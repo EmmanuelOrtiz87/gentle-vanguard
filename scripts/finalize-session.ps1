@@ -90,15 +90,22 @@ $timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm'
 $tagName = "foundation-v$(Get-Date -Format 'yyyy.MM.dd-HHmm')"
 $msg = "chore: foundation base update - session $timestamp"
 
-git commit -m $msg 2>$null
-if ($LASTEXITCODE -ne 0) {
-    Write-Warning "No se pudo realizar el commit (posiblemente no hay cambios o error de configuracion)."
-    exit 1
-}
+# Realizar commit solo si hay cambios detectados
+$hasChanges = git status --porcelain
+if ($hasChanges) {
+    git commit -m $msg 2>$null
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "No se pudo realizar el commit. Verifica la configuracion de Git."
+        exit 1
+    }
 
-# Crear tag solo si el commit fue exitoso y hay un HEAD valido
-if ($LASTEXITCODE -eq 0 -and (git rev-parse HEAD 2>$null)) {
-    git tag -a $tagName -m "Release $tagName - Session $timestamp" 2>$null
+    # Crear tag solo si el commit fue exitoso y hay un HEAD valido
+    if (git rev-parse HEAD 2>$null) {
+        git tag -a $tagName -m "Release $tagName - Session $timestamp" 2>$null
+        Write-Host "[OK] Commit y Tag ($tagName) creados exitosamente." -ForegroundColor Green
+    }
+} else {
+    Write-Host "[INFO] No hay cambios para confirmar en esta sesion." -ForegroundColor Gray
 }
 
 Write-Host "`n>> Sincronizando con Repositorio Remoto..." -ForegroundColor Cyan
