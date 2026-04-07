@@ -11,7 +11,23 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $projectRoot = Resolve-Path (Join-Path $scriptDir "..")
 Set-Location $projectRoot
 
+$targetBranch = "foundation-base"
+
 Write-Host ">> Iniciando cierre de sesion para Foundation..." -ForegroundColor Cyan
+
+# 0. Verificar e inicializar repositorio Git si no existe
+if (-not (Test-Path (Join-Path $projectRoot ".git"))) {
+    Write-Host "[!] No se detecto un repositorio Git en la raiz del proyecto." -ForegroundColor Yellow
+    $confirmInit = Read-Host "¿Deseas inicializar un nuevo repositorio Git ahora? (s/n)"
+    if ($confirmInit -eq 's') {
+        git init
+        git checkout -b $targetBranch
+        Write-Host "[OK] Repositorio Git inicializado en la rama '$targetBranch'." -ForegroundColor Green
+    } else {
+        Write-Error "No se puede continuar con la publicacion sin un repositorio Git."
+        exit 1
+    }
+}
 
 # 1. Aplicar identidad inmediatamente si se pasan parametros (globalmente)
 if (-not [string]::IsNullOrWhiteSpace($GitUser)) { git config --global user.name "$GitUser" }
@@ -45,7 +61,6 @@ while ([string]::IsNullOrWhiteSpace($(git config user.email 2>$null))) {
 Write-Host "`n>> Versionando en Git (Branch: foundation-base)..." -ForegroundColor Cyan
 
 # Asegurar que estamos en la rama correcta (incluso en repos nuevos)
-$targetBranch = "foundation-base"
 if (git branch --list $targetBranch) {
     git checkout -q $targetBranch
 } else {
