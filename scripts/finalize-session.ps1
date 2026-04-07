@@ -70,14 +70,46 @@ if (git branch --list $targetBranch) {
     if ($LASTEXITCODE -ne 0) { Write-Host "Preparando rama inicial: $targetBranch" -ForegroundColor Yellow }
 }
 
+# Verificar e informar sobre el remoto actual
+$currentRemote = git remote get-url origin 2>$null
+if ($currentRemote) {
+    Write-Host "[INFO] Remoto 'origin' actual: $currentRemote" -ForegroundColor Gray
+    $changeRemote = Read-Host "¿Deseas cambiar la URL del remoto? (s/n)"
+    if ($changeRemote -eq 's') {
+        git remote remove origin
+        Write-Host "Remoto eliminado. Se solicitara uno nuevo." -ForegroundColor Yellow
+    }
+}
+
 # Verificar existencia de remoto origin
 if (-not (git remote | Select-String "origin")) {
     Write-Host "[!] No se encontro el remoto 'origin'." -ForegroundColor Yellow
-    $remoteUrl = Read-Host "Ingresa la URL de tu repositorio remoto (ej. https://github.com/user/repo.git)"
+    Write-Host "Si no has creado el repositorio en la nube, hazlo ahora en GitHub o Bitbucket." -ForegroundColor Gray
+    
+    $remoteUrl = ""
     while ([string]::IsNullOrWhiteSpace($remoteUrl)) {
-        $remoteUrl = Read-Host "La URL es obligatoria para sincronizar. Ingresala (o 'skip' para no subir nada)"
-        if ($remoteUrl -eq "skip") { break }
+        $input = Read-Host "Ingresa la URL del repositorio (ej. https://github.com/usuario/repo.git) o solo el NOMBRE del repo"
+        if ($input -eq "skip") { $remoteUrl = "skip"; break }
+        
+        # Inteligencia: Si no hay '/' o ':', asumimos que es un nombre de repo y sugerimos URL basada en el usuario actual
+        if ($input -notmatch "/" -and $input -notmatch ":") {
+            $gitUser = git config user.name 2>$null
+            if ([string]::IsNullOrWhiteSpace($gitUser)) { $gitUser = "usuario" }
+            $remoteUrl = "https://github.com/$gitUser/$input.git"
+            Write-Host "Sugerencia de URL generada: $remoteUrl" -ForegroundColor Gray
+            $confirm = Read-Host "¿Es esta la URL correcta? (s/n)"
+            if ($confirm -ne 's') { $remoteUrl = ""; continue }
+        } else {
+            $remoteUrl = $input
+        }
+
+        if ($remoteUrl -notmatch "\.git$" -and $remoteUrl -notmatch "git@" -and $remoteUrl -ne "skip") {
+            Write-Warning "La URL no parece un repositorio Git valido (deberia terminar en .git)."
+            $confirm = Read-Host "¿Deseas usarla de todos modos? (s/n)"
+            if ($confirm -ne 's') { $remoteUrl = "" }
+        }
     }
+
     if (-not [string]::IsNullOrWhiteSpace($remoteUrl) -and $remoteUrl -ne "skip") {
         git remote add origin $remoteUrl
         Write-Host "Remoto 'origin' configurado correctamente." -ForegroundColor Green
@@ -110,17 +142,37 @@ if ($hasChanges) {
 
 Write-Host "`n>> Sincronizando con Repositorio Remoto..." -ForegroundColor Cyan
 
-if (git remote | Select-String "origin") {
-    # Determinar si necesitamos --set-upstream para el primer push
-    $upstream = git config "branch.$targetBranch.remote" 2>$null
-    if (-not $upstream) {
-        Write-Host "[INFO] Upstream branch no configurada para '$targetBranch'. Intentando con '--set-upstream'." -ForegroundColor Yellow
-        git push -u origin $targetBranch --tags 2>$null
-    } else {
-        git push origin $targetBranch --tags 2>$null
-    }
+$pushSuccess = $false
+while (-not $pushSuccess) {
+    if (git remote | Select-String "origin") {
+        # Determinar si necesitamos --set-upstream para el primer push
+        $upstream = git config "branch.$targetBranch.remote" 2>$null
+        if (-not $upstream) {
+            Write-Host "[INFO] Upstream branch no configurada para '$targetBranch'. Intentando con '--set-upstream'." -ForegroundColor Yellow
+            git push -u origin $targetBranch --tags 2>$null
+        } else {
+            git push origin $targetBranch --tags 2>$null
+        }
 
-    if ($LASTEXITCODE -ne 0) { Write-Warning "Error al hacer push. Verifica que tengas permisos en el repositorio remoto." }
+        if ($LASTEXITCODE -eq 0) {
+            $pushSuccess = $true
+        } else {
+            Write-Warning "Error al hacer push. La URL es invalida, el repositorio no existe o no tienes permisos."
+            Write-Host "URL actual detectada: $(git remote get-url origin)" -ForegroundColor Gray
+            $action = Read-Host "¿Que deseas hacer? (r) Reintentar con otra URL, (s) Saltar sincronizacion, (c) Cancelar"
+            
+            if ($action -eq 'r') {
+                git remote remove origin
+                $newUrl = Read-Host "Ingresa la URL correcta del repositorio (.git)"
+                if (-not [string]::IsNullOrWhiteSpace($newUrl)) { git remote add origin $newUrl }
+            } elseif ($action -eq 's') {
+                Write-Warning "Sincronizacion saltada por el usuario."
+                break
+            } else {
+                exit 1
+            }
+        }
+    }
 } else {
     Write-Warning "Sincronizacion saltada: No hay un remoto 'origin' configurado."
 }
