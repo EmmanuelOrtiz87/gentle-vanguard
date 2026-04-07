@@ -88,7 +88,7 @@ Write-Host "`n>> Sincronizando con Repositorio Remoto..." -ForegroundColor Cyan
 
 # Determinar si necesitamos --set-upstream para el primer push
 $pushOptions = "$targetBranch --tags"
-$upstream = git rev-parse --abbrev-ref --symbolic-full-name "@{u}" 2>$null
+$upstream = git config "branch.$targetBranch.remote" 2>$null
 if (-not $upstream) {
     Write-Host "[INFO] Upstream branch no configurada para '$targetBranch'. Intentando con '--set-upstream'." -ForegroundColor Yellow
     $pushOptions = "-u $targetBranch --tags"
