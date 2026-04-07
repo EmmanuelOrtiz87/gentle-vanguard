@@ -20,8 +20,12 @@ if (-not (Test-Path (Join-Path $projectRoot ".git"))) {
     Write-Host "[!] No se detecto un repositorio Git en la raiz del proyecto." -ForegroundColor Yellow
     $confirmInit = Read-Host "¿Deseas inicializar un nuevo repositorio Git ahora? (s/n)"
     if ($confirmInit -eq 's') {
-        git init
-        git checkout -b $targetBranch
+        # Intentar inicializar con la rama especificada directamente (Git moderno)
+        git init -b $targetBranch 2>$null
+        if ($LASTEXITCODE -ne 0) {
+            git init
+            git checkout -b $targetBranch
+        }
         Write-Host "[OK] Repositorio Git inicializado en la rama '$targetBranch'." -ForegroundColor Green
     } else {
         Write-Error "No se puede continuar con la publicacion sin un repositorio Git."
@@ -61,18 +65,21 @@ while ([string]::IsNullOrWhiteSpace($(git config user.email 2>$null))) {
 Write-Host "`n>> Versionando en Git (Branch: foundation-base)..." -ForegroundColor Cyan
 
 # Asegurar que estamos en la rama correcta (incluso en repos nuevos)
-if (git branch --list $targetBranch) {
-    git checkout -q $targetBranch
-} else {
-    # Si es un repo nuevo sin commits, intentamos crearla
-    # Si falla porque no hay HEAD, git lo manejara en el commit inicial
-    git checkout -q -b $targetBranch 2>$null
-    if ($LASTEXITCODE -ne 0) { Write-Host "Preparando rama inicial: $targetBranch" -ForegroundColor Yellow }
+$currentBranch = git branch --show-current
+if ($currentBranch -ne $targetBranch) {
+    if (git branch --list $targetBranch) {
+        git checkout -q $targetBranch
+    } else {
+        # En repos nuevos o si la rama no existe, intentamos crearla o renombrar la actual
+        git checkout -q -b $targetBranch 2>$null
+        if ($LASTEXITCODE -ne 0) { git branch -m $targetBranch 2>$null }
+        Write-Host "[INFO] Operando en rama: $targetBranch" -ForegroundColor Yellow
+    }
 }
 
 # Verificar e informar sobre el remoto actual
-$currentRemote = git remote get-url origin 2>$null
-if ($currentRemote) {
+if (git remote | Select-String -Quiet "^origin$") {
+    $currentRemote = git remote get-url origin 2>$null
     Write-Host "[INFO] Remoto 'origin' actual: $currentRemote" -ForegroundColor Gray
     $changeRemote = Read-Host "¿Deseas cambiar la URL del remoto? (s/n)"
     if ($changeRemote -eq 's') {
@@ -87,26 +94,34 @@ if (-not (git remote | Select-String "origin")) {
     Write-Host "Si no has creado el repositorio en la nube, hazlo ahora en GitHub o Bitbucket." -ForegroundColor Gray
     
     $remoteUrl = ""
-    while ([string]::IsNullOrWhiteSpace($remoteUrl)) {
-        $input = Read-Host "Ingresa la URL del repositorio (ej. https://github.com/usuario/repo.git) o solo el NOMBRE del repo"
-        if ($input -eq "skip") { $remoteUrl = "skip"; break }
+    while ($true) {
+        $userInput = Read-Host "Ingresa la URL del repositorio (ej. https://github.com/usuario/repo.git) o solo el NOMBRE del repo"
         
-        # Inteligencia: Si no hay '/' o ':', asumimos que es un nombre de repo y sugerimos URL basada en el usuario actual
-        if ($input -notmatch "/" -and $input -notmatch ":") {
-            $gitUser = git config user.name 2>$null
-            if ([string]::IsNullOrWhiteSpace($gitUser)) { $gitUser = "usuario" }
-            $remoteUrl = "https://github.com/$gitUser/$input.git"
-            Write-Host "Sugerencia de URL generada: $remoteUrl" -ForegroundColor Gray
-            $confirm = Read-Host "¿Es esta la URL correcta? (s/n)"
-            if ($confirm -ne 's') { $remoteUrl = ""; continue }
-        } else {
-            $remoteUrl = $input
+        if ($userInput -eq "skip") { $remoteUrl = "skip"; break }
+        if ([string]::IsNullOrWhiteSpace($userInput)) {
+            Write-Warning "La entrada no puede estar vacia. Intenta de nuevo o escribe 'skip'."
+            continue
         }
 
-        if ($remoteUrl -notmatch "\.git$" -and $remoteUrl -notmatch "git@" -and $remoteUrl -ne "skip") {
-            Write-Warning "La URL no parece un repositorio Git valido (deberia terminar en .git)."
-            $confirm = Read-Host "¿Deseas usarla de todos modos? (s/n)"
-            if ($confirm -ne 's') { $remoteUrl = "" }
+        # Inteligencia: Si no hay '/' o ':', asumimos que es un nombre de repo y sugerimos URL basada en el usuario actual
+        if ($userInput -notmatch "/" -and $userInput -notmatch ":") {
+            $gitUser = git config user.name 2>$null
+            if ([string]::IsNullOrWhiteSpace($gitUser)) { $gitUser = "usuario" }
+            $suggestedUrl = "https://github.com/$gitUser/$userInput.git"
+            Write-Host "Sugerencia generada: $suggestedUrl" -ForegroundColor Gray
+            $confirm = Read-Host "¿Usar esta URL? (s/n)"
+            if ($confirm -eq 's') { $remoteUrl = $suggestedUrl; break }
+            continue
+        } else {
+            # Validacion basica de formato Git (HTTPS o SSH)
+            if ($userInput -match "^(https?://|git@|ssh://).+\.git$") {
+                $remoteUrl = $userInput
+                break
+            } else {
+                Write-Warning "La URL '$userInput' no parece valida (debe empezar con http/git/ssh y terminar en .git)."
+                $confirm = Read-Host "¿Deseas usarla de todos modos? (s/n)"
+                if ($confirm -eq 's') { $remoteUrl = $userInput; break }
+            }
         }
     }
 
