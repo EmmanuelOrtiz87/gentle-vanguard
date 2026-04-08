@@ -81,7 +81,7 @@ if ($currentBranch -ne $targetBranch) {
 if (git remote | Select-String -Quiet "^origin$") {
     $currentRemote = git remote get-url origin 2>$null
     Write-Host "[INFO] Remoto 'origin' actual: $currentRemote" -ForegroundColor Gray
-    $changeRemote = Read-Host "¿Deseas cambiar la URL del remoto? (s/n)"
+    $changeRemote = Read-Host "El remoto actual podria ser invalido. ¿Deseas eliminarlo para configurar uno nuevo o crearlo en la nube? (s/n)"
     if ($changeRemote -eq 's') {
         git remote remove origin
         Write-Host "Remoto eliminado. Se solicitara uno nuevo." -ForegroundColor Yellow
@@ -97,18 +97,26 @@ if (-not (git remote | Select-String "origin")) {
     # Inteligencia: Integracion con GitHub CLI (gh) para creacion automatica
     $ghCli = Get-Command gh -ErrorAction SilentlyContinue
     if ($ghCli) {
-        & gh auth status 2>$null
+        $ghStatus = & gh auth status 2>&1
         if ($LASTEXITCODE -eq 0) {
             if ((Read-Host "¿Deseas crear el repositorio automaticamente en GitHub? (s/n)") -eq 's') {
                 $repoDefault = Split-Path -Leaf $projectRoot
                 $repoName = Read-Host "Nombre del repositorio [$repoDefault]"
                 if ([string]::IsNullOrWhiteSpace($repoName)) { $repoName = $repoDefault }
-                $vis = Read-Host "¿Privacidad? (1) Publico, (2) Privado [Default: Privado]"
+                $vis = Read-Host "¿Privacidad? (1) Publico, (2) Privado [Predeterminado: Privado]"
                 $visFlag = if ($vis -eq "1") { "--public" } else { "--private" }
                 
                 Write-Host "[INFO] Creando repositorio '$repoName' en GitHub..." -ForegroundColor Cyan
                 & gh repo create $repoName $visFlag --source=. --remote=origin
                 if ($LASTEXITCODE -eq 0) { $remoteUrl = "created_by_cli" }
+            }
+        } else {
+            Write-Host "[!] GitHub CLI detectado pero no autenticado." -ForegroundColor Yellow
+            if ((Read-Host "¿Deseas iniciar sesion en GitHub ahora para habilitar la creacion automatica? (s/n)") -eq 's') {
+                & gh auth login
+                if ($LASTEXITCODE -eq 0) {
+                    Write-Host "Autenticacion exitosa. Reinicia el script para usar la creacion automatica o ingresa la URL manualmente." -ForegroundColor Cyan
+                }
             }
         }
     }
@@ -117,7 +125,7 @@ if (-not (git remote | Select-String "origin")) {
         Write-Host "Si no has creado el repositorio en la nube, hazlo ahora en GitHub o Bitbucket." -ForegroundColor Gray
     }
 
-    while ($true -and [string]::IsNullOrWhiteSpace($remoteUrl)) {
+    while ([string]::IsNullOrWhiteSpace($remoteUrl)) {
         $userInput = Read-Host "Ingresa la URL del repositorio (ej. https://github.com/usuario/repo.git) o solo el NOMBRE del repo"
         
         if ($userInput -eq "skip") { $remoteUrl = "skip"; break }
@@ -202,20 +210,39 @@ while (-not $pushSuccess) {
         if ($pushExitCode -eq 0) {
             $pushSuccess = $true
         } else {
-            Write-Warning "Error al hacer push. El repositorio no existe en la nube o la URL es incorrecta."
+            Write-Warning "Error al hacer push. El repositorio no existe en la nube, la URL es incorrecta o falta autenticacion."
             Write-Host "IMPORTANTE: Asegurate de haber creado el repositorio en la WEB (GitHub/Bitbucket) antes de subirlo." -ForegroundColor Yellow
             Write-Host "URL actual detectada: $(git remote get-url origin)" -ForegroundColor Gray
-            $action = Read-Host "¿Que deseas hacer? (r) Reintentar con otra URL, (s) Saltar sincronizacion, (c) Cancelar"
+            $action = Read-Host "¿Que deseas hacer? (r) Reintentar URL, (g) Crear en GitHub ahora, (s) Saltar, (x) Salir"
             
             if ($action -eq 'r') {
                 git remote remove origin
                 $newUrl = Read-Host "Ingresa la URL correcta del repositorio (.git)"
                 if (-not [string]::IsNullOrWhiteSpace($newUrl)) { git remote add origin $newUrl }
+            } elseif ($action -eq 'g') {
+                if (Get-Command gh -ErrorAction SilentlyContinue) {
+                    git remote remove origin 2>$null
+                    $repoDefault = Split-Path -Leaf $projectRoot
+                    $repoName = Read-Host "Nombre del repositorio [$repoDefault]"
+                    if ([string]::IsNullOrWhiteSpace($repoName)) { $repoName = $repoDefault }
+                    $vis = Read-Host "¿Privacidad? (1) Publico, (2) Privado [Predeterminado: Privado]"
+                    $visFlag = if ($vis -eq "1") { "--public" } else { "--private" }
+                    
+                    Write-Host "[INFO] Creando repositorio '$repoName' en GitHub..." -ForegroundColor Cyan
+                    & gh repo create $repoName $visFlag --source=. --remote=origin
+                    if ($LASTEXITCODE -ne 0) {
+                        Write-Error "No se pudo crear el repositorio. Asegurate de estar autenticado con 'gh auth login'."
+                    }
+                } else {
+                    Write-Error "GitHub CLI (gh) no instalado. No se puede crear automaticamente."
+                }
             } elseif ($action -eq 's') {
                 Write-Warning "Sincronizacion saltada por el usuario."
                 break
-            } else {
+            } elseif ($action -eq 'x') {
                 exit 1
+            } else {
+                Write-Host "Opcion no valida."
             }
         }
     }
