@@ -91,10 +91,33 @@ if (git remote | Select-String -Quiet "^origin$") {
 # Verificar existencia de remoto origin
 if (-not (git remote | Select-String "origin")) {
     Write-Host "[!] No se encontro el remoto 'origin'." -ForegroundColor Yellow
-    Write-Host "Si no has creado el repositorio en la nube, hazlo ahora en GitHub o Bitbucket." -ForegroundColor Gray
     
     $remoteUrl = ""
-    while ($true) {
+
+    # Inteligencia: Integracion con GitHub CLI (gh) para creacion automatica
+    $ghCli = Get-Command gh -ErrorAction SilentlyContinue
+    if ($ghCli) {
+        & gh auth status 2>$null
+        if ($LASTEXITCODE -eq 0) {
+            if ((Read-Host "¿Deseas crear el repositorio automaticamente en GitHub? (s/n)") -eq 's') {
+                $repoDefault = Split-Path -Leaf $projectRoot
+                $repoName = Read-Host "Nombre del repositorio [$repoDefault]"
+                if ([string]::IsNullOrWhiteSpace($repoName)) { $repoName = $repoDefault }
+                $vis = Read-Host "¿Privacidad? (1) Publico, (2) Privado [Default: Privado]"
+                $visFlag = if ($vis -eq "1") { "--public" } else { "--private" }
+                
+                Write-Host "[INFO] Creando repositorio '$repoName' en GitHub..." -ForegroundColor Cyan
+                & gh repo create $repoName $visFlag --source=. --remote=origin
+                if ($LASTEXITCODE -eq 0) { $remoteUrl = "created_by_cli" }
+            }
+        }
+    }
+
+    if ([string]::IsNullOrWhiteSpace($remoteUrl)) {
+        Write-Host "Si no has creado el repositorio en la nube, hazlo ahora en GitHub o Bitbucket." -ForegroundColor Gray
+    }
+
+    while ($true -and [string]::IsNullOrWhiteSpace($remoteUrl)) {
         $userInput = Read-Host "Ingresa la URL del repositorio (ej. https://github.com/usuario/repo.git) o solo el NOMBRE del repo"
         
         if ($userInput -eq "skip") { $remoteUrl = "skip"; break }

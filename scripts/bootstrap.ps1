@@ -129,6 +129,7 @@ if (-not (Test-Path $configPath)) {
 Write-Step "Paso 4: Reporte de Salud del Sistema (Health Check)..."
 $report = @{
     Git = if (Get-Command git -ErrorAction SilentlyContinue) { "PASS" } else { "FAIL" }
+    GitHubCLI = if (Get-Command gh -ErrorAction SilentlyContinue) { "PASS" } else { "INFO: No instalado (opcional)" }
     Go  = if (Get-Command go -ErrorAction SilentlyContinue) { "PASS" } else { "FAIL" }
     Engram = if (Get-Command engram -ErrorAction SilentlyContinue) { "PASS" } else { "FAIL" }
     Skills = if (Test-Path $skillsDir) { "PASS" } else { "FAIL" }
