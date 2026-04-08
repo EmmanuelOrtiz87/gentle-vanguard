@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿# Workspace Foundation
+﻿﻿﻿﻿﻿﻿﻿# Workspace Foundation
 
 Este es el proyecto base agnóstico diseñado para gestionar la infraestructura de desarrollo, herramientas de IA y habilidades predeterminadas.
 

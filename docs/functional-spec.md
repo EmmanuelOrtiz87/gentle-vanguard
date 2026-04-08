@@ -13,6 +13,7 @@ Workspace Foundation es una plataforma de infraestructura de desarrollo agnósti
 | Ventaja | Impacto en el Negocio |
 | :--- | :--- |
 | **Libertad de Entorno** | Operación idéntica en Windows, macOS y Linux. Sin "lock-in" de plataforma. |
+| **Automatización E2E** | Desde la creación del repositorio hasta el Pull Request en un solo flujo. |
 | **Independencia de Repo** | Compatible con Bitbucket, GitHub o infraestructura on-premise. |
 | **Automatización de Reseñas** | Los "Session Reviews" automáticos ahorran horas de documentación técnica. |
 | **Seguridad Proactiva** | Integración con GGA para evitar fugas de credenciales en tiempo real. |

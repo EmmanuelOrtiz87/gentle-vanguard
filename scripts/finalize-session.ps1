@@ -1,5 +1,10 @@
 # finalize-session.ps1 (Foundation)
-# Automatiza la validacion, persistencia en Engram y subida a la rama foundation-base.
+# Automatiza la validacion, persistencia en Engram, versionado y publicacion.
+# Soporta flujos interactivos para:
+# 1. Configuracion de identidad Git (user/email).
+# 2. Inicializacion de repositorio Git si no existe.
+# 3. Creacion de repositorio remoto via GitHub CLI (gh).
+# 4. Sincronizacion con reintentos inteligentes y creacion de Pull Requests.
 
 param(
     [string]$GitUser,
@@ -252,6 +257,10 @@ if (git remote | Select-String "origin") {
     if ($pushSuccess) {
         Write-Host ""
         Write-Host "[OK] Sesion finalizada y subida con exito a la rama '$targetBranch' en GitHub." -ForegroundColor Green
+        
+        # Automatizacion de Pull Request
+        $prScript = Join-Path $scriptDir "create-pull-request.ps1"
+        if (Test-Path $prScript) { & $prScript -BaseBranch "main" }
     } elseif ($skippedPush) {
         Write-Host ""
         Write-Host "[OK] Sesion finalizada localmente, pero la subida fue saltada." -ForegroundColor Yellow

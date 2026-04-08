@@ -26,7 +26,7 @@ El archivo `workspace.config.json` utiliza *placeholders* (ej: `{workspaceRoot}`
 ## Flujo de Publicación (Finalize)
 El script `finalize-session.ps1` garantiza la atomicidad de la publicación:
 ```powershell
-Validation -> Tagging (vYYYY.MM.DD-HHmm) -> Commit -> Push --tags
+Validation -> Tagging -> Commit -> Push (Auto-Upstream) -> Pull Request (gh)
 ```
 Esto crea un historial de Git inmaculado y listo para despliegues basados en Tags.
 

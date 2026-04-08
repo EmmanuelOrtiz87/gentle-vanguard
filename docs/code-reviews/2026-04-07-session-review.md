@@ -3,13 +3,17 @@
 > [!IMPORTANT]
 > Este documento es la memoria persistente de Engram para esta sesion.
 
-**Fecha:** 2026-04-07 23:05:29
+**Fecha:** 2026-04-07 23:29:31
 **Reviewer:** Engram AI Agent
 **Base Branch:** foundation-base
 
 ## Archivos Cambiados
 
+- README.md
+- docs/functional-spec.md
+- docs/technical-spec.md
 - scripts/finalize-session.ps1
+- scripts/create-pull-request.ps1
 
 ## Analisis de Arquitectura y Calidad
 
