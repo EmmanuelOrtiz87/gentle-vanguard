@@ -107,6 +107,35 @@ if (-not (Test-Path $skillsDir)) {
     Write-Success "Gentleman-Skills actualizado."
 }
 
+# 5. GitHub CLI (Opcional pero recomendado para automatización de repos)
+Write-Step "Verificando GitHub CLI (gh)..."
+if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
+    Write-Host "[!] GitHub CLI no detectado." -ForegroundColor Yellow
+    $confirmGh = Read-Host "¿Deseas intentar la instalacion automatizada? (s/n)"
+    if ($confirmGh -eq 's') {
+        try {
+            if ($IsWindows) {
+                Write-InfoMsg "Instalando gh via winget..."
+                winget install --id GitHub.cli --silent --accept-source-agreements --accept-package-agreements
+            } elseif ($IsMacOS) {
+                Write-InfoMsg "Instalando gh via brew..."
+                brew install gh
+            } elseif ($IsLinux) {
+                Write-InfoMsg "Instalando gh via apt..."
+                sudo apt update && sudo apt install gh -y
+            }
+            
+            if (Get-Command gh -ErrorAction SilentlyContinue) {
+                Write-Success "GitHub CLI instalado exitosamente."
+            }
+        } catch {
+            Write-ErrorMsg "Error durante la instalacion automatica. Por favor instalo manualmente: https://cli.github.com/"
+        }
+    }
+} else {
+    Write-Success "GitHub CLI detectado."
+}
+
 Write-Step "Paso 3: Desplegando Configuración por Defecto..."
 $configPath = Join-Path $workspaceRoot "config/workspace.config.json"
 if (-not (Test-Path $configPath)) {
