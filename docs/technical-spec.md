@@ -1,30 +1,30 @@
-# Documento Técnico: Archictectura de Workspace Foundation
+# Technical Specification: Workspace Architecture (Template)
 
-## Estructura de Directorios
-- `/scripts`: Motores de automatización en PowerShell Core (agnóstico de plataforma).
-- `/tools`: Repositorios de herramientas core (Engram, Gentleman-Skills, GGA).
-- `/config`: Configuración centralizada en JSON con soporte para resolución de variables dinámicas.
-- `/.engram-data`: Persistencia de contexto para modelos de lenguaje (aislado del código fuente).
+## Directory Structure
+- `/scripts`: Automation engines in PowerShell Core (platform agnostic).
+- `/tools`: Integrated core tools (AI Skills, Security Scanners).
+- `/config`: Centralized JSON configuration with support for dynamic variable resolution.
+- `/.ai-data`: Context persistence for language models (isolated from source code).
 
-## Componentes Críticos
+## Critical Components
 
-### 1. El Orquestador de Arranque (`bootstrap.ps1`)
-Utiliza una lógica de verificación de dependencias (Git, Go, Engram). Si una herramienta falta, el script se encarga de su despliegue, asegurando que el entorno sea determinista.
+### 1. The Bootstrap Orchestrator (`bootstrap.ps1`)
+Uses local dependency verification logic. The script ensures the project has everything needed to be autonomous and deterministic from its own root.
 
-### 2. Protocolo de Validación (`validate-project.ps1`)
-Implementa una jerarquía de validación:
-1. **Seguridad:** Invoca a Gentleman Guardian Angel (GGA).
-2. **Integridad IA:** Verifica la carga de Gentleman-Skills.
-3. **Documentación:** Dispara `generate-session-review.ps1`.
+### 2. Validation Protocol (`validate-project.ps1`)
+Implements a validation hierarchy:
+1. **Security:** Invokes local security scanners.
+2. **AI Integrity:** Verifies AI skill libraries.
+3. **Documentation:** Triggers session review generation.
 
-### 3. Persistencia de Sesión y Memoria de IA
-El sistema genera archivos Markdown en `docs/code-reviews/`. Estos archivos no son solo para humanos; sirven como "memoria a largo plazo" para que Gemini/Claude entiendan la evolución del proyecto en futuras sesiones.
+### 3. Session Persistence and AI Memory
+The system generates Markdown files in `docs/code-reviews/` internally. These files serve as long-term memory specific to the evolution of this independent repository.
 
-### 4. Modelo de Configuración Agnostico
-El archivo `workspace.config.json` utiliza *placeholders* (ej: `{workspaceRoot}`) que se resuelven en tiempo de ejecución, permitiendo que el proyecto se mueva entre diferentes rutas de disco o servidores sin romperse.
+### 4. Agnostic Configuration Model
+The configuration files use placeholders (e.g., `{workspaceRoot}`) that resolve at runtime, allowing the project to be moved between different paths or servers without breaking.
 
-## Flujo de Publicación (Finalize)
-El script `finalize-session.ps1` garantiza la atomicidad de la publicación:
+## Autonomous Workflow
+The `finalize-session.ps1` script ensures publication atomicity:
 ```powershell
 Validation -> Tagging -> Commit -> Push (Auto-Upstream) -> Pull Request (gh)
 ```

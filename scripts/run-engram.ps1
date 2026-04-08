@@ -35,15 +35,15 @@ function Ensure-Directory {
 $workspaceRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $defaultDataRoot = Join-Path $workspaceRoot '.engram-data'
 
-# Validación de inicialización
+# Initialization validation
 if (-not (Test-Path -LiteralPath $ConfigPath)) {
-    throw "El entorno no ha sido inicializado o el config no existe. Por favor, ejecuta 'scripts/bootstrap.ps1' primero."
+    throw "Environment not initialized or config missing. Please run 'scripts/bootstrap.ps1' first."
 }
 
-# Health Check de dependencias críticas
-$skillsDir = Join-Path $workspaceRoot "tools/Gentleman-Skills"
+# Health Check of critical dependencies
+$skillsDir = Join-Path $workspaceRoot "tools/ai-skills"
 if (-not (Test-Path $skillsDir)) {
-    Write-Warning "Gentleman-Skills no detectado. Algunas capacidades de IA podrian no estar disponibles."
+    Write-Warning "AI Skills directory not detected. Some AI capabilities might be unavailable."
 }
 
 $config = $null

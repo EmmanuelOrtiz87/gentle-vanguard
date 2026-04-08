@@ -1,43 +1,40 @@
-# Workspace Foundation
+# Workspace Foundation (Project Template)
 
-This is the agnostic base project designed to manage development infrastructure, AI tools, and default skills.
+Base template for creating standardized projects with integrated automation, validation, and AI support.
 
-## Architecture
+## Requirements
 
-- **Core**: Automation scripts in `scripts/`.
-- **Tools**: Binaries and tool repositories (Engram, Gentleman Skills) in `tools/`.
-- **Config**: Global definitions in `config/workspace.config.json`.
-- **Projects**: Directory intended for projects that implement this base.
+This project requires a standard development environment for Go and integration with AI via the Model Context Protocol (MCP).
+- **Runtime**: Go 1.21+
+- **Integration**: MCP Server support.
 
 ## Initialization
 
-To configure a new machine from scratch, run:
+To set up a new project:
+
 ```powershell
-./scripts/bootstrap.ps1
+./scripts/bootstrap-project.ps1
 ```
 
-### Gentleman Skills
-Este proyecto actúa como el host principal de `Gentleman-Skills`. Los proyectos hijos (como Dashboard) deben referenciar la ruta `tools/Gentleman-Skills` para cargar las capacidades del agente.
+Este comando verificará automáticamente que la base de `workspace-foundation` esté presente y configurada.
 
-## Uso en Proyectos Derivados
+## Validación de Sesión
 
-Cualquier proyecto nuevo (ej. `bitbucket-dashboard`) debe:
-1. Ubicarse en una ruta relativa que permita acceder a Foundation.
-2. Tener un script `bootstrap-project.ps1` que llame al bootstrap de Foundation.
-3. No duplicar lógica de herramientas; usar los lanzadores de Foundation (`run-engram.ps1`).
+Antes de finalizar una sesión de trabajo y subir los cambios al repositorio, es obligatorio ejecutar el script de validación:
 
-## Flujo de Trabajo y Validación
-
-Cualquier cambio en la base debe ser validado antes de finalizar la sesión:
 ```powershell
 ./scripts/validate-project.ps1
 ```
-Esto garantiza que GGA, Gentleman-Skills y la integridad del repositorio estén en orden.
+
+## Estructura del Proyecto
+
+- `/internal`: Lógica de servidor web y adaptadores de Bitbucket.
+- `/mcp`: Servidor Model Context Protocol para integración con asistentes de IA.
+- `/scripts`: Automatizaciones específicas (Reviews, Bootstraps).
+- `/html`: Plantillas dinámicas utilizando HTMX.
 
 ## Health Check
-El sistema incluye validaciones en:
-- **Nivel OS**: `bootstrap.ps1` verifica binarios y paths.
-- **Nivel IA**: El servidor MCP incluye la herramienta `mcp_health_check` para validar conectividad con APIs externas (Jira/Bitbucket).
+Puedes verificar el estado de las conexiones con Jira y Bitbucket ejecutando la herramienta `mcp_health_check` desde el servidor MCP.
 
 ---
-*Mantenido por el Agente IA de Engram.*
+*Proyecto derivado de Workspace Foundation.*
