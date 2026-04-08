@@ -1,6 +1,6 @@
 # create-pull-request.ps1
-# Automatiza la creacion de Pull Requests usando GitHub CLI (gh).
-# Diseñado para ser invocado despues de un push exitoso en entornos agnosticos.
+# Automates Pull Request creation using GitHub CLI (gh).
+# Designed to be invoked after a successful push in agnostic environments.
 
 param(
     [string]$BaseBranch = "main"
@@ -8,66 +8,66 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-# El script opera sobre el repositorio donde se encuentre el usuario actualmente.
+# The script operates on the repository where the user is currently located.
 
-Write-Host "`n>> Validando automatizacion de Pull Request..." -ForegroundColor Cyan
+Write-Host "`nACTION: Validating Pull Request automation..." -ForegroundColor Cyan
 
-# 1. Verificar herramienta gh
+# 1. Check for gh tool
 if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
-    Write-Host "[!] GitHub CLI (gh) no detectado en el PATH." -ForegroundColor Yellow
-    Write-Host "    Si lo acabas de instalar, por favor reinicia tu terminal o VS Code." -ForegroundColor Gray
+    Write-Host "WARN: GitHub CLI (gh) not detected in PATH." -ForegroundColor Yellow
+    Write-Host "    If you just installed it, please restart your terminal or VS Code." -ForegroundColor Gray
     return
 }
 
-# 2. Verificar autenticacion
+# 2. Verify authentication
 $oldEAP = $ErrorActionPreference
 $ErrorActionPreference = 'Continue'
 $ghStatus = & gh auth status 2>&1
 $ErrorActionPreference = $oldEAP
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "[!] GitHub CLI no autenticado. Por favor, ejecuta: gh auth login" -ForegroundColor Red
+    Write-Host "ERROR: GitHub CLI not authenticated. Please run: gh auth login" -ForegroundColor Red
     return
 }
 
-# 3. Verificar ramas
+# 3. Verify branches
 $currentBranch = git branch --show-current
 if ($currentBranch -eq $BaseBranch) {
-    Write-Host "[INFO] Estas en la rama '$BaseBranch'. No se puede crear un PR hacia si misma." -ForegroundColor Gray
-    Write-Host "       Para crear un PR, debes trabajar en una rama de característica (feature branch)." -ForegroundColor Gray
+    Write-Host "INFO: You are on the '$BaseBranch' branch. Cannot create a PR to itself." -ForegroundColor Gray
+    Write-Host "       To create a PR, you must work on a feature branch." -ForegroundColor Gray
     return
 }
 
-# 4. Verificar si la rama existe en el remoto
+# 4. Verify if the branch exists on remote
 $remoteCheck = git ls-remote --heads origin $currentBranch
 if (-not $remoteCheck) {
-    Write-Host "[!] La rama '$currentBranch' no existe en el remoto 'origin'." -ForegroundColor Yellow
-    Write-Host "    Realiza un 'git push' antes de intentar crear el Pull Request." -ForegroundColor Gray
+    Write-Host "WARN: Branch '$currentBranch' does not exist on remote 'origin'." -ForegroundColor Yellow
+    Write-Host "    Perform a 'git push' before attempting to create the Pull Request." -ForegroundColor Gray
     return
 }
 
-# 5. Verificar si ya existe un PR para esta rama
-Write-Host "[INFO] Comprobando si ya existe un PR activo..." -ForegroundColor Gray
+# 5. Check if a PR already exists for this branch
+Write-Host "INFO: Checking for existing active PR..." -ForegroundColor Gray
 $existingPr = & gh pr view $currentBranch --json url --template "{{.url}}" 2>$null
 if ($LASTEXITCODE -eq 0 -and $existingPr) {
-    Write-Host "[OK] Ya existe un Pull Request para esta rama: $existingPr" -ForegroundColor Green
-    if ((Read-Host "¿Deseas abrirlo en el navegador? (s/n)") -eq 's') {
+    Write-Host "SUCCESS: A Pull Request already exists for this branch: $existingPr" -ForegroundColor Green
+    if ((Read-Host "Open in browser? (y/n)") -eq 'y') {
         Start-Process $existingPr
     }
     return
 }
 
-# 6. Proceso de creacion interactivo
-$confirmation = Read-Host "¿Deseas crear un nuevo Pull Request para fusionar '$currentBranch' en '$BaseBranch'? (s/n)"
-if ($confirmation -eq 's') {
+# 6. Interactive creation process
+$confirmation = Read-Host "Do you want to create a new Pull Request to merge '$currentBranch' into '$BaseBranch'? (y/n)"
+if ($confirmation -eq 'y') {
     $title = "Session Update: $currentBranch -> $BaseBranch"
-    $body = "Pull Request automatizado generado tras finalizar la sesion de desarrollo.`n`nBase Branch: $BaseBranch`nHead Branch: $currentBranch"
+    $body = "Automated Pull Request generated after finishing the development session.`n`nBase Branch: $BaseBranch`nHead Branch: $currentBranch"
     
-    Write-Host "[INFO] Enviando solicitud a GitHub..." -ForegroundColor Cyan
+    Write-Host "INFO: Sending request to GitHub..." -ForegroundColor Cyan
     & gh pr create --base $BaseBranch --head $currentBranch --title "$title" --body "$body"
     
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "[OK] Pull Request creado y disponible en la plataforma." -ForegroundColor Green
+        Write-Host "SUCCESS: Pull Request created and available on the platform." -ForegroundColor Green
     } else {
-        Write-Host "[!] Error al crear el Pull Request. Revisa los mensajes de arriba." -ForegroundColor Red
+        Write-Host "ERROR: Error creating the Pull Request. Please check the messages above." -ForegroundColor Red
     }
 }

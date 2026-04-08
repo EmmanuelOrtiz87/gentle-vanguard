@@ -1,75 +1,75 @@
-# Guion de Presentación: Workspace Foundation
+# Presentation Script: Workspace Foundation
 
-Este documento contiene el contenido detallado para las 13 diapositivas de la presentación a los directivos.
-
----
-
-### Diapositiva 1: Portada
-**Título:** Workspace Foundation: El Futuro de la Eficiencia en Ingeniería.
-**Subtítulo:** Estandarización, IA y Calidad como pilares del crecimiento.
-**Notas:** Presentar la visión general de modernización del área de desarrollo.
-
-### Diapositiva 2: El Problema Silencioso
-**Puntos Clave:**
-- Fragmentación de entornos (Diferentes configuraciones entre desarrolladores).
-- Onboarding lento (Días perdidos instalando herramientas).
-- Falta de documentación técnica actualizada.
-- Riesgos de seguridad (Fuga de secretos).
-
-### Diapositiva 3: La Solución: Workspace Foundation
-**Mensaje:** Una capa de abstracción que unifica el desarrollo.
-**Frase:** "No construimos solo código, construimos una plataforma para escalar la ingeniería".
-
-### Diapositiva 4: Los 3 Pilares Estratégicos
-**Gráfico Sugerido:** Triángulo de valor.
-1. **Automatización:** Procesos repetitivos eliminados.
-2. **Calidad:** Seguridad y validación embebida (GGA).
-3. **IA-Ready:** Optimizado para trabajar con Agentes de IA (Engram).
-
-### Diapositiva 5: Arquitectura Simplificada
-**Flujo:**
-[Capa Base: Foundation] -> [Capa Herramientas: Engram/GGA] -> [Valor de Negocio: Proyectos]
-**Concepto:** Independencia total entre la base técnica y la lógica de negocio.
-
-### Diapositiva 6: El "Efecto Bootstrap"
-**Mensaje:** Configuración total en un solo comando.
-**Métrica:** Reducción estimada del 80% en el tiempo de configuración de nuevas estaciones de trabajo.
-
-### Diapositiva 7: IA como Miembro del Equipo
-**Concepto:** Integración con Protocolo MCP y Gentleman-Skills.
-**Beneficio:** La IA no solo genera código, entiende nuestras reglas y arquitectura.
-
-### Diapositiva 8: Seguridad Proactiva (Guardian Angel)
-**Visual:** Escudo de protección de datos.
-**Mensaje:** Validación automática de secretos y calidad antes de cada publicación.
-
-### Diapositiva 9: El Ciclo de Vida "Inmaculado"
-**Pasos:**
-1. Desarrollo asistido.
-2. Validación automática.
-3. Documentación generada por IA.
-4. Publicación trazable (Tags).
-
-### Diapositiva 10: Ventajas Competitivas
-**Puntos:**
-- Agnosticismo total (Windows, Mac, Linux / Bitbucket, GitHub).
-- Documentación que se escribe sola (Session Reviews).
-- Historial inmaculado para auditorías.
-
-### Diapositiva 11: Impacto en el ROI
-**Comparativa:**
-- **Antes:** 30% del tiempo en burocracia técnica.
-- **Ahora:** 95% del tiempo en entrega de valor al cliente.
-
-### Diapositiva 12: Roadmap y Futuro
-**Visión:**
-- Expansión de la librería de Gentleman-Skills.
-- Dashboard de salud de proyectos global.
-- Integración con pipelines de CI/CD corporativos.
-
-### Diapositiva 13: Conclusión
-**Cierre:** "Workspace Foundation es la base de nuestra agilidad tecnológica".
-**Llamado a la acción:** Implementación estándar para todos los nuevos desarrollos.
+This document contains the detailed content for the 13 presentation slides for executives.
 
 ---
-*Documento generado para soporte de presentación ejecutiva.*
+
+### Slide 1: Title Page
+**Title:** Workspace Foundation: The Future of Engineering Efficiency.
+**Subtitle:** Standardization, AI, and Quality as pillars of growth.
+**Notes:** Present the general vision of modernizing the development area.
+
+### Slide 2: The Silent Problem
+**Key Points:**
+- Environment fragmentation (Different configurations between developers).
+- Slow onboarding (Days lost installing tools).
+- Lack of updated technical documentation.
+- Security risks (Secret leakage).
+
+### Slide 3: The Solution: Workspace Foundation
+**Message:** An abstraction layer that unifies development.
+**Quote:** "We don't just build code; we build a platform to scale engineering."
+
+### Slide 4: The 3 Strategic Pillars
+**Suggested Graphic:** Value triangle.
+1. **Automation:** Repetitive processes eliminated.
+2. **Quality:** Embedded security and validation (GGA).
+3. **AI-Ready:** Optimized to work with AI Agents (Engram).
+
+### Slide 5: Simplified Architecture
+**Flow:**
+[Base Layer: Foundation] -> [Tools Layer: Engram/GGA] -> [Business Value: Projects]
+**Concept:** Total independence between the technical base and business logic.
+
+### Slide 6: The "Bootstrap Effect"
+**Message:** Total configuration in a single command.
+**Metric:** Estimated 80% reduction in setup time for new workstations.
+
+### Slide 7: AI as a Team Member
+**Concept:** Integration with MCP Protocol and Gentleman-Skills.
+**Benefit:** AI doesn't just generate code; it understands our rules and architecture.
+
+### Slide 8: Proactive Security (Guardian Angel)
+**Visual:** Data protection shield.
+**Message:** Automatic secret validation and quality checks before every publish.
+
+### Slide 9: The "Immaculate" Lifecycle
+**Steps:**
+1. Assisted development.
+2. Automatic validation.
+3. AI-generated documentation.
+4. Traceable publishing (Tags).
+
+### Slide 10: Competitive Advantages
+**Points:**
+- Total agnosticism (Windows, Mac, Linux / Bitbucket, GitHub).
+- Self-writing documentation (Session Reviews).
+- Immaculate history for audits.
+
+### Slide 11: Impact on ROI
+**Comparison:**
+- **Before:** 30% of time on technical bureaucracy.
+- **After:** 95% of time on delivering customer value.
+
+### Slide 12: Roadmap and Future
+**Vision:**
+- Expansion of the Gentleman-Skills library.
+- Global project health dashboard.
+- Integration with corporate CI/CD pipelines.
+
+### Slide 13: Conclusion
+**Closing:** "Workspace Foundation is the base of our technological agility."
+**Call to Action:** Standard implementation for all new developments.
+
+---
+*Document generated for executive presentation support.*
