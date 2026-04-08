@@ -122,7 +122,9 @@ if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
                 brew install gh
             } elseif ($IsLinux) {
                 Write-InfoMsg "Instalando gh via apt..."
-                sudo apt update && sudo apt install gh -y
+                sudo apt update
+                sudo apt install gh -y
+                if ($?) { sudo apt install gh -y }
             }
             
             if (Get-Command gh -ErrorAction SilentlyContinue) {
@@ -158,7 +160,11 @@ if (-not (Test-Path $configPath)) {
 Write-Step "Paso 4: Reporte de Salud del Sistema (Health Check)..."
 $report = @{
     Git = if (Get-Command git -ErrorAction SilentlyContinue) { "PASS" } else { "FAIL" }
-    GitHubCLI = if (Get-Command gh -ErrorAction SilentlyContinue) { "PASS" } else { "INFO: No instalado (opcional)" }
+    GitHubCLI = if (Get-Command gh -ErrorAction SilentlyContinue) { 
+        "PASS" 
+    } else { 
+        if (Test-Path "$env:ProgramFiles\GitHub CLI\gh.exe") { "RESTART REQUIRED (Instalado pero no en PATH)" } else { "INFO: No instalado" }
+    }
     Go  = if (Get-Command go -ErrorAction SilentlyContinue) { "PASS" } else { "FAIL" }
     Engram = if (Get-Command engram -ErrorAction SilentlyContinue) { "PASS" } else { "FAIL" }
     Skills = if (Test-Path $skillsDir) { "PASS" } else { "FAIL" }

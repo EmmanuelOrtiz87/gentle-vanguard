@@ -102,7 +102,10 @@ if (-not (git remote | Select-String "origin")) {
     # Inteligencia: Integracion con GitHub CLI (gh) para creacion automatica
     $ghCli = Get-Command gh -ErrorAction SilentlyContinue
     if ($ghCli) {
+        $oldEAP = $ErrorActionPreference
+        $ErrorActionPreference = 'Continue'
         $ghStatus = & gh auth status 2>&1
+        $ErrorActionPreference = $oldEAP
         if ($LASTEXITCODE -eq 0) {
             if ((Read-Host "¿Deseas crear el repositorio automaticamente en GitHub? (s/n)") -eq 's') {
                 $repoDefault = Split-Path -Leaf $projectRoot

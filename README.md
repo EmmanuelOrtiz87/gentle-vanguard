@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿﻿﻿﻿﻿﻿﻿# Workspace Foundation
 
 Este es el proyecto base agnóstico diseñado para gestionar la infraestructura de desarrollo, herramientas de IA y habilidades predeterminadas.
@@ -41,3 +42,6 @@ El sistema incluye validaciones en:
 
 ---
 *Mantenido por el Agente IA de Engram.*
+=======
+# workspace_foundation
+>>>>>>> origin/main
