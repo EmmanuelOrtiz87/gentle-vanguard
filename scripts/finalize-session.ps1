@@ -16,7 +16,7 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $projectRoot = Resolve-Path (Join-Path $scriptDir "..")
 Set-Location $projectRoot
 
-$targetBranch = "foundation-base"
+$targetBranch = "main"
 
 Write-Host ">> Iniciando cierre de sesion para Foundation..." -ForegroundColor Cyan
 
@@ -67,7 +67,7 @@ while ([string]::IsNullOrWhiteSpace($(git config user.email 2>$null))) {
 & (Join-Path $scriptDir "validate-project.ps1")
 
 # 2. Git Workflow
-Write-Host "`n>> Versionando en Git (Branch: foundation-base)..." -ForegroundColor Cyan
+Write-Host "`n>> Versionando en Git (Branch: main)..." -ForegroundColor Cyan
 
 # Asegurar que estamos en la rama correcta (incluso en repos nuevos)
 $currentBranch = git branch --show-current
