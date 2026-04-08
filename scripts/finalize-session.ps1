@@ -190,6 +190,7 @@ Write-Host "`n>> Sincronizando con Repositorio Remoto..." -ForegroundColor Cyan
 
 if (git remote | Select-String "origin") {
     $pushSuccess = $false
+    $skippedPush = $false
     while (-not $pushSuccess) {
         # Temporariamente permitimos errores para que el bucle de reintento funcione
         $oldEAP = $ErrorActionPreference
@@ -199,9 +200,9 @@ if (git remote | Select-String "origin") {
         $upstream = git config "branch.$targetBranch.remote" 2>$null
         if (-not $upstream) {
             Write-Host "[INFO] Upstream branch no configurada para '$targetBranch'. Intentando con '--set-upstream'." -ForegroundColor Yellow
-            git push -u origin $targetBranch --tags 2>$null
+            git push -u origin $targetBranch --tags
         } else {
-            git push origin $targetBranch --tags 2>$null
+            git push origin $targetBranch --tags
         }
 
         $pushExitCode = $LASTEXITCODE
@@ -238,6 +239,7 @@ if (git remote | Select-String "origin") {
                 }
             } elseif ($action -eq 's') {
                 Write-Warning "Sincronizacion saltada por el usuario."
+                $skippedPush = $true
                 break
             } elseif ($action -eq 'x') {
                 exit 1
@@ -246,9 +248,16 @@ if (git remote | Select-String "origin") {
             }
         }
     }
+
+    if ($pushSuccess) {
+        Write-Host ""
+        Write-Host "[OK] Sesion finalizada y subida con exito a la rama '$targetBranch' en GitHub." -ForegroundColor Green
+    } elseif ($skippedPush) {
+        Write-Host ""
+        Write-Host "[OK] Sesion finalizada localmente, pero la subida fue saltada." -ForegroundColor Yellow
+    }
 } else {
     Write-Warning "Sincronizacion saltada: No hay un remoto 'origin' configurado."
+    Write-Host ""
+    Write-Host "[OK] Sesion finalizada localmente." -ForegroundColor Yellow
 }
-
-Write-Host ""
-Write-Host "[OK] Sesion finalizada y guardada con exito en Foundation." -ForegroundColor Green
