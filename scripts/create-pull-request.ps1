@@ -46,15 +46,31 @@ if (-not $remoteCheck) {
 }
 
 # 5. Verificar si ya existe un PR para esta rama
-Write-Host "[INFO] Comprobando si ya existe un PR activo..." -ForegroundColor Gray
-$existingPr = & gh pr view $currentBranch --json url --template "{{.url}}" 2>$null
-if ($LASTEXITCODE -eq 0 -and $existingPr) {
+Write-Host "[INFO] Comprobando si ya existe un PR activo para '$currentBranch' a '$BaseBranch'..." -ForegroundColor Gray
+# Usamos 'gh pr list' para evitar el mensaje de error "no pull requests found" en stderr.
+# Este comando devuelve un array JSON vacío '[]' si no se encuentran PRs, y sale con código 0.
+$existingPrsJson = & gh pr list --head $currentBranch --base $BaseBranch --state open --json url 2>$null
+
+$existingPr = $null
+if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace($existingPrsJson) -and $existingPrsJson -ne "[]") {
+    try {
+        $prObjects = $existingPrsJson | ConvertFrom-Json
+        if ($prObjects.Count -gt 0) {
+            $existingPr = $prObjects[0].url
+        }
+    } catch {
+        Write-Warning "No se pudo analizar la salida de 'gh pr list': $_"
+    }
+}
+
+if ($existingPr) {
     Write-Host "[OK] Ya existe un Pull Request para esta rama: $existingPr" -ForegroundColor Green
     if ((Read-Host "¿Deseas abrirlo en el navegador? (s/n)") -eq 's') {
         Start-Process $existingPr
     }
     return
 }
+Write-Host "[INFO] No se encontraron Pull Requests activos para '$currentBranch' a '$BaseBranch'." -ForegroundColor Gray
 
 # 6. Proceso de creacion interactivo
 $confirmation = Read-Host "¿Deseas crear un nuevo Pull Request para fusionar '$currentBranch' en '$BaseBranch'? (s/n)"
