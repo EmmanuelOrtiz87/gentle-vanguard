@@ -1,18 +1,17 @@
-<<<<<<< HEAD
-﻿﻿﻿﻿﻿﻿﻿# Workspace Foundation
+# Workspace Foundation
 
-Este es el proyecto base agnóstico diseñado para gestionar la infraestructura de desarrollo, herramientas de IA y habilidades predeterminadas.
+This is the agnostic base project designed to manage development infrastructure, AI tools, and default skills.
 
-## Arquitectura
+## Architecture
 
-- **Core**: Scripts de automatización en `scripts/`.
-- **Tools**: Binarios y repositorios de herramientas (Engram, Gentleman Skills) en `tools/`.
-- **Config**: Definiciones globales en `config/workspace.config.json`.
-- **Projects**: Directorio destinado a los proyectos que implementan esta base.
+- **Core**: Automation scripts in `scripts/`.
+- **Tools**: Binaries and tool repositories (Engram, Gentleman Skills) in `tools/`.
+- **Config**: Global definitions in `config/workspace.config.json`.
+- **Projects**: Directory intended for projects that implement this base.
 
-## Inicialización
+## Initialization
 
-Para configurar una máquina nueva desde cero, ejecuta:
+To configure a new machine from scratch, run:
 ```powershell
 ./scripts/bootstrap.ps1
 ```
@@ -42,6 +41,3 @@ El sistema incluye validaciones en:
 
 ---
 *Mantenido por el Agente IA de Engram.*
-=======
-# workspace_foundation
->>>>>>> origin/main
