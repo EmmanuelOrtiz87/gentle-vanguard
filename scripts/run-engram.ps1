@@ -35,15 +35,15 @@ function Ensure-Directory {
 $workspaceRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $defaultDataRoot = Join-Path $workspaceRoot '.engram-data'
 
-# Validación de inicialización
+# Initialization validation
 if (-not (Test-Path -LiteralPath $ConfigPath)) {
-    throw "El entorno no ha sido inicializado o el config no existe. Por favor, ejecuta 'scripts/bootstrap.ps1' primero."
+    throw "Environment not initialized or config missing. Run 'scripts/bootstrap.ps1' first."
 }
 
-# Health Check de dependencias críticas
+# Health check for critical dependencies
 $skillsDir = Join-Path $workspaceRoot "tools/Gentleman-Skills"
 if (-not (Test-Path $skillsDir)) {
-    Write-Warning "Gentleman-Skills no detectado. Algunas capacidades de IA podrian no estar disponibles."
+    Write-Warning "Gentleman-Skills not detected. Some AI capabilities may not be available."
 }
 
 $config = $null
@@ -73,7 +73,7 @@ Write-Host "[OK] Engram Session Data: $env:ENGRAM_DATA_DIR" -ForegroundColor Cya
 
 $engramCmd = Get-Command engram -ErrorAction SilentlyContinue
 if (-not $engramCmd) {
-    throw "engram no se encontro en PATH. Instala la herramienta o exponla antes de usar este launcher."
+    throw "engram not found in PATH. Install the tool or add it to PATH before using this launcher."
 }
 
 & engram @EngramArgs

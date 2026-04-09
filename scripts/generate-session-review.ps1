@@ -1,14 +1,14 @@
 # generate-session-review.ps1 (Foundation Core)
-# Generador agnóstico de reseñas de sesión para control de cambios asistido por IA.
+# Agnostic session review generator for AI-assisted change control.
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $projectRoot = Resolve-Path (Join-Path $scriptDir "..")
 Set-Location $projectRoot
 
-# Verificar si el directorio es un repositorio Git antes de proceder
+# Verify if the directory is a Git repository before proceeding
 git rev-parse --is-inside-work-tree 2>$null
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "[INFO] No se detecto un repositorio Git. Saltando generacion de reporte de sesion." -ForegroundColor Gray
+    Write-Host "[INFO] No Git repository detected. Skipping session report generation." -ForegroundColor Gray
     exit 0
 }
 
@@ -16,60 +16,59 @@ $headRef = git show-ref --head HEAD 2>$null
 if ($headRef) {
     $lastCommit = git rev-parse HEAD 2>$null
 } else {
-    Write-Host "No se detecto un commit previo. Inicializando reporte de sesion inicial."
+    Write-Host "No previous commit detected. Initializing initial session report."
     $lastCommit = "Initial"
 }
 
-# Capturar cambios actuales (staged y unstaged) para el reporte de sesion
+# Capture current changes (staged and unstaged) for the session report
 $changedFilesOutput = git status --porcelain 2>$null
 $changedFiles = $changedFilesOutput | ForEach-Object { 
     if ($_.Length -gt 3) { $_.Substring(3) }
 } | Where-Object { $_ -ne "" }
 
 if ($changedFiles.Count -eq 0 -and $lastCommit -ne "Initial") {
-    Write-Host "No hay cambios detectados para reportar en esta sesion."
+    Write-Host "No changes detected to report in this session."
     exit 0
 }
 
 $date = Get-Date -Format "yyyy-MM-dd"
+$fullDate = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
 $reviewDir = Join-Path $projectRoot "docs/code-reviews"
 if (-not (Test-Path $reviewDir)) {
     New-Item -ItemType Directory -Path $reviewDir -Force | Out-Null
 }
 
 $reviewFile = Join-Path $reviewDir "${date}-session-review.md"
+$templateFile = Join-Path $projectRoot "config/session-review.template.md"
 
-$contentLines = @()
-$contentLines += "# Code Review: Session Changes - $date"
-$contentLines += ""
-$contentLines += "> [!IMPORTANT]"
-$contentLines += "> Este documento es la memoria persistente de Engram para esta sesion."
-$contentLines += ""
-$contentLines += "**Fecha:** $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
-$contentLines += "**Reviewer:** Engram AI Agent"
-$currentBranch = git rev-parse --abbrev-ref HEAD 2>$null
-if ($LASTEXITCODE -ne 0) { $currentBranch = "Initial" }
-$contentLines += "**Base Branch:** $currentBranch"
-$contentLines += ""
-$contentLines += "## Archivos Cambiados"
-$contentLines += ""
-foreach ($file in $changedFiles) { $contentLines += "- $file" }
-if ($changedFiles.Count -eq 0) { $contentLines += "- No hay archivos modificados (Commit inicial)" }
+if (Test-Path $templateFile) {
+    $branch = git rev-parse --abbrev-ref HEAD 2>$null
+    $filesList = ($changedFiles | ForEach-Object { "- $_" }) -join "`n"
+    if ([string]::IsNullOrWhiteSpace($filesList)) { $filesList = "- No modified files" }
+    
+    # Detect Specs for SDD integration
+    $specsPath = Join-Path $projectRoot "docs/specs"
+    $specLink = "None found"
+    $specStatus = "N/A (Optional)"
+    if (Test-Path $specsPath) {
+        $specFiles = Get-ChildItem -Path $specsPath -File
+        if ($specFiles.Count -gt 0) {
+            $specLink = "docs/specs/$($specFiles[0].Name)"
+            $specStatus = "Pending AI/Manual Review"
+        }
+    }
 
-$contentLines += ""
-$contentLines += "## Analisis de Arquitectura y Calidad"
-$contentLines += ""
-$contentLines += "[Analisis automatico del agente sobre la integridad del proyecto]"
-$contentLines += ""
-$contentLines += "## Checklist de Validacion"
-$contentLines += ""
-$contentLines += "- [ ] El codigo cumple con los estandares de Gentleman Programming"
-$contentLines += "- [ ] No se han expuesto secretos o credenciales"
-$contentLines += "- [ ] La arquitectura base se mantiene intacta"
-$contentLines += "- [ ] Documentacion actualizada"
-$contentLines += ""
-$contentLines += "---"
-$contentLines += "*Reporte generado por Workspace Foundation Core.*"
+    $content = Get-Content $templateFile -Raw
+    $content = $content.Replace("{{DATE}}", $date)
+    $content = $content.Replace("{{FULL_DATE}}", $fullDate)
+    $content = $content.Replace("{{BRANCH}}", $branch)
+    $content = $content.Replace("{{CHANGED_FILES}}", $filesList)
+    $content = $content.Replace("{{SPEC_LINK}}", $specLink)
+    $content = $content.Replace("{{SPEC_STATUS}}", $specStatus)
 
-$contentLines -join "`n" | Out-File -FilePath $reviewFile -Encoding UTF8
-Write-Host "[OK] Session review generado en: $reviewFile" -ForegroundColor Green
+    $content | Out-File -FilePath $reviewFile -Encoding UTF8
+    Write-Host "[OK] Session review generated from template at: $reviewFile" -ForegroundColor Green
+} else {
+    Write-Error "Session review template not found at $templateFile"
+}
+Write-Host "[OK] Session review generated at: $reviewFile" -ForegroundColor Green

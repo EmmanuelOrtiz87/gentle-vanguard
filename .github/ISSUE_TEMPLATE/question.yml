@@ -1,0 +1,40 @@
+name: Question
+description: Ask a question about the project
+title: "[QUESTION] "
+labels: ["question", "triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Question
+        
+        Use this for general questions about the project.
+        
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question
+      description: What do you want to ask?
+      placeholder: Ask your question here...
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other context that might help answer your question?
+      placeholder: |
+        - What have you tried?
+        - What were you expecting?
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I've checked the documentation
+          required: true
+        - label: I've searched for existing questions
+          required: true
