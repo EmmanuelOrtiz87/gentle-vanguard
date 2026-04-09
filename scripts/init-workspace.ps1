@@ -45,3 +45,13 @@ if ($runner) {
 } else {
     & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $bootstrap @args
 }
+
+# Start Session Audit
+$auditScript = Join-Path $PSScriptRoot 'generate-session-audit.ps1'
+if (Test-Path $auditScript) {
+    try {
+        & $auditScript -Start
+    } catch {
+        Write-Warning "Could not start audit session: $_"
+    }
+}
