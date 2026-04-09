@@ -49,31 +49,31 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                           AUTOMATIC (Pre-commit)                              │
+│                         AUTOMATIC (Pre-commit)                               │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│    git commit ──▶ pre-commit hook ──▶ Fast scan (Secrets + Quality)        │
-│                                            │                                │
-│                           ┌─────────────────┼─────────────────┐               │
-│                           │                 │                 │               │
-│                      Critical?          Report saved        Allow            │
-│                           │                 │                 │               │
-│                           ▼                 ▼                 ▼               │
-│                       🚫 BLOCK          docs/reviews/     ✓ Proceed         │
-│                                                                              │
+│                                                                             │
+│    git commit ──► pre-commit hook ──► Fast scan (Secrets + Quality)     │
+│                                           │                                 │
+│                          ┌────────────────┼────────────────┐                │
+│                          │                │                │                │
+│                     Critical?         Report saved      Allow               │
+│                          │                │                │                │
+│                          ▼                ▼                ▼                │
+│                       [X] BLOCK     docs/reviews/    [OK] Proceed         │
+│                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                           MANUAL (On Demand)                                 │
+│                           MANUAL (On Demand)                                │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│    wf review              → Full review (all 7 dimensions)                  │
-│    wf review security     → Security only                                  │
-│    wf review quality     → Quality only                                    │
-│    wf review quick       → Fast scan (~30s)                                │
-│    wf review --report    → Generate detailed report                         │
-│    wf review --track     → Export issues to CSV                             │
-│                                                                              │
+│                                                                             │
+│    wf review              --> Full review (all 7 dimensions)                │
+│    wf review security     --> Security only                                 │
+│    wf review quality      --> Quality only                                   │
+│    wf review quick       --> Fast scan (~30s)                              │
+│    wf review --report    --> Generate detailed report                       │
+│    wf review --track     --> Export issues to CSV                           │
+│                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -469,6 +469,27 @@ workspace-foundation/
     ✓ AI-ready development environment
 ```
 
+## Acknowledgments
+
+This project integrates tools from [Gentleman-Programming](https://github.com/Gentleman-Programming) under MIT license.
+
+| Tool | Repository | Author |
+|------|------------|--------|
+| **Engram** | [gentleman-programming/engram](https://github.com/gentleman-programming/engram) | Gentleman-Programming |
+| **Gentle-AI** | [gentleman-programming/gentle-ai](https://github.com/gentleman-programming/gentle-ai) | Gentleman-Programming |
+| **GGA** | [gentleman-programming/gentleman-guardian-angel](https://github.com/Gentleman-Programming/gentleman-guardian-angel) | Gentleman-Programming |
+| **Gentleman-Skills** | [Gentleman-Programming/Gentleman-Skills](https://github.com/Gentleman-Programming/Gentleman-Skills) | Gentleman-Programming + Community |
+
+All integrated tools are published under the **MIT License**. See their respective repositories for license details.
+
 ## License
 
 MIT
+
+Copyright (c) 2024-2026 Emmanuel Ortiz
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
