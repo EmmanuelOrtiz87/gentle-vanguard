@@ -31,6 +31,8 @@
 
 ## Quick Start
 
+### New Projects
+
 ```powershell
 # 1. Initialize workspace
 .\scripts\wf.ps1 init
@@ -44,6 +46,28 @@
 # 4. Run code review
 .\scripts\wf.ps1 review
 ```
+
+### Existing Projects
+
+Workspace Foundation integrates into existing repositories without modifying your code:
+
+```powershell
+# 1. Navigate to your existing project
+cd C:\my-existing-project
+
+# 2. Integrate Foundation
+.\scripts\init-workspace.ps1
+
+# 3. That's it - Foundation adds capabilities
+#    - .audit/ directory
+#    - AI tools configured
+#    - Code review hooks
+#    - Audit system
+
+# See docs/INTEGRATION-EXISTING-PROJECTS.md for full guide
+```
+
+**Key point:** Foundation is **additive**. It never overwrites existing files.
 
 ## The Unified Flow
 
@@ -424,10 +448,13 @@ workspace-foundation/
 | Document | Description |
 |----------|-------------|
 | [Installation Guide](docs/installation.md) | Setup instructions |
+| [Existing Projects](docs/INTEGRATION-EXISTING-PROJECTS.md) | Integrate into existing repos |
+| [AI Configuration](docs/AI-CONFIGURATION.md) | Cloud & local AI setup |
 | [Project Types](docs/project-types.md) | Template details |
 | [Visual Guide](docs/VISUAL-GUIDE.md) | Complete visual reference |
 | [AI Models](docs/ai-models.md) | AI integration setup |
 | [Tools](docs/tools.md) | External tools reference |
+| [Technical Onboarding](docs/TECHNICAL-ONBOARDING.md) | Team training guide |
 
 ## Requirements
 
