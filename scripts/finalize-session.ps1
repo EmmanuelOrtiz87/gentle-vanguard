@@ -1,4 +1,4 @@
-# finalize-session.ps1 (Dashboard)
+# finalize-session.ps1 (Foundation Core)
 # Automates validation, Engram persistence, versioning, and publishing.
 # Supports interactive flows for:
 # 1. Git identity configuration (user/email).
@@ -14,11 +14,12 @@ param(
 $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $projectRoot = Resolve-Path (Join-Path $scriptDir "..")
+$projectName = Split-Path $projectRoot -Leaf # Get the current project name from the root directory
 Set-Location $projectRoot
 
-$targetBranch = "main"
+$targetBranch = "main" # Default branch defined early for initialization
 
-Write-Host "STARTING: Session finalization for Bitbucket Dashboard..." -ForegroundColor Cyan
+Write-Host "STARTING: Session finalization for $projectName..." -ForegroundColor Cyan
 
 # 0. Verify and initialize Git repository if missing
 if (-not (Test-Path (Join-Path $projectRoot ".git"))) {
@@ -42,8 +43,8 @@ if (-not (Test-Path (Join-Path $projectRoot ".git"))) {
 if (-not [string]::IsNullOrWhiteSpace($GitUser)) { git config user.name "$GitUser" }
 if (-not [string]::IsNullOrWhiteSpace($GitEmail)) { git config user.email "$GitEmail" }
 
-# 2. Verify/Request configuration if missing
-while ([string]::IsNullOrWhiteSpace($(git config user.name 2>$null))) {
+# 2. Verify/Request configuration if missing (Check global as fallback)
+while ([string]::IsNullOrWhiteSpace($(git config --get user.name 2>$null))) {
     Write-Host "WARN: Git user.name not detected." -ForegroundColor Yellow
     $inputUser = Read-Host "Enter your full name for Git (or 'exit' to cancel)"
     if ($inputUser -eq "exit") { exit 1 }
@@ -53,7 +54,7 @@ while ([string]::IsNullOrWhiteSpace($(git config user.name 2>$null))) {
     }
 }
 
-while ([string]::IsNullOrWhiteSpace($(git config user.email 2>$null))) {
+while ([string]::IsNullOrWhiteSpace($(git config --get user.email 2>$null))) {
     Write-Host "WARN: Git user.email not detected." -ForegroundColor Yellow
     $inputEmail = Read-Host "Enter your email for Git (or 'exit' to cancel)"
     if ($inputEmail -eq "exit") { exit 1 }
@@ -66,21 +67,44 @@ while ([string]::IsNullOrWhiteSpace($(git config user.email 2>$null))) {
 # 1. Validate and integrate changes into Engram memory
 & (Join-Path $scriptDir "validate-project.ps1")
 
-# 2. Git Workflow
-Write-Host "`nACTION: Versioning in Git (Branch: main)..." -ForegroundColor Cyan
+# 3. Git Workflow & Branch Management
+Write-Host "`nACTION: Branch Management and Versioning..." -ForegroundColor Cyan
 
-# Ensure we are on the correct branch
 $currentBranch = git branch --show-current
-if ($currentBranch -ne $targetBranch) {
-    if (git branch --list $targetBranch | Select-String -Quiet $targetBranch) {
-        git checkout -q $targetBranch
-    } else {
-        # In new repos or if branch missing, attempt create or rename current
-        git checkout -q -b $targetBranch 2>$null
-        if ($LASTEXITCODE -ne 0) { git branch -m $targetBranch 2>$null }
-        Write-Host "[INFO] Operating on branch: $targetBranch" -ForegroundColor Yellow
+$availableBranches = git branch --format="%(refname:short)" 2>$null
+
+if ([string]::IsNullOrWhiteSpace($currentBranch) -and -not $availableBranches) {
+    # Case: Brand new repository with no commits
+    $targetBranch = Read-Host "No branches detected. Enter name for initial branch [main]"
+    if ([string]::IsNullOrWhiteSpace($targetBranch)) { $targetBranch = "main" }
+} else {
+    Write-Host "Current branch: $currentBranch" -ForegroundColor Gray
+    $branchAction = Read-Host "Use (c)urrent branch, (s)elect existing, or create (n)ew branch? [c]"
+    
+    switch ($branchAction.ToLower()) {
+        "s" {
+            Write-Host "Available local branches:" -ForegroundColor Gray
+            $availableBranches | ForEach-Object { Write-Host " - $_" -ForegroundColor Gray }
+            $targetBranch = Read-Host "Enter branch name to use"
+            if ($availableBranches -notcontains $targetBranch) {
+                Write-Error "Branch '$targetBranch' does not exist."
+                exit 1
+            }
+            git checkout $targetBranch
+        }
+        "n" {
+            $targetBranch = Read-Host "Enter name for the new branch"
+            if ([string]::IsNullOrWhiteSpace($targetBranch)) { Write-Error "Branch name is required."; exit 1 }
+            git checkout -b $targetBranch
+        }
+        default {
+            $targetBranch = $currentBranch
+            if ([string]::IsNullOrWhiteSpace($targetBranch)) { $targetBranch = "main" }
+        }
     }
 }
+
+Write-Host "[INFO] Operating on branch: $targetBranch" -ForegroundColor Yellow
 
 # Verify and report on current remote
 if (git remote | Select-String -Quiet "^origin$") {
@@ -173,8 +197,8 @@ if (-not (git remote | Select-String "origin")) {
 git add .
 
 $timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm'
-$tagName = "dashboard-v$(Get-Date -Format 'yyyy.MM.dd-HHmm')"
-$msg = "feat: dashboard update - session $timestamp"
+$tagName = "$projectName-v$(Get-Date -Format 'yyyy.MM.dd-HHmm')" # Use dynamic project name
+$msg = "feat: $projectName update - session $timestamp" # Use dynamic project name
 
 # Commit only if changes detected
 $hasChanges = git status --porcelain
@@ -185,10 +209,15 @@ if ($hasChanges) {
         exit 1
     }
 
-    # Create tag only if commit successful and HEAD valid
+    # Create tag only if user confirms and HEAD is valid
     if (git rev-parse HEAD 2>$null) {
-        git tag -a $tagName -m "Release $tagName - Session $timestamp" 2>$null
-        Write-Host "SUCCESS: Commit and Tag ($tagName) created successfully." -ForegroundColor Green
+        $createTag = Read-Host "Do you want to create a version tag ($tagName) for this session? (y/n)"
+        if ($createTag -eq 'y') {
+            git tag -a $tagName -m "Release $tagName - Session $timestamp" 2>$null
+            Write-Host "SUCCESS: Commit and Tag ($tagName) created successfully." -ForegroundColor Green
+        } else {
+            Write-Host "SUCCESS: Commit created without tag." -ForegroundColor Green
+        }
     }
 } else {
     Write-Host "[INFO] No changes to commit in this session." -ForegroundColor Gray

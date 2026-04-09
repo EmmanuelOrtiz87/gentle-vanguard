@@ -1,0 +1,53 @@
+name: Documentation Update
+description: Improve documentation or fix outdated docs
+title: "[DOCS] "
+labels: ["documentation", "triage"]
+assignees: []
+body:
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Documentation Type
+      description: What type of documentation needs updating?
+      options:
+        - README
+        - Installation Guide
+        - API Documentation
+        - Tutorial
+        - Code Comments
+        - Examples
+        - CLI Help
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: file
+    attributes:
+      label: File Path
+      description: Path to the documentation file (if applicable)
+      placeholder: "e.g., docs/installation.md"
+
+  - type: textarea
+    id: current
+    attributes:
+      label: Current Documentation
+      description: What does the current documentation say?
+      placeholder: Paste the relevant section...
+
+  - type: textarea
+    id: improvement
+    attributes:
+      label: Suggested Improvement
+      description: How should this be improved?
+      placeholder: Describe the improvement...
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I've verified the documentation is incorrect
+          required: true
+        - label: I've tested any code examples
+          required: true

@@ -1,33 +1,33 @@
-# Documento Funcional: Workspace Foundation
+# Functional Document: Workspace Foundation
 
-## ¿Qué es Workspace Foundation?
-Workspace Foundation es una plataforma de infraestructura de desarrollo agnóstica diseñada para estandarizar, automatizar y potenciar el ciclo de vida del software mediante la integración nativa de Inteligencia Artificial y protocolos de calidad robustos.
+## What is Workspace Foundation?
+Workspace Foundation is an agnostic development infrastructure platform designed to standardize, automate, and enhance the software lifecycle through native Artificial Intelligence integration and robust quality protocols.
 
-## Objetivos Principales
-- **Estandarización:** Eliminar el "en mi máquina funciona" mediante un entorno replicable.
-- **Aceleración:** Reducir el tiempo de onboarding de nuevos desarrolladores de días a minutos.
-- **Calidad Continua:** Garantizar que cada línea de código sea revisada y validada antes de tocar el repositorio.
-- **Simbiosis con IA:** Proveer un entorno donde los agentes de IA (Engram) tengan el contexto necesario para asistir de forma efectiva.
+## Main Objectives
+- **Standardization:** Eliminate "works on my machine" through a replicable environment.
+- **Acceleration:** Reduce new developer onboarding time from days to minutes.
+- **Continuous Quality:** Ensure every line of code is reviewed and validated before touching the repository.
+- **AI Symbiosis:** Provide an environment where AI agents (Engram) have the necessary context to assist effectively.
 
-## Ventajas y Beneficios
-| Ventaja | Impacto en el Negocio |
+## Advantages and Benefits
+| Advantage | Business Impact |
 | :--- | :--- |
-| **Libertad de Entorno** | Operación idéntica en Windows, macOS y Linux. Sin "lock-in" de plataforma. |
-| **Automatización E2E** | Desde la creación del repositorio hasta el Pull Request en un solo flujo. |
-| **Independencia de Repo** | Compatible con Bitbucket, GitHub o infraestructura on-premise. |
-| **Automatización de Reseñas** | Los "Session Reviews" automáticos ahorran horas de documentación técnica. |
-| **Seguridad Proactiva** | Integración con GGA para evitar fugas de credenciales en tiempo real. |
-| **Trazabilidad Total** | Sistema de versionado con Tags automáticos para auditorías y rollbacks. |
+| **Environment Freedom** | Identical operation on Windows, macOS, and Linux. No platform "lock-in". |
+| **E2E Automation** | From repository creation to Pull Request in a single flow. |
+| **Repo Independence** | Compatible with Bitbucket, GitHub, or on-premise infrastructure. |
+| **Review Automation** | Automatic "Session Reviews" save hours of technical documentation. |
+| **Proactive Security** | Integration with GGA to prevent credential leaks in real-time. |
+| **Total Traceability** | Versioning system with automatic Tags for audits and rollbacks. |
 
-## Impacto en el Proceso de Desarrollo
-Foundation transforma un proceso manual y propenso a errores en una "fábrica de software" automatizada:
-1. **Inicio:** El desarrollador ejecuta `bootstrap` y obtiene todas las herramientas.
-2. **Desarrollo:** El agente de IA tiene acceso a `Gentleman-Skills` para guiar al dev.
-3. **Cierre:** El sistema valida, documenta y sube el código sin intervención manual tediosa.
+## Impact on Development Process
+Foundation transforms a manual, error-prone process into an automated "software factory":
+1. **Start:** Developer runs `bootstrap` and gets all tools.
+2. **Development:** AI agent has access to `Gentleman-Skills` to guide the developer.
+3. **Closure:** System validates, documents, and uploads code without tedious manual intervention.
 
-## Desventajas / Desafíos
-- **Curva de Aprendizaje Inicial:** Los desarrolladores deben adaptarse a usar los scripts de la base.
-- **Mantenimiento de Tools:** Requiere mantener actualizados los repositorios base (Engram/GGA).
+## Disadvantages / Challenges
+- **Initial Learning Curve:** Developers must adapt to using the foundation scripts.
+- **Tools Maintenance:** Requires keeping base repositories (Engram/GGA) up to date.
 
-## Impacto en Publicación Productiva
-Al asegurar que el código que sale de la máquina del desarrollador ya está compilado, validado por linters y documentado, la tasa de fallo en los pipelines de CI/CD se reduce drásticamente, acelerando el *Time-to-Market*.
+## Impact on Production Release
+By ensuring that code leaving the developer's machine is already compiled, validated by linters, and documented, the failure rate in CI/CD pipelines is drastically reduced, accelerating *Time-to-Market*.
