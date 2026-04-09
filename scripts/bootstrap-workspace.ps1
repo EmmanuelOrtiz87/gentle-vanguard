@@ -230,6 +230,125 @@ function Remove-LegacyTemplateFiles {
     }
 }
 
+function Install-SecuritySkill {
+    param(
+        [string]$ProjectPath,
+        [string]$WorkspaceSkillsPath,
+        [string]$SkillName = 'security-expert-skill'
+    )
+
+    $skillSource = Join-Path $WorkspaceSkillsPath $SkillName
+    $skillDest = Join-Path $ProjectPath '.workspace-foundation\skills\$SkillName'
+    
+    $skillDest = Join-Path $ProjectPath ".workspace-foundation\skills\$SkillName"
+    
+    if (Test-Path $skillSource) {
+        Write-Host "Installing $SkillName..."
+        Ensure-Directory -Path (Split-Path -Parent $skillDest)
+        Copy-Item -Path $skillSource -Destination $skillDest -Recurse -Force
+        
+        Install-SecurityHook -ProjectPath $ProjectPath
+        
+        Write-Success "Security Expert skill installed"
+        return $true
+    } else {
+        Write-Warning "$SkillName not found in workspace skills"
+        return $false
+    }
+}
+
+function Install-SecurityHook {
+    param([string]$ProjectPath)
+
+    $hooksDir = Join-Path $ProjectPath '.git\hooks'
+    Ensure-Directory -Path $hooksDir
+    
+    $isWindows = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows)
+    
+    $hookScript = if ($isWindows) {
+        'pre-commit-security.ps1'
+    } else {
+        'pre-commit-security.sh'
+    }
+    
+    $hookSource = Join-Path $WorkspaceRoot "skills\security-expert-skill\hooks\$hookScript"
+    $hookDest = Join-Path $hooksDir 'pre-commit'
+    
+    if (Test-Path $hookSource) {
+        Copy-Item -Path $hookSource -Destination $hookDest -Force
+        
+        if (-not $isWindows) {
+            & chmod +x $hookDest 2>$null
+        }
+        
+        Write-Success "Security pre-commit hook installed"
+    }
+}
+
+function Install-ProjectSkills {
+    param(
+        [string]$ProjectPath,
+        [string]$WorkspaceSkillsPath,
+        [string[]]$SkillNames
+    )
+
+    $hooksInstalled = $false
+
+    foreach ($skillName in $SkillNames) {
+        $skillSource = Join-Path $WorkspaceSkillsPath $skillName
+        
+        if (-not (Test-Path $skillSource)) {
+            Write-Warning "Skill not found: $skillName"
+            continue
+        }
+        
+        $skillDest = Join-Path $ProjectPath ".workspace-foundation\skills\$skillName"
+        Ensure-Directory -Path (Split-Path -Parent $skillDest)
+        
+        Copy-Item -Path $skillSource -Destination $skillDest -Recurse -Force
+        Write-Host "  Installed skill: $skillName"
+        
+        if (-not $hooksInstalled) {
+            $hooksSource = Join-Path $skillSource "hooks"
+            if (Test-Path $hooksSource) {
+                Install-ReviewHook -ProjectPath $ProjectPath -HooksSource $hooksSource
+                $hooksInstalled = $true
+            }
+        }
+    }
+}
+
+function Install-ReviewHook {
+    param(
+        [string]$ProjectPath,
+        [string]$HooksSource
+    )
+
+    $hooksDir = Join-Path $ProjectPath '.git\hooks'
+    Ensure-Directory -Path $hooksDir
+    
+    $isWindows = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows)
+    
+    $hookScript = if ($isWindows) {
+        'pre-commit-review.ps1'
+    } else {
+        'pre-commit-review.sh'
+    }
+    
+    $hookSource = Join-Path $HooksSource $hookScript
+    $hookDest = Join-Path $hooksDir 'pre-commit'
+    
+    if (Test-Path $hookSource) {
+        Copy-Item -Path $hookSource -Destination $hookDest -Force
+        
+        if (-not $isWindows) {
+            & chmod +x $hookDest 2>$null
+        }
+        
+        Write-Success "Code Review hook installed"
+    }
+}
+
 function Initialize-Project {
     param(
         [string]$Name,
@@ -282,7 +401,13 @@ if (-not $config.projectDefaults) {
     })
 }
 if (-not $config.projectKinds) { $config | Add-Member -NotePropertyName projectKinds -NotePropertyValue @('service', 'cli', 'library') }
-if (-not $config.tools) { $config | Add-Member -NotePropertyName tools -NotePropertyValue @() }
+    if (-not $config.tools) { $config | Add-Member -NotePropertyName tools -NotePropertyValue @() }
+if (-not $config.skills) {
+    $config | Add-Member -NotePropertyName skills -NotePropertyValue @(
+        'workspace-foundation',
+        'code-review-orchestrator-skill'
+    )
+}
 
 Ensure-Directory -Path $WorkspaceRoot
 Ensure-Directory -Path $config.dataRoot
@@ -440,6 +565,12 @@ if ($CreateProject) {
         'ai-model-endpoint' = $selectedAiModelEndpoint
         'ai-model-notes' = $selectedAiModelNotes
     }
+
+    Write-Host "Installing project skills..."
+    $projectSkills = if ($config.skills) { $config.skills } else {
+        @('workspace-foundation', 'security-expert-skill', 'testing-skill', 'git-workflow-skill')
+    }
+    Install-ProjectSkills -ProjectPath $destination -WorkspaceSkillsPath $config.toolsRoot -SkillNames $projectSkills
 
     Write-Host "Project scaffold created at $destination"
 

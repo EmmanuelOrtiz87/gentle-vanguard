@@ -4,9 +4,14 @@
 
 param(
     [Parameter(Position = 0)]
-    [ValidateSet('init', 'new', 'validate', 'tools', 'skills', 'clean', 'help', 'version', 'info', 'doctor', 'update', 'completion', 'list', 'search', 'config', 'deploy', 'migrate', 'test')]
+    [ValidateSet('init', 'new', 'validate', 'tools', 'skills', 'clean', 'help', 'version', 'info', 'doctor', 'update', 'completion', 'list', 'search', 'config', 'deploy', 'migrate', 'test', 'review')]
     [string]$Command = 'help',
-    [switch]$Interactive
+    [Parameter(Position = 1)]
+    [string]$Scope = 'all',
+    [switch]$Interactive,
+    [switch]$Report,
+    [switch]$Track,
+    [switch]$VerboseOutput
 )
 
 $ErrorActionPreference = 'Stop'
@@ -49,11 +54,29 @@ function Show-Help {
     Write-Host "  validate     Validate workspace" -ForegroundColor White
     Write-Host "  tools        Manage tools" -ForegroundColor White
     Write-Host "  skills       Manage skills" -ForegroundColor White
+    Write-Host "  review       Comprehensive code review" -ForegroundColor White
     Write-Host "  clean        Clean runtime" -ForegroundColor White
     Write-Host "  doctor       Diagnose issues" -ForegroundColor White
     Write-Host "  list         List projects" -ForegroundColor White
     Write-Host "  version      Show version" -ForegroundColor White
     Write-Host "  help         Show this help" -ForegroundColor White
+    Write-Host ""
+    
+    Write-Host "CODE REVIEW COMMANDS:" -ForegroundColor Magenta
+    Write-Host "  wf review                    Full comprehensive review (all dimensions)" -ForegroundColor White
+    Write-Host ""
+    Write-Host "  Scope Options:" -ForegroundColor Yellow
+    Write-Host "    wf review --scope all       Full review (default)" -ForegroundColor Gray
+    Write-Host "    wf review --scope security   Security-focused review" -ForegroundColor Gray
+    Write-Host "    wf review --scope quality    Code quality review" -ForegroundColor Gray
+    Write-Host "    wf review --scope testing   Test coverage review" -ForegroundColor Gray
+    Write-Host "    wf review --scope docs      Documentation review" -ForegroundColor Gray
+    Write-Host "    wf review --scope quick     Security + Quality (fast)" -ForegroundColor Gray
+    Write-Host ""
+    Write-Host "  Options:" -ForegroundColor Yellow
+    Write-Host "    wf review --report          Generate detailed report" -ForegroundColor Gray
+    Write-Host "    wf review --track           Export issues to CSV" -ForegroundColor Gray
+    Write-Host "    wf review --verbose         Verbose output" -ForegroundColor Gray
     Write-Host ""
     
     Write-Host "For help on a command, run: wf <command> -help" -ForegroundColor Gray
@@ -293,6 +316,34 @@ function Invoke-List {
     }
 }
 
+function Invoke-Review {
+    $orchestratorScript = Join-Path $Script:WF_ROOT "skills\code-review-orchestrator-skill\code-review.ps1"
+    
+    if (-not (Test-Path $orchestratorScript)) {
+        Write-Error "Code Review Orchestrator skill not installed. Run 'wf skills --install' to install."
+        exit 1
+    }
+    
+    Write-Banner "Code Review Orchestrator"
+    
+    $currentDir = if ($Path -eq '.' -or [string]::IsNullOrWhiteSpace($Path)) {
+        $PWD.Path
+    } else {
+        $Path
+    }
+    
+    $params = @{
+        Scope = $Scope
+        Path = $currentDir
+    }
+    if ($Report) { $params['Report'] = $Report }
+    if ($Interactive) { $params['Interactive'] = $Interactive }
+    if ($Track) { $params['Track'] = $Track }
+    if ($VerboseOutput) { $params['Verbose'] = $VerboseOutput }
+    
+    & $orchestratorScript @params
+}
+
 switch ($Command) {
     'help' { Show-Help }
     'version' { Show-Version }
@@ -302,6 +353,7 @@ switch ($Command) {
     'doctor' { Invoke-Doctor }
     'tools' { Invoke-Tools }
     'skills' { Invoke-Skills }
+    'review' { Invoke-Review }
     'clean' { Invoke-Clean }
     'list' { Invoke-List }
     default {

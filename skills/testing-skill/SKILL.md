@@ -72,14 +72,14 @@ src/
 ## Test Structure (AAA Pattern)
 
 ```typescript
-// ❌ Bad
+// BAD
 test('test', () => {
   const user = { name: 'John', age: 30 };
   user.age = 31;
   expect(user.age).toBe(31);
 });
 
-// ✅ Good
+// GOOD
 describe('User', () => {
   describe('age', () => {
     it('should update age when birthday is called', () => {

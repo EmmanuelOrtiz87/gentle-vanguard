@@ -55,19 +55,19 @@ Identify and prevent security vulnerabilities, implement secure authentication/a
 ## Input Validation
 
 ```typescript
-// ❌ Dangerous - SQL Injection
+// DANGEROUS - SQL Injection
 const query = `SELECT * FROM users WHERE id = ${userId}`;
 
-// ✅ Safe - Parameterized Query
+// SAFE - Parameterized Query
 const query = `SELECT * FROM users WHERE id = $1`;
 await db.query(query, [userId]);
 ```
 
 ```typescript
-// ❌ Dangerous - XSS
+// DANGEROUS - XSS
 const html = `<div>${userInput}</div>`;
 
-// ✅ Safe - Output Encoding
+// SAFE - Output Encoding
 import DOMPurify from 'dompurify';
 const html = DOMPurify.sanitize(userInput);
 ```

@@ -9,15 +9,53 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+#### Code Review Orchestrator (v2.0.0)
+- Unified code review system that orchestrates all technical skills
+- Multi-dimensional analysis: Security, Quality, Architecture, Testing, Documentation, API Design, Git Workflow
+- Pre-commit hook integration for automatic scanning
+- Interactive mode with actionable feedback
+- Issue tracking and CSV export
+- Comprehensive markdown reports
+
+#### CLI Commands
+- `wf review` - Full comprehensive code review
+- `wf review --scope <type>` - Scope-specific reviews (security, quality, testing, docs, quick)
+- `wf review --report` - Generate detailed report
+- `wf review --track` - Export issues to CSV
+
+#### Pre-commit Hook
+- Automatic code scanning before each commit
+- Critical issues block commits
+- Fast scan mode for performance
+- Reentrant protection to avoid infinite loops
+
 ### Changed
+
+#### Skills Consolidation
+- All specialized skills (security, testing, docs, etc.) now orchestrated by code-review-orchestrator
+- Single skill installation instead of multiple
+- Centralized configuration in `configs/review-config.json`
+
+#### Bootstrap Updates
+- Projects automatically install code-review-orchestrator skill
+- Pre-commit hook automatically configured on project creation
 
 ### Deprecated
 
+- `wf security` commands - Use `wf review --scope security` instead
+
 ### Removed
+
+- security-expert-skill as standalone (integrated into orchestrator)
+- Duplicate security commands from CLI
 
 ### Fixed
 
 ### Security
+
+- Pre-commit hook blocks commits with exposed secrets
+- Pattern-based secret detection (AWS keys, GitHub tokens, API keys, etc.)
+- Vulnerability pattern scanning
 
 ## [1.0.0] - 2026-04-08
 
