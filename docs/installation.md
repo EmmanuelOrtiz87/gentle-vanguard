@@ -64,10 +64,28 @@ git config --global pull.rebase true
 .\scripts\wf.ps1 init --force
 ```
 
-### 3. Install Skills
+### 3. Install AI Tools (Optional but Recommended)
+
+The workspace-foundation includes integration with:
+
+| Tool | Purpose | Install |
+|------|---------|---------|
+| **OpenCode** | AI coding agent | https://opencode.ai |
+| **Claude Code** | AI coding agent | https://claude.ai/code |
+| **gentle-ai** | AI ecosystem configurator | `go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest` |
+| **gga** | AI code review on commits | https://github.com/Gentleman-Programming/gentleman-guardian-angel |
+| **engram** | Persistent memory | `go install github.com/gentleman-programming/engram/cmd/engram@latest` |
+
+### 4. Install Skills
+
+Skills are automatically installed for detected AI agents. To manually install:
 
 ```powershell
-.\scripts\wf.ps1 skills --install
+# For Claude Code
+cp -r tools/Gentleman-Skills/curated/* ~/.claude/skills/
+
+# For OpenCode
+cp -r tools/Gentleman-Skills/curated/* ~/.config/opencode/skills/
 ```
 
 ## Project Creation

@@ -349,6 +349,246 @@ function Install-ReviewHook {
     }
 }
 
+# ============================================================================
+# GGA (Gentleman Guardian Angel) Integration
+# ============================================================================
+
+function Install-Gga {
+    param(
+        [string]$ProjectPath
+    )
+
+    $ggaSource = Join-Path $WorkspaceRoot "templates\gga"
+
+    if (-not (Test-Path $ggaSource)) {
+        Write-Host "[GGA] Templates not found, skipping GGA installation." -ForegroundColor Yellow
+        return $false
+    }
+
+    Write-Host "[GGA] Installing GGA configuration..." -ForegroundColor Blue
+
+    # Copy .gga config file
+    $ggaConfigSource = Join-Path $ggaSource ".gga"
+    $ggaConfigDest = Join-Path $ProjectPath ".gga"
+
+    if (Test-Path $ggaConfigSource) {
+        Copy-Item -Path $ggaConfigSource -Destination $ggaConfigDest -Force
+        Write-Host "[GGA] Copied .gga configuration" -ForegroundColor Green
+    }
+
+    # Copy AGENTS.md template (merge with existing if present)
+    $agentsSource = Join-Path $ggaSource "AGENTS.md"
+    $agentsDest = Join-Path $ProjectPath "AGENTS.md"
+
+    if (Test-Path $agentsSource) {
+        if (-not (Test-Path $agentsDest)) {
+            Copy-Item -Path $agentsSource -Destination $agentsDest -Force
+            Write-Host "[GGA] Copied AGENTS.md template" -ForegroundColor Green
+        }
+        else {
+            Write-Host "[GGA] AGENTS.md already exists, preserving existing file" -ForegroundColor Yellow
+        }
+    }
+
+    # Install pre-commit hook
+    Install-GgaHook -ProjectPath $ProjectPath
+
+    return $true
+}
+
+function Install-GgaHook {
+    param(
+        [string]$ProjectPath
+    )
+
+    $hooksDir = Join-Path $ProjectPath ".git\hooks"
+    Ensure-Directory -Path $hooksDir
+
+    $isWindows = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows)
+
+    $hookScript = if ($isWindows) {
+        "pre-commit-gga.ps1"
+    }
+    else {
+        "pre-commit-gga.sh"
+    }
+
+    $hookSource = Join-Path $WorkspaceRoot "templates\gga\hooks\$hookScript"
+    $hookDest = Join-Path $hooksDir "pre-commit"
+
+    if (Test-Path $hookSource) {
+        Copy-Item -Path $hookSource -Destination $hookDest -Force
+
+        if (-not $isWindows) {
+            & chmod +x $hookDest 2>$null
+        }
+
+        Write-Host "[GGA] Pre-commit hook installed" -ForegroundColor Green
+    }
+}
+
+function Install-GgaGlobal {
+    param()
+
+    $isGitBash = $env:MSYSTEM -eq "MINGW64" -or $env:OSTYPE -like "msys*"
+    $hasBash = Test-Path "C:\Program Files\Git\bin\bash.exe"
+
+    if (-not $hasBash) {
+        Write-Host "[GGA] Git Bash not found. GGA requires Git Bash on Windows." -ForegroundColor Yellow
+        Write-Host "[GGA] Install Git for Windows with Git Bash to enable GGA." -ForegroundColor Yellow
+        return $false
+    }
+
+    # Check if already installed
+    $ggaInstalled = $false
+    $ggaPaths = @(
+        "$env:HOME\bin\gga",
+        "$env:USERPROFILE\bin\gga"
+    )
+
+    foreach ($path in $ggaPaths) {
+        if (Test-Path $path) {
+            Write-Host "[GGA] Already installed at: $path" -ForegroundColor Green
+            $ggaInstalled = $true
+            break
+        }
+    }
+
+    if ($ggaInstalled) {
+        return $true
+    }
+
+    Write-Host "[GGA] Installing Gentleman Guardian Angel globally..." -ForegroundColor Blue
+
+    # Clone repository
+    $ggaRepoPath = Join-Path $env:TEMP "gentleman-guardian-angel"
+
+    if (-not (Test-Path $ggaRepoPath)) {
+        Write-Host "[GGA] Cloning repository..." -ForegroundColor Blue
+        git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git $ggaRepoPath 2>$null
+    }
+
+    if (Test-Path (Join-Path $ggaRepoPath "install.sh")) {
+        & "C:\Program Files\Git\bin\bash.exe" -c "cd '$ggaRepoPath' && bash install.sh"
+        Write-Host "[GGA] Installation complete!" -ForegroundColor Green
+        return $true
+    }
+
+    Write-Host "[GGA] Failed to install GGA" -ForegroundColor Red
+    return $false
+}
+
+# ============================================================================
+# Gentle-AI Integration
+# ============================================================================
+
+function Install-GentleAi {
+    param()
+
+    # Check if already installed
+    $gentleAi = Get-Command gentle-ai -ErrorAction SilentlyContinue
+    if ($gentleAi) {
+        Write-Host "[Gentle-AI] Already installed: $($gentleAi.Source)" -ForegroundColor Green
+        return $true
+    }
+
+    # Check if Go is available
+    $go = Get-Command go -ErrorAction SilentlyContinue
+    if (-not $go) {
+        Write-Host "[Gentle-AI] Go not found. Please install Go 1.24+ to install Gentle-AI." -ForegroundColor Yellow
+        return $false
+    }
+
+    Write-Host "[Gentle-AI] Installing AI Gentle Stack..." -ForegroundColor Blue
+
+    try {
+        & go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest 2>$null
+
+        # Verify installation
+        $installed = Get-Command gentle-ai -ErrorAction SilentlyContinue
+        if ($installed) {
+            Write-Host "[Gentle-AI] Installation complete!" -ForegroundColor Green
+            Write-Host "[Gentle-AI] Run 'gentle-ai' in your AI agent to configure the ecosystem." -ForegroundColor Cyan
+            return $true
+        }
+    }
+    catch {
+        Write-Host "[Gentle-AI] Installation failed: $_" -ForegroundColor Red
+    }
+
+    return $false
+}
+
+# ============================================================================
+# Gentleman-Skills Integration
+# ============================================================================
+
+function Install-GentlemanSkills {
+    param()
+
+    $skillsRepo = Join-Path $config.toolsRoot "Gentleman-Skills"
+
+    if (-not (Test-Path $skillsRepo)) {
+        Write-Host "[Gentleman-Skills] Cloning repository..." -ForegroundColor Blue
+        try {
+            git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git $skillsRepo 2>$null
+        }
+        catch {
+            Write-Host "[Gentleman-Skills] Failed to clone repository: $_" -ForegroundColor Red
+            return $false
+        }
+    }
+    else {
+        Write-Host "[Gentleman-Skills] Repository already exists at: $skillsRepo" -ForegroundColor Green
+    }
+
+    Write-Host "[Gentleman-Skills] Skills available for installation." -ForegroundColor Cyan
+    Write-Host "[Gentleman-Skills] To install skills for your AI agent, run:" -ForegroundColor Cyan
+    Write-Host "[Gentleman-Skills]   cp -r $skillsRepo\curated\* ~/.claude/skills\" -ForegroundColor White
+
+    return $true
+}
+
+function Install-GentlemanSkillsToAgent {
+    param(
+        [string]$Agent = "claude"
+    )
+
+    $skillsRepo = Join-Path $config.toolsRoot "Gentleman-Skills"
+
+    if (-not (Test-Path $skillsRepo)) {
+        Write-Host "[Gentleman-Skills] Repository not found. Skipping skill installation." -ForegroundColor Yellow
+        return $false
+    }
+
+    $skillsDir = switch ($Agent.ToLower()) {
+        "claude" { "$env:USERPROFILE\.claude\skills" }
+        "opencode" { "$env:USERPROFILE\.config\opencode\skills" }
+        "gemini" { "$env:USERPROFILE\.gemini\skills" }
+        "cursor" { "$env:USERPROFILE\.cursor\skills" }
+        default {
+            Write-Host "[Gentleman-Skills] Unknown agent: $Agent" -ForegroundColor Yellow
+            return $false
+        }
+    }
+
+    try {
+        Ensure-Directory -Path $skillsDir
+
+        $curatedPath = Join-Path $skillsRepo "curated"
+        if (Test-Path $curatedPath) {
+            Copy-Item -Path (Join-Path $curatedPath "*") -Destination $skillsDir -Recurse -Force -ErrorAction SilentlyContinue
+            Write-Host "[Gentleman-Skills] Installed curated skills for $Agent" -ForegroundColor Green
+            return $true
+        }
+    }
+    catch {
+        Write-Host "[Gentleman-Skills] Failed to install skills: $_" -ForegroundColor Red
+    }
+
+    return $false
+}
+
 function Initialize-Project {
     param(
         [string]$Name,
@@ -376,6 +616,20 @@ function Initialize-Project {
 }
 
 $config = Read-WorkspaceConfig -Path $ConfigPath
+
+# Resolve relative paths based on WorkspaceRoot
+if ($config.dataRoot -and -not [System.IO.Path]::IsPathRooted($config.dataRoot)) {
+    $config.dataRoot = Join-Path $WorkspaceRoot $config.dataRoot
+}
+if ($config.toolsRoot -and -not [System.IO.Path]::IsPathRooted($config.toolsRoot)) {
+    $config.toolsRoot = Join-Path $WorkspaceRoot $config.toolsRoot
+}
+if ($config.projectsRoot -and -not [System.IO.Path]::IsPathRooted($config.projectsRoot)) {
+    $config.projectsRoot = Join-Path $WorkspaceRoot $config.projectsRoot
+}
+if ($config.projectTemplate -and -not [System.IO.Path]::IsPathRooted($config.projectTemplate)) {
+    $config.projectTemplate = Join-Path $WorkspaceRoot $config.projectTemplate
+}
 
 if (-not $config.dataRoot) { $config | Add-Member -NotePropertyName dataRoot -NotePropertyValue $(Join-Path $WorkspaceRoot '.engram-data') }
 if (-not $config.toolsRoot) { $config | Add-Member -NotePropertyName toolsRoot -NotePropertyValue $(Join-Path $WorkspaceRoot 'tools') }
@@ -568,9 +822,32 @@ if ($CreateProject) {
 
     Write-Host "Installing project skills..."
     $projectSkills = if ($config.skills) { $config.skills } else {
-        @('workspace-foundation', 'security-expert-skill', 'testing-skill', 'git-workflow-skill')
+        @('workspace-foundation', 'code-review-orchestrator-skill')
     }
     Install-ProjectSkills -ProjectPath $destination -WorkspaceSkillsPath $config.toolsRoot -SkillNames $projectSkills
+
+    # Install GGA (Gentleman Guardian Angel) for AI-powered code review
+    Install-Gga -ProjectPath $destination
+
+    # Try to install GGA globally if not already installed
+    Install-GgaGlobal
+
+    # Install Gentle-AI (AI Gentle Stack ecosystem configurator)
+    Install-GentleAi
+
+    # Install Gentleman-Skills (community-curated AI agent skills)
+    Install-GentlemanSkills
+
+    # Try to auto-detect and install skills for available AI agent
+    $detectedAgent = $null
+    if (Get-Command claude -ErrorAction SilentlyContinue) { $detectedAgent = "claude" }
+    elseif (Get-Command opencode -ErrorAction SilentlyContinue) { $detectedAgent = "opencode" }
+    elseif (Get-Command gemini -ErrorAction SilentlyContinue) { $detectedAgent = "gemini" }
+    elseif (Get-Command cursor -ErrorAction SilentlyContinue) { $detectedAgent = "cursor" }
+
+    if ($detectedAgent) {
+        Install-GentlemanSkillsToAgent -Agent $detectedAgent
+    }
 
     Write-Host "Project scaffold created at $destination"
 

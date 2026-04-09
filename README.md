@@ -5,7 +5,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                        WORKSPACE FOUNDATION v2.0                             │
+│                        WORKSPACE FOUNDATION v2.2                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │    ┌─────────────┐         ┌─────────────┐         ┌─────────────┐         │
@@ -16,7 +16,15 @@
 │                           ┌──────▼──────┐         ┌──────▼──────┐         │
 │                           │  Bootstrap  │         │ 7 Dimensions │         │
 │                           │   Engine    │         │   Scanned    │         │
-│                           └─────────────┘         └──────────────┘         │
+│                           └──────┬──────┘         └──────────────┘         │
+│                                  │                                          │
+│         ┌───────────────────────┼───────────────────────┐                  │
+│         │                       │                       │                  │
+│         ▼                       ▼                       ▼                  │
+│  ┌─────────────┐         ┌─────────────┐         ┌─────────────┐         │
+│  │ Gentle-AI   │         │ Gentleman-  │         │   Engram    │         │
+│  │ Ecosystem   │         │   Skills    │         │   Memory    │         │
+│  └─────────────┘         └─────────────┘         └─────────────┘         │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -75,6 +83,9 @@
 |---------|-------------|
 | **Unified CLI** | Single command (`wf`) for all operations |
 | **Code Review Orchestrator** | 7-dimensional automated code review |
+| **GGA Integration** | AI-powered code review on every commit |
+| **Gentle-AI** | AI ecosystem configurator with SDD workflow |
+| **Gentleman-Skills** | 20+ curated skills for AI agents |
 | **Pre-commit Security** | Automatic secrets detection before commit |
 | **Multi-Technology** | Supports Node.js, Go, Python, Rust, and more |
 | **Cross-Platform** | Works on Windows, Linux, and macOS |
@@ -143,6 +154,203 @@
                         └─────────────┘
 ```
 
+## GGA - AI-Powered Code Review
+
+**GGA** (Gentleman Guardian Angel) provides AI-powered code review on every commit, enforcing your project's coding standards defined in `AGENTS.md`.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           GGA WORKFLOW                                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    git commit ──▶ GGA Pre-commit Hook ──▶ AI Review ──▶ Pass/Fail
+                                                      │
+                                                      ▼
+                                              Check against AGENTS.md
+                                              Enforce coding standards
+                                              Block if violations found
+```
+
+### Supported AI Providers
+
+| Provider | Command | Installation |
+|----------|---------|--------------|
+| **Claude** | `claude` | [claude.ai/code](https://claude.ai/code) |
+| **OpenCode** | `opencode` | [opencode.ai](https://opencode.ai) |
+| **Gemini** | `gemini` | [gemini-cli](https://github.com/google-gemini/gemini-cli) |
+| **Ollama** | `ollama:<model>` | [ollama.ai](https://ollama.ai) |
+| **GitHub Models** | `github:<model>` | `gh auth login` |
+
+### Configuration
+
+Edit `.gga` in your project root:
+
+```bash
+PROVIDER="opencode"          # AI provider
+FILE_PATTERNS="*.py,*.ts"   # Files to review
+EXCLUDE_PATTERNS="*.test.*"  # Files to skip
+STRICT_MODE="false"          # Fail on ambiguous responses
+```
+
+### Commands
+
+```bash
+gga run          # Review staged files
+gga install      # Reinstall pre-commit hook
+gga uninstall    # Remove pre-commit hook
+gga config       # Show current configuration
+```
+
+> GGA is automatically installed when creating a new project with `wf new`.
+
+## Gentle-AI - AI Ecosystem Configurator
+
+**Gentle-AI** transforms your AI coding agent into an ecosystem with memory, skills, and Spec-Driven Development workflow.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     GENTLE-AI ECOSYSTEM                                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    Your AI Agent ──▶ Gentle-AI ──▶ Ecosystem with:
+                              ├── Persistent Memory
+                              ├── SDD Workflow
+                              ├── Skills System
+                              ├── MCP Servers
+                              └── Teaching Persona
+```
+
+### Supported AI Agents
+
+| Agent | Integration | Recommended |
+|-------|-------------|-------------|
+| **OpenCode** | Full (per-phase model routing) | Yes (default) |
+| Claude Code | Full (with sub-agents) | Yes |
+| Gemini CLI | Full (experimental) | No |
+| Cursor | Full (9 SDD agents) | Yes |
+| VS Code Copilot | Full (parallel execution) | No |
+| Codex | Solo-agent | No |
+| Windsurf | Solo-agent | No |
+| Antigravity | Solo-agent + Mission Control | No |
+
+OpenCode is the default provider for GGA code review and is recommended for its:
+- Multi-provider support (Claude, GPT, Gemini, local models)
+- Terminal, desktop, and IDE integration
+- 140K+ GitHub stars, 6.5M monthly developers
+
+### Quick Commands
+
+```bash
+gentle-ai              # Interactive TUI
+gentle-ai status       # Show ecosystem status
+gentle-ai update       # Update all components
+gentle-ai backup       # Backup configuration
+```
+
+### Post-Install (in your AI agent)
+
+```bash
+/sdd-init              # Initialize SDD context
+skill-registry         # Build skills registry
+```
+
+> Gentle-AI is automatically installed when creating a new project with `wf new`.
+
+## Gentleman-Skills - AI Agent Skill Library
+
+**Gentleman-Skills** provides community-curated skills for AI coding agents, offering specialized patterns for frameworks, libraries, and best practices.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     GENTLEMAN-SKILLS ECOSYSTEM                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    AI Agent ──▶ Skill Library ──▶ Framework Expertise
+                                  ├── Angular Patterns
+                                  ├── React Patterns
+                                  ├── Testing Patterns
+                                  ├── API Patterns
+                                  └── Workflow Patterns
+```
+
+### Available Skills
+
+#### Frontend
+
+| Skill | Description | Trigger |
+|-------|-------------|---------|
+| `angular/core` | Standalone components, signals, inject, zoneless | Angular components |
+| `angular/forms` | Signal Forms, Reactive Forms | Angular forms |
+| `angular/performance` | NgOptimizedImage, @defer, lazy loading | Angular optimization |
+| `angular/architecture` | Scope Rule, project structure, file naming | Angular projects |
+| `react-19` | React 19 patterns with React Compiler | React components |
+| `nextjs-15` | Next.js 15 App Router patterns | Next.js projects |
+| `typescript` | TypeScript strict patterns | TypeScript code |
+| `tailwind-4` | Tailwind CSS 4 patterns | Tailwind styling |
+| `zod-4` | Zod 4 schema validation | Zod validation |
+| `zustand-5` | Zustand 5 state management | React state |
+
+#### Backend & AI
+
+| Skill | Description | Trigger |
+|-------|-------------|---------|
+| `ai-sdk-5` | Vercel AI SDK 5 patterns | AI chat features |
+| `django-drf` | Django REST Framework patterns | Django REST APIs |
+| `pytest` | Python pytest patterns | Python tests |
+
+#### Testing
+
+| Skill | Description | Trigger |
+|-------|-------------|---------|
+| `playwright` | Playwright E2E testing patterns | E2E tests |
+
+#### Workflow
+
+| Skill | Description | Trigger |
+|-------|-------------|---------|
+| `github-pr` | Create quality PRs with conventional commits | PR creation |
+| `jira-task` | Jira task creation | Task creation |
+| `jira-epic` | Jira epic creation | Epic creation |
+| `skill-creator` | Create new AI agent skills | Skill creation |
+
+### Installation
+
+Skills are automatically installed for detected AI agents. To manually install:
+
+```bash
+# For Claude Code
+cp -r tools/Gentleman-Skills/curated/* ~/.claude/skills/
+
+# For OpenCode
+cp -r tools/Gentleman-Skills/curated/* ~/.config/opencode/skills/
+
+# For Gemini CLI
+cp -r tools/Gentleman-Skills/curated/* ~/.gemini/skills/
+
+# For Cursor
+cp -r tools/Gentleman-Skills/curated/* ~/.cursor/skills/
+```
+
+### Skill Structure
+
+```
+~/.claude/skills/
+├── angular/
+│   └── core/SKILL.md
+├── react-19/SKILL.md
+├── typescript/SKILL.md
+├── playwright/SKILL.md
+└── ...
+```
+
+Each skill contains:
+- **Trigger conditions** - When the AI should load this skill
+- **Patterns and rules** - Coding conventions to follow
+- **Code examples** - Reference implementations
+- **Anti-patterns** - What to avoid
+
+> Gentleman-Skills are automatically available when creating a new project with `wf new`.
+
 ## Severity Levels
 
 | Level | Icon | Description | Action |
@@ -188,22 +396,27 @@ workspace-foundation/
 │   ├── ISSUE_TEMPLATE/
 │   └── PULL_REQUEST_TEMPLATE/
 ├── config/                # Global configurations
+│   └── workspace.config.json
 ├── docs/                  # Documentation
-│   ├── VISUAL-GUIDE.md   # Complete visual reference
-│   ├── installation.md
-│   └── project-types.md
+│   ├── README.md         # This index
+│   ├── VISUAL-GUIDE.md  # Complete visual reference
+│   ├── ARCHITECTURE.md  # System design
+│   ├── installation.md   # Setup guide
+│   └── project-types.md # Template details
 ├── scripts/               # Automation scripts
-│   └── wf.ps1            # Main CLI
+│   └── wf.ps1           # Main CLI
 ├── skills/               # AI Skills
 │   ├── workspace-foundation/
 │   └── code-review-orchestrator/
 ├── templates/             # Project templates
 │   ├── project-root/     # Base template
-│   ├── project-types/    # By type
+│   ├── project-types/    # By type (service, cli, library, etc.)
+│   ├── gga/             # GGA configuration template
 │   ├── config/           # ESLint, Prettier, etc.
 │   ├── editor/           # Editor configs
 │   └── testing/          # Test templates
-└── tools/                 # External tools
+└── tools/                 # External tools (auto-installed)
+    └── Gentleman-Skills/ # AI agent skills library
 ```
 
 ## Documentation

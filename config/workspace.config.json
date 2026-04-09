@@ -1,14 +1,14 @@
 {
   "workspaceName": "workspace-foundation-portable",
-  "dataRoot": "{workspaceRoot}/.engram-data",
-  "toolsRoot": "{workspaceRoot}/tools",
-  "projectsRoot": "{workspaceRoot}/projects",
+  "dataRoot": ".engram-data",
+  "toolsRoot": "tools",
+  "projectsRoot": "projects",
   "aiModelSettings": {
-    "provider": "gemini",
-    "model": "gemini-pro",
-    "protocol": "mcp"
+    "provider": "opencode",
+    "model": "claude-sonnet-4-20250514",
+    "protocol": "openai"
   },
-  "projectTemplate": "{workspaceRoot}/templates/project-root",
+  "projectTemplate": "templates/project-root",
   "projectDefaults": {
     "repositoryMode": "template",
     "kind": "service",
@@ -56,6 +56,26 @@
         "windows": "$target = Join-Path '{toolsRoot}' 'Gentleman-Skills'; if (-not (Test-Path $target)) { git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git $target } else { Set-Location $target; git pull --ff-only }",
         "linux": "$target = Join-Path '{toolsRoot}' 'Gentleman-Skills'; if (-not (Test-Path $target)) { git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git $target } else { Set-Location $target; git pull --ff-only }",
         "macos": "$target = Join-Path '{toolsRoot}' 'Gentleman-Skills'; if (-not (Test-Path $target)) { git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git $target } else { Set-Location $target; git pull --ff-only }"
+      }
+    },
+    {
+      "name": "gentle-ai",
+      "checkCommand": "gentle-ai",
+      "requires": ["go"],
+      "install": {
+        "windows": "go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest",
+        "linux": "go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest",
+        "macos": "go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest"
+      }
+    },
+    {
+      "name": "opencode",
+      "checkCommand": "opencode",
+      "requires": [],
+      "install": {
+        "windows": "irm https://opencode.ai/install | iex",
+        "linux": "curl -fsSL https://opencode.ai/install | bash",
+        "macos": "curl -fsSL https://opencode.ai/install | bash"
       }
     }
   ]

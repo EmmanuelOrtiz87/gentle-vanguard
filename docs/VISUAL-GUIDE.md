@@ -615,49 +615,123 @@ my-service/
     └─────────────────────────────────────────────────────────────────────┘
 
     ┌─────────────────────────────────────────────────────────────────────┐
-    │  [*] CORE SKILLS (Auto-installed on project creation)              │
+    │  [*] CORE SKILLS (Auto-installed on project creation)                │
     │  ─────────────────────────────────────────────────────────────────  │
     │                                                                       │
-    │  ┌─────────────────────────┐  ┌─────────────────────────┐           │
-    │  │ workspace-foundation     │  │ code-review-orchestrator │           │
-    │  │                         │  │                         │           │
-    │  │ • Project scaffolding    │  │ • Unified review       │           │
-    │  │ • Bootstrapping         │  │ • 7 dimensions         │           │
-    │  │ • CLI integration        │  │ • Pre-commit hooks     │           │
-    │  │                         │  │ • Report generation    │           │
-    │  └─────────────────────────┘  └─────────────────────────┘           │
+    │  ┌─────────────────────────┐  ┌─────────────────────────┐            │
+    │  │ workspace-foundation   │  │ code-review-orchestrator │            │
+    │  │                       │  │                        │            │
+    │  │ [P] Project scaffold  │  │ [R] Unified review      │            │
+    │  │ [B] Bootstrapping     │  │ [7] 7 dimensions       │            │
+    │  │ [C] CLI integration    │  │ [H] Pre-commit hooks   │            │
+    │  └─────────────────────────┘  └─────────────────────────┘            │
     └─────────────────────────────────────────────────────────────────────┘
 
     ┌─────────────────────────────────────────────────────────────────────┐
-    │  [T] TECHNICAL SKILLS (Available for specific needs)              │
+    │  [AI] AI ECOSYSTEM SKILLS                                          │
     │  ─────────────────────────────────────────────────────────────────  │
     │                                                                       │
-    │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌────────────┐ │
-    │  │  security-   │ │   testing-   │ │    git-      │ │   docker-   │ │
-    │  │  expert     │ │    skill     │ │  workflow-    │ │   devops-   │ │
-    │  │    [S]     │ │     [T]      │ │    skill     │ │    skill   │ │
-    │  │             │ │              │ │      [G]    │ │      [D]    │ │
-    │  └──────────────┘ └──────────────┘ └──────────────┘ └────────────┘ │
+    │  ┌─────────────────────┐  ┌─────────────────────┐                   │
+    │  │ Gentle-AI          │  │ Gentleman-Skills    │                   │
+    │  │                     │  │                     │                   │
+    │  │ [S] SDD Workflow   │  │ [F] Framework patt. │                   │
+    │  │ [M] Memory system  │  │ [T] Testing patt.  │                   │
+    │  │ [K] Skills system  │  │ [W] Workflow patt.  │                   │
+    │  └─────────────────────┘  └─────────────────────┘                   │
+    │                                                                       │
+    │  Auto-installed for detected AI agents (Claude, OpenCode, Gemini)   │
+    └─────────────────────────────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────────────────────────────┐
+    │  [T] TECHNICAL SKILLS (Available for specific needs)                 │
+    │  ─────────────────────────────────────────────────────────────────  │
+    │                                                                       │
+    │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌────────────┐│
+    │  │  security-   │ │   testing-   │ │    git-      │ │   docker-   ││
+    │  │  expert     │ │    skill     │ │  workflow-    │ │   devops-   ││
+    │  │     [S]     │ │     [T]      │ │    skill     │ │    skill   ││
+    │  └──────────────┘ └──────────────┘ └──────────────┘ └────────────┘│
     │                                                                       │
     │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐                  │
     │  │     api-     │ │    archi-   │ │documentation-│                  │
     │  │   design-    │ │   tecture-  │ │  governance   │                  │
-    │  │    skill     │ │   governanc │ │     [D]       │                  │
-    │  │    [API]   │ │     [A]      │ │              │                  │
+    │  │    skill     │ │   governanc │ │               │                  │
+    │  │    [API]     │ │     [A]     │ │     [D]       │                  │
     │  └──────────────┘ └──────────────┘ └──────────────┘                  │
     └─────────────────────────────────────────────────────────────────────┘
+```
 
-    ┌─────────────────────────────────────────────────────────────────────┐
-    │  [P] TEMPLATE SKILLS (Domain-specific)                              │
-    │  ─────────────────────────────────────────────────────────────────  │
-    │                                                                       │
-    │  Available via: wf skills --install <skill-name>                   │
-    │                                                                       │
-    │  • react-19-skill    • nextjs-15-skill    • angular-core-skill     │
-    │  • django-drf-skill  • zod-4-skill        • playwright-skill       │
-    │  • pytest-skill       • ai-sdk-5-skill     • tailwind-4-skill      │
-    │  • zustand-5-skill   • typescript-skill                            │
-    └─────────────────────────────────────────────────────────────────────┘
+### 7.2 Gentleman-Skills Library
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      GENTLEMAN-SKILLS LIBRARY                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────┐
+    │  FRONTEND SKILLS                                                      │
+    └───────────────────────────────────────────────────────────────────────┘
+
+    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+    │  angular/   │  │   react-19  │  │   nextjs-15  │  │  tailwind-4  │
+    │  core       │  │              │  │              │  │              │
+    ├──────────────┤  ├──────────────┤  ├──────────────┤  ├──────────────┤
+    │ • Signals   │  │ • Compiler   │  │ • App Router │  │ • CSS 4      │
+    │ • Standalone│  │ • no useMemo │  │ • Server Act. │  │ • No var()   │
+    │ • Inject    │  │ • Server Fn. │  │ • Streaming  │  │ • cn()       │
+    └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘
+
+    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+    │   typescript │  │    zod-4    │  │  zustand-5   │  │  angular/    │
+    │              │  │              │  │              │  │  forms       │
+    ├──────────────┤  ├──────────────┤  ├──────────────┤  ├──────────────┤
+    │ • Strict    │  │ • Schema    │  │ • State mgmt │  │ • Signal     │
+    │ • Generics  │  │ • Validation │  │ • Slices     │  │ • Reactive   │
+    │ • Interfaces │  │ • Transform  │  │ • Persist    │  │ • Validation │
+    └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────┐
+    │  BACKEND & TESTING SKILLS                                             │
+    └───────────────────────────────────────────────────────────────────────┘
+
+    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+    │  django-drf  │  │   ai-sdk-5   │  │   playwright  │  │    pytest    │
+    │              │  │              │  │              │  │              │
+    ├──────────────┤  ├──────────────┤  ├──────────────┤  ├──────────────┤
+    │ • ViewSets   │  │ • AI SDK 5  │  │ • E2E tests  │  │ • Fixtures   │
+    │ • Serializers│  │ • Providers  │  │ • Page Obj.  │  │ • Mocking    │
+    │ • Filters    │  │ • Streaming  │  │ • Selectors   │  │ • Markers    │
+    └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘
+
+    ┌───────────────────────────────────────────────────────────────────────┐
+    │  WORKFLOW SKILLS                                                     │
+    └───────────────────────────────────────────────────────────────────────┘
+
+    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+    │  github-pr    │  │  jira-task   │  │  jira-epic   │  │skill-creator │
+    ├──────────────┤  ├──────────────┤  ├──────────────┤  ├──────────────┤
+    │ • PR format  │  │ • Std format │  │ • Epic format│  │ • Create new │
+    │ • Conventional│  │ • Acceptance │  │ • Stories    │  │ • Templates  │
+    │   Commits   │  │   Criteria    │  │ • Link TKs   │  │ • Best pract.│
+    └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘
+```
+
+### 7.3 Skill Installation Paths
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      AI AGENT SKILL PATHS                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    Agent          │  Skill Directory
+    ──────────────┼────────────────────────────────────────────
+    Claude Code   │  ~/.claude/skills/
+    OpenCode      │  ~/.config/opencode/skills/
+    Gemini CLI    │  ~/.gemini/skills/
+    Cursor        │  ~/.cursor/skills/
+    VS Code       │  ~/.copilot/skills/
+    Codex         │  ~/.codex/skills/
+    Windsurf      │  ~/.codeium/windsurf/skills/
 ```
 
 ---
