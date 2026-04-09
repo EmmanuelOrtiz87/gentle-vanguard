@@ -1,4 +1,4 @@
-# finalize-session.ps1 (Foundation)
+# finalize-session.ps1 (Foundation Core)
 # Automates validation, Engram persistence, versioning, and publishing.
 # Supports interactive flows for:
 # 1. Git identity configuration (user/email).
@@ -14,11 +14,12 @@ param(
 $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $projectRoot = Resolve-Path (Join-Path $scriptDir "..")
+$projectName = Split-Path $projectRoot -Leaf # Get the current project name from the root directory
 Set-Location $projectRoot
 
-$targetBranch = "foundation-base"
+$targetBranch = "main" # Default branch defined early for initialization
 
-Write-Host "STARTING: Session finalization for Foundation..." -ForegroundColor Cyan
+Write-Host "STARTING: Session finalization for $projectName..." -ForegroundColor Cyan
 
 # 0. Verify and initialize Git repository if missing
 if (-not (Test-Path (Join-Path $projectRoot ".git"))) {
@@ -38,54 +39,77 @@ if (-not (Test-Path (Join-Path $projectRoot ".git"))) {
     }
 }
 
-# 1. Apply identity immediately if parameters are passed (globally)
-if (-not [string]::IsNullOrWhiteSpace($GitUser)) { git config --global user.name "$GitUser" }
-if (-not [string]::IsNullOrWhiteSpace($GitEmail)) { git config --global user.email "$GitEmail" }
+# 1. Apply identity immediately if parameters are passed
+if (-not [string]::IsNullOrWhiteSpace($GitUser)) { git config user.name "$GitUser" }
+if (-not [string]::IsNullOrWhiteSpace($GitEmail)) { git config user.email "$GitEmail" }
 
-# 2. Verify/Request configuration if missing locally
-while ([string]::IsNullOrWhiteSpace($(git config user.name 2>$null))) {
+# 2. Verify/Request configuration if missing (Check global as fallback)
+while ([string]::IsNullOrWhiteSpace($(git config --get user.name 2>$null))) {
     Write-Host "WARN: Git user.name not detected." -ForegroundColor Yellow
     $inputUser = Read-Host "Enter your full name for Git (or 'exit' to cancel)"
     if ($inputUser -eq "exit") { exit 1 }
     if (-not [string]::IsNullOrWhiteSpace($inputUser)) {
         git config --global user.name "$inputUser"
-        git config user.name "$inputUser"
+        git config user.name "$inputUser" # Set local config too
     }
 }
 
-while ([string]::IsNullOrWhiteSpace($(git config user.email 2>$null))) {
+while ([string]::IsNullOrWhiteSpace($(git config --get user.email 2>$null))) {
     Write-Host "WARN: Git user.email not detected." -ForegroundColor Yellow
     $inputEmail = Read-Host "Enter your email for Git (or 'exit' to cancel)"
     if ($inputEmail -eq "exit") { exit 1 }
     if (-not [string]::IsNullOrWhiteSpace($inputEmail)) {
         git config --global user.email "$inputEmail"
-        git config user.email "$inputEmail"
+        git config user.email "$inputEmail" # Set local config too
     }
 }
 
 # 1. Validate and integrate changes into Engram memory
 & (Join-Path $scriptDir "validate-project.ps1")
 
-# 2. Git Workflow
-Write-Host "`nACTION: Versioning in Git (Branch: foundation-base)..." -ForegroundColor Cyan
+# 3. Git Workflow & Branch Management
+Write-Host "`nACTION: Branch Management and Versioning..." -ForegroundColor Cyan
 
-# Ensure we are on the correct branch (even in new repos)
 $currentBranch = git branch --show-current
-if ($currentBranch -ne $targetBranch) {
-    if (git branch --list $targetBranch) {
-        git checkout -q $targetBranch
-    } else {
-        # In new repos or if branch missing, attempt create or rename current
-        git checkout -q -b $targetBranch 2>$null
-        if ($LASTEXITCODE -ne 0) { git branch -m $targetBranch 2>$null }
-        Write-Host "INFO: Operating on branch: $targetBranch" -ForegroundColor Yellow
+$availableBranches = git branch --format="%(refname:short)" 2>$null
+
+if ([string]::IsNullOrWhiteSpace($currentBranch) -and -not $availableBranches) {
+    # Case: Brand new repository with no commits
+    $targetBranch = Read-Host "No branches detected. Enter name for initial branch [main]"
+    if ([string]::IsNullOrWhiteSpace($targetBranch)) { $targetBranch = "main" }
+} else {
+    Write-Host "Current branch: $currentBranch" -ForegroundColor Gray
+    $branchAction = Read-Host "Use (c)urrent branch, (s)elect existing, or create (n)ew branch? [c]"
+    
+    switch ($branchAction.ToLower()) {
+        "s" {
+            Write-Host "Available local branches:" -ForegroundColor Gray
+            $availableBranches | ForEach-Object { Write-Host " - $_" -ForegroundColor Gray }
+            $targetBranch = Read-Host "Enter branch name to use"
+            if ($availableBranches -notcontains $targetBranch) {
+                Write-Error "Branch '$targetBranch' does not exist."
+                exit 1
+            }
+            git checkout $targetBranch
+        }
+        "n" {
+            $targetBranch = Read-Host "Enter name for the new branch"
+            if ([string]::IsNullOrWhiteSpace($targetBranch)) { Write-Error "Branch name is required."; exit 1 }
+            git checkout -b $targetBranch
+        }
+        default {
+            $targetBranch = $currentBranch
+            if ([string]::IsNullOrWhiteSpace($targetBranch)) { $targetBranch = "main" }
+        }
     }
 }
 
+Write-Host "[INFO] Operating on branch: $targetBranch" -ForegroundColor Yellow
+
 # Verify and report on current remote
 if (git remote | Select-String -Quiet "^origin$") {
-    $currentRemote = git remote get-url origin 2>$null
-    Write-Host "INFO: Current 'origin' remote: $currentRemote" -ForegroundColor Gray
+    $currentRemote = git remote get-url origin
+    Write-Host "[INFO] Current 'origin' remote: $currentRemote" -ForegroundColor Gray
     $changeRemote = Read-Host "The current remote might be invalid. Do you want to remove it to configure a new one or create it in the cloud? (y/n)"
     if ($changeRemote -eq 'y') {
         git remote remove origin
@@ -95,7 +119,7 @@ if (git remote | Select-String -Quiet "^origin$") {
 
 # Check for origin remote existence
 if (-not (git remote | Select-String "origin")) {
-    Write-Host "WARN: No 'origin' remote found." -ForegroundColor Yellow
+    Write-Host "[!] No 'origin' remote found." -ForegroundColor Yellow
     
     $remoteUrl = ""
 
@@ -103,7 +127,7 @@ if (-not (git remote | Select-String "origin")) {
     $ghCli = Get-Command gh -ErrorAction SilentlyContinue
     if ($ghCli) {
         $oldEAP = $ErrorActionPreference
-        $ErrorActionPreference = 'Continue'
+        $ErrorActionPreference = 'SilentlyContinue' # Avoid breaking script on gh auth status errors
         $ghStatus = & gh auth status 2>&1
         $ErrorActionPreference = $oldEAP
         if ($LASTEXITCODE -eq 0) {
@@ -114,16 +138,16 @@ if (-not (git remote | Select-String "origin")) {
                 $vis = Read-Host "Privacy? (1) Public, (2) Private [Default: Private]"
                 $visFlag = if ($vis -eq "1") { "--public" } else { "--private" }
                 
-                Write-Host "INFO: Creating repository '$repoName' on GitHub..." -ForegroundColor Cyan
-                & gh repo create $repoName $visFlag --source=. --remote=origin
+                Write-Host "[INFO] Creating repository '$repoName' on GitHub..." -ForegroundColor Cyan
+                & gh repo create $repoName $visFlag --source=. --remote=origin -y # -y to accept prompts
                 if ($LASTEXITCODE -eq 0) { $remoteUrl = "created_by_cli" }
             }
         } else {
-            Write-Host "WARN: GitHub CLI detected but not authenticated." -ForegroundColor Yellow
+            Write-Host "[!] GitHub CLI detected but not authenticated." -ForegroundColor Yellow
             if ((Read-Host "Do you want to log in to GitHub now to enable automatic creation? (y/n)") -eq 'y') {
                 & gh auth login
                 if ($LASTEXITCODE -eq 0) {
-                    Write-Host "INFO: Authentication successful. Restart the script or enter the URL manually." -ForegroundColor Cyan
+                    Write-Host "Authentication successful. Restart the script to use auto-creation or enter the URL manually." -ForegroundColor Cyan
                 }
             }
         }
@@ -144,7 +168,7 @@ if (-not (git remote | Select-String "origin")) {
 
         # Intelligence: If no '/' or ':', assume it's a repo name and suggest URL based on current user
         if ($userInput -notmatch "/" -and $userInput -notmatch ":") {
-            $gitUser = git config user.name 2>$null
+            $gitUser = git config user.name
             if ([string]::IsNullOrWhiteSpace($gitUser)) { $gitUser = "user" }
             $suggestedUrl = "https://github.com/$gitUser/$userInput.git"
             Write-Host "Generated suggestion: $suggestedUrl" -ForegroundColor Gray
@@ -173,25 +197,30 @@ if (-not (git remote | Select-String "origin")) {
 git add .
 
 $timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm'
-$tagName = "foundation-v$(Get-Date -Format 'yyyy.MM.dd-HHmm')"
-$msg = "chore: foundation base update - session $timestamp"
+$tagName = "$projectName-v$(Get-Date -Format 'yyyy.MM.dd-HHmm')" # Use dynamic project name
+$msg = "feat: $projectName update - session $timestamp" # Use dynamic project name
 
 # Commit only if changes detected
 $hasChanges = git status --porcelain
 if ($hasChanges) {
     git commit -m $msg 2>$null
-    if ($LASTEXITCODE -ne 0) {
+    if ($LASTEXITCODE -ne 0 -and $LASTEXITCODE -ne 1) { # Git commit returns 1 if no changes, but we already checked
         Write-Warning "Could not perform commit. Check Git configuration."
         exit 1
     }
 
-    # Create tag only if commit successful and HEAD valid
+    # Create tag only if user confirms and HEAD is valid
     if (git rev-parse HEAD 2>$null) {
-        git tag -a $tagName -m "Release $tagName - Session $timestamp" 2>$null
-        Write-Host "SUCCESS: Commit and Tag ($tagName) created successfully." -ForegroundColor Green
+        $createTag = Read-Host "Do you want to create a version tag ($tagName) for this session? (y/n)"
+        if ($createTag -eq 'y') {
+            git tag -a $tagName -m "Release $tagName - Session $timestamp" 2>$null
+            Write-Host "SUCCESS: Commit and Tag ($tagName) created successfully." -ForegroundColor Green
+        } else {
+            Write-Host "SUCCESS: Commit created without tag." -ForegroundColor Green
+        }
     }
 } else {
-    Write-Host "INFO: No changes to commit in this session." -ForegroundColor Gray
+    Write-Host "[INFO] No changes to commit in this session." -ForegroundColor Gray
 }
 
 Write-Host "`nACTION: Synchronizing with Remote Repository..." -ForegroundColor Cyan
@@ -201,20 +230,20 @@ if (git remote | Select-String "origin") {
     $skippedPush = $false
     while (-not $pushSuccess) {
         # Temporarily allow errors for retry loop to work
-        $oldEAP = $ErrorActionPreference
-        $ErrorActionPreference = 'Continue'
+        $oldEAP = $ErrorActionPreference # Save old error action
+        $ErrorActionPreference = 'SilentlyContinue' # Suppress errors for retry logic
 
         # Determine if we need --set-upstream for first push
         $upstream = git config "branch.$targetBranch.remote" 2>$null
         if (-not $upstream) {
-            Write-Host "INFO: Upstream branch not configured for '$targetBranch'. Attempting '--set-upstream'." -ForegroundColor Yellow
+            Write-Host "[INFO] Upstream branch not configured for '$targetBranch'. Attempting '--set-upstream'." -ForegroundColor Yellow
             git push -u origin $targetBranch --tags
         } else {
             git push origin $targetBranch --tags
         }
 
         $pushExitCode = $LASTEXITCODE
-        $ErrorActionPreference = $oldEAP
+        $ErrorActionPreference = $oldEAP # Restore old error action
 
         if ($pushExitCode -eq 0) {
             $pushSuccess = $true
@@ -237,8 +266,8 @@ if (git remote | Select-String "origin") {
                     $vis = Read-Host "Privacy? (1) Public, (2) Private [Default: Private]"
                     $visFlag = if ($vis -eq "1") { "--public" } else { "--private" }
                     
-                    Write-Host "INFO: Creating repository '$repoName' on GitHub..." -ForegroundColor Cyan
-                    & gh repo create $repoName $visFlag --source=. --remote=origin
+                    Write-Host "[INFO] Creating repository '$repoName' on GitHub..." -ForegroundColor Cyan
+                    & gh repo create $repoName $visFlag --source=. --remote=origin -y # -y to accept prompts
                     if ($LASTEXITCODE -ne 0) {
                         Write-Error "Could not create repository. Ensure you are authenticated with 'gh auth login'."
                     }
@@ -260,10 +289,6 @@ if (git remote | Select-String "origin") {
     if ($pushSuccess) {
         Write-Host ""
         Write-Host "SUCCESS: Session finished and uploaded successfully to branch '$targetBranch' on GitHub." -ForegroundColor Green
-        
-        # Pull Request Automation
-        $prScript = Join-Path $scriptDir "create-pull-request.ps1"
-        if (Test-Path $prScript) { & $prScript -BaseBranch "main" }
     } elseif ($skippedPush) {
         Write-Host ""
         Write-Host "SUCCESS: Session finished locally, but upload was skipped." -ForegroundColor Yellow

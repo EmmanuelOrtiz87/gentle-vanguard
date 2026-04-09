@@ -37,13 +37,13 @@ $defaultDataRoot = Join-Path $workspaceRoot '.engram-data'
 
 # Initialization validation
 if (-not (Test-Path -LiteralPath $ConfigPath)) {
-    throw "Environment not initialized or config missing. Please run 'scripts/bootstrap.ps1' first."
+    throw "Environment not initialized or config missing. Run 'scripts/bootstrap.ps1' first."
 }
 
-# Health Check of critical dependencies
-$skillsDir = Join-Path $workspaceRoot "tools/ai-skills"
+# Health check for critical dependencies
+$skillsDir = Join-Path $workspaceRoot "tools/Gentleman-Skills"
 if (-not (Test-Path $skillsDir)) {
-    Write-Warning "AI Skills directory not detected. Some AI capabilities might be unavailable."
+    Write-Warning "Gentleman-Skills not detected. Some AI capabilities may not be available."
 }
 
 $config = $null
@@ -73,7 +73,7 @@ Write-Host "[OK] Engram Session Data: $env:ENGRAM_DATA_DIR" -ForegroundColor Cya
 
 $engramCmd = Get-Command engram -ErrorAction SilentlyContinue
 if (-not $engramCmd) {
-    throw "engram no se encontro en PATH. Instala la herramienta o exponla antes de usar este launcher."
+    throw "engram not found in PATH. Install the tool or add it to PATH before using this launcher."
 }
 
 & engram @EngramArgs

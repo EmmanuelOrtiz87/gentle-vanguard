@@ -1,0 +1,36 @@
+# Code Owners
+# https://help.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners
+
+# Default owner for all files
+* @owner
+
+# Project leads
+/scripts/ @project-lead
+/config/ @project-lead
+/templates/ @project-lead
+
+# Documentation
+/docs/ @project-lead @docs-team
+*.md @docs-team
+
+# CI/CD and DevOps
+.github/ @devops-team
+/scripts/deploy.ps1 @devops-team
+/scripts/deploy.sh @devops-team
+
+# Scripts
+/scripts/*.ps1 @project-lead @scripts-team
+/scripts/*.sh @project-lead @scripts-team
+
+# Skills
+/skills/ @project-lead
+
+# Templates
+/templates/project-types/ @project-lead
+
+# Kubernetes
+**/k8s/ @devops-team
+
+# Docker
+**/Dockerfile* @devops-team
+**/docker-compose*.yml @devops-team

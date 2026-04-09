@@ -1,0 +1,102 @@
+name: Bug Report
+description: Report a bug to help us improve
+title: "[BUG] "
+labels: ["bug", "triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Bug Report
+        
+        Thanks for taking the time to fill out this bug report!
+        
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Bug Severity
+      description: How severe is this bug?
+      options:
+        - Critical (blocks all work)
+        - High (blocks major functionality)
+        - Medium (non-blocking but significant)
+        - Low (minor issue)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: Where does this bug occur?
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Docker
+        - Kubernetes
+        - All environments
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: What version of the project are you using?
+      placeholder: "e.g., 1.0.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the bug and what you expected to happen.
+      placeholder: "Tell us what you see..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce the issue?
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant Logs
+      description: Please include any error messages or logs.
+      placeholder: |
+        ```
+        Paste your logs here
+        ```
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other context about the problem?
+      placeholder: |
+        - OS: Windows 11
+        - Node.js: 20.x
+        - Dependencies: ...
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched for related issues
+          required: true
+        - label: I included version information
+          required: true
+        - label: I included minimal reproduction steps
+          required: true
