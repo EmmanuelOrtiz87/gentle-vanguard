@@ -1,36 +1,36 @@
-# Technical Specification: Workspace Architecture (Template)
+# Technical Document: Workspace Foundation Architecture
 
 ## Directory Structure
-- `/scripts`: Automation engines in PowerShell Core (platform agnostic).
-- `/tools`: Integrated core tools (AI Skills, Security Scanners).
-- `/config`: Centralized JSON configuration with support for dynamic variable resolution.
-- `/.ai-data`: Context persistence for language models (isolated from source code).
+- `/scripts`: Automation engines in PowerShell Core (platform-agnostic).
+- `/tools`: Core tool repositories (Engram, Gentleman-Skills, GGA).
+- `/config`: Centralized JSON configuration with dynamic variable resolution support.
+- `/.engram-data`: Context persistence for language models (isolated from source code).
 
 ## Critical Components
 
-### 1. The Bootstrap Orchestrator (`bootstrap.ps1`)
-Uses local dependency verification logic. The script ensures the project has everything needed to be autonomous and deterministic from its own root.
+### 1. Bootstrap Orchestrator (`bootstrap.ps1`)
+Uses dependency verification logic (Git, Go, Engram). If a tool is missing, the script handles its deployment, ensuring a deterministic environment.
 
 ### 2. Validation Protocol (`validate-project.ps1`)
 Implements a validation hierarchy:
-1. **Security:** Invokes local security scanners.
-2. **AI Integrity:** Verifies AI skill libraries.
-3. **Documentation:** Triggers session review generation.
+1. **Security:** Invokes Gentleman Guardian Angel (GGA).
+2. **AI Integrity:** Verifies Gentleman-Skills loading.
+3. **Documentation:** Triggers `generate-session-review.ps1`.
 
 ### 3. Session Persistence and AI Memory
-The system generates Markdown files in `docs/code-reviews/` internally. These files serve as long-term memory specific to the evolution of this independent repository.
+The system generates Markdown files in `docs/code-reviews/`. These files are not just for humans; they serve as "long-term memory" so Gemini/Claude understand project evolution in future sessions.
 
 ### 4. Agnostic Configuration Model
-The configuration files use placeholders (e.g., `{workspaceRoot}`) that resolve at runtime, allowing the project to be moved between different paths or servers without breaking.
+The `workspace.config.json` file uses *placeholders* (e.g., `{workspaceRoot}`) that are resolved at runtime, allowing the project to move between different disk paths or servers without breaking.
 
-## Autonomous Workflow
-The `finalize-session.ps1` script ensures publication atomicity:
+## Publishing Flow (Finalize)
+The `finalize-session.ps1` script ensures atomic publishing:
 ```powershell
 Validation -> Tagging -> Commit -> Push (Auto-Upstream) -> Pull Request (gh)
 ```
-Esto crea un historial de Git inmaculado y listo para despliegues basados en Tags.
+This creates an immaculate Git history ready for Tag-based deployments.
 
-## Requisitos de Sistema
+## System Requirements
 - PowerShell Core 7+
 - Git 2.30+
-- Go 1.20+ (para herramientas backend)
+- Go 1.20+ (for backend tools)

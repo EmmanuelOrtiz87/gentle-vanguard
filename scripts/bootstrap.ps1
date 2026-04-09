@@ -1,10 +1,10 @@
 # bootstrap.ps1
-# This script initializes the full working environment on a new machine.
-# It is designed to be agnostic:
-# - OS: Works on Windows, Linux, and macOS (via PowerShell Core).
-# - IDE: Does not depend on VSCode, IntelliJ, or specific editors.
-# - AI: Sets up the base for any model to use the MCP protocol.
-# - Tech: Structures projects and tools in an isolated manner.
+# This script initializes the complete work environment on a new machine.
+# Designed to be agnostic:
+# - OS: Works on Windows, Linux and macOS (via PowerShell Core).
+# - IDE: Not dependent on VSCode, IntelliJ or specific editors.
+# - AI: Sets the base for any model to use the MCP protocol.
+# - Tech: Structures projects and tools in an isolated way.
 
 param(
     [string]$GitUser,
@@ -17,8 +17,8 @@ $ErrorActionPreference = 'Stop'
 $ENGRAM_REPO_URL = "https://github.com/Gentleman-Programming/engram.git"
 $SKILLS_REPO_URL = "https://github.com/Gentleman-Programming/Gentleman-Skills.git"
 
-function Write-Step { param([string]$msg) Write-Host "`nSTEP: $msg" -ForegroundColor Cyan }
-function Write-Success { param([string]$msg) Write-Host "   SUCCESS: $msg" -ForegroundColor Green }
+function Write-Step { param([string]$msg) Write-Host "`n>> $msg" -ForegroundColor Cyan }
+function Write-Success { param([string]$msg) Write-Host "   OK: $msg" -ForegroundColor Green }
 function Write-ErrorMsg { param([string]$msg) Write-Host "   ERROR: $msg" -ForegroundColor Red }
 function Write-InfoMsg { param([string]$msg) Write-Host "   INFO: $msg" -ForegroundColor Gray }
 
@@ -38,7 +38,7 @@ foreach ($dir in $dirs) {
 
 Write-Step "Step 2: Verifying Core Dependencies..."
 
-# 1. Git (Agnostic Version Control)
+# 1. Git (Agnostic version control)
 if (Get-Command git -ErrorAction SilentlyContinue) {
     Write-Success "Git detected: $(git --version | Select-Object -First 1)"
 } else {
@@ -93,8 +93,8 @@ if (Get-Command engram -ErrorAction SilentlyContinue) {
     }
 }
 
-# 4. Gentleman Skills (Base knowledge library)
-Write-Step "Syncing Gentleman Skills (Knowledge Base)..."
+# 4. Gentleman Skills (Base skills library)
+Write-Step "Synchronizing Gentleman Skills (Knowledge Base)..."
 $skillsDir = Join-Path $workspaceRoot "tools/Gentleman-Skills"
 if (-not (Test-Path $skillsDir)) {
     git clone $SKILLS_REPO_URL "$skillsDir"
@@ -109,8 +109,8 @@ if (-not (Test-Path $skillsDir)) {
 # 5. GitHub CLI (Optional but recommended for repo automation)
 Write-Step "Verifying GitHub CLI (gh)..."
 if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
-    Write-Host "WARN: GitHub CLI not detected." -ForegroundColor Yellow
-    $confirmGh = Read-Host "Attempt automated installation? (y/n)"
+    Write-Host "[!] GitHub CLI not detected." -ForegroundColor Yellow
+    $confirmGh = Read-Host "Do you want to attempt automated installation? (y/n)"
     if ($confirmGh -eq 'y') {
         try {
             if ($IsWindows) {
@@ -121,7 +121,9 @@ if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
                 brew install gh
             } elseif ($IsLinux) {
                 Write-InfoMsg "Installing gh via apt..."
-                sudo apt update; if ($?) { sudo apt install gh -y }
+                sudo apt update
+                sudo apt install gh -y
+                if ($?) { sudo apt install gh -y }
             }
             
             if (Get-Command gh -ErrorAction SilentlyContinue) {
@@ -133,6 +135,26 @@ if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
     }
 } else {
     Write-Success "GitHub CLI detected."
+}
+
+# 6. Gentleman Guardian Angel (GGA) - AI-assisted code review
+Write-Step "Verifying Gentleman Guardian Angel (gga)..."
+if (Get-Command gga -ErrorAction SilentlyContinue) {
+    Write-Success "GGA CLI detected."
+} else {
+    Write-Step "Installing Gentleman Guardian Angel CLI from repository..."
+    $ggaToolDir = Join-Path $workspaceRoot "tools/gentleman-guardian-angel"
+    if (-not (Test-Path $ggaToolDir)) {
+        git clone "https://github.com/Gentleman-Programming/gentleman-guardian-angel.git" "$ggaToolDir"
+    }
+    Push-Location $ggaToolDir
+    & go install ./cmd/gga
+    Pop-Location
+    if (Get-Command gga -ErrorAction SilentlyContinue) {
+        Write-Success "GGA CLI installed successfully."
+    } else {
+        Write-ErrorMsg "Could not install GGA. Ensure %GOPATH%\bin is in your PATH."
+    }
 }
 
 Write-Step "Step 3: Deploying Default Configuration..."
@@ -154,7 +176,16 @@ if (-not (Test-Path $configPath)) {
     Write-InfoMsg "Existing configuration respected: config/workspace.config.json"
 }
 
-Write-Step "Step 4: System Health Report (Health Check)..."
+Write-Step "Step 4: Configuring Git Hooks..."
+if (Test-Path (Join-Path $workspaceRoot ".git")) {
+    # Set Git to look for hooks in our versioned directory instead of .git/hooks
+    git config core.hooksPath scripts/git-hooks
+    Write-Success "Git hooks path set to 'scripts/git-hooks'."
+} else {
+    Write-InfoMsg "Not a Git repository. Skipping hook configuration."
+}
+
+Write-Step "Step 5: System Health Report (Health Check)..."
 $report = @{
     Git = if (Get-Command git -ErrorAction SilentlyContinue) { "PASS" } else { "FAIL" }
     GitHubCLI = if (Get-Command gh -ErrorAction SilentlyContinue) { 
@@ -164,6 +195,7 @@ $report = @{
     }
     Go  = if (Get-Command go -ErrorAction SilentlyContinue) { "PASS" } else { "FAIL" }
     Engram = if (Get-Command engram -ErrorAction SilentlyContinue) { "PASS" } else { "FAIL" }
+    GGA = if (Get-Command gga -ErrorAction SilentlyContinue) { "PASS" } else { "FAIL" }
     Skills = if (Test-Path $skillsDir) { "PASS" } else { "FAIL" }
     Config = if (Test-Path $configPath) { "PASS" } else { "FAIL" }
 }
@@ -173,5 +205,5 @@ foreach ($item in $report.Keys) {
     Write-Host "   [Checking] $item : $($report[$item])" -ForegroundColor $color
 }
 
-Write-Host "`nSUCCESS: Workspace Foundation Initialized and Verified!" -ForegroundColor Green
+Write-Host "`n[SUCCESS] Workspace Foundation Initialized and Verified!" -ForegroundColor Green
 Write-Host "You can now run 'scripts/run-engram.ps1' to start your assisted development session." -ForegroundColor Green
