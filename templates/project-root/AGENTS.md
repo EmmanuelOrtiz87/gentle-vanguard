@@ -36,6 +36,16 @@
 - Address AI feedback before committing.
 - Follow the Definition of Done.
 
+## Audit
+
+AI-assisted development activity is automatically tracked in the `.audit/` directory:
+- Sessions: Development session records
+- Code Reviews: PR/MR review records
+- Metrics: Velocity, effectiveness, and cost analytics
+- Reports: Weekly summaries for stakeholders
+
+See `.audit/README.md` for details.
+
 ## Definition of Done
 
 - [ ] Code follows style guidelines

@@ -298,3 +298,39 @@ if (git remote | Select-String "origin") {
     Write-Host ""
     Write-Host "SUCCESS: Session finished locally." -ForegroundColor Yellow
 }
+
+# 4. Generate Session Audit
+Write-Host "`nACTION: Generating Session Audit..." -ForegroundColor Cyan
+
+$auditScript = Join-Path $scriptDir "generate-session-audit.ps1"
+$metricsScript = Join-Path $scriptDir "aggregate-metrics.ps1"
+$reportScript = Join-Path $scriptDir "generate-audit-report.ps1"
+
+if (Test-Path $auditScript) {
+    try {
+        & $auditScript -End
+    } catch {
+        Write-Warning "Could not generate audit: $_"
+    }
+}
+
+if (Test-Path $metricsScript) {
+    try {
+        Write-Host "Aggregating daily metrics..." -ForegroundColor Gray
+        & $metricsScript -Period daily -Silent
+    } catch {
+        Write-Warning "Could not aggregate metrics: $_"
+    }
+}
+
+$dayOfWeek = (Get-Date).DayOfWeek
+if ($dayOfWeek -eq 'Sunday' -or $dayOfWeek -eq 'Monday') {
+    if (Test-Path $reportScript) {
+        try {
+            Write-Host "Generating weekly report..." -ForegroundColor Gray
+            & $reportScript -Period weekly -Silent
+        } catch {
+            Write-Warning "Could not generate weekly report: $_"
+        }
+    }
+}
