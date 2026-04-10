@@ -39,6 +39,8 @@ docs/
 
 | Document | Description |
 |----------|-------------|
+| [SESSION-GUIDE.md](guides/SESSION-GUIDE.md) | Session workflow with AI agents |
+| [DEVELOPMENT-WORKFLOW.md](guides/DEVELOPMENT-WORKFLOW.md) | Git Flow, PRs, Code Review |
 | [INTEGRATION-EXISTING-PROJECTS.md](guides/INTEGRATION-EXISTING-PROJECTS.md) | Integrate existing projects |
 | [AI-CONFIGURATION.md](guides/AI-CONFIGURATION.md) | AI configuration |
 | [audit-system.md](guides/audit-system.md) | Audit system |

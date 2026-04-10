@@ -1,139 +1,199 @@
 # Session Guide
 
-How AI sessions work with this project.
+## Quick Commands
 
-## How It Works
-
-The **project-orchestrator** is ALWAYS ACTIVE. No need to trigger it.
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  PROJECT ORCHESTRATOR (Always Running)                      │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  At session start, it automatically:                        │
-│                                                              │
-│  1. DETECTS project and stack                              │
-│  2. CHECKS git status                                     │
-│  3. LOADS relevant skills                                 │
-│  4. SHOWS status and suggests next step                   │
-│                                                              │
-│  You don't need to say anything special.                  │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
-
-## User Commands
-
-These trigger specific actions:
-
-| Command | What Happens |
-|---------|--------------|
-| *(nothing)* | Orchestrator auto-detects and shows status |
-| `Continuar` | Resume previous work, show next step |
-| `Estado` | Show current project status and todos |
-| `Guardar` | mem_save summary, commit, push |
-
-## Session Flow
-
-```
-1. You start talking
-      │
-      ▼
-2. Orchestrator auto-detects:
-      │ - Project name
-      │ - Stack (Go, Angular, etc.)
-      │ - Git status
-      │ - Recent memory (mem_context)
-      │
-      ▼
-3. Orchestrator loads relevant skills:
-      │ - golang-api-skill (if Go detected)
-      │ - angular-spa-skill (if Angular detected)
-      │ - etc.
-      │
-      ▼
-4. Orchestrator shows:
-      │ - Project detected
-      │ - Skills loaded
-      │ - Suggested next step
-      │
-      ▼
-5. We work together
-      │
-      ▼
-6. Say "Guardar" when done
-      │ - mem_save summary
-      │ - Commit
-      │ - Push
-```
-
-## Skills Auto-Loaded
-
-Based on detected stack:
-
-| Stack | Skills Loaded |
-|-------|---------------|
-| Go | golang-api-skill, testing-skill |
-| Angular | angular-spa-skill, tailwind-4-skill |
-| React | react-19-skill, tailwind-4-skill, zustand-5-skill |
-| Django | django-drf-skill |
-| Documentation | documentation-governance-skill |
-| Testing | testing-strategy-skill |
-| CI/CD | docker-devops-skill |
-
-## Memory
-
-Engram is used automatically:
-
-| Command | When |
-|---------|-------|
-| `mem_context` | Session start (automatic) |
-| `mem_save` | When you say "Guardar" |
-
-## Example Session
-
-```
-YOU: (start talking about the project)
-
-ORCHESTRATOR: 
-## Session Started
-
-**Project Detected:** bitbucket-dashboard
-**Stack:** Go + Angular
-**Skills Loaded:** golang-api-skill, angular-spa-skill
-
-**Status:**
-- ✅ CI/CD configured
-- ⏳ Frontend migration in progress
-- 📋 Need to add tests
-
-**Next Step:** Continue Angular component migration
+| Command | Description |
+|---------|-------------|
+| `Continuar` | Resume work, check context |
+| `Estado` | Show project status |
+| `Guardar` | Commit & push changes |
+| `Review` | Run code review |
+| `PR` | Create pull request |
 
 ---
 
-YOU: Let's add the user profile component
+## Workflow
 
-ORCHESTRATOR: (uses angular-spa-skill)
-...
+### 1. Session Start
 
-YOU: Guardar
+```
+1. Orchestrator auto-detects:
+   - Project type
+   - Tech stack
+   - Available skills
+   - Git branch status
 
-ORCHESTRATOR:
-## Session Summary
-[Summary created]
-[Changes committed]
-[Push completed]
+2. Memory check:
+   - mem_context
+   - Show recent work
+
+3. Present status:
+   - Project name
+   - Branch
+   - Pending tasks
+   - Next step
 ```
 
-## Tips
+### 2. During Work
 
-- Just start talking - orchestrator detects automatically
-- Say "Estado" to see current status
-- Say "Continuar" to resume previous work
-- Say "Guardar" when finished
+```
+1. Execute with loaded skills
+2. Update todo list
+3. Verify each step
+4. Run tests locally
+```
 
-## See Also
+### 3. Before Push/PR
 
-- [skills/SKILL_INDEX.md](../skills/SKILL_INDEX.md) - All skills
-- [docs/getting-started/DEVELOPER-SETUP.md](../getting-started/DEVELOPER-SETUP.md) - Setup
+```
+1. Run: wf.ps1 review
+2. Generate: Audit document
+3. Check: Specification complete?
+4. Ask: Create PR?
+```
+
+### 4. Code Review (7 Dimensions)
+
+| Dimension | Severity | Auto |
+|-----------|----------|------|
+| Security | CRITICAL/HIGH | Yes |
+| Quality | HIGH/MEDIUM | Yes |
+| Architecture | MEDIUM | No |
+| Testing | MEDIUM | No |
+| Documentation | LOW | No |
+| API Design | MEDIUM | No |
+| Git Workflow | LOW | No |
+
+### 5. Findings Decision
+
+```
+🚫 CRITICAL → Block immediately, fix now
+⚠️ HIGH     → Must fix before PR
+📋 MEDIUM   → Your choice
+💡 LOW      → Optional fixes
+```
+
+---
+
+## Commands Reference
+
+### Orchestrator Commands
+
+```bash
+Continuar     # Resume work
+Estado        # Show status
+Guardar       # Commit & push
+Review        # Run code review
+PR            # Create PR
+```
+
+### CLI Commands
+
+```powershell
+.\wf.ps1 review     # Code review
+.\wf.ps1 audit      # Generate audit doc
+.\wf.ps1 pr         # PR template
+.\wf.ps1 status     # Show status
+.\wf.ps1 push       # Prepare to push
+```
+
+### Git Commands
+
+```bash
+git status              # Check changes
+git add .               # Stage changes
+git commit -m "..."     # Commit
+git push                # Push to remote
+gh pr create            # Create PR
+```
+
+---
+
+## Workflow Automation
+
+### wf.ps1 Workflow
+
+```powershell
+# 1. Check status
+.\wf.ps1 status
+
+# 2. Run code review
+.\wf.ps1 review
+
+# 3. Generate audit
+.\wf.ps1 audit
+
+# 4. Create PR
+.\wf.ps1 pr
+```
+
+### Pre-commit Hook
+
+Automatically runs:
+1. Secrets scan
+2. Format check
+3. Basic tests
+
+### Pre-push Hook
+
+Automatically runs:
+1. Full code review
+2. Tests verification
+3. Audit document generation
+
+---
+
+## Best Practices
+
+### Before Any Commit
+
+- [ ] Tests pass
+- [ ] No secrets
+- [ ] Commit message follows convention
+- [ ] Code follows project patterns
+
+### Before Any PR
+
+- [ ] All tests pass
+- [ ] Code review completed
+- [ ] Audit document generated
+- [ ] Specification validated
+- [ ] Documentation updated
+
+### Before Push
+
+- [ ] Review findings resolved
+- [ ] Audit document created
+- [ ] Changes documented
+
+---
+
+## Questions to Ask
+
+### During Session
+
+```
+¿Cumplimos con la especificación?
+¿Hay algo que olvidamos?
+¿Los cambios están listos?
+```
+
+### Before PR
+
+```
+¿Findings de code review?
+  - CRITICAL/HIGH: Must fix
+  - MEDIUM: Your choice
+  - LOW: Optional
+
+¿Creamos PR o trabajamos más?
+```
+
+---
+
+## Resources
+
+- [Orchestrator Skill](../skills/project-orchestrator-skill/SKILL.md)
+- [Git Workflow Skill](../skills/git-workflow-skill/SKILL.md)
+- [Code Review Skill](../skills/code-review-orchestrator-skill/SKILL.md)
+- [AGENTS.md](../AGENTS.md)

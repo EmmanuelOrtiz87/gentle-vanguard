@@ -46,11 +46,37 @@ scripts/
 
 | Script | Purpose |
 |--------|---------|
+| `wf.ps1` | Workflow CLI - review, audit, pr, push |
 | `deploy.ps1` | Deploy project |
 | `clean-runtime.ps1` | Clean runtime data |
 | `generate-*.ps1` | Generate reports and audits |
 | `run-*.ps1` | Run tools (engram, gga) |
 | `aggregate-metrics.ps1` | Aggregate metrics |
+
+## Workflow CLI (wf.ps1)
+
+Automated development workflow commands.
+
+```powershell
+# Show help
+.\wf.ps1 help
+
+# Show status
+.\wf.ps1 status
+
+# Run code review
+.\wf.ps1 review
+.\wf.ps1 review security
+
+# Generate audit document
+.\wf.ps1 audit
+
+# Create PR template
+.\wf.ps1 pr
+
+# Prepare to push
+.\wf.ps1 push
+```
 
 ## Quick Reference
 
@@ -66,4 +92,10 @@ scripts/
 
 # Check updates
 .\scripts\validation\check-updates.ps1
+
+# Code review
+.\wf.ps1 review
+
+# Audit document
+.\wf.ps1 audit
 ```
