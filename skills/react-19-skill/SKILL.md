@@ -25,9 +25,9 @@ src/
 ## React Compiler
 
 React Compiler automatically optimizes:
-- useMemo → automatic
-- useCallback → automatic
-- React.memo → automatic
+- useMemo -> automatic
+- useCallback -> automatic
+- React.memo -> automatic
 
 ```tsx
 // No manual memoization needed!

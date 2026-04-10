@@ -218,10 +218,10 @@ START REVIEW
 
 | Severity | Icon | Action | Blocking |
 |----------|------|--------|----------|
-| **CRITICAL** | 🚫 | Block immediately | YES |
-| **HIGH** | ⚠️ | Must fix before PR | YES |
-| **MEDIUM** | 📋 | User choice | NO |
-| **LOW** | 💡 | Suggestion only | NO |
+| **CRITICAL** | [X] | Block immediately | YES |
+| **HIGH** | [!]️ | Must fix before PR | YES |
+| **MEDIUM** | [-] | User choice | NO |
+| **LOW** | [*] | Suggestion only | NO |
 
 ### User Decision Options
 
@@ -232,7 +232,7 @@ START REVIEW
 │                                                              │
 │  CRITICAL/HIGH found:                                       │
 │  ─────────────────────────                                  │
-│  → Must fix before proceeding                                │
+│  -> Must fix before proceeding                                │
 │                                                              │
 │  MEDIUM found:                                              │
 │  ───────────────                                            │
@@ -242,7 +242,7 @@ START REVIEW
 │                                                              │
 │  LOW found:                                                 │
 │  ───────────                                                │
-│  → Can be fixed anytime, proceed with PR                     │
+│  -> Can be fixed anytime, proceed with PR                     │
 │                                                              │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -253,10 +253,10 @@ START REVIEW
 ## Findings Summary
 
 **Found:** X issues
-- 🚫 CRITICAL: N (block if any)
-- ⚠️ HIGH: N
-- 📋 MEDIUM: N  
-- 💡 LOW: N
+- [X] CRITICAL: N (block if any)
+- [!]️ HIGH: N
+- [-] MEDIUM: N  
+- [*] LOW: N
 
 ### Critical/High Issues (MUST FIX)
 1. [SEV] File:line - Description
@@ -355,9 +355,9 @@ START REVIEW
 **Skills:** [loaded skills]
 
 **Status:**
-- ✅ Done
-- ⏳ In progress
-- 📋 Pending
+- [OK] Done
+- [...] In progress
+- [-] Pending
 
 **Git:** [ahead/behind]
 
@@ -378,10 +378,10 @@ START REVIEW
 - [x] Item 2
 
 **Findings:**
-- 🚫 Critical: N
-- ⚠️ High: N
-- 📋 Medium: N
-- 💡 Low: N
+- [X] Critical: N
+- [!]️ High: N
+- [-] Medium: N
+- [*] Low: N
 
 **Specification:** COMPLETE / PARTIAL
 
@@ -396,7 +396,7 @@ Run `mem_save` with this summary.
 
 ## ANTI-PATTERNS
 
-| ❌ Don't | ✅ Do |
+| ❌ Don't | [OK] Do |
 |----------|------|
 | Push without audit | Generate audit doc |
 | PR without review | Run code review |

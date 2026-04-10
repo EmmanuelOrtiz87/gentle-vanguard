@@ -38,12 +38,12 @@ Líneas de código/semana          | 200    | 300     | 50%
 
 | Riesgo | Probabilidad | Impacto | Severidad | Mitigación |
 |--------|-------------|---------|-----------|------------|
-| Dependencia excesiva de IA | Media | Alto | ⚠️ | Training en uso responsable |
+| Dependencia excesiva de IA | Media | Alto | [!]️ | Training en uso responsable |
 | Calidad inconsistente de código | Baja | Medio | ⚡ | GGA + code review obligatorio |
-| Información sensible en prompts | Media | Alto | ⚠️ | Políticas de no enviar secrets |
+| Información sensible en prompts | Media | Alto | [!]️ | Políticas de no enviar secrets |
 | Vendor lock-in | Baja | Medio | ⚡ | Multi-provider (Claude + OpenAI) |
 | Costos de API descontrolados | Baja | Medio | ⚡ | Audit system + budget alerts |
-| Resistencia del equipo | Media | Alto | ⚠️ | Communication + champions |
+| Resistencia del equipo | Media | Alto | [!]️ | Communication + champions |
 
 ### B.2 Mitigaciones Detalladas
 
@@ -202,13 +202,13 @@ Workspace Foundation vs Alternativas
 ┌─────────────────┬──────────────────────────────────────────────┐
 │ Feature          │ WF          │ Copilot │ Amazon Q │ Cursor   │
 ├─────────────────┼─────────────┼─────────┼──────────┼──────────┤
-│ Multi-provider   │ ✓           │ ✗       │ ✗        │ ✓        │
-│ Audit system     │ ✓           │ ✗       │ ✗        │ ✗        │
-│ Templates        │ ✓           │ ✗       │ ✗        │ ✗        │
-│ GGA review       │ ✓           │ ✗       │ ✗        │ ✗        │
-│ Code $0          │ ✓           │ ✗       │ ✗        │ ✗        │
-│ Customizable     │ ✓           │ ✗       │ ✗        │ ✗        │
-│ Open source      │ ✓           │ ✗       │ ✗        │ ✗        │
+│ Multi-provider   │ [OK]           │ ✗       │ ✗        │ [OK]        │
+│ Audit system     │ [OK]           │ ✗       │ ✗        │ ✗        │
+│ Templates        │ [OK]           │ ✗       │ ✗        │ ✗        │
+│ GGA review       │ [OK]           │ ✗       │ ✗        │ ✗        │
+│ Code $0          │ [OK]           │ ✗       │ ✗        │ ✗        │
+│ Customizable     │ [OK]           │ ✗       │ ✗        │ ✗        │
+│ Open source      │ [OK]           │ ✗       │ ✗        │ ✗        │
 └─────────────────┴─────────────┴─────────┴──────────┴──────────┘
 ```
 
@@ -236,10 +236,10 @@ Hola [Nombre]!,
 Workspace Foundation está aquí para hacerte más productivo.
 
 Lo que ganás:
-✓ Setup en 5 minutos (vs 4 horas)
-✓ AI assistance integrada en tu workflow
-✓ Code review automático
-✓ Métricas para que veas tu progreso
+[OK] Setup en 5 minutos (vs 4 horas)
+[OK] AI assistance integrada en tu workflow
+[OK] Code review automático
+[OK] Métricas para que veas tu progreso
 
 Cómo empezar:
 1. ./scripts/init-workspace.ps1
@@ -342,7 +342,7 @@ ESCENARIO: 20 desarrolladores
 
 BENEFICIOS:
 ├─ Ahorro tiempo setup:
-│   4hrs → 15min = 3.75hrs × 20 devs × 250 días × $50/hr
+│   4hrs -> 15min = 3.75hrs × 20 devs × 250 días × $50/hr
 │   = $93,750/año
 │
 ├─ Productividad +30%:
@@ -354,7 +354,7 @@ BENEFICIOS:
 │   = $22,500/año
 │
 └─ Reducción code review time:
-    30 min → 10 min × 20 devs × 250 días × $50/hr
+    30 min -> 10 min × 20 devs × 250 días × $50/hr
     = $50,000/año
 
 TOTAL BENEFICIOS: ~$1,066,250/año

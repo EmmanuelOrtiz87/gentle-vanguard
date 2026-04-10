@@ -12,10 +12,10 @@ Complete guide to configure AI tools for Workspace Foundation - both cloud and l
 OPTION A: CLOUD (Recommended)              OPTION B: LOCAL
 ────────────────────────────              ─────────────────
 
-✅ Quick setup                            ✅ 100% offline
-✅ No GPU required                        ✅ No API costs
-✅ Best models (Claude Opus)              ✅ Privacy focused
-✅ Just need API key                      ✅ Ollama or LM Studio
+[OK] Quick setup                            [OK] 100% offline
+[OK] No GPU required                        [OK] No API costs
+[OK] Best models (Claude Opus)              [OK] Privacy focused
+[OK] Just need API key                      [OK] Ollama or LM Studio
 
 Both can run simultaneously for failover!
 ```
@@ -130,10 +130,10 @@ MAX_DAILY_SPEND_USD=10
 ```
 ADVANTAGES                          DISADVANTAGES
 ───────────                         ─────────────
-✅ 100% offline                      ❌ Need decent GPU (8GB+ VRAM)
-✅ No API costs                      ❌ Slower than cloud models
-✅ Complete privacy                  ❌ Weaker reasoning
-✅ No internet required              ❌ Setup time
+[OK] 100% offline                      ❌ Need decent GPU (8GB+ VRAM)
+[OK] No API costs                      ❌ Slower than cloud models
+[OK] Complete privacy                  ❌ Weaker reasoning
+[OK] No internet required              ❌ Setup time
 ```
 
 ### Ollama Installation

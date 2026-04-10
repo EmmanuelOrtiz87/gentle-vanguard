@@ -101,25 +101,25 @@ docs(readme): update installation
 
 | Severity | Icon | Action | Blocking |
 |----------|------|--------|----------|
-| CRITICAL | 🚫 | Block immediately | Yes |
-| HIGH | ⚠️ | Must fix before PR | Yes |
-| MEDIUM | 📋 | User choice | No |
-| LOW | 💡 | Optional | No |
+| CRITICAL | [X] | Block immediately | Yes |
+| HIGH | [!]️ | Must fix before PR | Yes |
+| MEDIUM | [-] | User choice | No |
+| LOW | [*] | Optional | No |
 
 ### Findings Decision
 
 ```
 CRITICAL/HIGH found:
-→ Must fix before proceeding
+-> Must fix before proceeding
 
 MEDIUM found:
-→ Option A: Fix now (recommended)
-→ Option B: Fix after PR
-→ Option C: Document as tech debt
+-> Option A: Fix now (recommended)
+-> Option B: Fix after PR
+-> Option C: Document as tech debt
 
 LOW found:
-→ Optional fixes
-→ Can proceed with PR
+-> Optional fixes
+-> Can proceed with PR
 ```
 
 ## Audit Document

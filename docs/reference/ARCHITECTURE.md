@@ -104,7 +104,7 @@
 
     ════════════════════════════════════════════════════════════════════════
 
-    Dependencies flow: CLI → Engine → Output
+    Dependencies flow: CLI -> Engine -> Output
     Configuration: JSON files (runtime-resolved)
     Templates: Static files (copy-once)
 ```
@@ -201,9 +201,9 @@
 
     COPY SEQUENCE:
     
-    1. Copy project-root/*          → destination/
-    2. Copy project-types/{kind}/*   → destination/ (overlays)
-    3. Apply {{placeholders}}       → destination/
+    1. Copy project-root/*          -> destination/
+    2. Copy project-types/{kind}/*   -> destination/ (overlays)
+    3. Apply {{placeholders}}       -> destination/
     4. Generate docs/project-context.md
 ```
 
@@ -579,24 +579,24 @@
 
     Category: Cloud Provider Keys
     ───────────────────────────────────────────────────────────────────────
-    AWS Access Key    → AKIA[0-9A-Z]{16}
-    AWS Secret Key    → (?i)aws_secret_access_key["\s]*[=:]["'][A-Za-z0-9/+=]{40}["']
-    Google API Key    → AIza[0-9A-Za-z_-]{35}
+    AWS Access Key    -> AKIA[0-9A-Z]{16}
+    AWS Secret Key    -> (?i)aws_secret_access_key["\s]*[=:]["'][A-Za-z0-9/+=]{40}["']
+    Google API Key    -> AIza[0-9A-Za-z_-]{35}
 
     Category: Authentication Tokens
     ───────────────────────────────────────────────────────────────────────
-    GitHub Token      → ghp_[A-Za-z0-9]{36}
-    GitHub OAuth      → gho_[A-Za-z0-9]{36}
-    Slack Token       → xox[baprs]-[0-9]{10,13}-[0-9]{10,13}-[A-Za-z0-9]+
-    Stripe Key       → sk_live_[0-9a-zA-Z]{24,}
-    SendGrid Key     → SG\.[A-Za-z0-9_-]{22}\.[A-Za-z0-9_-]{43}
+    GitHub Token      -> ghp_[A-Za-z0-9]{36}
+    GitHub OAuth      -> gho_[A-Za-z0-9]{36}
+    Slack Token       -> xox[baprs]-[0-9]{10,13}-[0-9]{10,13}-[A-Za-z0-9]+
+    Stripe Key       -> sk_live_[0-9a-zA-Z]{24,}
+    SendGrid Key     -> SG\.[A-Za-z0-9_-]{22}\.[A-Za-z0-9_-]{43}
 
     Category: Generic Secrets
     ───────────────────────────────────────────────────────────────────────
-    API Key           → (?i)(api[_-]?key|apikey)["\s]*[=:]["'][A-Za-z0-9]{20,}["']
-    Bearer Token      → (?i)bearer\s+[A-Za-z0-9_\-\.]+
-    Database URL      → (?i)(mysql|postgres|mongodb)://[^:\s]+:[^@\s]+@
-    Private Key       → -----BEGIN (RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----
+    API Key           -> (?i)(api[_-]?key|apikey)["\s]*[=:]["'][A-Za-z0-9]{20,}["']
+    Bearer Token      -> (?i)bearer\s+[A-Za-z0-9_\-\.]+
+    Database URL      -> (?i)(mysql|postgres|mongodb)://[^:\s]+:[^@\s]+@
+    Private Key       -> -----BEGIN (RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----
 
     ════════════════════════════════════════════════════════════════════════════
 
@@ -618,12 +618,12 @@
 │                      TECHNOLOGY DECISION: POWERSHELL                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  ✓ Cross-platform (Windows, Linux, macOS)                                  │
-│  ✓ Native JSON/Object handling                                             │
-│  ✓ Built-in SSH/CI/CD support                                              │
-│  ✓ Scripting with functions and modules                                     │
-│  ✓ Easy to read/write for beginners                                        │
-│  ✓ Good IDE support (VSCode, PowerShell ISE)                              │
+│  [OK] Cross-platform (Windows, Linux, macOS)                                  │
+│  [OK] Native JSON/Object handling                                             │
+│  [OK] Built-in SSH/CI/CD support                                              │
+│  [OK] Scripting with functions and modules                                     │
+│  [OK] Easy to read/write for beginners                                        │
+│  [OK] Good IDE support (VSCode, PowerShell ISE)                              │
 │                                                                              │
 │  ✗ Slower than compiled languages (Go, Rust)                                 │
 │  ✗ Requires PowerShell Core installation                                   │
@@ -644,10 +644,10 @@
 │                                                                              │
 │  JSON Advantages:                      YAML Advantages:                       │
 │  ─────────────────                    ──────────────────                     │
-│  ✓ Native PowerShell support        ✓ Human-readable                       │
-│  ✓ No external dependencies          ✓ Supports comments                    │
-│  ✓ ConvertFrom-Json one-liner       ✓ Better for complex nested config    │
-│  ✓ Consistent with package.json       ✓ Markdown-friendly                    │
+│  [OK] Native PowerShell support        [OK] Human-readable                       │
+│  [OK] No external dependencies          [OK] Supports comments                    │
+│  [OK] ConvertFrom-Json one-liner       [OK] Better for complex nested config    │
+│  [OK] Consistent with package.json       [OK] Markdown-friendly                    │
 │                                                                              │
 │  Decision: JSON primarily, with JSONC (JSON with comments) where needed   │
 │                                                                              │
