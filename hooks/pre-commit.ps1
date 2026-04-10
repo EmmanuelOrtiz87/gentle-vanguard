@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
-# pre-commit-security.ps1
-# Security pre-commit hook (Windows)
-# Place this file in .git/hooks/ as pre-commit
+# pre-commit.ps1
+# Pre-commit hook for Gentleman Foundation projects
+# Place this in .githooks/ or configure git to use it
 
 param(
     [switch]$Force
@@ -15,29 +15,36 @@ if (-not $GitRoot) {
     exit 0
 }
 
-$SkillDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-if (-not $SkillDir) { $SkillDir = Split-Path -Parent $PSScriptRoot }
-while ($SkillDir -and (Split-Path -Parent $SkillDir)) {
-    $parent = Split-Path -Parent $SkillDir
-    if (Test-Path (Join-Path $parent 'SKILL.md')) {
-        $SkillDir = $parent
-        break
+$GFRoot = $env:GENTLEMAN_ROOT
+if (-not $GFRoot) {
+    $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+    if (-not $scriptDir) { $scriptDir = Split-Path -Parent $PSScriptRoot }
+    
+    $candidate = Split-Path -Parent $scriptDir
+    while ($candidate) {
+        if (Test-Path (Join-Path $candidate ".gentleman")) {
+            $GFRoot = $candidate
+            break
+        }
+        if (Test-Path (Join-Path $candidate "SKILL.md")) {
+            $GFRoot = Split-Path -Parent $candidate
+            break
+        }
+        $parent = Split-Path -Parent $candidate
+        if (-not $parent -or $parent -eq $candidate) { break }
+        $candidate = $parent
     }
-    $SkillDir = $parent
 }
-$ScanScript = Join-Path $SkillDir 'security-scan.ps1'
-$HookBackup = Join-Path $GitRoot '.git\hooks\pre-commit.backup.ps1'
+
+if (-not $GFRoot) {
+    $GFRoot = Join-Path $env:USERPROFILE ".gentleman"
+}
 
 Write-Host ""
 Write-Host "==========================================" -ForegroundColor Cyan
-Write-Host " Security Expert - Pre-commit Scan" -ForegroundColor Cyan
+Write-Host " Gentleman Foundation - Pre-commit" -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host ""
-
-if (-not (Test-Path $ScanScript)) {
-    Write-Host "[SKIP] Security skill not found. Run 'wf skills --install' to install." -ForegroundColor Yellow
-    exit 0
-}
 
 $StagedFiles = git diff --cached --name-only --diff-filter=ACM 2>$null
 if (-not $StagedFiles) {
@@ -45,7 +52,7 @@ if (-not $StagedFiles) {
     exit 0
 }
 
-Write-Host "Scanning staged files for security issues..." -ForegroundColor Gray
+Write-Host "Scanning staged files..." -ForegroundColor Gray
 Write-Host ""
 
 $SecretFound = $false
@@ -79,31 +86,10 @@ if ($SecretFound) {
     Write-Host " COMMIT BLOCKED - Secrets detected!" -ForegroundColor Red
     Write-Host "==========================================" -ForegroundColor Red
     Write-Host ""
-    Write-Host "Remove secrets from staged files or use environment variables." -ForegroundColor White
-    Write-Host "See: docs/security-best-practices.md" -ForegroundColor Gray
-    Write-Host ""
     exit 1
 }
 
-Write-Host "Running security scanner..." -ForegroundColor Gray
-& $ScanScript -Path $GitRoot -Interactive:$(-not $Force)
-
-$ScanResult = $LASTEXITCODE
-
-if ($ScanResult -eq 1) {
-    Write-Host ""
-    Write-Host "==========================================" -ForegroundColor Red
-    Write-Host " COMMIT BLOCKED - Security issues found!" -ForegroundColor Red
-    Write-Host "==========================================" -ForegroundColor Red
-    Write-Host ""
-    Write-Host "Run 'wf security audit' for detailed report." -ForegroundColor White
-    Write-Host "Run 'wf security scan --interactive' to review and fix." -ForegroundColor White
-    Write-Host ""
-    exit 1
-}
-
-Write-Host ""
-Write-Host "[OK] Security scan passed!" -ForegroundColor Green
+Write-Host "[OK] Pre-commit checks passed!" -ForegroundColor Green
 Write-Host ""
 
 exit 0

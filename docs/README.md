@@ -1,51 +1,60 @@
 # Documentation Index
 
-Complete documentation for Workspace Foundation v2.2.
+Gentleman Foundation documentation - reorganized for better navigation.
+
+## Structure
+
+```
+docs/
+├── getting-started/     # Quick start guides
+├── reference/          # Technical reference
+├── guides/             # How-to guides
+└── supplementary/       # Additional resources
+```
+
+## Quick Start
+
+1. **[PREREQUISITES.md](getting-started/PREREQUISITES.md)** - System requirements
+2. **[DEVELOPER-SETUP.md](getting-started/DEVELOPER-SETUP.md)** - Developer setup guide
+3. **[installation.md](getting-started/installation.md)** - Installation guide
 
 ## Getting Started
 
 | Document | Description |
 |----------|-------------|
-| [Installation Guide](installation.md) | Setup instructions for Windows, Linux, macOS |
-| [Quick Start Guide](VISUAL-GUIDE.md) | Visual reference and quick commands |
+| [PREREQUISITES.md](getting-started/PREREQUISITES.md) | System requirements |
+| [DEVELOPER-SETUP.md](getting-started/DEVELOPER-SETUP.md) | Developer setup guide |
+| [installation.md](getting-started/installation.md) | Installation instructions |
 
-## Core Documentation
-
-| Document | Description |
-|----------|-------------|
-| [README.md](../README.md) | Project overview and features |
-| [ARCHITECTURE.md](ARCHITECTURE.md) | System design and component relationships |
-| [VISUAL-GUIDE.md](VISUAL-GUIDE.md) | Complete visual reference |
-| [project-types.md](project-types.md) | Available project templates |
-
-## AI Integration
+## Reference
 
 | Document | Description |
 |----------|-------------|
-| [ai-models.md](ai-models.md) | AI model configuration |
-| [tools.md](tools.md) | External tools integration |
+| [ARCHITECTURE.md](reference/ARCHITECTURE.md) | System architecture |
+| [project-types.md](reference/project-types.md) | Available project types |
+| [tools.md](reference/tools.md) | Tools reference |
+| [structure.md](reference/structure.md) | Directory structure |
 
-## Configuration
-
-| Document | Description |
-|----------|-------------|
-| [configuration.md](configuration.md) | Configuration system |
-| [defaults-vs-decisions.md](defaults-vs-decisions.md) | Default values and decisions |
-
-## Internal
+## Guides
 
 | Document | Description |
 |----------|-------------|
-| [structure.md](structure.md) | Directory structure |
-| [runtime-state.md](runtime-state.md) | Runtime state management |
-| [technical-spec.md](technical-spec.md) | Technical specifications |
-| [functional-spec.md](functional-spec.md) | Functional specifications |
-| [future-projects.md](future-projects.md) | Future roadmap |
-| [presentation-slides.md](presentation-slides.md) | Presentation materials |
+| [INTEGRATION-EXISTING-PROJECTS.md](guides/INTEGRATION-EXISTING-PROJECTS.md) | Integrate existing projects |
+| [AI-CONFIGURATION.md](guides/AI-CONFIGURATION.md) | AI configuration |
+| [audit-system.md](guides/audit-system.md) | Audit system |
+| [configuration.md](guides/configuration.md) | Configuration guide |
+
+## Supplementary
+
+| Document | Description |
+|----------|-------------|
+| [TECHNICAL-ONBOARDING.md](supplementary/TECHNICAL-ONBOARDING.md) | Technical onboarding |
+| [BOARD-SUPPLEMENT.md](supplementary/BOARD-SUPPLEMENT.md) | Board presentation |
+| [ai-models.md](supplementary/ai-models.md) | AI models guide |
 
 ## External Resources
 
-- [Gentleman-Skills](https://github.com/Gentleman-Programming/Gentleman-Skills) - AI agent skills library
-- [Gentle-AI](https://github.com/Gentleman-Programming/gentle-ai) - AI ecosystem configurator
-- [GGA](https://github.com/Gentleman-Programming/gentleman-guardian-angel) - Code review on commits
-- [Engram](https://github.com/Gentleman-Programming/engram) - Persistent memory
+- [Gentleman-Skills](https://github.com/Gentleman-Programming/Gentleman-Skills)
+- [Gentle-AI](https://github.com/Gentleman-Programming/gentle-ai)
+- [GGA](https://github.com/Gentleman-Programming/gentleman-guardian-angel)
+- [Engram](https://github.com/Gentleman-Programming/engram)

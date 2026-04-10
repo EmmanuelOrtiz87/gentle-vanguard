@@ -1,0 +1,23 @@
+# Reference
+
+Technical reference documentation.
+
+## Documents
+
+| Document | Description |
+|----------|-------------|
+| [ARCHITECTURE.md](ARCHITECTURE.md) | System architecture and design |
+| [project-types.md](project-types.md) | Available project types and templates |
+| [tools.md](tools.md) | External tools integration |
+| [structure.md](structure.md) | Directory structure |
+
+## Quick Reference
+
+### Project Types
+
+- `service` - REST APIs, workers, daemons
+- `cli` - Command-line tools
+- `library` - Reusable packages
+- `frontend` - Web applications
+- `fullstack` - Frontend + Backend
+- `microservices` - Distributed systems

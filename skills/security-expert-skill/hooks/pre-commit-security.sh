@@ -1,10 +1,11 @@
 #!/bin/sh
 # pre-commit-security.sh
-# Security pre-commit hook for Workspace Foundation
+# Security pre-commit hook
 # This hook runs before each commit to scan for security issues
 
 WF_ROOT="$(git rev-parse --show-toplevel)"
-SKILL_DIR="$WF_ROOT/.workspace-foundation/skills/security-expert-skill"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SKILL_DIR="$(dirname "$SCRIPT_DIR")"
 SCAN_SCRIPT="$SKILL_DIR/security-scan.ps1"
 REPORT_FILE="$WF_ROOT/docs/security-review.md"
 

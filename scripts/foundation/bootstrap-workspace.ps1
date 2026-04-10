@@ -674,8 +674,18 @@ if (-not $config.projectKinds) { $config | Add-Member -NotePropertyName projectK
     if (-not $config.tools) { $config | Add-Member -NotePropertyName tools -NotePropertyValue @() }
 if (-not $config.skills) {
     $config | Add-Member -NotePropertyName skills -NotePropertyValue @(
-        'workspace-foundation',
-        'code-review-orchestrator-skill'
+        'project-orchestrator-skill',
+        'project-scaffolding-skill',
+        'code-review-orchestrator-skill',
+        'golang-api-skill',
+        'angular-spa-skill',
+        'react-19-skill',
+        'nextjs-15-skill',
+        'typescript-skill',
+        'testing-strategy-skill',
+        'docker-devops-skill',
+        'ai-sdk-5-skill',
+        'mcp-skill'
     )
 }
 
@@ -838,7 +848,7 @@ if ($CreateProject) {
 
     Write-Host "Installing project skills..."
     $projectSkills = if ($config.skills) { $config.skills } else {
-        @('workspace-foundation', 'code-review-orchestrator-skill')
+        @('project-scaffolding-skill', 'code-review-orchestrator-skill')
     }
     Install-ProjectSkills -ProjectPath $destination -WorkspaceSkillsPath $config.toolsRoot -SkillNames $projectSkills
 
@@ -864,6 +874,10 @@ if ($CreateProject) {
     if ($detectedAgent) {
         Install-GentlemanSkillsToAgent -Agent $detectedAgent
     }
+
+    # Install CI/CD templates
+    Write-Host "Installing CI/CD templates..."
+    & "$PSScriptRoot\install-ci-cd-template.ps1" -ProjectPath $destination
 
     Write-Host "Project scaffold created at $destination"
 
