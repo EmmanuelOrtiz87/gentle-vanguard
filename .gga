@@ -15,7 +15,7 @@ EXCLUDE_PATTERNS="*.test.ts,*.spec.ts,*.d.ts,node_modules,dist,.git"
 RULES_FILE="AGENTS.md"
 
 # Strict mode: fail if AI response is ambiguous
-STRICT_MODE="false"
+STRICT_MODE="true"
 
 # Timeout in seconds for AI provider response
 TIMEOUT="300"
