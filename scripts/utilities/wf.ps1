@@ -16,7 +16,7 @@ param(
 
 $ErrorActionPreference = 'Continue'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot = if ($scriptDir) { (Resolve-Path (Join-Path $scriptDir '..')).Path } else { Get-Location }
+$repoRoot = if ($scriptDir) { (Resolve-Path (Join-Path (Join-Path $scriptDir '..') '..')).Path } else { Get-Location }
 
 function Write-Step {
     param([string]$Message)
@@ -98,6 +98,11 @@ function Test-Secrets {
 }
 
 function Test-GoTests {
+    if (-not (Test-Path (Join-Path $repoRoot 'go.mod'))) {
+        Write-Step "Skipping Go tests - no go.mod found"
+        return $true
+    }
+    
     Write-Step "Running Go tests..."
     Set-Location $repoRoot
     $result = go test ./... 2>&1
@@ -111,20 +116,22 @@ function Test-GoTests {
 }
 
 function Test-AngularTests {
-    Write-Step "Running Angular tests..."
     $webDir = Join-Path $repoRoot 'web'
-    if (Test-Path $webDir) {
-        Set-Location $webDir
-        npm test 2>&1 | Out-Null
-        if ($LASTEXITCODE -eq 0) {
-            Write-Success "Angular tests passed"
-            return $true
-        } else {
-            Write-Error "Angular tests failed"
-            return $false
-        }
+    if (-not (Test-Path $webDir)) {
+        Write-Step "Skipping Angular tests - no web directory found"
+        return $true
     }
-    return $true
+    
+    Write-Step "Running Angular tests..."
+    Set-Location $webDir
+    npm test 2>&1 | Out-Null
+    if ($LASTEXITCODE -eq 0) {
+        Write-Success "Angular tests passed"
+        return $true
+    } else {
+        Write-Error "Angular tests failed"
+        return $false
+    }
 }
 
 function Get-CommitHistory {

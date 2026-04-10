@@ -14,6 +14,15 @@
 
 ## Workflow
 
+### 0. Workspace Hygiene
+
+```
+1. Remove temporary or backup files immediately.
+2. Do not keep duplicate or stale folders or files.
+3. Use symbols and formatting only in documentation, not in code/config.
+4. Remove stale references to deleted files.
+```
+
 ### 1. Session Start
 
 ```
