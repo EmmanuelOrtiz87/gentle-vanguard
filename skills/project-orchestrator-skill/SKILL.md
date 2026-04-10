@@ -10,17 +10,18 @@ description: >
 
 ## ROLE
 
-**YOU ARE THE MASTER CONDUCTOR.** This skill is always active and coordinates everything.
+**YOU ARE THE MASTER CONDUCTOR.** This skill always active and coordinates everything.
 
 ## CORE PRINCIPLES
 
 1. **Always Active** - Don't wait to be called, detect context immediately
 2. **Auto-Detect** - Detect stack, project type, and gaps automatically
 3. **Load Skills** - Load relevant skills based on context
-4. **Guide Workflow** - Show status, plan, and next steps proactively
-5. **Git Flow** - Follow Git Flow branch strategy
-6. **Spec Validation** - Validate completion before PR
-7. **End Properly** - Always save to memory, commit, and summarize
+4. **Git Flow** - Follow branch strategy
+5. **Audit on Push** - Generate audit document before push
+6. **Code Review on PR** - Full review with 7 dimensions
+7. **Spec Validation** - Validate completion before PR
+8. **End Properly** - Save to memory, commit, summarize
 
 ## GIT FLOW WORKFLOW
 
@@ -46,76 +47,243 @@ chore:    Maintenance
 ci:       CI/CD changes
 ```
 
-### Workflow Steps
-```
-1. DETECT current branch and status
-2. DECIDE: feature branch or direct commit?
-3. WORK: Implement with skills
-4. VALIDATE: Run tests, lint, build
-5. COMMIT: Conventional commit message
-6. PUSH: To remote
-7. VALIDATE SPEC: Check completion
-8. PR: Create PR if needed
-```
+---
 
-### Before ANY Commit
-- [ ] Tests pass
-- [ ] Code follows patterns (loaded skills)
-- [ ] No secrets in code
-- [ ] Commit message follows convention
-
-## SESSION FLOW
+## COMPLETE WORKFLOW
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    AUTOMATIC SESSION FLOW                          │
+│                    SESSION WORKFLOW                                │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                   │
-│  1. DETECT ──────────────────────────────────────────────      │
-│     ├─ Detect project (go.mod, package.json, etc.)              │
-│     ├─ Detect stack (Go, Angular, React, etc.)                 │
-│     ├─ Check git status & branch                                │
-│     ├─ Check engram memory (mem_context)                        │
-│     └─ Load git-workflow-skill                                  │
+│  1. SESSION START                                               │
+│     ├─ mem_context                                              │
+│     ├─ Detect project/stack                                      │
+│     ├─ Check git branch/status                                  │
+│     ├─ Load skills                                              │
+│     └─ Present status                                           │
 │                                                                   │
-│  2. ASSESS ──────────────────────────────────────────────      │
-│     ├─ Analyze project structure                                │
-│     ├─ Identify gaps (tests, docs, CI/CD)                       │
-│     └─ List available skills                                   │
-│                                                                   │
-│  3. LOAD SKILLS ─────────────────────────────────────────      │
-│     ├─ Load stack-specific skills                               │
-│     └─ Load git-workflow-skill                                  │
-│                                                                   │
-│  4. PRESENT STATUS ──────────────────────────────────────      │
-│     ├─ Project, stack, skills                                  │
-│     ├─ Git branch & status                                     │
-│     ├─ Pending tasks                                           │
-│     └─ Next step                                               │
-│                                                                   │
-│  5. EXECUTE ─────────────────────────────────────────────      │
-│     ├─ Work with loaded skills                                 │
+│  2. WORK                                                        │
+│     ├─ Execute with loaded skills                               │
 │     ├─ Update todos                                            │
-│     └─ Verify each step                                        │
+│     └─ Verify each step                                         │
 │                                                                   │
-│  6. VALIDATE SPEC ──────────────────────────────────────       │
-│     ├─ Run tests                                               │
-│     ├─ Check all items completed                               │
-│     └─ Verify against acceptance criteria                      │
+│  3. PRE-PUSH                                                    │
+│     ├─ Generate AUDIT DOCUMENT                                   │
+│     ├─ Run code review (if PR)                                  │
+│     └─ Handle findings                                          │
 │                                                                   │
-│  7. END SESSION ─────────────────────────────────────────      │
-│     ├─ Commit changes (if any)                                  │
-│     ├─ Push (if requested)                                      │
-│     ├─ Ask: Create PR?                                         │
-│     ├─ mem_save session summary                                │
+│  4. VALIDATE SPEC                                               │
+│     └─ Check acceptance criteria                                │
+│                                                                   │
+│  5. ASK USER                                                    │
+│     ├─ ¿Cumplimos con la especificación?                        │
+│     ├─ ¿Findings encontrados?                                    │
+│     ├─ ¿Resolver ahora o después?                               │
+│     └─ ¿Crear PR?                                              │
+│                                                                   │
+│  6. END SESSION                                                 │
+│     ├─ Commit changes                                           │
+│     ├─ Push (if confirmed)                                      │
+│     ├─ mem_save summary                                         │
 │     └─ Present completion summary                               │
 │                                                                   │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## SPECIFICATION VALIDATION
+---
 
-Before creating PR, ALWAYS validate:
+## AUDIT DOCUMENT (Generated on Push)
+
+### Purpose
+Document all session work for traceability and compliance.
+
+### Format
+```markdown
+# Audit Document - [DATE]
+
+**Project:** [project-name]
+**Session:** [session-id]
+**Date:** [ISO date]
+**Author:** [agent/user]
+
+---
+
+## Summary
+Brief description of session work.
+
+## Changes
+| File | Change | Lines |
+|------|--------|-------|
+| file.go | Added feature X | +150/-20 |
+
+## Commits
+| Hash | Type | Message |
+|------|------|---------|
+| abc123 | feat | description |
+
+## Findings
+| Severity | Count | Description |
+|----------|-------|-------------|
+| CRITICAL | 0 | - |
+| HIGH | 1 | Issue description |
+| MEDIUM | 2 | - |
+
+## Tests
+- Go: X passed, Y failed
+- Angular: X passed, Y failed
+
+## Specification
+- Status: COMPLETE / PARTIAL / INCOMPLETE
+- Notes: ...
+
+## Next Steps
+- [ ] Item 1
+- [ ] Item 2
+
+---
+
+**Generated by:** Gentleman Foundation Orchestrator
+**Version:** 1.0
+```
+
+---
+
+## CODE REVIEW ON PR
+
+### When to Run
+- Before creating any PR
+- On user request: "review", "code review", "auditar"
+
+### 7 Review Dimensions
+
+| Dimension | Scope | Severity | Auto |
+|----------|-------|----------|------|
+| **Security** | secrets, vulnerabilities, OWASP | CRITICAL/HIGH | Yes |
+| **Quality** | code smells, complexity, patterns | HIGH/MEDIUM | Yes |
+| **Architecture** | structure, coupling, design | MEDIUM | No |
+| **Testing** | coverage, test quality | MEDIUM | No |
+| **Documentation** | README, comments, ADRs | LOW | No |
+| **API Design** | REST compliance, validation | MEDIUM | No |
+| **Git Workflow** | commits, branches, hooks | LOW | No |
+
+### Review Flow
+```
+START REVIEW
+     │
+     ▼
+┌─────────────────┐
+│ Run quick scan  │  ← Security + Quality
+│ (~30 seconds)   │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ Findings?       │
+└────────┬────────┘
+         │
+    ┌────┴────┐
+    │YES      │NO
+    ▼         ▼
+┌─────────┐ ┌─────────┐
+│ Classify │ │ Review  │
+│ severity │ │ Complete│
+└────┬────┘ └────┬────┘
+     │           │
+     ▼           ▼
+┌─────────────────────────┐
+│ PRESENT FINDINGS         │
+│                         │
+│ Severity breakdown       │
+│ List of issues          │
+│ Recommendations         │
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│ ASK USER DECISION       │
+│                         │
+│ A) Fix all now          │
+│ B) Fix HIGH+ now, rest later │
+│ C) Create PR, fix later │
+│ D) Skip PR, fix in next session │
+└─────────────────────────┘
+```
+
+---
+
+## FINDINGS DECISION WORKFLOW
+
+### Severity Actions
+
+| Severity | Icon | Action | Blocking |
+|----------|------|--------|----------|
+| **CRITICAL** | 🚫 | Block immediately | YES |
+| **HIGH** | ⚠️ | Must fix before PR | YES |
+| **MEDIUM** | 📋 | User choice | NO |
+| **LOW** | 💡 | Suggestion only | NO |
+
+### User Decision Options
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   FINDINGS DECISION                         │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  CRITICAL/HIGH found:                                       │
+│  ─────────────────────────                                  │
+│  → Must fix before proceeding                                │
+│                                                              │
+│  MEDIUM found:                                              │
+│  ───────────────                                            │
+│  A) Fix now (recommended)                                    │
+│  B) Create PR, fix in separate session                       │
+│  C) Document as tech debt, create PR                         │
+│                                                              │
+│  LOW found:                                                 │
+│  ───────────                                                │
+│  → Can be fixed anytime, proceed with PR                     │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Questions to Ask
+
+```markdown
+## Findings Summary
+
+**Found:** X issues
+- 🚫 CRITICAL: N (block if any)
+- ⚠️ HIGH: N
+- 📋 MEDIUM: N  
+- 💡 LOW: N
+
+### Critical/High Issues (MUST FIX)
+1. [SEV] File:line - Description
+2. [SEV] File:line - Description
+
+### Medium Issues (Your Choice)
+1. [SEV] File:line - Description
+
+### Suggestions (Optional)
+1. [LOW] File:line - Description
+
+---
+
+**¿Qué hacemos con los hallazgos?**
+
+1) Arreglar TODO ahora (recommended)
+2) Arreglar CRITICAL/HIGH ahora, MEDIUM después
+3) Crear PR y arreglar después
+4) Solo crear PR sin arreglar
+5) Volver al trabajo para arreglar más
+
+**Elige una opción:**
+```
+
+---
+
+## SPECIFICATION VALIDATION
 
 ### Checklist
 - [ ] All planned features implemented
@@ -123,85 +291,58 @@ Before creating PR, ALWAYS validate:
 - [ ] Documentation updated
 - [ ] No breaking changes without notice
 - [ ] CI/CD passes
-- [ ] Code follows project conventions
+- [ ] Code follows conventions
 
-### Questions to Ask User
+### Questions
 ```
-¿Cumplimos con la especificación?
-¿Creamos PR o subimos directo a main?
-¿Hay algo más que agregar?
+¿Cumplimos con la especificación original?
+¿Hay algo que olvidamos?
+¿El código está listo para revisión?
 ```
+
+---
 
 ## AUTO-DETECTION RULES
 
 ### Stack Detection
 
-| File Found | Stack | Skills to Load |
-|------------|-------|----------------|
+| File Found | Stack | Skills |
+|------------|-------|--------|
 | `go.mod` | Go | golang-api-skill, testing-skill |
 | `package.json` (Angular) | Angular | angular-spa-skill, angular-core |
 | `package.json` (Next) | Next.js | nextjs-15-skill |
 | `package.json` (React) | React | react-19-skill, tailwind-4-skill |
-| `requirements.txt` | Python/Django | django-drf-skill |
-| `Cargo.toml` | Rust | (no skill yet) |
-
-### Project Structure Detection
-
-| File/Directory | Meaning |
-|----------------|---------|
-| `.github/workflows/` | CI/CD configured |
-| `tests/` or `*_test.go` | Testing exists |
-| `docs/` | Documentation exists |
-| `AGENTS.md` | AI agent configured |
-| `.skills/` | Foundation linked |
-| `docker-compose.yml` | Containerization |
-
-### Gap Detection
-
-| Missing | Priority | Action |
-|---------|----------|--------|
-| No README | HIGH | Create README.md |
-| No AGENTS.md | HIGH | Create AGENTS.md |
-| No CI/CD | HIGH | Add workflows |
-| No tests | MEDIUM | Add tests |
-| No docs structure | MEDIUM | Create docs/ |
-| No .skills/ | HIGH | Link foundation |
-
-## SKILL LOADING GUIDE
+| `requirements.txt` | Django | django-drf-skill |
 
 ### Always Load
 - `git-workflow-skill` - Git best practices
+- `code-review-orchestrator-skill` - Code review
 
-### When Detecting Stack, Load:
-```
-IF Go detected:
-   → golang-api-skill
-   → testing-skill
+### Project Structure
 
-IF Angular detected:
-   → angular-spa-skill
-   → angular-core
-   → tailwind-4-skill
+| File/Directory | Meaning |
+|----------------|---------|
+| `.github/workflows/` | CI/CD |
+| `tests/` or `*_test.go` | Testing |
+| `docs/` | Documentation |
+| `AGENTS.md` | AI configured |
+| `.skills/` | Foundation linked |
 
-IF React detected:
-   → react-19-skill
-   → tailwind-4-skill
-   → zustand-5-skill
-
-IF Django detected:
-   → django-drf-skill
-```
+---
 
 ## WORKFLOW COMMANDS
 
 | User Says | AI Does |
 |-----------|---------|
-| *(nothing - just start)* | Auto-detect, assess, load skills, show status |
-| "Continuar" | Resume work, check mem_context, show next step |
-| "Estado" | Show current status, todos, next step |
-| "Guardar" | Commit & push, mem_save summary |
-| "PR" | Validate spec, create PR |
-| "Nuevo proyecto" | Start new project workflow |
+| *(start)* | Auto-detect, assess, load skills |
+| "Continuar" | Resume, show next step |
+| "Estado" | Show status, todos |
+| "Guardar" | Commit & push, audit doc |
+| "Review" / "Auditar" | Run code review |
+| "PR" | Validate, code review, decision |
+| "Push" | Generate audit, commit, push |
+
+---
 
 ## SESSION START TEMPLATE
 
@@ -209,81 +350,59 @@ IF Django detected:
 ## Session Started
 
 **Project:** [project-name]
-**Branch:** [current-branch]
-**Stack:** [Go / Angular / React / etc.]
-**Skills Loaded:** [list]
+**Branch:** [branch-name]
+**Stack:** [stack]
+**Skills:** [loaded skills]
 
 **Status:**
-- ✅ [Already done]
-- ⏳ [In progress]
-- 📋 [Pending]
+- ✅ Done
+- ⏳ In progress
+- 📋 Pending
 
-**Git Status:**
-- Branch: [branch-name]
-- Commits ahead: [n]
-- Changes: [staged/unstaged]
+**Git:** [ahead/behind]
 
-**Next Step:** [Suggested action]
+**Next Step:** [suggestion]
 ```
+
+---
 
 ## SESSION END TEMPLATE
 
 ```markdown
 ## Session Summary
 
-**Goal:** [What we accomplished]
+**Goal:** [what we did]
 
 **Completed:**
 - [x] Item 1
 - [x] Item 2
 
-**Pending:**
-- [ ] Item to continue
+**Findings:**
+- 🚫 Critical: N
+- ⚠️ High: N
+- 📋 Medium: N
+- 💡 Low: N
 
-**Commits:**
-- [hash] [type]: [description]
+**Specification:** COMPLETE / PARTIAL
 
-**Specification Validated:** [YES/NO]
-
----
-
-**¿Crear PR?** [Ask user]
+**¿Create PR?** [Ask user]
 
 ---
 
 Run `mem_save` with this summary.
 ```
 
-## MEMORY MANAGEMENT
-
-| Command | When |
-|---------|------|
-| `mem_context` | Session start |
-| `mem_save` | After significant accomplishments |
-| `mem_search` | When user mentions past work |
-| `mem_update` | To correct previous observations |
-
-## PR CREATION CHECKLIST
-
-Before creating PR, confirm with user:
-
-1. **Spec Complete:** ¿Cumplimos con lo planeado?
-2. **Tests Pass:** ¿Los tests pasan?
-3. **Changes Clean:** ¿Sin secretos/comentarios?
-4. **Branch Strategy:** ¿Usamos feature branch?
-
-If YES to all → Create PR
-If NO → List remaining items
+---
 
 ## ANTI-PATTERNS
 
 | ❌ Don't | ✅ Do |
 |----------|------|
-| Push without testing | Verify first |
-| Skip spec validation | Always validate |
-| Skip mem_save | Save to memory |
-| Commit without convention | Follow conventional commits |
-| Create PR without asking | Always ask user |
+| Push without audit | Generate audit doc |
+| PR without review | Run code review |
+| Skip critical issues | Block & fix |
+| Skip mem_save | Always save |
+| Skip user confirmation | Ask for decision |
 
 ---
 
