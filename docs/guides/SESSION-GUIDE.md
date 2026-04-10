@@ -1,148 +1,139 @@
 # Session Guide
 
-How to work with this project using AI agents.
+How AI sessions work with this project.
 
-## Starting a Session
+## How It Works
 
-### Step 1: Say "Iniciar sesion" or "Start session"
-
-This triggers the **session-workflow-skill** which will:
-
-1. Check engram memory (`mem_context`)
-2. Create session plan (`todowrite`)
-3. Load required skills
-4. Set up the workflow
-
-### Step 2: Automatic Actions
-
-When you say "Iniciar sesion", the AI will:
-
-```
-1. mem_context           # Check memory for past work
-2. todowrite             # Create session plan
-3. Load skills:          # Based on project type
-   - project-orchestrator-skill
-   - session-workflow-skill
-   - domain-specific skills
-4. Present plan          # Ask for confirmation
-```
-
-## Session Workflow
+The **project-orchestrator** is ALWAYS ACTIVE. No need to trigger it.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  1. START                                                 │
-│     "Iniciar sesion"                                       │
-│          │                                                │
-│          ▼                                                │
-│  2. ASSESS ────► Check context, load memory               │
-│          │                                                │
-│          ▼                                                │
-│  3. PLAN ─────► Create todos, load skills                │
-│          │                                                │
-│          ▼                                                │
-│  4. EXECUTE ───► Implement with skills                     │
-│          │                                                │
-│          ▼                                                │
-│  5. VERIFY ────► Run tests, validate                     │
-│          │                                                │
-│          ▼                                                │
-│  6. DOCUMENT ──► Save memory, commit                      │
-│          │                                                │
-│          ▼                                                │
-│  7. END ────────► "Guardar sesion" or "End session"    │
+│  PROJECT ORCHESTRATOR (Always Running)                      │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  At session start, it automatically:                        │
+│                                                              │
+│  1. DETECTS project and stack                              │
+│  2. CHECKS git status                                     │
+│  3. LOADS relevant skills                                 │
+│  4. SHOWS status and suggests next step                   │
+│                                                              │
+│  You don't need to say anything special.                  │
+│                                                              │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## Commands Reference
+## User Commands
 
-| Command | Action |
-|---------|--------|
-| `Iniciar sesion` | Start session workflow |
-| `Continuar` | Resume previous work |
-| `Guardar sesion` | End session, save to engram |
-| `Nuevo proyecto` | Start new project workflow |
+These trigger specific actions:
 
-## Required Skills
+| Command | What Happens |
+|---------|--------------|
+| *(nothing)* | Orchestrator auto-detects and shows status |
+| `Continuar` | Resume previous work, show next step |
+| `Estado` | Show current project status and todos |
+| `Guardar` | mem_save summary, commit, push |
 
-Always loaded at session start:
+## Session Flow
 
-| Skill | Purpose |
-|-------|---------|
-| `project-orchestrator-skill` | Project assessment and guidance |
-| `session-workflow-skill` | Session management |
+```
+1. You start talking
+      │
+      ▼
+2. Orchestrator auto-detects:
+      │ - Project name
+      │ - Stack (Go, Angular, etc.)
+      │ - Git status
+      │ - Recent memory (mem_context)
+      │
+      ▼
+3. Orchestrator loads relevant skills:
+      │ - golang-api-skill (if Go detected)
+      │ - angular-spa-skill (if Angular detected)
+      │ - etc.
+      │
+      ▼
+4. Orchestrator shows:
+      │ - Project detected
+      │ - Skills loaded
+      │ - Suggested next step
+      │
+      ▼
+5. We work together
+      │
+      ▼
+6. Say "Guardar" when done
+      │ - mem_save summary
+      │ - Commit
+      │ - Push
+```
 
-Domain skills loaded based on project:
+## Skills Auto-Loaded
 
-| Project Type | Skills to Load |
-|--------------|---------------|
-| Go API | `golang-api-skill` |
-| Angular | `angular-spa-skill` |
-| React | `react-19-skill`, `tailwind-4-skill` |
-| Fullstack | `golang-api-skill`, `angular-spa-skill` |
+Based on detected stack:
 
-## Memory Commands
+| Stack | Skills Loaded |
+|-------|---------------|
+| Go | golang-api-skill, testing-skill |
+| Angular | angular-spa-skill, tailwind-4-skill |
+| React | react-19-skill, tailwind-4-skill, zustand-5-skill |
+| Django | django-drf-skill |
+| Documentation | documentation-governance-skill |
+| Testing | testing-strategy-skill |
+| CI/CD | docker-devops-skill |
 
-Engram is used for persistent memory:
+## Memory
+
+Engram is used automatically:
 
 | Command | When |
 |---------|-------|
-| `mem_context` | Session start - check recent work |
-| `mem_search` | Recall specific topics |
-| `mem_save` | After completing significant work |
-| `mem_update` | Correct previous observations |
+| `mem_context` | Session start (automatic) |
+| `mem_save` | When you say "Guardar" |
 
-## Ending a Session
-
-### Say "Guardar sesion" or "End session"
-
-The AI will:
+## Example Session
 
 ```
-1. Review todos completed
-2. Create session summary
-3. mem_save summary
-4. Commit changes
-5. Push to repo (if ready)
-```
+YOU: (start talking about the project)
 
-### Session Summary Format
+ORCHESTRATOR: 
+## Session Started
 
-```markdown
+**Project Detected:** bitbucket-dashboard
+**Stack:** Go + Angular
+**Skills Loaded:** golang-api-skill, angular-spa-skill
+
+**Status:**
+- ✅ CI/CD configured
+- ⏳ Frontend migration in progress
+- 📋 Need to add tests
+
+**Next Step:** Continue Angular component migration
+
+---
+
+YOU: Let's add the user profile component
+
+ORCHESTRATOR: (uses angular-spa-skill)
+...
+
+YOU: Guardar
+
+ORCHESTRATOR:
 ## Session Summary
-
-### Goal
-[What we were working on]
-
-### Accomplished
-- [Completed item 1]
-- [Completed item 2]
-
-### Next Steps
-- [Remaining work]
-
-### Discoveries
-- [Technical findings, if any]
-
-### Relevant Files
-- path/to/file - [what it does]
+[Summary created]
+[Changes committed]
+[Push completed]
 ```
 
 ## Tips
 
-### Do
-- Say "Iniciar sesion" at the beginning of each session
-- Say "Guardar sesion" at the end
-- Use skills for implementation
-- Update todos as work progresses
-
-### Don't
-- Start implementing without assessing first
-- Skip saving memory
-- Push without verifying
+- Just start talking - orchestrator detects automatically
+- Say "Estado" to see current status
+- Say "Continuar" to resume previous work
+- Say "Guardar" when finished
 
 ## See Also
 
-- [skills/SKILL_INDEX.md](skills/SKILL_INDEX.md) - All available skills
-- [docs/getting-started/DEVELOPER-SETUP.md](docs/getting-started/DEVELOPER-SETUP.md) - Setup guide
-- [docs/reference/ARCHITECTURE.md](docs/reference/ARCHITECTURE.md) - Architecture
+- [skills/SKILL_INDEX.md](../skills/SKILL_INDEX.md) - All skills
+- [docs/getting-started/DEVELOPER-SETUP.md](../getting-started/DEVELOPER-SETUP.md) - Setup
