@@ -3,7 +3,7 @@ name: session-workflow
 description: >
   Session workflow executor: handles the mechanics of session management.
   Coordinate with project-orchestrator for context detection.
-  Trigger: "iniciar sesion", "guardar sesion", "continuar", "estado".
+  Trigger: "iniciar sesion", "guardar sesion", "continuar", "estado", "pr".
 ---
 
 # SESSION WORKFLOW
@@ -34,9 +34,11 @@ Execute the mechanical aspects of session management while coordinating with the
 
 ```markdown
 1. mem_context              # Check engram memory
-2. todowrite                # Create/update session plan
-3. Show:                   # Present to user
+2. Check git branch/status
+3. todowrite                # Create/update session plan
+4. Show:                   # Present to user
    - Project detected
+   - Branch & status
    - Skills to load
    - Suggested plan
 ```
@@ -45,18 +47,20 @@ Execute the mechanical aspects of session management while coordinating with the
 
 ```markdown
 1. mem_context             # Get recent context
-2. Check current todos     # Where were we?
-3. Show next step
-4. Resume work
+2. Check git status        # Current branch, changes
+3. Check current todos     # Where were we?
+4. Show next step
+5. Resume work
 ```
 
 ### "Estado" / "Status"
 
 ```markdown
 1. Show current project
-2. Show active todos
-3. Show pending work
-4. Suggest next step
+2. Show git branch & status
+3. Show active todos
+4. Show pending work
+5. Suggest next step
 ```
 
 ### "Guardar sesion" / "Save session"
@@ -64,17 +68,52 @@ Execute the mechanical aspects of session management while coordinating with the
 ```markdown
 1. Review todos completed
 2. Create session summary
-3. mem_save summary
-4. Commit if changes exist
-5. Push if ready
+3. Run: git status
+4. Validate: tests pass?
+5. Commit if changes exist
+6. Ask: ¿Push to remote?
+7. mem_save summary
 ```
+
+### "PR" / "Create PR"
+
+```markdown
+1. Validate specification
+2. Ask: ¿Cumplimos con la especificación?
+3. If YES:
+   - Create branch (if needed)
+   - Commit changes
+   - Push
+   - Create PR with template
+4. If NO:
+   - List remaining items
+   - Continue work
+```
+
+## Git Flow Integration
+
+Before any commit:
+
+1. Check current branch
+2. Commit follows convention: `type(scope): description`
+3. Tests pass
+4. No secrets
+
+Before PR:
+
+1. Validate all checklist items
+2. Ask user confirmation
+3. Create PR with description template
 
 ## Todo Management
 
 Use todowrite at session start:
 
 ```markdown
-todowrite([...todos])
+todowrite([
+  { content: "Task 1", status: "in_progress", priority: "high" },
+  { content: "Task 2", status: "pending", priority: "medium" }
+])
 ```
 
 Use todowrite during session to update:
@@ -102,6 +141,13 @@ todowrite([...updated todos])
 - [Remaining work 1]
 - [Remaining work 2]
 
+### Git
+- Branch: [branch-name]
+- Commits: [list]
+
+### Specification Validated
+[YES/NO + notes]
+
 ### Skills Used
 - skill-name-1
 - skill-name-2
@@ -122,12 +168,13 @@ todowrite([...updated todos])
 ## Workflow Checklist
 
 - [ ] Session start: todowrite created
+- [ ] Git branch checked
 - [ ] Skills loaded per orchestrator
 - [ ] Work executed with skills
-- [ ] Verification done
+- [ ] Tests verified
+- [ ] Commit follows convention
 - [ ] Session end: mem_save executed
-- [ ] Changes committed
-- [ ] Repo pushed if ready
+- [ ] PR validated (if requested)
 
 ---
 

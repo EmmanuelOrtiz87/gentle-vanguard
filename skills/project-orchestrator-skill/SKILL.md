@@ -18,7 +18,51 @@ description: >
 2. **Auto-Detect** - Detect stack, project type, and gaps automatically
 3. **Load Skills** - Load relevant skills based on context
 4. **Guide Workflow** - Show status, plan, and next steps proactively
-5. **End Properly** - Always save to memory, commit, and summarize
+5. **Git Flow** - Follow Git Flow branch strategy
+6. **Spec Validation** - Validate completion before PR
+7. **End Properly** - Always save to memory, commit, and summarize
+
+## GIT FLOW WORKFLOW
+
+### Branch Strategy
+```
+main (production) ←── hotfix/*
+     ↑
+develop (integration) ←── release/*
+     ↑
+feature/* / bugfix/*
+```
+
+### Commit Convention (Conventional Commits)
+```
+<type>(<scope>): <description>
+
+feat:     New feature
+fix:      Bug fix
+docs:     Documentation
+refactor: Code refactoring
+test:     Adding tests
+chore:    Maintenance
+ci:       CI/CD changes
+```
+
+### Workflow Steps
+```
+1. DETECT current branch and status
+2. DECIDE: feature branch or direct commit?
+3. WORK: Implement with skills
+4. VALIDATE: Run tests, lint, build
+5. COMMIT: Conventional commit message
+6. PUSH: To remote
+7. VALIDATE SPEC: Check completion
+8. PR: Create PR if needed
+```
+
+### Before ANY Commit
+- [ ] Tests pass
+- [ ] Code follows patterns (loaded skills)
+- [ ] No secrets in code
+- [ ] Commit message follows convention
 
 ## SESSION FLOW
 
@@ -28,49 +72,64 @@ description: >
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                   │
 │  1. DETECT ──────────────────────────────────────────────      │
-│     │                                                          │
 │     ├─ Detect project (go.mod, package.json, etc.)              │
 │     ├─ Detect stack (Go, Angular, React, etc.)                 │
-│     ├─ Check git status                                       │
-│     └─ Check engram memory (mem_context)                       │
+│     ├─ Check git status & branch                                │
+│     ├─ Check engram memory (mem_context)                        │
+│     └─ Load git-workflow-skill                                  │
 │                                                                   │
 │  2. ASSESS ──────────────────────────────────────────────      │
-│     │                                                          │
 │     ├─ Analyze project structure                                │
-│     ├─ Identify gaps (tests, docs, CI/CD)                      │
-│     └─ List available skills                                    │
+│     ├─ Identify gaps (tests, docs, CI/CD)                       │
+│     └─ List available skills                                   │
 │                                                                   │
 │  3. LOAD SKILLS ─────────────────────────────────────────      │
-│     │                                                          │
-│     └─ Load relevant skills based on stack:                     │
-│        Go API → golang-api-skill                               │
-│        Angular → angular-spa-skill                              │
-│        React → react-19-skill                                 │
-│        Documentation → documentation-governance-skill           │
-│        Testing → testing-strategy-skill                         │
+│     ├─ Load stack-specific skills                               │
+│     └─ Load git-workflow-skill                                  │
 │                                                                   │
 │  4. PRESENT STATUS ──────────────────────────────────────      │
-│     │                                                          │
-│     └─ Show:                                                    │
-│        - Project detected                                        │
-│        - Stack identified                                       │
-│        - Skills loaded                                          │
-│        - Pending tasks (if any)                                 │
-│        - Next step suggestion                                   │
+│     ├─ Project, stack, skills                                  │
+│     ├─ Git branch & status                                     │
+│     ├─ Pending tasks                                           │
+│     └─ Next step                                               │
 │                                                                   │
 │  5. EXECUTE ─────────────────────────────────────────────      │
-│     │                                                          │
-│     ├─ Use loaded skills for implementation                     │
-│     ├─ Update todos as progress                                │
-│     └─ Verify each step                                       │
+│     ├─ Work with loaded skills                                 │
+│     ├─ Update todos                                            │
+│     └─ Verify each step                                        │
 │                                                                   │
-│  6. END SESSION ─────────────────────────────────────────      │
-│     │                                                          │
+│  6. VALIDATE SPEC ──────────────────────────────────────       │
+│     ├─ Run tests                                               │
+│     ├─ Check all items completed                               │
+│     └─ Verify against acceptance criteria                      │
+│                                                                   │
+│  7. END SESSION ─────────────────────────────────────────      │
+│     ├─ Commit changes (if any)                                  │
+│     ├─ Push (if requested)                                      │
+│     ├─ Ask: Create PR?                                         │
 │     ├─ mem_save session summary                                │
-│     ├─ Commit changes                                          │
-│     └─ Push to repo                                           │
+│     └─ Present completion summary                               │
 │                                                                   │
 └─────────────────────────────────────────────────────────────────┘
+```
+
+## SPECIFICATION VALIDATION
+
+Before creating PR, ALWAYS validate:
+
+### Checklist
+- [ ] All planned features implemented
+- [ ] Tests added/updated
+- [ ] Documentation updated
+- [ ] No breaking changes without notice
+- [ ] CI/CD passes
+- [ ] Code follows project conventions
+
+### Questions to Ask User
+```
+¿Cumplimos con la especificación?
+¿Creamos PR o subimos directo a main?
+¿Hay algo más que agregar?
 ```
 
 ## AUTO-DETECTION RULES
@@ -79,13 +138,12 @@ description: >
 
 | File Found | Stack | Skills to Load |
 |------------|-------|----------------|
-| `go.mod` | Go | golang-api-skill |
-| `package.json` (Angular) | Angular | angular-spa-skill |
+| `go.mod` | Go | golang-api-skill, testing-skill |
+| `package.json` (Angular) | Angular | angular-spa-skill, angular-core |
 | `package.json` (Next) | Next.js | nextjs-15-skill |
 | `package.json` (React) | React | react-19-skill, tailwind-4-skill |
 | `requirements.txt` | Python/Django | django-drf-skill |
 | `Cargo.toml` | Rust | (no skill yet) |
-| `*.csproj` | C#/.NET | (no skill yet) |
 
 ### Project Structure Detection
 
@@ -111,73 +169,64 @@ description: >
 
 ## SKILL LOADING GUIDE
 
-### When Detecting Stack, Load:
+### Always Load
+- `git-workflow-skill` - Git best practices
 
+### When Detecting Stack, Load:
 ```
 IF Go detected:
-   → Load golang-api-skill
-   → Load testing-skill
+   → golang-api-skill
+   → testing-skill
 
 IF Angular detected:
-   → Load angular-spa-skill
-   → Load tailwind-4-skill
+   → angular-spa-skill
+   → angular-core
+   → tailwind-4-skill
 
 IF React detected:
-   → Load react-19-skill
-   → Load tailwind-4-skill
-   → Load zustand-5-skill
+   → react-19-skill
+   → tailwind-4-skill
+   → zustand-5-skill
 
 IF Django detected:
-   → Load django-drf-skill
-
-IF Documentation task:
-   → Load documentation-governance-skill
-
-IF Testing task:
-   → Load testing-strategy-skill
-
-IF CI/CD task:
-   → Load docker-devops-skill
+   → django-drf-skill
 ```
 
 ## WORKFLOW COMMANDS
-
-These are the ONLY commands the user needs:
 
 | User Says | AI Does |
 |-----------|---------|
 | *(nothing - just start)* | Auto-detect, assess, load skills, show status |
 | "Continuar" | Resume work, check mem_context, show next step |
 | "Estado" | Show current status, todos, next step |
-| "Guardar" | mem_save summary, commit, push |
+| "Guardar" | Commit & push, mem_save summary |
+| "PR" | Validate spec, create PR |
 | "Nuevo proyecto" | Start new project workflow |
 
 ## SESSION START TEMPLATE
 
-At session start, ALWAYS output:
-
 ```markdown
 ## Session Started
 
-**Project Detected:** [project-name]
+**Project:** [project-name]
+**Branch:** [current-branch]
 **Stack:** [Go / Angular / React / etc.]
-**Skills Loaded:** [list of loaded skills]
+**Skills Loaded:** [list]
 
 **Status:**
 - ✅ [Already done]
 - ⏳ [In progress]
 - 📋 [Pending]
 
-**Next Step:** [Suggested next action]
+**Git Status:**
+- Branch: [branch-name]
+- Commits ahead: [n]
+- Changes: [staged/unstaged]
 
----
-
-[Proceed with work]
+**Next Step:** [Suggested action]
 ```
 
 ## SESSION END TEMPLATE
-
-At session end, ALWAYS output:
 
 ```markdown
 ## Session Summary
@@ -185,17 +234,20 @@ At session end, ALWAYS output:
 **Goal:** [What we accomplished]
 
 **Completed:**
-- [ ] Item 1
-- [ ] Item 2
+- [x] Item 1
+- [x] Item 2
 
-**Next Steps:**
+**Pending:**
 - [ ] Item to continue
 
-**Skills Used:**
-- skill-name
+**Commits:**
+- [hash] [type]: [description]
 
-**Files Changed:**
-- file-path - description
+**Specification Validated:** [YES/NO]
+
+---
+
+**¿Crear PR?** [Ask user]
 
 ---
 
@@ -204,65 +256,34 @@ Run `mem_save` with this summary.
 
 ## MEMORY MANAGEMENT
 
-Always use engram for persistence:
-
 | Command | When |
-|---------|-------|
-| `mem_context` | Session start - check recent work |
+|---------|------|
+| `mem_context` | Session start |
 | `mem_save` | After significant accomplishments |
 | `mem_search` | When user mentions past work |
 | `mem_update` | To correct previous observations |
 
-## SKILL INDEX
+## PR CREATION CHECKLIST
 
-Master list of all skills:
+Before creating PR, confirm with user:
 
-| Category | Skills |
-|----------|--------|
-| Orchestrator | project-orchestrator, session-workflow |
-| Frontend | angular-spa, react-19, nextjs-15, tailwind-4 |
-| State | zustand-5 |
-| Validation | zod-4 |
-| Backend | golang-api, api-design, django-drf |
-| Database | database-relational, database-nosql |
-| DevOps | docker-devops |
-| Testing | testing-strategy, testing-skill |
-| AI | ai-sdk-5, mcp-skill |
-| Workflow | github-pr, jira-task, jira-epic |
-| Quality | typescript, code-review, security |
-| Governance | project-scaffolding, documentation, architecture, git-workflow, foundation-manager |
+1. **Spec Complete:** ¿Cumplimos con lo planeado?
+2. **Tests Pass:** ¿Los tests pasan?
+3. **Changes Clean:** ¿Sin secretos/comentarios?
+4. **Branch Strategy:** ¿Usamos feature branch?
+
+If YES to all → Create PR
+If NO → List remaining items
 
 ## ANTI-PATTERNS
 
-Never do these:
-
 | ❌ Don't | ✅ Do |
 |----------|------|
-| Start without assessing | Auto-detect context first |
-| Implement without skills | Load relevant skills first |
-| Skip memory | Always mem_save at end |
-| Push without verifying | Verify before push |
-| Work without todos | Use todowrite to track |
-
-## QUICK REFERENCE
-
-```
-SESSION START:
-  1. Detect project/stack
-  2. mem_context
-  3. Load skills
-  4. Show status
-
-DURING SESSION:
-  1. Use skills for implementation
-  2. Update todowrite
-  3. Verify before moving on
-
-SESSION END:
-  1. mem_save summary
-  2. Commit changes
-  3. Push if ready
-```
+| Push without testing | Verify first |
+| Skip spec validation | Always validate |
+| Skip mem_save | Save to memory |
+| Commit without convention | Follow conventional commits |
+| Create PR without asking | Always ask user |
 
 ---
 
