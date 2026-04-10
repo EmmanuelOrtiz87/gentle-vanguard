@@ -18,8 +18,9 @@ if (-not $scriptDir) { $scriptDir = Split-Path -Parent $PSScriptRoot }
 
 if (-not $Source) {
     $possibleSources = @(
-        (Join-Path $scriptDir 'skills'),
-        (Join-Path (Split-Path -Parent $scriptDir) 'skills')
+        (Join-Path (Split-Path -Parent $scriptDir) 'skills'),
+        (Join-Path $scriptDir '..\skills'),
+        "C:\Workspace_local\workspace-foundation\skills"
     )
     
     foreach ($loc in $possibleSources) {

@@ -27,6 +27,21 @@ This is the master reference for all available skills. Skills activate automatic
 
 ---
 
+### session-workflow-skill
+
+**Trigger**: `new session`, `start work`, `session workflow`, `end session`, `workflow`
+
+**Use when**: Beginning a session, planning work, ending session. ALWAYS load at session start to ensure complete workflow.
+
+**Capabilities**:
+- Session orchestration
+- Skill loading guidance
+- Memory management (engram)
+- Todo tracking
+- Verification checklist
+
+---
+
 ## Frontend
 
 ### angular-spa-skill
