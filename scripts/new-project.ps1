@@ -12,15 +12,15 @@ param(
     [string]$AiModelEndpoint = '',
     [string]$AiModelNotes = '',
     [string]$RepoUrl = '',
-    [string]$ProjectRoot = ''
+    [string]$ProjectRoot = '',
+    [string]$GgaProvider = 'opencode'
 )
 
 $bootstrap = Join-Path $PSScriptRoot 'bootstrap-workspace.ps1'
 
-# Prefer PowerShell 7, but keep a Windows fallback for environments where only Windows PowerShell exists.
 $runner = Get-Command pwsh -ErrorAction SilentlyContinue
 if ($runner) {
-    & pwsh -NoProfile -ExecutionPolicy Bypass -File $bootstrap -ConfigPath $ConfigPath -CreateProject -ProjectName $Name -ProjectKind $Kind -ProjectPreset $Preset -ProjectArchitecture $Architecture -ProjectProfile $Profile -ProjectAiModelMode $AiModelMode -ProjectAiModelProvider $AiModelProvider -ProjectAiModelName $AiModelName -ProjectAiModelEndpoint $AiModelEndpoint -ProjectAiModelNotes $AiModelNotes -RepoUrl $RepoUrl -ProjectRoot $ProjectRoot
+    & pwsh -NoProfile -ExecutionPolicy Bypass -File $bootstrap -ConfigPath $ConfigPath -CreateProject -ProjectName $Name -ProjectKind $Kind -ProjectPreset $Preset -ProjectArchitecture $Architecture -ProjectProfile $Profile -ProjectAiModelMode $AiModelMode -ProjectAiModelProvider $AiModelProvider -ProjectAiModelName $AiModelName -ProjectAiModelEndpoint $AiModelEndpoint -ProjectAiModelNotes $AiModelNotes -RepoUrl $RepoUrl -ProjectRoot $ProjectRoot -GgaProvider $GgaProvider
 } else {
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $bootstrap -ConfigPath $ConfigPath -CreateProject -ProjectName $Name -ProjectKind $Kind -ProjectPreset $Preset -ProjectArchitecture $Architecture -ProjectProfile $Profile -ProjectAiModelMode $AiModelMode -ProjectAiModelProvider $AiModelProvider -ProjectAiModelName $AiModelName -ProjectAiModelEndpoint $AiModelEndpoint -ProjectAiModelNotes $AiModelNotes -RepoUrl $RepoUrl -ProjectRoot $ProjectRoot
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $bootstrap -ConfigPath $ConfigPath -CreateProject -ProjectName $Name -ProjectKind $Kind -ProjectPreset $Preset -ProjectArchitecture $Architecture -ProjectProfile $Profile -ProjectAiModelMode $AiModelMode -ProjectAiModelProvider $AiModelProvider -ProjectAiModelName $AiModelName -ProjectAiModelEndpoint $AiModelEndpoint -ProjectAiModelNotes $AiModelNotes -RepoUrl $RepoUrl -ProjectRoot $ProjectRoot -GgaProvider $GgaProvider
 }

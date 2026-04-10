@@ -15,6 +15,7 @@ param(
     [string]$ProjectAiModelNotes = '',
     [string]$RepoUrl = '',
     [string]$ProjectRoot = '',
+    [string]$GgaProvider = 'opencode',
     [switch]$CreateProject,
     [switch]$RunToolInstallers
 )
@@ -355,7 +356,8 @@ function Install-ReviewHook {
 
 function Install-Gga {
     param(
-        [string]$ProjectPath
+        [string]$ProjectPath,
+        [string]$GgaProvider = "opencode"
     )
 
     $ggaSource = Join-Path $WorkspaceRoot "templates\gga"
@@ -366,14 +368,17 @@ function Install-Gga {
     }
 
     Write-Host "[GGA] Installing GGA configuration..." -ForegroundColor Blue
+    Write-Host "[GGA] Provider: $GgaProvider" -ForegroundColor Cyan
 
-    # Copy .gga config file
+    # Copy and configure .gga config file
     $ggaConfigSource = Join-Path $ggaSource ".gga"
     $ggaConfigDest = Join-Path $ProjectPath ".gga"
 
     if (Test-Path $ggaConfigSource) {
-        Copy-Item -Path $ggaConfigSource -Destination $ggaConfigDest -Force
-        Write-Host "[GGA] Copied .gga configuration" -ForegroundColor Green
+        $configContent = Get-Content -Path $ggaConfigSource -Raw
+        $configContent = $configContent -replace '\{\{GGA_PROVIDER\}\}', $GgaProvider
+        $configContent | Set-Content -Path $ggaConfigDest -Encoding UTF8
+        Write-Host "[GGA] Configured .gga with provider: $GgaProvider" -ForegroundColor Green
     }
 
     # Copy AGENTS.md template (merge with existing if present)
@@ -388,6 +393,17 @@ function Install-Gga {
         else {
             Write-Host "[GGA] AGENTS.md already exists, preserving existing file" -ForegroundColor Yellow
         }
+    }
+
+    # Copy run-gga.ps1 script
+    $runGgaScriptSource = Join-Path $WorkspaceRoot "scripts\run-gga.ps1"
+    $runGgaScriptDest = Join-Path $ProjectPath "scripts\run-gga.ps1"
+
+    if (Test-Path $runGgaScriptSource) {
+        $scriptsDir = Split-Path -Parent $runGgaScriptDest
+        Ensure-Directory -Path $scriptsDir
+        Copy-Item -Path $runGgaScriptSource -Destination $scriptsDir -Force
+        Write-Host "[GGA] Copied run-gga.ps1 script" -ForegroundColor Green
     }
 
     # Install pre-commit hook
@@ -827,7 +843,7 @@ if ($CreateProject) {
     Install-ProjectSkills -ProjectPath $destination -WorkspaceSkillsPath $config.toolsRoot -SkillNames $projectSkills
 
     # Install GGA (Gentleman Guardian Angel) for AI-powered code review
-    Install-Gga -ProjectPath $destination
+    Install-Gga -ProjectPath $destination -GgaProvider $GgaProvider
 
     # Try to install GGA globally if not already installed
     Install-GgaGlobal
