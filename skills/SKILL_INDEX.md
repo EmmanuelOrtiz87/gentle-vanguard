@@ -38,11 +38,21 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 ---
 
+### skill-creator-skill
+
+**Trigger**: `create skill`, `new skill`, `add agent instructions`, `document patterns`
+
+**Use when**: Creating new skills, adding AI guidance, documenting patterns
+
+**See**: [skill-creator-skill](skill-creator-skill/SKILL.md)
+
+---
+
 ## Skill Categories
 
 | Category | Skills |
 |----------|--------|
-| **Orchestrators** | project-orchestrator, session-workflow |
+| **Orchestrators** | project-orchestrator, session-workflow, skill-creator |
 | **Frontend** | angular-spa, react-19, nextjs-15, tailwind-4 |
 | **State** | zustand-5 |
 | **Validation** | zod-4 |
@@ -299,7 +309,7 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 | Category | Skills |
 |----------|--------|
-| **Orchestrator** | project-orchestrator (load first!) |
+| **Orchestrator** | project-orchestrator (load first!), session-workflow, skill-creator |
 | **Frontend** | angular-spa, react-19, nextjs-15, tailwind-4 |
 | **State** | zustand-5 |
 | **Validation** | zod-4 |

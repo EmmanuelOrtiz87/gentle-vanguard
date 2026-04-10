@@ -6,7 +6,7 @@ This is the **Gentleman Foundation** project - the global development platform f
 
 ```
 ~/.gentleman/                    # Global installation
-├── skills/                     # 25 development skills
+├── skills/                     # 28 development skills
 ├── tools/                      # CLI tools
 ├── hooks/                      # Git hooks
 ├── bin/                        # CLI wrappers (gf)
@@ -35,11 +35,11 @@ gf update
 gf list
 ```
 
-## Available Skills (25)
+## Available Skills (28)
 
 | Category | Skills |
 |----------|--------|
-| Orchestrator | project-orchestrator |
+| Orchestrator | project-orchestrator, skill-creator |
 | Frontend | angular-spa, react-19, nextjs-15, tailwind-4 |
 | State | zustand-5 |
 | Validation | zod-4 |
