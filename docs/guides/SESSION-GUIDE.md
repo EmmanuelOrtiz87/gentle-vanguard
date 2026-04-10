@@ -67,10 +67,10 @@
 ### 5. Findings Decision
 
 ```
-🚫 CRITICAL → Block immediately, fix now
-⚠️ HIGH     → Must fix before PR
-📋 MEDIUM   → Your choice
-💡 LOW      → Optional fixes
+[X] CRITICAL -> Block immediately, fix now
+[!]️ HIGH     -> Must fix before PR
+[-] MEDIUM   -> Your choice
+[*] LOW      -> Optional fixes
 ```
 
 ---

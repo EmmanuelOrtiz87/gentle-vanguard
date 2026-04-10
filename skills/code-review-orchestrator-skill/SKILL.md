@@ -60,7 +60,7 @@ The Code Review Orchestrator is the **single, unified system** for all code qual
          │         │YES                    │NO                             │
          │         ▼                       ▼                              │
          │    ┌───────────┐           ┌───────────┐                       │
-         │    │ 🚫 BLOCK  │           │ ✓ ALLOW   │                       │
+         │    │ [X] BLOCK  │           │ [OK] ALLOW   │                       │
          │    │ Exit code 1│           │ Exit code 0│                       │
          │    └───────────┘           └───────────┘                       │
          │                                                             │

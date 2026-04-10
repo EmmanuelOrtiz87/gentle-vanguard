@@ -82,9 +82,9 @@ go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest
 
 | Platform | Status | Notes |
 |----------|--------|-------|
-| Windows 10/11 | ✅ Full | Primary platform |
-| macOS | ✅ Full | Use PowerShell Core |
-| Linux | ✅ Full | Use PowerShell Core |
+| Windows 10/11 | [OK] Full | Primary platform |
+| macOS | [OK] Full | Use PowerShell Core |
+| Linux | [OK] Full | Use PowerShell Core |
 
 ## Verification
 
@@ -118,9 +118,9 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 │                    MINIMUM REQUIREMENTS                       │
 ├─────────────────────────────────────────────────────────────┤
 │                                                              │
-│   ✅ git (any recent version)                                 │
-│   ✅ PowerShell 5.1+                                         │
-│   ✅ AI Agent (opencode, claude, copilot, etc.)             │
+│   [OK] git (any recent version)                                 │
+│   [OK] PowerShell 5.1+                                         │
+│   [OK] AI Agent (opencode, claude, copilot, etc.)             │
 │                                                              │
 │   Optional but recommended:                                  │
 │   ⬜ gga (AI code review)                                   │

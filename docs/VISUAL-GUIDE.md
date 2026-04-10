@@ -172,7 +172,7 @@
                                     │YES                    │NO
                                     ▼                        ▼
                             ┌───────────────┐      ┌─────────────────┐
-                            │   🚫 BLOCK    │      │  Run Quick Scan │
+                            │   [X] BLOCK    │      │  Run Quick Scan │
                             │   (Exit 1)   │      │  (Security +    │
                             └───────────────┘      │   Quality)      │
                                                    └────────┬────────┘
@@ -459,46 +459,46 @@ my-service/
               │  │      [S]       │  • Secrets detection
              └─────────┬───────────┘  • Vulnerability patterns
                        │              • OWASP Top 10
-                       │              → Fast scan
+                       │              -> Fast scan
                        │
                        │  ┌─────────────────┐
 │    │    quality      │  Code quality review
                         │  │      [Q]       │  • Code smells
                        └─────────┬───────────┘  • Complexity
                                  │              • Error handling
-                                 │              → Fast scan
+                                 │              -> Fast scan
                                  │
                        ┌─────────┴───────────┐
                        │    architecture    │  Architecture review
                        │        [A]        │  • Project structure
                        └─────────┬───────────┘  • Design patterns
                                  │              • Separation of concerns
-                       ┌─────────┴───────────┐  → Manual check
+                       ┌─────────┴───────────┐  -> Manual check
                        │      testing        │
                        │        [T]         │  Testing review
                        └─────────┬───────────┘  • Coverage metrics
                                  │              • Test quality
-                       ┌─────────┴───────────┐  → Manual check
+                       ┌─────────┴───────────┐  -> Manual check
                        │       docs          │
                        │        [D]          │  Documentation review
                        └─────────┬───────────┘  • README completeness
                                  │              • API docs
-                       ┌─────────┴───────────┐  → Manual check
+                       ┌─────────┴───────────┐  -> Manual check
                        │    api             │  API design review
                        │        [API]        │  • REST compliance
                        └─────────┬───────────┘  • Validation
-                                 │              → Manual check
+                                 │              -> Manual check
                        ┌─────────┴───────────┐
                        │       git           │
                        │        [G]          │  Git workflow review
                        └─────────┬───────────┘  • Hooks
                                  │              • Commit conventions
-                       ┌─────────┴───────────┐  → Manual check
+                       ┌─────────┴───────────┐  -> Manual check
                        │      quick           │
                        │       [Q]            │  Quick scan
                        └─────────┬───────────┘  • Security (fast)
                                  │              • Quality (fast)
-                                 │              → ~30 seconds
+                                 │              -> ~30 seconds
                                  │
                                  │  ┌─────────────────┐
                                  │  │      full       │  Alias for 'all'
@@ -829,8 +829,8 @@ my-service/
 ║  PRE-COMMIT (Automatic)                                                  ║
 ║  ───────────────────────────────────────────────────────────────────     ║
 ║  git commit               Triggers pre-commit hook                        ║
-║  • Secrets scan → BLOCK if critical                                      ║
-║  • Quality scan → Allow + warn                                           ║
+║  • Secrets scan -> BLOCK if critical                                      ║
+║  • Quality scan -> Allow + warn                                           ║
 ║  • Report generated                                                       ║
 ║                                                                           ║
 ║  PROJECT TYPES                                                           ║

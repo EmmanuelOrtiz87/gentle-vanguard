@@ -98,7 +98,7 @@ An AI agent is a system that:
 
 ### Examples
 
-| ❌ Bad Prompt | ✅ Good Prompt |
+| ❌ Bad Prompt | [OK] Good Prompt |
 |--------------|----------------|
 | "Fix my code" | "Fix the null pointer exception on line 45 in auth.go" |
 | "Write tests" | "Write unit tests for the validateEmail function in utils/validation.go" |
@@ -166,15 +166,15 @@ Response:
 │                 DEVELOPMENT CYCLE                             │
 ├─────────────────────────────────────────────────────────────┤
 │                                                              │
-│   1. Plan        → Define task and constraints             │
+│   1. Plan        -> Define task and constraints             │
 │         ↓                                                  │
-│   2. Generate    → AI generates code                      │
+│   2. Generate    -> AI generates code                      │
 │         ↓                                                  │
-│   3. Review      → GGA + human review                     │
+│   3. Review      -> GGA + human review                     │
 │         ↓                                                  │
-│   4. Iterate    → Refine based on feedback               │
+│   4. Iterate    -> Refine based on feedback               │
 │         ↓                                                  │
-│   5. Test        → Verify functionality                   │
+│   5. Test        -> Verify functionality                   │
 │                                                              │
 └─────────────────────────────────────────────────────────────┘
 ```

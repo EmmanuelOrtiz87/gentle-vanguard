@@ -15,8 +15,8 @@ $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $projectRoot = Split-Path -Parent $scriptDir
 
-function Write-Step { param([string]$Msg) Write-Host "[→] $Msg" -ForegroundColor Cyan }
-function Write-Success { param([string]$Msg) Write-Host "[✓] $Msg" -ForegroundColor Green }
+function Write-Step { param([string]$Msg) Write-Host "[->] $Msg" -ForegroundColor Cyan }
+function Write-Success { param([string]$Msg) Write-Host "[[OK]] $Msg" -ForegroundColor Green }
 function Write-Error { param([string]$Msg) Write-Host "[✗] $Msg" -ForegroundColor Red }
 
 function Get-DatabaseUrl {

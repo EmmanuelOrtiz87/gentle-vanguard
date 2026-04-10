@@ -152,10 +152,10 @@ Brief description of session work.
 ## Findings Summary
 
 **Found:** X issues
-- 🚫 CRITICAL: N (blocks if any)
-- ⚠️ HIGH: N
-- 📋 MEDIUM: N  
-- 💡 LOW: N
+- [X] CRITICAL: N (blocks if any)
+- [!]️ HIGH: N
+- [-] MEDIUM: N  
+- [*] LOW: N
 
 ### Options
 
@@ -194,10 +194,10 @@ todowrite([
 - [Completed item 2]
 
 ### Findings
-- 🚫 Critical: N
-- ⚠️ High: N
-- 📋 Medium: N
-- 💡 Low: N
+- [X] Critical: N
+- [!]️ High: N
+- [-] Medium: N
+- [*] Low: N
 
 ### Git
 - Branch: [branch]
