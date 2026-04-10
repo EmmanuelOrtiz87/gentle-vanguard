@@ -53,6 +53,12 @@ gf update     # Update skills from source
 gf new        # Create new project
 ```
 
+### Working with AI Agents
+
+**IMPORTANT**: For optimal sessions, start with "Iniciar sesion" to activate the session workflow.
+
+See [docs/guides/SESSION-GUIDE.md](docs/guides/SESSION-GUIDE.md) for complete instructions.
+
 ### Setup Existing Project
 
 ```powershell
