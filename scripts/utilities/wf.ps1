@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'health', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -279,6 +279,7 @@ COMMANDS:
     pr                Create PR with template
     push              Commit and push changes
     status            Show current status
+    health            Check system health & activate tools
     help              Show this help
 
 OPTIONS:
@@ -292,6 +293,7 @@ EXAMPLES:
     .\wf.ps1 audit              Generate audit document
     .\wf.ps1 pr                 Create PR
     .\wf.ps1 push               Commit and push
+    .\wf.ps1 health             Check system health & activate tools
 
 "@
 }
@@ -389,6 +391,20 @@ switch ($Command) {
         Write-Host "  git add ." -ForegroundColor Yellow
         Write-Host "  git commit -m 'type(scope): description'" -ForegroundColor Yellow
         Write-Host "  git push" -ForegroundColor Yellow
+    }
+    
+    'health' {
+        Write-Step "System Health Check & Tool Activation"
+        
+        $healthScript = Join-Path $scriptDir 'ensure-tools-active.ps1'
+        if (Test-Path $healthScript) {
+            $args = @()
+            if ($Force) { $args += "-AutoStart" }
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $healthScript @args
+        } else {
+            Write-Error "Health check script not found: $healthScript"
+            exit 1
+        }
     }
 }
 

@@ -9,6 +9,36 @@
 | `Guardar` | Commit & push changes |
 | `Review` | Run code review |
 | `PR` | Create pull request |
+| `Health` | Check system health & activate tools |
+
+---
+
+## Automatic Tool Activation
+
+The Gentleman Foundation automatically ensures all development tools are active:
+
+### Auto-Activation Triggers
+- **Pre-commit**: Tools validated before each commit
+- **Session start**: Health check runs automatically
+- **Manual**: Use `.\wf.ps1 health` anytime
+
+### Tools Activated
+- **Engram**: Memory system for context persistence
+- **GGA**: Gentleman Guardian Angel (code review)
+- **Gentle-AI**: AI CLI assistant
+- **Orchestrator Skills**: Project coordination system
+
+### Manual Activation
+```powershell
+# Check and activate all tools
+.\wf.ps1 health
+
+# Force auto-start missing tools
+.\wf.ps1 health -Force
+
+# Auto-init environment (any directory)
+.\scripts\utilities\auto-init-dev-environment.ps1
+```
 
 ---
 

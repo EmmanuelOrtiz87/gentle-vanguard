@@ -46,6 +46,21 @@ Write-Host " Gentleman Foundation - Pre-commit" -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host ""
 
+# Ensure tools are active before proceeding
+Write-Host "Ensuring development tools are active..." -ForegroundColor Yellow
+$healthScript = Join-Path $PSScriptRoot "..\scripts\utilities\ensure-tools-active.ps1"
+if (Test-Path $healthScript) {
+    try {
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $healthScript -Quiet
+        Write-Host "[OK] Tools activation check completed." -ForegroundColor Green
+    } catch {
+        Write-Host "[WARN] Tools activation check failed, but continuing..." -ForegroundColor Yellow
+    }
+} else {
+    Write-Host "[WARN] Health check script not found, skipping tools activation." -ForegroundColor Yellow
+}
+Write-Host ""
+
 $StagedFiles = git diff --cached --name-only --diff-filter=ACM 2>$null
 if (-not $StagedFiles) {
     Write-Host "[OK] No files staged for commit." -ForegroundColor Green
