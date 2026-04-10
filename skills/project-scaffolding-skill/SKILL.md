@@ -1,9 +1,9 @@
 ---
-name: workspace-foundation
+name: project-scaffolding
 description: Use when creating projects, scaffolding code, bootstrapping workspaces, applying templates, running validation scripts, or managing workspace infrastructure. Triggers for: "create project", "new project", "bootstrap", "scaffold", "template", "workspace setup", "initialize project", "wf CLI".
 ---
 
-# Workspace Foundation
+# Project Scaffolding
 
 ## Purpose
 

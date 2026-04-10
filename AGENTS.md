@@ -1,52 +1,94 @@
-# Code Review Rules - Workspace Foundation
+# Gentleman Foundation - Agent Guidelines
 
-This file defines the coding standards enforced by **GGA** (Gentleman Guardian Angel) on every commit.
+This is the **Gentleman Foundation** project - the global development platform for enterprise teams.
 
-## PowerShell Scripts
+## Foundation Architecture
 
-- Use `$ErrorActionPreference = 'Stop'` for critical scripts
-- Use `param()` with proper parameter attributes
-- Use `Write-Host` with `-ForegroundColor` for status messages
-- Prefer `Get-Command` over `Test-Path` for executables
-- Use `Ensure-Directory` helper for directory creation
-- Follow verb-noun naming convention
+```
+~/.gentleman/                    # Global installation
+├── skills/                     # 25 development skills
+├── tools/                      # CLI tools
+├── hooks/                      # Git hooks
+├── bin/                        # CLI wrappers (gf)
+├── config/                     # Configuration
+└── templates/                  # Project templates
+```
 
-## Shell Scripts
+## Quick Start
 
-- Use `set -e` for error propagation
-- Use `#!/usr/bin/env bash` shebang
-- Validate required commands before execution
-- Use consistent error messages
+### Install Foundation
+```powershell
+# One-time machine setup
+.\scripts\bootstrap-machine.ps1
 
-## Documentation
+# Verify installation
+gf validate
+```
 
-- Write documentation in English
-- Use markdown formatting
-- Keep README files updated
-- Document all public functions
+### Update Skills
+```powershell
+gf update
+```
 
-## Project Structure
+### List Available Skills
+```powershell
+gf list
+```
 
-- Follow the workspace foundation conventions
-- Use `scripts/` for automation
-- Use `docs/` for documentation
-- Use `config/` for configuration
+## Available Skills (25)
 
-## Git Workflow
+| Category | Skills |
+|----------|--------|
+| Orchestrator | project-orchestrator |
+| Frontend | angular-spa, react-19, nextjs-15, tailwind-4 |
+| State | zustand-5 |
+| Validation | zod-4 |
+| Backend | golang-api, api-design, django-drf |
+| Database | database-relational, database-nosql |
+| DevOps | docker-devops |
+| Testing | testing-strategy, testing-skill |
+| AI | ai-sdk-5, mcp-skill |
+| Workflow | github-pr, jira-task, jira-epic |
+| Quality | typescript, code-review, security |
+| Governance | project-scaffolding, architecture, documentation, git-workflow |
 
-- Use conventional commit messages
-- Run validation before committing
-- Keep commits focused and atomic
+## Scripts
+
+| Script | Purpose |
+|--------|---------|
+| `bootstrap-machine.ps1` | Install foundation globally |
+| `sync-skills.ps1` | Sync skills to global |
+| `setup-project.ps1` | Setup project with foundation |
+| `validate-project.ps1` | Validate project |
+
+## Code Standards
+
+### PowerShell Scripts
+- `$ErrorActionPreference = 'Stop'` for critical scripts
+- `param()` with proper attributes
+- `Write-Host -ForegroundColor` for status
+- Verb-Noun naming convention
+
+### Shell Scripts
+- `set -e` for error propagation
+- `#!/usr/bin/env bash` shebang
+
+### Git Workflow
+- Conventional commits: `feat(scope): description`
+- Run validation before commit
+- Atomic commits
 
 ## Testing
-
 - Write tests for critical functionality
-- Use table-driven tests where applicable
-- Mock external dependencies
+- Table-driven tests preferred
+- Coverage target: 70%+
 
 ## Security
+- Never commit secrets
+- Use environment variables
+- Validate inputs
+- Run security hooks pre-commit
 
-- Never commit secrets or credentials
-- Use environment variables for sensitive data
-- Validate all user inputs
-- Follow least privilege principle
+## See Also
+- `skills/SKILL_INDEX.md` - Complete skill reference
+- `docs/ARCHITECTURE.md` - Foundation architecture

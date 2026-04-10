@@ -1,29 +1,29 @@
-# Workspace Foundation
+# Gentleman Foundation
 
-> **Agnostic template for creating standardized development projects.**
-> Regardless of seniority, technology, operating system, or IDE.
+> **Global development platform for enterprise teams.**
+> Standardized skills, hooks, and CLI for consistent development practices.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                        WORKSPACE FOUNDATION v2.2                             │
+│                        GENTLEMAN FOUNDATION v3.0                            │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │    ┌─────────────┐         ┌─────────────┐         ┌─────────────┐         │
 │    │   Developer │         │     CLI     │         │  Orchestrator│         │
-│    │    Input    │────────▶│   (wf.ps1)  │────────▶│   (Review)   │         │
+│    │    Input    │────────▶│    (gf)     │────────▶│   (Skills)   │         │
 │    └─────────────┘         └──────┬──────┘         └──────┬──────┘         │
 │                                  │                        │                  │
 │                           ┌──────▼──────┐         ┌──────▼──────┐         │
-│                           │  Bootstrap  │         │ 7 Dimensions │         │
-│                           │   Engine    │         │   Scanned    │         │
+│                           │  Bootstrap  │         │    Skills    │         │
+│                           │   Machine   │         │     25+      │         │
 │                           └──────┬──────┘         └──────────────┘         │
 │                                  │                                          │
 │         ┌───────────────────────┼───────────────────────┐                  │
 │         │                       │                       │                  │
 │         ▼                       ▼                       ▼                  │
 │  ┌─────────────┐         ┌─────────────┐         ┌─────────────┐         │
-│  │ Gentle-AI   │         │ Gentleman-  │         │   Engram    │         │
-│  │ Ecosystem   │         │   Skills    │         │   Memory    │         │
+│  │  ~/.gentle  │         │   Global    │         │   Engram    │         │
+│  │    man/     │         │   Skills    │         │   Memory    │         │
 │  └─────────────┘         └─────────────┘         └─────────────┘         │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -31,40 +31,36 @@
 
 ## Quick Start
 
-### New Projects
+### One-Time Machine Setup
 
 ```powershell
-# 1. Initialize workspace
-.\scripts\wf.ps1 init
+# Install foundation globally (~/.gentleman/)
+.\scripts\bootstrap-machine.ps1
 
-# 2. Create a new project (interactive wizard)
-.\scripts\wf.ps1 new --interactive
+# Verify installation
+gf validate
 
-# 3. Or create project with parameters
-.\scripts\wf.ps1 new --name my-api --kind service --architecture clean
-
-# 4. Run code review
-.\scripts\wf.ps1 review
+# Restart terminal or run: refreshenv
 ```
 
-### Existing Projects
-
-Workspace Foundation integrates into existing repositories without modifying your code:
+### Available Commands
 
 ```powershell
-# 1. Navigate to your existing project
+gf info       # Show foundation information
+gf list       # List installed skills
+gf validate   # Validate installation
+gf update     # Update skills from source
+gf new        # Create new project
+```
+
+### Setup Existing Project
+
+```powershell
+# Navigate to project
 cd C:\my-existing-project
 
-# 2. Integrate Foundation
-.\scripts\init-workspace.ps1
-
-# 3. That's it - Foundation adds capabilities
-#    - .audit/ directory
-#    - AI tools configured
-#    - Code review hooks
-#    - Audit system
-
-# See docs/INTEGRATION-EXISTING-PROJECTS.md for full guide
+# Setup project with foundation
+.\path\to\workspace-foundation\scripts\setup-project.ps1
 ```
 
 **Key point:** Foundation is **additive**. It never overwrites existing files.
@@ -105,15 +101,14 @@ cd C:\my-existing-project
 
 | Feature | Description |
 |---------|-------------|
-| **Unified CLI** | Single command (`wf`) for all operations |
-| **Code Review Orchestrator** | 7-dimensional automated code review |
-| **GGA Integration** | AI-powered code review on every commit |
-| **Gentle-AI** | AI ecosystem configurator with SDD workflow |
-| **Gentleman-Skills** | 20+ curated skills for AI agents |
-| **Pre-commit Security** | Automatic secrets detection before commit |
+| **Global Installation** | Single installation per machine, used by all projects |
+| **Unified CLI** | Single command (`gf`) for all operations |
+| **Symlink Strategy** | Skills updated once, available everywhere |
+| **Pre-commit Hooks** | Automatic secrets detection before commit |
+| **25+ Skills** | Curated skills for Go, Angular, React, Python, etc. |
 | **Multi-Technology** | Supports Node.js, Go, Python, Rust, and more |
 | **Cross-Platform** | Works on Windows, Linux, and macOS |
-| **Templates** | service, cli, library, frontend, fullstack, microservices, mobile |
+| **Templates** | service, cli, library, frontend, fullstack, microservices |
 | **CI/CD** | GitHub Actions, GitLab CI, Azure DevOps included |
 | **Containers** | Docker and Kubernetes production-ready |
 | **AI-Ready** | Engram integration for persistent memory |
