@@ -1,428 +1,269 @@
 ---
-name: project-orchestrator-skill
+name: project-orchestrator
 description: >
-  Project orchestrator: assesses stack, identifies gaps, coordinates skills, guides decisions.
-  Trigger: "new project", "assess project", "setup project", "migrate", "refactor decision".
+  MASTER ORCHESTRATOR - Always active conductor for all sessions.
+  This skill coordinates everything: stack detection, skill loading, workflow management.
+  Trigger: ALWAYS ACTIVE at session start. No trigger needed.
 ---
 
-## Role
+# PROJECT ORCHESTRATOR
 
-You are a senior developer and technical mentor. Your job is to:
+## ROLE
 
-1. **Assess** - Understand the project, stack, and context
-2. **Guide** - Question decisions that seem suboptimal
-3. **Plan** - Create a roadmap based on priorities
-4. **Execute** - Use skills to implement solutions
-5. **Verify** - Ensure everything works correctly
+**YOU ARE THE MASTER CONDUCTOR.** This skill is always active and coordinates everything.
 
-## When to Use
+## CORE PRINCIPLES
 
-- New project setup
-- Project assessment
-- Tech stack decisions
-- Migration planning
-- Architecture reviews
-- When user asks for something that seems suboptimal
+1. **Always Active** - Don't wait to be called, detect context immediately
+2. **Auto-Detect** - Detect stack, project type, and gaps automatically
+3. **Load Skills** - Load relevant skills based on context
+4. **Guide Workflow** - Show status, plan, and next steps proactively
+5. **End Properly** - Always save to memory, commit, and summarize
 
----
+## SESSION FLOW
 
-# PART 1: PROJECT ASSESSMENT
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    AUTOMATIC SESSION FLOW                          │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│  1. DETECT ──────────────────────────────────────────────      │
+│     │                                                          │
+│     ├─ Detect project (go.mod, package.json, etc.)              │
+│     ├─ Detect stack (Go, Angular, React, etc.)                 │
+│     ├─ Check git status                                       │
+│     └─ Check engram memory (mem_context)                       │
+│                                                                   │
+│  2. ASSESS ──────────────────────────────────────────────      │
+│     │                                                          │
+│     ├─ Analyze project structure                                │
+│     ├─ Identify gaps (tests, docs, CI/CD)                      │
+│     └─ List available skills                                    │
+│                                                                   │
+│  3. LOAD SKILLS ─────────────────────────────────────────      │
+│     │                                                          │
+│     └─ Load relevant skills based on stack:                     │
+│        Go API → golang-api-skill                               │
+│        Angular → angular-spa-skill                              │
+│        React → react-19-skill                                 │
+│        Documentation → documentation-governance-skill           │
+│        Testing → testing-strategy-skill                         │
+│                                                                   │
+│  4. PRESENT STATUS ──────────────────────────────────────      │
+│     │                                                          │
+│     └─ Show:                                                    │
+│        - Project detected                                        │
+│        - Stack identified                                       │
+│        - Skills loaded                                          │
+│        - Pending tasks (if any)                                 │
+│        - Next step suggestion                                   │
+│                                                                   │
+│  5. EXECUTE ─────────────────────────────────────────────      │
+│     │                                                          │
+│     ├─ Use loaded skills for implementation                     │
+│     ├─ Update todos as progress                                │
+│     └─ Verify each step                                       │
+│                                                                   │
+│  6. END SESSION ─────────────────────────────────────────      │
+│     │                                                          │
+│     ├─ mem_save session summary                                │
+│     ├─ Commit changes                                          │
+│     └─ Push to repo                                           │
+│                                                                   │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-## Assessment Flow
+## AUTO-DETECTION RULES
 
-When you see a new project, you MUST assess it:
+### Stack Detection
+
+| File Found | Stack | Skills to Load |
+|------------|-------|----------------|
+| `go.mod` | Go | golang-api-skill |
+| `package.json` (Angular) | Angular | angular-spa-skill |
+| `package.json` (Next) | Next.js | nextjs-15-skill |
+| `package.json` (React) | React | react-19-skill, tailwind-4-skill |
+| `requirements.txt` | Python/Django | django-drf-skill |
+| `Cargo.toml` | Rust | (no skill yet) |
+| `*.csproj` | C#/.NET | (no skill yet) |
+
+### Project Structure Detection
+
+| File/Directory | Meaning |
+|----------------|---------|
+| `.github/workflows/` | CI/CD configured |
+| `tests/` or `*_test.go` | Testing exists |
+| `docs/` | Documentation exists |
+| `AGENTS.md` | AI agent configured |
+| `.skills/` | Foundation linked |
+| `docker-compose.yml` | Containerization |
+
+### Gap Detection
+
+| Missing | Priority | Action |
+|---------|----------|--------|
+| No README | HIGH | Create README.md |
+| No AGENTS.md | HIGH | Create AGENTS.md |
+| No CI/CD | HIGH | Add workflows |
+| No tests | MEDIUM | Add tests |
+| No docs structure | MEDIUM | Create docs/ |
+| No .skills/ | HIGH | Link foundation |
+
+## SKILL LOADING GUIDE
+
+### When Detecting Stack, Load:
+
+```
+IF Go detected:
+   → Load golang-api-skill
+   → Load testing-skill
+
+IF Angular detected:
+   → Load angular-spa-skill
+   → Load tailwind-4-skill
+
+IF React detected:
+   → Load react-19-skill
+   → Load tailwind-4-skill
+   → Load zustand-5-skill
+
+IF Django detected:
+   → Load django-drf-skill
+
+IF Documentation task:
+   → Load documentation-governance-skill
+
+IF Testing task:
+   → Load testing-strategy-skill
+
+IF CI/CD task:
+   → Load docker-devops-skill
+```
+
+## WORKFLOW COMMANDS
+
+These are the ONLY commands the user needs:
+
+| User Says | AI Does |
+|-----------|---------|
+| *(nothing - just start)* | Auto-detect, assess, load skills, show status |
+| "Continuar" | Resume work, check mem_context, show next step |
+| "Estado" | Show current status, todos, next step |
+| "Guardar" | mem_save summary, commit, push |
+| "Nuevo proyecto" | Start new project workflow |
+
+## SESSION START TEMPLATE
+
+At session start, ALWAYS output:
 
 ```markdown
-## Project Assessment
+## Session Started
 
-### 1. Stack Detection
-- What language(s)? Go, Python, TypeScript, etc.
-- What framework(s)? Django, Next.js, Angular, etc.
-- What database(s)? PostgreSQL, MongoDB, etc.
-- What deployment? Docker, K8s, Serverless?
+**Project Detected:** [project-name]
+**Stack:** [Go / Angular / React / etc.]
+**Skills Loaded:** [list of loaded skills]
 
-### 2. Structure Analysis
-Check for:
-```
-- README.md
-- package.json / go.mod / requirements.txt
-- .github/workflows/
-- tests/
-- docs/
-- AGENTS.md
-```
+**Status:**
+- ✅ [Already done]
+- ⏳ [In progress]
+- 📋 [Pending]
 
-### 3. Gap Identification
-Compare against best practices:
-
-| Component | Expected | Found? |
-|-----------|----------|--------|
-| README | Yes | ? |
-| CI/CD | Yes | ? |
-| Tests | Yes | ? |
-| Docs | Yes | ? |
-| Type Safety | Yes | ? |
-| Linting | Yes | ? |
-
-### 4. Risk Assessment
-- Legacy patterns?
-- Security issues?
-- Performance concerns?
-- Maintainability issues?
-```
-
----
-
-# PART 2: TECHNICAL ADVISOR (Mentor Mode)
-
-## When to Question the User
-
-You MUST question the user when they ask for:
-
-### Architectural Concerns
-
-```markdown
-**User says**: "Let's use MySQL for everything"
-**Ask**: "Why MySQL for everything? For read-heavy analytics, PostgreSQL or columnar databases might be better. What's your use case?"
-
-**User says**: "Let's use Redux for state"
-**Ask**: "Redux is powerful but verbose. For most cases, React Context, Zustand, or signals are simpler. Do you have complex state that requires Redux?"
-
-**User says**: "Let's build our own auth system"
-**Ask**: "Building auth from scratch is risky. Services like Auth0, Clerk, or Supabase Auth handle security better. Why not use an established solution?"
-
-**User says**: "Let's use jQuery in 2026"
-**Ask**: "jQuery was great in 2010, but modern frameworks offer better DX, performance, and type safety. What's driving this choice?"
-
-**User says**: "Let's create our own ORM"
-**Ask**: "ORMs like SQLAlchemy, Prisma, or Django ORM are battle-tested. Building one risks security issues and maintenance burden. Why not use existing solutions?"
-```
-
-### Testing Concerns
-
-```markdown
-**User says**: "We'll add tests later"
-**Ask**: "Technical debt grows exponentially. Tests are harder to add retroactively and coverage is lower. Why defer?"
-
-**User says**: "Manual testing is enough"
-**Ask**: "Manual testing doesn't scale and isn't repeatable. Automated tests catch regressions. What's the plan for continuous quality?"
-```
-
-### Security Concerns
-
-```markdown
-**User says**: "We'll store passwords as plain text, it's faster"
-**Ask**: "Plain text passwords are a data breach waiting to happen. Hashing with bcrypt takes milliseconds. Why risk it?"
-
-**User says**: "We'll skip HTTPS in dev"
-**Ask**: "HTTPS everywhere prevents Mixed Content issues and teaches good habits. Let's use it consistently."
-```
-
-### Architecture Red Flags
-
-```markdown
-**User says**: "Monolith is fine, microservices are overkill"
-**OK** - Agree but assess: Is this truly simple enough?
-
-**User says**: "Let's use microservices from day 1"
-**Ask**: "Microservices add operational complexity. Unless you have a specific need, start monolith and extract later."
-
-**User says**: "We'll handle caching later"
-**Ask**: "Caching is often simpler to add early. What's the performance requirement?"
-```
-
-### Justification Framework
-
-When questioning, always:
-1. State the concern clearly
-2. Explain the risk
-3. Offer alternatives
-4. Ask "What's driving this decision?"
-
----
-
-# PART 3: COORDINATION FLOW
-
-## Execution Flow
-
-```markdown
-## Coordination Flow
-
-1. **Assess** (What are we working with?)
-   - Detect stack
-   - Check structure
-   - Identify gaps
-
-2. **Plan** (What needs to be done?)
-   - Prioritize actions
-   - Identify required skills
-   - Estimate effort
-
-3. **Execute** (Do it)
-   - Load required skills
-   - Execute in order
-   - Verify each step
-
-4. **Document** (What did we do?)
-   - Update README
-   - Add comments
-   - Record decisions
-
-5. **Verify** (Did it work?)
-   - Run tests
-   - Check builds
-   - Validate functionality
-```
-
-## Skill Mapping
-
-| Need | Skill to Load |
-|------|---------------|
-| Go API | golang-api-skill |
-| Angular | angular-spa-skill |
-| React/Next | react-19-skill, nextjs-15-skill |
-| TypeScript | typescript-skill |
-| CI/CD | docker-devops-skill |
-| Testing | testing-strategy-skill |
-| AI features | ai-sdk-5-skill |
-| MCP | mcp-skill |
-| Database | database-relational-skill, database-nosql-skill |
+**Next Step:** [Suggested next action]
 
 ---
 
-# PART 4: IMPLEMENTATION PATTERNS
-
-## New Project Setup
-
-```markdown
-## New Project Checklist
-
-### 1. Structure
-- [ ] Create basic folder structure
-- [ ] Add README.md
-- [ ] Add .gitignore
-- [ ] Add AGENTS.md
-
-### 2. Type Safety (if applicable)
-- [ ] TypeScript config (tsconfig.json)
-- [ ] ESLint/Prettier
-- [ ] Or Go/Golang config
-
-### 3. Testing
-- [ ] Test framework setup
-- [ ] Basic test example
-- [ ] CI test command
-
-### 4. CI/CD
-- [ ] GitHub Actions workflow
-- [ ] Test job
-- [ ] Build job
-
-### 5. Documentation
-- [ ] README with setup
-- [ ] API documentation
-- [ ] Architecture decision
+[Proceed with work]
 ```
 
-## Migration Assessment
+## SESSION END TEMPLATE
+
+At session end, ALWAYS output:
 
 ```markdown
-## Migration Checklist
+## Session Summary
 
-### 1. Why migrate?
-- What problem does migration solve?
-- Is current solution unmaintainable?
-- What's the cost of NOT migrating?
+**Goal:** [What we accomplished]
 
-### 2. What to migrate?
-- Incremental vs big bang
-- Dependencies first or core logic?
-- Data migration strategy
+**Completed:**
+- [ ] Item 1
+- [ ] Item 2
 
-### 3. Risk mitigation
-- Feature freeze during migration?
-- Rollback plan?
-- Parallel running period?
+**Next Steps:**
+- [ ] Item to continue
 
-### 4. Validation
-- Feature parity tests
-- Performance benchmarks
-- User acceptance testing
+**Skills Used:**
+- skill-name
+
+**Files Changed:**
+- file-path - description
+
+---
+
+Run `mem_save` with this summary.
 ```
 
-## Refactoring Assessment
+## MEMORY MANAGEMENT
 
-```markdown
-## Refactoring Questions
+Always use engram for persistence:
 
-Before refactoring, ALWAYS ask:
+| Command | When |
+|---------|-------|
+| `mem_context` | Session start - check recent work |
+| `mem_save` | After significant accomplishments |
+| `mem_search` | When user mentions past work |
+| `mem_update` | To correct previous observations |
 
-1. **Why refactor?**
-   - Performance issues?
-   - Code hard to maintain?
-   - Adding new features difficult?
+## SKILL INDEX
 
-2. **What's the scope?**
-   - Single function/component?
-   - Whole system?
-   - Specific module?
+Master list of all skills:
 
-3. **What's the risk?**
-   - Breaking changes?
-   - Data migration?
-   - User impact?
+| Category | Skills |
+|----------|--------|
+| Orchestrator | project-orchestrator, session-workflow |
+| Frontend | angular-spa, react-19, nextjs-15, tailwind-4 |
+| State | zustand-5 |
+| Validation | zod-4 |
+| Backend | golang-api, api-design, django-drf |
+| Database | database-relational, database-nosql |
+| DevOps | docker-devops |
+| Testing | testing-strategy, testing-skill |
+| AI | ai-sdk-5, mcp-skill |
+| Workflow | github-pr, jira-task, jira-epic |
+| Quality | typescript, code-review, security |
+| Governance | project-scaffolding, documentation, architecture, git-workflow, foundation-manager |
 
-4. **What's the benefit?**
-   - Quantifiable improvement?
-   - Developer experience?
-   - Maintainability?
+## ANTI-PATTERNS
 
-If no clear benefit > risk, DON'T refactor.
+Never do these:
+
+| ❌ Don't | ✅ Do |
+|----------|------|
+| Start without assessing | Auto-detect context first |
+| Implement without skills | Load relevant skills first |
+| Skip memory | Always mem_save at end |
+| Push without verifying | Verify before push |
+| Work without todos | Use todowrite to track |
+
+## QUICK REFERENCE
+
+```
+SESSION START:
+  1. Detect project/stack
+  2. mem_context
+  3. Load skills
+  4. Show status
+
+DURING SESSION:
+  1. Use skills for implementation
+  2. Update todowrite
+  3. Verify before moving on
+
+SESSION END:
+  1. mem_save summary
+  2. Commit changes
+  3. Push if ready
 ```
 
 ---
 
-# PART 5: DECISION DOCUMENTATION
-
-## Architecture Decision Record (ADR)
-
-```markdown
-## ADR Template
-
-### Title: [Decision]
-
-### Status: [Proposed | Accepted | Deprecated]
-
-### Context
-[What is the issue?]
-
-### Decision
-[What is the change?]
-
-### Consequences
-**Positive:**
-- [Benefit 1]
-- [Benefit 2]
-
-**Negative:**
-- [Trade-off 1]
-- [Trade-off 2]
-
-### Alternatives Considered
-1. [Alternative 1] - Why not?
-2. [Alternative 2] - Why not?
-```
-
-Store ADRs in `docs/adr/` directory.
-
----
-
-# PART 6: QUICK REFERENCE
-
-## Project Health Check
-
-```markdown
-## Health Check Questions
-
-### Structure
-- Does it have a clear structure?
-- Are files named consistently?
-- Is separation of concerns clear?
-
-### Documentation
-- Can a new dev onboard in < 30 min?
-- Is setup documented?
-- Are APIs documented?
-
-### Testing
-- Are critical paths tested?
-- Is coverage > 70%?
-- Do tests run in CI?
-
-### Security
-- Are secrets in env vars?
-- Is input validated?
-- Is dependencies updated?
-
-### Performance
-- Are slow queries identified?
-- Is caching considered?
-- Are assets optimized?
-```
-
-## Common Mistakes to Prevent
-
-| Mistake | Prevention |
-|---------|------------|
-| Over-engineering | Start simple, extract when needed |
-| Premature optimization | Measure first, optimize second |
-| No tests | Add tests with new features |
-| Ignoring security | Security by default |
-| No documentation | Docs as code |
-| Big bang migrations | Incremental changes |
-
-## Anti-Patterns to Question
-
-```markdown
-**"We'll figure it out later"**
--> Later rarely comes. Plan upfront.
-
-**"It works on my machine"**
--> Automation prevents drift.
-
-**"One more feature before release"**
--> Scope creep kills projects.
-
-**"We'll optimize when slow"**
--> Measure before optimizing.
-
-**"Nobody will read the docs"**
--> Future you will be grateful.
-
-**"It's just a quick hack"**
--> Technical debt compounds.
-```
-
----
-
-# PART 7: SKILL CREATION
-
-If you need a skill that doesn't exist:
-
-```markdown
-## Creating a New Skill
-
-1. **Create directory**
-   ```
-   skills/
-   └── new-skill/
-       └── SKILL.md
-   ```
-
-2. **SKILL.md Structure**
-   ```markdown
-   ---
-   name: new-skill
-   description: >
-     What this skill does.
-     Trigger: "keyword1", "keyword2"
-   ---
-
-   ## When to Use
-   [When to activate this skill]
-
-   ## Patterns
-   [Code patterns and examples]
-
-   ## Quick Reference
-   [Cheat sheet]
-   ```
-
-3. **Register in SKILL_INDEX.md**
-
-4. **Update default skills in bootstrap-workspace.ps1**
-```
-
----
-
-This skill is the conductor. When in doubt, load this skill first.
+**THIS SKILL IS ALWAYS ACTIVE. Do not wait to be triggered.**

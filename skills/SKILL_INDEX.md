@@ -7,38 +7,53 @@ description: >
 
 ## Skill Index
 
-This is the master reference for all available skills. Skills activate automatically based on context.
+This is the master reference for all available skills.
 
-## Orchestrator (Load First)
+## MASTER ORCHESTRATORS
+
+These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 ### project-orchestrator-skill
 
-**Trigger**: `new project`, `assess project`, `setup project`, `migrate`, `refactor`, `architect`
+**Status**: ALWAYS ACTIVE - No trigger needed
 
-**Use when**: Project setup, stack assessment, migration planning, architecture decisions. ALWAYS load this skill first when starting a new project or evaluating an existing one.
+**This is the MASTER conductor.** It:
+- Auto-detects project and stack
+- Loads relevant skills
+- Guides workflow
+- Questions suboptimal decisions
 
-**Capabilities**:
-- Project stack detection
-- Gap identification
-- Skill coordination
-- Technical mentorship
-- Decision questioning
-- Anti-pattern prevention
-
----
+**Never wait to be called - always active.**
 
 ### session-workflow-skill
 
-**Trigger**: `new session`, `start work`, `session workflow`, `end session`, `workflow`
+**Trigger**: `iniciar sesion`, `guardar sesion`, `continuar`, `estado`
 
-**Use when**: Beginning a session, planning work, ending session. ALWAYS load at session start to ensure complete workflow.
+**Handles session mechanics:**
+- Memory management (mem_context, mem_save)
+- Todo tracking (todowrite)
+- Session start/end execution
 
-**Capabilities**:
-- Session orchestration
-- Skill loading guidance
-- Memory management (engram)
-- Todo tracking
-- Verification checklist
+**Coordinate with project-orchestrator.**
+
+---
+
+## Skill Categories
+
+| Category | Skills |
+|----------|--------|
+| **Orchestrators** | project-orchestrator, session-workflow |
+| **Frontend** | angular-spa, react-19, nextjs-15, tailwind-4 |
+| **State** | zustand-5 |
+| **Validation** | zod-4 |
+| **Backend** | golang-api, api-design, django-drf |
+| **Database** | database-relational, database-nosql |
+| **DevOps** | docker-devops |
+| **Testing** | testing-strategy, testing-skill |
+| **AI** | ai-sdk-5, mcp-skill |
+| **Workflow** | github-pr, jira-task, jira-epic |
+| **Quality** | typescript, code-review, security |
+| **Governance** | project-scaffolding, documentation, architecture, git-workflow, foundation-manager |
 
 ---
 

@@ -1,204 +1,134 @@
 ---
 name: session-workflow
 description: >
-  Session workflow orchestrator: guides complete session from start to finish.
-  Trigger: "new session", "start work", "session workflow", "end session", "workflow".
+  Session workflow executor: handles the mechanics of session management.
+  Coordinate with project-orchestrator for context detection.
+  Trigger: "iniciar sesion", "guardar sesion", "continuar", "estado".
 ---
 
-# Session Workflow Skill
+# SESSION WORKFLOW
 
 ## Purpose
 
-Ensure complete, documented sessions with proper use of skills, tools, and memory.
+Execute the mechanical aspects of session management while coordinating with the orchestrator.
 
-## Session Flow
+## Role Division
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    SESSION WORKFLOW                               │
+│              COORDINATION                                          │
 ├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  1. START ────► 2. ASSESS ────► 3. PLAN                       │
-│       │               │               │                          │
-│       ▼               ▼               ▼                          │
-│  - Check context   - Detect stack   - Create todos            │
-│  - Load memory     - Identify gaps   - Load skills              │
-│  - Open engram     - Check skills   - Prioritize               │
-│                                                                 │
-│  4. EXECUTE ───► 5. VERIFY ────► 6. DOCUMENT                  │
-│       │               │               │                          │
-│       ▼               ▼               ▼                          │
-│  - Use skills     - Run tests      - Save memory                │
-│  - Implement       - Validate       - Commit changes            │
-│  - Check progress  - Fix issues     - Push repo                 │
-│                                                                 │
-│  7. END ────────────────────────────────────────────            │
-│       │                                                      │
-│       ▼                                                      │
-│  - mem_save summary                                         │
-│  - Session review                                            │
-│  - Next steps clear                                          │
-│                                                                 │
+│                                                                   │
+│  PROJECT ORCHESTRATOR (Always Active)                            │
+│  └── Context detection, skill loading, guidance                   │
+│                                                                   │
+│  SESSION WORKFLOW (On Request)                                   │
+│  └── Memory management, todos, session mechanics                   │
+│                                                                   │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## Step 1: START
+## Commands
 
-At session start, ALWAYS:
+### "Iniciar sesion" / "Start session"
 
 ```markdown
-1. Check engram context
-   - Call: mem_context or mem_search
-
-2. Load relevant skills
-   - project-orchestrator-skill (always)
-   - domain-specific skills based on work
-
-3. Create/update todo list
-   - Use todowrite tool
+1. mem_context              # Check engram memory
+2. todowrite                # Create/update session plan
+3. Show:                   # Present to user
+   - Project detected
+   - Skills to load
+   - Suggested plan
 ```
 
-## Step 2: ASSESS
-
-Assess the work:
+### "Continuar" / "Continue"
 
 ```markdown
-## Assessment Checklist
-
-- [ ] What project are we working on?
-- [ ] What stack/technology?
-- [ ] What's the goal?
-- [ ] What's already done?
-- [ ] What skills are needed?
+1. mem_context             # Get recent context
+2. Check current todos     # Where were we?
+3. Show next step
+4. Resume work
 ```
 
-## Step 3: PLAN
-
-Plan before execution:
+### "Estado" / "Status"
 
 ```markdown
-## Plan
-
-### Tasks (priority order)
-1. [HIGH] Task 1
-2. [MED] Task 2
-3. [LOW] Task 3
-
-### Required Skills
-- skill1
-- skill2
-
-### Risks
-- Risk 1
-- Risk 2
+1. Show current project
+2. Show active todos
+3. Show pending work
+4. Suggest next step
 ```
 
-## Step 4: EXECUTE
-
-Execute with skills:
-
-| Task Type | Skills to Load |
-|-----------|---------------|
-| New project | project-scaffolding, relevant-tech-skill |
-| Go API | golang-api-skill |
-| Angular | angular-spa-skill |
-| React | react-19-skill, tailwind-4-skill |
-| Documentation | documentation-governance |
-| Testing | testing-strategy-skill |
-| CI/CD | docker-devops-skill |
-| Code review | code-review-orchestrator-skill |
-
-## Step 5: VERIFY
-
-Before finishing:
+### "Guardar sesion" / "Save session"
 
 ```markdown
-## Verification Checklist
-
-- [ ] Tests pass?
-- [ ] Linting/formatting OK?
-- [ ] Documentation updated?
-- [ ] Changes committed?
-- [ ] Repos pushed?
+1. Review todos completed
+2. Create session summary
+3. mem_save summary
+4. Commit if changes exist
+5. Push if ready
 ```
 
-## Step 6: DOCUMENT
+## Todo Management
 
-Document everything:
-
-### Session Summary
+Use todowrite at session start:
 
 ```markdown
-## Session Summary
+todowrite([...todos])
+```
+
+Use todowrite during session to update:
+
+```markdown
+todowrite([...updated todos])
+```
+
+## Session Summary Format
+
+```markdown
+## Session Summary - [DATE]
 
 ### Goal
-[What we were working on]
-
-### Instructions
-[User preferences or constraints]
-
-### Discoveries
-- [Technical findings]
+[What we worked on]
 
 ### Accomplished
-- [Completed items]
+- [Completed item 1]
+- [Completed item 2]
+
+### Discoveries
+- [Technical finding 1]
 
 ### Next Steps
-- [Remaining work]
+- [Remaining work 1]
+- [Remaining work 2]
+
+### Skills Used
+- skill-name-1
+- skill-name-2
 
 ### Relevant Files
-- path/to/file - [what changed]
+- path/to/file - description
 ```
 
-## Step 7: END
+## Memory Commands
 
-End session properly:
+| Command | Purpose |
+|---------|---------|
+| `mem_context` | Get recent session context |
+| `mem_save` | Save current session |
+| `mem_search` | Find past work |
+| `mem_update` | Correct previous |
 
-```markdown
-1. Call mem_save with summary
-2. Verify todos completed
-3. Clear next steps for user
-```
+## Workflow Checklist
 
-## Memory Commands (Engram)
-
-| Command | When to Use |
-|---------|-------------|
-| `mem_save` | After completing significant work |
-| `mem_context` | At session start |
-| `mem_search` | When recalling past work |
-| `mem_get_observation` | To get full details |
-| `mem_update` | To correct previous observations |
-
-## Quick Reference
-
-```markdown
-Session Start:
-  1. mem_context
-  2. todowrite (create plan)
-  3. Load needed skills
-
-During Session:
-  - Use skills for implementation
-  - todowrite (update progress)
-
-Session End:
-  1. Review todos
-  2. mem_save (session summary)
-  3. Push changes
-```
-
-## Anti-Patterns to Avoid
-
-| ❌ Don't | ✅ Do |
-|----------|------|
-| Start without assessing | Check context first |
-| Skip skills | Load relevant skills |
-| No plan | Create todo list |
-| Skip verification | Always verify |
-| Forget to save | Always mem_save |
-| Push without review | Review before push |
+- [ ] Session start: todowrite created
+- [ ] Skills loaded per orchestrator
+- [ ] Work executed with skills
+- [ ] Verification done
+- [ ] Session end: mem_save executed
+- [ ] Changes committed
+- [ ] Repo pushed if ready
 
 ---
 
-**This skill ensures consistent, complete sessions.**
+**Coordinate with project-orchestrator for all technical guidance.**
