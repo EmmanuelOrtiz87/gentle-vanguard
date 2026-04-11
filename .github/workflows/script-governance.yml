@@ -1,0 +1,20 @@
+name: Script Governance
+
+on:
+  push:
+    branches: [main, develop, feature/**, bugfix/**]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  script-governance:
+    name: Validate Script Governance
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run script governance checks
+        shell: pwsh
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1

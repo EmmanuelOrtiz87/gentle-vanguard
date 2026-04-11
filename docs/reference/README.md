@@ -10,6 +10,7 @@ Technical reference documentation.
 | [project-types.md](project-types.md) | Available project types and templates |
 | [tools.md](tools.md) | External tools integration |
 | [structure.md](structure.md) | Directory structure |
+| [script-registry.md](script-registry.md) | Script governance registry and policy levels |
 
 ## Quick Reference
 
