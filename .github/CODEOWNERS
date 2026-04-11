@@ -1,32 +1,40 @@
 # Code Owners
 # https://help.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners
+#
+# Any file not covered by a specific rule falls to the default owner.
+# Rules are evaluated from bottom to top — last matching rule wins.
 
-# Default owner for all files
-* @owner
+# Default owner for everything
+* @platform-team
 
-# Project leads
-/scripts/ @project-lead
-/config/ @project-lead
-/templates/ @project-lead
+# Core automation scripts — require platform-team review
+/scripts/ @platform-team
+/scripts/utilities/ @platform-team
+/scripts/diagnostics/ @platform-team
 
-# Documentation
-/docs/ @project-lead @docs-team
-*.md @docs-team
+# Governance validator — extra visibility (notify both teams)
+/scripts/diagnostics/validate-script-governance.ps1 @platform-team @devops-team
 
-# CI/CD and DevOps
-.github/ @devops-team
-/scripts/deploy.ps1 @devops-team
-/scripts/deploy.sh @devops-team
+# Script registry — single source of truth, changes need careful review
+/docs/reference/script-registry.md @platform-team @devops-team
 
-# Scripts
-/scripts/*.ps1 @project-lead @scripts-team
-/scripts/*.sh @project-lead @scripts-team
+# CI/CD workflows — devops owns, platform-team co-reviews
+/.github/workflows/ @devops-team @platform-team
+/.github/CODEOWNERS @platform-team
 
-# Skills
-/skills/ @project-lead
+# Skills / AI prompting layer
+/skills/ @platform-team
 
 # Templates
-/templates/project-types/ @project-lead
+/templates/ @platform-team
+/templates/project-types/ @platform-team
+
+# Configuration
+/config/ @platform-team
+
+# Documentation
+/docs/ @docs-team @platform-team
+*.md @docs-team
 
 # Kubernetes
 **/k8s/ @devops-team
