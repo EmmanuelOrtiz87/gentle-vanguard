@@ -78,8 +78,8 @@ if ($projectRoot) {
     Write-Step "Activating Development Tools"
     $healthScript = Join-Path $projectRoot 'scripts/utilities/ensure-tools-active.ps1'
     if (Test-Path $healthScript) {
-        $args = @('-Quiet')
-        if ($Force) { $args += "-AutoStart" }
+        $args = @('-Quiet', '-AutoStart')
+        if ($Force) { $args += "-Force" }
         & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $healthScript @args
         Write-Success "Development tools activated"
     } else {

@@ -319,6 +319,40 @@ function Install-ProjectSkills {
     }
 }
 
+function Create-OrchestratorActivation {
+    param([string]$ProjectPath)
+
+    $activation = @{
+        activated = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+        skill = "project-orchestrator"
+        version = "1.0"
+        project = Split-Path $ProjectPath -Leaf
+        auto_active = $true
+    }
+
+    $activationFile = Join-Path $ProjectPath '.orchestrator-active'
+    $activation | ConvertTo-Json | Set-Content -Path $activationFile -Encoding UTF8
+
+    $configDir = Join-Path $ProjectPath 'config'
+    Ensure-Directory -Path $configDir
+
+    $config = @{
+        active = $true
+        skill_path = ".workspace-foundation/skills/project-orchestrator-skill"
+        auto_detect = $true
+        workflow_mode = "coordinated"
+        memory_integration = $true
+        quality_gates = $true
+        session_tracking = $true
+        git_integration = $true
+        activated_at = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    }
+
+    $configFile = Join-Path $configDir 'orchestrator.json'
+    $config | ConvertTo-Json | Set-Content -Path $configFile -Encoding UTF8
+    Write-Host "Orchestrator activation created at: $activationFile" -ForegroundColor Green
+}
+
 function Install-ReviewHook {
     param(
         [string]$ProjectPath,
@@ -829,6 +863,8 @@ if ($CreateProject) {
     }
 
     Remove-LegacyTemplateFiles -Destination $destination
+
+    Create-OrchestratorActivation -ProjectPath $destination
 
     Write-ProjectContext -Destination $destination -TemplateSource $config.projectTemplate -Context @{
         workspaceName = $config.workspaceName

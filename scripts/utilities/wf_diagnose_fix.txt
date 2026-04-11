@@ -1,0 +1,17 @@
+# Fix for diagnose command
+'diagnose' {
+    Write-Step "Running Full System Diagnostics"
+    # Try multiple paths to find diagnostics script
+    $diagPaths = @(
+        (Join-Path $scriptDir '..','..','diagnostics','system-diagnostics.ps1')
+    )
+    foreach ($path in $diagPaths) {
+        if (Test-Path $path) {
+            $args = @()
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $path @args
+            exit 0
+        }
+    }
+    Write-Error "Diagnostics script not found"
+    exit 1
+}

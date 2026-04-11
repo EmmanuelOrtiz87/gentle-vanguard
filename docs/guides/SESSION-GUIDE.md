@@ -10,6 +10,7 @@
 | `Review` | Run code review |
 | `PR` | Create pull request |
 | `Health` | Check system health & activate tools |
+| `Start Session` | Create session brief and optional task brief |
 
 ---
 
@@ -32,6 +33,12 @@ The Gentleman Foundation automatically ensures all development tools are active:
 ```powershell
 # Check and activate all tools
 .\wf.ps1 health
+
+# Create the session brief for today
+.\wf.ps1 start-session
+
+# Create the session brief and the first task brief
+.\wf.ps1 start-session api-hardening
 
 # Force auto-start missing tools
 .\wf.ps1 health -Force
@@ -56,17 +63,24 @@ The Gentleman Foundation automatically ensures all development tools are active:
 ### 1. Session Start
 
 ```
-1. Orchestrator auto-detects:
+1. Run the standard bootstrap:
+   - .\wf.ps1 start-session [task-name]
+
+2. Orchestrator auto-detects:
    - Project type
    - Tech stack
    - Available skills
    - Git branch status
 
-2. Memory check:
+3. Memory check:
    - mem_context
    - Show recent work
 
-3. Present status:
+4. Review generated artifacts:
+   - docs/sessions/YYYY-MM-DD-session-start.md
+   - docs/tasks/<task>.md
+
+5. Present status:
    - Project name
    - Branch
    - Pending tasks
@@ -129,6 +143,8 @@ PR            # Create PR
 ### CLI Commands
 
 ```powershell
+.\wf.ps1 start-session [task]  # Create session brief and optional task brief
+.\wf.ps1 task-brief <task>     # Create or refresh a task brief
 .\wf.ps1 review     # Code review
 .\wf.ps1 audit      # Generate audit doc
 .\wf.ps1 pr         # PR template
@@ -190,6 +206,7 @@ Automatically runs:
 - [ ] No secrets
 - [ ] Commit message follows convention
 - [ ] Code follows project patterns
+- [ ] Task brief is still aligned with the work actually done
 
 ### Before Any PR
 
@@ -215,6 +232,7 @@ Automatically runs:
 ¿Cumplimos con la especificación?
 ¿Hay algo que olvidamos?
 ¿Los cambios están listos?
+¿El task brief sigue representando el alcance real?
 ```
 
 ### Before PR

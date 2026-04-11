@@ -62,25 +62,35 @@ function Start-Engram {
     Write-Step "Starting Engram memory system..."
 
     $engramScript = Join-Path $scriptDir 'run-engram.ps1'
-    if (Test-Path $engramScript) {
-        try {
-            # Check if engram is already running
-            $engramProcess = Get-Process -Name "*engram*" -ErrorAction SilentlyContinue
-            if (-not $engramProcess -or $Force) {
-                if ($AutoStart) {
-                    Write-Host "Starting Engram in background..." -ForegroundColor Yellow
-                    Start-Process -FilePath 'powershell.exe' -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$engramScript`"" -NoNewWindow
-                    Start-Sleep -Seconds 2
-                }
-                Write-Success "Engram initialization triggered"
-            } else {
-                Write-Success "Engram already running"
-            }
-        } catch {
-            Write-Error "Failed to start Engram: $($_.Exception.Message)"
-        }
-    } else {
+    if (-not (Test-Path $engramScript)) {
         Write-Warning "Engram script not found at: $engramScript"
+        return
+    }
+
+    $engramCmd = Get-Command engram -ErrorAction SilentlyContinue
+    if (-not $engramCmd -and $AutoStart) {
+        $installer = Join-Path $scriptDir 'install-engram.ps1'
+        if (Test-Path $installer) {
+            Write-Host "Engram CLI missing. Installing..." -ForegroundColor Yellow
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $installer -Force
+        }
+    }
+
+    try {
+        # Check if engram is already running
+        $engramProcess = Get-Process -Name "*engram*" -ErrorAction SilentlyContinue
+        if (-not $engramProcess -or $Force) {
+            if ($AutoStart) {
+                Write-Host "Starting Engram in background..." -ForegroundColor Yellow
+                Start-Process -FilePath 'powershell.exe' -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$engramScript`"" -NoNewWindow
+                Start-Sleep -Seconds 2
+            }
+            Write-Success "Engram initialization triggered"
+        } else {
+            Write-Success "Engram already running"
+        }
+    } catch {
+        Write-Error "Failed to start Engram: $($_.Exception.Message)"
     }
 }
 

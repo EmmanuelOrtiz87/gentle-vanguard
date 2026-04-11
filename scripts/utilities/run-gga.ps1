@@ -10,13 +10,25 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$workspaceRoot = Split-Path -Parent $scriptDir
-$ggaRoot = Join-Path $workspaceRoot "tools\gentleman-guardian-angel"
+$workspaceRoot = (Resolve-Path (Join-Path $scriptDir "..\..")).Path
 
-$ggaBinaryPath = Join-Path $ggaRoot "bin\gga"
+$candidateGgaPaths = @(
+    (Join-Path $workspaceRoot "tools\gentleman-guardian-angel\bin\gga"),
+    (Join-Path $workspaceRoot "..\gentleman-guardian-angel\bin\gga"),
+    (Join-Path $env:USERPROFILE "bin\gga")
+)
 
-if (-not (Test-Path -LiteralPath $ggaBinaryPath)) {
-    $ggaBinaryPath = Join-Path $workspaceRoot "..\gentleman-guardian-angel\bin\gga"
+$ggaBinaryPath = $null
+foreach ($candidate in $candidateGgaPaths) {
+    if ($candidate -and (Test-Path -LiteralPath $candidate)) {
+        $ggaBinaryPath = $candidate
+        break
+    }
+}
+
+if (-not $ggaBinaryPath) {
+    Write-Error "GGA binary not found. Checked: $($candidateGgaPaths -join ', ')"
+    exit 1
 }
 
 $bashCommand = Get-Command bash -ErrorAction SilentlyContinue
