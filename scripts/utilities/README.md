@@ -16,6 +16,9 @@ Miscellaneous utility scripts for various tasks.
 
 # Install/verify Engram CLI
 .\wf.ps1 install-engram
+
+# IDE detection and activation recommendation
+.\wf.ps1 ide-status
 ```
 
 ## Scripts
@@ -35,6 +38,7 @@ Miscellaneous utility scripts for various tasks.
 | `finalize-session.ps1` | Finalize development session |
 | `run-engram.ps1` | Run Engram memory |
 | `install-engram.ps1` | Install or verify Engram CLI |
+| `detect-ide-session.ps1` | Detect IDE session and suggest activation command |
 | `orchestrator-status.ps1` | Check orchestrator + Engram integration |
 | `stack-on-demand.ps1` | Activate/validate/deactivate orchestrator in on-demand mode |
 | `token-efficiency-estimator.ps1` | Estimate token, time, and equivalent cost savings |
