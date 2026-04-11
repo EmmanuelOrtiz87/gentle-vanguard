@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'health', 'update', 'update-all', 'install-engram', 'orchestrator-status', 'diagnose', 'verify', 'start-session', 'task-brief', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'health', 'update', 'update-all', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'task-brief', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -304,6 +304,7 @@ COMMANDS:
     health               Check system health & activate tools
     install-engram       Install or verify Engram CLI availability
     orchestrator-status  Validate orchestrator and Engram integration
+    ide-status           Detect IDE session and suggest activation command
     diagnose             Full system diagnostics report
     verify               Quick stack verification & auto-repair
     update               Update repository, foundation, skills, and tools
@@ -327,9 +328,28 @@ EXAMPLES:
     .\wf.ps1 verify              Quick verify & auto-repair if needed
     .\wf.ps1 health              Check system health & activate tools
     .\wf.ps1 install-engram      Install or verify Engram CLI
+    .\wf.ps1 ide-status          Detect IDE and show recommended activation
     .\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
 
 "@
+}
+
+function Show-IdeStatus {
+    Write-Step "IDE Session Detection"
+    $detectScript = Join-Path $scriptDir 'detect-ide-session.ps1'
+    if (-not (Test-Path $detectScript)) {
+        Write-Error "IDE detection script not found: $detectScript"
+        exit 1
+    }
+
+    $ideDataRaw = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $detectScript -AsJson
+    $ideData = $ideDataRaw | ConvertFrom-Json
+
+    Write-Host "IDE: $($ideData.ideName)" -ForegroundColor White
+    Write-Host "Confidence: $($ideData.confidence)" -ForegroundColor White
+    Write-Host "Session detected: $($ideData.isIdeSession)" -ForegroundColor White
+    Write-Host "Activation: $($ideData.recommendedActivationCommand)" -ForegroundColor Cyan
+    Write-Host "Session start: $($ideData.recommendedSessionCommand)" -ForegroundColor Cyan
 }
 
 # Main execution
@@ -489,6 +509,9 @@ switch ($Command) {
             Write-Error "Orchestrator status script not found: $statusScript"
             exit 1
         }
+    }
+    'ide-status' {
+        Show-IdeStatus
     }
     'install-engram' {
         Write-Step "Installing or verifying Engram CLI"

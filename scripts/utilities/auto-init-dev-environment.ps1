@@ -30,6 +30,13 @@ function Write-Info {
     }
 }
 
+function Write-Warning {
+    param([string]$Message)
+    if (-not $Quiet) {
+        Write-Host "[WARN] $Message" -ForegroundColor Yellow
+    }
+}
+
 # Check if we're in a Gentleman Foundation project
 $currentDir = Get-Location
 $projectRoot = $null
@@ -74,13 +81,28 @@ if ($projectRoot) {
     Write-Info "Detected Gentleman Foundation project at: $projectRoot"
     Set-Location $projectRoot
 
+    $detectScript = Join-Path $projectRoot 'scripts/utilities/detect-ide-session.ps1'
+    if (Test-Path $detectScript) {
+        try {
+            $ideDataRaw = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $detectScript -AsJson
+            $ideData = $ideDataRaw | ConvertFrom-Json
+            Write-Info "IDE session detection: $($ideData.ideName) (confidence=$($ideData.confidence))"
+            if (-not $ideData.isIdeSession) {
+                Write-Warning "No known IDE session detected. Manual activation is recommended."
+                Write-Host "  Suggested: $($ideData.recommendedActivationCommand)" -ForegroundColor White
+            }
+        } catch {
+            Write-Warning "IDE detection script failed: $($_.Exception.Message)"
+        }
+    }
+
     # Run health check and tool activation
     Write-Step "Activating Development Tools"
     $healthScript = Join-Path $projectRoot 'scripts/utilities/ensure-tools-active.ps1'
     if (Test-Path $healthScript) {
-        $args = @('-Quiet', '-AutoStart')
-        if ($Force) { $args += "-Force" }
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $healthScript @args
+        $healthArgs = @('-Quiet', '-AutoStart')
+        if ($Force) { $healthArgs += "-Force" }
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $healthScript @healthArgs
         Write-Success "Development tools activated"
     } else {
         Write-Warning "Health check script not found - tools may not be fully activated"
@@ -125,7 +147,7 @@ if ($projectRoot) {
 
     foreach ($tool in $tools) {
         try {
-            $result = Invoke-Expression $tool.Command 2>$null
+            Invoke-Expression $tool.Command 2>$null | Out-Null
             if ($LASTEXITCODE -eq 0) {
                 Write-Success "$($tool.Name) is available"
             } else {

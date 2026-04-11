@@ -77,20 +77,18 @@ function Start-Engram {
     }
 
     try {
-        # Check if engram is already running
-        $engramProcess = Get-Process -Name "*engram*" -ErrorAction SilentlyContinue
-        if (-not $engramProcess -or $Force) {
-            if ($AutoStart) {
-                Write-Host "Starting Engram in background..." -ForegroundColor Yellow
-                Start-Process -FilePath 'powershell.exe' -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$engramScript`"" -NoNewWindow
-                Start-Sleep -Seconds 2
+        if ($AutoStart) {
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $engramScript version 2>$null | Out-Null
+            if ($LASTEXITCODE -eq 0) {
+                Write-Success "Engram CLI is ready"
+            } else {
+                Write-Warning "Engram CLI check failed"
             }
-            Write-Success "Engram initialization triggered"
         } else {
-            Write-Success "Engram already running"
+            Write-Success "Engram check skipped (AutoStart not requested)"
         }
     } catch {
-        Write-Error "Failed to start Engram: $($_.Exception.Message)"
+        Write-Error "Failed to verify Engram: $($_.Exception.Message)"
     }
 }
 
@@ -127,12 +125,17 @@ function Start-GentleAI {
     }
 
     if (-not $gentleAIAvailable -and $AutoStart) {
-        Write-Warning "Gentle-AI not available - attempting installation..."
-        try {
-            npm install -g gentle-ai
-            Write-Success "Gentle-AI installed"
-        } catch {
-            Write-Error "Failed to install Gentle-AI: $($_.Exception.Message)"
+        if ($Force) {
+            Write-Warning "Gentle-AI not available - attempting installation due to -Force..."
+            try {
+                npm install -g gentle-ai
+                Write-Success "Gentle-AI installed"
+            } catch {
+                Write-Warning "Gentle-AI installation skipped due to registry/package availability."
+            }
+        } else {
+            Write-Warning "Gentle-AI not available. Skipping auto-install for stability."
+            Write-Host "Install manually if needed: npm install -g gentle-ai" -ForegroundColor Yellow
         }
     }
 }
