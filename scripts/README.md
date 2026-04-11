@@ -47,11 +47,14 @@ scripts/
 | Script | Purpose |
 |--------|---------|
 | `wf.ps1` | Workflow CLI - review, audit, pr, push |
+| `start-session.ps1` | Create session brief and task brief artifacts |
 | `deploy.ps1` | Deploy project |
 | `clean-runtime.ps1` | Clean runtime data |
 | `generate-*.ps1` | Generate reports and audits |
 | `run-*.ps1` | Run tools (engram, gga) |
 | `aggregate-metrics.ps1` | Aggregate metrics |
+| `orchestrator-status.ps1` | Comprobar orquestador + Engram |
+| `install-engram.ps1` | Instalar o verificar Engram CLI |
 
 ## Workflow CLI (wf.ps1)
 
@@ -63,6 +66,10 @@ Automated development workflow commands.
 
 # Show status
 .\wf.ps1 status
+
+# Start session with normalized artifacts
+.\wf.ps1 start-session
+.\wf.ps1 start-session auth-hardening
 
 # Run code review
 .\wf.ps1 review
@@ -76,6 +83,9 @@ Automated development workflow commands.
 
 # Prepare to push
 .\wf.ps1 push
+
+# Update repository, foundation, skills, and tools
+.\wf.ps1 update
 ```
 
 ## Quick Reference
@@ -92,6 +102,20 @@ Automated development workflow commands.
 
 # Check updates
 .\scripts\validation\check-updates.ps1
+
+# Run full foundation update
+.\scripts\update-all.ps1
+
+# Check orchestrator status
+.\scripts\utilities\orchestrator-status.ps1
+.\scripts\utilities\wf.ps1 orchestrator-status
+
+# Create or refresh task brief only
+.\scripts\utilities\wf.ps1 task-brief auth-hardening
+
+# Install or verify Engram
+.\scripts\utilities\install-engram.ps1
+.\scripts\utilities\wf.ps1 install-engram
 
 # Code review
 .\wf.ps1 review

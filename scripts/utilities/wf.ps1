@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'health', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'health', 'update', 'update-all', 'install-engram', 'orchestrator-status', 'diagnose', 'verify', 'start-session', 'task-brief', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -62,6 +62,26 @@ function Get-BranchStatus {
         }
     }
     return $true
+}
+
+function Invoke-Update {
+    Write-Step "Updating repository, foundation, skills, and tools"
+
+    $updateScript = Join-Path $scriptDir '..\validation\update-all.ps1'
+    if (-not (Test-Path $updateScript)) {
+        Write-Error "Update script not found: $updateScript"
+        exit 1
+    }
+
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $updateScript -All -Force
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Update failed with exit code $LASTEXITCODE"
+        exit $LASTEXITCODE
+    }
+}
+
+function Invoke-UpdateAll {
+    Invoke-Update
 }
 
 function Test-Secrets {
@@ -274,13 +294,21 @@ USAGE:
     .\wf.ps1 <command> [options]
 
 COMMANDS:
-    review [scope]    Run code review (security, quality, all)
-    audit             Generate audit document
-    pr                Create PR with template
-    push              Commit and push changes
-    status            Show current status
-    health            Check system health & activate tools
-    help              Show this help
+    review [scope]       Run code review (security, quality, all)
+    audit                Generate audit document
+    pr                   Create PR with template
+    push                 Commit and push changes
+    status               Show current status
+    start-session [task] Create a session brief and optional task brief
+    task-brief <task>    Create or refresh a task brief only
+    health               Check system health & activate tools
+    install-engram       Install or verify Engram CLI availability
+    orchestrator-status  Validate orchestrator and Engram integration
+    diagnose             Full system diagnostics report
+    verify               Quick stack verification & auto-repair
+    update               Update repository, foundation, skills, and tools
+    update-all           Alias for update
+    help                 Show this help
 
 OPTIONS:
     -SkipTests        Skip test execution
@@ -293,7 +321,13 @@ EXAMPLES:
     .\wf.ps1 audit              Generate audit document
     .\wf.ps1 pr                 Create PR
     .\wf.ps1 push               Commit and push
-    .\wf.ps1 health             Check system health & activate tools
+    .\wf.ps1 start-session      Create the session brief for today
+    .\wf.ps1 task-brief auth    Create a task brief for auth work
+    .\wf.ps1 diagnose            Full diagnostics report (JSON available)
+    .\wf.ps1 verify              Quick verify & auto-repair if needed
+    .\wf.ps1 health              Check system health & activate tools
+    .\wf.ps1 install-engram      Install or verify Engram CLI
+    .\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
 
 "@
 }
@@ -306,6 +340,45 @@ switch ($Command) {
     
     'status' {
         Show-Status
+    }
+
+    'start-session' {
+        Write-Step "Creating session brief"
+        $startScript = Join-Path $scriptDir 'start-session.ps1'
+        if (Test-Path $startScript) {
+            $args = @()
+            if (-not [string]::IsNullOrWhiteSpace($Scope)) { $args += @('-TaskName', $Scope) }
+            if ($Force) { $args += '-Force' }
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $startScript @args
+        } else {
+            Write-Error "Start session script not found: $startScript"
+            exit 1
+        }
+    }
+
+    'task-brief' {
+        Write-Step "Creating task brief"
+        if ([string]::IsNullOrWhiteSpace($Scope)) {
+            Write-Error "Task name required. Example: .\wf.ps1 task-brief auth-flow"
+            exit 1
+        }
+
+        $startScript = Join-Path $scriptDir 'start-session.ps1'
+        if (Test-Path $startScript) {
+            $args = @('-TaskName', $Scope, '-Force')
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $startScript @args
+        } else {
+            Write-Error "Start session script not found: $startScript"
+            exit 1
+        }
+    }
+    
+    'update' {
+        Invoke-Update
+    }
+
+    'update-all' {
+        Invoke-UpdateAll
     }
     
     'review' {
@@ -398,11 +471,80 @@ switch ($Command) {
         
         $healthScript = Join-Path $scriptDir 'ensure-tools-active.ps1'
         if (Test-Path $healthScript) {
-            $args = @()
-            if ($Force) { $args += "-AutoStart" }
+            $args = @('-AutoStart')
+            if ($Force) { $args += "-Force" }
             & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $healthScript @args
         } else {
             Write-Error "Health check script not found: $healthScript"
+            exit 1
+        }
+    }
+
+    'orchestrator-status' {
+        Write-Step "Checking Orchestrator and Engram integration"
+        $statusScript = Join-Path $scriptDir 'orchestrator-status.ps1'
+        if (Test-Path $statusScript) {
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $statusScript
+        } else {
+            Write-Error "Orchestrator status script not found: $statusScript"
+            exit 1
+        }
+    }
+    'install-engram' {
+        Write-Step "Installing or verifying Engram CLI"
+        $installScript = Join-Path $scriptDir 'install-engram.ps1'
+        if (Test-Path $installScript) {
+            $args = @()
+            if ($Force) { $args += '-Force' }
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $installScript @args
+        } else {
+            Write-Error "Install script not found: $installScript"
+            exit 1
+        }
+    }
+    
+    'diagnose' {
+        Write-Step "Running Full System Diagnostics"
+        $diagScript = Join-Path $PSScriptRoot '..\..\..\..'  'scripts\diagnostics\system-diagnostics.ps1'
+        # Try multiple paths to find diagnostics script
+        $diagPaths = @(
+            (Join-Path $scriptDir '..\..\diagnostics\system-diagnostics.ps1'),
+            (Join-Path $repoRoot 'scripts\diagnostics\system-diagnostics.ps1')
+        )
+        $found = $false
+        foreach ($path in $diagPaths) {
+            if (Test-Path $path) {
+                $args = @()
+                if ($JSON) { $args += '-JSON' }
+                & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $path @args
+                $found = $true
+                break
+            }
+        }
+        if (-not $found) {
+            Write-Error "Diagnostics script not found"
+            exit 1
+        }
+    }
+    
+    'verify' {
+        Write-Step "Quick Stack Verification & Auto-Repair"
+        $diagScript = $null
+        $diagPaths = @(
+            (Join-Path $scriptDir '..\..\diagnostics\system-diagnostics.ps1'),
+            (Join-Path $repoRoot 'scripts\diagnostics\system-diagnostics.ps1')
+        )
+        foreach ($path in $diagPaths) {
+            if (Test-Path $path) {
+                $diagScript = $path
+                break
+            }
+        }
+        if ($diagScript) {
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $diagScript -AutoRepair -Quiet
+            Write-Success "Stack verification and repair completed"
+        } else {
+            Write-Error "Diagnostics script not found"
             exit 1
         }
     }

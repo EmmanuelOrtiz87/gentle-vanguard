@@ -12,6 +12,8 @@
 - Follow the project structure.
 - Prefer small, bounded changes.
 - Validate before handing off.
+- Start substantial work with `scripts/start-session.ps1`.
+- Keep `docs/sessions/` and `docs/tasks/` aligned with the real scope of work.
 
 ## Documentation
 
@@ -29,6 +31,11 @@
 - Use consistent naming conventions.
 - Write self-documenting code.
 - Document all public APIs.
+
+## Orchestrator
+
+- The Project Orchestrator is responsible for analysis, design, architecture, and testing guidance.
+- Use `.\scripts\orchestrator-next-steps.ps1` to ask the orchestrator for the next development actions.
 
 ## Review
 

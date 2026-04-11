@@ -161,6 +161,10 @@ Skills are linked via `.skills/` directory and available globally.
 | Testing | testing-strategy, testing-skill |
 | Quality | typescript, security |
 | Workflow | github-pr, jira-task |
+| Orchestrator | project-orchestrator |
+
+## Orchestrator
+- Use `.\scripts\orchestrator-next-steps.ps1` to ask the orchestrator for the next set of development activities.
 
 ## Validation
 
@@ -179,6 +183,37 @@ Git hooks are configured in `.githooks/` directory.
     } else {
         Set-Content -Path $agentsMd -Value $agentsContent
         Write-Success "AGENTS.md created/updated"
+    }
+
+    $activationFile = Join-Path $ProjectRoot '.orchestrator-active'
+    $configDir = Join-Path $ProjectRoot 'config'
+    if (-not (Test-Path $activationFile) -or $Force) {
+        if (-not (Test-Path $configDir)) {
+            New-Item -ItemType Directory -Path $configDir -Force | Out-Null
+        }
+        $activation = @{
+            activated = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+            skill = "project-orchestrator"
+            version = "1.0"
+            project = Split-Path $ProjectRoot -Leaf
+            auto_active = $true
+        }
+        $activation | ConvertTo-Json | Set-Content -Path $activationFile -Encoding UTF8
+
+        $config = @{
+            active = $true
+            skill_path = ".skills/project-orchestrator-skill"
+            auto_detect = $true
+            workflow_mode = "coordinated"
+            memory_integration = $true
+            quality_gates = $true
+            session_tracking = $true
+            git_integration = $true
+            activated_at = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+        }
+        $configFile = Join-Path $configDir 'orchestrator.json'
+        $config | ConvertTo-Json | Set-Content -Path $configFile -Encoding UTF8
+        Write-Success "Orchestrator activation created"
     }
 }
 

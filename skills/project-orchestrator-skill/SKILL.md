@@ -22,6 +22,7 @@ description: >
 6. **Code Review on PR** - Full review with 7 dimensions
 7. **Spec Validation** - Validate completion before PR
 8. **End Properly** - Save to memory, commit, summarize
+9. **Session Brief First** - Every substantial session starts with a session brief and task brief when scope is non-trivial
 
 ## GIT FLOW WORKFLOW
 
@@ -363,6 +364,22 @@ START REVIEW
 
 **Next Step:** [suggestion]
 ```
+
+## REQUIRED SESSION ARTIFACTS
+
+Before substantive work, create or refresh:
+
+1. `docs/sessions/YYYY-MM-DD-session-start.md`
+2. `docs/tasks/<task>.md` when the session targets a bounded task or feature
+
+These artifacts must capture:
+- current goal,
+- affected files or subsystems,
+- acceptance criteria,
+- risks or blockers,
+- and validation expectations.
+
+If they drift from the real work, update them during the session.
 
 ---
 

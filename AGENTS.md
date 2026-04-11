@@ -59,6 +59,7 @@ gf list
 | `bootstrap-machine.ps1` | Install foundation globally |
 | `sync-skills.ps1` | Sync skills to global |
 | `setup-project.ps1` | Setup project with foundation |
+| `orchestrator-next-steps.ps1` | Ask the orchestrator for next development actions |
 | `validate-project.ps1` | Validate project |
 
 ## Code Standards

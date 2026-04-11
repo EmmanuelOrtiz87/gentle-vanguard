@@ -57,7 +57,18 @@ Copy-Item "scripts/utilities/Microsoft.PowerShell_profile.ps1" $PROFILE
 .\scripts\utilities\wf.ps1 health
 ```
 
-4. **Create Your First Project:**
+> `health` now also auto-starts the tooling flow and attempts to install missing CLI dependencies like `engram`.
+
+4. **Open the Session Properly:**
+```powershell
+# Create the daily session brief
+.\scripts\utilities\wf.ps1 start-session
+
+# Or create it together with the first bounded task brief
+.\scripts\utilities\wf.ps1 start-session foundation-hardening
+```
+
+5. **Create Your First Project:**
 ```powershell
 # Use foundation as template for new projects
 .\scripts\utilities\create-project.ps1 -Name "my-awesome-project" -Type "web-api"
@@ -92,16 +103,42 @@ Gentleman Foundation Suite
     └── Continuous Validation
 ```
 
-## 📚 Core Components
+## � Design & Specifications
+
+### Software Design Document (SDD)
+The foundation follows a comprehensive design document that combines architectural planning with specification-driven development:
+
+**→ [Foundation SDD](./docs/sdd/foundation-sdd.md)**
+
+**Key Sections:**
+- System Architecture & Components
+- Error Handling Patterns
+- Performance Optimization
+- AI-Assisted Development Guidelines
+- Cross-Platform Implementation
+
+### Specification Driven Development
+All components are built following TDD/BDD principles:
+- Tests define requirements before implementation
+- Specifications drive design decisions
+- Quality gates ensure compliance
+
+## �📚 Core Components
 
 ### 🤖 AI Skills System
 
 Gentleman Foundation uses a sophisticated skill-based architecture:
 
-#### Master Orchestrators (Always Active)
-- **Project Orchestrator**: Auto-detects project type, loads relevant skills, guides workflow
+#### Master Orchestrators (On-Demand Recommended)
+- **Project Orchestrator**: Auto-detects project type, loads relevant skills, guides workflow, and acts as an expert for analysis, design, architecture, and testing throughout the development lifecycle
 - **Session Workflow**: Manages session lifecycle, memory persistence, todo tracking
 - **Code Review Orchestrator**: Coordinates quality checks and automated reviews
+
+> Recommended operation mode: activate orchestrator controls only during active implementation windows, then deactivate at closeout.
+>
+> Use: `.\scripts\utilities\stack-on-demand.ps1 -Action activate|validate|deactivate`
+
+> Run `.\scripts\utilities\orchestrator-next-steps.ps1` from the foundation root to get the orchestrator's recommended next actions.
 
 #### Specialized Skills
 - **Foundation Manager**: Template management and project initialization
@@ -130,7 +167,12 @@ Gentleman Foundation uses a sophisticated skill-based architecture:
 
 # Commit and push changes
 .\wf.ps1 push
+
+# Update repository, foundation, skills, and tools
+.\wf.ps1 update
 ```
+
+> For global foundation updates, run `gf update-all` from the foundation install root.
 
 #### Auto-Activation System
 - **Pre-commit Hooks**: Automatic validation before commits
