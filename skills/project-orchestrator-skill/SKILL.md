@@ -1,9 +1,9 @@
 ---
 name: project-orchestrator
 description: >
-  MASTER ORCHESTRATOR - Always active conductor for all sessions.
-  This skill coordinates everything: stack detection, skill loading, workflow management.
-  Trigger: ALWAYS ACTIVE at session start. No trigger needed.
+     MASTER ORCHESTRATOR for coordinated sessions.
+     Coordinates stack detection, skill loading, workflow management, and session activation strategy.
+     Trigger: session start, project setup, orchestration checks, repository governance.
 ---
 
 # PROJECT ORCHESTRATOR
@@ -14,7 +14,7 @@ description: >
 
 ## CORE PRINCIPLES
 
-1. **Always Active** - Don't wait to be called, detect context immediately
+1. **Auto-First Session Activation** - Prefer automatic IDE/session detection, but keep on-demand fallback
 2. **Auto-Detect** - Detect stack, project type, and gaps automatically
 3. **Load Skills** - Load relevant skills based on context
 4. **Git Flow** - Follow branch strategy
@@ -23,6 +23,31 @@ description: >
 7. **Spec Validation** - Validate completion before PR
 8. **End Properly** - Save to memory, commit, summarize
 9. **Session Brief First** - Every substantial session starts with a session brief and task brief when scope is non-trivial
+
+## SESSION ACTIVATION STRATEGY
+
+Use this decision model:
+
+1. Detect IDE session first (`wf.ps1 ide-status`).
+2. If known IDE session is detected, continue with auto-init and health checks.
+3. If IDE session is unknown/low confidence, explicitly suggest activation command.
+4. Never block work if auto-detection fails; degrade gracefully to guided commands.
+
+Preferred command order:
+1. `.\scripts\utilities\wf.ps1 ide-status`
+2. `.\scripts\utilities\wf.ps1 health`
+3. `.\scripts\utilities\wf.ps1 start-session [task]`
+
+On-demand fallback:
+1. `.\scripts\utilities\stack-on-demand.ps1 -Action activate`
+2. `.\scripts\utilities\stack-on-demand.ps1 -Action validate`
+3. `.\scripts\utilities\stack-on-demand.ps1 -Action deactivate` at closeout
+
+Stability rules:
+1. Automatic activation must be idempotent (safe to run multiple times).
+2. Avoid noisy or risky auto-installs in routine startup paths.
+3. Print actionable recommendations when auto-start prerequisites are missing.
+4. Keep hooks non-blocking unless security-critical conditions are detected.
 
 ## GIT FLOW WORKFLOW
 

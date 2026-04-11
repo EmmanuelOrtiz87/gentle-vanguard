@@ -64,6 +64,7 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 | **Workflow** | github-pr, jira-task, jira-epic |
 | **Quality** | typescript, code-review, security |
 | **Governance** | project-scaffolding, documentation, architecture, git-workflow, foundation-manager |
+| **Script Engineering** | script-governance |
 
 ---
 
