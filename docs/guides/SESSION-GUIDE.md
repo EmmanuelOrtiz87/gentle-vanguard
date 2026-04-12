@@ -11,6 +11,7 @@
 | `PR` | Create pull request |
 | `Health` | Check system health & activate tools |
 | `Start Session` | Create session brief and optional task brief |
+| `End Session` | Run closure checks and generate delivery closure artifact |
 
 ---
 
@@ -39,6 +40,10 @@ The Gentleman Foundation automatically ensures all development tools are active:
 
 # Create the session brief and the first task brief
 .\wf.ps1 start-session api-hardening
+
+# Close the session with validation + closure artifact
+.\wf.ps1 end-session
+.\wf.ps1 end-session api-hardening
 
 # Force auto-start missing tools
 .\wf.ps1 health -Force
@@ -146,6 +151,7 @@ PR            # Create PR
 
 ```powershell
 .\wf.ps1 start-session [task]  # Create session brief and optional task brief
+.\wf.ps1 end-session [task]    # Close session and create delivery closure artifact
 .\wf.ps1 task-brief <task>     # Create or refresh a task brief
 .\wf.ps1 review     # Code review
 .\wf.ps1 audit      # Generate audit doc
@@ -197,9 +203,9 @@ Automatically runs:
 ### Pre-push Hook
 
 Automatically runs:
-1. Protected branch warning checks
-2. Local test checks for Node/Go projects
-3. Conventional commit warning (advisory)
+1. GGA local check (when available)
+2. Script governance validation
+3. Homologation drift check (fail on changes)
 
 Note: hook installation depends on local Git hook wiring. Canonical script paths are under `scripts/git-hooks/`.
 

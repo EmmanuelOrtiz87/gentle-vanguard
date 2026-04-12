@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'health', 'update', 'update-all', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'homologate', 'agent-alert', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'health', 'update', 'update-all', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'homologate', 'agent-alert', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -542,6 +542,7 @@ COMMANDS:
     push                 Commit and push changes
     status               Show current status
     start-session [task] Create a session brief and optional task brief
+    end-session [task]   Run session closure checks and create delivery closure artifact
     task-brief <task>    Create or refresh a task brief only
     health               Check system health & activate tools
     install-engram       Install or verify Engram CLI availability
@@ -573,6 +574,7 @@ EXAMPLES:
     .\wf.ps1 pr                 Create PR
     .\wf.ps1 push               Commit and push
     .\wf.ps1 start-session      Create the session brief for today
+    .\wf.ps1 end-session        Run end-of-session checks and create closure artifact
     .\wf.ps1 task-brief auth    Create a task brief for auth work
     .\wf.ps1 diagnose            Full diagnostics report (JSON available)
     .\wf.ps1 diagnose -JSON      Full diagnostics report in JSON format
@@ -648,6 +650,22 @@ switch ($Command) {
             & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $startScript @taskBriefArgs
         } else {
             Write-Error "Start session script not found: $startScript"
+            exit 1
+        }
+    }
+
+    'end-session' {
+        Write-Step "Running session closure"
+        $endScript = Join-Path $scriptDir 'end-session.ps1'
+        if (Test-Path $endScript) {
+            $endArgs = @()
+            if (-not [string]::IsNullOrWhiteSpace($Scope)) { $endArgs += @('-TaskName', $Scope) }
+            if ($SkipReview) { $endArgs += '-SkipReview' }
+            if ($SkipTests) { $endArgs += '-SkipTests' }
+            if ($Force) { $endArgs += '-Force' }
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $endScript @endArgs
+        } else {
+            Write-Error "End session script not found: $endScript"
             exit 1
         }
     }

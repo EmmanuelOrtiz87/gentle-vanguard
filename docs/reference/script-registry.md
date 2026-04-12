@@ -19,10 +19,12 @@ Central inventory of automation scripts with ownership, risk level, and executio
 | scripts/utilities/ensure-tools-active.ps1 | Tooling | B | yes | platform | Avoids heavy auto-installs unless forced |
 | scripts/utilities/run-gentle-ai.ps1 | Tooling Bridge | B | manual | platform | Compatibility launcher when native `gentle-ai` is unavailable |
 | scripts/utilities/wf.ps1 | Operator CLI | B | manual | dev-experience | Entrypoint for workflow commands |
+| scripts/utilities/end-session.ps1 | Session Closure | B | manual | dev-experience | Runs review/audit/governance checks and generates delivery closure artifact |
 | scripts/utilities/context-pack.ps1 | Context Budgeting | B | manual | dev-experience | Generates compact continuation summary to reduce token usage |
 | scripts/utilities/compact-start.ps1 | Context Budgeting | B | manual | dev-experience | Generates context pack and compact prompt for new thread |
 | scripts/utilities/context-metrics-report.ps1 | Context Budgeting | B | manual | dev-experience | Reports context-pack and compact-start usage metrics |
 | scripts/validation/homologate-workspace.ps1 | Workspace Hygiene | B | manual | dev-experience | Normalizes artifacts/docs, removes stale files, updates references |
+| scripts/git-hooks/pre-push | Git Hook Runtime | B | git-event | platform | Runs governed pre-push checks (gga, governance validation, homologation drift gate) |
 | scripts/utilities/stack-on-demand.ps1 | Orchestration Mode | B | manual | platform | Activate/validate/deactivate flow |
 | scripts/utilities/orchestrator-status.ps1 | Status | A | manual | platform | Read-oriented orchestration checks |
 | scripts/diagnostics/system-diagnostics.ps1 | Diagnostics | B | manual | platform | Health and repair checks |

@@ -87,9 +87,11 @@ $requiredPaths = @(
     "scripts/utilities/auto-init-dev-environment.ps1",
     "scripts/utilities/ensure-tools-active.ps1",
     "scripts/utilities/run-gentle-ai.ps1",
+    "scripts/utilities/end-session.ps1",
     "scripts/utilities/wf.ps1",
     "scripts/utilities/stack-on-demand.ps1",
-    "scripts/utilities/orchestrator-status.ps1"
+    "scripts/utilities/orchestrator-status.ps1",
+    "scripts/git-hooks/pre-push"
 )
 
 Write-Step "1. Validating required scripts and registry"
