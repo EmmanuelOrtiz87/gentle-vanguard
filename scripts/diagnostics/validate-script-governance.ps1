@@ -83,6 +83,7 @@ function Get-RepoRelativePath {
 # ---------------------------------------------------------------------------
 $requiredPaths = @(
     "docs/reference/script-registry.md",
+    "docs/guides/DEVELOPER-COMMUNICATION-POLICY.md",
     "scripts/utilities/detect-ide-session.ps1",
     "scripts/utilities/auto-init-dev-environment.ps1",
     "scripts/utilities/ensure-tools-active.ps1",
