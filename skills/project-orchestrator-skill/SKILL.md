@@ -49,6 +49,46 @@ Stability rules:
 3. Print actionable recommendations when auto-start prerequisites are missing.
 4. Keep hooks non-blocking unless security-critical conditions are detected.
 
+## TOOLING CONTRACT (HOMOLOGATION v1)
+
+Goal: avoid overlap, confusion, and conflicting behavior across sessions.
+
+1. MUST use Engram for durable memory (context, decisions, closeout learnings).
+2. MUST use this orchestrator skill as the primary execution framework.
+3. MUST keep session artifacts updated (`docs/sessions/YYYY-MM-DD-session-start.md` and task brief for bounded scope).
+4. SHOULD use `gga` and `gentle-ai` when available; if unavailable, continue with warnings plus remediation commands.
+5. MUST run focused validation before push and include evidence in docs.
+
+## SESSION STATE MACHINE
+
+1. `START`
+- Run `wf.ps1 ide-status`.
+- Refresh session/task artifacts.
+- Capture context in Engram.
+
+2. `EXECUTE`
+- Apply changes under relevant skills.
+- Keep behavior deterministic and idempotent.
+
+3. `VALIDATE`
+- Run governance validator and targeted checks.
+- Fix blocking failures before publication.
+
+4. `AUDIT`
+- Update session/task/audit evidence.
+- Persist durable learnings to Engram.
+
+5. `PUBLISH`
+- Commit, push, create PR.
+- Close only when docs, repo state, and memory state are aligned.
+
+## FAILURE POLICY
+
+1. Blocking failures: syntax errors, broken validation, missing required governance files.
+2. Advisory failures: optional toolchain gaps (`gentle-ai`, `gga`) unless strict mode is enabled.
+3. Never fail silently: every failure must print actionable remediation.
+4. If ambiguity appears, stop and notify user before proceeding.
+
 ## GIT FLOW WORKFLOW
 
 ### Branch Strategy

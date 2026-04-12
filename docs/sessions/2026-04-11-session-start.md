@@ -45,5 +45,12 @@
 - Implemented: stricter CODEOWNERS routing for script-governance critical surfaces.
 - Implemented: validator SLO thresholds around smoke checks.
 - Implemented: negative fallback test for missing `detect-ide-session.ps1` with guaranteed restore in `finally`.
+- Implemented: homologation contract in orchestrator/script governance skills (MUST/SHOULD policy, state machine, failure policy).
+- Implemented: validator governance artifact checks plus toolchain availability checks (`engram`, `gga`, `gentle-ai`) with strict mode option.
 - Validation: `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1` passed locally.
-- Publication: pushed to `main` at commit `761c597`.
+- Publication: pushed to `main` at commit `e9baa36` before current homologation delta.
+
+## Risks and Notifications
+
+- Advisory gap detected: `gentle-ai` is not available in current environment.
+- Operational policy chosen: keep this as warning (non-blocking) unless `-StrictToolchain` is explicitly enabled.

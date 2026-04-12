@@ -1,6 +1,7 @@
 ﻿param(
     [switch]$Quiet,
-    [switch]$SkipFallbackTests
+    [switch]$SkipFallbackTests,
+    [switch]$StrictToolchain
 )
 
 $ErrorActionPreference = 'Stop'
@@ -10,6 +11,22 @@ function Write-Step { param([string]$Message) if (-not $Quiet) { Write-Host "`n=
 function Write-Ok   { param([string]$Message) if (-not $Quiet) { Write-Host "[OK] $Message" -ForegroundColor Green } }
 function Write-Warn { param([string]$Message) if (-not $Quiet) { Write-Host "[WARN] $Message" -ForegroundColor Yellow } }
 function Write-Fail { param([string]$Message) Write-Host "[FAIL] $Message" -ForegroundColor Red }
+
+function Register-ToolingGap {
+    param(
+        [string]$Message,
+        [string]$Remediation
+    )
+
+    if ($StrictToolchain) {
+        Write-Fail "$Message`
+  Remediation: $Remediation"
+        $script:failures++
+    } else {
+        Write-Warn "$Message`
+  Remediation: $Remediation"
+    }
+}
 
 # SLO budget in milliseconds per script category
 $SLO = @{
@@ -41,6 +58,65 @@ foreach ($relativePath in $requiredPaths) {
     } else {
         Write-Fail "Missing: $relativePath"
         $failures++
+    }
+}
+
+# ---------------------------------------------------------------------------
+# 1.1 Required governance artifacts
+# ---------------------------------------------------------------------------
+Write-Step "1.1 Validating governance artifacts"
+
+$orchestratorSkillPath = Join-Path $repoRoot "skills/project-orchestrator-skill/SKILL.md"
+$scriptSkillPath = Join-Path $repoRoot "skills/script-governance-skill/SKILL.md"
+
+if (Test-Path $orchestratorSkillPath) {
+    Write-Ok "skills/project-orchestrator-skill/SKILL.md"
+} else {
+    Write-Fail "Missing: skills/project-orchestrator-skill/SKILL.md"
+    $failures++
+}
+
+if (Test-Path $scriptSkillPath) {
+    Write-Ok "skills/script-governance-skill/SKILL.md"
+} else {
+    Write-Fail "Missing: skills/script-governance-skill/SKILL.md"
+    $failures++
+}
+
+$sessionBriefExists = (Get-ChildItem -Path (Join-Path $repoRoot "docs/sessions") -Filter "*-session-start.md" -File -ErrorAction SilentlyContinue | Measure-Object).Count -gt 0
+$taskBriefExists = (Get-ChildItem -Path (Join-Path $repoRoot "docs/tasks") -Filter "*.md" -File -ErrorAction SilentlyContinue | Measure-Object).Count -gt 0
+
+if ($sessionBriefExists) {
+    Write-Ok "Session start artifact exists"
+} else {
+    Write-Fail "Missing session start artifact under docs/sessions/*-session-start.md"
+    $failures++
+}
+
+if ($taskBriefExists) {
+    Write-Ok "Task brief artifact exists"
+} else {
+    Write-Fail "Missing task brief artifact under docs/tasks/*.md"
+    $failures++
+}
+
+# ---------------------------------------------------------------------------
+# 1.2 Toolchain availability checks (advisory by default)
+# ---------------------------------------------------------------------------
+Write-Step "1.2 Toolchain availability checks"
+
+$toolChecks = @(
+    @{ Name = "engram"; Remediation = "Install/repair Engram and verify with: engram version" },
+    @{ Name = "gga"; Remediation = "Install/repair GGA and verify with: gga --help" },
+    @{ Name = "gentle-ai"; Remediation = "Install/repair gentle-ai and verify with: gentle-ai --help" }
+)
+
+foreach ($tool in $toolChecks) {
+    $cmd = Get-Command $tool.Name -ErrorAction SilentlyContinue
+    if ($null -ne $cmd) {
+        Write-Ok "Tool available: $($tool.Name)"
+    } else {
+        Register-ToolingGap -Message "Tool missing: $($tool.Name)" -Remediation $tool.Remediation
     }
 }
 

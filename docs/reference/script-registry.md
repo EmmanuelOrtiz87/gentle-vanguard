@@ -29,6 +29,19 @@ Central inventory of automation scripts with ownership, risk level, and executio
 3. Non-critical failures must not block session progress.
 4. Hooks block only for security-critical failures.
 
+## Homologation Contract (Tools and Process)
+
+| Item | Requirement | Enforcement |
+|---|---|---|
+| Engram memory | MUST | Validator advisory by default, strict-capable |
+| Orchestrator skill flow | MUST | Documented + validator file checks |
+| Session artifacts | MUST | Validator file checks |
+| `gga` command | SHOULD | Validator advisory warning |
+| `gentle-ai` command | SHOULD | Validator advisory warning |
+| Focused validation before push | MUST | Validator execution + CI gate |
+
+Default policy: keep development flow unblocked for advisory gaps, but never hide them.
+
 ## Validation Commands
 
 ```powershell

@@ -7,7 +7,7 @@
 
 ## Scope
 
-- In scope: CODEOWNERS updates, validator SLO checks, negative fallback simulation, local validation, and publication.
+- In scope: CODEOWNERS updates, validator SLO checks, negative fallback simulation, governance artifact and toolchain checks, local validation, and publication.
 - Out of scope: introducing new governance levels or changing startup command contracts.
 
 ## Key Files
@@ -31,5 +31,5 @@
 
 ## Status
 
-- Current state: completed and published.
-- Next concrete step: monitor CI runs for SLO drift and tune thresholds only with evidence.
+- Current state: homologation update completed and ready for PR publication.
+- Next concrete step: publish current commit via PR and monitor CI trend; enable strict toolchain mode only when `gentle-ai` is provisioned.
