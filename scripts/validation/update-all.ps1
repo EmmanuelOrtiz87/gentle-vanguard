@@ -136,7 +136,7 @@ function Install-Tool {
     Write-Host "Installing $Name..." -ForegroundColor Gray
     
     try {
-        Invoke-Expression $InstallCommand 2>$null
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -Command $InstallCommand 2>$null | Out-Null
         $installed = Get-Command $VerifyCommand -ErrorAction SilentlyContinue
         if ($installed) {
             Write-Success "$Name installed"

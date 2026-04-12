@@ -22,7 +22,7 @@ function Get-ParentProcessNames {
             $pidCursor = $parentId
         }
     } catch {
-        # ignore process tree errors
+        Write-Verbose "Unable to resolve full parent process tree"
     }
     return $names
 }
