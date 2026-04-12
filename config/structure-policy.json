@@ -10,6 +10,12 @@
     "scripts/git-hooks"
   ],
   "allowedRootFiles": ["README.md"],
+  "allowedRootMarkdownFiles": [
+    "README.md",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md"
+  ],
   "deprecatedPathPatterns": [
     ".\\scripts\\update-all.ps1",
     "scripts/update-all.ps1"

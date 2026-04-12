@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'health', 'update', 'update-all', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'health', 'update', 'update-all', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'homologate', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -554,6 +554,7 @@ COMMANDS:
     context-pack [goal]  Generate compact context summary for new chat thread
     compact-start [goal] Generate context pack and copy compact continuation prompt
     context-metrics [days] Show context/token usage metrics from local logs
+    homologate [apply]  Normalize docs/artifacts and update references (dry-run default)
     help                 Show this help
 
 OPTIONS:
@@ -580,6 +581,8 @@ EXAMPLES:
     .\wf.ps1 context-pack "fix ci noise"  Generate compact handoff summary for token-efficient continuation
     .\wf.ps1 compact-start "fix ci noise" Generate handoff summary and copy compact prompt
     .\wf.ps1 context-metrics 14  Show 14-day context usage summary
+    .\wf.ps1 homologate          Preview normalization actions
+    .\wf.ps1 homologate apply    Execute normalization and reference updates
 
 "@
 }
@@ -883,6 +886,22 @@ switch ($Command) {
         }
 
         & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $metricsScript -Days $days
+    }
+
+    'homologate' {
+        Write-Step "Workspace Homologation"
+        $homologateScript = Join-Path $scriptDir '..\validation\homologate-workspace.ps1'
+        if (-not (Test-Path $homologateScript)) {
+            Write-Error "Homologation script not found: $homologateScript"
+            exit 1
+        }
+
+        $homologateArgs = @('-OrganizeRootDocs')
+        if ($Force -or $Scope -eq 'apply') {
+            $homologateArgs += '-Apply'
+        }
+
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $homologateScript @homologateArgs
     }
 }
 
