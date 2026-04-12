@@ -52,5 +52,5 @@
 
 ## Risks and Notifications
 
-- Advisory gap detected: `gentle-ai` is not available in current environment.
-- Operational policy chosen: keep this as warning (non-blocking) unless `-StrictToolchain` is explicitly enabled.
+- Native `gentle-ai` command remains optional in this environment.
+- Resolution applied: compatibility launcher `scripts/utilities/run-gentle-ai.ps1` is now part of required governance tooling and validator checks.

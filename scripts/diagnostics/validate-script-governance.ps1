@@ -45,6 +45,7 @@ $requiredPaths = @(
     "scripts/utilities/detect-ide-session.ps1",
     "scripts/utilities/auto-init-dev-environment.ps1",
     "scripts/utilities/ensure-tools-active.ps1",
+    "scripts/utilities/run-gentle-ai.ps1",
     "scripts/utilities/wf.ps1",
     "scripts/utilities/stack-on-demand.ps1",
     "scripts/utilities/orchestrator-status.ps1"
@@ -108,12 +109,22 @@ Write-Step "1.2 Toolchain availability checks"
 $toolChecks = @(
     @{ Name = "engram"; Remediation = "Install/repair Engram and verify with: engram version" },
     @{ Name = "gga"; Remediation = "Install/repair GGA and verify with: gga --help" },
-    @{ Name = "gentle-ai"; Remediation = "Install/repair gentle-ai and verify with: gentle-ai --help" }
+    @{ Name = "gentle-ai"; Remediation = "Use compatibility launcher: .\\scripts\\utilities\\run-gentle-ai.ps1 status" }
 )
 
 foreach ($tool in $toolChecks) {
+    $toolAvailable = $false
     $cmd = Get-Command $tool.Name -ErrorAction SilentlyContinue
     if ($null -ne $cmd) {
+        $toolAvailable = $true
+    } elseif ($tool.Name -eq "gentle-ai") {
+        $launcherPath = Join-Path $repoRoot "scripts/utilities/run-gentle-ai.ps1"
+        if (Test-Path $launcherPath) {
+            $toolAvailable = $true
+        }
+    }
+
+    if ($toolAvailable) {
         Write-Ok "Tool available: $($tool.Name)"
     } else {
         Register-ToolingGap -Message "Tool missing: $($tool.Name)" -Remediation $tool.Remediation

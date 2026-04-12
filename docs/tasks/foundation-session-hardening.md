@@ -31,5 +31,5 @@
 
 ## Status
 
-- Current state: homologation update completed and ready for PR publication.
-- Next concrete step: publish current commit via PR and monitor CI trend; enable strict toolchain mode only when `gentle-ai` is provisioned.
+- Current state: homologation + Gentle-AI compatibility fix completed and ready for PR publication.
+- Next concrete step: publish current commit via PR and monitor CI trend; strict mode can be enabled without `gentle-ai` global dependency because launcher is now enforced.
