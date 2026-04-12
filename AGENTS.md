@@ -62,6 +62,20 @@ gf list
 | `orchestrator-next-steps.ps1` | Ask the orchestrator for next development actions |
 | `validate-project.ps1` | Validate project |
 
+## Developer Communication Policy
+
+Default interaction mode for agent responses:
+
+1. Executive mode by default: short, precise, action-oriented responses.
+2. Extended details only on explicit request from developer:
+	- `EXTENDER`
+	- `DETALLE`
+3. Suggestions, optional improvements, and adjustment proposals only when explicitly authorized by developer.
+4. If requirements are ambiguous, ask one concise clarification question before proceeding.
+5. For critical risk (security/data loss), agent must warn immediately even in executive mode.
+
+Policy reference: `docs/guides/DEVELOPER-COMMUNICATION-POLICY.md`
+
 ## Code Standards
 
 ### PowerShell Scripts
@@ -93,3 +107,4 @@ gf list
 ## See Also
 - `skills/SKILL_INDEX.md` - Complete skill reference
 - `docs/ARCHITECTURE.md` - Foundation architecture
+- `docs/guides/DEVELOPER-COMMUNICATION-POLICY.md` - Response mode and authorization rules
