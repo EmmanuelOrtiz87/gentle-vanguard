@@ -162,6 +162,7 @@ function Get-CommitHistory {
 
 function Get-ContextEfficiencyPolicy {
     $defaults = @{
+        ProfileName = 'default'
         WindowDays = 7
         PromptYellowMax = 1200
         PromptRedMax = 1800
@@ -176,11 +177,25 @@ function Get-ContextEfficiencyPolicy {
 
     try {
         $policy = Get-Content -Path $policyPath -Raw | ConvertFrom-Json
-        if ($policy.windowDays) { $defaults.WindowDays = [int]$policy.windowDays }
-        if ($policy.promptChars.yellowMax) { $defaults.PromptYellowMax = [int]$policy.promptChars.yellowMax }
-        if ($policy.promptChars.redMax) { $defaults.PromptRedMax = [int]$policy.promptChars.redMax }
-        if ($policy.adoptionPercent.yellowMin) { $defaults.AdoptionYellowMin = [int]$policy.adoptionPercent.yellowMin }
-        if ($policy.adoptionPercent.redMin) { $defaults.AdoptionRedMin = [int]$policy.adoptionPercent.redMin }
+        $source = $policy
+
+        if ($policy.profiles) {
+            $requestedProfile = if ($policy.activeProfile) { [string]$policy.activeProfile } else { 'default' }
+            $availableProfiles = @($policy.profiles.PSObject.Properties.Name)
+            if ($availableProfiles -contains $requestedProfile) {
+                $source = $policy.profiles.$requestedProfile
+                $defaults.ProfileName = $requestedProfile
+            } elseif ($availableProfiles -contains 'default') {
+                $source = $policy.profiles.default
+                $defaults.ProfileName = 'default'
+            }
+        }
+
+        if ($null -ne $source.windowDays) { $defaults.WindowDays = [int]$source.windowDays }
+        if ($source.promptChars -and $null -ne $source.promptChars.yellowMax) { $defaults.PromptYellowMax = [int]$source.promptChars.yellowMax }
+        if ($source.promptChars -and $null -ne $source.promptChars.redMax) { $defaults.PromptRedMax = [int]$source.promptChars.redMax }
+        if ($source.adoptionPercent -and $null -ne $source.adoptionPercent.yellowMin) { $defaults.AdoptionYellowMin = [int]$source.adoptionPercent.yellowMin }
+        if ($source.adoptionPercent -and $null -ne $source.adoptionPercent.redMin) { $defaults.AdoptionRedMin = [int]$source.adoptionPercent.redMin }
     } catch {
         Write-Warning "Invalid context efficiency policy; using defaults."
     }
@@ -204,6 +219,8 @@ function Get-ContextMetricsSnapshot {
             Lines = @(
                 '| Metric | Value |',
                 '|---|---|',
+                "| Policy profile | $($policy.ProfileName) |",
+                "| Thresholds (prompt/adoption) | Y: <=$($policy.PromptYellowMax) & >=$($policy.AdoptionYellowMin)% ; R: <=$($policy.PromptRedMax) & >=$($policy.AdoptionRedMin)% |",
                 '| Window | Last 7 days |',
                 '| Data | No metrics collected yet |'
             )
@@ -235,6 +252,8 @@ function Get-ContextMetricsSnapshot {
             Lines = @(
                 '| Metric | Value |',
                 '|---|---|',
+                "| Policy profile | $($policy.ProfileName) |",
+                "| Thresholds (prompt/adoption) | Y: <=$($policy.PromptYellowMax) & >=$($policy.AdoptionYellowMin)% ; R: <=$($policy.PromptRedMax) & >=$($policy.AdoptionRedMin)% |",
                 '| Window | Last 7 days |',
                 '| Events | 0 |'
             )
@@ -284,6 +303,8 @@ function Get-ContextMetricsSnapshot {
         Lines = @(
             '| Metric | Value |',
             '|---|---|',
+            "| Policy profile | $($policy.ProfileName) |",
+            "| Thresholds (prompt/adoption) | Y: <=$($policy.PromptYellowMax) & >=$($policy.AdoptionYellowMin)% ; R: <=$($policy.PromptRedMax) & >=$($policy.AdoptionRedMin)% |",
             "| Window | Last $Days days |",
             "| Total events | $total |",
             "| context-pack | $pack |",
