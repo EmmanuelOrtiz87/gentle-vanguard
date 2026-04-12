@@ -160,6 +160,115 @@ function Get-CommitHistory {
     git log --oneline -n $Count 2>$null
 }
 
+function Get-ContextMetricsSnapshot {
+    param([int]$Days = 7)
+
+    $metricsPath = Join-Path $repoRoot 'docs/sessions/metrics/context-usage.csv'
+    if (-not (Test-Path $metricsPath)) {
+        return @{
+            HealthStatus = 'WARN (no data)'
+            Recommendation = 'Adopt compact-start in daily handoffs to start collecting baseline data.'
+            Lines = @(
+                '| Metric | Value |',
+                '|---|---|',
+                '| Window | Last 7 days |',
+                '| Data | No metrics collected yet |'
+            )
+            TrendLines = @(
+                '| Metric | Current 7d | Previous 7d | Delta |',
+                '|---|---:|---:|---:|',
+                '| Total events | 0 | 0 | 0 |',
+                '| Avg prompt chars | 0 | 0 | 0 |',
+                '| compact-start adoption % | 0 | 0 | 0 |'
+            )
+        }
+    }
+
+    $now = Get-Date
+    $currentStart = $now.AddDays(-1 * $Days)
+    $previousStart = $now.AddDays(-2 * $Days)
+
+    $allRows = Import-Csv -Path $metricsPath
+    $rows = $allRows | Where-Object { [datetime]::Parse($_.timestamp) -ge $currentStart }
+    $previousRows = $allRows | Where-Object {
+        $ts = [datetime]::Parse($_.timestamp)
+        $ts -ge $previousStart -and $ts -lt $currentStart
+    }
+
+    if (-not $rows -or $rows.Count -eq 0) {
+        return @{
+            HealthStatus = 'WARN (no events in window)'
+            Recommendation = 'Run compact-start before opening new threads to capture usage and enforce concise handoffs.'
+            Lines = @(
+                '| Metric | Value |',
+                '|---|---|',
+                '| Window | Last 7 days |',
+                '| Events | 0 |'
+            )
+            TrendLines = @(
+                '| Metric | Current 7d | Previous 7d | Delta |',
+                '|---|---:|---:|---:|',
+                '| Total events | 0 | 0 | 0 |',
+                '| Avg prompt chars | 0 | 0 | 0 |',
+                '| compact-start adoption % | 0 | 0 | 0 |'
+            )
+        }
+    }
+
+    $total = $rows.Count
+    $pack = @($rows | Where-Object event -eq 'context-pack').Count
+    $compact = @($rows | Where-Object event -eq 'compact-start').Count
+    $avgObjective = [math]::Round((($rows | Measure-Object -Property objective_chars -Average).Average), 1)
+    $avgPrompt = [math]::Round((($rows | Measure-Object -Property prompt_chars -Average).Average), 1)
+    $adoption = if ($total -gt 0) { [math]::Round(($compact * 100.0) / $total, 1) } else { 0 }
+
+    $prevTotal = @($previousRows).Count
+    $prevCompact = @($previousRows | Where-Object event -eq 'compact-start').Count
+    $prevAvgPrompt = if ($prevTotal -gt 0) { [math]::Round(((@($previousRows) | Measure-Object -Property prompt_chars -Average).Average), 1) } else { 0 }
+    $prevAdoption = if ($prevTotal -gt 0) { [math]::Round(($prevCompact * 100.0) / $prevTotal, 1) } else { 0 }
+
+    $deltaTotal = $total - $prevTotal
+    $deltaPrompt = [math]::Round(($avgPrompt - $prevAvgPrompt), 1)
+    $deltaAdoption = [math]::Round(($adoption - $prevAdoption), 1)
+
+    $healthStatus = 'GREEN'
+    if ($avgPrompt -gt 1800 -or $adoption -lt 40) {
+        $healthStatus = 'RED'
+    } elseif ($avgPrompt -gt 1200 -or $adoption -lt 70) {
+        $healthStatus = 'YELLOW'
+    }
+
+    $recommendation = 'Maintain current compact-start adoption and review weekly trend for drift.'
+    if ($healthStatus -eq 'RED') {
+        $recommendation = 'Enforce compact-start before every handoff and trim objective prompts to one sentence.'
+    } elseif ($healthStatus -eq 'YELLOW') {
+        $recommendation = 'Increase compact-start adoption and reduce repeated constraints in follow-up prompts.'
+    }
+
+    return @{
+        HealthStatus = $healthStatus
+        Recommendation = $recommendation
+        Lines = @(
+            '| Metric | Value |',
+            '|---|---|',
+            "| Window | Last $Days days |",
+            "| Total events | $total |",
+            "| context-pack | $pack |",
+            "| compact-start | $compact |",
+            "| compact-start adoption % | $adoption |",
+            "| Avg objective chars | $avgObjective |",
+            "| Avg prompt chars | $avgPrompt |"
+        )
+        TrendLines = @(
+            '| Metric | Current 7d | Previous 7d | Delta |',
+            '|---|---:|---:|---:|',
+            "| Total events | $total | $prevTotal | $deltaTotal |",
+            "| Avg prompt chars | $avgPrompt | $prevAvgPrompt | $deltaPrompt |",
+            "| compact-start adoption % | $adoption | $prevAdoption | $deltaAdoption |"
+        )
+    }
+}
+
 function New-AuditDocument {
     param([string]$OutputPath)
     
@@ -168,6 +277,14 @@ function New-AuditDocument {
     $gitInfo = Get-GitInfo
     $date = Get-Date -Format "yyyy-MM-ddTHH:mm:sszzz"
     $commits = Get-CommitHistory -Count 10
+    $commitLines = if ($commits) {
+        (@($commits) | ForEach-Object { "- $_" }) -join [Environment]::NewLine
+    } else {
+        '- none'
+    }
+    $metrics = Get-ContextMetricsSnapshot -Days 7
+    $metricsSection = ($metrics.Lines -join [Environment]::NewLine)
+    $metricsTrendSection = ($metrics.TrendLines -join [Environment]::NewLine)
     
     $auditContent = @"
 # Audit Document - $date
@@ -181,6 +298,14 @@ function New-AuditDocument {
 ## Summary
 `[Brief description of changes]`
 
+## Executive Overview
+
+| Area | Status | Notes |
+|---|---|---|
+| Delivery | `TODO` | Confirm scope completion against task brief |
+| Operational Risk | `TODO` | Confirm CI/workflow status and blockers |
+| Context Efficiency Health | $($metrics.HealthStatus) | $($metrics.Recommendation) |
+
 ## Git Information
 
 | Item | Value |
@@ -192,7 +317,7 @@ function New-AuditDocument {
 
 ## Recent Commits
 
-$commits
+$commitLines
 
 ## Tests Status
 
@@ -209,6 +334,14 @@ $commits
 | HIGH | 0 |
 | MEDIUM | 0 |
 | LOW | 0 |
+
+## Context Efficiency (7d)
+
+$metricsSection
+
+## Technical Context Trend (7d vs previous 7d)
+
+$metricsTrendSection
 
 ## Specification
 
