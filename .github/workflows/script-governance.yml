@@ -37,3 +37,9 @@ jobs:
         shell: pwsh
         run: |
           powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\wf.ps1 health -StrictCleanup
+
+      - name: Agent process compliance alert (non-blocking)
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\agent-process-alert.ps1 -WindowHours 24 -EmitGitHubAnnotations

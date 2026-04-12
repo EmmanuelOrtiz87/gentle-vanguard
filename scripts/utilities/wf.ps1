@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'health', 'update', 'update-all', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'homologate', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'health', 'update', 'update-all', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'homologate', 'agent-alert', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -556,6 +556,7 @@ COMMANDS:
     compact-start [goal] Generate context pack and copy compact continuation prompt
     context-metrics [days] Show context/token usage metrics from local logs
     homologate [apply]  Normalize docs/artifacts and update references (dry-run default)
+    agent-alert [strict] Check process-compliance signals for off-process AI activity
     help                 Show this help
 
 OPTIONS:
@@ -586,6 +587,8 @@ EXAMPLES:
     .\wf.ps1 homologate          Preview normalization actions
     .\wf.ps1 homologate apply    Execute normalization and reference updates
     .\wf.ps1 health -StrictCleanup  Run health and fail if cleanup drift exists
+    .\wf.ps1 agent-alert           Show process-compliance warnings (non-blocking)
+    .\wf.ps1 agent-alert strict    Fail if process-compliance warnings are detected
 
 "@
 }
@@ -921,6 +924,22 @@ switch ($Command) {
         }
 
         & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $homologateScript @homologateArgs
+    }
+
+    'agent-alert' {
+        Write-Step "Agent Process Compliance Alert"
+        $alertScript = Join-Path $scriptDir '..\diagnostics\agent-process-alert.ps1'
+        if (-not (Test-Path $alertScript)) {
+            Write-Error "Agent alert script not found: $alertScript"
+            exit 1
+        }
+
+        $alertArgs = @('-WindowHours', '24')
+        if ($StrictCleanup -or $Scope -eq 'strict') {
+            $alertArgs += '-Strict'
+        }
+
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $alertScript @alertArgs
     }
 }
 
