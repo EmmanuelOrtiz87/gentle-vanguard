@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'health', 'update', 'update-all', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'health', 'update', 'update-all', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -313,6 +313,7 @@ COMMANDS:
     migrate-structure    Preflight and guided migration of loose scripts
     context-pack [goal]  Generate compact context summary for new chat thread
     compact-start [goal] Generate context pack and copy compact continuation prompt
+    context-metrics [days] Show context/token usage metrics from local logs
     help                 Show this help
 
 OPTIONS:
@@ -338,6 +339,7 @@ EXAMPLES:
     .\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
     .\wf.ps1 context-pack "fix ci noise"  Generate compact handoff summary for token-efficient continuation
     .\wf.ps1 compact-start "fix ci noise" Generate handoff summary and copy compact prompt
+    .\wf.ps1 context-metrics 14  Show 14-day context usage summary
 
 "@
 }
@@ -622,6 +624,25 @@ switch ($Command) {
         }
 
         & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $compactScript @compactArgs
+    }
+
+    'context-metrics' {
+        Write-Step "Context Usage Metrics"
+        $metricsScript = Join-Path $scriptDir 'context-metrics-report.ps1'
+        if (-not (Test-Path $metricsScript)) {
+            Write-Error "Context metrics script not found: $metricsScript"
+            exit 1
+        }
+
+        $days = 7
+        if (-not [string]::IsNullOrWhiteSpace($Scope)) {
+            $parsedDays = 0
+            if ([int]::TryParse($Scope, [ref]$parsedDays) -and $parsedDays -gt 0) {
+                $days = $parsedDays
+            }
+        }
+
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $metricsScript -Days $days
     }
 }
 

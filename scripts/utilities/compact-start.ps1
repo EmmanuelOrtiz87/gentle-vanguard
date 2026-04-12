@@ -5,6 +5,42 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
+function Write-Metric {
+    param(
+        [string]$Event,
+        [string]$Objective,
+        [int]$PromptChars,
+        [string]$OutputFile
+    )
+
+    $repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..\..')
+    $metricsDir = Join-Path $repoRoot 'docs/sessions/metrics'
+    if (-not (Test-Path $metricsDir)) {
+        New-Item -ItemType Directory -Path $metricsDir -Force | Out-Null
+    }
+
+    $metricsFile = Join-Path $metricsDir 'context-usage.csv'
+    if (-not (Test-Path $metricsFile)) {
+        'timestamp,event,repository,branch,objective_chars,changed_count,prompt_chars,output_file' | Set-Content -Path $metricsFile -Encoding UTF8
+    }
+
+    $branchName = git rev-parse --abbrev-ref HEAD 2>$null
+    if (-not $branchName) { $branchName = '(unknown)' }
+
+    $line = ('{0},{1},{2},{3},{4},{5},{6},{7}' -f
+        (Get-Date -Format 'yyyy-MM-ddTHH:mm:ssK'),
+        $Event,
+        (Split-Path $repoRoot -Leaf),
+        $branchName,
+        $Objective.Length,
+        0,
+        $PromptChars,
+        $OutputFile.Replace(',', ';')
+    )
+
+    Add-Content -Path $metricsFile -Value $line -Encoding UTF8
+}
+
 $contextScript = Join-Path $PSScriptRoot 'context-pack.ps1'
 if (-not (Test-Path $contextScript)) {
     Write-Error "Context pack script not found: $contextScript"
@@ -60,3 +96,4 @@ Write-Host ''
 Write-Host '--- Compact Prompt ---' -ForegroundColor Cyan
 Write-Host $prompt
 Write-Host '----------------------' -ForegroundColor Cyan
+Write-Metric -Event 'compact-start' -Objective $objectiveLine -PromptChars $prompt.Length -OutputFile $contextPath

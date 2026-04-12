@@ -11,6 +11,42 @@ $ErrorActionPreference = 'Stop'
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..\..')
 Set-Location $repoRoot
 
+function Write-Metric {
+    param(
+        [string]$Event,
+        [string]$Objective,
+        [int]$ChangedCount,
+        [int]$PromptChars,
+        [string]$OutputFile
+    )
+
+    $metricsDir = Join-Path $repoRoot 'docs/sessions/metrics'
+    if (-not (Test-Path $metricsDir)) {
+        New-Item -ItemType Directory -Path $metricsDir -Force | Out-Null
+    }
+
+    $metricsFile = Join-Path $metricsDir 'context-usage.csv'
+    if (-not (Test-Path $metricsFile)) {
+        'timestamp,event,repository,branch,objective_chars,changed_count,prompt_chars,output_file' | Set-Content -Path $metricsFile -Encoding UTF8
+    }
+
+    $branchName = git rev-parse --abbrev-ref HEAD 2>$null
+    if (-not $branchName) { $branchName = '(unknown)' }
+
+    $line = ('{0},{1},{2},{3},{4},{5},{6},{7}' -f
+        (Get-Date -Format 'yyyy-MM-ddTHH:mm:ssK'),
+        $Event,
+        (Split-Path $repoRoot -Leaf),
+        $branchName,
+        $Objective.Length,
+        $ChangedCount,
+        $PromptChars,
+        $OutputFile.Replace(',', ';')
+    )
+
+    Add-Content -Path $metricsFile -Value $line -Encoding UTF8
+}
+
 function Get-ChangedFiles {
     param([int]$Limit)
 
@@ -118,6 +154,7 @@ Validate changes and report concise results.
 
 Set-Content -Path $OutputPath -Value $content -Encoding UTF8
 Write-Host "[OK] Context pack generated: $OutputPath" -ForegroundColor Green
+Write-Metric -Event 'context-pack' -Objective $objectiveLine -ChangedCount $changedFiles.Count -PromptChars $content.Length -OutputFile $OutputPath
 if ($PassThru) {
     Write-Output $OutputPath
 }

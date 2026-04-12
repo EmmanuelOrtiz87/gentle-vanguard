@@ -27,6 +27,13 @@ Brief description of the project.
 
 7. Paste the generated compact prompt (already copied to clipboard) in the new thread.
 
+8. Review weekly usage metrics to monitor token/context optimization adoption:
+
+```powershell
+.\scripts\context-metrics-report.ps1
+.\scripts\context-metrics-report.ps1 -Days 14
+```
+
 ```text
 <build-command>
 <test-command>
