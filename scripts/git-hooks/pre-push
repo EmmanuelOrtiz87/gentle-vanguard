@@ -13,8 +13,18 @@ HOMOLOGATE_SCRIPT="$REPO_ROOT/scripts/validation/homologate-workspace.ps1"
 echo "[pre-push] Running governance checks..."
 
 if command -v gga >/dev/null 2>&1; then
-    gga check --local
-    if [ $? -ne 0 ]; then
+    GGA_OUTPUT="$(gga run --no-cache 2>&1)"
+    GGA_EXIT=$?
+
+    # Hide noisy env dumps (declare -x ...) while preserving actionable output.
+    printf '%s\n' "$GGA_OUTPUT" | while IFS= read -r line; do
+        case "$line" in
+            "declare -x "*) ;;
+            *) printf '%s\n' "$line" ;;
+        esac
+    done
+
+    if [ $GGA_EXIT -ne 0 ]; then
         echo "[pre-push][ERROR] gga local check failed"
         exit 1
     fi
