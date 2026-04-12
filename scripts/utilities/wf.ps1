@@ -160,8 +160,41 @@ function Get-CommitHistory {
     git log --oneline -n $Count 2>$null
 }
 
+function Get-ContextEfficiencyPolicy {
+    $defaults = @{
+        WindowDays = 7
+        PromptYellowMax = 1200
+        PromptRedMax = 1800
+        AdoptionYellowMin = 70
+        AdoptionRedMin = 40
+    }
+
+    $policyPath = Join-Path $repoRoot 'config/context-efficiency.json'
+    if (-not (Test-Path $policyPath)) {
+        return $defaults
+    }
+
+    try {
+        $policy = Get-Content -Path $policyPath -Raw | ConvertFrom-Json
+        if ($policy.windowDays) { $defaults.WindowDays = [int]$policy.windowDays }
+        if ($policy.promptChars.yellowMax) { $defaults.PromptYellowMax = [int]$policy.promptChars.yellowMax }
+        if ($policy.promptChars.redMax) { $defaults.PromptRedMax = [int]$policy.promptChars.redMax }
+        if ($policy.adoptionPercent.yellowMin) { $defaults.AdoptionYellowMin = [int]$policy.adoptionPercent.yellowMin }
+        if ($policy.adoptionPercent.redMin) { $defaults.AdoptionRedMin = [int]$policy.adoptionPercent.redMin }
+    } catch {
+        Write-Warning "Invalid context efficiency policy; using defaults."
+    }
+
+    return $defaults
+}
+
 function Get-ContextMetricsSnapshot {
     param([int]$Days = 7)
+
+    $policy = Get-ContextEfficiencyPolicy
+    if (-not $Days -or $Days -le 0) {
+        $Days = $policy.WindowDays
+    }
 
     $metricsPath = Join-Path $repoRoot 'docs/sessions/metrics/context-usage.csv'
     if (-not (Test-Path $metricsPath)) {
@@ -232,9 +265,9 @@ function Get-ContextMetricsSnapshot {
     $deltaAdoption = [math]::Round(($adoption - $prevAdoption), 1)
 
     $healthStatus = 'GREEN'
-    if ($avgPrompt -gt 1800 -or $adoption -lt 40) {
+    if ($avgPrompt -gt $policy.PromptRedMax -or $adoption -lt $policy.AdoptionRedMin) {
         $healthStatus = 'RED'
-    } elseif ($avgPrompt -gt 1200 -or $adoption -lt 70) {
+    } elseif ($avgPrompt -gt $policy.PromptYellowMax -or $adoption -lt $policy.AdoptionYellowMin) {
         $healthStatus = 'YELLOW'
     }
 
