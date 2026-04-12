@@ -20,7 +20,7 @@ The Gentleman Foundation automatically ensures all development tools are active:
 
 ### Auto-Activation Triggers
 - **Pre-commit**: Tools validated before each commit
-- **Session start**: Health check runs automatically
+- **Session start**: Session brief artifacts are generated
 - **Manual**: Use `.\wf.ps1 health` anytime
 
 ### Tools Activated
@@ -64,6 +64,7 @@ The Gentleman Foundation automatically ensures all development tools are active:
 
 ```
 1. Run the standard bootstrap:
+   - .\wf.ps1 health
    - .\wf.ps1 start-session [task-name]
 
 2. Orchestrator auto-detects:
@@ -102,7 +103,8 @@ The Gentleman Foundation automatically ensures all development tools are active:
 1. Run: wf.ps1 review
 2. Generate: Audit document
 3. Check: Specification complete?
-4. Ask: Create PR?
+4. Optional closeout: wf.ps1 push (prints guided commit/push commands)
+5. Ask: Create PR?
 ```
 
 ### 4. Code Review (7 Dimensions)
@@ -150,6 +152,7 @@ PR            # Create PR
 .\wf.ps1 pr         # PR template
 .\wf.ps1 status     # Show status
 .\wf.ps1 push       # Prepare to push
+.\wf.ps1 update-all # Alias for full update workflow
 .\wf.ps1 homologate # Preview cleanup/homologation actions
 .\wf.ps1 homologate apply # Apply cleanup/homologation actions
 .\wf.ps1 health -StrictCleanup # Health + cleanup drift gate
@@ -188,16 +191,17 @@ gh pr create            # Create PR
 ### Pre-commit Hook
 
 Automatically runs:
-1. Secrets scan
-2. Format check
-3. Basic tests
+1. Project validation script (when hook is installed)
+2. Cross-platform PowerShell execution fallback
 
 ### Pre-push Hook
 
 Automatically runs:
-1. Full code review
-2. Tests verification
-3. Audit document generation
+1. Protected branch warning checks
+2. Local test checks for Node/Go projects
+3. Conventional commit warning (advisory)
+
+Note: hook installation depends on local Git hook wiring. Canonical script paths are under `scripts/git-hooks/`.
 
 ---
 

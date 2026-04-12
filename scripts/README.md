@@ -84,8 +84,15 @@ Automated development workflow commands.
 # Prepare to push
 .\wf.ps1 push
 
+# Full update alias
+.\wf.ps1 update-all
+
 # Update repository, foundation, skills, and tools
 .\wf.ps1 update
+
+# Homologation workflow
+.\wf.ps1 homologate
+.\wf.ps1 homologate apply
 ```
 
 ## Quick Reference
