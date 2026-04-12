@@ -255,6 +255,9 @@ git ahead/behind tracking, and annotated next steps.
 ```powershell
 .\scripts\diagnostics\validate-script-governance.ps1
 # Expected: EXIT:0 (all checks passed)
+
+# Optional strict gate (recommended for CI)
+.\wf.ps1 health -StrictCleanup
 ```
 Validates that all scripts reference canonical paths and that no deprecated references remain.
 A non-zero exit is a blocking issue — fix before proceeding.
@@ -266,6 +269,16 @@ A non-zero exit is a blocking issue — fix before proceeding.
 ```
 Displays accumulated session metrics: total events, context-pack calls, compact-start calls,
 and context efficiency indicators.
+
+### Step 6 — Manual Homologation (Optional)
+```powershell
+# Preview cleanup actions
+.\wf.ps1 homologate
+
+# Apply cleanup and reference updates
+.\wf.ps1 homologate apply
+```
+Use this when strict cleanup reports drift or when you want to normalize the workspace before release.
 
 ---
 

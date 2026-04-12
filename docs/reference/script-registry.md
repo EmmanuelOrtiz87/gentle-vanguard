@@ -22,6 +22,7 @@ Central inventory of automation scripts with ownership, risk level, and executio
 | scripts/utilities/context-pack.ps1 | Context Budgeting | B | manual | dev-experience | Generates compact continuation summary to reduce token usage |
 | scripts/utilities/compact-start.ps1 | Context Budgeting | B | manual | dev-experience | Generates context pack and compact prompt for new thread |
 | scripts/utilities/context-metrics-report.ps1 | Context Budgeting | B | manual | dev-experience | Reports context-pack and compact-start usage metrics |
+| scripts/validation/homologate-workspace.ps1 | Workspace Hygiene | B | manual | dev-experience | Normalizes artifacts/docs, removes stale files, updates references |
 | scripts/utilities/stack-on-demand.ps1 | Orchestration Mode | B | manual | platform | Activate/validate/deactivate flow |
 | scripts/utilities/orchestrator-status.ps1 | Status | A | manual | platform | Read-oriented orchestration checks |
 | scripts/diagnostics/system-diagnostics.ps1 | Diagnostics | B | manual | platform | Health and repair checks |
@@ -52,6 +53,9 @@ Default policy: keep development flow unblocked for advisory gaps, but never hid
 # IDE and session readiness
 .\scripts\utilities\wf.ps1 ide-status
 
+# Health + cleanup drift gate (CI-friendly)
+.\scripts\utilities\wf.ps1 health -StrictCleanup
+
 # Startup path
 .\scripts\utilities\auto-init-dev-environment.ps1 -Quiet
 
@@ -74,6 +78,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\valida
 # Context usage metrics report (7 days default)
 .\scripts\utilities\wf.ps1 context-metrics
 .\scripts\utilities\wf.ps1 context-metrics 14
+
+# Workspace homologation (dry-run / apply)
+.\scripts\utilities\wf.ps1 homologate
+.\scripts\utilities\wf.ps1 homologate apply
 
 # Context efficiency thresholds for audit semaphore
 Get-Content .\config\context-efficiency.json
