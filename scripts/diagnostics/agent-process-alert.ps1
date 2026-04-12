@@ -36,6 +36,24 @@ function Emit-Notice {
     }
 }
 
+function Emit-Remediation {
+    param([switch]$Annotate)
+
+    $steps = @(
+        "Run: .\\scripts\\utilities\\wf.ps1 health",
+        "Run: .\\scripts\\utilities\\wf.ps1 start-session",
+        'Run: .\scripts\utilities\wf.ps1 compact-start "current objective"',
+        "Optional fix: .\\scripts\\utilities\\wf.ps1 homologate apply"
+    )
+
+    foreach ($step in $steps) {
+        Write-Host "[SUGGESTION] $step" -ForegroundColor Cyan
+        if ($Annotate) {
+            Write-Host "::notice::$step"
+        }
+    }
+}
+
 function Get-LatestCommitDate {
     $latestCommitIso = git -C $repoRoot log -1 --format=%cI 2>$null
     if (-not $latestCommitIso) {
@@ -89,16 +107,19 @@ Write-Host ("session-start artifacts in window: {0}" -f $sessionArtifactCount)
 
 if ($recentCommit -and $eventCount -eq 0) {
     Emit-Notice -Level 'WARN' -Message 'Recent repository activity detected without context-usage telemetry. Possible off-process AI operation.' -Annotate:$EmitGitHubAnnotations
+    Emit-Remediation -Annotate:$EmitGitHubAnnotations
     $warnings++
 }
 
 if ($recentCommit -and $compactCount -eq 0) {
     Emit-Notice -Level 'WARN' -Message 'Recent repository activity detected without compact-start usage. Handoff process may be bypassed.' -Annotate:$EmitGitHubAnnotations
+    Emit-Remediation -Annotate:$EmitGitHubAnnotations
     $warnings++
 }
 
 if ($recentCommit -and $sessionArtifactCount -eq 0) {
     Emit-Notice -Level 'WARN' -Message 'Recent repository activity detected without a session-start artifact in the configured window.' -Annotate:$EmitGitHubAnnotations
+    Emit-Remediation -Annotate:$EmitGitHubAnnotations
     $warnings++
 }
 

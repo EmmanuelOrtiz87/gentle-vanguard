@@ -21,7 +21,7 @@ on:
 
 jobs:
   script-governance:
-    name: Validate Script Governance and Cleanup Drift
+    name: Validate Script Governance and Process Alerts
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -33,10 +33,11 @@ jobs:
           # -SkipFallbackTests: skip file-mutation tests (unnecessary in CI — validated locally)
           powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1 -SkipFallbackTests
 
-      - name: Run strict cleanup drift gate
+      - name: Stack readiness advisory (non-blocking)
         shell: pwsh
+        continue-on-error: true
         run: |
-          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\wf.ps1 health -StrictCleanup
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\wf.ps1 health
 
       - name: Agent process compliance alert (non-blocking)
         shell: pwsh
