@@ -557,10 +557,9 @@ OpenCode is the default provider for GGA code review and is recommended for its:
 ### Quick Commands
 
 ```bash
-gentle-ai              # Interactive TUI
-gentle-ai status       # Show ecosystem status
-gentle-ai update       # Update all components
-gentle-ai backup       # Backup configuration
+./scripts/utilities/run-gentle-ai.ps1 status   # Show ecosystem status (native or compatibility mode)
+./scripts/utilities/run-gentle-ai.ps1 update   # Run toolchain update flow
+./scripts/utilities/run-gentle-ai.ps1 help     # Show available commands
 ```
 
 ### Post-Install (in your AI agent)
@@ -570,7 +569,7 @@ gentle-ai backup       # Backup configuration
 skill-registry         # Build skills registry
 ```
 
-> Gentle-AI is automatically installed when creating a new project with `wf new`.
+> If native `gentle-ai` is not installed, the compatibility launcher keeps workflow checks operational without breaking startup/CI.
 
 ## Gentleman-Skills - AI Agent Skill Library
 
