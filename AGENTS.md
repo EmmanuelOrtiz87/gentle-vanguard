@@ -73,6 +73,8 @@ Default interaction mode for agent responses:
 3. Suggestions, optional improvements, and adjustment proposals only when explicitly authorized by developer.
 4. If requirements are ambiguous, ask one concise clarification question before proceeding.
 5. For critical risk (security/data loss), agent must warn immediately even in executive mode.
+6. The orchestrator can request temporary escalation to standard/deep based on detected risk and must ask developer authorization to keep that level.
+7. Document optimization is selective: optimize operational artifacts (review/audit/handoff), keep architecture/design/technical/business docs complete.
 
 Policy reference: `docs/guides/DEVELOPER-COMMUNICATION-POLICY.md`
 
