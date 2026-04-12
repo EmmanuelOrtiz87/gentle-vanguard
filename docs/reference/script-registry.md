@@ -74,4 +74,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\valida
 # Context usage metrics report (7 days default)
 .\scripts\utilities\wf.ps1 context-metrics
 .\scripts\utilities\wf.ps1 context-metrics 14
+
+# Context efficiency thresholds for audit semaphore
+Get-Content .\config\context-efficiency.json
 ```

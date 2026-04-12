@@ -47,3 +47,4 @@ Brief description of the project.
 - Use `docs/project-context.md` to record the first architecture, scope, and AI model decisions.
 - Use `docs/sessions/` and `docs/tasks/` to keep session and task scope explicit.
 - Use `docs/sessions/*-context-pack.md` to keep token usage low while preserving continuity.
+- Tune audit semaphore thresholds in `config/context-efficiency.json`.

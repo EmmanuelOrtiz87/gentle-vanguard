@@ -1,0 +1,11 @@
+{
+  "windowDays": 7,
+  "promptChars": {
+    "yellowMax": 1200,
+    "redMax": 1800
+  },
+  "adoptionPercent": {
+    "yellowMin": 70,
+    "redMin": 40
+  }
+}
