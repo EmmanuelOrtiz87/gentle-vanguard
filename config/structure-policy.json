@@ -1,0 +1,23 @@
+{
+  "_comment": "structureMode: enforce-canonical (greenfield/new repos) | adopt-existing (legacy/production repos — advisory only, no auto-refactor)",
+  "structureMode": "enforce-canonical",
+  "allowedScriptDirs": [
+    "scripts/utilities",
+    "scripts/diagnostics",
+    "scripts/validation",
+    "scripts/foundation",
+    "scripts/project",
+    "scripts/git-hooks"
+  ],
+  "allowedRootFiles": ["README.md"],
+  "allowedRootMarkdownFiles": [
+    "README.md",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md"
+  ],
+  "deprecatedPathPatterns": [
+    ".\\scripts\\update-all.ps1",
+    "scripts/update-all.ps1"
+  ]
+}

@@ -104,7 +104,7 @@ Automated development workflow commands.
 .\scripts\validation\check-updates.ps1
 
 # Run full foundation update
-.\scripts\update-all.ps1
+.\scripts\validation\update-all.ps1
 
 # Check orchestrator status
 .\scripts\utilities\orchestrator-status.ps1

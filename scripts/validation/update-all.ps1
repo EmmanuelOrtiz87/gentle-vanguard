@@ -136,7 +136,7 @@ function Install-Tool {
     Write-Host "Installing $Name..." -ForegroundColor Gray
     
     try {
-        Invoke-Expression $InstallCommand 2>$null
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -Command $InstallCommand 2>$null | Out-Null
         $installed = Get-Command $VerifyCommand -ErrorAction SilentlyContinue
         if ($installed) {
             Write-Success "$Name installed"
@@ -170,10 +170,16 @@ function Update-Tools {
             check = { Get-Command engram -ErrorAction SilentlyContinue }
             install = "npm install -g @engram/memory"
         }
-        "gentle-ai" = @{
-            desc = "Gentle-AI CLI"
-            check = { Get-Command gentle-ai -ErrorAction SilentlyContinue }
-            install = "npm install -g gentle-ai"
+            "gentle-ai" = @{
+                desc = "Gentle-AI CLI"
+                check = {
+                    $native = Get-Command gentle-ai -ErrorAction SilentlyContinue
+                    if ($native) { return $native }
+                    $launcher = Join-Path (Split-Path -Parent $scriptDir) "utilities\run-gentle-ai.ps1"
+                    if (Test-Path $launcher) { return $launcher }
+                    return $null
+                }
+                install = "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\utilities\\run-gentle-ai.ps1 status"
         }
     }
     

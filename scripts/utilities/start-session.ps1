@@ -173,7 +173,7 @@ $tasksDir = Join-Path $repoRoot 'docs\tasks'
 New-Item -ItemType Directory -Path $sessionsDir -Force | Out-Null
 New-Item -ItemType Directory -Path $tasksDir -Force | Out-Null
 
-$sessionFile = Join-Path $sessionsDir ("{0}-session-start.md" -f (Get-Date -Format 'yyyy-MM-dd'))
+$sessionFile = Join-Path $sessionsDir ("{0}-session-start.md" -f (Get-Date -Format 'yyyy-MM-dd-HHmmss'))
 if ((Test-Path $sessionFile) -and -not $Force) {
     $sessionFile = Join-Path $sessionsDir ("{0}-session-start-{1}.md" -f (Get-Date -Format 'yyyy-MM-dd'), (Get-Date -Format 'HHmmss'))
 }

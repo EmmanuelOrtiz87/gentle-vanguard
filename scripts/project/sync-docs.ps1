@@ -80,11 +80,11 @@ foreach ($item in $syncItems) {
         continue
     }
     
-    $sourceHash = (Get-FileHash $sourcePath -Algorithm MD5).Hash
-    $destHash = if (Test-Path $destPath) { (Get-FileHash $destPath -Algorithm MD5).Hash } else { $null }
+    $sourceHash = (Get-FileHash $sourcePath -Algorithm SHA256).Hash
+    $destHash = if (Test-Path $destPath) { (Get-FileHash $destPath -Algorithm SHA256).Hash } else { $null }
     
     if ($sourceHash -eq $destHash -and -not $Force) {
-        Write-Host "[OK] $($_.'Item Name') (up to date)" -ForegroundColor Green
+        Write-Host "[OK] $($item.Name) (up to date)" -ForegroundColor Green
         $skipCount++
         continue
     }

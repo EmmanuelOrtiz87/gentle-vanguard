@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'health', 'update', 'update-all', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'task-brief', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'health', 'update', 'update-all', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'homologate', 'agent-alert', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -11,7 +11,9 @@ param(
     
     [switch]$SkipTests,
     [switch]$SkipReview,
-    [switch]$Force
+    [switch]$StrictCleanup,
+    [switch]$Force,
+    [switch]$JSON
 )
 
 $ErrorActionPreference = 'Continue'
@@ -42,13 +44,40 @@ function Get-GitInfo {
     $branch = git rev-parse --abbrev-ref HEAD 2>$null
     $status = git status --porcelain 2>$null
     $hasChanges = $status -and $status.Trim() -ne ''
+
+    $ahead = 0
+    $behind = 0
+    $upstream = git rev-parse --abbrev-ref --symbolic-full-name "@{upstream}" 2>$null
+    if ($upstream) {
+        $counts = git rev-list --left-right --count "@{upstream}...HEAD" 2>$null
+        if ($counts -and $counts -match '^(\d+)\s+(\d+)$') {
+            $behind = [int]$matches[1]
+            $ahead = [int]$matches[2]
+        }
+    }
     
     @{
         Branch = $branch
         HasChanges = $hasChanges
         Status = $status
-        Ahead = 0
-        Behind = 0
+        Ahead = $ahead
+        Behind = $behind
+    }
+}
+
+function Get-TestSuiteStatus {
+    $goStatus = if (Test-Path (Join-Path $repoRoot 'go.mod')) { 'AVAILABLE (not run in audit)' } else { 'NOT DETECTED' }
+
+    $webDir = Join-Path $repoRoot 'web'
+    $angularStatus = if ((Test-Path $webDir) -and (Test-Path (Join-Path $webDir 'package.json'))) {
+        'AVAILABLE (not run in audit)'
+    } else {
+        'NOT DETECTED'
+    }
+
+    return @{
+        Go = $goStatus
+        Angular = $angularStatus
     }
 }
 
@@ -159,6 +188,169 @@ function Get-CommitHistory {
     git log --oneline -n $Count 2>$null
 }
 
+function Get-ContextEfficiencyPolicy {
+    $defaults = @{
+        ProfileName = 'default'
+        WindowDays = 7
+        PromptYellowMax = 1200
+        PromptRedMax = 1800
+        AdoptionYellowMin = 70
+        AdoptionRedMin = 40
+    }
+
+    $policyPath = Join-Path $repoRoot 'config/context-efficiency.json'
+    if (-not (Test-Path $policyPath)) {
+        return $defaults
+    }
+
+    try {
+        $policy = Get-Content -Path $policyPath -Raw | ConvertFrom-Json
+        $source = $policy
+
+        if ($policy.profiles) {
+            $requestedProfile = if ($policy.activeProfile) { [string]$policy.activeProfile } else { 'default' }
+            $availableProfiles = @($policy.profiles.PSObject.Properties.Name)
+            if ($availableProfiles -contains $requestedProfile) {
+                $source = $policy.profiles.$requestedProfile
+                $defaults.ProfileName = $requestedProfile
+            } elseif ($availableProfiles -contains 'default') {
+                $source = $policy.profiles.default
+                $defaults.ProfileName = 'default'
+            }
+        }
+
+        if ($null -ne $source.windowDays) { $defaults.WindowDays = [int]$source.windowDays }
+        if ($source.promptChars -and $null -ne $source.promptChars.yellowMax) { $defaults.PromptYellowMax = [int]$source.promptChars.yellowMax }
+        if ($source.promptChars -and $null -ne $source.promptChars.redMax) { $defaults.PromptRedMax = [int]$source.promptChars.redMax }
+        if ($source.adoptionPercent -and $null -ne $source.adoptionPercent.yellowMin) { $defaults.AdoptionYellowMin = [int]$source.adoptionPercent.yellowMin }
+        if ($source.adoptionPercent -and $null -ne $source.adoptionPercent.redMin) { $defaults.AdoptionRedMin = [int]$source.adoptionPercent.redMin }
+    } catch {
+        Write-Warning "Invalid context efficiency policy; using defaults."
+    }
+
+    return $defaults
+}
+
+function Get-ContextMetricsSnapshot {
+    param([int]$Days = 7)
+
+    $policy = Get-ContextEfficiencyPolicy
+    if (-not $Days -or $Days -le 0) {
+        $Days = $policy.WindowDays
+    }
+
+    $metricsPath = Join-Path $repoRoot 'docs/sessions/metrics/context-usage.csv'
+    if (-not (Test-Path $metricsPath)) {
+        return @{
+            HealthStatus = 'WARN (no data)'
+            Recommendation = 'Adopt compact-start in daily handoffs to start collecting baseline data.'
+            Lines = @(
+                '| Metric | Value |',
+                '|---|---|',
+                "| Policy profile | $($policy.ProfileName) |",
+                "| Thresholds (prompt/adoption) | Y: <=$($policy.PromptYellowMax) & >=$($policy.AdoptionYellowMin)% ; R: <=$($policy.PromptRedMax) & >=$($policy.AdoptionRedMin)% |",
+                '| Window | Last 7 days |',
+                '| Data | No metrics collected yet |'
+            )
+            TrendLines = @(
+                '| Metric | Current 7d | Previous 7d | Delta |',
+                '|---|---:|---:|---:|',
+                '| Total events | 0 | 0 | 0 |',
+                '| Avg prompt chars | 0 | 0 | 0 |',
+                '| compact-start adoption % | 0 | 0 | 0 |'
+            )
+        }
+    }
+
+    $now = Get-Date
+    $currentStart = $now.AddDays(-1 * $Days)
+    $previousStart = $now.AddDays(-2 * $Days)
+
+    $allRows = Import-Csv -Path $metricsPath
+    $rows = $allRows | Where-Object { [datetime]::Parse($_.timestamp) -ge $currentStart }
+    $previousRows = $allRows | Where-Object {
+        $ts = [datetime]::Parse($_.timestamp)
+        $ts -ge $previousStart -and $ts -lt $currentStart
+    }
+
+    if (-not $rows -or $rows.Count -eq 0) {
+        return @{
+            HealthStatus = 'WARN (no events in window)'
+            Recommendation = 'Run compact-start before opening new threads to capture usage and enforce concise handoffs.'
+            Lines = @(
+                '| Metric | Value |',
+                '|---|---|',
+                "| Policy profile | $($policy.ProfileName) |",
+                "| Thresholds (prompt/adoption) | Y: <=$($policy.PromptYellowMax) & >=$($policy.AdoptionYellowMin)% ; R: <=$($policy.PromptRedMax) & >=$($policy.AdoptionRedMin)% |",
+                '| Window | Last 7 days |',
+                '| Events | 0 |'
+            )
+            TrendLines = @(
+                '| Metric | Current 7d | Previous 7d | Delta |',
+                '|---|---:|---:|---:|',
+                '| Total events | 0 | 0 | 0 |',
+                '| Avg prompt chars | 0 | 0 | 0 |',
+                '| compact-start adoption % | 0 | 0 | 0 |'
+            )
+        }
+    }
+
+    $total = $rows.Count
+    $pack = @($rows | Where-Object event -eq 'context-pack').Count
+    $compact = @($rows | Where-Object event -eq 'compact-start').Count
+    $avgObjective = [math]::Round((($rows | Measure-Object -Property objective_chars -Average).Average), 1)
+    $avgPrompt = [math]::Round((($rows | Measure-Object -Property prompt_chars -Average).Average), 1)
+    $adoption = if ($total -gt 0) { [math]::Round(($compact * 100.0) / $total, 1) } else { 0 }
+
+    $prevTotal = @($previousRows).Count
+    $prevCompact = @($previousRows | Where-Object event -eq 'compact-start').Count
+    $prevAvgPrompt = if ($prevTotal -gt 0) { [math]::Round(((@($previousRows) | Measure-Object -Property prompt_chars -Average).Average), 1) } else { 0 }
+    $prevAdoption = if ($prevTotal -gt 0) { [math]::Round(($prevCompact * 100.0) / $prevTotal, 1) } else { 0 }
+
+    $deltaTotal = $total - $prevTotal
+    $deltaPrompt = [math]::Round(($avgPrompt - $prevAvgPrompt), 1)
+    $deltaAdoption = [math]::Round(($adoption - $prevAdoption), 1)
+
+    $healthStatus = 'GREEN'
+    if ($avgPrompt -gt $policy.PromptRedMax -or $adoption -lt $policy.AdoptionRedMin) {
+        $healthStatus = 'RED'
+    } elseif ($avgPrompt -gt $policy.PromptYellowMax -or $adoption -lt $policy.AdoptionYellowMin) {
+        $healthStatus = 'YELLOW'
+    }
+
+    $recommendation = 'Maintain current compact-start adoption and review weekly trend for drift.'
+    if ($healthStatus -eq 'RED') {
+        $recommendation = 'Enforce compact-start before every handoff and trim objective prompts to one sentence.'
+    } elseif ($healthStatus -eq 'YELLOW') {
+        $recommendation = 'Increase compact-start adoption and reduce repeated constraints in follow-up prompts.'
+    }
+
+    return @{
+        HealthStatus = $healthStatus
+        Recommendation = $recommendation
+        Lines = @(
+            '| Metric | Value |',
+            '|---|---|',
+            "| Policy profile | $($policy.ProfileName) |",
+            "| Thresholds (prompt/adoption) | Y: <=$($policy.PromptYellowMax) & >=$($policy.AdoptionYellowMin)% ; R: <=$($policy.PromptRedMax) & >=$($policy.AdoptionRedMin)% |",
+            "| Window | Last $Days days |",
+            "| Total events | $total |",
+            "| context-pack | $pack |",
+            "| compact-start | $compact |",
+            "| compact-start adoption % | $adoption |",
+            "| Avg objective chars | $avgObjective |",
+            "| Avg prompt chars | $avgPrompt |"
+        )
+        TrendLines = @(
+            '| Metric | Current 7d | Previous 7d | Delta |',
+            '|---|---:|---:|---:|',
+            "| Total events | $total | $prevTotal | $deltaTotal |",
+            "| Avg prompt chars | $avgPrompt | $prevAvgPrompt | $deltaPrompt |",
+            "| compact-start adoption % | $adoption | $prevAdoption | $deltaAdoption |"
+        )
+    }
+}
+
 function New-AuditDocument {
     param([string]$OutputPath)
     
@@ -167,6 +359,40 @@ function New-AuditDocument {
     $gitInfo = Get-GitInfo
     $date = Get-Date -Format "yyyy-MM-ddTHH:mm:sszzz"
     $commits = Get-CommitHistory -Count 10
+    $commitArray = @($commits)
+    $commitLines = if ($commits) {
+        ($commitArray | ForEach-Object { "- $_" }) -join [Environment]::NewLine
+    } else {
+        '- none'
+    }
+
+    $summaryText = if ($commitArray.Count -gt 0) {
+        "Latest change: $($commitArray[0])"
+    } else {
+        'No recent commits detected in this branch.'
+    }
+
+    $deliveryStatus = if ($gitInfo.HasChanges) { 'IN PROGRESS' } else { 'READY' }
+    $deliveryNote = if ($gitInfo.HasChanges) {
+        'Working tree has pending changes; finalize commit before PR cut.'
+    } else {
+        'Working tree clean; branch is ready for review handoff.'
+    }
+
+    $operationalRiskStatus = 'LOW'
+    $operationalRiskNote = 'No divergence from upstream and no local pending changes.'
+    if ($gitInfo.Behind -gt 0) {
+        $operationalRiskStatus = 'HIGH'
+        $operationalRiskNote = "Branch is behind upstream by $($gitInfo.Behind) commit(s); rebase or merge before release."
+    } elseif ($gitInfo.HasChanges -or $gitInfo.Ahead -gt 0) {
+        $operationalRiskStatus = 'MEDIUM'
+        $operationalRiskNote = "Ahead: $($gitInfo.Ahead), pending changes: $($gitInfo.HasChanges). Validate and publish intentionally."
+    }
+
+    $tests = Get-TestSuiteStatus
+    $metrics = Get-ContextMetricsSnapshot -Days 7
+    $metricsSection = ($metrics.Lines -join [Environment]::NewLine)
+    $metricsTrendSection = ($metrics.TrendLines -join [Environment]::NewLine)
     
     $auditContent = @"
 # Audit Document - $date
@@ -178,7 +404,15 @@ function New-AuditDocument {
 ---
 
 ## Summary
-`[Brief description of changes]`
+$summaryText
+
+## Executive Overview
+
+| Area | Status | Notes |
+|---|---|---|
+| Delivery | $deliveryStatus | $deliveryNote |
+| Operational Risk | $operationalRiskStatus | $operationalRiskNote |
+| Context Efficiency Health | $($metrics.HealthStatus) | $($metrics.Recommendation) |
 
 ## Git Information
 
@@ -191,14 +425,14 @@ function New-AuditDocument {
 
 ## Recent Commits
 
-$commits
+$commitLines
 
 ## Tests Status
 
 | Suite | Status |
 |-------|--------|
-| Go | `TODO` |
-| Angular | `TODO` |
+| Go | $($tests.Go) |
+| Angular | $($tests.Angular) |
 
 ## Findings
 
@@ -209,15 +443,23 @@ $commits
 | MEDIUM | 0 |
 | LOW | 0 |
 
+## Context Efficiency (7d)
+
+$metricsSection
+
+## Technical Context Trend (7d vs previous 7d)
+
+$metricsTrendSection
+
 ## Specification
 
-- Status: `TODO`
-- Notes: `TODO`
+- Status: Baseline governance and context-efficiency controls are active.
+- Notes: Use task-brief + audit output as implementation contract for next slice.
 
 ## Next Steps
 
-- [ ] Review changes
-- [ ] Create PR if needed
+- [ ] Run `wf.ps1 review` before release cut
+- [ ] Confirm audit + governance outputs in PR description
 
 ---
 
@@ -309,12 +551,20 @@ COMMANDS:
     verify               Quick stack verification & auto-repair
     update               Update repository, foundation, skills, and tools
     update-all           Alias for update
+    migrate-structure    Preflight and guided migration of loose scripts
+    context-pack [goal]  Generate compact context summary for new chat thread
+    compact-start [goal] Generate context pack and copy compact continuation prompt
+    context-metrics [days] Show context/token usage metrics from local logs
+    homologate [apply]  Normalize docs/artifacts and update references (dry-run default)
+    agent-alert [strict] Check process-compliance signals for off-process AI activity
     help                 Show this help
 
 OPTIONS:
     -SkipTests        Skip test execution
     -SkipReview       Skip code review
+    -StrictCleanup    Fail if homologation drift is detected (CI-oriented)
     -Force            Proceed without confirmation
+    -JSON             Output diagnostics in JSON format (diagnose command)
 
 EXAMPLES:
     .\wf.ps1 review              Run full code review
@@ -325,11 +575,20 @@ EXAMPLES:
     .\wf.ps1 start-session      Create the session brief for today
     .\wf.ps1 task-brief auth    Create a task brief for auth work
     .\wf.ps1 diagnose            Full diagnostics report (JSON available)
+    .\wf.ps1 diagnose -JSON      Full diagnostics report in JSON format
     .\wf.ps1 verify              Quick verify & auto-repair if needed
     .\wf.ps1 health              Check system health & activate tools
     .\wf.ps1 install-engram      Install or verify Engram CLI
     .\wf.ps1 ide-status          Detect IDE and show recommended activation
     .\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
+    .\wf.ps1 context-pack "fix ci noise"  Generate compact handoff summary for token-efficient continuation
+    .\wf.ps1 compact-start "fix ci noise" Generate handoff summary and copy compact prompt
+    .\wf.ps1 context-metrics 14  Show 14-day context usage summary
+    .\wf.ps1 homologate          Preview normalization actions
+    .\wf.ps1 homologate apply    Execute normalization and reference updates
+    .\wf.ps1 health -StrictCleanup  Run health and fail if cleanup drift exists
+    .\wf.ps1 agent-alert           Show process-compliance warnings (non-blocking)
+    .\wf.ps1 agent-alert strict    Fail if process-compliance warnings are detected
 
 "@
 }
@@ -366,10 +625,10 @@ switch ($Command) {
         Write-Step "Creating session brief"
         $startScript = Join-Path $scriptDir 'start-session.ps1'
         if (Test-Path $startScript) {
-            $args = @()
-            if (-not [string]::IsNullOrWhiteSpace($Scope)) { $args += @('-TaskName', $Scope) }
-            if ($Force) { $args += '-Force' }
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $startScript @args
+            $startSessionArgs = @()
+            if (-not [string]::IsNullOrWhiteSpace($Scope)) { $startSessionArgs += @('-TaskName', $Scope) }
+            if ($Force) { $startSessionArgs += '-Force' }
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $startScript @startSessionArgs
         } else {
             Write-Error "Start session script not found: $startScript"
             exit 1
@@ -385,8 +644,8 @@ switch ($Command) {
 
         $startScript = Join-Path $scriptDir 'start-session.ps1'
         if (Test-Path $startScript) {
-            $args = @('-TaskName', $Scope, '-Force')
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $startScript @args
+            $taskBriefArgs = @('-TaskName', $Scope, '-Force')
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $startScript @taskBriefArgs
         } else {
             Write-Error "Start session script not found: $startScript"
             exit 1
@@ -430,7 +689,7 @@ switch ($Command) {
             New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
         }
         
-        $dateStr = Get-Date -Format "yyyy-MM-dd"
+        $dateStr = Get-Date -Format "yyyy-MM-dd-HHmmss"
         $outputPath = Join-Path $outputDir "$dateStr-audit.md"
         
         New-AuditDocument -OutputPath $outputPath
@@ -491,12 +750,28 @@ switch ($Command) {
         
         $healthScript = Join-Path $scriptDir 'ensure-tools-active.ps1'
         if (Test-Path $healthScript) {
-            $args = @('-AutoStart')
-            if ($Force) { $args += "-Force" }
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $healthScript @args
+            $healthArgs = @('-AutoStart')
+            if ($Force) { $healthArgs += "-Force" }
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $healthScript @healthArgs
         } else {
             Write-Error "Health check script not found: $healthScript"
             exit 1
+        }
+
+        $homologateScript = Join-Path $scriptDir '..\validation\homologate-workspace.ps1'
+        if (Test-Path $homologateScript) {
+            Write-Step "Homologation Drift Preview"
+            $homologateArgs = @('-OrganizeRootDocs')
+            if ($StrictCleanup) {
+                $homologateArgs += '-FailOnChanges'
+            }
+
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $homologateScript @homologateArgs
+
+            if ($StrictCleanup -and $LASTEXITCODE -ne 0) {
+                Write-Error "Strict cleanup mode failed: run '.\wf.ps1 homologate apply' to remediate drift."
+                exit $LASTEXITCODE
+            }
         }
     }
 
@@ -517,35 +792,11 @@ switch ($Command) {
         Write-Step "Installing or verifying Engram CLI"
         $installScript = Join-Path $scriptDir 'install-engram.ps1'
         if (Test-Path $installScript) {
-            $args = @()
-            if ($Force) { $args += '-Force' }
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $installScript @args
+            $installArgs = @()
+            if ($Force) { $installArgs += '-Force' }
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $installScript @installArgs
         } else {
             Write-Error "Install script not found: $installScript"
-            exit 1
-        }
-    }
-    
-    'diagnose' {
-        Write-Step "Running Full System Diagnostics"
-        $diagScript = Join-Path $PSScriptRoot '..\..\..\..'  'scripts\diagnostics\system-diagnostics.ps1'
-        # Try multiple paths to find diagnostics script
-        $diagPaths = @(
-            (Join-Path $scriptDir '..\..\diagnostics\system-diagnostics.ps1'),
-            (Join-Path $repoRoot 'scripts\diagnostics\system-diagnostics.ps1')
-        )
-        $found = $false
-        foreach ($path in $diagPaths) {
-            if (Test-Path $path) {
-                $args = @()
-                if ($JSON) { $args += '-JSON' }
-                & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $path @args
-                $found = $true
-                break
-            }
-        }
-        if (-not $found) {
-            Write-Error "Diagnostics script not found"
             exit 1
         }
     }
@@ -570,6 +821,125 @@ switch ($Command) {
             Write-Error "Diagnostics script not found"
             exit 1
         }
+    }
+
+    'diagnose' {
+        Write-Step "Running Full System Diagnostics"
+        # Try multiple paths to find diagnostics script
+        $diagPaths = @(
+            (Join-Path $scriptDir '..\..\diagnostics\system-diagnostics.ps1'),
+            (Join-Path $repoRoot 'scripts\diagnostics\system-diagnostics.ps1')
+        )
+        $found = $false
+        foreach ($path in $diagPaths) {
+            if (Test-Path $path) {
+                $diagnoseArgs = @()
+                if ($JSON) { $diagnoseArgs += '-JSON' }
+                & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $path @diagnoseArgs
+                $found = $true
+                break
+            }
+        }
+        if (-not $found) {
+            Write-Error "Diagnostics script not found"
+            exit 1
+        }
+    }
+    
+    'migrate-structure' {
+        Write-Step "Structure Migration"
+        $migrateScript = Join-Path $scriptDir 'migrate-structure.ps1'
+        if (-not (Test-Path $migrateScript)) {
+            Write-Error "Migration script not found: $migrateScript"
+            exit 1
+        }
+        $migrateArgs = @()
+        if ($SkipTests) { $migrateArgs += '-DryRun' }
+        if ($Force)     { $migrateArgs += '-Force' }
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $migrateScript @migrateArgs
+    }
+
+    'context-pack' {
+        Write-Step "Generating Compact Context Pack"
+        $contextScript = Join-Path $scriptDir 'context-pack.ps1'
+        if (-not (Test-Path $contextScript)) {
+            Write-Error "Context pack script not found: $contextScript"
+            exit 1
+        }
+
+        $contextArgs = @()
+        if (-not [string]::IsNullOrWhiteSpace($Scope)) {
+            $contextArgs += @('-Objective', $Scope)
+        }
+
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $contextScript @contextArgs
+    }
+
+    'compact-start' {
+        Write-Step "Preparing Compact Chat Start"
+        $compactScript = Join-Path $scriptDir 'compact-start.ps1'
+        if (-not (Test-Path $compactScript)) {
+            Write-Error "Compact start script not found: $compactScript"
+            exit 1
+        }
+
+        $compactArgs = @()
+        if (-not [string]::IsNullOrWhiteSpace($Scope)) {
+            $compactArgs += @('-Objective', $Scope)
+        }
+
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $compactScript @compactArgs
+    }
+
+    'context-metrics' {
+        Write-Step "Context Usage Metrics"
+        $metricsScript = Join-Path $scriptDir 'context-metrics-report.ps1'
+        if (-not (Test-Path $metricsScript)) {
+            Write-Error "Context metrics script not found: $metricsScript"
+            exit 1
+        }
+
+        $days = 7
+        if (-not [string]::IsNullOrWhiteSpace($Scope)) {
+            $parsedDays = 0
+            if ([int]::TryParse($Scope, [ref]$parsedDays) -and $parsedDays -gt 0) {
+                $days = $parsedDays
+            }
+        }
+
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $metricsScript -Days $days
+    }
+
+    'homologate' {
+        Write-Step "Workspace Homologation"
+        $homologateScript = Join-Path $scriptDir '..\validation\homologate-workspace.ps1'
+        if (-not (Test-Path $homologateScript)) {
+            Write-Error "Homologation script not found: $homologateScript"
+            exit 1
+        }
+
+        $homologateArgs = @('-OrganizeRootDocs')
+        if ($Force -or $Scope -eq 'apply') {
+            $homologateArgs += '-Apply'
+        }
+
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $homologateScript @homologateArgs
+    }
+
+    'agent-alert' {
+        Write-Step "Agent Process Compliance Alert"
+        $alertScript = Join-Path $scriptDir '..\diagnostics\agent-process-alert.ps1'
+        if (-not (Test-Path $alertScript)) {
+            Write-Error "Agent alert script not found: $alertScript"
+            exit 1
+        }
+
+        $alertArgs = @('-WindowHours', '24')
+        if ($StrictCleanup -or $Scope -eq 'strict') {
+            $alertArgs += '-Strict'
+        }
+
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $alertScript @alertArgs
     }
 }
 

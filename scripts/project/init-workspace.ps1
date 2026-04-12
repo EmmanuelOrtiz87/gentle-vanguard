@@ -31,19 +31,19 @@ if ((Test-Path $ConfigPath) -and -not $Force) {
 
 $bootstrap = Join-Path $PSScriptRoot 'bootstrap-workspace.ps1'
 
-$args = @(
+$bootstrapArgs = @(
     '-ConfigPath', $ConfigPath
 )
 
 if ($RunToolInstallers) {
-    $args += '-RunToolInstallers'
+    $bootstrapArgs += '-RunToolInstallers'
 }
 
 $runner = Get-Command pwsh -ErrorAction SilentlyContinue
 if ($runner) {
-    & pwsh -NoProfile -ExecutionPolicy Bypass -File $bootstrap @args
+    & pwsh -NoProfile -ExecutionPolicy Bypass -File $bootstrap @bootstrapArgs
 } else {
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $bootstrap @args
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $bootstrap @bootstrapArgs
 }
 
 # Start Session Audit

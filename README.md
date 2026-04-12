@@ -223,7 +223,66 @@ Gentleman Foundation provides templates for:
 # Production deployment templates
 ```
 
-## 📖 Documentation
+## �️ Weekly Audit Runbook
+
+A systematic 5-step process to generate a complete, governance-validated audit of the repository.
+All output files use full datetime in their name (`YYYY-MM-DD-HHmmss`) so multiple runs on the same day are always distinguishable.
+
+### Step 1 — Generate Context Pack
+```powershell
+.\wf.ps1 context-pack
+# Output: docs/sessions/YYYY-MM-DD-HHmmss-context-pack.md
+```
+Captures the current repository state: branch, recent commits, changed files, and platform health.
+
+### Step 2 — Activate Compact Context
+```powershell
+.\wf.ps1 compact-start
+# Reads: latest context-pack from docs/sessions/ (by filename timestamp)
+# Logs event to: docs/sessions/metrics/context-usage.csv
+```
+Loads the latest context pack and records the compact-start telemetry event.
+
+### Step 3 — Generate Audit Document
+```powershell
+.\wf.ps1 audit
+# Output: docs/audits/YYYY-MM-DD-HHmmss-audit.md
+```
+Produces a full audit report with delivery status, operational risk, test suite availability,
+git ahead/behind tracking, and annotated next steps.
+
+### Step 4 — Governance Validation
+```powershell
+.\scripts\diagnostics\validate-script-governance.ps1
+# Expected: EXIT:0 (all checks passed)
+
+# Optional strict gate (recommended for CI)
+.\wf.ps1 health -StrictCleanup
+```
+Validates that all scripts reference canonical paths and that no deprecated references remain.
+A non-zero exit is a blocking issue — fix before proceeding.
+
+### Step 5 — Review Session Metrics
+```powershell
+.\wf.ps1 context-metrics
+# Reads: docs/sessions/metrics/context-usage.csv
+```
+Displays accumulated session metrics: total events, context-pack calls, compact-start calls,
+and context efficiency indicators.
+
+### Step 6 — Manual Homologation (Optional)
+```powershell
+# Preview cleanup actions
+.\wf.ps1 homologate
+
+# Apply cleanup and reference updates
+.\wf.ps1 homologate apply
+```
+Use this when strict cleanup reports drift or when you want to normalize the workspace before release.
+
+---
+
+## �📖 Documentation
 
 ### For Developers
 - **[Session Guide](docs/guides/SESSION-GUIDE.md)**: Daily workflow and commands
@@ -557,10 +616,9 @@ OpenCode is the default provider for GGA code review and is recommended for its:
 ### Quick Commands
 
 ```bash
-gentle-ai              # Interactive TUI
-gentle-ai status       # Show ecosystem status
-gentle-ai update       # Update all components
-gentle-ai backup       # Backup configuration
+./scripts/utilities/run-gentle-ai.ps1 status   # Show ecosystem status (native or compatibility mode)
+./scripts/utilities/run-gentle-ai.ps1 update   # Run toolchain update flow
+./scripts/utilities/run-gentle-ai.ps1 help     # Show available commands
 ```
 
 ### Post-Install (in your AI agent)
@@ -570,7 +628,7 @@ gentle-ai backup       # Backup configuration
 skill-registry         # Build skills registry
 ```
 
-> Gentle-AI is automatically installed when creating a new project with `wf new`.
+> If native `gentle-ai` is not installed, the compatibility launcher keeps workflow checks operational without breaking startup/CI.
 
 ## Gentleman-Skills - AI Agent Skill Library
 

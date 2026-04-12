@@ -264,9 +264,9 @@ function Install-SecurityHook {
     $hooksDir = Join-Path $ProjectPath '.git\hooks'
     Ensure-Directory -Path $hooksDir
     
-    $isWindows = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows)
+    $isWindowsHost = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows)
     
-    $hookScript = if ($isWindows) {
+    $hookScript = if ($isWindowsHost) {
         'pre-commit-security.ps1'
     } else {
         'pre-commit-security.sh'
@@ -278,7 +278,7 @@ function Install-SecurityHook {
     if (Test-Path $hookSource) {
         Copy-Item -Path $hookSource -Destination $hookDest -Force
         
-        if (-not $isWindows) {
+        if (-not $isWindowsHost) {
             & chmod +x $hookDest 2>$null
         }
         
@@ -362,9 +362,9 @@ function Install-ReviewHook {
     $hooksDir = Join-Path $ProjectPath '.git\hooks'
     Ensure-Directory -Path $hooksDir
     
-    $isWindows = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows)
+    $isWindowsHost = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows)
     
-    $hookScript = if ($isWindows) {
+    $hookScript = if ($isWindowsHost) {
         'pre-commit-review.ps1'
     } else {
         'pre-commit-review.sh'
@@ -376,7 +376,7 @@ function Install-ReviewHook {
     if (Test-Path $hookSource) {
         Copy-Item -Path $hookSource -Destination $hookDest -Force
         
-        if (-not $isWindows) {
+        if (-not $isWindowsHost) {
             & chmod +x $hookDest 2>$null
         }
         
@@ -454,9 +454,9 @@ function Install-GgaHook {
     $hooksDir = Join-Path $ProjectPath ".git\hooks"
     Ensure-Directory -Path $hooksDir
 
-    $isWindows = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows)
+    $isWindowsHost = [System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows)
 
-    $hookScript = if ($isWindows) {
+    $hookScript = if ($isWindowsHost) {
         "pre-commit-gga.ps1"
     }
     else {
@@ -469,7 +469,7 @@ function Install-GgaHook {
     if (Test-Path $hookSource) {
         Copy-Item -Path $hookSource -Destination $hookDest -Force
 
-        if (-not $isWindows) {
+        if (-not $isWindowsHost) {
             & chmod +x $hookDest 2>$null
         }
 

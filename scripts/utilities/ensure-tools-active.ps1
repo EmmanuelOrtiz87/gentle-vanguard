@@ -119,23 +119,20 @@ function Start-GGA {
 function Start-GentleAI {
     Write-Step "Checking Gentle-AI CLI..."
 
+    $gentleAIScript = Join-Path $scriptDir 'run-gentle-ai.ps1'
     $gentleAIAvailable = Test-ToolAvailable "Gentle-AI" {
         $cmd = Get-Command gentle-ai -ErrorAction SilentlyContinue
-        return $cmd -ne $null
+        if ($cmd) { return $true }
+        return (Test-Path $gentleAIScript)
     }
 
     if (-not $gentleAIAvailable -and $AutoStart) {
-        if ($Force) {
-            Write-Warning "Gentle-AI not available - attempting installation due to -Force..."
-            try {
-                npm install -g gentle-ai
-                Write-Success "Gentle-AI installed"
-            } catch {
-                Write-Warning "Gentle-AI installation skipped due to registry/package availability."
-            }
+        if (Test-Path $gentleAIScript) {
+            Write-Warning "Native Gentle-AI CLI not found. Using compatibility launcher."
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $gentleAIScript status | Out-Null
         } else {
-            Write-Warning "Gentle-AI not available. Skipping auto-install for stability."
-            Write-Host "Install manually if needed: npm install -g gentle-ai" -ForegroundColor Yellow
+            Write-Warning "Gentle-AI tooling is unavailable."
+            Write-Host "Expected launcher: $gentleAIScript" -ForegroundColor Yellow
         }
     }
 }

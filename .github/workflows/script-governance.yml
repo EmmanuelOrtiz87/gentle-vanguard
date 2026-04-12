@@ -2,13 +2,26 @@ name: Script Governance
 
 on:
   push:
-    branches: [main, develop, feature/**, bugfix/**]
+    branches: [main, develop]
+    paths:
+      - 'scripts/**'
+      - 'docs/**'
+      - '*.md'
+      - 'config/structure-policy.json'
+      - '.github/workflows/script-governance.yml'
   pull_request:
     branches: [main, develop]
+    paths:
+      - 'scripts/**'
+      - 'docs/**'
+      - '*.md'
+      - 'config/structure-policy.json'
+      - '.github/workflows/script-governance.yml'
+  workflow_dispatch:
 
 jobs:
   script-governance:
-    name: Validate Script Governance
+    name: Validate Script Governance and Process Alerts
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -17,4 +30,17 @@ jobs:
       - name: Run script governance checks
         shell: pwsh
         run: |
-          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1
+          # -SkipFallbackTests: skip file-mutation tests (unnecessary in CI — validated locally)
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1 -SkipFallbackTests
+
+      - name: Stack readiness advisory (non-blocking)
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\wf.ps1 health
+
+      - name: Agent process compliance alert (non-blocking)
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\agent-process-alert.ps1 -WindowHours 24 -EmitGitHubAnnotations

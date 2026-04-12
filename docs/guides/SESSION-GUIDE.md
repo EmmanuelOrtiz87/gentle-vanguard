@@ -77,7 +77,7 @@ The Gentleman Foundation automatically ensures all development tools are active:
    - Show recent work
 
 4. Review generated artifacts:
-   - docs/sessions/YYYY-MM-DD-session-start.md
+   - docs/sessions/YYYY-MM-DD-HHmmss-session-start.md
    - docs/tasks/<task>.md
 
 5. Present status:
@@ -150,6 +150,9 @@ PR            # Create PR
 .\wf.ps1 pr         # PR template
 .\wf.ps1 status     # Show status
 .\wf.ps1 push       # Prepare to push
+.\wf.ps1 homologate # Preview cleanup/homologation actions
+.\wf.ps1 homologate apply # Apply cleanup/homologation actions
+.\wf.ps1 health -StrictCleanup # Health + cleanup drift gate
 ```
 
 ### Git Commands

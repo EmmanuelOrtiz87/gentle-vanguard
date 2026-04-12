@@ -35,15 +35,39 @@ function Get-UserName {
     return $env:USERNAME
 }
 
+function Resolve-SessionAuditFileById {
+    param([string]$SessionId)
+
+    if ([string]::IsNullOrWhiteSpace($SessionId)) {
+        return $null
+    }
+
+    $sessionsPath = Join-Path $auditDir 'sessions'
+    if (-not (Test-Path $sessionsPath)) {
+        return $null
+    }
+
+    $pattern = "*-session-$SessionId.json"
+    $match = Get-ChildItem -Path $sessionsPath -Filter $pattern -File -ErrorAction SilentlyContinue |
+        Sort-Object LastWriteTime -Descending |
+        Select-Object -First 1
+
+    if ($match) {
+        return $match.FullName
+    }
+
+    return $null
+}
+
 function New-SessionAudit {
     param([string]$SessionId)
     
     Ensure-AuditDirs
     
     $timestamp = Get-Date -Format "yyyy-MM-ddTHH:mm:ss"
-    $date = Get-Date -Format "yyyy-MM-dd"
+    $dateTag = Get-Date -Format "yyyy-MM-dd-HHmmss"
     
-    $sessionFile = Join-Path $auditDir "sessions\$date-session-$SessionId.json"
+    $sessionFile = Join-Path $auditDir "sessions\$dateTag-session-$SessionId.json"
     
     $session = @{
         id = $SessionId
@@ -212,9 +236,12 @@ switch ($true) {
         if ([string]::IsNullOrEmpty($SessionId) -and $env:WFS_SESSION_FILE) {
             Complete-SessionAudit -File $env:WFS_SESSION_FILE
         } elseif (-not [string]::IsNullOrEmpty($SessionId)) {
-            $date = Get-Date -Format "yyyy-MM-dd"
-            $sessionFile = Join-Path $auditDir "sessions\$date-session-$SessionId.json"
-            Complete-SessionAudit -File $sessionFile
+            $sessionFile = Resolve-SessionAuditFileById -SessionId $SessionId
+            if ($sessionFile) {
+                Complete-SessionAudit -File $sessionFile
+            } else {
+                Write-Warning "Session file not found for SessionId=$SessionId"
+            }
         } else {
             Write-Warning "No active session. Use -Start first or provide -SessionId"
         }
@@ -222,11 +249,10 @@ switch ($true) {
     $Activity {
         $file = if ($env:WFS_SESSION_FILE) { $env:WFS_SESSION_FILE } else { $null }
         if (-not $file) {
-            $date = Get-Date -Format "yyyy-MM-dd"
             $SessionId = if ($SessionId) { $SessionId } else { (Get-Random -Maximum 9999).ToString("0000") }
-            $file = Join-Path $auditDir "sessions\$date-session-$SessionId.json"
+            $file = Resolve-SessionAuditFileById -SessionId $SessionId
             if (-not (Test-Path $file)) {
-                New-SessionAudit -SessionId $SessionId
+                $file = New-SessionAudit -SessionId $SessionId
             }
         }
         

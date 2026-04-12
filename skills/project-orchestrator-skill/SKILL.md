@@ -23,6 +23,9 @@ description: >
 7. **Spec Validation** - Validate completion before PR
 8. **End Properly** - Save to memory, commit, summarize
 9. **Session Brief First** - Every substantial session starts with a session brief and task brief when scope is non-trivial
+10. **Question Before Adoption** - Challenge proposals that add complexity, lock-in, or weak validation
+11. **Evidence Before Content** - Add durable docs/learning only after explicit validation and decision rationale
+12. **Goal Alignment Always** - Keep every change aligned to stated objective, constraints, and acceptance criteria
 
 ## SESSION ACTIVATION STRATEGY
 
@@ -48,6 +51,111 @@ Stability rules:
 2. Avoid noisy or risky auto-installs in routine startup paths.
 3. Print actionable recommendations when auto-start prerequisites are missing.
 4. Keep hooks non-blocking unless security-critical conditions are detected.
+
+## TOOLING CONTRACT (HOMOLOGATION v1)
+
+Goal: avoid overlap, confusion, and conflicting behavior across sessions.
+
+1. MUST use Engram for durable memory (context, decisions, closeout learnings).
+2. MUST use this orchestrator skill as the primary execution framework.
+3. MUST keep session artifacts updated (`docs/sessions/YYYY-MM-DD-session-start.md` and task brief for bounded scope).
+4. SHOULD use `gga` and `gentle-ai` when available; if unavailable, continue with warnings plus remediation commands.
+5. MUST run focused validation before push and include evidence in docs.
+6. MUST load script-governance skill for any script move, command-path update, hook change, or script documentation change.
+
+## TOKEN AND CONTEXT BUDGET PROTOCOL
+
+Use this protocol to control token costs while preserving execution quality:
+
+1. SHOULD keep active chat context to the last 5-10 messages when continuing long-running work.
+2. MUST generate a compact handoff before opening a new thread:
+     - `./scripts/utilities/wf.ps1 compact-start "<objective>"`
+3. MUST treat generated `docs/sessions/*-context-pack.md` as the source of truth for prior state in new threads.
+4. SHOULD avoid repeating long invariant instructions unless they changed.
+5. SHOULD use concise prompts with explicit acceptance criteria.
+
+Automation boundary:
+1. Context budgeting is command-driven, not silent background automation.
+2. The orchestrator should recommend and execute it when requested, but must not interrupt active work unexpectedly.
+
+## STRUCTURE ADAPTATION POLICY
+
+Apply this policy to scripts, code, docs, and generated files:
+
+1. Greenfield or explicitly standardized repos: enforce canonical structure rules.
+2. Existing/legacy production repos: adopt established structure by default.
+3. Never perform structural refactors without explicit user approval when repo conventions are already in use.
+4. If a mismatch is detected, report it with risk/impact and ask for decision before moving files.
+
+Before structural changes:
+1. Describe affected paths and compatibility risk.
+2. Provide migration benefit and non-migration alternative.
+3. Include rollback path (for example via `git mv` reversal or explicit restore steps).
+
+If approval is missing, record recommendation only and keep layout unchanged.
+
+## SESSION STATE MACHINE
+
+1. `START`
+- Run `wf.ps1 ide-status`.
+- Refresh session/task artifacts.
+- Capture context in Engram.
+
+2. `EXECUTE`
+- Apply changes under relevant skills.
+- Keep behavior deterministic and idempotent.
+
+3. `VALIDATE`
+- Run governance validator and targeted checks.
+- Fix blocking failures before publication.
+
+4. `AUDIT`
+- Update session/task/audit evidence.
+- Persist durable learnings to Engram.
+
+5. `PUBLISH`
+- Commit, push, create PR.
+- Close only when docs, repo state, and memory state are aligned.
+
+6. `HANDOFF`
+- Run `wf.ps1 compact-start [goal]` before moving to a new chat thread.
+- Continue in a fresh thread using only compact prompt + immediate request.
+
+## FAILURE POLICY
+
+1. Blocking failures: syntax errors, broken validation, missing required governance files.
+2. Advisory failures: optional toolchain gaps (`gentle-ai`, `gga`) unless strict mode is enabled.
+3. Never fail silently: every failure must print actionable remediation.
+4. If ambiguity appears, stop and notify user before proceeding.
+
+## DECISION CHALLENGE PROTOCOL
+
+Apply this protocol before accepting new proposals that affect architecture, automation, docs, or workflow:
+
+1. State the proposal and expected gain in one sentence.
+2. Ask for the driving constraint (cost, speed, reliability, maintainability, compliance).
+3. Identify downside risk (complexity, coupling, regression, maintenance overhead).
+4. Provide at least one lower-complexity alternative.
+5. Require explicit validation plan before implementation.
+
+Minimum validation plan fields:
+1. Hypothesis (what should improve).
+2. Measurable signal (what metric/check confirms it).
+3. Scope and rollback condition.
+4. Pass/fail threshold.
+
+If the plan is missing, mark proposal as `deferred` and do not institutionalize it in skills/docs.
+
+## LEARNING QUALITY BAR
+
+Only persist learning as durable guidance when all are true:
+
+1. The change was executed or tested against a real repo slice.
+2. Validation evidence exists (command/test/check result).
+3. A reusable pattern or decision rationale was identified.
+4. Limits/trade-offs are recorded (when not to use the pattern).
+
+If evidence is weak, store as `hypothesis` in session notes, not as durable rule.
 
 ## GIT FLOW WORKFLOW
 

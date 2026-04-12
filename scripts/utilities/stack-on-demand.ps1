@@ -126,10 +126,10 @@ function Validate-Stack {
 
     $sessionValidator = "C:\Workspace_local\tools\validate-session-stack.ps1"
     if (Test-Path $sessionValidator) {
-        $args = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $sessionValidator)
-        if ($Detailed) { $args += "-Detailed" }
-        if ($AllowPassive) { $args += "-AllowPassive" }
-        & powershell @args
+        $validatorArgs = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $sessionValidator)
+        if ($Detailed) { $validatorArgs += "-Detailed" }
+        if ($AllowPassive) { $validatorArgs += "-AllowPassive" }
+        & powershell @validatorArgs
     } else {
         Write-Warn "Workspace validator not found: $sessionValidator"
     }
