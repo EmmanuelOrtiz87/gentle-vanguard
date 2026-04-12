@@ -43,13 +43,40 @@ function Get-GitInfo {
     $branch = git rev-parse --abbrev-ref HEAD 2>$null
     $status = git status --porcelain 2>$null
     $hasChanges = $status -and $status.Trim() -ne ''
+
+    $ahead = 0
+    $behind = 0
+    $upstream = git rev-parse --abbrev-ref --symbolic-full-name "@{upstream}" 2>$null
+    if ($upstream) {
+        $counts = git rev-list --left-right --count "@{upstream}...HEAD" 2>$null
+        if ($counts -and $counts -match '^(\d+)\s+(\d+)$') {
+            $behind = [int]$matches[1]
+            $ahead = [int]$matches[2]
+        }
+    }
     
     @{
         Branch = $branch
         HasChanges = $hasChanges
         Status = $status
-        Ahead = 0
-        Behind = 0
+        Ahead = $ahead
+        Behind = $behind
+    }
+}
+
+function Get-TestSuiteStatus {
+    $goStatus = if (Test-Path (Join-Path $repoRoot 'go.mod')) { 'AVAILABLE (not run in audit)' } else { 'NOT DETECTED' }
+
+    $webDir = Join-Path $repoRoot 'web'
+    $angularStatus = if ((Test-Path $webDir) -and (Test-Path (Join-Path $webDir 'package.json'))) {
+        'AVAILABLE (not run in audit)'
+    } else {
+        'NOT DETECTED'
+    }
+
+    return @{
+        Go = $goStatus
+        Angular = $angularStatus
     }
 }
 
@@ -331,11 +358,37 @@ function New-AuditDocument {
     $gitInfo = Get-GitInfo
     $date = Get-Date -Format "yyyy-MM-ddTHH:mm:sszzz"
     $commits = Get-CommitHistory -Count 10
+    $commitArray = @($commits)
     $commitLines = if ($commits) {
-        (@($commits) | ForEach-Object { "- $_" }) -join [Environment]::NewLine
+        ($commitArray | ForEach-Object { "- $_" }) -join [Environment]::NewLine
     } else {
         '- none'
     }
+
+    $summaryText = if ($commitArray.Count -gt 0) {
+        "Latest change: $($commitArray[0])"
+    } else {
+        'No recent commits detected in this branch.'
+    }
+
+    $deliveryStatus = if ($gitInfo.HasChanges) { 'IN PROGRESS' } else { 'READY' }
+    $deliveryNote = if ($gitInfo.HasChanges) {
+        'Working tree has pending changes; finalize commit before PR cut.'
+    } else {
+        'Working tree clean; branch is ready for review handoff.'
+    }
+
+    $operationalRiskStatus = 'LOW'
+    $operationalRiskNote = 'No divergence from upstream and no local pending changes.'
+    if ($gitInfo.Behind -gt 0) {
+        $operationalRiskStatus = 'HIGH'
+        $operationalRiskNote = "Branch is behind upstream by $($gitInfo.Behind) commit(s); rebase or merge before release."
+    } elseif ($gitInfo.HasChanges -or $gitInfo.Ahead -gt 0) {
+        $operationalRiskStatus = 'MEDIUM'
+        $operationalRiskNote = "Ahead: $($gitInfo.Ahead), pending changes: $($gitInfo.HasChanges). Validate and publish intentionally."
+    }
+
+    $tests = Get-TestSuiteStatus
     $metrics = Get-ContextMetricsSnapshot -Days 7
     $metricsSection = ($metrics.Lines -join [Environment]::NewLine)
     $metricsTrendSection = ($metrics.TrendLines -join [Environment]::NewLine)
@@ -350,14 +403,14 @@ function New-AuditDocument {
 ---
 
 ## Summary
-`[Brief description of changes]`
+$summaryText
 
 ## Executive Overview
 
 | Area | Status | Notes |
 |---|---|---|
-| Delivery | `TODO` | Confirm scope completion against task brief |
-| Operational Risk | `TODO` | Confirm CI/workflow status and blockers |
+| Delivery | $deliveryStatus | $deliveryNote |
+| Operational Risk | $operationalRiskStatus | $operationalRiskNote |
 | Context Efficiency Health | $($metrics.HealthStatus) | $($metrics.Recommendation) |
 
 ## Git Information
@@ -377,8 +430,8 @@ $commitLines
 
 | Suite | Status |
 |-------|--------|
-| Go | `TODO` |
-| Angular | `TODO` |
+| Go | $($tests.Go) |
+| Angular | $($tests.Angular) |
 
 ## Findings
 
@@ -399,13 +452,13 @@ $metricsTrendSection
 
 ## Specification
 
-- Status: `TODO`
-- Notes: `TODO`
+- Status: Baseline governance and context-efficiency controls are active.
+- Notes: Use task-brief + audit output as implementation contract for next slice.
 
 ## Next Steps
 
-- [ ] Review changes
-- [ ] Create PR if needed
+- [ ] Run `wf.ps1 review` before release cut
+- [ ] Confirm audit + governance outputs in PR description
 
 ---
 

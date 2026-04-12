@@ -51,16 +51,22 @@ $contextRaw = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $context
 $contextPath = $null
 if ($contextRaw) {
     $candidate = ($contextRaw | Out-String).Trim()
-    $match = [regex]::Match($candidate, '[A-Za-z]:\\[^\r\n]*-context-pack\.md')
-    if ($match.Success) {
-        $contextPath = $match.Value
+    $matches = [regex]::Matches($candidate, '[A-Za-z]:\\[^\r\n]*-context-pack\.md')
+    if ($matches.Count -gt 0) {
+        $contextPath = $matches[$matches.Count - 1].Value
     }
 }
 if (-not $contextPath) {
     $repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..')
     $sessionsDir = Join-Path $repoRoot 'docs/sessions'
     $latest = Get-ChildItem -Path $sessionsDir -Filter '*-context-pack.md' -File -ErrorAction SilentlyContinue |
-        Sort-Object LastWriteTime -Descending |
+        Sort-Object @{ Expression = {
+            $name = $_.BaseName
+            if ($name -match '^(\d{4}-\d{2}-\d{2})-(\d{4})-context-pack$') {
+                return "{0}{1}" -f $matches[1], $matches[2]
+            }
+            return $_.LastWriteTime.ToString('yyyyMMddHHmmss')
+        }; Descending = $true } |
         Select-Object -First 1
     if ($latest) {
         $contextPath = $latest.FullName
