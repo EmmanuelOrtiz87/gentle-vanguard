@@ -51,7 +51,10 @@ $contextRaw = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $context
 $contextPath = $null
 if ($contextRaw) {
     $candidate = ($contextRaw | Out-String).Trim()
-    $matches = [regex]::Matches($candidate, '[A-Za-z]:\\[^\r\n]*-context-pack\.md')
+    $matches = [regex]::Matches($candidate, '[A-Za-z]:\\[^\r\n]*\d{4}-\d{2}-\d{2}-\d{6}-context-pack\.md')
+    if ($matches.Count -eq 0) {
+        $matches = [regex]::Matches($candidate, '[A-Za-z]:\\[^\r\n]*-context-pack\.md')
+    }
     if ($matches.Count -gt 0) {
         $contextPath = $matches[$matches.Count - 1].Value
     }
@@ -62,6 +65,9 @@ if (-not $contextPath) {
     $latest = Get-ChildItem -Path $sessionsDir -Filter '*-context-pack.md' -File -ErrorAction SilentlyContinue |
         Sort-Object @{ Expression = {
             $name = $_.BaseName
+            if ($name -match '^(\d{4}-\d{2}-\d{2})-(\d{6})-context-pack$') {
+                return "{0}{1}" -f $matches[1], $matches[2]
+            }
             if ($name -match '^(\d{4}-\d{2}-\d{2})-(\d{4})-context-pack$') {
                 return "{0}{1}" -f $matches[1], $matches[2]
             }

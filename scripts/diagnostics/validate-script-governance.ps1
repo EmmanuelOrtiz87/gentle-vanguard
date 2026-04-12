@@ -161,13 +161,18 @@ if (Test-Path $scriptSkillPath) {
     $failures++
 }
 
-$sessionBriefExists = (Get-ChildItem -Path (Join-Path $repoRoot "docs/sessions") -Filter "*-session-start.md" -File -ErrorAction SilentlyContinue | Measure-Object).Count -gt 0
+$sessionBriefExists = (Get-ChildItem -Path (Join-Path $repoRoot "docs/sessions") -File -ErrorAction SilentlyContinue |
+    Where-Object {
+        $_.Name -like '*-session-start.md' -or
+        $_.Name -match '^\d{4}-\d{2}-\d{2}-\d{6}-session-start\.md$'
+    } |
+    Measure-Object).Count -gt 0
 $taskBriefExists = (Get-ChildItem -Path (Join-Path $repoRoot "docs/tasks") -Filter "*.md" -File -ErrorAction SilentlyContinue | Measure-Object).Count -gt 0
 
 if ($sessionBriefExists) {
     Write-Ok "Session start artifact exists"
 } else {
-    Write-Fail "Missing session start artifact under docs/sessions/*-session-start.md"
+    Write-Fail "Missing session start artifact under docs/sessions/*-session-start.md or docs/sessions/YYYY-MM-DD-HHmmss-session-start.md"
     $failures++
 }
 
