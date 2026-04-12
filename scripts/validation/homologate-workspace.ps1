@@ -1,5 +1,6 @@
 param(
     [switch]$Apply,
+    [switch]$FailOnChanges,
     [switch]$OrganizeRootDocs,
     [switch]$SkipReferenceUpdate,
     [switch]$SkipArtifactCleanup,
@@ -176,7 +177,7 @@ if (-not $SkipTempCleanup) {
     $tempFiles = Get-ChildItem -Path $repoRoot -Recurse -File -ErrorAction SilentlyContinue |
         Where-Object {
             $_.FullName -notmatch '\\.git\\' -and
-            $_.Name -match '\\.(tmp|bak|old|orig)$'
+            $_.Name -match '\.(tmp|bak|old|orig)$'
         }
 
     foreach ($tmp in $tempFiles) {
@@ -267,6 +268,13 @@ Write-Host ("Moved/Renamed: {0}" -f $movedCount)
 Write-Host ("Removed: {0}" -f $removedCount)
 Write-Host ("Files with reference updates: {0}" -f $updatedRefCount)
 Write-Host ("Empty dirs removed: {0}" -f $cleanedDirCount)
+
+$totalChanges = $movedCount + $removedCount + $updatedRefCount + $cleanedDirCount
+
+if ($FailOnChanges -and -not $Apply -and $totalChanges -gt 0) {
+    Write-Host 'Strict cleanup check failed: pending homologation changes detected.' -ForegroundColor Red
+    exit 2
+}
 
 if (-not $Apply) {
     Write-Host 'Run again with -Apply to execute changes.' -ForegroundColor Yellow

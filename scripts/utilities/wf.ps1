@@ -11,6 +11,7 @@ param(
     
     [switch]$SkipTests,
     [switch]$SkipReview,
+    [switch]$StrictCleanup,
     [switch]$Force,
     [switch]$JSON
 )
@@ -560,6 +561,7 @@ COMMANDS:
 OPTIONS:
     -SkipTests        Skip test execution
     -SkipReview       Skip code review
+    -StrictCleanup    Fail if homologation drift is detected (CI-oriented)
     -Force            Proceed without confirmation
     -JSON             Output diagnostics in JSON format (diagnose command)
 
@@ -583,6 +585,7 @@ EXAMPLES:
     .\wf.ps1 context-metrics 14  Show 14-day context usage summary
     .\wf.ps1 homologate          Preview normalization actions
     .\wf.ps1 homologate apply    Execute normalization and reference updates
+    .\wf.ps1 health -StrictCleanup  Run health and fail if cleanup drift exists
 
 "@
 }
@@ -750,6 +753,22 @@ switch ($Command) {
         } else {
             Write-Error "Health check script not found: $healthScript"
             exit 1
+        }
+
+        $homologateScript = Join-Path $scriptDir '..\validation\homologate-workspace.ps1'
+        if (Test-Path $homologateScript) {
+            Write-Step "Homologation Drift Preview"
+            $homologateArgs = @('-OrganizeRootDocs')
+            if ($StrictCleanup) {
+                $homologateArgs += '-FailOnChanges'
+            }
+
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $homologateScript @homologateArgs
+
+            if ($StrictCleanup -and $LASTEXITCODE -ne 0) {
+                Write-Error "Strict cleanup mode failed: run '.\wf.ps1 homologate apply' to remediate drift."
+                exit $LASTEXITCODE
+            }
         }
     }
 
