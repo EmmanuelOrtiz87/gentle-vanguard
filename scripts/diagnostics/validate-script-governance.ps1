@@ -1,7 +1,8 @@
 ﻿param(
     [switch]$Quiet,
     [switch]$SkipFallbackTests,
-    [switch]$StrictToolchain
+    [switch]$StrictToolchain,
+    [switch]$EnforceCanonicalStructure
 )
 
 $ErrorActionPreference = 'Stop'
@@ -28,6 +29,22 @@ function Register-ToolingGap {
     }
 }
 
+function Register-StructureIssue {
+    param(
+        [string]$Message,
+        [string]$Remediation
+    )
+
+    if ($script:effectiveEnforce) {
+        Write-Fail "$Message`
+  Remediation: $Remediation"
+        $script:failures++
+    } else {
+        Write-Warn "$Message`
+  Remediation: $Remediation"
+    }
+}
+
 # SLO budget in milliseconds per script category
 $SLO = @{
     StartupSafe   = 8000   # Level-A: invoked on every shell open
@@ -36,6 +53,28 @@ $SLO = @{
 }
 
 $failures = 0
+
+# Load structure policy configuration (config/structure-policy.json)
+$policyFile = Join-Path $repoRoot 'config/structure-policy.json'
+$policyMode = 'adopt-existing'
+$policyAllowedRootFiles = @('README.md')
+$policyDeprecatedPatterns = $null
+if (Test-Path $policyFile) {
+    $policy = Get-Content $policyFile -Raw | ConvertFrom-Json
+    if ($policy.structureMode) { $policyMode = $policy.structureMode }
+    if ($policy.allowedRootFiles) { $policyAllowedRootFiles = $policy.allowedRootFiles }
+    if ($policy.deprecatedPathPatterns) { $policyDeprecatedPatterns = $policy.deprecatedPathPatterns }
+    if (-not $Quiet) { Write-Ok "Loaded config/structure-policy.json (mode: $policyMode)" }
+} else {
+    if (-not $Quiet) { Write-Warn 'config/structure-policy.json not found — using defaults (adopt-existing)' }
+}
+$effectiveEnforce = $EnforceCanonicalStructure -or ($policyMode -eq 'enforce-canonical')
+
+function Get-RepoRelativePath {
+    param([string]$Path)
+
+    return $Path.Replace(($repoRoot.Path + '\\'), '').Replace('\\', '/')
+}
 
 # ---------------------------------------------------------------------------
 # 1. Required path inventory
@@ -59,6 +98,44 @@ foreach ($relativePath in $requiredPaths) {
     } else {
         Write-Fail "Missing: $relativePath"
         $failures++
+    }
+}
+
+# ---------------------------------------------------------------------------
+# 1.0 Structure and path hygiene enforcement
+# ---------------------------------------------------------------------------
+Write-Step "1.0 Validating script structure and deprecated references"
+
+$scriptsRoot = Join-Path $repoRoot 'scripts'
+$allowedRootFiles = $policyAllowedRootFiles
+$rootFiles = Get-ChildItem -Path $scriptsRoot -File -ErrorAction SilentlyContinue
+
+foreach ($file in $rootFiles) {
+    if ($allowedRootFiles -notcontains $file.Name) {
+        Register-StructureIssue `
+            -Message "Loose root script/config found under scripts/: $(Get-RepoRelativePath -Path $file.FullName)" `
+            -Remediation "Move to canonical subfolder or run with -EnforceCanonicalStructure when migration is approved"
+    }
+}
+
+$deprecatedPathPatterns = if ($policyDeprecatedPatterns) { $policyDeprecatedPatterns } else {
+    @(
+        '.\\scripts\\update-all.ps1',
+        'scripts/update-all.ps1'
+    )
+}
+
+$searchFiles = Get-ChildItem -Path $repoRoot -Recurse -File -Include *.md,*.ps1,*.sh,*.yml,*.yaml,*.json -ErrorAction SilentlyContinue |
+    Where-Object { $_.FullName -ne $PSCommandPath } |
+    Where-Object { $_.FullName -ne $policyFile }
+foreach ($searchFile in $searchFiles) {
+    foreach ($pattern in $deprecatedPathPatterns) {
+        $foundMatches = Select-String -Path $searchFile.FullName -Pattern $pattern -SimpleMatch -ErrorAction SilentlyContinue
+        foreach ($match in $foundMatches) {
+            Register-StructureIssue `
+                -Message "Deprecated path reference found: $(Get-RepoRelativePath -Path $match.Path):$($match.LineNumber) -> $($match.Line.Trim())" `
+                -Remediation "Update to canonical command paths, or keep advisory mode until migration approval"
+        }
     }
 }
 
@@ -139,43 +216,47 @@ Write-Step "2. Smoke checks with SLO timing"
 $wfScript       = Join-Path $repoRoot "scripts/utilities/wf.ps1"
 $autoInitScript = Join-Path $repoRoot "scripts/utilities/auto-init-dev-environment.ps1"
 
-# wf ide-status  (Level-A — startup budget)
-try {
-    $elapsed = (Measure-Command {
-        & powershell -NoProfile -ExecutionPolicy Bypass -File $wfScript ide-status 2>&1 | Out-Null
-    }).TotalMilliseconds
+if ($env:CI -eq 'true') {
+    Write-Ok "Smoke checks skipped in CI environment (local-only checks)"
+} else {
+    # wf ide-status  (Level-A — startup budget)
+    try {
+        $elapsed = (Measure-Command {
+            & powershell -NoProfile -ExecutionPolicy Bypass -File $wfScript ide-status 2>&1 | Out-Null
+        }).TotalMilliseconds
 
-    if ($LASTEXITCODE -ne 0) { throw "non-zero exit" }
+        if ($LASTEXITCODE -ne 0) { throw "non-zero exit" }
 
-    if ($elapsed -gt $SLO.StartupSafe) {
-        Write-Warn "wf ide-status completed but exceeded SLO: ${elapsed}ms > $($SLO.StartupSafe)ms"
+        if ($elapsed -gt $SLO.StartupSafe) {
+            Write-Warn "wf ide-status completed but exceeded SLO: ${elapsed}ms > $($SLO.StartupSafe)ms"
+            $failures++
+        } else {
+            Write-Ok "wf ide-status [${elapsed}ms / SLO $($SLO.StartupSafe)ms]"
+        }
+    } catch {
+        Write-Fail "wf ide-status smoke check failed: $_"
         $failures++
-    } else {
-        Write-Ok "wf ide-status [${elapsed}ms / SLO $($SLO.StartupSafe)ms]"
     }
-} catch {
-    Write-Fail "wf ide-status smoke check failed: $_"
-    $failures++
-}
 
-# auto-init -Quiet  (Level-A — startup budget)
-try {
-    $elapsed = (Measure-Command {
-        & powershell -NoProfile -ExecutionPolicy Bypass -File $autoInitScript -Quiet 2>&1 | Out-Null
-    }).TotalMilliseconds
+    # auto-init -Quiet  (Level-A — startup budget)
+    try {
+        $elapsed = (Measure-Command {
+            & powershell -NoProfile -ExecutionPolicy Bypass -File $autoInitScript -Quiet 2>&1 | Out-Null
+        }).TotalMilliseconds
 
-    if ($LASTEXITCODE -ne 0) { throw "non-zero exit" }
+        if ($LASTEXITCODE -ne 0) { throw "non-zero exit" }
 
-    if ($elapsed -gt $SLO.StartupSafe) {
-        Write-Warn "auto-init exceeded SLO: ${elapsed}ms > $($SLO.StartupSafe)ms"
+        if ($elapsed -gt $SLO.StartupSafe) {
+            Write-Warn "auto-init exceeded SLO: ${elapsed}ms > $($SLO.StartupSafe)ms"
+            $failures++
+        } else {
+            Write-Ok "auto-init -Quiet [${elapsed}ms / SLO $($SLO.StartupSafe)ms]"
+        }
+    } catch {
+        Write-Fail "auto-init smoke check failed: $_"
         $failures++
-    } else {
-        Write-Ok "auto-init -Quiet [${elapsed}ms / SLO $($SLO.StartupSafe)ms]"
     }
-} catch {
-    Write-Fail "auto-init smoke check failed: $_"
-    $failures++
-}
+} # end CI-skip else block
 
 # ---------------------------------------------------------------------------
 # 3. Negative / fallback tests

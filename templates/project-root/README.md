@@ -19,6 +19,14 @@ Brief description of the project.
 .\scripts\orchestrator-next-steps.ps1
 ```
 
+6. Before opening a new chat thread, generate a compact handoff summary:
+
+```powershell
+.\scripts\compact-start.ps1 "current objective"
+```
+
+7. Paste the generated compact prompt (already copied to clipboard) in the new thread.
+
 ```text
 <build-command>
 <test-command>
@@ -31,3 +39,4 @@ Brief description of the project.
 - Keep data outside the project tree.
 - Use `docs/project-context.md` to record the first architecture, scope, and AI model decisions.
 - Use `docs/sessions/` and `docs/tasks/` to keep session and task scope explicit.
+- Use `docs/sessions/*-context-pack.md` to keep token usage low while preserving continuity.

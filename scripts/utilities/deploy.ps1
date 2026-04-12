@@ -162,12 +162,12 @@ function Invoke-VercelDeploy {
     }
     
     if (-not $DryRun) {
-        $args = @('--yes')
+        $vercelArgs = @('--yes')
         if ($Environment -eq 'production') {
-            $args += '--prod'
+            $vercelArgs += '--prod'
         }
         
-        & vercel @args
+        & vercel @vercelArgs
         
         Write-Success "Deployed to Vercel"
     } else {

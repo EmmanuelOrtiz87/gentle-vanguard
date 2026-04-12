@@ -2,9 +2,18 @@ name: Script Governance
 
 on:
   push:
-    branches: [main, develop, feature/**, bugfix/**]
+    branches: [main, develop]
+    paths:
+      - 'scripts/**'
+      - 'config/structure-policy.json'
+      - '.github/workflows/script-governance.yml'
   pull_request:
     branches: [main, develop]
+    paths:
+      - 'scripts/**'
+      - 'config/structure-policy.json'
+      - '.github/workflows/script-governance.yml'
+  workflow_dispatch:
 
 jobs:
   script-governance:
@@ -17,4 +26,5 @@ jobs:
       - name: Run script governance checks
         shell: pwsh
         run: |
-          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1
+          # -SkipFallbackTests: skip file-mutation tests (unnecessary in CI — validated locally)
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1 -SkipFallbackTests

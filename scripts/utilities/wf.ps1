@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'health', 'update', 'update-all', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'task-brief', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'health', 'update', 'update-all', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -11,7 +11,8 @@ param(
     
     [switch]$SkipTests,
     [switch]$SkipReview,
-    [switch]$Force
+    [switch]$Force,
+    [switch]$JSON
 )
 
 $ErrorActionPreference = 'Continue'
@@ -309,12 +310,16 @@ COMMANDS:
     verify               Quick stack verification & auto-repair
     update               Update repository, foundation, skills, and tools
     update-all           Alias for update
+    migrate-structure    Preflight and guided migration of loose scripts
+    context-pack [goal]  Generate compact context summary for new chat thread
+    compact-start [goal] Generate context pack and copy compact continuation prompt
     help                 Show this help
 
 OPTIONS:
     -SkipTests        Skip test execution
     -SkipReview       Skip code review
     -Force            Proceed without confirmation
+    -JSON             Output diagnostics in JSON format (diagnose command)
 
 EXAMPLES:
     .\wf.ps1 review              Run full code review
@@ -325,11 +330,14 @@ EXAMPLES:
     .\wf.ps1 start-session      Create the session brief for today
     .\wf.ps1 task-brief auth    Create a task brief for auth work
     .\wf.ps1 diagnose            Full diagnostics report (JSON available)
+    .\wf.ps1 diagnose -JSON      Full diagnostics report in JSON format
     .\wf.ps1 verify              Quick verify & auto-repair if needed
     .\wf.ps1 health              Check system health & activate tools
     .\wf.ps1 install-engram      Install or verify Engram CLI
     .\wf.ps1 ide-status          Detect IDE and show recommended activation
     .\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
+    .\wf.ps1 context-pack "fix ci noise"  Generate compact handoff summary for token-efficient continuation
+    .\wf.ps1 compact-start "fix ci noise" Generate handoff summary and copy compact prompt
 
 "@
 }
@@ -366,10 +374,10 @@ switch ($Command) {
         Write-Step "Creating session brief"
         $startScript = Join-Path $scriptDir 'start-session.ps1'
         if (Test-Path $startScript) {
-            $args = @()
-            if (-not [string]::IsNullOrWhiteSpace($Scope)) { $args += @('-TaskName', $Scope) }
-            if ($Force) { $args += '-Force' }
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $startScript @args
+            $startSessionArgs = @()
+            if (-not [string]::IsNullOrWhiteSpace($Scope)) { $startSessionArgs += @('-TaskName', $Scope) }
+            if ($Force) { $startSessionArgs += '-Force' }
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $startScript @startSessionArgs
         } else {
             Write-Error "Start session script not found: $startScript"
             exit 1
@@ -385,8 +393,8 @@ switch ($Command) {
 
         $startScript = Join-Path $scriptDir 'start-session.ps1'
         if (Test-Path $startScript) {
-            $args = @('-TaskName', $Scope, '-Force')
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $startScript @args
+            $taskBriefArgs = @('-TaskName', $Scope, '-Force')
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $startScript @taskBriefArgs
         } else {
             Write-Error "Start session script not found: $startScript"
             exit 1
@@ -491,9 +499,9 @@ switch ($Command) {
         
         $healthScript = Join-Path $scriptDir 'ensure-tools-active.ps1'
         if (Test-Path $healthScript) {
-            $args = @('-AutoStart')
-            if ($Force) { $args += "-Force" }
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $healthScript @args
+            $healthArgs = @('-AutoStart')
+            if ($Force) { $healthArgs += "-Force" }
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $healthScript @healthArgs
         } else {
             Write-Error "Health check script not found: $healthScript"
             exit 1
@@ -517,35 +525,11 @@ switch ($Command) {
         Write-Step "Installing or verifying Engram CLI"
         $installScript = Join-Path $scriptDir 'install-engram.ps1'
         if (Test-Path $installScript) {
-            $args = @()
-            if ($Force) { $args += '-Force' }
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $installScript @args
+            $installArgs = @()
+            if ($Force) { $installArgs += '-Force' }
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $installScript @installArgs
         } else {
             Write-Error "Install script not found: $installScript"
-            exit 1
-        }
-    }
-    
-    'diagnose' {
-        Write-Step "Running Full System Diagnostics"
-        $diagScript = Join-Path $PSScriptRoot '..\..\..\..'  'scripts\diagnostics\system-diagnostics.ps1'
-        # Try multiple paths to find diagnostics script
-        $diagPaths = @(
-            (Join-Path $scriptDir '..\..\diagnostics\system-diagnostics.ps1'),
-            (Join-Path $repoRoot 'scripts\diagnostics\system-diagnostics.ps1')
-        )
-        $found = $false
-        foreach ($path in $diagPaths) {
-            if (Test-Path $path) {
-                $args = @()
-                if ($JSON) { $args += '-JSON' }
-                & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $path @args
-                $found = $true
-                break
-            }
-        }
-        if (-not $found) {
-            Write-Error "Diagnostics script not found"
             exit 1
         }
     }
@@ -570,6 +554,74 @@ switch ($Command) {
             Write-Error "Diagnostics script not found"
             exit 1
         }
+    }
+
+    'diagnose' {
+        Write-Step "Running Full System Diagnostics"
+        # Try multiple paths to find diagnostics script
+        $diagPaths = @(
+            (Join-Path $scriptDir '..\..\diagnostics\system-diagnostics.ps1'),
+            (Join-Path $repoRoot 'scripts\diagnostics\system-diagnostics.ps1')
+        )
+        $found = $false
+        foreach ($path in $diagPaths) {
+            if (Test-Path $path) {
+                $diagnoseArgs = @()
+                if ($JSON) { $diagnoseArgs += '-JSON' }
+                & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $path @diagnoseArgs
+                $found = $true
+                break
+            }
+        }
+        if (-not $found) {
+            Write-Error "Diagnostics script not found"
+            exit 1
+        }
+    }
+    
+    'migrate-structure' {
+        Write-Step "Structure Migration"
+        $migrateScript = Join-Path $scriptDir 'migrate-structure.ps1'
+        if (-not (Test-Path $migrateScript)) {
+            Write-Error "Migration script not found: $migrateScript"
+            exit 1
+        }
+        $migrateArgs = @()
+        if ($SkipTests) { $migrateArgs += '-DryRun' }
+        if ($Force)     { $migrateArgs += '-Force' }
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $migrateScript @migrateArgs
+    }
+
+    'context-pack' {
+        Write-Step "Generating Compact Context Pack"
+        $contextScript = Join-Path $scriptDir 'context-pack.ps1'
+        if (-not (Test-Path $contextScript)) {
+            Write-Error "Context pack script not found: $contextScript"
+            exit 1
+        }
+
+        $contextArgs = @()
+        if (-not [string]::IsNullOrWhiteSpace($Scope)) {
+            $contextArgs += @('-Objective', $Scope)
+        }
+
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $contextScript @contextArgs
+    }
+
+    'compact-start' {
+        Write-Step "Preparing Compact Chat Start"
+        $compactScript = Join-Path $scriptDir 'compact-start.ps1'
+        if (-not (Test-Path $compactScript)) {
+            Write-Error "Compact start script not found: $compactScript"
+            exit 1
+        }
+
+        $compactArgs = @()
+        if (-not [string]::IsNullOrWhiteSpace($Scope)) {
+            $compactArgs += @('-Objective', $Scope)
+        }
+
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $compactScript @compactArgs
     }
 }
 

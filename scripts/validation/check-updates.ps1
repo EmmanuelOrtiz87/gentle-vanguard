@@ -51,7 +51,9 @@ function Get-CommandVersion {
             if ($output -is [array]) { return $output[0].ToString().Trim() }
             return $output.ToString().Trim()
         }
-    } catch { }
+    } catch {
+        Write-Verbose "Version check failed for command: $Command"
+    }
     
     return "installed"
 }

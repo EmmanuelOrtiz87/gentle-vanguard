@@ -138,16 +138,16 @@ if ($projectRoot) {
     Write-Step "Checking Global Development Environment"
 
     $tools = @(
-        @{ Name = "Node.js"; Command = "node --version" },
-        @{ Name = "npm"; Command = "npm --version" },
-        @{ Name = "Go"; Command = "go version" },
-        @{ Name = "Git"; Command = "git --version" },
-        @{ Name = "GitHub CLI"; Command = "gh --version" }
+        @{ Name = "Node.js"; Exec = "node"; Args = @("--version") },
+        @{ Name = "npm"; Exec = "npm"; Args = @("--version") },
+        @{ Name = "Go"; Exec = "go"; Args = @("version") },
+        @{ Name = "Git"; Exec = "git"; Args = @("--version") },
+        @{ Name = "GitHub CLI"; Exec = "gh"; Args = @("--version") }
     )
 
     foreach ($tool in $tools) {
         try {
-            Invoke-Expression $tool.Command 2>$null | Out-Null
+            & $tool.Exec @($tool.Args) 2>$null | Out-Null
             if ($LASTEXITCODE -eq 0) {
                 Write-Success "$($tool.Name) is available"
             } else {
