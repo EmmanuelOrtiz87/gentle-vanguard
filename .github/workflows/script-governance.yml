@@ -5,19 +5,23 @@ on:
     branches: [main, develop]
     paths:
       - 'scripts/**'
+      - 'docs/**'
+      - '*.md'
       - 'config/structure-policy.json'
       - '.github/workflows/script-governance.yml'
   pull_request:
     branches: [main, develop]
     paths:
       - 'scripts/**'
+      - 'docs/**'
+      - '*.md'
       - 'config/structure-policy.json'
       - '.github/workflows/script-governance.yml'
   workflow_dispatch:
 
 jobs:
   script-governance:
-    name: Validate Script Governance
+    name: Validate Script Governance and Cleanup Drift
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -28,3 +32,8 @@ jobs:
         run: |
           # -SkipFallbackTests: skip file-mutation tests (unnecessary in CI — validated locally)
           powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1 -SkipFallbackTests
+
+      - name: Run strict cleanup drift gate
+        shell: pwsh
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\wf.ps1 health -StrictCleanup
