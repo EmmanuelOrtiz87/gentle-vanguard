@@ -33,12 +33,13 @@ if ($changedFiles.Count -eq 0 -and $lastCommit -ne "Initial") {
 
 $date = Get-Date -Format "yyyy-MM-dd"
 $fullDate = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+$dateTag = Get-Date -Format 'yyyy-MM-dd-HHmmss'
 $reviewDir = Join-Path $projectRoot "docs/code-reviews"
 if (-not (Test-Path $reviewDir)) {
     New-Item -ItemType Directory -Path $reviewDir -Force | Out-Null
 }
 
-$reviewFile = Join-Path $reviewDir "${date}-session-review.md"
+$reviewFile = Join-Path $reviewDir "${dateTag}-session-review.md"
 $templateFile = Join-Path $projectRoot "config/session-review.template.md"
 
 if (Test-Path $templateFile) {

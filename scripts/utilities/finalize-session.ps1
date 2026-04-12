@@ -196,8 +196,8 @@ if (-not (git remote | Select-String "origin")) {
 
 git add .
 
-$timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm'
-$tagName = "$projectName-v$(Get-Date -Format 'yyyy.MM.dd-HHmm')" # Use dynamic project name
+$timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+$tagName = "$projectName-v$(Get-Date -Format 'yyyy.MM.dd-HHmmss')" # Use dynamic project name
 $msg = "feat: $projectName update - session $timestamp" # Use dynamic project name
 
 # Commit only if changes detected

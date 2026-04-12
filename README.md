@@ -223,7 +223,53 @@ Gentleman Foundation provides templates for:
 # Production deployment templates
 ```
 
-## 📖 Documentation
+## �️ Weekly Audit Runbook
+
+A systematic 5-step process to generate a complete, governance-validated audit of the repository.
+All output files use full datetime in their name (`YYYY-MM-DD-HHmmss`) so multiple runs on the same day are always distinguishable.
+
+### Step 1 — Generate Context Pack
+```powershell
+.\wf.ps1 context-pack
+# Output: docs/sessions/YYYY-MM-DD-HHmmss-context-pack.md
+```
+Captures the current repository state: branch, recent commits, changed files, and platform health.
+
+### Step 2 — Activate Compact Context
+```powershell
+.\wf.ps1 compact-start
+# Reads: latest context-pack from docs/sessions/ (by filename timestamp)
+# Logs event to: docs/sessions/metrics/context-usage.csv
+```
+Loads the latest context pack and records the compact-start telemetry event.
+
+### Step 3 — Generate Audit Document
+```powershell
+.\wf.ps1 audit
+# Output: docs/audits/YYYY-MM-DD-HHmmss-audit.md
+```
+Produces a full audit report with delivery status, operational risk, test suite availability,
+git ahead/behind tracking, and annotated next steps.
+
+### Step 4 — Governance Validation
+```powershell
+.\scripts\diagnostics\validate-script-governance.ps1
+# Expected: EXIT:0 (all checks passed)
+```
+Validates that all scripts reference canonical paths and that no deprecated references remain.
+A non-zero exit is a blocking issue — fix before proceeding.
+
+### Step 5 — Review Session Metrics
+```powershell
+.\wf.ps1 context-metrics
+# Reads: docs/sessions/metrics/context-usage.csv
+```
+Displays accumulated session metrics: total events, context-pack calls, compact-start calls,
+and context efficiency indicators.
+
+---
+
+## �📖 Documentation
 
 ### For Developers
 - **[Session Guide](docs/guides/SESSION-GUIDE.md)**: Daily workflow and commands
