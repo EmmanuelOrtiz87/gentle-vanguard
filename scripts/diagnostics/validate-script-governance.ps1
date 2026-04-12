@@ -58,11 +58,13 @@ $failures = 0
 $policyFile = Join-Path $repoRoot 'config/structure-policy.json'
 $policyMode = 'adopt-existing'
 $policyAllowedRootFiles = @('README.md')
+$policyAllowedRootMarkdownFiles = @('README.md', 'AGENTS.md', 'CHANGELOG.md', 'CONTRIBUTING.md')
 $policyDeprecatedPatterns = $null
 if (Test-Path $policyFile) {
     $policy = Get-Content $policyFile -Raw | ConvertFrom-Json
     if ($policy.structureMode) { $policyMode = $policy.structureMode }
     if ($policy.allowedRootFiles) { $policyAllowedRootFiles = $policy.allowedRootFiles }
+    if ($policy.allowedRootMarkdownFiles) { $policyAllowedRootMarkdownFiles = $policy.allowedRootMarkdownFiles }
     if ($policy.deprecatedPathPatterns) { $policyDeprecatedPatterns = $policy.deprecatedPathPatterns }
     if (-not $Quiet) { Write-Ok "Loaded config/structure-policy.json (mode: $policyMode)" }
 } else {
@@ -115,6 +117,15 @@ foreach ($file in $rootFiles) {
         Register-StructureIssue `
             -Message "Loose root script/config found under scripts/: $(Get-RepoRelativePath -Path $file.FullName)" `
             -Remediation "Move to canonical subfolder or run with -EnforceCanonicalStructure when migration is approved"
+    }
+}
+
+$rootMarkdownFiles = Get-ChildItem -Path $repoRoot -File -Filter '*.md' -ErrorAction SilentlyContinue
+foreach ($md in $rootMarkdownFiles) {
+    if ($policyAllowedRootMarkdownFiles -notcontains $md.Name) {
+        Register-StructureIssue `
+            -Message "Loose root markdown found: $(Get-RepoRelativePath -Path $md.FullName)" `
+            -Remediation "Move to docs/* and update references, or whitelist in config/structure-policy.json if intentionally root-scoped"
     }
 }
 

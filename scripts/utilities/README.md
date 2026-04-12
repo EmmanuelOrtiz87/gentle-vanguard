@@ -1,4 +1,4 @@
-# Utility Scripts
+﻿# Utility Scripts
 
 Miscellaneous utility scripts for various tasks.
 
@@ -52,11 +52,11 @@ Miscellaneous utility scripts for various tasks.
 
 The stack includes automatic detection and repair for:
 
-- Missing Engram CLI → Auto-installed
-- Missing config files → Created from templates
-- Inactive orchestrator → Auto-activated
-- Missing workspace environment → Auto-initialized
-- Degraded dependencies → Auto-verified
+- Missing Engram CLI â†’ Auto-installed
+- Missing config files â†’ Created from templates
+- Inactive orchestrator â†’ Auto-activated
+- Missing workspace environment â†’ Auto-initialized
+- Degraded dependencies â†’ Auto-verified
 
 ## Usage Patterns
 
@@ -69,8 +69,8 @@ The stack includes automatic detection and repair for:
 ```powershell
 git checkout feature/new-feature
 # post-checkout hook runs automatically
-# → system-diagnostics.ps1
-# → auto-init-dev-environment.ps1
+# â†’ system-diagnostics.ps1
+# â†’ auto-init-dev-environment.ps1
 ```
 
 ### Manual Verification
@@ -87,6 +87,7 @@ git checkout feature/new-feature
 
 ## See Also
 
-- [STACK-SETUP.md](../../STACK-SETUP.md) - Complete stack setup guide
+- [STACK-SETUP.md](/docs/getting-started/STACK-SETUP.md) - Complete stack setup guide
 - [../diagnostics/system-diagnostics.ps1](../diagnostics/system-diagnostics.ps1) - Core diagnostics engine
 - [../hooks/post-checkout.ps1](../hooks/post-checkout.ps1) - Auto-repair on git checkout
+
