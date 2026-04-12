@@ -138,6 +138,11 @@ $deprecatedPathPatterns = if ($policyDeprecatedPatterns) { $policyDeprecatedPatt
     )
 }
 
+$deprecatedCommandPatterns = @(
+    '^\s*&\s*gga\s+check(?:\s+--local)?(?:\s|$)',
+    '^\s*gga\s+check(?:\s+--local)?(?:\s|$)'
+)
+
 $searchFiles = Get-ChildItem -Path $repoRoot -Recurse -File -Include *.md,*.ps1,*.sh,*.yml,*.yaml,*.json -ErrorAction SilentlyContinue |
     Where-Object { $_.FullName -ne $PSCommandPath } |
     Where-Object { $_.FullName -ne $policyFile }
@@ -148,6 +153,15 @@ foreach ($searchFile in $searchFiles) {
             Register-StructureIssue `
                 -Message "Deprecated path reference found: $(Get-RepoRelativePath -Path $match.Path):$($match.LineNumber) -> $($match.Line.Trim())" `
                 -Remediation "Update to canonical command paths, or keep advisory mode until migration approval"
+        }
+    }
+
+    foreach ($pattern in $deprecatedCommandPatterns) {
+        $foundMatches = Select-String -Path $searchFile.FullName -Pattern $pattern -ErrorAction SilentlyContinue
+        foreach ($match in $foundMatches) {
+            Register-StructureIssue `
+                -Message "Deprecated GGA command found: $(Get-RepoRelativePath -Path $match.Path):$($match.LineNumber) -> $($match.Line.Trim())" `
+                -Remediation "Replace legacy GGA invocations with: gga run --no-cache"
         }
     }
 }
