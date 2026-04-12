@@ -71,6 +71,10 @@ Automated development workflow commands.
 .\wf.ps1 start-session
 .\wf.ps1 start-session auth-hardening
 
+# Close session with verification and closure artifact
+.\wf.ps1 end-session
+.\wf.ps1 end-session auth-hardening
+
 # Run code review
 .\wf.ps1 review
 .\wf.ps1 review security

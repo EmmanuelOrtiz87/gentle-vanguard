@@ -14,6 +14,9 @@ Miscellaneous utility scripts for various tasks.
 # Health check + tool activation
 .\wf.ps1 health
 
+# Close session with verification and closure artifact
+.\wf.ps1 end-session
+
 # Install/verify Engram CLI
 .\wf.ps1 install-engram
 
@@ -40,6 +43,7 @@ Miscellaneous utility scripts for various tasks.
 | `install-engram.ps1` | Install or verify Engram CLI |
 | `detect-ide-session.ps1` | Detect IDE session and suggest activation command |
 | `orchestrator-status.ps1` | Check orchestrator + Engram integration |
+| `end-session.ps1` | Run end-of-session checks and generate delivery closure artifact |
 | `stack-on-demand.ps1` | Activate/validate/deactivate orchestrator in on-demand mode |
 | `token-efficiency-estimator.ps1` | Estimate token, time, and equivalent cost savings |
 | `run-gga.ps1` | Run GGA code review |
