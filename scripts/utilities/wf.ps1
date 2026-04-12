@@ -680,7 +680,7 @@ switch ($Command) {
             New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
         }
         
-        $dateStr = Get-Date -Format "yyyy-MM-dd"
+        $dateStr = Get-Date -Format "yyyy-MM-dd-HHmmss"
         $outputPath = Join-Path $outputDir "$dateStr-audit.md"
         
         New-AuditDocument -OutputPath $outputPath

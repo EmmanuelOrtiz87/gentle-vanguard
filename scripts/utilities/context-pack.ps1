@@ -102,7 +102,7 @@ if ($changedFiles.Count -eq 0) {
 $recentCommits = Get-RecentCommits -Limit $MaxCommits
 
 $timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
-$dateTag = Get-Date -Format 'yyyy-MM-dd-HHmm'
+$dateTag = Get-Date -Format 'yyyy-MM-dd-HHmmss'
 
 if ([string]::IsNullOrWhiteSpace($OutputPath)) {
     $sessionsDir = Join-Path $repoRoot 'docs/sessions'
