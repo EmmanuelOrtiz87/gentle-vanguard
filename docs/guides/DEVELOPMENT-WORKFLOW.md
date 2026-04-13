@@ -52,6 +52,7 @@ feature/* / bugfix/* / chore/*
 2. wf.ps1 audit           # Audit document
 3. Validate specification
 4. Ask: Create PR?
+5. wf.ps1 publish         # Full publish flow with gated merge decision
 ```
 
 ## Commit Convention
@@ -165,6 +166,16 @@ gh pr merge --squash
 gh pr merge --admin --merge
 ```
 
+### Controlled Publish Decision
+
+Use `wf.ps1 publish` for end-to-end execution with governance gates:
+
+1. If validations pass with no alerts, PR merge is authorized automatically.
+2. If alerts are detected, a summary + suggestions are shown.
+3. If suggestions are accepted, automated fixes are applied and the flow re-runs.
+4. If suggestions are rejected, a final explicit confirmation is required to merge with gaps under developer responsibility.
+5. Every decision path is documented in `docs/sessions/*-publish-decision.md`.
+
 ## Automation
 
 ### Scripts
@@ -175,6 +186,7 @@ gh pr merge --admin --merge
 | `wf.ps1 audit` | Generate audit document |
 | `wf.ps1 pr` | Create PR template |
 | `wf.ps1 push` | Prepare for push |
+| `wf.ps1 publish` | Validate, summarize alerts, apply suggestions, and merge according to decision policy |
 | `wf.ps1 status` | Show current status |
 
 ### Hooks
