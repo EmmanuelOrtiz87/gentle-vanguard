@@ -19,6 +19,28 @@ metadata:
 - When reviewing a feature to verify spec coverage
 - When creating a template SDD for a module or service
 
+## Enforcement Profile
+
+Mandatory:
+
+1. Net-new feature behavior.
+2. API contract changes.
+3. Cross-module or architectural behavior changes.
+
+Conditionally optional (with mini-spec):
+
+1. Hotfixes and production incidents where speed is critical.
+2. Purely internal refactors with no behavior change.
+
+For exceptions, use a mini-spec before merge with:
+
+1. Problem statement.
+2. Scope and non-goals.
+3. Acceptance criteria.
+4. Validation command/evidence.
+
+Reference policy: `docs/reference/SDD-GOVERNANCE-POLICY.md`
+
 ## The SDD Workflow
 
 **Rule: Code NEVER precedes specification. The spec IS the source of truth.**
