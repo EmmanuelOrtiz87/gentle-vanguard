@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'status', 'health', 'update', 'update-all', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'homologate', 'agent-alert', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'homologate', 'agent-alert', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -91,6 +91,449 @@ function Get-BranchStatus {
         }
     }
     return $true
+}
+
+function Resolve-PublishMode {
+    param(
+        [string]$RequestedMode,
+        [switch]$ForceMode
+    )
+
+    $normalized = if ($RequestedMode) { $RequestedMode.Trim().ToLowerInvariant() } else { '' }
+    switch ($normalized) {
+        'pr' { return 'push+pr' }
+        'push+pr' { return 'push+pr' }
+        'with-pr' { return 'push+pr' }
+        'later' { return 'push-only' }
+        'push-only' { return 'push-only' }
+        'only-push' { return 'push-only' }
+    }
+
+    if ($ForceMode) {
+        return 'push-only'
+    }
+
+    Write-Host "" 
+    Write-Host "Choose publish mode:" -ForegroundColor Cyan
+    Write-Host "  1) Push changes and open PR now" -ForegroundColor Yellow
+    Write-Host "  2) Push changes only (create PR later)" -ForegroundColor Yellow
+    $choice = Read-Host "Enter 1 or 2"
+
+    if ($choice -eq '1') {
+        return 'push+pr'
+    }
+
+    return 'push-only'
+}
+
+function Invoke-ScriptGovernanceValidation {
+    $validationScript = Join-Path $scriptDir '..\diagnostics\validate-script-governance.ps1'
+    if (-not (Test-Path $validationScript)) {
+        return @{
+            Passed = $true
+            Detail = 'validate-script-governance.ps1 not found (skipped)'
+            Suggestion = 'Add scripts/diagnostics/validate-script-governance.ps1 to enable governance gate.'
+            Fixable = $false
+        }
+    }
+
+    Write-Step 'Running script governance validation...'
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $validationScript
+    if ($LASTEXITCODE -eq 0) {
+        return @{
+            Passed = $true
+            Detail = 'Script governance validation passed.'
+            Suggestion = ''
+            Fixable = $false
+        }
+    }
+
+    return @{
+        Passed = $false
+        Detail = "Script governance validation failed with exit code $LASTEXITCODE."
+        Suggestion = "Run '.\\wf.ps1 homologate apply' and rerun publish."
+        Fixable = $true
+    }
+}
+
+function Get-GitFlowBaseForBranch {
+    param([string]$Branch)
+
+    if ($Branch -match '^(feature|bugfix|chore)/.+') {
+        return 'develop'
+    }
+
+    if ($Branch -match '^(hotfix|release)/.+') {
+        return 'main'
+    }
+
+    if ($Branch -eq 'develop') {
+        return 'develop'
+    }
+
+    return 'main'
+}
+
+function Invoke-GitFlowValidation {
+    param(
+        [switch]$EnforcePrBase,
+        [string]$PrBase
+    )
+
+    $gitflowScript = Join-Path $scriptDir '..\diagnostics\validate-gitflow.ps1'
+    if (-not (Test-Path $gitflowScript)) {
+        return @{
+            Passed = $true
+            Detail = 'validate-gitflow.ps1 not found (skipped)'
+            Suggestion = 'Add scripts/diagnostics/validate-gitflow.ps1 to enforce GitFlow gates.'
+            Fixable = $false
+        }
+    }
+
+    $gitflowArgs = @()
+    if ($EnforcePrBase) {
+        $gitflowArgs += '-EnforcePrBase'
+        if (-not [string]::IsNullOrWhiteSpace($PrBase)) {
+            $gitflowArgs += @('-PrBase', $PrBase)
+        }
+    }
+
+    Write-Step 'Running GitFlow policy validation...'
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $gitflowScript @gitflowArgs
+    if ($LASTEXITCODE -eq 0) {
+        return @{
+            Passed = $true
+            Detail = 'GitFlow policy validation passed.'
+            Suggestion = ''
+            Fixable = $false
+        }
+    }
+
+    return @{
+        Passed = $false
+        Detail = "GitFlow policy validation failed with exit code $LASTEXITCODE."
+        Suggestion = 'Use a valid branch type and PR base per GitFlow policy.'
+        Fixable = $false
+    }
+}
+
+function Ensure-PublishCommit {
+    $gitInfo = Get-GitInfo
+    if (-not $gitInfo.HasChanges) {
+        return $true
+    }
+
+    $defaultMessage = 'chore(publish): apply validated release changes'
+    $message = Read-Host "Detected uncommitted changes. Enter commit message or press Enter for default [$defaultMessage]"
+    if ([string]::IsNullOrWhiteSpace($message)) {
+        $message = $defaultMessage
+    }
+
+    git add .
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error 'git add failed.'
+        return $false
+    }
+
+    git commit -m $message
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error 'git commit failed.'
+        return $false
+    }
+
+    Write-Success 'Pending changes committed.'
+    return $true
+}
+
+function Ensure-PullRequest {
+    param([string]$Branch)
+
+    $targetBase = Get-GitFlowBaseForBranch -Branch $Branch
+
+    $existingJson = gh pr view --head $Branch --json number,url,state,baseRefName 2>$null
+    if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace($existingJson)) {
+        try {
+            $existingPr = ($existingJson | ConvertFrom-Json)
+            if ($existingPr.baseRefName -ne $targetBase) {
+                Write-Error "Existing PR base '$($existingPr.baseRefName)' does not match GitFlow target '$targetBase'."
+                return $null
+            }
+            return $existingPr
+        } catch {
+        }
+    }
+
+    $prPath = Join-Path $repoRoot '.github/PULL_REQUEST_TEMPLATE.md'
+    if (-not (Test-Path (Split-Path $prPath))) {
+        New-Item -ItemType Directory -Path (Split-Path $prPath) -Force | Out-Null
+    }
+    if (-not (Test-Path $prPath)) {
+        New-PRDescription -OutputPath $prPath
+    }
+
+    $title = (git log -1 --pretty=%s 2>$null)
+    if ([string]::IsNullOrWhiteSpace($title)) {
+        $title = 'chore(publish): automated publish flow'
+    }
+
+    gh pr create --base $targetBase --head $Branch --title $title --body-file $prPath | Out-Null
+    if ($LASTEXITCODE -ne 0) {
+        return $null
+    }
+
+    $createdJson = gh pr view --head $Branch --json number,url,state,baseRefName 2>$null
+    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($createdJson)) {
+        return $null
+    }
+
+    try {
+        return ($createdJson | ConvertFrom-Json)
+    } catch {
+        return $null
+    }
+}
+
+function Write-PublishDecisionLog {
+    param(
+        [string]$Decision,
+        [array]$Findings,
+        [array]$Actions,
+        [string]$Notes = ''
+    )
+
+    $sessionsDir = Join-Path $repoRoot 'docs/sessions'
+    if (-not (Test-Path $sessionsDir)) {
+        New-Item -ItemType Directory -Path $sessionsDir -Force | Out-Null
+    }
+
+    $timestamp = Get-Date -Format 'yyyy-MM-dd-HHmmss'
+    $filePath = Join-Path $sessionsDir "$timestamp-publish-decision.md"
+    $branch = git rev-parse --abbrev-ref HEAD 2>$null
+
+    $findingsLines = if ($Findings -and $Findings.Count -gt 0) {
+        ($Findings | ForEach-Object { "- [$($_.Severity)] $($_.Code): $($_.Detail) | Suggestion: $($_.Suggestion)" }) -join [Environment]::NewLine
+    } else {
+        '- None'
+    }
+
+    $actionLines = if ($Actions -and $Actions.Count -gt 0) {
+        ($Actions | ForEach-Object { "- $_" }) -join [Environment]::NewLine
+    } else {
+        '- None'
+    }
+
+    $content = @"
+# Publish Decision Log
+
+- Timestamp: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss zzz")
+- Repository: $(Split-Path $repoRoot -Leaf)
+- Branch: $branch
+- Decision: $Decision
+
+## Findings
+$findingsLines
+
+## Actions Taken
+$actionLines
+
+## Notes
+$Notes
+"@
+
+    $content | Out-File -FilePath $filePath -Encoding UTF8
+    Write-Success "Publish decision documented: $filePath"
+}
+
+function Invoke-AutomaticSuggestions {
+    param([array]$Findings)
+
+    $actions = @()
+    $hasGovernanceFinding = $Findings | Where-Object { $_.Code -eq 'governance' -and $_.Fixable }
+    if ($hasGovernanceFinding) {
+        $homologateScript = Join-Path $scriptDir '..\validation\homologate-workspace.ps1'
+        if (Test-Path $homologateScript) {
+            Write-Step 'Applying homologation suggestions...'
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $homologateScript -Apply
+            if ($LASTEXITCODE -eq 0) {
+                $actions += 'Applied homologation fixes via homologate-workspace.ps1 -Apply.'
+            } else {
+                $actions += "Homologation apply failed with exit code $LASTEXITCODE."
+            }
+        }
+    }
+
+    return $actions
+}
+
+function Invoke-PublishWorkflow {
+    param(
+        [switch]$SkipReviewGate,
+        [switch]$SkipTestsGate,
+        [switch]$ForceMode
+    )
+
+    if (-not (Get-BranchStatus)) {
+        return
+    }
+
+    $attempt = 1
+    while ($attempt -le 2) {
+        Write-Step "Publish validation attempt $attempt/2"
+        $findings = @()
+        $actions = @()
+
+        if (-not $SkipReviewGate) {
+            if (-not (Test-Secrets)) {
+                $findings += [pscustomobject]@{
+                    Code = 'secrets'
+                    Severity = 'CRITICAL'
+                    Detail = 'Secrets scan failed.'
+                    Suggestion = 'Remove secrets from staged changes and rotate compromised credentials.'
+                    Fixable = $false
+                }
+            }
+        }
+
+        if (-not $SkipTestsGate) {
+            if (-not (Test-GoTests)) {
+                $findings += [pscustomobject]@{
+                    Code = 'go-tests'
+                    Severity = 'HIGH'
+                    Detail = 'Go test suite failed.'
+                    Suggestion = 'Fix failing tests before merging.'
+                    Fixable = $false
+                }
+            }
+
+            if (-not (Test-AngularTests)) {
+                $findings += [pscustomobject]@{
+                    Code = 'angular-tests'
+                    Severity = 'HIGH'
+                    Detail = 'Angular test suite failed.'
+                    Suggestion = 'Fix failing frontend tests before merging.'
+                    Fixable = $false
+                }
+            }
+        }
+
+        $gitInfo = Get-GitInfo
+        $targetBase = Get-GitFlowBaseForBranch -Branch $gitInfo.Branch
+        $gitflow = Invoke-GitFlowValidation -EnforcePrBase -PrBase $targetBase
+        if (-not $gitflow.Passed) {
+            $findings += [pscustomobject]@{
+                Code = 'gitflow'
+                Severity = 'HIGH'
+                Detail = $gitflow.Detail
+                Suggestion = $gitflow.Suggestion
+                Fixable = $gitflow.Fixable
+            }
+        }
+
+        $governance = Invoke-ScriptGovernanceValidation
+        if (-not $governance.Passed) {
+            $findings += [pscustomobject]@{
+                Code = 'governance'
+                Severity = 'HIGH'
+                Detail = $governance.Detail
+                Suggestion = $governance.Suggestion
+                Fixable = $governance.Fixable
+            }
+        }
+
+        & "$PSCommandPath" audit
+        if ($LASTEXITCODE -eq 0) {
+            $actions += 'Generated audit document via wf.ps1 audit.'
+        }
+
+        if ($findings.Count -eq 0) {
+            Write-Success 'All validations passed. Proceeding with automatic PR creation and merge authorization.'
+
+            if (-not (Ensure-PublishCommit)) {
+                Write-PublishDecisionLog -Decision 'blocked-commit-failed' -Findings $findings -Actions $actions -Notes 'Commit step failed.'
+                return
+            }
+
+            $gitInfo = Get-GitInfo
+            $branch = $gitInfo.Branch
+            git push -u origin $branch
+            if ($LASTEXITCODE -ne 0) {
+                Write-Error 'Branch push failed.'
+                Write-PublishDecisionLog -Decision 'blocked-push-failed' -Findings $findings -Actions $actions -Notes 'Could not push branch to origin.'
+                return
+            }
+            $actions += "Pushed branch to origin: $branch"
+
+            $pr = Ensure-PullRequest -Branch $branch
+            if (-not $pr) {
+                Write-Error 'PR creation or retrieval failed.'
+                Write-PublishDecisionLog -Decision 'blocked-pr-failed' -Findings $findings -Actions $actions -Notes 'Unable to create or retrieve PR.'
+                return
+            }
+            $actions += "PR ready: $($pr.url)"
+
+            gh pr merge $($pr.number) --squash --delete-branch
+            if ($LASTEXITCODE -eq 0) {
+                $actions += "Merged PR #$($pr.number) with squash merge."
+                Write-Success "PR merged successfully: $($pr.url)"
+                Write-PublishDecisionLog -Decision 'auto-merged-after-clean-validation' -Findings $findings -Actions $actions -Notes 'Merge authorized automatically because no alerts were detected.'
+            } else {
+                $actions += "Automatic merge failed for PR #$($pr.number)."
+                Write-Warning 'Automatic merge failed (likely branch protection or required checks).'
+                Write-PublishDecisionLog -Decision 'merge-blocked-after-clean-validation' -Findings $findings -Actions $actions -Notes 'Validations passed but merge command did not complete.'
+            }
+
+            return
+        }
+
+        Write-Warning 'Validation alerts detected. Summary:'
+        $findings | ForEach-Object {
+            Write-Host " - [$($_.Severity)] $($_.Code): $($_.Detail)" -ForegroundColor Yellow
+            Write-Host "   Suggestion: $($_.Suggestion)" -ForegroundColor Yellow
+        }
+
+        $apply = Read-Host 'Apply automatic suggestions and retry publish? (yes/no)'
+        if ($apply -match '^(y|yes|si|s)$') {
+            $applied = Invoke-AutomaticSuggestions -Findings $findings
+            $actions += $applied
+            Write-PublishDecisionLog -Decision 'alerts-detected-auto-fix-requested' -Findings $findings -Actions $actions -Notes 'Developer accepted auto-suggestions and rerun.'
+            $attempt++
+            continue
+        }
+
+        $confirm = Read-Host 'Do you confirm merge with detected gaps and developer responsibility? (yes/no)'
+        if ($confirm -match '^(y|yes|si|s)$') {
+            if (-not (Ensure-PublishCommit)) {
+                Write-PublishDecisionLog -Decision 'override-requested-but-commit-failed' -Findings $findings -Actions $actions -Notes 'Developer accepted risks but commit failed.'
+                return
+            }
+
+            $gitInfo = Get-GitInfo
+            $branch = $gitInfo.Branch
+            git push -u origin $branch
+            if ($LASTEXITCODE -eq 0) {
+                $actions += "Pushed branch to origin: $branch"
+            }
+
+            $pr = Ensure-PullRequest -Branch $branch
+            if ($pr) {
+                $actions += "PR ready: $($pr.url)"
+                gh pr merge $($pr.number) --squash --delete-branch
+                if ($LASTEXITCODE -eq 0) {
+                    $actions += "Merged PR #$($pr.number) by developer override."
+                } else {
+                    $actions += "Developer override merge attempt failed for PR #$($pr.number)."
+                }
+            }
+
+            Write-PublishDecisionLog -Decision 'developer-override-accepted-risks' -Findings $findings -Actions $actions -Notes 'Developer accepted full responsibility for detected gaps before merge attempt.'
+            return
+        }
+
+        Write-PublishDecisionLog -Decision 'blocked-awaiting-remediation' -Findings $findings -Actions $actions -Notes 'Developer declined auto-fixes and merge override.'
+        return
+    }
+
+    Write-Warning 'Publish stopped after automatic suggestion retry with remaining alerts.'
 }
 
 function Invoke-Update {
@@ -539,7 +982,8 @@ COMMANDS:
     review [scope]       Run code review (security, quality, all)
     audit                Generate audit document
     pr                   Create PR with template
-    push                 Commit and push changes
+    push [pr|later]      Prepare publish flow; choose push+PR now or push-only
+    publish              Full PR workflow: validate, document, decide, and merge
     status               Show current status
     start-session [task] Create a session brief and optional task brief
     end-session [task]   Run session closure checks and create delivery closure artifact
@@ -573,6 +1017,9 @@ EXAMPLES:
     .\wf.ps1 audit              Generate audit document
     .\wf.ps1 pr                 Create PR
     .\wf.ps1 push               Commit and push
+    .\wf.ps1 push pr            Push and open PR now
+    .\wf.ps1 push later         Push only and create PR later
+    .\wf.ps1 publish            Run end-to-end PR flow with auto-merge on clean validation
     .\wf.ps1 start-session      Create the session brief for today
     .\wf.ps1 end-session        Run end-of-session checks and create closure artifact
     .\wf.ps1 task-brief auth    Create a task brief for auth work
@@ -754,13 +1201,32 @@ switch ($Command) {
         
         # Generate audit
         & "$PSCommandPath" audit
+
+        $publishMode = Resolve-PublishMode -RequestedMode $Scope -ForceMode:$Force
+        $gitInfo = Get-GitInfo
+        $branchName = if ([string]::IsNullOrWhiteSpace($gitInfo.Branch)) { '<current-branch>' } else { $gitInfo.Branch }
         
         # Commit and push
         Write-Host ""
-        Write-Host "Run the following commands:" -ForegroundColor Cyan
-        Write-Host "  git add ." -ForegroundColor Yellow
-        Write-Host "  git commit -m 'type(scope): description'" -ForegroundColor Yellow
-        Write-Host "  git push" -ForegroundColor Yellow
+        if ($publishMode -eq 'push+pr') {
+            Write-Host "Run the following commands (push + PR):" -ForegroundColor Cyan
+            Write-Host "  git add ." -ForegroundColor Yellow
+            Write-Host "  git commit -m 'type(scope): description'" -ForegroundColor Yellow
+            Write-Host "  git push -u origin $branchName" -ForegroundColor Yellow
+            Write-Host "  gh pr create --fill" -ForegroundColor Yellow
+        } else {
+            Write-Host "Run the following commands (push only):" -ForegroundColor Cyan
+            Write-Host "  git add ." -ForegroundColor Yellow
+            Write-Host "  git commit -m 'type(scope): description'" -ForegroundColor Yellow
+            Write-Host "  git push" -ForegroundColor Yellow
+            Write-Host "" 
+            Write-Host "Later, create PR with:" -ForegroundColor Cyan
+            Write-Host "  .\wf.ps1 pr" -ForegroundColor Yellow
+        }
+    }
+
+    'publish' {
+        Invoke-PublishWorkflow -SkipReviewGate:$SkipReview -SkipTestsGate:$SkipTests -ForceMode:$Force
     }
     
     'health' {
