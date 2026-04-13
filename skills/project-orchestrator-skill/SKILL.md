@@ -78,6 +78,25 @@ Automation boundary:
 1. Context budgeting is command-driven, not silent background automation.
 2. The orchestrator should recommend and execute it when requested, but must not interrupt active work unexpectedly.
 
+## LIVE ROLLBACK CHECKPOINT PROTOCOL
+
+Use this protocol before risky in-session edits that are not yet committed:
+
+1. For multi-file edits or structural changes, SHOULD create a checkpoint first:
+     - `./scripts/utilities/wf.ps1 checkpoint <scope-objective>`
+     - Label convention: lowercase kebab-case, for example `feature-doc-cleanup`.
+2. The checkpoint MUST include untracked files (implemented via `git stash -u`) so new files can be restored too.
+3. If rollback is requested, use:
+     - `./scripts/utilities/wf.ps1 rollback-checkpoint` (latest)
+     - `./scripts/utilities/wf.ps1 rollback-checkpoint <label-or-stash-ref>` (specific)
+4. Before checkpointing, print a one-line summary of what risk is being contained.
+5. After rollback, run the relevant validation gate before continuing (for this repo: script governance when scripts/docs automation are involved).
+
+Guardrails:
+1. Do not checkpoint repeatedly for trivial single-line edits unless user asks.
+2. Prefer one checkpoint per bounded task to keep stash list clear.
+3. If no local changes exist, skip checkpoint and continue.
+
 ## STRUCTURE ADAPTATION POLICY
 
 Apply this policy to scripts, code, docs, and generated files:
