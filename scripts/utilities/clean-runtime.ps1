@@ -15,7 +15,6 @@ function Remove-TreeIfExists {
 
 $workspaceParent = Split-Path -Parent $WorkspaceRoot
 $candidateRoots = @(
-    (Join-Path $workspaceParent 'engram-tool'),
     (Join-Path $workspaceParent 'Engram\bitbucket-dashboard'),
     (Join-Path $WorkspaceRoot 'projects')
 )
