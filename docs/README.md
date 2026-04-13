@@ -44,6 +44,9 @@ docs/
 | [INTEGRATION-EXISTING-PROJECTS.md](guides/INTEGRATION-EXISTING-PROJECTS.md) | Integrate existing projects |
 | [AI-CONFIGURATION.md](guides/AI-CONFIGURATION.md) | AI configuration |
 | [STACK-ON-DEMAND.md](guides/STACK-ON-DEMAND.md) | On-demand activation model for orchestrator stack |
+| [TOOL-ACTIVATION.md](guides/TOOL-ACTIVATION.md) | Automatic tool activation setup |
+| [DEVELOPER-COMMUNICATION-POLICY.md](guides/DEVELOPER-COMMUNICATION-POLICY.md) | Developer communication standards |
+| [runtime-state.md](guides/runtime-state.md) | Runtime state reference |
 | [audit-system.md](guides/audit-system.md) | Audit system |
 | [configuration.md](guides/configuration.md) | Configuration guide |
 

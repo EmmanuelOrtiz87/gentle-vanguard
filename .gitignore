@@ -32,3 +32,6 @@ projects/
 
 # Engram data
 .engram-data/
+
+# Orchestrator runtime state
+.orchestrator-active

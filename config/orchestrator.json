@@ -1,6 +1,6 @@
 ﻿{
-    "active":  false,
-    "skill_path":  "C:\\Workspace_local\\workspace-foundation\\skills\\project-orchestrator-skill",
+    "active":  true,
+    "skill_path":  "skills/project-orchestrator-skill",
     "auto_detect":  true,
     "workflow_mode":  "coordinated",
     "memory_integration":  true,
@@ -8,6 +8,5 @@
     "session_tracking":  true,
     "git_integration":  true,
     "activation_mode":  "on-demand",
-    "activated_at":  "2026-04-11 20:08:24",
-    "deactivated_at":  "2026-04-11 20:09:50"
+    "activated_at":  "2026-04-13 11:22:55"
 }

@@ -28,6 +28,7 @@ Central inventory of automation scripts with ownership, risk level, and executio
 | scripts/utilities/stack-on-demand.ps1 | Orchestration Mode | B | manual | platform | Activate/validate/deactivate flow |
 | scripts/utilities/orchestrator-status.ps1 | Status | A | manual | platform | Read-oriented orchestration checks |
 | scripts/diagnostics/system-diagnostics.ps1 | Diagnostics | B | manual | platform | Health and repair checks |
+| scripts/diagnostics/validate-script-governance.ps1 | Governance | B | manual | platform | Validates script placement, naming, and governance policy compliance |
 
 ## Execution Policy
 

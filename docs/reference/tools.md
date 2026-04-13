@@ -41,8 +41,8 @@ Instead, the workspace bootstrap reads a config file and uses one of these strat
 
 ## Engram Runtime State
 
-- Run `scripts/init-workspace.ps1` or `scripts/init-workspace.sh` first so old embedded runtime state gets cleaned automatically.
-- Use `scripts/run-engram.ps1` or `scripts/run-engram.sh` to launch Engram.
+- Run `scripts/project/init-workspace.ps1` or `scripts/git-hooks/init-workspace.sh` first so old embedded runtime state gets cleaned automatically.
+- Use `scripts/utilities/run-engram.ps1` or `scripts/git-hooks/run-engram.sh` to launch Engram.
 - The launcher creates the workspace data directory automatically and sets `ENGRAM_DATA_DIR` for that process.
 - This keeps `.engram/` out of `engram-tool` and out of project checkouts.
 
@@ -54,4 +54,4 @@ For repository-based skill packs, prefer `checkPath` so the bootstrap can verify
 
 ## Validation
 
-Use `scripts/validate-workspace.ps1` or the equivalent PowerShell command on Linux/macOS.
+Use `scripts/validation/validate-workspace.ps1` or the equivalent PowerShell command on Linux/macOS.
