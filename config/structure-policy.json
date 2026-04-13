@@ -14,7 +14,8 @@
     "README.md",
     "AGENTS.md",
     "CHANGELOG.md",
-    "CONTRIBUTING.md"
+    "CONTRIBUTING.md",
+    "MIGRATION.md"
   ],
   "deprecatedPathPatterns": [
     ".\\scripts\\update-all.ps1",
