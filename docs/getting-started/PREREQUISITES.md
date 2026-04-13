@@ -35,7 +35,7 @@ These enhance the foundation but are **not required**:
 | Tool | Type | Purpose | Install |
 |------|------|---------|---------|
 | **engram** | opencode plugin | Persistent memory across sessions | Built into opencode |
-| **gga** | CLI | AI-powered code review | `go install github.com/gentleman-programming/gentleman-guardian-angel/cmd/gga@latest` |
+| **gga** | CLI | AI-powered code review | `git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git && cd gentleman-guardian-angel && bash install.sh` |
 | **gentle-ai** | CLI | Ecosystem configurator | `go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest` |
 
 ## Quick Setup for New Developer
@@ -71,11 +71,16 @@ gf validate
 ### 3. Optional: Additional Tools
 
 ```powershell
-# AI Code Review
-go install github.com/gentleman-programming/gentleman-guardian-angel/cmd/gga@latest
+# AI Code Review (Git Bash)
+git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git
+cd gentleman-guardian-angel
+bash install.sh
 
 # Ecosystem Configurator
 go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest
+
+# One-shot updater for all tools
+.\scripts\utilities\wf.ps1 update-tools
 ```
 
 ## Platform Support

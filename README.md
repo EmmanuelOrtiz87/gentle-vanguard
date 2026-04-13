@@ -619,7 +619,10 @@ OpenCode is the default provider for GGA code review and is recommended for its:
 ./scripts/utilities/run-gentle-ai.ps1 status   # Show ecosystem status (native or compatibility mode)
 ./scripts/utilities/run-gentle-ai.ps1 update   # Run toolchain update flow
 ./scripts/utilities/run-gentle-ai.ps1 help     # Show available commands
+./scripts/utilities/wf.ps1 update-tools        # Update gga, engram, and gentle-ai in one command
 ```
+
+> Windows note: Homebrew (`brew`) is not required. Use `wf.ps1 update-tools` (Git Bash + Go).
 
 ### Post-Install (in your AI agent)
 
