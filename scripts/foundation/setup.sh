@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# setup.sh - Universal Gentleman Foundation Stack Setup
+# scripts/foundation/setup.sh - Universal Gentleman Foundation Stack Setup
 # Works on: Linux, macOS, Windows (WSL, Git Bash, MSYS2)
 # No dependencies except bash, git, and go
 
