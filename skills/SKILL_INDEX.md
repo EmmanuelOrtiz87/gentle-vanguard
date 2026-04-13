@@ -9,6 +9,16 @@ description: >
 
 This is the master reference for all available skills.
 
+## Distribution Model
+
+Skill lifecycle is on-demand and Foundation-first:
+
+1. Skills are authored and updated in Foundation under `skills/`.
+2. New and updated skills must be native (self-contained) and must not depend on external `references/` files for core operation.
+3. Foundation changes are published to repository.
+4. Consumer repositories update through `wf.ps1 foundation-sync apply`.
+5. The orchestrator activates skills on-demand based on task context.
+
 ## MASTER ORCHESTRATORS
 
 These skills coordinate everything. **ALWAYS ACTIVE** at session start.
@@ -53,18 +63,47 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 | Category | Skills |
 |----------|--------|
 | **Orchestrators** | project-orchestrator, session-workflow, skill-creator |
+| **Context & Process** | context-engineering, sdd, bdd-scenarios |
 | **Frontend** | angular-spa, react-19, nextjs-15, tailwind-4 |
+| **Mobile** | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging |
 | **State** | zustand-5 |
 | **Validation** | zod-4 |
 | **Backend** | golang-api, api-design, django-drf |
 | **Database** | database-relational, database-nosql |
-| **DevOps** | docker-devops |
-| **Testing** | testing-strategy, testing-skill |
+| **DevOps** | docker-devops, terraform-infrastructure, kubernetes-deployment |
+| **Testing** | testing-strategy, testing-skill, playwright, pytest |
 | **AI** | ai-sdk-5, mcp-skill |
-| **Workflow** | github-pr, jira-task, jira-epic |
-| **Quality** | typescript, code-review, security |
+| **Workflow** | github-pr, jira-task, jira-epic, release-management |
+| **Quality** | typescript, code-review, security, technical-debt, web-performance-optimization |
+| **Operations** | observability, incident-response-plan |
 | **Governance** | project-scaffolding, documentation, architecture, git-workflow, foundation-manager |
 | **Script Engineering** | script-governance |
+
+---
+
+## Context & Process
+
+### context-engineering-skill
+
+**Trigger**: `context pack`, `compact start`, `session handoff`, `token efficiency`, `context budget`
+
+**Use when**: Compacting sessions, restoring context, measuring token usage, handoff between sessions or agents
+
+---
+
+### sdd-skill
+
+**Trigger**: `spec`, `spec-driven`, `SDD`, `acceptance criteria`, `docs/specs`, `feature spec`
+
+**Use when**: Writing specs before code, defining acceptance criteria, validating implementation against specs. Governance policy: `docs/reference/SDD-GOVERNANCE-POLICY.md`
+
+---
+
+### bdd-scenarios-skill
+
+**Trigger**: `BDD`, `gherkin`, `scenario`, `acceptance criteria`, `Given When Then`
+
+**Use when**: Writing behavior scenarios and turning requirements into testable acceptance criteria
 
 ---
 
@@ -99,6 +138,88 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 **Trigger**: `Tailwind`, `Tailwind CSS`, `cn()`, `className`, `tailwind-4`
 
 **Use when**: Tailwind styling, component classes, dark mode, responsive design
+
+---
+
+## Mobile
+
+### ios-swift-development
+
+**Trigger**: `iOS`, `Swift`, `SwiftUI`, `UIKit`, `Xcode`, `TestFlight`
+
+**Use when**: Native iOS development, architecture, networking, persistence, release preparation
+
+---
+
+### ios-swiftui-patterns-skill
+
+**Trigger**: `SwiftUI`, `@State`, `@Binding`, `ObservableObject`, `View`
+
+**Use when**: Building declarative iOS UI and managing SwiftUI state correctly
+
+---
+
+### android-kotlin-skill
+
+**Trigger**: `Android`, `Kotlin`, `Jetpack Compose`, `Hilt`, `Room`, `Gradle`
+
+**Use when**: Native Android development with Kotlin and production mobile architecture
+
+---
+
+### android-architecture-skill
+
+**Trigger**: `Android architecture`, `MVVM`, `MVI`, `repository`, `ViewModel`
+
+**Use when**: Structuring Android modules and enforcing maintainable Android boundaries
+
+---
+
+### android-jetpack-compose-skill
+
+**Trigger**: `Jetpack Compose`, `Composable`, `remember`, `Modifier`
+
+**Use when**: Building Android UI in Compose and applying modern Android UI patterns
+
+---
+
+### flutter-development
+
+**Trigger**: `Flutter`, `Dart`, `Provider`, `Widget`, `pubspec`
+
+**Use when**: Cross-platform mobile development in Flutter
+
+---
+
+### flutter-skill
+
+**Trigger**: `Flutter`, `Riverpod`, `GoRouter`, `Impeller`, `Dart`
+
+**Use when**: Modern Flutter patterns, state management, navigation, and performance-sensitive mobile work
+
+---
+
+### react-native-skill
+
+**Trigger**: `React Native`, `Expo`, `mobile app`, `native bridge`
+
+**Use when**: Cross-platform React Native applications and mobile delivery workflows
+
+---
+
+### ui-mobile-skill
+
+**Trigger**: `mobile UI`, `mobile UX`, `responsive mobile`, `touch target`
+
+**Use when**: Mobile-specific UX and UI decisions across iOS, Android, Flutter, or React Native
+
+---
+
+### mobile-app-debugging
+
+**Trigger**: `mobile debug`, `device logs`, `simulator`, `emulator`, `crash`
+
+**Use when**: Debugging native or cross-platform mobile applications across iOS and Android
 
 ---
 
@@ -176,6 +297,22 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 ---
 
+### terraform-infrastructure
+
+**Trigger**: `Terraform`, `IaC`, `infrastructure as code`, `tfvars`, `module`
+
+**Use when**: Authoring Terraform modules, infrastructure plans, and deployment configuration
+
+---
+
+### kubernetes-deployment
+
+**Trigger**: `Kubernetes`, `k8s`, `deployment`, `service`, `ingress`, `helm`
+
+**Use when**: Kubernetes manifests, RBAC, workloads, and deployment hardening
+
+---
+
 ## Testing
 
 ### testing-strategy-skill
@@ -191,6 +328,22 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 **Trigger**: `write test`, `add test`, `mock`, `AAA pattern`, `test framework`
 
 **Use when**: Writing tests, mocking, test patterns, test organization
+
+---
+
+### playwright-skill
+
+**Trigger**: `Playwright`, `E2E`, `browser test`, `page object`
+
+**Use when**: End-to-end browser testing and pre-production validation flows
+
+---
+
+### pytest-skill
+
+**Trigger**: `pytest`, `fixture`, `parametrize`, `monkeypatch`
+
+**Use when**: Python unit and integration tests using pytest
 
 ---
 
@@ -238,6 +391,14 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 ---
 
+### release-management-skill
+
+**Trigger**: `release`, `changelog`, `version bump`, `release notes`, `hotfix`
+
+**Use when**: Planning releases, managing semver, updating changelogs, and documenting cutover steps
+
+---
+
 ## Code Quality
 
 ### typescript-skill
@@ -261,6 +422,40 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 **Trigger**: `security`, `vulnerability`, `secrets`, `OWASP`
 
 **Use when**: Security audits, secret detection, vulnerabilities
+
+---
+
+### web-performance-optimization
+
+**Trigger**: `performance`, `LCP`, `CLS`, `TTFB`, `bundle size`, `web vitals`
+
+**Use when**: Frontend performance tuning, asset optimization, caching, and monitoring performance regressions
+
+---
+
+### technical-debt-skill
+
+**Trigger**: `technical debt`, `refactor`, `code smell`, `anti-pattern`, `cleanup`
+
+**Use when**: Debt assessment, maintainability reviews, remediation planning, and documenting debt records
+
+---
+
+## Operations
+
+### observability-skill
+
+**Trigger**: `observability`, `monitoring`, `metrics`, `logs`, `tracing`, `OpenTelemetry`
+
+**Use when**: Instrumenting systems, designing dashboards, defining alerts, and production triage
+
+---
+
+### incident-response-plan
+
+**Trigger**: `incident`, `outage`, `production issue`, `runbook`, `mitigation`
+
+**Use when**: Handling incidents, response coordination, mitigation, and recovery planning
 
 ---
 
@@ -311,16 +506,19 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 | Category | Skills |
 |----------|--------|
 | **Orchestrator** | project-orchestrator (load first!), session-workflow, skill-creator |
+| **Context & Process** | context-engineering, sdd, bdd-scenarios |
 | **Frontend** | angular-spa, react-19, nextjs-15, tailwind-4 |
+| **Mobile** | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging |
 | **State** | zustand-5 |
 | **Validation** | zod-4 |
 | **Backend** | golang-api, api-design, django-drf |
 | **Database** | database-relational, database-nosql |
-| **DevOps** | docker-devops |
-| **Testing** | testing-strategy, testing-skill |
+| **DevOps** | docker-devops, terraform-infrastructure, kubernetes-deployment |
+| **Testing** | testing-strategy, testing-skill, playwright, pytest |
 | **AI** | ai-sdk-5, mcp-skill |
-| **Workflow** | github-pr, jira-task, jira-epic |
-| **Quality** | typescript, code-review, security |
+| **Workflow** | github-pr, jira-task, jira-epic, release-management |
+| **Quality** | typescript, code-review, security, technical-debt, web-performance-optimization |
+| **Operations** | observability, incident-response-plan |
 | **Governance** | foundation-manager, project-scaffolding, architecture, documentation, git-workflow |
 
 ## Skill Loading
