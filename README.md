@@ -71,7 +71,7 @@ Copy-Item "scripts/utilities/Microsoft.PowerShell_profile.ps1" $PROFILE
 5. **Create Your First Project:**
 ```powershell
 # Use foundation as template for new projects
-.\scripts\utilities\create-project.ps1 -Name "my-awesome-project" -Type "web-api"
+.\scripts\project\create-new-project.ps1 -Name "my-awesome-project" -Type "web-api"
 ```
 
 ## 🏗️ Architecture Overview
