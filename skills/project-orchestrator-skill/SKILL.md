@@ -27,6 +27,32 @@ description: >
 11. **Evidence Before Content** - Add durable docs/learning only after explicit validation and decision rationale
 12. **Goal Alignment Always** - Keep every change aligned to stated objective, constraints, and acceptance criteria
 
+## SDD ENFORCEMENT POLICY
+
+Current policy baseline:
+
+1. SDD is active and handled by the orchestrator as part of normal workflow.
+2. New feature work should be spec-first (`docs/specs/*`) before implementation.
+3. Spec validation is required before PR merge when feature behavior changes.
+
+Recommended policy (normalized):
+
+1. Treat SDD as mandatory for all net-new features and behavior changes.
+2. Allow hotfix/incident exception only with a mini-spec written before merge.
+3. Require evidence in PR:
+- spec file path,
+- acceptance criteria status,
+- validation evidence (tests/checks),
+- final spec status (`validated` or `done`).
+
+Role split:
+
+1. Orchestrator: source of truth for process and enforcement decisions.
+2. `gga`: governance/compliance assist and diagnostics.
+3. `gentle-ai`: implementation assistant only.
+
+Reference: `docs/reference/SDD-GOVERNANCE-POLICY.md`
+
 ## SESSION ACTIVATION STRATEGY
 
 Use this decision model:
@@ -59,9 +85,25 @@ Goal: avoid overlap, confusion, and conflicting behavior across sessions.
 1. MUST use Engram for durable memory (context, decisions, closeout learnings).
 2. MUST use this orchestrator skill as the primary execution framework.
 3. MUST keep session artifacts updated (`docs/sessions/YYYY-MM-DD-session-start.md` and task brief for bounded scope).
-4. SHOULD use `gga` and `gentle-ai` when available; if unavailable, continue with warnings plus remediation commands.
+4. SHOULD use `gentle-ai`, `gentleman-guardian-angel` (`gga`), and `gentleman-skills` when available; if unavailable, continue with warnings plus remediation commands.
 5. MUST run focused validation before push and include evidence in docs.
 6. MUST load script-governance skill for any script move, command-path update, hook change, or script documentation change.
+
+## SKILL DISTRIBUTION MODEL (ON-DEMAND)
+
+1. Foundation is the source of truth for skills.
+2. Skills are maintained natively in `skills/<skill-name>/SKILL.md` and should not rely on external `references/` dependencies for core operation.
+3. Publication flow:
+- update skills in Foundation,
+- commit and publish Foundation,
+- consumers update by running `wf.ps1 foundation-sync apply`.
+4. Activation model is on-demand:
+- the orchestrator loads only the skills required by current task context,
+- avoid loading full catalog by default.
+5. Any new skill added to Foundation must be reflected in:
+- `skills/SKILL_INDEX.md`,
+- orchestrator stack/use-case mapping,
+- consumer sync manifest when that consumer depends on shared skill updates.
 
 ## TOKEN AND CONTEXT BUDGET PROTOCOL
 
@@ -164,6 +206,50 @@ Minimum validation plan fields:
 4. Pass/fail threshold.
 
 If the plan is missing, mark proposal as `deferred` and do not institutionalize it in skills/docs.
+
+## DEFERRED-WORK REGISTRY PROTOCOL
+
+Use this protocol whenever the user decides to postpone optimization, enhancement, or refactor work.
+
+1. Register deferred work in `docs/reference/FUTURE-FEATURES-BACKLOG.md`.
+2. Keep one row per unique deferred scope (no duplicates).
+3. Include date, value, status, and trigger-to-revisit.
+
+Confirmation is mandatory before registration if:
+
+1. The deferred request is ambiguous.
+2. The deferred request appears redundant with existing backlog items.
+
+If ambiguity/redundancy exists, ask a short confirmation question and only then write/update the backlog.
+
+Default behavior:
+
+1. If clear and non-redundant: append backlog item automatically.
+2. If clear and already tracked: update existing row instead of creating new one.
+
+Reference: `docs/reference/FUTURE-FEATURES-BACKLOG.md`
+
+## GLOBAL VS REPOSITORY BOUNDARY PROTOCOL
+
+Use this protocol to keep workspace-global decisions and repository decisions separated without losing traceability.
+
+1. Global-level artifacts (workspace root docs/process notes) are coordination artifacts and must not be auto-published into repository history.
+2. Repository-level artifacts are implementation/governance artifacts and follow normal PR workflow in their own repository.
+
+Replication checks are mandatory:
+
+1. If a global artifact changes, ask the user whether any repository must receive a mirrored implementation change.
+2. If a repository artifact changes, ask the user whether global workspace guidance must be updated to keep cross-repo consistency.
+
+Decision outcomes:
+
+1. Global only: keep change at workspace scope and do not replicate to repos.
+2. Repo only: keep change in repository and do not modify workspace-global docs.
+3. Both: apply in both places with explicit cross-reference.
+
+If unclear or seemingly redundant, request user confirmation before writing either side.
+
+Workspace reference: `c:/Workspace_local/docs/reference/WORKSPACE-FUTURE-FEATURES-BACKLOG.md`
 
 ## LEARNING QUALITY BAR
 
@@ -461,15 +547,21 @@ START REVIEW
 
 | File Found | Stack | Skills |
 |------------|-------|--------|
-| `go.mod` | Go | golang-api-skill, testing-skill |
-| `package.json` (Angular) | Angular | angular-spa-skill, angular-core |
-| `package.json` (Next) | Next.js | nextjs-15-skill |
+| `go.mod` | Go | golang-api-skill, api-design-skill, testing-skill |
+| `package.json` (Angular) | Angular | angular-spa-skill, testing-skill |
+| `package.json` (Next) | Next.js | nextjs-15-skill, tailwind-4-skill |
 | `package.json` (React) | React | react-19-skill, tailwind-4-skill |
-| `requirements.txt` | Django | django-drf-skill |
+| `pubspec.yaml` | Flutter | flutter-skill, testing-skill |
+| `ios/` + `.swift` | iOS | ios-swift-development, ios-swiftui-patterns-skill |
+| `android/` + `.kt` | Android | android-kotlin-skill, android-architecture-skill, android-jetpack-compose-skill |
+| `requirements.txt` | Django/Python | django-drf-skill, pytest-skill |
+| `*.tf` | Terraform | terraform-infrastructure |
+| `k8s/*.yaml` or `helm/` | Kubernetes | kubernetes-deployment |
 
 ### Always Load
 - `git-workflow-skill` - Git best practices
 - `code-review-orchestrator-skill` - Code review
+- `project-orchestrator-skill` - Task coordination and skill routing
 
 ### Project Structure
 
@@ -479,7 +571,7 @@ START REVIEW
 | `tests/` or `*_test.go` | Testing |
 | `docs/` | Documentation |
 | `AGENTS.md` | AI configured |
-| `.skills/` | Foundation linked |
+| `skills/` | Native Foundation skills catalog |
 
 ---
 

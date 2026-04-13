@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-04-13
+
+**First Stable Release: Foundation Ready for Production**
+
+This marks the first official, stable release of Gentleman Foundation. All preview features are now formalized with governance, versioning, and release strategy.
+
 ### Added
 
 #### OpenCode Integration (v2.2.0)
@@ -86,84 +92,84 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pattern-based secret detection (AWS keys, GitHub tokens, API keys, etc.)
 - Vulnerability pattern scanning
 
-## [1.0.0] - 2026-04-08
+#### Release & Versioning (v1.0.0)
 
-### Added
+- Formal release strategy document: `docs/guides/RELEASE-STRATEGY.md`
+- Release checklist with pre-release validation: `docs/guides/RELEASE-CHECKLIST.md`
+- Migration guide: `MIGRATION.md`
+- Semantic versioning (SemVer 2.0.0) compliance
+- GitHub release automation with release notes
 
-#### CLI (wf.ps1)
-- New unified CLI with 16 commands: `init`, `new`, `validate`, `tools`, `skills`, `clean`, `info`, `doctor`, `list`, `search`, `config`, `update`, `completion`, `deploy`, `migrate`, `test`
-- Interactive wizard for project creation
-- Auto-completion support for PowerShell and Bash
+#### Governance Formalization (v1.0.0)
 
-#### Templates
-- **Project Types**: service, cli, library, frontend, fullstack, microservices, mobile
-- **Frontend Frameworks**: React + Vite, Vue 3 + Vite, Next.js 14, Angular + Nx
-- **Mobile Frameworks**: React Native, Flutter
-- **Configuration Templates**: ESLint, Prettier, TypeScript (tsconfig), Vitest, Jest, lint-staged
-- **Testing Templates**: Playwright configs with specs for homepage, auth, API, responsive, and accessibility tests
+- Spec-Driven Design (SDD) enforcement via CI gates: `.github/workflows/script-governance.yml`
+- SDD governance policy: `docs/reference/SDD-GOVERNANCE-POLICY.md`
+- SDD validation script: `scripts/diagnostics/validate-sdd-governance.ps1`
+- SDD spec template: `docs/specs/SPEC-TEMPLATE.md`
+- Mandatory spec validation on protected branch PRs
 
-#### CI/CD
-- GitHub Actions workflows (CI, container, preview)
-- GitLab CI configuration
-- Azure DevOps pipelines
+#### Orchestrator Protocols (v1.0.0)
 
-#### Container & Orchestration
-- Dockerfiles (multi-stage): Node.js, Go, Python
-- Kubernetes manifests: Deployment, Service, Ingress, HPA, PDB
-- Docker Compose templates for fullstack and microservices
+- **Deferred-Work Registry Protocol**: `skills/project-orchestrator-skill/SKILL.md#DEFERRED-WORK-REGISTRY-PROTOCOL`
+  - Structured backlog for deferred features
+  - Confirmation rules for ambiguous items
+  - Status tracking (pending, scheduled, in-progress, done, discarded)
+  - Futures registry at `docs/reference/FUTURE-FEATURES-BACKLOG.md`
 
-#### Observability
-- Prometheus configuration
-- Grafana dashboard templates
-- Alert rules (error rate, latency, memory, CPU)
+- **Global vs Repository Boundary Protocol**: `skills/project-orchestrator-skill/SKILL.md#GLOBAL-VS-REPOSITORY-BOUNDARY-PROTOCOL`
+  - Separation of coordination artifacts from implementation artifacts
+  - Explicit replication checks (global ↔ repo)
+  - Decision outcomes (global-only, repo-only, both)
+  - Workspace reference at `c:/Workspace_local/docs/reference/WORKSPACE-FUTURE-FEATURES-BACKLOG.md`
 
-#### Git Workflow
-- Pre-commit hook (linting, TypeScript, secrets detection)
-- Pre-push hook (tests, protected branch checks)
-- Commit-msg hook (conventional commits validation)
+- **Skill Distribution Model (On-Demand)**
+  - Foundation as single source of truth for skills
+  - On-demand activation vs full-catalog preload
+  - Foundation-sync manifest for consumers
+  - No external dependency chains in core skills
 
-#### Editor Configuration
-- `.editorconfig` (universal)
-- VSCode settings (Node.js, Go, Python variants)
-- JetBrains codestyle
-- Vim/Neovim configuration
-- Emacs configuration
-- Sublime Text settings
+#### Foundation-Dashboard Homologation (v1.0.0)
 
-#### Scripts
-- `deploy.ps1` - Multi-target deployment (Docker, Kubernetes, AWS, Azure, GCP, Vercel, Fly.io)
-- `migrate.ps1` - Database migrations (Prisma, TypeORM, Knex, Go-migrate)
-- Makefile template
-
-#### Skills
-- `workspace-foundation` - Main skill for project scaffolding
-- `testing-skill` - Testing best practices
-- `security-skill` - Security checklist and patterns
-- `git-workflow-skill` - Git workflow standards
-- `api-design-skill` - REST API design
-- `docker-devops-skill` - Container and DevOps practices
-
-#### Documentation
-- API specifications (OpenAPI 3.0 templates)
-- Project type guides
-- Installation guide
-
-#### GitHub Templates
-- Issue templates (bug, feature, question, documentation)
-- Pull request template
-- CODEOWNERS
-- FUNDING configuration
+- Skills synchronized and aligned across both repos
+- Orchestrator skill protocols replicated
+- Sync manifest and runner restored in Dashboard
+- Foundation-sync flow operational in both repos
+- Consistent governance boundaries in both deployments
 
 ### Changed
+
+- **Orchestrator Skill Enhanced**
+  - Updated `skills/project-orchestrator-skill/SKILL.md` with deferred-work and boundary protocols
+  - Foundation and Dashboard homologated (identical orchestrator guidance)
+  - Skill distribution model clarified
+
 - Improved validation scripts with detailed output
 - Enhanced project wizard with framework selection
 - Consolidated frontend templates
 
 ### Fixed
+
 - Docker multi-stage builds
 - Kubernetes manifest syntax
+- Pre-push hook output noise reduced (verbose env dumps removed)
+- Foundation-Dashboard sync drift resolved
+- Orchestrator skill bootstrapping in consumer repos
 
-### Security
-- Secrets detection in pre-commit hook
-- Non-root user in Dockerfiles
-- Health checks in containers
+### Deprecated
+
+- Deprecated: Using custom deferred-work tracking outside `docs/reference/FUTURE-FEATURES-BACKLOG.md`
+  - New: Use centralized registry protocol (Foundation) or boundary-aware replication (Dashboard)
+
+---
+
+## Previous Milestones
+
+### v2.2.1 - Pre-Release
+
+### v2.2.0 - Pre-Release
+
+### v2.0.0 - Code Review Orchestrator (Pre-Release)
+
+### v1.0.0 (Old Placeholder) - 2026-04-08
+
+*This entry superseded by v1.0.0 - 2026-04-13 stable release above.*
