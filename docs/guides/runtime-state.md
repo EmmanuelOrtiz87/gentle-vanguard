@@ -4,7 +4,7 @@ This workspace automates isolation of Engram state so it is never written inside
 
 ## Goal
 
-- Prevent `.engram/` from appearing inside `engram-tool` or any project.
+- Prevent `.engram/` from appearing inside any tool or project repository.
 - Keep local databases and temporary files in a dedicated workspace directory.
 - Reduce manual steps when installing or using Engram for the first time.
 
@@ -21,13 +21,13 @@ This workspace automates isolation of Engram state so it is never written inside
 
 ## Operational rule
 
-- Do not run `engram` manually from `engram-tool` if you want to keep the repo clean.
+- Do not run `engram` manually from inside repositories if you want to keep them clean.
 - Always use the workspace launcher when the state must be reproducible and outside the checkout.
 - If you need to clean old leftovers, run `scripts/clean-runtime.ps1` or `scripts/clean-runtime.sh` manually.
 - `scripts/validate-workspace.ps1` fails if `.engram/` appears again inside known repositories.
 
-## Effect on `engram-tool`
+## Effect on repositories
 
-- `engram-tool` remains the original tool repository.
-- Runtime state should no longer live there.
-- If `.engram/` appears, it can be removed without touching the source code.
+- Tool and project repositories stay clean from Engram runtime state.
+- Runtime state should only live under the workspace data root.
+- If `.engram/` appears in any repository, it can be removed without touching source code.
