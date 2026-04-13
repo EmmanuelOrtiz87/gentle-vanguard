@@ -42,11 +42,28 @@ Activate tools anytime with:
 - **Gentle-AI**: AI CLI assistant for development
 - **Orchestrator Skills**: Coordinated workflow management
 
+### Optional MCP Integrations
+- **Context7 (optional)**: Version-aware technical documentation lookup
+- **Notion (optional)**: Shared project knowledge base for delivery notes and playbooks
+- Default mode is disabled (`enabled: false`) for both integrations
+- Enable only when team process requires them and credentials are managed securely
+
+Configuration lives in `config/workspace.config.json` under `mcpIntegrations`.
+Required environment variables when enabled:
+- Context7: `CONTEXT7_API_KEY`
+- Notion: `NOTION_TOKEN`, `NOTION_DATABASE_ID`
+
+Adoption criteria:
+- Enable **Context7** when implementation work depends on fast, version-accurate docs lookup.
+- Enable **Notion** when delivery requires shared project notes/tasks beyond git docs.
+- Keep both disabled for small/local-only projects to reduce token/tool noise and credential surface.
+
 ### Validation Checks
 - Tool availability verification
 - Automatic installation attempts (where possible)
 - Background service startup
 - Workflow system readiness
+- Optional MCP integration readiness (enabled flag + required env vars)
 
 ## 🔄 Activation Triggers
 
