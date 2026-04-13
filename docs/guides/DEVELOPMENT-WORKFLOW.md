@@ -24,6 +24,15 @@ feature/* / bugfix/* / chore/*
 | `bugfix/*` | Bug fixes | PR after completion |
 | `chore/*` | Maintenance | PR after completion |
 | `hotfix/*` | Urgent fixes | Direct commit allowed |
+| `release/*` | Release preparation | Direct commit allowed |
+
+### GitFlow Enforcement
+
+1. Protected branch direct push (`main`, `develop`) is blocked by default.
+2. Allowed branch naming is enforced: `feature/*`, `bugfix/*`, `chore/*`, `hotfix/*`, `release/*`.
+3. Expected PR base is enforced:
+- `feature/*`, `bugfix/*`, `chore/*` -> `develop`
+- `hotfix/*`, `release/*` -> `main`
 
 ## Session Workflow
 
@@ -194,7 +203,7 @@ Use `wf.ps1 publish` for end-to-end execution with governance gates:
 | Hook | Trigger | Actions |
 |------|---------|---------|
 | `pre-commit` | `git commit` | Secrets scan, format check |
-| `pre-push` | `git push` | Full review, tests |
+| `pre-push` | `git push` | GGA + GitFlow policy + governance + homologation drift gate |
 | `commit-msg` | `git commit` | Commit message validation |
 
 ## Tools

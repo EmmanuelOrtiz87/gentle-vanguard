@@ -29,6 +29,15 @@ main (production)
 | `release/*` | Release preparation | Direct commit allowed |
 | `hotfix/*` | Urgent production fixes | Direct commit allowed |
 
+## Enforcement Profile (Repository Runtime)
+
+1. Direct push to `main` and `develop` is blocked by default.
+2. Branch names must follow GitFlow patterns: `feature/*`, `bugfix/*`, `chore/*`, `hotfix/*`, `release/*`.
+3. PR base mapping is enforced:
+- `feature/*`, `bugfix/*`, `chore/*` -> `develop`
+- `hotfix/*`, `release/*` -> `main`
+4. Override for protected direct push is allowed only with explicit environment variable `GITFLOW_ALLOW_PROTECTED_PUSH=1`.
+
 ## Commit Convention (Conventional Commits)
 
 ```

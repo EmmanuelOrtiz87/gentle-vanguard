@@ -156,6 +156,67 @@ function Invoke-ScriptGovernanceValidation {
     }
 }
 
+function Get-GitFlowBaseForBranch {
+    param([string]$Branch)
+
+    if ($Branch -match '^(feature|bugfix|chore)/.+') {
+        return 'develop'
+    }
+
+    if ($Branch -match '^(hotfix|release)/.+') {
+        return 'main'
+    }
+
+    if ($Branch -eq 'develop') {
+        return 'develop'
+    }
+
+    return 'main'
+}
+
+function Invoke-GitFlowValidation {
+    param(
+        [switch]$EnforcePrBase,
+        [string]$PrBase
+    )
+
+    $gitflowScript = Join-Path $scriptDir '..\diagnostics\validate-gitflow.ps1'
+    if (-not (Test-Path $gitflowScript)) {
+        return @{
+            Passed = $true
+            Detail = 'validate-gitflow.ps1 not found (skipped)'
+            Suggestion = 'Add scripts/diagnostics/validate-gitflow.ps1 to enforce GitFlow gates.'
+            Fixable = $false
+        }
+    }
+
+    $gitflowArgs = @()
+    if ($EnforcePrBase) {
+        $gitflowArgs += '-EnforcePrBase'
+        if (-not [string]::IsNullOrWhiteSpace($PrBase)) {
+            $gitflowArgs += @('-PrBase', $PrBase)
+        }
+    }
+
+    Write-Step 'Running GitFlow policy validation...'
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $gitflowScript @gitflowArgs
+    if ($LASTEXITCODE -eq 0) {
+        return @{
+            Passed = $true
+            Detail = 'GitFlow policy validation passed.'
+            Suggestion = ''
+            Fixable = $false
+        }
+    }
+
+    return @{
+        Passed = $false
+        Detail = "GitFlow policy validation failed with exit code $LASTEXITCODE."
+        Suggestion = 'Use a valid branch type and PR base per GitFlow policy.'
+        Fixable = $false
+    }
+}
+
 function Ensure-PublishCommit {
     $gitInfo = Get-GitInfo
     if (-not $gitInfo.HasChanges) {
@@ -187,10 +248,17 @@ function Ensure-PublishCommit {
 function Ensure-PullRequest {
     param([string]$Branch)
 
-    $existingJson = gh pr view --head $Branch --json number,url,state 2>$null
+    $targetBase = Get-GitFlowBaseForBranch -Branch $Branch
+
+    $existingJson = gh pr view --head $Branch --json number,url,state,baseRefName 2>$null
     if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace($existingJson)) {
         try {
-            return ($existingJson | ConvertFrom-Json)
+            $existingPr = ($existingJson | ConvertFrom-Json)
+            if ($existingPr.baseRefName -ne $targetBase) {
+                Write-Error "Existing PR base '$($existingPr.baseRefName)' does not match GitFlow target '$targetBase'."
+                return $null
+            }
+            return $existingPr
         } catch {
         }
     }
@@ -208,12 +276,12 @@ function Ensure-PullRequest {
         $title = 'chore(publish): automated publish flow'
     }
 
-    gh pr create --base main --head $Branch --title $title --body-file $prPath | Out-Null
+    gh pr create --base $targetBase --head $Branch --title $title --body-file $prPath | Out-Null
     if ($LASTEXITCODE -ne 0) {
         return $null
     }
 
-    $createdJson = gh pr view --head $Branch --json number,url,state 2>$null
+    $createdJson = gh pr view --head $Branch --json number,url,state,baseRefName 2>$null
     if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($createdJson)) {
         return $null
     }
@@ -345,6 +413,19 @@ function Invoke-PublishWorkflow {
                     Suggestion = 'Fix failing frontend tests before merging.'
                     Fixable = $false
                 }
+            }
+        }
+
+        $gitInfo = Get-GitInfo
+        $targetBase = Get-GitFlowBaseForBranch -Branch $gitInfo.Branch
+        $gitflow = Invoke-GitFlowValidation -EnforcePrBase -PrBase $targetBase
+        if (-not $gitflow.Passed) {
+            $findings += [pscustomobject]@{
+                Code = 'gitflow'
+                Severity = 'HIGH'
+                Detail = $gitflow.Detail
+                Suggestion = $gitflow.Suggestion
+                Fixable = $gitflow.Fixable
             }
         }
 
