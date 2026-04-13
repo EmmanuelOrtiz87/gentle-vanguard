@@ -19,6 +19,7 @@ Central inventory of automation scripts with ownership, risk level, and executio
 | scripts/utilities/ensure-tools-active.ps1 | Tooling | B | yes | platform | Avoids heavy auto-installs unless forced |
 | scripts/utilities/run-gentle-ai.ps1 | Tooling Bridge | B | manual | platform | Compatibility launcher when native `gentle-ai` is unavailable |
 | scripts/utilities/wf.ps1 | Operator CLI | B | manual | dev-experience | Entrypoint for workflow commands |
+| scripts/foundation/setup.sh | Foundation Setup | B | manual | platform | Cross-platform bootstrap entrypoint for Linux/macOS/WSL |
 | scripts/utilities/end-session.ps1 | Session Closure | B | manual | dev-experience | Runs review/audit/governance checks and generates delivery closure artifact |
 | scripts/utilities/context-pack.ps1 | Context Budgeting | B | manual | dev-experience | Generates compact continuation summary to reduce token usage |
 | scripts/utilities/compact-start.ps1 | Context Budgeting | B | manual | dev-experience | Generates context pack and compact prompt for new thread |
@@ -29,6 +30,7 @@ Central inventory of automation scripts with ownership, risk level, and executio
 | scripts/utilities/orchestrator-status.ps1 | Status | A | manual | platform | Read-oriented orchestration checks |
 | scripts/diagnostics/system-diagnostics.ps1 | Diagnostics | B | manual | platform | Health and repair checks |
 | scripts/diagnostics/validate-script-governance.ps1 | Governance | B | manual | platform | Validates script placement, naming, and governance policy compliance |
+| scripts/diagnostics/validate-gitflow.ps1 | GitFlow Policy | B | manual | platform | Enforces branch naming, protected branch push policy, and expected PR base |
 
 ## Execution Policy
 
@@ -64,6 +66,9 @@ Default policy: keep development flow unblocked for advisory gaps, but never hid
 
 # Governance policy gate (legacy-safe advisory mode)
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1
+
+# GitFlow policy gate
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-gitflow.ps1
 
 # Canonical structure enforcement (enable only with explicit migration approval)
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1 -EnforceCanonicalStructure

@@ -6,6 +6,7 @@ Scripts for installing and maintaining the foundation.
 
 | Script | Description |
 |--------|-------------|
+| `setup.sh` | Cross-platform foundation setup entrypoint (Linux/macOS/WSL) |
 | `bootstrap-machine.ps1` | Install foundation globally on machine |
 | `bootstrap-workspace.ps1` | Bootstrap workspace with skills and tools |
 | `bootstrap.ps1` | Main bootstrap script |
