@@ -95,7 +95,7 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 **Trigger**: `spec`, `spec-driven`, `SDD`, `acceptance criteria`, `docs/specs`, `feature spec`
 
-**Use when**: Writing specs before code, defining acceptance criteria, validating implementation against specs
+**Use when**: Writing specs before code, defining acceptance criteria, validating implementation against specs. Governance policy: `docs/reference/SDD-GOVERNANCE-POLICY.md`
 
 ---
 

@@ -34,6 +34,7 @@ docs/
 | [project-types.md](reference/project-types.md) | Available project types |
 | [tools.md](reference/tools.md) | Tools reference |
 | [structure.md](reference/structure.md) | Directory structure |
+| [SDD-GOVERNANCE-POLICY.md](reference/SDD-GOVERNANCE-POLICY.md) | SDD enforcement criteria and exceptions |
 
 ## Guides
 
@@ -49,6 +50,7 @@ docs/
 | [runtime-state.md](guides/runtime-state.md) | Runtime state reference |
 | [audit-system.md](guides/audit-system.md) | Audit system |
 | [configuration.md](guides/configuration.md) | Configuration guide |
+| [../specs/README.md](specs/README.md) | Spec-Driven Development entry point and templates |
 
 ## Supplementary
 
