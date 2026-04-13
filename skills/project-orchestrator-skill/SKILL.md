@@ -229,6 +229,28 @@ Default behavior:
 
 Reference: `docs/reference/FUTURE-FEATURES-BACKLOG.md`
 
+## GLOBAL VS REPOSITORY BOUNDARY PROTOCOL
+
+Use this protocol to keep workspace-global decisions and repository decisions separated without losing traceability.
+
+1. Global-level artifacts (workspace root docs/process notes) are coordination artifacts and must not be auto-published into repository history.
+2. Repository-level artifacts are implementation/governance artifacts and follow normal PR workflow in their own repository.
+
+Replication checks are mandatory:
+
+1. If a global artifact changes, ask the user whether any repository must receive a mirrored implementation change.
+2. If a repository artifact changes, ask the user whether global workspace guidance must be updated to keep cross-repo consistency.
+
+Decision outcomes:
+
+1. Global only: keep change at workspace scope and do not replicate to repos.
+2. Repo only: keep change in repository and do not modify workspace-global docs.
+3. Both: apply in both places with explicit cross-reference.
+
+If unclear or seemingly redundant, request user confirmation before writing either side.
+
+Workspace reference: `c:/Workspace_local/docs/reference/WORKSPACE-FUTURE-FEATURES-BACKLOG.md`
+
 ## LEARNING QUALITY BAR
 
 Only persist learning as durable guidance when all are true:
