@@ -157,6 +157,55 @@ function Start-OrchestratorSkills {
     Write-Success "Orchestrator skills ready for coordination"
 }
 
+function Test-MCPIntegrationReadiness {
+    Write-Step "Checking optional MCP integrations..."
+
+    $configPath = Join-Path $repoRoot 'config\workspace.config.json'
+    if (-not (Test-Path $configPath)) {
+        Write-Warning "workspace.config.json not found - skipping MCP integration checks"
+        return
+    }
+
+    try {
+        $cfg = Get-Content $configPath -Raw | ConvertFrom-Json
+    } catch {
+        Write-Warning "Could not parse workspace.config.json - skipping MCP integration checks"
+        return
+    }
+
+    if (-not $cfg.mcpIntegrations) {
+        Write-Success "No optional MCP integrations configured"
+        return
+    }
+
+    $integrationNames = @('context7', 'notion')
+    foreach ($name in $integrationNames) {
+        $integration = $cfg.mcpIntegrations.$name
+        if (-not $integration) { continue }
+
+        if (-not $integration.enabled) {
+            Write-Success "MCP $name is disabled (default)"
+            continue
+        }
+
+        $missing = @()
+        if ($integration.requiredEnv) {
+            foreach ($envName in $integration.requiredEnv) {
+                $value = [Environment]::GetEnvironmentVariable([string]$envName)
+                if ([string]::IsNullOrWhiteSpace($value)) {
+                    $missing += [string]$envName
+                }
+            }
+        }
+
+        if ($missing.Count -gt 0) {
+            Write-Warning "MCP $name is enabled but missing env vars: $($missing -join ', ')"
+        } else {
+            Write-Success "MCP $name is enabled and env vars are present"
+        }
+    }
+}
+
 function Test-WorkflowReadiness {
     Write-Step "Testing Workflow Readiness..."
 
@@ -210,6 +259,7 @@ Start-Engram
 Start-GGA
 Start-GentleAI
 Start-OrchestratorSkills
+Test-MCPIntegrationReadiness
 Test-WorkflowReadiness
 Show-StatusSummary
 
