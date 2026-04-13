@@ -24,6 +24,15 @@ feature/* / bugfix/* / chore/*
 | `bugfix/*` | Bug fixes | PR after completion |
 | `chore/*` | Maintenance | PR after completion |
 | `hotfix/*` | Urgent fixes | Direct commit allowed |
+| `release/*` | Release preparation | Direct commit allowed |
+
+### GitFlow Enforcement
+
+1. Protected branch direct push (`main`, `develop`) is blocked by default.
+2. Allowed branch naming is enforced: `feature/*`, `bugfix/*`, `chore/*`, `hotfix/*`, `release/*`.
+3. Expected PR base is enforced:
+- `feature/*`, `bugfix/*`, `chore/*` -> `develop`
+- `hotfix/*`, `release/*` -> `main`
 
 ## Session Workflow
 
@@ -52,6 +61,7 @@ feature/* / bugfix/* / chore/*
 2. wf.ps1 audit           # Audit document
 3. Validate specification
 4. Ask: Create PR?
+5. wf.ps1 publish         # Full publish flow with gated merge decision
 ```
 
 ## Commit Convention
@@ -165,6 +175,16 @@ gh pr merge --squash
 gh pr merge --admin --merge
 ```
 
+### Controlled Publish Decision
+
+Use `wf.ps1 publish` for end-to-end execution with governance gates:
+
+1. If validations pass with no alerts, PR merge is authorized automatically.
+2. If alerts are detected, a summary + suggestions are shown.
+3. If suggestions are accepted, automated fixes are applied and the flow re-runs.
+4. If suggestions are rejected, a final explicit confirmation is required to merge with gaps under developer responsibility.
+5. Every decision path is documented in `docs/sessions/*-publish-decision.md`.
+
 ## Automation
 
 ### Scripts
@@ -175,6 +195,7 @@ gh pr merge --admin --merge
 | `wf.ps1 audit` | Generate audit document |
 | `wf.ps1 pr` | Create PR template |
 | `wf.ps1 push` | Prepare for push |
+| `wf.ps1 publish` | Validate, summarize alerts, apply suggestions, and merge according to decision policy |
 | `wf.ps1 status` | Show current status |
 
 ### Hooks
@@ -182,7 +203,7 @@ gh pr merge --admin --merge
 | Hook | Trigger | Actions |
 |------|---------|---------|
 | `pre-commit` | `git commit` | Secrets scan, format check |
-| `pre-push` | `git push` | Full review, tests |
+| `pre-push` | `git push` | GGA + GitFlow policy + governance + homologation drift gate |
 | `commit-msg` | `git commit` | Commit message validation |
 
 ## Tools
