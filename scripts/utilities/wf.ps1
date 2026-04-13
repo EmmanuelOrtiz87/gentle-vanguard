@@ -93,6 +93,39 @@ function Get-BranchStatus {
     return $true
 }
 
+function Resolve-PublishMode {
+    param(
+        [string]$RequestedMode,
+        [switch]$ForceMode
+    )
+
+    $normalized = if ($RequestedMode) { $RequestedMode.Trim().ToLowerInvariant() } else { '' }
+    switch ($normalized) {
+        'pr' { return 'push+pr' }
+        'push+pr' { return 'push+pr' }
+        'with-pr' { return 'push+pr' }
+        'later' { return 'push-only' }
+        'push-only' { return 'push-only' }
+        'only-push' { return 'push-only' }
+    }
+
+    if ($ForceMode) {
+        return 'push-only'
+    }
+
+    Write-Host "" 
+    Write-Host "Choose publish mode:" -ForegroundColor Cyan
+    Write-Host "  1) Push changes and open PR now" -ForegroundColor Yellow
+    Write-Host "  2) Push changes only (create PR later)" -ForegroundColor Yellow
+    $choice = Read-Host "Enter 1 or 2"
+
+    if ($choice -eq '1') {
+        return 'push+pr'
+    }
+
+    return 'push-only'
+}
+
 function Invoke-Update {
     Write-Step "Updating repository, foundation, skills, and tools"
 
@@ -539,7 +572,7 @@ COMMANDS:
     review [scope]       Run code review (security, quality, all)
     audit                Generate audit document
     pr                   Create PR with template
-    push                 Commit and push changes
+    push [pr|later]      Prepare publish flow; choose push+PR now or push-only
     status               Show current status
     start-session [task] Create a session brief and optional task brief
     end-session [task]   Run session closure checks and create delivery closure artifact
@@ -573,6 +606,8 @@ EXAMPLES:
     .\wf.ps1 audit              Generate audit document
     .\wf.ps1 pr                 Create PR
     .\wf.ps1 push               Commit and push
+    .\wf.ps1 push pr            Push and open PR now
+    .\wf.ps1 push later         Push only and create PR later
     .\wf.ps1 start-session      Create the session brief for today
     .\wf.ps1 end-session        Run end-of-session checks and create closure artifact
     .\wf.ps1 task-brief auth    Create a task brief for auth work
@@ -754,13 +789,28 @@ switch ($Command) {
         
         # Generate audit
         & "$PSCommandPath" audit
+
+        $publishMode = Resolve-PublishMode -RequestedMode $Scope -ForceMode:$Force
+        $gitInfo = Get-GitInfo
+        $branchName = if ([string]::IsNullOrWhiteSpace($gitInfo.Branch)) { '<current-branch>' } else { $gitInfo.Branch }
         
         # Commit and push
         Write-Host ""
-        Write-Host "Run the following commands:" -ForegroundColor Cyan
-        Write-Host "  git add ." -ForegroundColor Yellow
-        Write-Host "  git commit -m 'type(scope): description'" -ForegroundColor Yellow
-        Write-Host "  git push" -ForegroundColor Yellow
+        if ($publishMode -eq 'push+pr') {
+            Write-Host "Run the following commands (push + PR):" -ForegroundColor Cyan
+            Write-Host "  git add ." -ForegroundColor Yellow
+            Write-Host "  git commit -m 'type(scope): description'" -ForegroundColor Yellow
+            Write-Host "  git push -u origin $branchName" -ForegroundColor Yellow
+            Write-Host "  gh pr create --fill" -ForegroundColor Yellow
+        } else {
+            Write-Host "Run the following commands (push only):" -ForegroundColor Cyan
+            Write-Host "  git add ." -ForegroundColor Yellow
+            Write-Host "  git commit -m 'type(scope): description'" -ForegroundColor Yellow
+            Write-Host "  git push" -ForegroundColor Yellow
+            Write-Host "" 
+            Write-Host "Later, create PR with:" -ForegroundColor Cyan
+            Write-Host "  .\wf.ps1 pr" -ForegroundColor Yellow
+        }
     }
     
     'health' {
