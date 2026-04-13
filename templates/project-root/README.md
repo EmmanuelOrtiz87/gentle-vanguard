@@ -48,3 +48,8 @@ Brief description of the project.
 - Use `docs/sessions/` and `docs/tasks/` to keep session and task scope explicit.
 - Use `docs/sessions/*-context-pack.md` to keep token usage low while preserving continuity.
 - Tune audit semaphore thresholds in `config/context-efficiency.json`.
+- Optional hook coverage is available but disabled by default:
+
+```powershell
+.\scripts\enable-optional-post-commit.ps1
+```
