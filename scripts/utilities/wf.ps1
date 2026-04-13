@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'homologate', 'agent-alert', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'homologate', 'agent-alert', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -375,6 +375,8 @@ function Invoke-PublishWorkflow {
     if (-not (Get-BranchStatus)) {
         return
     }
+
+    Warn-OldWorkflowCheckpoints -ThresholdDays 7
 
     $attempt = 1
     while ($attempt -le 2) {
@@ -952,6 +954,13 @@ Closes #[ISSUE_NUMBER]
 
 function Show-Status {
     $gitInfo = Get-GitInfo
+    $checkpointCount = 0
+    $oldCheckpointCount = 0
+
+    if (Assert-GitRepository) {
+        $checkpointCount = (Get-WorkflowCheckpoints).Count
+        $oldCheckpointCount = (Get-OldWorkflowCheckpoints -ThresholdDays 7).Count
+    }
     
     Write-Host ""
     Write-Host "========================================" -ForegroundColor Green
@@ -960,6 +969,10 @@ function Show-Status {
     Write-Host ""
     Write-Host "Branch: $($gitInfo.Branch)"
     Write-Host "Has Changes: $($gitInfo.HasChanges)"
+    Write-Host "Workflow checkpoints: $checkpointCount"
+    if ($oldCheckpointCount -gt 0) {
+        Write-Warning "$oldCheckpointCount checkpoint(s) older than 7 days"
+    }
     Write-Host ""
     
     if ($gitInfo.HasChanges) {
@@ -971,6 +984,192 @@ function Show-Status {
     Write-Host "Recent commits:" -ForegroundColor Cyan
     Get-CommitHistory -Count 3 | ForEach-Object { Write-Host "  $_" }
     Write-Host ""
+}
+
+function Assert-GitRepository {
+    git rev-parse --is-inside-work-tree 2>$null | Out-Null
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Current directory is not a git repository."
+        return $false
+    }
+
+    return $true
+}
+
+function Get-WorkflowCheckpoints {
+    $lines = git stash list 2>$null
+    if ($LASTEXITCODE -ne 0 -or -not $lines) {
+        return @()
+    }
+
+    return @($lines | Where-Object { $_ -match 'wf-checkpoint:' })
+}
+
+function Get-WorkflowCheckpointRefs {
+    $checkpoints = Get-WorkflowCheckpoints
+    if (-not $checkpoints -or $checkpoints.Count -eq 0) {
+        return @()
+    }
+
+    $refs = @()
+    foreach ($entry in $checkpoints) {
+        if ($entry -match '^(stash@\{\d+\})') {
+            $refs += $matches[1]
+        }
+    }
+
+    return $refs
+}
+
+function Get-OldWorkflowCheckpoints {
+    param([int]$ThresholdDays = 7)
+
+    $refs = Get-WorkflowCheckpointRefs
+    if (-not $refs -or $refs.Count -eq 0) {
+        return @()
+    }
+
+    $cutoff = (Get-Date).AddDays(-1 * $ThresholdDays)
+    $oldRefs = @()
+    foreach ($ref in $refs) {
+        $dateRaw = git show -s --format=%cI $ref 2>$null
+        if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($dateRaw)) {
+            continue
+        }
+
+        $parsedDate = $null
+        if ([DateTimeOffset]::TryParse($dateRaw, [ref]$parsedDate)) {
+            if ($parsedDate.LocalDateTime -lt $cutoff) {
+                $oldRefs += $ref
+            }
+        }
+    }
+
+    return $oldRefs
+}
+
+function Warn-OldWorkflowCheckpoints {
+    param([int]$ThresholdDays = 7)
+
+    if (-not (Assert-GitRepository)) {
+        return
+    }
+
+    $oldRefs = Get-OldWorkflowCheckpoints -ThresholdDays $ThresholdDays
+    if ($oldRefs.Count -gt 0) {
+        Write-Warning "Found $($oldRefs.Count) workflow checkpoint(s) older than $ThresholdDays days. Review with '.\wf.ps1 list-checkpoints'."
+        Write-Host "Tip: drop stale checkpoints with 'git stash drop <stash@{n}>'" -ForegroundColor Cyan
+    }
+}
+
+function Invoke-LiveCheckpoint {
+    param([string]$Label)
+
+    if (-not (Assert-GitRepository)) {
+        exit 1
+    }
+
+    $status = git status --porcelain 2>$null
+    if (-not $status -or [string]::IsNullOrWhiteSpace(($status -join ''))) {
+        Write-Warning "No local changes detected. Nothing to checkpoint."
+        return
+    }
+
+    $branch = git rev-parse --abbrev-ref HEAD 2>$null
+    $timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
+    $branchTag = (($branch -replace '[^a-zA-Z0-9\-/_]', '') -replace '[/_]+', '-').ToLowerInvariant()
+    $rawLabel = if ([string]::IsNullOrWhiteSpace($Label)) {
+        Write-Warning "No checkpoint label provided. Convention is '<scope>-<objective>' (example: feature-mcp-cleanup)."
+        "$branchTag-snapshot"
+    } else {
+        $Label
+    }
+
+    $safeLabel = (($rawLabel -replace '\s+', '-') -replace '[^a-zA-Z0-9\-]', '').ToLowerInvariant().Trim('-')
+    if ([string]::IsNullOrWhiteSpace($safeLabel)) {
+        $safeLabel = "$branchTag-snapshot"
+    }
+    if ($safeLabel -notmatch '^[a-z0-9]+-[a-z0-9][a-z0-9-]*$') {
+        $safeLabel = "$branchTag-$safeLabel".Trim('-')
+        Write-Warning "Normalized checkpoint label to '$safeLabel' (expected '<scope>-<objective>')."
+    }
+
+    $stashMessage = "wf-checkpoint:{0}:{1}:{2}" -f $branch, $safeLabel, $timestamp
+    git stash push -u -m $stashMessage | Out-Null
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Failed to create checkpoint stash."
+        exit 1
+    }
+
+    Write-Success "Checkpoint created: $stashMessage"
+    Write-Host "Restore latest checkpoint with: .\wf.ps1 rollback-checkpoint" -ForegroundColor Cyan
+    Write-Host "List checkpoints with: .\wf.ps1 list-checkpoints" -ForegroundColor Cyan
+}
+
+function Show-LiveCheckpoints {
+    if (-not (Assert-GitRepository)) {
+        exit 1
+    }
+
+    $checkpoints = Get-WorkflowCheckpoints
+    if (-not $checkpoints -or $checkpoints.Count -eq 0) {
+        Write-Warning "No workflow checkpoints found."
+        return
+    }
+
+    Write-Step "Available workflow checkpoints"
+    foreach ($entry in $checkpoints) {
+        Write-Host "  $entry"
+    }
+}
+
+function Resolve-CheckpointReference {
+    param([string]$Selector)
+
+    $checkpoints = Get-WorkflowCheckpoints
+    if (-not $checkpoints -or $checkpoints.Count -eq 0) {
+        return $null
+    }
+
+    if ([string]::IsNullOrWhiteSpace($Selector)) {
+        if ($checkpoints[0] -match '^(stash@\{\d+\})') {
+            return $matches[1]
+        }
+        return $null
+    }
+
+    if ($Selector -match '^stash@\{\d+\}$') {
+        return $Selector
+    }
+
+    $match = $checkpoints | Where-Object { $_ -like "*$Selector*" } | Select-Object -First 1
+    if ($match -and $match -match '^(stash@\{\d+\})') {
+        return $matches[1]
+    }
+
+    return $null
+}
+
+function Invoke-RollbackCheckpoint {
+    param([string]$Selector)
+
+    if (-not (Assert-GitRepository)) {
+        exit 1
+    }
+
+    $stashRef = Resolve-CheckpointReference -Selector $Selector
+    if ([string]::IsNullOrWhiteSpace($stashRef)) {
+        Write-Error "No matching workflow checkpoint found. Use '.\wf.ps1 list-checkpoints'."
+        exit 1
+    }
+
+    git stash pop $stashRef
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "Checkpoint apply reported conflicts. Resolve them and continue."
+        exit 1
+    }
+
+    Write-Success "Checkpoint restored from $stashRef"
 }
 
 function Show-Help {
@@ -1004,6 +1203,9 @@ COMMANDS:
     context-pack [goal]  Generate compact context summary for new chat thread
     compact-start [goal] Generate context pack and copy compact continuation prompt
     context-metrics [days] Show context/token usage metrics from local logs
+    checkpoint [label]   Save a live rollback point (git stash -u) before risky edits
+    list-checkpoints     List workflow-created checkpoints
+    rollback-checkpoint [selector] Restore latest checkpoint or one matching selector
     homologate [apply]  Normalize docs/artifacts and update references (dry-run default)
     agent-alert [strict] Check process-compliance signals for off-process AI activity
     help                 Show this help
@@ -1038,11 +1240,19 @@ EXAMPLES:
     .\wf.ps1 context-pack "fix ci noise"  Generate compact handoff summary for token-efficient continuation
     .\wf.ps1 compact-start "fix ci noise" Generate handoff summary and copy compact prompt
     .\wf.ps1 context-metrics 14  Show 14-day context usage summary
+    .\wf.ps1 checkpoint feature-doc-cleanup  Save rollback point including untracked files
+    .\wf.ps1 list-checkpoints        Show available rollback points
+    .\wf.ps1 rollback-checkpoint     Restore latest rollback point
+    .\wf.ps1 rollback-checkpoint feature-doc-cleanup Restore matching rollback point
     .\wf.ps1 homologate          Preview normalization actions
     .\wf.ps1 homologate apply    Execute normalization and reference updates
     .\wf.ps1 health -StrictCleanup  Run health and fail if cleanup drift exists
     .\wf.ps1 agent-alert           Show process-compliance warnings (non-blocking)
     .\wf.ps1 agent-alert strict    Fail if process-compliance warnings are detected
+
+CHECKPOINT LABEL CONVENTION:
+    Use '<scope>-<objective>' in lowercase kebab-case.
+    Examples: feature-doc-cleanup, bugfix-hook-timeout, release-prep-check.
 
 "@
 }
@@ -1073,6 +1283,18 @@ switch ($Command) {
     
     'status' {
         Show-Status
+    }
+
+    'checkpoint' {
+        Invoke-LiveCheckpoint -Label $Scope
+    }
+
+    'list-checkpoints' {
+        Show-LiveCheckpoints
+    }
+
+    'rollback-checkpoint' {
+        Invoke-RollbackCheckpoint -Selector $Scope
     }
 
     'start-session' {
@@ -1203,6 +1425,7 @@ switch ($Command) {
         if (-not (Get-BranchStatus)) { exit 0 }
         
         Write-Step "Pushing Changes"
+        Warn-OldWorkflowCheckpoints -ThresholdDays 7
         
         # Check secrets
         if (-not (Test-Secrets)) {
