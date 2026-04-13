@@ -43,7 +43,7 @@ Workspace Foundation is the base framework for creating standardized, cross-plat
 Workspace Foundation
 ├── Core Components
 │   ├── Bootstrap System (bootstrap-project.ps1)
-│   ├── Setup Scripts (setup.sh, setup.ps1)
+│   ├── Setup Scripts (scripts/foundation/setup.sh, setup.ps1)
 │   ├── Template Engine (templates/)
 │   └── Skill Registry (skills/)
 ├── Governance Layer
@@ -64,7 +64,7 @@ Workspace Foundation
 
 ### Deployment
 - **Distribution:** Git repository as template
-- **Installation:** Single command setup (`bash setup.sh` or `.\setup.ps1`)
+- **Installation:** Single command setup (`bash scripts/foundation/setup.sh` or `.\setup.ps1`)
 - **Updates:** Git-based with validation scripts
 
 ## 3. Detailed Design
@@ -139,7 +139,7 @@ User Request → Bootstrap Script → Template Selection → Configuration → V
 #### Setup API
 ```bash
 # Cross-platform setup
-bash setup.sh    # Linux/macOS/WSL
+bash scripts/foundation/setup.sh    # Linux/macOS/WSL
 ./setup.ps1      # Windows
 ```
 
