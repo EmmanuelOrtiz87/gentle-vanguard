@@ -207,6 +207,28 @@ Minimum validation plan fields:
 
 If the plan is missing, mark proposal as `deferred` and do not institutionalize it in skills/docs.
 
+## DEFERRED-WORK REGISTRY PROTOCOL
+
+Use this protocol whenever the user decides to postpone optimization, enhancement, or refactor work.
+
+1. Register deferred work in `docs/reference/FUTURE-FEATURES-BACKLOG.md`.
+2. Keep one row per unique deferred scope (no duplicates).
+3. Include date, value, status, and trigger-to-revisit.
+
+Confirmation is mandatory before registration if:
+
+1. The deferred request is ambiguous.
+2. The deferred request appears redundant with existing backlog items.
+
+If ambiguity/redundancy exists, ask a short confirmation question and only then write/update the backlog.
+
+Default behavior:
+
+1. If clear and non-redundant: append backlog item automatically.
+2. If clear and already tracked: update existing row instead of creating new one.
+
+Reference: `docs/reference/FUTURE-FEATURES-BACKLOG.md`
+
 ## LEARNING QUALITY BAR
 
 Only persist learning as durable guidance when all are true:

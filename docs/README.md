@@ -35,6 +35,7 @@ docs/
 | [tools.md](reference/tools.md) | Tools reference |
 | [structure.md](reference/structure.md) | Directory structure |
 | [SDD-GOVERNANCE-POLICY.md](reference/SDD-GOVERNANCE-POLICY.md) | SDD enforcement criteria and exceptions |
+| [FUTURE-FEATURES-BACKLOG.md](reference/FUTURE-FEATURES-BACKLOG.md) | Deferred improvements and optimization backlog |
 
 ## Guides
 
