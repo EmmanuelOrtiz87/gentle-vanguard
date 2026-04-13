@@ -27,6 +27,32 @@ description: >
 11. **Evidence Before Content** - Add durable docs/learning only after explicit validation and decision rationale
 12. **Goal Alignment Always** - Keep every change aligned to stated objective, constraints, and acceptance criteria
 
+## SDD ENFORCEMENT POLICY
+
+Current policy baseline:
+
+1. SDD is active and handled by the orchestrator as part of normal workflow.
+2. New feature work should be spec-first (`docs/specs/*`) before implementation.
+3. Spec validation is required before PR merge when feature behavior changes.
+
+Recommended policy (normalized):
+
+1. Treat SDD as mandatory for all net-new features and behavior changes.
+2. Allow hotfix/incident exception only with a mini-spec written before merge.
+3. Require evidence in PR:
+- spec file path,
+- acceptance criteria status,
+- validation evidence (tests/checks),
+- final spec status (`validated` or `done`).
+
+Role split:
+
+1. Orchestrator: source of truth for process and enforcement decisions.
+2. `gga`: governance/compliance assist and diagnostics.
+3. `gentle-ai`: implementation assistant only.
+
+Reference: `docs/reference/SDD-GOVERNANCE-POLICY.md`
+
 ## SESSION ACTIVATION STRATEGY
 
 Use this decision model:
