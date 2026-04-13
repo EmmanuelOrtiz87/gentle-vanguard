@@ -33,6 +33,13 @@ jobs:
           # -SkipFallbackTests: skip file-mutation tests (unnecessary in CI — validated locally)
           powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1 -SkipFallbackTests
 
+      - name: SDD governance gate (PR)
+        if: github.event_name == 'pull_request'
+        shell: pwsh
+        run: |
+          # Mandatory on feature/* and feat/* branches, advisory otherwise.
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-sdd-governance.ps1
+
       - name: Stack readiness advisory (non-blocking)
         shell: pwsh
         continue-on-error: true
