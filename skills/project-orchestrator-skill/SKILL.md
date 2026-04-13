@@ -59,9 +59,25 @@ Goal: avoid overlap, confusion, and conflicting behavior across sessions.
 1. MUST use Engram for durable memory (context, decisions, closeout learnings).
 2. MUST use this orchestrator skill as the primary execution framework.
 3. MUST keep session artifacts updated (`docs/sessions/YYYY-MM-DD-session-start.md` and task brief for bounded scope).
-4. SHOULD use `gga` and `gentle-ai` when available; if unavailable, continue with warnings plus remediation commands.
+4. SHOULD use `gentle-ai`, `gentleman-guardian-angel` (`gga`), and `gentleman-skills` when available; if unavailable, continue with warnings plus remediation commands.
 5. MUST run focused validation before push and include evidence in docs.
 6. MUST load script-governance skill for any script move, command-path update, hook change, or script documentation change.
+
+## SKILL DISTRIBUTION MODEL (ON-DEMAND)
+
+1. Foundation is the source of truth for skills.
+2. Skills are maintained natively in `skills/<skill-name>/SKILL.md` and should not rely on external `references/` dependencies for core operation.
+3. Publication flow:
+- update skills in Foundation,
+- commit and publish Foundation,
+- consumers update by running `wf.ps1 foundation-sync apply`.
+4. Activation model is on-demand:
+- the orchestrator loads only the skills required by current task context,
+- avoid loading full catalog by default.
+5. Any new skill added to Foundation must be reflected in:
+- `skills/SKILL_INDEX.md`,
+- orchestrator stack/use-case mapping,
+- consumer sync manifest when that consumer depends on shared skill updates.
 
 ## TOKEN AND CONTEXT BUDGET PROTOCOL
 
@@ -461,15 +477,21 @@ START REVIEW
 
 | File Found | Stack | Skills |
 |------------|-------|--------|
-| `go.mod` | Go | golang-api-skill, testing-skill |
-| `package.json` (Angular) | Angular | angular-spa-skill, angular-core |
-| `package.json` (Next) | Next.js | nextjs-15-skill |
+| `go.mod` | Go | golang-api-skill, api-design-skill, testing-skill |
+| `package.json` (Angular) | Angular | angular-spa-skill, testing-skill |
+| `package.json` (Next) | Next.js | nextjs-15-skill, tailwind-4-skill |
 | `package.json` (React) | React | react-19-skill, tailwind-4-skill |
-| `requirements.txt` | Django | django-drf-skill |
+| `pubspec.yaml` | Flutter | flutter-skill, testing-skill |
+| `ios/` + `.swift` | iOS | ios-swift-development, ios-swiftui-patterns-skill |
+| `android/` + `.kt` | Android | android-kotlin-skill, android-architecture-skill, android-jetpack-compose-skill |
+| `requirements.txt` | Django/Python | django-drf-skill, pytest-skill |
+| `*.tf` | Terraform | terraform-infrastructure |
+| `k8s/*.yaml` or `helm/` | Kubernetes | kubernetes-deployment |
 
 ### Always Load
 - `git-workflow-skill` - Git best practices
 - `code-review-orchestrator-skill` - Code review
+- `project-orchestrator-skill` - Task coordination and skill routing
 
 ### Project Structure
 
@@ -479,7 +501,7 @@ START REVIEW
 | `tests/` or `*_test.go` | Testing |
 | `docs/` | Documentation |
 | `AGENTS.md` | AI configured |
-| `.skills/` | Foundation linked |
+| `skills/` | Native Foundation skills catalog |
 
 ---
 
