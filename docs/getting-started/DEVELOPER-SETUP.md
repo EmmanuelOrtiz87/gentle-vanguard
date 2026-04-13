@@ -92,13 +92,21 @@ git config --global core.hooksPath "$env:USERPROFILE\.git-hooks"
 ### AI Code Review (gga)
 
 ```powershell
-go install github.com/gentleman-programming/gentleman-guardian-angel/cmd/gga@latest
+git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git
+cd gentleman-guardian-angel
+bash install.sh
 ```
 
 ### Verify
 
 ```powershell
 gga --version
+```
+
+### Update optional tools (recommended)
+
+```powershell
+.\scripts\utilities\wf.ps1 update-tools
 ```
 
 ## Step 5: Configure AI Agent

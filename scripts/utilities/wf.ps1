@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'homologate', 'agent-alert', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'homologate', 'agent-alert', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -540,15 +540,18 @@ function Invoke-Update {
     Write-Step "Updating repository, foundation, skills, and tools"
 
     $updateScript = Join-Path $scriptDir '..\validation\update-all.ps1'
-    if (-not (Test-Path $updateScript)) {
-        Write-Error "Update script not found: $updateScript"
-        exit 1
+    if (Test-Path $updateScript) {
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $updateScript -All -Force
+        if ($LASTEXITCODE -ne 0) { Write-Warning "Foundation update returned exit $LASTEXITCODE" }
+    } else {
+        Write-Warning "update-all.ps1 not found - skipping foundation update"
     }
 
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $updateScript -All -Force
-    if ($LASTEXITCODE -ne 0) {
-        Write-Error "Update failed with exit code $LASTEXITCODE"
-        exit $LASTEXITCODE
+    # Update tools (gga, engram, gentle-ai) - no brew needed
+    $toolsScript = Join-Path $scriptDir 'update-tools.ps1'
+    if (Test-Path $toolsScript) {
+        Write-Step "Updating tools (gga, engram, gentle-ai)"
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $toolsScript
     }
 }
 
@@ -996,6 +999,7 @@ COMMANDS:
     verify               Quick stack verification & auto-repair
     update               Update repository, foundation, skills, and tools
     update-all           Alias for update
+    update-tools         Update gga, engram, and gentle-ai (no brew needed on Windows)
     migrate-structure    Preflight and guided migration of loose scripts
     context-pack [goal]  Generate compact context summary for new chat thread
     compact-start [goal] Generate context pack and copy compact continuation prompt
@@ -1030,6 +1034,7 @@ EXAMPLES:
     .\wf.ps1 install-engram      Install or verify Engram CLI
     .\wf.ps1 ide-status          Detect IDE and show recommended activation
     .\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
+    .\wf.ps1 update-tools         Update gga / engram / gentle-ai (Windows: go install, not brew)
     .\wf.ps1 context-pack "fix ci noise"  Generate compact handoff summary for token-efficient continuation
     .\wf.ps1 compact-start "fix ci noise" Generate handoff summary and copy compact prompt
     .\wf.ps1 context-metrics 14  Show 14-day context usage summary
@@ -1124,7 +1129,19 @@ switch ($Command) {
     'update-all' {
         Invoke-UpdateAll
     }
-    
+
+    'update-tools' {
+        Write-Step "Updating tools (gga, engram, gentle-ai)"
+        $toolsScript = Join-Path $scriptDir 'update-tools.ps1'
+        if (-not (Test-Path $toolsScript)) {
+            Write-Error "update-tools.ps1 not found: $toolsScript"
+            exit 1
+        }
+        $toolsArgs = @()
+        if ($Force) { $toolsArgs += '-Force' }
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $toolsScript @toolsArgs
+    }
+
     'review' {
         Write-Step "Code Review - $($Scope.ToUpper())"
         
