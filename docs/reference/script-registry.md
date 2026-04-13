@@ -19,6 +19,7 @@ Central inventory of automation scripts with ownership, risk level, and executio
 | scripts/utilities/ensure-tools-active.ps1 | Tooling | B | yes | platform | Avoids heavy auto-installs unless forced |
 | scripts/utilities/run-gentle-ai.ps1 | Tooling Bridge | B | manual | platform | Compatibility launcher when native `gentle-ai` is unavailable |
 | scripts/utilities/wf.ps1 | Operator CLI | B | manual | dev-experience | Entrypoint for workflow commands |
+| scripts/utilities/enable-optional-post-commit.ps1 | Optional Hook Coverage | B | manual | dev-experience | Enables/disables optional post-commit automation (disabled by default) |
 | scripts/foundation/setup.sh | Foundation Setup | B | manual | platform | Cross-platform bootstrap entrypoint for Linux/macOS/WSL |
 | scripts/utilities/end-session.ps1 | Session Closure | B | manual | dev-experience | Runs review/audit/governance checks and generates delivery closure artifact |
 | scripts/utilities/context-pack.ps1 | Context Budgeting | B | manual | dev-experience | Generates compact continuation summary to reduce token usage |
@@ -38,7 +39,22 @@ Central inventory of automation scripts with ownership, risk level, and executio
 2. Scripts must print actionable remediation commands on failure.
 3. Non-critical failures must not block session progress.
 4. Hooks block only for security-critical failures.
-5. Foundation keeps hook scope minimal by design: pre-push only, no post-commit automation.
+5. Foundation keeps hook scope minimal by design: pre-push only by default.
+6. Post-commit automation is available as an opt-in profile and must be explicitly enabled.
+
+## Optional Post-Commit Profile
+
+Use this profile only when the project needs commit-time memory/session synchronization.
+
+```powershell
+# Enable optional post-commit coverage
+.\scripts\utilities\enable-optional-post-commit.ps1
+
+# Disable optional post-commit coverage
+.\scripts\utilities\enable-optional-post-commit.ps1 -Disable
+```
+
+Default for Foundation and generated projects remains disabled.
 
 ## Homologation Contract (Tools and Process)
 
