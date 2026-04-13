@@ -74,7 +74,9 @@ The workspace-foundation includes integration with:
 | **Claude Code** | AI coding agent | https://claude.ai/code |
 | **gentle-ai** | AI ecosystem configurator | `go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest` |
 | **gga** | AI code review on commits | `git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git && cd gentleman-guardian-angel && bash install.sh` |
-| **engram** | Persistent memory | `go install github.com/gentleman-programming/engram/cmd/engram@latest` |
+| **engram** | Persistent memory | `go install github.com/Gentleman-Programming/engram/cmd/engram@latest` |
+
+Windows one-shot update (no brew required): `./scripts/utilities/wf.ps1 update-tools`
 
 Windows one-shot update (no brew required): `./scripts/utilities/wf.ps1 update-tools`
 

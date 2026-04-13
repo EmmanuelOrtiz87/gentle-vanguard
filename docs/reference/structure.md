@@ -19,7 +19,7 @@ The goal is to clearly separate:
 
 ## Workspace Level
 
-- `C:\Workspace_local\Engram` or the main project directory
+- `C:\Workspace_local` (workspace root)
 - `C:\Workspace_local\gentleman-guardian-angel`
 - `C:\Workspace_local\Gentleman-Skills`
 - `C:\Workspace_local\.engram-data`

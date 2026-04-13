@@ -855,7 +855,7 @@ This project integrates tools from [Gentleman-Programming](https://github.com/Ge
 
 | Tool | Repository | Author |
 |------|------------|--------|
-| **Engram** | [gentleman-programming/engram](https://github.com/gentleman-programming/engram) | Gentleman-Programming |
+| **Engram** | [Gentleman-Programming/engram](https://github.com/Gentleman-Programming/engram) | Gentleman-Programming |
 | **Gentle-AI** | [gentleman-programming/gentle-ai](https://github.com/gentleman-programming/gentle-ai) | Gentleman-Programming |
 | **GGA** | [gentleman-programming/gentleman-guardian-angel](https://github.com/Gentleman-Programming/gentleman-guardian-angel) | Gentleman-Programming |
 | **Gentleman-Skills** | [Gentleman-Programming/Gentleman-Skills](https://github.com/Gentleman-Programming/Gentleman-Skills) | Gentleman-Programming + Community |
