@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'homologate', 'agent-alert', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -1172,6 +1172,71 @@ function Invoke-RollbackCheckpoint {
     Write-Success "Checkpoint restored from $stashRef"
 }
 
+function Invoke-CleanBranches {
+    param([switch]$ApplyNow)
+
+    if (-not (Assert-GitRepository)) {
+        exit 1
+    }
+
+    git fetch origin 2>$null | Out-Null
+
+    $currentBranch = (git rev-parse --abbrev-ref HEAD 2>$null).Trim()
+    $mergedDevelop = @(git branch --merged origin/develop 2>$null)
+    $mergedMain = @(git branch --merged origin/main 2>$null)
+
+    $allMerged = @($mergedDevelop + $mergedMain) |
+        ForEach-Object { $_.Replace('*', '').Trim() } |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+        Sort-Object -Unique
+
+    $candidates = $allMerged |
+        Where-Object { $_ -match '^(feature|bugfix|release|chore)/' } |
+        Where-Object { $_ -ne $currentBranch }
+
+    if (-not $candidates -or $candidates.Count -eq 0) {
+        Write-Success 'No merged feature/bugfix/release/chore branches to clean.'
+        return
+    }
+
+    Write-Step 'Merged local branches eligible for cleanup'
+    foreach ($branch in $candidates) {
+        Write-Host "  $branch"
+    }
+
+    if (-not $ApplyNow) {
+        Write-Host "Preview mode only. Use '.\wf.ps1 clean-branches apply' to delete listed local branches." -ForegroundColor Cyan
+        return
+    }
+
+    if (-not $Force) {
+        $confirm = Read-Host "Delete these local branches now? (yes/no)"
+        if ($confirm -notmatch '^(y|yes|si|s)$') {
+            Write-Warning 'Branch cleanup cancelled.'
+            return
+        }
+    }
+
+    foreach ($branch in $candidates) {
+        git branch -d $branch 2>$null | Out-Null
+        if ($LASTEXITCODE -eq 0) {
+            Write-Success "Deleted local branch: $branch"
+            continue
+        }
+
+        if ($Force) {
+            git branch -D $branch 2>$null | Out-Null
+            if ($LASTEXITCODE -eq 0) {
+                Write-Success "Force-deleted local branch: $branch"
+            } else {
+                Write-Warning "Could not delete branch: $branch"
+            }
+        } else {
+            Write-Warning "Could not delete branch with -d: $branch (use -Force to allow -D)"
+        }
+    }
+}
+
 function Show-Help {
     Write-Host @"
 Gentleman Foundation Workflow CLI
@@ -1206,6 +1271,7 @@ COMMANDS:
     checkpoint [label]   Save a live rollback point (git stash -u) before risky edits
     list-checkpoints     List workflow-created checkpoints
     rollback-checkpoint [selector] Restore latest checkpoint or one matching selector
+    clean-branches [apply] Preview or clean merged local feature/release branches
     homologate [apply]  Normalize docs/artifacts and update references (dry-run default)
     agent-alert [strict] Check process-compliance signals for off-process AI activity
     help                 Show this help
@@ -1244,6 +1310,9 @@ EXAMPLES:
     .\wf.ps1 list-checkpoints        Show available rollback points
     .\wf.ps1 rollback-checkpoint     Restore latest rollback point
     .\wf.ps1 rollback-checkpoint feature-doc-cleanup Restore matching rollback point
+    .\wf.ps1 clean-branches          Preview merged local branches for cleanup
+    .\wf.ps1 clean-branches apply    Delete merged local branches (asks confirmation)
+    .\wf.ps1 clean-branches apply -Force  Delete merged branches without prompt, fallback to -D when needed
     .\wf.ps1 homologate          Preview normalization actions
     .\wf.ps1 homologate apply    Execute normalization and reference updates
     .\wf.ps1 health -StrictCleanup  Run health and fail if cleanup drift exists
@@ -1295,6 +1364,10 @@ switch ($Command) {
 
     'rollback-checkpoint' {
         Invoke-RollbackCheckpoint -Selector $Scope
+    }
+
+    'clean-branches' {
+        Invoke-CleanBranches -ApplyNow:($Scope -eq 'apply')
     }
 
     'start-session' {
