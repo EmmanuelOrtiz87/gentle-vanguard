@@ -53,7 +53,17 @@ function Get-ChangedFiles {
     }
 
     if ($files.Count -eq 0) {
-        $files = @(git diff --name-only HEAD~1..HEAD 2>$null)
+        # In shallow CI checkouts, HEAD~1 may not exist; guard before diffing.
+        git rev-parse --verify HEAD~1 2>$null | Out-Null
+        if ($LASTEXITCODE -eq 0) {
+            try {
+                $files = @(git diff --name-only HEAD~1..HEAD 2>$null)
+            } catch {
+                $files = @()
+            }
+        } else {
+            $files = @()
+        }
     }
 
     return @($files | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
