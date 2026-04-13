@@ -8,26 +8,6 @@
     "model": "claude-sonnet-4-20250514",
     "protocol": "openai"
   },
-  "mcpIntegrations": {
-    "context7": {
-      "enabled": false,
-      "serverName": "context7",
-      "transport": "stdio",
-      "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"],
-      "requiredEnv": ["CONTEXT7_API_KEY"],
-      "purpose": "Version-aware docs and snippets for implementation support"
-    },
-    "notion": {
-      "enabled": false,
-      "serverName": "notion",
-      "transport": "stdio",
-      "command": "npx",
-      "args": ["-y", "@notionhq/notion-mcp-server"],
-      "requiredEnv": ["NOTION_TOKEN", "NOTION_DATABASE_ID"],
-      "purpose": "Shared knowledge base and delivery notes"
-    }
-  },
   "projectTemplate": "templates/project-root",
   "projectDefaults": {
     "repositoryMode": "template",
