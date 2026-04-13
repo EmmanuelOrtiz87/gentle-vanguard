@@ -26,11 +26,11 @@
     {
       "name": "engram",
       "checkCommand": "engram",
-      "requires": ["git", "go"],
+      "requires": ["go"],
       "install": {
-        "windows": "$target = Join-Path '{toolsRoot}' 'engram'; if (-not (Test-Path $target)) { git clone https://github.com/Gentleman-Programming/engram.git $target }; Set-Location $target; go install ./cmd/engram",
-        "linux": "$target = Join-Path '{toolsRoot}' 'engram'; if (-not (Test-Path $target)) { git clone https://github.com/Gentleman-Programming/engram.git $target }; Set-Location $target; go install ./cmd/engram",
-        "macos": "$target = Join-Path '{toolsRoot}' 'engram'; if (-not (Test-Path $target)) { git clone https://github.com/Gentleman-Programming/engram.git $target }; Set-Location $target; go install ./cmd/engram"
+        "windows": "go install github.com/Gentleman-Programming/engram/cmd/engram@latest",
+        "linux": "go install github.com/Gentleman-Programming/engram/cmd/engram@latest",
+        "macos": "go install github.com/Gentleman-Programming/engram/cmd/engram@latest"
       }
     },
     {
