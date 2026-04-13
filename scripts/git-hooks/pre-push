@@ -7,10 +7,23 @@ if [ -z "$REPO_ROOT" ]; then
     exit 0
 fi
 
+GITFLOW_SCRIPT="$REPO_ROOT/scripts/diagnostics/validate-gitflow.ps1"
 GOV_SCRIPT="$REPO_ROOT/scripts/diagnostics/validate-script-governance.ps1"
 HOMOLOGATE_SCRIPT="$REPO_ROOT/scripts/validation/homologate-workspace.ps1"
 
 echo "[pre-push] Running governance checks..."
+
+if [ -f "$GITFLOW_SCRIPT" ]; then
+    if command -v pwsh >/dev/null 2>&1; then
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "$GITFLOW_SCRIPT"
+    else
+        powershell -NoProfile -ExecutionPolicy Bypass -File "$GITFLOW_SCRIPT"
+    fi
+    if [ $? -ne 0 ]; then
+        echo "[pre-push][ERROR] GitFlow policy validation failed"
+        exit 1
+    fi
+fi
 
 if command -v gga >/dev/null 2>&1; then
     GGA_OUTPUT="$(gga run --no-cache 2>&1)"

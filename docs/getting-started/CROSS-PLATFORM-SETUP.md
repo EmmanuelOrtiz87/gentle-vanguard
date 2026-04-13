@@ -26,8 +26,8 @@ The Gentleman Foundation stack now supports **all platforms** through orchestrat
 
 ```bash
 # First time setup
-bash setup.sh
-chmod +x setup.sh wf
+bash scripts/foundation/setup.sh
+chmod +x scripts/foundation/setup.sh wf
 
 # Then use workflow commands
 ./wf status
@@ -77,9 +77,9 @@ Same commands work on **all platforms**:
 
 | Script | Platform | Purpose |
 |--------|----------|---------|
-| `setup.sh` | Linux/macOS/WSL | Universal setup with platform detection |
+| `scripts/foundation/setup.sh` | Linux/macOS/WSL | Universal setup with platform detection |
 | `setup.ps1` | Windows/PowerShell | Windows-specific initialization |
-| `setup.sh` in `wf` wrapper | All | Auto-detects platform on execution |
+| `scripts/foundation/setup.sh` in `wf` wrapper | All | Auto-detects platform on execution |
 
 ### Diagnostic Scripts
 
@@ -188,7 +188,7 @@ The orchestrator is configured in `config/orchestrator.json`:
     "macos": ["bash", "zsh", "sh"]
   },
   "bootstrap": {
-    "primary_entry": "setup.sh",
+    "primary_entry": "scripts/foundation/setup.sh",
     "fallback_entry": "setup.ps1"
   }
 }
@@ -242,7 +242,7 @@ Before each commit:
 
 **Linux/macOS:**
 ```bash
-chmod +x setup.sh wf
+chmod +x scripts/foundation/setup.sh wf
 chmod +x scripts/utilities/*.sh
 chmod +x scripts/diagnostics/*.sh
 chmod +x scripts/hooks/*.sh
@@ -317,7 +317,7 @@ esac
 
 ```
 project-root/
-├── setup.sh                          # Universal setup entry point
+├── scripts/foundation/setup.sh       # Universal setup entry point
 ├── setup.ps1                         # Windows setup (legacy)
 ├── wf                                # Universal wrapper (any shell)
 ├── config/
@@ -350,7 +350,7 @@ project-root/
 
 ## What's Next
 
-1. Run setup: `bash setup.sh` (Linux/macOS) or `.\setup.ps1` (Windows)
+1. Run setup: `bash scripts/foundation/setup.sh` (Linux/macOS) or `.\setup.ps1` (Windows)
 2. Verify installation: `./wf health`
 3. Start development: See project-specific README
 4. Monitor via orchestrator: `engram status`
