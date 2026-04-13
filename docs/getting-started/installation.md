@@ -78,6 +78,8 @@ The workspace-foundation includes integration with:
 
 Windows one-shot update (no brew required): `./scripts/utilities/wf.ps1 update-tools`
 
+Windows one-shot update (no brew required): `./scripts/utilities/wf.ps1 update-tools`
+
 ### 4. Install Skills
 
 Skills are automatically installed for detected AI agents. To manually install:
