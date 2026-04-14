@@ -68,7 +68,7 @@ Default interaction mode for agent responses:
 
 1. Global default is executive mode: short, precise, action-oriented responses.
 2. Local workspace override can activate `simple` mode via `config/orchestrator.json` (`communication_response_mode`).
-3. Current local baseline is `simple` for minimum-token closure-first responses.
+3. Current local baseline is `executive` with `lite` compression and language constrained to `es | pt-BR | en`.
 4. Extended details only on explicit request from developer:
 	- `EXTENDER`
 	- `DETALLE`
@@ -82,8 +82,9 @@ Default interaction mode for agent responses:
 6. Suggestions, optional improvements, and adjustment proposals only when explicitly authorized by developer.
 7. If requirements are ambiguous, ask one concise clarification question before proceeding.
 8. For critical risk (security/data loss), agent must warn immediately even in simple/executive mode.
-9. The orchestrator can request temporary escalation to standard/deep based on detected risk and must ask developer authorization to keep that level.
+9. The orchestrator can request temporary escalation to expanded based on detected risk and must ask developer authorization to keep that level.
 10. Document optimization is selective: optimize operational artifacts (review/audit/handoff), keep architecture/design/technical/business docs complete.
+11. Supported communication languages are `es`, `pt-BR`, and `en`; Chinese classical variants are deprecated for this workspace audience.
 
 Policy reference: `docs/guides/DEVELOPER-COMMUNICATION-POLICY.md`
 

@@ -1262,7 +1262,7 @@ COMMANDS:
     install-engram       Install or verify Engram CLI availability
     orchestrator-status  Validate orchestrator and Engram integration
     custom-rules-status  Show custom technical/business/review rule loading status
-    response-mode [name] Show active response profile, list options, or set profile
+    response-mode [arg]  Show/set communication language, detail level, and compression profile
     ide-status           Detect IDE session and suggest activation command
     diagnose             Full system diagnostics report
     verify               Quick stack verification & auto-repair
@@ -1306,9 +1306,11 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 health              Check system health & activate tools
     .\scripts\utilities\wf.ps1 install-engram      Install or verify Engram CLI
     .\scripts\utilities\wf.ps1 custom-rules-status Show loaded custom rule scopes and files
-    .\scripts\utilities\wf.ps1 response-mode       Show active response profile
-    .\scripts\utilities\wf.ps1 response-mode list  List all response profiles
-    .\scripts\utilities\wf.ps1 response-mode ultra Set active profile to ultra
+    .\scripts\utilities\wf.ps1 response-mode                Show active communication settings
+    .\scripts\utilities\wf.ps1 response-mode list           List language/detail/profile options
+    .\scripts\utilities\wf.ps1 response-mode profile:ultra  Set compression profile
+    .\scripts\utilities\wf.ps1 response-mode language:pt-BR Set communication language
+    .\scripts\utilities\wf.ps1 response-mode detail:expanded Set detail level
     .\scripts\utilities\wf.ps1 ide-status          Detect IDE and show recommended activation
     .\scripts\utilities\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
     .\scripts\utilities\wf.ps1 update-tools         Update gga / engram / gentle-ai (Windows: go install, not brew)
@@ -1646,17 +1648,37 @@ switch ($Command) {
             exit 1
         }
 
-        $modeArgs = @()
-        if ([string]::IsNullOrWhiteSpace($Scope)) {
-            $modeArgs += 'status'
-        } elseif ($Scope -eq 'list') {
-            $modeArgs += 'list'
-        } else {
-            $modeArgs += @('set', $Scope)
+        $modeParams = @{
+            Mode = 'status'
         }
 
-        if ($JSON) { $modeArgs += '-AsJson' }
-        Invoke-LocalPowerShellScript -ScriptPath $modeScript -ScriptArgs $modeArgs
+        $scopeText = [string]$Scope
+        if (-not [string]::IsNullOrWhiteSpace($scopeText)) {
+            if ($scopeText -eq 'list') {
+                $modeParams = @{ Mode = 'list' }
+            }
+            elseif ($scopeText -match '^profile:(.+)$') {
+                $modeParams = @{ Mode = 'set'; Profile = $matches[1] }
+            }
+            elseif ($scopeText -match '^language:(.+)$') {
+                $modeParams = @{ Mode = 'set-language'; Language = $matches[1] }
+            }
+            elseif ($scopeText -match '^detail:(.+)$') {
+                $modeParams = @{ Mode = 'set-detail'; Detail = $matches[1] }
+            }
+            elseif ($scopeText -in @('lite', 'lleno', 'ultra')) {
+                $modeParams = @{ Mode = 'set'; Profile = $scopeText }
+            }
+            elseif ($scopeText -in @('es', 'pt-BR', 'en')) {
+                $modeParams = @{ Mode = 'set-language'; Language = $scopeText }
+            }
+            elseif ($scopeText -in @('simple', 'executive', 'expanded')) {
+                $modeParams = @{ Mode = 'set-detail'; Detail = $scopeText }
+            }
+        }
+
+        if ($JSON) { $modeParams['AsJson'] = $true }
+        & $modeScript @modeParams
     }
     'ide-status' {
         Show-IdeStatus

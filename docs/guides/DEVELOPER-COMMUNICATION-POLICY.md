@@ -37,12 +37,17 @@ File:
 
 Keys:
 
-- `communication_response_mode`: `simple | executive | standard | deep`
+- `communication_language`: `es | pt-BR | en`
+- `allowed_languages`: allowed language values for tooling checks and status visibility
+- `communication_response_mode`: `simple | executive | expanded`
 - `allowed_response_modes`: allowed values for local tooling checks and status visibility
+- `response_profiles.active`: `lite | lleno | ultra` (compression style)
 
 Current local baseline for this workspace:
 
-- `communication_response_mode = simple`
+- `communication_language = es`
+- `communication_response_mode = executive`
+- `response_profiles.active = lite`
 
 ## Detail Escalation
 
@@ -64,10 +69,11 @@ Escalation model:
 
 1. Minimal on request: `simple`.
 2. Default: `executive`.
-3. Escalate to `standard` for medium risk:
+3. Escalate to `expanded` for medium/high explanation needs:
 	- ambiguous requirement with implementation impact
 	- non-trivial integration or migration risk
-4. Escalate to `deep` for high risk:
+	- handoff or decision documentation requested explicitly
+4. Keep risk warnings mandatory in all modes:
 	- security, data-loss, compliance, or critical regression risk
 	- architecture decisions with broad blast radius
 
@@ -123,6 +129,16 @@ Do not compress core knowledge documents that require full traceability and tech
 3. Business and product documentation.
 
 Rule: keep foundational/technical/business documents complete; optimize only operational/transient artifacts.
+
+## Language Scope
+
+The supported communication languages for this workspace are:
+
+1. `es`
+2. `pt-BR`
+3. `en`
+
+Classical Chinese variants are deprecated and out of scope for Foundation audiences.
 
 ## Governance
 

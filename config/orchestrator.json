@@ -19,15 +19,24 @@
                          "file_format":  "md",
                          "max_files_per_scope":  20
                      },
+    "communication_language":  "es",
+    "allowed_languages":  [
+                              "es",
+                              "pt-BR",
+                              "en"
+                          ],
+    "communication_response_mode":  "executive",
+    "allowed_response_modes":  [
+                                   "simple",
+                                   "executive",
+                                   "expanded"
+                               ],
     "response_profiles":  {
                               "active":  "lite",
                               "allow":  [
                                             "lite",
                                             "lleno",
-                                            "ultra",
-                                            "wenyan-lite",
-                                            "wenyan-full",
-                                            "wenyan-ultra"
+                                            "ultra"
                                         ],
                               "profiles":  {
                                                "lite":  {
@@ -53,31 +62,7 @@
                                                                                 "Prefer X -\u003e Y causal notation.",
                                                                                 "One-word answers when enough."
                                                                             ]
-                                                         },
-                                               "wenyan-lite":  {
-                                                                   "description":  "Semi-classical Chinese style preserving sentence structure.",
-                                                                   "guidelines":  [
-                                                                                      "Remove hedging and filler.",
-                                                                                      "Keep grammatical structure.",
-                                                                                      "Use only for Chinese-language audiences."
-                                                                                  ]
-                                                               },
-                                               "wenyan-full":  {
-                                                                   "description":  "Maximum classical Chinese concision.",
-                                                                   "guidelines":  [
-                                                                                      "Strong character compression.",
-                                                                                      "Frequent subject omission.",
-                                                                                      "Use only for Chinese-language audiences."
-                                                                                  ]
-                                                               },
-                                               "wenyan-ultra":  {
-                                                                    "description":  "Extreme classical Chinese abbreviation while preserving core meaning.",
-                                                                    "guidelines":  [
-                                                                                       "Maximum compression.",
-                                                                                       "Keep only essential semantics.",
-                                                                                       "Use only for Chinese-language audiences."
-                                                                                   ]
-                                                                }
+                                                         }
                                            }
                           },
     "activated_at":  "2026-04-14 00:03:38"
