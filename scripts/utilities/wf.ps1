@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -1245,9 +1245,10 @@ COMMANDS:
     push [pr|later]      Prepare publish flow; choose push+PR now or push-only
     publish              Full PR workflow: validate, document, decide, and merge
     status               Show current status
-    start-session [task] Create a session brief and optional task brief
-    end-session [task]   Run session closure checks and create delivery closure artifact
-    task-brief <task>    Create or refresh a task brief only
+    start-session [task]   Create a session brief and optional task brief
+    end-session [task]     Run session closure checks and create delivery closure artifact
+    day-end-closure        Automated daily closure: delivery closure + workspace validation + Engram memory capture
+    task-brief <task>      Create or refresh a task brief only
     health               Check system health & activate tools
     install-engram       Install or verify Engram CLI availability
     orchestrator-status  Validate orchestrator and Engram integration
@@ -1407,6 +1408,21 @@ switch ($Command) {
             & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $endScript @endArgs
         } else {
             Write-Error "End session script not found: $endScript"
+            exit 1
+        }
+    }
+
+    'day-end-closure' {
+        Write-Step "Running automated day-end closure"
+        $dayEndScript = Join-Path $scriptDir 'day-end-closure.ps1'
+        if (Test-Path $dayEndScript) {
+            $dayEndArgs = @()
+            if (-not [string]::IsNullOrWhiteSpace($Scope)) { $dayEndArgs += @('-SessionId', $Scope) }
+            if ($SkipTests) { $dayEndArgs += '-SkipValidation' }
+            if ($Force) { $dayEndArgs += '-Force' }
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $dayEndScript @dayEndArgs
+        } else {
+            Write-Error "Day-end closure script not found: $dayEndScript"
             exit 1
         }
     }
