@@ -191,6 +191,10 @@ Gentleman Foundation uses a sophisticated skill-based architecture:
 # Strict mode for CI/CD gates (non-zero exit when traffic light is RED)
 .\scripts\utilities\wf.ps1 stack-dashboard strict
 
+# Runtime route resolver (AI/Hybrid/Offline)
+.\scripts\utilities\wf.ps1 runtime-route
+.\scripts\utilities\wf.ps1 runtime-route -JSON
+
 # Run code review
 .\scripts\utilities\wf.ps1 review
 
@@ -218,6 +222,12 @@ Dashboard signal coverage:
 4. Immediate recommended next actions to avoid session blockage.
 5. Strict gate signal in JSON (`strict_violation`) for pipeline automation.
 6. Local telemetry is stored at `docs/sessions/metrics/token-guard-usage.csv` (gitignored by design).
+
+Runtime routing model:
+
+1. `ai_orchestrated`: orchestrator delegates to subagents and skills.
+2. `hybrid_guarded`: orchestrator keeps selective AI plus deterministic script fallback.
+3. `offline_deterministic`: orchestrator delegates to local scripts only (no network/AI dependency).
 
 > For global foundation updates, run `gf update-all` from the foundation install root.
 

@@ -10,6 +10,7 @@ $configPath = Join-Path $repoRoot 'config\orchestrator.json'
 $activationFile = Join-Path $repoRoot '.orchestrator-active'
 $tokenGuardScript = Join-Path $scriptDir 'token-budget-guard.ps1'
 $tokenUsageFile = Join-Path $repoRoot 'docs\sessions\metrics\token-guard-usage.csv'
+$runtimeRouterScript = Join-Path $scriptDir 'runtime-router.ps1'
 
 function Resolve-EngramCommand {
     if ($env:ENGRAM_CMD) {
@@ -116,6 +117,18 @@ $compression = if ($config -and $config.PSObject.Properties.Name -contains 'resp
 $engramPath = Resolve-EngramCommand
 $engramAvailable = [bool]$engramPath
 
+$runtimeData = $null
+if (Test-Path $runtimeRouterScript) {
+    try {
+        $runtimeJson = & $runtimeRouterScript -Mode status -AsJson -Quiet
+        if ($runtimeJson) {
+            $runtimeData = $runtimeJson | ConvertFrom-Json
+        }
+    } catch {
+        $runtimeData = $null
+    }
+}
+
 $tokenData = $null
 if (Test-Path $tokenGuardScript) {
     try {
@@ -204,6 +217,8 @@ $result = [ordered]@{
     token_eta_text = $etaText
     traffic_light = $trafficLight
     strict_violation = ($trafficLight -eq 'RED')
+    runtime_mode = if ($runtimeData) { [string]$runtimeData.runtime_mode } else { 'unknown' }
+    runtime_delegation_strategy = if ($runtimeData) { [string]$runtimeData.delegation_strategy } else { 'unknown' }
     risk_level = $riskLevel
     recommended_next_actions = $recommendation
 }
@@ -216,6 +231,7 @@ if ($AsJson) {
 Write-Host "`n=== Stack Dashboard ===" -ForegroundColor Cyan
 Write-Host "Orchestrator active: $($result.orchestrator_active) | Workflow: $($result.workflow_mode)" -ForegroundColor White
 Write-Host "Response mode: $($result.response_mode) | Compression: $($result.compression)" -ForegroundColor White
+Write-Host "Runtime mode: $($result.runtime_mode) | Delegation: $($result.runtime_delegation_strategy)" -ForegroundColor White
 Write-Host "Engram available: $($result.engram_available)" -ForegroundColor White
 Write-Host "Token guard: $($result.token_guard_status) | Projected: $($result.token_projected_pct)%" -ForegroundColor White
 Write-Host "Budget today: $($result.token_used_today) / $($result.token_daily_budget) | Burn rate: $($result.token_burn_rate_per_hour)/h | ETA: $($result.token_eta_text)" -ForegroundColor White

@@ -107,6 +107,18 @@
     "subagent_orchestration":  {
                                      "enabled":  true,
                                      "mode":  "coordinator-workers",
+                                     "runtime_router":  {
+                                                            "enabled":  true,
+                                                            "preferred_mode":  "ai_orchestrated",
+                                                            "allow_offline_fallback":  true,
+                                                            "require_engram_for_continuity":  true,
+                                                            "mode_order":  [
+                                                                               "ai_orchestrated",
+                                                                               "hybrid_guarded",
+                                                                               "offline_deterministic"
+                                                                           ],
+                                                            "strict_offline_without_engram_exit_code":  2
+                                                        },
                                      "token_efficiency":  {
                                                               "task_packet_char_budget":  {
                                                                                                "min":  1500,
