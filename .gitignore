@@ -35,3 +35,6 @@ projects/
 
 # Orchestrator runtime state
 .orchestrator-active
+
+# Local token guard telemetry
+docs/sessions/metrics/token-guard-usage.csv

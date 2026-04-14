@@ -217,6 +217,7 @@ Dashboard signal coverage:
 3. Engram continuity posture.
 4. Immediate recommended next actions to avoid session blockage.
 5. Strict gate signal in JSON (`strict_violation`) for pipeline automation.
+6. Local telemetry is stored at `docs/sessions/metrics/token-guard-usage.csv` (gitignored by design).
 
 > For global foundation updates, run `gf update-all` from the foundation install root.
 
