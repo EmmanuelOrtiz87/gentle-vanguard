@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'reset-demo', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'reset-demo', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -1283,6 +1283,7 @@ COMMANDS:
     install-engram       Install or verify Engram CLI availability
     orchestrator-status  Validate orchestrator and Engram integration
     stack-dashboard      Show one-shot stack health, token risk, and next action recommendation
+    runtime-route        Resolve runtime mode (AI/Hybrid/Offline) and delegation strategy
     custom-rules-status  Show custom technical/business/review rule loading status
     response-mode [arg]  Show/set language, detail, profile, presets, and recommendation
     ide-status           Detect IDE session and suggest activation command
@@ -1330,6 +1331,8 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 install-engram      Install or verify Engram CLI
     .\scripts\utilities\wf.ps1 stack-dashboard     One-shot operational dashboard (health + token risk + action)
     .\scripts\utilities\wf.ps1 stack-dashboard strict  Fail with non-zero exit when executive traffic light is RED
+    .\scripts\utilities\wf.ps1 runtime-route        Resolve runtime mode and recommended fallback actions
+    .\scripts\utilities\wf.ps1 runtime-route -JSON  Emit machine-readable runtime mode data
     .\scripts\utilities\wf.ps1 custom-rules-status Show loaded custom rule scopes and files
     .\scripts\utilities\wf.ps1 response-mode                Show active communication settings
     .\scripts\utilities\wf.ps1 response-mode list           List language/detail/profile options
@@ -1697,6 +1700,32 @@ switch ($Command) {
                 & $dashboardScript -Strict
             } else {
                 Invoke-LocalPowerShellScript -ScriptPath $dashboardScript
+            }
+        }
+    }
+
+    'runtime-route' {
+        if (-not $JSON) {
+            Write-Step "Runtime Route"
+        }
+        $routeScript = Join-Path $scriptDir 'runtime-router.ps1'
+        if (-not (Test-Path $routeScript)) {
+            Write-Error "Runtime router script not found: $routeScript"
+            exit 1
+        }
+
+        $isStrict = $StrictCleanup -or ($Scope -eq 'strict')
+        if ($JSON) {
+            if ($isStrict) {
+                & $routeScript -Mode route -AsJson -Strict
+            } else {
+                & $routeScript -Mode route -AsJson
+            }
+        } else {
+            if ($isStrict) {
+                & $routeScript -Mode route -Strict
+            } else {
+                & $routeScript -Mode route
             }
         }
     }
