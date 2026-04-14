@@ -6,13 +6,19 @@ Audiencia: Ejecutivos (5 min) + Equipo de desarrollo (15 min total)
 
 ## Preparación (antes de entrar a la sala)
 
+**0. Ejecutar preflight (paso clave en máquina nueva):**
+
+```powershell
+./demos/07-mixed-cookbook-real-request/preflight.ps1
+```
+
+Esto verifica Go, Git, activa el orquestador (si hace falta) y limpia datos previos.
+
+**Después del preflight:**
+
 1. Terminal abierta en `C:\Workspace_local\workspace-foundation`.
 2. PowerShell con permisos de ejecución: `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`.
-3. Go instalado y en PATH (`go version` debe responder).
-4. Repo limpio: `git status` sin cambios pendientes.
-5. Si quieres mostrar Engram en vivo: confirmar `engram --version` activo o dejar que `run-engram.ps1` complete el setup básico en primer uso.
-6. `.engram-data/` se crea automáticamente en la primera invocación; su ausencia inicial ya no debe tratarse como error del demo.
-7. Para una demo sin sorpresas, correr `./scripts/utilities/wf.ps1 install-engram` antes de entrar a la presentación.
+3. Repo limpio: `git status` sin cambios pendientes.
 
 ---
 

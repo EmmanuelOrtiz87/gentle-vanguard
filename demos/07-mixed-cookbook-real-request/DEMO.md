@@ -26,11 +26,24 @@ Implement a simple project in `demos/shared/task-tracker/` with commands:
 
 ## Start Here
 
+**FIRST: Run the preflight setup script (required on fresh machines):**
+
+```powershell
+./demos/07-mixed-cookbook-real-request/preflight.ps1
+```
+
+This script will:
+- Verify Go and Git are installed.
+- Activate the orchestrator if needed.
+- Verify task-tracker can run.
+- Clean previous demo data if present.
+
+After preflight, proceed with the recipe steps:
+
 1. Open terminal at repository root.
-2. Confirm stack status.
+2. Confirm stack status: `./scripts/utilities/wf.ps1 status`
 3. Start session with a meaningful task name.
-4. If `.engram-data/` does not exist yet, it will be created automatically on first Engram use.
-5. If you plan to show Step 4 live, run `./scripts/utilities/wf.ps1 install-engram` during preflight to avoid installing tools in front of the audience.
+4. If you plan to show Step 4 (Engram segment) live, the preflight already verified availability. No additional setup needed.
 
 ```powershell
 ./scripts/utilities/wf.ps1 status
@@ -116,10 +129,10 @@ Commands:
 
 Expected outcome:
 
-1. Team sees continuity strategy between sessions.
-2. Less re-briefing overhead in follow-up work.
-3. Fresh environments create `.engram-data/engram-session` automatically instead of warning or blocking.
-4. If Engram CLI is not present yet, `wf.ps1 install-engram` is the supported setup path; the demo should not vendor a duplicate binary inside `demos/`.
+1. Team observes Engram as a lifecycle tool, not a blocker.
+2. Continuity strategy between sessions is demonstrated.
+3. Less re-briefing overhead in follow-up work.
+4. Preflight ensures the environment is ready end-to-end.
 
 ### Step 5 - Code Review and Audit
 
