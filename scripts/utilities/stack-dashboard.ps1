@@ -8,6 +8,7 @@ $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 $configPath = Join-Path $repoRoot 'config\orchestrator.json'
 $activationFile = Join-Path $repoRoot '.orchestrator-active'
 $tokenGuardScript = Join-Path $scriptDir 'token-budget-guard.ps1'
+$tokenUsageFile = Join-Path $repoRoot 'docs\sessions\metrics\token-guard-usage.csv'
 
 function Resolve-EngramCommand {
     if ($env:ENGRAM_CMD) {
@@ -28,6 +29,77 @@ function Resolve-EngramCommand {
     }
 
     return $null
+}
+
+function Get-TodayTokenUsageStats {
+    param([string]$UsagePath)
+
+    $now = Get-Date
+    $today = $now.ToString('yyyy-MM-dd')
+    if (-not (Test-Path $UsagePath)) {
+        return @{
+            used_today_tokens = 0
+            entries_today = 0
+            burn_rate_tokens_per_hour = 0.0
+            eta_hours = $null
+            eta_text = 'unknown'
+        }
+    }
+
+    $rows = Import-Csv -Path $UsagePath -ErrorAction SilentlyContinue
+    if (-not $rows) {
+        return @{
+            used_today_tokens = 0
+            entries_today = 0
+            burn_rate_tokens_per_hour = 0.0
+            eta_hours = $null
+            eta_text = 'unknown'
+        }
+    }
+
+    $todayRows = @($rows | Where-Object { $_.date -eq $today })
+    if ($todayRows.Count -eq 0) {
+        return @{
+            used_today_tokens = 0
+            entries_today = 0
+            burn_rate_tokens_per_hour = 0.0
+            eta_hours = $null
+            eta_text = 'unknown'
+        }
+    }
+
+    $used = 0
+    foreach ($row in $todayRows) {
+        $value = 0
+        if ([int]::TryParse([string]$row.estimated_tokens, [ref]$value)) {
+            $used += $value
+        }
+    }
+
+    $firstTimestamp = $null
+    foreach ($row in $todayRows) {
+        $parsed = $null
+        if ([DateTime]::TryParse([string]$row.timestamp, [ref]$parsed)) {
+            if (-not $firstTimestamp -or $parsed -lt $firstTimestamp) {
+                $firstTimestamp = $parsed
+            }
+        }
+    }
+
+    $burnRate = 0.0
+    if ($firstTimestamp) {
+        $elapsedHours = ($now - $firstTimestamp).TotalHours
+        if ($elapsedHours -lt 0.10) { $elapsedHours = 0.10 }
+        $burnRate = [Math]::Round(($used / $elapsedHours), 2)
+    }
+
+    return @{
+        used_today_tokens = $used
+        entries_today = $todayRows.Count
+        burn_rate_tokens_per_hour = $burnRate
+        eta_hours = $null
+        eta_text = 'unknown'
+    }
 }
 
 $config = $null
@@ -57,6 +129,39 @@ if (Test-Path $tokenGuardScript) {
 
 $tokenStatus = if ($tokenData) { [string]$tokenData.status } else { 'UNKNOWN' }
 $projectedPct = if ($tokenData) { [double]$tokenData.projected_pct } else { 0 }
+$dailyBudget = if ($tokenData -and $tokenData.PSObject.Properties.Name -contains 'daily_budget_tokens') { [int]$tokenData.daily_budget_tokens } else { 0 }
+$softThreshold = if ($tokenData -and $tokenData.PSObject.Properties.Name -contains 'soft_threshold_pct') { [double]$tokenData.soft_threshold_pct } else { 70 }
+$hardThreshold = if ($tokenData -and $tokenData.PSObject.Properties.Name -contains 'hard_threshold_pct') { [double]$tokenData.hard_threshold_pct } else { 90 }
+
+$usageStats = Get-TodayTokenUsageStats -UsagePath $tokenUsageFile
+$usedTodayTokens = if ($tokenData -and $tokenData.PSObject.Properties.Name -contains 'used_today_tokens') { [int]$tokenData.used_today_tokens } else { [int]$usageStats.used_today_tokens }
+$burnRate = [double]$usageStats.burn_rate_tokens_per_hour
+
+$etaHours = $null
+$etaText = 'unknown'
+if ($dailyBudget -gt 0) {
+    $remaining = $dailyBudget - $usedTodayTokens
+    if ($remaining -le 0) {
+        $etaHours = 0
+        $etaText = 'now'
+    } elseif ($burnRate -gt 0) {
+        $etaHours = [Math]::Round(($remaining / $burnRate), 2)
+        if ($etaHours -lt 1) {
+            $etaText = '<1h'
+        } elseif ($etaHours -le 24) {
+            $etaText = "~$etaHours h"
+        } else {
+            $etaText = '>24h'
+        }
+    }
+}
+
+$trafficLight = 'GREEN'
+if ($tokenStatus -eq 'HARD_LIMIT' -or $tokenStatus -eq 'ENGRAM_MISSING' -or $projectedPct -ge $hardThreshold -or -not $engramAvailable) {
+    $trafficLight = 'RED'
+} elseif ($tokenStatus -eq 'SOFT_LIMIT' -or $projectedPct -ge $softThreshold) {
+    $trafficLight = 'YELLOW'
+}
 
 $riskLevel = 'low'
 if (-not $orchestratorActive -or -not $engramAvailable -or $tokenStatus -eq 'HARD_LIMIT' -or $tokenStatus -eq 'ENGRAM_MISSING') {
@@ -91,6 +196,12 @@ $result = [ordered]@{
     engram_path = if ($engramPath) { $engramPath } else { '' }
     token_guard_status = $tokenStatus
     token_projected_pct = $projectedPct
+    token_daily_budget = $dailyBudget
+    token_used_today = $usedTodayTokens
+    token_burn_rate_per_hour = $burnRate
+    token_eta_hours = $etaHours
+    token_eta_text = $etaText
+    traffic_light = $trafficLight
     risk_level = $riskLevel
     recommended_next_actions = $recommendation
 }
@@ -105,6 +216,15 @@ Write-Host "Orchestrator active: $($result.orchestrator_active) | Workflow: $($r
 Write-Host "Response mode: $($result.response_mode) | Compression: $($result.compression)" -ForegroundColor White
 Write-Host "Engram available: $($result.engram_available)" -ForegroundColor White
 Write-Host "Token guard: $($result.token_guard_status) | Projected: $($result.token_projected_pct)%" -ForegroundColor White
+Write-Host "Budget today: $($result.token_used_today) / $($result.token_daily_budget) | Burn rate: $($result.token_burn_rate_per_hour)/h | ETA: $($result.token_eta_text)" -ForegroundColor White
+
+if ($trafficLight -eq 'RED') {
+    Write-Host "Executive traffic light: RED" -ForegroundColor Red
+} elseif ($trafficLight -eq 'YELLOW') {
+    Write-Host "Executive traffic light: YELLOW" -ForegroundColor Yellow
+} else {
+    Write-Host "Executive traffic light: GREEN" -ForegroundColor Green
+}
 
 if ($riskLevel -eq 'high') {
     Write-Host "Risk level: HIGH" -ForegroundColor Red

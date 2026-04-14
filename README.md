@@ -185,6 +185,9 @@ Gentleman Foundation uses a sophisticated skill-based architecture:
 # One-shot operations dashboard (health + token risk + next action)
 .\scripts\utilities\wf.ps1 stack-dashboard
 
+# Machine-readable dashboard output for automation
+.\scripts\utilities\wf.ps1 stack-dashboard -JSON
+
 # Run code review
 .\scripts\utilities\wf.ps1 review
 
@@ -203,6 +206,13 @@ Gentleman Foundation uses a sophisticated skill-based architecture:
 # Update repository, foundation, skills, and tools
 .\scripts\utilities\wf.ps1 update
 ```
+
+Dashboard signal coverage:
+
+1. Executive traffic light (GREEN/YELLOW/RED).
+2. Token budget burn rate and estimated threshold exhaustion time (ETA).
+3. Engram continuity posture.
+4. Immediate recommended next actions to avoid session blockage.
 
 > For global foundation updates, run `gf update-all` from the foundation install root.
 
