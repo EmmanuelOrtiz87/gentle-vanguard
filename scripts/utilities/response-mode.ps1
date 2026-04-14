@@ -13,6 +13,7 @@
     [string]$Risk = 'medium',
     [switch]$AsJson,
     [switch]$PassThru,
+    [switch]$SkipEngramLog,
     [switch]$Quiet
 )
 
@@ -136,6 +137,34 @@ function Emit-Output {
     elseif (-not $Quiet) { Write-Host $Text }
 }
 
+function Save-ResponseModeObservation {
+    param(
+        [pscustomobject]$Config,
+        [string]$Reason
+    )
+
+    if ($SkipEngramLog) {
+        return
+    }
+
+    $runEngramScript = Join-Path $scriptDir 'run-engram.ps1'
+    if (-not (Test-Path $runEngramScript)) {
+        return
+    }
+
+    $projectName = Split-Path $repoRoot -Leaf
+    $message = "language=$($Config.communication_language); detail=$($Config.communication_response_mode); profile=$($Config.response_profiles.active); preset=$($Config.communication_presets.default); reason=$Reason"
+
+    try {
+        & $runEngramScript 'save' 'communication-response-mode' $message '--project' $projectName | Out-Null
+    }
+    catch {
+        if (-not $Quiet) {
+            Write-Warning "Engram logging failed for response-mode change: $($_.Exception.Message)"
+        }
+    }
+}
+
 function Apply-Preset {
     param([pscustomobject]$Config, [string]$PresetName)
 
@@ -199,6 +228,7 @@ if ($Mode -eq 'set') {
     if ($config.response_profiles.allow -notcontains $Profile) { throw "Unsupported profile '$Profile'. Allowed: $($config.response_profiles.allow -join ', ')" }
     $config.response_profiles.active = $Profile
     Save-Config -Config $config
+    Save-ResponseModeObservation -Config $config -Reason "set-profile:$Profile"
     Emit-Output -Text "[OK] Active response profile set to: $Profile" -AsPassThru:$PassThru
     exit 0
 }
@@ -208,6 +238,7 @@ if ($Mode -eq 'set-language') {
     if ($config.allowed_languages -notcontains $Language) { throw "Unsupported language '$Language'. Allowed: $($config.allowed_languages -join ', ')" }
     $config.communication_language = $Language
     Save-Config -Config $config
+    Save-ResponseModeObservation -Config $config -Reason "set-language:$Language"
     Emit-Output -Text "[OK] Communication language set to: $Language" -AsPassThru:$PassThru
     exit 0
 }
@@ -217,6 +248,7 @@ if ($Mode -eq 'set-detail') {
     if ($config.allowed_response_modes -notcontains $Detail) { throw "Unsupported detail level '$Detail'. Allowed: $($config.allowed_response_modes -join ', ')" }
     $config.communication_response_mode = $Detail
     Save-Config -Config $config
+    Save-ResponseModeObservation -Config $config -Reason "set-detail:$Detail"
     Emit-Output -Text "[OK] Response detail level set to: $Detail" -AsPassThru:$PassThru
     exit 0
 }
@@ -225,6 +257,7 @@ if ($Mode -eq 'set-preset') {
     if ([string]::IsNullOrWhiteSpace($Preset)) { throw 'Preset is required when Mode=set-preset.' }
     $config = Apply-Preset -Config $config -PresetName $Preset
     Save-Config -Config $config
+    Save-ResponseModeObservation -Config $config -Reason "set-preset:$Preset"
     Emit-Output -Text ("[OK] Preset applied: {0} (language={1}, detail={2}, profile={3})" -f $Preset, $config.communication_language, $config.communication_response_mode, $config.response_profiles.active) -AsPassThru:$PassThru
     exit 0
 }

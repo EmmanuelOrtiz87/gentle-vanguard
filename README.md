@@ -864,6 +864,7 @@ workspace-foundation/
 | [Visual Guide](docs/VISUAL-GUIDE.md) | Complete visual reference |
 | [AI Models](docs/ai-models.md) | AI integration setup |
 | [Tools](docs/tools.md) | External tools reference |
+| [Developer Communication Policy](docs/guides/DEVELOPER-COMMUNICATION-POLICY.md) | Response-mode contract and enforcement |
 | [Technical Onboarding](docs/TECHNICAL-ONBOARDING.md) | Team training guide |
 
 ## Requirements
