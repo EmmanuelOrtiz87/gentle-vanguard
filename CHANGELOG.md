@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-04-13
+
+### Fixed
+
+#### CI Stability and Governance Reliability
+- Fixed shallow-checkout edge cases in `scripts/diagnostics/validate-sdd-governance.ps1` to avoid false failures in GitHub Actions.
+- Added resilient fallback logic for changed-file detection when PR history is limited.
+- Backported CI stability fixes to `develop` to keep governance behavior consistent across base branches.
+
+#### Script Governance Workflow Noise Reduction
+- Updated `.github/workflows/script-governance.yml` with workflow `concurrency` and `cancel-in-progress` to reduce duplicate runs.
+- Restricted `pull_request` trigger types to active review events (`opened`, `synchronize`, `reopened`, `ready_for_review`) to reduce mobile notification noise.
+- Set full checkout history (`fetch-depth: 0`) for reliable diff-based validations.
+
+### Changed
+
+- Normalized release governance so `main` remains default public branch and `develop` stays integration branch with aligned CI checks.
+- Cleaned up historical failed Action runs that were no longer representative of current repository state.
+
 ## [1.0.0] - 2026-04-13
 
 **First Stable Release: Foundation Ready for Production**
