@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'reset-demo', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -1445,6 +1445,20 @@ switch ($Command) {
             Invoke-LocalPowerShellScript -ScriptPath $endScript -ScriptArgs $endArgs
         } else {
             Write-Error "End session script not found: $endScript"
+            exit 1
+        }
+    }
+
+    'reset-demo' {
+        Write-Step "Resetting Demo 07"
+        $demoRoot = Join-Path $repoRoot 'demos\07-mixed-cookbook-real-request'
+        $resetScript = Join-Path $demoRoot 'reset-demo.ps1'
+        if (Test-Path $resetScript) {
+            $resetArgs = @()
+            if ($Force) { $resetArgs += '-SkipPreflight' }
+            Invoke-LocalPowerShellScript -ScriptPath $resetScript -ScriptArgs $resetArgs
+        } else {
+            Write-Error "Reset script not found: $resetScript"
             exit 1
         }
     }
