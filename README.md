@@ -182,6 +182,9 @@ Gentleman Foundation uses a sophisticated skill-based architecture:
 # Check project status
 .\scripts\utilities\wf.ps1 status
 
+# One-shot operations dashboard (health + token risk + next action)
+.\scripts\utilities\wf.ps1 stack-dashboard
+
 # Run code review
 .\scripts\utilities\wf.ps1 review
 

@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'reset-demo', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'reset-demo', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -1282,6 +1282,7 @@ COMMANDS:
     health               Check system health & activate tools
     install-engram       Install or verify Engram CLI availability
     orchestrator-status  Validate orchestrator and Engram integration
+    stack-dashboard      Show one-shot stack health, token risk, and next action recommendation
     custom-rules-status  Show custom technical/business/review rule loading status
     response-mode [arg]  Show/set language, detail, profile, presets, and recommendation
     ide-status           Detect IDE session and suggest activation command
@@ -1327,6 +1328,7 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 verify              Quick verify & auto-repair if needed
     .\scripts\utilities\wf.ps1 health              Check system health & activate tools
     .\scripts\utilities\wf.ps1 install-engram      Install or verify Engram CLI
+    .\scripts\utilities\wf.ps1 stack-dashboard     One-shot operational dashboard (health + token risk + action)
     .\scripts\utilities\wf.ps1 custom-rules-status Show loaded custom rule scopes and files
     .\scripts\utilities\wf.ps1 response-mode                Show active communication settings
     .\scripts\utilities\wf.ps1 response-mode list           List language/detail/profile options
@@ -1671,6 +1673,20 @@ switch ($Command) {
         } else {
             Write-Error "Orchestrator status script not found: $statusScript"
             exit 1
+        }
+    }
+
+    'stack-dashboard' {
+        $dashboardScript = Join-Path $scriptDir 'stack-dashboard.ps1'
+        if (-not (Test-Path $dashboardScript)) {
+            Write-Error "Stack dashboard script not found: $dashboardScript"
+            exit 1
+        }
+
+        if ($JSON) {
+            & $dashboardScript -AsJson
+        } else {
+            Invoke-LocalPowerShellScript -ScriptPath $dashboardScript
         }
     }
 
