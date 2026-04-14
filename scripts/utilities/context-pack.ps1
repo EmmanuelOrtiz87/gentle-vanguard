@@ -89,6 +89,24 @@ function Get-RecentCommits {
     return $items
 }
 
+function Get-CustomRulesDigest {
+    $rulesScript = Join-Path $PSScriptRoot 'custom-rules.ps1'
+    if (-not (Test-Path $rulesScript)) {
+        return '- custom rules script not found'
+    }
+
+    try {
+        $digest = & $rulesScript -Mode export -PassThru -Quiet
+        if ([string]::IsNullOrWhiteSpace(($digest | Out-String).Trim())) {
+            return '- no custom rules loaded'
+        }
+        return ($digest | Out-String).Trim()
+    }
+    catch {
+        return '- failed to load custom rules digest'
+    }
+}
+
 $branch = git rev-parse --abbrev-ref HEAD 2>$null
 if (-not $branch) {
     $branch = '(unknown)'
@@ -115,6 +133,7 @@ if ([string]::IsNullOrWhiteSpace($OutputPath)) {
 $objectiveLine = if ([string]::IsNullOrWhiteSpace($Objective)) { '[define objective in one sentence]' } else { $Objective }
 $changedSection = ($changedFiles -join [Environment]::NewLine)
 $commitSection = ($recentCommits -join [Environment]::NewLine)
+$customRulesSection = Get-CustomRulesDigest
 
 $content = @"
 # Context Pack
@@ -131,6 +150,9 @@ $changedSection
 
 ## Recent Commits
 $commitSection
+
+## Custom Rules (Loaded)
+$customRulesSection
 
 ## Continue Prompt (Compact)
 Use this context and continue the same objective.

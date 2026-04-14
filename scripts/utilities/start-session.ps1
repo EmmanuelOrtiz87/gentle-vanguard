@@ -60,6 +60,7 @@ function New-SessionBriefContent {
         [string]$OrchestratorState,
         [string]$EngramState,
         [string]$GgaState,
+        [string]$CustomRulesState,
         [string]$SessionFile,
         [string]$TaskFile
     )
@@ -78,6 +79,7 @@ function New-SessionBriefContent {
 - Orchestrator: $OrchestratorState
 - Engram: $EngramState
 - GGA: $GgaState
+- Custom rules: $CustomRulesState
 
 ## Objective
 
@@ -109,6 +111,26 @@ $taskReference
 - Keep this brief updated if the session goal changes materially.
 - Record durable decisions in ADRs or Engram, not only in chat.
 "@
+}
+
+function Get-CustomRulesState {
+    $rulesScript = Join-Path $PSScriptRoot 'custom-rules.ps1'
+    if (-not (Test-Path $rulesScript)) {
+        return 'unavailable (custom-rules script not found)'
+    }
+
+    try {
+        $json = & $rulesScript -Mode status -AsJson -PassThru -Quiet
+        if ([string]::IsNullOrWhiteSpace(($json | Out-String).Trim())) {
+            return 'enabled but no status output'
+        }
+
+        $status = $json | ConvertFrom-Json
+        return "enabled=$($status.enabled); loaded_files=$($status.totalFiles); root=$($status.root)"
+    }
+    catch {
+        return 'failed to load custom rules status'
+    }
 }
 
 function New-TaskBriefContent {
@@ -167,6 +189,7 @@ $orchestratorMarker = Test-Path (Join-Path $repoRoot '.orchestrator-active')
 $orchestratorState = if ($orchestratorMarker) { 'active marker present' } else { 'marker missing' }
 $engramState = Get-ToolState -Name 'engram' -RelativeWrapper 'scripts\utilities\run-engram.ps1'
 $ggaState = Get-ToolState -Name 'gga' -RelativeWrapper 'scripts\utilities\run-gga.ps1'
+$customRulesState = Get-CustomRulesState
 
 $sessionsDir = Join-Path $repoRoot 'docs\sessions'
 $tasksDir = Join-Path $repoRoot 'docs\tasks'
@@ -190,7 +213,7 @@ if (-not [string]::IsNullOrWhiteSpace($TaskName)) {
     }
 }
 
-New-SessionBriefContent -Branch $branch -GitState $gitState -OrchestratorState $orchestratorState -EngramState $engramState -GgaState $ggaState -SessionFile $sessionFile -TaskFile $taskFile | Out-File -FilePath $sessionFile -Encoding UTF8
+New-SessionBriefContent -Branch $branch -GitState $gitState -OrchestratorState $orchestratorState -EngramState $engramState -GgaState $ggaState -CustomRulesState $customRulesState -SessionFile $sessionFile -TaskFile $taskFile | Out-File -FilePath $sessionFile -Encoding UTF8
 
 Write-Ok "Session brief created: $sessionFile"
 Write-Host "`nNext steps:" -ForegroundColor Cyan

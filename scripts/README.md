@@ -54,6 +54,7 @@ scripts/
 | `aggregate-metrics.ps1` | Aggregate metrics |
 | `orchestrator-status.ps1` | Comprobar orquestador + Engram |
 | `install-engram.ps1` | Instalar o verificar Engram CLI |
+| `custom-rules.ps1` | Load and report custom technical/business/review rules |
 | `foundation-sync.ps1` | Sync managed Foundation assets into consumer repositories |
 
 ## Workflow CLI (wf.ps1)
@@ -128,6 +129,10 @@ Automated development workflow commands.
 # Check orchestrator status
 .\scripts\utilities\orchestrator-status.ps1
 .\scripts\utilities\wf.ps1 orchestrator-status
+
+# Check loaded custom rules
+.\scripts\utilities\custom-rules.ps1 -Mode status
+.\scripts\utilities\wf.ps1 custom-rules-status
 
 # Create or refresh task brief only
 .\scripts\utilities\wf.ps1 task-brief auth-hardening

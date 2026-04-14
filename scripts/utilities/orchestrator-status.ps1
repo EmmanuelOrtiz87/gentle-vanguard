@@ -21,6 +21,7 @@ $skillDir = $skillCandidates | Where-Object { Test-Path $_ } | Select-Object -Fi
 if (-not $skillDir) { $skillDir = $skillCandidates[0] }
 $engramData = Join-Path $projectRoot '.engram-data'
 $runEngramScript = Join-Path $projectRoot 'scripts\utilities\run-engram.ps1'
+$customRulesScript = Join-Path $projectRoot 'scripts\utilities\custom-rules.ps1'
 
 function Write-Step { param([string]$Message) Write-Host "`n=== $Message ===" -ForegroundColor Cyan }
 function Write-Success { param([string]$Message) Write-Host "[OK] $Message" -ForegroundColor Green }
@@ -99,6 +100,26 @@ if (Test-Path $runEngramScript) {
     Write-Success "Engram launcher script exists"
 } else {
     Write-Warning "Engram launcher script not found: $runEngramScript"
+}
+
+if (Test-Path $customRulesScript) {
+    try {
+        $rulesJson = & $customRulesScript -Mode status -AsJson -PassThru -Quiet
+        if (-not [string]::IsNullOrWhiteSpace(($rulesJson | Out-String).Trim())) {
+            $rulesStatus = $rulesJson | ConvertFrom-Json
+            Write-Success "Custom rules loader is available"
+            Write-Host "  enabled: $($rulesStatus.enabled)" -ForegroundColor White
+            Write-Host "  root: $($rulesStatus.root)" -ForegroundColor White
+            Write-Host "  files loaded: $($rulesStatus.totalFiles)" -ForegroundColor White
+        } else {
+            Write-Warning "Custom rules loader returned no status"
+        }
+    }
+    catch {
+        Write-Warning "Custom rules status failed: $($_.Exception.Message)"
+    }
+} else {
+    Write-Warning "Custom rules loader script not found: $customRulesScript"
 }
 
 Write-Step "Conclusion"
