@@ -25,7 +25,7 @@
                               "pt-BR",
                               "en"
                           ],
-    "communication_response_mode":  "executive",
+    "communication_response_mode":  "simple",
     "allowed_response_modes":  [
                                    "simple",
                                    "executive",
@@ -71,7 +71,7 @@
                                                }
                               },
     "response_profiles":  {
-                              "active":  "lite",
+                              "active":  "ultra",
                               "allow":  [
                                             "lite",
                                             "lleno",
