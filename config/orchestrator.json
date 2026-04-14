@@ -104,5 +104,113 @@
                                                          }
                                            }
                           },
+    "subagent_orchestration":  {
+                                     "enabled":  true,
+                                     "mode":  "coordinator-workers",
+                                     "token_efficiency":  {
+                                                              "task_packet_char_budget":  {
+                                                                                               "min":  1500,
+                                                                                               "max":  2500
+                                                                                           },
+                                                              "max_context_files_per_lane":  8,
+                                                              "max_findings_per_lane":  8,
+                                                              "deduplicate_findings":  true,
+                                                              "collapse_similar_errors":  true,
+                                                              "cache_readonly_discovery":  true,
+                                                              "cache_ttl_minutes":  20,
+                                                              "auto_compact_after_merges":  true,
+                                                              "compact_trigger":  {
+                                                                                      "completed_lanes":  2,
+                                                                                      "changed_files":  8
+                                                                                  },
+                                                              "allow_full_transcript_replay":  false
+                                                          },
+                                     "token_budget_guard":  {
+                                                                "enabled":  true,
+                                                                "non_blocking":  true,
+                                                                "require_engram":  true,
+                                                                "daily_budget_tokens":  120000,
+                                                                "soft_threshold_pct":  70,
+                                                                "hard_threshold_pct":  90,
+                                                                "enforce_on_commands":  [
+                                                                                             "context-pack",
+                                                                                             "compact-start",
+                                                                                             "review",
+                                                                                             "audit",
+                                                                                             "end-session",
+                                                                                             "publish"
+                                                                                         ],
+                                                                "fallback_actions":  [
+                                                                                         "./scripts/utilities/wf.ps1 response-mode simple",
+                                                                                         "./scripts/utilities/wf.ps1 response-mode ultra",
+                                                                                         "./scripts/utilities/wf.ps1 context-pack \"<objective>\"",
+                                                                                         "./scripts/utilities/wf.ps1 compact-start \"<objective>\"",
+                                                                                         "./scripts/utilities/wf.ps1 end-session \"<task>\" -SkipReview -SkipTests -Force",
+                                                                                         "./scripts/utilities/run-engram.ps1 --help"
+                                                                                     ]
+                                                            },
+                                     "max_parallel_by_risk":  {
+                                                                  "low":  4,
+                                                                  "medium":  3,
+                                                                  "high":  2
+                                                              },
+                                     "default_timeout_minutes":  8,
+                                     "retry_policy":  {
+                                                          "max_retries":  1,
+                                                          "retry_on":  [
+                                                                           "transient"
+                                                                       ]
+                                                      },
+                                     "lanes":  [
+                                                   {
+                                                       "id":  "discovery",
+                                                       "goal":  "Collect facts and code references with minimal context",
+                                                       "output_contract":  [
+                                                                               "lane_id",
+                                                                               "status",
+                                                                               "files_touched",
+                                                                               "findings_or_changes",
+                                                                               "validation_result",
+                                                                               "next_action"
+                                                                           ]
+                                                   },
+                                                   {
+                                                       "id":  "implementation",
+                                                       "goal":  "Apply scoped code changes",
+                                                       "output_contract":  [
+                                                                               "lane_id",
+                                                                               "status",
+                                                                               "files_touched",
+                                                                               "findings_or_changes",
+                                                                               "validation_result",
+                                                                               "next_action"
+                                                                           ]
+                                                   },
+                                                   {
+                                                       "id":  "validation",
+                                                       "goal":  "Run tests and checks on changed slices",
+                                                       "output_contract":  [
+                                                                               "lane_id",
+                                                                               "status",
+                                                                               "files_touched",
+                                                                               "findings_or_changes",
+                                                                               "validation_result",
+                                                                               "next_action"
+                                                                           ]
+                                                   },
+                                                   {
+                                                       "id":  "governance",
+                                                       "goal":  "Validate documentation and policy compliance",
+                                                       "output_contract":  [
+                                                                               "lane_id",
+                                                                               "status",
+                                                                               "files_touched",
+                                                                               "findings_or_changes",
+                                                                               "validation_result",
+                                                                               "next_action"
+                                                                           ]
+                                                   }
+                                               ]
+                                 },
     "activated_at":  "2026-04-14 00:03:38"
 }

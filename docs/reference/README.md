@@ -7,6 +7,7 @@ Technical reference documentation.
 | Document | Description |
 |----------|-------------|
 | [ARCHITECTURE.md](ARCHITECTURE.md) | System architecture and design |
+| [SUBAGENT-ARCHITECTURE.md](SUBAGENT-ARCHITECTURE.md) | Parallel subagent topology and token-efficient execution model |
 | [project-types.md](project-types.md) | Available project types and templates |
 | [tools.md](tools.md) | External tools integration |
 | [structure.md](structure.md) | Directory structure |

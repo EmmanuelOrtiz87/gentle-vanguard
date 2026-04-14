@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'reset-demo', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'reset-demo', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -47,6 +47,27 @@ function Invoke-LocalPowerShellScript {
     )
 
     & $ScriptPath @ScriptArgs
+}
+
+function Invoke-TokenBudgetGuard {
+    param(
+        [string]$Task,
+        [ValidateSet('low', 'medium', 'high')]
+        [string]$Risk = 'medium',
+        [int]$EstimatedChars = 0
+    )
+
+    $guardScript = Join-Path $scriptDir 'token-budget-guard.ps1'
+    if (-not (Test-Path $guardScript)) {
+        return
+    }
+
+    # Guard alerts are non-blocking by default to avoid blocking session completion.
+    if ($EstimatedChars -gt 0) {
+        & $guardScript -Mode check -Task $Task -Risk $Risk -EstimatedChars $EstimatedChars -Record
+    } else {
+        & $guardScript -Mode check -Task $Task -Risk $Risk -Record
+    }
 }
 
 function Get-GitInfo {
@@ -1273,6 +1294,7 @@ COMMANDS:
     context-pack [goal]  Generate compact context summary for new chat thread
     compact-start [goal] Generate context pack and copy compact continuation prompt
     context-metrics [days] Show context/token usage metrics from local logs
+    token-guard [task]   Check token budget thresholds and continuity alternatives (Engram-aware)
     checkpoint [label]   Save a live rollback point (git stash -u) before risky edits
     list-checkpoints     List workflow-created checkpoints
     rollback-checkpoint [selector] Restore latest checkpoint or one matching selector
@@ -1320,6 +1342,8 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 context-pack "fix ci noise"  Generate compact handoff summary for token-efficient continuation
     .\scripts\utilities\wf.ps1 compact-start "fix ci noise" Generate handoff summary and copy compact prompt
     .\scripts\utilities\wf.ps1 context-metrics 14  Show 14-day context usage summary
+    .\scripts\utilities\wf.ps1 token-guard         Show token budget status for current session
+    .\scripts\utilities\wf.ps1 token-guard publish Check token budget for publish-level workflow
     .\scripts\utilities\wf.ps1 checkpoint feature-doc-cleanup  Save rollback point including untracked files
     .\scripts\utilities\wf.ps1 list-checkpoints        Show available rollback points
     .\scripts\utilities\wf.ps1 rollback-checkpoint     Restore latest checkpoint
@@ -1435,6 +1459,7 @@ switch ($Command) {
 
     'end-session' {
         Write-Step "Running session closure"
+        Invoke-TokenBudgetGuard -Task 'end-session' -Risk 'medium' -EstimatedChars 7200
         $endScript = Join-Path $scriptDir 'end-session.ps1'
         if (Test-Path $endScript) {
             $endArgs = @()
@@ -1465,6 +1490,7 @@ switch ($Command) {
 
     'day-end-closure' {
         Write-Step "Running automated day-end closure"
+        Invoke-TokenBudgetGuard -Task 'end-session' -Risk 'high' -EstimatedChars 14000
         $dayEndScript = Join-Path $scriptDir 'day-end-closure.ps1'
         if (Test-Path $dayEndScript) {
             $dayEndArgs = @()
@@ -1500,6 +1526,7 @@ switch ($Command) {
 
     'review' {
         Write-Step "Code Review - $($Scope.ToUpper())"
+        Invoke-TokenBudgetGuard -Task 'review' -Risk 'high' -EstimatedChars 12800
         
         # Run security check
         if (-not (Test-Secrets)) {
@@ -1522,6 +1549,8 @@ switch ($Command) {
     }
     
     'audit' {
+        Write-Step "Generating Audit"
+        Invoke-TokenBudgetGuard -Task 'audit' -Risk 'medium' -EstimatedChars 8800
         $outputDir = Join-Path $repoRoot 'docs/audits'
         if (-not (Test-Path $outputDir)) {
             New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
@@ -1600,6 +1629,7 @@ switch ($Command) {
     }
 
     'publish' {
+        Invoke-TokenBudgetGuard -Task 'publish' -Risk 'high' -EstimatedChars 18000
         Invoke-PublishWorkflow -SkipReviewGate:$SkipReview -SkipTestsGate:$SkipTests -ForceMode:$Force
     }
     
@@ -1784,6 +1814,8 @@ switch ($Command) {
 
     'context-pack' {
         Write-Step "Generating Compact Context Pack"
+        $scopeChars = if ([string]::IsNullOrWhiteSpace($Scope)) { 0 } else { $Scope.Length }
+        Invoke-TokenBudgetGuard -Task 'context-pack' -Risk 'medium' -EstimatedChars (4800 + $scopeChars)
         $contextScript = Join-Path $scriptDir 'context-pack.ps1'
         if (-not (Test-Path $contextScript)) {
             Write-Error "Context pack script not found: $contextScript"
@@ -1799,6 +1831,8 @@ switch ($Command) {
 
     'compact-start' {
         Write-Step "Preparing Compact Chat Start"
+        $scopeChars = if ([string]::IsNullOrWhiteSpace($Scope)) { 0 } else { $Scope.Length }
+        Invoke-TokenBudgetGuard -Task 'compact-start' -Risk 'medium' -EstimatedChars (6200 + $scopeChars)
         $compactScript = Join-Path $scriptDir 'compact-start.ps1'
         if (-not (Test-Path $compactScript)) {
             Write-Error "Compact start script not found: $compactScript"
@@ -1829,6 +1863,18 @@ switch ($Command) {
         }
 
         Invoke-LocalPowerShellScript -ScriptPath $metricsScript -ScriptArgs @('-Days', [string]$days)
+    }
+
+    'token-guard' {
+        Write-Step "Token Budget Guard"
+        $guardScript = Join-Path $scriptDir 'token-budget-guard.ps1'
+        if (-not (Test-Path $guardScript)) {
+            Write-Error "Token budget guard script not found: $guardScript"
+            exit 1
+        }
+
+        $taskName = if ([string]::IsNullOrWhiteSpace($Scope)) { 'general' } else { $Scope }
+        & $guardScript -Mode status -Task $taskName
     }
 
     'homologate' {
