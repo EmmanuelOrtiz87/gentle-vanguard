@@ -29,6 +29,7 @@ Implement a simple project in `demos/shared/task-tracker/` with commands:
 1. Open terminal at repository root.
 2. Confirm stack status.
 3. Start session with a meaningful task name.
+4. If `.engram-data/` does not exist yet, it will be created automatically on first Engram use.
 
 ```powershell
 ./scripts/utilities/wf.ps1 status
@@ -103,6 +104,7 @@ Expected outcome:
 Objective:
 
 1. Show persistent memory workflow.
+2. Confirm first-use setup is non-blocking on a fresh machine.
 
 Commands:
 
@@ -115,6 +117,7 @@ Expected outcome:
 
 1. Team sees continuity strategy between sessions.
 2. Less re-briefing overhead in follow-up work.
+3. Fresh environments create `.engram-data/engram-session` automatically instead of warning or blocking.
 
 ### Step 5 - Code Review and Audit
 
@@ -181,3 +184,4 @@ Expected outcome:
 1. This cookbook intentionally prioritizes operational simplicity over product complexity.
 2. Use this as the default showcase for mixed audience sessions.
 3. If a shorter demo is needed, execute Step 1, Step 2, Step 5, and Executive Talking Points.
+4. Step 4 is optional for environments where Engram should not be demonstrated live; the rest of the demo remains fully runnable.

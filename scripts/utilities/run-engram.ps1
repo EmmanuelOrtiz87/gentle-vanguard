@@ -24,6 +24,23 @@ function Resolve-ConfigText {
     return $resolved
 }
 
+function Resolve-WorkspacePath {
+    param(
+        [string]$Path,
+        [string]$WorkspaceRoot
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Path)) {
+        return $Path
+    }
+
+    if ([System.IO.Path]::IsPathRooted($Path)) {
+        return $Path
+    }
+
+    return [System.IO.Path]::GetFullPath((Join-Path $WorkspaceRoot $Path))
+}
+
 function Ensure-Directory {
     param([string]$Path)
 
@@ -67,6 +84,8 @@ $dataRoot = if ($config -and $config.dataRoot) {
 } else {
     $defaultDataRoot
 }
+
+$dataRoot = Resolve-WorkspacePath -Path $dataRoot -WorkspaceRoot $workspaceRoot
 
 $engramDataDir = Join-Path $dataRoot 'engram-session'
 Ensure-Directory -Path $engramDataDir

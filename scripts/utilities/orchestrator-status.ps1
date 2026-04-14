@@ -27,6 +27,42 @@ function Write-Step { param([string]$Message) Write-Host "`n=== $Message ===" -F
 function Write-Success { param([string]$Message) Write-Host "[OK] $Message" -ForegroundColor Green }
 function Write-Warning { param([string]$Message) Write-Host "[WARN] $Message" -ForegroundColor Yellow }
 function Write-Error { param([string]$Message) Write-Host "[ERROR] $Message" -ForegroundColor Red }
+function Write-Info { param([string]$Message) Write-Host "[INFO] $Message" -ForegroundColor DarkCyan }
+
+function Resolve-ConfigText {
+    param(
+        [string]$Text,
+        [hashtable]$Context
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Text)) {
+        return $Text
+    }
+
+    $resolved = $Text
+    foreach ($key in $Context.Keys) {
+        $resolved = $resolved.Replace("{$key}", [string]$Context[$key])
+    }
+
+    return $resolved
+}
+
+function Resolve-WorkspacePath {
+    param(
+        [string]$Path,
+        [string]$WorkspaceRoot
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Path)) {
+        return $Path
+    }
+
+    if ([System.IO.Path]::IsPathRooted($Path)) {
+        return $Path
+    }
+
+    return [System.IO.Path]::GetFullPath((Join-Path $WorkspaceRoot $Path))
+}
 
 Write-Step "Orchestrator Status Check"
 
@@ -43,6 +79,15 @@ if (Test-Path $activationFile) {
 if (Test-Path $configFile) {
     Write-Success "Orchestrator config found"
     $config = Get-Content $configFile | ConvertFrom-Json
+    $configContext = @{
+        workspaceRoot = $projectRoot
+        dataRoot = (Join-Path $projectRoot '.engram-data')
+        toolsRoot = (Join-Path $projectRoot 'tools')
+        projectsRoot = (Join-Path $projectRoot 'projects')
+    }
+    if ($config.PSObject.Properties.Name -contains 'dataRoot' -and $config.dataRoot) {
+        $engramData = Resolve-WorkspacePath -Path (Resolve-ConfigText -Text $config.dataRoot -Context $configContext) -WorkspaceRoot $projectRoot
+    }
     Write-Host "  active: $($config.active)" -ForegroundColor White
     Write-Host "  workflow_mode: $($config.workflow_mode)" -ForegroundColor White
     $responseMode = if ($config.PSObject.Properties.Name -contains 'communication_response_mode') { $config.communication_response_mode } else { 'executive (default)' }
@@ -103,7 +148,7 @@ if (Test-Path $engramData) {
     $entries = Get-ChildItem -Path $engramData -Force | Select-Object -ExpandProperty Name
     Write-Host "  Entries: $($entries -join ', ')" -ForegroundColor White
 } else {
-    Write-Warning "Engram data directory not found: $engramData"
+    Write-Info "Engram data directory will be created on first use: $engramData"
 }
 
 if (Test-Path $runEngramScript) {

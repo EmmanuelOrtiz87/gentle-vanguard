@@ -10,7 +10,8 @@ Audiencia: Ejecutivos (5 min) + Equipo de desarrollo (15 min total)
 2. PowerShell con permisos de ejecución: `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`.
 3. Go instalado y en PATH (`go version` debe responder).
 4. Repo limpio: `git status` sin cambios pendientes.
-5. Si quieres mostrar Engram en vivo: confirmar `engram --version` activo.
+5. Si quieres mostrar Engram en vivo: confirmar `engram --version` activo o dejar que `run-engram.ps1` complete el setup básico en primer uso.
+6. `.engram-data/` se crea automáticamente en la primera invocación; su ausencia inicial ya no debe tratarse como error del demo.
 
 ---
 
@@ -163,6 +164,9 @@ tasks_total=1  tasks_done=1  tasks_pending=0
 
 > "Al cierre de cualquier sesión de trabajo — o antes de pasar la tarea a otro miembro —
 > guardamos un resumen en Engram. Eso elimina el re-briefing en la siguiente sesión."
+
+> "En una máquina nueva, este paso ya no depende de una carpeta precreada.
+> El launcher la inicializa automáticamente y el resto del demo no queda bloqueado."
 
 ### Lo que muestras en pantalla
 

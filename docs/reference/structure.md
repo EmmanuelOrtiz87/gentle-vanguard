@@ -13,18 +13,18 @@ The goal is to clearly separate:
 1. Keep the workspace root stable.
 2. Keep tool repositories separate from project repositories.
 3. Keep reusable skills in the workspace kit and install them into Codex when needed.
-4. Keep runtime data outside source checkouts.
+4. Keep runtime data in a workspace-resolved location so the setup remains portable across machines.
 5. Keep documentation in the project tree.
 6. Use the template structure consistently for new projects.
 
 ## Workspace Level
 
-- `C:\Workspace_local` (workspace root)
-- `C:\Workspace_local\gentleman-guardian-angel`
-- `C:\Workspace_local\Gentleman-Skills`
-- `C:\Workspace_local\.engram-data`
-- `C:\Workspace_local\workspace-foundation`
-- `C:\Workspace_local\workspace-foundation\skills`
+- `{workspaceRoot}/` (workspace root)
+- `{workspaceRoot}/gentleman-guardian-angel`
+- `{workspaceRoot}/Gentleman-Skills`
+- `{workspaceRoot}/workspace-foundation`
+- `{workspaceRoot}/workspace-foundation/.engram-data`
+- `{workspaceRoot}/workspace-foundation/skills`
 
 ## Project Level
 
@@ -52,3 +52,9 @@ Every new project should contain:
 ## Golden Rule
 
 No project should depend on an embedded local copy of external tools.
+
+## Portable Runtime Note
+
+1. `config/workspace.config.json` should prefer workspace-resolved paths such as `{workspaceRoot}/.engram-data`.
+2. `scripts/utilities/run-engram.ps1` creates the Engram session directory on first use.
+3. A missing `.engram-data/` directory on a fresh machine is normal and should not block demos.

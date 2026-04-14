@@ -1,8 +1,8 @@
 {
   "workspaceName": "workspace-foundation",
-  "dataRoot": "C:\\Workspace_local\\.engram-data",
-  "toolsRoot": "C:\\Workspace_local\\tools",
-  "projectsRoot": "C:\\Workspace_local\\projects",
+  "dataRoot": "{workspaceRoot}/.engram-data",
+  "toolsRoot": "{workspaceRoot}/tools",
+  "projectsRoot": "{workspaceRoot}/projects",
   "mcpIntegrations": {
     "context7": {
       "enabled": false,
@@ -23,7 +23,7 @@
       "purpose": "Shared knowledge base and delivery notes"
     }
   },
-  "projectTemplate": "C:\\Workspace_local\\workspace-foundation\\templates\\project-root",
+  "projectTemplate": "{workspaceRoot}/templates/project-root",
   "projectDefaults": {
     "repositoryMode": "template",
     "kind": "service",
