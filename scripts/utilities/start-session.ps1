@@ -61,6 +61,7 @@ function New-SessionBriefContent {
         [string]$EngramState,
         [string]$GgaState,
         [string]$CustomRulesState,
+        [string]$ResponseModeState,
         [string]$SessionFile,
         [string]$TaskFile
     )
@@ -80,6 +81,7 @@ function New-SessionBriefContent {
 - Engram: $EngramState
 - GGA: $GgaState
 - Custom rules: $CustomRulesState
+- Response profile: $ResponseModeState
 
 ## Objective
 
@@ -130,6 +132,26 @@ function Get-CustomRulesState {
     }
     catch {
         return 'failed to load custom rules status'
+    }
+}
+
+function Get-ResponseModeState {
+    $modeScript = Join-Path $PSScriptRoot 'response-mode.ps1'
+    if (-not (Test-Path $modeScript)) {
+        return 'unavailable (response-mode script not found)'
+    }
+
+    try {
+        $json = & $modeScript -Mode status -AsJson -PassThru -Quiet
+        if ([string]::IsNullOrWhiteSpace(($json | Out-String).Trim())) {
+            return 'enabled but no status output'
+        }
+
+        $status = $json | ConvertFrom-Json
+        return "active=$($status.active); allowed=$(@($status.allowed).Count)"
+    }
+    catch {
+        return 'failed to load response profile status'
     }
 }
 
@@ -190,6 +212,7 @@ $orchestratorState = if ($orchestratorMarker) { 'active marker present' } else {
 $engramState = Get-ToolState -Name 'engram' -RelativeWrapper 'scripts\utilities\run-engram.ps1'
 $ggaState = Get-ToolState -Name 'gga' -RelativeWrapper 'scripts\utilities\run-gga.ps1'
 $customRulesState = Get-CustomRulesState
+$responseModeState = Get-ResponseModeState
 
 $sessionsDir = Join-Path $repoRoot 'docs\sessions'
 $tasksDir = Join-Path $repoRoot 'docs\tasks'
@@ -213,7 +236,7 @@ if (-not [string]::IsNullOrWhiteSpace($TaskName)) {
     }
 }
 
-New-SessionBriefContent -Branch $branch -GitState $gitState -OrchestratorState $orchestratorState -EngramState $engramState -GgaState $ggaState -CustomRulesState $customRulesState -SessionFile $sessionFile -TaskFile $taskFile | Out-File -FilePath $sessionFile -Encoding UTF8
+New-SessionBriefContent -Branch $branch -GitState $gitState -OrchestratorState $orchestratorState -EngramState $engramState -GgaState $ggaState -CustomRulesState $customRulesState -ResponseModeState $responseModeState -SessionFile $sessionFile -TaskFile $taskFile | Out-File -FilePath $sessionFile -Encoding UTF8
 
 Write-Ok "Session brief created: $sessionFile"
 Write-Host "`nNext steps:" -ForegroundColor Cyan
