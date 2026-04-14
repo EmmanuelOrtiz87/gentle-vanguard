@@ -53,9 +53,16 @@ function Get-ChangedFiles {
     }
 
     if ($files.Count -eq 0) {
-        # In shallow CI checkouts, HEAD~1 may not exist; guard before diffing.
-        git rev-parse --verify HEAD~1 2>$null | Out-Null
-        if ($LASTEXITCODE -eq 0) {
+        # Shallow CI clones may not have HEAD~1; avoid failing the whole gate.
+        $hasPreviousCommit = $false
+        try {
+            git rev-parse --verify --quiet HEAD~1 *> $null
+            $hasPreviousCommit = ($LASTEXITCODE -eq 0)
+        } catch {
+            $hasPreviousCommit = $false
+        }
+
+        if ($hasPreviousCommit) {
             try {
                 $files = @(git diff --name-only HEAD~1..HEAD 2>$null)
             } catch {
