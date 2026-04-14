@@ -29,6 +29,112 @@ function Write-Warning { param([string]$Message) Write-Host "[WARN] $Message" -F
 function Write-Error { param([string]$Message) Write-Host "[ERROR] $Message" -ForegroundColor Red }
 function Write-Info { param([string]$Message) Write-Host "[INFO] $Message" -ForegroundColor DarkCyan }
 
+function Get-TokenGuardDefaults {
+    return @{
+        enabled = $true
+        require_engram = $true
+        daily_budget_tokens = 120000
+        soft_threshold_pct = 70
+        hard_threshold_pct = 90
+    }
+}
+
+function Get-TodayTokenUsage {
+    param([string]$ProjectRoot)
+
+    $usageFile = Join-Path $ProjectRoot 'docs\sessions\metrics\token-guard-usage.csv'
+    if (-not (Test-Path $usageFile)) {
+        return 0
+    }
+
+    $rows = Import-Csv -Path $usageFile -ErrorAction SilentlyContinue
+    if (-not $rows) {
+        return 0
+    }
+
+    $today = Get-Date -Format 'yyyy-MM-dd'
+    $sum = 0
+    foreach ($row in $rows) {
+        if ($row.date -ne $today) {
+            continue
+        }
+
+        $tokens = 0
+        if ([int]::TryParse([string]$row.estimated_tokens, [ref]$tokens)) {
+            $sum += $tokens
+        }
+    }
+
+    return $sum
+}
+
+function Show-TokenGuardExecutiveSummary {
+    param(
+        [object]$Config,
+        [string]$ProjectRoot,
+        [bool]$EngramInstalled
+    )
+
+    Write-Step 'Token Guard Executive Summary'
+
+    $defaults = Get-TokenGuardDefaults
+    $guard = @{}
+    foreach ($key in @($defaults.Keys)) {
+        $guard[$key] = $defaults[$key]
+    }
+
+    if ($Config -and $Config.PSObject.Properties.Name -contains 'subagent_orchestration' -and $Config.subagent_orchestration -and $Config.subagent_orchestration.PSObject.Properties.Name -contains 'token_budget_guard' -and $Config.subagent_orchestration.token_budget_guard) {
+        $custom = $Config.subagent_orchestration.token_budget_guard
+        foreach ($key in @($defaults.Keys)) {
+            if ($custom.PSObject.Properties.Name -contains $key) {
+                $guard[$key] = $custom.$key
+            }
+        }
+    }
+
+    if (-not $guard.enabled) {
+        Write-Warning 'Token budget guard is disabled.'
+        return
+    }
+
+    $usedToday = Get-TodayTokenUsage -ProjectRoot $ProjectRoot
+    $budget = [int]$guard.daily_budget_tokens
+    $pct = if ($budget -gt 0) { [Math]::Round(($usedToday / $budget) * 100, 2) } else { 0 }
+    $soft = [double]$guard.soft_threshold_pct
+    $hard = [double]$guard.hard_threshold_pct
+
+    Write-Host "  guard_enabled: $($guard.enabled)" -ForegroundColor White
+    Write-Host "  require_engram: $($guard.require_engram)" -ForegroundColor White
+    Write-Host "  used_today_tokens: $usedToday" -ForegroundColor White
+    Write-Host "  daily_budget_tokens: $budget" -ForegroundColor White
+    Write-Host "  projected_pct_today: $pct" -ForegroundColor White
+    Write-Host "  thresholds: soft=$soft% hard=$hard%" -ForegroundColor White
+
+    if ($guard.require_engram -and -not $EngramInstalled) {
+        Write-Warning 'Continuity risk: Engram required by policy but not installed in PATH.'
+        Write-Host '  Alternative 1: .\scripts\utilities\wf.ps1 install-engram' -ForegroundColor Yellow
+        Write-Host '  Alternative 2: .\scripts\utilities\run-engram.ps1 --help' -ForegroundColor Yellow
+        return
+    }
+
+    if ($pct -ge $hard) {
+        Write-Warning 'Hard token threshold reached: use compact flow and finish with closure-safe path.'
+        Write-Host '  Alternative 1: .\scripts\utilities\wf.ps1 response-mode simple' -ForegroundColor Yellow
+        Write-Host '  Alternative 2: .\scripts\utilities\wf.ps1 response-mode ultra' -ForegroundColor Yellow
+        Write-Host '  Alternative 3: .\scripts\utilities\wf.ps1 context-pack "<objective>"' -ForegroundColor Yellow
+        Write-Host '  Alternative 4: .\scripts\utilities\wf.ps1 end-session "<task>" -SkipReview -SkipTests -Force' -ForegroundColor Yellow
+        return
+    }
+
+    if ($pct -ge $soft) {
+        Write-Warning 'Soft token threshold reached: reduce context size and split work into smaller slices.'
+        Write-Host '  Recommendation: run .\scripts\utilities\wf.ps1 compact-start "<objective>" before continuing' -ForegroundColor Yellow
+        return
+    }
+
+    Write-Success 'Token budget posture is healthy.'
+}
+
 function Resolve-ConfigText {
     param(
         [string]$Text,
@@ -155,6 +261,10 @@ if (Test-Path $runEngramScript) {
     Write-Success "Engram launcher script exists"
 } else {
     Write-Warning "Engram launcher script not found: $runEngramScript"
+}
+
+if ($config) {
+    Show-TokenGuardExecutiveSummary -Config $config -ProjectRoot $projectRoot -EngramInstalled:$engramInstalled
 }
 
 if (Test-Path $customRulesScript) {

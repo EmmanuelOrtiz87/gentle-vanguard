@@ -20,6 +20,26 @@ Gentleman Foundation is a revolutionary development suite that combines:
 - **🎨 Template System**: Rapid project scaffolding with best practices
 - **🔗 Homologated Projects**: Consistent development experience across all projects
 
+## 🧭 Stack Positioning
+
+Gentleman Foundation should be treated as an operational framework, not a closed tool.
+
+1. Core identity:
+- Framework-oriented workflow platform.
+- Composable orchestration layer over scripts, policies, and skills.
+
+2. Tool strategy:
+- Integrates optional and replaceable tools (Engram, GGA, Gentle-AI).
+- Does not hard-couple all capabilities to a single binary lifecycle.
+
+3. Engram role:
+- Engram is mandatory for continuity posture in guarded workflows.
+- Foundation still keeps a graceful fallback path when Engram is temporarily unavailable.
+
+4. Practical outcome:
+- Foundation behaves as a governance and execution framework.
+- Engram behaves as a specialized persistence component within that framework.
+
 ## 🚀 Quick Start
 
 ### Prerequisites
