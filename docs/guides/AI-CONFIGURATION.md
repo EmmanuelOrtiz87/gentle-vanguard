@@ -22,35 +22,44 @@ Both can run simultaneously for failover!
 
 ## Response Profile Compression (Token Efficiency)
 
-The stack supports configurable response profiles to reduce output/context tokens while keeping consistent style.
+The stack supports configurable communication controls to reduce output/context tokens while keeping consistent style.
+
+Three independent axes are used:
+
+1. Language: `es | pt-BR | en`
+2. Detail level: `simple | executive | expanded`
+3. Compression profile: `lite | lleno | ultra`
 
 Profiles available in `config/orchestrator.json`:
 
 - `lite`
 - `lleno`
 - `ultra`
-- `wenyan-lite`
-- `wenyan-full`
-- `wenyan-ultra`
 
 Operational commands:
 
 ```powershell
-# Show active profile
+# Show active communication settings
 .\scripts\utilities\wf.ps1 response-mode
 
-# List all profiles
+# List all options
 .\scripts\utilities\wf.ps1 response-mode list
 
-# Set active profile
-.\scripts\utilities\wf.ps1 response-mode ultra
+# Set compression profile
+.\scripts\utilities\wf.ps1 response-mode profile:ultra
+
+# Set language
+.\scripts\utilities\wf.ps1 response-mode language:pt-BR
+
+# Set detail level
+.\scripts\utilities\wf.ps1 response-mode detail:expanded
 ```
 
 Recommendation:
 
-1. Use `lite` as default for cross-team readability.
+1. Use `es + executive + lite` as baseline for this workspace.
 2. Use `ultra` for short implementation loops and rapid triage.
-3. Use `wenyan-*` only when the audience explicitly requires classical Chinese compression.
+3. Use `expanded` when explicit deep detail is requested.
 
 ## Option A: Cloud Configuration (Recommended)
 
