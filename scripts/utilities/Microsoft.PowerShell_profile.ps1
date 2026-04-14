@@ -28,8 +28,9 @@ if ($Host.Name -eq 'ConsoleHost') {
         $initScript = Join-Path $currentDir 'scripts/utilities/auto-init-dev-environment.ps1'
         if (Test-Path $initScript) {
             Start-Job -ScriptBlock {
-                & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $using:initScript -Quiet
-            } | Out-Null
+                param($scriptPath)
+                & $scriptPath -Quiet
+            } -ArgumentList $initScript | Out-Null
         }
 
         Write-Host "✅ Development environment activation started in background" -ForegroundColor Green

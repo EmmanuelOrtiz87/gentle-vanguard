@@ -65,7 +65,7 @@ function Invoke-Update {
         return 1
     }
 
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $updateScript -Tools
+    & $updateScript -Tools
     return $LASTEXITCODE
 }
 

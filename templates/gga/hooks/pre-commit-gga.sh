@@ -47,9 +47,9 @@ check_gga() {
 install_gga() {
     echo -e "${BLUE}[GGA]${NC} Installing Gentleman Guardian Angel..."
 
-    # Check if this is Windows (Git Bash)
+    # Check if this is Git Bash on Windows
     if [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
-        echo -e "${BLUE}[GGA]${NC} Detected Git Bash on Windows"
+        echo -e "${BLUE}[GGA]${NC} Detected Windows Git Bash environment"
 
         # Clone repository if not exists
         if [ ! -d "$HOME/gentleman-guardian-angel" ]; then

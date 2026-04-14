@@ -1,14 +1,12 @@
-# update-tools.ps1
+﻿# update-tools.ps1
 # Updates all foundation tools on the local machine.
 #
-# Tool installation on Windows:
-#   gga              - bash install.sh (Git Bash required, gentleman-guardian-angel repo)
+# Tool installation:
+#   gga              - bash install.sh (gentleman-guardian-angel repo)
 #   engram           - go install github.com/Gentleman-Programming/engram/cmd/engram@latest
 #   gentle-ai        - go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest
 #   gentleman-skills - git clone / pull https://github.com/Gentleman-Programming/Gentleman-Skills.git
-#   opencode         - irm https://opencode.ai/install | iex  (requires -Force to auto-run)
-#
-# brew is NOT required on Windows. All Go tools install via go install.
+#   opencode         - installer script, package manager, npm, or manual binary install
 
 param(
     [switch]$DryRun,
@@ -26,12 +24,63 @@ function Write-Warn  { param([string]$m) Write-Host "[WARN] $m" -ForegroundColor
 function Write-Err   { param([string]$m) Write-Host "[ERROR] $m" -ForegroundColor Red }
 function Write-Info  { param([string]$m) Write-Host "[INFO] $m" -ForegroundColor Cyan }
 
-# ── Prerequisites ─────────────────────────────────────────────────────────────
+function Get-CurrentPlatform {
+    if ($PSVersionTable.PSVersion.Major -ge 6) {
+        if ($IsWindows) { return 'windows' }
+        if ($IsMacOS) { return 'macos' }
+        if ($IsLinux) { return 'linux' }
+    }
+    try {
+        $os = [System.Runtime.InteropServices.RuntimeInformation]::OSDescription.ToLowerInvariant()
+        if ($os -like '*windows*') { return 'windows' }
+        if ($os -like '*darwin*' -or $os -like '*mac*') { return 'macos' }
+        if ($os -like '*linux*') { return 'linux' }
+    } catch {}
+    return 'windows'
+}
+
+function Get-HomePath {
+    if ((Get-CurrentPlatform) -eq 'windows') { return $env:USERPROFILE }
+    return $HOME
+}
+
+function Convert-ToBashPath {
+    param([string]$Path)
+    if ((Get-CurrentPlatform) -ne 'windows') { return $Path }
+    $normalized = $Path -replace '\\', '/'
+    if ($normalized -match '^([A-Za-z]):(.*)$') {
+        $drive = $Matches[1].ToLowerInvariant()
+        $rest = $Matches[2]
+        return "/$drive$rest"
+    }
+    return $normalized
+}
+
+function Get-BashPath {
+    $bash = Get-Command bash -ErrorAction SilentlyContinue
+    if ($bash) { return $bash.Source }
+    if ((Get-CurrentPlatform) -eq 'windows') {
+        $gitBash = 'C:\Program Files\Git\bin\bash.exe'
+        if (Test-Path $gitBash) { return $gitBash }
+    }
+    return $null
+}
+
+function Get-GgaBinaryPath {
+    $userHome = Get-HomePath
+    return (Join-Path (Join-Path $userHome 'bin') 'gga')
+}
+
+function Get-GgaShellPath {
+    return (Convert-ToBashPath (Get-GgaBinaryPath))
+}
+
+#  Prerequisites 
 
 function Get-GoBinDir {
     if ($env:GOBIN)  { return $env:GOBIN }
     if ($env:GOPATH) { return Join-Path $env:GOPATH 'bin' }
-    return Join-Path $env:USERPROFILE 'go\bin'
+    return Join-Path (Join-Path (Get-HomePath) 'go') 'bin'
 }
 
 function Get-ToolsRoot {
@@ -50,7 +99,7 @@ function Test-Go {
     return $false
 }
 
-# ── Version comparison helpers ─────────────────────────────────────────────────
+#  Version comparison helpers 
 
 # Fetches the latest release tag from a GitHub repo (e.g. "Gentleman-Programming/engram")
 function Get-GitHubLatestVersion {
@@ -90,15 +139,13 @@ function Get-InstalledVersion {
 }
 
 function Test-GitBash {
-    $gitBash = 'C:\Program Files\Git\bin\bash.exe'
-    if (Test-Path $gitBash) { Write-Ok "Git Bash found: $gitBash"; return $gitBash }
-    $alt = Get-Command bash -ErrorAction SilentlyContinue
-    if ($alt) { Write-Ok "bash found: $($alt.Source)"; return $alt.Source }
-    Write-Err "Git Bash not found. Install Git for Windows: https://git-scm.com/download/win"
+    $bash = Get-BashPath
+    if ($bash) { Write-Ok "bash found: $bash"; return $bash }
+    Write-Err "bash not found. Install bash (or Git if it bundles bash) and retry."
     return $null
 }
 
-# ── Tool: GGA (Gentleman Guardian Angel) ──────────────────────────────────────
+#  Tool: GGA (Gentleman Guardian Angel) 
 # Installed via bash install.sh from the gentleman-guardian-angel repo.
 # The installed binary is a bash script placed in $HOME/bin/gga.
 
@@ -108,11 +155,12 @@ function Update-Gga {
     Write-Step "Updating GGA (Gentleman Guardian Angel)"
 
     # Version check before pulling
-    $ggaBin    = Join-Path $env:USERPROFILE 'bin\gga'
-    $gitBashEx = if ($BashPath) { $BashPath } else { 'C:\Program Files\Git\bin\bash.exe' }
+    $ggaBin    = Get-GgaBinaryPath
+    $gitBashEx = if ($BashPath) { $BashPath } else { Get-BashPath }
     if ((Test-Path $ggaBin) -and (Test-Path $gitBashEx)) {
         $installed = $null
-        $verOut = & $gitBashEx -c "/c/Users/$env:USERNAME/bin/gga --version" 2>&1 | Select-Object -First 1
+        $ggaShellPath = Get-GgaShellPath
+        $verOut = & $gitBashEx -c "$ggaShellPath --version" 2>&1 | Select-Object -First 1
         if ($verOut -match '(\d+\.\d+[\.\d]*)') { $installed = $Matches[1] }
         $latest = Get-GitHubLatestVersion -Repo 'Gentleman-Programming/gentleman-guardian-angel'
         if ($installed) {
@@ -123,7 +171,7 @@ function Update-Gga {
                     Write-Ok "GGA is up to date (v$installed)"
                     return $true
                 }
-                Write-Info "Upgrade available: v$installed → v$latest"
+                Write-Info "Upgrade available: v$installed -> v$latest"
             }
         }
     }
@@ -132,8 +180,7 @@ function Update-Gga {
     $ggaRepo = $null
     $candidates = @(
         (Join-Path $repoRoot '..\gentleman-guardian-angel'),
-        (Join-Path $env:USERPROFILE 'Workspace_local\gentleman-guardian-angel'),
-        'C:\Workspace_local\gentleman-guardian-angel'
+        (Join-Path (Get-HomePath) 'Workspace_local\gentleman-guardian-angel')
     )
     foreach ($c in $candidates) {
         $resolved = if (Test-Path $c) { (Resolve-Path $c).Path } else { $null }
@@ -171,12 +218,12 @@ function Update-Gga {
     }
 
     # Non-interactive install: copy files and patch LIB_DIR manually
-    $installDir = "$env:USERPROFILE\bin" -replace '\\', '/'
-    $installDir = $installDir -replace '^C:', '/c'
-    $libDir     = "$installDir/lib/gga"
+    $installDirHost  = Join-Path (Get-HomePath) 'bin'
+    $installDirShell = Convert-ToBashPath $installDirHost
+    $libDir          = "$installDirShell/lib/gga"
 
-    $binSrc  = Join-Path $ggaRepo 'bin\gga'
-    $binDest = Join-Path $env:USERPROFILE 'bin\gga'
+    $binSrc  = Join-Path (Join-Path $ggaRepo 'bin') 'gga'
+    $binDest = Get-GgaBinaryPath
 
     if (-not (Test-Path (Split-Path $binDest))) {
         New-Item -ItemType Directory -Path (Split-Path $binDest) -Force | Out-Null
@@ -185,11 +232,11 @@ function Update-Gga {
     Copy-Item $binSrc $binDest -Force
 
     # Copy lib files
-    $winLibDir = Join-Path $env:USERPROFILE 'bin\lib\gga'
-    New-Item -ItemType Directory -Path $winLibDir -Force | Out-Null
+    $libInstallDir = Join-Path (Join-Path $installDirHost 'lib') 'gga'
+    New-Item -ItemType Directory -Path $libInstallDir -Force | Out-Null
     foreach ($lib in @('providers.sh', 'cache.sh', 'pr_mode.sh')) {
-        $src = Join-Path $ggaRepo "lib\$lib"
-        if (Test-Path $src) { Copy-Item $src (Join-Path $winLibDir $lib) -Force }
+        $src = Join-Path (Join-Path $ggaRepo 'lib') $lib
+        if (Test-Path $src) { Copy-Item $src (Join-Path $libInstallDir $lib) -Force }
     }
 
     # Patch LIB_DIR and VERSION in the installed script
@@ -204,7 +251,8 @@ function Update-Gga {
     [System.IO.File]::WriteAllText($binDest, $content, $utf8NoBom)
 
     # Verify
-    $result = & $BashPath -c "$($installDir -replace ' ', '\ ')/gga --version" 2>&1
+    $escapedInstallDir = $installDirShell -replace ' ', '\\ '
+    $result = & $gitBashEx -c "$escapedInstallDir/gga --version" 2>&1
     if ($result -match 'gga') {
         Write-Ok "GGA updated: $result"
         return $true
@@ -214,7 +262,7 @@ function Update-Gga {
     }
 }
 
-# ── Tool: Engram ───────────────────────────────────────────────────────────────
+#  Tool: Engram 
 # Installed via: go install github.com/Gentleman-Programming/engram/cmd/engram@latest
 # Binary lands in $GOPATH/bin/engram.exe
 
@@ -237,10 +285,10 @@ function Update-Engram {
                 Write-Ok "Engram is up to date (v$installed)"
                 return $true
             }
-            Write-Info "Upgrade available: v$installed → v$latest"
+            Write-Info "Upgrade available: v$installed  v$latest"
         }
     } else {
-        Write-Info "Engram not installed — installing latest"
+        Write-Info "Engram not installed; installing latest"
     }
 
     if ($DryRun) {
@@ -272,7 +320,7 @@ function Update-Engram {
     return $true
 }
 
-# ── Tool: Gentle-AI ───────────────────────────────────────────────────────────
+#  Tool: Gentle-AI 
 # Installed via: go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest
 # Binary lands in $GOPATH/bin/gentle-ai.exe
 
@@ -295,10 +343,10 @@ function Update-GentleAI {
                 Write-Ok "Gentle-AI is up to date (v$installed)"
                 return $true
             }
-            Write-Info "Upgrade available: v$installed → v$latest"
+            Write-Info "Upgrade available: v$installed -> v$latest"
         }
     } else {
-        Write-Info "Gentle-AI not installed — installing latest"
+        Write-Info "Gentle-AI not installed; installing latest"
     }
 
     if ($DryRun) {
@@ -329,9 +377,9 @@ function Update-GentleAI {
     return $true
 }
 
-# ── Show current status ────────────────────────────────────────────────────────
+#  Show current status 
 
-# ── Tool: Gentleman-Skills ────────────────────────────────────────────────────
+#  Tool: Gentleman-Skills 
 # Installed via: git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git {toolsRoot}/Gentleman-Skills
 # Update via: git pull --ff-only
 
@@ -363,7 +411,7 @@ function Update-GentlemanSkills {
         }
     } else {
         if ($DryRun) {
-            Write-Info "[DRY-RUN] Would clone: $repoUrl → $skillsDir"
+            Write-Info "[DRY-RUN] Would clone: $repoUrl -> $skillsDir"
             return $true
         }
         Write-Info "Cloning Gentleman-Skills..."
@@ -380,17 +428,25 @@ function Update-GentlemanSkills {
     }
 }
 
-# ── Tool: OpenCode ─────────────────────────────────────────────────────────────
-# Installed via: irm https://opencode.ai/install | iex
+#  Tool: OpenCode 
+# Installed via: official installer, package manager, npm, or manual binary install
 # NOTE: The installer downloads and executes a remote script.
 #       Auto-install requires explicit -Force flag to avoid unintended network calls.
 
 function Check-Opencode {
     Write-Step "Checking OpenCode"
 
+    function Get-OpencodeVersion {
+        try {
+            $v = (& opencode --version 2>$null | Select-Object -First 1)
+            if (-not [string]::IsNullOrWhiteSpace($v)) { return $v }
+        } catch {}
+        return $null
+    }
+
     $opencodeCmd = Get-Command opencode -ErrorAction SilentlyContinue
     if ($opencodeCmd) {
-        $ver = & $opencodeCmd.Source --version 2>&1 | Select-Object -First 1
+        $ver = Get-OpencodeVersion
         if ([string]::IsNullOrWhiteSpace($ver)) { $ver = 'installed' }
         Write-Ok "opencode: $ver"
         return $true
@@ -408,7 +464,7 @@ function Check-Opencode {
             Invoke-Expression $installerScript 2>&1 | Out-Null
             $opencodeCmd = Get-Command opencode -ErrorAction SilentlyContinue
             if ($opencodeCmd) { Write-Ok "opencode installed"; return $true }
-            Write-Warn "opencode installer ran but binary not found — restart terminal"
+            Write-Warn "opencode installer ran but binary not found; restart terminal"
             return $false
         } catch {
             $msg = $_.Exception.Message
@@ -416,7 +472,7 @@ function Check-Opencode {
                 Write-Warn "opencode: install blocked by network restriction (HTTP 403)"
                 Write-Info "  This tool is optional. Alternative install options:"
                 Write-Info "  1. GitHub releases: https://github.com/sst/opencode/releases"
-                Write-Info "  2. winget:          winget install sst.opencode"
+                Write-Info "  2. package manager: install from your OS package manager"
                 Write-Info "  3. npm:             npm install -g opencode"
                 Write-Info "  4. Manual:          download binary from GitHub and add to PATH"
             } else {
@@ -425,8 +481,8 @@ function Check-Opencode {
             return $false
         }
     } else {
-        Write-Host "  To install: irm https://opencode.ai/install | iex" -ForegroundColor Gray
-        Write-Host "  Or run:     .\scripts\utilities\wf.ps1 update-tools -Force" -ForegroundColor Gray
+        Write-Host "  Install via the official installer, your package manager, npm, or a manual binary download." -ForegroundColor Gray
+        Write-Host "  Or run: .\scripts\utilities\wf.ps1 update-tools -Force" -ForegroundColor Gray
         return $false
     }
 }
@@ -436,23 +492,25 @@ function Show-ToolStatus {
 
     $goBin     = Get-GoBinDir
     $toolsRoot = Get-ToolsRoot
-    $gitBash   = 'C:\Program Files\Git\bin\bash.exe'
+    $bashPath  = Get-BashPath
 
     # GGA
-    $ggaBin = Join-Path $env:USERPROFILE 'bin\gga'
+    $ggaBin = Get-GgaBinaryPath
     if (Test-Path $ggaBin) {
-        if (Test-Path $gitBash) {
-            $ver = & $gitBash -c "/c/Users/$env:USERNAME/bin/gga --version" 2>&1 | Select-Object -First 1
+        if ($bashPath) {
+            $ggaShellPath = Get-GgaShellPath
+            $ver = & $bashPath -c "$ggaShellPath --version" 2>&1 | Select-Object -First 1
             Write-Ok "gga: $ver"
         } else {
-            Write-Ok "gga: installed at $ggaBin (Git Bash not found to check version)"
+            Write-Ok "gga: installed at $ggaBin (bash not found to check version)"
         }
     } else {
         Write-Warn "gga: not installed"
     }
 
     # Engram
-    $engramExe = Join-Path $goBin 'engram.exe'
+    $engramExe = Join-Path $goBin 'engram'
+    if (-not (Test-Path $engramExe)) { $engramExe = Join-Path $goBin 'engram.exe' }
     if (Test-Path $engramExe) {
         $ver = & $engramExe --version 2>&1 | Select-Object -First 1
         Write-Ok "engram: $ver"
@@ -461,7 +519,8 @@ function Show-ToolStatus {
     }
 
     # Gentle-AI
-    $gentleExe = Join-Path $goBin 'gentle-ai.exe'
+    $gentleExe = Join-Path $goBin 'gentle-ai'
+    if (-not (Test-Path $gentleExe)) { $gentleExe = Join-Path $goBin 'gentle-ai.exe' }
     if (Test-Path $gentleExe) {
         $ver = & $gentleExe --version 2>&1 | Select-Object -First 1
         Write-Ok "gentle-ai: $ver"
@@ -481,7 +540,10 @@ function Show-ToolStatus {
     # OpenCode
     $opencodeCmd = Get-Command opencode -ErrorAction SilentlyContinue
     if ($opencodeCmd) {
-        $ver = & $opencodeCmd.Source --version 2>&1 | Select-Object -First 1
+        $ver = $null
+        try {
+            $ver = (& opencode --version 2>$null | Select-Object -First 1)
+        } catch {}
         if ([string]::IsNullOrWhiteSpace($ver)) { $ver = 'installed' }
         Write-Ok "opencode: $ver"
     } else {
@@ -489,15 +551,15 @@ function Show-ToolStatus {
     }
 
     Write-Host ""
-    Write-Host "Install commands (Windows / no brew needed):" -ForegroundColor Gray
+    Write-Host "Install commands:" -ForegroundColor Gray
     Write-Host "  gga       : git clone + bash install.sh (gentleman-guardian-angel repo)" -ForegroundColor Gray
     Write-Host "  engram    : go install github.com/Gentleman-Programming/engram/cmd/engram@latest" -ForegroundColor Gray
     Write-Host "  gentle-ai : go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest" -ForegroundColor Gray
     Write-Host "  gentleman-skills: git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git" -ForegroundColor Gray
-    Write-Host "  opencode  : irm https://opencode.ai/install | iex  (or wf.ps1 update-tools -Force)" -ForegroundColor Gray
+    Write-Host "  opencode  : official installer, package manager, npm, or manual binary (or wf.ps1 update-tools -Force)" -ForegroundColor Gray
 }
 
-# ── Main ──────────────────────────────────────────────────────────────────────
+#  Main 
 
 Write-Host ""
 Write-Host "Gentleman Foundation - Tool Updater" -ForegroundColor Cyan
@@ -524,7 +586,7 @@ if ($hasGo) {
 if ($bashExe) {
     $results['gga'] = Update-Gga -BashPath $bashExe
 } else {
-    Write-Warn "Skipping gga (Git Bash not found)"
+    Write-Warn "Skipping gga (bash not found)"
     $results['gga'] = $false
 }
 

@@ -1,124 +1,81 @@
-# Automatic Tool Activation - Gentleman Foundation
+# Tool Activation
 
-This system ensures that all development tools are automatically activated and ready for coordinated workflow development.
+This guide describes the current tool activation model for the workspace foundation.
 
-## 🚀 Quick Setup
+## Start Here
 
-### 1. Copy PowerShell Profile (Optional)
-For automatic activation when entering Gentleman Foundation projects:
+1. Run the workflow health check from the repository root.
+2. Let the config decide which tools are required, optional, or shell-dependent.
+3. Use the shell wrapper on Linux or macOS, or run the PowerShell entrypoint directly when preferred.
 
-```powershell
-# Copy to your PowerShell profile location
-Copy-Item "scripts/utilities/Microsoft.PowerShell_profile.ps1" $PROFILE
-```
+## Primary Commands
 
-### 2. Configure Git Hooks (Recommended)
-Git hooks automatically validate tools before commits:
+Windows PowerShell:
 
 ```powershell
-# Copy pre-commit hook
-Copy-Item "hooks/pre-commit.ps1" ".git/hooks/pre-commit.ps1"
-```
-
-### 3. Manual Activation
-Activate tools anytime with:
-
-```powershell
-# Check and activate all tools
 .\scripts\utilities\wf.ps1 health
-
-# Force auto-start missing tools
 .\scripts\utilities\wf.ps1 health -Force
-
-# Auto-init environment (any directory)
-.\scripts\utilities\auto-init-dev-environment.ps1
+.\scripts\utilities\update-tools.ps1 -DryRun
 ```
 
-## 🛠️ Tools Activated
+Linux, macOS, or WSL:
 
-### Core Tools
-- **Engram**: Memory persistence system for AI context
-- **GGA**: Gentleman Guardian Angel (AI code review)
-- **Gentle-AI**: AI CLI assistant for development
-- **Orchestrator Skills**: Coordinated workflow management
-
-### Optional MCP Integrations
-- **Context7 (optional)**: Version-aware technical documentation lookup
-- **Notion (optional)**: Shared project knowledge base for delivery notes and playbooks
-- Default mode is disabled (`enabled: false`) for both integrations
-- Enable only when team process requires them and credentials are managed securely
-
-Configuration lives in `config/workspace.config.json` under `mcpIntegrations`.
-Required environment variables when enabled:
-- Context7: `CONTEXT7_API_KEY`
-- Notion: `NOTION_TOKEN`, `NOTION_DATABASE_ID`
-
-Adoption criteria:
-- Enable **Context7** when implementation work depends on fast, version-accurate docs lookup.
-- Enable **Notion** when delivery requires shared project notes/tasks beyond git docs.
-- Keep both disabled for small/local-only projects to reduce token/tool noise and credential surface.
-
-### Validation Checks
-- Tool availability verification
-- Automatic installation attempts (where possible)
-- Background service startup
-- Workflow system readiness
-- Optional MCP integration readiness (enabled flag + required env vars)
-
-## 🔄 Activation Triggers
-
-### Automatic
-- **Pre-commit hook**: Validates tools before each commit
-- **PowerShell profile**: Activates when entering GF projects
-- **Session start**: Health checks run automatically
-
-### Manual
-- `.\scripts\utilities\wf.ps1 health`: Check and activate tools
-- `.\scripts\utilities\auto-init-dev-environment.ps1`: Full environment init
-
-## 📋 Status Indicators
-
-- ✅ **Available**: Tool is ready and functional
-- ⚠️ **Warning**: Tool not available but not critical
-- ❌ **Error**: Tool failed to activate
-
-## 🎯 Benefits
-
-1. **Guaranteed Readiness**: All tools active before development
-2. **AI Context Persistence**: Engram ensures memory continuity
-3. **Coordinated Workflow**: Orchestrator skills guide development
-4. **Quality Assurance**: Pre-commit validation prevents issues
-5. **Seamless Experience**: Automatic activation reduces manual setup
-
-## 🔧 Troubleshooting
-
-### Tools Not Activating
-```powershell
-# Force activation with verbose output
-.\scripts\utilities\wf.ps1 health -Force
+```bash
+./wf health
+pwsh -NoProfile -File ./scripts/utilities/wf.ps1 health
+pwsh -NoProfile -File ./scripts/utilities/update-tools.ps1 -DryRun
 ```
 
-### Profile Not Loading
-```powershell
-# Check profile path
-$PROFILE
+## Activation Model
 
-# Reload profile
-. $PROFILE
-```
+1. `wf.ps1 health` is the canonical tool activation entrypoint.
+2. `ensure-tools-active.ps1` reads `config/workspace.config.json` and resolves platform-specific installation metadata for Windows, Linux, and macOS.
+3. Missing system dependencies are checked before tool installation.
+4. Tool activation is tolerant of optional tools and non-blocking installer failures when the tool is not required.
 
-### Git Hooks Not Working
-```powershell
-# Ensure hook is executable
-chmod +x .git/hooks/pre-commit.ps1
-```
+## Platform and Shell Behavior
 
-## 📚 Integration
+1. Platform selection is dynamic: `windows`, `linux`, or `macos`.
+2. Tool install metadata is resolved from the config per platform instead of hardcoded `.windows` paths.
+3. Bash is treated as a capability, not a Windows-only implementation detail.
+4. PowerShell remains the canonical automation runtime for these scripts, even when invoked through `pwsh` on Linux or macOS.
 
-This system integrates with:
-- **Foundation Template**: Automatic setup for new projects
-- **Workflow CLI**: `scripts/utilities/wf.ps1` commands
-- **Session Management**: Coordinated development sessions
-- **Quality Gates**: Pre-commit validation
+## Current Agnosticism Status
 
-The automatic activation ensures that every Gentleman Foundation project starts with a fully prepared development environment, maximizing productivity and maintaining development standards.
+High portability is implemented for these areas:
+
+1. OS-aware dependency and tool install selection.
+2. Cross-platform home directory and PATH refresh handling.
+3. Bash detection for tools that require shell scripts, such as `gga`.
+4. Optional AI tool handling when a provider or CLI is missing.
+
+The remaining intentional constraint is:
+
+1. The activation and update workflows are still authored in PowerShell, so the stack is shell-compatible through routing, but not shell-neutral at the implementation layer.
+
+## Tools Covered
+
+1. `engram`
+2. `gga`
+3. `gentle-ai`
+4. `gentleman-skills`
+5. `opencode`
+
+Optional MCP integrations are validated separately through `config/workspace.config.json`.
+
+## Validation Scope
+
+The activation flow validates:
+
+1. Tool availability.
+2. Minimum system dependencies.
+3. Platform-specific installer metadata.
+4. Workflow CLI readiness.
+5. Optional MCP integration readiness when enabled.
+
+## Troubleshooting
+
+1. If a required dependency is missing, run the health check again with `-Force`.
+2. If a bash-based tool cannot install, verify that `bash` is available in `PATH`.
+3. If a tool installs but is not detected immediately, restart the terminal and re-run the health check.
+4. If you need a non-destructive check, use `update-tools.ps1 -DryRun`.

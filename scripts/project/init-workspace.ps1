@@ -7,13 +7,21 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
+function Get-PreferredPowerShellRunner {
+    $runner = Get-Command pwsh -ErrorAction SilentlyContinue
+    if ($runner) { return $runner.Source }
+
+    $runner = Get-Command powershell -ErrorAction SilentlyContinue
+    if ($runner) { return $runner.Source }
+
+    return $null
+}
+
 $cleanRuntime = Join-Path $PSScriptRoot 'clean-runtime.ps1'
 if (Test-Path -LiteralPath $cleanRuntime) {
-    $runner = Get-Command pwsh -ErrorAction SilentlyContinue
-    if ($runner) {
-        & pwsh -NoProfile -ExecutionPolicy Bypass -File $cleanRuntime
-    } elseif (Get-Command powershell.exe -ErrorAction SilentlyContinue) {
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $cleanRuntime
+    $runnerPath = Get-PreferredPowerShellRunner
+    if ($runnerPath) {
+        & $runnerPath -NoProfile -ExecutionPolicy Bypass -File $cleanRuntime
     }
 }
 
@@ -39,11 +47,11 @@ if ($RunToolInstallers) {
     $bootstrapArgs += '-RunToolInstallers'
 }
 
-$runner = Get-Command pwsh -ErrorAction SilentlyContinue
-if ($runner) {
-    & pwsh -NoProfile -ExecutionPolicy Bypass -File $bootstrap @bootstrapArgs
+$runnerPath = Get-PreferredPowerShellRunner
+if ($runnerPath) {
+    & $runnerPath -NoProfile -ExecutionPolicy Bypass -File $bootstrap @bootstrapArgs
 } else {
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $bootstrap @bootstrapArgs
+    & $bootstrap @bootstrapArgs
 }
 
 # Start Session Audit

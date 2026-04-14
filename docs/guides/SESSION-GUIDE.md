@@ -242,21 +242,21 @@ Note: hook installation depends on local Git hook wiring. Canonical script paths
 ### During Session
 
 ```
-¿Cumplimos con la especificación?
-¿Hay algo que olvidamos?
-¿Los cambios están listos?
-¿El task brief sigue representando el alcance real?
+Did we meet the specification?
+Did we forget anything?
+Are the changes ready?
+Does the task brief still match the real scope?
 ```
 
 ### Before PR
 
 ```
-¿Findings de code review?
+Code review findings?
   - CRITICAL/HIGH: Must fix
   - MEDIUM: Your choice
   - LOW: Optional
 
-¿Creamos PR o trabajamos más?
+Create a PR or keep working?
 ```
 
 ---

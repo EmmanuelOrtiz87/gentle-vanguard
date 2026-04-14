@@ -101,7 +101,7 @@ if (-not $engramPath) {
     $installScript = Join-Path $PSScriptRoot 'install-engram.ps1'
     if (Test-Path $installScript) {
         Write-Host "Engram CLI not found in PATH. Attempting install..." -ForegroundColor Yellow
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $installScript
+        & $installScript
         $engramPath = Resolve-EngramCommand
     }
 }

@@ -9,6 +9,15 @@ param(
 
 $ErrorActionPreference = 'Continue'
 
+function Invoke-LocalPowerShellScript {
+    param(
+        [string]$ScriptPath,
+        [string[]]$ScriptArgs = @()
+    )
+
+    & $ScriptPath @ScriptArgs
+}
+
 $GitRoot = git rev-parse --show-toplevel 2>$null
 if (-not $GitRoot) {
     Write-Host "[SKIP] Not in a git repository." -ForegroundColor Yellow
@@ -51,7 +60,7 @@ Write-Host "Ensuring development tools are active..." -ForegroundColor Yellow
 $healthScript = Join-Path $PSScriptRoot "..\scripts\utilities\ensure-tools-active.ps1"
 if (Test-Path $healthScript) {
     try {
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $healthScript -Quiet
+        Invoke-LocalPowerShellScript -ScriptPath $healthScript -ScriptArgs @('-Quiet')
         Write-Host "[OK] Tools activation check completed." -ForegroundColor Green
     } catch {
         Write-Host "[WARN] Tools activation check failed, but continuing..." -ForegroundColor Yellow

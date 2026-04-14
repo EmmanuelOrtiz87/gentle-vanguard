@@ -6,13 +6,12 @@ param(
 
 $ErrorActionPreference = 'Continue'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot = if ($scriptDir) { (Resolve-Path (Join-Path (Join-Path $scriptDir '..') '..')).Path } else { Get-Location }
+$repoRoot = if ($scriptDir) { (Resolve-Path (Join-Path (Join-Path $scriptDir '..') '..')).Path } else { (Get-Location).Path }
 
-# Diagnostics state
-$diagnostics = @{
-    timestamp = Get-Date -Format "o"
+$diagnostics = [ordered]@{
+    timestamp = Get-Date -Format 'o'
     projectRoot = $repoRoot
-    projectType = ''
+    projectType = 'unknown'
     overallStatus = 'unknown'
     checks = @()
     errors = @()
@@ -21,15 +20,25 @@ $diagnostics = @{
 }
 
 function Write-Diag {
-    param([string]$Message, [string]$Color = 'White')
+    param(
+        [string]$Message,
+        [string]$Color = 'White'
+    )
+
     if (-not $Quiet) {
         Write-Host $Message -ForegroundColor $Color
     }
 }
 
 function Add-Check {
-    param([string]$Name, [string]$Status, [string]$Message = '', [switch]$Critical)
-    $diagnostics.checks += @{
+    param(
+        [string]$Name,
+        [string]$Status,
+        [string]$Message = '',
+        [switch]$Critical
+    )
+
+    $diagnostics.checks += [pscustomobject]@{
         name = $Name
         status = $Status
         message = $Message
@@ -52,8 +61,38 @@ function Add-Suggestion {
     $diagnostics.suggestions += $Message
 }
 
+function Invoke-LocalPowerShellScript {
+    param(
+        [string]$ScriptPath,
+        [string[]]$ScriptArgs = @()
+    )
+
+    & $ScriptPath @ScriptArgs
+}
+
+function Get-CommandVersion {
+    param(
+        [string]$Name,
+        [string[]]$Args = @('--version')
+    )
+
+    $cmd = Get-Command $Name -ErrorAction SilentlyContinue
+    if (-not $cmd) {
+        return $null
+    }
+
+    try {
+        $output = & $cmd.Source @Args 2>$null | Select-Object -First 1
+        if ([string]::IsNullOrWhiteSpace($output)) {
+            return 'installed'
+        }
+        return $output
+    } catch {
+        return 'installed'
+    }
+}
+
 # Detect project type
-$gitConfig = Join-Path $repoRoot '.git\config'
 $hasAngular = Test-Path (Join-Path $repoRoot 'angular.json')
 $hasGo = Test-Path (Join-Path $repoRoot 'go.mod')
 $hasBootstrap = Test-Path (Join-Path $repoRoot 'scripts\foundation\bootstrap.ps1')
@@ -62,244 +101,211 @@ if ($hasAngular -and $hasGo) {
     $diagnostics.projectType = 'bitbucket-dashboard'
 } elseif ($hasBootstrap) {
     $diagnostics.projectType = 'workspace-foundation'
-} else {
-    $diagnostics.projectType = 'unknown'
 }
 
-Write-Diag "`n╔═══════════════════════════════════════════════════════╗" -Color Cyan
-Write-Diag "║    Gentleman Foundation - System Diagnostics          ║" -Color Cyan
-Write-Diag "╚═══════════════════════════════════════════════════════╝" -Color Cyan
+Write-Diag ''
+Write-Diag '=======================================================' -Color Cyan
+Write-Diag '  Gentleman Foundation - System Diagnostics' -Color Cyan
+Write-Diag '=======================================================' -Color Cyan
 Write-Diag "Project Type: $($diagnostics.projectType)" -Color Yellow
-Write-Diag "Project Root: $repoRoot`n" -Color Yellow
+Write-Diag "Project Root: $repoRoot" -Color Yellow
 
-# Check critical dependencies
-Write-Diag "=== CRITICAL DEPENDENCIES ===" -Color Cyan
+# Critical dependency checks
+Write-Diag ''
+Write-Diag '=== CRITICAL DEPENDENCIES ===' -Color Cyan
 
-if (Get-Command go -ErrorAction SilentlyContinue) {
-    $goVersion = $(go version)
-    Add-Check "Go" "PASS" $goVersion
-    Write-Diag "[✓] Go: $goVersion" -Color Green
+$goVersion = Get-CommandVersion -Name 'go' -Args @('version')
+if ($goVersion) {
+    Add-Check -Name 'Go' -Status 'PASS' -Message $goVersion -Critical
+    Write-Diag "[OK] Go: $goVersion" -Color Green
 } else {
-    Add-Check "Go" "FAIL" "Go not found in PATH" -Critical
-    Add-Error "Go not found. Install from https://go.dev/"
-    Write-Diag "[✗] Go: NOT FOUND" -Color Red
+    Add-Check -Name 'Go' -Status 'FAIL' -Message 'Go not found in PATH' -Critical
+    Add-Error 'Go not found in PATH.'
+    Add-Suggestion 'Install Go from https://go.dev/ and restart the terminal.'
+    Write-Diag '[ERR] Go: NOT FOUND' -Color Red
 }
 
-if (Get-Command git -ErrorAction SilentlyContinue) {
-    $gitVersion = $(git --version)
-    Add-Check "Git" "PASS" $gitVersion
-    Write-Diag "[✓] Git: $gitVersion" -Color Green
+$gitVersion = Get-CommandVersion -Name 'git' -Args @('--version')
+if ($gitVersion) {
+    Add-Check -Name 'Git' -Status 'PASS' -Message $gitVersion -Critical
+    Write-Diag "[OK] Git: $gitVersion" -Color Green
 } else {
-    Add-Check "Git" "FAIL" "Git not found in PATH" -Critical
-    Add-Error "Git not found. Install from https://git-scm.com/"
-    Write-Diag "[✗] Git: NOT FOUND" -Color Red
+    Add-Check -Name 'Git' -Status 'FAIL' -Message 'Git not found in PATH' -Critical
+    Add-Error 'Git not found in PATH.'
+    Add-Suggestion 'Install Git from https://git-scm.com/ and restart the terminal.'
+    Write-Diag '[ERR] Git: NOT FOUND' -Color Red
 }
 
-# Check Engram CLI
-Write-Diag "`n=== ENGRAM MEMORY SYSTEM ===" -Color Cyan
+$nodeVersion = Get-CommandVersion -Name 'node' -Args @('--version')
+if ($nodeVersion) {
+    Add-Check -Name 'Node' -Status 'PASS' -Message $nodeVersion
+    Write-Diag "[OK] Node: $nodeVersion" -Color Green
+} else {
+    if ($diagnostics.projectType -eq 'bitbucket-dashboard') {
+        Add-Check -Name 'Node' -Status 'FAIL' -Message 'Node not found in PATH' -Critical
+        Add-Error 'Node is required for bitbucket-dashboard but was not found.'
+        Add-Suggestion 'Install Node.js from https://nodejs.org/ and restart the terminal.'
+        Write-Diag '[ERR] Node: NOT FOUND' -Color Red
+    } else {
+        Add-Check -Name 'Node' -Status 'WARN' -Message 'Node not found in PATH'
+        Add-Warning 'Node not found in PATH.'
+        Write-Diag '[WARN] Node: NOT FOUND (optional for this project type)' -Color Yellow
+    }
+}
+
+# Engram check
+Write-Diag ''
+Write-Diag '=== ENGRAM MEMORY SYSTEM ===' -Color Cyan
 
 $engramPath = $null
 if ($env:ENGRAM_CMD -and (Test-Path $env:ENGRAM_CMD)) {
     $engramPath = $env:ENGRAM_CMD
-} elseif (Get-Command engram -ErrorAction SilentlyContinue) {
-    $engramPath = (Get-Command engram).Source
 } else {
-    $pathsToCheck = @()
-    if ($env:GOBIN) { $pathsToCheck += @($(Join-Path $env:GOBIN 'engram.exe'), $(Join-Path $env:GOBIN 'engram')) }
-    if ($env:GOPATH) { $pathsToCheck += @($(Join-Path $env:GOPATH 'bin\engram.exe'), $(Join-Path $env:GOPATH 'bin\engram')) }
-    if ($env:USERPROFILE) { $pathsToCheck += @($(Join-Path $env:USERPROFILE 'go\bin\engram.exe'), $(Join-Path $env:USERPROFILE 'go\bin\engram')) }
-    
-    foreach ($path in $pathsToCheck) {
-        if (Test-Path $path) {
-            $engramPath = $path
-            break
-        }
+    $engramCmd = Get-Command engram -ErrorAction SilentlyContinue
+    if ($engramCmd) {
+        $engramPath = $engramCmd.Source
     }
 }
 
 if ($engramPath) {
-    Add-Check "Engram CLI" "PASS" $engramPath
-    Write-Diag "[✓] Engram CLI: $engramPath" -Color Green
+    Add-Check -Name 'Engram CLI' -Status 'PASS' -Message $engramPath
+    Write-Diag "[OK] Engram CLI: $engramPath" -Color Green
 } else {
-    Add-Check "Engram CLI" "FAIL" "Not found in PATH or ENGRAM_CMD"
-    Add-Warning "Engram CLI not found. Can be auto-installed."
-    Write-Diag "[✗] Engram CLI: NOT FOUND (can auto-install)" -Color Yellow
+    Add-Check -Name 'Engram CLI' -Status 'WARN' -Message 'Engram not found in PATH'
+    Add-Warning 'Engram CLI not found in PATH.'
+    Add-Suggestion 'Run scripts/utilities/install-engram.ps1 or wf.ps1 install-engram.'
+    Write-Diag '[WARN] Engram CLI: NOT FOUND' -Color Yellow
 }
 
-# Check workspace configuration
-Write-Diag "`n=== WORKSPACE CONFIGURATION ===" -Color Cyan
+# Orchestrator and skills
+Write-Diag ''
+Write-Diag '=== ORCHESTRATOR AND SKILLS ===' -Color Cyan
 
-$configPath = Join-Path $repoRoot 'config\workspace.config.json'
-if (Test-Path $configPath) {
-    Add-Check "Config File" "PASS" $configPath
-    Write-Diag "[✓] Config file exists" -Color Green
+$activationFile = Join-Path $repoRoot '.orchestrator-active'
+if (Test-Path $activationFile) {
+    Add-Check -Name 'Orchestrator Active' -Status 'PASS' -Message $activationFile
+    Write-Diag '[OK] Orchestrator: ACTIVE' -Color Green
 } else {
-    Add-Check "Config File" "FAIL" "workspace.config.json not found"
-    Add-Warning "Workspace config missing. Bootstrap may help."
-    Write-Diag "[✗] Config file: NOT FOUND" -Color Yellow
-}
-
-# Check orchestrator state
-Write-Diag "`n=== ORCHESTRATOR STATE ===" -Color Cyan
-
-$orchestratorActive = Test-Path (Join-Path $repoRoot '.orchestrator-active')
-if ($orchestratorActive) {
-    Add-Check "Orchestrator Active" "PASS"
-    Write-Diag "[✓] Orchestrator flag detected" -Color Green
-} else {
-    Add-Check "Orchestrator Active" "WARN" "Orchestrator not activated"
-    Add-Warning "Orchestrator not activated. Run: wf.ps1 orchestrator-status"
-    Write-Diag "[⚠] Orchestrator: NOT ACTIVATED" -Color Yellow
+    Add-Check -Name 'Orchestrator Active' -Status 'WARN' -Message 'Orchestrator not activated'
+    Add-Warning 'Orchestrator not activated.'
+    Add-Suggestion 'Run wf.ps1 orchestrator-status to initialize orchestrator metadata.'
+    Write-Diag '[WARN] Orchestrator: NOT ACTIVATED' -Color Yellow
 }
 
 $orchestratorConfig = Join-Path $repoRoot 'config\orchestrator.json'
 if (Test-Path $orchestratorConfig) {
-    Add-Check "Orchestrator Config" "PASS"
-    Write-Diag "[✓] Orchestrator config found" -Color Green
+    Add-Check -Name 'Orchestrator Config' -Status 'PASS' -Message $orchestratorConfig
+    Write-Diag '[OK] Orchestrator config found' -Color Green
 } else {
-    Add-Check "Orchestrator Config" "WARN" 
-    Write-Diag "[⚠] Orchestrator config: NOT FOUND" -Color Yellow
+    Add-Check -Name 'Orchestrator Config' -Status 'WARN' -Message 'config/orchestrator.json not found'
+    Add-Warning 'Orchestrator config not found.'
+    Write-Diag '[WARN] Orchestrator config: NOT FOUND' -Color Yellow
 }
-
-# Check skills
-Write-Diag "`n=== SKILLS & KNOWLEDGE BASE ===" -Color Cyan
 
 $skillsDir = Join-Path $repoRoot 'skills'
 if (Test-Path $skillsDir) {
     $skillCount = (Get-ChildItem $skillsDir -Directory -ErrorAction SilentlyContinue | Measure-Object).Count
-    Add-Check "Skills Directory" "PASS" "$skillCount skills found"
-    Write-Diag "[✓] Skills directory: $skillCount skills" -Color Green
+    Add-Check -Name 'Skills Directory' -Status 'PASS' -Message "$skillCount skills found"
+    Write-Diag "[OK] Skills directory: $skillCount skills" -Color Green
 } else {
-    Add-Check "Skills Directory" "FAIL"
-    Add-Warning "Skills directory not found"
-    Write-Diag "[✗] Skills directory: NOT FOUND" -Color Yellow
+    Add-Check -Name 'Skills Directory' -Status 'WARN' -Message 'skills directory not found'
+    Add-Warning 'Skills directory not found.'
+    Write-Diag '[WARN] Skills directory: NOT FOUND' -Color Yellow
 }
 
-# Check Engram data directory
-Write-Diag "`n=== ENGRAM DATA & MEMORY ===" -Color Cyan
+# Engram data directory check
+Write-Diag ''
+Write-Diag '=== ENGRAM DATA DIRECTORY ===' -Color Cyan
 
 $engramDataDir = Join-Path $repoRoot '.engram-data'
 if (Test-Path $engramDataDir) {
-    Add-Check "Engram Data" "PASS" $engramDataDir
-    Write-Diag "[✓] Engram data directory exists" -Color Green
+    Add-Check -Name 'Engram Data Directory' -Status 'PASS' -Message $engramDataDir
+    Write-Diag '[OK] .engram-data directory exists' -Color Green
 } else {
-    Add-Check "Engram Data" "WARN" "Will be created on first use"
-    Write-Diag "[⚠] Engram data directory: WILL CREATE ON FIRST USE" -Color Yellow
+    Add-Check -Name 'Engram Data Directory' -Status 'WARN' -Message 'Will be created on first use'
+    Add-Warning '.engram-data directory does not exist yet.'
+    Write-Diag '[WARN] .engram-data directory: WILL BE CREATED ON FIRST USE' -Color Yellow
 }
 
-# Project-specific checks
-Write-Diag "`n=== PROJECT-SPECIFIC CHECKS ===" -Color Cyan
-
-if ($diagnostics.projectType -eq 'bitbucket-dashboard') {
-    if (Get-Command node -ErrorAction SilentlyContinue) {
-        $nodeVersion = $(node --version)
-        Add-Check "Node.js" "PASS" $nodeVersion
-        Write-Diag "[✓] Node.js: $nodeVersion" -Color Green
-    } else {
-        Add-Check "Node.js" "FAIL" "Not found"
-        Add-Error "Node.js required for bitbucket-dashboard"
-        Write-Diag "[✗] Node.js: NOT FOUND" -Color Red
-    }
-    
-    if (Get-Command npm -ErrorAction SilentlyContinue) {
-        $npmVersion = $(npm --version)
-        Add-Check "npm" "PASS" $npmVersion
-        Write-Diag "[✓] npm: $npmVersion" -Color Green
-    } else {
-        Add-Check "npm" "FAIL" "Not found"
-        Add-Error "npm required for bitbucket-dashboard"
-        Write-Diag "[✗] npm: NOT FOUND" -Color Red
-    }
-    
-    if (Get-Command ng -ErrorAction SilentlyContinue) {
-        Add-Check "Angular CLI" "PASS"
-        Write-Diag "[✓] Angular CLI installed" -Color Green
-    } else {
-        Add-Check "Angular CLI" "WARN" "Can be installed with: npm install -g @angular/cli"
-        Write-Diag "[⚠] Angular CLI: Not globally installed (can auto-install)" -Color Yellow
-    }
-    
-    $packageJson = Join-Path $repoRoot 'package.json'
-    if (Test-Path $packageJson) {
-        Add-Check "package.json" "PASS"
-        Write-Diag "[✓] package.json found" -Color Green
-    }
-}
-
-if ($diagnostics.projectType -eq 'workspace-foundation') {
-    Write-Diag "[✓] Foundation workspace detected" -Color Green
-}
-
-# Determine overall status
-Write-Diag "`n" -Color Cyan
-$failedCritical = $diagnostics.checks | Where-Object { $_.status -eq 'FAIL' -and $_.critical }
-if ($failedCritical) {
+# Derive final status
+$criticalFailures = @($diagnostics.checks | Where-Object { $_.critical -and $_.status -eq 'FAIL' })
+if ($criticalFailures.Count -gt 0) {
     $diagnostics.overallStatus = 'CRITICAL'
-    Write-Diag "╔═════════════════════════════════════════╗" -Color Red
-    Write-Diag "║    ⚠ CRITICAL ISSUES DETECTED ⚠        ║" -Color Red
-    Write-Diag "╚═════════════════════════════════════════╝" -Color Red
+} elseif ($diagnostics.errors.Count -gt 0 -or $diagnostics.warnings.Count -gt 0) {
+    $diagnostics.overallStatus = 'DEGRADED'
 } else {
-    $failedWarnings = $diagnostics.checks | Where-Object { $_.status -in @('FAIL', 'WARN') }
-    if ($failedWarnings) {
-        $diagnostics.overallStatus = 'DEGRADED'
-        Write-Diag "╔═════════════════════════════════════════╗" -Color Yellow
-        Write-Diag "║    ⚠ WARNINGS - Stack Degraded ⚠       ║" -Color Yellow
-        Write-Diag "╚═════════════════════════════════════════╝" -Color Yellow
-    } else {
-        $diagnostics.overallStatus = 'HEALTHY'
-        Write-Diag "╔═════════════════════════════════════════╗" -Color Green
-        Write-Diag "║    ✓ STACK IS HEALTHY ✓               ║" -Color Green
-        Write-Diag "╚═════════════════════════════════════════╝" -Color Green
+    $diagnostics.overallStatus = 'HEALTHY'
+}
+
+Write-Diag ''
+if ($diagnostics.overallStatus -eq 'CRITICAL') {
+    Write-Diag '==============================' -Color Red
+    Write-Diag '  CRITICAL ISSUES DETECTED' -Color Red
+    Write-Diag '==============================' -Color Red
+} elseif ($diagnostics.overallStatus -eq 'DEGRADED') {
+    Write-Diag '==============================' -Color Yellow
+    Write-Diag '  WARNINGS DETECTED (DEGRADED)' -Color Yellow
+    Write-Diag '==============================' -Color Yellow
+} else {
+    Write-Diag '==============================' -Color Green
+    Write-Diag '  STACK IS HEALTHY' -Color Green
+    Write-Diag '==============================' -Color Green
+}
+
+if ($diagnostics.errors.Count -gt 0) {
+    Write-Diag ''
+    Write-Diag '=== ERRORS ===' -Color Red
+    foreach ($message in $diagnostics.errors) {
+        Write-Diag "- $message" -Color Red
     }
 }
 
-# Show errors and warnings
-if ($diagnostics.errors) {
-    Write-Diag "`n=== ERRORS ===" -Color Red
-    foreach ($error in $diagnostics.errors) {
-        Write-Diag "  ✗ $error" -Color Red
+if ($diagnostics.warnings.Count -gt 0) {
+    Write-Diag ''
+    Write-Diag '=== WARNINGS ===' -Color Yellow
+    foreach ($message in $diagnostics.warnings) {
+        Write-Diag "- $message" -Color Yellow
     }
 }
 
-if ($diagnostics.warnings) {
-    Write-Diag "`n=== WARNINGS ===" -Color Yellow
-    foreach ($warning in $diagnostics.warnings) {
-        Write-Diag "  ⚠ $warning" -Color Yellow
+if ($diagnostics.suggestions.Count -gt 0) {
+    Write-Diag ''
+    Write-Diag '=== SUGGESTIONS ===' -Color Cyan
+    foreach ($message in $diagnostics.suggestions) {
+        Write-Diag "- $message" -Color Cyan
     }
 }
 
-if ($diagnostics.suggestions) {
-    Write-Diag "`n=== SUGGESTIONS ===" -Color Cyan
-    foreach ($suggestion in $diagnostics.suggestions) {
-        Write-Diag "  → $suggestion" -Color Cyan
-    }
-}
-
-# Auto-repair if requested
 if ($AutoRepair -and $diagnostics.overallStatus -ne 'HEALTHY') {
-    Write-Diag "`n=== AUTO-REPAIR IN PROGRESS ===" -Color Yellow
-    
+    Write-Diag ''
+    Write-Diag '=== AUTO-REPAIR IN PROGRESS ===' -Color Yellow
+
     if (-not $engramPath) {
-        Write-Diag "Installing Engram CLI..." -Color Yellow
         $installScript = Join-Path $scriptDir '..\utilities\install-engram.ps1'
         if (Test-Path $installScript) {
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $installScript -Force
+            Write-Diag 'Installing Engram CLI...' -Color Yellow
+            Invoke-LocalPowerShellScript -ScriptPath $installScript -ScriptArgs @('-Force')
         }
     }
-    
-    Write-Diag "Activating health check..." -Color Yellow
+
     $healthScript = Join-Path $scriptDir '..\utilities\ensure-tools-active.ps1'
     if (Test-Path $healthScript) {
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $healthScript -AutoStart -Quiet
+        Write-Diag 'Running health activation...' -Color Yellow
+        Invoke-LocalPowerShellScript -ScriptPath $healthScript -ScriptArgs @('-AutoStart', '-Quiet')
     }
 }
 
-# JSON output if requested
 if ($JSON) {
     $diagnostics | ConvertTo-Json -Depth 10
 } else {
-    Write-Diag "`nDiagnostics Report Generated at: $($diagnostics.timestamp)" -Color Gray
+    Write-Diag '' -Color Gray
+    Write-Diag "Diagnostics Report Generated at: $($diagnostics.timestamp)" -Color Gray
     Write-Diag "Status: $($diagnostics.overallStatus)" -Color Gray
 }
 
-exit 0
+switch ($diagnostics.overallStatus) {
+    'HEALTHY' { exit 0 }
+    'DEGRADED' { exit 1 }
+    'CRITICAL' { exit 2 }
+    default { exit 2 }
+}

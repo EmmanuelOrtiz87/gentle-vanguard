@@ -22,8 +22,16 @@ function Write-Warn { param([string]$m) if (-not $Quiet) { Write-Host "[WARN] $m
 function Write-Err  { param([string]$m) Write-Host "[ERROR] $m" -ForegroundColor Red }
 function Write-Info { param([string]$m) if (-not $Quiet) { Write-Host "[INFO] $m" -ForegroundColor Cyan } }
 
+function Invoke-LocalPowerShellScript {
+    param(
+        [string]$ScriptPath,
+        [string[]]$ScriptArgs = @()
+    )
+
+    & $ScriptPath @ScriptArgs
+}
+
 # ── Session closure sequence ──────────────────────────────────────────────────
-$wfScript = Join-Path $scriptDir 'wf.ps1'
 $endSessionScript = Join-Path $scriptDir 'end-session.ps1'
 $validateScript = Join-Path $repoRoot 'scripts\diagnostics\validate-script-governance.ps1'
 
@@ -33,7 +41,7 @@ if (Test-Path $endSessionScript) {
     $endArgs = @()
     if ($SkipValidation) { $endArgs += '-SkipAudit' }
     if (-not $SkipEngram) { $endArgs += '-Force' }  # Allow subsequent memory save
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $endSessionScript @endArgs
+    Invoke-LocalPowerShellScript -ScriptPath $endSessionScript -ScriptArgs $endArgs
     if ($LASTEXITCODE -ne 0 -and -not $Force) {
         Write-Err "Operational closure reported issues. Use -Force to proceed with memory capture."
         exit 1
@@ -47,7 +55,7 @@ if (Test-Path $endSessionScript) {
 if (-not $SkipValidation) {
     Write-Step "Stage 2: Workspace Validation"
     if (Test-Path $validateScript) {
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $validateScript -SkipFallbackTests -Quiet
+        Invoke-LocalPowerShellScript -ScriptPath $validateScript -ScriptArgs @('-SkipFallbackTests', '-Quiet')
         if ($LASTEXITCODE -eq 0) {
             Write-Ok "Workspace validation clean"
         } else {

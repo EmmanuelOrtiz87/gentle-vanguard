@@ -95,17 +95,18 @@ function Invoke-GgaReview {
 
     $bashPath = "C:\Program Files\Git\bin\bash.exe"
     if (-not (Test-Path $bashPath)) {
-        Write-Host "[GGA] Git Bash not found. Please install Git for Windows." -ForegroundColor Yellow
+        Write-Host "[GGA] Git Bash not found. Install Git Bash or update the configured bash path." -ForegroundColor Yellow
         return $true
     }
 
     # Ensure PATH includes gga location
     $gGaBinDir = Split-Path $GgaPath -Parent
-    $bashCommand = "export PATH=`"$gGaBinDir:`$PATH`" && cd '$RepoRoot' && gga run"
+    $escapedRepoRoot = $RepoRoot -replace '"', '\\"'
+    $dollar = [char]36
+    $bashCommand = 'export PATH="{0}:{1}PATH" && cd "{2}" && gga run' -f $gGaBinDir, $dollar, $escapedRepoRoot
 
     try {
         $result = & $bashPath -c $bashCommand 2>&1
-        $exitCode = $LASTEXITCODE
 
         if ($result -match "STATUS: PASSED" -or $result -match "Review passed") {
             Write-Host "[GGA] Review passed!" -ForegroundColor Green

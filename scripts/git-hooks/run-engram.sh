@@ -12,5 +12,5 @@ if command -v powershell >/dev/null 2>&1; then
   exec powershell -NoProfile -ExecutionPolicy Bypass -File "$PS_SCRIPT" "$@"
 fi
 
-printf '%s\n' "run-engram: no se encontro pwsh ni powershell en PATH." >&2
+printf '%s\n' "run-engram: neither pwsh nor powershell was found in PATH." >&2
 exit 1

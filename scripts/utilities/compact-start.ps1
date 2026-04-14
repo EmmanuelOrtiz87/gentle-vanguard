@@ -47,7 +47,7 @@ if (-not (Test-Path $contextScript)) {
     exit 1
 }
 
-$contextRaw = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $contextScript -Objective $Objective -PassThru
+$contextRaw = & $contextScript -Objective $Objective -PassThru
 $contextPath = $null
 if ($contextRaw) {
     $candidate = ($contextRaw | Out-String).Trim()

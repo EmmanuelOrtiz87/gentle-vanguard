@@ -103,15 +103,15 @@ if (Test-Path $runEngramScript) {
 
 Write-Step "Conclusion"
 if ((Test-Path $activationFile) -and (Test-Path $configFile) -and (Test-Path $skillDir)) {
-    Write-Success "El Orquestador está configurado y activo."
+    Write-Success "The orchestrator is configured and active."
 } else {
-    Write-Warning "La configuración del orquestador tiene elementos faltantes. Revise los avisos anteriores."
+    Write-Warning "The orchestrator configuration is missing required elements. Review the warnings above."
 }
 if ($engramInstalled -and (Test-Path $runEngramScript)) {
-    Write-Success "Engram está disponible para iniciar memoria persistente."
-    Write-Host "Para iniciar una sesión con memoria persistente, use: .\scripts\utilities\run-engram.ps1" -ForegroundColor Cyan
+    Write-Success "Engram is available for persistent memory sessions."
+    Write-Host "To start a session with persistent memory, use: .\scripts\utilities\run-engram.ps1" -ForegroundColor Cyan
 } else {
-    Write-Warning "Engram no está completamente disponible en el entorno actual."
+    Write-Warning "Engram is not fully available in the current environment."
 }
 
 exit 0

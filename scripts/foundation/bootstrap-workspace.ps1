@@ -1,8 +1,8 @@
 param(
-    [string]$ConfigPath = $(Join-Path $PSScriptRoot '..\config\workspace.config.json'),
-    [string]$TemplatePath = $(Join-Path $PSScriptRoot '..\templates\project-root'),
-    [string]$TemplateKindsRoot = $(Join-Path $PSScriptRoot '..\templates\project-types'),
-    [string]$WorkspaceRoot = $(Resolve-Path (Join-Path $PSScriptRoot '..')).Path,
+    [string]$ConfigPath = $(Join-Path $PSScriptRoot '..\..\config\workspace.config.json'),
+    [string]$TemplatePath = $(Join-Path $PSScriptRoot '..\..\templates\project-root'),
+    [string]$TemplateKindsRoot = $(Join-Path $PSScriptRoot '..\..\templates\project-types'),
+    [string]$WorkspaceRoot = $(Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path,
     [string]$ProjectName = '',
     [string]$ProjectKind = '',
     [string]$ProjectPreset = '',
@@ -121,8 +121,9 @@ function Copy-TemplateProject {
         throw "Destination already exists: $Destination"
     }
 
-    # Create the parent directory first so template copies work on a fresh workspace.
+    # Create the destination directory explicitly so template copies work reliably.
     Ensure-Directory -Path (Split-Path -Parent $Destination)
+    Ensure-Directory -Path $Destination
     Copy-Item -Path (Join-Path $Source '*') -Destination $Destination -Recurse -Force
 
     $readme = Join-Path $Destination 'README.md'
@@ -486,8 +487,8 @@ function Install-GgaGlobal {
     $hasBash = Test-Path "C:\Program Files\Git\bin\bash.exe"
 
     if (-not $hasBash) {
-        Write-Host "[GGA] Git Bash not found. GGA requires Git Bash on Windows." -ForegroundColor Yellow
-        Write-Host "[GGA] Install Git for Windows with Git Bash to enable GGA." -ForegroundColor Yellow
+        Write-Host "[GGA] bash not found. GGA requires a bash-compatible runtime on Windows." -ForegroundColor Yellow
+        Write-Host "[GGA] Install Git Bash, WSL, or another bash-compatible environment to enable GGA." -ForegroundColor Yellow
         return $false
     }
 
@@ -745,7 +746,7 @@ $configContext = @{
 $requiredCommands = @('git', 'pwsh')
 foreach ($cmd in $requiredCommands) {
     if (-not (Get-Command $cmd -ErrorAction SilentlyContinue)) {
-        Write-Warning "$cmd no se encontro en PATH."
+        Write-Warning "$cmd was not found in PATH."
     } else {
         Write-Host "$cmd OK"
     }
@@ -915,7 +916,8 @@ if ($CreateProject) {
 
     # Install CI/CD templates
     Write-Host "Installing CI/CD templates..."
-    & "$PSScriptRoot\install-ci-cd-template.ps1" -ProjectPath $destination
+    $ciCdTemplateScript = Join-Path (Join-Path $PSScriptRoot '..\utilities') 'install-ci-cd-template.ps1'
+    & $ciCdTemplateScript -ProjectPath $destination
 
     Write-Host "Project scaffold created at $destination"
 
@@ -1002,8 +1004,8 @@ foreach ($tool in $config.tools) {
         $shellRunner = Get-Command pwsh -ErrorAction SilentlyContinue
         if ($shellRunner) {
             & pwsh -NoProfile -Command $installCommand
-        } elseif (Get-Command powershell.exe -ErrorAction SilentlyContinue) {
-            & powershell.exe -NoProfile -Command $installCommand
+        } elseif (Get-Command powershell -ErrorAction SilentlyContinue) {
+            & powershell -NoProfile -Command $installCommand
         } else {
             throw "No PowerShell runner found for $toolName installer."
         }

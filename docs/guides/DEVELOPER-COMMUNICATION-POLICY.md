@@ -22,8 +22,8 @@ Activation triggers:
 
 `simple` response contract:
 
-1. Success: `OK: cerrado` (or `OK: <resultado mínimo verificable>`).
-2. Failure: `ERROR: <causa breve> | ACCION: <paso mínimo requerido>`.
+1. Success: `OK: closed` (or `OK: <minimum verifiable result>`).
+2. Failure: `ERROR: <brief cause> | ACTION: <minimum required step>`.
 3. Do not include optional suggestions unless explicitly authorized.
 4. Keep warnings only for critical risk (security/data-loss/regression).
 

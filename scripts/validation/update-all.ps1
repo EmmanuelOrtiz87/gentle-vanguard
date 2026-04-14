@@ -38,6 +38,15 @@ function Write-Err {
     Write-Host "[ERROR] $Message" -ForegroundColor Red
 }
 
+function Invoke-LocalPowerShellScript {
+    param(
+        [string]$ScriptPath,
+        [string[]]$ScriptArgs = @()
+    )
+
+    & $ScriptPath @ScriptArgs
+}
+
 function Update-Skills {
     Write-Step "Updating Skills"
     
@@ -136,7 +145,7 @@ function Install-Tool {
     Write-Host "Installing $Name..." -ForegroundColor Gray
     
     try {
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -Command $InstallCommand 2>$null | Out-Null
+        Invoke-Expression $InstallCommand 2>$null | Out-Null
         $installed = Get-Command $VerifyCommand -ErrorAction SilentlyContinue
         if ($installed) {
             Write-Success "$Name installed"
@@ -159,11 +168,16 @@ function Update-Tools {
         Write-Err "update-tools.ps1 not found at: $toolsScript"
         return $false
     }
-    $args = @()
-    if ($DryRun) { $args += '-DryRun' }
-    if ($Force)  { $args += '-Force' }
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $toolsScript @args
-    return ($LASTEXITCODE -eq 0)
+    if ($DryRun -and $Force) {
+        & $toolsScript -DryRun -Force
+    } elseif ($DryRun) {
+        & $toolsScript -DryRun
+    } elseif ($Force) {
+        & $toolsScript -Force
+    } else {
+        & $toolsScript
+    }
+    return $?
 }
 
 Write-Host ""
@@ -189,7 +203,8 @@ if ($All -or $Skills) {
 }
 
 if ($All -or $Tools) {
-    Update-Tools
+    $result = Update-Tools
+    if (-not $result) { $success = $false }
 }
 
 Write-Step "Update Complete"

@@ -2,53 +2,53 @@
 
 ## Overview
 
-La arquitectura de Gentleman Foundation incluye un **sistema automático de detección y reparación del stack** que se ejecuta sin intervención manual. El stack se verifica y repara cada vez que:
+The Gentleman Foundation architecture includes an **automatic stack detection and repair system** that runs with minimal manual intervention. The stack is checked and repaired when:
 
-- Abres una terminal en una carpeta del proyecto
-- Haces `git checkout` en una rama
-- Ejecutas comandos del flujo de trabajo
-- Ejecutas explícitamente `.\scripts\utilities\wf.ps1 verify`
+- You open a terminal in a project directory
+- You run `git checkout` on a branch
+- You run workflow commands
+- You explicitly run `.\scripts\utilities\wf.ps1 verify`
 
 ## Quick Start
 
-### Opción 1: Proyecto Nuevo
+### Option 1: New Project
 
 ```powershell
-# En workspace-foundation root
+# In the workspace-foundation root
 .\scripts\utilities\wf.ps1 init-stack
 
-# O en bitbucket-dashboard root
+# Or in the bitbucket-dashboard root
 .\scripts\utilities\wf.ps1 init-stack
 ```
 
-### Opción 2: Proyecto Existente (descargado, rama nueva, etc.)
+### Option 2: Existing Project (cloned repo, new branch, and similar cases)
 
 ```powershell
-# Verificación rápida con auto-reparación
+# Quick verification with auto-repair
 .\scripts\utilities\wf.ps1 verify
 
-# O verificación completa con reporte detallado
+# Or a full verification with a detailed report
 .\scripts\utilities\wf.ps1 diagnose
 ```
 
-### Opción 3: Automático al Abrir Terminal (Recomendado)
+### Option 3: Automatic on Terminal Entry (Recommended)
 
-El PowerShell profile ejecuta automáticamente `verify` al detectar un Gentleman Foundation project.
+On Windows, the optional PowerShell profile can run `verify` automatically when it detects a Gentleman Foundation project. On Linux and macOS, use `./wf verify` or invoke `wf.ps1` through `pwsh`.
 
 ## Stack Components
 
-El stack requiere estos componentes. El sistema verifica automáticamente:
+The stack requires these components. The system verifies them automatically:
 
-### ✅ Críticos (Deben estar instalados)
+### Critical Components (Must Be Installed)
 - **Go** - Backend runtime
 - **Git** - Version control
 - **PowerShell 5.1+** - Script execution
 
-Para bitbucket-dashboard adicional:
+Additional for bitbucket-dashboard:
 - **Node.js** - Frontend runtime
 - **npm** - Package manager
 
-### ⚠️ Opcionales (Se instalan automáticamente)
+### Optional Components (Installed Automatically When Supported)
 - **Engram CLI** - AI memory system
 - **Angular CLI** - Frontend tooling (bitbucket-dashboard)
 - **gh CLI** - GitHub automation
@@ -56,117 +56,117 @@ Para bitbucket-dashboard adicional:
 ## Command Reference
 
 ### `.\scripts\utilities\wf.ps1 diagnose`
-Genera un reporte completo del estado del stack.
+Generates a full stack status report.
 
 ```powershell
-# Reporte detallado en consola
+# Detailed console report
 .\scripts\utilities\wf.ps1 diagnose
 
-# Reporte en JSON para automatización
+# JSON report for automation
 .\scripts\utilities\wf.ps1 diagnose -JSON > stack-status.json
 ```
 
-**Salida incluye:**
-- Estado de cada componente (PASS/FAIL/WARN)
-- Paths resueltos de herramientas
-- Configuración del workspace
-- Estado del orquestador
-- Recomendaciones de reparación
+**Output includes:**
+- Status of each component (PASS/FAIL/WARN)
+- Resolved tool paths
+- Workspace configuration
+- Orchestrator status
+- Repair recommendations
 
 ### `.\scripts\utilities\wf.ps1 verify`
-Verificación rápida con auto-reparación. Silencioso por defecto.
+Quick verification with auto-repair. Quiet by default.
 
 ```powershell
-# Verificación silenciosa con auto-reparación
+# Quiet verification with auto-repair
 .\scripts\utilities\wf.ps1 verify
 
-# Muestra detalles mientras repara
+# Show details during repair
 .\scripts\utilities\wf.ps1 verify -Verbose
 ```
 
-**Qué hace verify:**
-1. Detecta el tipo de proyecto
-2. Verifica componentes críticos
-3. Detecta Engram CLI, instala si falta
-4. Activa herramientas de desarrollo
-5. Reporta estado final
+**What `verify` does:**
+1. Detects the project type
+2. Verifies critical components
+3. Detects the Engram CLI and installs it if missing
+4. Activates development tools
+5. Reports the final status
 
 ### `.\scripts\utilities\wf.ps1 health`
-Chequeo de salud con activación de herramientas.
+Health check with tool activation.
 
 ```powershell
 .\scripts\utilities\wf.ps1 health
 ```
 
 ### `.\scripts\utilities\wf.ps1 install-engram`
-Instala o verifica disponibilidad de Engram CLI.
+Install or verify Engram CLI availability.
 
 ```powershell
 .\scripts\utilities\wf.ps1 install-engram
 ```
 
-## Flujos de Uso
+## Usage Flows
 
-### 🆕 Iniciar Proyecto Desde Cero
+### 🆕 Start a Project From Scratch
 
 ```powershell
 cd c:\projects
 mkdir my-new-project
 cd my-new-project
 
-# Copiar template
+# Copy template
 Copy-Item -Path "c:\workspace-foundation\*" -Destination . -Recurse
 
-# Inicializar stack
+# Initialize stack
 .\scripts\utilities\wf.ps1 init-stack
 ```
 
-**Resultado:** Stack completamente inicializado y operacional.
+**Result:** Stack fully initialized and operational.
 
-### 📥 Proyecto Descargado o Nueva Rama
+### 📥 Cloned Project or New Branch
 
 ```powershell
-# Después de git clone o git checkout
+# After git clone or git checkout
 cd <project-root>
 
-# El post-checkout hook ejecuta verify automáticamente
-# Pero puedes ejecutarlo manualmente también:
+# The post-checkout hook runs verify automatically
+# You can also run it manually:
 .\scripts\utilities\wf.ps1 verify
 ```
 
-**El hook post-checkout:**
-- Se ejecuta automáticamente después de `git checkout`
-- Diagnostica el estado del stack
-- Repara automáticamente problemas detectados
-- Inicializa ambiente si es necesario
+**The post-checkout hook:**
+- Runs automatically after `git checkout`
+- Diagnoses the stack state
+- Repairs detected problems automatically
+- Initializes the environment when needed
 
-### 🔄 Verificación Manual en Cualquier Momento
+### Manual Verification at Any Time
 
 ```powershell
-# Reporte completo
+# Full report
 .\scripts\utilities\wf.ps1 diagnose
 
-# Reporte + auto-reparación
+# Report + auto-repair
 .\scripts\utilities\wf.ps1 verify
 
-# Reporte en JSON para CI/CD
+# JSON report for CI/CD
 .\scripts\utilities\wf.ps1 diagnose -JSON
 ```
 
-## Detección Automática
+## Automatic Detection
 
 ### PowerShell Profile Auto-Detection
 
-El PowerShell profile especial (`scripts/utilities/Microsoft.PowerShell_profile.ps1`) detecta automáticamente cuando te encuentras en un Gentleman Foundation project y ejecuta:
+The optional PowerShell profile (`scripts/utilities/Microsoft.PowerShell_profile.ps1`) can detect when you are in a Gentleman Foundation project and run:
 
 ```powershell
-# Al abrir una terminal en una carpeta de proyecto:
-if (es_gentleman_foundation_project) {
-    .\scripts\utilities\wf.ps1 verify  # Auto-verificación silenciosa
+# When opening a terminal in a project directory:
+if (is_gentleman_foundation_project) {
+  .\scripts\utilities\wf.ps1 verify  # Quiet automatic verification
 }
 ```
 
-Para activar, copia el profile:
+To enable it, copy the profile:
 ```powershell
 Copy-Item ".\scripts\utilities\Microsoft.PowerShell_profile.ps1" $PROFILE
 . $PROFILE
@@ -174,39 +174,39 @@ Copy-Item ".\scripts\utilities\Microsoft.PowerShell_profile.ps1" $PROFILE
 
 ### Git Post-Checkout Hook
 
-Se ejecuta automáticamente después de `git checkout`:
+Runs automatically after `git checkout`:
 
 ```powershell
-# En .git/hooks/ (auto-configurado en bootstrap)
+# In .git/hooks/ (auto-configured during bootstrap)
 post-checkout -> system-diagnostics.ps1 + auto-init
 ```
 
-## Escenarios de Auto-Reparación
+## Auto-Repair Scenarios
 
-El sistema detecta y repara automáticamente:
+The system detects and repairs the following automatically:
 
-| Problema | Detección | Reparación |
+| Problem | Detection | Repair |
 |----------|-----------|-----------|
-| Engram CLI falta | ✓ | Instala vía `go install` |
-| Workspace config falta | ✓ | Crea desde template |
-| Orquestador no activado | ✓ | Activa e inicializa |
-| Dependencias no satisfechas | ✓ | Instala automáticamente |
-| Node/npm ausentes (dashboard) | ✓ | Avisa para instalación manual |
-| Go no instalado | ✓ | Avisa para instalación manual |
+| Missing Engram CLI | ✓ | Installs via `go install` |
+| Missing workspace config | ✓ | Creates it from the template |
+| Orchestrator not activated | ✓ | Activates and initializes it |
+| Unsatisfied dependencies | ✓ | Attempts automatic installation |
+| Missing Node/npm (dashboard) | ✓ | Warns for manual installation |
+| Go not installed | ✓ | Warns for manual installation |
 
 ## Status Codes
 
-El sistema retorna códigos de salida:
+The system returns these exit codes:
 
 ```
 0 = Stack HEALTHY
-1 = Stack DEGRADED (warnings, pero operacional)
-2 = Stack CRITICAL (errors, no operacional)
+1 = Stack DEGRADED (warnings, but still operational)
+2 = Stack CRITICAL (errors, not operational)
 ```
 
 ## JSON Output Example
 
-Para CI/CD y automatización:
+For CI/CD and automation:
 
 ```powershell
 .\scripts\utilities\wf.ps1 diagnose -JSON | ConvertFrom-Json
@@ -238,44 +238,44 @@ Para CI/CD y automatización:
 }
 ```
 
-## Procedimiento Estándar Para Desarrolladores
+## Standard Developer Procedure
 
-### Cada Vez que Abres el Proyecto
+### Every Time You Open the Project
 
 ```powershell
-# 1. Abre PowerShell en la carpeta del proyecto
-cd C:\projects\mi-proyecto
+# 1. Open a terminal in the project directory
+cd C:\projects\my-project
 
-# 2. La verificación automática se ejecuta (desde profile/hook)
-# Nada que hacer, espera 2-3 segundos
+# 2. Automatic verification may run from the profile or hook
+# Wait 2-3 seconds if it does
 
-# 3. Stack listo para usar
-.\scripts\utilities\wf.ps1 status  # Verifica estado del proyecto
+# 3. The stack is ready to use
+.\scripts\utilities\wf.ps1 status  # Confirm project status
 ```
 
-### Cuando Cambias de Rama
+### When You Change Branches
 
 ```powershell
 git checkout feature/new-feature
 
-# El post-checkout hook ejecuta:
+# The post-checkout hook runs:
 # - system-diagnostics.ps1
 # - auto-init-dev-environment.ps1
 
-# Espera a que termine, stack está listo
-.\scripts\utilities\wf.ps1 review  # Procede con trabajo
+# Wait for completion; the stack is then ready
+.\scripts\utilities\wf.ps1 review  # Continue with normal work
 ```
 
-### Cuando Sospechas Problemas
+### When You Suspect Problems
 
 ```powershell
-# Reporte completo
+# Full report
 .\scripts\utilities\wf.ps1 diagnose
 
-# Auto-reparar
+# Auto-repair
 .\scripts\utilities\wf.ps1 verify
 
-# Re-verificar
+# Re-verify
 .\scripts\utilities\wf.ps1 diagnose
 ```
 
@@ -283,78 +283,78 @@ git checkout feature/new-feature
 
 ### "Stack is CRITICAL - Go not found"
 
-**Solución:**
+**Solution:**
 ```powershell
-# Instalar Go desde https://go.dev/
-# Agregar a PATH
-# Reiniciar PowerShell
+# Install Go from https://go.dev/
+# Add it to PATH
+# Restart PowerShell or pwsh
 
-# Verificar
+# Verify
 .\scripts\utilities\wf.ps1 verify
 ```
 
 ### "Engram CLI NOT FOUND (can auto-install)"
 
-**Solución:**
+**Solution:**
 ```powershell
 # Auto-install
 .\scripts\utilities\wf.ps1 install-engram
 
-# O verificar e reparar todo
+# Or verify and repair everything
 .\scripts\utilities\wf.ps1 verify
 ```
 
 ### "Orchestrator NOT ACTIVATED"
 
-**Solución:**
+**Solution:**
 ```powershell
 .\scripts\utilities\wf.ps1 orchestrator-status
 
-# O usar verify para activar
+# Or use verify to activate it
 .\scripts\utilities\wf.ps1 verify
 ```
 
-### Hook post-checkout no se ejecuta
+### Post-checkout hook does not run
 
-**Causa:** Git hooks no están configurados correctamente.
+**Cause:** Git hooks are not configured correctly.
 
-**Solución:**
+**Solution:**
 ```powershell
-# Re-configurar hooks path
+# Reconfigure the hooks path
 git config core.hooksPath scripts/git-hooks
 
-# Verificar
+# Verify
 git config core.hooksPath
-# Debería mostrar: scripts/git-hooks
+# Expected value: scripts/git-hooks
 ```
 
 ## CI/CD Integration
 
-Para pipelines de integración continua:
+For continuous integration pipelines:
 
 ```powershell
-# En el paso de setup:
+# In the setup step:
 .\scripts\utilities\wf.ps1 diagnose -JSON | ConvertFrom-Json | Select-Object overallStatus
 
-# Si overallStatus != "HEALTHY", fallar el pipeline
+# If overallStatus != "HEALTHY", fail the pipeline
 if ($status.overallStatus -ne "HEALTHY") {
     exit 1
 }
 
-# Proceder con tests/builds
+# Proceed with tests and builds
 ```
 
 ## Best Practices
 
-1. **Siempre ejecuta `verify` después de clonar/descargar un proyecto**
-2. **El PowerShell profile hace esto automáticamente**
-3. **Usa `diagnose` cuando necesites un reporte detallado**
-4. **El sistema auto-repara la mayoría de problemas comunes**
-5. **Componentecríticos (Go, Git, Node) requieren instalación manual**
+1. **Run `verify` after cloning or downloading a project**
+2. **Treat the PowerShell profile as an optional Windows convenience, not the only activation path**
+3. **Use `diagnose` when you need a detailed report**
+4. **Let the system repair common problems automatically when possible**
+5. **Critical components such as Go, Git, and Node may still require manual installation**
 
-## Ver También
+## See Also
 
-- [scripts/utilities/README.md](scripts/utilities/README.md) - Comandos disponibles
-- [scripts/foundation/bootstrap.ps1](scripts/foundation/bootstrap.ps1) - Inicialización completa
-- [scripts/diagnostics/system-diagnostics.ps1](scripts/diagnostics/system-diagnostics.ps1) - Motor de diagnósticos
-- [hooks/post-checkout.ps1](hooks/post-checkout.ps1) - Auto-verificación en checkouts
+- [scripts/utilities/README.md](scripts/utilities/README.md) - Available commands
+- [scripts/foundation/bootstrap.ps1](scripts/foundation/bootstrap.ps1) - Full initialization
+- [scripts/diagnostics/system-diagnostics.ps1](scripts/diagnostics/system-diagnostics.ps1) - Diagnostics engine
+- [hooks/post-checkout.ps1](hooks/post-checkout.ps1) - Automatic verification on checkout

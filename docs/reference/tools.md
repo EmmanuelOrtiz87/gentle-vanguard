@@ -30,14 +30,27 @@ Instead, the workspace bootstrap reads a config file and uses one of these strat
 
 ## Platform Support
 
-- Windows: PowerShell bootstrap with `pwsh` fallback to `powershell.exe`
+- Windows: PowerShell bootstrap with `pwsh` fallback to `powershell`
 - Linux: use the shell wrapper or invoke the PowerShell script with `pwsh`
 - macOS: use the shell wrapper or invoke the PowerShell script with `pwsh`
+
+## Portability Notes
+
+1. Tool installation metadata is resolved per platform from `config/workspace.config.json`.
+2. `ensure-tools-active.ps1` and `update-tools.ps1` no longer assume platform-specific paths for home directories, PATH updates, or tool verification.
+3. The stack is OS-aware and wrapper-friendly, but the canonical automation layer is still PowerShell.
+4. Bash remains a required capability for `gga` because the upstream project installs and runs through shell scripts.
 
 ## Windows Note
 
 - `gga` can be installed automatically on Windows only if `bash` is available through Git Bash, WSL, or a similar environment.
 - If `bash` is missing, the bootstrap warns and skips that installer instead of failing the whole setup.
+
+## AI Tool Neutrality
+
+1. The workspace can operate with different AI tools and editors.
+2. `opencode`, `engram`, and related settings are configurable defaults, not exclusive runtime requirements.
+3. Missing optional AI tools should degrade gracefully instead of blocking bootstrap.
 
 ## Engram Runtime State
 

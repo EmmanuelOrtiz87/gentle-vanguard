@@ -20,6 +20,57 @@ function Write-Warn { param([string]$m) if (-not $Quiet) { Write-Host "[WARN] $m
 function Write-Info { param([string]$m) if (-not $Quiet) { Write-Host "[INFO] $m" -ForegroundColor Cyan   } }
 function Write-Err  { param([string]$m) if (-not $Quiet) { Write-Host "[ERROR] $m" -ForegroundColor Red   } }
 
+function Get-CurrentPlatform {
+    if ($PSVersionTable.PSVersion.Major -ge 6) {
+        if ($IsWindows) { return 'windows' }
+        if ($IsMacOS) { return 'macos' }
+        if ($IsLinux) { return 'linux' }
+    }
+    try {
+        $os = [System.Runtime.InteropServices.RuntimeInformation]::OSDescription.ToLowerInvariant()
+        if ($os -like '*windows*') { return 'windows' }
+        if ($os -like '*darwin*' -or $os -like '*mac*') { return 'macos' }
+        if ($os -like '*linux*') { return 'linux' }
+    } catch {}
+    return 'windows'
+}
+
+function Get-PathSeparator {
+    return [string][System.IO.Path]::PathSeparator
+}
+
+function Get-HomePath {
+    if ((Get-CurrentPlatform) -eq 'windows') {
+        return $env:USERPROFILE
+    }
+    return $HOME
+}
+
+function Get-GoBinDir {
+    if ($env:GOBIN)  { return $env:GOBIN }
+    if ($env:GOPATH) { return (Join-Path $env:GOPATH 'bin') }
+    return (Join-Path (Join-Path (Get-HomePath) 'go') 'bin')
+}
+
+function Get-BashPath {
+    $bashCmd = Get-Command bash -ErrorAction SilentlyContinue
+    if ($bashCmd) { return $bashCmd.Source }
+    if ((Get-CurrentPlatform) -eq 'windows') {
+        $gitBash = 'C:\Program Files\Git\bin\bash.exe'
+        if (Test-Path $gitBash) { return $gitBash }
+    }
+    return $null
+}
+
+function Get-PlatformInstallInfo {
+    param($InstallNode)
+    if (-not $InstallNode) { return $null }
+    $platform = Get-CurrentPlatform
+    $prop = $InstallNode.PSObject.Properties[$platform]
+    if ($prop) { return $prop.Value }
+    return $null
+}
+
 # ── Resolve {token} placeholders in a string ─────────────────────────────────
 function Resolve-Placeholders {
     param([string]$Text, [hashtable]$Vars)
@@ -62,7 +113,8 @@ function Get-SystemDepVersion {
 function Install-SystemDep {
     param($Dep)
 
-    $info = if ($Dep.install) { $Dep.install.windows } else { $null }
+    $platform = Get-CurrentPlatform
+    $info = Get-PlatformInstallInfo -InstallNode $Dep.install
 
     Write-Host ""
     Write-Host "  --- REQUIRED SYSTEM DEPENDENCY: $($Dep.name) ---" -ForegroundColor Yellow
@@ -74,67 +126,108 @@ function Install-SystemDep {
     }
 
     if (-not $info) {
-        Write-Host "  -─ [ERROR] No Windows install info in workspace.config.json for '$($Dep.name)'" -ForegroundColor Red
+        Write-Host "  -─ [ERROR] No install info in workspace.config.json for '$($Dep.name)' on '$platform'" -ForegroundColor Red
         return $false
     }
 
-    # ── Attempt auto-install via winget ──────────────────────────────────────
-    $wingetCmd = Get-Command winget -ErrorAction SilentlyContinue
-    $winget = if ($wingetCmd) { $wingetCmd.Source } else { $null }
-    if (-not $winget) {
-        # winget ships as an AppX alias on Windows 10/11
-        $alias = Join-Path $env:LOCALAPPDATA 'Microsoft\WindowsApps\winget.exe'
-        if (Test-Path $alias) { $winget = $alias }
+    # ── Attempt auto-install via available package managers ───────────────────
+    $didAutoInstall = $false
+    if ($info.winget) {
+        $wingetCmd = Get-Command winget -ErrorAction SilentlyContinue
+        $winget = if ($wingetCmd) { $wingetCmd.Source } else { $null }
+        if ((-not $winget) -and ($platform -eq 'windows')) {
+            # winget ships as an AppX alias on Windows 10/11
+            $alias = Join-Path $env:LOCALAPPDATA 'Microsoft\WindowsApps\winget.exe'
+            if (Test-Path $alias) { $winget = $alias }
+        }
+        if ($winget) {
+            Write-Host "  -  Trying winget auto-install: $($info.winget)" -ForegroundColor Cyan
+            try {
+                $output   = & $winget install --id $info.winget --silent `
+                                --accept-package-agreements --accept-source-agreements 2>&1
+                $exitCode = $LASTEXITCODE
+                $outText  = $output | Out-String
+
+                $alreadyOk = ($exitCode -eq 0) -or
+                             ($outText -like '*already installed*') -or
+                             ($outText -like '*No applicable upgrade*') -or
+                             ($exitCode -eq -1978335189)
+
+                if ($alreadyOk) {
+                    Write-Host "  [OK] winget install succeeded" -ForegroundColor Green
+                    $didAutoInstall = $true
+                } else {
+                    $lastLines = ($output | Select-Object -Last 4) -join "`n"
+                    Write-Host "  [ERROR] winget exit $exitCode" -ForegroundColor Red
+                    Write-Host "  $lastLines" -ForegroundColor Red
+                }
+            } catch {
+                Write-Host "  [ERROR] winget threw: $($_.Exception.Message)" -ForegroundColor Red
+            }
+        }
     }
 
-    if ($winget -and $info.winget) {
-        Write-Host "  -  Trying winget auto-install: $($info.winget)" -ForegroundColor Cyan
-        try {
-            $output   = & $winget install --id $info.winget --silent `
-                            --accept-package-agreements --accept-source-agreements 2>&1
-            $exitCode = $LASTEXITCODE
-            $outText  = $output | Out-String
-
-            $alreadyOk = ($exitCode -eq 0) -or
-                         ($outText -like '*already installed*') -or
-                         ($outText -like '*No applicable upgrade*') -or
-                         ($exitCode -eq -1978335189)   # APPINSTALLER_ERROR_ALREADY_INSTALLED
-
-            if ($alreadyOk) {
-                Write-Host "  [OK] winget install succeeded" -ForegroundColor Green
-                if ($info.notes) {
-                    Write-Host "  NOTE: $($info.notes)" -ForegroundColor Yellow
+    if ((-not $didAutoInstall) -and $info.brew) {
+        $brewCmd = Get-Command brew -ErrorAction SilentlyContinue
+        if ($brewCmd) {
+            Write-Host "  -  Trying brew auto-install: $($info.brew)" -ForegroundColor Cyan
+            try {
+                & $brewCmd.Source install $info.brew 2>&1 | Out-Null
+                if ($LASTEXITCODE -eq 0) {
+                    Write-Host "  [OK] brew install succeeded" -ForegroundColor Green
+                    $didAutoInstall = $true
                 }
-                # Refresh session PATH with common install locations
-                $refreshDirs = @(
-                    'C:\Program Files\Go\bin',
-                    'C:\Program Files\Git\bin',
-                    'C:\Program Files\Git\cmd',
-                    'C:\Program Files\nodejs',
-                    (Join-Path $env:USERPROFILE 'go\bin')
-                )
-                foreach ($d in $refreshDirs) {
-                    if ((Test-Path $d) -and ($env:PATH -notlike "*$d*")) {
-                        $env:PATH += ";$d"
-                    }
-                }
-                $nowAvailable = [bool](Get-Command $Dep.checkCommand -ErrorAction SilentlyContinue)
-                if ($nowAvailable) {
-                    Write-Host "  [OK] $($Dep.name) is now available in this session" -ForegroundColor Green
-                } else {
-                    Write-Host "  [OK] $($Dep.name) installed - open a NEW terminal, then re-run: wf.ps1 health" -ForegroundColor Yellow
-                }
-                return $true
+            } catch {
+                Write-Host "  [ERROR] brew threw: $($_.Exception.Message)" -ForegroundColor Red
             }
-
-            # winget ran but failed
-            $lastLines = ($output | Select-Object -Last 4) -join "`n"
-            Write-Host "  [ERROR] winget exit $exitCode" -ForegroundColor Red
-            Write-Host "  $lastLines" -ForegroundColor Red
-        } catch {
-            Write-Host "  [ERROR] winget threw: $($_.Exception.Message)" -ForegroundColor Red
         }
-    } elseif (-not $winget) {
+    }
+
+    if ($didAutoInstall) {
+        if ($info.notes) {
+            Write-Host "  NOTE: $($info.notes)" -ForegroundColor Yellow
+        }
+        $pathSep = Get-PathSeparator
+        $userHome = Get-HomePath
+        $refreshDirs = @()
+        if ($platform -eq 'windows') {
+            $refreshDirs = @(
+                'C:\Program Files\Go\bin',
+                'C:\Program Files\Git\bin',
+                'C:\Program Files\Git\cmd',
+                'C:\Program Files\nodejs',
+                (Join-Path (Join-Path $userHome 'go') 'bin')
+            )
+        } elseif ($platform -eq 'macos') {
+            $refreshDirs = @(
+                '/usr/local/bin',
+                '/opt/homebrew/bin',
+                '/usr/local/go/bin',
+                (Join-Path (Join-Path $userHome 'go') 'bin')
+            )
+        } else {
+            $refreshDirs = @(
+                '/usr/local/bin',
+                '/usr/bin',
+                '/usr/local/go/bin',
+                (Join-Path (Join-Path $userHome 'go') 'bin')
+            )
+        }
+        foreach ($d in $refreshDirs) {
+            if ((Test-Path $d) -and ($env:PATH -notlike "*$d*")) {
+                $env:PATH += "$pathSep$d"
+            }
+        }
+        $nowAvailable = [bool](Get-Command $Dep.checkCommand -ErrorAction SilentlyContinue)
+        if ($nowAvailable) {
+            Write-Host "  [OK] $($Dep.name) is now available in this session" -ForegroundColor Green
+        } else {
+            Write-Host "  [OK] $($Dep.name) installed - open a NEW terminal, then re-run: wf.ps1 health" -ForegroundColor Yellow
+        }
+        return $true
+    }
+
+    if (($platform -eq 'windows') -and (-not (Get-Command winget -ErrorAction SilentlyContinue))) {
         Write-Host "  winget not found on this system" -ForegroundColor Yellow
     }
 
@@ -166,7 +259,9 @@ function Invoke-SystemDeps {
 
     $missingRequired = @()
 
+    $platform = Get-CurrentPlatform
     foreach ($dep in $cfg.systemDependencies) {
+        $depInfo = Get-PlatformInstallInfo -InstallNode $dep.install
         $available = [bool](Get-Command $dep.checkCommand -ErrorAction SilentlyContinue)
 
         if ($available) {
@@ -187,8 +282,8 @@ function Invoke-SystemDeps {
 
                     if ($cmp -lt 0) {
                         Write-Warn "$($dep.name) v$ver is below required minimum v$($dep.minVersion)"
-                        if ($dep.install.windows.url) {
-                            Write-Info "  Update from: $($dep.install.windows.url)"
+                        if ($depInfo -and $depInfo.url) {
+                            Write-Info "  Update from: $($depInfo.url)"
                         }
                         if (-not $dep.optional) { $missingRequired += $dep.name }
                     } else {
@@ -207,8 +302,8 @@ function Invoke-SystemDeps {
         if ($dep.optional) {
             $usedMsg = if ($dep.usedBy) { " (used by: $($dep.usedBy -join ', '))" } else { '' }
             Write-Warn "$($dep.name) not installed [optional]$usedMsg"
-            if ($dep.install.windows.url) {
-                Write-Info "  Install from: $($dep.install.windows.url)"
+            if ($depInfo -and $depInfo.url) {
+                Write-Info "  Install from: $($depInfo.url)"
             }
             continue
         }
@@ -219,8 +314,8 @@ function Invoke-SystemDeps {
             $ok = Install-SystemDep -Dep $dep
             if (-not $ok) { $missingRequired += $dep.name }
         } else {
-            if ($dep.install.windows.url) {
-                Write-Host "  Install from : $($dep.install.windows.url)" -ForegroundColor Yellow
+            if ($depInfo -and $depInfo.url) {
+                Write-Host "  Install from : $($depInfo.url)" -ForegroundColor Yellow
             }
             Write-Host "  Then run     : wf.ps1 health" -ForegroundColor Yellow
             $missingRequired += $dep.name
@@ -244,25 +339,27 @@ function Invoke-SystemDeps {
 function Install-Tool {
     param($Tool, [string]$ToolsRoot)
 
+    $platform = Get-CurrentPlatform
     $installCmd = $null
-    if ($Tool.install -and $Tool.install.windows) {
-        $installCmd = Resolve-Placeholders -Text ([string]$Tool.install.windows) -Vars @{
+    $platformInstall = Get-PlatformInstallInfo -InstallNode $Tool.install
+    if ($platformInstall) {
+        $installCmd = Resolve-Placeholders -Text ([string]$platformInstall) -Vars @{
             toolsRoot     = $ToolsRoot
             workspaceRoot = $repoRoot
         }
     }
     if (-not $installCmd) {
-        Write-Warn "$($Tool.name): no install command defined for Windows"
+        Write-Warn "$($Tool.name): no install command defined for '$platform'"
         return $false
     }
 
     # Prerequisite check (go, git, bash) — attempt auto-install via system deps if missing
     foreach ($req in $Tool.requires) {
         if ($req -eq 'bash') {
-            $hasBash = (Get-Command bash -ErrorAction SilentlyContinue) -or
-                       (Test-Path 'C:\Program Files\Git\bin\bash.exe')
+            $bashPath = Get-BashPath
+            $hasBash = -not [string]::IsNullOrWhiteSpace($bashPath)
             if (-not $hasBash) {
-                Write-Warn "$($Tool.name): requires bash (Git for Windows)"
+                Write-Warn "$($Tool.name): requires bash"
                 # Try to resolve via git's system dep entry if AutoStart is on
                 if ($AutoStart) {
                     $configPath = Join-Path $repoRoot 'config\workspace.config.json'
@@ -271,13 +368,13 @@ function Install-Tool {
                     if ($gitDep) {
                         $ok = Install-SystemDep -Dep $gitDep
                         if ($ok) {
-                            $hasBash = (Get-Command bash -ErrorAction SilentlyContinue) -or
-                                       (Test-Path 'C:\Program Files\Git\bin\bash.exe')
+                            $bashPath = Get-BashPath
+                            $hasBash = -not [string]::IsNullOrWhiteSpace($bashPath)
                         }
                     }
                 }
                 if (-not $hasBash) {
-                    Write-Host "  Install Git for Windows: https://git-scm.com/download/win" -ForegroundColor Yellow
+                    Write-Host "  Install bash (or Git, if it bundles bash), then re-run: wf.ps1 health" -ForegroundColor Yellow
                     return $false
                 }
             }
@@ -333,12 +430,13 @@ function Confirm-ToolAfterInstall {
 
     if (Test-ToolAvailable -Tool $Tool -ToolsRoot $ToolsRoot) { return $true }
 
+    $platformInstall = Get-PlatformInstallInfo -InstallNode $Tool.install
+    $installText = if ($platformInstall) { [string]$platformInstall } else { '' }
+
     # For Go-installed binaries: check $GOPATH/bin directly
     if ($Tool.checkCommand -and $Tool.install -and
-        ([string]$Tool.install.windows) -like '*go install*') {
-        $goBin = if ($env:GOBIN) { $env:GOBIN } `
-                 elseif ($env:GOPATH) { Join-Path $env:GOPATH 'bin' } `
-                 else { Join-Path $env:USERPROFILE 'go\bin' }
+        $installText -like '*go install*') {
+        $goBin = Get-GoBinDir
         $exe = Join-Path $goBin "$($Tool.checkCommand).exe"
         if (-not (Test-Path $exe)) { $exe = Join-Path $goBin $Tool.checkCommand }
         if (Test-Path $exe) {
@@ -349,20 +447,28 @@ function Confirm-ToolAfterInstall {
 
     # For bash-installed tools (e.g. GGA): check common install locations
     if ($Tool.checkCommand -and $Tool.install -and
-        ([string]$Tool.install.windows) -like '*bash*install.sh*') {
+        $installText -like '*bash*install.sh*') {
+        $pathSep = Get-PathSeparator
+        $userHome = Get-HomePath
         $candidateDirs = @(
-            (Join-Path $env:USERPROFILE 'bin'),
-            (Join-Path $env:USERPROFILE '.local\bin'),
-            'C:\Program Files\Git\usr\bin',
-            'C:\Program Files\Git\bin'
+            (Join-Path $userHome 'bin'),
+            (Join-Path $userHome '.local\bin')
         )
+        if ((Get-CurrentPlatform) -eq 'windows') {
+            $candidateDirs += @(
+                'C:\Program Files\Git\usr\bin',
+                'C:\Program Files\Git\bin'
+            )
+        }
         foreach ($dir in $candidateDirs) {
             $candidate = Join-Path $dir $Tool.checkCommand
             if (Test-Path $candidate) {
                 Write-Ok "$($Tool.name) installed at $candidate"
                 Write-Info "  To use immediately in this session: PATH updated automatically"
                 Write-Info "  To persist, restart your terminal after install"
-                $env:PATH += ";$dir"
+                if ($env:PATH -notlike "*$dir*") {
+                    $env:PATH += "$pathSep$dir"
+                }
                 Write-Info "  PATH updated for this session"
                 return $true
             }
@@ -476,7 +582,18 @@ function Test-WorkflowReadiness {
         Write-Err "Workflow CLI not found: $wfScript"
         return
     }
-    $null = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $wfScript status 2>$null
+    $shellCmd = Get-Command pwsh -ErrorAction SilentlyContinue
+    if (-not $shellCmd) { $shellCmd = Get-Command powershell -ErrorAction SilentlyContinue }
+    if (-not $shellCmd) {
+        Write-Warn "Cannot locate a PowerShell runner to execute wf.ps1 status"
+        return
+    }
+
+    if ((Get-CurrentPlatform) -eq 'windows') {
+        $null = & $shellCmd.Source -NoProfile -ExecutionPolicy Bypass -File $wfScript status 2>$null
+    } else {
+        $null = & $shellCmd.Source -NoProfile -File $wfScript status 2>$null
+    }
     if ($LASTEXITCODE -eq 0) {
         Write-Ok "Workflow CLI (wf.ps1) is operational"
     } else {

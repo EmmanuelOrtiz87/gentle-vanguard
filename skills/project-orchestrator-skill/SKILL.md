@@ -35,8 +35,8 @@ Use this policy to keep response verbosity deterministic and token-efficient.
 2. Local workspace can override mode through `config/orchestrator.json` using `communication_response_mode`.
 3. Current local baseline is `simple`.
 4. `simple` mode contract:
-- success: `OK: cerrado` (or minimal verifiable result),
-- failure: `ERROR: <causa breve> | ACCION: <paso mínimo>`.
+- success: `OK: closed` (or minimal verifiable result),
+- failure: `ERROR: <brief cause> | ACTION: <minimum step>`.
 5. Escalate to `standard`/`deep` only for medium/high risk or explicit developer request.
 
 Validation and visibility:
@@ -335,10 +335,10 @@ ci:       CI/CD changes
 │     └─ Check acceptance criteria                                │
 │                                                                   │
 │  5. ASK USER                                                    │
-│     ├─ ¿Cumplimos con la especificación?                        │
-│     ├─ ¿Findings encontrados?                                    │
-│     ├─ ¿Resolver ahora o después?                               │
-│     └─ ¿Crear PR?                                              │
+│     ├─ Did we meet the specification?                          │
+│     ├─ Were any findings identified?                           │
+│     ├─ Fix them now or later?                                  │
+│     └─ Create a PR?                                            │
 │                                                                   │
 │  6. END SESSION                                                 │
 │     ├─ Commit changes                                           │
@@ -528,15 +528,15 @@ START REVIEW
 
 ---
 
-**¿Qué hacemos con los hallazgos?**
+**What should we do with the findings?**
 
-1) Arreglar TODO ahora (recommended)
-2) Arreglar CRITICAL/HIGH ahora, MEDIUM después
-3) Crear PR y arreglar después
-4) Solo crear PR sin arreglar
-5) Volver al trabajo para arreglar más
+1) Fix everything now (recommended)
+2) Fix CRITICAL/HIGH now, MEDIUM later
+3) Create the PR and fix them later
+4) Only create the PR without fixing them
+5) Go back to implementation and fix more
 
-**Elige una opción:**
+**Choose an option:**
 ```
 
 ---
@@ -553,9 +553,9 @@ START REVIEW
 
 ### Questions
 ```
-¿Cumplimos con la especificación original?
-¿Hay algo que olvidamos?
-¿El código está listo para revisión?
+Did we meet the original specification?
+Did we forget anything?
+Is the code ready for review?
 ```
 
 ---
@@ -665,7 +665,7 @@ If they drift from the real work, update them during the session.
 
 **Specification:** COMPLETE / PARTIAL
 
-**¿Create PR?** [Ask user]
+**Create PR?** [Ask user]
 
 ---
 

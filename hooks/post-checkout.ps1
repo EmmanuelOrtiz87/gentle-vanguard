@@ -4,6 +4,15 @@ param(
 
 $ErrorActionPreference = 'Continue'
 
+function Invoke-LocalPowerShellScript {
+    param(
+        [string]$ScriptPath,
+        [string[]]$ScriptArgs = @()
+    )
+
+    & $ScriptPath @ScriptArgs
+}
+
 $GitRoot = git rev-parse --show-toplevel 2>$null
 if (-not $GitRoot) {
     exit 0
@@ -45,7 +54,7 @@ while ($candidate) {
 # Run diagnostics
 if ($diagnosticsScript) {
     Write-Host "Running system diagnostics..." -ForegroundColor Yellow
-    $null = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $diagnosticsScript -Quiet -AutoRepair
+    $null = Invoke-LocalPowerShellScript -ScriptPath $diagnosticsScript -ScriptArgs @('-Quiet', '-AutoRepair')
 } else {
     Write-Host "[WARN] Diagnostics script not found" -ForegroundColor Yellow
 }
@@ -53,12 +62,12 @@ if ($diagnosticsScript) {
 # Run auto-init if available
 if ($autoInitScript) {
     Write-Host "Verifying environment..." -ForegroundColor Yellow
-    $null = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $autoInitScript -Quiet -Force
+    $null = Invoke-LocalPowerShellScript -ScriptPath $autoInitScript -ScriptArgs @('-Quiet', '-Force')
 } else {
     Write-Host "[WARN] Auto-init script not found" -ForegroundColor Yellow
 }
 
-Write-Host "✓ Post-checkout completion check finished" -ForegroundColor Green
+Write-Host "[OK] Post-checkout completion check finished" -ForegroundColor Green
 Write-Host ""
 
 exit 0

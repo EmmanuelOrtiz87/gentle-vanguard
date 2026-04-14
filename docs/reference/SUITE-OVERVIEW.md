@@ -7,7 +7,7 @@
 **Last Updated**: 2026-04-10  
 **Status**: âœ… **FULLY OPERATIONAL**  
 **Coverage**: 100% Projects Homologated  
-**Activation**: Automatic (PowerShell Profile + Health Checks)
+**Activation**: Automatic through workflow health checks, with optional PowerShell profile integration on Windows
 
 ---
 
@@ -50,7 +50,7 @@ Gentleman Foundation Suite
 | **Workflow CLI** | âœ… Ready | `.\scripts\utilities\wf.ps1` | Project coordination & automation |
 | **Health Check** | âœ… Ready | `.\scripts\utilities\wf.ps1 health` | Tool validation & activation |
 | **Auto-Init** | âœ… Ready | `auto-init-dev-environment.ps1` | Environment setup |
-| **PowerShell Profile** | âœ… Deployed | `$PROFILE` | Global auto-activation |
+| **PowerShell Profile** | âœ… Optional | `$PROFILE` | Windows convenience for auto-activation |
 
 ### âœ… Quality Assurance
 | Component | Status | Trigger | Coverage |
@@ -80,7 +80,7 @@ Gentleman Foundation Suite
 | **CI/CD** | âœ… Ready | GitHub Actions workflows |
 | **Templates** | âœ… Available | Go, Angular, Python, React |
 | **Skills** | âœ… Loaded | 25+ AI skills available |
-| **Activation** | âœ… Automatic | PowerShell profile integration |
+| **Activation** | âœ… Automatic | Health checks and wrapper-based workflow routing |
 
 ### ðŸ“Š bitbucket-dashboard (DevOps Analytics)
 | Aspect | Status | Details |
@@ -102,7 +102,7 @@ Gentleman Foundation Suite
 # Clone foundation template
 git clone https://github.com/EmmanuelOrtiz87/workspace-foundation.git
 
-# Configure PowerShell profile (automatic activation)
+# Optional Windows PowerShell profile setup
 Copy-Item "scripts/utilities/Microsoft.PowerShell_profile.ps1" $PROFILE
 . $PROFILE
 
@@ -203,7 +203,7 @@ git commit -m "feat: add new dashboard component"
 - **Performance**: CI/CD pipelines track build metrics
 
 ### Updates
-- **Automatic**: PowerShell profile updates tools on project entry
+- **Automatic**: Health checks and workflow entrypoints keep tools aligned; the PowerShell profile is optional on Windows
 - **Manual**: `.\scripts\utilities\wf.ps1 update` for explicit updates
 - **Skills**: AI skills update automatically via orchestrator
 

@@ -37,6 +37,15 @@ function Write-Warning {
     }
 }
 
+function Invoke-LocalPowerShellScript {
+    param(
+        [string]$ScriptPath,
+        [string[]]$ScriptArgs = @()
+    )
+
+    & $ScriptPath @ScriptArgs
+}
+
 # Check if we're in a Gentleman Foundation project
 $currentDir = Get-Location
 $projectRoot = $null
@@ -84,7 +93,7 @@ if ($projectRoot) {
     $detectScript = Join-Path $projectRoot 'scripts/utilities/detect-ide-session.ps1'
     if (Test-Path $detectScript) {
         try {
-            $ideDataRaw = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $detectScript -AsJson
+            $ideDataRaw = Invoke-LocalPowerShellScript -ScriptPath $detectScript -ScriptArgs @('-AsJson')
             $ideData = $ideDataRaw | ConvertFrom-Json
             Write-Info "IDE session detection: $($ideData.ideName) (confidence=$($ideData.confidence))"
             if (-not $ideData.isIdeSession) {
@@ -102,7 +111,7 @@ if ($projectRoot) {
     if (Test-Path $healthScript) {
         $healthArgs = @('-Quiet', '-AutoStart')
         if ($Force) { $healthArgs += "-Force" }
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $healthScript @healthArgs
+        Invoke-LocalPowerShellScript -ScriptPath $healthScript -ScriptArgs $healthArgs
         Write-Success "Development tools activated"
     } else {
         Write-Warning "Health check script not found - tools may not be fully activated"
@@ -112,7 +121,7 @@ if ($projectRoot) {
     Write-Step "Initializing Project"
     $initScript = Join-Path $projectRoot 'scripts/project/init-project.ps1'
     if (Test-Path $initScript) {
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $initScript
+        Invoke-LocalPowerShellScript -ScriptPath $initScript
         Write-Success "Project initialized"
     } else {
         Write-Info "No project initialization script found - skipping"

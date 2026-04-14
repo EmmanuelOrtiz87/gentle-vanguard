@@ -57,7 +57,10 @@ if (-not (Test-Path $markerPath)) {
     exit 0
 }
 
-$powershell = if (Get-Command pwsh -ErrorAction SilentlyContinue) { 'pwsh' } else { 'powershell.exe' }
+$powershell = Get-Command pwsh -ErrorAction SilentlyContinue
+if (-not $powershell) {
+    $powershell = Get-Command powershell -ErrorAction SilentlyContinue
+}
 
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     exit 0
@@ -94,7 +97,11 @@ try {
 $reviewScript = Join-Path $projectRoot 'scripts\utilities\generate-session-review.ps1'
 if ($env:AUTO_SESSION_REVIEW_ON_COMMIT -eq '1' -and (Test-Path $reviewScript)) {
     try {
-        & $powershell -NoProfile -ExecutionPolicy Bypass -File $reviewScript
+        if ($powershell) {
+            & $powershell.Source -NoProfile -ExecutionPolicy Bypass -File $reviewScript
+        } else {
+            & $reviewScript
+        }
     } catch {
         Write-Host "[WARN] failed to generate session review: $_" -ForegroundColor Yellow
     }
@@ -124,8 +131,8 @@ fi
 if command -v pwsh >/dev/null 2>&1; then
   OUTPUT="$(pwsh -NoProfile -ExecutionPolicy Bypass -File "$HOOK_SCRIPT" 2>&1)"
   EXIT_CODE=$?
-elif command -v powershell.exe >/dev/null 2>&1; then
-  OUTPUT="$(powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$HOOK_SCRIPT" 2>&1)"
+elif command -v powershell >/dev/null 2>&1; then
+    OUTPUT="$(powershell -NoProfile -ExecutionPolicy Bypass -File "$HOOK_SCRIPT" 2>&1)"
   EXIT_CODE=$?
 else
   printf '%s\n' "PowerShell not found for post-commit hook." >&2

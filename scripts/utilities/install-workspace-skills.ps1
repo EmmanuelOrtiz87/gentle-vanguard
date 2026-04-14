@@ -15,7 +15,7 @@ if (-not (Test-Path -LiteralPath $archScript)) {
     throw "Missing installer: $archScript"
 }
 
-& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $docsScript -SourceRoot $SourceRoot
-& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $archScript -SourceRoot $SourceRoot
+& $docsScript -SourceRoot $SourceRoot
+& $archScript -SourceRoot $SourceRoot
 
 Write-Host "Installed workspace skills. Restart Codex to pick up the new skills."

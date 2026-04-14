@@ -42,6 +42,8 @@ These enhance the foundation but are **not required**:
 
 ### 1. Minimal Setup (Required)
 
+Windows:
+
 ```powershell
 # Install git
 winget install Git.Git
@@ -54,7 +56,18 @@ winget install Microsoft.PowerShell
 # - Or use existing Claude Desktop/Copilot/etc.
 ```
 
+Linux or macOS:
+
+```bash
+# Install git, PowerShell, and any required package managers using your platform standard.
+# Then verify:
+git --version
+pwsh --version
+```
+
 ### 2. Install Gentleman Foundation
+
+Windows PowerShell:
 
 ```powershell
 # Clone foundation
@@ -65,6 +78,15 @@ cd C:\path\to\foundation
 .\scripts\bootstrap-machine.ps1
 
 # Verify
+gf validate
+```
+
+Linux or macOS:
+
+```bash
+git clone <foundation-repo-url> ~/workspace-foundation
+cd ~/workspace-foundation
+pwsh -NoProfile -File ./scripts/foundation/bootstrap.ps1
 gf validate
 ```
 
@@ -83,13 +105,30 @@ go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest
 .\scripts\utilities\wf.ps1 update-tools
 ```
 
+Linux or macOS equivalent:
+
+```bash
+git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git
+cd gentleman-guardian-angel
+bash install.sh
+go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest
+pwsh -NoProfile -File ./scripts/utilities/wf.ps1 update-tools
+```
+
 ## Platform Support
 
 | Platform | Status | Notes |
 |----------|--------|-------|
-| Windows 10/11 | [OK] Full | Primary platform |
-| macOS | [OK] Full | Use PowerShell Core |
-| Linux | [OK] Full | Use PowerShell Core |
+| Windows 10/11 | [OK] Full | Canonical PowerShell entrypoint |
+| macOS | [OK] Full | Use `pwsh` or the shell wrapper |
+| Linux | [OK] Full | Use `pwsh` or the shell wrapper |
+
+## Compatibility Notes
+
+1. The workspace is platform-aware and reads platform-specific install metadata from `config/workspace.config.json`.
+2. PowerShell is still the canonical runtime for automation scripts.
+3. Bash is additionally required for tools whose upstream installer is shell-based, such as `gga`.
+4. AI editor or provider choice is flexible; the foundation is not tied to a single IDE or AI agent.
 
 ## Verification
 

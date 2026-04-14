@@ -28,6 +28,15 @@ function Write-Warn {
     Write-Host "[WARN] $Message" -ForegroundColor Yellow
 }
 
+function Invoke-LocalPowerShellScript {
+    param(
+        [string]$ScriptPath,
+        [string[]]$ScriptArgs = @()
+    )
+
+    & $ScriptPath @ScriptArgs
+}
+
 function Get-ResultLabel {
     param([bool]$Ran, [int]$Code)
     if (-not $Ran) { return 'SKIPPED' }
@@ -52,7 +61,7 @@ if (-not $SkipReview) {
     $reviewRan = $true
     $reviewArgs = @('review')
     if ($SkipTests) { $reviewArgs += '-SkipTests' }
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $wfScript @reviewArgs
+    Invoke-LocalPowerShellScript -ScriptPath $wfScript -ScriptArgs $reviewArgs
     $reviewCode = $LASTEXITCODE
     if ($reviewCode -ne 0) {
         Write-Warn 'Review reported failures.'
@@ -62,7 +71,7 @@ if (-not $SkipReview) {
 if (-not $SkipAudit) {
     Write-Step 'Session closure audit'
     $auditRan = $true
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $wfScript audit
+    Invoke-LocalPowerShellScript -ScriptPath $wfScript -ScriptArgs @('audit')
     $auditCode = $LASTEXITCODE
     if ($auditCode -ne 0) {
         Write-Warn 'Audit generation reported failures.'
@@ -72,7 +81,7 @@ if (-not $SkipAudit) {
 if (-not $SkipGovernance -and (Test-Path $governanceScript)) {
     Write-Step 'Session closure governance check'
     $govRan = $true
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $governanceScript -SkipFallbackTests
+    Invoke-LocalPowerShellScript -ScriptPath $governanceScript -ScriptArgs @('-SkipFallbackTests')
     $govCode = $LASTEXITCODE
     if ($govCode -ne 0) {
         Write-Warn 'Governance validation reported failures.'

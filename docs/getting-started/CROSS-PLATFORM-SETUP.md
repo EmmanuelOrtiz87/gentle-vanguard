@@ -9,6 +9,13 @@ The Gentleman Foundation stack now supports **all platforms** through orchestrat
 - **macOS**: Bash, zsh, sh
 - **WSL**: Full support via bash
 
+## Support Model
+
+1. The workspace is platform-aware for Windows, Linux, macOS, and WSL.
+2. The wrapper commands are shell-aware and route to the correct entrypoint.
+3. The tool activation and update scripts are PowerShell-based, but they now resolve platform-specific paths, home directories, and install metadata dynamically.
+4. This means the stack is highly portable across OSes, while PowerShell remains the canonical implementation runtime for automation.
+
 ## Quick Start
 
 ### Windows (PowerShell)
@@ -86,14 +93,14 @@ Same commands work on **all platforms**:
 | Script | Platform | Purpose |
 |--------|----------|---------|
 | `scripts/diagnostics/system-diagnostics.sh` | Linux/macOS/WSL | Check Go, Git, Engram, Node.js |
-| `scripts/diagnostics/system-diagnostics.ps1` | Windows/PowerShell | Windows version of diagnostics |
+| `scripts/diagnostics/system-diagnostics.ps1` | Windows/PowerShell | PowerShell diagnostics entrypoint for Windows hosts |
 
 ### Initialization Scripts
 
 | Script | Platform | Purpose |
 |--------|----------|---------|
 | `scripts/utilities/auto-init-dev-environment.sh` | Linux/macOS/WSL | Auto-detect and initialize stack |
-| `scripts/utilities/auto-init-dev-environment.ps1` | Windows/PowerShell | Windows version with auto-install |
+| `scripts/utilities/auto-init-dev-environment.ps1` | Windows/PowerShell | PowerShell auto-init entrypoint with auto-install support |
 
 ### Workflow CLI
 
@@ -129,6 +136,11 @@ Actions:
 - Auto-installs Engram CLI via `go install`
 - Initializes Engram data directory
 - Auto-links orchestrator skill
+
+Additional behavior:
+- Resolves system dependency installation metadata per platform from `config/workspace.config.json`
+- Detects `bash` as a cross-platform capability for bash-installed tools such as `gga`
+- Uses platform-aware PATH refresh logic after installation attempts
 
 ### diagnose
 Detailed system diagnostics (verbose):
@@ -239,6 +251,13 @@ Before each commit:
 
 ## Troubleshooting
 
+## Compatibility Notes
+
+1. `wf.ps1`, `ensure-tools-active.ps1`, and `update-tools.ps1` are the canonical automation scripts.
+2. On Linux or macOS, prefer `pwsh` when invoking the PowerShell scripts directly.
+3. `gga` still requires `bash` because its upstream installer is shell-based.
+4. AI tooling is configurable and optional; the workspace does not require a single IDE or AI provider to be hardcoded.
+
 ### Problem: "Setup scripts not executable"
 
 **Linux/macOS:**
@@ -275,8 +294,8 @@ Explicitly use desired shell:
 # Force bash
 bash scripts/utilities/wf.sh status
 
-# Force PowerShell (Windows)
-powershell.exe -File scripts\utilities\wf.ps1 status
+# Force PowerShell
+powershell -File scripts\utilities\wf.ps1 status
 ```
 
 ## Development

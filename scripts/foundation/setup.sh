@@ -229,7 +229,7 @@ PROJECT_ROOT="$SCRIPT_DIR"
 # Detect what we're running with
 if command -v powershell &> /dev/null && [ -f "$PROJECT_ROOT/scripts/utilities/wf.ps1" ]; then
     # Try PowerShell if available
-    powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$PROJECT_ROOT/scripts/utilities/wf.ps1" "$@"
+    powershell -NoProfile -ExecutionPolicy Bypass -File "$PROJECT_ROOT/scripts/utilities/wf.ps1" "$@"
 elif [ -f "$PROJECT_ROOT/scripts/utilities/wf.sh" ]; then
     # Fall back to bash version
     bash "$PROJECT_ROOT/scripts/utilities/wf.sh" "$@"

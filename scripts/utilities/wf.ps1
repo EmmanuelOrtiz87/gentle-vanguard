@@ -40,6 +40,15 @@ function Write-Error {
     Write-Host "[ERROR] $Message" -ForegroundColor Red
 }
 
+function Invoke-LocalPowerShellScript {
+    param(
+        [string]$ScriptPath,
+        [string[]]$ScriptArgs = @()
+    )
+
+    & $ScriptPath @ScriptArgs
+}
+
 function Get-GitInfo {
     $branch = git rev-parse --abbrev-ref HEAD 2>$null
     $status = git status --porcelain 2>$null
@@ -138,7 +147,7 @@ function Invoke-ScriptGovernanceValidation {
     }
 
     Write-Step 'Running script governance validation...'
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $validationScript
+    Invoke-LocalPowerShellScript -ScriptPath $validationScript
     if ($LASTEXITCODE -eq 0) {
         return @{
             Passed = $true
@@ -199,7 +208,7 @@ function Invoke-GitFlowValidation {
     }
 
     Write-Step 'Running GitFlow policy validation...'
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $gitflowScript @gitflowArgs
+    Invoke-LocalPowerShellScript -ScriptPath $gitflowScript -ScriptArgs $gitflowArgs
     if ($LASTEXITCODE -eq 0) {
         return @{
             Passed = $true
@@ -353,7 +362,7 @@ function Invoke-AutomaticSuggestions {
         $homologateScript = Join-Path $scriptDir '..\validation\homologate-workspace.ps1'
         if (Test-Path $homologateScript) {
             Write-Step 'Applying homologation suggestions...'
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $homologateScript -Apply
+            Invoke-LocalPowerShellScript -ScriptPath $homologateScript -ScriptArgs @('-Apply')
             if ($LASTEXITCODE -eq 0) {
                 $actions += 'Applied homologation fixes via homologate-workspace.ps1 -Apply.'
             } else {
@@ -543,7 +552,7 @@ function Invoke-Update {
 
     $updateScript = Join-Path $scriptDir '..\validation\update-all.ps1'
     if (Test-Path $updateScript) {
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $updateScript -All -Force
+        Invoke-LocalPowerShellScript -ScriptPath $updateScript -ScriptArgs @('-All', '-Force')
         if ($LASTEXITCODE -ne 0) { Write-Warning "Foundation update returned exit $LASTEXITCODE" }
     } else {
         Write-Warning "update-all.ps1 not found - skipping foundation update"
@@ -1329,7 +1338,7 @@ function Show-IdeStatus {
         exit 1
     }
 
-    $ideDataRaw = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $detectScript -AsJson
+    $ideDataRaw = Invoke-LocalPowerShellScript -ScriptPath $detectScript -ScriptArgs @('-AsJson')
     $ideData = $ideDataRaw | ConvertFrom-Json
 
     Write-Host "IDE: $($ideData.ideName)" -ForegroundColor White
@@ -1372,7 +1381,7 @@ switch ($Command) {
             $startSessionArgs = @()
             if (-not [string]::IsNullOrWhiteSpace($Scope)) { $startSessionArgs += @('-TaskName', $Scope) }
             if ($Force) { $startSessionArgs += '-Force' }
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $startScript @startSessionArgs
+            Invoke-LocalPowerShellScript -ScriptPath $startScript -ScriptArgs $startSessionArgs
         } else {
             Write-Error "Start session script not found: $startScript"
             exit 1
@@ -1389,7 +1398,7 @@ switch ($Command) {
         $startScript = Join-Path $scriptDir 'start-session.ps1'
         if (Test-Path $startScript) {
             $taskBriefArgs = @('-TaskName', $Scope, '-Force')
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $startScript @taskBriefArgs
+            Invoke-LocalPowerShellScript -ScriptPath $startScript -ScriptArgs $taskBriefArgs
         } else {
             Write-Error "Start session script not found: $startScript"
             exit 1
@@ -1405,7 +1414,7 @@ switch ($Command) {
             if ($SkipReview) { $endArgs += '-SkipReview' }
             if ($SkipTests) { $endArgs += '-SkipTests' }
             if ($Force) { $endArgs += '-Force' }
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $endScript @endArgs
+            Invoke-LocalPowerShellScript -ScriptPath $endScript -ScriptArgs $endArgs
         } else {
             Write-Error "End session script not found: $endScript"
             exit 1
@@ -1420,7 +1429,7 @@ switch ($Command) {
             if (-not [string]::IsNullOrWhiteSpace($Scope)) { $dayEndArgs += @('-SessionId', $Scope) }
             if ($SkipTests) { $dayEndArgs += '-SkipValidation' }
             if ($Force) { $dayEndArgs += '-Force' }
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $dayEndScript @dayEndArgs
+            Invoke-LocalPowerShellScript -ScriptPath $dayEndScript -ScriptArgs $dayEndArgs
         } else {
             Write-Error "Day-end closure script not found: $dayEndScript"
             exit 1
@@ -1444,7 +1453,7 @@ switch ($Command) {
         }
         $toolsArgs = @()
         if ($Force) { $toolsArgs += '-Force' }
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $toolsScript @toolsArgs
+        Invoke-LocalPowerShellScript -ScriptPath $toolsScript -ScriptArgs $toolsArgs
     }
 
     'review' {
@@ -1559,7 +1568,7 @@ switch ($Command) {
         if (Test-Path $healthScript) {
             $healthArgs = @('-AutoStart')
             if ($Force) { $healthArgs += "-Force" }
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $healthScript @healthArgs
+            Invoke-LocalPowerShellScript -ScriptPath $healthScript -ScriptArgs $healthArgs
         } else {
             Write-Error "Health check script not found: $healthScript"
             exit 1
@@ -1573,7 +1582,7 @@ switch ($Command) {
                 $homologateArgs += '-FailOnChanges'
             }
 
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $homologateScript @homologateArgs
+            Invoke-LocalPowerShellScript -ScriptPath $homologateScript -ScriptArgs $homologateArgs
 
             if ($StrictCleanup -and $LASTEXITCODE -ne 0) {
                 Write-Error "Strict cleanup mode failed: run '.\scripts\utilities\wf.ps1 homologate apply' to remediate drift."
@@ -1586,7 +1595,7 @@ switch ($Command) {
         Write-Step "Checking Orchestrator and Engram integration"
         $statusScript = Join-Path $scriptDir 'orchestrator-status.ps1'
         if (Test-Path $statusScript) {
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $statusScript
+            Invoke-LocalPowerShellScript -ScriptPath $statusScript
         } else {
             Write-Error "Orchestrator status script not found: $statusScript"
             exit 1
@@ -1601,7 +1610,7 @@ switch ($Command) {
         if (Test-Path $installScript) {
             $installArgs = @()
             if ($Force) { $installArgs += '-Force' }
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $installScript @installArgs
+            Invoke-LocalPowerShellScript -ScriptPath $installScript -ScriptArgs $installArgs
         } else {
             Write-Error "Install script not found: $installScript"
             exit 1
@@ -1622,7 +1631,7 @@ switch ($Command) {
             }
         }
         if ($diagScript) {
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $diagScript -AutoRepair -Quiet
+            Invoke-LocalPowerShellScript -ScriptPath $diagScript -ScriptArgs @('-AutoRepair', '-Quiet')
             Write-Success "Stack verification and repair completed"
         } else {
             Write-Error "Diagnostics script not found"
@@ -1642,7 +1651,7 @@ switch ($Command) {
             if (Test-Path $path) {
                 $diagnoseArgs = @()
                 if ($JSON) { $diagnoseArgs += '-JSON' }
-                & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $path @diagnoseArgs
+                Invoke-LocalPowerShellScript -ScriptPath $path -ScriptArgs $diagnoseArgs
                 $found = $true
                 break
             }
@@ -1663,7 +1672,7 @@ switch ($Command) {
         $migrateArgs = @()
         if ($SkipTests) { $migrateArgs += '-DryRun' }
         if ($Force)     { $migrateArgs += '-Force' }
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $migrateScript @migrateArgs
+        Invoke-LocalPowerShellScript -ScriptPath $migrateScript -ScriptArgs $migrateArgs
     }
 
     'context-pack' {
@@ -1679,7 +1688,7 @@ switch ($Command) {
             $contextArgs += @('-Objective', $Scope)
         }
 
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $contextScript @contextArgs
+        Invoke-LocalPowerShellScript -ScriptPath $contextScript -ScriptArgs $contextArgs
     }
 
     'compact-start' {
@@ -1695,7 +1704,7 @@ switch ($Command) {
             $compactArgs += @('-Objective', $Scope)
         }
 
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $compactScript @compactArgs
+        Invoke-LocalPowerShellScript -ScriptPath $compactScript -ScriptArgs $compactArgs
     }
 
     'context-metrics' {
@@ -1714,7 +1723,7 @@ switch ($Command) {
             }
         }
 
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $metricsScript -Days $days
+        Invoke-LocalPowerShellScript -ScriptPath $metricsScript -ScriptArgs @('-Days', [string]$days)
     }
 
     'homologate' {
@@ -1730,7 +1739,7 @@ switch ($Command) {
             $homologateArgs += '-Apply'
         }
 
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $homologateScript @homologateArgs
+        Invoke-LocalPowerShellScript -ScriptPath $homologateScript -ScriptArgs $homologateArgs
     }
 
     'agent-alert' {
@@ -1746,7 +1755,7 @@ switch ($Command) {
             $alertArgs += '-Strict'
         }
 
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $alertScript @alertArgs
+        Invoke-LocalPowerShellScript -ScriptPath $alertScript -ScriptArgs $alertArgs
     }
 }
 

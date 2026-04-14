@@ -68,8 +68,8 @@ Execute the mechanical aspects of session management while coordinating with the
 1. Validate specification
 2. Run code review
 3. Handle findings (if any)
-4. Ask: ¿Cumplimos spec?
-5. Ask: ¿Create PR?
+4. Ask: Did we meet the spec?
+5. Ask: Create PR?
 6. If YES:
    - Create branch (if needed)
    - Commit
@@ -159,13 +159,13 @@ Brief description of session work.
 
 ### Options
 
-1) Arreglar TODO ahora (recommended)
-2) Arreglar CRITICAL/HIGH ahora, rest después
-3) Crear PR, arreglar después
-4) Solo crear PR
-5) Volver al trabajo
+1) Fix everything now (recommended)
+2) Fix CRITICAL/HIGH now, handle the rest later
+3) Create the PR, then fix later
+4) Only create the PR
+5) Go back to implementation
 
-**Elige:**
+**Choose:**
 ```
 
 ---
@@ -243,7 +243,7 @@ todowrite([
 - [ ] Code review run (before PR)
 - [ ] Findings handled
 - [ ] Commit follows convention
-- [ ] User asked: ¿Create PR?
+- [ ] User asked: Create PR?
 - [ ] Pushed if confirmed
 - [ ] mem_save executed
 
