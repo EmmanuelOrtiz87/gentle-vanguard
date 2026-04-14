@@ -30,6 +30,7 @@ Implement a simple project in `demos/shared/task-tracker/` with commands:
 2. Confirm stack status.
 3. Start session with a meaningful task name.
 4. If `.engram-data/` does not exist yet, it will be created automatically on first Engram use.
+5. If you plan to show Step 4 live, run `./scripts/utilities/wf.ps1 install-engram` during preflight to avoid installing tools in front of the audience.
 
 ```powershell
 ./scripts/utilities/wf.ps1 status
@@ -118,6 +119,7 @@ Expected outcome:
 1. Team sees continuity strategy between sessions.
 2. Less re-briefing overhead in follow-up work.
 3. Fresh environments create `.engram-data/engram-session` automatically instead of warning or blocking.
+4. If Engram CLI is not present yet, `wf.ps1 install-engram` is the supported setup path; the demo should not vendor a duplicate binary inside `demos/`.
 
 ### Step 5 - Code Review and Audit
 
