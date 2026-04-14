@@ -56,8 +56,21 @@ if (Test-Path $markerFile) {
     }
 }
 
-# 3. Verify Engram (optional for demo base, required for Segment 4)
-Write-Step "Checking Engram CLI"
+# 3. Verify and auto-update Engram (optional for demo base, required for Segment 4)
+Write-Step "Checking and updating tools"
+$updateScript = Join-Path $workspaceRoot 'scripts\utilities\update-tools.ps1'
+if (Test-Path $updateScript) {
+    Write-Info "Updating tools to latest versions..."
+    & $updateScript -Quiet | Out-Null
+    if ($LASTEXITCODE -eq 0) {
+        Write-Ok "Tools updated successfully"
+    } else {
+        Write-Warn "Tool update completed with issues (non-critical for demo)"
+    }
+} else {
+    Write-Warn "update-tools.ps1 not found - skipping auto-update"
+}
+
 $engramCmd = Get-Command engram -ErrorAction SilentlyContinue
 if ($engramCmd) {
     Write-Ok "Engram available: $(& $engramCmd version | Select-Object -First 1)"
