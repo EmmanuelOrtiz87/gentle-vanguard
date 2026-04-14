@@ -46,7 +46,13 @@ if (Test-Path $configFile) {
     Write-Host "  active: $($config.active)" -ForegroundColor White
     Write-Host "  workflow_mode: $($config.workflow_mode)" -ForegroundColor White
     $responseMode = if ($config.PSObject.Properties.Name -contains 'communication_response_mode') { $config.communication_response_mode } else { 'executive (default)' }
+    $languageMode = if ($config.PSObject.Properties.Name -contains 'communication_language') { $config.communication_language } else { 'es (default)' }
+    $compressionProfile = if ($config.PSObject.Properties.Name -contains 'response_profiles' -and $config.response_profiles -and $config.response_profiles.active) { $config.response_profiles.active } else { 'lite (default)' }
+    $defaultPreset = if ($config.PSObject.Properties.Name -contains 'communication_presets' -and $config.communication_presets -and $config.communication_presets.default) { $config.communication_presets.default } else { 'bugfix (default)' }
+    Write-Host "  communication_language: $languageMode" -ForegroundColor White
     Write-Host "  communication_response_mode: $responseMode" -ForegroundColor White
+    Write-Host "  response_profile: $compressionProfile" -ForegroundColor White
+    Write-Host "  communication_preset_default: $defaultPreset" -ForegroundColor White
     Write-Host "  memory_integration: $($config.memory_integration)" -ForegroundColor White
     Write-Host "  auto_detect: $($config.auto_detect)" -ForegroundColor White
 } else {

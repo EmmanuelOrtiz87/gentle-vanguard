@@ -1262,7 +1262,7 @@ COMMANDS:
     install-engram       Install or verify Engram CLI availability
     orchestrator-status  Validate orchestrator and Engram integration
     custom-rules-status  Show custom technical/business/review rule loading status
-    response-mode [arg]  Show/set communication language, detail level, and compression profile
+    response-mode [arg]  Show/set language, detail, profile, presets, and recommendation
     ide-status           Detect IDE session and suggest activation command
     diagnose             Full system diagnostics report
     verify               Quick stack verification & auto-repair
@@ -1311,6 +1311,8 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 response-mode profile:ultra  Set compression profile
     .\scripts\utilities\wf.ps1 response-mode language:pt-BR Set communication language
     .\scripts\utilities\wf.ps1 response-mode detail:expanded Set detail level
+    .\scripts\utilities\wf.ps1 response-mode preset:bugfix Apply preset for task type
+    .\scripts\utilities\wf.ps1 response-mode recommend:docs:high Recommend mode for preset+risk
     .\scripts\utilities\wf.ps1 ide-status          Detect IDE and show recommended activation
     .\scripts\utilities\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
     .\scripts\utilities\wf.ps1 update-tools         Update gga / engram / gentle-ai (Windows: go install, not brew)
@@ -1666,6 +1668,15 @@ switch ($Command) {
             elseif ($scopeText -match '^detail:(.+)$') {
                 $modeParams = @{ Mode = 'set-detail'; Detail = $matches[1] }
             }
+            elseif ($scopeText -match '^preset:(.+)$') {
+                $modeParams = @{ Mode = 'set-preset'; Preset = $matches[1] }
+            }
+            elseif ($scopeText -match '^recommend:([^:]+):([^:]+)$') {
+                $modeParams = @{ Mode = 'recommend'; Preset = $matches[1]; Risk = $matches[2] }
+            }
+            elseif ($scopeText -match '^recommend:([^:]+)$') {
+                $modeParams = @{ Mode = 'recommend'; Preset = $matches[1] }
+            }
             elseif ($scopeText -in @('lite', 'lleno', 'ultra')) {
                 $modeParams = @{ Mode = 'set'; Profile = $scopeText }
             }
@@ -1674,6 +1685,9 @@ switch ($Command) {
             }
             elseif ($scopeText -in @('simple', 'executive', 'expanded')) {
                 $modeParams = @{ Mode = 'set-detail'; Detail = $scopeText }
+            }
+            elseif ($scopeText -in @('bugfix', 'refactor', 'docs', 'audit-review', 'executive-demo')) {
+                $modeParams = @{ Mode = 'set-preset'; Preset = $scopeText }
             }
         }
 

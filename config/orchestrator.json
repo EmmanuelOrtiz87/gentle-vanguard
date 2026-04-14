@@ -31,6 +31,43 @@
                                    "executive",
                                    "expanded"
                                ],
+    "communication_presets":  {
+                                  "default":  "bugfix",
+                                  "allow":  [
+                                                "bugfix",
+                                                "refactor",
+                                                "docs",
+                                                "audit-review",
+                                                "executive-demo"
+                                            ],
+                                  "profiles":  {
+                                                   "bugfix":  {
+                                                                  "language":  "es",
+                                                                  "detail":  "executive",
+                                                                  "compression":  "ultra"
+                                                              },
+                                                   "refactor":  {
+                                                                    "language":  "es",
+                                                                    "detail":  "executive",
+                                                                    "compression":  "lleno"
+                                                                },
+                                                   "docs":  {
+                                                                "language":  "es",
+                                                                "detail":  "expanded",
+                                                                "compression":  "lite"
+                                                            },
+                                                   "audit-review":  {
+                                                                        "language":  "es",
+                                                                        "detail":  "expanded",
+                                                                        "compression":  "lleno"
+                                                                    },
+                                                   "executive-demo":  {
+                                                                          "language":  "es",
+                                                                          "detail":  "executive",
+                                                                          "compression":  "lite"
+                                                                      }
+                                               }
+                              },
     "response_profiles":  {
                               "active":  "lite",
                               "allow":  [
