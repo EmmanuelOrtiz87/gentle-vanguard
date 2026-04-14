@@ -12,6 +12,7 @@ Audiencia: Ejecutivos (5 min) + Equipo de desarrollo (15 min total)
 4. Repo limpio: `git status` sin cambios pendientes.
 5. Si quieres mostrar Engram en vivo: confirmar `engram --version` activo o dejar que `run-engram.ps1` complete el setup básico en primer uso.
 6. `.engram-data/` se crea automáticamente en la primera invocación; su ausencia inicial ya no debe tratarse como error del demo.
+7. Para una demo sin sorpresas, correr `./scripts/utilities/wf.ps1 install-engram` antes de entrar a la presentación.
 
 ---
 
@@ -173,6 +174,11 @@ tasks_total=1  tasks_done=1  tasks_pending=0
 ```powershell
 ./scripts/utilities/run-engram.ps1 --help
 ```
+
+### Nota operativa
+
+> "No duplicamos Engram dentro de `demos/`.
+> La instalación soportada vive en el stack (`wf.ps1 install-engram`) para evitar deriva entre máquinas."
 
 > "Si Engram está activo, el ciclo es:"
 

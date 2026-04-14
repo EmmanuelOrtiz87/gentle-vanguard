@@ -7,6 +7,11 @@
 
 ## Comandos por Segmento
 
+### Preflight opcional (si vas a mostrar Engram)
+```powershell
+./scripts/utilities/wf.ps1 install-engram
+```
+
 ### Apertura
 ```powershell
 ./scripts/utilities/wf.ps1 status
