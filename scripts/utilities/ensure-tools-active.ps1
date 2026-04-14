@@ -120,20 +120,50 @@ function Start-GentleAI {
     Write-Step "Checking Gentle-AI CLI..."
 
     $gentleAIScript = Join-Path $scriptDir 'run-gentle-ai.ps1'
-    $gentleAIAvailable = Test-ToolAvailable "Gentle-AI" {
-        $cmd = Get-Command gentle-ai -ErrorAction SilentlyContinue
-        if ($cmd) { return $true }
-        return (Test-Path $gentleAIScript)
+
+    # Check native binary first — compat launcher existence is not sufficient.
+    $nativeCmd = Get-Command gentle-ai -ErrorAction SilentlyContinue
+    if ($nativeCmd) {
+        Write-Success "Gentle-AI is available (native)"
+        return
     }
 
-    if (-not $gentleAIAvailable -and $AutoStart) {
-        if (Test-Path $gentleAIScript) {
-            Write-Warning "Native Gentle-AI CLI not found. Using compatibility launcher."
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $gentleAIScript status | Out-Null
+    # Native binary not found.
+    if ($AutoStart) {
+        # Attempt auto-install via go install (Go is required by workspace.config.json).
+        $goCmd = Get-Command go -ErrorAction SilentlyContinue
+        if ($goCmd) {
+            Write-Host "[INFO] Gentle-AI not found. Installing via 'go install'..." -ForegroundColor Cyan
+            go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest 2>&1 | Out-Null
+            # Re-check after install attempt.
+            $nativeCmd = Get-Command gentle-ai -ErrorAction SilentlyContinue
+            if ($nativeCmd) {
+                Write-Success "Gentle-AI installed successfully"
+                return
+            }
+            # Binary installed but not yet in session PATH — try $GOPATH/bin directly.
+            $goBin = if ($env:GOBIN) { $env:GOBIN } elseif ($env:GOPATH) { Join-Path $env:GOPATH 'bin' } else { Join-Path $env:USERPROFILE 'go\bin' }
+            $gentleExe = Join-Path $goBin 'gentle-ai.exe'
+            if (-not (Test-Path $gentleExe)) { $gentleExe = Join-Path $goBin 'gentle-ai' }
+            if (Test-Path $gentleExe) {
+                Write-Success "Gentle-AI installed at $gentleExe (restart terminal or add $goBin to PATH)"
+                return
+            }
+            Write-Warning "go install ran but gentle-ai binary not found. Check GOBIN/PATH."
         } else {
-            Write-Warning "Gentle-AI tooling is unavailable."
-            Write-Host "Expected launcher: $gentleAIScript" -ForegroundColor Yellow
+            Write-Warning "Go not found — cannot auto-install Gentle-AI."
+            Write-Host "  Install Go from https://go.dev/dl/ then run: wf.ps1 update-tools" -ForegroundColor Yellow
         }
+    }
+
+    # Fallback: compat launcher.
+    if (Test-Path $gentleAIScript) {
+        Write-Warning "Native Gentle-AI not available. Using compatibility launcher."
+        if ($AutoStart) {
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $gentleAIScript status | Out-Null
+        }
+    } else {
+        Write-Warning "Gentle-AI tooling unavailable. Run: .\scripts\utilities\wf.ps1 update-tools"
     }
 }
 
