@@ -142,6 +142,8 @@ Automated development workflow commands.
 .\scripts\utilities\wf.ps1 response-mode profile:ultra
 .\scripts\utilities\wf.ps1 response-mode language:pt-BR
 .\scripts\utilities\wf.ps1 response-mode detail:expanded
+.\scripts\utilities\wf.ps1 response-mode preset:bugfix
+.\scripts\utilities\wf.ps1 response-mode recommend:docs:high
 
 # Generate response-mode savings matrix
 .\scripts\utilities\response-mode-efficiency-matrix.ps1

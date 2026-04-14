@@ -42,12 +42,20 @@ Keys:
 - `communication_response_mode`: `simple | executive | expanded`
 - `allowed_response_modes`: allowed values for local tooling checks and status visibility
 - `response_profiles.active`: `lite | lleno | ultra` (compression style)
+- `communication_presets.default`: default preset (`bugfix | refactor | docs | audit-review | executive-demo`)
 
 Current local baseline for this workspace:
 
 - `communication_language = es`
 - `communication_response_mode = executive`
 - `response_profiles.active = lite`
+- `communication_presets.default = bugfix`
+
+Preset workflow:
+
+1. Ask orchestrator recommendation (`orchestrator-next-steps`).
+2. Apply preset (`wf.ps1 response-mode preset:<name>`).
+3. Escalate by risk when needed (`wf.ps1 response-mode recommend:<name>:high`).
 
 ## Detail Escalation
 

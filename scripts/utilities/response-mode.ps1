@@ -1,5 +1,5 @@
 ﻿param(
-    [ValidateSet('status', 'list', 'set', 'set-language', 'set-detail', 'export')]
+    [ValidateSet('status', 'list', 'set', 'set-language', 'set-detail', 'set-preset', 'recommend', 'export')]
     [string]$Mode = 'status',
     [ValidateSet('lite', 'lleno', 'ultra')]
     [string]$Profile,
@@ -7,6 +7,10 @@
     [string]$Language,
     [ValidateSet('simple', 'executive', 'expanded')]
     [string]$Detail,
+    [ValidateSet('bugfix', 'refactor', 'docs', 'audit-review', 'executive-demo')]
+    [string]$Preset,
+    [ValidateSet('low', 'medium', 'high')]
+    [string]$Risk = 'medium',
     [switch]$AsJson,
     [switch]$PassThru,
     [switch]$Quiet
@@ -17,12 +21,23 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 $configPath = Join-Path $repoRoot 'config\orchestrator.json'
 
-function Get-DefaultProfiles {
+function Get-DefaultConfig {
     return [ordered]@{
         communication_language = 'es'
         allowed_languages = @('es', 'pt-BR', 'en')
         communication_response_mode = 'executive'
         allowed_response_modes = @('simple', 'executive', 'expanded')
+        communication_presets = [ordered]@{
+            default = 'bugfix'
+            allow = @('bugfix', 'refactor', 'docs', 'audit-review', 'executive-demo')
+            profiles = [ordered]@{
+                'bugfix' = [ordered]@{ language = 'es'; detail = 'executive'; compression = 'ultra' }
+                'refactor' = [ordered]@{ language = 'es'; detail = 'executive'; compression = 'lleno' }
+                'docs' = [ordered]@{ language = 'es'; detail = 'expanded'; compression = 'lite' }
+                'audit-review' = [ordered]@{ language = 'es'; detail = 'expanded'; compression = 'lleno' }
+                'executive-demo' = [ordered]@{ language = 'es'; detail = 'executive'; compression = 'lite' }
+            }
+        }
         response_profiles = [ordered]@{
             active = 'lite'
             allow = @('lite', 'lleno', 'ultra')
@@ -59,126 +74,129 @@ function Get-DefaultProfiles {
 function Ensure-ConfigDefaults {
     param([pscustomobject]$Config)
 
-    $defaults = Get-DefaultProfiles
+    $defaults = Get-DefaultConfig
 
-    if (-not $Config.PSObject.Properties['communication_language']) {
-        Add-Member -InputObject $Config -MemberType NoteProperty -Name 'communication_language' -Value $defaults.communication_language
-    }
-    if (-not $Config.PSObject.Properties['allowed_languages']) {
-        Add-Member -InputObject $Config -MemberType NoteProperty -Name 'allowed_languages' -Value @($defaults.allowed_languages)
-    }
-    if (-not $Config.PSObject.Properties['communication_response_mode']) {
-        Add-Member -InputObject $Config -MemberType NoteProperty -Name 'communication_response_mode' -Value $defaults.communication_response_mode
-    }
-    if (-not $Config.PSObject.Properties['allowed_response_modes']) {
-        Add-Member -InputObject $Config -MemberType NoteProperty -Name 'allowed_response_modes' -Value @($defaults.allowed_response_modes)
-    }
-    if (-not $Config.PSObject.Properties['response_profiles']) {
-        Add-Member -InputObject $Config -MemberType NoteProperty -Name 'response_profiles' -Value ([pscustomobject]$defaults.response_profiles)
-    }
-
-    if (-not $Config.response_profiles.PSObject.Properties['active']) {
-        $Config.response_profiles | Add-Member -MemberType NoteProperty -Name 'active' -Value $defaults.response_profiles.active -Force
-    }
-    if (-not $Config.response_profiles.PSObject.Properties['allow']) {
-        $Config.response_profiles | Add-Member -MemberType NoteProperty -Name 'allow' -Value @($defaults.response_profiles.allow) -Force
-    }
-    if (-not $Config.response_profiles.PSObject.Properties['profiles']) {
-        $Config.response_profiles | Add-Member -MemberType NoteProperty -Name 'profiles' -Value ([pscustomobject]$defaults.response_profiles.profiles) -Force
-    }
-
-    foreach ($name in $defaults.response_profiles.allow) {
-        if (-not $Config.response_profiles.profiles.PSObject.Properties[$name]) {
-            $Config.response_profiles.profiles | Add-Member -MemberType NoteProperty -Name $name -Value ([pscustomobject]$defaults.response_profiles.profiles[$name])
+    foreach ($key in @('communication_language', 'allowed_languages', 'communication_response_mode', 'allowed_response_modes', 'communication_presets', 'response_profiles')) {
+        if (-not $Config.PSObject.Properties[$key]) {
+            Add-Member -InputObject $Config -MemberType NoteProperty -Name $key -Value $defaults[$key]
         }
     }
 
-    # Remove deprecated Chinese profiles if present.
     foreach ($deprecated in @('wenyan-lite', 'wenyan-full', 'wenyan-ultra')) {
         if ($Config.response_profiles.profiles.PSObject.Properties[$deprecated]) {
             $Config.response_profiles.profiles.PSObject.Properties.Remove($deprecated)
         }
     }
 
-    $Config.response_profiles.allow = @($Config.response_profiles.allow | ForEach-Object { [string]$_ } | Where-Object { $_ -in @('lite', 'lleno', 'ultra') })
-    if ($Config.response_profiles.allow.Count -eq 0) {
-        $Config.response_profiles.allow = @('lite', 'lleno', 'ultra')
-    }
-
-    if ($Config.response_profiles.active -notin $Config.response_profiles.allow) {
-        $Config.response_profiles.active = 'lite'
-    }
-
     $Config.allowed_languages = @($Config.allowed_languages | ForEach-Object { [string]$_ } | Where-Object { $_ -in @('es', 'pt-BR', 'en') })
-    if ($Config.allowed_languages.Count -eq 0) {
-        $Config.allowed_languages = @('es', 'pt-BR', 'en')
-    }
-
-    if ($Config.communication_language -notin $Config.allowed_languages) {
-        $Config.communication_language = 'es'
-    }
+    if ($Config.allowed_languages.Count -eq 0) { $Config.allowed_languages = @('es', 'pt-BR', 'en') }
+    if ($Config.communication_language -notin $Config.allowed_languages) { $Config.communication_language = 'es' }
 
     $Config.allowed_response_modes = @($Config.allowed_response_modes | ForEach-Object { [string]$_ } | Where-Object { $_ -in @('simple', 'executive', 'expanded') })
-    if ($Config.allowed_response_modes.Count -eq 0) {
-        $Config.allowed_response_modes = @('simple', 'executive', 'expanded')
+    if ($Config.allowed_response_modes.Count -eq 0) { $Config.allowed_response_modes = @('simple', 'executive', 'expanded') }
+    if ($Config.communication_response_mode -notin $Config.allowed_response_modes) { $Config.communication_response_mode = 'executive' }
+
+    $Config.response_profiles.allow = @($Config.response_profiles.allow | ForEach-Object { [string]$_ } | Where-Object { $_ -in @('lite', 'lleno', 'ultra') })
+    if ($Config.response_profiles.allow.Count -eq 0) { $Config.response_profiles.allow = @('lite', 'lleno', 'ultra') }
+    if ($Config.response_profiles.active -notin $Config.response_profiles.allow) { $Config.response_profiles.active = 'lite' }
+
+    if (-not $Config.communication_presets.PSObject.Properties['allow']) {
+        $Config.communication_presets | Add-Member -MemberType NoteProperty -Name 'allow' -Value @('bugfix', 'refactor', 'docs', 'audit-review', 'executive-demo')
+    }
+    if (-not $Config.communication_presets.PSObject.Properties['profiles']) {
+        $Config.communication_presets | Add-Member -MemberType NoteProperty -Name 'profiles' -Value ([pscustomobject](Get-DefaultConfig).communication_presets.profiles)
     }
 
-    if ($Config.communication_response_mode -notin $Config.allowed_response_modes) {
-        $Config.communication_response_mode = 'executive'
+    $Config.communication_presets.allow = @($Config.communication_presets.allow | ForEach-Object { [string]$_ } | Where-Object { $_ -in @('bugfix', 'refactor', 'docs', 'audit-review', 'executive-demo') })
+    if ($Config.communication_presets.allow.Count -eq 0) { $Config.communication_presets.allow = @('bugfix', 'refactor', 'docs', 'audit-review', 'executive-demo') }
+
+    if (-not $Config.communication_presets.PSObject.Properties['default'] -or $Config.communication_presets.default -notin $Config.communication_presets.allow) {
+        $Config.communication_presets.default = 'bugfix'
     }
 
     return $Config
 }
 
 function Get-Config {
-    $defaults = Get-DefaultProfiles
-    if (-not (Test-Path $configPath)) {
-        return [pscustomobject]$defaults
-    }
-
-    try {
-        $config = Get-Content -Path $configPath -Raw -Encoding UTF8 | ConvertFrom-Json
-    }
-    catch {
-        return [pscustomobject]$defaults
-    }
-
+    $defaults = [pscustomobject](Get-DefaultConfig)
+    if (-not (Test-Path $configPath)) { return $defaults }
+    try { $config = Get-Content -Path $configPath -Raw -Encoding UTF8 | ConvertFrom-Json } catch { return $defaults }
     return Ensure-ConfigDefaults -Config $config
 }
 
 function Save-Config {
     param([pscustomobject]$Config)
-
     $json = $Config | ConvertTo-Json -Depth 30
     Set-Content -Path $configPath -Value $json -Encoding UTF8
 }
 
 function Emit-Output {
+    param([string]$Text, [switch]$AsPassThru)
+    if ($AsPassThru) { Write-Output $Text }
+    elseif (-not $Quiet) { Write-Host $Text }
+}
+
+function Apply-Preset {
+    param([pscustomobject]$Config, [string]$PresetName)
+
+    if ($Config.communication_presets.allow -notcontains $PresetName) {
+        throw "Unsupported preset '$PresetName'. Allowed: $($Config.communication_presets.allow -join ', ')"
+    }
+
+    $presetData = $Config.communication_presets.profiles.$PresetName
+    if (-not $presetData) {
+        throw "Preset '$PresetName' has no profile data configured."
+    }
+
+    if ($presetData.language -in $Config.allowed_languages) {
+        $Config.communication_language = [string]$presetData.language
+    }
+    if ($presetData.detail -in $Config.allowed_response_modes) {
+        $Config.communication_response_mode = [string]$presetData.detail
+    }
+    if ($presetData.compression -in $Config.response_profiles.allow) {
+        $Config.response_profiles.active = [string]$presetData.compression
+    }
+
+    return $Config
+}
+
+function Get-Recommendation {
     param(
-        [Parameter(Mandatory = $true)]
-        [string]$Text,
-        [switch]$AsPassThru
+        [pscustomobject]$Config,
+        [string]$PresetName,
+        [string]$RiskLevel
     )
 
-    if ($AsPassThru) {
-        Write-Output $Text
+    $selectedPreset = if ([string]::IsNullOrWhiteSpace($PresetName)) { [string]$Config.communication_presets.default } else { $PresetName }
+    $effective = Apply-Preset -Config $Config -PresetName $selectedPreset
+
+    if ($RiskLevel -eq 'high') {
+        $effective.communication_response_mode = 'expanded'
+        if ($effective.response_profiles.active -eq 'ultra') {
+            $effective.response_profiles.active = 'lleno'
+        }
     }
-    elseif (-not $Quiet) {
-        Write-Host $Text
+    elseif ($RiskLevel -eq 'low') {
+        if ($effective.communication_response_mode -eq 'expanded') {
+            $effective.communication_response_mode = 'executive'
+        }
+    }
+
+    return [pscustomobject]@{
+        preset = $selectedPreset
+        risk = $RiskLevel
+        language = [string]$effective.communication_language
+        detail = [string]$effective.communication_response_mode
+        compression = [string]$effective.response_profiles.active
     }
 }
 
 $config = Get-Config
 
 if ($Mode -eq 'set') {
-    if ([string]::IsNullOrWhiteSpace($Profile)) {
-        throw 'Profile is required when Mode=set.'
-    }
-
-    if ($config.response_profiles.allow -notcontains $Profile) {
-        throw "Unsupported profile '$Profile'. Allowed: $($config.response_profiles.allow -join ', ')"
-    }
-
+    if ([string]::IsNullOrWhiteSpace($Profile)) { throw 'Profile is required when Mode=set.' }
+    if ($config.response_profiles.allow -notcontains $Profile) { throw "Unsupported profile '$Profile'. Allowed: $($config.response_profiles.allow -join ', ')" }
     $config.response_profiles.active = $Profile
     Save-Config -Config $config
     Emit-Output -Text "[OK] Active response profile set to: $Profile" -AsPassThru:$PassThru
@@ -186,14 +204,8 @@ if ($Mode -eq 'set') {
 }
 
 if ($Mode -eq 'set-language') {
-    if ([string]::IsNullOrWhiteSpace($Language)) {
-        throw 'Language is required when Mode=set-language.'
-    }
-
-    if ($config.allowed_languages -notcontains $Language) {
-        throw "Unsupported language '$Language'. Allowed: $($config.allowed_languages -join ', ')"
-    }
-
+    if ([string]::IsNullOrWhiteSpace($Language)) { throw 'Language is required when Mode=set-language.' }
+    if ($config.allowed_languages -notcontains $Language) { throw "Unsupported language '$Language'. Allowed: $($config.allowed_languages -join ', ')" }
     $config.communication_language = $Language
     Save-Config -Config $config
     Emit-Output -Text "[OK] Communication language set to: $Language" -AsPassThru:$PassThru
@@ -201,17 +213,37 @@ if ($Mode -eq 'set-language') {
 }
 
 if ($Mode -eq 'set-detail') {
-    if ([string]::IsNullOrWhiteSpace($Detail)) {
-        throw 'Detail is required when Mode=set-detail.'
-    }
-
-    if ($config.allowed_response_modes -notcontains $Detail) {
-        throw "Unsupported detail level '$Detail'. Allowed: $($config.allowed_response_modes -join ', ')"
-    }
-
+    if ([string]::IsNullOrWhiteSpace($Detail)) { throw 'Detail is required when Mode=set-detail.' }
+    if ($config.allowed_response_modes -notcontains $Detail) { throw "Unsupported detail level '$Detail'. Allowed: $($config.allowed_response_modes -join ', ')" }
     $config.communication_response_mode = $Detail
     Save-Config -Config $config
     Emit-Output -Text "[OK] Response detail level set to: $Detail" -AsPassThru:$PassThru
+    exit 0
+}
+
+if ($Mode -eq 'set-preset') {
+    if ([string]::IsNullOrWhiteSpace($Preset)) { throw 'Preset is required when Mode=set-preset.' }
+    $config = Apply-Preset -Config $config -PresetName $Preset
+    Save-Config -Config $config
+    Emit-Output -Text ("[OK] Preset applied: {0} (language={1}, detail={2}, profile={3})" -f $Preset, $config.communication_language, $config.communication_response_mode, $config.response_profiles.active) -AsPassThru:$PassThru
+    exit 0
+}
+
+if ($Mode -eq 'recommend') {
+    $rec = Get-Recommendation -Config $config -PresetName $Preset -RiskLevel $Risk
+    if ($AsJson) {
+        Emit-Output -Text ($rec | ConvertTo-Json -Depth 6) -AsPassThru:$PassThru
+    } else {
+        $lines = @(
+            'Response Recommendation',
+            ("Preset: {0}" -f $rec.preset),
+            ("Risk: {0}" -f $rec.risk),
+            ("Language: {0}" -f $rec.language),
+            ("Detail: {0}" -f $rec.detail),
+            ("Compression: {0}" -f $rec.compression)
+        )
+        Emit-Output -Text ($lines -join [Environment]::NewLine) -AsPassThru:$PassThru
+    }
     exit 0
 }
 
@@ -224,9 +256,11 @@ if ($Mode -eq 'list') {
             allowedDetailLevels = @($config.allowed_response_modes)
             profile = $config.response_profiles.active
             allowedProfiles = @($config.response_profiles.allow)
+            preset = $config.communication_presets.default
+            allowedPresets = @($config.communication_presets.allow)
+            presets = $config.communication_presets.profiles
             profiles = $config.response_profiles.profiles
         } | ConvertTo-Json -Depth 20
-
         Emit-Output -Text $payload -AsPassThru:$PassThru
         exit 0
     }
@@ -236,12 +270,13 @@ if ($Mode -eq 'list') {
     $lines += "Language: $($config.communication_language)"
     $lines += "Detail: $($config.communication_response_mode)"
     $lines += "Compression Profile: $($config.response_profiles.active)"
+    $lines += "Default Preset: $($config.communication_presets.default)"
     $lines += ''
     $lines += "Allowed languages: $($config.allowed_languages -join ', ')"
     $lines += "Allowed detail levels: $($config.allowed_response_modes -join ', ')"
+    $lines += "Allowed presets: $($config.communication_presets.allow -join ', ')"
     $lines += ''
     $lines += 'Compression profiles:'
-
     foreach ($name in $config.response_profiles.allow) {
         $marker = if ($name -eq $config.response_profiles.active) { '*' } else { '-' }
         $lines += ('{0} {1}: {2}' -f $marker, $name, $config.response_profiles.profiles.$name.description)
@@ -257,12 +292,9 @@ if ($Mode -eq 'export') {
     $lines += "Detail level: $($config.communication_response_mode)"
     $lines += "Compression profile: $($config.response_profiles.active)"
     $lines += "Profile description: $($config.response_profiles.profiles.$($config.response_profiles.active).description)"
+    $lines += "Default preset: $($config.communication_presets.default)"
     $lines += 'Guidelines:'
-
-    foreach ($rule in $config.response_profiles.profiles.$($config.response_profiles.active).guidelines) {
-        $lines += "- $rule"
-    }
-
+    foreach ($rule in $config.response_profiles.profiles.$($config.response_profiles.active).guidelines) { $lines += "- $rule" }
     Emit-Output -Text ($lines -join [Environment]::NewLine) -AsPassThru:$PassThru
     exit 0
 }
@@ -276,9 +308,9 @@ if ($AsJson) {
         active = $config.response_profiles.active
         description = $config.response_profiles.profiles.$($config.response_profiles.active).description
         guidelines = @($config.response_profiles.profiles.$($config.response_profiles.active).guidelines)
-        allowed = @($config.response_profiles.allow)
+        preset = $config.communication_presets.default
+        allowedPresets = @($config.communication_presets.allow)
     } | ConvertTo-Json -Depth 20
-
     Emit-Output -Text $status -AsPassThru:$PassThru
     exit 0
 }
@@ -288,13 +320,10 @@ $statusLines = @(
     "Language: $($config.communication_language)",
     "Detail level: $($config.communication_response_mode)",
     "Active compression profile: $($config.response_profiles.active)",
+    "Default preset: $($config.communication_presets.default)",
     "Description: $($config.response_profiles.profiles.$($config.response_profiles.active).description)",
     'Guidelines:'
 )
-
-foreach ($rule in $config.response_profiles.profiles.$($config.response_profiles.active).guidelines) {
-    $statusLines += "- $rule"
-}
-
+foreach ($rule in $config.response_profiles.profiles.$($config.response_profiles.active).guidelines) { $statusLines += "- $rule" }
 Emit-Output -Text ($statusLines -join [Environment]::NewLine) -AsPassThru:$PassThru
 exit 0

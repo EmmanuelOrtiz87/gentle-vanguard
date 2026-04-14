@@ -61,6 +61,32 @@ Recommendation:
 2. Use `ultra` for short implementation loops and rapid triage.
 3. Use `expanded` when explicit deep detail is requested.
 
+### Presets by Task Type
+
+The orchestrator can apply consistent settings using communication presets:
+
+1. `bugfix` -> `es + executive + ultra`
+2. `refactor` -> `es + executive + lleno`
+3. `docs` -> `es + expanded + lite`
+4. `audit-review` -> `es + expanded + lleno`
+5. `executive-demo` -> `es + executive + lite`
+
+Commands:
+
+```powershell
+# Apply preset directly
+.\scripts\utilities\wf.ps1 response-mode preset:bugfix
+
+# Ask for recommendation from preset + risk
+.\scripts\utilities\wf.ps1 response-mode recommend:docs:high
+```
+
+Orchestrator integration:
+
+1. Run `./scripts/utilities/orchestrator-next-steps.ps1`.
+2. Review recommended preset and risk.
+3. Apply suggested mode before implementation.
+
 ## Option A: Cloud Configuration (Recommended)
 
 ### Providers Supported
