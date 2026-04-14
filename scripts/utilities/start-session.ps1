@@ -64,7 +64,7 @@ function New-SessionBriefContent {
         [string]$TaskFile
     )
 
-    $taskReference = if ($TaskFile) { "- Task brief: $TaskFile" } else { "- Task brief: create with '.\wf.ps1 task-brief <name>' if needed" }
+    $taskReference = if ($TaskFile) { "- Task brief: $TaskFile" } else { "- Task brief: create with '.\scripts\utilities\wf.ps1 task-brief <name>' if needed" }
 
 @"
 # Session Start Brief
@@ -100,8 +100,8 @@ function New-SessionBriefContent {
 ## Recommended Commands
 
 - Validate stack: powershell -NoProfile -ExecutionPolicy Bypass -File c:\Workspace_local\tools\validate-session-stack.ps1
-- Project health: .\wf.ps1 health
-- Project status: .\wf.ps1 status
+- Project health: .\scripts\utilities\wf.ps1 health
+- Project status: .\scripts\utilities\wf.ps1 status
 $taskReference
 
 ## Notes
@@ -195,5 +195,5 @@ New-SessionBriefContent -Branch $branch -GitState $gitState -OrchestratorState $
 Write-Ok "Session brief created: $sessionFile"
 Write-Host "`nNext steps:" -ForegroundColor Cyan
 Write-Host "1. Review the generated session brief." -ForegroundColor Yellow
-Write-Host "2. Run '.\wf.ps1 health' if stack readiness is uncertain." -ForegroundColor Yellow
+Write-Host "2. Run '.\scripts\utilities\wf.ps1 health' if stack readiness is uncertain." -ForegroundColor Yellow
 Write-Host "3. Keep the task brief updated as the scope changes." -ForegroundColor Yellow

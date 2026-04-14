@@ -165,8 +165,8 @@ if (-not $Quiet) {
     Write-Host "==========================================" -ForegroundColor Green
     Write-Host ""
     Write-Host "The Gentleman Foundation development environment is now active." -ForegroundColor White
-    Write-Host "Use '.\wf.ps1 status' to check project status" -ForegroundColor Cyan
-    Write-Host "Use '.\wf.ps1 health' to re-run tool activation" -ForegroundColor Cyan
+    Write-Host "Use '.\scripts\utilities\wf.ps1 status' to check project status" -ForegroundColor Cyan
+    Write-Host "Use '.\scripts\utilities\wf.ps1 health' to re-run tool activation" -ForegroundColor Cyan
     Write-Host ""
 }
 

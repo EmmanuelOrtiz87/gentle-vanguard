@@ -16,7 +16,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$Script:WF_ROOT = $PSScriptRoot | Split-Path
+$Script:WF_ROOT = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 $Script:WF_CONFIG = Join-Path $Script:WF_ROOT 'config\workspace.config.json'
 $Script:WF_TEMPLATES = Join-Path $Script:WF_ROOT 'templates'
 $Script:WF_TOOLS = Join-Path $Script:WF_ROOT 'tools'
@@ -177,7 +177,7 @@ function Invoke-New {
     
     Write-Banner "Creating Project: $name"
     
-    $bootstrapScript = Join-Path $Script:WF_ROOT "scripts\bootstrap-workspace.ps1"
+    $bootstrapScript = Join-Path $Script:WF_ROOT "scripts\foundation\bootstrap-workspace.ps1"
     if (-not (Test-Path $bootstrapScript)) {
         Write-Error "Bootstrap script not found: $bootstrapScript"
         exit 1
@@ -201,7 +201,7 @@ function Invoke-New {
 function Invoke-Validate {
     Write-Banner "Validate Workspace"
     
-    $validateScript = Join-Path $Script:WF_ROOT "scripts\validate-workspace.ps1"
+    $validateScript = Join-Path $Script:WF_ROOT "scripts\validation\validate-workspace.ps1"
     if (Test-Path $validateScript) {
         & $validateScript
     } else {

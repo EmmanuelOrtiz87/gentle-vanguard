@@ -170,7 +170,7 @@ Skills are linked via `.skills/` directory and available globally.
 
 Run before commits:
 ```powershell
-.\scripts\validate-project.ps1
+.\scripts\validation\validate-project.ps1
 ```
 
 ## Hooks
@@ -205,6 +205,8 @@ Git hooks are configured in `.githooks/` directory.
             skill_path = ".skills/project-orchestrator-skill"
             auto_detect = $true
             workflow_mode = "coordinated"
+            communication_response_mode = "simple"
+            allowed_response_modes = @("simple", "executive", "standard", "deep")
             memory_integration = $true
             quality_gates = $true
             session_tracking = $true

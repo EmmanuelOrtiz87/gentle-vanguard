@@ -33,7 +33,7 @@ if ($Host.Name -eq 'ConsoleHost') {
         }
 
         Write-Host "✅ Development environment activation started in background" -ForegroundColor Green
-        Write-Host "Use '.\wf.ps1 health' to check status" -ForegroundColor Blue
+        Write-Host "Use '.\scripts\utilities\wf.ps1 health' to check status" -ForegroundColor Blue
         Write-Host ""
     }
 }

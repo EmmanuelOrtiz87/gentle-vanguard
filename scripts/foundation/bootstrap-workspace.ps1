@@ -341,6 +341,8 @@ function Create-OrchestratorActivation {
         skill_path = ".workspace-foundation/skills/project-orchestrator-skill"
         auto_detect = $true
         workflow_mode = "coordinated"
+        communication_response_mode = "simple"
+        allowed_response_modes = @("simple", "executive", "standard", "deep")
         memory_integration = $true
         quality_gates = $true
         session_tracking = $true

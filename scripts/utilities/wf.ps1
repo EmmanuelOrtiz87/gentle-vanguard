@@ -1057,7 +1057,7 @@ function Warn-OldWorkflowCheckpoints {
 
     $oldRefs = Get-OldWorkflowCheckpoints -ThresholdDays $ThresholdDays
     if ($oldRefs.Count -gt 0) {
-        Write-Warning "Found $($oldRefs.Count) workflow checkpoint(s) older than $ThresholdDays days. Review with '.\wf.ps1 list-checkpoints'."
+        Write-Warning "Found $($oldRefs.Count) workflow checkpoint(s) older than $ThresholdDays days. Review with '.\scripts\utilities\wf.ps1 list-checkpoints'."
         Write-Host "Tip: drop stale checkpoints with 'git stash drop <stash@{n}>'" -ForegroundColor Cyan
     }
 }
@@ -1102,8 +1102,8 @@ function Invoke-LiveCheckpoint {
     }
 
     Write-Success "Checkpoint created: $stashMessage"
-    Write-Host "Restore latest checkpoint with: .\wf.ps1 rollback-checkpoint" -ForegroundColor Cyan
-    Write-Host "List checkpoints with: .\wf.ps1 list-checkpoints" -ForegroundColor Cyan
+    Write-Host "Restore latest checkpoint with: .\scripts\utilities\wf.ps1 rollback-checkpoint" -ForegroundColor Cyan
+    Write-Host "List checkpoints with: .\scripts\utilities\wf.ps1 list-checkpoints" -ForegroundColor Cyan
 }
 
 function Show-LiveCheckpoints {
@@ -1159,7 +1159,7 @@ function Invoke-RollbackCheckpoint {
 
     $stashRef = Resolve-CheckpointReference -Selector $Selector
     if ([string]::IsNullOrWhiteSpace($stashRef)) {
-        Write-Error "No matching workflow checkpoint found. Use '.\wf.ps1 list-checkpoints'."
+        Write-Error "No matching workflow checkpoint found. Use '.\scripts\utilities\wf.ps1 list-checkpoints'."
         exit 1
     }
 
@@ -1205,7 +1205,7 @@ function Invoke-CleanBranches {
     }
 
     if (-not $ApplyNow) {
-        Write-Host "Preview mode only. Use '.\wf.ps1 clean-branches apply' to delete listed local branches." -ForegroundColor Cyan
+        Write-Host "Preview mode only. Use '.\scripts\utilities\wf.ps1 clean-branches apply' to delete listed local branches." -ForegroundColor Cyan
         return
     }
 
@@ -1243,7 +1243,7 @@ Gentleman Foundation Workflow CLI
 ================================
 
 USAGE:
-    .\wf.ps1 <command> [options]
+    .\scripts\utilities\wf.ps1 <command> [options]
 
 COMMANDS:
     review [scope]       Run code review (security, quality, all)
@@ -1284,40 +1284,40 @@ OPTIONS:
     -JSON             Output diagnostics in JSON format (diagnose command)
 
 EXAMPLES:
-    .\wf.ps1 review              Run full code review
-    .\wf.ps1 review security     Run security scan only
-    .\wf.ps1 audit              Generate audit document
-    .\wf.ps1 pr                 Create PR
-    .\wf.ps1 push               Commit and push
-    .\wf.ps1 push pr            Push and open PR now
-    .\wf.ps1 push later         Push only and create PR later
-    .\wf.ps1 publish            Run end-to-end PR flow with auto-merge on clean validation
-    .\wf.ps1 start-session      Create the session brief for today
-    .\wf.ps1 end-session        Run end-of-session checks and create closure artifact
-    .\wf.ps1 task-brief auth    Create a task brief for auth work
-    .\wf.ps1 diagnose            Full diagnostics report (JSON available)
-    .\wf.ps1 diagnose -JSON      Full diagnostics report in JSON format
-    .\wf.ps1 verify              Quick verify & auto-repair if needed
-    .\wf.ps1 health              Check system health & activate tools
-    .\wf.ps1 install-engram      Install or verify Engram CLI
-    .\wf.ps1 ide-status          Detect IDE and show recommended activation
-    .\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
-    .\wf.ps1 update-tools         Update gga / engram / gentle-ai (Windows: go install, not brew)
-    .\wf.ps1 context-pack "fix ci noise"  Generate compact handoff summary for token-efficient continuation
-    .\wf.ps1 compact-start "fix ci noise" Generate handoff summary and copy compact prompt
-    .\wf.ps1 context-metrics 14  Show 14-day context usage summary
-    .\wf.ps1 checkpoint feature-doc-cleanup  Save rollback point including untracked files
-    .\wf.ps1 list-checkpoints        Show available rollback points
-    .\wf.ps1 rollback-checkpoint     Restore latest rollback point
-    .\wf.ps1 rollback-checkpoint feature-doc-cleanup Restore matching rollback point
-    .\wf.ps1 clean-branches          Preview merged local branches for cleanup
-    .\wf.ps1 clean-branches apply    Delete merged local branches (asks confirmation)
-    .\wf.ps1 clean-branches apply -Force  Delete merged branches without prompt, fallback to -D when needed
-    .\wf.ps1 homologate          Preview normalization actions
-    .\wf.ps1 homologate apply    Execute normalization and reference updates
-    .\wf.ps1 health -StrictCleanup  Run health and fail if cleanup drift exists
-    .\wf.ps1 agent-alert           Show process-compliance warnings (non-blocking)
-    .\wf.ps1 agent-alert strict    Fail if process-compliance warnings are detected
+    .\scripts\utilities\wf.ps1 review              Run full code review
+    .\scripts\utilities\wf.ps1 review security     Run security scan only
+    .\scripts\utilities\wf.ps1 audit              Generate audit document
+    .\scripts\utilities\wf.ps1 pr                 Create PR
+    .\scripts\utilities\wf.ps1 push               Commit and push
+    .\scripts\utilities\wf.ps1 push pr            Push and open PR now
+    .\scripts\utilities\wf.ps1 push later         Push only and create PR later
+    .\scripts\utilities\wf.ps1 publish            Run end-to-end PR flow with auto-merge on clean validation
+    .\scripts\utilities\wf.ps1 start-session      Create the session brief for today
+    .\scripts\utilities\wf.ps1 end-session        Run end-of-session checks and create closure artifact
+    .\scripts\utilities\wf.ps1 task-brief auth    Create a task brief for auth work
+    .\scripts\utilities\wf.ps1 diagnose            Full diagnostics report (JSON available)
+    .\scripts\utilities\wf.ps1 diagnose -JSON      Full diagnostics report in JSON format
+    .\scripts\utilities\wf.ps1 verify              Quick verify & auto-repair if needed
+    .\scripts\utilities\wf.ps1 health              Check system health & activate tools
+    .\scripts\utilities\wf.ps1 install-engram      Install or verify Engram CLI
+    .\scripts\utilities\wf.ps1 ide-status          Detect IDE and show recommended activation
+    .\scripts\utilities\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
+    .\scripts\utilities\wf.ps1 update-tools         Update gga / engram / gentle-ai (Windows: go install, not brew)
+    .\scripts\utilities\wf.ps1 context-pack "fix ci noise"  Generate compact handoff summary for token-efficient continuation
+    .\scripts\utilities\wf.ps1 compact-start "fix ci noise" Generate handoff summary and copy compact prompt
+    .\scripts\utilities\wf.ps1 context-metrics 14  Show 14-day context usage summary
+    .\scripts\utilities\wf.ps1 checkpoint feature-doc-cleanup  Save rollback point including untracked files
+    .\scripts\utilities\wf.ps1 list-checkpoints        Show available rollback points
+    .\scripts\utilities\wf.ps1 rollback-checkpoint     Restore latest checkpoint
+    .\scripts\utilities\wf.ps1 rollback-checkpoint feature-doc-cleanup Restore matching checkpoint
+    .\scripts\utilities\wf.ps1 clean-branches          Preview merged local branches for cleanup
+    .\scripts\utilities\wf.ps1 clean-branches apply    Delete merged local branches (asks confirmation)
+    .\scripts\utilities\wf.ps1 clean-branches apply -Force  Delete merged branches without prompt, fallback to -D when needed
+    .\scripts\utilities\wf.ps1 homologate          Preview normalization actions
+    .\scripts\utilities\wf.ps1 homologate apply    Execute normalization and reference updates
+    .\scripts\utilities\wf.ps1 health -StrictCleanup  Run health and fail if cleanup drift exists
+    .\scripts\utilities\wf.ps1 agent-alert           Show process-compliance warnings (non-blocking)
+    .\scripts\utilities\wf.ps1 agent-alert strict    Fail if process-compliance warnings are detected
 
 CHECKPOINT LABEL CONVENTION:
     Use '<scope>-<objective>' in lowercase kebab-case.
@@ -1387,7 +1387,7 @@ switch ($Command) {
     'task-brief' {
         Write-Step "Creating task brief"
         if ([string]::IsNullOrWhiteSpace($Scope)) {
-            Write-Error "Task name required. Example: .\wf.ps1 task-brief auth-flow"
+            Write-Error "Task name required. Example: .\scripts\utilities\wf.ps1 task-brief auth-flow"
             exit 1
         }
 
@@ -1534,7 +1534,7 @@ switch ($Command) {
             Write-Host "  git push" -ForegroundColor Yellow
             Write-Host "" 
             Write-Host "Later, create PR with:" -ForegroundColor Cyan
-            Write-Host "  .\wf.ps1 pr" -ForegroundColor Yellow
+            Write-Host "  .\scripts\utilities\wf.ps1 pr" -ForegroundColor Yellow
         }
     }
 
@@ -1566,7 +1566,7 @@ switch ($Command) {
             & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $homologateScript @homologateArgs
 
             if ($StrictCleanup -and $LASTEXITCODE -ne 0) {
-                Write-Error "Strict cleanup mode failed: run '.\wf.ps1 homologate apply' to remediate drift."
+                Write-Error "Strict cleanup mode failed: run '.\scripts\utilities\wf.ps1 homologate apply' to remediate drift."
                 exit $LASTEXITCODE
             }
         }

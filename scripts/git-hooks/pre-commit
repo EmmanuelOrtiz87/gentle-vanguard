@@ -1,7 +1,7 @@
 #!/bin/sh
 # Standard Git hook for cross-platform pre-commit validation.
 
-VALIDATE_SCRIPT="./scripts/validate-project.ps1"
+VALIDATE_SCRIPT="./scripts/validation/validate-project.ps1"
 
 if [ -f "$VALIDATE_SCRIPT" ]; then
     echo ">> [Hook] Running pre-commit validation..."

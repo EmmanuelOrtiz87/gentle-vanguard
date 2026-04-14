@@ -44,6 +44,8 @@ if (Test-Path $configFile) {
     $config = Get-Content $configFile | ConvertFrom-Json
     Write-Host "  active: $($config.active)" -ForegroundColor White
     Write-Host "  workflow_mode: $($config.workflow_mode)" -ForegroundColor White
+    $responseMode = if ($config.PSObject.Properties.Name -contains 'communication_response_mode') { $config.communication_response_mode } else { 'executive (default)' }
+    Write-Host "  communication_response_mode: $responseMode" -ForegroundColor White
     Write-Host "  memory_integration: $($config.memory_integration)" -ForegroundColor White
     Write-Host "  auto_detect: $($config.auto_detect)" -ForegroundColor White
 } else {

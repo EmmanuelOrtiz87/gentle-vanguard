@@ -41,7 +41,7 @@ if ([string]::IsNullOrWhiteSpace($ConfigPath)) {
 
 # Initialization validation
 if (-not (Test-Path -LiteralPath $ConfigPath)) {
-    throw "Environment not initialized or config missing. Run 'scripts/bootstrap.ps1' first."
+    throw "Environment not initialized or config missing. Run 'scripts/foundation/bootstrap.ps1' first."
 }
 
 # Health check for critical dependencies

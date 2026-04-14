@@ -201,8 +201,8 @@ try {
             Write-Success 'Foundation sync check: no changes required.'
         } else {
             Write-Warning "Foundation sync check detected $($drifted.Count) file(s) to update."
-            Write-Host "Run: .\wf.ps1 foundation-sync apply"
-            Write-Host "     .\wf.ps1 foundation-sync apply -CreatePr   (auto PR)"
+            Write-Host "Run: .\scripts\utilities\wf.ps1 foundation-sync apply"
+            Write-Host "     .\scripts\utilities\wf.ps1 foundation-sync apply -CreatePr   (auto PR)"
         }
         exit 0
     }

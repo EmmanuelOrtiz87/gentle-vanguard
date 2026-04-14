@@ -132,6 +132,19 @@ foreach ($md in $rootMarkdownFiles) {
     }
 }
 
+$rootExecutablePatterns = @('*.ps1', '*.sh', '*.cmd', '*.bat')
+$rootExecutableFiles = foreach ($pattern in $rootExecutablePatterns) {
+    Get-ChildItem -Path $repoRoot -File -Filter $pattern -ErrorAction SilentlyContinue
+}
+
+foreach ($file in $rootExecutableFiles) {
+    if ($policyAllowedRootFiles -notcontains $file.Name) {
+        Register-StructureIssue `
+            -Message "Loose root executable found: $(Get-RepoRelativePath -Path $file.FullName)" `
+            -Remediation "Move to a canonical scripts/* subfolder, replace with the canonical entrypoint, or explicitly whitelist it if intentionally root-scoped"
+    }
+}
+
 $deprecatedPathPatterns = if ($policyDeprecatedPatterns) { $policyDeprecatedPatterns } else {
     @(
         '.\\scripts\\update-all.ps1',

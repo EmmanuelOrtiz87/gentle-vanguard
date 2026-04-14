@@ -126,7 +126,11 @@ main() {
     log_check "Orchestrator state"
     if [ -f "$project_root/config/orchestrator.json" ]; then
         local active=$(grep -o '"active": [^,}]*' "$project_root/config/orchestrator.json" | cut -d' ' -f2)
-        echo " (active=$active)"
+        local response_mode=$(grep -o '"communication_response_mode": "[^"]*"' "$project_root/config/orchestrator.json" | sed -E 's/.*: "([^"]+)"/\1/' )
+        if [ -z "$response_mode" ]; then
+            response_mode="executive"
+        fi
+        echo " (active=$active, mode=$response_mode)"
         log_ok
     else
         echo ""

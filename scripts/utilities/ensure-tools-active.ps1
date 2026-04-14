@@ -241,9 +241,9 @@ function Show-StatusSummary {
         Write-Host "All development tools have been checked and activated where possible." -ForegroundColor White
         Write-Host "The coordinated workflow system is now ready for use." -ForegroundColor White
         Write-Host ""
-        Write-Host "Use '.\wf.ps1 status' to check project status" -ForegroundColor Cyan
-        Write-Host "Use '.\wf.ps1 review' to run code review" -ForegroundColor Cyan
-        Write-Host "Use '.\wf.ps1 audit' to generate audit reports" -ForegroundColor Cyan
+        Write-Host "Use '.\scripts\utilities\wf.ps1 status' to check project status" -ForegroundColor Cyan
+        Write-Host "Use '.\scripts\utilities\wf.ps1 review' to run code review" -ForegroundColor Cyan
+        Write-Host "Use '.\scripts\utilities\wf.ps1 audit' to generate audit reports" -ForegroundColor Cyan
         Write-Host ""
     }
 }

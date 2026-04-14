@@ -11,7 +11,7 @@ param(
 $ErrorActionPreference = 'Continue'
 
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
-$workspaceRoot = (Resolve-Path (Join-Path $root "..")).Path
+$workspaceRoot = (Resolve-Path (Join-Path $root "..\..")).Path
 $configPath = Join-Path $workspaceRoot 'config\workspace.config.json'
 
 $script:FAIL_COUNT = 0
@@ -37,7 +37,6 @@ Write-Header "System Requirements"
 
 $requiredCommands = @(
     @{ name = 'git'; desc = 'Version Control'; critical = $true }
-    @{ name = 'pwsh'; desc = 'PowerShell Core'; critical = $true }
     @{ name = 'go'; desc = 'Go Runtime'; critical = $false }
 )
 
@@ -55,6 +54,20 @@ foreach ($cmd in $requiredCommands) {
     }
 }
 
+$pwshCommand = Get-Command pwsh -ErrorAction SilentlyContinue
+$powershellCommand = Get-Command powershell -ErrorAction SilentlyContinue
+if ($pwshCommand) {
+    $version = & $pwshCommand.Source -NoProfile -Command '$PSVersionTable.PSVersion.ToString()' 2>$null | Select-Object -First 1
+    if ([string]::IsNullOrWhiteSpace($version)) { $version = 'OK' }
+    Write-Success "PowerShell: pwsh $version"
+} elseif ($powershellCommand) {
+    $version = & $powershellCommand.Source -NoProfile -Command '$PSVersionTable.PSVersion.ToString()' 2>$null | Select-Object -First 1
+    if ([string]::IsNullOrWhiteSpace($version)) { $version = 'OK' }
+    Write-Success "PowerShell: Windows PowerShell $version"
+} else {
+    Write-Fail 'PowerShell: NOT FOUND'
+}
+
 if (-not $SkipTools) {
     Write-Header "Workspace Tools"
     
@@ -62,11 +75,40 @@ if (-not $SkipTools) {
     if (Test-Path $configPath) {
         $config = Get-Content -Path $configPath -Raw -Encoding UTF8 | ConvertFrom-Json
     }
-    
-    $defaultTools = @(
-        @{ name = 'engram'; checkCommand = 'engram'; desc = 'Engram CLI' }
-        @{ name = 'gga'; checkCommand = 'gga'; desc = 'Guardian Angel' }
-    )
+
+    function Resolve-ConfiguredPath {
+        param(
+            [string]$RawPath,
+            [string]$WorkspaceRoot,
+            $WorkspaceConfig
+        )
+
+        if ([string]::IsNullOrWhiteSpace($RawPath)) {
+            return $RawPath
+        }
+
+        $resolved = $RawPath
+
+        $pathVariables = @{
+            workspaceRoot = $WorkspaceRoot
+        }
+
+        foreach ($name in @('dataRoot', 'toolsRoot', 'projectsRoot')) {
+            if ($WorkspaceConfig -and $WorkspaceConfig.PSObject.Properties.Name -contains $name) {
+                $value = [string]$WorkspaceConfig.$name
+                if (-not [string]::IsNullOrWhiteSpace($value)) {
+                    $absoluteValue = if ([System.IO.Path]::IsPathRooted($value)) { $value } else { Join-Path $WorkspaceRoot $value }
+                    $pathVariables[$name] = $absoluteValue
+                }
+            }
+        }
+
+        foreach ($key in $pathVariables.Keys) {
+            $resolved = $resolved.Replace("{$key}", [string]$pathVariables[$key])
+        }
+
+        return $ExecutionContext.InvokeCommand.ExpandString($resolved)
+    }
     
     $toolsToCheck = if ($config -and $config.tools) { $config.tools } else { @() }
     foreach ($tool in $toolsToCheck) {
@@ -78,7 +120,7 @@ if (-not $SkipTools) {
             Write-Success "$($tool.name): Command '$checkCmd' available"
             $installed = $true
         } elseif ($checkPath) {
-            $resolvedPath = $ExecutionContext.InvokeCommand.ExpandString($checkPath)
+            $resolvedPath = Resolve-ConfiguredPath -RawPath $checkPath -WorkspaceRoot $workspaceRoot -WorkspaceConfig $config
             if (Test-Path $resolvedPath) {
                 Write-Success "$($tool.name): Path '$resolvedPath' exists"
                 $installed = $true
@@ -184,7 +226,7 @@ foreach ($dir in $requiredDirs) {
         $itemCount = (Get-ChildItem $fullPath -ErrorAction SilentlyContinue).Count
         Write-Success "$dir/ ($itemCount items)"
     } else {
-        Write-Wail "$dir/: Missing"
+        Write-Fail "$dir/: Missing"
     }
 }
 
