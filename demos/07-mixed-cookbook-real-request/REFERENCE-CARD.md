@@ -7,9 +7,9 @@
 
 ## Comandos por Segmento
 
-### Preflight opcional (si vas a mostrar Engram)
+### Preflight (REQUIRED - ejecutar primero)
 ```powershell
-./scripts/utilities/wf.ps1 install-engram
+./demos/07-mixed-cookbook-real-request/preflight.ps1
 ```
 
 ### Apertura
