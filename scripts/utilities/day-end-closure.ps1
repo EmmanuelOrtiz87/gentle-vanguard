@@ -31,6 +31,24 @@ function Invoke-LocalPowerShellScript {
     & $ScriptPath @ScriptArgs
 }
 
+function Invoke-Engram {
+    param(
+        [string]$RunEngramScript,
+        [string[]]$EngramArgs
+    )
+
+    if (-not (Test-Path $RunEngramScript)) {
+        return $false
+    }
+
+    try {
+        & $RunEngramScript @EngramArgs | Out-Null
+        return (($LASTEXITCODE -eq 0) -and $?)
+    } catch {
+        return $false
+    }
+}
+
 # ── Session closure sequence ──────────────────────────────────────────────────
 $endSessionScript = Join-Path $scriptDir 'end-session.ps1'
 $validateScript = Join-Path $repoRoot 'scripts\diagnostics\validate-script-governance.ps1'
@@ -69,6 +87,8 @@ if (-not $SkipValidation) {
 # 3. Memory capture via Engram (optional, controlled by flag)
 if (-not $SkipEngram) {
     Write-Step "Stage 3: Session Memory Capture"
+    $runEngramScript = Join-Path $scriptDir 'run-engram.ps1'
+    $projectName = Split-Path $repoRoot -Leaf
     
     # Build session ID if not provided
     if ([string]::IsNullOrWhiteSpace($SessionId)) {
@@ -87,19 +107,36 @@ if (-not $SkipEngram) {
         $closureContent = Get-Content $closureArtifact.FullName -Raw
         $SessionSummary = $closureContent
     }
+
+    # Avoid overlong command-line payloads while preserving a meaningful closure summary.
+    if (-not [string]::IsNullOrWhiteSpace($SessionSummary) -and $SessionSummary.Length -gt 12000) {
+        $SessionSummary = $SessionSummary.Substring(0, 12000)
+        Write-Info "Session summary trimmed to 12000 chars for Engram save"
+    }
     
     if (-not [string]::IsNullOrWhiteSpace($SessionSummary)) {
         Write-Info "Saving session summary to Engram: $SessionId"
-        # Session summary would be saved here; in production this calls mcp_engram_mem_session_summary
-        # For now, we indicate that this would be called
-        Write-Host "  [Would execute: mcp_engram_mem_session_summary with session learning]" -ForegroundColor DarkCyan
+        $summaryTitle = "session-summary:$SessionId"
+        $savedSummary = Invoke-Engram -RunEngramScript $runEngramScript -EngramArgs @('save', $summaryTitle, $SessionSummary, '--project', $projectName)
+        if ($savedSummary) {
+            Write-Ok "Engram session summary saved"
+        } else {
+            Write-Warn "Could not save session summary to Engram"
+        }
     } else {
         Write-Warn "No session summary provided - Engram capture skipped"
     }
     
-    # Mark session as ended in Engram
+    # Mark session as ended in Engram as a dedicated closure observation.
     Write-Info "Closing session in Engram: $SessionId"
-    Write-Host "  [Would execute: mcp_engram_mem_session_end $SessionId]" -ForegroundColor DarkCyan
+    $endTitle = "session-end:$SessionId"
+    $endMessage = "Session closed at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') on branch $(git rev-parse --abbrev-ref HEAD 2>$null)."
+    $savedEnd = Invoke-Engram -RunEngramScript $runEngramScript -EngramArgs @('save', $endTitle, $endMessage, '--project', $projectName)
+    if ($savedEnd) {
+        Write-Ok "Engram session end marker saved"
+    } else {
+        Write-Warn "Could not save session end marker to Engram"
+    }
 }
 
 # 4. Generate final report

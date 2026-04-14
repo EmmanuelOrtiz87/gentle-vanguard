@@ -189,15 +189,26 @@ Developer choice:         Generated
 
 ## Troubleshooting
 
-### Closure runs but Engram capture shows as "Would execute"
+### Closure cannot save to Engram
 
-**Status**: The script is designed to work with Engram CLI tools which aren't yet wired into this automated chain.
+**Expected behavior**: `day-end-closure` now calls Engram directly and saves:
 
-**Solution**: For now, after running day-end-closure, you can manually:
+1. `session-summary:<session_id>` observation
+2. `session-end:<session_id>` observation
+
+**Checks**:
 ```powershell
-# Call Engram directly if installed
-engram context save --session-summary <summary_text>
-engram session end --id <session_id>
+# Verify launcher and CLI
+.\scripts\utilities\run-engram.ps1 --help
+
+# Inspect recent project context
+.\scripts\utilities\run-engram.ps1 context workspace-foundation
+```
+
+**Fallback (manual save)**:
+```powershell
+engram save "session-summary:<session_id>" "<summary_text>" --project workspace-foundation
+engram save "session-end:<session_id>" "<end_message>" --project workspace-foundation
 ```
 
 ### Delivery closure artifact not created
