@@ -1,4 +1,4 @@
-# ensure-tools-active.ps1
+﻿# ensure-tools-active.ps1
 # Health-check and auto-install for all foundation tools.
 # Reads tool definitions from config/workspace.config.json (single source of truth).
 # All 5 tools follow the same check → install → verify pattern.
@@ -43,6 +43,203 @@ function Test-ToolAvailable {
     return $false
 }
 
+# ── System dependency management (go, git, node, etc.) ───────────────────────
+
+# Returns the installed version string for a system dep, or $null if undetectable.
+function Get-SystemDepVersion {
+    param($Dep)
+    if (-not (Get-Command $Dep.checkCommand -ErrorAction SilentlyContinue)) { return $null }
+    try {
+        $vArgs = if ($Dep.versionArgs) { [string[]]($Dep.versionArgs | ForEach-Object { [string]$_ }) } else { @('--version') }
+        $raw   = (& $Dep.checkCommand $vArgs 2>&1) | Select-Object -First 1 | Out-String
+        if ($raw -match [string]$Dep.versionRegex) { return $Matches[1] }
+    } catch {}
+    return $null
+}
+
+# Attempts to install a system dep via winget; falls back to clear manual instructions.
+# Returns $true if installed (may need terminal restart), $false if manual action required.
+function Install-SystemDep {
+    param($Dep)
+
+    $info = if ($Dep.install) { $Dep.install.windows } else { $null }
+
+    Write-Host ""
+    Write-Host "  --- REQUIRED SYSTEM DEPENDENCY: $($Dep.name) ---" -ForegroundColor Yellow
+    if ($Dep.minVersion) {
+        Write-Host "  Minimum version : $($Dep.minVersion)" -ForegroundColor Yellow
+    }
+    if ($Dep.usedBy) {
+        Write-Host "  Used by         : $($Dep.usedBy -join ', ')" -ForegroundColor Yellow
+    }
+
+    if (-not $info) {
+        Write-Host "  -─ [ERROR] No Windows install info in workspace.config.json for '$($Dep.name)'" -ForegroundColor Red
+        return $false
+    }
+
+    # ── Attempt auto-install via winget ──────────────────────────────────────
+    $wingetCmd = Get-Command winget -ErrorAction SilentlyContinue
+    $winget = if ($wingetCmd) { $wingetCmd.Source } else { $null }
+    if (-not $winget) {
+        # winget ships as an AppX alias on Windows 10/11
+        $alias = Join-Path $env:LOCALAPPDATA 'Microsoft\WindowsApps\winget.exe'
+        if (Test-Path $alias) { $winget = $alias }
+    }
+
+    if ($winget -and $info.winget) {
+        Write-Host "  -  Trying winget auto-install: $($info.winget)" -ForegroundColor Cyan
+        try {
+            $output   = & $winget install --id $info.winget --silent `
+                            --accept-package-agreements --accept-source-agreements 2>&1
+            $exitCode = $LASTEXITCODE
+            $outText  = $output | Out-String
+
+            $alreadyOk = ($exitCode -eq 0) -or
+                         ($outText -like '*already installed*') -or
+                         ($outText -like '*No applicable upgrade*') -or
+                         ($exitCode -eq -1978335189)   # APPINSTALLER_ERROR_ALREADY_INSTALLED
+
+            if ($alreadyOk) {
+                Write-Host "  [OK] winget install succeeded" -ForegroundColor Green
+                if ($info.notes) {
+                    Write-Host "  NOTE: $($info.notes)" -ForegroundColor Yellow
+                }
+                # Refresh session PATH with common install locations
+                $refreshDirs = @(
+                    'C:\Program Files\Go\bin',
+                    'C:\Program Files\Git\bin',
+                    'C:\Program Files\Git\cmd',
+                    'C:\Program Files\nodejs',
+                    (Join-Path $env:USERPROFILE 'go\bin')
+                )
+                foreach ($d in $refreshDirs) {
+                    if ((Test-Path $d) -and ($env:PATH -notlike "*$d*")) {
+                        $env:PATH += ";$d"
+                    }
+                }
+                $nowAvailable = [bool](Get-Command $Dep.checkCommand -ErrorAction SilentlyContinue)
+                if ($nowAvailable) {
+                    Write-Host "  [OK] $($Dep.name) is now available in this session" -ForegroundColor Green
+                } else {
+                    Write-Host "  [OK] $($Dep.name) installed - open a NEW terminal, then re-run: wf.ps1 health" -ForegroundColor Yellow
+                }
+                return $true
+            }
+
+            # winget ran but failed
+            $lastLines = ($output | Select-Object -Last 4) -join "`n"
+            Write-Host "  [ERROR] winget exit $exitCode" -ForegroundColor Red
+            Write-Host "  $lastLines" -ForegroundColor Red
+        } catch {
+            Write-Host "  [ERROR] winget threw: $($_.Exception.Message)" -ForegroundColor Red
+        }
+    } elseif (-not $winget) {
+        Write-Host "  winget not found on this system" -ForegroundColor Yellow
+    }
+
+    # ── Manual install fallback ───────────────────────────────────────────────
+    Write-Host "" -ForegroundColor Red
+    Write-Host "  MANUAL INSTALL REQUIRED" -ForegroundColor Red
+    Write-Host "  ---------------------------------------------------------" -ForegroundColor Red
+    Write-Host "  1. Download from : $($info.url)" -ForegroundColor White
+    Write-Host "  2. Install version $($Dep.minVersion) or newer" -ForegroundColor White
+    if ($info.notes) {
+        Write-Host "  3. $($info.notes)" -ForegroundColor White
+    }
+    Write-Host "  4. Restart this terminal" -ForegroundColor White
+    Write-Host "  5. Re-run: wf.ps1 health" -ForegroundColor White
+    Write-Host "  [BLOCKED] Cannot auto-install '$($Dep.name)' -- see instructions above" -ForegroundColor Red
+    return $false
+}
+
+# Iterates systemDependencies from config; checks availability, version, and auto-installs
+# required missing deps when -AutoStart is set.
+function Invoke-SystemDeps {
+    Write-Step "Checking System Dependencies"
+
+    $configPath = Join-Path $repoRoot 'config\workspace.config.json'
+    if (-not (Test-Path $configPath)) { Write-Warn 'Config not found - skipping system dep checks'; return }
+
+    $cfg = Get-Content $configPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    if (-not $cfg.systemDependencies) { Write-Info "No system dependencies declared in config"; return }
+
+    $missingRequired = @()
+
+    foreach ($dep in $cfg.systemDependencies) {
+        $available = [bool](Get-Command $dep.checkCommand -ErrorAction SilentlyContinue)
+
+        if ($available) {
+            # Optionally check minimum version
+            if ($dep.versionRegex -and $dep.minVersion) {
+                $ver = Get-SystemDepVersion -Dep $dep
+                if ($ver) {
+                    $cmp = 0
+                    try {
+                        $va = [Version]($ver  -replace '[^0-9.]', '')
+                        $vb = [Version]([string]$dep.minVersion -replace '[^0-9.]', '')
+                        # Pad to same component count for reliable comparison
+                        while ($va.ToString().Split('.').Count -lt $vb.ToString().Split('.').Count) {
+                            $va = [Version]("$va.0")
+                        }
+                        $cmp = $va.CompareTo($vb)
+                    } catch {}
+
+                    if ($cmp -lt 0) {
+                        Write-Warn "$($dep.name) v$ver is below required minimum v$($dep.minVersion)"
+                        if ($dep.install.windows.url) {
+                            Write-Info "  Update from: $($dep.install.windows.url)"
+                        }
+                        if (-not $dep.optional) { $missingRequired += $dep.name }
+                    } else {
+                        Write-Ok "$($dep.name) v$ver"
+                    }
+                } else {
+                    Write-Ok "$($dep.name) installed (version check skipped)"
+                }
+            } else {
+                Write-Ok "$($dep.name) installed"
+            }
+            continue
+        }
+
+        # Not installed
+        if ($dep.optional) {
+            $usedMsg = if ($dep.usedBy) { " (used by: $($dep.usedBy -join ', '))" } else { '' }
+            Write-Warn "$($dep.name) not installed [optional]$usedMsg"
+            if ($dep.install.windows.url) {
+                Write-Info "  Install from: $($dep.install.windows.url)"
+            }
+            continue
+        }
+
+        # Required dep is missing
+        Write-Err "$($dep.name) is REQUIRED but not installed"
+        if ($AutoStart) {
+            $ok = Install-SystemDep -Dep $dep
+            if (-not $ok) { $missingRequired += $dep.name }
+        } else {
+            if ($dep.install.windows.url) {
+                Write-Host "  Install from : $($dep.install.windows.url)" -ForegroundColor Yellow
+            }
+            Write-Host "  Then run     : wf.ps1 health" -ForegroundColor Yellow
+            $missingRequired += $dep.name
+        }
+    }
+
+    if ($missingRequired.Count -gt 0) {
+        Write-Host ""
+        Write-Host "  =========================================================" -ForegroundColor Red
+        Write-Host "  MISSING REQUIRED DEPENDENCIES: $($missingRequired -join ', ')" -ForegroundColor Red
+        Write-Host "  Install the packages listed above, restart this terminal," -ForegroundColor Red
+        Write-Host "  then run: wf.ps1 health" -ForegroundColor Red
+        Write-Host "  =========================================================" -ForegroundColor Red
+        Write-Host ""
+    } else {
+        Write-Ok "All required system dependencies are satisfied"
+    }
+}
+
 # ── Install a tool using the command from workspace.config.json ──────────────
 function Install-Tool {
     param($Tool, [string]$ToolsRoot)
@@ -59,23 +256,56 @@ function Install-Tool {
         return $false
     }
 
-    # Prerequisite check (go, git, bash) before attempting install
+    # Prerequisite check (go, git, bash) — attempt auto-install via system deps if missing
     foreach ($req in $Tool.requires) {
         if ($req -eq 'bash') {
             $hasBash = (Get-Command bash -ErrorAction SilentlyContinue) -or
                        (Test-Path 'C:\Program Files\Git\bin\bash.exe')
             if (-not $hasBash) {
-                Write-Warn "$($Tool.name): requires bash (Git for Windows) — skipping auto-install"
-                Write-Host "  Install Git for Windows: https://git-scm.com/download/win" -ForegroundColor Yellow
-                return $false
+                Write-Warn "$($Tool.name): requires bash (Git for Windows)"
+                # Try to resolve via git's system dep entry if AutoStart is on
+                if ($AutoStart) {
+                    $configPath = Join-Path $repoRoot 'config\workspace.config.json'
+                    $cfg        = Get-Content $configPath -Raw -Encoding UTF8 | ConvertFrom-Json
+                    $gitDep     = $cfg.systemDependencies | Where-Object { $_.name -eq 'git' } | Select-Object -First 1
+                    if ($gitDep) {
+                        $ok = Install-SystemDep -Dep $gitDep
+                        if ($ok) {
+                            $hasBash = (Get-Command bash -ErrorAction SilentlyContinue) -or
+                                       (Test-Path 'C:\Program Files\Git\bin\bash.exe')
+                        }
+                    }
+                }
+                if (-not $hasBash) {
+                    Write-Host "  Install Git for Windows: https://git-scm.com/download/win" -ForegroundColor Yellow
+                    return $false
+                }
             }
-        } elseif (-not (Get-Command $req -ErrorAction SilentlyContinue)) {
-            Write-Warn "$($Tool.name): requires '$req' but it is not found — skipping auto-install"
-            return $false
+        } else {
+            $reqFound = [bool](Get-Command $req -ErrorAction SilentlyContinue)
+            if (-not $reqFound) {
+                Write-Warn "$($Tool.name): requires '$req' but it is not installed"
+                # Try to resolve via systemDependencies if AutoStart is on
+                if ($AutoStart) {
+                    $configPath = Join-Path $repoRoot 'config\workspace.config.json'
+                    $cfg        = Get-Content $configPath -Raw -Encoding UTF8 | ConvertFrom-Json
+                    $sysDep     = $cfg.systemDependencies | Where-Object { $_.name -eq $req } | Select-Object -First 1
+                    if ($sysDep) {
+                        $ok = Install-SystemDep -Dep $sysDep
+                        if ($ok) {
+                            $reqFound = [bool](Get-Command $req -ErrorAction SilentlyContinue)
+                        }
+                    }
+                }
+                if (-not $reqFound) {
+                    Write-Host "  Once '$req' is installed, re-run: wf.ps1 health" -ForegroundColor Yellow
+                    return $false
+                }
+            }
         }
     }
 
-    Write-Info "$($Tool.name): not found — installing..."
+    Write-Info "$($Tool.name): not found - installing..."
     try {
         Invoke-Expression $installCmd 2>&1 | Out-Null
     } catch {
@@ -91,7 +321,7 @@ function Install-Tool {
             # Return true so this does NOT block workspace bootstrap
             return $true
         }
-        Write-Warn "$($Tool.name): install failed — $msg"
+        Write-Warn "$($Tool.name): install failed - $msg"
         return $false
     }
     return $true
@@ -130,14 +360,14 @@ function Confirm-ToolAfterInstall {
             $candidate = Join-Path $dir $Tool.checkCommand
             if (Test-Path $candidate) {
                 Write-Ok "$($Tool.name) installed at $candidate"
-                Write-Info "  To use immediately, add to PATH: `$env:PATH += ';$dir'"
-                Write-Info "  To persist, run: [Environment]::SetEnvironmentVariable('PATH', `$env:PATH + ';$dir', 'User')"
+                Write-Info "  To use immediately in this session: PATH updated automatically"
+                Write-Info "  To persist, restart your terminal after install"
                 $env:PATH += ";$dir"
                 Write-Info "  PATH updated for this session"
                 return $true
             }
         }
-        Write-Warn "$($Tool.name): install ran — binary not found in common locations"
+        Write-Warn "$($Tool.name): install ran - binary not found in common locations"
         Write-Info "  Expected locations: $($candidateDirs -join ', ')"
         Write-Info "  Open a new terminal and run: $($Tool.checkCommand) --version"
     }
@@ -151,7 +381,7 @@ function Invoke-ToolActivation {
 
     $configPath = Join-Path $repoRoot 'config\workspace.config.json'
     if (-not (Test-Path $configPath)) {
-        Write-Warn "workspace.config.json not found — skipping tool checks"
+        Write-Warn "workspace.config.json not found - skipping tool checks"
         return
     }
 
@@ -173,14 +403,14 @@ function Invoke-ToolActivation {
                 if (Confirm-ToolAfterInstall -Tool $tool -ToolsRoot $toolsRoot) {
                     Write-Ok "$($tool.name) installed and verified"
                 } else {
-                    Write-Warn "$($tool.name) install ran — binary may need a terminal restart to appear in PATH"
+                    Write-Warn "$($tool.name) install ran - binary may need a terminal restart to appear in PATH"
                 }
             } else {
-                Write-Warn "$($tool.name) could not be auto-installed — manual action needed"
+                Write-Warn "$($tool.name) could not be auto-installed - manual action needed"
                 $allOk = $false
             }
         } else {
-            Write-Warn "$($tool.name) not installed — run 'wf.ps1 health' to auto-install"
+            Write-Warn "$($tool.name) not installed - run 'wf.ps1 health' to auto-install"
             $allOk = $false
         }
     }
@@ -212,7 +442,7 @@ function Test-MCPIntegrations {
     Write-Step "Checking Optional MCP Integrations"
 
     $configPath = Join-Path $repoRoot 'config\workspace.config.json'
-    if (-not (Test-Path $configPath)) { Write-Warn "Config not found — skipping MCP checks"; return }
+    if (-not (Test-Path $configPath)) { Write-Warn "Config not found - skipping MCP checks"; return }
 
     $cfg = Get-Content $configPath -Raw -Encoding UTF8 | ConvertFrom-Json
     if (-not $cfg.mcpIntegrations) { Write-Ok "No MCP integrations configured (default)"; return }
@@ -250,7 +480,7 @@ function Test-WorkflowReadiness {
     if ($LASTEXITCODE -eq 0) {
         Write-Ok "Workflow CLI (wf.ps1) is operational"
     } else {
-        Write-Warn "Workflow CLI returned exit $LASTEXITCODE — check wf.ps1"
+        Write-Warn "Workflow CLI returned exit $LASTEXITCODE - check wf.ps1"
     }
 }
 
@@ -261,20 +491,21 @@ function Show-Summary {
     Write-Host "  Tool Activation Complete" -ForegroundColor Green
     Write-Host "========================================" -ForegroundColor Green
     Write-Host ""
-    Write-Host "  wf.ps1 status        — project status"   -ForegroundColor Cyan
-    Write-Host "  wf.ps1 review        — run code review"  -ForegroundColor Cyan
-    Write-Host "  wf.ps1 audit         — generate report"  -ForegroundColor Cyan
-    Write-Host "  wf.ps1 update-tools  — update all tools" -ForegroundColor Cyan
+    Write-Host "  wf.ps1 status        - project status"   -ForegroundColor Cyan
+    Write-Host "  wf.ps1 review        - run code review"  -ForegroundColor Cyan
+    Write-Host "  wf.ps1 audit         - generate report"  -ForegroundColor Cyan
+    Write-Host "  wf.ps1 update-tools  - update all tools" -ForegroundColor Cyan
     Write-Host ""
 }
 
-# ── Entry point ───────────────────────────────────────────────────────────────
+# -─ Entry point ───────────────────────────────────────────────────────────────
 if (-not $Quiet) {
-    Write-Host "Gentleman Foundation — Tool Activation" -ForegroundColor Magenta
+    Write-Host "Gentleman Foundation - Tool Activation" -ForegroundColor Magenta
     Write-Host "Reads tool list from config/workspace.config.json" -ForegroundColor White
     Write-Host ""
 }
 
+Invoke-SystemDeps
 Invoke-ToolActivation
 Test-OrchestratorSkills
 Test-MCPIntegrations

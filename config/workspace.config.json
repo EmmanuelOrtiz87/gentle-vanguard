@@ -47,6 +47,78 @@
     "postInstallCommand": ""
   },
   "projectKinds": ["service", "cli", "library"],
+  "systemDependencies": [
+    {
+      "name": "go",
+      "checkCommand": "go",
+      "minVersion": "1.21",
+      "versionArgs": ["version"],
+      "versionRegex": "go(\\d+\\.\\d+\\.\\d+)",
+      "optional": false,
+      "install": {
+        "windows": {
+          "winget": "GoLang.Go",
+          "url": "https://go.dev/dl/",
+          "notes": "Restart terminal after install so PATH includes Go"
+        },
+        "linux": {
+          "url": "https://go.dev/dl/",
+          "notes": "Download tarball, extract to /usr/local/go, add /usr/local/go/bin to PATH"
+        },
+        "macos": {
+          "brew": "go",
+          "url": "https://go.dev/dl/"
+        }
+      }
+    },
+    {
+      "name": "git",
+      "checkCommand": "git",
+      "minVersion": "2.30",
+      "versionArgs": ["--version"],
+      "versionRegex": "git version (\\d+\\.\\d+\\.\\d+)",
+      "optional": false,
+      "install": {
+        "windows": {
+          "winget": "Git.Git",
+          "url": "https://git-scm.com/download/win",
+          "notes": "Git Bash (bash.exe) is included — restart terminal after install"
+        },
+        "linux": {
+          "url": "https://git-scm.com/download/linux",
+          "notes": "sudo apt install git  OR  sudo dnf install git"
+        },
+        "macos": {
+          "brew": "git",
+          "url": "https://git-scm.com/download/mac"
+        }
+      }
+    },
+    {
+      "name": "node",
+      "checkCommand": "node",
+      "minVersion": "18",
+      "versionArgs": ["--version"],
+      "versionRegex": "v(\\d+\\.\\d+)",
+      "optional": true,
+      "usedBy": ["MCP integrations (context7, notion)", "opencode npm fallback"],
+      "install": {
+        "windows": {
+          "winget": "OpenJS.NodeJS.LTS",
+          "url": "https://nodejs.org/en/download/",
+          "notes": "Restart terminal after install"
+        },
+        "linux": {
+          "url": "https://nodejs.org/en/download/",
+          "notes": "sudo apt install nodejs  OR use nvm: https://github.com/nvm-sh/nvm"
+        },
+        "macos": {
+          "brew": "node",
+          "url": "https://nodejs.org/en/download/"
+        }
+      }
+    }
+  ],
   "tools": [
     {
       "name": "engram",
