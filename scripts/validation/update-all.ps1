@@ -152,66 +152,18 @@ function Install-Tool {
 }
 
 function Update-Tools {
-    Write-Step "Checking Tools"
-    
-    $tools = @{
-        "gg" = @{
-            desc = "Gentleman Guardian Angel"
-            check = { Get-Command gg -ErrorAction SilentlyContinue }
-            install = "winget install Gentleman.GG --silent"
-        }
-        "gga" = @{
-            desc = "GGA CLI"
-            check = { Get-Command gga -ErrorAction SilentlyContinue }
-            install = "winget install Gentleman.GGA --silent"
-        }
-        "engram" = @{
-            desc = "Engram Memory"
-            check = { Get-Command engram -ErrorAction SilentlyContinue }
-            install = "npm install -g @engram/memory"
-        }
-            "gentle-ai" = @{
-                desc = "Gentle-AI CLI"
-                check = {
-                    $native = Get-Command gentle-ai -ErrorAction SilentlyContinue
-                    if ($native) { return $native }
-                    $launcher = Join-Path (Split-Path -Parent $scriptDir) "utilities\run-gentle-ai.ps1"
-                    if (Test-Path $launcher) { return $launcher }
-                    return $null
-                }
-                install = "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\utilities\\run-gentle-ai.ps1 status"
-        }
+    Write-Step "Updating Tools"
+    # Delegate to the canonical tool updater which installs gga, engram, and gentle-ai.
+    $toolsScript = Join-Path $scriptDir "..\utilities\update-tools.ps1"
+    if (-not (Test-Path $toolsScript)) {
+        Write-Err "update-tools.ps1 not found at: $toolsScript"
+        return $false
     }
-    
-    $installedCount = 0
-    $missingCount = 0
-    
-    foreach ($toolName in $tools.Keys) {
-        $tool = $tools[$toolName]
-        $result = & $tool.check
-        
-        if ($result) {
-            Write-Success "$toolName ($($tool.desc))"
-            $installedCount++
-        } else {
-            Write-Host "$toolName ($($tool.desc)) - NOT FOUND" -ForegroundColor Yellow
-            $missingCount++
-            
-            if ($Force) {
-                Write-Host "  Attempting install..." -ForegroundColor Gray
-            }
-        }
-    }
-    
-    Write-Host ""
-    Write-Host "Tools: $installedCount installed, $missingCount missing" -ForegroundColor Gray
-    
-    if ($missingCount -gt 0 -and $Force) {
-        Write-Host ""
-        Write-Host "Use winget or npm to install missing tools:" -ForegroundColor Cyan
-        Write-Host "  winget install Gentleman.GG" -ForegroundColor White
-        Write-Host "  npm install -g @engram/memory" -ForegroundColor White
-    }
+    $args = @()
+    if ($DryRun) { $args += '-DryRun' }
+    if ($Force)  { $args += '-Force' }
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $toolsScript @args
+    return ($LASTEXITCODE -eq 0)
 }
 
 Write-Host ""
