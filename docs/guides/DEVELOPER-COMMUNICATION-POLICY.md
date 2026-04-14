@@ -65,6 +65,41 @@ Session auto-apply workflow:
 2. If enabled, it infers preset from task/branch and applies recommendation automatically.
 3. Session brief records the exact applied combination for traceability.
 
+## Agent Chat Enforcement Layer
+
+To avoid relying only on runtime config/scripts, this workspace also defines explicit agent-layer style enforcement.
+
+File:
+
+- `.github/copilot-instructions.md`
+
+Behavior:
+
+1. Enforces `simple + ultra` as default chat contract.
+2. Requires closure-first output format:
+	- `OK: <minimum verifiable result>`
+	- `ERROR: <brief cause> | ACTION: <minimum required step>`
+3. Restricts optional suggestions unless explicitly authorized.
+4. Allows detail escalation only on explicit request or critical-risk context.
+
+This complements (not replaces) `config/orchestrator.json` controls.
+
+## Engram Traceability for Communication Mode
+
+Communication mode changes executed through `scripts/utilities/response-mode.ps1` are persisted as Engram observations.
+
+Observation key:
+
+- `communication-response-mode`
+
+Recorded fields:
+
+1. `language`
+2. `detail`
+3. `profile`
+4. `preset`
+5. `reason` (change action source)
+
 ## Detail Escalation
 
 Use extended detail only when the developer explicitly requests it.
