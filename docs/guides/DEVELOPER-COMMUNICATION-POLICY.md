@@ -6,9 +6,11 @@ Standardize agent-to-developer communication to reduce ambiguity, token waste, a
 
 ## Default Mode
 
-1. Default mode is `executive`.
+1. Default mode is `simple`.
 2. Responses must be short, clear, and action-focused.
 3. Use plain language and avoid unnecessary narrative.
+4. Compression baseline is `ultra`.
+5. This baseline remains active until the developer explicitly asks to change it.
 
 ## Minimal Mode (`simple`)
 
@@ -47,8 +49,8 @@ Keys:
 Current local baseline for this workspace:
 
 - `communication_language = es`
-- `communication_response_mode = executive`
-- `response_profiles.active = lite`
+- `communication_response_mode = simple`
+- `response_profiles.active = ultra`
 - `communication_presets.default = bugfix`
 
 Preset workflow:
@@ -73,7 +75,7 @@ Approved triggers:
 - `DETALLE`
 - Explicit equivalent request in natural language.
 
-Without one of those triggers, keep executive mode.
+Without one of those triggers, keep simple mode.
 
 ## Risk-Based Escalation (Orchestrator)
 
