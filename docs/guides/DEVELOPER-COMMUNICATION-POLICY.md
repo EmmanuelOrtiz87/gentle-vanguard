@@ -10,6 +10,23 @@ Standardize agent-to-developer communication to reduce ambiguity, token waste, a
 2. Responses must be short, clear, and action-focused.
 3. Use plain language and avoid unnecessary narrative.
 
+## Minimal Mode (`simple`)
+
+Use `simple` mode when the developer wants the lowest possible token usage and closure-first output.
+
+Activation triggers:
+
+- `SIMPLE`
+- `RESUMEN`
+- Equivalent explicit request in natural language (for example: "solo cierre", "respuesta mínima").
+
+`simple` response contract:
+
+1. Success: `OK: cerrado` (or `OK: <resultado mínimo verificable>`).
+2. Failure: `ERROR: <causa breve> | ACCION: <paso mínimo requerido>`.
+3. Do not include optional suggestions unless explicitly authorized.
+4. Keep warnings only for critical risk (security/data-loss/regression).
+
 ## Detail Escalation
 
 Use extended detail only when the developer explicitly requests it.
@@ -28,11 +45,12 @@ The orchestrator may request a temporary response-level escalation when risk is 
 
 Escalation model:
 
-1. Default: `executive`.
-2. Escalate to `standard` for medium risk:
+1. Minimal on request: `simple`.
+2. Default: `executive`.
+3. Escalate to `standard` for medium risk:
 	- ambiguous requirement with implementation impact
 	- non-trivial integration or migration risk
-3. Escalate to `deep` for high risk:
+4. Escalate to `deep` for high risk:
 	- security, data-loss, compliance, or critical regression risk
 	- architecture decisions with broad blast radius
 
