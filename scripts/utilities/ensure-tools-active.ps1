@@ -1,6 +1,7 @@
 # ensure-tools-active.ps1
-# Automated tool activation and health check for Gentleman Foundation
-# Ensures all development tools are active and ready for coordinated workflow
+# Health-check and auto-install for all foundation tools.
+# Reads tool definitions from config/workspace.config.json (single source of truth).
+# All 5 tools follow the same check → install → verify pattern.
 
 param(
     [switch]$AutoStart,
@@ -9,288 +10,237 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
-$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot = if ($scriptDir) { (Resolve-Path (Join-Path (Join-Path $scriptDir '..') '..')).Path } else { Get-Location }
+$scriptDir  = Split-Path -Parent $MyInvocation.MyCommand.Path
+$repoRoot   = if ($scriptDir) { (Resolve-Path (Join-Path (Join-Path $scriptDir '..') '..')).Path } else { Get-Location }
 
-function Write-Step {
-    param([string]$Message)
-    if (-not $Quiet) {
-        Write-Host "`n=== $Message ===" -ForegroundColor Cyan
-    }
+# ── Output helpers ────────────────────────────────────────────────────────────
+function Write-Step { param([string]$m) if (-not $Quiet) { Write-Host "`n=== $m ===" -ForegroundColor Cyan } }
+function Write-Ok   { param([string]$m) if (-not $Quiet) { Write-Host "[OK] $m"   -ForegroundColor Green  } }
+function Write-Warn { param([string]$m) if (-not $Quiet) { Write-Host "[WARN] $m" -ForegroundColor Yellow } }
+function Write-Info { param([string]$m) if (-not $Quiet) { Write-Host "[INFO] $m" -ForegroundColor Cyan   } }
+function Write-Err  { param([string]$m) if (-not $Quiet) { Write-Host "[ERROR] $m" -ForegroundColor Red   } }
+
+# ── Resolve {token} placeholders in a string ─────────────────────────────────
+function Resolve-Placeholders {
+    param([string]$Text, [hashtable]$Vars)
+    foreach ($k in $Vars.Keys) { $Text = $Text.Replace("{$k}", $Vars[$k]) }
+    return $Text
 }
 
-function Write-Success {
-    param([string]$Message)
-    if (-not $Quiet) {
-        Write-Host "[OK] $Message" -ForegroundColor Green
-    }
-}
-
-function Write-Warning {
-    param([string]$Message)
-    if (-not $Quiet) {
-        Write-Host "[WARN] $Message" -ForegroundColor Yellow
-    }
-}
-
-function Write-Error {
-    param([string]$Message)
-    if (-not $Quiet) {
-        Write-Host "[ERROR] $Message" -ForegroundColor Red
-    }
-}
-
+# ── Check if a tool is currently available ───────────────────────────────────
 function Test-ToolAvailable {
-    param([string]$Name, [scriptblock]$TestScript)
-
-    try {
-        $result = & $TestScript
-        if ($result) {
-            Write-Success "$Name is available"
-            return $true
-        } else {
-            Write-Warning "$Name is not available"
-            return $false
+    param($Tool, [string]$ToolsRoot)
+    if ($Tool.checkCommand) {
+        return [bool](Get-Command $Tool.checkCommand -ErrorAction SilentlyContinue)
+    }
+    if ($Tool.checkPath) {
+        $resolved = Resolve-Placeholders -Text $Tool.checkPath -Vars @{
+            toolsRoot     = $ToolsRoot
+            workspaceRoot = $repoRoot
         }
-    } catch {
-        Write-Error "$Name check failed: $($_.Exception.Message)"
+        return (Test-Path $resolved)
+    }
+    return $false
+}
+
+# ── Install a tool using the command from workspace.config.json ──────────────
+function Install-Tool {
+    param($Tool, [string]$ToolsRoot)
+
+    $installCmd = $null
+    if ($Tool.install -and $Tool.install.windows) {
+        $installCmd = Resolve-Placeholders -Text ([string]$Tool.install.windows) -Vars @{
+            toolsRoot     = $ToolsRoot
+            workspaceRoot = $repoRoot
+        }
+    }
+    if (-not $installCmd) {
+        Write-Warn "$($Tool.name): no install command defined for Windows"
         return $false
     }
-}
 
-function Start-Engram {
-    Write-Step "Starting Engram memory system..."
-
-    $engramScript = Join-Path $scriptDir 'run-engram.ps1'
-    if (-not (Test-Path $engramScript)) {
-        Write-Warning "Engram script not found at: $engramScript"
-        return
-    }
-
-    $engramCmd = Get-Command engram -ErrorAction SilentlyContinue
-    if (-not $engramCmd -and $AutoStart) {
-        $installer = Join-Path $scriptDir 'install-engram.ps1'
-        if (Test-Path $installer) {
-            Write-Host "Engram CLI missing. Installing..." -ForegroundColor Yellow
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $installer -Force
-        }
-    }
-
-    try {
-        if ($AutoStart) {
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $engramScript version 2>$null | Out-Null
-            if ($LASTEXITCODE -eq 0) {
-                Write-Success "Engram CLI is ready"
-            } else {
-                Write-Warning "Engram CLI check failed"
-            }
-        } else {
-            Write-Success "Engram check skipped (AutoStart not requested)"
-        }
-    } catch {
-        Write-Error "Failed to verify Engram: $($_.Exception.Message)"
-    }
-}
-
-function Start-GGA {
-    Write-Step "Checking Gentleman Guardian Angel (GGA)..."
-
-    $ggaScript = Join-Path $scriptDir 'run-gga.ps1'
-    if (Test-Path $ggaScript) {
-        # Test GGA availability
-        $ggaAvailable = Test-ToolAvailable "GGA" {
-            try {
-                $result = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $ggaScript --help 2>$null
-                return $true
-            } catch {
+    # Prerequisite check (go, git, bash) before attempting install
+    foreach ($req in $Tool.requires) {
+        if ($req -eq 'bash') {
+            $hasBash = (Get-Command bash -ErrorAction SilentlyContinue) -or
+                       (Test-Path 'C:\Program Files\Git\bin\bash.exe')
+            if (-not $hasBash) {
+                Write-Warn "$($Tool.name): requires bash (Git for Windows) — skipping auto-install"
+                Write-Host "  Install Git for Windows: https://git-scm.com/download/win" -ForegroundColor Yellow
                 return $false
             }
+        } elseif (-not (Get-Command $req -ErrorAction SilentlyContinue)) {
+            Write-Warn "$($Tool.name): requires '$req' but it is not found — skipping auto-install"
+            return $false
         }
-
-        if (-not $ggaAvailable -and $AutoStart) {
-            Write-Warning "GGA not available - attempting installation..."
-            # Could add installation logic here
-        }
-    } else {
-        Write-Warning "GGA script not found at: $ggaScript"
     }
+
+    Write-Info "$($Tool.name): not found — installing..."
+    try {
+        Invoke-Expression $installCmd 2>&1 | Out-Null
+    } catch {
+        Write-Warn "$($Tool.name): install failed — $($_.Exception.Message)"
+        return $false
+    }
+    return $true
 }
 
-function Start-GentleAI {
-    Write-Step "Checking Gentle-AI CLI..."
+# ── Re-check after install (handles GOPATH/bin not yet in session PATH) ───────
+function Confirm-ToolAfterInstall {
+    param($Tool, [string]$ToolsRoot)
 
-    $gentleAIScript = Join-Path $scriptDir 'run-gentle-ai.ps1'
+    if (Test-ToolAvailable -Tool $Tool -ToolsRoot $ToolsRoot) { return $true }
 
-    # Check native binary first — compat launcher existence is not sufficient.
-    $nativeCmd = Get-Command gentle-ai -ErrorAction SilentlyContinue
-    if ($nativeCmd) {
-        Write-Success "Gentle-AI is available (native)"
-        return
-    }
-
-    # Native binary not found.
-    if ($AutoStart) {
-        # Attempt auto-install via go install (Go is required by workspace.config.json).
-        $goCmd = Get-Command go -ErrorAction SilentlyContinue
-        if ($goCmd) {
-            Write-Host "[INFO] Gentle-AI not found. Installing via 'go install'..." -ForegroundColor Cyan
-            go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest 2>&1 | Out-Null
-            # Re-check after install attempt.
-            $nativeCmd = Get-Command gentle-ai -ErrorAction SilentlyContinue
-            if ($nativeCmd) {
-                Write-Success "Gentle-AI installed successfully"
-                return
-            }
-            # Binary installed but not yet in session PATH — try $GOPATH/bin directly.
-            $goBin = if ($env:GOBIN) { $env:GOBIN } elseif ($env:GOPATH) { Join-Path $env:GOPATH 'bin' } else { Join-Path $env:USERPROFILE 'go\bin' }
-            $gentleExe = Join-Path $goBin 'gentle-ai.exe'
-            if (-not (Test-Path $gentleExe)) { $gentleExe = Join-Path $goBin 'gentle-ai' }
-            if (Test-Path $gentleExe) {
-                Write-Success "Gentle-AI installed at $gentleExe (restart terminal or add $goBin to PATH)"
-                return
-            }
-            Write-Warning "go install ran but gentle-ai binary not found. Check GOBIN/PATH."
-        } else {
-            Write-Warning "Go not found — cannot auto-install Gentle-AI."
-            Write-Host "  Install Go from https://go.dev/dl/ then run: wf.ps1 update-tools" -ForegroundColor Yellow
+    # For Go-installed binaries: check $GOPATH/bin directly
+    if ($Tool.checkCommand -and $Tool.install -and
+        ([string]$Tool.install.windows) -like '*go install*') {
+        $goBin = if ($env:GOBIN) { $env:GOBIN } `
+                 elseif ($env:GOPATH) { Join-Path $env:GOPATH 'bin' } `
+                 else { Join-Path $env:USERPROFILE 'go\bin' }
+        $exe = Join-Path $goBin "$($Tool.checkCommand).exe"
+        if (-not (Test-Path $exe)) { $exe = Join-Path $goBin $Tool.checkCommand }
+        if (Test-Path $exe) {
+            Write-Ok "$($Tool.name) installed at $exe (add $goBin to PATH if not already)"
+            return $true
         }
     }
-
-    # Fallback: compat launcher.
-    if (Test-Path $gentleAIScript) {
-        Write-Warning "Native Gentle-AI not available. Using compatibility launcher."
-        if ($AutoStart) {
-            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $gentleAIScript status | Out-Null
-        }
-    } else {
-        Write-Warning "Gentle-AI tooling unavailable. Run: .\scripts\utilities\wf.ps1 update-tools"
-    }
+    return $false
 }
 
-function Start-OrchestratorSkills {
-    Write-Step "Activating Orchestrator Skills..."
-
-    # Check if skills are installed
-    $skillsDir = Join-Path $repoRoot 'skills'
-    $orchestratorSkills = @('project-orchestrator-skill', 'code-review-orchestrator-skill', 'session-workflow-skill')
-
-    foreach ($skill in $orchestratorSkills) {
-        $skillPath = Join-Path $skillsDir $skill
-        if (Test-Path $skillPath) {
-            Write-Success "$skill is available"
-        } else {
-            Write-Warning "$skill not found - may need installation"
-        }
-    }
-
-    # Skills are always active when available - no explicit start needed
-    Write-Success "Orchestrator skills ready for coordination"
-}
-
-function Test-MCPIntegrationReadiness {
-    Write-Step "Checking optional MCP integrations..."
+# ── Main tool activation loop (data-driven over workspace.config.json) ────────
+function Invoke-ToolActivation {
+    Write-Step "Checking Foundation Tools"
 
     $configPath = Join-Path $repoRoot 'config\workspace.config.json'
     if (-not (Test-Path $configPath)) {
-        Write-Warning "workspace.config.json not found - skipping MCP integration checks"
+        Write-Warn "workspace.config.json not found — skipping tool checks"
         return
     }
 
-    try {
-        $cfg = Get-Content $configPath -Raw | ConvertFrom-Json
-    } catch {
-        Write-Warning "Could not parse workspace.config.json - skipping MCP integration checks"
-        return
-    }
+    $cfg       = Get-Content $configPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    $toolsRoot = if ($cfg.toolsRoot) { Join-Path $repoRoot $cfg.toolsRoot } else { Join-Path $repoRoot 'tools' }
+    $allOk     = $true
 
-    if (-not $cfg.mcpIntegrations) {
-        Write-Success "No optional MCP integrations configured"
-        return
-    }
+    foreach ($tool in $cfg.tools) {
+        $available = Test-ToolAvailable -Tool $tool -ToolsRoot $toolsRoot
 
-    $integrationNames = @('context7', 'notion')
-    foreach ($name in $integrationNames) {
-        $integration = $cfg.mcpIntegrations.$name
-        if (-not $integration) { continue }
-
-        if (-not $integration.enabled) {
-            Write-Success "MCP $name is disabled (default)"
+        if ($available) {
+            Write-Ok "$($tool.name) is available"
             continue
         }
 
-        $missing = @()
-        if ($integration.requiredEnv) {
-            foreach ($envName in $integration.requiredEnv) {
-                $value = [Environment]::GetEnvironmentVariable([string]$envName)
-                if ([string]::IsNullOrWhiteSpace($value)) {
-                    $missing += [string]$envName
+        if ($AutoStart) {
+            $ok = Install-Tool -Tool $tool -ToolsRoot $toolsRoot
+            if ($ok) {
+                if (Confirm-ToolAfterInstall -Tool $tool -ToolsRoot $toolsRoot) {
+                    Write-Ok "$($tool.name) installed and verified"
+                } else {
+                    Write-Warn "$($tool.name) install ran — binary may need a terminal restart to appear in PATH"
                 }
+            } else {
+                Write-Warn "$($tool.name) could not be auto-installed — manual action needed"
+                $allOk = $false
+            }
+        } else {
+            Write-Warn "$($tool.name) not installed — run 'wf.ps1 health' to auto-install"
+            $allOk = $false
+        }
+    }
+
+    if ($allOk) { Write-Ok "All foundation tools are active" }
+}
+
+# ── Orchestrator skills ───────────────────────────────────────────────────────
+function Test-OrchestratorSkills {
+    Write-Step "Checking Orchestrator Skills"
+
+    $skillsDir = Join-Path $repoRoot 'skills'
+    $required  = @('project-orchestrator-skill', 'code-review-orchestrator-skill', 'session-workflow-skill')
+    $allOk     = $true
+
+    foreach ($skill in $required) {
+        if (Test-Path (Join-Path $skillsDir $skill)) {
+            Write-Ok "$skill available"
+        } else {
+            Write-Warn "$skill not found"
+            $allOk = $false
+        }
+    }
+    if ($allOk) { Write-Ok "Orchestrator skills ready" }
+}
+
+# ── Optional MCP integrations ─────────────────────────────────────────────────
+function Test-MCPIntegrations {
+    Write-Step "Checking Optional MCP Integrations"
+
+    $configPath = Join-Path $repoRoot 'config\workspace.config.json'
+    if (-not (Test-Path $configPath)) { Write-Warn "Config not found — skipping MCP checks"; return }
+
+    $cfg = Get-Content $configPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    if (-not $cfg.mcpIntegrations) { Write-Ok "No MCP integrations configured (default)"; return }
+
+    foreach ($name in @('context7', 'notion')) {
+        $integration = $cfg.mcpIntegrations.$name
+        if (-not $integration -or -not $integration.enabled) {
+            Write-Ok "MCP $name disabled (default)"
+            continue
+        }
+        $missing = @()
+        foreach ($envName in $integration.requiredEnv) {
+            if ([string]::IsNullOrWhiteSpace([Environment]::GetEnvironmentVariable([string]$envName))) {
+                $missing += [string]$envName
             }
         }
-
         if ($missing.Count -gt 0) {
-            Write-Warning "MCP $name is enabled but missing env vars: $($missing -join ', ')"
+            Write-Warn "MCP $name enabled but missing env vars: $($missing -join ', ')"
         } else {
-            Write-Success "MCP $name is enabled and env vars are present"
+            Write-Ok "MCP $name enabled and configured"
         }
     }
 }
 
+# ── Workflow CLI readiness ────────────────────────────────────────────────────
 function Test-WorkflowReadiness {
-    Write-Step "Testing Workflow Readiness..."
+    Write-Step "Checking Workflow CLI"
 
-    # Test wf.ps1 functionality
     $wfScript = Join-Path $scriptDir 'wf.ps1'
-    if (Test-Path $wfScript) {
-        $statusWorks = Test-ToolAvailable "Workflow CLI (status)" {
-            $result = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $wfScript status 2>$null
-            return $LASTEXITCODE -eq 0
-        }
-
-        $reviewWorks = Test-ToolAvailable "Workflow CLI (review)" {
-            $result = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $wfScript review -SkipTests 2>$null
-            return $LASTEXITCODE -eq 0
-        }
-
-        if ($statusWorks -and $reviewWorks) {
-            Write-Success "Workflow system is fully operational"
-        } else {
-            Write-Warning "Some workflow functions may not be working correctly"
-        }
+    if (-not (Test-Path $wfScript)) {
+        Write-Err "Workflow CLI not found: $wfScript"
+        return
+    }
+    $null = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $wfScript status 2>$null
+    if ($LASTEXITCODE -eq 0) {
+        Write-Ok "Workflow CLI (wf.ps1) is operational"
     } else {
-        Write-Error "Workflow script not found: $wfScript"
+        Write-Warn "Workflow CLI returned exit $LASTEXITCODE — check wf.ps1"
     }
 }
 
-function Show-StatusSummary {
-    if (-not $Quiet) {
-        Write-Host "`n========================================" -ForegroundColor Green
-        Write-Host "  Tool Activation Complete" -ForegroundColor Green
-        Write-Host "========================================" -ForegroundColor Green
-        Write-Host ""
-        Write-Host "All development tools have been checked and activated where possible." -ForegroundColor White
-        Write-Host "The coordinated workflow system is now ready for use." -ForegroundColor White
-        Write-Host ""
-        Write-Host "Use '.\scripts\utilities\wf.ps1 status' to check project status" -ForegroundColor Cyan
-        Write-Host "Use '.\scripts\utilities\wf.ps1 review' to run code review" -ForegroundColor Cyan
-        Write-Host "Use '.\scripts\utilities\wf.ps1 audit' to generate audit reports" -ForegroundColor Cyan
-        Write-Host ""
-    }
-}
-
-# Main execution
-if (-not $Quiet) {
-    Write-Host "Gentleman Foundation - Tool Activation System" -ForegroundColor Magenta
-    Write-Host "Ensuring all development tools are active and ready..." -ForegroundColor White
+# ── Summary ───────────────────────────────────────────────────────────────────
+function Show-Summary {
+    if ($Quiet) { return }
+    Write-Host "`n========================================" -ForegroundColor Green
+    Write-Host "  Tool Activation Complete" -ForegroundColor Green
+    Write-Host "========================================" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "  wf.ps1 status        — project status"   -ForegroundColor Cyan
+    Write-Host "  wf.ps1 review        — run code review"  -ForegroundColor Cyan
+    Write-Host "  wf.ps1 audit         — generate report"  -ForegroundColor Cyan
+    Write-Host "  wf.ps1 update-tools  — update all tools" -ForegroundColor Cyan
     Write-Host ""
 }
 
-Start-Engram
-Start-GGA
-Start-GentleAI
-Start-OrchestratorSkills
-Test-MCPIntegrationReadiness
+# ── Entry point ───────────────────────────────────────────────────────────────
+if (-not $Quiet) {
+    Write-Host "Gentleman Foundation — Tool Activation" -ForegroundColor Magenta
+    Write-Host "Reads tool list from config/workspace.config.json" -ForegroundColor White
+    Write-Host ""
+}
+
+Invoke-ToolActivation
+Test-OrchestratorSkills
+Test-MCPIntegrations
 Test-WorkflowReadiness
-Show-StatusSummary
+Show-Summary
 
 exit 0

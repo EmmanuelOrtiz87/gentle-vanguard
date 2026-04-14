@@ -548,13 +548,6 @@ function Invoke-Update {
     } else {
         Write-Warning "update-all.ps1 not found - skipping foundation update"
     }
-
-    # Update tools (gga, engram, gentle-ai) - no brew needed
-    $toolsScript = Join-Path $scriptDir 'update-tools.ps1'
-    if (Test-Path $toolsScript) {
-        Write-Step "Updating tools (gga, engram, gentle-ai)"
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $toolsScript
-    }
 }
 
 function Invoke-UpdateAll {
@@ -1263,7 +1256,7 @@ COMMANDS:
     verify               Quick stack verification & auto-repair
     update               Update repository, foundation, skills, and tools
     update-all           Alias for update
-    update-tools         Update gga, engram, and gentle-ai (no brew needed on Windows)
+    update-tools         Update all tools: gga, engram, gentle-ai, gentleman-skills, opencode
     migrate-structure    Preflight and guided migration of loose scripts
     context-pack [goal]  Generate compact context summary for new chat thread
     compact-start [goal] Generate context pack and copy compact continuation prompt
@@ -1303,6 +1296,7 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 ide-status          Detect IDE and show recommended activation
     .\scripts\utilities\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
     .\scripts\utilities\wf.ps1 update-tools         Update gga / engram / gentle-ai (Windows: go install, not brew)
+        .\scripts\utilities\wf.ps1 update-tools         Update all tools: gga, engram, gentle-ai, gentleman-skills, opencode
     .\scripts\utilities\wf.ps1 context-pack "fix ci noise"  Generate compact handoff summary for token-efficient continuation
     .\scripts\utilities\wf.ps1 compact-start "fix ci noise" Generate handoff summary and copy compact prompt
     .\scripts\utilities\wf.ps1 context-metrics 14  Show 14-day context usage summary

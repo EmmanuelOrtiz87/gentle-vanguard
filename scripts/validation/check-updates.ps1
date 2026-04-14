@@ -131,11 +131,15 @@ if ($All -or $Tools) {
         Write-Check "gga" "OK" "AI-powered code review"
     } else {
         Write-Check "gga" "MISSING" "AI-powered code review"
-        Write-Host "       Install: go install github.com/gentleman-programming/gentleman-guardian-angel/cmd/gga@latest" -ForegroundColor Gray
+        Write-Host "       Install: git clone + bash install.sh (see scripts/utilities/update-tools.ps1)" -ForegroundColor Gray
     }
     
-    if ($opencode) {
-        Write-Check "engram" "OK" "Persistent memory (built into opencode)"
+    $engram = Get-Command engram -ErrorAction SilentlyContinue
+    if ($engram) {
+        Write-Check "engram" "OK" "Persistent memory"
+    } else {
+        Write-Check "engram" "MISSING" "Persistent memory"
+        Write-Host "       Install: go install github.com/Gentleman-Programming/engram/cmd/engram@latest" -ForegroundColor Gray
     }
     
     $gentleAi = Get-Command gentle-ai -ErrorAction SilentlyContinue
@@ -146,6 +150,19 @@ if ($All -or $Tools) {
         Write-Host "       Install: go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest" -ForegroundColor Gray
     }
     
+    $cfgPath   = Join-Path (Split-Path -Parent $scriptDir) 'config\workspace.config.json'
+    $toolsRoot = if (Test-Path $cfgPath) {
+        $c = Get-Content $cfgPath -Raw | ConvertFrom-Json
+        if ($c.toolsRoot) { Join-Path (Split-Path -Parent $scriptDir) $c.toolsRoot } else { Join-Path (Split-Path -Parent $scriptDir) 'tools' }
+    } else { Join-Path (Split-Path -Parent $scriptDir) 'tools' }
+    $skillsDir = Join-Path $toolsRoot 'Gentleman-Skills'
+    if (Test-Path $skillsDir) {
+        Write-Check "gentleman-skills" "OK" "AI skills library"
+    } else {
+        Write-Check "gentleman-skills" "MISSING" "AI skills library"
+        Write-Host "       Install: git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git $skillsDir" -ForegroundColor Gray
+    }
+
     Write-Host ""
     Write-Host "Optional: These enhance the foundation but are not required." -ForegroundColor Gray
 }
@@ -156,7 +173,7 @@ Write-Host "========================================" -ForegroundColor Cyan
 if ($All -or $Core -or $Skills) {
     Write-Host ""
     Write-Host "To fix missing items:" -ForegroundColor Yellow
-    Write-Host "  1. Run .\scripts\bootstrap-machine.ps1" -ForegroundColor White
+    Write-Host "  1. Run .\scripts\foundation\bootstrap-machine.ps1" -ForegroundColor White
     Write-Host "  2. Restart terminal" -ForegroundColor White
     Write-Host "  3. Run gf validate" -ForegroundColor White
 }

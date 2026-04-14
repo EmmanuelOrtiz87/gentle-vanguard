@@ -1,13 +1,14 @@
 # update-tools.ps1
-# Updates GGA, Engram, and Gentle-AI on the local machine.
+# Updates all foundation tools on the local machine.
 #
-# How each tool is installed on Windows:
-#   gga         - bash install.sh from gentleman-guardian-angel repo (Git Bash required)
-#   engram      - go install github.com/Gentleman-Programming/engram/cmd/engram@latest
-#   gentle-ai   - go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest
+# Tool installation on Windows:
+#   gga              - bash install.sh (Git Bash required, gentleman-guardian-angel repo)
+#   engram           - go install github.com/Gentleman-Programming/engram/cmd/engram@latest
+#   gentle-ai        - go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest
+#   gentleman-skills - git clone / pull https://github.com/Gentleman-Programming/Gentleman-Skills.git
+#   opencode         - irm https://opencode.ai/install | iex  (requires -Force to auto-run)
 #
-# brew is NOT required. brew is macOS/Linuxbrew only.
-# All tools work on Windows via Git Bash + Go.
+# brew is NOT required on Windows. All Go tools install via go install.
 
 param(
     [switch]$DryRun,
@@ -26,6 +27,21 @@ function Write-Err   { param([string]$m) Write-Host "[ERROR] $m" -ForegroundColo
 function Write-Info  { param([string]$m) Write-Host "[INFO] $m" -ForegroundColor Cyan }
 
 # ── Prerequisites ─────────────────────────────────────────────────────────────
+
+function Get-GoBinDir {
+    if ($env:GOBIN)  { return $env:GOBIN }
+    if ($env:GOPATH) { return Join-Path $env:GOPATH 'bin' }
+    return Join-Path $env:USERPROFILE 'go\bin'
+}
+
+function Get-ToolsRoot {
+    $cfgPath = Join-Path $repoRoot 'config\workspace.config.json'
+    if (Test-Path $cfgPath) {
+        $c = Get-Content $cfgPath -Raw | ConvertFrom-Json
+        if ($c.toolsRoot) { return Join-Path $repoRoot $c.toolsRoot }
+    }
+    return Join-Path $repoRoot 'tools'
+}
 
 function Test-Go {
     $go = Get-Command go -ErrorAction SilentlyContinue
@@ -209,11 +225,101 @@ function Update-GentleAI {
 
 # ── Show current status ────────────────────────────────────────────────────────
 
+# ── Tool: Gentleman-Skills ────────────────────────────────────────────────────
+# Installed via: git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git {toolsRoot}/Gentleman-Skills
+# Update via: git pull --ff-only
+
+function Update-GentlemanSkills {
+    Write-Step "Updating Gentleman-Skills"
+
+    $toolsRoot = Get-ToolsRoot
+    $skillsDir = Join-Path $toolsRoot 'Gentleman-Skills'
+    $repoUrl   = 'https://github.com/Gentleman-Programming/Gentleman-Skills.git'
+
+    if (Test-Path $skillsDir) {
+        if ($DryRun) {
+            Write-Info "[DRY-RUN] Would run: git pull --ff-only in $skillsDir"
+            return $true
+        }
+        Write-Info "Pulling latest Gentleman-Skills..."
+        Push-Location $skillsDir
+        try {
+            git pull --ff-only origin main 2>&1 | ForEach-Object { Write-Host "  $_" }
+            if ($LASTEXITCODE -eq 0) {
+                Write-Ok "Gentleman-Skills up to date"
+                return $true
+            } else {
+                Write-Warn "Gentleman-Skills pull returned exit $LASTEXITCODE"
+                return $false
+            }
+        } finally {
+            Pop-Location
+        }
+    } else {
+        if ($DryRun) {
+            Write-Info "[DRY-RUN] Would clone: $repoUrl → $skillsDir"
+            return $true
+        }
+        Write-Info "Cloning Gentleman-Skills..."
+        $parent = Split-Path -Parent $skillsDir
+        if (-not (Test-Path $parent)) { New-Item -ItemType Directory -Path $parent -Force | Out-Null }
+        git clone $repoUrl $skillsDir 2>&1 | ForEach-Object { Write-Host "  $_" }
+        if ($LASTEXITCODE -eq 0) {
+            Write-Ok "Gentleman-Skills cloned"
+            return $true
+        } else {
+            Write-Err "Gentleman-Skills clone failed"
+            return $false
+        }
+    }
+}
+
+# ── Tool: OpenCode ─────────────────────────────────────────────────────────────
+# Installed via: irm https://opencode.ai/install | iex
+# NOTE: The installer downloads and executes a remote script.
+#       Auto-install requires explicit -Force flag to avoid unintended network calls.
+
+function Check-Opencode {
+    Write-Step "Checking OpenCode"
+
+    $opencodeCmd = Get-Command opencode -ErrorAction SilentlyContinue
+    if ($opencodeCmd) {
+        $ver = & $opencodeCmd.Source --version 2>&1 | Select-Object -First 1
+        if ([string]::IsNullOrWhiteSpace($ver)) { $ver = 'installed' }
+        Write-Ok "opencode: $ver"
+        return $true
+    }
+
+    Write-Warn "opencode not found"
+    if ($DryRun) {
+        Write-Info "[DRY-RUN] Would run: irm https://opencode.ai/install | iex"
+        return $true
+    }
+    if ($Force) {
+        Write-Info "Running opencode installer (requires network)..."
+        try {
+            Invoke-Expression "irm https://opencode.ai/install | iex" 2>&1 | Out-Null
+            $opencodeCmd = Get-Command opencode -ErrorAction SilentlyContinue
+            if ($opencodeCmd) { Write-Ok "opencode installed"; return $true }
+            Write-Warn "opencode installer ran but binary not found — restart terminal"
+            return $false
+        } catch {
+            Write-Err "opencode install failed: $($_.Exception.Message)"
+            return $false
+        }
+    } else {
+        Write-Host "  To install: irm https://opencode.ai/install | iex" -ForegroundColor Gray
+        Write-Host "  Or run:     .\scripts\utilities\wf.ps1 update-tools -Force" -ForegroundColor Gray
+        return $false
+    }
+}
+
 function Show-ToolStatus {
     Write-Step "Current Tool Status"
 
-    $goBin = if ($env:GOBIN) { $env:GOBIN } elseif ($env:GOPATH) { Join-Path $env:GOPATH 'bin' } else { Join-Path $env:USERPROFILE 'go\bin' }
-    $gitBash = 'C:\Program Files\Git\bin\bash.exe'
+    $goBin     = Get-GoBinDir
+    $toolsRoot = Get-ToolsRoot
+    $gitBash   = 'C:\Program Files\Git\bin\bash.exe'
 
     # GGA
     $ggaBin = Join-Path $env:USERPROFILE 'bin\gga'
@@ -246,11 +352,32 @@ function Show-ToolStatus {
         Write-Warn "gentle-ai: not installed (expected at $gentleExe)"
     }
 
+    # Gentleman-Skills
+    $skillsDir = Join-Path $toolsRoot 'Gentleman-Skills'
+    if (Test-Path $skillsDir) {
+        $branch = git -C $skillsDir rev-parse --abbrev-ref HEAD 2>$null
+        Write-Ok "gentleman-skills: $skillsDir (branch: $branch)"
+    } else {
+        Write-Warn "gentleman-skills: not cloned (expected at $skillsDir)"
+    }
+
+    # OpenCode
+    $opencodeCmd = Get-Command opencode -ErrorAction SilentlyContinue
+    if ($opencodeCmd) {
+        $ver = & $opencodeCmd.Source --version 2>&1 | Select-Object -First 1
+        if ([string]::IsNullOrWhiteSpace($ver)) { $ver = 'installed' }
+        Write-Ok "opencode: $ver"
+    } else {
+        Write-Warn "opencode: not installed"
+    }
+
     Write-Host ""
     Write-Host "Install commands (Windows / no brew needed):" -ForegroundColor Gray
     Write-Host "  gga       : git clone + bash install.sh (gentleman-guardian-angel repo)" -ForegroundColor Gray
     Write-Host "  engram    : go install github.com/Gentleman-Programming/engram/cmd/engram@latest" -ForegroundColor Gray
     Write-Host "  gentle-ai : go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest" -ForegroundColor Gray
+    Write-Host "  gentleman-skills: git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git" -ForegroundColor Gray
+    Write-Host "  opencode  : irm https://opencode.ai/install | iex  (or wf.ps1 update-tools -Force)" -ForegroundColor Gray
 }
 
 # ── Main ──────────────────────────────────────────────────────────────────────
@@ -283,6 +410,9 @@ if ($bashExe) {
     Write-Warn "Skipping gga (Git Bash not found)"
     $results['gga'] = $false
 }
+
+$results['gentleman-skills'] = Update-GentlemanSkills
+$results['opencode']         = Check-Opencode
 
 # Summary
 Write-Step "Update Summary"
