@@ -27,6 +27,25 @@ description: >
 11. **Evidence Before Content** - Add durable docs/learning only after explicit validation and decision rationale
 12. **Goal Alignment Always** - Keep every change aligned to stated objective, constraints, and acceptance criteria
 
+## COMMUNICATION MODE HOMOLOGATION
+
+Use this policy to keep response verbosity deterministic and token-efficient.
+
+1. Global default response mode is `executive`.
+2. Local workspace can override mode through `config/orchestrator.json` using `communication_response_mode`.
+3. Current local baseline is `simple`.
+4. `simple` mode contract:
+- success: `OK: cerrado` (or minimal verifiable result),
+- failure: `ERROR: <causa breve> | ACCION: <paso mínimo>`.
+5. Escalate to `standard`/`deep` only for medium/high risk or explicit developer request.
+
+Validation and visibility:
+
+1. `scripts/utilities/orchestrator-status.ps1` must report `communication_response_mode`.
+2. `scripts/diagnostics/system-diagnostics.sh` should show orchestrator active state plus response mode.
+
+Reference: `docs/guides/DEVELOPER-COMMUNICATION-POLICY.md`
+
 ## SDD ENFORCEMENT POLICY
 
 Current policy baseline:

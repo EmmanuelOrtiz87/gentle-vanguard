@@ -22,7 +22,7 @@ The Gentleman Foundation automatically ensures all development tools are active:
 ### Auto-Activation Triggers
 - **Pre-commit**: Tools validated before each commit
 - **Session start**: Session brief artifacts are generated
-- **Manual**: Use `.\wf.ps1 health` anytime
+- **Manual**: Use `.\scripts\utilities\wf.ps1 health` anytime
 
 ### Tools Activated
 - **Engram**: Memory system for context persistence
@@ -33,20 +33,20 @@ The Gentleman Foundation automatically ensures all development tools are active:
 ### Manual Activation
 ```powershell
 # Check and activate all tools
-.\wf.ps1 health
+.\scripts\utilities\wf.ps1 health
 
 # Create the session brief for today
-.\wf.ps1 start-session
+.\scripts\utilities\wf.ps1 start-session
 
 # Create the session brief and the first task brief
-.\wf.ps1 start-session api-hardening
+.\scripts\utilities\wf.ps1 start-session api-hardening
 
 # Close the session with validation + closure artifact
-.\wf.ps1 end-session
-.\wf.ps1 end-session api-hardening
+.\scripts\utilities\wf.ps1 end-session
+.\scripts\utilities\wf.ps1 end-session api-hardening
 
 # Force auto-start missing tools
-.\wf.ps1 health -Force
+.\scripts\utilities\wf.ps1 health -Force
 
 # Auto-init environment (any directory)
 .\scripts\utilities\auto-init-dev-environment.ps1
@@ -69,8 +69,8 @@ The Gentleman Foundation automatically ensures all development tools are active:
 
 ```
 1. Run the standard bootstrap:
-   - .\wf.ps1 health
-   - .\wf.ps1 start-session [task-name]
+   - .\scripts\utilities\wf.ps1 health
+   - .\scripts\utilities\wf.ps1 start-session [task-name]
 
 2. Orchestrator auto-detects:
    - Project type
@@ -150,18 +150,18 @@ PR            # Create PR
 ### CLI Commands
 
 ```powershell
-.\wf.ps1 start-session [task]  # Create session brief and optional task brief
-.\wf.ps1 end-session [task]    # Close session and create delivery closure artifact
-.\wf.ps1 task-brief <task>     # Create or refresh a task brief
-.\wf.ps1 review     # Code review
-.\wf.ps1 audit      # Generate audit doc
-.\wf.ps1 pr         # PR template
-.\wf.ps1 status     # Show status
-.\wf.ps1 push       # Prepare to push
-.\wf.ps1 update-all # Alias for full update workflow
-.\wf.ps1 homologate # Preview cleanup/homologation actions
-.\wf.ps1 homologate apply # Apply cleanup/homologation actions
-.\wf.ps1 health -StrictCleanup # Health + cleanup drift gate
+.\scripts\utilities\wf.ps1 start-session [task]  # Create session brief and optional task brief
+.\scripts\utilities\wf.ps1 end-session [task]    # Close session and create delivery closure artifact
+.\scripts\utilities\wf.ps1 task-brief <task>     # Create or refresh a task brief
+.\scripts\utilities\wf.ps1 review     # Code review
+.\scripts\utilities\wf.ps1 audit      # Generate audit doc
+.\scripts\utilities\wf.ps1 pr         # PR template
+.\scripts\utilities\wf.ps1 status     # Show status
+.\scripts\utilities\wf.ps1 push       # Prepare to push
+.\scripts\utilities\wf.ps1 update-all # Alias for full update workflow
+.\scripts\utilities\wf.ps1 homologate # Preview cleanup/homologation actions
+.\scripts\utilities\wf.ps1 homologate apply # Apply cleanup/homologation actions
+.\scripts\utilities\wf.ps1 health -StrictCleanup # Health + cleanup drift gate
 ```
 
 ### Git Commands
@@ -182,16 +182,16 @@ gh pr create            # Create PR
 
 ```powershell
 # 1. Check status
-.\wf.ps1 status
+.\scripts\utilities\wf.ps1 status
 
 # 2. Run code review
-.\wf.ps1 review
+.\scripts\utilities\wf.ps1 review
 
 # 3. Generate audit
-.\wf.ps1 audit
+.\scripts\utilities\wf.ps1 audit
 
 # 4. Create PR
-.\wf.ps1 pr
+.\scripts\utilities\wf.ps1 pr
 ```
 
 ### Pre-commit Hook

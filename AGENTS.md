@@ -66,21 +66,24 @@ gf list
 
 Default interaction mode for agent responses:
 
-1. Executive mode by default: short, precise, action-oriented responses.
-2. `simple` mode available for minimum-token output when developer requests concise closure-only responses.
-3. Extended details only on explicit request from developer:
+1. Global default is executive mode: short, precise, action-oriented responses.
+2. Local workspace override can activate `simple` mode via `config/orchestrator.json` (`communication_response_mode`).
+3. Current local baseline is `simple` for minimum-token closure-first responses.
+4. Extended details only on explicit request from developer:
 	- `EXTENDER`
 	- `DETALLE`
+
+	Minimal-mode triggers:
 	- `SIMPLE`
 	- `RESUMEN`
-4. In `simple` mode, response contract is:
+5. In `simple` mode, response contract is:
 	- `OK: cerrado` (or `OK: <resultado mínimo>`)
 	- `ERROR: <causa breve> | ACCION: <siguiente paso mínimo>`
-5. Suggestions, optional improvements, and adjustment proposals only when explicitly authorized by developer.
-6. If requirements are ambiguous, ask one concise clarification question before proceeding.
-7. For critical risk (security/data loss), agent must warn immediately even in simple/executive mode.
-8. The orchestrator can request temporary escalation to standard/deep based on detected risk and must ask developer authorization to keep that level.
-9. Document optimization is selective: optimize operational artifacts (review/audit/handoff), keep architecture/design/technical/business docs complete.
+6. Suggestions, optional improvements, and adjustment proposals only when explicitly authorized by developer.
+7. If requirements are ambiguous, ask one concise clarification question before proceeding.
+8. For critical risk (security/data loss), agent must warn immediately even in simple/executive mode.
+9. The orchestrator can request temporary escalation to standard/deep based on detected risk and must ask developer authorization to keep that level.
+10. Document optimization is selective: optimize operational artifacts (review/audit/handoff), keep architecture/design/technical/business docs complete.
 
 Policy reference: `docs/guides/DEVELOPER-COMMUNICATION-POLICY.md`
 

@@ -212,7 +212,7 @@ Use `wf.ps1 publish` for end-to-end execution with governance gates:
 
 ```powershell
 # Workflow CLI
-.\wf.ps1 <command>
+.\scripts\utilities\wf.ps1 <command>
 
 # Foundation CLI
 gf validate
@@ -262,7 +262,7 @@ Add to `~/.gitconfig`:
 git checkout -b feature/my-feature
 
 # During work
-.\wf.ps1 review
+.\scripts\utilities\wf.ps1 review
 go test ./...
 npm test
 
@@ -271,7 +271,7 @@ git add .
 git commit -m "feat(scope): description"
 
 # Before push
-.\wf.ps1 audit
+.\scripts\utilities\wf.ps1 audit
 git push -u origin feature/my-feature
 
 # Create PR

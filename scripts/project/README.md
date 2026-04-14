@@ -7,10 +7,9 @@ Scripts for creating and managing projects.
 | Script | Description |
 |--------|-------------|
 | `setup-project.ps1` | Setup existing project with foundation |
-| `create-new-project.ps1` | Create new project from template |
+| `new-project.ps1` | Create new project (canonical entrypoint) |
 | `init-workspace.ps1` | Initialize workspace |
 | `migrate.ps1` | Migrate existing project to foundation |
-| `new-project.ps1` | Create new project (wizard) |
 
 ## Usage
 
@@ -19,7 +18,7 @@ Scripts for creating and managing projects.
 .\setup-project.ps1 -ProjectPath "C:\my-project"
 
 # Create new project
-.\create-new-project.ps1 -Name "my-api" -Type "service"
+.\new-project.ps1 -Name "my-api" -Kind "service"
 
 # Initialize workspace
 .\init-workspace.ps1

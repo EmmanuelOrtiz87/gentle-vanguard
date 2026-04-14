@@ -15,11 +15,11 @@ The Gentleman Foundation stack now supports **all platforms** through orchestrat
 
 ```powershell
 # First time setup
-.\setup.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\foundation\bootstrap.ps1
 
 # Then use workflow commands
-.\wf.ps1 status
-.\wf.ps1 health
+.\scripts\utilities\wf.ps1 status
+.\scripts\utilities\wf.ps1 health
 ```
 
 ### Linux / macOS / WSL
@@ -78,8 +78,8 @@ Same commands work on **all platforms**:
 | Script | Platform | Purpose |
 |--------|----------|---------|
 | `scripts/foundation/setup.sh` | Linux/macOS/WSL | Universal setup with platform detection |
-| `setup.ps1` | Windows/PowerShell | Windows-specific initialization |
-| `scripts/foundation/setup.sh` in `wf` wrapper | All | Auto-detects platform on execution |
+| `scripts/foundation/bootstrap.ps1` | Windows/PowerShell | Canonical PowerShell bootstrap entrypoint |
+| `wf` wrapper + `scripts/utilities/wf.*` | All | Auto-detects platform on execution |
 
 ### Diagnostic Scripts
 
@@ -181,6 +181,7 @@ The orchestrator is configured in `config/orchestrator.json`:
 {
   "platform_aware": true,
   "cross_platform_routing": true,
+  "communication_response_mode": "simple",
   "supported_shells": ["powershell", "pwsh", "bash", "sh"],
   "shell_routing": {
     "windows": ["powershell", "pwsh"],
@@ -189,7 +190,7 @@ The orchestrator is configured in `config/orchestrator.json`:
   },
   "bootstrap": {
     "primary_entry": "scripts/foundation/setup.sh",
-    "fallback_entry": "setup.ps1"
+    "fallback_entry": "scripts/foundation/bootstrap.ps1"
   }
 }
 ```
@@ -226,7 +227,7 @@ On each branch checkout, automatically:
 .git/hooks/post-checkout
 
 # (For Windows - calls via orchestrator)
-& .\s scripts\hooks\post-checkout.ps1
+& .\hooks\post-checkout.ps1
 ```
 
 ### Pre-Commit Hook
@@ -245,7 +246,7 @@ Before each commit:
 chmod +x scripts/foundation/setup.sh wf
 chmod +x scripts/utilities/*.sh
 chmod +x scripts/diagnostics/*.sh
-chmod +x scripts/hooks/*.sh
+chmod +x scripts/git-hooks/*
 ```
 
 **Windows:** Already executable (PowerShell scripts handle execution)
@@ -309,7 +310,8 @@ esac
 {
   "commands": {
     "mycommand": "wf.sh mycommand"
-  }
+  },
+  "communication_response_mode": "simple"
 }
 ```
 
@@ -317,8 +319,8 @@ esac
 
 ```
 project-root/
-├── scripts/foundation/setup.sh       # Universal setup entry point
-├── setup.ps1                         # Windows setup (legacy)
+├── scripts/foundation/setup.sh       # Universal setup entry point (bash)
+├── scripts/foundation/bootstrap.ps1  # PowerShell bootstrap entry point
 ├── wf                                # Universal wrapper (any shell)
 ├── config/
 │   ├── orchestrator.json             # Platform routing config
@@ -350,7 +352,7 @@ project-root/
 
 ## What's Next
 
-1. Run setup: `bash scripts/foundation/setup.sh` (Linux/macOS) or `.\setup.ps1` (Windows)
-2. Verify installation: `./wf health`
+1. Run setup: `bash scripts/foundation/setup.sh` (Linux/macOS) or `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\foundation\bootstrap.ps1` (Windows)
+2. Verify installation: `./wf health` or `.\scripts\utilities\wf.ps1 health`
 3. Start development: See project-specific README
 4. Monitor via orchestrator: `engram status`

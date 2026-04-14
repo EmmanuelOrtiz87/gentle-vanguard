@@ -47,8 +47,8 @@ Gentleman Foundation Suite
 ### âœ… Development Tools
 | Tool | Status | Command | Description |
 |------|--------|---------|-------------|
-| **Workflow CLI** | âœ… Ready | `.\wf.ps1` | Project coordination & automation |
-| **Health Check** | âœ… Ready | `.\wf.ps1 health` | Tool validation & activation |
+| **Workflow CLI** | âœ… Ready | `.\scripts\utilities\wf.ps1` | Project coordination & automation |
+| **Health Check** | âœ… Ready | `.\scripts\utilities\wf.ps1 health` | Tool validation & activation |
 | **Auto-Init** | âœ… Ready | `auto-init-dev-environment.ps1` | Environment setup |
 | **PowerShell Profile** | âœ… Deployed | `$PROFILE` | Global auto-activation |
 
@@ -119,9 +119,9 @@ cd C:\Workspace_local\bitbucket-dashboard
 # (Orchestrator detects project type, loads skills)
 
 # Development workflow
-.\wf.ps1 status    # Project status
-.\wf.ps1 review    # Code review
-.\wf.ps1 audit     # Generate reports
+.\scripts\utilities\wf.ps1 status    # Project status
+.\scripts\utilities\wf.ps1 review    # Code review
+.\scripts\utilities\wf.ps1 audit     # Generate reports
 ```
 
 ### 3. Quality Gates (Automatic)
@@ -187,7 +187,7 @@ git commit -m "feat: add new dashboard component"
 ### Daily Operations
 ```powershell
 # Health check (run daily)
-.\wf.ps1 health
+.\scripts\utilities\wf.ps1 health
 
 # Update tools (weekly)
 .\scripts\utilities\update-tools.ps1
@@ -204,7 +204,7 @@ git commit -m "feat: add new dashboard component"
 
 ### Updates
 - **Automatic**: PowerShell profile updates tools on project entry
-- **Manual**: `.\wf.ps1 update` for explicit updates
+- **Manual**: `.\scripts\utilities\wf.ps1 update` for explicit updates
 - **Skills**: AI skills update automatically via orchestrator
 
 ---
@@ -238,15 +238,15 @@ git commit -m "feat: add new dashboard component"
 - **[Suite Overview](/docs/reference/SUITE-OVERVIEW.md)**: This document
 - **[Tool Activation](docs/guides/TOOL-ACTIVATION.md)**: Setup guide
 - **[Session Guide](docs/guides/SESSION-GUIDE.md)**: Daily workflow
-- **[Architecture](docs/architecture/)**: System design
+- **[Architecture](docs/reference/ARCHITECTURE.md)**: System design
 
 ### Quick Commands
 ```powershell
 # Get help
-.\wf.ps1 --help
+.\scripts\utilities\wf.ps1 --help
 
 # Health check
-.\wf.ps1 health
+.\scripts\utilities\wf.ps1 health
 
 # Start session
 # (AI agents will guide you)

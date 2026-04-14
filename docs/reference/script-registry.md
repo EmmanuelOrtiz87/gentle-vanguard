@@ -21,6 +21,9 @@ Central inventory of automation scripts with ownership, risk level, and executio
 | scripts/utilities/wf.ps1 | Operator CLI | B | manual | dev-experience | Entrypoint for workflow commands |
 | scripts/utilities/enable-optional-post-commit.ps1 | Optional Hook Coverage | B | manual | dev-experience | Enables/disables optional post-commit automation (disabled by default) |
 | scripts/foundation/setup.sh | Foundation Setup | B | manual | platform | Cross-platform bootstrap entrypoint for Linux/macOS/WSL |
+| scripts/foundation/bootstrap.ps1 | Foundation Setup | B | manual | platform | Canonical PowerShell bootstrap entrypoint for workspace initialization |
+| scripts/foundation/wf.ps1 | Foundation CLI | B | manual | platform | Workspace bootstrap and scaffolding CLI (`init`, `new`, `validate`, `tools`, `skills`) |
+| scripts/project/new-project.ps1 | Project Scaffolding | B | manual | dev-experience | Canonical new-project entrypoint backed by bootstrap-workspace |
 | scripts/utilities/end-session.ps1 | Session Closure | B | manual | dev-experience | Runs review/audit/governance checks and generates delivery closure artifact |
 | scripts/utilities/context-pack.ps1 | Context Budgeting | B | manual | dev-experience | Generates compact continuation summary to reduce token usage |
 | scripts/utilities/compact-start.ps1 | Context Budgeting | B | manual | dev-experience | Generates context pack and compact prompt for new thread |

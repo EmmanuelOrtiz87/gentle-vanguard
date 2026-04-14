@@ -131,12 +131,12 @@ Ensuring all development tools are active and ready...
 ### Daily Operations ✅
 ```powershell
 # Health monitoring
-.\wf.ps1 health          # ✅ Validated
+.\scripts\utilities\wf.ps1 health          # ✅ Validated
 
 # Development workflow
-.\wf.ps1 status          # ✅ Ready
-.\wf.ps1 review          # ✅ Ready
-.\wf.ps1 audit           # ✅ Ready
+.\scripts\utilities\wf.ps1 status          # ✅ Ready
+.\scripts\utilities\wf.ps1 review          # ✅ Ready
+.\scripts\utilities\wf.ps1 audit           # ✅ Ready
 ```
 
 ### Maintenance ✅

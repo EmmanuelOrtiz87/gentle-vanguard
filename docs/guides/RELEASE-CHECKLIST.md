@@ -101,7 +101,7 @@ Use this checklist every time before publishing a release to ensure consistency,
   - [ ] `docs/guides/` folder has at least 3-5 guides (getting-started, deployment, troubleshooting, etc.)
 
 - [ ] **Architecture Docs**
-  - [ ] `docs/architecture/` has ADR files or architecture overview
+  - [ ] `docs/reference/ARCHITECTURE.md` or equivalent architecture overview is present and current
   - [ ] Foundation-Dashboard homologation documented (if applicable)
   - [ ] Skill distribution model documented
 

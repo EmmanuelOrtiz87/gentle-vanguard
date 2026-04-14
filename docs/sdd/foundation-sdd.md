@@ -42,8 +42,8 @@ Workspace Foundation is the base framework for creating standardized, cross-plat
 ```
 Workspace Foundation
 ├── Core Components
-│   ├── Bootstrap System (bootstrap-project.ps1)
-│   ├── Setup Scripts (scripts/foundation/setup.sh, setup.ps1)
+│   ├── Bootstrap System (scripts/foundation/bootstrap.ps1)
+│   ├── Setup Scripts (scripts/foundation/setup.sh, scripts/utilities/wf.ps1)
 │   ├── Template Engine (templates/)
 │   └── Skill Registry (skills/)
 ├── Governance Layer
@@ -53,7 +53,7 @@ Workspace Foundation
 └── Project Generation
     ├── Scaffold Creation (projects/)
     ├── Configuration Management (config/)
-    └── Validation System (scripts/validate-*.ps1)
+    └── Validation System (scripts/validation/*.ps1)
 ```
 
 ### Technology Stack
@@ -64,7 +64,7 @@ Workspace Foundation
 
 ### Deployment
 - **Distribution:** Git repository as template
-- **Installation:** Single command setup (`bash scripts/foundation/setup.sh` or `.\setup.ps1`)
+- **Installation:** Canonical setup entrypoints are `bash scripts/foundation/setup.sh` or `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\foundation\bootstrap.ps1`
 - **Updates:** Git-based with validation scripts
 
 ## 3. Detailed Design
@@ -78,7 +78,8 @@ Workspace Foundation
 - Dependency setup and validation
 
 **Key Files:**
-- `bootstrap-project.ps1` - Main bootstrap script
+- `scripts/foundation/bootstrap.ps1` - Canonical PowerShell bootstrap script
+- `scripts/project/new-project.ps1` - Canonical project creation entrypoint
 - `templates/` - Project templates
 - `config/` - Configuration templates
 
@@ -118,7 +119,7 @@ docs/
 ### Data Flow
 
 ```
-User Request → Bootstrap Script → Template Selection → Configuration → Validation → Project Ready
+User Request → Canonical Bootstrap Script → Template Selection → Configuration → Validation → Project Ready
                       ↓
            Orchestrator Coordination → Skill Loading → Implementation → Documentation
 ```
@@ -128,19 +129,21 @@ User Request → Bootstrap Script → Template Selection → Configuration → V
 #### Bootstrap API
 ```powershell
 # Main entry point
-.\bootstrap-project.ps1 -Template "web-app" -Name "MyProject"
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\foundation\bootstrap.ps1
+
+# Canonical project creation entry point
+.\scripts\project\new-project.ps1 -Name "MyProject" -Kind "service"
 
 # Parameters:
-# -Template: Template type (web-app, api, cli)
 # -Name: Project name
-# -Path: Target directory (optional)
+# -Kind: Project type/profile selector
 ```
 
 #### Setup API
 ```bash
 # Cross-platform setup
 bash scripts/foundation/setup.sh    # Linux/macOS/WSL
-./setup.ps1      # Windows
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\foundation\bootstrap.ps1   # Windows
 ```
 
 ## 4. Implementation Plan

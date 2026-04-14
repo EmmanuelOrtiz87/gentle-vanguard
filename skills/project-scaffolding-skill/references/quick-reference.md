@@ -4,25 +4,25 @@
 
 ```powershell
 # Initialize workspace
-.\scripts\wf.ps1 init
+.\scripts\foundation\wf.ps1 init
 
 # Create project
-.\scripts\wf.ps1 new --name <name> --kind <type> [options]
+.\scripts\foundation\wf.ps1 new --name <name> --kind <type> [options]
 
 # Validate
-.\scripts\wf.ps1 validate [--project <name>] [--full]
+.\scripts\foundation\wf.ps1 validate [--project <name>] [--full]
 
 # Tools
-.\scripts\wf.ps1 tools [--install|--list|--update]
+.\scripts\foundation\wf.ps1 tools [--install|--list|--update]
 
 # Skills
-.\scripts\wf.ps1 skills [--install|--list]
+.\scripts\foundation\wf.ps1 skills [--install|--list]
 
 # Clean
-.\scripts\wf.ps1 clean [--data|--cache|--all]
+.\scripts\foundation\wf.ps1 clean [--data|--cache|--all]
 
 # Help
-.\scripts\wf.ps1 help
+.\scripts\foundation\wf.ps1 help
 ```
 
 ## Project Creation Options

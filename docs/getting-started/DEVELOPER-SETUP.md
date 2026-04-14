@@ -157,7 +157,7 @@ gf validate
 
 ```powershell
 # Run project validation
-.\scripts\validate-project.ps1
+.\scripts\validation\validate-project.ps1
 
 # Or use git hooks automatically
 git add .

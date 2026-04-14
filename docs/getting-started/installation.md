@@ -23,10 +23,10 @@ git clone https://github.com/your-org/workspace-foundation.git
 cd workspace-foundation
 
 # Initialize workspace
-.\scripts\wf.ps1 init
+.\scripts\foundation\wf.ps1 init
 
 # Create your first project
-.\scripts\wf.ps1 new --name my-project --kind service
+.\scripts\foundation\wf.ps1 new --name my-project --kind service
 ```
 
 ### Linux/macOS
@@ -37,10 +37,10 @@ git clone https://github.com/your-org/workspace-foundation.git
 cd workspace-foundation
 
 # Initialize workspace
-pwsh ./scripts/wf.ps1 init
+pwsh ./scripts/foundation/wf.ps1 init
 
 # Create your first project
-pwsh ./scripts/wf.ps1 new --name my-project --kind service
+pwsh ./scripts/foundation/wf.ps1 new --name my-project --kind service
 ```
 
 ## Detailed Setup
@@ -58,10 +58,10 @@ git config --global pull.rebase true
 
 ```powershell
 # Using the CLI
-.\scripts\wf.ps1 tools --install
+.\scripts\foundation\wf.ps1 tools --install
 
 # Or manually
-.\scripts\wf.ps1 init --force
+.\scripts\foundation\wf.ps1 init
 ```
 
 ### 3. Install AI Tools (Optional but Recommended)
@@ -75,8 +75,6 @@ The workspace-foundation includes integration with:
 | **gentle-ai** | AI ecosystem configurator | `go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest` |
 | **gga** | AI code review on commits | `git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git && cd gentleman-guardian-angel && bash install.sh` |
 | **engram** | Persistent memory | `go install github.com/Gentleman-Programming/engram/cmd/engram@latest` |
-
-Windows one-shot update (no brew required): `./scripts/utilities/wf.ps1 update-tools`
 
 Windows one-shot update (no brew required): `./scripts/utilities/wf.ps1 update-tools`
 
@@ -97,7 +95,7 @@ cp -r tools/Gentleman-Skills/curated/* ~/.config/opencode/skills/
 ### Interactive Mode (Recommended for beginners)
 
 ```powershell
-.\scripts\wf.ps1 new --interactive
+.\scripts\foundation\wf.ps1 new --interactive
 ```
 
 The wizard will ask:
@@ -111,10 +109,10 @@ The wizard will ask:
 
 ```powershell
 # Basic service
-.\scripts\wf.ps1 new --name my-api --kind service
+.\scripts\foundation\wf.ps1 new --name my-api --kind service
 
 # With options
-.\scripts\wf.ps1 new `
+.\scripts\foundation\wf.ps1 new `
     --name my-project `
     --kind frontend `
     --framework react `
@@ -144,17 +142,17 @@ The wizard will ask:
 ### Validate Your Setup
 
 ```powershell
-.\scripts\wf.ps1 validate
+.\scripts\foundation\wf.ps1 validate
 ```
 
 ### Create a Project
 
 ```powershell
 # Interactive
-.\scripts\wf.ps1 new --interactive
+.\scripts\foundation\wf.ps1 new --interactive
 
 # Or specify all options
-.\scripts\wf.ps1 new --name my-service --kind service
+.\scripts\foundation\wf.ps1 new --name my-service --kind service
 ```
 
 ### Run Tests

@@ -28,10 +28,9 @@ scripts/
 | Script | Purpose |
 |--------|---------|
 | `setup-project.ps1` | Setup existing project with foundation |
-| `create-new-project.ps1` | Create new project from template |
+| `new-project.ps1` | Create new project (canonical entrypoint) |
 | `init-workspace.ps1` | Initialize workspace |
 | `migrate.ps1` | Migrate existing project |
-| `new-project.ps1` | Create new project |
 
 ## Validation
 
@@ -62,41 +61,41 @@ Automated development workflow commands.
 
 ```powershell
 # Show help
-.\wf.ps1 help
+.\scripts\utilities\wf.ps1 help
 
 # Show status
-.\wf.ps1 status
+.\scripts\utilities\wf.ps1 status
 
 # Start session with normalized artifacts
-.\wf.ps1 start-session
-.\wf.ps1 start-session auth-hardening
+.\scripts\utilities\wf.ps1 start-session
+.\scripts\utilities\wf.ps1 start-session auth-hardening
 
 # Close session with verification and closure artifact
-.\wf.ps1 end-session
-.\wf.ps1 end-session auth-hardening
+.\scripts\utilities\wf.ps1 end-session
+.\scripts\utilities\wf.ps1 end-session auth-hardening
 
 # Run code review
-.\wf.ps1 review
-.\wf.ps1 review security
+.\scripts\utilities\wf.ps1 review
+.\scripts\utilities\wf.ps1 review security
 
 # Generate audit document
-.\wf.ps1 audit
+.\scripts\utilities\wf.ps1 audit
 
 # Create PR template
-.\wf.ps1 pr
+.\scripts\utilities\wf.ps1 pr
 
 # Prepare to push
-.\wf.ps1 push
+.\scripts\utilities\wf.ps1 push
 
 # Full update alias
-.\wf.ps1 update-all
+.\scripts\utilities\wf.ps1 update-all
 
 # Update repository, foundation, skills, and tools
-.\wf.ps1 update
+.\scripts\utilities\wf.ps1 update
 
 # Homologation workflow
-.\wf.ps1 homologate
-.\wf.ps1 homologate apply
+.\scripts\utilities\wf.ps1 homologate
+.\scripts\utilities\wf.ps1 homologate apply
 ```
 
 ## Quick Reference
@@ -104,6 +103,9 @@ Automated development workflow commands.
 ```powershell
 # Install foundation
 .\scripts\foundation\bootstrap-machine.ps1
+
+# Bootstrap workspace locally
+.\scripts\foundation\bootstrap.ps1
 
 # Setup project
 .\scripts\project\setup-project.ps1 -ProjectPath "path\to\project"
@@ -129,8 +131,8 @@ Automated development workflow commands.
 .\scripts\utilities\wf.ps1 install-engram
 
 # Code review
-.\wf.ps1 review
+.\scripts\utilities\wf.ps1 review
 
 # Audit document
-.\wf.ps1 audit
+.\scripts\utilities\wf.ps1 audit
 ```

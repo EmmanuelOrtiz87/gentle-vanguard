@@ -38,25 +38,25 @@ The primary interface is `wf.ps1` (PowerShell) or `wf.sh` (Bash).
 
 ```powershell
 # Initialize workspace
-.\scripts\wf.ps1 init
+.\scripts\foundation\wf.ps1 init
 
 # Create project (interactive wizard)
-.\scripts\wf.ps1 new --interactive
+.\scripts\foundation\wf.ps1 new --interactive
 
 # Create project with options
-.\scripts\wf.ps1 new --name <name> --kind <type> --architecture <pattern>
+.\scripts\foundation\wf.ps1 new --name <name> --kind <type> --architecture <pattern>
 
 # Validate workspace
-.\scripts\wf.ps1 validate
+.\scripts\foundation\wf.ps1 validate
 
 # Validate specific project
-.\scripts\wf.ps1 validate --project <name>
+.\scripts\foundation\wf.ps1 validate --project <name>
 
 # Install tools
-.\scripts\wf.ps1 tools --install
+.\scripts\foundation\wf.ps1 tools --install
 
 # Clean runtime
-.\scripts\wf.ps1 clean --data --cache
+.\scripts\foundation\wf.ps1 clean --data --cache
 ```
 
 ### 3. Template Variables
@@ -110,7 +110,7 @@ After scaffolding, always verify:
 - [ ] `package.json` or `go.mod` has correct name/version
 - [ ] Git initialized: `git init`
 - [ ] Initial commit: `git add . && git commit -m "Initial commit"`
-- [ ] Run validation: `wf.ps1 validate`
+- [ ] Run validation: `scripts/foundation/wf.ps1 validate`
 
 ## Project Type Selection Guide
 
@@ -138,13 +138,13 @@ Always run validation after project creation:
 
 ```powershell
 # Workspace validation
-.\scripts\wf.ps1 validate
+.\scripts\foundation\wf.ps1 validate
 
 # Project validation
-.\scripts\validate-project.ps1 -ProjectPath "projects/my-project"
+.\scripts\validation\validate-project.ps1 -ProjectPath "projects/my-project"
 
 # Full validation with details
-.\scripts\wf.ps1 validate --project my-project --full
+.\scripts\foundation\wf.ps1 validate --project my-project --full
 ```
 
 ## Anti-Patterns to Avoid
@@ -159,15 +159,15 @@ Always run validation after project creation:
 
 ```powershell
 # Complete project creation flow
-.\scripts\wf.ps1 new --name my-api --kind service --architecture clean
+.\scripts\foundation\wf.ps1 new --name my-api --kind service --architecture clean
 cd projects\my-api
-.\scripts\wf.ps1 validate --project my-api
+.\scripts\foundation\wf.ps1 validate --project my-api
 git add . && git commit -m "Initial commit"
 ```
 
 ## Skill Files
 
-- `scripts/wf.ps1` - Main CLI
+- `scripts/foundation/wf.ps1` - Foundation scaffolding CLI
 - `config/workspace.config.json` - Workspace configuration
 - `templates/project-root/` - Base template
 - `templates/project-types/*/` - Type-specific templates

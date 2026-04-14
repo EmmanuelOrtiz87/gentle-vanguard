@@ -38,13 +38,13 @@ git checkout -b feat/your-feature-name
 
 ```bash
 # Install dependencies
-./scripts/init-workspace.ps1
+./scripts/project/init-workspace.ps1
 
 # Validate your changes
-./scripts/wf.ps1 validate
+./scripts/foundation/wf.ps1 validate
 
-# Run tests
-./scripts/wf.ps1 test
+# Check workflow health
+./scripts/utilities/wf.ps1 health
 ```
 
 ### 4. Make Changes
@@ -87,10 +87,10 @@ git commit -m "docs(readme): update installation guide"
 
 ```bash
 # Validate workspace
-./scripts/wf.ps1 validate
+./scripts/foundation/wf.ps1 validate
 
 # Test specific functionality
-./scripts/wf.ps1 new --name test-project --kind service
+./scripts/project/new-project.ps1 --name test-project --kind service
 ```
 
 ### 6. Push and Create PR
@@ -134,9 +134,10 @@ workspace-foundation/
 ├── config/            # Workspace configuration
 ├── docs/              # Documentation
 ├── scripts/           # Automation scripts
-│   ├── wf.ps1        # Main CLI
-│   ├── deploy.ps1    # Deployment script
-│   └── migrate.ps1   # Database migrations
+│   ├── foundation/    # Bootstrap and scaffolding CLI
+│   ├── project/       # Project setup and creation scripts
+│   ├── utilities/     # Workflow CLI and operational utilities
+│   └── validation/    # Validation scripts
 ├── skills/            # Agent skills
 │   ├── workspace-foundation/
 │   ├── testing-skill/
@@ -156,11 +157,11 @@ workspace-foundation/
 
 | Script | Purpose |
 |--------|---------|
-| `wf.ps1 init` | Initialize workspace |
-| `wf.ps1 new` | Create new project |
-| `wf.ps1 validate` | Validate workspace |
-| `wf.ps1 deploy` | Deploy application |
-| `wf.ps1 migrate` | Run migrations |
+| `scripts/foundation/wf.ps1 init` | Initialize workspace |
+| `scripts/project/new-project.ps1 -Name <name> -Kind <kind>` | Create new project |
+| `scripts/foundation/wf.ps1 validate` | Validate workspace |
+| `scripts/utilities/wf.ps1 health` | Check tool activation and workflow health |
+| `scripts/validation/validate-project.ps1` | Run repository validation gate |
 
 ## Questions?
 

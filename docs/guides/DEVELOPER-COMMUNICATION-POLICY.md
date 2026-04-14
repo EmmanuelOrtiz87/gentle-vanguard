@@ -27,6 +27,23 @@ Activation triggers:
 3. Do not include optional suggestions unless explicitly authorized.
 4. Keep warnings only for critical risk (security/data-loss/regression).
 
+## Local Activation (Workspace Override)
+
+The local workspace can override the global default response mode via orchestrator config.
+
+File:
+
+- `config/orchestrator.json`
+
+Keys:
+
+- `communication_response_mode`: `simple | executive | standard | deep`
+- `allowed_response_modes`: allowed values for local tooling checks and status visibility
+
+Current local baseline for this workspace:
+
+- `communication_response_mode = simple`
+
 ## Detail Escalation
 
 Use extended detail only when the developer explicitly requests it.

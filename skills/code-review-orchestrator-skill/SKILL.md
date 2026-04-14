@@ -312,8 +312,8 @@ The Code Review Orchestrator is the **single, unified system** for all code qual
 # GitHub Actions Example
 - name: Code Review
   run: |
-    ./scripts/wf.ps1 review --scope all --report
-    ./scripts/wf.ps1 review --track
+    ./scripts/utilities/wf.ps1 review --scope all --report
+    ./scripts/utilities/wf.ps1 review --track
 
 - name: Upload Review Report
   uses: actions/upload-artifact@v4

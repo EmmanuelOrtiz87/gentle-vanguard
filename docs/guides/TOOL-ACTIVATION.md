@@ -25,10 +25,10 @@ Activate tools anytime with:
 
 ```powershell
 # Check and activate all tools
-.\wf.ps1 health
+.\scripts\utilities\wf.ps1 health
 
 # Force auto-start missing tools
-.\wf.ps1 health -Force
+.\scripts\utilities\wf.ps1 health -Force
 
 # Auto-init environment (any directory)
 .\scripts\utilities\auto-init-dev-environment.ps1
@@ -73,7 +73,7 @@ Adoption criteria:
 - **Session start**: Health checks run automatically
 
 ### Manual
-- `.\wf.ps1 health`: Check and activate tools
+- `.\scripts\utilities\wf.ps1 health`: Check and activate tools
 - `.\scripts\utilities\auto-init-dev-environment.ps1`: Full environment init
 
 ## 📋 Status Indicators
@@ -95,7 +95,7 @@ Adoption criteria:
 ### Tools Not Activating
 ```powershell
 # Force activation with verbose output
-.\wf.ps1 health -Force
+.\scripts\utilities\wf.ps1 health -Force
 ```
 
 ### Profile Not Loading
@@ -117,7 +117,7 @@ chmod +x .git/hooks/pre-commit.ps1
 
 This system integrates with:
 - **Foundation Template**: Automatic setup for new projects
-- **Workflow CLI**: `wf.ps1` commands
+- **Workflow CLI**: `scripts/utilities/wf.ps1` commands
 - **Session Management**: Coordinated development sessions
 - **Quality Gates**: Pre-commit validation
 

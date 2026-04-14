@@ -6,22 +6,22 @@ Miscellaneous utility scripts for various tasks.
 
 ```powershell
 # Full system diagnostics
-.\wf.ps1 diagnose
+.\scripts\utilities\wf.ps1 diagnose
 
 # Quick verify + auto-repair
-.\wf.ps1 verify
+.\scripts\utilities\wf.ps1 verify
 
 # Health check + tool activation
-.\wf.ps1 health
+.\scripts\utilities\wf.ps1 health
 
 # Close session with verification and closure artifact
-.\wf.ps1 end-session
+.\scripts\utilities\wf.ps1 end-session
 
 # Install/verify Engram CLI
-.\wf.ps1 install-engram
+.\scripts\utilities\wf.ps1 install-engram
 
 # IDE detection and activation recommendation
-.\wf.ps1 ide-status
+.\scripts\utilities\wf.ps1 ide-status
 ```
 
 ## Scripts
@@ -66,7 +66,7 @@ The stack includes automatic detection and repair for:
 
 ### New Project
 ```powershell
-.\wf.ps1 init-stack
+.\scripts\utilities\wf.ps1 init-stack
 ```
 
 ### After Git Checkout (Automatic)
@@ -80,13 +80,13 @@ git checkout feature/new-feature
 ### Manual Verification
 ```powershell
 # Full diagnostics
-.\wf.ps1 diagnose
+.\scripts\utilities\wf.ps1 diagnose
 
 # Quick verify + repair
-.\wf.ps1 verify
+.\scripts\utilities\wf.ps1 verify
 
 # For JSON output (CI/CD)
-.\wf.ps1 diagnose -JSON
+.\scripts\utilities\wf.ps1 diagnose -JSON
 ```
 
 ## See Also

@@ -70,8 +70,8 @@ Copy-Item "scripts/utilities/Microsoft.PowerShell_profile.ps1" $PROFILE
 
 5. **Create Your First Project:**
 ```powershell
-# Use foundation as template for new projects
-.\scripts\project\create-new-project.ps1 -Name "my-awesome-project" -Type "web-api"
+# Create a new project from the canonical project bootstrap flow
+.\scripts\project\new-project.ps1 -Name "my-awesome-project" -Kind "service"
 ```
 
 ## 🏗️ Architecture Overview
@@ -151,25 +151,25 @@ Gentleman Foundation uses a sophisticated skill-based architecture:
 #### Core CLI (`wf.ps1`)
 ```powershell
 # Check project status
-.\wf.ps1 status
+.\scripts\utilities\wf.ps1 status
 
 # Run code review
-.\wf.ps1 review
+.\scripts\utilities\wf.ps1 review
 
 # Generate audit reports
-.\wf.ps1 audit
+.\scripts\utilities\wf.ps1 audit
 
 # Check system health
-.\wf.ps1 health
+.\scripts\utilities\wf.ps1 health
 
 # Create pull requests
-.\wf.ps1 pr
+.\scripts\utilities\wf.ps1 pr
 
 # Commit and push changes
-.\wf.ps1 push
+.\scripts\utilities\wf.ps1 push
 
 # Update repository, foundation, skills, and tools
-.\wf.ps1 update
+.\scripts\utilities\wf.ps1 update
 ```
 
 > For global foundation updates, run `gf update-all` from the foundation install root.
@@ -230,14 +230,14 @@ All output files use full datetime in their name (`YYYY-MM-DD-HHmmss`) so multip
 
 ### Step 1 — Generate Context Pack
 ```powershell
-.\wf.ps1 context-pack
+.\scripts\utilities\wf.ps1 context-pack
 # Output: docs/sessions/YYYY-MM-DD-HHmmss-context-pack.md
 ```
 Captures the current repository state: branch, recent commits, changed files, and platform health.
 
 ### Step 2 — Activate Compact Context
 ```powershell
-.\wf.ps1 compact-start
+.\scripts\utilities\wf.ps1 compact-start
 # Reads: latest context-pack from docs/sessions/ (by filename timestamp)
 # Logs event to: docs/sessions/metrics/context-usage.csv
 ```
@@ -245,7 +245,7 @@ Loads the latest context pack and records the compact-start telemetry event.
 
 ### Step 3 — Generate Audit Document
 ```powershell
-.\wf.ps1 audit
+.\scripts\utilities\wf.ps1 audit
 # Output: docs/audits/YYYY-MM-DD-HHmmss-audit.md
 ```
 Produces a full audit report with delivery status, operational risk, test suite availability,
@@ -257,14 +257,14 @@ git ahead/behind tracking, and annotated next steps.
 # Expected: EXIT:0 (all checks passed)
 
 # Optional strict gate (recommended for CI)
-.\wf.ps1 health -StrictCleanup
+.\scripts\utilities\wf.ps1 health -StrictCleanup
 ```
 Validates that all scripts reference canonical paths and that no deprecated references remain.
 A non-zero exit is a blocking issue — fix before proceeding.
 
 ### Step 5 — Review Session Metrics
 ```powershell
-.\wf.ps1 context-metrics
+.\scripts\utilities\wf.ps1 context-metrics
 # Reads: docs/sessions/metrics/context-usage.csv
 ```
 Displays accumulated session metrics: total events, context-pack calls, compact-start calls,
@@ -273,10 +273,10 @@ and context efficiency indicators.
 ### Step 6 — Manual Homologation (Optional)
 ```powershell
 # Preview cleanup actions
-.\wf.ps1 homologate
+.\scripts\utilities\wf.ps1 homologate
 
 # Apply cleanup and reference updates
-.\wf.ps1 homologate apply
+.\scripts\utilities\wf.ps1 homologate apply
 ```
 Use this when strict cleanup reports drift or when you want to normalize the workspace before release.
 
@@ -291,7 +291,7 @@ Use this when strict cleanup reports drift or when you want to normalize the wor
 - **[Testing Strategy](docs/guides/TESTING-STRATEGY.md)**: Quality assurance
 
 ### For Project Leads
-- **[Architecture Decisions](docs/architecture/DECISIONS.md)**: System design rationale
+- **[Architecture Overview](docs/reference/ARCHITECTURE.md)**: System design rationale
 - **[Skill Development](docs/skills/SKILL-DEVELOPMENT.md)**: Creating new AI skills
 - **[Template Creation](docs/templates/TEMPLATE-GUIDE.md)**: Building project templates
 
