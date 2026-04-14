@@ -22,6 +22,7 @@ Write-Info "Workspace: $workspaceRoot"
 
 # 1. End any active sessions
 Write-Step "Terminating active sessions"
+Write-Info "Cleanup mode: skipping review/audit/governance checks during session termination"
 $endSessionScript = Join-Path $workspaceRoot 'scripts\utilities\end-session.ps1'
 if (Test-Path $endSessionScript) {
     try {
