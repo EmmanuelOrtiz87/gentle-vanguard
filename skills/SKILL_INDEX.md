@@ -77,11 +77,19 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 | **Quality** | typescript, code-review, security, technical-debt, web-performance-optimization |
 | **Operations** | observability, incident-response-plan |
 | **Governance** | project-scaffolding, documentation, architecture, git-workflow, foundation-manager |
-| **Script Engineering** | script-governance |
+| **Script Engineering** | script-governance, script-runtime-engineering |
 
 ---
 
 ## Context & Process
+
+### script-runtime-engineering-skill
+
+**Trigger**: `bash script`, `shell script`, `powershell script`, `hook`, `script parse error`, `cross-platform script`
+
+**Use when**: Creating, editing, or validating operational scripts across Bash/PowerShell runtimes with parser-safe quoting and cross-shell compatibility.
+
+---
 
 ### context-engineering-skill
 

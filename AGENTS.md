@@ -35,7 +35,7 @@ gf update
 gf list
 ```
 
-## Available Skills (28)
+## Available Skills
 
 | Category | Skills |
 |----------|--------|
@@ -50,7 +50,7 @@ gf list
 | AI | ai-sdk-5, mcp-skill |
 | Workflow | github-pr, jira-task, jira-epic |
 | Quality | typescript, code-review, security |
-| Governance | project-scaffolding, architecture, documentation, git-workflow, script-governance |
+| Governance | project-scaffolding, architecture, documentation, git-workflow, script-governance, script-runtime-engineering |
 
 ## Scripts
 
