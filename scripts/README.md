@@ -54,6 +54,7 @@ scripts/
 | `aggregate-metrics.ps1` | Aggregate metrics |
 | `orchestrator-status.ps1` | Comprobar orquestador + Engram |
 | `install-engram.ps1` | Instalar o verificar Engram CLI |
+| `foundation-sync.ps1` | Sync managed Foundation assets into consumer repositories |
 
 ## Workflow CLI (wf.ps1)
 
@@ -96,6 +97,11 @@ Automated development workflow commands.
 # Homologation workflow
 .\scripts\utilities\wf.ps1 homologate
 .\scripts\utilities\wf.ps1 homologate apply
+
+# Foundation managed-asset sync (consumer repos)
+.\scripts\utilities\wf.ps1 foundation-sync
+.\scripts\utilities\wf.ps1 foundation-sync apply
+.\scripts\utilities\wf.ps1 foundation-sync apply -CreatePr
 ```
 
 ## Quick Reference

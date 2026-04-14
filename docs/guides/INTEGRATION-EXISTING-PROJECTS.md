@@ -174,6 +174,19 @@ You CAN apply project templates to add missing structure:
 
 ## Handling Conflicts
 
+## Foundation Sync Safety Model
+
+Foundation sync updates only managed assets. It does not overwrite the entire repository.
+
+Rules:
+
+1. Only files listed in `config/foundation-sync.json` under `assets` are considered.
+2. Strategy `replace` updates drifted managed files during `apply`.
+3. Strategy `preserve-local` keeps local files unchanged.
+4. For safe rollout, prefer `check` first and `apply -CreatePr` for review.
+
+See: `docs/guides/FOUNDATION-SYNC.md` for full behavior and examples.
+
 ### What Happens If...
 
 | Conflict | Resolution |

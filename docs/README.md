@@ -47,6 +47,7 @@ docs/
 | [AI-CONFIGURATION.md](guides/AI-CONFIGURATION.md) | AI configuration |
 | [STACK-ON-DEMAND.md](guides/STACK-ON-DEMAND.md) | On-demand activation model for orchestrator stack |
 | [TOOL-ACTIVATION.md](guides/TOOL-ACTIVATION.md) | Automatic tool activation setup |
+| [FOUNDATION-SYNC.md](guides/FOUNDATION-SYNC.md) | Managed asset sync behavior and custom preservation |
 | [DEVELOPER-COMMUNICATION-POLICY.md](guides/DEVELOPER-COMMUNICATION-POLICY.md) | Developer communication standards |
 | [runtime-state.md](guides/runtime-state.md) | Runtime state reference |
 | [audit-system.md](guides/audit-system.md) | Audit system |
