@@ -103,6 +103,23 @@ Inspection commands:
 1. `wf.ps1 response-mode`
 2. `wf.ps1 response-mode list`
 
+Architecture baseline for session start:
+
+1. `chat_response.default_level = chat-compact`
+2. `chat_response.enforce_on_session_start = true`
+
+Meaning:
+
+1. The orchestrator starts each session in the lowest-detail chat level (`simple + ultra`).
+2. This is treated as an architecture decision for token-efficiency and closure-first operation.
+3. Developers can still override at any moment by command, instruction, or script.
+
+Override paths:
+
+1. Command: `wf.ps1 response-mode chat:<level>`
+2. Script call: `response-mode.ps1 -Mode set-chat-level -ChatLevel <level>`
+3. Instruction override: explicit developer request (`DETALLE`, `EXTENDER`, or direct level command)
+
 ## Engram Traceability for Communication Mode
 
 Communication mode changes executed through `scripts/utilities/response-mode.ps1` are persisted as Engram observations.

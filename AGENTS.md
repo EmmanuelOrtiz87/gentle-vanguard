@@ -70,22 +70,23 @@ Default interaction mode for agent responses:
 2. Local workspace override can activate `simple` mode via `config/orchestrator.json` (`communication_response_mode`).
 3. Current local baseline is `simple` with `ultra` compression and language constrained to `es | pt-BR | en`.
 4. Chat/agent layer enforcement is defined in `.github/copilot-instructions.md` to keep responses consistently compact.
-5. Extended details only on explicit request from developer:
+5. Startup architecture baseline enforces `chat-compact` (`simple + ultra`) at session start; overrides remain allowed by command/instruction/script.
+6. Extended details only on explicit request from developer:
 	- `EXTENDER`
 	- `DETALLE`
 
 	Minimal-mode triggers:
 	- `SIMPLE`
 	- `RESUMEN`
-6. In `simple` mode, response contract is:
+7. In `simple` mode, response contract is:
 	- `OK: cerrado` (or `OK: <resultado mínimo>`)
 	- `ERROR: <causa breve> | ACCION: <siguiente paso mínimo>`
-7. Suggestions, optional improvements, and adjustment proposals only when explicitly authorized by developer.
-8. If requirements are ambiguous, ask one concise clarification question before proceeding.
-9. For critical risk (security/data loss), agent must warn immediately even in simple/executive mode.
-10. The orchestrator can request temporary escalation to expanded based on detected risk and must ask developer authorization to keep that level.
-11. Document optimization is selective: optimize operational artifacts (review/audit/handoff), keep architecture/design/technical/business docs complete.
-12. Supported communication languages are `es`, `pt-BR`, and `en`; Chinese classical variants are deprecated for this workspace audience.
+8. Suggestions, optional improvements, and adjustment proposals only when explicitly authorized by developer.
+9. If requirements are ambiguous, ask one concise clarification question before proceeding.
+10. For critical risk (security/data loss), agent must warn immediately even in simple/executive mode.
+11. The orchestrator can request temporary escalation to expanded based on detected risk and must ask developer authorization to keep that level.
+12. Document optimization is selective: optimize operational artifacts (review/audit/handoff), keep architecture/design/technical/business docs complete.
+13. Supported communication languages are `es`, `pt-BR`, and `en`; Chinese classical variants are deprecated for this workspace audience.
 
 Policy reference: `docs/guides/DEVELOPER-COMMUNICATION-POLICY.md`
 

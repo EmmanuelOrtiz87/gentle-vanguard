@@ -22,6 +22,13 @@ Runtime activation (orchestrator CLI):
 2. `./scripts/utilities/wf.ps1 response-mode chat:chat-balanced`
 3. `./scripts/utilities/wf.ps1 response-mode chat:chat-detailed`
 
+## Startup Architecture Baseline
+
+1. Session start must initialize with `chat-compact`.
+2. This default is persisted in `config/orchestrator.json` under `chat_response`.
+3. Purpose: minimal token footprint and closure-first communication from first response.
+4. Override remains supported by command, instruction, or script when requested by developer.
+
 ## Mandatory Output Contract
 
 When no explicit escalation is requested:
