@@ -45,28 +45,28 @@
                                   "profiles":  {
                                                    "bugfix":  {
                                                                   "language":  "es",
-                                                                  "detail":  "executive",
+                                                                  "detail":  "simple",
                                                                   "compression":  "ultra"
                                                               },
                                                    "refactor":  {
                                                                     "language":  "es",
-                                                                    "detail":  "executive",
-                                                                    "compression":  "lleno"
+                                                                    "detail":  "simple",
+                                                                    "compression":  "ultra"
                                                                 },
                                                    "docs":  {
                                                                 "language":  "es",
-                                                                "detail":  "expanded",
-                                                                "compression":  "lite"
+                                                                "detail":  "simple",
+                                                                "compression":  "ultra"
                                                             },
                                                    "audit-review":  {
                                                                         "language":  "es",
-                                                                        "detail":  "expanded",
-                                                                        "compression":  "lleno"
+                                                                        "detail":  "simple",
+                                                                        "compression":  "ultra"
                                                                     },
                                                    "executive-demo":  {
                                                                           "language":  "es",
-                                                                          "detail":  "executive",
-                                                                          "compression":  "lite"
+                                                                          "detail":  "simple",
+                                                                          "compression":  "ultra"
                                                                       }
                                                }
                               },

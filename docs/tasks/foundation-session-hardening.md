@@ -33,3 +33,7 @@
 
 - Current state: homologation + Gentle-AI compatibility fix completed and ready for PR publication.
 - Next concrete step: publish current commit via PR and monitor CI trend; strict mode can be enabled without `gentle-ai` global dependency because launcher is now enforced.
+
+## Future Release Backlog
+
+- [ ] Make runtime-router mandatory before every critical command execution (`review`, `audit`, `publish`, `end-session`, `day-end-closure`, `context-pack`, `compact-start`) and fail when no valid fallback route is available.
