@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'foundation-sync', 'homologate', 'agent-alert', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -13,7 +13,6 @@ param(
     [switch]$SkipReview,
     [switch]$StrictCleanup,
     [switch]$Force,
-    [switch]$CreatePr,
     [switch]$JSON
 )
 
@@ -603,7 +602,7 @@ function Test-GoTests {
     
     Write-Step "Running Go tests..."
     Set-Location $repoRoot
-    go test ./... 2>&1
+    $result = go test ./... 2>&1
     if ($LASTEXITCODE -eq 0) {
         Write-Success "Go tests passed"
         return $true
@@ -1238,31 +1237,6 @@ function Invoke-CleanBranches {
     }
 }
 
-function Invoke-FoundationSync {
-    param([string]$RequestedScope)
-
-    $syncScript = Join-Path $scriptDir 'foundation-sync.ps1'
-    if (-not (Test-Path $syncScript)) {
-        Write-Error "Foundation sync script not found: $syncScript"
-        exit 1
-    }
-
-    $mode = if ($RequestedScope -eq 'apply') { 'apply' } else { 'check' }
-
-    if ($mode -eq 'apply') {
-        Invoke-LiveCheckpoint -Label 'foundation-sync'
-    }
-
-    $syncArgs = @('-Mode', $mode)
-    if ($Force)    { $syncArgs += '-Force' }
-    if ($CreatePr) { $syncArgs += '-CreatePR' }
-
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $syncScript @syncArgs
-    if ($LASTEXITCODE -ne 0) {
-        exit $LASTEXITCODE
-    }
-}
-
 function Show-Help {
     Write-Host @"
 Gentleman Foundation Workflow CLI
@@ -1298,8 +1272,6 @@ COMMANDS:
     list-checkpoints     List workflow-created checkpoints
     rollback-checkpoint [selector] Restore latest checkpoint or one matching selector
     clean-branches [apply] Preview or clean merged local feature/release branches
-    foundation-sync [apply] Check or apply foundation-managed file updates
-                            Apply with -CreatePr to auto-create a PR after syncing
     homologate [apply]  Normalize docs/artifacts and update references (dry-run default)
     agent-alert [strict] Check process-compliance signals for off-process AI activity
     help                 Show this help
@@ -1341,9 +1313,6 @@ EXAMPLES:
     .\wf.ps1 clean-branches          Preview merged local branches for cleanup
     .\wf.ps1 clean-branches apply    Delete merged local branches (asks confirmation)
     .\wf.ps1 clean-branches apply -Force  Delete merged branches without prompt, fallback to -D when needed
-    .\wf.ps1 foundation-sync         Check drift vs foundation-managed assets
-    .\wf.ps1 foundation-sync apply   Apply updates from foundation
-    .\wf.ps1 foundation-sync apply -CreatePr  Apply updates and open a PR automatically
     .\wf.ps1 homologate          Preview normalization actions
     .\wf.ps1 homologate apply    Execute normalization and reference updates
     .\wf.ps1 health -StrictCleanup  Run health and fail if cleanup drift exists
@@ -1399,10 +1368,6 @@ switch ($Command) {
 
     'clean-branches' {
         Invoke-CleanBranches -ApplyNow:($Scope -eq 'apply')
-    }
-
-    'foundation-sync' {
-        Invoke-FoundationSync -RequestedScope $Scope
     }
 
     'start-session' {
