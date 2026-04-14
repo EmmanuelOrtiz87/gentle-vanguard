@@ -24,6 +24,29 @@ Implement a simple project in `demos/shared/task-tracker/` with commands:
 3. Complete task.
 4. Show summary stats.
 
+## Reset Demo to Clean State
+
+**If the demo was interrupted or needs a complete reset:**
+
+```powershell
+./scripts/utilities/wf.ps1 reset-demo
+```
+
+Or directly:
+
+```powershell
+./demos/07-mixed-cookbook-real-request/reset-demo.ps1
+```
+
+This will:
+- ✅ Terminate any active sessions
+- ✅ Clean all task-tracker data (tasks.json)
+- ✅ Remove session/context artifacts
+- ✅ Re-run preflight to restore clean state
+- ✅ Verify all tools are ready
+
+Then you can run the demo again without failures or warnings.
+
 ## Start Here
 
 **FIRST: Run the preflight setup script (required on fresh machines):**
