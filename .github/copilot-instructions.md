@@ -8,6 +8,20 @@ This repository enforces a compact chat response contract in the agent layer.
 2. Detail level: `simple`
 3. Compression profile: `ultra`
 
+## Chat Levels
+
+The chat layer supports explicit levels mapped to detail/profile bundles:
+
+1. `chat-compact` => `simple + ultra`
+2. `chat-balanced` => `executive + lleno`
+3. `chat-detailed` => `expanded + lite`
+
+Runtime activation (orchestrator CLI):
+
+1. `./scripts/utilities/wf.ps1 response-mode chat:chat-compact`
+2. `./scripts/utilities/wf.ps1 response-mode chat:chat-balanced`
+3. `./scripts/utilities/wf.ps1 response-mode chat:chat-detailed`
+
 ## Mandatory Output Contract
 
 When no explicit escalation is requested:

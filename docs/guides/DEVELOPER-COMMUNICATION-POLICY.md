@@ -84,6 +84,25 @@ Behavior:
 
 This complements (not replaces) `config/orchestrator.json` controls.
 
+### Chat Levels (explicit bundles)
+
+To make chat behavior predictable, the workspace defines explicit chat levels:
+
+1. `chat-compact`: `simple + ultra`
+2. `chat-balanced`: `executive + lleno`
+3. `chat-detailed`: `expanded + lite`
+
+Activation commands:
+
+1. `wf.ps1 response-mode chat:chat-compact`
+2. `wf.ps1 response-mode chat:chat-balanced`
+3. `wf.ps1 response-mode chat:chat-detailed`
+
+Inspection commands:
+
+1. `wf.ps1 response-mode`
+2. `wf.ps1 response-mode list`
+
 ## Engram Traceability for Communication Mode
 
 Communication mode changes executed through `scripts/utilities/response-mode.ps1` are persisted as Engram observations.

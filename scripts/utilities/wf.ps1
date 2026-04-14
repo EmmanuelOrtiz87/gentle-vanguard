@@ -1285,7 +1285,7 @@ COMMANDS:
     stack-dashboard      Show one-shot stack health, token risk, and next action recommendation
     runtime-route        Resolve runtime mode (AI/Hybrid/Offline) and delegation strategy
     custom-rules-status  Show custom technical/business/review rule loading status
-    response-mode [arg]  Show/set language, detail, profile, presets, and recommendation
+    response-mode [arg]  Show/set language, detail, profile, chat level, presets, and recommendation
     ide-status           Detect IDE session and suggest activation command
     diagnose             Full system diagnostics report
     verify               Quick stack verification & auto-repair
@@ -1337,6 +1337,7 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 response-mode                Show active communication settings
     .\scripts\utilities\wf.ps1 response-mode list           List language/detail/profile options
     .\scripts\utilities\wf.ps1 response-mode profile:ultra  Set compression profile
+    .\scripts\utilities\wf.ps1 response-mode chat:chat-compact Set chat level bundle
     .\scripts\utilities\wf.ps1 response-mode language:pt-BR Set communication language
     .\scripts\utilities\wf.ps1 response-mode detail:expanded Set detail level
     .\scripts\utilities\wf.ps1 response-mode preset:bugfix Apply preset for task type
@@ -1768,6 +1769,9 @@ switch ($Command) {
             elseif ($scopeText -match '^detail:(.+)$') {
                 $modeParams = @{ Mode = 'set-detail'; Detail = $matches[1] }
             }
+            elseif ($scopeText -match '^chat:(.+)$') {
+                $modeParams = @{ Mode = 'set-chat-level'; ChatLevel = $matches[1] }
+            }
             elseif ($scopeText -match '^preset:(.+)$') {
                 $modeParams = @{ Mode = 'set-preset'; Preset = $matches[1] }
             }
@@ -1785,6 +1789,9 @@ switch ($Command) {
             }
             elseif ($scopeText -in @('simple', 'executive', 'expanded')) {
                 $modeParams = @{ Mode = 'set-detail'; Detail = $scopeText }
+            }
+            elseif ($scopeText -in @('chat-compact', 'chat-balanced', 'chat-detailed')) {
+                $modeParams = @{ Mode = 'set-chat-level'; ChatLevel = $scopeText }
             }
             elseif ($scopeText -in @('bugfix', 'refactor', 'docs', 'audit-review', 'executive-demo')) {
                 $modeParams = @{ Mode = 'set-preset'; Preset = $scopeText }

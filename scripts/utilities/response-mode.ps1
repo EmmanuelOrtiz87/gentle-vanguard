@@ -1,5 +1,5 @@
 ﻿param(
-    [ValidateSet('status', 'list', 'set', 'set-language', 'set-detail', 'set-preset', 'recommend', 'export')]
+    [ValidateSet('status', 'list', 'set', 'set-language', 'set-detail', 'set-preset', 'set-chat-level', 'recommend', 'export')]
     [string]$Mode = 'status',
     [ValidateSet('lite', 'lleno', 'ultra')]
     [string]$Profile,
@@ -11,6 +11,8 @@
     [string]$Preset,
     [ValidateSet('low', 'medium', 'high')]
     [string]$Risk = 'medium',
+    [ValidateSet('chat-compact', 'chat-balanced', 'chat-detailed')]
+    [string]$ChatLevel,
     [switch]$AsJson,
     [switch]$PassThru,
     [switch]$SkipEngramLog,
@@ -137,6 +139,40 @@ function Emit-Output {
     elseif (-not $Quiet) { Write-Host $Text }
 }
 
+function Get-ChatLevelMap {
+    return [ordered]@{
+        'chat-compact' = [ordered]@{
+            detail = 'simple'
+            profile = 'ultra'
+            description = 'Minimo para cierre rapido: simple + ultra.'
+        }
+        'chat-balanced' = [ordered]@{
+            detail = 'executive'
+            profile = 'lleno'
+            description = 'Balance entre claridad y tokens: executive + lleno.'
+        }
+        'chat-detailed' = [ordered]@{
+            detail = 'expanded'
+            profile = 'lite'
+            description = 'Mayor explicacion con mas contexto: expanded + lite.'
+        }
+    }
+}
+
+function Resolve-ActiveChatLevel {
+    param([pscustomobject]$Config)
+
+    $map = Get-ChatLevelMap
+    foreach ($levelName in $map.Keys) {
+        $level = $map[$levelName]
+        if ($Config.communication_response_mode -eq $level.detail -and $Config.response_profiles.active -eq $level.profile) {
+            return $levelName
+        }
+    }
+
+    return 'custom'
+}
+
 function Save-ResponseModeObservation {
     param(
         [pscustomobject]$Config,
@@ -169,7 +205,7 @@ function Apply-Preset {
     param([pscustomobject]$Config, [string]$PresetName)
 
     if ($Config.communication_presets.allow -notcontains $PresetName) {
-        throw "Unsupported preset '$PresetName'. Allowed: $($Config.communication_presets.allow -join ', ')"
+        throw ("Unsupported preset '{0}'. Allowed: {1}" -f $PresetName, ($Config.communication_presets.allow -join ', '))
     }
 
     $presetData = $Config.communication_presets.profiles.$PresetName
@@ -262,6 +298,22 @@ if ($Mode -eq 'set-preset') {
     exit 0
 }
 
+if ($Mode -eq 'set-chat-level') {
+    if ([string]::IsNullOrWhiteSpace($ChatLevel)) { throw 'ChatLevel is required when Mode=set-chat-level.' }
+    $chatLevels = Get-ChatLevelMap
+    if (-not $chatLevels.Contains($ChatLevel)) {
+        throw "Unsupported chat level '$ChatLevel'. Allowed: $($chatLevels.Keys -join ', ')"
+    }
+
+    $selected = $chatLevels[$ChatLevel]
+    $config.communication_response_mode = [string]$selected.detail
+    $config.response_profiles.active = [string]$selected.profile
+    Save-Config -Config $config
+    Save-ResponseModeObservation -Config $config -Reason ("set-chat-level:{0}" -f $ChatLevel)
+    Emit-Output -Text ("[OK] Chat level applied: {0} (detail={1}, profile={2})" -f $ChatLevel, $config.communication_response_mode, $config.response_profiles.active) -AsPassThru:$PassThru
+    exit 0
+}
+
 if ($Mode -eq 'recommend') {
     $rec = Get-Recommendation -Config $config -PresetName $Preset -RiskLevel $Risk
     if ($AsJson) {
@@ -281,6 +333,8 @@ if ($Mode -eq 'recommend') {
 }
 
 if ($Mode -eq 'list') {
+    $chatLevelMap = Get-ChatLevelMap
+    $activeChatLevel = Resolve-ActiveChatLevel -Config $config
     if ($AsJson) {
         $payload = [pscustomobject]@{
             language = $config.communication_language
@@ -289,6 +343,9 @@ if ($Mode -eq 'list') {
             allowedDetailLevels = @($config.allowed_response_modes)
             profile = $config.response_profiles.active
             allowedProfiles = @($config.response_profiles.allow)
+            chatLevel = $activeChatLevel
+            allowedChatLevels = @($chatLevelMap.Keys)
+            chatLevels = $chatLevelMap
             preset = $config.communication_presets.default
             allowedPresets = @($config.communication_presets.allow)
             presets = $config.communication_presets.profiles
@@ -303,11 +360,20 @@ if ($Mode -eq 'list') {
     $lines += "Language: $($config.communication_language)"
     $lines += "Detail: $($config.communication_response_mode)"
     $lines += "Compression Profile: $($config.response_profiles.active)"
+    $lines += "Chat level: $activeChatLevel"
     $lines += "Default Preset: $($config.communication_presets.default)"
     $lines += ''
     $lines += "Allowed languages: $($config.allowed_languages -join ', ')"
     $lines += "Allowed detail levels: $($config.allowed_response_modes -join ', ')"
+    $lines += "Allowed chat levels: $($chatLevelMap.Keys -join ', ')"
     $lines += "Allowed presets: $($config.communication_presets.allow -join ', ')"
+    $lines += ''
+    $lines += 'Chat level map:'
+    foreach ($levelName in $chatLevelMap.Keys) {
+        $level = $chatLevelMap[$levelName]
+        $marker = if ($levelName -eq $activeChatLevel) { '*' } else { '-' }
+        $lines += ('{0} {1}: detail={2}, profile={3}' -f $marker, $levelName, $level.detail, $level.profile)
+    }
     $lines += ''
     $lines += 'Compression profiles:'
     foreach ($name in $config.response_profiles.allow) {
@@ -333,12 +399,17 @@ if ($Mode -eq 'export') {
 }
 
 if ($AsJson) {
+    $chatLevelMap = Get-ChatLevelMap
+    $activeChatLevel = Resolve-ActiveChatLevel -Config $config
     $status = [pscustomobject]@{
         language = $config.communication_language
         allowedLanguages = @($config.allowed_languages)
         detail = $config.communication_response_mode
         allowedDetailLevels = @($config.allowed_response_modes)
         active = $config.response_profiles.active
+        chatLevel = $activeChatLevel
+        allowedChatLevels = @($chatLevelMap.Keys)
+        chatLevels = $chatLevelMap
         description = $config.response_profiles.profiles.$($config.response_profiles.active).description
         guidelines = @($config.response_profiles.profiles.$($config.response_profiles.active).guidelines)
         preset = $config.communication_presets.default
@@ -353,6 +424,7 @@ $statusLines = @(
     "Language: $($config.communication_language)",
     "Detail level: $($config.communication_response_mode)",
     "Active compression profile: $($config.response_profiles.active)",
+    "Active chat level: $(Resolve-ActiveChatLevel -Config $config)",
     "Default preset: $($config.communication_presets.default)",
     "Description: $($config.response_profiles.profiles.$($config.response_profiles.active).description)",
     'Guidelines:'
