@@ -74,6 +74,15 @@ Copy-Item "scripts/utilities/Microsoft.PowerShell_profile.ps1" $PROFILE
 .\scripts\project\new-project.ps1 -Name "my-awesome-project" -Kind "service"
 ```
 
+## 🎬 Demo Entry Point
+
+Use the audience-labeled demo suite to jump directly to the right walkthrough:
+
+1. Development Team: `demos/01-dev-developer-onboarding/` to `demos/05-dev-documentation-and-closure/`
+2. Executive Council / Management: `demos/06-exec-executive-overview/`
+3. Demo index and recommended order: `demos/README.md`
+4. Shared sample project used across all demos: `demos/shared/task-tracker/`
+
 ## 🏗️ Architecture Overview
 
 ```
