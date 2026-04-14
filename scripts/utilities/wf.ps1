@@ -1790,12 +1790,11 @@ switch ($Command) {
             exit 1
         }
 
-        $contextArgs = @()
-        if (-not [string]::IsNullOrWhiteSpace($Scope)) {
-            $contextArgs += @('-Objective', $Scope)
+        if ([string]::IsNullOrWhiteSpace($Scope)) {
+            & $contextScript
+        } else {
+            & $contextScript -Objective $Scope
         }
-
-        Invoke-LocalPowerShellScript -ScriptPath $contextScript -ScriptArgs $contextArgs
     }
 
     'compact-start' {
@@ -1806,12 +1805,11 @@ switch ($Command) {
             exit 1
         }
 
-        $compactArgs = @()
-        if (-not [string]::IsNullOrWhiteSpace($Scope)) {
-            $compactArgs += @('-Objective', $Scope)
+        if ([string]::IsNullOrWhiteSpace($Scope)) {
+            & $compactScript
+        } else {
+            & $compactScript -Objective $Scope
         }
-
-        Invoke-LocalPowerShellScript -ScriptPath $compactScript -ScriptArgs $compactArgs
     }
 
     'context-metrics' {
