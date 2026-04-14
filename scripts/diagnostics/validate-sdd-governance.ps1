@@ -53,7 +53,24 @@ function Get-ChangedFiles {
     }
 
     if ($files.Count -eq 0) {
-        $files = @(git diff --name-only HEAD~1..HEAD 2>$null)
+        # Shallow CI clones may not have HEAD~1; avoid failing the whole gate.
+        $hasPreviousCommit = $false
+        try {
+            git rev-parse --verify --quiet HEAD~1 *> $null
+            $hasPreviousCommit = ($LASTEXITCODE -eq 0)
+        } catch {
+            $hasPreviousCommit = $false
+        }
+
+        if ($hasPreviousCommit) {
+            try {
+                $files = @(git diff --name-only HEAD~1..HEAD 2>$null)
+            } catch {
+                $files = @()
+            }
+        } else {
+            $files = @()
+        }
     }
 
     return @($files | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
