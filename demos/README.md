@@ -20,6 +20,9 @@ This directory contains audience-oriented demos for the stack.
 2. Executive/Board demo:
 - `06-exec-executive-overview/`
 
+3. Mixed audience end-to-end recipe:
+- `07-mixed-cookbook-real-request/`
+
 ## Coverage Matrix
 
 1. Engram usage: demos 03, 05, 06.
@@ -32,4 +35,5 @@ This directory contains audience-oriented demos for the stack.
 
 1. For developers: 01 -> 02 -> 03 -> 04 -> 05.
 2. For executives: 06.
-3. For mixed audience session: 01 -> 02 -> 04 -> 06.
+3. For mixed audience session: 07 (single end-to-end story).
+4. For deep mixed walkthrough: 01 -> 02 -> 04 -> 06 -> 07.
