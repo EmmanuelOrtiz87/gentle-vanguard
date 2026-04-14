@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'custom-rules-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -1261,6 +1261,7 @@ COMMANDS:
     health               Check system health & activate tools
     install-engram       Install or verify Engram CLI availability
     orchestrator-status  Validate orchestrator and Engram integration
+    custom-rules-status  Show custom technical/business/review rule loading status
     ide-status           Detect IDE session and suggest activation command
     diagnose             Full system diagnostics report
     verify               Quick stack verification & auto-repair
@@ -1303,6 +1304,7 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 verify              Quick verify & auto-repair if needed
     .\scripts\utilities\wf.ps1 health              Check system health & activate tools
     .\scripts\utilities\wf.ps1 install-engram      Install or verify Engram CLI
+    .\scripts\utilities\wf.ps1 custom-rules-status Show loaded custom rule scopes and files
     .\scripts\utilities\wf.ps1 ide-status          Detect IDE and show recommended activation
     .\scripts\utilities\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
     .\scripts\utilities\wf.ps1 update-tools         Update gga / engram / gentle-ai (Windows: go install, not brew)
@@ -1600,6 +1602,19 @@ switch ($Command) {
             Write-Error "Orchestrator status script not found: $statusScript"
             exit 1
         }
+    }
+
+    'custom-rules-status' {
+        Write-Step "Custom Rules Status"
+        $rulesScript = Join-Path $scriptDir 'custom-rules.ps1'
+        if (-not (Test-Path $rulesScript)) {
+            Write-Error "Custom rules script not found: $rulesScript"
+            exit 1
+        }
+
+        $rulesArgs = @('status')
+        if ($JSON) { $rulesArgs += '-AsJson' }
+        Invoke-LocalPowerShellScript -ScriptPath $rulesScript -ScriptArgs $rulesArgs
     }
     'ide-status' {
         Show-IdeStatus

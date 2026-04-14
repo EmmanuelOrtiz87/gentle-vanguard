@@ -8,5 +8,16 @@
     "session_tracking":  true,
     "git_integration":  true,
     "activation_mode":  "on-demand",
+    "custom_rules":  {
+                         "enabled":  true,
+                         "root":  "rules/custom",
+                         "include":  [
+                                         "technical",
+                                         "business",
+                                         "review"
+                                     ],
+                         "file_format":  "md",
+                         "max_files_per_scope":  20
+                     },
     "activated_at":  "2026-04-14 00:03:38"
 }

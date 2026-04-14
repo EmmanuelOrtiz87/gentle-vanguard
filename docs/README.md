@@ -45,6 +45,7 @@ docs/
 | [DEVELOPMENT-WORKFLOW.md](guides/DEVELOPMENT-WORKFLOW.md) | Git Flow, PRs, Code Review |
 | [INTEGRATION-EXISTING-PROJECTS.md](guides/INTEGRATION-EXISTING-PROJECTS.md) | Integrate existing projects |
 | [AI-CONFIGURATION.md](guides/AI-CONFIGURATION.md) | AI configuration |
+| [CUSTOM-RULES.md](guides/CUSTOM-RULES.md) | Extend orchestrator with technical/business/review custom rules |
 | [STACK-ON-DEMAND.md](guides/STACK-ON-DEMAND.md) | On-demand activation model for orchestrator stack |
 | [TOOL-ACTIVATION.md](guides/TOOL-ACTIVATION.md) | Automatic tool activation setup |
 | [FOUNDATION-SYNC.md](guides/FOUNDATION-SYNC.md) | Managed asset sync behavior and custom preservation |
