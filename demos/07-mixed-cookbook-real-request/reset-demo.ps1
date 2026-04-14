@@ -22,16 +22,17 @@ Write-Info "Workspace: $workspaceRoot"
 
 # 1. End any active sessions
 Write-Step "Terminating active sessions"
-$wfScript = Join-Path $workspaceRoot 'scripts\utilities\wf.ps1'
-if (Test-Path $wfScript) {
+$endSessionScript = Join-Path $workspaceRoot 'scripts\utilities\end-session.ps1'
+if (Test-Path $endSessionScript) {
     try {
-        & $wfScript end-session demo-task-tracker -Force 2>&1 | Out-Null
-        Write-Ok "Session terminated"
+        # Reset is a cleanup action; skip heavy validations to avoid noisy warnings.
+        & $endSessionScript -TaskName demo-task-tracker -SkipReview -SkipAudit -SkipGovernance -Force 2>&1 | Out-Null
+        Write-Ok "Session terminated (cleanup mode)"
     } catch {
         Write-Info "No active session (or termination non-critical)"
     }
 } else {
-    Write-Warn "wf.ps1 not found - skipping session termination"
+    Write-Warn "end-session.ps1 not found - skipping session termination"
 }
 
 # 2. Clean task-tracker runtime data
