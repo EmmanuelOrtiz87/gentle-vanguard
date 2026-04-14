@@ -20,6 +20,38 @@ OPTION A: CLOUD (Recommended)              OPTION B: LOCAL
 Both can run simultaneously for failover!
 ```
 
+## Response Profile Compression (Token Efficiency)
+
+The stack supports configurable response profiles to reduce output/context tokens while keeping consistent style.
+
+Profiles available in `config/orchestrator.json`:
+
+- `lite`
+- `lleno`
+- `ultra`
+- `wenyan-lite`
+- `wenyan-full`
+- `wenyan-ultra`
+
+Operational commands:
+
+```powershell
+# Show active profile
+.\scripts\utilities\wf.ps1 response-mode
+
+# List all profiles
+.\scripts\utilities\wf.ps1 response-mode list
+
+# Set active profile
+.\scripts\utilities\wf.ps1 response-mode ultra
+```
+
+Recommendation:
+
+1. Use `lite` as default for cross-team readability.
+2. Use `ultra` for short implementation loops and rapid triage.
+3. Use `wenyan-*` only when the audience explicitly requires classical Chinese compression.
+
 ## Option A: Cloud Configuration (Recommended)
 
 ### Providers Supported

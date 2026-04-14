@@ -107,6 +107,24 @@ function Get-CustomRulesDigest {
     }
 }
 
+function Get-ResponseModeDigest {
+    $modeScript = Join-Path $PSScriptRoot 'response-mode.ps1'
+    if (-not (Test-Path $modeScript)) {
+        return '- response profile script not found'
+    }
+
+    try {
+        $digest = & $modeScript -Mode export -PassThru -Quiet
+        if ([string]::IsNullOrWhiteSpace(($digest | Out-String).Trim())) {
+            return '- response profile unavailable'
+        }
+        return ($digest | Out-String).Trim()
+    }
+    catch {
+        return '- failed to load response profile'
+    }
+}
+
 $branch = git rev-parse --abbrev-ref HEAD 2>$null
 if (-not $branch) {
     $branch = '(unknown)'
@@ -134,6 +152,7 @@ $objectiveLine = if ([string]::IsNullOrWhiteSpace($Objective)) { '[define object
 $changedSection = ($changedFiles -join [Environment]::NewLine)
 $commitSection = ($recentCommits -join [Environment]::NewLine)
 $customRulesSection = Get-CustomRulesDigest
+$responseModeSection = Get-ResponseModeDigest
 
 $content = @"
 # Context Pack
@@ -153,6 +172,9 @@ $commitSection
 
 ## Custom Rules (Loaded)
 $customRulesSection
+
+## Response Profile (Active)
+$responseModeSection
 
 ## Continue Prompt (Compact)
 Use this context and continue the same objective.

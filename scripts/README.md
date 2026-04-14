@@ -55,6 +55,7 @@ scripts/
 | `orchestrator-status.ps1` | Comprobar orquestador + Engram |
 | `install-engram.ps1` | Instalar o verificar Engram CLI |
 | `custom-rules.ps1` | Load and report custom technical/business/review rules |
+| `response-mode.ps1` | Manage token-optimized response profiles (lite/lleno/ultra/wenyan-*) |
 | `foundation-sync.ps1` | Sync managed Foundation assets into consumer repositories |
 
 ## Workflow CLI (wf.ps1)
@@ -133,6 +134,11 @@ Automated development workflow commands.
 # Check loaded custom rules
 .\scripts\utilities\custom-rules.ps1 -Mode status
 .\scripts\utilities\wf.ps1 custom-rules-status
+
+# Check or set response profile
+.\scripts\utilities\wf.ps1 response-mode
+.\scripts\utilities\wf.ps1 response-mode list
+.\scripts\utilities\wf.ps1 response-mode ultra
 
 # Create or refresh task brief only
 .\scripts\utilities\wf.ps1 task-brief auth-hardening

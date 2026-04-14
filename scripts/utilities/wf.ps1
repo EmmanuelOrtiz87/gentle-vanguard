@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'custom-rules-status', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -1262,6 +1262,7 @@ COMMANDS:
     install-engram       Install or verify Engram CLI availability
     orchestrator-status  Validate orchestrator and Engram integration
     custom-rules-status  Show custom technical/business/review rule loading status
+    response-mode [name] Show active response profile, list options, or set profile
     ide-status           Detect IDE session and suggest activation command
     diagnose             Full system diagnostics report
     verify               Quick stack verification & auto-repair
@@ -1305,6 +1306,9 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 health              Check system health & activate tools
     .\scripts\utilities\wf.ps1 install-engram      Install or verify Engram CLI
     .\scripts\utilities\wf.ps1 custom-rules-status Show loaded custom rule scopes and files
+    .\scripts\utilities\wf.ps1 response-mode       Show active response profile
+    .\scripts\utilities\wf.ps1 response-mode list  List all response profiles
+    .\scripts\utilities\wf.ps1 response-mode ultra Set active profile to ultra
     .\scripts\utilities\wf.ps1 ide-status          Detect IDE and show recommended activation
     .\scripts\utilities\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
     .\scripts\utilities\wf.ps1 update-tools         Update gga / engram / gentle-ai (Windows: go install, not brew)
@@ -1633,6 +1637,26 @@ switch ($Command) {
         $rulesArgs = @('status')
         if ($JSON) { $rulesArgs += '-AsJson' }
         Invoke-LocalPowerShellScript -ScriptPath $rulesScript -ScriptArgs $rulesArgs
+    }
+    'response-mode' {
+        Write-Step 'Response Profile'
+        $modeScript = Join-Path $scriptDir 'response-mode.ps1'
+        if (-not (Test-Path $modeScript)) {
+            Write-Error "Response mode script not found: $modeScript"
+            exit 1
+        }
+
+        $modeArgs = @()
+        if ([string]::IsNullOrWhiteSpace($Scope)) {
+            $modeArgs += 'status'
+        } elseif ($Scope -eq 'list') {
+            $modeArgs += 'list'
+        } else {
+            $modeArgs += @('set', $Scope)
+        }
+
+        if ($JSON) { $modeArgs += '-AsJson' }
+        Invoke-LocalPowerShellScript -ScriptPath $modeScript -ScriptArgs $modeArgs
     }
     'ide-status' {
         Show-IdeStatus
