@@ -79,13 +79,25 @@ function Install-Tool {
     try {
         Invoke-Expression $installCmd 2>&1 | Out-Null
     } catch {
-        Write-Warn "$($Tool.name): install failed — $($_.Exception.Message)"
+        $msg = $_.Exception.Message
+        # HTTP 403 on opencode.ai means corporate/network restriction — treat as optional-blocked
+        if ($msg -like '*403*' -or $msg -like '*Prohibido*' -or $msg -like '*Forbidden*') {
+            Write-Warn "$($Tool.name): install blocked by network restriction (HTTP 403)"
+            Write-Info "  This tool is optional. Alternative install options:"
+            Write-Info "  1. GitHub releases: https://github.com/sst/opencode/releases"
+            Write-Info "  2. winget:          winget install sst.opencode"
+            Write-Info "  3. npm:             npm install -g opencode"
+            Write-Info "  4. Manual:          download binary from GitHub and add to PATH"
+            # Return true so this does NOT block workspace bootstrap
+            return $true
+        }
+        Write-Warn "$($Tool.name): install failed — $msg"
         return $false
     }
     return $true
 }
 
-# ── Re-check after install (handles GOPATH/bin not yet in session PATH) ───────
+# ── Re-check after install (handles GOPATH/bin and bash-installed tools not yet in PATH) ──
 function Confirm-ToolAfterInstall {
     param($Tool, [string]$ToolsRoot)
 
@@ -104,6 +116,32 @@ function Confirm-ToolAfterInstall {
             return $true
         }
     }
+
+    # For bash-installed tools (e.g. GGA): check common install locations
+    if ($Tool.checkCommand -and $Tool.install -and
+        ([string]$Tool.install.windows) -like '*bash*install.sh*') {
+        $candidateDirs = @(
+            (Join-Path $env:USERPROFILE 'bin'),
+            (Join-Path $env:USERPROFILE '.local\bin'),
+            'C:\Program Files\Git\usr\bin',
+            'C:\Program Files\Git\bin'
+        )
+        foreach ($dir in $candidateDirs) {
+            $candidate = Join-Path $dir $Tool.checkCommand
+            if (Test-Path $candidate) {
+                Write-Ok "$($Tool.name) installed at $candidate"
+                Write-Info "  To use immediately, add to PATH: `$env:PATH += ';$dir'"
+                Write-Info "  To persist, run: [Environment]::SetEnvironmentVariable('PATH', `$env:PATH + ';$dir', 'User')"
+                $env:PATH += ";$dir"
+                Write-Info "  PATH updated for this session"
+                return $true
+            }
+        }
+        Write-Warn "$($Tool.name): install ran — binary not found in common locations"
+        Write-Info "  Expected locations: $($candidateDirs -join ', ')"
+        Write-Info "  Open a new terminal and run: $($Tool.checkCommand) --version"
+    }
+
     return $false
 }
 

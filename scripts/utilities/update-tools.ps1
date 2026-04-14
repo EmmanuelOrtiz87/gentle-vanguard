@@ -50,6 +50,45 @@ function Test-Go {
     return $false
 }
 
+# ── Version comparison helpers ─────────────────────────────────────────────────
+
+# Fetches the latest release tag from a GitHub repo (e.g. "Gentleman-Programming/engram")
+function Get-GitHubLatestVersion {
+    param([string]$Repo)
+    try {
+        $url  = "https://api.github.com/repos/$Repo/releases/latest"
+        $resp = Invoke-RestMethod -Uri $url -Headers @{ 'User-Agent' = 'workspace-foundation-updater' } -ErrorAction Stop
+        return ($resp.tag_name -replace '^v', '')
+    } catch {
+        return $null
+    }
+}
+
+# Compares two semantic version strings. Returns -1, 0, or 1.
+function Compare-Version {
+    param([string]$A, [string]$B)
+    try {
+        $va = [Version]($A -replace '[^0-9.]', '')
+        $vb = [Version]($B -replace '[^0-9.]', '')
+        return $va.CompareTo($vb)
+    } catch {
+        return 0
+    }
+}
+
+# Gets the installed version of a Go binary (first number-containing line of --version output)
+function Get-InstalledVersion {
+    param([string]$BinaryPath)
+    if (-not (Test-Path $BinaryPath)) { return $null }
+    try {
+        $raw = & $BinaryPath --version 2>&1 | Select-Object -First 2
+        foreach ($line in $raw) {
+            if ($line -match '(\d+\.\d+[\.\d]*)') { return $Matches[1] }
+        }
+    } catch {}
+    return $null
+}
+
 function Test-GitBash {
     $gitBash = 'C:\Program Files\Git\bin\bash.exe'
     if (Test-Path $gitBash) { Write-Ok "Git Bash found: $gitBash"; return $gitBash }
@@ -67,6 +106,27 @@ function Update-Gga {
     param([string]$BashPath)
 
     Write-Step "Updating GGA (Gentleman Guardian Angel)"
+
+    # Version check before pulling
+    $ggaBin    = Join-Path $env:USERPROFILE 'bin\gga'
+    $gitBashEx = if ($BashPath) { $BashPath } else { 'C:\Program Files\Git\bin\bash.exe' }
+    if ((Test-Path $ggaBin) -and (Test-Path $gitBashEx)) {
+        $installed = $null
+        $verOut = & $gitBashEx -c "/c/Users/$env:USERNAME/bin/gga --version" 2>&1 | Select-Object -First 1
+        if ($verOut -match '(\d+\.\d+[\.\d]*)') { $installed = $Matches[1] }
+        $latest = Get-GitHubLatestVersion -Repo 'Gentleman-Programming/gentleman-guardian-angel'
+        if ($installed) {
+            Write-Info "GGA installed: v$installed"
+            if ($latest) {
+                Write-Info "GGA latest:    v$latest"
+                if ((Compare-Version -A $installed -B $latest) -ge 0) {
+                    Write-Ok "GGA is up to date (v$installed)"
+                    return $true
+                }
+                Write-Info "Upgrade available: v$installed → v$latest"
+            }
+        }
+    }
 
     # Find the local repo
     $ggaRepo = $null
@@ -161,21 +221,44 @@ function Update-Gga {
 function Update-Engram {
     Write-Step "Updating Engram"
 
+    $goBin     = Get-GoBinDir
+    $engramExe = Join-Path $goBin 'engram.exe'
+    if (-not (Test-Path $engramExe)) { $engramExe = Join-Path $goBin 'engram' }
+
+    $installed = Get-InstalledVersion -BinaryPath $engramExe
+    $latest    = Get-GitHubLatestVersion -Repo 'Gentleman-Programming/engram'
+
+    if ($installed) {
+        Write-Info "Engram installed: v$installed"
+        if ($latest) {
+            Write-Info "Engram latest:    v$latest"
+            $cmp = Compare-Version -A $installed -B $latest
+            if ($cmp -ge 0) {
+                Write-Ok "Engram is up to date (v$installed)"
+                return $true
+            }
+            Write-Info "Upgrade available: v$installed → v$latest"
+        }
+    } else {
+        Write-Info "Engram not installed — installing latest"
+    }
+
     if ($DryRun) {
         Write-Info "[DRY-RUN] Would run: go install github.com/Gentleman-Programming/engram/cmd/engram@latest"
         return $true
     }
 
     Write-Info "Running: go install github.com/Gentleman-Programming/engram/cmd/engram@latest"
+    # -mod=mod ensures Go fetches the latest even if module cache has an older version
+    $env:GOFLAGS = '-mod=mod'
     go install github.com/Gentleman-Programming/engram/cmd/engram@latest 2>&1 | ForEach-Object { Write-Host "  $_" }
+    $env:GOFLAGS = $null
 
     if ($LASTEXITCODE -ne 0) {
         Write-Err "Engram update failed (exit $LASTEXITCODE)"
         return $false
     }
 
-    # Locate binary
-    $goBin = if ($env:GOBIN) { $env:GOBIN } elseif ($env:GOPATH) { Join-Path $env:GOPATH 'bin' } else { Join-Path $env:USERPROFILE 'go\bin' }
     $engramExe = Join-Path $goBin 'engram.exe'
     if (-not (Test-Path $engramExe)) { $engramExe = Join-Path $goBin 'engram' }
 
@@ -196,20 +279,43 @@ function Update-Engram {
 function Update-GentleAI {
     Write-Step "Updating Gentle-AI"
 
+    $goBin      = Get-GoBinDir
+    $gentleExe  = Join-Path $goBin 'gentle-ai.exe'
+    if (-not (Test-Path $gentleExe)) { $gentleExe = Join-Path $goBin 'gentle-ai' }
+
+    $installed = Get-InstalledVersion -BinaryPath $gentleExe
+    $latest    = Get-GitHubLatestVersion -Repo 'gentleman-programming/gentle-ai'
+
+    if ($installed) {
+        Write-Info "Gentle-AI installed: v$installed"
+        if ($latest) {
+            Write-Info "Gentle-AI latest:    v$latest"
+            $cmp = Compare-Version -A $installed -B $latest
+            if ($cmp -ge 0) {
+                Write-Ok "Gentle-AI is up to date (v$installed)"
+                return $true
+            }
+            Write-Info "Upgrade available: v$installed → v$latest"
+        }
+    } else {
+        Write-Info "Gentle-AI not installed — installing latest"
+    }
+
     if ($DryRun) {
         Write-Info "[DRY-RUN] Would run: go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest"
         return $true
     }
 
     Write-Info "Running: go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest"
+    $env:GOFLAGS = '-mod=mod'
     go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest 2>&1 | ForEach-Object { Write-Host "  $_" }
+    $env:GOFLAGS = $null
 
     if ($LASTEXITCODE -ne 0) {
         Write-Err "Gentle-AI update failed (exit $LASTEXITCODE)"
         return $false
     }
 
-    $goBin = if ($env:GOBIN) { $env:GOBIN } elseif ($env:GOPATH) { Join-Path $env:GOPATH 'bin' } else { Join-Path $env:USERPROFILE 'go\bin' }
     $gentleExe = Join-Path $goBin 'gentle-ai.exe'
     if (-not (Test-Path $gentleExe)) { $gentleExe = Join-Path $goBin 'gentle-ai' }
 
@@ -298,13 +404,24 @@ function Check-Opencode {
     if ($Force) {
         Write-Info "Running opencode installer (requires network)..."
         try {
-            Invoke-Expression "irm https://opencode.ai/install | iex" 2>&1 | Out-Null
+            $installerScript = Invoke-RestMethod -Uri 'https://opencode.ai/install' -ErrorAction Stop
+            Invoke-Expression $installerScript 2>&1 | Out-Null
             $opencodeCmd = Get-Command opencode -ErrorAction SilentlyContinue
             if ($opencodeCmd) { Write-Ok "opencode installed"; return $true }
             Write-Warn "opencode installer ran but binary not found — restart terminal"
             return $false
         } catch {
-            Write-Err "opencode install failed: $($_.Exception.Message)"
+            $msg = $_.Exception.Message
+            if ($_.Exception.Response.StatusCode.value__ -eq 403 -or $msg -like '*403*' -or $msg -like '*Prohibido*' -or $msg -like '*Forbidden*') {
+                Write-Warn "opencode: install blocked by network restriction (HTTP 403)"
+                Write-Info "  This tool is optional. Alternative install options:"
+                Write-Info "  1. GitHub releases: https://github.com/sst/opencode/releases"
+                Write-Info "  2. winget:          winget install sst.opencode"
+                Write-Info "  3. npm:             npm install -g opencode"
+                Write-Info "  4. Manual:          download binary from GitHub and add to PATH"
+            } else {
+                Write-Err "opencode install failed: $msg"
+            }
             return $false
         }
     } else {
