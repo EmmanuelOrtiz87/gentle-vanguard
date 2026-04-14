@@ -10,6 +10,7 @@ on:
       - 'config/structure-policy.json'
       - '.github/workflows/script-governance.yml'
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     branches: [main, develop]
     paths:
       - 'scripts/**'
