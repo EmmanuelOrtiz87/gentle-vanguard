@@ -1340,8 +1340,26 @@ function Show-IdeStatus {
         exit 1
     }
 
-    $ideDataRaw = Invoke-LocalPowerShellScript -ScriptPath $detectScript -ScriptArgs @('-AsJson')
-    $ideData = $ideDataRaw | ConvertFrom-Json
+    # Request machine-readable output and suppress human-readable noise from the child script.
+    $ideDataRaw = & $detectScript -AsJson -Quiet 2>$null
+    if ($ideDataRaw -is [array]) {
+        $ideDataRaw = ($ideDataRaw -join [Environment]::NewLine)
+    }
+
+    $ideDataText = [string]$ideDataRaw
+    $jsonStart = $ideDataText.IndexOf('{')
+    if ($jsonStart -gt 0) {
+        $ideDataText = $ideDataText.Substring($jsonStart)
+    }
+
+    try {
+        $ideData = $ideDataText | ConvertFrom-Json -ErrorAction Stop
+    } catch {
+        Write-Error "IDE detection returned invalid JSON."
+        Write-Host "Raw output:" -ForegroundColor Yellow
+        Write-Host $ideDataText -ForegroundColor DarkGray
+        exit 1
+    }
 
     Write-Host "IDE: $($ideData.ideName)" -ForegroundColor White
     Write-Host "Confidence: $($ideData.confidence)" -ForegroundColor White
