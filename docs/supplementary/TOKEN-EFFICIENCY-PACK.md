@@ -131,6 +131,48 @@ Aggressive scenario:
 
 Use scripts/utilities/token-efficiency-estimator.ps1 for custom estimates.
 
+### 6.1 Response-Mode Matrix (27 Combinations)
+
+The stack now supports a combination matrix based on:
+
+1. Language: `es | pt-BR | en`
+2. Detail level: `simple | executive | expanded`
+3. Compression profile: `lite | lleno | ultra`
+
+Total combinations: $3 \times 3 \times 3 = 27$.
+
+Generate matrix:
+
+```powershell
+.\scripts\utilities\response-mode-efficiency-matrix.ps1
+
+# CSV export
+.\scripts\utilities\response-mode-efficiency-matrix.ps1 -AsCsv
+
+# Custom baseline for your team
+.\scripts\utilities\response-mode-efficiency-matrix.ps1 -TasksPerMonth 35 -BaselineTokensPerTask 12000 -BaseReductionPercent 32 -AsCsv
+```
+
+This script provides ranked combinations with estimated monthly and yearly token savings.
+
+---
+
+### 6.2 Calibration Workflow (Recommended)
+
+Use this process before enforcing a new default mode:
+
+1. Choose 10 representative tasks from the last sprint.
+2. For each task, run 2-3 response combinations in controlled prompts.
+3. Track token usage and completion quality with the same acceptance criteria.
+4. Update baseline assumptions in the matrix script parameters.
+5. Select default mode based on best quality-cost ratio, not minimum tokens alone.
+
+Calibration note:
+
+1. Keep `executive + lite` as baseline.
+2. Promote `simple + ultra` only for low-risk, high-volume operational loops.
+3. Use `expanded` for high-risk or decision-heavy tasks.
+
 ---
 
 ## 7. Rollout Plan

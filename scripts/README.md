@@ -56,6 +56,7 @@ scripts/
 | `install-engram.ps1` | Instalar o verificar Engram CLI |
 | `custom-rules.ps1` | Load and report custom technical/business/review rules |
 | `response-mode.ps1` | Manage communication language, detail level, and compression profile |
+| `response-mode-efficiency-matrix.ps1` | Generate token-savings matrix for language/detail/profile combinations |
 | `foundation-sync.ps1` | Sync managed Foundation assets into consumer repositories |
 
 ## Workflow CLI (wf.ps1)
@@ -141,6 +142,10 @@ Automated development workflow commands.
 .\scripts\utilities\wf.ps1 response-mode profile:ultra
 .\scripts\utilities\wf.ps1 response-mode language:pt-BR
 .\scripts\utilities\wf.ps1 response-mode detail:expanded
+
+# Generate response-mode savings matrix
+.\scripts\utilities\response-mode-efficiency-matrix.ps1
+.\scripts\utilities\response-mode-efficiency-matrix.ps1 -AsCsv
 
 # Create or refresh task brief only
 .\scripts\utilities\wf.ps1 task-brief auth-hardening
