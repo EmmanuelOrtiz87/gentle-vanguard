@@ -57,6 +57,12 @@ Preset workflow:
 2. Apply preset (`wf.ps1 response-mode preset:<name>`).
 3. Escalate by risk when needed (`wf.ps1 response-mode recommend:<name>:high`).
 
+Session auto-apply workflow:
+
+1. `start-session` reads `communication_presets.auto_apply_on_session_start`.
+2. If enabled, it infers preset from task/branch and applies recommendation automatically.
+3. Session brief records the exact applied combination for traceability.
+
 ## Detail Escalation
 
 Use extended detail only when the developer explicitly requests it.

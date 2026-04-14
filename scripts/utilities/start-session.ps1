@@ -62,6 +62,7 @@ function New-SessionBriefContent {
         [string]$GgaState,
         [string]$CustomRulesState,
         [string]$ResponseModeState,
+        [string]$ResponseModeAutoState,
         [string]$SessionFile,
         [string]$TaskFile
     )
@@ -82,6 +83,7 @@ function New-SessionBriefContent {
 - GGA: $GgaState
 - Custom rules: $CustomRulesState
 - Response profile: $ResponseModeState
+- Response auto-apply: $ResponseModeAutoState
 
 ## Objective
 
@@ -155,6 +157,117 @@ function Get-ResponseModeState {
     }
 }
 
+function Get-CommunicationPresetConfig {
+    $configPath = Join-Path $repoRoot 'config\orchestrator.json'
+    $defaults = [ordered]@{
+        enabled = $true
+        defaultRisk = 'medium'
+        defaultPreset = 'bugfix'
+    }
+
+    if (-not (Test-Path $configPath)) {
+        return [pscustomobject]$defaults
+    }
+
+    try {
+        $config = Get-Content -Path $configPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        if ($config.PSObject.Properties['communication_presets']) {
+            $presets = $config.communication_presets
+            if ($presets.PSObject.Properties['auto_apply_on_session_start']) {
+                $defaults.enabled = [bool]$presets.auto_apply_on_session_start
+            }
+            if ($presets.PSObject.Properties['auto_apply_default_risk']) {
+                $risk = [string]$presets.auto_apply_default_risk
+                if ($risk -in @('low', 'medium', 'high')) {
+                    $defaults.defaultRisk = $risk
+                }
+            }
+            if ($presets.PSObject.Properties['default'] -and -not [string]::IsNullOrWhiteSpace([string]$presets.default)) {
+                $defaults.defaultPreset = [string]$presets.default
+            }
+        }
+    }
+    catch {
+        return [pscustomobject]$defaults
+    }
+
+    return [pscustomobject]$defaults
+}
+
+function Get-SessionRecommendationInput {
+    param(
+        [string]$Branch,
+        [string]$TaskName,
+        [string]$DefaultPreset,
+        [string]$DefaultRisk
+    )
+
+    $preset = $DefaultPreset
+    $risk = $DefaultRisk
+
+    if ($Branch -match '^(hotfix|release)/') {
+        $risk = 'high'
+    }
+
+    if (-not [string]::IsNullOrWhiteSpace($TaskName)) {
+        $task = $TaskName.ToLowerInvariant()
+
+        if ($task -match 'doc|readme|guide|manual|onboard') {
+            $preset = 'docs'
+        }
+        elseif ($task -match 'audit|review|security|governance|compliance') {
+            $preset = 'audit-review'
+            if ($risk -eq 'low') {
+                $risk = 'medium'
+            }
+        }
+        elseif ($task -match 'refactor|cleanup|homologat|restruct') {
+            $preset = 'refactor'
+        }
+        elseif ($task -match 'demo|board|executive|stakeholder') {
+            $preset = 'executive-demo'
+        }
+        else {
+            $preset = 'bugfix'
+        }
+    }
+
+    return [pscustomobject]@{
+        preset = $preset
+        risk = $risk
+    }
+}
+
+function Apply-ResponseModeRecommendation {
+    param(
+        [string]$Preset,
+        [string]$Risk
+    )
+
+    $modeScript = Join-Path $PSScriptRoot 'response-mode.ps1'
+    if (-not (Test-Path $modeScript)) {
+        return 'skipped (response-mode script not found)'
+    }
+
+    try {
+        $json = & $modeScript -Mode recommend -Preset $Preset -Risk $Risk -AsJson -PassThru -Quiet
+        if ([string]::IsNullOrWhiteSpace(($json | Out-String).Trim())) {
+            return 'skipped (recommendation returned empty output)'
+        }
+
+        $rec = $json | ConvertFrom-Json
+
+        & $modeScript -Mode set-language -Language $rec.language -Quiet | Out-Null
+        & $modeScript -Mode set-detail -Detail $rec.detail -Quiet | Out-Null
+        & $modeScript -Mode set -Profile $rec.compression -Quiet | Out-Null
+
+        return "applied preset=$($rec.preset); risk=$($rec.risk); language=$($rec.language); detail=$($rec.detail); profile=$($rec.compression)"
+    }
+    catch {
+        return "failed ($($_.Exception.Message))"
+    }
+}
+
 function New-TaskBriefContent {
     param([string]$TaskTitle)
 
@@ -212,6 +325,12 @@ $orchestratorState = if ($orchestratorMarker) { 'active marker present' } else {
 $engramState = Get-ToolState -Name 'engram' -RelativeWrapper 'scripts\utilities\run-engram.ps1'
 $ggaState = Get-ToolState -Name 'gga' -RelativeWrapper 'scripts\utilities\run-gga.ps1'
 $customRulesState = Get-CustomRulesState
+$presetConfig = Get-CommunicationPresetConfig
+$responseModeAutoState = 'disabled by config'
+if ($presetConfig.enabled) {
+    $input = Get-SessionRecommendationInput -Branch $branch -TaskName $TaskName -DefaultPreset $presetConfig.defaultPreset -DefaultRisk $presetConfig.defaultRisk
+    $responseModeAutoState = Apply-ResponseModeRecommendation -Preset $input.preset -Risk $input.risk
+}
 $responseModeState = Get-ResponseModeState
 
 $sessionsDir = Join-Path $repoRoot 'docs\sessions'
@@ -236,7 +355,7 @@ if (-not [string]::IsNullOrWhiteSpace($TaskName)) {
     }
 }
 
-New-SessionBriefContent -Branch $branch -GitState $gitState -OrchestratorState $orchestratorState -EngramState $engramState -GgaState $ggaState -CustomRulesState $customRulesState -ResponseModeState $responseModeState -SessionFile $sessionFile -TaskFile $taskFile | Out-File -FilePath $sessionFile -Encoding UTF8
+New-SessionBriefContent -Branch $branch -GitState $gitState -OrchestratorState $orchestratorState -EngramState $engramState -GgaState $ggaState -CustomRulesState $customRulesState -ResponseModeState $responseModeState -ResponseModeAutoState $responseModeAutoState -SessionFile $sessionFile -TaskFile $taskFile | Out-File -FilePath $sessionFile -Encoding UTF8
 
 Write-Ok "Session brief created: $sessionFile"
 Write-Host "`nNext steps:" -ForegroundColor Cyan

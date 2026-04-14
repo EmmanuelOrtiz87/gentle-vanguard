@@ -49,10 +49,14 @@ if (Test-Path $configFile) {
     $languageMode = if ($config.PSObject.Properties.Name -contains 'communication_language') { $config.communication_language } else { 'es (default)' }
     $compressionProfile = if ($config.PSObject.Properties.Name -contains 'response_profiles' -and $config.response_profiles -and $config.response_profiles.active) { $config.response_profiles.active } else { 'lite (default)' }
     $defaultPreset = if ($config.PSObject.Properties.Name -contains 'communication_presets' -and $config.communication_presets -and $config.communication_presets.default) { $config.communication_presets.default } else { 'bugfix (default)' }
+    $autoApplyPreset = if ($config.PSObject.Properties.Name -contains 'communication_presets' -and $config.communication_presets -and $config.communication_presets.PSObject.Properties.Name -contains 'auto_apply_on_session_start') { $config.communication_presets.auto_apply_on_session_start } else { $true }
+    $autoApplyRisk = if ($config.PSObject.Properties.Name -contains 'communication_presets' -and $config.communication_presets -and $config.communication_presets.PSObject.Properties.Name -contains 'auto_apply_default_risk') { $config.communication_presets.auto_apply_default_risk } else { 'medium' }
     Write-Host "  communication_language: $languageMode" -ForegroundColor White
     Write-Host "  communication_response_mode: $responseMode" -ForegroundColor White
     Write-Host "  response_profile: $compressionProfile" -ForegroundColor White
     Write-Host "  communication_preset_default: $defaultPreset" -ForegroundColor White
+    Write-Host "  communication_preset_auto_apply: $autoApplyPreset" -ForegroundColor White
+    Write-Host "  communication_preset_auto_risk: $autoApplyRisk" -ForegroundColor White
     Write-Host "  memory_integration: $($config.memory_integration)" -ForegroundColor White
     Write-Host "  auto_detect: $($config.auto_detect)" -ForegroundColor White
 } else {

@@ -87,6 +87,30 @@ Orchestrator integration:
 2. Review recommended preset and risk.
 3. Apply suggested mode before implementation.
 
+### Auto-Apply on Session Start
+
+`start-session` can auto-apply communication mode using preset + risk heuristics.
+
+Config keys in `config/orchestrator.json`:
+
+1. `communication_presets.auto_apply_on_session_start` (`true|false`)
+2. `communication_presets.auto_apply_default_risk` (`low|medium|high`)
+3. `communication_presets.default` (fallback preset)
+
+Default behavior:
+
+1. Branch `hotfix/*` or `release/*` -> risk escalates to `high`.
+2. Task name keywords infer preset (`docs`, `audit-review`, `refactor`, `executive-demo`, fallback `bugfix`).
+3. Recommended mode is applied automatically before session brief generation.
+
+Disable auto-apply:
+
+```json
+"communication_presets": {
+     "auto_apply_on_session_start": false
+}
+```
+
 ## Option A: Cloud Configuration (Recommended)
 
 ### Providers Supported

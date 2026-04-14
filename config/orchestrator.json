@@ -33,6 +33,8 @@
                                ],
     "communication_presets":  {
                                   "default":  "bugfix",
+                                  "auto_apply_on_session_start":  true,
+                                  "auto_apply_default_risk":  "medium",
                                   "allow":  [
                                                 "bugfix",
                                                 "refactor",

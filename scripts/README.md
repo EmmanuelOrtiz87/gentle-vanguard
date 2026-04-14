@@ -145,6 +145,9 @@ Automated development workflow commands.
 .\scripts\utilities\wf.ps1 response-mode preset:bugfix
 .\scripts\utilities\wf.ps1 response-mode recommend:docs:high
 
+# start-session auto-applies preset+risk when enabled in config
+.\scripts\utilities\start-session.ps1 -TaskName "audit security flow"
+
 # Generate response-mode savings matrix
 .\scripts\utilities\response-mode-efficiency-matrix.ps1
 .\scripts\utilities\response-mode-efficiency-matrix.ps1 -AsCsv
