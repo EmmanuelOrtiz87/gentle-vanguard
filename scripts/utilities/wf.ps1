@@ -1329,6 +1329,7 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 health              Check system health & activate tools
     .\scripts\utilities\wf.ps1 install-engram      Install or verify Engram CLI
     .\scripts\utilities\wf.ps1 stack-dashboard     One-shot operational dashboard (health + token risk + action)
+    .\scripts\utilities\wf.ps1 stack-dashboard strict  Fail with non-zero exit when executive traffic light is RED
     .\scripts\utilities\wf.ps1 custom-rules-status Show loaded custom rule scopes and files
     .\scripts\utilities\wf.ps1 response-mode                Show active communication settings
     .\scripts\utilities\wf.ps1 response-mode list           List language/detail/profile options
@@ -1683,10 +1684,20 @@ switch ($Command) {
             exit 1
         }
 
+        $isStrict = $StrictCleanup -or ($Scope -eq 'strict')
+
         if ($JSON) {
-            & $dashboardScript -AsJson
+            if ($isStrict) {
+                & $dashboardScript -AsJson -Strict
+            } else {
+                & $dashboardScript -AsJson
+            }
         } else {
-            Invoke-LocalPowerShellScript -ScriptPath $dashboardScript
+            if ($isStrict) {
+                & $dashboardScript -Strict
+            } else {
+                Invoke-LocalPowerShellScript -ScriptPath $dashboardScript
+            }
         }
     }
 

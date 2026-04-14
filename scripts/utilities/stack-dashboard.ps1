@@ -1,5 +1,6 @@
 param(
-    [switch]$AsJson
+    [switch]$AsJson,
+    [switch]$Strict
 )
 
 $ErrorActionPreference = 'Stop'
@@ -202,6 +203,7 @@ $result = [ordered]@{
     token_eta_hours = $etaHours
     token_eta_text = $etaText
     traffic_light = $trafficLight
+    strict_violation = ($trafficLight -eq 'RED')
     risk_level = $riskLevel
     recommended_next_actions = $recommendation
 }
@@ -237,6 +239,11 @@ if ($riskLevel -eq 'high') {
 Write-Host "Recommended next actions:" -ForegroundColor Cyan
 foreach ($action in $recommendation) {
     Write-Host "  - $action" -ForegroundColor Yellow
+}
+
+if ($Strict -and $trafficLight -eq 'RED') {
+    Write-Host "[ERROR] Strict mode violation: traffic light is RED." -ForegroundColor Red
+    exit 2
 }
 
 exit 0

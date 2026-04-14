@@ -188,6 +188,9 @@ Gentleman Foundation uses a sophisticated skill-based architecture:
 # Machine-readable dashboard output for automation
 .\scripts\utilities\wf.ps1 stack-dashboard -JSON
 
+# Strict mode for CI/CD gates (non-zero exit when traffic light is RED)
+.\scripts\utilities\wf.ps1 stack-dashboard strict
+
 # Run code review
 .\scripts\utilities\wf.ps1 review
 
@@ -213,6 +216,7 @@ Dashboard signal coverage:
 2. Token budget burn rate and estimated threshold exhaustion time (ETA).
 3. Engram continuity posture.
 4. Immediate recommended next actions to avoid session blockage.
+5. Strict gate signal in JSON (`strict_violation`) for pipeline automation.
 
 > For global foundation updates, run `gf update-all` from the foundation install root.
 
