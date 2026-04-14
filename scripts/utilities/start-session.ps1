@@ -163,6 +163,8 @@ function Get-CommunicationPresetConfig {
         enabled = $true
         defaultRisk = 'medium'
         defaultPreset = 'bugfix'
+        defaultChatLevel = 'chat-compact'
+        enforceChatLevelOnStart = $true
     }
 
     if (-not (Test-Path $configPath)) {
@@ -184,6 +186,16 @@ function Get-CommunicationPresetConfig {
             }
             if ($presets.PSObject.Properties['default'] -and -not [string]::IsNullOrWhiteSpace([string]$presets.default)) {
                 $defaults.defaultPreset = [string]$presets.default
+            }
+        }
+
+        if ($config.PSObject.Properties['chat_response']) {
+            $chat = $config.chat_response
+            if ($chat.PSObject.Properties['default_level'] -and -not [string]::IsNullOrWhiteSpace([string]$chat.default_level)) {
+                $defaults.defaultChatLevel = [string]$chat.default_level
+            }
+            if ($chat.PSObject.Properties['enforce_on_session_start']) {
+                $defaults.enforceChatLevelOnStart = [bool]$chat.enforce_on_session_start
             }
         }
     }
@@ -241,7 +253,9 @@ function Get-SessionRecommendationInput {
 function Apply-ResponseModeRecommendation {
     param(
         [string]$Preset,
-        [string]$Risk
+        [string]$Risk,
+        [string]$ChatLevel,
+        [bool]$EnforceChatLevelOnStart
     )
 
     $modeScript = Join-Path $PSScriptRoot 'response-mode.ps1'
@@ -250,6 +264,11 @@ function Apply-ResponseModeRecommendation {
     }
 
     try {
+        if ($EnforceChatLevelOnStart -and -not [string]::IsNullOrWhiteSpace($ChatLevel)) {
+            & $modeScript -Mode set-chat-level -ChatLevel $ChatLevel -Quiet | Out-Null
+            return "applied startup chat-level=$ChatLevel (architecture baseline)"
+        }
+
         $json = & $modeScript -Mode recommend -Preset $Preset -Risk $Risk -AsJson -PassThru -Quiet
         if ([string]::IsNullOrWhiteSpace(($json | Out-String).Trim())) {
             return 'skipped (recommendation returned empty output)'
@@ -329,7 +348,7 @@ $presetConfig = Get-CommunicationPresetConfig
 $responseModeAutoState = 'disabled by config'
 if ($presetConfig.enabled) {
     $input = Get-SessionRecommendationInput -Branch $branch -TaskName $TaskName -DefaultPreset $presetConfig.defaultPreset -DefaultRisk $presetConfig.defaultRisk
-    $responseModeAutoState = Apply-ResponseModeRecommendation -Preset $input.preset -Risk $input.risk
+    $responseModeAutoState = Apply-ResponseModeRecommendation -Preset $input.preset -Risk $input.risk -ChatLevel $presetConfig.defaultChatLevel -EnforceChatLevelOnStart $presetConfig.enforceChatLevelOnStart
 }
 $responseModeState = Get-ResponseModeState
 

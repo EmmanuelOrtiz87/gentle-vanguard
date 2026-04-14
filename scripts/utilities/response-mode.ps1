@@ -30,6 +30,16 @@ function Get-DefaultConfig {
         allowed_languages = @('es', 'pt-BR', 'en')
         communication_response_mode = 'executive'
         allowed_response_modes = @('simple', 'executive', 'expanded')
+        chat_response = [ordered]@{
+            default_level = 'chat-compact'
+            enforce_on_session_start = $true
+            allow = @('chat-compact', 'chat-balanced', 'chat-detailed')
+            decision = [ordered]@{
+                kind = 'architecture'
+                title = 'startup-chat-baseline'
+                rationale = 'Initialize sessions with minimal chat verbosity for token efficiency and closure-first operation.'
+            }
+        }
         communication_presets = [ordered]@{
             default = 'bugfix'
             allow = @('bugfix', 'refactor', 'docs', 'audit-review', 'executive-demo')
@@ -79,7 +89,7 @@ function Ensure-ConfigDefaults {
 
     $defaults = Get-DefaultConfig
 
-    foreach ($key in @('communication_language', 'allowed_languages', 'communication_response_mode', 'allowed_response_modes', 'communication_presets', 'response_profiles')) {
+    foreach ($key in @('communication_language', 'allowed_languages', 'communication_response_mode', 'allowed_response_modes', 'chat_response', 'communication_presets', 'response_profiles')) {
         if (-not $Config.PSObject.Properties[$key]) {
             Add-Member -InputObject $Config -MemberType NoteProperty -Name $key -Value $defaults[$key]
         }
@@ -102,6 +112,24 @@ function Ensure-ConfigDefaults {
     $Config.response_profiles.allow = @($Config.response_profiles.allow | ForEach-Object { [string]$_ } | Where-Object { $_ -in @('lite', 'lleno', 'ultra') })
     if ($Config.response_profiles.allow.Count -eq 0) { $Config.response_profiles.allow = @('lite', 'lleno', 'ultra') }
     if ($Config.response_profiles.active -notin $Config.response_profiles.allow) { $Config.response_profiles.active = 'lite' }
+
+    $chatLevelMap = Get-ChatLevelMap
+    if (-not $Config.chat_response.PSObject.Properties['allow']) {
+        $Config.chat_response | Add-Member -MemberType NoteProperty -Name 'allow' -Value @($chatLevelMap.Keys)
+    }
+    if (-not $Config.chat_response.PSObject.Properties['default_level']) {
+        $Config.chat_response | Add-Member -MemberType NoteProperty -Name 'default_level' -Value 'chat-compact'
+    }
+    if (-not $Config.chat_response.PSObject.Properties['enforce_on_session_start']) {
+        $Config.chat_response | Add-Member -MemberType NoteProperty -Name 'enforce_on_session_start' -Value $true
+    }
+    if (-not $Config.chat_response.PSObject.Properties['decision']) {
+        $Config.chat_response | Add-Member -MemberType NoteProperty -Name 'decision' -Value ([pscustomobject](Get-DefaultConfig).chat_response.decision)
+    }
+
+    $Config.chat_response.allow = @($Config.chat_response.allow | ForEach-Object { [string]$_ } | Where-Object { $_ -in @($chatLevelMap.Keys) })
+    if ($Config.chat_response.allow.Count -eq 0) { $Config.chat_response.allow = @($chatLevelMap.Keys) }
+    if ($Config.chat_response.default_level -notin $Config.chat_response.allow) { $Config.chat_response.default_level = 'chat-compact' }
 
     if (-not $Config.communication_presets.PSObject.Properties['allow']) {
         $Config.communication_presets | Add-Member -MemberType NoteProperty -Name 'allow' -Value @('bugfix', 'refactor', 'docs', 'audit-review', 'executive-demo')
@@ -308,6 +336,9 @@ if ($Mode -eq 'set-chat-level') {
     $selected = $chatLevels[$ChatLevel]
     $config.communication_response_mode = [string]$selected.detail
     $config.response_profiles.active = [string]$selected.profile
+    if ($config.PSObject.Properties['chat_response']) {
+        $config.chat_response.default_level = [string]$ChatLevel
+    }
     Save-Config -Config $config
     Save-ResponseModeObservation -Config $config -Reason ("set-chat-level:{0}" -f $ChatLevel)
     Emit-Output -Text ("[OK] Chat level applied: {0} (detail={1}, profile={2})" -f $ChatLevel, $config.communication_response_mode, $config.response_profiles.active) -AsPassThru:$PassThru
@@ -344,6 +375,8 @@ if ($Mode -eq 'list') {
             profile = $config.response_profiles.active
             allowedProfiles = @($config.response_profiles.allow)
             chatLevel = $activeChatLevel
+            defaultChatLevel = if ($config.PSObject.Properties['chat_response']) { [string]$config.chat_response.default_level } else { 'chat-compact' }
+            enforceChatLevelOnSessionStart = if ($config.PSObject.Properties['chat_response']) { [bool]$config.chat_response.enforce_on_session_start } else { $true }
             allowedChatLevels = @($chatLevelMap.Keys)
             chatLevels = $chatLevelMap
             preset = $config.communication_presets.default
@@ -361,6 +394,10 @@ if ($Mode -eq 'list') {
     $lines += "Detail: $($config.communication_response_mode)"
     $lines += "Compression Profile: $($config.response_profiles.active)"
     $lines += "Chat level: $activeChatLevel"
+    if ($config.PSObject.Properties['chat_response']) {
+        $lines += "Default chat level: $($config.chat_response.default_level)"
+        $lines += "Enforce chat level on session start: $($config.chat_response.enforce_on_session_start)"
+    }
     $lines += "Default Preset: $($config.communication_presets.default)"
     $lines += ''
     $lines += "Allowed languages: $($config.allowed_languages -join ', ')"
@@ -408,6 +445,8 @@ if ($AsJson) {
         allowedDetailLevels = @($config.allowed_response_modes)
         active = $config.response_profiles.active
         chatLevel = $activeChatLevel
+        defaultChatLevel = if ($config.PSObject.Properties['chat_response']) { [string]$config.chat_response.default_level } else { 'chat-compact' }
+        enforceChatLevelOnSessionStart = if ($config.PSObject.Properties['chat_response']) { [bool]$config.chat_response.enforce_on_session_start } else { $true }
         allowedChatLevels = @($chatLevelMap.Keys)
         chatLevels = $chatLevelMap
         description = $config.response_profiles.profiles.$($config.response_profiles.active).description
@@ -425,6 +464,7 @@ $statusLines = @(
     "Detail level: $($config.communication_response_mode)",
     "Active compression profile: $($config.response_profiles.active)",
     "Active chat level: $(Resolve-ActiveChatLevel -Config $config)",
+    "Default chat level: $(if ($config.PSObject.Properties['chat_response']) { $config.chat_response.default_level } else { 'chat-compact' })",
     "Default preset: $($config.communication_presets.default)",
     "Description: $($config.response_profiles.profiles.$($config.response_profiles.active).description)",
     'Guidelines:'
