@@ -61,13 +61,23 @@ Each asset can define a `strategy`:
 
 2. Review drifted files and strategy (`replace` vs `preserve-local`).
 3. Adjust `config/foundation-sync.json` before apply if needed.
-4. Apply with PR for traceability:
+4. Ensure a clean working tree before apply:
+
+```powershell
+# Option A: Commit your changes
+git add .
+git commit -m "chore: save local changes"
+
+# Option B: Stash temporarily
+git stash push -u -m "pre-foundation-sync"
+```
+5. Apply with PR for traceability:
 
 ```powershell
 .\scripts\utilities\wf.ps1 foundation-sync apply -CreatePr
 ```
 
-5. Review PR and merge.
+6. Review PR and merge.
 
 ## Will Custom Files Be Lost?
 
