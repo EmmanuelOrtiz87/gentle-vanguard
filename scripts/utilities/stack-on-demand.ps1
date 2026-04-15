@@ -75,17 +75,97 @@ function Activate-OnDemand {
         auto_active = $false
     } | ConvertTo-Json | Out-File -FilePath $marker -Encoding UTF8 -Force
 
-    @{
-        active = $true
-        skill_path = $orchestratorSkill
-        auto_detect = $true
-        workflow_mode = "coordinated"
-        memory_integration = $true
-        quality_gates = $true
-        session_tracking = $true
-        activation_mode = "on-demand"
-        activated_at = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    } | ConvertTo-Json | Out-File -FilePath $configFile -Encoding UTF8 -Force
+    $cfg = $null
+    if (Test-Path $configFile) {
+        try {
+            $cfg = Get-Content $configFile -Raw | ConvertFrom-Json
+        } catch {
+            $cfg = [pscustomobject]@{}
+        }
+    } else {
+        $cfg = [pscustomobject]@{}
+    }
+
+    function Set-ConfigValue {
+        param(
+            [psobject]$Target,
+            [string]$Name,
+            $Value
+        )
+
+        if ($Target.PSObject.Properties.Name -contains $Name) {
+            $Target.$Name = $Value
+        } else {
+            $Target | Add-Member -NotePropertyName $Name -NotePropertyValue $Value
+        }
+    }
+
+    Set-ConfigValue -Target $cfg -Name 'active' -Value $true
+    Set-ConfigValue -Target $cfg -Name 'skill_path' -Value $orchestratorSkill
+    Set-ConfigValue -Target $cfg -Name 'auto_detect' -Value $true
+    Set-ConfigValue -Target $cfg -Name 'workflow_mode' -Value 'coordinated'
+    Set-ConfigValue -Target $cfg -Name 'memory_integration' -Value $true
+    Set-ConfigValue -Target $cfg -Name 'quality_gates' -Value $true
+    Set-ConfigValue -Target $cfg -Name 'session_tracking' -Value $true
+    Set-ConfigValue -Target $cfg -Name 'activation_mode' -Value 'on-demand'
+    Set-ConfigValue -Target $cfg -Name 'activated_at' -Value (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+
+    if (-not ($cfg.PSObject.Properties.Name -contains 'communication_response_mode')) {
+        Set-ConfigValue -Target $cfg -Name 'communication_response_mode' -Value 'simple'
+    }
+    if (-not ($cfg.PSObject.Properties.Name -contains 'allowed_response_modes')) {
+        Set-ConfigValue -Target $cfg -Name 'allowed_response_modes' -Value @('simple', 'executive', 'expanded')
+    }
+    if (-not ($cfg.PSObject.Properties.Name -contains 'response_profiles') -or -not $cfg.response_profiles) {
+        Set-ConfigValue -Target $cfg -Name 'response_profiles' -Value ([pscustomobject]@{
+            active = 'ultra'
+            allow = @('lite', 'lleno', 'ultra')
+        })
+    }
+    if (-not ($cfg.PSObject.Properties.Name -contains 'chat_response') -or -not $cfg.chat_response) {
+        Set-ConfigValue -Target $cfg -Name 'chat_response' -Value ([pscustomobject]@{
+            default_level = 'chat-compact'
+            enforce_on_session_start = $true
+            allow = @('chat-compact', 'chat-balanced', 'chat-detailed')
+            decision = [pscustomobject]@{
+                kind = 'architecture'
+                title = 'startup-chat-baseline'
+                rationale = 'Initialize sessions with minimal chat verbosity for token efficiency and closure-first operation.'
+            }
+        })
+    }
+
+    if (-not ($cfg.PSObject.Properties.Name -contains 'response_policy') -or -not $cfg.response_policy) {
+        Set-ConfigValue -Target $cfg -Name 'response_policy' -Value ([pscustomobject]@{
+            strict_mode = $true
+            enforce_baseline = $true
+            baseline_detail = 'simple'
+            baseline_profile = 'ultra'
+            baseline_chat_level = 'chat-compact'
+            allow_overrides = $false
+            require_override_reason = $true
+        })
+    }
+
+    if (-not ($cfg.PSObject.Properties.Name -contains 'workflow_optimization') -or -not $cfg.workflow_optimization) {
+        Set-ConfigValue -Target $cfg -Name 'workflow_optimization' -Value ([pscustomobject]@{
+            auto_escalation = [pscustomobject]@{
+                enabled = $true
+                file_change_threshold = 8
+                risk_trigger = 'high'
+                target_detail = 'expanded'
+                target_profile = 'lleno'
+            }
+            kpi_tracking = [pscustomobject]@{
+                enabled = $true
+                cadence = 'weekly'
+                script = './scripts/utilities/aggregate-metrics.ps1'
+                metrics = @('tokens_per_task', 'time_per_task', 'rework_rate', 'post_change_defects')
+            }
+        })
+    }
+
+    ($cfg | ConvertTo-Json -Depth 30) | Out-File -FilePath $configFile -Encoding UTF8 -Force
 
     Write-Ok "On-demand orchestrator active in: $Path"
 }

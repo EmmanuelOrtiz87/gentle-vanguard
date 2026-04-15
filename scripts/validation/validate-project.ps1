@@ -203,7 +203,8 @@ Write-Header "Documentation"
 
 $docFiles = @(
     @{ name = 'docs/project-context.md'; desc = 'Project context' }
-    @{ name = 'docs/ARCHITECTURE.md'; desc = 'Architecture doc' }
+    @{ name = 'docs/reference/ARCHITECTURE.md'; desc = 'Architecture doc (canonical)' }
+    @{ name = 'docs/architecture/ARCHITECTURE.md'; desc = 'Architecture doc (directory entry)' }
     @{ name = 'docs/CHANGELOG.md'; desc = 'Changelog' }
     @{ name = 'LICENSE'; desc = 'License file' }
 )

@@ -6,6 +6,7 @@ Gentleman Foundation documentation - reorganized for better navigation.
 
 ```
 docs/
+├── architecture/       # Architecture hub and decision records
 ├── getting-started/     # Quick start guides
 ├── reference/          # Technical reference
 ├── guides/             # How-to guides
@@ -36,6 +37,14 @@ docs/
 | [structure.md](reference/structure.md) | Directory structure |
 | [SDD-GOVERNANCE-POLICY.md](reference/SDD-GOVERNANCE-POLICY.md) | SDD enforcement criteria and exceptions |
 | [FUTURE-FEATURES-BACKLOG.md](reference/FUTURE-FEATURES-BACKLOG.md) | Deferred improvements and optimization backlog |
+
+## Architecture
+
+| Document | Description |
+|----------|-------------|
+| [README.md](architecture/README.md) | Architecture hub and navigation |
+| [ARCHITECTURE.md](architecture/ARCHITECTURE.md) | Entry point that redirects to canonical architecture doc |
+| [ARCHITECTURE.md](reference/ARCHITECTURE.md) | Canonical full architecture document |
 
 ## Guides
 

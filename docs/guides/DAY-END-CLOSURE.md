@@ -168,6 +168,12 @@ Developer choice:         Generated
 
 ## Best Practices
 
+1. **Do not close sessions with unpublished changes**
+   - `end-session.ps1` now enforces publication policy by default.
+   - Closure is blocked when there are uncommitted changes, no upstream, or local commits ahead of upstream.
+   - Recommended flow: `wf.ps1 publish` before closure.
+   - Explicit override only when intentional: `wf.ps1 end-session -AllowUnpublishedClose`.
+
 1. **Run day-end-closure before truly leaving for the day**
    - Ensures all learnings are captured
    - Validates state before next session
