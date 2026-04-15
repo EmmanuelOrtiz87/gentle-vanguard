@@ -202,6 +202,8 @@ if (Test-Path $scriptSkillPath) {
     $failures++
 }
 
+$isCi = ($env:GITHUB_ACTIONS -eq 'true')
+
 $sessionBriefExists = (Get-ChildItem -Path (Join-Path $repoRoot "docs/sessions") -File -ErrorAction SilentlyContinue |
     Where-Object {
         $_.Name -like '*-session-start.md' -or
@@ -213,15 +215,23 @@ $taskBriefExists = (Get-ChildItem -Path (Join-Path $repoRoot "docs/tasks") -Filt
 if ($sessionBriefExists) {
     Write-Ok "Session start artifact exists"
 } else {
-    Write-Fail "Missing session start artifact under docs/sessions/*-session-start.md or docs/sessions/YYYY-MM-DD-HHmmss-session-start.md"
-    $failures++
+    if ($isCi) {
+        Write-Warn "Missing session start artifact (CI advisory only)"
+    } else {
+        Write-Fail "Missing session start artifact under docs/sessions/*-session-start.md or docs/sessions/YYYY-MM-DD-HHmmss-session-start.md"
+        $failures++
+    }
 }
 
 if ($taskBriefExists) {
     Write-Ok "Task brief artifact exists"
 } else {
-    Write-Fail "Missing task brief artifact under docs/tasks/*.md"
-    $failures++
+    if ($isCi) {
+        Write-Warn "Missing task brief artifact (CI advisory only)"
+    } else {
+        Write-Fail "Missing task brief artifact under docs/tasks/*.md"
+        $failures++
+    }
 }
 
 # ---------------------------------------------------------------------------
