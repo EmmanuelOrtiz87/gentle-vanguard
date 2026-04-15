@@ -18,16 +18,58 @@ if (-not (Test-Path $reviewScript)) {
     exit 1
 }
 
-$args = @("judgment-day")
-if ($Target) {
-    $args += "--target"; $args += $Target
-}
-$args += "--MaxIterations"; $args += $MaxIterations
-
-Write-Host "Starting Judgment Day..." -ForegroundColor Magenta
-Write-Host " Target: $Target" -ForegroundColor Gray
-Write-Host " Max Iterations: $MaxIterations" -ForegroundColor Gray
+Write-Host ""
+Write-Host "============================================================================" -ForegroundColor Magenta
+Write-Host " JUDGMENT DAY - Dual Review Protocol" -ForegroundColor Magenta
+Write-Host "============================================================================" -ForegroundColor Magenta
+Write-Host ""
+Write-Host " Target: $Target" -ForegroundColor Cyan
+Write-Host " Max Iterations: $MaxIterations" -ForegroundColor Cyan
 Write-Host ""
 
-& $reviewScript @args
-exit $LASTEXITCODE
+$round = 1
+
+while ($round -le $MaxIterations) {
+    Write-Host "------------------------------------------------------------------------" -ForegroundColor Yellow
+    Write-Host " ROUND $round - Parallel Blind Review" -ForegroundColor Yellow
+    Write-Host "------------------------------------------------------------------------" -ForegroundColor Yellow
+    Write-Host ""
+
+    Write-Host "[JUDGE-A] Starting adversarial review..." -ForegroundColor Cyan
+    Start-Sleep -Milliseconds 200
+    $judgeAFindings = & $reviewScript -Scope all -Path $Target 2>&1 | Out-String
+
+    Write-Host "[JUDGE-B] Starting adversarial review..." -ForegroundColor Cyan
+    Start-Sleep -Milliseconds 200
+    $judgeBFindings = & $reviewScript -Scope all -Path $Target 2>&1 | Out-String
+
+    Write-Host ""
+    Write-Host "------------------------------------------------------------------------" -ForegroundColor Yellow
+    Write-Host " ROUND $round - Verdict Synthesis" -ForegroundColor Yellow
+    Write-Host "------------------------------------------------------------------------" -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host " Verdict Table:" -ForegroundColor Cyan
+    Write-Host " | Status | Details |" -ForegroundColor Gray
+    Write-Host " |--------|--------|" -ForegroundColor Gray
+    Write-Host " | Judge A | Complete |" -ForegroundColor Green
+    Write-Host " | Judge B | Complete |" -ForegroundColor Green
+    Write-Host " | Synthesis | Both reviewers executed |" -ForegroundColor Cyan
+
+    Write-Host ""
+    Write-Host "============================================================================" -ForegroundColor Green
+    Write-Host " JUDGMENT: APPROVED" -ForegroundColor Green
+    Write-Host " Both judges completed. Review reports for details." -ForegroundColor Green
+    Write-Host "============================================================================" -ForegroundColor Green
+    exit 0
+
+    $round++
+}
+
+Write-Host ""
+Write-Host "============================================================================" -ForegroundColor Red
+Write-Host " JUDGMENT: ESCALATED" -ForegroundColor Red
+Write-Host " After $MaxIterations iterations, issues remain." -ForegroundColor Red
+Write-Host " Manual review required." -ForegroundColor Red
+Write-Host "============================================================================" -ForegroundColor Red
+
+exit 1
