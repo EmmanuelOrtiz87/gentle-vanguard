@@ -6,7 +6,8 @@
 param(
     [int]$MaxRepoFiles = 1,
     [int]$MaxLocalFiles = 30,
-    [string[]]$Categories = @("audits", "sessions", "reviews", "metrics", "reports")
+    [string[]]$Categories = @("audits", "sessions", "reviews", "metrics", "reports"),
+    [switch]$Force
 )
 
 $ErrorActionPreference = 'Continue'
@@ -15,6 +16,37 @@ $repoRoot = if ($scriptDir) { (Resolve-Path (Join-Path (Join-Path $scriptDir '..
 $docsDir = Join-Path $repoRoot 'docs'
 $archiveRoot = Join-Path $docsDir '.local-archive'
 
+function Test-NonArtifactDocChanges {
+    param([string]$Root)
+
+    $status = git -C $Root status --short -- docs 2>$null
+    if ([string]::IsNullOrWhiteSpace($status)) { return $false }
+
+    $allowed = @(
+        'docs/audits/',
+        'docs/sessions/',
+        'docs/reviews/',
+        'docs/metrics/',
+        'docs/reports/',
+        'docs/.local-archive/'
+    )
+
+    foreach ($line in ($status -split "`n")) {
+        $trim = $line.Trim()
+        if ([string]::IsNullOrWhiteSpace($trim)) { continue }
+        $path = $trim.Substring(3)
+
+        $isAllowed = $false
+        foreach ($prefix in $allowed) {
+            if ($path.Replace('\\','/').StartsWith($prefix)) { $isAllowed = $true; break }
+        }
+
+        if (-not $isAllowed) { return $true }
+    }
+
+    return $false
+}
+
 Write-Host ""
 Write-Host "============================================================================" -ForegroundColor Cyan
 Write-Host " ARTIFACT ROTATION" -ForegroundColor Cyan
@@ -22,6 +54,13 @@ Write-Host "====================================================================
 Write-Host " Max repo files per category: $MaxRepoFiles" -ForegroundColor Gray
 Write-Host " Max local archive files per category: $MaxLocalFiles" -ForegroundColor Gray
 Write-Host ""
+
+if (-not $Force -and (Test-NonArtifactDocChanges -Root $repoRoot)) {
+    Write-Host "[WARN] Uncommitted docs changes detected outside artifact folders." -ForegroundColor Yellow
+    Write-Host "[WARN] Commit or move those changes before rotating artifacts." -ForegroundColor Yellow
+    Write-Host "[INFO] Use -Force to bypass." -ForegroundColor Cyan
+    exit 1
+}
 
 $totalArchived = 0
 $totalDeleted = 0

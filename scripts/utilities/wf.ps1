@@ -1542,23 +1542,34 @@ switch ($Command) {
     'review' {
         Write-Step "Code Review - $($Scope.ToUpper())"
 
-        $reviewScript = Join-Path $scriptDir '..\skills\code-review-orchestrator-skill\code-review.ps1'
+        if ($Scope -eq 'judgment-day') {
+            $jdScript = Join-Path $scriptDir 'judgment-day.ps1'
+            if (-not (Test-Path $jdScript)) {
+                Write-Error "judgment-day.ps1 not found"
+                exit 1
+            }
 
-        if (-not (Test-Path $reviewScript)) {
-            Write-Error "Code review script not found: $reviewScript"
-            exit 1
-        }
-
-        $reviewArgs = @()
-        if ($Scope) {
-            $reviewArgs += $Scope
+            Write-Host " Running: judgment-day.ps1" -ForegroundColor Cyan
+            & $jdScript
+            $exitCode = $LASTEXITCODE
         } else {
-            $reviewArgs += 'all'
-        }
+            $reviewScript = Join-Path $scriptDir '..\skills\code-review-orchestrator-skill\code-review.ps1'
+            if (-not (Test-Path $reviewScript)) {
+                Write-Error "Code review script not found: $reviewScript"
+                exit 1
+            }
 
-        Write-Host " Running: code-review.ps1 --scope $($reviewArgs -join ' ')" -ForegroundColor Cyan
-        & $reviewScript @reviewArgs
-        $exitCode = $LASTEXITCODE
+            $reviewArgs = @()
+            if ($Scope) {
+                $reviewArgs += $Scope
+            } else {
+                $reviewArgs += 'all'
+            }
+
+            Write-Host " Running: code-review.ps1 --scope $($reviewArgs -join ' ')" -ForegroundColor Cyan
+            & $reviewScript @reviewArgs
+            $exitCode = $LASTEXITCODE
+        }
 
         if ($exitCode -ne 0) {
             Write-Error "Code review found issues"
