@@ -281,6 +281,39 @@ Only persist learning as durable guidance when all are true:
 
 If evidence is weak, store as `hypothesis` in session notes, not as durable rule.
 
+## REASONING CACHE PROTOCOL
+
+Use Engram memory as a reasoning cache to avoid redundant analysis and preserve cross-session continuity.
+
+### At Task Start (automatic)
+
+1. Extract 2-4 keywords from the user's request (topic, feature name, file, technology).
+2. Call `mem_search` with those keywords scoped to the current project.
+3. If results are found:
+   - Call `mem_get_observation` for the top match to load full context.
+   - Use prior decisions, patterns, and gotchas as starting constraints.
+   - State briefly what prior context was loaded so the user has visibility.
+4. If no results are found:
+   - Proceed normally; do not delay work waiting for context.
+5. Also call `mem_context` if the task references recent session work (last 1-2 sessions).
+
+### At Task End (automatic)
+
+1. Identify key decisions, non-obvious learnings, and reusable patterns from the completed work.
+2. Call `mem_save` for each distinct item using structured format:
+   - **title**: verb + subject, searchable (e.g. "Chose retry strategy for HTTP client").
+   - **type**: `decision` | `discovery` | `pattern` | `bugfix` | `architecture`.
+   - **topic_key**: use `mem_suggest_topic_key` for evolving topics to enable upsert.
+   - **content**: `What / Why / Where / Learned` structure.
+3. Skip saving if the task was trivial (single-line fix, no decision made, no new pattern).
+4. Do not duplicate observations already stored under the same `topic_key`.
+
+### Guardrails
+
+1. Search adds at most one tool round-trip; never block user-facing work for memory lookup.
+2. Saving happens after the user confirms task completion, not mid-flight.
+3. Respect the Learning Quality Bar: only persist validated, evidence-backed learnings.
+
 ## GIT FLOW WORKFLOW
 
 ### Branch Strategy

@@ -41,6 +41,20 @@ ORCHESTRATOR (context slim - only orchestrates)
 
 ---
 
+## AGENT BOUNDARIES
+
+| Agent | CAN do | CANNOT do | Escalates to |
+|-------|--------|-----------|--------------|
+| BA | Analyze requirements, write BDD/Gherkin, define acceptance criteria, create user stories | Write code, deploy, modify infrastructure | Orchestrator |
+| SAD | Design architecture, create SDD/ADR, define API contracts, model databases | Implement code directly, deploy, run tests | Orchestrator |
+| DEV | Implement features, write code, refactor, fix bugs, apply security patterns | Deploy to production, approve PRs, modify infra | Orchestrator |
+| QA | Write tests, run test suites, validate quality gates, perform code review | Implement features, write business logic, deploy | Orchestrator |
+| OPS | Manage CI/CD, configure Docker/K8s, deploy, manage infrastructure | Write business logic, implement features, define requirements | Orchestrator |
+| GOV | Audit compliance, monitor metrics, run security reviews, handle incidents | Implement features, deploy, write business logic | Orchestrator |
+| DOC | Write documentation, maintain READMEs, create guides and runbooks | Modify code, modify infrastructure, deploy | Orchestrator |
+
+---
+
 ## AGENT-BA: Business Analyst
 
 ### ROLE

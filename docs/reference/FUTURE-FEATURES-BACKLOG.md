@@ -51,6 +51,7 @@ If the user confirms, append the item. If not confirmed, do not register it.
 | FF-010 | 2026-04-15 | Event Bus System | Basic pub/sub event system for script hooks and automation triggers. | medium | done | framework-core | When orchestration complexity increases. |
 | FF-011 | 2026-04-15 | Plugin Architecture | Extensibility contract for third-party plugins with standardized interface. | medium | pending | framework-core | When community adoption grows. |
 | FF-012 | 2026-04-15 | Unified Metrics Dashboard | Centralized metrics collection with Grafana visualization. | medium | pending | framework-core | When operational scale requires centralized observability. |
+| FF-013 | 2026-04-15 | SDD Governance Enforcement | Mandatory SDD gate pre-merge with validated/done status. Template exists but not enforced. | high | pending | AGENT-GOV | When SDD baseline is stable for one sprint. |
 
 ## Notes
 

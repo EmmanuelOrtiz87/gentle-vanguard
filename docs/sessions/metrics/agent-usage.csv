@@ -1,0 +1,4 @@
+﻿timestamp,agent,skill,task,duration_ms
+2026-04-15T18:34:24-03:00,DEV,angular-core,implement auth,4500
+2026-04-15T18:34:32-03:00,QA,testing-skill,write tests,2200
+2026-04-15T18:34:32-03:00,DEV,react-19,build ui,3100

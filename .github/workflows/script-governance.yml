@@ -40,6 +40,16 @@ jobs:
           # -SkipFallbackTests: skip file-mutation tests (unnecessary in CI — validated locally)
           powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1 -SkipFallbackTests
 
+      - name: Foundation drift check (advisory)
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          if (Test-Path '.\scripts\utilities\foundation-sync.ps1') {
+            powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\foundation-sync.ps1 -Mode check
+          } else {
+            Write-Host '::notice::foundation-sync.ps1 not found -- skipping drift check.'
+          }
+
       - name: SDD governance gate (PR)
         if: github.event_name == 'pull_request'
         shell: pwsh
