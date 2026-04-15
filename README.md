@@ -159,7 +159,8 @@ All components are built following TDD/BDD principles:
 Gentleman Foundation uses a sophisticated skill-based architecture:
 
 #### Master Orchestrators (On-Demand Recommended)
-- **Project Orchestrator**: Auto-detects project type, loads relevant skills, guides workflow, and acts as an expert for analysis, design, architecture, and testing throughout the development lifecycle
+- **Project Orchestrator**: Auto-detects project type, loads relevant skills, guides workflow
+- **Multi-Agent Registry**: 7 specialized sub-agents for token-efficient delegation (BA, SAD, DEV, QA, OPS, GOV, DOC)
 - **Session Workflow**: Manages session lifecycle, memory persistence, todo tracking
 - **Code Review Orchestrator**: Coordinates quality checks and automated reviews
 
@@ -174,6 +175,14 @@ Gentleman Foundation uses a sophisticated skill-based architecture:
 - **Security Expert**: Vulnerability scanning and security best practices
 - **Testing Strategy**: Comprehensive testing frameworks and strategies
 - **Architecture Governance**: System design and architectural decisions
+
+#### Multi-Agent Commands
+```powershell
+.\wf.ps1 agent list       # List all 7 specialized agents
+.\wf.ps1 agent status     # Check agent readiness
+.\wf.ps1 agent DEV "implement login"  # Delegate to DEV agent
+.\wf.ps1 agent QA "test checkout"     # Delegate to QA agent
+```
 
 ### 🔧 Development Tools
 

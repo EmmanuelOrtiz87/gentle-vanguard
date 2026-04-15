@@ -6,13 +6,30 @@ This is the **Gentleman Foundation** project - the global development platform f
 
 ```
 ~/.gentleman/                    # Global installation
-├── skills/                     # 28 development skills
+├── skills/                     # 28 development skills + multi-agent-registry
 ├── tools/                      # CLI tools
 ├── hooks/                      # Git hooks
 ├── bin/                        # CLI wrappers (gf)
 ├── config/                     # Configuration
 └── templates/                  # Project templates
 ```
+
+## Multi-Agent Specialization Model
+
+Orquestador slim con 7 sub-agentes especializados para token efficiency (~60% savings):
+
+```
+ORCHESTRATOR (context slim)
+├── AGENT-BA   → Business Analysis (BDD, requirements)
+├── AGENT-SAD  → Architecture (SDD, API design, DB)
+├── AGENT-DEV  → Development (code, features)
+├── AGENT-QA   → Quality (testing, validation)
+├── AGENT-OPS  → DevOps (deploy, CI/CD)
+├── AGENT-GOV  → Governance (security, audit)
+└── AGENT-DOC  → Documentation (specs, guides)
+```
+
+Usage: `.\wf.ps1 agent <AGENT> [TASK]`
 
 ## Quick Start
 
@@ -39,7 +56,8 @@ gf list
 
 | Category | Skills |
 |----------|--------|
-| Orchestrator | project-orchestrator, skill-creator |
+| Orchestrator | project-orchestrator, multi-agent-registry, skill-creator |
+| **Sub-Agents** | BA (BA), SAD (Architecture), DEV (Development), QA (Testing), OPS (DevOps), GOV (Governance), DOC (Documentation) |
 | Frontend | angular-spa, react-19, nextjs-15, tailwind-4 |
 | State | zustand-5 |
 | Validation | zod-4 |

@@ -12,6 +12,7 @@
 | `Health` | Check system health & activate tools |
 | `Start Session` | Create session brief and optional task brief |
 | `End Session` | Run closure checks and generate delivery closure artifact |
+| `Agent <NAME> <TASK>` | Delegate to specialized sub-agent (BA/SAD/DEV/QA/OPS/GOV/DOC) |
 
 ---
 

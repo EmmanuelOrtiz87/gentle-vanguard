@@ -26,6 +26,25 @@ function Resolve-NativeGentleAI {
     return $null
 }
 
+    function Get-NativeVersionLine {
+        param([string]$NativePath)
+
+        if ([string]::IsNullOrWhiteSpace($NativePath)) {
+            return 'not-found'
+        }
+
+        try {
+            $out = & $NativePath version 2>$null
+            $line = ($out | Select-Object -First 1)
+            if (-not [string]::IsNullOrWhiteSpace($line)) {
+                return [string]$line
+            }
+        } catch {
+        }
+
+        return 'available (version not reported)'
+    }
+
 function Show-Help {
     Write-Host "Gentle-AI compatibility launcher" -ForegroundColor Green
     Write-Host ""
@@ -55,7 +74,14 @@ function Show-Status {
         }
     }
 
-    Write-Info "Compatibility mode active via run-gentle-ai.ps1"
+        $nativePath = Resolve-NativeGentleAI
+        if ($nativePath) {
+            $nativeVersion = Get-NativeVersionLine -NativePath $nativePath
+            Write-Host "[OK] gentle-ai native - $nativeVersion" -ForegroundColor Green
+            Write-Info "Native CLI detected; use direct gentle-ai commands for native features."
+        } else {
+            Write-Info "Compatibility mode active via run-gentle-ai.ps1"
+        }
 }
 
 function Invoke-Update {
@@ -70,10 +96,6 @@ function Invoke-Update {
 }
 
 $native = Resolve-NativeGentleAI
-if ($native) {
-    & $native @Args
-    exit $LASTEXITCODE
-}
 
 $command = if ($Args.Count -gt 0) { $Args[0].ToLowerInvariant() } else { "status" }
 
@@ -84,8 +106,13 @@ switch ($command) {
     "status" { Show-Status; exit 0 }
     "update" { exit (Invoke-Update) }
     default {
-        Write-Warn "Native 'gentle-ai' command is not installed. Executing compatibility status instead."
-        Show-Status
-        exit 0
+          if ($native) {
+                & $native @Args
+                exit $LASTEXITCODE
+          }
+
+          Write-Warn "Native 'gentle-ai' command is not installed. Executing compatibility status instead."
+          Show-Status
+          exit 0
     }
 }

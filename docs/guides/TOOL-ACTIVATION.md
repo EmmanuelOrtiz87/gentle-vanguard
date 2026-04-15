@@ -33,6 +33,13 @@ pwsh -NoProfile -File ./scripts/utilities/update-tools.ps1 -DryRun
 3. Missing system dependencies are checked before tool installation.
 4. Tool activation is tolerant of optional tools and non-blocking installer failures when the tool is not required.
 
+## Runtime Priority Model
+
+1. Session startup uses `gentle-ai` as the primary runtime when available.
+2. The stack CLI (`stack-on-demand.ps1`) is used as fallback when primary startup fails or is unavailable.
+3. Runtime preference is persisted in `config/orchestrator.json` under `runtime_preference`.
+4. Fallback remains deterministic and policy-driven to avoid runtime inconsistency.
+
 ## Platform and Shell Behavior
 
 1. Platform selection is dynamic: `windows`, `linux`, or `macos`.

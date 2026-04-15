@@ -8,7 +8,7 @@
     "session_tracking":  true,
     "git_integration":  true,
     "activation_mode":  "on-demand",
-    "activated_at":  "2026-04-14 20:53:11",
+    "activated_at":  "2026-04-14 21:11:16",
     "communication_language":  "es",
     "allowed_languages":  [
                               "es",
@@ -134,5 +134,12 @@
                                                                        "post_change_defects"
                                                                    ]
                                                    }
-                              }
+                              },
+    "runtime_preference":  {
+                               "primary":  "gentle-ai",
+                               "fallback":  "stack-cli",
+                               "auto_start_primary":  true,
+                               "fallback_on_primary_failure":  true,
+                               "require_primary_for_guidance":  true
+                           }
 }

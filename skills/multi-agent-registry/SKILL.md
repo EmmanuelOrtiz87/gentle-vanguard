@@ -1,0 +1,392 @@
+---
+name: multi-agent-registry
+description: >
+  Multi-agent specialization registry defining 7 specialized sub-agents.
+  Trigger: When orchestrator needs to delegate tasks to specialized agents.
+  Replaces monolithic orchestrator pattern with distributed specialist agents.
+license: Apache-2.0
+metadata:
+  author: gentleman-programming
+  version: "1.0"
+---
+
+# MULTI-AGENT SPECIALIZATION REGISTRY
+
+## ARCHITECTURE OVERVIEW
+
+```
+ORCHESTRATOR (context slim - only orchestrates)
+│
+├── AGENT-BA     → Business Analysis & Requirements
+├── AGENT-SAD    → Solution Architecture & Design
+├── AGENT-DEV    → Development & Implementation
+├── AGENT-QA     → Quality Assurance & Testing
+├── AGENT-OPS    → DevOps & Infrastructure
+├── AGENT-GOV    → Governance & Observability
+└── AGENT-DOC    → Documentation & Specifications
+```
+
+## DELEGATION MODEL
+
+**Orchestrator responsibilities:**
+- Task decomposition and routing
+- Cross-agent coordination
+- Final validation and handoff
+- Session management and memory
+
+**Agent responsibilities:**
+- Domain-specific execution
+- Skill application
+- Focused output within scope
+
+---
+
+## AGENT-BA: Business Analyst
+
+### ROLE
+Analyzes requirements, creates BDD scenarios, defines acceptance criteria.
+
+### SKILLS ASSIGNED
+- bdd-scenarios-skill
+- documentation-governance
+- requirements patterns
+
+### TRIGGERS
+```
+requirements, user story, BDD, Gherkin, acceptance criteria,
+feature analysis,需求分析, especificación funcional
+```
+
+### DELIVERABLES
+- BDD scenario files (`docs/specs/*.feature`)
+- Acceptance criteria documents
+- User story mappings
+- Requirements traceability matrix
+
+### COMMANDS
+```powershell
+# Activate BA agent
+.\scripts\utilities\wf.ps1 agent BA "<task>"
+
+# Generate BDD scenarios
+.\scripts\utilities\wf.ps1 bdd "<feature-description>"
+```
+
+---
+
+## AGENT-SAD: Solution Architect & Designer
+
+### ROLE
+Defines system architecture, creates SDD documents, makes technical decisions.
+
+### SKILLS ASSIGNED
+- architecture-governance
+- api-design-skill
+- database-relational-skill
+- database-nosql-skill
+- typescript-skill
+- golang-api-skill
+
+### TRIGGERS
+```
+architecture, design, SDD, system design, API design,
+database schema, technical decision, arquitectura, diseño
+```
+
+### DELIVERABLES
+- SDD documents (`docs/specs/SDD-*.md`)
+- Architecture decision records (ADR)
+- API contracts and schemas
+- Database design documents
+
+### COMMANDS
+```powershell
+# Activate SAD agent
+.\scripts\utilities\wf.ps1 agent SAD "<task>"
+
+# Generate SDD
+.\scripts\utilities\wf.ps1 sdd "<feature-name>"
+```
+
+---
+
+## AGENT-DEV: Senior Developer
+
+### ROLE
+Implements features, writes code, performs refactoring.
+
+### SKILLS ASSIGNED
+- angular-spa-skill
+- react-19-skill
+- nextjs-15-skill
+- tailwind-4-skill
+- zustand-5-skill
+- zod-4-skill
+- security-skill
+- technical-debt-skill
+
+### TRIGGERS
+```
+implement, code, develop, feature, refactor, fix bug,
+frontend, backend, component, API endpoint
+```
+
+### DELIVERABLES
+- Source code implementations
+- Code refactoring
+- Technical debt records
+- Security hardening
+
+### COMMANDS
+```powershell
+# Activate DEV agent
+.\scripts\utilities\wf.ps1 agent DEV "<task>"
+
+# Create component
+.\scripts\utilities\wf.ps1 scaffold "<component-name>"
+```
+
+---
+
+## AGENT-QA: Quality Assurance
+
+### ROLE
+Creates tests, validates functionality, ensures quality gates.
+
+### SKILLS ASSIGNED
+- testing-strategy-skill
+- testing-skill
+- playwright-skill
+- pytest-skill
+
+### TRIGGERS
+```
+test, testing, QA, validation, E2E, unit test,
+integration test, playwright, pytest, calidad
+```
+
+### DELIVERABLES
+- Test files and suites
+- E2E test scenarios
+- Test coverage reports
+- Validation evidence
+
+### COMMANDS
+```powershell
+# Activate QA agent
+.\scripts\utilities\wf.ps1 agent QA "<task>"
+
+# Run tests
+.\scripts\utilities\wf.ps1 test "<scope>"
+```
+
+---
+
+## AGENT-OPS: DevOps & Infrastructure
+
+### ROLE
+Manages deployment, CI/CD, infrastructure as code.
+
+### SKILLS ASSIGNED
+- docker-devops-skill
+- kubernetes-deployment
+- terraform-infrastructure
+- git-workflow-skill
+- release-management-skill
+
+### TRIGGERS
+```
+deploy, CI/CD, Docker, Kubernetes, infrastructure,
+Terraform, helm, release, ops, DevOps
+```
+
+### DELIVERABLES
+- Docker configurations
+- Kubernetes manifests
+- CI/CD pipeline definitions
+- Deployment runbooks
+
+### COMMANDS
+```powershell
+# Activate OPS agent
+.\scripts\utilities\wf.ps1 agent OPS "<task>"
+
+# Deploy
+.\scripts\utilities\wf.ps1 deploy "<environment>"
+```
+
+---
+
+## AGENT-GOV: Governance & Observability
+
+### ROLE
+Ensures compliance, monitors metrics, handles incidents.
+
+### SKILLS ASSIGNED
+- observability-skill
+- incident-response-plan
+- security-skill
+- code-review-orchestrator-skill
+
+### TRIGGERS
+```
+governance, compliance, metrics, monitoring, observability,
+incident, security audit, review, auditoría
+```
+
+### DELIVERABLES
+- Audit reports
+- Compliance documentation
+- Incident runbooks
+- Monitoring dashboards
+
+### COMMANDS
+```powershell
+# Activate GOV agent
+.\scripts\utilities\wf.ps1 agent GOV "<task>"
+
+# Run audit
+.\scripts\utilities\wf.ps1 audit
+```
+
+---
+
+## AGENT-DOC: Documentation
+
+### ROLE
+Creates and maintains all project documentation.
+
+### SKILLS ASSIGNED
+- documentation-governance
+- sdd-skill
+- github-pr-skill
+
+### TRIGGERS
+```
+documentation, docs, README, guide, runbook,
+BDD specs, SDD specs, specification
+```
+
+### DELIVERABLES
+- README files
+- API documentation
+- Runbooks and guides
+- BDD/SDD specifications
+
+### COMMANDS
+```powershell
+# Activate DOC agent
+.\scripts\utilities\wf.ps1 agent DOC "<task>"
+
+# Generate docs
+.\scripts\utilities\wf.ps1 docs "<type>"
+```
+
+---
+
+## SKILL MAPPING MATRIX
+
+| Skill | BA | SAD | DEV | QA | OPS | GOV | DOC |
+|-------|----|-----|-----|-----|-----|-----|-----|
+| bdd-scenarios | ✓ |   |   |   |   |   |   |
+| architecture |   | ✓ |   |   |   |   |   |
+| api-design |   | ✓ |   |   |   |   |   |
+| database-relational |   | ✓ |   |   |   |   |   |
+| database-nosql |   | ✓ |   |   |   |   |   |
+| typescript |   | ✓ | ✓ |   |   |   |   |
+| angular-spa |   |   | ✓ |   |   |   |   |
+| react-19 |   |   | ✓ |   |   |   |   |
+| nextjs-15 |   |   | ✓ |   |   |   |   |
+| tailwind-4 |   |   | ✓ |   |   |   |   |
+| zustand-5 |   |   | ✓ |   |   |   |   |
+| zod-4 |   |   | ✓ |   |   |   |   |
+| security |   |   | ✓ |   |   | ✓ |   |
+| testing-strategy |   |   |   | ✓ |   |   |   |
+| testing |   |   |   | ✓ |   |   |   |
+| playwright |   |   |   | ✓ |   |   |   |
+| pytest |   |   |   | ✓ |   |   |   |
+| docker-devops |   |   |   |   | ✓ |   |   |
+| kubernetes |   |   |   |   | ✓ |   |   |
+| terraform |   |   |   |   | ✓ |   |   |
+| git-workflow |   |   |   |   | ✓ |   |   |
+| observability |   |   |   |   |   | ✓ |   |
+| incident-response |   |   |   |   |   | ✓ |   |
+| code-review |   |   |   |   |   | ✓ |   |
+| documentation |   |   |   |   |   |   | ✓ |
+| sdd |   | ✓ |   |   |   |   | ✓ |
+| github-pr |   |   |   |   |   |   | ✓ |
+
+---
+
+## DELEGATION FLOW
+
+```
+USER REQUEST
+     │
+     ▼
+┌─────────────────────────┐
+│     ORCHESTRATOR        │
+│  (decompose & route)    │
+└────────────┬────────────┘
+             │
+    ┌────────┼────────┐
+    │        │        │
+    ▼        ▼        ▼
+  [BA]     [SAD]    [DEV]
+    │        │        │
+    └────────┼────────┘
+             │
+             ▼
+    ┌────────────────┐
+    │  CROSS-AGENT   │
+    │  COORDINATION  │
+    └───────┬────────┘
+            │
+    ┌───────┴───────┐
+    │               │
+    ▼               ▼
+ [QA]            [OPS]
+    │               │
+    └───────┬───────┘
+            │
+            ▼
+┌─────────────────────────┐
+│  ORCHESTRATOR VALIDATE  │
+│  (final check & handoff)│
+└─────────────────────────┘
+```
+
+---
+
+## TOKEN EFFICIENCY GAINS
+
+| Pattern | Tokens/Session | Reduction |
+|---------|----------------|----------|
+| Monolithic (orchestrator does all) | ~50K | baseline |
+| 3-agent specialization | ~35K | 30% |
+| 7-agent specialization | ~20K | 60% |
+
+**Key savings:**
+- Orchestrator: slim context (~5K tokens)
+- Each agent: loads only domain skills (~2-3K per agent)
+- Parallel execution: compounds savings
+
+---
+
+## IMPLEMENTATION STATUS
+
+| Component | Status |
+|-----------|--------|
+| Agent Registry | ✓ Defined |
+| Skill Mapping | ✓ Defined |
+| Agent Scripts | ✓ Implemented |
+| Orchestrator Update | ✓ Integrated |
+| Documentation | ✓ Updated |
+
+---
+
+## REFERENCES
+
+- Skill Index: [SKILL_INDEX.md](../SKILL_INDEX.md)
+- Orchestrator: [project-orchestrator-skill](../project-orchestrator-skill/SKILL.md)
+- Documentation: [documentation-governance](../documentation-governance/SKILL.md)

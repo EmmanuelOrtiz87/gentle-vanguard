@@ -14,7 +14,7 @@ Define a parallel, token-efficient execution model for the Foundation orchestrat
 
 ## 3. Agent Topology
 
-### 3.1 Coordinator
+### 3.1 Coordinator (Orchestrator)
 
 Responsibilities:
 
@@ -24,23 +24,42 @@ Responsibilities:
 4. Merge outputs and resolve conflicts.
 5. Produce final response and action summary.
 
-### 3.2 Worker Lanes
+**Implementation**: Orquestador slim con ~5K tokens de contexto.
 
-1. Discovery lane:
-- Searches files, symbols, references.
-- Produces a compact fact pack.
+### 3.2 Specialized Sub-Agents (7 Agents)
 
-2. Implementation lane:
-- Applies code changes for assigned slice.
-- Returns changed files, rationale, and validation intent.
+| Agent | Role | Skills Loaded | Token Budget |
+|-------|------|--------------|--------------|
+| **BA** | Business Analysis | bdd-scenarios, documentation | ~2-3K |
+| **SAD** | Solution Architecture | architecture, api-design, databases | ~3-4K |
+| **DEV** | Development | angular, react, tailwind, zustand, zod, security | ~3-4K |
+| **QA** | Quality Assurance | testing, playwright, pytest | ~2-3K |
+| **OPS** | DevOps | docker, k8s, terraform, git-workflow | ~2-3K |
+| **GOV** | Governance | observability, incident-response, security | ~2-3K |
+| **DOC** | Documentation | sdd, bdd, github-pr | ~2K |
 
-3. Validation lane:
-- Runs tests/lint/build for assigned slice.
-- Returns pass/fail evidence and regressions.
+**Token Efficiency**: ~60% savings vs monolithic orchestrator (~20K vs ~50K tokens/session).
 
-4. Governance lane:
-- Checks docs, scripts, policies, and release readiness.
-- Returns compliance findings and required fixes.
+### 3.3 Worker Lanes (Legacy Mapping)
+
+1. Discovery lane → **AGENT-BA** + **AGENT-SAD**
+2. Implementation lane → **AGENT-DEV**
+3. Validation lane → **AGENT-QA**
+4. Governance lane → **AGENT-GOV** + **AGENT-DOC**
+
+## 3.4 Agent Invocation
+
+```powershell
+# List agents
+.\wf.ps1 agent list
+
+# Check readiness
+.\wf.ps1 agent status
+
+# Delegate task
+.\wf.ps1 agent DEV "implement login feature"
+.\wf.ps1 agent QA "validate checkout flow"
+```
 
 ## 4. Execution Graph
 
@@ -203,3 +222,9 @@ Each lane must return:
 ./scripts/utilities/wf.ps1 install-engram
 ./scripts/utilities/run-engram.ps1 --help
 ```
+
+## 15. Implementation Reference
+
+**Full specification**: See [skills/multi-agent-registry/SKILL.md](../../skills/multi-agent-registry/SKILL.md)
+
+**Skill mapping matrix**: 35 skills distributed across 7 agents with zero overlap redundancy.

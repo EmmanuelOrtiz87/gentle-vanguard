@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'reset-demo', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'reset-demo', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -1303,6 +1303,7 @@ COMMANDS:
     clean-branches [apply] Preview or clean merged local feature/release branches
     homologate [apply]  Normalize docs/artifacts and update references (dry-run default)
     agent-alert [strict] Check process-compliance signals for off-process AI activity
+    agent <AGENT> [TASK] Route task to specialized sub-agent (BA|SAD|DEV|QA|OPS|GOV|DOC)
     help                 Show this help
 
 OPTIONS:
@@ -1363,6 +1364,10 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 health -StrictCleanup  Run health and fail if cleanup drift exists
     .\scripts\utilities\wf.ps1 agent-alert           Show process-compliance warnings (non-blocking)
     .\scripts\utilities\wf.ps1 agent-alert strict    Fail if process-compliance warnings are detected
+    .\scripts\utilities\wf.ps1 agent list            List all available specialized agents
+    .\scripts\utilities\wf.ps1 agent status          Check agent readiness and skill availability
+    .\scripts\utilities\wf.ps1 agent DEV "implement login"  Delegate implementation to DEV agent
+    .\scripts\utilities\wf.ps1 agent QA "validate checkout"  Delegate testing to QA agent
 
 CHECKPOINT LABEL CONVENTION:
     Use '<scope>-<objective>' in lowercase kebab-case.
@@ -1970,6 +1975,31 @@ switch ($Command) {
         }
 
         Invoke-LocalPowerShellScript -ScriptPath $alertScript -ScriptArgs $alertArgs
+    }
+
+    'agent' {
+        Write-Step "Multi-Agent Router"
+        $agentScript = Join-Path $scriptDir 'agent-router.ps1'
+        if (-not (Test-Path $agentScript)) {
+            Write-Error "Agent router script not found: $agentScript"
+            exit 1
+        }
+
+        if ([string]::IsNullOrWhiteSpace($Scope)) {
+            Write-Host "Usage: .\wf.ps1 agent <AGENT> [TASK]" -ForegroundColor Yellow
+            Write-Host "Agents: BA, SAD, DEV, QA, OPS, GOV, DOC, status, list" -ForegroundColor White
+            exit 1
+        }
+
+        $agentParams = $Scope.Trim() -split ' ', 2
+        $agentName = if ($agentParams.Count -ge 1) { $agentParams[0].Trim() } else { '' }
+        $taskText = if ($agentParams.Count -ge 2) { $agentParams[1].Trim() -replace "^'", "" -replace "'$", "" } else { '' }
+
+        if (-not [string]::IsNullOrWhiteSpace($agentName)) {
+            & $agentScript -Agent $agentName -Task $taskText
+        } else {
+            & $agentScript
+        }
     }
 }
 

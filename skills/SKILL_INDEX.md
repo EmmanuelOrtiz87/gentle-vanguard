@@ -5,6 +5,34 @@ description: >
   Trigger: "skills", "available skills", "what skill to use", "skill index".
 ---
 
+# SKILL INDEX
+
+## Multi-Agent Specialization Architecture
+
+The orchestrator delegates tasks to specialized sub-agents for token efficiency:
+
+```
+ORCHESTRATOR (slim context)
+├── AGENT-BA  → Business Analysis (BDD, requirements)
+├── AGENT-SAD → Architecture (SDD, API design, DB)
+├── AGENT-DEV → Development (code, features, refactor)
+├── AGENT-QA  → Quality (testing, validation)
+├── AGENT-OPS → DevOps (deploy, CI/CD, infra)
+├── AGENT-GOV → Governance (security, audit, observability)
+└── AGENT-DOC → Documentation (specs, guides, BDD/SDD)
+```
+
+**Quick commands:**
+```powershell
+.\scripts\utilities\wf.ps1 agent list           # List all agents
+.\scripts\utilities\wf.ps1 agent status        # Check agent readiness
+.\scripts\utilities\wf.ps1 agent DEV "implement login"  # Delegate to DEV agent
+```
+
+See [multi-agent-registry](multi-agent-registry/SKILL.md) for full agent definitions and skill mapping.
+
+---
+
 ## Skill Index
 
 This is the master reference for all available skills.
@@ -30,10 +58,18 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 **This is the MASTER conductor.** It:
 - Auto-detects project and stack
 - Loads relevant skills
-- Guides workflow
+- Delegates to specialized sub-agents
 - Questions suboptimal decisions
 
 **Never wait to be called - always active.**
+
+### multi-agent-registry-skill
+
+**Trigger**: `agent`, `sub-agent`, `delegate`, `specialist`
+
+**Use when**: Routing tasks to specialized agents (BA, SAD, DEV, QA, OPS, GOV, DOC)
+
+**See**: [multi-agent-registry](multi-agent-registry/SKILL.md) for 7-agent delegation model.
 
 ### session-workflow-skill
 
@@ -62,7 +98,7 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 | Category | Skills |
 |----------|--------|
-| **Orchestrators** | project-orchestrator, session-workflow, skill-creator |
+| **Orchestrators** | project-orchestrator, multi-agent-registry, session-workflow, skill-creator |
 | **Context & Process** | context-engineering, sdd, bdd-scenarios |
 | **Frontend** | angular-spa, react-19, nextjs-15, tailwind-4 |
 | **Mobile** | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging |
