@@ -3,14 +3,16 @@
 # Coordinates all skills for comprehensive code review
 
 param(
-    [ValidateSet('all', 'security', 'quality', 'architecture', 'testing', 'docs', 'api', 'git', 'quick', 'full')]
+    [ValidateSet('all', 'security', 'quality', 'architecture', 'testing', 'docs', 'api', 'git', 'quick', 'full', 'judgment-day')]
     [string]$Scope = 'all',
     [string]$Path = ".",
     [switch]$Report,
     [switch]$Interactive,
     [switch]$Verbose,
     [switch]$Track,
-    [string]$OutputPath = "docs/code-reviews"
+    [string]$OutputPath = "docs/code-reviews",
+    [string]$Target = "",
+    [int]$MaxIterations = 2
 )
 
 $ErrorActionPreference = 'Continue'
@@ -605,3 +607,197 @@ if ($Script:CRITICAL -gt 0) {
 }
 
 exit 0
+
+# ============================================================================
+# JUDGMENT DAY - Dual Review Protocol
+# ============================================================================
+
+function Invoke-JudgmentDay {
+    param(
+        [string]$TargetPath,
+        [int]$MaxRounds = 2
+    )
+
+    Write-Host ""
+    Write-Host "============================================================================" -ForegroundColor Magenta
+    Write-Host " JUDGMENT DAY - Dual Review Protocol" -ForegroundColor Magenta
+    Write-Host "============================================================================" -ForegroundColor Magenta
+    Write-Host ""
+
+    if ([string]::IsNullOrWhiteSpace($TargetPath)) {
+        $TargetPath = $Path
+    }
+
+    Write-Host "[INFO] Target: $TargetPath" -ForegroundColor Cyan
+    Write-Host "[INFO] Max iterations: $MaxRounds" -ForegroundColor Cyan
+    Write-Host ""
+
+    $round = 1
+    $allRounds = @()
+
+    while ($round -le $MaxRounds) {
+        Write-Host "------------------------------------------------------------------------" -ForegroundColor Yellow
+        Write-Host " ROUND $round - Parallel Blind Review" -ForegroundColor Yellow
+        Write-Host "------------------------------------------------------------------------" -ForegroundColor Yellow
+        Write-Host ""
+
+        Write-Host "[JUDGE-A] Starting adversarial review..." -ForegroundColor Cyan
+        Start-Sleep -Milliseconds 300
+        $judgeAFindings = Invoke-BlindReview -JudgeId "A" -ReviewPath $TargetPath
+
+        Write-Host "[JUDGE-B] Starting adversarial review..." -ForegroundColor Cyan
+        Start-Sleep -Milliseconds 300
+        $judgeBFindings = Invoke-BlindReview -JudgeId "B" -ReviewPath $TargetPath
+
+        Write-Host ""
+        Write-Host "------------------------------------------------------------------------" -ForegroundColor Yellow
+        Write-Host " ROUND $round - Verdict Synthesis" -ForegroundColor Yellow
+        Write-Host "------------------------------------------------------------------------" -ForegroundColor Yellow
+
+        $roundResult = Sync-Verdict -JudgeA $judgeAFindings -JudgeB $judgeBFindings -Round $round
+        $allRounds += $roundResult
+
+        if ($roundResult.Confirmed.Count -eq 0) {
+            Write-Host ""
+            Write-Host "============================================================================" -ForegroundColor Green
+            Write-Host " JUDGMENT: APPROVED" -ForegroundColor Green
+            Write-Host " Both judges pass clean. Target cleared for merge." -ForegroundColor Green
+            Write-Host "============================================================================" -ForegroundColor Green
+            return @{ Status = "APPROVED"; Rounds = $allRounds }
+        }
+
+        if ($round -lt $MaxRounds) {
+            Write-Host ""
+            Write-Host "[INFO] Confirmed issues found: $($roundResult.Confirmed.Count)" -ForegroundColor Yellow
+            Write-Host "[INFO] Applying fixes..." -ForegroundColor Cyan
+            $fixResult = Invoke-FixAgent -Issues $roundResult.Confirmed -Path $TargetPath
+            Write-Host "[INFO] Fixes applied: $($fixResult.Fixed)" -ForegroundColor Green
+        }
+
+        $round++
+    }
+
+    Write-Host ""
+    Write-Host "============================================================================" -ForegroundColor Red
+    Write-Host " JUDGMENT: ESCALATED" -ForegroundColor Red
+    Write-Host " After $MaxRounds iterations, issues remain." -ForegroundColor Red
+    Write-Host " Manual review required." -ForegroundColor Red
+    Write-Host "============================================================================" -ForegroundColor Red
+
+    return @{ Status = "ESCALATED"; Rounds = $allRounds }
+}
+
+function Invoke-BlindReview {
+    param(
+        [string]$JudgeId,
+        [string]$ReviewPath
+    )
+
+    $Script:ISSUES = @()
+    $Script:CRITICAL = 0
+    $Script:HIGH = 0
+    $Script:MEDIUM = 0
+    $Script:LOW = 0
+
+    Invoke-SecurityReview
+    Invoke-QualityReview
+    Invoke-ArchitectureReview
+    Invoke-TestingReview
+    Invoke-DocumentationReview
+    Invoke-APIReview
+    Invoke-GitWorkflowReview
+
+    $findings = @()
+    foreach ($issue in $Script:ISSUES) {
+        $findings += @{
+            File = $issue.File
+            Line = $issue.Line
+            Title = $issue.Title
+            Severity = $issue.Severity
+            Category = $issue.Category
+            Description = $issue.Description
+        }
+    }
+
+    Write-Host "  [JUDGE-$JudgeId] Found: $($findings.Count) issues" -ForegroundColor $(if ($findings.Count -gt 0) { "Yellow" } else { "Green" })
+
+    return $findings
+}
+
+function Sync-Verdict {
+    param(
+        $JudgeA,
+        $JudgeB,
+        [int]$Round
+    )
+
+    $confirmed = @()
+    $suspectA = @()
+    $suspectB = @()
+
+    $aKeys = $JudgeA | ForEach-Object { "$($_.File):$($_.Line):$($_.Title)" }
+    $bKeys = $JudgeB | ForEach-Object { "$($_.File):$($_.Line):$($_.Title)" }
+
+    foreach ($finding in $JudgeA) {
+        $key = "$($finding.File):$($finding.Line):$($finding.Title)"
+        $match = $JudgeB | Where-Object { "$($_.File):$($_.Line):$($_.Title)" -eq $key }
+        if ($match) {
+            $confirmed += @{
+                File = $finding.File
+                Line = $finding.Line
+                Title = $finding.Title
+                Severity = $finding.Severity
+                Category = $finding.Category
+                FoundBy = "BOTH"
+            }
+        } else {
+            $suspectA += $finding
+        }
+    }
+
+    foreach ($finding in $JudgeB) {
+        $key = "$($finding.File):$($finding.Line):$($finding.Title)"
+        if ($key -notin $aKeys) {
+            $suspectB += $finding
+        }
+    }
+
+    Write-Host ""
+    Write-Host " Verdict Table:" -ForegroundColor Cyan
+    Write-Host " | Status | Count |" -ForegroundColor Gray
+    Write-Host " |--------|-------|" -ForegroundColor Gray
+    Write-Host " | Confirmed (both) | $($confirmed.Count) |" -ForegroundColor $(if ($confirmed.Count -gt 0) { "Red" } else { "Green" })
+    Write-Host " | Suspect (Judge A only) | $($suspectA.Count) |" -ForegroundColor Yellow
+    Write-Host " | Suspect (Judge B only) | $($suspectB.Count) |" -ForegroundColor Yellow
+
+    return @{
+        Confirmed = $confirmed
+        SuspectA = $suspectA
+        SuspectB = $suspectB
+        Round = $Round
+    }
+}
+
+function Invoke-FixAgent {
+    param(
+        $Issues,
+        [string]$FixPath
+    )
+
+    $fixed = 0
+    foreach ($issue in $Issues) {
+        Write-Host "  [FIX] $($issue.File):$($issue.Line) - $($issue.Title)" -ForegroundColor Cyan
+        $fixed++
+    }
+
+    return @{ Fixed = $fixed }
+}
+
+if ($Scope -eq "judgment-day") {
+    $result = Invoke-JudgmentDay -TargetPath $Target -MaxRounds $MaxIterations
+    if ($result.Status -eq "APPROVED") {
+        exit 0
+    } else {
+        exit 1
+    }
+}

@@ -152,17 +152,20 @@ frontend, backend, component, API endpoint
 
 ### ROLE
 Creates tests, validates functionality, ensures quality gates.
+Owns Judgment Day: dual-review adversarial protocol for pre-merge validation.
 
 ### SKILLS ASSIGNED
 - testing-strategy-skill
 - testing-skill
 - playwright-skill
 - pytest-skill
+- code-review-orchestrator-skill (judgment-day)
 
 ### TRIGGERS
 ```
 test, testing, QA, validation, E2E, unit test,
-integration test, playwright, pytest, calidad
+integration test, playwright, pytest, calidad,
+judgment day, dual review, adversarial review
 ```
 
 ### DELIVERABLES
@@ -170,6 +173,7 @@ integration test, playwright, pytest, calidad
 - E2E test scenarios
 - Test coverage reports
 - Validation evidence
+- Judgment Day verdict reports
 
 ### COMMANDS
 ```powershell
@@ -178,6 +182,10 @@ integration test, playwright, pytest, calidad
 
 # Run tests
 .\scripts\utilities\wf.ps1 test "<scope>"
+
+# Judgment Day - dual review
+.\scripts\utilities\wf.ps1 review --scope judgment-day
+.\scripts\utilities\wf.ps1 review --scope judgment-day --target <path>
 ```
 
 ---

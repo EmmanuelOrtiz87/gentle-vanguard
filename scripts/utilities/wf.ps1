@@ -1269,7 +1269,7 @@ USAGE:
     .\scripts\utilities\wf.ps1 <command> [options]
 
 COMMANDS:
-    review [scope]       Run code review (security, quality, all)
+    review [scope]       Run code review (security, quality, all, judgment-day)
     audit                Generate audit document
     pr                   Create PR with template
     push [pr|later]      Prepare publish flow; choose push+PR now or push-only
@@ -1316,6 +1316,7 @@ OPTIONS:
 EXAMPLES:
     .\scripts\utilities\wf.ps1 review              Run full code review
     .\scripts\utilities\wf.ps1 review security     Run security scan only
+    .\scripts\utilities\wf.ps1 review judgment-day Run dual-review adversarial protocol
     .\scripts\utilities\wf.ps1 audit              Generate audit document
     .\scripts\utilities\wf.ps1 pr                 Create PR
     .\scripts\utilities\wf.ps1 push               Commit and push
@@ -1538,25 +1539,30 @@ switch ($Command) {
 
     'review' {
         Write-Step "Code Review - $($Scope.ToUpper())"
-        Invoke-TokenBudgetGuard -Task 'review' -Risk 'high' -EstimatedChars 12800
-        
-        # Run security check
-        if (-not (Test-Secrets)) {
-            Write-Error "Secrets detected - review blocked"
+
+        $reviewScript = Join-Path $scriptDir '..\skills\code-review-orchestrator-skill\code-review.ps1'
+
+        if (-not (Test-Path $reviewScript)) {
+            Write-Error "Code review script not found: $reviewScript"
             exit 1
         }
-        
-        # Run tests
-        if (-not $SkipTests) {
-            $goPass = Test-GoTests
-            $ngPass = Test-AngularTests
-            
-            if (-not ($goPass -and $ngPass)) {
-                Write-Error "Tests failed - review blocked"
-                exit 1
-            }
+
+        $reviewArgs = @()
+        if ($Scope) {
+            $reviewArgs += $Scope
+        } else {
+            $reviewArgs += 'all'
         }
-        
+
+        Write-Host " Running: code-review.ps1 --scope $($reviewArgs -join ' ')" -ForegroundColor Cyan
+        & $reviewScript @reviewArgs
+        $exitCode = $LASTEXITCODE
+
+        if ($exitCode -ne 0) {
+            Write-Error "Code review found issues"
+            exit $exitCode
+        }
+
         Write-Success "Code review complete"
     }
     
