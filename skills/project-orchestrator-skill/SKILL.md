@@ -605,6 +605,8 @@ Is the code ready for review?
 | "Review" / "Auditar" | Run code review |
 | "PR" | Validate, code review, decision |
 | "Push" | Generate audit, commit, push |
+| "Judgment Day" / "Juicio Final" / "Revision de a Pares" / "Dual Review" | Run adversarial dual-review protocol |
+| "Corre juicio" / "Ejecuta dia del juicio" / "Activa juicio" | Run judgment-day --scope judgment-day |
 
 ---
 
