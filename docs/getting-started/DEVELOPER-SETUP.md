@@ -73,6 +73,19 @@ gf info
 gf list
 ```
 
+### Optional: Local Workspace Autostart (Local-only)
+
+If you keep a personal workspace root (example: `C:\Workspace_local`), you can add a local-only startup helper to run health checks automatically. This is optional and should stay **local** (not a shared repo rule).
+
+```powershell
+# Local-only helper
+C:\Workspace_local\tools\session-autostart.cmd
+```
+
+Notes:
+- Do not enforce this path for other developers.
+- Keep local-only helpers out of shared policies.
+
 ## Step 3: Configure Git
 
 ```powershell
