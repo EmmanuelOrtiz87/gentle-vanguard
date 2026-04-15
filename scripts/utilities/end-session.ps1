@@ -4,6 +4,9 @@ param(
     [switch]$SkipTests,
     [switch]$SkipAudit,
     [switch]$SkipGovernance,
+    [switch]$SkipRotation,
+    [int]$MaxArtifacts = 1,
+    [int]$MaxLocalArtifacts = 30,
     [switch]$AllowUnpublishedClose,
     [switch]$Force
 )
@@ -13,6 +16,7 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 $wfScript = Join-Path $scriptDir 'wf.ps1'
 $governanceScript = Join-Path $repoRoot 'scripts\diagnostics\validate-script-governance.ps1'
+$rotateScript = Join-Path $scriptDir 'rotate-artifacts.ps1'
 
 function Write-Step {
     param([string]$Message)
@@ -160,6 +164,12 @@ $taskLine
 
 $content | Out-File -FilePath $outputPath -Encoding UTF8
 Write-Ok "Delivery closure created: $outputPath"
+
+if (-not $SkipRotation -and (Test-Path $rotateScript)) {
+    Write-Step "Artifact rotation"
+    & $rotateScript -MaxRepoFiles $MaxArtifacts -MaxLocalFiles $MaxLocalArtifacts | Out-Null
+    Write-Ok "Artifact rotation complete"
+}
 
 $hasFailure = ($reviewRan -and $reviewCode -ne 0) -or ($auditRan -and $auditCode -ne 0) -or ($govRan -and $govCode -ne 0)
 if ($hasFailure -and -not $Force) {

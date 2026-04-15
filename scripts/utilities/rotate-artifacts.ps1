@@ -1,9 +1,11 @@
 # rotate-artifacts.ps1
-# Rotates generated artifacts (audits, reviews, sessions) keeping only the most recent
-# Usage: .\rotate-artifacts.ps1 [-MaxFiles <n>] [-Categories <array>]
+# Rotates generated artifacts keeping only the most recent in the repo,
+# while archiving all older files locally (gitignored).
+# Usage: .\rotate-artifacts.ps1 [-MaxRepoFiles <n>] [-MaxLocalFiles <n>] [-Categories <array>]
 
 param(
-    [int]$MaxFiles = 7,
+    [int]$MaxRepoFiles = 1,
+    [int]$MaxLocalFiles = 30,
     [string[]]$Categories = @("audits", "sessions", "reviews", "metrics", "reports")
 )
 
@@ -11,14 +13,17 @@ $ErrorActionPreference = 'Continue'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = if ($scriptDir) { (Resolve-Path (Join-Path (Join-Path $scriptDir '..') '..')).Path } else { Get-Location }
 $docsDir = Join-Path $repoRoot 'docs'
+$archiveRoot = Join-Path $docsDir '.local-archive'
 
 Write-Host ""
 Write-Host "============================================================================" -ForegroundColor Cyan
 Write-Host " ARTIFACT ROTATION" -ForegroundColor Cyan
 Write-Host "============================================================================" -ForegroundColor Cyan
-Write-Host " Max files per category: $MaxFiles" -ForegroundColor Gray
+Write-Host " Max repo files per category: $MaxRepoFiles" -ForegroundColor Gray
+Write-Host " Max local archive files per category: $MaxLocalFiles" -ForegroundColor Gray
 Write-Host ""
 
+$totalArchived = 0
 $totalDeleted = 0
 $totalKept = 0
 
@@ -40,27 +45,44 @@ foreach ($category in $Categories) {
         continue
     }
 
-    Write-Host "[$($category.ToUpper())] Found: $count files (max: $MaxFiles)" -ForegroundColor Cyan
+    Write-Host "[$($category.ToUpper())] Found: $count files (max repo: $MaxRepoFiles)" -ForegroundColor Cyan
 
-    if ($count -le $MaxFiles) {
+    if ($count -le $MaxRepoFiles) {
         Write-Host "  Keeping all $count files" -ForegroundColor Green
         $totalKept += $count
         continue
     }
 
-    $toDelete = $files | Select-Object -Skip $MaxFiles
-    $kept = $files | Select-Object -First $MaxFiles
+    $toArchive = $files | Select-Object -Skip $MaxRepoFiles
+    $kept = $files | Select-Object -First $MaxRepoFiles
+    $archivePath = Join-Path $archiveRoot $category
+    if (-not (Test-Path $archivePath)) {
+        New-Item -ItemType Directory -Path $archivePath -Force | Out-Null
+    }
 
     Write-Host "  Keeping $($kept.Count) files:" -ForegroundColor Green
     foreach ($f in $kept) {
         Write-Host "    - $($f.Name)" -ForegroundColor Gray
     }
 
-    Write-Host "  Deleting $($toDelete.Count) files:" -ForegroundColor Yellow
-    foreach ($f in $toDelete) {
+    Write-Host "  Archiving $($toArchive.Count) files:" -ForegroundColor Yellow
+    foreach ($f in $toArchive) {
+        $destination = Join-Path $archivePath $f.Name
         Write-Host "    - $($f.Name)" -ForegroundColor DarkYellow
-        Remove-Item $f.FullName -Force
-        $totalDeleted++
+        Move-Item $f.FullName $destination -Force
+        $totalArchived++
+    }
+
+    $archiveFiles = Get-ChildItem -Path $archivePath -Filter "*.md" -File -ErrorAction SilentlyContinue |
+                    Sort-Object LastWriteTime -Descending
+
+    if ($archiveFiles.Count -gt $MaxLocalFiles) {
+        $archiveDelete = $archiveFiles | Select-Object -Skip $MaxLocalFiles
+        Write-Host "  Pruning archive: $($archiveDelete.Count) old files" -ForegroundColor Yellow
+        foreach ($f in $archiveDelete) {
+            Remove-Item $f.FullName -Force
+            $totalDeleted++
+        }
     }
 }
 
@@ -69,6 +91,7 @@ Write-Host "====================================================================
 Write-Host " ROTATION COMPLETE" -ForegroundColor Cyan
 Write-Host "============================================================================" -ForegroundColor Cyan
 Write-Host " Files kept: $totalKept" -ForegroundColor Green
+Write-Host " Files archived: $totalArchived" -ForegroundColor Cyan
 Write-Host " Files deleted: $totalDeleted" -ForegroundColor Yellow
 Write-Host ""
 

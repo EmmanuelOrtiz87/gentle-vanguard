@@ -41,3 +41,6 @@ projects/
 
 # Local token guard telemetry
 docs/sessions/metrics/token-guard-usage.csv
+
+# Local artifact archive (kept on disk, not in repo)
+docs/.local-archive/

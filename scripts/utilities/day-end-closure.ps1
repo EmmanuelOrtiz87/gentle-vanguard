@@ -9,6 +9,9 @@ param(
     [switch]$Quiet,
     [switch]$SkipEngram,
     [switch]$SkipValidation,
+    [switch]$SkipRotation,
+    [int]$MaxArtifacts = 1,
+    [int]$MaxLocalArtifacts = 30,
     [switch]$Force
 )
 
@@ -145,6 +148,19 @@ $reportDir = Join-Path $repoRoot 'docs\sessions'
 New-Item -ItemType Directory -Path $reportDir -Force | Out-Null
 
 $timestamp = Get-Date -Format 'yyyy-MM-dd HHmmss'
+
+# 5. Artifact rotation (optional)
+if (-not $SkipRotation) {
+    Write-Step "Stage 5: Artifact Rotation"
+    $rotateScript = Join-Path $scriptDir 'rotate-artifacts.ps1'
+    if (Test-Path $rotateScript) {
+        Write-Info "Running artifact rotation (repo max $MaxArtifacts, local max $MaxLocalArtifacts)..."
+        & $rotateScript -MaxRepoFiles $MaxArtifacts -MaxLocalFiles $MaxLocalArtifacts -ErrorAction SilentlyContinue | Out-Null
+        Write-Ok "Artifact rotation complete"
+    } else {
+        Write-Info "rotate-artifacts.ps1 not found - skipping rotation"
+    }
+}
 $reportPath = Join-Path $reportDir "closure-report-$timestamp.md"
 
 $owner = git config user.name 2>$null
