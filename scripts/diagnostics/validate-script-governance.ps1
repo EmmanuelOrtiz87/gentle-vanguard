@@ -187,18 +187,20 @@ Write-Step "1.1 Validating governance artifacts"
 
 $orchestratorSkillPath = Join-Path $repoRoot "skills/project-orchestrator-skill/SKILL.md"
 $scriptSkillPath = Join-Path $repoRoot "skills/script-governance-skill/SKILL.md"
+$orchestratorSkillAlt = Join-Path $repoRoot ".skills/project-orchestrator-skill/SKILL.md"
+$scriptSkillAlt = Join-Path $repoRoot ".skills/script-governance-skill/SKILL.md"
 
-if (Test-Path $orchestratorSkillPath) {
-    Write-Ok "skills/project-orchestrator-skill/SKILL.md"
+if ((Test-Path $orchestratorSkillPath) -or (Test-Path $orchestratorSkillAlt)) {
+    Write-Ok "project-orchestrator-skill present"
 } else {
-    Write-Fail "Missing: skills/project-orchestrator-skill/SKILL.md"
+    Write-Fail "Missing: skills/.skills/project-orchestrator-skill/SKILL.md"
     $failures++
 }
 
-if (Test-Path $scriptSkillPath) {
-    Write-Ok "skills/script-governance-skill/SKILL.md"
+if ((Test-Path $scriptSkillPath) -or (Test-Path $scriptSkillAlt)) {
+    Write-Ok "script-governance-skill present"
 } else {
-    Write-Fail "Missing: skills/script-governance-skill/SKILL.md"
+    Write-Fail "Missing: skills/.skills/script-governance-skill/SKILL.md"
     $failures++
 }
 
