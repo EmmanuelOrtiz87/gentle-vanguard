@@ -265,20 +265,20 @@ function Apply-ResponseModeRecommendation {
 
     try {
         if ($EnforceChatLevelOnStart -and -not [string]::IsNullOrWhiteSpace($ChatLevel)) {
-            & $modeScript -Mode set-chat-level -ChatLevel $ChatLevel -Quiet | Out-Null
+            & $modeScript -Mode set-chat-level -ChatLevel $ChatLevel -SkipEngramLog -Quiet | Out-Null
             return "applied startup chat-level=$ChatLevel (architecture baseline)"
         }
 
-        $json = & $modeScript -Mode recommend -Preset $Preset -Risk $Risk -AsJson -PassThru -Quiet
+        $json = & $modeScript -Mode recommend -Preset $Preset -Risk $Risk -AsJson -PassThru -SkipEngramLog -Quiet
         if ([string]::IsNullOrWhiteSpace(($json | Out-String).Trim())) {
             return 'skipped (recommendation returned empty output)'
         }
 
         $rec = $json | ConvertFrom-Json
 
-        & $modeScript -Mode set-language -Language $rec.language -Quiet | Out-Null
-        & $modeScript -Mode set-detail -Detail $rec.detail -Quiet | Out-Null
-        & $modeScript -Mode set -Profile $rec.compression -Quiet | Out-Null
+        & $modeScript -Mode set-language -Language $rec.language -SkipEngramLog -Quiet | Out-Null
+        & $modeScript -Mode set-detail -Detail $rec.detail -SkipEngramLog -Quiet | Out-Null
+        & $modeScript -Mode set -Profile $rec.compression -SkipEngramLog -Quiet | Out-Null
 
         return "applied preset=$($rec.preset); risk=$($rec.risk); language=$($rec.language); detail=$($rec.detail); profile=$($rec.compression)"
     }

@@ -6,7 +6,7 @@
 param(
     [int]$MaxRepoFiles = 1,
     [int]$MaxLocalFiles = 30,
-    [string[]]$Categories = @("audits", "sessions", "reviews", "metrics", "reports"),
+    [string[]]$Categories = @("audits", "sessions", "code-reviews"),
     [switch]$Force
 )
 
@@ -25,9 +25,7 @@ function Test-NonArtifactDocChanges {
     $allowed = @(
         'docs/audits/',
         'docs/sessions/',
-        'docs/reviews/',
-        'docs/metrics/',
-        'docs/reports/',
+        'docs/code-reviews/',
         'docs/.local-archive/'
     )
 
@@ -65,6 +63,7 @@ if (-not $Force -and (Test-NonArtifactDocChanges -Root $repoRoot)) {
 $totalArchived = 0
 $totalDeleted = 0
 $totalKept = 0
+$totalErrors = 0
 
 foreach ($category in $Categories) {
     $categoryPath = Join-Path $docsDir $category
@@ -108,8 +107,13 @@ foreach ($category in $Categories) {
     foreach ($f in $toArchive) {
         $destination = Join-Path $archivePath $f.Name
         Write-Host "    - $($f.Name)" -ForegroundColor DarkYellow
-        Move-Item $f.FullName $destination -Force
-        $totalArchived++
+        try {
+            Move-Item -LiteralPath $f.FullName -Destination $destination -Force -ErrorAction Stop
+            $totalArchived++
+        } catch {
+            Write-Host "      [ERROR] Could not archive '$($f.Name)': $($_.Exception.Message)" -ForegroundColor Red
+            $totalErrors++
+        }
     }
 
     $archiveFiles = Get-ChildItem -Path $archivePath -Filter "*.md" -File -ErrorAction SilentlyContinue |
@@ -119,8 +123,13 @@ foreach ($category in $Categories) {
         $archiveDelete = $archiveFiles | Select-Object -Skip $MaxLocalFiles
         Write-Host "  Pruning archive: $($archiveDelete.Count) old files" -ForegroundColor Yellow
         foreach ($f in $archiveDelete) {
-            Remove-Item $f.FullName -Force
-            $totalDeleted++
+            try {
+                Remove-Item -LiteralPath $f.FullName -Force -ErrorAction Stop
+                $totalDeleted++
+            } catch {
+                Write-Host "      [ERROR] Could not delete archived file '$($f.Name)': $($_.Exception.Message)" -ForegroundColor Red
+                $totalErrors++
+            }
         }
     }
 }
@@ -132,8 +141,13 @@ Write-Host "====================================================================
 Write-Host " Files kept: $totalKept" -ForegroundColor Green
 Write-Host " Files archived: $totalArchived" -ForegroundColor Cyan
 Write-Host " Files deleted: $totalDeleted" -ForegroundColor Yellow
+Write-Host " Errors: $totalErrors" -ForegroundColor Red
 Write-Host ""
 
 if ($totalDeleted -gt 0) {
     Write-Host "[INFO] Run 'git status' to see changes" -ForegroundColor Cyan
+}
+
+if ($totalErrors -gt 0) {
+    exit 1
 }

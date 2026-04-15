@@ -45,8 +45,8 @@ function Invoke-Engram {
     }
 
     try {
-        & $RunEngramScript @EngramArgs | Out-Null
-        return (($LASTEXITCODE -eq 0) -and $?)
+        & $RunEngramScript @EngramArgs 2>$null | Out-Null
+        return ($LASTEXITCODE -eq 0)
     } catch {
         return $false
     }
@@ -59,10 +59,7 @@ $validateScript = Join-Path $repoRoot 'scripts\diagnostics\validate-script-gover
 # 1. Generate standard delivery closure artifact via wf.ps1
 Write-Step "Stage 1: Operational Closure"
 if (Test-Path $endSessionScript) {
-    $endArgs = @()
-    if ($SkipValidation) { $endArgs += '-SkipAudit' }
-    if (-not $SkipEngram) { $endArgs += '-Force' }  # Allow subsequent memory save
-    Invoke-LocalPowerShellScript -ScriptPath $endSessionScript -ScriptArgs $endArgs
+    & $endSessionScript -SkipAudit:$SkipValidation -Force:(-not $SkipEngram)
     if ($LASTEXITCODE -ne 0 -and -not $Force) {
         Write-Err "Operational closure reported issues. Use -Force to proceed with memory capture."
         exit 1

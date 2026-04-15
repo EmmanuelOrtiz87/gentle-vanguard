@@ -79,7 +79,7 @@ docs/
 
 | Document | Description |
 |----------|-------------|
-| [2026-04-11-executive-stack-report.md](sessions/2026-04-11-executive-stack-report.md) | Executive summary for on-demand stack rollout |
+| [SESSION-GUIDE.md](guides/SESSION-GUIDE.md) | Session lifecycle, generated artifacts, and operating flow |
 
 ## External Resources
 

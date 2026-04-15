@@ -264,7 +264,7 @@ Create a PR or keep working?
 
 ## Resources
 
-- [Orchestrator Skill](../skills/project-orchestrator-skill/SKILL.md)
-- [Git Workflow Skill](../skills/git-workflow-skill/SKILL.md)
-- [Code Review Skill](../skills/code-review-orchestrator-skill/SKILL.md)
-- [AGENTS.md](../AGENTS.md)
+- [Orchestrator Skill](../../skills/project-orchestrator-skill/SKILL.md)
+- [Git Workflow Skill](../../skills/git-workflow-skill/SKILL.md)
+- [Code Review Skill](../../skills/code-review-orchestrator-skill/SKILL.md)
+- [AGENTS.md](../../AGENTS.md)

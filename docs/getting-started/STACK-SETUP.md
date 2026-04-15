@@ -354,7 +354,7 @@ if ($status.overallStatus -ne "HEALTHY") {
 
 ## See Also
 
-- [scripts/utilities/README.md](scripts/utilities/README.md) - Available commands
-- [scripts/foundation/bootstrap.ps1](scripts/foundation/bootstrap.ps1) - Full initialization
-- [scripts/diagnostics/system-diagnostics.ps1](scripts/diagnostics/system-diagnostics.ps1) - Diagnostics engine
-- [hooks/post-checkout.ps1](hooks/post-checkout.ps1) - Automatic verification on checkout
+- [scripts/utilities/README.md](../../scripts/utilities/README.md) - Available commands
+- [scripts/foundation/bootstrap.ps1](../../scripts/foundation/bootstrap.ps1) - Full initialization
+- [scripts/diagnostics/system-diagnostics.ps1](../../scripts/diagnostics/system-diagnostics.ps1) - Diagnostics engine
+- [hooks/post-checkout.ps1](../../hooks/post-checkout.ps1) - Automatic verification on checkout

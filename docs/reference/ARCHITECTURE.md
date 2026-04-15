@@ -117,7 +117,7 @@ Foundation stores operational artifacts with a dual-scope retention model:
 
 1. **Repo scope (example only)**
    - Keep **1** most recent file per category in the repo.
-   - Categories: `docs/audits/`, `docs/sessions/`, `docs/reviews/`, `docs/metrics/`, `docs/reports/`.
+   - Categories: `docs/audits/`, `docs/sessions/`, `docs/code-reviews/`.
 
 2. **Local scope (full history)**
    - Archive all older files to `docs/.local-archive/` (gitignored).

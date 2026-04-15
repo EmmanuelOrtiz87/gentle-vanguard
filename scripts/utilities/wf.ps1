@@ -1508,11 +1508,11 @@ switch ($Command) {
         Invoke-TokenBudgetGuard -Task 'end-session' -Risk 'high' -EstimatedChars 14000
         $dayEndScript = Join-Path $scriptDir 'day-end-closure.ps1'
         if (Test-Path $dayEndScript) {
-            $dayEndArgs = @()
-            if (-not [string]::IsNullOrWhiteSpace($Scope)) { $dayEndArgs += @('-SessionId', $Scope) }
-            if ($SkipTests) { $dayEndArgs += '-SkipValidation' }
-            if ($Force) { $dayEndArgs += '-Force' }
-            Invoke-LocalPowerShellScript -ScriptPath $dayEndScript -ScriptArgs $dayEndArgs
+            if (-not [string]::IsNullOrWhiteSpace($Scope)) {
+                & $dayEndScript -SessionId $Scope -SkipValidation:$SkipTests -Force:$Force
+            } else {
+                & $dayEndScript -SkipValidation:$SkipTests -Force:$Force
+            }
         } else {
             Write-Error "Day-end closure script not found: $dayEndScript"
             exit 1

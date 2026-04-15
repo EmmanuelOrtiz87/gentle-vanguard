@@ -236,9 +236,9 @@ git commit -m "feat: add new dashboard component"
 
 ### Documentation
 - **[Suite Overview](/docs/reference/SUITE-OVERVIEW.md)**: This document
-- **[Tool Activation](docs/guides/TOOL-ACTIVATION.md)**: Setup guide
-- **[Session Guide](docs/guides/SESSION-GUIDE.md)**: Daily workflow
-- **[Architecture](docs/reference/ARCHITECTURE.md)**: System design
+- **[Tool Activation](../guides/TOOL-ACTIVATION.md)**: Setup guide
+- **[Session Guide](../guides/SESSION-GUIDE.md)**: Daily workflow
+- **[Architecture](ARCHITECTURE.md)**: System design
 
 ### Quick Commands
 ```powershell

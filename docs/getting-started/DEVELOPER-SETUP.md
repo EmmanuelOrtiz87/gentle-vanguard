@@ -227,6 +227,6 @@ git config --global core.hooksPath
 
 ## Next Steps
 
-1. Read [ARCHITECTURE.md](ARCHITECTURE.md) to understand the system
-2. Explore available [skills](../skills/SKILL_INDEX.md)
+1. Read [ARCHITECTURE.md](../reference/ARCHITECTURE.md) to understand the system
+2. Explore available [skills](../../skills/SKILL_INDEX.md)
 3. Setup your first project
