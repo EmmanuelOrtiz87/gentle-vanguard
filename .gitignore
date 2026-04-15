@@ -27,6 +27,9 @@ Thumbs.db
 # Workspace tools (auto-downloaded)
 tools/
 
+# Event bus (runtime data)
+.event-bus/
+
 # Local projects
 projects/
 

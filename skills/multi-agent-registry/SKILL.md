@@ -423,6 +423,72 @@ Auto-detect skills and generate mapping:
 
 ---
 
+## PARALLEL AGENT DISPATCH (FF-009)
+
+Execute multiple agents in parallel with risk-based lane management:
+
+```powershell
+# Dry run - preview execution plan
+.\wf.ps1 dispatch "DEV,QA" "implement feature" -DryRun
+
+# Execute in parallel mode (default)
+.\wf.ps1 dispatch "DEV,QA,BA" "plan sprint"
+
+# Execute in adaptive mode (discovery first, then execution)
+.\wf.ps1 dispatch "BA,DEV,QA" "new feature" -Mode adaptive
+
+# Execute sequentially with dependencies
+.\wf.ps1 dispatch "BA,SAD,DEV" "requirements" -Mode sequential
+```
+
+**Execution Modes:**
+| Mode | Behavior | Best For |
+|------|----------|----------|
+| `parallel` | Concurrent execution (max 3-4 by risk) | Independent tasks |
+| `sequential` | One-by-one with dependencies | Dependent tasks |
+| `adaptive` | Discovery agents first, then execution | New features |
+
+**Risk-Based Parallelism:**
+| Risk | Max Parallel | Use Case |
+|------|-------------|----------|
+| low | 4 | Documentation, testing |
+| medium | 3 | Feature development |
+| high | 2 | Production deployments |
+
+---
+
+## EVENT BUS SYSTEM (FF-010)
+
+Pub/sub event system for automation and hooks:
+
+```powershell
+# List available events
+.\wf.ps1 events list
+
+# Subscribe to event
+.\wf.ps1 events subscribe dispatch.started
+
+# Emit custom event
+.\wf.ps1 events emit agent.completed '{"agent":"DEV","status":"ready"}'
+
+# View event history
+.\wf.ps1 events history
+```
+
+**Standard Events:**
+| Event | Trigger |
+|-------|---------|
+| `dispatch.started` | Parallel dispatch begins |
+| `dispatch.completed` | Parallel dispatch finishes |
+| `agent.dispatched` | Single agent dispatched |
+| `agent.completed` | Single agent completes |
+| `session.started/ended` | Session lifecycle |
+| `workflow.checkpoint` | Checkpoint created |
+| `workflow.publish` | Publish/commit action |
+| `validation.started/completed` | Validation lifecycle |
+
+---
+
 ## IMPLEMENTATION STATUS
 
 | Component | Status |
@@ -432,6 +498,8 @@ Auto-detect skills and generate mapping:
 | Agent Scripts | ✓ Implemented |
 | Agent Result Schema | ✓ Implemented (FF-007) |
 | Skills Auto-Discovery | ✓ Implemented (FF-008) |
+| Parallel Dispatch | ✓ Implemented (FF-009) |
+| Event Bus System | ✓ Implemented (FF-010) |
 | Orchestrator Update | ✓ Integrated |
 | Documentation | ✓ Updated |
 

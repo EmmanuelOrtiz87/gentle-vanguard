@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'reset-demo', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -2014,6 +2014,39 @@ switch ($Command) {
         $action = if ($validActions -contains $Scope) { $Scope } else { 'discover' }
 
         & $skillsScript -Action $action
+    }
+
+    'dispatch' {
+        Write-Step "Parallel Agent Dispatch"
+        $dispatchScript = Join-Path $scriptDir 'dispatch-agent.ps1'
+        if (-not (Test-Path $dispatchScript)) {
+            Write-Error "Dispatch script not found: $dispatchScript"
+            exit 1
+        }
+
+        if ([string]::IsNullOrWhiteSpace($Scope)) {
+            & $dispatchScript
+        } else {
+            Invoke-Expression "& '$dispatchScript' -Agents '$Scope'"
+        }
+    }
+
+    'events' {
+        Write-Step "Event Bus"
+        $eventScript = Join-Path $scriptDir 'event-bus.ps1'
+        if (-not (Test-Path $eventScript)) {
+            Write-Error "Event bus script not found: $eventScript"
+            exit 1
+        }
+
+        $scopeParts = $Scope -split ' ', 2
+        $action = if ($scopeParts[0]) { $scopeParts[0] } else { 'list' }
+        $eventName = if ($scopeParts.Count -gt 1) { $scopeParts[1] } else { '' }
+
+        $cmd = "& '$eventScript' -Action '$action'"
+        if ($eventName) { $cmd += " -Event '$eventName'" }
+
+        Invoke-Expression $cmd
     }
 }
 
