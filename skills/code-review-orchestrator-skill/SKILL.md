@@ -364,3 +364,55 @@ Edit `configs/review-config.json`:
 3. **Address medium issues in tech debt** - Track with `wf review --track`
 4. **Consider low issues for code polish** - Part of regular maintenance
 5. **Update report after fixes** - Re-run to verify resolution
+
+---
+
+## Judgment Day - Dual Review Protocol
+
+### Overview
+
+**Judgment Day** is a foundation-native capability that complements GGA pre-commit reviews with deep pre-merge adversarial validation.
+
+### GGA vs Judgment Day
+
+| Aspect | GGA | Judgment Day |
+|--------|-----|--------------|
+| **Trigger** | Pre-commit | Pre-merge |
+| **Mode** | Single reviewer | Two parallel judges |
+| **Purpose** | Fast block of critical issues | Deep adversarial validation |
+| **Speed** | ~seconds | ~minutes |
+
+### Workflow
+
+```
+git commit ──> GGA ──> Block critical issues
+                                  │
+                                  ▼
+                         Significant work ready for merge
+                                  │
+                                  ▼
+                     wf review --scope judgment-day
+                                  │
+                    ┌──────────────┴──────────────┐
+                    ▼                              ▼
+               APPROVED                         ESCALATED
+               (merge)                    (manual review)
+```
+
+### Commands
+
+| Command | Description |
+|---------|-------------|
+| `wf review --scope judgment-day` | Run dual review protocol |
+| `wf review --scope judgment-day --target <path>` | Target specific path |
+| `wf review --scope judgment-day --max-iterations 3` | Custom iteration limit |
+
+### AGENT-QA Integration
+
+AGENT-QA owns Judgment Day execution:
+
+```powershell
+wf agent QA "judgment day on src/features/auth"
+```
+
+See: `skills/multi-agent-registry/SKILL.md` - AGENT-QA section
