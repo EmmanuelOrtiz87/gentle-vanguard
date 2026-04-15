@@ -13,6 +13,7 @@ See [SESSION-GUIDE.md](SESSION-GUIDE.md) for complete session instructions.
 | Document | Description |
 |----------|-------------|
 | [SESSION-GUIDE.md](SESSION-GUIDE.md) | How to work with AI agents |
+| [AGENT-RUNTIME-RECIPE.md](AGENT-RUNTIME-RECIPE.md) | Local/cloud/self-hosted/SaaS setup recipe for agent runtime |
 | [INTEGRATION-EXISTING-PROJECTS.md](INTEGRATION-EXISTING-PROJECTS.md) | Integrate foundation into existing projects |
 | [AI-CONFIGURATION.md](AI-CONFIGURATION.md) | Configure AI models and providers |
 | [audit-system.md](audit-system.md) | Using the audit system |

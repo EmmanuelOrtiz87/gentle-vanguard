@@ -35,6 +35,7 @@ docs/
 | [project-types.md](reference/project-types.md) | Available project types |
 | [tools.md](reference/tools.md) | Tools reference |
 | [structure.md](reference/structure.md) | Directory structure |
+| [OPERATING-DECISIONS-2026-04-15.md](reference/OPERATING-DECISIONS-2026-04-15.md) | Consolidated lessons learned, mechanisms, and operating definitions |
 | [SDD-GOVERNANCE-POLICY.md](reference/SDD-GOVERNANCE-POLICY.md) | SDD enforcement criteria and exceptions |
 | [FUTURE-FEATURES-BACKLOG.md](reference/FUTURE-FEATURES-BACKLOG.md) | Deferred improvements and optimization backlog |
 
@@ -55,6 +56,7 @@ docs/
 | [INTEGRATION-EXISTING-PROJECTS.md](guides/INTEGRATION-EXISTING-PROJECTS.md) | Integrate existing projects |
 | [AI-CONFIGURATION.md](guides/AI-CONFIGURATION.md) | AI configuration |
 | [CUSTOM-RULES.md](guides/CUSTOM-RULES.md) | Extend orchestrator with technical/business/review custom rules |
+| [AGENT-RUNTIME-RECIPE.md](guides/AGENT-RUNTIME-RECIPE.md) | Step-by-step runtime recipe for local, cloud/self-hosted, and SaaS agent setups |
 | [STACK-ON-DEMAND.md](guides/STACK-ON-DEMAND.md) | On-demand activation model for orchestrator stack |
 | [TOOL-ACTIVATION.md](guides/TOOL-ACTIVATION.md) | Automatic tool activation setup |
 | [FOUNDATION-SYNC.md](guides/FOUNDATION-SYNC.md) | Managed asset sync behavior and custom preservation |
