@@ -61,6 +61,42 @@ function Get-AssetStrategy {
     }
 }
 
+function Get-AssetType {
+    param($Asset)
+    $raw = if ($Asset.PSObject.Properties['type']) { [string]$Asset.type } else { '' }
+    switch ($raw.ToLowerInvariant()) {
+        'dir' { return 'dir' }
+        default { return 'file' }
+    }
+}
+
+function Compare-Directory {
+    param(
+        [string]$SourceDir,
+        [string]$TargetDir
+    )
+
+    if (-not (Test-Path $TargetDir)) {
+        return 'missing-target'
+    }
+
+    $sourceFiles = Get-ChildItem -Path $SourceDir -File -Recurse -ErrorAction SilentlyContinue
+    foreach ($file in $sourceFiles) {
+        $relative = $file.FullName.Substring($SourceDir.Length).TrimStart('\','/')
+        $targetFile = Join-Path $TargetDir $relative
+        if (-not (Test-Path $targetFile)) {
+            return 'drift'
+        }
+        $sourceHash = (Get-FileHash -Path $file.FullName -Algorithm SHA256).Hash
+        $targetHash = (Get-FileHash -Path $targetFile -Algorithm SHA256).Hash
+        if ($sourceHash -ne $targetHash) {
+            return 'drift'
+        }
+    }
+
+    return 'up-to-date'
+}
+
 try {
     if ([string]::IsNullOrWhiteSpace($ManifestPath)) {
         $ManifestPath = Join-Path $repoRoot 'config/foundation-sync.json'
@@ -146,26 +182,33 @@ try {
         }
 
         $strategy  = Get-AssetStrategy -Asset $asset
+        $assetType = Get-AssetType -Asset $asset
 
         $sourceAbs = [System.IO.Path]::GetFullPath((Join-Path $foundationRoot $sourceRel))
         $targetAbs = [System.IO.Path]::GetFullPath((Join-Path $repoRoot $targetRel))
 
         if (-not (Test-Path $sourceAbs)) {
-            $results += [pscustomobject]@{ Source = $sourceRel; Target = $targetRel; Strategy = $strategy; Status = 'missing-source' }
+            $results += [pscustomobject]@{ Source = $sourceRel; Target = $targetRel; Strategy = $strategy; Type = $assetType; Status = 'missing-source' }
             continue
         }
 
         if (-not (Test-Path $targetAbs)) {
             if ($strategy -eq 'preserve-local') {
-                $results += [pscustomobject]@{ Source = $sourceRel; Target = $targetRel; Strategy = $strategy; Status = 'preserve-no-target' }
+                $results += [pscustomobject]@{ Source = $sourceRel; Target = $targetRel; Strategy = $strategy; Type = $assetType; Status = 'preserve-no-target' }
             } else {
-                $results += [pscustomobject]@{ Source = $sourceRel; Target = $targetRel; Strategy = $strategy; Status = 'missing-target' }
+                $results += [pscustomobject]@{ Source = $sourceRel; Target = $targetRel; Strategy = $strategy; Type = $assetType; Status = 'missing-target' }
             }
             continue
         }
 
         if ($strategy -eq 'preserve-local') {
-            $results += [pscustomobject]@{ Source = $sourceRel; Target = $targetRel; Strategy = $strategy; Status = 'preserved' }
+            $results += [pscustomobject]@{ Source = $sourceRel; Target = $targetRel; Strategy = $strategy; Type = $assetType; Status = 'preserved' }
+            continue
+        }
+
+        if ($assetType -eq 'dir') {
+            $dirStatus = Compare-Directory -SourceDir $sourceAbs -TargetDir $targetAbs
+            $results += [pscustomobject]@{ Source = $sourceRel; Target = $targetRel; Strategy = $strategy; Type = $assetType; Status = $dirStatus }
             continue
         }
 
@@ -173,7 +216,7 @@ try {
         $targetHash = (Get-FileHash -Path $targetAbs -Algorithm SHA256).Hash
 
         $status = if ($sourceHash -eq $targetHash) { 'up-to-date' } else { 'drift' }
-        $results += [pscustomobject]@{ Source = $sourceRel; Target = $targetRel; Strategy = $strategy; Status = $status }
+        $results += [pscustomobject]@{ Source = $sourceRel; Target = $targetRel; Strategy = $strategy; Type = $assetType; Status = $status }
     }
 
     $drifted      = @($results | Where-Object { $_.Status -in @('drift', 'missing-target') })
@@ -245,6 +288,16 @@ try {
     foreach ($row in $drifted) {
         $sourceAbs = [System.IO.Path]::GetFullPath((Join-Path $foundationRoot $row.Source))
         $targetAbs = [System.IO.Path]::GetFullPath((Join-Path $repoRoot $row.Target))
+
+        if ($row.Type -eq 'dir') {
+            if (-not (Test-Path $targetAbs)) {
+                New-Item -ItemType Directory -Path $targetAbs -Force | Out-Null
+            }
+            Copy-Item -Path (Join-Path $sourceAbs '*') -Destination $targetAbs -Recurse -Force
+            Write-Success "Synced dir: $($row.Target)"
+            continue
+        }
+
         $targetDir = Split-Path -Parent $targetAbs
         if (-not (Test-Path $targetDir)) {
             New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
