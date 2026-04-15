@@ -120,5 +120,5 @@ Policy reference: `docs/guides/DEVELOPER-COMMUNICATION-POLICY.md`
 
 ## See Also
 - `skills/SKILL_INDEX.md` - Complete skill reference
-- `docs/ARCHITECTURE.md` - Foundation architecture
+- `docs/reference/ARCHITECTURE.md` - Foundation architecture
 - `docs/guides/DEVELOPER-COMMUNICATION-POLICY.md` - Response mode and authorization rules

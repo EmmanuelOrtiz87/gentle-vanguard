@@ -107,18 +107,24 @@ Architecture baseline for session start:
 
 1. `chat_response.default_level = chat-compact`
 2. `chat_response.enforce_on_session_start = true`
+3. `response_policy.strict_mode = true`
+4. `response_policy.enforce_baseline = true`
 
 Meaning:
 
 1. The orchestrator starts each session in the lowest-detail chat level (`simple + ultra`).
 2. This is treated as an architecture decision for token-efficiency and closure-first operation.
-3. Developers can still override at any moment by command, instruction, or script.
+3. Baseline is mandatory by default; out-of-policy changes require explicit override command.
 
-Override paths:
+Override paths (controlled):
 
-1. Command: `wf.ps1 response-mode chat:<level>`
-2. Script call: `response-mode.ps1 -Mode set-chat-level -ChatLevel <level>`
-3. Instruction override: explicit developer request (`DETALLE`, `EXTENDER`, or direct level command)
+1. Command: `response-mode.ps1 -Mode set-chat-level -ChatLevel <level> -AllowPolicyOverride -OverrideReason "<reason>"`
+2. Detail/profile override: `response-mode.ps1 -Mode set-detail -Detail <level> -AllowPolicyOverride -OverrideReason "<reason>"`
+3. Return to baseline: `response-mode.ps1 -Mode enforce-baseline`
+
+Default rule:
+
+1. No free-mode operation outside `simple + ultra + chat-compact` unless override is explicit and traceable.
 
 ## Engram Traceability for Communication Mode
 

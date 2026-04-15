@@ -1,5 +1,5 @@
 ﻿param(
-    [ValidateSet('status', 'list', 'set', 'set-language', 'set-detail', 'set-preset', 'set-chat-level', 'recommend', 'export')]
+    [ValidateSet('status', 'list', 'set', 'set-language', 'set-detail', 'set-preset', 'set-chat-level', 'enforce-baseline', 'recommend', 'export')]
     [string]$Mode = 'status',
     [ValidateSet('lite', 'lleno', 'ultra')]
     [string]$Profile,
@@ -16,6 +16,8 @@
     [switch]$AsJson,
     [switch]$PassThru,
     [switch]$SkipEngramLog,
+    [switch]$AllowPolicyOverride,
+    [string]$OverrideReason = '',
     [switch]$Quiet
 )
 
@@ -28,7 +30,7 @@ function Get-DefaultConfig {
     return [ordered]@{
         communication_language = 'es'
         allowed_languages = @('es', 'pt-BR', 'en')
-        communication_response_mode = 'executive'
+        communication_response_mode = 'simple'
         allowed_response_modes = @('simple', 'executive', 'expanded')
         chat_response = [ordered]@{
             default_level = 'chat-compact'
@@ -44,15 +46,15 @@ function Get-DefaultConfig {
             default = 'bugfix'
             allow = @('bugfix', 'refactor', 'docs', 'audit-review', 'executive-demo')
             profiles = [ordered]@{
-                'bugfix' = [ordered]@{ language = 'es'; detail = 'executive'; compression = 'ultra' }
-                'refactor' = [ordered]@{ language = 'es'; detail = 'executive'; compression = 'lleno' }
-                'docs' = [ordered]@{ language = 'es'; detail = 'expanded'; compression = 'lite' }
-                'audit-review' = [ordered]@{ language = 'es'; detail = 'expanded'; compression = 'lleno' }
-                'executive-demo' = [ordered]@{ language = 'es'; detail = 'executive'; compression = 'lite' }
+                'bugfix' = [ordered]@{ language = 'es'; detail = 'simple'; compression = 'ultra' }
+                'refactor' = [ordered]@{ language = 'es'; detail = 'simple'; compression = 'ultra' }
+                'docs' = [ordered]@{ language = 'es'; detail = 'simple'; compression = 'ultra' }
+                'audit-review' = [ordered]@{ language = 'es'; detail = 'simple'; compression = 'ultra' }
+                'executive-demo' = [ordered]@{ language = 'es'; detail = 'simple'; compression = 'ultra' }
             }
         }
         response_profiles = [ordered]@{
-            active = 'lite'
+            active = 'ultra'
             allow = @('lite', 'lleno', 'ultra')
             profiles = [ordered]@{
                 'lite' = [ordered]@{
@@ -81,6 +83,15 @@ function Get-DefaultConfig {
                 }
             }
         }
+        response_policy = [ordered]@{
+            strict_mode = $true
+            enforce_baseline = $true
+            baseline_detail = 'simple'
+            baseline_profile = 'ultra'
+            baseline_chat_level = 'chat-compact'
+            allow_overrides = $false
+            require_override_reason = $true
+        }
     }
 }
 
@@ -89,7 +100,7 @@ function Ensure-ConfigDefaults {
 
     $defaults = Get-DefaultConfig
 
-    foreach ($key in @('communication_language', 'allowed_languages', 'communication_response_mode', 'allowed_response_modes', 'chat_response', 'communication_presets', 'response_profiles')) {
+    foreach ($key in @('communication_language', 'allowed_languages', 'communication_response_mode', 'allowed_response_modes', 'chat_response', 'communication_presets', 'response_profiles', 'response_policy')) {
         if (-not $Config.PSObject.Properties[$key]) {
             Add-Member -InputObject $Config -MemberType NoteProperty -Name $key -Value $defaults[$key]
         }
@@ -107,11 +118,11 @@ function Ensure-ConfigDefaults {
 
     $Config.allowed_response_modes = @($Config.allowed_response_modes | ForEach-Object { [string]$_ } | Where-Object { $_ -in @('simple', 'executive', 'expanded') })
     if ($Config.allowed_response_modes.Count -eq 0) { $Config.allowed_response_modes = @('simple', 'executive', 'expanded') }
-    if ($Config.communication_response_mode -notin $Config.allowed_response_modes) { $Config.communication_response_mode = 'executive' }
+    if ($Config.communication_response_mode -notin $Config.allowed_response_modes) { $Config.communication_response_mode = 'simple' }
 
     $Config.response_profiles.allow = @($Config.response_profiles.allow | ForEach-Object { [string]$_ } | Where-Object { $_ -in @('lite', 'lleno', 'ultra') })
     if ($Config.response_profiles.allow.Count -eq 0) { $Config.response_profiles.allow = @('lite', 'lleno', 'ultra') }
-    if ($Config.response_profiles.active -notin $Config.response_profiles.allow) { $Config.response_profiles.active = 'lite' }
+    if ($Config.response_profiles.active -notin $Config.response_profiles.allow) { $Config.response_profiles.active = 'ultra' }
 
     $chatLevelMap = Get-ChatLevelMap
     if (-not $Config.chat_response.PSObject.Properties['allow']) {
@@ -143,6 +154,28 @@ function Ensure-ConfigDefaults {
 
     if (-not $Config.communication_presets.PSObject.Properties['default'] -or $Config.communication_presets.default -notin $Config.communication_presets.allow) {
         $Config.communication_presets.default = 'bugfix'
+    }
+
+    if (-not $Config.response_policy.PSObject.Properties['strict_mode']) {
+        $Config.response_policy | Add-Member -MemberType NoteProperty -Name 'strict_mode' -Value $true
+    }
+    if (-not $Config.response_policy.PSObject.Properties['enforce_baseline']) {
+        $Config.response_policy | Add-Member -MemberType NoteProperty -Name 'enforce_baseline' -Value $true
+    }
+    if (-not $Config.response_policy.PSObject.Properties['baseline_detail']) {
+        $Config.response_policy | Add-Member -MemberType NoteProperty -Name 'baseline_detail' -Value 'simple'
+    }
+    if (-not $Config.response_policy.PSObject.Properties['baseline_profile']) {
+        $Config.response_policy | Add-Member -MemberType NoteProperty -Name 'baseline_profile' -Value 'ultra'
+    }
+    if (-not $Config.response_policy.PSObject.Properties['baseline_chat_level']) {
+        $Config.response_policy | Add-Member -MemberType NoteProperty -Name 'baseline_chat_level' -Value 'chat-compact'
+    }
+    if (-not $Config.response_policy.PSObject.Properties['allow_overrides']) {
+        $Config.response_policy | Add-Member -MemberType NoteProperty -Name 'allow_overrides' -Value $false
+    }
+    if (-not $Config.response_policy.PSObject.Properties['require_override_reason']) {
+        $Config.response_policy | Add-Member -MemberType NoteProperty -Name 'require_override_reason' -Value $true
     }
 
     return $Config
@@ -229,6 +262,55 @@ function Save-ResponseModeObservation {
     }
 }
 
+function Test-PolicyOverride {
+    param([pscustomobject]$Config)
+
+    if (-not $Config.PSObject.Properties['response_policy']) { return $AllowPolicyOverride }
+
+    if ($Config.response_policy.allow_overrides) {
+        return $true
+    }
+
+    if (-not $AllowPolicyOverride) {
+        return $false
+    }
+
+    if ($Config.response_policy.require_override_reason -and [string]::IsNullOrWhiteSpace($OverrideReason)) {
+        throw "Policy override requires -OverrideReason when require_override_reason=true."
+    }
+
+    return $true
+}
+
+function Assert-ResponsePolicy {
+    param(
+        [pscustomobject]$Config,
+        [string]$TargetDetail,
+        [string]$TargetProfile,
+        [string]$TargetChatLevel,
+        [string]$Operation
+    )
+
+    if (-not $Config.PSObject.Properties['response_policy']) { return }
+    if (-not $Config.response_policy.strict_mode -or -not $Config.response_policy.enforce_baseline) { return }
+
+    $baselineDetail = [string]$Config.response_policy.baseline_detail
+    $baselineProfile = [string]$Config.response_policy.baseline_profile
+    $baselineChat = [string]$Config.response_policy.baseline_chat_level
+
+    $detailViolation = (-not [string]::IsNullOrWhiteSpace($TargetDetail)) -and ($TargetDetail -ne $baselineDetail)
+    $profileViolation = (-not [string]::IsNullOrWhiteSpace($TargetProfile)) -and ($TargetProfile -ne $baselineProfile)
+    $chatViolation = (-not [string]::IsNullOrWhiteSpace($TargetChatLevel)) -and ($TargetChatLevel -ne $baselineChat)
+
+    if (-not ($detailViolation -or $profileViolation -or $chatViolation)) {
+        return
+    }
+
+    if (-not (Test-PolicyOverride -Config $Config)) {
+        throw ("Policy blocked operation '{0}'. Baseline is detail={1}, profile={2}, chat={3}. Use -AllowPolicyOverride -OverrideReason '<why>' or change response_policy config explicitly." -f $Operation, $baselineDetail, $baselineProfile, $baselineChat)
+    }
+}
+
 function Apply-Preset {
     param([pscustomobject]$Config, [string]$PresetName)
 
@@ -290,9 +372,11 @@ $config = Get-Config
 if ($Mode -eq 'set') {
     if ([string]::IsNullOrWhiteSpace($Profile)) { throw 'Profile is required when Mode=set.' }
     if ($config.response_profiles.allow -notcontains $Profile) { throw "Unsupported profile '$Profile'. Allowed: $($config.response_profiles.allow -join ', ')" }
+    Assert-ResponsePolicy -Config $config -TargetDetail $config.communication_response_mode -TargetProfile $Profile -TargetChatLevel (Resolve-ActiveChatLevel -Config $config) -Operation 'set-profile'
     $config.response_profiles.active = $Profile
     Save-Config -Config $config
-    Save-ResponseModeObservation -Config $config -Reason "set-profile:$Profile"
+    $reasonTag = if ($AllowPolicyOverride) { "override:$OverrideReason" } else { "set-profile:$Profile" }
+    Save-ResponseModeObservation -Config $config -Reason $reasonTag
     Emit-Output -Text "[OK] Active response profile set to: $Profile" -AsPassThru:$PassThru
     exit 0
 }
@@ -310,18 +394,23 @@ if ($Mode -eq 'set-language') {
 if ($Mode -eq 'set-detail') {
     if ([string]::IsNullOrWhiteSpace($Detail)) { throw 'Detail is required when Mode=set-detail.' }
     if ($config.allowed_response_modes -notcontains $Detail) { throw "Unsupported detail level '$Detail'. Allowed: $($config.allowed_response_modes -join ', ')" }
+    Assert-ResponsePolicy -Config $config -TargetDetail $Detail -TargetProfile $config.response_profiles.active -TargetChatLevel (Resolve-ActiveChatLevel -Config $config) -Operation 'set-detail'
     $config.communication_response_mode = $Detail
     Save-Config -Config $config
-    Save-ResponseModeObservation -Config $config -Reason "set-detail:$Detail"
+    $reasonTag = if ($AllowPolicyOverride) { "override:$OverrideReason" } else { "set-detail:$Detail" }
+    Save-ResponseModeObservation -Config $config -Reason $reasonTag
     Emit-Output -Text "[OK] Response detail level set to: $Detail" -AsPassThru:$PassThru
     exit 0
 }
 
 if ($Mode -eq 'set-preset') {
     if ([string]::IsNullOrWhiteSpace($Preset)) { throw 'Preset is required when Mode=set-preset.' }
+    $presetData = $config.communication_presets.profiles.$Preset
+    Assert-ResponsePolicy -Config $config -TargetDetail ([string]$presetData.detail) -TargetProfile ([string]$presetData.compression) -TargetChatLevel '' -Operation 'set-preset'
     $config = Apply-Preset -Config $config -PresetName $Preset
     Save-Config -Config $config
-    Save-ResponseModeObservation -Config $config -Reason "set-preset:$Preset"
+    $reasonTag = if ($AllowPolicyOverride) { "override:$OverrideReason" } else { "set-preset:$Preset" }
+    Save-ResponseModeObservation -Config $config -Reason $reasonTag
     Emit-Output -Text ("[OK] Preset applied: {0} (language={1}, detail={2}, profile={3})" -f $Preset, $config.communication_language, $config.communication_response_mode, $config.response_profiles.active) -AsPassThru:$PassThru
     exit 0
 }
@@ -334,14 +423,34 @@ if ($Mode -eq 'set-chat-level') {
     }
 
     $selected = $chatLevels[$ChatLevel]
+    Assert-ResponsePolicy -Config $config -TargetDetail ([string]$selected.detail) -TargetProfile ([string]$selected.profile) -TargetChatLevel $ChatLevel -Operation 'set-chat-level'
     $config.communication_response_mode = [string]$selected.detail
     $config.response_profiles.active = [string]$selected.profile
     if ($config.PSObject.Properties['chat_response']) {
         $config.chat_response.default_level = [string]$ChatLevel
     }
     Save-Config -Config $config
-    Save-ResponseModeObservation -Config $config -Reason ("set-chat-level:{0}" -f $ChatLevel)
+    $reasonTag = if ($AllowPolicyOverride) { "override:$OverrideReason" } else { ("set-chat-level:{0}" -f $ChatLevel) }
+    Save-ResponseModeObservation -Config $config -Reason $reasonTag
     Emit-Output -Text ("[OK] Chat level applied: {0} (detail={1}, profile={2})" -f $ChatLevel, $config.communication_response_mode, $config.response_profiles.active) -AsPassThru:$PassThru
+    exit 0
+}
+
+if ($Mode -eq 'enforce-baseline') {
+    $baselineDetail = [string]$config.response_policy.baseline_detail
+    $baselineProfile = [string]$config.response_policy.baseline_profile
+    $baselineChat = [string]$config.response_policy.baseline_chat_level
+
+    $config.communication_response_mode = $baselineDetail
+    $config.response_profiles.active = $baselineProfile
+    if ($config.PSObject.Properties['chat_response']) {
+        $config.chat_response.default_level = $baselineChat
+        $config.chat_response.enforce_on_session_start = $true
+    }
+
+    Save-Config -Config $config
+    Save-ResponseModeObservation -Config $config -Reason 'enforce-baseline'
+    Emit-Output -Text ("[OK] Baseline enforced: detail={0}, profile={1}, chat={2}" -f $baselineDetail, $baselineProfile, $baselineChat) -AsPassThru:$PassThru
     exit 0
 }
 
@@ -379,6 +488,7 @@ if ($Mode -eq 'list') {
             enforceChatLevelOnSessionStart = if ($config.PSObject.Properties['chat_response']) { [bool]$config.chat_response.enforce_on_session_start } else { $true }
             allowedChatLevels = @($chatLevelMap.Keys)
             chatLevels = $chatLevelMap
+            responsePolicy = $config.response_policy
             preset = $config.communication_presets.default
             allowedPresets = @($config.communication_presets.allow)
             presets = $config.communication_presets.profiles
@@ -398,6 +508,11 @@ if ($Mode -eq 'list') {
         $lines += "Default chat level: $($config.chat_response.default_level)"
         $lines += "Enforce chat level on session start: $($config.chat_response.enforce_on_session_start)"
     }
+        if ($config.PSObject.Properties['response_policy']) {
+            $lines += "Policy strict_mode: $($config.response_policy.strict_mode)"
+            $lines += "Policy enforce_baseline: $($config.response_policy.enforce_baseline)"
+            $lines += "Policy allow_overrides: $($config.response_policy.allow_overrides)"
+        }
     $lines += "Default Preset: $($config.communication_presets.default)"
     $lines += ''
     $lines += "Allowed languages: $($config.allowed_languages -join ', ')"
@@ -449,6 +564,7 @@ if ($AsJson) {
         enforceChatLevelOnSessionStart = if ($config.PSObject.Properties['chat_response']) { [bool]$config.chat_response.enforce_on_session_start } else { $true }
         allowedChatLevels = @($chatLevelMap.Keys)
         chatLevels = $chatLevelMap
+        responsePolicy = $config.response_policy
         description = $config.response_profiles.profiles.$($config.response_profiles.active).description
         guidelines = @($config.response_profiles.profiles.$($config.response_profiles.active).guidelines)
         preset = $config.communication_presets.default

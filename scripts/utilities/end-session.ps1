@@ -4,6 +4,7 @@ param(
     [switch]$SkipTests,
     [switch]$SkipAudit,
     [switch]$SkipGovernance,
+    [switch]$AllowUnpublishedClose,
     [switch]$Force
 )
 
@@ -97,6 +98,26 @@ $outputPath = Join-Path $sessionsDir ("{0}-delivery-closure.md" -f $dateTag)
 $taskLine = if ([string]::IsNullOrWhiteSpace($TaskName)) { '- Task scope: not specified' } else { "- Task scope: $TaskName" }
 $gitStatus = git status --short 2>$null
 $gitState = if ([string]::IsNullOrWhiteSpace(($gitStatus -join '').Trim())) { 'clean' } else { 'has uncommitted changes' }
+$hasUncommittedChanges = ($gitState -ne 'clean')
+
+$upstream = git rev-parse --abbrev-ref --symbolic-full-name "@{upstream}" 2>$null
+$hasUpstream = -not [string]::IsNullOrWhiteSpace($upstream)
+$commitsAhead = 0
+$commitsBehind = 0
+if ($hasUpstream) {
+    $aheadBehind = git rev-list --count --left-right "@{upstream}...HEAD" 2>$null
+    if (-not [string]::IsNullOrWhiteSpace($aheadBehind)) {
+        $parts = $aheadBehind -split '\s+'
+        if ($parts.Count -ge 2) {
+            $commitsBehind = [int]$parts[0]
+            $commitsAhead = [int]$parts[1]
+        }
+    }
+}
+
+$hasUnpublishedCommits = ($commitsAhead -gt 0) -or (-not $hasUpstream)
+$publishState = if ($hasUnpublishedCommits) { 'has unpublished commits or no upstream tracking' } else { 'synced with upstream' }
+
 $owner = git config user.name 2>$null
 if ([string]::IsNullOrWhiteSpace($owner)) { $owner = 'unknown' }
 $latestCommit = git log -1 --pretty=oneline 2>$null
@@ -119,6 +140,10 @@ $taskLine
 ## 2. Repository State
 
 - Git state: $gitState
+- Publish state: $publishState
+- Upstream branch: $(if ($hasUpstream) { $upstream } else { 'none' })
+- Commits ahead: $commitsAhead
+- Commits behind: $commitsBehind
 - Latest commit: $latestCommit
 
 ## 3. Pending Actions
@@ -140,6 +165,13 @@ $hasFailure = ($reviewRan -and $reviewCode -ne 0) -or ($auditRan -and $auditCode
 if ($hasFailure -and -not $Force) {
     Write-Warn 'Session closure completed with failed checks. Re-run with -Force to bypass failure exit.'
     exit 1
+}
+
+$hasPublicationRisk = $hasUncommittedChanges -or $hasUnpublishedCommits
+if ($hasPublicationRisk -and -not $AllowUnpublishedClose -and -not $Force) {
+    Write-Warn 'Session closure blocked by publication policy: there are local/unpublished changes.'
+    Write-Warn 'Use wf.ps1 publish (recommended), or re-run end-session with -AllowUnpublishedClose to accept the risk.'
+    exit 2
 }
 
 Write-Ok 'Session closure completed.'
