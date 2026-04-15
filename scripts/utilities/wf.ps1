@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -1279,6 +1279,7 @@ COMMANDS:
     end-session [task]     Run session closure checks and create delivery closure artifact
     day-end-closure        Automated daily closure: delivery closure + workspace validation + Engram memory capture
     task-brief <task>      Create or refresh a task brief only
+    judgment-day          Run dual-review adversarial protocol (pre-merge validation)
     health               Check system health & activate tools
     install-engram       Install or verify Engram CLI availability
     orchestrator-status  Validate orchestrator and Engram integration
@@ -1317,6 +1318,7 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 review              Run full code review
     .\scripts\utilities\wf.ps1 review security     Run security scan only
     .\scripts\utilities\wf.ps1 review judgment-day Run dual-review adversarial protocol
+    .\scripts\utilities\wf.ps1 judgment-day       Run judgment day directly
     .\scripts\utilities\wf.ps1 audit              Generate audit document
     .\scripts\utilities\wf.ps1 pr                 Create PR
     .\scripts\utilities\wf.ps1 push               Commit and push
@@ -1564,6 +1566,27 @@ switch ($Command) {
         }
 
         Write-Success "Code review complete"
+    }
+
+    'judgment-day' {
+        Write-Step "Judgment Day - Dual Review Protocol"
+
+        $jdScript = Join-Path $scriptDir 'judgment-day.ps1'
+        if (-not (Test-Path $jdScript)) {
+            Write-Error "judgment-day.ps1 not found"
+            exit 1
+        }
+
+        Write-Host " Running: judgment-day.ps1" -ForegroundColor Cyan
+        & $jdScript
+        $exitCode = $LASTEXITCODE
+
+        if ($exitCode -ne 0) {
+            Write-Error "Judgment Day found issues"
+            exit $exitCode
+        }
+
+        Write-Success "Judgment Day complete"
     }
     
     'audit' {
