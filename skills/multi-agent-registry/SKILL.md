@@ -165,7 +165,10 @@ Owns Judgment Day: dual-review adversarial protocol for pre-merge validation.
 ```
 test, testing, QA, validation, E2E, unit test,
 integration test, playwright, pytest, calidad,
-judgment day, dual review, adversarial review
+judgment day, juicio final, dia del juicio, revision de a pares,
+dual review, adversarial review, corre juicio, ejecuta juicio,
+activa juicio, realizar juicio, corre dual review,
+corre adversarial, revision profunda pre-merge
 ```
 
 ### DELIVERABLES
