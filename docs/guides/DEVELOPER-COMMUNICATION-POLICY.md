@@ -33,6 +33,16 @@ Activation triggers:
 
 The local workspace can override the global default response mode via orchestrator config.
 
+## Global Enforcement (Local Machine)
+
+You can enforce `simple/ultra` globally on your machine (not per repo). This is a **local-only** helper and should not be committed to shared repositories.
+
+Example:
+
+```powershell
+C:\Workspace_local\tools\enforce-response-mode.ps1
+```
+
 File:
 
 - `config/orchestrator.json`
