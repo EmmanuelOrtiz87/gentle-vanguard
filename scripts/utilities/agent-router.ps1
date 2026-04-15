@@ -19,13 +19,6 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 $skillsPath = Join-Path $repoRoot 'skills'
 
-function Write-InfoLine {
-    param([string]$Message)
-    if (-not $Quiet) {
-        Write-Host "[INFO] $Message" -ForegroundColor Gray
-    }
-}
-
 function Write-AgentLine {
     param([string]$Message, [string]$Color = 'White')
     if (-not $Quiet) {
@@ -51,6 +44,16 @@ $AGENT_DESCRIPTIONS = @{
     'OPS' = 'DevOps - Deployment, CI/CD, Infrastructure'
     'GOV' = 'Governance - Compliance, Observability, Security Audits'
     'DOC' = 'Documentation - BDD/SDD Specs, Guides, README'
+}
+
+$AGENT_DELIVERABLES = @{
+    'BA'  = @('bdd-scenarios', 'acceptance-criteria', 'user-stories', 'requirements-traceability')
+    'SAD' = @('sdd-documents', 'architecture-decisions', 'api-contracts', 'database-designs')
+    'DEV' = @('source-code', 'refactoring', 'technical-debt-records', 'security-hardening')
+    'QA'  = @('test-files', 'e2e-scenarios', 'coverage-reports', 'validation-evidence')
+    'OPS' = @('docker-configs', 'k8s-manifests', 'cicd-pipelines', 'deployment-runbooks')
+    'GOV' = @('audit-reports', 'compliance-docs', 'incident-runbooks', 'monitoring-dashboards')
+    'DOC' = @('readme-files', 'api-docs', 'runbooks', 'bdd-sdd-specs')
 }
 
 function Get-AgentSkills {
@@ -80,6 +83,55 @@ function Get-AgentSkills {
     return $skillFiles
 }
 
+function Get-AgentResult {
+    param(
+        [string]$AgentName,
+        [string]$TaskText,
+        [string]$ActionType
+    )
+    
+    $skills = Get-AgentSkills -AgentName $AgentName
+    $availableSkills = $skills | Where-Object { $_.available }
+    $missingSkills = $skills | Where-Object { -not $_.available }
+    $deliverables = $AGENT_DELIVERABLES[$AgentName]
+    
+    $timestamp = Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz'
+    
+    $result = @{
+        lane_id = "agent-$AgentName-$($timestamp -replace '[:\.]', '-' -replace 'T', '-')"
+        agent = $AgentName
+        role = $AGENT_DESCRIPTIONS[$AgentName]
+        status = 'dispatched'
+        task = $TaskText
+        action = $ActionType
+        timestamp = $timestamp
+        skills_loaded = @($availableSkills | ForEach-Object { $_.name })
+        skills_missing = @($missingSkills | ForEach-Object { $_.name })
+        deliverables_expected = $deliverables
+        files_touched = @()
+        findings = @()
+        validation_result = $null
+        next_action = $null
+        token_estimate = $null
+    }
+    
+    if ($result.skills_missing.Count -eq 0) {
+        $result.status = 'ready'
+        $result.token_estimate = 2000 + ($availableSkills.Count * 300)
+    } elseif ($result.skills_missing.Count -lt $availableSkills.Count) {
+        $result.status = 'partial'
+        $result.token_estimate = 2000 + ($availableSkills.Count * 200)
+    } else {
+        $result.status = 'blocked'
+        $result.validation_result = @{
+            passed = $false
+            reason = 'All required skills missing'
+        }
+    }
+    
+    return $result
+}
+
 function Invoke-Agent {
     param(
         [string]$AgentName,
@@ -87,31 +139,46 @@ function Invoke-Agent {
         [string]$ActionType
     )
     
-    Write-AgentLine "`n=== AGENT-$AgentName ===" 'Cyan'
-    Write-AgentLine "Role: $($AGENT_DESCRIPTIONS[$AgentName])" 'White'
-    Write-AgentLine "Task: $TaskText" 'Gray'
-    Write-AgentLine "Action: $ActionType" 'Gray'
-    Write-AgentLine ""
+    $result = Get-AgentResult -AgentName $AgentName -TaskText $TaskText -ActionType $ActionType
     
-    $skills = Get-AgentSkills -AgentName $AgentName
-    $availableSkills = $skills | Where-Object { $_.available }
-    $missingSkills = $skills | Where-Object { -not $_.available }
-    
-    Write-AgentLine "Skills loaded ($($availableSkills.Count)):" 'Green'
-    foreach ($skill in $availableSkills) {
-        Write-Host "  [OK] $($skill.name)" -ForegroundColor Green
+    if ($AsJson) {
+        $result | ConvertTo-Json -Depth 5
+        return
     }
     
-    if ($missingSkills.Count -gt 0) {
-        Write-AgentLine "`nSkills missing ($($missingSkills.Count)):" 'Yellow'
-        foreach ($skill in $missingSkills) {
-            Write-Host "  [--] $($skill.name)" -ForegroundColor Yellow
+    Write-AgentLine "`n=== AGENT-$AgentName ===" 'Cyan'
+    Write-AgentLine "Role: $($result.role)" 'White'
+    Write-AgentLine "Task: $($result.task)" 'Gray'
+    Write-AgentLine "Action: $($result.action)" 'Gray'
+    Write-AgentLine "Status: $($result.status)" -ForegroundColor $(if ($result.status -eq 'ready') { 'Green' } elseif ($result.status -eq 'blocked') { 'Red' } else { 'Yellow' })
+    Write-AgentLine ""
+    
+    if ($result.skills_loaded.Count -gt 0) {
+        Write-AgentLine "Skills loaded ($($result.skills_loaded.Count)):" 'Green'
+        foreach ($skill in $result.skills_loaded) {
+            Write-Host "  [OK] $skill" -ForegroundColor Green
         }
+    }
+    
+    if ($result.skills_missing.Count -gt 0) {
+        Write-AgentLine "`nSkills missing ($($result.skills_missing.Count)):" 'Yellow'
+        foreach ($skill in $result.skills_missing) {
+            Write-Host "  [--] $skill" -ForegroundColor Yellow
+        }
+    }
+    
+    Write-AgentLine "`nExpected deliverables:" 'Cyan'
+    foreach ($deliverable in $result.deliverables_expected) {
+        Write-Host "  - $deliverable" -ForegroundColor Gray
+    }
+    
+    if ($result.token_estimate) {
+        Write-AgentLine "`nToken estimate: ~$($result.token_estimate) chars" 'DarkGray'
     }
     
     Write-AgentLine "`n--- Ready to execute ---" 'Cyan'
     Write-Host "The orchestrator will now delegate to AGENT-$AgentName for:" -ForegroundColor White
-    Write-Host "  $TaskText" -ForegroundColor Gray
+    Write-Host "  $($result.task)" -ForegroundColor Gray
     Write-Host ""
 }
 
@@ -121,6 +188,7 @@ function Show-AgentStatus {
     $skills = Get-AgentSkills -AgentName $AgentName
     $available = ($skills | Where-Object { $_.available }).Count
     $total = $skills.Count
+    $deliverables = $AGENT_DELIVERABLES[$AgentName]
     
     return @{
         agent = $AgentName
@@ -129,6 +197,7 @@ function Show-AgentStatus {
         skills_total = $total
         readiness = if ($available -eq $total) { 'READY' } elseif ($available -gt 0) { 'PARTIAL' } else { 'UNAVAILABLE' }
         skills = $skills
+        deliverables = $deliverables
     }
 }
 
@@ -161,6 +230,7 @@ if ($Agent -eq 'status') {
             Write-Host "[$($result.readiness)] AGENT-$($result.agent)" -ForegroundColor $color
             Write-Host "       $($result.role)" -ForegroundColor Gray
             Write-Host "       Skills: $($result.skills_available)/$($result.skills_total)" -ForegroundColor White
+            Write-Host "       Deliverables: $($result.deliverables -join ', ')" -ForegroundColor DarkGray
             Write-Host ""
         }
     }
@@ -182,16 +252,17 @@ if ($Agent -eq 'list') {
 }
 
 if ([string]::IsNullOrWhiteSpace($Agent)) {
-    Write-Host "Usage: .\wf.ps1 agent <AGENT> [TASK] [ACTION]" -ForegroundColor Yellow
+    Write-Host "Usage: .\wf.ps1 agent <AGENT> [TASK] [-AsJson]" -ForegroundColor Yellow
     Write-Host ""
     Write-Host "Agents: BA, SAD, DEV, QA, OPS, GOV, DOC" -ForegroundColor White
     Write-Host "Actions: run, plan, validate, status" -ForegroundColor White
+    Write-Host "Flags: -AsJson for structured output" -ForegroundColor White
     Write-Host ""
     Write-Host "Examples:" -ForegroundColor Cyan
     Write-Host "  .\wf.ps1 agent list" -ForegroundColor Gray
     Write-Host "  .\wf.ps1 agent status" -ForegroundColor Gray
-    Write-Host "  .\wf.ps1 agent DEV `"implement login feature`"" -ForegroundColor Gray
-    Write-Host "  .\wf.ps1 agent QA `"validate checkout flow`"" -ForegroundColor Gray
+    Write-Host "  .\wf.ps1 agent DEV `"implement login`"" -ForegroundColor Gray
+    Write-Host "  .\wf.ps1 agent QA `"validate checkout`" -AsJson" -ForegroundColor Gray
     exit 1
 }
 

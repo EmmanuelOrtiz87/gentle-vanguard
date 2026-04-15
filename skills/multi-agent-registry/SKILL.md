@@ -373,6 +373,56 @@ USER REQUEST
 
 ---
 
+## AGENT RESULT SCHEMA (FF-007)
+
+Structured JSON output for agent results enabling merge/consolidation:
+
+```json
+{
+  "lane_id": "agent-DEV-timestamp",
+  "agent": "DEV",
+  "role": "Developer - Implementation",
+  "status": "success|failed|blocked|partial",
+  "task": "implementation task description",
+  "action": "run|plan|validate",
+  "timestamp": "2026-04-15T...",
+  "skills_loaded": ["angular-spa", "typescript"],
+  "skills_missing": [],
+  "deliverables_expected": ["source-code", "refactoring"],
+  "files_touched": [],
+  "findings": [],
+  "validation_result": { "passed": true },
+  "next_action": "merge-output",
+  "token_estimate": 2400
+}
+```
+
+**Usage:**
+```powershell
+.\wf.ps1 agent DEV "implement feature" -AsJson
+```
+
+---
+
+## SKILLS AUTO-DISCOVERY (FF-008)
+
+Auto-detect skills and generate mapping:
+
+```powershell
+.\wf.ps1 skills discover    # List all available skills
+.\wf.ps1 skills map         # Show auto-generated agent mapping
+.\wf.ps1 skills agents      # Show agent skill assignments
+.\wf.ps1 skills validate    # Validate skill metadata
+```
+
+**Discovery Features:**
+- Scans `skills/` directory automatically
+- Extracts metadata from SKILL.md (name, description, triggers)
+- Generates keyword-based agent mapping
+- Identifies unmapped skills
+
+---
+
 ## IMPLEMENTATION STATUS
 
 | Component | Status |
@@ -380,6 +430,8 @@ USER REQUEST
 | Agent Registry | ✓ Defined |
 | Skill Mapping | ✓ Defined |
 | Agent Scripts | ✓ Implemented |
+| Agent Result Schema | ✓ Implemented (FF-007) |
+| Skills Auto-Discovery | ✓ Implemented (FF-008) |
 | Orchestrator Update | ✓ Integrated |
 | Documentation | ✓ Updated |
 
@@ -390,3 +442,4 @@ USER REQUEST
 - Skill Index: [SKILL_INDEX.md](../SKILL_INDEX.md)
 - Orchestrator: [project-orchestrator-skill](../project-orchestrator-skill/SKILL.md)
 - Documentation: [documentation-governance](../documentation-governance/SKILL.md)
+- Future Backlog: [FUTURE-FEATURES-BACKLOG.md](../../docs/reference/FUTURE-FEATURES-BACKLOG.md)

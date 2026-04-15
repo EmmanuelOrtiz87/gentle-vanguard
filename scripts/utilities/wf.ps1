@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'reset-demo', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'reset-demo', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -2000,6 +2000,20 @@ switch ($Command) {
         } else {
             & $agentScript
         }
+    }
+
+    'skills' {
+        Write-Step "Skills Auto-Discovery"
+        $skillsScript = Join-Path $scriptDir 'skills-discovery.ps1'
+        if (-not (Test-Path $skillsScript)) {
+            Write-Error "Skills discovery script not found: $skillsScript"
+            exit 1
+        }
+
+        $validActions = @('discover', 'map', 'agents', 'validate')
+        $action = if ($validActions -contains $Scope) { $Scope } else { 'discover' }
+
+        & $skillsScript -Action $action
     }
 }
 

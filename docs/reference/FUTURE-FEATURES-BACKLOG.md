@@ -45,6 +45,12 @@ If the user confirms, append the item. If not confirmed, do not register it.
 | FF-004 | 2026-04-13 | Sync Drift Prevention | Add periodic drift report for Foundation vs consumers manifests/skills. | medium | pending | orchestrator | When multi-repo sync cadence increases. |
 | FF-005 | 2026-04-13 | PR Template Quality | Standardize PR templates to include spec traceability and validation evidence. | medium | pending | orchestrator | When next workflow template update is scheduled. |
 | FF-006 | 2026-04-13 | Local Workflow Performance | Profile and optimize `wf health/verify` runtime for faster local loops. | medium | pending | orchestrator | When local validation runtime exceeds agreed SLO. |
+| FF-007 | 2026-04-15 | Agent Result Schema | Structured JSON output schema for sub-agent results to enable merge/consolidation. | high | pending | agent-router | When parallel execution is implemented. |
+| FF-008 | 2026-04-15 | Skills Auto-Discovery | Script to auto-detect available skills in skills/ directory and generate mapping. | high | pending | agent-router | When new skills are added frequently. |
+| FF-009 | 2026-04-15 | Parallel Agent Dispatch | Support `-Parallel` flag in agent-router for concurrent sub-agent execution. | high | pending | agent-router | When agent result schema is stable. |
+| FF-010 | 2026-04-15 | Event Bus System | Basic pub/sub event system for script hooks and automation triggers. | medium | pending | framework-core | When orchestration complexity increases. |
+| FF-011 | 2026-04-15 | Plugin Architecture | Extensibility contract for third-party plugins with standardized interface. | medium | pending | framework-core | When community adoption grows. |
+| FF-012 | 2026-04-15 | Unified Metrics Dashboard | Centralized metrics collection with Grafana visualization. | medium | pending | framework-core | When operational scale requires centralized observability. |
 
 ## Notes
 
