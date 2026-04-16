@@ -46,7 +46,7 @@ function Sync-Target {
     }
     
     Copy-Item $masterFile $Path -Force
-    Write-Ok "Synced $Name: $Path"
+    Write-Ok "Synced ${Name}: ${Path}"
 }
 
 if (-not (Test-Path $masterFile)) {
