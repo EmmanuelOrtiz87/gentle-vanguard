@@ -113,6 +113,14 @@ function Get-AgentResult {
         validation_result = $null
         next_action = $null
         token_estimate = $null
+        completion_signal = @{
+            finished = $false
+            message = "Agent $AgentName initialized. Awaiting execution command."
+            continuity_instruction = "Maintain current session context, rules, and definitions. Do not deviate from established workflow."
+            required_skills_enforced = @($availableSkills | ForEach-Object { $_.name })
+        }
+    }
+    }
     }
     
     if ($result.skills_missing.Count -eq 0) {
