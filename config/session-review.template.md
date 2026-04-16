@@ -4,6 +4,7 @@
 > This document is the persistent memory of Engram for this session.
 
 **Date:** {{FULL_DATE}}
+**Owner:** {{GIT_USER}}
 **Reviewer:** Engram AI Agent
 **Base Branch:** {{BRANCH}}
 

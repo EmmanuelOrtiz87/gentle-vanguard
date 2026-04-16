@@ -39,7 +39,15 @@ if (-not (Test-Path $reviewDir)) {
     New-Item -ItemType Directory -Path $reviewDir -Force | Out-Null
 }
 
-$reviewFile = Join-Path $reviewDir "${dateTag}-session-review.md"
+$gitUser = git config user.name 2>$null
+if ([string]::IsNullOrWhiteSpace($gitUser)) {
+    $gitUser = $env:USERNAME
+}
+$safeUser = $gitUser -replace '[^a-zA-Z0-9_-]', ''
+if ([string]::IsNullOrWhiteSpace($safeUser)) {
+    $safeUser = "unknown"
+}
+$reviewFile = Join-Path $reviewDir "${safeUser}-${dateTag}-session-review.md"
 $templateFile = Join-Path $projectRoot "config/session-review.template.md"
 
 if (Test-Path $templateFile) {
