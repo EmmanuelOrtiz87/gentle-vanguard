@@ -116,7 +116,7 @@ if (Test-Path $templateFile) {
         $content = $auditNote + "`n" + $content
     }
 
-    $content | Out-File -FilePath $reviewFile -Encoding UTF8
+    $content | Out-File -FilePath $reviewFile -Encoding UTF8BOM
     Write-Host "[OK] Session review generated from template at: $reviewFile" -ForegroundColor Green
 } else {
     Write-Error "Session review template not found at $templateFile"

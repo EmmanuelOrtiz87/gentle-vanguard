@@ -302,7 +302,7 @@ $(if ($costs.summary.totalEstimatedCost -gt 100) { "- Cost is notable at `$$([ma
 
 $reportFileName = "$Period-$(Get-Date -Format 'yyyy-MM-dd-HHmmss').md"
 $reportPath = Join-Path $reportsDir $reportFileName
-$weeklyReport | Out-File -FilePath $reportPath -Encoding UTF8
+$weeklyReport | Out-File -FilePath $reportPath -Encoding UTF8BOM
 
 Write-Log "Report generated: $reportPath" "OK"
 

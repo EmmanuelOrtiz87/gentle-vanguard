@@ -162,7 +162,7 @@ $taskLine
 - Commands can be skipped with: `-SkipReview`, `-SkipAudit`, `-SkipGovernance`.
 "@
 
-$content | Out-File -FilePath $outputPath -Encoding UTF8
+$content | Out-File -FilePath $outputPath -Encoding UTF8BOM
 Write-Ok "Delivery closure created: $outputPath"
 
 if (-not $SkipRotation -and (Test-Path $rotateScript)) {

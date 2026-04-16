@@ -370,7 +370,7 @@ $actionLines
 $Notes
 "@
 
-    $content | Out-File -FilePath $filePath -Encoding UTF8
+    $content | Out-File -FilePath $filePath -Encoding UTF8BOM
     Write-Success "Publish decision documented: $filePath"
 }
 
@@ -938,7 +938,7 @@ $metricsTrendSection
 **Version:** 1.0
 "@
     
-    $auditContent | Out-File -FilePath $OutputPath -Encoding UTF8
+    $auditContent | Out-File -FilePath $OutputPath -Encoding UTF8BOM
     Write-Success "Audit document created: $OutputPath"
 }
 
@@ -971,7 +971,7 @@ function New-PRDescription {
 Closes #[ISSUE_NUMBER]
 "@
     
-    $prContent | Out-File -FilePath $OutputPath -Encoding UTF8
+    $prContent | Out-File -FilePath $OutputPath -Encoding UTF8BOM
     Write-Success "PR description template created: $OutputPath"
 }
 
