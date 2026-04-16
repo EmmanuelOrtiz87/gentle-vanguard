@@ -25,7 +25,7 @@ The system runs **automatically** - no manual intervention required:
 │                    AUDIT WORKFLOW                                 │
 └─────────────────────────────────────────────────────────────────┘
 
-init-workspace.ps1          finalize-session.ps1
+start-session.ps1           finalize-session.ps1
        │                           │
        ▼                           ▼
 ┌──────────────┐           ┌───────────────────────┐
@@ -47,35 +47,31 @@ init-workspace.ps1          finalize-session.ps1
                                       │
                                       ▼
                           ┌───────────────────────┐
-                          │ .audit/ Directory    │
+                          │ docs/ Directory      │
                           │                       │
-                          │ sessions/            │
-                          │ metrics/             │
-                          │ reports/             │
+                          │ audits/              │
+                          │ sessions/metrics/    │
                           └───────────────────────┘
 ```
 
 ## Directory Structure
 
 ```
-.audit/
-├── sessions/              # Session records (JSON)
-│   └── 2026-04-09-session-1430.json
-├── code-reviews/         # PR review records
-├── ai-activity/          # Daily summaries
-├── metrics/              # Aggregated metrics
-│   ├── daily.json        # Current day metrics
-│   ├── weekly.json       # Week metrics
-│   └── monthly.json      # Month metrics
-└── reports/              # Human-readable reports
-    └── weekly-2026-04-09.md
+docs/
+├── audits/                # Audit reports (Markdown)
+│   └── 2026-04-15-202322-audit.md
+└── sessions/
+    └── metrics/           # Aggregated metrics (CSV)
+        ├── agent-usage.csv
+        ├── context-usage.csv
+        └── token-guard-usage.csv
 ```
 
 ## Automatic Execution
 
 | When | What | Output |
 |------|------|--------|
-| `init-workspace.ps1` | Session starts | Session file created |
+| `start-session.ps1` | Session starts | Session file created |
 | `finalize-session.ps1` | Session ends | Metrics captured |
 | Every finalize (Sun/Mon) | Weekly report | Report generated |
 
@@ -86,8 +82,8 @@ init-workspace.ps1          finalize-session.ps1
 .\scripts\generate-session-audit.ps1 -Start
 .\scripts\generate-session-audit.ps1 -End
 
-# View metrics
-Get-Content .audit/metrics/daily.json | ConvertFrom-Json
+# View metrics (CSV)
+Import-Csv docs/sessions/metrics/context-usage.csv | Format-Table
 
 # Generate report manually
 .\scripts\generate-audit-report.ps1 -Period weekly
@@ -108,7 +104,13 @@ Get-Content .audit/metrics/daily.json | ConvertFrom-Json
 | activity | Actions, files modified, lines changed |
 | metrics | Duration, files created/updated/deleted |
 
-### Metrics
+### Metrics (CSV)
+
+- **agent-usage.csv:** Agent invocation counts and durations
+- **context-usage.csv:** Context pack efficiency metrics
+- **token-guard-usage.csv:** Token budget tracking
+
+### Reports
 
 - **Velocity:** Commits, lines of code, files, PRs
 - **AI Usage:** Requests per tool, tokens consumed
@@ -141,10 +143,14 @@ The metrics directly support development KPIs:
 
 | KPI | Metric Source |
 |-----|---------------|
-| Development Velocity | `.audit/metrics/velocity.json` |
+| Development Velocity | `docs/sessions/metrics/` CSVs |
 | AI Adoption Rate | Session count with AI usage |
 | Code Quality | Issues found/resolved in reviews |
-| Cost Management | `.audit/metrics/costs.json` |
+| Cost Management | Audit report cost sections |
+
+## Archival Process
+
+Historical audit files are archived to `docs/.local-archive/audits/` for retention. Archives preserve historical data while keeping the active `docs/audits/` directory focused on recent work.
 
 ## Privacy
 
@@ -158,8 +164,8 @@ The metrics directly support development KPIs:
 ### No sessions found
 
 ```powershell
-# Check if .audit directory exists
-Test-Path .audit/sessions
+# Check if docs/audits directory exists
+Test-Path docs/audits
 
 # Run audit manually
 .\scripts\generate-session-audit.ps1 -Start

@@ -11,10 +11,10 @@ param(
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $projectRoot = Resolve-Path (Join-Path $scriptDir "..")
-$auditDir = Join-Path $projectRoot ".audit"
+$auditDir = Join-Path $projectRoot "docs\sessions"
 
 function Ensure-AuditDirs {
-    $dirs = @("sessions", "ai-activity", "code-reviews", "metrics", "reports")
+    $dirs = @(".", "metrics")
     foreach ($dir in $dirs) {
         $path = Join-Path $auditDir $dir
         if (-not (Test-Path $path)) {

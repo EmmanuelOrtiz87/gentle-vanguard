@@ -28,6 +28,9 @@ Central inventory of automation scripts with ownership, risk level, and executio
 | scripts/utilities/context-pack.ps1 | Context Budgeting | B | manual | dev-experience | Generates compact continuation summary to reduce token usage |
 | scripts/utilities/compact-start.ps1 | Context Budgeting | B | manual | dev-experience | Generates context pack and compact prompt for new thread |
 | scripts/utilities/context-metrics-report.ps1 | Context Budgeting | B | manual | dev-experience | Reports context-pack and compact-start usage metrics |
+| scripts/utilities/generate-audit-report.ps1 | Audit Reporting | B | manual | platform | Generates weekly/monthly/executive audit reports in markdown |
+| scripts/utilities/generate-session-audit.ps1 | Session Audit | B | manual | platform | Manages session lifecycle audit logging |
+| scripts/utilities/aggregate-metrics.ps1 | Metrics Aggregation | B | manual | platform | Aggregates daily/weekly/monthly metrics |
 | scripts/validation/homologate-workspace.ps1 | Workspace Hygiene | B | manual | dev-experience | Normalizes artifacts/docs, removes stale files, updates references |
 | scripts/git-hooks/pre-push | Git Hook Runtime | B | git-event | platform | Runs governed pre-push checks (gga, governance validation, homologation drift gate); post-commit hook intentionally not enabled in Foundation |
 | scripts/utilities/stack-on-demand.ps1 | Orchestration Mode | B | manual | platform | Activate/validate/deactivate flow |

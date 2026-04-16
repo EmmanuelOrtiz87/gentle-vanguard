@@ -299,10 +299,11 @@ if (git remote | Select-String "origin") {
     Write-Host "SUCCESS: Session finished locally." -ForegroundColor Yellow
 }
 
-# 4. Generate Session Audit
-Write-Host "`nACTION: Generating Session Audit..." -ForegroundColor Cyan
+# 4. Generate Session Audit, Budget, and Telemetry
+Write-Host "`nACTION: Generating Session Artifacts (Audit, Budget, Telemetry)..." -ForegroundColor Cyan
 
 $auditScript = Join-Path $scriptDir "generate-session-audit.ps1"
+$artifactsScript = Join-Path $scriptDir "generate-session-artifacts.ps1"
 $metricsScript = Join-Path $scriptDir "aggregate-metrics.ps1"
 $reportScript = Join-Path $scriptDir "generate-audit-report.ps1"
 
@@ -311,6 +312,21 @@ if (Test-Path $auditScript) {
         & $auditScript -End
     } catch {
         Write-Warning "Could not generate audit: $_"
+    }
+}
+
+if (Test-Path $artifactsScript) {
+    try {
+        $sessionId = if ($env:WFS_SESSION_ID) { $env:WFS_SESSION_ID } else { $null }
+        $sessionFile = if ($env:WFS_SESSION_FILE) { $env:WFS_SESSION_FILE } else { $null }
+        
+        if ($sessionId -or $sessionFile) {
+            & $artifactsScript -Force -SessionId $sessionId -SessionFile $sessionFile
+        } else {
+            Write-Log "No active session found for artifact generation" "WARN"
+        }
+    } catch {
+        Write-Warning "Could not generate artifacts: $_"
     }
 }
 

@@ -139,8 +139,20 @@ if (-not $SkipEngram) {
     }
 }
 
-# 4. Generate final report
-Write-Step "Stage 4: Final Report"
+# 4. Generate Session Artifacts (Audit, Budget, Telemetry) and Final Report
+Write-Step "Stage 4: Session Artifacts & Final Report"
+
+$artifactsScript = Join-Path $scriptDir 'generate-session-artifacts.ps1'
+if (Test-Path $artifactsScript) {
+    try {
+        Write-Info "Generating session artifacts (audit, budget, telemetry)..."
+        & $artifactsScript -Force -SessionId $SessionId
+        Write-Ok "Session artifacts generated"
+    } catch {
+        Write-Warn "Could not generate session artifacts: $_"
+    }
+}
+
 $reportDir = Join-Path $repoRoot 'docs\sessions'
 New-Item -ItemType Directory -Path $reportDir -Force | Out-Null
 
