@@ -39,6 +39,42 @@ if (-not (Test-Path $reviewDir)) {
     New-Item -ItemType Directory -Path $reviewDir -Force | Out-Null
 }
 
+$sessionId = $env:WFS_SESSION_ID
+$sessionActive = -not [string]::IsNullOrWhiteSpace($sessionId)
+
+if (-not $sessionActive) {
+    Write-Host "[WARN] No active session detected (WFS_SESSION_ID not set)." -ForegroundColor Yellow
+    $forceOverride = Read-Host "Proceed without active session? This will be logged in audit. (yes/no)"
+    if ($forceOverride -notmatch '^(y|yes|si|s)$') {
+        Write-Host "[INFO] Operation cancelled. Please start a session with '.\scripts\utilities\start-session.ps1' first." -ForegroundColor Cyan
+        exit 0
+    }
+}
+
+$sessionId = $env:WFS_SESSION_ID
+$sessionActive = -not [string]::IsNullOrWhiteSpace($sessionId)
+
+if (-not $sessionActive) {
+    Write-Host "[WARN] No active session detected (WFS_SESSION_ID not set)." -ForegroundColor Yellow
+    $forceOverride = Read-Host "Proceed without active session? This will be logged in audit. (yes/no)"
+    if ($forceOverride -notmatch '^(y|yes|si|s)$') {
+        Write-Host "[INFO] Operation cancelled. Please start a session with '.\scripts\utilities\start-session.ps1' first." -ForegroundColor Cyan
+        exit 0
+    }
+}
+
+$sessionId = $env:WFS_SESSION_ID
+$sessionActive = -not [string]::IsNullOrWhiteSpace($sessionId)
+
+if (-not $sessionActive) {
+    Write-Host "[WARN] No active session detected (WFS_SESSION_ID not set)." -ForegroundColor Yellow
+    $forceOverride = Read-Host "Proceed without active session? This will be logged in audit. (yes/no)"
+    if ($forceOverride -notmatch '^(y|yes|si|s)$') {
+        Write-Host "[INFO] Operation cancelled. Please start a session with '.\scripts\utilities\start-session.ps1' first." -ForegroundColor Cyan
+        exit 0
+    }
+}
+
 $gitUser = git config user.name 2>$null
 if ([string]::IsNullOrWhiteSpace($gitUser)) {
     $gitUser = $env:USERNAME
@@ -55,7 +91,6 @@ if (Test-Path $templateFile) {
     $filesList = ($changedFiles | ForEach-Object { "- $_" }) -join "`n"
     if ([string]::IsNullOrWhiteSpace($filesList)) { $filesList = "- No modified files" }
     
-    # Detect Specs for SDD integration
     $specsPath = Join-Path $projectRoot "docs/specs"
     $specLink = "None found"
     $specStatus = "N/A (Optional)"
@@ -70,10 +105,16 @@ if (Test-Path $templateFile) {
     $content = Get-Content $templateFile -Raw
     $content = $content.Replace("{{DATE}}", $date)
     $content = $content.Replace("{{FULL_DATE}}", $fullDate)
+    $content = $content.Replace("{{GIT_USER}}", $gitUser)
     $content = $content.Replace("{{BRANCH}}", $branch)
     $content = $content.Replace("{{CHANGED_FILES}}", $filesList)
     $content = $content.Replace("{{SPEC_LINK}}", $specLink)
     $content = $content.Replace("{{SPEC_STATUS}}", $specStatus)
+
+    if (-not $sessionActive) {
+        $auditNote = "`n> [!WARNING]`n> This review was generated WITHOUT an active session by explicit user override.`n> **Owner:** $gitUser`n> **Timestamp:** $fullDate`n"
+        $content = $auditNote + "`n" + $content
+    }
 
     $content | Out-File -FilePath $reviewFile -Encoding UTF8
     Write-Host "[OK] Session review generated from template at: $reviewFile" -ForegroundColor Green
