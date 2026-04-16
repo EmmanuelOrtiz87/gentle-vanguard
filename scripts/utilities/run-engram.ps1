@@ -125,9 +125,82 @@ if (-not $engramPath) {
     }
 }
 
-if (-not $engramPath) {
-    throw "engram not found. Install the tool or add it to PATH before using this launcher."
+$engramFallback = Join-Path $engramDataDir 'fallback-memory.json'
+
+function Write-ContinuityLog {
+    param([string]$Message, [string]$Level = 'INFO')
+    $timestamp = Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz'
+    $logEntry = @{
+        timestamp = $timestamp
+        level = $Level
+        message = $Message
+        session = $env:WFS_SESSION_ID
+    }
+    $logFile = Join-Path $engramDataDir 'continuity-log.jsonl'
+    $logEntry | ConvertTo-Json -Compress | Out-File -FilePath $logFile -Append -Encoding UTF8
+    
+    $color = switch ($Level) {
+        'WARN' { 'Yellow' }
+        'ERROR' { 'Red' }
+        default { 'Gray' }
+    }
+    Write-Host "[$Level] $Message" -ForegroundColor $color
 }
 
-& "$engramPath" @EngramArgs
+function Save-ToFallback {
+    param(
+        [string]$Operation,
+        [hashtable]$Data
+    )
+    
+    if (-not (Test-Path $engramFallback)) {
+        @{} | ConvertTo-Json | Out-File -FilePath $engramFallback -Encoding UTF8
+    }
+    
+    try {
+        $fallback = Get-Content $engramFallback -Raw | ConvertFrom-Json
+        if (-not $fallback.sessions) {
+            $fallback | Add-Member -NotePropertyName 'sessions' -NotePropertyValue @{}
+        }
+        
+        $sessionId = $env:WFS_SESSION_ID
+        if ([string]::IsNullOrWhiteSpace($sessionId)) {
+            $sessionId = 'unknown-session'
+        }
+        
+        if (-not $fallback.sessions.$sessionId) {
+            $fallback.sessions | Add-Member -NotePropertyName $sessionId -NotePropertyValue @{}
+        }
+        
+        $fallback.sessions.$sessionId | Add-Member -NotePropertyName $Operation -NotePropertyValue $Data -Force
+        $fallback | ConvertTo-Json -Depth 10 | Out-File -FilePath $engramFallback -Encoding UTF8
+        Write-ContinuityLog -Message "Persisted '$Operation' to fallback memory" -Level 'INFO'
+    } catch {
+        Write-ContinuityLog -Message "Failed to save fallback memory: $_" -Level 'ERROR'
+    }
+}
+
+if (-not $engramPath) {
+    Write-ContinuityLog -Message 'Engram CLI not available. Operating in offline continuity mode.' -Level 'WARN'
+    Write-Host '[INFO] All session data will be stored locally in .engram-data/ for later sync.' -ForegroundColor Cyan
+    
+    if ($EngramArgs -and $EngramArgs.Count -gt 0) {
+        Save-ToFallback -Operation 'pending-sync' -Data @{ args = $EngramArgs; timestamp = Get-Date }
+    }
+    
+    exit 0
+}
+
+try {
+    & "$engramPath" @EngramArgs
+    if ($LASTEXITCODE -ne 0) {
+        Write-ContinuityLog -Message "Engram exited with code $LASTEXITCODE. Saving state to fallback." -Level 'WARN'
+        Save-ToFallback -Operation 'last-command' -Data @{ args = $EngramArgs; exitCode = $LASTEXITCODE }
+    }
+} catch {
+    Write-ContinuityLog -Message "Engram execution failed: $_. State saved to fallback." -Level 'ERROR'
+    Save-ToFallback -Operation 'error-state' -Data @{ args = $EngramArgs; error = $_.Exception.Message }
+    exit 1
+}
+
 exit $LASTEXITCODE
