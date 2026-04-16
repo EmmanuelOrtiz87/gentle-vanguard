@@ -147,6 +147,41 @@ function Migrate-LegacyBacklog {
     }
 }
 
+function Update-BacklogReadme {
+    if (-not (Test-Path $itemsFile)) { return }
+    
+    $items = Get-Content $itemsFile | ConvertFrom-Json
+    $readmePath = Join-Path $backlogDir 'README.md'
+    $templatePath = Join-Path $repoRoot 'docs\templates\backlog-readme-template.md'
+    
+    # Default template if not found
+    $template = "# Backlog de Desarrollo\n\n> **Nota:** Este archivo es generado automáticamente a partir de `items.json`.\n\n## Resumen\n\n| Estado | Cantidad |\n|--------|----------|\n| Pendiente | {{PENDING_COUNT}} |\n| En Progreso | {{IN_PROGRESS_COUNT}} |\n| Completado | {{DONE_COUNT}} |\n\n## Lista Detallada\n\n{{BACKLOG_TABLE}}\n\n---\n*Generado: {{GENERATION_DATE}}*"
+    
+    if (Test-Path $templatePath) {
+        $template = Get-Content $templatePath -Raw
+    }
+    
+    $pending = @($items | Where-Object { $_.status -eq 'pending' }).Count
+    $inProgress = @($items | Where-Object { $_.status -eq 'in-progress' }).Count
+    $done = @($items | Where-Object { $_.status -eq 'done' }).Count
+    
+    $table = "| ID | Título | Prioridad | Estado | Owner |\n|----|--------|-----------|--------|-------|\n"
+    foreach ($item in $items) {
+        if ($item.status -ne 'done') {
+            $table += "| $($item.id) | $($item.title) | $($item.priority) | $($item.status) | $($item.owner) |\n"
+        }
+    }
+    
+    $content = $template.Replace("{{PENDING_COUNT}}", $pending)
+    $content = $content.Replace("{{IN_PROGRESS_COUNT}}", $inProgress)
+    $content = $content.Replace("{{DONE_COUNT}}", $done)
+    $content = $content.Replace("{{BACKLOG_TABLE}}", $table)
+    $content = $content.Replace("{{GENERATION_DATE}}", (Get-Date -Format 'yyyy-MM-dd HH:mm'))
+    
+    $content | Out-File -FilePath $readmePath -Encoding UTF8BOM
+    Write-Host "[OK] README actualizado en $readmePath" -ForegroundColor Gray
+}
+
 function List-BacklogItems {
     if (-not (Test-Path $itemsFile)) {
         Write-Host "[INFO] Backlog is empty." -ForegroundColor Cyan
@@ -163,6 +198,8 @@ function List-BacklogItems {
         }
         Write-Host "[$($item.id)] $($item.title) (Priority: $($item.priority), Status: $($item.status))" -ForegroundColor $color
     }
+    
+    Update-BacklogReadme
 }
 
 switch ($Action) {
