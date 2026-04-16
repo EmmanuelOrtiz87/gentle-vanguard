@@ -1,0 +1,55 @@
+﻿Timestamp,SessionID,Category,Status,Agent,Message,SLO_ms
+2026-04-16T19:35:47.5365341-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:35:47.5528219-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:39:51.4170092-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:39:51.5215708-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:39:55.5486779-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:39:55.6311703-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:00.8094908-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:00.8630549-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:01.3344995-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:01.3950630-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:02.3285142-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:02.3686261-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:05.3568029-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:05.4009472-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:09.4885017-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:09.5494415-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:10.7370083-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:10.7829170-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:11.1778302-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:11.2199112-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:11.8033606-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:11.8581650-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:12.5870855-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:12.6427503-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:12.7637352-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:12.8147538-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:12.7745254-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:12.9399748-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:13.5600379-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:13.6177065-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:14.0595278-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:14.1205135-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:15.4041843-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:15.4547898-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:16.6626318-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:16.7094339-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:17.5881824-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:17.6250782-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:18.2934360-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:18.3200122-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:18.8957429-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:18.9214725-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:19.0005510-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:19.0260025-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:19.4283502-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:19.4493782-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:19.4545758-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:19.4864467-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:40:20.5401553-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:40:20.5538559-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:50:03.5044650-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:50:03.5265228-03:00,manual-run,Governance,OK,CRITIC,All rules met,0
+2026-04-16T19:50:06.5981251-03:00,manual-run,Initial Scan,OK,ACTOR,Draft report generated,0
+2026-04-16T19:50:06.6109982-03:00,manual-run,Governance,OK,CRITIC,All rules met,0

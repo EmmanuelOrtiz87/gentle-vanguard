@@ -110,9 +110,10 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 | **Testing** | testing-strategy, testing-skill, playwright, pytest |
 | **AI** | ai-sdk-5, mcp-skill |
 | **Workflow** | github-pr, jira-task, jira-epic, release-management |
-| **Quality** | typescript, code-review, security, technical-debt, web-performance-optimization |
+| **Quality** | typescript, code-review, security, technical-debt, web-performance-optimization, judgment-day |
 | **Operations** | observability, incident-response-plan |
 | **Governance** | project-scaffolding, documentation, architecture, git-workflow, foundation-manager |
+| **SDD Lifecycle** | sdd-init, sdd-explore, sdd-propose, sdd-spec, sdd-design, sdd-tasks, sdd-apply, sdd-verify, sdd-archive |
 | **Script Engineering** | script-governance, script-runtime-engineering |
 
 ---
