@@ -12,8 +12,8 @@ param(
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $projectRoot = Resolve-Path (Join-Path $scriptDir "..")
-$auditDir = Join-Path $projectRoot ".audit"
-$metricsDir = Join-Path $auditDir "metrics"
+$auditDir = Join-Path $projectRoot "docs\audits"
+$metricsDir = Join-Path $projectRoot "docs\sessions\metrics"
 $reportsDir = Join-Path $auditDir "reports"
 
 function Write-Log {
