@@ -35,7 +35,7 @@ pwsh -NoProfile -File ./scripts/utilities/update-tools.ps1 -DryRun
 
 ## Runtime Priority Model
 
-1. Session startup uses `gentle-ai` as the primary runtime when available.
+1. Session startup uses the native runtime router to select the primary runtime.
 2. The stack CLI (`stack-on-demand.ps1`) is used as fallback when primary startup fails or is unavailable.
 3. Runtime preference is persisted in `config/orchestrator.json` under `runtime_preference`.
 4. Fallback remains deterministic and policy-driven to avoid runtime inconsistency.
@@ -53,7 +53,7 @@ High portability is implemented for these areas:
 
 1. OS-aware dependency and tool install selection.
 2. Cross-platform home directory and PATH refresh handling.
-3. Bash detection for tools that require shell scripts, such as `gga`.
+3. Bash detection for shell-based utilities when required by optional tooling.
 4. Optional AI tool handling when a provider or CLI is missing.
 
 The remaining intentional constraint is:
@@ -63,10 +63,8 @@ The remaining intentional constraint is:
 ## Tools Covered
 
 1. `engram`
-2. `gga`
-3. `gentle-ai`
-4. `gentleman-skills`
-5. `opencode`
+2. `gentleman-skills`
+3. `opencode`
 
 Optional MCP integrations are validated separately through `config/workspace.config.json`.
 

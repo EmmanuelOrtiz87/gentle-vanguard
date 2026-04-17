@@ -35,8 +35,7 @@ These enhance the foundation but are **not required**:
 | Tool | Type | Purpose | Install |
 |------|------|---------|---------|
 | **engram** | opencode plugin | Persistent memory across sessions | Built into opencode |
-| **gga** | CLI | AI-powered code review | `git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git && cd gentleman-guardian-angel && bash install.sh` |
-| **gentle-ai** | CLI | Ecosystem configurator | `go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest` |
+| **gentleman-skills** | Repository | Optional community skill library | `git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git` |
 
 ## Quick Setup for New Developer
 
@@ -90,16 +89,11 @@ pwsh -NoProfile -File ./scripts/foundation/bootstrap.ps1
 gf validate
 ```
 
-### 3. Optional: Additional Tools
+### 3. Optional: Additional Tooling
 
 ```powershell
-# AI Code Review (Git Bash)
-git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git
-cd gentleman-guardian-angel
-bash install.sh
-
-# Ecosystem Configurator
-go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest
+# Optional external skills library
+git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git
 
 # One-shot updater for all tools
 .\scripts\utilities\wf.ps1 update-tools
@@ -108,10 +102,7 @@ go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest
 Linux or macOS equivalent:
 
 ```bash
-git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git
-cd gentleman-guardian-angel
-bash install.sh
-go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest
+git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git
 pwsh -NoProfile -File ./scripts/utilities/wf.ps1 update-tools
 ```
 
@@ -127,7 +118,7 @@ pwsh -NoProfile -File ./scripts/utilities/wf.ps1 update-tools
 
 1. The workspace is platform-aware and reads platform-specific install metadata from `config/workspace.config.json`.
 2. PowerShell is still the canonical runtime for automation scripts.
-3. Bash is additionally required for tools whose upstream installer is shell-based, such as `gga`.
+3. Bash is useful for shell-based helper tooling in cross-platform environments.
 4. AI editor or provider choice is flexible; the foundation is not tied to a single IDE or AI agent.
 
 ## Verification
@@ -167,9 +158,8 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 │   [OK] AI Agent (opencode, claude, copilot, etc.)             │
 │                                                              │
 │   Optional but recommended:                                  │
-│   ⬜ gga (AI code review)                                   │
+│   ⬜ gentleman-skills (external skill pack)                 │
 │   ⬜ engram (memory - built into opencode)                  │
-│   ⬜ gentle-ai (ecosystem config)                           │
 │                                                              │
 └─────────────────────────────────────────────────────────────┘
 ```

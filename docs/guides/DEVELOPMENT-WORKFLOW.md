@@ -203,7 +203,7 @@ Use `wf.ps1 publish` for end-to-end execution with governance gates:
 | Hook | Trigger | Actions |
 |------|---------|---------|
 | `pre-commit` | `git commit` | Secrets scan, format check |
-| `pre-push` | `git push` | GGA + GitFlow policy + governance + homologation drift gate |
+| `pre-push` | `git push` | Native review + GitFlow policy + governance + homologation drift gate |
 | `commit-msg` | `git commit` | Commit message validation |
 
 ## Tools

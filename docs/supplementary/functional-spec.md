@@ -16,7 +16,7 @@ Workspace Foundation is an agnostic development infrastructure platform designed
 | **E2E Automation** | From repository creation to Pull Request in a single flow. |
 | **Repo Independence** | Compatible with Bitbucket, GitHub, or on-premise infrastructure. |
 | **Review Automation** | Automatic "Session Reviews" save hours of technical documentation. |
-| **Proactive Security** | Integration with GGA to prevent credential leaks in real-time. |
+| **Proactive Security** | Native pre-commit controls to prevent credential leaks in real-time. |
 | **Total Traceability** | Versioning system with automatic Tags for audits and rollbacks. |
 
 ## Impact on Development Process
@@ -27,7 +27,7 @@ Foundation transforms a manual, error-prone process into an automated "software 
 
 ## Disadvantages / Challenges
 - **Initial Learning Curve:** Developers must adapt to using the foundation scripts.
-- **Tools Maintenance:** Requires keeping base repositories (Engram/GGA) up to date.
+- **Tools Maintenance:** Requires keeping base repositories (Engram and native policies) up to date.
 
 ## Impact on Production Release
 By ensuring that code leaving the developer's machine is already compiled, validated by linters, and documented, the failure rate in CI/CD pipelines is drastically reduced, accelerating *Time-to-Market*.

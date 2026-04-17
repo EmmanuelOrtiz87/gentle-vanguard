@@ -23,12 +23,12 @@ This document contains detailed content for the 13 slides in the executive prese
 ### Slide 4: The 3 Strategic Pillars
 **Suggested Graphic:** Value triangle.
 1. **Automation:** Repetitive processes eliminated.
-2. **Quality:** Embedded security and validation (GGA).
+2. **Quality:** Embedded security and validation (native review engine).
 3. **AI-Ready:** Optimized to work with AI Agents (Engram).
 
 ### Slide 5: Simplified Architecture
 **Flow:**
-[Base Layer: Foundation] -> [Tools Layer: Engram/GGA] -> [Business Value: Projects]
+[Base Layer: Foundation] -> [Tools Layer: Engram/Native Review] -> [Business Value: Projects]
 **Concept:** Total independence between the technical base and business logic.
 
 ### Slide 6: The "Bootstrap Effect"

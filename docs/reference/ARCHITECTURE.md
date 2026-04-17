@@ -54,8 +54,8 @@
       │  │                    AI ECOSYSTEM LAYER                        │   │
       │  │                                                              │   │
       │  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │   │
-      │  │  │ Gentle-AI   │  │ Gentleman-  │  │   Engram    │         │   │
-      │  │  │ Config     │  │   Skills    │  │   Memory    │         │   │
+      │  │  │ Native     │  │ Gentleman-  │  │   Engram    │         │   │
+      │  │  │ Runtime    │  │   Skills    │  │   Memory    │         │   │
       │  │  └─────────────┘  └─────────────┘  └─────────────┘         │   │
       │  │                                                              │   │
       │  └─────────────────────────────────────────────────────────────┘   │
@@ -85,7 +85,7 @@
         │                             │
         │                             └──► Setup-Hooks
         │                                      │
-        │                                      ├──► GGA-Precommit-Hook
+        │                                      ├──► Native-Precommit-Review
         │                                      └──► Code-Review-Hook
         │
         ├──► Review-Orchestrator ──► Security-Scan
@@ -96,7 +96,7 @@
         │
         └──► AI-Ecosystem
                    │
-                   ├──► Gentle-AI (SDD Workflow)
+                   ├──► Native Runtime Router (SDD Workflow)
                    ├──► Gentleman-Skills (Framework Patterns)
                    └──► Engram (Persistent Memory)
                             │

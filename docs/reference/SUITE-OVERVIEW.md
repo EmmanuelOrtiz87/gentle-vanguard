@@ -64,8 +64,8 @@ Gentleman Foundation Suite
 | Tool | Status | Integration | Purpose |
 |------|--------|-------------|---------|
 | **Engram** | âœ… Active (Required) | Memory system | Session persistence |
-| **GGA** | ðŸŸ¡ Optional | Guardian fallback | Secondary validation when blocked |
-| **Gentle-AI** | ðŸŸ¡ Optional | Compatibility CLI | Extra orchestration runtime |
+| **Native Review Engine** | âœ… Active | Review + quality gates | Primary validation flow |
+| **Native Runtime Router** | âœ… Active | Runtime orchestration | Policy-driven execution |
 | **Gentleman-Skills** | ðŸŸ¡ Optional | External skill library | Community add-on skills |
 
 ---

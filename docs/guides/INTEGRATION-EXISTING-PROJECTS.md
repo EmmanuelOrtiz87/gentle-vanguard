@@ -24,7 +24,7 @@ Workspace Foundation is **designed to be additive**, meaning it adds capabilitie
 
 | Tool | Purpose |
 |------|---------|
-| Go 1.21+ | Go-based tools (Gentle-AI, Engram) |
+| Go 1.21+ | Go-based tooling (Engram and automation support) |
 | Node.js 20+ | Node.js projects |
 | Docker | Containerized development |
 
@@ -73,7 +73,7 @@ git status
 #    - Detect existing project structure
 #    - Add .audit/ directory
 #    - Add AGENTS.md
-#    - Configure AI tools
+#    - Configure native workflow tooling
 #    - Initialize audit system
 ```
 

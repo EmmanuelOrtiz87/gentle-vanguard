@@ -11,8 +11,8 @@ This document standardizes how Spec-Driven Development (SDD) is applied in this 
 ## Ownership Model
 
 1. Primary owner: project orchestrator.
-2. Governance support: gga (compliance signals, checks, diagnostics).
-3. Implementation support: gentle-ai (execution assistant only).
+2. Governance support: native review and compliance checks.
+3. Implementation support: orchestrator-guided execution assistants.
 
 ## Policy Scope
 
@@ -73,5 +73,5 @@ For exception paths, a mini-spec must exist before merge with:
 ## References
 
 1. `skills/project-orchestrator-skill/SKILL.md`
-2. `skills/sdd-skill/SKILL.md`
+2. `skills/sdd-lifecycle/SKILL.md`
 3. `docs/specs/README.md`
