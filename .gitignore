@@ -44,3 +44,7 @@ docs/sessions/metrics/token-guard-usage.csv
 
 # Local artifact archive (kept on disk, not in repo)
 docs/.local-archive/
+
+# Cloud Agent Connector - LOCAL SECRETS (NEVER commit)
+config/cloud-agents.local.json
+cloud-agents.local.json

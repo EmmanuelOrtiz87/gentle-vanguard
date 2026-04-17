@@ -348,23 +348,21 @@ Use this when strict cleanup reports drift or when you want to normalize the wor
 
 ---
 
-## �📖 Documentation
+## 📖 Documentation
 
 ### For Developers
 - **[Session Guide](docs/guides/SESSION-GUIDE.md)**: Daily workflow and commands
 - **[Tool Activation](docs/guides/TOOL-ACTIVATION.md)**: Auto-activation system
-- **[Code Standards](docs/guides/CODE-STANDARDS.md)**: Development guidelines
-- **[Testing Strategy](docs/guides/TESTING-STRATEGY.md)**: Quality assurance
+- **[Testing Strategy](skills/testing-strategy-skill/SKILL.md)**: Quality assurance (see also `testing-strategy-skill`)
 
 ### For Project Leads
 - **[Architecture Overview](docs/reference/ARCHITECTURE.md)**: System design rationale
-- **[Skill Development](docs/skills/SKILL-DEVELOPMENT.md)**: Creating new AI skills
-- **[Template Creation](docs/templates/TEMPLATE-GUIDE.md)**: Building project templates
+- **[Skill Development](skills/SKILL-DEVELOPMENT.md)**: Creating new AI skills (see `skill-creator-skill`)
 
 ### For Administrators
-- **[Installation Guide](docs/setup/INSTALLATION.md)**: Complete setup instructions
-- **[Configuration](docs/setup/CONFIGURATION.md)**: Advanced configuration options
-- **[Troubleshooting](docs/setup/TROUBLESHOOTING.md)**: Common issues and solutions
+- **[Installation Guide](docs/getting-started/installation.md)**: Complete setup instructions
+- **[AI Configuration](docs/guides/AI-CONFIGURATION.md)**: AI provider setup
+- **[Getting Started](docs/getting-started/README.md)**: All setup guides
 
 ## 🔧 Configuration
 
@@ -754,7 +752,7 @@ skill-registry         # Build skills registry
 | `github-pr` | Create quality PRs with conventional commits | PR creation |
 | `jira-task` | Jira task creation | Task creation |
 | `jira-epic` | Jira epic creation | Epic creation |
-| `skill-creator` | Create new AI agent skills | Skill creation |
+| `skill-creator-skill` | Create new AI agent skills | Skill creation |
 
 ### Installation
 
@@ -866,15 +864,12 @@ workspace-foundation/
 
 | Document | Description |
 |----------|-------------|
-| [Installation Guide](docs/installation.md) | Setup instructions |
-| [Existing Projects](docs/INTEGRATION-EXISTING-PROJECTS.md) | Integrate into existing repos |
-| [AI Configuration](docs/AI-CONFIGURATION.md) | Cloud & local AI setup |
-| [Project Types](docs/project-types.md) | Template details |
+| [Installation Guide](docs/getting-started/installation.md) | Setup instructions |
+| [AI Configuration](docs/guides/AI-CONFIGURATION.md) | Cloud & local AI setup |
 | [Visual Guide](docs/VISUAL-GUIDE.md) | Complete visual reference |
-| [AI Models](docs/ai-models.md) | AI integration setup |
-| [Tools](docs/tools.md) | External tools reference |
 | [Developer Communication Policy](docs/guides/DEVELOPER-COMMUNICATION-POLICY.md) | Response-mode contract and enforcement |
-| [Technical Onboarding](docs/TECHNICAL-ONBOARDING.md) | Team training guide |
+| [Technical Onboarding](docs/supplementary/TECHNICAL-ONBOARDING.md) | Team training guide |
+| [Getting Started](docs/getting-started/README.md) | All setup guides |
 
 ## Requirements
 

@@ -1,0 +1,28 @@
+{
+  "version": "1.0.0",
+  "description": "Artifact retention policy for Foundation v2.1+",
+  "defaultMaxRepo": 1,
+  "defaultMaxLocal": 30,
+  "categories": {
+    "audits": {
+      "maxRepo": 5,
+      "maxLocal": 30,
+      "description": "Keep last 5 audit reports in repo for weekly trend analysis"
+    },
+    "sessions": {
+      "maxRepo": 1,
+      "maxLocal": 30,
+      "description": "Keep only latest session-start file in repo, archive rest"
+    },
+    "code-reviews": {
+      "maxRepo": 1,
+      "maxLocal": 30,
+      "description": "Keep only latest code review in repo"
+    }
+  },
+  "automation": {
+    "triggerOn": ["end-session", "day-end-closure"],
+    "manualCommand": ".\\scripts\\utilities\\rotate-artifacts.ps1",
+    "ciIntegration": true
+  }
+}

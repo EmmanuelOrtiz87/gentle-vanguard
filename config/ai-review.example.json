@@ -1,0 +1,45 @@
+{
+  "provider": "openai",
+  "filePatterns": ["*.ps1", "*.ts", "*.tsx", "*.js", "*.jsx", "*.py", "*.go", "*.java", "*.cs"],
+  "excludePatterns": ["*.test.ps1", "*.spec.ts", "*.test.ts", "*.test.js", "*.spec.js", "*.d.ts", "node_modules/*", "dist/*", "build/*"],
+  "rulesFile": "AGENTS.md",
+  "strictMode": true,
+  "timeout": 300,
+  "cache": {
+    "enabled": true,
+    "ttl": 86400
+  },
+  "providers": {
+    "openai": {
+      "envVar": "OPENAI_API_KEY",
+      "endpoint": "https://api.openai.com/v1/chat/completions",
+      "model": "gpt-4o"
+    },
+    "anthropic": {
+      "envVar": "ANTHROPIC_API_KEY",
+      "endpoint": "https://api.anthropic.com/v1/messages",
+      "model": "claude-3-5-sonnet-20241022"
+    },
+    "gemini": {
+      "envVar": "GEMINI_API_KEY",
+      "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+      "model": "gemini-2.0-flash"
+    },
+    "ollama": {
+      "endpoint": "http://localhost:11434/api/chat",
+      "model": "llama3.2",
+      "local": true
+    },
+    "github": {
+      "envVar": "GH_TOKEN",
+      "endpoint": "https://models.inference.ai.dev/chat/completions",
+      "model": "github/gpt-4o"
+    },
+    "bedrock": {
+      "envVar": "AWS_ACCESS_KEY_ID",
+      "region": "us-east-1",
+      "model": "anthropic.claude-3-5-sonnet-20241022",
+      "authType": "aws_sigv4"
+    }
+  }
+}

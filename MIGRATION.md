@@ -53,7 +53,7 @@ This pulls the latest skills, scripts, and policies from Foundation v1.0.0.
 ##### 4. Review New Governance Models
 
 Read these docs to understand new protocols:
-- `docs/guides/RELEASE-STRATEGY.md` — versioning and release process
+- `skills/release-management-skill/SKILL.md` — versioning and release process
 - `skills/project-orchestrator-skill/SKILL.md#DEFERRED-WORK-REGISTRY-PROTOCOL` — how to register deferred work
 - `skills/project-orchestrator-skill/SKILL.md#GLOBAL-VS-REPOSITORY-BOUNDARY-PROTOCOL` — coordination boundaries
 
@@ -90,7 +90,7 @@ Potential breaking changes to enable:
 
 **Q: Can I keep using `develop` branch after upgrading to v1.0.0?**
 
-A: Yes. Foundation continues to support `develop` as integration branch. New consumers cloning Foundation will get the `v1.0.0` tag (snapshot of main), but can create features on `develop` locally. See RELEASE-STRATEGY.md for branch design.
+A: Yes. Foundation continues to support `develop` as integration branch. New consumers cloning Foundation will get the `v1.0.0` tag (snapshot of main), but can create features on `develop` locally. See `skills/release-management-skill/SKILL.md` for branch design.
 
 **Q: Will v1.0.0 break my current projects?**
 
@@ -136,4 +136,4 @@ A: Yes. v1.0.0 is the first stable release and is production-ready. All governan
 
 ---
 
-**Next**: See [RELEASE-STRATEGY.md](./RELEASE-STRATEGY.md) for versioning and release process details.
+**Next**: See [release-management-skill](skills/release-management-skill/SKILL.md) for versioning and release process details.

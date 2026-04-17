@@ -95,7 +95,7 @@ gh pr create --title "feat(dashboard): add analytics" --body "$(cat <<'EOF'
 - [x] Manual testing complete
 
 ## Screenshots
-![Dashboard](url)
+![Dashboard](https://placeholder.com/dashboard.png) <!-- TODO: Add actual screenshot -->
 
 Closes #123
 EOF

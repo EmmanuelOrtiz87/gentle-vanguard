@@ -1,3 +1,10 @@
+---
+name: security-expert
+description: >
+  AI-powered security assistant for pre-commit validation, security audits, and secure coding.
+  Trigger: "security", "vulnerability", "secrets", "auth", "jwt"
+---
+
 # Security Expert Skill
 
 **Trigger Keywords:** security, secure, credentials, secrets, api-key, token, password, auth, jwt, oauth, ssl, tls, https, csrf, xss, sqli, injection, vulnerability, exploit, cipher, encrypt, decrypt, hash, signature, certificate, pem, jwt, bearer, basic-auth, cors, csrf, rate-limit, sanitize, validate
@@ -126,7 +133,7 @@ Found: 4 issues (1 critical, 1 high, 1 medium, 1 low)
 Action required: Review critical issues before commit
 ```
 
-### Report Format (docs/security-review.md)
+### Report Format (docs/security-review.md) — output path, created by agent
 ```markdown
 # Security Review Report
 

@@ -1,6 +1,185 @@
 {
   "schemaVersion": 1,
   "role": "source",
-  "foundationVersion": "0.2.0",
-  "assets": []
+  "foundationVersion": "2.1.0",
+  "lastUpdated": "2026-04-17",
+  "assets": [
+    {
+      "type": "script",
+      "path": "scripts/utilities/invoke-cloud-agent.ps1",
+      "description": "Cloud Agent Connector - Invoke external AI models (Bedrock, Difi, Azure, etc.)"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/invoke-judgment.ps1",
+      "description": "Judgment Day - Dual-agent adversarial review protocol"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/manage-backlog.ps1",
+      "description": "Backlog Management - JSON-based task management"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/create-skill.ps1",
+      "description": "Skill Factory - Automated skill generation"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/consolidate-telemetry.ps1",
+      "description": "Business Telemetry - Centralized metrics reporting"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/compact-memory.ps1",
+      "description": "Compact Memory - Session summarization"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/read-once-guard.ps1",
+      "description": "Read Once Guard - Prevent redundant file reads"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/mcp-monitor.ps1",
+      "description": "MCP Monitor - Auto-shutdown inactive MCP servers"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/setup-wizard.ps1",
+      "description": "Setup Wizard - Interactive dependency installation"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/sync-agent-instructions.ps1",
+      "description": "Agent Instructions Sync - Cross-platform sync for Claude, Copilot, etc."
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/manual-recovery.ps1",
+      "description": "Manual Recovery - Fallback when self-healing fails"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/invoke-ai-review.ps1",
+      "description": "GGA-Native AI Review - Multi-provider code review with caching"
+    },
+    {
+      "type": "hook",
+      "path": "hooks/pre-tool-format.ps1",
+      "description": "PreTool Auto-Format Hook - Lint/format before AI agent access"
+    },
+    {
+      "type": "config",
+      "path": "config/cloud-agents.json",
+      "description": "Cloud Agents Template Config (no secrets)"
+    },
+    {
+      "type": "config",
+      "path": "config/cloud-agents.local.example",
+      "description": "Cloud Agents Local Config Template"
+    },
+    {
+      "type": "config",
+      "path": "config/ai-review.example.json",
+      "description": "AI Review Config Template (GGA-native)"
+    },
+    {
+      "type": "guide",
+      "path": "docs/guides/CLOUD-AGENT-CONNECTOR.md",
+      "description": "Complete Cloud Agent Connector Setup Guide"
+    },
+    {
+      "type": "guide",
+      "path": "docs/guides/cloud-agent-security.md",
+      "description": "Cloud Agent Security Reference"
+    },
+    {
+      "type": "guide",
+      "path": "docs/guides/PRETOOL-FORMAT-HOOK.md",
+      "description": "PreTool Auto-Format Hook Integration Guide"
+    },
+    {
+      "type": "guide",
+      "path": "docs/guides/JUDGMENT-GUIDE.md",
+      "description": "Judgment Day Protocol Guide"
+    },
+    {
+      "type": "guide",
+      "path": "docs/guides/TELEMETRY.md",
+      "description": "Business Telemetry Guide"
+    },
+    {
+      "type": "guide",
+      "path": "docs/reference/GGA-ABSORPTION-PLAN.md",
+      "description": "GGA Native Integration Plan"
+    },
+    {
+      "type": "skill",
+      "path": "skills/cloud-agent-connector-skill",
+      "description": "Cloud Agent Connector Skill"
+    },
+    {
+      "type": "skill",
+      "path": "skills/pretool-format-hook-skill",
+      "description": "PreTool Auto-Format Hook Skill"
+    },
+    {
+      "type": "skill",
+      "path": "skills/business-telemetry-skill",
+      "description": "Business Telemetry Skill"
+    },
+    {
+      "type": "skill",
+      "path": "skills/backlog-management-skill",
+      "description": "Backlog Management Skill"
+    },
+    {
+      "type": "skill",
+      "path": "skills/skill-factory-skill",
+      "description": "Skill Factory Skill"
+    },
+    {
+      "type": "skill",
+      "path": "skills/judgment-day",
+      "description": "Judgment Day Skill"
+    },
+    {
+      "type": "skill",
+      "path": "skills/commit-hygiene-skill",
+      "description": "Commit Hygiene (GGA-native)"
+    },
+    {
+      "type": "skill",
+      "path": "skills/docs-alignment-skill",
+      "description": "Docs Alignment (GGA-native)"
+    },
+    {
+      "type": "skill",
+      "path": "skills/shellcheck-standards-skill",
+      "description": "Shell Standards (GGA-native)"
+    },
+    {
+      "type": "skill",
+      "path": "skills/testing-coverage-skill",
+      "description": "Testing Coverage (GGA-native)"
+    },
+    {
+      "type": "skill",
+      "path": "skills/guardian-fallback-skill",
+      "description": "Guardian Fallback - GGA as optional secondary skill"
+    },
+    {
+      "type": "guide",
+      "path": "docs/guides/GUARDIAN-FALLBACK-PROTOCOL.md",
+      "description": "Guardian Fallback Protocol - When and how to invoke GGA as fallback"
+    }
+  ],
+  "breakingChanges": [],
+  "migrationNotes": [
+    "cloud-agents.local.json is now gitignored - create from cloud-agents.local.example",
+    "PreTool hooks install to ~/.pretool-hooks/ via bootstrap-machine.ps1",
+    "GGA-native: invoke-ai-review.ps1 replaces external gga for code review",
+    "GGA is now OPTIONAL secondary skill - Foundation operates fully without it"
+  ]
 }

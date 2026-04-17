@@ -201,6 +201,177 @@ If approval is missing, record recommendation only and keep layout unchanged.
 - Run `wf.ps1 compact-start [goal]` before moving to a new chat thread.
 - Continue in a fresh thread using only compact prompt + immediate request.
 
+## 7-DIMENSION CODE REVIEW PROTOCOL
+
+Every substantial code review MUST cover all 7 dimensions. The orchestrator is responsible for ensuring complete coverage.
+
+### The 7 Dimensions
+
+| # | Dimension | Icon | Agent | Skills | Auto? |
+|---|----------|------|-------|--------|-------|
+| 1 | **Security** | [S] | AGENT-GOV | security-skill, security-expert-skill | Yes |
+| 2 | **Quality** | [Q] | AGENT-DEV | typescript-skill, code-review-orchestrator | Yes |
+| 3 | **Architecture** | [A] | AGENT-SAD | architecture-governance, api-design-skill | No |
+| 4 | **Testing** | [T] | AGENT-QA | testing-skill, playwright-skill, pytest-skill | No |
+| 5 | **Documentation** | [D] | AGENT-DOC | documentation-governance, README checks | No |
+| 6 | **API Design** | [API] | AGENT-SAD | api-design-skill, golang-api-skill | No |
+| 7 | **Git Workflow** | [G] | AGENT-GOV | git-workflow-skill, github-pr-skill | No |
+
+### Agent-to-Dimension Mapping
+
+```
+ORCHESTRATOR
+    │
+    ├── AGENT-BA     → BDD Scenarios, Requirements
+    │
+    ├── AGENT-SAD    → [A] Architecture + [API] API Design
+    │                   ├── architecture-governance
+    │                   ├── api-design-skill
+    │                   ├── database-relational-skill
+    │                   └── database-nosql-skill
+    │
+    ├── AGENT-DEV    → [Q] Quality + Code Implementation
+    │                   ├── typescript-skill
+    │                   ├── code-review-orchestrator-skill
+    │                   ├── technical-debt-skill
+    │                   └── security-skill (basic)
+    │
+    ├── AGENT-QA     → [T] Testing + Validation
+    │                   ├── testing-strategy-skill
+    │                   ├── testing-skill
+    │                   ├── playwright-skill
+    │                   ├── pytest-skill
+    │                   └── judgment-day (dual-review)
+    │
+    ├── AGENT-OPS    → Infrastructure, CI/CD
+    │                   ├── docker-devops-skill
+    │                   ├── kubernetes-deployment
+    │                   └── terraform-infrastructure
+    │
+    ├── AGENT-GOV    → [S] Security + [G] Git Workflow
+    │                   ├── security-expert-skill
+    │                   ├── git-workflow-skill
+    │                   ├── observability-skill
+    │                   └── incident-response-plan
+    │
+    └── AGENT-DOC    → [D] Documentation
+                        ├── documentation-governance
+                        ├── readme-standards
+                        └── docs-structure
+```
+
+### Review Scope Commands
+
+```powershell
+wf review                # Full 7-dimension review
+wf review --scope quick  # Security + Quality only (~30s)
+wf review --scope full   # All 7 dimensions
+wf review --scope security   # Dimension 1 only
+wf review --scope quality   # Dimension 2 only
+wf review --scope testing   # Dimension 4 only
+```
+
+### Mandatory Coverage Rules
+
+1. **PRE-COMMIT**: Run `wf review --scope quick` (Security + Quality)
+2. **PRE-MERGE**: Run `wf review --scope full` (all 7 dimensions)
+3. **JUDGMENT DAY**: Invoke for adversarial dual-review before major releases
+
+### Severity Matrix
+
+| Level | Icon | Action | Exit Code |
+|-------|------|--------|-----------|
+| CRITICAL | [!C] | BLOCK commit | 1 |
+| HIGH | [!H] | WARN + require review | 0 |
+| MEDIUM | [!M] | INFO + log | 0 |
+| LOW | [!L] | SUGGESTION | 0 |
+
+See: `skills/code-review-orchestrator-skill/SKILL.md` for full implementation.
+
+## GUARDIAN FALLBACK PROTOCOL
+
+GGA (Gentleman Guardian Angel) serves as **optional fallback** when Foundation cannot proceed autonomously.
+
+### Architecture
+
+```
+ORCHESTRATOR (Primary - Always Active)
+    │
+    ├── Can proceed? → Execute normally
+    │
+    ├── Blocked/Unknown? → Try self-healing
+    │
+    └── Still blocked? → GGA FALLBACK (Optional Guardian)
+            │
+            ├── Code review assistance
+            ├── Decision support
+            ├── Task completion assist
+            └── Commit hygiene
+```
+
+### Fallback Trigger Conditions
+
+| Condition | Action |
+|-----------|--------|
+| Unknown error blocks progress | Invoke GGA for diagnosis |
+| Complex decision needed | GGA reasoning assist |
+| PR needs final review | `gga run --pr-mode` |
+| Code review assistance | `invoke-ai-review.ps1` (native) OR `gga run` (fallback) |
+| Commit validation | GGA commit-msg hook |
+
+### Implementation
+
+```powershell
+# Check GGA availability
+function Test-GgaAvailable {
+    $gga = Get-Command gga -ErrorAction SilentlyContinue
+    return ($null -ne $gga)
+}
+
+# Fallback decision tree
+if (-not $canProceed) {
+    # Step 1: Self-healing attempt
+    $healed = Invoke-SelfHealing -Context $context
+    
+    if (-not $healed) {
+        # Step 2: GGA fallback (optional)
+        if (Test-GgaAvailable) {
+            Write-Host "[ORCHESTRATOR] Invoking GGA guardian..."
+            gga run --ci
+        } else {
+            # Step 3: Manual intervention flag
+            Write-Warn "Blocked: GGA unavailable - manual intervention required"
+            Flag-ForManualReview -Context $context
+        }
+    }
+}
+```
+
+### Dependency Model
+
+| Component | Required | Status |
+|-----------|----------|--------|
+| project-orchestrator | **YES** | Always active |
+| invoke-ai-review.ps1 | **YES** | Native replacement |
+| code-review-orchestrator | **YES** | 7-dimension review |
+| **GGA (gga)** | **NO** | **Optional guardian** |
+
+### Skill Loading Order
+
+```
+1. project-orchestrator        → ALWAYS (master conductor)
+2. session-workflow            → On session start/end
+3. context-engineering         → On context operations
+4. code-review-orchestrator    → On review requests
+5. guardian-fallback (GGA)     → ONLY when blocked (optional)
+```
+
+### Key Principle
+
+> **Foundation operates fully without GGA.** GGA is enhancement, not requirement.
+
+See: `skills/guardian-fallback-skill/SKILL.md` for full protocol.
+
 ## FAILURE POLICY
 
 1. Blocking failures: syntax errors, broken validation, missing required governance files.

@@ -1,4 +1,4 @@
-﻿# ðŸ¤– Gentleman Foundation Suite - Complete Overview
+# ðŸ¤– Gentleman Foundation Suite - Complete Overview
 
 > **AI-Powered Development Ecosystem - Production Ready**
 
@@ -235,7 +235,7 @@ git commit -m "feat: add new dashboard component"
 ## ðŸ“ž Support & Resources
 
 ### Documentation
-- **[Suite Overview](/docs/reference/SUITE-OVERVIEW.md)**: This document
+- **[Suite Overview](./SUITE-OVERVIEW.md)**: This document
 - **[Tool Activation](../guides/TOOL-ACTIVATION.md)**: Setup guide
 - **[Session Guide](../guides/SESSION-GUIDE.md)**: Daily workflow
 - **[Architecture](ARCHITECTURE.md)**: System design

@@ -1,12 +1,14 @@
 # rotate-artifacts.ps1
 # Rotates generated artifacts keeping only the most recent in the repo,
 # while archiving all older files locally (gitignored).
-# Usage: .\rotate-artifacts.ps1 [-MaxRepoFiles <n>] [-MaxLocalFiles <n>] [-Categories <array>]
+# Supports per-category retention limits via config file.
+# Usage: .\rotate-artifacts.ps1 [-MaxRepoFiles <n>] [-MaxLocalFiles <n>] [-Categories <array>] [-ConfigPath <path>]
 
 param(
-    [int]$MaxRepoFiles = 1,
-    [int]$MaxLocalFiles = 30,
+    [int]$MaxRepoFiles = -1,
+    [int]$MaxLocalFiles = -1,
     [string[]]$Categories = @("audits", "sessions", "code-reviews"),
+    [string]$ConfigPath = "",
     [switch]$Force
 )
 
@@ -15,6 +17,65 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = if ($scriptDir) { (Resolve-Path (Join-Path (Join-Path $scriptDir '..') '..')).Path } else { Get-Location }
 $docsDir = Join-Path $repoRoot 'docs'
 $archiveRoot = Join-Path $docsDir '.local-archive'
+
+# Load configuration from file or use defaults
+$defaultRetention = @{
+    "audits" = @{ "maxRepo" = 5; "maxLocal" = 30 }
+    "sessions" = @{ "maxRepo" = 1; "maxLocal" = 30 }
+    "code-reviews" = @{ "maxRepo" = 1; "maxLocal" = 30 }
+}
+
+$globalMaxRepo = $MaxRepoFiles
+$globalMaxLocal = $MaxLocalFiles
+
+if ([string]::IsNullOrWhiteSpace($ConfigPath)) {
+    $ConfigPath = Join-Path $repoRoot 'config\artifacts-retention.json'
+}
+
+if (Test-Path $ConfigPath) {
+    try {
+        $config = Get-Content $ConfigPath -Raw | ConvertFrom-Json
+        if ($config.PSObject.Properties.Name -contains "defaultMaxRepo") {
+            $globalMaxRepo = $config.defaultMaxRepo
+        }
+        if ($config.PSObject.Properties.Name -contains "defaultMaxLocal") {
+            $globalMaxLocal = $config.defaultMaxLocal
+        }
+        Write-Host "[CONFIG] Loaded retention config from $ConfigPath" -ForegroundColor Cyan
+    } catch {
+        Write-Host "[WARN] Could not load config file: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
+} else {
+    Write-Host "[INFO] No config file found, using defaults (repo: $globalMaxRepo, local: $globalMaxLocal)" -ForegroundColor Gray
+}
+
+function Get-CategoryRetention {
+    param([string]$Category)
+    
+    $repoLimit = if ($globalMaxRepo -gt 0) { $globalMaxRepo } else { $defaultRetention[$Category].maxRepo }
+    $localLimit = if ($globalMaxLocal -gt 0) { $globalMaxLocal } else { $defaultRetention[$Category].maxLocal }
+    
+    if (Test-Path $ConfigPath) {
+        try {
+            $config = Get-Content $ConfigPath -Raw | ConvertFrom-Json
+            if ($config.PSObject.Properties.Name -contains "categories") {
+                $catConfig = $config.categories.$Category
+                if ($catConfig) {
+                    if ($catConfig.PSObject.Properties.Name -contains "maxRepo") {
+                        $repoLimit = $catConfig.maxRepo
+                    }
+                    if ($catConfig.PSObject.Properties.Name -contains "maxLocal") {
+                        $localLimit = $catConfig.maxLocal
+                    }
+                }
+            }
+        } catch {
+            # Ignore config errors, use defaults
+        }
+    }
+    
+    return @{ "maxRepo" = $repoLimit; "maxLocal" = $localLimit }
+}
 
 function Test-NonArtifactDocChanges {
     param([string]$Root)
@@ -49,8 +110,12 @@ Write-Host ""
 Write-Host "============================================================================" -ForegroundColor Cyan
 Write-Host " ARTIFACT ROTATION" -ForegroundColor Cyan
 Write-Host "============================================================================" -ForegroundColor Cyan
-Write-Host " Max repo files per category: $MaxRepoFiles" -ForegroundColor Gray
-Write-Host " Max local archive files per category: $MaxLocalFiles" -ForegroundColor Gray
+if ($globalMaxRepo -gt 0) {
+    Write-Host " Default max repo files: $globalMaxRepo (override per-category config)" -ForegroundColor Gray
+}
+if ($globalMaxLocal -gt 0) {
+    Write-Host " Default max local files: $globalMaxLocal (override per-category config)" -ForegroundColor Gray
+}
 Write-Host ""
 
 if (-not $Force -and (Test-NonArtifactDocChanges -Root $repoRoot)) {
@@ -83,16 +148,20 @@ foreach ($category in $Categories) {
         continue
     }
 
-    Write-Host "[$($category.ToUpper())] Found: $count files (max repo: $MaxRepoFiles)" -ForegroundColor Cyan
+    $retention = Get-CategoryRetention -Category $category
+    $maxRepo = $retention.maxRepo
+    $maxLocal = $retention.maxLocal
+    
+    Write-Host "[$($category.ToUpper())] Found: $count files (max repo: $maxRepo, max local: $maxLocal)" -ForegroundColor Cyan
 
-    if ($count -le $MaxRepoFiles) {
+    if ($count -le $maxRepo) {
         Write-Host "  Keeping all $count files" -ForegroundColor Green
         $totalKept += $count
         continue
     }
 
-    $toArchive = $files | Select-Object -Skip $MaxRepoFiles
-    $kept = $files | Select-Object -First $MaxRepoFiles
+    $toArchive = $files | Select-Object -Skip $maxRepo
+    $kept = $files | Select-Object -First $maxRepo
     $archivePath = Join-Path $archiveRoot $category
     if (-not (Test-Path $archivePath)) {
         New-Item -ItemType Directory -Path $archivePath -Force | Out-Null
@@ -119,8 +188,8 @@ foreach ($category in $Categories) {
     $archiveFiles = Get-ChildItem -Path $archivePath -Filter "*.md" -File -ErrorAction SilentlyContinue |
                     Sort-Object LastWriteTime -Descending
 
-    if ($archiveFiles.Count -gt $MaxLocalFiles) {
-        $archiveDelete = $archiveFiles | Select-Object -Skip $MaxLocalFiles
+    if ($archiveFiles.Count -gt $maxLocal) {
+        $archiveDelete = $archiveFiles | Select-Object -Skip $maxLocal
         Write-Host "  Pruning archive: $($archiveDelete.Count) old files" -ForegroundColor Yellow
         foreach ($f in $archiveDelete) {
             try {

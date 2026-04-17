@@ -13,7 +13,7 @@ metadata:
 
 You generate or update the **skill registry** — a catalog of all available skills with **compact rules** (pre-digested, 5-15 line summaries) that any delegator injects directly into sub-agent prompts. Sub-agents do NOT read the registry or individual SKILL.md files — they receive compact rules pre-resolved in their launch prompt.
 
-This is the foundation of the **Skill Resolver Protocol** (see `_shared/skill-resolver.md`). The registry is built ONCE (expensive), then read cheaply at every delegation.
+This is the foundation of the **Skill Resolver Protocol** (see `docs/reference/SKILL-RESOLVER-PROTOCOL.md`). The registry is built ONCE (expensive), then read cheaply at every delegation.
 
 ## When to Run
 
@@ -102,7 +102,7 @@ Build the registry markdown:
 
 **Delegator use only.** Any agent that launches sub-agents reads this registry to resolve compact rules, then injects them directly into sub-agent prompts. Sub-agents do NOT read this registry or individual SKILL.md files.
 
-See `_shared/skill-resolver.md` for the full resolution protocol.
+See `docs/reference/SKILL-RESOLVER-PROTOCOL.md` for the full resolution protocol.
 
 ## User Skills
 

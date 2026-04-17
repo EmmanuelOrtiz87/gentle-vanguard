@@ -369,12 +369,12 @@ if (-not [string]::IsNullOrWhiteSpace($TaskName)) {
     if ((Test-Path $taskFile) -and -not $Force) {
         Write-Warn "Task brief already exists: $taskFile"
     } else {
-        New-TaskBriefContent -TaskTitle $TaskName | Out-File -FilePath $taskFile -Encoding UTF8BOM
+        New-TaskBriefContent -TaskTitle $TaskName | Out-File -FilePath $taskFile -Encoding UTF8
         Write-Ok "Task brief created: $taskFile"
     }
 }
 
-New-SessionBriefContent -Branch $branch -GitState $gitState -OrchestratorState $orchestratorState -EngramState $engramState -GgaState $ggaState -CustomRulesState $customRulesState -ResponseModeState $responseModeState -ResponseModeAutoState $responseModeAutoState -SessionFile $sessionFile -TaskFile $taskFile | Out-File -FilePath $sessionFile -Encoding UTF8BOM
+New-SessionBriefContent -Branch $branch -GitState $gitState -OrchestratorState $orchestratorState -EngramState $engramState -GgaState $ggaState -CustomRulesState $customRulesState -ResponseModeState $responseModeState -ResponseModeAutoState $responseModeAutoState -SessionFile $sessionFile -TaskFile $taskFile | Out-File -FilePath $sessionFile -Encoding UTF8
 
 Write-Ok "Session brief created: $sessionFile"
 Write-Host "`nNext steps:" -ForegroundColor Cyan

@@ -1,4 +1,4 @@
-﻿# Utility Scripts
+# Utility Scripts
 
 Miscellaneous utility scripts for various tasks.
 
@@ -91,7 +91,6 @@ git checkout feature/new-feature
 
 ## See Also
 
-- [STACK-SETUP.md](/docs/getting-started/STACK-SETUP.md) - Complete stack setup guide
-- [../diagnostics/system-diagnostics.ps1](../diagnostics/system-diagnostics.ps1) - Core diagnostics engine
-- [../hooks/post-checkout.ps1](../hooks/post-checkout.ps1) - Auto-repair on git checkout
+- [STACK-SETUP.md](../../docs/getting-started/STACK-SETUP.md) - Complete stack setup guide
+- [../../hooks/post-checkout.ps1](../../hooks/post-checkout.ps1) - Auto-repair on git checkout
 
