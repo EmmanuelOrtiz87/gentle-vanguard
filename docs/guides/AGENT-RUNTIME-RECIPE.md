@@ -9,21 +9,21 @@ Ensure these capabilities work together without conflicts:
 - Orchestrator (`project-orchestrator-skill`)
 - Skills registry / multi-agent lanes (`agent-router.ps1`)
 - Memory (`engram`)
-- Runtime configurator (`gentle-ai`)
+- Native runtime router (`runtime-router.ps1`)
 - Session governance (start/closure, token guard, compatibility checks)
 
 ## Prerequisites
 
 - `go`, `git`, `node` available
 - `workspace-foundation` cloned
-- `engram`, `gentle-ai`, `gga` installed and reachable in `PATH`
+- `engram` installed and reachable in `PATH`
 
 Quick validation:
 
 ```powershell
 .\tools\validate-session-stack.ps1 -Quiet
-.\workspace-foundation\scripts\utilities\run-gentle-ai.ps1 status
 .\workspace-foundation\scripts\utilities\wf.ps1 orchestrator-status
+.\workspace-foundation\scripts\utilities\wf.ps1 runtime-route
 .\workspace-foundation\scripts\utilities\agent-router.ps1 status
 ```
 
@@ -34,7 +34,7 @@ Quick validation:
 Use this for day-to-day coding in a local repo.
 
 1. Configure startup policy in `tools/session-autostart.config.json`:
-   - `autoStartGentleAi: true`
+   - `autoStartPrimaryRuntime: true`
    - `strictCompatibilityChecks: true` (recommended)
 2. Start session:
 
@@ -52,7 +52,7 @@ Use this for controlled infrastructure (VM, container host, internal runners).
 
 Recommended pattern:
 
-1. Provision required binaries (`engram`, `gentle-ai`, `gga`) in image/bootstrap.
+1. Provision required binaries (`engram`, AI agent CLI) in image/bootstrap.
 2. Run preflight before work units:
 
 ```powershell
@@ -101,7 +101,7 @@ Decision rule:
 
 | Component A | Component B | Conflict Risk | Notes |
 |---|---|---|---|
-| `gentle-ai` | Orchestrator skills | Low | `gentle-ai` is runtime CLI; orchestrator governs workflow/skills. |
+| Runtime router | Orchestrator skills | Low | Router selects native available runtime; orchestrator governs workflow/skills. |
 | `engram` | Orchestrator memory integration | Low | Native complement; required by token guard policy. |
 | Agent lanes (`agent-router`) | Session governance | Low | Registry status is used as readiness gate. |
 | Update checks (network) | Strict startup | Medium | Treat as non-critical; avoid blocking startup on update warnings. |
@@ -109,7 +109,7 @@ Decision rule:
 ## Recommended Default Policy
 
 - `strictCompatibilityChecks: true`
-- `autoStartGentleAi: true`
+- `autoStartPrimaryRuntime: true`
 - `enableIdleAutoClose: true`
 - `idleTimeoutMinutes: 60`
 
@@ -119,8 +119,8 @@ If startup fails in strict mode:
 
 ```powershell
 .\tools\validate-session-stack.ps1 -Quiet
-.\workspace-foundation\scripts\utilities\run-gentle-ai.ps1 status
 .\workspace-foundation\scripts\utilities\wf.ps1 orchestrator-status
+.\workspace-foundation\scripts\utilities\wf.ps1 runtime-route
 .\workspace-foundation\scripts\utilities\agent-router.ps1 status
 ```
 
@@ -135,4 +135,3 @@ If startup fails in strict mode:
 - [ ] Agent lanes are `READY`
 - [ ] Engram memory path available
 - [ ] Session closure artifact generated at end of cycle
-

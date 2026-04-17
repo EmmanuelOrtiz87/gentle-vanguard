@@ -28,8 +28,8 @@ The Gentleman Foundation automatically ensures all development tools are active:
 
 ### Tools Activated
 - **Engram**: Memory system for context persistence
-- **GGA**: Gentleman Guardian Angel (code review)
-- **Gentle-AI**: AI CLI assistant
+- **Native Review Engine**: Foundation code quality validation
+- **Native Runtime Orchestrator**: Policy-driven execution and guidance
 - **Orchestrator Skills**: Project coordination system
 
 ### Manual Activation
@@ -210,7 +210,7 @@ Automatically runs:
 ### Pre-push Hook
 
 Automatically runs:
-1. GGA local check (when available)
+1. Native review and policy checks
 2. Script governance validation
 3. Homologation drift check (fail on changes)
 

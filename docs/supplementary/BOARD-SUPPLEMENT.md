@@ -39,7 +39,7 @@ Líneas de código/semana          | 200    | 300     | 50%
 | Riesgo | Probabilidad | Impacto | Severidad | Mitigación |
 |--------|-------------|---------|-----------|------------|
 | Dependencia excesiva de IA | Media | Alto | [!]️ | Training en uso responsable |
-| Calidad inconsistente de código | Baja | Medio | ⚡ | GGA + code review obligatorio |
+| Calidad inconsistente de código | Baja | Medio | ⚡ | Native review + code review obligatorio |
 | Información sensible en prompts | Media | Alto | [!]️ | Políticas de no enviar secrets |
 | Vendor lock-in | Baja | Medio | ⚡ | Multi-provider (Claude + OpenAI) |
 | Costos de API descontrolados | Baja | Medio | ⚡ | Audit system + budget alerts |
@@ -70,7 +70,7 @@ Política:
 - SI enviar: código genérico, arquitectura, patterns
 
 Tools de seguridad:
-- Secret scanner en pre-commit (GGA)
+- Secret scanner en pre-commit (native)
 - .env en .gitignore obligatorio
 - Training de seguridad para el equipo
 ```
@@ -140,7 +140,7 @@ Semana 1: Fundamentos
 
 Semana 2: Uso Práctico
 ├── Sesión 3: Prompt Engineering básico (1 hr)
-├── Sesión 4: Code review con GGA (1 hr)
+├── Sesión 4: Code review con flujo nativo (1 hr)
 └── Hands-on: Generar una feature completa (2 hrs)
 
 Semana 3: Mastering
@@ -205,7 +205,7 @@ Workspace Foundation vs Alternativas
 │ Multi-provider   │ [OK]           │ ✗       │ ✗        │ [OK]        │
 │ Audit system     │ [OK]           │ ✗       │ ✗        │ ✗        │
 │ Templates        │ [OK]           │ ✗       │ ✗        │ ✗        │
-│ GGA review       │ [OK]           │ ✗       │ ✗        │ ✗        │
+│ Native review    │ [OK]           │ ✗       │ ✗        │ ✗        │
 │ Code $0          │ [OK]           │ ✗       │ ✗        │ ✗        │
 │ Customizable     │ [OK]           │ ✗       │ ✗        │ ✗        │
 │ Open source      │ [OK]           │ ✗       │ ✗        │ ✗        │

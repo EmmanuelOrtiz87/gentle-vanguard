@@ -23,7 +23,7 @@ Consolidated lessons learned, rules, mechanisms, and definitions agreed during h
 - Session IDs follow `session-YYYY-MM-DD-XX`.
 - Auto-close emits a user-facing re-entry message with explicit restart commands.
 - Compatibility gate validates coexistence of:
-  - `gentle-ai`
+  - native runtime router
   - `engram`
   - orchestrator status
   - agent registry status
@@ -67,7 +67,7 @@ Consolidated lessons learned, rules, mechanisms, and definitions agreed during h
 ## Operational Defaults Kept
 
 - `strictCompatibilityChecks=true`
-- `autoStartGentleAi=true`
+- `autoStartPrimaryRuntime=true`
 - `enableIdleAutoClose=true`
 - `idleTimeoutMinutes=60`
 
@@ -79,4 +79,3 @@ Consolidated lessons learned, rules, mechanisms, and definitions agreed during h
 .\tools\session-manual-end.cmd
 .\tools\validate-session-stack.ps1 -Quiet
 ```
-

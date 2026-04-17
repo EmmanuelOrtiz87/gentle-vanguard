@@ -52,6 +52,7 @@ If the user confirms, append the item. If not confirmed, do not register it.
 | FF-011 | 2026-04-15 | Plugin Architecture | Extensibility contract for third-party plugins with standardized interface. | medium | pending | framework-core | When community adoption grows. |
 | FF-012 | 2026-04-15 | Unified Metrics Dashboard | Centralized metrics collection with Grafana visualization. | medium | pending | framework-core | When operational scale requires centralized observability. |
 | FF-013 | 2026-04-15 | SDD Governance Enforcement | Mandatory SDD gate pre-merge with validated/done status. Template exists but not enforced. | high | pending | AGENT-GOV | When SDD baseline is stable for one sprint. |
+| FF-014 | 2026-04-17 | Optional Toolchain Deprecation | Remove validation and governance coupling to legacy optional integrations (`gga`, `gentle-ai`) and finalize native-only documentation/flows. | high | pending | AGENT-GOV | Next release planning cycle after native review/runtime metrics remain stable for one sprint. |
 
 ## Notes
 

@@ -14,7 +14,7 @@ The workspace foundation keeps external tools outside each project and versioned
 ## Tool Contract
 
 - `engram` handles memory and session persistence.
-- `gga` handles review and quality gates.
+- Foundation native review handles review and quality gates.
 - `gentleman-skills` provides reusable skills and rules as a cloned skills repository, not as a CLI.
 - `documentation-governance` standardizes README files, technical docs, code reviews, and script comments.
 - `architecture-governance` standardizes project structure decisions, defaults, and decision records.
@@ -39,12 +39,11 @@ Instead, the workspace bootstrap reads a config file and uses one of these strat
 1. Tool installation metadata is resolved per platform from `config/workspace.config.json`.
 2. `ensure-tools-active.ps1` and `update-tools.ps1` no longer assume platform-specific paths for home directories, PATH updates, or tool verification.
 3. The stack is OS-aware and wrapper-friendly, but the canonical automation layer is still PowerShell.
-4. Bash remains a required capability for `gga` because the upstream project installs and runs through shell scripts.
+4. Bash remains a useful cross-platform capability for shell-based helper utilities.
 
 ## Windows Note
 
-- `gga` can be installed automatically on Windows only if `bash` is available through Git Bash, WSL, or a similar environment.
-- If `bash` is missing, the bootstrap warns and skips that installer instead of failing the whole setup.
+- If optional shell-based tooling is unavailable, bootstrap warns and continues without blocking required capabilities.
 
 ## AI Tool Neutrality
 

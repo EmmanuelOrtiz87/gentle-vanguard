@@ -17,7 +17,7 @@ Central inventory of automation scripts with ownership, risk level, and executio
 | scripts/utilities/detect-ide-session.ps1 | Session Detection | A | yes | platform | Detection only, no mutations |
 | scripts/utilities/auto-init-dev-environment.ps1 | Startup | A | yes | platform | Quiet-safe activation checks |
 | scripts/utilities/ensure-tools-active.ps1 | Tooling | B | yes | platform | Avoids heavy auto-installs unless forced |
-| scripts/utilities/run-gentle-ai.ps1 | Tooling Bridge | B | manual | platform | Compatibility launcher when native `gentle-ai` is unavailable |
+| scripts/utilities/run-engram.ps1 | Memory Runtime | B | manual | platform | Canonical launcher for Engram session persistence |
 | scripts/utilities/wf.ps1 | Operator CLI | B | manual | dev-experience | Entrypoint for workflow commands |
 | scripts/utilities/enable-optional-post-commit.ps1 | Optional Hook Coverage | B | manual | dev-experience | Enables/disables optional post-commit automation (disabled by default) |
 | scripts/foundation/setup.sh | Foundation Setup | B | manual | platform | Cross-platform bootstrap entrypoint for Linux/macOS/WSL |
@@ -32,7 +32,7 @@ Central inventory of automation scripts with ownership, risk level, and executio
 | scripts/utilities/generate-session-audit.ps1 | Session Audit | B | manual | platform | Manages session lifecycle audit logging |
 | scripts/utilities/aggregate-metrics.ps1 | Metrics Aggregation | B | manual | platform | Aggregates daily/weekly/monthly metrics |
 | scripts/validation/homologate-workspace.ps1 | Workspace Hygiene | B | manual | dev-experience | Normalizes artifacts/docs, removes stale files, updates references |
-| scripts/git-hooks/pre-push | Git Hook Runtime | B | git-event | platform | Runs governed pre-push checks (gga, governance validation, homologation drift gate); post-commit hook intentionally not enabled in Foundation |
+| scripts/git-hooks/pre-push | Git Hook Runtime | B | git-event | platform | Runs governed pre-push checks (native review, governance validation, homologation drift gate); post-commit hook intentionally not enabled in Foundation |
 | scripts/utilities/stack-on-demand.ps1 | Orchestration Mode | B | manual | platform | Activate/validate/deactivate flow |
 | scripts/utilities/orchestrator-status.ps1 | Status | A | manual | platform | Read-oriented orchestration checks |
 | scripts/diagnostics/system-diagnostics.ps1 | Diagnostics | B | manual | platform | Health and repair checks |
@@ -70,8 +70,8 @@ Default for Foundation and generated projects remains disabled.
 | Engram memory | MUST | Validator advisory by default, strict-capable |
 | Orchestrator skill flow | MUST | Documented + validator file checks |
 | Session artifacts | MUST | Validator file checks |
-| `gga` command | SHOULD | Validator advisory warning |
-| `gentle-ai` command | SHOULD | Validator advisory warning |
+| Native review command path | MUST | Validator policy check |
+| Runtime router readiness | SHOULD | Validator advisory warning |
 | Focused validation before push | MUST | Validator execution + CI gate |
 
 Default policy: keep development flow unblocked for advisory gaps, but never hide them.

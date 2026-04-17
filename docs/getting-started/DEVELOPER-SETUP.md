@@ -100,23 +100,7 @@ git config --global init.defaultBranch main
 git config --global core.hooksPath "$env:USERPROFILE\.git-hooks"
 ```
 
-## Step 4: Install Optional Tools
-
-### AI Code Review (gga)
-
-```powershell
-git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git
-cd gentleman-guardian-angel
-bash install.sh
-```
-
-### Verify
-
-```powershell
-gga --version
-```
-
-### Update optional tools (recommended)
+## Step 4: Update Optional Tooling (Recommended)
 
 ```powershell
 .\scripts\utilities\wf.ps1 update-tools
@@ -217,7 +201,7 @@ git config --global core.hooksPath
 - [ ] Gentleman Foundation installed
 - [ ] Git identity configured
 - [ ] `gf validate` passes
-- [ ] Optional: gga installed
+- [ ] Optional: gentleman-skills installed
 
 ## Getting Help
 

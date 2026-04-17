@@ -632,7 +632,7 @@ my-service/
     │  ─────────────────────────────────────────────────────────────────  │
     │                                                                       │
     │  ┌─────────────────────┐  ┌─────────────────────┐                   │
-    │  │ Gentle-AI          │  │ Gentleman-Skills    │                   │
+    │  │ Native Runtime     │  │ Gentleman-Skills    │                   │
     │  │                     │  │                     │                   │
     │  │ [S] SDD Workflow   │  │ [F] Framework patt. │                   │
     │  │ [M] Memory system  │  │ [T] Testing patt.  │                   │

@@ -83,9 +83,15 @@ docs/
 |----------|-------------|
 | [SESSION-GUIDE.md](guides/SESSION-GUIDE.md) | Session lifecycle, generated artifacts, and operating flow |
 
+## Generated Operational Artifacts
+
+| Directory | Description |
+|-----------|-------------|
+| [audits/README.md](audits/README.md) | Generated audit reports for delivery and governance visibility |
+| [sessions/README.md](sessions/README.md) | Session briefs, closure artifacts, and context handoff files |
+| [judgment/README.md](judgment/README.md) | Judgment-day outputs and dashboards |
+
 ## External Resources
 
 - [Gentleman-Skills](https://github.com/Gentleman-Programming/Gentleman-Skills)
-- [Gentle-AI](https://github.com/Gentleman-Programming/gentle-ai)
-- [GGA](https://github.com/Gentleman-Programming/gentleman-guardian-angel)
 - [Engram](https://github.com/Gentleman-Programming/engram)

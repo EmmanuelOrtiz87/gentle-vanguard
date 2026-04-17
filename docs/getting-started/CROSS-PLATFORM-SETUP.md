@@ -139,7 +139,7 @@ Actions:
 
 Additional behavior:
 - Resolves system dependency installation metadata per platform from `config/workspace.config.json`
-- Detects `bash` as a cross-platform capability for bash-installed tools such as `gga`
+- Detects `bash` as a cross-platform capability for shell-based helper tooling
 - Uses platform-aware PATH refresh logic after installation attempts
 
 ### diagnose
@@ -255,7 +255,7 @@ Before each commit:
 
 1. `wf.ps1`, `ensure-tools-active.ps1`, and `update-tools.ps1` are the canonical automation scripts.
 2. On Linux or macOS, prefer `pwsh` when invoking the PowerShell scripts directly.
-3. `gga` still requires `bash` because its upstream installer is shell-based.
+3. Bash support is recommended when using shell-based helper tooling.
 4. AI tooling is configurable and optional; the workspace does not require a single IDE or AI provider to be hardcoded.
 
 ### Problem: "Setup scripts not executable"

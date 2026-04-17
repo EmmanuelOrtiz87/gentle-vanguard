@@ -8,7 +8,7 @@
 - Git state:
 - Orchestrator:
 - Engram:
-- GGA:
+- Native review engine:
 
 ## Objective
 

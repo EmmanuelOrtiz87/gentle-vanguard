@@ -134,7 +134,7 @@ When you start the next session:
 1. **Tools Auto-Activate**
    - PowerShell profile detects Gentleman Foundation project
    - `ensure-tools-active.ps1` runs in background
-   - All 5 tools verified (engram, gga, genteel-ai, gentleman-skills, opencode)
+   - Required and optional tools verified from workspace policy (engram, skills, AI runtime)
 
 2. **Context Restores**
    - `wf.ps1 start-session` (or manual entry) loads prior Engram context

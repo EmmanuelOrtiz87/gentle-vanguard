@@ -17,11 +17,11 @@ Ensuring all development tools are active and ready...
 === Starting Engram memory system... ===
 [OK] Engram initialization triggered
 
-=== Checking Gentleman Guardian Angel (GGA)... ===
-[OK] GGA is available
+=== Checking Native Review Engine... ===
+[OK] Native review is available
 
-=== Checking Gentle-AI CLI... ===
-[WARN] Gentle-AI is not available
+=== Checking Runtime Router... ===
+[OK] Runtime routing is available
 
 === Activating Orchestrator Skills... ===
 [OK] project-orchestrator-skill is available
@@ -47,8 +47,8 @@ Ensuring all development tools are active and ready...
 |-----------|--------|---------|--------|
 | **🤖 AI Orchestration** | ✅ **PASS** | All orchestrators active | Full AI coordination |
 | **🧠 Engram Memory** | ✅ **PASS** | Memory system initialized | Session persistence |
-| **🔧 GGA Code Review** | ✅ **PASS** | AI review system ready | Automated quality checks |
-| **🎨 Gentle-AI CLI** | ⚠️ **WARN** | Not available (optional) | No ecosystem orchestration |
+| **🔧 Native Code Review** | ✅ **PASS** | AI review system ready | Automated quality checks |
+| **🎨 Runtime Router** | ✅ **PASS** | Runtime selection active | Deterministic orchestration |
 | **⚙️ Orchestrator Skills** | ✅ **PASS** | All 3 skills loaded | Workflow coordination |
 | **🔄 Workflow CLI** | ✅ **PASS** | All commands functional | Development automation |
 
@@ -76,7 +76,7 @@ Ensuring all development tools are active and ready...
 - **CI/CD Pipelines**: Automated testing and deployment
 
 ### ⚠️ Minor Notes
-- **Gentle-AI CLI**: Optional tool, not required for core functionality
+- **Runtime Router**: Active and policy-driven
 - **Performance**: All operations complete within expected timeframes
 - **Compatibility**: Tested on Windows with PowerShell 7+
 
@@ -87,7 +87,7 @@ Ensuring all development tools are active and ready...
 ### 🤖 AI-Powered Development
 - ✅ **Intelligent Coordination**: Orchestrators actively managing workflow
 - ✅ **Memory Persistence**: Engram system initialized and ready
-- ✅ **Automated Reviews**: GGA code review system operational
+- ✅ **Automated Reviews**: Native code review system operational
 - ✅ **Skill Loading**: Framework-specific AI skills available
 
 ### 🔄 Zero-Config Automation

@@ -63,7 +63,7 @@ An AI agent is a system that:
 |-----------|---------|
 | **OpenCode** | AI agent for development tasks |
 | **Engram** | Persistent memory across sessions |
-| **GGA** | Code review with AI |
+| **Native Review Engine** | Code review with AI |
 | **Foundation Skills** | Context and patterns for AI |
 
 ### Tool Categories
@@ -74,7 +74,7 @@ An AI agent is a system that:
 ├─────────────────────────────────────────────────────────────┤
 │                                                              │
 │   Code Generation        │   Code Review                    │
-│   ├── OpenCode          │   ├── GGA                         │
+│   ├── OpenCode          │   ├── Native Review Engine        │
 │   ├── Copilot          │   └── Human review                │
 │   └── Cursor           │                                  │
 │                        │                                  │
@@ -145,7 +145,7 @@ Response:
     Write Code
          ↓
     ┌─────────────────┐
-    │   Git Commit    │ ← GGA AI Review
+    │   Git Commit    │ ← Native AI Review
     └────────┬────────┘
              ↓
     ┌─────────────────┐
@@ -170,7 +170,7 @@ Response:
 │         ↓                                                  │
 │   2. Generate    -> AI generates code                      │
 │         ↓                                                  │
-│   3. Review      -> GGA + human review                     │
+│   3. Review      -> Native review + human review           │
 │         ↓                                                  │
 │   4. Iterate    -> Refine based on feedback               │
 │         ↓                                                  │
@@ -194,7 +194,7 @@ Response:
 
 - Use AI for learning and exploration
 - Review code for logic errors
-- Use GGA for security scanning
+- Use native pre-commit security scanning
 - Keep prompts focused and specific
 
 ### Don't
@@ -211,7 +211,7 @@ Response:
 .\.githooks\pre-commit.ps1
 
 # Manual security scan
-gga security scan
+.\scripts\utilities\wf.ps1 review security
 ```
 
 ---

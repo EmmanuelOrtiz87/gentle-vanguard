@@ -29,8 +29,8 @@ Gentleman Foundation should be treated as an operational framework, not a closed
 - Composable orchestration layer over scripts, policies, and skills.
 
 2. Tool strategy:
-- Integrates optional and replaceable tools (GGA, Gentle-AI, Gentleman-Skills).
-- Does not hard-couple all capabilities to a single binary lifecycle.
+- Uses native Foundation capabilities for orchestration, review, and governance.
+- Avoids hard-coupling to external runtime-specific tooling.
 
 3. Engram role:
 - Engram is mandatory for continuity posture in guarded workflows.
@@ -54,7 +54,6 @@ Gentleman Foundation should be treated as an operational framework, not a closed
 **AI Tools:**
 - Claude/OpenCode (any AI coding assistant)
 - Engram (required for persistent memory continuity)
-- GGA / Gentle-AI / Gentleman-Skills (optional compatibility integrations)
 
 ### Installation
 
@@ -114,8 +113,8 @@ Gentleman Foundation Suite
 │   └── Foundation Manager
 ├── 🔧 Tool Integration Layer
 │   ├── Engram (Memory System)
-│   ├── GGA (Code Review)
-│   ├── Gentle-AI (CLI Assistant)
+│   ├── Native Review Engine
+│   ├── Native Orchestrator Runtime
 │   └── GitHub CLI Integration
 ├── 📋 Quality Assurance Layer
 │   ├── Pre-commit Hooks
@@ -377,12 +376,10 @@ Use this when strict cleanup reports drift or when you want to normalize the wor
 ### Environment Variables
 ```bash
 # AI Tools
-export GENTLE_AI_TOKEN="your-token"
 export CLAUDE_API_KEY="your-key"
 
 # Development Paths
 export GENTLEMAN_ROOT="/path/to/foundation"
-export GGA_PATH="/path/to/gga"
 
 # Git Configuration
 git config --global core.hooksPath "/path/to/foundation/hooks"
@@ -401,7 +398,7 @@ Each project contains a `.gentleman` configuration file:
   "ai": {
     "orchestrator": "project-orchestrator-skill",
     "memory": "engram",
-    "review": "gga"
+    "review": "native-review"
   },
   "quality": {
     "precommit": true,
@@ -477,7 +474,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- **AI Assistants**: Claude, OpenCode, Gentle-AI for intelligent guidance
+- **AI Assistants**: Claude, OpenCode for intelligent guidance
 - **Open Source Community**: For the amazing tools we integrate
 - **Beta Testers**: For their valuable feedback and contributions
 
@@ -601,71 +598,9 @@ Start with `.\scripts\utilities\wf.ps1 health` and experience the future of AI-p
                         └─────────────┘
 ```
 
-## GGA (Optional) - Compatibility Fallback
+## Native Runtime and Review
 
-**GGA** (Gentleman Guardian Angel) is an optional fallback integration. Foundation provides native review workflows without requiring GGA.
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           GGA WORKFLOW                                       │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-    git commit ──▶ GGA Pre-commit Hook ──▶ AI Review ──▶ Pass/Fail
-                                                      │
-                                                      ▼
-                                              Check against AGENTS.md
-                                              Enforce coding standards
-                                              Block if violations found
-```
-
-### Supported AI Providers
-
-| Provider | Command | Installation |
-|----------|---------|--------------|
-| **Claude** | `claude` | [claude.ai/code](https://claude.ai/code) |
-| **OpenCode** | `opencode` | [opencode.ai](https://opencode.ai) |
-| **Gemini** | `gemini` | [gemini-cli](https://github.com/google-gemini/gemini-cli) |
-| **Ollama** | `ollama:<model>` | [ollama.ai](https://ollama.ai) |
-| **GitHub Models** | `github:<model>` | `gh auth login` |
-
-### Configuration
-
-Edit `.gga` in your project root:
-
-```bash
-PROVIDER="opencode"          # AI provider
-FILE_PATTERNS="*.py,*.ts"   # Files to review
-EXCLUDE_PATTERNS="*.test.*"  # Files to skip
-STRICT_MODE="false"          # Fail on ambiguous responses
-```
-
-### Commands
-
-```bash
-gga run          # Review staged files
-gga install      # Reinstall pre-commit hook
-gga uninstall    # Remove pre-commit hook
-gga config       # Show current configuration
-```
-
-> GGA is optional. If unavailable, Foundation native workflows continue without blocking.
-
-## Gentle-AI (Optional) - Compatibility Runtime
-
-**Gentle-AI** is an optional compatibility runtime. Foundation operates natively without requiring it.
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                     GENTLE-AI ECOSYSTEM                                     │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-    Your AI Agent ──▶ Gentle-AI ──▶ Ecosystem with:
-                              ├── Persistent Memory
-                              ├── SDD Workflow
-                              ├── Skills System
-                              ├── MCP Servers
-                              └── Teaching Persona
-```
+Foundation provides native orchestration and native review capabilities directly through the workflow CLI and skills.
 
 ### Supported AI Agents
 
@@ -680,7 +615,7 @@ gga config       # Show current configuration
 | Windsurf | Solo-agent | No |
 | Antigravity | Solo-agent + Mission Control | No |
 
-OpenCode is the default provider for GGA code review and is recommended for its:
+OpenCode is the default provider for native review flows and is recommended for its:
 - Multi-provider support (Claude, GPT, Gemini, local models)
 - Terminal, desktop, and IDE integration
 - 140K+ GitHub stars, 6.5M monthly developers
@@ -688,10 +623,9 @@ OpenCode is the default provider for GGA code review and is recommended for its:
 ### Quick Commands
 
 ```bash
-./scripts/utilities/run-gentle-ai.ps1 status   # Show ecosystem status (native or compatibility mode)
-./scripts/utilities/run-gentle-ai.ps1 update   # Run toolchain update flow
-./scripts/utilities/run-gentle-ai.ps1 help     # Show available commands
-./scripts/utilities/wf.ps1 update-tools        # Update required toolchain + optional integrations
+./scripts/utilities/wf.ps1 status              # Show workflow status
+./scripts/utilities/wf.ps1 review              # Run native review workflow
+./scripts/utilities/wf.ps1 update-tools        # Update required toolchain
 ```
 
 > Windows note: Homebrew (`brew`) is not required. Use `wf.ps1 update-tools` (Git Bash + Go).
@@ -702,8 +636,6 @@ OpenCode is the default provider for GGA code review and is recommended for its:
 /sdd-init              # Initialize SDD context
 skill-registry         # Build skills registry
 ```
-
-> If native `gentle-ai` is not installed, workflow checks continue in native Foundation mode.
 
 ## Gentleman-Skills (Optional) - External Skill Library
 
@@ -860,7 +792,7 @@ workspace-foundation/
 ├── templates/             # Project templates
 │   ├── project-root/     # Base template
 │   ├── project-types/    # By type (service, cli, library, etc.)
-│   ├── gga/             # GGA configuration template
+│   ├── reviews/         # Native review configuration template
 │   ├── config/           # ESLint, Prettier, etc.
 │   ├── editor/           # Editor configs
 │   └── testing/          # Test templates
@@ -922,13 +854,11 @@ workspace-foundation/
 ## Acknowledgments
 
 This project integrates tools from [Gentleman-Programming](https://github.com/Gentleman-Programming) under MIT license.
-Engram is part of the required continuity posture; GGA, Gentle-AI, and Gentleman-Skills are optional integrations.
+Engram is part of the required continuity posture.
 
 | Tool | Repository | Author |
 |------|------------|--------|
 | **Engram** | [Gentleman-Programming/engram](https://github.com/Gentleman-Programming/engram) | Gentleman-Programming |
-| **Gentle-AI** | [gentleman-programming/gentle-ai](https://github.com/gentleman-programming/gentle-ai) | Gentleman-Programming |
-| **GGA** | [gentleman-programming/gentleman-guardian-angel](https://github.com/Gentleman-Programming/gentleman-guardian-angel) | Gentleman-Programming |
 | **Gentleman-Skills** | [Gentleman-Programming/Gentleman-Skills](https://github.com/Gentleman-Programming/Gentleman-Skills) | Gentleman-Programming + Community |
 
 All integrated tools are published under the **MIT License**. See their respective repositories for license details.

@@ -136,11 +136,10 @@ For use in projects without Foundation:
 | `foundation-audit-skill` | Batch validation, zero tokens |
 | `judgment-day-skill` | Adversarial review, token cost |
 | `script-governance-skill` | Script validation |
-| `docs-alignment-skill` | Documentation sync (GGA) |
+| `docs-alignment-skill` | Documentation synchronization |
 
 ## Related Documentation
 
 - [foundation-audit-skill/SKILL.md](../../skills/foundation-audit-skill/SKILL.md)
 - [judgment-day/SKILL.md](../../skills/judgment-day/SKILL.md)
-- [GGA Absorption Plan](../reference/GGA-ABSORPTION-PLAN.md)
 - [SKILL-RESOLVER-PROTOCOL](../reference/SKILL-RESOLVER-PROTOCOL.md)
