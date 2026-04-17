@@ -497,6 +497,10 @@ function Invoke-ToolActivation {
 
     foreach ($tool in $cfg.tools) {
         $available = Test-ToolAvailable -Tool $tool -ToolsRoot $toolsRoot
+        $isOptionalTool = $false
+        if ($tool.PSObject.Properties.Name -contains 'optional') {
+            $isOptionalTool = [bool]$tool.optional
+        }
 
         if ($available) {
             Write-Ok "$($tool.name) is available"
@@ -510,18 +514,29 @@ function Invoke-ToolActivation {
                     Write-Ok "$($tool.name) installed and verified"
                 } else {
                     Write-Warn "$($tool.name) install ran - binary may need a terminal restart to appear in PATH"
+                    if (-not $isOptionalTool) {
+                        $allOk = $false
+                    }
                 }
             } else {
-                Write-Warn "$($tool.name) could not be auto-installed - manual action needed"
-                $allOk = $false
+                if ($isOptionalTool) {
+                    Write-Warn "$($tool.name) could not be auto-installed - optional tool, continuing"
+                } else {
+                    Write-Warn "$($tool.name) could not be auto-installed - manual action needed"
+                    $allOk = $false
+                }
             }
         } else {
-            Write-Warn "$($tool.name) not installed - run 'wf.ps1 health' to auto-install"
-            $allOk = $false
+            if ($isOptionalTool) {
+                Write-Warn "$($tool.name) not installed [optional]"
+            } else {
+                Write-Warn "$($tool.name) not installed - run 'wf.ps1 health' to auto-install"
+                $allOk = $false
+            }
         }
     }
 
-    if ($allOk) { Write-Ok "All foundation tools are active" }
+    if ($allOk) { Write-Ok "Required foundation tools are active" }
 }
 
 # ── Orchestrator skills ───────────────────────────────────────────────────────

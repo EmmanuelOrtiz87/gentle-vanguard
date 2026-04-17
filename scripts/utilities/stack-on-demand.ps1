@@ -167,11 +167,11 @@ function Activate-OnDemand {
 
     if (-not ($cfg.PSObject.Properties.Name -contains 'runtime_preference') -or -not $cfg.runtime_preference) {
         Set-ConfigValue -Target $cfg -Name 'runtime_preference' -Value ([pscustomobject]@{
-            primary = 'gentle-ai'
-            fallback = 'stack-cli'
+            primary = 'stack-cli'
+            fallback = 'gentle-ai'
             auto_start_primary = $true
             fallback_on_primary_failure = $true
-            require_primary_for_guidance = $true
+            require_primary_for_guidance = $false
         })
     }
 

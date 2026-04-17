@@ -1292,7 +1292,7 @@ COMMANDS:
     verify               Quick stack verification & auto-repair
     update               Update repository, foundation, skills, and tools
     update-all           Alias for update
-    update-tools         Update all tools: gga, engram, gentle-ai, gentleman-skills, opencode
+    update-tools         Update toolchain (required + optional integrations)
     migrate-structure    Preflight and guided migration of loose scripts
     context-pack [goal]  Generate compact context summary for new chat thread
     compact-start [goal] Generate context pack and copy compact continuation prompt
@@ -1348,8 +1348,7 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 response-mode recommend:docs:high Recommend mode for preset+risk
     .\scripts\utilities\wf.ps1 ide-status          Detect IDE and show recommended activation
     .\scripts\utilities\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
-    .\scripts\utilities\wf.ps1 update-tools         Update gga / engram / gentle-ai (Windows: go install, not brew)
-        .\scripts\utilities\wf.ps1 update-tools         Update all tools: gga, engram, gentle-ai, gentleman-skills, opencode
+    .\scripts\utilities\wf.ps1 update-tools         Update required tools and optional integrations
     .\scripts\utilities\wf.ps1 context-pack "fix ci noise"  Generate compact handoff summary for token-efficient continuation
     .\scripts\utilities\wf.ps1 compact-start "fix ci noise" Generate handoff summary and copy compact prompt
     .\scripts\utilities\wf.ps1 context-metrics 14  Show 14-day context usage summary
@@ -1528,7 +1527,7 @@ switch ($Command) {
     }
 
     'update-tools' {
-        Write-Step "Updating tools (gga, engram, gentle-ai)"
+        Write-Step "Updating tools (required + optional integrations)"
         $toolsScript = Join-Path $scriptDir 'update-tools.ps1'
         if (-not (Test-Path $toolsScript)) {
             Write-Error "update-tools.ps1 not found: $toolsScript"

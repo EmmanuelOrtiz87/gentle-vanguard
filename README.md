@@ -29,7 +29,7 @@ Gentleman Foundation should be treated as an operational framework, not a closed
 - Composable orchestration layer over scripts, policies, and skills.
 
 2. Tool strategy:
-- Integrates optional and replaceable tools (Engram, GGA, Gentle-AI).
+- Integrates optional and replaceable tools (GGA, Gentle-AI, Gentleman-Skills).
 - Does not hard-couple all capabilities to a single binary lifecycle.
 
 3. Engram role:
@@ -51,10 +51,10 @@ Gentleman Foundation should be treated as an operational framework, not a closed
 - Node.js 18+
 - Go 1.19+
 
-**AI Tools (Optional but Recommended):**
-- Claude/OpenCode/Gentle-AI (any AI coding assistant)
-- GGA (Gentleman Guardian Angel)
-- Engram (memory persistence system)
+**AI Tools:**
+- Claude/OpenCode (any AI coding assistant)
+- Engram (required for persistent memory continuity)
+- GGA / Gentle-AI / Gentleman-Skills (optional compatibility integrations)
 
 ### Installation
 
@@ -593,9 +593,9 @@ Start with `.\scripts\utilities\wf.ps1 health` and experience the future of AI-p
                         └─────────────┘
 ```
 
-## GGA - AI-Powered Code Review
+## GGA (Optional) - Compatibility Fallback
 
-**GGA** (Gentleman Guardian Angel) provides AI-powered code review on every commit, enforcing your project's coding standards defined in `AGENTS.md`.
+**GGA** (Gentleman Guardian Angel) is an optional fallback integration. Foundation provides native review workflows without requiring GGA.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -640,11 +640,11 @@ gga uninstall    # Remove pre-commit hook
 gga config       # Show current configuration
 ```
 
-> GGA is automatically installed when creating a new project with `wf new`.
+> GGA is optional. If unavailable, Foundation native workflows continue without blocking.
 
-## Gentle-AI - AI Ecosystem Configurator
+## Gentle-AI (Optional) - Compatibility Runtime
 
-**Gentle-AI** transforms your AI coding agent into an ecosystem with memory, skills, and Spec-Driven Development workflow.
+**Gentle-AI** is an optional compatibility runtime. Foundation operates natively without requiring it.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -683,7 +683,7 @@ OpenCode is the default provider for GGA code review and is recommended for its:
 ./scripts/utilities/run-gentle-ai.ps1 status   # Show ecosystem status (native or compatibility mode)
 ./scripts/utilities/run-gentle-ai.ps1 update   # Run toolchain update flow
 ./scripts/utilities/run-gentle-ai.ps1 help     # Show available commands
-./scripts/utilities/wf.ps1 update-tools        # Update gga, engram, and gentle-ai in one command
+./scripts/utilities/wf.ps1 update-tools        # Update required toolchain + optional integrations
 ```
 
 > Windows note: Homebrew (`brew`) is not required. Use `wf.ps1 update-tools` (Git Bash + Go).
@@ -695,11 +695,11 @@ OpenCode is the default provider for GGA code review and is recommended for its:
 skill-registry         # Build skills registry
 ```
 
-> If native `gentle-ai` is not installed, the compatibility launcher keeps workflow checks operational without breaking startup/CI.
+> If native `gentle-ai` is not installed, workflow checks continue in native Foundation mode.
 
-## Gentleman-Skills - AI Agent Skill Library
+## Gentleman-Skills (Optional) - External Skill Library
 
-**Gentleman-Skills** provides community-curated skills for AI coding agents, offering specialized patterns for frameworks, libraries, and best practices.
+**Gentleman-Skills** is an optional external skill source. Foundation ships with native local skills under `skills/`.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -914,6 +914,7 @@ workspace-foundation/
 ## Acknowledgments
 
 This project integrates tools from [Gentleman-Programming](https://github.com/Gentleman-Programming) under MIT license.
+Engram is part of the required continuity posture; GGA, Gentle-AI, and Gentleman-Skills are optional integrations.
 
 | Tool | Repository | Author |
 |------|------------|--------|
