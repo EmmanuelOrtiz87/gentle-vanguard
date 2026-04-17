@@ -65,12 +65,15 @@ function Get-AICapability {
     }
 
     $gentleAiCmd = Get-Command gentle-ai -ErrorAction SilentlyContinue
+    $opencodeCmd = Get-Command opencode -ErrorAction SilentlyContinue
     $hasGentleAi = [bool]$gentleAiCmd
+    $hasOpencode = [bool]$opencodeCmd
 
     return @{
         has_env_provider = $hasEnvProvider
         has_gentle_ai = $hasGentleAi
-        available = ($hasEnvProvider -or $hasGentleAi)
+        has_opencode = $hasOpencode
+        available = ($hasEnvProvider -or $hasGentleAi -or $hasOpencode)
     }
 }
 

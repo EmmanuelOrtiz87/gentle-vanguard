@@ -87,12 +87,16 @@ $requiredPaths = @(
     "scripts/utilities/detect-ide-session.ps1",
     "scripts/utilities/auto-init-dev-environment.ps1",
     "scripts/utilities/ensure-tools-active.ps1",
-    "scripts/utilities/run-gentle-ai.ps1",
     "scripts/utilities/end-session.ps1",
     "scripts/utilities/wf.ps1",
     "scripts/utilities/stack-on-demand.ps1",
     "scripts/utilities/orchestrator-status.ps1",
     "scripts/git-hooks/pre-push"
+)
+
+$optionalPaths = @(
+    "scripts/utilities/run-gentle-ai.ps1",
+    "scripts/utilities/run-gga.ps1"
 )
 
 Write-Step "1. Validating required scripts and registry"
@@ -197,6 +201,16 @@ if ((Test-Path $orchestratorSkillPath) -or (Test-Path $orchestratorSkillAlt)) {
     $failures++
 }
 
+Write-Step "1.1 Optional compatibility scripts"
+foreach ($relativePath in $optionalPaths) {
+    $fullPath = Join-Path $repoRoot $relativePath
+    if (Test-Path $fullPath) {
+        Write-Ok "Optional script available: $relativePath"
+    } else {
+        Write-Warn "Optional script missing: $relativePath"
+    }
+}
+
 if ((Test-Path $scriptSkillPath) -or (Test-Path $scriptSkillAlt)) {
     Write-Ok "script-governance-skill present"
 } else {
@@ -242,9 +256,9 @@ if ($taskBriefExists) {
 Write-Step "1.2 Toolchain availability checks"
 
 $toolChecks = @(
-    @{ Name = "engram"; Remediation = "Install/repair Engram and verify with: engram version" },
-    @{ Name = "gga"; Remediation = "Install/repair GGA and verify with: gga --help" },
-    @{ Name = "gentle-ai"; Remediation = "Use compatibility launcher: .\\scripts\\utilities\\run-gentle-ai.ps1 status" }
+    @{ Name = "engram"; Optional = $false; Remediation = "Install/repair Engram and verify with: engram version" },
+    @{ Name = "gga"; Optional = $true; Remediation = "Optional fallback: install/repair GGA and verify with: gga --help" },
+    @{ Name = "gentle-ai"; Optional = $true; Remediation = "Optional compatibility launcher: .\\scripts\\utilities\\run-gentle-ai.ps1 status" }
 )
 
 foreach ($tool in $toolChecks) {
@@ -262,7 +276,11 @@ foreach ($tool in $toolChecks) {
     if ($toolAvailable) {
         Write-Ok "Tool available: $($tool.Name)"
     } else {
-        Register-ToolingGap -Message "Tool missing: $($tool.Name)" -Remediation $tool.Remediation
+        if ($tool.Optional) {
+            Write-Warn "Optional tool missing: $($tool.Name)`n  Remediation: $($tool.Remediation)"
+        } else {
+            Register-ToolingGap -Message "Tool missing: $($tool.Name)" -Remediation $tool.Remediation
+        }
     }
 }
 

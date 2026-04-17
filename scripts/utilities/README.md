@@ -46,7 +46,7 @@ Miscellaneous utility scripts for various tasks.
 | `end-session.ps1` | Run end-of-session checks and generate delivery closure artifact |
 | `stack-on-demand.ps1` | Activate/validate/deactivate orchestrator in on-demand mode |
 | `token-efficiency-estimator.ps1` | Estimate token, time, and equivalent cost savings |
-| `run-gga.ps1` | Run GGA code review |
+| `run-gga.ps1` | Optional compatibility wrapper for GGA |
 | `create-pull-request.ps1` | Create pull request |
 | `aggregate-metrics.ps1` | Aggregate metrics |
 | `help.ps1` | Show help |
@@ -56,11 +56,12 @@ Miscellaneous utility scripts for various tasks.
 
 The stack includes automatic detection and repair for:
 
-- Missing Engram CLI â†’ Auto-installed
+- Missing Engram CLI â†’ Auto-installed (required)
 - Missing config files â†’ Created from templates
 - Inactive orchestrator â†’ Auto-activated
 - Missing workspace environment â†’ Auto-initialized
 - Degraded dependencies â†’ Auto-verified
+- Optional integrations missing (GGA/Gentle-AI/Gentleman-Skills) â†’ Warning only
 
 ## Usage Patterns
 

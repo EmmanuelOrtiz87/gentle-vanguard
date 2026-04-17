@@ -63,10 +63,10 @@ Gentleman Foundation Suite
 ### âœ… AI Tools Integration
 | Tool | Status | Integration | Purpose |
 |------|--------|-------------|---------|
-| **Engram** | âœ… Active | Memory system | Session persistence |
-| **GGA** | âœ… Active | Code review | AI-powered validation |
-| **Gentle-AI** | âœ… Active | CLI assistant | Ecosystem orchestration |
-| **Gentleman-Skills** | âœ… Active | Skill library | Framework expertise |
+| **Engram** | âœ… Active (Required) | Memory system | Session persistence |
+| **GGA** | ðŸŸ¡ Optional | Guardian fallback | Secondary validation when blocked |
+| **Gentle-AI** | ðŸŸ¡ Optional | Compatibility CLI | Extra orchestration runtime |
+| **Gentleman-Skills** | ðŸŸ¡ Optional | External skill library | Community add-on skills |
 
 ---
 
