@@ -98,23 +98,25 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 | Category | Skills |
 |----------|--------|
-| **Orchestrators** | project-orchestrator, multi-agent-registry, session-workflow, skill-creator |
+| **Orchestrators** | project-orchestrator, multi-agent-registry, session-workflow, skill-creator-skill |
 | **Context & Process** | context-engineering, sdd, bdd-scenarios |
 | **Frontend** | angular-spa, react-19, nextjs-15, tailwind-4 |
-| **Mobile** | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging |
+| **Mobile** | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-kotlin-coroutines, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging |
 | **State** | zustand-5 |
 | **Validation** | zod-4 |
 | **Backend** | golang-api, api-design, django-drf |
 | **Database** | database-relational, database-nosql |
 | **DevOps** | docker-devops, terraform-infrastructure, kubernetes-deployment |
-| **Testing** | testing-strategy, testing-skill, playwright, pytest |
-| **AI** | ai-sdk-5, mcp-skill |
-| **Workflow** | github-pr, jira-task, jira-epic, release-management |
+| **Testing** | testing-strategy, testing-skill, playwright, pytest, go-testing |
+| **AI** | ai-sdk-5, mcp-skill, cloud-agent-connector, pretool-format-hook |
+| **Business** | business-telemetry, backlog-management |
+| **Workflow** | github-pr, jira-task, jira-epic, release-management, skill-factory |
 | **Quality** | typescript, code-review, security, technical-debt, web-performance-optimization, judgment-day |
+| **Code Hygiene** | commit-hygiene, docs-alignment, shellcheck-standards, testing-coverage (GGA-native) |
 | **Operations** | observability, incident-response-plan |
+| **Guardian** | guardian-fallback (GGA-optional fallback when blocked) |
 | **Governance** | project-scaffolding, documentation, architecture, git-workflow, foundation-manager |
-| **SDD Lifecycle** | sdd-init, sdd-explore, sdd-propose, sdd-spec, sdd-design, sdd-tasks, sdd-apply, sdd-verify, sdd-archive |
-| **Script Engineering** | script-governance, script-runtime-engineering |
+| **SDD Lifecycle** | sdd-lifecycle (CONSOLIDATED - 9 phases in 1) |
 
 ---
 
@@ -133,14 +135,6 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 **Trigger**: `context pack`, `compact start`, `session handoff`, `token efficiency`, `context budget`
 
 **Use when**: Compacting sessions, restoring context, measuring token usage, handoff between sessions or agents
-
----
-
-### sdd-skill
-
-**Trigger**: `spec`, `spec-driven`, `SDD`, `acceptance criteria`, `docs/specs`, `feature spec`
-
-**Use when**: Writing specs before code, defining acceptance criteria, validating implementation against specs. Governance policy: `docs/reference/SDD-GOVERNANCE-POLICY.md`
 
 ---
 
@@ -209,6 +203,22 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 **Trigger**: `Android`, `Kotlin`, `Jetpack Compose`, `Hilt`, `Room`, `Gradle`
 
 **Use when**: Native Android development with Kotlin and production mobile architecture
+
+---
+
+### android-kotlin-coroutines-skill
+
+**Trigger**: `coroutines`, `async`, `suspend`, `flow`, `channels`, `structured concurrency`
+
+**Use when**: Async programming in Kotlin, background processing, reactive streams
+
+---
+
+### go-testing
+
+**Trigger**: `go test`, `testing`, `testify`, `benchmark`, `coverage`
+
+**Use when**: Writing and running Go tests, test suites, coverage analysis
 
 ---
 
@@ -410,6 +420,48 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 ---
 
+### cloud-agent-connector-skill
+
+**Trigger**: `cloud agent`, `bedrock`, `difi`, `external model`, `invoke cloud`
+
+**Use when**: Connecting to external AI providers (AWS Bedrock, Difi, Azure, OpenAI, Anthropic, Gemini, Ollama)
+
+**See**: [cloud-agent-connector-skill](cloud-agent-connector-skill/SKILL.md)
+
+---
+
+### pretool-format-hook-skill
+
+**Trigger**: `auto-format`, `pretool`, `format hook`, `format before save`
+
+**Use when**: Running linter/formatter before AI agent accesses files to save tokens
+
+**See**: [pretool-format-hook-skill](pretool-format-hook-skill/SKILL.md)
+
+---
+
+## Business & Operations
+
+### business-telemetry-skill
+
+**Trigger**: `telemetry`, `metrics`, `management report`, `roi analysis`
+
+**Use when**: Capturing and reporting business-relevant telemetry data
+
+**See**: [business-telemetry-skill](business-telemetry-skill/SKILL.md)
+
+---
+
+### backlog-management-skill
+
+**Trigger**: `backlog`, `manage backlog`, `task list`, `prioritize`
+
+**Use when**: Managing project backlog with JSON-based source of truth
+
+**See**: [backlog-management-skill](backlog-management-skill/SKILL.md)
+
+---
+
 ## Workflow & Process
 
 ### github-pr-skill
@@ -441,6 +493,16 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 **Trigger**: `release`, `changelog`, `version bump`, `release notes`, `hotfix`
 
 **Use when**: Planning releases, managing semver, updating changelogs, and documenting cutover steps
+
+---
+
+### skill-factory-skill
+
+**Trigger**: `create skill`, `skill factory`, `new skill`, `generate skill`
+
+**Use when**: Automated skill generation with templates and conventions
+
+**See**: [skill-factory-skill](skill-factory-skill/SKILL.md)
 
 ---
 
@@ -514,6 +576,29 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 ---
 
+### foundation-audit-skill
+
+**Trigger**: `audit foundation`, `validate`, `sweep`, `check links`, `find duplicates`, `homologate`, `validation sweep`, `wf audit`, `judgment`, `pre-release audit`
+
+**Use when**: Running comprehensive validation of Foundation, detecting duplicates, broken links, skill inconsistencies, and documentation issues. Zero agent tokens when using batch mode.
+
+**Unified Workflow** (foundation-audit + judgment-day):
+```powershell
+# Batch validation only (0 tokens)
+.\scripts\utilities\wf.ps1 audit sweep --scope quick    # 1s
+.\scripts\utilities\wf.ps1 audit sweep --scope full     # 5s
+
+# Batch + Adversarial review (tokens)
+.\scripts\utilities\wf.ps1 audit judgment --mode full   # 15min
+
+# Sync to local (standalone)
+.\scripts\utilities\wf.ps1 audit sync
+```
+
+**Documentation**: See [docs/guides/AUDIT-WORKFLOW.md](../docs/guides/AUDIT-WORKFLOW.md) for full workflow diagram.
+
+---
+
 ### foundation-manager-skill
 
 **Trigger**: `update`, `sync`, `check`, `maintenance`, `tools`, `version`
@@ -546,25 +631,81 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 ---
 
+### commit-hygiene-skill
+
+**Trigger**: `commit`, `message`, `conventional`, `changelog`, `semantic`
+
+**Use when**: Enforcing commit message conventions, generating changelogs (GGA-native)
+
+---
+
+### docs-alignment-skill
+
+**Trigger**: `docs sync`, `documentation alignment`, `readme update`
+
+**Use when**: Keeping documentation in sync with code changes (GGA-native)
+
+---
+
+### shellcheck-standards-skill
+
+**Trigger**: `shellcheck`, `bash`, `shell script`, `lint`
+
+**Use when**: Shell script linting and standards enforcement (GGA-native)
+
+---
+
+### testing-coverage-skill
+
+**Trigger**: `coverage`, `test coverage`, `uncovered`
+
+**Use when**: Analyzing and improving test coverage metrics (GGA-native)
+
+---
+
+### guardian-fallback-skill
+
+**Trigger**: `guardian fallback`, `GGA blocked`, `agent fallback`
+
+**Use when**: Alternative execution when GGA is blocked or unavailable
+
+---
+
+### script-governance-skill
+
+**Trigger**: `script governance`, `validate script`, `script standards`
+
+**Use when**: Validating script conventions and governance compliance
+
+---
+
+### security-expert-skill
+
+**Trigger**: `security scan`, `vulnerability`, `CVE`, `SAST`, `DAST`
+
+**Use when**: Deep security analysis, penetration testing, compliance audits
+
+---
+
 ## Quick Reference
 
 | Category | Skills |
 |----------|--------|
 | **Orchestrator** | project-orchestrator (load first!), session-workflow, skill-creator |
-| **Context & Process** | context-engineering, sdd, bdd-scenarios |
+| **Audit** | foundation-audit (validate, sweep, check) |
 | **Frontend** | angular-spa, react-19, nextjs-15, tailwind-4 |
-| **Mobile** | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging |
+| **Mobile** | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-kotlin-coroutines, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging |
 | **State** | zustand-5 |
 | **Validation** | zod-4 |
 | **Backend** | golang-api, api-design, django-drf |
 | **Database** | database-relational, database-nosql |
 | **DevOps** | docker-devops, terraform-infrastructure, kubernetes-deployment |
-| **Testing** | testing-strategy, testing-skill, playwright, pytest |
+| **Testing** | testing-strategy, testing-skill, playwright, pytest, go-testing |
 | **AI** | ai-sdk-5, mcp-skill |
 | **Workflow** | github-pr, jira-task, jira-epic, release-management |
 | **Quality** | typescript, code-review, security, technical-debt, web-performance-optimization |
 | **Operations** | observability, incident-response-plan |
-| **Governance** | foundation-manager, project-scaffolding, architecture, documentation, git-workflow |
+| **Governance** | foundation-manager, project-scaffolding, architecture, documentation, git-workflow, foundation-audit |
 
 ## Skill Loading
 
