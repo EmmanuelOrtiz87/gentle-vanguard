@@ -20,6 +20,32 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 $eventBusPath = Join-Path $repoRoot '.event-bus'
 
+function Resolve-HandlerScriptPath {
+    param([string]$Path)
+
+    if ([string]::IsNullOrWhiteSpace($Path) -or $Path -eq 'default-logger') {
+        return $null
+    }
+
+    $candidate = if ([IO.Path]::IsPathRooted($Path)) {
+        $Path
+    } else {
+        Join-Path $repoRoot $Path
+    }
+
+    $resolved = Resolve-Path -Path $candidate -ErrorAction SilentlyContinue
+    if (-not $resolved) {
+        return $null
+    }
+
+    $resolvedPath = $resolved.Path
+    if (-not $resolvedPath.StartsWith($repoRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
+        return $null
+    }
+
+    return $resolvedPath
+}
+
 function Initialize-EventBus {
     if (-not (Test-Path $eventBusPath)) {
         New-Item -ItemType Directory -Path $eventBusPath -Force | Out-Null
@@ -84,6 +110,24 @@ function Add-HistoryEntry {
     
     $history.events = @($entry) + $history.events | Select-Object -First $history.max_history
     $history | ConvertTo-Json -Depth 3 | Out-File -FilePath (Join-Path $eventBusPath 'history.json') -Encoding UTF8
+}
+
+function Get-EventHandlers {
+    param(
+        [object]$Subscriptions,
+        [string]$EventName
+    )
+
+    if (-not $Subscriptions -or [string]::IsNullOrWhiteSpace($EventName)) {
+        return @()
+    }
+
+    $property = $Subscriptions.subscriptions.PSObject.Properties[$EventName]
+    if (-not $property) {
+        return @()
+    }
+
+    return @($property.Value)
 }
 
 $STANDARD_EVENTS = @{
@@ -181,9 +225,15 @@ switch ($Action) {
         $subs = Get-Subscriptions
         $handlerId = "handler-$((Get-Date -Format 'yyyyMMdd-HHmmss'))"
         
+        $resolvedHandlerPath = Resolve-HandlerScriptPath -Path $HandlerScript
+        if ($HandlerScript -and -not $resolvedHandlerPath) {
+            Write-Host "[ERROR] Handler script must exist inside repository root: $repoRoot" -ForegroundColor Red
+            exit 1
+        }
+
         $newHandler = @{
             id = $handlerId
-            script = if ($HandlerScript) { $HandlerScript } else { 'default-logger' }
+            script = if ($resolvedHandlerPath) { $resolvedHandlerPath } else { 'default-logger' }
             subscribed_at = Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz'
             active = $true
         }
@@ -192,8 +242,8 @@ switch ($Action) {
             $subs.subscriptions | Add-Member -NotePropertyName $normalizedEvent -NotePropertyValue @()
         }
         
-        $handlers = @($subs.subscriptions.$normalizedEvent) + @($newHandler)
-        $subs.subscriptions.$normalizedEvent = $handlers
+        $handlers = @(Get-EventHandlers -Subscriptions $subs -EventName $normalizedEvent) + @($newHandler)
+        $subs.subscriptions.PSObject.Properties[$normalizedEvent].Value = $handlers
         
         Set-Subscriptions -Data $subs
         
@@ -211,7 +261,7 @@ switch ($Action) {
         $subs = Get-Subscriptions
         
         if ($subs.subscriptions.PSObject.Properties[$normalizedEvent]) {
-            $count = @($subs.subscriptions.$normalizedEvent).Count
+            $count = @(Get-EventHandlers -Subscriptions $subs -EventName $normalizedEvent).Count
             $subs.subscriptions.PSObject.Properties.Remove($normalizedEvent)
             Set-Subscriptions -Data $subs
             Write-Host "[OK] Unsubscribed $count handlers from '$normalizedEvent'" -ForegroundColor Green
@@ -237,15 +287,18 @@ switch ($Action) {
         $handlersTriggered = 0
         
         if ($subs.subscriptions.PSObject.Properties[$normalizedEvent]) {
-            foreach ($handler in $subs.subscriptions.$normalizedEvent) {
+            foreach ($handler in (Get-EventHandlers -Subscriptions $subs -EventName $normalizedEvent)) {
                 if ($handler.active) {
                     Write-Host "  [HANDLER] $($handler.id): $($handler.script)" -ForegroundColor Green
                     $handlersTriggered++
                     
                     if ($handler.script -ne 'default-logger') {
                         try {
-                            if (Test-Path $handler.script) {
-                                Invoke-Expression "& '$($handler.script)' -Event '$normalizedEvent' -Payload '$Payload'"
+                            $handlerPath = Resolve-HandlerScriptPath -Path $handler.script
+                            if ($handlerPath) {
+                                & $handlerPath -Event $normalizedEvent -Payload $Payload
+                            } else {
+                                Write-Host "    [WARN] Skipping invalid handler path: $($handler.script)" -ForegroundColor Yellow
                             }
                         } catch {
                             Write-Host "    [ERROR] $($_.Exception.Message)" -ForegroundColor Red
@@ -279,7 +332,7 @@ switch ($Action) {
             
             if ($subs.subscriptions.PSObject.Properties[$normalizedEvent]) {
                 Write-Host "`nHandlers for '$normalizedEvent':" -ForegroundColor Yellow
-                foreach ($handler in $subs.subscriptions.$normalizedEvent) {
+                foreach ($handler in (Get-EventHandlers -Subscriptions $subs -EventName $normalizedEvent)) {
                     Write-Host "  $($handler.id): $($handler.script)" -ForegroundColor Green
                 }
             } else {

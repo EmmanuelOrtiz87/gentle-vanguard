@@ -104,7 +104,7 @@ $prBody = if ($event.pull_request -and $event.pull_request.body) { [string]$even
 Write-Host "PR base: $baseRef"
 Write-Host "PR head: $headRef"
 
-$changedFiles = Get-ChangedFiles -BaseRef $baseRef -HeadRef 'HEAD'
+$changedFiles = Get-ChangedFiles -BaseRef $baseRef -HeadRef $headRef
 if ($changedFiles.Count -eq 0) {
     Write-Warn 'No changed files detected for PR diff. Skipping enforcement to avoid false negatives.'
     Add-GitHubAnnotation -Level warning -Message 'SDD gate skipped: no changed files detected from PR diff.'

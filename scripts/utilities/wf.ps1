@@ -1669,7 +1669,7 @@ switch ($Command) {
             & $jdScript
             $exitCode = $LASTEXITCODE
         } else {
-            $reviewScript = Join-Path $scriptDir '..\skills\code-review-orchestrator-skill\code-review.ps1'
+            $reviewScript = Join-Path $repoRoot 'skills\code-review-orchestrator-skill\code-review.ps1'
             if (-not (Test-Path $reviewScript)) {
                 Write-Error "Code review script not found: $reviewScript"
                 exit 1
@@ -2216,7 +2216,7 @@ switch ($Command) {
         if ([string]::IsNullOrWhiteSpace($Scope)) {
             & $dispatchScript
         } else {
-            Invoke-Expression "& '$dispatchScript' -Agents '$Scope'"
+            & $dispatchScript -Agents $Scope
         }
     }
 
@@ -2232,10 +2232,12 @@ switch ($Command) {
         $action = if ($scopeParts[0]) { $scopeParts[0] } else { 'list' }
         $eventName = if ($scopeParts.Count -gt 1) { $scopeParts[1] } else { '' }
 
-        $cmd = "& '$eventScript' -Action '$action'"
-        if ($eventName) { $cmd += " -Event '$eventName'" }
+        $eventArgs = @('-Action', $action)
+        if ($eventName) {
+            $eventArgs += @('-Event', $eventName)
+        }
 
-        Invoke-Expression $cmd
+        & $eventScript @eventArgs
     }
 }
 

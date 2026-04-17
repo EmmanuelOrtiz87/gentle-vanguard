@@ -177,10 +177,10 @@ Gentleman Foundation uses a sophisticated skill-based architecture:
 
 #### Multi-Agent Commands
 ```powershell
-.\wf.ps1 agent list       # List all 7 specialized agents
-.\wf.ps1 agent status     # Check agent readiness
-.\wf.ps1 agent DEV "implement login"  # Delegate to DEV agent
-.\wf.ps1 agent QA "test checkout"     # Delegate to QA agent
+.\scripts\utilities\wf.ps1 agent list       # List all 7 specialized agents
+.\scripts\utilities\wf.ps1 agent status     # Check agent readiness
+.\scripts\utilities\wf.ps1 agent DEV "implement login"  # Delegate to DEV agent
+.\scripts\utilities\wf.ps1 agent QA "test checkout"     # Delegate to QA agent
 ```
 
 ### 🔧 Development Tools
@@ -455,8 +455,8 @@ We welcome contributions! See our [Contributing Guide](CONTRIBUTING.md) for deta
 git clone https://github.com/EmmanuelOrtiz87/workspace-foundation.git
 cd workspace-foundation
 
-# Install development dependencies
-.\scripts\utilities\install-dev-dependencies.ps1
+# Initialize/update development tooling
+.\scripts\utilities\wf.ps1 update-tools
 
 # Run tests
 .\scripts\utilities\wf.ps1 review

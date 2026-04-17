@@ -232,8 +232,15 @@ foreach ($dir in $requiredDirs) {
 
 Write-Header "Git Configuration"
 
-$gitName = git config --global user.name 2>$null
-$gitEmail = git config --global user.email 2>$null
+$gitName = git config user.name 2>$null
+$gitEmail = git config user.email 2>$null
+
+if ([string]::IsNullOrWhiteSpace($gitName)) {
+    $gitName = git config --global user.name 2>$null
+}
+if ([string]::IsNullOrWhiteSpace($gitEmail)) {
+    $gitEmail = git config --global user.email 2>$null
+}
 
 if (-not [string]::IsNullOrWhiteSpace($gitName)) {
     Write-Success "Git user: $gitName"

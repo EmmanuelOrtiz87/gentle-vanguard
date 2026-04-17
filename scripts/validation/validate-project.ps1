@@ -75,8 +75,36 @@ if (Test-Path 'go.mod') {
 }
 if (Test-Path 'Cargo.toml') {
     $detectedType = 'rust'
-    $cargo = Get-Content 'Cargo.toml' -Raw | ConvertFrom-Json
-    Write-Success "Rust project: $($cargo.package.name) v$($cargo.package.version)"
+    $cargoText = Get-Content 'Cargo.toml' -Raw
+    $cargoName = $null
+    $cargoVersion = $null
+    $inPackageSection = $false
+    foreach ($line in ($cargoText -split "`r?`n")) {
+        $trimmed = $line.Trim()
+        if ($trimmed -match '^\[.*\]$') {
+            $inPackageSection = ($trimmed -eq '[package]')
+            continue
+        }
+        if (-not $inPackageSection) {
+            continue
+        }
+        if ($trimmed -match '^name\s*=\s*"([^"]+)"') {
+            $cargoName = $matches[1]
+        }
+        if ($trimmed -match '^version\s*=\s*"([^"]+)"') {
+            $cargoVersion = $matches[1]
+        }
+    }
+
+    if ($cargoName) {
+        if ($cargoVersion) {
+            Write-Success "Rust project: $cargoName v$cargoVersion"
+        } else {
+            Write-Success "Rust project: $cargoName"
+        }
+    } else {
+        Write-Success "Rust project detected"
+    }
 }
 if (Test-Path 'requirements.txt') {
     $detectedType = 'python'
@@ -120,7 +148,11 @@ if (Test-Path 'package.json') {
         
         if ($pkg.scripts.typecheck -or $pkg.scripts.'tsc') {
             Write-Info "Running type check..."
-            npm run typecheck 2>$null
+            if ($pkg.scripts.typecheck) {
+                npm run typecheck 2>$null
+            } elseif ($pkg.scripts.'tsc') {
+                npm run tsc 2>$null
+            }
             if ($LASTEXITCODE -eq 0) { Write-Success "Type checking passed" }
             else { Write-Warning "Type checking found issues" }
         }
@@ -192,8 +224,8 @@ if ($hasRemote) {
     
     $aheadBehind = git rev-list --count --left-right '@{upstream}...HEAD' 2>$null
     if ($aheadBehind) {
-        $ahead = [int]$aheadBehind.Split()[0]
-        $behind = [int]$aheadBehind.Split()[1]
+        $behind = [int]$aheadBehind.Split()[0]
+        $ahead = [int]$aheadBehind.Split()[1]
         if ($ahead -gt 0) { Write-Info "Commits ahead: $ahead" }
         if ($behind -gt 0) { Write-Warning "Commits behind: $behind" }
     }
