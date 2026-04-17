@@ -799,6 +799,32 @@ workspace-foundation/
     • Plugin system for custom checks
 ```
 
+## 11. Shared Conventions & Protocols
+
+Foundation now incorporates standardized protocols from `agent-teams-lite-main` to ensure consistent agent behavior and token efficiency:
+
+### 11.1 Skill Resolver Protocol
+
+All sub-agent delegations must follow the **Skill Resolver Protocol** (`docs/reference/SKILL-RESOLVER-PROTOCOL.md`). This ensures:
+- Agents receive only relevant, compact skill rules (not full SKILL.md files).
+- Matching is based on both **Code Context** (file types) and **Task Context** (actions).
+- Token usage is optimized by injecting only 50-150 tokens per skill.
+
+### 11.2 Persistence Contract
+
+The **Persistence Contract** (`docs/reference/PERSISTENCE-CONTRACT.md`) defines how artifacts are stored and retrieved across different modes:
+- **Engram Mode:** Cross-session persistence via memory system.
+- **OpenSpec Mode:** Filesystem-based storage for version control.
+- **Hybrid Mode:** Dual-write for maximum safety and auditability.
+- **None Mode:** Inline-only results for ephemeral tasks.
+
+### 11.3 SDD Phase Common Protocol
+
+All Spec-Driven Development (SDD) phases follow the `sdd-phase-common.md` standards, ensuring:
+- Parallel artifact retrieval using `mem_search` and `mem_get_observation`.
+- Mandatory artifact persistence via `mem_save` with `topic_key` for upserts.
+- Structured return envelopes for orchestrator synthesis.
+
 ---
 
-*Architecture document for Workspace Foundation v2.0*
+*Architecture document for Workspace Foundation v2.1*

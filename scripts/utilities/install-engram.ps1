@@ -85,4 +85,10 @@ if ($existing -and -not $Force) {
     exit 0
 }
 
-Install-Engram
+Write-Warning "Engram CLI is required for persistent memory but was not found."
+$choice = Read-Host "Do you want to install Engram now? (y/n)"
+if ($choice -match '^(y|yes|si|s)$') {
+    Install-Engram
+} else {
+    Write-Warning "Skipping Engram installation. Some features will be limited."
+}
