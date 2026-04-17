@@ -309,6 +309,14 @@ Captures the current repository state: branch, recent commits, changed files, an
 ```
 Loads the latest context pack and records the compact-start telemetry event.
 
+Live guidance is enabled by default: when context efficiency health is WARN/YELLOW/RED,
+`wf.ps1` commands like `status`, `health`, `start-session`, `review`, `audit`, and `publish`
+show a contextual nudge with the recommended `compact-start` command.
+
+Orchestrator auto-action is also enabled by default: if health is RED on `wf.ps1 start-session`,
+Foundation runs `compact-start` automatically before creating the session brief. Manual execution
+remains available with `wf.ps1 compact-start "<objective>"`.
+
 ### Step 3 — Generate Audit Document
 ```powershell
 .\scripts\utilities\wf.ps1 audit

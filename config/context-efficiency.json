@@ -23,5 +23,19 @@
         "redMin": 50
       }
     }
+  },
+  "liveAssist": {
+    "enabled": true,
+    "showOnCommands": [
+      "status",
+      "health",
+      "start-session",
+      "end-session",
+      "day-end-closure",
+      "review",
+      "audit",
+      "publish"
+    ],
+    "autoRunOnStartSessionWhenRed": true
   }
 }

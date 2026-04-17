@@ -23,6 +23,7 @@ The Gentleman Foundation automatically ensures all development tools are active:
 ### Auto-Activation Triggers
 - **Pre-commit**: Tools validated before each commit
 - **Session start**: Session brief artifacts are generated
+- **Session start (RED context health)**: Orchestrator auto-runs `compact-start` before the brief
 - **Manual**: Use `.\scripts\utilities\wf.ps1 health` anytime
 
 ### Tools Activated
@@ -74,10 +75,15 @@ The Gentleman Foundation automatically ensures all development tools are active:
    - .\scripts\utilities\wf.ps1 start-session [task-name]
 
 2. Orchestrator auto-detects:
-   - Project type
-   - Tech stack
-   - Available skills
-   - Git branch status
+    - Project type
+    - Tech stack
+    - Available skills
+    - Git branch status
+
+2.1. Context efficiency assist:
+   - When health is WARN/YELLOW/RED, CLI shows live guidance.
+   - When health is RED and you run `start-session`, orchestrator auto-runs `compact-start`.
+   - Manual fallback is always available: `.\scripts\utilities\wf.ps1 compact-start "<objective>"`.
 
 3. Memory check:
    - mem_context

@@ -702,6 +702,38 @@ function Get-ContextEfficiencyPolicy {
     return $defaults
 }
 
+function Get-ContextLiveAssistPolicy {
+    $defaults = @{
+        Enabled = $true
+        ShowOnCommands = @('status', 'health', 'start-session', 'end-session', 'day-end-closure', 'review', 'audit', 'publish')
+        AutoRunOnStartSessionWhenRed = $false
+    }
+
+    $policyPath = Join-Path $repoRoot 'config/context-efficiency.json'
+    if (-not (Test-Path $policyPath)) {
+        return $defaults
+    }
+
+    try {
+        $policy = Get-Content -Path $policyPath -Raw | ConvertFrom-Json
+        if ($policy.liveAssist) {
+            if ($null -ne $policy.liveAssist.enabled) {
+                $defaults.Enabled = [bool]$policy.liveAssist.enabled
+            }
+            if ($policy.liveAssist.showOnCommands) {
+                $defaults.ShowOnCommands = @($policy.liveAssist.showOnCommands | ForEach-Object { [string]$_ })
+            }
+            if ($null -ne $policy.liveAssist.autoRunOnStartSessionWhenRed) {
+                $defaults.AutoRunOnStartSessionWhenRed = [bool]$policy.liveAssist.autoRunOnStartSessionWhenRed
+            }
+        }
+    } catch {
+        Write-Warning 'Invalid context live-assist policy; using defaults.'
+    }
+
+    return $defaults
+}
+
 function Get-ContextMetricsSnapshot {
     param([int]$Days = 7)
 
@@ -715,6 +747,14 @@ function Get-ContextMetricsSnapshot {
         return @{
             HealthStatus = 'WARN (no data)'
             Recommendation = 'Adopt compact-start in daily handoffs to start collecting baseline data.'
+            WindowDays = $Days
+            TotalEvents = 0
+            ContextPackCount = 0
+            CompactStartCount = 0
+            AdoptionPercent = 0
+            AvgObjectiveChars = 0
+            AvgPromptChars = 0
+            HasData = $false
             Lines = @(
                 '| Metric | Value |',
                 '|---|---|',
@@ -748,6 +788,14 @@ function Get-ContextMetricsSnapshot {
         return @{
             HealthStatus = 'WARN (no events in window)'
             Recommendation = 'Run compact-start before opening new threads to capture usage and enforce concise handoffs.'
+            WindowDays = $Days
+            TotalEvents = 0
+            ContextPackCount = 0
+            CompactStartCount = 0
+            AdoptionPercent = 0
+            AvgObjectiveChars = 0
+            AvgPromptChars = 0
+            HasData = $false
             Lines = @(
                 '| Metric | Value |',
                 '|---|---|',
@@ -799,6 +847,14 @@ function Get-ContextMetricsSnapshot {
     return @{
         HealthStatus = $healthStatus
         Recommendation = $recommendation
+        WindowDays = $Days
+        TotalEvents = $total
+        ContextPackCount = $pack
+        CompactStartCount = $compact
+        AdoptionPercent = $adoption
+        AvgObjectiveChars = $avgObjective
+        AvgPromptChars = $avgPrompt
+        HasData = $true
         Lines = @(
             '| Metric | Value |',
             '|---|---|',
@@ -819,6 +875,65 @@ function Get-ContextMetricsSnapshot {
             "| Avg prompt chars | $avgPrompt | $prevAvgPrompt | $deltaPrompt |",
             "| compact-start adoption % | $adoption | $prevAdoption | $deltaAdoption |"
         )
+    }
+}
+
+function Invoke-ContextEfficiencyLiveAssist {
+    param(
+        [string]$CommandName,
+        [string]$Objective = ''
+    )
+
+    $livePolicy = Get-ContextLiveAssistPolicy
+    if (-not $livePolicy.Enabled) {
+        return
+    }
+
+    $normalized = if ($CommandName) { $CommandName.Trim().ToLowerInvariant() } else { '' }
+    if (-not $normalized) {
+        return
+    }
+
+    if (@('help', 'context-pack', 'compact-start', 'context-metrics') -contains $normalized) {
+        return
+    }
+
+    $allowedCommands = @($livePolicy.ShowOnCommands | ForEach-Object { [string]$_ })
+    if ($allowedCommands.Count -gt 0 -and ($allowedCommands -notcontains $normalized)) {
+        return
+    }
+
+    $metrics = Get-ContextMetricsSnapshot -Days 7
+    $needsNudge = ($metrics.HealthStatus -like 'RED*') -or ($metrics.HealthStatus -like 'YELLOW*') -or ($metrics.HealthStatus -like 'WARN*')
+    if (-not $needsNudge) {
+        return
+    }
+
+    Write-Host ''
+    Write-Host '[Context Efficiency]' -ForegroundColor Yellow
+    Write-Host "  Status: $($metrics.HealthStatus)" -ForegroundColor Yellow
+    Write-Host "  Window: last $($metrics.WindowDays) days | adoption: $($metrics.AdoptionPercent)% | avg prompt chars: $($metrics.AvgPromptChars)" -ForegroundColor Yellow
+    Write-Host "  Recommendation: $($metrics.Recommendation)" -ForegroundColor Yellow
+    Write-Host '  Suggested action now:' -ForegroundColor Cyan
+    Write-Host '    .\scripts\utilities\wf.ps1 compact-start "one-sentence objective"' -ForegroundColor Cyan
+
+    if ($livePolicy.AutoRunOnStartSessionWhenRed -and $normalized -eq 'start-session' -and ($metrics.HealthStatus -like 'RED*')) {
+        $compactScript = Join-Path $scriptDir 'compact-start.ps1'
+        if (Test-Path $compactScript) {
+            $autoObjective = if ([string]::IsNullOrWhiteSpace($Objective)) {
+                "resume $((Get-GitInfo).Branch) work"
+            } else {
+                $Objective
+            }
+
+            Write-Host '  Auto action: running compact-start before session brief...' -ForegroundColor Cyan
+            & $compactScript -Objective $autoObjective | Out-Null
+            if ($LASTEXITCODE -eq 0) {
+                Write-Success 'Auto compact-start completed.'
+            } else {
+                Write-Warning 'Auto compact-start failed; continue manually with wf.ps1 compact-start.'
+            }
+        }
     }
 }
 
@@ -1060,8 +1175,8 @@ function Get-OldWorkflowCheckpoints {
             continue
         }
 
-        $parsedDate = $null
-        if ([DateTimeOffset]::TryParse($dateRaw, [ref]$parsedDate)) {
+        [DateTimeOffset]$parsedDate = [DateTimeOffset]::MinValue
+        if ([DateTimeOffset]::TryParse([string]$dateRaw, [ref]$parsedDate)) {
             if ($parsedDate.LocalDateTime -lt $cutoff) {
                 $oldRefs += $ref
             }
@@ -1415,6 +1530,8 @@ function Show-IdeStatus {
 }
 
 # Main execution
+Invoke-ContextEfficiencyLiveAssist -CommandName $Command -Objective $Scope
+
 switch ($Command) {
     'help' {
         Show-Help
