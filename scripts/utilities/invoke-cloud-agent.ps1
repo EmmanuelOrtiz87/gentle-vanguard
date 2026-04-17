@@ -51,10 +51,12 @@ $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 if (-not $scriptDir) { $scriptDir = $PSScriptRoot }
 
-$configDir = Join-Path $scriptDir '..\config'
-$localConfigPath = Join-Path $scriptDir '..\config\cloud-agents.local.json'
-$templateConfigPath = Join-Path $scriptDir '..\config\cloud-agents.json'
-$telemetryPath = Join-Path $scriptDir '..\docs\management\telemetry-master.csv'
+$repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
+
+$configDir = Join-Path $repoRoot 'config'
+$localConfigPath = Join-Path $configDir 'cloud-agents.local.json'
+$templateConfigPath = Join-Path $configDir 'cloud-agents.json'
+$telemetryPath = Join-Path $repoRoot 'docs\management\telemetry-master.csv'
 
 function Get-CloudAgentConfig {
     param([string]$ProviderName)
@@ -94,6 +96,149 @@ function Get-SecretFromEnv {
     return $value
 }
 
+function Resolve-ProviderUri {
+    param(
+        [string]$ProviderName,
+        [psobject]$ProviderConfig
+    )
+
+    $uri = [string]$ProviderConfig.endpoint
+
+    if ($ProviderName -eq 'gemini' -and $ProviderConfig.api_key_env) {
+        $apiKey = Get-SecretFromEnv -SecretName $ProviderConfig.api_key_env
+        if ([string]::IsNullOrWhiteSpace($apiKey)) {
+            throw "Missing API key environment variable: $($ProviderConfig.api_key_env)"
+        }
+
+        if ($uri -match ':generateContent') {
+            $uri = $uri -replace ':generateContent', '%3AgenerateContent'
+        }
+
+        if ($uri -match '\?') {
+            $uri = "${uri}&key=$apiKey"
+        } else {
+            $uri = "${uri}?key=$apiKey"
+        }
+    }
+
+    return $uri
+}
+
+function Get-ProviderHeaders {
+    param(
+        [string]$ProviderName,
+        [psobject]$ProviderConfig,
+        [hashtable]$IncomingHeaders
+    )
+
+    $headers = @{
+        'Content-Type' = 'application/json'
+        'User-Agent' = 'Foundation-CloudAgent/1.0'
+    }
+
+    if ($ProviderConfig.api_key_env -and $ProviderName -ne 'gemini') {
+        $apiKey = Get-SecretFromEnv -SecretName $ProviderConfig.api_key_env
+        if ([string]::IsNullOrWhiteSpace($apiKey)) {
+            throw "Missing API key environment variable: $($ProviderConfig.api_key_env)"
+        }
+
+        switch ($ProviderName) {
+            'azure' {
+                $headers['api-key'] = $apiKey
+            }
+            'anthropic' {
+                $headers['x-api-key'] = $apiKey
+                $headers['anthropic-version'] = '2023-06-01'
+            }
+            default {
+                $headers['Authorization'] = "Bearer $apiKey"
+            }
+        }
+    }
+
+    if ($ProviderConfig.auth_type -eq 'aws_sigv4') {
+        throw "Provider '$ProviderName' requires aws_sigv4 auth, which is not supported by invoke-cloud-agent.ps1 HTTP path yet. Use providers with API key auth or run through a signed proxy endpoint."
+    }
+
+    foreach ($key in $IncomingHeaders.Keys) {
+        $headers[$key] = $IncomingHeaders[$key]
+    }
+
+    return $headers
+}
+
+function Build-ProviderRequestBody {
+    param(
+        [string]$ProviderName,
+        [psobject]$ProviderConfig,
+        [hashtable]$RequestParams
+    )
+
+    $model = if ($RequestParams.Model) { $RequestParams.Model } else { $ProviderConfig.model }
+
+    switch ($ProviderName) {
+        'anthropic' {
+            return @{
+                model = $model
+                messages = $RequestParams.Messages | Where-Object { $_.role -ne 'system' }
+                temperature = $RequestParams.Temperature
+                max_tokens = $RequestParams.MaxTokens
+            }
+        }
+        'gemini' {
+            $systemMessage = $RequestParams.Messages | Where-Object { $_.role -eq 'system' } | Select-Object -First 1
+            $contentMessages = $RequestParams.Messages | Where-Object { $_.role -ne 'system' }
+            $contents = @()
+            foreach ($msg in $contentMessages) {
+                $geminiRole = if ($msg.role -eq 'assistant') { 'model' } else { 'user' }
+                $contents += @{
+                    role = $geminiRole
+                    parts = @(@{ text = [string]$msg.content })
+                }
+            }
+
+            $body = @{
+                generationConfig = @{
+                    temperature = $RequestParams.Temperature
+                    maxOutputTokens = $RequestParams.MaxTokens
+                }
+                contents = $contents
+            }
+
+            if ($systemMessage) {
+                $body.system_instruction = @{ parts = @(@{ text = [string]$systemMessage.content }) }
+            }
+
+            return $body
+        }
+        'ollama' {
+            return @{
+                model = $model
+                messages = $RequestParams.Messages
+                stream = $false
+                options = @{
+                    temperature = $RequestParams.Temperature
+                    num_predict = $RequestParams.MaxTokens
+                }
+            }
+        }
+        default {
+            $body = @{
+                model = $model
+                messages = $RequestParams.Messages
+                temperature = $RequestParams.Temperature
+                max_tokens = $RequestParams.MaxTokens
+            }
+
+            if ($ProviderConfig.response_format) {
+                $body.response_format = $ProviderConfig.response_format
+            }
+
+            return $body
+        }
+    }
+}
+
 function Write-Telemetry {
     param(
         [string]$Provider,
@@ -130,30 +275,14 @@ function Invoke-CloudRequest {
     $startTime = Get-Date
     
     try {
-        $headers = @{
-            'Content-Type' = 'application/json'
-            'User-Agent' = 'Foundation-CloudAgent/1.0'
-        }
-        
-        foreach ($key in $RequestParams.Headers.Keys) {
-            $headers[$key] = $RequestParams.Headers[$key]
-        }
-        
-        $body = @{
-            model = if ($RequestParams.Model) { $RequestParams.Model } else { $providerConfig.model }
-            messages = $RequestParams.Messages
-            temperature = $RequestParams.Temperature
-            max_tokens = $RequestParams.MaxTokens
-        }
-        
-        if ($providerConfig.response_format) {
-            $body.response_format = $providerConfig.response_format
-        }
+        $headers = Get-ProviderHeaders -ProviderName $RequestParams.Provider -ProviderConfig $providerConfig -IncomingHeaders $RequestParams.Headers
+        $requestUri = Resolve-ProviderUri -ProviderName $RequestParams.Provider -ProviderConfig $providerConfig
+        $body = Build-ProviderRequestBody -ProviderName $RequestParams.Provider -ProviderConfig $providerConfig -RequestParams $RequestParams
         
         $bodyJson = $body | ConvertTo-Json -Depth 10
         
         $params = @{
-            Uri = $providerConfig.endpoint
+            Uri = $requestUri
             Method = 'POST'
             Headers = $headers
             Body = $bodyJson
@@ -234,7 +363,7 @@ function Show-InteractiveMode {
         }
         
         Write-Host "`nExecuting..." -ForegroundColor Yellow
-        $result = Invoke-CloudRequest @params
+        $result = Invoke-CloudRequest -RequestParams $params
         
         if ($result.Success) {
             Write-Host "`n=== Response ===" -ForegroundColor Green
@@ -399,7 +528,7 @@ if ($Interactive) {
 if ($TestConnection) {
     Write-Host "Testing $Provider connection..." -ForegroundColor Cyan
     
-    $config = Get-CloudAgentConfig -ProviderName $Provider
+    $providerConfig = Get-CloudAgentConfig -ProviderName $Provider
     $result = Invoke-CloudRequest -RequestParams @{
         Provider = $Provider
         Messages = @(@{ role = 'user'; content = 'Ping' })

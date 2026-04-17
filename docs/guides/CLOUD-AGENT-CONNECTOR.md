@@ -170,6 +170,9 @@ Edit `config/cloud-agents.local.json`:
 
 ### AWS Bedrock
 
+> Current status: direct `aws_sigv4` signing is not implemented in `invoke-cloud-agent.ps1` yet.
+> Use a signed proxy endpoint or another provider mode until SigV4 support is added.
+
 **Requirements:**
 - AWS account with Bedrock access
 - IAM credentials with `bedrock:InvokeModel` permission
@@ -475,25 +478,25 @@ Test-NetConnection api.openai.com -Port 443
 
 ```powershell
 # List all providers
-.\invoke-cloud-agent.ps1 -ListProviders
+.\scripts\utilities\invoke-cloud-agent.ps1 -ListProviders
 
 # Interactive mode
-.\invoke-cloud-agent.ps1 -Interactive
+.\scripts\utilities\invoke-cloud-agent.ps1 -Interactive
 
 # Single command
-.\invoke-cloud-agent.ps1 -Provider openai -Command "your task"
+.\scripts\utilities\invoke-cloud-agent.ps1 -Provider openai -Command "your task"
 
 # Script execution
-.\invoke-cloud-agent.ps1 -Provider bedrock -Script ".\task.ps1"
+.\scripts\utilities\invoke-cloud-agent.ps1 -Provider bedrock -Script ".\task.ps1"
 
 # Strict JSON (automation)
-.\invoke-cloud-agent.ps1 -Provider openai -StrictJson -Command "return JSON"
+.\scripts\utilities\invoke-cloud-agent.ps1 -Provider openai -StrictJson -Command "return JSON"
 
 # Test connection
-.\invoke-cloud-agent.ps1 -Provider openai -TestConnection
+.\scripts\utilities\invoke-cloud-agent.ps1 -Provider openai -TestConnection
 
 # Configure (create local config)
-.\invoke-cloud-agent.ps1 -Config
+.\scripts\utilities\invoke-cloud-agent.ps1 -Config
 ```
 
 ---

@@ -15,6 +15,7 @@ $ErrorActionPreference = 'Stop'
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 if (-not $scriptDir) { $scriptDir = Split-Path -Parent $PSScriptRoot }
+$repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 
 $GFRoot = Join-Path $env:USERPROFILE ".gentleman"
 
@@ -54,7 +55,7 @@ function Update-Skills {
         $src = Join-Path $Source "skills"
         if (Test-Path $src) { $src } else { $null }
     } else {
-        $src = Join-Path (Split-Path -Parent $scriptDir) "skills"
+        $src = Join-Path $repoRoot "skills"
         if (Test-Path $src) { $src } else { $null }
     }
     
@@ -63,7 +64,7 @@ function Update-Skills {
         return $false
     }
     
-    $syncScript = Join-Path $scriptDir "sync-skills.ps1"
+    $syncScript = Join-Path $repoRoot "scripts\foundation\sync-skills.ps1"
     if (Test-Path $syncScript) {
         if ($DryRun) {
             Write-Host "[DRY-RUN] Would sync skills from: $skillsSource" -ForegroundColor Cyan
@@ -83,7 +84,7 @@ function Update-Foundation {
     
     if (-not $Source) {
         $possibleSources = @(
-            (Split-Path -Parent $scriptDir),
+            $repoRoot,
             "C:\Workspace_local\workspace-foundation",
             "C:\Workspace_local\gentleman-foundation"
         )

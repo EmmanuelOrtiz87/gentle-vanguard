@@ -7,7 +7,7 @@ on:
       - 'scripts/**'
       - 'docs/**'
       - '*.md'
-      - 'config/structure-policy.json'
+      - 'config/**'
       - '.github/workflows/script-governance.yml'
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
@@ -16,7 +16,7 @@ on:
       - 'scripts/**'
       - 'docs/**'
       - '*.md'
-      - 'config/structure-policy.json'
+      - 'config/**'
       - '.github/workflows/script-governance.yml'
   workflow_dispatch:
 

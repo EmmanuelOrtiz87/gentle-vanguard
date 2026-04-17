@@ -1,0 +1,6 @@
+Timestamp,User_ID,Provider,Model,InputTokens,OutputTokens,LatencyMs,Status,ErrorMessage
+2026-04-17 20:12:07,emman,bedrock,anthropic.claude-3-5-sonnet-20241022,0,0,25,ERROR,Provider 'bedrock' requires aws_sigv4 auth, which is not supported by invoke-cloud-agent.ps1 HTTP path yet. Use providers with API key auth or run through a signed proxy endpoint.
+2026-04-17 20:12:07,emman,gemini,gemini-2.0-flash,0,0,165,ERROR,Invalid URI: The hostname could not be parsed.
+2026-04-17 20:12:08,emman,openai,gpt-4o,0,0,1202,ERROR,Response status code does not indicate success: 401 (Unauthorized).
+2026-04-17 20:12:43,emman,gemini,gemini-2.0-flash,0,0,128,ERROR,Invalid URI: The hostname could not be parsed.
+2026-04-17 20:13:30,emman,gemini,gemini-2.0-flash,0,0,1671,ERROR,Response status code does not indicate success: 404 (Not Found).
