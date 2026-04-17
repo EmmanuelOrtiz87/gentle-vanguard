@@ -370,7 +370,7 @@ $actionLines
 $Notes
 "@
 
-    $content | Out-File -FilePath $filePath -Encoding UTF8BOM
+    $content | Out-File -FilePath $filePath -Encoding UTF8
     Write-Success "Publish decision documented: $filePath"
 }
 
@@ -938,7 +938,7 @@ $metricsTrendSection
 **Version:** 1.0
 "@
     
-    $auditContent | Out-File -FilePath $OutputPath -Encoding UTF8BOM
+    $auditContent | Out-File -FilePath $OutputPath -Encoding UTF8
     Write-Success "Audit document created: $OutputPath"
 }
 
@@ -971,7 +971,7 @@ function New-PRDescription {
 Closes #[ISSUE_NUMBER]
 "@
     
-    $prContent | Out-File -FilePath $OutputPath -Encoding UTF8BOM
+    $prContent | Out-File -FilePath $OutputPath -Encoding UTF8
     Write-Success "PR description template created: $OutputPath"
 }
 
@@ -1603,15 +1603,48 @@ switch ($Command) {
     'audit' {
         Write-Step "Generating Audit"
         Invoke-TokenBudgetGuard -Task 'audit' -Risk 'medium' -EstimatedChars 8800
-        $outputDir = Join-Path $repoRoot 'docs/audits'
-        if (-not (Test-Path $outputDir)) {
-            New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
+
+        $auditWorkflow = Join-Path $repoRoot 'skills\foundation-audit-skill\scripts\audit-workflow.ps1'
+        $auditModes = @('quick', 'standard', 'full', 'deep', 'judgment', 'unified')
+        $normalizedScope = if ($Scope) { $Scope.ToLowerInvariant() } else { $null }
+
+        if ($normalizedScope) {
+            if (-not ($auditModes -contains $normalizedScope)) {
+                Write-Error "Invalid audit scope '$Scope'. Valid scopes: $($auditModes -join ', ')"
+                exit 1
+            }
+
+            # Structured audit via audit-workflow.ps1
+            if (-not (Test-Path $auditWorkflow)) {
+                Write-Error "audit-workflow.ps1 not found: $auditWorkflow"
+                exit 1
+            }
+            Write-Host " Mode: $normalizedScope" -ForegroundColor Gray
+            & $auditWorkflow -Mode $normalizedScope -BasePath $repoRoot
+            if ($LASTEXITCODE -ne 0) {
+                Write-Error "audit-workflow failed with exit code $LASTEXITCODE"
+                exit $LASTEXITCODE
+            }
+        } else {
+            # Default: generate audit markdown document
+            $outputDir = Join-Path $repoRoot 'docs/audits'
+            if (-not (Test-Path $outputDir)) {
+                New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
+            }
+
+            $dateStr = Get-Date -Format "yyyy-MM-dd-HHmmss"
+            $outputPath = Join-Path $outputDir "$dateStr-audit.md"
+
+            New-AuditDocument -OutputPath $outputPath
+
+            Write-Host ""
+            Write-Host "Tip: Use scoped audit modes for structural validation:" -ForegroundColor DarkGray
+            Write-Host "  wf.ps1 audit quick     -- fast structure check (0 tokens)" -ForegroundColor DarkGray
+            Write-Host "  wf.ps1 audit standard  -- + links and skill validation" -ForegroundColor DarkGray
+            Write-Host "  wf.ps1 audit full      -- complete batch sweep" -ForegroundColor DarkGray
+            Write-Host "  wf.ps1 audit deep      -- + orphaned docs sweep" -ForegroundColor DarkGray
+            Write-Host "  wf.ps1 audit judgment  -- full sweep + adversarial AI review" -ForegroundColor DarkGray
         }
-        
-        $dateStr = Get-Date -Format "yyyy-MM-dd-HHmmss"
-        $outputPath = Join-Path $outputDir "$dateStr-audit.md"
-        
-        New-AuditDocument -OutputPath $outputPath
     }
     
     'pr' {
