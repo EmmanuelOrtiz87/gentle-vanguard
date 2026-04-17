@@ -1,35 +1,70 @@
 # Cloud Agent Security Guide
 
 ## Overview
-Foundation allows you to delegate heavy AI tasks to cloud providers (AWS Bedrock, Difi, etc.) while keeping your local environment light.
+Foundation's Cloud Agent Connector supports secure connections to external AI providers (AWS Bedrock, Difi, Azure, OpenAI, Anthropic, Gemini, Ollama).
 
-## 1. Secure Configuration
+**For complete setup and usage guide, see:** [CLOUD-AGENT-CONNECTOR.md](CLOUD-AGENT-CONNECTOR.md)
 
-### Never Commit Secrets
-We use a **`.env.local`** file for credentials. This file is **gitignored** by default.
+## Quick Security Rules
 
-1. Copy `.env.example` to `.env.local`.
-2. Fill in your API keys or AWS credentials.
+1. **Never commit secrets** - `cloud-agents.local.json` is gitignored
+2. **Use environment variables** for production credentials
+3. **Least privilege** - Minimum required IAM permissions
+4. **Rotate keys** - Every 90 days
+5. **Audit logs** - All requests logged to `telemetry-master.csv`
 
-### Principle of Least Privilege
-- Create specific IAM users or API keys with **only** the permissions needed (e.g., `bedrock:InvokeModel`).
-- Rotate keys every 90 days.
+## Secret Management Hierarchy
 
-## 2. Manual Setup Steps
+| Level | Method | Security |
+|-------|--------|----------|
+| 1 | Environment variables | Highest |
+| 2 | `cloud-agents.local.json` | High (gitignored) |
+| 3 | `config/cloud-agents.json` | Template only (no secrets) |
 
-### For AWS Bedrock:
-1. Install `AWSPowerShell.NetCore`: `Install-Module -Name AWSPowerShell.NetCore`
-2. Configure AWS Profile: `Set-AWSCredential -ProfileName default`
-3. Update `config/cloud-agents.json` with your region and model ID.
+## Quick Setup
 
-### For Difi / Generic APIs:
-1. Obtain your API Key from the provider dashboard.
-2. Add it to `.env.local` as `DIFI_API_KEY` or `GENERIC_AI_API_KEY`.
-3. Set the `endpoint` in `cloud-agents.json`.
+```powershell
+# 1. Create local configuration
+.\scripts\utilities\invoke-cloud-agent.ps1 -Config
+# Select option 2
 
-## 3. Preventing "Narration Errors"
-When using cloud models for automation, always enable the `-StrictJson` flag in `invoke-cloud-agent.ps1`. This forces the model to return only valid JSON tool calls, preventing parsing errors in your scripts.
+# 2. Add your API keys as environment variables
+$env:OPENAI_API_KEY = "sk-..."
 
-## 4. Troubleshooting
-- **"Upstream returned workflow narration..."**: The model talked instead of acting. Ensure `temperature` is low (0.1) and `response_format` is set to JSON.
-- **Auth Failed**: Check that your `.env.local` variables match the names in `invoke-cloud-agent.ps1`.
+# 3. Enable provider in cloud-agents.local.json
+# Set "enabled": true for your provider
+
+# 4. Test connection
+.\scripts\utilities\invoke-cloud-agent.ps1 -Provider openai -TestConnection
+```
+
+## Common Issues
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| "Auth Failed" | Missing API key | Check `$env:YOUR_API_KEY` is set |
+| "Narration error" | Model talked instead of acting | Use `-StrictJson` flag |
+| "Connection timeout" | Network issue | Check firewall/proxy |
+
+## Provider-Specific Notes
+
+### AWS Bedrock
+- Use IAM credentials with `bedrock:InvokeModel` only
+- Consider VPC endpoints for production
+
+### OpenAI/Azure
+- Set API key in environment: `$env:OPENAI_API_KEY`
+- Rate limits apply per API key
+
+### Ollama (Local)
+- No API key needed
+- Ensure service running: `ollama serve`
+
+## Files
+
+| File | Git | Purpose |
+|------|-----|---------|
+| `invoke-cloud-agent.ps1` | Yes | Main script |
+| `config/cloud-agents.json` | Yes | Template (no secrets) |
+| `config/cloud-agents.local.json` | **NO** | Your secrets |
+| `telemetry-master.csv` | No | Audit log |

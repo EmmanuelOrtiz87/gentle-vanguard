@@ -1,3 +1,10 @@
+---
+name: code-review-orchestrator
+description: >
+  Unified system for all code quality and security reviews across 7 dimensions.
+  Trigger: "code review", "review all", "quality check", "orchestrator"
+---
+
 # Code Review Orchestrator Skill
 
 **Trigger Keywords:** code review, review, review all, full review, check code, analyze code, quality check, audit code, orchestrator, orchestrate, coordinate

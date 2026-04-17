@@ -28,12 +28,12 @@ function Write-AgentLine {
 
 $AGENT_SKILLS = @{
     'BA'  = @('bdd-scenarios-skill', 'documentation-governance')
-    'SAD' = @('architecture-governance', 'api-design-skill', 'database-relational-skill', 'database-nosql-skill', 'typescript-skill', 'golang-api-skill', 'sdd-skill')
+    'SAD' = @('architecture-governance', 'api-design-skill', 'database-relational-skill', 'database-nosql-skill', 'typescript-skill', 'golang-api-skill', 'sdd-lifecycle')
     'DEV' = @('angular-spa-skill', 'react-19-skill', 'nextjs-15-skill', 'tailwind-4-skill', 'zustand-5-skill', 'zod-4-skill', 'security-skill', 'technical-debt-skill', 'typescript-skill')
     'QA'  = @('testing-strategy-skill', 'testing-skill', 'playwright-skill', 'pytest-skill')
     'OPS' = @('docker-devops-skill', 'kubernetes-deployment', 'terraform-infrastructure', 'git-workflow-skill', 'release-management-skill')
     'GOV' = @('observability-skill', 'incident-response-plan', 'security-skill', 'code-review-orchestrator-skill')
-    'DOC' = @('documentation-governance', 'sdd-skill', 'bdd-scenarios-skill', 'github-pr-skill')
+    'DOC' = @('documentation-governance', 'sdd-lifecycle', 'bdd-scenarios-skill', 'github-pr-skill')
 }
 
 $AGENT_DESCRIPTIONS = @{
@@ -120,8 +120,6 @@ function Get-AgentResult {
             required_skills_enforced = @($availableSkills | ForEach-Object { $_.name })
         }
     }
-    }
-    }
     
     if ($result.skills_missing.Count -eq 0) {
         $result.status = 'ready'
@@ -158,7 +156,7 @@ function Invoke-Agent {
     Write-AgentLine "Role: $($result.role)" 'White'
     Write-AgentLine "Task: $($result.task)" 'Gray'
     Write-AgentLine "Action: $($result.action)" 'Gray'
-    Write-AgentLine "Status: $($result.status)" -ForegroundColor $(if ($result.status -eq 'ready') { 'Green' } elseif ($result.status -eq 'blocked') { 'Red' } else { 'Yellow' })
+    Write-AgentLine "Status: $($result.status)" -Color $(if ($result.status -eq 'ready') { 'Green' } elseif ($result.status -eq 'blocked') { 'Red' } else { 'Yellow' })
     Write-AgentLine ""
     
     if ($result.skills_loaded.Count -gt 0) {

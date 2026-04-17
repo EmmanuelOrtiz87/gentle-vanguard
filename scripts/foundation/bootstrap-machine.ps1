@@ -216,6 +216,27 @@ if ($gitConfigHookPath -ne $gitHooksDir) {
     Write-Success "Git hooks path configured: $gitHooksDir"
 }
 
+Write-Step "5b. Installing PreTool Auto-Format Hooks"
+$preToolHookSource = Join-Path $GentlemanRoot "hooks"
+$preToolHookTarget = Join-Path $env:USERPROFILE ".pretool-hooks"
+
+Ensure-Directory -Path $preToolHookTarget
+
+$preToolHooks = Get-ChildItem -Path $preToolHookSource -Filter "pre-tool*.ps1" -ErrorAction SilentlyContinue
+foreach ($hook in $preToolHooks) {
+    $targetHook = Join-Path $preToolHookTarget $hook.Name
+    
+    try {
+        New-Item -ItemType SymbolicLink -Path $targetHook -Target $hook.FullName -Force | Out-Null
+        Write-Success "[PreTool] $($hook.Name) (symlinked)"
+    } catch {
+        Copy-Item -Path $hook.FullName -Destination $targetHook -Force
+        Write-Success "[PreTool] $($hook.Name) (copied)"
+    }
+}
+
+$env:PRETOOL_HOOKS_PATH = $preToolHookTarget
+
 Write-Step "6. Creating CLI Wrapper"
 $cliPath = Join-Path (Join-Path $GentlemanRoot "bin") "gf.ps1"
 

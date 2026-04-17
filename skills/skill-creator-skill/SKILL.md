@@ -2,24 +2,28 @@
 name: skill-creator
 description: >
   Creates new AI agent skills following the Agent Skills spec.
-  Trigger: When user asks to create a new skill, add agent instructions, or document patterns for AI.
+  Trigger: "create skill", "new skill", "add agent instructions", "document patterns",
+  "skill factory", "generate skill", "skill template"
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  version: "2.0"
+allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task
 ---
 
-## When to Use
+# Skill Creator
 
-Use this skill when:
-- User asks to create a new skill
-- User wants to add agent instructions
-- User asks to document patterns for AI
-- A repeated pattern needs AI guidance
+Create new AI agent skills following Foundation's Agent Skills specification.
 
-## When NOT to Create
+## When to Create a Skill
 
-Don't create a skill when:
+**CREATE a skill when:**
+- A pattern is used repeatedly and AI needs guidance
+- Project-specific conventions differ from generic best practices
+- Complex workflows need step-by-step instructions
+- Decision trees help AI choose the right approach
+
+**DON'T create a skill when:**
 - Documentation already exists (reference instead)
 - Pattern is trivial or self-explanatory
 - It's a one-off task
@@ -74,9 +78,9 @@ metadata:
 
 ## Resources
 
-- **Templates**: See [assets/](assets/) for {description}
-- **Documentation**: See [references/](references/) for local docs
-```
+<!-- Template placeholders - replace with actual paths when creating a skill -->
+- **Templates**: See `assets/` for code templates, schemas, examples
+- **Documentation**: See `references/` for local documentation links
 
 ---
 
@@ -88,6 +92,7 @@ metadata:
 | Foundation-specific | `{name}-skill` | `foundation-manager`, `skill-creator` |
 | Workflow skill | `{action}-{target}` | `github-pr`, `jira-task` |
 | Architecture | `{component}-governance` | `documentation-governance` |
+| Testing skill | `{project}-test-{component}` | `myapp-test-sdk` |
 
 ---
 
@@ -123,12 +128,14 @@ metadata:
 - Start with the most critical patterns
 - Use tables for decision trees
 - Keep code examples minimal and focused
-- Include Commands section
+- Include Commands section with copy-paste commands
 
 ### DON'T
-- Add Keywords section
+- Add Keywords section (agent searches frontmatter, not body)
 - Duplicate content from existing docs (reference instead)
 - Include lengthy explanations (link to docs)
+- Add troubleshooting sections (keep focused)
+- Use web URLs in references (use local paths)
 
 ---
 
@@ -137,16 +144,26 @@ metadata:
 - [ ] Skill doesn't already exist (check `skills/`)
 - [ ] Pattern is reusable (not one-off)
 - [ ] Name follows conventions
-- [ ] Frontmatter is complete
+- [ ] Frontmatter is complete (description includes trigger keywords)
 - [ ] Critical patterns are clear
 - [ ] Code examples are minimal
 - [ ] Commands section exists
-- [ ] Added to AGENTS.md
+- [ ] Added to `SKILL_INDEX.md`
+
+---
+
+## Registration
+
+After creating the skill, add it to `SKILL_INDEX.md`:
+
+```markdown
+| **Category** | skill-name |
+```
 
 ---
 
 ## Resources
 
 - **Foundation**: See `~/.gentleman/` for global installation
-- **Skill Index**: See [SKILL_INDEX.md](SKILL_INDEX.md) for all skills
-- **Documentation**: See [docs/](docs/) for guides
+- **Skill Index**: See [SKILL_INDEX.md](../SKILL_INDEX.md) for all skills
+- **Documentation**: See [docs/](../../docs/) for guides
