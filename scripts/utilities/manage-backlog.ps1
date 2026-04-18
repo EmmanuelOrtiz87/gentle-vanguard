@@ -30,7 +30,7 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 $backlogDir = Join-Path $repoRoot 'docs\backlog'
 $itemsFile = Join-Path $backlogDir 'items.json'
-$legacyFile = Join-Path $repoRoot 'docs\reference\FUTURE-FEATURES-BACKLOG.md'
+$legacyFile = Join-Path $backlogDir 'FUTURE-FEATURES-BACKLOG.md'
 
 function Ensure-BacklogDir {
     if (-not (Test-Path $backlogDir)) {
