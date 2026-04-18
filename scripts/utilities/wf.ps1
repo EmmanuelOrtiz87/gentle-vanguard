@@ -1704,8 +1704,8 @@ switch ($Command) {
             exit 1
         }
 
-        Write-Host " Running: judgment-day.ps1" -ForegroundColor Cyan
-        & $jdScript
+        Write-Host " Running: judgment-day.ps1 (max 3 passes default)" -ForegroundColor Cyan
+        & $jdScript -MaxPasses 3
         $exitCode = $LASTEXITCODE
 
         if ($exitCode -ne 0) {
