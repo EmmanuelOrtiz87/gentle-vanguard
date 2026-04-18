@@ -42,7 +42,7 @@ function Get-NextId {
     if (-not (Test-Path $itemsFile)) { return 1 }
     $items = Get-Content $itemsFile | ConvertFrom-Json
     if ($items.Count -eq 0) { return 1 }
-    $maxId = ($items | ForEach-Object { [int]($_.id -replace 'BL-', '') } | Measure-Object -Maximum).Maximum
+    $maxId = ($items | ForEach-Object { [int]($_.id -replace '^[A-Z]+-', '') } | Measure-Object -Maximum).Maximum
     return $maxId + 1
 }
 
