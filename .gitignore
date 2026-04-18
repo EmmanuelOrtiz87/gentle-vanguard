@@ -51,3 +51,6 @@ docs/.local-archive/
 # Cloud Agent Connector - LOCAL SECRETS (NEVER commit)
 config/cloud-agents.local.json
 cloud-agents.local.json
+
+# Cloud Agent runtime telemetry (local artifact)
+.runtime/

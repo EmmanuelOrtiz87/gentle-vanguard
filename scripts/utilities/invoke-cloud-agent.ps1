@@ -5,7 +5,7 @@
 param(
     [Parameter(Mandatory=$false)]
     [ValidateSet('bedrock', 'difi', 'azure', 'openai', 'anthropic', 'gemini', 'ollama', 'custom')]
-    [string]$Provider = 'bedrock',
+    [string]$Provider = 'openai',
     
     [Parameter(Mandatory=$false)]
     [string]$Agent = '',
@@ -56,7 +56,38 @@ $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 $configDir = Join-Path $repoRoot 'config'
 $localConfigPath = Join-Path $configDir 'cloud-agents.local.json'
 $templateConfigPath = Join-Path $configDir 'cloud-agents.json'
-$telemetryPath = Join-Path $repoRoot 'docs\management\telemetry-master.csv'
+$telemetryPath = Join-Path $repoRoot '.runtime\telemetry\cloud-agent-telemetry.csv'
+
+function Import-EnvFile {
+    param([string]$EnvFilePath)
+
+    if (-not (Test-Path $EnvFilePath)) {
+        return
+    }
+
+    foreach ($line in Get-Content $EnvFilePath) {
+        $trimmed = $line.Trim()
+        if ([string]::IsNullOrWhiteSpace($trimmed) -or $trimmed.StartsWith('#')) {
+            continue
+        }
+
+        if ($trimmed -match '^([A-Za-z_][A-Za-z0-9_]*)=(.*)$') {
+            $name = $matches[1]
+            $value = $matches[2].Trim()
+            if (($value.StartsWith('"') -and $value.EndsWith('"')) -or ($value.StartsWith("'") -and $value.EndsWith("'"))) {
+                $value = $value.Substring(1, $value.Length - 2)
+            }
+            if (-not [string]::IsNullOrWhiteSpace($name)) {
+                $existing = (Get-ChildItem "env:$name" -ErrorAction SilentlyContinue).Value
+                if ([string]::IsNullOrWhiteSpace($existing)) {
+                    Set-Item -Path "env:$name" -Value $value
+                }
+            }
+        }
+    }
+}
+
+Import-EnvFile -EnvFilePath (Join-Path $repoRoot '.env.local')
 
 function Get-CloudAgentConfig {
     param([string]$ProviderName)
@@ -104,24 +135,66 @@ function Resolve-ProviderUri {
 
     $uri = [string]$ProviderConfig.endpoint
 
-    if ($ProviderName -eq 'gemini' -and $ProviderConfig.api_key_env) {
-        $apiKey = Get-SecretFromEnv -SecretName $ProviderConfig.api_key_env
-        if ([string]::IsNullOrWhiteSpace($apiKey)) {
-            throw "Missing API key environment variable: $($ProviderConfig.api_key_env)"
-        }
+    $parsed = $null
+    if (-not [Uri]::TryCreate($uri, [UriKind]::Absolute, [ref]$parsed)) {
+        throw "Invalid provider endpoint URI: $uri"
+    }
 
-        if ($uri -match ':generateContent') {
-            $uri = $uri -replace ':generateContent', '%3AgenerateContent'
-        }
-
-        if ($uri -match '\?') {
-            $uri = "${uri}&key=$apiKey"
-        } else {
-            $uri = "${uri}?key=$apiKey"
-        }
+    $isLocalHttp = $parsed.Scheme -eq 'http' -and ($parsed.Host -in @('localhost', '127.0.0.1'))
+    if ($parsed.Scheme -eq 'http' -and -not $isLocalHttp) {
+        throw "Insecure HTTP endpoint is only allowed for localhost providers. Endpoint: $uri"
     }
 
     return $uri
+}
+
+function Get-DefaultProvider {
+    $configs = @()
+    if (Test-Path $localConfigPath) {
+        $configs += ,(Get-Content $localConfigPath -Raw | ConvertFrom-Json)
+    }
+    if (Test-Path $templateConfigPath) {
+        $configs += ,(Get-Content $templateConfigPath -Raw | ConvertFrom-Json)
+    }
+
+    foreach ($cfg in $configs) {
+        if (-not $cfg -or -not $cfg.providers) {
+            continue
+        }
+
+        foreach ($name in $cfg.providers.PSObject.Properties.Name) {
+            $provider = $cfg.providers.$name
+            if (-not $provider.enabled) {
+                continue
+            }
+            if ($provider.auth_type -eq 'aws_sigv4') {
+                continue
+            }
+            return [string]$name
+        }
+    }
+
+    return 'openai'
+}
+
+function Get-CurrentSessionId {
+    if (-not [string]::IsNullOrWhiteSpace($env:FOUNDATION_SESSION_ID)) {
+        return [string]$env:FOUNDATION_SESSION_ID
+    }
+
+    $sessionsPath = Join-Path $repoRoot 'docs\sessions'
+    if (-not (Test-Path $sessionsPath)) {
+        return ''
+    }
+
+    $latest = Get-ChildItem -Path $sessionsPath -Filter '*-session-start.md' -File -ErrorAction SilentlyContinue |
+        Sort-Object LastWriteTime -Descending |
+        Select-Object -First 1
+    if (-not $latest) {
+        return ''
+    }
+
+    return ($latest.BaseName -replace '-session-start$', '')
 }
 
 function Get-ProviderHeaders {
@@ -136,13 +209,16 @@ function Get-ProviderHeaders {
         'User-Agent' = 'Foundation-CloudAgent/1.0'
     }
 
-    if ($ProviderConfig.api_key_env -and $ProviderName -ne 'gemini') {
+    if ($ProviderConfig.api_key_env) {
         $apiKey = Get-SecretFromEnv -SecretName $ProviderConfig.api_key_env
         if ([string]::IsNullOrWhiteSpace($apiKey)) {
             throw "Missing API key environment variable: $($ProviderConfig.api_key_env)"
         }
 
         switch ($ProviderName) {
+            'gemini' {
+                $headers['x-goog-api-key'] = $apiKey
+            }
             'azure' {
                 $headers['api-key'] = $apiKey
             }
@@ -239,6 +315,48 @@ function Build-ProviderRequestBody {
     }
 }
 
+function Sanitize-CsvCell {
+    param([string]$Value)
+
+    if ($null -eq $Value) {
+        return ''
+    }
+
+    $safe = ($Value -replace '[\r\n]+', ' ')
+    $trimmedLead = $safe.TrimStart()
+    if ($trimmedLead -match '^[=+\-@]') {
+        $safe = "'$safe"
+    }
+    return $safe
+}
+
+function Get-TokenUsage {
+    param(
+        [object]$Response,
+        [string]$ProviderName,
+        [int]$FallbackInput,
+        [int]$FallbackOutput
+    )
+
+    $input = $FallbackInput
+    $output = $FallbackOutput
+
+    if ($Response -and $Response.usage) {
+        if ($Response.usage.prompt_tokens -or $Response.usage.completion_tokens) {
+            [void][int]::TryParse([string]$Response.usage.prompt_tokens, [ref]$input)
+            [void][int]::TryParse([string]$Response.usage.completion_tokens, [ref]$output)
+            return @{ Input = $input; Output = $output }
+        }
+        if ($Response.usage.input_tokens -or $Response.usage.output_tokens) {
+            [void][int]::TryParse([string]$Response.usage.input_tokens, [ref]$input)
+            [void][int]::TryParse([string]$Response.usage.output_tokens, [ref]$output)
+            return @{ Input = $input; Output = $output }
+        }
+    }
+
+    return @{ Input = $FallbackInput; Output = $FallbackOutput }
+}
+
 function Write-Telemetry {
     param(
         [string]$Provider,
@@ -252,18 +370,47 @@ function Write-Telemetry {
     
     $timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
     $userId = $env:USERNAME
-    
-    $csvLine = "$timestamp,$userId,$Provider,$Model,$InputTokens,$OutputTokens,$LatencyMs,$Status,$ErrorMessage"
+    $sessionId = Get-CurrentSessionId
+    $requestId = [guid]::NewGuid().ToString()
+
+    $safeUser = if ([string]::IsNullOrWhiteSpace($userId)) { 'unknown' } else { [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($userId)) }
+    $safeUser = Sanitize-CsvCell -Value $safeUser
+    $safeSession = Sanitize-CsvCell -Value $sessionId
+    $safeRequest = Sanitize-CsvCell -Value $requestId
+    $safeProvider = Sanitize-CsvCell -Value $Provider
+    $safeModel = Sanitize-CsvCell -Value $Model
+    $safeStatus = Sanitize-CsvCell -Value $Status
+    $safeError = Sanitize-CsvCell -Value $ErrorMessage
     
     if (-not (Test-Path (Split-Path $telemetryPath -Parent))) {
         New-Item -ItemType Directory -Path (Split-Path $telemetryPath -Parent) -Force | Out-Null
     }
     
-    if (-not (Test-Path $telemetryPath)) {
-        'Timestamp,User_ID,Provider,Model,InputTokens,OutputTokens,LatencyMs,Status,ErrorMessage' | Out-File -FilePath $telemetryPath -Encoding UTF8
+    if (Test-Path $telemetryPath) {
+        $header = Get-Content -Path $telemetryPath -TotalCount 1 -ErrorAction SilentlyContinue
+        if ($header -and $header -notmatch 'Session_ID') {
+            $legacyPath = "$telemetryPath.legacy.$(Get-Date -Format 'yyyyMMddHHmmss')"
+            Move-Item -Path $telemetryPath -Destination $legacyPath -Force
+        }
     }
-    
-    $csvLine | Out-File -FilePath $telemetryPath -Append -Encoding UTF8
+
+    if (-not (Test-Path $telemetryPath)) {
+        'Timestamp,User_ID,Session_ID,Request_ID,Provider,Model,InputTokens,OutputTokens,LatencyMs,Status,ErrorMessage' | Out-File -FilePath $telemetryPath -Encoding UTF8
+    }
+
+    [pscustomobject]@{
+        Timestamp = $timestamp
+        User_ID = $safeUser
+        Session_ID = $safeSession
+        Request_ID = $safeRequest
+        Provider = $safeProvider
+        Model = $safeModel
+        InputTokens = $InputTokens
+        OutputTokens = $OutputTokens
+        LatencyMs = $LatencyMs
+        Status = $safeStatus
+        ErrorMessage = $safeError
+    } | Export-Csv -Path $telemetryPath -Append -NoTypeInformation -Encoding UTF8
 }
 
 function Invoke-CloudRequest {
@@ -278,6 +425,7 @@ function Invoke-CloudRequest {
         $headers = Get-ProviderHeaders -ProviderName $RequestParams.Provider -ProviderConfig $providerConfig -IncomingHeaders $RequestParams.Headers
         $requestUri = Resolve-ProviderUri -ProviderName $RequestParams.Provider -ProviderConfig $providerConfig
         $body = Build-ProviderRequestBody -ProviderName $RequestParams.Provider -ProviderConfig $providerConfig -RequestParams $RequestParams
+        $resolvedModel = if ($RequestParams.Model) { $RequestParams.Model } else { $providerConfig.model }
         
         $bodyJson = $body | ConvertTo-Json -Depth 10
         
@@ -294,10 +442,11 @@ function Invoke-CloudRequest {
         $endTime = Get-Date
         $latencyMs = [int]($endTime - $startTime).TotalMilliseconds
         
-        $inputTokens = [int]($bodyJson.Length / 4)
-        $outputTokens = [int](($response | ConvertTo-Json -Depth 5).Length / 4)
+        $usage = Get-TokenUsage -Response $response -ProviderName $RequestParams.Provider -FallbackInput 0 -FallbackOutput 0
+        $inputTokens = $usage.Input
+        $outputTokens = $usage.Output
         
-        Write-Telemetry -Provider $RequestParams.Provider -Model $body.model `
+        Write-Telemetry -Provider $RequestParams.Provider -Model $resolvedModel `
             -InputTokens $inputTokens -OutputTokens $outputTokens `
             -LatencyMs $latencyMs -Status 'SUCCESS'
         
@@ -410,10 +559,9 @@ function Show-ConfigMenu {
                 providers = @{
                     bedrock = @{
                         enabled = $false
-                        endpoint = 'https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-3-5-sonnet-20241022/invoke'
+                        endpoint = 'https://YOUR_SIGNED_PROXY/bedrock/invoke'
                         model = 'anthropic.claude-3-5-sonnet-20241022'
-                        region = 'us-east-1'
-                        auth_type = 'aws_sigv4'
+                        auth_type = 'proxy_signed'
                         response_format = @{ type = 'json_object' }
                     }
                     difi = @{
@@ -451,8 +599,8 @@ function Show-ConfigMenu {
             }
             
             $template | ConvertTo-Json -Depth 10 | Out-File -FilePath $localConfigPath -Encoding UTF8
-            Write-Host "Template created. Edit $localConfigPath and set your secrets." -ForegroundColor Green
-            Write-Host "IMPORTANT: This file is gitignored. Never commit secrets!" -ForegroundColor Red
+            Write-Host "Template created. Edit $localConfigPath for provider metadata (endpoints, models, enabled flags)." -ForegroundColor Green
+            Write-Host "IMPORTANT: Keep secrets in environment variables / .env.local, never in config JSON." -ForegroundColor Red
         }
         '3' {
             Write-Host "Editing local config..." -ForegroundColor Yellow
@@ -523,6 +671,10 @@ if ($Config) {
 if ($Interactive) {
     Show-InteractiveMode
     return
+}
+
+if (-not $PSBoundParameters.ContainsKey('Provider')) {
+    $Provider = Get-DefaultProvider
 }
 
 if ($TestConnection) {

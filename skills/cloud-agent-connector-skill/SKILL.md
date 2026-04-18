@@ -1,7 +1,7 @@
 ---
 name: cloud-agent-connector
 description: >
-  Standards and utilities for connecting to external cloud AI agents (AWS Bedrock, Difi, Azure, OpenAI, Anthropic, Gemini, Ollama).
+  Standards and utilities for connecting to external cloud AI agents (Difi, Azure, OpenAI, Anthropic, Gemini, Ollama, and Bedrock via signed proxy).
   Supports command, script, interactive, and agent modes with secure secret management.
   Trigger: "cloud agent", "bedrock", "difi", "external model", "api connection", "invoke cloud"
 ---
@@ -18,7 +18,7 @@ Enable Foundation to delegate tasks to high-performance cloud models while maint
 
 ### 2. Script Mode (Execute file)
 ```powershell
-.\scripts\utilities\invoke-cloud-agent.ps1 -Provider bedrock -Script ".\tasks\analyze.ps1"
+.\scripts\utilities\invoke-cloud-agent.ps1 -Provider openai -Script ".\tasks\analyze.ps1"
 ```
 
 ### 3. Interactive Mode (Manual)
@@ -40,7 +40,7 @@ Enable Foundation to delegate tasks to high-performance cloud models while maint
 
 | Provider | Env Variable | Use Case |
 |----------|--------------|----------|
-| AWS Bedrock | AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY | Claude on AWS |
+| AWS Bedrock (proxy) | Proxy-specific credentials (`auth_type: proxy_signed`) | Claude on AWS via signed proxy |
 | OpenAI | OPENAI_API_KEY | GPT models |
 | Anthropic | ANTHROPIC_API_KEY | Direct Claude |
 | Azure | AZURE_OPENAI_KEY | GPT on Azure |
@@ -51,14 +51,14 @@ Enable Foundation to delegate tasks to high-performance cloud models while maint
 
 ### Secret Management Hierarchy
 1. **Environment variables** (highest security) - For production
-2. **cloud-agents.local.json** (gitignored) - For development
+2. **cloud-agents.local.json** (gitignored) - For provider metadata only (no secrets)
 3. **config/cloud-agents.json** (committed) - Template only
 
 ### Configuration Files
 ```
 config/
 ├── cloud-agents.json          # SHARED template (no secrets)
-└── cloud-agents.local.json    # LOCAL secrets (GITIGNORED)
+└── cloud-agents.local.json    # LOCAL provider metadata (GITIGNORED)
 ```
 
 ## Protocol: Preventing "Narration Errors"
@@ -73,9 +73,9 @@ This injects:
 ## Workflow
 1. **Load Config:** Read from `cloud-agents.local.json` or `config/cloud-agents.json`
 2. **Auth:** Inject API keys from environment
-3. **Dispatch:** Send with `temperature=0.1` and JSON mode
-4. **Validate:** Ensure valid tool call or data payload
-5. **Log:** Record to `docs/management/telemetry-master.csv`
+3. **Dispatch:** Send with default `temperature=0.1` (configurable) and optional strict JSON mode
+4. **Validate:** Prefer strict JSON mode (`-StrictJson`) and validate responses in caller workflows
+5. **Log:** Record runtime telemetry to `.runtime/telemetry/cloud-agent-telemetry.csv`
 
 ## Quick Commands
 ```powershell

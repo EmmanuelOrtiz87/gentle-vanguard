@@ -40,21 +40,21 @@
 
 ## Security Model
 
-### Three-Layer Secret Management
+### Three-Layer Configuration Management
 
-| Layer | File | Git Status | Security Level | Use Case |
-|-------|------|------------|----------------|----------|
-| **1 - Environment** | System env vars | Never in repo | **HIGHEST** | Production, CI/CD |
-| **2 - Local Config** | `cloud-agents.local.json` | **GITIGNORED** | **HIGH** | Development |
-| **3 - Template** | `config/cloud-agents.json` | Committed | Template only | Sharing structure |
+| Layer | Source | Git Status | Security Level | Use Case |
+|-------|--------|------------|----------------|----------|
+| **1 - Environment** | System env vars / `.env.local` | Never in repo | **HIGHEST** | Credentials |
+| **2 - Local Config** | `cloud-agents.local.json` | **GITIGNORED** | **HIGH** | Provider metadata and enablement |
+| **3 - Template** | `config/cloud-agents.json` | Committed | Template only | Shared defaults |
 
 ### Security Principles
 
-1. **Never commit secrets** - `cloud-agents.local.json` is gitignored
+1. **Never commit secrets** - keep credentials in environment variables only
 2. **Least privilege** - Use minimum required permissions
 3. **Key rotation** - Rotate API keys every 90 days
-4. **Audit logging** - All requests logged to `telemetry-master.csv`
-5. **JSON-only mode** - Prevents "narration errors" from AI models
+4. **Audit logging** - Runtime requests logged to `.runtime/telemetry/cloud-agent-telemetry.csv`
+5. **JSON-only mode** - Reduces narration errors from AI models
 
 ---
 
@@ -68,7 +68,7 @@ cd C:\Workspace_local\workspace-foundation
 
 # Run the interactive config generator
 .\scripts\utilities\invoke-cloud-agent.ps1 -Config
-# Select option 2 to create your cloud-agents.local.json
+# Select option 2 to create your cloud-agents.local.json metadata template
 ```
 
 ### Step 2: Add Your API Keys
@@ -96,9 +96,13 @@ AWS_ACCESS_KEY_ID=AKIA...
 AWS_SECRET_ACCESS_KEY=...
 ```
 
-### Step 3: Configure Your Provider
+`invoke-cloud-agent.ps1` automatically loads `.env.local` from repository root before resolving provider credentials, but keeps existing process environment variables as higher priority.
 
-Edit `config/cloud-agents.local.json`:
+For deterministic correlation, set `FOUNDATION_SESSION_ID` in session workflows before cloud requests.
+
+### Step 3: Configure Your Provider Metadata
+
+Edit `config/cloud-agents.local.json` (no secrets):
 
 ```json
 {
@@ -160,7 +164,7 @@ Edit `config/cloud-agents.local.json`:
 ### Mode 5: Strict JSON Mode (Automation)
 
 ```powershell
-# Force JSON-only responses (prevents narration errors)
+# Force JSON-only responses (reduces narration errors)
 .\scripts\utilities\invoke-cloud-agent.ps1 -Provider openai -StrictJson -Command "Return user stats as JSON"
 ```
 
@@ -171,7 +175,7 @@ Edit `config/cloud-agents.local.json`:
 ### AWS Bedrock
 
 > Current status: direct `aws_sigv4` signing is not implemented in `invoke-cloud-agent.ps1` yet.
-> Use a signed proxy endpoint or another provider mode until SigV4 support is added.
+> Use a signed proxy endpoint (`auth_type: proxy_signed`) or another provider mode until SigV4 support is added.
 
 **Requirements:**
 - AWS account with Bedrock access
@@ -197,10 +201,9 @@ $env:AWS_DEFAULT_REGION = "us-east-1"
   "providers": {
     "bedrock": {
       "enabled": true,
-      "endpoint": "https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-3-5-sonnet-20241022/invoke",
+      "endpoint": "https://YOUR_SIGNED_PROXY/bedrock/invoke",
       "model": "anthropic.claude-3-5-sonnet-20241022",
-      "region": "us-east-1",
-      "auth_type": "aws_sigv4"
+      "auth_type": "proxy_signed"
     }
   }
 }
@@ -388,18 +391,20 @@ $config = @{
 ```powershell
 # Rotate keys every 90 days
 # 1. Generate new key in provider dashboard
-# 2. Update environment variable or cloud-agents.local.json
+# 2. Update environment variable or local provider metadata (model/endpoint)
 # 3. Test connection
 # 4. Revoke old key
 ```
 
 ### 4. Audit & Monitoring
 
-All requests are logged to `docs/management/telemetry-master.csv`:
+All runtime requests are logged to `.runtime/telemetry/cloud-agent-telemetry.csv` (local runtime artifact). If you need management consolidation, run `scripts/utilities/consolidate-telemetry.ps1`.
+
+Consolidation requires `Session_ID` correlation from runtime telemetry; rows without matching session correlation are skipped by design.
 
 ```csv
-Timestamp,User_ID,Provider,Model,InputTokens,OutputTokens,LatencyMs,Status,ErrorMessage
-2026-04-17 10:30:00,emman,openai,gpt-4o,150,300,1200,SUCCESS,
+Timestamp,User_ID,Session_ID,Request_ID,Provider,Model,InputTokens,OutputTokens,LatencyMs,Status,ErrorMessage
+2026-04-17 10:30:00,ZW1tYW4=,2026-04-17-203645,0db96100-8444-4088-85aa-5f06d2dc4d05,openai,gpt-4o,120,245,1200,SUCCESS,
 ```
 
 ### 5. Network Security
@@ -458,7 +463,7 @@ Test-NetConnection api.openai.com -Port 443
 
 **Cause:** Wrong model ID in configuration.
 
-**Solution:** Update `config/cloud-agents.local.json` with correct model ID from provider.
+**Solution:** Update provider metadata in `config/cloud-agents.local.json` with correct model ID from provider.
 
 ---
 
@@ -469,8 +474,8 @@ Test-NetConnection api.openai.com -Port 443
 | `scripts/utilities/invoke-cloud-agent.ps1` | Main connector script | Committed |
 | `config/cloud-agents.json` | Shared template config | Committed |
 | `config/cloud-agents.local.example` | Local config template | Committed |
-| `config/cloud-agents.local.json` | **Your secrets here** | **GITIGNORED** |
-| `docs/management/telemetry-master.csv` | Request audit log | Gitignored |
+| `config/cloud-agents.local.json` | Local provider metadata (no secrets) | **GITIGNORED** |
+| `.runtime/telemetry/cloud-agent-telemetry.csv` | Request audit log | **GITIGNORED** |
 
 ---
 
