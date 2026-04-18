@@ -76,7 +76,7 @@ function Add-BacklogItem {
     $items += $item
     
     $items | ConvertTo-Json -Depth 10 | Set-Content $itemsFile -Encoding UTF8
-    Write-Host "[OK] Added $id: $Title" -ForegroundColor Green
+    Write-Host "[OK] Added ${id}: ${Title}" -ForegroundColor Green
 }
 
 function Migrate-LegacyBacklog {
