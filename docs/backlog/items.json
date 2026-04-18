@@ -88,20 +88,5 @@
     "linked_prs": [],
     "status": "pending",
     "type": "feature"
-  },
-  {
-    "linked_sessions": [],
-    "type": "feature",
-    "description": "This is a test to verify the add → list → README flow works end-to-end",
-    "trigger": "Manual review",
-    "created_at": "2026-04-18",
-    "title": "Test item - Verify add flow",
-    "linked_prs": [],
-    "owner": "session-2026-04-18",
-    "priority": "high",
-    "status": "pending",
-    "id": "BL-7",
-    "defer_reason": "Deferred by user",
-    "value_prop": ""
   }
 ]
