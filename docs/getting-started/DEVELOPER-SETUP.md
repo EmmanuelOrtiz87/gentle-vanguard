@@ -5,7 +5,7 @@ Step-by-step guide for new developers joining the team.
 ## Overview
 
 This guide sets up your machine for development with:
-- Gentleman Foundation (skills, hooks, CLI)
+- Foundation - Development Stack (skills, hooks, CLI)
 - AI-assisted development workflow
 - Code review automation
 
@@ -33,7 +33,7 @@ git --version
 pwsh --version  # or powershell --version
 ```
 
-## Step 2: Install Gentleman Foundation
+## Step 2: Install Foundation - Development Stack
 
 ### Option A: Automated (Recommended)
 
@@ -198,7 +198,7 @@ git config --global core.hooksPath
 - [ ] git installed and configured
 - [ ] PowerShell 7 installed
 - [ ] OpenCode (or other AI agent) installed
-- [ ] Gentleman Foundation installed
+- [ ] Foundation - Development Stack installed
 - [ ] Git identity configured
 - [ ] `gf validate` passes
 - [ ] Optional: gentleman-skills installed
@@ -214,3 +214,7 @@ git config --global core.hooksPath
 1. Read [ARCHITECTURE.md](../reference/ARCHITECTURE.md) to understand the system
 2. Explore available [skills](../../skills/SKILL_INDEX.md)
 3. Setup your first project
+
+- Los hooks automáticos de Foundation - Development Stack ahora cubren 7 dimensiones: Seguridad, Calidad, Arquitectura, Testing, API, Documentación y Gitflow. Consulta REVIEW-INDEX.md para detalles y cómo personalizar reglas.
+- Para personalizar reglas de revisión, edita los archivos SKILL.md en cada subcarpeta de skills/.
+- Los scripts de chequeo están en scripts/hooks/ y pueden adaptarse a las necesidades del proyecto.

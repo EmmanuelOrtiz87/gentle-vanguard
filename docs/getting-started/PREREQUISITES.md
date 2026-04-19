@@ -1,6 +1,6 @@
 # System Prerequisites
 
-Gentleman Foundation requirements for development machines.
+Foundation - Development Stack requirements for development machines.
 
 ## Required
 
@@ -64,7 +64,7 @@ git --version
 pwsh --version
 ```
 
-### 2. Install Gentleman Foundation
+### 2. Install Foundation - Development Stack
 
 Windows PowerShell:
 
@@ -163,3 +163,5 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 │                                                              │
 └─────────────────────────────────────────────────────────────┘
 ```
+
+- Los hooks automáticos de Foundation - Development Stack validan seguridad, calidad, arquitectura, testing, API, documentación y gitflow antes de cada commit/push.

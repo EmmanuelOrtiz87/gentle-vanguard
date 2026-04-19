@@ -632,7 +632,7 @@ function Show-Summary {
 
 # -─ Entry point ───────────────────────────────────────────────────────────────
 if (-not $Quiet) {
-    Write-Host "Gentleman Foundation - Tool Activation" -ForegroundColor Magenta
+    Write-Host "Foundation - Development Stack - Tool Activation" -ForegroundColor Magenta
     Write-Host "Reads tool list from config/workspace.config.json" -ForegroundColor White
     Write-Host ""
 }

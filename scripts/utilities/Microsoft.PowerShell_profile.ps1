@@ -1,11 +1,11 @@
 # Microsoft.PowerShell_profile.ps1
-# PowerShell profile for Gentleman Foundation development
+# PowerShell profile for Foundation - Development Stack development
 # This runs automatically when PowerShell starts
 
 # Only run in interactive sessions
 if ($Host.Name -eq 'ConsoleHost') {
 
-    # Check if we're in a Gentleman Foundation project
+    # Check if we're in a Foundation - Development Stack project
     $currentDir = Get-Location
     $isGFProject = $false
     $checkPaths = @(
@@ -22,7 +22,7 @@ if ($Host.Name -eq 'ConsoleHost') {
     }
 
     if ($isGFProject) {
-        Write-Host "🤖 Gentleman Foundation project detected - Activating tools..." -ForegroundColor Cyan
+        Write-Host "🤖 Foundation - Development Stack project detected - Activating tools..." -ForegroundColor Cyan
 
         # Run auto-init in background to avoid blocking shell startup
         $initScript = Join-Path $currentDir 'scripts/utilities/auto-init-dev-environment.ps1'
@@ -39,7 +39,7 @@ if ($Host.Name -eq 'ConsoleHost') {
     }
 }
 
-# Set common aliases for Gentleman Foundation
+# Set common aliases for Foundation - Development Stack
 Set-Alias -Name gf-status -Value '.\scripts\utilities\wf.ps1 status' -ErrorAction SilentlyContinue
 Set-Alias -Name gf-health -Value '.\scripts\utilities\wf.ps1 health' -ErrorAction SilentlyContinue
 Set-Alias -Name gf-review -Value '.\scripts\utilities\wf.ps1 review' -ErrorAction SilentlyContinue

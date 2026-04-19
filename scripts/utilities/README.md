@@ -29,6 +29,29 @@ Miscellaneous utility scripts for various tasks.
 | Script | Description |
 |--------|-------------|
 | `wf.ps1` | Main workflow CLI - run all commands from here |
+| `judgment-day.ps1` | Orquesta juicio adversarial dual (review paralelo, síntesis, fix loop, escalado) |
+| `invoke-judgment.ps1` | Ejecuta el proceso de juicio dual (actor/critic/fix) para un target dado |
+# Juicio Adversarial (Judgment Day)
+
+- `judgment-day.ps1` permite ejecutar el protocolo de juicio adversarial dual ("judgment day") bajo demanda, con passes iterativos, síntesis de resultados y escalado automático si no se logra convergencia.
+- `invoke-judgment.ps1` implementa el flujo actor/critic/fix para un target dado.
+- Ambos scripts están alineados con el skill `judgment-day` y el protocolo de sub-agentes documentado en `skills/judgment-day/SKILL.md`.
+
+## Ejecución manual
+
+```powershell
+# Juicio adversarial completo sobre el workspace
+.\scripts\utilities\judgment-day.ps1
+
+# Juicio sobre un target específico, modo rápido, sin prompt interactivo
+.\scripts\utilities\judgment-day.ps1 -Target "projects/mi-modulo" -Scope Quick -NoPrompt
+```
+
+## Protocolo y detalles
+
+- El protocolo sigue el skill `judgment-day` (dual review, síntesis, fix, escalado)
+- Documentación completa: `skills/judgment-day/SKILL.md` y `agent-teams-lite-main/docs/sub-agents.md`
+- El resultado se muestra en consola y se puede auditar en `docs/judgment/` si está habilitado
 | `system-diagnostics.ps1` | Full stack diagnostics engine (supports JSON output) |
 | `auto-init-dev-environment.ps1` | Auto-detect and initialize dev environment |
 | `ensure-tools-active.ps1` | Activate all development tools |

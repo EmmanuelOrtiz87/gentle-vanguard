@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# wf.sh - Gentleman Foundation Workflow CLI (bash/sh version)
+# wf.sh - Foundation - Development Stack Workflow CLI (bash/sh version)
 # Works on: Linux, macOS, Windows (WSL, Git Bash)
 # Mirror of wf.ps1 - all commands wrapped for shell compatibility
 
@@ -44,7 +44,7 @@ log_warn() {
 
 # Command: status
 cmd_status() {
-    log_header "Gentleman Foundation - Status Report"
+    log_header "Foundation - Development Stack - Status Report"
     
     echo ""
     log_info "Project Root: $PROJECT_ROOT"
@@ -178,7 +178,7 @@ cmd_init() {
 cmd_help() {
     cat << 'EOF'
 
-Gentleman Foundation Workflow CLI (bash version)
+Foundation - Development Stack Workflow CLI (bash version)
 
 USAGE:
     wf <command> [options]

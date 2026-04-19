@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Gentleman Foundation stack now supports **all platforms** through orchestrator-coordinated shell routing:
+The Foundation - Development Stack now supports **all platforms** through orchestrator-coordinated shell routing:
 
 - **Windows**: PowerShell 5.1+ or PowerShell Core (pwsh)
 - **Linux**: Bash, sh, zsh
@@ -375,3 +375,5 @@ project-root/
 2. Verify installation: `./wf health` or `.\scripts\utilities\wf.ps1 health`
 3. Start development: See project-specific README
 4. Monitor via orchestrator: `engram status`
+
+- Los hooks automáticos de Foundation - Development Stack ejecutan chequeos de seguridad, calidad, arquitectura, testing, API, documentación y gitflow en cada commit/push. Ver REVIEW-INDEX.md.

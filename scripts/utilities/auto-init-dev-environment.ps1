@@ -46,7 +46,7 @@ function Invoke-LocalPowerShellScript {
     & $ScriptPath @ScriptArgs
 }
 
-# Check if we're in a Gentleman Foundation project
+# Check if we're in a Foundation - Development Stack project
 $currentDir = Get-Location
 $projectRoot = $null
 $checkPaths = @(
@@ -81,13 +81,13 @@ if (-not $projectRoot) {
 }
 
 if (-not $Quiet) {
-    Write-Host "Gentleman Foundation - Auto Environment Init" -ForegroundColor Magenta
+    Write-Host "Foundation - Development Stack - Auto Environment Init" -ForegroundColor Magenta
     Write-Host "Ensuring development environment is ready..." -ForegroundColor White
     Write-Host ""
 }
 
 if ($projectRoot) {
-    Write-Info "Detected Gentleman Foundation project at: $projectRoot"
+    Write-Info "Detected Foundation - Development Stack project at: $projectRoot"
     Set-Location $projectRoot
 
     $detectScript = Join-Path $projectRoot 'scripts/utilities/detect-ide-session.ps1'
@@ -141,7 +141,7 @@ if ($projectRoot) {
     }
 
 } else {
-    Write-Info "No Gentleman Foundation project detected in current directory tree"
+    Write-Info "No Foundation - Development Stack project detected in current directory tree"
 
     # Global environment check
     Write-Step "Checking Global Development Environment"
@@ -173,7 +173,7 @@ if (-not $Quiet) {
     Write-Host "  Environment Ready for Development" -ForegroundColor Green
     Write-Host "==========================================" -ForegroundColor Green
     Write-Host ""
-    Write-Host "The Gentleman Foundation development environment is now active." -ForegroundColor White
+    Write-Host "The Foundation - Development Stack development environment is now active." -ForegroundColor White
     Write-Host "Use '.\scripts\utilities\wf.ps1 status' to check project status" -ForegroundColor Cyan
     Write-Host "Use '.\scripts\utilities\wf.ps1 health' to re-run tool activation" -ForegroundColor Cyan
     Write-Host ""

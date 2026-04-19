@@ -1,6 +1,6 @@
 #!/usr/bin/env pwsh
 # pre-commit.ps1
-# Pre-commit hook for Gentleman Foundation projects
+# Pre-commit hook for Foundation - Development Stack
 # Place this in .githooks/ or configure git to use it
 
 param(
@@ -51,23 +51,30 @@ if (-not $GFRoot) {
 
 Write-Host ""
 Write-Host "==========================================" -ForegroundColor Cyan
-Write-Host " Gentleman Foundation - Pre-commit" -ForegroundColor Cyan
+Write-Host " Foundation - Development Stack - Pre-commit" -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host ""
 
-# Ensure tools are active before proceeding
-Write-Host "Ensuring development tools are active..." -ForegroundColor Yellow
-$healthScript = Join-Path $PSScriptRoot "..\scripts\utilities\ensure-tools-active.ps1"
-if (Test-Path $healthScript) {
-    try {
-        Invoke-LocalPowerShellScript -ScriptPath $healthScript -ScriptArgs @('-Quiet')
-        Write-Host "[OK] Tools activation check completed." -ForegroundColor Green
-    } catch {
-        Write-Host "[WARN] Tools activation check failed, but continuing..." -ForegroundColor Yellow
-    }
-} else {
-    Write-Host "[WARN] Health check script not found, skipping tools activation." -ForegroundColor Yellow
-}
+
+# 7 Dimensiones: Seguridad, Calidad, Arquitectura, Testing, API, Documentación, Gitflow
+Write-Host "[INFO] Ejecutando chequeos automáticos de las 7 dimensiones..." -ForegroundColor Cyan
+
+# Seguridad
+& scripts/hooks/check-security.ps1 || exit 1
+# Calidad
+& scripts/hooks/check-quality.ps1 || exit 1
+# Arquitectura
+& scripts/hooks/check-architecture.ps1 || exit 1
+# Testing
+& scripts/hooks/check-testing.ps1 || exit 1
+# API
+& scripts/hooks/check-api.ps1 || exit 1
+# Documentación
+& scripts/hooks/check-documentation.ps1 || Write-Host "[WARN] Documentación incompleta" -ForegroundColor Yellow
+# Gitflow
+& scripts/hooks/check-gitflow.ps1 || Write-Host "[WARN] Convención gitflow no cumplida" -ForegroundColor Yellow
+
+Write-Host "[OK] Chequeos de las 7 dimensiones completados." -ForegroundColor Green
 Write-Host ""
 
 $StagedFiles = git diff --cached --name-only --diff-filter=ACM 2>$null
