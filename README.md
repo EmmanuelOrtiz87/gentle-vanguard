@@ -1,82 +1,82 @@
-# 🤖 Gentleman Foundation - AI-Powered Development Suite
 
-> **"Where Code Meets Intelligence"**
+# 🏛️ Foundation - Development Stack
 
-A comprehensive, AI-orchestrated development framework that transforms how teams build software through intelligent coordination, automated quality assurance, and seamless workflow management.
+> **"Donde la gobernanza, la automatización y la IA convergen para equipos modernos"**
+
+Framework de orquestación, automatización y gobernanza para desarrollo profesional, con integración nativa de skills, hooks, revisión adversarial, SDD, y memoria persistente (Engram).
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![PowerShell](https://img.shields.io/badge/PowerShell-7+-blue.svg)](https://github.com/PowerShell/PowerShell)
 [![Go](https://img.shields.io/badge/Go-1.19+-blue.svg)](https://golang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 
-## 🎯 What is Gentleman Foundation?
+---
 
-Gentleman Foundation is a revolutionary development suite that combines:
+## 📚 ¿Qué es Foundation?
 
-- **🤖 AI Orchestration**: Intelligent coordination of development workflows
-- **🔄 Automated Tool Activation**: Zero-config environment setup
-- **📋 Quality Assurance**: Pre-commit validation and automated reviews
-- **🧠 Memory Persistence**: AI context retention across sessions
-- **🎨 Template System**: Rapid project scaffolding with best practices
-- **🔗 Homologated Projects**: Consistent development experience across all projects
+Foundation - Development Stack es un marco operativo para equipos que requieren:
 
-## 🧭 Stack Positioning
+- **🤖 Orquestación AI y sub-agentes**: Coordinación inteligente de flujos, revisión, automatización y memoria
+- **🛡️ Validación 7D**: Hooks automáticos para seguridad, calidad, arquitectura, testing, API, docs y gitflow
+- **⚖️ Juicio adversarial**: Protocolo de doble revisión paralela y síntesis ("judgment day")
+- **🧠 Memoria persistente**: Engram para continuidad, decisiones y contexto entre sesiones
+- **📋 SDD y gobernanza**: Enforcement de especificaciones, criterios de cierre y artefactos de sesión
+- **🔄 Activación bajo demanda**: Stack y skills sólo activos cuando se requiere, optimizando recursos
+- **🎨 Plantillas y scaffolding**: Arranque rápido de proyectos y módulos homologados
 
-Gentleman Foundation should be treated as an operational framework, not a closed tool.
+---
 
-1. Core identity:
-- Framework-oriented workflow platform.
-- Composable orchestration layer over scripts, policies, and skills.
+## 🧭 Stack y Normativas Vigentes
 
-2. Tool strategy:
-- Uses native Foundation capabilities for orchestration, review, and governance.
-- Avoids hard-coupling to external runtime-specific tooling.
+- **Identidad**: Foundation es un framework de gobernanza, no una herramienta cerrada
+- **Estrategia**: Orquestación nativa, skills modulares, hooks y scripts alineados a 7 dimensiones
+- **Engram**: Obligatorio para continuidad y memoria; fallback disponible si no está activo
+- **SDD**: Especificaciones, criterios de aceptación y validación son obligatorios para features, cambios de API y arquitectura
+- **Juicio adversarial**: Siempre disponible para directores y cambios críticos
+- **Backlog y documentación**: Unificados, exportables a CSV, y auditados automáticamente
 
-3. Engram role:
-- Engram is mandatory for continuity posture in guarded workflows.
-- Foundation still keeps a graceful fallback path when Engram is temporarily unavailable.
+---
 
-4. Practical outcome:
-- Foundation behaves as a governance and execution framework.
-- Engram behaves as a specialized persistence component within that framework.
+## 🚀 Inicio Rápido
 
-## 🚀 Quick Start
 
-### Prerequisites
+### Requisitos
 
-**System Requirements:**
-- Windows 10/11 or Linux/macOS
-- PowerShell 7+ (Windows) or PowerShell Core (cross-platform)
+- Windows 10/11, Linux o macOS
+- PowerShell 7+ (o Core)
 - Git 2.30+
 - Node.js 18+
 - Go 1.19+
+- Engram (memoria persistente, obligatorio)
 
-**AI Tools:**
-- Claude/OpenCode (any AI coding assistant)
-- Engram (required for persistent memory continuity)
+### Instalación y Primeros Pasos
 
-### Installation
+1. Clona el repositorio:
+  ```bash
+  git clone https://github.com/EmmanuelOrtiz87/workspace-foundation.git
+  cd workspace-foundation
+  ```
+2. Configura el perfil de PowerShell (Windows):
+  ```powershell
+  Copy-Item "scripts/utilities/Microsoft.PowerShell_profile.ps1" $PROFILE
+  . $PROFILE
+  ```
+3. Inicializa el entorno y valida herramientas:
+  ```powershell
+  .\scripts\utilities\wf.ps1 health
+  ```
+  > Esto activa el stack, valida Engram y auto-repara herramientas faltantes.
 
-1. **Clone the Foundation Template:**
-```bash
-git clone https://github.com/EmmanuelOrtiz87/workspace-foundation.git
-cd workspace-foundation
-```
+4. Inicia sesión de trabajo:
+  ```powershell
+  .\scripts\utilities\wf.ps1 start-session
+  ```
+  > Genera el brief de sesión y activa skills/herramientas según contexto.
 
-2. **Configure PowerShell Profile (Windows):**
-```powershell
-# Copy the auto-activation profile
-Copy-Item "scripts/utilities/Microsoft.PowerShell_profile.ps1" $PROFILE
-. $PROFILE  # Reload profile
-```
-
-3. **Initialize Environment:**
-```powershell
-# Run health check and activate all tools
-.\scripts\utilities\wf.ps1 health
-```
-
-> `health` now also auto-starts the tooling flow and attempts to install missing CLI dependencies like `engram`.
+5. Crea tu primer proyecto:
+  ```powershell
+  .\scripts\project\new-project.ps1 -Name "mi-proyecto" -Kind "service"
+  ```
 
 4. **Open the Session Properly:**
 ```powershell
@@ -93,132 +93,53 @@ Copy-Item "scripts/utilities/Microsoft.PowerShell_profile.ps1" $PROFILE
 .\scripts\project\new-project.ps1 -Name "my-awesome-project" -Kind "service"
 ```
 
-## 🎬 Demo Entry Point
 
-Use the audience-labeled demo suite to jump directly to the right walkthrough:
+---
 
-1. Development Team: `demos/01-dev-developer-onboarding/` to `demos/05-dev-documentation-and-closure/`
-2. Executive Council / Management: `demos/06-exec-executive-overview/`
-3. Demo index and recommended order: `demos/README.md`
-4. Shared sample project used across all demos: `demos/shared/task-tracker/`
 
-## 🏗️ Architecture Overview
+## 🏗️ Arquitectura y Componentes
 
-```
-Gentleman Foundation Suite
-├── 🤖 AI Orchestration Layer
-│   ├── Project Orchestrator (Always Active)
-│   ├── Code Review Orchestrator
-│   ├── Session Workflow Manager
-│   └── Foundation Manager
-├── 🔧 Tool Integration Layer
-│   ├── Engram (Memory System)
-│   ├── Native Review Engine
-│   ├── Native Orchestrator Runtime
-│   └── GitHub CLI Integration
-├── 📋 Quality Assurance Layer
-│   ├── Pre-commit Hooks
-│   ├── Automated Testing
-│   ├── Security Scanning
-│   └── Code Standards Enforcement
-├── 🎨 Template System
-│   ├── Project Scaffolding
-│   ├── Skill Injection
-│   └── Configuration Management
-└── 🔄 Workflow Automation
-    ├── Environment Activation
-    ├── Session Management
-    └── Continuous Validation
-```
+Ver [docs/reference/ARCHITECTURE.md](docs/reference/ARCHITECTURE.md) para el diagrama y dependencias.
 
-## � Design & Specifications
+**Capas principales:**
+- Orquestador AI y sub-agentes (siempre activo bajo demanda)
+- Hooks automáticos (pre-commit, pre-push, validación 7D)
+- Skills modulares (seguridad, calidad, arquitectura, testing, API, docs, gitflow)
+- Protocolo de juicio adversarial (scripts/utilities/judgment-day.ps1)
+- SDD y enforcement de especificaciones (docs/specs, skills/sdd-*)
+- Engram (memoria, decisiones, continuidad)
 
-### Software Design Document (SDD)
-The foundation follows a comprehensive design document that combines architectural planning with specification-driven development:
 
-**→ [Foundation SDD](./docs/sdd/foundation-sdd.md)**
+## 📐 Diseño y SDD
 
-**Key Sections:**
-- System Architecture & Components
-- Error Handling Patterns
-- Performance Optimization
-- AI-Assisted Development Guidelines
-- Cross-Platform Implementation
+- [docs/sdd/foundation-sdd.md](docs/sdd/foundation-sdd.md): Documento de diseño y arquitectura
+- SDD obligatorio para features, cambios de API y arquitectura
+- Validación y cierre sólo con criterios y artefactos completos
 
-### Specification Driven Development
-All components are built following TDD/BDD principles:
-- Tests define requirements before implementation
-- Specifications drive design decisions
-- Quality gates ensure compliance
 
-## �📚 Core Components
+## 🧩 Skills, Hooks y Automatización
 
-### 🤖 AI Skills System
+- Skills alineados a 7 dimensiones (ver [docs/REVIEW-INDEX.md](docs/REVIEW-INDEX.md))
+- Hooks automáticos: scripts/hooks/check-*.ps1 (pre-commit, pre-push)
+- Protocolo juicio adversarial: scripts/utilities/judgment-day.ps1, skills/judgment-day/SKILL.md
+- Orquestador y sub-agentes: scripts/utilities/wf.ps1 agent <NAME> <TASK>
 
-Gentleman Foundation uses a sophisticated skill-based architecture:
 
-#### Master Orchestrators (On-Demand Recommended)
-- **Project Orchestrator**: Auto-detects project type, loads relevant skills, guides workflow
-- **Multi-Agent Registry**: 7 specialized sub-agents for token-efficient delegation (BA, SAD, DEV, QA, OPS, GOV, DOC)
-- **Session Workflow**: Manages session lifecycle, memory persistence, todo tracking
-- **Code Review Orchestrator**: Coordinates quality checks and automated reviews
-
-> Recommended operation mode: activate orchestrator controls only during active implementation windows, then deactivate at closeout.
->
-> Use: `.\scripts\utilities\stack-on-demand.ps1 -Action activate|validate|deactivate`
-
-> Run `.\scripts\utilities\orchestrator-next-steps.ps1` from the foundation root to get the orchestrator's recommended next actions.
-
-#### Specialized Skills
-- **Foundation Manager**: Template management and project initialization
-- **Security Expert**: Vulnerability scanning and security best practices
-- **Testing Strategy**: Comprehensive testing frameworks and strategies
-- **Architecture Governance**: System design and architectural decisions
-
-#### Multi-Agent Commands
+### CLI principal (`wf.ps1`)
 ```powershell
-.\scripts\utilities\wf.ps1 agent list       # List all 7 specialized agents
-.\scripts\utilities\wf.ps1 agent status     # Check agent readiness
-.\scripts\utilities\wf.ps1 agent DEV "implement login"  # Delegate to DEV agent
-.\scripts\utilities\wf.ps1 agent QA "test checkout"     # Delegate to QA agent
-```
-
-### 🔧 Development Tools
-
-#### Core CLI (`wf.ps1`)
-```powershell
-# Check project status
+# Estado del proyecto
 .\scripts\utilities\wf.ps1 status
-
-# One-shot operations dashboard (health + token risk + next action)
+# Dashboard de operaciones
 .\scripts\utilities\wf.ps1 stack-dashboard
-
-# Machine-readable dashboard output for automation
-.\scripts\utilities\wf.ps1 stack-dashboard -JSON
-
-# Strict mode for CI/CD gates (non-zero exit when traffic light is RED)
-.\scripts\utilities\wf.ps1 stack-dashboard strict
-
-# Runtime route resolver (AI/Hybrid/Offline)
-.\scripts\utilities\wf.ps1 runtime-route
-.\scripts\utilities\wf.ps1 runtime-route -JSON
-
-# Run code review
+# Validación y revisión
 .\scripts\utilities\wf.ps1 review
-
-# Generate audit reports
 .\scripts\utilities\wf.ps1 audit
-
-# Check system health
+# Health check y activación
 .\scripts\utilities\wf.ps1 health
-
-# Create pull requests
+# PR y push
 .\scripts\utilities\wf.ps1 pr
-
-# Commit and push changes
 .\scripts\utilities\wf.ps1 push
-
-# Update repository, foundation, skills, and tools
+# Actualización de stack y skills
 .\scripts\utilities\wf.ps1 update
 ```
 
@@ -255,38 +176,12 @@ Gentleman Foundation provides templates for:
 - **Data Processing** (Python + FastAPI)
 - **DevOps Pipelines** (GitHub Actions + Azure)
 
-## 🚀 Workflow Lifecycle
 
-### 1. Project Initialization
-```powershell
-# Auto-detects project type and loads skills
-# Activates all development tools
-# Sets up quality gates and hooks
-```
+## 🔄 Ciclo de Trabajo
 
-### 2. Development Session
-```powershell
-# AI-guided workflow suggestions
-# Automatic code reviews
-# Memory persistence across sessions
-# Quality assurance checks
-```
-
-### 3. Code Quality Gates
-```powershell
-# Pre-commit validation
-# Security scanning
-# Automated testing
-# Standards compliance
-```
-
-### 4. Deployment Ready
-```powershell
-# Containerization support
-# CI/CD pipeline generation
-# Infrastructure as Code
-# Production deployment templates
-```
+1. Inicialización: stack, skills y hooks activos sólo cuando se requiere
+2. Sesión: orquestador y memoria persistente, revisión y validación automática
+3. Cierre: revisión adversarial, artefactos de sesión, cierre y publicación
 
 ## �️ Weekly Audit Runbook
 
@@ -422,75 +317,50 @@ Each project contains a `.gentleman` configuration file:
 - **Knowledge Base**: Accumulated best practices and patterns
 - **Collaboration**: Shared context across team members
 
-### 🛡️ Quality Assurance
-- **Pre-commit Hooks**: Automatic validation before commits
-- **Security Scanning**: Vulnerability detection and fixes
-- **Code Standards**: Automated formatting and linting
-- **Testing Automation**: Comprehensive test suite execution
 
-### 🚀 Rapid Development
-- **Project Scaffolding**: One-command project creation
-- **Template System**: Proven architectures and patterns
-- **Tool Integration**: Seamless integration with development tools
-- **Deployment Ready**: Production-ready configurations out-of-the-box
+## 🛡️ Validación y QA
+- Hooks automáticos (pre-commit, pre-push, 7D)
+- Revisión adversarial (judgment-day)
+- Testing y cobertura (skills/testing-strategy-skill)
+- SDD y enforcement de criterios
 
-## 🌟 Success Stories
-
-### Enterprise Adoption
-> "Gentleman Foundation reduced our onboarding time by 80% and improved code quality by 60%." - Enterprise Dev Lead
-
-### Startup Acceleration
-> "From idea to production in 3 days instead of 3 weeks." - Startup CTO
-
-### Team Productivity
-> "Our developers are now 3x more productive with AI-guided workflows." - Engineering Manager
-
-## 🤝 Contributing
-
-We welcome contributions! See our [Contributing Guide](CONTRIBUTING.md) for details.
-
-### Development Setup
-```bash
-# Clone and setup
-git clone https://github.com/EmmanuelOrtiz87/workspace-foundation.git
-cd workspace-foundation
-
-# Initialize/update development tooling
-.\scripts\utilities\wf.ps1 update-tools
-
-# Run tests
-.\scripts\utilities\wf.ps1 review
-```
-
-### Adding New Skills
-```powershell
-# Use the skill creator
-.\scripts\utilities\create-skill.ps1 -Name "my-new-skill" -Type "orchestrator"
-```
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **AI Assistants**: Claude, OpenCode for intelligent guidance
-- **Open Source Community**: For the amazing tools we integrate
-- **Beta Testers**: For their valuable feedback and contributions
-
-## 📞 Support
-
-- **Documentation**: [docs/](docs/)
-- **Issues**: [GitHub Issues](https://github.com/EmmanuelOrtiz87/workspace-foundation/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/EmmanuelOrtiz87/workspace-foundation/discussions)
 
 ---
 
-**Ready to revolutionize your development workflow?** 🚀
 
-Start with `.\scripts\utilities\wf.ps1 health` and experience the future of AI-powered development!
+## 🤝 Contribuciones
 
-## The Unified Flow
+Ver [CONTRIBUTING.md](CONTRIBUTING.md) para detalles y flujos de contribución.
+
+### Setup de desarrollo
+```bash
+git clone https://github.com/EmmanuelOrtiz87/workspace-foundation.git
+cd workspace-foundation
+.\scripts\utilities\wf.ps1 update
+.\scripts\utilities\wf.ps1 review
+```
+
+### Crear nuevos skills
+```powershell
+.\scripts\utilities\create-skill.ps1 -Name "mi-skill" -Type "orchestrator"
+```
+
+
+## 📄 Licencia
+
+MIT — ver [LICENSE](LICENSE)
+
+## 📞 Soporte y Documentación
+
+- Documentación: [docs/](docs/)
+- Issues: [GitHub Issues](https://github.com/EmmanuelOrtiz87/workspace-foundation/issues)
+- Discusiones: [GitHub Discussions](https://github.com/EmmanuelOrtiz87/workspace-foundation/discussions)
+
+---
+
+**¿Listo para operar con gobernanza, automatización y AI real?**
+
+Inicia con `.\scripts\utilities\wf.ps1 health` y consulta la documentación para flujos, skills y normativas vigentes.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
