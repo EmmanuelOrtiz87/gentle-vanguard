@@ -105,7 +105,7 @@ if ($hasAngular -and $hasGo) {
 
 Write-Diag ''
 Write-Diag '=======================================================' -Color Cyan
-Write-Diag '  Gentleman Foundation - System Diagnostics' -Color Cyan
+Write-Diag '  Foundation - Development Stack - System Diagnostics' -Color Cyan
 Write-Diag '=======================================================' -Color Cyan
 Write-Diag "Project Type: $($diagnostics.projectType)" -Color Yellow
 Write-Diag "Project Root: $repoRoot" -Color Yellow

@@ -1,8 +1,8 @@
-# 🏗️ Gentleman Foundation Stack Setup & Auto-Repair Guide
+# 🏗️ Foundation - Development Stack Setup & Auto-Repair Guide
 
 ## Overview
 
-The Gentleman Foundation architecture includes an **automatic stack detection and repair system** that runs with minimal manual intervention. The stack is checked and repaired when:
+The Foundation - Development Stack architecture includes an **automatic stack detection and repair system** that runs with minimal manual intervention. The stack is checked and repaired when:
 
 - You open a terminal in a project directory
 - You run `git checkout` on a branch
@@ -33,7 +33,7 @@ The Gentleman Foundation architecture includes an **automatic stack detection an
 
 ### Option 3: Automatic on Terminal Entry (Recommended)
 
-On Windows, the optional PowerShell profile can run `verify` automatically when it detects a Gentleman Foundation project. On Linux and macOS, use `./wf verify` or invoke `wf.ps1` through `pwsh`.
+On Windows, the optional PowerShell profile can run `verify` automatically when it detects a Foundation - Development Stack project. On Linux and macOS, use `./wf verify` or invoke `wf.ps1` through `pwsh`.
 
 ## Stack Components
 
@@ -157,7 +157,7 @@ cd <project-root>
 
 ### PowerShell Profile Auto-Detection
 
-The optional PowerShell profile (`scripts/utilities/Microsoft.PowerShell_profile.ps1`) can detect when you are in a Gentleman Foundation project and run:
+The optional PowerShell profile (`scripts/utilities/Microsoft.PowerShell_profile.ps1`) can detect when you are in a Foundation - Development Stack project and run:
 
 ```powershell
 # When opening a terminal in a project directory:
@@ -358,3 +358,5 @@ if ($status.overallStatus -ne "HEALTHY") {
 - [scripts/foundation/bootstrap.ps1](../../scripts/foundation/bootstrap.ps1) - Full initialization
 - [scripts/diagnostics/system-diagnostics.ps1](../../scripts/diagnostics/system-diagnostics.ps1) - Diagnostics engine
 - [hooks/post-checkout.ps1](../../hooks/post-checkout.ps1) - Automatic verification on checkout
+
+- Los hooks automáticos de Foundation - Development Stack ejecutan chequeos de 7 dimensiones (seguridad, calidad, arquitectura, testing, API, documentación, gitflow) en cada commit/push. Ver REVIEW-INDEX.md para detalles.

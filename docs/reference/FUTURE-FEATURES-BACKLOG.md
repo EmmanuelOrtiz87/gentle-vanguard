@@ -1,3 +1,6 @@
+
+# DEPRECATED: El backlog oficial ahora vive en docs/backlog/items.json (JSON fuente) y docs/backlog/README.md (resumen generado). Este archivo queda solo como referencia histórica. Actualiza y consulta el backlog únicamente en docs/backlog/.
+
 # Future Features Backlog
 
 This file is the single source of truth for deferred improvements, optimizations, and future features.
@@ -53,6 +56,10 @@ If the user confirms, append the item. If not confirmed, do not register it.
 | FF-012 | 2026-04-15 | Unified Metrics Dashboard | Centralized metrics collection with Grafana visualization. | medium | pending | framework-core | When operational scale requires centralized observability. |
 | FF-013 | 2026-04-15 | SDD Governance Enforcement | Mandatory SDD gate pre-merge with validated/done status. Template exists but not enforced. | high | pending | AGENT-GOV | When SDD baseline is stable for one sprint. |
 | FF-014 | 2026-04-17 | Optional Toolchain Deprecation | Remove validation and governance coupling to legacy optional integrations (`gga`, `gentle-ai`) and finalize native-only documentation/flows. | high | pending | AGENT-GOV | Next release planning cycle after native review/runtime metrics remain stable for one sprint. |
+| FF-015 | 2026-04-19 | Git Hooks Robustness | Automatizar la verificación e instalación del hook post-checkout.ps1 en el setup/bootstrap de Foundation. Documentar restauración manual y agregar logging si falla la instalación. | high | pending | orchestrator | Cuando un dev reporte pérdida del hook o tras migraciones de estructura. |
+| FF-016 | 2026-04-19 | Token Efficiency | Evaluar integración de RTK (Rust Token Killer) solo si los hooks/skills actuales no logran reducir el consumo de tokens en casos reales. | low | pending | orchestrator | Cuando se detecte un cuello de botella real de consumo de tokens no mitigable por los mecanismos actuales. |
+| FF-017 | 2026-04-19 | Auto-Actualización Skills/Tools | Implementar mecanismo de auto-actualización para skills y herramientas nativas, similar a gentle-ai, para reducir mantenimiento manual y asegurar mejoras continuas. | medium | pending | orchestrator | Próxima release o cuando se detecten skills/herramientas desactualizadas. |
+| FF-018 | 2026-04-19 | Instalador Interactivo (TUI) | Desarrollar instalador y configurador interactivo tipo TUI para facilitar onboarding y setup, inspirado en gentle-ai, pero nativo de Foundation. | low | pending | orchestrator | Próxima release o cuando se priorice experiencia de onboarding. |
 
 ## Notes
 

@@ -1,6 +1,6 @@
 # Scripts Directory
 
-Automation scripts for Gentleman Foundation.
+Automation scripts for Foundation - Development Stack.
 
 ## Structure
 
