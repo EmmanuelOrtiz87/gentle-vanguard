@@ -1,4 +1,4 @@
-﻿# Task Brief: foundation-session-hardening
+# Task Brief: foundation-session-hardening
 
 ## Goal
 

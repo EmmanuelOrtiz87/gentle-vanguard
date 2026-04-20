@@ -1,4 +1,4 @@
-﻿# Workspace Configuration
+# Workspace Configuration
 
 This file describes the recommended schema for `config/workspace.config.json`.
 

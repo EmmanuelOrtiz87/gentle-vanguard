@@ -1,4 +1,4 @@
-﻿# Project Name
+# Project Name
 
 Main service or application.
 

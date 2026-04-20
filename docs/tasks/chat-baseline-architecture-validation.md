@@ -1,4 +1,4 @@
-﻿# Task Brief: chat baseline architecture validation
+# Task Brief: chat baseline architecture validation
 
 ## Goal
 

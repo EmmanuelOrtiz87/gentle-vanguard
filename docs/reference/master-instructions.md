@@ -1,4 +1,4 @@
-﻿# Master Instructions
+# Master Instructions
 
 These are the global instructions for all AI agents.
 

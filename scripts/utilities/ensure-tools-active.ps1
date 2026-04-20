@@ -1,4 +1,4 @@
-﻿# ensure-tools-active.ps1
+# ensure-tools-active.ps1
 # Health-check and auto-install for all foundation tools.
 # Reads tool definitions from config/workspace.config.json (single source of truth).
 # All 5 tools follow the same check → install → verify pattern.

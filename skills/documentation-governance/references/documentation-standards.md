@@ -1,4 +1,4 @@
-﻿# Documentation Standards
+# Documentation Standards
 
 ## 1. README Template
 

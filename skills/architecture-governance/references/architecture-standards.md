@@ -1,4 +1,4 @@
-﻿# Architecture Standards
+# Architecture Standards
 
 ## 1. Default Decision Shape
 
