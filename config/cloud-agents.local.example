@@ -19,14 +19,14 @@
         "aws_session_token": "AWS_SESSION_TOKEN (for temp credentials)"
       }
     },
-    "difi": {
+    "dify": {
       "enabled": false,
-      "description": "Difi AI - Custom AI platform",
-      "endpoint": "https://api.difi.ai/v1/chat/completions",
-      "model": "difi-model",
-      "api_key_env": "DIFI_API_KEY",
+      "description": "Dify AI - Custom AI platform",
+      "endpoint": "https://api.dify.ai/v1/chat/completions",
+      "model": "dify-model",
+      "api_key_env": "DIFY_API_KEY",
       "_secrets": {
-        "api_key": "Set DIFI_API_KEY in your environment or .env.local"
+        "api_key": "Set DIFY_API_KEY in your environment or .env.local"
       }
     },
     "azure": {
