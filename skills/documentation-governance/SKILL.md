@@ -1,4 +1,4 @@
-﻿---
+---
 name: documentation-governance
 description: Standardize and produce project documentation, technical docs, code reviews, setup guides, script comments, and markdown structure. Use when creating or updating README files, ARCHITECTURE docs, technical documents, code reviews, setup or secrets docs, script/help docs, or any markdown or comment work that must stay consistent, English-first, numbered, and easy to maintain.
 ---

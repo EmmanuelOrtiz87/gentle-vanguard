@@ -1,4 +1,4 @@
-﻿# update-tools.ps1
+# update-tools.ps1
 # Updates all foundation tools on the local machine.
 #
 # Tool installation:

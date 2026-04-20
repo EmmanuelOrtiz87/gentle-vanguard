@@ -1,4 +1,4 @@
-﻿# 🛡️ Judgment Dashboard - 2026-04-16 19:23
+# 🛡️ Judgment Dashboard - 2026-04-16 19:23
 
 | Check Type | Status | Agent | Details |
 |------------|--------|-------|---------|

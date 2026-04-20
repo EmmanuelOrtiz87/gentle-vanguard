@@ -1,4 +1,4 @@
-﻿param(
+param(
     [ValidateSet('status', 'list', 'set', 'set-language', 'set-detail', 'set-preset', 'set-chat-level', 'enforce-baseline', 'recommend', 'export')]
     [string]$Mode = 'status',
     [ValidateSet('lite', 'lleno', 'ultra')]

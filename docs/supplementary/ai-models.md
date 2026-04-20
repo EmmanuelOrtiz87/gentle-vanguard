@@ -1,4 +1,4 @@
-﻿# AI Model Setup
+# AI Model Setup
 
 This guide explains how to prepare an optional AI model layer for projects that use AI-assisted workflows.
 

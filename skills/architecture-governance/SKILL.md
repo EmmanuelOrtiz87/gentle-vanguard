@@ -1,4 +1,4 @@
-﻿---
+---
 name: architecture-governance
 description: Standardize architecture decisions, project structure choices, defaults, and decision records. Use when defining or updating project architecture, layering, naming conventions, repository structure, scaffolding defaults, compatibility constraints, or architecture decision documents.
 ---

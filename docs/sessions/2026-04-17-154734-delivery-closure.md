@@ -1,4 +1,4 @@
-﻿# Delivery Closure
+# Delivery Closure
 
 Date: 2026-04-17 15:47:34
 Owner: EmmanuelOrtiz87
