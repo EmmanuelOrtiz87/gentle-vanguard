@@ -99,3 +99,8 @@ docs/
 
 | [skills/](../skills/) | Review skills for each dimension (edit SKILL.md to customize) |
 | [scripts/hooks/](../scripts/hooks/) | Automated check scripts for each review dimension |
+
+# Additional Documentation
+- All architecture, security, testing, and process docs are organized here.
+- Audit reports, governance, and supplementary materials included.
+- See PROJECT-STRUCTURE.md for structure guidance.

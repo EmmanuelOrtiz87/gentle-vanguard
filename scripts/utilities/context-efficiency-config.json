@@ -1,0 +1,6 @@
+{
+  "targetPercentage": 70,
+  "autoCompactionThreshold": 15000,
+  "reduceRedundancy": true,
+  "referenceInsteadOfRepeat": true
+}

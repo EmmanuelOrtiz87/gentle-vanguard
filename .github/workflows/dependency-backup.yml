@@ -1,0 +1,43 @@
+name: Dependency Scan and Backup
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    - cron: '0 3 * * 0' # Weekly on Sunday
+
+jobs:
+  dependency-scan:
+    name: Dependency Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@v0.16.0
+        with:
+          scan-type: fs
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH
+      - name: Upload Trivy report
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-report
+          path: trivy-report.json
+
+  backup:
+    name: Backup Artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Archive docs and config
+        run: |
+          tar -czf backup-$(date +%Y-%m-%d).tar.gz docs/ config/
+      - name: Upload backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: workspace-backup
+          path: backup-*.tar.gz

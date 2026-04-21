@@ -13,6 +13,17 @@ scripts/
 └── utilities/       # Utility scripts
 ```
 
+## Additional Subdirectories
+
+- diagnostics/: System and workflow diagnostics
+- monitoring/: Monitoring and alerting
+- optional/: Optional/experimental scripts
+- projects/: Project-specific scripts
+- tools/: Utility scripts
+- hooks/: General hooks
+
+See each subdirectory's README.md for details.
+
 ## Foundation
 
 | Script | Purpose |
