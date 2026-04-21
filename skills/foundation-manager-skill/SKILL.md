@@ -58,9 +58,7 @@ gf tools
 
 Shows installation status for:
 - `gg` - Gentleman Guardian Angel
-- `gga` - GGA CLI
 - `engram` - Engram Memory
-- `gentle-ai` - Gentle-AI CLI
 
 ## Update Workflow
 

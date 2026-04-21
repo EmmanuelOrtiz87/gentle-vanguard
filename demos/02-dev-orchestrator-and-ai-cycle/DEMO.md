@@ -18,8 +18,7 @@ Show how the orchestrator and skills drive AI-assisted implementation flow.
 1. `context-pack.ps1`
 2. `orchestrator-next-steps.ps1`
 3. `custom-rules.ps1`
-4. `run-gentle-ai.ps1`
-5. Skills: project orchestrator + session workflow + technical skills
+4. Skills: project orchestrator + session workflow + technical skills
 
 ## Run Steps
 
@@ -27,7 +26,6 @@ Show how the orchestrator and skills drive AI-assisted implementation flow.
 2. `./scripts/utilities/orchestrator-next-steps.ps1`
 3. `./scripts/utilities/custom-rules.ps1 status`
 4. `./scripts/utilities/custom-rules.ps1 export`
-5. `./scripts/utilities/run-gentle-ai.ps1 --help`
 
 ## Expected Outcome
 

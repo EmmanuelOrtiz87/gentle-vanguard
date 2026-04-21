@@ -201,7 +201,6 @@ git config --global core.hooksPath
 - [ ] Foundation - Development Stack installed
 - [ ] Git identity configured
 - [ ] `gf validate` passes
-- [ ] Optional: gentleman-skills installed
 
 ## Getting Help
 

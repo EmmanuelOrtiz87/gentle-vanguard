@@ -69,7 +69,6 @@ Miscellaneous utility scripts for various tasks.
 | `end-session.ps1` | Run end-of-session checks and generate delivery closure artifact |
 | `stack-on-demand.ps1` | Activate/validate/deactivate orchestrator in on-demand mode |
 | `token-efficiency-estimator.ps1` | Estimate token, time, and equivalent cost savings |
-| `run-gga.ps1` | Optional compatibility wrapper for GGA |
 | `create-pull-request.ps1` | Create pull request |
 | `aggregate-metrics.ps1` | Aggregate metrics |
 | `help.ps1` | Show help |

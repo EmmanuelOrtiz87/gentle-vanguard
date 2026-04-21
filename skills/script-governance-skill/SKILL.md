@@ -91,7 +91,7 @@ Use this contract to keep governance behavior predictable and non-conflicting:
 
 1. MUST persist durable decisions and session closure notes in Engram.
 2. MUST follow orchestrator skill flow for assessment, validation, audit, and publication.
-3. SHOULD use `gga` and `gentle-ai` when present; if absent, emit warnings with install/remediation commands.
+3. SHOULD use available native tools when present; if absent, emit warnings with install/remediation commands.
 4. MUST keep validators deterministic and quiet-safe in automation mode.
 5. MUST avoid introducing startup behavior that changes state unexpectedly.
 6. MUST classify new checks by severity: blocking only for reliability/security/integrity risks.

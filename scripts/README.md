@@ -61,7 +61,7 @@ See each subdirectory's README.md for details.
 | `deploy.ps1` | Deploy project |
 | `clean-runtime.ps1` | Clean runtime data |
 | `generate-*.ps1` | Generate reports and audits |
-| `run-*.ps1` | Run tools (engram, gga) |
+| `run-*.ps1` | Run tools (engram) |
 | `aggregate-metrics.ps1` | Aggregate metrics |
 | `orchestrator-status.ps1` | Comprobar orquestador + Engram |
 | `install-engram.ps1` | Instalar o verificar Engram CLI |

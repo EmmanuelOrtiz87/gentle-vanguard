@@ -15,16 +15,14 @@ Show automated quality control, AI review, and audit generation.
 
 ## Components Demonstrated
 
-1. `run-gga.ps1`
-2. `generate-session-review.ps1`
+1. `generate-session-review.ps1`
 3. `generate-audit-report.ps1`
 4. `generate-session-audit.ps1`
 5. Review and governance skills
 
 ## Run Steps
 
-1. `./scripts/utilities/run-gga.ps1 --help`
-2. `./scripts/utilities/generate-session-review.ps1`
+1. `./scripts/utilities/generate-session-review.ps1`
 3. `./scripts/utilities/generate-session-audit.ps1`
 4. `./scripts/utilities/generate-audit-report.ps1 -Period weekly`
 

@@ -93,20 +93,7 @@ if (Get-Command engram -ErrorAction SilentlyContinue) {
     }
 }
 
-# 4. Gentleman Skills (Base skills library)
-Write-Step "Synchronizing Gentleman Skills (Knowledge Base)..."
-$skillsDir = Join-Path $workspaceRoot "tools/Gentleman-Skills"
-if (-not (Test-Path $skillsDir)) {
-    git clone $SKILLS_REPO_URL "$skillsDir"
-    Write-Success "Gentleman-Skills cloned successfully."
-} else {
-    Push-Location $skillsDir
-    git pull --ff-only
-    Pop-Location
-    Write-Success "Gentleman-Skills updated."
-}
-
-# 5. GitHub CLI (Optional but recommended for repo automation)
+# 4. GitHub CLI (Optional but recommended for repo automation)
 Write-Step "Verifying GitHub CLI (gh)..."
 if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
     Write-Host "[!] GitHub CLI not detected." -ForegroundColor Yellow
@@ -135,26 +122,6 @@ if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
     }
 } else {
     Write-Success "GitHub CLI detected."
-}
-
-# 6. Gentleman Guardian Angel (GGA) - AI-assisted code review
-Write-Step "Verifying Gentleman Guardian Angel (gga)..."
-if (Get-Command gga -ErrorAction SilentlyContinue) {
-    Write-Success "GGA CLI detected."
-} else {
-    Write-Step "Installing Gentleman Guardian Angel CLI from repository..."
-    $ggaToolDir = Join-Path $workspaceRoot "tools/gentleman-guardian-angel"
-    if (-not (Test-Path $ggaToolDir)) {
-        git clone "https://github.com/Gentleman-Programming/gentleman-guardian-angel.git" "$ggaToolDir"
-    }
-    Push-Location $ggaToolDir
-    & go install ./cmd/gga
-    Pop-Location
-    if (Get-Command gga -ErrorAction SilentlyContinue) {
-        Write-Success "GGA CLI installed successfully."
-    } else {
-        Write-ErrorMsg "Could not install GGA. Ensure %GOPATH%\bin is in your PATH."
-    }
 }
 
 Write-Step "Step 3: Deploying Default Configuration..."
@@ -195,8 +162,6 @@ $report = @{
     }
     Go  = if (Get-Command go -ErrorAction SilentlyContinue) { "PASS" } else { "FAIL" }
     Engram = if (Get-Command engram -ErrorAction SilentlyContinue) { "PASS" } else { "FAIL" }
-    GGA = if (Get-Command gga -ErrorAction SilentlyContinue) { "PASS" } else { "FAIL" }
-    Skills = if (Test-Path $skillsDir) { "PASS" } else { "FAIL" }
     Config = if (Test-Path $configPath) { "PASS" } else { "FAIL" }
 }
 

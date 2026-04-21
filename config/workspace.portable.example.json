@@ -3,26 +3,7 @@
   "dataRoot": "{workspaceRoot}/.engram-data",
   "toolsRoot": "{workspaceRoot}/tools",
   "projectsRoot": "{workspaceRoot}/projects",
-  "mcpIntegrations": {
-    "context7": {
-      "enabled": false,
-      "serverName": "context7",
-      "transport": "stdio",
-      "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"],
-      "requiredEnv": ["CONTEXT7_API_KEY"],
-      "purpose": "Version-aware docs and snippets for implementation support"
-    },
-    "notion": {
-      "enabled": false,
-      "serverName": "notion",
-      "transport": "stdio",
-      "command": "npx",
-      "args": ["-y", "@notionhq/notion-mcp-server"],
-      "requiredEnv": ["NOTION_TOKEN", "NOTION_DATABASE_ID"],
-      "purpose": "Shared knowledge base and delivery notes"
-    }
-  },
+  "mcpIntegrations": {},
   "projectTemplate": "{workspaceRoot}/templates/project-root",
   "projectDefaults": {
     "repositoryMode": "template",
@@ -53,25 +34,5 @@
         "macos": "go install github.com/Gentleman-Programming/engram/cmd/engram@latest"
       }
     },
-    {
-      "name": "gga",
-      "checkCommand": "gga",
-      "requires": ["git", "bash"],
-      "install": {
-        "windows": "$target = Join-Path '{toolsRoot}' 'gentleman-guardian-angel'; if (-not (Test-Path $target)) { git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git $target }; Set-Location $target; bash ./install.sh",
-        "linux": "$target = Join-Path '{toolsRoot}' 'gentleman-guardian-angel'; if (-not (Test-Path $target)) { git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git $target }; Set-Location $target; bash ./install.sh",
-        "macos": "$target = Join-Path '{toolsRoot}' 'gentleman-guardian-angel'; if (-not (Test-Path $target)) { git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git $target }; Set-Location $target; bash ./install.sh"
-      }
-    },
-    {
-      "name": "gentleman-skills",
-      "checkPath": "{toolsRoot}/Gentleman-Skills",
-      "requires": ["git"],
-      "install": {
-        "windows": "$target = Join-Path '{toolsRoot}' 'Gentleman-Skills'; if (-not (Test-Path $target)) { git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git $target } else { Set-Location $target; git pull --ff-only }",
-        "linux": "$target = Join-Path '{toolsRoot}' 'Gentleman-Skills'; if (-not (Test-Path $target)) { git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git $target } else { Set-Location $target; git pull --ff-only }",
-        "macos": "$target = Join-Path '{toolsRoot}' 'Gentleman-Skills'; if (-not (Test-Path $target)) { git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git $target } else { Set-Location $target; git pull --ff-only }"
-      }
-    }
   ]
 }

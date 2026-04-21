@@ -126,41 +126,12 @@ if ($All -or $Tools) {
     Write-Host "Optional Tools" -ForegroundColor Yellow
     Write-Host "-------------"
     
-    $gga = Get-Command gga -ErrorAction SilentlyContinue
-    if ($gga) {
-        Write-Check "gga" "OK" "AI-powered code review"
-    } else {
-        Write-Check "gga" "MISSING" "AI-powered code review"
-        Write-Host "       Install: git clone + bash install.sh (see scripts/utilities/update-tools.ps1)" -ForegroundColor Gray
-    }
-    
     $engram = Get-Command engram -ErrorAction SilentlyContinue
     if ($engram) {
         Write-Check "engram" "OK" "Persistent memory"
     } else {
         Write-Check "engram" "MISSING" "Persistent memory"
         Write-Host "       Install: go install github.com/Gentleman-Programming/engram/cmd/engram@latest" -ForegroundColor Gray
-    }
-    
-    $gentleAi = Get-Command gentle-ai -ErrorAction SilentlyContinue
-    if ($gentleAi) {
-        Write-Check "gentle-ai" "OK" "Ecosystem configurator"
-    } else {
-        Write-Check "gentle-ai" "MISSING" "Ecosystem configurator"
-        Write-Host "       Install: go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest" -ForegroundColor Gray
-    }
-    
-    $cfgPath   = Join-Path (Split-Path -Parent $scriptDir) 'config\workspace.config.json'
-    $toolsRoot = if (Test-Path $cfgPath) {
-        $c = Get-Content $cfgPath -Raw | ConvertFrom-Json
-        if ($c.toolsRoot) { Join-Path (Split-Path -Parent $scriptDir) $c.toolsRoot } else { Join-Path (Split-Path -Parent $scriptDir) 'tools' }
-    } else { Join-Path (Split-Path -Parent $scriptDir) 'tools' }
-    $skillsDir = Join-Path $toolsRoot 'Gentleman-Skills'
-    if (Test-Path $skillsDir) {
-        Write-Check "gentleman-skills" "OK" "AI skills library"
-    } else {
-        Write-Check "gentleman-skills" "MISSING" "AI skills library"
-        Write-Host "       Install: git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git $skillsDir" -ForegroundColor Gray
     }
 
     Write-Host ""

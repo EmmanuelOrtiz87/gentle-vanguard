@@ -35,7 +35,6 @@ These enhance the foundation but are **not required**:
 | Tool | Type | Purpose | Install |
 |------|------|---------|---------|
 | **engram** | opencode plugin | Persistent memory across sessions | Built into opencode |
-| **gentleman-skills** | Repository | Optional community skill library | `git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git` |
 
 ## Quick Setup for New Developer
 
@@ -158,7 +157,6 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 │   [OK] AI Agent (opencode, claude, copilot, etc.)             │
 │                                                              │
 │   Optional but recommended:                                  │
-│   ⬜ gentleman-skills (external skill pack)                 │
 │   ⬜ engram (memory - built into opencode)                  │
 │                                                              │
 └─────────────────────────────────────────────────────────────┘

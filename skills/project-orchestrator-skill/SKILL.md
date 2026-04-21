@@ -67,8 +67,6 @@ Recommended policy (normalized):
 Role split:
 
 1. Orchestrator: source of truth for process and enforcement decisions.
-2. `gga`: governance/compliance assist and diagnostics.
-3. `gentle-ai`: implementation assistant only.
 
 Reference: `docs/reference/SDD-GOVERNANCE-POLICY.md`
 
@@ -104,7 +102,7 @@ Goal: avoid overlap, confusion, and conflicting behavior across sessions.
 1. MUST use Engram for durable memory (context, decisions, closeout learnings).
 2. MUST use this orchestrator skill as the primary execution framework.
 3. MUST keep session artifacts updated (`docs/sessions/YYYY-MM-DD-session-start.md` and task brief for bounded scope).
-4. SHOULD use `gentle-ai`, `gentleman-guardian-angel` (`gga`), and `gentleman-skills` when available; if unavailable, continue with warnings plus remediation commands.
+4. SHOULD use available native skills; if unavailable, continue with warnings plus remediation commands.
 5. MUST run focused validation before push and include evidence in docs.
 6. MUST load script-governance skill for any script move, command-path update, hook change, or script documentation change.
 
@@ -375,7 +373,7 @@ See: `skills/guardian-fallback-skill/SKILL.md` for full protocol.
 ## FAILURE POLICY
 
 1. Blocking failures: syntax errors, broken validation, missing required governance files.
-2. Advisory failures: optional toolchain gaps (`gentle-ai`, `gga`) unless strict mode is enabled.
+2. Advisory failures: missing optional tools unless strict mode is enabled.
 3. Never fail silently: every failure must print actionable remediation.
 4. If ambiguity appears, stop and notify user before proceeding.
 

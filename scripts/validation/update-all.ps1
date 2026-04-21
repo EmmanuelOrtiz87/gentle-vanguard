@@ -163,7 +163,7 @@ function Install-Tool {
 
 function Update-Tools {
     Write-Step "Updating Tools"
-    # Delegate to the canonical tool updater which installs gga, engram, and gentle-ai.
+    # Delegate to the canonical tool updater which installs engram and opencode.
     $toolsScript = Join-Path $scriptDir "..\utilities\update-tools.ps1"
     if (-not (Test-Path $toolsScript)) {
         Write-Err "update-tools.ps1 not found at: $toolsScript"

@@ -119,59 +119,16 @@
       }
     }
   ],
-  "tools": [
-    {
-      "name": "engram",
-      "checkCommand": "engram",
-      "requires": ["go"],
-      "install": {
-        "windows": "go install github.com/Gentleman-Programming/engram/cmd/engram@latest",
-        "linux": "go install github.com/Gentleman-Programming/engram/cmd/engram@latest",
-        "macos": "go install github.com/Gentleman-Programming/engram/cmd/engram@latest"
-      }
-    },
-    {
-      "name": "gga",
-      "checkCommand": "gga",
-      "optional": true,
-      "requires": ["git", "bash"],
-      "install": {
-        "windows": "$target = Join-Path '{toolsRoot}' 'gentleman-guardian-angel'; if (-not (Test-Path $target)) { git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git $target }; Set-Location $target; bash ./install.sh",
-        "linux": "$target = Join-Path '{toolsRoot}' 'gentleman-guardian-angel'; if (-not (Test-Path $target)) { git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git $target }; Set-Location $target; bash ./install.sh",
-        "macos": "$target = Join-Path '{toolsRoot}' 'gentleman-guardian-angel'; if (-not (Test-Path $target)) { git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git $target }; Set-Location $target; bash ./install.sh"
-      }
-    },
-    {
-      "name": "gentleman-skills",
-      "checkPath": "{toolsRoot}/Gentleman-Skills",
-      "optional": true,
-      "requires": ["git"],
-      "install": {
-        "windows": "$target = Join-Path '{toolsRoot}' 'Gentleman-Skills'; if (-not (Test-Path $target)) { git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git $target } else { Set-Location $target; git pull --ff-only }",
-        "linux": "$target = Join-Path '{toolsRoot}' 'Gentleman-Skills'; if (-not (Test-Path $target)) { git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git $target } else { Set-Location $target; git pull --ff-only }",
-        "macos": "$target = Join-Path '{toolsRoot}' 'Gentleman-Skills'; if (-not (Test-Path $target)) { git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git $target } else { Set-Location $target; git pull --ff-only }"
-      }
-    },
-    {
-      "name": "gentle-ai",
-      "checkCommand": "gentle-ai",
-      "optional": true,
-      "requires": ["go"],
-      "install": {
-        "windows": "go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest",
-        "linux": "go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest",
-        "macos": "go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest"
-      }
-    },
-    {
-      "name": "opencode",
-      "checkCommand": "opencode",
-      "requires": [],
-      "install": {
-        "windows": "irm https://opencode.ai/install | iex",
-        "linux": "curl -fsSL https://opencode.ai/install | bash",
-        "macos": "curl -fsSL https://opencode.ai/install | bash"
-      }
-    }
-  ]
+   "tools": [
+     {
+       "name": "opencode",
+       "checkCommand": "opencode",
+       "requires": [],
+       "install": {
+         "windows": "irm https://opencode.ai/install | iex",
+         "linux": "curl -fsSL https://opencode.ai/install | bash",
+         "macos": "curl -fsSL https://opencode.ai/install | bash"
+       }
+     }
+   ]
 }

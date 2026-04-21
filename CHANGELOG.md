@@ -57,7 +57,6 @@ This marks the first official, stable release of Gentleman Foundation. All previ
 
 #### GGA Integration (v2.1.0)
 - Automatic GGA installation on project creation
-- Pre-configured .gga file with project settings
 - AGENTS.md template for coding standards
 - Pre-commit hook for AI-powered code review
 - Support for multiple AI providers (Claude, OpenCode, Gemini, Ollama, GitHub Models)

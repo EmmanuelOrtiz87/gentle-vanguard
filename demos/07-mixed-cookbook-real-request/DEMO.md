@@ -166,7 +166,6 @@ Objective:
 Commands:
 
 ```powershell
-./scripts/utilities/run-gga.ps1 --help
 ./scripts/utilities/generate-session-review.ps1
 ./scripts/utilities/generate-session-audit.ps1
 ./scripts/utilities/generate-audit-report.ps1 -Period weekly

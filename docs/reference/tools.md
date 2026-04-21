@@ -15,7 +15,6 @@ The workspace foundation keeps external tools outside each project and versioned
 
 - `engram` handles memory and session persistence.
 - Foundation native review handles review and quality gates.
-- `gentleman-skills` provides reusable skills and rules as a cloned skills repository, not as a CLI.
 - `documentation-governance` standardizes README files, technical docs, code reviews, and script comments.
 - `architecture-governance` standardizes project structure decisions, defaults, and decision records.
 
