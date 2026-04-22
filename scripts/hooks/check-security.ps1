@@ -31,7 +31,7 @@ foreach ($file in $StagedFiles.Split("`n")) {
 if (Test-Path "package.json") {
     $audit = npm audit --json 2>$null | ConvertFrom-Json
     if ($audit.metadata.vulnerabilities.critical -gt 0) {
-        Write-Host "[CRITICAL] Vulnerabilidades críticas detectadas en dependencias (npm audit)" -ForegroundColor Red
+        Write-Host "[CRITICAL] Vulnerabilidades crticas detectadas en dependencias (npm audit)" -ForegroundColor Red
         $SecretFound = $true
     }
 }

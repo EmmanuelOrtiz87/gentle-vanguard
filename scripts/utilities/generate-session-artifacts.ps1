@@ -178,7 +178,7 @@ function New-AuditFile {
 "@
     
     if ($sessionData) {
-        $auditContent += "| Validation Passed | $(if ($sessionData.validation.passed) { '✅' } else { '❌' }) |`n"
+        $auditContent += "| Validation Passed | $(if ($sessionData.validation.passed) { '' } else { '' }) |`n"
     } else {
         $auditContent += "| Validation | N/A |`n"
     }
@@ -260,10 +260,10 @@ function New-BudgetFile {
     
     $alerts = @()
     if ($estimatedCost -gt 5.0) {
-        $alerts += "⚠️ Session cost exceeds $5 threshold"
+        $alerts += " Session cost exceeds $5 threshold"
     }
     if ($estimatedCost -gt 20.0) {
-        $alerts += "🚨 Session cost exceeds $20 threshold - review required"
+        $alerts += " Session cost exceeds $20 threshold - review required"
     }
     
     if ($alerts.Count -gt 0) {
@@ -390,7 +390,7 @@ function New-TelemetryFile {
 
 | Check | Status |
 |-------|--------|
-| Validation Passed | $(if ($Summary.ValidationPassed) { '✅' } else { '❌' }) |
+| Validation Passed | $(if ($Summary.ValidationPassed) { '' } else { '' }) |
 | Tests Run | $($Summary.TestsRun) |
 | Tests Passed | $($Summary.TestsPassed) |
 | Code Coverage | N/A |
