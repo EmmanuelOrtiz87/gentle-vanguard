@@ -52,7 +52,7 @@ function Invoke-Engram {
     }
 }
 
-# ── Session closure sequence ──────────────────────────────────────────────────
+#  Session closure sequence 
 $endSessionScript = Join-Path $scriptDir 'end-session.ps1'
 $validateScript = Join-Path $repoRoot 'scripts\diagnostics\validate-script-governance.ps1'
 
@@ -190,10 +190,10 @@ $report = @"
 
 | Stage | Status |
 |-------|--------|
-| Operational Closure | ✅ Complete |
-| Workspace Validation | $(if ($SkipValidation) { '⏭️  Skipped' } else { '✅ Complete' }) |
-| Memory Capture | $(if ($SkipEngram) { '⏭️  Skipped' } else { '✅ Complete' }) |
-| Report Generation | ✅ Complete |
+| Operational Closure |  Complete |
+| Workspace Validation | $(if ($SkipValidation) { '  Skipped' } else { ' Complete' }) |
+| Memory Capture | $(if ($SkipEngram) { '  Skipped' } else { ' Complete' }) |
+| Report Generation |  Complete |
 
 ## Repository State
 
@@ -229,14 +229,14 @@ if (-not $Quiet) {
     Write-Host "Day end closure completed successfully." -ForegroundColor Green
     Write-Host ""
     Write-Host "Artifacts created:" -ForegroundColor Cyan
-    Write-Host "  • docs/sessions/*delivery-closure-*.md (operational state)" -ForegroundColor Gray
-    Write-Host "  • docs/sessions/closure-report-$timestamp.md (this report)" -ForegroundColor Gray
-    Write-Host "  • Engram session summary (memory capture)" -ForegroundColor Gray
+    Write-Host "   docs/sessions/*delivery-closure-*.md (operational state)" -ForegroundColor Gray
+    Write-Host "   docs/sessions/closure-report-$timestamp.md (this report)" -ForegroundColor Gray
+    Write-Host "   Engram session summary (memory capture)" -ForegroundColor Gray
     Write-Host ""
     Write-Host "To resume tomorrow:" -ForegroundColor Cyan
-    Write-Host "  • Tools auto-activate on project entry" -ForegroundColor Gray
-    Write-Host "  • Engram loads prior session context" -ForegroundColor Gray
-    Write-Host "  • Run 'gf status' to see where you left off" -ForegroundColor Gray
+    Write-Host "   Tools auto-activate on project entry" -ForegroundColor Gray
+    Write-Host "   Engram loads prior session context" -ForegroundColor Gray
+    Write-Host "   Run 'gf status' to see where you left off" -ForegroundColor Gray
     Write-Host ""
 }
 

@@ -1,5 +1,5 @@
 # check-api.ps1
-# Valida reglas de diseño de API (OpenAPI, convenciones, breaking changes)
+# Valida reglas de diseo de API (OpenAPI, convenciones, breaking changes)
 
 $ErrorActionPreference = 'Continue'
 
@@ -12,7 +12,7 @@ foreach ($file in $files.Split("`n")) {
     if ($file -like '*controller*' -or $file -like '*api*') {
         $content = Get-Content $file -Raw -ErrorAction SilentlyContinue
         if ($content -notmatch 'openapi|swagger') {
-            Write-Host "[API] Falta documentación OpenAPI/Swagger en $file" -ForegroundColor Yellow
+            Write-Host "[API] Falta documentacin OpenAPI/Swagger en $file" -ForegroundColor Yellow
             $failed = $true
         }
     }

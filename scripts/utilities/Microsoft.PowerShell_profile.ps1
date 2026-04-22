@@ -22,7 +22,7 @@ if ($Host.Name -eq 'ConsoleHost') {
     }
 
     if ($isGFProject) {
-        Write-Host "🤖 Foundation - Development Stack project detected - Activating tools..." -ForegroundColor Cyan
+        Write-Host " Foundation - Development Stack project detected - Activating tools..." -ForegroundColor Cyan
 
         # Run auto-init in background to avoid blocking shell startup
         $initScript = Join-Path $currentDir 'scripts/utilities/auto-init-dev-environment.ps1'
@@ -33,7 +33,7 @@ if ($Host.Name -eq 'ConsoleHost') {
             } -ArgumentList $initScript | Out-Null
         }
 
-        Write-Host "✅ Development environment activation started in background" -ForegroundColor Green
+        Write-Host " Development environment activation started in background" -ForegroundColor Green
         Write-Host "Use '.\scripts\utilities\wf.ps1 health' to check status" -ForegroundColor Blue
         Write-Host ""
     }

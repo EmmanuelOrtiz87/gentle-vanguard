@@ -20,7 +20,7 @@ $projectRoot = Split-Path -Parent $scriptDir
 
 function Write-Step { param([string]$Msg) Write-Host "[->] $Msg" -ForegroundColor Cyan }
 function Write-Success { param([string]$Msg) Write-Host "[[OK]] $Msg" -ForegroundColor Green }
-function Write-Error { param([string]$Msg) Write-Host "[✗] $Msg" -ForegroundColor Red }
+function Write-Error { param([string]$Msg) Write-Host "[] $Msg" -ForegroundColor Red }
 function Write-Info { param([string]$Msg) Write-Host "[INFO] $Msg" -ForegroundColor Gray }
 
 function Get-ProjectName {

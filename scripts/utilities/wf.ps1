@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -1410,7 +1410,8 @@ COMMANDS:
     update-tools         Update toolchain (required + optional integrations)
     migrate-structure    Preflight and guided migration of loose scripts
     context-pack [goal]  Generate compact context summary for new chat thread
-    compact-start [goal] Generate context pack and copy compact continuation prompt
+    compact-start [goal]  Generate context pack and copy compact continuation prompt
+    simplify-text [text]   Simplify input text (remove emojis, normalize, abbreviate)
     context-metrics [days] Show context/token usage metrics from local logs
     token-guard [task]   Check token budget thresholds and continuity alternatives (Engram-aware)
     checkpoint [label]   Save a live rollback point (git stash -u) before risky edits
@@ -2100,6 +2101,23 @@ switch ($Command) {
             & $compactScript
         } else {
             & $compactScript -Objective $Scope
+        }
+    }
+
+    'simplify-text' {
+        Write-Step "Simplifying Text for Token Efficiency"
+        $simplifyScript = Join-Path $scriptDir 'simplify-text.ps1'
+        if (-not (Test-Path $simplifyScript)) {
+            Write-Error "Simplify text script not found: $simplifyScript"
+            exit 1
+        }
+
+        if ([string]::IsNullOrWhiteSpace($Scope)) {
+            Write-Host "Usage: wf.ps1 simplify-text '<text>'" -ForegroundColor Yellow
+            Write-Host "       wf.ps1 simplify-text -Interactive" -ForegroundColor Yellow
+            Write-Host "       wf.ps1 simplify-text -InputFile '<path>'" -ForegroundColor Yellow
+        } else {
+            & $simplifyScript -InputText $Scope -SaveMetrics
         }
     }
 
