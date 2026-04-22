@@ -1,7 +1,7 @@
 # ensure-tools-active.ps1
 # Health-check and auto-install for all foundation tools.
 # Reads tool definitions from config/workspace.config.json (single source of truth).
-# All 5 tools follow the same check → install → verify pattern.
+# All 5 tools follow the same check  install  verify pattern.
 
 param(
     [switch]$AutoStart,
@@ -13,7 +13,7 @@ $ErrorActionPreference = 'Continue'
 $scriptDir  = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot   = if ($scriptDir) { (Resolve-Path (Join-Path (Join-Path $scriptDir '..') '..')).Path } else { Get-Location }
 
-# ── Output helpers ────────────────────────────────────────────────────────────
+#  Output helpers 
 function Write-Step { param([string]$m) if (-not $Quiet) { Write-Host "`n=== $m ===" -ForegroundColor Cyan } }
 function Write-Ok   { param([string]$m) if (-not $Quiet) { Write-Host "[OK] $m"   -ForegroundColor Green  } }
 function Write-Warn { param([string]$m) if (-not $Quiet) { Write-Host "[WARN] $m" -ForegroundColor Yellow } }
@@ -71,14 +71,14 @@ function Get-PlatformInstallInfo {
     return $null
 }
 
-# ── Resolve {token} placeholders in a string ─────────────────────────────────
+#  Resolve {token} placeholders in a string 
 function Resolve-Placeholders {
     param([string]$Text, [hashtable]$Vars)
     foreach ($k in $Vars.Keys) { $Text = $Text.Replace("{$k}", $Vars[$k]) }
     return $Text
 }
 
-# ── Check if a tool is currently available ───────────────────────────────────
+#  Check if a tool is currently available 
 function Test-ToolAvailable {
     param($Tool, [string]$ToolsRoot)
     if ($Tool.checkCommand) {
@@ -94,7 +94,7 @@ function Test-ToolAvailable {
     return $false
 }
 
-# ── System dependency management (go, git, node, etc.) ───────────────────────
+#  System dependency management (go, git, node, etc.) 
 
 # Returns the installed version string for a system dep, or $null if undetectable.
 function Get-SystemDepVersion {
@@ -126,11 +126,11 @@ function Install-SystemDep {
     }
 
     if (-not $info) {
-        Write-Host "  -─ [ERROR] No install info in workspace.config.json for '$($Dep.name)' on '$platform'" -ForegroundColor Red
+        Write-Host "  - [ERROR] No install info in workspace.config.json for '$($Dep.name)' on '$platform'" -ForegroundColor Red
         return $false
     }
 
-    # ── Attempt auto-install via available package managers ───────────────────
+    #  Attempt auto-install via available package managers 
     $didAutoInstall = $false
     if ($info.winget) {
         $wingetCmd = Get-Command winget -ErrorAction SilentlyContinue
@@ -231,7 +231,7 @@ function Install-SystemDep {
         Write-Host "  winget not found on this system" -ForegroundColor Yellow
     }
 
-    # ── Manual install fallback ───────────────────────────────────────────────
+    #  Manual install fallback 
     Write-Host "" -ForegroundColor Red
     Write-Host "  MANUAL INSTALL REQUIRED" -ForegroundColor Red
     Write-Host "  ---------------------------------------------------------" -ForegroundColor Red
@@ -335,7 +335,7 @@ function Invoke-SystemDeps {
     }
 }
 
-# ── Install a tool using the command from workspace.config.json ──────────────
+#  Install a tool using the command from workspace.config.json 
 function Install-Tool {
     param($Tool, [string]$ToolsRoot)
 
@@ -353,7 +353,7 @@ function Install-Tool {
         return $false
     }
 
-    # Prerequisite check (go, git, bash) — attempt auto-install via system deps if missing
+    # Prerequisite check (go, git, bash)  attempt auto-install via system deps if missing
     foreach ($req in $Tool.requires) {
         if ($req -eq 'bash') {
             $bashPath = Get-BashPath
@@ -407,7 +407,7 @@ function Install-Tool {
         Invoke-Expression $installCmd 2>&1 | Out-Null
     } catch {
         $msg = $_.Exception.Message
-        # HTTP 403 on opencode.ai means corporate/network restriction — treat as optional-blocked
+        # HTTP 403 on opencode.ai means corporate/network restriction  treat as optional-blocked
         if ($msg -like '*403*' -or $msg -like '*Prohibido*' -or $msg -like '*Forbidden*') {
             Write-Warn "$($Tool.name): install blocked by network restriction (HTTP 403)"
             Write-Info "  This tool is optional. Alternative install options:"
@@ -424,7 +424,7 @@ function Install-Tool {
     return $true
 }
 
-# ── Re-check after install (handles GOPATH/bin and bash-installed tools not yet in PATH) ──
+#  Re-check after install (handles GOPATH/bin and bash-installed tools not yet in PATH) 
 function Confirm-ToolAfterInstall {
     param($Tool, [string]$ToolsRoot)
 
@@ -481,7 +481,7 @@ function Confirm-ToolAfterInstall {
     return $false
 }
 
-# ── Main tool activation loop (data-driven over workspace.config.json) ────────
+#  Main tool activation loop (data-driven over workspace.config.json) 
 function Invoke-ToolActivation {
     Write-Step "Checking Foundation Tools"
 
@@ -539,7 +539,7 @@ function Invoke-ToolActivation {
     if ($allOk) { Write-Ok "Required foundation tools are active" }
 }
 
-# ── Orchestrator skills ───────────────────────────────────────────────────────
+#  Orchestrator skills 
 function Test-OrchestratorSkills {
     Write-Step "Checking Orchestrator Skills"
 
@@ -558,7 +558,7 @@ function Test-OrchestratorSkills {
     if ($allOk) { Write-Ok "Orchestrator skills ready" }
 }
 
-# ── Optional MCP integrations ─────────────────────────────────────────────────
+#  Optional MCP integrations 
 function Test-MCPIntegrations {
     Write-Step "Checking Optional MCP Integrations"
 
@@ -588,7 +588,7 @@ function Test-MCPIntegrations {
     }
 }
 
-# ── Workflow CLI readiness ────────────────────────────────────────────────────
+#  Workflow CLI readiness 
 function Test-WorkflowReadiness {
     Write-Step "Checking Workflow CLI"
 
@@ -616,7 +616,7 @@ function Test-WorkflowReadiness {
     }
 }
 
-# ── Summary ───────────────────────────────────────────────────────────────────
+#  Summary 
 function Show-Summary {
     if ($Quiet) { return }
     Write-Host "`n========================================" -ForegroundColor Green
@@ -630,7 +630,7 @@ function Show-Summary {
     Write-Host ""
 }
 
-# -─ Entry point ───────────────────────────────────────────────────────────────
+# - Entry point 
 if (-not $Quiet) {
     Write-Host "Foundation - Development Stack - Tool Activation" -ForegroundColor Magenta
     Write-Host "Reads tool list from config/workspace.config.json" -ForegroundColor White

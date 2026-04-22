@@ -1,5 +1,5 @@
 # orchestrator-status.ps1
-# Verifica el estado del Project Orchestrator y la integración con Engram.
+# Verifica el estado del Project Orchestrator y la integracin con Engram.
 
 $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path

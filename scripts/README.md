@@ -29,7 +29,6 @@ scripts/
 │   ├── secrets-manager.ps1            # Gestión de secretos
 │   └── security-logger.ps1            # Logging de seguridad
 ├── monitoring/                        # Scripts de monitoreo
-│   ├── engram-backup-manager.ps1      # Gestión de backups
 │   └── health-check.ps1               # Verificación de salud
 └── utilities/                         # Scripts utilitarios
     ├── setup.ps1                      # Setup inicial
@@ -195,17 +194,6 @@ Write-Log "Mensaje" "info"
 
 ### Monitoring (Scripts de Monitoreo)
 
-#### engram-backup-manager.ps1
-**Propósito**: Gestión de backups de Engram
-
-**Funcionalidades**:
-- Backups automáticos
-- Rotación de backups
-- Restauración
-- Validación de integridad
-
----
-
 #### health-check.ps1
 **Propósito**: Verificación de salud del sistema
 
@@ -238,6 +226,29 @@ Write-Log "Mensaje" "info"
 - Logs antiguos
 - Caché
 - Archivos de build
+
+---
+
+#### simplify-text.ps1
+**Propósito**: Simplificación de texto para eficiencia de tokens
+
+**Transformaciones**:
+- Normaliza whitespace (tabs, saltos múltiples)
+- Remueve ruido de markdown (negrita, links, headers)
+- Abbrevia frases comunes ("por favor" → "pls", "es importante" → "imp")
+- Remueve frases redundantes ("en conclusion", "por ultimo")
+- Deduplica palabras consecutivas
+
+**Uso**:
+```powershell
+.\scripts\utilities\simplify-text.ps1 -InputText "Hola! Buenos dias, por favor necesito tu ayuda!"
+.\scripts\utilities\wf.ps1 simplify-text "texto a simplificar"
+.\scripts\utilities\simplify-text.ps1 -InputFile "archivo.md" -OutputFile "resultado.txt"
+```
+
+**Métricas**: Guarda reducción en `docs/sessions/metrics/text-simplification.csv`
+
+**Resultado típico**: 15-25% reducción en caracteres (~5-10 tokens ahorrados)
 
 ---
 

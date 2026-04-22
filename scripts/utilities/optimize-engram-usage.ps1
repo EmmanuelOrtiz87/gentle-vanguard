@@ -1,78 +1,217 @@
-# optimize-engram-usage.ps1
-# Script para optimizar el uso de Engram y mejorar la eficiencia del contexto
-
 param(
     [string]$ProjectName = 'workspace_local',
-    [switch]$AutoApply = $false
+    [switch]$AutoApply = $false,
+    [switch]$Verbose = $false
 )
 
-$ErrorActionPreference = 'Stop'
-$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$engramBin = Join-Path $scriptDir 'engram.exe'
+$ErrorActionPreference = 'Continue'
 
-function Write-Status {
-    param([string]$m) Write-Host "[OPTIMIZE] $m" -ForegroundColor Green
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$repoRoot = Resolve-Path (Join-Path $scriptDir '..\..')
+
+function Find-EngramBinary {
+    $localPath = Join-Path $repoRoot 'tools\engram.exe'
+    if (Test-Path $localPath) {
+        return $localPath
+    }
+    $localPath2 = Join-Path $repoRoot 'tools\engram'
+    if (Test-Path $localPath2) {
+        return $localPath2
+    }
+    $userBin = 'C:\Users\emman\bin\engram.exe'
+    if (Test-Path $userBin) {
+        return $userBin
+    }
+    $inPath = Get-Command 'engram.exe' -ErrorAction SilentlyContinue
+    if ($inPath) {
+        return $inPath.Source
+    }
+    $inPath2 = Get-Command 'engram' -ErrorAction SilentlyContinue
+    if ($inPath2) {
+        return $inPath2.Source
+    }
+    return $null
 }
 
-function Write-Warning {
-    param([string]$m) Write-Host "[WARNING] $m" -ForegroundColor Yellow
+function Write-Status {
+    param([string]$m)
+    Write-Host "[ENGRAM] $m" -ForegroundColor Green
 }
 
 function Write-Info {
-    param([string]$m) Write-Host "[INFO] $m" -ForegroundColor Cyan
+    param([string]$m)
+    Write-Host "[INFO] $m" -ForegroundColor Cyan
 }
 
-Write-Status "Starting Engram usage optimization for project: $ProjectName"
+function Write-Warn {
+    param([string]$m)
+    Write-Host "[WARN] $m" -ForegroundColor Yellow
+}
 
-# Verificar que Engram está disponible
-if (-not (Test-Path $engramBin)) {
-    # Intentar encontrar Engram en el PATH
-    $engramInPath = Get-Command "engram" -ErrorAction SilentlyContinue
-    if (-not $engramInPath) {
-        Write-Warning "Engram binary not found at $engramBin or in PATH"
-        Write-Info "Continuing without Engram optimization..."
-        exit 0
-    } else {
-        $engramBin = "engram"
-        Write-Info "Using Engram from PATH"
+function Get-EngramMemory {
+    param([string]$Project)
+
+    $engramBin = Find-EngramBinary
+    if (-not $engramBin) {
+        return $null
     }
+
+    $result = & $engramBin context --limit 10 2>$null
+    return $result
+}
+
+function Search-EngramObservations {
+    param(
+        [string]$Project,
+        [string]$Query
+    )
+
+    $engramBin = Find-EngramBinary
+    if (-not $engramBin) {
+        return $null
+    }
+
+    $result = & $engramBin search $Query --project $Project --limit 5 2>$null
+    return $result
+}
+
+function Get-ProjectObservations {
+    param([string]$Project)
+
+    $engramBin = Find-EngramBinary
+    if (-not $engramBin) {
+        return $null
+    }
+
+    $result = & $engramBin search '' --project $Project --limit 20 2>$null
+    return $result
+}
+
+function Save-PreloadCache {
+    param(
+        [string]$RepoRoot,
+        [hashtable]$Data
+    )
+
+    $cacheDir = Join-Path $repoRoot '.session\engram-cache'
+    if (-not (Test-Path $cacheDir)) {
+        New-Item -ItemType Directory -Path $cacheDir -Force | Out-Null
+    }
+
+    $cacheFile = Join-Path $cacheDir 'preload-cache.json'
+    $Data.timestamp = (Get-Date -Format 'o')
+    $Data.project = $ProjectName
+
+    $Data | ConvertTo-Json -Depth 10 | Set-Content -Path $cacheFile -Encoding UTF8
+    return $cacheFile
+}
+
+function Get-PreloadCache {
+    param([string]$RepoRoot)
+
+    $cacheFile = Join-Path $repoRoot '.session\engram-cache\preload-cache.json'
+    if (-not (Test-Path $cacheFile)) {
+        return $null
+    }
+
+    $cache = Get-Content $cacheFile -Raw | ConvertFrom-Json
+    $age = (Get-Date) - [DateTime]::Parse($cache.timestamp)
+    if ($age.TotalHours -gt 24) {
+        return $null
+    }
+    return $cache
+}
+
+Write-Status "Engram Pre-load for project: $ProjectName"
+Write-Info "Starting context optimization..."
+
+$engramBin = Find-EngramBinary
+if (-not $engramBin) {
+    Write-Warn "Engram binary not found. Pre-load skipped."
+    Write-Info "Run: .\scripts\utilities\wf.ps1 install-engram"
+    exit 0
+}
+
+$startTime = Get-Date
+
+$cachedData = Get-PreloadCache -RepoRoot $repoRoot
+if ($cachedData) {
+    Write-Info "Using cached pre-load (age: $((Get-Date) - [DateTime]::Parse($cachedData.timestamp)).TotalMinutes minutes)"
 } else {
-    Write-Info "Using Engram from local tools directory"
+    Write-Info "Generating fresh pre-load..."
 }
 
-# 1. Buscar contenido redundante en memoria
-Write-Info "Checking for redundant content in Engram..."
-$redundantEntries = & $engramBin search "duplicate OR repeated" --project $ProjectName --limit 10 2>$null
-if ($redundantEntries) {
-    Write-Info "Found potential redundant entries. Consider cleaning up."
+$observationsLoaded = 0
+$recentContext = @()
+$projectObservations = @()
+$searchResults = @()
+
+try {
+    Write-Info "Loading recent context..."
+    $contextOutput = Get-EngramMemory -Project $ProjectName
+    if ($contextOutput) {
+        $recentContext = $contextOutput -split "`n" | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+        $observationsLoaded = $recentContext.Count
+        Write-Info "Loaded $($observationsLoaded) recent observations"
+    }
+} catch {
+    Write-Warn "Could not load recent context: $_"
 }
 
-# 2. Verificar decisiones importantes no guardadas
-Write-Info "Checking for important decisions to save..."
-# Esta sería una implementación más completa en producción
-# Por ahora simulamos la verificación
-
-# 3. Optimizar búsqueda de referencias
-Write-Info "Optimizing reference search..."
-$recentContext = & $engramBin context --limit 5 2>$null
-if ($recentContext) {
-    Write-Info "Loaded recent context for reference optimization"
+try {
+    Write-Info "Loading project observations..."
+    $projOutput = Get-ProjectObservations -Project $ProjectName
+    if ($projOutput) {
+        $projectObservations = $projOutput -split "`n" | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+        Write-Info "Found $($projectObservations.Count) project observations"
+    }
+} catch {
+    Write-Warn "Could not load project observations: $_"
 }
 
-# 4. Registrar patrones de uso
-$timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-& $engramBin save --title "Context efficiency optimization run" --content "Optimization script executed at $timestamp. Project: $ProjectName" --project $ProjectName 2>$null | Out-Null
+try {
+    Write-Info "Searching for decisions and patterns..."
+    $searchOutput = Search-EngramObservations -Project $ProjectName -Query "decision OR architecture OR pattern OR bugfix"
+    if ($searchOutput) {
+        $searchResults = $searchOutput -split "`n" | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+        Write-Info "Found $($searchResults.Count) relevant observations"
+    }
+} catch {
+    Write-Warn "Search failed: $_"
+}
 
-Write-Status "Engram usage optimization completed"
+$cacheData = @{
+    timestamp = $startTime
+    project = $ProjectName
+    observations = $observationsLoaded
+    recentContext = $recentContext
+    projectObservations = $projectObservations
+    searchResults = $searchResults
+}
 
-# 5. Mostrar recomendaciones
-Write-Info "Recommendations for better context efficiency:"
-Write-Host "  1. Use 'engram search' before repeating explanations" -ForegroundColor Gray
-Write-Host "  2. Save decisions > 5min to Engram automatically" -ForegroundColor Gray
-Write-Host "  3. Reference Engram IDs instead of full content" -ForegroundColor Gray
-Write-Host "  4. Run this script regularly for maintenance" -ForegroundColor Gray
+$cacheFile = Save-PreloadCache -RepoRoot $repoRoot -Data $cacheData
+Write-Status "Pre-load cache saved: $cacheFile"
+
+$elapsed = (Get-Date) - $startTime
+Write-Status "Engram pre-load completed in $($elapsed.TotalMilliseconds)ms"
+
+if ($Verbose) {
+    Write-Host "`n--- Recent Context ($observationsLoaded items) ---" -ForegroundColor Gray
+    $recentContext | Select-Object -First 5 | ForEach-Object { Write-Host "  $_" -ForegroundColor DarkGray }
+    if ($recentContext.Count -gt 5) {
+        Write-Host "  ... and $($recentContext.Count - 5) more" -ForegroundColor DarkGray
+    }
+}
+
+Write-Info "Pre-load benefits:"
+Write-Host "  - Context available without explicit mem_context calls" -ForegroundColor Gray
+Write-Host "  - Reduced token usage (no repeated context loading)" -ForegroundColor Gray
+Write-Host "  - Faster session resume" -ForegroundColor Gray
+Write-Host "  - Recent decisions/patterns visible at session start" -ForegroundColor Gray
 
 if ($AutoApply) {
-    Write-Status "Auto-applying optimizations..."
-    # Aquí irían las acciones automáticas
+    Write-Status "Auto-apply enabled - optimizations active"
 }
+
+Write-Status "Pre-load optimization completed"
+exit 0

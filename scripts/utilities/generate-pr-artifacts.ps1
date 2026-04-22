@@ -121,8 +121,8 @@ function New-PRAuditFile {
 
 | Check | Status |
 |-------|--------|
-| Pre-Push Checks | $(if ($Metrics.PrePushChecks) { '✅' } else { '❌' }) |
-| Validation Passed | $(if ($Metrics.ValidationPassed) { '✅' } else { '❌' }) |
+| Pre-Push Checks | $(if ($Metrics.PrePushChecks) { '' } else { '' }) |
+| Validation Passed | $(if ($Metrics.ValidationPassed) { '' } else { '' }) |
 | Tests Run | $(if ($Metrics.TestsRun -gt 0) { "$($Metrics.TestsRun)" } else { "N/A" }) |
 | Tests Passed | $(if ($Metrics.TestsPassed -gt 0) { "$($Metrics.TestsPassed)" } else { "N/A" }) |
 

@@ -1,10 +1,10 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-    Genera métricas semanales del workspace usando Engram.
+    Genera mtricas semanales del workspace usando Engram.
 
 .DESCRIPTION
-    Recopila estadísticas de uso, sesiones, y estado del proyecto
+    Recopila estadsticas de uso, sesiones, y estado del proyecto
     usando Engram y otras herramientas del workspace.
 
 .PARAMETER ProjectName
@@ -14,15 +14,15 @@
     Ruta del archivo de reporte. Por defecto: logs/weekly-metrics-{date}.md
 
 .PARAMETER Email
-    Enviar reporte por email (requiere configuración SMTP)
+    Enviar reporte por email (requiere configuracin SMTP)
 
 .EXAMPLE
     .\weekly-metrics.ps1
-    Genera reporte de métricas semanales
+    Genera reporte de mtricas semanales
 
 .EXAMPLE
     .\weekly-metrics.ps1 -ProjectName "workspace_local" -Email
-    Genera reporte y lo envía por email
+    Genera reporte y lo enva por email
 #>
 
 param(

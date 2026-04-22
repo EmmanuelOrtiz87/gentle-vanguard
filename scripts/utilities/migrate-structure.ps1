@@ -42,9 +42,9 @@ if (-not (Test-Path $policyFile)) {
     exit 1
 }
 $policy = Get-Content $policyFile -Raw | ConvertFrom-Json
-$allowedRootFiles    = $policy.allowedRootFiles    ?? @('README.md')
-$allowedScriptDirs   = $policy.allowedScriptDirs   ?? @()
-$policyMode          = $policy.structureMode       ?? 'adopt-existing'
+$allowedRootFiles    = $policy.allowedRootFiles     @('README.md')
+$allowedScriptDirs   = $policy.allowedScriptDirs    @()
+$policyMode          = $policy.structureMode        'adopt-existing'
 
 Write-Step "Structure Migration Preflight"
 Write-Info "Policy mode   : $policyMode"
@@ -76,7 +76,7 @@ function Resolve-CanonicalDir {
     return 'scripts/utilities'
 }
 
-Write-Step "Preflight Report — Files to Migrate"
+Write-Step "Preflight Report  Files to Migrate"
 $plan = @()
 foreach ($file in $looseFiles) {
     $relSrc  = $file.FullName.Replace("$($repoRoot.Path)\", '').Replace('\', '/')

@@ -13,7 +13,7 @@ if ($branch -eq 'main' -or $branch -eq 'master') {
 # Validar mensaje de commit (convencional)
 $commitMsg = git log -1 --pretty=%B
 if ($commitMsg -notmatch '^(feat|fix|docs|style|refactor|test|chore)\:') {
-    Write-Host "[GITFLOW] Mensaje de commit no sigue convención convencional (feat:, fix:, etc.)" -ForegroundColor Yellow
+    Write-Host "[GITFLOW] Mensaje de commit no sigue convencin convencional (feat:, fix:, etc.)" -ForegroundColor Yellow
     exit 1
 }
 

@@ -1,5 +1,5 @@
 # check-documentation.ps1
-# Valida cobertura de documentación en funciones públicas y cambios de usuario
+# Valida cobertura de documentacin en funciones pblicas y cambios de usuario
 
 $ErrorActionPreference = 'Continue'
 
@@ -11,7 +11,7 @@ foreach ($file in $files.Split("`n")) {
     if ($file -like '*.js' -or $file -like '*.py') {
         $content = Get-Content $file -Raw -ErrorAction SilentlyContinue
         if ($content -notmatch 'docstring|@param|@returns|#' ) {
-            Write-Host "[DOC] Falta documentación en $file" -ForegroundColor Yellow
+            Write-Host "[DOC] Falta documentacin en $file" -ForegroundColor Yellow
             $warned = $true
         }
     }
