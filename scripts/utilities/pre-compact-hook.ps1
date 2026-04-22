@@ -16,12 +16,12 @@ function Write-Anchor {
     param([string]$m) Write-Host "[ANCHOR] $m" -ForegroundColor Magenta
 }
 
-# Verificar tamaño del contexto para compactación automática
+# Verificar tamao del contexto para compactacin automtica
 function Check-AutoCompaction {
     param([int]$threshold = $TriggerThreshold)
     
-    # Simular verificación de tamaño de contexto
-    # En implementación real, esto verificaría el tamaño real del contexto
+    # Simular verificacin de tamao de contexto
+    # En implementacin real, esto verificara el tamao real del contexto
     $contextSize = 16000 # Valor simulado para demostrar la funcionalidad
     
     if ($contextSize -gt $threshold) {
@@ -42,7 +42,7 @@ function Check-AutoCompaction {
 
 Write-Anchor "Pre-compact hook triggered"
 
-# Verificar compactación automática
+# Verificar compactacin automtica
 $autoCompacted = Check-AutoCompaction
 
 $engramBin = Join-Path $scriptDir 'engram.exe'

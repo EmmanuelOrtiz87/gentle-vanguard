@@ -1,5 +1,5 @@
 # setup-remote-agent.ps1
-# Automatiza la configuración segura de un agente remoto IA en Foundation/local
+# Automatiza la configuracin segura de un agente remoto IA en Foundation/local
 
 param(
     [Parameter(Mandatory=$true)]
@@ -50,9 +50,9 @@ if ($envLines -notcontains $envEntry) {
     Write-Host "[INFO] API key ya estaba presente en .env.local" -ForegroundColor Yellow
 }
 
-# 5. Validar conexión
-Write-Host "[INFO] Probando conexión..." -ForegroundColor Cyan
+# 5. Validar conexin
+Write-Host "[INFO] Probando conexin..." -ForegroundColor Cyan
 $test = & "$repoRoot\scripts\utilities\invoke-cloud-agent.ps1" -Provider $ProviderName -TestConnection
 Write-Host $test
 
-Write-Host "[FINALIZADO] Configuración automatizada completa. Si ves errores arriba, revisa el endpoint y la API key." -ForegroundColor Cyan
+Write-Host "[FINALIZADO] Configuracin automatizada completa. Si ves errores arriba, revisa el endpoint y la API key." -ForegroundColor Cyan

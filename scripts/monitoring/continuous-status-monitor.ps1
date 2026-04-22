@@ -4,7 +4,7 @@
     Monitoreo continuo del estado del workspace.
 
 .DESCRIPTION
-    Ejecuta wf.ps1 status periódicamente y genera reportes de estado.
+    Ejecuta wf.ps1 status peridicamente y genera reportes de estado.
     Puede ejecutarse como tarea programada o en modo continuo.
 
 .PARAMETER OutputPath

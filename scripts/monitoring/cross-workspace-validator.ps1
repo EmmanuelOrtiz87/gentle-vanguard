@@ -4,11 +4,11 @@
     Valida consistencia entre workspace local y foundation.
 
 .DESCRIPTION
-    Compara archivos de configuración y scripts entre workspace-foundation
+    Compara archivos de configuracin y scripts entre workspace-foundation
     y el workspace local para detectar inconsistencias.
 
 .PARAMETER Fix
-    Aplicar correcciones automáticas cuando sea posible
+    Aplicar correcciones automticas cuando sea posible
 
 .PARAMETER Detailed
     Mostrar diferencias detalladas
@@ -19,7 +19,7 @@
 
 .EXAMPLE
     .\cross-workspace-validator.ps1 -Fix
-    Valida y corrige automáticamente
+    Valida y corrige automticamente
 #>
 
 param(

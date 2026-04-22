@@ -18,9 +18,9 @@ $script:FAIL_COUNT = 0
 $script:WARN_COUNT = 0
 
 function Write-Header { param([string]$Msg) 
-    Write-Host "`n═══════════════════════════════════════════════════════════" -ForegroundColor DarkGray
+    Write-Host "`n" -ForegroundColor DarkGray
     Write-Host "  $Msg" -ForegroundColor Cyan
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor DarkGray
+    Write-Host "" -ForegroundColor DarkGray
 }
 
 function Write-Success { param([string]$Msg) Write-Host "  [PASS] $Msg" -ForegroundColor Green }

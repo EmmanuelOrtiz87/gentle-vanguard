@@ -1,56 +1,69 @@
-# Dependencies
-node_modules/
-vendor/
-.env
-.env.local
+# Workspace Foundation .gitignore
 
-# Build outputs
+# Auto-generated reports and temporary files
+docs/audit/
+docs/reports/
+docs/metrics/
+*.report.md
+*.audit.md
+
+# Temporary documentation
+docs/temp/
+docs/draft/
+docs/.backup/
+
+# Build and runtime
+bin/
+obj/
 dist/
 build/
-out/
+*.exe
+*.dll
+*.so
+
+# Cache and temp
+.cache/
+.temp/
+tmp/
+*.tmp
+*.log
 
 # IDE
-.vscode/
+.vscode/settings.json
+.vscode/launch.json
 .idea/
 *.swp
 *.swo
+*~
 
 # OS
 .DS_Store
 Thumbs.db
-
-# Temporary files
-*.tmp
 *.bak
-*.log
 
-# Workspace tools (auto-downloaded)
-tools/
+# Environment
+.env
+.env.local
+.env.*.local
 
-# Event bus (runtime data)
-.event-bus/
+# Dependencies
+node_modules/
+packages/
+vendor/
 
-# Local projects
-projects/
+# Test coverage
+coverage/
+.coverage
+*.lcov
 
-# Engram data
-.engram-data/
+# Performance profiling
+*.prof
+*.pprof
 
-# Orchestrator runtime state
-.orchestrator-active
-
-# Local token guard telemetry
-docs/sessions/metrics/token-guard-usage.csv
-
-# Local artifact archive (kept on disk, not in repo)
-docs/.local-archive/
-
-# Local generated day-end artifacts (not versioned)
-.audit/
-
-# Cloud Agent Connector - LOCAL SECRETS (NEVER commit)
-config/cloud-agents.local.json
-cloud-agents.local.json
-
-# Cloud Agent runtime telemetry (local artifact)
-.runtime/
+# Gentleman Guard Angel (GGA) - COMPLETELY REMOVED
+.gga
+.gga/
+templates/gga/
+scripts/optional/run-gga.ps1
+scripts/utilities/run-gga.ps1
+*gga*

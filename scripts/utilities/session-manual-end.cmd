@@ -18,9 +18,8 @@ REM Generar reporte de estado final
 echo [INFO] Generating final status report...
 powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\monitoring\continuous-status-monitor.ps1" -Once
 
-REM Crear backup final de Engram
-echo [INFO] Creating final Engram backup...
-powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\monitoring\engram-backup-manager.ps1" -Action backup
+REM Ejecutar day-end-closure para persistir memoria (ya hace backup real)
+echo [INFO] Day-end closure will persist Engram memories
 
 REM Validar consistencia cross-workspace
 echo [INFO] Validating cross-workspace consistency...

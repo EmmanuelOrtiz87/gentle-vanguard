@@ -7,7 +7,7 @@ param(
 
 $backlogPath = "..\docs\backlog\items.json"
 if (!(Test-Path $backlogPath)) {
-    Write-Error "No se encontró el archivo de backlog: $backlogPath"
+    Write-Error "No se encontr el archivo de backlog: $backlogPath"
     exit 1
 }
 
