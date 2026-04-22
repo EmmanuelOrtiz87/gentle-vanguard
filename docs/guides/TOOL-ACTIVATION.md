@@ -63,8 +63,7 @@ The remaining intentional constraint is:
 ## Tools Covered
 
 1. `engram`
-2. `gentleman-skills`
-3. `opencode`
+2. `opencode`
 
 Optional MCP integrations are validated separately through `config/workspace.config.json`.
 
