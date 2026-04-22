@@ -39,7 +39,7 @@ For agent-to-agent transfers, use `tools/handoff-compress.ps1`:
 - Output: state-only handoff (~30% size reduction)
 
 ### Pre-Compact Hook
-Before context compaction (every ~15k tokens), run:
+Before context compaction (every ~25k tokens), run:
 ```powershell
 .\tools\pre-compact-hook.ps1 -ProjectName "workspace_local" -CompressionRatio 0.90
 ```

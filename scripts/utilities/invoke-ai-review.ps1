@@ -123,7 +123,7 @@ function Get-StagedFiles {
 function Get-CacheKey {
     param([string[]]$Files)
     $content = $Files | ForEach-Object { 
-        $hash = (git hash-object $_ 2>$null) ?? (Get-FileHash $_ -Algorithm SHA256).Hash
+        $hash = (git hash-object $_ 2>$null)  (Get-FileHash $_ -Algorithm SHA256).Hash
         "$_`:$hash"
     }
     $combined = $content -join "|"
