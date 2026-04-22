@@ -1,3 +1,8 @@
+---
+name: workflow-orchestrator
+description: Workflow orchestration skill for managing development workflows and automation
+---
+
 # Skill: workflow-orchestrator
 
 **Version**: 1.0.0

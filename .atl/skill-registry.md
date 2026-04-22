@@ -18,4 +18,4 @@ This file defines the enforceable skills and compact rules for the workspace-fou
 
 ## Usage
 - Update this file when adding or removing skills.
-- See docs/PROJECT-STRUCTURE.md for structure guidance.
+- See docs/architecture/PROJECT-STRUCTURE.md for structure guidance.

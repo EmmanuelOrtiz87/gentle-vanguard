@@ -35,4 +35,4 @@ workspace-foundation/
 2. Move misplaced files to their recommended locations.
 3. Update or add README.md files as needed.
 4. Remove or archive obsolete items.
-5. Document the new structure in docs/PROJECT-STRUCTURE.md.
+5. Document the new structure in docs/architecture/PROJECT-STRUCTURE.md.

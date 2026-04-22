@@ -38,7 +38,7 @@ docs/
 | [OPERATING-DECISIONS-2026-04-15.md](reference/OPERATING-DECISIONS-2026-04-15.md) | Consolidated lessons learned, mechanisms, and operating definitions |
 | [SDD-GOVERNANCE-POLICY.md](reference/SDD-GOVERNANCE-POLICY.md) | SDD enforcement criteria and exceptions |
 | [FUTURE-FEATURES-BACKLOG.md](reference/FUTURE-FEATURES-BACKLOG.md) | Deferred improvements and optimization backlog |
-| [REVIEW-INDEX.md](REVIEW-INDEX.md) | 7-Dimensional review skill index and automation |
+| [REVIEW-INDEX.md](code-reviews/REVIEW-INDEX.md) | 7-Dimensional review skill index and automation |
 
 ## Architecture
 

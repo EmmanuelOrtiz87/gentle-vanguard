@@ -181,9 +181,9 @@ Publicamos la versión 2.2.0 de workspace-foundation con implementación complet
 - ✅ `tests/README.md` - Guía de tests
 
 ### Documentación Existente
-- ✅ `docs/TESTING-GUIDE.md` - Guía de testing
-- ✅ `docs/SECURITY-HARDENING.md` - Guía de seguridad
-- ✅ `docs/IMPLEMENTATION-COMPLETE.md` - Implementación
+- ✅ `docs/guides/TESTING-GUIDE.md` - Guía de testing
+- ✅ `docs/guides/SECURITY-HARDENING.md` - Guía de seguridad
+- ✅ `docs/supplementary/IMPLEMENTATION-COMPLETE.md` - Implementación
 - ✅ 20+ documentos técnicos
 
 **Cobertura**: 100%
@@ -318,7 +318,7 @@ git checkout v2.2.0
 - `scripts/README.md` - Guía de scripts
 - `config/README.md` - Guía de configuración
 - `tests/README.md` - Guía de tests
-- `docs/SECURITY-HARDENING.md` - Seguridad
+- `docs/guides/SECURITY-HARDENING.md` - Seguridad
 
 ### Problemas Comunes
 1. **Script no ejecuta**: Verificar permisos

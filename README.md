@@ -119,7 +119,7 @@ Ver [docs/reference/ARCHITECTURE.md](docs/reference/ARCHITECTURE.md) para el dia
 
 ## 🧩 Skills, Hooks y Automatización
 
-- Skills alineados a 7 dimensiones (ver [docs/REVIEW-INDEX.md](docs/REVIEW-INDEX.md))
+- Skills alineados a 7 dimensiones (ver [docs/code-reviews/REVIEW-INDEX.md](docs/code-reviews/REVIEW-INDEX.md))
 - Hooks automáticos: scripts/hooks/check-*.ps1 (pre-commit, pre-push)
 - Protocolo juicio adversarial: scripts/utilities/judgment-day.ps1, skills/judgment-day/SKILL.md
 - Orquestador y sub-agentes: scripts/utilities/wf.ps1 agent <NAME> <TASK>
@@ -676,7 +676,7 @@ workspace-foundation/
 |----------|-------------|
 | [Installation Guide](docs/getting-started/installation.md) | Setup instructions |
 | [AI Configuration](docs/guides/AI-CONFIGURATION.md) | Cloud & local AI setup |
-| [Visual Guide](docs/VISUAL-GUIDE.md) | Complete visual reference |
+| [Visual Guide](docs/guides/VISUAL-GUIDE.md) | Complete visual reference |
 | [Developer Communication Policy](docs/guides/DEVELOPER-COMMUNICATION-POLICY.md) | Response-mode contract and enforcement |
 | [Technical Onboarding](docs/supplementary/TECHNICAL-ONBOARDING.md) | Team training guide |
 | [Getting Started](docs/getting-started/README.md) | All setup guides |

@@ -41,7 +41,7 @@ Main specification:
 - [foundation-sdd.md](foundation-sdd.md) - Core Workspace Foundation design
 
 Template:
-- [SPEC-TEMPLATE.md](SPEC-TEMPLATE.md) - Template for new specifications
+- [SPEC-TEMPLATE.md](../specs/SPEC-TEMPLATE.md) - Template for new specifications
 
 ## Related Documentation
 

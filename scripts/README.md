@@ -347,9 +347,9 @@ Install-Module -Name Pester -Force -SkipPublisherCheck
 
 ## 📚 Documentación Relacionada
 
-- `docs/TESTING-GUIDE.md` - Guía de testing
-- `docs/SECURITY-HARDENING.md` - Guía de seguridad
-- `docs/IMPLEMENTATION-COMPLETE.md` - Implementación completa
+- `docs/guides/TESTING-GUIDE.md` - Guía de testing
+- `docs/guides/SECURITY-HARDENING.md` - Guía de seguridad
+- `docs/supplementary/IMPLEMENTATION-COMPLETE.md` - Implementación completa
 - `config/README.md` - Configuración
 
 ---

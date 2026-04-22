@@ -191,9 +191,9 @@ Publicamos la versión 2.3.0 de workspace-foundation con:
 - ✅ `tests/README.md` - Guía de tests
 
 #### Documentación Existente
-- ✅ `docs/TESTING-GUIDE.md`
-- ✅ `docs/SECURITY-HARDENING.md`
-- ✅ `docs/IMPLEMENTATION-COMPLETE.md`
+- ✅ `docs/guides/TESTING-GUIDE.md`
+- ✅ `docs/guides/SECURITY-HARDENING.md`
+- ✅ `docs/supplementary/IMPLEMENTATION-COMPLETE.md`
 - ✅ 20+ documentos técnicos
 
 **Cobertura**: 100%

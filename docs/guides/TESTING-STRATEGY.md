@@ -38,4 +38,4 @@ func TestFoo(t *testing.T) {
 
 ## References
 - See [skills/testing-strategy-skill/SKILL.md](../../skills/testing-strategy-skill/SKILL.md) for more details.
-- See [docs/SECURITY-AUTH-SECRETS.md](SECURITY-AUTH-SECRETS.md) for secret management during tests.
+- See [docs/guides/SECURITY-AUTH-SECRETS.md](SECURITY-AUTH-SECRETS.md) for secret management during tests.

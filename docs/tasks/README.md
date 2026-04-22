@@ -35,7 +35,7 @@ Each task brief should include:
 
 ## Creating New Task Briefs
 
-Use the template [TASK-BRIEF-TEMPLATE.md](TASK-BRIEF-TEMPLATE.md) as a starting point for new task briefs.
+Use the template [TASK-BRIEF-TEMPLATE.md](../supplementary/TASK-BRIEF.template.md) as a starting point for new task briefs.
 
 You can also generate a task brief using the workflow CLI:
 ```powershell
@@ -49,7 +49,7 @@ You can also generate a task brief using the workflow CLI:
 - [chat-baseline-architecture-validation.md](chat-baseline-architecture-validation.md) - Chat architecture validation task
 
 ### Templates
-- [TASK-BRIEF-TEMPLATE.md](TASK-BRIEF-TEMPLATE.md) - Template for new task briefs
+- [TASK-BRIEF-TEMPLATE.md](../supplementary/TASK-BRIEF.template.md) - Template for new task briefs
 
 ## Related Documentation
 
