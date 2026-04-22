@@ -2,7 +2,7 @@
 
 **Fecha:** 2026-04-22 18:35:50
 **Estado:** COMPLETADO
-**Duracion:** 0.1187686 segundos
+**Duracion:** Menos de 1 segundo
 
 ## Resumen Ejecutivo
 
@@ -55,8 +55,19 @@ La Fase 1 de activacion inmediata ha sido completada exitosamente. Todos los mec
 4. Optimizacion predictiva
 
 **Beneficio esperado:** 60-70% mejora
-
----
-
-**Generado por:** Gentleman Foundation Orchestrator
-**Version:** 1.0.0
+{
+  "prompt_tokens": 71281,
+  "prompt_unit_price": "0",
+  "prompt_price_unit": "0",
+  "prompt_price": "0",
+  "completion_tokens": 8096,
+  "completion_unit_price": "0",
+  "completion_price_unit": "0",
+  "completion_price": "0",
+  "total_tokens": 79377,
+  "total_price": "0",
+  "currency": "USD",
+  "latency": 69.36,
+  "time_to_first_token": 3.837,
+  "time_to_generate": 65.523
+}

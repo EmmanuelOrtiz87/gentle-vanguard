@@ -79,5 +79,5 @@
 
 ---
 
-**Estrategia creada por:** Gentleman Foundation Orchestrator
+**Estrategia creada por:** Foundation Team
 **Version:** 1.0.0

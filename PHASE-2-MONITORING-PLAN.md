@@ -57,5 +57,5 @@
 
 ---
 
-**Plan creado por:** Gentleman Foundation Orchestrator
+**Plan creado por:** Foundation Team
 **Version:** 1.0.0
