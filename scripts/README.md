@@ -1,178 +1,392 @@
 # Scripts Directory
 
-Automation scripts for Foundation - Development Stack.
+## Descripción
 
-## Structure
+Directorio centralizado para todos los scripts del proyecto workspace-foundation.
+
+**Versión**: 2.0.0
+**Última actualización**: 2026-04-21
+**Estado**: ✅ PRODUCCIÓN
+
+---
+
+## 📁 Estructura de Directorios
 
 ```
 scripts/
-├── foundation/      # Installation and bootstrap
-├── project/         # Project creation and setup
-├── validation/      # Validation and checks
-├── git-hooks/       # Git hooks (PowerShell and Shell)
-└── utilities/       # Utility scripts
+├── README.md                          # Este archivo
+├── common/                            # Funciones compartidas
+│   └── platform-helpers.ps1           # Helpers multiplataforma
+├── testing/                           # Scripts de testing
+│   ├── run-tests.ps1                  # Test runner principal
+│   ├── git-hooks-setup.ps1            # Configuración de git hooks
+│   ├── pre-test.ps1                   # Hook pre-test
+│   ├── post-test.ps1                  # Hook post-test
+│   └── on-failure.ps1                 # Hook en caso de fallo
+├── security/                          # Scripts de seguridad
+│   ├── encryption-manager.ps1         # Gestión de encriptación AES-256
+│   ├── input-validator.ps1            # Validación de entrada
+│   ├── secrets-manager.ps1            # Gestión de secretos
+│   └── security-logger.ps1            # Logging de seguridad
+├── monitoring/                        # Scripts de monitoreo
+│   ├── engram-backup-manager.ps1      # Gestión de backups
+│   └── health-check.ps1               # Verificación de salud
+└── utilities/                         # Scripts utilitarios
+    ├── setup.ps1                      # Setup inicial
+    └── cleanup.ps1                    # Limpieza
 ```
 
-## Additional Subdirectories
+---
 
-- diagnostics/: System and workflow diagnostics
-- monitoring/: Monitoring and alerting
-- optional/: Optional/experimental scripts
-- projects/: Project-specific scripts
-- tools/: Utility scripts
-- hooks/: General hooks
+## 🔧 Scripts Disponibles
 
-See each subdirectory's README.md for details.
+### Common (Funciones Compartidas)
 
-## Foundation
+#### platform-helpers.ps1
+**Propósito**: Proporciona funciones de compatibilidad multiplataforma
 
-| Script | Purpose |
-|--------|---------|
-| `bootstrap-machine.ps1` | Install foundation globally on machine |
-| `bootstrap-workspace.ps1` | Bootstrap workspace with skills |
-| `bootstrap.ps1` | Main bootstrap script |
-| `sync-skills.ps1` | Sync skills to global |
-| `wf.ps1` | Main CLI entry point |
+**Funciones principales**:
+- `Get-OSType` - Detecta el sistema operativo
+- `Get-SafePath` - Crea rutas agnósticas
+- `Get-UserHome` - Obtiene directorio del usuario
+- `Write-Log` - Logging con timestamp
+- `Set-ExecutablePermission` - Permisos ejecutables
 
-## Project
-
-| Script | Purpose |
-|--------|---------|
-| `setup-project.ps1` | Setup existing project with foundation |
-| `new-project.ps1` | Create new project (canonical entrypoint) |
-| `init-workspace.ps1` | Initialize workspace |
-| `migrate.ps1` | Migrate existing project |
-
-## Validation
-
-| Script | Purpose |
-|--------|---------|
-| `validate-project.ps1` | Validate project setup |
-| `validate-workspace.ps1` | Validate workspace |
-| `check-updates.ps1` | Check for updates |
-| `update-all.ps1` | Update everything |
-
-## Utilities
-
-| Script | Purpose |
-|--------|---------|
-| `wf.ps1` | Workflow CLI - review, audit, pr, push |
-| `start-session.ps1` | Create session brief and task brief artifacts |
-| `deploy.ps1` | Deploy project |
-| `clean-runtime.ps1` | Clean runtime data |
-| `generate-*.ps1` | Generate reports and audits |
-| `run-*.ps1` | Run tools (engram) |
-| `aggregate-metrics.ps1` | Aggregate metrics |
-| `orchestrator-status.ps1` | Comprobar orquestador + Engram |
-| `install-engram.ps1` | Instalar o verificar Engram CLI |
-| `custom-rules.ps1` | Load and report custom technical/business/review rules |
-| `response-mode.ps1` | Manage communication language, detail level, and compression profile |
-| `response-mode-efficiency-matrix.ps1` | Generate token-savings matrix for language/detail/profile combinations |
-| `foundation-sync.ps1` | Sync managed Foundation assets into consumer repositories |
-
-## Workflow CLI (wf.ps1)
-
-Automated development workflow commands.
-
+**Uso**:
 ```powershell
-# Show help
-.\scripts\utilities\wf.ps1 help
-
-# Show status
-.\scripts\utilities\wf.ps1 status
-
-# Start session with normalized artifacts
-.\scripts\utilities\wf.ps1 start-session
-.\scripts\utilities\wf.ps1 start-session auth-hardening
-
-# Close session with verification and closure artifact
-.\scripts\utilities\wf.ps1 end-session
-.\scripts\utilities\wf.ps1 end-session auth-hardening
-
-# Run code review
-.\scripts\utilities\wf.ps1 review
-.\scripts\utilities\wf.ps1 review security
-
-# Generate audit document
-.\scripts\utilities\wf.ps1 audit
-
-# Create PR template
-.\scripts\utilities\wf.ps1 pr
-
-# Prepare to push
-.\scripts\utilities\wf.ps1 push
-
-# Full update alias
-.\scripts\utilities\wf.ps1 update-all
-
-# Update repository, foundation, skills, and tools
-.\scripts\utilities\wf.ps1 update
-
-# Homologation workflow
-.\scripts\utilities\wf.ps1 homologate
-.\scripts\utilities\wf.ps1 homologate apply
-
-# Foundation managed-asset sync (consumer repos)
-.\scripts\utilities\wf.ps1 foundation-sync
-.\scripts\utilities\wf.ps1 foundation-sync apply
-.\scripts\utilities\wf.ps1 foundation-sync apply -CreatePr
+. .\scripts\common\platform-helpers.ps1
+$osType = Get-OSType
+$safePath = Get-SafePath @(".", "config", "test.json")
+Write-Log "Mensaje" "info"
 ```
 
-## Quick Reference
+---
 
+### Testing (Scripts de Testing)
+
+#### run-tests.ps1
+**Propósito**: Ejecutor principal de tests
+
+**Parámetros**:
+- `-TestType` (all, unit, integration, performance, security)
+- `-GenerateReport` (genera reportes)
+- `-FailOnLowCoverage` (falla si coverage bajo)
+
+**Uso**:
 ```powershell
-# Install foundation
-.\scripts\foundation\bootstrap-machine.ps1
-
-# Bootstrap workspace locally
-.\scripts\foundation\bootstrap.ps1
-
-# Setup project
-.\scripts\project\setup-project.ps1 -ProjectPath "path\to\project"
-
-# Validate
-.\scripts\validation\validate-project.ps1
-
-# Check updates
-.\scripts\validation\check-updates.ps1
-
-# Run full foundation update
-.\scripts\validation\update-all.ps1
-
-# Check orchestrator status
-.\scripts\utilities\orchestrator-status.ps1
-.\scripts\utilities\wf.ps1 orchestrator-status
-
-# Check loaded custom rules
-.\scripts\utilities\custom-rules.ps1 -Mode status
-.\scripts\utilities\wf.ps1 custom-rules-status
-
-# Check or set communication mode
-.\scripts\utilities\wf.ps1 response-mode
-.\scripts\utilities\wf.ps1 response-mode list
-.\scripts\utilities\wf.ps1 response-mode profile:ultra
-.\scripts\utilities\wf.ps1 response-mode language:pt-BR
-.\scripts\utilities\wf.ps1 response-mode detail:expanded
-.\scripts\utilities\wf.ps1 response-mode preset:bugfix
-.\scripts\utilities\wf.ps1 response-mode recommend:docs:high
-
-# start-session auto-applies preset+risk when enabled in config
-.\scripts\utilities\start-session.ps1 -TaskName "audit security flow"
-
-# Generate response-mode savings matrix
-.\scripts\utilities\response-mode-efficiency-matrix.ps1
-.\scripts\utilities\response-mode-efficiency-matrix.ps1 -AsCsv
-
-# Create or refresh task brief only
-.\scripts\utilities\wf.ps1 task-brief auth-hardening
-
-# Install or verify Engram
-.\scripts\utilities\install-engram.ps1
-.\scripts\utilities\wf.ps1 install-engram
-
-# Code review
-.\scripts\utilities\wf.ps1 review
-
-# Audit document
-.\scripts\utilities\wf.ps1 audit
+.\scripts\testing\run-tests.ps1 -TestType all -GenerateReport
 ```
+
+**Salida**:
+- Reportes en `test-results/`
+- Cobertura en `coverage/`
+
+---
+
+#### git-hooks-setup.ps1
+**Propósito**: Configura git hooks automáticamente
+
+**Hooks configurados**:
+- Pre-commit: Ejecuta unit tests
+- Pre-push: Ejecuta todos los tests
+
+**Uso**:
+```powershell
+.\scripts\testing\git-hooks-setup.ps1
+```
+
+---
+
+### Security (Scripts de Seguridad)
+
+#### encryption-manager.ps1
+**Propósito**: Gestión de encriptación AES-256
+
+**Acciones**:
+- `generate-key` - Genera clave de 256-bit
+- `encrypt` - Encripta datos
+- `decrypt` - Desencripta datos
+- `validate` - Valida configuración
+
+**Uso**:
+```powershell
+# Generar clave
+.\scripts\security\encryption-manager.ps1 -Action generate-key
+
+# Encriptar
+.\scripts\security\encryption-manager.ps1 -Action encrypt -Data "sensitive"
+
+# Validar
+.\scripts\security\encryption-manager.ps1 -Action validate
+```
+
+---
+
+#### input-validator.ps1
+**Propósito**: Validación y sanitización de entrada
+
+**Tipos de validación**:
+- `string` - Strings con límites
+- `integer` - Números enteros
+- `path` - Rutas seguras
+- `command` - Comandos sin inyección
+- `email` - Emails válidos
+
+**Uso**:
+```powershell
+.\scripts\security\input-validator.ps1 -Input "test" -Type string
+.\scripts\security\input-validator.ps1 -Input ".\config\test.json" -Type path
+```
+
+---
+
+#### secrets-manager.ps1
+**Propósito**: Gestión segura de secretos
+
+**Acciones**:
+- `get` - Obtiene secreto
+- `set` - Establece secreto
+- `delete` - Elimina secreto
+- `list` - Lista secretos
+- `rotate` - Rota secretos
+- `validate` - Valida configuración
+
+**Uso**:
+```powershell
+# Establecer
+.\scripts\security\secrets-manager.ps1 -Action set -SecretName "API_KEY" -SecretValue "secret123"
+
+# Obtener
+.\scripts\security\secrets-manager.ps1 -Action get -SecretName "API_KEY"
+
+# Listar
+.\scripts\security\secrets-manager.ps1 -Action list
+
+# Rotar
+.\scripts\security\secrets-manager.ps1 -Action rotate
+```
+
+---
+
+#### security-logger.ps1
+**Propósito**: Logging y auditoría de seguridad
+
+**Tipos de eventos**:
+- `access` - Acceso a recursos
+- `modification` - Cambios
+- `deletion` - Eliminaciones
+- `error` - Errores
+- `warning` - Advertencias
+- `info` - Información
+
+**Uso**:
+```powershell
+# Registrar evento
+.\scripts\security\security-logger.ps1 -EventType access -Message "User accessed config" -Severity low
+
+# Generar reporte
+.\scripts\security\security-logger.ps1 -Action report
+
+# Detectar anomalías
+.\scripts\security\security-logger.ps1 -Action anomalies
+```
+
+---
+
+### Monitoring (Scripts de Monitoreo)
+
+#### engram-backup-manager.ps1
+**Propósito**: Gestión de backups de Engram
+
+**Funcionalidades**:
+- Backups automáticos
+- Rotación de backups
+- Restauración
+- Validación de integridad
+
+---
+
+#### health-check.ps1
+**Propósito**: Verificación de salud del sistema
+
+**Verifica**:
+- Estado de Engram
+- Disponibilidad de recursos
+- Integridad de datos
+- Configuración
+
+---
+
+### Utilities (Scripts Utilitarios)
+
+#### setup.ps1
+**Propósito**: Setup inicial del proyecto
+
+**Realiza**:
+- Creación de directorios
+- Instalación de dependencias
+- Configuración inicial
+- Validación de requisitos
+
+---
+
+#### cleanup.ps1
+**Propósito**: Limpieza del proyecto
+
+**Limpia**:
+- Archivos temporales
+- Logs antiguos
+- Caché
+- Archivos de build
+
+---
+
+## 🚀 Requisitos
+
+### Mínimos
+- PowerShell 7.0+
+- .NET 6.0+
+- Pester (para tests)
+
+### Recomendados
+- PowerShell 7.4+
+- .NET 8.0+
+- Git 2.40+
+
+---
+
+## 📋 Compatibilidad
+
+### Sistemas Operativos
+- ✅ Windows 10/11
+- ✅ Linux (Ubuntu, CentOS, etc.)
+- ✅ macOS 11+
+
+### Shells
+- ✅ PowerShell 7+
+- ✅ Bash 5+
+- ✅ Zsh
+
+---
+
+## 🔐 Seguridad
+
+### Mejores Prácticas
+1. **Nunca hardcodear secretos**
+   - Usar `secrets-manager.ps1`
+   - Usar variables de entorno
+
+2. **Validar siempre entrada**
+   - Usar `input-validator.ps1`
+   - Validar tipos y rangos
+
+3. **Encriptar datos sensibles**
+   - Usar `encryption-manager.ps1`
+   - AES-256 CBC
+
+4. **Registrar eventos**
+   - Usar `security-logger.ps1`
+   - Auditoría completa
+
+---
+
+## 📊 Ejemplos de Uso
+
+### Ejecutar Tests Completos
+```powershell
+cd workspace-foundation
+.\scripts\testing\run-tests.ps1 -TestType all -GenerateReport
+```
+
+### Configurar Git Hooks
+```powershell
+.\scripts\testing\git-hooks-setup.ps1
+```
+
+### Encriptar Datos
+```powershell
+.\scripts\security\encryption-manager.ps1 -Action generate-key
+$encrypted = .\scripts\security\encryption-manager.ps1 -Action encrypt -Data "sensitive"
+```
+
+### Validar Entrada
+```powershell
+.\scripts\security\input-validator.ps1 -Input "user@example.com" -Type email
+```
+
+### Gestionar Secretos
+```powershell
+.\scripts\security\secrets-manager.ps1 -Action set -SecretName "DB_PASSWORD" -SecretValue "pass123"
+.\scripts\security\secrets-manager.ps1 -Action rotate
+```
+
+---
+
+## 🆘 Troubleshooting
+
+### Problema: Script no ejecuta
+**Solución**: Verificar permisos de ejecución
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+### Problema: Rutas no funcionan
+**Solución**: Usar `platform-helpers.ps1`
+```powershell
+. .\scripts\common\platform-helpers.ps1
+$path = Get-SafePath @(".", "config", "test.json")
+```
+
+### Problema: Tests fallan
+**Solución**: Verificar Pester instalado
+```powershell
+Install-Module -Name Pester -Force -SkipPublisherCheck
+```
+
+---
+
+## 📚 Documentación Relacionada
+
+- `docs/TESTING-GUIDE.md` - Guía de testing
+- `docs/SECURITY-HARDENING.md` - Guía de seguridad
+- `docs/IMPLEMENTATION-COMPLETE.md` - Implementación completa
+- `config/README.md` - Configuración
+
+---
+
+## 📝 Notas
+
+- Todos los scripts son agnósticos de plataforma
+- Compatibles con PowerShell 7+
+- Logging automático en todos los scripts
+- Manejo de errores robusto
+- Documentación inline completa
+
+---
+
+## ✅ Checklist de Uso
+
+- [ ] Instalar PowerShell 7+
+- [ ] Clonar repositorio
+- [ ] Ejecutar `setup.ps1`
+- [ ] Configurar git hooks
+- [ ] Ejecutar tests
+- [ ] Revisar documentación
+- [ ] Configurar secretos
+- [ ] Iniciar desarrollo
+
+---
+
+## 📞 Soporte
+
+Para reportar problemas o sugerencias:
+1. Revisar documentación
+2. Ejecutar `health-check.ps1`
+3. Revisar logs en `logs/`
+4. Crear issue en GitHub
+
+---
+
+**Última actualización**: 2026-04-21
+**Versión**: 2.0.0
+**Estado**: ✅ PRODUCCIÓN
