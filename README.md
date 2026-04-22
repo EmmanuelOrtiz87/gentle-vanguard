@@ -1,4 +1,3 @@
-
 # 🏛️ Foundation - Development Stack
 
 > **"Donde la gobernanza, la automatización y la IA convergen para equipos modernos"**
@@ -168,7 +167,7 @@ Runtime routing model:
 
 ### 🎨 Project Templates
 
-Gentleman Foundation provides templates for:
+Foundation provides templates for:
 
 - **Web APIs** (Go + REST)
 - **Single Page Applications** (Angular + TypeScript)
@@ -183,7 +182,7 @@ Gentleman Foundation provides templates for:
 2. Sesión: orquestador y memoria persistente, revisión y validación automática
 3. Cierre: revisión adversarial, artefactos de sesión, cierre y publicación
 
-## �️ Weekly Audit Runbook
+## 📋 Weekly Audit Runbook
 
 A systematic 5-step process to generate a complete, governance-validated audit of the repository.
 All output files use full datetime in their name (`YYYY-MM-DD-HHmmss`) so multiple runs on the same day are always distinguishable.
@@ -274,14 +273,14 @@ Use this when strict cleanup reports drift or when you want to normalize the wor
 export CLAUDE_API_KEY="your-key"
 
 # Development Paths
-export GENTLEMAN_ROOT="/path/to/foundation"
+export FOUNDATION_ROOT="/path/to/foundation"
 
 # Git Configuration
 git config --global core.hooksPath "/path/to/foundation/hooks"
 ```
 
 ### Project Configuration
-Each project contains a `.gentleman` configuration file:
+Each project contains a `.foundation` configuration file:
 
 ```json
 {
@@ -507,21 +506,21 @@ OpenCode is the default provider for native review flows and is recommended for 
 skill-registry         # Build skills registry
 ```
 
-## Gentleman-Skills (Optional) - External Skill Library
+## Foundation Skills (Optional) - External Skill Library
 
-**Gentleman-Skills** is an optional external skill source. Foundation ships with native local skills under `skills/`.
+**Foundation Skills** is an optional external skill source. Foundation ships with native local skills under `skills/`.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                     GENTLEMAN-SKILLS ECOSYSTEM                               │
+│                     FOUNDATION SKILLS ECOSYSTEM                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 
     AI Agent ──▶ Skill Library ──▶ Framework Expertise
-                                  ├── Angular Patterns
-                                  ├── React Patterns
-                                  ├── Testing Patterns
-                                  ├── API Patterns
-                                  └── Workflow Patterns
+                                   ├── Angular Patterns
+                                   ├── React Patterns
+                                   ├── Testing Patterns
+                                   ├── API Patterns
+                                   └── Workflow Patterns
 ```
 
 ### Available Skills
@@ -570,16 +569,16 @@ Skills are automatically installed for detected AI agents. To manually install:
 
 ```bash
 # For Claude Code
-cp -r tools/Gentleman-Skills/curated/* ~/.claude/skills/
+cp -r tools/Foundation-Skills/curated/* ~/.claude/skills/
 
 # For OpenCode
-cp -r tools/Gentleman-Skills/curated/* ~/.config/opencode/skills/
+cp -r tools/Foundation-Skills/curated/* ~/.config/opencode/skills/
 
 # For Gemini CLI
-cp -r tools/Gentleman-Skills/curated/* ~/.gemini/skills/
+cp -r tools/Foundation-Skills/curated/* ~/.gemini/skills/
 
 # For Cursor
-cp -r tools/Gentleman-Skills/curated/* ~/.cursor/skills/
+cp -r tools/Foundation-Skills/curated/* ~/.cursor/skills/
 ```
 
 ### Skill Structure
@@ -600,7 +599,7 @@ Each skill contains:
 - **Code examples** - Reference implementations
 - **Anti-patterns** - What to avoid
 
-> Gentleman-Skills are automatically available when creating a new project with `wf new`.
+> Foundation Skills are automatically available when creating a new project with `wf new`.
 
 ## Severity Levels
 
@@ -667,7 +666,7 @@ workspace-foundation/
 │   ├── editor/           # Editor configs
 │   └── testing/          # Test templates
 └── tools/                 # External tools (auto-installed)
-    └── Gentleman-Skills/ # AI agent skills library
+    └── Foundation-Skills/ # AI agent skills library
 ```
 
 ## Documentation
@@ -686,61 +685,20 @@ workspace-foundation/
 | Tool | Required | Description |
 |------|----------|-------------|
 | Git | Yes | Version control (2.30+) |
-| PowerShell | Yes | Automation (Core 7+) |
-| Go | No | For Go-based tools |
-| Node.js | No | For Node.js projects |
-| Docker | No | For containerized development |
-
-## Benefits
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         BEFORE vs AFTER                                       │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-    BEFORE:                                    AFTER:
-    
-    Day 1 ──────────────────────────────────► Day 1
-    
-    │                                          │
-    ▼                                          ▼
-    Setup   Setup   Setup   Setup   Setup    ┌──────────────┐
-    Git     IDE      Tools   Learn   Start   │  wf new      │
-    Env            Config   Repo    Coding  │  wf review   │
-    │                                          │
-    ▼                                          ▼
-    5 Days to                                  30 Minutes to
-    Productive                                 Productive
-    
-    ════════════════════════════════════════════════════════════════════
-    
-    [OK] 95% reduction in setup time
-    [OK] Automated code review on every commit
-    [OK] Consistent project structure
-    [OK] Cross-platform compatibility
-    [OK] AI-ready development environment
-```
-
-## Acknowledgments
-
-This project integrates tools from [Gentleman-Programming](https://github.com/Gentleman-Programming) under MIT license.
-Engram is part of the required continuity posture.
-
-| Tool | Repository | Author |
-|------|------------|--------|
-| **Engram** | [Gentleman-Programming/engram](https://github.com/Gentleman-Programming/engram) | Gentleman-Programming |
-| **Gentleman-Skills** | [Gentleman-Programming/Gentleman-Skills](https://github.com/Gentleman-Programming/Gentleman-Skills) | Gentleman-Programming + Community |
-
-All integrated tools are published under the **MIT License**. See their respective repositories for license details.
-
-## License
-
-MIT
-
-Copyright (c) 2024-2026 Emmanuel Ortiz
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+| PowerShell |
+{
+  "prompt_tokens": 73095,
+  "prompt_unit_price": "0",
+  "prompt_price_unit": "0",
+  "prompt_price": "0",
+  "completion_tokens": 8096,
+  "completion_unit_price": "0",
+  "completion_price_unit": "0",
+  "completion_price": "0",
+  "total_tokens": 81191,
+  "total_price": "0",
+  "currency": "USD",
+  "latency": 65.569,
+  "time_to_first_token": 2.03,
+  "time_to_generate": 63.539
+}
