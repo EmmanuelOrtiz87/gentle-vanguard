@@ -256,12 +256,8 @@
 
 ## 📚 DOCUMENTACIÓN DISPONIBLE
 
-- `docs/AI-TOOL-COMPATIBILITY.md` - Compatibilidad de herramientas
-- `docs/ENGRAM-MEMORY-SYSTEM.md` - Sistema Engram
-- `docs/EFFICIENCY-COMPLETE-10-10.md` - Eficiencia completa
-- `docs/CLEANUP-GUIDE.md` - Guía de limpieza
-- `docs/FINAL-AUDIT-COMPLETENESS-CHECK.md` - Auditoría final
-- `docs/LESSONS-LEARNED.md` - Lecciones aprendidas
+- `docs/guides/CLEANUP-GUIDE.md` - Guía de limpieza
+- `docs/supplementary/TOKEN-EFFICIENCY-PACK.md` - Eficiencia de tokens
 - `AGENTS.md` - Reglas del proyecto
 
 ---

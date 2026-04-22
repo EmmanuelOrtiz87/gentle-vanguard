@@ -22,9 +22,7 @@ Centralizar y versionar todas las reglas, patrones, decisiones y aprendizajes cl
 ---
 
 ## 3. Referencias
-- [PROTOCOLO-NORMATIVAS-SESIÓN.md](PROTOCOLO-NORMATIVAS-SESIÓN.md)
-- [HANDOFF-TEMPLATE.md](HANDOFF-TEMPLATE.md)
-- [OPERATING-DECISIONS-*.md](OPERATING-DECISIONS-*.md)
+- [OPERATING-DECISIONS-2026-04-15.md](OPERATING-DECISIONS-2026-04-15.md)
 
 ---
 

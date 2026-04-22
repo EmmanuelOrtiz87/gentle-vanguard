@@ -299,10 +299,10 @@ echo "credentials.json" >> .gitignore
 
 ## 📚 Documentación Relacionada
 
-- `docs/SECURITY-HARDENING.md` - Seguridad
-- `docs/TESTING-GUIDE.md` - Testing
+- `docs/guides/SECURITY-HARDENING.md` - Seguridad
+- `docs/guides/TESTING-GUIDE.md` - Testing
 - `scripts/README.md` - Scripts
-- `docs/IMPLEMENTATION-COMPLETE.md` - Implementación
+- `docs/supplementary/IMPLEMENTATION-COMPLETE.md` - Implementación
 
 ---
 

@@ -35,7 +35,7 @@ config/cline-dify-optimized.config.json
 
 ### 2. **Documentación de Análisis**
 ```
-docs/CLINE-OPTIMIZATION-ANALYSIS.md
+docs/supplementary/CLINE-OPTIMIZATION-ANALYSIS.md
 ```
 - **Tamaño**: ~12 KB
 - **Secciones**: 15+
@@ -52,7 +52,7 @@ docs/CLINE-OPTIMIZATION-ANALYSIS.md
 
 ### 3. **Resumen de Validación** (Este archivo)
 ```
-docs/CLINE-VALIDATION-SUMMARY.md
+docs/supplementary/CLINE-VALIDATION-SUMMARY.md
 ```
 - **Estado**: ✅ En proceso
 
@@ -427,7 +427,7 @@ tail -f logs/cline-health-check.log
 - **config/context-efficiency.json**: Perfiles de eficiencia
 - **config/workspace.config.json**: Configuración del workspace
 - **config/structure-policy.json**: Política de estructura
-- **docs/CLINE-OPTIMIZATION-ANALYSIS.md**: Análisis detallado
+- **docs/supplementary/CLINE-OPTIMIZATION-ANALYSIS.md**: Análisis detallado
 - **Dify.io Docs**: https://docs.dify.io/
 
 ---
@@ -476,7 +476,7 @@ Para preguntas o problemas:
    ```
 
 4. **Consultar Documentación**:
-   - `docs/CLINE-OPTIMIZATION-ANALYSIS.md`
+   - `docs/supplementary/CLINE-OPTIMIZATION-ANALYSIS.md`
    - `docs/` (directorio general)
 
 ---
@@ -486,7 +486,7 @@ Para preguntas o problemas:
 | Componente | Estado | Notas |
 |-----------|--------|-------|
 | Configuración Optimizada | ✅ Completo | `config/cline-dify-optimized.config.json` |
-| Análisis Detallado | ✅ Completo | `docs/CLINE-OPTIMIZATION-ANALYSIS.md` |
+| Análisis Detallado | ✅ Completo | `docs/supplementary/CLINE-OPTIMIZATION-ANALYSIS.md` |
 | Documentación | ✅ Completo | Este archivo |
 | Validación | ✅ Completo | Todas las validaciones pasadas |
 | Implementación | ⏳ Pendiente | Listo para aplicar |

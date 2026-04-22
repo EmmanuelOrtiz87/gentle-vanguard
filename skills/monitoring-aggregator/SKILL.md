@@ -1,3 +1,8 @@
+---
+name: monitoring-aggregator
+description: Monitoring aggregation skill for collecting and analyzing workspace metrics
+---
+
 # Skill: monitoring-aggregator
 
 **Version**: 1.0.0

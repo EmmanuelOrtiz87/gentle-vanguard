@@ -1,3 +1,8 @@
+---
+name: backup-orchestrator
+description: Backup orchestration skill for workspace and project backup management
+---
+
 # Skill: backup-orchestrator
 
 **Version**: 1.0.0

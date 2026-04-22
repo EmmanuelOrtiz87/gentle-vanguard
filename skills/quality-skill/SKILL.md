@@ -1,3 +1,8 @@
+---
+name: quality
+description: Code quality governance skill - enforces linters, formatters and best practices
+---
+
 # Quality Skill
 
 REJECT if:

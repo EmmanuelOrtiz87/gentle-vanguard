@@ -1,3 +1,8 @@
+---
+name: architecture
+description: Architecture governance skill - ensures proper project structure and layer separation
+---
+
 # Architecture Skill
 
 REJECT if:

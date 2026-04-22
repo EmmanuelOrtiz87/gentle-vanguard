@@ -1,3 +1,8 @@
+---
+name: gitflow
+description: Git flow governance skill - enforces branch strategy and commit conventions
+---
+
 # Gitflow Skill
 
 REJECT if:

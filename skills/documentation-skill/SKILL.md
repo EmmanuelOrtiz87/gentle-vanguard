@@ -1,3 +1,8 @@
+---
+name: documentation
+description: Documentation governance skill - ensures proper documentation coverage and quality
+---
+
 # Documentation Skill
 
 REJECT if:

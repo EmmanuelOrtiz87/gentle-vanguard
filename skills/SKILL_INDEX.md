@@ -51,6 +51,70 @@ Skill lifecycle is on-demand and Foundation-first:
 
 These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
+### architecture-skill
+
+**Trigger**: `architecture`, `structure`, `layers`
+
+**Use when**: Architecture governance, project structure, layer separation
+
+---
+
+### backup-orchestrator
+
+**Trigger**: `backup`, `restore`, `snapshot`
+
+**Use when**: Backup management, disaster recovery
+
+---
+
+### cross-workspace-sync
+
+**Trigger**: `sync`, `cross-workspace`, `synchronization`
+
+**Use when**: Syncing across multiple workspaces
+
+---
+
+### documentation-skill
+
+**Trigger**: `documentation`, `docs`, `readme`
+
+**Use when**: Documentation standards and quality
+
+---
+
+### gitflow-skill
+
+**Trigger**: `gitflow`, `branch`, `merge`
+
+**Use when**: Git workflow and branching strategy
+
+---
+
+### monitoring-aggregator
+
+**Trigger**: `monitoring`, `metrics`, `aggregate`
+
+**Use when**: Aggregating monitoring data
+
+---
+
+### quality-skill
+
+**Trigger**: `quality`, `linter`, `formatter`
+
+**Use when**: Code quality and linting
+
+---
+
+### workflow-orchestrator
+
+**Trigger**: `workflow`, `automation`, `orchestrate`
+
+**Use when**: Workflow automation and orchestration
+
+---
+
 ### project-orchestrator-skill
 
 **Status**: ALWAYS ACTIVE - No trigger needed

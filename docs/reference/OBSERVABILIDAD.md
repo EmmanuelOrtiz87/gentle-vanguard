@@ -25,8 +25,6 @@ Centralizar la referencia de todos los artefactos, métricas, logs y normativas 
 
 ## 3. Normativas y Protocolos
 - **docs/reference/NORMATIVAS-ORQUESTADOR.md**: Normativas de orquestador y autorizaciones globales (debe estar SIEMPRE dentro del proyecto Foundation)
-- **docs/reference/PROTOCOLO-NORMATIVAS-SESIÓN.md**: Protocolo de normalización y persistencia
-- **docs/reference/HANDOFF-TEMPLATE.md**: Plantilla de artefacto de handoff
 - **docs/reference/OPERATING-DECISIONS-*.md**: Decisiones y reglas clave
 
 ## 4. Engram

@@ -30,5 +30,5 @@ DATABASE_URL=postgres://user:pass@host:5432/db
 - Document all secret variables and their purpose in README or a dedicated secrets doc.
 
 ## References
-- See docs/SECURITY-API-KEY-ROTATION.md for rotation procedures.
+- See docs/guides/SECURITY-API-KEY-ROTATION.md for rotation procedures.
 - See README.md for environment setup and security practices.
