@@ -377,6 +377,19 @@ if (-not [string]::IsNullOrWhiteSpace($TaskName)) {
 New-SessionBriefContent -Branch $branch -GitState $gitState -OrchestratorState $orchestratorState -EngramState $engramState -GgaState $ggaState -CustomRulesState $customRulesState -ResponseModeState $responseModeState -ResponseModeAutoState $responseModeAutoState -SessionFile $sessionFile -TaskFile $taskFile | Out-File -FilePath $sessionFile -Encoding UTF8
 
 Write-Ok "Session brief created: $sessionFile"
+
+$compactScript = Join-Path $PSScriptRoot 'compact-start.ps1'
+if (Test-Path $compactScript) {
+    Write-Step "Optimizing context for efficiency"
+    try {
+        & $compactScript -Objective "Session $($branch): $($TaskName)" -NoClipboard | Out-Null
+        Write-Ok "Context optimized with compact-start"
+    }
+    catch {
+        Write-Warn "compact-start skipped: $_"
+    }
+}
+
 Write-Host "`nNext steps:" -ForegroundColor Cyan
 Write-Host "1. Review the generated session brief." -ForegroundColor Yellow
 Write-Host "2. Run '.\scripts\utilities\wf.ps1 health' if stack readiness is uncertain." -ForegroundColor Yellow
