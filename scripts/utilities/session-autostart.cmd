@@ -3,8 +3,9 @@ setlocal
 
 set SCRIPT=%~dp0session-manager.ps1
 set OPTIMIZE_SCRIPT=%~dp0optimize-engram-usage.ps1
+set COMPACT_SCRIPT=%~dp0compact-start.ps1
 
-echo === Session Autostart with Engram Optimization ===
+echo === Session Autostart with Context Optimization ===
 
 if not exist "%SCRIPT%" (
   echo [ERROR] session-manager.ps1 not found: %SCRIPT%
@@ -22,9 +23,11 @@ if exist "%OPTIMIZE_SCRIPT%" (
   powershell -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_local"
 )
 
-REM Ejecutar backup automático de Engram
-echo [INFO] Checking Engram backup status...
-powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\monitoring\engram-backup-manager.ps1" -Action auto-sync
+REM Optimizar contexto para eficiencia de tokens
+if exist "%COMPACT_SCRIPT%" (
+  echo [INFO] Running compact-start for context efficiency...
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%COMPACT_SCRIPT%" -Objective "Session startup"
+)
 
 REM Validar consistencia cross-workspace
 echo [INFO] Validating cross-workspace consistency...
