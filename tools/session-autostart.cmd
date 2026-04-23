@@ -26,5 +26,11 @@ REM Validar consistencia cross-workspace
 echo [INFO] Validating cross-workspace consistency...
 powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\monitoring\cross-workspace-validator.ps1"
 
+REM Inicializar sesión
 powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT%" -Mode AutoStart
+
+REM Inicializar orquestador y delegación automática
+echo [INFO] Initializing orchestrator and auto-delegation...
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Import-Module '.\skills\auto-delegation-router\auto-delegation-router.ps1' -Force; Enable-AutoDelegation -ConfigPath 'config/auto-delegation.json' | Out-Null; Write-Host '[ORCHESTRATOR] Auto-delegation enabled' -ForegroundColor Green; Write-Host '[ORCHESTRATOR] Stack ready for automated operations' -ForegroundColor Green"
+
 exit /b %errorlevel%

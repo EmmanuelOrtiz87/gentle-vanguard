@@ -9,3 +9,8 @@
 [2026-04-22 17:38:18] [REPORT] 
 [2026-04-22 17:38:18] [INFO] Ejecutando verificacion de estado del workspace...
 [2026-04-22 17:38:18] [ERROR] Error al generar reporte: El término '.\scripts\utilities\wf.ps1' no se reconoce como nombre de un cmdlet, función, archivo de script o programa ejecutable. Compruebe si escribió correctamente el nombre o, si incluyó una ruta de acceso, compruebe que dicha ruta es correcta e inténtelo de nuevo.
+[2026-04-23 10:24:54] [REPORT] === Reporte de Estado del Workspace ===
+[2026-04-23 10:24:54] [REPORT] Timestamp: 2026-04-23 10:24:54
+[2026-04-23 10:24:54] [REPORT] 
+[2026-04-23 10:24:54] [INFO] Ejecutando verificacion de estado del workspace...
+[2026-04-23 10:24:54] [ERROR] Error al generar reporte: El término '.\scripts\utilities\wf.ps1' no se reconoce como nombre de un cmdlet, función, archivo de script o programa ejecutable. Compruebe si escribió correctamente el nombre o, si incluyó una ruta de acceso, compruebe que dicha ruta es correcta e inténtelo de nuevo.

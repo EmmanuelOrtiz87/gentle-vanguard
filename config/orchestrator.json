@@ -1,145 +1,148 @@
-{
-  "active": true,
-  "skill_path": "C:\\Workspace_local\\workspace-foundation\\skills\\project-orchestrator-skill",
-  "auto_detect": true,
-  "workflow_mode": "coordinated",
-  "memory_integration": true,
-  "quality_gates": true,
-  "session_tracking": true,
-  "git_integration": true,
-  "activation_mode": "on-demand",
-  "activated_at": "2026-04-14 21:11:16",
-  "communication_language": "es",
-  "allowed_languages": [
-    "es",
-    "pt-BR",
-    "en"
-  ],
-  "communication_response_mode": "simple",
-  "allowed_response_modes": [
-    "simple",
-    "executive",
-    "expanded"
-  ],
-  "chat_response": {
-    "default_level": "chat-compact",
-    "enforce_on_session_start": true,
-    "allow": [
-      "chat-compact",
-      "chat-balanced",
-      "chat-detailed"
-    ],
-    "decision": {
-      "kind": "architecture",
-      "title": "startup-chat-baseline",
-      "rationale": "Initialize sessions with minimal chat verbosity for token efficiency and closure-first operation."
-    }
-  },
-  "communication_presets": {
-    "default": "bugfix",
-    "allow": [
-      "bugfix",
-      "refactor",
-      "docs",
-      "audit-review",
-      "executive-demo"
-    ],
-    "profiles": {
-      "bugfix": {
-        "language": "es",
-        "detail": "simple",
-        "compression": "ultra"
-      },
-      "refactor": {
-        "language": "es",
-        "detail": "simple",
-        "compression": "ultra"
-      },
-      "docs": {
-        "language": "es",
-        "detail": "simple",
-        "compression": "ultra"
-      },
-      "audit-review": {
-        "language": "es",
-        "detail": "simple",
-        "compression": "ultra"
-      },
-      "executive-demo": {
-        "language": "es",
-        "detail": "simple",
-        "compression": "ultra"
-      }
-    }
-  },
-  "response_profiles": {
-    "active": "ultra",
-    "allow": [
-      "lite",
-      "lleno",
-      "ultra"
-    ],
-    "profiles": {
-      "lite": {
-        "description": "Professional concise language with complete sentences; no filler.",
-        "guidelines": [
-          "No digressions.",
-          "Keep complete sentences.",
-          "Focus on actionable output."
-        ]
-      },
-      "lleno": {
-        "description": "Compressed language with short fragments accepted.",
-        "guidelines": [
-          "Prefer short clauses.",
-          "Drop non-essential connectors.",
-          "Keep meaning explicit."
-        ]
-      },
-      "ultra": {
-        "description": "Aggressive compression with abbreviations and causal arrows.",
-        "guidelines": [
-          "Use compact abbreviations (db/auth/config/req/res/fn/impl).",
-          "Prefer X -> Y causal notation.",
-          "One-word answers when enough."
-        ]
-      }
-    }
-  },
-  "response_policy": {
-    "strict_mode": true,
-    "enforce_baseline": true,
-    "baseline_detail": "simple",
-    "baseline_profile": "ultra",
-    "baseline_chat_level": "chat-compact",
-    "allow_overrides": false,
-    "require_override_reason": true
-  },
-  "workflow_optimization": {
-    "auto_escalation": {
-      "enabled": true,
-      "file_change_threshold": 8,
-      "risk_trigger": "high",
-      "target_detail": "expanded",
-      "target_profile": "lleno"
-    },
-    "kpi_tracking": {
-      "enabled": true,
-      "cadence": "weekly",
-      "script": "./scripts/utilities/aggregate-metrics.ps1",
-      "metrics": [
-        "tokens_per_task",
-        "time_per_task",
-        "rework_rate",
-        "post_change_defects"
-      ]
-    }
-  },
-  "runtime_preference": {
-    "primary": "gentle-ai",
-    "fallback": "stack-cli",
-    "auto_start_primary": true,
-    "fallback_on_primary_failure": true,
-    "require_primary_for_guidance": true
-  }
+﻿{
+    "active":  true,
+    "skill_path":  "C:\\Workspace_local\\workspace-foundation\\skills\\project-orchestrator-skill",
+    "auto_detect":  true,
+    "workflow_mode":  "coordinated",
+    "memory_integration":  true,
+    "quality_gates":  true,
+    "session_tracking":  true,
+    "git_integration":  true,
+    "activation_mode":  "auto-start",
+    "activated_at":  "2026-04-14 21:11:16",
+    "communication_language":  "es",
+    "allowed_languages":  [
+                              "es",
+                              "pt-BR",
+                              "en"
+                          ],
+    "communication_response_mode":  "simple",
+    "allowed_response_modes":  [
+                                   "simple",
+                                   "executive",
+                                   "expanded"
+                               ],
+    "chat_response":  {
+                          "default_level":  "chat-compact",
+                          "enforce_on_session_start":  true,
+                          "allow":  [
+                                        "chat-compact",
+                                        "chat-balanced",
+                                        "chat-detailed"
+                                    ],
+                          "decision":  {
+                                           "kind":  "architecture",
+                                           "title":  "startup-chat-baseline",
+                                           "rationale":  "Initialize sessions with minimal chat verbosity for token efficiency and closure-first operation."
+                                       }
+                      },
+    "communication_presets":  {
+                                  "default":  "bugfix",
+                                  "allow":  [
+                                                "bugfix",
+                                                "refactor",
+                                                "docs",
+                                                "audit-review",
+                                                "executive-demo"
+                                            ],
+                                  "profiles":  {
+                                                   "bugfix":  {
+                                                                  "language":  "es",
+                                                                  "detail":  "simple",
+                                                                  "compression":  "ultra"
+                                                              },
+                                                   "refactor":  {
+                                                                    "language":  "es",
+                                                                    "detail":  "simple",
+                                                                    "compression":  "ultra"
+                                                                },
+                                                   "docs":  {
+                                                                "language":  "es",
+                                                                "detail":  "simple",
+                                                                "compression":  "ultra"
+                                                            },
+                                                   "audit-review":  {
+                                                                        "language":  "es",
+                                                                        "detail":  "simple",
+                                                                        "compression":  "ultra"
+                                                                    },
+                                                   "executive-demo":  {
+                                                                          "language":  "es",
+                                                                          "detail":  "simple",
+                                                                          "compression":  "ultra"
+                                                                      }
+                                               }
+                              },
+    "response_profiles":  {
+                              "active":  "ultra",
+                              "allow":  [
+                                            "lite",
+                                            "lleno",
+                                            "ultra"
+                                        ],
+                              "profiles":  {
+                                               "lite":  {
+                                                            "description":  "Professional concise language with complete sentences; no filler.",
+                                                            "guidelines":  [
+                                                                               "No digressions.",
+                                                                               "Keep complete sentences.",
+                                                                               "Focus on actionable output."
+                                                                           ]
+                                                        },
+                                               "lleno":  {
+                                                             "description":  "Compressed language with short fragments accepted.",
+                                                             "guidelines":  [
+                                                                                "Prefer short clauses.",
+                                                                                "Drop non-essential connectors.",
+                                                                                "Keep meaning explicit."
+                                                                            ]
+                                                         },
+                                               "ultra":  {
+                                                             "description":  "Aggressive compression with abbreviations and causal arrows.",
+                                                             "guidelines":  [
+                                                                                "Use compact abbreviations (db/auth/config/req/res/fn/impl).",
+                                                                                "Prefer X -\u003e Y causal notation.",
+                                                                                "One-word answers when enough."
+                                                                            ]
+                                                         }
+                                           }
+                          },
+    "response_policy":  {
+                            "strict_mode":  true,
+                            "enforce_baseline":  true,
+                            "baseline_detail":  "simple",
+                            "baseline_profile":  "ultra",
+                            "baseline_chat_level":  "chat-compact",
+                            "allow_overrides":  false,
+                            "require_override_reason":  true
+                        },
+    "workflow_optimization":  {
+                                  "auto_escalation":  {
+                                                          "enabled":  true,
+                                                          "file_change_threshold":  8,
+                                                          "risk_trigger":  "high",
+                                                          "target_detail":  "expanded",
+                                                          "target_profile":  "lleno"
+                                                      },
+                                  "kpi_tracking":  {
+                                                       "enabled":  true,
+                                                       "cadence":  "weekly",
+                                                       "script":  "./scripts/utilities/aggregate-metrics.ps1",
+                                                       "metrics":  [
+                                                                       "tokens_per_task",
+                                                                       "time_per_task",
+                                                                       "rework_rate",
+                                                                       "post_change_defects"
+                                                                   ]
+                                                   }
+                              },
+    "runtime_preference":  {
+                               "primary":  "gentle-ai",
+                               "fallback":  "stack-cli",
+                               "auto_start_primary":  true,
+                               "fallback_on_primary_failure":  true,
+                               "require_primary_for_guidance":  true
+                           },
+    "skills":  [
+                   "parallel-execution-limits"
+               ]
 }
