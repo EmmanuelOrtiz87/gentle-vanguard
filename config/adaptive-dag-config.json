@@ -1,0 +1,203 @@
+{
+  "version": "1.0",
+  "enabled": true,
+  "description": "Adaptive Mode DAG Configuration - Dynamic phase orchestration with feedback loops",
+  "dag": {
+    "agents": {
+      "BA": {
+        "name": "Business Analyst",
+        "description": "Requirements and BDD scenarios",
+        "dependencies": [],
+        "skills": ["bdd-scenarios-skill", "backlog-management-skill"],
+        "priority": 1
+      },
+      "SAD": {
+        "name": "Solution Architect",
+        "description": "Architecture and API design",
+        "dependencies": ["BA"],
+        "skills": ["architecture-governance", "api-design-skill", "database-relational-skill"],
+        "priority": 2
+      },
+      "DEV": {
+        "name": "Developer",
+        "description": "Implementation and coding",
+        "dependencies": ["SAD"],
+        "skills": ["typescript-skill", "react-19-skill", "golang-api-skill"],
+        "priority": 3
+      },
+      "QA": {
+        "name": "QA Engineer",
+        "description": "Testing and validation",
+        "dependencies": ["DEV"],
+        "skills": ["testing-skill", "playwright-skill", "pytest-skill"],
+        "priority": 4
+      },
+      "OPS": {
+        "name": "DevOps Engineer",
+        "description": "Deployment and infrastructure",
+        "dependencies": ["QA"],
+        "skills": ["docker-devops-skill", "kubernetes-deployment", "terraform-infrastructure"],
+        "priority": 5
+      },
+      "GOV": {
+        "name": "Governance",
+        "description": "Security, compliance, and monitoring",
+        "dependencies": ["DEV", "QA"],
+        "skills": ["security-expert-skill", "observability-skill", "incident-response-plan"],
+        "priority": 4
+      },
+      "DOC": {
+        "name": "Documentation",
+        "description": "Documentation and guides",
+        "dependencies": ["DEV", "QA"],
+        "skills": ["documentation-governance", "documentation-skill"],
+        "priority": 5
+      }
+    },
+    "phases": {
+      "planning": {
+        "agents": ["BA"],
+        "description": "Requirements gathering and BDD scenarios",
+        "timeout": 3600,
+        "parallel": false,
+        "required": true
+      },
+      "design": {
+        "agents": ["SAD"],
+        "description": "Architecture and API design",
+        "timeout": 3600,
+        "parallel": false,
+        "required": true,
+        "dependencies": ["planning"]
+      },
+      "implementation": {
+        "agents": ["DEV"],
+        "description": "Code implementation",
+        "timeout": 7200,
+        "parallel": false,
+        "required": true,
+        "dependencies": ["design"]
+      },
+      "quality_assurance": {
+        "agents": ["QA"],
+        "description": "Testing and validation",
+        "timeout": 3600,
+        "parallel": false,
+        "required": true,
+        "dependencies": ["implementation"],
+        "feedback_target": "implementation"
+      },
+      "governance": {
+        "agents": ["GOV"],
+        "description": "Security and compliance review",
+        "timeout": 1800,
+        "parallel": true,
+        "required": true,
+        "dependencies": ["implementation"]
+      },
+      "documentation": {
+        "agents": ["DOC"],
+        "description": "Documentation updates",
+        "timeout": 1800,
+        "parallel": true,
+        "required": false,
+        "dependencies": ["implementation"]
+      },
+      "deployment": {
+        "agents": ["OPS"],
+        "description": "Deployment to production",
+        "timeout": 3600,
+        "parallel": false,
+        "required": true,
+        "dependencies": ["quality_assurance", "governance"]
+      }
+    },
+    "feedback_loops": {
+      "qa_to_dev": {
+        "source": "QA",
+        "target": "DEV",
+        "trigger": "test_failure",
+        "max_iterations": 3,
+        "description": "QA failures trigger DEV rework",
+        "enabled": true
+      },
+      "qa_to_design": {
+        "source": "QA",
+        "target": "SAD",
+        "trigger": "architecture_issue",
+        "max_iterations": 2,
+        "description": "Architecture issues trigger design review",
+        "enabled": true
+      },
+      "gov_to_dev": {
+        "source": "GOV",
+        "target": "DEV",
+        "trigger": "security_issue",
+        "max_iterations": 2,
+        "description": "Security issues trigger DEV fixes",
+        "enabled": true
+      }
+    },
+    "rollback_policy": {
+      "enabled": true,
+      "auto_rollback_on_qa_failure": true,
+      "max_rollback_attempts": 2,
+      "rollback_triggers": [
+        "critical_test_failure",
+        "security_vulnerability",
+        "performance_degradation",
+        "deployment_failure"
+      ],
+      "checkpoint_on_phase_complete": true,
+      "preserve_artifacts": true
+    },
+    "execution_strategy": {
+      "mode": "adaptive",
+      "parallelization": {
+        "enabled": true,
+        "max_parallel_phases": 2,
+        "max_parallel_agents": 3
+      },
+      "error_handling": {
+        "strategy": "fail_fast",
+        "retry_count": 2,
+        "retry_delay_ms": 1000
+      },
+      "monitoring": {
+        "enabled": true,
+        "metrics_collection": true,
+        "health_check_interval": 300
+      }
+    },
+    "decision_points": {
+      "after_qa": {
+        "condition": "qa_pass_rate >= 95",
+        "on_true": "proceed_to_deployment",
+        "on_false": "trigger_feedback_loop"
+      },
+      "after_gov": {
+        "condition": "security_issues == 0 AND compliance_check == true",
+        "on_true": "proceed_to_deployment",
+        "on_false": "trigger_feedback_loop"
+      },
+      "after_deployment": {
+        "condition": "deployment_success == true AND health_check == true",
+        "on_true": "mark_complete",
+        "on_false": "trigger_rollback"
+      }
+    }
+  },
+  "thresholds": {
+    "qa_pass_rate_min": 95,
+    "code_coverage_min": 80,
+    "security_issues_max": 0,
+    "performance_degradation_max": 5,
+    "timeout_buffer_percent": 10
+  },
+  "logging": {
+    "enabled": true,
+    "level": "info",
+    "log_file": "logs/adaptive-mode.log",
+    "metrics_file": "logs/adaptive-mode-metrics.json"
+  }
+}

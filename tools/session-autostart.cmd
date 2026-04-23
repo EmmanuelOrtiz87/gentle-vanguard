@@ -3,6 +3,7 @@ setlocal
 
 set SCRIPT=%~dp0session-manager.ps1
 set OPTIMIZE_SCRIPT=%~dp0optimize-engram-usage.ps1
+set TOKEN_GUARD_SCRIPT=%~dp0token-guard.ps1
 
 echo === Session Autostart with Engram Optimization ===
 
@@ -29,8 +30,61 @@ powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\monitoring\cross-
 REM Inicializar sesión
 powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT%" -Mode AutoStart
 
+REM Extraer SessionId del archivo de sesión
+for /f "tokens=*" %%i in ('powershell -NoProfile -ExecutionPolicy Bypass -Command "if (Test-Path '.\.session\session-*.json') { Get-ChildItem '.\.session\session-*.json' -File | Select-Object -Last 1 | ForEach-Object { $_.BaseName } }"') do set SESSION_ID=%%i
+
+REM Inicializar Distributed Tracing
+echo [INFO] Initializing Distributed Tracing System...
+set TRACING_SCRIPT=.\tools\initialize-distributed-tracing.ps1
+if exist "%TRACING_SCRIPT%" (
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%TRACING_SCRIPT%" -SessionId "%SESSION_ID%" -ConfigPath "config/distributed-tracing-config.json"
+  if errorlevel 1 (
+    echo [WARNING] Distributed Tracing initialization completed with warnings
+  ) else (
+    echo [INFO] Distributed Tracing initialized successfully
+  )
+) else (
+  echo [WARNING] Distributed Tracing script not found: %TRACING_SCRIPT%
+)
+
+REM Inicializar Token Guard para protección de tokens
+echo [INFO] Initializing Token Guard...
+if exist "%TOKEN_GUARD_SCRIPT%" (
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%TOKEN_GUARD_SCRIPT%" -ConfigPath "tools/token-guard-config.json" -SessionId "%SESSION_ID%" -Mode "monitor"
+) else (
+  echo [WARNING] Token Guard script not found: %TOKEN_GUARD_SCRIPT%
+)
+
+REM Inicializar Adaptive Mode Mejorado
+echo [INFO] Initializing Adaptive Mode Orchestrator...
+set ADAPTIVE_MODE_SCRIPT=.\skills\adaptive-mode-orchestrator\adaptive-mode-engine.ps1
+if exist "%ADAPTIVE_MODE_SCRIPT%" (
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%ADAPTIVE_MODE_SCRIPT%" -DryRun -ConfigPath "config/adaptive-dag-config.json"
+  if errorlevel 1 (
+    echo [WARNING] Adaptive Mode initialization completed with warnings
+  ) else (
+    echo [INFO] Adaptive Mode initialized successfully
+  )
+) else (
+  echo [WARNING] Adaptive Mode script not found: %ADAPTIVE_MODE_SCRIPT%
+)
+
 REM Inicializar orquestador y delegación automática
 echo [INFO] Initializing orchestrator and auto-delegation...
 powershell -NoProfile -ExecutionPolicy Bypass -Command "Import-Module '.\skills\auto-delegation-router\auto-delegation-router.ps1' -Force; Enable-AutoDelegation -ConfigPath 'config/auto-delegation.json' | Out-Null; Write-Host '[ORCHESTRATOR] Auto-delegation enabled' -ForegroundColor Green; Write-Host '[ORCHESTRATOR] Stack ready for automated operations' -ForegroundColor Green"
+
+REM Inicializar Judgment Day automation
+echo [INFO] Initializing Judgment Day automation...
+set JUDGMENT_DAY_SCRIPT=.\scripts\utilities\judgment-day-orchestrator.ps1
+if exist "%JUDGMENT_DAY_SCRIPT%" (
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%JUDGMENT_DAY_SCRIPT%" -Action initialize
+  if errorlevel 1 (
+    echo [WARNING] Judgment Day initialization completed with warnings
+  ) else (
+    echo [INFO] Judgment Day automation initialized successfully
+  )
+) else (
+  echo [WARNING] Judgment Day orchestrator script not found: %JUDGMENT_DAY_SCRIPT%
+)
 
 exit /b %errorlevel%
