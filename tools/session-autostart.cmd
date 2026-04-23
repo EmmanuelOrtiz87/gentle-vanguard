@@ -41,6 +41,20 @@ if exist "%TOKEN_GUARD_SCRIPT%" (
   echo [WARNING] Token Guard script not found: %TOKEN_GUARD_SCRIPT%
 )
 
+REM Inicializar Adaptive Mode Mejorado
+echo [INFO] Initializing Adaptive Mode Orchestrator...
+set ADAPTIVE_MODE_SCRIPT=.\skills\adaptive-mode-orchestrator\adaptive-mode-engine.ps1
+if exist "%ADAPTIVE_MODE_SCRIPT%" (
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%ADAPTIVE_MODE_SCRIPT%" -DryRun -ConfigPath "config/adaptive-dag-config.json"
+  if errorlevel 1 (
+    echo [WARNING] Adaptive Mode initialization completed with warnings
+  ) else (
+    echo [INFO] Adaptive Mode initialized successfully
+  )
+) else (
+  echo [WARNING] Adaptive Mode script not found: %ADAPTIVE_MODE_SCRIPT%
+)
+
 REM Inicializar orquestador y delegación automática
 echo [INFO] Initializing orchestrator and auto-delegation...
 powershell -NoProfile -ExecutionPolicy Bypass -Command "Import-Module '.\skills\auto-delegation-router\auto-delegation-router.ps1' -Force; Enable-AutoDelegation -ConfigPath 'config/auto-delegation.json' | Out-Null; Write-Host '[ORCHESTRATOR] Auto-delegation enabled' -ForegroundColor Green; Write-Host '[ORCHESTRATOR] Stack ready for automated operations' -ForegroundColor Green"

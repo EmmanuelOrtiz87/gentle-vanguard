@@ -1,4 +1,4 @@
-﻿{
+{
     "active":  true,
     "skill_path":  "C:\\Workspace_local\\workspace-foundation\\skills\\project-orchestrator-skill",
     "auto_detect":  true,
@@ -142,7 +142,29 @@
                                "fallback_on_primary_failure":  true,
                                "require_primary_for_guidance":  true
                            },
-    "skills":  [
-                   "parallel-execution-limits"
-               ]
+     "skills":  [
+                    "parallel-execution-limits"
+                ],
+     "adaptive_mode":  {
+                           "enabled":  true,
+                           "auto_detect":  true,
+                           "complexity_threshold":  "high",
+                           "min_agents":  2,
+                           "config_path":  "config/adaptive-dag-config.json",
+                           "auto_detect_config":  {
+                                                      "high_complexity_indicators":  [
+                                                                                        "multi-agent",
+                                                                                        "feedback-loops",
+                                                                                        "rollback-required",
+                                                                                        "cross-phase-dependencies"
+                                                                                    ]
+                                                  },
+                           "execution_config":  {
+                                                    "max_iterations":  3,
+                                                    "max_feedback_loops":  3,
+                                                    "auto_rollback":  true,
+                                                    "verbose_logging":  true,
+                                                    "dry_run_on_start":  true
+                                                }
+                       }
 }
