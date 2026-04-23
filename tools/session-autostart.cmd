@@ -33,6 +33,20 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT%" -Mode AutoStart
 REM Extraer SessionId del archivo de sesión
 for /f "tokens=*" %%i in ('powershell -NoProfile -ExecutionPolicy Bypass -Command "if (Test-Path '.\.session\session-*.json') { Get-ChildItem '.\.session\session-*.json' -File | Select-Object -Last 1 | ForEach-Object { $_.BaseName } }"') do set SESSION_ID=%%i
 
+REM Inicializar Distributed Tracing
+echo [INFO] Initializing Distributed Tracing System...
+set TRACING_SCRIPT=.\tools\initialize-distributed-tracing.ps1
+if exist "%TRACING_SCRIPT%" (
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%TRACING_SCRIPT%" -SessionId "%SESSION_ID%" -ConfigPath "config/distributed-tracing-config.json"
+  if errorlevel 1 (
+    echo [WARNING] Distributed Tracing initialization completed with warnings
+  ) else (
+    echo [INFO] Distributed Tracing initialized successfully
+  )
+) else (
+  echo [WARNING] Distributed Tracing script not found: %TRACING_SCRIPT%
+)
+
 REM Inicializar Token Guard para protección de tokens
 echo [INFO] Initializing Token Guard...
 if exist "%TOKEN_GUARD_SCRIPT%" (
