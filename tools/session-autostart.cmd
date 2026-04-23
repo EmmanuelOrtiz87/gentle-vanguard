@@ -59,4 +59,18 @@ REM Inicializar orquestador y delegación automática
 echo [INFO] Initializing orchestrator and auto-delegation...
 powershell -NoProfile -ExecutionPolicy Bypass -Command "Import-Module '.\skills\auto-delegation-router\auto-delegation-router.ps1' -Force; Enable-AutoDelegation -ConfigPath 'config/auto-delegation.json' | Out-Null; Write-Host '[ORCHESTRATOR] Auto-delegation enabled' -ForegroundColor Green; Write-Host '[ORCHESTRATOR] Stack ready for automated operations' -ForegroundColor Green"
 
+REM Inicializar Judgment Day automation
+echo [INFO] Initializing Judgment Day automation...
+set JUDGMENT_DAY_SCRIPT=.\scripts\utilities\judgment-day-orchestrator.ps1
+if exist "%JUDGMENT_DAY_SCRIPT%" (
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%JUDGMENT_DAY_SCRIPT%" -Action initialize
+  if errorlevel 1 (
+    echo [WARNING] Judgment Day initialization completed with warnings
+  ) else (
+    echo [INFO] Judgment Day automation initialized successfully
+  )
+) else (
+  echo [WARNING] Judgment Day orchestrator script not found: %JUDGMENT_DAY_SCRIPT%
+)
+
 exit /b %errorlevel%
