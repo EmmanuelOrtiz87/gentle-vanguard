@@ -2224,17 +2224,58 @@ switch ($Command) {
     }
 
     'dispatch' {
-        Write-Step "Parallel Agent Dispatch"
+        Write-Step "Parallel Agent Dispatch with Memory Persistence"
         $dispatchScript = Join-Path $scriptDir 'dispatch-agent.ps1'
+        $memoryScript = Join-Path $scriptDir 'dispatch-memory-manager.ps1'
+        
         if (-not (Test-Path $dispatchScript)) {
             Write-Error "Dispatch script not found: $dispatchScript"
             exit 1
         }
+        
+        if (-not (Test-Path $memoryScript)) {
+            Write-Error "Dispatch memory manager not found: $memoryScript"
+            exit 1
+        }
 
-        if ([string]::IsNullOrWhiteSpace($Scope)) {
-            & $dispatchScript
-        } else {
-            & $dispatchScript -Agents $Scope
+        # Parse dispatch command: dispatch [agents|memory] [action] [params...]
+        $dispatchParts = $Scope -split ' ', 3
+        $dispatchAction = if ($dispatchParts[0]) { $dispatchParts[0].ToLower() } else { 'execute' }
+        
+        switch ($dispatchAction) {
+            'memory' {
+                # Memory management: dispatch memory [list|load|save|clear|sync]
+                $memAction = if ($dispatchParts[1]) { $dispatchParts[1].ToLower() } else { 'list' }
+                Write-Host "Memory action: $memAction" -ForegroundColor Gray
+                
+                $memArgs = @('-Action', $memAction)
+                if ($JSON) { $memArgs += '-AsJson' }
+                
+                & $memoryScript @memArgs
+            }
+            'list' {
+                # List dispatch memory for current session
+                Write-Host "Listing dispatch memory for current session..." -ForegroundColor Gray
+                & $memoryScript -Action 'list' -AsJson | ConvertFrom-Json | Format-Table -AutoSize
+            }
+            'sync' {
+                # Synchronize dispatch memory
+                Write-Host "Synchronizing dispatch memory..." -ForegroundColor Gray
+                & $memoryScript -Action 'sync' -AsJson | ConvertFrom-Json | Format-Table -AutoSize
+            }
+            default {
+                # Execute dispatch with agents
+                $agents = if ($dispatchAction -ne 'execute') { $dispatchAction } else { $dispatchParts[1] }
+                $task = if ($dispatchParts.Count -gt 2) { $dispatchParts[2] } else { '' }
+                
+                $dispatchArgs = @()
+                if ($agents) { $dispatchArgs += @('-Agents', $agents) }
+                if ($task) { $dispatchArgs += @('-Task', $task) }
+                if ($JSON) { $dispatchArgs += '-AsJson' }
+                
+                Invoke-TokenBudgetGuard -Task 'dispatch' -Risk 'medium' -EstimatedChars 5000
+                & $dispatchScript @dispatchArgs
+            }
         }
     }
 

@@ -25,6 +25,7 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 $agentRouter = Join-Path $scriptDir 'agent-router.ps1'
 $eventBusScript = Join-Path $scriptDir 'event-bus.ps1'
+$dispatchMemoryManager = Join-Path $scriptDir 'dispatch-memory-manager.ps1'
 
 function Write-AgentLine {
     param([string]$Message, [string]$Color = 'White')
@@ -41,6 +42,42 @@ function Get-MaxParallelByRisk {
         'high'   { return 2 }
     }
     return 2
+}
+
+function Load-PreviousDispatchContext {
+    if (-not (Test-Path $dispatchMemoryManager)) {
+        return @{}
+    }
+    
+    try {
+        $previousContext = & $dispatchMemoryManager -Action 'load' -AsJson | ConvertFrom-Json -ErrorAction SilentlyContinue
+        if ($previousContext -and $previousContext.context) {
+            Write-AgentLine "Contexto anterior cargado: $($previousContext.execution_id)" 'Gray'
+            return $previousContext.context
+        }
+    } catch {
+        Write-AgentLine "No se pudo cargar contexto anterior" 'Gray'
+    }
+    
+    return @{}
+}
+
+function Save-DispatchContext {
+    param(
+        [string]$ExecutionId,
+        [hashtable]$Context
+    )
+    
+    if (-not (Test-Path $dispatchMemoryManager)) {
+        return
+    }
+    
+    try {
+        & $dispatchMemoryManager -Action 'save' -ExecutionId $ExecutionId -DispatchContext $Context -AsJson | Out-Null
+        Write-AgentLine "Contexto de dispatch guardado: $ExecutionId" 'Gray'
+    } catch {
+        Write-AgentLine "No se pudo guardar contexto de dispatch" 'Gray'
+    }
 }
 
 function Get-ParallelConfig {
@@ -292,11 +329,37 @@ if ([string]::IsNullOrWhiteSpace($Task)) {
     exit 1
 }
 
+# Cargar contexto anterior
+$previousContext = Load-PreviousDispatchContext
+
 if ($AsJson) {
     $result = Invoke-ParallelDispatch -AgentNames $agentList -TaskText $Task -ExecutionMode $Mode -RiskLevel $Risk
+    
+    # Guardar contexto para próxima ejecución
+    $dispatchContext = @{
+        agents = $agentList
+        task = $Task
+        mode = $Mode
+        risk = $Risk
+        previous_context = $previousContext
+        results_summary = $result.summary
+    }
+    Save-DispatchContext -ExecutionId $result.execution_id -Context $dispatchContext
+    
     $result | ConvertTo-Json -Depth 5
 } else {
     $result = Invoke-ParallelDispatch -AgentNames $agentList -TaskText $Task -ExecutionMode $Mode -RiskLevel $Risk
+    
+    # Guardar contexto para próxima ejecución
+    $dispatchContext = @{
+        agents = $agentList
+        task = $Task
+        mode = $Mode
+        risk = $Risk
+        previous_context = $previousContext
+        results_summary = $result.summary
+    }
+    Save-DispatchContext -ExecutionId $result.execution_id -Context $dispatchContext
     
     Write-AgentLine "`n=== DISPATCH SUMMARY ===" 'Cyan'
     Write-Host "Execution ID: $($result.execution_id)" -ForegroundColor White
