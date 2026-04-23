@@ -7,7 +7,7 @@
   "quality_gates": true,
   "session_tracking": true,
   "git_integration": true,
-  "activation_mode": "on-demand",
+  "activation_mode": "auto-start",
   "activated_at": "2026-04-14 21:11:16",
   "communication_language": "es",
   "allowed_languages": [

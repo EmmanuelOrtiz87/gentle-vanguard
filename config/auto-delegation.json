@@ -1,0 +1,106 @@
+{
+    "enabled":  true,
+    "confidenceThreshold":  60,
+    "maxParallelAgents":  3,
+    "fallbackStrategy":  "manual",
+    "loggingEnabled":  true,
+    "metricsEnabled":  true,
+    "features":  {
+                     "keywordExtraction":  true,
+                     "decisionTree":  true,
+                     "confidenceScoring":  true,
+                     "autoRetry":  false,
+                     "autoEscalation":  true
+                 },
+    "thresholds":  {
+                       "highConfidence":  80,
+                       "mediumConfidence":  60,
+                       "lowConfidence":  40
+                   },
+    "keywordMappings":  {
+                            "BA":  [
+                                       "requirement",
+                                       "user story",
+                                       "bdd",
+                                       "gherkin",
+                                       "acceptance",
+                                       "specification",
+                                       "feature analysis",
+                                       "stakeholder",
+                                       "business logic",
+                                       "workflow"
+                                   ],
+                            "SAD":  [
+                                        "architecture",
+                                        "design",
+                                        "sdd",
+                                        "api design",
+                                        "database",
+                                        "schema",
+                                        "technical decision",
+                                        "system design",
+                                        "microservice",
+                                        "integration"
+                                    ],
+                            "DEV":  [
+                                        "implement",
+                                        "code",
+                                        "develop",
+                                        "feature",
+                                        "refactor",
+                                        "bug fix",
+                                        "component",
+                                        "endpoint",
+                                        "frontend",
+                                        "backend",
+                                        "security",
+                                        "performance"
+                                    ],
+                            "QA":  [
+                                       "test",
+                                       "testing",
+                                       "qa",
+                                       "validation",
+                                       "e2e",
+                                       "unit test",
+                                       "integration test",
+                                       "playwright",
+                                       "pytest",
+                                       "quality",
+                                       "judgment day"
+                                   ],
+                            "OPS":  [
+                                        "deploy",
+                                        "ci/cd",
+                                        "docker",
+                                        "kubernetes",
+                                        "infrastructure",
+                                        "terraform",
+                                        "helm",
+                                        "release",
+                                        "devops",
+                                        "pipeline"
+                                    ],
+                            "GOV":  [
+                                        "governance",
+                                        "compliance",
+                                        "metrics",
+                                        "monitoring",
+                                        "observability",
+                                        "incident",
+                                        "security audit",
+                                        "review",
+                                        "audit"
+                                    ],
+                            "DOC":  [
+                                        "documentation",
+                                        "docs",
+                                        "readme",
+                                        "guide",
+                                        "runbook",
+                                        "specification",
+                                        "bdd specs",
+                                        "sdd specs"
+                                    ]
+                        }
+}
