@@ -28,37 +28,5 @@
     "reduceRedundancy": true,
     "referenceInsteadOfRepeat": true,
     "forceCompactOnStartup": true
-  },
-  "tokenGuard": {
-    "enabled": true,
-    "autoStart": true,
-    "configPath": "tools/token-guard-config.json",
-    "tokenBudget": 128000,
-    "alertThreshold": 0.80,
-    "pauseThreshold": 0.95,
-    "maxRounds": 5,
-    "roundTokenBudget": 25600,
-    "enableFragmentation": true,
-    "enableAutoDispatchPause": true,
-    "enableAlerts": true,
-    "monitoring": {
-      "enableRealTimeTracking": true,
-      "enableDetailedLogging": true
-    },
-    "alerting": {
-      "alertAt80Percent": true,
-      "alertAt90Percent": true,
-      "alertAt95Percent": true,
-      "pauseAt95Percent": true
-    },
-    "fragmentation": {
-      "strategy": "round-robin",
-      "autoRestartOnCompletion": true
-    },
-    "dispatch": {
-      "autoResume": true,
-      "resumeThreshold": 0.70,
-      "pauseOnCritical": true
-    }
   }
 }
