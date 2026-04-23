@@ -795,3 +795,20 @@ skills/
 ```
 
 See `skill-creator-skill` for creation guidelines.
+
+
+### parallel-execution-limits
+
+Advanced parallel execution management with dependency graphs, resource pooling, and token budget circuit breaker.
+
+- **Trigger**: "parallel execution", "ejecuciÃ³n paralela", "execution limits"
+- **Use when**: Complex workflows with >10 tasks, GPU/CPU constraints, token budget protection
+- **Key Functions**: 
+  - Initialize-ParallelExecutor - Initialize all components
+  - Plan-ParallelExecution - Create execution plan
+  - Invoke-ParallelExecution - Execute tasks in parallel
+  - Get-ExecutionStatus - Monitor execution
+  - Export-ExecutionReport - Generate reports
+
+**Path**: skills/parallel-execution-limits/
+**Documentation**: skills/parallel-execution-limits/SKILL.md
