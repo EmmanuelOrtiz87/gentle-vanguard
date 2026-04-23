@@ -102,5 +102,23 @@
                                         "bdd specs",
                                         "sdd specs"
                                     ]
-                        }
+                        },
+    "adaptive_mode":  {
+                          "enabled":  true,
+                          "integration":  "orchestrator",
+                          "feedback_loop_support":  true,
+                          "rollback_support":  true,
+                          "auto_detect_integration":  true,
+                          "complexity_detection":  {
+                                                       "enabled":  true,
+                                                       "min_agents_for_adaptive":  2,
+                                                       "complexity_keywords":  [
+                                                                                   "multi-phase",
+                                                                                   "feedback-loop",
+                                                                                   "rollback",
+                                                                                   "cross-team",
+                                                                                   "high-risk"
+                                                                               ]
+                                                   }
+                      }
 }
