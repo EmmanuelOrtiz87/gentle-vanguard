@@ -12,13 +12,11 @@ param(
     [switch]$Update,
     [switch]$New,
     [switch]$Info,
-    # gf.ps1 - Foundation Development Stack CLI
-    # Main entry point for Foundation - Development Stack
     [switch]$Check,
     [switch]$Tools,
     [switch]$All,
     [switch]$Force
-        Write-Host "  Foundation - Development Stack CLI" -ForegroundColor Cyan
+)
 
 $ErrorActionPreference = 'Stop'
 
@@ -26,43 +24,7 @@ $scriptRoot = $PSScriptRoot
 if (-not $scriptRoot) {
     $scriptPath = $PSCommandPath
     if ($scriptPath) {
-    Foundation - Development Stack CLI
-
-    REQUISITOS:
-      - git + PowerShell
-      - AI Agent: opencode, claude, copilot, etc.
-
-    USO:
-      gf <comando> [opciones]
-
-    COMANDOS:
-      check       Verifica el estado del sistema (core, skills, tools)
-      validate    Valida la instalación de Foundation
-      info        Muestra información de Foundation
-      list        Lista skills instalados
-      update      Actualiza skills desde la fuente
-      sync        Sincroniza skills (alias de update)
-      update-all  Actualiza Foundation + skills
-      tools       Muestra el estado de herramientas opcionales
-      new         Crea un nuevo proyecto
-      help        Muestra esta ayuda
-
-    OPCIONES:
-      --name <nombre>     Nombre del proyecto (para 'new')
-      --type <tipo>       Tipo de proyecto: service, cli, library, frontend
-      --arch <patrón>     Arquitectura: layered, clean, modular
-      --force             Forzar actualización (sobrescribe)
-      --help              Muestra esta ayuda
-
-    Ejemplos:
-      gf new --name mi-api --type service --arch clean
-      gf validate
-      gf check
-      gf update
-      gf update-all
-      gf tools
-
-    "@ -ForegroundColor White
+        $scriptRoot = Split-Path -Parent $scriptPath
     }
 }
 
@@ -107,11 +69,11 @@ function Write-CLI-Footer {
     Write-Host "Run 'gf --help' for usage information." -ForegroundColor Gray
 }
 
-            Write-Host "Validación EXITOSA" -ForegroundColor Green
+function Show-Help {
     Write-CLI-Header
-            Write-Host "Validación EXITOSA con $warnings advertencia(s)" -ForegroundColor Yellow
+    Write-Host @"
 Gentleman Foundation CLI - Agnostic Development Platform
-            Write-Host "Validación FALLIDA con $errors error(es)" -ForegroundColor Red
+
 REQUIREMENTS (any AI agent works):
   - git + PowerShell
   - AI Agent: opencode, claude, copilot, etc.
@@ -119,7 +81,7 @@ REQUIREMENTS (any AI agent works):
 USAGE:
   gf <command> [options]
 
-        Write-Host "Skills instalados" -ForegroundColor Green
+COMMANDS:
   check       Check system status (core, skills, tools)
   validate    Validate foundation installation
   info        Show foundation information
@@ -134,7 +96,7 @@ USAGE:
 OPTIONS:
   --name <name>       Project name (for 'new' command)
   --type <type>       Project type: service, cli, library, frontend
-  --arch <pattern>     Architecture: layered, clean, modular
+  --arch <pattern>    Architecture: layered, clean, modular
   --force             Force update (overwrite existing)
   --help              Show this help
 
@@ -145,7 +107,6 @@ Examples:
   gf update
   gf update-all
   gf tools
-        Write-Host "Creando nuevo proyecto" -ForegroundColor Green
 "@ -ForegroundColor White
     Write-CLI-Footer
 }
@@ -160,17 +121,17 @@ function Get-Foundation-Info {
         gitHooks = git config --global core.hooksPath 2>$null
     }
     
-        # TODO: Implementar scaffolding de proyectos desde plantillas (migrar a Foundation)
+    if (Test-Path $versionFile) {
         $versionData = Get-Content $versionFile | ConvertFrom-Json
-        Write-Host "Por ahora, crea el proyecto manualmente y ejecuta:" -ForegroundColor Cyan
-        Write-Host "  gf setup --project $Name" -ForegroundColor White
+        $info.version = $versionData.version
+        $info.installed = $versionData.installed
     }
     
     if (Test-Path $SkillsDir) {
         $info.skillsCount = (Get-ChildItem $SkillsDir -Directory).Count
     }
     
-        Write-Host "Actualizando skills..." -ForegroundColor Green
+    return $info
 }
 
 function Show-Info {
@@ -181,28 +142,23 @@ function Show-Info {
     Write-Host ""
     Write-Host "  Root:         $($info.root)" -ForegroundColor White
     Write-Host "  Version:      $($info.version)" -ForegroundColor White
-    Write-Host "  Installed:   $($info.installed)" -ForegroundColor White
+    Write-Host "  Installed:    $($info.installed)" -ForegroundColor White
     Write-Host "  Skills:       $($info.skillsCount)" -ForegroundColor White
     Write-Host "  Git Hooks:    $($info.gitHooks)" -ForegroundColor White
     Write-Host ""
     
-        Write-Host "Buscando actualizaciones..." -ForegroundColor Green
+    if (Test-Path $SkillsDir) {
         Write-Host "  Available Skills:" -ForegroundColor Yellow
         Get-ChildItem $SkillsDir -Directory | ForEach-Object {
             $skillFile = Join-Path $_.FullName "SKILL.md"
             if (Test-Path $skillFile) {
-                $content = Get-Content $skillFile -Raw
-                if ($content -match 'description:\s*(.+)') {
-                    Write-Host "    - $($_.Name)" -ForegroundColor Gray
-                } else {
-                    Write-Host "    - $($_.Name)" -ForegroundColor Gray
-                }
+                Write-Host "    - $($_.Name)" -ForegroundColor Gray
             }
         }
     }
     
     Write-CLI-Footer
-        Write-Host "Actualizando todo..." -ForegroundColor Green
+}
 
 function Show-Validate {
     Write-CLI-Header
@@ -378,6 +334,7 @@ function Show-Tools {
     Write-CLI-Footer
 }
 
+# Main command routing
 switch ($Command) {
     "new" { New-Project }
     "validate" { Show-Validate }
