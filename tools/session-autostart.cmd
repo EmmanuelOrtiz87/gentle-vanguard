@@ -3,6 +3,7 @@ setlocal
 
 set SCRIPT=%~dp0session-manager.ps1
 set OPTIMIZE_SCRIPT=%~dp0optimize-engram-usage.ps1
+set TOKEN_GUARD_SCRIPT=%~dp0token-guard.ps1
 
 echo === Session Autostart with Engram Optimization ===
 
@@ -28,6 +29,17 @@ powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\monitoring\cross-
 
 REM Inicializar sesión
 powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT%" -Mode AutoStart
+
+REM Extraer SessionId del archivo de sesión
+for /f "tokens=*" %%i in ('powershell -NoProfile -ExecutionPolicy Bypass -Command "if (Test-Path '.\.session\session-*.json') { Get-ChildItem '.\.session\session-*.json' -File | Select-Object -Last 1 | ForEach-Object { $_.BaseName } }"') do set SESSION_ID=%%i
+
+REM Inicializar Token Guard para protección de tokens
+echo [INFO] Initializing Token Guard...
+if exist "%TOKEN_GUARD_SCRIPT%" (
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%TOKEN_GUARD_SCRIPT%" -ConfigPath "tools/token-guard-config.json" -SessionId "%SESSION_ID%" -Mode "monitor"
+) else (
+  echo [WARNING] Token Guard script not found: %TOKEN_GUARD_SCRIPT%
+)
 
 REM Inicializar orquestador y delegación automática
 echo [INFO] Initializing orchestrator and auto-delegation...
