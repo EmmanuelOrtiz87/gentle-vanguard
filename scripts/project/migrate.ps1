@@ -37,7 +37,7 @@ function Get-DatabaseUrl {
 }
 
 function Invoke-PrismaMigrate {
-    param([string]$DbAction, [int]$DbSteps
+    param([string]$DbAction, [int]$DbSteps)
     
     $prismaDir = Join-Path $projectRoot 'prisma'
     if (-not (Test-Path $prismaDir)) {
@@ -92,7 +92,7 @@ function Invoke-TypeORMMigrate {
         'up' { & npx typeorm migration:run }
         'down' { & npx typeorm migration:revert }
         'status' { & npx typeorm migration:show }
-        'fresh' { & npx typeorm schema:drop && & npx typeorm migration:run }
+         'fresh' { & npx typeorm schema:drop; & npx typeorm migration:run }
         'seed' { & npx ts-node src/database/seed.ts }
     }
 }
@@ -111,7 +111,7 @@ function Invoke-KnexMigrate {
         'up' { & npx knex migrate:latest --knexfile knexfile.ts }
         'down' { & npx knex migrate:down --knexfile knexfile.ts }
         'status' { & npx knex migrate:status --knexfile knexfile.ts }
-        'fresh' { & npx knex migrate:rollback --knexfile knexfile.ts && & npx knex migrate:latest --knexfile knexfile.ts }
+         'fresh' { & npx knex migrate:rollback --knexfile knexfile.ts; & npx knex migrate:latest --knexfile knexfile.ts }
         'seed' { & npx knex seed:run --knexfile knexfile.ts }
     }
 }
@@ -133,7 +133,7 @@ function Invoke-GoMigrate {
         'up' { & migrate -path $migrationsDir -database $dbUrl up }
         'down' { & migrate -path $migrationsDir -database $dbUrl down $Steps }
         'status' { & migrate -path $migrationsDir -database $dbUrl version }
-        'fresh' { & migrate -path $migrationsDir -database $dbUrl down && & migrate -path $migrationsDir -database $dbUrl up }
+         'fresh' { & migrate -path $migrationsDir -database $dbUrl down; & migrate -path $migrationsDir -database $dbUrl up }
     }
 }
 
