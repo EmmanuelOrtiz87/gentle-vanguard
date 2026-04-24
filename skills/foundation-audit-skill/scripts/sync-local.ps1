@@ -161,24 +161,24 @@ if (-not (Test-Path $rulesPath)) {
 # Create wrapper script for easy access
 $wrapperPath = Join-Path $AuditTarget 'audit.ps1'
 if (-not (Test-Path $wrapperPath) -or $Force) {
-    $wrapperContent = @"
+    $wrapperContent = @'
 #Requires -Version 5.1
 # Foundation Audit Wrapper - Place in project root for quick access
 # This script wraps the unified audit workflow
 
-`$ErrorActionPreference = 'Continue'
-`$ScriptRoot = Split-Path -Parent `$MyInvocation.MyCommand.Path
-`$AuditScript = Join-Path `$ScriptRoot 'audit-workflow.ps1'
+$ErrorActionPreference = 'Continue'
+$ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$AuditScript = Join-Path $ScriptRoot 'audit-workflow.ps1'
 
-if (Test-Path `$AuditScript) {
-    `$mode = if (`$args.Count -ge 1 -and -not [string]::IsNullOrWhiteSpace(`$args[0])) { `$args[0] } else { 'standard' }
-    `$out = if (`$args.Count -ge 2 -and -not [string]::IsNullOrWhiteSpace(`$args[1])) { `$args[1] } else { 'text' }
-    & `$AuditScript -Mode `$mode -Output `$out
+if (Test-Path $AuditScript) {
+    $mode = if ($args.Count -ge 1 -and -not [string]::IsNullOrWhiteSpace($args[0])) { $args[0] } else { 'standard' }
+    $out = if ($args.Count -ge 2 -and -not [string]::IsNullOrWhiteSpace($args[1])) { $args[1] } else { 'text' }
+    & $AuditScript -Mode $mode -Output $out
 } else {
     Write-Error "Audit script not found. Run sync-local.ps1 from Foundation first."
     exit 1
 }
-"@
+'@
     if (-not $ListOnly) {
         $wrapperContent | Set-Content $wrapperPath -Encoding UTF8
         Write-Host "  [CREATE] Wrapper: $wrapperPath" -ForegroundColor Green
