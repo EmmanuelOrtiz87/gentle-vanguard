@@ -101,6 +101,19 @@
                                         "specification",
                                         "bdd specs",
                                         "sdd specs"
+                                    ],
+                            "SCRIPT-GOV": [
+                                        "script",
+                                        "powershell",
+                                        "parser error",
+                                        "syntax error",
+                                        "validate script",
+                                        "script validation",
+                                        "governance script",
+                                        "hook",
+                                        "pre-push",
+                                        "pre-commit",
+                                        "fix script"
                                     ]
                         },
     "adaptive_mode":  {

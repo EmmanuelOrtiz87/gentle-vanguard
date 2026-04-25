@@ -64,26 +64,14 @@ function Extract-TaskKeywords {
         'OPS' = @('deploy', 'ci/cd', 'docker', 'kubernetes', 'infrastructure', 
                   'terraform', 'helm', 'release', 'devops', 'pipeline')
         
-        # Governance keywords
+# Governance keywords
         'GOV' = @('governance', 'compliance', 'metrics', 'monitoring', 'observability', 
                   'incident', 'security audit', 'review', 'audit')
         
-        # Documentation keywords (expanded for documentation-strategist)
-        'DOC' = @('documentation', 'docs', 'readme', 'guide', 'runbook', 
-                  'specification', 'bdd specs', 'sdd specs', 'documentar',
-                  'executive summary', 'technical document', 'architecture doc',
-                  'confluence', 'drive', 'user guide', 'api documentation',
-                  'documentation strategy', 'documento', 'generar documentacion')
-        
-        # Documentation Strategy keywords (for documentation-strategist skill)
-        'DOCS' = @('documentation strategy', 'documento para gerencia', 'audience',
-                   'format selection', 'destination', 'doc improvement', 'doc audit',
-                   'improve documentation', 'documentacion estrategica', 'doc strategist')
-
-        # Skill Optimizer keywords (owner-only)
-        'OPT' = @('optimizar skills', 'improve skills', 'skill audit', 'analizar skills',
-                  'optimize orchestrator', 'skill quality', 'skill health', 'skill maintenance',
-                  'escalation', 'request skill change', 'skill optimization')
+        # Script Governance - PowerShell syntax, parser errors
+        'SCRIPT-GOV' = @('script', 'powershell', 'parser error', 'syntax error', 
+                        'validate script', 'script validation', 'governance script',
+                        'hook', 'pre-push', 'pre-commit', 'fix script', 'auto-fix')
     }
     
     $extractedKeywords = @{}
