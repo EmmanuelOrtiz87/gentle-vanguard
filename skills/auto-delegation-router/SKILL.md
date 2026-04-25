@@ -68,9 +68,22 @@ function Extract-TaskKeywords {
         'GOV' = @('governance', 'compliance', 'metrics', 'monitoring', 'observability', 
                   'incident', 'security audit', 'review', 'audit')
         
-        # Documentation keywords
+        # Documentation keywords (expanded for documentation-strategist)
         'DOC' = @('documentation', 'docs', 'readme', 'guide', 'runbook', 
-                  'specification', 'bdd specs', 'sdd specs')
+                  'specification', 'bdd specs', 'sdd specs', 'documentar',
+                  'executive summary', 'technical document', 'architecture doc',
+                  'confluence', 'drive', 'user guide', 'api documentation',
+                  'documentation strategy', 'documento', 'generar documentacion')
+        
+        # Documentation Strategy keywords (for documentation-strategist skill)
+        'DOCS' = @('documentation strategy', 'documento para gerencia', 'audience',
+                   'format selection', 'destination', 'doc improvement', 'doc audit',
+                   'improve documentation', 'documentacion estrategica', 'doc strategist')
+
+        # Skill Optimizer keywords (owner-only)
+        'OPT' = @('optimizar skills', 'improve skills', 'skill audit', 'analizar skills',
+                  'optimize orchestrator', 'skill quality', 'skill health', 'skill maintenance',
+                  'escalation', 'request skill change', 'skill optimization')
     }
     
     $extractedKeywords = @{}
