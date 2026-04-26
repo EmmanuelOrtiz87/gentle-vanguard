@@ -9,7 +9,7 @@ pre-commit:
 
 pre-push:
   run:
-    - echo "[pre-push] Building project..."
+    - powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/pre-push-script-validator.ps1" -Strict
     - echo "[pre-push] Running judgment day..."
 
 commit-msg:
