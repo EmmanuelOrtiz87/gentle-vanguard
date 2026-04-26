@@ -176,10 +176,26 @@
     }
   ],
   "breakingChanges": [],
+  "newInThisVersion": [
+    {
+      "type": "config",
+      "path": "config/mcp-servers.json",
+      "description": "MCP Server Configuration (filesystem, git, sqlite)"
+    },
+    {
+      "type": "skill",
+      "path": "skills/incident-response-skill",
+      "description": "Incident Response - Automated detection and recovery"
+    },
+    {
+      "type": "tests",
+      "path": "tests/",
+      "description": "Test suite structure (unit, integration, regression, performance, security)"
+    }
+  ],
   "migrationNotes": [
     "cloud-agents.local.json is now gitignored - create from cloud-agents.local.example",
     "PreTool hooks install to ~/.pretool-hooks/ via bootstrap-machine.ps1",
-    "GGA-native: invoke-ai-review.ps1 replaces external gga for code review",
-    "GGA is now OPTIONAL secondary skill - Foundation operates fully without it"
+    "Foundation operates with Opencode + judgment-day for code review"
   ]
 }
