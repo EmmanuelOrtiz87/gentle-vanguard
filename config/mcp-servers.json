@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
+      "description": "File system access for workspace-foundation"
+    },
+    "git": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-git"],
+      "description": "Git operations"
+    },
+    "sqlite": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sqlite", ".session/workspace.db"],
+      "description": "Database queries for session data"
+    }
+  },
+  "version": "1.0.0",
+  "description": "MCP Server Configuration for workspace-foundation",
+  "autoStart": true
+}
