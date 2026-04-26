@@ -9,7 +9,7 @@ pre-commit:
 
 pre-push:
   run:
-    - powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/auto-fix-delegate.ps1"
+    - powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/orchestrate-auto-fix.ps1" -Fix
     - echo "[pre-push] Running judgment day..."
 
 commit-msg:
