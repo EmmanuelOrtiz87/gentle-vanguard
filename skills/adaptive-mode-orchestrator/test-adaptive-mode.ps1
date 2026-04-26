@@ -258,13 +258,13 @@ Write-Host "TEST SUMMARY" -ForegroundColor $colors.Highlight
 Write-Host "=" * 80 -ForegroundColor $colors.Info
 
 Write-Host @"
-[OK] Configuration files validated
-[OK] Engine script verified
-[OK] Documentation present
-[OK] DAG structure validated
-[OK] Feedback loops configured
-[OK] Rollback policy configured
-[OK] Thresholds validated
+[# OK] Configuration files verified
+[# OK] Engine script checked
+[# OK] Documentation present
+[# OK] DAG structure validated
+[# OK] Feedback loops configured
+[# OK] Rollback policy configured
+[# OK] Thresholds validated
 
 All tests completed successfully!
 "@ -ForegroundColor $colors.Success

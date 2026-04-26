@@ -348,6 +348,38 @@ Get-Content .\docs\audit\script-normalization-report.md
 - Use curly quotes or special quote characters
 - Mix PowerShell and shell syntax
 
+### CRITICAL: Parser-Breaking Patterns
+
+**The `[OK]`, `[ERROR]`, `[FAIL]`, `[WARN]` pattern at the start of a line (without `Write-Host` or `Write-Output`) BREAKS the PowerShell parser.**
+
+**PROBLEM**:
+```powershell
+# This breaks the parser - PowerShell interprets [OK] as an index expression
+[OK] Validation passed    ← ERROR: Index expression without array
+
+# This also breaks in here-strings without proper handling
+Write-Host @"
+[OK] Validation passed
+"@
+```
+
+**CORRECT**:
+```powershell
+# GOOD - Use Write-Host or Write-Output
+Write-Host "[OK] Validation passed" -ForegroundColor Green
+Write-Output "[OK] Validation passed"
+
+# GOOD - Prefix with # in examples and here-strings
+Write-Host @"
+[# OK] Validation passed
+[✔] All good
+"@
+
+# GOOD - Use Write- function
+function Write-Ok { param($m) Write-Host "[OK] $m" -ForegroundColor Green }
+Write-Ok "Validation passed"
+```
+
 ---
 
 ## Resources

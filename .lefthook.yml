@@ -9,7 +9,7 @@ pre-commit:
 
 pre-push:
   run:
-    - echo "[pre-push] Building project..."
+    - powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/orchestrate-auto-fix.ps1" -Fix
     - echo "[pre-push] Running judgment day..."
 
 commit-msg:
