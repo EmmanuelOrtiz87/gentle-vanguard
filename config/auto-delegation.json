@@ -18,18 +18,17 @@
                        "lowConfidence":  40
                    },
     "keywordMappings":  {
-                            "BA":  [
-                                       "requirement",
-                                       "user story",
-                                       "bdd",
-                                       "gherkin",
-                                       "acceptance",
-                                       "specification",
-                                       "feature analysis",
-                                       "stakeholder",
-                                       "business logic",
-                                       "workflow"
-                                   ],
+                            "GOV":  [
+                                        "governance",
+                                        "compliance",
+                                        "metrics",
+                                        "monitoring",
+                                        "observability",
+                                        "incident",
+                                        "security audit",
+                                        "review",
+                                        "audit"
+                                    ],
                             "SAD":  [
                                         "architecture",
                                         "design",
@@ -81,17 +80,6 @@
                                         "devops",
                                         "pipeline"
                                     ],
-                            "GOV":  [
-                                        "governance",
-                                        "compliance",
-                                        "metrics",
-                                        "monitoring",
-                                        "observability",
-                                        "incident",
-                                        "security audit",
-                                        "review",
-                                        "audit"
-                                    ],
                             "DOC":  [
                                         "documentation",
                                         "docs",
@@ -102,20 +90,41 @@
                                         "bdd specs",
                                         "sdd specs"
                                     ],
-                            "SCRIPT-GOV": [
-                                        "script",
-                                        "powershell",
-                                        "parser error",
-                                        "syntax error",
-                                        "validate script",
-                                        "script validation",
-                                        "governance script",
-                                        "hook",
-                                        "pre-push",
-                                        "pre-commit",
-                                        "fix script"
-                                    ]
-                        },
+"SCRIPT-GOV":  [
+                                                "script",
+                                                "powershell",
+                                                "parser error",
+                                                "syntax error",
+                                                "validate script",
+                                                "script validation",
+                                                "governance script",
+                                                "hook",
+                                                "pre-push",
+                                                "pre-commit",
+                                                "fix script"
+                                            ],
+                             "REPORT":  [
+                                           "informe",
+                                           "report",
+                                           "reporte",
+                                           "métricas",
+                                           "metrics",
+                                           "analytics",
+                                           "análisis",
+                                           "dashboard",
+                                           "resumen ejecutivo",
+                                           "gerencia",
+                                           "tokens",
+                                           "costos",
+                                           "consumo",
+                                           "sesiones",
+                                           "telemetry",
+                                           "telemetría",
+                                           "estadísticas",
+                                           "stats",
+                                           "resumen de sesión"
+                                       ]
+                         },
     "adaptive_mode":  {
                           "enabled":  true,
                           "integration":  "orchestrator",
