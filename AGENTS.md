@@ -6,14 +6,10 @@ This file defines agent-agnostic startup behavior for this workspace.
 
 Before substantial work in a new conversation, run:
 
-1. `tools\session-autostart.cmd` on Windows, or
+1. `tools/session-autostart.cmd` on Windows, or
 2. `bash ./tools/session-autostart.sh` on Linux/macOS/WSL.
 
-Default behavior is controlled by `tools\session-autostart.config.json`.
-
-## Language Rule (MANDATORY)
-
-**ALWAYS respond in Spanish** - The user speaks Spanish. Never respond in any other language.
+Default behavior is controlled by `tools/session-autostart.config.json`.
 
 ## Session Tracking Rule
 
@@ -62,29 +58,6 @@ Skills auto-load based on project context:
 
 See: `rules/adaptive/` for dynamic rule configuration.
 
-## Auto-Delegation Rule (MANDATORY)
-
-Before processing ANY user request, you MUST:
-
-1. **Route task automatically** to determine which subagent(s) are needed:
-```powershell
-# Quick test - detect intent and agent
-.\scripts\utilities\auto-delegation-wrapper.ps1 "<user-request>"
-# Or use skill-router for restricted operations:
-.\scripts\utilities\skill-router.ps1 -Query "<what-user-wants>"
-```
-
-2. **If the task involves security, orchestrator, skills, or restricted operations**, validate access:
-```powershell
-.\scripts\utilities\skill-router.ps1 -Query "<what-user-wants>"
-# BLOCKED if requires auth → authenticate first
-.\scripts\utilities\auth-session.ps1 -ApiKey "fnd_local_2026_Emmanuel_"
-```
-
-3. **Proceed** after routing decision is made with appropriate agent/skill.
-
-**Never process any user request without first routing it.**
-
 ## Workspace-Specific Skills
 
 ### Automation Skills
@@ -98,155 +71,4 @@ Before processing ANY user request, you MUST:
 ```
 Read skills/workspace-automation/SKILL.md before creating automation scripts
 Read skills/session-lifecycle/SKILL.md before modifying session management
-
-## Required Tools
-
-The following tools should be installed for complete Foundation functionality:
-
-### Core Tools
-| Tool | Purpose | Installation |
-|------|---------|--------------|
-| `lefthook` | Git hooks management | `npm install -g lefthook` |
-| `prettier` | Code formatting | `npm install -D prettier` |
-| `commitlint` | Commit validation | `npm install -D @commitlint/cli` |
-
-### Security Tools
-| Tool | Purpose | Installation |
-|------|---------|--------------|
-| `trufflehog` | Secrets detection | `choco install trufflehog` |
-| `git-secrets` | AWS secrets prevention | git clone + make |
-
-### MCP Servers (Model Context Protocol)
-| Server | Purpose |
-|--------|----------|
-| `@modelcontextprotocol/server-filesystem` | File system access |
-| `@modelcontextprotocol/server-git` | Git operations |
-| `@modelcontextprotocol/server-sqlite` | Database queries |
-
-## Security Rules
-
-### Privacy Automation Rules (MANDATORY)
-
-Foundation implements automatic privacy protection for all AI API connections. **This is NOT optional.**
-
-**Files**:
-- Security Orchestrator: `scripts/security/security-orchestrator.ps1`
-- Privacy Gateway: `scripts/security/privacy-gateway.ps1`
-- Config: `config/security-privacy.json`
-
-**Automation** (runs on every session start):
-1. Security Orchestrator initialized automatically
-2. All prompts sanitized before sending to AI APIs
-3. Machine IDs, user IDs, paths replaced with placeholders
-4. Critical patterns (AWS keys, tokens) blocked immediately
-5. Audit log maintained in `.runtime/security-audit.log`
-
-**On-Demand Usage**:
-```powershell
-# Sanitize a prompt manually
-.\scripts\security\privacy-gateway.ps1 -Input "..." -Target ai-api
-
-# Check security status
-.\scripts\security\security-orchestrator.ps1 -Action status
-
-# Scan for violations
-.\scripts\security\security-orchestrator.ps1 -Action scan -Targets @(".")
-
-# Disable temporarily
-.\scripts\security\security-orchestrator.ps1 -Action disable
-
-# Re-enable
-.\scripts\security\security-orchestrator.ps1 -Action enable
-```
-
-**What Gets Sanitized**:
-| Pattern | Replacement |
-|---------|-------------|
-| Machine name | `<MACHINE>` |
-| Username | `<USER>` |
-| Home path | `<HOME>` |
-| Full paths | `<PATH>` |
-| API keys | `<REDACTED>` |
-| AWS keys | `<AWS_KEY>` |
-| IPs | `<IP>` |
-
-**What Gets Blocked** (immediate halt):
-- AWS Access Keys: `AKIA...`
-- GitHub Tokens: `ghp_...`
-- Stripe Keys: `sk_live_...`
-- Private Keys: `-----BEGIN ...PRIVATE KEY-----`
-
-### Secrets Detection
-NEVER commit secrets, API keys, or credentials. Always:
-1. Use `.env` files (never commit `.env`)
-2. Add secrets to `.gitignore`
-3. Use `trufflehog` before committing:
-   ```powershell
-   trufflehog filesystem .
-   ```
-
-### Git Hooks
-The following hooks are configured:
-- `pre-commit`: Lint, format, secrets scan
-- `pre-push`: Tests, judgment day
-- `commit-msg`: Conventional commits validation
-
-### Vulnerability Scanning
-Run dependency audit regularly:
-```powershell
-npm audit
-# or
-pip audit
-```
-
-## Monitoring & Observability
-
-### Metrics Endpoints
-| Endpoint | Description |
-|----------|-------------|
-| `/api/v1/metrics` | Session and token metrics |
-| `/api/v1/health` | System health check |
-
-### Telemetry
-- Distributed tracing: `.telemetry/`
-- Session metrics: `.session/metrics/`
-- Telemetry master: `docs/management/telemetry-master.csv`
-
-## MCP Integration
-
-MCP servers provide tool integration to LLMs:
-
-```json
-{
-  "mcpServers": {
-    "filesystem": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/root"]
-    },
-    "git": {
-      "command": "npx", 
-      "args": ["-y", "@modelcontextprotocol/server-git"]
-    }
-  }
-}
-```
-
-## Plugin System
-
-Foundation supports plugins in `plugins/` directory:
-
-```
-plugins/
-├── my-plugin/
-│   ├── SKILL.md
-│   ├── hooks/
-│   └── scripts/
-```
-
-**Usage**:
-```powershell
-wf plugins list
-wf plugins install <name>
-wf plugins uninstall <name>
-```
 ```
