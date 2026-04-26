@@ -46,6 +46,13 @@ Thumbs.db
 .env.local
 .env.*.local
 
+# Workspace Security (NEVER commit)
+.workspace/config/owner-auth.json
+.workspace/config/session-auth.json
+.workspace/config/dev-credentials.json
+.runtime/security-*.json
+.runtime/*-audit.log
+
 # Dependencies
 node_modules/
 packages/

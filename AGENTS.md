@@ -125,6 +125,57 @@ The following tools should be installed for complete Foundation functionality:
 
 ## Security Rules
 
+### Privacy Automation Rules (MANDATORY)
+
+Foundation implements automatic privacy protection for all AI API connections. **This is NOT optional.**
+
+**Files**:
+- Security Orchestrator: `scripts/security/security-orchestrator.ps1`
+- Privacy Gateway: `scripts/security/privacy-gateway.ps1`
+- Config: `config/security-privacy.json`
+
+**Automation** (runs on every session start):
+1. Security Orchestrator initialized automatically
+2. All prompts sanitized before sending to AI APIs
+3. Machine IDs, user IDs, paths replaced with placeholders
+4. Critical patterns (AWS keys, tokens) blocked immediately
+5. Audit log maintained in `.runtime/security-audit.log`
+
+**On-Demand Usage**:
+```powershell
+# Sanitize a prompt manually
+.\scripts\security\privacy-gateway.ps1 -Input "..." -Target ai-api
+
+# Check security status
+.\scripts\security\security-orchestrator.ps1 -Action status
+
+# Scan for violations
+.\scripts\security\security-orchestrator.ps1 -Action scan -Targets @(".")
+
+# Disable temporarily
+.\scripts\security\security-orchestrator.ps1 -Action disable
+
+# Re-enable
+.\scripts\security\security-orchestrator.ps1 -Action enable
+```
+
+**What Gets Sanitized**:
+| Pattern | Replacement |
+|---------|-------------|
+| Machine name | `<MACHINE>` |
+| Username | `<USER>` |
+| Home path | `<HOME>` |
+| Full paths | `<PATH>` |
+| API keys | `<REDACTED>` |
+| AWS keys | `<AWS_KEY>` |
+| IPs | `<IP>` |
+
+**What Gets Blocked** (immediate halt):
+- AWS Access Keys: `AKIA...`
+- GitHub Tokens: `ghp_...`
+- Stripe Keys: `sk_live_...`
+- Private Keys: `-----BEGIN ...PRIVATE KEY-----`
+
 ### Secrets Detection
 NEVER commit secrets, API keys, or credentials. Always:
 1. Use `.env` files (never commit `.env`)

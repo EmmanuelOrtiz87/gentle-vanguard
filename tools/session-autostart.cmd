@@ -71,7 +71,7 @@ REM 5. Distributed Tracing (si existe)
 set TRACING_SCRIPT=.\tools\initialize-distributed-tracing.ps1
 set TRACING_CONFIG=config\distributed-tracing-config.json
 if exist "%TRACING_SCRIPT%" (
-    echo [4/7] Initializing Distributed Tracing...
+    echo [5/8] Initializing Distributed Tracing...
     if exist "%TRACING_CONFIG%" (
         powershell -NoProfile -ExecutionPolicy Bypass -File "%TRACING_SCRIPT%" -SessionId "!SESSION_ID!" -ConfigPath "!TRACING_CONFIG!"
     ) else (
@@ -86,9 +86,26 @@ if exist "%TRACING_SCRIPT%" (
     echo [SKIP] Distributed Tracing script not found
 )
 
-REM 6. Token Guard (si existe)
-if exist "%TOKEN_GUARD_SCRIPT%" (
-    echo [5/7] Initializing Token Guard...
+REM 5. Session Authentication (owner verification)
+set AUTH_SCRIPT=.\scripts\utilities\auth-session.ps1
+set OWNER_AUTH=.workspace\config\owner-auth.json
+if exist "%AUTH_SCRIPT%" (
+    if exist "%OWNER_AUTH%" (
+        echo [5/8] Checking session authentication...
+        powershell -NoProfile -ExecutionPolicy Bypass -File "%AUTH_SCRIPT%" -SkipAuthCheck
+        if errorlevel 1 (
+            echo [OK] Session authenticated
+        ) else (
+            echo [INFO] Session auth not required for read-only operations
+        )
+    ) else (
+        echo [SKIP] Owner auth not configured
+    )
+) else (
+    echo [SKIP] Auth script not found
+)
+
+REM 6. Security Orchestrator (privacy automation)
     set TOKEN_GUARD_CONFIG=tools\token-guard-config.json
     if exist "!TOKEN_GUARD_CONFIG!" (
         powershell -NoProfile -ExecutionPolicy Bypass -File "%TOKEN_GUARD_SCRIPT%" -ConfigPath "!TOKEN_GUARD_CONFIG!" -SessionId "!SESSION_ID!" -Mode "monitor"
@@ -104,10 +121,25 @@ if exist "%TOKEN_GUARD_SCRIPT%" (
     echo [SKIP] Token Guard script not found
 )
 
+REM 6. Security Orchestrator (privacy automation)
+set SECURITY_SCRIPT=.\scripts\security\security-orchestrator.ps1
+set SECURITY_CONFIG=config\security-privacy.json
+if exist "%SECURITY_SCRIPT%" (
+    echo [6/7] Initializing Security Orchestrator...
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%SECURITY_SCRIPT%" -Action init -AsJson
+    if errorlevel 1 (
+        echo [WARNING] Security Orchestrator initialized with warnings
+    ) else (
+        echo [OK] Security Orchestrator initialized
+    )
+) else (
+    echo [SKIP] Security Orchestrator not found
+)
+
 REM 7. Skill Router / Auto-delegation (si existe)
 set SKILL_ROUTER=.\scripts\utilities\skill-router.ps1
 if exist "%SKILL_ROUTER%" (
-    echo [6/7] Initializing Skill Router...
+    echo [7/7] Initializing Skill Router...
     powershell -NoProfile -ExecutionPolicy Bypass -File "%SKILL_ROUTER%" -Query "session-start"
     if errorlevel 1 (
         echo [WARNING] Skill Router validation issue
@@ -122,7 +154,7 @@ REM 8. Auto-delegation Module (si existe)
 set AUTO_DELEGATION=.\skills\auto-delegation-router\auto-delegation-router.ps1
 set AUTO_DELEGATION_CONFIG=config\auto-delegation.json
 if exist "%AUTO_DELEGATION%" (
-    echo [7/7] Enabling Auto-Delegation...
+    echo [8/8] Enabling Auto-Delegation...
     powershell -NoProfile -ExecutionPolicy Bypass -Command "Import-Module '%AUTO_DELEGATION%' -Force; Get-AutoDelegationConfig -ConfigPath '%AUTO_DELEGATION_CONFIG%' | Out-Null; Write-Host '[OK] Auto-Delegation enabled' -ForegroundColor Green"
     if errorlevel 1 (
         echo [WARNING] Auto-Delegation enabled with warnings

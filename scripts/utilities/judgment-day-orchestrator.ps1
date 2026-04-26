@@ -80,17 +80,22 @@ function Initialize-JudgmentDay {
     
     $eventBusPath = ".event-bus/subscriptions.json"
     if (Test-Path $eventBusPath) {
-        $subscriptions = Get-Content $eventBusPath | ConvertFrom-Json
+        $subscriptions = Get-Content $eventBusPath -Raw | ConvertFrom-Json
+        
+        # Ensure subscriptions is an array
+        $subsList = @($subscriptions.subscriptions)
         
         # Add judgment day subscriptions if not present
-        $jdSubscription = $subscriptions.subscriptions | Where-Object { $_.name -eq "judgment-day-automation" }
+        $jdSubscription = $subsList | Where-Object { $_.name -eq "judgment-day-automation" }
         if (-not $jdSubscription) {
-            $subscriptions.subscriptions += @{
+            $newSub = @{
                 name = "judgment-day-automation"
                 events = @("pre-push", "pre-merge", "pr-created")
                 handler = "judgment-day-orchestrator.ps1"
                 enabled = $true
             }
+            $subsList += $newSub
+            $subscriptions.subscriptions = $subsList
             $subscriptions | ConvertTo-Json -Depth 10 | Set-Content $eventBusPath
             Write-Host "  [OK] Event subscriptions registered" -ForegroundColor Green
         }
