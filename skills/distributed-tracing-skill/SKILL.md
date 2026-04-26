@@ -1,3 +1,9 @@
+---
+name: distributed-tracing-skill
+description: Distributed tracing with OpenTelemetry for workspace sessions
+trigger: tracing, telemetry, distributed, correlation, span
+---
+
 # Distributed Tracing Skill
 
 ## Descripción

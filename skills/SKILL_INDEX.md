@@ -176,9 +176,7 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 | **Business** | business-telemetry, backlog-management |
 | **Workflow** | github-pr, jira-task, jira-epic, release-management, skill-factory |
 | **Quality** | typescript, code-review, security, technical-debt, web-performance-optimization, judgment-day |
-| **Code Hygiene** | commit-hygiene, docs-alignment, shellcheck-standards, testing-coverage (GGA-native) |
 | **Operations** | observability, incident-response-plan |
-| **Guardian** | guardian-fallback (GGA-optional fallback when blocked) |
 | **Governance** | project-scaffolding, documentation, architecture, git-workflow, foundation-manager |
 | **SDD Lifecycle** | sdd-lifecycle (CONSOLIDATED - 9 phases in 1) |
 
@@ -528,7 +526,31 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 ## Workflow & Process
 
-### github-pr-skill
+### auto-delegation-router
+
+**Trigger**: `auto-delegation`, `delegate`, `route`, `orchestrate`
+
+**Use when**: Task routing, agent delegation, orchestration
+
+**Trigger**: `gitflow`, `gitflow-orchestrator`, `branch creation`, `git hooks`
+
+**Use when**: GitFlow workflow validation, branch creation, pre-push hooks
+
+---
+
+### distributed-tracing-skill
+
+**Trigger**: `tracing`, `telemetry`, `distributed tracing`, `correlation`, `span`
+
+**Use when**: Distributed tracing, OpenTelemetry, session correlation
+
+---
+
+### adaptive-mode-orchestrator
+
+**Trigger**: `adaptive`, `auto-optimization`, `mode`, `performance`
+
+**Use when**: Adaptive mode, on-demand optimization, performance tuning
 
 **Trigger**: `pull request`, `PR`, `commit message`, `conventional commit`
 
