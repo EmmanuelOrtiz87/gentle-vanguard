@@ -6,10 +6,14 @@ This file defines agent-agnostic startup behavior for this workspace.
 
 Before substantial work in a new conversation, run:
 
-1. `tools/session-autostart.cmd` on Windows, or
+1. `tools\session-autostart.cmd` on Windows, or
 2. `bash ./tools/session-autostart.sh` on Linux/macOS/WSL.
 
-Default behavior is controlled by `tools/session-autostart.config.json`.
+Default behavior is controlled by `tools\session-autostart.config.json`.
+
+## Language Rule (MANDATORY)
+
+**ALWAYS respond in Spanish** - The user speaks Spanish. Never respond in any other language.
 
 ## Session Tracking Rule
 

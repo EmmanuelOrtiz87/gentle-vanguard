@@ -1,9 +1,9 @@
 # auto-delegation-wrapper.ps1
-# Wrapper que carga auto-delegation config con soporte español
+# Wrapper that loads auto-delegation config with multi-language support
 
 $ErrorActionPreference = 'Continue'
 
-# Keywords en español
+# Keywords for task routing (multi-language support)
 $spanishKeywords = @{
     "REPORT" = @("informe", "report", "reporte", "metricas", "metrics", "costos", "costs", "gerencia", "resumen", "session", "sesiones", "analytics", "dashboard")
     "GOV" = @("governance", "modificar", "config", "seguridad", "autenticacion", "permission", "orquestador", "seguro", "orchestrator", "rules", "policy", "admin")
