@@ -99,7 +99,10 @@ function End-Session {
     }
     
     $latestSession = $sessionFiles | Select-Object -First 1
-    $sessionData = Get-Content -Path $latestSession.FullName | ConvertFrom-Json
+    $sessionData = Get-Content -Path $latestSession.FullName -Raw | ConvertFrom-Json
+    
+    $sessionData | Add-Member -NotePropertyName "endTime" -NotePropertyValue (Get-Date -Format "o") -PassThru | 
+    ForEach-Object { $_.endTime = Get-Date -Format "o" }
     
     $sessionData.status = "ended"
     $sessionData.endTime = Get-Date -Format "o"

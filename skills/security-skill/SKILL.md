@@ -188,3 +188,36 @@ gitrob scan
 # SAST
 semgrep --config=auto .
 ```
+
+## Workspace Access Control (Foundation)
+
+Foundation implements Role-Based Access Control (RBAC) for workspace operations:
+
+### Roles
+
+| Role | Description | Access |
+|------|-------------|--------|
+| `owner` | Workspace owner | Full access to all operations |
+| `developer` | Developer | Restricted to development tasks |
+
+### Authentication
+
+```powershell
+# Check access level
+.\scripts\utilities\access-control-middleware.ps1 -CheckOnly
+
+# Authenticate with API key (8hr session)
+.\scripts\utilities\auth-session.ps1 -ApiKey "fnd_local_2026_Emmanuel_"
+
+# Authenticate via security questions (recovery)
+.\scripts\utilities\auth-session.ps1 -UseSecurityQuestions
+```
+
+### Blocked Operations (developers)
+
+- Modifying skills (`skills/*`)
+- Modifying orchestrator
+- Accessing workspace config (`.workspace/config/*`)
+- Running skill-optimizer
+- Running foundation-audit
+- Managing users

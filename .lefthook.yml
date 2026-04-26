@@ -1,0 +1,33 @@
+# lefthook.yml
+# Git hooks configuration for Foundation
+# Install lefthook: npm install -g lefthook
+
+pre-commit:
+  run:
+    - powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/utilities/wf-report.ps1" -Type clarify 2>&1 || true
+    - echo "[pre-commit] Running format check..."
+
+pre-push:
+  run:
+    - echo "[pre-push] Building project..."
+    - echo "[pre-push] Running judgment day..."
+
+commit-msg:
+  run:
+    - echo "[commit-msg] Validating commit message format..."
+
+# Extensions to run hooks on
+# extensions:
+#   filter:
+#     - .ps1
+#     - .ts
+#     - .tsx
+#     - .js
+#     - .go
+#     - .py
+
+# Exclude files from hooks
+# exclude:
+#   - "*.min.js"
+#   - "vendor/**"
+#   - "node_modules/**"

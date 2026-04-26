@@ -1,3 +1,9 @@
+---
+name: gitflow-orchestrator-skill
+description: GitFlow workflow validation and branch creation orchestration
+trigger: gitflow, git, branch, workflow, git hooks
+---
+
 # GitFlow Orchestrator Skill
 
 **Versión**: 1.0.0  
