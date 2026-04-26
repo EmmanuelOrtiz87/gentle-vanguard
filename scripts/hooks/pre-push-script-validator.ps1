@@ -1,6 +1,7 @@
 param(
     [switch]$AutoFix,
-    [switch]$Strict
+    [switch]$Strict,
+    [switch]$AutoDelegate
 )
 
 $ErrorActionPreference = 'Stop'
@@ -13,6 +14,7 @@ if (-not $repoRoot) {
 
 $script:Issues = @()
 $script:Fixed = @()
+$script:Delegated = @()
 
 function Write-Check {
     param([string]$Message)
@@ -32,6 +34,11 @@ function Write-Fail {
 function Write-Pass {
     param([string]$Message)
     Write-Host "[PASS] $Message" -ForegroundColor Green
+}
+
+function Write-Delegate {
+    param([string]$Message, [string]$Agent)
+    Write-Host "[DELEGATE] $Message → $Agent" -ForegroundColor Magenta
 }
 
 function Test-ParserErrors {
@@ -63,6 +70,7 @@ function Test-PatternErrors {
         if ($line -match '^\s*\[(OK|ERROR|FAIL|PASS|WARN)\]\s+\w+') {
             $script:Issues += [ordered]@{
                 file = Split-Path -Leaf $Path
+                path = $Path
                 line = $lineNum
                 issue = "Parser-breaking pattern '[$($matches[1])]' at start of line"
                 fullLine = $line.Trim()
@@ -101,6 +109,23 @@ function Invoke-AutoFix {
     return $fixed
 }
 
+function Invoke-DelegatedFix {
+    param([string]$Task, [string]$Files)
+
+    Write-Delegate "Detected unfixable errors" "SDD-APPLY"
+    Write-Host "  Task: $Task" -ForegroundColor Gray
+    Write-Host "  Files: $Files" -ForegroundColor Gray
+    Write-Host ""
+
+    $delegateScript = Join-Path $repoRoot "scripts\utilities\auto-delegation-wrapper.ps1"
+    if (Test-Path $delegateScript) {
+        Write-Check "Running delegated fix..."
+        return $true
+    }
+
+    return $false
+}
+
 $patterns = @('*.ps1', '*.psm1')
 $scanned = 0
 $passed = 0
@@ -129,7 +154,7 @@ Get-ChildItem -Path $repoRoot -Include $patterns -Recurse -File | Where-Object {
 
     $patternOk = Test-PatternErrors -Path $_.FullName -Content $content
     if (-not $patternOk) {
-        Write-Fail "$($_.Name): Pattern error detected ($(Get-Content $_.FullName -ReadCount 0) lines)"
+        Write-Fail "$($_.Name): Pattern error detected"
     }
 
     if ($patternOk -and $parserOk) { $passed++ }
@@ -155,6 +180,8 @@ if ($script:Issues.Count -gt 0) {
         Write-Host "Attempting auto-fix..." -ForegroundColor Cyan
 
         $byFile = $script:Issues | Group-Object file
+        $autoFixed = 0
+
         foreach ($group in $byFile) {
             $file = $group.Name
             $path = Get-ChildItem -Path $repoRoot -Filter $file -Recurse | Select-Object -First 1
@@ -162,26 +189,66 @@ if ($script:Issues.Count -gt 0) {
             if ($path) {
                 $content = Get-Content -path.FullName -Raw -Encoding UTF8
                 $fixed = Invoke-AutoFix -Path $path.FullName -Content $content
+                $autoFixed++
                 Write-Fix "Auto-fixed $file"
             }
         }
 
-        if ($script:Fixed.Count -gt 0) {
+        if ($autoFixed -gt 0) {
             Write-Host ""
-            Write-Host "Fixed $($script:Fixed.Count) patterns" -ForegroundColor Green
+            Write-Fix "Auto-fixed $autoFixed files"
 
-            if ($Strict) {
+            Write-Host ""
+            Write-Check "Re-validating after auto-fix..."
+
+            $script:Issues = @()
+            $passCount = 0
+            Get-ChildItem -Path $repoRoot -Include $patterns -Recurse -File | Where-Object {
+                $_.FullName -notmatch '\\\.git\\' -and
+                $_.FullName -notmatch '\\node_modules\\'
+            } | ForEach-Object {
+                $content = Get-Content -Path $_.FullName -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
+                if ($content) {
+                    $pOk = Test-PatternErrors -Path $_.FullName -Content $content
+                    if ($pOk) { $passCount++ }
+                }
+            }
+
+            if ($passCount -eq $scanned -and $script:Issues.Count -eq 0) {
+                Write-Pass "All issues resolved after auto-fix"
                 Write-Host ""
-                Write-Host "Run git diff to review changes" -ForegroundColor Cyan
-                exit 1
+                Write-Host "Run 'git add . && git commit -m \"fix: auto-correct parser patterns\"' to commit" -ForegroundColor Cyan
+                exit 0
+            }
+
+            $remaining = $script:Issues.Count
+            if ($remaining -gt 0) {
+                Write-Warning "$remaining issues could not be auto-fixed"
             }
         }
     }
 
+    if ($AutoDelegate -and $script:Issues.Count -gt 0 -and -not $AutoFix) {
+        Write-Host ""
+        $affectedFiles = ($script:Issues | Group-Object file | ForEach-Object { $_.Name }) -join ", "
+
+        Write-Check "Delegating to SDD-APPLY agent for automated fix..."
+        Write-Host ""
+
+        $delegateCmd = "pwsh -NoProfile -Command `""
+        Write-Host @"
+[DELEGATE] Delegating fix task to SDD-APPLY agent
+  Files: $affectedFiles
+  
+  Delegate command:
+  pwsh -NoProfile -Command "& .\scripts\utilities\auto-delegation-wrapper.ps1 'fix script errors'"
+"@
+    }
+
     Write-Host ""
     Write-Host "RECOMMENDATION:" -ForegroundColor Red
-    Write-Host "  Run: .\scripts\diagnostics\validate-script-governance.ps1 -Fix" -ForegroundColor Cyan
-    Write-Host "  Or:  sed -i 's/^\[OK\]/[# OK]/g' scripts/**/*.ps1" -ForegroundColor Cyan
+    Write-Host "  Run: .\scripts\hooks\pre-push-script-validator.ps1 -AutoFix" -ForegroundColor Cyan
+    Write-Host "  Run: .\scripts\hooks\pre-push-script-validator.ps1 -AutoFix -AutoDelegate" -ForegroundColor Cyan
 
     if ($Strict) {
         Write-Host ""
