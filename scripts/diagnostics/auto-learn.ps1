@@ -66,6 +66,7 @@ EJEMPLOS:
 
 APRENDIZAJE INTEGRADO EN:
   - validate-script-governance.ps1 (regla automatizada)
+  - auto-fix-delegate.ps1 (flujo automático detect-fix-delegate)
   - .git/hooks/pre-push (valida automáticamente)
   - auto-delegation.json (SCRIPT-GOV keywords)
 
