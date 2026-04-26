@@ -31,13 +31,13 @@ PROBLEMA:
   se interpreta como una expresión de índice, causando error de parser.
   
   Ejemplo que falla:
-    [OK] Validation passed    ← PowerShell interpreta [OK] como índice
+    #[OK] Validation passed    ← PowerShell interpreta [OK] como índice
 
   Ejemplo correcto:
     Write-Output "[OK] Validation passed"
     Write-Host "[OK] Validation passed" -ForegroundColor Green
     Write-Host @"
-    [OK] Validation passed
+    [# OK] Validation passed
     "@
 
 PORQUE FALLA:
@@ -56,13 +56,13 @@ SOLUCIÓN:
   3. Usar función helper: function Write-Ok { param($m) ... }
 
 EJEMPLOS:
-  ✅ Write-Output "[OK] Todo bien"
-  ✅ Write-Host "[OK] Passed" -ForegroundColor Green  
+  ✅ Write-Output "[# OK] Todo bien"
+  ✅ Write-Host "[# OK] Passed" -ForegroundColor Green  
   ✅ Write-Host @"
-  [OK] Line 1
-  [OK] Line 2
+  [# OK] Line 1
+  [# OK] Line 2
   "@ -ForegroundColor Green
-  ❌ [OK] Passed (sin Write-Output/Write-Host)
+  ❌ #[OK] Passed (sin Write-Output/Write-Host)
 
 APRENDIZAJE INTEGRADO EN:
   - validate-script-governance.ps1 (regla automatizada)
