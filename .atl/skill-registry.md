@@ -15,6 +15,9 @@ This file defines the enforceable skills and compact rules for the workspace-fou
 - go-testing: Go test patterns and coverage
 - pytest: Python test patterns
 - playwright: E2E testing patterns
+- reporting-skill: Generation of management reports, metrics, cost analysis, and dashboards on demand
+- marketing-content-skill: Marketing content, social media posts, and promotional materials
+- session-workflow-skill: Session lifecycle management and tracking
 
 ## Usage
 - Update this file when adding or removing skills.
