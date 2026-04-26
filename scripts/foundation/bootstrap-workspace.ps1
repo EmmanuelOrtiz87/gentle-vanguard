@@ -943,6 +943,7 @@ if ($CreateProject) {
         Write-Host "AI model name: $selectedAiModelName"
     }
 }
+}
 
 $platformKey = Get-PlatformKey
 foreach ($tool in $config.tools) {

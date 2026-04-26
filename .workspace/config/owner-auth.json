@@ -1,0 +1,29 @@
+{
+  "name": "workspace_owner",
+  "apiKey": "fnd_local_2026_Emmanuel_",
+  "createdAt": "2026-04-25T01:57:00Z",
+  "securityQuestions": {
+    "q1": {
+      "question": "Nombre de tu primera mascota?",
+      "answerHash": "sha256:q9jPuhUYJrt7895XOH6WU+nX9U1h4uEHITs63UODz5E="
+    },
+    "q2": {
+      "question": "Ciudad donde naciste?",
+      "answerHash": "sha256:r+rMRh6qlDbAXL/7jWHJpWBOOv1aIqfdH5iuCJiWvvc="
+    },
+    "q3": {
+      "question": "Nombre de tu mejor amigo de infancia?",
+      "answerHash": "sha256:kBvobUUMUE6FVf/u6rHga5Jsh4X9me84LBMQt8ZrwWc="
+    }
+  },
+  "permissions": [
+    "run-skill-optimizer",
+    "run-documentation-strategist", 
+    "modify-skills",
+    "modify-orchestrator",
+    "approve-escalations",
+    "access-workspace-config",
+    "run-foundation-audit",
+    "manage-users"
+  ]
+}

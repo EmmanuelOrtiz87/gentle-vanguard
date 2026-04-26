@@ -1,0 +1,72 @@
+{
+  "workspace": "workspace_local",
+  "accessControl": {
+    "owner": {
+      "name": "Emmanuel",
+      "role": "owner"
+    },
+    "developers": {
+      "role": "developer",
+      "denied": [
+        "run-skill-optimizer",
+        "modify-skills",
+        "modify-orchestrator",
+        "access-workspace-config",
+        "run-foundation-audit",
+        "manage-users"
+      ]
+    }
+  },
+  "blockedActions": {
+    "developers": {
+      "files": [
+        "tools/skills/*/SKILL.md",
+        "skills/*/SKILL.md",
+        "skills/*/*/*.ps1",
+        "tools/skills/*/*/*.ps1",
+        "AGENTS.md",
+        "tools/session-autostart.*",
+        "tools/*config*.json",
+        ".workspace/config/*",
+        "tools/orchestrator/*",
+        "scripts/utilities/judgment-day*",
+        ".workspace/*"
+      ],
+      "commands": [
+        "skill-optimizer analyze",
+        "skill-optimizer optimize", 
+        "skill-optimizer improve",
+        "skill-optimizer escalations",
+        "orchestrator",
+        "admin",
+        "config",
+        "access-recover"
+      ],
+      "intentPatterns": [
+        "change.*orchestrator",
+        "modify.*skill",
+        "update.*skill",
+        "delete.*skill",
+        "create.*skill",
+        "edit.*config",
+        "modify.*config",
+        "update.*architecture",
+        "change.*architecture",
+        "modify.*workflow",
+        "update.*workflow",
+        "escalar",
+        "optimizar skills",
+        "improve skills",
+        "skill audit",
+        "analizar skills",
+        "optimize orchestrator",
+        "skill quality",
+        "skill health"
+      ]
+    }
+  },
+  "escalationSettings": {
+    "requireOwnerApproval": true,
+    "requireJustification": true
+  }
+}

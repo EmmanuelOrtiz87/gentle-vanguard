@@ -7,9 +7,11 @@
     "scripts/validation",
     "scripts/foundation",
     "scripts/project",
-    "scripts/git-hooks"
+    "scripts/git-hooks",
+    "skills",
+    "tests"
   ],
-  "allowedRootFiles": ["README.md"],
+  "allowedRootFiles": ["README.md", "config/mcp-servers.json"],
   "allowedRootMarkdownFiles": [
     "README.md",
     "AGENTS.md",

@@ -1,165 +1,135 @@
-# System Prerequisites
+# 📋 Prerequisites - Foundation
 
-Foundation - Development Stack requirements for development machines.
+**Fecha**: 2026-04-26  
+**Descripción**: Lista completa de herramientas requeridas y opcionales para Foundation
 
-## Required
+---
 
-These are **required** for the foundation to work:
-
-### Core
-
-| Requirement | Version | Purpose |
-|-------------|---------|---------|
-| **git** | 2.30+ | Version control, hooks |
-| **PowerShell** | 5.1+ | Scripts and automation |
-| **PowerShell Core** | 7.0+ | Recommended for cross-platform |
-
-### AI Agent (Required for AI features)
-
-You need **one** of:
-
-| Provider | Model Examples | Install |
-|----------|---------------|---------|
-| **OpenCode** | big-pickle, claude-3.5, gpt-4 | [opencode.ai](https://opencode.ai) |
-| **Claude Desktop** | Claude 3.5 | [anthropic.com](https://anthropic.com) |
-| **GitHub Copilot** | GPT-4 | VS Code extension |
-| **Cursor** | claude-3.5 | [cursor.com](https://cursor.com) |
-| **Windsurf** | Claude 3.5 | [codeium.com](https://codeium.com/windsurf) |
-
-> **Note**: The foundation works with ANY AI agent. OpenCode is recommended for best integration.
-
-## Optional
-
-These enhance the foundation but are **not required**:
-
-| Tool | Type | Purpose | Install |
-|------|------|---------|---------|
-| **engram** | opencode plugin | Persistent memory across sessions | Built into opencode |
-
-## Quick Setup for New Developer
-
-### 1. Minimal Setup (Required)
-
-Windows:
+## 🚀 Instalación Automática
 
 ```powershell
-# Install git
-winget install Git.Git
+# Opción 1: Instalar todo automáticamente
+.\scripts\utilities\install-prerequisites.ps1
 
-# Install PowerShell 7
-winget install Microsoft.PowerShell
-
-# Install AI Agent (choose one)
-# - OpenCode (recommended): https://opencode.ai
-# - Or use existing Claude Desktop/Copilot/etc.
+# Opción 2: Solo verificar estado
+.\scripts\utilities\install-prerequisites.ps1 -CheckOnly
 ```
 
-Linux or macOS:
+---
 
-```bash
-# Install git, PowerShell, and any required package managers using your platform standard.
-# Then verify:
+## 🔴 Requeridas (Obligatorias)
+
+| Herramienta | Versión Mínima | Propósito | Instalación |
+|------------|----------------|-----------|-------------|
+| **Node.js** | 18+ | Runtime JavaScript | [nodejs.org](https://nodejs.org) |
+| **npm** | 9+ | Package manager | Incluido con Node.js |
+| **Git** | 2.30+ | Control de versiones | [git-scm.com](https://git-scm.com) |
+
+---
+
+## 🟡 Recomendadas (Instalación Automática)
+
+```powershell
+# Estas se instalan con el comando anterior
+npm install -g lefthook
+npm install -g prettier
+npm install -g @commitlint/cli @commitlint/config-conventional
+```
+
+| Herramienta | Propósito | Instalación |
+|------------|-----------|-------------|
+| **lefthook** | Git hooks management | `npm install -g lefthook` |
+| **prettier** | Code formatting | `npm install -g prettier` |
+| **commitlint** | Commit validation | `npm install -g @commitlint/cli` |
+
+---
+
+## 🟢 Opcionales
+
+### Security
+
+| Herramienta | Propósito | Instalación Windows | Instalación Linux/macOS |
+|------------|-----------|--------------------|----------------------|
+| **trufflehog** | Secrets detection | `choco install trufflehog` | `go install github.com/trufflesecurity/trufflehog/cmd/trufflehog@latest` |
+
+### Python (para scripts Python)
+
+```powershell
+# Instalar Python
+choco install python
+
+# Instalar pip
+pip install safety bandit
+```
+
+| Herramienta | Propósito |
+|-------------|-----------|
+| **safety** | Dependency vulnerability scanning |
+| **bandit** | Python security analysis |
+
+---
+
+## 📋 Checklist de Instalación
+
+### 1. Requeridas
+- [ ] Node.js (18+)
+- [ ] npm (9+)
+- [ ] Git (2.30+)
+
+### 2. Recomendadas
+- [ ] lefthook
+- [ ] prettier
+- [ ] commitlint
+
+### 3. Opcionales
+- [ ] trufflehog
+- [ ] Python (para scripts Python)
+- [ ] PowerShell Core (pwsh)
+
+---
+
+## 🔧 Verificación
+
+```powershell
+# Verificar todas las herramientas
+.\scripts\utilities\install-prerequisites.ps1 -CheckOnly
+
+# Verificar individualmente
+node --version
+npm --version
 git --version
-pwsh --version
+lefthook --version
+prettier --version
+trufflehog --version
 ```
 
-### 2. Install Foundation - Development Stack
+---
 
-Windows PowerShell:
+## ⚠️ Notas Importantes
 
+1. **trufflehog** no está disponible como npm - se instala vía Chocolatey o Go
+2. Algunas herramientas requieren permisos de administrador
+3. En Windows, ejecutar PowerShell como administrador si hay problemas
+
+---
+
+## 📞 Troubleshooting
+
+### Error: "command not found"
+Agregar al PATH:
 ```powershell
-# Clone foundation
-git clone <foundation-repo-url> C:\path\to\foundation
-
-# Install globally
-cd C:\path\to\foundation
-.\scripts\bootstrap-machine.ps1
-
-# Verify
-gf validate
+# Para npm global
+$env:PATH += ";$env:APPDATA\npm"
 ```
 
-Linux or macOS:
-
-```bash
-git clone <foundation-repo-url> ~/workspace-foundation
-cd ~/workspace-foundation
-pwsh -NoProfile -File ./scripts/foundation/bootstrap.ps1
-gf validate
-```
-
-### 3. Optional: Additional Tooling
-
+### Error: "choco not found"
+Instalar Chocolatey:
 ```powershell
-# Optional external skills library
-git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git
-
-# One-shot updater for all tools
-.\scripts\utilities\wf.ps1 update-tools
+# Ejecutar como administrador
+Set-ExecutionPolicy Bypass -Scope Process -Force
+iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 ```
 
-Linux or macOS equivalent:
+---
 
-```bash
-git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git
-pwsh -NoProfile -File ./scripts/utilities/wf.ps1 update-tools
-```
-
-## Platform Support
-
-| Platform | Status | Notes |
-|----------|--------|-------|
-| Windows 10/11 | [OK] Full | Canonical PowerShell entrypoint |
-| macOS | [OK] Full | Use `pwsh` or the shell wrapper |
-| Linux | [OK] Full | Use `pwsh` or the shell wrapper |
-
-## Compatibility Notes
-
-1. The workspace is platform-aware and reads platform-specific install metadata from `config/workspace.config.json`.
-2. PowerShell is still the canonical runtime for automation scripts.
-3. Bash is useful for shell-based helper tooling in cross-platform environments.
-4. AI editor or provider choice is flexible; the foundation is not tied to a single IDE or AI agent.
-
-## Verification
-
-Run to check your setup:
-
-```powershell
-gf validate
-gf check
-```
-
-## Troubleshooting
-
-### "git not found"
-```powershell
-winget install Git.Git
-```
-
-### "PowerShell script blocked"
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-
-### "AI agent not detected"
-- Install opencode or configure your AI agent
-- Foundation works without AI, but features are limited
-
-## Requirements Summary
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    MINIMUM REQUIREMENTS                       │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│   [OK] git (any recent version)                                 │
-│   [OK] PowerShell 5.1+                                         │
-│   [OK] AI Agent (opencode, claude, copilot, etc.)             │
-│                                                              │
-│   Optional but recommended:                                  │
-│   ⬜ engram (memory - built into opencode)                  │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
-```
-
-- Los hooks automáticos de Foundation - Development Stack validan seguridad, calidad, arquitectura, testing, API, documentación y gitflow antes de cada commit/push.
+*Documento actualizado: 2026-04-26*

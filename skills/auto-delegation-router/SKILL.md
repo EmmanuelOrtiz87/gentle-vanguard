@@ -64,13 +64,14 @@ function Extract-TaskKeywords {
         'OPS' = @('deploy', 'ci/cd', 'docker', 'kubernetes', 'infrastructure', 
                   'terraform', 'helm', 'release', 'devops', 'pipeline')
         
-        # Governance keywords
+# Governance keywords
         'GOV' = @('governance', 'compliance', 'metrics', 'monitoring', 'observability', 
                   'incident', 'security audit', 'review', 'audit')
         
-        # Documentation keywords
-        'DOC' = @('documentation', 'docs', 'readme', 'guide', 'runbook', 
-                  'specification', 'bdd specs', 'sdd specs')
+        # Script Governance - PowerShell syntax, parser errors
+        'SCRIPT-GOV' = @('script', 'powershell', 'parser error', 'syntax error', 
+                        'validate script', 'script validation', 'governance script',
+                        'hook', 'pre-push', 'pre-commit', 'fix script', 'auto-fix')
     }
     
     $extractedKeywords = @{}
