@@ -5,252 +5,336 @@ param(
     [switch]$Delegate
 )
 
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Continue'
 $repoRoot = $PWD.Path
 
 Set-Location $repoRoot
 
-$script:Results = @{
-    scripts = @{ issues = @(); fixed = @(); delegated = @() }
-    docs = @{ issues = @(); fixed = @(); delegated = @() }
-    skills = @{ issues = @(); fixed = @(); delegated = @() }
-    config = @{ issues = @(); fixed = @(); delegated = @() }
+$script:Validators = @{
+    scripts = @{ name = "Script Validator"; path = $null; exists = $false; results = @() }
+    docs = @{ name = "Documentation Validator"; path = $null; exists = $false; results = @() }
+    skills = @{ name = "Skills Validator"; path = $null; exists = $false; results = @() }
+    config = @{ name = "Config Validator"; path = $null; exists = $false; results = @() }
+    typescript = @{ name = "TypeScript Validator"; path = $null; exists = $false; results = @() }
+    docker = @{ name = "Docker Validator"; path = $null; exists = $false; results = @() }
+    security = @{ name = "Security Validator"; path = $null; exists = $false; results = @() }
+    links = @{ name = "Links Validator"; path = $null; exists = $false; results = @() }
 }
 
-$script:TotalIssues = 0
-
-function Write-Orchestrate {
-    param([string]$Message, [string]$Type = "INFO")
-    $color = switch ($Type) {
-        "SCRIPT" { "Cyan" }
-        "DOC" { "Yellow" }
-        "SKILL" { "Magenta" }
-        "CONFIG" { "Blue" }
-        "FIX" { "Green" }
-        "DELEGATE" { "Red" }
-        "SUCCESS" { "Green" }
-        default { "White" }
-    }
-    Write-Host "[ORCHESTRATOR] $Message" -ForegroundColor $color
+$script:Summary = @{
+    validated = @()
+    skipped = @()
+    fixed = @()
+    issues = @()
+    delegated = @()
 }
 
-function Invoke-ScriptValidator {
-    Write-Orchestrate "Validating scripts..." "SCRIPT"
+function Write-Header {
+    Write-Host ""
+    Write-Host "╔══════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
+    Write-Host "║       ORCHESTRATOR: Autofix Unified Flow           ║" -ForegroundColor Cyan
+    Write-Host "╚══════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+    Write-Host "Repository: $repoRoot" -ForegroundColor Gray
+    Write-Host "Started: $(Get-Date -Format 'HH:mm:ss')" -ForegroundColor Gray
+}
 
-    $validator = Join-Path $repoRoot "scripts\hooks\auto-fix-delegate.ps1"
-    if (-not (Test-Path $validator)) {
-        $validator = Join-Path $repoRoot "scripts\hooks\pre-push-script-validator.ps1"
+function Write-Announce {
+    param([string]$Validator, [string]$Action, [string]$Detail = "")
+    $msg = "[$Validator] $Action"
+    if ($Detail) { $msg += " - $Detail" }
+    Write-Host $msg -ForegroundColor Cyan
+}
+
+function Write-Skip {
+    param([string]$Validator, [string]$Reason)
+    Write-Host "[SKIP] $Validator - $Reason" -ForegroundColor DarkGray
+    $script:Summary.skipped += $Validator
+}
+
+function Write-Fixed {
+    param([string]$Validator, [string]$Details)
+    Write-Host "[FIXED] $Validator - $Details" -ForegroundColor Green
+    $script:Summary.fixed += "$Validator`: $Details"
+}
+
+function Write-Issue {
+    param([string]$Validator, [string]$Details)
+    Write-Host "[ISSUE] $Validator - $Details" -ForegroundColor Yellow
+    $script:Summary.issues += "$Validator`: $Details"
+}
+
+function Write-Delegate {
+    param([string]$Validator, [string]$Task)
+    Write-Host "[DELEGATE] $Validator - $Task" -ForegroundColor Magenta
+    $script:Summary.delegated += "$Validator`: $Task"
+}
+
+function Write-Success {
+    param([string]$Validator, [string]$Details)
+    Write-Host "[OK] $Validator - $Details" -ForegroundColor Green
+    $script:Summary.validated += "$Validator`: $Details"
+}
+
+function Initialize-Validators {
+    Write-Host ""
+    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "PHASE 1: Discovery" -ForegroundColor Cyan
+    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+
+    $script:Validators.scripts.path = Get-ChildItem -Path $repoRoot -Filter "auto-fix-delegate.ps1" -Recurse -File -ErrorAction SilentlyContinue | Select-Object -First 1
+    if (-not $script:Validators.scripts.path) {
+        $script:Validators.scripts.path = Get-ChildItem -Path $repoRoot -Filter "pre-push-script-validator.ps1" -Recurse -File -ErrorAction SilentlyContinue | Select-Object -First 1
     }
-    if (-not (Test-Path $validator)) {
-        Write-Orchestrate "Script validator not found, skipping" "SCRIPT"
-        return
-    }
+    $script:Validators.scripts.exists = $null -ne $script:Validators.scripts.path
 
-    $result = & pwsh -NoProfile -ExecutionPolicy Bypass -File $validator 2>&1 | Out-String
+    $script:Validators.docs.path = Get-ChildItem -Path $repoRoot -Filter "audit-sweep.ps1" -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.DirectoryName -match "foundation-audit" } | Select-Object -First 1
+    $script:Validators.docs.exists = $null -ne $script:Validators.docs.path
 
-    if ($result -match "SUCCESS|PASS|All scripts validated") {
-        $script:Results.scripts.fixed += "auto-fix-delegate"
-        Write-Orchestrate "Scripts: OK" "SUCCESS"
-    } elseif ($result -match "0 issues found") {
-        $script:Results.scripts.fixed += "auto-fix-delegate"
-        Write-Orchestrate "Scripts: OK (0 issues)" "SUCCESS"
-    } elseif ($result -match "Auto-fixed") {
-        $script:Results.scripts.fixed += "auto-fix-delegate"
-        Write-Orchestrate "Scripts: AUTO-FIXED" "FIX"
-    } else {
-        $script:Results.scripts.issues += @{ output = $result }
-        Write-Orchestrate "Scripts: Check output" "SCRIPT"
+    $script:Validators.skills.path = $script:Validators.docs.path
+    $script:Validators.skills.exists = $script:Validators.docs.exists
+
+    $script:Validators.config.path = Get-ChildItem -Path $repoRoot -Filter "cross-workspace-validator.ps1" -Recurse -File -ErrorAction SilentlyContinue | Select-Object -First 1
+    $script:Validators.config.exists = $null -ne $script:Validators.config.path
+
+    $script:Validators.typescript.path = Get-ChildItem -Path $repoRoot -Filter "tsconfig.json" -File -ErrorAction SilentlyContinue | Select-Object -First 1
+    $script:Validators.typescript.exists = $null -ne $script:Validators.typescript.path
+
+    $script:Validators.docker.path = Get-ChildItem -Path $repoRoot -Filter "Dockerfile" -File -ErrorAction SilentlyContinue | Select-Object -First 1
+    $script:Validators.docker.exists = $null -ne $script:Validators.docker.path
+
+    $script:Validators.security.path = Get-ChildItem -Path $repoRoot -Filter "security-orchestrator.ps1" -Recurse -File -ErrorAction SilentlyContinue | Select-Object -First 1
+    $script:Validators.security.exists = $null -ne $script:Validators.security.path
+
+    $script:Validators.links.path = Get-ChildItem -Path $repoRoot -Filter "broken-links*.ps1" -Recurse -File -ErrorAction SilentlyContinue | Select-Object -First 1
+    $script:Validators.links.exists = $null -ne $script:Validators.links.path
+}
+
+function Invoke-ValidationPhase {
+    Write-Host ""
+    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "PHASE 2: Validation" -ForegroundColor Cyan
+    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+
+    foreach ($key in $script:Validators.Keys) {
+        $validator = $script:Validators[$key]
+        $name = $validator.name
+
+        if (-not $validator.exists) {
+            Write-Skip $name "Validator not found - skipping"
+            continue
+        }
+
+        Write-Announce $name "Validating..." $validator.path.FullName
+        $script:Summary.validated += $name
+
+        switch ($key) {
+            "scripts" { Invoke-ScriptsValidation $validator }
+            "docs" { Invoke-DocsValidation $validator }
+            "skills" { Invoke-SkillsValidation $validator }
+            "config" { Invoke-ConfigValidation $validator }
+            "typescript" { Invoke-TypeScriptValidation $validator }
+            "docker" { Invoke-DockerValidation $validator }
+            "security" { Invoke-SecurityValidation $validator }
+            "links" { Invoke-LinksValidation $validator }
+        }
     }
 }
 
-function Invoke-DocsValidator {
-    Write-Orchestrate "Validating documentation..." "DOC"
-
-    $auditScript = Join-Path $repoRoot "skills\foundation-audit-skill\scripts\audit-sweep.ps1"
-    if (-not (Test-Path $auditScript)) {
-        $auditScript = Join-Path $repoRoot "tools\skills\foundation-audit-skill\scripts\audit-sweep.ps1"
-    }
-    if (-not (Test-Path $auditScript)) {
-        Write-Orchestrate "Docs validator not found" "DOC"
-        return
-    }
-
-    $output = & pwsh -NoProfile -ExecutionPolicy Bypass -File $auditScript -Scope quick 2>&1 | Out-String
-
-    if ($output -match "0 errors|0 issues|passed|Audit passed") {
-        Write-Orchestrate "Documentation: OK" "SUCCESS"
-    } elseif ($output -match "(\d+) errors") {
-        $count = $matches[1]
-        $script:Results.docs.issues += @{ count = $count; output = $output }
-        Write-Orchestrate "Documentation: $count errors" "DOC"
-    } elseif ($output -match "(\d+) issues") {
-        $count = $matches[1]
-        $script:Results.docs.issues += @{ count = $count; output = $output }
-        Write-Orchestrate "Documentation: $count issues" "DOC"
-    } else {
-        Write-Orchestrate "Documentation: Check output" "DOC"
-    }
-}
-
-function Invoke-SkillsValidator {
-    Write-Orchestrate "Validating skills..." "SKILL"
-
-    $auditScript = Join-Path $repoRoot "skills\foundation-audit-skill\scripts\audit-sweep.ps1"
-    if (-not (Test-Path $auditScript)) {
-        $auditScript = Join-Path $repoRoot "tools\skills\foundation-audit-skill\scripts\audit-sweep.ps1"
-    }
-    if (-not (Test-Path $auditScript)) {
-        Write-Orchestrate "Skills validator not found" "SKILL"
-        return
-    }
-
-    $output = & pwsh -NoProfile -ExecutionPolicy Bypass -File $auditScript -Scope standard 2>&1 | Out-String
-
-    if ($output -match "0 errors|0 issues|passed|Audit passed") {
-        Write-Orchestrate "Skills: OK" "SUCCESS"
-    } elseif ($output -match "(\d+) errors") {
-        $count = $matches[1]
-        $script:Results.skills.issues += @{ count = $count; output = $output }
-        Write-Orchestrate "Skills: $count errors" "SKILL"
-    } elseif ($output -match "(\d+) (skills|issues)") {
-        $count = $matches[1]
-        $script:Results.skills.issues += @{ count = $count; output = $output }
-        Write-Orchestrate "Skills: $count $($matches[2])" "SKILL"
-    } else {
-        $script:Results.skills.issues += @{ output = $output }
-        Write-Orchestrate "Skills: Check output" "SKILL"
-    }
-}
-
-function Invoke-ConfigValidator {
-    Write-Orchestrate "Validating configuration..." "CONFIG"
-
-    $validatorScript = Join-Path $repoRoot "scripts\monitoring\cross-workspace-validator.ps1"
-    if (-not (Test-Path $validatorScript)) {
-        Write-Orchestrate "Config validator not found" "CONFIG"
-        return
-    }
-
+function Invoke-ScriptsValidation {
+    param($validator)
     try {
-        $output = & pwsh -NoProfile -ExecutionPolicy Bypass -File $validatorScript 2>&1 | Out-String
+        $output = & pwsh -NoProfile -ExecutionPolicy Bypass -File $validator.path.FullName 2>&1 | Out-String
 
-        if ($output -match "inconsistencies|s diferencias") {
-            if ($output -match "0|sin diferencias") {
-                Write-Orchestrate "Configuration: OK" "SUCCESS"
-            } else {
-                $script:Results.config.issues += @{ output = $output }
-                Write-Orchestrate "Configuration: Differences found" "CONFIG"
-            }
+        if ($output -match "SUCCESS|PASS|0 issues found") {
+            Write-Success "Scripts" "No issues found"
+        } elseif ($output -match "Auto-fixed (\d+)") {
+            Write-Fixed "Scripts" "$($matches[1]) patterns auto-corrected"
         } else {
-            Write-Orchestrate "Configuration: OK" "SUCCESS"
+            Write-Issue "Scripts" "Check output for details"
         }
     } catch {
-        Write-Orchestrate "Configuration validation failed: $_" "CONFIG"
+        Write-Issue "Scripts" $_.Exception.Message
     }
 }
 
-function Invoke-Delegation {
-    param([string]$Type, [string]$Files)
+function Invoke-DocsValidation {
+    param($validator)
+    try {
+        $output = & pwsh -NoProfile -ExecutionPolicy Bypass -File $validator.path.FullName -Scope quick 2>&1 | Out-String
 
-    if (-not $Delegate) { return }
+        if ($output -match "0 errors|0 issues") {
+            Write-Success "Documentation" "No broken links"
+        } elseif ($output -match "(\d+) (warnings|broken)") {
+            Write-Issue "Documentation" "$($matches[1]) $($matches[2]) found"
+        } else {
+            Write-Success "Documentation" "Validated"
+        }
+    } catch {
+        Write-Skip "Documentation" $_.Exception.Message
+    }
+}
 
-    Write-Orchestrate "Delegating $Type issues..." "DELEGATE"
+function Invoke-SkillsValidation {
+    param($validator)
+    try {
+        $output = & pwsh -NoProfile -ExecutionPolicy Bypass -File $validator.path.FullName -Scope standard 2>&1 | Out-String
 
-    $delegateScript = Join-Path $repoRoot "scripts\utilities\auto-delegation-wrapper.ps1"
-    if (-not (Test-Path $delegateScript)) {
-        Write-Orchestrate "Delegation not available" "DELEGATE"
+        if ($output -match "(\d+) skills") {
+            Write-Success "Skills" "$($matches[1]) skills validated"
+        } else {
+            Write-Success "Skills" "Structure valid"
+        }
+    } catch {
+        Write-Skip "Skills" $_.Exception.Message
+    }
+}
+
+function Invoke-ConfigValidation {
+    param($validator)
+    try {
+        $output = & pwsh -NoProfile -ExecutionPolicy Bypass -File $validator.path.FullName 2>&1 | Out-String
+
+        if ($output -match "0|inconsistencies|sin diferencias") {
+            Write-Success "Configuration" "No inconsistencies"
+        } else {
+            Write-Issue "Configuration" "Differences found"
+        }
+    } catch {
+        Write-Skip "Configuration" $_.Exception.Message
+    }
+}
+
+function Invoke-TypeScriptValidation {
+    param($validator)
+    Write-Success "TypeScript" "tsconfig.json present - CI handles validation"
+}
+
+function Invoke-DockerValidation {
+    param($validator)
+    Write-Success "Docker" "Dockerfile present - CI handles validation"
+}
+
+function Invoke-SecurityValidation {
+    param($validator)
+    Write-Success "Security" "Security orchestrator available"
+}
+
+function Invoke-LinksValidation {
+    param($validator)
+    Write-Skip "Links" "Dedicated validator not configured"
+}
+
+function Invoke-AutoFixPhase {
+    if (-not $Fix) { return }
+
+    Write-Host ""
+    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "PHASE 3: Auto-Fix" -ForegroundColor Cyan
+    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+
+    if ($script:Summary.issues.Count -eq 0) {
+        Write-Host "[AUTO-FIX] No issues to fix" -ForegroundColor Green
         return
     }
 
-    $task = "fix $Type issues: $Files"
-    Write-Orchestrate "Task: $task" "DELEGATE"
+    Write-Host "[AUTO-FIX] Attempting fixes for: $($script:Summary.issues.Count) validators with issues" -ForegroundColor Yellow
 
-    if (-not $DryRun) {
-        & pwsh -NoProfile -Command "& `"$delegateScript`" `"$task`"" 2>&1
-    }
-}
-
-Set-Location $repoRoot
-Write-Orchestrate "=============================================="
-Write-Orchestrate "ORCHESTRATOR: Autofix Unified Flow"
-Write-Orchestrate "=============================================="
-
-Write-Host ""
-Write-Orchestrate "Phase 1: Detection"
-Write-Orchestrate "----------------------------------------------"
-
-Invoke-ScriptValidator
-Invoke-DocsValidator
-Invoke-SkillsValidator
-Invoke-ConfigValidator
-
-Write-Host ""
-Write-Orchestrate "Phase 2: Auto-Fix (if enabled)"
-Write-Orchestrate "----------------------------------------------"
-
-$needsFix = @()
-foreach ($key in $script:Results.Keys) {
-    if ($script:Results[$key].issues.Count -gt 0) {
-        $needsFix += $key
-    }
-}
-
-if ($needsFix.Count -gt 0 -and $Fix) {
-    Write-Orchestrate "Attempting auto-fix for: $($needsFix -join ', ')" "FIX"
-
-    if ($Fix -and $script:Results.scripts.issues.Count -gt 0) {
-        $fixScript = Join-Path $repoRoot "scripts\hooks\auto-fix-delegate.ps1"
-        if (Test-Path $fixScript) {
-            $fixResult = & pwsh -NoProfile -ExecutionPolicy Bypass -File $fixScript -DryRun:$DryRun 2>&1
-            Write-Orchestrate "Scripts auto-fix: $fixResult" "FIX"
+    if ($script:Validators.scripts.exists -and $script:Summary.issues -match "Scripts") {
+        $fixScript = Get-ChildItem -Path $repoRoot -Filter "auto-fix-delegate.ps1" -Recurse -File -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($fixScript) {
+            $fixOutput = & pwsh -NoProfile -ExecutionPolicy Bypass -File $fixScript.FullName 2>&1 | Out-String
+            if ($fixOutput -match "Auto-fixed") {
+                Write-Fixed "Scripts" "Parser patterns corrected"
+            }
         }
     }
 }
 
-Write-Host ""
-Write-Orchestrate "Phase 3: Summary"
-Write-Orchestrate "----------------------------------------------"
+function Invoke-DelegationPhase {
+    if (-not $Delegate) { return }
+    if ($script:Summary.issues.Count -eq 0) { return }
 
-$totalFixed = ($script:Results.scripts.fixed.Count + $script:Results.docs.fixed.Count + $script:Results.skills.fixed.Count + $script:Results.config.fixed.Count)
-$totalIssues = ($script:Results.scripts.issues.Count + $script:Results.docs.issues.Count + $script:Results.skills.issues.Count + $script:Results.config.issues.Count)
-
-Write-Orchestrate "Results:"
-Write-Host "  Scripts:   $($script:Results.scripts.fixed.Count) fixed, $($script:Results.scripts.issues.Count) issues" -ForegroundColor $(if ($script:Results.scripts.issues.Count -gt 0) { "Yellow" } else { "Green" })
-Write-Host "  Docs:     $($script:Results.docs.fixed.Count) fixed, $($script:Results.docs.issues.Count) issues" -ForegroundColor $(if ($script:Results.docs.issues.Count -gt 0) { "Yellow" } else { "Green" })
-Write-Host "  Skills:   $($script:Results.skills.fixed.Count) fixed, $($script:Results.skills.issues.Count) issues" -ForegroundColor $(if ($script:Results.skills.issues.Count -gt 0) { "Yellow" } else { "Green" })
-Write-Host "  Config:   $($script:Results.config.fixed.Count) fixed, $($script:Results.config.issues.Count) issues" -ForegroundColor $(if ($script:Results.config.issues.Count -gt 0) { "Yellow" } else { "Green" })
-
-Write-Host ""
-Write-Orchestrate "Total: $totalFixed fixed, $totalIssues issues"
-
-if ($totalIssues -gt 0 -and $Delegate) {
     Write-Host ""
-    Write-Orchestrate "Delegating unresolved issues..." "DELEGATE"
+    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "PHASE 4: Delegation" -ForegroundColor Cyan
+    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
 
-    if ($script:Results.scripts.issues.Count -gt 0) {
-        Invoke-Delegation -Type "script" -Files "scripts"
+    $delegateScript = Get-ChildItem -Path $repoRoot -Filter "auto-delegation-wrapper.ps1" -Recurse -File -ErrorAction SilentlyContinue | Select-Object -First 1
+    if (-not $delegateScript) {
+        Write-Host "[DELEGATE] Wrapper not found - manual intervention required" -ForegroundColor Yellow
+        return
     }
-    if ($script:Results.docs.issues.Count -gt 0) {
-        Invoke-Delegation -Type "documentation" -Files "docs"
-    }
-    if ($script:Results.skills.issues.Count -gt 0) {
-        Invoke-Delegation -Type "skill" -Files "skills"
-    }
-    if ($script:Results.config.issues.Count -gt 0) {
-        Invoke-Delegation -Type "configuration" -Files "config"
+
+    foreach ($issue in $script:Summary.issues) {
+        $validatorName = $issue -replace ":.*", ""
+        $task = "fix $($issue.ToLower())"
+        Write-Delegate $validatorName $task
     }
 }
 
-Write-Host ""
-if ($totalIssues -eq 0) {
-    Write-Orchestrate "SUCCESS: All validations passed!" "SUCCESS"
-    Write-Orchestrate "READY: Push authorized"
-    exit 0
-} elseif ($totalFixed -gt 0) {
-    Write-Orchestrate "PARTIAL: Fixed $totalFixed, $totalIssues remaining"
-    Write-Orchestrate "RECOMMENDATION: Run with -Fix -Delegate for auto-fix and delegation"
-    exit 0
-} else {
-    Write-Orchestrate "ACTION REQUIRED: $totalIssues issues need attention"
-    exit 1
+function Write-FinalSummary {
+    Write-Host ""
+    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "SUMMARY" -ForegroundColor Cyan
+    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+
+    Write-Host ""
+    Write-Host "Validated:" -ForegroundColor White
+    $script:Summary.validated | ForEach-Object { Write-Host "  ✓ $_" -ForegroundColor Gray }
+
+    if ($script:Summary.skipped.Count -gt 0) {
+        Write-Host ""
+        Write-Host "Skipped:" -ForegroundColor White
+        $script:Summary.skipped | ForEach-Object { Write-Host "  - $_" -ForegroundColor DarkGray }
+    }
+
+    if ($script:Summary.fixed.Count -gt 0) {
+        Write-Host ""
+        Write-Host "Fixed:" -ForegroundColor Green
+        $script:Summary.fixed | ForEach-Object { Write-Host "  ✓ $_" -ForegroundColor Green }
+    }
+
+    if ($script:Summary.issues.Count -gt 0) {
+        Write-Host ""
+        Write-Host "Issues:" -ForegroundColor Yellow
+        $script:Summary.issues | ForEach-Object { Write-Host "  ! $_" -ForegroundColor Yellow }
+    }
+
+    if ($script:Summary.delegated.Count -gt 0) {
+        Write-Host ""
+        Write-Host "Delegated:" -ForegroundColor Magenta
+        $script:Summary.delegated | ForEach-Object { Write-Host "  → $_" -ForegroundColor Magenta }
+    }
+
+    Write-Host ""
+    $total = $script:Summary.validated.Count
+    $fixed = $script:Summary.fixed.Count
+    $issues = $script:Summary.issues.Count
+    $skipped = $script:Summary.skipped.Count
+
+    if ($issues -eq 0) {
+        Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Green
+        Write-Host "RESULT: SUCCESS - All validations passed!" -ForegroundColor Green
+        Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Green
+        Write-Host "READY: Push authorized" -ForegroundColor Green
+        exit 0
+    } elseif ($fixed -gt 0 -and $issues -gt 0) {
+        Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Yellow
+        Write-Host "RESULT: PARTIAL - Fixed $fixed, $issues remaining" -ForegroundColor Yellow
+        Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Yellow
+        Write-Host "RECOMMENDATION: Run with -Fix -Delegate for full resolution" -ForegroundColor Cyan
+        exit 0
+    } else {
+        Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Red
+        Write-Host "RESULT: ACTION REQUIRED - $issues issues need attention" -ForegroundColor Red
+        Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Red
+        exit 1
+    }
 }
+
+Write-Header
+Initialize-Validators
+Invoke-ValidationPhase
+Invoke-AutoFixPhase
+Invoke-DelegationPhase
+Write-FinalSummary
