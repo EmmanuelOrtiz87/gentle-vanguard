@@ -164,7 +164,7 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 |----------|--------|
 | **Orchestrators** | project-orchestrator, multi-agent-registry, session-workflow, skill-creator-skill |
 | **Context & Process** | context-engineering, sdd, bdd-scenarios |
-| **Frontend** | angular-spa, react-19, nextjs-15, tailwind-4 |
+| **Frontend & Web** | angular-spa, react-19, nextjs-15, tailwind-4, firecrawl-web, web-artifacts-builder, seo-audit, brand-guide |
 | **Mobile** | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-kotlin-coroutines, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging |
 | **State** | zustand-5 |
 | **Validation** | zod-4 |
@@ -176,9 +176,7 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 | **Business** | business-telemetry, backlog-management |
 | **Workflow** | github-pr, jira-task, jira-epic, release-management, skill-factory |
 | **Quality** | typescript, code-review, security, technical-debt, web-performance-optimization, judgment-day |
-| **Code Hygiene** | commit-hygiene, docs-alignment, shellcheck-standards, testing-coverage (GGA-native) |
 | **Operations** | observability, incident-response-plan |
-| **Guardian** | guardian-fallback (GGA-optional fallback when blocked) |
 | **Governance** | project-scaffolding, documentation, architecture, git-workflow, foundation-manager |
 | **SDD Lifecycle** | sdd-lifecycle (CONSOLIDATED - 9 phases in 1) |
 
@@ -212,35 +210,43 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 ## Frontend
 
-### angular-spa-skill
-
-**Trigger**: `Angular`, `Angular component`, `signal`, `zoneless`, `@defer`, `standalone`
-
-**Use when**: Angular 19+, standalone components, signals, zoneless, lazy loading
-
----
-
-### react-19-skill
-
-**Trigger**: `React`, `React 19`, `useActionState`, `useFormStatus`, `React Compiler`
-
-**Use when**: React 19 features, React Compiler, form handling, optimistic updates
-
----
-
-### nextjs-15-skill
-
-**Trigger**: `Next.js`, `Next.js 15`, `App Router`, `Server Component`, `Server Action`
-
-**Use when**: Next.js applications, App Router, data fetching, API routes
-
----
-
 ### tailwind-4-skill
 
-**Trigger**: `Tailwind`, `Tailwind CSS`, `cn()`, `className`, `tailwind-4`
+**Trigger**: `Tailwind`, `Tailwind CSS`, `cn()`, `className`, `tailwind-4`, `frontend`, `UI`, `interface`
 
-**Use when**: Tailwind styling, component classes, dark mode, responsive design
+**Use when**: Tailwind styling, component classes, dark mode, production-grade UI
+
+---
+
+### firecrawl-web-skill
+
+**Trigger**: `web scrape`, `extract data`, `crawl website`, `markdown`, `screenshot`, `web search`, `firecrawl`
+
+**Use when**: Web scraping, data extraction, competitive analysis
+
+---
+
+### web-artifacts-builder-skill
+
+**Trigger**: `web artifact`, `html component`, `interactive demo`, `prototype`, `single page`, `runnable code`
+
+**Use when**: Building interactive web artifacts, prototypes, single-page demos
+
+---
+
+### seo-audit-skill
+
+**Trigger**: `SEO`, `audit SEO`, `meta tags`, `structured data`, `sitemap`, `robots.txt`, `canonical`
+
+**Use when**: Technical SEO auditing, meta tags, structured data
+
+---
+
+### brand-guide-skill
+
+**Trigger**: `brand`, `brand guide`, `brand identity`, `branding`, `voice`, `tone`, `visual identity`
+
+**Use when**: Brand consistency, visual identity, voice and tone
 
 ---
 
@@ -528,7 +534,31 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 ## Workflow & Process
 
-### github-pr-skill
+### auto-delegation-router
+
+**Trigger**: `auto-delegation`, `delegate`, `route`, `orchestrate`
+
+**Use when**: Task routing, agent delegation, orchestration
+
+**Trigger**: `gitflow`, `gitflow-orchestrator`, `branch creation`, `git hooks`
+
+**Use when**: GitFlow workflow validation, branch creation, pre-push hooks
+
+---
+
+### distributed-tracing-skill
+
+**Trigger**: `tracing`, `telemetry`, `distributed tracing`, `correlation`, `span`
+
+**Use when**: Distributed tracing, OpenTelemetry, session correlation
+
+---
+
+### adaptive-mode-orchestrator
+
+**Trigger**: `adaptive`, `auto-optimization`, `mode`, `performance`
+
+**Use when**: Adaptive mode, on-demand optimization, performance tuning
 
 **Trigger**: `pull request`, `PR`, `commit message`, `conventional commit`
 

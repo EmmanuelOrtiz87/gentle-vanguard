@@ -257,7 +257,7 @@ Write-Host "=" * 80 -ForegroundColor $colors.Info
 Write-Host "TEST SUMMARY" -ForegroundColor $colors.Highlight
 Write-Host "=" * 80 -ForegroundColor $colors.Info
 
-Write-Host "
+Write-Host @"
 [OK] Configuration files validated
 [OK] Engine script verified
 [OK] Documentation present
@@ -267,7 +267,7 @@ Write-Host "
 [OK] Thresholds validated
 
 All tests completed successfully!
-" -ForegroundColor $colors.Success
+"@ -ForegroundColor $colors.Success
 
 Write-Host "=" * 80 -ForegroundColor $colors.Info
 Write-Host "ADAPTIVE MODE READY FOR USE" -ForegroundColor $colors.Highlight

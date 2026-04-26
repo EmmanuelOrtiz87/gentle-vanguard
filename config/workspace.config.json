@@ -3,6 +3,10 @@
   "dataRoot": ".engram-data",
   "toolsRoot": "tools",
   "projectsRoot": "projects",
+  "languageSettings": {
+    "defaultLanguage": "es",
+    "description": "Spanish is the default language for all responses"
+  },
   "aiModelSettings": {
     "provider": "opencode",
     "model": "claude-sonnet-4-20250514",
