@@ -101,7 +101,12 @@
                                                 "hook",
                                                 "pre-push",
                                                 "pre-commit",
-                                                "fix script"
+                                                "fix script",
+                                                "auto fix",
+                                                "auto-fix",
+                                                "autofix",
+                                                "script error",
+                                                "correct script"
                                             ],
                              "REPORT":  [
                                            "informe",
