@@ -36,67 +36,35 @@ Foundation - Development Stack es un marco operativo para equipos que requieren:
 
 ---
 
-## 🚀 Inicio Rápido
+## Quick Start
 
+### Requirements
 
-### Requisitos
-
-- Windows 10/11, Linux o macOS
-- PowerShell 7+ (o Core)
+- Windows 10/11, Linux, or macOS
+- PowerShell 7+
 - Git 2.30+
 - Node.js 18+
-- Go 1.19+
-- Engram (memoria persistente, obligatorio)
+- Engram (persistent memory)
 
-### Instalación y Primeros Pasos
+### Installation
 
-1. Clona el repositorio:
-  ```bash
-  git clone https://github.com/EmmanuelOrtiz87/workspace-foundation.git
-  cd workspace-foundation
-  ```
-2. Configura el perfil de PowerShell (Windows):
-  ```powershell
-  Copy-Item "scripts/utilities/Microsoft.PowerShell_profile.ps1" $PROFILE
-  . $PROFILE
-  ```
-3. Inicializa el entorno y valida herramientas:
-  ```powershell
-  .\scripts\utilities\wf.ps1 health
-  ```
-  > Esto activa el stack, valida Engram y auto-repara herramientas faltantes.
-
-4. Inicia sesión de trabajo:
-  ```powershell
-  .\scripts\utilities\wf.ps1 start-session
-  ```
-  > Genera el brief de sesión y activa skills/herramientas según contexto.
-
-5. Crea tu primer proyecto:
-  ```powershell
-  .\scripts\project\new-project.ps1 -Name "mi-proyecto" -Kind "service"
-  ```
-
-4. **Open the Session Properly:**
-```powershell
-# Create the daily session brief
-.\scripts\utilities\wf.ps1 start-session
-
-# Or create it together with the first bounded task brief
-.\scripts\utilities\wf.ps1 start-session foundation-hardening
-```
-
-5. **Create Your First Project:**
-```powershell
-# Create a new project from the canonical project bootstrap flow
-.\scripts\project\new-project.ps1 -Name "my-awesome-project" -Kind "service"
-```
-
+1. Clone:
+   ```bash
+   git clone https://github.com/EmmanuelOrtiz87/workspace-foundation.git
+   cd workspace-foundation
+   ```
+2. Initialize:
+   ```powershell
+   .\scripts\foundation\bootstrap-machine.ps1
+   ```
+3. Start session:
+   ```powershell
+   .\wf.ps1 start-session
+   ```
 
 ---
 
-
-## 🏗️ Arquitectura y Componentes
+## Architecture
 
 Ver [docs/reference/ARCHITECTURE.md](docs/reference/ARCHITECTURE.md) para el diagrama y dependencias.
 

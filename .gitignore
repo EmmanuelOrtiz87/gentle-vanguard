@@ -67,10 +67,11 @@ coverage/
 *.prof
 *.pprof
 
-# Gentleman Guard Angel (GGA) - COMPLETELY REMOVED
+# Local development artifacts
+.local/
 .gga
 .gga/
 templates/gga/
 scripts/optional/run-gga.ps1
 scripts/utilities/run-gga.ps1
-*gga*
+*gga*.local/
