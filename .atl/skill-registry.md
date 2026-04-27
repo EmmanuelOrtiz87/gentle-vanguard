@@ -17,6 +17,7 @@ This file defines the enforceable skills and compact rules for the workspace-fou
 - playwright: E2E testing patterns
 - reporting-skill: Generation of management reports, metrics, cost analysis, and dashboards on demand
 - content-output-skill: Unified content output - technical docs, internal reports, marketing, social media, copywriting persuasivo, storytelling, speeches (Twitter/X, LinkedIn, Reddit, Discord, WhatsApp, blog)
+- visual-content-skill: Visual content - ASCII art, Mermaid diagrams, presentation templates, social media cards
 - session-workflow-skill: Session lifecycle management and tracking
 
 ## Usage
