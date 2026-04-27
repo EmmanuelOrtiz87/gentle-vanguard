@@ -20,15 +20,13 @@
   "blockedActions": {
     "developers": {
       "files": [
-        "tools/skills/*/SKILL.md",
         "skills/*/SKILL.md",
         "skills/*/*/*.ps1",
-        "tools/skills/*/*/*.ps1",
         "AGENTS.md",
         "tools/session-autostart.*",
         "tools/*config*.json",
-        ".workspace/config/*",
-        "tools/orchestrator/*",
+        "config/access-control.json",
+        "config/owner-auth.json",
         "scripts/utilities/judgment-day*",
         ".workspace/*"
       ],

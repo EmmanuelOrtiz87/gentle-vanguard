@@ -1,38 +1,43 @@
-# Project Structure Refactoring Plan
+# Project Structure - Foundation (v2.0)
 
-## Current Structure (Key Areas)
-- Scripts, docs, configs, and tools are mixed at the root and in scripts/.
-- Some folders (e.g., scripts/project, scripts/utilities, scripts/validation) are well-scoped, but others are broad.
-- Documentation is mostly in docs/, but some README.md files are scattered.
+## Canonical Structure
 
-## Recommendations
-- Group all scripts under scripts/ by function (e.g., scripts/validation, scripts/diagnostics, scripts/project).
-- Move all documentation (except root README.md) to docs/.
-- Place all configuration files in a config/ directory.
-- Place all test files in a tests/ directory at the root.
-- Add or update README.md files in each major directory to clarify scope and usage.
-- Remove or archive obsolete files and folders.
+After refactoring (April 2026), Foundation uses ONE single source of truth for each category:
 
-## Example Structure
 ```
 workspace-foundation/
-├── config/
-├── docs/
-├── scripts/
-│   ├── diagnostics/
-│   ├── project/
-│   ├── utilities/
-│   ├── validation/
-├── skills/
-├── tests/
-├── tools/
-├── .gitignore
-├── README.md
+├── config/                 # ✅ Single config location (was: .workspace/config/)
+├── docs/                  # ✅ Documentation (no duplicates)
+├── hooks/                 # ✅ Git hooks (unified)
+├── scripts/                # ✅ All scripts (no tools/ subdirs)
+├── skills/                # ✅ Single skills location (was: tools/skills/ + skills/)
+├── templates/              # Templates for new projects
+├── tests/                # Test files
+├── tools/                # Runtime tools (autostart, token-guard, etc)
+├── .workspace/           # ⚠️ Legacy - to be deprecated
+├── .atl/                 # Agent Toolkit Layer (skill registry)
+├── .audit/               # Audit logs and metrics
+├── .engram/              # Engram memory data
+├── .session/             # Session data
+├── .telemetry/           # Telemetry data
+├── AGENTS.md             # Agent instructions
+├── README.md             # Root documentation
+└── CHANGELOG.md         # Version history
 ```
 
-## Next Steps
-1. Review all files/folders for correct placement.
-2. Move misplaced files to their recommended locations.
-3. Update or add README.md files as needed.
-4. Remove or archive obsolete items.
-5. Document the new structure in docs/architecture/PROJECT-STRUCTURE.md.
+## Rules
+
+| Category | Location | Legacy to Remove |
+|----------|----------|-----------------|
+| **Skills** | `skills/` | `tools/skills/` ✅ DONE |
+| **Config** | `config/` | `.workspace/config/` ✅ DONE |
+| **Scripts** | `scripts/` | Various - review needed |
+| **Docs** | `docs/` | OK - no duplicates |
+
+## Migration Status
+
+| Date | Change |Status|
+|------|-------|------|
+| 2026-04-27 | Eliminated `tools/skills/` duplicate | ✅ DONE |
+| 2026-04-27 | Merged `.workspace/config/` → `config/` | ✅ DONE |
+| 2026-04-27 | Unified `content-output-skill` | ✅ DONE |
