@@ -70,7 +70,7 @@ Location: .workspace/config/owner-auth.json (ENCRYPTED)
 
 | Category | Blocked |
 |----------|---------|
-| Files | tools/skills/*, skills/*, AGENTS.md, .workspace/config/* |
+| Files | skills/*, AGENTS.md, .workspace/config/* |
 | Commands | skill-optimizer, orchestrator, admin, config |
 | Intents | "change orchestrator", "modify skill", "update architecture" |
 
