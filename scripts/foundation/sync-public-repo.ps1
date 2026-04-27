@@ -12,7 +12,100 @@ param(
     [switch]$DryRun,
     [switch]$AutoCommit,
     [switch]$Verify,
-    [switch]$AsJson
+    [switch]$AsJson,
+    [ValidateSet("full", "demo")]
+    [string]$Mode = "demo"
+)
+
+$ErrorActionPreference = 'Continue'
+
+$scriptDir = Split-Path -Parent $PSCommandPath
+$repoRoot = Resolve-Path (Join-Path $scriptDir '....')
+
+# =============================================================================
+# EXCLUDE PATTERNS - FULL MODE (all non-sensitive)
+# =============================================================================
+
+$EXCLUDE_DIRS_FULL = @(
+    '.workspace',
+    'scripts\security',
+    'docs\security',
+    'docs\sessions',
+    'docs\tasks',
+    'skills\orchestrator',
+    'skills\governance'
+)
+
+$EXCLUDE_FILES_FULL = @(
+    'AGENTS.md',
+    'config\security*.json',
+    'config\orchestrator.json',
+    'config\adaptive*.json',
+    'config\owner*.json'
+)
+
+$EXCLUDE_SCAN_PATHS_FULL = @(
+    'docs\',
+    'skills\',
+    'templates\',
+    'config\README',
+    'scripts\foundation\sync-public-repo'
+)
+
+# =============================================================================
+# EXCLUDE PATTERNS - DEMO MODE (minimal for public demo)
+# =============================================================================
+
+$EXCLUDE_DIRS_DEMO = @(
+    '.workspace',
+    'scripts',
+    'skills',
+    'tools',
+    'hooks',
+    'tests',
+    'bin',
+    '.event-bus',
+    '.session',
+    '.telemetry',
+    '.runtime',
+    '.audit',
+    '.engram',
+    '.engram-data',
+    'config',
+    'demos',
+    'docs\security',
+    'docs\sessions',
+    'docs\tasks',
+    'docs\audits',
+    'docs\code-reviews',
+    'docs\reference',
+    'docs\sdd',
+    'docs\judgment',
+    'docs\backlog',
+    'docs\architecture',
+    'scripts\security',
+    'scripts\diagnostics',
+    'scripts\foundation',
+    'scripts\git-hooks',
+    'scripts\hooks',
+    'scripts\monitoring',
+    'scripts\project',
+    'scripts\testing',
+    'scripts\validation'
+)
+
+$EXCLUDE_FILES_DEMO = @(
+    'AGENTS.md',
+    'config\*.json',
+    'config\*.md',
+    'config\*-config.json',
+    'config\*-example.json'
+)
+
+$EXCLUDE_SCAN_PATHS_DEMO = @(
+    'docs\',
+    'skills\',
+    'tools\'
 )
 
 $ErrorActionPreference = 'Continue'

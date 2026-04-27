@@ -18,20 +18,20 @@
 
   "files": {
     "neverCommit": [
-      ".workspace/config/owner-auth.json",
-      ".workspace/config/session-auth.json",
-      ".workspace/config/dev-credentials.json",
+      "config/owner-auth.json",
+      "config/session-auth.json",
+      "config/dev-credentials.json",
       ".env",
       ".env.local",
       ".runtime/security-state.json",
       ".runtime/*-audit.log"
     ],
     "encryptBeforeCommit": [
-      ".workspace/config/owner-auth.json"
+      "config/owner-auth.json"
     ],
     "templateFiles": [
-      ".workspace/config/owner-auth.example.json",
-      ".workspace/config/owner-auth.encrypted"
+      "config/owner-auth.example.json",
+      "config/owner-auth.encrypted"
     ]
   },
 

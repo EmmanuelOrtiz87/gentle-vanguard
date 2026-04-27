@@ -16,7 +16,7 @@ This file defines the enforceable skills and compact rules for the workspace-fou
 - pytest: Python test patterns
 - playwright: E2E testing patterns
 - reporting-skill: Generation of management reports, metrics, cost analysis, and dashboards on demand
-- marketing-content-skill: Marketing content, social media posts, and promotional materials
+- content-output-skill: Unified content output - technical docs, internal reports, marketing, social media, copywriting persuasivo, storytelling, speeches (Twitter/X, LinkedIn, Reddit, Discord, WhatsApp, blog)
 - session-workflow-skill: Session lifecycle management and tracking
 
 ## Usage
