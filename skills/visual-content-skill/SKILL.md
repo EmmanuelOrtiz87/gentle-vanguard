@@ -31,7 +31,70 @@ For social media, presentations, and documentation.
 
 ## ASCII Art
 
-### Foundation Logo
+### Foundation Logo (Classic)
+```
+ ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ █                             █
+ █   █████╗  ██████╗  ██████╗ ███████╗
+ █  ██╔══██╗██╔═══██╗██╔═══██╗██╔══██╗
+ █  ██████║██║   ██║██║   ██║██║  ██║
+ █  ██╔═══██╗██║   ██║██║   ██║██║  ██║
+ █  ██║  ██║╚██████╔╝╚██████╔╝███████║
+ █  ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚══════╝
+ █       FOUNDATION        █
+  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+```
+
+### Foundation Logo (Modern)
+```
+╔══════════════════════════════════════════╗
+║                                          ║
+║     ●█╗   ●█╗ █████╗  ●██████╗  ██████╗ ║
+║     ██╗  ██║██╔══██╗ ██╔════╝ ██╔══██╗║
+║     ███████║███████║ ██║  ███╗███████║║
+║     ██╔══██║██╔══██║ ██║   ██║██╔══██║║
+║     ██║  ██║██║  ██║ ╚██████╔╝███████║║
+║     ╚═╝  ╚═╝╚═╝  ╚═╝  ╚═════╝ ╚══════╝║
+║          F O U N D A T I O N           ║
+║                                          ║
+╚══════════════════════════════════════════╝
+```
+
+### Foundation Logo (Minimal)
+```
+┌─────────────────────────────┐
+│  █████╗  ██████╗  ██████╗  │
+│  ██╔══██╗██╔═══██╗██╔═══██╗ │
+│  ██████║██║   ██║██║   ██║ │
+│  ██╔═══██╗██║   ██║██║   ██║ │
+│  ██║  ██║╚██████╔╝╚██████╔╝ │
+│  ╚═╝  ╚═╝ ╚═════╝  ╚═════╝  │
+│       FOUNDATION            │
+└─────────────────────────────┘
+```
+
+### Pillars (7D)
+```
+═══════════════════════════════════
+  🛡️ SECURITY    │  🔍 QUALITY    │
+  📐 ARCH        │  🧪 TESTING   │
+  📡 API         │  📖 DOCS      │
+  🔀 GITFLOW    │                  
+═══════════════════════════════════
+```
+
+### Features Icons
+```
+  🤖 AI Orchestration     🧠 Memory
+  ⚡ Auto-Delegation      ⚖️ Judgment
+  📊 Reporting          📋 SDD
+  🛡️ 7D Validation     🔄 On-Demand
+```
+
+### Mini Banner
+```
+🏛️ Foundation v2.0 - AI Development Stack
+=====================================
 ```
  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  █                             █
@@ -84,60 +147,27 @@ flowchart LR
 
 ## Social Media Cards
 
-### Twitter/X (1200x675)
-```
-┌─────────────────────────────────────────┐
-│                                 //
-│        🏛️ Foundation            //
-│   AI Development Stack            //
-//                                 //
-│  • Auto-delegation              //
-//  • Persistent memory          //
-│  • 7D Validation            //
-//                                 │
-//        github.com/...          //
-└─────────────────────────────────────────┘
-```
+---
+
+## External Resources (For Professional Logos)
+
+For production logos and social media assets, use these tools:
+
+| Tool | Purpose | Link |
+|------|---------|------|
+| **Canva** | Logo + posts | canva.com |
+| **Figma** | Design | figma.com (free) |
+| **Midjourney** | AI art | discord.gg/midjourney |
+| **Bing Creator** | AI images | bing.com/create |
+| **LogoAI** | AI logo generator | logoai.com |
+
+### Recommended Workflow
+
+1. Generate basic concept in ASCII here
+2. Export to Figma/Canva for professional version
+3. Create variants for each platform
 
 ---
 
-## Presentation Templates
-
-### Quick Slide (16:9)
-```
-# Title
-
-## Subtitle
-
-### Bullet 1
-### Bullet 2
-### Bullet 3
-
----
-
-## CTA
-Link or next steps
-```
-
----
-
-## Usage
-
-```powershell
-# Use with content-output-skill for complete campaigns
-# visual-content provides graphics
-# content-output provides text
-```
-
----
-
-## Integration
-
-- Use with `content-output-skill` for full campaigns
-- ASCII art: Copy-paste directly
-- Mermaid: Render with mermaid-cli or VSCode extension
-
----
-
-*Skill version: 1.0*  
+*Skill version: 1.1*  
 *Last updated: 2026-04-27*
