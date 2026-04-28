@@ -56,7 +56,12 @@ When session tracking capability exists, initialize a session early using:
 - **Warm**: Recent (1 day), 90% retention
 - **Cold**: Archive (7 days), 70% retention
 
-### Handoff Compression Mode
+### Message Count Tracking
+Track chat messages to prevent exponential token growth:
+- **Warning**: At 15 messages, suggest saving to Engram and preparing new session
+- **Critical**: At 20 messages, mandatory notification to start new chat
+- After each response, agent should run: `powershell -File tools/message-tracker.ps1 -Action Increment`
+- Check current count: `powershell -File tools/message-tracker.ps1 -Action Get`
 For agent-to-agent transfers, use `tools/handoff-compress.ps1`:
 - Preserves: decisions, results, FIXMEs, status flags
 - Truncates: verbose outputs, repeated patterns
@@ -96,4 +101,7 @@ See: `rules/adaptive/` for dynamic rule configuration.
 Read skills/workspace-automation/SKILL.md before creating automation scripts
 Read skills/session-lifecycle/SKILL.md before modifying session management
 ```
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
