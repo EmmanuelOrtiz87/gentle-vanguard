@@ -1,0 +1,26 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "openrouter": {
+      "options": {
+        "setCacheKey": true,
+        "timeout": 600000
+      }
+    },
+    "anthropic": {
+      "options": {
+        "setCacheKey": true,
+        "timeout": 600000
+      }
+    }
+  },
+  "agent": {
+    "default": {
+      "model": "anthropic/claude-sonnet-4-5",
+      "options": {
+        "minTokens": 2000,
+        "maxTokens": 4500
+      }
+    }
+  }
+}
