@@ -570,16 +570,19 @@ function Log-RoutingDecision {
 # EXPORTS
 # ============================================================================
 
-Export-ModuleMember -Function @(
-    'Get-AutoDelegationConfig',
-    'Set-AutoDelegationConfig',
-    'Extract-TaskKeywords',
-    'Evaluate-DecisionTree',
-    'Calculate-ConfidenceScore',
-    'Route-TaskToAgent',
-    'Enable-AutoDelegation',
-    'Disable-AutoDelegation',
-    'Set-ConfidenceThreshold',
-    'Get-RoutingMetrics',
-    'Log-RoutingDecision'
-)
+# Export functions (only if running as module)
+if ($MyInvocation.MyCommand.Module) {
+    Export-ModuleMember -Function @(
+        'Get-AutoDelegationConfig',
+        'Set-AutoDelegationConfig',
+        'Extract-TaskKeywords',
+        'Evaluate-DecisionTree',
+        'Calculate-ConfidenceScore',
+        'Route-TaskToAgent',
+        'Enable-AutoDelegation',
+        'Disable-AutoDelegation',
+        'Set-ConfidenceThreshold',
+        'Get-RoutingMetrics',
+        'Log-RoutingDecision'
+    )
+}

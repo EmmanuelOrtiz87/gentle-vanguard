@@ -4,7 +4,7 @@
 param(
     [ValidateSet('AutoStart', 'Manual', 'Health', 'End')]
     [string]$Mode = 'Manual',
-    [string]$ProjectName = 'workspace_local',
+    [string]$ProjectName = 'gentleman-foundation',
     [string]$SessionDir = '.\.session'
 )
 
@@ -101,8 +101,26 @@ function End-Session {
     $latestSession = $sessionFiles | Select-Object -First 1
     $sessionData = Get-Content -Path $latestSession.FullName -Raw | ConvertFrom-Json
     
-    $sessionData | Add-Member -NotePropertyName "endTime" -NotePropertyValue (Get-Date -Format "o") -PassThru | 
-    ForEach-Object { $_.endTime = Get-Date -Format "o" }
+    # Save session summary to Engram BEFORE ending session
+    $engramBin = Join-Path $PSScriptRoot "engram.exe"
+    if (Test-Path $engramBin) {
+        $summaryContent = @"
+## Session End Summary
+Session ID: $($sessionData.sessionId)
+Project: $($sessionData.project)
+Mode: $($sessionData.mode)
+Start Time: $($sessionData.startTime)
+End Time: $(Get-Date -Format "o")
+
+Session context preserved before cleanup.
+"@
+        & $engramBin session-summary --id $sessionData.sessionId --content $summaryContent 2>$null | Out-Null
+        if ($LASTEXITCODE -eq 0) {
+            Write-Status "Session summary saved to Engram"
+        } else {
+            Write-Warning "Failed to save session summary to Engram"
+        }
+    }
     
     $sessionData.status = "ended"
     $sessionData.endTime = Get-Date -Format "o"
@@ -110,6 +128,12 @@ function End-Session {
     $sessionData | ConvertTo-Json | Out-File -FilePath $latestSession.FullName -Encoding UTF8
     
     Write-Status "Session ended: $($sessionData.sessionId)"
+    
+    # Notify user with recovery option
+    $notifyScript = Join-Path $PSScriptRoot "notify-user.ps1"
+    if (Test-Path $notifyScript) {
+        & $notifyScript -Action "session-close" -Reason "Session ended (manual or idle timeout)" -RecoveryCommand ".\tools\session-quick-restart.ps1 -Components session" 2>$null
+    }
 }
 
 # Ejecutar según el modo

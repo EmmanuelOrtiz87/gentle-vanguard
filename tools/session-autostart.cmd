@@ -139,7 +139,7 @@ if exist "%SECURITY_SCRIPT%" (
 REM 7. Skill Router / Auto-delegation (si existe)
 set SKILL_ROUTER=.\scripts\utilities\skill-router.ps1
 if exist "%SKILL_ROUTER%" (
-    echo [7/7] Initializing Skill Router...
+    echo [7/8] Initializing Skill Router...
     powershell -NoProfile -ExecutionPolicy Bypass -File "%SKILL_ROUTER%" -Query "session-start"
     if errorlevel 1 (
         echo [WARNING] Skill Router validation issue
@@ -148,6 +148,14 @@ if exist "%SKILL_ROUTER%" (
     )
 ) else (
     echo [SKIP] Skill Router not found
+)
+
+REM 7.5 Quick Restart Available (for recovery without full restart)
+set QUICK_RESTART=.\tools\session-quick-restart.ps1
+if exist "%QUICK_RESTART%" (
+    echo [7.5/8] Quick restart available: %QUICK_RESTART%
+) else (
+    echo [WARN] Quick restart script not found
 )
 
 REM 8. Auto-delegation Module (si existe)

@@ -580,6 +580,64 @@ function Get-RoutingMetrics {
 
 ---
 
+## Delegation Limits - What NOT to Delegate
+
+### Critical Tasks (NEVER Auto-Delegate)
+These tasks MUST be handled by the main orchestrator or user:
+
+1. **Core Configuration Changes**
+   - Modifications to `AGENTS.md`, `config/mcp-servers.json`
+   - Changes to `tools/session-autostart.cmd`, `tools/enforce-response-mode.ps1`
+   - Token budget or threshold adjustments in `token-guard-config.json`
+
+2. **Security & Authentication**
+   - Credential management
+   - Authentication configuration
+   - Security policy updates
+
+3. **Session Lifecycle Management**
+   - Session start/end operations
+   - Context compaction decisions
+   - Manual session recovery
+
+4. **User Interaction Required**
+   - Tasks where user explicitly says "you do it" without specifying details
+   - Tasks requiring human judgment on priorities
+   - Release decisions
+
+### Auto-Delegate Appropriate Tasks
+- Code implementation (DEV agent)
+- Testing (QA agent)
+- Architecture design (SAD agent)
+- Business analysis (BA agent)
+- Deployment operations (OPS agent)
+- Script validation (SCRIPT-GOV agent)
+
+### Decision Logic
+```powershell
+function Test-ShouldDelegate {
+    param([string]$TaskDescription)
+    
+    $neverDelegate = @(
+        'AGENTS.md', 'config/', 'session-autostart', 
+        'security', 'authentication', 'credential',
+        'release', 'deploy to production'
+    )
+    
+    $taskLower = $TaskDescription.ToLower()
+    
+    foreach ($pattern in $neverDelegate) {
+        if ($taskLower -match [regex]::Escape($pattern)) {
+            return $false  # Don't delegate
+        }
+    }
+    
+    return $true  # Safe to delegate
+}
+```
+
+---
+
 ## References
 
 - Multi-Agent Registry: [skills/multi-agent-registry/SKILL.md](../multi-agent-registry/SKILL.md)

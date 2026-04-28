@@ -470,22 +470,24 @@ function Finalize-DistributedTracing {
     Write-Host "[TRACING] Distributed tracing finalized" -ForegroundColor Green
 }
 
-# Export functions
-Export-ModuleMember -Function @(
-    'Initialize-DistributedTracing',
-    'Generate-CorrelationId',
-    'Get-CorrelationId',
-    'Get-SessionId',
-    'Start-Span',
-    'End-Span',
-    'Add-SpanEvent',
-    'Add-SpanMetric',
-    'Record-Metric',
-    'Get-Metrics',
-    'Export-Span',
-    'Export-Metrics',
-    'Export-AllSpans',
-    'Get-TracingSummary',
-    'Show-TracingSummary',
-    'Finalize-DistributedTracing'
-)
+# Export functions (only if running as module)
+if ($MyInvocation.MyCommand.Module) {
+    Export-ModuleMember -Function @(
+        'Initialize-DistributedTracing',
+        'Generate-CorrelationId',
+        'Get-CorrelationId',
+         'Get-SessionId',
+         'Start-Span',
+         'End-Span',
+         'Add-SpanEvent',
+         'Add-SpanMetric',
+         'Record-Metric',
+         'Get-Metrics',
+         'Export-Span',
+         'Export-Metrics',
+         'Export-AllSpans',
+         'Get-TracingSummary',
+         'Show-TracingSummary',
+         'Finalize-DistributedTracing'
+     )
+ }

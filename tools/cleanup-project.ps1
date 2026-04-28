@@ -172,9 +172,35 @@ function Verify-ProjectIntegrity {
     return $allGood
 }
 
+function Save-EngramContext {
+    Write-Log "Saving context to Engram before cleanup..." "info"
+    $engramBin = Join-Path $PSScriptRoot "engram.exe"
+    
+    if (Test-Path $engramBin) {
+        $summaryContent = @"
+## Pre-Cleanup Summary
+Cleanup initiated in mode: $Mode
+Timestamp: $timestamp
+
+Context preserved before cleanup operation.
+"@
+        & $engramBin save --title "Pre-Cleanup Context Save" --content $summaryContent --project "gentleman-foundation" --type manual 2>$null | Out-Null
+        if ($LASTEXITCODE -eq 0) {
+            Write-Log "Context saved to Engram" "info"
+        } else {
+            Write-Log "Failed to save to Engram (code: $LASTEXITCODE)" "warn"
+        }
+    } else {
+        Write-Log "Engram not found, skipping context save" "warn"
+    }
+}
+
 function Main {
     Write-Log "Project Cleanup v$CleanupVersion" "info"
     Write-Log "Mode: $Mode" "info"
+    
+    # Save context to Engram BEFORE any cleanup
+    Save-EngramContext
     
     $targets = Get-CleanupTargets
     Show-CleanupPlan $targets
