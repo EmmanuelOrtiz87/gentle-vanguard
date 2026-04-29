@@ -74,7 +74,8 @@ try {
                 
                 if ($AutoResolve) {
                     Write-Host "Auto-pushing to $upstream..." -ForegroundColor Yellow
-                    git push origin HEAD:$branch --set-upstream 2>$null
+                    $branch = git rev-parse --abbrev-ref HEAD 2>$null
+                    git push origin $branch --set-upstream 2>$null
                     if ($LASTEXITCODE -eq 0) {
                         Write-Ok "Auto-pushed commits"
                     } else {
