@@ -2,6 +2,35 @@
 
 This file defines agent-agnostic startup behavior for this workspace.
 
+## 5-Layer Topology
+
+This workspace implements a 5-layer topology for AI agent tooling:
+
+| Layer | Name | Description |
+|-------|------|-------------|
+| 5 | Agentes (Agents) | AI agents executing tasks |
+| 4 | Comandos (Commands) | Executable operations (bash, read, write, etc.) |
+| 3 | MCP | Model Context Protocol integration |
+| 2 | Skills | Domain-specific knowledge and patterns |
+| 1 | Memoria (Memory) | Persistent state and context management |
+
+See: `docs/architecture/layer-topology.md` for full details.
+
+## Role-Based Workflows
+
+The orchestrator delegates to specialized roles using subagents and skills:
+
+| Role | Subagents | Key Skills |
+|------|-----------|------------|
+| Product Manager | sdd-propose, sdd-explore | sdd-propose, jira-epic, issue-creation |
+| Architect | sdd-design, sdd-spec, explore | sdd-design, architecture-governance |
+| Developer (FE/BE) | sdd-apply, sdd-tasks | angular-spa, react-19, golang-api, django-drf |
+| QA | sdd-verify, general | sdd-verify, testing-strategy, pytest, playwright |
+| DevOps | general, explore | docker-devops, workspace-automation, github-pr |
+| UX/UI | general | angular-spa, react-19, tailwind-4, zustand-5 |
+
+See: `docs/architecture/role-workflows.md` for full details.
+
 ## Startup Rule
 
 Before substantial work in a new conversation, run:
