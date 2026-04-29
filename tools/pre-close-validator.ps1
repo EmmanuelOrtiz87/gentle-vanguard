@@ -95,9 +95,11 @@ function Test-PendingTasks {
     $pendingFiles = @()
     
     foreach ($marker in $pendingMarkers) {
-        $results = grep -r -n $marker $repoRoot --include="*.ps1" --include="*.md" --include="*.json" 2>$null | Select-Object -First 10
+        $results = Get-ChildItem -Path $repoRoot -Include "*.ps1", "*.md", "*.json" -Recurse -ErrorAction SilentlyContinue | 
+                   Select-String -Pattern $marker -SimpleMatch -List | 
+                   Select-Object -First 10
         if ($results) {
-            $pendingFiles += $results
+            $pendingFiles += $results | ForEach-Object { "$($_.FileName):$($_.LineNumber): $($_.Line.Trim())" }
         }
     }
     
@@ -133,14 +135,22 @@ function Test-PartialImplementations {
     )
     
     $found = $false
+    $foundItems = @()
+    
     foreach ($pattern in $partialPatterns) {
-        $results = grep -r -i -n $pattern $repoRoot --include="*.ps1" --include="*.md" 2>$null | Select-Object -First 5
+        $results = Get-ChildItem -Path $repoRoot -Include "*.ps1", "*.md" -Recurse -ErrorAction SilentlyContinue | 
+                   Select-String -Pattern $pattern -CaseSensitive:$false | 
+                   Select-Object -First 5
         if ($results) {
             if (-not $found) {
                 Write-Warn "Potential partial implementations found:"
                 $found = $true
             }
-            $results | ForEach-Object { Write-Host "  $_" -ForegroundColor Yellow }
+            $results | ForEach-Object { 
+                $line = "$($_.FileName):$($_.LineNumber): $($_.Line.Trim())"
+                Write-Host "  $line" -ForegroundColor Yellow
+                $foundItems += $line
+            }
         }
     }
     
