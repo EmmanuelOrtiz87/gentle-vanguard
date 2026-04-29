@@ -1,6 +1,5 @@
 # pre-close-validator.ps1
-# Simplified and robust session closure validation
-# Ensures clean state before session ends
+# Robust session closure validation with auto-resolve
 
 param(
     [switch]$AutoResolve,
@@ -8,7 +7,7 @@ param(
     [string]$ProjectName = "workspace-foundation"
 )
 
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Continue'
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
 Set-Location $repoRoot
 
@@ -28,34 +27,37 @@ function Write-Error { param([string]$Message)
     Write-Host "[ERROR] $Message" -ForegroundColor Red
 }
 
-# Main validation
 Write-Host "STARTING: Pre-close validation for $ProjectName" -ForegroundColor Cyan
 Write-Host "Auto-resolve: $AutoResolve, Force: $Force" -ForegroundColor Gray
 
 $allPassed = $true
 $failedChecks = @()
+$gitError = $false
 
-# 1. Git State Check
+# 1. Git State Validation
 Write-Step "Validating Git state"
+
 try {
-    $status = git status --porcelain 2>$null
-    $hasUncommitted = -not [string]::IsNullOrWhiteSpace($status)
+    $statusOutput = git status --porcelain 2>$null
+    $hasUncommitted = -not [string]::IsNullOrWhiteSpace($statusOutput)
     
     if ($hasUncommitted) {
         Write-Warn "Uncommitted changes detected"
-        git status --short | Select-Object -First 10
+        git status --short
         
         if ($AutoResolve) {
             Write-Host "Auto-committing changes..." -ForegroundColor Yellow
-            git add .
+            git add . 2>$null
             $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-            git commit -m "fix: auto-commit before session close - $timestamp"
+            $commitMsg = "fix: auto-commit before session close - $timestamp"
+            $commitOutput = git commit -m $commitMsg 2>&1
             if ($LASTEXITCODE -eq 0) {
                 Write-Ok "Auto-committed pending changes"
             } else {
-                Write-Error "Failed to auto-commit"
+                Write-Error "Failed to auto-commit: $commitOutput"
                 $allPassed = $false
                 $failedChecks += "GitCommit"
+                $gitError = $true
             }
         } else {
             $allPassed = $false
@@ -65,21 +67,26 @@ try {
         Write-Ok "Working directory clean"
     }
     
-    if ($allPassed) {
+    if (-not $gitError) {
         $upstream = git rev-parse --abbrev-ref '@{upstream}' 2>$null
         if (-not [string]::IsNullOrWhiteSpace($upstream)) {
-            $ahead = git rev-list --count '@{upstream}..HEAD' 2>$null
-            if ([int]$ahead -gt 0) {
+            $aheadOutput = git rev-list --count '@{upstream}..HEAD' 2>$null
+            $ahead = 0
+            if (-not [string]::IsNullOrWhiteSpace($aheadOutput)) {
+                $ahead = [int]$aheadOutput
+            }
+            
+            if ($ahead -gt 0) {
                 Write-Warn "Unpushed commits: $ahead"
                 
                 if ($AutoResolve) {
                     Write-Host "Auto-pushing to $upstream..." -ForegroundColor Yellow
                     $branch = git rev-parse --abbrev-ref HEAD 2>$null
-                    git push origin $branch --set-upstream 2>$null
+                    $pushOutput = git push origin $branch 2>&1
                     if ($LASTEXITCODE -eq 0) {
-                        Write-Ok "Auto-pushed commits"
+                        Write-Ok "Auto-pushed commits to $upstream"
                     } else {
-                        Write-Error "Failed to auto-push"
+                        Write-Error "Failed to auto-push: $pushOutput"
                         $allPassed = $false
                         $failedChecks += "GitPush"
                     }
@@ -88,11 +95,14 @@ try {
                     $failedChecks += "GitUnpushed"
                 }
             } else {
-                Write-Ok "All commits synced"
+                Write-Ok "All commits synced with upstream"
             }
         } else {
             Write-Warn "No upstream configured"
-            if (-not $Force) { $allPassed = $false; $failedChecks += "GitNoUpstream" }
+            if (-not $Force) { 
+                $allPassed = $false
+                $failedChecks += "GitNoUpstream"
+            }
         }
     }
 } catch {
@@ -101,10 +111,10 @@ try {
     $failedChecks += "GitError"
 }
 
-# 2. Quick Pending Tasks Check (only critical code files)
+# 2. Quick Pending Tasks Check
 Write-Step "Checking for critical pending tasks"
 try {
-    $criticalPatterns = @('^\s*#\s*TODO:', '^\s*//\s*TODO:', '^\s*#\s*FIXME:', '^\s*//\s*FIXME:')
+    $criticalPatterns = @('TODO:', 'FIXME:', 'HACK:', 'XXX:')
     $foundTasks = @()
     
     $codeFiles = Get-ChildItem -Path $repoRoot -Include "*.ps1", "*.ts", "*.js" -Recurse -ErrorAction SilentlyContinue | 
@@ -116,11 +126,10 @@ try {
         for ($i = 0; $i -lt $lines.Count; $i++) {
             $line = $lines[$i]
             foreach ($pattern in $criticalPatterns) {
-                if ($line -match $pattern) {
+                if ($line -match [regex]::Escape($pattern)) {
                     $relativePath = $file.FullName.Replace($repoRoot, '').TrimStart('\')
                     $lineNum = $i + 1
-                    $trimmedLine = $line.Trim()
-                    $foundTasks += "{0}:{1}: {2}" -f $relativePath, $lineNum, $trimmedLine
+                    $foundTasks += "{0}:{1}: {2}" -f $relativePath, $lineNum, $line.Trim()
                     break
                 }
             }
@@ -128,15 +137,14 @@ try {
     }
     
     if ($foundTasks.Count -gt 0) {
-        Write-Warn "Critical pending tasks found:"
+        Write-Warn "Critical pending tasks found: $($foundTasks.Count)"
         $foundTasks | Select-Object -First 5 | ForEach-Object { Write-Host "  $_" -ForegroundColor Yellow }
-        Write-Warn "Found $($foundTasks.Count) pending tasks - review recommended"
         if (-not $Force) {
             $allPassed = $false
             $failedChecks += "PendingTasks"
         }
     } else {
-        Write-Ok "No critical pending tasks in code"
+        Write-Ok "No critical pending tasks"
     }
 } catch {
     Write-Warn "Error checking pending tasks: $_"
@@ -146,10 +154,10 @@ try {
 Write-Step "Checking for session locks"
 try {
     $lockFiles = Get-ChildItem -Path $repoRoot -Filter "*.lock" -Recurse -ErrorAction SilentlyContinue | 
-                  Where-Object { $_.FullName -match '\.session|session.*lock' }
+                  Where-Object { $_.FullName -match '\.session|session.*lock|engram.*lock' }
     
     if ($lockFiles.Count -gt 0) {
-        Write-Warn "Session lock files found"
+        Write-Warn "Session lock files found: $($lockFiles.Count)"
         if ($AutoResolve) {
             $lockFiles | Remove-Item -Force -ErrorAction SilentlyContinue
             Write-Ok "Removed session locks"
@@ -169,13 +177,13 @@ Write-Step "Checking Engram (non-critical)"
 try {
     $engramBin = Join-Path $PSScriptRoot "engram.exe"
     if (Test-Path $engramBin) {
-        # Use a simple test that doesn't trigger GitHub API
-        $env:ENGAM_SKIP_UPDATE = "1"
-        $result = & $engramBin session-list 2>&1 | Out-String
+        $env:ENGRAM_SKIP_UPDATE = "1"
+        $sessionList = & $engramBin session-list 2>&1 | Out-String
         if ($LASTEXITCODE -eq 0) {
             Write-Ok "Engram is responsive"
         } else {
             Write-Warn "Engram check failed - non-critical for session closure"
+            Write-Warn "Engram output: $($sessionList.Substring(0, [Math]::Min(100, $sessionList.Length)))"
         }
     } else {
         Write-Warn "Engram binary not found"
