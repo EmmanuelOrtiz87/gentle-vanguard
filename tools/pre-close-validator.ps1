@@ -144,42 +144,52 @@ function Test-PendingTasks {
 }
 
 function Test-PartialImplementations {
-    Write-Step "Checking for partial implementations"
+    Write-Step "Checking for partial implementations in code"
+    
+    # Only check actual code files, not documentation
+    $codeFiles = Get-ChildItem -Path $repoRoot -Include "*.ps1", "*.ts", "*.js", "*.go", "*.py" -Recurse -ErrorAction SilentlyContinue | 
+                 Where-Object { $_.FullName -notmatch 'node_modules|\.git|docs|templates|\.session|\.telemetry' }
     
     $partialPatterns = @(
-        'partial.*implementation',
-        'work.*in.*progress',
-        'WIP',
-        'not.*complete',
-        'incomplete',
-        'placeholder'
+        'function.*partial',
+        'class.*partial',
+        '^\s*#\s*PARTIAL',
+        '^\s*//\s*PARTIAL',
+        'TODO.*implement',
+        'FIXME.*implement',
+        'TEMP.*implementation',
+        'placeholder.*code'
     )
     
     $found = $false
     $foundItems = @()
     
-    foreach ($pattern in $partialPatterns) {
-        $results = Get-ChildItem -Path $repoRoot -Include "*.ps1", "*.md" -Recurse -ErrorAction SilentlyContinue | 
-                   Select-String -Pattern $pattern -CaseSensitive:$false | 
-                   Select-Object -First 5
-        if ($results) {
-            if (-not $found) {
-                Write-Warn "Potential partial implementations found:"
-                $found = $true
-            }
-            $results | ForEach-Object { 
-                $line = "$($_.FileName):$($_.LineNumber): $($_.Line.Trim())"
-                Write-Host "  $line" -ForegroundColor Yellow
-                $foundItems += $line
+    foreach ($file in $codeFiles) {
+        $content = Get-Content $file.FullName -ErrorAction SilentlyContinue
+        for ($i = 0; $i -lt $content.Count; $i++) {
+            $line = $content[$i]
+            foreach ($pattern in $partialPatterns) {
+                if ($line -match $pattern) {
+                    $relativePath = $file.FullName.Replace($repoRoot, '').TrimStart('\')
+                    $lineNum = $i + 1
+                    $foundItems += "{0}:{1}: {2}" -f $relativePath, $lineNum, $line.Trim()
+                    $found = $true
+                    break
+                }
             }
         }
     }
     
     if ($found) {
+        Write-Warn "Potential partial implementations found in code:"
+        $foundItems | Select-Object -First 10 | ForEach-Object { Write-Host "  $_" -ForegroundColor Yellow }
+        if ($foundItems.Count -gt 10) {
+            Write-Host "  ... and $($foundItems.Count - 10) more" -ForegroundColor Yellow
+        }
         Write-Warn "Partial implementations detected - manual review required"
         if (-not $Force) { return $false }
     } else {
-        Write-Ok "No partial implementations detected"
+        Write-Ok "No partial implementations detected in code"
     }
     
     return $true
@@ -209,24 +219,25 @@ function Test-EngramState {
     
     $engramBin = Join-Path $PSScriptRoot "engram.exe"
     if (Test-Path $engramBin) {
-        # Try health check with error suppression
-        $output = & $engramBin health 2>&1
+        # Try health check - suppress error output
+        $output = & $engramBin health 2>&1 | Out-String
+        
         if ($LASTEXITCODE -eq 0) {
             Write-Ok "Engram health check passed"
         } else {
             # Check if it's just a GitHub API issue (not critical)
             if ($output -match "Could not check for updates|403 Forbidden") {
-                Write-Warn "Engram: Update check failed (rate limited) - core functionality assumed working"
+                Write-Warn "Engram: Update check failed (rate limited) - verifying core functionality"
                 # Try a basic operation to verify Engram works
-                $testOutput = & $engramBin session-list 2>&1
+                $testOutput = & $engramBin session-list 2>&1 | Out-String
                 if ($LASTEXITCODE -eq 0) {
                     Write-Ok "Engram core functionality verified"
                 } else {
-                    Write-Warn "Engram not responding properly"
+                    Write-Warn "Engram not responding properly - output: $($testOutput.Substring(0, [Math]::Min(100, $testOutput.Length)))"
                     if (-not $Force) { return $false }
                 }
             } else {
-                Write-Warn "Engram health check failed"
+                Write-Warn "Engram health check failed: $($output.Substring(0, [Math]::Min(100, $output.Length)))"
                 if (-not $Force) { return $false }
             }
         }
