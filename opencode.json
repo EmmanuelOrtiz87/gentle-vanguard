@@ -39,5 +39,25 @@
         "webfetch": "allow"
       }
     }
+  },
+  "hooks": {
+    "pre_process": {
+      "enabled": true,
+      "mandatory": true,
+      "description": "MANDATORY pre-processing hook - runs BEFORE any AI response",
+      "script": "tools/pre-process-input.ps1",
+      "args": {
+        "UserInput": "${user_input}",
+        "WorkspaceRoot": "."
+      },
+      "parseOutput": {
+        "triggerFound": "TRIGGER_MATCH_FOUND",
+        "noMatch": "NO_TRIGGER_MATCH"
+      },
+      "actions": {
+        "onMatch": "Load skill using skill tool",
+        "onNoMatch": "Continue with normal behavior"
+      }
+    }
   }
 }

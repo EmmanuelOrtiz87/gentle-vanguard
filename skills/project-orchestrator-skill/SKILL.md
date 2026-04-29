@@ -15,17 +15,26 @@ description: >
 ## CORE PRINCIPLES
 
 1. **Auto-First Session Activation** - Prefer automatic IDE/session detection, but keep on-demand fallback
-2. **Auto-Detect** - Detect stack, project type, and gaps automatically
-3. **Load Skills** - Load relevant skills based on context
-4. **Git Flow** - Follow branch strategy
-5. **Audit on Push** - Generate audit document before push
-6. **Code Review on PR** - Full review with 7 dimensions
-7. **Spec Validation** - Validate completion before PR
-8. **End Properly** - Save to memory, commit, summarize
-9. **Session Brief First** - Every substantial session starts with a session brief and task brief when scope is non-trivial
-10. **Question Before Adoption** - Challenge proposals that add complexity, lock-in, or weak validation
-11. **Evidence Before Content** - Add durable docs/learning only after explicit validation and decision rationale
-12. **Goal Alignment Always** - Keep every change aligned to stated objective, constraints, and acceptance criteria
+2. **MANDATORY Pre-Processing** - BEFORE ANY user input response:
+   - Execute: `powershell -File tools/pre-process-input.ps1 -UserInput "USER_INPUT" -WorkspaceRoot "."`
+   - If TRIGGER_MATCH_FOUND → Load skill using `skill` tool BEFORE any other action
+   - If NO_TRIGGER_MATCH → Continue with normal behavior
+   - This applies to ALL tools: opencode, cline, cursor, windsurf, continue.dev, claude, copilot
+3. **Session Startup** - On "iniciar sesion" or session start:
+   - Load `session-workflow-skill` automatically
+   - Execute `tools/session-autostart.cmd` (Windows) or `bash ./tools/session-autostart.sh` (Linux/macOS)
+   - This ensures notifications, optimizations, validations run automatically
+4. **Auto-Detect** - Detect stack, project type, and gaps automatically
+5. **Load Skills** - Load relevant skills based on context
+6. **Git Flow** - Follow branch strategy
+7. **Audit on Push** - Generate audit document before push
+8. **Code Review on PR** - Full review with 7 dimensions
+9. **Spec Validation** - Validate completion before PR
+10. **End Properly** - Save to memory, commit, summarize
+11. **Session Brief First** - Every substantial session starts with a session brief and task brief when scope is non-trivial
+12. **Question Before Adoption** - Challenge proposals that add complexity, lock-in, or weak validation
+13. **Evidence Before Content** - Add durable docs/learning only after explicit validation and decision rationale
+14. **Goal Alignment Always** - Keep every change aligned to stated objective, constraints, and acceptance criteria
 
 ## COMMUNICATION MODE HOMOLOGATION
 
