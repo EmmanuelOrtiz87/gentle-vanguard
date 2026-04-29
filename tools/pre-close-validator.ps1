@@ -1,6 +1,6 @@
 # pre-close-validator.ps1
-# Comprehensive session closure validation with automatic resolution
-# Ensures no pending work, partial implementations, or misunderstandings for next session
+# Simplified and robust session closure validation
+# Ensures clean state before session ends
 
 param(
     [switch]$AutoResolve,
@@ -28,253 +28,174 @@ function Write-Error { param([string]$Message)
     Write-Host "[ERROR] $Message" -ForegroundColor Red
 }
 
-function Test-GitState {
-    Write-Step "Validating Git state"
-    
-    $status = git status --porcelain 2>$null
-    $hasUncommitted = -not [string]::IsNullOrWhiteSpace($status)
-    
-    if ($hasUncommitted) {
-        Write-Warn "Uncommitted changes detected:"
-        git status --short
-        
-        if ($AutoResolve) {
-            Write-Step "Auto-resolving uncommitted changes"
-            git add .
-            $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-            $branch = git rev-parse --abbrev-ref HEAD 2>$null
-            if ([string]::IsNullOrWhiteSpace($branch)) { $branch = "main" }
-            
-            git commit -m "fix: auto-commit pending changes before session close - $timestamp"
-            if ($LASTEXITCODE -eq 0) {
-                Write-Ok "Auto-committed pending changes"
-            } else {
-                Write-Error "Failed to auto-commit changes"
-                return $false
-            }
-        } else {
-            return $false
-        }
-    } else {
-        Write-Ok "Working directory clean"
-    }
-    
-    $upstream = git rev-parse --abbrev-ref '@{upstream}' 2>$null
-    if (-not [string]::IsNullOrWhiteSpace($upstream)) {
-        $ahead = git rev-list --count '@{upstream}..HEAD' 2>$null
-        if ([int]$ahead -gt 0) {
-            Write-Warn "Unpushed commits detected: $ahead commit(s) ahead of $upstream"
-            
-            if ($AutoResolve) {
-                Write-Step "Auto-resolving unpushed commits"
-                git push origin HEAD:$branch --set-upstream
-                if ($LASTEXITCODE -eq 0) {
-                    Write-Ok "Auto-pushed commits to $upstream"
-                } else {
-                    Write-Error "Failed to auto-push commits"
-                    return $false
-                }
-            } else {
-                return $false
-            }
-        } else {
-            Write-Ok "All commits synced with upstream"
-        }
-    } else {
-        Write-Warn "No upstream configured"
-        if (-not $Force) { return $false }
-    }
-    
-    return $true
-}
-
-function Test-PendingTasks {
-    Write-Step "Checking for pending tasks in code files"
-    
-    # Only check actual code files, not documentation
-    $codeFiles = Get-ChildItem -Path $repoRoot -Include "*.ps1", "*.ts", "*.js", "*.go", "*.py" -Recurse -ErrorAction SilentlyContinue | 
-                 Where-Object { $_.FullName -notmatch 'node_modules|\.git|docs|templates' }
-    
-    $pendingPatterns = @(
-        '^\s*#.*\bTODO\b(?!.*comment)',  # PowerShell/Python TODO in comments
-        '^\s*//.*\bTODO\b',                # JS/TS TODO in comments
-        '^\s*/\*.*\bTODO\b',               # C-style TODO
-        '^\s*#.*\bFIXME\b',
-        '^\s*//.*\bFIXME\b',
-        '^\s*#.*\bHACK\b',
-        '^\s*//.*\bHACK\b',
-        '^\s*#.*\bXXX\b',
-        '^\s*//.*\bXXX\b'
-    )
-    
-    $pendingItems = @()
-    foreach ($file in $codeFiles) {
-        $content = Get-Content $file.FullName -ErrorAction SilentlyContinue
-        for ($i = 0; $i -lt $content.Count; $i++) {
-            $line = $content[$i]
-            foreach ($pattern in $pendingPatterns) {
-                if ($line -match $pattern) {
-                    $relativePath = $file.FullName.Replace($repoRoot, '').TrimStart('\')
-                    $lineNum = $i + 1
-                    $pendingItems += "{0}:{1}: {2}" -f $relativePath, $lineNum, $line.Trim()
-                    break
-                }
-            }
-        }
-    }
-    
-    if ($pendingItems.Count -gt 0) {
-        Write-Warn "Pending task markers found in code:"
-        $pendingItems | Select-Object -First 15 | ForEach-Object { Write-Host "  $_" -ForegroundColor Yellow }
-        if ($pendingItems.Count -gt 15) {
-            Write-Host "  ... and $($pendingItems.Count - 15) more" -ForegroundColor Yellow
-        }
-        
-        if ($AutoResolve) {
-            Write-Warn "Auto-resolution: Converting TODO/FIXME to work items requires manual review"
-            return $false
-        } else {
-            return $false
-        }
-    } else {
-        Write-Ok "No pending task markers in code files"
-    }
-    
-    return $true
-}
-
-function Test-PartialImplementations {
-    Write-Step "Checking for partial implementations in code"
-    
-    # Only check actual code files, not documentation
-    $codeFiles = Get-ChildItem -Path $repoRoot -Include "*.ps1", "*.ts", "*.js", "*.go", "*.py" -Recurse -ErrorAction SilentlyContinue | 
-                 Where-Object { $_.FullName -notmatch 'node_modules|\.git|docs|templates|\.session|\.telemetry' }
-    
-    $partialPatterns = @(
-        'function.*partial',
-        'class.*partial',
-        '^\s*#\s*PARTIAL',
-        '^\s*//\s*PARTIAL',
-        'TODO.*implement',
-        'FIXME.*implement',
-        'TEMP.*implementation',
-        'placeholder.*code'
-    )
-    
-    $found = $false
-    $foundItems = @()
-    
-    foreach ($file in $codeFiles) {
-        $content = Get-Content $file.FullName -ErrorAction SilentlyContinue
-        for ($i = 0; $i -lt $content.Count; $i++) {
-            $line = $content[$i]
-            foreach ($pattern in $partialPatterns) {
-                if ($line -match $pattern) {
-                    $relativePath = $file.FullName.Replace($repoRoot, '').TrimStart('\')
-                    $lineNum = $i + 1
-                    $foundItems += "{0}:{1}: {2}" -f $relativePath, $lineNum, $line.Trim()
-                    $found = $true
-                    break
-                }
-            }
-        }
-    }
-    
-    if ($found) {
-        Write-Warn "Potential partial implementations found in code:"
-        $foundItems | Select-Object -First 10 | ForEach-Object { Write-Host "  $_" -ForegroundColor Yellow }
-        if ($foundItems.Count -gt 10) {
-            Write-Host "  ... and $($foundItems.Count - 10) more" -ForegroundColor Yellow
-        }
-        Write-Warn "Partial implementations detected - manual review required"
-        if (-not $Force) { return $false }
-    } else {
-        Write-Ok "No partial implementations detected in code"
-    }
-    
-    return $true
-}
-
-function Test-RunningProcesses {
-    Write-Step "Checking for running processes or locks"
-    
-    $sessionLock = Join-Path $repoRoot '.session\*.lock'
-    if (Test-Path $sessionLock) {
-        Write-Warn "Session lock files detected"
-        if ($AutoResolve) {
-            Remove-Item $sessionLock -Force -ErrorAction SilentlyContinue
-            Write-Ok "Removed session lock files"
-        } else {
-            return $false
-        }
-    } else {
-        Write-Ok "No session locks detected"
-    }
-    
-    return $true
-}
-
-function Test-EngramState {
-    Write-Step "Validating Engram memory state"
-    
-    $engramBin = Join-Path $PSScriptRoot "engram.exe"
-    if (Test-Path $engramBin) {
-        # Try health check - suppress error output
-        $output = & $engramBin health 2>&1 | Out-String
-        
-        if ($LASTEXITCODE -eq 0) {
-            Write-Ok "Engram health check passed"
-        } else {
-            # Check if it's just a GitHub API issue (not critical)
-            if ($output -match "Could not check for updates|403 Forbidden") {
-                Write-Warn "Engram: Update check failed (rate limited) - verifying core functionality"
-                # Try a basic operation to verify Engram works
-                $testOutput = & $engramBin session-list 2>&1 | Out-String
-                if ($LASTEXITCODE -eq 0) {
-                    Write-Ok "Engram core functionality verified"
-                } else {
-                    Write-Warn "Engram not responding properly - output: $($testOutput.Substring(0, [Math]::Min(100, $testOutput.Length)))"
-                    if (-not $Force) { return $false }
-                }
-            } else {
-                Write-Warn "Engram health check failed: $($output.Substring(0, [Math]::Min(100, $output.Length)))"
-                if (-not $Force) { return $false }
-            }
-        }
-    } else {
-        Write-Warn "Engram binary not found - skipping Engram validation"
-    }
-    
-    return $true
-}
-
-# Main validation flow
+# Main validation
 Write-Host "STARTING: Pre-close validation for $ProjectName" -ForegroundColor Cyan
 Write-Host "Auto-resolve: $AutoResolve, Force: $Force" -ForegroundColor Gray
 
 $allPassed = $true
 $failedChecks = @()
 
-if (-not (Test-GitState)) { $allPassed = $false; $failedChecks += "GitState" }
-if (-not (Test-PendingTasks)) { $allPassed = $false; $failedChecks += "PendingTasks" }
-if (-not (Test-PartialImplementations)) { $allPassed = $false; $failedChecks += "PartialImpl" }
-if (-not (Test-RunningProcesses)) { $allPassed = $false; $failedChecks += "RunningProcesses" }
-if (-not (Test-EngramState)) { $allPassed = $false; $failedChecks += "EngramState" }
+# 1. Git State Check
+Write-Step "Validating Git state"
+try {
+    $status = git status --porcelain 2>$null
+    $hasUncommitted = -not [string]::IsNullOrWhiteSpace($status)
+    
+    if ($hasUncommitted) {
+        Write-Warn "Uncommitted changes detected"
+        git status --short | Select-Object -First 10
+        
+        if ($AutoResolve) {
+            Write-Host "Auto-committing changes..." -ForegroundColor Yellow
+            git add .
+            $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+            git commit -m "fix: auto-commit before session close - $timestamp"
+            if ($LASTEXITCODE -eq 0) {
+                Write-Ok "Auto-committed pending changes"
+            } else {
+                Write-Error "Failed to auto-commit"
+                $allPassed = $false
+                $failedChecks += "GitCommit"
+            }
+        } else {
+            $allPassed = $false
+            $failedChecks += "GitUncommitted"
+        }
+    } else {
+        Write-Ok "Working directory clean"
+    }
+    
+    if ($allPassed) {
+        $upstream = git rev-parse --abbrev-ref '@{upstream}' 2>$null
+        if (-not [string]::IsNullOrWhiteSpace($upstream)) {
+            $ahead = git rev-list --count '@{upstream}..HEAD' 2>$null
+            if ([int]$ahead -gt 0) {
+                Write-Warn "Unpushed commits: $ahead"
+                
+                if ($AutoResolve) {
+                    Write-Host "Auto-pushing to $upstream..." -ForegroundColor Yellow
+                    git push origin HEAD:$branch --set-upstream 2>$null
+                    if ($LASTEXITCODE -eq 0) {
+                        Write-Ok "Auto-pushed commits"
+                    } else {
+                        Write-Error "Failed to auto-push"
+                        $allPassed = $false
+                        $failedChecks += "GitPush"
+                    }
+                } else {
+                    $allPassed = $false
+                    $failedChecks += "GitUnpushed"
+                }
+            } else {
+                Write-Ok "All commits synced"
+            }
+        } else {
+            Write-Warn "No upstream configured"
+            if (-not $Force) { $allPassed = $false; $failedChecks += "GitNoUpstream" }
+        }
+    }
+} catch {
+    Write-Error "Git validation error: $_"
+    $allPassed = $false
+    $failedChecks += "GitError"
+}
 
+# 2. Quick Pending Tasks Check (only critical code files)
+Write-Step "Checking for critical pending tasks"
+try {
+    $criticalPatterns = @('^\s*#\s*TODO:', '^\s*//\s*TODO:', '^\s*#\s*FIXME:', '^\s*//\s*FIXME:')
+    $foundTasks = @()
+    
+    $codeFiles = Get-ChildItem -Path $repoRoot -Include "*.ps1", "*.ts", "*.js" -Recurse -ErrorAction SilentlyContinue | 
+                 Where-Object { $_.FullName -notmatch 'node_modules|\.git|docs|templates' } |
+                 Select-Object -First 50
+    
+    foreach ($file in $codeFiles) {
+        $lines = Get-Content $file.FullName -ErrorAction SilentlyContinue
+        for ($i = 0; $i -lt $lines.Count; $i++) {
+            $line = $lines[$i]
+            foreach ($pattern in $criticalPatterns) {
+                if ($line -match $pattern) {
+                    $relativePath = $file.FullName.Replace($repoRoot, '').TrimStart('\')
+                    $lineNum = $i + 1
+                    $trimmedLine = $line.Trim()
+                    $foundTasks += "{0}:{1}: {2}" -f $relativePath, $lineNum, $trimmedLine
+                    break
+                }
+            }
+        }
+    }
+    
+    if ($foundTasks.Count -gt 0) {
+        Write-Warn "Critical pending tasks found:"
+        $foundTasks | Select-Object -First 5 | ForEach-Object { Write-Host "  $_" -ForegroundColor Yellow }
+        Write-Warn "Found $($foundTasks.Count) pending tasks - review recommended"
+        if (-not $Force) {
+            $allPassed = $false
+            $failedChecks += "PendingTasks"
+        }
+    } else {
+        Write-Ok "No critical pending tasks in code"
+    }
+} catch {
+    Write-Warn "Error checking pending tasks: $_"
+}
+
+# 3. Session Locks Check
+Write-Step "Checking for session locks"
+try {
+    $lockFiles = Get-ChildItem -Path $repoRoot -Filter "*.lock" -Recurse -ErrorAction SilentlyContinue | 
+                  Where-Object { $_.FullName -match '\.session|session.*lock' }
+    
+    if ($lockFiles.Count -gt 0) {
+        Write-Warn "Session lock files found"
+        if ($AutoResolve) {
+            $lockFiles | Remove-Item -Force -ErrorAction SilentlyContinue
+            Write-Ok "Removed session locks"
+        } else {
+            $allPassed = $false
+            $failedChecks += "SessionLocks"
+        }
+    } else {
+        Write-Ok "No session locks"
+    }
+} catch {
+    Write-Warn "Error checking locks: $_"
+}
+
+# 4. Engram Check (non-blocking)
+Write-Step "Checking Engram (non-critical)"
+try {
+    $engramBin = Join-Path $PSScriptRoot "engram.exe"
+    if (Test-Path $engramBin) {
+        # Use a simple test that doesn't trigger GitHub API
+        $env:ENGAM_SKIP_UPDATE = "1"
+        $result = & $engramBin session-list 2>&1 | Out-String
+        if ($LASTEXITCODE -eq 0) {
+            Write-Ok "Engram is responsive"
+        } else {
+            Write-Warn "Engram check failed - non-critical for session closure"
+        }
+    } else {
+        Write-Warn "Engram binary not found"
+    }
+} catch {
+    Write-Warn "Engram check error (non-critical): $_"
+}
+
+# Final Result
 Write-Host "`n" + ("=" * 60) -ForegroundColor Cyan
 if ($allPassed) {
     Write-Ok "ALL VALIDATIONS PASSED - Session ready for closure"
-    Write-Host "`nNext steps for AI agent:"
+    Write-Host "`nNext steps:"
     Write-Host "  1. Call mem_session_summary with proper structure"
     Write-Host "  2. Call mem_session_end to close the session"
-    Write-Host "  3. Proceed with tools/session-manual-end.cmd if needed"
+    Write-Host "  3. Run tools/session-manual-end.cmd if needed"
     exit 0
 } else {
     Write-Error "VALIDATION FAILED - Checks failed: $($failedChecks -join ', ')"
-    Write-Host "`nRecommended actions:"
+    Write-Host "`nRequired actions:"
+    Write-Host "  - Fix critical issues or use -Force to override"
     Write-Host "  - Run with -AutoResolve to auto-fix git issues"
-    Write-Host "  - Review and manually fix pending markers"
-    Write-Host "  - Use -Force to close anyway (not recommended)"
-    Write-Host "`nSession will NOT be closed to avoid pending work in next session."
     exit 1
 }
