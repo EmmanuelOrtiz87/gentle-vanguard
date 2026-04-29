@@ -1,7 +1,7 @@
 {
   "name": "Cline VSCode Plugin - Dify.io Integration",
-  "version": "1.0.0",
-  "description": "Optimized configuration for Cline VSCode plugin using Dify.io as LLM provider",
+  "version": "1.1.0",
+  "description": "Local-first configuration for Cline VSCode plugin using Dify.io as LLM provider",
   "provider": {
     "type": "dify",
     "endpoint": "https://api.dify.io/v1",
@@ -118,6 +118,13 @@
       "enforceStructure": true,
       "maxResponseTokens": 4000,
       "requireSummary": true
+    },
+    "localFirst": {
+      "enabled": true,
+      "denyWebSearch": true,
+      "denyCodeSearch": true,
+      "denyWebFetch": true,
+      "note": "External tools only available via orchestrator agent"
     }
   },
   "monitoring": {

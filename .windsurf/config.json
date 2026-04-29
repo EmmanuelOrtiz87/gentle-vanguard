@@ -1,0 +1,47 @@
+{
+  "name": "Windsurf - Local-First Configuration",
+  "version": "1.0.0",
+  "description": "Local-first policy for Windsurf IDE with tool restrictions",
+  "workspace": {
+    "projectRoot": ".",
+    "configFiles": ["opencode.json", "AGENTS.md", "CLAUDE.md", ".cursorrules"],
+    "skillPaths": ["skills/", "~/.config/opencode/skills/"]
+  },
+  "aiSettings": {
+    "model": "opencode/claude-sonnet-4-5",
+    "temperature": 0.3,
+    "maxTokens": 4500,
+    "localFirst": true
+  },
+  "toolPermissions": {
+    "websearch": "deny",
+    "codesearch": "deny",
+    "webfetch": "deny",
+    "note": "External tools only available via orchestrator agent"
+  },
+  "contextManagement": {
+    "useEngramMemory": true,
+    "useLocalSkills": true,
+    "useProjectDocs": true,
+    "compressionRatio": 0.90,
+    "memoryTiering": {
+      "hot": "active session",
+      "warm": "1 day",
+      "cold": "7 days"
+    }
+  },
+  "mcpServers": {
+    "context7": {
+      "enabled": false,
+      "note": "Enable only when local skills insufficient"
+    }
+  },
+  "language": {
+    "default": "es",
+    "technicalTerms": "en"
+  },
+  "cascade": {
+    "restrictToLocal": true,
+    "allowExternalTools": false
+  }
+}

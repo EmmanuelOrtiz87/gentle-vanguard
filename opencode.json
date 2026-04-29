@@ -20,6 +20,23 @@
       "options": {
         "minTokens": 2000,
         "maxTokens": 4500
+      },
+      "permission": {
+        "websearch": "deny",
+        "codesearch": "deny",
+        "webfetch": "deny"
+      }
+    },
+    "orchestrator": {
+      "model": "anthropic/claude-sonnet-4-5",
+      "options": {
+        "minTokens": 2000,
+        "maxTokens": 4500
+      },
+      "permission": {
+        "websearch": "allow",
+        "codesearch": "allow",
+        "webfetch": "allow"
       }
     }
   }

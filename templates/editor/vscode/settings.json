@@ -145,5 +145,22 @@
   "breadcrumbs.enabled": true,
   "outline.showProperties": true,
   "problems.showCurrentInStatus": true,
-  "scm.defaultViewMode": "tree"
+  "scm.defaultViewMode": "tree",
+  "github.copilot.enable": {
+    "default": true,
+    "languages": {
+      "markdown": false,
+      "json": true,
+      "jsonc": true
+    }
+  },
+  "github.copilot.editor.enableAutoCompletions": true,
+  "github.copilot.chat.followCursor": false,
+  "github.copilot.chat.localeOverride": "es",
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "github.copilot.chat.localFirst": true,
+  "github.copilot.chat.experimental.suggestions": {
+    "enabled": false,
+    "reasoning": "local-first policy - no external search"
+  }
 }

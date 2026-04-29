@@ -1,0 +1,37 @@
+# Cursor Rules - Local-First Policy
+
+## Core Principle
+This project follows a **LOCAL-FIRST** approach. AI agents must prioritize:
+1. Local project knowledge (skills, documentation, scripts)
+2. Persistent memory (engram)
+3. Cached responses and context
+4. External search ONLY when explicitly needed by orchestrator
+
+## Restrictions
+- **NO web search** by default
+- **NO external API calls** unless authorized
+- **NO deep reasoning** for simple tasks
+- **USE** local skills in `~/.cursor/skills/` or project `skills/`
+- **USE** engram memory for context continuity
+- **USE** project documentation before external sources
+
+## Tool Permissions
+- `websearch`: DENY (enable only for orchestrator tasks)
+- `codesearch`: DENY (use local code patterns)
+- `webfetch`: DENY (rely on local docs)
+
+## When to Use External Tools
+Only the **orchestrator** agent may enable external tools when:
+1. Local knowledge is insufficient
+2. Documentation is outdated
+3. Explicit user request for external research
+
+## Efficiency Rules
+- Prefer `grep` over `codesearch`
+- Prefer `read` + engram memory over `websearch`
+- Use `context7` MCP only when local skills lack coverage
+- Batch operations when possible (non-urgent tasks)
+
+## Language
+- Default: Spanish (es) for communication
+- Technical terms: English (preserve original terminology)
