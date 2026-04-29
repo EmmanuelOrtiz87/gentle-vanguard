@@ -1,13 +1,13 @@
 {
   "name": "Cline VSCode Plugin - Dify.io Integration (Optimized)",
-  "version": "2.0.0",
-  "description": "Highly optimized configuration for Cline VSCode plugin using Dify.io as LLM provider with full token efficiency and context management",
-  "lastUpdated": "2026-04-21",
+  "version": "2.1.0",
+  "description": "Local-first optimized configuration for Cline VSCode plugin using Dify.io as LLM provider with full token efficiency and context management",
+  "lastUpdated": "2026-04-28",
   "optimization": {
     "status": "OPTIMIZED",
     "targetReduction": "40-50%",
     "expectedTokenSavings": "significant",
-    "notes": "Fully aligned with workspace-foundation normatives and best practices"
+    "notes": "Fully aligned with workspace-foundation local-first policy"
   },
   "provider": {
     "type": "dify",
@@ -205,7 +205,15 @@
       "compressResponses": true
     },
     "languagePreference": "es",
-    "toneGuidance": "technical, direct, concise"
+    "toneGuidance": "technical, direct, concise",
+    "localFirst": {
+      "enabled": true,
+      "denyWebSearch": true,
+      "denyCodeSearch": true,
+      "denyWebFetch": true,
+      "orchestratorOverride": true,
+      "note": "External tools only available via orchestrator agent"
+    }
   },
   "monitoring": {
     "tokenUsageTracking": true,
@@ -318,5 +326,16 @@
     "verifyScriptPaths": true,
     "testConnectivity": true,
     "reportIssues": true
+  },
+  "localFirstPolicy": {
+    "enabled": true,
+    "toolRestrictions": {
+      "websearch": "deny",
+      "codesearch": "deny",
+      "webfetch": "deny"
+    },
+    "preferredSources": ["local-skills", "engram-memory", "project-docs", "cached-responses"],
+    "externalToolsOrchestratorOnly": true,
+    "bypassConditions": ["user-explicit-request", "local-knowledge-insufficient"]
   }
 }
