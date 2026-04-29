@@ -16,11 +16,14 @@ Execute the mechanical aspects of session management while coordinating with the
 
 ### "Iniciar sesion" / "Start session"
 
+**Note: This skill should be AUTO-LOADED when user says "iniciar sesion" via pre-process-input.ps1**
+
 ```markdown
-1. mem_context              # Check engram memory
-2. git status              # Current branch
-3. todowrite               # Create session plan
-4. Present status
+1. tools/session-autostart.cmd  # Ejecutar autostart (notificaciones, optimización, validaciones)
+2. mem_context                  # Check engram memory
+3. git status                   # Current branch
+4. todowrite                    # Create session plan
+5. Present status
 ```
 
 ### "Continuar" / "Continue"
