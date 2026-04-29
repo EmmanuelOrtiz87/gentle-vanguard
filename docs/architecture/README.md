@@ -1,24 +1,30 @@
-# Architecture
+# Architecture Documentation
 
-Architecture documentation hub for Workspace Foundation.
+## Topology and Workflows
 
-## Start Here
+| Document | Description |
+|----------|-------------|
+| [layer-topology.md](layer-topology.md) | 5-layer topology: Agents, Commands, MCP, Skills, Memory |
+| [role-workflows.md](role-workflows.md) | Role-based workflows: PM, Architect, Developer, QA, DevOps, UX/UI |
 
-1. Read [ARCHITECTURE.md](../reference/ARCHITECTURE.md) for the canonical system architecture.
-2. Read [SUBAGENT-ARCHITECTURE.md](../reference/SUBAGENT-ARCHITECTURE.md) for subagent topology and execution model.
-3. Use [../sdd/foundation-sdd.md](../sdd/foundation-sdd.md) for design-level implementation details.
+## Architecture Standards
 
-## Purpose of This Directory
+| Document | Description |
+|----------|-------------|
+| [architecture-standards.md](architecture-standards.md) | Default decision shape, common areas, repository targets |
 
-This directory is the thematic entry point for architecture content.
+## Navigation
 
-- Keep architecture navigation and architecture-specific indexes here.
-- Keep canonical long-form architecture reference in `docs/reference/`.
-- Keep design documents and SDD assets in `docs/sdd/`.
+```
+docs/architecture/
+├── README.md                    # This file - architecture hub
+├── layer-topology.md            # 5-layer topology definition
+├── role-workflows.md            # Role-based workflow mappings
+└── architecture-standards.md   # Architecture governance standards
+```
 
-## Organization Rules
+## Quick Links
 
-1. Put architecture indexes and navigation files in `docs/architecture/`.
-2. Put stable, canonical technical references in `docs/reference/`.
-3. Keep links synchronized when files move.
-4. Prefer one canonical source per topic to avoid duplicated content drift.
+- **Topology**: Understand the 5-layer architecture that makes this workspace agnostic
+- **Workflows**: See how the orchestrator delegates to specialized roles
+- **Standards**: Governance rules for architecture decisions
