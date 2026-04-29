@@ -50,7 +50,7 @@ $autoDelegationConfig = Join-Path $workspaceRoot "config/auto-delegation.json"
 if (Test-Path $autoDelegationConfig) {
     $config = Get-Content $autoDelegationConfig -Raw | ConvertFrom-Json
     if ($config.keywordMappings) {
-        # Map keywords to their corresponding skills
+        # Map agent codes to skill names
         $skillMapping = @{
             "GOV" = "judgment-day"
             "SAD" = "sdd-design"
