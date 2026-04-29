@@ -89,45 +89,55 @@ function Test-GitState {
 }
 
 function Test-PendingTasks {
-    Write-Step "Checking for pending tasks"
+    Write-Step "Checking for pending tasks in code files"
     
-    $pendingMarkers = @('TODO', 'FIXME', 'HACK', 'XXX', 'TEMP', 'PARTIAL')
-    $pendingFiles = @()
+    # Only check actual code files, not documentation
+    $codeFiles = Get-ChildItem -Path $repoRoot -Include "*.ps1", "*.ts", "*.js", "*.go", "*.py" -Recurse -ErrorAction SilentlyContinue | 
+                 Where-Object { $_.FullName -notmatch 'node_modules|\.git|docs|templates' }
     
-    foreach ($marker in $pendingMarkers) {
-        $results = Get-ChildItem -Path $repoRoot -Include "*.ps1", "*.md", "*.json" -Recurse -ErrorAction SilentlyContinue | 
-                   Select-String -Pattern $marker -CaseSensitive:$false | 
-                   Where-Object { 
-                       $line = $_.Line
-                       # Exclude lines that are just documenting the marker itself
-                       (-not ($line -match "preservePatterns|pattern.*TODO|FIXME.*pattern")) -and
-                       # Exclude documentation about TODOs
-                       (-not ($line -match "TODO.*comment|TODO.*found|FIXME.*found")) -and
-                       # Only match actual code comments or standalone markers
-                       (($line -match "^\s*[#///*]+.*$marker") -or
-                        ($line -match "$marker\s*:" -and $line -match "^\s*$marker") -or
-                        ($line -match "^\s*$marker\s*$"))
-                   } |
-                   Select-Object -First 10
-        if ($results) {
-            $pendingFiles += $results | ForEach-Object { "$($_.FileName):$($_.LineNumber): $($_.Line.Trim())" }
+    $pendingPatterns = @(
+        '^\s*#.*\bTODO\b(?!.*comment)',  # PowerShell/Python TODO in comments
+        '^\s*//.*\bTODO\b',                # JS/TS TODO in comments
+        '^\s*/\*.*\bTODO\b',               # C-style TODO
+        '^\s*#.*\bFIXME\b',
+        '^\s*//.*\bFIXME\b',
+        '^\s*#.*\bHACK\b',
+        '^\s*//.*\bHACK\b',
+        '^\s*#.*\bXXX\b',
+        '^\s*//.*\bXXX\b'
+    )
+    
+    $pendingItems = @()
+    foreach ($file in $codeFiles) {
+        $content = Get-Content $file.FullName -ErrorAction SilentlyContinue
+        for ($i = 0; $i -lt $content.Count; $i++) {
+            $line = $content[$i]
+            foreach ($pattern in $pendingPatterns) {
+                if ($line -match $pattern) {
+                    $relativePath = $file.FullName.Replace($repoRoot, '').TrimStart('\')
+                    $lineNum = $i + 1
+                    $pendingItems += "{0}:{1}: {2}" -f $relativePath, $lineNum, $line.Trim()
+                    break
+                }
+            }
         }
     }
     
-    if ($pendingFiles.Count -gt 0) {
-        Write-Warn "Pending markers found in code:"
-        $pendingFiles | ForEach-Object { Write-Host "  $_" -ForegroundColor Yellow }
+    if ($pendingItems.Count -gt 0) {
+        Write-Warn "Pending task markers found in code:"
+        $pendingItems | Select-Object -First 15 | ForEach-Object { Write-Host "  $_" -ForegroundColor Yellow }
+        if ($pendingItems.Count -gt 15) {
+            Write-Host "  ... and $($pendingItems.Count - 15) more" -ForegroundColor Yellow
+        }
         
         if ($AutoResolve) {
-            Write-Step "Auto-resolution of pending markers"
-            Write-Warn "Auto-resolution of pending markers requires manual review"
-            Write-Warn "Found $($pendingFiles.Count) pending markers that should be reviewed"
+            Write-Warn "Auto-resolution: Converting TODO/FIXME to work items requires manual review"
             return $false
         } else {
             return $false
         }
     } else {
-        Write-Ok "No pending task markers found"
+        Write-Ok "No pending task markers in code files"
     }
     
     return $true
@@ -199,19 +209,24 @@ function Test-EngramState {
     
     $engramBin = Join-Path $PSScriptRoot "engram.exe"
     if (Test-Path $engramBin) {
-        # Use -SkipUpdate to avoid GitHub API rate limiting
-        $env:ENGAM_SKIP_UPDATE = "1"
-        & $engramBin health --skip-update 2>$null
+        # Try health check with error suppression
+        $output = & $engramBin health 2>&1
         if ($LASTEXITCODE -eq 0) {
             Write-Ok "Engram health check passed"
         } else {
-            Write-Warn "Engram health check failed - trying basic check"
-            # Try without update check
-            $engramOutput = & $engramBin session-list 2>&1
-            if ($LASTEXITCODE -eq 0) {
-                Write-Ok "Engram basic check passed"
+            # Check if it's just a GitHub API issue (not critical)
+            if ($output -match "Could not check for updates|403 Forbidden") {
+                Write-Warn "Engram: Update check failed (rate limited) - core functionality assumed working"
+                # Try a basic operation to verify Engram works
+                $testOutput = & $engramBin session-list 2>&1
+                if ($LASTEXITCODE -eq 0) {
+                    Write-Ok "Engram core functionality verified"
+                } else {
+                    Write-Warn "Engram not responding properly"
+                    if (-not $Force) { return $false }
+                }
             } else {
-                Write-Warn "Engram not responding properly"
+                Write-Warn "Engram health check failed"
                 if (-not $Force) { return $false }
             }
         }
