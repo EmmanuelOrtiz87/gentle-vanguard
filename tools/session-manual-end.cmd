@@ -13,6 +13,15 @@ if not exist "%SCRIPT%" (
 
 echo Closing session manually...
 
+REM Ejecutar validación pre-cierre
+echo [INFO] Running pre-close validation...
+powershell -NoProfile -ExecutionPolicy Bypass -File ".\tools\pre-close-validator.ps1" -AutoResolve
+if errorlevel 1 (
+    echo [ERROR] Pre-close validation failed. Fix issues before closing session.
+    pause
+    exit /b 1
+)
+
 REM Generar reporte de estado final
 echo [INFO] Generating final status report...
 powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\monitoring\continuous-status-monitor.ps1" -Once

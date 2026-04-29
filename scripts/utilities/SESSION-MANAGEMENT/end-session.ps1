@@ -51,6 +51,21 @@ function Get-ResultLabel {
 
 Set-Location $repoRoot
 
+# Pre-close validation
+Write-Step "Running pre-close validation"
+$validator = Join-Path $repoRoot "tools\pre-close-validator.ps1"
+if (Test-Path $validator) {
+    & $validator -AutoResolve
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warn "Pre-close validation failed. Session closure blocked."
+        Write-Warn "Fix issues or use -Force to override."
+        exit 1
+    }
+    Write-Ok "Pre-close validation passed"
+} else {
+    Write-Warn "Pre-close validator not found, skipping validation"
+}
+
 $branch = git rev-parse --abbrev-ref HEAD 2>$null
 if ([string]::IsNullOrWhiteSpace($branch)) { $branch = 'unknown' }
 
