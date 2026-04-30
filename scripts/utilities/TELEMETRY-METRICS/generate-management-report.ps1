@@ -71,34 +71,39 @@ try {
     if (Test-Path $engramExe) {
         Write-Host "   🔄 Exporting Engram data..."
         
-        # Run engram export - redirect stderr to null to avoid GitHub API errors
-        $process = Start-Process -FilePath $engramExe -ArgumentList "export", "--json" -NoNewWindow -Wait -RedirectStandardError "engram-stderr.txt" -RedirectStandardOutput "engram-stdout.txt" -PassThru
-        Start-Sleep -Milliseconds 1000
-        
-        # Check if export created a file
+        # Run engram export (writes to engram-export.json by default)
         $exportFile = "engram-export.json"
+        $stderrFile = "engram-stderr.txt"
+        
+        $process = Start-Process -FilePath $engramExe -ArgumentList "export", $exportFile -NoNewWindow -Wait -RedirectStandardError $stderrFile -PassThru
+        Start-Sleep -Milliseconds 2000
+        
+        # Read the export file
         if (Test-Path $exportFile) {
             try {
                 $engramJson = Get-Content $exportFile -Raw -ErrorAction Stop
-                if ($engramJson) {
+                if ($engramJson -and $engramJson.Trim().StartsWith('{')) {
                     $engramData = $engramJson | ConvertFrom-Json -ErrorAction Stop
                     if ($engramData.observations -and $engramData.observations.Count -gt 0) {
                         $engramObservations = $engramData.observations
                         Write-Host "   ✅ Engram data loaded: $($engramObservations.Count) observations"
+                    } else {
+                        Write-Host "   ⚠️ Engram export has no observations"
                     }
+                } else {
+                    Write-Host "   ⚠️ Engram export is not valid JSON"
                 }
             } catch {
                 Write-Host "   ⚠️ Engram parse error: $_"
             } finally {
                 Remove-Item $exportFile -Force -ErrorAction SilentlyContinue
-                Remove-Item "engram-stdout.txt" -Force -ErrorAction SilentlyContinue
-                Remove-Item "engram-stderr.txt" -Force -ErrorAction SilentlyContinue
+                Remove-Item $stderrFile -Force -ErrorAction SilentlyContinue
             }
         } else {
-            Write-Host "   ⚠️ Engram export file not found"
+            Write-Host "   ⚠️ Engram export file not created"
         }
     } else {
-        Write-Host "   ⚠️ engram.exe not found in tools/"
+        Write-Host "   ⚠️ engram.exe not found"
     }
 } catch {
     Write-Host "   ⚠️ Engram error: $_"
