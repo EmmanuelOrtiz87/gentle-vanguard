@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Generates and updates INDEX.md automatically
 
@@ -96,7 +96,7 @@ function Generate-IndexContent {
     param([hashtable]$ScriptsByCategory)
     
     $content = @"
-# 📑 ÍNDICE COMPLETO DE SCRIPTS
+# [DOC] ÍNDICE COMPLETO DE SCRIPTS
 
 **Versión:** 2.0.0  
 **Última actualización:** $(Get-Date -Format 'yyyy-MM-dd')  
@@ -106,14 +106,14 @@ function Generate-IndexContent {
 
 ---
 
-## 📋 Tabla de Contenidos
+## [LIST] Tabla de Contenidos
 
 - [Scripts por Categoría](#scripts-por-categoría)
 - [Búsqueda Rápida](#búsqueda-rápida)
 
 ---
 
-## 🔍 Búsqueda Rápida
+## [SEARCH] Búsqueda Rápida
 
 ### Por Directorio
 

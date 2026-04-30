@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Autonomous Norm Learner - Learns and updates norms from experiences (Simplified)
     
@@ -138,9 +138,9 @@ function Get-NextNormID {
 
 # Main learning function
 function Invoke-Learning {
-    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Magenta
-    Write-Host "🧠 NORM LEARNER (Trigger: $Trigger)" -ForegroundColor Magenta
-    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Magenta
+    Write-Host "" -ForegroundColor Magenta
+    Write-Host " NORM LEARNER (Trigger: $Trigger)" -ForegroundColor Magenta
+    Write-Host "" -ForegroundColor Magenta
     Write-Host ""
     
     $patterns = Get-EngramPatterns
@@ -241,16 +241,16 @@ Update-LearnedNorms
 
 # Summary
 Write-Host ""
-Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
-Write-Host "📊 LEARNING SUMMARY" -ForegroundColor Cyan
-Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+Write-Host "" -ForegroundColor Cyan
+Write-Host "[DATA] LEARNING SUMMARY" -ForegroundColor Cyan
+Write-Host "" -ForegroundColor Cyan
 Write-Host "  New norms created: $($NewNorms.Count)" -ForegroundColor Green
 Write-Host "  Norms updated: $($UpdatedNorms.Count)" -ForegroundColor Yellow
 Write-Host "  Norms promoted: $($PromotedNorms.Count)" -ForegroundColor Cyan
 Write-Host ""
 
 if ($NewNorms.Count -gt 0) {
-    Write-Host "✅ New norms:" -ForegroundColor Green
+    Write-Host " New norms:" -ForegroundColor Green
     foreach ($norm in $NewNorms) {
         Write-Host "   - $($norm.ID): $($norm.Norm)" -ForegroundColor Gray
     }
@@ -266,3 +266,6 @@ $result = @{
 }
 
 return $result
+
+
+

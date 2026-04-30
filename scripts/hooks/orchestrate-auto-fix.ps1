@@ -1,4 +1,4 @@
-param(
+﻿param(
     [switch]$DryRun,
     [switch]$Verbose,
     [switch]$Fix,
@@ -31,9 +31,9 @@ $script:Summary = @{
 
 function Write-Header {
     Write-Host ""
-    Write-Host "╔══════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-    Write-Host "║       ORCHESTRATOR: Autofix Unified Flow           ║" -ForegroundColor Cyan
-    Write-Host "╚══════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
+    Write-Host "       ORCHESTRATOR: Autofix Unified Flow           " -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host "Repository: $repoRoot" -ForegroundColor Gray
     Write-Host "Started: $(Get-Date -Format 'HH:mm:ss')" -ForegroundColor Gray
 }
@@ -77,9 +77,9 @@ function Write-Success {
 
 function Initialize-Validators {
     Write-Host ""
-    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host "PHASE 1: Discovery" -ForegroundColor Cyan
-    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
 
     $script:Validators.scripts.path = Get-ChildItem -Path $repoRoot -Filter "auto-fix-delegate.ps1" -Recurse -File -ErrorAction SilentlyContinue | Select-Object -First 1
     if (-not $script:Validators.scripts.path) {
@@ -111,9 +111,9 @@ function Initialize-Validators {
 
 function Invoke-ValidationPhase {
     Write-Host ""
-    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host "PHASE 2: Validation" -ForegroundColor Cyan
-    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
 
     foreach ($key in $script:Validators.Keys) {
         $validator = $script:Validators[$key]
@@ -228,9 +228,9 @@ function Invoke-AutoFixPhase {
     if (-not $Fix) { return }
 
     Write-Host ""
-    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host "PHASE 3: Auto-Fix" -ForegroundColor Cyan
-    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
 
     if ($script:Summary.issues.Count -eq 0) {
         Write-Host "[AUTO-FIX] No issues to fix" -ForegroundColor Green
@@ -255,9 +255,9 @@ function Invoke-DelegationPhase {
     if ($script:Summary.issues.Count -eq 0) { return }
 
     Write-Host ""
-    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host "PHASE 4: Delegation" -ForegroundColor Cyan
-    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
 
     $delegateScript = Get-ChildItem -Path $repoRoot -Filter "auto-delegation-wrapper.ps1" -Recurse -File -ErrorAction SilentlyContinue | Select-Object -First 1
     if (-not $delegateScript) {
@@ -274,13 +274,13 @@ function Invoke-DelegationPhase {
 
 function Write-FinalSummary {
     Write-Host ""
-    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host "SUMMARY" -ForegroundColor Cyan
-    Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
 
     Write-Host ""
     Write-Host "Validated:" -ForegroundColor White
-    $script:Summary.validated | ForEach-Object { Write-Host "  ✓ $_" -ForegroundColor Gray }
+    $script:Summary.validated | ForEach-Object { Write-Host "   $_" -ForegroundColor Gray }
 
     if ($script:Summary.skipped.Count -gt 0) {
         Write-Host ""
@@ -291,7 +291,7 @@ function Write-FinalSummary {
     if ($script:Summary.fixed.Count -gt 0) {
         Write-Host ""
         Write-Host "Fixed:" -ForegroundColor Green
-        $script:Summary.fixed | ForEach-Object { Write-Host "  ✓ $_" -ForegroundColor Green }
+        $script:Summary.fixed | ForEach-Object { Write-Host "   $_" -ForegroundColor Green }
     }
 
     if ($script:Summary.issues.Count -gt 0) {
@@ -303,7 +303,7 @@ function Write-FinalSummary {
     if ($script:Summary.delegated.Count -gt 0) {
         Write-Host ""
         Write-Host "Delegated:" -ForegroundColor Magenta
-        $script:Summary.delegated | ForEach-Object { Write-Host "  → $_" -ForegroundColor Magenta }
+        $script:Summary.delegated | ForEach-Object { Write-Host "   $_" -ForegroundColor Magenta }
     }
 
     Write-Host ""
@@ -313,21 +313,21 @@ function Write-FinalSummary {
     $skipped = $script:Summary.skipped.Count
 
     if ($issues -eq 0) {
-        Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Green
+        Write-Host "" -ForegroundColor Green
         Write-Host "RESULT: SUCCESS - All validations passed!" -ForegroundColor Green
-        Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Green
+        Write-Host "" -ForegroundColor Green
         Write-Host "READY: Push authorized" -ForegroundColor Green
         exit 0
     } elseif ($fixed -gt 0 -and $issues -gt 0) {
-        Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Yellow
+        Write-Host "" -ForegroundColor Yellow
         Write-Host "RESULT: PARTIAL - Fixed $fixed, $issues remaining" -ForegroundColor Yellow
-        Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Yellow
+        Write-Host "" -ForegroundColor Yellow
         Write-Host "RECOMMENDATION: Run with -Fix -Delegate for full resolution" -ForegroundColor Cyan
         exit 0
     } else {
-        Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Red
+        Write-Host "" -ForegroundColor Red
         Write-Host "RESULT: ACTION REQUIRED - $issues issues need attention" -ForegroundColor Red
-        Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Red
+        Write-Host "" -ForegroundColor Red
         exit 1
     }
 }
@@ -338,3 +338,4 @@ Invoke-ValidationPhase
 Invoke-AutoFixPhase
 Invoke-DelegationPhase
 Write-FinalSummary
+

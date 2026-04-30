@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Autonomous Delegate Orchestrator - Full autonomous operation
     
@@ -217,9 +217,9 @@ function Invoke-AutoDelegate {
 # Main autonomous workflow
 function Invoke-AutoOrchestration {
     Write-Host ""
-    Write-Host "╔══════════════════════════════════════════════════════════════╗" -ForegroundColor Green
-    Write-Host "║  AUTO-DELEGATE ORCHESTRATOR (Trigger: $Trigger)" -ForegroundColor Green
-    Write-Host "╚══════════════════════════════════════════════════════════════╝" -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
+    Write-Host "  AUTO-DELEGATE ORCHESTRATOR (Trigger: $Trigger)" -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
     Write-Host ""
     
     # Scan for issues that need autonomous handling
@@ -294,12 +294,12 @@ function Invoke-AutoOrchestration {
     
     # Summary
     Write-Host ""
-    Write-Host "══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
-    Write-Host "📊 AUTONOMOUS DELEGATION SUMMARY" -ForegroundColor Cyan
-    Write-Host "══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
+    Write-Host "[DATA] AUTONOMOUS DELEGATION SUMMARY" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host "  Total issues: $($issues.Count)" -ForegroundColor White
-    Write-Host "  ✅ Delegated successfully: $successCount" -ForegroundColor Green
-    Write-Host "  ❌ Failed/Escalated: $failCount" -ForegroundColor Red
+    Write-Host "   Delegated successfully: $successCount" -ForegroundColor Green
+    Write-Host "   Failed/Escalated: $failCount" -ForegroundColor Red
     Write-Host ""
     
     if ($failCount -gt 0) {
@@ -332,3 +332,6 @@ if (Test-Path $engramBin) {
 }
 
 return $result
+
+
+

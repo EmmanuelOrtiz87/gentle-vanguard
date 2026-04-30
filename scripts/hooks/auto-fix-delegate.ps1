@@ -1,4 +1,4 @@
-param(
+﻿param(
     [switch]$DryRun,
     [switch]$Verbose
 )
@@ -204,7 +204,7 @@ if ($script:Issues.Count -gt 0) {
             Write-Host ""
             Write-Host "SUMMARY:" -ForegroundColor Green
             $script:Fixed | ForEach-Object {
-                Write-Host "  $($_.file): $($_.original) → $($_.fixed)" -ForegroundColor Gray
+                Write-Host "  $($_.file): $($_.original)  $($_.fixed)" -ForegroundColor Gray
             }
 
             if (-not $DryRun) {

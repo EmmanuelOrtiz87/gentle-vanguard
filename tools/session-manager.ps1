@@ -1,4 +1,4 @@
-# session-manager.ps1
+﻿# session-manager.ps1
 # Gestor de sesiones para workspace-foundation
 
 param(
@@ -172,9 +172,9 @@ Session closure with full validation
 - Engram state verified before closure
 
 ## Accomplished
-- ✅ Pre-close validation passed
-- ✅ Session $($sessionData.sessionId) closed properly
-- ✅ All checks completed
+-  Pre-close validation passed
+-  Session $($sessionData.sessionId) closed properly
+-  All checks completed
 
 ## Relevant Files
 - tools/pre-close-validator.ps1 — New validation before closure

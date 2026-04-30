@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Autonomous Norm Enforcer - Validates and applies learned norms
     
@@ -184,9 +184,9 @@ function Test-DocumentationStandards {
 
 # Main execution
 function Invoke-NormEnforcement {
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Green
-    Write-Host "🔍 NORM ENFORCER (Trigger: $Trigger)" -ForegroundColor Green
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
+    Write-Host "[SEARCH] NORM ENFORCER (Trigger: $Trigger)" -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
     Write-Host ""
     
     Test-DocsStructure
@@ -194,20 +194,20 @@ function Invoke-NormEnforcement {
     
     # Summary
     Write-Host ""
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
-    Write-Host "📊 SUMMARY" -ForegroundColor Cyan
-    Write-Host "═══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
+    Write-Host "[DATA] SUMMARY" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host "  Issues found: $($script:Issues.Count)" -ForegroundColor Yellow
     Write-Host "  Fixes applied: $($script:Fixes.Count)" -ForegroundColor Green
     Write-Host ""
     
     if ($script:Issues.Count -gt 0 -and -not $AutoFix) {
-        Write-Host "⚠️  Issues found (run with -AutoFix to correct):" -ForegroundColor Yellow
+        Write-Host "  Issues found (run with -AutoFix to correct):" -ForegroundColor Yellow
         $script:Issues | ForEach-Object { Write-Host "   - $_" -ForegroundColor Gray }
     }
     
     if ($script:Fixes.Count -gt 0) {
-        Write-Host "✅ Fixes applied:" -ForegroundColor Green
+        Write-Host " Fixes applied:" -ForegroundColor Green
         $script:Fixes | ForEach-Object { Write-Host "   - $_" -ForegroundColor Gray }
     }
     
@@ -225,3 +225,6 @@ function Invoke-NormEnforcement {
 
 # Execute
 Invoke-NormEnforcement
+
+
+

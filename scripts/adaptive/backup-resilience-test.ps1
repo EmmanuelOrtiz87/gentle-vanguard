@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Backup Resilience Tester
     
@@ -144,9 +144,9 @@ function Test-FallbackRestore {
 # Test 3: Full resilience cycle
 function Test-FullResilience {
     Write-Host ""
-    Write-Host "╔══════════════════════════════════════════════════════════════╗" -ForegroundColor Green
-    Write-Host "║  BACKUP RESILIENCE TEST SUITE                    ║" -ForegroundColor Green
-    Write-Host "╚══════════════════════════════════════════════════════════════╝" -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
+    Write-Host "  BACKUP RESILIENCE TEST SUITE                    " -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
     Write-Host ""
     
     $results = New-Object System.Collections.ArrayList
@@ -162,17 +162,17 @@ function Test-FullResilience {
     Write-Host ""
     
     # Summary
-    Write-Host "══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host "RESILIENCE TEST SUMMARY" -ForegroundColor Cyan
-    Write-Host "══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     
     $passCount = ($results | Where-Object { $_.status -eq "PASS" }).Count
     $failCount = ($results | Where-Object { $_.status -eq "FAIL" }).Count
     $skipCount = ($results | Where-Object { $_.status -eq "SKIPPED" }).Count
     
-    Write-Host "  ✅ Passed: $passCount" -ForegroundColor Green
-    Write-Host "  ❌ Failed: $failCount" -ForegroundColor Red
-    Write-Host "  ⚠️ Skipped: $skipCount" -ForegroundColor Yellow
+    Write-Host "   Passed: $passCount" -ForegroundColor Green
+    Write-Host "   Failed: $failCount" -ForegroundColor Red
+    Write-Host "   Skipped: $skipCount" -ForegroundColor Yellow
     Write-Host ""
     
     foreach ($result in $results) {
@@ -200,3 +200,5 @@ switch ($Action) {
 }
 
 return $result
+
+

@@ -1,4 +1,4 @@
-param(
+﻿param(
     [Parameter(Mandatory=$false)]
     [ValidateSet("status", "optimize", "reset")]
     [string]$Action = "status",
@@ -56,9 +56,9 @@ function Set-ScalingDb {
 
 function Show-Status {
     Write-Host ""
-    Write-Host "╔══════════════════════════════════════════════════════════════╗" -ForegroundColor Green
-    Write-Host "║  AUTO-SCALING DELEGATION STATUS                           ║" -ForegroundColor Green
-    Write-Host "╚══════════════════════════════════════════════════════════════╝" -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
+    Write-Host "  AUTO-SCALING DELEGATION STATUS                           " -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
     Write-Host ""
     
     $db = Get-ScalingDb
@@ -88,7 +88,7 @@ function Show-Status {
     if ($db.history.Count -gt 0) {
         Write-Host "Recent History (last 5):" -ForegroundColor Gray
         $db.history | Select-Object -Last 5 | ForEach-Object {
-            $status = if ($_.success) { "✅" } else { "❌" }
+            $status = if ($_.success) { "" } else { "" }
             Write-Host "  $status $($_.pattern) -> $($_.subagent) (rate: $($_.successRate))" -ForegroundColor Gray
         }
     }
@@ -137,3 +137,5 @@ if ($Trigger -eq "session-close") {
 }
 
 return $result
+
+

@@ -1,4 +1,4 @@
-# validate-foundation-complete.ps1
+﻿# validate-foundation-complete.ps1
 # Comprehensive validation of ALL project aspects before deployment
 
 $ErrorActionPreference = 'Stop'
@@ -9,14 +9,14 @@ $warnings = 0
 function Test-Item($Description, $Condition, $Type = "ERROR") {
     if (-not $Condition) {
         if ($Type -eq "ERROR") {
-            Write-Host "   ❌ $Description" -ForegroundColor Red
+            Write-Host "    $Description" -ForegroundColor Red
             $script:errors++
         } else {
-            Write-Host "   ⚠️ $Description" -ForegroundColor Yellow
+            Write-Host "   ️ $Description" -ForegroundColor Yellow
             $script:warnings++
         }
     } else {
-        Write-Host "   ✅ $Description" -ForegroundColor Green
+        Write-Host "    $Description" -ForegroundColor Green
     }
 }
 
@@ -163,13 +163,13 @@ foreach ($script in $scriptsToCheck) {
     if (Test-Path $scriptPath) {
         try {
             $null = Get-Content $scriptPath -Raw | ForEach-Object { [System.Management.Automation.PSParser]::Tokenize($_, [ref]$null) }
-            Write-Host "   ✅ $script syntax OK" -ForegroundColor Green
+            Write-Host "    $script syntax OK" -ForegroundColor Green
         } catch {
-            Write-Host "   ❌ $script syntax ERROR: $_" -ForegroundColor Red
+            Write-Host "    $script syntax ERROR: $_" -ForegroundColor Red
             $errors++
         }
     } else {
-        Write-Host "   ⚠️ $script not found" -ForegroundColor Yellow
+        Write-Host "   ️ $script not found" -ForegroundColor Yellow
         $warnings++
     }
 }
@@ -191,9 +191,9 @@ foreach ($config in $configFiles) {
     if (Test-Path $configPath) {
         try {
             $null = Get-Content $configPath | ConvertFrom-Json
-            Write-Host "   ✅ $config valid JSON" -ForegroundColor Green
+            Write-Host "    $config valid JSON" -ForegroundColor Green
         } catch {
-            Write-Host "   ❌ $config invalid JSON: $_" -ForegroundColor Red
+            Write-Host "    $config invalid JSON: $_" -ForegroundColor Red
             $errors++
         }
     } else {
@@ -208,10 +208,11 @@ Write-Host "Warnings: $warnings" -ForegroundColor $(if ($warnings -gt 0) { "Yell
 
 if ($errors -gt 0) {
     Write-Host ""
-    Write-Host "❌ VALIDATION FAILED - Fix errors before deploying" -ForegroundColor Red
+    Write-Host " VALIDATION FAILED - Fix errors before deploying" -ForegroundColor Red
     exit 1
 } else {
     Write-Host ""
-    Write-Host "✅ VALIDATION PASSED - Safe to deploy" -ForegroundColor Green
+    Write-Host " VALIDATION PASSED - Safe to deploy" -ForegroundColor Green
     exit 0
 }
+

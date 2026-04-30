@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Autonomous Backup & Recovery Orchestrator with Encryption
     
@@ -159,9 +159,9 @@ function Unprotect-Data {
 # Create backup
 function Invoke-Backup {
     Write-Host ""
-    Write-Host "╔═══════════════════════════════════════════════════╗" -ForegroundColor Green
-    Write-Host "║  AUTO-BACKUP ORCHESTRATOR (Trigger: $Trigger)" -ForegroundColor Green
-    Write-Host "╚═══════════════════════════════════════════════════╝" -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
+    Write-Host "  AUTO-BACKUP ORCHESTRATOR (Trigger: $Trigger)" -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
     Write-Host ""
     
     $backupData = @{
@@ -244,9 +244,9 @@ function Invoke-Backup {
     
     # Summary
     Write-Host ""
-    Write-Host "════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host "BACKUP SUMMARY" -ForegroundColor Cyan
-    Write-Host "════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host "  Timestamp: $($backupData.timestamp)" -ForegroundColor White
     Write-Host "  Components: $($backupData.components -join ', ')" -ForegroundColor Gray
     Write-Host "  Trigger: $Trigger" -ForegroundColor Gray
@@ -259,9 +259,9 @@ function Invoke-Backup {
 # Restore from backup
 function Invoke-Restore {
     Write-Host ""
-    Write-Host "╔═══════════════════════════════════════════════════╗" -ForegroundColor Green
-    Write-Host "║  AUTO-RESTORE ORCHESTRATOR" -ForegroundColor Green
-    Write-Host "╚═══════════════════════════════════════════════════╝" -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
+    Write-Host "  AUTO-RESTORE ORCHESTRATOR" -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
     Write-Host ""
     
     if (-not (Test-Path $backupMetaFile)) {
@@ -325,9 +325,9 @@ function Invoke-Restore {
     }
     
     Write-Host ""
-    Write-Host "════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host "RESTORE SUMMARY" -ForegroundColor Cyan
-    Write-Host "════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host "  Restored: $restored component(s)" -ForegroundColor White
     Write-Host "  From backup: $($backupMeta.timestamp)" -ForegroundColor Gray
     Write-Host ""
@@ -339,9 +339,9 @@ function Invoke-Restore {
 # Check backup status
 function Invoke-Check {
     Write-Host ""
-    Write-Host "╔═══════════════════════════════════════════════════╗" -ForegroundColor Green
-    Write-Host "║  BACKUP STATUS CHECK" -ForegroundColor Green
-    Write-Host "╚═══════════════════════════════════════════════════╝" -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
+    Write-Host "  BACKUP STATUS CHECK" -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
     Write-Host ""
     
     if (-not (Test-Path $backupMetaFile)) {
@@ -374,3 +374,4 @@ switch ($Action) {
 }
 
 return $result
+
