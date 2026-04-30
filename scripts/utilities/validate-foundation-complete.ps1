@@ -116,12 +116,10 @@ $skillsDir = Join-Path $workspaceRoot "skills"
 $actualSkillCount = (Get-ChildItem $skillsDir -Directory).Count
 Test-Item "Skills directory has 94 folders" ($actualSkillCount -eq 94)
 
-# Check SKILL_INDEX has entries (count skill entries by looking for "### skill-name" pattern)
+# Check SKILL_INDEX has entries (count skill entries by looking for "### " pattern)
 $skillIndex = Get-Content (Join-Path $workspaceRoot "skills\SKILL_INDEX.md") -Raw
-$skillEntries = ($skillIndex | Select-String "^### " -AllMatches).Matches
-$indexCount = if ($skillEntries) { 
-    if ($skillEntries -is [array]) { $skillEntries.Count } else { 1 }
-} else { 0 }
+# Use regex to count "### " headers
+$indexCount = ([regex]::Matches($skillIndex, '###\s+\w')).Count
 # Actual skill count is 100 (from directory count), index shows 100 entries
 Test-Item "SKILL_INDEX has entries (>= 90)" ($indexCount -ge 90)
 
