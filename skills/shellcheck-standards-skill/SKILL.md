@@ -1,4 +1,4 @@
----
+﻿---
 name: shellcheck-standards
 description: >
   Shell script quality and portability standards.
@@ -24,11 +24,11 @@ shellcheck -x bin/* lib/*.sh
 
 ### Variables
 ```powershell
-# GOOD — use $ for variables
+# GOOD  use $ for variables
 $name = "value"
 $env:PATH += ";$customPath"
 
-# GOOD — local scope
+# GOOD  local scope
 function Get-Value {
     $result = Get-Something
     return $result
@@ -37,7 +37,7 @@ function Get-Value {
 
 ### Parameters
 ```powershell
-# GOOD — typed parameters
+# GOOD  typed parameters
 param(
     [string]$Name,
     [int]$Count = 10,
@@ -47,7 +47,7 @@ param(
 
 ### Error Handling
 ```powershell
-# GOOD — use ErrorAction
+# GOOD  use ErrorAction
 Invoke-Something -ErrorAction Stop
 $ErrorActionPreference = 'Stop'
 ```
@@ -56,26 +56,26 @@ $ErrorActionPreference = 'Stop'
 
 ### Quoting
 ```bash
-# GOOD — always quote
+# GOOD  always quote
 echo "$var"
 "$cmd" "$arg"
 
-# BAD — unquoted
+# BAD  unquoted
 echo $var
 ```
 
 ### Conditionals
 ```bash
-# GOOD — use [[ ]]
+# GOOD  use [[ ]]
 [[ "$var" == "value" ]]
 [[ -f "$file" ]]
 
-# BAD — use [ ] only for POSIX
+# BAD  use [ ] only for POSIX
 ```
 
 ### Functions
 ```bash
-# GOOD — local variables
+# GOOD  local variables
 my_function() {
     local result
     result="something"
@@ -86,10 +86,10 @@ my_function() {
 
 ### Paths
 ```powershell
-# GOOD — Join-Path
+# GOOD  Join-Path
 $path = Join-Path $dir $file
 
-# GOOD — forward slashes work on all platforms
+# GOOD  forward slashes work on all platforms
 $uri = "https://example.com/path"
 ```
 

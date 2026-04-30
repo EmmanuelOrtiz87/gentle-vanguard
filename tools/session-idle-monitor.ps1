@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Session Idle Monitor - Detects idle sessions and triggers auto-close with notification
     
@@ -262,9 +262,9 @@ Context preserved in Engram for recovery.
 # Main monitoring loop
 function Start-IdleMonitor {
     Write-Host ""
-    Write-Host "╔════════════════════════════════════════════════════════════════╗" -ForegroundColor Yellow
-    Write-Host "║            SESSION IDLE MONITOR - AUTOMATIC MANAGEMENT         ║" -ForegroundColor Yellow
-    Write-Host "╚════════════════════════════════════════════════════════════════╝" -ForegroundColor Yellow
+    Write-Host "" -ForegroundColor Yellow
+    Write-Host "            SESSION IDLE MONITOR - AUTOMATIC MANAGEMENT         " -ForegroundColor Yellow
+    Write-Host "" -ForegroundColor Yellow
     Write-Host ""
     Write-Host "  Idle Timeout: $IdleTimeoutMinutes minutes" -ForegroundColor Gray
     Write-Host "  Cache Cleanup: every $CacheCleanupIntervalMinutes minutes" -ForegroundColor Gray

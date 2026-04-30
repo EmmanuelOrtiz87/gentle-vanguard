@@ -1,4 +1,4 @@
----
+﻿---
 name: guardian-fallback
 description: >
   Optional fallback skill for when Foundation cannot close tasks autonomously.
@@ -19,17 +19,17 @@ GGA serves as **optional guardian** when Foundation's orchestrator:
 
 ```
 ORCHESTRATOR (Primary)
-    │
-    ├── Can proceed? → Execute normally
-    │
-    ├── Blocked? → Try self-healing
-    │
-    └── Still blocked? → GGA FALLBACK (optional)
-            │
-            ├── Code review
-            ├── Decision assist
-            ├── Task completion
-            └── Commit hygiene
+    
+     Can proceed?  Execute normally
+    
+     Blocked?  Try self-healing
+    
+     Still blocked?  GGA FALLBACK (optional)
+            
+             Code review
+             Decision assist
+             Task completion
+             Commit hygiene
 ```
 
 ## Trigger Conditions
@@ -149,30 +149,30 @@ GGA is **enhancement**, not **requirement**.
 ## Error Handling
 
 ```
-┌─────────────────────────────────────────────┐
-│              FALLBACK DECISION TREE            │
-├─────────────────────────────────────────────┤
-│                                              │
-│  Orchestrator blocked?                       │
-│         │                                   │
-│         ▼                                   │
-│  Self-healing possible?                      │
-│         │                                   │
-│    ┌────┴────┐                            │
-│    │YES       │NO                          │
-│    ▼          ▼                             │
-│  Apply      GGA available?                  │
-│  healing        │                           │
-│    │        ┌──┴──┐                        │
-│    │        │YES   │NO                      │
-│    │        ▼       ▼                       │
-│    │    Invoke   Flag for                    │
-│    │    GGA     manual                      │
-│    │        intervention                     │
-│    ▼                                           │
-│  Report result                                │
-│                                              │
-└─────────────────────────────────────────────┘
+
+              FALLBACK DECISION TREE            
+
+                                              
+  Orchestrator blocked?                       
+                                            
+                                            
+  Self-healing possible?                      
+                                            
+                                
+    YES       NO                          
+                                           
+  Apply      GGA available?                  
+  healing                                   
+                                    
+            YES   NO                      
+                                          
+        Invoke   Flag for                    
+        GGA     manual                      
+            intervention                     
+                                               
+  Report result                                
+                                              
+
 ```
 
 ## Commands Reference

@@ -1,4 +1,4 @@
-# Custom Rules Extension
+﻿# Custom Rules Extension
 
 This directory is the extension layer for project-specific rules.
 
@@ -21,10 +21,10 @@ Purpose:
 
 ## Rule Authoring Guidance
 
-1. **Format is mandatory `.md`** — only Markdown files are loaded; other formats are ignored.
+1. **Format is mandatory `.md`**  only Markdown files are loaded; other formats are ignored.
 2. `README.md` files in each scope directory are reserved for documentation and excluded from rule loading.
 3. Use one file per rule group, named with the rule ID prefix (e.g., `TECH-001-parser-validation.md`).
-4. Keep files concise and explicit — short actionable statements, not long prose.
+4. Keep files concise and explicit  short actionable statements, not long prose.
 5. Follow the mandatory template defined in `docs/guides/CUSTOM-RULES.md`.
 6. Avoid duplicating global security/compliance policies.
 

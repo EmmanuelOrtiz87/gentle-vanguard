@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Session Quick Restart - Restarts only what's needed without full stack
     
@@ -116,9 +116,9 @@ function Restart-Cache {
 # Main execution
 try {
     Write-Host ""
-    Write-Host "╔════════════════════════════════════════════════════════════════╗" -ForegroundColor Green
-    Write-Host "║          SESSION QUICK RESTART - LIGHTWEIGHT RECOVERY         ║" -ForegroundColor Green
-    Write-Host "╚════════════════════════════════════════════════════════════════╝" -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
+    Write-Host "          SESSION QUICK RESTART - LIGHTWEIGHT RECOVERY         " -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
     Write-Host ""
     
     $success = $true
@@ -141,9 +141,9 @@ try {
     
     Write-Host ""
     if ($success) {
-        Write-Host "╔════════════════════════════════════════════════════════════════╗" -ForegroundColor Green
-        Write-Host "║                    READY TO CONTINUE                         ║" -ForegroundColor Green
-        Write-Host "╚════════════════════════════════════════════════════════════════╝" -ForegroundColor Green
+        Write-Host "" -ForegroundColor Green
+        Write-Host "                    READY TO CONTINUE                         " -ForegroundColor Green
+        Write-Host "" -ForegroundColor Green
     } else {
         Write-Host "[WARN] Some components failed to restart" -ForegroundColor Yellow
         Write-Host "Run full restart: .\tools\session-autostart.cmd" -ForegroundColor Cyan

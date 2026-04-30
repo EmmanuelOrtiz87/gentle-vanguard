@@ -1,16 +1,16 @@
-# AI Configuration Guide
+﻿# AI Configuration Guide
 
 Complete guide to configure AI tools for Workspace Foundation - both cloud and local.
 
 ## Overview
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                     AI CONFIGURATION OPTIONS                                  │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+                     AI CONFIGURATION OPTIONS                                  
+
 
 OPTION A: CLOUD (Recommended)              OPTION B: LOCAL
-────────────────────────────              ─────────────────
+              
 
 [OK] Quick setup                            [OK] 100% offline
 [OK] No GPU required                        [OK] No API costs
@@ -220,11 +220,11 @@ MAX_DAILY_SPEND_USD=10
 
 ```
 ADVANTAGES                          DISADVANTAGES
-───────────                         ─────────────
-[OK] 100% offline                      ❌ Need decent GPU (8GB+ VRAM)
-[OK] No API costs                      ❌ Slower than cloud models
-[OK] Complete privacy                  ❌ Weaker reasoning
-[OK] No internet required              ❌ Setup time
+                         
+[OK] 100% offline                       Need decent GPU (8GB+ VRAM)
+[OK] No API costs                       Slower than cloud models
+[OK] Complete privacy                   Weaker reasoning
+[OK] No internet required               Setup time
 ```
 
 ### Ollama Installation
@@ -322,28 +322,28 @@ USE_LOCAL_WHEN_CLOUD_UNAVAILABLE=true
 Foundation automatically detects availability:
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    CONNECTION CHECK                          │
-└─────────────────────────────────────────────────────────────┘
 
-1. Try Cloud (Anthropic)    ──► Available? ──► Use Claude
-                                    │
-                                    ▼
+                    CONNECTION CHECK                          
+
+
+1. Try Cloud (Anthropic)     Available?  Use Claude
+                                    
+                                    
                                Not Available
-                                    │
-                                    ▼
-2. Try Fallback (OpenAI)      ──► Available? ──► Use GPT-4
-                                    │
-                                    ▼
+                                    
+                                    
+2. Try Fallback (OpenAI)       Available?  Use GPT-4
+                                    
+                                    
                                Not Available
-                                    │
-                                    ▼
-3. Try Local (Ollama)        ──► Available? ──► Use Local
-                                    │
-                                    ▼
+                                    
+                                    
+3. Try Local (Ollama)         Available?  Use Local
+                                    
+                                    
                                Not Available
-                                    │
-                                    ▼
+                                    
+                                    
                            Show Error / Queue Request
 ```
 
@@ -461,13 +461,13 @@ USE_LOCAL_FALLBACK=true
 ## Quick Reference: .env Template
 
 ```powershell
-# ═══════════════════════════════════════════════════════════════
+# 
 # WORKSPACE FOUNDATION - AI CONFIGURATION
-# ═══════════════════════════════════════════════════════════════
+# 
 
-# ─────────────────────────────────────────────────────────────────
+# 
 # CLOUD PROVIDERS (Get keys from their websites)
-# ─────────────────────────────────────────────────────────────────
+# 
 
 # Anthropic (Claude) - Recommended
 # Get: https://console.anthropic.com/
@@ -481,9 +481,9 @@ OPENAI_API_KEY=sk-xxxxx
 # Get: https://aistudio.google.com/
 GOOGLE_API_KEY=AIzaSyxxxxx
 
-# ─────────────────────────────────────────────────────────────────
+# 
 # LOCAL PROVIDER (Ollama)
-# ─────────────────────────────────────────────────────────────────
+# 
 
 # Base URL (default: localhost)
 OLLAMA_BASE_URL=http://localhost:11434
@@ -491,9 +491,9 @@ OLLAMA_BASE_URL=http://localhost:11434
 # Default model
 OLLAMA_MODEL=codellama:13b
 
-# ─────────────────────────────────────────────────────────────────
+# 
 # PROVIDER PRIORITY (First available is used)
-# ─────────────────────────────────────────────────────────────────
+# 
 
 # Options: anthropic, openai, google, ollama
 DEFAULT_AI_PROVIDER=anthropic
@@ -501,9 +501,9 @@ DEFAULT_AI_PROVIDER=anthropic
 # Fallback order
 AI_PROVIDER_PRIORITY=anthropic,openai,ollama
 
-# ─────────────────────────────────────────────────────────────────
+# 
 # MODEL SELECTION
-# ─────────────────────────────────────────────────────────────────
+# 
 
 # Standard model
 DEFAULT_MODEL=claude-sonnet-4-20250514
@@ -511,21 +511,21 @@ DEFAULT_MODEL=claude-sonnet-4-20250514
 # For complex tasks
 COMPLEX_TASK_MODEL=claude-opus-4-20250514
 
-# ─────────────────────────────────────────────────────────────────
+# 
 # COST MANAGEMENT
-# ─────────────────────────────────────────────────────────────────
+# 
 
 MAX_DAILY_SPEND_USD=10
 SHOW_TOKEN_USAGE=true
 
-# ─────────────────────────────────────────────────────────────────
+# 
 # PERFORMANCE
-# ─────────────────────────────────────────────────────────────────
+# 
 
 CACHE_PROMPTS=true
 STREAM_RESPONSES=true
 
-# ═══════════════════════════════════════════════════════════════
+# 
 ```
 
 ---

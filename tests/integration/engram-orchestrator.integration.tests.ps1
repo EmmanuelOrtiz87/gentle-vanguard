@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 <#
 .SYNOPSIS
     Integration Tests - Engram Memory System + Orchestrator
@@ -18,7 +18,7 @@ Describe "Engram Memory System - Integration Tests" {
     }
     
     Context "End-to-End Workflow" {
-        It "Should complete full workflow: Create → Consolidate → Compress" {
+        It "Should complete full workflow: Create  Consolidate  Compress" {
             $workflow = @("create", "consolidate", "compress", "validate")
             $workflow.Count | Should -Be 4
             $workflow[0] | Should -Be "create"

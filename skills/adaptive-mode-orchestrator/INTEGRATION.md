@@ -1,10 +1,10 @@
-# Adaptive Mode - Integration Guide
+﻿# Adaptive Mode - Integration Guide
 
-## Integración con Project Orchestrator
+## Integracin con Project Orchestrator
 
-### 1. Detección Automática
+### 1. Deteccin Automtica
 
-El orquestador principal detecta automáticamente cuándo usar Adaptive Mode:
+El orquestador principal detecta automticamente cundo usar Adaptive Mode:
 
 ```powershell
 # En project-orchestrator-skill
@@ -14,7 +14,7 @@ if ($taskComplexity -eq "high" -and $agentCount -gt 2) {
 }
 ```
 
-### 2. Configuración de Activación
+### 2. Configuracin de Activacin
 
 Agregar a `config/orchestrator.json`:
 
@@ -30,7 +30,7 @@ Agregar a `config/orchestrator.json`:
 }
 ```
 
-### 3. Puntos de Integración
+### 3. Puntos de Integracin
 
 #### A. Session Start
 ```powershell
@@ -55,36 +55,36 @@ if ($status.FailedPhases -gt 0) {
 }
 ```
 
-### 4. Flujo de Ejecución Integrado
+### 4. Flujo de Ejecucin Integrado
 
 ```
 SESSION START
-    ↓
+    
 DETECT TASK COMPLEXITY
-    ├─ Simple → Usar auto-delegation normal
-    └─ Complex → Activar Adaptive Mode
-    ↓
+     Simple  Usar auto-delegation normal
+     Complex  Activar Adaptive Mode
+    
 ADAPTIVE MODE ENGINE
-    ├─ Build DAG
-    ├─ Execute Phases
-    ├─ Monitor Feedback Loops
-    ├─ Auto-Rollback if needed
-    └─ Generate Report
-    ↓
+     Build DAG
+     Execute Phases
+     Monitor Feedback Loops
+     Auto-Rollback if needed
+     Generate Report
+    
 RETURN TO ORCHESTRATOR
-    ├─ Update session state
-    ├─ Log metrics
-    └─ Continue workflow
+     Update session state
+     Log metrics
+     Continue workflow
 ```
 
-### 5. Comunicación entre Componentes
+### 5. Comunicacin entre Componentes
 
-#### Orchestrator → Adaptive Mode
+#### Orchestrator  Adaptive Mode
 
 ```json
 {
   "command": "execute_workflow",
-  "task_description": "Implementar feature de autenticación",
+  "task_description": "Implementar feature de autenticacin",
   "config_path": "config/adaptive-dag-config.json",
   "options": {
     "dry_run": false,
@@ -94,7 +94,7 @@ RETURN TO ORCHESTRATOR
 }
 ```
 
-#### Adaptive Mode → Orchestrator
+#### Adaptive Mode  Orchestrator
 
 ```json
 {
@@ -112,7 +112,7 @@ RETURN TO ORCHESTRATOR
 }
 ```
 
-### 6. Configuración de Auto-Delegation
+### 6. Configuracin de Auto-Delegation
 
 Actualizar `config/auto-delegation.json`:
 
@@ -134,12 +134,12 @@ Actualizar `config/auto-delegation.json`:
 1. project-orchestrator-skill (siempre)
 2. auto-delegation-router (siempre)
 3. adaptive-mode-orchestrator (si complejidad alta)
-4. Otros skills específicos del dominio
+4. Otros skills especficos del dominio
 ```
 
 ### 8. Monitoreo y Observabilidad
 
-#### Métricas a Capturar
+#### Mtricas a Capturar
 
 ```powershell
 $metrics = @{
@@ -169,7 +169,7 @@ try {
     $result = & .\skills\adaptive-mode-orchestrator\adaptive-mode-engine.ps1
 } catch {
     # Fallback a auto-delegation normal
-    Write-Host "Adaptive Mode falló, usando auto-delegation"
+    Write-Host "Adaptive Mode fall, usando auto-delegation"
     & .\skills\auto-delegation-router\auto-delegation-router.ps1
 }
 ```
@@ -183,21 +183,21 @@ Actualizar `docs/sessions/YYYY-MM-DD-session-start.md`:
 
 - **Enabled**: true
 - **Phases Executed**: 7
-- **Feedback Loops**: 1 (QA → DEV)
+- **Feedback Loops**: 1 (QA  DEV)
 - **Rollbacks**: 0
 - **Status**: RUNNING
 
 ### Phase Progress
-- ✓ Planning (BA)
-- ✓ Design (SAD)
-- ✓ Implementation (DEV)
-- ⏳ Quality Assurance (QA)
-- ⏳ Governance (GOV)
-- ⏳ Documentation (DOC)
-- ⏳ Deployment (OPS)
+-  Planning (BA)
+-  Design (SAD)
+-  Implementation (DEV)
+-  Quality Assurance (QA)
+-  Governance (GOV)
+-  Documentation (DOC)
+-  Deployment (OPS)
 ```
 
-## Comandos de Integración
+## Comandos de Integracin
 
 ```powershell
 # Habilitar Adaptive Mode
@@ -209,11 +209,11 @@ Actualizar `docs/sessions/YYYY-MM-DD-session-start.md`:
 # Ver estado
 .\scripts\utilities\wf.ps1 adaptive-mode status
 
-# Ver métricas
+# Ver mtricas
 .\scripts\utilities\wf.ps1 adaptive-mode metrics
 
 # Ejecutar manualmente
-.\scripts\utilities\wf.ps1 adaptive-mode run --task "descripción"
+.\scripts\utilities\wf.ps1 adaptive-mode run --task "descripcin"
 
 # Ver logs
 .\scripts\utilities\wf.ps1 adaptive-mode logs
@@ -225,7 +225,7 @@ Actualizar `docs/sessions/YYYY-MM-DD-session-start.md`:
 .\scripts\utilities\wf.ps1 adaptive-mode rollback --checkpoint "nombre"
 ```
 
-## Configuración Recomendada
+## Configuracin Recomendada
 
 ### Para Desarrollo
 
@@ -242,7 +242,7 @@ Actualizar `docs/sessions/YYYY-MM-DD-session-start.md`:
 }
 ```
 
-### Para Producción
+### Para Produccin
 
 ```json
 {
@@ -258,27 +258,27 @@ Actualizar `docs/sessions/YYYY-MM-DD-session-start.md`:
 }
 ```
 
-## Troubleshooting de Integración
+## Troubleshooting de Integracin
 
 ### Problema: Adaptive Mode no se activa
-**Solución**: Verificar `enabled: true` en config
+**Solucin**: Verificar `enabled: true` en config
 
 ### Problema: Feedback loops no funcionan
-**Solución**: Verificar `feedback_loops` en DAG config
+**Solucin**: Verificar `feedback_loops` en DAG config
 
 ### Problema: Rollback no se ejecuta
-**Solución**: Verificar `rollback_policy.enabled` en config
+**Solucin**: Verificar `rollback_policy.enabled` en config
 
-### Problema: Métricas no se capturan
-**Solución**: Verificar `logging.enabled` en config
+### Problema: Mtricas no se capturan
+**Solucin**: Verificar `logging.enabled` en config
 
-## Testing de Integración
+## Testing de Integracin
 
 ```powershell
 # Test 1: Verificar carga del skill
 Test-Path "skills/adaptive-mode-orchestrator/adaptive-mode-engine.ps1"
 
-# Test 2: Verificar configuración
+# Test 2: Verificar configuracin
 $config = Get-Content "config/adaptive-dag-config.json" | ConvertFrom-Json
 $config.enabled
 
@@ -289,19 +289,19 @@ $config.enabled
 Get-Content "logs/adaptive-mode.log" -Tail 20
 ```
 
-## Próximos Pasos
+## Prximos Pasos
 
-1. ✅ Crear configuración DAG
-2. ✅ Implementar motor de ejecución
-3. ✅ Crear documentación
-4. ⏳ Integrar con orchestrator.json
-5. ⏳ Crear comandos de CLI
-6. ⏳ Implementar dashboard de monitoreo
-7. ⏳ Realizar testing completo
-8. ⏳ Documentar casos de uso reales
+1.  Crear configuracin DAG
+2.  Implementar motor de ejecucin
+3.  Crear documentacin
+4.  Integrar con orchestrator.json
+5.  Crear comandos de CLI
+6.  Implementar dashboard de monitoreo
+7.  Realizar testing completo
+8.  Documentar casos de uso reales
 
 ---
 
-**Versión**: 1.0
+**Versin**: 1.0
 **Fecha**: 2026-04-23
 **Estado**: READY FOR INTEGRATION

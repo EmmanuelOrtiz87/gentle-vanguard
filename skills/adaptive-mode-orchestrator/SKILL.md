@@ -1,9 +1,9 @@
----
+﻿---
 name: adaptive-mode-orchestrator
 description: >
-  Adaptive Mode Mejorado - Orquestación inteligente con DAG dinámico, feedback loops automáticos
-  y rollback inteligente. Coordina múltiples agentes con dependencias reales, permite ciclos
-  de retroalimentación (QA → DEV → QA) y ejecuta rollback automático ante fallos críticos.
+  Adaptive Mode Mejorado - Orquestacin inteligente con DAG dinmico, feedback loops automticos
+  y rollback inteligente. Coordina mltiples agentes con dependencias reales, permite ciclos
+  de retroalimentacin (QA  DEV  QA) y ejecuta rollback automtico ante fallos crticos.
 license: Apache-2.0
 metadata:
   author: gentleman-programming
@@ -14,70 +14,70 @@ metadata:
 
 # ADAPTIVE MODE ORCHESTRATOR SKILL
 
-## Descripción General
+## Descripcin General
 
-El **Adaptive Mode Orchestrator** es un sistema de orquestación inteligente que:
+El **Adaptive Mode Orchestrator** es un sistema de orquestacin inteligente que:
 
-1. **Analiza dependencias reales** entre agentes (BA → SAD → DEV → QA → OPS)
-2. **Crea fases dinámicas** basadas en un DAG (Directed Acyclic Graph)
-3. **Permite feedback loops** automáticos (QA → DEV → QA, GOV → DEV)
-4. **Implementa rollback automático** cuando QA o GOV fallan
-5. **Ejecuta en modo automático** sin intervención manual
+1. **Analiza dependencias reales** entre agentes (BA  SAD  DEV  QA  OPS)
+2. **Crea fases dinmicas** basadas en un DAG (Directed Acyclic Graph)
+3. **Permite feedback loops** automticos (QA  DEV  QA, GOV  DEV)
+4. **Implementa rollback automtico** cuando QA o GOV fallan
+5. **Ejecuta en modo automtico** sin intervencin manual
 6. **Monitorea y adapta** el flujo en tiempo real
 
-## Características Principales
+## Caractersticas Principales
 
-### 🎯 DAG-Based Orchestration
-- Análisis automático de dependencias entre agentes
-- Ejecución topológicamente ordenada
-- Paralelización inteligente donde es posible
+###  DAG-Based Orchestration
+- Anlisis automtico de dependencias entre agentes
+- Ejecucin topolgicamente ordenada
+- Paralelizacin inteligente donde es posible
 
-### 🔄 Feedback Loops
-- **QA → DEV**: Fallos de prueba disparan rework de desarrollo
-- **QA → SAD**: Problemas de arquitectura disparan revisión de diseño
-- **GOV → DEV**: Problemas de seguridad disparan fixes de código
-- Máximo de iteraciones configurable por loop
+###  Feedback Loops
+- **QA  DEV**: Fallos de prueba disparan rework de desarrollo
+- **QA  SAD**: Problemas de arquitectura disparan revisin de diseo
+- **GOV  DEV**: Problemas de seguridad disparan fixes de cdigo
+- Mximo de iteraciones configurable por loop
 
-### 🔙 Auto-Rollback
-- Rollback automático ante fallos críticos
-- Checkpoints automáticos después de cada fase
-- Preservación de artefactos durante rollback
-- Múltiples intentos de rollback configurables
+###  Auto-Rollback
+- Rollback automtico ante fallos crticos
+- Checkpoints automticos despus de cada fase
+- Preservacin de artefactos durante rollback
+- Mltiples intentos de rollback configurables
 
-### ⚡ Ejecución Automática
-- Detección automática de fases completadas
-- Transición automática entre fases
-- Decisiones automáticas basadas en métricas
-- Sin intervención manual requerida
+###  Ejecucin Automtica
+- Deteccin automtica de fases completadas
+- Transicin automtica entre fases
+- Decisiones automticas basadas en mtricas
+- Sin intervencin manual requerida
 
-### 📊 Monitoreo en Tiempo Real
-- Métricas de ejecución por agente
+###  Monitoreo en Tiempo Real
+- Mtricas de ejecucin por agente
 - Tracking de feedback loops
 - Logs detallados de rollbacks
 - Dashboard de estado
 
-## Flujo de Ejecución
+## Flujo de Ejecucin
 
 ```
 PLANNING (BA)
-    ↓
+    
 DESIGN (SAD)
-    ↓
+    
 IMPLEMENTATION (DEV)
-    ├─→ GOVERNANCE (GOV) [paralelo]
-    └─→ DOCUMENTATION (DOC) [paralelo]
-    ↓
+     GOVERNANCE (GOV) [paralelo]
+     DOCUMENTATION (DOC) [paralelo]
+    
 QUALITY_ASSURANCE (QA)
-    ├─ Si falla → FEEDBACK LOOP → IMPLEMENTATION
-    ├─ Si falla seguridad → FEEDBACK LOOP → GOVERNANCE
-    └─ Si pasa → DEPLOYMENT
-    ↓
+     Si falla  FEEDBACK LOOP  IMPLEMENTATION
+     Si falla seguridad  FEEDBACK LOOP  GOVERNANCE
+     Si pasa  DEPLOYMENT
+    
 DEPLOYMENT (OPS)
-    ├─ Si falla → AUTO-ROLLBACK
-    └─ Si pasa → COMPLETE
+     Si falla  AUTO-ROLLBACK
+     Si pasa  COMPLETE
 ```
 
-## Configuración
+## Configuracin
 
 ### Archivo: `config/adaptive-dag-config.json`
 
@@ -123,13 +123,13 @@ DEPLOYMENT (OPS)
 ### Iniciar Adaptive Mode
 
 ```powershell
-# Ejecutar orquestación adaptativa
+# Ejecutar orquestacin adaptativa
 .\skills\adaptive-mode-orchestrator\adaptive-mode-engine.ps1
 
-# Con configuración personalizada
+# Con configuracin personalizada
 .\skills\adaptive-mode-orchestrator\adaptive-mode-engine.ps1 `
   -ConfigPath "config/adaptive-dag-config.json" `
-  -TaskDescription "Implementar feature de autenticación"
+  -TaskDescription "Implementar feature de autenticacin"
 
 # Modo dry-run (sin ejecutar)
 .\skills\adaptive-mode-orchestrator\adaptive-mode-engine.ps1 -DryRun
@@ -138,111 +138,111 @@ DEPLOYMENT (OPS)
 ### Desde el Orquestador Principal
 
 ```powershell
-# El orquestador detectará automáticamente cuando usar Adaptive Mode
-# y lo ejecutará sin intervención manual
+# El orquestador detectar automticamente cuando usar Adaptive Mode
+# y lo ejecutar sin intervencin manual
 ```
 
 ## Feedback Loops en Detalle
 
-### QA → DEV Loop
+### QA  DEV Loop
 
 ```
 1. QA ejecuta pruebas
 2. Si pruebas fallan:
    - Registra errores
    - Dispara feedback loop
-   - DEV recibe notificación
-   - DEV corrige código
-   - Vuelve a QA (máx 3 iteraciones)
+   - DEV recibe notificacin
+   - DEV corrige cdigo
+   - Vuelve a QA (mx 3 iteraciones)
 3. Si pruebas pasan:
-   - Continúa a siguiente fase
+   - Contina a siguiente fase
 ```
 
-### GOV → DEV Loop
+### GOV  DEV Loop
 
 ```
 1. GOV revisa seguridad
 2. Si encuentra vulnerabilidades:
    - Registra problemas
    - Dispara feedback loop
-   - DEV corrige código
-   - Vuelve a GOV (máx 2 iteraciones)
-3. Si pasa revisión:
-   - Continúa a deployment
+   - DEV corrige cdigo
+   - Vuelve a GOV (mx 2 iteraciones)
+3. Si pasa revisin:
+   - Contina a deployment
 ```
 
-## Rollback Automático
+## Rollback Automtico
 
 ### Triggers de Rollback
 
-- `critical_test_failure`: Fallo crítico en pruebas
+- `critical_test_failure`: Fallo crtico en pruebas
 - `security_vulnerability`: Vulnerabilidad de seguridad
-- `performance_degradation`: Degradación de rendimiento
+- `performance_degradation`: Degradacin de rendimiento
 - `deployment_failure`: Fallo en deployment
 
 ### Proceso de Rollback
 
 ```
-1. Detectar fallo crítico
-2. Obtener último checkpoint válido
+1. Detectar fallo crtico
+2. Obtener ltimo checkpoint vlido
 3. Restaurar estado anterior
 4. Preservar artefactos
 5. Registrar rollback en log
-6. Permitir reintentos (máx 2)
+6. Permitir reintentos (mx 2)
 ```
 
-## Métricas y Monitoreo
+## Mtricas y Monitoreo
 
-### Métricas Capturadas
+### Mtricas Capturadas
 
-- Tiempo de ejecución por fase
-- Tasa de éxito de pruebas
-- Número de feedback loops activados
-- Número de rollbacks ejecutados
-- Cobertura de código
+- Tiempo de ejecucin por fase
+- Tasa de xito de pruebas
+- Nmero de feedback loops activados
+- Nmero de rollbacks ejecutados
+- Cobertura de cdigo
 - Vulnerabilidades encontradas
 
 ### Logs
 
-- `logs/adaptive-mode.log` - Log detallado de ejecución
-- `logs/adaptive-mode-metrics.json` - Métricas en JSON
+- `logs/adaptive-mode.log` - Log detallado de ejecucin
+- `logs/adaptive-mode-metrics.json` - Mtricas en JSON
 
-## Integración con Orquestador
+## Integracin con Orquestador
 
-El Adaptive Mode se integra automáticamente con el orquestador principal:
+El Adaptive Mode se integra automticamente con el orquestador principal:
 
 1. **Auto-Detection**: El orquestador detecta cuando usar Adaptive Mode
-2. **Auto-Execution**: Se ejecuta sin intervención manual
-3. **Auto-Reporting**: Genera reportes automáticos
-4. **Auto-Escalation**: Escala a intervención manual si es necesario
+2. **Auto-Execution**: Se ejecuta sin intervencin manual
+3. **Auto-Reporting**: Genera reportes automticos
+4. **Auto-Escalation**: Escala a intervencin manual si es necesario
 
-## Decisiones Automáticas
+## Decisiones Automticas
 
 ### After QA
 
 ```
 if qa_pass_rate >= 95 AND code_coverage >= 80:
-  → Proceder a deployment
+   Proceder a deployment
 else:
-  → Activar feedback loop QA → DEV
+   Activar feedback loop QA  DEV
 ```
 
 ### After GOV
 
 ```
 if security_issues == 0 AND compliance_check == true:
-  → Proceder a deployment
+   Proceder a deployment
 else:
-  → Activar feedback loop GOV → DEV
+   Activar feedback loop GOV  DEV
 ```
 
 ### After Deployment
 
 ```
 if deployment_success == true AND health_check == true:
-  → Marcar como completado
+   Marcar como completado
 else:
-  → Activar auto-rollback
+   Activar auto-rollback
 ```
 
 ## Umbrales Configurables
@@ -261,48 +261,48 @@ else:
 
 ## Ventajas
 
-✅ **Automatización Completa**: Sin intervención manual
-✅ **Inteligencia Adaptativa**: Se adapta a resultados
-✅ **Feedback Loops**: Ciclos automáticos de mejora
-✅ **Rollback Seguro**: Recuperación automática ante fallos
-✅ **Monitoreo Real-time**: Visibilidad completa
-✅ **Escalabilidad**: Maneja múltiples agentes
-✅ **Confiabilidad**: Checkpoints y recuperación
+ **Automatizacin Completa**: Sin intervencin manual
+ **Inteligencia Adaptativa**: Se adapta a resultados
+ **Feedback Loops**: Ciclos automticos de mejora
+ **Rollback Seguro**: Recuperacin automtica ante fallos
+ **Monitoreo Real-time**: Visibilidad completa
+ **Escalabilidad**: Maneja mltiples agentes
+ **Confiabilidad**: Checkpoints y recuperacin
 
 ## Casos de Uso
 
 ### 1. Feature Development
 ```
-BA → SAD → DEV → QA → OPS
-Con feedback loops automáticos si QA falla
+BA  SAD  DEV  QA  OPS
+Con feedback loops automticos si QA falla
 ```
 
 ### 2. Bug Fixes
 ```
-DEV → QA → OPS
-Con rollback automático si deployment falla
+DEV  QA  OPS
+Con rollback automtico si deployment falla
 ```
 
 ### 3. Security Patches
 ```
-DEV → GOV → QA → OPS
-Con rollback automático si seguridad falla
+DEV  GOV  QA  OPS
+Con rollback automtico si seguridad falla
 ```
 
 ## Troubleshooting
 
 ### Problema: Feedback loop infinito
-**Solución**: Aumentar `max_iterations` en configuración
+**Solucin**: Aumentar `max_iterations` en configuracin
 
 ### Problema: Rollback no se ejecuta
-**Solución**: Verificar `rollback_policy.enabled` en config
+**Solucin**: Verificar `rollback_policy.enabled` en config
 
 ### Problema: Fases se saltan
-**Solución**: Verificar dependencias en DAG
+**Solucin**: Verificar dependencias en DAG
 
 ## Referencias
 
-- Configuración: `config/adaptive-dag-config.json`
+- Configuracin: `config/adaptive-dag-config.json`
 - Motor: `skills/adaptive-mode-orchestrator/adaptive-mode-engine.ps1`
 - Orquestador Principal: `skills/project-orchestrator-skill/SKILL.md`
 - Auto-Delegation: `skills/auto-delegation-router/SKILL.md`
@@ -310,5 +310,5 @@ Con rollback automático si seguridad falla
 ---
 
 **Estado**: ACTIVE
-**Versión**: 1.0
-**Última actualización**: 2026-04-23
+**Versin**: 1.0
+**ltima actualizacin**: 2026-04-23

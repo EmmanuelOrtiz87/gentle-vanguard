@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
 .SYNOPSIS
     Sync Foundation Audit to Local - Enables standalone usage without repo
@@ -55,10 +55,10 @@ $FilesToSync = @(
 function Write-SyncHeader {
     Write-Host @"
 
-╔════════════════════════════════════════════════════════════════╗
-║           FOUNDATION LOCAL SYNC                               ║
-║  Standalone audit scripts for any directory                   ║
-╚════════════════════════════════════════════════════════════════╝
+
+           FOUNDATION LOCAL SYNC                               
+  Standalone audit scripts for any directory                   
+
 
 "@ -ForegroundColor Cyan
 }
@@ -80,7 +80,7 @@ function Copy-SyncItem {
         if ($ListOnly) {
             Write-Host "  [SYNC] $Description" -ForegroundColor Yellow
             Write-Host "         $SourcePath" -ForegroundColor DarkGray
-            Write-Host "       → $DestPath" -ForegroundColor DarkGray
+            Write-Host "        $DestPath" -ForegroundColor DarkGray
         } else {
             if ((Test-Path $DestPath) -and -not $Force) {
                 Write-Host "  [SKIP] $Description (already exists, use -Force to overwrite)" -ForegroundColor DarkGray
@@ -188,7 +188,7 @@ if (Test-Path $AuditScript) {
 }
 
 Write-Host ""
-Write-Host "═══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
+Write-Host "" -ForegroundColor Cyan
 
 if ($ListOnly) {
     Write-Host "[DRY RUN] No files copied. Run without -ListOnly to sync." -ForegroundColor Yellow

@@ -1,4 +1,4 @@
-param(
+﻿param(
     [ValidateSet('telemetry', 'health-checks', 'dashboard', 'all')]
     [string]$Component = 'all',
     [switch]$Enable
@@ -209,20 +209,20 @@ function Show-MonitoringDashboard {
     Clear-Host
     
     Write-Host ""
-    Write-Host "╔════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-    Write-Host "║         WORKSPACE FOUNDATION MONITORING DASHBOARD         ║" -ForegroundColor Cyan
-    Write-Host "╚════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
+    Write-Host "         WORKSPACE FOUNDATION MONITORING DASHBOARD         " -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     
     Write-Host ""
     Write-Host "System Status" -ForegroundColor Cyan
-    Write-Host "─────────────────────────────────────────────────────────────"
+    Write-Host ""
     
     . .\scripts\utilities\health-checks.ps1
     Get-HealthReport
     
     Write-Host ""
     Write-Host "Performance Metrics" -ForegroundColor Cyan
-    Write-Host "─────────────────────────────────────────────────────────────"
+    Write-Host ""
     
     $cpu = (Get-WmiObject win32_processor).LoadPercentage
     $mem = (Get-WmiObject win32_operatingsystem).TotalVisibleMemorySize - (Get-WmiObject win32_operatingsystem).FreePhysicalMemory
@@ -233,7 +233,7 @@ function Show-MonitoringDashboard {
     
     Write-Host ""
     Write-Host "Recent Activity" -ForegroundColor Cyan
-    Write-Host "─────────────────────────────────────────────────────────────"
+    Write-Host ""
     
     $recentLogs = Get-ChildItem .\logs -Filter "*.log" -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 5
     if ($recentLogs) {

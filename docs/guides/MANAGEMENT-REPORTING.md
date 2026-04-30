@@ -1,4 +1,4 @@
-# Management Reporting System
+﻿# Management Reporting System
 
 Unified reporting system for Gentleman Foundation.
 
@@ -27,13 +27,13 @@ Single CSV file per month containing ALL workspace activity metrics for executiv
 10. Outcome - COMPLETE/ESCALATED/PENDING
 11. IssuesFound - Number of issues found
 12. Duration(min) - Session duration in minutes
-13. Cost(USD) - Estimated cost (tokens × rate)
+13. Cost(USD) - Estimated cost (tokens  rate)
 14. Notes - Additional context
 
 ## Monthly Rotation
 
 When month changes:
-1. Script notifies: "⚠️ Month changed! Export reports/MANAGEMENT-REPORT-YYYY-MM.csv"
+1. Script notifies: " Month changed! Export reports/MANAGEMENT-REPORT-YYYY-MM.csv"
 2. User exports old file (Excel-ready, filterable)
 3. Run with `-ForceNewMonth` to create new empty file
 4. New file starts fresh for new month
@@ -74,8 +74,8 @@ Configured in `opencode.json`:
 
 - **Single Source**: One CSV = all metrics
 - **Filterable**: By date, user, project, outcome in Excel
-- **Traceability**: Session ID → Engram → CSV → Management
-- **Cost Tracking**: Token usage → USD conversion
+- **Traceability**: Session ID  Engram  CSV  Management
+- **Cost Tracking**: Token usage  USD conversion
 - **Historical**: One file per month, never overwritten
 - **Excel-Ready**: No special tools needed
 

@@ -30,7 +30,7 @@ function Write-Error {
     Write-Host "[ERROR] $Message" -ForegroundColor Red
 }
 
-# Asegurar que existe el directorio de sesión
+# Asegurar que existe el directorio de sesin
 if (-not (Test-Path $SessionDir)) {
     New-Item -ItemType Directory -Path $SessionDir -Force | Out-Null
     Write-Info "Created session directory: $SessionDir"
@@ -41,12 +41,12 @@ function Initialize-Session {
     
     Write-Status "Initializing session in $Mode mode"
     
-    # Generar ID de sesión
+    # Generar ID de sesin
     $date = Get-Date -Format "yyyy-MM-dd"
     $sessionNumber = (Get-ChildItem -Path $SessionDir -Filter "session-$date-*" -ErrorAction SilentlyContinue | Measure-Object).Count + 1
     $sessionId = "session-$date-$($sessionNumber.ToString('D2'))"
     
-    # Crear archivo de sesión
+    # Crear archivo de sesin
     $sessionFile = Join-Path $SessionDir "$sessionId.json"
     
     $sessionData = @{
@@ -177,8 +177,8 @@ Session closure with full validation
 -  All checks completed
 
 ## Relevant Files
-- tools/pre-close-validator.ps1 — New validation before closure
-- tools/session-manager.ps1 — Enhanced with validation
+- tools/pre-close-validator.ps1  New validation before closure
+- tools/session-manager.ps1  Enhanced with validation
 "@
         & $engramBin session-summary --id $sessionData.sessionId --content $summaryContent 2>$null | Out-Null
         if ($LASTEXITCODE -eq 0) {
@@ -202,7 +202,7 @@ Session closure with full validation
     }
 }
 
-# Ejecutar según el modo
+# Ejecutar segn el modo
 switch ($Mode) {
     'AutoStart' {
         Write-Status "AutoStart mode - initializing workspace session"

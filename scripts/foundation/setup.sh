@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+﻿#!/usr/bin/env bash
 # scripts/foundation/setup.sh - Universal Gentleman Foundation Stack Setup
 # Works on: Linux, macOS, Windows (WSL, Git Bash, MSYS2)
 # No dependencies except bash, git, and go
@@ -60,9 +60,9 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR" && pwd)"
 OS=$(detect_os)
 SHELL_NAME=$(detect_shell)
 
-log_info "═════════════════════════════════════════════════════════"
+log_info ""
 log_info "    Gentleman Foundation - Universal Stack Setup"
-log_info "═════════════════════════════════════════════════════════"
+log_info ""
 log_info "OS: $OS"
 log_info "Shell: $SHELL_NAME"
 log_info "Root: $PROJECT_ROOT"
@@ -293,9 +293,9 @@ main() {
     orchestrator_notify "setup" "completed"
     
     log_info ""
-    log_success "═════════════════════════════════════════════════════════"
+    log_success ""
     log_success "    Stack Setup Complete!"
-    log_success "═════════════════════════════════════════════════════════"
+    log_success ""
     log_info ""
     log_info "Next steps:"
     log_info "  1. Run: ./wf status"

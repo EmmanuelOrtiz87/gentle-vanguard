@@ -1,4 +1,4 @@
-# Demo 07 - Mixed Cookbook Real Request
+﻿# Demo 07 - Mixed Cookbook Real Request
 
 Audience: Executive Council + Small Developer Team
 
@@ -39,11 +39,11 @@ Or directly:
 ```
 
 This will:
-- ✅ Terminate any active sessions
-- ✅ Clean all task-tracker data (tasks.json)
-- ✅ Remove session/context artifacts
-- ✅ Re-run preflight to restore clean state
-- ✅ Verify all tools are ready
+-  Terminate any active sessions
+-  Clean all task-tracker data (tasks.json)
+-  Remove session/context artifacts
+-  Re-run preflight to restore clean state
+-  Verify all tools are ready
 
 Then you can run the demo again without failures or warnings.
 

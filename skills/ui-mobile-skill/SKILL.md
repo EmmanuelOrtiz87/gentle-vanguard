@@ -1,4 +1,4 @@
----
+﻿---
 name: ui-mobile
 description: Mobile UI patterns - React Native, iOS/Android, touch targets
 when-to-use: When building mobile UI components
@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
 });
 
 // NEVER DO THIS:
-style={{ height: 30 }}  // ✗ TOO SMALL
-style={{ padding: 4 }}  // ✗ RESULTS IN TINY TARGET
+style={{ height: 30 }}  //  TOO SMALL
+style={{ padding: 4 }}  //  RESULTS IN TINY TARGET
 ```
 
 ### 2. Color Contrast (CRITICAL)
@@ -49,18 +49,18 @@ style={{ padding: 4 }}  // ✗ RESULTS IN TINY TARGET
 // SAFE COMBINATIONS:
 const colors = {
   // Light mode
-  textPrimary: '#000000',     // on white = 21:1 ✓
-  textSecondary: '#374151',   // gray-700 on white = 9.2:1 ✓
+  textPrimary: '#000000',     // on white = 21:1 
+  textSecondary: '#374151',   // gray-700 on white = 9.2:1 
 
   // Dark mode
-  textPrimaryDark: '#FFFFFF', // on gray-900 = 16:1 ✓
-  textSecondaryDark: '#E5E7EB', // gray-200 on gray-900 = 11:1 ✓
+  textPrimaryDark: '#FFFFFF', // on gray-900 = 16:1 
+  textSecondaryDark: '#E5E7EB', // gray-200 on gray-900 = 11:1 
 };
 
 // FORBIDDEN - FAILS CONTRAST:
-// ✗ '#9CA3AF' (gray-400) on white = 2.6:1
-// ✗ '#6B7280' (gray-500) on '#111827' = 4.0:1
-// ✗ Any text below 4.5:1 ratio
+//  '#9CA3AF' (gray-400) on white = 2.6:1
+//  '#6B7280' (gray-500) on '#111827' = 4.0:1
+//  Any text below 4.5:1 ratio
 ```
 
 ### 3. Visibility Rules
@@ -108,8 +108,8 @@ const styles = StyleSheet.create({
 });
 
 // NEVER CREATE invisible buttons:
-// ✗ backgroundColor: 'transparent' without border
-// ✗ Text color matching background
+//  backgroundColor: 'transparent' without border
+//  Text color matching background
 ```
 
 ### 4. Accessibility Labels (REQUIRED)
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
 ### Design Language
 ```
 iOS (Human Interface Guidelines)
-─────────────────────────────────
+
 - Flat design with subtle depth
 - SF Symbols for icons
 - Large titles (34pt)
@@ -212,7 +212,7 @@ iOS (Human Interface Guidelines)
 - Blue as default tint
 
 Android (Material Design 3)
-─────────────────────────────────
+
 - Material You dynamic color
 - Outlined/filled icons
 - Medium titles (22pt)
@@ -891,39 +891,39 @@ const scaledFontSize = (size: number) => size * fontScale;
 
 ### Never Do
 ```
-✗ Touch targets smaller than 44pt
-✗ Text smaller than 12pt
-✗ Hover states (no hover on mobile)
-✗ Fixed heights that break with large text
-✗ Ignoring safe areas
-✗ Heavy shadows on Android (use elevation)
-✗ White text on light backgrounds without checking contrast
-✗ Non-native animations (JS-driven transforms)
-✗ Ignoring platform conventions (iOS vs Android)
-✗ Inline styles everywhere (use StyleSheet.create)
+ Touch targets smaller than 44pt
+ Text smaller than 12pt
+ Hover states (no hover on mobile)
+ Fixed heights that break with large text
+ Ignoring safe areas
+ Heavy shadows on Android (use elevation)
+ White text on light backgrounds without checking contrast
+ Non-native animations (JS-driven transforms)
+ Ignoring platform conventions (iOS vs Android)
+ Inline styles everywhere (use StyleSheet.create)
 ```
 
 ### Common Mistakes
 ```tsx
-// ✗ Hardcoded dimensions that break accessibility
+//  Hardcoded dimensions that break accessibility
 style={{ height: 40 }}  // Text might be larger
 
-// ✓ Minimum height with padding
+//  Minimum height with padding
 style={{ minHeight: 44, paddingVertical: 12 }}
 
-// ✗ Shadow on Android
+//  Shadow on Android
 shadowColor: '#000'  // Won't work
 
-// ✓ Platform-specific
+//  Platform-specific
 ...Platform.select({
   ios: { shadowColor: '#000', ... },
   android: { elevation: 4 },
 })
 
-// ✗ Fixed status bar height
+//  Fixed status bar height
 paddingTop: 44
 
-// ✓ Use safe area
+//  Use safe area
 paddingTop: insets.top
 ```
 
@@ -941,14 +941,14 @@ Shadow: iOS shadowOpacity 0.08-0.15, Android elevation 2-8
 
 ### Premium Feel Checklist
 ```
-□ All touch targets 44pt+
-□ Consistent spacing (4pt grid)
-□ Platform-appropriate styling
-□ Safe area handling
-□ Native animations (60fps)
-□ Proper loading states
-□ Dark mode support
-□ Accessibility labels
-□ Haptic feedback on actions
-□ Pull-to-refresh where appropriate
+ All touch targets 44pt+
+ Consistent spacing (4pt grid)
+ Platform-appropriate styling
+ Safe area handling
+ Native animations (60fps)
+ Proper loading states
+ Dark mode support
+ Accessibility labels
+ Haptic feedback on actions
+ Pull-to-refresh where appropriate
 ```

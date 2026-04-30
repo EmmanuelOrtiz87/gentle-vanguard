@@ -61,9 +61,9 @@ function Show-TelemetrySummary {
     param([string]$OutputPath = ".telemetry")
     
     Write-Host "`n" -ForegroundColor Cyan
-    Write-Host "╔════════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-    Write-Host "║          DISTRIBUTED TRACING TELEMETRY DASHBOARD              ║" -ForegroundColor Cyan
-    Write-Host "╚════════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
+    Write-Host "          DISTRIBUTED TRACING TELEMETRY DASHBOARD              " -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     
     # Count traces
     $tracesDir = "$OutputPath/traces"
@@ -114,7 +114,7 @@ function Show-TelemetrySummary {
     Write-Host "  Spans:      $spanCount" -ForegroundColor Gray
     Write-Host "  Reports:    $reportCount" -ForegroundColor Gray
     
-    Write-Host "`n📁 Telemetry Directory Structure`n" -ForegroundColor Green
+    Write-Host "`n Telemetry Directory Structure`n" -ForegroundColor Green
     Write-Host "  Location: $OutputPath" -ForegroundColor Gray
     
     if (Test-Path $OutputPath) {

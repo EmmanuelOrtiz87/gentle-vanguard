@@ -1,8 +1,8 @@
-# Token Consumption, Utility & Context Reporting Process
+﻿# Token Consumption, Utility & Context Reporting Process
 
 **Date**: 2026-04-28  
 **Version**: 1.0.0  
-**Status**: ✅ **COMPLETE & OPERATIONAL**
+**Status**:  **COMPLETE & OPERATIONAL**
 
 ---
 ## Overview
@@ -16,15 +16,15 @@ Foundation includes a **comprehensive, on-demand process** to generate detailed 
 ---
 ## Process Components
 
-### 1. **Token Consumption Report** ✅
+### 1. **Token Consumption Report** 
 **Script**: `scripts/utilities/token-consumption-report.ps1`
 
 **Capabilities**:
-- ✅ Multiple output formats: `markdown`, `json`, `csv`
-- ✅ Scope filtering: `session`, `daily`, `weekly`, `all`
-- ✅ Token utility analysis (useful vs wasted)
-- ✅ Context tier information
-- ✅ Integrates with existing telemetry systems
+-  Multiple output formats: `markdown`, `json`, `csv`
+-  Scope filtering: `session`, `daily`, `weekly`, `all`
+-  Token utility analysis (useful vs wasted)
+-  Context tier information
+-  Integrates with existing telemetry systems
 
 **Usage**:
 ```powershell
@@ -39,7 +39,7 @@ Foundation includes a **comprehensive, on-demand process** to generate detailed 
 ```
 
 ---
-## Data Sources ✅
+## Data Sources 
 
 The process aggregates data from:
 
@@ -51,7 +51,7 @@ The process aggregates data from:
 | **Runtime Telemetry** | `.runtime/telemetry/cloud-agent-telemetry.csv` | Input/output tokens |
 
 ---
-## Report Structure ✅
+## Report Structure 
 
 ### Markdown Report Example:
 ```markdown
@@ -120,7 +120,7 @@ The process aggregates data from:
 ```
 
 ---
-## JSON Report Example ✅
+## JSON Report Example 
 
 ```json
 {
@@ -151,19 +151,19 @@ The process aggregates data from:
 ```
 
 ---
-## Existing Complementary Scripts ✅
+## Existing Complementary Scripts 
 
 | Script | Purpose | Status |
 |--------|---------|--------|
-| `token-telemetry.ps1` | Collects token data from multiple repos | ✅ Active |
-| `token-budget-guard.ps1` | Enforces token limits, tracks usage | ✅ Active |
-| `token-efficiency-estimator.ps1` | Estimates efficiency gains | ✅ Active |
-| `token-telemetry-report.ps1` | Legacy report (replaced by new process) | ⏳ Legacy |
-| `consolidate-telemetry.ps1` | Consolidates runtime/session data | ✅ Active |
-| `token-consumption-report.ps1` | **NEW** comprehensive report | ✅ **Active** |
+| `token-telemetry.ps1` | Collects token data from multiple repos |  Active |
+| `token-budget-guard.ps1` | Enforces token limits, tracks usage |  Active |
+| `token-efficiency-estimator.ps1` | Estimates efficiency gains |  Active |
+| `token-telemetry-report.ps1` | Legacy report (replaced by new process) |  Legacy |
+| `consolidate-telemetry.ps1` | Consolidates runtime/session data |  Active |
+| `token-consumption-report.ps1` | **NEW** comprehensive report |  **Active** |
 
 ---
-## Integration Points ✅
+## Integration Points 
 
 ### 1. **MCP Bridge Integration**
 The token consumption report is exposed via MCP:
@@ -185,20 +185,20 @@ Can be integrated into release pipeline:
 ```
 
 ---
-## Validation Checklist ✅
+## Validation Checklist 
 
-- ✅ **On-demand execution**: Run manually when needed
-- ✅ **Multiple formats**: markdown (human), json (automation), csv (export)
-- ✅ **Scope filtering**: session (2h), daily, weekly, all
-- ✅ **Context tiers**: hot/warm/cold/archive structure
-- ✅ **Token utility**: useful vs wasted analysis
-- ✅ **Data integration**: Uses existing telemetry sources
-- ✅ **MCP exposed**: Available via foundation_token_report
-- ✅ **Documentation**: This file complete
-- ✅ **Git tracked**: Committed and pushed to develop + main
+-  **On-demand execution**: Run manually when needed
+-  **Multiple formats**: markdown (human), json (automation), csv (export)
+-  **Scope filtering**: session (2h), daily, weekly, all
+-  **Context tiers**: hot/warm/cold/archive structure
+-  **Token utility**: useful vs wasted analysis
+-  **Data integration**: Uses existing telemetry sources
+-  **MCP exposed**: Available via foundation_token_report
+-  **Documentation**: This file complete
+-  **Git tracked**: Committed and pushed to develop + main
 
 ---
-## How to Use (Step-by-Step) ✅
+## How to Use (Step-by-Step) 
 
 ### Step 1: Basic Report
 ```powershell
@@ -241,6 +241,6 @@ foundation_token_report({
 | Add email/Slack notifications | Low | 2h |
 
 ---
-**Status**: ✅ **PROCESS COMPLETE & OPERATIONAL**  
+**Status**:  **PROCESS COMPLETE & OPERATIONAL**  
 **Last Updated**: 2026-04-28  
 **Memory Saved**: `telemetry/token-consumption-process`

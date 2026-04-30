@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Orchestrator Governance Integration - Connects Orchestrator with Event Governance Layer
     
@@ -24,7 +24,7 @@ $governancePath = Join-Path $eventBusPath 'governance'
 $governanceLayerScript = Join-Path $scriptDir 'event-governance-layer.ps1'
 
 function Initialize-OrchestratorIntegration {
-    Write-Host "[ORCHESTRATOR-GOVERNANCE] Inicializando integración..." -ForegroundColor Cyan
+    Write-Host "[ORCHESTRATOR-GOVERNANCE] Inicializando integracin..." -ForegroundColor Cyan
     
     # Initialize governance layer
     & $governanceLayerScript -Action initialize -Quiet
@@ -43,7 +43,7 @@ function Initialize-OrchestratorIntegration {
         } | ConvertTo-Json -Depth 3 | Out-File -FilePath $supervisionFile -Encoding UTF8
     }
     
-    Write-Host "[ORCHESTRATOR-GOVERNANCE] Integración inicializada" -ForegroundColor Green
+    Write-Host "[ORCHESTRATOR-GOVERNANCE] Integracin inicializada" -ForegroundColor Green
 }
 
 function Get-GovernanceHealth {
@@ -81,7 +81,7 @@ function Get-GovernanceHealth {
     
     # Check audit logs
     Write-Host ""
-    Write-Host "Auditoría:" -ForegroundColor Cyan
+    Write-Host "Auditora:" -ForegroundColor Cyan
     $auditPath = Join-Path $governancePath 'audit'
     $auditFiles = Get-ChildItem $auditPath -Filter "audit-*.json" -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending
     if ($auditFiles) {
@@ -90,14 +90,14 @@ function Get-GovernanceHealth {
             $entries = Get-Content -Path $file.FullName -Raw | ConvertFrom-Json
             $totalAuditEntries += $entries.Count
         }
-        Write-Host "  Entradas de auditoría: $totalAuditEntries" -ForegroundColor Green
+        Write-Host "  Entradas de auditora: $totalAuditEntries" -ForegroundColor Green
     } else {
-        Write-Host "  Sin entradas de auditoría" -ForegroundColor Gray
+        Write-Host "  Sin entradas de auditora" -ForegroundColor Gray
     }
     
     Write-Host ""
     Write-Host "Estado General: OPERATIVO" -ForegroundColor Green
-    Write-Host "Modo: Pasivo (supervisión sin interferencia)" -ForegroundColor Green
+    Write-Host "Modo: Pasivo (supervisin sin interferencia)" -ForegroundColor Green
     Write-Host ""
 }
 
@@ -134,7 +134,7 @@ function Monitor-GovernanceEvents {
             }
             
             if ($recentEntries.Count -gt 0) {
-                Write-Host "  Actividad de auditoría (últimos 5 min): $($recentEntries.Count) eventos" -ForegroundColor Green
+                Write-Host "  Actividad de auditora (ltimos 5 min): $($recentEntries.Count) eventos" -ForegroundColor Green
             }
         }
     }
@@ -149,11 +149,11 @@ function Get-GovernanceReport {
     
     # Summary
     Write-Host "RESUMEN:" -ForegroundColor Yellow
-    Write-Host "  Modo de Operación: Pasivo (supervisión sin interferencia)" -ForegroundColor Green
-    Write-Host "  Políticas Activas: SÍ" -ForegroundColor Green
-    Write-Host "  Validación de Esquemas: SÍ" -ForegroundColor Green
-    Write-Host "  Rate Limiting: SÍ" -ForegroundColor Green
-    Write-Host "  Auditoría Completa: SÍ" -ForegroundColor Green
+    Write-Host "  Modo de Operacin: Pasivo (supervisin sin interferencia)" -ForegroundColor Green
+    Write-Host "  Polticas Activas: S" -ForegroundColor Green
+    Write-Host "  Validacin de Esquemas: S" -ForegroundColor Green
+    Write-Host "  Rate Limiting: S" -ForegroundColor Green
+    Write-Host "  Auditora Completa: S" -ForegroundColor Green
     
     # Violations
     $policyStateFile = Join-Path $governancePath 'policy-state.json'
@@ -162,7 +162,7 @@ function Get-GovernanceReport {
         $violations = $policyState.violations
         
         Write-Host ""
-        Write-Host "VIOLACIONES (últimas 24h):" -ForegroundColor Yellow
+        Write-Host "VIOLACIONES (ltimas 24h):" -ForegroundColor Yellow
         if ($violations.Count -eq 0) {
             Write-Host "  Sin violaciones detectadas" -ForegroundColor Green
         } else {
@@ -177,8 +177,8 @@ function Get-GovernanceReport {
     Write-Host "RECOMENDACIONES:" -ForegroundColor Cyan
     Write-Host "  1. Revisar violaciones de seguridad regularmente" -ForegroundColor Gray
     Write-Host "  2. Monitorear eventos de rate limit excedido" -ForegroundColor Gray
-    Write-Host "  3. Mantener auditoría actualizada para compliance" -ForegroundColor Gray
-    Write-Host "  4. Escalar violaciones críticas a administradores" -ForegroundColor Gray
+    Write-Host "  3. Mantener auditora actualizada para compliance" -ForegroundColor Gray
+    Write-Host "  4. Escalar violaciones crticas a administradores" -ForegroundColor Gray
     
     Write-Host ""
 }
@@ -203,7 +203,7 @@ switch ($Action) {
     }
     
     default {
-        Write-Host "[ERROR] Acción desconocida: $Action" -ForegroundColor Red
+        Write-Host "[ERROR] Accin desconocida: $Action" -ForegroundColor Red
         exit 1
     }
 }

@@ -1,4 +1,4 @@
----
+﻿---
 name: visual-content-skill
 description: >
   Creates visual content for Foundation: ASCII art, diagrams (Mermaid), presentation
@@ -33,84 +33,84 @@ For social media, presentations, and documentation.
 
 ### Foundation Logo (Classic)
 ```
- ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
- █                             █
- █   █████╗  ██████╗  ██████╗ ███████╗
- █  ██╔══██╗██╔═══██╗██╔═══██╗██╔══██╗
- █  ██████║██║   ██║██║   ██║██║  ██║
- █  ██╔═══██╗██║   ██║██║   ██║██║  ██║
- █  ██║  ██║╚██████╔╝╚██████╔╝███████║
- █  ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚══════╝
- █       FOUNDATION        █
-  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+ 
+                              
+         
+   
+           
+           
+     
+         
+        FOUNDATION        
+  
 ```
 
 ### Foundation Logo (Modern)
 ```
-╔══════════════════════════════════════════╗
-║                                          ║
-║     ●█╗   ●█╗ █████╗  ●██████╗  ██████╗ ║
-║     ██╗  ██║██╔══██╗ ██╔════╝ ██╔══██╗║
-║     ███████║███████║ ██║  ███╗███████║║
-║     ██╔══██║██╔══██║ ██║   ██║██╔══██║║
-║     ██║  ██║██║  ██║ ╚██████╔╝███████║║
-║     ╚═╝  ╚═╝╚═╝  ╚═╝  ╚═════╝ ╚══════╝║
-║          F O U N D A T I O N           ║
-║                                          ║
-╚══════════════════════════════════════════╝
+
+                                          
+              
+         
+        
+         
+          
+            
+          F O U N D A T I O N           
+                                          
+
 ```
 
 ### Foundation Logo (Minimal)
 ```
-┌─────────────────────────────┐
-│  █████╗  ██████╗  ██████╗  │
-│  ██╔══██╗██╔═══██╗██╔═══██╗ │
-│  ██████║██║   ██║██║   ██║ │
-│  ██╔═══██╗██║   ██║██║   ██║ │
-│  ██║  ██║╚██████╔╝╚██████╔╝ │
-│  ╚═╝  ╚═╝ ╚═════╝  ╚═════╝  │
-│       FOUNDATION            │
-└─────────────────────────────┘
+
+        
+   
+         
+         
+     
+         
+       FOUNDATION            
+
 ```
 
 ### Pillars (7D)
 ```
-═══════════════════════════════════
-  🛡️ SECURITY    │  🔍 QUALITY    │
-  📐 ARCH        │  🧪 TESTING   │
-  📡 API         │  📖 DOCS      │
-  🔀 GITFLOW    │                  
-═══════════════════════════════════
+
+   SECURITY       QUALITY    
+   ARCH           TESTING   
+   API            DOCS      
+   GITFLOW                      
+
 ```
 
 ### Features Icons
 ```
-  🤖 AI Orchestration     🧠 Memory
-  ⚡ Auto-Delegation      ⚖️ Judgment
-  📊 Reporting          📋 SDD
-  🛡️ 7D Validation     🔄 On-Demand
+   AI Orchestration      Memory
+   Auto-Delegation       Judgment
+   Reporting           SDD
+   7D Validation      On-Demand
 ```
 
 ### Mini Banner
 ```
-🏛️ Foundation v2.0 - AI Development Stack
+ Foundation v2.0 - AI Development Stack
 =====================================
 ```
- ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
- █                             █
- █   █████╗  ██████╗  ██████╗ ███████╗
- █  ██╔══██╗██╔═══██╗██╔═══██╗██╔══██╗
- █  ██████║██║   ██║██║   ██║██║  ██║
- █  ██╔═══██╗██║   ██║██║   ██║██║  ██║
- █  ██║  ██║╚██████╔╝╚██████╔╝███████║
- █  ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚══════╝
- █       FOUNDATION        █
-  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+ 
+                              
+         
+   
+           
+           
+     
+         
+        FOUNDATION        
+  
 ```
 
 ### Mini Banner
 ```
-🏛️ Foundation v2.0 - AI Development Stack
+ Foundation v2.0 - AI Development Stack
 =====================================
 ```
 

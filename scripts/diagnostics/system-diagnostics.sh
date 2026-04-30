@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+﻿#!/usr/bin/env bash
 # system-diagnostics.sh - Universal system diagnostics
 # Works on: Linux, macOS, Windows (WSL, Git Bash)
 
@@ -16,15 +16,15 @@ log_check() {
 }
 
 log_ok() {
-    echo -e " ${GREEN}✓${NC}"
+    echo -e " ${GREEN}${NC}"
 }
 
 log_missing() {
-    echo -e " ${RED}✗${NC}"
+    echo -e " ${RED}${NC}"
 }
 
 log_warn() {
-    echo -e " ${YELLOW}⚠${NC}"
+    echo -e " ${YELLOW}${NC}"
 }
 
 # Get config value from JSON (simple grep-based parser)
@@ -49,9 +49,9 @@ main() {
     local project_root="$(cd "$script_dir/../.." && pwd)"
     
     echo ""
-    echo "═════════════════════════════════════════════════════════"
+    echo ""
     echo "         System Diagnostics & Health Check"
-    echo "═════════════════════════════════════════════════════════"
+    echo ""
     echo ""
     
     local status=0
@@ -149,7 +149,7 @@ main() {
     fi
     
     echo ""
-    echo "═════════════════════════════════════════════════════════"
+    echo ""
     
     if [ $status -eq 0 ]; then
         echo -e "${GREEN}All critical systems operational${NC}"

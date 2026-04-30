@@ -1,12 +1,12 @@
-# Ejemplo de integración Dify.io en Foundation
+﻿# Ejemplo de integracin Dify.io en Foundation
 
-Este instructivo muestra cómo conectar Foundation a Dify.io usando la arquitectura estándar.
+Este instructivo muestra cmo conectar Foundation a Dify.io usando la arquitectura estndar.
 
 ---
 
-## 1. Configuración del proveedor en cloud-agents.local.json
+## 1. Configuracin del proveedor en cloud-agents.local.json
 
-Copia el bloque de ejemplo desde config/cloud-agents.local.example y edítalo así:
+Copia el bloque de ejemplo desde config/cloud-agents.local.example y edtalo as:
 
 ```
 {
@@ -26,7 +26,7 @@ Copia el bloque de ejemplo desde config/cloud-agents.local.example y edítalo as
 
 ## 2. Carga tu API key
 
-Crea un archivo `.env.local` (o usa el ejemplo `.env.local.example`) en la raíz del repo:
+Crea un archivo `.env.local` (o usa el ejemplo `.env.local.example`) en la raz del repo:
 
 ```
 DIFY_API_KEY=pon_aqui_tu_api_key
@@ -40,7 +40,7 @@ $env:DIFY_API_KEY = "pon_aqui_tu_api_key"
 
 ---
 
-## 3. Prueba la conexión
+## 3. Prueba la conexin
 
 ```powershell
 cd workspace-foundation
@@ -53,9 +53,9 @@ cd workspace-foundation
 
 - Ejecutar un comando:
   ```powershell
-  .\scripts\utilities\invoke-cloud-agent.ps1 -Provider dify -Command "¿Cuál es la capital de Francia?"
+  .\scripts\utilities\invoke-cloud-agent.ps1 -Provider dify -Command "Cul es la capital de Francia?"
   ```
-- Modo estricto (automatización):
+- Modo estricto (automatizacin):
   ```powershell
   .\scripts\utilities\invoke-cloud-agent.ps1 -Provider dify -StrictJson -Command "return JSON"
   ```
@@ -68,9 +68,9 @@ cd workspace-foundation
 
 ## Notas
 - Nunca pongas la API key en archivos versionados.
-- Puedes tener múltiples proveedores configurados y alternar con el flag `-Provider`.
-- Si el endpoint requiere parámetros adicionales, consulta la documentación de Dify.io.
+- Puedes tener mltiples proveedores configurados y alternar con el flag `-Provider`.
+- Si el endpoint requiere parmetros adicionales, consulta la documentacin de Dify.io.
 
 ---
 
-**Última actualización:** 2026-04-20
+**ltima actualizacin:** 2026-04-20

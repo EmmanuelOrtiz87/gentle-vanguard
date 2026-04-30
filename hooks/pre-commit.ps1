@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 # pre-commit.ps1
 # Pre-commit hook for Foundation - Development Stack
 # Place this in .githooks/ or configure git to use it
@@ -56,8 +56,8 @@ Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host ""
 
 
-# 7 Dimensiones: Seguridad, Calidad, Arquitectura, Testing, API, Documentación, Gitflow
-Write-Host "[INFO] Ejecutando chequeos automáticos de las 7 dimensiones..." -ForegroundColor Cyan
+# 7 Dimensiones: Seguridad, Calidad, Arquitectura, Testing, API, Documentacin, Gitflow
+Write-Host "[INFO] Ejecutando chequeos automticos de las 7 dimensiones..." -ForegroundColor Cyan
 
 # Seguridad
 & scripts/hooks/check-security.ps1 || exit 1
@@ -69,10 +69,10 @@ Write-Host "[INFO] Ejecutando chequeos automáticos de las 7 dimensiones..." -Fo
 & scripts/hooks/check-testing.ps1 || exit 1
 # API
 & scripts/hooks/check-api.ps1 || exit 1
-# Documentación
-& scripts/hooks/check-documentation.ps1 || Write-Host "[WARN] Documentación incompleta" -ForegroundColor Yellow
+# Documentacin
+& scripts/hooks/check-documentation.ps1 || Write-Host "[WARN] Documentacin incompleta" -ForegroundColor Yellow
 # Gitflow
-& scripts/hooks/check-gitflow.ps1 || Write-Host "[WARN] Convención gitflow no cumplida" -ForegroundColor Yellow
+& scripts/hooks/check-gitflow.ps1 || Write-Host "[WARN] Convencin gitflow no cumplida" -ForegroundColor Yellow
 
 Write-Host "[OK] Chequeos de las 7 dimensiones completados." -ForegroundColor Green
 Write-Host ""

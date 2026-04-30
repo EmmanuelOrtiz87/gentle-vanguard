@@ -1,4 +1,4 @@
----
+﻿---
 name: electron
 description: >
   Electron patterns for building cross-platform desktop applications.
@@ -24,27 +24,27 @@ Load this skill when:
 
 ```
 src/
-├── main/                    # Main process (Node.js)
-│   ├── index.ts            # Entry point
-│   ├── ipc/                # IPC handlers
-│   │   ├── handlers.ts
-│   │   └── channels.ts     # Type-safe channel names
-│   ├── services/           # Native services
-│   │   ├── store.ts        # electron-store
-│   │   └── updater.ts      # auto-updater
-│   └── windows/            # Window management
-│       └── main-window.ts
-├── renderer/               # Renderer process (browser)
-│   ├── src/
-│   │   ├── App.tsx
-│   │   ├── components/
-│   │   └── hooks/
-│   │       └── useIPC.ts   # IPC hooks
-│   └── index.html
-├── preload/                # Preload scripts
-│   └── index.ts            # Expose safe APIs
-└── shared/                 # Shared types
-    └── types.ts
+ main/                    # Main process (Node.js)
+    index.ts            # Entry point
+    ipc/                # IPC handlers
+       handlers.ts
+       channels.ts     # Type-safe channel names
+    services/           # Native services
+       store.ts        # electron-store
+       updater.ts      # auto-updater
+    windows/            # Window management
+        main-window.ts
+ renderer/               # Renderer process (browser)
+    src/
+       App.tsx
+       components/
+       hooks/
+           useIPC.ts   # IPC hooks
+    index.html
+ preload/                # Preload scripts
+    index.ts            # Expose safe APIs
+ shared/                 # Shared types
+     types.ts
 ```
 
 ### Pattern 2: Secure IPC Communication
@@ -458,7 +458,7 @@ export function createMenu(mainWindow: BrowserWindow) {
 ### Don't: Enable nodeIntegration
 
 ```typescript
-// ❌ DANGEROUS - Never do this
+//  DANGEROUS - Never do this
 const win = new BrowserWindow({
   webPreferences: {
     nodeIntegration: true,    // Security vulnerability!
@@ -466,7 +466,7 @@ const win = new BrowserWindow({
   },
 });
 
-// ✅ Safe - Always use contextIsolation with preload
+//  Safe - Always use contextIsolation with preload
 const win = new BrowserWindow({
   webPreferences: {
     preload: path.join(__dirname, 'preload.js'),
@@ -480,10 +480,10 @@ const win = new BrowserWindow({
 ### Don't: Use Remote Module
 
 ```typescript
-// ❌ Bad - remote is deprecated and insecure
+//  Bad - remote is deprecated and insecure
 const { BrowserWindow } = require('@electron/remote');
 
-// ✅ Good - Use IPC for all main process access
+//  Good - Use IPC for all main process access
 // In renderer:
 const result = await window.electron.invoke('dialog:open-file', {});
 ```
@@ -491,12 +491,12 @@ const result = await window.electron.invoke('dialog:open-file', {});
 ### Don't: Expose Entire ipcRenderer
 
 ```typescript
-// ❌ Bad - exposes everything
+//  Bad - exposes everything
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: ipcRenderer, // Never expose the entire module!
 });
 
-// ✅ Good - expose only specific, typed methods
+//  Good - expose only specific, typed methods
 contextBridge.exposeInMainWorld('electron', {
   invoke: (channel: string, data: unknown) => {
     const allowedChannels = ['app:get-version', 'file:read'];

@@ -1,4 +1,4 @@
-# Frontend Templates
+﻿# Frontend Templates
 
 This directory contains frontend framework templates. Copy the appropriate `package.*.json` to `package.json` based on your chosen framework.
 
@@ -41,14 +41,14 @@ npm install
 
 ```
 frontend/
-├── src/
-│   ├── components/   # Reusable UI components
-│   ├── pages/        # Route pages
-│   ├── hooks/        # Custom React/Vue hooks
-│   ├── services/     # API clients
-│   └── utils/        # Utility functions
-├── public/           # Static assets
-├── tests/            # Test files
-├── package.*.json    # Framework-specific package files
-└── tsconfig.*.json   # Framework-specific TypeScript configs
+ src/
+    components/   # Reusable UI components
+    pages/        # Route pages
+    hooks/        # Custom React/Vue hooks
+    services/     # API clients
+    utils/        # Utility functions
+ public/           # Static assets
+ tests/            # Test files
+ package.*.json    # Framework-specific package files
+ tsconfig.*.json   # Framework-specific TypeScript configs
 ```

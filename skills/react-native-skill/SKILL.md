@@ -1,4 +1,4 @@
----
+﻿---
 name: react-native
 description: React Native mobile patterns, platform-specific code
 when-to-use: When working on React Native mobile app code
@@ -16,30 +16,30 @@ effort: medium
 
 ```
 project/
-├── src/
-│   ├── core/                   # Pure business logic (no React)
-│   │   ├── types.ts
-│   │   └── services/
-│   ├── components/             # Reusable UI components
-│   │   ├── Button/
-│   │   │   ├── Button.tsx
-│   │   │   ├── Button.test.tsx
-│   │   │   └── index.ts
-│   │   └── index.ts            # Barrel export
-│   ├── screens/                # Screen components
-│   │   ├── Home/
-│   │   │   ├── HomeScreen.tsx
-│   │   │   ├── useHome.ts      # Screen-specific hook
-│   │   │   └── index.ts
-│   │   └── index.ts
-│   ├── navigation/             # Navigation configuration
-│   ├── hooks/                  # Shared custom hooks
-│   ├── store/                  # State management
-│   └── utils/                  # Utilities
-├── __tests__/
-├── android/
-├── ios/
-└── CLAUDE.md
+ src/
+    core/                   # Pure business logic (no React)
+       types.ts
+       services/
+    components/             # Reusable UI components
+       Button/
+          Button.tsx
+          Button.test.tsx
+          index.ts
+       index.ts            # Barrel export
+    screens/                # Screen components
+       Home/
+          HomeScreen.tsx
+          useHome.ts      # Screen-specific hook
+          index.ts
+       index.ts
+    navigation/             # Navigation configuration
+    hooks/                  # Shared custom hooks
+    store/                  # State management
+    utils/                  # Utilities
+ __tests__/
+ android/
+ ios/
+ CLAUDE.md
 ```
 
 ---
@@ -227,22 +227,22 @@ const styles = StyleSheet.create({
 ### Separate Files for Complex Differences
 ```
 Component/
-├── Component.tsx          # Shared logic
-├── Component.ios.tsx      # iOS-specific
-├── Component.android.tsx  # Android-specific
-└── index.ts
+ Component.tsx          # Shared logic
+ Component.ios.tsx      # iOS-specific
+ Component.android.tsx  # Android-specific
+ index.ts
 ```
 
 ---
 
 ## React Native Anti-Patterns
 
-- ❌ Inline styles - use StyleSheet.create
-- ❌ Logic in render - extract to hooks
-- ❌ Deep component nesting - flatten hierarchy
-- ❌ Anonymous functions in props - use useCallback
-- ❌ Index as key in lists - use stable IDs
-- ❌ Direct state mutation - always use setter
-- ❌ Mixing business logic with UI - keep core/ pure
-- ❌ Ignoring TypeScript errors - fix them
-- ❌ Large components - split into smaller pieces
+-  Inline styles - use StyleSheet.create
+-  Logic in render - extract to hooks
+-  Deep component nesting - flatten hierarchy
+-  Anonymous functions in props - use useCallback
+-  Index as key in lists - use stable IDs
+-  Direct state mutation - always use setter
+-  Mixing business logic with UI - keep core/ pure
+-  Ignoring TypeScript errors - fix them
+-  Large components - split into smaller pieces

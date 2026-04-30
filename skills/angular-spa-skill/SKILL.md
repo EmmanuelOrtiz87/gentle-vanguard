@@ -1,4 +1,4 @@
----
+﻿---
 name: angular-spa-skill
 description: >
   Angular 19+ SPA patterns: signals, zoneless, standalone components, defer loading.
@@ -17,16 +17,16 @@ description: >
 
 ```
 src/app/
-├── core/
-│   ├── models/           # Interfaces
-│   └── services/         # API services (injectable)
-├── features/
-│   └── feature-name/
-│       ├── feature.ts     # Component
-│       └── feature.spec.ts # Tests
-├── app.config.ts         # App providers
-├── app.routes.ts         # Routes
-└── app.ts               # Root component
+ core/
+    models/           # Interfaces
+    services/         # API services (injectable)
+ features/
+    feature-name/
+        feature.ts     # Component
+        feature.spec.ts # Tests
+ app.config.ts         # App providers
+ app.routes.ts         # Routes
+ app.ts               # Root component
 ```
 
 ## Standalone Component

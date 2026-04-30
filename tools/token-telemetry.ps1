@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Token Telemetry - Real-time token usage tracking
     
@@ -138,9 +138,9 @@ function Generate-Report {
     $remaining = $usage.budget - $usage.totalUsed
     
     Write-Host ""
-    Write-Host "╔════════════════════════════════════════════════════════════════╗" -ForegroundColor Magenta
-    Write-Host "║              TOKEN TELEMETRY REPORT                          ║" -ForegroundColor Magenta
-    Write-Host "╚════════════════════════════════════════════════════════════════╝" -ForegroundColor Magenta
+    Write-Host "" -ForegroundColor Magenta
+    Write-Host "              TOKEN TELEMETRY REPORT                          " -ForegroundColor Magenta
+    Write-Host "" -ForegroundColor Magenta
     Write-Host ""
     Write-Host "  Total Used: $($usage.totalUsed) tokens" -ForegroundColor White
     Write-Host "  Budget:     $($usage.budget) tokens" -ForegroundColor Gray

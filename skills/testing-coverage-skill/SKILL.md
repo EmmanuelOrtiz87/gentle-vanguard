@@ -1,4 +1,4 @@
----
+﻿---
 name: testing-coverage
 description: >
   Test coverage requirements for script behavior changes.
@@ -31,10 +31,10 @@ shellspec spec/
 
 ```
 scripts/
-├── tests/
-│   ├── unit/           # Isolated function tests
-│   ├── integration/    # End-to-end tests
-│   └── helpers/        # Shared fixtures
+ tests/
+    unit/           # Isolated function tests
+    integration/    # End-to-end tests
+    helpers/        # Shared fixtures
 ```
 
 ## Critical Rules

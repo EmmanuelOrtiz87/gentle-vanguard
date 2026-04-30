@@ -1,4 +1,4 @@
-# Custom Rules for Orchestrator Extension
+﻿# Custom Rules for Orchestrator Extension
 
 This guide explains how to add project-specific rules that complement the base stack skills.
 
@@ -22,7 +22,7 @@ Use these folders:
 
 Add one or more `.md` files per scope. Other formats are not loaded.
 
-## File Format — Mandatory
+## File Format  Mandatory
 
 All rule files **must** be Markdown (`.md`). This is enforced by the loader and ensures:
 
@@ -53,7 +53,7 @@ Clear, actionable statement of what is required.
 
 ## Why It Matters
 
-Rationale — explain the risk or business reason.
+Rationale  explain the risk or business reason.
 
 ## Validation
 
@@ -117,7 +117,7 @@ Export rule digest:
 ## Operational Notes
 
 1. Custom rules complement existing skills, not replace safety/compliance policy.
-2. Keep rule files concise and actionable — prefer short, explicit statements over long prose.
+2. Keep rule files concise and actionable  prefer short, explicit statements over long prose.
 3. Review rule changes via normal PR workflow.
 4. Prefer advisory language unless a rule is truly blocking.
 5. Files that do not match the `.md` extension are silently ignored by the loader.

@@ -1,4 +1,4 @@
-# Project Types
+﻿# Project Types
 
 Detailed guide for each project type supported by Workspace Foundation.
 
@@ -21,18 +21,18 @@ Backend services: REST APIs, gRPC services, background workers, daemons.
 
 ```
 my-service/
-├── cmd/              # Entry points
-│   └── server/      # Main application
-├── internal/         # Private code
-│   ├── handlers/    # HTTP/gRPC handlers
-│   ├── middleware/   # Middleware
-│   ├── models/       # Data models
-│   └── services/    # Business logic
-├── pkg/             # Public packages
-├── api/             # API definitions (OpenAPI, protobuf)
-├── scripts/         # Deployment scripts
-├── Dockerfile
-└── docker-compose.yml
+ cmd/              # Entry points
+    server/      # Main application
+ internal/         # Private code
+    handlers/    # HTTP/gRPC handlers
+    middleware/   # Middleware
+    models/       # Data models
+    services/    # Business logic
+ pkg/             # Public packages
+ api/             # API definitions (OpenAPI, protobuf)
+ scripts/         # Deployment scripts
+ Dockerfile
+ docker-compose.yml
 ```
 
 ### Commands
@@ -59,12 +59,12 @@ Command-line tools and utilities.
 
 ```
 my-cli/
-├── cmd/             # Command definitions
-│   └── root.go     # Root command
-├── internal/        # Implementation
-├── pkg/            # Reusable packages
-├── scripts/        # Install scripts
-└── main.go
+ cmd/             # Command definitions
+    root.go     # Root command
+ internal/        # Implementation
+ pkg/            # Reusable packages
+ scripts/        # Install scripts
+ main.go
 ```
 
 ### Commands
@@ -88,12 +88,12 @@ Reusable packages for other projects.
 
 ```
 my-library/
-├── src/             # Source code
-├── types/          # TypeScript types
-├── utils/          # Utilities
-├── scripts/        # Build/release scripts
-├── package.json
-└── tsconfig.json
+ src/             # Source code
+ types/          # TypeScript types
+ utils/          # Utilities
+ scripts/        # Build/release scripts
+ package.json
+ tsconfig.json
 ```
 
 ### Commands
@@ -117,16 +117,16 @@ Web applications (SPA or SSR).
 
 ```
 my-app/
-├── src/
-│   ├── components/   # Reusable components
-│   ├── pages/       # Route pages
-│   ├── hooks/       # Custom hooks
-│   ├── services/    # API clients
-│   └── utils/       # Utilities
-├── public/          # Static assets
-├── tests/          # Test files
-├── Dockerfile
-└── docker-compose.yml
+ src/
+    components/   # Reusable components
+    pages/       # Route pages
+    hooks/       # Custom hooks
+    services/    # API clients
+    utils/       # Utilities
+ public/          # Static assets
+ tests/          # Test files
+ Dockerfile
+ docker-compose.yml
 ```
 
 ### Frameworks
@@ -162,14 +162,14 @@ Monorepo with frontend and backend.
 
 ```
 my-fullstack/
-├── apps/
-│   ├── web/        # Frontend app
-│   └── api/        # Backend API
-├── packages/
-│   ├── shared/     # Shared types
-│   └── ui/         # Shared UI components
-├── docker-compose.yml
-└── nx.json         # Nx configuration
+ apps/
+    web/        # Frontend app
+    api/        # Backend API
+ packages/
+    shared/     # Shared types
+    ui/         # Shared UI components
+ docker-compose.yml
+ nx.json         # Nx configuration
 ```
 
 ### Commands
@@ -193,15 +193,15 @@ Distributed system with multiple services.
 
 ```
 my-microservices/
-├── services/
-│   ├── users/       # User service
-│   ├── orders/      # Order service
-│   ├── payments/    # Payment service
-│   └── notifications/ # Notification service
-├── api-gateway/    # API Gateway
-├── shared/         # Shared libraries
-├── infrastructure/ # Docker, K8s, Terraform
-└── docker-compose.yml
+ services/
+    users/       # User service
+    orders/      # Order service
+    payments/    # Payment service
+    notifications/ # Notification service
+ api-gateway/    # API Gateway
+ shared/         # Shared libraries
+ infrastructure/ # Docker, K8s, Terraform
+ docker-compose.yml
 ```
 
 ### Services
@@ -241,7 +241,7 @@ Override files by placing them in your project after creation:
 
 ```
 my-project/
-├── .wf/
-│   └── templates/   # Your custom overrides
-└── (generated files)
+ .wf/
+    templates/   # Your custom overrides
+ (generated files)
 ```

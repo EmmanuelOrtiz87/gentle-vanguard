@@ -1,4 +1,4 @@
----
+﻿---
 name: docs-alignment
 description: >
   Keep documentation in sync with code and workflow changes.
@@ -18,11 +18,11 @@ Keep documentation synchronized with every code and workflow change.
 | `CONTRIBUTING.md` | Dev setup, contribution workflow, testing |
 | `docs/guides/*.md` | User guides and how-tos |
 
-## Change → Doc Rules
+## Change  Doc Rules
 
 | If you change... | Update... |
 |-----------------|-----------|
-| A CLI flag (add/remove/rename) | README.md — flags table |
+| A CLI flag (add/remove/rename) | README.md  flags table |
 | A provider (behavior change) | README.md |
 | Test structure or commands | CONTRIBUTING.md |
 | Install/uninstall behavior | README.md |
@@ -39,19 +39,19 @@ Keep documentation synchronized with every code and workflow change.
 Before submitting a PR with code changes:
 
 ```
-[ ] Does this change affect any CLI flags?      → update README.md
-[ ] Does this change affect provider behavior?  → update README.md
-[ ] Does this add/remove a config option?       → update README.md
-[ ] Are all code examples still accurate?       → verify manually
+[ ] Does this change affect any CLI flags?       update README.md
+[ ] Does this change affect provider behavior?   update README.md
+[ ] Does this add/remove a config option?        update README.md
+[ ] Are all code examples still accurate?        verify manually
 ```
 
 ## Anti-patterns
 
 ```
-# BAD — README shows old flag
+# BAD  README shows old flag
 README: --cache-dir
-Code: --cache-path  ← was renamed
+Code: --cache-path   was renamed
 
-# BAD — docs reference non-existent script
-README: "run setup.sh"  ← setup.sh doesn't exist
+# BAD  docs reference non-existent script
+README: "run setup.sh"   setup.sh doesn't exist
 ```

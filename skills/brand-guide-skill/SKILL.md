@@ -1,4 +1,4 @@
----
+﻿---
 name: brand-guide-skill
 description: >
   Brand consistency: colors, typography, voice, tone, identity.
@@ -122,7 +122,7 @@ Maintain brand consistency across all touchpoints.
 | Marketing | Enthusiastic, benefits-focused |
 
 ### Example Transformations
-| ❌ Don't | ✅ Do |
+|  Don't |  Do |
 |----------|-----|
 | "Your request has been processed" | "Done! Your request is complete" |
 | "An error occurred" | "Something went wrong - here's how to fix it" |

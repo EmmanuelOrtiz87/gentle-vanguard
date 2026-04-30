@@ -1,4 +1,4 @@
-# Workspace Foundation - Quick Reference
+﻿# Workspace Foundation - Quick Reference
 
 ## CLI Commands
 
@@ -44,22 +44,22 @@
 
 ```
 templates/
-├── project-root/
-│   ├── README.md
-│   ├── AGENTS.md
-│   ├── ARCHITECTURE.md
-│   └── docs/
-│       └── project-context.md
-└── project-types/
-    ├── service/
-    │   ├── Dockerfile
-    │   ├── .github/workflows/
-    │   └── k8s/
-    ├── cli/
-    ├── library/
-    ├── frontend/
-    ├── fullstack/
-    └── microservices/
+ project-root/
+    README.md
+    AGENTS.md
+    ARCHITECTURE.md
+    docs/
+        project-context.md
+ project-types/
+     service/
+        Dockerfile
+        .github/workflows/
+        k8s/
+     cli/
+     library/
+     frontend/
+     fullstack/
+     microservices/
 ```
 
 ## File Replacements

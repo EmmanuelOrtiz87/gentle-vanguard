@@ -1,11 +1,11 @@
----
+﻿---
 name: reporting-skill
 description: >
   Comprehensive reporting skill for generating management reports, session metrics,
   cost analysis, performance dashboards, and technical documentation on demand.
-  Trigger: "informe", "report", "reporte", "métricas", "metrics", "dashboard",
+  Trigger: "informe", "report", "reporte", "mtricas", "metrics", "dashboard",
   "gerencia", "costos", "tokens", "consumo", "performance", "analytics",
-  "sesiones", "telemetry", "estadísticas", "resumen"
+  "sesiones", "telemetry", "estadsticas", "resumen"
 license: Apache-2.0
 metadata:
   author: workspace-local
@@ -24,8 +24,8 @@ Reports can be requested on-demand and are structured for executive presentation
 | Category | Keywords |
 |----------|----------|
 | Reports | "informe", "report", "reporte", "resumen" |
-| Metrics | "métricas", "metrics", "estadísticas", "stats" |
-| Analytics | "analytics", "análisis", "dashboard" |
+| Metrics | "mtricas", "metrics", "estadsticas", "stats" |
+| Analytics | "analytics", "anlisis", "dashboard" |
 | Costs | "costos", "costs", "gastos", "consumo" |
 | Performance | "performance", "rendimiento", "eficiencia" |
 | Sessions | "sesiones", "sessions", "tokens" |
@@ -104,24 +104,24 @@ Reports can be requested on-demand and are structured for executive presentation
 
 ### Markdown (default)
 ```
-# 📊 Report Title
+#  Report Title
 
 **Period**:Date range
 **Generated**: ISO timestamp
 
 ---
 
-## 📋 Executive Summary
+##  Executive Summary
 | Metric | Value | Trend |
 |--------|-------|-------|
-| Sessions | N | ↑↓ |
-| Tokens | N | ↑↓ |
-| Cost | $N | ↑↓ |
+| Sessions | N |  |
+| Tokens | N |  |
+| Cost | $N |  |
 
-## 📈 Detailed Analysis
+##  Detailed Analysis
 ...
 
-## 🎯 Recommendations
+##  Recommendations
 ...
 ```
 
@@ -151,22 +151,22 @@ Reports can be requested on-demand and are structured for executive presentation
 ### On-demand via orchestrator
 ```
 User: "generame un informe de las sesiones de ayer"
-→ Auto-detects: REPORT + Sessions
-→ Delegates to: session-metrics-collector.ps1
-→ Output: markdown report
+ Auto-detects: REPORT + Sessions
+ Delegates to: session-metrics-collector.ps1
+ Output: markdown report
 ```
 
 ### On-demand WITHOUT context
 ```
 User: "quiero un informe" (vago)
-→ Clarification menu:
-   "¿Qué tipo de informe necesitas?"
+ Clarification menu:
+   "Qu tipo de informe necesitas?"
    - Sesiones (resumen de actividad)
-   - Costos (análisis de gastos)
-   - Rendimiento (métricas de performance)
+   - Costos (anlisis de gastos)
+   - Rendimiento (mtricas de performance)
    - Ejecutivo (para gerencia)
    - Completo (integral)
-→ Genera según selección
+ Genera segn seleccin
 ```
 
 ## Metrics Schema
@@ -210,7 +210,7 @@ Timestamp,User_ID,Session_ID,Task_Scope,Tokens_Estimated,Judgment_Result,Review_
 1. Always verify data sources exist before reporting
 2. Include "limitations" section when data is missing
 3. Use ISO 8601 timestamps
-4. Add trend indicators (↑↓→)
+4. Add trend indicators ()
 5. Structure for executive readability
 6. Save reports to `reports/` directory
 

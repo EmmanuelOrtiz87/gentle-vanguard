@@ -1,4 +1,4 @@
-# Documentation Standards & Organization
+﻿# Documentation Standards & Organization
 
 **Date**: 2026-04-22  
 **Status**: NORMALIZATION GUIDELINES  
@@ -18,28 +18,28 @@ This document defines standards for documentation to maintain a clean, organized
 
 ```
 docs/
-├── guides/                    # User-facing guides (keep only essential)
-│   ├── GITFLOW-QUICK-REFERENCE.md
-│   ├── SCRIPT-NORMALIZATION-STANDARDS.md
-│   ├── AI-TOOLS-COMPATIBILITY-MATRIX.md
-│   ├── TOKEN-CONTEXT-STANDARDS.md
-│   └── DEPLOYMENT-READY-SUMMARY.md
-├── architecture/              # Technical architecture (NEW)
-│   ├── SYSTEM-DESIGN.md
-│   └── COMPONENT-OVERVIEW.md
-├── api/                       # API documentation (NEW)
-│   └── MESSAGE-FORMATS.md
-├── audit/                     # Audit reports (auto-generated, gitignored)
-│   ├── .gitignore
-│   └── script-normalization-report.md
-└── DOCUMENTATION-STANDARDS.md # This file
+ guides/                    # User-facing guides (keep only essential)
+    GITFLOW-QUICK-REFERENCE.md
+    SCRIPT-NORMALIZATION-STANDARDS.md
+    AI-TOOLS-COMPATIBILITY-MATRIX.md
+    TOKEN-CONTEXT-STANDARDS.md
+    DEPLOYMENT-READY-SUMMARY.md
+ architecture/              # Technical architecture (NEW)
+    SYSTEM-DESIGN.md
+    COMPONENT-OVERVIEW.md
+ api/                       # API documentation (NEW)
+    MESSAGE-FORMATS.md
+ audit/                     # Audit reports (auto-generated, gitignored)
+    .gitignore
+    script-normalization-report.md
+ DOCUMENTATION-STANDARDS.md # This file
 ```
 
 ---
 
 ## What Should Be Documented
 
-### ✅ KEEP - Essential Documentation
+###  KEEP - Essential Documentation
 
 1. **User Guides** (docs/guides/)
    - Quick reference guides
@@ -65,7 +65,7 @@ docs/
    - Default values
    - Examples
 
-### ❌ REMOVE - Unnecessary Documentation
+###  REMOVE - Unnecessary Documentation
 
 1. **Duplicate Information**
    - Don't repeat content across multiple files
@@ -150,31 +150,31 @@ docs/
 
 ```
 docs/guides/
-├── README.md                          # Navigation hub
-├── GETTING-STARTED.md                 # New user entry point
-├── GITFLOW-WORKFLOW.md                # GitFlow guide (consolidated)
-├── SCRIPT-STANDARDS.md                # Script normalization
-├── AI-TOOLS-INTEGRATION.md            # Tool integration
-└── TROUBLESHOOTING.md                 # Common issues
+ README.md                          # Navigation hub
+ GETTING-STARTED.md                 # New user entry point
+ GITFLOW-WORKFLOW.md                # GitFlow guide (consolidated)
+ SCRIPT-STANDARDS.md                # Script normalization
+ AI-TOOLS-INTEGRATION.md            # Tool integration
+ TROUBLESHOOTING.md                 # Common issues
 ```
 
 ### Architecture Documentation (Keep)
 
 ```
 docs/architecture/
-├── OVERVIEW.md                        # System overview
-├── COMPONENTS.md                      # Component descriptions
-├── MESSAGE-FORMATS.md                 # Message protocols
-└── TOKEN-MANAGEMENT.md                # Token system
+ OVERVIEW.md                        # System overview
+ COMPONENTS.md                      # Component descriptions
+ MESSAGE-FORMATS.md                 # Message protocols
+ TOKEN-MANAGEMENT.md                # Token system
 ```
 
 ### Auto-Generated (Gitignore)
 
 ```
 docs/audit/
-├── .gitignore                         # Ignore all reports
-├── script-normalization-report.md     # Auto-generated
-└── optimization-report.md             # Auto-generated
+ .gitignore                         # Ignore all reports
+ script-normalization-report.md     # Auto-generated
+ optimization-report.md             # Auto-generated
 ```
 
 ---
@@ -279,21 +279,21 @@ docs/metrics/
 
 ### DO
 
-- ✅ Write clear, concise content
-- ✅ Use examples and code snippets
-- ✅ Include diagrams where helpful
-- ✅ Link to related documentation
-- ✅ Keep information current
-- ✅ Use consistent formatting
+-  Write clear, concise content
+-  Use examples and code snippets
+-  Include diagrams where helpful
+-  Link to related documentation
+-  Keep information current
+-  Use consistent formatting
 
 ### DON'T
 
-- ❌ Duplicate information
-- ❌ Include auto-generated reports
-- ❌ Add temporary notes
-- ❌ Keep outdated versions
-- ❌ Mix unrelated topics
-- ❌ Exceed recommended sizes
+-  Duplicate information
+-  Include auto-generated reports
+-  Add temporary notes
+-  Keep outdated versions
+-  Mix unrelated topics
+-  Exceed recommended sizes
 
 ---
 
@@ -328,21 +328,21 @@ docs/metrics/
 ## Files to Keep (Final List)
 
 ### Essential Guides (7 files)
-1. ✅ `GITFLOW-QUICK-REFERENCE.md` - GitFlow workflow
-2. ✅ `SCRIPT-NORMALIZATION-STANDARDS.md` - Script standards
-3. ✅ `AI-TOOLS-COMPATIBILITY-MATRIX.md` - Tool integration
-4. ✅ `TOKEN-CONTEXT-STANDARDS.md` - Token management
-5. ✅ `DEPLOYMENT-READY-SUMMARY.md` - Deployment overview
-6. ✅ `GETTING-STARTED.md` - New user guide (NEW)
-7. ✅ `TROUBLESHOOTING.md` - Common issues (NEW)
+1.  `GITFLOW-QUICK-REFERENCE.md` - GitFlow workflow
+2.  `SCRIPT-NORMALIZATION-STANDARDS.md` - Script standards
+3.  `AI-TOOLS-COMPATIBILITY-MATRIX.md` - Tool integration
+4.  `TOKEN-CONTEXT-STANDARDS.md` - Token management
+5.  `DEPLOYMENT-READY-SUMMARY.md` - Deployment overview
+6.  `GETTING-STARTED.md` - New user guide (NEW)
+7.  `TROUBLESHOOTING.md` - Common issues (NEW)
 
 ### Architecture (3 files)
-1. ✅ `SYSTEM-DESIGN.md` - Architecture overview (NEW)
-2. ✅ `COMPONENTS.md` - Component descriptions (NEW)
-3. ✅ `MESSAGE-FORMATS.md` - Protocol definitions (NEW)
+1.  `SYSTEM-DESIGN.md` - Architecture overview (NEW)
+2.  `COMPONENTS.md` - Component descriptions (NEW)
+3.  `MESSAGE-FORMATS.md` - Protocol definitions (NEW)
 
 ### Configuration (1 file)
-1. ✅ `DOCUMENTATION-STANDARDS.md` - This file
+1.  `DOCUMENTATION-STANDARDS.md` - This file
 
 ### Total: 11 essential files (down from 16+)
 
@@ -351,17 +351,17 @@ docs/metrics/
 ## Files to Remove
 
 ### Remove from Repository
-- ❌ `GITHUB-ACTIONS-TROUBLESHOOTING.md` (move to wiki)
-- ❌ `PRE-DEPLOYMENT-CHECKLIST.md` (move to issues)
-- ❌ `DEPLOYMENT-OPTIMIZATION-GUIDE.md` (move to wiki)
-- ❌ `REMAINING-SCRIPTS-TO-FIX.md` (move to issues)
-- ❌ `QUICK-FIX-GUIDE.md` (consolidate into standards)
-- ❌ `SCRIPT-NORMALIZATION-COMPLETION-REPORT.md` (auto-generated)
+-  `GITHUB-ACTIONS-TROUBLESHOOTING.md` (move to wiki)
+-  `PRE-DEPLOYMENT-CHECKLIST.md` (move to issues)
+-  `DEPLOYMENT-OPTIMIZATION-GUIDE.md` (move to wiki)
+-  `REMAINING-SCRIPTS-TO-FIX.md` (move to issues)
+-  `QUICK-FIX-GUIDE.md` (consolidate into standards)
+-  `SCRIPT-NORMALIZATION-COMPLETION-REPORT.md` (auto-generated)
 
 ### Gitignore (Auto-Generated)
-- ❌ `docs/audit/*` (auto-generated reports)
-- ❌ `docs/reports/*` (performance reports)
-- ❌ `docs/metrics/*` (metrics data)
+-  `docs/audit/*` (auto-generated reports)
+-  `docs/reports/*` (performance reports)
+-  `docs/metrics/*` (metrics data)
 
 ---
 

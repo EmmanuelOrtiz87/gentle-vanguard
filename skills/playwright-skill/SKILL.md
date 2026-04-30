@@ -1,4 +1,4 @@
----
+﻿---
 name: playwright
 description: >
   Playwright E2E testing patterns.
@@ -11,7 +11,7 @@ metadata:
 
 ## MCP Workflow (MANDATORY If Available)
 
-**⚠️ If you have Playwright MCP tools, ALWAYS use them BEFORE creating any test:**
+** If you have Playwright MCP tools, ALWAYS use them BEFORE creating any test:**
 
 1. **Navigate** to target page
 2. **Take snapshot** to see page structure and elements
@@ -24,31 +24,31 @@ metadata:
 **If MCP NOT available:** Proceed with test creation based on docs and code analysis.
 
 **Why This Matters:**
-- ✅ Precise tests - exact steps needed, no assumptions
-- ✅ Accurate selectors - real DOM structure, not imagined
-- ✅ Real flow validation - verify journey actually works
-- ✅ Avoid over-engineering - minimal tests for what exists
-- ✅ Prevent flaky tests - real exploration = stable tests
-- ❌ Never assume how UI "should" work
+-  Precise tests - exact steps needed, no assumptions
+-  Accurate selectors - real DOM structure, not imagined
+-  Real flow validation - verify journey actually works
+-  Avoid over-engineering - minimal tests for what exists
+-  Prevent flaky tests - real exploration = stable tests
+-  Never assume how UI "should" work
 
 ## File Structure
 
 ```
 tests/
-├── base-page.ts              # Parent class for ALL pages
-├── helpers.ts                # Shared utilities
-└── {page-name}/
-    ├── {page-name}-page.ts   # Page Object Model
-    ├── {page-name}.spec.ts   # ALL tests here (NO separate files!)
-    └── {page-name}.md        # Test documentation
+ base-page.ts              # Parent class for ALL pages
+ helpers.ts                # Shared utilities
+ {page-name}/
+     {page-name}-page.ts   # Page Object Model
+     {page-name}.spec.ts   # ALL tests here (NO separate files!)
+     {page-name}.md        # Test documentation
 ```
 
 **File Naming:**
-- ✅ `sign-up.spec.ts` (all sign-up tests)
-- ✅ `sign-up-page.ts` (page object)
-- ✅ `sign-up.md` (documentation)
-- ❌ `sign-up-critical-path.spec.ts` (WRONG - no separate files)
-- ❌ `sign-up-validation.spec.ts` (WRONG)
+-  `sign-up.spec.ts` (all sign-up tests)
+-  `sign-up-page.ts` (page object)
+-  `sign-up.md` (documentation)
+-  `sign-up-critical-path.spec.ts` (WRONG - no separate files)
+-  `sign-up-validation.spec.ts` (WRONG)
 
 ## Selector Priority (REQUIRED)
 
@@ -68,7 +68,7 @@ this.pageTitle = page.getByText("Welcome");
 // 4. LAST RESORT - getByTestId when above fail
 this.customWidget = page.getByTestId("date-picker");
 
-// ❌ AVOID fragile selectors
+//  AVOID fragile selectors
 this.button = page.locator(".btn-primary");  // NO
 this.input = page.locator("#email");         // NO
 ```
@@ -81,9 +81,9 @@ this.input = page.locator("#email");         // NO
 | "comprehensive tests", "all tests", "test suite", "generate tests" | Create full suite |
 
 **Examples:**
-- "Create a test for user sign-up" → ONE test only
-- "Generate E2E tests for login page" → Full suite
-- "Add a test to verify form validation" → ONE test to existing spec
+- "Create a test for user sign-up"  ONE test only
+- "Generate E2E tests for login page"  Full suite
+- "Add a test to verify form validation"  ONE test to existing spec
 
 ## Page Object Pattern
 
@@ -149,7 +149,7 @@ export class LoginPage extends BasePage {
 **Always check existing page objects before creating new ones!**
 
 ```typescript
-// ✅ GOOD: Reuse existing page objects
+//  GOOD: Reuse existing page objects
 import { SignInPage } from "../sign-in/sign-in-page";
 import { HomePage } from "../home/home-page";
 
@@ -164,10 +164,10 @@ test("User can sign up and login", async ({ page }) => {
   await signInPage.login(credentials); // REUSE method
 });
 
-// ❌ BAD: Recreating existing functionality
+//  BAD: Recreating existing functionality
 export class SignUpPage extends BasePage {
-  async logout() { /* ... */ }  // ❌ HomePage already has this
-  async login() { /* ... */ }   // ❌ SignInPage already has this
+  async logout() { /* ... */ }  //  HomePage already has this
+  async login() { /* ... */ }   //  SignInPage already has this
 }
 ```
 
@@ -180,18 +180,18 @@ export class SignUpPage extends BasePage {
 ## Refactoring Guidelines
 
 ### Move to `BasePage` when:
-- ✅ Navigation helpers used by multiple pages (`waitForPageLoad()`, `getCurrentUrl()`)
-- ✅ Common UI interactions (notifications, modals, theme toggles)
-- ✅ Verification patterns repeated across pages (`isVisible()`, `waitForVisible()`)
-- ✅ Error handling that applies to all pages
-- ✅ Screenshot utilities for debugging
+-  Navigation helpers used by multiple pages (`waitForPageLoad()`, `getCurrentUrl()`)
+-  Common UI interactions (notifications, modals, theme toggles)
+-  Verification patterns repeated across pages (`isVisible()`, `waitForVisible()`)
+-  Error handling that applies to all pages
+-  Screenshot utilities for debugging
 
 ### Move to `helpers.ts` when:
-- ✅ Test data generation (`generateUniqueEmail()`, `generateTestUser()`)
-- ✅ Setup/teardown utilities (`createTestUser()`, `cleanupTestData()`)
-- ✅ Custom assertions (`expectNotificationToContain()`)
-- ✅ API helpers for test setup (`seedDatabase()`, `resetState()`)
-- ✅ Time utilities (`waitForCondition()`, `retryAction()`)
+-  Test data generation (`generateUniqueEmail()`, `generateTestUser()`)
+-  Setup/teardown utilities (`createTestUser()`, `cleanupTestData()`)
+-  Custom assertions (`expectNotificationToContain()`)
+-  API helpers for test setup (`seedDatabase()`, `resetState()`)
+-  Time utilities (`waitForCondition()`, `retryAction()`)
 
 **Before (BAD):**
 ```typescript
@@ -273,8 +273,8 @@ test.describe("Login", () => {
 **Priority:** `{critical|high|medium|low}`
 
 **Tags:**
-- type → @e2e
-- feature → @{feature-name}
+- type  @e2e
+- feature  @{feature-name}
 
 **Description/Objective:** {Brief description}
 
@@ -300,12 +300,12 @@ test.describe("Login", () => {
 ```
 
 **Documentation Rules:**
-- ❌ NO general test running instructions
-- ❌ NO file structure explanations
-- ❌ NO code examples or tutorials
-- ❌ NO troubleshooting sections
-- ✅ Focus ONLY on specific test case
-- ✅ Keep under 60 lines when possible
+-  NO general test running instructions
+-  NO file structure explanations
+-  NO code examples or tutorials
+-  NO troubleshooting sections
+-  Focus ONLY on specific test case
+-  Keep under 60 lines when possible
 
 ## Commands
 

@@ -1,5 +1,5 @@
-{
-  "_comment": "structureMode: enforce-canonical (greenfield/new repos) | adopt-existing (legacy/production repos — advisory only, no auto-refactor)",
+﻿{
+  "_comment": "structureMode: enforce-canonical (greenfield/new repos) | adopt-existing (legacy/production repos  advisory only, no auto-refactor)",
   "structureMode": "enforce-canonical",
   "allowedScriptDirs": [
     "scripts/utilities",

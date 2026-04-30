@@ -20,4 +20,4 @@ $global:FoundationSkills["parallel-execution-limits"] = @{
     Status = "Active"
 }
 
-Write-Host "âœ… parallel-execution-limits skill activated" -ForegroundColor Green
+Write-Host " parallel-execution-limits skill activated" -ForegroundColor Green

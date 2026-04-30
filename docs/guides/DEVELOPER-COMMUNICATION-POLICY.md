@@ -1,4 +1,4 @@
-# Developer Communication Policy
+﻿# Developer Communication Policy
 
 ## Purpose
 
@@ -20,7 +20,7 @@ Activation triggers:
 
 - `SIMPLE`
 - `RESUMEN`
-- Equivalent explicit request in natural language (for example: "solo cierre", "respuesta mínima").
+- Equivalent explicit request in natural language (for example: "solo cierre", "respuesta mnima").
 
 `simple` response contract:
 

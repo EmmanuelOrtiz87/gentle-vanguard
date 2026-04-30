@@ -1,4 +1,4 @@
----
+﻿---
 name: android-kotlin
 description: Android Kotlin development with Coroutines, Jetpack Compose, Hilt, and MockK testing
 when-to-use: When working on Android Kotlin source files
@@ -16,35 +16,35 @@ effort: medium
 
 ```
 project/
-├── app/
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── kotlin/com/example/app/
-│   │   │   │   ├── data/               # Data layer
-│   │   │   │   │   ├── local/          # Room database
-│   │   │   │   │   ├── remote/         # Retrofit/Ktor services
-│   │   │   │   │   └── repository/     # Repository implementations
-│   │   │   │   ├── di/                 # Hilt modules
-│   │   │   │   ├── domain/             # Business logic
-│   │   │   │   │   ├── model/          # Domain models
-│   │   │   │   │   ├── repository/     # Repository interfaces
-│   │   │   │   │   └── usecase/        # Use cases
-│   │   │   │   ├── ui/                 # Presentation layer
-│   │   │   │   │   ├── feature/        # Feature screens
-│   │   │   │   │   │   ├── FeatureScreen.kt      # Compose UI
-│   │   │   │   │   │   └── FeatureViewModel.kt
-│   │   │   │   │   ├── components/     # Reusable Compose components
-│   │   │   │   │   └── theme/          # Material theme
-│   │   │   │   └── App.kt              # Application class
-│   │   │   ├── res/
-│   │   │   └── AndroidManifest.xml
-│   │   ├── test/                       # Unit tests
-│   │   └── androidTest/                # Instrumentation tests
-│   └── build.gradle.kts
-├── build.gradle.kts                    # Project-level build file
-├── gradle.properties
-├── settings.gradle.kts
-└── CLAUDE.md
+ app/
+    src/
+       main/
+          kotlin/com/example/app/
+             data/               # Data layer
+                local/          # Room database
+                remote/         # Retrofit/Ktor services
+                repository/     # Repository implementations
+             di/                 # Hilt modules
+             domain/             # Business logic
+                model/          # Domain models
+                repository/     # Repository interfaces
+                usecase/        # Use cases
+             ui/                 # Presentation layer
+                feature/        # Feature screens
+                   FeatureScreen.kt      # Compose UI
+                   FeatureViewModel.kt
+                components/     # Reusable Compose components
+                theme/          # Material theme
+             App.kt              # Application class
+          res/
+          AndroidManifest.xml
+       test/                       # Unit tests
+       androidTest/                # Instrumentation tests
+    build.gradle.kts
+ build.gradle.kts                    # Project-level build file
+ gradle.properties
+ settings.gradle.kts
+ CLAUDE.md
 ```
 
 ---
@@ -445,14 +445,14 @@ coroutines:
 
 ## Kotlin Anti-Patterns
 
-- ❌ **Blocking coroutines on Main** - Never use `runBlocking` on main thread
-- ❌ **GlobalScope usage** - Use structured concurrency with viewModelScope/lifecycleScope
-- ❌ **Collecting flows in init** - Use `repeatOnLifecycle` or `collectAsStateWithLifecycle`
-- ❌ **Mutable state exposure** - Expose `StateFlow` not `MutableStateFlow`
-- ❌ **Not handling exceptions in flows** - Always use `catch` operator
-- ❌ **Lateinit for nullable** - Use `lazy` or nullable with `?`
-- ❌ **Hardcoded dispatchers** - Inject dispatchers for testability
-- ❌ **Not using sealed classes** - Prefer sealed for finite state sets
-- ❌ **Side effects in Composables** - Use `LaunchedEffect`/`SideEffect`
-- ❌ **Unstable Compose parameters** - Use stable/immutable types or `@Stable`
+-  **Blocking coroutines on Main** - Never use `runBlocking` on main thread
+-  **GlobalScope usage** - Use structured concurrency with viewModelScope/lifecycleScope
+-  **Collecting flows in init** - Use `repeatOnLifecycle` or `collectAsStateWithLifecycle`
+-  **Mutable state exposure** - Expose `StateFlow` not `MutableStateFlow`
+-  **Not handling exceptions in flows** - Always use `catch` operator
+-  **Lateinit for nullable** - Use `lazy` or nullable with `?`
+-  **Hardcoded dispatchers** - Inject dispatchers for testability
+-  **Not using sealed classes** - Prefer sealed for finite state sets
+-  **Side effects in Composables** - Use `LaunchedEffect`/`SideEffect`
+-  **Unstable Compose parameters** - Use stable/immutable types or `@Stable`
 

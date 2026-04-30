@@ -1,4 +1,4 @@
-# Adapter Examples
+﻿# Adapter Examples
 
 Quick reference for using Foundation adapters with various tools.
 
@@ -208,5 +208,5 @@ Get-ChildItem env: | Where-Object { $_.Name -like "*WINDSURF*" }
 ```
 
 ---
-**Status**: 🚧 Work in Progress  
+**Status**:  Work in Progress  
 **Last Updated**: 2026-04-28

@@ -1,4 +1,4 @@
-# Codex Adapter
+﻿# Codex Adapter
 
 Exposes Foundation capabilities via OpenAI-compatible function calling API.
 
@@ -90,7 +90,7 @@ export OPENAI_API_KEY="dummy"  # Not needed for local
 ---
 ## Status
 
-🚧 **Implementation Pending**
+ **Implementation Pending**
 
 Next steps:
 1. Implement `proxy.js` with Express

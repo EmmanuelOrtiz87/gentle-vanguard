@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Event Governance Layer - Validates, enforces policies, and audits event communications
     
@@ -84,7 +84,7 @@ function Initialize-GovernanceLayer {
         } | ConvertTo-Json -Depth 3 | Out-File -FilePath $policyStateFile -Encoding UTF8
     }
     
-    Write-Host "[GOVERNANCE] Inicialización completada" -ForegroundColor Green
+    Write-Host "[GOVERNANCE] Inicializacin completada" -ForegroundColor Green
 }
 
 # ======== CONFIGURATION LOADING ========
@@ -142,7 +142,7 @@ function Test-SchemaCompliance {
                 }
                 
                 if ($fieldDef.pattern -and $fieldValue -notmatch $fieldDef.pattern) {
-                    $errors += "Campo '$fieldName' no coincide con patrón: $($fieldDef.pattern)"
+                    $errors += "Campo '$fieldName' no coincide con patrn: $($fieldDef.pattern)"
                 }
                 
                 if ($fieldDef.enum -and $fieldValue -notin $fieldDef.enum) {
@@ -227,7 +227,7 @@ function Test-RateLimit {
     
     $limits = $GovernanceConfig.governance.rate_limiting.per_event_overrides.PSObject.Properties[$EventName]
     if (-not $limits) {
-        return @{ allowed = $true; reason = "Sin límite de rate configurado" }
+        return @{ allowed = $true; reason = "Sin lmite de rate configurado" }
     }
     
     $maxPerMinute = $limits.Value.max_per_minute
@@ -263,7 +263,7 @@ function Test-RateLimit {
     $rateLimits.events.PSObject.Properties[$EventName].Value.occurrences = $recentOccurrences
     $rateLimits | ConvertTo-Json -Depth 5 | Out-File -FilePath $rateLimitFile -Encoding UTF8
     
-    return @{ allowed = $true; reason = "Dentro de límites" }
+    return @{ allowed = $true; reason = "Dentro de lmites" }
 }
 
 # ======== AUDIT LOGGING ========
@@ -319,7 +319,7 @@ function Add-Violation {
     $policyState | ConvertTo-Json -Depth 5 | Out-File -FilePath $policyStateFile -Encoding UTF8
     
     if ($Severity -in @('high', 'critical')) {
-        Write-Host "[ALERT] Violación de seguridad: $ViolationType ($Severity)" -ForegroundColor Red
+        Write-Host "[ALERT] Violacin de seguridad: $ViolationType ($Severity)" -ForegroundColor Red
     }
 }
 
@@ -339,7 +339,7 @@ function Invoke-Validation {
     if (-not $registry -or -not $govConfig) {
         return @{
             valid = $false
-            errors = @("Configuración no disponible")
+            errors = @("Configuracin no disponible")
         }
     }
     
@@ -391,7 +391,7 @@ function Invoke-Validation {
             }
         }
         catch {
-            $errors += "Payload JSON inválido: $($_.Exception.Message)"
+            $errors += "Payload JSON invlido: $($_.Exception.Message)"
         }
     }
     
@@ -440,7 +440,7 @@ function Get-GovernanceReport {
     if (Test-Path $rateLimitFile) {
         $rateLimits = Get-Content -Path $rateLimitFile -Raw | ConvertFrom-Json
         Write-Host ""
-        Write-Host "Rate Limits (últimas 24h):" -ForegroundColor Cyan
+        Write-Host "Rate Limits (ltimas 24h):" -ForegroundColor Cyan
         foreach ($event in $rateLimits.events.PSObject.Properties) {
             $count = @($event.Value.occurrences).Count
             Write-Host "  $($event.Name): $count eventos" -ForegroundColor Gray
@@ -449,7 +449,7 @@ function Get-GovernanceReport {
     
     # Audit entries
     Write-Host ""
-    Write-Host "Auditoría (últimas 10 entradas):" -ForegroundColor Cyan
+    Write-Host "Auditora (ltimas 10 entradas):" -ForegroundColor Cyan
     $auditFiles = Get-ChildItem $auditPath -Filter "audit-*.json" -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending
     if ($auditFiles) {
         $auditFiles | Select-Object -First 1 | ForEach-Object {
@@ -482,10 +482,10 @@ switch ($Action) {
         $result = Invoke-Validation -EventName $EventName -Payload $Payload -Actor $Actor -ActionType $ActionType
         
         if ($result.valid) {
-            Write-Host "[OK] Validación exitosa" -ForegroundColor Green
+            Write-Host "[OK] Validacin exitosa" -ForegroundColor Green
         }
         else {
-            Write-Host "[FAILED] Validación fallida:" -ForegroundColor Red
+            Write-Host "[FAILED] Validacin fallida:" -ForegroundColor Red
             $result.errors | ForEach-Object { Write-Host "  - $_" -ForegroundColor Red }
             exit 1
         }
@@ -500,10 +500,10 @@ switch ($Action) {
         $result = Invoke-Validation -EventName $EventName -Payload $Payload -Actor $Actor -ActionType $ActionType
         
         if ($result.valid) {
-            Write-Host "[OK] Política aplicada exitosamente" -ForegroundColor Green
+            Write-Host "[OK] Poltica aplicada exitosamente" -ForegroundColor Green
         }
         else {
-            Write-Host "[BLOCKED] Política rechazada:" -ForegroundColor Red
+            Write-Host "[BLOCKED] Poltica rechazada:" -ForegroundColor Red
             $result.errors | ForEach-Object { Write-Host "  - $_" -ForegroundColor Red }
             exit 1
         }
@@ -527,13 +527,13 @@ switch ($Action) {
         $eventDef = $registry.registry.PSObject.Properties[$EventName]
         
         if ($eventDef) {
-            Write-Host "`nPolítica para evento: $EventName" -ForegroundColor Cyan
-            Write-Host "Descripción: $($eventDef.Value.description)" -ForegroundColor Gray
-            Write-Host "Categoría: $($eventDef.Value.category)" -ForegroundColor Gray
+            Write-Host "`nPoltica para evento: $EventName" -ForegroundColor Cyan
+            Write-Host "Descripcin: $($eventDef.Value.description)" -ForegroundColor Gray
+            Write-Host "Categora: $($eventDef.Value.category)" -ForegroundColor Gray
             Write-Host "Severidad: $($eventDef.Value.severity)" -ForegroundColor Gray
             Write-Host "Emisores permitidos: $($eventDef.Value.emitters -join ', ')" -ForegroundColor Gray
             Write-Host "Escuchadores permitidos: $($eventDef.Value.listeners -join ', ')" -ForegroundColor Gray
-            Write-Host "Políticas: $($eventDef.Value.policies -join ', ')" -ForegroundColor Gray
+            Write-Host "Polticas: $($eventDef.Value.policies -join ', ')" -ForegroundColor Gray
             Write-Host "Rate Limit: $($eventDef.Value.rate_limit.max_per_minute)/min, $($eventDef.Value.rate_limit.max_per_hour)/hora" -ForegroundColor Gray
         }
         else {
@@ -543,7 +543,7 @@ switch ($Action) {
     }
     
     default {
-        Write-Host "[ERROR] Acción desconocida: $Action" -ForegroundColor Red
+        Write-Host "[ERROR] Accin desconocida: $Action" -ForegroundColor Red
         exit 1
     }
 }

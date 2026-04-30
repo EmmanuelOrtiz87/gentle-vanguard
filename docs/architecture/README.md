@@ -1,4 +1,4 @@
-# Architecture Documentation
+﻿# Architecture Documentation
 
 ## Topology and Workflows
 
@@ -17,10 +17,10 @@
 
 ```
 docs/architecture/
-├── README.md                    # This file - architecture hub
-├── layer-topology.md            # 5-layer topology definition
-├── role-workflows.md            # Role-based workflow mappings
-└── architecture-standards.md   # Architecture governance standards
+ README.md                    # This file - architecture hub
+ layer-topology.md            # 5-layer topology definition
+ role-workflows.md            # Role-based workflow mappings
+ architecture-standards.md   # Architecture governance standards
 ```
 
 ## Quick Links

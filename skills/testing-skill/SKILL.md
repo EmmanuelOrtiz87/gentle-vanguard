@@ -1,4 +1,4 @@
----
+﻿---
 name: testing-skill
 description: Use when writing tests, setting up test coverage, choosing test frameworks, or improving test quality. Triggers: "write test", "add test", "test coverage", "unit test", "integration test", "e2e test", "testing framework", "test setup".
 ---
@@ -30,13 +30,13 @@ Activate this skill when:
 ## Test Pyramid
 
 ```
-        ┌─────────┐
-        │   E2E   │  ← Few, slow, expensive (Playwright, Cypress)
-       ┌─────────┐
-       │Integration│ ← Some, moderate (API tests, component tests)
-      ┌─────────┐
-      │  Unit   │  ← Many, fast, cheap (Vitest, Jest, Go test)
-     └─────────┘
+        
+           E2E      Few, slow, expensive (Playwright, Cypress)
+       
+       Integration  Some, moderate (API tests, component tests)
+      
+        Unit      Many, fast, cheap (Vitest, Jest, Go test)
+     
 ```
 
 ## Framework Selection
@@ -56,17 +56,17 @@ Activate this skill when:
 
 ```
 src/
-├── components/
-│   └── Button/
-│       ├── Button.tsx
-│       └── Button.test.tsx      ← Unit tests
-│       └── Button.e2e.spec.ts   ← E2E tests
-├── services/
-│   └── api.ts
-│       └── api.test.ts          ← Integration tests
-│       └── api.mock.ts          ← Mock data
-└── __tests__/
-    └── setup.ts                 ← Test setup
+ components/
+    Button/
+        Button.tsx
+        Button.test.tsx       Unit tests
+        Button.e2e.spec.ts    E2E tests
+ services/
+    api.ts
+        api.test.ts           Integration tests
+        api.mock.ts           Mock data
+ __tests__/
+     setup.ts                  Test setup
 ```
 
 ## Test Structure (AAA Pattern)

@@ -1,4 +1,4 @@
-# Mobile Templates
+﻿# Mobile Templates
 
 This directory contains mobile app framework templates.
 
@@ -54,15 +54,15 @@ npx create-expo-app {{project-name}}
 
 ```
 mobile/
-├── src/                   # Source code
-│   ├── components/         # Reusable components
-│   ├── screens/           # Screen/page components
-│   ├── navigation/        # Navigation configuration
-│   ├── services/          # API clients, services
-│   ├── hooks/             # Custom hooks
-│   ├── utils/             # Utilities
-│   └── types/             # Type definitions
-├── android/               # Android native code
-├── ios/                   # iOS native code
-└── package.*.json         # Framework-specific packages
+ src/                   # Source code
+    components/         # Reusable components
+    screens/           # Screen/page components
+    navigation/        # Navigation configuration
+    services/          # API clients, services
+    hooks/             # Custom hooks
+    utils/             # Utilities
+    types/             # Type definitions
+ android/               # Android native code
+ ios/                   # iOS native code
+ package.*.json         # Framework-specific packages
 ```

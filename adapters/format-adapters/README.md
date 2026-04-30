@@ -1,4 +1,4 @@
-# Format Adapters
+﻿# Format Adapters
 
 Translate between Foundation's standard format and tool-specific formats for tools that don't support MCP.
 
@@ -21,19 +21,19 @@ Each adapter follows the same pattern:
 
 ```
 format-adapters/
-├── windsurf-adapter/
-│   ├── SKILL.md           # Converted skill (Windsurf format)
-│   ├── adapter.js          # Translation script
-│   └── README.md         # Adapter documentation
-├── codex-adapter/
-│   ├── functions.json     # OpenAI function definitions
-│   ├── proxy.js           # HTTP proxy to Foundation
-│   └── README.md
-├── antigravity-adapter/
-│   ├── mission-control.json # Mission Control config
-│   ├── adapter.js
-│   └── README.md
-└── README.md (this file)
+ windsurf-adapter/
+    SKILL.md           # Converted skill (Windsurf format)
+    adapter.js          # Translation script
+    README.md         # Adapter documentation
+ codex-adapter/
+    functions.json     # OpenAI function definitions
+    proxy.js           # HTTP proxy to Foundation
+    README.md
+ antigravity-adapter/
+    mission-control.json # Mission Control config
+    adapter.js
+    README.md
+ README.md (this file)
 ```
 
 ---
@@ -72,12 +72,12 @@ node adapters/format-adapters/antigravity-adapter/adapter.js \
 ## Translation Process
 
 ```
-┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
-│  Foundation      │────►│  Format         │────►│  Tool-Specific  │
-│  SKILL.md       │     │  Adapter        │     │  Format          │
-│  (Standard)     │     │  (Translate)    │     │  (Windsurf/      │
-└──────────────────┘     └──────────────────┘     │  Codex/etc.)    │
-                                                     └──────────────────┘
+          
+  Foundation        Format           Tool-Specific  
+  SKILL.md              Adapter               Format          
+  (Standard)            (Translate)           (Windsurf/      
+            Codex/etc.)    
+                                                     
 ```
 
 ---
@@ -85,9 +85,9 @@ node adapters/format-adapters/antigravity-adapter/adapter.js \
 
 | Adapter | Status | Priority | Notes |
 |---------|--------|----------|-------|
-| Windsurf | ⏳ Pending | HIGH | Research Windsurf plugin format |
-| Codex | ⏳ Pending | MEDIUM | OpenAI-compatible endpoint |
-| Antigravity | ⏳ Pending | LOW | Mission Control API research |
+| Windsurf |  Pending | HIGH | Research Windsurf plugin format |
+| Codex |  Pending | MEDIUM | OpenAI-compatible endpoint |
+| Antigravity |  Pending | LOW | Mission Control API research |
 
 ---
 ## Adding a New Adapter

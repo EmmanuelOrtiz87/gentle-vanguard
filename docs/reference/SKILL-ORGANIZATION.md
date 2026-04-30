@@ -1,4 +1,4 @@
-# Skill Organization Policy
+﻿# Skill Organization Policy
 
 ## Security Skills (Intentional Separation)
 
@@ -37,14 +37,14 @@ Skills are NOT duplicates if:
 ## Example: Security Skills
 
 ```
-security-skill          → DEV agent → inline checks
-security-expert-skill   → GOV agent → full audits
+security-skill           DEV agent  inline checks
+security-expert-skill    GOV agent  full audits
 ```
 
 ## Example: Testing Skills
 
 ```
-testing-skill           → DEV agent → unit tests
-playwright-skill       → QA agent → E2E tests
-pytest-skill           → QA agent → Python tests
+testing-skill            DEV agent  unit tests
+playwright-skill        QA agent  E2E tests
+pytest-skill            QA agent  Python tests
 ```

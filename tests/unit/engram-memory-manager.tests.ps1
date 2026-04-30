@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 <#
 .SYNOPSIS
     Unit Tests for Engram Memory Manager
@@ -185,7 +185,7 @@ Describe "Engram Memory Manager - Integration Tests" {
     
     Context "End-to-End Workflow" {
         It "Should complete full workflow" {
-            # Create → Consolidate → Compress → Validate
+            # Create  Consolidate  Compress  Validate
             $workflow = @("create", "consolidate", "compress", "validate")
             $workflow.Count | Should -Be 4
         }

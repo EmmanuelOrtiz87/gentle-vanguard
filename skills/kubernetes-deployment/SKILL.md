@@ -1,4 +1,4 @@
----
+﻿---
 name: kubernetes-deployment
 description: >
   Deploy, manage, and scale containerized applications on Kubernetes clusters
@@ -64,7 +64,7 @@ spec:
 
 ## Best Practices
 
-### ✅ DO
+###  DO
 
 - Use resource requests and limits
 - Implement health checks (liveness, readiness)
@@ -75,7 +75,7 @@ spec:
 - Use namespaces for isolation
 - Enable pod security policies
 
-### ❌ DON'T
+###  DON'T
 
 - Use latest image tags in production
 - Run containers as root

@@ -1,4 +1,4 @@
----
+﻿---
 name: android-architecture
 user-invocable: false
 description: Use when implementing MVVM, clean architecture, dependency injection with Hilt, or structuring Android app layers.
@@ -69,21 +69,21 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
 
 ```
 app/
-├── data/
-│   ├── local/           # Room database, DataStore
-│   │   ├── dao/
-│   │   └── entities/
-│   ├── remote/          # Retrofit, network
-│   │   ├── api/
-│   │   └── dto/
-│   └── repository/      # Repository implementations
-├── domain/
-│   ├── model/           # Domain models
-│   ├── repository/      # Repository interfaces
-│   └── usecase/         # Business logic
-└── presentation/
-    ├── ui/              # Composables
-    └── viewmodel/       # ViewModels
+ data/
+    local/           # Room database, DataStore
+       dao/
+       entities/
+    remote/          # Retrofit, network
+       api/
+       dto/
+    repository/      # Repository implementations
+ domain/
+    model/           # Domain models
+    repository/      # Repository interfaces
+    usecase/         # Business logic
+ presentation/
+     ui/              # Composables
+     viewmodel/       # ViewModels
 ```
 
 ### Repository Pattern

@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Orchestrator for automatic optimization and monitoring
 
@@ -151,8 +151,8 @@ class AutomationOrchestrator {
         
         Write-Log ""
         Write-Log "[CONTEXTO]" "METRIC"
-        Write-Log "  Tamaño Original: 100%"
-        Write-Log "  Tamaño Optimizado: 65%"
+        Write-Log "  Tamao Original: 100%"
+        Write-Log "  Tamao Optimizado: 65%"
         Write-Log "  Reduccion: 35% DOWN"
         
         Write-Log ""
@@ -268,7 +268,7 @@ La Fase 1 de activacion inmediata ha sido completada exitosamente. Todos los mec
 ## Metricas a Monitorear
 
 ### Contexto
-- Tamaño total
+- Tamao total
 - Tasa de compresion
 - Efectividad de deduplicacion
 - Tiempo de lazy loading
@@ -352,7 +352,7 @@ La Fase 1 de activacion inmediata ha sido completada exitosamente. Todos los mec
 
 ### Parametros Adaptativos
 - Nivel de compresion
-- Tamaño de batch
+- Tamao de batch
 - Umbral de cache
 - Threads de paralelizacion
 

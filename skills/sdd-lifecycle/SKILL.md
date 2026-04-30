@@ -1,4 +1,4 @@
----
+﻿---
 name: sdd-lifecycle
 description: >
   Spec-Driven Development (SDD) complete lifecycle - all phases in one skill.
@@ -14,34 +14,34 @@ Complete Spec-Driven Development workflow with all phases.
 ## Phases
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    SDD LIFECYCLE                            │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐   │
-│  │  INIT   │──▶│ EXPLORE │──▶│ PROPOSE │──▶│  SPEC   │   │
-│  └─────────┘   └─────────┘   └─────────┘   └─────────┘   │
-│       │                                         │            │
-│       │         ┌─────────┐   ┌─────────┐   │            │
-│       └────────▶│  TASKS   │◀──│ DESIGN  │◀──┘            │
-│                 └────┬────┘   └─────────┘                │
-│                      │                                     │
-│                      ▼                                     │
-│                 ┌─────────┐                               │
-│                 │  APPLY  │                               │
-│                 └────┬────┘                               │
-│                      │                                     │
-│                      ▼                                     │
-│                 ┌─────────┐                               │
-│                 │ VERIFY  │                               │
-│                 └────┬────┘                               │
-│                      │                                     │
-│                      ▼                                     │
-│                 ┌─────────┐                               │
-│                 │ ARCHIVE │                               │
-│                 └─────────┘                               │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
+
+                    SDD LIFECYCLE                            
+
+                                                              
+              
+    INIT    EXPLORE  PROPOSE   SPEC      
+              
+                                                            
+                                  
+         TASKS    DESIGN              
+                                    
+                                                           
+                                                           
+                                                
+                   APPLY                                 
+                                                
+                                                           
+                                                           
+                                                
+                  VERIFY                                 
+                                                
+                                                           
+                                                           
+                                                
+                  ARCHIVE                                
+                                                
+                                                              
+
 ```
 
 ## Phase Details
@@ -170,13 +170,13 @@ wf sdd verify "user-authentication"
 
 ```
 docs/specs/
-├── SDD-{name}/
-│   ├── 01-exploration.md
-│   ├── 02-proposal.md
-│   ├── 03-specification.md
-│   ├── 04-design.md
-│   ├── 05-tasks.md
-│   └── 06-verification.md
+ SDD-{name}/
+    01-exploration.md
+    02-proposal.md
+    03-specification.md
+    04-design.md
+    05-tasks.md
+    06-verification.md
 ```
 
 ## Integration
@@ -205,16 +205,16 @@ docs/specs/
 ## Migration
 
 This skill consolidates the old phase-specific skills:
-- `sdd-init` → Phase 1
-- `sdd-explore` → Phase 2
-- `sdd-propose` → Phase 3
-- `sdd-spec` → Phase 4
-- `sdd-design` → Phase 5
-- `sdd-tasks` → Phase 6
-- `sdd-apply` → Phase 7
-- `sdd-verify` → Phase 8
-- `sdd-archive` → Phase 9
-- `sdd-skill` → This file (overview)
+- `sdd-init`  Phase 1
+- `sdd-explore`  Phase 2
+- `sdd-propose`  Phase 3
+- `sdd-spec`  Phase 4
+- `sdd-design`  Phase 5
+- `sdd-tasks`  Phase 6
+- `sdd-apply`  Phase 7
+- `sdd-verify`  Phase 8
+- `sdd-archive`  Phase 9
+- `sdd-skill`  This file (overview)
 
 Old skills are deprecated but continue to work as aliases.
 

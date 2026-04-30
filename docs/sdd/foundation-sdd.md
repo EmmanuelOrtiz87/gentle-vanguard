@@ -1,4 +1,4 @@
-# Software Design Document (SDD) - Workspace Foundation
+﻿# Software Design Document (SDD) - Workspace Foundation
 
 **Version:** 1.0  
 **Date:** April 11, 2026  
@@ -41,19 +41,19 @@ Workspace Foundation is the base framework for creating standardized, cross-plat
 
 ```
 Workspace Foundation
-├── Core Components
-│   ├── Bootstrap System (scripts/foundation/bootstrap.ps1)
-│   ├── Setup Scripts (scripts/foundation/setup.sh, scripts/utilities/wf.ps1)
-│   ├── Template Engine (templates/)
-│   └── Skill Registry (skills/)
-├── Governance Layer
-│   ├── Documentation Standards (docs/)
-│   ├── Orchestrator Integration (config/orchestrator.json)
-│   └── Cross-platform Routing (scripts/)
-└── Project Generation
-    ├── Scaffold Creation (projects/)
-    ├── Configuration Management (config/)
-    └── Validation System (scripts/validation/*.ps1)
+ Core Components
+    Bootstrap System (scripts/foundation/bootstrap.ps1)
+    Setup Scripts (scripts/foundation/setup.sh, scripts/utilities/wf.ps1)
+    Template Engine (templates/)
+    Skill Registry (skills/)
+ Governance Layer
+    Documentation Standards (docs/)
+    Orchestrator Integration (config/orchestrator.json)
+    Cross-platform Routing (scripts/)
+ Project Generation
+     Scaffold Creation (projects/)
+     Configuration Management (config/)
+     Validation System (scripts/validation/*.ps1)
 ```
 
 ### Technology Stack
@@ -107,21 +107,21 @@ $shell = if ($PSVersionTable.PSEdition -eq "Core") { "pwsh" } else { "powershell
 **Structure:**
 ```
 docs/
-├── README.md                    # Master index
-├── getting-started/            # Setup guides
-├── guides/                     # Strategies and initiatives
-├── reference/                  # Technical specs
-├── supplementary/              # Resources and summaries
-├── sdd/                        # Design documents
-└── sessions/                   # Development notes
+ README.md                    # Master index
+ getting-started/            # Setup guides
+ guides/                     # Strategies and initiatives
+ reference/                  # Technical specs
+ supplementary/              # Resources and summaries
+ sdd/                        # Design documents
+ sessions/                   # Development notes
 ```
 
 ### Data Flow
 
 ```
-User Request → Canonical Bootstrap Script → Template Selection → Configuration → Validation → Project Ready
-                      ↓
-           Orchestrator Coordination → Skill Loading → Implementation → Documentation
+User Request  Canonical Bootstrap Script  Template Selection  Configuration  Validation  Project Ready
+                      
+           Orchestrator Coordination  Skill Loading  Implementation  Documentation
 ```
 
 ### APIs/Interfaces
@@ -151,21 +151,21 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\foundation\bootstr
 ### Phases
 
 #### Phase 1: Core Foundation (Current)
-- ✅ Bootstrap system
-- ✅ Cross-platform setup
-- ✅ Basic templates
-- ✅ Documentation structure
+-  Bootstrap system
+-  Cross-platform setup
+-  Basic templates
+-  Documentation structure
 
 #### Phase 2: Advanced Features (Next)
-- 🔄 AI-assisted scaffolding
-- 🔄 Advanced templates
-- 🔄 Integrated testing
-- 🔄 Performance monitoring
+-  AI-assisted scaffolding
+-  Advanced templates
+-  Integrated testing
+-  Performance monitoring
 
 #### Phase 3: Ecosystem Integration
-- 📋 Plugin system
-- 📋 Cloud deployment templates
-- 📋 Multi-language support
+-  Plugin system
+-  Cloud deployment templates
+-  Multi-language support
 
 ### Dependencies
 - **External:** Git, PowerShell/Bash
@@ -196,10 +196,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\foundation\bootstr
 - Orchestrator integration
 
 ### Acceptance Criteria
-- ✅ Projects bootstrap successfully on all platforms
-- ✅ Generated projects follow standards
-- ✅ Documentation is navigable and complete
-- ✅ Orchestrator coordination works seamlessly
+-  Projects bootstrap successfully on all platforms
+-  Generated projects follow standards
+-  Documentation is navigable and complete
+-  Orchestrator coordination works seamlessly
 
 ## 6. AI-Assisted Development Notes
 

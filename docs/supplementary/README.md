@@ -1,4 +1,4 @@
-# Supplementary
+﻿# Supplementary
 
 Additional documentation and resources.
 
@@ -24,10 +24,10 @@ Code reviews are stored **per project**, not in the foundation:
 
 ```
 <project>/
-└── docs/
-    └── code-reviews/       # Project-specific reviews
-        ├── 2026-04-10-session-review.md
-        └── YYYY-MM-DD-*-review.md
+ docs/
+     code-reviews/       # Project-specific reviews
+         2026-04-10-session-review.md
+         YYYY-MM-DD-*-review.md
 ```
 
 See project AGENTS.md for review workflow.

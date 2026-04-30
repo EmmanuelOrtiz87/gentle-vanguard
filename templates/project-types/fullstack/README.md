@@ -1,18 +1,18 @@
-# Fullstack Project Template
+﻿# Fullstack Project Template
 # Monorepo structure with frontend and backend
 
 ## Structure
 
 ```
 {{project-name}}/
-├── apps/
-│   ├── web/          # Frontend application
-│   └── api/          # Backend API service
-├── packages/
-│   ├── shared/       # Shared types and utilities
-│   └── ui/           # Shared UI components
-├── docker-compose.yml
-└── nx.json           # Nx monorepo config
+ apps/
+    web/          # Frontend application
+    api/          # Backend API service
+ packages/
+    shared/       # Shared types and utilities
+    ui/           # Shared UI components
+ docker-compose.yml
+ nx.json           # Nx monorepo config
 ```
 
 ## Quick Start

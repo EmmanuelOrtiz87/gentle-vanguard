@@ -1,4 +1,4 @@
-# Spec-Driven Development (SDD)
+﻿# Spec-Driven Development (SDD)
 
 This directory contains design documents and implementation specifications for Workspace Foundation and its components.
 
@@ -10,9 +10,9 @@ Spec-Driven Development ensures that all features are designed, implemented, and
 
 ```
 sdd/
-├── foundation-sdd.md          # Main design document
-├── SPEC-TEMPLATE.md           # Template for new specs
-└── [feature]-[spec].md        # Individual feature specs
+ foundation-sdd.md          # Main design document
+ SPEC-TEMPLATE.md           # Template for new specs
+ [feature]-[spec].md        # Individual feature specs
 ```
 
 ## Documentation Guidelines

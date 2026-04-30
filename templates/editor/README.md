@@ -1,4 +1,4 @@
-# Editor Configuration
+﻿# Editor Configuration
 
 Universal and language-specific editor settings for consistent code formatting across all IDEs.
 
@@ -94,18 +94,18 @@ Or install [editorconfig-vim](https://github.com/editorconfig/editorconfig-vim).
 
 ```
 templates/editor/
-├── .editorconfig                    # Universal (copy to project root)
-├── README.md                         # This file
-├── vscode/
-│   ├── settings.json               # Default settings
-│   ├── settings.go.json            # Go-specific
-│   ├── settings.python.json        # Python-specific
-│   └── extensions.json             # Recommended extensions
-├── jetbrains/                       # JetBrains settings (IDEA format)
-├── vim/                            # Vim/Neovim config snippets
-├── emacs/                          # Emacs config snippets
-├── sublime/                        # Sublime Text settings
-└── atom/                          # Atom settings
+ .editorconfig                    # Universal (copy to project root)
+ README.md                         # This file
+ vscode/
+    settings.json               # Default settings
+    settings.go.json            # Go-specific
+    settings.python.json        # Python-specific
+    extensions.json             # Recommended extensions
+ jetbrains/                       # JetBrains settings (IDEA format)
+ vim/                            # Vim/Neovim config snippets
+ emacs/                          # Emacs config snippets
+ sublime/                        # Sublime Text settings
+ atom/                          # Atom settings
 ```
 
 ## CI Integration

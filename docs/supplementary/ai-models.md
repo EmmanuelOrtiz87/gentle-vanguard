@@ -1,4 +1,4 @@
-# AI Model Setup
+﻿# AI Model Setup
 
 This guide explains how to prepare an optional AI model layer for projects that use AI-assisted workflows.
 
@@ -28,7 +28,7 @@ Use this path when the model should run on the same machine as the developer.
 
 ### Generic Steps
 
-1. Install the provider’s official desktop app or CLI for the target operating system.
+1. Install the providers official desktop app or CLI for the target operating system.
 2. Install any runtime the provider requires.
 3. Download or pull the selected local model.
 4. Configure the provider with the model name, endpoint, and credentials if required.

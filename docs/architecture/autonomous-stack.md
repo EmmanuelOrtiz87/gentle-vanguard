@@ -1,4 +1,4 @@
-# Autonomous Stack 100% - Architecture & User Guide
+﻿# Autonomous Stack 100% - Architecture & User Guide
 
 ## Overview
 
@@ -7,27 +7,27 @@ The Workspace Foundation implements a **100% autonomous development stack** with
 ## Stack Layered Architecture
 
 ```
-┌─────────────────────────────────────────────────────┐
-│              Agent Layer (AI Agents)                │
-├─────────────────────────────────────────────────────┤
-│         Orchestration Layer (adaptive/)             │
-│  ┌─────────────┬──────────────┬────────────────┐  │
-│  │ Auto-Backup │ Auto-Norm    │ Auto-Scaling  │  │
-│  │ Orchestrator│ Enforcer     │ Delegation    │  │
-│  └─────────────┴──────────────┴────────────────┘  │
-│  ┌─────────────┬──────────────┬────────────────┐  │
-│  │ Auto-Norm   │ Auto-Doc     │ Auto-Testing  │  │
-│  │ Learner      │ Drift        │ Orchestrator  │  │
-│  └─────────────┴──────────────┴────────────────┘  │
-│  ┌─────────────┬──────────────┬────────────────┐  │
-│  │ Backup      │ Judgment Day │                │  │
-│  │ Resilience  │ Bridge       │                │  │
-│  └─────────────┴──────────────┴────────────────┘  │
-├─────────────────────────────────────────────────────┤
-│         Persistence Layer (Engram + .backups/)      │
-├─────────────────────────────────────────────────────┤
-│         Security Layer (AES-256 Encryption)         │
-└─────────────────────────────────────────────────────┘
+
+              Agent Layer (AI Agents)                
+
+         Orchestration Layer (adaptive/)             
+    
+   Auto-Backup  Auto-Norm     Auto-Scaling    
+   Orchestrator Enforcer      Delegation      
+    
+    
+   Auto-Norm    Auto-Doc      Auto-Testing    
+   Learner       Drift         Orchestrator    
+    
+    
+   Backup       Judgment Day                   
+   Resilience   Bridge                         
+    
+
+         Persistence Layer (Engram + .backups/)      
+
+         Security Layer (AES-256 Encryption)         
+
 ```
 
 ## Component Details
@@ -105,11 +105,11 @@ The Workspace Foundation implements a **100% autonomous development stack** with
 - Database: `.session/scaling-db.json`
 
 **Default Patterns**:
-- `code-fix` → sdd-apply
-- `doc-update` → sdd-apply
-- `research` → explore
-- `test-fix` → sdd-verify
-- `general-task` → general
+- `code-fix`  sdd-apply
+- `doc-update`  sdd-apply
+- `research`  explore
+- `test-fix`  sdd-verify
+- `general-task`  general
 
 ### 7. Backup Resilience Test
 **File**: `scripts/adaptive/backup-resilience-test.ps1`
@@ -172,28 +172,28 @@ The Workspace Foundation implements a **100% autonomous development stack** with
 
 ```
 workspace-foundation/
-├── .backups/              # Encrypted backups (in .gitignore)
-│   ├── engram-memory.json.enc
-│   ├── learned-norms.json.enc
-│   ├── session-state.json.enc
-│   └── backup-meta.json
-├── .session/              # Runtime session data (in .gitignore)
-│   ├── scaling-db.json
-│   ├── testing-results.json
-│   └── engram-cache/
-├── scripts/
-│   ├── adaptive/         # All autonomous systems (8 scripts)
-│   └── utilities/        # Workflow tools (wf.ps1 symlink)
-├── rules/
-│   ├── adaptive/         # Learned norms and rules
-│   │   ├── LEARNED-NORMS.md
-│   │   └── README.md
-│   └── custom/          # Promoted high-confidence norms
-├── docs/
-│   └── architecture/
-│       └── autonomous-stack.md (this file)
-└── tools/
-    └── engram.exe        # Persistence binary
+ .backups/              # Encrypted backups (in .gitignore)
+    engram-memory.json.enc
+    learned-norms.json.enc
+    session-state.json.enc
+    backup-meta.json
+ .session/              # Runtime session data (in .gitignore)
+    scaling-db.json
+    testing-results.json
+    engram-cache/
+ scripts/
+    adaptive/         # All autonomous systems (8 scripts)
+    utilities/        # Workflow tools (wf.ps1 symlink)
+ rules/
+    adaptive/         # Learned norms and rules
+       LEARNED-NORMS.md
+       README.md
+    custom/          # Promoted high-confidence norms
+ docs/
+    architecture/
+        autonomous-stack.md (this file)
+ tools/
+     engram.exe        # Persistence binary
 ```
 
 ## Usage Examples

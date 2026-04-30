@@ -1,15 +1,15 @@
 ﻿<#
 .SYNOPSIS
-    Clear Context - Limpia el contexto entre tareas sin cerrar sesión
+    Clear Context - Limpia el contexto entre tareas sin cerrar sesin
     
 .DESCRIPTION
     Guarda un resumen de la tarea actual en Engram y limpia el estado
     para evitar que el contexto anterior viaje a la siguiente tarea.
     
-    Similar a cerrar sesión pero sin terminar la sesión actual.
+    Similar a cerrar sesin pero sin terminar la sesin actual.
     
 .PARAMETER TaskSummary
-    Resumen breve de la tarea que se está cerrando
+    Resumen breve de la tarea que se est cerrando
     
 .PARAMETER ProjectName
     Nombre del proyecto (default: workspace_local)
@@ -34,7 +34,7 @@ $ErrorActionPreference = 'Continue'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 
-# Función para logging coloreado
+# Funcin para logging coloreado
 function Write-Step {
     param([string]$Message)
     Write-Host "[CLEAR] $Message" -ForegroundColor Cyan
@@ -74,14 +74,14 @@ Context cleared for next task. Previous context preserved in Engram.
         if ($LASTEXITCODE -eq 0) {
             Write-Success "Resumen guardado en Engram"
         } else {
-            Write-WarningMsg "No se pudo guardar en Engram (código: $LASTEXITCODE)"
+            Write-WarningMsg "No se pudo guardar en Engram (cdigo: $LASTEXITCODE)"
         }
     } else {
         Write-WarningMsg "Engram no encontrado en: $engramBin"
     }
 }
 
-# 2. Limpiar archivos de estado de sesión temporal
+# 2. Limpiar archivos de estado de sesin temporal
 Write-Step "Limpiando archivos de estado temporal..."
 $sessionFiles = @(
     ".\.session\.context-clear-requested",
@@ -101,21 +101,21 @@ foreach ($file in $sessionFiles) {
 }
 
 # 3. Ejecutar handoff-compress para preparar transferencia limpia
-Write-Step "Ejecutando compresión de transferencia..."
+Write-Step "Ejecutando compresin de transferencia..."
 $handoffScript = Join-Path $scriptDir "handoff-compress.ps1"
 if (Test-Path $handoffScript) {
     & $handoffScript -ProjectName $ProjectName -CompressionRatio 0.30 2>$null
-    Write-Success "Compresión de transferencia completada"
+    Write-Success "Compresin de transferencia completada"
 } else {
     Write-WarningMsg "handoff-compress.ps1 no encontrado"
 }
 
-# 4. Limpiar métricas de sesión actual (opcional)
-Write-Step "Limpiando métricas de sesión actual..."
+# 4. Limpiar mtricas de sesin actual (opcional)
+Write-Step "Limpiando mtricas de sesin actual..."
 $metricsDir = ".\.session\metrics"
 if (Test-Path $metricsDir) {
     $currentMetrics = Get-ChildItem $metricsDir -Filter "session-*.json" | Sort-Object LastWriteTime -Descending | Select-Object -First 3
-    # Mantener las últimas 3 métricas, eliminar el resto
+    # Mantener las ltimas 3 mtricas, eliminar el resto
     # (opcional - comentado por seguridad)
     # $currentMetrics | ForEach-Object { Remove-Item $_.FullName -Force }
 }
@@ -132,7 +132,7 @@ Write-Host " " -ForegroundColor Green
 Write-Host ("=" * 50) -ForegroundColor Cyan
 Write-Host "Contexto anterior guardado en Engram" -ForegroundColor Gray
 Write-Host "Nueva tarea puede iniciar sin contexto heredado" -ForegroundColor Gray
-Write-Host "Sesión actual sigue activa: " -NoNewline -ForegroundColor Yellow
+Write-Host "Sesin actual sigue activa: " -NoNewline -ForegroundColor Yellow
 Write-Host $env:SESSION_ID -ForegroundColor White
 
 if ($TaskSummary -ne "") {

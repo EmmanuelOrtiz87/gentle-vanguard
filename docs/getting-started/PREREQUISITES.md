@@ -1,25 +1,25 @@
-# 📋 Prerequisites - Foundation
+﻿#  Prerequisites - Foundation
 
 **Fecha**: 2026-04-26  
-**Descripción**: Lista completa de herramientas requeridas y opcionales para Foundation
+**Descripcin**: Lista completa de herramientas requeridas y opcionales para Foundation
 
 ---
 
-## 🚀 Instalación Automática
+##  Instalacin Automtica
 
 ```powershell
-# Opción 1: Instalar todo automáticamente
+# Opcin 1: Instalar todo automticamente
 .\scripts\utilities\install-prerequisites.ps1
 
-# Opción 2: Solo verificar estado
+# Opcin 2: Solo verificar estado
 .\scripts\utilities\install-prerequisites.ps1 -CheckOnly
 ```
 
 ---
 
-## 🔴 Requeridas (Obligatorias)
+##  Requeridas (Obligatorias)
 
-| Herramienta | Versión Mínima | Propósito | Instalación |
+| Herramienta | Versin Mnima | Propsito | Instalacin |
 |------------|----------------|-----------|-------------|
 | **Node.js** | 18+ | Runtime JavaScript | [nodejs.org](https://nodejs.org) |
 | **npm** | 9+ | Package manager | Incluido con Node.js |
@@ -27,7 +27,7 @@
 
 ---
 
-## 🟡 Recomendadas (Instalación Automática)
+##  Recomendadas (Instalacin Automtica)
 
 ```powershell
 # Estas se instalan con el comando anterior
@@ -36,7 +36,7 @@ npm install -g prettier
 npm install -g @commitlint/cli @commitlint/config-conventional
 ```
 
-| Herramienta | Propósito | Instalación |
+| Herramienta | Propsito | Instalacin |
 |------------|-----------|-------------|
 | **lefthook** | Git hooks management | `npm install -g lefthook` |
 | **prettier** | Code formatting | `npm install -g prettier` |
@@ -44,11 +44,11 @@ npm install -g @commitlint/cli @commitlint/config-conventional
 
 ---
 
-## 🟢 Opcionales
+##  Opcionales
 
 ### Security
 
-| Herramienta | Propósito | Instalación Windows | Instalación Linux/macOS |
+| Herramienta | Propsito | Instalacin Windows | Instalacin Linux/macOS |
 |------------|-----------|--------------------|----------------------|
 | **trufflehog** | Secrets detection | `choco install trufflehog` | `go install github.com/trufflesecurity/trufflehog/cmd/trufflehog@latest` |
 
@@ -62,14 +62,14 @@ choco install python
 pip install safety bandit
 ```
 
-| Herramienta | Propósito |
+| Herramienta | Propsito |
 |-------------|-----------|
 | **safety** | Dependency vulnerability scanning |
 | **bandit** | Python security analysis |
 
 ---
 
-## 📋 Checklist de Instalación
+##  Checklist de Instalacin
 
 ### 1. Requeridas
 - [ ] Node.js (18+)
@@ -88,7 +88,7 @@ pip install safety bandit
 
 ---
 
-## 🔧 Verificación
+##  Verificacin
 
 ```powershell
 # Verificar todas las herramientas
@@ -105,15 +105,15 @@ trufflehog --version
 
 ---
 
-## ⚠️ Notas Importantes
+##  Notas Importantes
 
-1. **trufflehog** no está disponible como npm - se instala vía Chocolatey o Go
+1. **trufflehog** no est disponible como npm - se instala va Chocolatey o Go
 2. Algunas herramientas requieren permisos de administrador
 3. En Windows, ejecutar PowerShell como administrador si hay problemas
 
 ---
 
-## 📞 Troubleshooting
+##  Troubleshooting
 
 ### Error: "command not found"
 Agregar al PATH:

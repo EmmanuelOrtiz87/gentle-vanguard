@@ -1,4 +1,4 @@
-# Workspace Foundation - Architecture
+﻿# Workspace Foundation - Architecture
 
 > System design, component relationships, and technical decisions.
 
@@ -9,100 +9,100 @@
 ### 1.1 High-Level View
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           SYSTEM ARCHITECTURE                                │
-└─────────────────────────────────────────────────────────────────────────────┘
 
-                              ┌───────────────────────┐
-                              │       DEVELOPER       │
-                              │        (You)         │
-                              └───────────┬───────────┘
-                                          │
-                                          ▼
-      ┌───────────────────────────────────────────────────────────────────────┐
-      │                           CLI LAYER                                   │
-      │  ┌────────────────────────────────────────────────────────────────┐ │
-      │  │                    wf.ps1 (Main Entry)                          │ │
-      │  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐          │ │
-      │  │  │   init   │ │   new    │ │  review  │ │ validate │ ...      │ │
-      │  │  └────┬─────┘ └────┬─────┘ └────┬─────┘ └────┬─────┘          │ │
-      │  └───────┼────────────┼────────────┼────────────┼─────────────────┘ │
-      └──────────┼────────────┼────────────┼────────────┼─────────────────────┘
-                 │            │            │            │
-                 ▼            ▼            ▼            ▼
-      ┌───────────────────────────────────────────────────────────────────────┐
-      │                        ENGINE LAYER                                  │
-      │                                                                       │
-      │  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐           │
-      │  │   Bootstrap   │  │   Review      │  │   Validation  │           │
-      │  │   Engine     │  │   Orchestrator│  │   Engine      │           │
-      │  └───────┬──────┘  └───────┬──────┘  └───────┬──────┘           │
-      │          │                  │                  │                  │
-      │          └──────────────────┼──────────────────┘                  │
-      │                              │                                      │
-      └──────────────────────────────┼──────────────────────────────────────┘
-                                     │
-                                     ▼
-      ┌───────────────────────────────────────────────────────────────────────┐
-      │                        OUTPUT LAYER                                   │
-      │                                                                       │
-      │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐         │
-      │  │ Projects │  │ Reports  │  │  Hooks   │  │  Skills  │         │
-      │  └──────────┘  └──────────┘  └──────────┘  └──────────┘         │
-      │                                                                       │
-      │  ┌─────────────────────────────────────────────────────────────┐   │
-      │  │                    AI ECOSYSTEM LAYER                        │   │
-      │  │                                                              │   │
-      │  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │   │
-      │  │  │ Native     │  │ Gentleman-  │  │   Engram    │         │   │
-      │  │  │ Runtime    │  │   Skills    │  │   Memory    │         │   │
-      │  │  └─────────────┘  └─────────────┘  └─────────────┘         │   │
-      │  │                                                              │   │
-      │  └─────────────────────────────────────────────────────────────┘   │
-      │                                                                       │
-      └───────────────────────────────────────────────────────────────────────┘
+                           SYSTEM ARCHITECTURE                                
+
+
+                              
+                                     DEVELOPER       
+                                      (You)         
+                              
+                                          
+                                          
+      
+                                 CLI LAYER                                   
+         
+                            wf.ps1 (Main Entry)                           
+                        
+             init       new       review    validate  ...       
+                        
+         
+      
+                                                     
+                                                     
+      
+                              ENGINE LAYER                                  
+                                                                             
+                       
+           Bootstrap        Review           Validation             
+           Engine          Orchestrator     Engine                 
+                       
+                                                                      
+                                  
+                                                                          
+      
+                                     
+                                     
+      
+                              OUTPUT LAYER                                   
+                                                                             
+                       
+         Projects    Reports      Hooks       Skills           
+                       
+                                                                             
+           
+                            AI ECOSYSTEM LAYER                           
+                                                                         
+                          
+           Native        Gentleman-       Engram                
+           Runtime         Skills         Memory                
+                          
+                                                                         
+           
+                                                                             
+      
 ```
 
 ### 1.2 Component Dependencies
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         COMPONENT DEPENDENCIES                               │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+                         COMPONENT DEPENDENCIES                               
+
 
     wf.ps1 (CLI)
-        │
-        ├──► Read-Workspace-Config
-        │         │
-        │         └──► workspace.config.json
-        │
-        ├──► Bootstrap-Engine ──► Create-Project ──► Copy-Templates
-        │                             │
-        │                             ├──► Install-Skills
-        │                             │         │
-        │                             │         ├──► Project-Skills
-        │                             │         └──► Gentleman-Skills
-        │                             │
-        │                             └──► Setup-Hooks
-        │                                      │
-        │                                      ├──► Native-Precommit-Review
-        │                                      └──► Code-Review-Hook
-        │
-        ├──► Review-Orchestrator ──► Security-Scan
-        │                   │              │
-        │                   │              └──► Quality-Scan
-        │                   │
-        │                   └──► Generate-Report
-        │
-        └──► AI-Ecosystem
-                   │
-                   ├──► Native Runtime Router (SDD Workflow)
-                   ├──► Gentleman-Skills (Framework Patterns)
-                   └──► Engram (Persistent Memory)
-                            │
-                            └──► docs/code-reviews/
+        
+         Read-Workspace-Config
+                 
+                  workspace.config.json
+        
+         Bootstrap-Engine  Create-Project  Copy-Templates
+                                     
+                                      Install-Skills
+                                              
+                                               Project-Skills
+                                               Gentleman-Skills
+                                     
+                                      Setup-Hooks
+                                              
+                                               Native-Precommit-Review
+                                               Code-Review-Hook
+        
+         Review-Orchestrator  Security-Scan
+                                         
+                                          Quality-Scan
+                           
+                            Generate-Report
+        
+         AI-Ecosystem
+                   
+                    Native Runtime Router (SDD Workflow)
+                    Gentleman-Skills (Framework Patterns)
+                    Engram (Persistent Memory)
+                            
+                             docs/code-reviews/
 
-    ════════════════════════════════════════════════════════════════════════
+    
 
     Dependencies flow: CLI -> Engine -> Output
     Configuration: JSON files (runtime-resolved)
@@ -132,88 +132,88 @@ Rotation is automated on `end-session` and `day-end-closure`.
 ### 2.1 Project Creation Pipeline
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                        BOOTSTRAP PIPELINE                                    │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+                        BOOTSTRAP PIPELINE                                    
+
 
     User Input                  Bootstrap                   Output
-    ──────────                  ─────────                   ──────
+                                         
     
-         │                         │                         │
-         ▼                         ▼                         ▼
-    ┌─────────────┐          ┌─────────────┐          ┌─────────────┐
-    │ wf new     │          │ Read Config │          │ Project    │
-    │ --name     │────────▶│             │────────▶│ Structure  │
-    │ --kind     │          └──────┬──────┘          └─────────────┘
-    └─────────────┘                 │
-                                    ▼
-                            ┌─────────────────┐
-                            │ Validate Input  │
-                            └────────┬────────┘
-                                     │
-                    ┌────────────────┼────────────────┐
-                    │                │                 │
-                    ▼                ▼                 ▼
-             ┌───────────┐   ┌───────────┐   ┌───────────┐
-             │  Clone    │   │  Copy     │   │ Generate │
-             │  (repo)   │   │  Template │   │ Context  │
-             └───────────┘   └─────┬─────┘   └───────────┘
-                                   │                  │
-                                   └────────┬─────────┘
-                                            │
-                                            ▼
-                                   ┌─────────────────┐
-                                   │ Install Skills  │
-                                   └────────┬────────┘
-                                            │
-                                            ▼
-                                   ┌─────────────────┐
-                                   │ Setup Hooks    │
-                                   └────────┬────────┘
-                                            │
-                                            ▼
-                                   ┌─────────────────┐
-                                   │    Complete     │
-                                   └─────────────────┘
+                                                           
+                                                           
+                        
+     wf new                Read Config            Project    
+     --name                   Structure  
+     --kind                         
+                     
+                                    
+                            
+                             Validate Input  
+                            
+                                     
+                    
+                                                     
+                                                     
+                   
+               Clone         Copy         Generate 
+               (repo)        Template     Context  
+                   
+                                                     
+                                   
+                                            
+                                            
+                                   
+                                    Install Skills  
+                                   
+                                            
+                                            
+                                   
+                                    Setup Hooks    
+                                   
+                                            
+                                            
+                                   
+                                       Complete     
+                                   
 ```
 
 ### 2.2 Template Resolution
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                      TEMPLATE RESOLUTION                                     │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+                      TEMPLATE RESOLUTION                                     
+
 
     templates/
-    │
-    ├── project-root/                 ← Base template (always copied)
-    │   ├── .editorconfig
-    │   ├── .gitignore
-    │   ├── README.md
-    │   ├── src/
-    │   ├── tests/
-    │   ├── Dockerfile
-    │   └── docker-compose.yml
-    │
-    └── project-types/
-        │
-        ├── service/                ← Overlay (if --kind=service)
-        │   ├── cmd/
-        │   ├── internal/
-        │   └── .gitlab-ci.yml
-        │
-        ├── cli/                    ← Overlay (if --kind=cli)
-        │   ├── cmd/
-        │   └── Makefile
-        │
-        ├── frontend/               ← Overlay (if --kind=frontend)
-        │   ├── src/
-        │   ├── public/
-        │   └── package.json
-        │
-        └── ... (more types)
+    
+     project-root/                  Base template (always copied)
+        .editorconfig
+        .gitignore
+        README.md
+        src/
+        tests/
+        Dockerfile
+        docker-compose.yml
+    
+     project-types/
+        
+         service/                 Overlay (if --kind=service)
+            cmd/
+            internal/
+            .gitlab-ci.yml
+        
+         cli/                     Overlay (if --kind=cli)
+            cmd/
+            Makefile
+        
+         frontend/                Overlay (if --kind=frontend)
+            src/
+            public/
+            package.json
+        
+         ... (more types)
 
-    ════════════════════════════════════════════════════════════════════════
+    
 
     COPY SEQUENCE:
     
@@ -230,63 +230,63 @@ Rotation is automated on `end-session` and `day-end-closure`.
 ### 3.1 Orchestrator Components
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    ORCHESTRATOR COMPONENTS                                   │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+                    ORCHESTRATOR COMPONENTS                                   
+
 
     code-review.ps1
-    │
-    ├──► Param Block
-    │         ├── Scope (all/security/quality/...)
-    │         ├── Path
-    │         ├── Report (switch)
-    │         ├── Track (switch)
-    │         └── Verbose (switch)
-    │
-    ├──► Issue Collection
-    │         │
-    │         ├── Add-Issue (function)
-    │         │         │
-    │         │         └──► $Script:ISSUES array
-    │         │
-    │         ├── Increment-Counters (CRITICAL/HIGH/MEDIUM/LOW)
-    │         │
-    │         └── Severity-Lookup
-    │
-    ├──► Scan Functions
-    │         │
-    │         ├── Invoke-SecurityReview
-    │         │         │
-    │         │         ├── Secret-Detection
-    │         │         └── Vulnerability-Scan
-    │         │
-    │         ├── Invoke-QualityReview
-    │         ├── Invoke-ArchitectureReview
-    │         ├── Invoke-TestingReview
-    │         ├── Invoke-DocumentationReview
-    │         ├── Invoke-APIReview
-    │         └── Invoke-GitWorkflowReview
-    │
-    ├──► Report Generation
-    │         │
-    │         ├── Get-ReportHeader
-    │         ├── Get-ReportBody
-    │         ├── Get-ReportFooter
-    │         └── Export-IssuesToCSV
-    │
-    └──► Output
-              │
-              ├── Console (formatted)
-              ├── Markdown (docs/code-reviews/)
-              └── CSV (optional)
+    
+     Param Block
+              Scope (all/security/quality/...)
+              Path
+              Report (switch)
+              Track (switch)
+              Verbose (switch)
+    
+     Issue Collection
+             
+              Add-Issue (function)
+                      
+                       $Script:ISSUES array
+             
+              Increment-Counters (CRITICAL/HIGH/MEDIUM/LOW)
+             
+              Severity-Lookup
+    
+     Scan Functions
+             
+              Invoke-SecurityReview
+                      
+                       Secret-Detection
+                       Vulnerability-Scan
+             
+              Invoke-QualityReview
+              Invoke-ArchitectureReview
+              Invoke-TestingReview
+              Invoke-DocumentationReview
+              Invoke-APIReview
+              Invoke-GitWorkflowReview
+    
+     Report Generation
+             
+              Get-ReportHeader
+              Get-ReportBody
+              Get-ReportFooter
+              Export-IssuesToCSV
+    
+     Output
+              
+               Console (formatted)
+               Markdown (docs/code-reviews/)
+               CSV (optional)
 ```
 
 ### 3.2 Issue Object Structure
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         ISSUE OBJECT SCHEMA                                   │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+                         ISSUE OBJECT SCHEMA                                   
+
 
     Issue {
         Id: int                    # Auto-incremented
@@ -302,7 +302,7 @@ Rotation is automated on `end-session` and `day-end-closure`.
         Status: string            # open | in_progress | fixed | accepted
     }
 
-    ════════════════════════════════════════════════════════════════════════
+    
 
     Example JSON Output:
 
@@ -327,82 +327,82 @@ Rotation is automated on `end-session` and `day-end-closure`.
 ### 4.1 Skill Structure
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                            SKILL STRUCTURE                                   │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+                            SKILL STRUCTURE                                   
+
 
     skills/
-    │
-    └── {skill-name}/
-        │
-        ├── SKILL.md                    # Main skill file
-        │                                 (triggers, rules, workflows)
-        │
-        ├── {skill-name}.ps1           # Main script (optional)
-        │
-        ├── configs/
-        │     └── *.json               # Configuration files
-        │
-        ├── hooks/
-        │     ├── pre-commit-*.ps1     # Windows hooks
-        │     └── pre-commit-*.sh      # Unix hooks
-        │
-        ├── prompts/
-        │     └── *.md                 # AI prompts
-        │
-        ├── references/
-        │     └── *.md                 # Documentation
-        │
-        └── templates/
-              └── *.md                 # Output templates
+    
+     {skill-name}/
+        
+         SKILL.md                    # Main skill file
+                                         (triggers, rules, workflows)
+        
+         {skill-name}.ps1           # Main script (optional)
+        
+         configs/
+              *.json               # Configuration files
+        
+         hooks/
+              pre-commit-*.ps1     # Windows hooks
+              pre-commit-*.sh      # Unix hooks
+        
+         prompts/
+              *.md                 # AI prompts
+        
+         references/
+              *.md                 # Documentation
+        
+         templates/
+               *.md                 # Output templates
 ```
 
 ### 4.2 Skill Installation Flow
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                      SKILL INSTALLATION FLOW                                 │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+                      SKILL INSTALLATION FLOW                                 
+
 
     Bootstrap-Engine
-         │
-         ▼
+         
+         
     Read config.skills []
-         │
-         ▼
-    ┌───────────────────────────────────────┐
-    │ For each skill in config.skills:     │
-    └───────────────────────────────────────┘
-         │
-         ▼
-    ┌─────────────┐     ┌─────────────────┐
-    │ Source:      │     │ skills/{name}/  │
-    │ {workspace}/ │────▶│                 │
-    │ skills/{name}│     │  - SKILL.md     │
-    └─────────────┘     │  - configs/     │
-                        │  - hooks/       │
-                        │  - ...          │
-                        └────────┬────────┘
-                                 │
-                                 ▼
-                        ┌─────────────────┐
-                        │ Destination:     │
-                        │ {project}/      │
-                        │ .workspace-     │
-                        │ foundation/     │
-                        │ skills/{name}/ │
-                        └────────┬────────┘
-                                 │
-                                 ▼
-                        ┌─────────────────┐
-                        │ Install Hooks   │
-                        │ (if hooks/ dir)│
-                        └────────┬────────┘
-                                 │
-                                 ▼
-                        ┌─────────────────┐
-                        │    Complete     │
-                        └─────────────────┘
+         
+         
+    
+     For each skill in config.skills:     
+    
+         
+         
+         
+     Source:            skills/{name}/  
+     {workspace}/                  
+     skills/{name}       - SKILL.md     
+           - configs/     
+                          - hooks/       
+                          - ...          
+                        
+                                 
+                                 
+                        
+                         Destination:     
+                         {project}/      
+                         .workspace-     
+                         foundation/     
+                         skills/{name}/ 
+                        
+                                 
+                                 
+                        
+                         Install Hooks   
+                         (if hooks/ dir)
+                        
+                                 
+                                 
+                        
+                            Complete     
+                        
 ```
 
 ---
@@ -412,84 +412,84 @@ Rotation is automated on `end-session` and `day-end-closure`.
 ### 5.1 Pre-commit Hook Flow
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         PRE-COMMIT HOOK FLOW                                 │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+                         PRE-COMMIT HOOK FLOW                                 
+
 
     git commit
-        │
-        ▼
+        
+        
     .git/hooks/pre-commit
-        │
-        ▼
-    ┌─────────────────────────────────────────────┐
-    │ 1. Reentrant Check                         │
-    │    Check .hooks/pre-commit.marker exists?  │
-    └─────────────────────────────────────────────┘
-        │ NO
-        ▼
-    ┌─────────────────────────────────────────────┐
-    │ 2. Create Marker File                     │
-    │    Create .hooks/pre-commit.marker         │
-    └─────────────────────────────────────────────┘
-        │
-        ▼
-    ┌─────────────────────────────────────────────┐
-    │ 3. Get Staged Files                       │
-    │    git diff --cached --name-only           │
-    └─────────────────────────────────────────────┘
-        │
-        ▼
-    ┌─────────────────────────────────────────────┐
-    │ 4. Critical Secrets Scan                  │
-    │    Regex: AWS keys, tokens, API keys...    │
-    └─────────────────────────────────────────────┘
-        │
-        ├──► CRITICAL FOUND ──▶ BLOCK (exit 1)
-        │
-        ▼
-    ┌─────────────────────────────────────────────┐
-    │ 5. Full Quick Scan (Security + Quality)    │
-    │    Call code-review.ps1 -Scope quick        │
-    └─────────────────────────────────────────────┘
-        │
-        ▼
-    ┌─────────────────────────────────────────────┐
-    │ 6. Cleanup                                  │
-    │    Remove .hooks/pre-commit.marker           │
-    └─────────────────────────────────────────────┘
-        │
-        ▼
-    ┌─────────────────────────────────────────────┐
-    │ 7. Exit                                     │
-    │    0 = success, 1 = blocked                 │
-    └─────────────────────────────────────────────┘
+        
+        
+    
+     1. Reentrant Check                         
+        Check .hooks/pre-commit.marker exists?  
+    
+         NO
+        
+    
+     2. Create Marker File                     
+        Create .hooks/pre-commit.marker         
+    
+        
+        
+    
+     3. Get Staged Files                       
+        git diff --cached --name-only           
+    
+        
+        
+    
+     4. Critical Secrets Scan                  
+        Regex: AWS keys, tokens, API keys...    
+    
+        
+         CRITICAL FOUND  BLOCK (exit 1)
+        
+        
+    
+     5. Full Quick Scan (Security + Quality)    
+        Call code-review.ps1 -Scope quick        
+    
+        
+        
+    
+     6. Cleanup                                  
+        Remove .hooks/pre-commit.marker           
+    
+        
+        
+    
+     7. Exit                                     
+        0 = success, 1 = blocked                 
+    
 ```
 
 ### 5.2 Reentrant Protection
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                       REENTRANT PROTECTION                                  │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+                       REENTRANT PROTECTION                                  
+
 
     Problem:
-    ────────────────────────────────────────────────────────────────────────
+    
     git commit
-        │
-        └─▶ pre-commit hook calls code-review.ps1
-                    │
-                    └─▶ code-review.ps1 calls git commands
-                                │
-                                └─▶ git operations might trigger hooks again
-                                            │
-                                            └─▶ INFINITE LOOP!
+        
+         pre-commit hook calls code-review.ps1
+                    
+                     code-review.ps1 calls git commands
+                                
+                                 git operations might trigger hooks again
+                                            
+                                             INFINITE LOOP!
 
     Solution:
-    ────────────────────────────────────────────────────────────────────────
+    
     
     .hooks/
-    └── pre-commit.marker          ← Created at start, deleted at end
+     pre-commit.marker           Created at start, deleted at end
                                        
     Pre-commit Script:
     
@@ -515,60 +515,60 @@ Rotation is automated on `end-session` and `day-end-closure`.
 ### 6.1 Config Hierarchy
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                      CONFIGURATION HIERARCHY                                  │
-└─────────────────────────────────────────────────────────────────────────────┘
 
-    ┌───────────────────────────────────────────────────────────────────────┐
-    │                        config/workspace.config.json                    │
-    │  (Project-specific defaults)                                         │
-    │                                                                        │
-    │  • dataRoot, toolsRoot, projectsRoot                                  │
-    │  • projectDefaults (kind, preset, architecture)                      │
-    │  • tools (external tool configurations)                                │
-    │  • skills (skills to install)                                        │
-    └───────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼ (resolved)
-    ┌───────────────────────────────────────────────────────────────────────┐
-    │                       RUNTIME CONTEXT                                  │
-    │                                                                        │
-    │  Placeholders:                                                        │
-    │  • {workspaceRoot} ──▶ C:\Projects\my-workspace                      │
-    │  • {dataRoot}     ──▶ .engram-data                                   │
-    │  • {toolsRoot}    ──▶ tools/                                         │
-    │  • {projectsRoot} ──▶ projects/                                       │
-    └───────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼ (applied)
-    ┌───────────────────────────────────────────────────────────────────────┐
-    │                      SKILL CONFIGS                                      │
-    │                                                                        │
-    │  skills/code-review-orchestrator/configs/review-config.json         │
-    │  skills/security-expert/configs/security-rules.json                   │
-    │  ...                                                                  │
-    └───────────────────────────────────────────────────────────────────────┘
+                      CONFIGURATION HIERARCHY                                  
+
+
+    
+                            config/workspace.config.json                    
+      (Project-specific defaults)                                         
+                                                                            
+       dataRoot, toolsRoot, projectsRoot                                  
+       projectDefaults (kind, preset, architecture)                      
+       tools (external tool configurations)                                
+       skills (skills to install)                                        
+    
+                                    
+                                     (resolved)
+    
+                           RUNTIME CONTEXT                                  
+                                                                            
+      Placeholders:                                                        
+       {workspaceRoot}  C:\Projects\my-workspace                      
+       {dataRoot}      .engram-data                                   
+       {toolsRoot}     tools/                                         
+       {projectsRoot}  projects/                                       
+    
+                                    
+                                     (applied)
+    
+                          SKILL CONFIGS                                      
+                                                                            
+      skills/code-review-orchestrator/configs/review-config.json         
+      skills/security-expert/configs/security-rules.json                   
+      ...                                                                  
+    
 ```
 
 ### 6.2 Placeholder Resolution
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                     PLACEHOLDER RESOLUTION                                    │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+                     PLACEHOLDER RESOLUTION                                    
+
 
     config/workspace.config.json:
-    ───────────────────────────────────────────────────────────────────────
+    
     {
       "dataRoot": "{workspaceRoot}/.engram-data",
       "toolsRoot": "{workspaceRoot}/tools",
       "projectsRoot": "{workspaceRoot}/projects"
     }
 
-    ════════════════════════════════════════════════════════════════════════════
+    
 
     Resolution Context:
-    ───────────────────────────────────────────────────────────────────────
+    
     {
       workspaceRoot: "C:/Projects/my-workspace",
       dataRoot: "C:/Projects/my-workspace/.engram-data",
@@ -576,7 +576,7 @@ Rotation is automated on `end-session` and `day-end-closure`.
       projectsRoot: "C:/Projects/my-workspace/projects"
     }
 
-    ════════════════════════════════════════════════════════════════════════════
+    
 
     BEFORE:  "{workspaceRoot}/tools/Gentleman-Skills"
     AFTER:    "C:/Projects/my-workspace/tools/Gentleman-Skills"
@@ -589,18 +589,18 @@ Rotation is automated on `end-session` and `day-end-closure`.
 ### 7.1 Secret Detection Rules
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         SECRET DETECTION RULES                                │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+                         SECRET DETECTION RULES                                
+
 
     Category: Cloud Provider Keys
-    ───────────────────────────────────────────────────────────────────────
+    
     AWS Access Key    -> AKIA[0-9A-Z]{16}
     AWS Secret Key    -> (?i)aws_secret_access_key["\s]*[=:]["'][A-Za-z0-9/+=]{40}["']
     Google API Key    -> AIza[0-9A-Za-z_-]{35}
 
     Category: Authentication Tokens
-    ───────────────────────────────────────────────────────────────────────
+    
     GitHub Token      -> ghp_[A-Za-z0-9]{36}
     GitHub OAuth      -> gho_[A-Za-z0-9]{36}
     Slack Token       -> xox[baprs]-[0-9]{10,13}-[0-9]{10,13}-[A-Za-z0-9]+
@@ -608,13 +608,13 @@ Rotation is automated on `end-session` and `day-end-closure`.
     SendGrid Key     -> SG\.[A-Za-z0-9_-]{22}\.[A-Za-z0-9_-]{43}
 
     Category: Generic Secrets
-    ───────────────────────────────────────────────────────────────────────
+    
     API Key           -> (?i)(api[_-]?key|apikey)["\s]*[=:]["'][A-Za-z0-9]{20,}["']
     Bearer Token      -> (?i)bearer\s+[A-Za-z0-9_\-\.]+
     Database URL      -> (?i)(mysql|postgres|mongodb)://[^:\s]+:[^@\s]+@
     Private Key       -> -----BEGIN (RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----
 
-    ════════════════════════════════════════════════════════════════════════════
+    
 
     Note: These patterns may match test/example code.
     Use --exclude-paths to skip test directories.
@@ -630,22 +630,22 @@ Rotation is automated on `end-session` and `day-end-closure`.
 
 **Rationale:**
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                      TECHNOLOGY DECISION: POWERSHELL                        │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│  [OK] Cross-platform (Windows, Linux, macOS)                                  │
-│  [OK] Native JSON/Object handling                                             │
-│  [OK] Built-in SSH/CI/CD support                                              │
-│  [OK] Scripting with functions and modules                                     │
-│  [OK] Easy to read/write for beginners                                        │
-│  [OK] Good IDE support (VSCode, PowerShell ISE)                              │
-│                                                                              │
-│  ✗ Slower than compiled languages (Go, Rust)                                 │
-│  ✗ Requires PowerShell Core installation                                   │
-│  ✗ Some syntax quirks (pipelines, objects)                                  │
-│                                                                              │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+                      TECHNOLOGY DECISION: POWERSHELL                        
+
+                                                                              
+  [OK] Cross-platform (Windows, Linux, macOS)                                  
+  [OK] Native JSON/Object handling                                             
+  [OK] Built-in SSH/CI/CD support                                              
+  [OK] Scripting with functions and modules                                     
+  [OK] Easy to read/write for beginners                                        
+  [OK] Good IDE support (VSCode, PowerShell ISE)                              
+                                                                              
+   Slower than compiled languages (Go, Rust)                                 
+   Requires PowerShell Core installation                                   
+   Some syntax quirks (pipelines, objects)                                  
+                                                                              
+
 ```
 
 ### 8.2 JSON Configuration Over YAML
@@ -654,20 +654,20 @@ Rotation is automated on `end-session` and `day-end-closure`.
 
 **Rationale:**
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                   TECHNOLOGY DECISION: JSON vs YAML                          │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│  JSON Advantages:                      YAML Advantages:                       │
-│  ─────────────────                    ──────────────────                     │
-│  [OK] Native PowerShell support        [OK] Human-readable                       │
-│  [OK] No external dependencies          [OK] Supports comments                    │
-│  [OK] ConvertFrom-Json one-liner       [OK] Better for complex nested config    │
-│  [OK] Consistent with package.json       [OK] Markdown-friendly                    │
-│                                                                              │
-│  Decision: JSON primarily, with JSONC (JSON with comments) where needed   │
-│                                                                              │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+                   TECHNOLOGY DECISION: JSON vs YAML                          
+
+                                                                              
+  JSON Advantages:                      YAML Advantages:                       
+                                           
+  [OK] Native PowerShell support        [OK] Human-readable                       
+  [OK] No external dependencies          [OK] Supports comments                    
+  [OK] ConvertFrom-Json one-liner       [OK] Better for complex nested config    
+  [OK] Consistent with package.json       [OK] Markdown-friendly                    
+                                                                              
+  Decision: JSON primarily, with JSONC (JSON with comments) where needed   
+                                                                              
+
 ```
 
 ---
@@ -678,90 +678,90 @@ Rotation is automated on `end-session` and `day-end-closure`.
 
 ```
 workspace-foundation/
-│
-├── .github/                          # GitHub specific
-│   ├── ISSUE_TEMPLATE/
-│   │     ├── bug_report.yml
-│   │     ├── feature_request.yml
-│   │     └── question.yml
-│   ├── PULL_REQUEST_TEMPLATE.md
-│   ├── CODEOWNERS
-│   └── FUNDING.yml
-│
-├── config/                           # Configuration
-│   ├── workspace.config.json         # Main config
-│   ├── workspace.example.json        # Example config
-│   └── workspace.portable.json       # Portable variant
-│
-├── docs/                             # Documentation
-│   ├── installation.md
-│   ├── project-types.md
-│   ├── ai-models.md
-│   ├── tools.md
-│   ├── VISUAL-GUIDE.md             # Diagrams & charts
-│   ├── ARCHITECTURE.md              # This file
-│   └── code-reviews/               # Generated reports
-│
-├── scripts/                          # Main scripts
-│   ├── wf.ps1                       # Main CLI
-│   ├── bootstrap-workspace.ps1       # Project creation
-│   ├── validate-workspace.ps1        # Validation
-│   ├── deploy.ps1                    # Deployment
-│   ├── migrate.ps1                   # Migrations
-│   └── git-hooks/
-│         ├── pre-commit
-│         ├── pre-push
-│         └── commit-msg
-│
-├── skills/                           # AI Skills
-│   ├── workspace-foundation/
-│   ├── code-review-orchestrator/
-│   ├── security-expert/
-│   ├── testing-skill/
-│   ├── git-workflow-skill/
-│   ├── documentation-governance/
-│   ├── api-design-skill/
-│   ├── architecture-governance/
-│   └── docker-devops-skill/
-│
-├── templates/                         # Project templates
-│   ├── project-root/                 # Base template
-│   ├── project-types/
-│   │     ├── service/
-│   │     ├── cli/
-│   │     ├── library/
-│   │     ├── frontend/
-│   │     ├── fullstack/
-│   │     ├── microservices/
-│   │     └── mobile/
-│   ├── config/                      # Config templates
-│   │     ├── eslintrc.json
-│   │     ├── prettierrc
-│   │     ├── tsconfig.json
-│   │     ├── vitest.config.ts
-│   │     └── jest.config.js
-│   ├── editor/                     # Editor configs
-│   │     ├── .editorconfig
-│   │     ├── vscode/
-│   │     ├── jetbrains/
-│   │     ├── vim/
-│   │     └── emacs/
-│   ├── testing/                    # Test templates
-│   │     ├── playwright.config.ts
-│   │     └── tests/
-│   ├── observability/              # Monitoring
-│   │     ├── prometheus.yml
-│   │     ├── grafana/
-│   │     └── alerts.yml
-│   └── api/                       # API specs
-│         └── openapi.yaml
-│
-├── tools/                            # External tools
-│   └── (tool repositories)
-│
-├── CHANGELOG.md
-├── CONTRIBUTING.md
-└── README.md
+
+ .github/                          # GitHub specific
+    ISSUE_TEMPLATE/
+         bug_report.yml
+         feature_request.yml
+         question.yml
+    PULL_REQUEST_TEMPLATE.md
+    CODEOWNERS
+    FUNDING.yml
+
+ config/                           # Configuration
+    workspace.config.json         # Main config
+    workspace.example.json        # Example config
+    workspace.portable.json       # Portable variant
+
+ docs/                             # Documentation
+    installation.md
+    project-types.md
+    ai-models.md
+    tools.md
+    VISUAL-GUIDE.md             # Diagrams & charts
+    ARCHITECTURE.md              # This file
+    code-reviews/               # Generated reports
+
+ scripts/                          # Main scripts
+    wf.ps1                       # Main CLI
+    bootstrap-workspace.ps1       # Project creation
+    validate-workspace.ps1        # Validation
+    deploy.ps1                    # Deployment
+    migrate.ps1                   # Migrations
+    git-hooks/
+          pre-commit
+          pre-push
+          commit-msg
+
+ skills/                           # AI Skills
+    workspace-foundation/
+    code-review-orchestrator/
+    security-expert/
+    testing-skill/
+    git-workflow-skill/
+    documentation-governance/
+    api-design-skill/
+    architecture-governance/
+    docker-devops-skill/
+
+ templates/                         # Project templates
+    project-root/                 # Base template
+    project-types/
+         service/
+         cli/
+         library/
+         frontend/
+         fullstack/
+         microservices/
+         mobile/
+    config/                      # Config templates
+         eslintrc.json
+         prettierrc
+         tsconfig.json
+         vitest.config.ts
+         jest.config.js
+    editor/                     # Editor configs
+         .editorconfig
+         vscode/
+         jetbrains/
+         vim/
+         emacs/
+    testing/                    # Test templates
+         playwright.config.ts
+         tests/
+    observability/              # Monitoring
+         prometheus.yml
+         grafana/
+         alerts.yml
+    api/                       # API specs
+          openapi.yaml
+
+ tools/                            # External tools
+    (tool repositories)
+
+ CHANGELOG.md
+ CONTRIBUTING.md
+ README.md
 ```
 
 ---
@@ -771,32 +771,32 @@ workspace-foundation/
 ### 10.1 Potential Improvements
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                      FUTURE IMPROVEMENTS                                   │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+                      FUTURE IMPROVEMENTS                                   
+
 
     Short Term (v2.1):
-    ───────────────────────────────────────────────────────────────────────
-    • Performance optimization for large codebases
-    • Parallel scanning for multiple dimensions
-    • Configurable exclusion patterns (glob support)
-    • Interactive fix suggestions with AI
+    
+     Performance optimization for large codebases
+     Parallel scanning for multiple dimensions
+     Configurable exclusion patterns (glob support)
+     Interactive fix suggestions with AI
 
     Medium Term (v2.2):
-    ───────────────────────────────────────────────────────────────────────
-    • Web dashboard for review reports
-    • Integration with Jira/Linear for issue tracking
-    • Historical trend analysis
-    • Team-level aggregations
-    • Custom skill SDK
+    
+     Web dashboard for review reports
+     Integration with Jira/Linear for issue tracking
+     Historical trend analysis
+     Team-level aggregations
+     Custom skill SDK
 
     Long Term (v3.0):
-    ───────────────────────────────────────────────────────────────────────
-    • Real-time collaboration on reviews
-    • ML-based issue classification
-    • Automatic fix generation
-    • Cross-repository analysis
-    • Plugin system for custom checks
+    
+     Real-time collaboration on reviews
+     ML-based issue classification
+     Automatic fix generation
+     Cross-repository analysis
+     Plugin system for custom checks
 ```
 
 ## 11. Shared Conventions & Protocols

@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Report Generator - Generate centralized telemetry reports
     
@@ -294,7 +294,7 @@ function Generate-ErrorAnalysis {
 "@
     
     if ($errorTraces.Count -eq 0) {
-        $report += "**Status**: No errors detected ✓`n"
+        $report += "**Status**: No errors detected `n"
     }
     else {
         # Errors by type

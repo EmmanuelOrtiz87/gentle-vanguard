@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+﻿#!/usr/bin/env bash
 # auto-init-dev-environment.sh - Universal auto-initialization
 # Works on: Linux, macOS, Windows (WSL, Git Bash)
 
@@ -32,9 +32,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 if [ "$QUIET" != "true" ]; then
-    log_info "═════════════════════════════════════════════════════════"
+    log_info ""
     log_info "    Auto-Initialize Development Environment"
-    log_info "═════════════════════════════════════════════════════════"
+    log_info ""
 fi
 
 # Step 1: Run diagnostics
@@ -104,9 +104,9 @@ fi
 
 if bash "$SCRIPT_DIR/system-diagnostics.sh" > /dev/null 2>&1; then
     if [ "$QUIET" != "true" ]; then
-        log_success "═════════════════════════════════════════════════════════"
+        log_success ""
         log_success "    Environment Ready!"
-        log_success "═════════════════════════════════════════════════════════"
+        log_success ""
         log_info ""
         log_info "Next steps:"
         log_info "  1. cd $(basename "$PROJECT_ROOT")"

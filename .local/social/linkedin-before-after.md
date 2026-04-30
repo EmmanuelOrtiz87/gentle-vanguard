@@ -1,4 +1,4 @@
-# LinkedIn - Before/After Story
+﻿# LinkedIn - Before/After Story
 
 BEFORE:
 - 5 projects = context switching chaos
@@ -8,11 +8,11 @@ BEFORE:
 - Surface-level reviews
 
 AFTER:
-- 🧠 Memory survives sessions
-- ⚡ 70% time recovered  
-- 📊 Reporting on-demand
-- 📖 Docs from code
-- ⚖️ Real dual review
+-  Memory survives sessions
+-  70% time recovered  
+-  Reporting on-demand
+-  Docs from code
+-  Real dual review
 
 The change wasn't the tool. It was the SYSTEM.
 

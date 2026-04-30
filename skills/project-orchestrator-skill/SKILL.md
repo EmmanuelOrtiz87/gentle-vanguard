@@ -1,4 +1,4 @@
----
+﻿---
 name: project-orchestrator
 description: >
      MASTER ORCHESTRATOR for coordinated sessions.
@@ -17,8 +17,8 @@ description: >
 1. **Auto-First Session Activation** - Prefer automatic IDE/session detection, but keep on-demand fallback
 2. **MANDATORY Pre-Processing** - BEFORE ANY user input response:
    - Execute: `powershell -File tools/pre-process-input.ps1 -UserInput "USER_INPUT" -WorkspaceRoot "."`
-   - If TRIGGER_MATCH_FOUND → Load skill using `skill` tool BEFORE any other action
-   - If NO_TRIGGER_MATCH → Continue with normal behavior
+   - If TRIGGER_MATCH_FOUND  Load skill using `skill` tool BEFORE any other action
+   - If NO_TRIGGER_MATCH  Continue with normal behavior
    - This applies to ALL tools: opencode, cline, cursor, windsurf, continue.dev, claude, copilot
 3. **Session Startup** - On "iniciar sesion" or session start:
    - Load `session-workflow-skill` automatically
@@ -228,43 +228,43 @@ Every substantial code review MUST cover all 7 dimensions. The orchestrator is r
 
 ```
 ORCHESTRATOR
-    │
-    ├── AGENT-BA     → BDD Scenarios, Requirements
-    │
-    ├── AGENT-SAD    → [A] Architecture + [API] API Design
-    │                   ├── architecture-governance
-    │                   ├── api-design-skill
-    │                   ├── database-relational-skill
-    │                   └── database-nosql-skill
-    │
-    ├── AGENT-DEV    → [Q] Quality + Code Implementation
-    │                   ├── typescript-skill
-    │                   ├── code-review-orchestrator-skill
-    │                   ├── technical-debt-skill
-    │                   └── security-skill (basic)
-    │
-    ├── AGENT-QA     → [T] Testing + Validation
-    │                   ├── testing-strategy-skill
-    │                   ├── testing-skill
-    │                   ├── playwright-skill
-    │                   ├── pytest-skill
-    │                   └── judgment-day (dual-review)
-    │
-    ├── AGENT-OPS    → Infrastructure, CI/CD
-    │                   ├── docker-devops-skill
-    │                   ├── kubernetes-deployment
-    │                   └── terraform-infrastructure
-    │
-    ├── AGENT-GOV    → [S] Security + [G] Git Workflow
-    │                   ├── security-expert-skill
-    │                   ├── git-workflow-skill
-    │                   ├── observability-skill
-    │                   └── incident-response-plan
-    │
-    └── AGENT-DOC    → [D] Documentation
-                        ├── documentation-governance
-                        ├── readme-standards
-                        └── docs-structure
+    
+     AGENT-BA      BDD Scenarios, Requirements
+    
+     AGENT-SAD     [A] Architecture + [API] API Design
+                        architecture-governance
+                        api-design-skill
+                        database-relational-skill
+                        database-nosql-skill
+    
+     AGENT-DEV     [Q] Quality + Code Implementation
+                        typescript-skill
+                        code-review-orchestrator-skill
+                        technical-debt-skill
+                        security-skill (basic)
+    
+     AGENT-QA      [T] Testing + Validation
+                        testing-strategy-skill
+                        testing-skill
+                        playwright-skill
+                        pytest-skill
+                        judgment-day (dual-review)
+    
+     AGENT-OPS     Infrastructure, CI/CD
+                        docker-devops-skill
+                        kubernetes-deployment
+                        terraform-infrastructure
+    
+     AGENT-GOV     [S] Security + [G] Git Workflow
+                        security-expert-skill
+                        git-workflow-skill
+                        observability-skill
+                        incident-response-plan
+    
+     AGENT-DOC     [D] Documentation
+                         documentation-governance
+                         readme-standards
+                         docs-structure
 ```
 
 ### Review Scope Commands
@@ -303,17 +303,17 @@ GGA (Gentleman Guardian Angel) serves as **optional fallback** when Foundation c
 
 ```
 ORCHESTRATOR (Primary - Always Active)
-    │
-    ├── Can proceed? → Execute normally
-    │
-    ├── Blocked/Unknown? → Try self-healing
-    │
-    └── Still blocked? → GGA FALLBACK (Optional Guardian)
-            │
-            ├── Code review assistance
-            ├── Decision support
-            ├── Task completion assist
-            └── Commit hygiene
+    
+     Can proceed?  Execute normally
+    
+     Blocked/Unknown?  Try self-healing
+    
+     Still blocked?  GGA FALLBACK (Optional Guardian)
+            
+             Code review assistance
+             Decision support
+             Task completion assist
+             Commit hygiene
 ```
 
 ### Fallback Trigger Conditions
@@ -366,11 +366,11 @@ if (-not $canProceed) {
 ### Skill Loading Order
 
 ```
-1. project-orchestrator        → ALWAYS (master conductor)
-2. session-workflow            → On session start/end
-3. context-engineering         → On context operations
-4. code-review-orchestrator    → On review requests
-5. guardian-fallback (GGA)     → ONLY when blocked (optional)
+1. project-orchestrator         ALWAYS (master conductor)
+2. session-workflow             On session start/end
+3. context-engineering          On context operations
+4. code-review-orchestrator     On review requests
+5. guardian-fallback (GGA)      ONLY when blocked (optional)
 ```
 
 ### Key Principle
@@ -496,10 +496,10 @@ Use Engram memory as a reasoning cache to avoid redundant analysis and preserve 
 
 ### Branch Strategy
 ```
-main (production) ←── hotfix/*
-     ↑
-develop (integration) ←── release/*
-     ↑
+main (production)  hotfix/*
+     
+develop (integration)  release/*
+     
 feature/* / bugfix/*
 ```
 
@@ -521,43 +521,43 @@ ci:       CI/CD changes
 ## COMPLETE WORKFLOW
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    SESSION WORKFLOW                                │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                   │
-│  1. SESSION START                                               │
-│     ├─ mem_context                                              │
-│     ├─ Detect project/stack                                      │
-│     ├─ Check git branch/status                                  │
-│     ├─ Load skills                                              │
-│     └─ Present status                                           │
-│                                                                   │
-│  2. WORK                                                        │
-│     ├─ Execute with loaded skills                               │
-│     ├─ Update todos                                            │
-│     └─ Verify each step                                         │
-│                                                                   │
-│  3. PRE-PUSH                                                    │
-│     ├─ Generate AUDIT DOCUMENT                                   │
-│     ├─ Run code review (if PR)                                  │
-│     └─ Handle findings                                          │
-│                                                                   │
-│  4. VALIDATE SPEC                                               │
-│     └─ Check acceptance criteria                                │
-│                                                                   │
-│  5. ASK USER                                                    │
-│     ├─ Did we meet the specification?                          │
-│     ├─ Were any findings identified?                           │
-│     ├─ Fix them now or later?                                  │
-│     └─ Create a PR?                                            │
-│                                                                   │
-│  6. END SESSION                                                 │
-│     ├─ Commit changes                                           │
-│     ├─ Push (if confirmed)                                      │
-│     ├─ mem_save summary                                         │
-│     └─ Present completion summary                               │
-│                                                                   │
-└─────────────────────────────────────────────────────────────────┘
+
+                    SESSION WORKFLOW                                
+
+                                                                   
+  1. SESSION START                                               
+      mem_context                                              
+      Detect project/stack                                      
+      Check git branch/status                                  
+      Load skills                                              
+      Present status                                           
+                                                                   
+  2. WORK                                                        
+      Execute with loaded skills                               
+      Update todos                                            
+      Verify each step                                         
+                                                                   
+  3. PRE-PUSH                                                    
+      Generate AUDIT DOCUMENT                                   
+      Run code review (if PR)                                  
+      Handle findings                                          
+                                                                   
+  4. VALIDATE SPEC                                               
+      Check acceptance criteria                                
+                                                                   
+  5. ASK USER                                                    
+      Did we meet the specification?                          
+      Were any findings identified?                           
+      Fix them now or later?                                  
+      Create a PR?                                            
+                                                                   
+  6. END SESSION                                                 
+      Commit changes                                           
+      Push (if confirmed)                                      
+      mem_save summary                                         
+      Present completion summary                               
+                                                                   
+
 ```
 
 ---
@@ -639,44 +639,44 @@ Brief description of session work.
 ### Review Flow
 ```
 START REVIEW
-     │
-     ▼
-┌─────────────────┐
-│ Run quick scan  │  ← Security + Quality
-│ (~30 seconds)   │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Findings?       │
-└────────┬────────┘
-         │
-    ┌────┴────┐
-    │YES      │NO
-    ▼         ▼
-┌─────────┐ ┌─────────┐
-│ Classify │ │ Review  │
-│ severity │ │ Complete│
-└────┬────┘ └────┬────┘
-     │           │
-     ▼           ▼
-┌─────────────────────────┐
-│ PRESENT FINDINGS         │
-│                         │
-│ Severity breakdown       │
-│ List of issues          │
-│ Recommendations         │
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│ ASK USER DECISION       │
-│                         │
-│ A) Fix all now          │
-│ B) Fix HIGH+ now, rest later │
-│ C) Create PR, fix later │
-│ D) Skip PR, fix in next session │
-└─────────────────────────┘
+     
+     
+
+ Run quick scan     Security + Quality
+ (~30 seconds)   
+
+         
+         
+
+ Findings?       
+
+         
+    
+    YES      NO
+             
+ 
+ Classify   Review  
+ severity   Complete
+ 
+                
+                
+
+ PRESENT FINDINGS         
+                         
+ Severity breakdown       
+ List of issues          
+ Recommendations         
+
+             
+             
+
+ ASK USER DECISION       
+                         
+ A) Fix all now          
+ B) Fix HIGH+ now, rest later 
+ C) Create PR, fix later 
+ D) Skip PR, fix in next session 
+
 ```
 
 ---
@@ -688,32 +688,32 @@ START REVIEW
 | Severity | Icon | Action | Blocking |
 |----------|------|--------|----------|
 | **CRITICAL** | [X] | Block immediately | YES |
-| **HIGH** | [!]️ | Must fix before PR | YES |
+| **HIGH** | [!] | Must fix before PR | YES |
 | **MEDIUM** | [-] | User choice | NO |
 | **LOW** | [*] | Suggestion only | NO |
 
 ### User Decision Options
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                   FINDINGS DECISION                         │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│  CRITICAL/HIGH found:                                       │
-│  ─────────────────────────                                  │
-│  -> Must fix before proceeding                                │
-│                                                              │
-│  MEDIUM found:                                              │
-│  ───────────────                                            │
-│  A) Fix now (recommended)                                    │
-│  B) Create PR, fix in separate session                       │
-│  C) Document as tech debt, create PR                         │
-│                                                              │
-│  LOW found:                                                 │
-│  ───────────                                                │
-│  -> Can be fixed anytime, proceed with PR                     │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
+
+                   FINDINGS DECISION                         
+
+                                                              
+  CRITICAL/HIGH found:                                       
+                                    
+  -> Must fix before proceeding                                
+                                                              
+  MEDIUM found:                                              
+                                              
+  A) Fix now (recommended)                                    
+  B) Create PR, fix in separate session                       
+  C) Document as tech debt, create PR                         
+                                                              
+  LOW found:                                                 
+                                                  
+  -> Can be fixed anytime, proceed with PR                     
+                                                              
+
 ```
 
 ### Questions to Ask
@@ -723,7 +723,7 @@ START REVIEW
 
 **Found:** X issues
 - [X] CRITICAL: N (block if any)
-- [!]️ HIGH: N
+- [!] HIGH: N
 - [-] MEDIUM: N  
 - [*] LOW: N
 
@@ -872,7 +872,7 @@ If they drift from the real work, update them during the session.
 
 **Findings:**
 - [X] Critical: N
-- [!]️ High: N
+- [!] High: N
 - [-] Medium: N
 - [*] Low: N
 
@@ -889,7 +889,7 @@ Run `mem_save` with this summary.
 
 ## ANTI-PATTERNS
 
-| ❌ Don't | [OK] Do |
+|  Don't | [OK] Do |
 |----------|------|
 | Push without audit | Generate audit doc |
 | PR without review | Run code review |

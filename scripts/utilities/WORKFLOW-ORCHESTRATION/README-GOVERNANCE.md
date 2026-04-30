@@ -1,4 +1,4 @@
-# Event Bus Governance System
+﻿# Event Bus Governance System
 
 ## Quick Start
 
@@ -27,22 +27,22 @@ View Report:
 
 ## Components
 
-- `event-governance-layer.ps1` - Validación y enforcement
+- `event-governance-layer.ps1` - Validacin y enforcement
 - `event-bus-enhanced.ps1` - Event Bus mejorado
-- `orchestrator-governance-integration.ps1` - Integración Orchestrator
+- `orchestrator-governance-integration.ps1` - Integracin Orchestrator
 
 ## Configuration
 
-- `config/event-registry.json` - Definición de eventos
-- `config/event-governance-config.json` - Políticas
+- `config/event-registry.json` - Definicin de eventos
+- `config/event-governance-config.json` - Polticas
 
 ## Features
 
-✅ Validación de esquemas  
-✅ Políticas de seguridad  
-✅ Rate limiting  
-✅ Auditoría completa  
-✅ Monitoreo pasivo  
-✅ Alertas automáticas  
+ Validacin de esquemas  
+ Polticas de seguridad  
+ Rate limiting  
+ Auditora completa  
+ Monitoreo pasivo  
+ Alertas automticas  
 
 Ver `docs/EVENT-GOVERNANCE-IMPLEMENTATION.md` para detalles.

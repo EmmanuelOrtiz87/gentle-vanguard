@@ -1,4 +1,4 @@
-# Adaptive Rules - Learned Norms
+﻿# Adaptive Rules - Learned Norms
 
 This directory contains norms learned autonomously by the **Auto-Norm-Learner** system.
 
@@ -6,17 +6,17 @@ This directory contains norms learned autonomously by the **Auto-Norm-Learner** 
 
 ```
 rules/adaptive/
-├── README.md              (this file)
-├── LEARNED-NORMS.md      (master index of all learned norms)
-├── docs-placement/       (documentation location norms)
-│   ├── DOC-001.md
-│   └── DOC-002.md
-├── auto-correction/       (automatic correction patterns)
-│   ├── CORR-001.md
-│   └── CORR-002.md
-└── session-patterns/      (session behavior norms)
-    ├── SESS-001.md
-    └── SESS-002.md
+ README.md              (this file)
+ LEARNED-NORMS.md      (master index of all learned norms)
+ docs-placement/       (documentation location norms)
+    DOC-001.md
+    DOC-002.md
+ auto-correction/       (automatic correction patterns)
+    CORR-001.md
+    CORR-002.md
+ session-patterns/      (session behavior norms)
+     SESS-001.md
+     SESS-002.md
 ```
 
 ## Norm Types

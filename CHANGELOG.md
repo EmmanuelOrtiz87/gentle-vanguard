@@ -1,4 +1,4 @@
-# Changelog
+﻿# Changelog
 
 All notable changes to this project will be documented in this file.
 
@@ -136,7 +136,7 @@ This marks the first official, stable release of Gentleman Foundation. All previ
 
 - **Global vs Repository Boundary Protocol**: `skills/project-orchestrator-skill/SKILL.md#GLOBAL-VS-REPOSITORY-BOUNDARY-PROTOCOL`
   - Separation of coordination artifacts from implementation artifacts
-  - Explicit replication checks (global ↔ repo)
+  - Explicit replication checks (global  repo)
   - Decision outcomes (global-only, repo-only, both)
   - Workspace reference at `c:/Workspace_local/docs/reference/WORKSPACE-FUTURE-FEATURES-BACKLOG.md`
 

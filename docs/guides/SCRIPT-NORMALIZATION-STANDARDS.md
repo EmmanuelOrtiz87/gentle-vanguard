@@ -1,4 +1,4 @@
-# Script Normalization Standards
+﻿# Script Normalization Standards
 
 **Date**: 2026-04-22  
 **Status**: AUDIT COMPLETED  
@@ -31,7 +31,7 @@ All PowerShell scripts in the project must follow strict normalization standards
 Write-Host "OK - Task completed"
 
 # BAD - Contains special Unicode
-Write-Host "✓ Validation passed"
+Write-Host " Validation passed"
 
 # BAD - Contains curly quotes
 Write-Host "Error: 'Invalid input'"
@@ -114,9 +114,9 @@ Write-Host "ERROR - Something failed"
 Write-Host "WARNING - Check this"
 
 # BAD - Special symbols
-Write-Host "✓ Success"
-Write-Host "✗ Failed"
-Write-Host "→ Next step"
+Write-Host " Success"
+Write-Host " Failed"
+Write-Host " Next step"
 ```
 
 **CORRECT**:
@@ -355,7 +355,7 @@ Get-Content .\docs\audit\script-normalization-report.md
 **PROBLEM**:
 ```powershell
 # This breaks the parser - PowerShell interprets [OK] as an index expression
-[OK] Validation passed    ← ERROR: Index expression without array
+[OK] Validation passed     ERROR: Index expression without array
 
 # This also breaks in here-strings without proper handling
 Write-Host @"
@@ -372,7 +372,7 @@ Write-Output "[OK] Validation passed"
 # GOOD - Prefix with # in examples and here-strings
 Write-Host @"
 [# OK] Validation passed
-[✔] All good
+[] All good
 "@
 
 # GOOD - Use Write- function

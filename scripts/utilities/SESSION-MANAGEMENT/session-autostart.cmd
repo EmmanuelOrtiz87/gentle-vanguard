@@ -1,4 +1,4 @@
-@echo off
+﻿@echo off
 setlocal
 
 set SCRIPT=%~dp0session-manager.ps1
@@ -17,7 +17,7 @@ if not exist "%SCRIPT%" (
   exit /b 1
 )
 
-REM Ejecutar optimización de Engram antes del inicio de sesión
+REM Ejecutar optimizacin de Engram antes del inicio de sesin
 if exist "%OPTIMIZE_SCRIPT%" (
   echo [INFO] Running Engram optimization pre-session...
   powershell -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_local"
@@ -33,7 +33,7 @@ REM Validar consistencia cross-workspace
 echo [INFO] Validating cross-workspace consistency...
 powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\monitoring\cross-workspace-validator.ps1"
 
-REM Marcar sesión como activa
+REM Marcar sesin como activa
 echo [INFO] Marking session as active...
 if not exist "logs" mkdir logs
 echo %date% %time% > logs\.session-active

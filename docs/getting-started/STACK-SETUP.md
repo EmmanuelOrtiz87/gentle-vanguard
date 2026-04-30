@@ -1,4 +1,4 @@
-# 🏗️ Foundation - Development Stack Setup & Auto-Repair Guide
+﻿#  Foundation - Development Stack Setup & Auto-Repair Guide
 
 ## Overview
 
@@ -107,7 +107,7 @@ Install or verify Engram CLI availability.
 
 ## Usage Flows
 
-### 🆕 Start a Project From Scratch
+###  Start a Project From Scratch
 
 ```powershell
 cd c:\projects
@@ -123,7 +123,7 @@ Copy-Item -Path "c:\workspace-foundation\*" -Destination . -Recurse
 
 **Result:** Stack fully initialized and operational.
 
-### 📥 Cloned Project or New Branch
+###  Cloned Project or New Branch
 
 ```powershell
 # After git clone or git checkout
@@ -187,12 +187,12 @@ The system detects and repairs the following automatically:
 
 | Problem | Detection | Repair |
 |----------|-----------|-----------|
-| Missing Engram CLI | ✓ | Installs via `go install` |
-| Missing workspace config | ✓ | Creates it from the template |
-| Orchestrator not activated | ✓ | Activates and initializes it |
-| Unsatisfied dependencies | ✓ | Attempts automatic installation |
-| Missing Node/npm (dashboard) | ✓ | Warns for manual installation |
-| Go not installed | ✓ | Warns for manual installation |
+| Missing Engram CLI |  | Installs via `go install` |
+| Missing workspace config |  | Creates it from the template |
+| Orchestrator not activated |  | Activates and initializes it |
+| Unsatisfied dependencies |  | Attempts automatic installation |
+| Missing Node/npm (dashboard) |  | Warns for manual installation |
+| Go not installed |  | Warns for manual installation |
 
 ## Status Codes
 
@@ -359,4 +359,4 @@ if ($status.overallStatus -ne "HEALTHY") {
 - [scripts/diagnostics/system-diagnostics.ps1](../../scripts/diagnostics/system-diagnostics.ps1) - Diagnostics engine
 - [hooks/post-checkout.ps1](../../hooks/post-checkout.ps1) - Automatic verification on checkout
 
-- Los hooks automáticos de Foundation - Development Stack ejecutan chequeos de 7 dimensiones (seguridad, calidad, arquitectura, testing, API, documentación, gitflow) en cada commit/push. Ver REVIEW-INDEX.md para detalles.
+- Los hooks automticos de Foundation - Development Stack ejecutan chequeos de 7 dimensiones (seguridad, calidad, arquitectura, testing, API, documentacin, gitflow) en cada commit/push. Ver REVIEW-INDEX.md para detalles.

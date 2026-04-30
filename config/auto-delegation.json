@@ -1,4 +1,4 @@
-{
+﻿{
     "enabled":  true,
     "confidenceThreshold":  60,
     "maxParallelAgents":  3,
@@ -112,10 +112,10 @@
                                            "informe",
                                            "report",
                                            "reporte",
-                                           "métricas",
+                                           "mtricas",
                                            "metrics",
                                            "analytics",
-                                           "análisis",
+                                           "anlisis",
                                            "dashboard",
                                            "resumen ejecutivo",
                                            "gerencia",
@@ -124,10 +124,10 @@
                                            "consumo",
                                            "sesiones",
                                            "telemetry",
-                                           "telemetría",
-                                           "estadísticas",
+                                           "telemetra",
+                                           "estadsticas",
                                            "stats",
-                                           "resumen de sesión"
+                                           "resumen de sesin"
                                        ]
                          },
     "adaptive_mode":  {

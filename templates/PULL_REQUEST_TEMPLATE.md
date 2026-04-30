@@ -1,4 +1,4 @@
-## Summary
+﻿## Summary
 
 <!-- Brief description of what this PR does and why -->
 
@@ -44,8 +44,8 @@ Closes #[ISSUE_NUMBER]
 
 | Dimension | Status | Notes |
 |-----------|--------|-------|
-| Security | ☐ | |
-| Quality | ☐ | |
-| Architecture | ☐ | |
-| Testing | ☐ | |
-| Documentation | ☐ | |
+| Security |  | |
+| Quality |  | |
+| Architecture |  | |
+| Testing |  | |
+| Documentation |  | |

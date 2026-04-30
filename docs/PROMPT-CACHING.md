@@ -1,28 +1,28 @@
-# Prompt Caching Configuration
+﻿# Prompt Caching Configuration
 
 ## Overview
-Configuración de prompt caching para optimizar costos de tokens en opencode.
+Configuracin de prompt caching para optimizar costos de tokens en opencode.
 
 ## Requisitos Implementados
 
 ### 1. Estructura de Prompt (Orden Obligatorio)
 1. **Herramientas (tools)** - Primeras en el prompt
 2. **System Prompt** - Segundo en el prompt  
-3. **Mensajes (messages)** - Últimos en el prompt
+3. **Mensajes (messages)** - ltimos en el prompt
 
-### 2. Configuración de Cache
+### 2. Configuracin de Cache
 - `cache_control: { type: "ephemeral" }` en bloques de contenido
-- Tokens mínimos: 2000
-- Tokens máximos: 4500
+- Tokens mnimos: 2000
+- Tokens mximos: 4500
 
 ### 3. Restricciones
-- **No imágenes**: No se aceptan imágenes para gestión de cache
-- **No contenido dinámico**: Nada de contenido dinámico antes de guardar en cache
-- **No cambios de parámetros de razonamiento**: 
+- **No imgenes**: No se aceptan imgenes para gestin de cache
+- **No contenido dinmico**: Nada de contenido dinmico antes de guardar en cache
+- **No cambios de parmetros de razonamiento**: 
   - No cambiar nivel de "thinking" entre requests
   - Esto invalida la cache
 
-### 4. Configuración en opencode.json
+### 4. Configuracin en opencode.json
 
 ```json
 {
@@ -78,12 +78,12 @@ Para proveedores que soportan prompt caching (Anthropic, OpenRouter), usar:
 }
 ```
 
-## Verificación
+## Verificacin
 
-Para verificar que el cache está funcionando:
+Para verificar que el cache est funcionando:
 1. Revisar logs de proveedor (ej. OpenRouter logs)
 2. Confirmar que hay cache hits en requests consecutivos
-3. Verificar que no hay cambios en parámetros entre requests
+3. Verificar que no hay cambios en parmetros entre requests
 
 ## Notas Importantes
 

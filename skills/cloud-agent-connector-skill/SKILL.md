@@ -1,4 +1,4 @@
----
+﻿---
 name: cloud-agent-connector
 description: >
   Standards and utilities for connecting to external cloud AI agents (Difi, Azure, OpenAI, Anthropic, Gemini, Ollama, and Bedrock via signed proxy).
@@ -57,8 +57,8 @@ Enable Foundation to delegate tasks to high-performance cloud models while maint
 ### Configuration Files
 ```
 config/
-├── cloud-agents.json          # SHARED template (no secrets)
-└── cloud-agents.local.json    # LOCAL provider metadata (GITIGNORED)
+ cloud-agents.json          # SHARED template (no secrets)
+ cloud-agents.local.json    # LOCAL provider metadata (GITIGNORED)
 ```
 
 ## Protocol: Preventing "Narration Errors"

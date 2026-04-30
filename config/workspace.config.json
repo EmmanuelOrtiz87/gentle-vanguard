@@ -1,4 +1,4 @@
-{
+﻿{
   "workspaceName": "workspace-foundation-portable",
   "dataRoot": ".engram-data",
   "toolsRoot": "tools",
@@ -86,7 +86,7 @@
         "windows": {
           "winget": "Git.Git",
           "url": "https://git-scm.com/download/win",
-          "notes": "Git Bash (bash.exe) is included — restart terminal after install"
+          "notes": "Git Bash (bash.exe) is included  restart terminal after install"
         },
         "linux": {
           "url": "https://git-scm.com/download/linux",

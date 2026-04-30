@@ -1,4 +1,4 @@
-# Integration Guide: Existing Projects
+﻿# Integration Guide: Existing Projects
 
 How to integrate Workspace Foundation into existing repositories and projects.
 
@@ -45,16 +45,16 @@ winget install Microsoft.PowerShell
 
 ```
 Existing Project          Foundation Integration
-─────────────────        ────────────────────
+        
 C:\my-project\           C:\my-project\
-├── src/                  ├── src/
-├── tests/                ├── tests/
-├── README.md             ├── README.md (kept)
-├── package.json          ├── package.json (kept)
-│                        ├── .audit/ (NEW)
-│                        ├── AGENTS.md (NEW)
-│                        ├── scripts/ (NEW)
-│                        └── docs/ (NEW)
+ src/                   src/
+ tests/                 tests/
+ README.md              README.md (kept)
+ package.json           package.json (kept)
+                         .audit/ (NEW)
+                         AGENTS.md (NEW)
+                         scripts/ (NEW)
+                         docs/ (NEW)
 ```
 
 **Steps:**
@@ -81,11 +81,11 @@ git status
 
 ```
 GitHub/Bitbucket          Local + Foundation
-─────────────────        ────────────────────
-my-repo.git    ──────▶   my-repo/
-                              ├── src/
-                              ├── .audit/ (NEW)
-                              └── ...
+        
+my-repo.git       my-repo/
+                               src/
+                               .audit/ (NEW)
+                               ...
 ```
 
 **Steps:**
@@ -108,9 +108,9 @@ git push
 
 ```
 C:\Projects\
-├── project-alpha\      ← Integrate Foundation
-├── project-beta\       ← Integrate Foundation
-└── project-gamma\     ← Integrate Foundation
+ project-alpha\       Integrate Foundation
+ project-beta\        Integrate Foundation
+ project-gamma\      Integrate Foundation
 ```
 
 **Steps:**
@@ -136,40 +136,40 @@ cd C:\Projects\project-beta
 
 ```
 Your Project
-├── .audit/                    ← NEW: Audit system
-│   ├── sessions/             ← Session logs
-│   ├── metrics/              ← Aggregated metrics
-│   └── reports/               ← Weekly reports
-├── AGENTS.md                  ← NEW: AI agent rules
-├── scripts/                   ← NEW: Helper scripts
-│   ├── init-workspace.ps1    ← Bootstrap
-│   ├── finalize-session.ps1   ← Session end
-│   └── ...
-└── docs/                      ← NEW: Foundation docs
-    └── audit-system.md
+ .audit/                     NEW: Audit system
+    sessions/              Session logs
+    metrics/               Aggregated metrics
+    reports/                Weekly reports
+ AGENTS.md                   NEW: AI agent rules
+ scripts/                    NEW: Helper scripts
+    init-workspace.ps1     Bootstrap
+    finalize-session.ps1    Session end
+    ...
+ docs/                       NEW: Foundation docs
+     audit-system.md
 ```
 
 ### Files That Stay Untouched
 
 ```
 Your existing files are NEVER modified:
-├── src/                       ← NO CHANGE
-├── tests/                      ← NO CHANGE
-├── package.json                ← NO CHANGE
-├── README.md                  ← NO CHANGE (content kept)
-├── .gitignore                 ← NO CHANGE (may merge if needed)
-├── package-lock.json          ← NO CHANGE
-└── ...                        ← NO CHANGE
+ src/                        NO CHANGE
+ tests/                       NO CHANGE
+ package.json                 NO CHANGE
+ README.md                   NO CHANGE (content kept)
+ .gitignore                  NO CHANGE (may merge if needed)
+ package-lock.json           NO CHANGE
+ ...                         NO CHANGE
 ```
 
 ### Template Files (Optional)
 
 ```
 You CAN apply project templates to add missing structure:
-├── templates/project-types/service/
-│   ├── src/
-│   │   └── main/             ← Only if you don't have src/main/
-│   └── Dockerfile             ← Only if you don't have one
+ templates/project-types/service/
+    src/
+       main/              Only if you don't have src/main/
+    Dockerfile              Only if you don't have one
 ```
 
 ## Handling Conflicts
@@ -275,9 +275,9 @@ claude "Hello, verify you're working"
 ```powershell
 # Local config (not committed)
 .env.local
-├── AI_PROVIDER=claude
-├── AI_MODEL=claude-sonnet-4
-└── AUDIT_ENABLED=true
+ AI_PROVIDER=claude
+ AI_MODEL=claude-sonnet-4
+ AUDIT_ENABLED=true
 ```
 
 ### Team Consistency

@@ -1,5 +1,5 @@
-
-# DEPRECATED: El backlog oficial ahora vive en docs/backlog/items.json (JSON fuente) y docs/backlog/README.md (resumen generado). Este archivo queda solo como referencia histórica. Actualiza y consulta el backlog únicamente en docs/backlog/.
+﻿
+# DEPRECATED: El backlog oficial ahora vive en docs/backlog/items.json (JSON fuente) y docs/backlog/README.md (resumen generado). Este archivo queda solo como referencia histrica. Actualiza y consulta el backlog nicamente en docs/backlog/.
 
 # Future Features Backlog
 
@@ -56,10 +56,10 @@ If the user confirms, append the item. If not confirmed, do not register it.
 | FF-012 | 2026-04-15 | Unified Metrics Dashboard | Centralized metrics collection with Grafana visualization. | medium | pending | framework-core | When operational scale requires centralized observability. |
 | FF-013 | 2026-04-15 | SDD Governance Enforcement | Mandatory SDD gate pre-merge with validated/done status. Template exists but not enforced. | high | pending | AGENT-GOV | When SDD baseline is stable for one sprint. |
 | FF-014 | 2026-04-17 | Legacy Toolchain Cleanup | Complete removal of legacy optional integrations references and finalize native-only documentation/flows. | high | done | AGENT-GOV | Completed in current release. |
-| FF-015 | 2026-04-19 | Git Hooks Robustness | Automatizar la verificación e instalación del hook post-checkout.ps1 en el setup/bootstrap de Foundation. Documentar restauración manual y agregar logging si falla la instalación. | high | pending | orchestrator | Cuando un dev reporte pérdida del hook o tras migraciones de estructura. |
-| FF-016 | 2026-04-19 | Token Efficiency | Evaluar integración de RTK (Rust Token Killer) solo si los hooks/skills actuales no logran reducir el consumo de tokens en casos reales. | low | pending | orchestrator | Cuando se detecte un cuello de botella real de consumo de tokens no mitigable por los mecanismos actuales. |
-| FF-017 | 2026-04-19 | Auto-Actualización Skills/Tools | Implementar mecanismo de auto-actualización para skills y herramientas nativas para reducir mantenimiento manual y asegurar mejoras continuas. | medium | pending | orchestrator | Próxima release o cuando se detecten skills/herramientas desactualizadas. |
-| FF-018 | 2026-04-19 | Instalador Interactivo (TUI) | Desarrollar instalador y configurador interactivo tipo TUI para facilitar onboarding y setup nativo de Foundation. | low | pending | orchestrator | Próxima release o cuando se priorice experiencia de onboarding. |
+| FF-015 | 2026-04-19 | Git Hooks Robustness | Automatizar la verificacin e instalacin del hook post-checkout.ps1 en el setup/bootstrap de Foundation. Documentar restauracin manual y agregar logging si falla la instalacin. | high | pending | orchestrator | Cuando un dev reporte prdida del hook o tras migraciones de estructura. |
+| FF-016 | 2026-04-19 | Token Efficiency | Evaluar integracin de RTK (Rust Token Killer) solo si los hooks/skills actuales no logran reducir el consumo de tokens en casos reales. | low | pending | orchestrator | Cuando se detecte un cuello de botella real de consumo de tokens no mitigable por los mecanismos actuales. |
+| FF-017 | 2026-04-19 | Auto-Actualizacin Skills/Tools | Implementar mecanismo de auto-actualizacin para skills y herramientas nativas para reducir mantenimiento manual y asegurar mejoras continuas. | medium | pending | orchestrator | Prxima release o cuando se detecten skills/herramientas desactualizadas. |
+| FF-018 | 2026-04-19 | Instalador Interactivo (TUI) | Desarrollar instalador y configurador interactivo tipo TUI para facilitar onboarding y setup nativo de Foundation. | low | pending | orchestrator | Prxima release o cuando se priorice experiencia de onboarding. |
 
 ## Notes
 

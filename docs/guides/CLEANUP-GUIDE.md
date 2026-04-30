@@ -1,10 +1,10 @@
-# Project Cleanup Guide
+﻿# Project Cleanup Guide
 
-## Visión General
+## Visin General
 
-Este documento describe cómo limpiar el proyecto de archivos temporales, logs, cachés y otros archivos innecesarios.
+Este documento describe cmo limpiar el proyecto de archivos temporales, logs, cachs y otros archivos innecesarios.
 
-**Versión**: 1.0.0
+**Versin**: 1.0.0
 **Fecha**: 2026-04-21
 
 ---
@@ -15,33 +15,33 @@ Este documento describe cómo limpiar el proyecto de archivos temporales, logs, 
 
 **Extensiones**: `.tmp`, `.temp`, `.bak`, `.backup`
 
-**Ubicación**: Cualquier lugar en el proyecto
+**Ubicacin**: Cualquier lugar en el proyecto
 
-**Acción**: ELIMINAR
+**Accin**: ELIMINAR
 
 ### 2. Archivos de Log
 
 **Extensiones**: `.log`
 
-**Ubicación**: Cualquier lugar EXCEPTO `docs/judgment/`
+**Ubicacin**: Cualquier lugar EXCEPTO `docs/judgment/`
 
-**Acción**: ELIMINAR (solo en modo full)
+**Accin**: ELIMINAR (solo en modo full)
 
-### 3. Directorios de Caché
+### 3. Directorios de Cach
 
 **Nombres**: `*cache*`, `__pycache__`, `.cache`
 
-**Ubicación**: Cualquier lugar en el proyecto
+**Ubicacin**: Cualquier lugar en el proyecto
 
-**Acción**: ELIMINAR
+**Accin**: ELIMINAR
 
 ### 4. Archivos de Backup
 
 **Patrones**: `*backup*`, `*.bak`
 
-**Ubicación**: Cualquier lugar en el proyecto
+**Ubicacin**: Cualquier lugar en el proyecto
 
-**Acción**: ELIMINAR
+**Accin**: ELIMINAR
 
 ---
 
@@ -57,7 +57,7 @@ Este documento describe cómo limpiar el proyecto de archivos temporales, logs, 
 ```powershell
 .\tools\cleanup-project.ps1 -Mode dry-run
 ```
-- Muestra qué se limpiaría
+- Muestra qu se limpiara
 - NO elimina nada
 - Perfecto para verificar
 
@@ -66,7 +66,7 @@ Este documento describe cómo limpiar el proyecto de archivos temporales, logs, 
 .\tools\cleanup-project.ps1 -Mode safe
 ```
 - Elimina archivos temporales
-- Elimina directorios de caché
+- Elimina directorios de cach
 - NO elimina logs
 - Verifica integridad del proyecto
 
@@ -76,7 +76,7 @@ Este documento describe cómo limpiar el proyecto de archivos temporales, logs, 
 ```
 - Elimina archivos temporales
 - Elimina logs
-- Elimina directorios de caché
+- Elimina directorios de cach
 - Verifica integridad del proyecto
 
 ### Bash
@@ -109,13 +109,13 @@ Los siguientes archivos/directorios NUNCA se eliminan:
 ### Directorios Protegidos
 - `config/` - Configuraciones
 - `tools/` - Scripts
-- `docs/` - Documentación
+- `docs/` - Documentacin
 - `skills/` - Skills
 - `demos/` - Demos
 
 ### Archivos Protegidos
 - `AGENTS.md` - Reglas del proyecto
-- `README.md` - Documentación principal
+- `README.md` - Documentacin principal
 - Todos los archivos en `docs/judgment/` - Reportes de juicio
 
 ### Logs Protegidos
@@ -136,7 +136,7 @@ Los siguientes archivos/directorios NUNCA se eliminan:
 bash ./tools/cleanup-project.sh dry-run
 ```
 
-**Resultado**: Ver qué se limpiaría sin eliminar nada
+**Resultado**: Ver qu se limpiara sin eliminar nada
 
 ### Paso 2: Ejecutar Limpieza Safe
 
@@ -152,44 +152,44 @@ bash ./tools/cleanup-project.sh safe
 
 ### Paso 3: Verificar Integridad
 
-El script automáticamente verifica:
-- ✅ Directorios requeridos presentes
-- ✅ Archivos requeridos presentes
-- ✅ Estructura del proyecto intacta
+El script automticamente verifica:
+-  Directorios requeridos presentes
+-  Archivos requeridos presentes
+-  Estructura del proyecto intacta
 
 ---
 
-## Qué Se Limpia en Cada Modo
+## Qu Se Limpia en Cada Modo
 
 ### Dry-Run
-- ❌ No elimina nada
-- ✅ Muestra qué se limpiaría
-- ✅ Verifica integridad
+-  No elimina nada
+-  Muestra qu se limpiara
+-  Verifica integridad
 
 ### Safe (Recomendado)
-- ✅ Archivos temporales (*.tmp, *.temp, *.bak, *.backup)
-- ✅ Directorios de caché (*cache*)
-- ❌ NO elimina logs
-- ✅ Verifica integridad
+-  Archivos temporales (*.tmp, *.temp, *.bak, *.backup)
+-  Directorios de cach (*cache*)
+-  NO elimina logs
+-  Verifica integridad
 
 ### Full
-- ✅ Archivos temporales
-- ✅ Logs (excepto docs/judgment/)
-- ✅ Directorios de caché
-- ✅ Archivos de backup
-- ✅ Verifica integridad
+-  Archivos temporales
+-  Logs (excepto docs/judgment/)
+-  Directorios de cach
+-  Archivos de backup
+-  Verifica integridad
 
 ---
 
 ## Archivos Que NO Se Tocan
 
-### Documentación
+### Documentacin
 - `docs/` - Todos los archivos
 - `docs/judgment/` - Especialmente protegido
 - `AGENTS.md`
 - `README.md`
 
-### Configuración
+### Configuracin
 - `config/` - Todos los archivos
 - `config/*.json`
 
@@ -205,9 +205,9 @@ El script automáticamente verifica:
 
 ---
 
-## Verificación de Integridad
+## Verificacin de Integridad
 
-Después de limpiar, el script verifica:
+Despus de limpiar, el script verifica:
 
 ### Directorios Requeridos
 - [x] `config/` - Presente
@@ -221,8 +221,8 @@ Después de limpiar, el script verifica:
 - [x] `README.md` - Presente
 
 ### Resultado
-- ✅ Si todo está bien: "Project is clean and ready"
-- ❌ Si hay problemas: "Project integrity issues detected"
+-  Si todo est bien: "Project is clean and ready"
+-  Si hay problemas: "Project integrity issues detected"
 
 ---
 
@@ -231,7 +231,7 @@ Después de limpiar, el script verifica:
 ### Caso 1: Limpiar Antes de Despliegue
 
 ```powershell
-# Verificar qué se limpiaría
+# Verificar qu se limpiara
 .\tools\cleanup-project.ps1 -Mode dry-run
 
 # Limpiar de forma segura
@@ -244,7 +244,7 @@ Después de limpiar, el script verifica:
 ### Caso 2: Limpiar Completamente
 
 ```powershell
-# Verificar qué se limpiaría
+# Verificar qu se limpiara
 .\tools\cleanup-project.ps1 -Mode dry-run
 
 # Limpiar todo
@@ -269,15 +269,15 @@ Después de limpiar, el script verifica:
 
 **Causa**: Archivos requeridos fueron eliminados
 
-**Solución**: 
+**Solucin**: 
 1. Restaurar desde control de versiones
-2. Verificar que no se ejecutó modo full innecesariamente
+2. Verificar que no se ejecut modo full innecesariamente
 
 ### Problema: Archivos no se eliminan
 
 **Causa**: Permisos insuficientes
 
-**Solución**:
+**Solucin**:
 1. Ejecutar como administrador
 2. Verificar permisos de archivo
 
@@ -285,33 +285,33 @@ Después de limpiar, el script verifica:
 
 **Causa**: Archivos protegidos o permisos
 
-**Solución**:
+**Solucin**:
 1. Verificar que no son archivos protegidos
 2. Ejecutar con permisos elevados
 
 ---
 
-## Mejores Prácticas
+## Mejores Prcticas
 
-### ✅ Hacer
+###  Hacer
 
 - [x] Ejecutar dry-run primero
 - [x] Usar modo safe regularmente
-- [x] Verificar integridad después
+- [x] Verificar integridad despus
 - [x] Hacer backup antes de full
 - [x] Documentar cambios
 
-### ❌ No Hacer
+###  No Hacer
 
 - [ ] Ejecutar full sin verificar
 - [ ] Eliminar docs/judgment/
-- [ ] Eliminar archivos de configuración
+- [ ] Eliminar archivos de configuracin
 - [ ] Ejecutar sin permisos
 - [ ] Ignorar errores de integridad
 
 ---
 
-## Automatización
+## Automatizacin
 
 ### Limpiar Regularmente
 
@@ -321,7 +321,7 @@ Agregar a tareas programadas:
 ```
 Programa: powershell.exe
 Argumentos: -NoProfile -ExecutionPolicy Bypass -File ".\tools\cleanup-project.ps1" -Mode safe
-Frecuencia: Diaria (después de horas de trabajo)
+Frecuencia: Diaria (despus de horas de trabajo)
 ```
 
 **Linux/macOS (Cron)**:
@@ -332,17 +332,17 @@ Frecuencia: Diaria (después de horas de trabajo)
 
 ---
 
-## Conclusión
+## Conclusin
 
 El script de limpieza proporciona:
 
-✅ Múltiples modos de seguridad
-✅ Protección de archivos importantes
-✅ Verificación de integridad
-✅ Logging detallado
-✅ Automatización posible
+ Mltiples modos de seguridad
+ Proteccin de archivos importantes
+ Verificacin de integridad
+ Logging detallado
+ Automatizacin posible
 
-**Recomendación**: Ejecutar `safe` regularmente para mantener el proyecto limpio.
+**Recomendacin**: Ejecutar `safe` regularmente para mantener el proyecto limpio.
 
 ---
 

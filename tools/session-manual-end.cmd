@@ -1,4 +1,4 @@
-@echo off
+﻿@echo off
 setlocal
 
 set SCRIPT=%~dp0session-manager.ps1
@@ -13,7 +13,7 @@ if not exist "%SCRIPT%" (
 
 echo Closing session manually...
 
-REM Ejecutar validación pre-cierre
+REM Ejecutar validacin pre-cierre
 echo [INFO] Running pre-close validation...
 powershell -NoProfile -ExecutionPolicy Bypass -File ".\tools\pre-close-validator.ps1" -AutoResolve
 if errorlevel 1 (
@@ -34,10 +34,10 @@ REM Validar consistencia cross-workspace
 echo [INFO] Validating cross-workspace consistency...
 powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\monitoring\cross-workspace-validator.ps1"
 
-REM Cerrar sesión
+REM Cerrar sesin
 powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT%" -Mode ManualEnd
 
-REM Ejecutar optimización de Engram después del cierre de sesión
+REM Ejecutar optimizacin de Engram despus del cierre de sesin
 if exist "%OPTIMIZE_SCRIPT%" (
   echo [INFO] Running Engram post-session optimization...
   powershell -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_local" -AutoApply

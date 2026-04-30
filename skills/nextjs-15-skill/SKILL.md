@@ -1,4 +1,4 @@
----
+﻿---
 name: nextjs-15-skill
 description: >
   Next.js 15 App Router patterns: Server Components, Server Actions, data fetching.
@@ -17,17 +17,17 @@ description: >
 
 ```
 app/
-├── layout.tsx        # Root layout
-├── page.tsx         # Home page
-├── about/
-│   └── page.tsx    # /about
-├── api/
-│   └── route.ts    # API routes
-├── actions/
-│   └── form.ts     # Server Actions
+ layout.tsx        # Root layout
+ page.tsx         # Home page
+ about/
+    page.tsx    # /about
+ api/
+    route.ts    # API routes
+ actions/
+    form.ts     # Server Actions
 components/
-├── ui/             # UI components
-└── providers.tsx   # Client providers
+ ui/             # UI components
+ providers.tsx   # Client providers
 ```
 
 ## Server Component (Default)

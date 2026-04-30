@@ -1,36 +1,36 @@
-# SECURITY SYSTEM - Foundation
+﻿# SECURITY SYSTEM - Foundation
 
 ## Access Control Overview
 
 ```
-                    ┌─────────────────────────────────────┐
-                    │     RESTRICTED OPERATION           │
-                    │  (skill-optimizer, orchestrator)   │
-                    └──────────────┬────────────────────┘
-                                   │
-                    ┌──────────────▼──────────────────────┐
-                    │  AUTHENTICATION REQUIRED           │
-                    │  1. Check session (8hr cache)        │
-                    │  2. If not → require credentials    │
-                    └──────────────┬──────────────────────┘
-                                   │
-              ┌────────────────────┼────────────────────┐
-              │                    │                    │
-    ┌──────────▼──────────┐  ┌──────▼──────┐  ┌────────▼────────┐
-    │    API KEY          │  │ SECURITY   │  │    DENIED       │
-    │    (preferred)      │  │ QUESTIONS  │  │    (wrong)      │
-    └──────────┬─────────┘  └──────┬──────┘  └─────────────────┘
-               │                   │
-               │         ┌─────────▼─────────┐
-               │         │ 3 correct →        │
-               │         │ recover API key    │
-               │         │ → authenticate     │
-               │         └───────────────────┘
-               │
-       ┌───────▼────────┐
-       │ AUTHENTICATED   │
-       │ Session: 8hrs   │
-       └─────────────────┘
+                    
+                         RESTRICTED OPERATION           
+                      (skill-optimizer, orchestrator)   
+                    
+                                   
+                    
+                      AUTHENTICATION REQUIRED           
+                      1. Check session (8hr cache)        
+                      2. If not  require credentials    
+                    
+                                   
+              
+                                                      
+        
+        API KEY             SECURITY         DENIED       
+        (preferred)         QUESTIONS        (wrong)      
+        
+                                  
+                        
+                         3 correct         
+                         recover API key    
+                          authenticate     
+                        
+               
+       
+        AUTHENTICATED   
+        Session: 8hrs   
+       
 ```
 
 ## API Key
@@ -61,7 +61,7 @@ Location: .workspace/config/owner-auth.json (ENCRYPTED)
 ```powershell
 .\scripts\utilities\auth-session.ps1 -UseSecurityQuestions
 # Prompt for 3 answers
-# If all correct → show API key option to authenticate
+# If all correct  show API key option to authenticate
 ```
 
 ## What is Blocked
@@ -80,7 +80,7 @@ Location: .workspace/config/owner-auth.json (ENCRYPTED)
 # Attempting restricted operation without auth
 > wf.ps1 skill-optimizer analyze
 
-[ERROR] Esta operación requiere autenticación del owner
+[ERROR] Esta operacin requiere autenticacin del owner
 [INFO] Use: .\scripts\utilities\auth-session.ps1 -ApiKey <key>
    or: .\scripts\utilities\auth-session.ps1 -UseSecurityQuestions
 ```
@@ -89,7 +89,7 @@ Location: .workspace/config/owner-auth.json (ENCRYPTED)
 # Invalid API key
 > .\scripts\utilities\auth-session.ps1 -ApiKey "wrong"
 
-[X] API key inválida
+[X] API key invlida
 [INFO] Usa --security-questions si la olvidaste
 ```
 
@@ -110,33 +110,33 @@ Answer: ****
 [X] Incorrect
 
 [ERROR] Solo 0/3 respuestas correctas
-⛔ ACCESS DENIED
-No tienes permisos para realizar esta operación.
+ ACCESS DENIED
+No tienes permisos para realizar esta operacin.
 ```
 
 ## Escalation Workflow
 
 ```
 Developer wants to modify skill/orchestrator
-         │
-         ▼
+         
+         
 NO DIRECT ACCESS (BLOCKED)
-         │
-         ▼
+         
+         
 .Can submit escalation request
 .\wf.ps1 skill-optimizer request improve --skill "xxx" --reason "..."
-         │
-         ▼
+         
+         
 Goes to: .workspace/escalations/pending/
-         │
-         ▼
+         
+         
 Owner reviews (authenticated)
-         │
-    ┌────┴────┐
-    │         │
+         
+    
+             
 APPROVE  REJECT
-    │         │
-    ▼         ▼
+             
+             
 IMPLEMENT  NOTIFY
 ```
 
@@ -144,7 +144,7 @@ IMPLEMENT  NOTIFY
 
 - Authentication valid for: **8 hours**
 - Session file: `.workspace/config/session-auth.json`
-- After 8 hours → re-authenticate required
+- After 8 hours  re-authenticate required
 
 ## Security Principles
 

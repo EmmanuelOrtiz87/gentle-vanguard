@@ -1,26 +1,26 @@
-# Role-Based Workflows
+﻿# Role-Based Workflows
 
 ## Overview
 
-Workflows especializados por rol que operan sobre la topología de 5 capas, usando subagentes y skills existentes. El orquestador delega según el rol identificado.
+Workflows especializados por rol que operan sobre la topologa de 5 capas, usando subagentes y skills existentes. El orquestador delega segn el rol identificado.
 
 ## Roles y Mapeo a Capas
 
 ```
-┌─────────────────────────────────────────────────────┐
-│  Orchestrator (Layer 5 - Coordinator)               │
-│  Identifica rol → Mapea capas → Delega a subagentes │
-└─────────────────────────────────────────────────────┘
-                          │
-          ┌───────────────┼───────────────┐
-          ▼               ▼               ▼
-    ┌─────────┐    ┌─────────┐    ┌─────────┐
-    │   PM    │    │ Arquitecto│   │ Desarrollador│
-    └─────────┘    └─────────┘    └─────────┘
-          │               │               │
-    ┌─────────┐    ┌─────────┐    ┌─────────┐
-    │   QA    │    │  DevOps │    │ UX/UI   │
-    └─────────┘    └─────────┘    └─────────┘
+
+  Orchestrator (Layer 5 - Coordinator)               
+  Identifica rol  Mapea capas  Delega a subagentes 
+
+                          
+          
+                                        
+            
+       PM         Arquitecto    Desarrollador
+            
+                                        
+            
+       QA          DevOps      UX/UI   
+            
 ```
 
 ## Workflow: Product Manager
@@ -39,10 +39,10 @@ Workflows especializados por rol que operan sobre la topología de 5 capas, usan
 5. Opcional: crea GitHub issue con `issue-creation`
 6. Entrega propuesta validada al usuario
 
-**Comunicación**:
+**Comunicacin**:
 - Input: Requerimiento del usuario
 - Output: Propuesta SDD, Jira/GitHub artifacts
-- Delegación: `task` tool con subagentes `sdd-propose`, `jira-*`
+- Delegacin: `task` tool con subagentes `sdd-propose`, `jira-*`
 
 ---
 
@@ -55,17 +55,17 @@ Workflows especializados por rol que operan sobre la topología de 5 capas, usan
 **Skills**: `sdd-design`, `sdd-spec`, `architecture-governance`, `project-orchestrator-skill`, `skill-creator`
 
 **Flujo**:
-1. Recibe propuesta de PM o requerimiento arquitectónico
-2. Usa `sdd-design` para crear diseño técnico (decisions, approach)
+1. Recibe propuesta de PM o requerimiento arquitectnico
+2. Usa `sdd-design` para crear diseo tcnico (decisions, approach)
 3. Usa `sdd-spec` para escribir especificaciones (requirements, scenarios)
 4. Consulta Engram (Layer 1) para decisiones previas
-5. Usa `architecture-governance` para validar estándares
-6. Entrega diseño y specs validadas
+5. Usa `architecture-governance` para validar estndares
+6. Entrega diseo y specs validadas
 
-**Comunicación**:
-- Input: Propuesta SDD, requerimiento técnico
+**Comunicacin**:
+- Input: Propuesta SDD, requerimiento tcnico
 - Output: Technical design, specifications, ADRs
-- Delegación: `task` tool con `sdd-design`, `sdd-spec`, `explore`
+- Delegacin: `task` tool con `sdd-design`, `sdd-spec`, `explore`
 
 ---
 
@@ -80,18 +80,18 @@ Workflows especializados por rol que operan sobre la topología de 5 capas, usan
 **Skills (Backend)**: `golang-api-skill`, `django-drf-skill`, `go-api`, `database-relational-skill`, `database-nosql-skill`
 
 **Flujo**:
-1. Recibe tareas de `sdd-tasks` o diseño del Arquitecto
-2. Usa `sdd-tasks` para desglose de implementación
-3. Usa `sdd-apply` para implementar código siguiendo specs
+1. Recibe tareas de `sdd-tasks` o diseo del Arquitecto
+2. Usa `sdd-tasks` para desglose de implementacin
+3. Usa `sdd-apply` para implementar cdigo siguiendo specs
 4. Ejecuta comandos (Layer 4): bash, write, edit
 5. Usa MCP (Layer 3) para contexto adicional si necesario
 6. Ejecuta tests y linting
-7. Entrega código implementado
+7. Entrega cdigo implementado
 
-**Comunicación**:
+**Comunicacin**:
 - Input: Task breakdown, technical design, specifications
-- Output: Código implementado, tests pasando
-- Delegación: `task` tool con `sdd-apply`, `sdd-tasks`, `general`
+- Output: Cdigo implementado, tests pasando
+- Delegacin: `task` tool con `sdd-apply`, `sdd-tasks`, `general`
 
 ---
 
@@ -104,18 +104,18 @@ Workflows especializados por rol que operan sobre la topología de 5 capas, usan
 **Skills**: `sdd-verify`, `testing-strategy-skill`, `pytest`, `go-testing`, `playwright`
 
 **Flujo**:
-1. Recibe código implementado del Desarrollador
+1. Recibe cdigo implementado del Desarrollador
 2. Usa `sdd-verify` para validar contra specs/design/tasks
-3. Usa `testing-strategy-skill` para identificar qué probar
+3. Usa `testing-strategy-skill` para identificar qu probar
 4. Ejecuta tests: `pytest` (Python), `go-testing` (Go)
 5. Opcional: E2E con `playwright`
 6. Reporta resultados y bugs encontrados
 7. Guarda patrones en Engram (Layer 1)
 
-**Comunicación**:
-- Input: Código implementado, specs, tasks
+**Comunicacin**:
+- Input: Cdigo implementado, specs, tasks
 - Output: Verification report, test results, bug reports
-- Delegación: `task` tool con `sdd-verify`, `general`
+- Delegacin: `task` tool con `sdd-verify`, `general`
 
 ---
 
@@ -130,15 +130,15 @@ Workflows especializados por rol que operan sobre la topología de 5 capas, usan
 **Flujo**:
 1. Configura CI/CD basado en stack detectado
 2. Usa `docker-devops-skill` para containers, deployments
-3. Usa `workspace-automation` para scripts de automatización
+3. Usa `workspace-automation` para scripts de automatizacin
 4. Usa `github-pr` o `branch-pr` para release workflow
 5. Monitorea session lifecycle con `session-lifecycle`
-6. Ejecuta despliegues vía comandos (Layer 4)
+6. Ejecuta despliegues va comandos (Layer 4)
 
-**Comunicación**:
-- Input: Código listo para release, configuración de infraestructura
+**Comunicacin**:
+- Input: Cdigo listo para release, configuracin de infraestructura
 - Output: CI/CD pipelines, scripts, releases
-- Delegación: `task` tool con `general`, `explore`
+- Delegacin: `task` tool con `general`, `explore`
 
 ---
 
@@ -151,62 +151,62 @@ Workflows especializados por rol que operan sobre la topología de 5 capas, usan
 **Skills**: `angular-spa-skill`, `react-19-skill`, `tailwind-4-skill`, `zustand-5-skill`, `nextjs-15-skill`
 
 **Flujo**:
-1. Recibe requirements del PM o diseño del Arquitecto
+1. Recibe requirements del PM o diseo del Arquitecto
 2. Usa `angular-spa-skill` o `react-19-skill` para componentes
 3. Usa `tailwind-4-skill` para estilos
 4. Usa `zustand-5-skill` para state management (React)
 5. Implementa UI con `sdd-apply` o directamente
 6. Valida accessibility y responsive design
 
-**Comunicación**:
+**Comunicacin**:
 - Input: UI requirements, wireframes, design system
 - Output: Componentes UI, estilos, state management
-- Delegación: `task` tool con `general`
+- Delegacin: `task` tool con `general`
 
 ---
 
-## Coordinación del Orquestador
+## Coordinacin del Orquestador
 
-### Identificación de Rol
+### Identificacin de Rol
 El orquestador detecta el rol basado en:
-1. Palabras clave del usuario ("diseña arquitectura", "implementa", "testea")
-2. Estado del proyecto (propuesta existe, specs listas, código implementado)
+1. Palabras clave del usuario ("disea arquitectura", "implementa", "testea")
+2. Estado del proyecto (propuesta existe, specs listas, cdigo implementado)
 3. Skills/disponibilidad en el workspace
 
-### Delegación Ordenada
+### Delegacin Ordenada
 ```
-Usuario → Orchestrator (Layer 5)
-           ├─ Detecta rol necesario
-           ├─ Mapea a subagente + skills
-           ├─ Delega con `task` tool
-           ├─ Espera resultado (input/output)
-           └─ Entrega resultado al usuario
+Usuario  Orchestrator (Layer 5)
+            Detecta rol necesario
+            Mapea a subagente + skills
+            Delega con `task` tool
+            Espera resultado (input/output)
+            Entrega resultado al usuario
 ```
 
-### Mecanismos de Comunicación (Sin Cambios)
-- **Delegación**: `task` tool, `delegate` tool
+### Mecanismos de Comunicacin (Sin Cambios)
+- **Delegacin**: `task` tool, `delegate` tool
 - **Input**: Prompt del usuario o resultado de paso anterior
 - **Output**: Mensaje de retorno del subagente
 - **Persistencia**: Engram (Layer 1) para state entre pasos
-- **Validación**: `sdd-verify` para control de calidad
+- **Validacin**: `sdd-verify` para control de calidad
 
-### Optimización
-1. **Paralelización**: Delegar múltiples subagentes en una sola respuesta
-2. **Contexto**: Usar Engram para evitar re-exploración
-3. **Tokens**: `explore` subagent para investigación rápida antes de delegar
-4. **Reutilización**: Skills cargados dinámicamente según contexto
+### Optimizacin
+1. **Paralelizacin**: Delegar mltiples subagentes en una sola respuesta
+2. **Contexto**: Usar Engram para evitar re-exploracin
+3. **Tokens**: `explore` subagent para investigacin rpida antes de delegar
+4. **Reutilizacin**: Skills cargados dinmicamente segn contexto
 
 ## Compatibilidad
 
-✅ No afecta mecanismos existentes:
-- Misma delegación (`task`, `delegate`)
+ No afecta mecanismos existentes:
+- Misma delegacin (`task`, `delegate`)
 - Mismos subagentes (solo nuevos mapeos)
-- Misma comunicación input/output
+- Misma comunicacin input/output
 - Misma persistencia (Engram)
 - Mismos skills (solo nuevos triggers por rol)
 
-✅ Todo funcional y organizado:
+ Todo funcional y organizado:
 - Cada rol tiene flujo documentado
-- Orquestador sabe qué, cómo y cuándo delegar
+- Orquestador sabe qu, cmo y cundo delegar
 - Trabajo ordenado y optimizado con subagentes
-- Fácil agregar nuevos roles (solo documentar mapeo)
+- Fcil agregar nuevos roles (solo documentar mapeo)

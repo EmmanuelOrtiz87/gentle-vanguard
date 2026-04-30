@@ -1,22 +1,22 @@
-<#
+﻿<#
 .SYNOPSIS
-    Token Guard - Protección automática contra overflow de tokens
+    Token Guard - Proteccin automtica contra overflow de tokens
     
 .DESCRIPTION
-    Implementa monitoreo automático de tokens con:
+    Implementa monitoreo automtico de tokens con:
     - Alerta a 80% del presupuesto
     - Pausa de dispatch si se excede presupuesto
-    - Fragmentación automática en múltiples rounds
+    - Fragmentacin automtica en mltiples rounds
     - Logging detallado de uso de tokens
 
 .PARAMETER ConfigPath
-    Ruta al archivo de configuración token-guard-config.json
+    Ruta al archivo de configuracin token-guard-config.json
 
 .PARAMETER SessionId
-    ID de la sesión actual para tracking
+    ID de la sesin actual para tracking
 
 .PARAMETER Mode
-    Modo de operación: 'monitor', 'enforce', 'report'
+    Modo de operacin: 'monitor', 'enforce', 'report'
 #>
 
 param(
@@ -26,7 +26,7 @@ param(
 )
 
 # ============================================================================
-# CONFIGURACIÓN Y VARIABLES GLOBALES
+# CONFIGURACIN Y VARIABLES GLOBALES
 # ============================================================================
 
 $ErrorActionPreference = "Continue"
@@ -41,12 +41,12 @@ $Colors = @{
     Alert   = "Magenta"
 }
 
-# Cargar configuración
+# Cargar configuracin
 function Load-TokenGuardConfig {
     param([string]$Path)
     
     if (-not (Test-Path $Path)) {
-        Write-Host "[TOKEN-GUARD] Configuración no encontrada. Usando defaults." -ForegroundColor $Colors.Warning
+        Write-Host "[TOKEN-GUARD] Configuracin no encontrada. Usando defaults." -ForegroundColor $Colors.Warning
         return @{
             enabled = $true
             tokenBudget = 128000
@@ -68,7 +68,7 @@ function Load-TokenGuardConfig {
         $configObj.PSObject.Properties | ForEach-Object {
             $config[$_.Name] = $_.Value
         }
-        Write-Host "[TOKEN-GUARD] Configuración cargada desde: $Path" -ForegroundColor $Colors.Success
+        Write-Host "[TOKEN-GUARD] Configuracin cargada desde: $Path" -ForegroundColor $Colors.Success
         return $config
     }
     catch {
@@ -232,7 +232,7 @@ function Trigger-TokenAlert {
 }
 
 # ============================================================================
-# FUNCIONES DE FRAGMENTACIÓN
+# FUNCIONES DE FRAGMENTACIN
 # ============================================================================
 
 function Initialize-RoundFragmentation {
@@ -241,7 +241,7 @@ function Initialize-RoundFragmentation {
         [string]$StateFile
     )
     
-    Write-Host "[TOKEN-GUARD] Inicializando fragmentación en rounds..." -ForegroundColor $Colors.Info
+    Write-Host "[TOKEN-GUARD] Inicializando fragmentacin en rounds..." -ForegroundColor $Colors.Info
     
     $state = Get-TokenGuardState $StateFile
     if ($state) {
@@ -443,7 +443,7 @@ function Invoke-ReportMode {
 # ============================================================================
 
 try {
-    # Cargar configuración
+    # Cargar configuracin
     $config = Load-TokenGuardConfig $ConfigPath
     
     if (-not $config) {
@@ -451,13 +451,13 @@ try {
         exit 1
     }
     
-    # Ejecutar según modo
+    # Ejecutar segn modo
     switch ($Mode) {
         "monitor" {
             Invoke-MonitorMode $config $SessionId
         }
         "enforce" {
-            # Este modo se llamaría con tokens actuales
+            # Este modo se llamara con tokens actuales
             Write-Host "[TOKEN-GUARD] Modo ENFORCE requiere parametro de tokens actuales" -ForegroundColor $Colors.Warning
         }
         "report" {

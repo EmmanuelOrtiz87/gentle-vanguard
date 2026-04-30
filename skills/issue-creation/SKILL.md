@@ -1,4 +1,4 @@
----
+﻿---
 name: issue-creation
 description: >
   Issue creation workflow for Agent Teams Lite following the issue-first enforcement system.
@@ -20,7 +20,7 @@ Use this skill when:
 
 ## Critical Rules
 
-1. **Blank issues are disabled** — MUST use a template (bug report or feature request)
+1. **Blank issues are disabled**  MUST use a template (bug report or feature request)
 2. **Every issue gets `status:needs-review` automatically** on creation
 3. **A maintainer MUST add `status:approved`** before any PR can be opened
 4. **Questions go to [Discussions](https://github.com/Gentleman-Programming/agent-teams-lite/discussions)**, not issues
@@ -34,7 +34,7 @@ Use this skill when:
 2. Choose the correct template (Bug Report or Feature Request)
 3. Fill in ALL required fields
 4. Check pre-flight checkboxes
-5. Submit → issue gets status:needs-review automatically
+5. Submit  issue gets status:needs-review automatically
 6. Wait for maintainer to add status:approved
 7. Only then open a PR linking this issue
 ```
@@ -68,7 +68,7 @@ Auto-labels: `bug`, `status:needs-review`
 | **Relevant Logs** | Log output (auto-formatted as code block) |
 | **Additional Context** | Screenshots, workarounds, extra info |
 
-#### Example — Bug Report via CLI
+#### Example  Bug Report via CLI
 
 ```bash
 gh issue create --template "bug_report.yml" \
@@ -131,7 +131,7 @@ Auto-labels: `enhancement`, `status:needs-review`
 | **Alternatives Considered** | Other approaches or workarounds |
 | **Additional Context** | Mockups, examples, references |
 
-#### Example — Feature Request via CLI
+#### Example  Feature Request via CLI
 
 ```bash
 gh issue create --template "feature_request.yml" \
@@ -175,7 +175,7 @@ Manually symlinking, but that defeats the purpose of the setup script.
 
 | Label | When to apply |
 |-------|--------------|
-| `status:approved` | Issue accepted for implementation — PRs can now be opened |
+| `status:approved` | Issue accepted for implementation  PRs can now be opened |
 | `priority:high` | Critical bug or urgent feature |
 | `priority:medium` | Important but not blocking |
 | `priority:low` | Nice to have |
@@ -186,9 +186,9 @@ Manually symlinking, but that defeats the purpose of the setup script.
 
 ```
 1. New issue arrives with status:needs-review
-2. Review the issue — is it valid, clear, and in scope?
-3. If YES → add status:approved label
-4. If NO → comment with reason, close if needed
+2. Review the issue  is it valid, clear, and in scope?
+3. If YES  add status:approved label
+4. If NO  comment with reason, close if needed
 5. Contributor can now open a PR linking this issue
 ```
 
@@ -197,10 +197,10 @@ Manually symlinking, but that defeats the purpose of the setup script.
 ## Decision Tree
 
 ```
-Is it a bug?                    → Use Bug Report template
-Is it a new feature/improvement? → Use Feature Request template
-Is it a question?               → Use Discussions, NOT issues
-Is it a duplicate?              → Link to existing issue, close
+Is it a bug?                     Use Bug Report template
+Is it a new feature/improvement?  Use Feature Request template
+Is it a question?                Use Discussions, NOT issues
+Is it a duplicate?               Link to existing issue, close
 ```
 
 ---

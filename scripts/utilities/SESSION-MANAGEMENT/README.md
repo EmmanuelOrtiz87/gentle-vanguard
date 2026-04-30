@@ -1,67 +1,67 @@
-# SESSION-MANAGEMENT - Gestión de Sesiones
+﻿# SESSION-MANAGEMENT - Gestin de Sesiones
 
-Módulo centralizado para gestión del ciclo de vida de sesiones de trabajo.
+Mdulo centralizado para gestin del ciclo de vida de sesiones de trabajo.
 
-**Versión**: 2.0.0  
-**Última actualización**: 2026-04-22  
-**Estado**: ✅ PRODUCCIÓN
+**Versin**: 2.0.0  
+**ltima actualizacin**: 2026-04-22  
+**Estado**:  PRODUCCIN
 
 ---
 
-## 📋 Descripción
+##  Descripcin
 
 Este directorio contiene scripts para:
 - Inicio y cierre de sesiones
 - Monitoreo de inactividad
-- Validación de stack de sesión
-- Finalización con artefactos
-- Autostart automático
-- Gestión centralizada de sesiones
+- Validacin de stack de sesin
+- Finalizacin con artefactos
+- Autostart automtico
+- Gestin centralizada de sesiones
 
 ---
 
-## 📁 Scripts
+##  Scripts
 
 ### `start-session.ps1`
-**Propósito**: Inicia una nueva sesión de trabajo
+**Propsito**: Inicia una nueva sesin de trabajo
 
-**Características**:
-- Inicializa contexto de sesión
-- Carga configuración
+**Caractersticas**:
+- Inicializa contexto de sesin
+- Carga configuracin
 - Activa herramientas necesarias
-- Genera ID de sesión único
+- Genera ID de sesin nico
 
-**Parámetros**:
+**Parmetros**:
 ```powershell
--SessionName <string>    # Nombre de la sesión (opcional)
+-SessionName <string>    # Nombre de la sesin (opcional)
 -AutoInit                # Auto-inicializar entorno
 -Quiet                   # Modo silencioso
 ```
 
 **Uso**:
 ```powershell
-# Iniciar sesión estándar
+# Iniciar sesin estndar
 .\start-session.ps1
 
-# Iniciar con nombre específico
+# Iniciar con nombre especfico
 .\start-session.ps1 -SessionName "feature-auth"
 
-# Iniciar con auto-inicialización
+# Iniciar con auto-inicializacin
 .\start-session.ps1 -AutoInit
 ```
 
 ---
 
 ### `end-session.ps1`
-**Propósito**: Finaliza sesión con verificaciones
+**Propsito**: Finaliza sesin con verificaciones
 
-**Características**:
+**Caractersticas**:
 - Verifica integridad de cambios
 - Genera artefactos de cierre
 - Limpia recursos temporales
-- Registra métricas de sesión
+- Registra mtricas de sesin
 
-**Parámetros**:
+**Parmetros**:
 ```powershell
 -GenerateArtifacts       # Generar artefactos de cierre
 -Verify                  # Verificar antes de cerrar
@@ -70,30 +70,30 @@ Este directorio contiene scripts para:
 
 **Uso**:
 ```powershell
-# Finalizar sesión estándar
+# Finalizar sesin estndar
 .\end-session.ps1
 
 # Finalizar con artefactos
 .\end-session.ps1 -GenerateArtifacts
 
-# Finalizar con verificación
+# Finalizar con verificacin
 .\end-session.ps1 -Verify
 ```
 
 ---
 
 ### `finalize-session.ps1`
-**Propósito**: Finaliza sesión con generación completa de artefactos
+**Propsito**: Finaliza sesin con generacin completa de artefactos
 
-**Características**:
+**Caractersticas**:
 - Genera todos los artefactos de cierre
-- Auditoría completa
-- Reporte de sesión
-- Compresión de contexto
+- Auditora completa
+- Reporte de sesin
+- Compresin de contexto
 
-**Parámetros**:
+**Parmetros**:
 ```powershell
--IncludeAudit            # Incluir auditoría completa
+-IncludeAudit            # Incluir auditora completa
 -CompressContext         # Comprimir contexto
 -GenerateReport          # Generar reporte
 ```
@@ -107,20 +107,20 @@ Este directorio contiene scripts para:
 ---
 
 ### `session-manager.ps1`
-**Propósito**: Gestor centralizado de sesiones
+**Propsito**: Gestor centralizado de sesiones
 
 **Acciones**:
-- `start` - Inicia sesión
-- `end` - Finaliza sesión
+- `start` - Inicia sesin
+- `end` - Finaliza sesin
 - `list` - Lista sesiones activas
-- `status` - Estado de sesión actual
-- `validate` - Valida sesión
+- `status` - Estado de sesin actual
+- `validate` - Valida sesin
 - `cleanup` - Limpia sesiones antiguas
 
-**Parámetros**:
+**Parmetros**:
 ```powershell
--Action <string>         # Acción a ejecutar
--SessionId <string>      # ID de sesión (opcional)
+-Action <string>         # Accin a ejecutar
+-SessionId <string>      # ID de sesin (opcional)
 ```
 
 **Uso**:
@@ -131,7 +131,7 @@ Este directorio contiene scripts para:
 # Obtener estado actual
 .\session-manager.ps1 -Action status
 
-# Validar sesión
+# Validar sesin
 .\session-manager.ps1 -Action validate
 
 # Limpiar sesiones antiguas
@@ -141,18 +141,18 @@ Este directorio contiene scripts para:
 ---
 
 ### `session-idle-monitor.ps1`
-**Propósito**: Monitorea inactividad de sesión
+**Propsito**: Monitorea inactividad de sesin
 
-**Características**:
+**Caractersticas**:
 - Detecta inactividad
 - Alerta antes de timeout
 - Auto-pausa de recursos
-- Recuperación automática
+- Recuperacin automtica
 
-**Parámetros**:
+**Parmetros**:
 ```powershell
 -IdleThreshold <int>     # Minutos antes de considerar inactivo (default: 30)
--CheckInterval <int>     # Intervalo de verificación en segundos (default: 60)
+-CheckInterval <int>     # Intervalo de verificacin en segundos (default: 60)
 -AutoPause               # Auto-pausar recursos
 ```
 
@@ -168,27 +168,27 @@ Este directorio contiene scripts para:
 ---
 
 ### `validate-session-stack.ps1`
-**Propósito**: Valida integridad del stack de sesión
+**Propsito**: Valida integridad del stack de sesin
 
 **Verifica**:
-- Archivos de sesión
-- Configuración
+- Archivos de sesin
+- Configuracin
 - Recursos activos
 - Integridad de datos
 
-**Parámetros**:
+**Parmetros**:
 ```powershell
--Full                    # Validación completa
+-Full                    # Validacin completa
 -Repair                  # Reparar problemas encontrados
 -Verbose                 # Salida detallada
 ```
 
 **Uso**:
 ```powershell
-# Validación rápida
+# Validacin rpida
 .\validate-session-stack.ps1
 
-# Validación completa con reparación
+# Validacin completa con reparacin
 .\validate-session-stack.ps1 
 {
   "prompt_tokens": 33168,

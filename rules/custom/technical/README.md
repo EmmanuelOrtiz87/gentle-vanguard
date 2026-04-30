@@ -1,4 +1,4 @@
-# Technical Custom Rules
+﻿# Technical Custom Rules
 
 Add repository-specific technical rules in this directory.
 
@@ -27,7 +27,7 @@ Clear, actionable statement of what is required.
 
 ## Why It Matters
 
-Rationale — explain the risk or consequence.
+Rationale  explain the risk or consequence.
 
 ## Validation
 

@@ -1,17 +1,17 @@
-# Guía para Próxima Sesión - Auto-Delegation Router
+﻿# Gua para Prxima Sesin - Auto-Delegation Router
 
-**Última sesión**: 2026-04-23 09:00:30  
-**Estado**: ✅ Auto-Delegation Router completado  
-**Próxima tarea**: Integración en orchestrator principal
+**ltima sesin**: 2026-04-23 09:00:30  
+**Estado**:  Auto-Delegation Router completado  
+**Prxima tarea**: Integracin en orchestrator principal
 
-## Inicio Rápido
+## Inicio Rpido
 
 ### 1. Verificar Estado Actual
 ```powershell
-# Cargar módulo
+# Cargar mdulo
 Import-Module ".\skills\auto-delegation-router\auto-delegation-router.ps1" -Force
 
-# Verificar configuración
+# Verificar configuracin
 $config = Get-AutoDelegationConfig
 Write-Host "Auto-Delegation Status: $($config.Enabled)"
 Write-Host "Confidence Threshold: $($config.ConfidenceThreshold)%"
@@ -33,26 +33,26 @@ Get-ChildItem -Path "config/auto-delegation.json"
 Get-ChildItem -Path "tests/integration/auto-delegation-router*"
 ```
 
-## Tareas para Próxima Sesión
+## Tareas para Prxima Sesin
 
-### Fase 2: Integración en Orchestrator (Prioridad Alta)
+### Fase 2: Integracin en Orchestrator (Prioridad Alta)
 
 #### 2.1 Integrar en Orchestrator Principal
 - [ ] Abrir `skills/project-orchestrator-skill/SKILL.md`
-- [ ] Agregar import del módulo auto-delegation-router
+- [ ] Agregar import del mdulo auto-delegation-router
 - [ ] Integrar `Route-TaskToAgent` en flujo de despacho
 - [ ] Conectar con agent dispatcher existente
 
 #### 2.2 Modificar Flujo de Despacho
 - [ ] Actualizar `Invoke-Agent` para usar auto-routing
-- [ ] Agregar lógica de fallback a manual si es necesario
+- [ ] Agregar lgica de fallback a manual si es necesario
 - [ ] Registrar decisiones de enrutamiento
-- [ ] Agregar logging de métricas
+- [ ] Agregar logging de mtricas
 
-#### 2.3 Actualizar Configuración del Orchestrator
+#### 2.3 Actualizar Configuracin del Orchestrator
 - [ ] Agregar flag `useAutoRouting` en `config/orchestrator.json`
 - [ ] Establecer por defecto en `false` (seguro)
-- [ ] Documentar cómo habilitar
+- [ ] Documentar cmo habilitar
 
 ### Fase 3: Testing en Staging (Prioridad Alta)
 
@@ -66,7 +66,7 @@ Get-ChildItem -Path "tests/integration/auto-delegation-router*"
 - [ ] Medir tiempo de enrutamiento
 - [ ] Validar que sea < 300ms
 - [ ] Verificar uso de memoria
-- [ ] Probar con múltiples tareas simultáneas
+- [ ] Probar con mltiples tareas simultneas
 
 #### 3.3 Pruebas de Confiabilidad
 - [ ] Verificar manejo de errores
@@ -74,56 +74,56 @@ Get-ChildItem -Path "tests/integration/auto-delegation-router*"
 - [ ] Validar fallback a manual
 - [ ] Verificar logging de errores
 
-### Fase 4: Documentación (Prioridad Media)
+### Fase 4: Documentacin (Prioridad Media)
 
-#### 4.1 Actualizar Documentación Existente
+#### 4.1 Actualizar Documentacin Existente
 - [ ] Actualizar README principal
-- [ ] Agregar sección de auto-delegation
-- [ ] Actualizar guía de operaciones
+- [ ] Agregar seccin de auto-delegation
+- [ ] Actualizar gua de operaciones
 - [ ] Agregar troubleshooting
 
-#### 4.2 Crear Guías de Usuario
-- [ ] Guía de habilitación/deshabilitación
-- [ ] Guía de ajuste de umbrales
-- [ ] Guía de interpretación de métricas
+#### 4.2 Crear Guas de Usuario
+- [ ] Gua de habilitacin/deshabilitacin
+- [ ] Gua de ajuste de umbrales
+- [ ] Gua de interpretacin de mtricas
 - [ ] FAQ de auto-delegation
 
-### Fase 5: Producción (Prioridad Baja)
+### Fase 5: Produccin (Prioridad Baja)
 
-#### 5.1 Preparación para Producción
+#### 5.1 Preparacin para Produccin
 - [ ] Habilitar auto-delegation (opt-in)
 - [ ] Configurar umbrales conservadores
-- [ ] Establecer alertas de métricas
+- [ ] Establecer alertas de mtricas
 - [ ] Crear runbook de operaciones
 
 #### 5.2 Monitoreo en Vivo
-- [ ] Monitorear métricas de enrutamiento
+- [ ] Monitorear mtricas de enrutamiento
 - [ ] Recopilar feedback de usuarios
-- [ ] Ajustar umbrales según uso real
+- [ ] Ajustar umbrales segn uso real
 - [ ] Documentar lecciones aprendidas
 
 ## Archivos Clave para Referencia
 
-### Documentación
-- `skills/auto-delegation-router/SKILL.md` - Documentación completa
-- `skills/auto-delegation-router/INTEGRATION.md` - Guía de integración
-- `docs/reference/AUTO-DELEGATION-IMPLEMENTATION.md` - Resumen de implementación
-- `SESSION_CHECKPOINT.md` - Registro de esta sesión
+### Documentacin
+- `skills/auto-delegation-router/SKILL.md` - Documentacin completa
+- `skills/auto-delegation-router/INTEGRATION.md` - Gua de integracin
+- `docs/reference/AUTO-DELEGATION-IMPLEMENTATION.md` - Resumen de implementacin
+- `SESSION_CHECKPOINT.md` - Registro de esta sesin
 
-### Implementación
-- `skills/auto-delegation-router/auto-delegation-router.ps1` - Módulo PowerShell
-- `config/auto-delegation.json` - Configuración
+### Implementacin
+- `skills/auto-delegation-router/auto-delegation-router.ps1` - Mdulo PowerShell
+- `config/auto-delegation.json` - Configuracin
 - `tests/integration/auto-delegation-router.integration.tests.ps1` - Tests
 
 ### Referencia de Arquitectura
 - `docs/reference/SUBAGENT-ARCHITECTURE.md` - Arquitectura de subagentes
-- `skills/multi-agent-registry/SKILL.md` - Definición de agentes
+- `skills/multi-agent-registry/SKILL.md` - Definicin de agentes
 - `skills/project-orchestrator-skill/SKILL.md` - Orchestrator principal
 
-## Comandos Útiles
+## Comandos tiles
 
 ```powershell
-# Cargar módulo
+# Cargar mdulo
 Import-Module ".\skills\auto-delegation-router\auto-delegation-router.ps1" -Force
 
 # Habilitar para testing
@@ -133,50 +133,50 @@ Enable-AutoDelegation
 $routing = Route-TaskToAgent -TaskDescription "Implement login feature"
 $routing | ConvertTo-Json -Depth 10
 
-# Ver métricas
+# Ver mtricas
 $metrics = Get-RoutingMetrics
 $metrics | ConvertTo-Json
 
-# Deshabilitar después de testing
+# Deshabilitar despus de testing
 Disable-AutoDelegation
 
 # Ejecutar tests
 .\tests\integration\auto-delegation-router.integration.tests.ps1 -Verbose
 ```
 
-## Checklist para Próxima Sesión
+## Checklist para Prxima Sesin
 
 ### Inicio
-- [ ] Verificar que todos los archivos estén presentes
+- [ ] Verificar que todos los archivos estn presentes
 - [ ] Ejecutar tests para validar estado
 - [ ] Revisar SESSION_CHECKPOINT.md
 - [ ] Revisar NEXT_SESSION_GUIDE.md (este archivo)
 
-### Integración
+### Integracin
 - [ ] Integrar en orchestrator principal
-- [ ] Actualizar configuración
-- [ ] Crear tests de integración
+- [ ] Actualizar configuracin
+- [ ] Crear tests de integracin
 - [ ] Validar flujo completo
 
 ### Testing
 - [ ] Ejecutar tests en staging
 - [ ] Validar rendimiento
 - [ ] Probar fallback manual
-- [ ] Recopilar métricas
+- [ ] Recopilar mtricas
 
-### Documentación
+### Documentacin
 - [ ] Actualizar README
-- [ ] Crear guías de usuario
+- [ ] Crear guas de usuario
 - [ ] Documentar cambios
 - [ ] Crear runbooks
 
 ## Notas Importantes
 
-⚠️ **RECORDAR**:
-- Auto-delegation está **DISABLED por defecto**
+ **RECORDAR**:
+- Auto-delegation est **DISABLED por defecto**
 - Siempre hay **fallback a manual**
-- Configuración es **persistente en JSON**
-- Métricas se registran **automáticamente**
+- Configuracin es **persistente en JSON**
+- Mtricas se registran **automticamente**
 - Tests cubren **todos los escenarios**
 
 ## Contacto y Soporte
@@ -190,20 +190,20 @@ Para preguntas o problemas:
 ## Estado Actual
 
 ```
-✅ Auto-Delegation Router: IMPLEMENTADO
-✅ Tests: 26 PASANDO
-✅ Documentación: COMPLETA
-✅ Configuración: LISTA
-⏳ Integración: PENDIENTE
-⏳ Staging: PENDIENTE
-⏳ Producción: PENDIENTE
+ Auto-Delegation Router: IMPLEMENTADO
+ Tests: 26 PASANDO
+ Documentacin: COMPLETA
+ Configuracin: LISTA
+ Integracin: PENDIENTE
+ Staging: PENDIENTE
+ Produccin: PENDIENTE
 ```
 
 ---
 
 **Creado**: 2026-04-23 09:00:30  
-**Para**: Próxima sesión de desarrollo  
-**Duración estimada**: 2-3 horas  
+**Para**: Prxima sesin de desarrollo  
+**Duracin estimada**: 2-3 horas  
 **Complejidad**: Media  
 
-🚀 **¡LISTO PARA CONTINUAR!**
+ **LISTO PARA CONTINUAR!**

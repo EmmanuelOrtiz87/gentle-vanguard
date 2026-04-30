@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Token Monitor - Real-time token consumption display
     
@@ -42,7 +42,7 @@ param(
 $ErrorActionPreference = 'Continue'
 $sessionDir = '.\.session'
 
-# Función para obtener datos de Engram
+# Funcin para obtener datos de Engram
 function Get-EngramTokenData {
     $engramBin = Join-Path $PSScriptRoot "engram.exe"
     
@@ -58,7 +58,7 @@ function Get-EngramTokenData {
     }
 }
 
-# Función para leer estado de token-guard
+# Funcin para leer estado de token-guard
 function Get-TokenGuardData {
     $stateFile = Join-Path $sessionDir "token-guard-state.json"
     
@@ -74,7 +74,7 @@ function Get-TokenGuardData {
     }
 }
 
-# Función para detectar sesión actual
+# Funcin para detectar sesin actual
 function Get-CurrentSession {
     param([string]$ProvidedSessionId)
     
@@ -94,7 +94,7 @@ function Get-CurrentSession {
     return $sessionData.sessionId
 }
 
-# Función para obtener métricas de sesión
+# Funcin para obtener mtricas de sesin
 function Get-SessionMetrics {
     param([string]$SessionId)
     
@@ -118,7 +118,7 @@ function Get-SessionMetrics {
     }
 }
 
-# Función para mostrar el dashboard
+# Funcin para mostrar el dashboard
 function Show-TokenDashboard {
     param(
         [string]$SessionId,
@@ -132,18 +132,18 @@ function Show-TokenDashboard {
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     
     # Header
-    Write-Host "╔════════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-    Write-Host "║              TOKEN MONITOR - REAL-TIME DASHBOARD               ║" -ForegroundColor Cyan
-    Write-Host "╚════════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
+    Write-Host "              TOKEN MONITOR - REAL-TIME DASHBOARD               " -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host ""
     Write-Host "  Last Update: $timestamp" -ForegroundColor Gray
     Write-Host "  Session ID:  $SessionId" -ForegroundColor Gray
     Write-Host ""
     
     # Token Budget Section
-    Write-Host "┌─────────────────────────────────────────────────────────────┐" -ForegroundColor Green
-    Write-Host "│ TOKEN BUDGET & CONSUMPTION                                  │" -ForegroundColor Green
-    Write-Host "└─────────────────────────────────────────────────────────────┘" -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
+    Write-Host " TOKEN BUDGET & CONSUMPTION                                  " -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
     
     $budget = 128000  # Default
     $used = 0
@@ -183,14 +183,14 @@ function Show-TokenDashboard {
     $barWidth = 50
     $filled = [math]::Round(($percentUsed / 100) * $barWidth)
     $empty = $barWidth - $filled
-    $bar = "[" + ("█" * $filled) + ("░" * $empty) + "]"
+    $bar = "[" + ("" * $filled) + ("" * $empty) + "]"
     Write-Host "  $bar" -ForegroundColor $percentColor
     Write-Host ""
     
     # Session Status Section
-    Write-Host "┌─────────────────────────────────────────────────────────────┐" -ForegroundColor Magenta
-    Write-Host "│ SESSION STATUS                                            │" -ForegroundColor Magenta
-    Write-Host "└─────────────────────────────────────────────────────────────┘" -ForegroundColor Magenta
+    Write-Host "" -ForegroundColor Magenta
+    Write-Host " SESSION STATUS                                            " -ForegroundColor Magenta
+    Write-Host "" -ForegroundColor Magenta
     
     $status = "UNKNOWN"
     $statusColor = "Gray"
@@ -226,9 +226,9 @@ function Show-TokenDashboard {
     Write-Host ""
     
     # Thresholds Section
-    Write-Host "┌─────────────────────────────────────────────────────────────┐" -ForegroundColor Yellow
-    Write-Host "│ THRESHOLDS                                                │" -ForegroundColor Yellow
-    Write-Host "└─────────────────────────────────────────────────────────────┘" -ForegroundColor Yellow
+    Write-Host "" -ForegroundColor Yellow
+    Write-Host " THRESHOLDS                                                " -ForegroundColor Yellow
+    Write-Host "" -ForegroundColor Yellow
     
     $alertPercent = [math]::Round($alertThreshold * 100, 0)
     $pausePercent = [math]::Round($pauseThreshold * 100, 0)
@@ -245,9 +245,9 @@ function Show-TokenDashboard {
     
     # Engram Integration Section
     if ($EngramData) {
-        Write-Host "┌─────────────────────────────────────────────────────────────┐" -ForegroundColor Cyan
-        Write-Host "│ ENGRAM MEMORY STATUS                                      │" -ForegroundColor Cyan
-        Write-Host "└─────────────────────────────────────────────────────────────┘" -ForegroundColor Cyan
+        Write-Host "" -ForegroundColor Cyan
+        Write-Host " ENGRAM MEMORY STATUS                                      " -ForegroundColor Cyan
+        Write-Host "" -ForegroundColor Cyan
         
         $observationCount = if ($EngramData.observations) { $EngramData.observations.Count } else { 0 }
         $sessionCount = if ($EngramData.sessions) { $EngramData.sessions.Count } else { 0 }
@@ -258,7 +258,7 @@ function Show-TokenDashboard {
     }
     
     # Footer
-    Write-Host "═══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     if ($Continuous) {
         Write-Host "  Press Ctrl+C to exit | Refreshing every $RefreshInterval seconds" -ForegroundColor Gray
     }

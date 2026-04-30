@@ -11,7 +11,7 @@ if (-not (Test-Path $reportFile)) {
 $csv = Import-Csv $reportFile
 
 Write-Host "=== VALIDATION DE REPORTE ==="
-Write-Host "Ubicación: $reportFile"
+Write-Host "Ubicacin: $reportFile"
 Write-Host ""
 
 Write-Host "Total sesiones: $($csv.Count)"
@@ -37,18 +37,18 @@ Write-Host "=== RESUMEN ==="
 if ($csv.Count -ge 10) {
     Write-Host " Report has $($csv.Count) sessions"
 } else {
-    Write-Host "️ Report has only $($csv.Count) sessions (expected 10+)"
+    Write-Host " Report has only $($csv.Count) sessions (expected 10+)"
 }
 
 if (($csv | Where-Object { $_.SkillsUsed -ne '' }).Count -gt 0) {
     Write-Host " SkillsUsed column has data"
 } else {
-    Write-Host "️ SkillsUsed column is empty (Engram integration needed)"
+    Write-Host " SkillsUsed column is empty (Engram integration needed)"
 }
 
 if (($csv | Where-Object { $_.ActionsPerformed -ne '' }).Count -gt 0) {
     Write-Host " ActionsPerformed column has data"
 } else {
-    Write-Host "️ ActionsPerformed column is empty (Engram integration needed)"
+    Write-Host " ActionsPerformed column is empty (Engram integration needed)"
 }
 

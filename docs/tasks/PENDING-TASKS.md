@@ -1,27 +1,27 @@
-# 📋 Tareas Pendientes - Foundation
+﻿#  Tareas Pendientes - Foundation
 
 **Fecha**: 2026-04-26  
 **Estado**: En Progreso
 
 ---
 
-## 🔴 Crítico - Esta Semana
+##  Crtico - Esta Semana
 
 | ID | Tarea | Prioridad | Estado |
 |---|------|----------|--------|
-| P001 | Git hooks (pre-commit, pre-push) | ALTA | ⏳ Pendiente |
-| P002 | Secrets detection (trufflehog) | ALTA | ⏳ Pendiente |
-| P003 | Captura real de tokens en sesión | ALTA | ⏳ Pendiente |
+| P001 | Git hooks (pre-commit, pre-push) | ALTA |  Pendiente |
+| P002 | Secrets detection (trufflehog) | ALTA |  Pendiente |
+| P003 | Captura real de tokens en sesin | ALTA |  Pendiente |
 
 ---
 
-## 📋 Installation Complete System
+##  Installation Complete System
 
 ```powershell
 # Verificar herramientas
 .\scripts\utilities\install-prerequisites.ps1 -CheckOnly
 
-# Instalar automáticamente
+# Instalar automticamente
 .\scripts\utilities\install-prerequisites.ps1
 ```
 
@@ -30,18 +30,18 @@
 - [x]lefthook, prettier, commitlint disponibles
 - [x] Trufflehog (manual: choco install trufflehog)
 
-| Métrica | Valor |
+| Mtrica | Valor |
 |--------|------|
-| Sesiones totales (7 días) | 17 |
-| Token Guard | ✅ Activo (128K) |
-| Orchestrator | ✅ Funcionando (70% confidence) |
-| Auto-delegation | ✅ REPORT + 6 categorías |
+| Sesiones totales (7 das) | 17 |
+| Token Guard |  Activo (128K) |
+| Orchestrator |  Funcionando (70% confidence) |
+| Auto-delegation |  REPORT + 6 categoras |
 
 ---
 
-## 📁 Documentación related
+##  Documentacin related
 
-| Archivo | Ubicación |
+| Archivo | Ubicacin |
 |---------|-----------|
 | Recomendaciones producto | `reports/RECOMENDACIONES-FOUNDATION-PRODUCTO.md` |
 | Implementation status | `reports/IMPLEMENTATION-STATUS.md` |
@@ -50,5 +50,5 @@
 
 ---
 
-*Documento vivo - actualizar según progreso*  
-*Última actualización: 2026-04-26*
+*Documento vivo - actualizar segn progreso*  
+*ltima actualizacin: 2026-04-26*

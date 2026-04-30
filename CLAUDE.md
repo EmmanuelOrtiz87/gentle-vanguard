@@ -1,4 +1,4 @@
-# CLAUDE.md - Local-First Policy
+﻿# CLAUDE.md - Local-First Policy
 
 ## Workspace Configuration
 You are operating in **workspace-foundation** - a local-first workspace.
@@ -31,7 +31,7 @@ Only enable when explicitly requested:
 - Project: `workspace-foundation`
 - Engram project: `workspace_local`
 - Session pattern: `session-YYYY-MM-DD-XX`
-- Memory tiering: Hot (active) → Warm (1 day) → Cold (7 days)
+- Memory tiering: Hot (active)  Warm (1 day)  Cold (7 days)
 
 ## Language Preference
 - Responses: Spanish (es)

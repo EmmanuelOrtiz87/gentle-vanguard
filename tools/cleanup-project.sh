@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 
 ################################################################################
 # Project Cleanup - Removes temporary files and optimizes project structure
@@ -148,10 +148,10 @@ main() {
     verify_project_integrity
     
     if [ $? -eq 0 ]; then
-        log "INFO" "✓ Project is clean and ready"
+        log "INFO" " Project is clean and ready"
         return 0
     else
-        log "ERROR" "✗ Project integrity issues detected"
+        log "ERROR" " Project integrity issues detected"
         return 1
     fi
 }

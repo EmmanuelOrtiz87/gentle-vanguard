@@ -1,4 +1,4 @@
----
+﻿---
 name: mobile-app-debugging
 description: >
   Debug issues specific to mobile applications including platform-specific
@@ -34,20 +34,20 @@ Minimal working example:
 Xcode Debugging:
 
 Attach Debugger:
-  - Xcode → Run on device
+  - Xcode  Run on device
   - Set breakpoints in code
   - Step through execution
   - View variables
   - Console logs
 
 View Logs:
-  - Xcode → Window → Devices & Simulators
-  - Select device → View Device Logs
+  - Xcode  Window  Devices & Simulators
+  - Select device  View Device Logs
   - Filter by app name
   - Check system logs for crashes
 
 Inspect Memory:
-  - Xcode → Debug → View Memory Graph
+  - Xcode  Debug  View Memory Graph
   - Identify retain cycles
   - Check object count
   - Monitor allocation growth
@@ -61,14 +61,14 @@ App Crash (SIGABRT):
 
 ## Best Practices
 
-### ✅ DO
+###  DO
 
 - Follow established patterns and conventions
 - Write clean, maintainable code
 - Add appropriate documentation
 - Test thoroughly before deploying
 
-### ❌ DON'T
+###  DON'T
 
 - Skip testing or validation
 - Ignore error handling

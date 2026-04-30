@@ -1,4 +1,4 @@
----
+﻿---
 name: code-review-orchestrator
 description: >
   Unified system for all code quality and security reviews across 7 dimensions.
@@ -14,28 +14,28 @@ description: >
 The Code Review Orchestrator is the **single, unified system** for all code quality and security reviews.
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                     CODE REVIEW ORCHESTRATOR                                 │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│    ┌─────────────────────────────────────────────────────────────────────┐    │
-│    │                     7 REVIEW DIMENSIONS                             │    │
-│    │                                                                      │    │
-│    │  [S] Security  [Q] Quality  [A] Architecture                      │    │
-│    │  [T] Testing   [D] Docs     [API] API Design  [G] Git Workflow     │    │
-│    │                                                                      │    │
-│    └─────────────────────────────────────────────────────────────────────┘    │
-│                                    │                                        │
-│                                    ▼                                        │
-│    ┌─────────────────────────────────────────────────────────────────────┐    │
-│    │                     OUTPUTS                                          │    │
-│    │                                                                      │    │
-│    │  [R] Reports         [I] Issues       [X] Automation               │    │
-│    │  docs/reviews/      CSV export        Pre-commit hooks              │    │
-│    │                                                                      │    │
-│    └─────────────────────────────────────────────────────────────────────┘    │
-│                                                                              │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+                     CODE REVIEW ORCHESTRATOR                                 
+
+                                                                              
+        
+                         7 REVIEW DIMENSIONS                                 
+                                                                              
+      [S] Security  [Q] Quality  [A] Architecture                          
+      [T] Testing   [D] Docs     [API] API Design  [G] Git Workflow         
+                                                                              
+        
+                                                                            
+                                                                            
+        
+                         OUTPUTS                                              
+                                                                              
+      [R] Reports         [I] Issues       [X] Automation                   
+      docs/reviews/      CSV export        Pre-commit hooks                  
+                                                                              
+        
+                                                                              
+
 ```
 
 ## The Unified Flow
@@ -44,34 +44,34 @@ The Code Review Orchestrator is the **single, unified system** for all code qual
 
 ```
     git commit
-        │
-        ▼
-┌───────────────────┐
-│ pre-commit hook  │     ┌─────────────────────────────────────────────┐
-│ (auto-installed) │────▶│ 1. Reentrant protection check             │
-└────────┬──────────┘     │ 2. Get staged files                       │
-         │                │ 3. Critical secrets scan (fast)           │
-         │                │ 4. Quality patterns scan                  │
-         │                │ 5. Generate report                         │
-         │                └─────────────────────┬───────────────────────┘
-         │                                          │
-         │                    ┌─────────────────────┴─────────────────────┐
-         │                    │                     │                       │
-         │                    ▼                     ▼                       │
-         │              ┌───────────┐       ┌───────────┐                │
-         │              │ CRITICAL  │       │  REPORT   │                │
-         │              │  FOUND?   │       │ GENERATED │                │
-         │              └─────┬─────┘       └───────────┘                │
-         │                    │                                             │
-         │         ┌───────────┴───────────┐                              │
-         │         │YES                    │NO                             │
-         │         ▼                       ▼                              │
-         │    ┌───────────┐           ┌───────────┐                       │
-         │    │ [X] BLOCK  │           │ [OK] ALLOW   │                       │
-         │    │ Exit code 1│           │ Exit code 0│                       │
-         │    └───────────┘           └───────────┘                       │
-         │                                                             │
-         └─────────────────────────────────────────────────────────────────┘
+        
+        
+
+ pre-commit hook       
+ (auto-installed)  1. Reentrant protection check             
+      2. Get staged files                       
+                          3. Critical secrets scan (fast)           
+                          4. Quality patterns scan                  
+                          5. Generate report                         
+                         
+                                                   
+                             
+                                                                         
+                                                                         
+                                              
+                        CRITICAL           REPORT                   
+                         FOUND?           GENERATED                 
+                                              
+                                                                          
+                                                
+                  YES                    NO                             
+                                                                       
+                                               
+              [X] BLOCK              [OK] ALLOW                          
+              Exit code 1            Exit code 0                       
+                                               
+                                                                      
+         
 
     Performance: ~30 seconds for full quick scan
 ```
@@ -80,28 +80,28 @@ The Code Review Orchestrator is the **single, unified system** for all code qual
 
 ```
     wf review [scope] [options]
-        │
-        ▼
-┌───────────────────┐
-│ Load config      │     ┌─────────────────────────────────────────────┐
-│ from JSON        │────▶│ Scope validation                            │
-└────────┬──────────┘     │ • all, security, quality, testing          │
-         │                │ • docs, api, git, quick, full             │
-         │                └─────────────────────┬───────────────────────┘
-         │                                          │
-         ▼                                          ▼
-┌───────────────────┐                ┌─────────────────────────────────────┐
-│ Execute scans    │◀────────────────│ Run selected dimension checks       │
-│ (1-7 dimensions) │                 └─────────────────────────────────────┘
-└────────┬──────────┘                                    │
-         │                                              │
-         │         ┌────────────────────────────────────┴────────────────────┐
-         │         │                              │                         │
-         ▼         ▼                              ▼                         │
-┌───────────────────┐               ┌─────────────────────────────────────┐│
-│ Generate output  │               │ Generate detailed markdown report    ││
-│ (Console + File) │◀──────────────│ docs/code-reviews/YYYY-MM-DD-...   ││
-└───────────────────┘               └─────────────────────────────────────┘│
+        
+        
+
+ Load config           
+ from JSON         Scope validation                            
+       all, security, quality, testing          
+                           docs, api, git, quick, full             
+                         
+                                                   
+                                                   
+                
+ Execute scans     Run selected dimension checks       
+ (1-7 dimensions)                  
+                                    
+                                                       
+                  
+                                                                         
+                                                                         
+               
+ Generate output                  Generate detailed markdown report    
+ (Console + File)  docs/code-reviews/YYYY-MM-DD-...   
+               
 ```
 
 ## Review Dimensions
@@ -121,19 +121,19 @@ The Code Review Orchestrator is the **single, unified system** for all code qual
 ### Security Dimension Details
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                          SECURITY SCAN                                       │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+                          SECURITY SCAN                                       
+
 
     Pattern Detection:
     
     [!C] CRITICAL                          [!H] HIGH
-    ─────────────                         ─────────
-    • AWS Access Keys (AKIA...)          • Generic API Keys
-    • GitHub Tokens (ghp_...)            • Bearer Tokens
-    • Private Keys (PEM/RSA)             • Basic Auth strings
-    • Stripe Keys (sk_live_...)          • JWT Tokens
-    • SendGrid Keys (SG....)             • Database URLs w/ creds
+                             
+     AWS Access Keys (AKIA...)           Generic API Keys
+     GitHub Tokens (ghp_...)             Bearer Tokens
+     Private Keys (PEM/RSA)              Basic Auth strings
+     Stripe Keys (sk_live_...)           JWT Tokens
+     SendGrid Keys (SG....)              Database URLs w/ creds
     
     Detection Method: Regex pattern matching on staged files
     Performance: < 1 second for critical patterns
@@ -142,41 +142,41 @@ The Code Review Orchestrator is the **single, unified system** for all code qual
 ## Severity Levels
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                          SEVERITY MATRIX                                     │
-└─────────────────────────────────────────────────────────────────────────────┘
 
-    ┌───────────┬──────────────────────────────────────────────────────────────┐
-    │ [!C] CRITICAL│ • Security breach risk                                  │
-    │           │ • Exposed credentials                                       │
-    │           │ • Data loss vulnerability                                   │
-    ├───────────┼──────────────────────────────────────────────────────────────┤
-    │           │ BLOCK commit (exit code 1)                                  │
-    └───────────┴──────────────────────────────────────────────────────────────┘
+                          SEVERITY MATRIX                                     
 
-    ┌───────────┬──────────────────────────────────────────────────────────────┐
-    │ [!H] HIGH   │ • Major quality issues                                   │
-    │           │ • SQL injection risk                                         │
-    │           │ • Missing authentication                                    │
-    ├───────────┼──────────────────────────────────────────────────────────────┤
-    │           │ WARN + require review (exit code 0 with warning)            │
-    └───────────┴──────────────────────────────────────────────────────────────┘
 
-    ┌───────────┬──────────────────────────────────────────────────────────────┐
-    │ [!M] MEDIUM │ • Technical debt                                         │
-    │           │ • Error handling gaps                                       │
-    │           │ • Missing validation                                        │
-    ├───────────┼──────────────────────────────────────────────────────────────┤
-    │           │ INFO + log for review (exit code 0)                       │
-    └───────────┴──────────────────────────────────────────────────────────────┘
+    
+     [!C] CRITICAL  Security breach risk                                  
+                 Exposed credentials                                       
+                 Data loss vulnerability                                   
+    
+                BLOCK commit (exit code 1)                                  
+    
 
-    ┌───────────┬──────────────────────────────────────────────────────────────┐
-    │ [!L] LOW    │ • Code style violations                                   │
-    │           │ • Missing comments                                          │
-    │           │ • TODO/FIXME notes                                         │
-    ├───────────┼──────────────────────────────────────────────────────────────┤
-    │           │ SUGGESTION + log (exit code 0)                             │
-    └───────────┴──────────────────────────────────────────────────────────────┘
+    
+     [!H] HIGH     Major quality issues                                   
+                 SQL injection risk                                         
+                 Missing authentication                                    
+    
+                WARN + require review (exit code 0 with warning)            
+    
+
+    
+     [!M] MEDIUM   Technical debt                                         
+                 Error handling gaps                                       
+                 Missing validation                                        
+    
+                INFO + log for review (exit code 0)                       
+    
+
+    
+     [!L] LOW      Code style violations                                   
+                 Missing comments                                          
+                 TODO/FIXME notes                                         
+    
+                SUGGESTION + log (exit code 0)                             
+    
 ```
 
 ## Commands
@@ -201,30 +201,30 @@ The Code Review Orchestrator is the **single, unified system** for all code qual
 ### Scope Options Flow
 
 ```
-    ┌─────────────────────────────────────────────────────────────────┐
-    │                    SCOPE SELECTION FLOW                         │
-    └─────────────────────────────────────────────────────────────────┘
+    
+                        SCOPE SELECTION FLOW                         
+    
     
                               wf review
-                                  │
-                    ┌─────────────┼─────────────┐
-                    │             │             │
-                    ▼             ▼             ▼
+                                  
+                    
+                                              
+                                              
                --scope        (default)      --help
-               required           │
-                    │             │
-                    ▼             ▼
-              ┌─────────────────────────────┐
-              │      SCOPE MAPPING          │
-              └─────────────────────────────┘
+               required           
+                                 
+                                 
               
-    ┌─────────────┬─────────────┬─────────────┬─────────────┐
-    │   all      │  security   │  quality   │  testing   │
-    │   (7 dims) │   (1 dim)   │   (1 dim)   │   (1 dim)   │
-    ├─────────────┼─────────────┼─────────────┼─────────────┤
-    │   quick    │    docs     │    api      │    git      │
-    │  (2 dims)  │   (1 dim)   │   (1 dim)   │   (1 dim)   │
-    └─────────────┴─────────────┴─────────────┴─────────────┘
+                    SCOPE MAPPING          
+              
+              
+    
+       all        security     quality     testing   
+       (7 dims)    (1 dim)      (1 dim)      (1 dim)   
+    
+       quick        docs         api          git      
+      (2 dims)     (1 dim)      (1 dim)      (1 dim)   
+    
 ```
 
 ## Report Format
@@ -307,10 +307,10 @@ The Code Review Orchestrator is the **single, unified system** for all code qual
 
 ```
 .git/hooks/
-├── pre-commit              ← Auto-installed
-│   └── pre-commit-review.ps1 (or .sh)
-├── pre-push               ← Optional
-└── commit-msg             ← Optional (conventional commits)
+ pre-commit               Auto-installed
+    pre-commit-review.ps1 (or .sh)
+ pre-push                Optional
+ commit-msg              Optional (conventional commits)
 ```
 
 ### CI/CD Integration
@@ -392,16 +392,16 @@ Edit `configs/review-config.json`:
 ### Workflow
 
 ```
-git commit ──> GGA ──> Block critical issues
-                                  │
-                                  ▼
+git commit > GGA > Block critical issues
+                                  
+                                  
                          Significant work ready for merge
-                                  │
-                                  ▼
+                                  
+                                  
                      wf review --scope judgment-day
-                                  │
-                    ┌──────────────┴──────────────┐
-                    ▼                              ▼
+                                  
+                    
+                                                  
                APPROVED                         ESCALATED
                (merge)                    (manual review)
 ```

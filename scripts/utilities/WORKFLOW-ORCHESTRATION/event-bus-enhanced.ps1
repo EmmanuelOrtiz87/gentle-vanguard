@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Enhanced Event Bus - Integrates governance, validation, and audit capabilities
     
@@ -153,21 +153,21 @@ $STANDARD_EVENTS = @{
     'dispatch.completed' = @{ description = 'Disparado cuando finaliza el dispatch paralelo'; category = 'orchestration' }
     'agent.dispatched' = @{ description = 'Disparado cuando se despacha un agente'; category = 'agent' }
     'agent.completed' = @{ description = 'Disparado cuando un agente se completa'; category = 'agent' }
-    'session.started' = @{ description = 'Disparado cuando comienza una sesión'; category = 'session' }
-    'session.ended' = @{ description = 'Disparado cuando finaliza una sesión'; category = 'session' }
-    'security.violation' = @{ description = 'Disparado cuando se viola una política de seguridad'; category = 'security' }
-    'audit.event' = @{ description = 'Disparado para registro de auditoría'; category = 'audit' }
+    'session.started' = @{ description = 'Disparado cuando comienza una sesin'; category = 'session' }
+    'session.ended' = @{ description = 'Disparado cuando finaliza una sesin'; category = 'session' }
+    'security.violation' = @{ description = 'Disparado cuando se viola una poltica de seguridad'; category = 'security' }
+    'audit.event' = @{ description = 'Disparado para registro de auditora'; category = 'audit' }
 }
 
 Initialize-EventBus
 
 switch ($Action) {
     'list' {
-        Write-Host "`n=== EVENT BUS MEJORADO - EVENTOS ESTÁNDAR ===" -ForegroundColor Cyan
-        Write-Host "Ubicación: $eventBusPath" -ForegroundColor Gray
+        Write-Host "`n=== EVENT BUS MEJORADO - EVENTOS ESTNDAR ===" -ForegroundColor Cyan
+        Write-Host "Ubicacin: $eventBusPath" -ForegroundColor Gray
         Write-Host ""
         
-        Write-Host "Eventos Estándar:" -ForegroundColor Yellow
+        Write-Host "Eventos Estndar:" -ForegroundColor Yellow
         foreach ($evt in ($STANDARD_EVENTS.GetEnumerator() | Sort-Object Key)) {
             Write-Host "  $($evt.Key)" -ForegroundColor Green
             Write-Host "    $($evt.Value.description)" -ForegroundColor Gray
@@ -184,10 +184,10 @@ switch ($Action) {
         Write-Host "Historial de Eventos: $eventCount entradas" -ForegroundColor White
         Write-Host ""
         Write-Host "Governance: HABILITADO" -ForegroundColor Green
-        Write-Host "  - Validación de esquemas: SÍ" -ForegroundColor Green
-        Write-Host "  - Políticas de seguridad: SÍ" -ForegroundColor Green
-        Write-Host "  - Rate limiting: SÍ" -ForegroundColor Green
-        Write-Host "  - Auditoría completa: SÍ" -ForegroundColor Green
+        Write-Host "  - Validacin de esquemas: S" -ForegroundColor Green
+        Write-Host "  - Polticas de seguridad: S" -ForegroundColor Green
+        Write-Host "  - Rate limiting: S" -ForegroundColor Green
+        Write-Host "  - Auditora completa: S" -ForegroundColor Green
     }
     
     'subscribe' {
@@ -199,7 +199,7 @@ switch ($Action) {
         $normalizedEvent = $Event.ToLower()
         
         if (-not ($STANDARD_EVENTS.Keys -contains $normalizedEvent)) {
-            Write-Host "[WARN] '$normalizedEvent' no es un evento estándar" -ForegroundColor Yellow
+            Write-Host "[WARN] '$normalizedEvent' no es un evento estndar" -ForegroundColor Yellow
         }
         
         $subs = Get-Subscriptions
@@ -262,7 +262,7 @@ switch ($Action) {
         $validationResult = & $governanceLayerScript -Action validate -EventName $normalizedEvent -Payload $Payload -Actor $Actor -ActionType 'emit'
         
         if (-not $validationResult.valid) {
-            Write-Host "[BLOCKED] Emisión bloqueada por governance:" -ForegroundColor Red
+            Write-Host "[BLOCKED] Emisin bloqueada por governance:" -ForegroundColor Red
             $validationResult.errors | ForEach-Object { Write-Host "  - $_" -ForegroundColor Red }
             Add-HistoryEntry -EventName $normalizedEvent -PayloadJson $Payload -Status 'blocked' -ActorName $Actor
             exit 1
@@ -289,7 +289,7 @@ switch ($Action) {
                             if ($handlerPath) {
                                 & $handlerPath -Event $normalizedEvent -Payload $Payload
                             } else {
-                                Write-Host "    [WARN] Ruta de handler inválida: $($handler.script)" -ForegroundColor Yellow
+                                Write-Host "    [WARN] Ruta de handler invlida: $($handler.script)" -ForegroundColor Yellow
                             }
                         } catch {
                             Write-Host "    [ERROR] $($_.Exception.Message)" -ForegroundColor Red
@@ -334,7 +334,7 @@ switch ($Action) {
     
     'history' {
         $history = Get-History
-        Write-Host "`n=== HISTORIAL DE EVENTOS (últimos $($history.events.Count)) ===" -ForegroundColor Cyan
+        Write-Host "`n=== HISTORIAL DE EVENTOS (ltimos $($history.events.Count)) ===" -ForegroundColor Cyan
         
         foreach ($entry in $history.events | Select-Object -First 20) {
             $statusColor = switch ($entry.status) {

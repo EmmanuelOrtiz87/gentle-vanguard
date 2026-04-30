@@ -1,4 +1,4 @@
----
+﻿---
 name: pretool-format-hook
 description: >
   PreToolUse auto-format hook that runs linter/formatter before AI agent accesses files.
@@ -40,7 +40,7 @@ Run linter/formatter **before** AI agent reads saved files to avoid:
 
 ## Cost Savings
 
-**Per formatting fix:** ~1,000 tokens → ~50 tokens (hook only)
+**Per formatting fix:** ~1,000 tokens  ~50 tokens (hook only)
 
 ## Integration
 

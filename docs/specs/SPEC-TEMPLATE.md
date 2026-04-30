@@ -1,4 +1,4 @@
-# Spec: {Feature Name}
+﻿# Spec: {Feature Name}
 
 **Status**: draft | reviewed | implementing | validated | done
 **Author**: {name}
@@ -42,15 +42,15 @@ Feature: {Feature Name}
 
 | Criteria | Test Type | Status |
 |---|---|---|
-| {AC 1} | Unit | ⬜ |
-| {AC 2} | Integration | ⬜ |
-| {AC 3} | E2E | ⬜ |
+| {AC 1} | Unit |  |
+| {AC 2} | Integration |  |
+| {AC 3} | E2E |  |
 
 ## Traceability
 
 | Spec Section | Implementation File/Area | Status |
 |---|---|---|
-| {Section} | {path} | ⬜ |
+| {Section} | {path} |  |
 
 ## References
 

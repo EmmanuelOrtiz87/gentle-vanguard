@@ -1,4 +1,4 @@
-# TELEMETRY-METRICS
+﻿# TELEMETRY-METRICS
 
 Centralized management reporting system for Gentleman Foundation.
 
@@ -23,13 +23,13 @@ Single CSV file per month containing ALL workspace activity metrics for executiv
 - Outcome: COMPLETE/ESCALATED/PENDING
 - IssuesFound: Number of issues found
 - Duration(min): Session duration in minutes
-- Cost(USD): Estimated cost (tokens × rate)
+- Cost(USD): Estimated cost (tokens  rate)
 - Notes: Additional context
 
 ## Monthly Rotation
 
 When month changes:
-1. Script notifies: "⚠️ Month changed! Export reports/MANAGEMENT-REPORT-YYYY-MM.csv"
+1. Script notifies: " Month changed! Export reports/MANAGEMENT-REPORT-YYYY-MM.csv"
 2. User exports old file (Excel-ready, filterable)
 3. Run with `-ForceNewMonth` to create new empty file
 4. New file starts fresh for new month

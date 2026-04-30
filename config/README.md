@@ -1,37 +1,37 @@
-# Configuration Directory
+﻿# Configuration Directory
 
-## Descripción
+## Descripcin
 
-Directorio centralizado para toda la configuración del proyecto workspace-foundation.
+Directorio centralizado para toda la configuracin del proyecto workspace-foundation.
 
-**Versión**: 2.0.0
-**Última actualización**: 2026-04-21
-**Estado**: ✅ PRODUCCIÓN
+**Versin**: 2.0.0
+**ltima actualizacin**: 2026-04-21
+**Estado**:  PRODUCCIN
 
 ---
 
-## 📁 Estructura de Directorios
+##  Estructura de Directorios
 
 ```
 config/
-├── README.md                          # Este archivo
-├── testing.config.json                # Configuración de testing
-├── engram-memory.json                 # Configuración de Engram Memory
-├── orchestrator.json                  # Configuración del Orquestador
-├── ai-tool-detector.json              # Configuración de detección de herramientas
-├── dynamic-optimization.json          # Configuración de optimización dinámica
-├── tool-configs-template.json         # Template de configuración de herramientas
-├── security-policy.json               # Políticas de seguridad
-├── tls-config.json                    # Configuración TLS/SSL
-└── cline-dify-optimized.config.json   # Configuración optimizada Cline-Dify
+ README.md                          # Este archivo
+ testing.config.json                # Configuracin de testing
+ engram-memory.json                 # Configuracin de Engram Memory
+ orchestrator.json                  # Configuracin del Orquestador
+ ai-tool-detector.json              # Configuracin de deteccin de herramientas
+ dynamic-optimization.json          # Configuracin de optimizacin dinmica
+ tool-configs-template.json         # Template de configuracin de herramientas
+ security-policy.json               # Polticas de seguridad
+ tls-config.json                    # Configuracin TLS/SSL
+ cline-dify-optimized.config.json   # Configuracin optimizada Cline-Dify
 ```
 
 ---
 
-## 📋 Archivos de Configuración
+##  Archivos de Configuracin
 
 ### testing.config.json
-**Propósito**: Configuración de la suite de testing
+**Propsito**: Configuracin de la suite de testing
 
 **Secciones principales**:
 ```json
@@ -59,13 +59,13 @@ config/
 **Uso**:
 ```powershell
 $config = Get-Content .\config\testing.config.json | ConvertFrom-Json
-Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
+Write-Host "Coverage mnimo: $($config.testCoverage.minimumThreshold)"
 ```
 
 ---
 
 ### engram-memory.json
-**Propósito**: Configuración del Engram Memory System
+**Propsito**: Configuracin del Engram Memory System
 
 **Secciones principales**:
 ```json
@@ -90,16 +90,16 @@ Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
 }
 ```
 
-**Parámetros clave**:
-- `threshold`: Límite de tokens (250)
-- `triggerThreshold`: Número de packs para consolidar (5)
-- `compressionRatio`: Ratio de compresión (0.65 = 65%)
-- `qualityScore`: Puntuación mínima de calidad (0.91)
+**Parmetros clave**:
+- `threshold`: Lmite de tokens (250)
+- `triggerThreshold`: Nmero de packs para consolidar (5)
+- `compressionRatio`: Ratio de compresin (0.65 = 65%)
+- `qualityScore`: Puntuacin mnima de calidad (0.91)
 
 ---
 
 ### orchestrator.json
-**Propósito**: Configuración del Orquestador Universal
+**Propsito**: Configuracin del Orquestador Universal
 
 **Secciones principales**:
 ```json
@@ -128,20 +128,20 @@ Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
 ---
 
 ### ai-tool-detector.json
-**Propósito**: Configuración de detección automática de herramientas
+**Propsito**: Configuracin de deteccin automtica de herramientas
 
-**Características**:
-- Detección automática de herramientas IA
-- Configuración por herramienta
-- Parámetros específicos
-- Fallback automático
+**Caractersticas**:
+- Deteccin automtica de herramientas IA
+- Configuracin por herramienta
+- Parmetros especficos
+- Fallback automtico
 
 ---
 
 ### dynamic-optimization.json
-**Propósito**: Configuración de optimización dinámica
+**Propsito**: Configuracin de optimizacin dinmica
 
-**Métricas monitoreadas**:
+**Mtricas monitoreadas**:
 - CPU usage
 - Memory usage
 - Token usage
@@ -151,17 +151,17 @@ Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
 - Processing time
 - Error rate
 
-**Estrategias de optimización**:
+**Estrategias de optimizacin**:
 1. Ajuste de threshold
-2. Cambio de ratio de compresión
-3. Modificación de consolidación
-4. Ajuste de caché
+2. Cambio de ratio de compresin
+3. Modificacin de consolidacin
+4. Ajuste de cach
 5. Rebalanceo de carga
 
 ---
 
 ### security-policy.json
-**Propósito**: Políticas de seguridad
+**Propsito**: Polticas de seguridad
 
 **Secciones**:
 ```json
@@ -190,31 +190,31 @@ Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
 ---
 
 ### tls-config.json
-**Propósito**: Configuración TLS/SSL
+**Propsito**: Configuracin TLS/SSL
 
-**Parámetros**:
+**Parmetros**:
 - Certificados
 - Cipher suites
-- Validación de certificados
+- Validacin de certificados
 - HSTS headers
-- Versión mínima de TLS
+- Versin mnima de TLS
 
 ---
 
-## 🔧 Cómo Usar Configuraciones
+##  Cmo Usar Configuraciones
 
-### Cargar configuración
+### Cargar configuracin
 ```powershell
 $config = Get-Content .\config\testing.config.json | ConvertFrom-Json
 ```
 
-### Modificar configuración
+### Modificar configuracin
 ```powershell
 $config.testCoverage.minimumThreshold = 0.85
 $config | ConvertTo-Json | Set-Content .\config\testing.config.json
 ```
 
-### Validar configuración
+### Validar configuracin
 ```powershell
 $schema = Get-Content .\config\schema.json | ConvertFrom-Json
 # Validar contra schema
@@ -222,7 +222,7 @@ $schema = Get-Content .\config\schema.json | ConvertFrom-Json
 
 ---
 
-## 📊 Valores por Defecto
+##  Valores por Defecto
 
 ### Engram Memory
 - Threshold: 250 tokens
@@ -232,7 +232,7 @@ $schema = Get-Content .\config\schema.json | ConvertFrom-Json
 - Cache hit rate: 70-80%
 
 ### Testing
-- Coverage mínimo: 80%
+- Coverage mnimo: 80%
 - Coverage target: 90%
 - Timeout unit tests: 30s
 - Timeout integration: 60s
@@ -243,11 +243,11 @@ $schema = Get-Content .\config\schema.json | ConvertFrom-Json
 - Key length: 256 bits
 - Mode: CBC
 - Padding: PKCS7
-- Rotation interval: 90 días
+- Rotation interval: 90 das
 
 ---
 
-## 🚀 Configuración Inicial
+##  Configuracin Inicial
 
 ### 1. Copiar templates
 ```bash
@@ -261,14 +261,14 @@ $config.phases.phase1.threshold = 300  # Aumentar threshold
 $config | ConvertTo-Json | Set-Content .\config\engram-memory.json
 ```
 
-### 3. Validar configuración
+### 3. Validar configuracin
 ```powershell
 .\scripts\testing\run-tests.ps1 -TestType all
 ```
 
 ---
 
-## 📋 Checklist de Configuración
+##  Checklist de Configuracin
 
 - [ ] Revisar `testing.config.json`
 - [ ] Revisar `engram-memory.json`
@@ -276,18 +276,18 @@ $config | ConvertTo-Json | Set-Content .\config\engram-memory.json
 - [ ] Configurar `security-policy.json`
 - [ ] Configurar secretos
 - [ ] Ejecutar tests
-- [ ] Validar configuración
+- [ ] Validar configuracin
 
 ---
 
-## 🔐 Seguridad
+##  Seguridad
 
 ### Archivos Sensibles
 - `.secrets` - NO incluir en git
 - `*.key` - NO incluir en git
 - `credentials.json` - NO incluir en git
 
-### Protección
+### Proteccin
 ```bash
 # Agregar a .gitignore
 echo ".secrets" >> .gitignore
@@ -297,25 +297,25 @@ echo "credentials.json" >> .gitignore
 
 ---
 
-## 📚 Documentación Relacionada
+##  Documentacin Relacionada
 
 - `docs/guides/SECURITY-HARDENING.md` - Seguridad
 - `docs/guides/TESTING-GUIDE.md` - Testing
 - `scripts/README.md` - Scripts
-- `docs/supplementary/IMPLEMENTATION-COMPLETE.md` - Implementación
+- `docs/supplementary/IMPLEMENTATION-COMPLETE.md` - Implementacin
 
 ---
 
-## 🆘 Troubleshooting
+##  Troubleshooting
 
-### Problema: Configuración inválida
-**Solución**: Validar JSON
+### Problema: Configuracin invlida
+**Solucin**: Validar JSON
 ```powershell
 $config = Get-Content .\config\testing.config.json | ConvertFrom-Json
 ```
 
 ### Problema: Valores por defecto no funcionan
-**Solución**: Revisar `engram-memory.json`
+**Solucin**: Revisar `engram-memory.json`
 ```powershell
 $config = Get-Content .\config\engram-memory.json | ConvertFrom-Json
 $config | ConvertTo-Json -Depth 10
@@ -323,13 +323,13 @@ $config | ConvertTo-Json -Depth 10
 
 ---
 
-## ✅ Conclusión
+##  Conclusin
 
-Todos los archivos de configuración están centralizados, documentados y listos para usar.
+Todos los archivos de configuracin estn centralizados, documentados y listos para usar.
 
-**Estado**: 🟢 PRODUCCIÓN
+**Estado**:  PRODUCCIN
 
 ---
 
-**Última actualización**: 2026-04-21
-**Versión**: 2.0.0
+**ltima actualizacin**: 2026-04-21
+**Versin**: 2.0.0

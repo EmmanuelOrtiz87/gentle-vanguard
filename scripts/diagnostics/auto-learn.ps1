@@ -23,15 +23,15 @@ $scanned = 0
 
 $learnedLesson = @"
 
-[SEARCH] LECCIÓN: PowerShell Parser Error - `[OK]` al inicio de línea
+[SEARCH] LECCIN: PowerShell Parser Error - `[OK]` al inicio de lnea
 
 
 PROBLEMA:
-  En PowerShell, `[OK]` al inicio de una línea (sin variable precedente)
-  se interpreta como una expresión de índice, causando error de parser.
+  En PowerShell, `[OK]` al inicio de una lnea (sin variable precedente)
+  se interpreta como una expresin de ndice, causando error de parser.
   
   Ejemplo que falla:
-    #[OK] Validation passed     PowerShell interpreta [OK] como índice
+    #[OK] Validation passed     PowerShell interpreta [OK] como ndice
 
   Ejemplo correcto:
     Write-Output "[OK] Validation passed"
@@ -43,17 +43,17 @@ PROBLEMA:
 PORQUE FALLA:
   Los brackets [] en PowerShell tienen significados especiales:
   - [string] = tipo cast  
-  - $array[0] = índice de array
-  - [OK] = expresión inválida sin contexto
+  - $array[0] = ndice de array
+  - [OK] = expresin invlida sin contexto
 
-DÓNDE APLICA:
+DNDE APLICA:
   Scripts standalone que se ejecutan en hooks, CI, o como entrypoint
   (dentro de funciones NO falla porque hay contexto)
 
-SOLUCIÓN:
+SOLUCIN:
   1. Usar Write-Output o Write-Host con string entre comillas
-  2. Usar here-string @"..."@ para multi-línea
-  3. Usar función helper: function Write-Ok { param($m) ... }
+  2. Usar here-string @"..."@ para multi-lnea
+  3. Usar funcin helper: function Write-Ok { param($m) ... }
 
 EJEMPLOS:
    Write-Output "[# OK] Todo bien"
@@ -66,8 +66,8 @@ EJEMPLOS:
 
 APRENDIZAJE INTEGRADO EN:
   - validate-script-governance.ps1 (regla automatizada)
-  - auto-fix-delegate.ps1 (flujo automático detect-fix-delegate)
-  - .git/hooks/pre-push (valida automáticamente)
+  - auto-fix-delegate.ps1 (flujo automtico detect-fix-delegate)
+  - .git/hooks/pre-push (valida automticamente)
   - auto-delegation.json (SCRIPT-GOV keywords)
 
 "@
@@ -114,7 +114,7 @@ if ($script:Errors.Count -gt 0) {
 
     if ($Fix) {
         Write-Host ""
-        Write-Host "[TOOL] Aplicando correcciones automáticas..." -ForegroundColor Yellow
+        Write-Host "[TOOL] Aplicando correcciones automticas..." -ForegroundColor Yellow
 
         $errorsByFile = $script:Errors | Group-Object -Property path
         foreach ($fileGroup in $errorsByFile) {

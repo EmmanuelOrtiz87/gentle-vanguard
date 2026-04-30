@@ -1,4 +1,4 @@
-@echo off
+﻿@echo off
 setlocal
 
 set SCRIPT=%~dp0session-manager.ps1
@@ -11,7 +11,7 @@ if not exist "%SCRIPT%" (
   exit /b 1
 )
 
-REM Ejecutar optimización de Engram antes del inicio de sesión
+REM Ejecutar optimizacin de Engram antes del inicio de sesin
 if exist "%OPTIMIZE_SCRIPT%" (
   echo [INFO] Running Engram optimization pre-session...
   powershell -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_local"

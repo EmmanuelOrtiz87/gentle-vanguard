@@ -1,4 +1,4 @@
----
+﻿---
 name: terraform-infrastructure
 description: >
   Infrastructure as Code using Terraform with modular components, state
@@ -64,7 +64,7 @@ provider "aws" {
 
 ## Best Practices
 
-### ✅ DO
+###  DO
 
 - Use remote state (S3, Terraform Cloud)
 - Implement state locking (DynamoDB)
@@ -75,7 +75,7 @@ provider "aws" {
 - Implement code review before apply
 - Keep sensitive data in separate variable files
 
-### ❌ DON'T
+###  DON'T
 
 - Store state files locally in git
 - Use hardcoded values

@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Pre-Compact Hook - Saves state before context compaction
     
@@ -106,9 +106,9 @@ function Invoke-HandoffCompress {
 # Main execution
 try {
     Write-Host ""
-    Write-Host "╔════════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-    Write-Host "║              PRE-COMPACT HOOK - SAVING STATE                  ║" -ForegroundColor Cyan
-    Write-Host "╚════════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
+    Write-Host "              PRE-COMPACT HOOK - SAVING STATE                  " -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host ""
     
     $saved = Save-CriticalContent

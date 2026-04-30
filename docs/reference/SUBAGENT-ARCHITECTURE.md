@@ -1,4 +1,4 @@
-# Subagent Architecture
+﻿# Subagent Architecture
 
 ## 1. Purpose
 
@@ -42,10 +42,10 @@ Responsibilities:
 
 ### 3.3 Worker Lanes (Legacy Mapping)
 
-1. Discovery lane → **AGENT-BA** + **AGENT-SAD**
-2. Implementation lane → **AGENT-DEV**
-3. Validation lane → **AGENT-QA**
-4. Governance lane → **AGENT-GOV** + **AGENT-DOC**
+1. Discovery lane  **AGENT-BA** + **AGENT-SAD**
+2. Implementation lane  **AGENT-DEV**
+3. Validation lane  **AGENT-QA**
+4. Governance lane  **AGENT-GOV** + **AGENT-DOC**
 
 ## 3.4 Agent Invocation
 
