@@ -63,6 +63,26 @@ function Initialize-Session {
     Write-Status "Session initialized: $sessionId"
     Write-Info "Session file: $sessionFile"
     
+    # Autonomous norm enforcement at session start
+    Write-Status "Running autonomous norm enforcement (session-start)..."
+    $enforcerScript = Join-Path $PSScriptRoot "..\scripts\adaptive\auto-norm-enforcer.ps1"
+    if (Test-Path $enforcerScript) {
+        & $enforcerScript -Trigger session-start -AutoFix -VerboseOutput:$VerbosePreference
+        Write-Info "Norm enforcement completed"
+    } else {
+        Write-Warning "Norm enforcer not found at: $enforcerScript"
+    }
+    
+    # Autonomous learning at session start
+    Write-Status "Running autonomous norm learner (session-start)..."
+    $learnerScript = Join-Path $PSScriptRoot "..\scripts\adaptive\auto-norm-learner.ps1"
+    if (Test-Path $learnerScript) {
+        & $learnerScript -Trigger session-start -VerboseOutput:$VerbosePreference
+        Write-Info "Norm learner completed"
+    } else {
+        Write-Warning "Norm learner not found at: $learnerScript"
+    }
+    
     return $sessionId
 }
 
@@ -89,6 +109,26 @@ function Get-SessionHealth {
 
 function End-Session {
     Write-Status "Ending session..."
+    
+    # Autonomous norm enforcement at session close
+    Write-Status "Running autonomous norm enforcement (session-close)..."
+    $enforcerScript = Join-Path $PSScriptRoot "..\scripts\adaptive\auto-norm-enforcer.ps1"
+    if (Test-Path $enforcerScript) {
+        & $enforcerScript -Trigger session-close -AutoFix -VerboseOutput:$VerbosePreference
+        Write-Info "Norm enforcement completed"
+    } else {
+        Write-Warning "Norm enforcer not found at: $enforcerScript"
+    }
+    
+    # Autonomous learning at session close
+    Write-Status "Running autonomous norm learner (session-close)..."
+    $learnerScript = Join-Path $PSScriptRoot "..\scripts\adaptive\auto-norm-learner.ps1"
+    if (Test-Path $learnerScript) {
+        & $learnerScript -Trigger session-close -VerboseOutput:$VerbosePreference
+        Write-Info "Norm learner completed"
+    } else {
+        Write-Warning "Norm learner not found at: $learnerScript"
+    }
     
     # Pre-close validation
     Write-Status "Running pre-close validation..."
