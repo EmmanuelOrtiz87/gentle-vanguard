@@ -228,8 +228,7 @@ Utilidades generales y herramientas de propósito general.
 - `response-mode.ps1` - Modo de respuesta
 - `rotate-artifacts.ps1` - Rota artefactos
 - `run-engram.ps1` - Ejecuta Engram
-- `run-gentle-ai.ps1` - Ejecuta Gentle AI
-- `run-gga.ps1` - Ejecuta GGA
+- `run-gentle-ai.ps1` - Ejecuta Gentle AI (nativo)
 - `simplify-text.ps1` - Simplifica texto
 - `stack-dashboard.ps1` - Dashboard de stack
 - `stack-on-demand.ps1` - Stack bajo demanda

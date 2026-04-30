@@ -20,7 +20,7 @@
     "compactStartThreshold": 50
   },
   "deprecated": {
-    "note": "gentle-ai, GGA, Gentleman-Skills are DEPRECATED. Use opencode + 7-dimension review."
+    "note": "gentle-ai, GGA, Gentleman-Skills are DEPRECATED and absorbed natively. Use opencode + native skills."
   },
   "contextEfficiency": {
     "targetPercentage": 70,

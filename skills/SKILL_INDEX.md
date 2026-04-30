@@ -1,4 +1,4 @@
----
+﻿---
 name: skill-index
 description: >
   Master index of all available skills with triggers and usage guidelines.
@@ -127,6 +127,11 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 **Never wait to be called - always active.**
 
+### adaptive-orchestrator
+**Trigger**: `adaptive`, `auto-optimization`, `mode`, `performance`
+**Use when**: Adaptive mode, on-demand optimization, performance tuning
+---
+
 ### multi-agent-registry-skill
 
 **Trigger**: `agent`, `sub-agent`, `delegate`, `specialist`
@@ -155,9 +160,25 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 **Use when**: Creating new skills, adding AI guidance, documenting patterns
 
 **See**: [skill-creator-skill](skill-creator-skill/SKILL.md)
-
 ---
 
+### skill-registry
+**Trigger**: `update skills`, `skill registry`, `actualizar skills`, `update registry`
+**Use when**: Creating or updating the skill registry for the current project
+---
+
+### github-pr-skill
+**Trigger**: github, PR, pull request, pr creation`n**Use when**: Creating GitHub pull requests with conventional commits and proper descriptions
+---
+### gitflow-orchestrator-skill
+**Trigger**: gitflow, gitflow-orchestrator, ranch creation, git hooks`n**Use when**: GitFlow workflow validation, branch creation, pre-push hooks
+---
+### incident-response-skill
+**Trigger**: incident, outage, production issue, unbook, mitigation`n**Use when**: Handling incidents, response coordination, mitigation, and recovery planning
+---
+### issue-creation
+**Trigger**: issue, create issue, github issue, ug report`n**Use when**: Creating GitHub issues, reporting bugs, requesting features
+---
 ## Skill Categories
 
 | Category | Skills |
@@ -211,11 +232,23 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 ## Frontend
 
 ### tailwind-4-skill
-
 **Trigger**: `Tailwind`, `Tailwind CSS`, `cn()`, `className`, `tailwind-4`, `frontend`, `UI`, `interface`
-
 **Use when**: Tailwind styling, component classes, dark mode, production-grade UI
+---
 
+### angular-spa-skill
+**Trigger**: `Angular`, `Angular component`, `Angular service`, `Angular signal`, `Angular SPA`, `@defer`, `standalone component`
+**Use when**: Angular 19+ SPA patterns: signals, zoneless, standalone components, defer loading
+---
+
+### nextjs-15-skill
+**Trigger**: `Next.js`, `Next.js 15`, `App Router`, `Server Action`, `next.config`
+**Use when**: Next.js 15 App Router patterns: Server Components, Server Actions, data fetching
+---
+
+### angular-spa-skill
+**Trigger**: `Angular`, `Angular component`, `Angular service`, `Angular signal`, `Angular SPA`, `@defer`, `standalone component`
+**Use when**: Angular 19+ SPA patterns: signals, zoneless, standalone components, defer loading
 ---
 
 ### firecrawl-web-skill
@@ -831,7 +864,7 @@ See `skill-creator-skill` for creation guidelines.
 
 Advanced parallel execution management with dependency graphs, resource pooling, and token budget circuit breaker.
 
-- **Trigger**: "parallel execution", "ejecuciÃ³n paralela", "execution limits"
+- **Trigger**: "parallel execution", "ejecución paralela", "execution limits"
 - **Use when**: Complex workflows with >10 tasks, GPU/CPU constraints, token budget protection
 - **Key Functions**: 
   - Initialize-ParallelExecutor - Initialize all components
@@ -842,3 +875,100 @@ Advanced parallel execution management with dependency graphs, resource pooling,
 
 **Path**: skills/parallel-execution-limits/
 **Documentation**: skills/parallel-execution-limits/SKILL.md
+
+---
+
+### adaptive-mode-orchestrator
+
+**Trigger**: `adaptive`, `auto-optimization`, `mode`, `performance`
+
+**Use when**: Adaptive mode, on-demand optimization, performance tuning
+
+---
+
+### auto-delegation-router
+
+**Trigger**: `auto-delegation`, `delegate`, `route`, `orchestrate`
+
+**Use when**: Task routing, agent delegation, orchestration
+
+---
+
+### backlog-management-skill
+
+**Trigger**: `backlog`, `manage backlog`, `task list`, `prioritize`
+
+**Use when**: Managing project backlog with JSON-based source of truth
+
+**See**: [backlog-management-skill](backlog-management-skill/SKILL.md)
+
+---
+
+### business-telemetry-skill
+
+**Trigger**: `telemetry`, `metrics`, `management report`, `roi analysis`
+
+**Use when**: Capturing and reporting business-relevant telemetry data
+
+**See**: [business-telemetry-skill](business-telemetry-skill/SKILL.md)
+
+---
+
+### content-output-skill
+
+**Trigger**: `content output`, `format output`, `output template`
+
+**Use when**: Standardizing output formats, templates, and content generation patterns
+
+---
+
+### monitoring-aggregator
+
+**Trigger**: `monitoring`, `metrics`, `aggregate`
+
+**Use when**: Aggregating monitoring data
+
+---
+
+### react-19-skill
+
+**Trigger**: `React`, `React 19`, `useActionState`, `useFormStatus`, `React Compiler`
+
+**Use when**: React 19 patterns with React Compiler: no useMemo/useCallback needed, useActionState, useFormStatus
+
+---
+
+### reporting-skill
+
+**Trigger**: `reporting`, `generate report`, `metrics report`
+
+**Use when**: Generating structured reports from telemetry and metrics data
+
+---
+
+### sdd-lifecycle
+
+**Trigger**: `sdd`, `spec-driven`, `lifecycle`, `openspec`
+
+**Use when**: Full SDD lifecycle management: explore → propose → spec → design → tasks → apply → verify → archive
+
+**See**: [sdd-lifecycle](sdd-lifecycle/SKILL.md)
+
+---
+
+### sync-automation
+
+**Trigger**: `sync`, `automation`, `cross-workspace`
+
+**Use when**: Automating sync between workspaces and repositories
+
+---
+
+### visual-content-skill
+
+**Trigger**: `visual`, `content`, `images`, `media`
+
+**Use when**: Managing visual content, images, and media assets in documentation
+
+---
+
