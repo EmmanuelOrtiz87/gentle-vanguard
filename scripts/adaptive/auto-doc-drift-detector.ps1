@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Autonomous Document Drift Detector
     
@@ -143,9 +143,9 @@ function Test-DocumentDrift {
 # Main detection logic
 function Invoke-DriftDetection {
     Write-Host ""
-    Write-Host "╔═══════════════════════════════════════════╗" -ForegroundColor Green
-    Write-Host "║  AUTO-DOC-DRIFT DETECTOR (Trigger: $Trigger)" -ForegroundColor Green
-    Write-Host "╚═══════════════════════════════════════════╝" -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
+    Write-Host "  AUTO-DOC-DRIFT DETECTOR (Trigger: $Trigger)" -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
     Write-Host ""
     
     # Code file extensions to scan
@@ -190,12 +190,12 @@ function Invoke-DriftDetection {
     }
     
     # Summary
-    Write-Host "═══════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host "DRIFT DETECTION SUMMARY" -ForegroundColor Cyan
-    Write-Host "═══════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host "  Total code files scanned: $($codeFiles.Count)" -ForegroundColor White
-    Write-Host "  ✅ Up-to-date: $upToDate" -ForegroundColor Green
-    Write-Host "  ⚠️  Drift detected: $driftCount" -ForegroundColor Yellow
+    Write-Host "   Up-to-date: $upToDate" -ForegroundColor Green
+    Write-Host "    Drift detected: $driftCount" -ForegroundColor Yellow
     Write-Host ""
     
     if ($driftCount -eq 0) {
@@ -274,12 +274,14 @@ if ($result.drifts -gt 0) {
 
 # Final summary
 Write-Host ""
-Write-Host "═══════════════════════════════════════════════════" -ForegroundColor Cyan
+Write-Host "" -ForegroundColor Cyan
 Write-Host "FINAL RESULT" -ForegroundColor Cyan
-Write-Host "═══════════════════════════════════════════════════" -ForegroundColor Cyan
+Write-Host "" -ForegroundColor Cyan
 Write-Host "  Status: $($result.status)" -ForegroundColor White
 Write-Host "  Drifts detected: $($result.drifts)" -ForegroundColor Yellow
 Write-Host "  Auto-fixed: $($result.fixed)" -ForegroundColor Green
 Write-Host ""
 
 return $result
+
+

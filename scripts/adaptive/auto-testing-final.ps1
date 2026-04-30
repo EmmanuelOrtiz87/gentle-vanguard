@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Autonomous Testing Orchestrator with Auto-Repair (Non-blocking)
     
@@ -159,9 +159,9 @@ function Save-Results {
 
 # Main execution
 Write-Host ""
-Write-Host "╔══════════════════════════════════════════════════════════╗" -ForegroundColor Green
-Write-Host "║  AUTO-TESTING ORCHESTRATOR (Trigger: $Trigger)" -ForegroundColor Green
-Write-Host "╚══════════════════════════════════════════════════════════╝" -ForegroundColor Green
+Write-Host "" -ForegroundColor Green
+Write-Host "  AUTO-TESTING ORCHESTRATOR (Trigger: $Trigger)" -ForegroundColor Green
+Write-Host "" -ForegroundColor Green
 Write-Host ""
 
 # Phase 1: Run tests
@@ -216,9 +216,9 @@ $result = @{
 
 # Summary
 Write-Host ""
-Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+Write-Host "" -ForegroundColor Cyan
 Write-Host "TESTING ORCHESTRATION SUMMARY" -ForegroundColor Cyan
-Write-Host "══════════════════════════════════════════════════════════" -ForegroundColor Cyan
+Write-Host "" -ForegroundColor Cyan
 Write-Host "  Status: $($result.status)" -ForegroundColor White
 Write-Host "  Failures detected: $($result.failures)" -ForegroundColor Yellow
 Write-Host "  Auto-repairs attempted: $($result.repaired)" -ForegroundColor Cyan
@@ -226,3 +226,4 @@ Write-Host "  Logged for Judgment Day: YES" -ForegroundColor Gray
 Write-Host ""
 
 return $result
+

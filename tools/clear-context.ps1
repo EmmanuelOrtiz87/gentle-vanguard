@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Clear Context - Limpia el contexto entre tareas sin cerrar sesión
     
@@ -128,7 +128,7 @@ Write-Success "Marcador de contexto limpio creado"
 # 6. Mostrar resumen
 Write-Host "`n" + ("=" * 50) -ForegroundColor Cyan
 Write-Host "CONTEXTO LIMPIO EXITOSAMENTE" -ForegroundColor Green -NoNewline
-Write-Host " ✔" -ForegroundColor Green
+Write-Host " " -ForegroundColor Green
 Write-Host ("=" * 50) -ForegroundColor Cyan
 Write-Host "Contexto anterior guardado en Engram" -ForegroundColor Gray
 Write-Host "Nueva tarea puede iniciar sin contexto heredado" -ForegroundColor Gray
@@ -140,3 +140,4 @@ if ($TaskSummary -ne "") {
 }
 
 exit 0
+

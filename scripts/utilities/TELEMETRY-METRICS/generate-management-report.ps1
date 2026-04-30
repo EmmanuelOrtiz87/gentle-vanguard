@@ -35,7 +35,7 @@ if ($ForceNewMonth -or -not (Test-Path $reportFile)) {
         $firstLine = Get-Content $reportFile -First 1
         $fileMonth = ($firstLine -split ',')[1] -replace '"', '' -replace '-.*$', ''
         if ($fileMonth -ne $currentMonth) {
-            Write-Host "⚠️ Month changed! Please export: $reportFile"
+            Write-Host "[WARN] Month changed! Please export: $reportFile"
             Write-Host "   Then re-run with -ForceNewMonth to start new file"
             exit 0
         }
@@ -46,19 +46,19 @@ if ($ForceNewMonth -or -not (Test-Path $reportFile)) {
 if ($needNewFile) {
     $headers = "SessionID,Date,User,Project,TokensIn,TokensOut,SkillsUsed,SystemsTriggered,ActionsPerformed,Outcome,IssuesFound,Duration(min),Cost(USD),Notes"
     $headers | Out-File $reportFile -Encoding UTF8
-    Write-Host "✅ Created new report: $reportFile"
+    Write-Host "[OK] Created new report: $reportFile"
 }
 
 # Reminder if near month end (only for automated runs)
 if (-not $OnDemand) {
     $daysUntilMonthEnd = [DateTime]::DaysInMonth((Get-Date).Year, (Get-Date).Month) - (Get-Date).Day
     if ($daysUntilMonthEnd -le 3 -and $daysUntilMonthEnd -ge 0) {
-        Write-Host "⚠️ REMINDER: Only $daysUntilMonthEnd day(s) left! Export: $reportFile"
+        Write-Host "[WARN] REMINDER: Only $daysUntilMonthEnd day(s) left! Export: $reportFile"
     }
 }
 
 # Collect data from session files
-Write-Host "📊 Collecting session data..."
+Write-Host "[DATA] Collecting session data..."
 
 $sessionDir = Join-Path $workspaceRoot ".session"
 $telemetryDir = Join-Path $workspaceRoot ".telemetry"
@@ -69,7 +69,7 @@ try {
     $engramExe = "C:\Workspace_local\workspace-foundation\tools\engram.exe"
     
     if (Test-Path $engramExe) {
-        Write-Host "   🔄 Exporting Engram data..."
+        Write-Host "   [EXPORT] Exporting Engram data..."
         
         # Run engram export (writes to engram-export.json by default)
         $exportFile = "engram-export.json"
@@ -86,28 +86,25 @@ try {
                     $engramData = $engramJson | ConvertFrom-Json -ErrorAction Stop
                     if ($engramData.observations -and $engramData.observations.Count -gt 0) {
                         $engramObservations = $engramData.observations
-                        Write-Host "   ✅ Engram data loaded: $($engramObservations.Count) observations"
+                        Write-Host "   [OK] Engram data loaded: $($engramObservations.Count) observations"
                     } else {
-                        Write-Host "   ⚠️ Engram export has no observations"
+                        Write-Host "   [WARN] Engram export has no observations"
                     }
                 } else {
-                    Write-Host "   ⚠️ Engram export is not valid JSON"
+                    Write-Host "   [WARN] Engram export is not valid JSON"
                 }
-            } catch {
-                Write-Host "   ⚠️ Engram parse error: $_"
-            } finally {
-                Remove-Item $exportFile -Force -ErrorAction SilentlyContinue
-                Remove-Item $stderrFile -Force -ErrorAction SilentlyContinue
+                } catch {
+                    Write-Host "   [WARN] Engram parse error: $_"
+                }
+            } else {
+                Write-Host "   [WARN] Engram export file not created"
             }
         } else {
-            Write-Host "   ⚠️ Engram export file not created"
+            Write-Host "   [WARN] engram.exe not found"
         }
-    } else {
-        Write-Host "   ⚠️ engram.exe not found"
+    } catch {
+        Write-Host "   [WARN] Engram error: $_"
     }
-} catch {
-    Write-Host "   ⚠️ Engram error: $_"
-}
 
 if (Test-Path $sessionDir) {
     $sessionFiles = Get-ChildItem $sessionDir -Filter "session-*.json" | Where-Object { 
@@ -151,7 +148,7 @@ if (Test-Path $sessionDir) {
                 }
                 
                 if ($sessionObs -and $sessionObs.Count -gt 0) {
-                    Write-Host "   ✅ Found $($sessionObs.Count) observations for $sessionId"
+                    Write-Host "   [OK] Found $($sessionObs.Count) observations for $sessionId"
                     
                     # Extract skills from observations
                     $skillTitles = $sessionObs | Where-Object { 
@@ -195,22 +192,22 @@ if (Test-Path $sessionDir) {
             
             # Append to CSV
             $row | Export-Csv -Path $reportFile -Append -NoTypeInformation -Encoding UTF8
-            Write-Host "   ✅ Added: $sessionId"
+            Write-Host "   [OK] Added: $sessionId"
             
-        } catch {
-            Write-Host "   ⚠️ Error processing $($sessionFile.Name): $_"
-        }
+            } catch {
+                Write-Host "   [WARN] Error processing $($sessionFile.Name): $_"
+            }
     }
 }
 
-Write-Host "✅ Report updated: $reportFile"
+Write-Host "[OK] Report updated: $reportFile"
 if (Test-Path $reportFile) {
     $rowCount = (Get-Content $reportFile).Count - 1
     Write-Host "   Total rows: $rowCount"
 }
 
 # Show preview
-Write-Host "`n📊 Preview (first 3 rows):"
+Write-Host "`n[PREVIEW] First 3 rows:"
 if (Test-Path $reportFile) {
     Get-Content $reportFile -TotalCount 4 | ForEach-Object { Write-Host $_ }
 }

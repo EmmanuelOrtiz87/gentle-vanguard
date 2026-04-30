@@ -1,4 +1,4 @@
-param(
+﻿param(
     [switch]$Verbose,
     [switch]$Fix,
     [switch]$ShowLesson
@@ -22,16 +22,16 @@ $patterns = @('*.ps1', '*.psm1')
 $scanned = 0
 
 $learnedLesson = @"
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔍 LECCIÓN: PowerShell Parser Error - `[OK]` al inicio de línea
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[SEARCH] LECCIÓN: PowerShell Parser Error - `[OK]` al inicio de línea
+
 
 PROBLEMA:
   En PowerShell, `[OK]` al inicio de una línea (sin variable precedente)
   se interpreta como una expresión de índice, causando error de parser.
   
   Ejemplo que falla:
-    #[OK] Validation passed    ← PowerShell interpreta [OK] como índice
+    #[OK] Validation passed     PowerShell interpreta [OK] como índice
 
   Ejemplo correcto:
     Write-Output "[OK] Validation passed"
@@ -56,13 +56,13 @@ SOLUCIÓN:
   3. Usar función helper: function Write-Ok { param($m) ... }
 
 EJEMPLOS:
-  ✅ Write-Output "[# OK] Todo bien"
-  ✅ Write-Host "[# OK] Passed" -ForegroundColor Green  
-  ✅ Write-Host @"
+   Write-Output "[# OK] Todo bien"
+   Write-Host "[# OK] Passed" -ForegroundColor Green  
+   Write-Host @"
   [# OK] Line 1
   [# OK] Line 2
   "@ -ForegroundColor Green
-  ❌ #[OK] Passed (sin Write-Output/Write-Host)
+   #[OK] Passed (sin Write-Output/Write-Host)
 
 APRENDIZAJE INTEGRADO EN:
   - validate-script-governance.ps1 (regla automatizada)
@@ -103,18 +103,18 @@ Get-ChildItem -Path $repoRoot -Include $patterns -Recurse -File | Where-Object {
 
 if ($script:Errors.Count -gt 0) {
     Write-Host ""
-    Write-Host "══════════════════════════════════════════════════════════════" -ForegroundColor Yellow
-    Write-Host "⚠️  $($script:Errors.Count) errores de parser detectados" -ForegroundColor Yellow
-    Write-Host "══════════════════════════════════════════════════════════════" -ForegroundColor Yellow
+    Write-Host "" -ForegroundColor Yellow
+    Write-Host "  $($script:Errors.Count) errores de parser detectados" -ForegroundColor Yellow
+    Write-Host "" -ForegroundColor Yellow
 
     $script:Errors | ForEach-Object {
-        Write-Host "  📄 $($_.file):$($_.line)" -ForegroundColor Red
+        Write-Host "   $($_.file):$($_.line)" -ForegroundColor Red
         Write-Host "     $($_.content)" -ForegroundColor Gray
     }
 
     if ($Fix) {
         Write-Host ""
-        Write-Host "🔧 Aplicando correcciones automáticas..." -ForegroundColor Yellow
+        Write-Host "[TOOL] Aplicando correcciones automáticas..." -ForegroundColor Yellow
 
         $errorsByFile = $script:Errors | Group-Object -Property path
         foreach ($fileGroup in $errorsByFile) {
@@ -135,10 +135,10 @@ if ($script:Errors.Count -gt 0) {
             Set-Content -Path $filePath -Value $fileContent -Encoding UTF8
         }
 
-        Write-Host "  ✅ $($script:Fixed.Count) archivos corregidos" -ForegroundColor Green
+        Write-Host "   $($script:Fixed.Count) archivos corregidos" -ForegroundColor Green
     } else {
         Write-Host ""
-        Write-Host "💡 Para auto-corregir ejecutar:" -ForegroundColor Cyan
+        Write-Host " Para auto-corregir ejecutar:" -ForegroundColor Cyan
         Write-Host "   .\scripts\diagnostics\auto-learn.ps1 -Fix" -ForegroundColor White
     }
 }
@@ -148,8 +148,10 @@ if ($ShowLesson -or $Verbose) {
 }
 
 if ($script:Errors.Count -eq 0) {
-    Write-Host "✅ Script governance: Sin errores de parser" -ForegroundColor Green
+    Write-Host " Script governance: Sin errores de parser" -ForegroundColor Green
     exit 0
 }
 
 exit 1
+
+

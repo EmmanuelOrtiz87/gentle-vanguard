@@ -1,4 +1,4 @@
-# extract-engram-json.ps1
+﻿# extract-engram-json.ps1
 # Extracts pure JSON from engram export output (which prints summary text first)
 
 param(
@@ -24,9 +24,10 @@ if ($jsonStart -ge 0) {
     # Extract from JSON start to end
     $jsonLines = $lines[$jsonStart..($lines.Count - 1)]
     $jsonLines | Out-File $OutputFile -Encoding UTF8
-    Write-Host "✅ Extracted JSON to $OutputFile (started at line $($jsonStart+1))"
+    Write-Host " Extracted JSON to $OutputFile (started at line $($jsonStart+1))"
     exit 0
 } else {
-    Write-Host "❌ No JSON found in $InputFile"
+    Write-Host " No JSON found in $InputFile"
     exit 1
 }
+

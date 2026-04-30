@@ -1,4 +1,4 @@
-# validate-report.ps1
+﻿# validate-report.ps1
 # Simple validation of management report
 
 $reportFile = "C:\Workspace_local\workspace-foundation\reports\MANAGEMENT-REPORT-2026-04.csv"
@@ -35,19 +35,20 @@ $csv | Select-Object -First 3 | Format-Table
 Write-Host ""
 Write-Host "=== RESUMEN ==="
 if ($csv.Count -ge 10) {
-    Write-Host "✅ Report has $($csv.Count) sessions"
+    Write-Host " Report has $($csv.Count) sessions"
 } else {
-    Write-Host "⚠️ Report has only $($csv.Count) sessions (expected 10+)"
+    Write-Host "️ Report has only $($csv.Count) sessions (expected 10+)"
 }
 
 if (($csv | Where-Object { $_.SkillsUsed -ne '' }).Count -gt 0) {
-    Write-Host "✅ SkillsUsed column has data"
+    Write-Host " SkillsUsed column has data"
 } else {
-    Write-Host "⚠️ SkillsUsed column is empty (Engram integration needed)"
+    Write-Host "️ SkillsUsed column is empty (Engram integration needed)"
 }
 
 if (($csv | Where-Object { $_.ActionsPerformed -ne '' }).Count -gt 0) {
-    Write-Host "✅ ActionsPerformed column has data"
+    Write-Host " ActionsPerformed column has data"
 } else {
-    Write-Host "⚠️ ActionsPerformed column is empty (Engram integration needed)"
+    Write-Host "️ ActionsPerformed column is empty (Engram integration needed)"
 }
+

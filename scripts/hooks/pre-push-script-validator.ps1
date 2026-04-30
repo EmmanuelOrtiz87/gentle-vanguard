@@ -1,4 +1,4 @@
-param(
+﻿param(
     [switch]$AutoFix,
     [switch]$Strict,
     [switch]$AutoDelegate
@@ -38,7 +38,7 @@ function Write-Pass {
 
 function Write-Delegate {
     param([string]$Message, [string]$Agent)
-    Write-Host "[DELEGATE] $Message → $Agent" -ForegroundColor Magenta
+    Write-Host "[DELEGATE] $Message  $Agent" -ForegroundColor Magenta
 }
 
 function Test-ParserErrors {

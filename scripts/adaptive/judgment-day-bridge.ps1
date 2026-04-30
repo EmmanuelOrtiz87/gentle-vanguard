@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Judgment Day Integration Bridge
     
@@ -173,9 +173,9 @@ function Format-ForJudgmentDay {
 # Main execution: Collect
 function Invoke-Collect {
     Write-Host ""
-    Write-Host "╔═══════════════════════════════════════════════════════════════════╗" -ForegroundColor Green
-    Write-Host "║  JUDGMENT DAY BRIDGE (Collect Mode)                    ║" -ForegroundColor Green
-    Write-Host "╚═════════════════════════════════════════════════════════════════╝" -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
+    Write-Host "  JUDGMENT DAY BRIDGE (Collect Mode)                    " -ForegroundColor Green
+    Write-Host "" -ForegroundColor Green
     Write-Host ""
     
     Write-JBridge "Collecting logs from autonomous systems..."
@@ -222,12 +222,12 @@ function Invoke-Collect {
     
     # Summary
     Write-Host ""
-    Write-Host "═══════════════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host "BRIDGE COLLECTION SUMMARY" -ForegroundColor Cyan
-    Write-Host "═════════════════════════════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host "  Systems checked: $($logs.systems.Count)" -ForegroundColor White
-    Write-Host "  ✅ Passed: $passCount" -ForegroundColor Green
-    Write-Host "  ⚠️  Issues: $issueCount" -ForegroundColor Yellow
+    Write-Host "   Passed: $passCount" -ForegroundColor Green
+    Write-Host "    Issues: $issueCount" -ForegroundColor Yellow
     Write-Host ""
     
     return @{ status = "SUCCESS"; systems = $logs.systems.Count; issues = $issueCount }
@@ -259,3 +259,5 @@ switch ($Action) {
 }
 
 return $result
+
+

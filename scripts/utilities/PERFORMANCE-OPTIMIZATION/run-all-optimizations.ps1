@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Runs all optimization scripts in sequence
 
@@ -112,7 +112,7 @@ class OptimizationOrchestrator {
             $this.GenerateReport()
             
             Write-Log "╔════════════════════════════════════════════════════════════╗" "PHASE"
-            Write-Log "║              ✅ FASE 1 COMPLETADA EXITOSAMENTE             ║" "PHASE"
+            Write-Log "║               FASE 1 COMPLETADA EXITOSAMENTE             ║" "PHASE"
             Write-Log "╚════════════════════════════════════════════════════════════╝" "PHASE"
         }
         catch {
@@ -139,10 +139,10 @@ class OptimizationOrchestrator {
                 Timestamp = Get-Date
             }
             
-            Write-Log "✅ Optimización de Contexto completada" "SUCCESS"
+            Write-Log " Optimización de Contexto completada" "SUCCESS"
         }
         catch {
-            Write-Log "❌ Error en optimización de contexto: $_" "ERROR"
+            Write-Log " Error en optimización de contexto: $_" "ERROR"
             $this.Results.ContextOptimization = @{
                 Status = "Error"
                 Error = $_
@@ -171,10 +171,10 @@ class OptimizationOrchestrator {
                     Timestamp = Get-Date
                 }
                 
-                Write-Log "✅ Optimización de Tokens completada" "SUCCESS"
+                Write-Log " Optimización de Tokens completada" "SUCCESS"
             }
             else {
-                Write-Log "⚠️  No se encontraron archivos JSON para optimización de tokens" "WARN"
+                Write-Log "️  No se encontraron archivos JSON para optimización de tokens" "WARN"
                 $this.Results.TokenOptimization = @{
                     Status = "Omitido"
                     Reason = "No JSON files found"
@@ -182,7 +182,7 @@ class OptimizationOrchestrator {
             }
         }
         catch {
-            Write-Log "❌ Error en optimización de tokens: $_" "ERROR"
+            Write-Log " Error en optimización de tokens: $_" "ERROR"
             $this.Results.TokenOptimization = @{
                 Status = "Error"
                 Error = $_
@@ -213,10 +213,10 @@ class OptimizationOrchestrator {
                     Timestamp = Get-Date
                 }
                 
-                Write-Log "✅ Optimización de Mensajes completada" "SUCCESS"
+                Write-Log " Optimización de Mensajes completada" "SUCCESS"
             }
             else {
-                Write-Log "⚠️  No se encontraron archivos JSON para optimización de mensajes" "WARN"
+                Write-Log "️  No se encontraron archivos JSON para optimización de mensajes" "WARN"
                 $this.Results.MessageOptimization = @{
                     Status = "Omitido"
                     Reason = "No JSON files found"
@@ -224,7 +224,7 @@ class OptimizationOrchestrator {
             }
         }
         catch {
-            Write-Log "❌ Error en optimización de mensajes: $_" "ERROR"
+            Write-Log " Error en optimización de mensajes: $_" "ERROR"
             $this.Results.MessageOptimization = @{
                 Status = "Error"
                 Error = $_
@@ -247,10 +247,10 @@ class OptimizationOrchestrator {
                 Timestamp = Get-Date
             }
             
-            Write-Log "✅ Optimización de Rendimiento completada" "SUCCESS"
+            Write-Log " Optimización de Rendimiento completada" "SUCCESS"
         }
         catch {
-            Write-Log "❌ Error en optimización de rendimiento: $_" "ERROR"
+            Write-Log " Error en optimización de rendimiento: $_" "ERROR"
             $this.Results.PerformanceOptimization = @{
                 Status = "Error"
                 Error = $_
@@ -263,13 +263,13 @@ class OptimizationOrchestrator {
         $duration = (Get-Date) - $this.StartTime
         
         $report = @"
-# 📊 REPORTE DE OPTIMIZACIÓN - FASE 1
+# [DATA] REPORTE DE OPTIMIZACIÓN - FASE 1
 
 **Fecha:** $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 **Duración:** $($duration.TotalSeconds) segundos
-**Estado:** ✅ COMPLETADO
+**Estado:**  COMPLETADO
 
-## 📈 Resumen de Optimizaciones
+## [CHART] Resumen de Optimizaciones
 
 | Optimización | Estado | Detalles |
 |--------------|--------|----------|
@@ -278,7 +278,7 @@ class OptimizationOrchestrator {
 | Mensajes | $($this.Results.MessageOptimization.Status) | GZIP y batching aplicados |
 | Rendimiento | $($this.Results.PerformanceOptimization.Status) | Paralelización y caché activados |
 
-## 🎯 Beneficios Esperados (Fase 1)
+## [TARGET] Beneficios Esperados (Fase 1)
 
 - **Contexto:** 30-40% reducción
 - **Tokens:** 20-30% reducción
@@ -292,7 +292,7 @@ class OptimizationOrchestrator {
 - Tokens: $($this.Results.TokenOptimization.OutputPath)
 - Messages: $($this.Results.MessageOptimization.OutputPath)
 
-## 🚀 Próximos Pasos
+##  Próximos Pasos
 
 ### Fase 2: Monitoreo (1-2 semanas)
 1. Monitorear métricas en tiempo real
@@ -339,3 +339,4 @@ catch {
     Write-Log "Error fatal: $_" "ERROR"
     exit 1
 }
+

@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Telemetry Dashboard - View and manage distributed tracing data
     
@@ -108,7 +108,7 @@ function Show-TelemetrySummary {
         }
     }
     
-    Write-Host "`n📊 Telemetry Statistics`n" -ForegroundColor Green
+    Write-Host "`n[DATA] Telemetry Statistics`n" -ForegroundColor Green
     Write-Host "  Traces:     $traceCount" -ForegroundColor Gray
     Write-Host "  Metrics:    $metricCount" -ForegroundColor Gray
     Write-Host "  Spans:      $spanCount" -ForegroundColor Gray
@@ -127,7 +127,7 @@ function Show-TelemetrySummary {
         
         foreach ($dir in $dirs) {
             $exists = Test-Path $dir.Path
-            $status = if ($exists) { "✓" } else { "✗" }
+            $status = if ($exists) { "" } else { "" }
             $color = if ($exists) { "Green" } else { "Yellow" }
             Write-Host "    [$status] $($dir.Name)" -ForegroundColor $color
         }
@@ -272,7 +272,7 @@ function View-Metrics {
     foreach ($file in $metricFiles) {
         try {
             $data = Get-Content -Path $file.FullName | ConvertFrom-Json
-            Write-Host "`n📊 $($file.Name)" -ForegroundColor Green
+            Write-Host "`n[DATA] $($file.Name)" -ForegroundColor Green
             Write-Host "  Session: $($data.SessionId)" -ForegroundColor Gray
             Write-Host "  Correlation ID: $($data.CorrelationId)" -ForegroundColor Gray
             Write-Host "  Metric Count: $($data.Metrics.Count)" -ForegroundColor Gray
@@ -354,3 +354,4 @@ catch {
     Write-Host $_.Exception.StackTrace -ForegroundColor Red
     exit 1
 }
+

@@ -1,4 +1,4 @@
-# generate-executive-summary.ps1
+﻿# generate-executive-summary.ps1
 # Generates comprehensive executive summary report for management
 
 param(
@@ -90,10 +90,10 @@ $periodLabel = switch ($Period) {
 }
 
 $systemStatus = @{
-    tokenGuard = "✅ Activo (128K budget)"
-    contextEfficiency = "✅ Perfil recommended"
-    autoDelegation = "✅ Configurado"
-    distributedTracing = "✅ Activo"
+    tokenGuard = " Activo (128K budget)"
+    contextEfficiency = " Perfil recommended"
+    autoDelegation = " Configurado"
+    distributedTracing = " Activo"
 }
 
 if ($Format -eq "json") {
@@ -122,7 +122,7 @@ if (-not (Test-Path $outputDir)) {
 $reportFile = Join-Path $outputDir "informe-ejecutivo-$Period-$(Get-Date -Format 'yyyy-MM-dd').md"
 
 $markdown = @"
-# 📊 Informe Ejecutivo - Resumen de Actividad
+# [DATA] Informe Ejecutivo - Resumen de Actividad
 
 **Período**: $periodLabel  
 **Fecha de generación**: $reportDate  
@@ -130,15 +130,15 @@ $markdown = @"
 
 ---
 
-## 📋 Resumen Ejecutivo
+## [LIST] Resumen Ejecutivo
 
 | Métrica | Valor | Nota |
 |--------|-------|------|
-| **Sesiones totales** | $totalSessions | $(if ($Period -eq "7days") { "≈ $([math]::Round($totalSessions/7, 1))/día" } elseif ($Period -eq "30days") { "≈ $([math]::Round($totalSessions/30, 1))/día" }) |
+| **Sesiones totales** | $totalSessions | $(if ($Period -eq "7days") { " $([math]::Round($totalSessions/7, 1))/día" } elseif ($Period -eq "30days") { " $([math]::Round($totalSessions/30, 1))/día" }) |
 | **Sesiones activas** | $activeSessions | En curso |
 | **Días analizados** | $daysInPeriod | Período seleccionado |
 
-### 📈 Actividad por Día
+### [CHART] Actividad por Día
 
 | Fecha | Sesiones |
 |-------|----------|
@@ -152,7 +152,7 @@ $markdown += @"
 
 ---
 
-## ⚙️ Estado del Sistema
+##  Estado del Sistema
 
 | Componente | Estado |
 |------------|--------|
@@ -163,7 +163,7 @@ $markdown += @"
 
 ---
 
-## 📊 Detalle de Sesiones
+## [DATA] Detalle de Sesiones
 
 "@
 
@@ -180,9 +180,9 @@ foreach ($day in $sessionsByDay) {
 $markdown += @"
 ---
 
-## ⚠️ Limitaciones y Notas
+##  Limitaciones y Notas
 
-> **Nota importantes**: Los следуientes métricas aún no están siendo capturadas automáticamente:
+> **Nota importantes**: Los ientes métricas aún no están siendo capturadas automáticamente:
 > - Tokens consumidos por sesión
 > - Costo estimado (USD)
 > - Contexto utilizado
@@ -193,7 +193,7 @@ $markdown += @"
 
 ---
 
-## 🎯 Recomendaciones
+## [TARGET] Recomendaciones
 
 1. **Alta Prioridad**: Instrumentar captura de tokens en workflow de sesión
 2. **Media Prioridad**: Implementar consolidación automática de métricas
@@ -224,3 +224,5 @@ if (-not $Silent) {
 }
 
 exit 0
+
+

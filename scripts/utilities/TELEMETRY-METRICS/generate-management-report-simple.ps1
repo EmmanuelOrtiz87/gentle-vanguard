@@ -1,4 +1,4 @@
-# generate-management-report-simple.ps1
+﻿# generate-management-report-simple.ps1
 # Generates monthly management report in CSV format
 # Simplified version - works without Engram if needed
 
@@ -33,7 +33,7 @@ if ($ForceNewMonth -or -not (Test-Path $reportFile)) {
         $firstLine = Get-Content $reportFile -First 1
         $fileMonth = ($firstLine -split ',')[1] -replace '"', '' -replace '-.*$', ''
         if ($fileMonth -ne $currentMonth) {
-            Write-Host "⚠️ Month changed! Please export: $reportFile"
+            Write-Host "️ Month changed! Please export: $reportFile"
             Write-Host "   Then re-run with -ForceNewMonth to start new file"
             exit 0
         }
@@ -44,17 +44,17 @@ if ($ForceNewMonth -or -not (Test-Path $reportFile)) {
 if ($needNewFile) {
     $headers = "SessionID,Date,User,Project,TokensIn,TokensOut,SkillsUsed,SystemsTriggered,ActionsPerformed,Outcome,IssuesFound,Duration(min),Cost(USD),Notes"
     $headers | Out-File $reportFile -Encoding UTF8
-    Write-Host "✅ Created new report: $reportFile"
+    Write-Host " Created new report: $reportFile"
 }
 
 # Reminder if near month end
 $daysUntilMonthEnd = [DateTime]::DaysInMonth((Get-Date).Year, (Get-Date).Month) - (Get-Date).Day
 if ($daysUntilMonthEnd -le 3 -and $daysUntilMonthEnd -ge 0) {
-    Write-Host "⚠️ REMINDER: Only $daysUntilMonthEnd day(s) left! Export: $reportFile"
+    Write-Host "️ REMINDER: Only $daysUntilMonthEnd day(s) left! Export: $reportFile"
 }
 
 # Collect data from session files
-Write-Host "📊 Collecting session data..."
+Write-Host "[DATA] Collecting session data..."
 
 $sessionDir = Join-Path $workspaceRoot ".session"
 $telemetryDir = Join-Path $workspaceRoot ".telemetry"
@@ -119,22 +119,24 @@ if (Test-Path $sessionDir) {
             
             # Append to CSV
             $row | Export-Csv -Path $reportFile -Append -NoTypeInformation -Encoding UTF8
-            Write-Host "   ✅ Added: $sessionId"
+            Write-Host "    Added: $sessionId"
             
         } catch {
-            Write-Host "   ⚠️ Error processing $($sessionFile.Name): $_"
+            Write-Host "   ️ Error processing $($sessionFile.Name): $_"
         }
     }
 }
 
-Write-Host "✅ Report updated: $reportFile"
+Write-Host " Report updated: $reportFile"
 if (Test-Path $reportFile) {
     $rowCount = (Get-Content $reportFile).Count - 1
     Write-Host "   Total rows: $rowCount"
 }
 
 # Show preview
-Write-Host "`n📊 Preview (first 3 rows):"
+Write-Host "`n[DATA] Preview (first 3 rows):"
 if (Test-Path $reportFile) {
     Get-Content $reportFile -TotalCount 4 | ForEach-Object { Write-Host $_ }
 }
+
+
