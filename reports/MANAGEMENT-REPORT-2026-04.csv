@@ -1,0 +1,11 @@
+﻿SessionID,Date,User,Project,TokensIn,TokensOut,SkillsUsed,SystemsTriggered,ActionsPerformed,Outcome,IssuesFound,Duration(min),Cost(USD),Notes
+"session-2026-04-23-01","2026-04-23","emman","workspace_local","0","0","","auto-backup,auto-norm-enforcer,auto-doc-drift-detector","","COMPLETE","0","9572.81","0","Auto-collected from session + Engram"
+"session-2026-04-23-02","2026-04-23","emman","workspace_local","0","0","","auto-backup,auto-norm-enforcer,auto-doc-drift-detector","","COMPLETE","0","9544.56","0","Auto-collected from session + Engram"
+"session-2026-04-26-01","2026-04-26","emman","workspace_local","0","0","","auto-backup,auto-norm-enforcer,auto-doc-drift-detector","","COMPLETE","0","5464.65","0","Auto-collected from session + Engram"
+"session-2026-04-26-02","2026-04-26","emman","workspace_local","0","0","","auto-backup,auto-norm-enforcer,auto-doc-drift-detector","","COMPLETE","0","5368.06","0","Auto-collected from session + Engram"
+"session-2026-04-27-01","2026-04-27","emman","workspace_local","0","0","","auto-backup,auto-norm-enforcer,auto-doc-drift-detector","","COMPLETE","0","3987.44","0","Auto-collected from session + Engram"
+"session-2026-04-27-02","2026-04-27","emman","workspace_local","0","0","","auto-backup,auto-norm-enforcer,auto-doc-drift-detector","","COMPLETE","0","3973.86","0","Auto-collected from session + Engram"
+"session-2026-04-28-01","2026-04-28","emman","workspace_local","0","0","","auto-backup,auto-norm-enforcer,auto-doc-drift-detector","","COMPLETE","0","2407.46","0","Auto-collected from session + Engram"
+"session-2026-04-29-01","2026-04-29","emman","gentleman-foundation","0","0","","auto-backup,auto-norm-enforcer,auto-doc-drift-detector","","COMPLETE","0","1232.42","0","Auto-collected from session + Engram"
+"session-2026-04-29-02","2026-04-29","emman","gentleman-foundation","0","0","","auto-backup,auto-norm-enforcer,auto-doc-drift-detector","","COMPLETE","0","1106.6","0","Auto-collected from session + Engram"
+"session-2026-04-30-01","2026-04-30","emman","gentleman-foundation","0","0","","auto-backup,auto-norm-enforcer,auto-doc-drift-detector","","COMPLETE","0","186.48","0","Auto-collected from session + Engram"

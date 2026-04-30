@@ -58,6 +58,12 @@
         "onMatch": "Load skill using skill tool",
         "onNoMatch": "Continue with normal behavior"
       }
+    },
+    "post_session": {
+      "enabled": true,
+      "description": "Runs after session ends - generates management report",
+      "script": "scripts/utilities/TELEMETRY-METRICS/generate-management-report.ps1",
+      "args": {}
     }
   }
 }
