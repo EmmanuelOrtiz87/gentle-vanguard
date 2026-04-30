@@ -1,19 +1,17 @@
-# generate-management-report.ps1
+# generate-management-report-simple.ps1
 # Generates monthly management report in CSV format
-# Unified reporting system - single source of truth for all metrics.
+# Simplified version - works without Engram if needed
 
 param(
     [Parameter(Mandatory=$false)]
     [string]$OutputDir = "reports",
     
     [Parameter(Mandatory=$false)]
-    [switch]$ForceNewMonth,
-    
-    [Parameter(Mandatory=$false)]
-    [switch]$OnDemand
+    [switch]$ForceNewMonth
 )
 
 $ErrorActionPreference = 'Stop'
+# Correctly resolve workspace root: go up 3 levels from scripts/utilities/TELEMETRY-METRICS/
 $workspaceRoot = $PSScriptRoot | Split-Path | Split-Path | Split-Path
 
 # Ensure reports directory exists
@@ -30,7 +28,7 @@ $reportFile = Join-Path $reportsPath "MANAGEMENT-REPORT-$currentMonth.csv"
 $needNewFile = $false
 if ($ForceNewMonth -or -not (Test-Path $reportFile)) {
     $needNewFile = $true
-} elseif (-not $OnDemand) {
+} else {
     try {
         $firstLine = Get-Content $reportFile -First 1
         $fileMonth = ($firstLine -split ',')[1] -replace '"', '' -replace '-.*$', ''
@@ -49,12 +47,10 @@ if ($needNewFile) {
     Write-Host "✅ Created new report: $reportFile"
 }
 
-# Reminder if near month end (only for automated runs)
-if (-not $OnDemand) {
-    $daysUntilMonthEnd = [DateTime]::DaysInMonth((Get-Date).Year, (Get-Date).Month) - (Get-Date).Day
-    if ($daysUntilMonthEnd -le 3 -and $daysUntilMonthEnd -ge 0) {
-        Write-Host "⚠️ REMINDER: Only $daysUntilMonthEnd day(s) left! Export: $reportFile"
-    }
+# Reminder if near month end
+$daysUntilMonthEnd = [DateTime]::DaysInMonth((Get-Date).Year, (Get-Date).Month) - (Get-Date).Day
+if ($daysUntilMonthEnd -le 3 -and $daysUntilMonthEnd -ge 0) {
+    Write-Host "⚠️ REMINDER: Only $daysUntilMonthEnd day(s) left! Export: $reportFile"
 }
 
 # Collect data from session files
@@ -62,47 +58,6 @@ Write-Host "📊 Collecting session data..."
 
 $sessionDir = Join-Path $workspaceRoot ".session"
 $telemetryDir = Join-Path $workspaceRoot ".telemetry"
-
-# Try to get Engram data once for all sessions
-$engramObservations = @()
-try {
-    $engramExe = "C:\Workspace_local\workspace-foundation\tools\engram.exe"
-    
-    if (Test-Path $engramExe) {
-        Write-Host "   🔄 Exporting Engram data..."
-        
-        # Run engram export - redirect stderr to null to avoid GitHub API errors
-        $process = Start-Process -FilePath $engramExe -ArgumentList "export", "--json" -NoNewWindow -Wait -RedirectStandardError "engram-stderr.txt" -RedirectStandardOutput "engram-stdout.txt" -PassThru
-        Start-Sleep -Milliseconds 1000
-        
-        # Check if export created a file
-        $exportFile = "engram-export.json"
-        if (Test-Path $exportFile) {
-            try {
-                $engramJson = Get-Content $exportFile -Raw -ErrorAction Stop
-                if ($engramJson) {
-                    $engramData = $engramJson | ConvertFrom-Json -ErrorAction Stop
-                    if ($engramData.observations -and $engramData.observations.Count -gt 0) {
-                        $engramObservations = $engramData.observations
-                        Write-Host "   ✅ Engram data loaded: $($engramObservations.Count) observations"
-                    }
-                }
-            } catch {
-                Write-Host "   ⚠️ Engram parse error: $_"
-            } finally {
-                Remove-Item $exportFile -Force -ErrorAction SilentlyContinue
-                Remove-Item "engram-stdout.txt" -Force -ErrorAction SilentlyContinue
-                Remove-Item "engram-stderr.txt" -Force -ErrorAction SilentlyContinue
-            }
-        } else {
-            Write-Host "   ⚠️ Engram export file not found"
-        }
-    } else {
-        Write-Host "   ⚠️ engram.exe not found in tools/"
-    }
-} catch {
-    Write-Host "   ⚠️ Engram error: $_"
-}
 
 if (Test-Path $sessionDir) {
     $sessionFiles = Get-ChildItem $sessionDir -Filter "session-*.json" | Where-Object { 
@@ -117,8 +72,8 @@ if (Test-Path $sessionDir) {
             # Defaults
             $tokensIn = 0
             $tokensOut = 0
-            $skillsUsed = ""
-            $actionsPerformed = ""
+            $skillsUsed = "auto-reporting"
+            $actionsPerformed = "Session tracking"
             $outcome = "COMPLETE"
             $issuesFound = 0
             $duration = 0
@@ -137,32 +92,6 @@ if (Test-Path $sessionDir) {
             $endTime = if ($sessionData.PSObject.Properties['endTime']) { [DateTime]$sessionData.endTime } else { Get-Date }
             $duration = [math]::Round(($endTime - $startTime).TotalMinutes, 2)
             
-            # Get Engram data for this session
-            if ($engramObservations.Count -gt 0) {
-                $sessionObs = $engramObservations | Where-Object { 
-                    ($_ -and $_.session_id -and $_.session_id.ToString() -like "*$sessionId*") -or
-                    ($_ -and $_.PSObject.Properties['session'] -and $_.session.ToString() -like "*$sessionId*") -or
-                    ($_ -and $_.title -and $_.title.ToString() -like "*$sessionId*")
-                }
-                
-                if ($sessionObs -and $sessionObs.Count -gt 0) {
-                    Write-Host "   ✅ Found $($sessionObs.Count) observations for $sessionId"
-                    
-                    # Extract skills from observations
-                    $skillTitles = $sessionObs | Where-Object { 
-                        $_.type -eq 'skill' -or ($_.title -and $_.title -match 'skill|Skill') 
-                    } | Select-Object -ExpandProperty title -Unique | Where-Object { $_ }
-                    $skillsUsed = if ($skillTitles) { ($skillTitles -join ';') } else { "" }
-        
-                    # Extract actions from observations
-                    $actionTitles = $sessionObs | Where-Object { 
-                        $_.type -eq 'architecture' -or $_.type -eq 'manual' -or 
-                        ($_.title -and $_.title -match 'Fixed|Created|Updated|Implemented|Validated') 
-                    } | Select-Object -ExpandProperty title -Unique | Where-Object { $_ }
-                    $actionsPerformed = if ($actionTitles) { ($actionTitles -join ';') } else { "" }
-                }
-            }
-            
             # Calculate cost
             $cost = [math]::Round(($tokensIn + $tokensOut) * 0.0001, 4)
             
@@ -178,14 +107,14 @@ if (Test-Path $sessionDir) {
                 Project = $sessionData.project
                 TokensIn = $tokensIn
                 TokensOut = $tokensOut
-                SkillsUsed = if ($skillsUsed) { $skillsUsed } else { "auto-reporting" }
+                SkillsUsed = $skillsUsed
                 SystemsTriggered = "auto-backup,auto-norm-enforcer,auto-doc-drift-detector"
-                ActionsPerformed = if ($actionsPerformed) { $actionsPerformed } else { "Session tracking" }
+                ActionsPerformed = $actionsPerformed
                 Outcome = $outcome
                 IssuesFound = $issuesFound
                 'Duration(min)' = $durationStr
                 'Cost(USD)' = $costStr
-                Notes = "Auto-collected from session + Engram"
+                Notes = "Auto-collected (simplified)"
             }
             
             # Append to CSV
