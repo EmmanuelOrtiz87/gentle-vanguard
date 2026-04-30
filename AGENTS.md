@@ -19,27 +19,6 @@ When session tracking capability exists, initialize a session early using:
 2. `directory = c:\Workspace_local`
 3. session id pattern `session-YYYY-MM-DD-XX`
 
-## Session Closure Rule (MANDATORY)
-
-Before ending any session or saying "done" / "listo", you MUST:
-
-1. Run `tools/pre-close-validator.ps1 -AutoResolve` to validate:
-   - Git state (no uncommitted changes, synced with upstream)
-   - No pending task markers (TODO, FIXME, HACK, XXX, TEMP, PARTIAL)
-   - No partial implementations in code/docs
-   - No running processes or session locks
-   - Engram memory state is healthy
-
-2. If validation fails:
-   - Auto-resolve git issues automatically
-   - Notify user of pending tasks requiring manual review
-   - DO NOT close session until all validations pass or user forces with -Force
-
-3. After validation passes:
-   - Call `mem_session_summary` with complete structure (Goal, Instructions, Discoveries, Accomplished, Relevant Files)
-   - Call `mem_session_end` to close the session
-   - Session closure is BLOCKED until validation passes
-
 ## Reliability Rule
 
 1. Treat `READY` as pass.
