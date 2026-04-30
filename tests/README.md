@@ -1,22 +1,22 @@
-# Tests Directory
+﻿# Tests Directory
 
-## Descripción
+## Descripcin
 
 Directorio centralizado para toda la suite de testing del proyecto workspace-foundation.
 
-**Versión**: 1.0.0
-**Última actualización**: 2026-04-21
-**Estado**: ✅ PRODUCCIÓN
+**Versin**: 1.0.0
+**ltima actualizacin**: 2026-04-21
+**Estado**:  PRODUCCIN
 
 ---
 
-## 📁 Estructura de Directorios
+##  Estructura de Directorios
 
 ```
 tests/
-├── README.md                                      # Este archivo
-├── unit/
-│   └── engram-memory-manager.tests
+ README.md                                      # Este archivo
+ unit/
+    engram-memory-manager.tests
 {
   "prompt_tokens": 88943,
   "prompt_unit_price": "0",

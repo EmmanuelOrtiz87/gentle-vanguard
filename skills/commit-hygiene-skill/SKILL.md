@@ -1,4 +1,4 @@
----
+﻿---
 name: commit-hygiene
 description: >
   Enforce conventional commits and clean commit history.
@@ -39,20 +39,20 @@ Validated by regex:
 ## Critical Rules
 - One logical change per commit
 - Use imperative mood: "add" not "added"
-- Keep subject line ≤ 72 characters
+- Keep subject line  72 characters
 - Reference issue numbers when relevant: `feat(auth): add JWT support (#123)`
 - If commit needs explanation, add body separated by blank line
 
 ## Anti-patterns
 
 ```
-# BAD — vague
+# BAD  vague
 update stuff
 
-# BAD — multiple concerns
+# BAD  multiple concerns
 feat: add login and fix bug and update docs
 
-# BAD — past tense
+# BAD  past tense
 fix: fixed the cache issue
 ```
 

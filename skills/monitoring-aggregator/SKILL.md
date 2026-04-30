@@ -1,4 +1,4 @@
----
+﻿---
 name: monitoring-aggregator
 description: Monitoring aggregation skill for collecting and analyzing workspace metrics
 ---
@@ -17,18 +17,18 @@ description: Monitoring aggregation skill for collecting and analyzing workspace
 The `monitoring-aggregator` skill provides comprehensive metrics aggregation, analysis, and insights from multiple data sources. It enables trend analysis, forecasting, and actionable recommendations for system optimization.
 
 ### Key Capabilities
-- 📊 Metrics aggregation from multiple sources
-- 📈 Trend analysis and pattern recognition
-- 🔮 Forecasting and capacity planning
-- 💡 Intelligent recommendations
-- 📉 Visualization and reporting
+-  Metrics aggregation from multiple sources
+-  Trend analysis and pattern recognition
+-  Forecasting and capacity planning
+-  Intelligent recommendations
+-  Visualization and reporting
 
 ---
 
 ## When to Use This Skill
 
 ### Activation Triggers
-- User mentions "analyze metrics" or "analizar métricas"
+- User mentions "analyze metrics" or "analizar mtricas"
 - User asks to "show trends" or "mostrar tendencias"
 - User requests "predict resource usage" or "predecir uso de recursos"
 - Regular monitoring reports needed
@@ -337,11 +337,11 @@ function Show-SimpleChart {
     
     for ($row = $Height; $row -gt 0; $row--) {
         $threshold = ($max / $Height) * $row
-        Write-Host -NoNewline "│ "
+        Write-Host -NoNewline " "
         
         foreach ($value in $Data) {
             if ($value -ge $threshold) {
-                Write-Host -NoNewline "█ "
+                Write-Host -NoNewline " "
             } else {
                 Write-Host -NoNewline "  "
             }
@@ -349,7 +349,7 @@ function Show-SimpleChart {
         Write-Host ""
     }
     
-    Write-Host "└─────────────────────────────"
+    Write-Host ""
 }
 ```
 
@@ -448,7 +448,7 @@ $currentValue = 95
 $anomaly = Calculate-AnomalyScore -DataPoints $normalData -CurrentValue $currentValue
 
 if ($anomaly.IsAnomaly) {
-    Write-Host "⚠️ Anomaly detected! Z-Score: $($anomaly.ZScore)"
+    Write-Host " Anomaly detected! Z-Score: $($anomaly.ZScore)"
 }
 ```
 

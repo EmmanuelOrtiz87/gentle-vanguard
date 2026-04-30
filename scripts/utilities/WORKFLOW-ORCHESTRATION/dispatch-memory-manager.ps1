@@ -1,4 +1,4 @@
-# dispatch-memory-manager.ps1
+﻿# dispatch-memory-manager.ps1
 # Gestor de memoria persistente para dispatch-agent
 # Integra Engram con el sistema de dispatch para mantener contexto entre ejecuciones
 
@@ -24,7 +24,7 @@ $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 
-# Configuración de rutas
+# Configuracin de rutas
 $engramDataDir = Join-Path $repoRoot '.engram-data'
 $dispatchMemoryDir = Join-Path $engramDataDir 'dispatch-memory'
 $dispatchRegistry = Join-Path $dispatchMemoryDir 'dispatch-registry.json'
@@ -132,18 +132,18 @@ function Load-DispatchMemory {
     
     try {
         if (-not [string]::IsNullOrWhiteSpace($ExecutionId)) {
-            # Cargar contexto específico
+            # Cargar contexto especfico
             $contextFile = Join-Path $dispatchContextDir "$ExecutionId.json"
             if (Test-Path $contextFile) {
                 $memory = Get-Content -Path $contextFile -Raw | ConvertFrom-Json
                 Write-DispatchLog "Contexto de dispatch cargado: $ExecutionId" -Level 'SUCCESS'
                 return $memory
             } else {
-                Write-DispatchLog "No se encontró contexto para: $ExecutionId" -Level 'WARN'
+                Write-DispatchLog "No se encontr contexto para: $ExecutionId" -Level 'WARN'
                 return $null
             }
         } else {
-            # Cargar contexto más reciente de la sesión
+            # Cargar contexto ms reciente de la sesin
             $registry = Get-DispatchRegistry
             $currentSession = if ([string]::IsNullOrWhiteSpace($SessionId)) { $env:WFS_SESSION_ID } else { $SessionId }
             
@@ -156,7 +156,7 @@ function Load-DispatchMemory {
                 $contextFile = Join-Path $dispatchContextDir "$($latestDispatch.execution_id).json"
                 if (Test-Path $contextFile) {
                     $memory = Get-Content -Path $contextFile -Raw | ConvertFrom-Json
-                    Write-DispatchLog "Contexto más reciente cargado: $($latestDispatch.execution_id)" -Level 'SUCCESS'
+                    Write-DispatchLog "Contexto ms reciente cargado: $($latestDispatch.execution_id)" -Level 'SUCCESS'
                     return $memory
                 }
             }
@@ -209,7 +209,7 @@ function Clear-DispatchMemory {
     
     try {
         if (-not [string]::IsNullOrWhiteSpace($ExecutionId)) {
-            # Limpiar contexto específico
+            # Limpiar contexto especfico
             $contextFile = Join-Path $dispatchContextDir "$ExecutionId.json"
             if (Test-Path $contextFile) {
                 Remove-Item -Path $contextFile -Force
@@ -223,7 +223,7 @@ function Clear-DispatchMemory {
                 return $true
             }
         } elseif (-not [string]::IsNullOrWhiteSpace($SessionId) -and $Force) {
-            # Limpiar toda la sesión
+            # Limpiar toda la sesin
             $registry = Get-DispatchRegistry
             $dispatchesToRemove = @($registry.dispatches | Where-Object { $_.session_id -eq $SessionId })
             
@@ -237,7 +237,7 @@ function Clear-DispatchMemory {
             $registry.dispatches = @($registry.dispatches | Where-Object { $_.session_id -ne $SessionId })
             Save-DispatchRegistry -Registry $registry
             
-            Write-DispatchLog "Contextos de sesión eliminados: $SessionId" -Level 'SUCCESS'
+            Write-DispatchLog "Contextos de sesin eliminados: $SessionId" -Level 'SUCCESS'
             return $true
         } else {
             Write-DispatchLog "Especifique ExecutionId o use -Force con SessionId" -Level 'WARN'
@@ -262,7 +262,7 @@ function Sync-DispatchMemory {
         
         $sessionDispatches = @($registry.dispatches | Where-Object { $_.session_id -eq $currentSession })
         
-        Write-DispatchLog "Sincronizando $($sessionDispatches.Count) dispatches de sesión: $currentSession" -Level 'INFO'
+        Write-DispatchLog "Sincronizando $($sessionDispatches.Count) dispatches de sesin: $currentSession" -Level 'INFO'
         
         $syncReport = @{
             session_id = $currentSession
@@ -278,13 +278,13 @@ function Sync-DispatchMemory {
     }
 }
 
-# Ejecutar acción solicitada
+# Ejecutar accin solicitada
 Initialize-MemoryStructure
 
 $result = switch ($Action) {
     'save' {
         if ([string]::IsNullOrWhiteSpace($ExecutionId)) {
-            Write-DispatchLog "ExecutionId requerido para acción 'save'" -Level 'ERROR'
+            Write-DispatchLog "ExecutionId requerido para accin 'save'" -Level 'ERROR'
             @{ error = 'ExecutionId required' }
         } else {
             $success = Save-DispatchMemory -ExecutionId $ExecutionId -Context $DispatchContext -SessionId $SessionId
@@ -304,7 +304,7 @@ $result = switch ($Action) {
         Sync-DispatchMemory -SessionId $SessionId
     }
     default {
-        @{ error = "Acción no reconocida: $Action" }
+        @{ error = "Accin no reconocida: $Action" }
     }
 }
 

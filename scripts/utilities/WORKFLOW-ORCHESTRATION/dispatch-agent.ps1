@@ -1,4 +1,4 @@
-param(
+﻿param(
     [Parameter(Mandatory=$false)]
     [string]$Agents = '',
     
@@ -335,7 +335,7 @@ $previousContext = Load-PreviousDispatchContext
 if ($AsJson) {
     $result = Invoke-ParallelDispatch -AgentNames $agentList -TaskText $Task -ExecutionMode $Mode -RiskLevel $Risk
     
-    # Guardar contexto para próxima ejecución
+    # Guardar contexto para prxima ejecucin
     $dispatchContext = @{
         agents = $agentList
         task = $Task
@@ -350,7 +350,7 @@ if ($AsJson) {
 } else {
     $result = Invoke-ParallelDispatch -AgentNames $agentList -TaskText $Task -ExecutionMode $Mode -RiskLevel $Risk
     
-    # Guardar contexto para próxima ejecución
+    # Guardar contexto para prxima ejecucin
     $dispatchContext = @{
         agents = $agentList
         task = $Task

@@ -1,10 +1,10 @@
-# MIGRACIÓN DE NORMATIVAS GLOBALES
+﻿# MIGRACIN DE NORMATIVAS GLOBALES
 
-El archivo normativas-orquestador-global.md ha sido migrado y consolidado en docs/reference/NORMATIVAS-ORQUESTADOR.md según la directiva de centralización y versionado único.
+El archivo normativas-orquestador-global.md ha sido migrado y consolidado en docs/reference/NORMATIVAS-ORQUESTADOR.md segn la directiva de centralizacin y versionado nico.
 
 - Toda la normativa global ahora reside en Foundation.
 - El archivo global ha sido eliminado.
-- Referencias y patrones están actualizados y homologados.
+- Referencias y patrones estn actualizados y homologados.
 
-Última actualización: 2026-04-19
+ltima actualizacin: 2026-04-19
 Responsable: Orquestador Foundation

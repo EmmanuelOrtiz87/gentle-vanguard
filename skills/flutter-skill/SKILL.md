@@ -1,4 +1,4 @@
----
+﻿---
 name: flutter
 description: Flutter development with Riverpod state management, Freezed, go_router, and mocktail testing
 when-to-use: When working on Flutter/Dart code
@@ -16,38 +16,38 @@ effort: medium
 
 ```
 project/
-├── lib/
-│   ├── core/                           # Core utilities
-│   │   ├── constants/                  # App constants
-│   │   ├── extensions/                 # Dart extensions
-│   │   ├── router/                     # go_router configuration
-│   │   │   └── app_router.dart
-│   │   └── theme/                      # App theme
-│   │       └── app_theme.dart
-│   ├── data/                           # Data layer
-│   │   ├── models/                     # Freezed data models
-│   │   ├── repositories/               # Repository implementations
-│   │   └── services/                   # API services
-│   ├── domain/                         # Domain layer
-│   │   ├── entities/                   # Business entities
-│   │   └── repositories/               # Repository interfaces
-│   ├── presentation/                   # UI layer
-│   │   ├── common/                     # Shared widgets
-│   │   ├── features/                   # Feature modules
-│   │   │   └── feature_name/
-│   │   │       ├── providers/          # Riverpod providers
-│   │   │       ├── widgets/            # Feature-specific widgets
-│   │   │       └── feature_screen.dart
-│   │   └── providers/                  # Global providers
-│   ├── main.dart
-│   └── app.dart
-├── test/
-│   ├── unit/                           # Unit tests
-│   ├── widget/                         # Widget tests
-│   └── integration/                    # Integration tests
-├── pubspec.yaml
-├── analysis_options.yaml
-└── CLAUDE.md
+ lib/
+    core/                           # Core utilities
+       constants/                  # App constants
+       extensions/                 # Dart extensions
+       router/                     # go_router configuration
+          app_router.dart
+       theme/                      # App theme
+           app_theme.dart
+    data/                           # Data layer
+       models/                     # Freezed data models
+       repositories/               # Repository implementations
+       services/                   # API services
+    domain/                         # Domain layer
+       entities/                   # Business entities
+       repositories/               # Repository interfaces
+    presentation/                   # UI layer
+       common/                     # Shared widgets
+       features/                   # Feature modules
+          feature_name/
+              providers/          # Riverpod providers
+              widgets/            # Feature-specific widgets
+              feature_screen.dart
+       providers/                  # Global providers
+    main.dart
+    app.dart
+ test/
+    unit/                           # Unit tests
+    widget/                         # Widget tests
+    integration/                    # Integration tests
+ pubspec.yaml
+ analysis_options.yaml
+ CLAUDE.md
 ```
 
 ---
@@ -568,16 +568,16 @@ linter:
 
 ## Flutter Anti-Patterns
 
-- ❌ **Provider without autoDispose** - Use `.autoDispose` to prevent memory leaks
-- ❌ **watch in callbacks** - Use `ref.read()` in onPressed/callbacks, not `ref.watch()`
-- ❌ **Business logic in widgets** - Move to Notifiers/providers
-- ❌ **Mutable state in providers** - Use Freezed for immutable models
-- ❌ **Not using AsyncValue** - Handle loading/error states with `when()`
-- ❌ **setState with Riverpod** - Use providers for shared state
-- ❌ **Passing ref to functions** - Keep ref usage within widgets/providers
-- ❌ **Deeply nested Consumer** - Use ConsumerWidget instead
-- ❌ **Not using family for params** - Use `.family` for parameterized providers
-- ❌ **Global GoRouter instance** - Use Provider for router with redirect logic
-- ❌ **BuildContext across async** - Store values before await, not context
-- ❌ **Ignoring dispose** - Clean up controllers in ConsumerStatefulWidget
+-  **Provider without autoDispose** - Use `.autoDispose` to prevent memory leaks
+-  **watch in callbacks** - Use `ref.read()` in onPressed/callbacks, not `ref.watch()`
+-  **Business logic in widgets** - Move to Notifiers/providers
+-  **Mutable state in providers** - Use Freezed for immutable models
+-  **Not using AsyncValue** - Handle loading/error states with `when()`
+-  **setState with Riverpod** - Use providers for shared state
+-  **Passing ref to functions** - Keep ref usage within widgets/providers
+-  **Deeply nested Consumer** - Use ConsumerWidget instead
+-  **Not using family for params** - Use `.family` for parameterized providers
+-  **Global GoRouter instance** - Use Provider for router with redirect logic
+-  **BuildContext across async** - Store values before await, not context
+-  **Ignoring dispose** - Clean up controllers in ConsumerStatefulWidget
 

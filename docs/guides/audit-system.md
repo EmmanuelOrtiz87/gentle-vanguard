@@ -1,4 +1,4 @@
-# Audit System
+﻿# Audit System
 
 ## Overview
 
@@ -21,50 +21,50 @@ The system runs **automatically** - no manual intervention required:
 ## How It Works
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    AUDIT WORKFLOW                                 │
-└─────────────────────────────────────────────────────────────────┘
+
+                    AUDIT WORKFLOW                                 
+
 
 start-session.ps1           finalize-session.ps1
-       │                           │
-       ▼                           ▼
-┌──────────────┐           ┌───────────────────────┐
-│ Session Start │           │ Session End           │
-│              │           │                       │
-│ - Timestamp  │           │ - Capture metrics    │
-│ - User info │           │ - Git changes        │
-│ - AI tools  │           │ - Lines added/removed│
-└──────────────┘           └──────────┬────────────┘
-                                      │
-                                      ▼
-                          ┌───────────────────────┐
-                          │ Automatic Processing  │
-                          │                       │
-                          │ - Session saved       │
-                          │ - Daily metrics      │
-                          │ - Weekly report      │ (Sun/Mon only)
-                          └───────────────────────┘
-                                      │
-                                      ▼
-                          ┌───────────────────────┐
-                          │ docs/ Directory      │
-                          │                       │
-                          │ audits/              │
-                          │ sessions/metrics/    │
-                          └───────────────────────┘
+                                  
+                                  
+           
+ Session Start             Session End           
+                                                
+ - Timestamp              - Capture metrics    
+ - User info             - Git changes        
+ - AI tools              - Lines added/removed
+           
+                                      
+                                      
+                          
+                           Automatic Processing  
+                                                 
+                           - Session saved       
+                           - Daily metrics      
+                           - Weekly report       (Sun/Mon only)
+                          
+                                      
+                                      
+                          
+                           docs/ Directory      
+                                                 
+                           audits/              
+                           sessions/metrics/    
+                          
 ```
 
 ## Directory Structure
 
 ```
 docs/
-├── audits/                # Audit reports (Markdown)
-│   └── 2026-04-15-202322-audit.md
-└── sessions/
-    └── metrics/           # Aggregated metrics (CSV)
-        ├── agent-usage.csv
-        ├── context-usage.csv
-        └── token-guard-usage.csv
+ audits/                # Audit reports (Markdown)
+    2026-04-15-202322-audit.md
+ sessions/
+     metrics/           # Aggregated metrics (CSV)
+         agent-usage.csv
+         context-usage.csv
+         token-guard-usage.csv
 ```
 
 ## Automatic Execution

@@ -1,4 +1,4 @@
-# Day End Closure Process
+﻿# Day End Closure Process
 
 ## Purpose
 
@@ -45,22 +45,22 @@ Two modes available:
 
 ```
 Day End Closure Flow
-│
-├── Stage 1: Operational Closure (end-session.ps1)
-│   ├── Review: Check code quality
-│   ├── Audit: Generate audit document
-│   └── Governance: Validate structure compliance
-│
-├── Stage 2: Workspace Validation (validate-script-governance.ps1)
-│   └── Checks policy compliance, tool availability
-│
-├── Stage 3: Memory Capture (Engram)
-│   ├── Session summary saved
-│   ├── Learnings persisted
-│   └── Session marked complete
-│
-└── Stage 4: Report Generation
-    └── Creates closure-report-*.md artifact
+
+ Stage 1: Operational Closure (end-session.ps1)
+    Review: Check code quality
+    Audit: Generate audit document
+    Governance: Validate structure compliance
+
+ Stage 2: Workspace Validation (validate-script-governance.ps1)
+    Checks policy compliance, tool availability
+
+ Stage 3: Memory Capture (Engram)
+    Session summary saved
+    Learnings persisted
+    Session marked complete
+
+ Stage 4: Report Generation
+     Creates closure-report-*.md artifact
 ```
 
 ## Files Involved
@@ -150,20 +150,20 @@ When you start the next session:
 
 ```
 START SESSION                END OF DAY
-    ↓                             ↓
+                                 
 wf start-session          wf day-end-closure
-    ↓                             ↓
+                                 
 [WORK]                    [Operational Checks]
-    ↓                             ↓
+                                 
 Engram captures           [Workspace Validation]
-learnings during              ↓
-    ↓                     [Memory Capture]
-[More work]                    ↓
-    ↓                     Reports & Artifacts
+learnings during              
+                         [Memory Capture]
+[More work]                    
+                         Reports & Artifacts
 Developer choice:         Generated
-├─ Manual closure        ✅ Ready for resume
-├─ Auto closure          
-└─ Continue to next session
+ Manual closure         Ready for resume
+ Auto closure          
+ Continue to next session
 ```
 
 ## Best Practices
@@ -234,6 +234,6 @@ engram save "session-end:<session_id>" "<end_message>" --project workspace-found
 
 ## See Also
 
-- [Session Guide](SESSION-GUIDE.md) — Daily workflow orchestration
-- [DEVELOPER-COMMUNICATION-POLICY.md](DEVELOPER-COMMUNICATION-POLICY.md) — Response modes and escalation
-- [TOOL-ACTIVATION.md](TOOL-ACTIVATION.md) — Tool setup and verification
+- [Session Guide](SESSION-GUIDE.md)  Daily workflow orchestration
+- [DEVELOPER-COMMUNICATION-POLICY.md](DEVELOPER-COMMUNICATION-POLICY.md)  Response modes and escalation
+- [TOOL-ACTIVATION.md](TOOL-ACTIVATION.md)  Tool setup and verification

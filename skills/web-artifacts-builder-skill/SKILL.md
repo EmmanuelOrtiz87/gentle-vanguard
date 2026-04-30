@@ -1,4 +1,4 @@
----
+﻿---
 name: web-artifacts-builder-skill
 description: >
   Build interactive web artifacts: single-page HTML, React components, prototypes.
@@ -275,11 +275,11 @@ button:active{transform:scale(.95)}
 
 ---
 
-## Validación
+## Validacin
 
 Before output, verify:
-1. ✅ HTML syntax válido
-2. ✅ CSS sin errores
-3. ✅ JS funcional
-4. ✅ CDNs accesibles
-5. ✅ Responsive funciona
+1.  HTML syntax vlido
+2.  CSS sin errores
+3.  JS funcional
+4.  CDNs accesibles
+5.  Responsive funciona

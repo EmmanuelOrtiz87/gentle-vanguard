@@ -1,52 +1,52 @@
-# Scripts Directory
+﻿# Scripts Directory
 
-## Descripción
+## Descripcin
 
 Directorio centralizado para todos los scripts del proyecto workspace-foundation.
 
-**Versión**: 2.0.0
-**Última actualización**: 2026-04-21
-**Estado**: ✅ PRODUCCIÓN
+**Versin**: 2.0.0
+**ltima actualizacin**: 2026-04-21
+**Estado**:  PRODUCCIN
 
 ---
 
-## 📁 Estructura de Directorios
+##  Estructura de Directorios
 
 ```
 scripts/
-├── README.md                          # Este archivo
-├── common/                            # Funciones compartidas
-│   └── platform-helpers.ps1           # Helpers multiplataforma
-├── testing/                           # Scripts de testing
-│   ├── run-tests.ps1                  # Test runner principal
-│   ├── git-hooks-setup.ps1            # Configuración de git hooks
-│   ├── pre-test.ps1                   # Hook pre-test
-│   ├── post-test.ps1                  # Hook post-test
-│   └── on-failure.ps1                 # Hook en caso de fallo
-├── security/                          # Scripts de seguridad
-│   ├── encryption-manager.ps1         # Gestión de encriptación AES-256
-│   ├── input-validator.ps1            # Validación de entrada
-│   ├── secrets-manager.ps1            # Gestión de secretos
-│   └── security-logger.ps1            # Logging de seguridad
-├── monitoring/                        # Scripts de monitoreo
-│   └── health-check.ps1               # Verificación de salud
-└── utilities/                         # Scripts utilitarios
-    ├── setup.ps1                      # Setup inicial
-    └── cleanup.ps1                    # Limpieza
+ README.md                          # Este archivo
+ common/                            # Funciones compartidas
+    platform-helpers.ps1           # Helpers multiplataforma
+ testing/                           # Scripts de testing
+    run-tests.ps1                  # Test runner principal
+    git-hooks-setup.ps1            # Configuracin de git hooks
+    pre-test.ps1                   # Hook pre-test
+    post-test.ps1                  # Hook post-test
+    on-failure.ps1                 # Hook en caso de fallo
+ security/                          # Scripts de seguridad
+    encryption-manager.ps1         # Gestin de encriptacin AES-256
+    input-validator.ps1            # Validacin de entrada
+    secrets-manager.ps1            # Gestin de secretos
+    security-logger.ps1            # Logging de seguridad
+ monitoring/                        # Scripts de monitoreo
+    health-check.ps1               # Verificacin de salud
+ utilities/                         # Scripts utilitarios
+     setup.ps1                      # Setup inicial
+     cleanup.ps1                    # Limpieza
 ```
 
 ---
 
-## 🔧 Scripts Disponibles
+##  Scripts Disponibles
 
 ### Common (Funciones Compartidas)
 
 #### platform-helpers.ps1
-**Propósito**: Proporciona funciones de compatibilidad multiplataforma
+**Propsito**: Proporciona funciones de compatibilidad multiplataforma
 
 **Funciones principales**:
 - `Get-OSType` - Detecta el sistema operativo
-- `Get-SafePath` - Crea rutas agnósticas
+- `Get-SafePath` - Crea rutas agnsticas
 - `Get-UserHome` - Obtiene directorio del usuario
 - `Write-Log` - Logging con timestamp
 - `Set-ExecutablePermission` - Permisos ejecutables
@@ -64,9 +64,9 @@ Write-Log "Mensaje" "info"
 ### Testing (Scripts de Testing)
 
 #### run-tests.ps1
-**Propósito**: Ejecutor principal de tests
+**Propsito**: Ejecutor principal de tests
 
-**Parámetros**:
+**Parmetros**:
 - `-TestType` (all, unit, integration, performance, security)
 - `-GenerateReport` (genera reportes)
 - `-FailOnLowCoverage` (falla si coverage bajo)
@@ -83,7 +83,7 @@ Write-Log "Mensaje" "info"
 ---
 
 #### git-hooks-setup.ps1
-**Propósito**: Configura git hooks automáticamente
+**Propsito**: Configura git hooks automticamente
 
 **Hooks configurados**:
 - Pre-commit: Ejecuta unit tests
@@ -99,13 +99,13 @@ Write-Log "Mensaje" "info"
 ### Security (Scripts de Seguridad)
 
 #### encryption-manager.ps1
-**Propósito**: Gestión de encriptación AES-256
+**Propsito**: Gestin de encriptacin AES-256
 
 **Acciones**:
 - `generate-key` - Genera clave de 256-bit
 - `encrypt` - Encripta datos
 - `decrypt` - Desencripta datos
-- `validate` - Valida configuración
+- `validate` - Valida configuracin
 
 **Uso**:
 ```powershell
@@ -122,14 +122,14 @@ Write-Log "Mensaje" "info"
 ---
 
 #### input-validator.ps1
-**Propósito**: Validación y sanitización de entrada
+**Propsito**: Validacin y sanitizacin de entrada
 
-**Tipos de validación**:
-- `string` - Strings con límites
-- `integer` - Números enteros
+**Tipos de validacin**:
+- `string` - Strings con lmites
+- `integer` - Nmeros enteros
 - `path` - Rutas seguras
-- `command` - Comandos sin inyección
-- `email` - Emails válidos
+- `command` - Comandos sin inyeccin
+- `email` - Emails vlidos
 
 **Uso**:
 ```powershell
@@ -140,7 +140,7 @@ Write-Log "Mensaje" "info"
 ---
 
 #### secrets-manager.ps1
-**Propósito**: Gestión segura de secretos
+**Propsito**: Gestin segura de secretos
 
 **Acciones**:
 - `get` - Obtiene secreto
@@ -148,7 +148,7 @@ Write-Log "Mensaje" "info"
 - `delete` - Elimina secreto
 - `list` - Lista secretos
 - `rotate` - Rota secretos
-- `validate` - Valida configuración
+- `validate` - Valida configuracin
 
 **Uso**:
 ```powershell
@@ -168,7 +168,7 @@ Write-Log "Mensaje" "info"
 ---
 
 #### security-logger.ps1
-**Propósito**: Logging y auditoría de seguridad
+**Propsito**: Logging y auditora de seguridad
 
 **Tipos de eventos**:
 - `access` - Acceso a recursos
@@ -176,7 +176,7 @@ Write-Log "Mensaje" "info"
 - `deletion` - Eliminaciones
 - `error` - Errores
 - `warning` - Advertencias
-- `info` - Información
+- `info` - Informacin
 
 **Uso**:
 ```powershell
@@ -186,7 +186,7 @@ Write-Log "Mensaje" "info"
 # Generar reporte
 .\scripts\security\security-logger.ps1 -Action report
 
-# Detectar anomalías
+# Detectar anomalas
 .\scripts\security\security-logger.ps1 -Action anomalies
 ```
 
@@ -195,47 +195,47 @@ Write-Log "Mensaje" "info"
 ### Monitoring (Scripts de Monitoreo)
 
 #### health-check.ps1
-**Propósito**: Verificación de salud del sistema
+**Propsito**: Verificacin de salud del sistema
 
 **Verifica**:
 - Estado de Engram
 - Disponibilidad de recursos
 - Integridad de datos
-- Configuración
+- Configuracin
 
 ---
 
 ### Utilities (Scripts Utilitarios)
 
 #### setup.ps1
-**Propósito**: Setup inicial del proyecto
+**Propsito**: Setup inicial del proyecto
 
 **Realiza**:
-- Creación de directorios
-- Instalación de dependencias
-- Configuración inicial
-- Validación de requisitos
+- Creacin de directorios
+- Instalacin de dependencias
+- Configuracin inicial
+- Validacin de requisitos
 
 ---
 
 #### cleanup.ps1
-**Propósito**: Limpieza del proyecto
+**Propsito**: Limpieza del proyecto
 
 **Limpia**:
 - Archivos temporales
 - Logs antiguos
-- Caché
+- Cach
 - Archivos de build
 
 ---
 
 #### simplify-text.ps1
-**Propósito**: Simplificación de texto para eficiencia de tokens
+**Propsito**: Simplificacin de texto para eficiencia de tokens
 
 **Transformaciones**:
-- Normaliza whitespace (tabs, saltos múltiples)
+- Normaliza whitespace (tabs, saltos mltiples)
 - Remueve ruido de markdown (negrita, links, headers)
-- Abbrevia frases comunes ("por favor" → "pls", "es importante" → "imp")
+- Abbrevia frases comunes ("por favor"  "pls", "es importante"  "imp")
 - Remueve frases redundantes ("en conclusion", "por ultimo")
 - Deduplica palabras consecutivas
 
@@ -246,15 +246,15 @@ Write-Log "Mensaje" "info"
 .\scripts\utilities\simplify-text.ps1 -InputFile "archivo.md" -OutputFile "resultado.txt"
 ```
 
-**Métricas**: Guarda reducción en `docs/sessions/metrics/text-simplification.csv`
+**Mtricas**: Guarda reduccin en `docs/sessions/metrics/text-simplification.csv`
 
-**Resultado típico**: 15-25% reducción en caracteres (~5-10 tokens ahorrados)
+**Resultado tpico**: 15-25% reduccin en caracteres (~5-10 tokens ahorrados)
 
 ---
 
-## 🚀 Requisitos
+##  Requisitos
 
-### Mínimos
+### Mnimos
 - PowerShell 7.0+
 - .NET 6.0+
 - Pester (para tests)
@@ -266,23 +266,23 @@ Write-Log "Mensaje" "info"
 
 ---
 
-## 📋 Compatibilidad
+##  Compatibilidad
 
 ### Sistemas Operativos
-- ✅ Windows 10/11
-- ✅ Linux (Ubuntu, CentOS, etc.)
-- ✅ macOS 11+
+-  Windows 10/11
+-  Linux (Ubuntu, CentOS, etc.)
+-  macOS 11+
 
 ### Shells
-- ✅ PowerShell 7+
-- ✅ Bash 5+
-- ✅ Zsh
+-  PowerShell 7+
+-  Bash 5+
+-  Zsh
 
 ---
 
-## 🔐 Seguridad
+##  Seguridad
 
-### Mejores Prácticas
+### Mejores Prcticas
 1. **Nunca hardcodear secretos**
    - Usar `secrets-manager.ps1`
    - Usar variables de entorno
@@ -297,11 +297,11 @@ Write-Log "Mensaje" "info"
 
 4. **Registrar eventos**
    - Usar `security-logger.ps1`
-   - Auditoría completa
+   - Auditora completa
 
 ---
 
-## 📊 Ejemplos de Uso
+##  Ejemplos de Uso
 
 ### Ejecutar Tests Completos
 ```powershell
@@ -333,71 +333,71 @@ $encrypted = .\scripts\security\encryption-manager.ps1 -Action encrypt -Data "se
 
 ---
 
-## 🆘 Troubleshooting
+##  Troubleshooting
 
 ### Problema: Script no ejecuta
-**Solución**: Verificar permisos de ejecución
+**Solucin**: Verificar permisos de ejecucin
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 ### Problema: Rutas no funcionan
-**Solución**: Usar `platform-helpers.ps1`
+**Solucin**: Usar `platform-helpers.ps1`
 ```powershell
 . .\scripts\common\platform-helpers.ps1
 $path = Get-SafePath @(".", "config", "test.json")
 ```
 
 ### Problema: Tests fallan
-**Solución**: Verificar Pester instalado
+**Solucin**: Verificar Pester instalado
 ```powershell
 Install-Module -Name Pester -Force -SkipPublisherCheck
 ```
 
 ---
 
-## 📚 Documentación Relacionada
+##  Documentacin Relacionada
 
-- `docs/guides/TESTING-GUIDE.md` - Guía de testing
-- `docs/guides/SECURITY-HARDENING.md` - Guía de seguridad
-- `docs/supplementary/IMPLEMENTATION-COMPLETE.md` - Implementación completa
-- `config/README.md` - Configuración
+- `docs/guides/TESTING-GUIDE.md` - Gua de testing
+- `docs/guides/SECURITY-HARDENING.md` - Gua de seguridad
+- `docs/supplementary/IMPLEMENTATION-COMPLETE.md` - Implementacin completa
+- `config/README.md` - Configuracin
 
 ---
 
-## 📝 Notas
+##  Notas
 
-- Todos los scripts son agnósticos de plataforma
+- Todos los scripts son agnsticos de plataforma
 - Compatibles con PowerShell 7+
-- Logging automático en todos los scripts
+- Logging automtico en todos los scripts
 - Manejo de errores robusto
-- Documentación inline completa
+- Documentacin inline completa
 
 ---
 
-## ✅ Checklist de Uso
+##  Checklist de Uso
 
 - [ ] Instalar PowerShell 7+
 - [ ] Clonar repositorio
 - [ ] Ejecutar `setup.ps1`
 - [ ] Configurar git hooks
 - [ ] Ejecutar tests
-- [ ] Revisar documentación
+- [ ] Revisar documentacin
 - [ ] Configurar secretos
 - [ ] Iniciar desarrollo
 
 ---
 
-## 📞 Soporte
+##  Soporte
 
 Para reportar problemas o sugerencias:
-1. Revisar documentación
+1. Revisar documentacin
 2. Ejecutar `health-check.ps1`
 3. Revisar logs en `logs/`
 4. Crear issue en GitHub
 
 ---
 
-**Última actualización**: 2026-04-21
-**Versión**: 2.0.0
-**Estado**: ✅ PRODUCCIÓN
+**ltima actualizacin**: 2026-04-21
+**Versin**: 2.0.0
+**Estado**:  PRODUCCIN

@@ -1,4 +1,4 @@
-{
+﻿{
   "enabled": true,
   "version": "1.0",
   "automation_rules": {
@@ -34,7 +34,7 @@
     "require_both_reviewers": true,
     "reviewer_approval_threshold": 2,
     "allow_self_approval": false,
-    "approval_comment_pattern": "LGTM|Approved|✅"
+    "approval_comment_pattern": "LGTM|Approved|"
   },
   "pr_merge_policy": {
     "block_on_judgment_failure": true,

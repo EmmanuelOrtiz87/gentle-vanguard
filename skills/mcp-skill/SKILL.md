@@ -1,4 +1,4 @@
----
+﻿---
 name: mcp-skill
 description: >
   Model Context Protocol: MCP servers, tools, resources, prompts.
@@ -16,19 +16,19 @@ description: >
 ## MCP Architecture
 
 ```
-┌─────────────┐       ┌─────────────┐
-│   AI Agent  │◄─────►│ MCP Server  │
-│  (Client)   │       │             │
-└─────────────┘       │ - Tools     │
-                      │ - Resources  │
-                      │ - Prompts   │
-                      └──────┬──────┘
-                             │
-                             ▼
-                      ┌─────────────┐
-                      │  External  │
-                      │   System   │
-                      └─────────────┘
+       
+   AI Agent   MCP Server  
+  (Client)                       
+        - Tools     
+                       - Resources  
+                       - Prompts   
+                      
+                             
+                             
+                      
+                        External  
+                         System   
+                      
 ```
 
 ## MCP Server Structure

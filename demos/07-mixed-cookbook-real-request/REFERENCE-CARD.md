@@ -1,4 +1,4 @@
-# Reference Card — Demo 07 Mixed Cookbook
+﻿# Reference Card  Demo 07 Mixed Cookbook
 
 **Workspace:** `C:\Workspace_local\workspace-foundation`
 **Proyecto demo:** `demos/shared/task-tracker/`
@@ -29,7 +29,7 @@
 ./scripts/utilities/response-mode-efficiency-matrix.ps1 -AsCsv
 ```
 
-### Implementación
+### Implementacin
 ```powershell
 cd demos/shared/task-tracker
 go run . add --title "prepare standup notes"
@@ -57,7 +57,7 @@ cd ../../..
 
 ---
 
-## Ejes de Comunicación Activos
+## Ejes de Comunicacin Activos
 
 | Eje       | Valor activo |
 |-----------|:------------:|
@@ -71,7 +71,7 @@ cd ../../..
 
 ## Tiempos
 
-| Versión       | Duración |
+| Versin       | Duracin |
 |---------------|:--------:|
 | Solo ejecutiva | 5 min   |
 | Completa (dev) | 15 min  |

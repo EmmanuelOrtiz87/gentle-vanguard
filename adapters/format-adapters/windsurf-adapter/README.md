@@ -1,4 +1,4 @@
-# Windsurf Adapter
+﻿# Windsurf Adapter
 
 Converts Foundation skills to Windsurf plugin format.
 
@@ -14,12 +14,12 @@ Windsurf uses a proprietary plugin system. Research needed to determine:
 ---
 ## Status
 
-🚧 **Research Needed**
+ **Research Needed**
 
 To implement this adapter, we need:
 1. Install Windsurf IDE
 2. Analyze plugin system (check `~/.windsurf/` directory)
-3. Create `SKILL.md` → `plugin.md` converter
+3. Create `SKILL.md`  `plugin.md` converter
 4. Test with a simple skill (e.g., `react-19-skill`)
 
 ---

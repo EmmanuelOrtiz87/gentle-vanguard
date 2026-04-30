@@ -1,4 +1,4 @@
-# Artifact Retention Policy
+﻿# Artifact Retention Policy
 
 ## Overview
 
@@ -67,17 +67,17 @@ Rotation runs automatically during:
 
 ```
 docs/
-├── audits/                      # Active audits (kept in git)
-│   ├── 2026-04-17-125757-audit.md
-│   ├── 2026-04-17-125605-audit.md
-│   └── ... (up to 5 files)
-├── sessions/                    # Active sessions (kept in git)
-│   └── 2026-04-17-143636-session-start.md
-└── .local-archive/              # Archived files (gitignored)
-    ├── audits/
-    │   └── ... (up to 30 files)
-    └── sessions/
-        └── ... (up to 30 files)
+ audits/                      # Active audits (kept in git)
+    2026-04-17-125757-audit.md
+    2026-04-17-125605-audit.md
+    ... (up to 5 files)
+ sessions/                    # Active sessions (kept in git)
+    2026-04-17-143636-session-start.md
+ .local-archive/              # Archived files (gitignored)
+     audits/
+        ... (up to 30 files)
+     sessions/
+         ... (up to 30 files)
 ```
 
 ## AI Agent Context

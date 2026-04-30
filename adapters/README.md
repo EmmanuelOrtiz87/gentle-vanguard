@@ -1,4 +1,4 @@
-# Adapters & Integration Layer
+﻿# Adapters & Integration Layer
 
 **Purpose**: Bridge Foundation capabilities to tools outside the Agent Skills standard (Windsurf, Codex, Antigravity, etc.)
 
@@ -7,24 +7,24 @@
 
 ```
 adapters/
-├── README.md                    # This file
-├── mcp-bridge/                 # MCP Server exposing Foundation as MCP
-│   ├── server.ts               # Main MCP server implementation
-│   ├── tools.ts               # Foundation tools exposed via MCP
-│   ├── resources.ts            # Context/resources exposed
-│   ├── package.json           # Node.js dependencies
-│   └── README.md              # MCP Bridge documentation
-├── format-adapters/            # Format translators for non-standard tools
-│   ├── windsurf-adapter/      # Windsurf format adapter
-│   ├── codex-adapter/         # OpenAI Codex adapter
-│   ├── antigravity-adapter/   # Antigravity Mission Control adapter
-│   └── README.md              # Format adapters guide
-├── docs/
-│   ├── ARCHITECTURE.md        # Adapter architecture
-│   ├── COMPATIBILITY-MATRIX.md# Updated compatibility matrix
-│   └── IMPLEMENTATION-GUIDE.md# How to implement new adapters
-└── detection/
-    └── enhanced-detect.ps1    # Enhanced IDE/tool detection
+ README.md                    # This file
+ mcp-bridge/                 # MCP Server exposing Foundation as MCP
+    server.ts               # Main MCP server implementation
+    tools.ts               # Foundation tools exposed via MCP
+    resources.ts            # Context/resources exposed
+    package.json           # Node.js dependencies
+    README.md              # MCP Bridge documentation
+ format-adapters/            # Format translators for non-standard tools
+    windsurf-adapter/      # Windsurf format adapter
+    codex-adapter/         # OpenAI Codex adapter
+    antigravity-adapter/   # Antigravity Mission Control adapter
+    README.md              # Format adapters guide
+ docs/
+    ARCHITECTURE.md        # Adapter architecture
+    COMPATIBILITY-MATRIX.md# Updated compatibility matrix
+    IMPLEMENTATION-GUIDE.md# How to implement new adapters
+ detection/
+     enhanced-detect.ps1    # Enhanced IDE/tool detection
 ```
 
 ---
@@ -83,10 +83,10 @@ The enhanced detection system identifies:
 Converts Foundation into an **MCP Server** that any MCP-compatible tool can use.
 
 **Benefits**:
-- ✅ Universal compatibility (any MCP client)
-- ✅ Standard protocol (future-proof)
-- ✅ Exposes all Foundation capabilities
-- ✅ Token-efficient (MCP handles context)
+-  Universal compatibility (any MCP client)
+-  Standard protocol (future-proof)
+-  Exposes all Foundation capabilities
+-  Token-efficient (MCP handles context)
 
 **Exposed Tools**:
 - `foundation_review` - 7D code review
@@ -123,12 +123,12 @@ Translates between Foundation's standard format and tool-specific formats.
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| MCP Bridge Server | ⏳ Pending | Main server implementation |
-| Windsurf Adapter | ⏳ Pending | Plugin format research needed |
-| Codex Adapter | ⏳ Pending | OpenAI-compatible endpoint |
-| Antigravity Adapter | ⏳ Pending | Mission Control integration |
-| Enhanced Detection | ✅ Ready | Based on `detect-ide-session.ps1` |
-| Documentation | ⏳ In Progress | This README complete |
+| MCP Bridge Server |  Pending | Main server implementation |
+| Windsurf Adapter |  Pending | Plugin format research needed |
+| Codex Adapter |  Pending | OpenAI-compatible endpoint |
+| Antigravity Adapter |  Pending | Mission Control integration |
+| Enhanced Detection |  Ready | Based on `detect-ide-session.ps1` |
+| Documentation |  In Progress | This README complete |
 
 ---
 ## Next Steps
@@ -142,4 +142,4 @@ Translates between Foundation's standard format and tool-specific formats.
 ---
 **Generated**: 2026-04-28  
 **Version**: 1.0.0  
-**Status**: 🚧 In Development
+**Status**:  In Development

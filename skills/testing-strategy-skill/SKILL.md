@@ -1,4 +1,4 @@
----
+﻿---
 name: testing-strategy-skill
 description: >
   Testing strategy: when to test, what to test, test pyramid, coverage targets.
@@ -220,18 +220,18 @@ it('should call API', () => {
 ```
 Go:
   internal/web/
-  ├── server.go
-  └── server_test.go     # Same package
+   server.go
+   server_test.go     # Same package
 
 Angular:
   src/app/
-  ├── core/services/
-  │   └── api.service.ts
-  │   └── api.service.spec.ts
-  └── features/
-      └── dashboard/
-          ├── dashboard.ts
-          └── dashboard.spec.ts
+   core/services/
+      api.service.ts
+      api.service.spec.ts
+   features/
+       dashboard/
+           dashboard.ts
+           dashboard.spec.ts
 ```
 
 ## Anti-Patterns

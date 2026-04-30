@@ -1,12 +1,12 @@
-# Demo 07 - Guion de Presentación
+﻿# Demo 07 - Guion de Presentacin
 
 Audiencia: Ejecutivos (5 min) + Equipo de desarrollo (15 min total)
 
 ---
 
-## Preparación (antes de entrar a la sala)
+## Preparacin (antes de entrar a la sala)
 
-**0. Ejecutar preflight (paso clave en máquina nueva):**
+**0. Ejecutar preflight (paso clave en mquina nueva):**
 
 ```powershell
 ./demos/07-mixed-cookbook-real-request/preflight.ps1
@@ -14,24 +14,24 @@ Audiencia: Ejecutivos (5 min) + Equipo de desarrollo (15 min total)
 
 Esto verifica Go, Git, activa el orquestador (si hace falta) y limpia datos previos.
 
-**Después del preflight:**
+**Despus del preflight:**
 
 1. Terminal abierta en `C:\Workspace_local\workspace-foundation`.
-2. PowerShell con permisos de ejecución: `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`.
+2. PowerShell con permisos de ejecucin: `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`.
 3. Repo limpio: `git status` sin cambios pendientes.
 
 ---
 
 ## Mapa de Tiempos
 
-| Segmento              | Versión ejecutiva | Versión completa (dev) |
+| Segmento              | Versin ejecutiva | Versin completa (dev) |
 |-----------------------|:-----------------:|:----------------------:|
 | 0. Apertura           | 1 min             | 1 min                  |
 | 1. Orquestador        | 1 min             | 2 min                  |
 | 2. Contexto y tokens  | 1 min             | 2 min                  |
-| 3. Implementación     | —                 | 4 min                  |
-| 4. Engram             | —                 | 2 min                  |
-| 5. Review y auditoría | 1 min             | 3 min                  |
+| 3. Implementacin     |                  | 4 min                  |
+| 4. Engram             |                  | 2 min                  |
+| 5. Review y auditora | 1 min             | 3 min                  |
 | 6. Cierre             | 1 min             | 1 min                  |
 | **Total**             | **5 min**         | **15 min**             |
 
@@ -44,13 +44,13 @@ Esto verifica Go, Git, activa el orquestador (si hace falta) y limpia datos prev
 > "Hoy vemos un caso real de principio a fin.
 > Un equipo recibe una solicitud: construir un CLI sencillo para gestionar tareas de standup.
 > Vamos a ejecutarlo con el stack completo: desde que el orquestador lee el pedido
-> hasta que cierra la sesión con evidencia auditable.
-> No hay magia — cada paso es un comando reproducible."
+> hasta que cierra la sesin con evidencia auditable.
+> No hay magia  cada paso es un comando reproducible."
 
 ### Lo que muestras en pantalla
 
 ```powershell
-# Confirmar que el stack está en pie
+# Confirmar que el stack est en pie
 ./scripts/utilities/wf.ps1 status
 ```
 
@@ -61,13 +61,13 @@ Esto verifica Go, Git, activa el orquestador (si hace falta) y limpia datos prev
 
 ---
 
-## Segmento 1 - Orquestador y modo de comunicación (2 min dev / 1 min exec)
+## Segmento 1 - Orquestador y modo de comunicacin (2 min dev / 1 min exec)
 
 ### Lo que dices
 
 > "El orquestador es el primer paso: verifica el estado del proyecto
-> y recomienda qué modo de comunicación usar con la IA antes de empezar a trabajar.
-> No es una recomendación manual — lee el branch, el tipo de tarea, y elige automáticamente."
+> y recomienda qu modo de comunicacin usar con la IA antes de empezar a trabajar.
+> No es una recomendacin manual  lee el branch, el tipo de tarea, y elige automticamente."
 
 ### Lo que muestras en pantalla
 
@@ -79,24 +79,24 @@ Esto verifica Go, Git, activa el orquestador (si hace falta) y limpia datos prev
 
 ### Guion dev (ampliar)
 
-> "Miren la sección 'Communication Mode Recommendation'.
-> Si el branch fuera `hotfix/...` la recomendación cambiaría a `ultra`.
-> Para una tarea de demo como esta, eligió `executive + lite` — respuestas concisas, sin overhead.
-> Ese ajuste automático reduce tokens en aproximadamente un 50% versus el modo default sin configurar."
+> "Miren la seccin 'Communication Mode Recommendation'.
+> Si el branch fuera `hotfix/...` la recomendacin cambiara a `ultra`.
+> Para una tarea de demo como esta, eligi `executive + lite`  respuestas concisas, sin overhead.
+> Ese ajuste automtico reduce tokens en aproximadamente un 50% versus el modo default sin configurar."
 
 ### Puntos de anclaje (ejecutivo)
 
-- "El equipo no decide esto manualmente cada vez — el stack lo infiere."
-- "50% menos de tokens = costo de AI recortado a la mitad en operaciones estándar."
+- "El equipo no decide esto manualmente cada vez  el stack lo infiere."
+- "50% menos de tokens = costo de AI recortado a la mitad en operaciones estndar."
 
 ---
 
-## Segmento 2 - Reducción de contexto y tokens (2 min dev / 1 min exec)
+## Segmento 2 - Reduccin de contexto y tokens (2 min dev / 1 min exec)
 
 ### Lo que dices
 
 > "Antes de abrir el chat o invocar la IA, generamos un contexto compacto.
-> Esto evita que el modelo reciba información que no necesita — y eso baja el costo directo."
+> Esto evita que el modelo reciba informacin que no necesita  y eso baja el costo directo."
 
 ### Lo que muestras en pantalla
 
@@ -106,29 +106,29 @@ Esto verifica Go, Git, activa el orquestador (si hace falta) y limpia datos prev
 
 ### Guion dev (ampliar)
 
-> "Esta matriz cubre las 27 combinaciones posibles: 3 idiomas × 3 niveles de detalle × 3 perfiles de compresión.
-> La combinación activa está resaltada.
+> "Esta matriz cubre las 27 combinaciones posibles: 3 idiomas  3 niveles de detalle  3 perfiles de compresin.
+> La combinacin activa est resaltada.
 > Si quieren ver los ahorros en CSV para un reporte:"
 
 ```powershell
 ./scripts/utilities/response-mode-efficiency-matrix.ps1 -AsCsv
 ```
 
-> "Esto es útil para justificación de costo frente a finanzas o procurement."
+> "Esto es til para justificacin de costo frente a finanzas o procurement."
 
 ### Puntos de anclaje (ejecutivo)
 
 - "Visual claro: la columna 'Yearly Token Savings' muestra el ahorro proyectado anual."
-- "No es un cálculo teórico — está basado en el uso real del equipo calibrado por tarea."
+- "No es un clculo terico  est basado en el uso real del equipo calibrado por tarea."
 
 ---
 
-## Segmento 3 - Implementación asistida por IA (4 min dev — solo versión completa)
+## Segmento 3 - Implementacin asistida por IA (4 min dev  solo versin completa)
 
 ### Lo que dices
 
-> "Ahora la implementación. El proyecto ya existe en el repo — lo usamos como referencia.
-> Vean que los comandos son idénticos en cualquier máquina: Go, sin dependencias externas."
+> "Ahora la implementacin. El proyecto ya existe en el repo  lo usamos como referencia.
+> Vean que los comandos son idnticos en cualquier mquina: Go, sin dependencias externas."
 
 ### Lo que muestras en pantalla
 
@@ -152,28 +152,28 @@ tasks_total=1  tasks_done=1  tasks_pending=0
 
 ### Guion dev (detalle)
 
-> "Este proyecto usa JSON local para persistencia — sin base de datos, sin credenciales.
+> "Este proyecto usa JSON local para persistencia  sin base de datos, sin credenciales.
 > La variable de entorno `TASK_TRACKER_DB` permite apuntar a otro archivo si lo necesitan en CI.
-> Lo importante para el demo: cualquier feature pequeño que el stack implementa
-> pasa por este mismo ciclo — el proyecto real es más grande, el proceso es idéntico."
+> Lo importante para el demo: cualquier feature pequeo que el stack implementa
+> pasa por este mismo ciclo  el proyecto real es ms grande, el proceso es idntico."
 
-> "En un escenario real el loop sería: abrir contexto compacto → pedir cambio a la IA
-> → validar respuesta → commit. El response-mode ya estaba aplicado,
-> así que la IA responde en el nivel correcto sin necesitar prompts extra."
+> "En un escenario real el loop sera: abrir contexto compacto  pedir cambio a la IA
+>  validar respuesta  commit. El response-mode ya estaba aplicado,
+> as que la IA responde en el nivel correcto sin necesitar prompts extra."
 
-### Pausa para preguntas técnicas (30 seg)
+### Pausa para preguntas tcnicas (30 seg)
 
 ---
 
-## Segmento 4 - Continuidad con Engram (2 min dev — solo versión completa)
+## Segmento 4 - Continuidad con Engram (2 min dev  solo versin completa)
 
 ### Lo que dices
 
-> "Al cierre de cualquier sesión de trabajo — o antes de pasar la tarea a otro miembro —
-> guardamos un resumen en Engram. Eso elimina el re-briefing en la siguiente sesión."
+> "Al cierre de cualquier sesin de trabajo  o antes de pasar la tarea a otro miembro 
+> guardamos un resumen en Engram. Eso elimina el re-briefing en la siguiente sesin."
 
-> "En una máquina nueva, este paso ya no depende de una carpeta precreada.
-> El launcher la inicializa automáticamente y el resto del demo no queda bloqueado."
+> "En una mquina nueva, este paso ya no depende de una carpeta precreada.
+> El launcher la inicializa automticamente y el resto del demo no queda bloqueado."
 
 ### Lo que muestras en pantalla
 
@@ -184,20 +184,20 @@ tasks_total=1  tasks_done=1  tasks_pending=0
 ### Nota operativa
 
 > "No duplicamos Engram dentro de `demos/`.
-> La instalación soportada vive en el stack (`wf.ps1 install-engram`) para evitar deriva entre máquinas."
+> La instalacin soportada vive en el stack (`wf.ps1 install-engram`) para evitar deriva entre mquinas."
 
-> "Si Engram está activo, el ciclo es:"
+> "Si Engram est activo, el ciclo es:"
 
 ```
-mem_save   → guarda decisiones clave (bug encontrado, patrón elegido, deuda técnica identificada)
-mem_search → al siguiente día, el agente retoma desde where we left off
+mem_save    guarda decisiones clave (bug encontrado, patrn elegido, deuda tcnica identificada)
+mem_search  al siguiente da, el agente retoma desde where we left off
 ```
 
 ### Guion dev (detalle)
 
-> "Sin Engram, el equipo repite contexto verbal en cada sesión.
+> "Sin Engram, el equipo repite contexto verbal en cada sesin.
 > Con Engram, el agente lee el historial, y el desarrollador arranca directamente en el problema.
-> Redución de overhead de re-briefing: estimado 10-20 minutos por sesión larga."
+> Reducin de overhead de re-briefing: estimado 10-20 minutos por sesin larga."
 
 ### Puntos de anclaje (si hay ejecutivos presentes)
 
@@ -205,11 +205,11 @@ mem_search → al siguiente día, el agente retoma desde where we left off
 
 ---
 
-## Segmento 5 - Code Review y Auditoría (3 min dev / 1 min exec)
+## Segmento 5 - Code Review y Auditora (3 min dev / 1 min exec)
 
 ### Lo que dices
 
-> "El stack genera artefactos de review y auditoría como parte del workflow — no como paso extra.
+> "El stack genera artefactos de review y auditora como parte del workflow  no como paso extra.
 > Esto es lo que le muestra a compliance, a QA, o a un cliente con requerimientos de trazabilidad."
 
 ### Lo que muestras en pantalla
@@ -221,23 +221,23 @@ mem_search → al siguiente día, el agente retoma desde where we left off
 
 ### Guion dev (detalle)
 
-> "Cada sesión genera su review en `docs/sessions/YYYY-MM-DD-TASK.md`.
-> El audit report consolida actividad del período — útil para sprint retrospectivas o reportes de seguridad.
-> Gentleman Guardian Angel agrega una capa de validación de estructura de código
+> "Cada sesin genera su review en `docs/sessions/YYYY-MM-DD-TASK.md`.
+> El audit report consolida actividad del perodo  til para sprint retrospectivas o reportes de seguridad.
+> Gentleman Guardian Angel agrega una capa de validacin de estructura de cdigo
 > antes de que el artefacto llegue al review humano."
 
 ### Puntos de anclaje (ejecutivo)
 
-- "Trazabilidad completa: quién trabajó qué, cuándo, con qué resultado."
-- "Sin proceso manual de documentación — el stack lo genera."
+- "Trazabilidad completa: quin trabaj qu, cundo, con qu resultado."
+- "Sin proceso manual de documentacin  el stack lo genera."
 
 ---
 
-## Segmento 6 - Cierre de sesión (1 min)
+## Segmento 6 - Cierre de sesin (1 min)
 
 ### Lo que dices
 
-> "El último paso: cierre formal. Genera el artefacto de closure y deja el contexto listo para mañana."
+> "El ltimo paso: cierre formal. Genera el artefacto de closure y deja el contexto listo para maana."
 
 ### Lo que muestras en pantalla
 
@@ -249,49 +249,49 @@ mem_search → al siguiente día, el agente retoma desde where we left off
 
 Closure report guardado en `docs/sessions/` con:
 - Tareas completadas.
-- Modo de comunicación usado.
+- Modo de comunicacin usado.
 - Preset aplicado (y si fue auto-aplicado).
-- Hash del último commit.
+- Hash del ltimo commit.
 
 ### Frase de cierre
 
-> "Eso es un ciclo completo. Desde la solicitud hasta el artefacto de cierre —
+> "Eso es un ciclo completo. Desde la solicitud hasta el artefacto de cierre 
 > reproducible, medible, auditable.
-> Las preguntas habituales son sobre ROI y sobre cómo se integra con el stack existente.
+> Las preguntas habituales son sobre ROI y sobre cmo se integra con el stack existente.
 > Cubramos eso ahora."
 
 ---
 
-## FAQ — Respuestas Preparadas
+## FAQ  Respuestas Preparadas
 
-### "¿Cuánto ahorra esto realmente?"
+### "Cunto ahorra esto realmente?"
 
-> "La matriz de ahorro que vieron estima entre 30% y 50% de tokens por tarea según la combinación.
-> El mayor retorno no es el costo de tokens — es el tiempo de ciclo.
+> "La matriz de ahorro que vieron estima entre 30% y 50% de tokens por tarea segn la combinacin.
+> El mayor retorno no es el costo de tokens  es el tiempo de ciclo.
 > Un rework evitado en una tarea senior equivale a 2-4 horas.
 > El stack reduce retrabajos porque mantiene contexto y aplica modo correcto desde el inicio."
 
-### "¿Qué pasa si alguien no sigue el proceso?"
+### "Qu pasa si alguien no sigue el proceso?"
 
-> "El workflow es permisivo — no bloquea.
+> "El workflow es permisivo  no bloquea.
 > Pero el orchestrator y el GGA lanzan advertencias que quedan en logs.
 > A nivel de PR, si la review generada no pasa los puntos de governance, el revisor lo ve."
 
-### "¿Funciona con nuestro stack actual?"
+### "Funciona con nuestro stack actual?"
 
-> "Workspace-foundation es agnóstico al lenguaje. Lo que vieron en Go funciona igual en Python, TypeScript, o cualquier otro.
-> La capa de integración con la IA es via prompt — no hay dependencia de IDE o provider específico."
+> "Workspace-foundation es agnstico al lenguaje. Lo que vieron en Go funciona igual en Python, TypeScript, o cualquier otro.
+> La capa de integracin con la IA es via prompt  no hay dependencia de IDE o provider especfico."
 
-### "¿Cómo se integra con Jira / Azure DevOps / etc.?"
+### "Cmo se integra con Jira / Azure DevOps / etc.?"
 
-> "Los artefactos son markdown + JSON. Pueden conectar con cualquier sistema vía webhook o pipeline CI.
-> La integración directa con Jira y Azure Boards está en el roadmap como extensión de wf CLI."
+> "Los artefactos son markdown + JSON. Pueden conectar con cualquier sistema va webhook o pipeline CI.
+> La integracin directa con Jira y Azure Boards est en el roadmap como extensin de wf CLI."
 
-### "¿Qué tan difícil es adoptarlo para un equipo nuevo?"
+### "Qu tan difcil es adoptarlo para un equipo nuevo?"
 
-> "Getting Started está en `docs/getting-started/`. Primera sesión funcional en menos de 30 minutos.
-> La curva de adopción más común: un par de sesiones para internalizar los presets,
-> después el flujo se vuelve automático."
+> "Getting Started est en `docs/getting-started/`. Primera sesin funcional en menos de 30 minutos.
+> La curva de adopcin ms comn: un par de sesiones para internalizar los presets,
+> despus el flujo se vuelve automtico."
 
 ---
 
@@ -299,6 +299,6 @@ Closure report guardado en `docs/sessions/` con:
 
 1. Si el demo falla en un comando, mostrar el output esperado del DEMO.md sin interrumpir el flujo.
 2. Para audiencia 100% ejecutiva: saltar Segmentos 3 y 4, ir directo de 2 a 5.
-3. Para audiencia 100% técnica: ampliar Segmento 3 con un cambio real de código y commit en vivo.
-4. El proyecto task-tracker es intencionalmente simple — si alguien pregunta "¿es solo esto?", la respuesta es: "El proyecto es simple para que el proceso sea el protagonista, no el código."
+3. Para audiencia 100% tcnica: ampliar Segmento 3 con un cambio real de cdigo y commit en vivo.
+4. El proyecto task-tracker es intencionalmente simple  si alguien pregunta "es solo esto?", la respuesta es: "El proyecto es simple para que el proceso sea el protagonista, no el cdigo."
 5. Limpiar `demos/shared/task-tracker/tasks.json` antes de cada demo si hiciste una corrida de prueba.

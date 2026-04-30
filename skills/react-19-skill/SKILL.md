@@ -1,4 +1,4 @@
----
+﻿---
 name: react-19-skill
 description: >
   React 19 patterns with React Compiler: no useMemo/useCallback needed, useActionState, useFormStatus.
@@ -16,10 +16,10 @@ description: >
 
 ```
 src/
-├── components/       # Components
-├── hooks/           # Custom hooks
-├── lib/             # Utilities
-└── app/             # Next.js (if using Next)
+ components/       # Components
+ hooks/           # Custom hooks
+ lib/             # Utilities
+ app/             # Next.js (if using Next)
 ```
 
 ## React Compiler

@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Enforce Response Mode - Forces summarized responses to reduce token usage
     
@@ -76,7 +76,7 @@ function Test-ResponseInstructions {
         hasConciseRule = ($content -match "concise|breve|summarized|resum")
         hasNoPreamble = ($content -match "no preamble|without preamble|avoid.*introduction")
         hasNoPostamble = ($content -match "no postamble|without.*conclusion|avoid.*conclusion")
-        hasLineLimit = ($content -match "lines|líneas")
+        hasLineLimit = ($content -match "lines|lneas")
         hasTokenEfficiency = ($content -match "token.*efficien|context.*optim")
     }
     

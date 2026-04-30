@@ -1,4 +1,4 @@
-# Judgment Guide
+﻿# Judgment Guide
 
 ## Overview
 The Judgment system provides automated auditing, quality validation, and self-healing capabilities for the Foundation stack.
@@ -29,32 +29,32 @@ Connection/credential issues for unconfigured providers (Difi/Bedrock/other exte
 ## How It Works
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    JUDGMENT WORKFLOW                              │
-└─────────────────────────────────────────────────────────────────┘
+
+                    JUDGMENT WORKFLOW                              
+
 
 invoke-judgment.ps1
-       │
-       ▼
-┌──────────────┐
-│ ACTOR Agent  │ ──► Generates draft-report.md
-└──────┬───────┘
-       │
-       ▼
-┌──────────────┐
-│ CRITIC Agent │ ──► Validates against governance rules
-└──────┬───────┘
-       │
-       ├─ APPROVED ──► Update dashboard.csv
-       │
-       └─ REJECTED + Remediate
-              │
-              ▼
-      ┌──────────────┐
-      │ REMEDIATOR   │ ──► Attempts automated fixes
-      └──────┬───────┘
-             │
-             ▼
+       
+       
+
+ ACTOR Agent    Generates draft-report.md
+
+       
+       
+
+ CRITIC Agent   Validates against governance rules
+
+       
+        APPROVED  Update dashboard.csv
+       
+        REJECTED + Remediate
+              
+              
+      
+       REMEDIATOR     Attempts automated fixes
+      
+             
+             
       Re-run Critic (max 3 iterations)
 ```
 

@@ -1,31 +1,31 @@
-# Flutter Project Structure
+﻿# Flutter Project Structure
 
 ```
 {{project-name}}/
-├── lib/
-│   ├── main.dart           # Entry point
-│   ├── app.dart            # App configuration
-│   ├── core/               # Core utilities
-│   │   ├── constants/      # App constants
-│   │   ├── theme/          # Theme configuration
-│   │   └── utils/          # Utility functions
-│   ├── data/               # Data layer
-│   │   ├── models/         # Data models
-│   │   ├── repositories/   # Repository implementations
-│   │   └── sources/        # Data sources (API, local)
-│   ├── domain/             # Domain layer
-│   │   ├── entities/       # Business entities
-│   │   ├── repositories/   # Repository interfaces
-│   │   └── usecases/       # Use cases
-│   ├── presentation/       # Presentation layer
-│   │   ├── pages/          # Screen widgets
-│   │   ├── widgets/        # Reusable widgets
-│   │   └── providers/     # State providers
-│   └── routes/             # Navigation routes
-├── test/                   # Test files
-├── android/               # Android native code
-├── ios/                   # iOS native code
-└── pubspec.yaml
+ lib/
+    main.dart           # Entry point
+    app.dart            # App configuration
+    core/               # Core utilities
+       constants/      # App constants
+       theme/          # Theme configuration
+       utils/          # Utility functions
+    data/               # Data layer
+       models/         # Data models
+       repositories/   # Repository implementations
+       sources/        # Data sources (API, local)
+    domain/             # Domain layer
+       entities/       # Business entities
+       repositories/   # Repository interfaces
+       usecases/       # Use cases
+    presentation/       # Presentation layer
+       pages/          # Screen widgets
+       widgets/        # Reusable widgets
+       providers/     # State providers
+    routes/             # Navigation routes
+ test/                   # Test files
+ android/               # Android native code
+ ios/                   # iOS native code
+ pubspec.yaml
 ```
 
 ## Widget Example

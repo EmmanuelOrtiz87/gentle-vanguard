@@ -1,4 +1,4 @@
----
+﻿---
 name: backup-orchestrator
 description: Backup orchestration skill for workspace and project backup management
 ---
@@ -17,11 +17,11 @@ description: Backup orchestration skill for workspace and project backup managem
 The `backup-orchestrator` skill provides advanced backup management with intelligent strategies, scheduling, retention policies, and integrity validation. It extends the Phase 1 Smart Backup foundation with enterprise-grade capabilities.
 
 ### Key Capabilities
-- 🎯 Multiple backup strategies (Full, Incremental, Differential)
-- ⏱️ Intelligent scheduling with resource awareness
-- 💾 Flexible retention policies
-- ✅ Integrity validation and repair
-- 🔐 Compression and encryption support
+-  Multiple backup strategies (Full, Incremental, Differential)
+-  Intelligent scheduling with resource awareness
+-  Flexible retention policies
+-  Integrity validation and repair
+-  Compression and encryption support
 
 ---
 
@@ -35,8 +35,8 @@ The `backup-orchestrator` skill provides advanced backup management with intelli
 - Backup performance concerns
 
 ### Use Cases
-1. **Strategy Design**: "Necesito una estrategia de backup para datos críticos"
-2. **Optimization**: "Los backups son demasiado grandes, ¿cómo optimizar?"
+1. **Strategy Design**: "Necesito una estrategia de backup para datos crticos"
+2. **Optimization**: "Los backups son demasiado grandes, cmo optimizar?"
 3. **Recovery**: "Restaurar estado de ayer a las 15:00"
 4. **Validation**: "Verificar integridad de todos los backups"
 5. **Scheduling**: "Automatizar backups sin afectar performance"

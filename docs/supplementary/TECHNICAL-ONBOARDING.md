@@ -1,4 +1,4 @@
-# Gentleman Foundation
+﻿# Gentleman Foundation
 ## AI Concepts & Best Practices
 
 **Version:** 1.0  
@@ -24,16 +24,16 @@
 **LLM** = Large Language Model
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                         LLM                                  │
-│                                                              │
-│   Input: "Write a function that adds two numbers"           │
-│          ↓                                                   │
-│   [Understands context]                                      │
-│   [Generates response based on learned patterns]             │
-│          ↓                                                   │
-│   Output: "function sum(a, b) { return a + b; }"          │
-└─────────────────────────────────────────────────────────────┘
+
+                         LLM                                  
+                                                              
+   Input: "Write a function that adds two numbers"           
+                                                             
+   [Understands context]                                      
+   [Generates response based on learned patterns]             
+                                                             
+   Output: "function sum(a, b) { return a + b; }"          
+
 ```
 
 ### Key Concepts
@@ -69,20 +69,20 @@ An AI agent is a system that:
 ### Tool Categories
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    AI DEVELOPMENT TOOLS                        │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│   Code Generation        │   Code Review                    │
-│   ├── OpenCode          │   ├── Native Review Engine        │
-│   ├── Copilot          │   └── Human review                │
-│   └── Cursor           │                                  │
-│                        │                                  │
-│   Memory & Context      │   Execution                       │
-│   ├── Engram           │   ├── Code interpreter            │
-│   └── Foundation skills │   └── Terminal access              │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
+
+                    AI DEVELOPMENT TOOLS                        
+
+                                                              
+   Code Generation           Code Review                    
+    OpenCode              Native Review Engine        
+    Copilot              Human review                
+    Cursor                                             
+                                                          
+   Memory & Context         Execution                       
+    Engram               Code interpreter            
+    Foundation skills     Terminal access              
+                                                              
+
 ```
 
 ---
@@ -98,7 +98,7 @@ An AI agent is a system that:
 
 ### Examples
 
-| ❌ Bad Prompt | [OK] Good Prompt |
+|  Bad Prompt | [OK] Good Prompt |
 |--------------|----------------|
 | "Fix my code" | "Fix the null pointer exception on line 45 in auth.go" |
 | "Write tests" | "Write unit tests for the validateEmail function in utils/validation.go" |
@@ -136,47 +136,47 @@ Response:
 ### 4.2 Code Review Workflow
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                   CODE REVIEW WORKFLOW                        │
-└─────────────────────────────────────────────────────────────┘
+
+                   CODE REVIEW WORKFLOW                        
+
 
      Developer
-         ↓
+         
     Write Code
-         ↓
-    ┌─────────────────┐
-    │   Git Commit    │ ← Native AI Review
-    └────────┬────────┘
-             ↓
-    ┌─────────────────┐
-    │  PR Created     │ ← Human Review
-    └────────┬────────┘
-             ↓
-       ┌────┴────┐
-       ↓         ↓
+         
+    
+       Git Commit      Native AI Review
+    
+             
+    
+      PR Created       Human Review
+    
+             
+       
+                
     Approved   Changes Requested
-       ↓
+       
     Merge to Main
 ```
 
 ### 4.3 AI-Assisted Development Cycle
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                 DEVELOPMENT CYCLE                             │
-├─────────────────────────────────────────────────────────────┤
-│                                                              │
-│   1. Plan        -> Define task and constraints             │
-│         ↓                                                  │
-│   2. Generate    -> AI generates code                      │
-│         ↓                                                  │
-│   3. Review      -> Native review + human review           │
-│         ↓                                                  │
-│   4. Iterate    -> Refine based on feedback               │
-│         ↓                                                  │
-│   5. Test        -> Verify functionality                   │
-│                                                              │
-└─────────────────────────────────────────────────────────────┘
+
+                 DEVELOPMENT CYCLE                             
+
+                                                              
+   1. Plan        -> Define task and constraints             
+                                                           
+   2. Generate    -> AI generates code                      
+                                                           
+   3. Review      -> Native review + human review           
+                                                           
+   4. Iterate    -> Refine based on feedback               
+                                                           
+   5. Test        -> Verify functionality                   
+                                                              
+
 ```
 
 ### 4.4 Quality Guidelines

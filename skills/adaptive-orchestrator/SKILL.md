@@ -1,4 +1,4 @@
----
+﻿---
 name: adaptive-orchestrator
 description: >
   Autonomous norm enforcement and learning system.
@@ -8,15 +8,15 @@ description: >
 
 # Adaptive Orchestrator Skill (Full Stack)
 
-Sistema autónomo COMPLETO que opera, aprende y se recupera sin intervención humana.
+Sistema autnomo COMPLETO que opera, aprende y se recupera sin intervencin humana.
 
 ## Core Systems (5 Autonomous Layers)
 
 ### 1. Auto Norm Enforcer (`scripts/adaptive/auto-norm-enforcer.ps1`)
-**Purpose**: Valida y aplica normativas autónomamente.
+**Purpose**: Valida y aplica normativas autnomamente.
 
 **Auto-trigger**: Session start/close
-**What it does**: Crea directorios faltantes, aplica estándares, valida documentación.
+**What it does**: Crea directorios faltantes, aplica estndares, valida documentacin.
 
 ### 2. Auto Norm Learner (`scripts/adaptive/auto-norm-learner.ps1`)
 **Purpose**: Aprende normativas de experiencias y correcciones.
@@ -25,104 +25,104 @@ Sistema autónomo COMPLETO que opera, aprende y se recupera sin intervención hu
 **What it does**: Consulta Engram, extrae patrones, promueve normas a `rules/custom/`.
 
 ### 3. Auto Backup Orchestrator (`scripts/adaptive/auto-backup-orchestrator.ps1`)
-**Purpose**: Respaldo encriptado y recuperación autónoma.
+**Purpose**: Respaldo encriptado y recuperacin autnoma.
 
 **Auto-trigger**: Session start (restore if needed), Session close (backup)
 **Security**: AES-256, clave derivada del stack, solo metadatos
 **What it does**:
-- Respalda Engram, normativas, estado de sesión (encriptado)
-- Recupera automáticamente si hay falla
+- Respalda Engram, normativas, estado de sesin (encriptado)
+- Recupera automticamente si hay falla
 - `.backups/` en `.gitignore` (no expone datos sensibles)
 
 ### 4. Auto Doc-Drift Detector (`scripts/adaptive/auto-doc-drift-detector.ps1`)
-**Purpose**: Detecta documentación desactualizada vs código.
+**Purpose**: Detecta documentacin desactualizada vs cdigo.
 
 **Auto-trigger**: Session close
-**Security**: Solo metadatos (paths, timestamps), NO contenido de código/docs
+**Security**: Solo metadatos (paths, timestamps), NO contenido de cdigo/docs
 **What it does**:
-- Compara timestamps de código vs documentación
+- Compara timestamps de cdigo vs documentacin
 - Detecta funciones nuevas sin documentar
-- Auto-delega actualización a subagente
-- Aprende patrones: "código cambió, docs no"
+- Auto-delega actualizacin a subagente
+- Aprende patrones: "cdigo cambi, docs no"
 
 ### 5. Auto Testing Orchestrator (`scripts/adaptive/auto-testing-final.ps1`)
-**Purpose**: Ejecución y auto-reparación de tests.
+**Purpose**: Ejecucin y auto-reparacin de tests.
 
 **Auto-trigger**: Session start/close (no-blocking)
 **What it does**:
 - Detecta tipo de proyecto (Node/Go/Python)
-- Ejecuta tests automáticamente
-- Auto-repara fallos via delegación
+- Ejecuta tests automticamente
+- Auto-repara fallos via delegacin
 - Guarda resultados para **Judgment Day** (no es bloqueante para commits)
 
 ## Full Autonomous Flow
 
 ```
 Session Event (Start/Close)
-         │
-         ▼
-┌─────────────────────────────────┐
-│  1. Auto Backup (restore if    │
-│     session-start, backup if   │
-│     session-close)              │
-└───────────┬─────────────────────┘
-            │
-            ▼
-┌─────────────────────────────────┐
-│  2. Norm Enforcer             │
-│     - Validate docs/           │
-│     - Create missing dirs     │
-└───────────┬─────────────────────┘
-            │
-            ▼
-┌─────────────────────────────────┐
-│  3. Norm Learner              │
-│     - Query Engram            │
-│     - Update norms            │
-└───────────┬─────────────────────┘
-            │
-            ▼
-┌─────────────────────────────────┐
-│  4. Doc-Drift Detector       │
-│     - Compare code vs docs   │
-│     - Auto-delegate fixes    │
-└───────────┬─────────────────────┘
-            │
-            ▼
-┌─────────────────────────────────┐
-│  5. Auto Testing (non-block) │
-│     - Run tests              │
-│     - Auto-repair          │
-│     - Log for Judgment Day  │
-└───────────┬─────────────────────┘
-            │
-            ▼
-    ✅ Session Ready / Closed
+         
+         
+
+  1. Auto Backup (restore if    
+     session-start, backup if   
+     session-close)              
+
+            
+            
+
+  2. Norm Enforcer             
+     - Validate docs/           
+     - Create missing dirs     
+
+            
+            
+
+  3. Norm Learner              
+     - Query Engram            
+     - Update norms            
+
+            
+            
+
+  4. Doc-Drift Detector       
+     - Compare code vs docs   
+     - Auto-delegate fixes    
+
+            
+            
+
+  5. Auto Testing (non-block) 
+     - Run tests              
+     - Auto-repair          
+     - Log for Judgment Day  
+
+            
+            
+     Session Ready / Closed
 ```
 
 ## Integration with Commit Hooks (Non-blocking)
 
 | Stage | System | Blocking? | Purpose |
 |-------|--------|-----------|---------|
-| **Pre-commit** | Hooks check-*.ps1 | ✅ YES | Validación rápida (seguridad, calidad) |
-| **Session close** | 5 systems above | ❌ NO | Autonomía total, log para Judgment Day |
-| **Judgment Day** | Adversarial review | ✅ YES | Revisión profunda antes de merge |
+| **Pre-commit** | Hooks check-*.ps1 |  YES | Validacin rpida (seguridad, calidad) |
+| **Session close** | 5 systems above |  NO | Autonoma total, log para Judgment Day |
+| **Judgment Day** | Adversarial review |  YES | Revisin profunda antes de merge |
 
 ## Security Architecture
 
 ```
-┌──────────────────────────────────────┐
-│  All Backups: AES-256 Encrypted  │
-│  Key: Derived from stack identity │
-│  Storage: .backups/ (local)      │
-│  Repo: .gitignore (no push)     │
-└──────────────────────────────────────┘
 
-┌──────────────────────────────────────┐
-│  Doc-Drift: Metadata Only        │
-│  Logs: Paths, timestamps only    │
-│  NO: Code content, doc content  │
-└──────────────────────────────────────┘
+  All Backups: AES-256 Encrypted  
+  Key: Derived from stack identity 
+  Storage: .backups/ (local)      
+  Repo: .gitignore (no push)     
+
+
+
+  Doc-Drift: Metadata Only        
+  Logs: Paths, timestamps only    
+  NO: Code content, doc content  
+
 ```
 
 ## On-Demand Commands
@@ -158,16 +158,16 @@ cd C:\Workspace_local\workspace-foundation
 
 ## Status: 99% Autonomous
 
-✅ **Operación sin humanos**: Los 5 sistemas operan solos
-✅ **Aprendizaje continuo**: Engram + normativas evolucionan
-✅ **Seguridad**: Encriptación AES-256, sin exposición de código
-✅ **Respaldo**: Recuperación automática ante fallos
-✅ **Documentación siempre actualizada**: Doc-drift detector
-⚠️ **Judgment Day**: Revisión profunda separada (no bloquea commits)
+ **Operacin sin humanos**: Los 5 sistemas operan solos
+ **Aprendizaje continuo**: Engram + normativas evolucionan
+ **Seguridad**: Encriptacin AES-256, sin exposicin de cdigo
+ **Respaldo**: Recuperacin automtica ante fallos
+ **Documentacin siempre actualizada**: Doc-drift detector
+ **Judgment Day**: Revisin profunda separada (no bloquea commits)
 
 ## Notes
 
-- **Session boundaries**: Autonomía total (start/close)
-- **Commits**: Hooks rápidos (seguridad, no bloqueantes para autonomía)
-- **Judgment Day**: Ejecutar manualmente para revisión profunda
-- **Escalation**: Solo si agota reintentos (3x) en auto-delegación
+- **Session boundaries**: Autonoma total (start/close)
+- **Commits**: Hooks rpidos (seguridad, no bloqueantes para autonoma)
+- **Judgment Day**: Ejecutar manualmente para revisin profunda
+- **Escalation**: Solo si agota reintentos (3x) en auto-delegacin

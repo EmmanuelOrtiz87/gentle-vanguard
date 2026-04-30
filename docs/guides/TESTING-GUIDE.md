@@ -1,21 +1,21 @@
-# Testing Guide - Automated Test Suite
+﻿# Testing Guide - Automated Test Suite
 
-## Visión General
+## Visin General
 
 Este documento describe la suite de testing automatizado para workspace-foundation.
 
-**Versión**: 1.0.0
+**Versin**: 1.0.0
 **Fecha**: 2026-04-21
-**Estado**: ✅ ACTIVO
+**Estado**:  ACTIVO
 
 ---
 
 ## Tipos de Tests
 
 ### 1. Unit Tests
-**Ubicación**: `tests/unit/*.tests.ps1`
+**Ubicacin**: `tests/unit/*.tests.ps1`
 **Framework**: Pester
-**Propósito**: Verificar funciones individuales
+**Propsito**: Verificar funciones individuales
 
 **Cobertura**:
 - Engram Memory Manager
@@ -24,19 +24,19 @@ Este documento describe la suite de testing automatizado para workspace-foundati
 - Cleanup Project
 
 ### 2. Integration Tests
-**Ubicación**: `tests/integration/*.integration.tests.ps1`
+**Ubicacin**: `tests/integration/*.integration.tests.ps1`
 **Framework**: Pester
-**Propósito**: Verificar interacción entre componentes
+**Propsito**: Verificar interaccin entre componentes
 
 **Cobertura**:
 - Workflows end-to-end
-- Integración Engram-Orquestador
-- Consolidación automática
+- Integracin Engram-Orquestador
+- Consolidacin automtica
 
 ### 3. Performance Tests
-**Ubicación**: `tests/performance/*.perf.tests.ps1`
+**Ubicacin**: `tests/performance/*.perf.tests.ps1`
 **Framework**: Pester
-**Propósito**: Verificar rendimiento
+**Propsito**: Verificar rendimiento
 
 **Thresholds**:
 - Engram creation: <50ms
@@ -45,14 +45,14 @@ Este documento describe la suite de testing automatizado para workspace-foundati
 - Optimization: <150ms
 
 ### 4. Security Tests
-**Ubicación**: `tests/security/*.security.tests.ps1`
+**Ubicacin**: `tests/security/*.security.tests.ps1`
 **Framework**: Pester
-**Propósito**: Verificar seguridad
+**Propsito**: Verificar seguridad
 
 **Cobertura**:
-- Validación de entrada
+- Validacin de entrada
 - Manejo de errores
-- Encriptación
+- Encriptacin
 - Acceso a archivos
 
 ---
@@ -86,11 +86,11 @@ Este documento describe la suite de testing automatizado para workspace-foundati
 
 ---
 
-## Configuración
+## Configuracin
 
 **Archivo**: `config/testing.config.json`
 
-### Parámetros Principales
+### Parmetros Principales
 
 ```json
 {
@@ -108,7 +108,7 @@ Este documento describe la suite de testing automatizado para workspace-foundati
 
 ---
 
-## Integración CI/CD
+## Integracin CI/CD
 
 ### Pre-Commit Hook
 ```bash
@@ -132,7 +132,7 @@ CI/CD: run-tests.ps1 -TestType all -GenerateReport
 
 ## Reportes
 
-### Ubicación
+### Ubicacin
 - Resultados: `test-results/`
 - Cobertura: `coverage/`
 
@@ -142,23 +142,23 @@ CI/CD: run-tests.ps1 -TestType all -GenerateReport
 - HTML (reporte visual)
 - JUnit (compatible con CI/CD)
 
-### Generación
+### Generacin
 ```powershell
 .\scripts\testing\run-tests.ps1 -GenerateReport
 ```
 
 ---
 
-## Mejores Prácticas
+## Mejores Prcticas
 
-### ✅ Hacer
+###  Hacer
 - [x] Escribir tests para nuevas funciones
 - [x] Mantener cobertura >80%
 - [x] Ejecutar tests antes de commit
 - [x] Revisar reportes de cobertura
 - [x] Actualizar tests con cambios
 
-### ❌ No Hacer
+###  No Hacer
 - [ ] Saltarse tests
 - [ ] Reducir cobertura
 - [ ] Ignorar fallos
@@ -170,25 +170,25 @@ CI/CD: run-tests.ps1 -TestType all -GenerateReport
 ## Troubleshooting
 
 ### Problema: Tests no se encuentran
-**Solución**: Verificar estructura de directorios
+**Solucin**: Verificar estructura de directorios
 
 ```
 tests/
-├── unit/
-├── integration/
-├── performance/
-└── security/
+ unit/
+ integration/
+ performance/
+ security/
 ```
 
 ### Problema: Pester no instalado
-**Solución**: Instalar módulo
+**Solucin**: Instalar mdulo
 
 ```powershell
 Install-Module -Name Pester -Force
 ```
 
 ### Problema: Tests fallan
-**Solución**: Revisar logs
+**Solucin**: Revisar logs
 
 ```powershell
 .\scripts\testing\run-tests.ps1 -LogLevel debug
@@ -196,9 +196,9 @@ Install-Module -Name Pester -Force
 
 ---
 
-## Próximos Pasos
+## Prximos Pasos
 
-- [ ] Agregar más tests de cobertura
+- [ ] Agregar ms tests de cobertura
 - [ ] Implementar load testing
 - [ ] Agregar security scanning
 - [ ] Integrar con SonarQube
@@ -208,7 +208,7 @@ Install-Module -Name Pester -Force
 
 ## Referencias
 
-- `config/testing.config.json` - Configuración
+- `config/testing.config.json` - Configuracin
 - `scripts/testing/run-tests.ps1` - Test runner
 - `tests/unit/` - Unit tests
 - `tests/integration/` - Integration tests

@@ -1,4 +1,4 @@
----
+﻿---
 name: golang-api-skill
 description: >
   Go backend API patterns: REST endpoints, JSON responses, middleware, SPA serving.
@@ -17,19 +17,19 @@ description: >
 
 ```
 cmd/server/
-├── main.go
+ main.go
 internal/
-├── web/
-│   ├── server.go      # Handlers, routes
-│   └── middleware.go  # CORS, auth, logging
-├── domain/
-│   └── entities.go   # Domain models
-├── config/
-│   └── config.go      # Configuration
-└── external/          # External API clients
-    └── client.go
+ web/
+    server.go      # Handlers, routes
+    middleware.go  # CORS, auth, logging
+ domain/
+    entities.go   # Domain models
+ config/
+    config.go      # Configuration
+ external/          # External API clients
+     client.go
 web/                  # Frontend SPA
-└── dist/
+ dist/
 ```
 
 ## API Standards

@@ -1,4 +1,4 @@
----
+﻿---
 name: context-engineering-skill
 description: >
   Context engineering patterns for token-efficient AI sessions: context packing,
@@ -69,7 +69,7 @@ Use when:
 | Context Size | Action |
 |---|---|
 | < 40% used | Work normally |
-| 40–60% used | Consider `context-pack` for next session |
+| 4060% used | Consider `context-pack` for next session |
 | > 60% used | Run `compact-start` before next message |
 | > 80% used | Must compact or start new session with context pack |
 
@@ -83,10 +83,10 @@ Before ending a session or triggering `/compact`:
 
 ## What NOT to Do
 
-- Do NOT repeat large file contents when they're already in context — reference them by path
-- Do NOT include full file trees when only 2–3 files changed — use `git diff --stat`
-- Do NOT re-explain prior decisions already made — reference the session artifact
-- Avoid loading all skills and all docs at once when only 1–2 are needed
+- Do NOT repeat large file contents when they're already in context  reference them by path
+- Do NOT include full file trees when only 23 files changed  use `git diff --stat`
+- Do NOT re-explain prior decisions already made  reference the session artifact
+- Avoid loading all skills and all docs at once when only 12 are needed
 
 ## Metrics Interpretation
 

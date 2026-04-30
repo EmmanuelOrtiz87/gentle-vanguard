@@ -1,25 +1,25 @@
-<#
+﻿<#
 .SYNOPSIS
-    Adaptive Mode Detector - Detección automática de complejidad de tareas
+    Adaptive Mode Detector - Deteccin automtica de complejidad de tareas
     
 .DESCRIPTION
-    Analiza la descripción de una tarea y detecta si requiere Adaptive Mode Mejorado.
-    Activa automáticamente Adaptive Mode cuando se detectan indicadores de alta complejidad.
+    Analiza la descripcin de una tarea y detecta si requiere Adaptive Mode Mejorado.
+    Activa automticamente Adaptive Mode cuando se detectan indicadores de alta complejidad.
     
 .PARAMETER TaskDescription
-    Descripción de la tarea a analizar
+    Descripcin de la tarea a analizar
     
 .PARAMETER ConfigPath
-    Ruta al archivo de configuración del orquestador (default: config/orchestrator.json)
+    Ruta al archivo de configuracin del orquestador (default: config/orchestrator.json)
     
 .PARAMETER AutoActivate
-    Si es $true, activa automáticamente Adaptive Mode si se detecta complejidad alta
+    Si es $true, activa automticamente Adaptive Mode si se detecta complejidad alta
     
 .PARAMETER Verbose
-    Mostrar información detallada del análisis
+    Mostrar informacin detallada del anlisis
     
 .EXAMPLE
-    .\adaptive-mode-detector.ps1 -TaskDescription "Implementar autenticación multi-fase con feedback loops" -AutoActivate
+    .\adaptive-mode-detector.ps1 -TaskDescription "Implementar autenticacin multi-fase con feedback loops" -AutoActivate
     
 .EXAMPLE
     .\adaptive-mode-detector.ps1 -TaskDescription "Bugfix simple" -Verbose
@@ -87,7 +87,7 @@ function Analyze-TaskComplexity {
         }
     }
     
-    # Calcular puntuación total
+    # Calcular puntuacin total
     $totalScore = ($highScore * 3) + ($mediumScore * 1) + ($lowScore * -1)
     
     # Determinar nivel de complejidad
@@ -157,7 +157,7 @@ function Update-AdaptiveModeStatus {
     }
 }
 
-# Análisis principal
+# Anlisis principal
 if ([string]::IsNullOrWhiteSpace($TaskDescription)) {
     Write-Host "[INFO] No task description provided. Skipping complexity analysis." -ForegroundColor Gray
     exit 0
@@ -197,7 +197,7 @@ if ($Verbose) {
     Write-Host "[DECISION] Reason: $reason" -ForegroundColor Gray
 }
 
-# Actualizar configuración si se solicita
+# Actualizar configuracin si se solicita
 if ($AutoActivate -and $shouldActivate) {
     $configFullPath = Join-Path $repoRoot $ConfigPath
     if (Update-AdaptiveModeStatus -ConfigPath $configFullPath -Enabled $true -Reason $reason) {

@@ -1,16 +1,16 @@
-<#
+﻿<#
 .SYNOPSIS
-    Post-Task Cleanup - Limpieza automática al finalizar tareas de subagentes
+    Post-Task Cleanup - Limpieza automtica al finalizar tareas de subagentes
     
 .DESCRIPTION
-    Se ejecuta automáticamente cuando un subagente finaliza su tarea.
-    Limpia el contexto y deja el sistema listo para una nueva petición.
+    Se ejecuta automticamente cuando un subagente finaliza su tarea.
+    Limpia el contexto y deja el sistema listo para una nueva peticin.
     
 .PARAMETER TaskName
     Nombre de la tarea que finaliza
     
 .PARAMETER AgentType
-    Tipo de subagente que ejecutó la tarea
+    Tipo de subagente que ejecut la tarea
     
 .EXAMPLE
     .\tools\post-task-cleanup.ps1 -TaskName "Corregir bug" -AgentType "DEV"
@@ -18,7 +18,7 @@
 .NOTES
     Author: gentleman-programming
     Version: 1.0
-    Se invoca automáticamente desde auto-delegation-router.ps1
+    Se invoca automticamente desde auto-delegation-router.ps1
 #>
 
 param(
@@ -78,8 +78,8 @@ if (Test-Path $clearScript) {
     Write-Host "[WARN] clear-context.ps1 no encontrado" -ForegroundColor Yellow
 }
 
-# 3. Limpiar métricas temporales de la tarea
-Write-Step "Limpiando métricas temporales..."
+# 3. Limpiar mtricas temporales de la tarea
+Write-Step "Limpiando mtricas temporales..."
 $metricsFile = ".\.session\task-metrics-$AgentType.json"
 if (Test-Path $metricsFile) {
     Remove-Item $metricsFile -Force -ErrorAction SilentlyContinue

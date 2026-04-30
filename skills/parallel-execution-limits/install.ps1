@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
 Automatic installation and integration script for parallel-execution-limits skill
 
@@ -26,15 +26,15 @@ param(
 # Validation
 # ============================================================================
 
-Write-Host "🔍 Validating parallel-execution-limits skill installation..." -ForegroundColor Cyan
+Write-Host " Validating parallel-execution-limits skill installation..." -ForegroundColor Cyan
 
 if (-not (Test-Path $SkillPath)) {
-    Write-Host "❌ Skill path not found: $SkillPath" -ForegroundColor Red
+    Write-Host " Skill path not found: $SkillPath" -ForegroundColor Red
     exit 1
 }
 
 if (-not $FoundationRoot) {
-    Write-Host "❌ Not in a git repository" -ForegroundColor Red
+    Write-Host " Not in a git repository" -ForegroundColor Red
     exit 1
 }
 
@@ -57,17 +57,17 @@ foreach ($file in $requiredFiles) {
 }
 
 if ($missingFiles.Count -gt 0) {
-    Write-Host "❌ Missing required files: $($missingFiles -join ', ')" -ForegroundColor Red
+    Write-Host " Missing required files: $($missingFiles -join ', ')" -ForegroundColor Red
     exit 1
 }
 
-Write-Host "✅ All required files present" -ForegroundColor Green
+Write-Host " All required files present" -ForegroundColor Green
 
 # ============================================================================
 # Register in Skill Index
 # ============================================================================
 
-Write-Host "`n📝 Registering skill in index..." -ForegroundColor Cyan
+Write-Host "`n Registering skill in index..." -ForegroundColor Cyan
 
 $skillIndexPath = "$FoundationRoot\skills\SKILL_INDEX.md"
 
@@ -75,13 +75,13 @@ if (Test-Path $skillIndexPath) {
     $indexContent = Get-Content $skillIndexPath -Raw
     
     if ($indexContent -notlike "*parallel-execution-limits*") {
-        $newEntry = "`n`n### parallel-execution-limits`n`nAdvanced parallel execution management with dependency graphs, resource pooling, and token budget circuit breaker.`n`n- **Trigger**: `"parallel execution`", `"ejecución paralela`", `"execution limits`"`n- **Use when**: Complex workflows with >10 tasks, GPU/CPU constraints, token budget protection`n- **Key Functions**: `n  - Initialize-ParallelExecutor - Initialize all components`n  - Plan-ParallelExecution - Create execution plan`n  - Invoke-ParallelExecution - Execute tasks in parallel`n  - Get-ExecutionStatus - Monitor execution`n  - Export-ExecutionReport - Generate reports`n`n**Path**: skills/parallel-execution-limits/`n**Documentation**: skills/parallel-execution-limits/SKILL.md"
+        $newEntry = "`n`n### parallel-execution-limits`n`nAdvanced parallel execution management with dependency graphs, resource pooling, and token budget circuit breaker.`n`n- **Trigger**: `"parallel execution`", `"ejecucin paralela`", `"execution limits`"`n- **Use when**: Complex workflows with >10 tasks, GPU/CPU constraints, token budget protection`n- **Key Functions**: `n  - Initialize-ParallelExecutor - Initialize all components`n  - Plan-ParallelExecution - Create execution plan`n  - Invoke-ParallelExecution - Execute tasks in parallel`n  - Get-ExecutionStatus - Monitor execution`n  - Export-ExecutionReport - Generate reports`n`n**Path**: skills/parallel-execution-limits/`n**Documentation**: skills/parallel-execution-limits/SKILL.md"
         
         Add-Content -Path $skillIndexPath -Value $newEntry -Encoding UTF8
-        Write-Host "✅ Skill registered in index" -ForegroundColor Green
+        Write-Host " Skill registered in index" -ForegroundColor Green
     }
     else {
-        Write-Host "⚠️  Skill already registered in index" -ForegroundColor Yellow
+        Write-Host "  Skill already registered in index" -ForegroundColor Yellow
     }
 }
 
@@ -89,7 +89,7 @@ if (Test-Path $skillIndexPath) {
 # Update Orchestrator Configuration
 # ============================================================================
 
-Write-Host "`n⚙️  Updating orchestrator configuration..." -ForegroundColor Cyan
+Write-Host "`n  Updating orchestrator configuration..." -ForegroundColor Cyan
 
 $orchestratorConfigPath = "$FoundationRoot\config\orchestrator.json"
 
@@ -105,10 +105,10 @@ if (Test-Path $orchestratorConfigPath) {
         $config.skills += "parallel-execution-limits"
         
         $config | ConvertTo-Json -Depth 10 | Set-Content $orchestratorConfigPath -Encoding UTF8
-        Write-Host "✅ Orchestrator configuration updated" -ForegroundColor Green
+        Write-Host " Orchestrator configuration updated" -ForegroundColor Green
     }
     else {
-        Write-Host "⚠️  Skill already in orchestrator configuration" -ForegroundColor Yellow
+        Write-Host "  Skill already in orchestrator configuration" -ForegroundColor Yellow
     }
 }
 
@@ -116,7 +116,7 @@ if (Test-Path $orchestratorConfigPath) {
 # Create Integration Configuration
 # ============================================================================
 
-Write-Host "`n📋 Creating integration configuration..." -ForegroundColor Cyan
+Write-Host "`n Creating integration configuration..." -ForegroundColor Cyan
 
 $integrationConfigPath = "$SkillPath\integration-config.json"
 
@@ -191,13 +191,13 @@ $integrationConfig = @{
 }
 
 $integrationConfig | ConvertTo-Json -Depth 10 | Set-Content $integrationConfigPath -Encoding UTF8
-Write-Host "✅ Integration configuration created" -ForegroundColor Green
+Write-Host " Integration configuration created" -ForegroundColor Green
 
 # ============================================================================
 # Create Activation Hook
 # ============================================================================
 
-Write-Host "`n🔗 Creating activation hook..." -ForegroundColor Cyan
+Write-Host "`n Creating activation hook..." -ForegroundColor Cyan
 
 $hookPath = "$SkillPath\activate.ps1"
 
@@ -224,25 +224,25 @@ $global:FoundationSkills["parallel-execution-limits"] = @{
     Status = "Active"
 }
 
-Write-Host "✅ parallel-execution-limits skill activated" -ForegroundColor Green
+Write-Host " parallel-execution-limits skill activated" -ForegroundColor Green
 '@
 
 Set-Content -Path $hookPath -Value $hookContent -Encoding UTF8
-Write-Host "✅ Activation hook created" -ForegroundColor Green
+Write-Host " Activation hook created" -ForegroundColor Green
 
 # ============================================================================
 # Validation
 # ============================================================================
 
-Write-Host "`n✔️  Validating installation..." -ForegroundColor Cyan
+Write-Host "`n  Validating installation..." -ForegroundColor Cyan
 
 # Test imports
 try {
     . "$SkillPath\parallel-executor.ps1" -ErrorAction Stop
-    Write-Host "✅ Module imports successful" -ForegroundColor Green
+    Write-Host " Module imports successful" -ForegroundColor Green
 }
 catch {
-    Write-Host "❌ Module import failed: $_" -ForegroundColor Red
+    Write-Host " Module import failed: $_" -ForegroundColor Red
     exit 1
 }
 
@@ -252,10 +252,10 @@ try {
         Strategy = "Balanced"
         TokenBudget = 100000
     }
-    Write-Host "✅ Executor initialization successful" -ForegroundColor Green
+    Write-Host " Executor initialization successful" -ForegroundColor Green
 }
 catch {
-    Write-Host "❌ Executor initialization failed: $_" -ForegroundColor Red
+    Write-Host " Executor initialization failed: $_" -ForegroundColor Red
     exit 1
 }
 
@@ -264,21 +264,21 @@ catch {
 # ============================================================================
 
 Write-Host "`n" -ForegroundColor Cyan
-Write-Host "╔════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "║  ✅ parallel-execution-limits skill installed successfully  ║" -ForegroundColor Cyan
-Write-Host "╚════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+Write-Host "" -ForegroundColor Cyan
+Write-Host "   parallel-execution-limits skill installed successfully  " -ForegroundColor Cyan
+Write-Host "" -ForegroundColor Cyan
 
-Write-Host "`n📚 Documentation:" -ForegroundColor Green
+Write-Host "`n Documentation:" -ForegroundColor Green
 Write-Host "  - Skill Guide: $SkillPath\SKILL.md"
 Write-Host "  - Quick Start: $SkillPath\README.md"
 
-Write-Host "`n🚀 Quick Start:" -ForegroundColor Green
+Write-Host "`n Quick Start:" -ForegroundColor Green
 Write-Host "  1. Import: . `"$SkillPath\parallel-executor.ps1`""
 Write-Host "  2. Initialize: `$executor = Initialize-ParallelExecutor"
 Write-Host "  3. Add tasks: Add-GraphTask -Graph `$executor.DependencyGraph ..."
 Write-Host "  4. Execute: Invoke-ParallelExecution -Executor `$executor"
 
-Write-Host "`n📋 Configuration:" -ForegroundColor Green
+Write-Host "`n Configuration:" -ForegroundColor Green
 Write-Host "  - Integration Config: $integrationConfigPath"
 Write-Host "  - Orchestrator Config: $orchestratorConfigPath"
 

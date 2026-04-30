@@ -84,9 +84,9 @@ $reportDate = Get-Date -Format "yyyy-MM-dd HH:mm"
 $periodLabel = switch ($Period) {
     "today" { "Hoy" }
     "yesterday" { "Ayer" }
-    "7days" { "Últimos 7 días" }
-    "30days" { "Últimos 30 días" }
-    "all" { "Todo el período" }
+    "7days" { "ltimos 7 das" }
+    "30days" { "ltimos 30 das" }
+    "all" { "Todo el perodo" }
 }
 
 $systemStatus = @{
@@ -124,21 +124,21 @@ $reportFile = Join-Path $outputDir "informe-ejecutivo-$Period-$(Get-Date -Format
 $markdown = @"
 # [DATA] Informe Ejecutivo - Resumen de Actividad
 
-**Período**: $periodLabel  
-**Fecha de generación**: $reportDate  
+**Perodo**: $periodLabel  
+**Fecha de generacin**: $reportDate  
 **Proyecto**: workspace_local  
 
 ---
 
 ## [LIST] Resumen Ejecutivo
 
-| Métrica | Valor | Nota |
+| Mtrica | Valor | Nota |
 |--------|-------|------|
-| **Sesiones totales** | $totalSessions | $(if ($Period -eq "7days") { " $([math]::Round($totalSessions/7, 1))/día" } elseif ($Period -eq "30days") { " $([math]::Round($totalSessions/30, 1))/día" }) |
+| **Sesiones totales** | $totalSessions | $(if ($Period -eq "7days") { " $([math]::Round($totalSessions/7, 1))/da" } elseif ($Period -eq "30days") { " $([math]::Round($totalSessions/30, 1))/da" }) |
 | **Sesiones activas** | $activeSessions | En curso |
-| **Días analizados** | $daysInPeriod | Período seleccionado |
+| **Das analizados** | $daysInPeriod | Perodo seleccionado |
 
-### [CHART] Actividad por Día
+### [CHART] Actividad por Da
 
 | Fecha | Sesiones |
 |-------|----------|
@@ -182,26 +182,26 @@ $markdown += @"
 
 ##  Limitaciones y Notas
 
-> **Nota importantes**: Los ientes métricas aún no están siendo capturadas automáticamente:
-> - Tokens consumidos por sesión
+> **Nota importantes**: Los ientes mtricas an no estn siendo capturadas automticamente:
+> - Tokens consumidos por sesin
 > - Costo estimado (USD)
 > - Contexto utilizado
-> - Duración real de sesiones
+> - Duracin real de sesiones
 > - Tool calls, files read/edited
 
-**Próximas mejoras**: Ver `reports/MEJORAS-REPORTING-TELEMETRY.md`
+**Prximas mejoras**: Ver `reports/MEJORAS-REPORTING-TELEMETRY.md`
 
 ---
 
 ## [TARGET] Recomendaciones
 
-1. **Alta Prioridad**: Instrumentar captura de tokens en workflow de sesión
-2. **Media Prioridad**: Implementar consolidación automática de métricas
+1. **Alta Prioridad**: Instrumentar captura de tokens en workflow de sesin
+2. **Media Prioridad**: Implementar consolidacin automtica de mtricas
 3. **Mejora Continua**: Agregar dashboard en tiempo real
 
 ---
 
-*Informe generado automáticamente*  
+*Informe generado automticamente*  
 *Formato: Markdown (.md)*
 
 "@

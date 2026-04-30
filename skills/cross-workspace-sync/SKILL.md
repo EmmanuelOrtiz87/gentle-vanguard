@@ -1,4 +1,4 @@
----
+﻿---
 name: cross-workspace-sync
 description: Cross-workspace synchronization skill for maintaining consistency across projects
 ---
@@ -17,11 +17,11 @@ description: Cross-workspace synchronization skill for maintaining consistency a
 The `cross-workspace-sync` skill provides intelligent synchronization between multiple workspaces with advanced conflict resolution and consistency validation. It enables seamless data replication across workspace boundaries.
 
 ### Key Capabilities
-- 🔄 Multiple sync modes (One-way, Two-way, Selective, Smart)
-- ⚔️ Intelligent conflict resolution strategies
-- 🔍 Advanced change detection
-- ✅ Pre/Post sync validation
-- 📊 Consistency monitoring and drift detection
+-  Multiple sync modes (One-way, Two-way, Selective, Smart)
+-  Intelligent conflict resolution strategies
+-  Advanced change detection
+-  Pre/Post sync validation
+-  Consistency monitoring and drift detection
 
 ---
 
@@ -36,9 +36,9 @@ The `cross-workspace-sync` skill provides intelligent synchronization between mu
 
 ### Use Cases
 1. **Multi-Workspace Sync**: "Sincronizar datos entre workspace A y B"
-2. **Conflict Resolution**: "Hay conflictos en la sincronización, ¿cómo resolver?"
+2. **Conflict Resolution**: "Hay conflictos en la sincronizacin, cmo resolver?"
 3. **Selective Sync**: "Sincronizar solo archivos .config entre workspaces"
-4. **Consistency Check**: "Verificar que los datos estén sincronizados"
+4. **Consistency Check**: "Verificar que los datos estn sincronizados"
 5. **Automated Monitoring**: "Monitorear cambios entre workspaces"
 
 ---
@@ -452,13 +452,13 @@ function Send-SyncAlert {
     
     switch ($Severity) {
         "Critical" {
-            Write-Host "🔴 CRITICAL: $Message" -ForegroundColor Red
+            Write-Host " CRITICAL: $Message" -ForegroundColor Red
         }
         "Warning" {
-            Write-Host "🟡 WARNING: $Message" -ForegroundColor Yellow
+            Write-Host " WARNING: $Message" -ForegroundColor Yellow
         }
         "Info" {
-            Write-Host "🔵 INFO: $Message" -ForegroundColor Cyan
+            Write-Host " INFO: $Message" -ForegroundColor Cyan
         }
     }
     

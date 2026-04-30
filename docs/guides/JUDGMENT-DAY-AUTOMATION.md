@@ -1,57 +1,57 @@
-# Judgment Day Automation Guide
+﻿# Judgment Day Automation Guide
 
 ## Overview
 
 Judgment Day automation integrates the dual-review protocol with git hooks and the session orchestrator to ensure code quality before push and merge operations.
 
-**Objetivo**: Ejecutar automáticamente Judgment Day antes de PR merge, integrar con git hooks, fallar PR si Judgment Day falla, y requerir aprobación de ambos reviewers.
+**Objetivo**: Ejecutar automticamente Judgment Day antes de PR merge, integrar con git hooks, fallar PR si Judgment Day falla, y requerir aprobacin de ambos reviewers.
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    SESSION START                             │
-│              (session-autostart.cmd)                         │
-└────────────────────┬────────────────────────────────────────┘
-                     │
-                     ▼
-┌─────────────────────────────────────────────────────────────┐
-│         Judgment Day Orchestrator Initialize                 │
-│     (judgment-day-orchestrator.ps1 -Action initialize)       │
-│                                                              │
-│  ✓ Register git hooks (pre-push, pre-merge-commit)          │
-│  ✓ Setup event bus subscriptions                            │
-│  ✓ Create logging directories                               │
-│  ✓ Load configuration                                       │
-└────────────────────┬────────────────────────────────────────┘
-                     │
-        ┌────────────┴────────────┐
-        │                         │
-        ▼                         ▼
-┌──────────────────┐      ┌──────────────────┐
-│   PRE-PUSH HOOK  │      │ PRE-MERGE HOOK   │
-│  (git push)      │      │ (git merge)      │
-└────────┬─────────┘      └────────┬─────────┘
-         │                         │
-         ▼                         ▼
-┌──────────────────────────────────────────┐
-│  Judgment Day Orchestrator               │
-│  (run-judgment -Scope changed_files)     │
-│  (run-judgment -Scope pr_files)          │
-│                                          │
-│  ✓ Launch Judge A (async)                │
-│  ✓ Launch Judge B (async)                │
-│  ✓ Synthesize verdict                    │
-│  ✓ Apply fixes if needed                 │
-│  ✓ Re-judge until convergence            │
-└────────┬─────────────────────────────────┘
-         │
-    ┌────┴────┐
-    │          │
-    ▼          ▼
+
+                    SESSION START                             
+              (session-autostart.cmd)                         
+
+                     
+                     
+
+         Judgment Day Orchestrator Initialize                 
+     (judgment-day-orchestrator.ps1 -Action initialize)       
+                                                              
+   Register git hooks (pre-push, pre-merge-commit)          
+   Setup event bus subscriptions                            
+   Create logging directories                               
+   Load configuration                                       
+
+                     
+        
+                                 
+                                 
+      
+   PRE-PUSH HOOK         PRE-MERGE HOOK   
+  (git push)             (git merge)      
+      
+                                  
+                                  
+
+  Judgment Day Orchestrator               
+  (run-judgment -Scope changed_files)     
+  (run-judgment -Scope pr_files)          
+                                          
+   Launch Judge A (async)                
+   Launch Judge B (async)                
+   Synthesize verdict                    
+   Apply fixes if needed                 
+   Re-judge until convergence            
+
+         
+    
+              
+              
  APPROVED   ESCALATED
-    │          │
-    ▼          ▼
+              
+              
   PUSH      BLOCK MERGE
 ```
 
@@ -123,8 +123,8 @@ Executes before `git merge`:
 # [INFO] Initializing Judgment Day automation...
 # [JUDGMENT-DAY] Initializing Judgment Day automation...
 # [JUDGMENT-DAY] Registering git hooks...
-# [JUDGMENT-DAY] ✓ pre-push hook registered
-# [JUDGMENT-DAY] ✓ pre-merge-commit hook registered
+# [JUDGMENT-DAY]  pre-push hook registered
+# [JUDGMENT-DAY]  pre-merge-commit hook registered
 # [JUDGMENT-DAY] Initialization complete
 ```
 
@@ -143,7 +143,7 @@ git push origin feature/my-feature
 # [JUDGMENT-DAY] Verdict: 2 CRITICAL issues found
 # [JUDGMENT-DAY] Applying fixes...
 # [JUDGMENT-DAY] Re-judging...
-# [JUDGMENT-DAY] Verdict: APPROVED ✅
+# [JUDGMENT-DAY] Verdict: APPROVED 
 # [JUDGMENT-DAY] Push allowed
 ```
 
@@ -156,10 +156,10 @@ git merge feature/my-feature
 # [JUDGMENT-DAY] Pre-merge hook initiated
 # [JUDGMENT-DAY] Files to merge: 5
 # [JUDGMENT-DAY] Checking reviewer approvals...
-# [JUDGMENT-DAY] Reviewer 1: ✅ Approved
-# [JUDGMENT-DAY] Reviewer 2: ✅ Approved
+# [JUDGMENT-DAY] Reviewer 1:  Approved
+# [JUDGMENT-DAY] Reviewer 2:  Approved
 # [JUDGMENT-DAY] Running Judgment Day review...
-# [JUDGMENT-DAY] Verdict: APPROVED ✅
+# [JUDGMENT-DAY] Verdict: APPROVED 
 # [JUDGMENT-DAY] Merge allowed
 ```
 
@@ -176,8 +176,8 @@ git merge feature/my-feature
 #   Pre-push enabled: True
 #   Pre-merge enabled: True
 # Git Hooks:
-#   ✓ pre-push hook installed
-#   ✓ pre-merge-commit hook installed
+#    pre-push hook installed
+#    pre-merge-commit hook installed
 # Recent Sessions:
 #   judgment-day-2026-04-23-14-30-45: approved
 ```
@@ -200,30 +200,30 @@ git merge feature/my-feature
 ## Decision Tree
 
 ### No Issues Found
-- **Status**: APPROVED ✅
+- **Status**: APPROVED 
 - **Action**: Allow push/merge
 - **Message**: Code passes Judgment Day review
 
 ### CRITICAL Issues Found
-- **Status**: BLOCK ❌
+- **Status**: BLOCK 
 - **Action**: Block push/merge
 - **Message**: CRITICAL issues must be fixed
 - **Auto-fix**: No (requires manual intervention)
 
 ### Real WARNINGs Found
-- **Status**: BLOCK ❌ (pre-merge only)
+- **Status**: BLOCK  (pre-merge only)
 - **Action**: Block merge
 - **Message**: Real WARNINGs must be fixed
 - **Auto-fix**: Yes (if enabled)
 
 ### Theoretical WARNINGs Found
-- **Status**: INFO ℹ️
+- **Status**: INFO 
 - **Action**: Allow push/merge
 - **Message**: Theoretical WARNINGs reported
 - **Auto-fix**: No
 
 ### Suggestions Found
-- **Status**: SUGGESTION 💡
+- **Status**: SUGGESTION 
 - **Action**: Allow push/merge
 - **Message**: Suggestions for improvement
 - **Auto-fix**: Yes (if enabled)
@@ -233,14 +233,14 @@ git merge feature/my-feature
 ### Both Reviewers Must Approve
 - Reviewer 1: Approval required
 - Reviewer 2: Approval required
-- Approval pattern: `LGTM`, `Approved`, `✅`
+- Approval pattern: `LGTM`, `Approved`, ``
 - Self-approval: Not allowed
 
 ### PR Labels
-- `judgment-day-approved ✅`: Judgment Day passed
-- `judgment-day-failed ❌`: Judgment Day failed
-- `judgment-day-pending ⏳`: Judgment Day in progress
-- `judgment-day-escalated ⚠️`: Judgment Day escalated
+- `judgment-day-approved `: Judgment Day passed
+- `judgment-day-failed `: Judgment Day failed
+- `judgment-day-pending `: Judgment Day in progress
+- `judgment-day-escalated `: Judgment Day escalated
 
 ## Escalation Policy
 
@@ -261,10 +261,10 @@ If issues remain after 2 fix iterations:
 ### Log Location
 ```
 .session/judgment-day-logs/
-├── pre-push-2026-04-23-14-30-45.log
-├── pre-merge-2026-04-23-14-31-20.log
-├── judgment-day-2026-04-23-14-30-45.json
-└── ...
+ pre-push-2026-04-23-14-30-45.log
+ pre-merge-2026-04-23-14-31-20.log
+ judgment-day-2026-04-23-14-30-45.json
+ ...
 ```
 
 ### Log Format

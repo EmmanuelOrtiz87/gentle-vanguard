@@ -1,4 +1,4 @@
----
+﻿---
 name: flutter-development
 description: >
   Build beautiful cross-platform mobile apps with Flutter and Dart. Covers
@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
 
 ## Best Practices
 
-### ✅ DO
+###  DO
 
 - Use widgets for every UI element
 - Implement proper state management
@@ -75,7 +75,7 @@ class MyApp extends StatelessWidget {
 - Test on both iOS and Android
 - Document custom widgets
 
-### ❌ DON'T
+###  DON'T
 
 - Build entire screens in build() method
 - Use setState for complex state logic

@@ -1,4 +1,4 @@
----
+﻿---
 name: multi-agent-registry
 description: >
   Multi-agent specialization registry defining 7 specialized sub-agents.
@@ -16,14 +16,14 @@ metadata:
 
 ```
 ORCHESTRATOR (context slim - only orchestrates)
-│
-├── AGENT-BA     → Business Analysis & Requirements
-├── AGENT-SAD    → Solution Architecture & Design
-├── AGENT-DEV    → Development & Implementation
-├── AGENT-QA     → Quality Assurance & Testing
-├── AGENT-OPS    → DevOps & Infrastructure
-├── AGENT-GOV    → Governance & Observability
-└── AGENT-DOC    → Documentation & Specifications
+
+ AGENT-BA      Business Analysis & Requirements
+ AGENT-SAD     Solution Architecture & Design
+ AGENT-DEV     Development & Implementation
+ AGENT-QA      Quality Assurance & Testing
+ AGENT-OPS     DevOps & Infrastructure
+ AGENT-GOV     Governance & Observability
+ AGENT-DOC     Documentation & Specifications
 ```
 
 ## DELEGATION MODEL
@@ -68,7 +68,7 @@ Analyzes requirements, creates BDD scenarios, defines acceptance criteria.
 ### TRIGGERS
 ```
 requirements, user story, BDD, Gherkin, acceptance criteria,
-feature analysis,需求分析, especificación funcional
+feature analysis,, especificacin funcional
 ```
 
 ### DELIVERABLES
@@ -104,7 +104,7 @@ Defines system architecture, creates SDD documents, makes technical decisions.
 ### TRIGGERS
 ```
 architecture, design, SDD, system design, API design,
-database schema, technical decision, arquitectura, diseño
+database schema, technical decision, arquitectura, diseo
 ```
 
 ### DELIVERABLES
@@ -256,7 +256,7 @@ Ensures compliance, monitors metrics, handles incidents.
 ### TRIGGERS
 ```
 governance, compliance, metrics, monitoring, observability,
-incident, security audit, review, auditoría
+incident, security audit, review, auditora
 ```
 
 ### DELIVERABLES
@@ -313,33 +313,33 @@ BDD specs, SDD specs, specification
 
 | Skill | BA | SAD | DEV | QA | OPS | GOV | DOC |
 |-------|----|-----|-----|-----|-----|-----|-----|
-| bdd-scenarios | ✓ |   |   |   |   |   |   |
-| architecture |   | ✓ |   |   |   |   |   |
-| api-design |   | ✓ |   |   |   |   |   |
-| database-relational |   | ✓ |   |   |   |   |   |
-| database-nosql |   | ✓ |   |   |   |   |   |
-| typescript |   | ✓ | ✓ |   |   |   |   |
-| angular-spa |   |   | ✓ |   |   |   |   |
-| react-19 |   |   | ✓ |   |   |   |   |
-| nextjs-15 |   |   | ✓ |   |   |   |   |
-| tailwind-4 |   |   | ✓ |   |   |   |   |
-| zustand-5 |   |   | ✓ |   |   |   |   |
-| zod-4 |   |   | ✓ |   |   |   |   |
-| security |   |   | ✓ |   |   | ✓ |   |
-| testing-strategy |   |   |   | ✓ |   |   |   |
-| testing |   |   |   | ✓ |   |   |   |
-| playwright |   |   |   | ✓ |   |   |   |
-| pytest |   |   |   | ✓ |   |   |   |
-| docker-devops |   |   |   |   | ✓ |   |   |
-| kubernetes |   |   |   |   | ✓ |   |   |
-| terraform |   |   |   |   | ✓ |   |   |
-| git-workflow |   |   |   |   | ✓ |   |   |
-| observability |   |   |   |   |   | ✓ |   |
-| incident-response |   |   |   |   |   | ✓ |   |
-| code-review |   |   |   |   |   | ✓ |   |
-| documentation |   |   |   |   |   |   | ✓ |
-| sdd |   | ✓ |   |   |   |   | ✓ |
-| github-pr |   |   |   |   |   |   | ✓ |
+| bdd-scenarios |  |   |   |   |   |   |   |
+| architecture |   |  |   |   |   |   |   |
+| api-design |   |  |   |   |   |   |   |
+| database-relational |   |  |   |   |   |   |   |
+| database-nosql |   |  |   |   |   |   |   |
+| typescript |   |  |  |   |   |   |   |
+| angular-spa |   |   |  |   |   |   |   |
+| react-19 |   |   |  |   |   |   |   |
+| nextjs-15 |   |   |  |   |   |   |   |
+| tailwind-4 |   |   |  |   |   |   |   |
+| zustand-5 |   |   |  |   |   |   |   |
+| zod-4 |   |   |  |   |   |   |   |
+| security |   |   |  |   |   |  |   |
+| testing-strategy |   |   |   |  |   |   |   |
+| testing |   |   |   |  |   |   |   |
+| playwright |   |   |   |  |   |   |   |
+| pytest |   |   |   |  |   |   |   |
+| docker-devops |   |   |   |   |  |   |   |
+| kubernetes |   |   |   |   |  |   |   |
+| terraform |   |   |   |   |  |   |   |
+| git-workflow |   |   |   |   |  |   |   |
+| observability |   |   |   |   |   |  |   |
+| incident-response |   |   |   |   |   |  |   |
+| code-review |   |   |   |   |   |  |   |
+| documentation |   |   |   |   |   |   |  |
+| sdd |   |  |   |   |   |   |  |
+| github-pr |   |   |   |   |   |   |  |
 
 ---
 
@@ -347,38 +347,38 @@ BDD specs, SDD specs, specification
 
 ```
 USER REQUEST
-     │
-     ▼
-┌─────────────────────────┐
-│     ORCHESTRATOR        │
-│  (decompose & route)    │
-└────────────┬────────────┘
-             │
-    ┌────────┼────────┐
-    │        │        │
-    ▼        ▼        ▼
+     
+     
+
+     ORCHESTRATOR        
+  (decompose & route)    
+
+             
+    
+                    
+                    
   [BA]     [SAD]    [DEV]
-    │        │        │
-    └────────┼────────┘
-             │
-             ▼
-    ┌────────────────┐
-    │  CROSS-AGENT   │
-    │  COORDINATION  │
-    └───────┬────────┘
-            │
-    ┌───────┴───────┐
-    │               │
-    ▼               ▼
+                    
+    
+             
+             
+    
+      CROSS-AGENT   
+      COORDINATION  
+    
+            
+    
+                   
+                   
  [QA]            [OPS]
-    │               │
-    └───────┬───────┘
-            │
-            ▼
-┌─────────────────────────┐
-│  ORCHESTRATOR VALIDATE  │
-│  (final check & handoff)│
-└─────────────────────────┘
+                   
+    
+            
+            
+
+  ORCHESTRATOR VALIDATE  
+  (final check & handoff)
+
 ```
 
 ---
@@ -518,15 +518,15 @@ Pub/sub event system for automation and hooks:
 
 | Component | Status |
 |-----------|--------|
-| Agent Registry | ✓ Defined |
-| Skill Mapping | ✓ Defined |
-| Agent Scripts | ✓ Implemented |
-| Agent Result Schema | ✓ Implemented (FF-007) |
-| Skills Auto-Discovery | ✓ Implemented (FF-008) |
-| Parallel Dispatch | ✓ Implemented (FF-009) |
-| Event Bus System | ✓ Implemented (FF-010) |
-| Orchestrator Update | ✓ Integrated |
-| Documentation | ✓ Updated |
+| Agent Registry |  Defined |
+| Skill Mapping |  Defined |
+| Agent Scripts |  Implemented |
+| Agent Result Schema |  Implemented (FF-007) |
+| Skills Auto-Discovery |  Implemented (FF-008) |
+| Parallel Dispatch |  Implemented (FF-009) |
+| Event Bus System |  Implemented (FF-010) |
+| Orchestrator Update |  Integrated |
+| Documentation |  Updated |
 
 ---
 

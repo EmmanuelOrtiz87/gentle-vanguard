@@ -1,4 +1,4 @@
----
+﻿---
 name: incident-response-plan
 description: >
   Create and execute incident response procedures for security breaches, data
@@ -64,7 +64,7 @@ class IncidentType(Enum):
 
 ## Best Practices
 
-### ✅ DO
+###  DO
 
 - Maintain incident response plan
 - Define clear escalation paths
@@ -75,7 +75,7 @@ class IncidentType(Enum):
 - Conduct post-incident reviews
 - Update playbooks regularly
 
-### ❌ DON'T
+###  DON'T
 
 - Panic or rush
 - Delete evidence

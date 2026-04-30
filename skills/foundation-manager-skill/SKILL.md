@@ -1,4 +1,4 @@
----
+﻿---
 name: foundation-manager
 description: Use when checking updates, synchronizing foundation, managing tools, or maintaining the development stack. Triggers for: "update foundation", "check updates", "sync skills", "install tools", "maintenance".
 ---
@@ -63,31 +63,31 @@ Shows installation status for:
 ## Update Workflow
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    UPDATE WORKFLOW                           │
-└─────────────────────────────────────────────────────────────┘
+
+                    UPDATE WORKFLOW                           
+
 
      gf check
-         │
-         ▼
-    ┌─────────────┐
-    │ Updates?    │
-    └──────┬──────┘
-           │
-     ┌─────┴─────┐
-     │           │
+         
+         
+    
+     Updates?    
+    
+           
+     
+                
     YES          NO
-     │           │
-     ▼           ▼
+                
+                
 gf update-all   Already current
-     │
-     ▼
-┌─────────────────────────────────────────┐
-│  1. Update foundation (git pull)        │
-│  2. Sync skills (symlink/copy)          │
-│  3. Check tools status                  │
-│  4. Validate installation               │
-└─────────────────────────────────────────┘
+     
+     
+
+  1. Update foundation (git pull)        
+  2. Sync skills (symlink/copy)          
+  3. Check tools status                  
+  4. Validate installation               
+
 ```
 
 ## Version Strategy

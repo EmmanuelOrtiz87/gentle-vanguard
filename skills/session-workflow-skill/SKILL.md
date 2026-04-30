@@ -1,4 +1,4 @@
----
+﻿---
 name: session-workflow
 description: >
   Session workflow executor: handles the mechanics of session management.
@@ -19,7 +19,7 @@ Execute the mechanical aspects of session management while coordinating with the
 **Note: This skill should be AUTO-LOADED when user says "iniciar sesion" via pre-process-input.ps1**
 
 ```markdown
-1. tools/session-autostart.cmd  # Ejecutar autostart (notificaciones, optimización, validaciones)
+1. tools/session-autostart.cmd  # Ejecutar autostart (notificaciones, optimizacin, validaciones)
 2. mem_context                  # Check engram memory
 3. git status                   # Current branch
 4. todowrite                    # Create session plan
@@ -156,7 +156,7 @@ Brief description of session work.
 
 **Found:** X issues
 - [X] CRITICAL: N (blocks if any)
-- [!]️ HIGH: N
+- [!] HIGH: N
 - [-] MEDIUM: N  
 - [*] LOW: N
 
@@ -198,7 +198,7 @@ todowrite([
 
 ### Findings
 - [X] Critical: N
-- [!]️ High: N
+- [!] High: N
 - [-] Medium: N
 - [*] Low: N
 

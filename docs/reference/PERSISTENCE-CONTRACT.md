@@ -1,14 +1,14 @@
-# Persistence Contract
+﻿# Persistence Contract
 
 ## Mode Resolution
 
 The orchestrator passes `artifact_store.mode` with one of: `engram | openspec | hybrid | none`.
 
 Default resolution (when orchestrator does not explicitly set a mode):
-1. If Engram is available → use `engram`
-2. Otherwise → use `none`
+1. If Engram is available  use `engram`
+2. Otherwise  use `none`
 
-`openspec` and `hybrid` are NEVER used by default — only when explicitly passed.
+`openspec` and `hybrid` are NEVER used by default  only when explicitly passed.
 
 When falling back to `none`, recommend the user enable `engram` or `openspec`.
 
@@ -39,17 +39,17 @@ The orchestrator persists DAG state after each phase transition to enable SDD re
 
 | Mode | Persist State | Recover State |
 |------|--------------|---------------|
-| `engram` | `mem_save(topic_key: "sdd/{change-name}/state")` | `mem_search("sdd/*/state")` → `mem_get_observation(id)` |
+| `engram` | `mem_save(topic_key: "sdd/{change-name}/state")` | `mem_search("sdd/*/state")`  `mem_get_observation(id)` |
 | `openspec` | Write `openspec/changes/{change-name}/state.yaml` | Read `openspec/changes/{change-name}/state.yaml` |
 | `hybrid` | Both: `mem_save` AND write `state.yaml` | Engram first; filesystem fallback |
-| `none` | Not possible — warn user | Not possible |
+| `none` | Not possible  warn user | Not possible |
 
 ## Common Rules
 
-- `none` → do NOT create or modify any project files; return results inline only
-- `engram` → do NOT write any project files; persist to Engram and return observation IDs
-- `openspec` → write files ONLY to paths defined in `openspec-convention.md`
-- `hybrid` → persist to BOTH Engram AND filesystem; follow both conventions
+- `none`  do NOT create or modify any project files; return results inline only
+- `engram`  do NOT write any project files; persist to Engram and return observation IDs
+- `openspec`  write files ONLY to paths defined in `openspec-convention.md`
+- `hybrid`  persist to BOTH Engram AND filesystem; follow both conventions
 - NEVER force `openspec/` creation unless orchestrator explicitly passed `openspec` or `hybrid`
 - If unsure which mode to use, default to `none`
 
@@ -82,10 +82,10 @@ SDD (with dependencies):
 ```
 Artifact store mode: {engram|openspec|hybrid|none}
 Read these artifacts before starting (search returns truncated previews):
-  mem_search(query: "sdd/{change-name}/{type}", project: "{project}") → get ID
-  mem_get_observation(id: {id}) → full content (REQUIRED)
+  mem_search(query: "sdd/{change-name}/{type}", project: "{project}")  get ID
+  mem_get_observation(id: {id})  full content (REQUIRED)
 
-PERSISTENCE (MANDATORY — do NOT skip):
+PERSISTENCE (MANDATORY  do NOT skip):
 After completing your work, you MUST call:
   mem_save(
     title: "sdd/{change-name}/{artifact-type}",
@@ -101,7 +101,7 @@ SDD (no dependencies):
 ```
 Artifact store mode: {engram|openspec|hybrid|none}
 
-PERSISTENCE (MANDATORY — do NOT skip):
+PERSISTENCE (MANDATORY  do NOT skip):
 After completing your work, you MUST call:
   mem_save(
     title: "sdd/{change-name}/{artifact-type}",
@@ -115,12 +115,12 @@ If you return without calling mem_save, the next phase CANNOT find your artifact
 
 ## Skill Registry
 
-The orchestrator pre-resolves compact rules from the skill registry and injects them as `## Project Standards (auto-resolved)` in your launch prompt. Sub-agents do NOT read the registry or individual SKILL.md files — rules arrive pre-digested.
+The orchestrator pre-resolves compact rules from the skill registry and injects them as `## Project Standards (auto-resolved)` in your launch prompt. Sub-agents do NOT read the registry or individual SKILL.md files  rules arrive pre-digested.
 
 To generate/update: run the `skill-registry` skill, or run `sdd-init`.
 
-Sub-agent skill loading: check for a `## Project Standards (auto-resolved)` block in your prompt — if present, follow those rules. If not present, check for `SKILL: Load` instructions as a fallback. If neither exists, proceed without — this is not an error.
+Sub-agent skill loading: check for a `## Project Standards (auto-resolved)` block in your prompt  if present, follow those rules. If not present, check for `SKILL: Load` instructions as a fallback. If neither exists, proceed without  this is not an error.
 
 ## Detail Level
 
-The orchestrator may pass `detail_level`: `concise | standard | deep`. This controls output verbosity but does NOT affect what gets persisted — always persist the full artifact.
+The orchestrator may pass `detail_level`: `concise | standard | deep`. This controls output verbosity but does NOT affect what gets persisted  always persist the full artifact.

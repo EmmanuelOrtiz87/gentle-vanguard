@@ -13,13 +13,13 @@ The orchestrator delegates tasks to specialized sub-agents for token efficiency:
 
 ```
 ORCHESTRATOR (slim context)
-├── AGENT-BA  → Business Analysis (BDD, requirements)
-├── AGENT-SAD → Architecture (SDD, API design, DB)
-├── AGENT-DEV → Development (code, features, refactor)
-├── AGENT-QA  → Quality (testing, validation)
-├── AGENT-OPS → DevOps (deploy, CI/CD, infra)
-├── AGENT-GOV → Governance (security, audit, observability)
-└── AGENT-DOC → Documentation (specs, guides, BDD/SDD)
+ AGENT-BA   Business Analysis (BDD, requirements)
+ AGENT-SAD  Architecture (SDD, API design, DB)
+ AGENT-DEV  Development (code, features, refactor)
+ AGENT-QA   Quality (testing, validation)
+ AGENT-OPS  DevOps (deploy, CI/CD, infra)
+ AGENT-GOV  Governance (security, audit, observability)
+ AGENT-DOC  Documentation (specs, guides, BDD/SDD)
 ```
 
 **Quick commands:**
@@ -853,8 +853,8 @@ Use the skill tool to load a specific skill
 Create skills following this structure:
 ```
 skills/
-├── new-skill/
-│   └── SKILL.md    # Required: name, description, triggers
+ new-skill/
+    SKILL.md    # Required: name, description, triggers
 ```
 
 See `skill-creator-skill` for creation guidelines.
@@ -864,7 +864,7 @@ See `skill-creator-skill` for creation guidelines.
 
 Advanced parallel execution management with dependency graphs, resource pooling, and token budget circuit breaker.
 
-- **Trigger**: "parallel execution", "ejecución paralela", "execution limits"
+- **Trigger**: "parallel execution", "ejecucin paralela", "execution limits"
 - **Use when**: Complex workflows with >10 tasks, GPU/CPU constraints, token budget protection
 - **Key Functions**: 
   - Initialize-ParallelExecutor - Initialize all components
@@ -950,7 +950,7 @@ Advanced parallel execution management with dependency graphs, resource pooling,
 
 **Trigger**: `sdd`, `spec-driven`, `lifecycle`, `openspec`
 
-**Use when**: Full SDD lifecycle management: explore → propose → spec → design → tasks → apply → verify → archive
+**Use when**: Full SDD lifecycle management: explore  propose  spec  design  tasks  apply  verify  archive
 
 **See**: [sdd-lifecycle](sdd-lifecycle/SKILL.md)
 

@@ -1,4 +1,4 @@
-# Task Briefs
+﻿# Task Briefs
 
 This directory contains task briefs that provide context, scope, and acceptance criteria for development work.
 
@@ -10,8 +10,8 @@ Task briefs serve as lightweight documentation for development tasks, capturing 
 
 ```
 tasks/
-├── [task-name].md             # Individual task briefs
-└── TASK-BRIEF-TEMPLATE.md     # Template for new task briefs
+ [task-name].md             # Individual task briefs
+ TASK-BRIEF-TEMPLATE.md     # Template for new task briefs
 ```
 
 ## Task Brief Components

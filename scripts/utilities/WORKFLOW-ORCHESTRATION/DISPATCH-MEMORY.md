@@ -1,58 +1,58 @@
-# Dispatch Memory Manager - Memoria Persistente para Dispatches
+﻿# Dispatch Memory Manager - Memoria Persistente para Dispatches
 
-## Descripción General
+## Descripcin General
 
-El **Dispatch Memory Manager** es un módulo que resuelve el gap de "No hay memoria persistente entre dispatches" integrando Engram con el sistema de dispatch-agent para mantener contexto entre ejecuciones.
+El **Dispatch Memory Manager** es un mdulo que resuelve el gap de "No hay memoria persistente entre dispatches" integrando Engram con el sistema de dispatch-agent para mantener contexto entre ejecuciones.
 
 ## Problema Identificado
 
-Antes de esta implementación:
+Antes de esta implementacin:
 - Cada dispatch era aislado sin memoria del contexto anterior
-- Los resultados de ejecuciones anteriores se perdían
-- No había forma de recuperar información de dispatches previos
-- El sistema no podía aprender o mejorar basándose en ejecuciones anteriores
+- Los resultados de ejecuciones anteriores se perdan
+- No haba forma de recuperar informacin de dispatches previos
+- El sistema no poda aprender o mejorar basndose en ejecuciones anteriores
 
-## Solución Implementada
+## Solucin Implementada
 
 ### Componentes
 
 #### 1. **dispatch-memory-manager.ps1**
-Módulo central que gestiona la persistencia de memoria de dispatch.
+Mdulo central que gestiona la persistencia de memoria de dispatch.
 
-**Ubicación:** `scripts/utilities/WORKFLOW-ORCHESTRATION/dispatch-memory-manager.ps1`
+**Ubicacin:** `scripts/utilities/WORKFLOW-ORCHESTRATION/dispatch-memory-manager.ps1`
 
 **Funcionalidades:**
 - `save`: Guarda el contexto de un dispatch
-- `load`: Carga el contexto más reciente o uno específico
-- `list`: Lista todos los dispatches de una sesión
-- `clear`: Elimina contextos específicos o de toda una sesión
-- `sync`: Sincroniza y reporta dispatches de una sesión
+- `load`: Carga el contexto ms reciente o uno especfico
+- `list`: Lista todos los dispatches de una sesin
+- `clear`: Elimina contextos especficos o de toda una sesin
+- `sync`: Sincroniza y reporta dispatches de una sesin
 
 **Estructura de Almacenamiento:**
 ```
 .engram-data/
-├── dispatch-memory/
-│   ├── dispatch-registry.json          # Índice de todos los dispatches
-│   └── contexts/
-│       ├── dispatch-20260423-120530.json
-│       ├── dispatch-20260423-120545.json
-│       └── ...
+ dispatch-memory/
+    dispatch-registry.json          # ndice de todos los dispatches
+    contexts/
+        dispatch-20260423-120530.json
+        dispatch-20260423-120545.json
+        ...
 ```
 
 #### 2. **dispatch-agent.ps1 (Modificado)**
-Integración del dispatch-agent con el memory manager.
+Integracin del dispatch-agent con el memory manager.
 
 **Cambios:**
 - Carga contexto anterior antes de ejecutar
-- Guarda contexto después de ejecutar
+- Guarda contexto despus de ejecutar
 - Pasa contexto anterior a los agentes
 
 **Flujo:**
 ```
 1. Load-PreviousDispatchContext()
-   ↓
+   
 2. Invoke-ParallelDispatch()
-   ↓
+   
 3. Save-DispatchContext()
 ```
 
@@ -115,14 +115,14 @@ Integración del dispatch-agent con el memory manager.
 & .\dispatch-memory-manager.ps1 -Action load -AsJson
 ```
 
-### Cargar Contexto Específico
+### Cargar Contexto Especfico
 ```powershell
 & .\dispatch-memory-manager.ps1 -Action load `
   -ExecutionId "dispatch-20260423-120530" `
   -AsJson
 ```
 
-### Listar Dispatches de Sesión
+### Listar Dispatches de Sesin
 ```powershell
 & .\dispatch-memory-manager.ps1 -Action list -AsJson
 ```
@@ -134,26 +134,26 @@ Integración del dispatch-agent con el memory manager.
 
 ### Limpiar Contexto
 ```powershell
-# Limpiar contexto específico
+# Limpiar contexto especfico
 & .\dispatch-memory-manager.ps1 -Action clear `
   -ExecutionId "dispatch-20260423-120530"
 
-# Limpiar toda la sesión
+# Limpiar toda la sesin
 & .\dispatch-memory-manager.ps1 -Action clear `
   -SessionId "session-2026-04-23-22" `
   -Force
 ```
 
-## Integración con dispatch-agent
+## Integracin con dispatch-agent
 
-El dispatch-agent ahora automáticamente:
+El dispatch-agent ahora automticamente:
 
 1. **Carga contexto anterior** antes de ejecutar:
 ```powershell
 $previousContext = Load-PreviousDispatchContext
 ```
 
-2. **Construye contexto actual** con información relevante:
+2. **Construye contexto actual** con informacin relevante:
 ```powershell
 $dispatchContext = @{
     agents = $agentList
@@ -165,47 +165,47 @@ $dispatchContext = @{
 }
 ```
 
-3. **Guarda contexto** después de ejecutar:
+3. **Guarda contexto** despus de ejecutar:
 ```powershell
 Save-DispatchContext -ExecutionId $result.execution_id -Context $dispatchContext
 ```
 
 ## Beneficios
 
-✅ **Continuidad**: Mantiene contexto entre dispatches  
-✅ **Recuperabilidad**: Puede recuperar información de ejecuciones anteriores  
-✅ **Trazabilidad**: Registro completo de todas las ejecuciones  
-✅ **Aprendizaje**: Los agentes pueden acceder a contexto histórico  
-✅ **Debugging**: Facilita diagnóstico de problemas en ejecuciones anteriores  
-✅ **Optimización**: Permite mejorar basándose en resultados previos  
+ **Continuidad**: Mantiene contexto entre dispatches  
+ **Recuperabilidad**: Puede recuperar informacin de ejecuciones anteriores  
+ **Trazabilidad**: Registro completo de todas las ejecuciones  
+ **Aprendizaje**: Los agentes pueden acceder a contexto histrico  
+ **Debugging**: Facilita diagnstico de problemas en ejecuciones anteriores  
+ **Optimizacin**: Permite mejorar basndose en resultados previos  
 
 ## Casos de Uso
 
-### 1. Recuperación de Contexto
+### 1. Recuperacin de Contexto
 Si un dispatch falla, el siguiente puede recuperar el contexto anterior y continuar.
 
-### 2. Análisis de Tendencias
-Analizar patrones de éxito/fallo en múltiples ejecuciones.
+### 2. Anlisis de Tendencias
+Analizar patrones de xito/fallo en mltiples ejecuciones.
 
-### 3. Optimización Adaptativa
-Ajustar parámetros (modo, riesgo) basándose en resultados históricos.
+### 3. Optimizacin Adaptativa
+Ajustar parmetros (modo, riesgo) basndose en resultados histricos.
 
-### 4. Auditoría y Compliance
+### 4. Auditora y Compliance
 Mantener registro completo de todas las operaciones de dispatch.
 
-## Integración Futura con Engram
+## Integracin Futura con Engram
 
-Esta implementación está diseñada para ser compatible con Engram:
+Esta implementacin est diseada para ser compatible con Engram:
 
 1. Los datos se almacenan en `.engram-data/` (mismo directorio que Engram)
 2. Estructura JSON compatible con Engram
-3. Puede sincronizarse con Engram para análisis más profundo
-4. Preparado para integración con búsqueda y análisis de Engram
+3. Puede sincronizarse con Engram para anlisis ms profundo
+4. Preparado para integracin con bsqueda y anlisis de Engram
 
-## Configuración
+## Configuracin
 
 ### Variables de Entorno
-- `WFS_SESSION_ID`: ID de sesión actual (se usa automáticamente)
+- `WFS_SESSION_ID`: ID de sesin actual (se usa automticamente)
 
 ### Rutas Configurables
 Todas las rutas se derivan de `.engram-data/`:
@@ -217,7 +217,7 @@ Todas las rutas se derivan de `.engram-data/`:
 
 ### Limpiar Memoria Antigua
 ```powershell
-# Limpiar dispatches de sesión anterior
+# Limpiar dispatches de sesin anterior
 & .\dispatch-memory-manager.ps1 -Action clear `
   -SessionId "session-2026-04-22-XX" `
   -Force
@@ -225,7 +225,7 @@ Todas las rutas se derivan de `.engram-data/`:
 
 ### Monitorear Uso de Espacio
 ```powershell
-# Ver tamaño de directorio de memoria
+# Ver tamao de directorio de memoria
 Get-ChildItem -Path ".engram-data/dispatch-memory" -Recurse | 
   Measure-Object -Property Length -Sum
 ```
@@ -238,22 +238,22 @@ Get-ChildItem -Path ".engram-data/dispatch-memory" -Recurse |
 - Revisar logs en `-Verbose`
 
 ### Contexto anterior no se carga
-- Verificar que hay dispatches previos en la sesión
+- Verificar que hay dispatches previos en la sesin
 - Usar `-Action list` para ver dispatches disponibles
 - Verificar que `dispatch-registry.json` existe
 
 ### Errores de JSON
-- Verificar que los archivos de contexto no están corruptos
-- Usar `-Verbose` para más detalles
+- Verificar que los archivos de contexto no estn corruptos
+- Usar `-Verbose` para ms detalles
 - Limpiar y reintentar si es necesario
 
-## Próximos Pasos
+## Prximos Pasos
 
-1. **Integración con Engram**: Sincronización automática con Engram
-2. **Analytics**: Dashboard de métricas de dispatch
-3. **Machine Learning**: Predicción de éxito basada en contexto histórico
-4. **Auto-tuning**: Ajuste automático de parámetros
-5. **Distributed Memory**: Compartir contexto entre sesiones/máquinas
+1. **Integracin con Engram**: Sincronizacin automtica con Engram
+2. **Analytics**: Dashboard de mtricas de dispatch
+3. **Machine Learning**: Prediccin de xito basada en contexto histrico
+4. **Auto-tuning**: Ajuste automtico de parmetros
+5. **Distributed Memory**: Compartir contexto entre sesiones/mquinas
 
 ## Referencias
 

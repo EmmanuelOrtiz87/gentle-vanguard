@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Handoff Compress - Compresses state for agent-to-agent transfer
     
@@ -113,9 +113,9 @@ State compressed for agent transfer.
 # Main execution
 try {
     Write-Host ""
-    Write-Host "╔════════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-    Write-Host "║              HANDOFF COMPRESS - STATE TRANSFER                ║" -ForegroundColor Cyan
-    Write-Host "╚════════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
+    Write-Host "              HANDOFF COMPRESS - STATE TRANSFER                " -ForegroundColor Cyan
+    Write-Host "" -ForegroundColor Cyan
     Write-Host ""
     
     $state = Get-StateToPreserve

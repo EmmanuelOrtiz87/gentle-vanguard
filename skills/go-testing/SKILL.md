@@ -1,4 +1,4 @@
----
+﻿---
 name: go-testing
 description: >
   Go testing patterns for Gentleman.Dots, including Bubbletea TUI testing.
@@ -141,21 +141,21 @@ func TestOSSelectGolden(t *testing.T) {
 
 ```
 Testing a function?
-├── Pure function? → Table-driven test
-├── Has side effects? → Mock dependencies
-├── Returns error? → Test both success and error cases
-└── Complex logic? → Break into smaller testable units
+ Pure function?  Table-driven test
+ Has side effects?  Mock dependencies
+ Returns error?  Test both success and error cases
+ Complex logic?  Break into smaller testable units
 
 Testing TUI component?
-├── State change? → Test Model.Update() directly
-├── Full flow? → Use teatest.NewTestModel()
-├── Visual output? → Use golden file testing
-└── Key handling? → Send tea.KeyMsg
+ State change?  Test Model.Update() directly
+ Full flow?  Use teatest.NewTestModel()
+ Visual output?  Use golden file testing
+ Key handling?  Send tea.KeyMsg
 
 Testing system/exec?
-├── Mock os/exec? → Use interface + mock
-├── Real commands? → Integration test with --short skip
-└── File operations? → Use t.TempDir()
+ Mock os/exec?  Use interface + mock
+ Real commands?  Integration test with --short skip
+ File operations?  Use t.TempDir()
 ```
 
 ---
@@ -312,23 +312,23 @@ func TestWithMockedSystem(t *testing.T) {
 
 ```
 installer/internal/tui/
-├── model.go
-├── model_test.go           # Model tests
-├── update.go
-├── update_test.go          # Update handler tests
-├── view.go
-├── view_test.go            # View rendering tests
-├── teatest_test.go         # Teatest integration tests
-├── comprehensive_test.go   # Full flow tests
-├── testdata/
-│   ├── TestOSSelectGolden.golden
-│   └── TestViewGolden.golden
-└── trainer/
-    ├── types.go
-    ├── types_test.go
-    ├── exercises.go
-    ├── exercises_test.go
-    └── simulator_test.go
+ model.go
+ model_test.go           # Model tests
+ update.go
+ update_test.go          # Update handler tests
+ view.go
+ view_test.go            # View rendering tests
+ teatest_test.go         # Teatest integration tests
+ comprehensive_test.go   # Full flow tests
+ testdata/
+    TestOSSelectGolden.golden
+    TestViewGolden.golden
+ trainer/
+     types.go
+     types_test.go
+     exercises.go
+     exercises_test.go
+     simulator_test.go
 ```
 
 ---

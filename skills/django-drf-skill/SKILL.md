@@ -1,4 +1,4 @@
----
+﻿---
 name: django-drf-skill
 description: >
   Django REST Framework patterns: ViewSets, Serializers, Filters, Permissions.
@@ -16,18 +16,18 @@ description: >
 
 ```
 project/
-├── manage.py
-├── project/
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
-└── apps/
-    └── users/
-        ├── models.py
-        ├── serializers.py
-        ├── views.py
-        ├── urls.py
-        └── filters.py
+ manage.py
+ project/
+    settings.py
+    urls.py
+    wsgi.py
+ apps/
+     users/
+         models.py
+         serializers.py
+         views.py
+         urls.py
+         filters.py
 ```
 
 ## Serializers

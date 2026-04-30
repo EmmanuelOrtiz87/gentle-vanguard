@@ -1,4 +1,4 @@
-# MCP Bridge - Foundation
+﻿# MCP Bridge - Foundation
 
 Exposes Foundation capabilities as an **MCP (Model Context Protocol)** server, enabling any MCP-compatible tool to use Foundation's features.
 
@@ -144,15 +144,15 @@ const result = await mcpClient.callTool({
 ## Architecture
 
 ```
-┌─────────────────┐         ┌──────────────────┐         ┌─────────────────┐
-│   MCP Client    │◄───────►│  MCP Bridge     │◄───────►│  Foundation    │
-│ (Windsurf,     │         │  (this server)  │         │  Core          │
-│  Codex, etc.)  │         │                  │         │                │
-└─────────────────┘         └──────────────────┘         └─────────────────┘
-         │                           │                           │
-         │ MCP Protocol              │ Translates                 │ Calls
-         │ (standard)                │ to Foundation              │ Foundation
-         │                           │ CLI/Scripts               │ scripts
+                  
+   MCP Client      MCP Bridge       Foundation    
+ (Windsurf,                (this server)             Core          
+  Codex, etc.)                                                      
+                  
+                                                               
+          MCP Protocol               Translates                  Calls
+          (standard)                 to Foundation               Foundation
+                                     CLI/Scripts                scripts
 ```
 
 ---
@@ -162,19 +162,19 @@ const result = await mcpClient.callTool({
 
 ```
 mcp-bridge/
-├── package.json              # Dependencies (MCP SDK)
-├── tsconfig.json             # TypeScript config
-├── src/
-│   ├── server.ts            # Main MCP server
-│   ├── tools/               # Tool implementations
-│   │   ├── review.ts       # foundation_review
-│   │   ├── audit.ts        # foundation_audit
-│   │   ├── delegate.ts     # foundation_delegate
-│   │   ├── health.ts       # foundation_health
-│   │   └── session.ts      # foundation_session_*
-│   ├── resources/          # MCP resources
-│   └── utils/              # Shared utilities
-└── dist/                   # Compiled JavaScript (gitignored)
+ package.json              # Dependencies (MCP SDK)
+ tsconfig.json             # TypeScript config
+ src/
+    server.ts            # Main MCP server
+    tools/               # Tool implementations
+       review.ts       # foundation_review
+       audit.ts        # foundation_audit
+       delegate.ts     # foundation_delegate
+       health.ts       # foundation_health
+       session.ts      # foundation_session_*
+    resources/          # MCP resources
+    utils/              # Shared utilities
+ dist/                   # Compiled JavaScript (gitignored)
 ```
 
 ---
@@ -200,6 +200,6 @@ The MCP Bridge maintains Foundation's token efficiency:
 - Logs token usage for monitoring
 
 ---
-**Status**: 🚧 Implementation Pending  
+**Status**:  Implementation Pending  
 **Priority**: HIGH (covers 80% of non-standard tools)  
 **Next**: Implement `server.ts` and `tools.ts`

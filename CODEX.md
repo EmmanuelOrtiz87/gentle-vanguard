@@ -1,4 +1,4 @@
-# CODEX.md - Local-First Policy
+﻿# CODEX.md - Local-First Policy
 
 ## MANDATORY PRE-PROCESSING RULE (ALWAYS ACTIVE)
 
@@ -6,8 +6,8 @@
 
 1. **Run trigger detection** - Execute: `powershell -File tools/pre-process-input.ps1 -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
 2. **Parse output**:
-   - If `TRIGGER_MATCH_FOUND` → Load indicated skill using `skill` tool BEFORE any other action
-   - If `NO_TRIGGER_MATCH` → Continue with normal behavior
+   - If `TRIGGER_MATCH_FOUND`  Load indicated skill using `skill` tool BEFORE any other action
+   - If `NO_TRIGGER_MATCH`  Continue with normal behavior
 3. **Session start** - Always run `tools/session-autostart.cmd` on Windows for notifications, optimizations, validations
 4. **Special case "iniciar sesion"** - Load `session-workflow-skill`, then follow its workflow
 
@@ -26,12 +26,12 @@ This project follows a **LOCAL-FIRST** approach. AI agents must prioritize:
 - **webfetch**: DENY - Use local documentation
 
 ## Allowed by Default
-✅ `grep` - Search local files
-✅ `read` - Read local files
-✅ `glob` - Find local files
-✅ `mem_search` - Query engram memory
-✅ `mem_context` - Get session context
-✅ `bash` - Run local scripts
+ `grep` - Search local files
+ `read` - Read local files
+ `glob` - Find local files
+ `mem_search` - Query engram memory
+ `mem_context` - Get session context
+ `bash` - Run local scripts
 
 ## When External Tools Are Allowed
 Only when:

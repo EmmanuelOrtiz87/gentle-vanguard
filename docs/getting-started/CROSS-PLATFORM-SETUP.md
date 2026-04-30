@@ -1,4 +1,4 @@
-# Cross-Platform Setup Guide
+﻿# Cross-Platform Setup Guide
 
 ## Overview
 
@@ -59,11 +59,11 @@ detect_shell  # Returns: bash, zsh, sh, powershell, pwsh
 
 When you run `./wf`, the system:
 
-1. Detects available shells (prioritizes: PowerShell → bash → sh)
+1. Detects available shells (prioritizes: PowerShell  bash  sh)
 2. Routes to appropriate implementation:
-   - Windows + PowerShell available → runs `wf.ps1`
-   - Linux/macOS + bash available → runs `wf.sh`
-   - Fallback → uses `wf` wrapper script
+   - Windows + PowerShell available  runs `wf.ps1`
+   - Linux/macOS + bash available  runs `wf.sh`
+   - Fallback  uses `wf` wrapper script
 
 ### Unified Command Interface
 
@@ -338,28 +338,28 @@ esac
 
 ```
 project-root/
-├── scripts/foundation/setup.sh       # Universal setup entry point (bash)
-├── scripts/foundation/bootstrap.ps1  # PowerShell bootstrap entry point
-├── wf                                # Universal wrapper (any shell)
-├── config/
-│   ├── orchestrator.json             # Platform routing config
-│   └── workspace.config.json         # Workspace configuration
-├── scripts/
-│   ├── utilities/
-│   │   ├── wf.sh                     # Bash/sh workflow CLI
-│   │   ├── wf.ps1                    # PowerShell workflow CLI
-│   │   ├── auto-init-dev-environment.sh
-│   │   ├── auto-init-dev-environment.ps1
-│   │   └── ...
-│   ├── diagnostics/
-│   │   ├── system-diagnostics.sh
-│   │   ├── system-diagnostics.ps1
-│   │   └── ...
-│   └── hooks/
-│       ├── post-checkout.sh
-│       ├── post-checkout.ps1
-│       └── ...
-└── .engram-data/                     # Engram CLI data directory
+ scripts/foundation/setup.sh       # Universal setup entry point (bash)
+ scripts/foundation/bootstrap.ps1  # PowerShell bootstrap entry point
+ wf                                # Universal wrapper (any shell)
+ config/
+    orchestrator.json             # Platform routing config
+    workspace.config.json         # Workspace configuration
+ scripts/
+    utilities/
+       wf.sh                     # Bash/sh workflow CLI
+       wf.ps1                    # PowerShell workflow CLI
+       auto-init-dev-environment.sh
+       auto-init-dev-environment.ps1
+       ...
+    diagnostics/
+       system-diagnostics.sh
+       system-diagnostics.ps1
+       ...
+    hooks/
+        post-checkout.sh
+        post-checkout.ps1
+        ...
+ .engram-data/                     # Engram CLI data directory
 ```
 
 ## Performance Notes
@@ -376,4 +376,4 @@ project-root/
 3. Start development: See project-specific README
 4. Monitor via orchestrator: `engram status`
 
-- Los hooks automáticos de Foundation - Development Stack ejecutan chequeos de seguridad, calidad, arquitectura, testing, API, documentación y gitflow en cada commit/push. Ver REVIEW-INDEX.md.
+- Los hooks automticos de Foundation - Development Stack ejecutan chequeos de seguridad, calidad, arquitectura, testing, API, documentacin y gitflow en cada commit/push. Ver REVIEW-INDEX.md.

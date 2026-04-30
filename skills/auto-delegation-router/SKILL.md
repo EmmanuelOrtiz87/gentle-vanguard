@@ -1,4 +1,4 @@
----
+﻿---
 name: auto-delegation-router
 description: >
   Automatic delegation router for intelligent subagent routing based on task keywords,
@@ -22,12 +22,12 @@ The `auto-delegation-router` skill provides intelligent, automatic routing of ta
 - **Opt-in control** - Flag-based enable/disable of automatic routing
 
 ### Key Capabilities
-- 🎯 Keyword-based auto-routing
-- 🌳 Multi-level decision trees
-- 📊 Confidence scoring system
-- 🔄 Fallback routing strategies
-- 🎛️ Opt-in/opt-out control
-- 📈 Routing analytics and metrics
+-  Keyword-based auto-routing
+-  Multi-level decision trees
+-  Confidence scoring system
+-  Fallback routing strategies
+-  Opt-in/opt-out control
+-  Routing analytics and metrics
 
 ---
 

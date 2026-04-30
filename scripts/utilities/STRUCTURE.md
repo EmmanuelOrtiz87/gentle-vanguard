@@ -1,46 +1,46 @@
-# 📝 CONVENCIONES DE NOMBRES
+﻿#  CONVENCIONES DE NOMBRES
 
-**Versión:** 2.0.0  
-**Última actualización:** 2026-04-22  
-**Estado:** ✅ PRODUCCIÓN
+**Versin:** 2.0.0  
+**ltima actualizacin:** 2026-04-22  
+**Estado:**  PRODUCCIN
 
-Guía completa de convenciones de nombres para scripts, funciones, variables y archivos en el directorio `scripts/utilities/`.
+Gua completa de convenciones de nombres para scripts, funciones, variables y archivos en el directorio `scripts/utilities/`.
 
 ---
 
-## 📋 Tabla de Contenidos
+##  Tabla de Contenidos
 
-- [Descripción General](#descripción-general)
+- [Descripcin General](#descripcin-general)
 - [Convenciones de Scripts](#convenciones-de-scripts)
 - [Convenciones de Funciones](#convenciones-de-funciones)
 - [Convenciones de Variables](#convenciones-de-variables)
-- [Convenciones de Parámetros](#convenciones-de-parámetros)
+- [Convenciones de Parmetros](#convenciones-de-parmetros)
 - [Convenciones de Archivos](#convenciones-de-archivos)
 - [Convenciones de Directorios](#convenciones-de-directorios)
-- [Ejemplos Prácticos](#ejemplos-prácticos)
+- [Ejemplos Prcticos](#ejemplos-prcticos)
 - [Checklist](#checklist)
 
 ---
 
-## 🎯 Descripción General
+##  Descripcin General
 
 Las convenciones de nombres son esenciales para:
 
-- ✅ Consistencia en el proyecto
-- ✅ Facilitar búsqueda y descubrimiento
-- ✅ Mejorar legibilidad del código
-- ✅ Reducir confusión
-- ✅ Facilitar mantenimiento
+-  Consistencia en el proyecto
+-  Facilitar bsqueda y descubrimiento
+-  Mejorar legibilidad del cdigo
+-  Reducir confusin
+-  Facilitar mantenimiento
 
 **Principios Generales:**
 - Nombres descriptivos y claros
 - Evitar abreviaturas innecesarias
-- Usar inglés en código
+- Usar ingls en cdigo
 - Ser consistente en todo el proyecto
 
 ---
 
-## 📄 Convenciones de Scripts
+##  Convenciones de Scripts
 
 ### Formato General
 
@@ -51,13 +51,13 @@ verb-noun.sh
 
 ### Reglas
 
-| Regla | Descripción | Ejemplo |
+| Regla | Descripcin | Ejemplo |
 |-------|-------------|---------|
-| **Caso** | minúsculas con guiones | `optimize-performance.ps1` |
-| **Verbo** | Acción clara (verb-first) | `generate-`, `optimize-`, `clean-` |
-| **Sustantivo** | Objeto de la acción | `-report`, `-memory`, `-runtime` |
+| **Caso** | minsculas con guiones | `optimize-performance.ps1` |
+| **Verbo** | Accin clara (verb-first) | `generate-`, `optimize-`, `clean-` |
+| **Sustantivo** | Objeto de la accin | `-report`, `-memory`, `-runtime` |
 | **Longitud** | 10-40 caracteres | Evitar muy corto o muy largo |
-| **Extensión** | .ps1 (PowerShell) o .sh (Bash) | Según el lenguaje |
+| **Extensin** | .ps1 (PowerShell) o .sh (Bash) | Segn el lenguaje |
 
 ### Verbos Comunes
 
@@ -89,18 +89,18 @@ verb-noun.sh
 | `memory` | Memoria | `compact-memory.ps1` |
 | `runtime` | Runtime | `clean-runtime.ps1` |
 | `database` | Base de datos | `backup-database.ps1` |
-| `config` | Configuración | `validate-config.ps1` |
+| `config` | Configuracin | `validate-config.ps1` |
 | `log` | Logs | `rotate-log.ps1` |
 | `backup` | Respaldo | `restore-backup.ps1` |
-| `session` | Sesión | `manage-session.ps1` |
+| `session` | Sesin | `manage-session.ps1` |
 | `agent` | Agente | `deploy-agent.ps1` |
 | `workflow` | Flujo de trabajo | `orchestrate-workflow.ps1` |
-| `metric` | Métrica | `aggregate-metric.ps1` |
-| `audit` | Auditoría | `generate-audit.ps1` |
+| `metric` | Mtrica | `aggregate-metric.ps1` |
+| `audit` | Auditora | `generate-audit.ps1` |
 
 ### Ejemplos Correctos
 
-✅ **BIEN:**
+ **BIEN:**
 ```
 optimize-performance.ps1
 generate-audit-report.ps1
@@ -112,39 +112,39 @@ validate-configuration.ps1
 sync-data-sources.ps1
 ```
 
-❌ **MAL:**
+ **MAL:**
 ```
 OptimizePerformance.ps1          # CamelCase (usar kebab-case)
 opt_perf.ps1                     # Abreviado (ser descriptivo)
-script1.ps1                      # Genérico (ser específico)
+script1.ps1                      # Genrico (ser especfico)
 generateAuditReport.ps1          # Mezcla de casos
 optimize_performance.ps1         # snake_case (usar kebab-case)
 ```
 
 ---
 
-## 🔧 Convenciones de Funciones
+##  Convenciones de Funciones
 
 ### Formato General
 
 ```powershell
 function Verb-Noun {
-    # Implementación
+    # Implementacin
 }
 ```
 
 ### Reglas
 
-| Regla | Descripción | Ejemplo |
+| Regla | Descripcin | Ejemplo |
 |-------|-------------|---------|
 | **Caso** | PascalCase (Verb-Noun) | `Optimize-Performance` |
-| **Verbo** | Acción clara | `Get-`, `Set-`, `New-`, `Remove-` |
-| **Sustantivo** | Objeto de la acción | `-Performance`, `-Report`, `-Config` |
+| **Verbo** | Accin clara | `Get-`, `Set-`, `New-`, `Remove-` |
+| **Sustantivo** | Objeto de la accin | `-Performance`, `-Report`, `-Config` |
 | **Aprobado** | Usar verbos aprobados de PowerShell | Ver tabla de verbos |
 
 ### Verbos Aprobados de PowerShell
 
-| Categoría | Verbos |
+| Categora | Verbos |
 |-----------|--------|
 | **Common** | Get, Set, Add, Remove, Clear, Close, Copy, Enter, Exit, Find, Format, Get, Hide, Join, Lock, Move, New, Open, Pop, Push, Read, Rename, Reset, Resize, Search, Select, Set, Show, Skip, Split, Step, Stop, Submit, Suspend, Switch, Undo, Unlock, Watch, Wait, Write |
 | **Communication** | Connect, Disconnect, Read, Receive, Send, Write |
@@ -155,7 +155,7 @@ function Verb-Noun {
 
 ### Ejemplos Correctos
 
-✅ **BIEN:**
+ **BIEN:**
 ```powershell
 function Get-Performance { }
 function Set-Configuration { }
@@ -165,7 +165,7 @@ function Test-Connection { }
 function Invoke-Deployment { }
 ```
 
-❌ **MAL:**
+ **MAL:**
 ```powershell
 function OptimizePerformance { }      # No es verb-noun
 function get_performance { }          # snake_case
@@ -175,7 +175,7 @@ function Optimize_Performance { }     # Mezcla de casos
 
 ---
 
-## 📊 Convenciones de Variables
+##  Convenciones de Variables
 
 ### Formato General
 
@@ -187,7 +187,7 @@ $script:variableName (para variables de script)
 
 ### Reglas
 
-| Regla | Descripción | Ejemplo |
+| Regla | Descripcin | Ejemplo |
 |-------|-------------|---------|
 | **Caso** | camelCase o PascalCase | `$reportPath`, `$ConfigFile` |
 | **Prefijo** | Scope si es necesario | `$script:`, `$global:` |
@@ -205,7 +205,7 @@ $script:variableName (para variables de script)
 
 ### Tipos de Variables
 
-| Tipo | Convención | Ejemplo |
+| Tipo | Convencin | Ejemplo |
 |------|-----------|---------|
 | **String** | Descriptivo | `$reportPath`, `$userName` |
 | **Array** | Plural | `$reports`, `$users`, `$items` |
@@ -215,7 +215,7 @@ $script:variableName (para variables de script)
 
 ### Ejemplos Correctos
 
-✅ **BIEN:**
+ **BIEN:**
 ```powershell
 $reportPath = "C:\reports\report.txt"
 $isValid = $true
@@ -225,7 +225,7 @@ $config = @{ Timeout = 300; Verbose = $true }
 $script:globalConfig = $null
 ```
 
-❌ **MAL:**
+ **MAL:**
 ```powershell
 $rp = "C:\reports\report.txt"        # Muy corto
 $ReportPath = "C:\reports\report.txt" # PascalCase (usar camelCase)
@@ -235,7 +235,7 @@ $REPORTPATH = "C:\reports\report.txt"  # SCREAMING_SNAKE_CASE
 
 ---
 
-## 🎛️ Convenciones de Parámetros
+##  Convenciones de Parmetros
 
 ### Formato General
 
@@ -249,28 +249,28 @@ param(
 
 ### Reglas
 
-| Regla | Descripción | Ejemplo |
+| Regla | Descripcin | Ejemplo |
 |-------|-------------|---------|
 | **Caso** | PascalCase | `$ParameterName`, `$OutputPath` |
 | **Tipo** | Especificar tipo | `[string]`, `[int]`, `[switch]` |
 | **Descriptivo** | Nombre claro | `$OutputPath` no `$out` |
-| **Documentado** | Incluir descripción | Usar comentarios o help |
+| **Documentado** | Incluir descripcin | Usar comentarios o help |
 
-### Tipos de Parámetros
+### Tipos de Parmetros
 
 | Tipo | Uso | Ejemplo |
 |------|-----|---------|
 | `[string]` | Texto | `[string]$Path` |
-| `[int]` | Número entero | `[int]$Timeout` |
+| `[int]` | Nmero entero | `[int]$Timeout` |
 | `[bool]` | Booleano | `[bool]$Force` |
 | `[switch]` | Bandera | `[switch]$Verbose` |
 | `[array]` | Arreglo | `[array]$Items` |
 | `[hashtable]` | Diccionario | `[hashtable]$Config` |
-| `[object]` | Objeto genérico | `[object]$Data` |
+| `[object]` | Objeto genrico | `[object]$Data` |
 
 ### Ejemplos Correctos
 
-✅ **BIEN:**
+ **BIEN:**
 ```powershell
 param(
     [string]$InputPath,
@@ -282,20 +282,20 @@ param(
 )
 ```
 
-❌ **MAL:**
+ **MAL:**
 ```powershell
 param(
     $inputPath,                    # Sin tipo
     [string]$input_path,           # snake_case
     [string]$in,                   # Muy corto
     [string]$path,                 # Ambiguo (input o output?)
-    [string]$InputPath = ""        # Valor por defecto vacío
+    [string]$InputPath = ""        # Valor por defecto vaco
 )
 ```
 
 ---
 
-## 📁 Convenciones de Archivos
+##  Convenciones de Archivos
 
 ### Archivos de Script
 
@@ -309,7 +309,7 @@ verb-noun.sh
 - `generate-report.ps1`
 - `clean-runtime.ps1`
 
-### Archivos de Documentación
+### Archivos de Documentacin
 
 ```
 DOCUMENT-NAME.md
@@ -322,7 +322,7 @@ STANDARDS.md
 - `NAMING-CONVENTIONS.md`
 - `BEST-PRACTICES.md`
 
-### Archivos de Configuración
+### Archivos de Configuracin
 
 ```
 config.json

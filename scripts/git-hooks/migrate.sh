@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+﻿#!/usr/bin/env bash
 # migrate.sh - Database migration runner (Linux/macOS)
 
 set -e
@@ -58,9 +58,9 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Logging
-log_step() { echo -e "${YELLOW}[→]${NC} $1"; }
-log_success() { echo -e "${GREEN}[✓]${NC} $1"; }
-log_error() { echo -e "${RED}[✗]${NC} $1"; }
+log_step() { echo -e "${YELLOW}[]${NC} $1"; }
+log_success() { echo -e "${GREEN}[]${NC} $1"; }
+log_error() { echo -e "${RED}[]${NC} $1"; }
 
 # Prisma migrations
 run_prisma_migrate() {

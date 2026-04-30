@@ -1,6 +1,6 @@
-{
+﻿{
   "enabled": true,
-  "description": "Token Guard - Protección automática contra overflow de tokens",
+  "description": "Token Guard - Proteccin automtica contra overflow de tokens",
   "tokenBudget": 128000,
   "alertThreshold": 0.80,
   "pauseThreshold": 0.95,

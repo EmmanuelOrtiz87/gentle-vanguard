@@ -1,10 +1,10 @@
----
+﻿---
 name: content-output-skill
 description: >
   Unified content generation skill for all output types: technical documentation,
   internal reports, marketing content, social media posts, persuasive copy,
   storytelling, speeches, and external communication. Covers complete content
-  lifecycle: strategy → creation → distribution → metrics.
+  lifecycle: strategy  creation  distribution  metrics.
   Trigger: "post", "twitter", "linkedin", "redes", "social", "marketing", "promocionar",
   "publicar", "anuncio", "lanzamiento", "demo", "video", "branding", "logo",
   "copywriting", "persuasivo", "storytelling", "discurso", "presentacion", "expo",
@@ -26,7 +26,7 @@ Unified skill for generating all types of content output from Foundation:
 - **External Communication**: Marketing, social media, presentations
 - **Speeches**: Conferences, workshops, demos
 
-Part of the workflow: Input → Processing → Output (Docs + Communication)
+Part of the workflow: Input  Processing  Output (Docs + Communication)
 
 ## Content Types
 
@@ -38,7 +38,7 @@ Part of the workflow: Input → Processing → Output (Docs + Communication)
 | **Reddit** | Reddit | Text + links | Community discussion, feedback |
 | **Discord** | Discord | Embed + CTA | Community engagement |
 | **WhatsApp** | WhatsApp | Broadcast message | Direct reach, groups |
-| **Blog Post** | Web | MD → HTML | SEO, deep content |
+| **Blog Post** | Web | MD  HTML | SEO, deep content |
 | **Demo Script** | Video | 2-3 min | Product demo |
 | **Speech** | Presentations | 5-30 min | Conferences, workshops |
 
@@ -121,22 +121,22 @@ A - Action: CTA claro
 ```
 P - Problem: Describir el dolor del usuario
 A - Agitation: Intensificar sin resolver
-S - Solution: Presentar Foundation como solución
+S - Solution: Presentar Foundation como solucin
 ```
 
 #### BAB (Before, After, Bridge)
 ```
 B - Before: Estado actual del usuario
 A - After: Estado deseada con Foundation
-B - Bridge: Cómo llegar del Before al After
+B - Bridge: Cmo llegar del Before al After
 ```
 
-### Técnicas de Persuasión
+### Tcnicas de Persuasin
 
 1. **Social Proof**: "X equipos ya lo usan"
 2. **Autoridad**: "Usado por developers de Y"
 3. **Escasez**: "Solo disponibles hasta..."
-4. **Urgencia**: "Última semana para..."
+4. **Urgencia**: "ltima semana para..."
 5. **Consenso**: "El 90% recomienda..."
 6. **Reciprocidad**: "Gratis por tiempo limitado"
 
@@ -144,23 +144,23 @@ B - Bridge: Cómo llegar del Before al After
 
 #### Announce Feature
 ```
-🎯 [PROBLEMA QUE RESUELVE]
+ [PROBLEMA QUE RESUELVE]
 
 [CONTEXTO - 1-2 oraciones]
 
-💡 SOLUCIÓN: [FEATURE NAME]
+ SOLUCIN: [FEATURE NAME]
 
 [BENEFICIO PRINCIPAL]
 
-👉 [CTA]
+ [CTA]
 
 #FoundationStack
 ```
 
 #### Testimonial Request
 ```
-¿Ya usas Foundation? 
-Cuéntanos tu experiencia 👇
+Ya usas Foundation? 
+Cuntanos tu experiencia 
 
 Tu feedback nos ayuda a mejorar.
 [#FoundationStack]
@@ -176,9 +176,9 @@ Tu feedback nos ayuda a mejorar.
 ```
 1. ORDINARIO: El developer sin herramientas
 2. LLAMADO: Descubrir Foundation
-3. PRUEBAS: Learning curve, configuración
-4. MENTOR: Skills y documentación
-5. TRANSFORMACIÓN: Productividad X10
+3. PRUEBAS: Learning curve, configuracin
+4. MENTOR: Skills y documentacin
+5. TRANSFORMACIN: Productividad X10
 6. REGRESO: Compartir con el equipo
 ```
 
@@ -186,19 +186,19 @@ Tu feedback nos ayuda a mejorar.
 
 #### Thread de Twitter
 ```
-🧵 1/x
-Cómo pasé de 0 a 100 tasks/semana con AI...
+ 1/x
+Cmo pas de 0 a 100 tasks/semana con AI...
 
 [SETUP - contexto breve]
 
-Thread 👇
+Thread 
 
 2/x
 El problema: context hell, sesiones perdidas...
 Cada vez que iniciaba, tardaba 30min solo en recapitular.
 
 3/x
-Então encontré Foundation:
+Ento encontr Foundation:
 - Engram: memoria persistente
 - Auto-delegation: 70% tiempo recuperado
 - Token guard: 40% menos tokens
@@ -208,22 +208,22 @@ Então encontré Foundation:
 
 #### LinkedIn Story Post
 ```
-🚀 De developer frustrado a 10x productivity
+ De developer frustrado a 10x productivity
 
 Hace 3 meses, mi workflow era un desastre:
 
-😫 Context switching entre 5 proyectos
-😫 Perdía 30min cada mañana recapitando
-😫 No tenía forma de medir mi progreso
+ Context switching entre 5 proyectos
+ Perda 30min cada maana recapitando
+ No tena forma de medir mi progreso
 
 Hoy:
-✅ Memoria persistente via Engram
-✅ Auto-delegation a subagentes
-✅ Reporting automático
+ Memoria persistente via Engram
+ Auto-delegation a subagentes
+ Reporting automtico
 
 El cambio no fue el tool. Fue el sistema.
 
-Thread below 👇
+Thread below 
 
 #Productivity #AI #Development
 ```
@@ -237,23 +237,23 @@ Thread below 👇
 #### Opening (30-60 segundos)
 ```
 [HOOK]
-"¿Cuántas veces han perdido 30min recapitando lo que hicieron ayer?"
+"Cuntas veces han perdido 30min recapitando lo que hicieron ayer?"
 
 [CONTEXT]
-"Yo perdía eso cada mañana. Durante meses."
+"Yo perda eso cada maana. Durante meses."
 
 [THESIS]
-"Hoy les voy mostrar cómo lo resolví."
+"Hoy les voy mostrar cmo lo resolv."
 
 [ROADMAP]
-"3 cosas: el problema, la solución, los resultados."
+"3 cosas: el problema, la solucin, los resultados."
 ```
 
-#### Presentación tech conference (15 min)
+#### Presentacin tech conference (15 min)
 ```
-0:00-1:00  Hook + Introducción
+0:00-1:00  Hook + Introduccin
 1:00-4:00  Problema (con datos)
-4:00-9:00  Solución Foundation
+4:00-9:00  Solucin Foundation
 9:00-13:00 Demo live
 13:00-14:00  Resultados + CTA
 14:00-15:00 Q&A
@@ -261,18 +261,18 @@ Thread below 👇
 
 #### Workshop intro (30 min)
 ```
-0:00-5:00   Por qué aquí (pain compartido)
+0:00-5:00   Por qu aqu (pain compartido)
 5:00-12:00  Conceptos core
-12:00-25:00Hands-on: setup básico
-25:00-30:00 Q&A + próximos pasos
+12:00-25:00Hands-on: setup bsico
+25:00-30:00 Q&A + prximos pasos
 ```
 
 ### Speaking Tips
 
 1. **3 segundos rule**: Nuevo hook cada 3 min
 2. **Visuals**: screenshots > diagrams > text
-3. **Pausas**: Silencio después de key points
-4. **Repetición**: Say it three ways
+3. **Pausas**: Silencio despus de key points
+4. **Repeticin**: Say it three ways
 5. **CTA**: Sempre terminar con action
 
 ## Foundation Stack Description Templates
@@ -280,7 +280,7 @@ Thread below 👇
 ### Short (Twitter/X - 280 chars)
 ```
 # FoundationStack
-🚀 AI Development Workspace
+ AI Development Workspace
 - Session tracking & metrics
 - Auto-delegation con orquestador
 - Reporting on-demand
@@ -290,15 +290,15 @@ Thread below 👇
 
 ### Medium (LinkedIn - 2-3 paragraphs)
 ```
-🚀 Presentando Foundation: Mi AI Development Workspace
+ Presentando Foundation: Mi AI Development Workspace
 
-Foundation es un workspace agnóstico para desarrollo AI-first que incluye:
+Foundation es un workspace agnstico para desarrollo AI-first que incluye:
 
-✅ Session Management con tracking de métricas
-✅ Auto-delegation que routedareas subagentes especializados
-✅ Reporting on-demand para gerencia
-✅ Token Guard para eficiencia de contexto
-✅ Workflow orchestrator integrado
+ Session Management con tracking de mtricas
+ Auto-delegation que routedareas subagentes especializados
+ Reporting on-demand para gerencia
+ Token Guard para eficiencia de contexto
+ Workflow orchestrator integrado
 
 Ideal para equipos que usan AI assistants (OpenCode, Claude, Cursor).
 
@@ -345,23 +345,23 @@ Ver: `docs/marketing/foundation-stack-blog-post.md`
 #### Message Types
 ```
 - ANNOUNCEMENT: New feature release with emoji + links
-- QUESTION: Thread con preguntas específicas
+- QUESTION: Thread con preguntas especficas
 - SHOWCASE: Screenshot + "look what I made"
 - POLL: Voting embeds para feedback
 ```
 
 #### Discord Template
 ```
-📢 **Nuevo en Foundation [v2.x]**
+ **Nuevo en Foundation [v2.x]**
 
 [Feature description]
 
-✨ What's new:
+ What's new:
 - [Feature 1]
 - [Feature 2]
 
-📦 Get it: [Link]
-💬 Feedback: [Channel link]
+ Get it: [Link]
+ Feedback: [Channel link]
 
 #FoundationStack
 ```
@@ -379,13 +379,13 @@ Ver: `docs/marketing/foundation-stack-blog-post.md`
 
 #### WhatsApp Template
 ```
-🔧 Foundation Update v2.x
+ Foundation Update v2.x
 
 [1-liner sobre lo nuevo]
 
-👉 [Link to full post]
+ [Link to full post]
 
-¿Preguntas? Responde aquí 💬
+Preguntas? Responde aqu 
 #FoundationStack
 ```
 
@@ -395,32 +395,32 @@ Ver: `docs/marketing/foundation-stack-blog-post.md`
 
 ### Foundation Logo (Text-based)
 ```
-╔════════════════════════════════════════╗
-║                                        ║
-║     ██╗   ██╗ █████╗ ██╗     ║
-║     ██║   ██║██╔══██╗██║     ║
-║     ██║   ██║███████║██║     ║
-║     ╚██╗ ██╔╝██╔══██║██║     ║
-║      ╚████╔╝ ██║  ██║███████║
-║       ╚██╔╝  ╚═╝  ╚═╝╚══════╝
-║                                        ║
-║     F O U N D A T I O N           ║
-║                                        ║
-╚════════════════════════════════════════╝
+
+                                        
+               
+             
+             
+           
+         
+           
+                                        
+     F O U N D A T I O N           
+                                        
+
 ```
 
 ### ASCII Art Alternative
 ```
- ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-█                             █
-█   █████╗  ██████╗  ██████╗ ███████╗
-█  ██╔══██╗██╔═══██╗██╔═══██╗██╔══██╗
-█  ██████║██║   ██║██║   ██║██║  ██║
-█  ██╔═══██╗██║   ██║██║   ██║██║  ██║
-█  ██║  ██║╚██████╔╝╚██████╔╝███████║
-█  ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚══════╝
-█       FOUNDATION        █
- ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+ 
+                             
+        
+  
+          
+          
+    
+        
+       FOUNDATION        
+ 
 ```
 
 ## Hashtags

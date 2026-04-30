@@ -1,30 +1,30 @@
-# Distributed Tracing Skill - Guía Completa
+﻿# Distributed Tracing Skill - Gua Completa
 
-## 📋 Tabla de Contenidos
+##  Tabla de Contenidos
 
-1. [Descripción General](#descripción-general)
-2. [Características Principales](#características-principales)
-3. [Instalación y Configuración](#instalación-y-configuración)
-4. [Uso Básico](#uso-básico)
+1. [Descripcin General](#descripcin-general)
+2. [Caractersticas Principales](#caractersticas-principales)
+3. [Instalacin y Configuracin](#instalacin-y-configuracin)
+4. [Uso Bsico](#uso-bsico)
 5. [Casos de Uso Avanzados](#casos-de-uso-avanzados)
 6. [Estructura de Directorios](#estructura-de-directorios)
-7. [Reportes y Análisis](#reportes-y-análisis)
+7. [Reportes y Anlisis](#reportes-y-anlisis)
 8. [Troubleshooting](#troubleshooting)
 
-## Descripción General
+## Descripcin General
 
-El **Distributed Tracing Skill** proporciona un sistema completo de observabilidad para el workspace-foundation, permitiendo rastrear la ejecución de dispatches, orchestration y automatización con:
+El **Distributed Tracing Skill** proporciona un sistema completo de observabilidad para el workspace-foundation, permitiendo rastrear la ejecucin de dispatches, orchestration y automatizacin con:
 
-- **Correlation IDs**: Identificadores únicos para rastrear operaciones a través de múltiples componentes
-- **Span Hierarchy**: Estructura jerárquica de spans para visualizar relaciones entre operaciones
-- **Performance Metrics**: Métricas de rendimiento en tiempo real
-- **Centralized Reporting**: Reportes centralizados en un único directorio
-- **OpenTelemetry Compatible**: Compatible con estándares de observabilidad
+- **Correlation IDs**: Identificadores nicos para rastrear operaciones a travs de mltiples componentes
+- **Span Hierarchy**: Estructura jerrquica de spans para visualizar relaciones entre operaciones
+- **Performance Metrics**: Mtricas de rendimiento en tiempo real
+- **Centralized Reporting**: Reportes centralizados en un nico directorio
+- **OpenTelemetry Compatible**: Compatible con estndares de observabilidad
 
-## Características Principales
+## Caractersticas Principales
 
 ### 1. Correlation IDs
-Cada sesión obtiene un identificador único que se propaga a través de todas las operaciones:
+Cada sesin obtiene un identificador nico que se propaga a travs de todas las operaciones:
 
 ```
 Formato: session-YYYY-MM-DD-XX-XXXXXXXX-YYYYMMDDHHMMSS-XXXXXXXX
@@ -32,37 +32,37 @@ Ejemplo: session-2026-04-23-24-20260423143500-a1b2c3d4
 ```
 
 ### 2. Span Hierarchy
-Estructura jerárquica que muestra relaciones entre operaciones:
+Estructura jerrquica que muestra relaciones entre operaciones:
 
 ```
 Root Span (Session)
-├── Dispatch Span
-│   ├── Task Routing Span
-│   ├── Agent Execution Span
-│   └── Result Processing Span
-├── Orchestration Span
-│   ├── Phase Execution Span
-│   └── State Management Span
-└── Automation Span
-    ├── Event Processing Span
-    └── Action Execution Span
+ Dispatch Span
+    Task Routing Span
+    Agent Execution Span
+    Result Processing Span
+ Orchestration Span
+    Phase Execution Span
+    State Management Span
+ Automation Span
+     Event Processing Span
+     Action Execution Span
 ```
 
 ### 3. Performance Metrics
 - Latencia de operaciones (ms)
 - Throughput de dispatches (ops/sec)
-- Tasa de éxito/error (%)
-- Utilización de recursos
+- Tasa de xito/error (%)
+- Utilizacin de recursos
 
 ### 4. Reportes Centralizados
-Todos los reportes se generan automáticamente en `.telemetry/reports/`:
+Todos los reportes se generan automticamente en `.telemetry/reports/`:
 
 - `daily-summary-YYYY-MM-DD.md` - Resumen diario
-- `performance-analysis-YYYY-MM-DD.md` - Análisis de rendimiento
-- `error-analysis-YYYY-MM-DD.md` - Análisis de errores
-- `dispatch-metrics-YYYY-MM-DD.md` - Métricas de dispatches
+- `performance-analysis-YYYY-MM-DD.md` - Anlisis de rendimiento
+- `error-analysis-YYYY-MM-DD.md` - Anlisis de errores
+- `dispatch-metrics-YYYY-MM-DD.md` - Mtricas de dispatches
 
-## Instalación y Configuración
+## Instalacin y Configuracin
 
 ### Paso 1: Verificar Archivos Instalados
 
@@ -75,31 +75,31 @@ Test-Path "tools/initialize-distributed-tracing.ps1"
 Test-Path "tools/telemetry-dashboard.ps1"
 ```
 
-### Paso 2: Configuración Automática
+### Paso 2: Configuracin Automtica
 
-El sistema se inicializa automáticamente durante el `session-autostart`:
+El sistema se inicializa automticamente durante el `session-autostart`:
 
 ```powershell
-# Ejecutar autostart (incluye inicialización de tracing)
+# Ejecutar autostart (incluye inicializacin de tracing)
 .\tools\session-autostart.cmd
 ```
 
-### Paso 3: Verificar Inicialización
+### Paso 3: Verificar Inicializacin
 
 ```powershell
-# Ver resumen de telemetría
+# Ver resumen de telemetra
 .\tools\telemetry-dashboard.ps1 -Action show-summary
 ```
 
-## Uso Básico
+## Uso Bsico
 
 ### Inicializar Tracing en un Script
 
 ```powershell
-# Cargar el módulo de tracing
+# Cargar el mdulo de tracing
 . .\skills\distributed-tracing-skill\distributed-tracing-core.ps1
 
-# Inicializar tracing para la sesión
+# Inicializar tracing para la sesin
 $tracing = Initialize-DistributedTracing -SessionId "session-2026-04-23-24"
 
 # Ahora puedes usar las funciones de tracing
@@ -108,30 +108,30 @@ $tracing = Initialize-DistributedTracing -SessionId "session-2026-04-23-24"
 ### Crear Spans
 
 ```powershell
-# Crear un span raíz para una operación
+# Crear un span raz para una operacin
 $span = Start-Span -Name "process-dispatch" -SpanType "dispatch" -Attributes @{
     DispatchType = "auto-delegation"
     Priority = "high"
     TaskId = "task-123"
 }
 
-# ... realizar operación ...
+# ... realizar operacin ...
 
 # Finalizar el span
 End-Span -Span $span -Status "success"
 ```
 
-### Registrar Métricas
+### Registrar Mtricas
 
 ```powershell
-# Registrar una métrica de latencia
+# Registrar una mtrica de latencia
 Record-Metric -Name "dispatch-latency" -Value 1250 -Unit "ms" -Tags @{
     DispatchType = "auto-delegation"
     AgentType = "code-review"
     Status = "success"
 }
 
-# Registrar una métrica de throughput
+# Registrar una mtrica de throughput
 Record-Metric -Name "dispatch-throughput" -Value 42 -Unit "ops/sec" -Tags @{
     Period = "1min"
 }
@@ -159,9 +159,9 @@ Add-SpanEvent -Span $span -EventName "task-completed" -Attributes @{
 Finalize-DistributedTracing
 
 # Esto:
-# 1. Cierra el span raíz
+# 1. Cierra el span raz
 # 2. Exporta todos los spans
-# 3. Exporta todas las métricas
+# 3. Exporta todas las mtricas
 # 4. Muestra un resumen
 ```
 
@@ -174,7 +174,7 @@ Finalize-DistributedTracing
 . .\skills\distributed-tracing-skill\distributed-tracing-core.ps1
 $tracing = Initialize-DistributedTracing -SessionId "session-2026-04-23-24"
 
-# Crear span raíz para dispatch
+# Crear span raz para dispatch
 $dispatchSpan = Start-Span -Name "auto-delegation-dispatch" -SpanType "dispatch" -Attributes @{
     TaskDescription = "Implement login feature"
     Timestamp = Get-Date -Format "o"
@@ -187,7 +187,7 @@ try {
         TaskLength = 100
     }
     
-    # ... realizar extracción de keywords ...
+    # ... realizar extraccin de keywords ...
     $keywords = @("login", "authentication", "security")
     
     Add-SpanMetric -Span $keywordSpan -MetricName "keywords-found" -Value $keywords.Count
@@ -228,7 +228,7 @@ catch {
 Finalize-DistributedTracing
 ```
 
-### Integración con Auto-Delegation Router
+### Integracin con Auto-Delegation Router
 
 ```powershell
 # En auto-delegation-router.ps1, agregar tracing:
@@ -246,7 +246,7 @@ function Route-TaskToAgent {
     }
     
     try {
-        # ... lógica de routing ...
+        # ... lgica de routing ...
         $agent = Select-BestAgent -Task $TaskDescription
         
         Record-Metric -Name "routing-confidence" -Value $agent.Confidence -Unit "%" -Tags @{
@@ -268,41 +268,41 @@ function Route-TaskToAgent {
 
 ```
 .telemetry/
-├── traces/
-│   ├── dispatch-traces-2026-04-23.jsonl
-│   ├── orchestration-traces-2026-04-23.jsonl
-│   ├── automation-traces-2026-04-23.jsonl
-│   └── operation-traces-2026-04-23.jsonl
-├── metrics/
-│   ├── metrics-2026-04-23.json
-│   └── metrics-2026-04-22.json
-├── reports/
-│   ├── daily-summary-2026-04-23.md
-│   ├── performance-analysis-2026-04-23.md
-│   ├── error-analysis-2026-04-23.md
-│   └── dispatch-metrics-2026-04-23.md
-├── spans/
-│   ├── spans-2026-04-23.json
-│   └── spans-2026-04-22.json
-├── events/
-│   └── events-2026-04-23.jsonl
-└── index.json
+ traces/
+    dispatch-traces-2026-04-23.jsonl
+    orchestration-traces-2026-04-23.jsonl
+    automation-traces-2026-04-23.jsonl
+    operation-traces-2026-04-23.jsonl
+ metrics/
+    metrics-2026-04-23.json
+    metrics-2026-04-22.json
+ reports/
+    daily-summary-2026-04-23.md
+    performance-analysis-2026-04-23.md
+    error-analysis-2026-04-23.md
+    dispatch-metrics-2026-04-23.md
+ spans/
+    spans-2026-04-23.json
+    spans-2026-04-22.json
+ events/
+    events-2026-04-23.jsonl
+ index.json
 ```
 
 ### Nomenclatura de Archivos
 
-| Patrón | Descripción |
+| Patrn | Descripcin |
 |--------|-------------|
 | `dispatch-traces-YYYY-MM-DD.jsonl` | Traces de dispatches |
 | `orchestration-traces-YYYY-MM-DD.jsonl` | Traces de orchestration |
 | `automation-traces-YYYY-MM-DD.jsonl` | Traces de automation |
-| `metrics-YYYY-MM-DD.json` | Métricas del día |
+| `metrics-YYYY-MM-DD.json` | Mtricas del da |
 | `daily-summary-YYYY-MM-DD.md` | Resumen diario |
-| `performance-analysis-YYYY-MM-DD.md` | Análisis de rendimiento |
-| `error-analysis-YYYY-MM-DD.md` | Análisis de errores |
-| `dispatch-metrics-YYYY-MM-DD.md` | Métricas de dispatches |
+| `performance-analysis-YYYY-MM-DD.md` | Anlisis de rendimiento |
+| `error-analysis-YYYY-MM-DD.md` | Anlisis de errores |
+| `dispatch-metrics-YYYY-MM-DD.md` | Mtricas de dispatches |
 
-## Reportes y Análisis
+## Reportes y Anlisis
 
 ### Generar Reportes
 
@@ -310,7 +310,7 @@ function Route-TaskToAgent {
 # Generar todos los reportes para hoy
 .\tools\telemetry-dashboard.ps1 -Action generate-reports
 
-# Generar reportes para una fecha específica
+# Generar reportes para una fecha especfica
 .\tools\telemetry-dashboard.ps1 -Action generate-reports -Date (Get-Date).AddDays(-1)
 ```
 
@@ -320,7 +320,7 @@ function Route-TaskToAgent {
 # Listar todos los reportes disponibles
 .\tools\telemetry-dashboard.ps1 -Action show-reports
 
-# Ver resumen de telemetría
+# Ver resumen de telemetra
 .\tools\telemetry-dashboard.ps1 -Action show-summary
 ```
 
@@ -330,36 +330,36 @@ function Route-TaskToAgent {
 # Ver traces recientes
 .\tools\telemetry-dashboard.ps1 -Action view-traces
 
-# Ver métricas recientes
+# Ver mtricas recientes
 .\tools\telemetry-dashboard.ps1 -Action view-metrics
 ```
 
 ### Exportar Datos
 
 ```powershell
-# Exportar todos los datos de telemetría
+# Exportar todos los datos de telemetra
 .\tools\telemetry-dashboard.ps1 -Action export-data
 
-# Los datos se exportarán a: telemetry-export/
+# Los datos se exportarn a: telemetry-export/
 ```
 
 ### Limpiar Datos Antiguos
 
 ```powershell
-# Limpiar datos más antiguos de 30 días
+# Limpiar datos ms antiguos de 30 das
 .\tools\telemetry-dashboard.ps1 -Action cleanup
 
-# Limpiar datos más antiguos de 7 días
+# Limpiar datos ms antiguos de 7 das
 .\tools\telemetry-dashboard.ps1 -Action cleanup -RetentionDays 7
 ```
 
 ## Troubleshooting
 
-### Problema: Los spans no se están registrando
+### Problema: Los spans no se estn registrando
 
-**Solución:**
+**Solucin:**
 ```powershell
-# Verificar que tracing esté inicializado
+# Verificar que tracing est inicializado
 $correlationId = Get-CorrelationId
 if (-not $correlationId) {
     Write-Host "Tracing no inicializado. Ejecutar:"
@@ -370,9 +370,9 @@ if (-not $correlationId) {
 
 ### Problema: No se encuentran reportes
 
-**Solución:**
+**Solucin:**
 ```powershell
-# Verificar que el directorio de telemetría exista
+# Verificar que el directorio de telemetra exista
 if (-not (Test-Path ".telemetry")) {
     New-Item -ItemType Directory -Path ".telemetry" -Force
 }
@@ -381,9 +381,9 @@ if (-not (Test-Path ".telemetry")) {
 .\tools\telemetry-dashboard.ps1 -Action generate-reports
 ```
 
-### Problema: Métricas no se exportan
+### Problema: Mtricas no se exportan
 
-**Solución:**
+**Solucin:**
 ```powershell
 # Asegurarse de finalizar tracing
 Finalize-DistributedTracing
@@ -394,16 +394,16 @@ Get-ChildItem -Path ".telemetry/metrics" -Filter "*.json"
 
 ### Problema: Correlation ID no se propaga
 
-**Solución:**
+**Solucin:**
 ```powershell
 # Obtener el correlation ID actual
 $corrId = Get-CorrelationId
 
-# Pasar explícitamente a funciones
+# Pasar explcitamente a funciones
 $span = Start-Span -Name "operation" -CorrelationId $corrId
 ```
 
-## Configuración Avanzada
+## Configuracin Avanzada
 
 Ver: `config/distributed-tracing-config.json`
 
@@ -443,4 +443,4 @@ Ver: `config/distributed-tracing-config.json`
 
 Para reportar problemas o contribuir mejoras, consulta:
 - `CONTRIBUTING.md`
-- `docs/` - Documentación adicional
+- `docs/` - Documentacin adicional

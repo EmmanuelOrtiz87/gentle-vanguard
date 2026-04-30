@@ -1,4 +1,4 @@
----
+﻿---
 name: foundation-audit-skill
 description: >
   Foundation audit and validation sweep. Detects duplicates, broken links, missing files,
@@ -18,9 +18,9 @@ These two skills are **complementary, not duplicates**:
 | | foundation-audit-skill | judgment-day |
 |---|---|---|
 | **What it checks** | Structure, docs, links, duplicates | Logic, security, architecture, correctness |
-| **Token cost** | Zero (batch scripts) | ~2k–4k (AI sub-agents) |
+| **Token cost** | Zero (batch scripts) | ~2k4k (AI sub-agents) |
 | **When to use** | Every session, pre-commit, CI/CD | Before merge, after major features |
-| **Speed** | 30s – 5min | 5min – 15min |
+| **Speed** | 30s  5min | 5min  15min |
 | **Output** | Issues list, exit codes | Verdict table, APPROVED/ESCALATED |
 
 **Unified workflow**: Run audit first (free), then judgment-day if code quality review is needed.
@@ -29,11 +29,11 @@ These two skills are **complementary, not duplicates**:
 
 ```
 foundation-audit-skill/
-├── SKILL.md              # This file
-├── scripts/
-│   ├── audit-sweep.ps1   # Batch audit (ZERO agent tokens)
-│   ├── audit-workflow.ps1 # Unified workflow (audit + judgment)
-│   └── sync-local.ps1    # Sync to ~/.foundation-local/ for standalone use
+ SKILL.md              # This file
+ scripts/
+    audit-sweep.ps1   # Batch audit (ZERO agent tokens)
+    audit-workflow.ps1 # Unified workflow (audit + judgment)
+    sync-local.ps1    # Sync to ~/.foundation-local/ for standalone use
 ```
 
 ## Execution Modes

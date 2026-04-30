@@ -1,4 +1,4 @@
-@echo off
+﻿@echo off
 setlocal
 
 set SCRIPT=%~dp0session-manager.ps1
@@ -32,14 +32,14 @@ if /i "%DAYOFWEEK%"=="Sunday" (
   powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\monitoring\weekly-metrics.ps1"
 )
 
-REM Desmarcar sesión activa
+REM Desmarcar sesin activa
 echo [INFO] Unmarking session...
 if exist "logs\.session-active" del "logs\.session-active"
 
-REM Cerrar sesión
+REM Cerrar sesin
 powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT%" -Mode ManualEnd
 
-REM Ejecutar optimización de Engram después del cierre de sesión
+REM Ejecutar optimizacin de Engram despus del cierre de sesin
 if exist "%OPTIMIZE_SCRIPT%" (
   echo [INFO] Running Engram post-session optimization...
   powershell -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_local" -AutoApply

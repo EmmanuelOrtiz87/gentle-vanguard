@@ -1,10 +1,10 @@
-<#
+﻿<#
 .SYNOPSIS
     Adaptive Mode Engine - Dynamic DAG-based orchestration with feedback loops and auto-rollback
 .DESCRIPTION
     Implements intelligent workflow orchestration with:
     - Dynamic phase execution based on DAG
-    - Feedback loops (QA → DEV → QA)
+    - Feedback loops (QA  DEV  QA)
     - Automatic rollback on failures
     - Parallel execution where possible
     - Real-time monitoring and metrics
@@ -125,9 +125,9 @@ class DAGExecutor {
         }
         
         try {
-            # Simular ejecución de agentes
+            # Simular ejecucin de agentes
             foreach ($agent in $phase.Agents) {
-                Write-Host "  ├─ Ejecutando agente: $agent" -ForegroundColor Yellow
+                Write-Host "   Ejecutando agente: $agent" -ForegroundColor Yellow
                 
                 $agentResult = $this.ExecuteAgent($agent, $phaseName)
                 
@@ -149,17 +149,17 @@ class DAGExecutor {
             if ($result.Status -eq "success") {
                 $phase.Status.State = "completed"
                 $phase.Status.Progress = 100
-                Write-Host "  ✓ Fase completada: $phaseName" -ForegroundColor Green
+                Write-Host "   Fase completada: $phaseName" -ForegroundColor Green
             } else {
                 $phase.Status.State = "failed"
-                Write-Host "  ✗ Fase fallida: $phaseName" -ForegroundColor Red
+                Write-Host "   Fase fallida: $phaseName" -ForegroundColor Red
             }
             
         } catch {
             $result.Status = "error"
             $result.Errors += $_.Exception.Message
             $phase.Status.State = "error"
-            Write-Host "  ✗ Error en fase: $_" -ForegroundColor Red
+            Write-Host "   Error en fase: $_" -ForegroundColor Red
         }
         
         $phase.Results += $result
@@ -182,11 +182,11 @@ class DAGExecutor {
             }
         }
         
-        # Simulación de ejecución del agente
+        # Simulacin de ejecucin del agente
         $startTime = Get-Date
         
-        # Aquí iría la lógica real de ejecución del agente
-        # Por ahora, simulamos con un pequeño delay
+        # Aqu ira la lgica real de ejecucin del agente
+        # Por ahora, simulamos con un pequeo delay
         Start-Sleep -Milliseconds 100
         
         $result.Metrics.ExecutionTime = ((Get-Date) - $startTime).TotalMilliseconds
@@ -251,7 +251,7 @@ class DAGExecutor {
             $loop = $this.Config.dag.feedback_loops[$loopName]
             
             if ($loop.source -eq $sourcePhaseName -and $loop.enabled) {
-                # Evaluar condición del feedback loop
+                # Evaluar condicin del feedback loop
                 if ($this.EvaluateFeedbackCondition($loop, $lastResult)) {
                     $feedbackNeeded.Triggered = $true
                     $feedbackNeeded.TargetPhase = $loop.target
@@ -285,14 +285,14 @@ class DAGExecutor {
     }
     
     [hashtable]ExecuteAdaptiveWorkflow() {
-        Write-Host "`n[ADAPTIVE MODE] Iniciando orquestación adaptativa" -ForegroundColor Cyan
-        Write-Host "═" * 80 -ForegroundColor Cyan
+        Write-Host "`n[ADAPTIVE MODE] Iniciando orquestacin adaptativa" -ForegroundColor Cyan
+        Write-Host "" * 80 -ForegroundColor Cyan
         
         $executionPlan = $this.BuildExecutionPlan()
         
         Write-Host "`n[PLAN] Fases a ejecutar:" -ForegroundColor Yellow
         foreach ($phase in $executionPlan) {
-            Write-Host "  → $phase" -ForegroundColor Gray
+            Write-Host "   $phase" -ForegroundColor Gray
         }
         Write-Host ""
         
@@ -322,7 +322,7 @@ class DAGExecutor {
                 
                 if ($feedback.Triggered -and $feedback.CurrentIteration -lt $feedback.MaxIterations) {
                     Write-Host "`n[FEEDBACK LOOP] Activado: $($feedback.Reason)" -ForegroundColor Magenta
-                    Write-Host "  Origen: $phaseName → Destino: $($feedback.TargetPhase)" -ForegroundColor Magenta
+                    Write-Host "  Origen: $phaseName  Destino: $($feedback.TargetPhase)" -ForegroundColor Magenta
                     
                     # Reiniciar fase objetivo
                     $this.Phases[$feedback.TargetPhase].Status.State = "pending"
@@ -340,11 +340,11 @@ class DAGExecutor {
             } else {
                 $failedPhases += $phaseName
                 
-                # Evaluar política de rollback
+                # Evaluar poltica de rollback
                 if ($this.Config.dag.rollback_policy.auto_rollback_on_qa_failure -and $phaseName -eq "quality_assurance") {
                     Write-Host "`n[AUTO-ROLLBACK] Activado por fallo en QA" -ForegroundColor Red
                     
-                    # Obtener último checkpoint
+                    # Obtener ltimo checkpoint
                     $lastCheckpoint = $this.Checkpoints.Keys | Sort-Object -Descending | Select-Object -First 1
                     
                     if ($lastCheckpoint) {
@@ -403,16 +403,16 @@ function Start-AdaptiveMode {
         [switch]$DryRun = $false
     )
     
-    # Cargar configuración
+    # Cargar configuracin
     if (-not (Test-Path $ConfigPath)) {
-        Write-Host "[ERROR] Archivo de configuración no encontrado: $ConfigPath" -ForegroundColor Red
+        Write-Host "[ERROR] Archivo de configuracin no encontrado: $ConfigPath" -ForegroundColor Red
         return $null
     }
     
     $config = Get-Content $ConfigPath | ConvertFrom-Json
     
     if (-not $config.enabled) {
-        Write-Host "[INFO] Adaptive Mode está deshabilitado" -ForegroundColor Yellow
+        Write-Host "[INFO] Adaptive Mode est deshabilitado" -ForegroundColor Yellow
         return $null
     }
     
@@ -424,13 +424,13 @@ function Start-AdaptiveMode {
     
     # Mostrar resumen
     Write-Host "`n" -ForegroundColor Cyan
-    Write-Host "═" * 80 -ForegroundColor Cyan
-    Write-Host "[RESUMEN] Ejecución Adaptativa" -ForegroundColor Cyan
-    Write-Host "═" * 80 -ForegroundColor Cyan
+    Write-Host "" * 80 -ForegroundColor Cyan
+    Write-Host "[RESUMEN] Ejecucin Adaptativa" -ForegroundColor Cyan
+    Write-Host "" * 80 -ForegroundColor Cyan
     Write-Host "Estado: $($result.Status)" -ForegroundColor $(if ($result.Status -eq "success") { "Green" } else { "Yellow" })
     Write-Host "Fases completadas: $($result.CompletedPhases.Count)" -ForegroundColor Green
     Write-Host "Fases fallidas: $($result.FailedPhases.Count)" -ForegroundColor $(if ($result.FailedPhases.Count -gt 0) { "Red" } else { "Green" })
-    Write-Host "Duración total: $([Math]::Round($result.Duration, 2))s" -ForegroundColor Cyan
+    Write-Host "Duracin total: $([Math]::Round($result.Duration, 2))s" -ForegroundColor Cyan
     Write-Host ""
     
     return $result

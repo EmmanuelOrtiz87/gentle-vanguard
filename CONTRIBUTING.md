@@ -1,4 +1,4 @@
-# Contributing to Workspace Foundation
+﻿# Contributing to Workspace Foundation
 
 Thank you for your interest in contributing!
 
@@ -130,27 +130,27 @@ Include in your PR:
 
 ```
 workspace-foundation/
-├── .github/           # GitHub templates
-├── config/            # Workspace configuration
-├── docs/              # Documentation
-├── scripts/           # Automation scripts
-│   ├── foundation/    # Bootstrap and scaffolding CLI
-│   ├── project/       # Project setup and creation scripts
-│   ├── utilities/     # Workflow CLI and operational utilities
-│   └── validation/    # Validation scripts
-├── skills/            # Agent skills
-│   ├── workspace-foundation/
-│   ├── testing-skill/
-│   ├── security-skill/
-│   └── ...
-├── templates/        # Project templates
-│   ├── config/       # Configuration templates
-│   ├── editor/       # Editor configs
-│   ├── project-root/ # Base template
-│   ├── project-types/# Type-specific templates
-│   ├── testing/      # Test templates
-│   └── api/          # API specs
-└── tools/            # External tools
+ .github/           # GitHub templates
+ config/            # Workspace configuration
+ docs/              # Documentation
+ scripts/           # Automation scripts
+    foundation/    # Bootstrap and scaffolding CLI
+    project/       # Project setup and creation scripts
+    utilities/     # Workflow CLI and operational utilities
+    validation/    # Validation scripts
+ skills/            # Agent skills
+    workspace-foundation/
+    testing-skill/
+    security-skill/
+    ...
+ templates/        # Project templates
+    config/       # Configuration templates
+    editor/       # Editor configs
+    project-root/ # Base template
+    project-types/# Type-specific templates
+    testing/      # Test templates
+    api/          # API specs
+ tools/            # External tools
 ```
 
 ## Scripts

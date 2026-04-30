@@ -1,4 +1,4 @@
-# PreToolUse Auto-Format Hook
+﻿# PreToolUse Auto-Format Hook
 
 ## Concept
 
@@ -9,10 +9,10 @@ Run linter/formatter **before** the AI agent accesses saved files. This eliminat
 
 ```
 Traditional Flow (Wasteful):
-Agent edits file → Agent reads file → "Fix indentation" → Agent edits → ...
+Agent edits file  Agent reads file  "Fix indentation"  Agent edits  ...
 
 PreTool Hook Flow (Efficient):
-Agent edits file → Hook formats → Agent reads clean file → Done ✓
+Agent edits file  Hook formats  Agent reads clean file  Done 
 ```
 
 ## Hook Script
@@ -154,41 +154,41 @@ Create VS Code task in `.vscode/tasks.json`:
 
 | Scenario | Without Hook | With Hook |
 |----------|--------------|-----------|
-| Edit → Fix indentation | 500 tokens wasted | 0 tokens |
-| Edit → ESLint issues | 300 tokens wasted | 0 tokens |
-| Edit → Black formatting | 200 tokens wasted | 0 tokens |
+| Edit  Fix indentation | 500 tokens wasted | 0 tokens |
+| Edit  ESLint issues | 300 tokens wasted | 0 tokens |
+| Edit  Black formatting | 200 tokens wasted | 0 tokens |
 | **Per fix** | **~1,000 tokens** | **~50 tokens** (hook) |
 | **Monthly (50 fixes)** | **50,000 tokens** | **2,500 tokens** |
 
 ## How It Works
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                        Agent Edit                            │
-│                    (User or LLM)                             │
-└─────────────────────────┬───────────────────────────────────┘
-                          │
-                          ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    File Saved                                │
-└─────────────────────────┬───────────────────────────────────┘
-                          │
-                          ▼
-┌─────────────────────────────────────────────────────────────┐
-│                  PreToolUse Hook                            │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │  1. Detect file extension                           │   │
-│  │  2. Check formatter availability                    │   │
-│  │  3. Run appropriate formatter                      │   │
-│  │  4. Apply fixes                                     │   │
-│  │  5. Report if changes made                          │   │
-│  └─────────────────────────────────────────────────────┘   │
-└─────────────────────────┬───────────────────────────────────┘
-                          │
-                          ▼
-┌─────────────────────────────────────────────────────────────┐
-│                   Agent Read (Clean File)                   │
-└─────────────────────────────────────────────────────────────┘
+
+                        Agent Edit                            
+                    (User or LLM)                             
+
+                          
+                          
+
+                    File Saved                                
+
+                          
+                          
+
+                  PreToolUse Hook                            
+     
+    1. Detect file extension                              
+    2. Check formatter availability                       
+    3. Run appropriate formatter                         
+    4. Apply fixes                                        
+    5. Report if changes made                             
+     
+
+                          
+                          
+
+                   Agent Read (Clean File)                   
+
 ```
 
 ## Troubleshooting

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+﻿#!/usr/bin/env bash
 # deploy.sh - Deploy application to various targets (Linux/macOS)
 
 set -e
@@ -86,9 +86,9 @@ get_project_name() {
 }
 
 # Logging functions
-log_step() { echo -e "${YELLOW}[→]${NC} $1"; }
-log_success() { echo -e "${GREEN}[✓]${NC} $1"; }
-log_error() { echo -e "${RED}[✗]${NC} $1"; }
+log_step() { echo -e "${YELLOW}[]${NC} $1"; }
+log_success() { echo -e "${GREEN}[]${NC} $1"; }
+log_error() { echo -e "${RED}[]${NC} $1"; }
 
 # Docker deployment
 deploy_docker() {

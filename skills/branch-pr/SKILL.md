@@ -1,4 +1,4 @@
----
+﻿---
 name: branch-pr
 description: >
   PR creation workflow for Agent Teams Lite following the issue-first enforcement system.
@@ -20,7 +20,7 @@ Use this skill when:
 
 ## Critical Rules
 
-1. **Every PR MUST link an approved issue** — no exceptions
+1. **Every PR MUST link an approved issue**  no exceptions
 2. **Every PR MUST have exactly one `type:*` label**
 3. **Automated checks must pass** before merge is possible
 4. **Blank PRs without issue linkage will be blocked** by GitHub Actions
@@ -49,7 +49,7 @@ Branch names MUST match this regex:
 ^(feat|fix|chore|docs|style|refactor|perf|test|build|ci|revert)\/[a-z0-9._-]+$
 ```
 
-**Format:** `type/description` — lowercase, no spaces, only `a-z0-9._-` in description.
+**Format:** `type/description`  lowercase, no spaces, only `a-z0-9._-` in description.
 
 | Type | Branch pattern | Example |
 |------|---------------|---------|
@@ -147,10 +147,10 @@ Commit messages MUST match this regex:
 
 **Format:** `type(scope): description` or `type: description`
 
-- `type` — required, one of: `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style`, `test`
-- `(scope)` — optional, lowercase with `a-z0-9._-`
-- `!` — optional, indicates breaking change
-- `description` — required, starts after `: `
+- `type`  required, one of: `build`, `chore`, `ci`, `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style`, `test`
+- `(scope)`  optional, lowercase with `a-z0-9._-`
+- `!`  optional, indicates breaking change
+- `description`  required, starts after `: `
 
 Type-to-label mapping:
 

@@ -1,4 +1,4 @@
-# Foundation Release Checklist
+﻿# Foundation Release Checklist
 
 Use this checklist every time before publishing a release to ensure consistency, completeness, and quality.
 
@@ -73,7 +73,7 @@ Use this checklist every time before publishing a release to ensure consistency,
   - [ ] `.github/workflows/*.yml` files are valid YAML
   - [ ] No hardcoded secrets or API keys
   - [ ] Workflows triggered on expected events (push to main/develop, PR, tag)
-  - [ ] Recent workflow runs show green ✅
+  - [ ] Recent workflow runs show green 
 
 - [ ] **Pre-Commit Hooks**
   - [ ] `.githooks/pre-push` runs without blocking on clean code
@@ -234,7 +234,7 @@ git pull origin main
 git checkout -b hotfix/critical-bug
 # Make fix
 git push origin hotfix/critical-bug
-# Create PR hotfix/critical-bug → main
+# Create PR hotfix/critical-bug  main
 # After merge:
 git tag -a v1.0.1 -m "Hotfix: Critical bug fix"
 git push origin v1.0.1

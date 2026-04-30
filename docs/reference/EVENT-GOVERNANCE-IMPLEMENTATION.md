@@ -1,109 +1,109 @@
-# Event Governance Implementation Guide
+﻿# Event Governance Implementation Guide
 
 ## Overview
 
-Sistema completo de Governance para el Event Bus mejorado con validación de esquemas, políticas de seguridad, auditoría completa y rate limiting.
+Sistema completo de Governance para el Event Bus mejorado con validacin de esquemas, polticas de seguridad, auditora completa y rate limiting.
 
 ## Architecture
 
 ```
 Event Bus Enhanced
-├── Event Registry (config/event-registry.json)
-│   ├── Event definitions
-│   ├── Schemas
-│   ├── Permissions
-│   └── Policies
-├── Governance Layer (event-governance-layer.ps1)
-│   ├── Schema validation
-│   ├── Permission checking
-│   ├── Rate limiting
-│   └── Audit logging
-├── Enhanced Bus (event-bus-enhanced.ps1)
-│   ├── Subscribe/Emit/Unsubscribe
-│   ├── Governance integration
-│   └── History tracking
-└── Orchestrator Integration (orchestrator-governance-integration.ps1)
-    ├── Passive monitoring
-    ├── Health checks
-    └── Reporting
+ Event Registry (config/event-registry.json)
+    Event definitions
+    Schemas
+    Permissions
+    Policies
+ Governance Layer (event-governance-layer.ps1)
+    Schema validation
+    Permission checking
+    Rate limiting
+    Audit logging
+ Enhanced Bus (event-bus-enhanced.ps1)
+    Subscribe/Emit/Unsubscribe
+    Governance integration
+    History tracking
+ Orchestrator Integration (orchestrator-governance-integration.ps1)
+     Passive monitoring
+     Health checks
+     Reporting
 ```
 
 ## Components
 
 ### 1. Event Registry (`config/event-registry.json`)
 
-Define todos los eventos permitidos, esquemas, permisos y políticas.
+Define todos los eventos permitidos, esquemas, permisos y polticas.
 
-**Características:**
-- Definición de eventos estándar
-- Esquemas JSON para validación
-- Permisos por actor (qué puede emitir/escuchar)
-- Políticas de rate limiting
+**Caractersticas:**
+- Definicin de eventos estndar
+- Esquemas JSON para validacin
+- Permisos por actor (qu puede emitir/escuchar)
+- Polticas de rate limiting
 - Niveles de severidad
 
 **Eventos incluidos:**
 - `dispatch.started` - Inicio de dispatch paralelo
-- `dispatch.completed` - Finalización de dispatch
+- `dispatch.completed` - Finalizacin de dispatch
 - `agent.dispatched` - Despacho de agente
-- `agent.completed` - Finalización de agente
-- `session.started` - Inicio de sesión
-- `session.ended` - Finalización de sesión
-- `security.violation` - Violación de seguridad
-- `audit.event` - Evento de auditoría
+- `agent.completed` - Finalizacin de agente
+- `session.started` - Inicio de sesin
+- `session.ended` - Finalizacin de sesin
+- `security.violation` - Violacin de seguridad
+- `audit.event` - Evento de auditora
 
 ### 2. Governance Configuration (`config/event-governance-config.json`)
 
-Configuración de políticas de seguridad, rate limiting y auditoría.
+Configuracin de polticas de seguridad, rate limiting y auditora.
 
 **Secciones:**
-- **Security**: Políticas de autorización
-- **Rate Limiting**: Límites por evento
-- **Audit**: Configuración de auditoría
-- **Alerts**: Configuración de alertas
-- **Monitoring**: Métricas y monitoreo
+- **Security**: Polticas de autorizacin
+- **Rate Limiting**: Lmites por evento
+- **Audit**: Configuracin de auditora
+- **Alerts**: Configuracin de alertas
+- **Monitoring**: Mtricas y monitoreo
 
 ### 3. Governance Layer (`event-governance-layer.ps1`)
 
-Capa de validación y enforcement de políticas.
+Capa de validacin y enforcement de polticas.
 
 **Acciones:**
-- `validate` - Valida evento contra políticas
-- `enforce` - Aplica políticas y bloquea si es necesario
-- `audit` - Genera reporte de auditoría
-- `check-policy` - Verifica política de evento
+- `validate` - Valida evento contra polticas
+- `enforce` - Aplica polticas y bloquea si es necesario
+- `audit` - Genera reporte de auditora
+- `check-policy` - Verifica poltica de evento
 - `report` - Reporte completo de governance
 
 **Validaciones:**
-- Validación de esquemas JSON
-- Verificación de permisos
+- Validacin de esquemas JSON
+- Verificacin de permisos
 - Rate limiting
-- Auditoría completa
+- Auditora completa
 
 ### 4. Enhanced Event Bus (`event-bus-enhanced.ps1`)
 
-Event Bus mejorado con integración de governance.
+Event Bus mejorado con integracin de governance.
 
 **Acciones:**
 - `list` - Lista eventos y suscripciones
 - `subscribe` - Suscribe handler a evento
-- `emit` - Emite evento (con validación)
+- `emit` - Emite evento (con validacin)
 - `handlers` - Lista handlers activos
 - `history` - Historial de eventos
 - `governance-status` - Estado de governance
 
 ### 5. Orchestrator Integration (`orchestrator-governance-integration.ps1`)
 
-Integración del Orchestrator con governance.
+Integracin del Orchestrator con governance.
 
 **Acciones:**
-- `initialize` - Inicializa integración
+- `initialize` - Inicializa integracin
 - `check-health` - Verifica salud de governance
 - `monitor` - Monitorea eventos recientes
 - `report` - Genera reporte para Orchestrator
 
 ## Usage Examples
 
-### Emitir evento con validación
+### Emitir evento con validacin
 
 ```powershell
 .\event-bus-enhanced.ps1 -Action emit `
@@ -112,7 +112,7 @@ Integración del Orchestrator con governance.
   -Actor "orchestrator"
 ```
 
-### Verificar política de evento
+### Verificar poltica de evento
 
 ```powershell
 .\event-governance-layer.ps1 -Action check-policy -EventName "dispatch.started"
@@ -132,19 +132,19 @@ Integración del Orchestrator con governance.
 
 ## Automation
 
-El sistema está completamente automatizado:
+El sistema est completamente automatizado:
 
-1. **Inicialización automática** - Se ejecuta en session-autostart.cmd
-2. **Validación automática** - Cada emit valida contra governance
-3. **Auditoría automática** - Todos los eventos se registran
-4. **Rate limiting automático** - Se aplica sin intervención
+1. **Inicializacin automtica** - Se ejecuta en session-autostart.cmd
+2. **Validacin automtica** - Cada emit valida contra governance
+3. **Auditora automtica** - Todos los eventos se registran
+4. **Rate limiting automtico** - Se aplica sin intervencin
 5. **Monitoreo pasivo** - Orchestrator supervisa sin interferir
 
 ## Security Policies
 
 ### Permission Model
 
-Cada actor tiene permisos específicos:
+Cada actor tiene permisos especficos:
 
 ```json
 {
@@ -173,7 +173,7 @@ Cada evento tiene esquema JSON requerido:
 
 ## Audit Trail
 
-Auditoría completa en `.event-bus/governance/audit/`:
+Auditora completa en `.event-bus/governance/audit/`:
 
 ```json
 {
@@ -208,33 +208,33 @@ Auditoría completa en `.event-bus/governance/audit/`:
 El Orchestrator supervisa pero NO interfiere:
 
 1. **Modo Pasivo** - Solo monitorea
-2. **Conocimiento** - Acceso a políticas y auditoría
-3. **Alertas** - Notificación de violaciones
+2. **Conocimiento** - Acceso a polticas y auditora
+3. **Alertas** - Notificacin de violaciones
 4. **Reportes** - Visibilidad completa
 
 ## File Structure
 
 ```
 .event-bus/
-├── subscriptions.json          # Suscripciones activas
-├── history.json                # Historial de eventos
-└── governance/
-    ├── rate-limits.json        # Estado de rate limiting
-    ├── policy-state.json       # Violaciones y alertas
-    ├── orchestrator-supervision.json
-    ├── audit/
-    │   └── audit-YYYY-MM-DD.json
-    └── metrics/
-        └── metrics-YYYY-MM-DD.json
+ subscriptions.json          # Suscripciones activas
+ history.json                # Historial de eventos
+ governance/
+     rate-limits.json        # Estado de rate limiting
+     policy-state.json       # Violaciones y alertas
+     orchestrator-supervision.json
+     audit/
+        audit-YYYY-MM-DD.json
+     metrics/
+         metrics-YYYY-MM-DD.json
 ```
 
 ## Best Practices
 
 1. **Validar siempre** - Usar governance layer para todas las emisiones
 2. **Monitorear regularmente** - Revisar reportes de governance
-3. **Escalar violaciones** - Actuar sobre violaciones críticas
-4. **Mantener auditoría** - Conservar logs para compliance
-5. **Actualizar políticas** - Ajustar según necesidades
+3. **Escalar violaciones** - Actuar sobre violaciones crticas
+4. **Mantener auditora** - Conservar logs para compliance
+5. **Actualizar polticas** - Ajustar segn necesidades
 
 ## Troubleshooting
 
@@ -245,7 +245,7 @@ Verificar:
 - Esquema del payload
 - Rate limits
 
-### Validación fallida
+### Validacin fallida
 
 Revisar:
 - Campos obligatorios presentes
@@ -256,24 +256,24 @@ Revisar:
 
 Soluciones:
 - Esperar a que se reinicie la ventana
-- Aumentar límite en governance-config.json
+- Aumentar lmite en governance-config.json
 - Distribuir carga en tiempo
 
 ## Maintenance
 
 ### Daily
 
-- Revisar alertas críticas
+- Revisar alertas crticas
 - Monitorear violaciones
 
 ### Weekly
 
 - Generar reporte de governance
-- Revisar auditoría
-- Actualizar políticas si es necesario
+- Revisar auditora
+- Actualizar polticas si es necesario
 
 ### Monthly
 
-- Archivar logs de auditoría
-- Revisar métricas
+- Archivar logs de auditora
+- Revisar mtricas
 - Optimizar rate limits

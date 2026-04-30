@@ -1,4 +1,4 @@
-# Cloud Agent Connector - Complete Security & Setup Guide
+﻿# Cloud Agent Connector - Complete Security & Setup Guide
 
 > **Summary**: This guide covers secure setup, configuration, and usage of Foundation's Cloud Agent Connector for connecting to external AI providers (AWS Bedrock, Difi, Azure, OpenAI, Anthropic, Gemini, Ollama).
 
@@ -7,33 +7,33 @@
 ## Architecture Overview
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                     CLOUD AGENT CONNECTOR                                    │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│  ┌─────────────────┐     ┌──────────────────┐     ┌─────────────────────┐   │
-│  │  Local Config   │     │  Template Config │     │  Environment Vars   │   │
-│  │  (GITIGNORED)   │     │  (COMMITTED)     │     │  (Most Secure)      │   │
-│  │                 │     │                  │     │                     │   │
-│  │ cloud-agents.   │     │ config/cloud-    │     │  AWS_ACCESS_KEY_ID  │   │
-│  │ local.json      │     │ agents.json      │     │  OPENAI_API_KEY     │   │
-│  └────────┬────────┘     └────────┬─────────┘     └──────────┬──────────┘   │
-│           │                       │                           │              │
-│           └───────────────┬───────┴───────────────────────────┘              │
-│                           ▼                                                   │
-│              ┌────────────────────────┐                                      │
-│              │   invoke-cloud-agent    │                                      │
-│              │        .ps1            │                                      │
-│              └───────────┬────────────┘                                      │
-│                          │                                                   │
-│         ┌────────────────┼────────────────┐                                  │
-│         ▼                ▼                ▼                                  │
-│   ┌──────────┐   ┌──────────┐    ┌──────────────┐                          │
-│   │  AWS     │   │  OpenAI  │    │   Difi       │                          │
-│   │ Bedrock  │   │  Azure   │    │   Custom API │                          │
-│   └──────────┘   └──────────┘    └──────────────┘                          │
-│                                                                              │
-└─────────────────────────────────────────────────────────────────────────────┘
+
+                     CLOUD AGENT CONNECTOR                                    
+
+                                                                              
+               
+    Local Config          Template Config        Environment Vars      
+    (GITIGNORED)          (COMMITTED)            (Most Secure)         
+                                                                       
+   cloud-agents.         config/cloud-           AWS_ACCESS_KEY_ID     
+   local.json            agents.json             OPENAI_API_KEY        
+               
+                                                                           
+                         
+                                                                              
+                                                    
+                 invoke-cloud-agent                                          
+                      .ps1                                                  
+                                                    
+                                                                             
+                                           
+                                                                           
+                                    
+     AWS          OpenAI         Difi                                 
+    Bedrock       Azure          Custom API                           
+                                    
+                                                                              
+
 ```
 
 ---

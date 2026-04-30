@@ -1,4 +1,4 @@
----
+﻿---
 name: project-scaffolding
 description: Use when creating projects, scaffolding code, bootstrapping workspaces, applying templates, running validation scripts, or managing workspace infrastructure. Triggers for: "create project", "new project", "bootstrap", "scaffold", "template", "workspace setup", "initialize project", "wf CLI".
 ---
@@ -75,14 +75,14 @@ Templates use mustache-style placeholders. Replace before applying:
 
 ```
 templates/
-├── project-root/           # Base template (all projects)
-└── project-types/
-    ├── service/           # API, backend, worker
-    ├── cli/              # Command-line tools
-    ├── library/          # Reusable packages
-    ├── frontend/         # Web apps (React, Vue, Angular)
-    ├── fullstack/        # Frontend + Backend
-    └── microservices/    # Distributed systems
+ project-root/           # Base template (all projects)
+ project-types/
+     service/           # API, backend, worker
+     cli/              # Command-line tools
+     library/          # Reusable packages
+     frontend/         # Web apps (React, Vue, Angular)
+     fullstack/        # Frontend + Backend
+     microservices/    # Distributed systems
 ```
 
 ### 5. Apply Templates

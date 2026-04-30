@@ -1,21 +1,21 @@
-# PowerShell Script Standards & Governance
+﻿# PowerShell Script Standards & Governance
 
-## Propósito
-Este documento establece los estándares obligatorios para todos los scripts PowerShell en el proyecto. El orquestador utilizará estas reglas para validar, generar y revisar scripts automáticamente.
+## Propsito
+Este documento establece los estndares obligatorios para todos los scripts PowerShell en el proyecto. El orquestador utilizar estas reglas para validar, generar y revisar scripts automticamente.
 
 ---
 
-## 1. Estructura Básica Requerida
+## 1. Estructura Bsica Requerida
 
 ### 1.1 Encabezado del Script
 ```powershell
 #!/usr/bin/env pwsh
 # script-name.ps1
-# Descripción breve de qué hace el script
+# Descripcin breve de qu hace el script
 # Uso: .\script-name.ps1 -Parameter "value"
 ```
 
-### 1.2 Parámetros
+### 1.2 Parmetros
 ```powershell
 param(
     [Parameter(Mandatory=$true)]
@@ -29,12 +29,12 @@ param(
 ```
 
 **Reglas:**
-- Cada parámetro debe estar en su propia línea
-- Usar `[Parameter(Mandatory=$true)]` explícitamente
-- Proporcionar valores por defecto para parámetros opcionales
-- Cerrar paréntesis de `param()` correctamente
+- Cada parmetro debe estar en su propia lnea
+- Usar `[Parameter(Mandatory=$true)]` explcitamente
+- Proporcionar valores por defecto para parmetros opcionales
+- Cerrar parntesis de `param()` correctamente
 
-### 1.3 Configuración Inicial
+### 1.3 Configuracin Inicial
 ```powershell
 $ErrorActionPreference = 'Stop'
 $VerbosePreference = 'Continue'  # Opcional, para debugging
@@ -42,24 +42,24 @@ $VerbosePreference = 'Continue'  # Opcional, para debugging
 
 ---
 
-## 2. Errores Comunes y Cómo Evitarlos
+## 2. Errores Comunes y Cmo Evitarlos
 
-### ❌ ERROR: Paréntesis Desbalanceados
+###  ERROR: Parntesis Desbalanceados
 ```powershell
-# INCORRECTO - Falta paréntesis de cierre
+# INCORRECTO - Falta parntesis de cierre
 function Invoke-PrismaMigrate {
     param([string]$DbAction, [int]$DbSteps
-    # ... código
+    # ... cdigo
 }
 
 # CORRECTO
 function Invoke-PrismaMigrate {
     param([string]$DbAction, [int]$DbSteps)
-    # ... código
+    # ... cdigo
 }
 ```
 
-### ❌ ERROR: Operador && No Válido en PowerShell
+###  ERROR: Operador && No Vlido en PowerShell
 ```powershell
 # INCORRECTO - && no existe en PowerShell
 'fresh' { & npx typeorm schema:drop && & npx typeorm migration:run }
@@ -67,11 +67,11 @@ function Invoke-PrismaMigrate {
 # CORRECTO - Usar ; para encadenar comandos
 'fresh' { & npx typeorm schema:drop; & npx typeorm migration:run }
 
-# ALTERNATIVA - Usar -and para lógica
+# ALTERNATIVA - Usar -and para lgica
 if ($condition1 -and $condition2) { }
 ```
 
-### ❌ ERROR: Comillas Escapadas Incorrectamente
+###  ERROR: Comillas Escapadas Incorrectamente
 ```powershell
 # INCORRECTO - Comillas dobles sin cerrar
 $TriggerList | ForEach-Object { ""$_"" }
@@ -82,7 +82,7 @@ $TriggerList | ForEach-Object { "'$_'" }
 $TriggerList | ForEach-Object { "`"$_`"" }
 ```
 
-### ❌ ERROR: Duplicación de Contenido
+###  ERROR: Duplicacin de Contenido
 ```powershell
 # INCORRECTO - Archivo duplicado dentro de comillas
 $template = @"
@@ -103,7 +103,7 @@ description: >
 # Cerrar con "@
 ```
 
-### ❌ ERROR: Here-Strings Desbalanceados
+###  ERROR: Here-Strings Desbalanceados
 ```powershell
 # INCORRECTO - @" sin cerrar con "@
 $content = @"
@@ -119,7 +119,7 @@ that closes properly
 
 ---
 
-## 3. Funciones Auxiliares Estándar
+## 3. Funciones Auxiliares Estndar
 
 ### 3.1 Logging/Output
 ```powershell
@@ -144,7 +144,7 @@ function Write-Warning {
 }
 ```
 
-### 3.2 Validación de Directorios
+### 3.2 Validacin de Directorios
 ```powershell
 function Ensure-Directory {
     param([string]$Path)
@@ -156,7 +156,7 @@ function Ensure-Directory {
 }
 ```
 
-### 3.3 Validación de Comandos
+### 3.3 Validacin de Comandos
 ```powershell
 function Test-CommandExists {
     param([string]$CommandName)
@@ -173,7 +173,7 @@ function Test-CommandExists {
 ### 4.1 Try-Catch Correcto
 ```powershell
 try {
-    # Código que puede fallar
+    # Cdigo que puede fallar
     & some-command
 }
 catch {
@@ -186,7 +186,7 @@ finally {
 }
 ```
 
-### 4.2 Validación de Parámetros
+### 4.2 Validacin de Parmetros
 ```powershell
 if ([string]::IsNullOrWhiteSpace($ParameterName)) {
     Write-Error "ParameterName is required"
@@ -236,7 +236,7 @@ validate-workspace.ps1
 
 ## 6. Estructura de Funciones
 
-### 6.1 Plantilla Estándar
+### 6.1 Plantilla Estndar
 ```powershell
 function Invoke-MyFunction {
     param(
@@ -250,12 +250,12 @@ function Invoke-MyFunction {
     Write-Step "Starting MyFunction with $RequiredParam"
     
     try {
-        # Validación
+        # Validacin
         if ([string]::IsNullOrWhiteSpace($RequiredParam)) {
             throw "RequiredParam cannot be empty"
         }
         
-        # Lógica principal
+        # Lgica principal
         $result = Do-Something -Input $RequiredParam
         
         # Retornar resultado
@@ -270,33 +270,33 @@ function Invoke-MyFunction {
 
 ---
 
-## 7. Validación Automática (Orquestador)
+## 7. Validacin Automtica (Orquestador)
 
-El orquestador verificará automáticamente:
+El orquestador verificar automticamente:
 
 ### 7.1 Sintaxis
-- ✅ Paréntesis balanceados
-- ✅ Comillas balanceadas
-- ✅ Here-strings cerrados correctamente
-- ✅ Llaves balanceadas en funciones
+-  Parntesis balanceados
+-  Comillas balanceadas
+-  Here-strings cerrados correctamente
+-  Llaves balanceadas en funciones
 
 ### 7.2 Operadores
-- ✅ No usar `&&` (reemplazar con `;`)
-- ✅ No usar `||` (reemplazar con `-or`)
-- ✅ Usar `-and` en lugar de `&&`
-- ✅ Usar `-or` en lugar de `||`
+-  No usar `&&` (reemplazar con `;`)
+-  No usar `||` (reemplazar con `-or`)
+-  Usar `-and` en lugar de `&&`
+-  Usar `-or` en lugar de `||`
 
 ### 7.3 Estructura
-- ✅ Parámetros con `[Parameter(...)]`
-- ✅ `$ErrorActionPreference = 'Stop'` presente
-- ✅ Funciones con nombres Verb-Noun
-- ✅ Documentación en encabezado
+-  Parmetros con `[Parameter(...)]`
+-  `$ErrorActionPreference = 'Stop'` presente
+-  Funciones con nombres Verb-Noun
+-  Documentacin en encabezado
 
 ### 7.4 Convenciones
-- ✅ Nombres de variables en camelCase
-- ✅ Nombres de funciones en Verb-Noun
-- ✅ Nombres de archivos en kebab-case
-- ✅ Indentación consistente (4 espacios)
+-  Nombres de variables en camelCase
+-  Nombres de funciones en Verb-Noun
+-  Nombres de archivos en kebab-case
+-  Indentacin consistente (4 espacios)
 
 ---
 
@@ -304,36 +304,36 @@ El orquestador verificará automáticamente:
 
 Antes de crear un script nuevo, verificar:
 
-- [ ] Encabezado con descripción
-- [ ] Parámetros con `[Parameter(...)]`
+- [ ] Encabezado con descripcin
+- [ ] Parmetros con `[Parameter(...)]`
 - [ ] `$ErrorActionPreference = 'Stop'`
 - [ ] Funciones auxiliares (Write-Step, Write-Success, Write-Error)
 - [ ] Try-catch para manejo de errores
-- [ ] Validación de parámetros
-- [ ] Nombres en convención correcta
-- [ ] Paréntesis y comillas balanceados
+- [ ] Validacin de parmetros
+- [ ] Nombres en convencin correcta
+- [ ] Parntesis y comillas balanceados
 - [ ] No usar `&&` o `||`
 - [ ] Here-strings cerrados correctamente
 
 ---
 
-## 9. Validación del Orquestador
+## 9. Validacin del Orquestador
 
 ### 9.1 Comando para Validar Script
 ```powershell
-# El orquestador ejecutará automáticamente:
+# El orquestador ejecutar automticamente:
 Invoke-ScriptAnalyzer -Path "script.ps1" -Severity Error, Warning
 ```
 
 ### 9.2 Reglas Personalizadas
 ```powershell
-# Verificar operadores no válidos
+# Verificar operadores no vlidos
 if ($content -match '\s&&\s' -or $content -match '\s\|\|\s') {
     Write-Error "Script contains invalid operators && or ||"
     exit 1
 }
 
-# Verificar paréntesis balanceados
+# Verificar parntesis balanceados
 $openParens = [regex]::Matches($content, '\(').Count
 $closeParens = [regex]::Matches($content, '\)').Count
 if ($openParens -ne $closeParens) {
@@ -350,7 +350,7 @@ if ($openParens -ne $closeParens) {
 ```powershell
 #!/usr/bin/env pwsh
 # validate-config.ps1
-# Valida la configuración del workspace
+# Valida la configuracin del workspace
 
 param(
     [Parameter(Mandatory=$true)]
@@ -440,16 +440,16 @@ catch {
 
 ---
 
-## 11. Integración con el Orquestador
+## 11. Integracin con el Orquestador
 
-El orquestador ejecutará estas validaciones automáticamente cuando:
+El orquestador ejecutar estas validaciones automticamente cuando:
 
-1. **Se cree un nuevo script** → Validar estructura
-2. **Se modifique un script** → Validar sintaxis
-3. **Antes de hacer commit** → Pre-commit hook
-4. **En CI/CD pipeline** → Validación automática
+1. **Se cree un nuevo script**  Validar estructura
+2. **Se modifique un script**  Validar sintaxis
+3. **Antes de hacer commit**  Pre-commit hook
+4. **En CI/CD pipeline**  Validacin automtica
 
-### Comando para Forzar Validación Manual
+### Comando para Forzar Validacin Manual
 ```powershell
 .\scripts\diagnostics\validate-script-governance.ps1 -ScriptPath "path/to/script.ps1"
 ```

@@ -1,4 +1,4 @@
-# Developer Setup Guide
+﻿# Developer Setup Guide
 
 Step-by-step guide for new developers joining the team.
 
@@ -214,6 +214,6 @@ git config --global core.hooksPath
 2. Explore available [skills](../../skills/SKILL_INDEX.md)
 3. Setup your first project
 
-- Los hooks automáticos de Foundation - Development Stack ahora cubren 7 dimensiones: Seguridad, Calidad, Arquitectura, Testing, API, Documentación y Gitflow. Consulta REVIEW-INDEX.md para detalles y cómo personalizar reglas.
-- Para personalizar reglas de revisión, edita los archivos SKILL.md en cada subcarpeta de skills/.
-- Los scripts de chequeo están en scripts/hooks/ y pueden adaptarse a las necesidades del proyecto.
+- Los hooks automticos de Foundation - Development Stack ahora cubren 7 dimensiones: Seguridad, Calidad, Arquitectura, Testing, API, Documentacin y Gitflow. Consulta REVIEW-INDEX.md para detalles y cmo personalizar reglas.
+- Para personalizar reglas de revisin, edita los archivos SKILL.md en cada subcarpeta de skills/.
+- Los scripts de chequeo estn en scripts/hooks/ y pueden adaptarse a las necesidades del proyecto.

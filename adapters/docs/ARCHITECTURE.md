@@ -1,8 +1,8 @@
-# Adapter Architecture
+﻿# Adapter Architecture
 
 **Date**: 2026-04-28  
 **Version**: 1.0.0  
-**Status**: 🚧 In Development
+**Status**:  In Development
 
 ---
 ## Overview
@@ -13,46 +13,46 @@ The Adapter Layer enables **any AI tool/IDE** to use Foundation capabilities, re
 ## Architecture Diagram
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                     FOUNDATION CORE                                │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
-│  │   7D Review  │  │  SDD Workflow │  │  Engram Mem  │       │
-│  └──────────────┘  └──────────────┘  └──────────────┘       │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
-│  │  Subagents   │  │  Skills (65+) │  │  Token Guard │       │
-│  └──────────────┘  └──────────────┘  └──────────────┘       │
-└─────────────────────────────────────────────────────────────────────┘
-                              │
-                              │ Exposes via
-                              ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                   ADAPTER LAYER                                    │
-│                                                                   │
-│  ┌──────────────────┐    ┌──────────────────┐                  │
-│  │   MCP BRIDGE     │    │  FORMAT ADAPTERS │                  │
-│  │   (Recommended)  │    │                  │                  │
-│  │                  │    │  ┌────────────┐ │                  │
-│  │ ✅ Universal    │    │  │ Windsurf    │ │                  │
-│  │ ✅ Standard     │    │  └────────────┘ │                  │
-│  │ ✅ Future-proof │    │  ┌────────────┐ │                  │
-│  │                  │    │  │ Codex       │ │                  │
-│  │ MCP Protocol    │    │  └────────────┘ │                  │
-│  │ (stdin/stdout)  │    │  ┌────────────┐ │                  │
-│  │                  │    │  │ Antigravity  │ │                  │
-│  └──────────────────┘    │  └────────────┘ │                  │
-│                          └──────────────────┘                  │
-└─────────────────────────────────────────────────────────────────────┘
-                              │
-                              │ Used by
-                              ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                     AI TOOLS & IDES                                │
-│                                                                   │
-│  ✅ Claude Code    ✅ Cursor      ✅ VS Code + Cline             │
-│  ✅ OpenCode       ✅ Copilot    ✅ Continue.dev                 │
-│  🚧 Windsurf       🚧 Codex      🚧 Antigravity                 │
-│                                                                   │
-└─────────────────────────────────────────────────────────────────────┘
+
+                     FOUNDATION CORE                                
+             
+     7D Review      SDD Workflow     Engram Mem         
+             
+             
+    Subagents       Skills (65+)     Token Guard        
+             
+
+                              
+                               Exposes via
+                              
+
+                   ADAPTER LAYER                                    
+                                                                   
+                        
+     MCP BRIDGE           FORMAT ADAPTERS                   
+     (Recommended)                                          
+                                             
+    Universal           Windsurf                       
+    Standard                              
+    Future-proof                          
+                           Codex                          
+   MCP Protocol                             
+   (stdin/stdout)                           
+                           Antigravity                     
+                           
+                                            
+
+                              
+                               Used by
+                              
+
+                     AI TOOLS & IDES                                
+                                                                   
+   Claude Code     Cursor       VS Code + Cline             
+   OpenCode        Copilot     Continue.dev                 
+   Windsurf        Codex       Antigravity                 
+                                                                   
+
 ```
 
 ---
@@ -65,10 +65,10 @@ The Adapter Layer enables **any AI tool/IDE** to use Foundation capabilities, re
 Converts Foundation into an **MCP Server** that any MCP-compatible tool can use.
 
 **Benefits**:
-- ✅ Universal (any MCP client)
-- ✅ Standard protocol (future-proof)
-- ✅ Exposes all Foundation capabilities
-- ✅ Token-efficient (MCP handles context)
+-  Universal (any MCP client)
+-  Standard protocol (future-proof)
+-  Exposes all Foundation capabilities
+-  Token-efficient (MCP handles context)
 
 **Exposed Tools**:
 - `foundation_review` - 7D code review
@@ -98,9 +98,9 @@ Translates between Foundation's standard format and tool-specific formats.
 
 | Adapter | Input Format | Output Format | Status |
 |---------|--------------|---------------|--------|
-| `windsurf-adapter/` | Foundation SKILL.md | Windsurf plugin | 🚧 Pending |
-| `codex-adapter/` | Foundation tools | OpenAI functions | 🚧 Pending |
-| `antigravity-adapter/` | Foundation context | Mission Control | 🚧 Pending |
+| `windsurf-adapter/` | Foundation SKILL.md | Windsurf plugin |  Pending |
+| `codex-adapter/` | Foundation tools | OpenAI functions |  Pending |
+| `antigravity-adapter/` | Foundation context | Mission Control |  Pending |
 
 ---
 ## Data Flow
@@ -109,13 +109,13 @@ Translates between Foundation's standard format and tool-specific formats.
 
 ```
 Tool (Windsurf, Codex, etc.)
-    │
-    │ MCP Protocol (stdin/stdout)
-    ▼
+    
+     MCP Protocol (stdin/stdout)
+    
 MCP Bridge Server (adapters/mcp-bridge/)
-    │
-    │ Calls Foundation CLI/Scripts
-    ▼
+    
+     Calls Foundation CLI/Scripts
+    
 Foundation Core (7D Review, SDD, Engram, etc.)
 ```
 
@@ -123,13 +123,13 @@ Foundation Core (7D Review, SDD, Engram, etc.)
 
 ```
 Tool (Windsurf, Codex, etc.)
-    │
-    │ Tool-specific format
-    ▼
+    
+     Tool-specific format
+    
 Format Adapter (adapters/format-adapters/)
-    │
-    │ Translates to Foundation format
-    ▼
+    
+     Translates to Foundation format
+    
 Foundation Core (via CLI/Scripts)
 ```
 
@@ -142,14 +142,14 @@ Detects running tool and recommends adapter:
 
 | Tool | Detection Method | Confidence | MCP Support |
 |------|-----------------|------------|-------------|
-| VS Code / Cline | `VSCODE_GIT_IPC_HANDLE` | High | ✅ |
-| OpenCode | `OPENCODE_` env vars | High | ✅ |
-| Cursor | `CURSOR_` env vars | High | ✅ |
-| Windsurf | `WINDSURF_` env vars | Medium | 🚧 Research |
-| Codex | `CODEX_` env vars | Medium | ❌ |
-| Antigravity | `ANTIGRAVITY_` env vars | Low | ❌ |
-| JetBrains | `JETBRAINS_IDE` | Medium | ❌ |
-| Terminal | `TERM_PROGRAM` | Low | ❌ |
+| VS Code / Cline | `VSCODE_GIT_IPC_HANDLE` | High |  |
+| OpenCode | `OPENCODE_` env vars | High |  |
+| Cursor | `CURSOR_` env vars | High |  |
+| Windsurf | `WINDSURF_` env vars | Medium |  Research |
+| Codex | `CODEX_` env vars | Medium |  |
+| Antigravity | `ANTIGRAVITY_` env vars | Low |  |
+| JetBrains | `JETBRAINS_IDE` | Medium |  |
+| Terminal | `TERM_PROGRAM` | Low |  |
 
 ---
 ## Rule: ADAPTER-001
@@ -166,14 +166,14 @@ Detects running tool and recommends adapter:
 
 | Component | Status | Priority | Notes |
 |-----------|--------|----------|-------|
-| MCP Bridge Server | ⏳ Pending | HIGH | Main server implementation |
-| MCP Tools (6 tools) | ⏳ Pending | HIGH | review, audit, delegate, etc. |
-| Enhanced Detection | ✅ Ready | HIGH | In `adapters/detection/` |
-| Windsurf Adapter | ⏳ Pending | MEDIUM | Research plugin format |
-| Codex Adapter | ⏳ Pending | LOW | OpenAI function calling |
-| Antigravity Adapter | ⏳ Pending | LOW | Mission Control API |
-| Documentation | ✅ In Progress | HIGH | This file complete |
-| Rule TECH-ADAPTER-001 | ✅ Active | HIGH | Enforces detection |
+| MCP Bridge Server |  Pending | HIGH | Main server implementation |
+| MCP Tools (6 tools) |  Pending | HIGH | review, audit, delegate, etc. |
+| Enhanced Detection |  Ready | HIGH | In `adapters/detection/` |
+| Windsurf Adapter |  Pending | MEDIUM | Research plugin format |
+| Codex Adapter |  Pending | LOW | OpenAI function calling |
+| Antigravity Adapter |  Pending | LOW | Mission Control API |
+| Documentation |  In Progress | HIGH | This file complete |
+| Rule TECH-ADAPTER-001 |  Active | HIGH | Enforces detection |
 
 ---
 ## Next Steps

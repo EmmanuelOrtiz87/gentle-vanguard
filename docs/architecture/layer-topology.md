@@ -1,4 +1,4 @@
-# 5-Layer Topology Architecture
+﻿# 5-Layer Topology Architecture
 
 ## Overview
 
@@ -7,34 +7,34 @@ The workspace-foundation implements a 5-layer topology for AI agent tooling, des
 ## Layer Architecture
 
 ```
-┌─────────────────────────────────────────────────────┐
-│  Layer 5: Agentes (Agents)                        │
-│  Abstract layer for AI agents executing tasks      │
-└─────────────────────────────────────────────────────┘
-                          ▲
-                          │
-┌─────────────────────────────────────────────────────┐
-│  Layer 4: Comandos (Commands/Tools)                │
-│  Executable operations (bash, read, write, etc.)   │
-└─────────────────────────────────────────────────────┘
-                          ▲
-                          │
-┌─────────────────────────────────────────────────────┐
-│  Layer 3: MCP (Model Context Protocol)              │
-│  Standardized tool/service integration protocol     │
-└─────────────────────────────────────────────────────┘
-                          ▲
-                          │
-┌─────────────────────────────────────────────────────┐
-│  Layer 2: Skills                                    │
-│  Domain-specific knowledge and patterns              │
-└─────────────────────────────────────────────────────┘
-                          ▲
-                          │
-┌─────────────────────────────────────────────────────┐
-│  Layer 1: Memoria (Memory)                          │
-│  Persistent state and context management            │
-└─────────────────────────────────────────────────────┘
+
+  Layer 5: Agentes (Agents)                        
+  Abstract layer for AI agents executing tasks      
+
+                          
+                          
+
+  Layer 4: Comandos (Commands/Tools)                
+  Executable operations (bash, read, write, etc.)   
+
+                          
+                          
+
+  Layer 3: MCP (Model Context Protocol)              
+  Standardized tool/service integration protocol     
+
+                          
+                          
+
+  Layer 2: Skills                                    
+  Domain-specific knowledge and patterns              
+
+                          
+                          
+
+  Layer 1: Memoria (Memory)                          
+  Persistent state and context management            
+
 ```
 
 ## Layer Details
@@ -70,10 +70,10 @@ The workspace-foundation implements a 5-layer topology for AI agent tooling, des
 **Structure**:
 ```
 skills/
-├── angular-spa-skill/SKILL.md
-├── golang-api-skill/SKILL.md
-├── sdd-*/SKILL.md (SDD workflow)
-└── ...
+ angular-spa-skill/SKILL.md
+ golang-api-skill/SKILL.md
+ sdd-*/SKILL.md (SDD workflow)
+ ...
 ```
 
 ### Layer 3: MCP (Model Context Protocol)
@@ -145,8 +145,8 @@ Any component can be replaced:
 
 ### 3. No Cross-Layer Dependencies
 Layers only depend on the layer directly below them:
-- Layer 5 → Layer 4 → Layer 3 → Layer 2 → Layer 1
-- No Layer 5 → Layer 2 shortcuts
+- Layer 5  Layer 4  Layer 3  Layer 2  Layer 1
+- No Layer 5  Layer 2 shortcuts
 
 ### 4. OS/Agent/Language Agnostic
 - No Windows-specific paths in skill logic

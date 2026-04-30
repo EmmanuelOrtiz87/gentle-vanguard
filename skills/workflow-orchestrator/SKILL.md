@@ -1,4 +1,4 @@
----
+﻿---
 name: workflow-orchestrator
 description: Workflow orchestration skill for managing development workflows and automation
 ---
@@ -17,11 +17,11 @@ description: Workflow orchestration skill for managing development workflows and
 The `workflow-orchestrator` skill provides advanced workflow automation with intelligent scheduling, dependency management, and error recovery. It enables complex multi-step automation with autonomous execution and recovery.
 
 ### Key Capabilities
-- 🔄 DAG-based workflow graphs
-- ⏱️ Intelligent scheduling with resource awareness
-- 🔗 Advanced dependency management
-- 🛡️ Error handling & automatic recovery
-- 📊 Real-time execution monitoring
+-  DAG-based workflow graphs
+-  Intelligent scheduling with resource awareness
+-  Advanced dependency management
+-  Error handling & automatic recovery
+-  Real-time execution monitoring
 
 ---
 
@@ -36,9 +36,9 @@ The `workflow-orchestrator` skill provides advanced workflow automation with int
 
 ### Use Cases
 1. **Complex Automation**: "Automatizar proceso de backup, sync y reporte"
-2. **Scheduled Workflows**: "Ejecutar tareas en orden específico"
-3. **Error Recovery**: "Reintentar automáticamente si falla"
-4. **Monitoring**: "Monitorear ejecución del workflow"
+2. **Scheduled Workflows**: "Ejecutar tareas en orden especfico"
+3. **Error Recovery**: "Reintentar automticamente si falla"
+4. **Monitoring**: "Monitorear ejecucin del workflow"
 
 ---
 

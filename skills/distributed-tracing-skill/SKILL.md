@@ -1,4 +1,4 @@
----
+﻿---
 name: distributed-tracing-skill
 description: Distributed tracing with OpenTelemetry for workspace sessions
 trigger: tracing, telemetry, distributed, correlation, span
@@ -6,61 +6,61 @@ trigger: tracing, telemetry, distributed, correlation, span
 
 # Distributed Tracing Skill
 
-## Descripción
+## Descripcin
 
-Este skill proporciona capacidades de tracing distribuido para el workspace-foundation, permitiendo rastrear la ejecución de dispatches, orchestration y automatización con:
+Este skill proporciona capacidades de tracing distribuido para el workspace-foundation, permitiendo rastrear la ejecucin de dispatches, orchestration y automatizacin con:
 
-- **OpenTelemetry Integration**: Implementación compatible con estándares de observabilidad
-- **Correlation IDs**: Identificadores únicos para rastrear operaciones a través de múltiples componentes
-- **Span Hierarchy**: Estructura jerárquica de spans para visualizar relaciones entre operaciones
-- **Performance Metrics**: Métricas de rendimiento en tiempo real
-- **Centralized Reporting**: Reportes centralizados en un único directorio
+- **OpenTelemetry Integration**: Implementacin compatible con estndares de observabilidad
+- **Correlation IDs**: Identificadores nicos para rastrear operaciones a travs de mltiples componentes
+- **Span Hierarchy**: Estructura jerrquica de spans para visualizar relaciones entre operaciones
+- **Performance Metrics**: Mtricas de rendimiento en tiempo real
+- **Centralized Reporting**: Reportes centralizados en un nico directorio
 
-## Características
+## Caractersticas
 
 ### 1. Correlation IDs
-- Generación automática de IDs únicos por sesión
-- Propagación a través de todas las operaciones
+- Generacin automtica de IDs nicos por sesin
+- Propagacin a travs de todas las operaciones
 - Formato: `session-YYYY-MM-DD-XX-XXXXXXXX` (UUID)
 
 ### 2. Span Hierarchy
 ```
 Root Span (Session)
-├── Dispatch Span
-│   ├── Task Routing Span
-│   ├── Agent Execution Span
-│   └── Result Processing Span
-├── Orchestration Span
-│   ├── Phase Execution Span
-│   └── State Management Span
-└── Automation Span
-    ├── Event Processing Span
-    └── Action Execution Span
+ Dispatch Span
+    Task Routing Span
+    Agent Execution Span
+    Result Processing Span
+ Orchestration Span
+    Phase Execution Span
+    State Management Span
+ Automation Span
+     Event Processing Span
+     Action Execution Span
 ```
 
 ### 3. Performance Metrics
 - Latencia de operaciones
 - Throughput de dispatches
-- Tasa de éxito/error
-- Utilización de recursos
+- Tasa de xito/error
+- Utilizacin de recursos
 
 ### 4. Reportes Centralizados
 Estructura de directorios:
 ```
 .telemetry/
-├── traces/
-│   ├── dispatch-traces-YYYY-MM-DD.jsonl
-│   ├── orchestration-traces-YYYY-MM-DD.jsonl
-│   └── automation-traces-YYYY-MM-DD.jsonl
-├── metrics/
-│   ├── performance-metrics-YYYY-MM-DD.json
-│   ├── dispatch-metrics-YYYY-MM-DD.json
-│   └── system-metrics-YYYY-MM-DD.json
-├── reports/
-│   ├── daily-summary-YYYY-MM-DD.md
-│   ├── performance-analysis-YYYY-MM-DD.md
-│   └── error-analysis-YYYY-MM-DD.md
-└── index.json
+ traces/
+    dispatch-traces-YYYY-MM-DD.jsonl
+    orchestration-traces-YYYY-MM-DD.jsonl
+    automation-traces-YYYY-MM-DD.jsonl
+ metrics/
+    performance-metrics-YYYY-MM-DD.json
+    dispatch-metrics-YYYY-MM-DD.json
+    system-metrics-YYYY-MM-DD.json
+ reports/
+    daily-summary-YYYY-MM-DD.md
+    performance-analysis-YYYY-MM-DD.md
+    error-analysis-YYYY-MM-DD.md
+ index.json
 ```
 
 ## Uso
@@ -79,12 +79,12 @@ $span = Start-Span -Name "dispatch-task" -ParentSpanId $parentSpan.SpanId -Attri
     Priority = "high"
 }
 
-# ... realizar operación ...
+# ... realizar operacin ...
 
 End-Span -Span $span -Status "success"
 ```
 
-### Registrar Métricas
+### Registrar Mtricas
 ```powershell
 Record-Metric -Name "dispatch-latency" -Value 1250 -Unit "ms" -Tags @{
     DispatchType = "auto-delegation"
@@ -97,24 +97,24 @@ Record-Metric -Name "dispatch-latency" -Value 1250 -Unit "ms" -Tags @{
 Generate-DailyReport -Date (Get-Date) -OutputPath ".telemetry/reports"
 ```
 
-## Integración con Componentes Existentes
+## Integracin con Componentes Existentes
 
 ### Auto-Delegation Router
-- Cada dispatch genera un span raíz
+- Cada dispatch genera un span raz
 - Sub-spans para keyword extraction, decision tree, confidence scoring
-- Métricas de routing accuracy
+- Mtricas de routing accuracy
 
 ### Judgment Day Orchestrator
 - Span para cada fase de judgment
-- Métricas de review time y approval rate
+- Mtricas de review time y approval rate
 - Trazabilidad de decisiones
 
 ### Session Manager
-- Correlation ID propagado a toda la sesión
-- Métricas de session lifecycle
-- Análisis de session performance
+- Correlation ID propagado a toda la sesin
+- Mtricas de session lifecycle
+- Anlisis de session performance
 
-## Configuración
+## Configuracin
 
 Ver: `config/distributed-tracing-config.json`
 

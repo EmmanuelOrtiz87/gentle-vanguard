@@ -1,4 +1,4 @@
----
+﻿---
 name: skill-creator
 description: >
   Creates new AI agent skills following the Agent Skills spec.
@@ -34,12 +34,12 @@ Create new AI agent skills following Foundation's Agent Skills specification.
 
 ```
 skills/{skill-name}/
-├── SKILL.md              # Required - main skill file
-├── assets/               # Optional - templates, schemas, examples
-│   ├── template.py
-│   └── schema.json
-└── references/           # Optional - links to local docs
-    └── docs.md           # Points to docs/developer-guide/*.mdx
+ SKILL.md              # Required - main skill file
+ assets/               # Optional - templates, schemas, examples
+    template.py
+    schema.json
+ references/           # Optional - links to local docs
+     docs.md           # Points to docs/developer-guide/*.mdx
 ```
 
 ---

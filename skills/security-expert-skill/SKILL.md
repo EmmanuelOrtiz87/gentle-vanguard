@@ -1,4 +1,4 @@
----
+﻿---
 name: security-expert
 description: >
   AI-powered security assistant for pre-commit validation, security audits, and secure coding.
@@ -133,7 +133,7 @@ Found: 4 issues (1 critical, 1 high, 1 medium, 1 low)
 Action required: Review critical issues before commit
 ```
 
-### Report Format (docs/security-review.md) — output path, created by agent
+### Report Format (docs/security-review.md)  output path, created by agent
 ```markdown
 # Security Review Report
 

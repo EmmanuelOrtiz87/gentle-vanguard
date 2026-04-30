@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Session Authentication - Validates owner before restricted operations
 .DESCRIPTION
@@ -188,7 +188,7 @@ if ($ApiKey) {
         exit 0
     } else {
         Write-Host ""
-        Write-Host "[X] API key inválida" -ForegroundColor Red
+        Write-Host "[X] API key invlida" -ForegroundColor Red
         Write-Host ""
         Write-Host "Olvidaste tu API key? Usa: --security-questions" -ForegroundColor Yellow
         exit 1

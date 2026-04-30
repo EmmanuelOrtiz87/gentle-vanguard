@@ -1,23 +1,23 @@
-# React Native Project Structure
+﻿# React Native Project Structure
 
 ```
 {{project-name}}/
-├── src/
-│   ├── components/      # Reusable UI components
-│   ├── screens/         # Screen components
-│   ├── navigation/      # Navigation configuration
-│   ├── services/        # API clients, services
-│   ├── hooks/           # Custom hooks
-│   ├── utils/           # Utility functions
-│   ├── types/           # TypeScript types
-│   ├── store/           # State management
-│   └── constants/       # Constants, theme
-├── __tests__/           # Test files
-├── android/             # Android native code
-├── ios/                 # iOS native code
-├── index.js             # Entry point
-├── App.tsx              # Root component
-└── package.json
+ src/
+    components/      # Reusable UI components
+    screens/         # Screen components
+    navigation/      # Navigation configuration
+    services/        # API clients, services
+    hooks/           # Custom hooks
+    utils/           # Utility functions
+    types/           # TypeScript types
+    store/           # State management
+    constants/       # Constants, theme
+ __tests__/           # Test files
+ android/             # Android native code
+ ios/                 # iOS native code
+ index.js             # Entry point
+ App.tsx              # Root component
+ package.json
 ```
 
 ## Navigation Structure

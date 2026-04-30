@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+﻿#!/usr/bin/env bash
 # wf.sh - Foundation - Development Stack Workflow CLI (bash/sh version)
 # Works on: Linux, macOS, Windows (WSL, Git Bash)
 # Mirror of wf.ps1 - all commands wrapped for shell compatibility
@@ -21,9 +21,9 @@ DIAGNOSTICS_DIR="$PROJECT_ROOT/scripts/diagnostics"
 
 # Logging functions
 log_header() {
-    echo -e "${CYAN}══════════════════════════════════════════════════════════${NC}"
+    echo -e "${CYAN}${NC}"
     echo -e "${CYAN}  $1${NC}"
-    echo -e "${CYAN}══════════════════════════════════════════════════════════${NC}"
+    echo -e "${CYAN}${NC}"
 }
 
 log_info() {

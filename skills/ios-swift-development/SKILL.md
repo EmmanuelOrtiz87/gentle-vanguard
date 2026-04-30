@@ -1,4 +1,4 @@
----
+﻿---
 name: ios-swift-development
 description: >
   Develop native iOS apps with Swift. Covers MVVM architecture, SwiftUI,
@@ -62,7 +62,7 @@ class UserViewModel: ObservableObject {
 
 ## Best Practices
 
-### ✅ DO
+###  DO
 
 - Use SwiftUI for modern UI development
 - Implement MVVM architecture
@@ -76,7 +76,7 @@ class UserViewModel: ObservableObject {
 - Use dependency injection
 - Follow Swift style guidelines
 
-### ❌ DON'T
+###  DON'T
 
 - Store tokens in UserDefaults
 - Make network calls on main thread

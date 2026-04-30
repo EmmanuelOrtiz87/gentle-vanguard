@@ -1,32 +1,32 @@
-# Ejemplo: Conexión a un Agente IA Remoto vía API
+﻿# Ejemplo: Conexin a un Agente IA Remoto va API
 
-Este ejemplo documenta el paso a paso para conectar Foundation (o tu entorno local) a un agente IA externo expuesto vía API, usando solo la URL y la API key.
+Este ejemplo documenta el paso a paso para conectar Foundation (o tu entorno local) a un agente IA externo expuesto va API, usando solo la URL y la API key.
 
 ---
 
-## 1. Crear configuración local de proveedores
+## 1. Crear configuracin local de proveedores
 
-Desde PowerShell, en la raíz de workspace-foundation:
+Desde PowerShell, en la raz de workspace-foundation:
 
 ```powershell
 cd C:\Workspace_local\workspace-foundation
 .\scripts\utilities\invoke-cloud-agent.ps1 -Config
 ```
-Selecciona la opción 2 para crear el archivo `config/cloud-agents.local.json`.
+Selecciona la opcin 2 para crear el archivo `config/cloud-agents.local.json`.
 
 ---
 
 ## 2. Agregar la API Key
 
-**Opción recomendada (producción):**
+**Opcin recomendada (produccin):**
 
 ```powershell
 $env:MY_AGENT_APIKEY = "tu_apikey"
 ```
 
-**Opción desarrollo:**
+**Opcin desarrollo:**
 
-Crea un archivo `.env.local` en la raíz del repo y agrega:
+Crea un archivo `.env.local` en la raz del repo y agrega:
 
 ```
 MY_AGENT_APIKEY=tu_apikey
@@ -50,12 +50,12 @@ Edita `config/cloud-agents.local.json` y agrega tu proveedor personalizado:
 }
 ```
 
-- Si el proveedor no requiere parámetro "model", puedes omitirlo.
+- Si el proveedor no requiere parmetro "model", puedes omitirlo.
 - "api_key_env" debe coincidir con el nombre de tu variable de entorno.
 
 ---
 
-## 4. Probar la conexión
+## 4. Probar la conexin
 
 ```powershell
 .\scripts\utilities\invoke-cloud-agent.ps1 -Provider custom -TestConnection
@@ -67,9 +67,9 @@ Edita `config/cloud-agents.local.json` y agrega tu proveedor personalizado:
 
 - Ejecutar un comando:
   ```powershell
-  .\scripts\utilities\invoke-cloud-agent.ps1 -Provider custom -Command "¿Cuál es la capital de Francia?"
+  .\scripts\utilities\invoke-cloud-agent.ps1 -Provider custom -Command "Cul es la capital de Francia?"
   ```
-- Modo estricto (automatización):
+- Modo estricto (automatizacin):
   ```powershell
   .\scripts\utilities\invoke-cloud-agent.ps1 -Provider custom -StrictJson -Command "return JSON"
   ```
@@ -83,9 +83,9 @@ Edita `config/cloud-agents.local.json` y agrega tu proveedor personalizado:
 ## Notas
 - Nunca pongas la API key en archivos versionados.
 - Usa variables de entorno o `.env.local` (gitignored).
-- Puedes tener múltiples proveedores configurados y alternar con el flag `-Provider`.
-- Si el endpoint requiere parámetros adicionales, consulta la documentación del proveedor.
+- Puedes tener mltiples proveedores configurados y alternar con el flag `-Provider`.
+- Si el endpoint requiere parmetros adicionales, consulta la documentacin del proveedor.
 
 ---
 
-**Última actualización:** 2026-04-20
+**ltima actualizacin:** 2026-04-20

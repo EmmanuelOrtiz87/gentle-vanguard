@@ -1,18 +1,18 @@
-# Microservices Project Template
+﻿# Microservices Project Template
 
 ## Structure
 
 ```
 {{project-name}}/
-├── services/
-│   ├── users/        # User service
-│   ├── orders/       # Orders service
-│   ├── payments/    # Payment service
-│   └── notifications/ # Notification service
-├── api-gateway/     # API Gateway (Kong/Nginx)
-├── shared/          # Shared libraries
-├── infrastructure/  # Docker, K8s, Terraform
-└── docker-compose.yml
+ services/
+    users/        # User service
+    orders/       # Orders service
+    payments/    # Payment service
+    notifications/ # Notification service
+ api-gateway/     # API Gateway (Kong/Nginx)
+ shared/          # Shared libraries
+ infrastructure/  # Docker, K8s, Terraform
+ docker-compose.yml
 ```
 
 ## Services

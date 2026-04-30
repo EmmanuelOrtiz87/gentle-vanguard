@@ -1,4 +1,4 @@
----
+﻿---
 name: backlog-management-skill
 description: >
   Backlog management patterns: JSON schema, triage automation, migration from markdown.
@@ -11,9 +11,9 @@ Standardize backlog intake, triage, and lifecycle management using structured JS
 ## Directory Structure
 ```
 docs/backlog/
-├── items.json              # Source of truth (structured data)
-├── README.md               # Human-readable view (generated or manual)
-└── archive/                # Completed/discarded items
+ items.json              # Source of truth (structured data)
+ README.md               # Human-readable view (generated or manual)
+ archive/                # Completed/discarded items
 ```
 
 ## JSON Schema

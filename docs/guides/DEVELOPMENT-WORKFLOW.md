@@ -1,4 +1,4 @@
-# Development Workflow
+﻿# Development Workflow
 
 ## Overview
 
@@ -8,9 +8,9 @@ This document defines the standardized development workflow for all projects usi
 
 ```
 main (production)
-     ↑
+     
 develop (integration)
-     ↑
+     
 feature/* / bugfix/* / chore/*
 ```
 
@@ -112,7 +112,7 @@ docs(readme): update installation
 | Severity | Icon | Action | Blocking |
 |----------|------|--------|----------|
 | CRITICAL | [X] | Block immediately | Yes |
-| HIGH | [!]️ | Must fix before PR | Yes |
+| HIGH | [!] | Must fix before PR | Yes |
 | MEDIUM | [-] | User choice | No |
 | LOW | [*] | Optional | No |
 

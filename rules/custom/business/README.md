@@ -1,4 +1,4 @@
-# Business Custom Rules
+﻿# Business Custom Rules
 
 Add domain and business constraints in this directory.
 
@@ -39,7 +39,7 @@ Acceptance criteria or review checklist item.
 File: `BIZ-001-release-governance.md`
 
 ```markdown
-# Release Governance — Notes Format
+# Release Governance  Notes Format
 
 ## Metadata
 

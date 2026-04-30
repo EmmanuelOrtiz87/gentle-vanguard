@@ -1,4 +1,4 @@
-# Vendor Hook Requests - Pre-Processing Support
+﻿# Vendor Hook Requests - Pre-Processing Support
 
 ## Overview
 We need AI tool vendors to support a `pre_process` hook that automatically runs BEFORE any user input is processed by the AI.
@@ -35,7 +35,7 @@ Currently, we have rules in config files (`.clinerules`, `.cursorrules`, `AGENTS
 }
 ```
 
-**Status**: ✅ Config structure added (2026-04-29)
+**Status**:  Config structure added (2026-04-29)
 **Needed**: Actual enforcement by OpenCode runtime
 
 ---
@@ -56,7 +56,7 @@ Currently, we have rules in config files (`.clinerules`, `.cursorrules`, `AGENTS
 }
 ```
 
-**Status**: ❌ Not supported yet
+**Status**:  Not supported yet
 **Needed**: Add hook support in Cline extension settings
 
 ---
@@ -76,7 +76,7 @@ Currently, we have rules in config files (`.clinerules`, `.cursorrules`, `AGENTS
 }
 ```
 
-**Status**: ❌ Not supported yet
+**Status**:  Not supported yet
 **Needed**: Add hook support in Cursor IDE
 
 ---
@@ -94,7 +94,7 @@ Currently, we have rules in config files (`.clinerules`, `.cursorrules`, `AGENTS
 }
 ```
 
-**Status**: ❌ Not supported yet
+**Status**:  Not supported yet
 **Needed**: Add hook support in Windsurf
 
 ---
@@ -114,7 +114,7 @@ Currently, we have rules in config files (`.clinerules`, `.cursorrules`, `AGENTS
 }
 ```
 
-**Status**: ❌ Not supported yet
+**Status**:  Not supported yet
 **Needed**: Add hook support in Continue.dev extension
 
 ---
@@ -123,15 +123,15 @@ Currently, we have rules in config files (`.clinerules`, `.cursorrules`, `AGENTS
 
 While waiting for vendors to implement hooks, we rely on **AI self-enforcement**:
 
-1. AI reads `AGENTS.md` ✅
-2. AI sees `MANDATORY PRE-PROCESSING RULE` ✅
-3. AI **should** run `pre-process-input.ps1` before EVERY response ❌ (not happening reliably)
+1. AI reads `AGENTS.md` 
+2. AI sees `MANDATORY PRE-PROCESSING RULE` 
+3. AI **should** run `pre-process-input.ps1` before EVERY response  (not happening reliably)
 
 **Our implementation (2026-04-29):**
-- ✅ `tools/pre-process-input.ps1` (fixed and working)
-- ✅ `config/orchestrator.json` (unified config)
-- ✅ `opencode.json` (hook config added)
-- ✅ All tool configs updated (`.clinerules`, `.cursorrules`)
+-  `tools/pre-process-input.ps1` (fixed and working)
+-  `config/orchestrator.json` (unified config)
+-  `opencode.json` (hook config added)
+-  All tool configs updated (`.clinerules`, `.cursorrules`)
 
 ---
 
@@ -170,11 +170,11 @@ This would enable true automation across all AI coding tools.
 
 | Tool | Hook Support | Config Added | Status |
 |------|--------------|-------------|--------|
-| **OpenCode** | ❌ Needed | ✅ Yes | Waiting for runtime support |
-| **Cline** | ❌ Needed | ✅ Yes (`.clinerules`) | Waiting for extension update |
-| **Cursor** | ❌ Needed | ✅ Yes (`.cursorrules`) | Waiting for IDE update |
-| **Windsurf** | ❌ Needed | ❌ | Waiting for config support |
-| **Continue.dev** | ❌ Needed | ❌ | Waiting for extension update |
+| **OpenCode** |  Needed |  Yes | Waiting for runtime support |
+| **Cline** |  Needed |  Yes (`.clinerules`) | Waiting for extension update |
+| **Cursor** |  Needed |  Yes (`.cursorrules`) | Waiting for IDE update |
+| **Windsurf** |  Needed |  | Waiting for config support |
+| **Continue.dev** |  Needed |  | Waiting for extension update |
 
 ---
 

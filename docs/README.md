@@ -1,4 +1,4 @@
-# Documentation Index
+﻿# Documentation Index
 
 Foundation - Development Stack documentation - reorganized for better navigation.
 
@@ -6,11 +6,11 @@ Foundation - Development Stack documentation - reorganized for better navigation
 
 ```
 docs/
-├── architecture/       # Architecture hub and decision records
-├── getting-started/     # Quick start guides
-├── reference/          # Technical reference
-├── guides/             # How-to guides
-└── supplementary/       # Additional resources
+ architecture/       # Architecture hub and decision records
+ getting-started/     # Quick start guides
+ reference/          # Technical reference
+ guides/             # How-to guides
+ supplementary/       # Additional resources
 ```
 
 ## Quick Start
