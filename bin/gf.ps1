@@ -254,7 +254,7 @@ function New-Project {
     Write-Host ""
     Write-Host "Project creation scaffolding..." -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "TODO: Implement project scaffolding from templates" -ForegroundColor Gray
+    Write-Host "Project scaffolding available via: wf.ps1 scaffold" -ForegroundColor Gray
     Write-Host ""
     Write-Host "For now, create project manually and run:" -ForegroundColor Cyan
     Write-Host "  gf setup --project $Name" -ForegroundColor White
