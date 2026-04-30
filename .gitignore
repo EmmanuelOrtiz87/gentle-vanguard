@@ -76,3 +76,10 @@ templates/gga/
 scripts/optional/run-gga.ps1
 scripts/utilities/run-gga.ps1
 *gga*.local/
+
+# Encrypted backups (security)
+.backups/
+
+# Session data (runtime)
+.session/
+
