@@ -1,4 +1,4 @@
-# Cline Rules - Local-First Policy
+# Antigravity - Local-First Policy
 
 ## MANDATORY PRE-PROCESSING RULE (ALWAYS ACTIVE)
 
@@ -14,14 +14,17 @@
 **This rule is MANDATORY and MUST be followed automatically. Do NOT wait to be asked.**
 
 ## Principle: LOCAL-FIRST
+
 Prioritize local project knowledge over external searches.
 
 ## Tool Restrictions
+
 - **websearch**: DENY - Do not search the web
 - **codesearch**: DENY - Use local grep and project skills
 - **webfetch**: DENY - Use local documentation
 
 ## Allowed by Default
+
 ✅ `grep` - Search local files
 ✅ `read` - Read local files
 ✅ `glob` - Find local files
@@ -30,7 +33,9 @@ Prioritize local project knowledge over external searches.
 ✅ `bash` - Run local scripts
 
 ## When External Tools Are Allowed
+
 Only when:
+
 1. User explicitly requests external research
 2. Orchestrator agent requires it for complex tasks
 3. Local knowledge is proven insufficient after checking:
@@ -39,21 +44,25 @@ Only when:
    - Project documentation (`docs/`, `README.md`)
 
 ## Efficiency Guidelines
+
 - Use cached responses when available
 - Leverage prompt caching (setCacheKey: true)
 - Batch non-urgent operations
 - Prefer local context over external API calls
 
 ## Response Style
-- Language: Spanish (es) when responding to user
+
+- Language: Spanish (es) for communication
 - Technical terms: Keep in English
-- Be concise and direct
+- Be concise and direct, <4 lines
 - No unnecessary explanations
-- Match OpenCode behavior: keep responses concise (<4 lines), Spanish for user interaction
 
 ## Configuration Files
+
 See also:
+
 - `opencode.json` - OpenCode configuration
-- `CLAUDE.md` - Claude-specific rules
+- `AGENTS.md` - Workspace bootstrap rules
+- `.clinerules` - Cline-specific rules
 - `.cursorrules` - Cursor IDE rules
 - `.windsurf/config.json` - Windsurf configuration

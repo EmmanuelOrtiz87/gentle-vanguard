@@ -71,7 +71,7 @@ docs/
 
 | Document | Description |
 |----------|-------------|
-| [TECHNICAL-ONBOARDING.md](supplementary/TECHNICAL-ONBOARDING.md) | Technical onboarding |
+| [TECHNICAL-ONBOARDING.md](guides/TECHNICAL-ONBOARDING.md) | Technical onboarding |
 | [BOARD-SUPPLEMENT.md](supplementary/BOARD-SUPPLEMENT.md) | Board presentation |
 | [ai-models.md](supplementary/ai-models.md) | AI models guide |
 | [TOKEN-EFFICIENCY-PACK.md](supplementary/TOKEN-EFFICIENCY-PACK.md) | Token and context optimization pack |

@@ -114,11 +114,12 @@
       "includeCustomRules": true,
       "includeSessionContext": true
     },
-    "responseFormat": {
-      "enforceStructure": true,
-      "maxResponseTokens": 4000,
-      "requireSummary": true
-    },
+"responseFormat": {
+        "enforceStructure": true,
+        "maxResponseTokens": 3500,
+        "requireSummary": true,
+        "conciseMode": true
+      },
     "localFirst": {
       "enabled": true,
       "denyWebSearch": true,

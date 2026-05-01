@@ -1,0 +1,86 @@
+{
+  "$schema": "hook-registry.schema.json",
+  "description": "Central registry of all hooks and their lifecycle",
+  "version": "1.0.0",
+  "lastUpdated": "2026-04-30T14:00:00Z",
+  "hooks": {
+    "pre_process": {
+      "name": "pre_process",
+      "enabled": true,
+      "mandatory": true,
+      "category": "input-processing",
+      "script": "scripts/utilities/WORKFLOW-ORCHESTRATION/pre-process-input.ps1",
+      "description": "Pre-processes user input and loads skills",
+      "lastExecuted": null,
+      "executionCount": 0,
+      "successCount": 0,
+      "failureCount": 0,
+      "averageExecutionTime": 0
+    },
+    "post_session": {
+      "name": "post_session",
+      "enabled": true,
+      "mandatory": false,
+      "category": "session-management",
+      "script": "scripts/utilities/TELEMETRY-METRICS/generate-management-report.ps1",
+      "description": "Generates session reports and captures Engram memory",
+      "lastExecuted": null,
+      "executionCount": 0,
+      "successCount": 0,
+      "failureCount": 0,
+      "averageExecutionTime": 0
+    },
+    "pre_commit": {
+      "name": "pre_commit",
+      "enabled": true,
+      "mandatory": false,
+      "category": "git-validation",
+      "script": "scripts/utilities/GIT-VERSION-CONTROL/pre-commit-validation.ps1",
+      "description": "Validates code quality before commit",
+      "lastExecuted": null,
+      "executionCount": 0,
+      "successCount": 0,
+      "failureCount": 0,
+      "averageExecutionTime": 0
+    },
+    "post_merge": {
+      "name": "post_merge",
+      "enabled": true,
+      "mandatory": false,
+      "category": "git-synchronization",
+      "script": "scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1",
+      "description": "Synchronizes documentation after merge",
+      "lastExecuted": null,
+      "executionCount": 0,
+      "successCount": 0,
+      "failureCount": 0,
+      "averageExecutionTime": 0
+    }
+  },
+  "categories": {
+    "input-processing": {
+      "description": "Hooks for processing and validating user input",
+      "priority": 1
+    },
+    "session-management": {
+      "description": "Hooks for managing session lifecycle",
+      "priority": 2
+    },
+    "git-validation": {
+      "description": "Hooks for validating changes before git operations",
+      "priority": 3
+    },
+    "git-synchronization": {
+      "description": "Hooks for synchronizing after git operations",
+      "priority": 4
+    }
+  },
+  "statistics": {
+    "totalHooks": 4,
+    "enabledHooks": 4,
+    "mandatoryHooks": 1,
+    "totalExecutions": 0,
+    "totalSuccesses": 0,
+    "totalFailures": 0
+  }
+}
