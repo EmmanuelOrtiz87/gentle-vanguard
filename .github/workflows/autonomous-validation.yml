@@ -17,7 +17,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
@@ -99,7 +99,7 @@ jobs:
 
     - name: Upload Validation Reports
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: validation-reports
         path: .session/reports/
@@ -107,7 +107,7 @@ jobs:
 
     - name: Upload Logs
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: validation-logs
         path: .session/logs/
@@ -115,7 +115,7 @@ jobs:
 
     - name: Comment PR with Results
       if: github.event_name == 'pull_request'
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         script: |
           const fs = require('fs');
@@ -141,7 +141,7 @@ jobs:
 
     - name: Notify on Failure
       if: failure()
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         script: |
           github.rest.issues.createComment({
@@ -158,7 +158,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Apply Auto-Corrections
       shell: pwsh
