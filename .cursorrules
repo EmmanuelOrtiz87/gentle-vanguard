@@ -48,3 +48,25 @@ Only the **orchestrator** agent may enable external tools when:
 ## Language
 - Default: Spanish (es) for communication
 - Technical terms: English (preserve original terminology)
+
+## 8 Governance Layers (from auto-delegation.json)
+When trigger detected, load corresponding skill:
+- **GOV**: governance, compliance, metrics, monitoring, observability, incident, security audit, review, audit → `project-orchestrator-skill`
+- **SAD**: architecture, design, sdd, api design, database, schema, technical decision, system design, microservice, integration → `sdd-design`
+- **DEV**: implement, code, develop, feature, refactor, bug fix, component, endpoint, frontend, backend, security, performance → `sdd-apply`
+- **QA**: test, testing, qa, validation, e2e, unit test, integration test, playwright, pytest, quality, judgment day → `sdd-verify`
+- **OPS**: deploy, ci/cd, docker, kubernetes, infrastructure, terraform, helm, release, devops, pipeline → `docker-devops-skill`
+- **DOC**: documentation, docs, readme, guide, runbook, specification, bdd specs, sdd specs → `documentation-governance`
+- **SCRIPT-GOV**: script, powershell, parser error, syntax error, validate script, governance script, hook, pre-push, pre-commit, fix script, auto fix, autofix, script error, correct script → `sdd-apply`
+- **REPORT**: informe, report, reporte, metricas, metrics, analytics, analisis, dashboard, resumen ejecutivo, gerencia, tokens, costos, consumo, sesiones, telemetry, telemetria, estadisticas, stats, resumen de sesion → `management-reporting-skill`
+
+## 7 GitFlow Capabilities
+| Trigger Keywords | GitFlow Layer | Action |
+|---------------|----------------|--------|
+| create branch, feature branch, bugfix branch, hotfix branch, release branch | **Branch Management** | `create-gitflow-branch.ps1` |
+| pull request, PR, create PR, open PR | **PR Management** | `create-pull-request.ps1` |
+| pre-commit, pre-push, git hook, hook validation | **Hooks** | `pre-commit-validation.ps1` |
+| post-merge, merge sync, sync after merge | **Merge Sync** | `post-merge-sync.ps1` |
+| gitflow, workflow, checkout, branch switching | **Workflow** | `git-workflow-skill` |
+| commit, conventional commit, commit message | **Commit** | `git-workflow-skill` |
+| conflict, merge conflict, resolve conflict | **Conflict Resolution** | `git-workflow-skill` |
