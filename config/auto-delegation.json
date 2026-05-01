@@ -108,28 +108,75 @@
                                                 "script error",
                                                 "correct script"
                                             ],
-                             "REPORT":  [
-                                           "informe",
-                                           "report",
-                                           "reporte",
-                                           "mtricas",
-                                           "metrics",
-                                           "analytics",
-                                           "anlisis",
-                                           "dashboard",
-                                           "resumen ejecutivo",
-                                           "gerencia",
-                                           "tokens",
-                                           "costos",
-                                           "consumo",
-                                           "sesiones",
-                                           "telemetry",
-                                           "telemetra",
-                                           "estadsticas",
-                                           "stats",
-                                           "resumen de sesin"
-                                       ]
-                         },
+"REPORT":  [
+                                            "informe",
+                                            "report",
+                                            "reporte",
+                                            "mtricas",
+                                            "metrics",
+                                            "analytics",
+                                            "anlisis",
+                                            "dashboard",
+                                            "resumen ejecutivo",
+                                            "gerencia",
+                                            "tokens",
+                                            "costos",
+                                            "consumo",
+                                            "sesiones",
+                                            "telemetry",
+                                            "telemetra",
+                                            "estadsticas",
+                                            "stats",
+                                            "resumen de sesin"
+                                        ],
+                             "GITFLOW-BRANCH":  [
+                                            "create branch",
+                                            "feature branch",
+                                            "bugfix branch",
+                                            "hotfix branch",
+                                            "release branch",
+                                            "git checkout",
+                                            "switch branch"
+                                        ],
+                             "GITFLOW-PR":  [
+                                            "pull request",
+                                            "PR",
+                                            "create PR",
+                                            "open PR",
+                                            "pr created"
+                                        ],
+                             "GITFLOW-HOOKS":  [
+                                            "pre-commit",
+                                            "pre-push",
+                                            "git hook",
+                                            "hook validation",
+                                            "git-hook"
+                                        ],
+                             "GITFLOW-MERGE":  [
+                                            "post-merge",
+                                            "merge sync",
+                                            "sync after merge",
+                                            "post-merge-sync"
+                                        ],
+                             "GITFLOW-WORKFLOW":  [
+                                            "gitflow",
+                                            "workflow",
+                                            "git workflow",
+                                            "git flow"
+                                        ],
+                             "GITFLOW-COMMIT":  [
+                                            "commit",
+                                            "conventional commit",
+                                            "commit message",
+                                            "git commit"
+                                        ],
+                             "GITFLOW-CONFLICT": [
+                                            "conflict",
+                                            "merge conflict",
+                                            "resolve conflict",
+                                            "git conflict"
+                                        ]
+                          },
     "adaptive_mode":  {
                           "enabled":  true,
                           "integration":  "orchestrator",
