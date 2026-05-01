@@ -205,7 +205,7 @@
       "compressResponses": true
     },
     "languagePreference": "es",
-    "toneGuidance": "technical, direct, concise",
+    "toneGuidance": "technical, direct, concise, match OpenCode: <4 lines",
     "localFirst": {
       "enabled": true,
       "denyWebSearch": true,

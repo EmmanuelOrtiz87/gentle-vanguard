@@ -1,10 +1,10 @@
 {
-  "name": "Windsurf - Local-First Configuration",
+  "name": "Continue.dev - Local-First Configuration",
   "version": "1.0.0",
-  "description": "Local-first policy for Windsurf IDE with tool restrictions",
+  "description": "Local-first policy for Continue.dev with tool restrictions",
   "workspace": {
     "projectRoot": ".",
-    "configFiles": ["opencode.json", "AGENTS.md", "CLAUDE.md", ".cursorrules"],
+    "configFiles": ["opencode.json", "AGENTS.md", "CLAUDE.md", ".cursorrules", ".clinerules"],
     "skillPaths": ["skills/", "~/.config/opencode/skills/"]
   },
   "aiSettings": {
@@ -36,6 +36,10 @@
       "note": "Enable only when local skills insufficient"
     }
   },
+  "language": {
+    "default": "es",
+    "technicalTerms": "en"
+  },
   "preProcessing": {
     "enabled": true,
     "mandatory": true,
@@ -43,18 +47,13 @@
     "scriptArgs": {
       "UserInput": "USER_INPUT_HERE",
       "WorkspaceRoot": "."
-    },
-    "fallbackBehavior": "continue"
+    }
   },
   "sessionManagement": {
     "autostart": {
       "enabled": true,
       "script": "tools/session-autostart.cmd",
-      "platform": "windows",
-      "alternatives": {
-        "linux": "bash ./tools/session-autostart.sh",
-        "macos": "bash ./tools/session-autostart.sh"
-      }
+      "platform": "windows"
     },
     "tracking": {
       "project": "workspace_local",
@@ -62,13 +61,10 @@
       "sessionIdPattern": "session-YYYY-MM-DD-XX"
     }
   },
-  "language": {
-    "default": "es",
-    "technicalTerms": "en",
-    "responseStyle": "concise, direct, <4 lines"
-  },
-  "cascade": {
-    "restrictToLocal": true,
-    "allowExternalTools": false
+  "responseFormat": {
+    "enforceStructure": true,
+    "maxResponseTokens": 3500,
+    "conciseMode": true,
+    "requireSummary": true
   }
 }

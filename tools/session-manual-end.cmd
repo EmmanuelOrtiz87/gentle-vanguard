@@ -1,51 +1,40 @@
-﻿@echo off
-setlocal
+@echo off
+setlocal enabledelayedexpansion
 
-set SCRIPT=%~dp0session-manager.ps1
-set OPTIMIZE_SCRIPT=%~dp0optimize-engram-usage.ps1
+REM ============================================================================
+REM Descripción: Cierra sesión de trabajo
+REM Autor: Sistema de Estabilización
+REM Fecha: 2026-04-30
+REM Versión: 1.0
+REM ============================================================================
 
-echo === Manual Session End with Engram Optimization ===
+echo.
+echo === Session Manual End ===
+echo.
 
-if not exist "%SCRIPT%" (
-  echo [ERROR] session-manager.ps1 not found: %SCRIPT%
+REM Validaciones previas
+where powershell >nul 2>&1
+if errorlevel 1 (
+  echo [ERROR] PowerShell not found in PATH
   exit /b 1
 )
 
-echo Closing session manually...
+REM Lógica principal
+set "SCRIPT_DIR=%~dp0"
+set "WF_SCRIPT=%SCRIPT_DIR%..\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1"
 
-REM Ejecutar validacin pre-cierre
-echo [INFO] Running pre-close validation...
-powershell -NoProfile -ExecutionPolicy Bypass -File ".\tools\pre-close-validator.ps1" -AutoResolve
+if not exist "!WF_SCRIPT!" (
+  echo [ERROR] wf.ps1 not found at: !WF_SCRIPT!
+  exit /b 1
+)
+
+echo [INFO] Ending session...
+powershell -NoProfile -ExecutionPolicy Bypass -File "!WF_SCRIPT!" end-session
+
 if errorlevel 1 (
-    echo [ERROR] Pre-close validation failed. Fix issues before closing session.
-    pause
-    exit /b 1
+  echo [ERROR] Session end failed with exit code !errorlevel!
+  exit /b !errorlevel!
 )
 
-REM Generar reporte de estado final
-echo [INFO] Generating final status report...
-powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\monitoring\continuous-status-monitor.ps1" -Once
-
-REM Crear backup final de Engram
-echo [INFO] Creating final Engram backup...
-powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\monitoring\engram-backup-manager.ps1" -Action backup
-
-REM Validar consistencia cross-workspace
-echo [INFO] Validating cross-workspace consistency...
-powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\monitoring\cross-workspace-validator.ps1"
-
-REM Cerrar sesin
-powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT%" -Mode ManualEnd
-
-REM Ejecutar optimizacin de Engram despus del cierre de sesin
-if exist "%OPTIMIZE_SCRIPT%" (
-  echo [INFO] Running Engram post-session optimization...
-  powershell -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_local" -AutoApply
-)
-
-echo.
-echo [OK] Session closed successfully
-echo [OK] Final backup and reports generated
-echo.
-
-exit /b %errorlevel%
+echo [SUCCESS] Session ended successfully
+exit /b 0

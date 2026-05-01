@@ -6,7 +6,6 @@ Additional documentation and resources.
 
 | Document | Description |
 |----------|-------------|
-| [TECHNICAL-ONBOARDING.md](TECHNICAL-ONBOARDING.md) | AI concepts and best practices |
 | [BOARD-SUPPLEMENT.md](BOARD-SUPPLEMENT.md) | Board presentation content |
 | [defaults-vs-decisions.md](defaults-vs-decisions.md) | Defaults vs decisions log |
 | [future-projects.md](future-projects.md) | Future roadmap |
@@ -17,6 +16,12 @@ Additional documentation and resources.
 | [TOKEN-EFFICIENCY-PACK.md](TOKEN-EFFICIENCY-PACK.md) | Token/context optimization operating model |
 | [templates/PROMPT-PLAYBOOK.md](templates/PROMPT-PLAYBOOK.md) | Standard prompt templates |
 | [templates/CLOSEOUT-REPORT-TEMPLATE.md](templates/CLOSEOUT-REPORT-TEMPLATE.md) | Standard task closeout format |
+
+## Moved to guides/
+
+| Document | Description |
+|----------|-------------|
+| [TECHNICAL-ONBOARDING.md](../guides/TECHNICAL-ONBOARDING.md) | AI concepts and best practices |
 
 ## Project Code Reviews
 
