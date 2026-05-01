@@ -65,6 +65,7 @@ docs/
 | [runtime-state.md](guides/runtime-state.md) | Runtime state reference |
 | [audit-system.md](guides/audit-system.md) | Audit system |
 | [configuration.md](guides/configuration.md) | Configuration guide |
+| [COMPATIBILITY-MATRIX.md](guides/COMPATIBILITY-MATRIX.md) | Tool compatibility matrix & native policy |
 | [../specs/README.md](specs/README.md) | Spec-Driven Development entry point and templates |
 
 ## Supplementary
