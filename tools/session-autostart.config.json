@@ -8,8 +8,6 @@
   "enableIdleAutoClose": true,
   "idleTimeoutMinutes": 60,
   "strictCompatibilityChecks": true,
-  "timezone": "America/Buenos_Aires",
-  "timezoneOffset": "GMT-3",
   "optimization": {
     "handoffCompress": true,
     "preCompactHook": "tools/pre-compact-hook.ps1",
@@ -20,23 +18,6 @@
     "autoEngramContext": true,
     "autoCompactStart": true,
     "compactStartThreshold": 50
-  },
-  "scheduling": {
-    "timezone": "America/Buenos_Aires",
-    "timezoneNote": "Todos los horarios en GMT-3 (America/Buenos_Aires)",
-    "dailyBackup": "10:00",
-    "dailyBackupNote": "Backup diario a las 10:00 (GMT-3)",
-    "weeklyBackup": "10:00",
-    "weeklyBackupDay": "Monday",
-    "weeklyBackupNote": "Backup semanal los lunes a las 10:00 (GMT-3)",
-    "dailyReport": "19:00",
-    "dailyReportNote": "Reporte diario a las 19:00 (GMT-3)",
-    "weeklyReport": "21:00",
-    "weeklyReportDay": "Friday",
-    "weeklyReportNote": "Reporte semanal los viernes a las 21:00 (GMT-3)",
-    "monthlyReport": "21:00",
-    "monthlyReportDay": "LastDay",
-    "monthlyReportNote": "Reporte mensual el último día del mes a las 21:00 (GMT-3)"
   },
   "deprecated": {
     "note": "gentle-ai, GGA, Gentleman-Skills are DEPRECATED. Use opencode + 7-dimension review."
