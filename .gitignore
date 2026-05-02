@@ -83,3 +83,4 @@ scripts/utilities/run-gga.ps1
 # Session data (runtime)
 .session/
 
+.telemetry/
