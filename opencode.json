@@ -1,62 +1,21 @@
 {
-  "$schema": "https://opencode.ai/config.json",
   "provider": {
-    "openrouter": {
-      "options": {
-        "setCacheKey": true,
-        "timeout": 600000
-      }
-    },
     "anthropic": {
-      "options": {
-        "setCacheKey": true,
-        "timeout": 600000
-      }
+      "enabled": true,
+      "model": "claude-3-5-sonnet-20241022"
     }
   },
   "agent": {
-    "default": {
-      "model": "anthropic/claude-sonnet-4-5",
-      "options": {
-        "minTokens": 2000,
-        "maxTokens": 4500
-      },
-      "permission": {
-        "websearch": "deny",
-        "codesearch": "deny",
-        "webfetch": "deny"
-      },
-      "governanceLayers": {
-        "GOV": ["project-orchestrator-skill"],
-        "SAD": ["sdd-design"],
-        "DEV": ["sdd-apply"],
-        "QA": ["sdd-verify"],
-        "OPS": ["docker-devops-skill"],
-        "DOC": ["documentation-governance"],
-        "SCRIPT-GOV": ["sdd-apply"],
-        "REPORT": ["management-reporting-skill"]
-      },
-      "gitflowCapabilities": {
-        "branch": ["create-gitflow-branch.ps1"],
-        "pr": ["create-pull-request.ps1"],
-        "hooks": ["pre-commit-validation.ps1"],
-        "merge": ["post-merge-sync.ps1"],
-        "workflow": ["git-workflow-skill"],
-        "commit": ["git-workflow-skill"],
-        "conflict": ["git-workflow-skill"]
-      }
-    },
-    "orchestrator": {
-      "model": "anthropic/claude-sonnet-4-5",
-      "options": {
-        "minTokens": 2000,
-        "maxTokens": 4500
-      },
-      "permission": {
-        "websearch": "allow",
-        "codesearch": "allow",
-        "webfetch": "allow"
-      }
-    }
-  }
+    "default": "general",
+    "orchestrator": "orchestrator"
+  },
+  "skills": {
+    "directory": "skills",
+    "auto_load": true
+  },
+  "memory": {
+    "engine": "engram",
+    "persist": true
+  },
+  "version": "1.0"
 }
