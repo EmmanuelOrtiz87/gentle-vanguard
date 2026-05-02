@@ -309,6 +309,29 @@ BDD specs, SDD specs, specification
 
 ---
 
+## AGENT TO OPENCODE SUBAGENT MAPPING
+
+Each agent is now mapped to specific opencode `subagent_type` values for actual delegation:
+
+| Agent | Primary Subagent | Fallback | Use Case |
+|-------|-----------------|----------|----------|
+| **BA** | `sdd-explore` | `general` | Requirements analysis, feasibility studies |
+| **SAD** | `sdd-design` | `general` | Architecture design, technical specs |
+| **DEV** | `sdd-apply` | `general` | Code implementation, bug fixes |
+| **QA** | `sdd-verify` | `general` | Testing, validation, judgment day |
+| **OPS** | `general` | `general` | DevOps tasks, infrastructure |
+| **GOV** | `general` | `general` | Governance, audits, reviews |
+| **DOC** | `sdd-spec` | `general` | Documentation, specifications |
+
+**Configuration file:** `config/subagent-mapping.json`
+
+**Delegation command template:**
+```powershell
+task --description 'Task description' --prompt 'Detailed prompt' --subagent_type <subagent>
+```
+
+---
+
 ## SKILL MAPPING MATRIX
 
 | Skill | BA | SAD | DEV | QA | OPS | GOV | DOC |
