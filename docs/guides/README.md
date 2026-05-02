@@ -37,7 +37,7 @@ New to Workspace Foundation? Start here:
 ## Reference
 
 - **[DEPLOYMENT-READY-SUMMARY.md](DEPLOYMENT-READY-SUMMARY.md)** - Deployment overview
-- **[DOCUMENTATION-STANDARDS.md](../DOCUMENTATION-STANDARDS.md)** - How to write docs
+- **[DOCUMENTATION-STANDARDS.md](DOCUMENTATION-STANDARDS.md)** - How to write docs
 
 ---
 
