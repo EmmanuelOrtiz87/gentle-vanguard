@@ -7,7 +7,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  versión: "1.0"
 ---
 
 ## When to Use
@@ -145,3 +145,4 @@ if ($errors.Count -eq 0) { 'PARSE_OK' } else { $errors }
 .\hooks\pre-commit.ps1
 .\hooks\post-checkout.ps1
 ```
+

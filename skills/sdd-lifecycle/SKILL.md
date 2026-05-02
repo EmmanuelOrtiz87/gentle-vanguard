@@ -1,4 +1,4 @@
-﻿---
+---
 name: sdd-lifecycle
 description: >
   Spec-Driven Development (SDD) complete lifecycle - all phases in one skill.
@@ -96,7 +96,7 @@ Write formal specification:
 
 Design the implementation:
 ```
-1. Architecture decisions
+1. Architecture decisións
 2. API contracts
 3. Data models
 4. Sequence diagrams
@@ -232,3 +232,4 @@ wf sdd verify <name>         # Verify
 wf sdd archive <name>         # Archive
 wf sdd status <name>         # Show progress
 ```
+

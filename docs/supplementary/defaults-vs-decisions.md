@@ -1,14 +1,14 @@
-# Defaults vs Project Decisions
+# Defaults vs Project decisións
 
 This document explains what the workspace foundation owns and what each project must decide for itself.
 
 ## Start Here
 
 1. Use the workspace defaults when you want a safe, repeatable starting point.
-2. Use project decisions when the codebase has specific requirements that cannot be generalized.
+2. Use project decisións when the codebase has specific requirements that cannot be generalized.
 3. Keep defaults generic so they work across technologies, IDEs, and skill levels.
 4. Record project-specific choices in `docs/project-context.md`.
-5. Ask the user before changing scope, architecture, secrets, or AI provider decisions.
+5. Ask the user before changing scope, architecture, secrets, or AI provider decisións.
 6. Read this document before creating a new scaffolded project or changing the workspace kit.
 
 ## Workspace Defaults
@@ -22,7 +22,7 @@ These belong to `workspace-foundation` and should remain reusable across project
 5. Local Engram runtime isolation outside the project checkout.
 6. Optional AI model guidance without forcing a provider.
 
-## Project Decisions
+## Project decisións
 
 These belong to the target project and should be recorded in `docs/project-context.md`:
 
@@ -44,7 +44,7 @@ These belong to the target project and should be recorded in `docs/project-conte
 
 1. The separation between workspace tools and project code.
 2. The requirement to keep runtime state outside the checkout.
-3. The requirement to document decisions in English.
+3. The requirement to document decisións in English.
 4. The requirement to keep reusable skills outside project repositories.
 
 ## Recommended Rule
@@ -55,5 +55,6 @@ If a choice affects only one repository, it belongs in that project's `docs/proj
 ## Quick Summary
 
 1. Workspace foundation = reusable defaults and common workflow.
-2. Project context = repository-specific decisions and constraints.
+2. Project context = repository-specific decisións and constraints.
 3. If you are unsure, keep the default and record the question in `docs/project-context.md`.
+

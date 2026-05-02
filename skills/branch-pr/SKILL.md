@@ -1,4 +1,4 @@
-﻿---
+---
 name: branch-pr
 description: >
   PR creation workflow for Agent Teams Lite following the issue-first enforcement system.
@@ -6,7 +6,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "2.0"
+  versión: "2.0"
 ---
 
 ## When to Use
@@ -202,3 +202,4 @@ gh pr create --title "feat(scope): description" --body "Closes #N"
 # Add type label to PR
 gh pr edit <pr-number> --add-label "type:feature"
 ```
+

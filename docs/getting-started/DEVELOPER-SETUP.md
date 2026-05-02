@@ -1,4 +1,4 @@
-﻿# Developer Setup Guide
+# Developer Setup Guide
 
 Step-by-step guide for new developers joining the team.
 
@@ -29,8 +29,8 @@ winget install Microsoft.PowerShell
 ### Verify Installations
 
 ```powershell
-git --version
-pwsh --version  # or powershell --version
+git --versión
+pwsh --versión  # or powershell --versión
 ```
 
 ## Step 2: Install Foundation - Development Stack
@@ -215,5 +215,7 @@ git config --global core.hooksPath
 3. Setup your first project
 
 - Los hooks automticos de Foundation - Development Stack ahora cubren 7 dimensiones: Seguridad, Calidad, Arquitectura, Testing, API, Documentacin y Gitflow. Consulta REVIEW-INDEX.md para detalles y cmo personalizar reglas.
-- Para personalizar reglas de revisin, edita los archivos SKILL.md en cada subcarpeta de skills/.
+- Para personalizar reglas de revisión, edita los archivos SKILL.md en cada subcarpeta de skills/.
 - Los scripts de chequeo estn en scripts/hooks/ y pueden adaptarse a las necesidades del proyecto.
+
+

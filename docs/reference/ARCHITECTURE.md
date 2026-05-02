@@ -1,6 +1,6 @@
 ﻿# Workspace Foundation - Architecture
 
-> System design, component relationships, and technical decisions.
+> System design, component relationships, and technical decisións.
 
 ---
 
@@ -622,16 +622,16 @@ Rotation is automated on `end-session` and `day-end-closure`.
 
 ---
 
-## 8. Technology Decisions
+## 8. Technology decisións
 
 ### 8.1 PowerShell Core Choice
 
-**Decision:** Use PowerShell Core (pwsh) as the primary scripting language.
+**decisión:** Use PowerShell Core (pwsh) as the primary scripting language.
 
 **Rationale:**
 ```
 
-                      TECHNOLOGY DECISION: POWERSHELL                        
+                      TECHNOLOGY decisión: POWERSHELL                        
 
                                                                               
   [OK] Cross-platform (Windows, Linux, macOS)                                  
@@ -650,12 +650,12 @@ Rotation is automated on `end-session` and `day-end-closure`.
 
 ### 8.2 JSON Configuration Over YAML
 
-**Decision:** Use JSON for configuration files.
+**decisión:** Use JSON for configuration files.
 
 **Rationale:**
 ```
 
-                   TECHNOLOGY DECISION: JSON vs YAML                          
+                   TECHNOLOGY decisión: JSON vs YAML                          
 
                                                                               
   JSON Advantages:                      YAML Advantages:                       
@@ -665,7 +665,7 @@ Rotation is automated on `end-session` and `day-end-closure`.
   [OK] ConvertFrom-Json one-liner       [OK] Better for complex nested config    
   [OK] Consistent with package.json       [OK] Markdown-friendly                    
                                                                               
-  Decision: JSON primarily, with JSONC (JSON with comments) where needed   
+  decisión: JSON primarily, with JSONC (JSON with comments) where needed   
                                                                               
 
 ```
@@ -780,7 +780,7 @@ workspace-foundation/
      Performance optimization for large codebases
      Parallel scanning for multiple dimensions
      Configurable exclusion patterns (glob support)
-     Interactive fix suggestions with AI
+     Interactive fix suggestións with AI
 
     Medium Term (v2.2):
     
@@ -814,7 +814,7 @@ All sub-agent delegations must follow the **Skill Resolver Protocol** (`docs/ref
 
 The **Persistence Contract** (`docs/reference/PERSISTENCE-CONTRACT.md`) defines how artifacts are stored and retrieved across different modes:
 - **Engram Mode:** Cross-session persistence via memory system.
-- **OpenSpec Mode:** Filesystem-based storage for version control.
+- **OpenSpec Mode:** Filesystem-based storage for versión control.
 - **Hybrid Mode:** Dual-write for maximum safety and auditability.
 - **None Mode:** Inline-only results for ephemeral tasks.
 

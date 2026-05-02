@@ -1,4 +1,4 @@
-﻿---
+---
 name: android-kotlin
 description: Android Kotlin development with Coroutines, Jetpack Compose, Hilt, and MockK testing
 when-to-use: When working on Android Kotlin source files
@@ -68,8 +68,8 @@ android {
         applicationId = "com.example.app"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versiónCode = 1
+        versiónName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -85,8 +85,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = Javaversión.versión_17
+        targetCompatibility = Javaversión.versión_17
     }
 
     kotlinOptions {
@@ -98,7 +98,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.8"
+        kotlinCompilerExtensionversión = "1.5.8"
     }
 }
 
@@ -394,7 +394,7 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-versión: '17'
           distribution: 'temurin'
 
       - name: Setup Gradle
@@ -455,4 +455,5 @@ coroutines:
 -  **Not using sealed classes** - Prefer sealed for finite state sets
 -  **Side effects in Composables** - Use `LaunchedEffect`/`SideEffect`
 -  **Unstable Compose parameters** - Use stable/immutable types or `@Stable`
+
 

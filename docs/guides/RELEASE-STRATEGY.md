@@ -2,11 +2,11 @@
 
 ## Overview
 
-This document defines how Gentleman Foundation versions, releases, and manages backward compatibility across versions.
+This document defines how Gentleman Foundation versións, releases, and manages backward compatibility across versións.
 
-## Semantic Versioning (SemVer 2.0.0)
+## Semantic versióning (SemVer 2.0.0)
 
-Foundation adheres to **[Semantic Versioning](https://semver.org/)**: `MAJOR.MINOR.PATCH`
+Foundation adheres to **[Semantic versióning](https://semver.org/)**: `MAJOR.MINOR.PATCH`
 
 ```
 v1.0.0
@@ -15,7 +15,7 @@ v1.0.0
    MAJOR: breaking changes, architecture shifts, incompatible APIs
 ```
 
-### Version Increment Rules
+### versión Increment Rules
 
 | Scenario | When | Example |
 |----------|------|---------|
@@ -37,7 +37,7 @@ v1.0.0
 - Created from `main` branch
 - Tag format: `v1.0.0`, `v1.2.0`, `v2.1.0`
 - Process: develop on `develop`  merge to `main`  tag  GitHub Release
-- Supported for at least 3 subsequent minor versions
+- Supported for at least 3 subsequent minor versións
 - **Current strategy**: Quarterly stable releases
 
 #### 2. **Prerelease (Optional)**
@@ -50,7 +50,7 @@ v1.0.0
 #### 3. **Hotfix Release (Urgent)**
 - Created from `main` for critical security/stability issues
 - Branch: `hotfix/issue-description`
-- PATCH version bump (e.g., v1.0.0  v1.0.1)
+- PATCH versión bump (e.g., v1.0.0  v1.0.1)
 - Merged back to `main` and `develop`
 - Process: hotfix on branch  PR to main  tag  PR same commit to develop
 
@@ -60,9 +60,9 @@ v1.0.0
 
 When removing or changing a feature:
 
-1. **Announce deprecation** in CHANGELOG under current version: "Deprecated: `wf old-cmd` will be removed in v2.0.0"
+1. **Announce deprecation** in CHANGELOG under current versión: "Deprecated: `wf old-cmd` will be removed in v2.0.0"
 2. **Emit warnings** in CLI/scripts when deprecated feature is used
-3. **Maintain for 2+ minor versions** (e.g., deprecate in v1.1, remove in v2.0, but support in v1.2, v1.3)
+3. **Maintain for 2+ minor versións** (e.g., deprecate in v1.1, remove in v2.0, but support in v1.2, v1.3)
 4. **Document migration path** in MIGRATION.md
 
 ### Breaking Change Examples
@@ -85,13 +85,13 @@ v1.1.0: SDD mandatory for PRs (breaking for strict enforcement)
 
 ## Compatibility & Support Matrix
 
-| Version | Status | Support Until | Go | Node | Python | PowerShell |
+| versión | Status | Support Until | Go | Node | Python | PowerShell |
 |---------|--------|---------------|----|------|--------|------------|
 | v1.0.0  | Stable | v1.3 released | 1.19+ | 18+ | 3.9+ | 7+ |
 | v1.1.0+ | Stable | TBD | 1.19+ | 18+ | 3.9+ | 7+ |
 | v2.0.0  | Future | TBD | 1.20+ | 20+ | 3.11+ | 7+ |
 
-**Support Rule**: Maintain backward compatibility for at least 2 minor versions after a breaking change is announced.
+**Support Rule**: Maintain backward compatibility for at least 2 minor versións after a breaking change is announced.
 
 ## Branch Strategy for Release
 
@@ -157,23 +157,23 @@ See [`RELEASE-CHECKLIST.md`](./RELEASE-CHECKLIST.md) for pre-release validation.
 - [ ] Documentation updated
 - [ ] No uncommitted changes on `develop`
 
-## Versioning Governance
+## versióning Governance
 
-### Who Decides Version Number?
+### Who Decides versión Number?
 
 - **Project Lead** (you) decides and documents in CHANGELOG before release
 - **AI Agent** (me) implements the release process
-- **Consumers** (Dashboard) pin to a specific version or use "latest v1.*"
+- **Consumers** (Dashboard) pin to a specific versión or use "latest v1.*"
 
-### Where Version is Declared
+### Where versión is Declared
 
 - `git tag v1.0.0`  Primary source of truth in Git
-- `CHANGELOG.md`  What changed in this version
-- `version.txt` (optional)  Can store version for scripts if needed
+- `CHANGELOG.md`  What changed in this versión
+- `versión.txt` (optional)  Can store versión for scripts if needed
 
-### No Hardcoded Version in Code
+### No Hardcoded versión in Code
 
-Foundation does NOT store version in `scripts/utilities/wf.ps1` or source files.
+Foundation does NOT store versión in `scripts/utilities/wf.ps1` or source files.
 - Reason: Sync risk between code and git tags
 - Instead: Query git tag at runtime if needed: `git describe --tags --abbrev=0`
 
@@ -184,7 +184,7 @@ Foundation does NOT store version in `scripts/utilities/wf.ps1` or source files.
 - When governance or architecture changes require documentation
 - For security patches: immediately as v1.0.1 hotfix
 
-**Q: Can I skip versions?**
+**Q: Can I skip versións?**
 - No. Always increment sequentially (v1.0.0  v1.1.0  v2.0.0)
 - Reason: Consumers rely on predictable upgrade paths
 
@@ -193,7 +193,7 @@ Foundation does NOT store version in `scripts/utilities/wf.ps1` or source files.
 - If it does: `git merge main` on develop and push
 
 **Q: How do consumers use this?**
-- **Pin version**: `git clone... && git checkout v1.0.0`
+- **Pin versión**: `git clone... && git checkout v1.0.0`
 - **Latest stable**: Clone main directly
 - **Follow minor updates**: Pin to v1.* and update manually or via sync
 

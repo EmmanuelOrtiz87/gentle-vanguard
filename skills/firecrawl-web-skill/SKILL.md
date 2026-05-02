@@ -7,7 +7,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  versión: "1.0"
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task, webfetch, websearch
 ---
 

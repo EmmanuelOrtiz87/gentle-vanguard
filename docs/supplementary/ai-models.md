@@ -1,4 +1,4 @@
-﻿# AI Model Setup
+# AI Model Setup
 
 This guide explains how to prepare an optional AI model layer for projects that use AI-assisted workflows.
 
@@ -7,7 +7,7 @@ This guide explains how to prepare an optional AI model layer for projects that 
 1. Decide whether the project needs a local model, a cloud model, or no model at all.
 2. If the project does not use AI assistance, skip this guide.
 3. If the project uses AI assistance, choose exactly one primary provider to start.
-4. Keep provider-specific credentials and endpoints outside version control.
+4. Keep provider-specific credentials and endpoints outside versión control.
 5. Record the selected provider in `docs/project-context.md` or `ARCHITECTURE.md`.
 
 ## Required or Optional
@@ -97,3 +97,4 @@ When a scaffolded project is created, record the AI choice in `docs/project-cont
 5. `ai-model-notes`
 
 If the project does not use AI assistance, set `ai-model-mode` to `none` and leave the rest blank.
+

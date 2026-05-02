@@ -237,7 +237,7 @@ ADVANTAGES                          DISADVANTAGES
 winget install Ollama.Ollama
 
 # Verify installation
-ollama --version
+ollama --versión
 ```
 
 #### Linux/macOS
@@ -246,7 +246,7 @@ ollama --version
 curl -fsSL https://ollama.ai/install.sh | sh
 
 # Verify installation
-ollama --version
+ollama --versión
 ```
 
 ### Download Models

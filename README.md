@@ -1,8 +1,8 @@
-﻿#  Foundation - Development Stack
+# 🏗️ Foundation - Development Stack
 
-> **"Donde la gobernanza, la automatizacin y la IA convergen para equipos modernos"**
+> **💡 Mission Statement:** "Donde la gobernanza, la automatización y la IA convergen para equipos modernos"
 
-Framework de orquestacin, automatizacin y gobernanza para desarrollo profesional, con integracin nativa de skills, hooks, revisin adversarial, SDD, y memoria persistente (Engram).
+Framework de orquestación, automatización y gobernanza para desarrollo profesional, con integración nativa de skills, hooks, revisión adversarial, SDD, y memoria persistente (Engram).
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![PowerShell](https://img.shields.io/badge/PowerShell-7+-blue.svg)](https://github.com/PowerShell/PowerShell)
@@ -11,28 +11,36 @@ Framework de orquestacin, automatizacin y gobernanza para desarrollo profesional
 
 ---
 
-##  Qu es Foundation?
+## 🏗️ ¿Qué es Foundation?
+
+> 💡 **Visión:** Plataforma integral para equipos modernos que buscan excelencia operativa.
 
 Foundation - Development Stack es un marco operativo para equipos que requieren:
 
-- ** Orquestacin AI y sub-agentes**: Coordinacin inteligente de flujos, revisin, automatizacin y memoria
-- ** Validacin 7D**: Hooks automticos para seguridad, calidad, arquitectura, testing, API, docs y gitflow
-- ** Juicio adversarial**: Protocolo de doble revisin paralela y sntesis ("judgment day")
-- ** Memoria persistente**: Engram para continuidad, decisiones y contexto entre sesiones
-- ** SDD y gobernanza**: Enforcement de especificaciones, criterios de cierre y artefactos de sesin
-- ** Activacin bajo demanda**: Stack y skills slo activos cuando se requiere, optimizando recursos
-- ** Plantillas y scaffolding**: Arranque rpido de proyectos y mdulos homologados
+| Característica | Descripción | Beneficio |
+|---------------|-------------|-----------|
+| **🤖 Orquestación AI** | Coordinación inteligente de flujos y sub-agentes | Eficiencia máxima |
+| **✅ Validación 7D** | Hooks automáticos (seguridad, calidad, arquitectura, testing, API, docs, gitflow) | Calidad garantizada |
+| **⚖️ Juicio adversarial** | Protocolo de doble revisión paralela ("judgment day") | Seguridad crítica |
+| **🧠 Memoria persistente** | Engram para continuidad y decisiones entre sesiones | Continuidad total |
+| **📜 SDD y gobernanza** | Enforcement de especificaciones y criterios | Trazabilidad completa |
+| **⚡ Activación bajo demanda** | Stack y skills activos sólo cuando se requiere | Optimización de recursos |
+| **📦 Plantillas y scaffolding** | Arranque rápido de proyectos y módulos homologados | Tiempo reducido |
 
 ---
 
-##  Stack y Normativas Vigentes
+## 📋 Stack y Normativas Vigentes
 
-- **Identidad**: Foundation es un framework de gobernanza, no una herramienta cerrada
-- **Estrategia**: Orquestacin nativa, skills modulares, hooks y scripts alineados a 7 dimensiones
-- **Engram**: Obligatorio para continuidad y memoria; fallback disponible si no est activo
-- **SDD**: Especificaciones, criterios de aceptacin y validacin son obligatorios para features, cambios de API y arquitectura
-- **Juicio adversarial**: Siempre disponible para directores y cambios crticos
-- **Backlog y documentacin**: Unificados, exportables a CSV, y auditados automticamente
+> 💡 **Nota:** Foundation es un framework de gobernanza, no una herramienta cerrada.
+
+| Concepto | Descripción | Estado |
+|-----------|-------------|--------|
+| **Identidad** | Framework de gobernanza, no herramienta cerrada | ✅ Activo |
+| **Estrategia** | Orquestación nativa, skills modulares, 7 dimensiones | ✅ Activo |
+| **Engram** | Obligatorio para continuidad y memoria | ✅ Obligatorio |
+| **SDD** | Especificaciones y criterios obligatorios | ✅ Obligatorio |
+| **Juicio adversarial** | Siempre disponible para cambios críticos | ✅ Activo |
+| **Backlog** | Unificado, exportable a CSV, auditado | ✅ Activo |
 
 ---
 
@@ -70,24 +78,30 @@ Ver [docs/reference/ARCHITECTURE.md](docs/reference/ARCHITECTURE.md) para el dia
 
 **Capas principales:**
 - Orquestador AI y sub-agentes (siempre activo bajo demanda)
-- Hooks automticos (pre-commit, pre-push, validacin 7D)
+- Hooks automáticos (pre-commit, pre-push, validación 7D)
 - Skills modulares (seguridad, calidad, arquitectura, testing, API, docs, gitflow)
 - Protocolo de juicio adversarial (scripts/utilities/judgment-day.ps1)
 - SDD y enforcement de especificaciones (docs/specs, skills/sdd-*)
 - Engram (memoria, decisiones, continuidad)
 
 
-##  Diseo y SDD
+## 🎨 Diseño y SDD
 
-- [docs/sdd/foundation-sdd.md](docs/sdd/foundation-sdd.md): Documento de diseo y arquitectura
-- SDD obligatorio para features, cambios de API y arquitectura
-- Validacin y cierre slo con criterios y artefactos completos
+> 📖 **SDD Obligatorio:** Para features, cambios de API y arquitectura.
+
+| Recurso | Descripción | Enlace |
+|----------|-------------|--------|
+| **Documento SDD** | Diseño y arquitectura Foundation | [foundation-sdd.md](docs/sdd/foundation-sdd.md) |
+| **SDD Init** | Inicializar contexto SDD | `/sdd-init` |
+| **Skill Registry** | Construir registro de skills | `skill-registry` |
+
+✅ **Validación y cierre** solo con criterios y artefactos completos.
 
 
-##  Skills, Hooks y Automatizacin
+## ⚙️ Skills, Hooks y Automatización
 
 - Skills alineados a 7 dimensiones (ver [docs/code-reviews/REVIEW-INDEX.md](docs/code-reviews/REVIEW-INDEX.md))
-- Hooks automticos: scripts/hooks/check-*.ps1 (pre-commit, pre-push)
+- Hooks automáticos: scripts/hooks/check-*.ps1 (pre-commit, pre-push)
 - Protocolo juicio adversarial: scripts/utilities/judgment-day.ps1, skills/judgment-day/SKILL.md
 - Orquestador y sub-agentes: scripts/utilities/wf.ps1 agent <NAME> <TASK>
 
@@ -98,10 +112,10 @@ Ver [docs/reference/ARCHITECTURE.md](docs/reference/ARCHITECTURE.md) para el dia
 .\scripts\utilities\wf.ps1 status
 # Dashboard de operaciones
 .\scripts\utilities\wf.ps1 stack-dashboard
-# Validacin y revisin
+# Validación y revisión
 .\scripts\utilities\wf.ps1 review
 .\scripts\utilities\wf.ps1 audit
-# Health check y activacin
+# Health check y activación
 .\scripts\utilities\wf.ps1 health
 # PR y push
 .\scripts\utilities\wf.ps1 pr
@@ -144,13 +158,13 @@ Foundation provides templates for:
 - **DevOps Pipelines** (GitHub Actions + Azure)
 
 
-##  Ciclo de Trabajo
+## 🔄 Ciclo de Trabajo
 
-1. Inicializacin: stack, skills y hooks activos slo cuando se requiere
-2. Sesin: orquestador y memoria persistente, revisin y validacin automtica
-3. Cierre: revisin adversarial, artefactos de sesin, cierre y publicacin
+1. Inicialización: stack, skills y hooks activos sólo cuando se requiere
+2. Sesión: orquestador y memoria persistente, revisión y validación automática
+3. Cierre: revisión adversarial, artefactos de sesión, cierre y publicación
 
-##  Weekly Audit Runbook
+## 📅 Weekly Audit Runbook
 
 A systematic 5-step process to generate a complete, governance-validated audit of the repository.
 All output files use full datetime in their name (`YYYY-MM-DD-HHmmss`) so multiple runs on the same day are always distinguishable.
@@ -217,7 +231,7 @@ Use this when strict cleanup reports drift or when you want to normalize the wor
 
 ---
 
-##  Documentation
+## 📚 Documentation
 
 ### For Developers
 - **[Session Guide](docs/guides/SESSION-GUIDE.md)**: Daily workflow and commands
@@ -233,7 +247,7 @@ Use this when strict cleanup reports drift or when you want to normalize the wor
 - **[AI Configuration](docs/guides/AI-CONFIGURATION.md)**: AI provider setup
 - **[Getting Started](docs/getting-started/README.md)**: All setup guides
 
-##  Configuration
+## ⚙️ Configuration
 
 ### Environment Variables
 ```bash
@@ -270,34 +284,45 @@ Each project contains a `.foundation` configuration file:
 }
 ```
 
-##  Key Features
+## ✨ Key Features
 
-###  Intelligent Coordination
-- **Auto-detection**: Project type, tech stack, and requirements
-- **Skill Loading**: Dynamic loading of relevant AI skills
-- **Workflow Guidance**: Step-by-step development guidance
-- **Quality Gates**: Automated validation at every step
+> 💡 **Highlight:** Foundation combina IA, gobernanza y automatización en una sola plataforma.
 
-###  Memory Persistence
-- **Session Continuity**: Context retention across development sessions
-- **Decision Tracking**: Architecture and implementation decisions
-- **Knowledge Base**: Accumulated best practices and patterns
-- **Collaboration**: Shared context across team members
+### 🤖 Intelligent Coordination
+| Feature | Benefit |
+|---------|---------|
+| **Auto-detection** | Project type, tech stack, requirements |
+| **Skill Loading** | Dynamic loading of relevant AI skills |
+| **Workflow Guidance** | Step-by-step development guidance |
+| **Quality Gates** | Automated validation at every step |
+
+### 🧠 Memory Persistence
+| Feature | Benefit |
+|---------|---------|
+| **Session Continuity** | Context retention across sessions |
+| **Decision Tracking** | Architecture and implementation decisions |
+| **Knowledge Base** | Accumulated best practices |
+| **Collaboration** | Shared context across team members |
 
 
-##  Validacin y QA
-- Hooks automticos (pre-commit, pre-push, 7D)
-- Revisin adversarial (judgment-day)
-- Testing y cobertura (skills/testing-strategy-skill)
-- SDD y enforcement de criterios
+## ✅ Validación y QA
+
+> 🚨 **CRITICAL:** Los hooks se ejecutan automáticamente antes de cada commit.
+
+| Mecanismo | Descripción | Estado |
+|------------|-------------|--------|
+| **Hooks automáticos** | pre-commit, pre-push, 7D | ✅ Activo |
+| **Revisión adversarial** | judgment-day protocol | ✅ Activo |
+| **Testing y cobertura** | skills/testing-strategy-skill | ✅ Activo |
+| **SDD enforcement** | Especificaciones y criterios | ✅ Obligatorio |
 
 
 ---
 
 
-##  Contribuciones
+## 🤝 Contribuciones
 
-Ver [CONTRIBUTING.md](CONTRIBUTING.md) para detalles y flujos de contribucin.
+Ver [CONTRIBUTING.md](CONTRIBUTING.md) para detalles y flujos de contribución.
 
 ### Setup de desarrollo
 ```bash
@@ -313,21 +338,47 @@ cd workspace-foundation
 ```
 
 
-##  Licencia
+## 📄 Licencia
 
 MIT  ver [LICENSE](LICENSE)
 
-##  Soporte y Documentacin
+## 🆘 Soporte y Documentación
 
-- Documentacin: [docs/](docs/)
+- Documentación: [docs/](docs/)
 - Issues: [GitHub Issues](https://github.com/EmmanuelOrtiz87/workspace-foundation/issues)
 - Discusiones: [GitHub Discussions](https://github.com/EmmanuelOrtiz87/workspace-foundation/discussions)
 
 ---
 
-**Listo para operar con gobernanza, automatizacin y AI real?**
+**Listo para operar con gobernanza, automatización y AI real?**
 
-Inicia con `.\scripts\utilities\wf.ps1 health` y consulta la documentacin para flujos, skills y normativas vigentes.
+Inicia con `.\scripts\utilities\wf.ps1 health` y consulta la documentación para flujos, skills y normativas vigentes.
+
+```text
+
+                          AUTOMATIC (Pre-commit)                               
+
+                                                                              
+    git commit  pre-commit hook  Fast scan (Secrets + Quality)     
+                                                                             
+                                           
+                                                                           
+                      Critical?         Report saved      Allow               
+                                                                           
+                                                                           
+                        [X] BLOCK     docs/reviews/    [OK] Proceed         
+                                                                              
+
+                            MANUAL (On Demand)                                
+
+                                                                              
+    wf review              --> Full review (all 7 dimensions)                
+    wf review security     --> Security only                                 
+    wf review quality      --> Quality only                                   
+    wf review quick       --> Fast scan (~30s)                              
+    wf review --report    --> Generate detailed report                       
+    wf review --track     --> Export issues to CSV                           
+                                                                              
 
 ```
 
@@ -359,128 +410,127 @@ Inicia con `.\scripts\utilities\wf.ps1 health` y consulta la documentacin para f
 
 ```
 
-## Features
+## 🎁 Features
 
-| Feature | Description |
+> 💡 **Highlights:** Foundation combina lo mejor de IA, gobernanza y automatización.
+
+| Feature | Description | Benefit |
+|---------|-------------|---------|
+| **🌍 Global Installation** | Single installation per machine | All projects |
+| **⚡ Unified CLI** | Single command (`gf`) | Simple operation |
+| **🔗 Symlink Strategy** | Skills updated once, available everywhere | Always synced |
+| **🔒 Pre-commit Hooks** | Automatic secrets detection | Security first |
+| **🎯 25+ Skills** | Curated for Go, Angular, React, Python | Expert patterns |
+| **🔧 Multi-Technology** | Node.js, Go, Python, Rust | Flexible stack |
+| **💻 Cross-Platform** | Windows, Linux, macOS | Universal |
+| **📦 Templates** | service, cli, library, frontend, fullstack | Quick start |
+| **🚀 CI/CD** | GitHub Actions, GitLab CI, Azure DevOps | Ready to deploy |
+| **🐳 Containers** | Docker and Kubernetes production-ready | Scalable |
+| **🧠 AI-Ready** | Engram integration for persistent memory | Continuity |
+
+## 📦 Project Types
+
+> 📋 **Available Templates:** Foundation provides ready-to-use project scaffolding.
+
+| Type | Technologies | Use Case |
+|------|-------------|---------|
+| **🖥️ Web APIs** | Go + REST, Gin | Backend services |
+| **📱 SPA** | Angular + TypeScript | Modern frontends |
+| **🐳 Microservices** | Docker + Kubernetes | Scalable systems |
+| **📊 Data Processing** | Python + FastAPI | Analytics & ETL |
+| **🚀 DevOps Pipelines** | GitHub Actions + Azure | CI/CD automation |
+
+### 📋 Template Structure
+```text
+PROJECT TYPES AVAILABLE:
+
+  SERVICE    CLI        LIBRARY    FRONTEND
+    [SVC]      [CLI]      [LIB]      [FE]
+    API        Go         npm pkg    React
+    Backend    Rust       PyPI       Vue
+    Worker     Node       Go mod     Angular
+
+  FULLSTACK  MICROSERVCS  MOBILE
+    [FS]       [MS]        [M]
+    Nx Mono    Gateway    React Nat
+    FE+BE      Services   Flutter
+```
+
+## 🔍 Code Review Dimensions
+
+> 💡 **7 Dimensions:** Cobertura completa de calidad para cada cambio.
+
+| Dimensión | Icon | Descripción | Enfoque |
+|-----------|------|-------------|----------|
+| **SECURITY** | [S] | Secrets, Vulnerabilities, OWASP | Protección crítica |
+| **QUALITY** | [Q] | Code smell, Complexity, Error handling | Mantenibilidad |
+| **ARCHITECT.** | [A] | Structure, Patterns, Modularity | Diseño sólido |
+| **TESTING** | [T] | Coverage, Patterns, Edge cases | Validación completa |
+| **DOCS** | [D] | README, Changelog, Comments | Documentación clara |
+| **API DSGN** | [API] | REST, Validation, Versioning | Contratos claros |
+| **GIT FLOW** | [G] | Commits, Branches, Hooks | Flujo ordenado |
+
+### 🔍 Quick Reference
+```
+        SECURITY       QUALITY       ARCHITECT.   
+           [S]           [Q]           [A]    
+       Secrets       Code smell    Structure 
+       Vulnerab.     Complexity    Patterns  
+
+        TESTING         DOCS          API DSGN   
+          [T]           [D]           [API]   
+       Coverage      README        REST       
+       Patterns      Changelog    Validation
+
+                           GIT FLOW   
+                              [G]    
+                           Commits   
+                           Branches  
+                           Hooks     
+```
+
+## 🤖 Native Runtime and Review
+
+> 💡 **Core:** Foundation provides native orchestration and review through CLI and skills.
+
+### 🤖 Supported AI Agents
+
+| Agent | Integration | Recommended | Why |
+|-------|-------------|-------------|-----|
+| **OpenCode** | Full (per-phase routing) | ✅ Default | Multi-provider, 140K+ stars |
+| Claude Code | Full (sub-agents) | ✅ Yes | Native integration |
+| Gemini CLI | Full (experimental) | ❌ No | Testing only |
+| Cursor | Full (9 SDD agents) | ✅ Yes | Parallel execution |
+| VS Code Copilot | Full (parallel) | ❌ No | IDE only |
+| Codex | Solo-agent | ❌ No | Limited scope |
+| Windsurf | Solo-agent | ❌ No | Limited scope |
+| Antigravity | Solo-agent + Mission Control | ❌ No | Experimental |
+
+### 🚀 Quick Commands
+
+| Command | Description |
 |---------|-------------|
-| **Global Installation** | Single installation per machine, used by all projects |
-| **Unified CLI** | Single command (`gf`) for all operations |
-| **Symlink Strategy** | Skills updated once, available everywhere |
-| **Pre-commit Hooks** | Automatic secrets detection before commit |
-| **25+ Skills** | Curated skills for Go, Angular, React, Python, etc. |
-| **Multi-Technology** | Supports Node.js, Go, Python, Rust, and more |
-| **Cross-Platform** | Works on Windows, Linux, and macOS |
-| **Templates** | service, cli, library, frontend, fullstack, microservices |
-| **CI/CD** | GitHub Actions, GitLab CI, Azure DevOps included |
-| **Containers** | Docker and Kubernetes production-ready |
-| **AI-Ready** | Engram integration for persistent memory |
+| `wf.ps1 status` | Show workflow status |
+| `wf.ps1 review` | Run native review |
+| `wf.ps1 update-tools` | Update toolchain |
 
-## Project Types
+> 💡 **Windows:** Homebrew (`brew`) not required. Use `wf.ps1 update-tools` (Git Bash + Go).
 
-```
-
-                           AVAILABLE TEMPLATES                                
-
-
-          
-       SERVICE          CLI          LIBRARY       FRONTEND   
-        [SVC]          [CLI]         [LIB]         [FE]   
-          
-      API           Go            npm pkg       React     
-      Backend       Rust          PyPI          Vue       
-      Worker        Node          Go mod        Angular   
-          
-
-        
-      FULLSTACK     MICROSERVCS       MOBILE    
-         [FS]           [MS]           [M]     
-        
-      Nx Mono       Gateway       React Nat 
-      FE + BE       Services      Flutter   
-        
-```
-
-## Code Review Dimensions
-
-```
-
-                     7 DIMENSIONS CODE REVIEW                                 
-
-
-        
-      SECURITY       QUALITY       ARCHITECT.   
-         [S]           [Q]           [A]    
-        
-      Secrets       Code smell    Structure 
-      Vulnerab.     Complexity    Patterns  
-      OWASP         Error hnd     Modularity
-        
-
-        
-       TESTING         DOCS          API DSGN   
-         [T]           [D]           [API]   
-        
-      Coverage      README        REST       
-      Patterns      Changelog    Validation
-      Edge case    Comments      Versioning
-        
-
-                        
-                          GIT FLOW   
-                             [G]    
-                        
-                          Commits   
-                          Branches  
-                          Hooks     
-                        
-```
-
-## Native Runtime and Review
-
-Foundation provides native orchestration and native review capabilities directly through the workflow CLI and skills.
-
-### Supported AI Agents
-
-| Agent | Integration | Recommended |
-|-------|-------------|-------------|
-| **OpenCode** | Full (per-phase model routing) | Yes (default) |
-| Claude Code | Full (with sub-agents) | Yes |
-| Gemini CLI | Full (experimental) | No |
-| Cursor | Full (9 SDD agents) | Yes |
-| VS Code Copilot | Full (parallel execution) | No |
-| Codex | Solo-agent | No |
-| Windsurf | Solo-agent | No |
-| Antigravity | Solo-agent + Mission Control | No |
-
-OpenCode is the default provider for native review flows and is recommended for its:
-- Multi-provider support (Claude, GPT, Gemini, local models)
-- Terminal, desktop, and IDE integration
-- 140K+ GitHub stars, 6.5M monthly developers
-
-### Quick Commands
-
-```bash
-./scripts/utilities/wf.ps1 status              # Show workflow status
-./scripts/utilities/wf.ps1 review              # Run native review workflow
-./scripts/utilities/wf.ps1 update-tools        # Update required toolchain
-```
-
-> Windows note: Homebrew (`brew`) is not required. Use `wf.ps1 update-tools` (Git Bash + Go).
-
-### Post-Install (in your AI agent)
+### 📥 Post-Install (in your AI agent)
 
 ```bash
 /sdd-init              # Initialize SDD context
 skill-registry         # Build skills registry
 ```
 
-## Foundation Skills (Optional) - External Skill Library
+## 🛠️ Foundation Skills (Optional) - External Skill Library
 
 **Foundation Skills** is an optional external skill source. Foundation ships with native local skills under `skills/`.
 
-```
+```text
 
-                     FOUNDATION SKILLS ECOSYSTEM                              
+                      FOUNDATION SKILLS ECOSYSTEM                              
+
 
 
     AI Agent  Skill Library  Framework Expertise
@@ -551,7 +601,7 @@ cp -r tools/Foundation-Skills/curated/* ~/.cursor/skills/
 
 ### Skill Structure
 
-```
+```text
 ~/.claude/skills/
  angular/
     core/SKILL.md
@@ -569,7 +619,7 @@ Each skill contains:
 
 > Foundation Skills are automatically available when creating a new project with `wf new`.
 
-## Severity Levels
+## ⚠️ Severity Levels
 
 | Level | Icon | Description | Action |
 |-------|------|-------------|--------|
@@ -578,38 +628,42 @@ Each skill contains:
 | **MEDIUM** | [!M] | Technical debt, maintainability | Fix soon |
 | **LOW** | [!L] | Best practice, polish | Consider fixing |
 
-## Included Templates
+## 📦 Included Templates
 
 ### CI/CD
-```
+
+```text
 .github/workflows/ci.yml     GitHub Actions
-.gitlab-ci.yml              GitLab CI  
+.gitlab-ci.yml              GitLab CI
 azure-pipelines.yml        Azure DevOps
 ```
 
 ### Containers
-```
+
+```text
 Dockerfile                  Node.js (multi-stage)
 Dockerfile.go              Go (multi-stage)
 Dockerfile.python           Python (multi-stage)
 k8s/                       Kubernetes manifests
-   deployment.yaml
-   service.yaml
-   ingress.yaml
-   hpa.yaml
+    deployment.yaml
+    service.yaml
+    ingress.yaml
+    hpa.yaml
 ```
 
 ### Editor Configuration
-```
+
+```text
 .editorconfig               Universal (all editors)
 .vscode/settings.json       VSCode
 .vscode/extensions.json     Recommended extensions
 ```
 
-## Project Structure
+## 📂 Project Structure
 
-```
+```text
 workspace-foundation/
+
  .github/               # GitHub templates
     ISSUE_TEMPLATE/
     PULL_REQUEST_TEMPLATE/
@@ -645,7 +699,7 @@ workspace-foundation/
 | [AI Configuration](docs/guides/AI-CONFIGURATION.md) | Cloud & local AI setup |
 | [Visual Guide](docs/guides/VISUAL-GUIDE.md) | Complete visual reference |
 | [Developer Communication Policy](docs/guides/DEVELOPER-COMMUNICATION-POLICY.md) | Response-mode contract and enforcement |
-| [Technical Onboarding](docs/supplementary/TECHNICAL-ONBOARDING.md) | Team training guide |
+| [Technical Onboarding](docs/guides/TECHNICAL-ONBOARDING.md) | Team training guide |
 | [Getting Started](docs/getting-started/README.md) | All setup guides |
 
 ## Requirements
@@ -653,20 +707,6 @@ workspace-foundation/
 | Tool | Required | Description |
 |------|----------|-------------|
 | Git | Yes | Version control (2.30+) |
-| PowerShell |
-{
-  "prompt_tokens": 73095,
-  "prompt_unit_price": "0",
-  "prompt_price_unit": "0",
-  "prompt_price": "0",
-  "completion_tokens": 8096,
-  "completion_unit_price": "0",
-  "completion_price_unit": "0",
-  "completion_price": "0",
-  "total_tokens": 81191,
-  "total_price": "0",
-  "currency": "USD",
-  "latency": 65.569,
-  "time_to_first_token": 2.03,
-  "time_to_generate": 63.539
-}
+| PowerShell | Yes | Script automation (7+) |
+| Node.js | Recommended | JavaScript/TypeScript runtime (18+) |
+| Go | Optional | Backend development (1.19+) |

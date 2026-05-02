@@ -8,7 +8,7 @@ Se ha implementado un sistema completo de **Token Overflow Protection** que se e
 
 ### 1.  Token Guard Automtico
 - **Script**: `tools/token-guard.ps1`
-- **Configuracin**: `tools/token-guard-config.json`
+- **configuración**: `tools/token-guard-config.json`
 - **Estado**: `.session/token-guard-state.json`
 - Se inicializa automticamente al ejecutar `tools/session-autostart.cmd`
 - Monitorea tokens en tiempo real
@@ -40,7 +40,7 @@ Se ha implementado un sistema completo de **Token Overflow Protection** que se e
 ```
 Token Guard System
  tools/token-guard.ps1 (Motor principal)
- tools/token-guard-config.json (Configuracin)
+ tools/token-guard-config.json (configuración)
  tools/session-autostart.cmd (Integracin)
  tools/session-autostart.config.json (Config de sesin)
  .session/token-guard-state.json (Estado en tiempo real)
@@ -58,7 +58,7 @@ Validacin cross-workspace
 Inicializacin de sesin
     
 [NUEVO] Inicializacin de Token Guard
-     Cargar configuracin
+     Cargar configuración
      Crear archivo de estado
      Inicializar monitoreo
      Mostrar parmetros
@@ -66,7 +66,7 @@ Inicializacin de sesin
 Inicializacin de orquestador
 ```
 
-## Configuracin
+## configuración
 
 ### Presupuesto de Tokens
 
@@ -147,7 +147,7 @@ Generate-TokenReport -StateFile ".\.session\token-guard-state.json" `
 ```
 - Inicializa Token Guard
 - Crea archivo de estado
-- Muestra parmetros de configuracin
+- Muestra parmetros de configuración
 
 ### Enforce Mode
 ```powershell
@@ -202,7 +202,7 @@ if exist "%TOKEN_GUARD_SCRIPT%" (
 )
 ```
 
-## Configuracin de Sesin
+## configuración de Sesin
 
 El `tools/session-autostart.config.json` incluye la seccin de Token Guard:
 
@@ -288,7 +288,7 @@ El `tools/session-autostart.config.json` incluye la seccin de Token Guard:
 
 ### Token Guard no se inicializa
 ```powershell
-# Verificar que el archivo de configuracin existe
+# Verificar que el archivo de configuración existe
 Test-Path "tools/token-guard-config.json"
 
 # Verificar que el script existe
@@ -309,7 +309,7 @@ New-Item -ItemType Directory -Path ".\.session" -Force
 
 ### Alertas no se disparan
 ```powershell
-# Verificar configuracin
+# Verificar configuración
 Get-Content "tools/token-guard-config.json" | ConvertFrom-Json
 
 # Verificar estado
@@ -321,7 +321,7 @@ Get-Content ".\.session\token-guard-state.json" | ConvertFrom-Json
 | Archivo | Descripcin |
 |---------|-------------|
 | `tools/token-guard.ps1` | Motor principal del Token Guard |
-| `tools/token-guard-config.json` | Configuracin de presupuestos y umbrales |
+| `tools/token-guard-config.json` | configuración de presupuestos y umbrales |
 | `tools/session-autostart.cmd` | Integracin en autostart (modificado) |
 | `tools/session-autostart.config.json` | Config de sesin (modificado) |
 | `.session/token-guard-state.json` | Estado en tiempo real (generado) |

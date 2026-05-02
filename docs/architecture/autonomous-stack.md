@@ -257,7 +257,7 @@ $engramPath = Join-Path $repoRoot "tools\engram.exe"
 4. **Telemetry Dashboard**: Real-time view of all autonomous systems
 5. **Self-Healing**: Auto-fix common issues without human intervention
 
-## Version History
+## versión History
 
 - **v1.0.0** (2026-04-30): Initial 100% autonomous stack
   - 8 autonomous systems operational

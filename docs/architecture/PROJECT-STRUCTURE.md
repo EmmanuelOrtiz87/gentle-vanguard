@@ -22,7 +22,7 @@ workspace-foundation/
  .telemetry/           # Telemetry data
  AGENTS.md             # Agent instructions
  README.md             # Root documentation
- CHANGELOG.md         # Version history
+ CHANGELOG.md         # versión history
 ```
 
 ## Rules

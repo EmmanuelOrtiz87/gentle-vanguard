@@ -1,4 +1,4 @@
-﻿---
+---
 name: content-output-skill
 description: >
   Unified content generation skill for all output types: technical documentation,
@@ -9,11 +9,11 @@ description: >
   "publicar", "anuncio", "lanzamiento", "demo", "video", "branding", "logo",
   "copywriting", "persuasivo", "storytelling", "discurso", "presentacion", "expo",
   "congreso", "workshop", "reddit", "discord", "whatsapp", "informe", "report",
-  "reporte", "documentacion", "docs", "publicacion", "comunicacion"
+  "reporte", "documentación", "docs", "publicacion", "comunicacion"
 license: Apache-2.0
 metadata:
   author: workspace-local
-  version: "3.0"
+  versión: "3.0"
 ---
 
 # Content Output Skill (v3.0)
@@ -54,7 +54,7 @@ Part of the workflow: Input  Processing  Output (Docs + Communication)
 | **API Docs** | Auto-generated from code | OpenAPI/Swagger |
 | **Guides** | How-to tutorials | `docs/guides/*.md` |
 | **Reference** | Technical specs | `docs/reference/*.md` |
-| **Changelog** | Version history | `CHANGELOG.md` |
+| **Changelog** | versión history | `CHANGELOG.md` |
 
 ### Documentation Standards
 
@@ -72,7 +72,7 @@ PREFER:
 
 ### See Also
 - `skills/documentation-governance/SKILL.md` - Full governance rules
-- `docs/DOCUMENTATION-STANDARDS.md` - Detailed standards
+- `docs/TOKEN-CONTEXT-STANDARDS.md` - Detailed standards
 
 ---
 
@@ -82,7 +82,7 @@ PREFER:
 
 | Type | Trigger | Output |
 |------|---------|--------|
-| **Session Report** | "informe sesiones" | `docs/sessions/metrics/` |
+| **Session Report** | "informe sesiónes" | `docs/sessions/metrics/` |
 | **Cost Report** | "informe costos" | Token usage, USD |
 | **Performance** | "informe performance" | Velocity metrics |
 | **Executive** | "resumen ejecutivo" | Board-ready summary |
@@ -176,7 +176,7 @@ Tu feedback nos ayuda a mejorar.
 ```
 1. ORDINARIO: El developer sin herramientas
 2. LLAMADO: Descubrir Foundation
-3. PRUEBAS: Learning curve, configuracin
+3. PRUEBAS: Learning curve, configuración
 4. MENTOR: Skills y documentacin
 5. TRANSFORMACIN: Productividad X10
 6. REGRESO: Compartir con el equipo
@@ -194,7 +194,7 @@ Cmo pas de 0 a 100 tasks/semana con AI...
 Thread 
 
 2/x
-El problema: context hell, sesiones perdidas...
+El problema: context hell, sesiónes perdidas...
 Cada vez que iniciaba, tardaba 30min solo en recapitular.
 
 3/x
@@ -217,7 +217,7 @@ Hace 3 meses, mi workflow era un desastre:
  No tena forma de medir mi progreso
 
 Hoy:
- Memoria persistente via Engram
+ memoria persistente via Engram
  Auto-delegation a subagentes
  Reporting automtico
 
@@ -232,7 +232,7 @@ Thread below
 
 ## SPEECHES & PRESENTACIONES
 
-### Estructura de Discurso
+### estructura de Discurso
 
 #### Opening (30-60 segundos)
 ```
@@ -332,7 +332,7 @@ Ver: `docs/marketing/foundation-stack-blog-post.md`
 
 **Looking for**: 
 - Feedback on [specific areas]
-- Suggestions for [improvements]
+- Suggestións for [improvements]
 - Questions welcome
 
 [Link to repo in comments]
@@ -429,7 +429,7 @@ Preguntas? Responde aqu
 |----------|---------|
 | Stack | #FoundationStack #AIDevelopment |
 | Tools | #OpenCode #Claude #Cursor |
-| Spanish | #DevES #DesarrolloES |
+| Spanish | #DevES #desarrolloES |
 | General | #DevTools #AI #Productivity |
 
 ## Posting Schedule
@@ -466,9 +466,10 @@ Preguntas? Responde aqu
 - Impressions (views)
 - Engagements (likes, comments, shares)
 - Click-throughs (link clicks)
-- Conversions (installs, signups)
+- Conversións (installs, signups)
 
 ---
 
-*Skill version: 3.0*  
+*Skill versión: 3.0*  
 *Last updated: 2026-04-27*
+

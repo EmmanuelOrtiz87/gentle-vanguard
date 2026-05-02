@@ -5,7 +5,7 @@ description: >
   Trigger: When creating PRs, writing PR descriptions, or using gh CLI for pull requests.
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  versión: "1.0"
 ---
 
 ## When to Use
@@ -208,3 +208,4 @@ Closes #123"
 
 - [Conventional Commits](https://www.conventionalcommits.org/)
 - [GitHub CLI Manual](https://cli.github.com/manual/gh_pr_create)
+

@@ -1,4 +1,4 @@
-﻿---
+---
 name: skill-index
 description: >
   Master index of all available skills with triggers and usage guidelines.
@@ -123,7 +123,7 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 - Auto-detects project and stack
 - Loads relevant skills
 - Delegates to specialized sub-agents
-- Questions suboptimal decisions
+- Questions suboptimal decisións
 
 **Never wait to be called - always active.**
 
@@ -142,7 +142,7 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 ### session-workflow-skill
 
-**Trigger**: `iniciar sesion`, `guardar sesion`, `continuar`, `estado`
+**Trigger**: `iniciar sesión`, `guardar sesión`, `continuar`, `estado`
 
 **Handles session mechanics:**
 - Memory management (mem_context, mem_save)
@@ -369,7 +369,7 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 **Trigger**: `mobile UI`, `mobile UX`, `responsive mobile`, `touch target`
 
-**Use when**: Mobile-specific UX and UI decisions across iOS, Android, Flutter, or React Native
+**Use when**: Mobile-specific UX and UI decisións across iOS, Android, Flutter, or React Native
 
 ---
 
@@ -413,7 +413,7 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 ### api-design-skill
 
-**Trigger**: `REST API`, `design API`, `pagination`, `filtering`, `versioning`
+**Trigger**: `REST API`, `design API`, `pagination`, `filtering`, `versióning`
 
 **Use when**: REST API design, pagination, filtering, OpenAPI
 
@@ -617,7 +617,7 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 ### release-management-skill
 
-**Trigger**: `release`, `changelog`, `version bump`, `release notes`, `hotfix`
+**Trigger**: `release`, `changelog`, `versión bump`, `release notes`, `hotfix`
 
 **Use when**: Planning releases, managing semver, updating changelogs, and documenting cutover steps
 
@@ -728,9 +728,9 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 ### foundation-manager-skill
 
-**Trigger**: `update`, `sync`, `check`, `maintenance`, `tools`, `version`
+**Trigger**: `update`, `sync`, `check`, `maintenance`, `tools`, `versión`
 
-**Use when**: Update foundation, sync skills, check versions, manage tools, maintenance
+**Use when**: Update foundation, sync skills, check versións, manage tools, maintenance
 
 ---
 
@@ -738,7 +738,7 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 **Trigger**: `architecture`, `design patterns`, `structure`
 
-**Use when**: Architecture decisions, patterns, system design
+**Use when**: Architecture decisións, patterns, system design
 
 ---
 
@@ -971,4 +971,5 @@ Advanced parallel execution management with dependency graphs, resource pooling,
 **Use when**: Managing visual content, images, and media assets in documentation
 
 ---
+
 

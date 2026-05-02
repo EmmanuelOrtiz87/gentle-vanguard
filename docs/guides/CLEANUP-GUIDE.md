@@ -107,7 +107,7 @@ bash ./tools/cleanup-project.sh full
 Los siguientes archivos/directorios NUNCA se eliminan:
 
 ### Directorios Protegidos
-- `config/` - Configuraciones
+- `config/` - configuraciónes
 - `tools/` - Scripts
 - `docs/` - Documentacin
 - `skills/` - Skills
@@ -189,7 +189,7 @@ El script automticamente verifica:
 - `AGENTS.md`
 - `README.md`
 
-### Configuracin
+### configuración
 - `config/` - Todos los archivos
 - `config/*.json`
 
@@ -270,7 +270,7 @@ Despus de limpiar, el script verifica:
 **Causa**: Archivos requeridos fueron eliminados
 
 **Solucin**: 
-1. Restaurar desde control de versiones
+1. Restaurar desde control de versiónes
 2. Verificar que no se ejecut modo full innecesariamente
 
 ### Problema: Archivos no se eliminan
@@ -305,13 +305,13 @@ Despus de limpiar, el script verifica:
 
 - [ ] Ejecutar full sin verificar
 - [ ] Eliminar docs/judgment/
-- [ ] Eliminar archivos de configuracin
+- [ ] Eliminar archivos de configuración
 - [ ] Ejecutar sin permisos
 - [ ] Ignorar errores de integridad
 
 ---
 
-## Automatizacin
+## automatización
 
 ### Limpiar Regularmente
 
@@ -340,7 +340,7 @@ El script de limpieza proporciona:
  Proteccin de archivos importantes
  Verificacin de integridad
  Logging detallado
- Automatizacin posible
+ automatización posible
 
 **Recomendacin**: Ejecutar `safe` regularmente para mantener el proyecto limpio.
 

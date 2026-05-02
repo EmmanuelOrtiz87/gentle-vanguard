@@ -9,17 +9,20 @@
 
 New to Workspace Foundation? Start here:
 
-- **[SESSION-GUIDE.md](SESSION-GUIDE.md)** - Session management and daily workflow
-- **[GITFLOW-QUICK-REFERENCE.md](GITFLOW-QUICK-REFERENCE.md)** - GitFlow workflow guide
+- **📖 [SESSION-GUIDE.md](SESSION-GUIDE.md)** - Session management and daily workflow
+- **🔄 [GITFLOW-QUICK-REFERENCE.md](GITFLOW-QUICK-REFERENCE.md)** - GitFlow workflow guide
 
 ---
 
 ## Development Guides
 
-### Core Standards
-- **[SCRIPT-NORMALIZATION-STANDARDS.md](SCRIPT-NORMALIZATION-STANDARDS.md)** - Script normalization and best practices
-- **[AI-TOOLS-COMPATIBILITY-MATRIX.md](AI-TOOLS-COMPATIBILITY-MATRIX.md)** - AI tool integration (Claude, Cline, etc.)
-- **[TOKEN-CONTEXT-STANDARDS.md](TOKEN-CONTEXT-STANDARDS.md)** - Token budgets and efficiency modes
+### 📋 Core Standards
+
+| Documento | Descripción | Enlace |
+|-----------|-------------|--------|
+| **Script Normalization** | Script normalization and best practices | [SCRIPT-NORMALIZATION-STANDARDS.md](SCRIPT-NORMALIZATION-STANDARDS.md) |
+| **AI Tools Matrix** | AI tool integration (Claude, Cline, etc.) | [AI-TOOLS-COMPATIBILITY-MATRIX.md](AI-TOOLS-COMPATIBILITY-MATRIX.md) |
+| **Token Standards** | Token budgets and efficiency modes | [TOKEN-CONTEXT-STANDARDS.md](TOKEN-CONTEXT-STANDARDS.md) |
 
 ### Architecture
 - **[ARCHITECTURE.md](../architecture/ARCHITECTURE.md)** - System design and overview
@@ -37,7 +40,7 @@ New to Workspace Foundation? Start here:
 ## Reference
 
 - **[DEPLOYMENT-READY-SUMMARY.md](DEPLOYMENT-READY-SUMMARY.md)** - Deployment overview
-- **[DOCUMENTATION-STANDARDS.md](../DOCUMENTATION-STANDARDS.md)** - How to write docs
+- **[TOKEN-CONTEXT-STANDARDS.md](TOKEN-CONTEXT-STANDARDS.md)** - Token budgets and efficiency modes
 
 ---
 
@@ -77,7 +80,7 @@ New to Workspace Foundation? Start here:
 ## Contributing
 
 When adding documentation:
-1. Follow [DOCUMENTATION-STANDARDS.md](../DOCUMENTATION-STANDARDS.md)
+1. Follow [TOKEN-CONTEXT-STANDARDS.md](TOKEN-CONTEXT-STANDARDS.md)
 2. Update this README
 3. Link from relevant sections
 4. Keep files under 2000 lines

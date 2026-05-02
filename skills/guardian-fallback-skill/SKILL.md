@@ -1,4 +1,4 @@
-﻿---
+---
 name: guardian-fallback
 description: >
   Optional fallback skill for when Foundation cannot close tasks autonomously.
@@ -12,7 +12,7 @@ description: >
 GGA serves as **optional guardian** when Foundation's orchestrator:
 - Cannot determine next step
 - Is blocked by unknown error
-- Needs second opinion on complex decision
+- Needs second opinion on complex decisión
 - Requires code review to close PR
 
 ## Architecture
@@ -27,7 +27,7 @@ ORCHESTRATOR (Primary)
      Still blocked?  GGA FALLBACK (optional)
             
              Code review
-             Decision assist
+             decisión assist
              Task completion
              Commit hygiene
 ```
@@ -40,7 +40,7 @@ Use GGA fallback when:
 |-----------|--------|
 | Unknown error blocks progress | `gga run` for diagnosis |
 | PR needs final review | `gga run --pr-mode` |
-| Complex decision needed | GGA reasoning assist |
+| Complex decisión needed | GGA reasoning assist |
 | Blocked on coding standards | GGA review |
 | Commit message validation | `gga install --commit-msg` |
 
@@ -150,7 +150,7 @@ GGA is **enhancement**, not **requirement**.
 
 ```
 
-              FALLBACK DECISION TREE            
+              FALLBACK decisión TREE            
 
                                               
   Orchestrator blocked?                       
@@ -202,3 +202,4 @@ wf review --scope full
 
 ---
 **Note:** GGA is a convenience, not a requirement. Foundation works fully without it.
+

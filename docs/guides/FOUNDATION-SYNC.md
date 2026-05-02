@@ -1,4 +1,4 @@
-# Foundation Sync Guide
+﻿# Foundation Sync Guide
 
 This guide explains exactly how Foundation sync behaves in consumer repositories.
 
@@ -93,11 +93,11 @@ Custom files outside managed assets are not touched.
 
 ```json
 {
-  "schemaVersion": 1,
+  "schemaversión": 1,
   "role": "consumer",
   "foundationPath": "../workspace-foundation",
-  "fromVersion": "0.2.0",
-  "toVersion": "0.2.1",
+  "fromversión": "0.2.0",
+  "toversión": "0.2.1",
   "assets": [
     {
       "source": "scripts/utilities/wf.ps1",

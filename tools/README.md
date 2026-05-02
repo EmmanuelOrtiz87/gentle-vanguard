@@ -2,7 +2,7 @@
 
 Este directorio no debe contener scripts internos del proyecto Foundation.
 
-- Solo se permite aqu la presencia de dependencias externas, archivos de configuracin global o subdirectorios de herramientas externas.
+- Solo se permite aqu la presencia de dependencias externas, archivos de configuración global o subdirectorios de herramientas externas.
 - Todos los scripts internos deben residir en `scripts/utilities/` o `scripts/tools/` segn la convencin.
 - Si encuentras scripts aqu, migrarlos y eliminar del directorio.
 

@@ -5,7 +5,7 @@
 Se ha implementado un **sistema completo de distributed tracing** para el workspace-foundation que soluciona el GAP identificado: "No hay tracing distribuido de dispatches". 
 
 ### Problema Identificado
--  No haba trazabilidad de operaciones a travs de mltiples componentes
+-  No haba trazabilidad de operaciónes a travs de mltiples componentes
 -  No haba correlacin entre eventos en diferentes servicios
 -  No haba mtricas de rendimiento centralizadas
 -  Los reportes estaban dispersos sin estructura clara
@@ -13,14 +13,14 @@ Se ha implementado un **sistema completo de distributed tracing** para el worksp
 ### Solucin Implementada
 -  **Distributed Tracing** con OpenTelemetry compatible
 -  **Correlation IDs** nicos para cada sesin
--  **Span Hierarchy** para relaciones entre operaciones
+-  **Span Hierarchy** para relaciones entre operaciónes
 -  **Performance Metrics** en tiempo real
 -  **Centralized Reporting** en `.telemetry/`
 
 ##  Arquitectura Implementada
 
 ### 1. Correlation IDs
-Cada sesin obtiene un identificador nico que se propaga a travs de todas las operaciones:
+Cada sesin obtiene un identificador nico que se propaga a travs de todas las operaciónes:
 
 ```
 Formato: session-YYYY-MM-DD-XX-YYYYMMDDHHMMSS-XXXXXXXX
@@ -30,10 +30,10 @@ Ejemplo: session-2026-04-23-25-20260423144242-2dc547e7
 **Beneficios:**
 - Rastrear una operacin completa desde inicio a fin
 - Correlacionar eventos en mltiples componentes
-- Identificar problemas en cadenas de operaciones
+- Identificar problemas en cadenas de operaciónes
 
 ### 2. Span Hierarchy
-Estructura jerrquica que muestra relaciones entre operaciones:
+Estructura jerrquica que muestra relaciones entre operaciónes:
 
 ```
 Root Span (Session)
@@ -50,15 +50,15 @@ Root Span (Session)
 ```
 
 **Beneficios:**
-- Visualizar la estructura completa de operaciones
+- Visualizar la estructura completa de operaciónes
 - Identificar cuellos de botella
-- Entender dependencias entre operaciones
+- Entender dependencias entre operaciónes
 
 ### 3. Performance Metrics
 Mtricas automticas de rendimiento:
 
 - **Latencia**: Tiempo de ejecucin de cada operacin (ms)
-- **Throughput**: Operaciones por segundo
+- **Throughput**: operaciónes por segundo
 - **Error Rate**: Tasa de fallos (%)
 - **Resource Usage**: Utilizacin de recursos
 
@@ -95,7 +95,7 @@ Todos los reportes en un nico directorio `.telemetry/`:
 ### Configuration
 | Archivo | Descripcin |
 |---------|-------------|
-| `config/distributed-tracing-config.json` | Configuracin del sistema |
+| `config/distributed-tracing-config.json` | configuración del sistema |
 
 ### Tools & Integration
 | Archivo | Descripcin |
@@ -170,17 +170,17 @@ Finalize-DistributedTracing
 ##  Beneficios Implementados
 
 ### 1. Observabilidad Completa
-- Visibilidad total de operaciones
+- Visibilidad total de operaciónes
 - Rastreo de errores a travs de mltiples componentes
 - Identificacin de cuellos de botella
 
 ### 2. Anlisis de Rendimiento
 - Mtricas de latencia automticas
 - Anlisis de throughput
-- Identificacin de operaciones lentas
+- Identificacin de operaciónes lentas
 
 ### 3. Debugging Mejorado
-- Correlation IDs para rastrear operaciones
+- Correlation IDs para rastrear operaciónes
 - Span hierarchy para entender relaciones
 - Eventos y atributos para contexto
 
@@ -195,7 +195,7 @@ Finalize-DistributedTracing
 ### Auto-Delegation Router
 ```powershell
 # Cada dispatch genera un span raz
-# Sub-spans para keyword extraction, decision tree, confidence scoring
+# Sub-spans para keyword extraction, decisión tree, confidence scoring
 # Mtricas de routing accuracy
 ```
 
@@ -203,7 +203,7 @@ Finalize-DistributedTracing
 ```powershell
 # Span para cada fase de judgment
 # Mtricas de review time y approval rate
-# Trazabilidad de decisiones
+# Trazabilidad de decisiónes
 ```
 
 ### Session Manager
@@ -223,7 +223,7 @@ Finalize-DistributedTracing
 - Anlisis de errores
 
 ### Performance Analysis
-- Top 10 operaciones ms lentas
+- Top 10 operaciónes ms lentas
 - Anlisis de throughput
 - Anlisis de cuellos de botella
 - Identificacin de bottlenecks
@@ -250,7 +250,7 @@ Finalize-DistributedTracing
 2. **Monitoreo Continuo**
    - Revisar reportes diarios
    - Identificar tendencias de rendimiento
-   - Optimizar operaciones lentas
+   - Optimizar operaciónes lentas
 
 3. **Alertas y Notificaciones**
    - Configurar alertas para error rates altos
@@ -267,7 +267,7 @@ Finalize-DistributedTracing
 Para documentacin detallada, consulta:
 - `skills/distributed-tracing-skill/README.md` - Gua completa
 - `skills/distributed-tracing-skill/SKILL.md` - Descripcin del skill
-- `config/distributed-tracing-config.json` - Configuracin
+- `config/distributed-tracing-config.json` - configuración
 
 ##  Verificacin de Funcionalidad
 
@@ -297,7 +297,7 @@ Para documentacin detallada, consulta:
 Se ha implementado exitosamente un **sistema completo de distributed tracing** que:
 
 1.  Proporciona **Correlation IDs** nicos para cada sesin
-2.  Implementa **Span Hierarchy** para relaciones entre operaciones
+2.  Implementa **Span Hierarchy** para relaciones entre operaciónes
 3.  Recopila **Performance Metrics** automticamente
 4.  Centraliza todos los **reportes en `.telemetry/`**
 5.  Se **integra automticamente** en session-autostart

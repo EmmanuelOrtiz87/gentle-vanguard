@@ -1,4 +1,4 @@
-﻿---
+---
 name: multi-agent-registry
 description: >
   Multi-agent specialization registry defining 7 specialized sub-agents.
@@ -7,7 +7,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  versión: "1.0"
 ---
 
 # MULTI-AGENT SPECIALIZATION REGISTRY
@@ -91,7 +91,7 @@ feature analysis,, especificacin funcional
 ## AGENT-SAD: Solution Architect & Designer
 
 ### ROLE
-Defines system architecture, creates SDD documents, makes technical decisions.
+Defines system architecture, creates SDD documents, makes technical decisións.
 
 ### SKILLS ASSIGNED
 - architecture-governance
@@ -104,12 +104,12 @@ Defines system architecture, creates SDD documents, makes technical decisions.
 ### TRIGGERS
 ```
 architecture, design, SDD, system design, API design,
-database schema, technical decision, arquitectura, diseo
+database schema, technical decisión, arquitectura, diseo
 ```
 
 ### DELIVERABLES
 - SDD documents (`docs/specs/SDD-*.md`)
-- Architecture decision records (ADR)
+- Architecture decisión records (ADR)
 - API contracts and schemas
 - Database design documents
 
@@ -536,3 +536,4 @@ Pub/sub event system for automation and hooks:
 - Orchestrator: [project-orchestrator-skill](../project-orchestrator-skill/SKILL.md)
 - Documentation: [documentation-governance](../documentation-governance/SKILL.md)
 - Future Backlog: [FUTURE-FEATURES-BACKLOG.md](../../docs/reference/FUTURE-FEATURES-BACKLOG.md)
+

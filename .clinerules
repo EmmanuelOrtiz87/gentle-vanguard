@@ -63,8 +63,9 @@ When trigger detected, load corresponding skill:
 - **REPORT**: informe, report, reporte, metricas, metrics, analytics, analisis, dashboard, resumen ejecutivo, gerencia, tokens, costos, consumo, sesiones, telemetry, telemetria, estadisticas, stats, resumen de sesion → `management-reporting-skill`
 
 ## 7 GitFlow Capabilities
+
 | Trigger Keywords | GitFlow Layer | Action |
-|---------------|----------------|--------|
+|------------------|---------------|--------|
 | create branch, feature branch, bugfix branch, hotfix branch, release branch | **Branch Management** | `create-gitflow-branch.ps1` |
 | pull request, PR, create PR, open PR | **PR Management** | `create-pull-request.ps1` |
 | pre-commit, pre-push, git hook, hook validation | **Hooks** | `pre-commit-validation.ps1` |

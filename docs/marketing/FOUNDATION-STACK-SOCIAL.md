@@ -1,4 +1,4 @@
-﻿#  Foundation - AI Development Workspace
+#  Foundation - AI Development Workspace
 
 **El stack de desarrollo AI-first para equipos modernos**
 
@@ -27,7 +27,7 @@
 
 | Mdulo | Funcin | Estado |
 |--------|---------|--------|
-| **Session Manager** | Tracking de sesiones, mtricas |  |
+| **Session Manager** | Tracking de sesiónes, mtricas |  |
 | **Auto-Delegation** | Routing a subagentes especializados |  |
 | **Reporting** | Informes on-demand para gerencia |  |
 | **Token Guard** | Eficiencia de contexto |  |
@@ -67,10 +67,10 @@ AGENT-BA AGENT-SADAGENT-DEVAGENT-QA
 ```
 Da: 26-Abr-2026
 
-Sesiones:    17 total
+sesiónes:    17 total
 Activas:     17
-24-Abr:      5 sesiones
-25-Abr:      7 sesiones  40%
+24-Abr:      5 sesiónes
+25-Abr:      7 sesiónes  40%
 26-Abr:      1 sesin (en curso)
 
 Token Guard:  Activo (128K)
@@ -97,7 +97,7 @@ Token Guard:  Activo (128K)
 .\tools\session-autostart.cmd
 
 # 2. Solicitar algo
-"generame un informe de sesiones de ayer"
+"generame un informe de sesiónes de ayer"
 
 # 3. Obtener reporte
 .\scripts\utilities\wf-report.ps1 -Type executive

@@ -1,4 +1,4 @@
-﻿---
+---
 name: golang-api-skill
 description: >
   Go backend API patterns: REST endpoints, JSON responses, middleware, SPA serving.
@@ -34,7 +34,7 @@ web/                  # Frontend SPA
 
 ## API Standards
 
-### Versioning
+### versióning
 - Prefix: `/api/v1/`
 - Example: `/api/v1/metrics`, `/api/v1/users`
 
@@ -219,3 +219,4 @@ CMD ["./server"]
 | SPA handler | `mux.Handle("/", spaHandler("./web/dist"))` |
 | CORS | `corsMiddleware(handler)` |
 | Test endpoint | `httptest.NewRecorder()` |
+

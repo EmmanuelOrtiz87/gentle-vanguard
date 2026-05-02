@@ -1,4 +1,4 @@
-# Operating Decisions (2026-04-15)
+﻿# Operating decisións (2026-04-15)
 
 Consolidated lessons learned, rules, mechanisms, and definitions agreed during hardening of the Workspace + Foundation operating flow.
 

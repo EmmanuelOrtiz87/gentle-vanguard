@@ -1,4 +1,4 @@
-﻿---
+---
 name: go-testing
 description: >
   Go testing patterns for Gentleman.Dots, including Bubbletea TUI testing.
@@ -6,7 +6,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  versión: "1.0"
 ---
 
 ## When to Use
@@ -137,7 +137,7 @@ func TestOSSelectGolden(t *testing.T) {
 
 ---
 
-## Decision Tree
+## decisión Tree
 
 ```
 Testing a function?
@@ -353,3 +353,4 @@ go test -short ./...                    # Skip integration tests
 - **System Tests**: See `installer/internal/system/*_test.go`
 - **Golden Files**: See `installer/internal/tui/testdata/`
 - **Teatest Docs**: https://github.com/charmbracelet/bubbletea/tree/master/teatest
+

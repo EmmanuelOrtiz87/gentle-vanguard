@@ -1,17 +1,17 @@
 # Architecture Standards
 
-## 1. Default Decision Shape
+## 1. Default decisión Shape
 
 Use this order when writing an architecture note:
 
 1. Project context.
-2. Decision.
+2. decisión.
 3. Why this default is safe.
 4. What the user can override.
 5. Impact on structure, scripts, and validation.
 6. Follow-up notes.
 
-## 2. Common Decision Areas
+## 2. Common decisión Areas
 
 1. Layering and module boundaries.
 2. Project kind and scaffold shape.
@@ -32,7 +32,7 @@ Use these files for architecture records:
 ## 4. Minimal Architecture Note Template
 
 1. Context
-2. Decision
+2. decisión
 3. Expected result
 4. Current implementation
 5. Notes or constraints
@@ -46,3 +46,4 @@ Before closing an architecture change, verify:
 3. The repo does not depend on embedded external tools.
 4. OS-specific behavior is documented.
 5. Scripts and docs match the selected structure.
+

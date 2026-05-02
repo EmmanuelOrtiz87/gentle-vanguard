@@ -1,48 +1,48 @@
-﻿# Scripts Utilitarios - Directorio Principal
+# Scripts Utilitarios - directorio Principal
 
-Coleccin centralizada de scripts utilitarios organizados por funcionalidad para el workspace foundation.
+Colección centralizada de scripts utilitarios organizados por funcionalidad para el workspace foundation.
 
-**Versin**: 3.0.0  
-**ltima actualizacin**: 2026-04-22  
-**Estado**:  PRODUCCIN
+**Versión**: 3.0.0  
+**Última actualización**: 2026-04-22  
+**Estado**:  PRODUCCIÓN
 
 ---
 
-##  Estructura de Directorios
+##  estructura de directorios
 
 ```
 scripts/utilities/
  README.md                          # Este archivo
- AI-AGENT-MANAGEMENT/               # Gestin y enrutamiento de agentes IA
- AUDIT-REPORTING/                   # Auditora y generacin de reportes
- CONFIG/                            # Configuracin y perfiles
+ AI-AGENT-MANAGEMENT/               # Gestión y enrutamiento de agentes IA
+ AUDIT-REPORTING/                   # Auditoría y generación de reportes
+ CONFIG/                            # Configuración y perfiles
  DEPLOYMENT/                        # Scripts de despliegue
  Gentleman-Skills/                  # Habilidades especializadas
- GIT-VERSION-CONTROL/               # Control de versiones Git
- PERFORMANCE-OPTIMIZATION/          # Optimizacin de rendimiento
- SESSION-MANAGEMENT/                # Gestin de sesiones
- SKILLS-TOOLS/                      # Herramientas de habilidades
- TELEMETRY-METRICS/                 # Telemetra y mtricas
+ GIT-versión-CONTROL/               # Control de versiónes Git
+ PERFORMANCE-OPTIMIZATION/          # Optimización de rendimiento
+ SESSION-MANAGEMENT/                # Gestión de sesiónes
+ SKILLS-TOOLS/                      # herramientas de habilidades
+ TELEMETRY-METRICS/                 # Telemetría y métricas
  UTILITIES/                         # Utilidades generales
- WORKFLOW-ORCHESTRATION/            # Orquestacin de flujos de trabajo
+ WORKFLOW-ORCHESTRATION/            # Orquestación de flujos de trabajo
 ```
 
 ---
 
-##  Directorios por Funcionalidad
+##  directorios por Funcionalidad
 
 ### 1. **AI-AGENT-MANAGEMENT/** 
-Gestin y enrutamiento de agentes IA especializados.
+Gestión y enrutamiento de agentes IA especializados.
 
 **Scripts principales:**
 - `agent-router.ps1` - Enrutador central de agentes (BA, SAD, DEV, QA, OPS, GOV, DOC)
-- `invoke-ai-review.ps1` - Invoca revisin de IA
+- `invoke-ai-review.ps1` - Invoca revisión de IA
 - `invoke-cloud-agent.ps1` - Invoca agentes en la nube
 - `invoke-judgment.ps1` - Invoca proceso de juicio dual
 - `judgment-day.ps1` - Protocolo de juicio adversarial completo
 - `sync-agent-instructions.ps1` - Sincroniza instrucciones de agentes
 
-**Uso tpico:**
+**Uso típico:**
 ```powershell
 .\scripts\utilities\AI-AGENT-MANAGEMENT\agent-router.ps1 -Agent DEV -Task "implementar feature"
 ```
@@ -60,7 +60,7 @@ Auditora, reportes y artefactos de sesin.
 - `generate-audit-report.ps1` - Genera reporte de auditora
 - `generate-session-artifacts.ps1` - Genera artefactos de sesin
 - `generate-session-audit.ps1` - Auditora de sesin
-- `generate-session-review.ps1` - Revisin de sesin
+- `generate-session-review.ps1` - revisión de sesin
 
 **Uso tpico:**
 ```powershell
@@ -72,28 +72,28 @@ Auditora, reportes y artefactos de sesin.
 ---
 
 ### 3. **CONFIG/**
-Configuracin, perfiles y archivos de configuracin.
+configuración, perfiles y archivos de configuración.
 
-**Archivos principales:**
-- `context-efficiency-config.json` - Configuracin de eficiencia de contexto
-- `session-autostart.config.json` - Configuracin de autostart de sesin
+**archivos principales:**
+- `context-efficiency-config.json` - configuración de eficiencia de contexto
+- `session-autostart.config.json` - configuración de autostart de sesin
 - `Microsoft.PowerShell_profile.ps1` - Perfil de PowerShell
 
-**Uso:** Configuracin centralizada para todo el workspace.
+**Uso:** configuración centralizada para todo el workspace.
 
 [Ver documentacin completa](./CONFIG/README.md)
 
 ---
 
 ### 4. **DEPLOYMENT/**
-Scripts de despliegue, migracin y configuracin remota.
+Scripts de despliegue, migracin y configuración remota.
 
 **Scripts principales:**
 - `deploy.ps1` - Despliegue principal
 - `migrate-structure.ps1` - Migracin de estructura
-- `setup-monitoring.ps1` - Configuracin de monitoreo
-- `setup-remote-agent.ps1` - Configuracin de agentes remotos
-- `setup-wizard.ps1` - Asistente de configuracin
+- `setup-monitoring.ps1` - configuración de monitoreo
+- `setup-remote-agent.ps1` - configuración de agentes remotos
+- `setup-wizard.ps1` - Asistente de configuración
 
 **Uso tpico:**
 ```powershell
@@ -104,8 +104,8 @@ Scripts de despliegue, migracin y configuracin remota.
 
 ---
 
-### 5. **GIT-VERSION-CONTROL/**
-Control de versiones Git, ramas y pull requests.
+### 5. **GIT-versión-CONTROL/**
+Control de versiónes Git, ramas y pull requests.
 
 **Scripts principales:**
 - `create-gitflow-branch.ps1` - Crea rama gitflow
@@ -114,10 +114,10 @@ Control de versiones Git, ramas y pull requests.
 
 **Uso tpico:**
 ```powershell
-.\scripts\utilities\GIT-VERSION-CONTROL\create-gitflow-branch.ps1 -Type feature -Name "nueva-feature"
+.\scripts\utilities\GIT-versión-CONTROL\create-gitflow-branch.ps1 -Type feature -Name "nueva-feature"
 ```
 
-[Ver documentacin completa](./GIT-VERSION-CONTROL/README.md)
+[Ver documentacin completa](./GIT-versión-CONTROL/README.md)
 
 ---
 
@@ -142,13 +142,13 @@ Optimizacin de rendimiento, compactacin de memoria y Engram.
 ---
 
 ### 7. **SESSION-MANAGEMENT/**
-Gestin de sesiones, inicio, cierre y monitoreo.
+Gestin de sesiónes, inicio, cierre y monitoreo.
 
 **Scripts principales:**
 - `start-session.ps1` - Inicia sesin
 - `end-session.ps1` - Finaliza sesin
 - `finalize-session.ps1` - Finaliza sesin con artefactos
-- `session-manager.ps1` - Gestor de sesiones
+- `session-manager.ps1` - Gestor de sesiónes
 - `session-idle-monitor.ps1` - Monitor de inactividad
 - `validate-session-stack.ps1` - Valida stack de sesin
 - `session-autostart.cmd` - Autostart de sesin (Windows)
@@ -188,23 +188,59 @@ Instalacin y gestin de habilidades y herramientas.
 ---
 
 ### 9. **TELEMETRY-METRICS/**
-Telemetra, mtricas y presupuesto de tokens.
+Telemetría, métricas y presupuesto de tokens.
 
 **Scripts principales:**
-- `agent-usage-metrics.ps1` - Mtricas de uso de agentes
-- `aggregate-metrics.ps1` - Agrega mtricas
-- `consolidate-telemetry.ps1` - Consolida telemetra
+- `agent-usage-metrics.ps1` - Métricas de uso de agentes
+- `aggregate-metrics.ps1` - Agrega métricas
+- `consolidate-telemetry.ps1` - Consolida telemetría
 - `token-budget-guard.ps1` - Guarda presupuesto de tokens
 - `token-efficiency-estimator.ps1` - Estima eficiencia de tokens
-- `token-telemetry-report.ps1` - Reporte de telemetra de tokens
-- `token-telemetry.ps1` - Telemetra de tokens
+- `token-telemetry-report.ps1` - Reporte de telemetría de tokens
+- `token-telemetry.ps1` - Telemetría de tokens
+- `extract-engram-json.ps1` - Extrae JSON de Engram
+- `generate-management-report.ps1` - Genera reporte mensual en CSV
+- `generate-management-report-simple.ps1` - Versión simplificada
+- `validate-report.ps1` - Valida reportes
+- `validate-report-simple.ps1` - Versión simplificada
 
-**Uso tpico:**
+**Uso típico:**
 ```powershell
-.\scripts\utilities\TELEMETRY-METRICS\token-telemetry.ps1
+.\scripts\utilities\TELEMETRY-METRICS\generate-management-report.ps1
 ```
 
-[Ver documentacin completa](./TELEMETRY-METRICS/README.md)
+[Ver documentación completa](./TELEMETRY-METRICS/README.md)
+
+---
+
+### 9.1. **JSON-to-Document Converter**
+Convierte JSON de agentes/subagentes al formato de documento correcto.
+
+**Formats soportados:** Markdown, CSV, HTML, Text, JSON, XML, YAML
+
+**Scripts principales:**
+- `json-to-doc-converter.ps1` - Convierte JSON a 7 formatos
+- `json-to-doc-converter.README.md` - Documentación completa
+
+**Uso típico:**
+```powershell
+# JSON string to Markdown
+$json = '{"type":"session","project":"gentleman-foundation"}'
+.\scripts\utilities\json-to-doc-converter.ps1 -InputJson $json
+
+# JSON file to CSV
+.\scripts\utilities\json-to-doc-converter.ps1 -InputJson "logs\session.json" -OutputFormat csv
+
+# With template
+.\scripts\utilities\json-to-doc-converter.ps1 -InputJson $data -OutputFormat markdown -TemplatePath "templates\report-template.md"
+```
+
+**Integración con orquestador:**
+- Auto-detecta tipo de dato (`session`, `audit`, `judgment`, `management-report`)
+- Guarda en directorio correcto (`docs/`, `reports/`, `logs/`)
+- Soportado por todas las herramientas (OpenCode, Cline, Claude, Copilot, etc.)
+
+[Ver documentación completa](./json-to-doc-converter.README.md)
 
 ---
 
@@ -221,7 +257,7 @@ Utilidades generales y herramientas de propsito general.
 - `foundation-sync.ps1` - Sincroniza foundation
 - `handoff-compress.ps1` - Comprime handoff
 - `help.ps1` - Ayuda
-- `manage-backlog.ps1` - Gestiona backlog
+- `manage-backlog.ps1` - gestióna backlog
 - `manual-recovery.ps1` - Recuperacin manual
 - `mcp-monitor.ps1` - Monitor MCP
 - `read-once-guard.ps1` - Guarda lectura nica
@@ -307,12 +343,12 @@ Orquestacin de flujos de trabajo y enrutamiento de runtime.
 
 ---
 
-##  Estructura de Archivos por Directorio
+##  estructura de archivos por directorio
 
 Cada subdirectorio contiene:
 - `README.md` - Documentacin especfica del directorio
 - Scripts `.ps1` - Implementacin
-- Archivos de configuracin (si aplica)
+- archivos de configuración (si aplica)
 
 ---
 
@@ -339,7 +375,7 @@ Install-Module -Name Pester -Force -SkipPublisherCheck
 ##  Documentacin Relacionada
 
 - [scripts/README.md](../README.md) - Documentacin principal de scripts
-- [docs/getting-started/STACK-SETUP.md](../../docs/getting-started/STACK-SETUP.md) - Gua de configuracin
+- [docs/getting-started/STACK-SETUP.md](../../docs/getting-started/STACK-SETUP.md) - Gua de configuración
 - [skills/SKILL_INDEX.md](../../skills/SKILL_INDEX.md) - ndice de habilidades
 
 ---
@@ -356,3 +392,4 @@ Install-Module -Name Pester -Force -SkipPublisherCheck
 **ltima actualizacin**: 2026-04-22  
 **Versin**: 3.0.0  
 **Estado**:  PRODUCCIN
+

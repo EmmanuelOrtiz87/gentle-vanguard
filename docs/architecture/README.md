@@ -1,4 +1,4 @@
-﻿# Architecture Documentation
+# Architecture Documentation
 
 ## Topology and Workflows
 
@@ -11,7 +11,7 @@
 
 | Document | Description |
 |----------|-------------|
-| [architecture-standards.md](architecture-standards.md) | Default decision shape, common areas, repository targets |
+| [architecture-standards.md](architecture-standards.md) | Default decisión shape, common areas, repository targets |
 
 ## Navigation
 
@@ -27,4 +27,5 @@ docs/architecture/
 
 - **Topology**: Understand the 5-layer architecture that makes this workspace agnostic
 - **Workflows**: See how the orchestrator delegates to specialized roles
-- **Standards**: Governance rules for architecture decisions
+- **Standards**: Governance rules for architecture decisións
+

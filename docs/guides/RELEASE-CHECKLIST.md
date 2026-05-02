@@ -11,16 +11,16 @@ Use this checklist every time before publishing a release to ensure consistency,
   - [ ] All changes grouped: Added, Changed, Deprecated, Removed, Fixed, Security
   - [ ] Links section at bottom includes `[X.Y.Z]` URL
   - [ ] Spellcheck completed
-  - [ ] Technical accuracy verified (versions, tool names correct)
+  - [ ] Technical accuracy verified (versións, tool names correct)
 
 - [ ] **README.md Current**
-  - [ ] Prerequisites reflect current tool versions
+  - [ ] Prerequisites reflect current tool versións
   - [ ] Installation steps tested on fresh clone
   - [ ] Quick-start commands work (or noted as manual-only)
   - [ ] Links point to correct branches/docs
 
 - [ ] **MIGRATION.md (if applicable)**
-  - [ ] If MAJOR version bump: migration guide from previous major version
+  - [ ] If MAJOR versión bump: migration guide from previous major versión
   - [ ] If new deprecations: clear upgrade path documented
   - [ ] Examples provided (before/after code)
   - [ ] CLI command changes listed
@@ -42,8 +42,8 @@ Use this checklist every time before publishing a release to ensure consistency,
 - [ ] **Compatibility**
   - [ ] Scripts tested on Windows 10/11 + PowerShell 7+
   - [ ] Cross-platform paths use forward slashes (or `Join-Path` where needed)
-  - [ ] Go version pinned in `go.mod` matches README prerequisites
-  - [ ] Node/Python versions in templates match README
+  - [ ] Go versión pinned in `go.mod` matches README prerequisites
+  - [ ] Node/Python versións in templates match README
 
 ### Skills & Features
 
@@ -201,7 +201,7 @@ git push origin develop
 
 - [ ] **Announce Release** (pick one or all):
   - [ ] GitHub Discussions: Create announcement post
-  - [ ] README badge updated with version link
+  - [ ] README badge updated with versión link
   - [ ] Email/Slack notification to team
 
 - [ ] **Update Dependent Projects**

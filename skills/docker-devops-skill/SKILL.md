@@ -14,7 +14,7 @@ Guide containerization, orchestration, CI/CD setup, and deployment practices.
 ### Dockerfile Guidelines
 
 ```dockerfile
-# Use specific versions
+# Use specific versións
 FROM node:20-alpine
 
 # Use non-root user
@@ -61,7 +61,7 @@ node_modules
 
 ### Development Setup
 ```yaml
-version: '3.9'
+versión: '3.9'
 services:
   app:
     build: .
@@ -97,7 +97,7 @@ volumes:
 
 ### Production Setup
 ```yaml
-version: '3.9'
+versión: '3.9'
 services:
   app:
     image: myapp:latest
@@ -128,7 +128,7 @@ services:
 
 ### Deployment
 ```yaml
-apiVersion: apps/v1
+apiversión: apps/v1
 kind: Deployment
 metadata:
   name: myapp
@@ -172,7 +172,7 @@ spec:
 
 ### Service
 ```yaml
-apiVersion: v1
+apiversión: v1
 kind: Service
 metadata:
   name: myapp-svc
@@ -187,13 +187,13 @@ spec:
 
 ### Horizontal Pod Autoscaler
 ```yaml
-apiVersion: autoscaling/v2
+apiversión: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: myapp-hpa
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1
+    apiversión: apps/v1
     kind: Deployment
     name: myapp
   minReplicas: 2
@@ -225,7 +225,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-versión: '20'
           cache: 'npm'
       - run: npm ci
       - run: npm run lint
@@ -249,7 +249,7 @@ jobs:
           images: ghcr.io/${{ github.repository }}
           tags: |
             type=ref,event=branch
-            type=semver,pattern={{version}}
+            type=semver,pattern={{versión}}
       - uses: docker/build-push-action@v5
         with:
           push: ${{ github.event_name != 'pull_request' }}
@@ -310,3 +310,4 @@ kubectl logs -f deployment/myapp
 kubectl rollout restart deployment/myapp
 kubectl rollout undo deployment/myapp
 ```
+

@@ -6,7 +6,7 @@ This directory stores generated audit reports produced by `wf.ps1 audit` and ses
 
 1. Provide operational and governance visibility for current repository state.
 2. Capture delivery readiness, risk posture, and context-efficiency indicators.
-3. Preserve an auditable timeline for release and retrospective decisions.
+3. Preserve an auditable timeline for release and retrospective decisións.
 
 ## File Naming
 
@@ -28,3 +28,4 @@ This directory stores generated audit reports produced by `wf.ps1 audit` and ses
 
 - `docs/guides/AUDIT-WORKFLOW.md`
 - `docs/guides/ARTIFACT-RETENTION.md`
+

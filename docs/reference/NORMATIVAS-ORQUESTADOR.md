@@ -1,7 +1,7 @@
-﻿# NORMATIVAS DE ORQUESTADOR Y AUTORIZACIONES GLOBALES (Foundation)
+# NORMATIVAS DE ORQUESTADOR Y AUTORIZACIONES GLOBALES (Foundation)
 
 ## Objetivo
-Centralizar y versionar todas las reglas, patrones, decisiones y aprendizajes clave del orquestador, agentes y skills, cumpliendo la directiva de almacenamiento dentro del proyecto Foundation.
+Centralizar y versiónar todas las reglas, patrones, decisiónes y aprendizajes clave del orquestador, agentes y skills, cumpliendo la directiva de almacenamiento dentro del proyecto Foundation.
 
 ---
 
@@ -13,10 +13,10 @@ Centralizar y versionar todas las reglas, patrones, decisiones y aprendizajes cl
 ## 2. Contenido
 - Autorizaciones globales y blanket approval
 - Consulta y registro de autorizaciones
-- Registro de decisiones y lecciones
-- Consistencia y versionado
+- Registro de decisiónes y lecciones
+- Consistencia y versiónado
 - mbito de aplicacin
-- Ejemplos de patrones y decisiones
+- Ejemplos de patrones y decisiónes
 - Referencias cruzadas y protocolo de handoff
 
 ---
@@ -28,7 +28,7 @@ Centralizar y versionar todas las reglas, patrones, decisiones y aprendizajes cl
 
 # [ANEXO] Migracin de normativas globales
 
-El contenido de normativas-orquestador-global.md ha sido migrado y consolidado aqu para cumplir la directiva de centralizacin y versionado nico en Foundation.
+El contenido de normativas-orquestador-global.md ha sido migrado y consolidado aqu para cumplir la directiva de centralizacin y versiónado nico en Foundation.
 
 ## 1. Autorizaciones Globales y Blanket Approval
 - Si el usuario otorga autorizacin global ("blanket approval"), ningn agente, subagente o skill debe solicitar confirmaciones adicionales para acciones dentro del alcance autorizado.
@@ -41,24 +41,24 @@ El contenido de normativas-orquestador-global.md ha sido migrado y consolidado a
   - Este archivo de normativas
 - Si existe autorizacin previa, proceder sin repreguntar.
 
-## 3. Registro de Decisiones y Lecciones
+## 3. Registro de decisiónes y Lecciones
 - Toda decisin arquitectnica, patrn, excepcin o aprendizaje relevante debe:
   - Guardarse en memoria persistente (engram)
-  - Reflejarse en este archivo o en docs/reference/operating-decisions-*.md
+  - Reflejarse en este archivo o en docs/reference/OPERATING-DECISIONS-*.md
 - Ejemplo: "No repreguntar tras autorizacin global" es un patrn obligatorio.
 
-## 4. Consistencia y Versionado
-- Este archivo debe versionarse en el repositorio y actualizarse ante cualquier cambio de poltica, excepcin o aprendizaje relevante.
+## 4. Consistencia y versiónado
+- Este archivo debe versiónarse en el repositorio y actualizarse ante cualquier cambio de poltica, excepcin o aprendizaje relevante.
 - Los skills y scripts deben consultar este archivo para operar de forma consistente.
 
 ## 5. mbito de Aplicacin
 - Aplica a todo el workspace local y a todos los proyectos bajo Foundation - Development Stack.
 - Debe ser referenciado desde README, CONTRIBUTING y skills de orquestacin.
 
-## 6. Ejemplos de Patrones y Decisiones
+## 6. Ejemplos de Patrones y decisiónes
 - No repreguntar tras autorizacin global.
 - Registrar todas las autorizaciones y excepciones en memoria y en archivo.
-- Los agentes deben optimizar validaciones y evitar redundancias.
+- Los agentes deben optimizar validaciónes y evitar redundancias.
 - Toda limpieza, refactor, homologacin y commit/push puede ejecutarse sin repregunta si hay blanket approval.
 - Las normativas aqu descritas prevalecen salvo que un archivo de proyecto indique restricciones explcitas.
 
@@ -66,3 +66,4 @@ El contenido de normativas-orquestador-global.md ha sido migrado y consolidado a
 
 ltima actualizacin: 2026-04-19
 Responsable: Orquestador Foundation
+

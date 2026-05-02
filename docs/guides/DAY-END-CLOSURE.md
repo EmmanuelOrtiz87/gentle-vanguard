@@ -37,7 +37,7 @@ Two modes available:
 
 3. **Engram Memory** (Persistent)
    - Session summary with key learnings
-   - All discoveries and decisions
+   - All discoveries and decisións
    - Files changed during session
    - Status: session marked complete for continuity
 

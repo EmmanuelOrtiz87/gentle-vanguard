@@ -1,7 +1,7 @@
-# API Key Rotation Procedure
+﻿# API Key Rotation Procedure
 
 ## When to Rotate
-- If an API key is ever committed to version control (even if later removed)
+- If an API key is ever committed to versión control (even if later removed)
 - If a key is suspected to be leaked or exposed
 - On a regular schedule (e.g., every 90 days)
 
@@ -21,6 +21,6 @@ agent_custom_apikey=sk-prod-NEWKEYHERE
 ```
 
 ## Security Note
-- Never commit `.env.local` or any secrets to version control.
+- Never commit `.env.local` or any secrets to versión control.
 - Always verify `.env.local` is in `.gitignore`.
 - Rotate keys immediately if exposure is detected.
