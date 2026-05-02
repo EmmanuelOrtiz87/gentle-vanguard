@@ -1,0 +1,124 @@
+{
+  "version": "1.0",
+  "description": "Maps 7-agent specialization model to opencode subagent types",
+  "mapping": {
+    "BA": {
+      "name": "Business Analyst",
+      "opencode_subagents": ["sdd-explore", "sdd-propose", "sdd-spec"],
+      "primary_subagent": "sdd-explore",
+      "fallback": "general",
+      "skills": ["bdd-scenarios-skill", "documentation-governance"],
+      "triggers": ["requirements", "user story", "bdd", "gherkin", "acceptance criteria"]
+    },
+    "SAD": {
+      "name": "Solution Architect",
+      "opencode_subagents": ["sdd-design", "sdd-explore"],
+      "primary_subagent": "sdd-design",
+      "fallback": "general",
+      "skills": ["architecture-governance", "api-design-skill", "database-relational-skill"],
+      "triggers": ["architecture", "design", "sdd", "api design", "database schema"]
+    },
+    "DEV": {
+      "name": "Developer",
+      "opencode_subagents": ["sdd-apply", "sdd-tasks", "general"],
+      "primary_subagent": "sdd-apply",
+      "fallback": "general",
+      "skills": ["angular-spa-skill", "react-19-skill", "typescript-skill", "security-skill"],
+      "triggers": ["implement", "code", "develop", "feature", "refactor", "bug fix"]
+    },
+    "QA": {
+      "name": "Quality Assurance",
+      "opencode_subagents": ["sdd-verify", "general"],
+      "primary_subagent": "sdd-verify",
+      "fallback": "general",
+      "skills": ["testing-strategy-skill", "testing-skill", "playwright"],
+      "triggers": ["test", "testing", "qa", "validation", "quality", "judgment day"]
+    },
+    "OPS": {
+      "name": "DevOps",
+      "opencode_subagents": ["general"],
+      "primary_subagent": "general",
+      "fallback": "general",
+      "skills": ["docker-devops-skill", "git-workflow-skill"],
+      "triggers": ["deploy", "ci/cd", "docker", "kubernetes", "infrastructure"]
+    },
+    "GOV": {
+      "name": "Governance",
+      "opencode_subagents": ["sdd-verify", "general"],
+      "primary_subagent": "general",
+      "fallback": "general",
+      "skills": ["security-skill", "documentation-governance"],
+      "triggers": ["governance", "compliance", "audit", "security audit", "review"]
+    },
+    "DOC": {
+      "name": "Documentation",
+      "opencode_subagents": ["sdd-spec", "sdd-onboard", "general"],
+      "primary_subagent": "sdd-spec",
+      "fallback": "general",
+      "skills": ["documentation-governance", "sdd-skill"],
+      "triggers": ["documentation", "docs", "readme", "guide", "specification"]
+    }
+  },
+  "opencode_subagent_capabilities": {
+    "explore": {
+      "description": "Fast agent for exploring codebases",
+      "best_for": ["code search", "pattern finding", "quick analysis"],
+      "token_efficient": true
+    },
+    "general": {
+      "description": "General-purpose agent for complex tasks",
+      "best_for": ["multi-step tasks", "research", "complex implementation"],
+      "token_efficient": false
+    },
+    "sdd-apply": {
+      "description": "Implement code changes from task definitions",
+      "best_for": ["code implementation", "applying fixes", "feature development"],
+      "token_efficient": true
+    },
+    "sdd-archive": {
+      "description": "Archive completed change artifacts",
+      "best_for": ["sdd cleanup", "archiving", "completion tasks"],
+      "token_efficient": true
+    },
+    "sdd-design": {
+      "description": "Create technical design from proposals",
+      "best_for": ["architecture design", "technical specs", "system design"],
+      "token_efficient": true
+    },
+    "sdd-explore": {
+      "description": "Investigate codebase and think through ideas",
+      "best_for": ["requirements analysis", "code investigation", "feasibility studies"],
+      "token_efficient": true
+    },
+    "sdd-init": {
+      "description": "Bootstrap SDD context and project configuration",
+      "best_for": ["sdd setup", "project initialization"],
+      "token_efficient": true
+    },
+    "sdd-onboard": {
+      "description": "Guide user through SDD cycle",
+      "best_for": ["documentation", "user guidance", "sdd walkthrough"],
+      "token_efficient": false
+    },
+    "sdd-propose": {
+      "description": "Create change proposals from explorations",
+      "best_for": ["proposals", "change requests", "feature planning"],
+      "token_efficient": true
+    },
+    "sdd-spec": {
+      "description": "Write detailed specifications from proposals",
+      "best_for": ["specifications", "requirements docs", "technical documentation"],
+      "token_efficient": true
+    },
+    "sdd-tasks": {
+      "description": "Break down specs into implementation tasks",
+      "best_for": ["task breakdown", "planning", "sdd tasks"],
+      "token_efficient": true
+    },
+    "sdd-verify": {
+      "description": "Validate implementation against specs",
+      "best_for": ["verification", "testing", "validation", "judgment day"],
+      "token_efficient": true
+    }
+  }
+}

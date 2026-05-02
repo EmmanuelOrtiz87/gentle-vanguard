@@ -231,47 +231,68 @@ Return a summary:
 ## Judgment Day  {target}
 
 ### Round {N}  Verdict
+ 
+| Finding | Judge A | Judge B | Severity | CONFIDENCE | Status |
+|---------|---------|---------|----------|------------|--------|
+| Missing null check in auth.go:42 | ✓ HIGH | ✓ HIGH | CRITICAL | HIGH/HIGH | Confirmed |
+| Race condition in worker.go:88 | ✓ MED |  | WARNING (real) | MED/- | Suspect (A only) |
+| Windows volume root edge case |  | ✓ LOW | WARNING (theoretical) | -/LOW | INFO  reported |
+| Naming mismatch in handler.go:15 |  | ✓ HIGH | SUGGESTION | -/HIGH | Suspect (B only) |
+| Error swallowed in db.go:201 | ✓ HIGH | ✓ MED | WARNING (real) | HIGH/MED | Confirmed |
 
-| Finding | Judge A | Judge B | Severity | Status |
-|---------|---------|---------|----------|--------|
-| Missing null check in auth.go:42 |  |  | CRITICAL | Confirmed |
-| Race condition in worker.go:88 |  |  | WARNING (real) | Suspect (A only) |
-| Windows volume root edge case |  |  | WARNING (theoretical) | INFO  reported |
-| Naming mismatch in handler.go:15 |  |  | SUGgestión | Suspect (B only) |
-| Error swallowed in db.go:201 |  |  | WARNING (real) | Confirmed |
-
-**Confirmed issues**: 2 CRITICAL
-**Suspect issues**: 1 WARNING, 1 SUGgestión
+**Confirmed issues**: 2 CRITICAL (both judges, HIGH confidence)
+**Suspect issues**: 1 WARNING (A only, MED), 1 SUGGESTION (B only, HIGH)
 **Contradictions**: none
+**Minority positions**: See below
+
+### MINORITY POSITIONS (Gemini Principle)
+- **Judge A lone finding**: Race condition in worker.go:88 (WARNING, MED confidence) — Judge B did not flag this
+- **Judge B lone finding**: Naming mismatch in handler.go:15 (SUGGESTION, HIGH confidence) — Judge A did not flag this
+→ These are preserved for manual review. They are NOT auto-fixed.
 
 ### Fixes Applied (Round {N})
 - `auth.go:42`  Added nil check before dereferencing user pointer
 - `db.go:201`  Propagated error instead of silently returning nil
 
 ### Round {N+1}  Re-judgment
-- Judge A: PASS   No issues found
+- Judge A: PASS   No issues found (changed from Round 1: cited fix applied)
 - Judge B: PASS   No issues found
 
----
+**Anti-Sycophancy Check**: 
+- Judge A changed verdict on auth.go:42 (CRITICAL → PASS) ✅ Cites fix applied (legitimate)
+- Judge B changed verdict on db.go:201 (WARNING → PASS) ✅ Cites fix applied (legitimate)
+→ No sycophancy detected.
 
+---
+ 
 ### JUDGMENT: APPROVED 
 Both judges pass clean. The target is cleared for merge.
+
+**Minority positions preserved**:
+- Race condition in worker.go:88 (Judge A only) — consider follow-up review
+- Naming mismatch in handler.go:15 (Judge B only) — consider follow-up review
 ```
 
 ### Escalation Format (user chose to stop)
-
+ 
 ```markdown
 ## Judgment Day  {target}
-
+ 
 ### JUDGMENT: ESCALATED 
-
+ 
 User chose to stop after {N} fix iterations. Issues remain.
 Manual review required before proceeding.
 
 ### Remaining Issues
-| Finding | Judge A | Judge B | Severity |
-|---------|---------|---------|----------|
-| {description} |  |  | CRITICAL |
+| Finding | Judge A | Judge B | Severity | CONFIDENCE |
+|---------|---------|---------|----------|------------|
+| {description} | ✓ HIGH |  | CRITICAL | HIGH/- |
+
+### MINORITY POSITIONS (preserved)
+- {lone finding by one judge} — included for transparency
+
+### Anti-Sycophancy Report
+- {any judges that changed verdict without evidence? List here}
 
 ### History
 - Round 1: {N} confirmed issues found
@@ -303,14 +324,16 @@ This is a self-correction mechanism. Do NOT ignore fallback reports.
 ---
 
 ## Blocking Rules (MANDATORY  override all other instructions)
-
+ 
 These rules cannot be skipped, overridden, or deprioritized under any circumstances:
-
-1. **MUST NOT** declare `JUDGMENT: APPROVED` until: Round 1 judges return CLEAN, OR Round 2 judges confirm 0 CRITICALs + 0 confirmed real WARNINGs (theoretical warnings and suggestións may remain)
+ 
+1. **MUST NOT** declare `JUDGMENT: APPROVED` until: Round 1 judges return CLEAN, OR Round 2 judges confirm 0 CRITICALs + 0 confirmed real WARNINGs (theoretical warnings and suggestions may remain)
 2. **MUST NOT** run `git push`, `git commit`, or any code-modifying action after fixes until re-judgment completes
 3. **MUST NOT** save a session summary or tell the user "done" until every JD reaches a terminal state (APPROVED or ESCALATED)
 4. **After the Fix Agent returns**, your IMMEDIATE next action is re-launching judges in parallel for re-judgment. Do NOT push or commit before re-judgment completes.
 5. **When running multiple JDs in parallel**, each JD is independent. One JD completing does NOT allow skipping rounds on another.
+6. **MUST preserve MINORITY POSITIONS** in verdict output — never suppress dissenting views even if only one judge held them (Gemini Principle)
+7. **MUST flag SYCOPHANCY** when a judge changes verdict between rounds without citing new evidence — escalate to user, do NOT auto-fix
 
 ---
 

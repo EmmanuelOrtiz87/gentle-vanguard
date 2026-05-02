@@ -100,14 +100,44 @@ Responsibilities:
 
 ## 6. Subagent Output Contract
 
-Each lane must return:
+Each lane must return structured JSON matching the opencode subagent result schema:
 
-1. lane_id
-2. status: success | failed | blocked
-3. files_touched
-4. findings_or_changes (max 8 bullets)
-5. validation_result
-6. next_action
+```json
+{
+  "lane_id": "agent-DEV-timestamp",
+  "agent": "DEV",
+  "opencode_subagent": "sdd-apply",
+  "role": "Developer - Implementation",
+  "status": "success|failed|blocked|partial",
+  "task": "implementation task description",
+  "action": "run|plan|validate",
+  "timestamp": "2026-05-02T...",
+  "skills_loaded": ["angular-spa", "typescript"],
+  "skills_missing": [],
+  "deliverables_expected": ["source-code", "refactoring"],
+  "files_touched": [],
+  "findings_or_changes": [],
+  "validation_result": { "passed": true },
+  "next_action": "merge-output",
+  "token_estimate": 2400,
+  "confidence_score": 85,
+  "delegation_command": "task --description '...' --subagent_type sdd-apply"
+}
+```
+
+**Required fields:**
+1. `lane_id` - Unique identifier for this execution lane
+2. `status` - success | failed | blocked | partial
+3. `opencode_subagent` - The actual opencode subagent type used
+4. `files_touched` - Array of modified files
+5. `findings_or_changes` - Max 8 bullets with key changes
+6. `validation_result` - Pass/fail with details
+7. `next_action` - What should happen next
+
+**Optional but recommended:**
+- `confidence_score` - 0-100 rating of result quality
+- `token_estimate` - Tokens consumed by this lane
+- `delegation_command` - Exact command used for reproduction
 
 ## 7. Parallelism Policy
 
@@ -177,11 +207,59 @@ Each lane must return:
 
 ## 12. Metrics to Track
 
+### Basic Metrics
 1. Tokens per completed lane.
 2. Tokens per merged file.
 3. Reused cached discovery ratio.
 4. Duplicate finding reduction ratio.
 5. End-to-end cycle time versus baseline.
+
+### Enhanced Metrics (with subagent-mapping.json)
+6. **Delegation accuracy** - How often the correct opencode subagent was selected
+7. **Subagent efficiency** - Token cost per opencode subagent type
+8. **Skill coverage** - Percentage of agent skills actually loaded/used
+9. **Confidence calibration** - Correlation between confidence score and actual success
+10. **Fallback rate** - How often fallback subagent (general) was used
+
+### Learning Metrics
+11. **Routing improvement** - Change in delegation accuracy over time
+12. **Keyword effectiveness** - Which keywords best predict correct routing
+13. **Agent specialization** - How well agents stick to their boundaries
+14. **Cross-agent collaboration** - Success rate when multiple agents involved
+
+## 12.1 Metrics Collection Implementation
+
+```powershell
+# Store metrics in Engram for persistence
+function Save-SubagentMetrics {
+    param(
+        [string]$Agent,
+        [string]$OpenCodeSubagent,
+        [int]$ConfidenceScore,
+        [string]$Status,
+        [int]$TokensUsed,
+        [array]$SkillsLoaded
+    )
+    
+    $metrics = @{
+        timestamp = (Get-Date).ToString("yyyy-MM-ddTHH:mm:ssZ")
+        agent = $Agent
+        opencode_subagent = $OpenCodeSubagent
+        confidence_score = $ConfidenceScore
+        status = $Status
+        tokens_used = $TokensUsed
+        skills_loaded = $SkillsLoaded
+        delegation_command = "task --description '...' --subagent_type $OpenCodeSubagent"
+    }
+    
+    # Save to Engram
+    # This would call engram_mem_save with type "discovery"
+    # Title: "Subagent delegation: $Agent -> $OpenCodeSubagent"
+    # Content includes metrics summary
+}
+```
+
+Metrics are persisted to Engram with topic_key `metrics/subagent-delegation` for trend analysis.
 
 ## 13. Token Alert and Continuity Playbook
 
