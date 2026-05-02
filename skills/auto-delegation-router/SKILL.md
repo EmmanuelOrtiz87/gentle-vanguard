@@ -42,7 +42,17 @@ function Extract-TaskKeywords {
         [int]$MaxKeywords = 10
     )
     
-    # Domain-specific keyword mappings
+    # Load agent-to-subagent mapping
+    $mappingPath = "config/subagent-mapping.json"
+    $subagentMapping = @{}
+    if (Test-Path $mappingPath) {
+        $mapping = Get-Content $mappingPath | ConvertFrom-Json
+        $mapping.mapping.PSObject.Properties | ForEach-Object {
+            $subagentMapping[$_.Name] = $_.Value
+        }
+    }
+    
+    # Domain-specific keyword mappings (aligned with subagent-mapping.json)
     $keywordMap = @{
         # Business Analysis keywords
         'BA' = @('requirement', 'user story', 'bdd', 'gherkin', 'acceptance', 'specification', 
@@ -50,7 +60,7 @@ function Extract-TaskKeywords {
         
         # Solution Architecture keywords
         'SAD' = @('architecture', 'design', 'sdd', 'api design', 'database', 'schema', 
-                  'technical decisión', 'system design', 'microservice', 'integration')
+                  'technical decision', 'system design', 'microservice', 'integration')
         
         # Development keywords
         'DEV' = @('implement', 'code', 'develop', 'feature', 'refactor', 'bug fix', 
@@ -64,7 +74,7 @@ function Extract-TaskKeywords {
         'OPS' = @('deploy', 'ci/cd', 'docker', 'kubernetes', 'infrastructure', 
                   'terraform', 'helm', 'release', 'devops', 'pipeline')
         
-# Governance keywords
+        # Governance keywords
         'GOV' = @('governance', 'compliance', 'metrics', 'monitoring', 'observability', 
                   'incident', 'security audit', 'review', 'audit')
         
@@ -231,6 +241,187 @@ function Calculate-ConfidenceScore {
 }
 ```
 
+### 3.1 Tiered Routing System (from build-your-own-openclaw Step 11)
+
+```powershell
+function Get-RoutingBindings {
+    param(
+        [string]$ConfigPath = "config/auto-delegation.json"
+    )
+    
+    if (Test-Path $ConfigPath) {
+        $config = Get-Content $ConfigPath | ConvertFrom-Json
+        if ($config.routingBindings) {
+            return $config.routingBindings
+        }
+    }
+    
+    return @()  # No bindings configured
+}
+
+function Resolve-Tier {
+    param(
+        [string]$Value
+    )
+    
+    # Tier 0: Exact match (no regex special chars)
+    if (-not [regex]::IsMatch($Value, '[.*+?\[\]()|^$]')) {
+        return 0
+    }
+    
+    # Tier 2: Wildcard (contains .*)
+    if ($Value -match '\.\*') {
+        return 2
+    }
+    
+    # Tier 1: Specific regex
+    return 1
+}
+
+function Route-WithTieredSpecificity {
+    param(
+        [string]$TaskDescription,
+        [array]$Bindings = @()
+    )
+    
+    if ($Bindings.Count -eq 0) {
+        return $null  # No bindings, use keyword-based routing
+    }
+    
+    # Compute tiers and sort by specificity (lower tier = more specific)
+    $scoredBindings = @()
+    $taskLower = $TaskDescription.ToLower()
+    
+    foreach ($binding in $bindings) {
+        $tier = Resolve-Tier -Value $binding.value
+        $binding | Add-Member -NotePropertyName "computedTier" -NotePropertyValue $tier -Force
+        
+        # Check if binding matches
+        $pattern = $binding.value
+        if ($tier -eq 0) {
+            # Exact match
+            if ($taskLower -eq $pattern.ToLower()) {
+                $scoredBindings += @{
+                    Binding = $binding
+                    Tier = 0
+                    Order = 0
+                }
+            }
+        } else {
+            # Regex match
+            try {
+                if ([regex]::IsMatch($taskLower, $pattern, [Text.RegularExpressions.RegexOptions]::IgnoreCase)) {
+                    $scoredBindings += @{
+                        Binding = $binding
+                        Tier = $tier
+                        Order = $binding.order ?? 999
+                    }
+                }
+            } catch {
+                # Invalid regex, skip
+            }
+        }
+    }
+    
+    # Sort by: Tier (ascending), then Order (ascending)
+    $sortedBindings = $scoredBindings | Sort-Object -Property Tier, Order
+    
+    if ($sortedBindings.Count -gt 0) {
+        return $sortedBindings[0].Binding.agent
+    }
+    
+    return $null  # No match found
+}
+```
+
+### 3.2 Concurrency Control (from build-your-own-openclaw Step 16)
+
+```powershell
+# Semaphore-like concurrency control using PowerShell runspaces
+$script:agentSemaphores = @{}
+$script:agentConcurrencyLimits = @{}
+
+function Initialize-ConcurrencyControl {
+    param(
+        [string]$ConfigPath = "config/auto-delegation.json"
+    )
+    
+    if (Test-Path $ConfigPath) {
+        $config = Get-Content $ConfigPath | ConvertFrom-Json
+        if ($config.concurrencyLimits) {
+            $script:agentConcurrencyLimits = @{}
+            $config.concurrencyLimits.PSObject.Properties | ForEach-Object {
+                $script:agentConcurrencyLimits[$_.Name] = $_.Value
+            }
+        }
+    }
+}
+
+function Get-ConcurrencyLimit {
+    param(
+        [string]$Agent
+    )
+    
+    if ($script:agentConcurrencyLimits[$Agent]) {
+        return $script:agentConcurrencyLimits[$Agent]
+    }
+    
+    if ($script:agentConcurrencyLimits["default"]) {
+        return $script:agentConcurrencyLimits["default"]
+    }
+    
+    return 3  # Default limit
+}
+
+function Wait-ForAgentSlot {
+    param(
+        [string]$Agent,
+        [int]$TimeoutSeconds = 300
+    )
+    
+    $limit = Get-ConcurrencyLimit -Agent $Agent
+    $semaphoreKey = "sem_$Agent"
+    
+    if (-not $script:agentSemaphores[$semaphoreKey]) {
+        $script:agentSemaphores[$semaphoreKey] = @{
+            Current = 0
+            Limit = $limit
+            Queue = [System.Collections.Queue]::new()
+        }
+    }
+    
+    $sem = $script:agentSemaphores[$semaphoreKey]
+    
+    $startTime = Get-Date
+    while ($sem.Current -ge $sem.Limit) {
+        Start-Sleep -Milliseconds 100
+        
+        if (((Get-Date) - $startTime).TotalSeconds -gt $TimeoutSeconds) {
+            Write-Warning "Timeout waiting for agent $Agent concurrency slot"
+            return $false
+        }
+    }
+    
+    $sem.Current++
+    return $true
+}
+
+function Release-AgentSlot {
+    param(
+        [string]$Agent
+    )
+    
+    $semaphoreKey = "sem_$Agent"
+    
+    if ($script:agentSemaphores[$semaphoreKey]) {
+        $script:agentSemaphores[$semaphoreKey].Current--
+        if ($script:agentSemaphores[$semaphoreKey].Current -lt 0) {
+            $script:agentSemaphores[$semaphoreKey].Current = 0
+        }
+    }
+}
+```
+
 ### 4. Routing Engine with Fallback
 
 ```powershell
@@ -249,29 +440,111 @@ function Route-TaskToAgent {
         }
     }
     
-    # Step 1: Extract keywords
-    $keywords = Extract-TaskKeywords -TaskDescription $TaskDescription
-    
-    if ($keywords.Count -eq 0) {
-        return @{
-            Status = "NoKeywordsFound"
-            Message = "Unable to extract domain keywords. Manual routing required."
-            RequiresManualdecisión = $true
-            Suggestión = "Provide more specific task description"
+    # Step1: Try tiered routing first (from build-your-own-openclaw)
+    $tieredAgent = $null
+    if ($AutoDelegationEnabled) {
+        $bindings = Get-RoutingBindings
+        if ($bindings.Count -gt 0) {
+            $tieredAgent = Route-WithTieredSpecificity -TaskDescription $TaskDescription -Bindings $bindings
         }
     }
     
-    # Step 2: Evaluate decisión tree
-    $decisiónTree = Evaluate-decisiónTree -TaskDescription $TaskDescription -Keywords $keywords -Context $Context
+    # Step2: Extract keywords (fallback if no tiered match)
+    $keywords = @{}
+    if (-not $tieredAgent) {
+        $keywords = Extract-TaskKeywords -TaskDescription $TaskDescription
+        
+        if ($keywords.Count -eq 0) {
+            return @{
+                Status = "NoKeywordsFound"
+                Message = "Unable to extract domain keywords. Manual routing required."
+                RequiresManualdecisión = $true
+                Suggestión = "Provide more specific task description"
+            }
+        }
+    }
     
-    # Step 3: Calculate confidence
+    # Step3: Evaluate decisión tree (if using keyword routing)
+    $decisiónTree = @()
+    $primaryAgent = $null
+    if ($tieredAgent) {
+        # Tiered routing matched
+        $primaryAgent = @{
+            Agent = $tieredAgent
+            Level = 1
+            Reason = "Tiered routing match (specificity-based)"
+        }
+        $decisiónTree = @($primaryAgent)
+    } else {
+        # Keyword-based routing
+        $decisiónTree = Evaluate-decisiónTree -TaskDescription $TaskDescription -Keywords $keywords -Context $Context
+        $primaryAgent = $decisiónTree | Where-Object { $_.Level -eq 1 } | Select-Object -First 1
+    }
+    
+    # Step4: Calculate confidence
     $confidence = Calculate-ConfidenceScore -Keywords $keywords -decisiónTree $decisiónTree -Context $Context
     
-    # Step 4: Determine routing
-    $primaryAgent = $decisiónTree | Where-Object { $_.Level -eq 1 } | Select-Object -First 1
+    # Step5: Determine routing with opencode subagent mapping
     $secondaryAgents = $decisiónTree | Where-Object { $_.Level -gt 1 } | Select-Object -ExpandProperty Agent
     
-    # Step 5: Apply confidence threshold
+    # Load subagent mapping and behavior prompts
+    $mappingPath = "config/subagent-mapping.json"
+    $behaviorPath = "config/behavior-prompts.json"
+    $subagentType = "general"  # default fallback
+    $agentSkills = @()
+    $behaviorPrompt = ""
+    
+    if ($primaryAgent -and (Test-Path $mappingPath)) {
+        $mapping = Get-Content $mappingPath | ConvertFrom-Json
+        $agentKey = $primaryAgent.Agent
+        
+        if ($mapping.mapping.$agentKey) {
+            $agentConfig = $mapping.mapping.$agentKey
+            $subagentType = $agentConfig.primary_subagent
+            $agentSkills = $agentConfig.skills
+        }
+    }
+    
+    # Inject behavior prompt based on task type
+    if (Test-Path $behaviorPath) {
+        $behaviors = Get-Content $behaviorPath | ConvertFrom-Json
+        $taskLower = $TaskDescription.ToLower()
+        
+        foreach ($behaviorKey in $behaviors.prompts.PSObject.Properties.Name) {
+            $behavior = $behaviors.prompts.$behaviorKey
+            $appliesToAgent = $behavior.applies_to -contains $primaryAgent.Agent
+            
+            if ($appliesToAgent) {
+                # Check if task matches this behavior type
+                $matchScore = 0
+                if ($behaviorKey -eq "fullstack-developer" -and $taskLower -match "aplicación|aplicacion|app|desde cero|from scratch") {
+                    $matchScore = 10
+                }
+                elseif ($behaviorKey -eq "codebase-refactor" -and $taskLower -match "refactor|entender|comprender|codebase") {
+                    $matchScore = 10
+                }
+                elseif ($behaviorKey -eq "debugging-engineer" -and $taskLower -match "error|bug|falla|producción|production") {
+                    $matchScore = 10
+                }
+                elseif ($behaviorKey -eq "system-architect" -and $taskLower -match "diseñar|diseñar|sistema|escalable|scalable") {
+                    $matchScore = 10
+                }
+                elseif ($behaviorKey -eq "performance-engineer" -and $taskLower -match "rendimiento|performance|optimización|optimizacion|lento|slow") {
+                    $matchScore = 10
+                }
+                elseif ($behaviorKey -eq "clean-architecture" -and $taskLower -match "limpia|clean|arquitectura|acoplamiento|modular") {
+                    $matchScore = 10
+                }
+                
+                if ($matchScore -gt 0) {
+                    $behaviorPrompt = $behavior.prompt
+                    break
+                }
+            }
+        }
+    }
+    
+    # Step6: Apply confidence threshold
     $confidenceThreshold = 60
     
     if ($confidence.Score -lt $confidenceThreshold) {
@@ -280,22 +553,49 @@ function Route-TaskToAgent {
             Message = "Confidence score below threshold ($($confidence.Score)%)"
             RequiresManualdecisión = $true
             PrimaryAgent = $primaryAgent.Agent
+            OpenCodeSubagent = $subagentType
             ConfidenceScore = $confidence.Score
             Suggestión = "Review suggested agents and confirm manually"
         }
     }
     
-    # Step 6: Return routing decisión
+    # Step7: Check concurrency control (from build-your-own-openclaw)
+    $concurrencyLimit = Get-ConcurrencyLimit -Agent $primaryAgent.Agent
+    Write-Host "Agent $($primaryAgent.Agent) concurrency limit: $concurrencyLimit" -ForegroundColor Gray
+    
+    # Build enhanced prompt with behavior priming
+    $enhancedPrompt = $TaskDescription
+    if ($behaviorPrompt) {
+        $enhancedPrompt = "$behaviorPrompt\n\nTarea específica: $TaskDescription"
+    }
+    
+    # Add global principles
+    $globalPrinciples = @(
+        "Respeta las normativas en NORMATIVAS-ORQUESTADOR.md",
+        "Usa mem_save para documentar decisiones arquitectónicas",
+        "Verifica autorización global antes de preguntar"
+    )
+    $principlesText = $globalPrinciples -join "\n"
+    $finalPrompt = "$enhancedPrompt\n\nPrincipios:\n$principlesText"
+    
+    # Step8: Return routing decisión with opencode subagent type
     return @{
         Status = "Success"
         PrimaryAgent = $primaryAgent.Agent
+        OpenCodeSubagent = $subagentType
         SecondaryAgents = $secondaryAgents
+        SkillsToLoad = $agentSkills
         ConfidenceScore = $confidence.Score
         ConfidenceLevel = $confidence.Confidence
         Keywords = $keywords
         decisiónTree = $decisiónTree
         Adjustments = $confidence.Adjustments
         RequiresManualdecisión = $false
+        BehaviorPrompt = $behaviorPrompt
+        EnhancedPrompt = $finalPrompt
+        ConcurrencyLimit = $concurrencyLimit
+        RoutingMethod = if ($tieredAgent) { "tiered" } else { "keyword" }
+        DelegationCommand = "task --description '$TaskDescription' --prompt '$finalPrompt' --subagent_type $subagentType"
     }
 }
 ```
