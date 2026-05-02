@@ -6,7 +6,7 @@ description: >
 ---
 
 ## Purpose
-Transform raw development activity (tokens, sessions, judgments) into structured, management-ready data for decision making (ROI, Efficiency, Quality).
+Transform raw development activity (tokens, sessions, judgments) into structured, management-ready data for decisión making (ROI, Efficiency, Quality).
 
 ## Master Telemetry Schema (`docs/management/telemetry-master.csv`)
 
@@ -24,7 +24,7 @@ Transform raw development activity (tokens, sessions, judgments) into structured
 
 ## Core Rules
 1. **Identity First:** Every record MUST include a valid `User_ID`. If unknown, tag as 'unknown' and flag for review.
-2. **Business Relevance:** Do not log trivial actions (e.g., "fixed typo"). Focus on features, fixes, and architectural decisions.
+2. **Business Relevance:** Do not log trivial actions (e.g., "fixed typo"). Focus on features, fixes, and architectural decisións.
 3. **Consolidation:** Local logs are ephemeral. The `telemetry-master.csv` is the source of truth for management.
 4. **Privacy:** Avoid logging sensitive code snippets or secrets. Only metadata and metrics are recorded.
 
@@ -37,3 +37,4 @@ Transform raw development activity (tokens, sessions, judgments) into structured
 
 ## Adaptability
 If management requires new KPIs, update this schema and notify `AGENT-GOV` to adjust its analysis logic.
+

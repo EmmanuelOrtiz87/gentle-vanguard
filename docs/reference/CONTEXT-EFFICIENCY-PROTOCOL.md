@@ -1,6 +1,6 @@
-# Context Efficiency Protocol
+﻿# Context Efficiency Protocol
 
-**Version:** 1.0 (Apr 20, 2026)  
+**versión:** 1.0 (Apr 20, 2026)  
 **Effective:** Immediate  
 
 Defines how to maintain and improve context efficiency across all workspace interactions to achieve > 70% efficiency rating.
@@ -29,7 +29,7 @@ During compaction, these content types are preserved:
 - FIXME
 - TODO
 - BUG
-- DECISION
+- decisión
 - RESULT
 
 ### 2.3 Configuration
@@ -48,7 +48,7 @@ Additional to standard Engram protocol, save context efficiency optimizations:
 Always reference existing Engram entries instead of repeating full content:
 - Use `engram mem_search` before explaining concepts
 - Reference observation IDs in communications
-- Link to previous decisions rather than re-explaining
+- Link to previous decisións rather than re-explaining
 
 ### 3.3 Redundancy Reduction
 Reduce redundancy by:
@@ -143,7 +143,7 @@ System alerts when:
 - Efficiency drops below 60%: Warning level
 - Efficiency drops below 50%: Critical level
 - Auto-compaction triggered: Informational
-- Optimization opportunities detected: Suggestions
+- Optimization opportunities detected: Suggestións
 
 ## 9. Best Practices
 

@@ -251,7 +251,7 @@ import { execFile } from 'child_process';
 import { validateInput } from './validators';
 
 // Use execFile with array args
-execFile('node', ['--version'], (error, stdout) => {
+execFile('node', ['--versión'], (error, stdout) => {
   // Safe
 });
 
@@ -341,7 +341,7 @@ npm ci  # Clean install from lock file
 pip audit
 safety check
 
-# Use requirements.txt with pinned versions
+# Use requirements.txt with pinned versións
 pip freeze > requirements.lock
 ```
 
@@ -384,3 +384,4 @@ go mod verify
 - [ ] File uploads validated
 - [ ] Error messages don't leak information
 - [ ] Security headers set
+

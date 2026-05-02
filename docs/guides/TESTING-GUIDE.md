@@ -86,7 +86,7 @@ Este documento describe la suite de testing automatizado para workspace-foundati
 
 ---
 
-## Configuracin
+## configuración
 
 **Archivo**: `config/testing.config.json`
 
@@ -208,7 +208,7 @@ Install-Module -Name Pester -Force
 
 ## Referencias
 
-- `config/testing.config.json` - Configuracin
+- `config/testing.config.json` - configuración
 - `scripts/testing/run-tests.ps1` - Test runner
 - `tests/unit/` - Unit tests
 - `tests/integration/` - Integration tests

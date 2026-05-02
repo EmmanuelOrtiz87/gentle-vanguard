@@ -387,7 +387,7 @@ The Workspace Foundation project is **95% production-ready**. This checklist ide
 
 ---
 
-## Deployment Decision
+## Deployment decisión
 
 ### Recommended Path: **Option B - Phased Deployment**
 
@@ -461,7 +461,7 @@ The Workspace Foundation project is **ready for production deployment**. The cod
 
 **Next Steps**:
 1. Review this checklist with team
-2. Make deployment decision (Option A, B, or C)
+2. Make deployment decisión (Option A, B, or C)
 3. Execute deployment plan
 4. Monitor and iterate
 

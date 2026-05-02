@@ -1,11 +1,11 @@
-﻿---
+---
 name: parallel-execution-limits
 description: Advanced parallel execution management with dependency graphs, resource pooling, and token budget circuit breaker
 ---
 
 # Skill: parallel-execution-limits
 
-**Version**: 1.0.0
+**versión**: 1.0.0
 **Created**: 2026-04-23
 **Status**: ACTIVE
 **Priority**: CRITICAL

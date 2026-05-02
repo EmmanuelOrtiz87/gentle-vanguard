@@ -1,4 +1,4 @@
-﻿#  Foundation - Development Stack Setup & Auto-Repair Guide
+#  Foundation - Development Stack Setup & Auto-Repair Guide
 
 ## Overview
 
@@ -41,7 +41,7 @@ The stack requires these components. The system verifies them automatically:
 
 ### Critical Components (Must Be Installed)
 - **Go** - Backend runtime
-- **Git** - Version control
+- **Git** - versión control
 - **PowerShell 5.1+** - Script execution
 
 Additional for bitbucket-dashboard:
@@ -222,7 +222,7 @@ For CI/CD and automation:
     {
       "name": "Go",
       "status": "PASS",
-      "message": "go version go1.21.5 windows/amd64",
+      "message": "go versión go1.21.5 windows/amd64",
       "critical": true
     },
     {
@@ -234,7 +234,7 @@ For CI/CD and automation:
   ],
   "errors": [],
   "warnings": [],
-  "suggestions": []
+  "suggestións": []
 }
 ```
 
@@ -360,3 +360,4 @@ if ($status.overallStatus -ne "HEALTHY") {
 - [hooks/post-checkout.ps1](../../hooks/post-checkout.ps1) - Automatic verification on checkout
 
 - Los hooks automticos de Foundation - Development Stack ejecutan chequeos de 7 dimensiones (seguridad, calidad, arquitectura, testing, API, documentacin, gitflow) en cada commit/push. Ver REVIEW-INDEX.md para detalles.
+

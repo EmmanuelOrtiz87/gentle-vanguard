@@ -1,11 +1,11 @@
-﻿---
+---
 name: monitoring-aggregator
 description: Monitoring aggregation skill for collecting and analyzing workspace metrics
 ---
 
 # Skill: monitoring-aggregator
 
-**Version**: 1.0.0
+**versión**: 1.0.0
 **Created**: 2026-04-20
 **Status**: ACTIVE
 **Priority**: MEDIUM
@@ -260,38 +260,38 @@ function Plan-Capacity {
 
 ### 4. Recommendations Engine
 
-#### Optimization Suggestions
+#### Optimization Suggestións
 ```powershell
-function Get-OptimizationSuggestions {
+function Get-OptimizationSuggestións {
     param([hashtable]$Metrics)
     
-    $suggestions = @()
+    $suggestións = @()
     
     if ($Metrics.CPUUsage -gt 80) {
-        $suggestions += @{
+        $suggestións += @{
             Priority = "High"
             Category = "CPU"
-            Suggestion = "CPU usage is high. Consider optimizing processes or increasing resources."
+            Suggestión = "CPU usage is high. Consider optimizing processes or increasing resources."
         }
     }
     
     if ($Metrics.MemoryUsage -gt 85) {
-        $suggestions += @{
+        $suggestións += @{
             Priority = "High"
             Category = "Memory"
-            Suggestion = "Memory usage is critical. Review running processes and consider cleanup."
+            Suggestión = "Memory usage is critical. Review running processes and consider cleanup."
         }
     }
     
     if ($Metrics.DiskUsage -gt 90) {
-        $suggestions += @{
+        $suggestións += @{
             Priority = "Critical"
             Category = "Disk"
-            Suggestion = "Disk space is critically low. Archive or delete old files immediately."
+            Suggestión = "Disk space is critically low. Archive or delete old files immediately."
         }
     }
     
-    return $suggestions
+    return $suggestións
 }
 ```
 
@@ -427,7 +427,7 @@ $metrics = @{
     Disk = $disk.PercentDiskTime
 }
 
-$suggestions = Get-OptimizationSuggestions -Metrics $metrics
+$suggestións = Get-OptimizationSuggestións -Metrics $metrics
 Generate-HTMLReport -Metrics $metrics -OutputPath "weekly_report.html"
 ```
 

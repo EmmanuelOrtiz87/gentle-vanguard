@@ -214,7 +214,7 @@
           Coverage       README           REST Compliance  
           Patterns      Changelog      Validation        
           Edge Cases    Comments        Error Responses    
-          Mocks         ADRs           Versioning        
+          Mocks         ADRs           versióning        
                                                                        
     
                                                                        
@@ -868,7 +868,7 @@ my-service/
 
         
           GIT              POWERSHELL            GIT         
-       version 2.30+       Core 7+            configured     
+       versión 2.30+       Core 7+            configured     
         
       Windows           Windows           user.name     
       Linux            Linux            user.email    

@@ -1,4 +1,4 @@
-﻿# Supplementary
+# Supplementary
 
 Additional documentation and resources.
 
@@ -7,7 +7,7 @@ Additional documentation and resources.
 | Document | Description |
 |----------|-------------|
 | [BOARD-SUPPLEMENT.md](BOARD-SUPPLEMENT.md) | Board presentation content |
-| [defaults-vs-decisions.md](defaults-vs-decisions.md) | Defaults vs decisions log |
+| [defaults-vs-decisións.md](defaults-vs-decisións.md) | Defaults vs decisións log |
 | [future-projects.md](future-projects.md) | Future roadmap |
 | [functional-spec.md](functional-spec.md) | Functional specifications |
 | [technical-spec.md](technical-spec.md) | Technical specifications |
@@ -36,3 +36,4 @@ Code reviews are stored **per project**, not in the foundation:
 ```
 
 See project AGENTS.md for review workflow.
+

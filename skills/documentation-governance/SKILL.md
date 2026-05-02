@@ -22,7 +22,7 @@ Use this skill to keep project documentation consistent, English-first, and easy
 ## Workflow
 
 1. Identify the document type.
-2. Apply the matching template from `references/documentation-standards.md`.
+2. Apply the matching template from `references/TOKEN-CONTEXT-STANDARDS.md`.
 3. Normalize language, naming, and ordering.
 4. Check that script lists, file references, and paths are accurate.
 5. Keep the output concise but complete enough that a new developer can act without tribal knowledge.
@@ -30,7 +30,7 @@ Use this skill to keep project documentation consistent, English-first, and easy
 
 ## When to Use the Reference File
 
-Read `references/documentation-standards.md` when you need:
+Read `references/TOKEN-CONTEXT-STANDARDS.md` when you need:
 
 - a README structure
 - an installation or setup guide
@@ -46,3 +46,4 @@ Read `references/documentation-standards.md` when you need:
 - Enumerate important files and scripts.
 - Keep terminology stable across the repo.
 - Keep docs synchronized with the code and scripts they describe.
+

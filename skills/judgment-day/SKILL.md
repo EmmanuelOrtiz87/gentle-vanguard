@@ -1,4 +1,4 @@
-﻿---
+---
 name: judgment-day
 description: >
   Parallel adversarial review protocol that launches two independent blind judge sub-agents
@@ -9,7 +9,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.4"
+  versión: "1.4"
 ---
 
 ## When to Use
@@ -54,7 +54,7 @@ The **orchestrator** (NOT a sub-agent) compares results after both `delegation_r
 Confirmed    found by BOTH agents           high confidence, fix immediately
 Suspect A    found ONLY by Judge A          needs triage
 Suspect B    found ONLY by Judge B          needs triage
-Contradiction  agents DISAGREE on the same thing  flag for manual decision
+Contradiction  agents DISAGREE on the same thing  flag for manual decisión
 ```
 
 Present findings as a structured verdict table (see Output Format).
@@ -88,13 +88,13 @@ WARNING (theoretical)  Requires a contrived scenario, corrupted input, or condit
 **Round 2+**: Only re-judge if there are **confirmed CRITICALs**. For anything else:
 - **Real WARNINGs** (confirmed): Fix inline, do NOT re-launch judges. Report as "fixed without re-judge" in the verdict.
 - **Theoretical WARNINGs**: Report as INFO. Do NOT fix, do NOT re-judge.
-- **SUGGESTIONs**: Fix inline if trivial (dead code, style). Do NOT re-judge.
+- **SUGgestións**: Fix inline if trivial (dead code, style). Do NOT re-judge.
 
-**APPROVED criteria after Round 1**: 0 confirmed CRITICALs + 0 confirmed real WARNINGs = APPROVED. Theoretical warnings and suggestions may remain.
+**APPROVED criteria after Round 1**: 0 confirmed CRITICALs + 0 confirmed real WARNINGs = APPROVED. Theoretical warnings and suggestións may remain.
 
 ---
 
-## Decision Tree
+## decisión Tree
 
 ```
 User asks for "judgment day"
@@ -174,7 +174,7 @@ You are an adversarial code reviewer. Your ONLY job is to find problems.
 Return a structured list of findings ONLY. No praise, no approval.
 
 Each finding:
-- Severity: CRITICAL | WARNING (real) | WARNING (theoretical) | SUGGESTION
+- Severity: CRITICAL | WARNING (real) | WARNING (theoretical) | SUGgestión
 - File: path/to/file.ext (line N if applicable)
 - Description: What is wrong and why it matters
 - Suggested fix: one-line description of the fix (not code, just intent)
@@ -237,11 +237,11 @@ Return a summary:
 | Missing null check in auth.go:42 |  |  | CRITICAL | Confirmed |
 | Race condition in worker.go:88 |  |  | WARNING (real) | Suspect (A only) |
 | Windows volume root edge case |  |  | WARNING (theoretical) | INFO  reported |
-| Naming mismatch in handler.go:15 |  |  | SUGGESTION | Suspect (B only) |
+| Naming mismatch in handler.go:15 |  |  | SUGgestión | Suspect (B only) |
 | Error swallowed in db.go:201 |  |  | WARNING (real) | Confirmed |
 
 **Confirmed issues**: 2 CRITICAL
-**Suspect issues**: 1 WARNING, 1 SUGGESTION
+**Suspect issues**: 1 WARNING, 1 SUGgestión
 **Contradictions**: none
 
 ### Fixes Applied (Round {N})
@@ -297,7 +297,7 @@ This is a self-correction mechanism. Do NOT ignore fallback reports.
 
 ## Language
 
-- **Spanish input  Rioplatense**: "Juicio iniciado", "Los jueces estn trabajando en paralelo...", "Los jueces coinciden", "Juicio terminado  Aprobado", "Escalado  necesita revisin humana"
+- **Spanish input  Rioplatense**: "Juicio iniciado", "Los jueces estn trabajando en paralelo...", "Los jueces coinciden", "Juicio terminado  Aprobado", "Escalado  necesita revisión humana"
 - **English input**: "Judgment initiated", "Both judges are working in parallel...", "Both judges agree", "Judgment complete  Approved", "Escalated  requires human review"
 
 ---
@@ -306,7 +306,7 @@ This is a self-correction mechanism. Do NOT ignore fallback reports.
 
 These rules cannot be skipped, overridden, or deprioritized under any circumstances:
 
-1. **MUST NOT** declare `JUDGMENT: APPROVED` until: Round 1 judges return CLEAN, OR Round 2 judges confirm 0 CRITICALs + 0 confirmed real WARNINGs (theoretical warnings and suggestions may remain)
+1. **MUST NOT** declare `JUDGMENT: APPROVED` until: Round 1 judges return CLEAN, OR Round 2 judges confirm 0 CRITICALs + 0 confirmed real WARNINGs (theoretical warnings and suggestións may remain)
 2. **MUST NOT** run `git push`, `git commit`, or any code-modifying action after fixes until re-judgment completes
 3. **MUST NOT** save a session summary or tell the user "done" until every JD reaches a terminal state (APPROVED or ESCALATED)
 4. **After the Fix Agent returns**, your IMMEDIATE next action is re-launching judges in parallel for re-judgment. Do NOT push or commit before re-judgment completes.
@@ -376,7 +376,7 @@ The **orchestrator** (NOT a sub-agent) compares results after both `delegation_r
 Confirmed    found by BOTH agents           high confidence, fix immediately
 Suspect A    found ONLY by Judge A          needs triage
 Suspect B    found ONLY by Judge B          needs triage
-Contradiction  agents DISAGREE on the same thing  flag for manual decision
+Contradiction  agents DISAGREE on the same thing  flag for manual decisión
 ```
 
 Present findings as a structured verdict table (see Output Format).
@@ -390,7 +390,7 @@ Present findings as a structured verdict table (see Output Format).
 
 ---
 
-## Decision Tree
+## decisión Tree
 
 ```
 User asks for "judgment day"
@@ -464,7 +464,7 @@ You are an adversarial code reviewer. Your ONLY job is to find problems.
 Return a structured list of findings ONLY. No praise, no approval.
 
 Each finding:
-- Severity: CRITICAL | WARNING (real) | WARNING (theoretical) | SUGGESTION
+- Severity: CRITICAL | WARNING (real) | WARNING (theoretical) | SUGgestión
 - File: path/to/file.ext (line N if applicable)
 - Description: What is wrong and why it matters
 - Suggested fix: one-line description of the fix (not code, just intent)
@@ -525,11 +525,11 @@ Return a summary:
 |---------|---------|---------|----------|--------|
 | Missing null check in auth.go:42 |  |  | CRITICAL | Confirmed |
 | Race condition in worker.go:88 |  |  | WARNING | Suspect (A only) |
-| Naming mismatch in handler.go:15 |  |  | SUGGESTION | Suspect (B only) |
+| Naming mismatch in handler.go:15 |  |  | SUGgestión | Suspect (B only) |
 | Error swallowed in db.go:201 |  |  | CRITICAL | Confirmed |
 
 **Confirmed issues**: 2 CRITICAL
-**Suspect issues**: 1 WARNING, 1 SUGGESTION
+**Suspect issues**: 1 WARNING, 1 SUGgestión
 **Contradictions**: none
 
 ### Fixes Applied (Round {N})
@@ -575,7 +575,7 @@ Recommend: human review of the remaining issues above before re-running judgment
 
 ## Language
 
-- **Spanish input  Rioplatense**: "Juicio iniciado", "Los jueces estn trabajando en paralelo...", "Los jueces coinciden", "Juicio terminado  Aprobado", "Escalado  necesita revisin humana"
+- **Spanish input  Rioplatense**: "Juicio iniciado", "Los jueces estn trabajando en paralelo...", "Los jueces coinciden", "Juicio terminado  Aprobado", "Escalado  necesita revisión humana"
 - **English input**: "Judgment initiated", "Both judges are working in parallel...", "Both judges agree", "Judgment complete  Approved", "Escalated  requires human review"
 
 ---
@@ -599,3 +599,5 @@ Recommend: human review of the remaining issues above before re-running judgment
 # No CLI commands  this is a pure orchestration protocol.
 # Execution happens via delegate() and delegation_read() tool calls.
 ```
+
+

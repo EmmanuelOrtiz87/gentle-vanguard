@@ -157,11 +157,11 @@ Packages:
 {dependencies}
 
 For each vulnerable package:
-- Package name and version
+- Package name and versión
 - CVE ID if available
 - Severity
 - Description
-- Fix recommendation (minimum secure version)
+- Fix recommendation (minimum secure versión)
 
 Group by severity and provide remediation priority.
 ```
@@ -228,3 +228,4 @@ Steps:
 
 Format: Markdown with code blocks
 ```
+

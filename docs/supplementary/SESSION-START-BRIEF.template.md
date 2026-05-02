@@ -18,7 +18,7 @@
 ## Working Set
 
 - Primary files or directories:
-- Related decisions or documents:
+- Related decisións or documents:
 - Known blockers or assumptions:
 
 ## Acceptance Criteria
@@ -39,3 +39,4 @@
 
 - Update this brief when the goal or constraints change materially.
 - Save durable learnings to Engram, ADRs, or project docs before closing the session.
+

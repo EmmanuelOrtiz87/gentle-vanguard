@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Validates documentation consistency and completeness
 
@@ -20,7 +20,7 @@
 
 .NOTES
     Author: Gentleman Foundation Team
-    Version: 1.0.0
+    versión: 1.0.0
     Last Updated: 2026-04-22
 #>
 

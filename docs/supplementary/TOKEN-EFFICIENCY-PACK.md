@@ -171,7 +171,7 @@ Calibration note:
 
 1. Keep `executive + lite` as baseline.
 2. Promote `simple + ultra` only for low-risk, high-volume operational loops.
-3. Use `expanded` for high-risk or decision-heavy tasks.
+3. Use `expanded` for high-risk or decisión-heavy tasks.
 
 ---
 
@@ -191,3 +191,4 @@ Calibration note:
 3. Lower context overhead.
 4. Lower monthly token consumption.
 5. Faster cycle times for iterative work.
+

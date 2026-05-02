@@ -1,4 +1,4 @@
-# Token Context Standards
+﻿# Token Context Standards
 
 **Date**: 2026-04-22  
 **Status**: STANDARDIZATION IN PROGRESS  
@@ -155,7 +155,7 @@ $response_style = 'thorough'
 - Maximum token usage
 
 **Use Cases**:
-- Critical decisions
+- Critical decisións
 - Full project analysis
 - Comprehensive documentation
 
@@ -176,7 +176,7 @@ $response_style = 'exhaustive'
 #### Standard Schema
 ```json
 {
-  "version": "1.0",
+  "versión": "1.0",
   "session_id": "uuid",
   "timestamp": "ISO8601",
   "role": "user",
@@ -200,7 +200,7 @@ $response_style = 'exhaustive'
 ```
 
 #### Validation Rules
-- `version`: Must be "1.0"
+- `versión`: Must be "1.0"
 - `session_id`: Must be valid UUID
 - `timestamp`: Must be ISO8601 format
 - `role`: Must be "user"
@@ -215,7 +215,7 @@ $response_style = 'exhaustive'
 #### Standard Schema
 ```json
 {
-  "version": "1.0",
+  "versión": "1.0",
   "session_id": "uuid",
   "timestamp": "ISO8601",
   "role": "assistant",
@@ -239,7 +239,7 @@ $response_style = 'exhaustive'
 ```
 
 #### Validation Rules
-- `version`: Must be "1.0"
+- `versión`: Must be "1.0"
 - `session_id`: Must match input
 - `timestamp`: Must be ISO8601 format
 - `role`: Must be "assistant"
@@ -416,7 +416,7 @@ $config = @{
     features = @{
         code_completion = $true
         chat = $true
-        suggestions = $true
+        suggestións = $true
     }
 }
 ```

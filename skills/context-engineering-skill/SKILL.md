@@ -1,4 +1,4 @@
-﻿---
+---
 name: context-engineering-skill
 description: >
   Context engineering patterns for token-efficient AI sessions: context packing,
@@ -8,7 +8,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  versión: "1.0"
 ---
 
 ## When to Use
@@ -85,7 +85,7 @@ Before ending a session or triggering `/compact`:
 
 - Do NOT repeat large file contents when they're already in context  reference them by path
 - Do NOT include full file trees when only 23 files changed  use `git diff --stat`
-- Do NOT re-explain prior decisions already made  reference the session artifact
+- Do NOT re-explain prior decisións already made  reference the session artifact
 - Avoid loading all skills and all docs at once when only 12 are needed
 
 ## Metrics Interpretation
@@ -96,3 +96,4 @@ The `context-usage.csv` tracks:
 - `changed_count`: number of changed files included
 
 Target: `prompt_chars` < 8000 for compact-start, < 15000 for context-pack.
+

@@ -1,4 +1,4 @@
-﻿---
+---
 name: flutter-development
 description: >
   Build beautiful cross-platform mobile apps with Flutter and Dart. Covers
@@ -34,7 +34,7 @@ Minimal working example:
 ```dart
 // pubspec.yaml
 name: my_flutter_app
-version: 1.0.0
+versión: 1.0.0
 
 dependencies:
   flutter:
@@ -87,3 +87,4 @@ class MyApp extends StatelessWidget {
 - Skip testing
 - Forget to handle edge cases
 - Deploy without thorough testing
+

@@ -1,12 +1,12 @@
-﻿# Configuration Directory
+# Configuration Directory
 
-## Descripcin
+## Descripción
 
-Directorio centralizado para toda la configuracin del proyecto workspace-foundation.
+Directorio centralizado para toda la configuración del proyecto workspace-foundation.
 
-**Versin**: 2.0.0
-**ltima actualizacin**: 2026-04-21
-**Estado**:  PRODUCCIN
+**Versión**: 2.0.0
+**última actualización**: 2026-04-21
+**Estado**:  PRODUCCIÓN
 
 ---
 
@@ -15,23 +15,23 @@ Directorio centralizado para toda la configuracin del proyecto workspace-foundat
 ```
 config/
  README.md                          # Este archivo
- testing.config.json                # Configuracin de testing
- engram-memory.json                 # Configuracin de Engram Memory
- orchestrator.json                  # Configuracin del Orquestador
- ai-tool-detector.json              # Configuracin de deteccin de herramientas
- dynamic-optimization.json          # Configuracin de optimizacin dinmica
- tool-configs-template.json         # Template de configuracin de herramientas
+ testing.config.json                # Configuración de testing
+ engram-memory.json                 # Configuración de Engram Memory
+ orchestrator.json                  # Configuración del Orquestador
+ ai-tool-detector.json              # Configuración de detección de herramientas
+ dynamic-optimization.json          # Configuración de optimización dinmica
+ tool-configs-template.json         # Template de configuración de herramientas
  security-policy.json               # Polticas de seguridad
- tls-config.json                    # Configuracin TLS/SSL
- cline-dify-optimized.config.json   # Configuracin optimizada Cline-Dify
+ tls-config.json                    # Configuración TLS/SSL
+ cline-dify-optimized.config.json   # Configuración optimizada Cline-Dify
 ```
 
 ---
 
-##  Archivos de Configuracin
+##  Archivos de Configuración
 
 ### testing.config.json
-**Propsito**: Configuracin de la suite de testing
+**Propósito**: Configuración de la suite de testing
 
 **Secciones principales**:
 ```json
@@ -59,13 +59,13 @@ config/
 **Uso**:
 ```powershell
 $config = Get-Content .\config\testing.config.json | ConvertFrom-Json
-Write-Host "Coverage mnimo: $($config.testCoverage.minimumThreshold)"
+Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
 ```
 
 ---
 
 ### engram-memory.json
-**Propsito**: Configuracin del Engram Memory System
+**Propósito**: Configuración del Engram Memory System
 
 **Secciones principales**:
 ```json
@@ -90,16 +90,16 @@ Write-Host "Coverage mnimo: $($config.testCoverage.minimumThreshold)"
 }
 ```
 
-**Parmetros clave**:
+**Parámetros clave**:
 - `threshold`: Lmite de tokens (250)
 - `triggerThreshold`: Nmero de packs para consolidar (5)
-- `compressionRatio`: Ratio de compresin (0.65 = 65%)
+- `compressionRatio`: Ratio de compresión (0.65 = 65%)
 - `qualityScore`: Puntuacin mnima de calidad (0.91)
 
 ---
 
 ### orchestrator.json
-**Propsito**: Configuracin del Orquestador Universal
+**Propósito**: Configuración del Orquestador Universal
 
 **Secciones principales**:
 ```json
@@ -119,7 +119,7 @@ Write-Host "Coverage mnimo: $($config.testCoverage.minimumThreshold)"
 }
 ```
 
-**Herramientas soportadas**:
+**herramientas soportadas**:
 - Cline (200,000 tokens)
 - Continue (100,000 tokens)
 - Cursor (150,000 tokens)
@@ -128,20 +128,20 @@ Write-Host "Coverage mnimo: $($config.testCoverage.minimumThreshold)"
 ---
 
 ### ai-tool-detector.json
-**Propsito**: Configuracin de deteccin automtica de herramientas
+**Propósito**: Configuración de detección automática de herramientas
 
 **Caractersticas**:
-- Deteccin automtica de herramientas IA
-- Configuracin por herramienta
-- Parmetros especficos
-- Fallback automtico
+- Detección automática de herramientas IA
+- Configuración por herramienta
+- Parámetros especficos
+- Fallback automático
 
 ---
 
 ### dynamic-optimization.json
-**Propsito**: Configuracin de optimizacin dinmica
+**Propósito**: Configuración de optimización dinámica
 
-**Mtricas monitoreadas**:
+**Métricas monitoreadas**:
 - CPU usage
 - Memory usage
 - Token usage
@@ -151,9 +151,9 @@ Write-Host "Coverage mnimo: $($config.testCoverage.minimumThreshold)"
 - Processing time
 - Error rate
 
-**Estrategias de optimizacin**:
+**Estrategias de optimización**:
 1. Ajuste de threshold
-2. Cambio de ratio de compresin
+2. Cambio de ratio de compresión
 3. Modificacin de consolidacin
 4. Ajuste de cach
 5. Rebalanceo de carga
@@ -161,7 +161,7 @@ Write-Host "Coverage mnimo: $($config.testCoverage.minimumThreshold)"
 ---
 
 ### security-policy.json
-**Propsito**: Polticas de seguridad
+**Propósito**: Configuración de políticas de seguridad
 
 **Secciones**:
 ```json
@@ -190,31 +190,31 @@ Write-Host "Coverage mnimo: $($config.testCoverage.minimumThreshold)"
 ---
 
 ### tls-config.json
-**Propsito**: Configuracin TLS/SSL
+**Propsito**: Configuración TLS/SSL
 
-**Parmetros**:
+**Parámetros**:
 - Certificados
 - Cipher suites
-- Validacin de certificados
+- Validación de certificados
 - HSTS headers
-- Versin mnima de TLS
+- Versión mínima de TLS
 
 ---
 
-##  Cmo Usar Configuraciones
+##  Cmo Usar configuraciónes
 
-### Cargar configuracin
+### Cargar configuración
 ```powershell
 $config = Get-Content .\config\testing.config.json | ConvertFrom-Json
 ```
 
-### Modificar configuracin
+### Modificar configuración
 ```powershell
 $config.testCoverage.minimumThreshold = 0.85
 $config | ConvertTo-Json | Set-Content .\config\testing.config.json
 ```
 
-### Validar configuracin
+### Validar configuración
 ```powershell
 $schema = Get-Content .\config\schema.json | ConvertFrom-Json
 # Validar contra schema
@@ -232,7 +232,7 @@ $schema = Get-Content .\config\schema.json | ConvertFrom-Json
 - Cache hit rate: 70-80%
 
 ### Testing
-- Coverage mnimo: 80%
+- Coverage mínimo: 80%
 - Coverage target: 90%
 - Timeout unit tests: 30s
 - Timeout integration: 60s
@@ -247,7 +247,7 @@ $schema = Get-Content .\config\schema.json | ConvertFrom-Json
 
 ---
 
-##  Configuracin Inicial
+##  Configuración Inicial
 
 ### 1. Copiar templates
 ```bash
@@ -261,14 +261,14 @@ $config.phases.phase1.threshold = 300  # Aumentar threshold
 $config | ConvertTo-Json | Set-Content .\config\engram-memory.json
 ```
 
-### 3. Validar configuracin
+### 3. Validar configuración
 ```powershell
 .\scripts\testing\run-tests.ps1 -TestType all
 ```
 
 ---
 
-##  Checklist de Configuracin
+##  Checklist de Configuración
 
 - [ ] Revisar `testing.config.json`
 - [ ] Revisar `engram-memory.json`
@@ -276,7 +276,7 @@ $config | ConvertTo-Json | Set-Content .\config\engram-memory.json
 - [ ] Configurar `security-policy.json`
 - [ ] Configurar secretos
 - [ ] Ejecutar tests
-- [ ] Validar configuracin
+- [ ] Validar configuración
 
 ---
 
@@ -302,13 +302,13 @@ echo "credentials.json" >> .gitignore
 - `docs/guides/SECURITY-HARDENING.md` - Seguridad
 - `docs/guides/TESTING-GUIDE.md` - Testing
 - `scripts/README.md` - Scripts
-- `docs/supplementary/IMPLEMENTATION-COMPLETE.md` - Implementacin
+- `docs/supplementary/IMPLEMENTATION-COMPLETE.md` - Implementación
 
 ---
 
 ##  Troubleshooting
 
-### Problema: Configuracin invlida
+### Problema: Configuración inválida
 **Solucin**: Validar JSON
 ```powershell
 $config = Get-Content .\config\testing.config.json | ConvertFrom-Json
@@ -325,11 +325,11 @@ $config | ConvertTo-Json -Depth 10
 
 ##  Conclusin
 
-Todos los archivos de configuracin estn centralizados, documentados y listos para usar.
+Todos los archivos de configuración estn centralizados, documentados y listos para usar.
 
-**Estado**:  PRODUCCIN
+**Estado**:  PRODUCCIÓN
 
 ---
 
-**ltima actualizacin**: 2026-04-21
-**Versin**: 2.0.0
+**última actualización**: 2026-04-21
+**Versión**: 2.0.0

@@ -5,7 +5,7 @@ description: >
   Trigger: When building desktop apps, working with Electron main/renderer processes, IPC communication, or native integrations.
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  versión: "1.0"
 ---
 
 ## When to Use
@@ -97,7 +97,7 @@ Define all channels with request/response types:
 ```typescript
 // shared/types.ts
 export interface IpcChannels {
-  'app:get-version': {
+  'app:get-versión': {
     request: void;
     response: string;
   };
@@ -201,9 +201,9 @@ import Store from 'electron-store';
 const store = new Store();
 
 export function registerIpcHandlers() {
-  // Get app version
-  ipcMain.handle('app:get-version', () => {
-    return app.getVersion();
+  // Get app versión
+  ipcMain.handle('app:get-versión', () => {
+    return app.getversión();
   });
 
   // File operations
@@ -499,7 +499,7 @@ contextBridge.exposeInMainWorld('electron', {
 //  Good - expose only specific, typed methods
 contextBridge.exposeInMainWorld('electron', {
   invoke: (channel: string, data: unknown) => {
-    const allowedChannels = ['app:get-version', 'file:read'];
+    const allowedChannels = ['app:get-versión', 'file:read'];
     if (allowedChannels.includes(channel)) {
       return ipcRenderer.invoke(channel, data);
     }

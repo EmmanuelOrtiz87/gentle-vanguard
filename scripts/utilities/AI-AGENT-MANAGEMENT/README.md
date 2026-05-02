@@ -1,4 +1,4 @@
-﻿# AI-AGENT-MANAGEMENT - Gestin de Agentes IA
+# AI-AGENT-MANAGEMENT - Gestin de Agentes IA
 
 Mdulo centralizado para gestin, enrutamiento e invocacin de agentes IA especializados.
 
@@ -15,14 +15,14 @@ Este directorio contiene scripts para:
 - Invocacin de procesos de juicio adversarial dual
 - Sincronizacin de instrucciones de agentes
 - Gestin de agentes en la nube
-- Revisin de IA automatizada
+- revisión de IA automatizada
 
 ---
 
 ##  Agentes Disponibles
 
 ### 1. **BA** - Business Analyst
-**Especializacin**: Requisitos, BDD, Criterios de Aceptacin
+**Especializacin**: Requisitos, BDD, Criterios de aceptación
 
 **Habilidades**:
 - bdd-scenarios-skill
@@ -30,14 +30,14 @@ Este directorio contiene scripts para:
 
 **Entregables**:
 - Escenarios BDD
-- Criterios de aceptacin
+- Criterios de aceptación
 - Historias de usuario
 - Trazabilidad de requisitos
 
 ---
 
 ### 2. **SAD** - Solution Architect
-**Especializacin**: Arquitectura, SDD, Decisiones Tcnicas
+**Especializacin**: Arquitectura, SDD, decisiónes Tcnicas
 
 **Habilidades**:
 - architecture-governance
@@ -50,7 +50,7 @@ Este directorio contiene scripts para:
 
 **Entregables**:
 - Documentos SDD
-- Decisiones arquitectnicas
+- decisiónes arquitectnicas
 - Diseo de APIs
 - Modelos de datos
 
@@ -79,7 +79,7 @@ Este directorio contiene scripts para:
 ---
 
 ### 4. **QA** - Quality Assurance
-**Especializacin**: Testing, Validacin, Automatizacin
+**Especializacin**: Testing, Validacin, automatización
 
 **Habilidades**:
 - testing-strategy-skill
@@ -90,7 +90,7 @@ Este directorio contiene scripts para:
 **Entregables**:
 - Planes de testing
 - Casos de prueba
-- Automatizacin de tests
+- automatización de tests
 - Reportes de calidad
 
 ---
@@ -106,10 +106,10 @@ Este directorio contiene scripts para:
 - release-management-skill
 
 **Entregables**:
-- Configuracin CI/CD
+- configuración CI/CD
 - Scripts de despliegue
 - Infraestructura como cdigo
-- Documentacin de operaciones
+- Documentacin de operaciónes
 
 ---
 
@@ -125,7 +125,7 @@ Este directorio contiene scripts para:
 **Entregables**:
 - Reportes de auditora
 - Planes de respuesta a incidentes
-- Configuracin de observabilidad
+- configuración de observabilidad
 - Revisiones de seguridad
 
 ---
@@ -182,7 +182,7 @@ Este directorio contiene scripts para:
 **Propsito**: Protocolo de juicio adversarial dual completo
 
 **Caractersticas**:
-- Revisin paralela (actor/critic)
+- revisión paralela (actor/critic)
 - Sntesis de resultados
 - Fix loop iterativo
 - Escalado automtico
@@ -227,7 +227,7 @@ Este directorio contiene scripts para:
 ---
 
 ### `invoke-ai-review.ps1`
-**Propsito**: Invoca revisin de IA automatizada
+**Propsito**: Invoca revisión de IA automatizada
 
 **Uso**:
 ```powershell
@@ -284,7 +284,7 @@ Este directorio contiene scripts para:
 
 El protocolo de juicio adversarial dual sigue estos pasos:
 
-1. **Revisin Paralela**: Actor y Critic revisan simultneamente
+1. **revisión Paralela**: Actor y Critic revisan simultneamente
 2. **Sntesis**: Resultados se sintetizan en hallazgos
 3. **Fix Loop**: Se generan fixes iterativamente
 4. **Escalado**: Si no hay convergencia, se escala a nivel superior
@@ -313,7 +313,7 @@ El protocolo de juicio adversarial dual sigue estos pasos:
 ##  Documentacin Relacionada
 
 - [skills/judgment-day/SKILL.md](../../../skills/judgment-day/SKILL.md) - Skill de juicio adversarial
-- [../README.md](../README.md) - Directorio principal de utilities
+- [../README.md](../README.md) - directorio principal de utilities
 - [../../README.md](../../README.md) - Documentacin principal de scripts
 
 ---
@@ -323,10 +323,11 @@ El protocolo de juicio adversarial dual sigue estos pasos:
 - Todos los scripts requieren PowerShell 7+
 - Logging automtico en `logs/`
 - Salida JSON disponible para integracin
-- Modo silencioso para automatizacin
+- Modo silencioso para automatización
 
 ---
 
 **ltima actualizacin**: 2026-04-22  
 **Versin**: 2.0.0  
 **Estado**:  PRODUCCIN
+

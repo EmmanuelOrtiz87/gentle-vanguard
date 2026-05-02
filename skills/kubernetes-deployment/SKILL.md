@@ -1,4 +1,4 @@
-﻿---
+---
 name: kubernetes-deployment
 description: >
   Deploy, manage, and scale containerized applications on Kubernetes clusters
@@ -35,14 +35,14 @@ Minimal working example:
 
 ```yaml
 # kubernetes-deployment.yaml
-apiVersion: apps/v1
+apiversión: apps/v1
 kind: Deployment
 metadata:
   name: api-service
   namespace: production
   labels:
     app: api-service
-    version: v1
+    versión: v1
 spec:
   replicas: 3
   strategy:
@@ -57,7 +57,7 @@ spec:
     metadata:
       labels:
         app: api-service
-        version: v1
+        versión: v1
       annotations:
 // ... (expand this skeleton directly in this skill when needed)
 ```
@@ -84,3 +84,4 @@ spec:
 - Deploy without resource limits
 - Mix configurations in container images
 - Use default service accounts
+

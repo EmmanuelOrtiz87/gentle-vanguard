@@ -1,6 +1,6 @@
-# External Tools
+﻿# External Tools
 
-The workspace foundation keeps external tools outside each project and versioned independently.
+The workspace foundation keeps external tools outside each project and versióned independently.
 
 ## Start Here
 
@@ -16,7 +16,7 @@ The workspace foundation keeps external tools outside each project and versioned
 - `engram` handles memory and session persistence.
 - Foundation native review handles review and quality gates.
 - `documentation-governance` standardizes README files, technical docs, code reviews, and script comments.
-- `architecture-governance` standardizes project structure decisions, defaults, and decision records.
+- `architecture-governance` standardizes project structure decisións, defaults, and decisión records.
 
 ## Installation Strategy
 

@@ -1,4 +1,4 @@
-﻿# Observabilidad: Gua de Artefactos y Ubicacin
+# Observabilidad: Gua de Artefactos y Ubicacin
 
 ## Objetivo
 Centralizar la referencia de todos los artefactos, mtricas, logs y normativas relevantes para observabilidad, continuidad y auditora en Foundation.
@@ -25,10 +25,10 @@ Centralizar la referencia de todos los artefactos, mtricas, logs y normativas re
 
 ## 3. Normativas y Protocolos
 - **docs/reference/NORMATIVAS-ORQUESTADOR.md**: Normativas de orquestador y autorizaciones globales (debe estar SIEMPRE dentro del proyecto Foundation)
-- **docs/reference/OPERATING-DECISIONS-*.md**: Decisiones y reglas clave
+- **docs/reference/OPERATING-DECISIONS-*.md**: decisiónes y reglas clave
 
 ## 4. Engram
-- Memoria persistente de decisiones, aprendizajes y autorizaciones (consultar desde skills y scripts)
+- Memoria persistente de decisiónes, aprendizajes y autorizaciones (consultar desde skills y scripts)
 
 ## 5. Cumplimiento de Directivas
 - Todas las normativas y protocolos deben estar almacenados dentro de `docs/reference/` en Foundation.
@@ -44,3 +44,4 @@ Centralizar la referencia de todos los artefactos, mtricas, logs y normativas re
 
 ltima actualizacin: 2026-04-19
 Responsable: Orquestador Foundation
+

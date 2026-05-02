@@ -279,9 +279,9 @@ $env:AZURE_OPENAI_ENDPOINT = "https://your-resource.openai.azure.com/"
   "providers": {
     "azure": {
       "enabled": true,
-      "endpoint": "https://your-resource.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-02-01",
+      "endpoint": "https://your-resource.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-versión=2024-02-01",
       "model": "gpt-4o",
-      "api_version": "2024-02-01"
+      "api_versión": "2024-02-01"
     }
   }
 }
@@ -372,7 +372,7 @@ $config = @{
 
 ```json
 {
-  "Version": "2012-10-17",
+  "versión": "2012-10-17",
   "Statement": [
     {
       "Effect": "Allow",
@@ -507,4 +507,4 @@ Test-NetConnection api.openai.com -Port 443
 ---
 
 **Last Updated:** 2026-04-17  
-**Version:** 1.0
+**versión:** 1.0

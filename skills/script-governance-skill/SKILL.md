@@ -6,7 +6,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  versión: "1.0"
 ---
 
 ## When to Use
@@ -89,7 +89,7 @@ If any evidence is missing, keep the change as proposal/hypothesis and do not ha
 
 Use this contract to keep governance behavior predictable and non-conflicting:
 
-1. MUST persist durable decisions and session closure notes in Engram.
+1. MUST persist durable decisións and session closure notes in Engram.
 2. MUST follow orchestrator skill flow for assessment, validation, audit, and publication.
 3. SHOULD use available native tools when present; if absent, emit warnings with install/remediation commands.
 4. MUST keep validators deterministic and quiet-safe in automation mode.
@@ -132,3 +132,4 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\valida
 # On-demand orchestration fallback (if available)
 .\scripts\utilities\stack-on-demand.ps1 -Action activate
 ```
+

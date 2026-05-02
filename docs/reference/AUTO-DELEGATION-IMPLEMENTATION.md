@@ -5,7 +5,7 @@
 Se ha implementado un sistema completo de **delegacin automtica inteligente** para enrutar tareas a subagentes especializados basado en:
 
 1. **Anlisis de palabras clave** (Keyword-based auto-routing)
-2. **rboles de decisin** (Decision trees)
+2. **rboles de decisin** (decisión trees)
 3. **Puntuaciones de confianza** (Confidence scoring)
 4. **Control de opt-in** (Opt-in/opt-out flag)
 
@@ -21,7 +21,7 @@ Se ha implementado un sistema completo de **delegacin automtica inteligente** pa
 ### 2. Implementation
 - **`skills/auto-delegation-router/auto-delegation-router.ps1`** (500+ lneas)
   - Mdulo PowerShell con todas las funciones
-  - Gestin de configuracin
+  - Gestin de configuración
   - Motor de extraccin de palabras clave
   - Motor de rbol de decisin
   - Sistema de puntuacin de confianza
@@ -30,7 +30,7 @@ Se ha implementado un sistema completo de **delegacin automtica inteligente** pa
 
 ### 3. Configuration
 - **`config/auto-delegation.json`**
-  - Configuracin por defecto (disabled)
+  - configuración por defecto (disabled)
   - Umbrales de confianza
   - Mapeos de palabras clave por agente
   - Caractersticas configurables
@@ -65,7 +65,7 @@ $keywords = Extract-TaskKeywords -TaskDescription "Implement login feature"
 - **GOV**: governance, compliance, metrics, monitoring, observability, incident
 - **DOC**: documentation, docs, readme, guide, runbook, specification
 
-### 2. Decision Tree Engine 
+### 2. decisión Tree Engine 
 
 **4 niveles de decisin:**
 
@@ -75,8 +75,8 @@ $keywords = Extract-TaskKeywords -TaskDescription "Implement login feature"
 4. **Level 4**: Enrutamiento basado en dependencias (deploy/release  incluir OPS)
 
 ```powershell
-$decisions = Evaluate-DecisionTree -TaskDescription $task -Keywords $keywords
-# Output: Array de decisiones con Level, Agent, Reason, Score
+$decisións = Evaluate-decisiónTree -TaskDescription $task -Keywords $keywords
+# Output: Array de decisiónes con Level, Agent, Reason, Score
 ```
 
 ### 3. Confidence Scoring System 
@@ -96,13 +96,13 @@ $decisions = Evaluate-DecisionTree -TaskDescription $task -Keywords $keywords
 - Very Low: < 40%
 
 ```powershell
-$confidence = Calculate-ConfidenceScore -Keywords $keywords -DecisionTree $decisions
+$confidence = Calculate-ConfidenceScore -Keywords $keywords -decisiónTree $decisións
 # Output: @{ Score = 85; Confidence = "High"; Adjustments = @(...) }
 ```
 
 ### 4. Opt-In Control 
 
-**Configuracin por defecto: DISABLED**
+**configuración por defecto: DISABLED**
 
 ```powershell
 # Habilitar
@@ -181,9 +181,9 @@ $routing = Route-TaskToAgent -TaskDescription $task
 
 # Resultado:
 # Status: LowConfidence
-# RequiresManualDecision: $true
+# RequiresManualdecisión: $true
 # ConfidenceScore: 25
-# Suggestion: "Review suggested agents and confirm manually"
+# Suggestión: "Review suggested agents and confirm manually"
 ```
 
 ## Integracin con Orchestrator
@@ -215,7 +215,7 @@ function Invoke-OrchestratorWithAutoRouting {
         }
         
         # Registrar decisin
-        Log-RoutingDecision -RoutingResult $routing
+        Log-Routingdecisión -RoutingResult $routing
     }
 }
 ```
@@ -244,17 +244,17 @@ $metrics = Get-RoutingMetrics
 
 | Funcin | Descripcin |
 |---------|------------|
-| `Get-AutoDelegationConfig` | Cargar configuracin |
-| `Set-AutoDelegationConfig` | Guardar configuracin |
+| `Get-AutoDelegationConfig` | Cargar configuración |
+| `Set-AutoDelegationConfig` | Guardar configuración |
 | `Extract-TaskKeywords` | Extraer palabras clave |
-| `Evaluate-DecisionTree` | Evaluar rbol de decisin |
+| `Evaluate-decisiónTree` | Evaluar rbol de decisin |
 | `Calculate-ConfidenceScore` | Calcular puntuacin |
 | `Route-TaskToAgent` | Enrutar tarea a agente |
 | `Enable-AutoDelegation` | Habilitar auto-delegation |
 | `Disable-AutoDelegation` | Deshabilitar auto-delegation |
 | `Set-ConfidenceThreshold` | Ajustar umbral |
 | `Get-RoutingMetrics` | Obtener mtricas |
-| `Log-RoutingDecision` | Registrar decisin |
+| `Log-Routingdecisión` | Registrar decisin |
 
 ## Pruebas
 
@@ -264,7 +264,7 @@ Ejecutar suite de pruebas:
 ```
 
 **Cobertura de pruebas:**
--  Gestin de configuracin (4 tests)
+-  Gestin de configuración (4 tests)
 -  Extraccin de palabras clave (6 tests)
 -  Evaluacin de rbol de decisin (4 tests)
 -  Puntuacin de confianza (3 tests)
@@ -273,7 +273,7 @@ Ejecutar suite de pruebas:
 
 **Total: 26 tests de integracin**
 
-## Configuracin Recomendada
+## configuración Recomendada
 
 ### Para desarrollo (permisivo):
 ```json
@@ -295,8 +295,8 @@ Ejecutar suite de pruebas:
 
 ## Mejoras Futuras
 
-1. **Machine Learning** - Aprender de decisiones histricas
-2. **Feedback Loop** - Mejorar basado en correcciones del usuario
+1. **Machine Learning** - Aprender de decisiónes histricas
+2. **Feedback Loop** - Mejorar basado en correcciónes del usuario
 3. **Dynamic Thresholds** - Ajustar umbrales segn contexto
 4. **Agent Availability** - Considerar carga de agentes
 5. **Custom Keywords** - Permitir palabras clave personalizadas
@@ -314,7 +314,7 @@ Ejecutar suite de pruebas:
 | Componente | Estado | Notas |
 |-----------|--------|-------|
 | Keyword Extraction |  Completo | 7 agentes, 70+ palabras clave |
-| Decision Trees |  Completo | 4 niveles de decisin |
+| decisión Trees |  Completo | 4 niveles de decisin |
 | Confidence Scoring |  Completo | Ajustes dinmicos |
 | Opt-In Control |  Completo | Flag enable/disable |
 | Configuration |  Completo | JSON configurable |
@@ -326,7 +326,7 @@ Ejecutar suite de pruebas:
 
 1.  Crear skill de auto-delegation router
 2.  Implementar todas las funcionalidades
-3.  Crear configuracin
+3.  Crear configuración
 4.  Crear tests de integracin
 5.  Integrar en orchestrator principal
 6.  Ejecutar tests en ambiente de staging

@@ -108,7 +108,7 @@ Create VS Code task in `.vscode/tasks.json`:
 
 ```json
 {
-  "version": "2.0.0",
+  "versión": "2.0.0",
   "tasks": [
     {
       "label": "PreTool: Auto Format",

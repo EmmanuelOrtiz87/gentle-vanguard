@@ -1,4 +1,4 @@
-﻿---
+---
 name: code-review-orchestrator
 description: >
   Unified system for all code quality and security reviews across 7 dimensions.
@@ -175,7 +175,7 @@ The Code Review Orchestrator is the **single, unified system** for all code qual
                  Missing comments                                          
                  TODO/FIXME notes                                         
     
-                SUGGESTION + log (exit code 0)                             
+                SUGgestión + log (exit code 0)                             
     
 ```
 
@@ -423,3 +423,4 @@ wf agent QA "judgment day on src/features/auth"
 ```
 
 See: `skills/multi-agent-registry/SKILL.md` - AGENT-QA section
+

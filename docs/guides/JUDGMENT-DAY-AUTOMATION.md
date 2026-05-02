@@ -197,7 +197,7 @@ git merge feature/my-feature
 .\scripts\utilities\judgment-day-orchestrator.ps1 -Action run-judgment -Scope pr_files
 ```
 
-## Decision Tree
+## decisión Tree
 
 ### No Issues Found
 - **Status**: APPROVED 
@@ -222,10 +222,10 @@ git merge feature/my-feature
 - **Message**: Theoretical WARNINGs reported
 - **Auto-fix**: No
 
-### Suggestions Found
-- **Status**: SUGGESTION 
+### Suggestións Found
+- **Status**: SUGgestión 
 - **Action**: Allow push/merge
-- **Message**: Suggestions for improvement
+- **Message**: Suggestións for improvement
 - **Auto-fix**: Yes (if enabled)
 
 ## Reviewer Requirements
@@ -252,7 +252,7 @@ If issues remain after 2 fix iterations:
 
 ### Escalation Actions
 - Flag PR as `judgment-day-escalated`
-- Require manual reviewer decision
+- Require manual reviewer decisión
 - Log escalation reason
 - Notify team
 

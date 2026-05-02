@@ -1,4 +1,4 @@
-﻿---
+---
 name: ios-swift-development
 description: >
   Develop native iOS apps with Swift. Covers MVVM architecture, SwiftUI,
@@ -72,7 +72,7 @@ class UserViewModel: ObservableObject {
 - Use @StateObject for ViewModels
 - Validate API responses properly
 - Implement Core Data for persistence
-- Test on multiple iOS versions
+- Test on multiple iOS versións
 - Use dependency injection
 - Follow Swift style guidelines
 
@@ -88,3 +88,4 @@ class UserViewModel: ObservableObject {
 - Ignore accessibility
 - Deploy untested code
 - Use hardcoded API URLs
+

@@ -48,8 +48,8 @@ The workspace-foundation implements a 5-layer topology for AI agent tooling, des
 **Current Implementation**:
 - Engram persistent memory system
 - Session tracking (`session-YYYY-MM-DD-XX`)
-- Observations with types: bugfix, decision, architecture, discovery, pattern, config, preference
-- Topic keys for evolving decisions
+- Observations with types: bugfix, decisión, architecture, discovery, pattern, config, preference
+- Topic keys for evolving decisións
 
 **Key Files**:
 - `engram_*` tools in agent config

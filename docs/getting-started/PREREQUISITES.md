@@ -1,4 +1,4 @@
-﻿#  Prerequisites - Foundation
+#  Prerequisites - Foundation
 
 **Fecha**: 2026-04-26  
 **Descripcin**: Lista completa de herramientas requeridas y opcionales para Foundation
@@ -23,7 +23,7 @@
 |------------|----------------|-----------|-------------|
 | **Node.js** | 18+ | Runtime JavaScript | [nodejs.org](https://nodejs.org) |
 | **npm** | 9+ | Package manager | Incluido con Node.js |
-| **Git** | 2.30+ | Control de versiones | [git-scm.com](https://git-scm.com) |
+| **Git** | 2.30+ | Control de versiónes | [git-scm.com](https://git-scm.com) |
 
 ---
 
@@ -95,12 +95,12 @@ pip install safety bandit
 .\scripts\utilities\install-prerequisites.ps1 -CheckOnly
 
 # Verificar individualmente
-node --version
-npm --version
-git --version
-lefthook --version
-prettier --version
-trufflehog --version
+node --versión
+npm --versión
+git --versión
+lefthook --versión
+prettier --versión
+trufflehog --versión
 ```
 
 ---

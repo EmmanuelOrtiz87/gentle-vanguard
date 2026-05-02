@@ -1,4 +1,4 @@
-﻿# Cross-Platform Setup Guide
+# Cross-Platform Setup Guide
 
 ## Overview
 
@@ -149,10 +149,10 @@ Detailed system diagnostics (verbose):
 ```
 
 Checks:
-- Go compiler version
-- Git version
+- Go compiler versión
+- Git versión
 - Node.js / npm (if applicable)
-- Engram CLI version
+- Engram CLI versión
 - Engram data directory size
 - Workspace configuration
 - Orchestrator state
@@ -278,7 +278,7 @@ Install Go: https://go.dev/dl/
 
 Check Go installation:
 ```bash
-go version
+go versión
 go env GOPATH
 ```
 
@@ -377,3 +377,4 @@ project-root/
 4. Monitor via orchestrator: `engram status`
 
 - Los hooks automticos de Foundation - Development Stack ejecutan chequeos de seguridad, calidad, arquitectura, testing, API, documentacin y gitflow en cada commit/push. Ver REVIEW-INDEX.md.
+

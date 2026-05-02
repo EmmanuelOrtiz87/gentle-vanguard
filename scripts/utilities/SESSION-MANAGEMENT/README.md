@@ -1,6 +1,6 @@
-﻿# SESSION-MANAGEMENT - Gestin de Sesiones
+# SESSION-MANAGEMENT - Gestin de sesiónes
 
-Mdulo centralizado para gestin del ciclo de vida de sesiones de trabajo.
+Mdulo centralizado para gestin del ciclo de vida de sesiónes de trabajo.
 
 **Versin**: 2.0.0  
 **ltima actualizacin**: 2026-04-22  
@@ -11,12 +11,12 @@ Mdulo centralizado para gestin del ciclo de vida de sesiones de trabajo.
 ##  Descripcin
 
 Este directorio contiene scripts para:
-- Inicio y cierre de sesiones
+- Inicio y cierre de sesiónes
 - Monitoreo de inactividad
 - Validacin de stack de sesin
 - Finalizacin con artefactos
 - Autostart automtico
-- Gestin centralizada de sesiones
+- Gestin centralizada de sesiónes
 
 ---
 
@@ -27,7 +27,7 @@ Este directorio contiene scripts para:
 
 **Caractersticas**:
 - Inicializa contexto de sesin
-- Carga configuracin
+- Carga configuración
 - Activa herramientas necesarias
 - Genera ID de sesin nico
 
@@ -107,15 +107,15 @@ Este directorio contiene scripts para:
 ---
 
 ### `session-manager.ps1`
-**Propsito**: Gestor centralizado de sesiones
+**Propsito**: Gestor centralizado de sesiónes
 
 **Acciones**:
 - `start` - Inicia sesin
 - `end` - Finaliza sesin
-- `list` - Lista sesiones activas
+- `list` - Lista sesiónes activas
 - `status` - Estado de sesin actual
 - `validate` - Valida sesin
-- `cleanup` - Limpia sesiones antiguas
+- `cleanup` - Limpia sesiónes antiguas
 
 **Parmetros**:
 ```powershell
@@ -125,7 +125,7 @@ Este directorio contiene scripts para:
 
 **Uso**:
 ```powershell
-# Listar sesiones activas
+# Listar sesiónes activas
 .\session-manager.ps1 -Action list
 
 # Obtener estado actual
@@ -134,7 +134,7 @@ Este directorio contiene scripts para:
 # Validar sesin
 .\session-manager.ps1 -Action validate
 
-# Limpiar sesiones antiguas
+# Limpiar sesiónes antiguas
 .\session-manager.ps1 -Action cleanup
 ```
 
@@ -171,8 +171,8 @@ Este directorio contiene scripts para:
 **Propsito**: Valida integridad del stack de sesin
 
 **Verifica**:
-- Archivos de sesin
-- Configuracin
+- archivos de sesin
+- configuración
 - Recursos activos
 - Integridad de datos
 

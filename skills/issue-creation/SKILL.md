@@ -1,4 +1,4 @@
-﻿---
+---
 name: issue-creation
 description: >
   Issue creation workflow for Agent Teams Lite following the issue-first enforcement system.
@@ -6,7 +6,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  versión: "1.0"
 ---
 
 ## When to Use
@@ -194,7 +194,7 @@ Manually symlinking, but that defeats the purpose of the setup script.
 
 ---
 
-## Decision Tree
+## decisión Tree
 
 ```
 Is it a bug?                     Use Bug Report template
@@ -223,3 +223,4 @@ gh issue edit <number> --add-label "status:approved"
 # Maintainer: add priority
 gh issue edit <number> --add-label "priority:high"
 ```
+

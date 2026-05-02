@@ -1,4 +1,4 @@
-# Agent Runtime Recipe
+﻿# Agent Runtime Recipe
 
 Practical setup guide to run agents consistently across local, cloud/self-hosted, and SaaS environments.
 
@@ -89,7 +89,7 @@ Integration baseline:
 3. Use `agent-router.ps1 status` as readiness contract for role lanes.
 4. Capture artifacts in `docs/sessions`, `docs/audits`, `docs/code-reviews`.
 
-Decision rule:
+decisión rule:
 
 - SaaS agent can execute reasoning, but repository remains source of truth for:
   - policy checks

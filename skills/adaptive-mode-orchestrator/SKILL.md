@@ -1,4 +1,4 @@
-﻿---
+---
 name: adaptive-mode-orchestrator
 description: >
   Adaptive Mode Mejorado - Orquestacin inteligente con DAG dinmico, feedback loops automticos
@@ -7,7 +7,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  versión: "1.0"
   status: "ACTIVE"
   priority: "CRITICAL"
 ---
@@ -34,7 +34,7 @@ El **Adaptive Mode Orchestrator** es un sistema de orquestacin inteligente que:
 
 ###  Feedback Loops
 - **QA  DEV**: Fallos de prueba disparan rework de desarrollo
-- **QA  SAD**: Problemas de arquitectura disparan revisin de diseo
+- **QA  SAD**: Problemas de arquitectura disparan revisión de diseo
 - **GOV  DEV**: Problemas de seguridad disparan fixes de cdigo
 - Mximo de iteraciones configurable por loop
 
@@ -47,7 +47,7 @@ El **Adaptive Mode Orchestrator** es un sistema de orquestacin inteligente que:
 ###  Ejecucin Automtica
 - Deteccin automtica de fases completadas
 - Transicin automtica entre fases
-- Decisiones automticas basadas en mtricas
+- decisiónes automticas basadas en mtricas
 - Sin intervencin manual requerida
 
 ###  Monitoreo en Tiempo Real
@@ -77,13 +77,13 @@ DEPLOYMENT (OPS)
      Si pasa  COMPLETE
 ```
 
-## Configuracin
+## configuración
 
-### Archivo: `config/adaptive-dag-config.json`
+### archivo: `config/adaptive-dag-config.json`
 
 ```json
 {
-  "version": "1.0",
+  "versión": "1.0",
   "enabled": true,
   "dag": {
     "agents": {
@@ -126,7 +126,7 @@ DEPLOYMENT (OPS)
 # Ejecutar orquestacin adaptativa
 .\skills\adaptive-mode-orchestrator\adaptive-mode-engine.ps1
 
-# Con configuracin personalizada
+# Con configuración personalizada
 .\skills\adaptive-mode-orchestrator\adaptive-mode-engine.ps1 `
   -ConfigPath "config/adaptive-dag-config.json" `
   -TaskDescription "Implementar feature de autenticacin"
@@ -167,7 +167,7 @@ DEPLOYMENT (OPS)
    - Dispara feedback loop
    - DEV corrige cdigo
    - Vuelve a GOV (mx 2 iteraciones)
-3. Si pasa revisin:
+3. Si pasa revisión:
    - Contina a deployment
 ```
 
@@ -180,7 +180,7 @@ DEPLOYMENT (OPS)
 - `performance_degradation`: Degradacin de rendimiento
 - `deployment_failure`: Fallo en deployment
 
-### Proceso de Rollback
+### proceso de Rollback
 
 ```
 1. Detectar fallo crtico
@@ -216,7 +216,7 @@ El Adaptive Mode se integra automticamente con el orquestador principal:
 3. **Auto-Reporting**: Genera reportes automticos
 4. **Auto-Escalation**: Escala a intervencin manual si es necesario
 
-## Decisiones Automticas
+## decisiónes Automticas
 
 ### After QA
 
@@ -261,7 +261,7 @@ else:
 
 ## Ventajas
 
- **Automatizacin Completa**: Sin intervencin manual
+ **automatización Completa**: Sin intervencin manual
  **Inteligencia Adaptativa**: Se adapta a resultados
  **Feedback Loops**: Ciclos automticos de mejora
  **Rollback Seguro**: Recuperacin automtica ante fallos
@@ -292,7 +292,7 @@ Con rollback automtico si seguridad falla
 ## Troubleshooting
 
 ### Problema: Feedback loop infinito
-**Solucin**: Aumentar `max_iterations` en configuracin
+**Solucin**: Aumentar `max_iterations` en configuración
 
 ### Problema: Rollback no se ejecuta
 **Solucin**: Verificar `rollback_policy.enabled` en config
@@ -302,7 +302,7 @@ Con rollback automtico si seguridad falla
 
 ## Referencias
 
-- Configuracin: `config/adaptive-dag-config.json`
+- configuración: `config/adaptive-dag-config.json`
 - Motor: `skills/adaptive-mode-orchestrator/adaptive-mode-engine.ps1`
 - Orquestador Principal: `skills/project-orchestrator-skill/SKILL.md`
 - Auto-Delegation: `skills/auto-delegation-router/SKILL.md`
@@ -312,3 +312,4 @@ Con rollback automtico si seguridad falla
 **Estado**: ACTIVE
 **Versin**: 1.0
 **ltima actualizacin**: 2026-04-23
+

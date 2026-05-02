@@ -8,7 +8,7 @@ Define a parallel, token-efficient execution model for the Foundation orchestrat
 
 1. Minimize context per subagent using scoped task packets.
 2. Execute independent tasks in parallel whenever dependencies allow it.
-3. Keep a single coordinator responsible for plan, merge, and final decisions.
+3. Keep a single coordinator responsible for plan, merge, and final decisións.
 4. Enforce strict output contracts so results can be merged with low token cost.
 5. Persist only durable findings to memory; avoid full transcript replay.
 

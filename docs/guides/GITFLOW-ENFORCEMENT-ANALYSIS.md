@@ -1,4 +1,4 @@
-﻿# GitFlow Enforcement Analysis & Recommendations
+# GitFlow Enforcement Analysis & Recommendations
 
 **Fecha**: 2026-04-22  
 **Estado**: ANLISIS COMPLETADO  
@@ -8,7 +8,7 @@
 
 ##  ESTADO ACTUAL DEL CUMPLIMIENTO DE GITFLOW
 
-###  Lo que S est implementado (Automatizacin Existente)
+###  Lo que S est implementado (automatización Existente)
 
 #### 1. **Pre-Push Hook** (`scripts/git-hooks/pre-push`)
 -  Valida GitFlow antes de cada push
@@ -16,11 +16,11 @@
 -  Bloquea pushes directos a `main` y `develop`
 -  Requiere ramas con prefijo: `feature/`, `bugfix/`, `chore/`, `hotfix/`, `release/`
 -  Valida que PR base sea correcta segn el tipo de rama
--  Ejecuta validaciones adicionales (gga, governance, homologation)
+-  Ejecuta validaciónes adicionales (gga, governance, homologation)
 
 #### 2. **Pre-Commit Hook** (`scripts/git-hooks/pre-commit`)
 -  Ejecuta `gga run` antes de cada commit
--  Valida cdigo y polticas de revisin
+-  Valida cdigo y polticas de revisión
 
 #### 3. **Validacin GitFlow** (`scripts/diagnostics/validate-gitflow.ps1`)
 -  Detecta rama actual
@@ -219,7 +219,7 @@ git push -u origin feature/nombre-descriptivo
 # Abre PR hacia 'develop'
 ```
 
-### Para Correcciones de Bugs
+### Para correcciónes de Bugs
 ```bash
 git checkout -b bugfix/descripcion-del-bug
 # Haz cambios
@@ -246,7 +246,7 @@ git push -u origin hotfix/descripcion-critica
 **Solucin**: Usa: feature/, bugfix/, chore/, hotfix/, o release/
 ```
 
-### NIVEL 3: Automatizacin Avanzada (Mejora Continua)
+### NIVEL 3: automatización Avanzada (Mejora Continua)
 
 #### 3.1 Crear Asistente Interactivo en wf.ps1
 ```powershell
@@ -274,7 +274,7 @@ git push -u origin hotfix/descripcion-critica
 | Validacin de PR base |  FALTA |  CRTICA |
 | Asistente interactivo |  FALTA |  ALTA |
 | Documentacin clara |  FALTA |  ALTA |
-| Automatizacin GitHub Actions |  FALTA |  MEDIA |
+| automatización GitHub Actions |  FALTA |  MEDIA |
 
 ---
 
@@ -299,7 +299,7 @@ git push -u origin hotfix/descripcion-critica
 
 ##  CONCLUSIN
 
-**El proyecto YA tiene automatizacin de GitFlow**, pero le falta:
+**El proyecto YA tiene automatización de GitFlow**, pero le falta:
 -  **Informacin contextual** en los mensajes de error
 -  **Validacin de PR base** antes de hacer push
 -  **Asistentes interactivos** para guiar al usuario
