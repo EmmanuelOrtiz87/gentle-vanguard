@@ -1,4 +1,4 @@
-﻿# session-manager.ps1
+# session-manager.ps1
 # Gestor de sesiones para workspace-foundation
 
 param(
@@ -67,7 +67,8 @@ function Initialize-Session {
     Write-Status "Running autonomous norm enforcement (session-start)..."
     $enforcerScript = Join-Path $PSScriptRoot "..\scripts\adaptive\auto-norm-enforcer.ps1"
     if (Test-Path $enforcerScript) {
-        & $enforcerScript -Trigger session-start -AutoFix -VerboseOutput:$VerbosePreference
+        $verboseFlag = $VerbosePreference -eq "Continue"
+        & $enforcerScript -Trigger session-start -AutoFix -VerboseOutput:$verboseFlag
         Write-Info "Norm enforcement completed"
     } else {
         Write-Warning "Norm enforcer not found at: $enforcerScript"
@@ -77,7 +78,8 @@ function Initialize-Session {
     Write-Status "Running autonomous norm learner (session-start)..."
     $learnerScript = Join-Path $PSScriptRoot "..\scripts\adaptive\auto-norm-learner.ps1"
     if (Test-Path $learnerScript) {
-        & $learnerScript -Trigger session-start -VerboseOutput:$VerbosePreference
+        $verboseFlag = $VerbosePreference -eq "Continue"
+        & $learnerScript -Trigger session-start -VerboseOutput:$verboseFlag
         Write-Info "Norm learner completed"
     } else {
         Write-Warning "Norm learner not found at: $learnerScript"
