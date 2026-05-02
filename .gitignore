@@ -83,5 +83,16 @@ scripts/utilities/run-gga.ps1
 # Session data (runtime)
 .session/
 .engram-data/
+logs/*.json
+logs/.session-active
 
+# Telemetry
 .telemetry/
+
+# OpenCode generated
+opencode.json
+config/opencode.schema.json
+
+# Audit reports (auto-generated)
+LESSONS-LEARNED-*.md
+docs/reference/LESSONS-LEARNED-*.md
