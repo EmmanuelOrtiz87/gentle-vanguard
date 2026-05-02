@@ -645,7 +645,7 @@ workspace-foundation/
 | [AI Configuration](docs/guides/AI-CONFIGURATION.md) | Cloud & local AI setup |
 | [Visual Guide](docs/guides/VISUAL-GUIDE.md) | Complete visual reference |
 | [Developer Communication Policy](docs/guides/DEVELOPER-COMMUNICATION-POLICY.md) | Response-mode contract and enforcement |
-| [Technical Onboarding](docs/supplementary/TECHNICAL-ONBOARDING.md) | Team training guide |
+| [Technical Onboarding](docs/guides/TECHNICAL-ONBOARDING.md) | Team training guide |
 | [Getting Started](docs/getting-started/README.md) | All setup guides |
 
 ## Requirements
