@@ -10,13 +10,84 @@
                      "decisionTree":  true,
                      "confidenceScoring":  true,
                      "autoRetry":  false,
-                     "autoEscalation":  true
+                     "autoEscalation":  true,
+                     "tieredRouting":  true,
+                     "concurrencyControl":  true
                  },
     "thresholds":  {
                        "highConfidence":  80,
                        "mediumConfidence":  60,
                        "lowConfidence":  40
                    },
+    "routingBindings":  [
+                           {
+                               "agent":  "SCRIPT-GOV",
+                               "value":  "script|powershell|parser error|syntax error",
+                               "tier":  1,
+                               "description":  "Exact match for script governance"
+                           },
+                           {
+                               "agent":  "GITFLOW-*",
+                               "value":  "git.*|branch|commit|merge|pull request",
+                               "tier":  2,
+                               "description":  "Regex for git operations"
+                           },
+                           {
+                               "agent":  "DEV",
+                               "value":  "implement.*|code.*|develop.*",
+                               "tier":  2,
+                               "description":  "Regex for development tasks"
+                           },
+                           {
+                               "agent":  "QA",
+                               "value":  "test.*|validat.*|judgment day",
+                               "tier":  2,
+                               "description":  "Regex for QA tasks"
+                           },
+                           {
+                               "agent":  "OPS",
+                               "value":  "deploy.*|ci/cd|docker|kubernetes",
+                               "tier":  2,
+                               "description":  "Regex for DevOps tasks"
+                           },
+                           {
+                               "agent":  "GOV",
+                               "value":  "governance|compliance|audit|security audit",
+                               "tier":  2,
+                               "description":  "Regex for governance tasks"
+                           },
+                           {
+                               "agent":  "SAD",
+                               "value":  "architecture.*|design.*|sdd.*|api design",
+                               "tier":  2,
+                               "description":  "Regex for architecture tasks"
+                           },
+                           {
+                               "agent":  "DOC",
+                               "value":  "documentation.*|docs|readme|specification",
+                               "tier":  2,
+                               "description":  "Regex for documentation tasks"
+                           },
+                           {
+                               "agent":  "BA",
+                               "value":  ".*requirement.*|.*user story.*|.*bdd.*",
+                               "tier":  3,
+                               "description":  "Wildcard for business analysis"
+                           }
+                       ],
+    "concurrencyLimits":  {
+                             "BA":  2,
+                             "SAD":  2,
+                             "DEV":  3,
+                             "QA":  3,
+                             "OPS":  2,
+                             "GOV":  2,
+                             "DOC":  2,
+                             "SCRIPT-GOV":  1,
+                             "REPORT":  1,
+                             "GITFLOW-*":  2,
+                             "default":  3
+                         },
     "keywordMappings":  {
                             "GOV":  [
                                         "governance",
