@@ -37,7 +37,7 @@ New to Workspace Foundation? Start here:
 ## Reference
 
 - **[DEPLOYMENT-READY-SUMMARY.md](DEPLOYMENT-READY-SUMMARY.md)** - Deployment overview
-- **[DOCUMENTATION-STANDARDS.md](DOCUMENTATION-STANDARDS.md)** - How to write docs
+- **[DOCUMENTATION-STANDARDS.md](../../skills/documentation-governance/references/documentation-standards.md)** - How to write docs
 
 ---
 
@@ -77,7 +77,7 @@ New to Workspace Foundation? Start here:
 ## Contributing
 
 When adding documentation:
-1. Follow [DOCUMENTATION-STANDARDS.md](../DOCUMENTATION-STANDARDS.md)
+1. Follow [DOCUMENTATION-STANDARDS.md](../../skills/documentation-governance/references/documentation-standards.md)
 2. Update this README
 3. Link from relevant sections
 4. Keep files under 2000 lines
