@@ -174,7 +174,8 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 **Trigger**: gitflow, gitflow-orchestrator, ranch creation, git hooks`n**Use when**: GitFlow workflow validation, branch creation, pre-push hooks
 ---
 ### incident-response-skill
-**Trigger**: incident, outage, production issue, unbook, mitigation`n**Use when**: Handling incidents, response coordination, mitigation, and recovery planning
+**Trigger**: incident, outage, production issue, 
+unbook, mitigation`n**Use when**: Handling incidents, response coordination, mitigation, and recovery planning
 ---
 ### issue-creation
 **Trigger**: issue, create issue, github issue, ug report`n**Use when**: Creating GitHub issues, reporting bugs, requesting features
@@ -762,7 +763,7 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 **Trigger**: `commit`, `message`, `conventional`, `changelog`, `semantic`
 
-**Use when**: Enforcing commit message conventions, generating changelogs (GGA-native)
+**Use when**: Enforcing commit message conventions, generating changelogs (-native)
 
 ---
 
@@ -770,7 +771,7 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 **Trigger**: `docs sync`, `documentation alignment`, `readme update`
 
-**Use when**: Keeping documentation in sync with code changes (GGA-native)
+**Use when**: Keeping documentation in sync with code changes (-native)
 
 ---
 
@@ -778,7 +779,7 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 **Trigger**: `shellcheck`, `bash`, `shell script`, `lint`
 
-**Use when**: Shell script linting and standards enforcement (GGA-native)
+**Use when**: Shell script linting and standards enforcement (-native)
 
 ---
 
@@ -786,15 +787,15 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 **Trigger**: `coverage`, `test coverage`, `uncovered`
 
-**Use when**: Analyzing and improving test coverage metrics (GGA-native)
+**Use when**: Analyzing and improving test coverage metrics (-native)
 
 ---
 
 ### guardian-fallback-skill
 
-**Trigger**: `guardian fallback`, `GGA blocked`, `agent fallback`
+**Trigger**: `guardian fallback`, ` blocked`, `agent fallback`
 
-**Use when**: Alternative execution when GGA is blocked or unavailable
+**Use when**: Alternative execution when  is blocked or unavailable
 
 ---
 
