@@ -19,18 +19,40 @@ metadata:
 
 ## Critical Patterns
 
-### PR Title = Conventional Commit
+### PR Title = Conventional Commit (Gentle-AI branch-pr adapted)
 
 ```
 <type>(<scope>): <short description>
 
-feat     New feature
-fix      Bug fix  
-docs     Documentation
-refactor Code refactoring
-test     Adding tests
-chore    Maintenance
+feat        New feature
+fix         Bug fix  
+docs        Documentation
+refactor   Code refactoring
+test        Adding tests
+chore       Maintenance
+build        Build system
+ci          CI configuration
+style       Formatting (no logic change)
+perf        Performance improvement
+revert      Reverts a previous commit
 ```
+
+**Breaking changes**: Add `!` after type: `feat(auth)!: rename config flag`
+
+### Cognitive Budget (Gentle-AI branch-pr rule)
+- **Max 400 changed lines** (`additions + deletions`) per PR
+- **Request `size:exception`** if unavoidable (with rationale documented)
+- **Review time**: Design each PR for ≤60-minute human review
+
+### PR Labels (Gentle-AI branch-pr rule)
+- **Exactly ONE `type:*` label** per PR:
+  - `type:bug` → Bug fix
+  - `type:feature` → New feature
+  - `type:docs` → Documentation
+  - `type:refactor` → Code refactoring
+  - `type:chore` → Maintenance/tooling
+  - `type:breaking-change` → Breaking change
+- CI automatically rejects PRs with zero or multiple type labels
 
 ### PR Description Structure
 
