@@ -229,10 +229,10 @@ cd workspace-foundation
 
 ## Referencias
 
-- [NORMATIVAS-ORQUESTADOR.md](NORMATIVAS-ORQUESTADOR.md) - Normativas globales
-- [OPERATING-DECISIONS-2026-04-15.md](OPERATING-DECISIONS-2026-04-15.md) - Decisiones operacionales
+- [NORMATIVAS-ORQUESTADOR.md](reference/NORMATIVAS-ORQUESTADOR.md) - Normativas globales
+- [OPERATING-DECISIONS-2026-04-15.md](reference/OPERATING-DECISIONS-2026-04-15.md) - Decisiones operacionales
 - LESSONS-LEARNED-HOOKS-INCIDENT.md - Leccion anterior sobre hooks
-- [SCRIPT-NORMALIZATION-STANDARDS.md](../guides/SCRIPT-NORMALIZATION-STANDARDS.md) - Normativas de scripts
+- [SCRIPT-NORMALIZATION-STANDARDS.md](guides/SCRIPT-NORMALIZATION-STANDARDS.md) - Normativas de scripts
 
 ---
 
