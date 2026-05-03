@@ -65,24 +65,51 @@ function Initialize-Session {
     
     # Autonomous norm enforcement at session start
     Write-Status "Running autonomous norm enforcement (session-start)..."
-    $enforcerScript = Join-Path $PSScriptRoot "..\scripts\adaptive\auto-norm-enforcer.ps1"
+    $enforcerScript = Join-Path $PSScriptRoot "..\adaptive\karpathy-enforcer.ps1"
+    if (-not (Test-Path $enforcerScript)) {
+        $enforcerScript = Join-Path $PSScriptRoot "karpathy-enforcer.ps1"
+    }
     if (Test-Path $enforcerScript) {
         $verboseFlag = $VerbosePreference -eq "Continue"
-        & $enforcerScript -Trigger session-start -AutoFix -VerboseOutput:$verboseFlag
-        Write-Info "Norm enforcement completed"
+        & $enforcerScript -Trigger session-start -AutoFix:$false -VerboseOutput:$verboseFlag
+        Write-Info "Karpathy enforcement completed"
     } else {
-        Write-Warning "Norm enforcer not found at: $enforcerScript"
+        Write-Warning "Karpathy enforcer not found, skipping..."
     }
     
     # Autonomous learning at session start
     Write-Status "Running autonomous norm learner (session-start)..."
-    $learnerScript = Join-Path $PSScriptRoot "..\scripts\adaptive\auto-norm-learner.ps1"
+    $learnerScript = Join-Path $PSScriptRoot "..\adaptive\auto-norm-learner.ps1"
+    if (-not (Test-Path $learnerScript)) {
+        $learnerScript = Join-Path $PSScriptRoot "auto-norm-learner.ps1"
+    }
     if (Test-Path $learnerScript) {
         $verboseFlag = $VerbosePreference -eq "Continue"
         & $learnerScript -Trigger session-start -VerboseOutput:$verboseFlag
         Write-Info "Norm learner completed"
     } else {
-        Write-Warning "Norm learner not found at: $learnerScript"
+        Write-Warning "Norm learner not found, skipping..."
+    }
+    if (Test-Path $enforcerScript) {
+        $verboseFlag = $VerbosePreference -eq "Continue"
+        & $enforcerScript -Trigger session-start -AutoFix -VerboseOutput:$verboseFlag
+        Write-Info "Norm enforcement completed"
+    } else {
+        Write-Warning "Norm enforcer not found, skipping..."
+    }
+    
+    # Autonomous learning at session start
+    Write-Status "Running autonomous norm learner (session-start)..."
+    $learnerScript = Join-Path $PSScriptRoot "..\adaptive\auto-norm-learner.ps1"
+    if (-not (Test-Path $learnerScript)) {
+        $learnerScript = Join-Path $PSScriptRoot "auto-norm-learner.ps1"
+    }
+    if (Test-Path $learnerScript) {
+        $verboseFlag = $VerbosePreference -eq "Continue"
+        & $learnerScript -Trigger session-start -VerboseOutput:$verboseFlag
+        Write-Info "Norm learner completed"
+    } else {
+        Write-Warning "Norm learner not found, skipping..."
     }
     
     return $sessionId
