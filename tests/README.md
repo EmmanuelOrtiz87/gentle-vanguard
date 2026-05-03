@@ -10,26 +10,27 @@ Directorio centralizado para toda la suite de testing del proyecto workspace-fou
 
 ---
 
-##  Estructura de Directorios
-
-```
+## Estructura de Directorios
+``` 
 tests/
- README.md                                      # Este archivo
- unit/
-    engram-memory-manager.tests
-{
-  "prompt_tokens": 88943,
-  "prompt_unit_price": "0",
-  "prompt_price_unit": "0",
-  "prompt_price": "0",
-  "completion_tokens": 8096,
-  "completion_unit_price": "0",
-  "completion_price_unit": "0",
-  "completion_price": "0",
-  "total_tokens": 97039,
-  "total_price": "0",
-  "currency": "USD",
-  "latency": 42.833,
-  "time_to_first_token": 2.212,
-  "time_to_generate": 40.621
-}
+  README.md                                      # Este archivo
+  unit/
+      engram-memory-manager.tests.ps1
+      foundation-core.tests.ps1
+  integration/
+      auto-delegation-router.integration.tests.ps1
+      engram-orchestrator.integration.tests.ps1
+  performance/
+      engram-performance.perf.tests.ps1
+  security/
+      input-validation.security.tests.ps1
+```
+
+## Tipos de Tests
+
+| Tipo | Descripción |
+|------|-------------|
+| `unit/` | Pruebas unitarias de funciones core |
+| `integration/` | Pruebas de integración entre módulos |
+| `performance/` | Pruebas de rendimiento y carga |
+| `security/` | Pruebas de seguridad y validación |
