@@ -1,123 +1,23 @@
 <#
 .SYNOPSIS
-Post-merge hook for Foundation workflow - syncs documentation and validates consistency
-
+    Post-merge synchronization hook
 .DESCRIPTION
-This hook runs AFTER merge completes to:
-- Update documentation references
-- Validate consistency across branches
-- Sync configuration files
-- Generate merge report
-
-.PARAMETER MergeBranch
-The branch that was merged
-
-.PARAMETER WorkspaceRoot
-Root directory of the workspace
-
-.EXAMPLE
-.\post-merge-sync.ps1 -MergeBranch "feature/new-api" -WorkspaceRoot "."
+    Syncs workspace configuration after git merge
 #>
+param()
 
-param(
-    [Parameter(Mandatory = $false)]
-    [string]$MergeBranch,
-    
-    [Parameter(Mandatory = $false)]
-    [string]$WorkspaceRoot = "."
-)
+Write-Host "[INFO] Running post-merge sync..." -ForegroundColor Cyan
 
-Set-StrictMode -Version Latest
-$ErrorActionPreference = "Continue"
-
-# Initialize
-$timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-$logFile = ".session/logs/post-merge-$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
-$syncIssues = @()
-
-function Write-Log {
-    param([string]$Message, [string]$Level = "INFO")
-    $logMessage = "[$timestamp] [$Level] $Message"
-    Write-Host $logMessage
-    if (Test-Path (Split-Path $logFile)) {
-        Add-Content -Path $logFile -Value $logMessage -ErrorAction SilentlyContinue
-    }
+# Sync cross-workspace configurations
+if (Test-Path "scripts/monitoring/cross-workspace-validator.ps1") {
+    & "scripts/monitoring/cross-workspace-validator.ps1" -Fix
 }
 
-Write-Log "Starting post-merge sync hook"
-
-try {
-    # Get current branch if not provided
-    if ([string]::IsNullOrWhiteSpace($MergeBranch)) {
-        $MergeBranch = git rev-parse --abbrev-ref HEAD 2>$null
-        Write-Log "Current branch: $MergeBranch"
-    }
-
-    # Check for merge conflicts
-    $conflictFiles = @(git diff --name-only --diff-filter=U 2>$null)
-    if ($conflictFiles.Count -gt 0) {
-        Write-Log "Merge conflicts detected in $($conflictFiles.Count) files" "WARN"
-        foreach ($file in $conflictFiles) {
-            $syncIssues += "Conflict in $file"
-        }
-    }
-
-    # Validate configuration files
-    Write-Log "Validating configuration files..."
-    $configFiles = @(Get-ChildItem -Path "config/*.json" -ErrorAction SilentlyContinue)
-    foreach ($configFile in $configFiles) {
-        try {
-            $json = Get-Content $configFile.FullName -Raw | ConvertFrom-Json
-            Write-Log "Config validation passed: $($configFile.Name)"
-        }
-        catch {
-            $syncIssues += "Invalid config file: $($configFile.Name) - $_"
-            Write-Log "Config validation failed: $($configFile.Name)" "WARN"
-        }
-    }
-
-    # Check for documentation updates needed
-    Write-Log "Checking documentation references..."
-    $docFiles = @(Get-ChildItem -Path "docs/*.md" -ErrorAction SilentlyContinue)
-    $changedFiles = @(git diff --name-only HEAD~1 HEAD 2>$null)
-    
-    if ($changedFiles.Count -gt 0 -and $docFiles.Count -gt 0) {
-        Write-Log "Found $($changedFiles.Count) changed files and $($docFiles.Count) documentation files"
-        # Documentation sync would happen here
-    }
-
-    # Generate merge report
-    $reportPath = ".session/reports/merge-$(Get-Date -Format 'yyyyMMdd-HHmmss').json"
-    $report = @{
-        timestamp = $timestamp
-        branch = $MergeBranch
-        conflictCount = $conflictFiles.Count
-        issueCount = $syncIssues.Count
-        issues = $syncIssues
-        status = if ($syncIssues.Count -eq 0) { "SYNC_COMPLETE" } else { "ISSUES_FOUND" }
-    }
-
-    if (-not (Test-Path (Split-Path $reportPath))) {
-        New-Item -ItemType Directory -Path (Split-Path $reportPath) -Force | Out-Null
-    }
-
-    $report | ConvertTo-Json | Set-Content -Path $reportPath
-    Write-Log "Merge report generated: $reportPath"
-
-    # Output result
-    if ($syncIssues.Count -eq 0) {
-        Write-Log "Post-merge sync completed successfully" "SUCCESS"
-        Write-Output "SYNC_COMPLETE"
-    }
-    else {
-        Write-Log "Post-merge sync completed with issues" "WARN"
-        Write-Output "ISSUES_FOUND"
-    }
-
-    exit 0
+# Update engram if needed
+$engramVersion = & engram --version 2>$null
+if ($engramVersion -match "Update available") {
+    Write-Host "[WARN] Engram update available" -ForegroundColor Yellow
 }
-catch {
-    Write-Log "Error in post-merge sync: $_" "ERROR"
-    Write-Output "ISSUES_FOUND"
-    exit 0
-}
+
+Write-Host "[OK] Post-merge sync completed" -ForegroundColor Green
+exit 0

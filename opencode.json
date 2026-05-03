@@ -1,0 +1,19 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "anthropic": {
+      "enabled": true,
+      "model": "claude-3-5-sonnet-20241022"
+    }
+  },
+  "agent": {
+    "default": {
+      "model": "claude-3-5-sonnet-20241022",
+      "temperature": 0.1
+    },
+    "orchestrator": {
+      "model": "claude-3-5-sonnet-20241022",
+      "temperature": 0.0
+    }
+  }
+}

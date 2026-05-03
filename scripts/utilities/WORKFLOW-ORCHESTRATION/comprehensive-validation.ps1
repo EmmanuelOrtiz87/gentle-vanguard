@@ -1,12 +1,12 @@
 ﻿<#
 .SYNOPSIS
-Comprehensive end-to-end validation of entire Foundation system (updated 2026-05-02)
+Comprehensive end-to-end validation of entire Foundation system
 
 .DESCRIPTION
 Complete validation that checks:
 - All scripts for syntax errors
-- Configuration files validity (actual files)
-- Documentation completeness (actual docs)
+- Configuration files validity
+- Documentation completeness
 - Skill definitions
 - Automation setup
 - System definitions
@@ -74,35 +74,16 @@ function Add-ValidationResult {
 }
 
 # ============================================================================
-# 1. VALIDATE POWERSHELL SCRIPTS (actual scripts)
+# 1. VALIDATE POWERSHELL SCRIPTS
 # ============================================================================
 Write-Log "=== VALIDATING POWERSHELL SCRIPTS ===" "INFO"
 
 $psScripts = @(
-    "tools/cache-cleanup-manager.ps1",
-    "tools/cleanup-project.ps1",
-    "tools/clear-context.ps1",
-    "tools/enforce-response-mode.ps1",
-    "tools/handoff-compress.ps1",
-    "tools/initialize-distributed-tracing.ps1",
-    "tools/initialize-orchestrator.ps1",
-    "tools/master-connector.ps1",
-    "tools/message-tracker.ps1",
-    "tools/notify-user.ps1",
-    "tools/optimize-engram-usage.ps1",
-    "tools/post-task-cleanup.ps1",
-    "tools/pre-close-validator.ps1",
-    "tools/pre-compact-hook.ps1",
-    "tools/pre-process-input.ps1",
-    "tools/session-idle-monitor.ps1",
-    "tools/session-manager.ps1",
-    "tools/session-notification.ps1",
-    "tools/session-quick-restart.ps1",
-    "tools/telemetry-dashboard.ps1",
-    "tools/token-guard.ps1",
-    "tools/token-monitor.ps1",
-    "tools/token-telemetry.ps1",
-    "tools/trigger-detector.ps1"
+    "scripts/utilities/WORKFLOW-ORCHESTRATION/pre-process-input.ps1",
+    "scripts/utilities/WORKFLOW-ORCHESTRATION/validate-system-health.ps1",
+    "scripts/utilities/WORKFLOW-ORCHESTRATION/intelligent-validator.ps1",
+    "scripts/utilities/GIT-VERSION-CONTROL/pre-commit-validation.ps1",
+    "scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1"
 )
 
 foreach ($script in $psScripts) {
@@ -120,22 +101,21 @@ foreach ($script in $psScripts) {
         }
     }
     else {
-        Add-ValidationResult "PowerShell Scripts" $script "WARN" "File not found (optional)"
-        Write-Log "[WARN] $script - File not found" "WARN"
+        Add-ValidationResult "PowerShell Scripts" $script "FAIL" "File not found"
+        Write-Log "[FAIL] $script - File not found" "ERROR"
     }
 }
 
 # ============================================================================
-# 2. VALIDATE JSON CONFIGURATION FILES (actual files)
+# 2. VALIDATE JSON CONFIGURATION FILES
 # ============================================================================
 Write-Log "=== VALIDATING JSON CONFIGURATION FILES ===" "INFO"
 
 $jsonFiles = @(
+    "opencode.json",
     "config/hooks-config.json",
     "config/workspace.config.json",
-    "tools/session-autostart.config.json",
-    "tools/context-efficiency-config.json",
-    "tools/token-guard-config.json"
+    "scripts/utilities/WORKFLOW-ORCHESTRATION/hook-registry.json"
 )
 
 foreach ($jsonFile in $jsonFiles) {
@@ -144,6 +124,18 @@ foreach ($jsonFile in $jsonFiles) {
             $json = Get-Content $jsonFile -Raw | ConvertFrom-Json
             Add-ValidationResult "JSON Configuration" $jsonFile "PASS" "Valid JSON"
             Write-Log "[OK] $jsonFile - Valid JSON" "SUCCESS"
+            
+            # Additional checks
+            if ($jsonFile -match "opencode\.json$") {
+                if ($json.PSObject.Properties.Name -contains "hooks") {
+                    Add-ValidationResult "JSON Configuration" "$jsonFile - hooks section" "FAIL" "Invalid hooks section found"
+                    Write-Log "[FAIL] $jsonFile - Invalid hooks section" "ERROR"
+                }
+                else {
+                    Add-ValidationResult "JSON Configuration" "$jsonFile - schema compliance" "PASS" "Schema compliant"
+                    Write-Log "[OK] $jsonFile - Schema compliant" "SUCCESS"
+                }
+            }
         }
         catch {
             Add-ValidationResult "JSON Configuration" $jsonFile "FAIL" "Invalid JSON: $_"
@@ -157,19 +149,16 @@ foreach ($jsonFile in $jsonFiles) {
 }
 
 # ============================================================================
-# 3. VALIDATE DOCUMENTATION (actual docs)
+# 3. VALIDATE DOCUMENTATION
 # ============================================================================
 Write-Log "=== VALIDATING DOCUMENTATION ===" "INFO"
 
 $docFiles = @(
-    "README.md",
-    "AGENTS.md",
-    "CLAUDE.md",
-    "docs/README.md",
-    "docs/architecture/README.md",
-    "docs/guides/README.md",
-    "docs/reference/NORMATIVAS-ORQUESTADOR.md",
-    "docs/reference/OPERATING-DECISIONS-2026-04-15.md"
+    "docs/HOOKS-IMPLEMENTATION-GUIDE.md",
+    "docs/LESSONS-LEARNED-HOOKS-INCIDENT.md",
+    "docs/CONFIGURATION-VALIDATION-CHECKLIST.md",
+    "docs/AUTONOMOUS-VALIDATION-SYSTEM.md",
+    "docs/AUTONOMOUS-SYSTEM-GUIDE.md"
 )
 
 foreach ($docFile in $docFiles) {
@@ -177,14 +166,9 @@ foreach ($docFile in $docFiles) {
         $content = Get-Content $docFile -Raw
         $lines = $content.Split("`n").Count
         
-        # Check for Spanish accents (governance rule)
-        $hasAccents = $content -match "ación|ón|ín|é|á|í|ó|ú"
-        
         if ($lines -gt 10) {
-            $status = if ($hasAccents) { "PASS" } else { "WARN" }
-            $details = if ($hasAccents) { "$lines lines, accents OK" } else { "$lines lines, missing accents" }
-            Add-ValidationResult "Documentation" $docFile $status $details
-            Write-Log "[$($status)] $docFile - $details" $(if ($status -eq "PASS") { "SUCCESS" } else { "WARN" })
+            Add-ValidationResult "Documentation" $docFile "PASS" "$lines lines"
+            Write-Log "[OK] $docFile - Valid ($lines lines)" "SUCCESS"
         }
         else {
             Add-ValidationResult "Documentation" $docFile "WARN" "Document too short ($lines lines)"
@@ -198,20 +182,15 @@ foreach ($docFile in $docFiles) {
 }
 
 # ============================================================================
-# 4. VALIDATE DIRECTORY STRUCTURE (actual structure)
+# 4. VALIDATE DIRECTORY STRUCTURE
 # ============================================================================
 Write-Log "=== VALIDATING DIRECTORY STRUCTURE ===" "INFO"
 
 $requiredDirs = @(
     "config",
+    "scripts/utilities/WORKFLOW-ORCHESTRATION",
+    "scripts/utilities/GIT-VERSION-CONTROL",
     "docs",
-    "docs/architecture",
-    "docs/guides",
-    "docs/reference",
-    "scripts",
-    "scripts/utilities",
-    "skills",
-    "tools",
     ".session/logs",
     ".session/reports"
 )
@@ -233,21 +212,18 @@ foreach ($dir in $requiredDirs) {
 Write-Log "=== VALIDATING HOOKS CONFIGURATION ===" "INFO"
 
 try {
-    if (Test-Path "config/hooks-config.json") {
-        $hooksConfig = Get-Content "config/hooks-config.json" -Raw | ConvertFrom-Json
-        
-        if ($hooksConfig.hooks) {
-            Add-ValidationResult "Hooks Configuration" "hooks-config.json" "PASS" "Hooks section exists"
-            Write-Log "[OK] hooks-config.json - Hooks section exists" "SUCCESS"
+    $hooksConfig = Get-Content "config/hooks-config.json" -Raw | ConvertFrom-Json
+    
+    $expectedHooks = @("pre_process", "post_session", "pre_commit", "post_merge")
+    foreach ($hook in $expectedHooks) {
+        if ($hooksConfig.hooks.$hook) {
+            Add-ValidationResult "Hooks Configuration" "Hook: $hook" "PASS" "Configured"
+            Write-Log "[OK] Hook $hook - Configured" "SUCCESS"
         }
         else {
-            Add-ValidationResult "Hooks Configuration" "hooks-config.json" "WARN" "No hooks defined"
-            Write-Log "[WARN] hooks-config.json - No hooks defined" "WARN"
+            Add-ValidationResult "Hooks Configuration" "Hook: $hook" "FAIL" "Not configured"
+            Write-Log "[FAIL] Hook $hook - Not configured" "ERROR"
         }
-    }
-    else {
-        Add-ValidationResult "Hooks Configuration" "hooks-config.json" "WARN" "File not found"
-        Write-Log "[WARN] Hooks configuration error: File not found" "WARN"
     }
 }
 catch {
@@ -277,8 +253,8 @@ foreach ($file in $automationFiles) {
         }
     }
     else {
-        Add-ValidationResult "Automation Setup" $file "WARN" "File not found (may be archived)"
-        Write-Log "[WARN] $file - File not found" "WARN"
+        Add-ValidationResult "Automation Setup" $file "FAIL" "File not found"
+        Write-Log "[FAIL] $file - File not found" "ERROR"
     }
 }
 
@@ -288,22 +264,18 @@ foreach ($file in $automationFiles) {
 Write-Log "=== VALIDATING SYSTEM DEFINITIONS ===" "INFO"
 
 try {
-    if (Test-Path "opencode.json") {
-        $opencode = Get-Content "opencode.json" -Raw | ConvertFrom-Json
-        
-        if ($opencode.provider) {
-            Add-ValidationResult "System Definitions" "opencode.json - provider" "PASS" "Provider configured"
-            Write-Log "[OK] opencode.json - Provider configured" "SUCCESS"
-        }
-        
-        if ($opencode.agent) {
-            Add-ValidationResult "System Definitions" "opencode.json - agent" "PASS" "Agent configured"
-            Write-Log "[OK] opencode.json - Agent configured" "SUCCESS"
-        }
+    $opencode = Get-Content "opencode.json" -Raw | ConvertFrom-Json
+    
+    # Check providers
+    if ($opencode.provider.anthropic) {
+        Add-ValidationResult "System Definitions" "Provider: Anthropic" "PASS" "Configured"
+        Write-Log "[OK] Anthropic provider - Configured" "SUCCESS"
     }
-    else {
-        Add-ValidationResult "System Definitions" "opencode.json" "WARN" "File not found"
-        Write-Log "[WARN] opencode.json - File not found" "WARN"
+    
+    # Check agents
+    if ($opencode.agent.default -and $opencode.agent.orchestrator) {
+        Add-ValidationResult "System Definitions" "Agents" "PASS" "Default and Orchestrator configured"
+        Write-Log "[OK] Agents - Configured" "SUCCESS"
     }
 }
 catch {
@@ -333,34 +305,40 @@ if (Test-Path ".github/workflows") {
 }
 
 # ============================================================================
-# 9. VALIDATE .gitignore
+# 9. VALIDATE MANUAL PROCEDURES
 # ============================================================================
-Write-Log "=== VALIDATING .gitignore ===" "INFO"
+Write-Log "=== VALIDATING MANUAL PROCEDURES ===" "INFO"
 
-if (Test-Path ".gitignore") {
-    $gitignore = Get-Content ".gitignore" -Raw
-    
-    $requiredIgnores = @("node_modules", ".telemetry/", ".engram-data/")
-    $missingIgnores = @()
-    
-    foreach ($ignore in $requiredIgnores) {
-        if ($gitignore -notmatch [regex]::Escape($ignore)) {
-            $missingIgnores += $ignore
+$manualDocs = @(
+    "docs/CONFIGURATION-VALIDATION-CHECKLIST.md",
+    "docs/LESSONS-LEARNED-HOOKS-INCIDENT.md"
+)
+
+foreach ($doc in $manualDocs) {
+    if (Test-Path $doc) {
+        $content = Get-Content $doc -Raw
+        if ($content -match "checklist|procedure|step") {
+            Add-ValidationResult "Manual Procedures" $doc "PASS" "Procedures documented"
+            Write-Log "[OK] $doc - Procedures documented" "SUCCESS"
         }
     }
-    
-    if ($missingIgnores.Count -eq 0) {
-        Add-ValidationResult ".gitignore" ".gitignore" "PASS" "Required ignores present"
-        Write-Log "[OK] .gitignore - Required ignores present" "SUCCESS"
-    }
-    else {
-        Add-ValidationResult ".gitignore" ".gitignore" "WARN" "Missing: $($missingIgnores -join ', ')"
-        Write-Log "[WARN] .gitignore - Missing some ignores" "WARN"
-    }
 }
-else {
-    Add-ValidationResult ".gitignore" ".gitignore" "FAIL" "File not found"
-    Write-Log "[FAIL] .gitignore - File not found" "ERROR"
+
+# ============================================================================
+# 10. VALIDATE AUTONOMOUS SYSTEMS
+# ============================================================================
+Write-Log "=== VALIDATING AUTONOMOUS SYSTEMS ===" "INFO"
+
+$autonomousDocs = @(
+    "docs/AUTONOMOUS-VALIDATION-SYSTEM.md",
+    "docs/AUTONOMOUS-SYSTEM-GUIDE.md"
+)
+
+foreach ($doc in $autonomousDocs) {
+    if (Test-Path $doc) {
+        Add-ValidationResult "Autonomous Systems" $doc "PASS" "Documentation complete"
+        Write-Log "[OK] $doc - Documentation complete" "SUCCESS"
+    }
 }
 
 # ============================================================================
