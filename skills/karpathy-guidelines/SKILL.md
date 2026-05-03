@@ -1,6 +1,11 @@
-# karpathy-guidelines.skill.md
+---
+name: karpathy-guidelines
+description: >
+  Four principles for LLM coding excellence (Andrej Karpathy inspired).
+  Trigger: When writing code, refactoring, or implementing features.
+---
+
 # Skill: karpathy-guidelines
-# Four principles for LLM coding excellence (Andrej Karpathy inspired)
 
 ## Trigger Conditions
 - When writing code, refactoring, or implementing features

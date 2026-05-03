@@ -1,3 +1,10 @@
+---
+name: config-risk-analyzer
+description: >
+  Analyze risks in configuration files, detect inconsistencies, validate schemas.
+  Trigger: "config-risk-analyze", "validate-config", "check-config-integrity".
+---
+
 # Config Risk Analyzer Skill
 
 ## Objetivo
