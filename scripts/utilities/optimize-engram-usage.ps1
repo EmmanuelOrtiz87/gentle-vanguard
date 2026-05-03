@@ -12,6 +12,23 @@ $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $engramBin = Join-Path $scriptDir 'engram.exe'
 
+# Suppress stderr function
+function Invoke-EngramCommand {
+    param([string]$Command)
+    $output = ""
+    $errorOutput = ""
+    $process = Start-Process -FilePath $engramBin -ArgumentList $Command -NoNewWindow -Wait -RedirectStandardOutput "temp_out.txt" -RedirectStandardError "temp_err.txt" -PassThru
+    if (Test-Path "temp_out.txt") {
+        $output = Get-Content "temp_out.txt" -Raw
+        Remove-Item "temp_out.txt" -Force
+    }
+    if (Test-Path "temp_err.txt") {
+        $errorOutput = Get-Content "temp_err.txt" -Raw
+        Remove-Item "temp_err.txt" -Force
+    }
+    return $output
+}
+
 function Write-Status {
     param([string]$m) Write-Host "[OPTIMIZE] $m" -ForegroundColor Green
 }
@@ -38,20 +55,20 @@ if (-not (Test-Path $engramBin)) {
 
 # 1. Find and remove duplicate entries
 Write-Info "Checking for duplicate entries..."
-$duplicates = & $engramBin search "duplicate OR repeated" --project $ProjectName --limit 50 2>$null
+$duplicates = & $engramBin search "duplicate OR repeated" --project $ProjectName --limit 50 2>&1 | Where-Object { $_ -notmatch "Update available" }
 
 if ($duplicates) {
     Write-Info "Found potential duplicates. Analyzing..."
     # In real implementation, would parse and remove duplicates
     # For now, log the finding
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    & $engramBin save --title "Duplicate cleanup check" --content "Duplicate check run at $timestamp. Found entries needing review." --project $ProjectName 2>$null | Out-Null
+    & $engramBin save --title "Duplicate cleanup check" --content "Duplicate check run at $timestamp. Found entries needing review." --project $ProjectName 2>&1 | Where-Object { $_ -notmatch "Update available" } | Out-Null
 }
 
 # 2. Remove old entries (older than KeepRecentDays)
 Write-Info "Cleaning entries older than $KeepRecentDays days..."
 $oldDate = (Get-Date).AddDays(-$KeepRecentDays).ToString("yyyy-MM-dd")
-$oldEntries = & $engramBin search --project $ProjectName --before $oldDate --limit 100 2>$null
+$oldEntries = & $engramBin search --project $ProjectName --before $oldDate --limit 100 2>&1 | Where-Object { $_ -notmatch "Update available" }
 
 if ($oldEntries -and $AutoApply) {
     Write-Info "Removing old entries..."
