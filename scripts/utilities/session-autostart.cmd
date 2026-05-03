@@ -52,7 +52,17 @@ if defined SESSION_ID (
 
 REM 4. Optimizacion de Engram (si existe)
 if exist "%OPTIMIZE_SCRIPT%" (
-    echo [4/8] Running Engram optimization...
+    echo [4/8] Checking Engram version and updating if needed...
+echo [INFO] Checking for engram updates...
+engram --version 2>&1 | findstr /C:"Update available" >nul 2>&1
+if not errorlevel 1 (
+    echo [WARN] Engram update available, running update procedure...
+    powershell -ExecutionPolicy Bypass -File "%%~dp0update-engram.ps1" -Source tools-folder
+) else (
+    echo [OK] Engram is up to date
+)
+
+echo [5/8] Running Engram optimization...
     powershell -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_local"
     if errorlevel 1 (
         echo [WARNING] Engram optimization completed with warnings

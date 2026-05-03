@@ -4,20 +4,17 @@
       "enabled": true,
       "script": "tools/pre-process-input.ps1"
     },
-    "pre_commit": {
-      "enabled": true,
-      "script": "tools/pre-commit-hook.ps1",
-      "skip_on_flag": "--no-verify"
-    },
-    "post_merge": {
-      "enabled": true,
-      "script": "scripts/utilities/WORKFLOW-ORCHESTRATION/sync-after-merge.ps1"
-    },
     "post_session": {
       "enabled": true,
       "script": "tools/session-end-hook.ps1"
+    },
+    "pre_commit": {
+      "enabled": true,
+      "script": "tools/pre-commit-hook.ps1"
+    },
+    "post_merge": {
+      "enabled": true,
+      "script": "scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1"
     }
-  },
-  "version": "1.0",
-  "last_updated": "2026-05-02"
+  }
 }

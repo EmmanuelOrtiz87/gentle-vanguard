@@ -2,91 +2,37 @@ name: Autonomous Validation
 
 on:
   push:
-    branches: [ develop, main ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ develop, main ]
+    branches: [ main, master ]
   schedule:
-    - cron: '0 2 * * *'  # Daily at 2 AM
+    - cron: '0 10 * * 1'  # Weekly on Monday at 10:00 GMT-3
 
 jobs:
-  validate:
+  autonomous-validation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup PowerShell
         shell: pwsh
         run: |
           Install-Module -Name PowerShellGet -Force -AllowClobber
-      
-      - name: Validate PowerShell Scripts
+          Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+      - name: Run Comprehensive Validation
         shell: pwsh
         run: |
-          $scripts = Get-ChildItem -Path . -Filter *.ps1 -Recurse | Where-Object { $_.FullName -notmatch '\.git' }
-          $allPassed = $true
-          foreach ($script in $scripts) {
-            try {
-              $ast = [System.Management.Automation.Language.Parser]::ParseFile($script.FullName, [ref]$null, [ref]$null)
-              Write-Host "[OK] $($script.Name) - Syntax valid"
-            } catch {
-              Write-Host "[FAIL] $($script.Name) - Syntax error: $_"
-              $allPassed = $false
-            }
-          }
-          if (-not $allPassed) { exit 1 }
-      
-      - name: Validate JSON Files
+          ./scripts/utilities/WORKFLOW-ORCHESTRATION/comprehensive-validation.ps1 -Verbose
+
+      - name: Run Cross-Workspace Validation
         shell: pwsh
         run: |
-          $jsonFiles = Get-ChildItem -Path . -Filter *.json -Recurse | Where-Object { $_.FullName -notmatch '\.git' }
-          $allPassed = $true
-          foreach ($file in $jsonFiles) {
-            try {
-              $content = Get-Content $file.FullName -Raw | ConvertFrom-Json
-              Write-Host "[OK] $($file.Name) - Valid JSON"
-            } catch {
-              Write-Host "[FAIL] $($file.Name) - Invalid JSON: $_"
-              $allPassed = $false
-            }
-          }
-          if (-not $allPassed) { exit 1 }
-      
-      - name: Validate Markdown Documentation
-        shell: pwsh
-        run: |
-          $mdFiles = Get-ChildItem -Path . -Filter *.md -Recurse | Where-Object { $_.FullName -notmatch '\.git' }
-          $allPassed = $true
-          foreach ($file in $mdFiles) {
-            $content = Get-Content $file.FullName -Raw
-            $lines = $content.Split("`n").Count
-            if ($lines -lt 10) {
-              Write-Host "[WARN] $($file.Name) - Document too short ($lines lines)"
-            } else {
-              Write-Host "[OK] $($file.Name) - Valid ($lines lines)"
-            }
-          }
-      
-      - name: Check Directory Structure
-        shell: pwsh
-        run: |
-          $requiredDirs = @("config", "docs", "scripts", "skills", "tools")
-          foreach ($dir in $requiredDirs) {
-            if (Test-Path $dir) {
-              Write-Host "[OK] $dir - Exists"
-            } else {
-              Write-Host "[FAIL] $dir - Missing"
-              exit 1
-            }
-          }
-      
-      - name: Notify on Failure
-        if: failure()
-        uses: actions/github-script@v7
+          ./scripts/monitoring/cross-workspace-validator.ps1 -Fix
+
+      - name: Upload Validation Report
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          script: |
-            github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: '🚨 Autonomous Validation Failed',
-              body: `Validation failed on ${context.ref}\n\nSee [workflow run](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}) for details.`
-            })
+          name: validation-report
+          path: .session/reports/

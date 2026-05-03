@@ -23,7 +23,7 @@ pre-commit:
 commit-msg:
   commands:
     validate-conventional:
-      run: "powershell -NoProfile -Command \"& { $msg = Get-Content '{commit_msg_file}' -Raw; if ($msg -match '^(feat|fix|docs|chore|refactor|test|style|perf|build|ci|revert)(\\([a-z]+\\))?: .+') { Write-Host '[OK] Conventional commit' } else { Write-Host '[FAIL] Not conventional commit'; exit 1 }\""
+      run: powershell -NoProfile -Command "& { $msg = Get-Content '{commit_msg_file}' -Raw; if ($msg -match '^(feat|fix|docs|chore|refactor|test|style|perf|build|ci|revert)(\([a-z]+\))?: .+') { Write-Host '[OK] Conventional commit' } else { Write-Host '[FAIL] Not conventional commit'; exit 1 } }"
 
 post-commit:
   commands:

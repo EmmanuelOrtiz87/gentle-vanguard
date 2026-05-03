@@ -1,46 +1,13 @@
 ﻿{
-  "project": {
+  "workspace": {
     "name": "workspace-foundation",
-    "type": "workspace",
     "version": "1.0.0",
-    "description": "Gentleman Foundation - Workspace automation and AI agent tooling"
+    "type": "foundation",
+    "root": "."
   },
-  "structure": {
-    "config_dir": "config",
-    "docs_dir": "docs",
-    "scripts_dir": "scripts/utilities",
-    "skills_dir": "skills",
-    "tools_dir": "tools"
-  },
-  "validation": {
-    "required_dirs": [
-      "config",
-      "docs",
-      "scripts/utilities",
-      "skills",
-      "tools",
-      ".session/logs",
-      ".session/reports"
-    ],
-    "required_files": [
-      "config/hooks-config.json",
-      "config/workspace.config.json",
-      "README.md",
-      "AGENTS.md",
-      "CLAUDE.md"
-    ]
-  },
-  "governance": {
-    "documentation": {
-      "require_spanish_accents": true,
-      "require_code_block_lang": true,
-      "require_utf8_encoding": true,
-      "require_emojis": true
-    },
-    "git": {
-      "default_branch": "develop",
-      "commit_types": ["feat", "fix", "docs", "chore", "refactor"]
-    }
-  },
-  "last_updated": "2026-05-02"
+  "settings": {
+    "autoSave": true,
+    "contextEfficiencyTarget": 100,
+    "enableTelemetry": true
+  }
 }
