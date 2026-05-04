@@ -38,3 +38,4 @@ Transform raw development activity (tokens, sessions, judgments) into structured
 ## Adaptability
 If management requires new KPIs, update this schema and notify `AGENT-GOV` to adjust its analysis logic.
 
+

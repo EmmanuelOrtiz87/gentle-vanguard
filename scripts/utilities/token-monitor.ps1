@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Token Monitor - Real-time token consumption display
     
@@ -24,7 +24,7 @@
     Continuously monitors tokens, refreshing every 5 seconds
     
 .NOTES
-    Author: gentleman-programming
+    Author: workspace-foundation
     Version: 1.0
 #>
 

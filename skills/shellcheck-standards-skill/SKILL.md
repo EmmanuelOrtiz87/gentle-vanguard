@@ -1,4 +1,4 @@
-﻿---
+---
 name: shellcheck-standards
 description: >
   Shell script quality and portability standards.
@@ -108,3 +108,4 @@ $uri = "https://example.com/path"
 | `$?` without check | Use `if command; then` |
 | Global vars in functions | Add `local` keyword |
 | eval usage | Use arrays or parameter expansion |
+

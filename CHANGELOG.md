@@ -41,15 +41,15 @@ This marks the first official, stable release of Gentleman Foundation. All previ
 - Desktop app, terminal, and IDE integration available
 - 140K+ GitHub stars, 6.5M monthly developers
 
-#### Gentleman-Skills Integration (v2.2.0)
-- Automatic Gentleman-Skills repository installation
+#### Workspace-Skills Integration (v2.2.0)
+- Automatic workspace-skills repository installation
 - 20+ curated skills for AI agents (Angular, React, Next.js, TypeScript, etc.)
 - Auto-detection and installation of skills for available AI agent
 - Skills for: Frontend, Backend/AI, Testing, Workflow
 - Bootstrap integration with auto-install for Claude, OpenCode, Gemini, Cursor
 
-#### Gentle-AI Integration (v2.2.0)
-- Automatic Gentle-AI installation on project creation
+#### Native AI Integration (v2.2.0)
+- Automatic native AI tooling installation on project creation
 - AI ecosystem configurator with SDD workflow
 - Support for 8 AI agents (Claude Code, OpenCode, Gemini CLI, Cursor, etc.)
 - Persistent memory, skills system, and MCP servers

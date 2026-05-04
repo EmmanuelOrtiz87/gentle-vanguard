@@ -3,7 +3,6 @@
   "detailedOnStartup": false,
   "runDemoOnFull": false,
   "primaryRuntime": "opencode",
-  "autoStartGentleAi": false,
   "fallbackToStack": true,
   "enableIdleAutoClose": true,
   "idleTimeoutMinutes": 60,
@@ -20,7 +19,7 @@
     "compactStartThreshold": 50
   },
   "deprecated": {
-    "note": "gentle-ai, GGA, Gentleman-Skills are DEPRECATED. Use opencode + 7-dimension review."
+    "note": "Use opencode + 7-dimension review for native AI workflow."
   },
   "contextEfficiency": {
     "targetPercentage": 70,

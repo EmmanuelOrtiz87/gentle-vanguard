@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Enforce Response Mode - Forces summarized responses to reduce token usage
     
@@ -24,7 +24,7 @@
     Enforces maximum 5 lines per response
     
 .NOTES
-    Author: gentleman-programming
+    Author: workspace-foundation
     Version: 1.0
 #>
 

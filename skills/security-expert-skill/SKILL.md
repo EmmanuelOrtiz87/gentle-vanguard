@@ -1,4 +1,4 @@
-﻿---
+---
 name: security-expert
 description: >
   AI-powered security assistant for pre-commit validation, security audits, and secure coding.
@@ -216,3 +216,4 @@ See `references/security-patterns.md` for:
 - Encryption best practices
 - API security checklist
 - Dependency management
+

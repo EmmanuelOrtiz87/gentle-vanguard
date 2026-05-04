@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Post-Task Cleanup - Limpieza automtica al finalizar tareas de subagentes
     
@@ -16,7 +16,7 @@
     .\tools\post-task-cleanup.ps1 -TaskName "Corregir bug" -AgentType "DEV"
     
 .NOTES
-    Author: gentleman-programming
+    Author: workspace-foundation
     Version: 1.0
     Se invoca automticamente desde auto-delegation-router.ps1
 #>

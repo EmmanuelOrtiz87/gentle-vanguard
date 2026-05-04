@@ -19,7 +19,7 @@
     .\config-validator.agent.ps1 -ConfigFile opencode.json -AutoFix
     
 .NOTES
-    Author: gentleman-programming
+    Author: workspace-foundation
     Version: 1.0.0
 #>
 

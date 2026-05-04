@@ -1,4 +1,4 @@
-﻿---
+---
 name: cloud-agent-connector
 description: >
   Standards and utilities for connecting to external cloud AI agents (Difi, Azure, OpenAI, Anthropic, Gemini, Ollama, and Bedrock via signed proxy).
@@ -83,3 +83,4 @@ invoke-cloud-agent.ps1 -ListProviders    # Show all providers
 invoke-cloud-agent.ps1 -TestConnection    # Test current provider
 invoke-cloud-agent.ps1 -Config           # Interactive config
 ```
+

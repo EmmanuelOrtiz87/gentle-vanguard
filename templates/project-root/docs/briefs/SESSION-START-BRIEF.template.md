@@ -8,7 +8,7 @@
 - Git state:
 - Orchestrator:
 - Engram:
-- GGA:
+- native:
 
 ## Objective
 

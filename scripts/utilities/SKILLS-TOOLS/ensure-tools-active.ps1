@@ -445,7 +445,7 @@ function Confirm-ToolAfterInstall {
         }
     }
 
-    # For bash-installed tools (e.g. GGA): check common install locations
+    # For bash-installed tools: check common install locations
     if ($Tool.checkCommand -and $Tool.install -and
         $installText -like '*bash*install.sh*') {
         $pathSep = Get-PathSeparator

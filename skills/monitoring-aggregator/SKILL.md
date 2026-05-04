@@ -483,3 +483,4 @@ if ($anomaly.IsAnomaly) {
 
 **Issue**: "Forecast unreliable"
 - **Solution**: Increase data collection period
+

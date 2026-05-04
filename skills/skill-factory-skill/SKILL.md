@@ -70,3 +70,4 @@ Use `scripts/utilities/sync-agent-instructions.ps1` to propagate changes.
 - **Duplicate Detection:** Before creating a skill, search `skills/` for similar names or keywords.
 - **Naming Convention:** Use `kebab-case` for skill directories and `PascalCase` for internal references.
 - **Validation:** Every new skill must pass `gf validate` before being committed.
+

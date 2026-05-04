@@ -16,10 +16,9 @@
 -  Bloquea pushes directos a `main` y `develop`
 -  Requiere ramas con prefijo: `feature/`, `bugfix/`, `chore/`, `hotfix/`, `release/`
 -  Valida que PR base sea correcta segn el tipo de rama
--  Ejecuta validaciónes adicionales (gga, governance, homologation)
+-  Ejecuta validaciónes adicionales (governance, homologation)
 
 #### 2. **Pre-Commit Hook** (`scripts/git-hooks/pre-commit`)
--  Ejecuta `gga run` antes de cada commit
 -  Valida cdigo y polticas de revisión
 
 #### 3. **Validacin GitFlow** (`scripts/diagnostics/validate-gitflow.ps1`)

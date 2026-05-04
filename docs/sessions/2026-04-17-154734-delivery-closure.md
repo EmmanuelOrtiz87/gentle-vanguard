@@ -18,7 +18,7 @@ Branch: main
 - Upstream branch: origin/main
 - Commits ahead: 0
 - Commits behind: 0
-- Latest commit: e683a36223211aa8767acd88468b58d2fa6a6fab fix(agnostic): make GGA/Gentle-AI/Gentleman-Skills optional integrations
+- Latest commit: e683a36223211aa8767acd88468b58d2fa6a6fab fix(agnostic): make optional integrations configurable
 
 ## 3. Pending Actions
 

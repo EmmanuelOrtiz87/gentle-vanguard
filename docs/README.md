@@ -98,8 +98,7 @@
 
 ## External Resources
 
-- [Gentleman-Skills](https://github.com/Gentleman-Programming/Gentleman-Skills)
-- [Engram](https://github.com/Gentleman-Programming/engram)
+- [Engram](https://github.com/workspace-foundation/engram)
 
 | [skills/](../skills/) | Review skills for each dimension (edit SKILL.md to customize) |
 | [scripts/hooks/](../scripts/hooks/) | Automated check scripts for each review dimension |

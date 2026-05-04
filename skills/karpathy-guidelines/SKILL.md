@@ -96,3 +96,4 @@ When active, this skill:
 - Original: https://github.com/forrestchang/andrej-karpathy-skills
 - Andrej Karpathy's post: https://x.com/karpathy/status/2015883857489522876
 - Foundation integration: See judgment-day-orchestrator.ps1, failure-learning-system.ps1
+

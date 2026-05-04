@@ -1,4 +1,4 @@
-﻿---
+---
 name: django-drf-skill
 description: >
   Django REST Framework patterns: ViewSets, Serializers, Filters, Permissions.
@@ -213,3 +213,4 @@ def custom_exception_handler(exc, context):
 | FilterSet | Query filtering |
 | Permission | Access control |
 | Pagination | Response pagination |
+

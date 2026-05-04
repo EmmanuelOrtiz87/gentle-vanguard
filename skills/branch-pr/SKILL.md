@@ -5,7 +5,7 @@ description: >
   Trigger: When creating a pull request, opening a PR, or preparing changes for review.
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: workspace-foundation
   versión: "2.0"
 ---
 
@@ -202,4 +202,5 @@ gh pr create --title "feat(scope): description" --body "Closes #N"
 # Add type label to PR
 gh pr edit <pr-number> --add-label "type:feature"
 ```
+
 

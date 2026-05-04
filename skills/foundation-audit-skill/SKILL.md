@@ -1,4 +1,4 @@
-﻿---
+---
 name: foundation-audit-skill
 description: >
   Foundation audit and validation sweep. Detects duplicates, broken links, missing files,
@@ -129,3 +129,4 @@ To use audit scripts in any environment without Foundation repo:
 - Default: Human-readable output
 - `-Output json`: JSON for CI/CD
 - `-Output markdown`: Markdown report
+

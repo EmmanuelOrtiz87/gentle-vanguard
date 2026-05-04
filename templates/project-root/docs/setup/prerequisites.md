@@ -13,7 +13,6 @@
 ## External Tools
 
 - `engram`
-- `gga`
 - project skills or rules
 
 ## Workspace Skills
@@ -35,5 +34,4 @@ git --version
 pwsh --version
 go version
 engram --help
-gga version
 ```

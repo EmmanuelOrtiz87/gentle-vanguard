@@ -6,7 +6,7 @@ description: >
   "skill factory", "generate skill", "skill template"
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: workspace-foundation
   versión: "2.0"
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task
 ---
@@ -54,7 +54,7 @@ description: >
   Trigger: {When the AI should load this skill}.
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: workspace-foundation
   versión: "1.0"
 ---
 
@@ -117,7 +117,7 @@ metadata:
 | `name` | Yes | Skill identifier (lowercase, hyphens) |
 | `description` | Yes | What + Trigger in one block |
 | `license` | Yes | Always `Apache-2.0` |
-| `metadata.author` | Yes | `gentleman-programming` |
+| `metadata.author` | Yes | `workspace-foundation` |
 | `metadata.versión` | Yes | Semantic versión as string |
 
 ---
@@ -167,4 +167,5 @@ After creating the skill, add it to `SKILL_INDEX.md`:
 - **Foundation**: See `~/.gentleman/` for global installation
 - **Skill Index**: See [SKILL_INDEX.md](../SKILL_INDEX.md) for all skills
 - **Documentation**: See [docs/](../../docs/) for guides
+
 

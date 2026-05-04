@@ -1,4 +1,4 @@
-﻿---
+---
 name: testing-strategy-skill
 description: >
   Testing strategy: when to test, what to test, test pyramid, coverage targets.
@@ -254,3 +254,4 @@ Angular:
 | Angular coverage | `npm test -- --coverage` |
 | Run file | `npm test -- file.spec.ts` |
 | Watch mode | `npm test` |
+
