@@ -5,7 +5,7 @@ description: >
   Trigger: "script", "automation", "hook", "startup", "auto-init", "orchestrator script", "powershell", "bash".
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: workspace-foundation
   versión: "1.0"
 ---
 
@@ -132,4 +132,5 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\valida
 # On-demand orchestration fallback (if available)
 .\scripts\utilities\stack-on-demand.ps1 -Action activate
 ```
+
 

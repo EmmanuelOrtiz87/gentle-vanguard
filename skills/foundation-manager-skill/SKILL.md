@@ -57,7 +57,7 @@ gf tools
 ```
 
 Shows installation status for:
-- `gg` - Gentleman Guardian Angel
+- `gg` - Gentleman 
 - `engram` - Engram Memory
 
 ## Update Workflow
@@ -152,4 +152,5 @@ gf update-all     # Update everything
 gf validate       # Verify after update
 gf tools          # Check tool status
 ```
+
 

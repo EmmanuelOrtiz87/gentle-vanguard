@@ -24,7 +24,7 @@
       "requests": 0,
       "tokensEstimated": 0
     },
-    "gga": {
+    "": {
       "invocations": 0,
       "commandsExecuted": []
     }
@@ -51,3 +51,4 @@
     "errors": []
   }
 }
+

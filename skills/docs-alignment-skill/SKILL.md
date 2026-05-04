@@ -1,4 +1,4 @@
-﻿---
+---
 name: docs-alignment
 description: >
   Keep documentation in sync with code and workflow changes.
@@ -55,3 +55,4 @@ Code: --cache-path   was renamed
 # BAD  docs reference non-existent script
 README: "run setup.sh"   setup.sh doesn't exist
 ```
+

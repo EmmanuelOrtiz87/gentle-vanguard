@@ -6,7 +6,7 @@ description: >
   "release notes", "hotfix", "deployment readiness", "semver".
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: workspace-foundation
   versión: "1.0"
 ---
 
@@ -72,4 +72,5 @@ Keep hotfix scope minimal. No opportunistic refactors.
 - Mention risk areas and migrations explicitly
 - Link to specs, ADRs, or issue IDs when helpful
 - Keep notes short enough to scan quickly
+
 

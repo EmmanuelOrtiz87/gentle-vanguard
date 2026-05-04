@@ -279,3 +279,4 @@ document.documentElement.classList.toggle('dark');
 | Hover | `hover:bg-blue-600` |
 | Focus | `focus:ring-2` |
 | Group hover | `group-hover:opacity-100` |
+

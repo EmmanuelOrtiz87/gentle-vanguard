@@ -195,3 +195,4 @@ def transfer_funds(db: Session, from_id: int, to_id: int, amount: Decimal):
 | Transaction | `try: ... except: db.rollback()` |
 | Join | `db.query(A, B).join(B, A.b_id == B.id)` |
 | Count | `db.query(func.count(Model.id)).scalar()` |
+

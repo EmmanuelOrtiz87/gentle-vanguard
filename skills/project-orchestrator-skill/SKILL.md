@@ -297,7 +297,7 @@ See: `skills/code-review-orchestrator-skill/SKILL.md` for full implementation.
 
 ## GUARDIAN FALLBACK PROTOCOL
 
-GGA (Gentleman Guardian Angel) serves as **optional fallback** when Foundation cannot proceed autonomously.
+ (Gentleman ) serves as **optional fallback** when Foundation cannot proceed autonomously.
 
 ### Architecture
 
@@ -308,7 +308,7 @@ ORCHESTRATOR (Primary - Always Active)
     
      Blocked/Unknown?  Try self-healing
     
-     Still blocked?  GGA FALLBACK (Optional Guardian)
+     Still blocked?   FALLBACK (Optional Guardian)
             
              Code review assistance
              decisión support
@@ -320,19 +320,19 @@ ORCHESTRATOR (Primary - Always Active)
 
 | Condition | Action |
 |-----------|--------|
-| Unknown error blocks progress | Invoke GGA for diagnosis |
-| Complex decisión needed | GGA reasoning assist |
-| PR needs final review | `gga run --pr-mode` |
-| Code review assistance | `invoke-ai-review.ps1` (native) OR `gga run` (fallback) |
-| Commit validation | GGA commit-msg hook |
+| Unknown error blocks progress | Invoke  for diagnosis |
+| Complex decisión needed |  reasoning assist |
+| PR needs final review | ` run --pr-mode` |
+| Code review assistance | `invoke-ai-review.ps1` (native) OR ` run` (fallback) |
+| Commit validation |  commit-msg hook |
 
 ### Implementation
 
 ```powershell
-# Check GGA availability
-function Test-GgaAvailable {
-    $gga = Get-Command gga -ErrorAction SilentlyContinue
-    return ($null -ne $gga)
+# Check  availability
+function Test-Available {
+    $ = Get-Command  -ErrorAction SilentlyContinue
+    return ($null -ne $)
 }
 
 # Fallback decisión tree
@@ -341,13 +341,13 @@ if (-not $canProceed) {
     $healed = Invoke-SelfHealing -Context $context
     
     if (-not $healed) {
-        # Step 2: GGA fallback (optional)
-        if (Test-GgaAvailable) {
-            Write-Host "[ORCHESTRATOR] Invoking GGA guardian..."
-            gga run --ci
+        # Step 2:  fallback (optional)
+        if (Test-Available) {
+            Write-Host "[ORCHESTRATOR] Invoking  guardian..."
+             run --ci
         } else {
             # Step 3: Manual intervention flag
-            Write-Warn "Blocked: GGA unavailable - manual intervention required"
+            Write-Warn "Blocked:  unavailable - manual intervention required"
             Flag-ForManualReview -Context $context
         }
     }
@@ -361,7 +361,7 @@ if (-not $canProceed) {
 | project-orchestrator | **YES** | Always active |
 | invoke-ai-review.ps1 | **YES** | Native replacement |
 | code-review-orchestrator | **YES** | 7-dimension review |
-| **GGA (gga)** | **NO** | **Optional guardian** |
+| ** ()** | **NO** | **Optional guardian** |
 
 ### Skill Loading Order
 
@@ -370,12 +370,12 @@ if (-not $canProceed) {
 2. session-workflow             On session start/end
 3. context-engineering          On context operations
 4. code-review-orchestrator     On review requests
-5. guardian-fallback (GGA)      ONLY when blocked (optional)
+5. guardian-fallback ()      ONLY when blocked (optional)
 ```
 
 ### Key Principle
 
-> **Foundation operates fully without GGA.** GGA is enhancement, not requirement.
+> **Foundation operates fully without .**  is enhancement, not requirement.
 
 See: `skills/guardian-fallback-skill/SKILL.md` for full protocol.
 
@@ -900,4 +900,5 @@ Run `mem_save` with this summary.
 ---
 
 **THIS SKILL IS ALWAYS ACTIVE. Do not wait to be triggered.**
+
 

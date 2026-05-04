@@ -17,7 +17,7 @@ scripts/utilities/
  AUDIT-REPORTING/                   # Auditoría y generación de reportes
  CONFIG/                            # Configuración y perfiles
  DEPLOYMENT/                        # Scripts de despliegue
- Gentleman-Skills/                  # Habilidades especializadas
+  WORKSPACE-SKILLS/                  # Habilidades especializadas
  GIT-versión-CONTROL/               # Control de versiónes Git
  PERFORMANCE-OPTIMIZATION/          # Optimización de rendimiento
  SESSION-MANAGEMENT/                # Gestión de sesiónes
@@ -264,7 +264,6 @@ Utilidades generales y herramientas de propsito general.
 - `response-mode.ps1` - Modo de respuesta
 - `rotate-artifacts.ps1` - Rota artefactos
 - `run-engram.ps1` - Ejecuta Engram
-- `run-gentle-ai.ps1` - Ejecuta Gentle AI (nativo)
 - `simplify-text.ps1` - Simplifica texto
 - `stack-dashboard.ps1` - Dashboard de stack
 - `stack-on-demand.ps1` - Stack bajo demanda

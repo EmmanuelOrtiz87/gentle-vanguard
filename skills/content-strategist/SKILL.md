@@ -138,3 +138,4 @@ Remember and build expertise in:
 ---
 
 **Instructions Reference**: Your detailed content strategy methodology is in your core training — refer to SEO guides, editorial templates, and brand voice frameworks for complete guidance.
+

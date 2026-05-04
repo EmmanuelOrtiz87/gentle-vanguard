@@ -81,7 +81,7 @@
                                       Install-Skills
                                               
                                                Project-Skills
-                                               Gentleman-Skills
+                                                Workspace-Skills
                                      
                                       Setup-Hooks
                                               
@@ -97,7 +97,7 @@
          AI-Ecosystem
                    
                     Native Runtime Router (SDD Workflow)
-                    Gentleman-Skills (Framework Patterns)
+                     Workspace-Skills (Framework Patterns)
                     Engram (Persistent Memory)
                             
                              docs/code-reviews/
@@ -578,8 +578,8 @@ Rotation is automated on `end-session` and `day-end-closure`.
 
     
 
-    BEFORE:  "{workspaceRoot}/tools/Gentleman-Skills"
-    AFTER:    "C:/Projects/my-workspace/tools/Gentleman-Skills"
+    BEFORE:  "{workspaceRoot}/tools/Workspace-Skills"
+    AFTER:    "C:/Projects/my-workspace/tools/Workspace-Skills"
 ```
 
 ---

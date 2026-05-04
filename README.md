@@ -53,7 +53,7 @@ Foundation is a governance-first development stack that unifies:
 
 ---
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 Foundation uses a layered, modular architecture with on-demand activation:
 
@@ -62,28 +62,28 @@ Foundation uses a layered, modular architecture with on-demand activation:
 │                     AI Agent Layer                          │
 │  (OpenCode, Claude Code, Cursor, etc.)                     │
 └───────────────────────────┬─────────────────────────────────┘
-                            │ Integrates with
+                             │ Integrates with
 ┌───────────────────────────▼─────────────────────────────────┐
 │                  Orchestration Layer                        │
 │  • Project Orchestrator (wf.ps1)                           │
 │  • Sub-agent delegation                                    │
 │  • Context management                                      │
 └───────────────────────────┬─────────────────────────────────┘
-                            │ Coordinates
+                             │ Coordinates
 ┌───────────────────────────▼─────────────────────────────────┐
 │                    Skill Layer                              │
 │  • 25+ Curated Skills (Angular, React, Go, Python, etc.)   │
 │  • 7D Validation (Security, Quality, Architecture, etc.)    │
 │  • Adversarial Judgment Protocol                           │
 └───────────────────────────┬─────────────────────────────────┘
-                            │ Enforces
+                             │ Enforces
 ┌───────────────────────────▼─────────────────────────────────┐
 │                  Governance Layer                           │
 │  • SDD (Specification-Driven Development)                   │
 │  • Persistent Memory (Engram)                               │
 │  • Automated Hooks (pre-commit, pre-push)                   │
 └───────────────────────────┬─────────────────────────────────┘
-                            │ Runs on
+                             │ Runs on
 ┌───────────────────────────▼─────────────────────────────────┐
 │                  Infrastructure Layer                       │
 │  • Cross-platform (Windows, Linux, macOS)                   │
@@ -92,7 +92,7 @@ Foundation uses a layered, modular architecture with on-demand activation:
 └─────────────────────────────────────────────────────────────┘
 ```
 
-Refer to [docs/reference/ARCHITECTURE.md](docs/reference/ARCHITECTURE.md) for full dependency details.
+Refer to [docs/reference/ARCHITECTURE.md](docs/reference/ARCHITECTURE.md) for full details.
 
 ---
 
@@ -322,23 +322,24 @@ Each project uses a `.foundation` configuration file:
 | **API Design** | [API] | REST, validation, versioning | Clear contracts |
 | **Git Flow** | [G] | Commits, branches, hooks | Ordered workflow |
 
-### Review Flow Diagrams
+### Review Flow
+
 ```
-                           AUTOMATIC (Pre-commit)                               
+                            AUTOMATIC (Pre-commit)                               
 
-     git commit → pre-commit hook → Fast scan (Secrets + Quality)     
+      git commit → pre-commit hook → Fast scan (Secrets + Quality)     
 
-                         Critical?         Report saved      Allow               
-                         [X] BLOCK     docs/reviews/    [OK] Proceed         
+                          Critical?         Report saved      Allow               
+                          [X] BLOCK     docs/reviews/    [OK] Proceed         
 
-                             MANUAL (On Demand)                                
+                              MANUAL (On Demand)                                
 
-     wf review              --> Full review (all 7 dimensions)                
-     wf review security     --> Security only                                 
-     wf review quality      --> Quality only                                   
-     wf review quick       --> Fast scan (~30s)                              
-     wf review --report    --> Generate detailed report                       
-     wf review --track     --> Export issues to CSV                           
+      wf review              --> Full review (all 7 dimensions)                
+      wf review security     --> Security only                                 
+      wf review quality      --> Quality only                                   
+      wf review quick       --> Fast scan (~30s)                              
+      wf review --report    --> Generate detailed report                       
+      wf review --track     --> Export issues to CSV                           
 ```
 
 ---

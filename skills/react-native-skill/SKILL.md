@@ -1,4 +1,4 @@
-﻿---
+---
 name: react-native
 description: React Native mobile patterns, platform-specific code
 when-to-use: When working on React Native mobile app code
@@ -246,3 +246,4 @@ Component/
 -  Mixing business logic with UI - keep core/ pure
 -  Ignoring TypeScript errors - fix them
 -  Large components - split into smaller pieces
+

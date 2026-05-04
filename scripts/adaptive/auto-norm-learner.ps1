@@ -15,7 +15,7 @@
     .\auto-norm-learner.ps1 -Trigger session-start
     
 .NOTES
-    Author: gentleman-programming
+    Author: workspace-foundation
     Version: 1.0.0
 #>
 

@@ -35,7 +35,7 @@
       "invocations": 0,
       "commandsExecuted": 0
     },
-    "gga": {
+    "": {
       "invocations": 0,
       "hooksExecuted": 0,
       "reviewsCompleted": 0
@@ -61,3 +61,4 @@
     "trends": []
   }
 }
+

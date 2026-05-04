@@ -274,7 +274,7 @@ Closure report guardado en `docs/sessions/` con:
 ### "Qu pasa si alguien no sigue el proceso?"
 
 > "El workflow es permisivo  no bloquea.
-> Pero el orchestrator y el GGA lanzan advertencias que quedan en logs.
+> Pero el orchestrator y el native lanzan advertencias que quedan en logs.
 > A nivel de PR, si la review generada no pasa los puntos de governance, el revisor lo ve."
 
 ### "Funciona con nuestro stack actual?"

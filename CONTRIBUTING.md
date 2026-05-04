@@ -1,4 +1,4 @@
-﻿# Contributing to Workspace Foundation
+# Contributing to Workspace Foundation
 
 Thank you for your interest in contributing!
 
@@ -18,7 +18,7 @@ git clone https://github.com/YOUR_USERNAME/workspace-foundation.git
 cd workspace-foundation
 
 # Add upstream remote
-git remote add upstream https://github.com/Gentleman-Programming/workspace-foundation.git
+git remote add upstream https://github.com/EmmanuelOrtiz87/workspace-foundation.git
 ```
 
 ### 2. Create a Branch

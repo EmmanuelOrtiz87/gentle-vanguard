@@ -14,8 +14,7 @@ param(
 $ErrorActionPreference = 'Stop'
 
 # Origin Configuration (Git Provider Agnostic)
-$ENGRAM_REPO_URL = "https://github.com/Gentleman-Programming/engram.git"
-$SKILLS_REPO_URL = "https://github.com/Gentleman-Programming/Gentleman-Skills.git"
+$ENGRAM_REPO_URL = "https://github.com/workspace-foundation/engram.git"
 
 function Write-Step { param([string]$msg) Write-Host "`n>> $msg" -ForegroundColor Cyan }
 function Write-Success { param([string]$msg) Write-Host "   OK: $msg" -ForegroundColor Green }

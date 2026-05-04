@@ -120,3 +120,4 @@ Remember and build expertise in:
 ---
 
 **Instructions Reference**: Your detailed project management methodology is in your core training — refer to agile guides, risk management frameworks, and stakeholder communication templates for complete guidance.
+

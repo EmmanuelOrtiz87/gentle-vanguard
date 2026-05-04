@@ -1,4 +1,4 @@
-﻿---
+---
 name: testing-coverage
 description: >
   Test coverage requirements for script behavior changes.
@@ -78,3 +78,4 @@ Describe "Get-Config" {
 | New function | 80% |
 | Bug fix | Regression test |
 | Config change | Smoke test |
+

@@ -22,7 +22,7 @@ Workspace Foundation is an agnostic development infrastructure platform designed
 ## Impact on Development Process
 Foundation transforms a manual, error-prone process into an automated "software factory":
 1. **Start:** Developer runs `bootstrap` and gets all tools.
-2. **Development:** AI agent has access to `Gentleman-Skills` to guide the developer.
+2. **Development:** AI agent has access to native workspace skills to guide the developer.
 3. **Closure:** System validates, documents, and uploads code without tedious manual intervention.
 
 ## Disadvantages / Challenges

@@ -62,7 +62,7 @@
     {
       "type": "script",
       "path": "scripts/utilities/invoke-ai-review.ps1",
-      "description": "GGA-Native AI Review - Multi-provider code review with caching"
+      "description": "-Native AI Review - Multi-provider code review with caching"
     },
     {
       "type": "hook",
@@ -82,7 +82,7 @@
     {
       "type": "config",
       "path": "config/ai-review.example.json",
-      "description": "AI Review Config Template (GGA-native)"
+      "description": "AI Review Config Template (-native)"
     },
     {
       "type": "guide",
@@ -111,8 +111,8 @@
     },
     {
       "type": "guide",
-      "path": "docs/reference/GGA-ABSORPTION-PLAN.md",
-      "description": "GGA Native Integration Plan"
+      "path": "docs/reference/-ABSORPTION-PLAN.md",
+      "description": " Native Integration Plan"
     },
     {
       "type": "skill",
@@ -147,32 +147,32 @@
     {
       "type": "skill",
       "path": "skills/commit-hygiene-skill",
-      "description": "Commit Hygiene (GGA-native)"
+      "description": "Commit Hygiene (-native)"
     },
     {
       "type": "skill",
       "path": "skills/docs-alignment-skill",
-      "description": "Docs Alignment (GGA-native)"
+      "description": "Docs Alignment (-native)"
     },
     {
       "type": "skill",
       "path": "skills/shellcheck-standards-skill",
-      "description": "Shell Standards (GGA-native)"
+      "description": "Shell Standards (-native)"
     },
     {
       "type": "skill",
       "path": "skills/testing-coverage-skill",
-      "description": "Testing Coverage (GGA-native)"
+      "description": "Testing Coverage (-native)"
     },
     {
       "type": "skill",
       "path": "skills/guardian-fallback-skill",
-      "description": "Guardian Fallback - GGA as optional secondary skill"
+      "description": "Guardian Fallback -  as optional secondary skill"
     },
     {
       "type": "guide",
       "path": "docs/guides/GUARDIAN-FALLBACK-PROTOCOL.md",
-      "description": "Guardian Fallback Protocol - When and how to invoke GGA as fallback"
+      "description": "Guardian Fallback Protocol - When and how to invoke  as fallback"
     }
   ],
   "breakingChanges": [],
@@ -199,3 +199,4 @@
     "Foundation operates with Opencode + judgment-day for code review"
   ]
 }
+

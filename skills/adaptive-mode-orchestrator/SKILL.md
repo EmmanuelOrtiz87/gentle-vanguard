@@ -6,7 +6,7 @@ description: >
   de retroalimentacin (QA  DEV  QA) y ejecuta rollback automtico ante fallos crticos.
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: workspace-foundation
   versión: "1.0"
   status: "ACTIVE"
   priority: "CRITICAL"
@@ -312,4 +312,5 @@ Con rollback automtico si seguridad falla
 **Estado**: ACTIVE
 **Versin**: 1.0
 **ltima actualizacin**: 2026-04-23
+
 

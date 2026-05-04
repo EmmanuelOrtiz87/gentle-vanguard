@@ -123,7 +123,7 @@ El **GitFlow Orchestrator Skill** acta como un maestro/tutor que:
 
 **Caractersticas**:
 - Ejecuta validacin de GitFlow automticamente
-- Ejecuta validaciónes de cdigo (gga)
+- Ejecuta validaciónes de cdigo ()
 - Ejecuta validaciónes de governance
 - Ejecuta validaciónes de homologation
 - Proporciona mensajes claros y accionables
@@ -136,7 +136,7 @@ git push
   
 pre-push hook ejecuta:
   1. validate-gitflow.ps1 (valida rama)
-  2. gga run (valida cdigo)
+  2.  run (valida cdigo)
   3. validate-script-governance.ps1 (valida governance)
   4. homologate-workspace.ps1 (valida homologation)
   
@@ -208,7 +208,7 @@ Si hay error  push bloqueado + mensaje de ayuda
                           Ejecuta          
                           validaciónes:    
                            GitFlow        
-                           Cdigo (GGA)   
+                           Cdigo ()   
                            Governance     
                            Homologation   
                          
@@ -382,7 +382,7 @@ Script muestra:
    git commit -m "descripcin"
    
    Pre-commit hook valida:
-    Cdigo con GGA
+    Cdigo con 
     Polticas de revisión
    
    Si OK  commit permitido
@@ -395,7 +395,7 @@ Script muestra:
    
    Pre-push hook valida:
     GitFlow (rama, base)
-    Cdigo (GGA)
+    Cdigo ()
     Governance
     Homologation
    
@@ -497,4 +497,5 @@ El desarrollador ahora tiene un **maestro/tutor** que:
 - Lo previene de cometer errores
 - Lo ayuda a entender por qu algo fue rechazado
 - Lo automatiza tareas repetitivas
+
 

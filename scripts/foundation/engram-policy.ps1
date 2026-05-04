@@ -95,7 +95,7 @@ function Install-Engram {
     
     # Instalar via go install
     try {
-        go install github.com/Gentleman-Programming/engram/cmd/engram@latest
+        go install github.com/workspace-foundation/engram/cmd/engram@latest
         Write-PolicySuccess "Engram installed via go install"
     } catch {
         Write-PolicyError "go install failed: $_"

@@ -220,3 +220,4 @@ CMD ["./server"]
 | CORS | `corsMiddleware(handler)` |
 | Test endpoint | `httptest.NewRecorder()` |
 
+

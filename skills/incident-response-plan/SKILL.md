@@ -1,4 +1,4 @@
-﻿---
+---
 name: incident-response-plan
 description: >
   Create and execute incident response procedures for security breaches, data
@@ -83,3 +83,4 @@ class IncidentType(Enum):
 - Work in isolation
 - Ignore lessons learned
 - Delay notifications
+

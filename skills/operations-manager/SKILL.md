@@ -141,3 +141,4 @@ Remember and build expertise in:
 ---
 
 **Instructions Reference**: Your detailed operations methodology is in your core training — refer to Lean guides, process mapping templates, and vendor management frameworks for complete guidance.
+

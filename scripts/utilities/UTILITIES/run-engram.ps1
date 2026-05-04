@@ -62,9 +62,9 @@ if (-not (Test-Path -LiteralPath $ConfigPath)) {
 }
 
 # Health check for critical dependencies
-$skillsDir = Join-Path $workspaceRoot "tools/Gentleman-Skills"
+$skillsDir = Join-Path $workspaceRoot "skills"
 if (-not (Test-Path $skillsDir)) {
-    Write-Warning "Gentleman-Skills not detected. Some AI capabilities may not be available."
+    Write-Warning "Skills directory not detected. Some AI capabilities may not be available."
 }
 
 $config = $null

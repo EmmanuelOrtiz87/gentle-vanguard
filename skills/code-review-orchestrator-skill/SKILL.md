@@ -378,11 +378,11 @@ Edit `configs/review-config.json`:
 
 ### Overview
 
-**Judgment Day** is a foundation-native capability that complements GGA pre-commit reviews with deep pre-merge adversarial validation.
+**Judgment Day** is a foundation-native capability that complements  pre-commit reviews with deep pre-merge adversarial validation.
 
-### GGA vs Judgment Day
+###  vs Judgment Day
 
-| Aspect | GGA | Judgment Day |
+| Aspect |  | Judgment Day |
 |--------|-----|--------------|
 | **Trigger** | Pre-commit | Pre-merge |
 | **Mode** | Single reviewer | Two parallel judges |
@@ -392,7 +392,7 @@ Edit `configs/review-config.json`:
 ### Workflow
 
 ```
-git commit > GGA > Block critical issues
+git commit >  > Block critical issues
                                   
                                   
                          Significant work ready for merge
@@ -423,4 +423,5 @@ wf agent QA "judgment day on src/features/auth"
 ```
 
 See: `skills/multi-agent-registry/SKILL.md` - AGENT-QA section
+
 

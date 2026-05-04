@@ -51,8 +51,8 @@ cd C:\foundation
 ### Option B: Manual
 
 ```powershell
-# 1. Create foundation directory
-New-Item -ItemType Directory -Path "$env:USERPROFILE\.gentleman" -Force
+# Create foundation directory
+New-Item -ItemType Directory -Path "$env:USERPROFILE\.foundation" -Force
 
 # 2. Copy skills from repository
 # (Clone repo and copy skills folder)
@@ -60,17 +60,16 @@ New-Item -ItemType Directory -Path "$env:USERPROFILE\.gentleman" -Force
 # 3. Add to PATH
 [Environment]::SetEnvironmentVariable(
     "PATH",
-    "$env:USERPROFILE\.gentleman\bin;$env:PATH",
+    "$env:USERPROFILE\.foundation\bin;$env:PATH",
     "User"
 )
 ```
 
 ### Verify Foundation
-
 ```powershell
-gf validate
-gf info
-gf list
+wf.ps1 health
+wf.ps1 status
+wf.ps1 list
 ```
 
 ### Optional: Local Workspace Autostart (Local-only)
@@ -132,22 +131,21 @@ cd C:\Workspace
 C:\foundation\scripts\setup-project.ps1 -ProjectPath "C:\Workspace\my-project"
 
 # Or create new project
-gf new --name my-project --type service
+wf.ps1 new --name my-project --type service
 ```
 
 ## Daily Workflow
 
 ### Morning
-
 ```powershell
 # Check for updates
-gf check
+wf.ps1 check
 
 # Update if needed
-gf update-all
+wf.ps1 update-all
 
 # Validate setup
-gf validate
+wf.ps1 health
 ```
 
 ### Before Commit

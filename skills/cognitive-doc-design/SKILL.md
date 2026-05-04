@@ -7,7 +7,7 @@ description: >
   architecture docs, or review-facing documentation.
 license: Apache-2.0
 metadata:
-  author: gentleman-programming (adapted for Foundation)
+  author: workspace-foundation (adapted for Foundation)
   version: "1.0"
 ---
 
@@ -37,7 +37,7 @@ Use it especially for:
 
 ## Documentation Shape (Foundation Standard)
 
-Use this structure for all Foundation docs (adapted from Gentle-AI):
+Use this structure for all Foundation docs (adapted from native-tools):
 
 ```markdown
 # <Outcome-oriented title>
@@ -134,6 +134,6 @@ gh pr view <PR_NUMBER> --json additions,deletions,changedFiles
 
 ## Reference
 
-- Gentle-AI original: https://github.com/Gentleman-Programming/gentle-ai/blob/main/skills/cognitive-doc-design/SKILL.md
 - Foundation adaptation: 2026-05-02
 - Applied to: NORMATIVAS-ORQUESTADOR.md, AGENTS.md, READMEs
+

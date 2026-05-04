@@ -7,7 +7,7 @@
     que los archivos de configuración sean correctos.
     
 .NOTES
-    Author: gentleman-programming
+    Author: workspace-foundation
     Version: 1.0.0
 #>
 

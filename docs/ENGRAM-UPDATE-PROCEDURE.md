@@ -16,7 +16,7 @@ Before updating, completely close OpenCode (or any client using engram).
 
 **Option A (recommended - go install):**
 ```powershell
-go install github.com/Gentleman-Programming/engram/cmd/engram@latest
+go install github.com/workspace-foundation/engram/cmd/engram@latest
 ```
 Binary goes to `%USERPROFILE%\go\bin\engram.exe`
 
@@ -26,7 +26,7 @@ Copy-Item "C:\Workspace_local\workspace-foundation\tools\engram.exe" "C:\Users\e
 ```
 
 **Option C (download release):**
-- Go to: https://github.com/Gentleman-Programming/engram/releases
+- Go to: https://github.com/workspace-foundation/engram/releases
 - Download `engram_<version>_windows_amd64.zip`
 - Extract `engram.exe` to `C:\Users\emman\bin\`
 
@@ -63,9 +63,9 @@ See: `tools/update-engram.ps1`
 
 ## References
 
-- https://github.com/Gentleman-Programming/engram/blob/main/README.md
-- https://github.com/Gentleman-Programming/engram/blob/main/docs/INSTALLATION.md
-- https://github.com/Gentleman-Programming/engram/blob/main/docs/AGENT-SETUP.md
+- https://github.com/workspace-foundation/engram/blob/main/README.md
+- https://github.com/workspace-foundation/engram/blob/main/docs/INSTALLATION.md
+- https://github.com/workspace-foundation/engram/blob/main/docs/AGENT-SETUP.md
 
 ## Key Quote from Official README
 

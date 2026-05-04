@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Autonomous Norm Learner - Learns and updates norms from experiences (Simplified)
     
@@ -19,7 +19,7 @@
     .\auto-norm-learner-simple.ps1 -Trigger session-close -VerboseOutput
     
 .NOTES
-    Author: gentleman-programming
+    Author: workspace-foundation
     Version: 1.0.0 (Simplified)
 #>
 

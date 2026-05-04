@@ -6,7 +6,7 @@ description: >
   Replaces monolithic orchestrator pattern with distributed specialist agents.
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: workspace-foundation
   versión: "1.0"
 ---
 
@@ -559,4 +559,5 @@ Pub/sub event system for automation and hooks:
 - Orchestrator: [project-orchestrator-skill](../project-orchestrator-skill/SKILL.md)
 - Documentation: [documentation-governance](../documentation-governance/SKILL.md)
 - Future Backlog: [FUTURE-FEATURES-BACKLOG.md](../../docs/reference/FUTURE-FEATURES-BACKLOG.md)
+
 

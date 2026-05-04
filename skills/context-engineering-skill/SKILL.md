@@ -7,7 +7,7 @@ description: >
   "context budget", "context engineering", "reduce context", "@/context".
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: workspace-foundation
   versión: "1.0"
 ---
 
@@ -96,4 +96,5 @@ The `context-usage.csv` tracks:
 - `changed_count`: number of changed files included
 
 Target: `prompt_chars` < 8000 for compact-start, < 15000 for context-pack.
+
 

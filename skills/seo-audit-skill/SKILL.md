@@ -6,7 +6,7 @@ description: >
   "robots.txt", "canonical", "keywords", "ranking", "search engine"
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: workspace-foundation
   versión: "1.0"
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task
 ---
@@ -272,3 +272,4 @@ Sitemap: https://example.com/sitemap.xml
 - [Schema Markup Validator](https://validator.schema.org)
 - [Google PageSpeed Insights](https://pagespeed.web.dev)
 - [Sitemap Generator](https://www.xml-sitemaps.com)
+

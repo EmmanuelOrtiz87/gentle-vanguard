@@ -1,4 +1,4 @@
-﻿---
+---
 name: backlog-management-skill
 description: >
   Backlog management patterns: JSON schema, triage automation, migration from markdown.
@@ -52,3 +52,4 @@ docs/backlog/
 3. Generate `items.json`.
 4. Update `README.md` to point to new structure.
 5. Deprecate old markdown file (move to archive).
+

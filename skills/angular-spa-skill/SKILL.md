@@ -1,4 +1,4 @@
-﻿---
+---
 name: angular-spa-skill
 description: >
   Angular 19+ SPA patterns: signals, zoneless, standalone components, defer loading.
@@ -358,3 +358,4 @@ You're successful when:
 - **Ensure accessibility**: "Added ARIA labels and semantic HTML for screen reader support"
 
 ---
+

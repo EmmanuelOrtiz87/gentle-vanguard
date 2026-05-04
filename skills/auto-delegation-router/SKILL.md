@@ -5,7 +5,7 @@ description: >
   decisión trees, and confidence scoring. Enables autonomous agent selection with opt-in control.
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: workspace-foundation
   versión: "1.0"
   status: "ACTIVE"
   priority: "CRITICAL"
@@ -943,3 +943,4 @@ function Test-ShouldDelegate {
 - Multi-Agent Registry: [skills/multi-agent-registry/SKILL.md](../multi-agent-registry/SKILL.md)
 - Orchestrator: [skills/project-orchestrator-skill/SKILL.md](../project-orchestrator-skill/SKILL.md)
 - Subagent Architecture: [docs/reference/SUBAGENT-ARCHITECTURE.md](../../docs/reference/SUBAGENT-ARCHITECTURE.md)
+

@@ -7,7 +7,7 @@ description: >
   PRs, or reviewable slices.
 license: Apache-2.0
 metadata:
-  author: gentleman-programming (adapted for Foundation)
+  author: workspace-foundation (adapted for Foundation)
   version: "1.0"
 ---
 
@@ -81,11 +81,11 @@ Every child PR must show where it sits in the chain. Mark the current PR with `�
 
 ```text
 main
- └── #101 Foundation
-      └── #102 Fix links
-           └── 📍 #103 Move scripts
-                └── #104 Rename rules
-                     └── #105 Tracker
+└── #101 Foundation
+     └── #102 Fix links
+          └── 📍 #103 Move scripts
+               └── #104 Rename rules
+                    └── #105 Tracker
 ```
 
 Pair the diagram with a status table:
@@ -240,3 +240,4 @@ gh pr create --base fix-links --title "refactor: move scripts to utilities" --bo
 - **Max 400 lines/PR** (cognitive load)
 - **Micro-scoping** → 2-5 minute reviews instead of "many minutes"
 - **Chained PRs** → No more massive audits that timeout
+

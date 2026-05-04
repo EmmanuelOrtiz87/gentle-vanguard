@@ -534,3 +534,4 @@ Invoke-WorkspaceSync @config
 
 **Issue**: "Sync drift detected"
 - **Solution**: Trigger auto-resync, verify source integrity
+

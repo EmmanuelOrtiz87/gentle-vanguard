@@ -274,3 +274,4 @@ server.connect(transport);
 | Server | MCP server implementation |
 | Transport | Communication (stdio, HTTP) |
 
+
