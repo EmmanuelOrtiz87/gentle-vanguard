@@ -7,6 +7,7 @@
 1. **Run trigger detection** - Execute: `powershell -File tools/pre-process-input.ps1 -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
 2. **Parse output**:
    - If `TRIGGER_MATCH_FOUND` → Load indicated skill using `skill` tool BEFORE any other action
+   - If `PLAN_MODE_REQUIRED` → Activate BA agent, load `sdd-lifecycle` skill
    - If `NO_TRIGGER_MATCH` → Continue with normal behavior
 3. **Session start** - Always run `tools/session-autostart.cmd` on Windows for notifications, optimizations, validations
 4. **Special case "iniciar sesion"** - Load `session-workflow-skill`, then follow its workflow

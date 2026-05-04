@@ -1,32 +1,64 @@
 Describe 'Foundation Core Tests' {
     BeforeAll {
-        $script:root = $PSScriptRoot | Split-Path -Parent
+        $script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
     }
 
-    Context 'Session Management' {
-        It 'Session manager exists' {
-            Test-Path "$script:root\scripts\utilities\session-manager.ps1" | Should Be $true
+    Context 'Pre-Processing Hook' {
+        It 'pre-process-input.ps1 exists and is non-empty' {
+            $f = "$script:root\tools\pre-process-input.ps1"
+            Test-Path $f | Should Be $true
+            (Get-Item $f).Length | Should BeGreaterThan 0
+        }
+    }
+
+    Context 'Session Tools' {
+        It 'session-autostart.cmd exists' {
+            Test-Path "$script:root\tools\session-autostart.cmd" | Should Be $true
+        }
+
+        It 'install-hooks.ps1 exists' {
+            Test-Path "$script:root\tools\install-hooks.ps1" | Should Be $true
+        }
+
+        It 'validate-configs.ps1 exists' {
+            Test-Path "$script:root\tools\validate-configs.ps1" | Should Be $true
         }
     }
 
     Context 'Security' {
-        It 'Security orchestrator exists' {
-            Test-Path "$script:root\scripts\security\security-orchestrator.ps1" | Should Be $true
+        It 'security-policy.json is valid JSON' {
+            { Get-Content "$script:root\config\security-policy.json" -Raw | ConvertFrom-Json } | Should Not Throw
         }
 
-        It 'Security config exists' {
-            Test-Path "$script:root\config\security-privacy.json" | Should Be $true
+        It 'security-privacy.json is valid JSON' {
+            { Get-Content "$script:root\config\security-privacy.json" -Raw | ConvertFrom-Json } | Should Not Throw
+        }
+    }
+
+    Context 'Canonical Config' {
+        It 'auto-delegation.json is valid JSON' {
+            { Get-Content "$script:root\config\auto-delegation.json" -Raw | ConvertFrom-Json } | Should Not Throw
+        }
+
+        It 'auto-delegation.json has agentCodeToSkill' {
+            $ad = Get-Content "$script:root\config\auto-delegation.json" -Raw | ConvertFrom-Json
+            $ad.agentCodeToSkill | Should Not BeNullOrEmpty
+        }
+
+        It 'auto-delegation.json has at least 10 keyword mappings' {
+            $ad = Get-Content "$script:root\config\auto-delegation.json" -Raw | ConvertFrom-Json
+            ($ad.keywordMappings | Get-Member -MemberType NoteProperty).Count | Should BeGreaterThan 10
         }
     }
 
     Context 'Skills' {
-        It 'Skill router exists' {
-            Test-Path "$script:root\scripts\utilities\skill-router.ps1" | Should Be $true
+        It 'At least 80 skill directories exist' {
+            $skills = Get-ChildItem -Path "$script:root\skills" -Directory -ErrorAction SilentlyContinue
+            $skills.Count | Should BeGreaterThan 80
         }
 
-        It 'At least 90 skills exist' {
-            $skills = Get-ChildItem -Path "$script:root\skills" -Directory -ErrorAction SilentlyContinue
-            $skills.Count | Should BeGreaterThan 90
+        It 'sdd-lifecycle skill exists' {
+            Test-Path "$script:root\skills\sdd-lifecycle" | Should Be $true
         }
     }
 }

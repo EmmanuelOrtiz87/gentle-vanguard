@@ -15,9 +15,18 @@
   "allowedRootMarkdownFiles": [
     "README.md",
     "AGENTS.md",
+    "ANTIGRAVITY.md",
+    "AI-MANDATORY-BEHAVIOR.md",
     "CHANGELOG.md",
+    "CLAUDE.md",
+    "CODEX.md",
     "CONTRIBUTING.md",
-    "MIGRATION.md"
+    "NEXT_SESSION_GUIDE.md",
+    "TOKEN-REPORTING-PROCESS.md"
+  ],
+  "allowedRootJsonFiles": [
+    "opencode.json",
+    "engram-export.json"
   ],
   "deprecatedPathPatterns": [
     ".\\scripts\\update-all.ps1",
