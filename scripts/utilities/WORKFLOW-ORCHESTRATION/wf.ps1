@@ -18,7 +18,8 @@ param(
 
 $ErrorActionPreference = 'Continue'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot = if ($scriptDir) { (Resolve-Path (Join-Path (Join-Path $scriptDir '..') '..')).Path } else { Get-Location }
+# repoRoot: go up 3 levels from wf.ps1 (WORKFLOW-ORCHESTRATION -> utilities -> scripts -> repo)
+$repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..\..')).Path
 
 function Write-Step {
     param([string]$Message)
@@ -1596,7 +1597,7 @@ switch ($Command) {
     'end-session' {
         Write-Step "Running session closure"
         Invoke-TokenBudgetGuard -Task 'end-session' -Risk 'medium' -EstimatedChars 7200
-        $endScript = Join-Path $scriptDir 'end-session.ps1'
+        $endScript = Join-Path $scriptDir '..\SESSION-MANAGEMENT\end-session.ps1'
         if (Test-Path $endScript) {
             $endArgs = @()
             if (-not [string]::IsNullOrWhiteSpace($Scope)) { $endArgs += @('-TaskName', $Scope) }
@@ -2005,7 +2006,7 @@ switch ($Command) {
     }
     'install-engram' {
         Write-Step "Installing or verifying Engram CLI"
-        $installScript = Join-Path $scriptDir 'install-engram.ps1'
+        $installScript = Join-Path $scriptDir '..\SKILLS-TOOLS\install-engram.ps1'
         if (Test-Path $installScript) {
             $installArgs = @()
             if ($Force) { $installArgs += '-Force' }
