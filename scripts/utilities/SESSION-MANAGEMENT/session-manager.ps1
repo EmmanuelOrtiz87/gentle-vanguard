@@ -70,7 +70,9 @@ function Get-NewSessionId {
     $n = 0
     if (Test-Path $counterPath) {
         $raw = Get-Content -Path $counterPath -Raw -Encoding UTF8
-        [void][int]::TryParse(($raw.Trim()), [ref]$n)
+        if ($raw -match '^\d+$') {
+            $n = [int]$raw.Trim()
+        }
     }
     $n++
     Set-Content -Path $counterPath -Value $n -Encoding ASCII

@@ -343,13 +343,21 @@ function Get-TokenUsage {
 
     if ($Response -and $Response.usage) {
         if ($Response.usage.prompt_tokens -or $Response.usage.completion_tokens) {
-            [void][int]::TryParse([string]$Response.usage.prompt_tokens, [ref]$input)
-            [void][int]::TryParse([string]$Response.usage.completion_tokens, [ref]$output)
+            if ($Response.usage.prompt_tokens -match '^\d+$') {
+                $input = [int]$Response.usage.prompt_tokens
+            }
+            if ($Response.usage.completion_tokens -match '^\d+$') {
+                $output = [int]$Response.usage.completion_tokens
+            }
             return @{ Input = $input; Output = $output }
         }
         if ($Response.usage.input_tokens -or $Response.usage.output_tokens) {
-            [void][int]::TryParse([string]$Response.usage.input_tokens, [ref]$input)
-            [void][int]::TryParse([string]$Response.usage.output_tokens, [ref]$output)
+            if ($Response.usage.input_tokens -match '^\d+$') {
+                $input = [int]$Response.usage.input_tokens
+            }
+            if ($Response.usage.output_tokens -match '^\d+$') {
+                $output = [int]$Response.usage.output_tokens
+            }
             return @{ Input = $input; Output = $output }
         }
     }

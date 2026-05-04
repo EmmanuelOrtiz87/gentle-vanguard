@@ -143,8 +143,12 @@ $tokens = 0
 if ($latestCloudRow) {
     $inTokens = 0
     $outTokens = 0
-    [void][int]::TryParse([string]$latestCloudRow.InputTokens, [ref]$inTokens)
-    [void][int]::TryParse([string]$latestCloudRow.OutputTokens, [ref]$outTokens)
+    if ($latestCloudRow.InputTokens -match '^\d+$') {
+        $inTokens = [int]$latestCloudRow.InputTokens
+    }
+    if ($latestCloudRow.OutputTokens -match '^\d+$') {
+        $outTokens = [int]$latestCloudRow.OutputTokens
+    }
     $tokens = $inTokens + $outTokens
 }
 

@@ -1181,11 +1181,12 @@ function Get-OldWorkflowCheckpoints {
         }
 
         [DateTimeOffset]$parsedDate = [DateTimeOffset]::MinValue
-        if ([DateTimeOffset]::TryParse([string]$dateRaw, [ref]$parsedDate)) {
+        try {
+            $parsedDate = [DateTimeOffset]::Parse([string]$dateRaw)
             if ($parsedDate.LocalDateTime -lt $cutoff) {
                 $oldRefs += $ref
             }
-        }
+        } catch { }
     }
 
     return $oldRefs
@@ -2136,9 +2137,11 @@ switch ($Command) {
 
         $days = 7
         if (-not [string]::IsNullOrWhiteSpace($Scope)) {
-            $parsedDays = 0
-            if ([int]::TryParse($Scope, [ref]$parsedDays) -and $parsedDays -gt 0) {
-                $days = $parsedDays
+            if ($Scope -match '^\d+$') {
+                $parsedDays = [int]$Scope
+                if ($parsedDays -gt 0) {
+                    $days = $parsedDays
+                }
             }
         }
 

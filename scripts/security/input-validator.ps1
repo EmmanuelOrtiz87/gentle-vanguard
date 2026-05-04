@@ -62,12 +62,8 @@ function Validate-Integer {
     
     Write-Log "Validating integer input..." "info"
     
-    if (-not [int]::TryParse($Value, [ref]0)) {
-        Write-Log "Input is not a valid integer" "error"
-        return $false
-    }
-    
-    $intValue = [int]$Value
+    if ($Value -match '^\d+$') {
+        $intValue = [int]$Value
     if ($intValue -lt 0 -or $intValue -gt 10000) {
         Write-Log "Integer out of valid range (0-10000)" "error"
         return $false
