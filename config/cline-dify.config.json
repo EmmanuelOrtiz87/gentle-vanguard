@@ -116,7 +116,7 @@
     },
 "responseFormat": {
         "enforceStructure": true,
-        "maxResponseTokens": 3500,
+  "maxResponseTokens": 2000,
         "requireSummary": true,
         "conciseMode": true
       },
@@ -144,7 +144,7 @@
   },
   "performanceTuning": {
     "cacheResponses": true,
-    "cacheDuration": 3600,
+    "cacheDuration": 7200,
     "batchRequests": true,
     "maxBatchSize": 5,
     "requestTimeout": 30000

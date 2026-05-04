@@ -67,12 +67,199 @@ function Invoke-TokenBudgetGuard {
         return
     }
 
-    # Guard alerts are non-blocking by default to avoid blocking session completion.
-    if ($EstimatedChars -gt 0) {
-        & $guardScript -Mode check -Task $Task -Risk $Risk -EstimatedChars $EstimatedChars -Record
-    } else {
-        & $guardScript -Mode check -Task $Task -Risk $Risk -Record
+    $guardArgs = @{
+        Mode = 'check'
+        Task = $Task
+        Risk = $Risk
+        Record = $true
+        AsJson = $true
+        Quiet = $true
     }
+    if ($EstimatedChars -gt 0) {
+        $guardArgs['EstimatedChars'] = $EstimatedChars
+    }
+
+    $guardResult = $null
+    try {
+        $guardRaw = & $guardScript @guardArgs
+        if ($guardRaw) {
+            $guardText = [string]$guardRaw
+            $guardResult = $guardText | ConvertFrom-Json -ErrorAction Stop
+        }
+    }
+    catch {
+        # Fallback to legacy output mode if JSON parsing fails.
+        if ($EstimatedChars -gt 0) {
+            & $guardScript -Mode check -Task $Task -Risk $Risk -EstimatedChars $EstimatedChars -Record
+        } else {
+            & $guardScript -Mode check -Task $Task -Risk $Risk -Record
+        }
+        return
+    }
+
+    if ($guardResult -and $guardResult.status -ne 'PASS') {
+        Write-Warning ("Token guard status={0} projected={1}% for task={2}" -f $guardResult.status, $guardResult.projected_pct, $Task)
+    }
+
+    Invoke-TokenAutopilot -Task $Task -GuardResult $guardResult
+}
+
+function Get-TokenAutopilotPolicy {
+    $defaults = [ordered]@{
+        enabled = $true
+        triggerStatuses = @('SOFT_LIMIT', 'HARD_LIMIT')
+        minConsecutiveAlerts = 2
+        autoApplyOnCommands = @('context-pack', 'compact-start', 'audit', 'publish', 'end-session', 'dispatch')
+        applyChatLevel = 'chat-compact'
+        stateFile = '.session/token-autopilot-state.json'
+    }
+
+    $configPath = Join-Path $repoRoot 'config\context-efficiency.json'
+    if (-not (Test-Path $configPath)) {
+        return [pscustomobject]$defaults
+    }
+
+    try {
+        $cfg = Get-Content -Path $configPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        if ($cfg -and $cfg.PSObject.Properties['tokenAutopilot']) {
+            $custom = $cfg.tokenAutopilot
+            foreach ($k in @($defaults.Keys)) {
+                if ($custom.PSObject.Properties[$k]) {
+                    $defaults[$k] = $custom.$k
+                }
+            }
+        }
+    }
+    catch {
+        return [pscustomobject]$defaults
+    }
+
+    return [pscustomobject]$defaults
+}
+
+function Get-TokenAutopilotState {
+    param([string]$StatePath)
+
+    if (Test-Path $StatePath) {
+        try {
+            return Get-Content -Path $StatePath -Raw -Encoding UTF8 | ConvertFrom-Json
+        }
+        catch {
+            # Fall through to defaults.
+        }
+    }
+
+    return [pscustomobject]@{
+        consecutiveAlerts = 0
+        lastStatus = 'PASS'
+        lastTask = ''
+        lastAppliedChatLevel = ''
+        lastAppliedAt = ''
+    }
+}
+
+function Save-TokenAutopilotState {
+    param(
+        [string]$StatePath,
+        [pscustomobject]$State
+    )
+
+    $stateDir = Split-Path -Parent $StatePath
+    if (-not (Test-Path $stateDir)) {
+        New-Item -ItemType Directory -Path $stateDir -Force | Out-Null
+    }
+
+    $State | ConvertTo-Json -Depth 10 | Set-Content -Path $StatePath -Encoding UTF8
+}
+
+function Set-TokenAutopilotProfile {
+    param(
+        [ValidateSet('hard', 'balanced')]
+        [string]$Profile
+    )
+
+    $configPath = Join-Path $repoRoot 'config\context-efficiency.json'
+    if (-not (Test-Path $configPath)) {
+        throw "Context efficiency config not found: $configPath"
+    }
+
+    $config = Get-Content -Path $configPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    if (-not $config.PSObject.Properties['tokenAutopilot']) {
+        $config | Add-Member -MemberType NoteProperty -Name 'tokenAutopilot' -Value ([pscustomobject]@{})
+    }
+
+    if ($Profile -eq 'hard') {
+        $config.tokenAutopilot.profile = 'hard'
+        $config.tokenAutopilot.triggerStatuses = @('HARD_LIMIT')
+        $config.tokenAutopilot.minConsecutiveAlerts = 1
+        $config.tokenAutopilot.applyChatLevel = 'chat-compact'
+    }
+    else {
+        $config.tokenAutopilot.profile = 'balanced'
+        $config.tokenAutopilot.triggerStatuses = @('SOFT_LIMIT', 'HARD_LIMIT')
+        $config.tokenAutopilot.minConsecutiveAlerts = 2
+        $config.tokenAutopilot.applyChatLevel = 'chat-compact'
+    }
+
+    $json = $config | ConvertTo-Json -Depth 30
+    Set-Content -Path $configPath -Value $json -Encoding UTF8
+}
+
+function Invoke-TokenAutopilot {
+    param(
+        [string]$Task,
+        [pscustomobject]$GuardResult
+    )
+
+    if (-not $GuardResult) {
+        return
+    }
+
+    $policy = Get-TokenAutopilotPolicy
+    if (-not $policy.enabled) {
+        return
+    }
+
+    $normalizedTask = if ($Task) { $Task.Trim().ToLowerInvariant() } else { 'general' }
+    $taskAllowList = @($policy.autoApplyOnCommands | ForEach-Object { [string]$_ })
+    if ($taskAllowList.Count -gt 0 -and ($taskAllowList -notcontains $normalizedTask)) {
+        return
+    }
+
+    $status = [string]$GuardResult.status
+    $triggerStatuses = @($policy.triggerStatuses | ForEach-Object { [string]$_ })
+    $statePath = Join-Path $repoRoot ([string]$policy.stateFile)
+    $state = Get-TokenAutopilotState -StatePath $statePath
+
+    if ($triggerStatuses -contains $status) {
+        $state.consecutiveAlerts = [int]$state.consecutiveAlerts + 1
+    }
+    else {
+        $state.consecutiveAlerts = 0
+    }
+
+    $state.lastStatus = $status
+    $state.lastTask = $normalizedTask
+
+    $requiredAlerts = [int]$policy.minConsecutiveAlerts
+    if ($requiredAlerts -lt 1) {
+        $requiredAlerts = 1
+    }
+
+    if (($triggerStatuses -contains $status) -and ([int]$state.consecutiveAlerts -ge $requiredAlerts)) {
+        $modeScript = Join-Path $scriptDir '..\UTILITIES\response-mode.ps1'
+        if (Test-Path $modeScript) {
+            $chatLevel = [string]$policy.applyChatLevel
+            & $modeScript -Mode set-chat-level -ChatLevel $chatLevel -SkipEngramLog 2>$null | Out-Null
+            if ($LASTEXITCODE -eq 0) {
+                $state.lastAppliedChatLevel = $chatLevel
+                $state.lastAppliedAt = (Get-Date -Format 'yyyy-MM-ddTHH:mm:ssK')
+                Write-Warning ("Token autopilot applied chat-level={0} after {1} consecutive alerts (status={2})." -f $chatLevel, $state.consecutiveAlerts, $status)
+            }
+        }
+    }
+
+    Save-TokenAutopilotState -StatePath $statePath -State $state
 }
 
 function Get-GitInfo {
@@ -1419,7 +1606,7 @@ COMMANDS:
     compact-start [goal]  Generate context pack and copy compact continuation prompt
     simplify-text [text]   Simplify input text (remove emojis, normalize, abbreviate)
     context-metrics [days] Show context/token usage metrics from local logs
-    token-guard [task]   Check token budget thresholds and continuity alternatives (Engram-aware)
+    token-guard [task]   Check token budget thresholds and continuity alternatives (Engram-aware/autopilot-aware)
     checkpoint [label]   Save a live rollback point (git stash -u) before risky edits
     list-checkpoints     List workflow-created checkpoints
     rollback-checkpoint [selector] Restore latest checkpoint or one matching selector
@@ -1468,6 +1655,9 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 response-mode detail:expanded Set detail level
     .\scripts\utilities\wf.ps1 response-mode preset:bugfix Apply preset for task type
     .\scripts\utilities\wf.ps1 response-mode recommend:docs:high Recommend mode for preset+risk
+    .\scripts\utilities\wf.ps1 response-mode ahorro         On-demand token saving mode (chat-compact)
+    .\scripts\utilities\wf.ps1 response-mode normal         On-demand balanced mode (chat-balanced, override)
+    .\scripts\utilities\wf.ps1 response-mode detallado      On-demand detailed mode (chat-detailed, override)
     .\scripts\utilities\wf.ps1 ide-status          Detect IDE and show recommended activation
     .\scripts\utilities\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
     .\scripts\utilities\wf.ps1 update-tools         Update required tools and optional integrations
@@ -1476,6 +1666,9 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 context-metrics 14  Show 14-day context usage summary
     .\scripts\utilities\wf.ps1 token-guard         Show token budget status for current session
     .\scripts\utilities\wf.ps1 token-guard publish Check token budget for publish-level workflow
+    .\scripts\utilities\wf.ps1 token-guard auto    Run token check and execute autopilot if thresholds persist
+    .\scripts\utilities\wf.ps1 token-guard profile:hard      Set autopilot default to hard mode
+    .\scripts\utilities\wf.ps1 token-guard profile:balanced  Set autopilot default to balanced mode
     .\scripts\utilities\wf.ps1 checkpoint feature-doc-cleanup  Save rollback point including untracked files
     .\scripts\utilities\wf.ps1 list-checkpoints        Show available rollback points
     .\scripts\utilities\wf.ps1 rollback-checkpoint     Restore latest checkpoint
@@ -1994,6 +2187,15 @@ switch ($Command) {
             elseif ($scopeText -in @('chat-compact', 'chat-balanced', 'chat-detailed')) {
                 $modeParams = @{ Mode = 'set-chat-level'; ChatLevel = $scopeText }
             }
+            elseif ($scopeText -in @('ahorro', 'modo-ahorro', 'ahorro-on', 'economy', 'token-save')) {
+                $modeParams = @{ Mode = 'set-chat-level'; ChatLevel = 'chat-compact' }
+            }
+            elseif ($scopeText -in @('normal', 'balanceado', 'modo-normal', 'ahorro-off')) {
+                $modeParams = @{ Mode = 'set-chat-level'; ChatLevel = 'chat-balanced'; AllowPolicyOverride = $true; OverrideReason = 'manual-demand:balanced-chat' }
+            }
+            elseif ($scopeText -in @('detallado', 'detalle', 'full', 'verbose')) {
+                $modeParams = @{ Mode = 'set-chat-level'; ChatLevel = 'chat-detailed'; AllowPolicyOverride = $true; OverrideReason = 'manual-demand:detailed-chat' }
+            }
             elseif ($scopeText -in @('bugfix', 'refactor', 'docs', 'audit-review', 'executive-demo')) {
                 $modeParams = @{ Mode = 'set-preset'; Preset = $scopeText }
             }
@@ -2154,6 +2356,19 @@ switch ($Command) {
         if (-not (Test-Path $guardScript)) {
             Write-Error "Token budget guard script not found: $guardScript"
             exit 1
+        }
+
+        if ($Scope -match '^profile:(hard|balanced)$') {
+            $selectedProfile = [string]$matches[1]
+            Set-TokenAutopilotProfile -Profile $selectedProfile
+            Write-Success "Token autopilot profile updated to: $selectedProfile"
+            break
+        }
+
+        if ($Scope -eq 'auto') {
+            Invoke-TokenBudgetGuard -Task 'general' -Risk 'medium' -EstimatedChars 4500
+            Write-Success 'Token autopilot check completed.'
+            break
         }
 
         $taskName = if ([string]::IsNullOrWhiteSpace($Scope)) { 'general' } else { $Scope }

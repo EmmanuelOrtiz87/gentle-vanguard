@@ -92,8 +92,8 @@
         "policy_decisions": true
       },
       "retention": {
-        "days": 90,
-        "max_entries": 1000000
+        "days": 30,
+        "max_entries": 300000
       },
       "storage": {
         "type": "json",
