@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Token Guard - Proteccin automtica contra overflow de tokens
     
@@ -20,7 +20,7 @@
 #>
 
 param(
-    [string]$ConfigPath = "tools/token-guard-config.json",
+    [string]$ConfigPath = "scripts/utilities/token-guard-config.json",
     [string]$SessionId = "",
     [string]$Mode = "monitor"
 )

@@ -1,11 +1,11 @@
-﻿{
+{
   "orchestrator": {
     "version": "2.5.0",
     "preProcessing": {
       "enabled": true,
       "mandatory": true,
       "description": "MANDATORY pre-processing hook - runs BEFORE any AI response",
-      "script": "tools/pre-process-input.ps1",
+      "script": "scripts/utilities/pre-process-input.ps1",
       "scriptArgs": {
         "UserInput": "USER_INPUT_HERE",
         "WorkspaceRoot": "."
@@ -37,11 +37,11 @@
     "sessionStartup": {
       "enabled": true,
       "mandatory": true,
-      "script": "tools/session-autostart.cmd",
+      "script": "scripts/utilities/session-autostart.cmd",
       "platform": "windows",
       "alternatives": {
-        "linux": "bash ./tools/session-autostart.sh",
-        "macos": "bash ./tools/session-autostart.sh"
+        "linux": "bash ./scripts/utilities/session-autostart.sh",
+        "macos": "bash ./scripts/utilities/session-autostart.sh"
       }
     },
     "skillLoading": {

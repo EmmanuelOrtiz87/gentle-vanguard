@@ -1,4 +1,4 @@
-﻿# Implementacin de Distributed Tracing - Resumen Ejecutivo
+# Implementacin de Distributed Tracing - Resumen Ejecutivo
 
 ##  Descripcin General de la Mejora
 
@@ -100,9 +100,9 @@ Todos los reportes en un nico directorio `.telemetry/`:
 ### Tools & Integration
 | Archivo | Descripcin |
 |---------|-------------|
-| `tools/initialize-distributed-tracing.ps1` | Script de inicializacin |
-| `tools/telemetry-dashboard.ps1` | Dashboard de telemetra |
-| `tools/session-autostart.cmd` | Autostart actualizado |
+| `scripts/utilities/initialize-distributed-tracing.ps1` | Script de inicializacin |
+| `scripts/utilities/telemetry-dashboard.ps1` | Dashboard de telemetra |
+| `scripts/utilities/session-autostart.cmd` | Autostart actualizado |
 
 ##  Uso Rpido
 

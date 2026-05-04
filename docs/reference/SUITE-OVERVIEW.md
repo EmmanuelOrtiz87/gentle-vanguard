@@ -1,4 +1,4 @@
-﻿# Foundation - Development Stack Suite - Complete Overview
+# Foundation - Development Stack Suite - Complete Overview
 > **AI-Powered Development Ecosystem - Production Ready**
 
 Foundation - Development Stack Suite
@@ -119,7 +119,7 @@ Copy-Item "scripts/utilities/Microsoft.PowerShell_profile.ps1" $PROFILE
 ### 2. Project Development (Per Session)
 ```powershell
 # Enter project directory (auto-activates tools)
-cd C:\Workspace_local\bitbucket-dashboard
+cd .\bitbucket-dashboard
 
 # Start AI-guided session
 # (Orchestrator detects project type, loads skills)

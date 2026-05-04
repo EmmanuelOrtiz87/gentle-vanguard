@@ -1,4 +1,4 @@
-﻿# PreToolUse Auto-Format Hook
+# PreToolUse Auto-Format Hook
 
 ## Concept
 
@@ -209,7 +209,7 @@ npm install -g prettier eslint
 pip install black ruff
 
 # Go
-go install golang.org/x/tools/cmd/gofmt@latest
+go install golang.org/x/scripts/utilities/cmd/gofmt@latest
 ```
 
 ### "Formatter installed but not running"
@@ -249,10 +249,10 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 ```powershell
 # Install to current project
-Copy-Item "C:\Workspace_local\workspace-foundation\hooks\pre-tool-format.ps1" ".git\hooks\pre-tool-format.ps1"
+Copy-Item ".\workspace-foundation\hooks\pre-tool-format.ps1" ".git\hooks\pre-tool-format.ps1"
 
 # Or link for foundation updates
-New-Item -ItemType SymbolicLink -Path ".git\hooks\pre-tool-format.ps1" -Target "C:\Workspace_local\workspace-foundation\hooks\pre-tool-format.ps1"
+New-Item -ItemType SymbolicLink -Path ".git\hooks\pre-tool-format.ps1" -Target ".\workspace-foundation\hooks\pre-tool-format.ps1"
 ```
 
 ---

@@ -1,4 +1,4 @@
-﻿# Lecciones Aprendidas - Sesin 2026-04-23-02
+# Lecciones Aprendidas - Sesin 2026-04-23-02
 
 ## Resumen de la Sesin
 - **Fecha**: 2026-04-23
@@ -64,7 +64,7 @@ Write-Host ""
 
 -  Bsqueda de `@"[\s\S]*`\$[\s\S]*"@` en skills/ - 0 resultados despus de correccin
 -  Bsqueda de `@"[\s\S]*`\$[\s\S]*"@` en scripts/ - 0 resultados
--  Bsqueda de `@"[\s\S]*`\$[\s\S]*"@` en tools/ - 0 resultados
+-  Bsqueda de `@"[\s\S]*`\$[\s\S]*"@` en scripts/utilities/ - 0 resultados
 
 ## Archivos Modificados
 

@@ -1,4 +1,4 @@
-﻿# Token Consumption, Utility & Context Reporting Process
+# Token Consumption, Utility & Context Reporting Process
 
 **Date**: 2026-04-28  
 **Version**: 1.0.0  
@@ -202,7 +202,7 @@ Can be integrated into release pipeline:
 
 ### Step 1: Basic Report
 ```powershell
-cd C:\Workspace_local\workspace-foundation
+cd .\workspace-foundation
 .\scripts\utilities\token-consumption-report.ps1
 ```
 Output: Markdown report printed to console.

@@ -71,8 +71,8 @@ Todos los reportes se generan automticamente en `.telemetry/reports/`:
 Test-Path "skills/distributed-tracing-skill/distributed-tracing-core.ps1"
 Test-Path "skills/distributed-tracing-skill/report-generator.ps1"
 Test-Path "config/distributed-tracing-config.json"
-Test-Path "tools/initialize-distributed-tracing.ps1"
-Test-Path "tools/telemetry-dashboard.ps1"
+Test-Path "scripts/utilities/initialize-distributed-tracing.ps1"
+Test-Path "scripts/utilities/telemetry-dashboard.ps1"
 ```
 
 ### Paso 2: configuración Automtica
@@ -435,9 +435,9 @@ Ver: `config/distributed-tracing-config.json`
 - `skills/distributed-tracing-skill/distributed-tracing-core.ps1` - Core implementation
 - `skills/distributed-tracing-skill/report-generator.ps1` - Report generation
 - `config/distributed-tracing-config.json` - Configuration
-- `tools/initialize-distributed-tracing.ps1` - Initialization script
-- `tools/telemetry-dashboard.ps1` - Dashboard and management tool
-- `tools/session-autostart.cmd` - Autostart integration
+- `scripts/utilities/initialize-distributed-tracing.ps1` - Initialization script
+- `scripts/utilities/telemetry-dashboard.ps1` - Dashboard and management tool
+- `scripts/utilities/session-autostart.cmd` - Autostart integration
 
 ## Soporte y Contribuciones
 

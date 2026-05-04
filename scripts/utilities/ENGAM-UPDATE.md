@@ -22,13 +22,13 @@ El binario va a `%USERPROFILE%\go\bin\engram.exe`
 
 **Opcion B (copiar desde herramientas del workspace):**
 ```powershell
-Copy-Item "C:\Workspace_local\workspace-foundation\tools\engram.exe" "C:\Users\emman\bin\engram.exe"
+Copy-Item ".\workspace-foundation\tools\engram.exe" "$HOME\bin\engram.exe"
 ```
 
 **Opcion C (descargar release):**
 - Ir a: https://github.com/workspace-foundation/engram/releases
 - Descargar `engram_<version>_windows_amd64.zip`
-- Extraer `engram.exe` a `C:\Users\emman\bin\`
+- Extraer `engram.exe` a `$HOME\bin\`
 
 ### Paso 3: Reconfigurar el agente
 ```powershell
@@ -50,13 +50,13 @@ engram --version
 
 ## Script de Actualizacion Automatica
 
-Ver: `tools/update-engram.ps1`
+Ver: `scripts/utilities/update-engram.ps1`
 
 ## Notas Importantes
 
 1. **No sirve solo con copiar el .exe** - el proceso en memoria debe reiniciarse
-2. **Engram en PATH** (`C:\Users\emman\bin\`) vs **Engram en tools/** (`workspace-foundation/tools/`)
-   - El de tools/ se usa para actualizaciones internas
+2. **Engram en PATH** (`$HOME\bin\`) vs **Engram en scripts/utilities/** (`workspace-foundation/scripts/utilities/`)
+   - El de scripts/utilities/ se usa para actualizaciones internas
    - El de PATH es el que usa el sistema y los agentes MCP
 3. **OpenCode en Windows** usa `~/.config/opencode/` (no `%APPDATA%\opencode\`)
 4. **Datos** se guardan en `%USERPROFILE%\.engram\engram.db`

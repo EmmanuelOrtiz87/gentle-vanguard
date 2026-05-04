@@ -5,7 +5,7 @@
 .DESCRIPTION
     Procedimiento basado en la documentacion oficial de Engram (README.md):
     1. Detecta y detiene procesos engram (MCP subprocess)
-    2. Actualiza binario (go install o copia desde tools/)
+    2. Actualiza binario (go install o copia desde scripts/utilities/)
     3. Reconfigura con `engram setup`
     4. Solicita reinicio del agente
 
@@ -13,11 +13,11 @@
     Fuente de actualizacion: 'go-install' (default), 'tools-folder', 'github-release'
 
 .PARAMETER TargetPath
-    Donde instalar el binario (default: C:\Users\emman\bin\engram.exe)
+    Donde instalar el binario (default: $HOME\bin\engram.exe)
 
 .EXAMPLE
     .\update-engram.ps1 -Source tools-folder
-    Copia desde workspace-foundation/tools/ a C:\Users\emman\bin\
+    Copia desde workspace-foundation/scripts/utilities/ a $HOME\bin\
 
 .EXAMPLE
     .\update-engram.ps1 -Source go-install
@@ -27,7 +27,7 @@ param(
     [ValidateSet('go-install', 'tools-folder', 'github-release')]
     [string]$Source = 'tools-folder',
     
-    [string]$TargetPath = "C:\Users\emman\bin\engram.exe",
+    [string]$TargetPath = "$HOME\bin\engram.exe",
     
     [switch]$SkipSetup
 )
@@ -89,7 +89,7 @@ switch ($Source) {
     }
     
     'tools-folder' {
-        $sourceBinary = "C:\Workspace_local\workspace-foundation\tools\engram.exe"
+        $sourceBinary = ".\workspace-foundation\tools\engram.exe"
         if (-not (Test-Path $sourceBinary)) {
             Write-Host "  [ERROR] No se encuentra: $sourceBinary" -ForegroundColor Red
             exit 1
@@ -101,7 +101,7 @@ switch ($Source) {
         }
         
         Copy-Item $sourceBinary $TargetPath -Force
-        Write-Host "  [OK] Copiado desde tools/engram.exe" -ForegroundColor Green
+        Write-Host "  [OK] Copiado desde scripts/utilities/engram.exe" -ForegroundColor Green
         $newBinary = $TargetPath
     }
     

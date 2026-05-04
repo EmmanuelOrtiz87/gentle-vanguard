@@ -1,4 +1,4 @@
-﻿{
+{
     "enabled":  true,
     "confidenceThreshold":  60,
     "maxParallelAgents":  3,
@@ -56,12 +56,12 @@
                                "tier":  2,
                                "description":  "Regex for governance tasks"
                            },
-                           {
-                               "agent":  "SAD",
-                               "value":  "architecture.*|design.*|sdd.*|api design",
-                               "tier":  2,
-                               "description":  "Regex for architecture tasks"
-                           },
+{
+                                "agent":  "SAD",
+                                "value":  "architecture.*|design.*|sdd-lifecycle.*|api design",
+                                "tier":  2,
+                                "description":  "Regex for architecture tasks - routes to sdd-lifecycle"
+                            },
                            {
                                "agent":  "DOC",
                                "value":  "documentation.*|docs|readme|specification",
@@ -88,57 +88,59 @@
                              "GITFLOW-*":  2,
                              "default":  3
                          },
-    "keywordMappings":  {
-                            "GOV":  [
-                                        "governance",
-                                        "compliance",
-                                        "metrics",
-                                        "monitoring",
-                                        "observability",
-                                        "incident",
-                                        "security audit",
-                                        "review",
-                                        "audit"
+"keywordMappings": {
+                             "GOV":  [
+                                         "governance",
+                                         "compliance",
+                                         "metrics",
+                                         "monitoring",
+                                         "observability",
+                                         "incident",
+                                         "security audit",
+                                         "review",
+                                         "audit"
+                                     ],
+"SAD":  [
+                                         "architecture",
+                                         "design",
+                                         "sdd-lifecycle",
+                                         "api design",
+                                         "database",
+                                         "schema",
+                                         "technical decision",
+                                         "system design",
+                                         "microservice",
+                                         "integration"
+                                     ],
+                             "DEV":  [
+                                         "implement",
+                                         "code",
+                                         "develop",
+                                         "feature",
+                                         "refactor",
+                                         "bug fix",
+                                         "component",
+                                         "endpoint",
+                                         "frontend",
+                                         "backend",
+                                         "security",
+                                         "performance",
+                                         "sdd-lifecycle"
+                                     ],
+                             "QA":  [
+                                        "test",
+                                        "testing",
+                                        "qa",
+                                        "validation",
+                                        "e2e",
+                                        "unit test",
+                                        "integration test",
+                                        "playwright",
+                                        "pytest",
+                                        "quality",
+                                        "judgment day",
+                                        "sdd-lifecycle"
                                     ],
-                            "SAD":  [
-                                        "architecture",
-                                        "design",
-                                        "sdd",
-                                        "api design",
-                                        "database",
-                                        "schema",
-                                        "technical decision",
-                                        "system design",
-                                        "microservice",
-                                        "integration"
-                                    ],
-                            "DEV":  [
-                                        "implement",
-                                        "code",
-                                        "develop",
-                                        "feature",
-                                        "refactor",
-                                        "bug fix",
-                                        "component",
-                                        "endpoint",
-                                        "frontend",
-                                        "backend",
-                                        "security",
-                                        "performance"
-                                    ],
-                            "QA":  [
-                                       "test",
-                                       "testing",
-                                       "qa",
-                                       "validation",
-                                       "e2e",
-                                       "unit test",
-                                       "integration test",
-                                       "playwright",
-                                       "pytest",
-                                       "quality",
-                                       "judgment day"
-                                   ],
                             "OPS":  [
                                         "deploy",
                                         "ci/cd",
@@ -180,26 +182,27 @@
                                                 "correct script"
                                             ],
 "REPORT":  [
-                                            "informe",
-                                            "report",
-                                            "reporte",
-                                            "mtricas",
-                                            "metrics",
-                                            "analytics",
-                                            "anlisis",
-                                            "dashboard",
-                                            "resumen ejecutivo",
-                                            "gerencia",
-                                            "tokens",
-                                            "costos",
-                                            "consumo",
-                                            "sesiones",
-                                            "telemetry",
-                                            "telemetra",
-                                            "estadsticas",
-                                            "stats",
-                                            "resumen de sesin"
-                                        ],
+                                             "informe",
+                                             "report",
+                                             "reporte",
+                                             "metricas",
+                                             "metrics",
+                                             "analytics",
+                                             "analisis",
+                                             "dashboard",
+                                             "resumen ejecutivo",
+                                             "gerencia",
+                                             "tokens",
+                                             "costos",
+                                             "consumo",
+                                             "sesiones",
+                                             "telemetry",
+                                             "telemetria",
+                                             "estadisticas",
+                                             "stats",
+                                             "resumen de sesion",
+                                             "reporting-skill"
+                                         ],
                              "GITFLOW-BRANCH":  [
                                             "create branch",
                                             "feature branch",
@@ -267,3 +270,4 @@
                                                    }
                       }
 }
+

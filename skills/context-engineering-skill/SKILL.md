@@ -27,7 +27,7 @@ metadata:
 | `scripts/utilities/context-pack.ps1` | Pack current state: changed files + recent commits | Before handing off or compacting |
 | `scripts/utilities/context-metrics-report.ps1` | Report token usage metrics | End of session or weekly review |
 | `scripts/utilities/token-efficiency-estimator.ps1` | Estimate ROI of context optimization | Planning and governance reviews |
-| `tools/token-efficiency-estimator.ps1` | Workspace-level token efficiency | Cross-project analysis |
+| `scripts/utilities/token-efficiency-estimator.ps1` | Workspace-level token efficiency | Cross-project analysis |
 
 ## Critical Patterns
 

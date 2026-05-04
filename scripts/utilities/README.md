@@ -21,7 +21,7 @@ scripts/utilities/
  GIT-VERSION-CONTROL/               # Git version control
  PERFORMANCE-OPTIMIZATION/          # Performance optimization
  SESSION-MANAGEMENT/                # Session management
- SKILLS-TOOLS/                      # Skill tools
+ SKILLS-scripts/utilities/                      # Skill tools
  TELEMETRY-METRICS/                 # Telemetry and metrics
  UTILITIES/                         # General utilities
  WORKFLOW-ORCHESTRATION/            # Workflow orchestration
@@ -165,7 +165,7 @@ Session management, start, end, and monitoring.
 
 ---
 
-### 8. **SKILLS-TOOLS/**
+### 8. **SKILLS-scripts/utilities/**
 Installation and management of skills and tools.
 
 **Main scripts:**
@@ -183,7 +183,7 @@ Installation and management of skills and tools.
 .\scripts\utilities\SKILLS-TOOLS\install-workspace-skills.ps1
 ```
 
-[View full documentation](./SKILLS-TOOLS/README.md)
+[View full documentation](./SKILLS-scripts/utilities/README.md)
 
 ---
 

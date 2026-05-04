@@ -1,4 +1,4 @@
-﻿# Workspace Foundation - Architecture
+# Workspace Foundation - Architecture
 
 > System design, component relationships, and technical decisións.
 
@@ -536,7 +536,7 @@ Rotation is automated on `end-session` and `day-end-closure`.
       Placeholders:                                                        
        {workspaceRoot}  C:\Projects\my-workspace                      
        {dataRoot}      .engram-data                                   
-       {toolsRoot}     tools/                                         
+       {toolsRoot}     scripts/utilities/                                         
        {projectsRoot}  projects/                                       
     
                                     
@@ -578,8 +578,8 @@ Rotation is automated on `end-session` and `day-end-closure`.
 
     
 
-    BEFORE:  "{workspaceRoot}/tools/Workspace-Skills"
-    AFTER:    "C:/Projects/my-workspace/tools/Workspace-Skills"
+    BEFORE:  "{workspaceRoot}/scripts/utilities/Workspace-Skills"
+    AFTER:    "C:/Projects/my-workspace/scripts/utilities/Workspace-Skills"
 ```
 
 ---
@@ -756,7 +756,7 @@ workspace-foundation/
     api/                       # API specs
           openapi.yaml
 
- tools/                            # External tools
+ scripts/utilities/                            # External tools
     (tool repositories)
 
  CHANGELOG.md

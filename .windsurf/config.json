@@ -58,7 +58,7 @@
   "preProcessing": {
     "enabled": true,
     "mandatory": true,
-    "script": "tools/pre-process-input.ps1",
+    "script": "scripts/utilities/pre-process-input.ps1",
     "scriptArgs": {
       "UserInput": "USER_INPUT_HERE",
       "WorkspaceRoot": "."
@@ -68,16 +68,16 @@
   "sessionManagement": {
     "autostart": {
       "enabled": true,
-      "script": "tools/session-autostart.cmd",
+      "script": "scripts/utilities/session-autostart.cmd",
       "platform": "windows",
       "alternatives": {
-        "linux": "bash ./tools/session-autostart.sh",
-        "macos": "bash ./tools/session-autostart.sh"
+        "linux": "bash ./scripts/utilities/session-autostart.sh",
+        "macos": "bash ./scripts/utilities/session-autostart.sh"
       }
     },
     "tracking": {
-      "project": "workspace_local",
-      "directory": "c:\\Workspace_local",
+      "project": "workspace-foundation",
+      "directory": ".",
       "sessionIdPattern": "session-YYYY-MM-DD-XX"
     }
   },

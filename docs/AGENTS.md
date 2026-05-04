@@ -6,17 +6,17 @@ This file defines agent-agnostic startup behavior for this workspace.
 
 Before substantial work in a new conversation, run:
 
-1. `tools/session-autostart.cmd` on Windows, or
-2. `bash ./tools/session-autostart.sh` on Linux/macOS/WSL.
+1. `scripts/utilities/session-autostart.cmd` on Windows, or
+2. `bash ./scripts/utilities/session-autostart.sh` on Linux/macOS/WSL.
 
-Default behavior is controlled by `tools/session-autostart.config.json`.
+Default behavior is controlled by `scripts/utilities/session-autostart.config.json`.
 
 ## Session Tracking Rule
 
 When session tracking capability exists, initialize a session early using:
 
 1. `project = workspace_local`
-2. `directory = c:\Workspace_local`
+2. `directory = .`
 3. session id pattern `session-YYYY-MM-DD-XX`
 
 ## Reliability Rule
@@ -33,7 +33,7 @@ When session tracking capability exists, initialize a session early using:
 - **Cold**: Archive (7 days), 70% retention
 
 ### Handoff Compression Mode
-For agent-to-agent transfers, use `tools/handoff-compress.ps1`:
+For agent-to-agent transfers, use `scripts/utilities/handoff-compress.ps1`:
 - Preserves: decisions, results, FIXMEs, status flags
 - Truncates: verbose outputs, repeated patterns
 - Output: state-only handoff (~30% size reduction)

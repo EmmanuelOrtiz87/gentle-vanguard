@@ -5,8 +5,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $roots = @(
-    "C:\Workspace_local\workspace-foundation",
-    "C:\Workspace_local\bitbucket-dashboard"
+    ".\workspace-foundation",
+    ".\bitbucket-dashboard"
 )
 
 $reports = @()

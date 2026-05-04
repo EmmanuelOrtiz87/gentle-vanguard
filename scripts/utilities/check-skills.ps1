@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
-$skillsPath = 'C:\Workspace_local\workspace-foundation\skills'
-$indexPath = 'C:\Workspace_local\workspace-foundation\skills\SKILL_INDEX.md'
+$skillsPath = '.\workspace-foundation\skills'
+$indexPath = '.\workspace-foundation\skills\SKILL_INDEX.md'
 
 # Get directories
 $dirs = Get-ChildItem $skillsPath -Directory | Select-Object -ExpandProperty Name | Sort-Object

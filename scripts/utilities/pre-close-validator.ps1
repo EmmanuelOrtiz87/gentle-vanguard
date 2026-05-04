@@ -199,7 +199,7 @@ if ($allPassed) {
     Write-Host "`nNext steps:"
     Write-Host "  1. Call mem_session_summary with proper structure"
     Write-Host "  2. Call mem_session_end to close the session"
-    Write-Host "  3. Run tools/session-manual-end.cmd if needed"
+    Write-Host "  3. Run scripts/utilities/session-manual-end.cmd if needed"
     exit 0
 } else {
     Write-Error "VALIDATION FAILED - Checks failed: $($failedChecks -join ', ')"

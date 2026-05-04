@@ -16,7 +16,7 @@ The autonomous validation system continuously monitors workspace health and conf
 - **Run**: `.\cross-workspace-validator.ps1 -Fix`
 
 ### Engram Optimization
-- **Script**: `tools/optimize-engram-usage.ps1`
+- **Script**: `scripts/utilities/optimize-engram-usage.ps1`
 - **Purpose**: Optimizes Engram memory usage
 - **Trigger**: Automatic during session autostart
 

@@ -1,4 +1,4 @@
-﻿# Developer Communication Policy
+# Developer Communication Policy
 
 ## Purpose
 
@@ -40,7 +40,7 @@ You can enforce `simple/ultra` globally on your machine (not per repo). This is 
 Example:
 
 ```powershell
-C:\Workspace_local\tools\enforce-response-mode.ps1
+.\tools\enforce-response-mode.ps1
 ```
 
 File:

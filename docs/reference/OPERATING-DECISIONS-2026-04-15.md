@@ -1,4 +1,4 @@
-﻿# Operating decisións (2026-04-15)
+# Operating decisións (2026-04-15)
 
 Consolidated lessons learned, rules, mechanisms, and definitions agreed during hardening of the Workspace + Foundation operating flow.
 
@@ -12,7 +12,7 @@ Consolidated lessons learned, rules, mechanisms, and definitions agreed during h
 
 ### Rules Adopted
 
-- Always run startup through `tools/session-autostart.cmd`.
+- Always run startup through `scripts/utilities/session-autostart.cmd`.
 - Keep compatibility checks enabled by default (`strictCompatibilityChecks=true`).
 - Use degraded mode only as temporary continuity fallback (`strictCompatibilityChecks=false`).
 - Require closure execution via session manager (`session-manual-end.cmd` or idle auto-close flow).

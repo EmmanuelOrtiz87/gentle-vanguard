@@ -56,7 +56,7 @@ Write-Host ""
 
 if (-not $Source) {
     $possibleSources = @(
-        "C:\Workspace_local\workspace-foundation",
+        ".\workspace-foundation",
         (Join-Path (Split-Path -Parent $PSScriptRoot) "workspace-foundation"),
         (Join-Path (Split-Path -Parent $PSScriptRoot) "gentleman-foundation")
     )

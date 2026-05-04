@@ -1,11 +1,11 @@
-﻿# MANDATORY AI BEHAVIOR (NON-NEGOTIABLE)
+# MANDATORY AI BEHAVIOR (NON-NEGOTIABLE)
 
 ##  CRITICAL INSTRUCTION - READ BEFORE EVERY RESPONSE
 
 **BEFORE processing ANY user input, you (the AI) MUST:**
 
 1. **STOP** - Do not process the user's request yet
-2. **RUN**: `powershell -File tools/pre-process-input.ps1 -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
+2. **RUN**: `powershell -File scripts/utilities/pre-process-input.ps1 -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
 3. **PARSE the output**:
    - If `TRIGGER_MATCH_FOUND`  Load the indicated skill IMMEDIATELY using `skill` tool
    - If `NO_TRIGGER_MATCH`  Continue processing the user's request
@@ -18,15 +18,15 @@
 
 **User says**: "iniciar sesion"
 ```
-1. AI runs: powershell -File tools/pre-process-input.ps1 -UserInput "iniciar sesion" -WorkspaceRoot "."
+1. AI runs: powershell -File scripts/utilities/pre-process-input.ps1 -UserInput "iniciar sesion" -WorkspaceRoot "."
 2. Output: TRIGGER_MATCH_FOUND  SKILL: session-workflow-skill
 3. AI loads: skill tool with name "session-workflow-skill"
-4. Skill executes: tools/session-autostart.cmd (shows notifications )
+4. Skill executes: scripts/utilities/session-autostart.cmd (shows notifications )
 ```
 
 **User says**: "ayudame con testing"
 ```
-1. AI runs: powershell -File tools/pre-process-input.ps1 -UserInput "ayudame con testing" -WorkspaceRoot "."
+1. AI runs: powershell -File scripts/utilities/pre-process-input.ps1 -UserInput "ayudame con testing" -WorkspaceRoot "."
 2. Output: TRIGGER_MATCH_FOUND  SKILL: testing-coverage-skill
 3. AI loads: skill tool with name "testing-coverage-skill"
 4. Skill provides testing guidance
@@ -34,7 +34,7 @@
 
 **User says**: "hola"
 ```
-1. AI runs: powershell -File tools/pre-process-input.ps1 -UserInput "hola" -WorkspaceRoot "."
+1. AI runs: powershell -File scripts/utilities/pre-process-input.ps1 -UserInput "hola" -WorkspaceRoot "."
 2. Output: NO_TRIGGER_MATCH
 3. AI continues normally with greeting
 ```

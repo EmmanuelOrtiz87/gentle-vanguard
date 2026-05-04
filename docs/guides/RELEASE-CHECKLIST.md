@@ -1,4 +1,4 @@
-﻿# Foundation Release Checklist
+# Foundation Release Checklist
 
 Use this checklist every time before publishing a release to ensure consistency, completeness, and quality.
 
@@ -112,7 +112,7 @@ Use this checklist every time before publishing a release to ensure consistency,
 ### Step 1: Create Release Branch
 
 ```powershell
-cd c:\Workspace_local\workspace-foundation
+cd .\workspace-foundation
 git checkout -b release/v1.0.0
 ```
 

@@ -16,7 +16,7 @@ Esto verifica Go, Git, activa el orquestador (si hace falta) y limpia datos prev
 
 **Despus del preflight:**
 
-1. Terminal abierta en `C:\Workspace_local\workspace-foundation`.
+1. Terminal abierta en `.\workspace-foundation`.
 2. PowerShell con permisos de ejecucin: `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`.
 3. Repo limpio: `git status` sin cambios pendientes.
 

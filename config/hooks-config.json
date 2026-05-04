@@ -2,15 +2,15 @@
   "hooks": {
     "pre_process": {
       "enabled": true,
-      "script": "tools/pre-process-input.ps1"
+      "script": "scripts/utilities/pre-process-input.ps1"
     },
     "post_session": {
       "enabled": true,
-      "script": "tools/session-end-hook.ps1"
+      "script": "scripts/utilities/session-end-hook.ps1"
     },
     "pre_commit": {
       "enabled": true,
-      "script": "tools/pre-commit-hook.ps1"
+      "script": "scripts/utilities/pre-commit-hook.ps1"
     },
     "post_merge": {
       "enabled": true,

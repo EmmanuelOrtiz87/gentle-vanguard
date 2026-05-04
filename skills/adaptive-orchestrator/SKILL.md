@@ -138,7 +138,7 @@ Session Event (Start/Close)
 ## Quick Test (Verify All Systems)
 
 ```powershell
-cd C:\Workspace_local\workspace-foundation
+cd .\workspace-foundation
 
 # 1. Test backup
 .\scripts\adaptive\auto-backup-orchestrator.ps1 -Action check -VerboseOutput
