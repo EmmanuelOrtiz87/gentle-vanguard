@@ -1500,7 +1500,7 @@ CHECKPOINT LABEL CONVENTION:
 
 function Show-IdeStatus {
     Write-Step "IDE Session Detection"
-    $detectScript = Join-Path $scriptDir 'detect-ide-session.ps1'
+    $detectScript = Join-Path $scriptDir '..\UTILITIES\detect-ide-session.ps1'
     if (-not (Test-Path $detectScript)) {
         Write-Error "IDE detection script not found: $detectScript"
         exit 1
@@ -1932,7 +1932,7 @@ switch ($Command) {
 
     'custom-rules-status' {
         Write-Step "Custom Rules Status"
-        $rulesScript = Join-Path $scriptDir 'custom-rules.ps1'
+        $rulesScript = Join-Path $scriptDir '..\UTILITIES\custom-rules.ps1'
         if (-not (Test-Path $rulesScript)) {
             Write-Error "Custom rules script not found: $rulesScript"
             exit 1
@@ -1944,7 +1944,7 @@ switch ($Command) {
     }
     'response-mode' {
         Write-Step 'Response Profile'
-        $modeScript = Join-Path $scriptDir 'response-mode.ps1'
+        $modeScript = Join-Path $scriptDir '..\UTILITIES\response-mode.ps1'
         if (-not (Test-Path $modeScript)) {
             Write-Error "Response mode script not found: $modeScript"
             exit 1
