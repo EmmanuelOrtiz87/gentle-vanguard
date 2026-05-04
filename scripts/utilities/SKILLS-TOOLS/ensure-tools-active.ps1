@@ -11,7 +11,7 @@ param(
 
 $ErrorActionPreference = 'Continue'
 $scriptDir  = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot   = if ($scriptDir) { (Resolve-Path (Join-Path (Join-Path $scriptDir '..') '..')).Path } else { Get-Location }
+$repoRoot   = if ($scriptDir) { Split-Path (Split-Path (Split-Path $scriptDir)) } else { Get-Location }
 
 #  Output helpers 
 function Write-Step { param([string]$m) if (-not $Quiet) { Write-Host "`n=== $m ===" -ForegroundColor Cyan } }
@@ -592,7 +592,7 @@ function Test-MCPIntegrations {
 function Test-WorkflowReadiness {
     Write-Step "Checking Workflow CLI"
 
-    $wfScript = Join-Path $scriptDir 'wf.ps1'
+    $wfScript = Join-Path (Split-Path (Split-Path $scriptDir)) 'utilities\WORKFLOW-ORCHESTRATION\wf.ps1'
     if (-not (Test-Path $wfScript)) {
         Write-Err "Workflow CLI not found: $wfScript"
         return
