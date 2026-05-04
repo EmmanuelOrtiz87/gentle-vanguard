@@ -36,7 +36,7 @@ This document contains detailed content for the 13 slides in the executive prese
 **Metric:** Estimated 80% reduction in new workstation setup time.
 
 ### Slide 7: AI as Team Member
-**Concept:** Integration with MCP Protocol and Gentleman-Skills.
+**Concept:** Integration with MCP Protocol and Workspace-Skills.
 **Benefit:** AI not only generates code, it understands our rules and architecture.
 
 ### Slide 8: Proactive Security (Guardian Angel)
@@ -63,7 +63,7 @@ This document contains detailed content for the 13 slides in the executive prese
 
 ### Slide 12: Roadmap and Future
 **Vision:**
-- Expansion of the Gentleman-Skills library.
+- Expansion of the Workspace-Skills library.
 - Global project health dashboard.
 - Integration with corporate CI/CD pipelines.
 

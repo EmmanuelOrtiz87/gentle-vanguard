@@ -1,11 +1,11 @@
-﻿---
+---
 name: workflow-orchestrator
 description: Workflow orchestration skill for managing development workflows and automation
 ---
 
 # Skill: workflow-orchestrator
 
-**Version**: 1.0.0
+**versión**: 1.0.0
 **Created**: 2026-04-20
 **Status**: ACTIVE
 **Priority**: CRITICAL
@@ -467,3 +467,4 @@ $conditionalWorkflow = @{
 
 **Issue**: "Task execution failed"
 - **Solution**: Retry, skip, or rollback based on strategy
+

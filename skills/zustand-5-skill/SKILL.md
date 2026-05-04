@@ -212,3 +212,4 @@ const userName = useUserStore(
 | Selector | `useStore((s) => s.property)` |
 | Persist | `persist(store, { name: 'key' })` |
 | Async | `async (...) => { set({loading:true}); ... }` |
+

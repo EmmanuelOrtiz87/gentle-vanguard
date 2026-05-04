@@ -1,4 +1,4 @@
-﻿---
+---
 name: adaptive-orchestrator
 description: >
   Autonomous norm enforcement and learning system.
@@ -8,7 +8,7 @@ description: >
 
 # Adaptive Orchestrator Skill (Full Stack)
 
-Sistema autnomo COMPLETO que opera, aprende y se recupera sin intervencin humana.
+sistema autnomo COMPLETO que opera, aprende y se recupera sin intervencin humana.
 
 ## Core Systems (5 Autonomous Layers)
 
@@ -19,7 +19,7 @@ Sistema autnomo COMPLETO que opera, aprende y se recupera sin intervencin humana
 **What it does**: Crea directorios faltantes, aplica estndares, valida documentacin.
 
 ### 2. Auto Norm Learner (`scripts/adaptive/auto-norm-learner.ps1`)
-**Purpose**: Aprende normativas de experiencias y correcciones.
+**Purpose**: Aprende normativas de experiencias y correcciónes.
 
 **Auto-trigger**: Session start/close
 **What it does**: Consulta Engram, extrae patrones, promueve normas a `rules/custom/`.
@@ -106,7 +106,7 @@ Session Event (Start/Close)
 |-------|--------|-----------|---------|
 | **Pre-commit** | Hooks check-*.ps1 |  YES | Validacin rpida (seguridad, calidad) |
 | **Session close** | 5 systems above |  NO | Autonoma total, log para Judgment Day |
-| **Judgment Day** | Adversarial review |  YES | Revisin profunda antes de merge |
+| **Judgment Day** | Adversarial review |  YES | revisión profunda antes de merge |
 
 ## Security Architecture
 
@@ -138,7 +138,7 @@ Session Event (Start/Close)
 ## Quick Test (Verify All Systems)
 
 ```powershell
-cd C:\Workspace_local\workspace-foundation
+cd .\workspace-foundation
 
 # 1. Test backup
 .\scripts\adaptive\auto-backup-orchestrator.ps1 -Action check -VerboseOutput
@@ -163,11 +163,14 @@ cd C:\Workspace_local\workspace-foundation
  **Seguridad**: Encriptacin AES-256, sin exposicin de cdigo
  **Respaldo**: Recuperacin automtica ante fallos
  **Documentacin siempre actualizada**: Doc-drift detector
- **Judgment Day**: Revisin profunda separada (no bloquea commits)
+ **Judgment Day**: revisión profunda separada (no bloquea commits)
 
 ## Notes
 
 - **Session boundaries**: Autonoma total (start/close)
 - **Commits**: Hooks rpidos (seguridad, no bloqueantes para autonoma)
-- **Judgment Day**: Ejecutar manualmente para revisin profunda
+- **Judgment Day**: Ejecutar manualmente para revisión profunda
 - **Escalation**: Solo si agota reintentos (3x) en auto-delegacin
+
+
+

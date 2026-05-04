@@ -1,12 +1,12 @@
-﻿---
+---
 name: issue-creation
 description: >
   Issue creation workflow for Agent Teams Lite following the issue-first enforcement system.
   Trigger: When creating a GitHub issue, reporting a bug, or requesting a feature.
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
-  version: "1.0"
+  author: workspace-foundation
+  versión: "1.0"
 ---
 
 ## When to Use
@@ -23,7 +23,7 @@ Use this skill when:
 1. **Blank issues are disabled**  MUST use a template (bug report or feature request)
 2. **Every issue gets `status:needs-review` automatically** on creation
 3. **A maintainer MUST add `status:approved`** before any PR can be opened
-4. **Questions go to [Discussions](https://github.com/Gentleman-Programming/agent-teams-lite/discussions)**, not issues
+4. **Questions go to Discussions** of the project repository, not issues
 
 ---
 
@@ -194,7 +194,7 @@ Manually symlinking, but that defeats the purpose of the setup script.
 
 ---
 
-## Decision Tree
+## decisión Tree
 
 ```
 Is it a bug?                     Use Bug Report template
@@ -223,3 +223,5 @@ gh issue edit <number> --add-label "status:approved"
 # Maintainer: add priority
 gh issue edit <number> --add-label "priority:high"
 ```
+
+

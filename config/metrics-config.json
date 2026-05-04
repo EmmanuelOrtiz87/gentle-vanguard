@@ -1,0 +1,98 @@
+{
+  "version": "1.0",
+  "description": "Metrics & observability for autonomous orchestrator - track performance, token usage, success rates",
+  "metrics": {
+    "delegation_success_rate": {
+      "description": "Percentage of successful delegations per agent type",
+      "type": "percentage",
+      "target": 95,
+      "current": 0
+    },
+    "delegation_failure_rate": {
+      "description": "Percentage of failed delegations per agent type",
+      "type": "percentage",
+      "target": 5,
+      "current": 0
+    },
+    "average_time_to_completion": {
+      "description": "Average time in seconds for delegation completion",
+      "type": "duration_seconds",
+      "target": 180,
+      "current": 0
+    },
+    "token_usage_per_session": {
+      "description": "Total tokens consumed per session",
+      "type": "counter",
+      "target": 100000,
+      "current": 0
+    },
+    "circuit_breaker_trips": {
+      "description": "Number of times circuit breakers tripped",
+      "type": "counter",
+      "target": 0,
+      "current": 0
+    },
+    "skill_dependency_violations": {
+      "description": "Times skills executed out of order",
+      "type": "counter",
+      "target": 0,
+      "current": 0
+    }
+  },
+  "per_agent_metrics": {
+    "general": {
+      "total_delegations": 0,
+      "successes": 0,
+      "failures": 0,
+      "avg_time_seconds": 0,
+      "last_success": null,
+      "last_failure": null
+    },
+    "sdd-apply": {
+      "total_delegations": 0,
+      "successes": 0,
+      "failures": 0,
+      "avg_time_seconds": 0,
+      "last_success": null,
+      "last_failure": null
+    },
+    "sdd-design": {
+      "total_delegations": 0,
+      "successes": 0,
+      "failures": 0,
+      "avg_time_seconds": 0,
+      "last_success": null,
+      "last_failure": null
+    },
+    "sdd-verify": {
+      "total_delegations": 0,
+      "successes": 0,
+      "failures": 0,
+      "avg_time_seconds": 0,
+      "last_success": null,
+      "last_failure": null
+    }
+  },
+  "alerts": {
+    "low_success_rate": {
+      "condition": "success_rate < 80",
+      "severity": "HIGH",
+      "message": "Success rate below 80% for {agent}"
+    },
+    "circuit_open": {
+      "condition": "circuit_state == OPEN",
+      "severity": "MEDIUM",
+      "message": "Circuit breaker OPEN for {agent}"
+    },
+    "slow_delegation": {
+      "condition": "avg_time_seconds > 300",
+      "severity": "LOW",
+      "message": "Delegation time exceeding 5 minutes for {agent}"
+    }
+  },
+  "reporting": {
+    "save_interval_seconds": 300,
+    "path": ".session/metrics-report.json",
+    "engram_sync": true
+  }
+}

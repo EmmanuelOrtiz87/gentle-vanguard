@@ -1,4 +1,4 @@
-﻿---
+---
 name: foundation-manager
 description: Use when checking updates, synchronizing foundation, managing tools, or maintaining the development stack. Triggers for: "update foundation", "check updates", "sync skills", "install tools", "maintenance".
 ---
@@ -16,7 +16,7 @@ This skill activates when:
 - User asks to check for updates
 - User asks about installed tools or their status
 - User needs to install or configure tools
-- User mentions maintenance or version checking
+- User mentions maintenance or versión checking
 
 ## Core Commands
 
@@ -57,7 +57,7 @@ gf tools
 ```
 
 Shows installation status for:
-- `gg` - Gentleman Guardian Angel
+- `gg` - Gentleman 
 - `engram` - Engram Memory
 
 ## Update Workflow
@@ -90,11 +90,11 @@ gf update-all   Already current
 
 ```
 
-## Version Strategy
+## versión Strategy
 
-### Semantic Versioning
+### Semantic versióning
 
-Foundation versions follow `vMAJOR.MINOR.PATCH`:
+Foundation versións follow `vMAJOR.MINOR.PATCH`:
 - `MAJOR` - Breaking changes
 - `MINOR` - New skills/features
 - `PATCH` - Bug fixes
@@ -140,7 +140,7 @@ git stash pop
 This skill coordinates with:
 - `project-scaffolding-skill` - Project setup
 - `security-skill` - Pre-commit hooks
-- `git-workflow-skill` - Version control
+- `git-workflow-skill` - versión control
 
 ## Quick Reference
 
@@ -152,3 +152,5 @@ gf update-all     # Update everything
 gf validate       # Verify after update
 gf tools          # Check tool status
 ```
+
+

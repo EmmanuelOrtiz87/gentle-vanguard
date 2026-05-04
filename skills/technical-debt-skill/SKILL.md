@@ -6,8 +6,8 @@ description: >
   "cleanup", "maintainability", "architecture erosion".
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
-  version: "1.0"
+  author: workspace-foundation
+  versión: "1.0"
 ---
 
 ## When to Use
@@ -68,3 +68,5 @@ Address debt where all four are high.
 - Bundling debt cleanup into unrelated features with no scope control
 - Large refactors without specs, tests, or rollback plan
 - Treating documentation debt as low priority when onboarding or incident recovery suffers
+
+

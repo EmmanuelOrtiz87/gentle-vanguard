@@ -1,7 +1,7 @@
 ﻿# Gentleman Foundation
 ## AI Concepts & Best Practices
 
-**Version:** 1.0  
+**versión:** 1.0  
 **Date:** April 2026  
 **Audience:** Development Team  
 
@@ -23,18 +23,20 @@
 
 **LLM** = Large Language Model
 
+```text
+╔═══════════════════════════════════════════════════════════════════╗
+║                          LLM (Large Language Model)              ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+    Input:  "Write a function that adds two numbers"
+             
+             [Understands context]                                      
+             [Generates response based on learned patterns]             
+             
+    Output: "function sum(a, b) { return a + b; }"
 ```
 
-                         LLM                                  
-                                                              
-   Input: "Write a function that adds two numbers"           
-                                                             
-   [Understands context]                                      
-   [Generates response based on learned patterns]             
-                                                             
-   Output: "function sum(a, b) { return a + b; }"          
-
-```
+> **Note:** LLMs generate text based on patterns learned from massive datasets. They don't "understand" code like humans do, but they can generate syntactically correct code.
 
 ### Key Concepts
 
@@ -68,22 +70,14 @@ An AI agent is a system that:
 
 ### Tool Categories
 
-```
+**🛠️ AI Development Tools Landscape**
 
-                    AI DEVELOPMENT TOOLS                        
-
-                                                              
-   Code Generation           Code Review                    
-    OpenCode              Native Review Engine        
-    Copilot              Human review                
-    Cursor                                             
-                                                          
-   Memory & Context         Execution                       
-    Engram               Code interpreter            
-    Foundation skills     Terminal access              
-                                                              
-
-```
+| Category | Tools | Purpose |
+|----------|-------|---------|
+| **Code Generation** | OpenCode, GitHub Copilot, Cursor | Generate and complete code |
+| **Code Review** | Native Review Engine, Human review | Validate and improve code |
+| **Memory & Context** | Engram, Foundation Skills | Persistent context across sessions |
+| **Execution** | Code interpreter, Terminal access | Run and test code |
 
 ---
 
@@ -130,60 +124,49 @@ Response:
 | Boilerplate | Complex business logic |
 | Documentation | Sensitive data handling |
 | Refactoring | Performance-critical code |
-| Testing | Architecture decisions |
+| Testing | Architecture decisións |
 | Learning new tech | Understanding legacy systems |
 
 ### 4.2 Code Review Workflow
 
+**🔍 Recommended Code Review Process**
+
+```mermaid
+graph LR
+    A[Developer Writes Code] --> B[Git Commit]
+    B --> C[Native AI Review]
+    C --> D[PR Created]
+    D --> E[Human Review]
+    E --> F{Approved?}
+    F -->|Yes| G[Merge to Main]
+    F -->|Changes Requested| B
 ```
 
-                   CODE REVIEW WORKFLOW                        
+**Key Points:**
 
+- **Native AI Review** runs automatically via pre-commit hooks
+- **Human Review** is mandatory for critical changes
+- **Iterate** quickly when changes are requested
 
-     Developer
-         
-    Write Code
-         
-    
-       Git Commit      Native AI Review
-    
-             
-    
-      PR Created       Human Review
-    
-             
-       
-                
-    Approved   Changes Requested
-       
-    Merge to Main
-```
+---
 
 ### 4.3 AI-Assisted Development Cycle
 
-```
+**🔄 Recommended Development Cycle**
 
-                 DEVELOPMENT CYCLE                             
-
-                                                              
-   1. Plan        -> Define task and constraints             
-                                                           
-   2. Generate    -> AI generates code                      
-                                                           
-   3. Review      -> Native review + human review           
-                                                           
-   4. Iterate    -> Refine based on feedback               
-                                                           
-   5. Test        -> Verify functionality                   
-                                                              
-
-```
+| Step | Phase | Description | Tools |
+|------|-------|-------------|-------|
+| 1 | **Plan** | Define task and constraints | Skills, Engram |
+| 2 | **Generate** | AI generates initial code | OpenCode, Copilot |
+| 3 | **Review** | Native review + human review | Native Review Engine |
+| 4 | **Iterate** | Refine based on feedback | Edit, Test cycles |
+| 5 | **Test** | Verify functionality | Test runners, Manual |
 
 ### 4.4 Quality Guidelines
 
 - **Verify AI-generated code** - Always review before committing
 - **Test thoroughly** - AI can miss edge cases
-- **Document decisions** - Not all AI output is optimal
+- **Document decisións** - Not all AI output is optimal
 - **Keep context** - Use skills and engram for continuity
 
 ---
@@ -236,7 +219,7 @@ Response:
 ### Q: What if AI suggests something wrong?
 
 **A:** 
-1. Question the suggestion
+1. Question the suggestión
 2. Verify against documentation
 3. Test the proposed solution
 4. Trust your expertise when in doubt

@@ -73,7 +73,7 @@ The workspace-foundation includes integration with:
 | **OpenCode** | AI coding agent | https://opencode.ai |
 | **Claude Code** | AI coding agent | https://claude.ai/code |
 | **Native Review Engine** | Built-in workflow review | `./scripts/utilities/wf.ps1 review` |
-| **engram** | Persistent memory | `go install github.com/Gentleman-Programming/engram/cmd/engram@latest` |
+| **engram** | Persistent memory | `go install github.com/workspace-foundation/engram/cmd/engram@latest` |
 
 Windows one-shot update (no brew required): `./scripts/utilities/wf.ps1 update-tools`
 
@@ -83,10 +83,10 @@ Skills are automatically installed for detected AI agents. To manually install:
 
 ```powershell
 # For Claude Code
-cp -r tools/Gentleman-Skills/curated/* ~/.claude/skills/
+cp -r scripts/utilities/Workspace-Skills/curated/* ~/.claude/skills/
 
 # For OpenCode
-cp -r tools/Gentleman-Skills/curated/* ~/.config/opencode/skills/
+cp -r scripts/utilities/Workspace-Skills/curated/* ~/.config/opencode/skills/
 ```
 
 ## Project Creation

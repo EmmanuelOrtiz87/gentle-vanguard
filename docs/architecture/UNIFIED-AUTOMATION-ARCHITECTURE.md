@@ -1,4 +1,4 @@
-﻿# Unified Automation Architecture - Cross-Tool Solution
+# Unified Automation Architecture - Cross-Tool Solution
 
 ## The Problem
 We have rules in `AGENTS.md`, `.clinerules`, `.cursorrules` but they're just text. The AI (me) reads them but doesn't automatically obey them BEFORE every response.
@@ -34,7 +34,7 @@ Each tool needs to support a `pre_process` hook:
     "pre_process": {
       "enabled": true,
       "mandatory": true,
-      "script": "tools/pre-process-input.ps1",
+      "script": "scripts/utilities/pre-process-input.ps1",
       "args": ["-UserInput", "${user_input}", "-WorkspaceRoot", "."]
     }
   }
@@ -46,7 +46,7 @@ Each tool needs to support a `pre_process` hook:
 {
   "cline.hooks.preProcess": {
     "enabled": true,
-    "script": "tools/pre-process-input.ps1"
+    "script": "scripts/utilities/pre-process-input.ps1"
   }
 }
 ```

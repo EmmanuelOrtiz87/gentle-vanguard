@@ -1,4 +1,4 @@
-﻿# Adaptive Mode - Integration Guide
+# Adaptive Mode - Integration Guide
 
 ## Integracin con Project Orchestrator
 
@@ -14,7 +14,7 @@ if ($taskComplexity -eq "high" -and $agentCount -gt 2) {
 }
 ```
 
-### 2. Configuracin de Activacin
+### 2. configuración de activación
 
 Agregar a `config/orchestrator.json`:
 
@@ -112,7 +112,7 @@ RETURN TO ORCHESTRATOR
 }
 ```
 
-### 6. Configuracin de Auto-Delegation
+### 6. configuración de Auto-Delegation
 
 Actualizar `config/auto-delegation.json`:
 
@@ -225,9 +225,9 @@ Actualizar `docs/sessions/YYYY-MM-DD-session-start.md`:
 .\scripts\utilities\wf.ps1 adaptive-mode rollback --checkpoint "nombre"
 ```
 
-## Configuracin Recomendada
+## configuración Recomendada
 
-### Para Desarrollo
+### Para desarrollo
 
 ```json
 {
@@ -278,7 +278,7 @@ Actualizar `docs/sessions/YYYY-MM-DD-session-start.md`:
 # Test 1: Verificar carga del skill
 Test-Path "skills/adaptive-mode-orchestrator/adaptive-mode-engine.ps1"
 
-# Test 2: Verificar configuracin
+# Test 2: Verificar configuración
 $config = Get-Content "config/adaptive-dag-config.json" | ConvertFrom-Json
 $config.enabled
 
@@ -291,7 +291,7 @@ Get-Content "logs/adaptive-mode.log" -Tail 20
 
 ## Prximos Pasos
 
-1.  Crear configuracin DAG
+1.  Crear configuración DAG
 2.  Implementar motor de ejecucin
 3.  Crear documentacin
 4.  Integrar con orchestrator.json
@@ -305,3 +305,4 @@ Get-Content "logs/adaptive-mode.log" -Tail 20
 **Versin**: 1.0
 **Fecha**: 2026-04-23
 **Estado**: READY FOR INTEGRATION
+

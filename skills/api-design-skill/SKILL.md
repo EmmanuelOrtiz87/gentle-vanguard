@@ -1,6 +1,6 @@
 ---
 name: api-design-skill
-description: Use when designing REST APIs, GraphQL schemas, or API contracts. Triggers: "design API", "REST endpoint", "GraphQL", "OpenAPI", "API versioning", "pagination", "API documentation", "API error handling".
+description: Use when designing REST APIs, GraphQL schemas, or API contracts. Triggers: "design API", "REST endpoint", "GraphQL", "OpenAPI", "API versióning", "pagination", "API documentation", "API error handling".
 ---
 
 # API Design Skill
@@ -118,7 +118,7 @@ GET    /users/123/orders   # User's orders
 }
 ```
 
-## Versioning
+## versióning
 
 ```
 /v1/users
@@ -126,7 +126,7 @@ GET    /users/123/orders   # User's orders
 ```
 
 ```http
-Accept: application/vnd.api+json; version=2
+Accept: application/vnd.api+json; versión=2
 ```
 
 ## Pagination Patterns
@@ -191,7 +191,7 @@ X-API-Key: your-api-key-here
 - [ ] Consistent error format
 - [ ] Pagination implemented
 - [ ] Rate limiting documented
-- [ ] Versioning strategy defined
+- [ ] versióning strategy defined
 - [ ] Authentication required
 - [ ] Input validation
 - [ ] OpenAPI spec updated
@@ -254,3 +254,5 @@ type Mutation {
       '401':
         $ref: '#/components/responses/Unauthorized'
 ```
+
+

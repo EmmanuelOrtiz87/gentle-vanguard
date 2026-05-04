@@ -1,4 +1,4 @@
-﻿---
+---
 name: distributed-tracing-skill
 description: Distributed tracing with OpenTelemetry for workspace sessions
 trigger: tracing, telemetry, distributed, correlation, span
@@ -8,11 +8,11 @@ trigger: tracing, telemetry, distributed, correlation, span
 
 ## Descripcin
 
-Este skill proporciona capacidades de tracing distribuido para el workspace-foundation, permitiendo rastrear la ejecucin de dispatches, orchestration y automatizacin con:
+Este skill proporciona capacidades de tracing distribuido para el workspace-foundation, permitiendo rastrear la ejecucin de dispatches, orchestration y automatización con:
 
 - **OpenTelemetry Integration**: Implementacin compatible con estndares de observabilidad
-- **Correlation IDs**: Identificadores nicos para rastrear operaciones a travs de mltiples componentes
-- **Span Hierarchy**: Estructura jerrquica de spans para visualizar relaciones entre operaciones
+- **Correlation IDs**: Identificadores nicos para rastrear operaciónes a travs de mltiples componentes
+- **Span Hierarchy**: estructura jerrquica de spans para visualizar relaciones entre operaciónes
 - **Performance Metrics**: Mtricas de rendimiento en tiempo real
 - **Centralized Reporting**: Reportes centralizados en un nico directorio
 
@@ -20,7 +20,7 @@ Este skill proporciona capacidades de tracing distribuido para el workspace-foun
 
 ### 1. Correlation IDs
 - Generacin automtica de IDs nicos por sesin
-- Propagacin a travs de todas las operaciones
+- Propagacin a travs de todas las operaciónes
 - Formato: `session-YYYY-MM-DD-XX-XXXXXXXX` (UUID)
 
 ### 2. Span Hierarchy
@@ -39,13 +39,13 @@ Root Span (Session)
 ```
 
 ### 3. Performance Metrics
-- Latencia de operaciones
+- Latencia de operaciónes
 - Throughput de dispatches
 - Tasa de xito/error
 - Utilizacin de recursos
 
 ### 4. Reportes Centralizados
-Estructura de directorios:
+estructura de directorios:
 ```
 .telemetry/
  traces/
@@ -101,27 +101,28 @@ Generate-DailyReport -Date (Get-Date) -OutputPath ".telemetry/reports"
 
 ### Auto-Delegation Router
 - Cada dispatch genera un span raz
-- Sub-spans para keyword extraction, decision tree, confidence scoring
+- Sub-spans para keyword extraction, decisión tree, confidence scoring
 - Mtricas de routing accuracy
 
 ### Judgment Day Orchestrator
 - Span para cada fase de judgment
 - Mtricas de review time y approval rate
-- Trazabilidad de decisiones
+- Trazabilidad de decisiónes
 
 ### Session Manager
 - Correlation ID propagado a toda la sesin
 - Mtricas de session lifecycle
 - Anlisis de session performance
 
-## Configuracin
+## configuración
 
 Ver: `config/distributed-tracing-config.json`
 
-## Archivos Relacionados
+## archivos Relacionados
 
 - `skills/distributed-tracing-skill/distributed-tracing-core.ps1` - Core implementation
 - `skills/distributed-tracing-skill/otel-exporter.ps1` - OpenTelemetry exporter
 - `skills/distributed-tracing-skill/metrics-collector.ps1` - Metrics collection
 - `skills/distributed-tracing-skill/report-generator.ps1` - Report generation
-- `tools/telemetry-dashboard.ps1` - Dashboard para visualizar traces
+- `scripts/utilities/telemetry-dashboard.ps1` - Dashboard para visualizar traces
+

@@ -89,7 +89,7 @@ verb-noun.sh
 | `memory` | Memoria | `compact-memory.ps1` |
 | `runtime` | Runtime | `clean-runtime.ps1` |
 | `database` | Base de datos | `backup-database.ps1` |
-| `config` | Configuracin | `validate-config.ps1` |
+| `config` | configuración | `validate-config.ps1` |
 | `log` | Logs | `rotate-log.ps1` |
 | `backup` | Respaldo | `restore-backup.ps1` |
 | `session` | Sesin | `manage-session.ps1` |
@@ -200,7 +200,7 @@ $script:variableName (para variables de script)
 |---------|-----|---------|
 | `$` | Variable normal | `$reportPath` |
 | `$script:` | Variable de script | `$script:globalConfig` |
-| `$global:` | Variable global | `$global:appVersion` |
+| `$global:` | Variable global | `$global:appversión` |
 | `$env:` | Variable de entorno | `$env:PATH` |
 
 ### Tipos de Variables
@@ -322,7 +322,7 @@ STANDARDS.md
 - `NAMING-CONVENTIONS.md`
 - `BEST-PRACTICES.md`
 
-### Archivos de Configuracin
+### Archivos de configuración
 
 ```
 config.json

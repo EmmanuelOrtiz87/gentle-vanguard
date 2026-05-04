@@ -156,20 +156,21 @@ function Test-MarkdownLinks {
         $dir = $file.DirectoryName
         
         # Match markdown links: [text](path)
-        $links = [regex]::Matches($content, '\[([^\]]+)\]\(([^)]+)\)') | Select-Object -ExpandProperty Groups
-        
-        for ($i = 2; $i -lt $links.Count; $i += 3) {
-            $link = $links[$i].Value
-            
+        $linkMatches = [regex]::Matches($content, '\[([^\]]+)\]\(([^)]+)\)')
+
+        foreach ($match in $linkMatches) {
+            $linkText = $match.Groups[1].Value
+            $linkUrl = $match.Groups[2].Value
+
             # Skip external URLs and anchors
-            if ($link -match '^(https?://|#|mailto:)' -or $link -match '^skills/') { continue }
-            
+            if ($linkUrl -match '^(https?://|#|mailto:)' -or $linkUrl -match '^skills/') { continue }
+
             # Check if file exists
-            $resolvedPath = Resolve-PathSafe -BaseDirectory $dir -RelativeOrAbsolutePath $link
-            
+            $resolvedPath = Resolve-PathSafe -BaseDirectory $dir -RelativeOrAbsolutePath $linkUrl
+
             if ($null -eq $resolvedPath -or -not (Test-Path $resolvedPath)) {
                 $brokenLinks++
-                Add-Issue -Category 'links' -Message "Broken link: $($links[$i-1].Value)" -Path $file.FullName -Severity 'warning'
+                Add-Issue -Category 'links' -Message "Broken link: $linkText" -Path $file.FullName -Severity 'warning'
             }
         }
     }

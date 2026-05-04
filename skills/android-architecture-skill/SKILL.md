@@ -1,4 +1,4 @@
-﻿---
+---
 name: android-architecture
 user-invocable: false
 description: Use when implementing MVVM, clean architecture, dependency injection with Hilt, or structuring Android app layers.
@@ -227,7 +227,7 @@ interface UserDao {
     suspend fun deleteUser(user: UserEntity)
 }
 
-@Database(entities = [UserEntity::class], version = 1)
+@Database(entities = [UserEntity::class], versión = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 }
@@ -456,3 +456,5 @@ class GoodViewModel : ViewModel() {
 
 - **android-jetpack-compose**: UI layer patterns
 - **android-kotlin-coroutines**: Async operations
+
+

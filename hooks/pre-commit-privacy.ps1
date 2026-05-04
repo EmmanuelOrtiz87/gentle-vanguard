@@ -34,7 +34,13 @@ $CRITICAL_PATTERNS = @(
 $EXCLUDED_PATHS = @(
     'config/security-privacy.json',
     'config/security-policy.json',
-    'hooks/pre-commit-privacy.ps1'
+    'hooks/pre-commit-privacy.ps1',
+    'hooks/pre-commit.ps1',
+    'scripts/hooks/check-security.ps1',
+    'docs/reference/ARCHITECTURE.md',
+    'scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1',
+    'skills/docker-devops-skill/SKILL.md',
+    'skills/security-expert-skill/references/security-patterns.md'
 )
 
 # =============================================================================

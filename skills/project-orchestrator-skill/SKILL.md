@@ -1,4 +1,4 @@
-﻿---
+---
 name: project-orchestrator
 description: >
      MASTER ORCHESTRATOR for coordinated sessions.
@@ -16,13 +16,13 @@ description: >
 
 1. **Auto-First Session Activation** - Prefer automatic IDE/session detection, but keep on-demand fallback
 2. **MANDATORY Pre-Processing** - BEFORE ANY user input response:
-   - Execute: `powershell -File tools/pre-process-input.ps1 -UserInput "USER_INPUT" -WorkspaceRoot "."`
+   - Execute: `powershell -File scripts/utilities/pre-process-input.ps1 -UserInput "USER_INPUT" -WorkspaceRoot "."`
    - If TRIGGER_MATCH_FOUND  Load skill using `skill` tool BEFORE any other action
    - If NO_TRIGGER_MATCH  Continue with normal behavior
    - This applies to ALL tools: opencode, cline, cursor, windsurf, continue.dev, claude, copilot
-3. **Session Startup** - On "iniciar sesion" or session start:
+3. **Session Startup** - On "iniciar sesión" or session start:
    - Load `session-workflow-skill` automatically
-   - Execute `tools/session-autostart.cmd` (Windows) or `bash ./tools/session-autostart.sh` (Linux/macOS)
+   - Execute `scripts/utilities/session-autostart.cmd` (Windows) or `bash ./scripts/utilities/session-autostart.sh` (Linux/macOS)
    - This ensures notifications, optimizations, validations run automatically
 4. **Auto-Detect** - Detect stack, project type, and gaps automatically
 5. **Load Skills** - Load relevant skills based on context
@@ -33,7 +33,7 @@ description: >
 10. **End Properly** - Save to memory, commit, summarize
 11. **Session Brief First** - Every substantial session starts with a session brief and task brief when scope is non-trivial
 12. **Question Before Adoption** - Challenge proposals that add complexity, lock-in, or weak validation
-13. **Evidence Before Content** - Add durable docs/learning only after explicit validation and decision rationale
+13. **Evidence Before Content** - Add durable docs/learning only after explicit validation and decisión rationale
 14. **Goal Alignment Always** - Keep every change aligned to stated objective, constraints, and acceptance criteria
 
 ## COMMUNICATION MODE HOMOLOGATION
@@ -75,13 +75,13 @@ Recommended policy (normalized):
 
 Role split:
 
-1. Orchestrator: source of truth for process and enforcement decisions.
+1. Orchestrator: source of truth for process and enforcement decisións.
 
 Reference: `docs/reference/SDD-GOVERNANCE-POLICY.md`
 
 ## SESSION ACTIVATION STRATEGY
 
-Use this decision model:
+Use this decisión model:
 
 1. Detect IDE session first (`wf.ps1 ide-status`).
 2. If known IDE session is detected, continue with auto-init and health checks.
@@ -108,7 +108,7 @@ Stability rules:
 
 Goal: avoid overlap, confusion, and conflicting behavior across sessions.
 
-1. MUST use Engram for durable memory (context, decisions, closeout learnings).
+1. MUST use Engram for durable memory (context, decisións, closeout learnings).
 2. MUST use this orchestrator skill as the primary execution framework.
 3. MUST keep session artifacts updated (`docs/sessions/YYYY-MM-DD-session-start.md` and task brief for bounded scope).
 4. SHOULD use available native skills; if unavailable, continue with warnings plus remediation commands.
@@ -172,7 +172,7 @@ Apply this policy to scripts, code, docs, and generated files:
 1. Greenfield or explicitly standardized repos: enforce canonical structure rules.
 2. Existing/legacy production repos: adopt established structure by default.
 3. Never perform structural refactors without explicit user approval when repo conventions are already in use.
-4. If a mismatch is detected, report it with risk/impact and ask for decision before moving files.
+4. If a mismatch is detected, report it with risk/impact and ask for decisión before moving files.
 
 Before structural changes:
 1. Describe affected paths and compatibility risk.
@@ -291,13 +291,13 @@ wf review --scope testing   # Dimension 4 only
 | CRITICAL | [!C] | BLOCK commit | 1 |
 | HIGH | [!H] | WARN + require review | 0 |
 | MEDIUM | [!M] | INFO + log | 0 |
-| LOW | [!L] | SUGGESTION | 0 |
+| LOW | [!L] | SUGgestión | 0 |
 
 See: `skills/code-review-orchestrator-skill/SKILL.md` for full implementation.
 
 ## GUARDIAN FALLBACK PROTOCOL
 
-GGA (Gentleman Guardian Angel) serves as **optional fallback** when Foundation cannot proceed autonomously.
+ (Gentleman ) serves as **optional fallback** when Foundation cannot proceed autonomously.
 
 ### Architecture
 
@@ -308,10 +308,10 @@ ORCHESTRATOR (Primary - Always Active)
     
      Blocked/Unknown?  Try self-healing
     
-     Still blocked?  GGA FALLBACK (Optional Guardian)
+     Still blocked?   FALLBACK (Optional Guardian)
             
              Code review assistance
-             Decision support
+             decisión support
              Task completion assist
              Commit hygiene
 ```
@@ -320,34 +320,34 @@ ORCHESTRATOR (Primary - Always Active)
 
 | Condition | Action |
 |-----------|--------|
-| Unknown error blocks progress | Invoke GGA for diagnosis |
-| Complex decision needed | GGA reasoning assist |
-| PR needs final review | `gga run --pr-mode` |
-| Code review assistance | `invoke-ai-review.ps1` (native) OR `gga run` (fallback) |
-| Commit validation | GGA commit-msg hook |
+| Unknown error blocks progress | Invoke  for diagnosis |
+| Complex decisión needed |  reasoning assist |
+| PR needs final review | ` run --pr-mode` |
+| Code review assistance | `invoke-ai-review.ps1` (native) OR ` run` (fallback) |
+| Commit validation |  commit-msg hook |
 
 ### Implementation
 
 ```powershell
-# Check GGA availability
-function Test-GgaAvailable {
-    $gga = Get-Command gga -ErrorAction SilentlyContinue
-    return ($null -ne $gga)
+# Check  availability
+function Test-Available {
+    $ = Get-Command  -ErrorAction SilentlyContinue
+    return ($null -ne $)
 }
 
-# Fallback decision tree
+# Fallback decisión tree
 if (-not $canProceed) {
     # Step 1: Self-healing attempt
     $healed = Invoke-SelfHealing -Context $context
     
     if (-not $healed) {
-        # Step 2: GGA fallback (optional)
-        if (Test-GgaAvailable) {
-            Write-Host "[ORCHESTRATOR] Invoking GGA guardian..."
-            gga run --ci
+        # Step 2:  fallback (optional)
+        if (Test-Available) {
+            Write-Host "[ORCHESTRATOR] Invoking  guardian..."
+             run --ci
         } else {
             # Step 3: Manual intervention flag
-            Write-Warn "Blocked: GGA unavailable - manual intervention required"
+            Write-Warn "Blocked:  unavailable - manual intervention required"
             Flag-ForManualReview -Context $context
         }
     }
@@ -361,7 +361,7 @@ if (-not $canProceed) {
 | project-orchestrator | **YES** | Always active |
 | invoke-ai-review.ps1 | **YES** | Native replacement |
 | code-review-orchestrator | **YES** | 7-dimension review |
-| **GGA (gga)** | **NO** | **Optional guardian** |
+| ** ()** | **NO** | **Optional guardian** |
 
 ### Skill Loading Order
 
@@ -370,12 +370,12 @@ if (-not $canProceed) {
 2. session-workflow             On session start/end
 3. context-engineering          On context operations
 4. code-review-orchestrator     On review requests
-5. guardian-fallback (GGA)      ONLY when blocked (optional)
+5. guardian-fallback ()      ONLY when blocked (optional)
 ```
 
 ### Key Principle
 
-> **Foundation operates fully without GGA.** GGA is enhancement, not requirement.
+> **Foundation operates fully without .**  is enhancement, not requirement.
 
 See: `skills/guardian-fallback-skill/SKILL.md` for full protocol.
 
@@ -386,7 +386,7 @@ See: `skills/guardian-fallback-skill/SKILL.md` for full protocol.
 3. Never fail silently: every failure must print actionable remediation.
 4. If ambiguity appears, stop and notify user before proceeding.
 
-## DECISION CHALLENGE PROTOCOL
+## decisión CHALLENGE PROTOCOL
 
 Apply this protocol before accepting new proposals that affect architecture, automation, docs, or workflow:
 
@@ -428,7 +428,7 @@ Reference: `docs/reference/FUTURE-FEATURES-BACKLOG.md`
 
 ## GLOBAL VS REPOSITORY BOUNDARY PROTOCOL
 
-Use this protocol to keep workspace-global decisions and repository decisions separated without losing traceability.
+Use this protocol to keep workspace-global decisións and repository decisións separated without losing traceability.
 
 1. Global-level artifacts (workspace root docs/process notes) are coordination artifacts and must not be auto-published into repository history.
 2. Repository-level artifacts are implementation/governance artifacts and follow normal PR workflow in their own repository.
@@ -438,7 +438,7 @@ Replication checks are mandatory:
 1. If a global artifact changes, ask the user whether any repository must receive a mirrored implementation change.
 2. If a repository artifact changes, ask the user whether global workspace guidance must be updated to keep cross-repo consistency.
 
-Decision outcomes:
+decisión outcomes:
 
 1. Global only: keep change at workspace scope and do not replicate to repos.
 2. Repo only: keep change in repository and do not modify workspace-global docs.
@@ -454,7 +454,7 @@ Only persist learning as durable guidance when all are true:
 
 1. The change was executed or tested against a real repo slice.
 2. Validation evidence exists (command/test/check result).
-3. A reusable pattern or decision rationale was identified.
+3. A reusable pattern or decisión rationale was identified.
 4. Limits/trade-offs are recorded (when not to use the pattern).
 
 If evidence is weak, store as `hypothesis` in session notes, not as durable rule.
@@ -469,7 +469,7 @@ Use Engram memory as a reasoning cache to avoid redundant analysis and preserve 
 2. Call `mem_search` with those keywords scoped to the current project.
 3. If results are found:
    - Call `mem_get_observation` for the top match to load full context.
-   - Use prior decisions, patterns, and gotchas as starting constraints.
+   - Use prior decisións, patterns, and gotchas as starting constraints.
    - State briefly what prior context was loaded so the user has visibility.
 4. If no results are found:
    - Proceed normally; do not delay work waiting for context.
@@ -477,13 +477,13 @@ Use Engram memory as a reasoning cache to avoid redundant analysis and preserve 
 
 ### At Task End (automatic)
 
-1. Identify key decisions, non-obvious learnings, and reusable patterns from the completed work.
+1. Identify key decisións, non-obvious learnings, and reusable patterns from the completed work.
 2. Call `mem_save` for each distinct item using structured format:
    - **title**: verb + subject, searchable (e.g. "Chose retry strategy for HTTP client").
-   - **type**: `decision` | `discovery` | `pattern` | `bugfix` | `architecture`.
+   - **type**: `decisión` | `discovery` | `pattern` | `bugfix` | `architecture`.
    - **topic_key**: use `mem_suggest_topic_key` for evolving topics to enable upsert.
    - **content**: `What / Why / Where / Learned` structure.
-3. Skip saving if the task was trivial (single-line fix, no decision made, no new pattern).
+3. Skip saving if the task was trivial (single-line fix, no decisión made, no new pattern).
 4. Do not duplicate observations already stored under the same `topic_key`.
 
 ### Guardrails
@@ -613,7 +613,7 @@ Brief description of session work.
 ---
 
 **Generated by:** Gentleman Foundation Orchestrator
-**Version:** 1.0
+**versión:** 1.0
 ```
 
 ---
@@ -670,7 +670,7 @@ START REVIEW
              
              
 
- ASK USER DECISION       
+ ASK USER decisión       
                          
  A) Fix all now          
  B) Fix HIGH+ now, rest later 
@@ -681,7 +681,7 @@ START REVIEW
 
 ---
 
-## FINDINGS DECISION WORKFLOW
+## FINDINGS decisión WORKFLOW
 
 ### Severity Actions
 
@@ -690,13 +690,13 @@ START REVIEW
 | **CRITICAL** | [X] | Block immediately | YES |
 | **HIGH** | [!] | Must fix before PR | YES |
 | **MEDIUM** | [-] | User choice | NO |
-| **LOW** | [*] | Suggestion only | NO |
+| **LOW** | [*] | Suggestión only | NO |
 
-### User Decision Options
+### User decisión Options
 
 ```
 
-                   FINDINGS DECISION                         
+                   FINDINGS decisión                         
 
                                                               
   CRITICAL/HIGH found:                                       
@@ -734,7 +734,7 @@ START REVIEW
 ### Medium Issues (Your Choice)
 1. [SEV] File:line - Description
 
-### Suggestions (Optional)
+### Suggestións (Optional)
 1. [LOW] File:line - Description
 
 ---
@@ -814,7 +814,7 @@ Is the code ready for review?
 | "Estado" | Show status, todos |
 | "Guardar" | Commit & push, audit doc |
 | "Review" / "Auditar" | Run code review |
-| "PR" | Validate, code review, decision |
+| "PR" | Validate, code review, decisión |
 | "Push" | Generate audit, commit, push |
 | "Judgment Day" / "Juicio Final" / "Revision de a Pares" / "Dual Review" | Run adversarial dual-review protocol |
 | "Corre juicio" / "Ejecuta dia del juicio" / "Activa juicio" | Run judgment-day --scope judgment-day |
@@ -838,7 +838,7 @@ Is the code ready for review?
 
 **Git:** [ahead/behind]
 
-**Next Step:** [suggestion]
+**Next Step:** [suggestión]
 ```
 
 ## REQUIRED SESSION ARTIFACTS
@@ -895,8 +895,10 @@ Run `mem_save` with this summary.
 | PR without review | Run code review |
 | Skip critical issues | Block & fix |
 | Skip mem_save | Always save |
-| Skip user confirmation | Ask for decision |
+| Skip user confirmation | Ask for decisión |
 
 ---
 
 **THIS SKILL IS ALWAYS ACTIVE. Do not wait to be triggered.**
+
+

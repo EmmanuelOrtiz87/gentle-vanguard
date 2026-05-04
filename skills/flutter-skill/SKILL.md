@@ -1,4 +1,4 @@
-﻿---
+---
 name: flutter
 description: Flutter development with Riverpod state management, Freezed, go_router, and mocktail testing
 when-to-use: When working on Flutter/Dart code
@@ -442,7 +442,7 @@ void main() {
 name: my_app
 description: A Flutter application
 publish_to: 'none'
-version: 1.0.0+1
+versión: 1.0.0+1
 
 environment:
   sdk: '>=3.2.0 <4.0.0'
@@ -510,7 +510,7 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.16.0'
+          flutter-versión: '3.16.0'
           channel: 'stable'
           cache: true
 
@@ -580,4 +580,6 @@ linter:
 -  **Global GoRouter instance** - Use Provider for router with redirect logic
 -  **BuildContext across async** - Store values before await, not context
 -  **Ignoring dispose** - Clean up controllers in ConsumerStatefulWidget
+
+
 

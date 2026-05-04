@@ -92,7 +92,7 @@
     "preCompactHook": {
       "enabled": true,
       "triggerAt": 12000,
-      "script": "tools/pre-compact-hook.ps1",
+      "script": "scripts/utilities/pre-compact-hook.ps1",
       "preservePatterns": ["FIXME", "TODO", "BUG", "DECISION", "RESULT"],
       "compressionRatio": 0.85,
       "autoRun": true,
@@ -100,7 +100,7 @@
     },
     "handoffCompression": {
       "enabled": true,
-      "script": "tools/handoff-compress.ps1",
+      "script": "scripts/utilities/handoff-compress.ps1",
       "preserves": ["decisions", "results", "FIXMEs", "status flags", "critical context"],
       "truncates": ["verbose outputs", "repeated patterns", "debug logs", "intermediate steps"],
       "expectedReduction": "30-40%",
@@ -125,8 +125,8 @@
   "sessionManagement": {
     "autostart": {
       "enabled": true,
-      "script": "tools/session-autostart.cmd",
-      "configFile": "tools/session-autostart.config.json",
+      "script": "scripts/utilities/session-autostart.cmd",
+      "configFile": "scripts/utilities/session-autostart.config.json",
       "runOnPluginLoad": true
     },
     "tracking": {

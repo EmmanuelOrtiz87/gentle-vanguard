@@ -1,6 +1,6 @@
-﻿# Software Design Document (SDD) - Workspace Foundation
+# Software Design Document (SDD) - Workspace Foundation
 
-**Version:** 1.0  
+**versión:** 1.0  
 **Date:** April 11, 2026  
 **Authors:** Orchestrator AI Assistant  
 **Status:** Active  
@@ -32,7 +32,7 @@ Workspace Foundation is the base framework for creating standardized, cross-plat
 ### Assumptions
 - Target platforms: Windows (PowerShell/pwsh), Linux, macOS, WSL
 - Development environments support Bash/PowerShell scripting
-- Git is available for version control
+- Git is available for versión control
 - Projects will follow orchestrator standards
 
 ## 2. System Architecture
@@ -95,7 +95,7 @@ Workspace Foundation
 $os = if ($IsWindows) { "windows" } elseif ($IsMacOS) { "macos" } else { "linux" }
 
 # Shell routing
-$shell = if ($PSVersionTable.PSEdition -eq "Core") { "pwsh" } else { "powershell" }
+$shell = if ($PSversiónTable.PSEdition -eq "Core") { "pwsh" } else { "powershell" }
 ```
 
 #### Documentation Governance
@@ -179,7 +179,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\foundation\bootstr
 | Platform compatibility issues | High | Comprehensive testing on all platforms |
 | Template maintenance | Medium | Automated validation scripts |
 | Documentation drift | Low | Orchestrator-enforced standards |
-| Skill version conflicts | Medium | Version pinning and testing |
+| Skill versión conflicts | Medium | versión pinning and testing |
 
 ## 5. Testing Strategy
 

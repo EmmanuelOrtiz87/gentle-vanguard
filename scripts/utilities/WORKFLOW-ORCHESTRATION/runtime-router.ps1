@@ -64,16 +64,13 @@ function Get-AICapability {
         }
     }
 
-    $gentleAiCmd = Get-Command gentle-ai -ErrorAction SilentlyContinue
     $opencodeCmd = Get-Command opencode -ErrorAction SilentlyContinue
-    $hasGentleAi = [bool]$gentleAiCmd
     $hasOpencode = [bool]$opencodeCmd
 
     return @{
         has_env_provider = $hasEnvProvider
-        has_gentle_ai = $hasGentleAi
         has_opencode = $hasOpencode
-        available = ($hasEnvProvider -or $hasGentleAi -or $hasOpencode)
+        available = ($hasEnvProvider -or $hasOpencode)
     }
 }
 
@@ -165,20 +162,20 @@ if ($runtimeMode -eq 'offline_deterministic') {
     $actions += '.\\scripts\\utilities\\wf.ps1 stack-dashboard'
 }
 
-$result = [ordered]@{
-    runtime_mode = $runtimeMode
-    reason = $reason
-    delegation_strategy = $delegationStrategy
-    network_available = $networkAvailable
-    ai_available = [bool]$aiCapability.available
-    ai_env_provider = [bool]$aiCapability.has_env_provider
-    ai_tool_available = [bool]$aiCapability.has_gentle_ai
-    engram_available = $engramAvailable
-    engram_path = if ($engramPath) { $engramPath } else { '' }
-    token_status = $token.status
-    token_projected_pct = $token.projected_pct
-    recommended_next_actions = $actions
-}
+    $result = [ordered]@{
+        runtime_mode = $runtimeMode
+        reason = $reason
+        delegation_strategy = $delegationStrategy
+        network_available = $networkAvailable
+        ai_available = [bool]$aiCapability.available
+        ai_env_provider = [bool]$aiCapability.has_env_provider
+        ai_tool_available = [bool]$aiCapability.has_opencode
+        engram_available = $engramAvailable
+        engram_path = if ($engramPath) { $engramPath } else { '' }
+        token_status = $token.status
+        token_projected_pct = $token.projected_pct
+        recommended_next_actions = $actions
+    }
 
 if ($AsJson) {
     $result | ConvertTo-Json -Depth 5

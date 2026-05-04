@@ -5,7 +5,7 @@
 param(
     [ValidateSet("daily", "weekly", "monthly", "on-demand")]
     [string]$Period = "daily",
-    [string]$ProjectRoot = "C:\Workspace_local\workspace-foundation",
+    [string]$ProjectRoot = ".\workspace-foundation",
     [switch]$Silent,
     [switch]$GenerateReport
 )

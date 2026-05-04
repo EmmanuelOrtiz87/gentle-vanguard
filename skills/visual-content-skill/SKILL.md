@@ -1,4 +1,4 @@
-﻿---
+---
 name: visual-content-skill
 description: >
   Creates visual content for Foundation: ASCII art, diagrams (Mermaid), presentation
@@ -8,7 +8,7 @@ description: >
 license: Apache-2.0
 metadata:
   author: workspace-local
-  version: "1.0"
+  versión: "1.0"
 ---
 
 # Visual Content Skill
@@ -261,5 +261,6 @@ dark blue background
 
 ---
 
-*Skill version: 1.2*  
+*Skill versión: 1.2*  
 *Last updated: 2026-04-27*
+

@@ -1,4 +1,4 @@
-﻿---
+---
 name: terraform-infrastructure
 description: >
   Infrastructure as Code using Terraform with modular components, state
@@ -23,7 +23,7 @@ Build scalable infrastructure as code with Terraform, managing AWS, Azure, GCP, 
 
 - Cloud infrastructure provisioning
 - Multi-environment management (dev, staging, prod)
-- Infrastructure versioning and code review
+- Infrastructure versióning and code review
 - Cost tracking and resource optimization
 - Disaster recovery and environment replication
 - Automated infrastructure testing
@@ -36,12 +36,12 @@ Minimal working example:
 ```hcl
 # terraform/main.tf
 terraform {
-  required_version = ">= 1.0"
+  required_versión = ">= 1.0"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0"
+      versión = "~> 5.0"
     }
   }
 
@@ -84,3 +84,5 @@ provider "aws" {
 - Use root module for everything
 - Store secrets in code
 - Disable state locking
+
+

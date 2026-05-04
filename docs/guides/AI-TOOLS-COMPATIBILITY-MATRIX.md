@@ -8,7 +8,7 @@
 
 ## Overview
 
-This document maps compatibility between Workspace Foundation and various AI tools/plugins to ensure consistent behavior across all integrations.
+This document maps compatibility between Workspace Foundation and various AI scripts/utilities/plugins to ensure consistent behavior across all integrations.
 
 ---
 
@@ -18,7 +18,7 @@ This document maps compatibility between Workspace Foundation and various AI too
 
 #### 1. Claude (Anthropic)
 **Status**: FULLY SUPPORTED  
-**Versions**: Claude 3 Opus, Sonnet, Haiku  
+**versións**: Claude 3 Opus, Sonnet, Haiku  
 **Integration Points**:
 - Direct API integration
 - Context window: Up to 200K tokens
@@ -39,7 +39,7 @@ This document maps compatibility between Workspace Foundation and various AI too
 
 #### 2. Cline (VS Code Extension)
 **Status**: FULLY SUPPORTED  
-**Versions**: Latest (compatible with Claude backend)  
+**versións**: Latest (compatible with Claude backend)  
 **Integration Points**:
 - VS Code extension API
 - File operations: Read/Write/Execute
@@ -60,7 +60,7 @@ This document maps compatibility between Workspace Foundation and various AI too
 
 #### 3. OpenCode (GitHub Copilot Integration)
 **Status**: PARTIALLY SUPPORTED  
-**Versions**: Latest  
+**versións**: Latest  
 **Integration Points**:
 - GitHub Copilot API
 - Code completion
@@ -68,8 +68,7 @@ This document maps compatibility between Workspace Foundation and various AI too
 - Context: File-based
 
 **Current Implementation**:
-- GGA runner: `scripts/optional/run-gga.ps1`
-- Gentle AI runner: `scripts/optional/run-gentle-ai.ps1`
+- Native workspace tooling
 
 **Limitations**:
 - Token context: Limited to file scope
@@ -85,7 +84,7 @@ This document maps compatibility between Workspace Foundation and various AI too
 
 #### 4. Continue.dev (IDE Extension)
 **Status**: SUPPORTED  
-**Versions**: Latest  
+**versións**: Latest  
 **Integration Points**:
 - IDE extension API
 - Multiple LLM backends
@@ -257,9 +256,9 @@ MAXIMUM = 99% token usage (use all available)
 {
   "role": "assistant",
   "content": "Response text",
-  "suggestions": [
+  "suggestións": [
     {
-      "text": "code suggestion",
+      "text": "code suggestión",
       "range": [start, end]
     }
   ]
@@ -383,7 +382,7 @@ You are integrated with GitHub Copilot.
 
 CAPABILITIES:
 - Code completion
-- Code suggestions
+- Code suggestións
 - Chat interface
 - File context awareness
 
@@ -602,7 +601,7 @@ CONSTRAINTS:
   "features": {
     "code_completion": true,
     "chat": true,
-    "suggestions": true
+    "suggestións": true
   }
 }
 ```

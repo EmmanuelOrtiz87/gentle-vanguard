@@ -155,7 +155,7 @@ npm audit --audit-level=high
 npm outdated
 npm update
 
-# Lock versions in production
+# Lock versións in production
 npm ci  # Uses package-lock.json exactly
 ```
 
@@ -221,3 +221,5 @@ Foundation implements Role-Based Access Control (RBAC) for workspace operations:
 - Running skill-optimizer
 - Running foundation-audit
 - Managing users
+
+

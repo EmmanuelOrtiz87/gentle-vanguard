@@ -51,7 +51,7 @@ function Invoke-OrchestratorWithAutoRouting {
                 Invoke-Agent -AgentName $agent -Task $TaskDescription -Mode "Secondary"
             }
             
-            Log-RoutingDecision -RoutingResult $routing
+            Log-Routingdecisión -RoutingResult $routing
         }
     }
 }
