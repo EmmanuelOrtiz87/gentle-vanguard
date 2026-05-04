@@ -73,7 +73,8 @@ function Get-TodayTokenUsageStats {
     $used = 0
     foreach ($row in $todayRows) {
         $value = 0
-        if ([int]::TryParse([string]$row.estimated_tokens, [ref]$value)) {
+        if ($row.estimated_tokens -match '^\d+$') {
+            $value = [int]$row.estimated_tokens
             $used += $value
         }
     }
@@ -81,11 +82,12 @@ function Get-TodayTokenUsageStats {
     $firstTimestamp = $null
     foreach ($row in $todayRows) {
         $parsed = $null
-        if ([DateTime]::TryParse([string]$row.timestamp, [ref]$parsed)) {
+        try {
+            $parsed = [DateTime]::Parse([string]$row.timestamp)
             if (-not $firstTimestamp -or $parsed -lt $firstTimestamp) {
                 $firstTimestamp = $parsed
             }
-        }
+        } catch { }
     }
 
     $burnRate = 0.0
