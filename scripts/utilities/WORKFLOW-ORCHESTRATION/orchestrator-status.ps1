@@ -3,25 +3,19 @@
 
 $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$projectRoot = Resolve-Path $scriptDir
-if ($projectRoot.Path -like '*\utilities') {
-    $projectRoot = Resolve-Path (Join-Path $projectRoot '..\..')
-} else {
-    $projectRoot = Resolve-Path (Join-Path $projectRoot '..')
-}
+$projectRoot = Split-Path (Split-Path (Split-Path $scriptDir))
 
 $activationFile = Join-Path $projectRoot '.orchestrator-active'
 $configFile = Join-Path $projectRoot 'config\orchestrator.json'
 $skillCandidates = @(
-    Join-Path $projectRoot '.skills\project-orchestrator-skill'
-    Join-Path $projectRoot '.workspace-foundation\skills\project-orchestrator-skill'
     Join-Path $projectRoot 'skills\project-orchestrator-skill'
+    Join-Path $projectRoot '.workspace-foundation\skills\project-orchestrator-skill'
 )
 $skillDir = $skillCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
 if (-not $skillDir) { $skillDir = $skillCandidates[0] }
 $engramData = Join-Path $projectRoot '.engram-data'
-$runEngramScript = Join-Path $projectRoot 'scripts\utilities\run-engram.ps1'
-$customRulesScript = Join-Path $projectRoot 'scripts\utilities\custom-rules.ps1'
+$runEngramScript = Join-Path $projectRoot 'scripts\utilities\UTILITIES\run-engram.ps1'
+$customRulesScript = Join-Path $projectRoot 'scripts\utilities\UTILITIES\custom-rules.ps1'
 
 function Write-Step { param([string]$Message) Write-Host "`n=== $Message ===" -ForegroundColor Cyan }
 function Write-Success { param([string]$Message) Write-Host "[OK] $Message" -ForegroundColor Green }
