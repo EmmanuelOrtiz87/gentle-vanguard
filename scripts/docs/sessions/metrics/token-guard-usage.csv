@@ -1,1 +1,16 @@
 timestamp,date,task,risk,estimated_tokens,status,engram_available,notes
+2026-05-04T02:17:46-03:00,2026-05-04,end-session,medium,1800,PASS,True,projected_pct=1.5
+2026-05-04T02:18:28-03:00,2026-05-04,end-session,medium,1800,PASS,True,projected_pct=3
+2026-05-04T02:18:56-03:00,2026-05-04,end-session,medium,1800,PASS,True,projected_pct=4.5
+2026-05-04T02:19:52-03:00,2026-05-04,end-session,medium,1800,PASS,True,projected_pct=6
+2026-05-04T02:19:52-03:00,2026-05-04,audit,medium,2200,PASS,True,projected_pct=7.83
+2026-05-04T02:20:33-03:00,2026-05-04,end-session,medium,1800,PASS,True,projected_pct=9.33
+2026-05-04T02:20:34-03:00,2026-05-04,audit,medium,2200,PASS,True,projected_pct=11.17
+2026-05-04T07:03:13-03:00,2026-05-04,end-session,medium,1800,PASS,True,projected_pct=12.67
+2026-05-04T07:03:28-03:00,2026-05-04,audit,medium,2200,PASS,True,projected_pct=14.5
+2026-05-04T07:03:45-03:00,2026-05-04,end-session,medium,1800,PASS,True,projected_pct=16
+2026-05-04T07:03:55-03:00,2026-05-04,audit,medium,2200,PASS,True,projected_pct=17.83
+2026-05-04T07:04:11-03:00,2026-05-04,end-session,medium,1800,PASS,True,projected_pct=19.33
+2026-05-04T07:04:22-03:00,2026-05-04,audit,medium,2200,PASS,True,projected_pct=21.17
+2026-05-04T07:04:39-03:00,2026-05-04,end-session,medium,1800,PASS,True,projected_pct=22.67
+2026-05-04T07:04:50-03:00,2026-05-04,audit,medium,2200,PASS,True,projected_pct=24.5
