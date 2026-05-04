@@ -20,7 +20,7 @@ The goal is to clearly separate:
 ## Workspace Level
 
 - `{workspaceRoot}/` (workspace root)
-- `{workspaceRoot}/Gentleman-Skills`
+- `{workspaceRoot}/Workspace-Skills`
 - `{workspaceRoot}/workspace-foundation`
 - `{workspaceRoot}/workspace-foundation/.engram-data`
 - `{workspaceRoot}/workspace-foundation/skills`

@@ -68,8 +68,7 @@ This document maps compatibility between Workspace Foundation and various AI too
 - Context: File-based
 
 **Current Implementation**:
-- GGA runner: `scripts/optional/run-gga.ps1`
-- Gentle AI runner: `scripts/optional/run-gentle-ai.ps1`
+- Native workspace tooling
 
 **Limitations**:
 - Token context: Limited to file scope

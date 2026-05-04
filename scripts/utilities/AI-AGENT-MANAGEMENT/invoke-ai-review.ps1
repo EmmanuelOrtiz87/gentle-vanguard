@@ -1,6 +1,6 @@
 # invoke-ai-review.ps1
-# Native AI Code Review - GGA-style with multi-provider support
-# Absorbed from Gentleman Guardian Angel (GGA)
+# Native AI Code Review - -style with multi-provider support
+# Absorbed from Gentleman  Angel ()
 #
 # PROVIDER STATUS:
 # - openai, anthropic, gemini, ollama, github: FULLY FUNCTIONAL
@@ -43,7 +43,7 @@ $configPath = Join-Path $projectRoot "config\ai-review.json"
 $configGlobalPath = Join-Path $env:USERPROFILE ".config\ai-review\config.json"
 $cacheDir = Join-Path $projectRoot ".ai-review-cache"
 $hooksDir = Join-Path $projectRoot ".git\hooks"
-$ggaConfig = Join-Path $projectRoot ".gga"
+$Config = Join-Path $projectRoot "."
 
 function Write-Status {
     param([string]$Message, [string]$Type = "INFO")
@@ -94,15 +94,15 @@ function Get-Config {
         }
     }
     
-    if (Test-Path $ggaConfig) {
-        $ggaContent = Get-Content $ggaConfig -Raw
-        $ggaContent -match 'PROVIDER="([^"]+)"' | Out-Null
+    if (Test-Path $Config) {
+        $Content = Get-Content $Config -Raw
+        $Content -match 'PROVIDER="([^"]+)"' | Out-Null
         if ($Matches) { $config.provider = $Matches[1] }
-        $ggaContent -match 'FILE_PATTERNS="([^"]+)"' | Out-Null
+        $Content -match 'FILE_PATTERNS="([^"]+)"' | Out-Null
         if ($Matches) { $config.filePatterns = $Matches[1] -split ',' }
-        $ggaContent -match 'EXCLUDE_PATTERNS="([^"]+)"' | Out-Null
+        $Content -match 'EXCLUDE_PATTERNS="([^"]+)"' | Out-Null
         if ($Matches) { $config.excludePatterns = $Matches[1] -split ',' }
-        $ggaContent -match 'STRICT_MODE="([^"]+)"' | Out-Null
+        $Content -match 'STRICT_MODE="([^"]+)"' | Out-Null
         if ($Matches) { $config.strictMode = $Matches[1] -eq "true" }
     }
     
@@ -367,7 +367,7 @@ function Show-Config {
 
 function Show-Help {
     @"
-AI-Review - Native AI Code Review (GGA-style)
+AI-Review - Native AI Code Review (-style)
 
 USAGE:
     .\invoke-ai-review.ps1 [ACTION] [OPTIONS]
@@ -412,7 +412,7 @@ switch ($Action.ToLower()) {
         Show-Help
     }
     'version' {
-        Write-Host "AI-Review v1.0.0 (GGA-native)"
+        Write-Host "AI-Review v1.0.0 (-native)"
         Write-Host "Foundation-native implementation"
     }
     'init' {

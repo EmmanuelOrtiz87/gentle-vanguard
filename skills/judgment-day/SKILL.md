@@ -8,7 +8,7 @@ description: >
   "doble review", "juzgar", "que lo juzguen".
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: workspace-foundation
   versión: "1.4"
 ---
 
@@ -622,5 +622,6 @@ Recommend: human review of the remaining issues above before re-running judgment
 # No CLI commands  this is a pure orchestration protocol.
 # Execution happens via delegate() and delegation_read() tool calls.
 ```
+
 
 

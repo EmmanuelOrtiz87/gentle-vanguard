@@ -1,10 +1,10 @@
-﻿---
+---
 name: electron
 description: >
   Electron patterns for building cross-platform desktop applications.
   Trigger: When building desktop apps, working with Electron main/renderer processes, IPC communication, or native integrations.
 metadata:
-  author: gentleman-programming
+  author: workspace-foundation
   versión: "1.0"
 ---
 

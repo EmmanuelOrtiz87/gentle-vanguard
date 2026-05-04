@@ -6,7 +6,7 @@ description: >
   Trigger: "bash script", "shell script", "powershell script", "hook", "script parse error", "cross-platform script", "wf script".
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: workspace-foundation
   versión: "1.0"
 ---
 
@@ -145,4 +145,5 @@ if ($errors.Count -eq 0) { 'PARSE_OK' } else { $errors }
 .\hooks\pre-commit.ps1
 .\hooks\post-checkout.ps1
 ```
+
 

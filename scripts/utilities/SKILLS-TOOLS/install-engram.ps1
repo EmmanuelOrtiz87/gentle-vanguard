@@ -58,7 +58,7 @@ function Install-Engram {
 
     Write-Step "Installing Engram CLI via Go..."
     try {
-        & go install github.com/Gentleman-Programming/engram/cmd/engram@latest
+        & go install github.com/workspace-foundation/engram/cmd/engram@latest
     } catch {
         Write-Error "Engram installation failed: $($_.Exception.Message)"
         exit 1

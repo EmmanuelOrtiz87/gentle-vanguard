@@ -1,135 +1,133 @@
-#  Prerequisites - Foundation
+# Prerequisites - Foundation
 
-**Fecha**: 2026-04-26  
-**Descripcin**: Lista completa de herramientas requeridas y opcionales para Foundation
+**Date**: 2026-05-03  
+**Description**: Complete list of required and optional tools for Foundation.
 
 ---
 
-##  Instalacin Automtica
+## Automatic Installation
 
 ```powershell
-# Opcin 1: Instalar todo automticamente
+# Option 1: Install everything automatically
 .\scripts\utilities\install-prerequisites.ps1
 
-# Opcin 2: Solo verificar estado
+# Option 2: Check status only
 .\scripts\utilities\install-prerequisites.ps1 -CheckOnly
 ```
 
 ---
 
-##  Requeridas (Obligatorias)
+## Required (Mandatory)
 
-| Herramienta | Versin Mnima | Propsito | Instalacin |
-|------------|----------------|-----------|-------------|
-| **Node.js** | 18+ | Runtime JavaScript | [nodejs.org](https://nodejs.org) |
-| **npm** | 9+ | Package manager | Incluido con Node.js |
-| **Git** | 2.30+ | Control de versiónes | [git-scm.com](https://git-scm.com) |
+| Tool | Min Version | Purpose | Installation |
+|------|-------------|---------|-------------|
+| **Node.js** | 18+ | JavaScript runtime | [nodejs.org](https://nodejs.org) |
+| **npm** | 9+ | Package manager | Included with Node.js |
+| **Git** | 2.30+ | Version control | [git-scm.com](https://git-scm.com) |
 
 ---
 
-##  Recomendadas (Instalacin Automtica)
+## Recommended (Automatic Installation)
 
 ```powershell
-# Estas se instalan con el comando anterior
+# These install automatically with the command above
 npm install -g lefthook
 npm install -g prettier
 npm install -g @commitlint/cli @commitlint/config-conventional
 ```
 
-| Herramienta | Propsito | Instalacin |
-|------------|-----------|-------------|
+| Tool | Purpose | Installation |
+|------|---------|-------------|
 | **lefthook** | Git hooks management | `npm install -g lefthook` |
 | **prettier** | Code formatting | `npm install -g prettier` |
 | **commitlint** | Commit validation | `npm install -g @commitlint/cli` |
 
 ---
 
-##  Opcionales
+## Optional
 
 ### Security
+| Tool | Purpose | Installation |
+|------|---------|-------------|
+| **trufflehog** | Secrets detection | `choco install trufflehog` (Win) / `go install github.com/trufflesecurity/trufflehog/cmd/trufflehog@latest` (Linux/macOS) |
 
-| Herramienta | Propsito | Instalacin Windows | Instalacin Linux/macOS |
-|------------|-----------|--------------------|----------------------|
-| **trufflehog** | Secrets detection | `choco install trufflehog` | `go install github.com/trufflesecurity/trufflehog/cmd/trufflehog@latest` |
-
-### Python (para scripts Python)
-
+### Python (for Python scripts)
 ```powershell
-# Instalar Python
+# Install Python
 choco install python
 
-# Instalar pip
+# Install pip tools
 pip install safety bandit
 ```
 
-| Herramienta | Propsito |
-|-------------|-----------|
+| Tool | Purpose |
+|------|---------|
 | **safety** | Dependency vulnerability scanning |
 | **bandit** | Python security analysis |
 
 ---
 
-##  Checklist de Instalacin
+## Installation Checklist
 
-### 1. Requeridas
+### 1. Required
 - [ ] Node.js (18+)
 - [ ] npm (9+)
 - [ ] Git (2.30+)
 
-### 2. Recomendadas
+### 2. Recommended
 - [ ] lefthook
 - [ ] prettier
 - [ ] commitlint
 
-### 3. Opcionales
+### 3. Optional
 - [ ] trufflehog
-- [ ] Python (para scripts Python)
+- [ ] Python (for Python scripts)
 - [ ] PowerShell Core (pwsh)
 
 ---
 
-##  Verificacin
+## Verification
 
 ```powershell
-# Verificar todas las herramientas
+# Verify all tools
 .\scripts\utilities\install-prerequisites.ps1 -CheckOnly
 
-# Verificar individualmente
-node --versión
-npm --versión
-git --versión
-lefthook --versión
-prettier --versión
-trufflehog --versión
+# Verify individually
+node --version
+npm --version
+git --version
+lefthook --version
+prettier --version
+trufflehog --version
 ```
 
 ---
 
-##  Notas Importantes
+## Important Notes
 
-1. **trufflehog** no est disponible como npm - se instala va Chocolatey o Go
-2. Algunas herramientas requieren permisos de administrador
-3. En Windows, ejecutar PowerShell como administrador si hay problemas
+1. **trufflehog** is not available via npm - install via Chocolatey or Go
+2. Some tools require administrator permissions
+3. On Windows, run PowerShell as administrator if you encounter issues
 
 ---
 
-##  Troubleshooting
+## Troubleshooting
 
 ### Error: "command not found"
-Agregar al PATH:
+Add to PATH:
 ```powershell
-# Para npm global
+# For npm global
 $env:PATH += ";$env:APPDATA\npm"
 ```
 
 ### Error: "choco not found"
-Instalar Chocolatey:
+Install Chocolatey:
 ```powershell
-# Ejecutar como administrador
+# Run as administrator
 Set-ExecutionPolicy Bypass -Scope Process -Force
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 ```
 
 ---
 
-*Documento actualizado: 2026-04-26*
+*Document updated: 2026-05-03*

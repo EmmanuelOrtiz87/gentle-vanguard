@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Report Generator - Generate centralized telemetry reports
     
@@ -11,7 +11,7 @@
     - System health reports
     
 .NOTES
-    Author: gentleman-programming
+    Author: workspace-foundation
     Version: 1.0
 #>
 

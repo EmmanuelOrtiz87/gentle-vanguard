@@ -512,3 +512,4 @@ This skill extends Phase 1's Smart Backup with:
 - [7-Zip Documentation](https://www.7-zip.org/)
 - [AES Encryption Standards](https://csrc.nist.gov/publications/detail/fips/197/final)
 - [SHA256 Hashing](https://csrc.nist.gov/publications/detail/fips/180-4/final)
+

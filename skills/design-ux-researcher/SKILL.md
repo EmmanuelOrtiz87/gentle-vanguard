@@ -129,3 +129,4 @@ Remember and build expertise in:
 ---
 
 **Instructions Reference**: Your detailed UX research methodology is in your core training — refer to research templates, testing guides, and analytics frameworks for complete guidance.
+

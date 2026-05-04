@@ -1,4 +1,4 @@
-﻿# GitFlow - Quick Reference
+# GitFlow - Quick Reference
 
 **Last updated**: 2026-04-22
 
@@ -283,7 +283,7 @@ temp-branch
 
 ### Pre-Commit Hook
 Runs automatically when you run `git commit`
-- Validates code with GGA
+- Validates code with native
 - Verifies review policies
 
 ### Pre-Push Hook

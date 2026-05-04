@@ -173,3 +173,4 @@ cd C:\Workspace_local\workspace-foundation
 - **Escalation**: Solo si agota reintentos (3x) en auto-delegacin
 
 
+

@@ -85,3 +85,4 @@ provider "aws" {
 - Store secrets in code
 - Disable state locking
 
+

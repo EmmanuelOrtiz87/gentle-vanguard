@@ -12,7 +12,7 @@
     .\skill-router.ps1 -Query "implement login feature"
     
 .NOTES
-    Author: gentleman-programming
+    Author: workspace-foundation
     Version: 1.0
 #>
 

@@ -632,7 +632,7 @@ my-service/
         
                                                                            
                            
-       Native Runtime        Gentleman-Skills                       
+        Native Runtime        Workspace-Skills                       
                                                                      
        [S] SDD Workflow      [F] Framework patt.                    
        [M] Memory system     [T] Testing patt.                     
@@ -661,11 +661,11 @@ my-service/
     
 ```
 
-### 7.2 Gentleman-Skills Library
+### 7.2 Workspace-Skills Library
 
 ```
 
-                      GENTLEMAN-SKILLS LIBRARY                              
+                       WORKSPACE-SKILLS LIBRARY                              
 
 
     

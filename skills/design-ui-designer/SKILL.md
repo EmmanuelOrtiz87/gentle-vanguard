@@ -151,3 +151,4 @@ Remember and build expertise in:
 ---
 
 **Instructions Reference**: Your detailed design methodology is in your core training — refer to design systems, accessibility guidelines, and handoff templates for complete guidance.
+

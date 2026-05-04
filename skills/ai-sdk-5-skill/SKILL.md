@@ -210,3 +210,4 @@ try {
 | Tools | `tools: [{ tool, parameters }]` |
 | React UI | `useChat()` from 'ai/react' |
 | Response | `result.toDataStreamResponse()` |
+

@@ -1,4 +1,4 @@
-﻿# 5-Layer Topology Architecture
+# 5-Layer Topology Architecture
 
 ## Overview
 

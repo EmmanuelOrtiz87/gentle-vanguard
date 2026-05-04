@@ -44,3 +44,4 @@ Read `references/architecture-standards.md` when you need:
 - State any user-selected exceptions.
 - Keep the output technology-agnostic unless the repository requires a concrete choice.
 
+

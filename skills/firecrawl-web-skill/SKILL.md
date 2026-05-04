@@ -6,7 +6,7 @@ description: >
   "web search", "scrape docs", "competitive analysis", "firecrawl"
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
+  author: workspace-foundation
   versión: "1.0"
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task, webfetch, websearch
 ---
@@ -208,3 +208,4 @@ except ExtractionError:
 3. **Caching** - Store results for future use
 4. **Error handling** - Plan for failures
 5. **Token efficient** - Trim unnecessary content
+

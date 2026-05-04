@@ -89,8 +89,6 @@ function Calculate-Metrics {
     $byTool = @{
         claude = @{ requests = 0; tokens = 0 }
         opencode = @{ requests = 0; tokens = 0 }
-        gentleAi = @{ requests = 0; tokens = 0 }
-        gga = @{ invocations = 0 }
     }
     
     $actionBreakdown = @{

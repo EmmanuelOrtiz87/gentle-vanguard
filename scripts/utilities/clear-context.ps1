@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Clear Context - Limpia el contexto entre tareas sin cerrar sesin
     
@@ -18,7 +18,7 @@
     .\tools\clear-context.ps1 -TaskSummary "Corregidas inconsistencias de inicio"
     
 .NOTES
-    Author: gentleman-programming
+    Author: workspace-foundation
     Version: 1.0
 #>
 

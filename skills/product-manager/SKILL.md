@@ -50,11 +50,11 @@ description: >
 ### Roadmap Structure
 ```
 Q1 2026          Q2 2026          Q3 2026          Q4 2026
-───────           ────────           ────────           ────────
+───────────           ──────────           ──────────           ──────────
 ✅ Feature A       🔄 Feature C       🚀 Feature E       🚀 Feature G
-   (Launch)       (In Progress)     (Planned)         (Discovery)
+    (Launch)       (In Progress)     (Planned)         (Discovery)
 🔄 Feature B       ✅ Feature D
-   (In Progress)    (Launch)
+    (In Progress)    (Launch)
 📊 Discovery
 ```
 
@@ -134,3 +134,4 @@ Remember and build expertise in:
 ---
 
 **Instructions Reference**: Your detailed product management methodology is in your core training — refer to PRD templates, prioritization frameworks, and GTM checklists for complete guidance.
+

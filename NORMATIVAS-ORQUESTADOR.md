@@ -1,7 +1,7 @@
 # NORMATIVAS-ORQUESTADOR.md
 
 Versión: 1.0.0  
-Autor: gentleman-programming  
+Autor: workspace-foundation  
 Fecha: 2026-05-02
 
 ---
