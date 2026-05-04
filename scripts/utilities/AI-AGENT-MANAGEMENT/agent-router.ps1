@@ -16,8 +16,9 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
+$repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..\..')).Path
 $skillsPath = Join-Path $repoRoot 'skills'
+$userSkillsPath = 'C:\Users\emman\.claude\skills'
 
 function Write-AgentLine {
     param([string]$Message, [string]$Color = 'White')
@@ -65,10 +66,12 @@ function Get-AgentSkills {
     foreach ($skill in $skills) {
         $skillDir = Join-Path $skillsPath $skill
         $skillMd = Join-Path $skillDir 'SKILL.md'
-        if (Test-Path $skillMd) {
+        $userSkillDir = Join-Path $userSkillsPath $skill
+        $userSkillMd = Join-Path $userSkillDir 'SKILL.md'
+        if ((Test-Path $skillMd) -or (Test-Path $userSkillMd)) {
             $skillFiles += @{
                 name = $skill
-                path = $skillMd
+                path = if (Test-Path $skillMd) { $skillMd } else { $userSkillMd }
                 available = $true
             }
         } else {
@@ -81,6 +84,61 @@ function Get-AgentSkills {
     }
     
     return $skillFiles
+}
+
+function Get-SkillSummary {
+    param([hashtable]$SkillEntry, [int]$MaxLines = 40)
+    # Read first MaxLines of SKILL.md to extract key rules/patterns without loading full file
+    if (-not $SkillEntry.available) { return '' }
+    try {
+        $lines = Get-Content -Path $SkillEntry.path -TotalCount $MaxLines -Encoding UTF8 -ErrorAction Stop
+        return ($lines -join "`n").Trim()
+    } catch { return '' }
+}
+
+function Build-ExecutionContext {
+    param(
+        [string]$AgentName,
+        [string]$Role,
+        [string]$TaskText,
+        [string]$ActionType,
+        [array]$AvailableSkills,
+        [array]$Deliverables
+    )
+
+    $skillSections = foreach ($skill in $AvailableSkills) {
+        $summary = Get-SkillSummary -SkillEntry $skill -MaxLines 30
+        if ($summary) {
+            "### SKILL: $($skill.name)`n$summary"
+        }
+    }
+
+    $deliverableList = ($Deliverables | ForEach-Object { "- $_" }) -join "`n"
+
+    $prompt = @"
+## AGENT: $AgentName — $Role
+## ACTION: $ActionType
+## TASK: $TaskText
+
+### Expected deliverables
+$deliverableList
+
+### Loaded skill guidance
+$($skillSections -join "`n`n")
+
+### Execution instructions
+1. Apply skill patterns above to complete the task.
+2. Produce only the deliverables listed. Do not add unrequested work.
+3. Follow security and code-quality standards from the loaded skills.
+4. On completion set completion_signal.finished = true and list files_touched.
+"@
+
+    return @{
+        prompt          = $prompt.Trim()
+        skills_included = @($AvailableSkills | ForEach-Object { $_.name })
+        char_count      = $prompt.Length
+        token_estimate  = [math]::Ceiling($prompt.Length / 4)
+    }
 }
 
 function Get-AgentResult {
@@ -96,7 +154,21 @@ function Get-AgentResult {
     $deliverables = $AGENT_DELIVERABLES[$AgentName]
     
     $timestamp = Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz'
-    
+
+    # Build real execution context from loaded skill files
+    $execCtx = $null
+    if ($availableSkills.Count -gt 0) {
+        $execCtx = Build-ExecutionContext `
+            -AgentName $AgentName `
+            -Role $AGENT_DESCRIPTIONS[$AgentName] `
+            -TaskText $TaskText `
+            -ActionType $ActionType `
+            -AvailableSkills @($availableSkills) `
+            -Deliverables $deliverables
+    }
+
+    $baseTokenEstimate = if ($execCtx) { $execCtx.token_estimate + 500 } else { 2000 }
+
     $result = @{
         lane_id = "agent-$AgentName-$($timestamp -replace '[:\.]', '-' -replace 'T', '-')"
         agent = $AgentName
@@ -113,9 +185,10 @@ function Get-AgentResult {
         validation_result = $null
         next_action = $null
         token_estimate = $null
+        execution_context = $execCtx
         completion_signal = @{
             finished = $false
-            message = "Agent $AgentName initialized. Awaiting execution command."
+            message = "Agent $AgentName ready. Use execution_context.prompt to delegate to AI backend."
             continuity_instruction = "Maintain current session context, rules, and definitions. Do not deviate from established workflow."
             required_skills_enforced = @($availableSkills | ForEach-Object { $_.name })
         }
@@ -123,12 +196,15 @@ function Get-AgentResult {
     
     if ($result.skills_missing.Count -eq 0) {
         $result.status = 'ready'
-        $result.token_estimate = 2000 + ($availableSkills.Count * 300)
+        $result.token_estimate = $baseTokenEstimate
+        $result.completion_signal.message = "Agent $AgentName ready with full skill coverage. Execution context built — delegate prompt to AI backend."
     } elseif ($result.skills_missing.Count -lt $availableSkills.Count) {
         $result.status = 'partial'
-        $result.token_estimate = 2000 + ($availableSkills.Count * 200)
+        $result.token_estimate = $baseTokenEstimate
+        $result.completion_signal.message = "Agent $AgentName partially ready ($($missingSkills.Count) skills missing). Execution context built from available skills."
     } else {
         $result.status = 'blocked'
+        $result.token_estimate = 500
         $result.validation_result = @{
             passed = $false
             reason = 'All required skills missing'

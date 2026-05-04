@@ -261,13 +261,92 @@ if (-not $SkipEmptyDirCleanup) {
     }
 }
 
+# 6) Broken internal link scan (dry-run and apply both benefit from this audit)
+$brokenLinks = @()
+$mdFiles = Get-ChildItem -Path $repoRoot -Recurse -File -Include '*.md' -ErrorAction SilentlyContinue |
+    Where-Object { $_.FullName -notmatch '\\.git\\' -and $_.FullName -notmatch '\\node_modules\\' }
+
+foreach ($md in $mdFiles) {
+    $content = Get-Content -Path $md.FullName -Raw -ErrorAction SilentlyContinue
+    if (-not $content) { continue }
+
+    # Match markdown links: [text](path) — skip http/https and anchors-only
+    $matches2 = [regex]::Matches($content, '\[([^\]]+)\]\(([^)#][^)]*)\)')
+    foreach ($m in $matches2) {
+        $linkTarget = $m.Groups[2].Value.Trim()
+        # Skip external URLs
+        if ($linkTarget -match '^https?://') { continue }
+        # Strip inline anchors
+        $linkFile = ($linkTarget -split '#')[0].Trim()
+        if ([string]::IsNullOrWhiteSpace($linkFile)) { continue }
+
+        # Resolve relative to the containing markdown file
+        $mdDir = Split-Path $md.FullName -Parent
+        $resolvedPath = if ($linkFile.StartsWith('/')) {
+            Join-Path $repoRoot $linkFile.TrimStart('/')
+        } else {
+            Join-Path $mdDir $linkFile
+        }
+
+        if (-not (Test-Path $resolvedPath)) {
+            $brokenLinks += [pscustomobject]@{
+                file   = To-RepoRelative -Path $md.FullName
+                link   = $linkFile
+                target = To-RepoRelative -Path $resolvedPath
+            }
+        }
+    }
+}
+
+if ($brokenLinks.Count -gt 0) {
+    Write-Host ''
+    Write-Host '--- Broken internal links detected ---' -ForegroundColor Yellow
+    foreach ($bl in $brokenLinks) {
+        Write-Host ("  [BROKEN] {0}: {1}" -f $bl.file, $bl.link) -ForegroundColor Yellow
+    }
+}
+
+# 7) Persist action log to .logs/homologation/
+$logsDir = Join-Path $repoRoot '.logs\homologation'
+if (-not (Test-Path $logsDir)) {
+    New-Item -ItemType Directory -Path $logsDir -Force | Out-Null
+}
+
+$logTimestamp = Get-Date -Format 'yyyy-MM-dd_HHmmss'
+$logPath = Join-Path $logsDir "$logTimestamp.log"
+$mode = if ($Apply) { 'APPLY' } else { 'DRY-RUN' }
+
+$logLines = @(
+    "homologation-log v1.0",
+    "timestamp: $(Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz')",
+    "mode: $mode",
+    "moved_renamed: $movedCount",
+    "removed: $removedCount",
+    "ref_updates: $updatedRefCount",
+    "empty_dirs_removed: $cleanedDirCount",
+    "broken_links: $($brokenLinks.Count)"
+)
+
+if ($brokenLinks.Count -gt 0) {
+    $logLines += ''
+    $logLines += 'broken_links_detail:'
+    foreach ($bl in $brokenLinks) {
+        $logLines += "  - file: $($bl.file)"
+        $logLines += "    link: $($bl.link)"
+    }
+}
+
+$logLines | Out-File -FilePath $logPath -Encoding UTF8
+
 Write-Host ''
 Write-Host '=== Homologation Summary ===' -ForegroundColor Cyan
-Write-Host ("Mode: {0}" -f ($(if ($Apply) { 'APPLY' } else { 'DRY-RUN' })))
-Write-Host ("Moved/Renamed: {0}" -f $movedCount)
-Write-Host ("Removed: {0}" -f $removedCount)
-Write-Host ("Files with reference updates: {0}" -f $updatedRefCount)
-Write-Host ("Empty dirs removed: {0}" -f $cleanedDirCount)
+Write-Host ("Mode          : {0}" -f $mode)
+Write-Host ("Moved/Renamed : {0}" -f $movedCount)
+Write-Host ("Removed       : {0}" -f $removedCount)
+Write-Host ("Ref updates   : {0}" -f $updatedRefCount)
+Write-Host ("Empty dirs    : {0}" -f $cleanedDirCount)
+Write-Host ("Broken links  : {0}" -f $brokenLinks.Count) -ForegroundColor $(if ($brokenLinks.Count -gt 0) { 'Yellow' } else { 'Green' })
+Write-Host ("Action log    : {0}" -f (To-RepoRelative -Path $logPath)) -ForegroundColor DarkGray
 
 $totalChanges = $movedCount + $removedCount + $updatedRefCount + $cleanedDirCount
 
@@ -276,6 +355,8 @@ if ($FailOnChanges -and -not $Apply -and $totalChanges -gt 0) {
     exit 2
 }
 
-if (-not $Apply) {
-    Write-Host 'Run again with -Apply to execute changes.' -ForegroundColor Yellow
+if (-not $Apply -and ($totalChanges -gt 0 -or $brokenLinks.Count -gt 0)) {
+    Write-Host ''
+    Write-Host 'Run again with -Apply to execute file changes.' -ForegroundColor Yellow
+    Write-Host 'Broken links must be fixed manually in the source files.' -ForegroundColor Yellow
 }

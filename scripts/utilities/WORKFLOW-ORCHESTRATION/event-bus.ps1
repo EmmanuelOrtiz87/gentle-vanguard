@@ -99,12 +99,22 @@ function Add-HistoryEntry {
         [string]$Status
     )
     
+    # Extract execution_id from payload for cross-event correlation
+    $executionId = $null
+    if ($PayloadJson) {
+        try {
+            $p = $PayloadJson | ConvertFrom-Json
+            $executionId = if ($p.execution_id) { $p.execution_id } elseif ($p.lane_id) { $p.lane_id -replace '^agent-[A-Z]+-', 'dispatch-' } else { $null }
+        } catch { }
+    }
+
     $history = Get-History
     $entry = @{
-        timestamp = Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz'
-        event = $EventName
-        payload = if ($PayloadJson) { $PayloadJson } else { $null }
-        status = $Status
+        timestamp    = Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz'
+        event        = $EventName
+        execution_id = $executionId
+        payload      = if ($PayloadJson) { $PayloadJson } else { $null }
+        status       = $Status
         handlers_triggered = 0
     }
     
@@ -184,6 +194,102 @@ $STANDARD_EVENTS = @{
 }
 
 Initialize-EventBus
+
+# ─── GOVERNANCE ENFORCEMENT ─────────────────────────────────────────────────
+# Reads config/event-registry.json and config/event-governance-config.json.
+# Returns @{ Allowed=$true/$false; Reason='...' }
+function Invoke-EventGovernance {
+    param(
+        [string]$EventName,
+        [string]$PayloadJson
+    )
+
+    $registryPath   = Join-Path $repoRoot 'config\event-registry.json'
+    $governancePath = Join-Path $repoRoot 'config\event-governance-config.json'
+
+    # 1. Load configs (fail-open: if configs missing, allow but warn)
+    if (-not (Test-Path $registryPath) -or -not (Test-Path $governancePath)) {
+        Write-Host "  [GOV-WARN] Governance config not found — skipping enforcement" -ForegroundColor Yellow
+        return @{ Allowed = $true; Reason = 'config-missing' }
+    }
+
+    $registry   = Get-Content -Path $registryPath   -Raw | ConvertFrom-Json
+    $governance = Get-Content -Path $governancePath -Raw | ConvertFrom-Json
+
+    $eventDef = $registry.registry.PSObject.Properties[$EventName]
+
+    # 2. Unknown event check
+    if (-not $eventDef) {
+        Write-Host "  [GOV-WARN] '$EventName' is not in event-registry.json — proceeding unvalidated" -ForegroundColor Yellow
+        return @{ Allowed = $true; Reason = 'unregistered-event' }
+    }
+
+    # 3. Enabled check
+    if ($eventDef.Value.enabled -eq $false) {
+        return @{ Allowed = $false; Reason = "Event '$EventName' is disabled in registry" }
+    }
+
+    # 4. Payload size check (max_bytes = 10240)
+    $maxBytes = $governance.governance.security.policies.size_limit.max_bytes
+    if (-not $maxBytes) { $maxBytes = 10240 }
+    if ($PayloadJson) {
+        $payloadBytes = [System.Text.Encoding]::UTF8.GetByteCount($PayloadJson)
+        if ($payloadBytes -gt $maxBytes) {
+            return @{ Allowed = $false; Reason = "Payload size $payloadBytes bytes exceeds max $maxBytes bytes" }
+        }
+        # Soft warning at 80%
+        if ($payloadBytes -gt ($maxBytes * 0.8)) {
+            Write-Host "  [GOV-WARN] Payload $payloadBytes / $maxBytes bytes (>80% limit)" -ForegroundColor Yellow
+        }
+    }
+
+    # 5. Required fields schema check
+    $requiredFields = $eventDef.Value.schema.required
+    if ($requiredFields -and $PayloadJson) {
+        try {
+            $payload = $PayloadJson | ConvertFrom-Json
+            foreach ($field in $requiredFields) {
+                if ($null -eq $payload.PSObject.Properties[$field]) {
+                    return @{ Allowed = $false; Reason = "Schema validation failed: required field '$field' missing in payload" }
+                }
+            }
+        } catch {
+            return @{ Allowed = $false; Reason = "Payload is not valid JSON: $($_.Exception.Message)" }
+        }
+    }
+
+    # 6. Rate limit check (sliding window — count events in last 60s from history)
+    $rateLimitEnabled = $governance.governance.rate_limiting.enabled
+    if ($rateLimitEnabled) {
+        $rateLimit = $eventDef.Value.rate_limit
+        if ($rateLimit -and $rateLimit.max_per_minute) {
+            $history = Get-History
+            $windowStart = (Get-Date).AddSeconds(-60)
+            $recentCount = 0
+            if ($history.events) {
+                foreach ($entry in $history.events) {
+                    if ($entry.event -eq $EventName) {
+                        try {
+                            $ts = [datetime]::Parse($entry.timestamp)
+                            if ($ts -ge $windowStart) { $recentCount++ }
+                        } catch { }
+                    }
+                }
+            }
+            $maxPerMin = $rateLimit.max_per_minute
+            $softLimit = [math]::Floor($maxPerMin * 0.8)
+            if ($recentCount -ge $maxPerMin) {
+                return @{ Allowed = $false; Reason = "Rate limit exceeded: $recentCount/$maxPerMin per minute for '$EventName'" }
+            }
+            if ($recentCount -ge $softLimit) {
+                Write-Host "  [GOV-WARN] Rate limit approaching: $recentCount/$maxPerMin for '$EventName'" -ForegroundColor Yellow
+            }
+        }
+    }
+
+    return @{ Allowed = $true; Reason = 'ok' }
+}
+# ─────────────────────────────────────────────────────────────────────────────
 
 switch ($Action) {
     'list' {
@@ -359,21 +465,31 @@ switch ($Action) {
         }
     }
     
-    'clear' {
-        $historyPath = Join-Path $eventBusPath 'history.json'
-        $history = Get-History
-        $history.events = @()
-        $history | ConvertTo-Json -Depth 3 | Out-File -FilePath $historyPath -Encoding UTF8
-        Write-Host "[OK] Event history cleared" -ForegroundColor Green
-    }
-}
+    'emit' {
+        if ([string]::IsNullOrWhiteSpace($Event)) {
+            Write-Host "[ERROR] Event name required" -ForegroundColor Red
+            exit 1
+        }
+        
+        $normalizedEvent = $Event.ToLower()
 
-if ($Action -eq 'list' -and -not $Quiet) {
-    Write-Host ""
-    Write-Host "Usage:" -ForegroundColor Yellow
-    Write-Host "  .\wf.ps1 events list              List events and subscriptions"
-    Write-Host "  .\wf.ps1 events subscribe <EVENT>  Subscribe to event"
-    Write-Host "  .\wf.ps1 events unsubscribe <EV>   Unsubscribe from event"
+        # ── Governance gate ──────────────────────────────────────────────────
+        $govResult = Invoke-EventGovernance -EventName $normalizedEvent -PayloadJson $Payload
+        if (-not $govResult.Allowed) {
+            Write-Host "[GOV-BLOCK] Event '$normalizedEvent' blocked: $($govResult.Reason)" -ForegroundColor Red
+            Add-HistoryEntry -EventName $normalizedEvent -PayloadJson $Payload -Status "blocked:$($govResult.Reason)"
+            exit 1
+        }
+        # ─────────────────────────────────────────────────────────────────────
+
+        $subs = Get-Subscriptions
+        
+        Write-Host "Emitting: $normalizedEvent" -ForegroundColor Cyan
+        if ($Payload) {
+            Write-Host "  Payload: $Payload" -ForegroundColor Gray
+        }
+        
+        $handlersTriggered = 0
     Write-Host "  .\wf.ps1 events emit <EVENT> [P]  Emit event with optional payload"
     Write-Host "  .\wf.ps1 events handlers [EVENT]  List handlers"
     Write-Host "  .\wf.ps1 events history           Show event history"

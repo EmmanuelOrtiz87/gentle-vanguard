@@ -27,7 +27,8 @@ foreach ($file in $StagedFiles.Split("`n")) {
         'skills/docker-devops-skill/SKILL.md',
         'skills/security-expert-skill/references/security-patterns.md',
         'config/security-privacy.json',
-        'config/security-policy.json'
+        'config/security-policy.json',
+        'scripts/hooks/hook-output-safety.ps1'
     )
     if ($ExcludedPaths -contains $file) { continue }
     $content = git show ":0:$file" 2>$null

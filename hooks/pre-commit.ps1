@@ -9,6 +9,14 @@ param(
 
 $ErrorActionPreference = 'Continue'
 
+# FF-015: load hook output safety filter to prevent env var leakage in hook stdout
+$_safetyModule = Join-Path $PSScriptRoot '..\scripts\hooks\hook-output-safety.ps1'
+if (-not (Test-Path $_safetyModule)) {
+    # Try alternate relative path when run from repo root via .git/hooks/pre-commit
+    $_safetyModule = Join-Path (Split-Path $PSScriptRoot -Parent) 'scripts\hooks\hook-output-safety.ps1'
+}
+if (Test-Path $_safetyModule) { . $_safetyModule }
+
 function Invoke-LocalPowerShellScript {
     param(
         [string]$ScriptPath,
@@ -109,7 +117,8 @@ foreach ($file in $StagedFiles.Split("`n")) {
         'skills/docker-devops-skill/SKILL.md',
         'skills/security-expert-skill/references/security-patterns.md',
         'config/security-privacy.json',
-        'config/security-policy.json'
+        'config/security-policy.json',
+        'scripts/hooks/hook-output-safety.ps1'
     )
     if ($ExcludedPaths -contains $file) { continue }
     

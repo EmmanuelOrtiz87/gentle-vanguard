@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -2276,6 +2276,16 @@ switch ($Command) {
         if ($SkipTests) { $migrateArgs += '-DryRun' }
         if ($Force)     { $migrateArgs += '-Force' }
         Invoke-LocalPowerShellScript -ScriptPath $migrateScript -ScriptArgs $migrateArgs
+    }
+
+    'context-dashboard' {
+        $dashScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\context-dashboard.ps1'
+        if (-not (Test-Path $dashScript)) {
+            Write-Error "context-dashboard.ps1 not found at: $dashScript"
+            exit 1
+        }
+        $promptCharsArg = if ($Scope -match '^\d+$') { [int]$Scope } else { 0 }
+        & $dashScript -PromptChars $promptCharsArg
     }
 
     'context-pack' {
