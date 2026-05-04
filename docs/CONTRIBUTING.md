@@ -150,7 +150,7 @@ workspace-foundation/
     project-types/# Type-specific templates
     testing/      # Test templates
     api/          # API specs
- tools/            # External tools
+ scripts/utilities/            # External tools
 ```
 
 ## Scripts

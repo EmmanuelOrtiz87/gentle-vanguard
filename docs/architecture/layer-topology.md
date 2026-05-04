@@ -53,7 +53,7 @@ The workspace-foundation implements a 5-layer topology for AI agent tooling, des
 
 **Key Files**:
 - `engram_*` tools in agent config
-- Session management in `tools/session-*`
+- Session management in `scripts/utilities/session-*`
 
 ### Layer 2: Skills
 
@@ -176,7 +176,7 @@ The orchestrator (Layer 5 coordinator) must:
 ## Benefits
 
 1. **Modularity**: Replace any layer without rewriting others
-2. **Scalability**: Add new tools/skills/agents independently
+2. **Scalability**: Add new scripts/utilities/skills/agents independently
 3. **Testability**: Test each layer in isolation
 4. **Maintainability**: Clear boundaries reduce coupling
 5. **Agnosticity**: Works with any agent, OS, or language

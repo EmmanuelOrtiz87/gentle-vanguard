@@ -1,4 +1,4 @@
-﻿# AI Tools Compatibility Matrix
+# AI Tools Compatibility Matrix
 
 **Date**: 2026-04-22  
 **Status**: COMPATIBILITY AUDIT IN PROGRESS  
@@ -8,7 +8,7 @@
 
 ## Overview
 
-This document maps compatibility between Workspace Foundation and various AI tools/plugins to ensure consistent behavior across all integrations.
+This document maps compatibility between Workspace Foundation and various AI scripts/utilities/plugins to ensure consistent behavior across all integrations.
 
 ---
 

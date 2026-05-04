@@ -74,11 +74,11 @@ wf.ps1 list
 
 ### Optional: Local Workspace Autostart (Local-only)
 
-If you keep a personal workspace root (example: `C:\Workspace_local`), you can add a local-only startup helper to run health checks automatically. This is optional and should stay **local** (not a shared repo rule).
+If you keep a personal workspace root (example: `.`), you can add a local-only startup helper to run health checks automatically. This is optional and should stay **local** (not a shared repo rule).
 
 ```powershell
 # Local-only helper
-C:\Workspace_local\tools\session-autostart.cmd
+.\tools\session-autostart.cmd
 ```
 
 Notes:

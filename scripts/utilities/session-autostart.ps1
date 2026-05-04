@@ -3,7 +3,7 @@
 
 param(
     [string]$ProjectName = "workspace_local",
-    [string]$WorkspaceRoot = "C:\Workspace_local\workspace-foundation"
+    [string]$WorkspaceRoot = ".\workspace-foundation"
 )
 
 $ErrorActionPreference = "Continue"
@@ -25,7 +25,7 @@ Write-Step 1 "Running session-manager..."
 $sessionManager = Join-Path $PSScriptRoot "session-manager.ps1"
 if (-not (Test-Path $sessionManager)) {
     Write-Error "session-manager.ps1 not found: $sessionManager"
-    $wfScript = ".\scripts\utilities\wf.ps1"
+    $wfScript = Join-Path $PSScriptRoot "wf.ps1"
     if (Test-Path $wfScript) {
         & $wfScript start-session
     } else {
@@ -52,7 +52,7 @@ if (Test-Path $notificationScript) {
 
 # 3. Get Session ID
 Write-Step 3 "Getting Session ID..."
-$sessionFiles = Get-ChildItem ".\.session\session-*.json" -File -ErrorAction SilentlyContinue |
+$sessionFiles = Get-ChildItem (Join-Path $PSScriptRoot "..\.session\session-*.json") -File -ErrorAction SilentlyContinue |
                Sort-Object LastWriteTime -Descending
 if ($sessionFiles.Count -gt 0) {
     $SESSION_ID = $sessionFiles[0].BaseName
@@ -64,7 +64,7 @@ if ($sessionFiles.Count -gt 0) {
 
 # 4. Engram Policy Enforcement
 Write-Step 4 "Enforcing Engram policy (always installed and active)..."
-$engramPolicy = Join-Path $PSScriptRoot "..\foundation\engram-policy.ps1"
+$engramPolicy = Join-Path $PSScriptRoot "engram-policy.ps1"
 if (Test-Path $engramPolicy) {
     & $engramPolicy -Action enforce
     if ($LASTEXITCODE -ne 0) {
@@ -96,7 +96,7 @@ if (Test-Path $optimizeScript) {
 
 # 6. Cross-workspace validation
 Write-Step 6 "Validating cross-workspace consistency..."
-$crossValidator = ".\scripts\monitoring\cross-workspace-validator.ps1"
+$crossValidator = Join-Path $PSScriptRoot "cross-workspace-validator.ps1"
 if (Test-Path $crossValidator) {
     & $crossValidator -Detailed
     if ($LASTEXITCODE -ne 0) {
@@ -110,7 +110,7 @@ if (Test-Path $crossValidator) {
 
 # 7. Security Orchestrator
 Write-Step 7 "Initializing Security Orchestrator..."
-$securityScript = ".\scripts\security\security-orchestrator.ps1"
+$securityScript = Join-Path $PSScriptRoot "security-orchestrator.ps1"
 if (Test-Path $securityScript) {
     & $securityScript -Action init -AsJson
     if ($LASTEXITCODE -ne 0) {
@@ -138,7 +138,7 @@ if (Test-Path $skillRouter) {
 
 # 9. Karpathy Guidelines Enforcement (Next-Level Feature)
 Write-Step 9 "Enforcing Karpathy Guidelines (Think, Simplicity, Surgical, Goal-Driven)..."
-$karpathyEnforcer = ".\scripts\adaptive\karpathy-enforcer.ps1"
+$karpathyEnforcer = Join-Path $PSScriptRoot "karpathy-enforcer.ps1"
 if (Test-Path $karpathyEnforcer) {
     & $karpathyEnforcer -Trigger session-start -VerboseOutput
     if ($LASTEXITCODE -ne 0) {

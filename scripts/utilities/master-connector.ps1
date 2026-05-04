@@ -13,7 +13,7 @@ param(
 
 Write-Output "=== PHASE 1: Trigger Detection ==="
 
-$triggerScript = Join-Path $WorkspaceRoot "tools/pre-process-input.ps1"
+$triggerScript = Join-Path $WorkspaceRoot "scripts/utilities/pre-process-input.ps1"
 if (-not (Test-Path $triggerScript)) {
     Write-Output "ERROR: pre-process-input.ps1 not found at: $triggerScript"
     exit 1
@@ -82,14 +82,14 @@ foreach ($marker in $endMarkers) {
         Write-Output "Running cleanup..."
         
         # Run pre-compact-hook
-        $cleanupScript = Join-Path $WorkspaceRoot "tools/pre-compact-hook.ps1"
+        $cleanupScript = Join-Path $WorkspaceRoot "scripts/utilities/pre-compact-hook.ps1"
         if (Test-Path $cleanupScript) {
             & $cleanupScript -ProjectName "workspace_local" -CompressionRatio 0.90
             Write-Output "Context cleanup: DONE"
         }
         
         # Run handoff compression
-        $handoffScript = Join-Path $WorkspaceRoot "tools/handoff-compress.ps1"
+        $handoffScript = Join-Path $WorkspaceRoot "scripts/utilities/handoff-compress.ps1"
         if (Test-Path $handoffScript) {
             & $handoffScript
             Write-Output "Handoff compression: DONE"

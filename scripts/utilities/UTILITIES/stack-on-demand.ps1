@@ -214,7 +214,7 @@ function Validate-Stack {
     $validator = Join-Path $foundationRoot "scripts\utilities\orchestrator-status.ps1"
     & powershell -NoProfile -ExecutionPolicy Bypass -File $validator
 
-    $sessionValidator = "C:\Workspace_local\tools\validate-session-stack.ps1"
+    $sessionValidator = ".\tools\validate-session-stack.ps1"
     if (Test-Path $sessionValidator) {
         $validatorArgs = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $sessionValidator)
         if ($Detailed) { $validatorArgs += "-Detailed" }

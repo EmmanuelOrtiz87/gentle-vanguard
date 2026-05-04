@@ -4,11 +4,11 @@
 
 **BEFORE responding to ANY user input:**
 
-1. **Run trigger detection** - Execute: `powershell -File tools/pre-process-input.ps1 -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
+1. **Run trigger detection** - Execute: `powershell -File scripts/utilities/pre-process-input.ps1 -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
 2. **Parse output**:
    - If `TRIGGER_MATCH_FOUND` → Load indicated skill using `skill` tool BEFORE any other action
    - If `NO_TRIGGER_MATCH` → Continue with normal behavior
-3. **Session start** - Always run `tools/session-autostart.cmd` on Windows for notifications, optimizations, validations
+3. **Session start** - Always run `scripts/utilities/session-autostart.cmd` on Windows for notifications, optimizations, validations
 4. **Special case "iniciar sesion"** - Load `session-workflow-skill`, then follow its workflow
 
 **This rule is MANDATORY and MUST be followed automatically. Do NOT wait to be asked.**
@@ -20,54 +20,6 @@ This project follows a **LOCAL-FIRST** approach. AI agents must prioritize:
 3. Cached responses and context
 4. External search ONLY when explicitly needed by orchestrator
 
-## Restrictions
-- **NO web search** by default
-- **NO external API calls** unless authorized
-- **NO deep reasoning** for simple tasks
-- **USE** local skills in `~/.cursor/skills/` or project `skills/`
-- **USE** engram memory for context continuity
-- **USE** project documentation before external sources
-
-## Tool Permissions
-- `websearch`: DENY (enable only for orchestrator tasks)
-- `codesearch`: DENY (use local code patterns)
-- `webfetch`: DENY (rely on local docs)
-
-## When to Use External Tools
-Only the **orchestrator** agent may enable external tools when:
-1. Local knowledge is insufficient
-2. Documentation is outdated
-3. Explicit user request for external research
-
-## Efficiency Rules
-- Prefer `grep` over `codesearch`
-- Prefer `read` + engram memory over `websearch`
-- Use `context7` MCP only when local skills lack coverage
-- Batch operations when possible (non-urgent tasks)
-
-## Language
-- Default: Spanish (es) for communication
-- Technical terms: English (preserve original terminology)
-
-## 8 Governance Layers (from auto-delegation.json)
-When trigger detected, load corresponding skill:
-- **GOV**: governance, compliance, metrics, monitoring, observability, incident, security audit, review, audit → `project-orchestrator-skill`
-- **SAD**: architecture, design, sdd, api design, database, schema, technical decision, system design, microservice, integration → `sdd-design`
-- **DEV**: implement, code, develop, feature, refactor, bug fix, component, endpoint, frontend, backend, security, performance → `sdd-apply`
-- **QA**: test, testing, qa, validation, e2e, unit test, integration test, playwright, pytest, quality, judgment day → `sdd-verify`
-- **OPS**: deploy, ci/cd, docker, kubernetes, infrastructure, terraform, helm, release, devops, pipeline → `docker-devops-skill`
-- **DOC**: documentation, docs, readme, guide, runbook, specification, bdd specs, sdd specs → `documentation-governance`
-- **SCRIPT-GOV**: script, powershell, parser error, syntax error, validate script, governance script, hook, pre-push, pre-commit, fix script, auto fix, autofix, script error, correct script → `sdd-apply`
-- **REPORT**: informe, report, reporte, metricas, metrics, analytics, analisis, dashboard, resumen ejecutivo, gerencia, tokens, costos, consumo, sesiones, telemetry, telemetria, estadisticas, stats, resumen de sesion → `management-reporting-skill`
-
-## 7 GitFlow Capabilities
-
-| Trigger Keywords | GitFlow Layer | Action |
-|------------------|---------------|--------|
-| create branch, feature branch, bugfix branch, hotfix branch, release branch | **Branch Management** | `create-gitflow-branch.ps1` |
-| pull request, PR, create PR, open PR | **PR Management** | `create-pull-request.ps1` |
-| pre-commit, pre-push, git hook, hook validation | **Hooks** | `pre-commit-validation.ps1` |
-| post-merge, merge sync, sync after merge | **Merge Sync** | `post-merge-sync.ps1` |
-| gitflow, workflow, checkout, branch switching | **Workflow** | `git-workflow-skill` |
-| commit, conventional commit, commit message | **Commit** | `git-workflow-skill` |
-| conflict, merge conflict, resolve conflict | **Conflict Resolution** | `git-workflow-skill` |
+## Reference to Shared Rules
+See `.ai-rules/shared-context.md` for complete shared rules.
+See `CLAUDE.md` for the single source of truth.

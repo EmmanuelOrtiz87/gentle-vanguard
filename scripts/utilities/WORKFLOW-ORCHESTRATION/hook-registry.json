@@ -2,7 +2,7 @@
   "hooks": [
     {
       "name": "pre-process-input",
-      "path": "tools/pre-process-input.ps1",
+      "path": "scripts/utilities/pre-process-input.ps1",
       "description": "Pre-process user input for trigger detection"
     },
     {

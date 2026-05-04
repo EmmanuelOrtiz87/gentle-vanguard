@@ -22,13 +22,13 @@ Binary goes to `%USERPROFILE%\go\bin\engram.exe`
 
 **Option B (copy from workspace tools):**
 ```powershell
-Copy-Item "C:\Workspace_local\workspace-foundation\tools\engram.exe" "C:\Users\emman\bin\engram.exe"
+Copy-Item ".\workspace-foundation\tools\engram.exe" "$HOME\bin\engram.exe"
 ```
 
 **Option C (download release):**
 - Go to: https://github.com/workspace-foundation/engram/releases
 - Download `engram_<version>_windows_amd64.zip`
-- Extract `engram.exe` to `C:\Users\emman\bin\`
+- Extract `engram.exe` to `$HOME\bin\`
 
 ### Step 3: Reconfigure the Agent
 ```powershell
@@ -50,13 +50,13 @@ engram --version
 
 ## Automatic Update Script
 
-See: `tools/update-engram.ps1`
+See: `scripts/utilities/update-engram.ps1`
 
 ## Important Notes
 
 1. **Copying .exe alone is NOT enough** - the in-memory process must restart
-2. **Engram in PATH** (`C:\Users\emman\bin\`) vs **Engram in tools/** (`workspace-foundation/tools/`)
-   - tools/ is used for internal updates
+2. **Engram in PATH** (`$HOME\bin\`) vs **Engram in scripts/utilities/** (`workspace-foundation/scripts/utilities/`)
+   - scripts/utilities/ is used for internal updates
    - PATH is what the system and MCP agents use
 3. **OpenCode on Windows** uses `~/.config/opencode/` (not `%APPDATA%\opencode\`)
 4. **Data** is stored in `%USERPROFILE%\.engram\engram.db`

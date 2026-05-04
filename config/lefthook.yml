@@ -9,7 +9,7 @@ pre-commit:
 
     check-powershell-syntax:
       glob: "*.ps1"
-      exclude: "tools/.*"
+      exclude: "scripts/utilities/.*"
       run: powershell -NoProfile -Command "& { $ast = [System.Management.Automation.Language.Parser]::ParseFile('{staged_files}', [ref]$null, [ref]$null); if ($ast.EndBlock) { Write-Host '[OK] PowerShell syntax valid' } else { Write-Host '[FAIL] Syntax error'; exit 1 } }"
 
     check-markdown-accents:
@@ -28,7 +28,7 @@ commit-msg:
 post-commit:
   commands:
     update-session:
-      run: powershell -NoProfile -Command "& { if (Test-Path tools/session-manager.ps1) { .\\tools\\session-manager.ps1 -Action update } }"
+      run: powershell -NoProfile -Command "& { if (Test-Path scripts/utilities/session-manager.ps1) { .\\tools\\session-manager.ps1 -Action update } }"
 
 post-merge:
   commands:

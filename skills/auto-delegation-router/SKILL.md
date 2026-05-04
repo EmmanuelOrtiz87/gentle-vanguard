@@ -887,7 +887,7 @@ These tasks MUST be handled by the main orchestrator or user:
 
 1. **Core Configuration Changes**
    - Modifications to `AGENTS.md`, `config/mcp-servers.json`
-   - Changes to `tools/session-autostart.cmd`, `tools/enforce-response-mode.ps1`
+   - Changes to `scripts/utilities/session-autostart.cmd`, `scripts/utilities/enforce-response-mode.ps1`
    - Token budget or threshold adjustments in `token-guard-config.json`
 
 2. **Security & Authentication**

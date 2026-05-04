@@ -16,13 +16,13 @@ description: >
 
 1. **Auto-First Session Activation** - Prefer automatic IDE/session detection, but keep on-demand fallback
 2. **MANDATORY Pre-Processing** - BEFORE ANY user input response:
-   - Execute: `powershell -File tools/pre-process-input.ps1 -UserInput "USER_INPUT" -WorkspaceRoot "."`
+   - Execute: `powershell -File scripts/utilities/pre-process-input.ps1 -UserInput "USER_INPUT" -WorkspaceRoot "."`
    - If TRIGGER_MATCH_FOUND  Load skill using `skill` tool BEFORE any other action
    - If NO_TRIGGER_MATCH  Continue with normal behavior
    - This applies to ALL tools: opencode, cline, cursor, windsurf, continue.dev, claude, copilot
 3. **Session Startup** - On "iniciar sesión" or session start:
    - Load `session-workflow-skill` automatically
-   - Execute `tools/session-autostart.cmd` (Windows) or `bash ./tools/session-autostart.sh` (Linux/macOS)
+   - Execute `scripts/utilities/session-autostart.cmd` (Windows) or `bash ./scripts/utilities/session-autostart.sh` (Linux/macOS)
    - This ensures notifications, optimizations, validations run automatically
 4. **Auto-Detect** - Detect stack, project type, and gaps automatically
 5. **Load Skills** - Load relevant skills based on context

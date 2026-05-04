@@ -10,8 +10,8 @@ param(
     [string]$UserInput,
     [string]$CodePath = ".",
     [string]$SessionId = $env:SESSION_ID,
-    [string]$EngramPath = "C:\Users\emman\bin\engram.exe",
-    [string]$FailureLearningDb = "C:\Workspace_local\workspace-foundation\scripts\adaptive\.failure-learning.json"
+    [string]$EngramPath = "$HOME\bin\engram.exe",
+    [string]$FailureLearningDb = ".\workspace-foundation\scripts\adaptive\.failure-learning.json"
 )
 
 $ErrorActionPreference = "Continue"

@@ -124,5 +124,5 @@ Ver: `config/distributed-tracing-config.json`
 - `skills/distributed-tracing-skill/otel-exporter.ps1` - OpenTelemetry exporter
 - `skills/distributed-tracing-skill/metrics-collector.ps1` - Metrics collection
 - `skills/distributed-tracing-skill/report-generator.ps1` - Report generation
-- `tools/telemetry-dashboard.ps1` - Dashboard para visualizar traces
+- `scripts/utilities/telemetry-dashboard.ps1` - Dashboard para visualizar traces
 

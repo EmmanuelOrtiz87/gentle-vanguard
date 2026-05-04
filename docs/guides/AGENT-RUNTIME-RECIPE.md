@@ -1,4 +1,4 @@
-﻿# Agent Runtime Recipe
+# Agent Runtime Recipe
 
 Practical setup guide to run agents consistently across local, cloud/self-hosted, and SaaS environments.
 
@@ -33,7 +33,7 @@ Quick validation:
 
 Use this for day-to-day coding in a local repo.
 
-1. Configure startup policy in `tools/session-autostart.config.json`:
+1. Configure startup policy in `scripts/utilities/session-autostart.config.json`:
    - `autoStartPrimaryRuntime: true`
    - `strictCompatibilityChecks: true` (recommended)
 2. Start session:

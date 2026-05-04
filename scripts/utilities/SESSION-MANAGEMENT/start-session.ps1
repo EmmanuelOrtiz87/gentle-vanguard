@@ -105,7 +105,7 @@ function New-SessionBriefContent {
 
 ## Recommended Commands
 
-- Validate stack: powershell -NoProfile -ExecutionPolicy Bypass -File c:\Workspace_local\tools\validate-session-stack.ps1
+- Validate stack: powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\validate-session-stack.ps1
 - Project health: .\scripts\utilities\wf.ps1 health
 - Project status: .\scripts\utilities\wf.ps1 status
 $taskReference

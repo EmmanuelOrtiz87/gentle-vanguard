@@ -18,7 +18,7 @@ $timestamp = Get-Date -Format "yyyy-MM-dd-HHmmss"
 Write-Host "[INFO] Running session end hook..."
 
 # Save session summary to Engram if available
-$engramPath = "C:\Users\emman\bin\engram.exe"
+$engramPath = "$HOME\bin\engram.exe"
 if (Test-Path $engramPath) {
     try {
         $summary = @"
@@ -35,7 +35,7 @@ Session ended at $timestamp
 - Session cleanup completed
 
 ## Relevant Files
-- tools/session-end-hook.ps1 - Executed
+- scripts/utilities/session-end-hook.ps1 - Executed
 "@
         & $engramPath mem-session-summary --content $summary 2>$null
         Write-Host "[OK] Session summary saved to Engram"

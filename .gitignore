@@ -84,7 +84,6 @@ logs/.session-active
 .telemetry/
 
 # OpenCode generated
-opencode.json
 config/opencode.schema.json
 
 # Audit reports (auto-generated)

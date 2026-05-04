@@ -4,11 +4,11 @@
 
 **BEFORE responding to ANY user input:**
 
-1. **Run trigger detection** - Execute: `powershell -File tools/pre-process-input.ps1 -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
+1. **Run trigger detection** - Execute: `powershell -File scripts/utilities/pre-process-input.ps1 -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
 2. **Parse output**:
    - If `TRIGGER_MATCH_FOUND` → Load indicated skill using `skill` tool BEFORE any other action
    - If `NO_TRIGGER_MATCH` → Continue with normal behavior
-3. **Session start** - Always run `tools/session-autostart.cmd` on Windows for notifications, optimizations, validations
+3. **Session start** - Always run `scripts/utilities/session-autostart.cmd` on Windows for notifications, optimizations, validations
 4. **Special case "iniciar sesion"** - Load `session-workflow-skill`, then follow its workflow
 
 **This rule is MANDATORY and MUST be followed automatically. Do NOT wait to be asked.**

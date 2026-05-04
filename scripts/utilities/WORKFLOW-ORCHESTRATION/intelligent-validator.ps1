@@ -14,7 +14,7 @@ $results = @{
 }
 
 # Check context efficiency config
-$ceConfig = "tools/context-efficiency-config.json"
+$ceConfig = "scripts/utilities/context-efficiency-config.json"
 if (Test-Path $ceConfig) {
     $config = Get-Content $ceConfig -Raw | ConvertFrom-Json
     $target = $config.contextEfficiency.targetPercentage
@@ -26,7 +26,7 @@ if (Test-Path $ceConfig) {
 }
 
 # Check session autostart config
-$saConfig = "tools/session-autostart.config.json"
+$saConfig = "scripts/utilities/session-autostart.config.json"
 if (Test-Path $saConfig) {
     $config = Get-Content $saConfig -Raw | ConvertFrom-Json
     $target = $config.contextEfficiency.targetPercentage

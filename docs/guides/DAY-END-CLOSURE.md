@@ -1,4 +1,4 @@
-﻿# Day End Closure Process
+# Day End Closure Process
 
 ## Purpose
 
@@ -102,7 +102,7 @@ Currently manual-trigger only. To enable automatic closure:
 ```powershell
 # Create scheduled task to run at shift end (e.g., 5:30 PM)
 $trigger = New-ScheduledTaskTrigger -Daily -At "17:30"
-$action = New-ScheduledTaskAction -Execute "powershell" -Argument "-NoProfile -ExecutionPolicy Bypass -File C:\Workspace_local\workspace-foundation\scripts\utilities\wf.ps1 day-end-closure -Quiet"
+$action = New-ScheduledTaskAction -Execute "powershell" -Argument "-NoProfile -ExecutionPolicy Bypass -File .\workspace-foundation\scripts\utilities\wf.ps1 day-end-closure -Quiet"
 Register-ScheduledTask -TaskName "Gentleman-DayEndClosure" -Trigger $trigger -Action $action
 ```
 
@@ -110,7 +110,7 @@ Register-ScheduledTask -TaskName "Gentleman-DayEndClosure" -Trigger $trigger -Ac
 ```powershell
 # Add to your $PROFILE to run on shell exit
 Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action {
-    Push-Location "C:\Workspace_local\workspace-foundation"
+    Push-Location ".\workspace-foundation"
     & .\scripts\utilities\wf.ps1 day-end-closure -Quiet -AutoTriggered
     Pop-Location
 } | Out-Null

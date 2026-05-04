@@ -1,4 +1,4 @@
-﻿# Context Efficiency Protocol
+# Context Efficiency Protocol
 
 **versión:** 1.0 (Apr 20, 2026)  
 **Effective:** Immediate  
@@ -33,8 +33,8 @@ During compaction, these content types are preserved:
 - RESULT
 
 ### 2.3 Configuration
-Pre-compact hook located at: `tools/pre-compact-hook.ps1`
-Configuration: `tools/context-efficiency-config.json`
+Pre-compact hook located at: `scripts/utilities/pre-compact-hook.ps1`
+Configuration: `scripts/utilities/context-efficiency-config.json`
 
 ## 3. Engram Optimization
 
@@ -122,13 +122,13 @@ At session end:
 ## 7. Tools and Scripts
 
 ### 7.1 Primary Scripts
-- `tools/optimize-engram-usage.ps1`: Main optimization script
-- `tools/pre-compact-hook.ps1`: Automatic compaction hook
-- `tools/session-autostart.cmd`: Enhanced startup with optimization
+- `scripts/utilities/optimize-engram-usage.ps1`: Main optimization script
+- `scripts/utilities/pre-compact-hook.ps1`: Automatic compaction hook
+- `scripts/utilities/session-autostart.cmd`: Enhanced startup with optimization
 
 ### 7.2 Configuration Files
-- `tools/context-efficiency-config.json`: Efficiency configuration
-- `tools/session-autostart.config.json`: Session configuration with efficiency settings
+- `scripts/utilities/context-efficiency-config.json`: Efficiency configuration
+- `scripts/utilities/session-autostart.config.json`: Session configuration with efficiency settings
 
 ## 8. Monitoring and Alerts
 
