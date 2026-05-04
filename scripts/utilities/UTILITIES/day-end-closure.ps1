@@ -17,7 +17,7 @@ param(
 
 $ErrorActionPreference = 'Continue'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
+$repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..\..')).Path
 
 function Write-Step { param([string]$m) if (-not $Quiet) { Write-Host "`n=== $m ===" -ForegroundColor Cyan } }
 function Write-Ok   { param([string]$m) if (-not $Quiet) { Write-Host "[OK] $m" -ForegroundColor Green } }
@@ -53,7 +53,7 @@ function Invoke-Engram {
 }
 
 #  Session closure sequence 
-$endSessionScript = Join-Path $scriptDir 'end-session.ps1'
+$endSessionScript = Join-Path $scriptDir '..\SESSION-MANAGEMENT\end-session.ps1'
 $validateScript = Join-Path $repoRoot 'scripts\diagnostics\validate-script-governance.ps1'
 
 # 1. Generate standard delivery closure artifact via wf.ps1

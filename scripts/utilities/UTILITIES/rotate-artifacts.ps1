@@ -14,7 +14,7 @@ param(
 
 $ErrorActionPreference = 'Continue'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot = if ($scriptDir) { (Resolve-Path (Join-Path (Join-Path $scriptDir '..') '..')).Path } else { Get-Location }
+$repoRoot = if ($scriptDir) { (Resolve-Path (Join-Path (Join-Path (Join-Path $scriptDir '..') '..') '..')).Path } else { Get-Location }
 $docsDir = Join-Path $repoRoot 'docs'
 $archiveRoot = Join-Path $docsDir '.local-archive'
 
