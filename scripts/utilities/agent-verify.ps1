@@ -85,6 +85,25 @@ if ($Domain -in @("all","config")) {
     } else {
         Add-Result "auto-delegation-keys" "FAIL" "config/auto-delegation.json not found" "config"
     }
+
+    # quality-gates.json required keys
+    $QgPath = "$Root\config\quality-gates.json"
+    if (Test-Path $QgPath) {
+        try {
+            $qg = Get-Content $QgPath -Raw | ConvertFrom-Json
+            $requiredQg = @("requiredWorkflows","requiredStatusChecks","pullRequestRules")
+            $missingQg = $requiredQg | Where-Object { -not $qg.PSObject.Properties[$_] }
+            if ($missingQg.Count -eq 0) {
+                Add-Result "quality-gates-keys" "PASS" "Required keys present in config/quality-gates.json" "config"
+            } else {
+                Add-Result "quality-gates-keys" "FAIL" "Missing keys in quality-gates.json: $($missingQg -join ', ')" "config"
+            }
+        } catch {
+            Add-Result "quality-gates-keys" "FAIL" "Cannot parse quality-gates.json: $_" "config"
+        }
+    } else {
+        Add-Result "quality-gates-keys" "WARN" "config/quality-gates.json not found" "config"
+    }
 }
 
 # =============================================================================
@@ -212,12 +231,163 @@ if ($Domain -in @("all","structure")) {
         Add-Result "critical-scripts" "FAIL" "Missing scripts: $($missingScripts -join ', ')" "structure"
     }
 
+    # Required workflow files from quality-gates config
+    $QgPath = "$Root\config\quality-gates.json"
+    if (Test-Path $QgPath) {
+        try {
+            $qg = Get-Content $QgPath -Raw | ConvertFrom-Json
+            $requiredWorkflows = @($qg.requiredWorkflows)
+            $missingWorkflowFiles = @()
+            foreach ($wfName in $requiredWorkflows) {
+                $wfPath = "$Root\.github\workflows\$wfName.yml"
+                if (-not (Test-Path $wfPath)) {
+                    $missingWorkflowFiles += "$wfName.yml"
+                }
+            }
+
+            if ($missingWorkflowFiles.Count -eq 0) {
+                Add-Result "quality-gate-workflows" "PASS" "All required workflow files exist" "structure"
+            } else {
+                Add-Result "quality-gate-workflows" "FAIL" "Missing required workflow files: $($missingWorkflowFiles -join ', ')" "structure"
+            }
+        } catch {
+            Add-Result "quality-gate-workflows" "WARN" "Could not validate required workflows from quality-gates.json: $_" "structure"
+        }
+    }
+
+    # Workflow hardening checks (scheduled workflows only)
+    $WorkflowDir = Join-Path $Root ".github\workflows"
+    if (Test-Path $WorkflowDir) {
+        $scheduled = @()
+        Get-ChildItem "$WorkflowDir\*.yml" -File | ForEach-Object {
+            $raw = Get-Content $_.FullName -Raw
+            if ($raw -match "(?m)^\s*schedule:\s*$") {
+                $scheduled += [PSCustomObject]@{ file = $_.Name; raw = $raw }
+            }
+        }
+
+        if ($scheduled.Count -eq 0) {
+            Add-Result "workflow-hardening" "WARN" "No scheduled workflows found under .github/workflows" "structure"
+        } else {
+            $missingConcurrency = @()
+            $missingPermissions = @()
+            $missingTimeout = @()
+            $badCronComments = @()
+
+            foreach ($wf in $scheduled) {
+                if ($wf.raw -notmatch "(?m)^\s*concurrency:\s*$") { $missingConcurrency += $wf.file }
+                if ($wf.raw -notmatch "(?m)^\s*permissions:\s*$") { $missingPermissions += $wf.file }
+                if ($wf.raw -notmatch "(?m)^\s*timeout-minutes:\s*\d+") { $missingTimeout += $wf.file }
+
+                $cronLines = ($wf.raw -split "`r?`n") | Where-Object { $_ -match "cron:\s*'" }
+                foreach ($line in $cronLines) {
+                    if ($line -notmatch "GMT-3" -or $line -notmatch "UTC") {
+                        $badCronComments += $wf.file
+                        break
+                    }
+                }
+            }
+
+            $issues = @()
+            if ($missingConcurrency.Count -gt 0) { $issues += "missing concurrency: $($missingConcurrency -join ', ')" }
+            if ($missingPermissions.Count -gt 0) { $issues += "missing permissions: $($missingPermissions -join ', ')" }
+            if ($missingTimeout.Count -gt 0) { $issues += "missing timeout-minutes: $($missingTimeout -join ', ')" }
+
+            if ($issues.Count -eq 0) {
+                Add-Result "workflow-hardening" "PASS" "Scheduled workflows include permissions, concurrency and timeout-minutes" "structure"
+            } else {
+                Add-Result "workflow-hardening" "FAIL" ($issues -join " | ") "structure"
+            }
+
+            if ($badCronComments.Count -eq 0) {
+                Add-Result "workflow-cron-comments" "PASS" "Scheduled cron lines include UTC and GMT-3 mapping comments" "structure"
+            } else {
+                $uniqueBad = $badCronComments | Select-Object -Unique
+                Add-Result "workflow-cron-comments" "WARN" "Cron comments should include UTC and GMT-3 mapping: $($uniqueBad -join ', ')" "structure"
+            }
+        }
+    } else {
+        Add-Result "workflow-hardening" "WARN" ".github/workflows directory not found" "structure"
+    }
+
     # Detect uncommitted changes (unstaged or staged)
     $DirtyFiles = git -C $Root status --porcelain 2>$null | Where-Object { $_ -match "^\s*[MADRCU?]" }
     if ($DirtyFiles.Count -gt 0) {
         Add-Result "uncommitted-changes" "WARN" "$($DirtyFiles.Count) uncommitted file(s) — commit or stash before closing task" "structure"
     } else {
         Add-Result "uncommitted-changes" "PASS" "Working tree clean" "structure"
+    }
+
+    # Governed override abuse detection
+    $OrchPath = "$Root\config\orchestrator.json"
+    if (Test-Path $OrchPath) {
+        try {
+            $orch = Get-Content $OrchPath -Raw | ConvertFrom-Json
+            $gov = $orch.governed_override_profiles
+            $abuse = $gov.abuse_detection
+            $auditRel = $gov.audit_log
+
+            if ($gov -and $abuse -and $abuse.enabled -and $auditRel) {
+                $auditPath = Join-Path $Root $auditRel
+                if (-not (Test-Path $auditPath)) {
+                    Add-Result "override-abuse-audit" "PASS" "Override audit log not present yet; no abuse detected" "structure"
+                } else {
+                    $entries = @()
+                    Get-Content $auditPath -ErrorAction SilentlyContinue | ForEach-Object {
+                        if (-not [string]::IsNullOrWhiteSpace($_)) {
+                            try { $entries += ($_ | ConvertFrom-Json) } catch {}
+                        }
+                    }
+
+                    $windowStart = (Get-Date).AddHours(-1 * [int]$abuse.window_hours)
+                    $recent = @($entries | Where-Object {
+                        $ts = $null
+                        if ($_.timestamp) {
+                            try { $ts = [DateTimeOffset]::Parse([string]$_.timestamp).DateTime } catch {}
+                        }
+                        $ts -and $ts -ge $windowStart
+                    })
+
+                    if ($recent.Count -eq 0) {
+                        Add-Result "override-abuse-audit" "PASS" "No governed overrides recorded in the last $($abuse.window_hours)h" "structure"
+                    } else {
+                        $perAgent = @{}
+                        $perProfile = @{}
+                        foreach ($entry in $recent) {
+                            $agentKey = if ($entry.agent) { [string]$entry.agent } else { "unknown" }
+                            $profileKey = if ($entry.profile) { [string]$entry.profile } else { "unknown" }
+                            if (-not $perAgent.ContainsKey($agentKey)) { $perAgent[$agentKey] = 0 }
+                            if (-not $perProfile.ContainsKey($profileKey)) { $perProfile[$profileKey] = 0 }
+                            $perAgent[$agentKey]++
+                            $perProfile[$profileKey]++
+                        }
+
+                        $violations = @()
+                        if ($recent.Count -ge [int]$abuse.warn_total_overrides) {
+                            $violations += "total overrides=$($recent.Count)"
+                        }
+                        foreach ($k in $perAgent.Keys) {
+                            if ($perAgent[$k] -ge [int]$abuse.warn_per_agent) {
+                                $violations += "agent $k=$($perAgent[$k])"
+                            }
+                        }
+                        foreach ($k in $perProfile.Keys) {
+                            if ($perProfile[$k] -ge [int]$abuse.warn_per_profile) {
+                                $violations += "profile $k=$($perProfile[$k])"
+                            }
+                        }
+
+                        if ($violations.Count -gt 0) {
+                            Add-Result "override-abuse-audit" "WARN" "Governed override usage above threshold in last $($abuse.window_hours)h: $($violations -join '; ')" "structure"
+                        } else {
+                            Add-Result "override-abuse-audit" "PASS" "Governed override usage within threshold in last $($abuse.window_hours)h" "structure"
+                        }
+                    }
+                }
+            }
+        } catch {
+            Add-Result "override-abuse-audit" "WARN" "Could not evaluate override audit abuse: $_" "structure"
+        }
     }
 }
 

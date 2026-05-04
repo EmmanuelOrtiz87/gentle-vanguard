@@ -91,7 +91,7 @@ function Register-ScheduledTask {
     $taskName = "WorkspaceStatusMonitor"
     $scriptPath = $PSCommandPath
     $action = New-ScheduledTaskAction -Execute "pwsh.exe" -Argument "-ExecutionPolicy Bypass -File `"$scriptPath`" -Once"
-    $trigger = New-ScheduledTaskTrigger -Daily -At "09:00"
+    $trigger = New-ScheduledTaskTrigger -Daily -At "13:30"
     
     try {
         $existingTask = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
@@ -102,7 +102,7 @@ function Register-ScheduledTask {
         
         Register-ScheduledTask -TaskName $taskName -Action $action -Trigger $trigger -Description "Monitoreo continuo del estado del workspace"
         Write-Log "Tarea programada registrada: $taskName" "SUCCESS"
-        Write-Log "Se ejecutara diariamente a las 09:00" "INFO"
+        Write-Log "Se ejecutara diariamente a las 13:30" "INFO"
     }
     catch {
         Write-Log "Error al registrar tarea programada: $_" "ERROR"
