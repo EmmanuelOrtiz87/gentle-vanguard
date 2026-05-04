@@ -1,4 +1,4 @@
-﻿param(
+param(
     [switch]$Force
 )
 
@@ -20,7 +20,7 @@ if (-not $GitRoot) {
 
 Write-Host ""
 Write-Host "" -ForegroundColor Cyan
-Write-Host "  Gentleman Foundation - Post-Checkout Health Check" -ForegroundColor Cyan
+Write-Host "  Foundation - Post-Checkout Health Check" -ForegroundColor Cyan
 Write-Host "" -ForegroundColor Cyan
 
 # Find diagnostics script
@@ -71,3 +71,7 @@ Write-Host "[OK] Post-checkout completion check finished" -ForegroundColor Green
 Write-Host ""
 
 exit 0
+
+
+
+

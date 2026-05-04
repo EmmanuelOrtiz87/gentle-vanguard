@@ -322,3 +322,6 @@ switch ($Mode) {
         Write-Host ("Session: {0} | Status: {1} | Started: {2} | Monitor PID: {3}" -f $state.sessionId, $state.status, $state.startedAt, $state.monitorPid) -ForegroundColor White
     }
 }
+
+
+

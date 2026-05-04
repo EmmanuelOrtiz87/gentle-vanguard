@@ -1,10 +1,10 @@
 <#
 .SYNOPSIS
-    Pre-commit Hook - Valida cambios en configuraciones
+    Pre-commit Hook - Validate configuration changes
     
 .DESCRIPTION
-    Hook que se ejecuta antes de hacer commit para validar
-    que los archivos de configuración sean correctos.
+    Hook that runs before commit to validate
+    that configuration files are correct.
     
 .NOTES
     Author: workspace-foundation
@@ -13,16 +13,51 @@
 
 $ErrorActionPreference = 'Continue'
 
-Write-Host "🔍 Pre-commit: Validando cambios en configuraciones..." -ForegroundColor Cyan
+Write-Host "🔍 Pre-commit: Validating configuration changes..." -ForegroundColor Cyan
 
-# Obtener archivos modificados
+# Get modified files
 $stagedFiles = git diff --cached --name-only --diff-filter=ACM
 
 $configFiles = $stagedFiles | Where-Object { $_ -match '\.json$' -and $_ -match '(config|opencode)' }
 
 if ($configFiles.Count -eq 0) {
-    Write-Host "✅ No hay cambios en configuraciones" -ForegroundColor Green
+    Write-Host "✅ No configuration changes" -ForegroundColor Green
     exit 0
+}
+
+Write-Host "📋 Configuration files to validate: $($configFiles.Count)" -ForegroundColor Yellow
+
+$hasErrors = $false
+
+foreach ($file in $configFiles) {
+    Write-Host "  Validating: $file" -ForegroundColor Cyan
+    
+    # Validate JSON
+    try {
+        $content = Get-Content $file -Raw
+        $json = $content | ConvertFrom-Json
+        Write-Host "    ✅ Valid JSON" -ForegroundColor Green
+    } catch {
+        Write-Host "    ❌ Invalid JSON: $_" -ForegroundColor Red
+        $hasErrors = $true
+        continue
+    }
+    
+    # Validate schema if exists
+    $schemaFile = $file -replace '\.json$', '.schema.json'
+    if (Test-Path $schemaFile) {
+        Write-Host "    Validating against schema..." -ForegroundColor Cyan
+        # Here would go schema validation
+    }
+}
+
+if ($hasErrors) {
+    Write-Host "❌ Configuration validation failed" -ForegroundColor Red
+    exit 1
+}
+
+Write-Host "✅ Configuration validation passed" -ForegroundColor Green
+exit 0
 }
 
 Write-Host "📋 Archivos de configuración a validar: $($configFiles.Count)" -ForegroundColor Yellow
@@ -30,7 +65,7 @@ Write-Host "📋 Archivos de configuración a validar: $($configFiles.Count)" -F
 $hasErrors = $false
 
 foreach ($file in $configFiles) {
-    Write-Host "  Validando: $file" -ForegroundColor Cyan
+    Write-Host "  Validating: $file" -ForegroundColor Cyan
     
     # Validar JSON
     try {
@@ -46,7 +81,7 @@ foreach ($file in $configFiles) {
     # Validar esquema si existe
     $schemaFile = $file -replace '\.json$', '.schema.json'
     if (Test-Path $schemaFile) {
-        Write-Host "    Validando contra esquema..." -ForegroundColor Cyan
+        Write-Host "    Validating against schema..." -ForegroundColor Cyan
         # Aquí iría validación de esquema más compleja
         Write-Host "    ✅ Esquema validado" -ForegroundColor Green
     }
@@ -59,3 +94,6 @@ if ($hasErrors) {
     Write-Host "✅ Todas las configuraciones son válidas" -ForegroundColor Green
     exit 0
 }
+
+
+
