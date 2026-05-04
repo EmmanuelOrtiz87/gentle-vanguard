@@ -1822,7 +1822,7 @@ switch ($Command) {
     'day-end-closure' {
         Write-Step "Running automated day-end closure"
         Invoke-TokenBudgetGuard -Task 'end-session' -Risk 'high' -EstimatedChars 14000
-        $dayEndScript = Join-Path $scriptDir 'day-end-closure.ps1'
+        $dayEndScript = Join-Path $scriptDir '..\UTILITIES\day-end-closure.ps1'
         if (Test-Path $dayEndScript) {
             if (-not [string]::IsNullOrWhiteSpace($Scope)) {
                 & $dayEndScript -SessionId $Scope -SkipValidation:$SkipTests -Force:$Force
