@@ -3,26 +3,39 @@
 ## Principles
 - **LOCAL-FIRST**: project knowledge → engram memory → grep/read → external (only if authorized)
 - **NO** web search / codesearch / webfetch by default; require explicit user/orchestrator approval
-- Run `tools/pre-process-input.ps1` BEFORE responding — all trigger routing is automated
+- Run `scripts/utilities/pre-process-input.ps1` BEFORE responding — all trigger routing is automated
+
+## Self-Verification (MANDATORY)
+After completing any significant work, run the self-verification tool and fix all FAIL items:
+```powershell
+pwsh -File scripts/utilities/agent-verify.ps1
+```
+- **PASS** → task is done, safe to commit/close
+- **PASS_WITH_WARNINGS** → review warnings, then proceed
+- **FAIL** → fix all failures before marking task done
+
+Targeted domain checks: `-Domain config|tests|hooks|structure|skills`
+JSON output for programmatic use: `-Json`
 
 ## Workflow
-1. `tools/pre-process-input.ps1` → `TRIGGER_MATCH_FOUND` → load skill | `PLAN_MODE_REQUIRED` → activate BA | `NO_TRIGGER_MATCH` → continue
+1. `scripts/utilities/pre-process-input.ps1` → `TRIGGER_MATCH_FOUND` → load skill | `PLAN_MODE_REQUIRED` → activate BA | `NO_TRIGGER_MATCH` → continue
 2. Check `skills/` for patterns; query `engram context gentleman-foundation` for session context
 3. Full mappings: `config/auto-delegation.json#keywordMappings`
+4. After work: **always run `agent-verify.ps1`** and fix failures before closing
 
 ## Agent → Skill Map
 | Agent / Domain | Key triggers | Skill |
 |---|---|---|
 | BA (plan/explore) | iniciar sesion, requirements, start session, explore | `sdd-lifecycle` |
-| SAD (architecture) | architecture, design, sdd, schema, system design | `sdd-design` |
-| DEV (implement) | implement, code, feature, refactor, bug fix | `sdd-apply` |
-| QA (testing) | test, testing, qa, validation, e2e, playwright | `sdd-verify` |
+| SAD (architecture) | architecture, design, sdd, schema, system design | `sdd-lifecycle` |
+| DEV (implement) | implement, code, feature, refactor, bug fix | `sdd-lifecycle` |
+| QA (testing) | test, testing, qa, validation, e2e, playwright | `sdd-lifecycle` |
 | OPS (deploy) | deploy, docker, kubernetes, release, ci/cd, helm | `docker-devops-skill` |
 | GOV (governance) | governance, audit, compliance, security review | `project-orchestrator-skill` |
 | DOC (docs) | documentation, docs, readme, guide, runbook | `documentation-governance` |
 | SCRIPT-GOV | script, powershell, hook, pre-commit, fix script | `sdd-apply` |
 | REPORT | informe, metrics, analytics, dashboard, costos | `management-reporting-skill` |
-| PR-REVIEW | review PR, pull request check, merge gate | `code-review-orchestrator` |
+| PR-REVIEW | review PR, pull request check, merge gate | `code-review-orchestrator-skill` |
 | RELEASE | cut release, changelog, version bump, semver | `release-management-skill` |
 | SESSION-CLOSE | cerrar sesion, close session, fin de sesion | `project-orchestrator-skill` |
 | Angular | Angular, component, @defer, standalone | `angular-spa-skill` |
