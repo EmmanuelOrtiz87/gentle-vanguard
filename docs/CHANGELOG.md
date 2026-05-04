@@ -7,6 +7,70 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.0] - 2026-05-04
+
+### Added
+
+#### Agent Execution Context (FF-013 partial)
+- `agent-router.ps1` builds a real `execution_context.prompt` loading up to 30 lines per SKILL.md for each resolved skill.
+- New functions: `Get-SkillSummary`, `Build-ExecutionContext` — generates ~7.9 K chars / ~2 K tokens per typical DEV task.
+- `auto-delegation-wrapper.ps1` now exposes `exec_ctx_chars`, `exec_ctx_tokens`, `skills_in_ctx` in the JSON output.
+
+#### FF-014: Homologation Command
+- `homologate-workspace.ps1` extended with Step 6 (broken internal link scanner) and Step 7 (persistent action log).
+- Broken-link scanner regex detects relative Markdown links resolving outside their directory; skips anchors and external URLs.
+- Action log written to `.logs/homologation/YYYY-MM-DD_HHmmss.log` in YAML-style format after every run.
+- Summary table now includes: Mode, Moved/Renamed, Removed, Ref updates, Empty dirs, Broken links (color-coded), Action log path.
+
+#### FF-015: Git Hook Output Safety
+- New module `scripts/hooks/hook-output-safety.ps1` with three exported functions:
+  - `Write-SafeHook` — drop-in `Write-Host` replacement with automatic pattern-based redaction.
+  - `Protect-HookOutput` — pipeline filter for external command output.
+  - `Test-HookOutputSafe` — returns bool, safe to use as a guard before printing.
+- Sensitive patterns covered: API_KEY, SECRET, AWS_KEY, PRIVATE_KEY, GITHUB_TOKEN, STRIPE_KEY, absolute home and windir paths.
+- Integrated via dot-source in `hooks/pre-commit.ps1` and `scripts/hooks/pre-push-normalization.ps1`.
+
+#### Event Bus Governance (Phase 2)
+- `event-bus.ps1`: full `Invoke-EventGovernance` pipeline on every emit (schema validation, required fields, payload size, rate limiting).
+- Rate limiting via sliding window 60 s with per-event configurable limits.
+- `execution_id` normalization across history entries for cross-event telemetry correlation.
+- `agent.dispatched` and `agent.completed` emitted per agent in both parallel and sequential dispatch.
+- `dispatch.completed` now includes required `status` field.
+
+#### Token Budget Guard Unification (Phase 1)
+- Single canonical source: `config/orchestrator.json#subagent_orchestration.token_budget_guard`.
+- Canonical estimation rule: `chars / 4 = tokens` applied uniformly in budget-guard, dispatch, and router.
+- Legacy `token-guard.ps1` formally deprecated.
+
+#### Context Dashboard (Phase 3)
+- New script `scripts/utilities/TELEMETRY-METRICS/context-dashboard.ps1` with `wf context-dashboard [chars]` command.
+- Displays: prompt chars vs thresholds, token %, budget daily usage, autopilot status, blocked events in last 60 s.
+- `-AsJson` flag for programmatic integration.
+
+#### CI Hardening
+- New workflows: `foundation-quality-gate.yml`, `workflow-lint.yml`.
+- `quality-gates.json` canonical config for required checks.
+- All scheduled workflows include `permissions`, `concurrency`, `timeout-minutes` and UTC/GMT-3 cron comments.
+
+#### Override Governance (Phase 3)
+- `governed_override_profiles` in `orchestrator.json`: `verbose-debug` and `executive-review` profiles with max-turn enforcement.
+- `agent-verify.ps1` evaluates override abuse by time window using configurable thresholds.
+- Audit log at `.logs/override-audit.jsonl`.
+
+#### Metrics Persistence
+- `metrics-config.json#runtime_state` persists cumulative metrics cross-session.
+- Incremental updates after each session without full overwrite.
+
+#### Auto-Delegation Chain Unified
+- `auto-delegate-orchestrator.ps1` now delegates through `auto-delegation-wrapper.ps1` (no more internal simulation).
+- `auto-delegation-wrapper.ps1` unified: supports both legacy positional and parametrized invocation.
+- `agent-router.ps1` repoRoot path corrected to 3 levels up (was 2), fixing false `blocked` status for local skills.
+
+### Fixed
+- `agent-router.ps1`: repoRoot resolved incorrectly (`..\..` → `..\..\..`), causing local skills to not be found.
+- `dispatch.completed` event missing required `status` field — now always included.
+- `auto-delegate-orchestrator.ps1`: null-ref on missing keys (`concurrencyLimits`, `routingBindings`, `features.tieredRouting`).
+
 ## [1.0.1] - 2026-04-13
 
 ### Fixed

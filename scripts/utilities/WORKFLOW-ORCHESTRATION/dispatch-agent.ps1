@@ -244,14 +244,18 @@ function Invoke-ParallelDispatch {
             $jobs = @()
             foreach ($agent in $lane.agents) {
                 Write-Host "  Dispatching: $agent" -ForegroundColor Gray
+                if (Test-Path $eventBusScript) {
+                    & $eventBusScript -Action emit -Event 'agent.dispatched' -Payload (@{
+                        agent   = $agent
+                        task    = if ($TaskText.Length -gt 200) { $TaskText.Substring(0,200) } else { $TaskText }
+                        lane_id = "agent-$agent-$batchNum"
+                    } | ConvertTo-Json -Compress) -Quiet
+                }
                 $job = Start-Job -ScriptBlock {
                     param($script, $agentName, $taskDesc)
                     & $script -Agent $agentName -Task $taskDesc -AsJson | ConvertFrom-Json
                 } -ArgumentList $agentRouter, $agent, $TaskText
-                $jobs += @{
-                    job = $job
-                    agent = $agent
-                }
+                $jobs += @{ job = $job; agent = $agent; laneId = "agent-$agent-$batchNum" }
             }
             
             Write-Host "  Waiting for batch to complete..." -ForegroundColor DarkGray
@@ -262,20 +266,45 @@ function Invoke-ParallelDispatch {
             
             foreach ($job in $jobs) {
                 $results += $job.result
+                if (Test-Path $eventBusScript) {
+                    $tEst = if ($job.result -and $job.result.token_estimate) { [math]::Ceiling($job.result.token_estimate / 4) } else { 0 }
+                    $aStatus = if ($job.result -and $job.result.status) { $job.result.status } else { 'unknown' }
+                    & $eventBusScript -Action emit -Event 'agent.completed' -Payload (@{
+                        agent = $job.agent; status = $aStatus; lane_id = $job.laneId; token_estimate = $tEst
+                    } | ConvertTo-Json -Compress) -Quiet
+                }
             }
         } else {
             Write-AgentLine "`n[Lane $($lane.order)] Running $($lane.agent)..." 'Yellow'
             if ($lane.depends_on) {
                 Write-Host "  (waiting for $($lane.depends_on))" -ForegroundColor DarkGray
             }
-            
+            if (Test-Path $eventBusScript) {
+                & $eventBusScript -Action emit -Event 'agent.dispatched' -Payload (@{
+                    agent   = $lane.agent
+                    task    = if ($TaskText.Length -gt 200) { $TaskText.Substring(0,200) } else { $TaskText }
+                    lane_id = "agent-$($lane.agent)-$($lane.order)"
+                } | ConvertTo-Json -Compress) -Quiet
+            }
             $result = & $agentRouter -Agent $lane.agent -Task $TaskText -AsJson | ConvertFrom-Json
             $results += $result
+            if (Test-Path $eventBusScript) {
+                $tEst = if ($result -and $result.token_estimate) { [math]::Ceiling($result.token_estimate / 4) } else { 0 }
+                $aStatus = if ($result -and $result.status) { $result.status } else { 'unknown' }
+                & $eventBusScript -Action emit -Event 'agent.completed' -Payload (@{
+                    agent = $lane.agent; status = $aStatus; lane_id = "agent-$($lane.agent)-$($lane.order)"; token_estimate = $tEst
+                } | ConvertTo-Json -Compress) -Quiet
+            }
         }
     }
     
     if (Test-Path $eventBusScript) {
-        & $eventBusScript -Action emit -Event 'dispatch.completed' -Payload (@{ execution_id = $config.execution_id; results_count = $results.Count } | ConvertTo-Json -Compress)
+        $overallStatus = if (@($results | Where-Object { $_.status -eq 'failed' }).Count -gt 0) { 'partial' } else { 'success' }
+        & $eventBusScript -Action emit -Event 'dispatch.completed' -Payload (@{
+            execution_id  = $config.execution_id
+            results_count = $results.Count
+            status        = $overallStatus
+        } | ConvertTo-Json -Compress)
     }
     
     return @{

@@ -27,6 +27,8 @@ $AutoDelegation = Get-Content (Join-Path $ConfigPath "auto-delegation.json") | C
 $SkillDeps = Get-Content (Join-Path $ConfigPath "skill-dependencies.json") | ConvertFrom-Json
 $MetricsConfig = Get-Content (Join-Path $ConfigPath "metrics-config.json") | ConvertFrom-Json
 $BehaviorPrompts = Get-Content (Join-Path $ConfigPath "behavior-prompts.json") | ConvertFrom-Json
+$OrchestratorConfig = Get-Content (Join-Path $ConfigPath "orchestrator.json") | ConvertFrom-Json
+$AutoDelegationWrapper = Join-Path $PSScriptRoot "..\utilities\auto-delegation-wrapper.ps1"
 #endregion
 
 #region Global State
@@ -243,6 +245,13 @@ function Initialize-Metrics {
             last_failure = $null
         }
     }
+
+    $runtimeState = $MetricsConfig.runtime_state
+    if ($runtimeState) {
+        $script:OrchestratorState.Metrics.TotalDelegations = [int]$runtimeState.total_delegations
+        $script:OrchestratorState.Metrics.SuccessCount = [int]$runtimeState.success_count
+        $script:OrchestratorState.Metrics.FailureCount = [int]$runtimeState.failure_count
+    }
 }
 
 function Record-Metric {
@@ -343,6 +352,57 @@ function Write-MetricsSummary {
         Write-Host "Success Rate: $($script:MetricsData.summary.success_rate)%"
         Write-Host "Report saved to: $summaryPath"
     }
+
+    Save-PersistentMetrics -SessionSummary $script:MetricsData.summary
+}
+
+function Save-PersistentMetrics {
+    param([hashtable]$SessionSummary)
+
+    if (-not $MetricsConfig.reporting.persistence.enabled) {
+        return
+    }
+
+    try {
+        $metricsPath = Join-Path $ConfigPath "metrics-config.json"
+        $current = Get-Content $metricsPath -Raw | ConvertFrom-Json
+
+        if (-not $current.runtime_state) {
+            $current | Add-Member -NotePropertyName runtime_state -NotePropertyValue @{}
+        }
+
+        $durationToAdd = 0
+        if ($SessionSummary -and $SessionSummary.uptime_seconds) {
+            $durationToAdd = [double]$SessionSummary.uptime_seconds
+        }
+
+        $tokenUsage = 0
+        foreach ($agentMetric in $script:MetricsData.agents.PSObject.Properties) {
+            $tokenUsage += ([int]$agentMetric.Value.total_delegations * 750)
+        }
+
+        $current.runtime_state.session_count = [int]$current.runtime_state.session_count + 1
+        $current.runtime_state.total_delegations = [int]$current.runtime_state.total_delegations + [int]$script:OrchestratorState.Metrics.TotalDelegations
+        $current.runtime_state.success_count = [int]$current.runtime_state.success_count + [int]$script:OrchestratorState.Metrics.SuccessCount
+        $current.runtime_state.failure_count = [int]$current.runtime_state.failure_count + [int]$script:OrchestratorState.Metrics.FailureCount
+        $current.runtime_state.cumulative_duration_seconds = [double]$current.runtime_state.cumulative_duration_seconds + $durationToAdd
+        $current.runtime_state.cumulative_token_usage = [int]$current.runtime_state.cumulative_token_usage + $tokenUsage
+        $current.runtime_state.last_updated = Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"
+
+        $totalDelegations = [math]::Max(1, [int]$current.runtime_state.total_delegations)
+        $current.metrics.delegation_success_rate.current = [math]::Round(([int]$current.runtime_state.success_count * 100.0) / $totalDelegations, 2)
+        $current.metrics.delegation_failure_rate.current = [math]::Round(([int]$current.runtime_state.failure_count * 100.0) / $totalDelegations, 2)
+        $current.metrics.average_time_to_completion.current = [math]::Round(([double]$current.runtime_state.cumulative_duration_seconds / $totalDelegations), 2)
+        $current.metrics.token_usage_per_session.current = [int]$current.runtime_state.cumulative_token_usage
+        $current.metrics.circuit_breaker_trips.current = [int]$current.runtime_state.circuit_breaker_trips
+        $current.metrics.skill_dependency_violations.current = [int]$current.runtime_state.skill_dependency_violations
+
+        $json = $current | ConvertTo-Json -Depth 12
+        [System.IO.File]::WriteAllText($metricsPath, $json, [System.Text.Encoding]::UTF8)
+    }
+    catch {
+        if ($Verbose) { Write-Host "[METRICS] Warning: Failed to persist metrics: $_" }
+    }
 }
 #endregion
 
@@ -442,16 +502,35 @@ $(if ($BehaviorPrompt) { "Communication Style: $($BehaviorPrompt.communication_s
             return @{ success = $true; dry_run = $true; delegation_id = $DelegationId }
         }
         
-        # Call opencode delegation (simulated - replace with actual delegation call)
+        if (-not (Test-Path $AutoDelegationWrapper)) {
+            throw "Canonical delegation wrapper not found: $AutoDelegationWrapper"
+        }
+
         if ($Verbose) { Write-Host "[DELEGATE] $DelegationId → $SubagentType`: $TaskDescription" }
-        
-        # Simulate delegation result
+
+        $wrapperResult = & $AutoDelegationWrapper -Agent $AgentType -Task $TaskDescription -AsJson | ConvertFrom-Json
+        $status = if ($wrapperResult -and $wrapperResult.status) { [string]$wrapperResult.status } else { "unknown" }
+        $isSuccess = $status -in @("ready", "partial", "dispatched")
+        $tokenEstimate = 0
+        if ($wrapperResult -and $wrapperResult.token_estimate) {
+            $tokenEstimate = [int][math]::Ceiling([double]$wrapperResult.token_estimate / 4)
+        } elseif ($wrapperResult -and $wrapperResult.delegation -and $wrapperResult.delegation.token_estimate) {
+            $tokenEstimate = [int][math]::Ceiling([double]$wrapperResult.delegation.token_estimate / 4)
+        }
+
         $result = @{
-            success = $true
+            success = $isSuccess
             delegation_id = $DelegationId
             agent_type = $AgentType
             subagent_type = $SubagentType
+            delegated_via = "auto-delegation-wrapper"
+            wrapper_status = $status
+            token_estimate = $tokenEstimate
             duration_seconds = [math]::Round(((Get-Date) - $startTime).TotalSeconds, 2)
+        }
+
+        if ($wrapperResult) {
+            $result.wrapper_result = $wrapperResult
         }
         
         return $result
@@ -512,6 +591,9 @@ function Start-Orchestrator {
     # Check dependencies
     if (-not (Test-SkillDependencies -SkillName $subagentType)) {
         Write-Host "[DEPS] Dependencies not met for $subagentType - queuing"
+        if ($MetricsConfig.runtime_state) {
+            $MetricsConfig.runtime_state.skill_dependency_violations = [int]$MetricsConfig.runtime_state.skill_dependency_violations + 1
+        }
         $script:OrchestratorState.DependencyQueue[$TaskDescription] = @{
             agent = $AgentType
             subagent = $subagentType
