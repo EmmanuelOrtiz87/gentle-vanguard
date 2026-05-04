@@ -29,7 +29,7 @@
         "webfetch": "deny"
       },
       "routing": {
-        "preProcess": "tools/pre-process-input.ps1",
+        "preProcess": "scripts/utilities/pre-process-input.ps1",
         "mappings": "config/auto-delegation.json#keywordMappings",
         "agentProfiles": "config/auto-delegation.json#agentProfiles",
         "fallbackStrategy": "clarify-ba"
