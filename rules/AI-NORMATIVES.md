@@ -185,6 +185,40 @@ User input
 
 ---
 
+## 14. Scheduled Workflow Hardening Standard
+
+All workflows with `on.schedule` MUST include the following controls:
+
+1. **Concurrency control** (prevent overlapping runs):
+```yaml
+concurrency:
+  group: <workflow-name>-${{ github.ref }}
+  cancel-in-progress: true
+```
+
+2. **Least-privilege permissions** (minimum required):
+```yaml
+permissions:
+  contents: read
+```
+
+3. **Job timeout** (prevent hung runners): each scheduled workflow job MUST set `timeout-minutes`.
+
+4. **Timezone clarity** for cron lines: comments MUST include both UTC and GMT-3 mapping.
+Example:
+```yaml
+- cron: '30 16 * * 1'  # Weekly on Monday at 13:30 GMT-3 (16:30 UTC)
+```
+
+5. **Scheduling semantics**:
+- GitHub Actions cron is always interpreted in UTC.
+- Windows Scheduled Task uses local host timezone.
+- Convert local time to UTC explicitly before editing workflow cron.
+
+Validation gate: `scripts/utilities/agent-verify.ps1` enforces this standard for scheduled workflows.
+
+---
+
 ## References
 
 | Resource | Path |

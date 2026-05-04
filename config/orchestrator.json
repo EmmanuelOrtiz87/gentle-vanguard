@@ -1,6 +1,6 @@
 {
   "orchestrator": {
-    "version": "2.5.0",
+    "version": "2.6.0",
     "preProcessing": {
       "enabled": true,
       "mandatory": true,
@@ -165,5 +165,59 @@
     "baseline_chat_level": "chat-compact",
     "allow_overrides": false,
     "require_override_reason": true
+  },
+  "subagent_orchestration": {
+    "token_budget_guard": {
+      "enabled": true,
+      "unit": "tokens",
+      "estimation": {
+        "method": "chars_div_4",
+        "chars_per_token": 4,
+        "note": "Canonical unit: tokens. chars/4 = estimated tokens. Use this formula across all scripts."
+      },
+      "daily_budget_tokens": 30000,
+      "soft_threshold_pct": 70,
+      "hard_threshold_pct": 90,
+      "per_agent_budget_tokens": 750,
+      "coordination_overhead_tokens": 125,
+      "alert_levels": {
+        "soft": "WARN — log and continue",
+        "hard": "BLOCK — refuse dispatch until reset or override"
+      },
+      "legacy_script": "scripts/utilities/token-guard.ps1",
+      "operational_script": "scripts/utilities/TELEMETRY-METRICS/token-budget-guard.ps1",
+      "metrics_path": "docs/sessions/metrics/token-guard-usage.csv"
+    }
+  },
+  "governed_override_profiles": {
+    "_comment": "Controlled overrides for response_policy. Each profile requires a reason and is audit-logged.",
+    "allow_governed_overrides": true,
+    "require_reason": true,
+    "audit_log": ".logs/override-audit.jsonl",
+    "abuse_detection": {
+      "enabled": true,
+      "window_hours": 24,
+      "warn_total_overrides": 4,
+      "warn_per_agent": 3,
+      "warn_per_profile": 3
+    },
+    "profiles": {
+      "verbose-debug": {
+        "baseline_detail": "expanded",
+        "baseline_profile": "lleno",
+        "baseline_chat_level": "chat-detailed",
+        "allowed_for_agents": ["BA", "DOC"],
+        "max_duration_turns": 5,
+        "rationale": "Temporary verbose mode for complex exploratory or documentation tasks"
+      },
+      "executive-review": {
+        "baseline_detail": "expanded",
+        "baseline_profile": "lite",
+        "baseline_chat_level": "chat-balanced",
+        "allowed_for_agents": ["GOV", "DOC"],
+        "max_duration_turns": 3,
+        "rationale": "Used for executive-facing reports where full prose is required"
+      }
+    }
   }
 }
