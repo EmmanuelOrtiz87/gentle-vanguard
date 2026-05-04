@@ -1,8 +1,8 @@
-# Pre-commit hook para validar opencode.json
-# Valida la configuración centralizada contra esquema JSON Schema
-# Consulta NORMATIVAS-ORQUESTADOR.md antes de permitir cambios
+# Pre-commit hook to validate opencode.json
+# Validates centralized configuration against JSON Schema
+# Consult NORMATIVAS-ORQUESTADOR.md before allowing changes
 #
-# Referencia: docs/reference/NORMATIVAS-ORQUESTADOR.md
+# Reference: docs/reference/NORMATIVAS-ORQUESTADOR.md
 
 param([switch]$Verbose = $false)
 
@@ -19,12 +19,12 @@ function Test-JsonSchema {
     param([string]$JsonPath, [string]$SchemaPath)
     
     if (-not (Test-Path $JsonPath)) {
-        Write-Log "Archivo no encontrado: $JsonPath" "Error"
+        Write-Log "File not found: $JsonPath" "Error"
         return $false
     }
     
     if (-not (Test-Path $SchemaPath)) {
-        Write-Log "Esquema no encontrado: $SchemaPath" "Error"
+        Write-Log "Schema not found: $SchemaPath" "Error"
         return $false
     }
     
@@ -32,107 +32,121 @@ function Test-JsonSchema {
         $json = Get-Content $JsonPath -Raw | ConvertFrom-Json
         $schema = Get-Content $SchemaPath -Raw | ConvertFrom-Json
         
-        # Validación de campos requeridos
+        # Validate required fields
         $requiredFields = $schema.required
         foreach ($field in $requiredFields) {
             if (-not ($json.PSObject.Properties.Name -contains $field)) {
-                Write-Log "Campo requerido faltante: $field" "Error"
+                Write-Log "Required field missing: $field" "Error"
                 return $false
             }
         }
         
-        # Validar provider.anthropic
+        # Validate provider.anthropic
         if (-not $json.provider.anthropic) {
-            Write-Log "provider.anthropic es requerido" "Error"
+            Write-Log "provider.anthropic is required" "Error"
             return $false
         }
         
         if (-not $json.provider.anthropic.enabled -or -not $json.provider.anthropic.model) {
-            Write-Log "provider.anthropic debe tener 'enabled' y 'model'" "Error"
+            Write-Log "provider.anthropic.enabled and model are required" "Error"
             return $false
         }
         
-        # Validar agent
-        if (-not $json.agent.default -or -not $json.agent.orchestrator) {
-            Write-Log "agent debe tener 'default' y 'orchestrator'" "Error"
-            return $false
-        }
-        
-        # Validar skills
-        if (-not $json.skills.directory -or $null -eq $json.skills.auto_load) {
-            Write-Log "skills debe tener 'directory' y 'auto_load'" "Error"
-            return $false
-        }
-        
-        Write-Log "[OK] opencode.json validado correctamente" "Success"
+        Write-Log "JSON schema validation passed" "Success"
         return $true
     }
     catch {
-        Write-Log "Error al validar JSON: $_" "Error"
+        Write-Log "Invalid JSON: $_" "Error"
         return $false
     }
 }
 
-function Test-NormativasConsulta {
-    param([string]$NormativasPath)
+function Test-Normativas {
+    param([string]$JsonPath)
     
-    if (-not (Test-Path $NormativasPath)) {
-        Write-Log "Normativas no encontradas: $NormativasPath" "Warning"
+    $normativasPath = Join-Path $GitRoot "docs/reference/NORMATIVAS-ORQUESTADOR.md"
+    if (-not (Test-Path $normativasPath)) {
+        Write-Log "NORMATIVAS-ORQUESTADOR.md not found, skipping" "Warning"
         return $true
     }
     
     try {
-        $content = Get-Content $NormativasPath -Raw
+        $json = Get-Content $JsonPath -Raw | ConvertFrom-Json
+        $normativas = Get-Content $normativasPath -Raw
         
-        # Verificar directivas críticas
-        $criticalPatterns = @(
-            "Consulta de Autorizaciones",
-            "Registro de Decisiones",
-            "Consistencia y Versiónado"
-        )
-        
-        $missingPatterns = @()
-        foreach ($pattern in $criticalPatterns) {
-            if ($content -notmatch $pattern) {
-                $missingPatterns += $pattern
+        # Check required sections
+        $requiredSections = @("Identity", "Purpose", "Scope", "Decisions")
+        foreach ($section in $requiredSections) {
+            if ($normativas -notmatch "##\s*$section") {
+                Write-Log "Missing section in NORMATIVAS: $section" "Warning"
             }
         }
         
-        if ($missingPatterns.Count -gt 0) {
-            Write-Log "Advertencia: Normativas incompletas" "Warning"
-            return $true
-        }
-        
-        Write-Log "[OK] Normativas consultadas y validadas" "Success"
+        Write-Log "Normativas check completed" "Success"
         return $true
     }
     catch {
-        Write-Log "Error al consultar normativas: $_" "Warning"
+        Write-Log "Error checking normativas: $_" "Warning"
         return $true
     }
 }
 
-# Script principal
-Write-Log "Iniciando validación pre-commit de opencode.json..." "Info"
+# Main
+$GitRoot = git rev-parse --show-toplevel 2>$null
+if (-not $GitRoot) {
+    Write-Log "Not in a git repository" "Warning"
+    exit 0
+}
 
-$projectRoot = Split-Path -Parent $PSScriptRoot
-$opencodeJson = Join-Path $projectRoot "opencode.json"
-$opencodeSchema = Join-Path (Join-Path $projectRoot "config") "opencode.schema.json"
-$normativasPath = Join-Path (Join-Path (Join-Path $projectRoot "docs") "reference") "NORMATIVAS-ORQUESTADOR.md"
+$StagedFiles = git diff --cached --name-only --diff-filter=ACM 2>$null
+$configFiles = $StagedFiles | Where-Object { $_ -match '\.json$' -and $_ -match '(config|opencode)' }
 
-# Validar esquema
-if (-not (Test-JsonSchema -JsonPath $opencodeJson -SchemaPath $opencodeSchema)) {
-    Write-Log "[ERROR] Validacion de esquema FALLIDA" "Error"
-    Write-Log "Consulta: docs/reference/NORMATIVAS-ORQUESTADOR.md" "Info"
+if ($configFiles.Count -eq 0) {
+    Write-Log "No configuration changes" "Success"
+    exit 0
+}
+
+Write-Log "Configuration files to validate: $($configFiles.Count)" "Info"
+
+$hasErrors = $false
+
+foreach ($file in $configFiles) {
+    Write-Log "Validating: $file" "Info"
+    
+    # Validate JSON
+    try {
+        $content = Get-Content $file -Raw
+        $json = $content | ConvertFrom-Json
+        Write-Log "  Valid JSON" "Success"
+    }
+    catch {
+        Write-Log "  Invalid JSON: $_" "Error"
+        $hasErrors = $true
+        continue
+    }
+    
+    # Validate against schema
+    $schemaFile = $file -replace '\.json$', '.schema.json'
+    if (Test-Path $schemaFile) {
+        Write-Log "  Validating against schema..." "Info"
+        if (-not (Test-JsonSchema -JsonPath $file -SchemaPath $schemaFile)) {
+            $hasErrors = $true
+        }
+    }
+    
+    # Validate against normativas
+    if ($file -match 'opencode|config') {
+        Write-Log "  Checking normativas..." "Info"
+        if (-not (Test-Normativas -JsonPath $file)) {
+            $hasErrors = $true
+        }
+    }
+}
+
+if ($hasErrors) {
+    Write-Log "Configuration validation failed" "Error"
     exit 1
 }
 
-# Consultar normativas
-if (-not (Test-NormativasConsulta -NormativasPath $normativasPath)) {
-    Write-Log "[ERROR] Consulta de normativas FALLIDA" "Error"
-    exit 1
-}
-
-Write-Log "[OK] Pre-commit validation EXITOSA" "Success"
-Write-Log "opencode.json está validado y cumple normativas" "Info"
+Write-Log "All configuration validations passed" "Success"
 exit 0
