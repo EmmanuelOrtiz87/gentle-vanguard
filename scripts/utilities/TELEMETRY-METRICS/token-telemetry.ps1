@@ -22,7 +22,8 @@ foreach ($root in $roots) {
     $totalTokens = 0
     foreach ($row in $rows) {
         $tokens = 0
-        if ([int]::TryParse([string]$row.estimated_tokens, [ref]$tokens)) {
+        if ($row.estimated_tokens -match '^\d+$') {
+            $tokens = [int]$row.estimated_tokens
             $totalTokens += $tokens
         }
     }

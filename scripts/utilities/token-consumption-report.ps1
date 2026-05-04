@@ -56,7 +56,8 @@ function Get-TokenData {
         $rows = Import-Csv -Path $usageFile -ErrorAction SilentlyContinue
         foreach ($row in $rows) {
             $tokens = 0
-            if ([int]::TryParse([string]$row.estimated_tokens, [ref]$tokens)) {
+            if ($row.estimated_tokens -match '^\d+$') {
+                $tokens = [int]$row.estimated_tokens
                 $allData += [pscustomobject]@{
                     timestamp = $row.timestamp
                     task = $row.task
@@ -72,7 +73,8 @@ function Get-TokenData {
         $rows = Import-Csv -Path $masterFile -ErrorAction SilentlyContinue
         foreach ($row in $rows) {
             $tokens = 0
-            if ([int]::TryParse([string]$row.Tokens_Estimated, [ref]$tokens)) {
+            if ($row.Tokens_Estimated -match '^\d+$') {
+                $tokens = [int]$row.Tokens_Estimated
                 $allData += [pscustomobject]@{
                     timestamp = $row.Timestamp
                     sessionId = $row.Session_ID
