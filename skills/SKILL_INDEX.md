@@ -973,4 +973,252 @@ Advanced parallel execution management with dependency graphs, resource pooling,
 
 ---
 
+### _semantic-skill-matcher
+
+**Trigger**: `semantic`, `skill match`, `similarity`
+
+**Use when**: Semantic matching of skills based on context and task requirements
+
+---
+
+### backend-engineer
+
+**Trigger**: `backend`, `server-side`, `API development`
+
+**Use when**: Backend development, server-side logic, API implementation
+
+---
+
+### chained-pr
+
+**Trigger**: `chained PR`, `PR chain`, `dependent PR`
+
+**Use when**: Creating chained pull requests with dependencies
+
+---
+
+### cognitive-doc-design
+
+**Trigger**: `cognitive`, `doc design`, `documentation design`
+
+**Use when**: Designing documentation with cognitive load principles
+
+---
+
+### config-risk-analyzer
+
+**Trigger**: `config risk`, `configuration analysis`, `risk assessment`
+
+**Use when**: Analyzing configuration risks and security implications
+
+---
+
+### content-strategist
+
+**Trigger**: `content strategy`, `content planning`, `editorial`
+
+**Use when**: Planning content strategy and editorial guidelines
+
+---
+
+### customer-success-manager
+
+**Trigger**: `customer success`, `CSM`, `customer health`
+
+**Use when**: Managing customer success metrics and health scores
+
+---
+
+### customer-support-lead
+
+**Trigger**: `support`, `customer support`, `ticket management`
+
+**Use when**: Leading customer support operations and ticket management
+
+---
+
+### data-analyst
+
+**Trigger**: `data analysis`, `analytics`, `reporting`
+
+**Use when**: Analyzing data and generating insights
+
+---
+
+### data-scientist
+
+**Trigger**: `data science`, `ML`, `machine learning`, `models`
+
+**Use when**: Building machine learning models and data science workflows
+
+---
+
+### design-md
+
+**Trigger**: `design md`, `markdown design`, `document design`
+
+**Use when**: Designing markdown documents with visual hierarchy
+
+---
+
+### design-ui-designer
+
+**Trigger**: `UI design`, `interface design`, `mockups`
+
+**Use when**: Creating user interface designs and mockups
+
+---
+
+### design-ux-researcher
+
+**Trigger**: `UX research`, `user research`, `usability`
+
+**Use when**: Conducting user experience research and usability studies
+
+---
+
+### devops-sre
+
+**Trigger**: `DevOps`, `SRE`, `site reliability`, `operations`
+
+**Use when**: Site reliability engineering and DevOps operations
+
+---
+
+### finance-financial-analyst
+
+**Trigger**: `finance`, `financial analysis`, `budget`
+
+**Use when**: Financial analysis, budgeting, and forecasting
+
+---
+
+### frontend-engineer
+
+**Trigger**: `frontend`, `UI development`, `client-side`
+
+**Use when**: Frontend development and client-side implementation
+
+---
+
+### game-designer
+
+**Trigger**: `game design`, `game mechanics`, `gameplay`
+
+**Use when**: Designing game mechanics and gameplay systems
+
+---
+
+### hr-talent-acquisition
+
+**Trigger**: `HR`, `talent`, `recruiting`, `hiring`
+
+**Use when**: Talent acquisition and recruiting processes
+
+---
+
+### karpathy-guidelines
+
+**Trigger**: `karpathy`, `AI guidelines`, `LLM best practices`
+
+**Use when**: Following Karpathy's guidelines for AI/LLM development
+
+---
+
+### legal-compliance-officer
+
+**Trigger**: `legal`, `compliance`, `regulatory`
+
+**Use when**: Legal compliance and regulatory requirements
+
+---
+
+### marketing-content-writer
+
+**Trigger**: `marketing`, `content writing`, `copywriting`
+
+**Use when**: Writing marketing content and copywriting
+
+---
+
+### marketing-growth-hacker
+
+**Trigger**: `growth hacking`, `marketing growth`, `acquisition`
+
+**Use when**: Growth hacking and user acquisition strategies
+
+---
+
+### mobile-developer
+
+**Trigger**: `mobile`, `iOS`, `Android`, `mobile app`
+
+**Use when**: Mobile application development
+
+---
+
+### operations-manager
+
+**Trigger**: `operations`, `ops management`, `business ops`
+
+**Use when**: Managing business operations and operational efficiency
+
+---
+
+### product-manager
+
+**Trigger**: `product`, `product management`, `roadmap`
+
+**Use when**: Product management and roadmap planning
+
+---
+
+### project-manager
+
+**Trigger**: `project management`, `PM`, `project planning`
+
+**Use when**: Project management and planning
+
+---
+
+### sales-account-executive
+
+**Trigger**: `sales`, `account executive`, `AE`
+
+**Use when**: Sales and account executive activities
+
+---
+
+### sales-outbound-strategist
+
+**Trigger**: `outbound`, `sales strategy`, `lead generation`
+
+**Use when**: Outbound sales strategy and lead generation
+
+---
+
+### security-pentester
+
+**Trigger**: `pentest`, `penetration testing`, `security audit`
+
+**Use when**: Penetration testing and security audits
+
+---
+
+### seo-specialist
+
+**Trigger**: `SEO`, `search engine`, `organic traffic`
+
+**Use when**: Search engine optimization and organic traffic growth
+
+---
+
+### testing-evidence-qa
+
+**Trigger**: `QA`, `testing evidence`, `quality assurance`
+
+**Use when**: Quality assurance and testing evidence collection
+
+---
+
 
