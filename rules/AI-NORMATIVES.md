@@ -139,14 +139,39 @@ Valid types: `feat`, `fix`, `chore`, `docs`, `refactor`, `perf`, `test`, `ci`
 
 Before any release or major commit:
 ```powershell
-pwsh -File tools/validate-configs.ps1
+pwsh -File scripts/utilities/validate-configs.ps1
 ```
 Checks: JSON syntax, required keys, script paths, root file declarations.  
 **FAIL** = block release. **PASS with warnings** = review and document.
 
 ---
 
-## 12. Escalation Path
+## 12. Agent Self-Verification (Feedback Loop)
+
+After completing **any significant work**, the agent MUST run:
+```powershell
+pwsh -File scripts/utilities/agent-verify.ps1
+```
+
+| Result | Meaning | Action |
+|--------|---------|--------|
+| `PASS` | All checks green | Safe to commit/close task |
+| `PASS_WITH_WARNINGS` | Non-blocking issues found | Review warnings, then proceed |
+| `FAIL` | One or more checks failed | **Fix all FAILs before proceeding** |
+
+Targeted checks: `-Domain config|tests|hooks|structure|skills`  
+Machine-readable output: `-Json`
+
+The agent uses this tool to:
+- Verify that code changes did not break existing functionality
+- Confirm JSON/config edits are syntactically valid
+- Validate that skill references resolve to real directories
+- Ensure the working tree is clean before closing
+- Learn from failures and improve future implementations
+
+---
+
+## 13. Escalation Path
 
 ```
 User input
@@ -171,3 +196,4 @@ User input
 | Testing config | `config/testing.config.json` |
 | Structure policy | `config/structure-policy.json` |
 | Orchestrator | `config/orchestrator.json` |
+| Self-verification | `scripts/utilities/agent-verify.ps1` |
