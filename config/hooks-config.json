@@ -5,7 +5,7 @@
     "pre_process": {
       "enabled": true,
       "mandatory": true,
-      "script": "tools/pre-process-input.ps1",
+      "script": "scripts/utilities/pre-process-input.ps1",
       "timeout": 30000,
       "args": {
         "UserInput": "${user_input}",
