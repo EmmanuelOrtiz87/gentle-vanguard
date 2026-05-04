@@ -1,18 +1,18 @@
-﻿---
+---
 name: guardian-fallback
 description: >
   Optional fallback skill for when Foundation cannot close tasks autonomously.
-  GGA (Gentleman Guardian Angel) acts as guardian when orchestrator needs assistance.
+   (Gentleman ) acts as guardian when orchestrator needs assistance.
   Trigger: "fallback", "guardian", "assist", "cerrar", "completar tarea", " blocker"
 ---
 
 # Guardian Fallback Skill
 
 ## Purpose
-GGA serves as **optional guardian** when Foundation's orchestrator:
+ serves as **optional guardian** when Foundation's orchestrator:
 - Cannot determine next step
 - Is blocked by unknown error
-- Needs second opinion on complex decision
+- Needs second opinion on complex decisión
 - Requires code review to close PR
 
 ## Architecture
@@ -24,63 +24,63 @@ ORCHESTRATOR (Primary)
     
      Blocked?  Try self-healing
     
-     Still blocked?  GGA FALLBACK (optional)
+     Still blocked?   FALLBACK (optional)
             
              Code review
-             Decision assist
+             decisión assist
              Task completion
              Commit hygiene
 ```
 
 ## Trigger Conditions
 
-Use GGA fallback when:
+Use  fallback when:
 
 | Condition | Action |
 |-----------|--------|
-| Unknown error blocks progress | `gga run` for diagnosis |
-| PR needs final review | `gga run --pr-mode` |
-| Complex decision needed | GGA reasoning assist |
-| Blocked on coding standards | GGA review |
-| Commit message validation | `gga install --commit-msg` |
+| Unknown error blocks progress | ` run` for diagnosis |
+| PR needs final review | ` run --pr-mode` |
+| Complex decisión needed |  reasoning assist |
+| Blocked on coding standards |  review |
+| Commit message validation | ` install --commit-msg` |
 
 ## Invocation
 
 ### Automatic (Recommended)
-Foundation invokes GGA automatically when blocked:
+Foundation invokes  automatically when blocked:
 
 ```powershell
 # Automatic detection and fallback
 if (-not $canProceed) {
-    Write-Host "[FALLBACK] Invoking GGA guardian..."
-    gga run --ci
+    Write-Host "[FALLBACK] Invoking  guardian..."
+     run --ci
 }
 ```
 
 ### Manual
 ```powershell
 # Manual invocation
-gga run                    # Review staged files
-gga run --pr-mode        # Full PR review
-gga run --ci             # CI mode (last commit)
+ run                    # Review staged files
+ run --pr-mode        # Full PR review
+ run --ci             # CI mode (last commit)
 ```
 
 ## Availability Check
 
 ```powershell
-function Test-GgaAvailable {
-    $gga = Get-Command gga -ErrorAction SilentlyContinue
-    return ($null -ne $gga)
+function Test-Available {
+    $ = Get-Command  -ErrorAction SilentlyContinue
+    return ($null -ne $)
 }
 
-function Invoke-GgaFallback {
-    if (-not (Test-GgaAvailable)) {
-        Write-Warn "GGA not available - using Foundation native capabilities"
+function Invoke-Fallback {
+    if (-not (Test-Available)) {
+        Write-Warn " not available - using Foundation native capabilities"
         return $false
     }
     
-    # Invoke GGA for assistance
-    gga run
+    # Invoke  for assistance
+     run
     return ($LASTEXITCODE -eq 0)
 }
 ```
@@ -97,12 +97,12 @@ if (-not $canProceed) {
     $healed = Invoke-SelfHealing -Context $context
     
     if (-not $healed) {
-        # GGA fallback (optional)
-        if (Test-GgaAvailable) {
-            Write-Host "[ORCHESTRATOR] GGA guardian invoked..."
-            Invoke-GgaFallback
+        #  fallback (optional)
+        if (Test-Available) {
+            Write-Host "[ORCHESTRATOR]  guardian invoked..."
+            Invoke-Fallback
         } else {
-            Write-Warn "Blocked and GGA unavailable - manual intervention required"
+            Write-Warn "Blocked and  unavailable - manual intervention required"
         }
     }
 }
@@ -112,18 +112,18 @@ if (-not $canProceed) {
 ```powershell
 # Before session end
 if (-not (Test-AllTasksComplete)) {
-    if (Test-GgaAvailable) {
-        gga run --ci  # Final review before close
+    if (Test-Available) {
+         run --ci  # Final review before close
     }
 }
 ```
 
 ## Configuration
 
-GGA reads from `.gga` config or environment:
+ reads from `.` config or environment:
 
 ```bash
-# .gga (project level)
+# . (project level)
 PROVIDER="opencode"
 FILE_PATTERNS="*.ps1,*.ts,*.js"
 STRICT_MODE="true"
@@ -135,22 +135,22 @@ STRICT_MODE="true"
 |------|----------|---------|
 | Foundation Orchestrator | **YES** | Primary execution |
 | invoke-ai-review.ps1 | **YES** | Native review (replacement) |
-| GGA (gga) | **NO** | Optional fallback guardian |
+|  () | **NO** | Optional fallback guardian |
 
 ## Coexistence
 
-Foundation operates **fully** without GGA:
+Foundation operates **fully** without :
 - Native AI review via `invoke-ai-review.ps1`
 - Pre-commit hooks via Foundation hooks
 - Code review via `code-review-orchestrator-skill`
 
-GGA is **enhancement**, not **requirement**.
+ is **enhancement**, not **requirement**.
 
 ## Error Handling
 
 ```
 
-              FALLBACK DECISION TREE            
+              FALLBACK decisión TREE            
 
                                               
   Orchestrator blocked?                       
@@ -161,13 +161,13 @@ GGA is **enhancement**, not **requirement**.
                                 
     YES       NO                          
                                            
-  Apply      GGA available?                  
+  Apply       available?                  
   healing                                   
                                     
             YES   NO                      
                                           
         Invoke   Flag for                    
-        GGA     manual                      
+             manual                      
             intervention                     
                                                
   Report result                                
@@ -178,12 +178,12 @@ GGA is **enhancement**, not **requirement**.
 ## Commands Reference
 
 ```powershell
-# GGA commands (when available)
-gga run              # Review staged files
-gga run --ci        # CI mode
-gga run --pr-mode   # PR review
-gga config          # Show config
-gga cache status    # Cache info
+#  commands (when available)
+ run              # Review staged files
+ run --ci        # CI mode
+ run --pr-mode   # PR review
+ config          # Show config
+ cache status    # Cache info
 
 # Foundation native (always available)
 invoke-ai-review.ps1 run
@@ -198,7 +198,9 @@ wf review --scope full
 | 1 | project-orchestrator | Always |
 | 2 | invoke-ai-review | Always (native) |
 | 3 | code-review-orchestrator | Always |
-| **4** | **guardian-fallback (GGA)** | **Optional** |
+| **4** | **guardian-fallback ()** | **Optional** |
 
 ---
-**Note:** GGA is a convenience, not a requirement. Foundation works fully without it.
+**Note:**  is a convenience, not a requirement. Foundation works fully without it.
+
+

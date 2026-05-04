@@ -70,16 +70,22 @@ coverage/
 # Local development artifacts
 .local/
 .local/social/images/
-.gga
-.gga/
-templates/gga/
-scripts/optional/run-gga.ps1
-scripts/utilities/run-gga.ps1
-*gga*.local/
 
 # Encrypted backups (security)
 .backups/
 
 # Session data (runtime)
 .session/
+.engram-data/
+logs/*.json
+logs/.session-active
 
+# Telemetry
+.telemetry/
+
+# OpenCode generated
+config/opencode.schema.json
+
+# Audit reports (auto-generated)
+LESSONS-LEARNED-*.md
+docs/reference/LESSONS-LEARNED-*.md

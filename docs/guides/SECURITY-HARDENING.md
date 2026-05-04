@@ -73,7 +73,7 @@ Este documento describe las medidas de seguridad implementadas en workspace-foun
 **Caractersticas**:
 - Almacenamiento en variables de entorno
 - Rotacin automtica de secretos
-- Validacin de configuracin
+- Validacin de configuración
 - Auditora de acceso
 
 **Uso**:
@@ -168,7 +168,7 @@ Este documento describe las medidas de seguridad implementadas en workspace-foun
 - [x] Almacenamiento seguro
 - [x] Rotacin automtica
 - [x] Auditora de acceso
-- [x] Validacin de configuracin
+- [x] Validacin de configuración
 
 ### Logging
 - [x] Auditora de eventos
@@ -200,7 +200,7 @@ Este documento describe las medidas de seguridad implementadas en workspace-foun
 
 ---
 
-##  Configuracin de Seguridad
+##  configuración de Seguridad
 
 ### Archivo: `config/security-policy.json`
 

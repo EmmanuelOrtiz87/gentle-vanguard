@@ -1,11 +1,11 @@
-﻿---
+---
 name: parallel-execution-limits
 description: Advanced parallel execution management with dependency graphs, resource pooling, and token budget circuit breaker
 ---
 
 # Skill: parallel-execution-limits
 
-**Version**: 1.0.0
+**versión**: 1.0.0
 **Created**: 2026-04-23
 **Status**: ACTIVE
 **Priority**: CRITICAL
@@ -589,3 +589,4 @@ $env:TOKEN_BUDGET_THRESHOLD = "0.85"
 - [Workflow Orchestrator](../workflow-orchestrator/SKILL.md)
 - [Project Orchestrator](../project-orchestrator-skill/SKILL.md)
 - [Monitoring Aggregator](../monitoring-aggregator/SKILL.md)
+

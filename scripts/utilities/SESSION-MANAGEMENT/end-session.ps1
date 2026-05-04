@@ -13,8 +13,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
-$wfScript = Join-Path $scriptDir 'wf.ps1'
+$repoRoot = Split-Path (Split-Path (Split-Path $scriptDir))
+$wfScript = Join-Path $repoRoot 'scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1'
 $governanceScript = Join-Path $repoRoot 'scripts\diagnostics\validate-script-governance.ps1'
 $rotateScript = Join-Path $scriptDir 'rotate-artifacts.ps1'
 

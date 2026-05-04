@@ -1,4 +1,4 @@
-﻿---
+---
 name: skill-creator
 description: >
   Creates new AI agent skills following the Agent Skills spec.
@@ -6,8 +6,8 @@ description: >
   "skill factory", "generate skill", "skill template"
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
-  version: "2.0"
+  author: workspace-foundation
+  versión: "2.0"
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task
 ---
 
@@ -21,7 +21,7 @@ Create new AI agent skills following Foundation's Agent Skills specification.
 - A pattern is used repeatedly and AI needs guidance
 - Project-specific conventions differ from generic best practices
 - Complex workflows need step-by-step instructions
-- Decision trees help AI choose the right approach
+- decisión trees help AI choose the right approach
 
 **DON'T create a skill when:**
 - Documentation already exists (reference instead)
@@ -54,8 +54,8 @@ description: >
   Trigger: {When the AI should load this skill}.
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
-  version: "1.0"
+  author: workspace-foundation
+  versión: "1.0"
 ---
 
 ## When to Use
@@ -96,7 +96,7 @@ metadata:
 
 ---
 
-## Decision: assets/ vs references/
+## decisión: assets/ vs references/
 
 | Need | Use |
 |------|-----|
@@ -117,8 +117,8 @@ metadata:
 | `name` | Yes | Skill identifier (lowercase, hyphens) |
 | `description` | Yes | What + Trigger in one block |
 | `license` | Yes | Always `Apache-2.0` |
-| `metadata.author` | Yes | `gentleman-programming` |
-| `metadata.version` | Yes | Semantic version as string |
+| `metadata.author` | Yes | `workspace-foundation` |
+| `metadata.versión` | Yes | Semantic versión as string |
 
 ---
 
@@ -126,7 +126,7 @@ metadata:
 
 ### DO
 - Start with the most critical patterns
-- Use tables for decision trees
+- Use tables for decisión trees
 - Keep code examples minimal and focused
 - Include Commands section with copy-paste commands
 
@@ -167,3 +167,5 @@ After creating the skill, add it to `SKILL_INDEX.md`:
 - **Foundation**: See `~/.gentleman/` for global installation
 - **Skill Index**: See [SKILL_INDEX.md](../SKILL_INDEX.md) for all skills
 - **Documentation**: See [docs/](../../docs/) for guides
+
+

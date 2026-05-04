@@ -56,9 +56,9 @@ Workflows especializados por rol que operan sobre la topologa de 5 capas, usando
 
 **Flujo**:
 1. Recibe propuesta de PM o requerimiento arquitectnico
-2. Usa `sdd-design` para crear diseo tcnico (decisions, approach)
+2. Usa `sdd-design` para crear diseo tcnico (decisións, approach)
 3. Usa `sdd-spec` para escribir especificaciones (requirements, scenarios)
-4. Consulta Engram (Layer 1) para decisiones previas
+4. Consulta Engram (Layer 1) para decisiónes previas
 5. Usa `architecture-governance` para validar estndares
 6. Entrega diseo y specs validadas
 
@@ -130,13 +130,13 @@ Workflows especializados por rol que operan sobre la topologa de 5 capas, usando
 **Flujo**:
 1. Configura CI/CD basado en stack detectado
 2. Usa `docker-devops-skill` para containers, deployments
-3. Usa `workspace-automation` para scripts de automatizacin
+3. Usa `workspace-automation` para scripts de automatización
 4. Usa `github-pr` o `branch-pr` para release workflow
 5. Monitorea session lifecycle con `session-lifecycle`
 6. Ejecuta despliegues va comandos (Layer 4)
 
 **Comunicacin**:
-- Input: Cdigo listo para release, configuracin de infraestructura
+- Input: Cdigo listo para release, configuración de infraestructura
 - Output: CI/CD pipelines, scripts, releases
 - Delegacin: `task` tool con `general`, `explore`
 

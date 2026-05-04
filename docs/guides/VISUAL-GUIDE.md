@@ -214,7 +214,7 @@
           Coverage       README           REST Compliance  
           Patterns      Changelog      Validation        
           Edge Cases    Comments        Error Responses    
-          Mocks         ADRs           Versioning        
+          Mocks         ADRs           versióning        
                                                                        
     
                                                                        
@@ -632,7 +632,7 @@ my-service/
         
                                                                            
                            
-       Native Runtime        Gentleman-Skills                       
+        Native Runtime        Workspace-Skills                       
                                                                      
        [S] SDD Workflow      [F] Framework patt.                    
        [M] Memory system     [T] Testing patt.                     
@@ -661,11 +661,11 @@ my-service/
     
 ```
 
-### 7.2 Gentleman-Skills Library
+### 7.2 Workspace-Skills Library
 
 ```
 
-                      GENTLEMAN-SKILLS LIBRARY                              
+                       WORKSPACE-SKILLS LIBRARY                              
 
 
     
@@ -868,7 +868,7 @@ my-service/
 
         
           GIT              POWERSHELL            GIT         
-       version 2.30+       Core 7+            configured     
+       versión 2.30+       Core 7+            configured     
         
       Windows           Windows           user.name     
       Linux            Linux            user.email    

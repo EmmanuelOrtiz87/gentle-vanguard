@@ -1,4 +1,4 @@
-# Dify.io Integration Example
+﻿# Dify.io Integration Example
 
 This guide shows how to connect Foundation to Dify.io using the standard architecture.
 
@@ -70,7 +70,7 @@ cd workspace-foundation
 
 ## Notes
 
-- Never commit API keys in versioned files.
+- Never commit API keys in versióned files.
 - Multiple providers can be configured and alternated using the `-Provider` flag.
 - If the endpoint requires additional parameters, consult the Dify.io documentation.
 

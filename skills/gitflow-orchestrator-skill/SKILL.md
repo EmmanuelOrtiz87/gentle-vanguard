@@ -1,4 +1,4 @@
-﻿---
+---
 name: gitflow-orchestrator-skill
 description: GitFlow workflow validation and branch creation orchestration
 trigger: gitflow, git, branch, workflow, git hooks
@@ -43,7 +43,7 @@ El **GitFlow Orchestrator Skill** acta como un maestro/tutor que:
 -  Detecta ramas mal nombradas ANTES de hacer push
 -  Valida PR base ANTES de mergear
 -  Verifica que los commits cumplan polticas
--  Alerta sobre configuraciones incorrectas
+-  Alerta sobre configuraciónes incorrectas
 
 ### 4. Enseanza
 -  Explica por qu se rechaz una accin
@@ -56,7 +56,7 @@ El **GitFlow Orchestrator Skill** acta como un maestro/tutor que:
 ##  Componentes Implementados
 
 ### 1. Script de Validacin Mejorado
-**Archivo**: `scripts/diagnostics/validate-gitflow.ps1`
+**archivo**: `scripts/diagnostics/validate-gitflow.ps1`
 
 **Caractersticas**:
 - Detecta rama actual automticamente
@@ -82,7 +82,7 @@ El **GitFlow Orchestrator Skill** acta como un maestro/tutor que:
 ---
 
 ### 2. Creador de Rama Interactivo
-**Archivo**: `scripts/utilities/create-gitflow-branch.ps1`
+**archivo**: `scripts/utilities/create-gitflow-branch.ps1`
 
 **Caractersticas**:
 - Pregunta interactivamente qu tipo de cambio es
@@ -92,7 +92,7 @@ El **GitFlow Orchestrator Skill** acta como un maestro/tutor que:
 - Verifica que la rama no exista
 - Muestra informacin contextual sobre el tipo
 - Proporciona prximos pasos claros
-- Explica qu validaciones se ejecutarn
+- Explica qu validaciónes se ejecutarn
 
 **Uso**:
 ```powershell
@@ -114,18 +114,18 @@ El **GitFlow Orchestrator Skill** acta como un maestro/tutor que:
 5. Valida nomenclatura
 6. Crea rama desde base correcta
 7. Muestra prximos pasos
-8. Explica validaciones automticas
+8. Explica validaciónes automticas
 
 ---
 
 ### 3. Hooks de Git Mejorados
-**Archivo**: `scripts/git-hooks/pre-push`
+**archivo**: `scripts/git-hooks/pre-push`
 
 **Caractersticas**:
 - Ejecuta validacin de GitFlow automticamente
-- Ejecuta validaciones de cdigo (gga)
-- Ejecuta validaciones de governance
-- Ejecuta validaciones de homologation
+- Ejecuta validaciónes de cdigo ()
+- Ejecuta validaciónes de governance
+- Ejecuta validaciónes de homologation
 - Proporciona mensajes claros y accionables
 - Sugiere acciones correctivas
 - Bloquea push si hay violaciones
@@ -136,7 +136,7 @@ git push
   
 pre-push hook ejecuta:
   1. validate-gitflow.ps1 (valida rama)
-  2. gga run (valida cdigo)
+  2.  run (valida cdigo)
   3. validate-script-governance.ps1 (valida governance)
   4. homologate-workspace.ps1 (valida homologation)
   
@@ -147,7 +147,7 @@ Si hay error  push bloqueado + mensaje de ayuda
 ---
 
 ### 4. Documentacin de Referencia
-**Archivo**: `docs/guides/GITFLOW-QUICK-REFERENCE.md`
+**archivo**: `docs/guides/GITFLOW-QUICK-REFERENCE.md`
 
 **Contenido**:
 - Inicio rpido con comando interactivo
@@ -157,7 +157,7 @@ Si hay error  push bloqueado + mensaje de ayuda
 - Ejemplos de nombres vlidos/invlidos
 - Informacin de ramas (main, develop, work branches)
 - Flujo completo paso a paso
-- Informacin de automatizacin
+- Informacin de automatización
 - Enlaces a documentacin completa
 
 ---
@@ -206,9 +206,9 @@ Si hay error  push bloqueado + mensaje de ayuda
                                  
                          
                           Ejecuta          
-                          Validaciones:    
+                          validaciónes:    
                            GitFlow        
-                           Cdigo (GGA)   
+                           Cdigo ()   
                            Governance     
                            Homologation   
                          
@@ -244,7 +244,7 @@ Muestra:
    RAMA NO VLIDA
   Tu rama debe tener uno de estos prefijos:
      feature/  - para nuevas funcionalidades
-     bugfix/   - para correcciones de bugs
+     bugfix/   - para correcciónes de bugs
      chore/    - para mantenimiento
      hotfix/   - para fixes crticos
      release/  - para preparacin de release
@@ -382,8 +382,8 @@ Script muestra:
    git commit -m "descripcin"
    
    Pre-commit hook valida:
-    Cdigo con GGA
-    Polticas de revisin
+    Cdigo con 
+    Polticas de revisión
    
    Si OK  commit permitido
    Si error  commit bloqueado + gua
@@ -395,7 +395,7 @@ Script muestra:
    
    Pre-push hook valida:
     GitFlow (rama, base)
-    Cdigo (GGA)
+    Cdigo ()
     Governance
     Homologation
    
@@ -407,13 +407,13 @@ Script muestra:
    
    Desarrollador abre PR en GitHub
    
-   Validaciones automticas:
+   validaciónes automticas:
     Base correcta
     Descripcin presente
     Nombre sigue convenciones
    
 
-6. REVISIN
+6. revisión
    
    Reviewers validan cdigo
    
@@ -489,7 +489,7 @@ El **GitFlow Orchestrator Skill** proporciona:
 
  **Prevencin**: Detecta errores ANTES de que ocurran
 
- **Automatizacin**: Ejecuta validaciones automticamente en cada paso
+ **automatización**: Ejecuta validaciónes automticamente en cada paso
 
 El desarrollador ahora tiene un **maestro/tutor** que:
 - Lo gua en cada paso del proceso
@@ -497,3 +497,5 @@ El desarrollador ahora tiene un **maestro/tutor** que:
 - Lo previene de cometer errores
 - Lo ayuda a entender por qu algo fue rechazado
 - Lo automatiza tareas repetitivas
+
+

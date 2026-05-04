@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Autonomous Norm Enforcer - Validates and applies learned norms
     
@@ -20,7 +20,7 @@
     .\auto-norm-enforcer.ps1 -Trigger session-start -AutoFix
     
 .NOTES
-    Author: gentleman-programming
+    Author: workspace-foundation
     Version: 1.0.0
 #>
 

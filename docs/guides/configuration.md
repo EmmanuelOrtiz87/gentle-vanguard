@@ -1,4 +1,4 @@
-# Workspace Configuration
+﻿# Workspace Configuration
 
 This file describes the recommended schema for `config/workspace.config.json`.
 
@@ -57,7 +57,7 @@ Use `requires` to declare installation prerequisites such as `git`, `go`, or `ba
 - `projectDefaults.kind`, `preset`, `architecture`, and `profile` are safe values that the scaffold can use without asking the user.
 - `projectDefaults.aiModelMode`, `aiModelProvider`, `aiModelName`, `aiModelEndpoint`, and `aiModelNotes` let the scaffold capture AI intent without forcing a provider.
 - If the user already defined the structure, command-line parameters take priority over the config.
-- If there is no clear choice, the flow keeps the defaults and leaves the decision open for the moment with more context.
+- If there is no clear choice, the flow keeps the defaults and leaves the decisión open for the moment with more context.
 
 ## Maintenance Rule
 

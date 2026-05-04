@@ -1,4 +1,4 @@
-﻿---
+---
 name: multi-agent-registry
 description: >
   Multi-agent specialization registry defining 7 specialized sub-agents.
@@ -6,8 +6,8 @@ description: >
   Replaces monolithic orchestrator pattern with distributed specialist agents.
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
-  version: "1.0"
+  author: workspace-foundation
+  versión: "1.0"
 ---
 
 # MULTI-AGENT SPECIALIZATION REGISTRY
@@ -91,7 +91,7 @@ feature analysis,, especificacin funcional
 ## AGENT-SAD: Solution Architect & Designer
 
 ### ROLE
-Defines system architecture, creates SDD documents, makes technical decisions.
+Defines system architecture, creates SDD documents, makes technical decisións.
 
 ### SKILLS ASSIGNED
 - architecture-governance
@@ -104,12 +104,12 @@ Defines system architecture, creates SDD documents, makes technical decisions.
 ### TRIGGERS
 ```
 architecture, design, SDD, system design, API design,
-database schema, technical decision, arquitectura, diseo
+database schema, technical decisión, arquitectura, diseo
 ```
 
 ### DELIVERABLES
 - SDD documents (`docs/specs/SDD-*.md`)
-- Architecture decision records (ADR)
+- Architecture decisión records (ADR)
 - API contracts and schemas
 - Database design documents
 
@@ -305,6 +305,29 @@ BDD specs, SDD specs, specification
 
 # Generate docs
 .\scripts\utilities\wf.ps1 docs "<type>"
+```
+
+---
+
+## AGENT TO OPENCODE SUBAGENT MAPPING
+
+Each agent is now mapped to specific opencode `subagent_type` values for actual delegation:
+
+| Agent | Primary Subagent | Fallback | Use Case |
+|-------|-----------------|----------|----------|
+| **BA** | `sdd-explore` | `general` | Requirements analysis, feasibility studies |
+| **SAD** | `sdd-design` | `general` | Architecture design, technical specs |
+| **DEV** | `sdd-apply` | `general` | Code implementation, bug fixes |
+| **QA** | `sdd-verify` | `general` | Testing, validation, judgment day |
+| **OPS** | `general` | `general` | DevOps tasks, infrastructure |
+| **GOV** | `general` | `general` | Governance, audits, reviews |
+| **DOC** | `sdd-spec` | `general` | Documentation, specifications |
+
+**Configuration file:** `config/subagent-mapping.json`
+
+**Delegation command template:**
+```powershell
+task --description 'Task description' --prompt 'Detailed prompt' --subagent_type <subagent>
 ```
 
 ---
@@ -536,3 +559,5 @@ Pub/sub event system for automation and hooks:
 - Orchestrator: [project-orchestrator-skill](../project-orchestrator-skill/SKILL.md)
 - Documentation: [documentation-governance](../documentation-governance/SKILL.md)
 - Future Backlog: [FUTURE-FEATURES-BACKLOG.md](../../docs/reference/FUTURE-FEATURES-BACKLOG.md)
+
+

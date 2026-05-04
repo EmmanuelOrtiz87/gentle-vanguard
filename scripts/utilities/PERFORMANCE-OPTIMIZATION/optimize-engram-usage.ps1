@@ -18,7 +18,7 @@ function Find-EngramBinary {
     if (Test-Path $localPath2) {
         return $localPath2
     }
-    $userBin = 'C:\Users\emman\bin\engram.exe'
+    $userBin = '$HOME\bin\engram.exe'
     if (Test-Path $userBin) {
         return $userBin
     }

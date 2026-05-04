@@ -85,8 +85,6 @@ function New-SessionAudit {
         aiTools = @{
             claude = @{ requests = 0; tokensEstimated = 0 }
             opencode = @{ requests = 0; tokensEstimated = 0 }
-            gentleAi = @{ requests = 0; tokensEstimated = 0 }
-            gga = @{ invocations = 0; commandsExecuted = @() }
         }
         activity = @{
             actions = @()

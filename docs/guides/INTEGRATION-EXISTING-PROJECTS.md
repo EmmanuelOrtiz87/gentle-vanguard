@@ -15,9 +15,9 @@ Workspace Foundation is **designed to be additive**, meaning it adds capabilitie
 
 ### Required
 
-| Tool | Version | Purpose |
+| Tool | versión | Purpose |
 |------|---------|---------|
-| Git | 2.30+ | Version control |
+| Git | 2.30+ | versión control |
 | PowerShell | 7+ | Automation scripts |
 
 ### Optional (Recommended)
@@ -32,8 +32,8 @@ Workspace Foundation is **designed to be additive**, meaning it adds capabilitie
 
 ```powershell
 # Check prerequisites
-git --version
-pwsh --version
+git --versión
+pwsh --versión
 
 # If PowerShell 7 not installed:
 winget install Microsoft.PowerShell
@@ -216,7 +216,7 @@ See: `docs/guides/FOUNDATION-SYNC.md` for full behavior and examples.
 Test-Path .audit\sessions
 
 # 2. Verify AI tools configured
-claude --version
+claude --versión
 
 # 3. Start a session
 .\scripts\generate-session-audit.ps1 -Start
@@ -326,8 +326,8 @@ git config --get user.name
 git config --get user.email
 
 # 3. Check AI tools
-claude --version
-opencode --version
+claude --versión
+opencode --versión
 
 # 4. Check audit is working
 Get-ChildItem .audit/sessions/

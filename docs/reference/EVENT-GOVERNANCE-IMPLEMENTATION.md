@@ -53,13 +53,13 @@ Define todos los eventos permitidos, esquemas, permisos y polticas.
 
 ### 2. Governance Configuration (`config/event-governance-config.json`)
 
-Configuracin de polticas de seguridad, rate limiting y auditora.
+configuración de polticas de seguridad, rate limiting y auditora.
 
 **Secciones:**
 - **Security**: Polticas de autorizacin
 - **Rate Limiting**: Lmites por evento
-- **Audit**: Configuracin de auditora
-- **Alerts**: Configuracin de alertas
+- **Audit**: configuración de auditora
+- **Alerts**: configuración de alertas
 - **Monitoring**: Mtricas y monitoreo
 
 ### 3. Governance Layer (`event-governance-layer.ps1`)
@@ -73,7 +73,7 @@ Capa de validacin y enforcement de polticas.
 - `check-policy` - Verifica poltica de evento
 - `report` - Reporte completo de governance
 
-**Validaciones:**
+**validaciónes:**
 - Validacin de esquemas JSON
 - Verificacin de permisos
 - Rate limiting

@@ -220,3 +220,4 @@ def get_session(session_id: str):
 | Delete | `db.collection.delete_one({filter})` |
 | Redis cache | `cache.set(key, value, expire)` |
 | Session | `cache.set(f"session:{id}", data)` |
+

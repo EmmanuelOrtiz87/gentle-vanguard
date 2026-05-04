@@ -1,4 +1,4 @@
-﻿# Developer Communication Policy
+# Developer Communication Policy
 
 ## Purpose
 
@@ -26,7 +26,7 @@ Activation triggers:
 
 1. Success: `OK: closed` (or `OK: <minimum verifiable result>`).
 2. Failure: `ERROR: <brief cause> | ACTION: <minimum required step>`.
-3. Do not include optional suggestions unless explicitly authorized.
+3. Do not include optional suggestións unless explicitly authorized.
 4. Keep warnings only for critical risk (security/data-loss/regression).
 
 ## Local Activation (Workspace Override)
@@ -40,7 +40,7 @@ You can enforce `simple/ultra` globally on your machine (not per repo). This is 
 Example:
 
 ```powershell
-C:\Workspace_local\tools\enforce-response-mode.ps1
+.\tools\enforce-response-mode.ps1
 ```
 
 File:
@@ -89,7 +89,7 @@ Behavior:
 2. Requires closure-first output format:
 	- `OK: <minimum verifiable result>`
 	- `ERROR: <brief cause> | ACTION: <minimum required step>`
-3. Restricts optional suggestions unless explicitly authorized.
+3. Restricts optional suggestións unless explicitly authorized.
 4. Allows detail escalation only on explicit request or critical-risk context.
 
 This complements (not replaces) `config/orchestrator.json` controls.
@@ -123,7 +123,7 @@ Architecture baseline for session start:
 Meaning:
 
 1. The orchestrator starts each session in the lowest-detail chat level (`simple + ultra`).
-2. This is treated as an architecture decision for token-efficiency and closure-first operation.
+2. This is treated as an architecture decisión for token-efficiency and closure-first operation.
 3. Baseline is mandatory by default; out-of-policy changes require explicit override command.
 
 Override paths (controlled):
@@ -175,19 +175,19 @@ Escalation model:
 3. Escalate to `expanded` for medium/high explanation needs:
 	- ambiguous requirement with implementation impact
 	- non-trivial integration or migration risk
-	- handoff or decision documentation requested explicitly
+	- handoff or decisión documentation requested explicitly
 4. Keep risk warnings mandatory in all modes:
 	- security, data-loss, compliance, or critical regression risk
-	- architecture decisions with broad blast radius
+	- architecture decisións with broad blast radius
 
 When escalation is applied, the agent must:
 
 1. State why escalation is needed in one short line.
 2. Ask for developer authorization before keeping the higher level for subsequent responses.
 
-## Authorization Gate for Suggestions
+## Authorization Gate for Suggestións
 
-The agent must not proactively push optional improvements, refactors, or scope expansions unless the developer authorizes suggestions.
+The agent must not proactively push optional improvements, refactors, or scope expansions unless the developer authorizes suggestións.
 
 Approved trigger examples:
 
@@ -210,7 +210,7 @@ Warnings must remain concise and actionable.
 
 For normal operational responses:
 
-1. Decision.
+1. decisión.
 2. Action taken.
 3. Result.
 4. Next step only if needed.

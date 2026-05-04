@@ -5,8 +5,8 @@ description: >
   Trigger: When writing Python tests - fixtures, mocking, markers.
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
-  version: "1.0"
+  author: workspace-foundation
+  versión: "1.0"
 ---
 
 ## Basic Test Structure
@@ -184,3 +184,5 @@ pytest --tb=short               # Short traceback
 
 ## Keywords
 pytest, python, testing, fixtures, mocking, parametrize, markers
+
+

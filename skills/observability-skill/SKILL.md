@@ -6,8 +6,8 @@ description: >
   "OpenTelemetry", "SLO", "incident triage", "Grafana", "Prometheus".
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
-  version: "1.0"
+  author: workspace-foundation
+  versión: "1.0"
 ---
 
 ## When to Use
@@ -104,3 +104,5 @@ Bad examples:
 3. Correlate traces to failing components
 4. Inspect logs with requestId/traceId
 5. Validate mitigation, then root cause
+
+

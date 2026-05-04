@@ -1,4 +1,4 @@
-﻿# Workspace Foundation - Quick Reference
+# Workspace Foundation - Quick Reference
 
 ## CLI Commands
 
@@ -71,7 +71,7 @@ When applying templates, replace these placeholders:
 | `{{project-name}}` | Project name | my-api |
 | `{{namespace}}` | K8s namespace | production |
 | `{{domain}}` | Domain | api.example.com |
-| `{{version}}` | Version | 1.0.0 |
+| `{{versión}}` | versión | 1.0.0 |
 | `{{image}}` | Docker image | ghcr.io/user/repo |
 
 ## Common Commands by Stack
@@ -147,7 +147,7 @@ PORT=3000
 - [ ] README.md has project name and description
 - [ ] docs/project-context.md is complete
 - [ ] .env.example exists with all required vars
-- [ ] package.json/go.mod has correct name/version
+- [ ] package.json/go.mod has correct name/versión
 - [ ] Git initialized
 - [ ] Initial commit made
 - [ ] Validation passed
@@ -162,3 +162,4 @@ PORT=3000
 | frontend | 3000 | npm test | npm run build |
 | fullstack | 3000/3001 | npm test | npm run build |
 | microservices | varies | npm test | varies |
+

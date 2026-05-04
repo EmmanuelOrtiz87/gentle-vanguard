@@ -41,7 +41,7 @@ Write-Step "Workspace Foundation Setup Wizard"
 # 1. Git
 Test-Tool -Name "git" -InstallCmd "winget install --id Git.Git -e --source winget"
 
-# 2. Go (Required for Engram/GGA)
+# 2. Go (Required for Engram/native)
 if (-not (Get-Command go -ErrorAction SilentlyContinue)) {
     Write-Warn "Go is missing (required for Engram)."
     $choice = Read-Host "Install Go now? (y/n)"

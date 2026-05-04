@@ -1,12 +1,12 @@
-﻿---
+---
 name: playwright
 description: >
   Playwright E2E testing patterns.
   Trigger: When writing E2E tests - Page Objects, selectors, MCP workflow.
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
-  version: "1.1"
+  author: workspace-foundation
+  versión: "1.1"
 ---
 
 ## MCP Workflow (MANDATORY If Available)
@@ -319,3 +319,5 @@ npx playwright test tests/login/       # Run specific folder
 
 ## Keywords
 playwright, e2e, testing, page object model, selectors, end-to-end, mcp
+
+

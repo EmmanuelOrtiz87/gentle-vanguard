@@ -1,8 +1,8 @@
-﻿# Review Skill Index (7 Dimensiones)
+# Review Skill Index (7 Dimensiones)
 
 ## Descripcin
 
-Esta matriz define los skills y chequeos automticos que cubren las 7 dimensiones de revisin:
+Esta matriz define los skills y chequeos automticos que cubren las 7 dimensiones de revisión:
 
 1. Seguridad (Critical)
 2. Calidad (High)
@@ -28,3 +28,4 @@ Para detalles y ejemplos de cada dimensin, ver los archivos en `skills/` y los s
 
 - Cada skill contiene reglas REJECT, REQUIRE, PREFER.
 - Los hooks automticos invocan los chequeos segn severidad.
+

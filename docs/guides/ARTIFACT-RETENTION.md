@@ -178,9 +178,9 @@ ls docs\.local-archive\
 cat .gitignore | Select-String "local-archive"
 ```
 
-## Version History
+## versión History
 
-| Version | Date | Changes |
+| versión | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | 2026-04-17 | Initial policy: 5 audits, 1 session, 30 local |
 

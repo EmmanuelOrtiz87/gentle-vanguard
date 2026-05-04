@@ -1,4 +1,4 @@
-﻿#  Foundation - Development Stack Suite - Complete Overview
+# Foundation - Development Stack Suite - Complete Overview
 > **AI-Powered Development Ecosystem - Production Ready**
 
 Foundation - Development Stack Suite
@@ -10,8 +10,8 @@ Foundation - Development Stack Suite
 
 ##  Suite Status Summary
 
-**Last Updated**: 2026-04-10  
-**Status**:  **FULLY OPERATIONAL**  
+**Last Updated**: 2026-05-03  
+**Status**: **FULLY OPERATIONAL**  
 **Coverage**: 100% Projects Homologated  
 **Activation**: Automatic through workflow health checks, with optional PowerShell profile integration on Windows
 
@@ -72,7 +72,7 @@ Gentleman Foundation Suite
 | **Engram** |  Active (Required) | Memory system | Session persistence |
 | **Native Review Engine** |  Active | Review + quality gates | Primary validation flow |
 | **Native Runtime Router** |  Active | Runtime orchestration | Policy-driven execution |
-| **Gentleman-Skills** |  Optional | External skill library | Community add-on skills |
+| **Workspace-Skills** |  Optional | External skill library | Community add-on skills |
 
 ---
 
@@ -119,7 +119,7 @@ Copy-Item "scripts/utilities/Microsoft.PowerShell_profile.ps1" $PROFILE
 ### 2. Project Development (Per Session)
 ```powershell
 # Enter project directory (auto-activates tools)
-cd C:\Workspace_local\bitbucket-dashboard
+cd .\bitbucket-dashboard
 
 # Start AI-guided session
 # (Orchestrator detects project type, loads skills)
@@ -267,16 +267,16 @@ git commit -m "feat: add new dashboard component"
 
 ##  Conclusion
 
-**Gentleman Foundation Suite is now fully operational and production-ready.**
+**Foundation Suite is now fully operational and production-ready.**
 
 The suite provides:
-- ** Intelligent AI orchestration** for development workflows
-- ** Zero-config automation** for environment setup
-- ** Automated quality assurance** with AI-powered reviews
-- ** Persistent memory** across development sessions
-- ** Modern templates** for rapid project scaffolding
-- ** Homologated projects** with consistent development experience
+- **Intelligent AI orchestration** for development workflows
+- **Zero-config automation** for environment setup
+- **Automated quality assurance** with AI-powered reviews
+- **Persistent memory** across development sessions
+- **Modern templates** for rapid project scaffolding
+- **Homologated projects** with consistent development experience
 
 **Ready to experience the future of AI-powered development?**
 
-Start with `.\scripts\utilities\wf.ps1 health` in any project directory! 
+Start with `.\scripts\utilities\wf.ps1 health` in any project directory!

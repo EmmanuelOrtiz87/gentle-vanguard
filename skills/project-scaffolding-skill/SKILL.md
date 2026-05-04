@@ -1,4 +1,4 @@
-﻿---
+---
 name: project-scaffolding
 description: Use when creating projects, scaffolding code, bootstrapping workspaces, applying templates, running validation scripts, or managing workspace infrastructure. Triggers for: "create project", "new project", "bootstrap", "scaffold", "template", "workspace setup", "initialize project", "wf CLI".
 ---
@@ -68,7 +68,7 @@ Templates use mustache-style placeholders. Replace before applying:
 | `{{project-name}}` | Project name | my-api |
 | `{{namespace}}` | K8s namespace | production |
 | `{{domain}}` | Domain name | api.example.com |
-| `{{version}}` | Version | 1.0.0 |
+| `{{versión}}` | versión | 1.0.0 |
 | `{{image}}` | Docker image | ghcr.io/user/repo |
 
 ### 4. Available Templates
@@ -107,7 +107,7 @@ After scaffolding, always verify:
 - [ ] `README.md` updated with project name and description
 - [ ] `docs/project-context.md` contains project metadata
 - [ ] `.env.example` created (no real secrets)
-- [ ] `package.json` or `go.mod` has correct name/version
+- [ ] `package.json` or `go.mod` has correct name/versión
 - [ ] Git initialized: `git init`
 - [ ] Initial commit: `git add . && git commit -m "Initial commit"`
 - [ ] Run validation: `scripts/foundation/wf.ps1 validate`
@@ -173,3 +173,5 @@ git add . && git commit -m "Initial commit"
 - `templates/project-types/*/` - Type-specific templates
 - `skills/documentation-governance/` - Doc standards
 - `skills/architecture-governance/` - Architecture standards
+
+

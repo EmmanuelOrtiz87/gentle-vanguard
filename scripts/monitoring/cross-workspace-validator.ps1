@@ -117,14 +117,14 @@ $issues = 0
 
 # 1. Context Efficiency Config
 $result = Compare-ConfigFiles `
-    -File1 "tools/context-efficiency-config.json" `
-    -File2 "workspace-foundation/tools/context-efficiency-config.json" `
+    -File1 "scripts/utilities/context-efficiency-config.json" `
+    -File2 "workspace-foundation/scripts/utilities/context-efficiency-config.json" `
     -Description "Context Efficiency Config"
 
 $validations += @{
     Name = "Context Efficiency Config"
-    Local = "tools/context-efficiency-config.json"
-    Foundation = "workspace-foundation/tools/context-efficiency-config.json"
+    Local = "scripts/utilities/context-efficiency-config.json"
+    Foundation = "workspace-foundation/scripts/utilities/context-efficiency-config.json"
     Status = $result
 }
 
@@ -132,14 +132,14 @@ if (-not $result) { $issues++ }
 
 # 2. Session Autostart Config
 $result = Compare-ConfigFiles `
-    -File1 "tools/session-autostart.config.json" `
-    -File2 "workspace-foundation/tools/session-autostart.config.json" `
+    -File1 "scripts/utilities/session-autostart.config.json" `
+    -File2 "workspace-foundation/scripts/utilities/session-autostart.config.json" `
     -Description "Session Autostart Config"
 
 $validations += @{
     Name = "Session Autostart Config"
-    Local = "tools/session-autostart.config.json"
-    Foundation = "workspace-foundation/tools/session-autostart.config.json"
+    Local = "scripts/utilities/session-autostart.config.json"
+    Foundation = "workspace-foundation/scripts/utilities/session-autostart.config.json"
     Status = $result
 }
 

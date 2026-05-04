@@ -18,7 +18,8 @@ param(
 
 $ErrorActionPreference = 'Continue'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot = if ($scriptDir) { (Resolve-Path (Join-Path (Join-Path $scriptDir '..') '..')).Path } else { Get-Location }
+# repoRoot: go up 3 levels from wf.ps1 (WORKFLOW-ORCHESTRATION -> utilities -> scripts -> repo)
+$repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..\..')).Path
 
 function Write-Step {
     param([string]$Message)
@@ -46,7 +47,11 @@ function Invoke-LocalPowerShellScript {
         [string[]]$ScriptArgs = @()
     )
 
-    & $ScriptPath @ScriptArgs
+    if ($ScriptArgs.Count -gt 0) {
+        & $ScriptPath @ScriptArgs
+    } else {
+        & $ScriptPath
+    }
 }
 
 function Invoke-TokenBudgetGuard {
@@ -57,7 +62,7 @@ function Invoke-TokenBudgetGuard {
         [int]$EstimatedChars = 0
     )
 
-    $guardScript = Join-Path $scriptDir 'token-budget-guard.ps1'
+    $guardScript = Join-Path $scriptDir '..\TELEMETRY-METRICS\token-budget-guard.ps1'
     if (-not (Test-Path $guardScript)) {
         return
     }
@@ -1176,11 +1181,12 @@ function Get-OldWorkflowCheckpoints {
         }
 
         [DateTimeOffset]$parsedDate = [DateTimeOffset]::MinValue
-        if ([DateTimeOffset]::TryParse([string]$dateRaw, [ref]$parsedDate)) {
+        try {
+            $parsedDate = [DateTimeOffset]::Parse([string]$dateRaw)
             if ($parsedDate.LocalDateTime -lt $cutoff) {
                 $oldRefs += $ref
             }
-        }
+        } catch { }
     }
 
     return $oldRefs
@@ -1496,7 +1502,7 @@ CHECKPOINT LABEL CONVENTION:
 
 function Show-IdeStatus {
     Write-Step "IDE Session Detection"
-    $detectScript = Join-Path $scriptDir 'detect-ide-session.ps1'
+    $detectScript = Join-Path $scriptDir '..\UTILITIES\detect-ide-session.ps1'
     if (-not (Test-Path $detectScript)) {
         Write-Error "IDE detection script not found: $detectScript"
         exit 1
@@ -1592,7 +1598,7 @@ switch ($Command) {
     'end-session' {
         Write-Step "Running session closure"
         Invoke-TokenBudgetGuard -Task 'end-session' -Risk 'medium' -EstimatedChars 7200
-        $endScript = Join-Path $scriptDir 'end-session.ps1'
+        $endScript = Join-Path $scriptDir '..\SESSION-MANAGEMENT\end-session.ps1'
         if (Test-Path $endScript) {
             $endArgs = @()
             if (-not [string]::IsNullOrWhiteSpace($Scope)) { $endArgs += @('-TaskName', $Scope) }
@@ -1838,7 +1844,7 @@ switch ($Command) {
     'health' {
         Write-Step "System Health Check & Tool Activation"
         
-        $healthScript = Join-Path $scriptDir 'ensure-tools-active.ps1'
+        $healthScript = Join-Path $scriptDir '..\SKILLS-TOOLS\ensure-tools-active.ps1'
         if (Test-Path $healthScript) {
             $healthArgs = @('-AutoStart')
             if ($Force) { $healthArgs += "-Force" }
@@ -1877,7 +1883,7 @@ switch ($Command) {
     }
 
     'stack-dashboard' {
-        $dashboardScript = Join-Path $scriptDir 'stack-dashboard.ps1'
+        $dashboardScript = Join-Path $scriptDir '..\UTILITIES\stack-dashboard.ps1'
         if (-not (Test-Path $dashboardScript)) {
             Write-Error "Stack dashboard script not found: $dashboardScript"
             exit 1
@@ -1928,7 +1934,7 @@ switch ($Command) {
 
     'custom-rules-status' {
         Write-Step "Custom Rules Status"
-        $rulesScript = Join-Path $scriptDir 'custom-rules.ps1'
+        $rulesScript = Join-Path $scriptDir '..\UTILITIES\custom-rules.ps1'
         if (-not (Test-Path $rulesScript)) {
             Write-Error "Custom rules script not found: $rulesScript"
             exit 1
@@ -1940,7 +1946,7 @@ switch ($Command) {
     }
     'response-mode' {
         Write-Step 'Response Profile'
-        $modeScript = Join-Path $scriptDir 'response-mode.ps1'
+        $modeScript = Join-Path $scriptDir '..\UTILITIES\response-mode.ps1'
         if (-not (Test-Path $modeScript)) {
             Write-Error "Response mode script not found: $modeScript"
             exit 1
@@ -2001,7 +2007,7 @@ switch ($Command) {
     }
     'install-engram' {
         Write-Step "Installing or verifying Engram CLI"
-        $installScript = Join-Path $scriptDir 'install-engram.ps1'
+        $installScript = Join-Path $scriptDir '..\SKILLS-TOOLS\install-engram.ps1'
         if (Test-Path $installScript) {
             $installArgs = @()
             if ($Force) { $installArgs += '-Force' }
@@ -2123,7 +2129,7 @@ switch ($Command) {
 
     'context-metrics' {
         Write-Step "Context Usage Metrics"
-        $metricsScript = Join-Path $scriptDir 'context-metrics-report.ps1'
+        $metricsScript = Join-Path $scriptDir '..\AUDIT-REPORTING\context-metrics-report.ps1'
         if (-not (Test-Path $metricsScript)) {
             Write-Error "Context metrics script not found: $metricsScript"
             exit 1
@@ -2131,18 +2137,20 @@ switch ($Command) {
 
         $days = 7
         if (-not [string]::IsNullOrWhiteSpace($Scope)) {
-            $parsedDays = 0
-            if ([int]::TryParse($Scope, [ref]$parsedDays) -and $parsedDays -gt 0) {
-                $days = $parsedDays
+            if ($Scope -match '^\d+$') {
+                $parsedDays = [int]$Scope
+                if ($parsedDays -gt 0) {
+                    $days = $parsedDays
+                }
             }
         }
 
-        Invoke-LocalPowerShellScript -ScriptPath $metricsScript -ScriptArgs @('-Days', [string]$days)
+        & $metricsScript -Days $days
     }
 
     'token-guard' {
         Write-Step "Token Budget Guard"
-        $guardScript = Join-Path $scriptDir 'token-budget-guard.ps1'
+        $guardScript = Join-Path $scriptDir '..\TELEMETRY-METRICS\token-budget-guard.ps1'
         if (-not (Test-Path $guardScript)) {
             Write-Error "Token budget guard script not found: $guardScript"
             exit 1

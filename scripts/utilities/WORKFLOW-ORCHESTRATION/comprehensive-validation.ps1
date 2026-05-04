@@ -79,11 +79,11 @@ function Add-ValidationResult {
 Write-Log "=== VALIDATING POWERSHELL SCRIPTS ===" "INFO"
 
 $psScripts = @(
-    "workspace-foundation/scripts/utilities/WORKFLOW-ORCHESTRATION/pre-process-input.ps1",
-    "workspace-foundation/scripts/utilities/WORKFLOW-ORCHESTRATION/validate-system-health.ps1",
-    "workspace-foundation/scripts/utilities/WORKFLOW-ORCHESTRATION/intelligent-validator.ps1",
-    "workspace-foundation/scripts/utilities/GIT-VERSION-CONTROL/pre-commit-validation.ps1",
-    "workspace-foundation/scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1"
+    "scripts/utilities/WORKFLOW-ORCHESTRATION/pre-process-input.ps1",
+    "scripts/utilities/WORKFLOW-ORCHESTRATION/validate-system-health.ps1",
+    "scripts/utilities/WORKFLOW-ORCHESTRATION/intelligent-validator.ps1",
+    "scripts/utilities/GIT-VERSION-CONTROL/pre-commit-validation.ps1",
+    "scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1"
 )
 
 foreach ($script in $psScripts) {
@@ -112,10 +112,10 @@ foreach ($script in $psScripts) {
 Write-Log "=== VALIDATING JSON CONFIGURATION FILES ===" "INFO"
 
 $jsonFiles = @(
-    "workspace-foundation/opencode.json",
-    "workspace-foundation/config/hooks-config.json",
-    "workspace-foundation/config/workspace.config.json",
-    "workspace-foundation/scripts/utilities/WORKFLOW-ORCHESTRATION/hook-registry.json"
+    "opencode.json",
+    "config/hooks-config.json",
+    "config/workspace.config.json",
+    "scripts/utilities/WORKFLOW-ORCHESTRATION/hook-registry.json"
 )
 
 foreach ($jsonFile in $jsonFiles) {
@@ -154,11 +154,11 @@ foreach ($jsonFile in $jsonFiles) {
 Write-Log "=== VALIDATING DOCUMENTATION ===" "INFO"
 
 $docFiles = @(
-    "workspace-foundation/docs/HOOKS-IMPLEMENTATION-GUIDE.md",
-    "workspace-foundation/docs/LESSONS-LEARNED-HOOKS-INCIDENT.md",
-    "workspace-foundation/docs/CONFIGURATION-VALIDATION-CHECKLIST.md",
-    "workspace-foundation/docs/AUTONOMOUS-VALIDATION-SYSTEM.md",
-    "workspace-foundation/docs/AUTONOMOUS-SYSTEM-GUIDE.md"
+    "docs/HOOKS-IMPLEMENTATION-GUIDE.md",
+    "docs/LESSONS-LEARNED-HOOKS-INCIDENT.md",
+    "docs/CONFIGURATION-VALIDATION-CHECKLIST.md",
+    "docs/AUTONOMOUS-VALIDATION-SYSTEM.md",
+    "docs/AUTONOMOUS-SYSTEM-GUIDE.md"
 )
 
 foreach ($docFile in $docFiles) {
@@ -187,10 +187,10 @@ foreach ($docFile in $docFiles) {
 Write-Log "=== VALIDATING DIRECTORY STRUCTURE ===" "INFO"
 
 $requiredDirs = @(
-    "workspace-foundation/config",
-    "workspace-foundation/scripts/utilities/WORKFLOW-ORCHESTRATION",
-    "workspace-foundation/scripts/utilities/GIT-VERSION-CONTROL",
-    "workspace-foundation/docs",
+    "config",
+    "scripts/utilities/WORKFLOW-ORCHESTRATION",
+    "scripts/utilities/GIT-VERSION-CONTROL",
+    "docs",
     ".session/logs",
     ".session/reports"
 )
@@ -212,7 +212,7 @@ foreach ($dir in $requiredDirs) {
 Write-Log "=== VALIDATING HOOKS CONFIGURATION ===" "INFO"
 
 try {
-    $hooksConfig = Get-Content "workspace-foundation/config/hooks-config.json" -Raw | ConvertFrom-Json
+    $hooksConfig = Get-Content "config/hooks-config.json" -Raw | ConvertFrom-Json
     
     $expectedHooks = @("pre_process", "post_session", "pre_commit", "post_merge")
     foreach ($hook in $expectedHooks) {
@@ -237,7 +237,7 @@ catch {
 Write-Log "=== VALIDATING AUTOMATION SETUP ===" "INFO"
 
 $automationFiles = @(
-    "workspace-foundation/.github/workflows/autonomous-validation.yml"
+    ".github/workflows/autonomous-validation.yml"
 )
 
 foreach ($file in $automationFiles) {
@@ -264,7 +264,7 @@ foreach ($file in $automationFiles) {
 Write-Log "=== VALIDATING SYSTEM DEFINITIONS ===" "INFO"
 
 try {
-    $opencode = Get-Content "workspace-foundation/opencode.json" -Raw | ConvertFrom-Json
+    $opencode = Get-Content "opencode.json" -Raw | ConvertFrom-Json
     
     # Check providers
     if ($opencode.provider.anthropic) {
@@ -310,8 +310,8 @@ if (Test-Path ".github/workflows") {
 Write-Log "=== VALIDATING MANUAL PROCEDURES ===" "INFO"
 
 $manualDocs = @(
-    "workspace-foundation/docs/CONFIGURATION-VALIDATION-CHECKLIST.md",
-    "workspace-foundation/docs/LESSONS-LEARNED-HOOKS-INCIDENT.md"
+    "docs/CONFIGURATION-VALIDATION-CHECKLIST.md",
+    "docs/LESSONS-LEARNED-HOOKS-INCIDENT.md"
 )
 
 foreach ($doc in $manualDocs) {
@@ -330,8 +330,8 @@ foreach ($doc in $manualDocs) {
 Write-Log "=== VALIDATING AUTONOMOUS SYSTEMS ===" "INFO"
 
 $autonomousDocs = @(
-    "workspace-foundation/docs/AUTONOMOUS-VALIDATION-SYSTEM.md",
-    "workspace-foundation/docs/AUTONOMOUS-SYSTEM-GUIDE.md"
+    "docs/AUTONOMOUS-VALIDATION-SYSTEM.md",
+    "docs/AUTONOMOUS-SYSTEM-GUIDE.md"
 )
 
 foreach ($doc in $autonomousDocs) {

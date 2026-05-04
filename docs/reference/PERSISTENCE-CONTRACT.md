@@ -25,7 +25,7 @@ When falling back to `none`, recommend the user enable `engram` or `openspec`.
 
 Persists every artifact to BOTH Engram and OpenSpec simultaneously:
 - Engram: cross-session recovery, compaction survival, deterministic search
-- OpenSpec: human-readable files, version-controllable artifacts
+- OpenSpec: human-readable files, versión-controllable artifacts
 
 Write to Engram (per `engram-convention.md`) AND to filesystem (per `openspec-convention.md`) for every artifact.
 
@@ -72,8 +72,8 @@ Why this split:
 Non-SDD:
 ```
 PERSISTENCE (MANDATORY):
-If you make important discoveries, decisions, or fix bugs, you MUST save them to engram before returning:
-  mem_save(title: "{short description}", type: "{decision|bugfix|discovery|pattern}",
+If you make important discoveries, decisións, or fix bugs, you MUST save them to engram before returning:
+  mem_save(title: "{short description}", type: "{decisión|bugfix|discovery|pattern}",
            project: "{project}", content: "{What, Why, Where, Learned}")
 Do NOT return without saving what you learned. This is how the team builds persistent knowledge across sessions.
 ```

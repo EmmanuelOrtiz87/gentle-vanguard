@@ -1,4 +1,4 @@
-﻿---
+---
 name: mobile-app-debugging
 description: >
   Debug issues specific to mobile applications including platform-specific
@@ -73,3 +73,4 @@ App Crash (SIGABRT):
 - Skip testing or validation
 - Ignore error handling
 - Hard-code configuration values
+

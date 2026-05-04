@@ -1,4 +1,4 @@
-﻿---
+---
 name: git-workflow-skill
 description: Use when managing git branches, commits, pull requests, merge conflicts, or git workflows. Triggers: "git branch", "git merge", "conflict", "pull request", "commit", "rebase", "cherry-pick", "stash".
 ---
@@ -213,7 +213,7 @@ git merge --squash feature/name
 
 # Tags
 git tag v1.0.0
-git tag -a v1.0.0 -m "Version 1.0.0"
+git tag -a v1.0.0 -m "versión 1.0.0"
 git push origin v1.0.0
 
 # Stash
@@ -227,3 +227,5 @@ git log --oneline --graph --all
 git blame file.js
 git show commit-id
 ```
+
+

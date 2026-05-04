@@ -1,12 +1,12 @@
-﻿---
+---
 name: skill-registry
 description: >
   Create or update the skill registry for the current project. Scans user skills and project conventions, writes .atl/skill-registry.md, and saves to engram if available.
   Trigger: When user says "update skills", "skill registry", "actualizar skills", "update registry", or after installing/removing skills.
 license: MIT
 metadata:
-  author: gentleman-programming
-  version: "1.0"
+  author: workspace-foundation
+  versión: "1.0"
 ---
 
 ## Purpose
@@ -44,7 +44,7 @@ This is the foundation of the **Skill Resolver Protocol** (see `docs/reference/S
 
 2. **SKIP `sdd-*` and `_shared`**  those are SDD workflow skills, not coding/task skills
 3. Also **SKIP `skill-registry`**  that's this skill
-4. **Deduplicate**  if the same skill name appears in multiple locations, keep the project-level version (more specific). If both are user-level, keep the first found.
+4. **Deduplicate**  if the same skill name appears in multiple locations, keep the project-level versión (more specific). If both are user-level, keep the first found.
 5. For each skill found, read the **full SKILL.md** (if a SKILL.md exceeds 200 lines, focus on the frontmatter and Critical Patterns / Rules sections only) to extract:
    - `name` field (from frontmatter)
    - `description` field  extract the trigger text (after "Trigger:" in the description)
@@ -199,3 +199,5 @@ To update after installing/removing skills, run this again.
 - Include ALL convention index files found (not just the first)
 - If no skills or conventions are found, write an empty registry (so sub-agents don't waste time searching)
 - Add `.atl/` to the project's `.gitignore` if it exists and `.atl` is not already listed
+
+

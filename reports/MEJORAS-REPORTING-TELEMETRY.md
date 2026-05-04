@@ -15,7 +15,7 @@
 | Auto-delegation | ✅ Configurado | `config/auto-delegation.json` |
 | Sesiones | ✅ Grabadas | `.session/session-*.json` |
 | Telemetry inicialización | ✅ Grabada | `.telemetry/initialization-*.json` |
-| Token Guard config | ✅ Configurado | `tools/token-guard-config.json` |
+| Token Guard config | ✅ Configurado | `scripts/utilities/token-guard-config.json` |
 | Context Efficiency | ✅ Configurado | `config/context-efficiency.json` |
 | Business Telemetry Schema | ✅ Definido (sin usar) | `skills/business-telemetry-skill/SKILL.md` |
 | Context Engineering Skills | ✅ Definidos | `skills/context-engineering-skill/SKILL.md` |

@@ -1,4 +1,4 @@
-﻿# Developer Setup Guide
+# Developer Setup Guide
 
 Step-by-step guide for new developers joining the team.
 
@@ -29,8 +29,8 @@ winget install Microsoft.PowerShell
 ### Verify Installations
 
 ```powershell
-git --version
-pwsh --version  # or powershell --version
+git --versión
+pwsh --versión  # or powershell --versión
 ```
 
 ## Step 2: Install Foundation - Development Stack
@@ -51,8 +51,8 @@ cd C:\foundation
 ### Option B: Manual
 
 ```powershell
-# 1. Create foundation directory
-New-Item -ItemType Directory -Path "$env:USERPROFILE\.gentleman" -Force
+# Create foundation directory
+New-Item -ItemType Directory -Path "$env:USERPROFILE\.foundation" -Force
 
 # 2. Copy skills from repository
 # (Clone repo and copy skills folder)
@@ -60,26 +60,25 @@ New-Item -ItemType Directory -Path "$env:USERPROFILE\.gentleman" -Force
 # 3. Add to PATH
 [Environment]::SetEnvironmentVariable(
     "PATH",
-    "$env:USERPROFILE\.gentleman\bin;$env:PATH",
+    "$env:USERPROFILE\.foundation\bin;$env:PATH",
     "User"
 )
 ```
 
 ### Verify Foundation
-
 ```powershell
-gf validate
-gf info
-gf list
+wf.ps1 health
+wf.ps1 status
+wf.ps1 list
 ```
 
 ### Optional: Local Workspace Autostart (Local-only)
 
-If you keep a personal workspace root (example: `C:\Workspace_local`), you can add a local-only startup helper to run health checks automatically. This is optional and should stay **local** (not a shared repo rule).
+If you keep a personal workspace root (example: `.`), you can add a local-only startup helper to run health checks automatically. This is optional and should stay **local** (not a shared repo rule).
 
 ```powershell
 # Local-only helper
-C:\Workspace_local\tools\session-autostart.cmd
+.\tools\session-autostart.cmd
 ```
 
 Notes:
@@ -132,22 +131,21 @@ cd C:\Workspace
 C:\foundation\scripts\setup-project.ps1 -ProjectPath "C:\Workspace\my-project"
 
 # Or create new project
-gf new --name my-project --type service
+wf.ps1 new --name my-project --type service
 ```
 
 ## Daily Workflow
 
 ### Morning
-
 ```powershell
 # Check for updates
-gf check
+wf.ps1 check
 
 # Update if needed
-gf update-all
+wf.ps1 update-all
 
 # Validate setup
-gf validate
+wf.ps1 health
 ```
 
 ### Before Commit
@@ -215,5 +213,7 @@ git config --global core.hooksPath
 3. Setup your first project
 
 - Los hooks automticos de Foundation - Development Stack ahora cubren 7 dimensiones: Seguridad, Calidad, Arquitectura, Testing, API, Documentacin y Gitflow. Consulta REVIEW-INDEX.md para detalles y cmo personalizar reglas.
-- Para personalizar reglas de revisin, edita los archivos SKILL.md en cada subcarpeta de skills/.
+- Para personalizar reglas de revisión, edita los archivos SKILL.md en cada subcarpeta de skills/.
 - Los scripts de chequeo estn en scripts/hooks/ y pueden adaptarse a las necesidades del proyecto.
+
+

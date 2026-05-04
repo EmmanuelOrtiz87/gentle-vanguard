@@ -1,4 +1,4 @@
-﻿# Project Cleanup Guide
+# Project Cleanup Guide
 
 ## Visin General
 
@@ -49,7 +49,7 @@ Este documento describe cmo limpiar el proyecto de archivos temporales, logs, ca
 
 ### PowerShell
 
-**Archivo**: `tools/cleanup-project.ps1`
+**Archivo**: `scripts/utilities/cleanup-project.ps1`
 
 **Modos**:
 
@@ -81,23 +81,23 @@ Este documento describe cmo limpiar el proyecto de archivos temporales, logs, ca
 
 ### Bash
 
-**Archivo**: `tools/cleanup-project.sh`
+**Archivo**: `scripts/utilities/cleanup-project.sh`
 
 **Modos**:
 
 #### Dry-Run (Seguro)
 ```bash
-bash ./tools/cleanup-project.sh dry-run
+bash ./scripts/utilities/cleanup-project.sh dry-run
 ```
 
 #### Safe (Recomendado)
 ```bash
-bash ./tools/cleanup-project.sh safe
+bash ./scripts/utilities/cleanup-project.sh safe
 ```
 
 #### Full (Completo)
 ```bash
-bash ./tools/cleanup-project.sh full
+bash ./scripts/utilities/cleanup-project.sh full
 ```
 
 ---
@@ -107,8 +107,8 @@ bash ./tools/cleanup-project.sh full
 Los siguientes archivos/directorios NUNCA se eliminan:
 
 ### Directorios Protegidos
-- `config/` - Configuraciones
-- `tools/` - Scripts
+- `config/` - configuraciónes
+- `scripts/utilities/` - Scripts
 - `docs/` - Documentacin
 - `skills/` - Skills
 - `demos/` - Demos
@@ -133,7 +133,7 @@ Los siguientes archivos/directorios NUNCA se eliminan:
 .\tools\cleanup-project.ps1 -Mode dry-run
 
 # Bash
-bash ./tools/cleanup-project.sh dry-run
+bash ./scripts/utilities/cleanup-project.sh dry-run
 ```
 
 **Resultado**: Ver qu se limpiara sin eliminar nada
@@ -145,7 +145,7 @@ bash ./tools/cleanup-project.sh dry-run
 .\tools\cleanup-project.ps1 -Mode safe
 
 # Bash
-bash ./tools/cleanup-project.sh safe
+bash ./scripts/utilities/cleanup-project.sh safe
 ```
 
 **Resultado**: Proyecto limpio sin perder logs importantes
@@ -189,15 +189,15 @@ El script automticamente verifica:
 - `AGENTS.md`
 - `README.md`
 
-### Configuracin
+### configuración
 - `config/` - Todos los archivos
 - `config/*.json`
 
 ### Scripts
-- `tools/` - Todos los scripts
-- `tools/*.ps1`
-- `tools/*.sh`
-- `tools/*.cmd`
+- `scripts/utilities/` - Todos los scripts
+- `scripts/utilities/*.ps1`
+- `scripts/utilities/*.sh`
+- `scripts/utilities/*.cmd`
 
 ### Datos
 - `skills/` - Todos los skills
@@ -211,7 +211,7 @@ Despus de limpiar, el script verifica:
 
 ### Directorios Requeridos
 - [x] `config/` - Presente
-- [x] `tools/` - Presente
+- [x] `scripts/utilities/` - Presente
 - [x] `docs/` - Presente
 - [x] `skills/` - Presente
 - [x] `demos/` - Presente
@@ -270,7 +270,7 @@ Despus de limpiar, el script verifica:
 **Causa**: Archivos requeridos fueron eliminados
 
 **Solucin**: 
-1. Restaurar desde control de versiones
+1. Restaurar desde control de versiónes
 2. Verificar que no se ejecut modo full innecesariamente
 
 ### Problema: Archivos no se eliminan
@@ -305,13 +305,13 @@ Despus de limpiar, el script verifica:
 
 - [ ] Ejecutar full sin verificar
 - [ ] Eliminar docs/judgment/
-- [ ] Eliminar archivos de configuracin
+- [ ] Eliminar archivos de configuración
 - [ ] Ejecutar sin permisos
 - [ ] Ignorar errores de integridad
 
 ---
 
-## Automatizacin
+## automatización
 
 ### Limpiar Regularmente
 
@@ -327,7 +327,7 @@ Frecuencia: Diaria (despus de horas de trabajo)
 **Linux/macOS (Cron)**:
 ```bash
 # Ejecutar limpieza diaria a las 22:00
-0 22 * * * cd /path/to/project && bash ./tools/cleanup-project.sh safe
+0 22 * * * cd /path/to/project && bash ./scripts/utilities/cleanup-project.sh safe
 ```
 
 ---
@@ -340,7 +340,7 @@ El script de limpieza proporciona:
  Proteccin de archivos importantes
  Verificacin de integridad
  Logging detallado
- Automatizacin posible
+ automatización posible
 
 **Recomendacin**: Ejecutar `safe` regularmente para mantener el proyecto limpio.
 
@@ -348,6 +348,6 @@ El script de limpieza proporciona:
 
 ## Referencias
 
-- `tools/cleanup-project.ps1` - Script PowerShell
-- `tools/cleanup-project.sh` - Script Bash
+- `scripts/utilities/cleanup-project.ps1` - Script PowerShell
+- `scripts/utilities/cleanup-project.sh` - Script Bash
 - `AGENTS.md` - Reglas del proyecto

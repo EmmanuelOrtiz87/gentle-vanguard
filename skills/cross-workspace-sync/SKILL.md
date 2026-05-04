@@ -1,11 +1,11 @@
-﻿---
+---
 name: cross-workspace-sync
 description: Cross-workspace synchronization skill for maintaining consistency across projects
 ---
 
 # Skill: cross-workspace-sync
 
-**Version**: 1.0.0
+**versión**: 1.0.0
 **Created**: 2026-04-20
 **Status**: ACTIVE
 **Priority**: MEDIUM
@@ -534,3 +534,4 @@ Invoke-WorkspaceSync @config
 
 **Issue**: "Sync drift detected"
 - **Solution**: Trigger auto-resync, verify source integrity
+
