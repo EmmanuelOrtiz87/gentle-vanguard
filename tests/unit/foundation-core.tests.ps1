@@ -5,7 +5,7 @@ Describe 'Foundation Core Tests' {
 
     Context 'Pre-Processing Hook' {
         It 'pre-process-input.ps1 exists and is non-empty' {
-            $f = "$script:root\tools\pre-process-input.ps1"
+            $f = "$script:root\scripts\utilities\pre-process-input.ps1"
             Test-Path $f | Should Be $true
             (Get-Item $f).Length | Should BeGreaterThan 0
         }
@@ -13,15 +13,19 @@ Describe 'Foundation Core Tests' {
 
     Context 'Session Tools' {
         It 'session-autostart.cmd exists' {
-            Test-Path "$script:root\tools\session-autostart.cmd" | Should Be $true
+            Test-Path "$script:root\scripts\utilities\session-autostart.cmd" | Should Be $true
         }
 
         It 'install-hooks.ps1 exists' {
-            Test-Path "$script:root\tools\install-hooks.ps1" | Should Be $true
+            Test-Path "$script:root\scripts\utilities\install-hooks.ps1" | Should Be $true
         }
 
         It 'validate-configs.ps1 exists' {
-            Test-Path "$script:root\tools\validate-configs.ps1" | Should Be $true
+            Test-Path "$script:root\scripts\utilities\validate-configs.ps1" | Should Be $true
+        }
+
+        It 'agent-verify.ps1 exists' {
+            Test-Path "$script:root\scripts\utilities\agent-verify.ps1" | Should Be $true
         }
     }
 
