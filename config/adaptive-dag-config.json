@@ -1,12 +1,10 @@
 {
   "version": "1.0",
   "enabled": true,
-  "description": "Adaptive Mode DAG Configuration - Dynamic phase orchestration with feedback loops",
   "dag": {
     "agents": {
       "BA": {
         "name": "Business Analyst",
-        "description": "Requirements and BDD scenarios",
         "dependencies": [],
         "skills": ["bdd-scenarios-skill", "backlog-management-skill"],
         "priority": 1,
@@ -14,7 +12,6 @@
       },
       "SAD": {
         "name": "Solution Architect",
-        "description": "Architecture and API design",
         "dependencies": ["BA"],
         "skills": ["architecture-governance", "api-design-skill", "database-relational-skill"],
         "priority": 2,
@@ -22,7 +19,6 @@
       },
       "DEV": {
         "name": "Developer",
-        "description": "Implementation and coding",
         "dependencies": ["SAD"],
         "skills": ["typescript-skill", "react-19-skill", "golang-api-skill"],
         "priority": 3,
@@ -30,7 +26,6 @@
       },
       "QA": {
         "name": "QA Engineer",
-        "description": "Testing and validation",
         "dependencies": ["DEV"],
         "skills": ["testing-skill", "playwright-skill", "pytest-skill"],
         "priority": 4,
@@ -38,7 +33,6 @@
       },
       "OPS": {
         "name": "DevOps Engineer",
-        "description": "Deployment and infrastructure",
         "dependencies": ["QA"],
         "skills": ["docker-devops-skill", "kubernetes-deployment", "terraform-infrastructure"],
         "priority": 5,
@@ -46,7 +40,6 @@
       },
       "GOV": {
         "name": "Governance",
-        "description": "Security, compliance, and monitoring",
         "dependencies": ["DEV", "QA"],
         "skills": ["security-expert-skill", "observability-skill", "incident-response-plan"],
         "priority": 4,
@@ -54,7 +47,6 @@
       },
       "DOC": {
         "name": "Documentation",
-        "description": "Documentation and guides",
         "dependencies": ["DEV", "QA"],
         "skills": ["documentation-governance", "documentation-skill"],
         "priority": 5,
@@ -63,7 +55,6 @@
     },
     "profileSource": "config/auto-delegation.json#agentProfiles",
     "hallucinationGuardPolicy": {
-      "description": "Before an agent marks a task done, verify all requiredEvidence from its agentProfile",
       "low":      "Agent self-reports - no external verification",
       "medium":   "Orchestrator spot-checks 1 requiredEvidence item",
       "high":     "ALL requiredEvidence items verified before phase advances",
@@ -72,14 +63,12 @@
     "phases": {
       "planning": {
         "agents": ["BA"],
-        "description": "Requirements gathering and BDD scenarios",
         "timeout": 3600,
         "parallel": false,
         "required": true
       },
       "design": {
         "agents": ["SAD"],
-        "description": "Architecture and API design",
         "timeout": 3600,
         "parallel": false,
         "required": true,
@@ -87,7 +76,6 @@
       },
       "implementation": {
         "agents": ["DEV"],
-        "description": "Code implementation",
         "timeout": 7200,
         "parallel": false,
         "required": true,
@@ -95,7 +83,6 @@
       },
       "quality_assurance": {
         "agents": ["QA"],
-        "description": "Testing and validation",
         "timeout": 3600,
         "parallel": false,
         "required": true,
@@ -104,7 +91,6 @@
       },
       "governance": {
         "agents": ["GOV"],
-        "description": "Security and compliance review",
         "timeout": 1800,
         "parallel": true,
         "required": true,
@@ -112,7 +98,6 @@
       },
       "documentation": {
         "agents": ["DOC"],
-        "description": "Documentation updates",
         "timeout": 1800,
         "parallel": true,
         "required": false,
@@ -120,7 +105,6 @@
       },
       "deployment": {
         "agents": ["OPS"],
-        "description": "Deployment to production",
         "timeout": 3600,
         "parallel": false,
         "required": true,
@@ -130,7 +114,6 @@
       },
       "pr_review": {
         "agents": ["QA"],
-        "description": "PR gate: all checks pass before merge is allowed",
         "timeout": 1800,
         "parallel": false,
         "required": true,
@@ -141,7 +124,6 @@
       },
       "release": {
         "agents": ["OPS", "GOV"],
-        "description": "Release readiness: semver, changelog, rollback plan, GOV co-review",
         "timeout": 2700,
         "parallel": false,
         "required": false,
@@ -153,7 +135,6 @@
       },
       "session_close": {
         "agents": ["GOV"],
-        "description": "Session closure: audit, docs, learnings, blockers — GOV enforced",
         "timeout": 900,
         "parallel": false,
         "required": true,
@@ -169,7 +150,6 @@
         "target": "DEV",
         "trigger": "test_failure",
         "max_iterations": 3,
-        "description": "QA failures trigger DEV rework",
         "enabled": true
       },
       "qa_to_design": {
@@ -177,7 +157,6 @@
         "target": "SAD",
         "trigger": "architecture_issue",
         "max_iterations": 2,
-        "description": "Architecture issues trigger design review",
         "enabled": true
       },
       "gov_to_dev": {
@@ -185,7 +164,6 @@
         "target": "DEV",
         "trigger": "security_issue",
         "max_iterations": 2,
-        "description": "Security issues trigger DEV fixes",
         "enabled": true
       }
     },

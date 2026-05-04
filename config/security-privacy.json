@@ -34,7 +34,7 @@
       },
       {
         "category": "fullPaths",
-        "patterns": ["C:\\\\Users\\\\[^\\\\]+", "/home/[^/]+", "\\\\\\\\[A-Za-z0-9_-]+\\\\\"],
+        "patterns": ["C:\\\\Users\\\\[^\\\\]+", "/home/[^/]+", "\\\\\\\\[A-Za-z0-9_-]+\\\\\\\\"],
         "replacement": "<PATH>",
         "severity": "HIGH"
       },
@@ -63,7 +63,7 @@
       },
       {
         "id": "private-key",
-        "pattern": "-----BEGIN (RSA|EC|DSA|PRIVATE KEY-----",
+        "pattern": "-----BEGIN (RSA|EC|DSA|PRIVATE) KEY-----",
         "action": "BLOCK"
       }
     ]

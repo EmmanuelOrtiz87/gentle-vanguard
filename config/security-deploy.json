@@ -45,7 +45,7 @@
   "developerFlow": {
     "description": "What developers see when they clone the repo",
     "steps": [
-      "1. Run .\scripts\security\setup-secure.ps1",
+      "1. Run ./scripts/security/setup-secure.ps1",
       "2. Script generates new API key for developer",
       "3. Developer stores their key locally (not committed)",
       "4. Security enforced for restricted operations"
