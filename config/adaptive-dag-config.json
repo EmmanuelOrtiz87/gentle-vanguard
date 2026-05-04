@@ -120,7 +120,7 @@
         "dependencies": ["implementation", "quality_assurance"],
         "agentProfile": "$ref:agentProfiles.QA",
         "gateRef": "unmappedFlows.prReview.gate",
-        "skill": "code-review-orchestrator"
+        "skill": "code-review-orchestrator-skill"
       },
       "release": {
         "agents": ["OPS", "GOV"],

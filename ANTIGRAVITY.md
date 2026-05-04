@@ -61,12 +61,12 @@ Only when:
 ## 8 Governance Layers (from auto-delegation.json)
 When trigger detected, load corresponding skill:
 - **GOV**: governance, compliance, metrics, monitoring, observability, incident, security audit, review, audit → `project-orchestrator-skill`
-- **SAD**: architecture, design, sdd, api design, database, schema, technical decision, system design, microservice, integration → `sdd-design`
-- **DEV**: implement, code, develop, feature, refactor, bug fix, component, endpoint, frontend, backend, security, performance → `sdd-apply`
-- **QA**: test, testing, qa, validation, e2e, unit test, integration test, playwright, pytest, quality, judgment day → `sdd-verify`
+- **SAD**: architecture, design, sdd, api design, database, schema, technical decision, system design, microservice, integration → `sdd-lifecycle`
+- **DEV**: implement, code, develop, feature, refactor, bug fix, component, endpoint, frontend, backend, security, performance → `sdd-lifecycle`
+- **QA**: test, testing, qa, validation, e2e, unit test, integration test, playwright, pytest, quality, judgment day → `sdd-lifecycle`
 - **OPS**: deploy, ci/cd, docker, kubernetes, infrastructure, terraform, helm, release, devops, pipeline → `docker-devops-skill`
 - **DOC**: documentation, docs, readme, guide, runbook, specification, bdd specs, sdd specs → `documentation-governance`
-- **SCRIPT-GOV**: script, powershell, parser error, syntax error, validate script, governance script, hook, pre-push, pre-commit, fix script, auto fix, autofix, script error, correct script → `sdd-apply`
+- **SCRIPT-GOV**: script, powershell, parser error, syntax error, validate script, governance script, hook, pre-push, pre-commit, fix script, auto fix, autofix, script error, correct script → `sdd-lifecycle`
 - **REPORT**: informe, report, reporte, metricas, metrics, analytics, analisis, dashboard, resumen ejecutivo, gerencia, tokens, costos, consumo, sesiones, telemetry, telemetria, estadisticas, stats, resumen de sesion → `management-reporting-skill`
 
 ## 7 GitFlow Capabilities

@@ -20,14 +20,14 @@
     "agentCodeToSkill":  {
                              "BA":           "sdd-lifecycle",
                              "GOV":          "judgment-day",
-                             "SAD":          "sdd-design",
-                             "DEV":          "sdd-apply",
-                             "QA":           "sdd-verify",
+                             "SAD":          "sdd-lifecycle",
+                             "DEV":          "sdd-lifecycle",
+                             "QA":           "sdd-lifecycle",
                              "OPS":          "docker-devops-skill",
                              "DOC":          "documentation-governance",
                              "SCRIPT-GOV":   "script-governance-skill",
                              "REPORT":       "reporting-skill",
-                             "PR-REVIEW":    "code-review-orchestrator",
+                             "PR-REVIEW":    "code-review-orchestrator-skill",
                              "RELEASE":      "release-management-skill",
                              "SESSION-CLOSE": "project-orchestrator-skill",
                              "GITFLOW-BRANCH": "gitflow-orchestrator-skill",
@@ -39,7 +39,7 @@
                              "GITFLOW-CONFLICT": "git-workflow-skill"
                          },
     "skillToAgentProfile":  {
-                                "code-review-orchestrator":  "QA",
+                                "code-review-orchestrator-skill":  "QA",
                                 "release-management-skill":  "OPS",
                                 "project-orchestrator-skill": "GOV",
                                 "reporting-skill":           "DOC",
@@ -48,9 +48,6 @@
                                 "branch-pr":                 "QA",
                                 "git-workflow-skill":        "DEV",
                                 "script-governance-skill":   "DEV",
-                                "sdd-design":                "SAD",
-                                "sdd-apply":                 "DEV",
-                                "sdd-verify":                "QA",
                                 "sdd-lifecycle":             "BA",
                                 "docker-devops-skill":       "OPS",
                                 "documentation-governance":  "DOC"
