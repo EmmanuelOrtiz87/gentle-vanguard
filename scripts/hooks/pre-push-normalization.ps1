@@ -6,6 +6,28 @@ $ErrorActionPreference = 'Stop'
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot '../../')
 Set-Location $repoRoot
 
+# FF-015: load hook output safety filter
+$_safetyModule = Join-Path $PSScriptRoot 'hook-output-safety.ps1'
+if (Test-Path $_safetyModule) { . $_safetyModule }
+
+function Write-HookInfo {
+    param([string]$Msg)
+    if (Get-Command 'Write-SafeHook' -ErrorAction SilentlyContinue) {
+        Write-SafeHook $Msg -Color Cyan
+    } else {
+        Write-Host $Msg -ForegroundColor Cyan
+    }
+}
+
+function Write-HookError {
+    param([string]$Msg)
+    if (Get-Command 'Write-SafeHook' -ErrorAction SilentlyContinue) {
+        Write-SafeHook $Msg -Color Red
+    } else {
+        Write-Host $Msg -ForegroundColor Red
+    }
+}
+
 function Test-ScriptCompliance {
     param([string]$ScriptPath)
     
@@ -22,7 +44,7 @@ function Test-ScriptCompliance {
 $localBranch = git rev-parse --abbrev-ref HEAD 2>$null
 
 if ($localBranch -eq 'main' -or $localBranch -eq 'develop') {
-    Write-Host "Cannot push directly to protected branch: $localBranch" -ForegroundColor Red
+    Write-HookError "Cannot push directly to protected branch: $localBranch"
     exit 1
 }
 
@@ -43,26 +65,26 @@ foreach ($script in $changedScripts) {
     
     if (-not (Test-ScriptCompliance -ScriptPath $fullPath)) {
         if (-not $hasIssues) {
-            Write-Host ""
-            Write-Host "========================================================" -ForegroundColor Red
-            Write-Host "Script Compliance Check Failed" -ForegroundColor Red
-            Write-Host "========================================================" -ForegroundColor Red
-            Write-Host ""
+            Write-Host ''
+            Write-HookError '========================================================'
+            Write-HookError 'Script Compliance Check Failed'
+            Write-HookError '========================================================'
+            Write-Host ''
             $hasIssues = $true
         }
         
-        Write-Host "ERROR: $script has syntax errors" -ForegroundColor Red
+        Write-HookError "ERROR: $script has syntax errors"
     } elseif ($Verbose) {
-        Write-Host "OK: $script" -ForegroundColor Green
+        Write-HookInfo "OK: $script"
     }
 }
 
 if ($hasIssues) {
-    Write-Host ""
-    Write-Host "Please fix the syntax errors before pushing." -ForegroundColor Red
-    Write-Host ""
-    Write-Host "Run: .\scripts\utilities\audit-script-normalization.ps1 -Report" -ForegroundColor Cyan
-    Write-Host ""
+    Write-Host ''
+    Write-HookError 'Please fix the syntax errors before pushing.'
+    Write-Host ''
+    Write-HookInfo 'Run: .\scripts\utilities\audit-script-normalization.ps1 -Report'
+    Write-Host ''
     exit 1
 }
 

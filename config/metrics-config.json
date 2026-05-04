@@ -93,6 +93,22 @@
   "reporting": {
     "save_interval_seconds": 300,
     "path": ".session/metrics-report.json",
-    "engram_sync": true
+    "engram_sync": true,
+    "persistence": {
+      "enabled": true,
+      "strategy": "incremental_merge",
+      "store_runtime_state_in_config": true
+    }
+  },
+  "runtime_state": {
+    "session_count": 0,
+    "total_delegations": 0,
+    "success_count": 0,
+    "failure_count": 0,
+    "cumulative_duration_seconds": 0,
+    "cumulative_token_usage": 0,
+    "circuit_breaker_trips": 0,
+    "skill_dependency_violations": 0,
+    "last_updated": null
   }
 }

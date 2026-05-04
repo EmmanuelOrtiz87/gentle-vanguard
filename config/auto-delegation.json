@@ -10,8 +10,44 @@
                      "decisionTree":  true,
                      "confidenceScoring":  true,
                      "autoRetry":  false,
-                     "autoEscalation":  true
+                     "autoEscalation":  true,
+                     "tieredRouting":  true
                  },
+    "concurrencyLimits":  {
+                              "perAgent":  {
+                                               "BA":   1,
+                                               "SAD":  1,
+                                               "DEV":  2,
+                                               "QA":   2,
+                                               "OPS":  1,
+                                               "GOV":  1,
+                                               "DOC":  1
+                                           },
+                              "default":  1,
+                              "globalMax":  3,
+                              "_comment":  "Matches maxParallelAgents=3. perAgent caps prevent agent starvation."
+                          },
+    "routingBindings":  {
+                            "tiers":  {
+                                          "tier1_direct":  {
+                                              "confidenceMin":  80,
+                                              "action":  "dispatch_immediately",
+                                              "description":  "High confidence — dispatch without clarification"
+                                          },
+                                          "tier2_confirm":  {
+                                              "confidenceMin":  60,
+                                              "confidenceMax":  79,
+                                              "action":  "dispatch_with_summary",
+                                              "description":  "Medium confidence — dispatch but surface agent + skill to user"
+                                          },
+                                          "tier3_clarify":  {
+                                              "confidenceMax":  59,
+                                              "action":  "activate_ba_exploration",
+                                              "description":  "Low confidence — activate BA before dispatching"
+                                          }
+                                      },
+                            "_comment":  "Consumed by auto-delegate-orchestrator.ps1 Invoke-TieredRouting"
+                        },
     "thresholds":  {
                        "highConfidence":  80,
                        "mediumConfidence":  60,

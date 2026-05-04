@@ -1,0 +1,54 @@
+name: Foundation Quality Gate
+
+permissions:
+  contents: read
+
+concurrency:
+  group: foundation-quality-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'scripts/**'
+      - 'hooks/**'
+      - 'config/**'
+      - 'rules/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'scripts/**'
+      - 'hooks/**'
+      - 'config/**'
+      - 'rules/**'
+      - '.github/workflows/**'
+  workflow_dispatch:
+
+jobs:
+  quality-gate:
+    name: Foundation Quality Gate
+    runs-on: windows-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate config files
+        shell: pwsh
+        run: |
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\validate-configs.ps1
+
+      - name: Agent self verification
+        shell: pwsh
+        run: |
+          $json = powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\agent-verify.ps1 -Json
+          $result = $json | ConvertFrom-Json
+          if ($result.summary.failed -gt 0) {
+            Write-Error "agent-verify reported failures"
+            exit 1
+          }
+          Write-Host "agent-verify: PASS (warnings: $($result.summary.warnings))"

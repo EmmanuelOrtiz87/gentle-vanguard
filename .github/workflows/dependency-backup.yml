@@ -1,17 +1,25 @@
 name: Dependency Scan and Backup
 
+permissions:
+  contents: read
+
+concurrency:
+  group: dependency-backup-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [main, develop]
   pull_request:
     branches: [main, develop]
   schedule:
-    - cron: '0 3 * * 0' # Weekly on Sunday
+    - cron: '30 16 * * 0' # Weekly on Sunday at 13:30 GMT-3 (16:30 UTC)
 
 jobs:
   dependency-scan:
     name: Dependency Scanning
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,6 +38,7 @@ jobs:
   backup:
     name: Backup Artifacts
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
