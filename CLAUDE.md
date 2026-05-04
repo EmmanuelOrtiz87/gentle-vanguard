@@ -21,39 +21,10 @@ Only enable when explicitly requested:
 3. Use `grep` and `read` for code exploration
 4. Trigger routing: `tools/pre-process-input.ps1` BEFORE responding — all mappings in `config/auto-delegation.json`
 
-## Agent → Skill Map
-| Agent / Domain | Key triggers | Skill |
-|---|---|---|
-| BA (plan/explore) | iniciar sesion, requirements, start session, explore | `sdd-lifecycle` |
-| SAD (architecture) | architecture, design, sdd, schema, system design | `sdd-design` |
-| DEV (implement) | implement, code, feature, refactor, bug fix | `sdd-apply` |
-| QA (testing) | test, testing, qa, validation, e2e, playwright | `sdd-verify` |
-| OPS (deploy) | deploy, docker, kubernetes, release, ci/cd, helm | `docker-devops-skill` |
-| GOV (governance) | governance, audit, compliance, security review | `project-orchestrator-skill` |
-| DOC (docs) | documentation, docs, readme, guide, runbook | `documentation-governance` |
-| SCRIPT-GOV | script, powershell, hook, pre-commit, fix script | `sdd-apply` |
-| REPORT | informe, metrics, analytics, dashboard, costos | `management-reporting-skill` |
-| PR-REVIEW | review PR, pull request check, merge gate | `code-review-orchestrator` |
-| RELEASE | cut release, changelog, version bump, semver | `release-management-skill` |
-| SESSION-CLOSE | cerrar sesion, close session, fin de sesion | `project-orchestrator-skill` |
-| Angular | Angular, component, @defer, standalone | `angular-spa-skill` |
-| React | React 19, useActionState, React Compiler | `react-19-skill` |
-| Next.js | Next.js, App Router, Server Component | `nextjs-15-skill` |
-| Go | Go API, Go backend, REST endpoint Go | `golang-api-skill` |
-| TypeScript | TypeScript, interface, type, generic | `typescript-skill` |
-| Zod | Zod, schema validation, input validation | `zod-4-skill` |
-| Zustand | Zustand, state management, store, useStore | `zustand-5-skill` |
-| Tailwind | Tailwind, Tailwind CSS, cn(), className | `tailwind-4-skill` |
-| AI SDK | AI SDK, streamText, generateText, AI provider | `ai-sdk-5-skill` |
-| MCP | MCP, Model Context Protocol, MCP server | `mcp-skill` |
-| Security | security, auth, OWASP, XSS, SQL injection | `security-skill` |
-| Testing | write test, test coverage, unit test, e2e test | `testing-skill` |
-| DB-NoSQL | MongoDB, Redis, NoSQL, caching | `database-nosql-skill` |
-| DB-SQL | PostgreSQL, MySQL, SQL, SQLAlchemy | `database-relational-skill` |
-| Django | Django, DRF, ViewSet, Serializer | `django-drf-skill` |
-| GitFlow | branch, PR, commit, merge, conflict, hook | `git-workflow-skill` |
-| Project/Audit | new project, audit foundation, validate docs | `project-orchestrator-skill` |
-| Scaffold | create project, bootstrap, scaffold, template | `project-scaffolding` |
+## Canonical Routing Source
+- Trigger keywords and agent routing: `config/auto-delegation.json#keywordMappings`
+- Agent code to skill mapping: `config/auto-delegation.json#agentCodeToSkill`
+- Keep this file minimal; do not duplicate long keyword tables here.
 
 ## Orchestrator Delegation
 If skill tool unavailable: `"Trigger detected for [skill]. Requires @orchestrator."`

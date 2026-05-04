@@ -5,38 +5,48 @@ param(
     [Parameter(Mandatory=$true)]
     [string]$UserInput,
     [string]$SkillsPath = "skills",
-    [string]$WorkspaceRoot = "."
+    [string]$WorkspaceRoot = ".",
+    [switch]$DisableSkillFileFallback
 )
 
 $triggerMap = @{}
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$workspaceRoot = Split-Path -Parent $scriptDir
+$workspaceRoot = if ($PSBoundParameters.ContainsKey("WorkspaceRoot") -and $WorkspaceRoot -ne ".") {
+    try { (Resolve-Path -Path $WorkspaceRoot -ErrorAction Stop).Path } catch { Split-Path -Parent $scriptDir }
+} else {
+    Split-Path -Parent $scriptDir
+}
 $skillsFullPath = Join-Path $workspaceRoot $SkillsPath
 
-# Source 1: SKILL.md files
-$skillFiles = Get-ChildItem -Path $skillsFullPath -Filter "SKILL.md" -Recurse -ErrorAction SilentlyContinue
+function Add-TriggersFromSkillFiles {
+    param(
+        [hashtable]$Map,
+        [string]$SkillsPathFull
+    )
 
-foreach ($file in $skillFiles) {
-    $content = Get-Content $file.FullName -Raw
-    $skillName = $file.Directory.Name
-    
-    # Extract frontmatter (between --- markers)
-    $startMarker = $content.IndexOf("---")
-    if ($startMarker -ge 0) {
-        $secondMarker = $content.IndexOf("---", $startMarker + 3)
-        if ($secondMarker -ge 0) {
-            $frontMatter = $content.Substring($startMarker + 3, $secondMarker - $startMarker - 3)
-            
-            # Find trigger line (allowing leading whitespace)
-            $lines = $frontMatter -split "`n"
-            foreach ($line in $lines) {
-                if ($line -match '\s*[Tt]rigger:\s*"([^"]+)"') {
-                    $triggerText = $matches[1]
-                    $triggers = $triggerText -split ',' | ForEach-Object { $_.Trim().Trim('"') } | Where-Object { $_.Length -gt 0 }
-                    
-                    foreach ($trigger in $triggers) {
-                        if ($trigger -and -not $triggerMap.ContainsKey($trigger)) {
-                            $triggerMap[$trigger] = $skillName
+    $skillFiles = Get-ChildItem -Path $SkillsPathFull -Filter "SKILL.md" -Recurse -ErrorAction SilentlyContinue
+    foreach ($file in $skillFiles) {
+        $content = Get-Content $file.FullName -Raw
+        $skillName = $file.Directory.Name
+
+        # Extract frontmatter (between --- markers)
+        $startMarker = $content.IndexOf("---")
+        if ($startMarker -ge 0) {
+            $secondMarker = $content.IndexOf("---", $startMarker + 3)
+            if ($secondMarker -ge 0) {
+                $frontMatter = $content.Substring($startMarker + 3, $secondMarker - $startMarker - 3)
+
+                # Find trigger line (allowing leading whitespace)
+                $lines = $frontMatter -split "`n"
+                foreach ($line in $lines) {
+                    if ($line -match '\s*[Tt]rigger:\s*"([^"]+)"') {
+                        $triggerText = $matches[1]
+                        $triggers = $triggerText -split ',' | ForEach-Object { $_.Trim().Trim('"') } | Where-Object { $_.Length -gt 0 }
+
+                        foreach ($trigger in $triggers) {
+                            if ($trigger -and -not $Map.ContainsKey($trigger)) {
+                                $Map[$trigger] = $skillName
+                            }
                         }
                     }
                 }
@@ -57,9 +67,7 @@ if ($delegationConfig -and $delegationConfig.keywordMappings) {
     $skillMapping = @{}
     if ($delegationConfig.agentCodeToSkill) {
         foreach ($prop in $delegationConfig.agentCodeToSkill.PSObject.Properties) {
-            if ($prop.Name -notin @("description")) {
-                $skillMapping[$prop.Name] = $prop.Value
-            }
+            $skillMapping[$prop.Name] = $prop.Value
         }
     }
 
@@ -67,9 +75,7 @@ if ($delegationConfig -and $delegationConfig.keywordMappings) {
     $skillToAgent = @{}
     if ($delegationConfig.skillToAgentProfile) {
         foreach ($prop in $delegationConfig.skillToAgentProfile.PSObject.Properties) {
-            if ($prop.Name -ne "description") {
-                $skillToAgent[$prop.Name] = $prop.Value
-            }
+            $skillToAgent[$prop.Name] = $prop.Value
         }
     }
     # Fallback reverse map for any skills not in override
@@ -91,19 +97,38 @@ if ($delegationConfig -and $delegationConfig.keywordMappings) {
     }
 }
 
+$sortedTriggers = $triggerMap.Keys | Sort-Object Length -Descending
+
+function Find-Match {
+    param(
+        [string]$InputText,
+        [hashtable]$Map,
+        [array]$Sorted
+    )
+    foreach ($trigger in $Sorted) {
+        if ($InputText.Contains($trigger.ToLower())) {
+            return @($Map[$trigger], $trigger)
+        }
+    }
+    return @($null, $null)
+}
+
 # Check user input against triggers
 $inputLower = $UserInput.ToLower()
 $matchingSkill = $null
 $matchingTrigger = $null
 
-$sortedTriggers = $triggerMap.Keys | Sort-Object Length -Descending
+$firstPass = Find-Match -InputText $inputLower -Map $triggerMap -Sorted $sortedTriggers
+$matchingSkill = $firstPass[0]
+$matchingTrigger = $firstPass[1]
 
-foreach ($trigger in $sortedTriggers) {
-    if ($inputLower.Contains($trigger.ToLower())) {
-        $matchingSkill = $triggerMap[$trigger]
-        $matchingTrigger = $trigger
-        break
-    }
+# Fallback: parse SKILL.md only when config-based routing did not match.
+if (-not $matchingSkill -and -not $DisableSkillFileFallback) {
+    Add-TriggersFromSkillFiles -Map $triggerMap -SkillsPathFull $skillsFullPath
+    $sortedTriggers = $triggerMap.Keys | Sort-Object Length -Descending
+    $secondPass = Find-Match -InputText $inputLower -Map $triggerMap -Sorted $sortedTriggers
+    $matchingSkill = $secondPass[0]
+    $matchingTrigger = $secondPass[1]
 }
 
 # Compute confidence score
@@ -197,7 +222,7 @@ if ($matchingSkill) {
 }
 
 return @{
-    HasMatch       = ($matchingSkill -ne $null)
+    HasMatch       = ($null -ne $matchingSkill)
     Skill          = $matchingSkill
     Trigger        = $matchingTrigger
     Confidence     = $confidenceScore
