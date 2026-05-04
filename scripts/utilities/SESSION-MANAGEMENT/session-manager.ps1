@@ -172,7 +172,7 @@ function Invoke-CompatibilityChecks {
         Write-Host "     - .\workspace-foundation\scripts\utilities\wf.ps1 orchestrator-status" -ForegroundColor Gray
         Write-Host "     - .\workspace-foundation\scripts\utilities\agent-router.ps1 status" -ForegroundColor Gray
         Write-Host "  2) Temporary continuity mode (degraded startup)." -ForegroundColor White
-        Write-Host "     - Set strictCompatibilityChecks=false in tools/session-autostart.config.json" -ForegroundColor Gray
+        Write-Host "     - Set strictCompatibilityChecks=false in scripts/utilities/session-autostart.config.json" -ForegroundColor Gray
         Write-Host "     - Re-run: .\tools\session-autostart.cmd" -ForegroundColor Gray
         throw "Compatibility checks failed in strict mode."
     }
@@ -217,7 +217,7 @@ function Invoke-CompatibilityChecks {
         Write-Host "     - .\\workspace-foundation\\scripts\\utilities\\wf.ps1 orchestrator-status" -ForegroundColor Gray
         Write-Host "     - .\\workspace-foundation\\scripts\\utilities\\agent-router.ps1 status" -ForegroundColor Gray
         Write-Host "  2) Temporary continuity mode (degraded startup)." -ForegroundColor White
-        Write-Host "     - Set strictCompatibilityChecks=false in tools/session-autostart.config.json" -ForegroundColor Gray
+        Write-Host "     - Set strictCompatibilityChecks=false in scripts/utilities/session-autostart.config.json" -ForegroundColor Gray
         Write-Host "     - Re-run: .\\tools\\session-autostart.cmd" -ForegroundColor Gray
         throw "Compatibility checks failed in strict mode."
     }

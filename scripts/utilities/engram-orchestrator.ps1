@@ -6,7 +6,7 @@ param(
     [Parameter(Mandatory=$true)]
     [string]$Action,
     
-    [string]$WorkspaceRoot = "C:\Workspace_local\workspace-foundation",
+    [string]$WorkspaceRoot = ".\workspace-foundation",
     [string]$EngramPolicyScript = "$WorkspaceRoot\scripts\foundation\engram-policy.ps1"
 )
 
@@ -79,9 +79,9 @@ function Test-EngramHealth {
     
     # Verificar instalación
     $engramPaths = @(
-        "C:\Users\emman\bin\engram.exe",
-        "C:\Workspace_local\workspace-foundation\tools\engram.exe",
-        "C:\Users\emman\go\bin\engram.exe"
+        "$HOME\bin\engram.exe",
+        ".\workspace-foundation\tools\engram.exe",
+        "$HOME\go\bin\engram.exe"
     )
     
     foreach ($path in $engramPaths) {

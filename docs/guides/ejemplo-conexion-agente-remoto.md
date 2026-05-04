@@ -1,4 +1,4 @@
-﻿# Ejemplo: Conexin a un Agente IA Remoto va API
+# Ejemplo: Conexin a un Agente IA Remoto va API
 
 Este ejemplo documenta el paso a paso para conectar Foundation (o tu entorno local) a un agente IA externo expuesto va API, usando solo la URL y la API key.
 
@@ -9,7 +9,7 @@ Este ejemplo documenta el paso a paso para conectar Foundation (o tu entorno loc
 Desde PowerShell, en la raz de workspace-foundation:
 
 ```powershell
-cd C:\Workspace_local\workspace-foundation
+cd .\workspace-foundation
 .\scripts\utilities\invoke-cloud-agent.ps1 -Config
 ```
 Selecciona la opcin 2 para crear el archivo `config/cloud-agents.local.json`.

@@ -10,7 +10,7 @@ param(
     [string]$FailureType,
     [string]$Context,
     [string]$Resolution,
-    [string]$LearningDb = "C:\Workspace_local\workspace-foundation\scripts\adaptive\.failure-learning.json"
+    [string]$LearningDb = ".\workspace-foundation\scripts\adaptive\.failure-learning.json"
 )
 
 $ErrorActionPreference = "Continue"

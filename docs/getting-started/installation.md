@@ -83,10 +83,10 @@ Skills are automatically installed for detected AI agents. To manually install:
 
 ```powershell
 # For Claude Code
-cp -r tools/Workspace-Skills/curated/* ~/.claude/skills/
+cp -r scripts/utilities/Workspace-Skills/curated/* ~/.claude/skills/
 
 # For OpenCode
-cp -r tools/Workspace-Skills/curated/* ~/.config/opencode/skills/
+cp -r scripts/utilities/Workspace-Skills/curated/* ~/.config/opencode/skills/
 ```
 
 ## Project Creation

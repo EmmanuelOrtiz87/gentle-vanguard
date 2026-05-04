@@ -1,4 +1,4 @@
-﻿# Autonomous Stack 100% - Architecture & User Guide
+# Autonomous Stack 100% - Architecture & User Guide
 
 ## Overview
 
@@ -192,7 +192,7 @@ workspace-foundation/
  docs/
     architecture/
         autonomous-stack.md (this file)
- tools/
+ scripts/utilities/
      engram.exe        # Persistence binary
 ```
 
@@ -229,7 +229,7 @@ workspace-foundation/
 
 ### Engram Binary Not Found
 **Symptom**: `[BKP-WARN] Engram binary not found, skipping`
-**Fix**: Ensure `tools/engram.exe` exists. The script auto-detects via:
+**Fix**: Ensure `scripts/utilities/engram.exe` exists. The script auto-detects via:
 ```powershell
 $engramPath = Join-Path $repoRoot "tools\engram.exe"
 ```

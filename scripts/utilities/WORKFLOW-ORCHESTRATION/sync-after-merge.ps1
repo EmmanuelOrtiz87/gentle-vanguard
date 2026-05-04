@@ -28,7 +28,7 @@ if ($mergedFiles -match "package\.json") {
 }
 
 # Validate critical scripts
-$criticalScripts = @("tools/session-manager.ps1", "scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1")
+$criticalScripts = @("scripts/utilities/session-manager.ps1", "scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1")
 foreach ($script in $criticalScripts) {
     if ($mergedFiles -contains $script -and (Test-Path $script)) {
         try {
@@ -42,7 +42,7 @@ foreach ($script in $criticalScripts) {
 }
 
 # Update session if needed
-if (Test-Path "tools/session-manager.ps1") {
+if (Test-Path "scripts/utilities/session-manager.ps1") {
     try {
         .\tools\session-manager.ps1 -Action "update" -Silent
     }

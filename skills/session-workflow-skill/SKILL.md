@@ -19,7 +19,7 @@ Execute the mechanical aspects of session management while coordinating with the
 **Note: This skill should be AUTO-LOADED when user says "iniciar sesión" via pre-process-input.ps1**
 
 ```markdown
-1. tools/session-autostart.cmd  # Ejecutar autostart (notificaciones, optimizacin, validaciónes)
+1. scripts/utilities/session-autostart.cmd  # Ejecutar autostart (notificaciones, optimizacin, validaciónes)
 2. mem_context                  # Check engram memory
 3. git status                   # Current branch
 4. todowrite                    # Create session plan

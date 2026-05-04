@@ -7,7 +7,7 @@ param(
     [ValidateSet("start", "update", "end", "status")]
     [string]$Action,
     [string]$SessionId,
-    [string]$ProjectRoot = "C:\Workspace_local\workspace-foundation",
+    [string]$ProjectRoot = ".\workspace-foundation",
     [int]$InputTokens = 0,
     [int]$OutputTokens = 0,
     [int]$ContextChars = 0,

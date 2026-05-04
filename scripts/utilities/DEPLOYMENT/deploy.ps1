@@ -62,7 +62,7 @@ function Invoke-KubernetesDeploy {
     param([string]$ImageName, [string]$Ns, [string]$Env)
     
     if (-not (Get-Command kubectl -ErrorAction SilentlyContinue)) {
-        Write-Error "kubectl not found. Install from https://kubernetes.io/docs/tasks/tools/"
+        Write-Error "kubectl not found. Install from https://kubernetes.io/docs/tasks/scripts/utilities/"
         exit 1
     }
     

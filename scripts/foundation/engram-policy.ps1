@@ -6,9 +6,9 @@ param(
     [ValidateSet('check', 'enforce', 'repair', 'install', 'start', 'status')]
     [string]$Action = 'status',
     
-    [string]$EngramPath = "C:\Users\emman\bin\engram.exe",
-    [string]$ToolsPath = "C:\Workspace_local\workspace-foundation\tools\engram.exe",
-    [string]$GoPath = "C:\Users\emman\go\bin\engram.exe"
+    [string]$EngramPath = "$HOME\bin\engram.exe",
+    [string]$ToolsPath = ".\workspace-foundation\tools\engram.exe",
+    [string]$GoPath = "$HOME\go\bin\engram.exe"
 )
 
 $ErrorActionPreference = "Continue"

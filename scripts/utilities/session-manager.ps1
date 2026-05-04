@@ -206,8 +206,8 @@ Session closure with full validation
 -  All checks completed
 
 ## Relevant Files
-- tools/pre-close-validator.ps1  New validation before closure
-- tools/session-manager.ps1  Enhanced with validation
+- scripts/utilities/pre-close-validator.ps1  New validation before closure
+- scripts/utilities/session-manager.ps1  Enhanced with validation
 "@
         & $engramBin session-summary --id $sessionData.sessionId --content $summaryContent 2>$null | Out-Null
         if ($LASTEXITCODE -eq 0) {

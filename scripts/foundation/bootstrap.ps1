@@ -78,7 +78,7 @@ if (Get-Command engram -ErrorAction SilentlyContinue) {
     Write-Success "Engram CLI detected."
 } else {
     Write-Step "Installing Engram CLI from repository..."
-    $engramToolDir = Join-Path $workspaceRoot "tools/engram"
+    $engramToolDir = Join-Path $workspaceRoot "scripts/utilities/engram"
     if (-not (Test-Path $engramToolDir)) {
         git clone $ENGRAM_REPO_URL "$engramToolDir"
     }

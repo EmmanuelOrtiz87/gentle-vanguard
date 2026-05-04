@@ -8,7 +8,7 @@ param(
     [switch]$AutoFix,
     [switch]$VerboseOutput,
     [string]$TargetPath = ".",
-    [string]$FailureLearningDb = "C:\Workspace_local\workspace-foundation\scripts\adaptive\.failure-learning.json"
+    [string]$FailureLearningDb = ".\workspace-foundation\scripts\adaptive\.failure-learning.json"
 )
 
 $ErrorActionPreference = "Continue"

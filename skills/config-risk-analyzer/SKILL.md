@@ -45,7 +45,7 @@ Analizar riesgos en archivos de configuración, detectar inconsistencias, valida
 ## Archivos Monitoreados
 - `opencode.json` - Configuración principal de OpenCode
 - `config/*.json` - Todas las configuraciones del proyecto
-- `tools/*.config.json` - Configuraciones de herramientas
+- `scripts/utilities/*.config.json` - Configuraciones de herramientas
 - `workspace.config.json` - Configuración del workspace
 
 ## Riesgos Conocidos (Lecciones Aprendidas)
