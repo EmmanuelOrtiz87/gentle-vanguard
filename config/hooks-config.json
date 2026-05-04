@@ -1,23 +1,20 @@
 {
   "$schema": "hooks-config.schema.json",
-  "description": "Hooks configuration for Foundation workflow - defines pre/post processing hooks",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "hooks": {
     "pre_process": {
       "enabled": true,
       "mandatory": true,
-      "description": "MANDATORY pre-processing hook - runs BEFORE any AI response to validate input and load skills",
-      "script": "scripts/utilities/WORKFLOW-ORCHESTRATION/pre-process-input.ps1",
+      "script": "tools/pre-process-input.ps1",
       "timeout": 30000,
       "args": {
         "UserInput": "${user_input}",
-        "WorkspaceRoot": ".",
-        "SkillRegistry": "config/skill-registry.json"
+        "WorkspaceRoot": "."
       },
       "parseOutput": {
         "triggerFound": "TRIGGER_MATCH_FOUND",
-        "noMatch": "NO_TRIGGER_MATCH",
-        "skillLoaded": "SKILL_LOADED"
+        "planMode": "PLAN_MODE_REQUIRED",
+        "noMatch": "NO_TRIGGER_MATCH"
       },
       "actions": {
         "onMatch": "Load skill using skill tool",
@@ -28,7 +25,6 @@
     },
     "post_session": {
       "enabled": true,
-      "description": "Runs after session ends - generates management report and captures Engram memory",
       "script": "scripts/utilities/TELEMETRY-METRICS/generate-management-report.ps1",
       "timeout": 60000,
       "args": {
@@ -48,7 +44,6 @@
     },
     "pre_commit": {
       "enabled": true,
-      "description": "Runs before git commit - validates code quality and security",
       "script": "scripts/utilities/GIT-VERSION-CONTROL/pre-commit-validation.ps1",
       "timeout": 45000,
       "args": {
@@ -67,7 +62,6 @@
     },
     "post_merge": {
       "enabled": true,
-      "description": "Runs after merge completes - updates documentation and validates consistency",
       "script": "scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1",
       "timeout": 60000,
       "args": {
@@ -86,8 +80,7 @@
     }
   },
   "hookRegistry": {
-    "description": "Central registry of all available hooks and their lifecycle",
-    "location": "scripts/utilities/WORKFLOW-ORCHESTRATION/hook-registry.json",
+    "location": "config/auto-delegation.json",
     "autoDiscovery": true,
     "validateOnLoad": true
   },

@@ -4,13 +4,18 @@
     "preProcessing": {
       "enabled": true,
       "mandatory": true,
-      "description": "MANDATORY pre-processing hook - runs BEFORE any AI response",
       "script": "tools/pre-process-input.ps1",
       "scriptArgs": {
         "UserInput": "USER_INPUT_HERE",
         "WorkspaceRoot": "."
       },
       "fallbackBehavior": "continue",
+      "fallbackStrategy": "clarify-ba",
+      "parseOutput": {
+        "triggerFound": "TRIGGER_MATCH_FOUND",
+        "planMode": "PLAN_MODE_REQUIRED",
+        "noMatch": "NO_TRIGGER_MATCH"
+      },
       "toolsSupported": [
         "opencode",
         "cline",
@@ -25,8 +30,8 @@
     "triggerDetection": {
       "enabled": true,
       "sources": [
-        "skills/*/SKILL.md",
-        "config/auto-delegation.json"
+        "config/auto-delegation.json",
+        "skills/*/SKILL.md"
       ],
       "matchMode": "wordBoundary",
       "partialMatch": {
