@@ -46,7 +46,11 @@ function Invoke-LocalPowerShellScript {
         [string[]]$ScriptArgs = @()
     )
 
-    & $ScriptPath @ScriptArgs
+    if ($ScriptArgs.Count -gt 0) {
+        & $ScriptPath @ScriptArgs
+    } else {
+        & $ScriptPath
+    }
 }
 
 function Invoke-TokenBudgetGuard {
@@ -57,7 +61,7 @@ function Invoke-TokenBudgetGuard {
         [int]$EstimatedChars = 0
     )
 
-    $guardScript = Join-Path $scriptDir 'token-budget-guard.ps1'
+    $guardScript = Join-Path $scriptDir '..\TELEMETRY-METRICS\token-budget-guard.ps1'
     if (-not (Test-Path $guardScript)) {
         return
     }
@@ -1838,7 +1842,7 @@ switch ($Command) {
     'health' {
         Write-Step "System Health Check & Tool Activation"
         
-        $healthScript = Join-Path $scriptDir 'ensure-tools-active.ps1'
+        $healthScript = Join-Path $scriptDir '..\SKILLS-TOOLS\ensure-tools-active.ps1'
         if (Test-Path $healthScript) {
             $healthArgs = @('-AutoStart')
             if ($Force) { $healthArgs += "-Force" }
@@ -1877,7 +1881,7 @@ switch ($Command) {
     }
 
     'stack-dashboard' {
-        $dashboardScript = Join-Path $scriptDir 'stack-dashboard.ps1'
+        $dashboardScript = Join-Path $scriptDir '..\UTILITIES\stack-dashboard.ps1'
         if (-not (Test-Path $dashboardScript)) {
             Write-Error "Stack dashboard script not found: $dashboardScript"
             exit 1
@@ -2123,7 +2127,7 @@ switch ($Command) {
 
     'context-metrics' {
         Write-Step "Context Usage Metrics"
-        $metricsScript = Join-Path $scriptDir 'context-metrics-report.ps1'
+        $metricsScript = Join-Path $scriptDir '..\AUDIT-REPORTING\context-metrics-report.ps1'
         if (-not (Test-Path $metricsScript)) {
             Write-Error "Context metrics script not found: $metricsScript"
             exit 1
@@ -2137,12 +2141,12 @@ switch ($Command) {
             }
         }
 
-        Invoke-LocalPowerShellScript -ScriptPath $metricsScript -ScriptArgs @('-Days', [string]$days)
+        & $metricsScript -Days $days
     }
 
     'token-guard' {
         Write-Step "Token Budget Guard"
-        $guardScript = Join-Path $scriptDir 'token-budget-guard.ps1'
+        $guardScript = Join-Path $scriptDir '..\TELEMETRY-METRICS\token-budget-guard.ps1'
         if (-not (Test-Path $guardScript)) {
             Write-Error "Token budget guard script not found: $guardScript"
             exit 1
