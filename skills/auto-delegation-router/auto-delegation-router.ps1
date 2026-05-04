@@ -10,7 +10,7 @@
     $routing = Route-TaskToAgent -TaskDescription "Implement login feature"
     
 .NOTES
-    Author: gentleman-programming
+    Author: workspace-foundation
     Version: 1.0
 #>
 

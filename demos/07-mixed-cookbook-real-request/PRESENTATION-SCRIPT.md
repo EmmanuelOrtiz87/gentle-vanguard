@@ -1,4 +1,4 @@
-﻿# Demo 07 - Guion de Presentacin
+# Demo 07 - Guion de Presentacin
 
 Audiencia: Ejecutivos (5 min) + Equipo de desarrollo (15 min total)
 
@@ -16,7 +16,7 @@ Esto verifica Go, Git, activa el orquestador (si hace falta) y limpia datos prev
 
 **Despus del preflight:**
 
-1. Terminal abierta en `C:\Workspace_local\workspace-foundation`.
+1. Terminal abierta en `.\workspace-foundation`.
 2. PowerShell con permisos de ejecucin: `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`.
 3. Repo limpio: `git status` sin cambios pendientes.
 
@@ -186,7 +186,7 @@ tasks_total=1  tasks_done=1  tasks_pending=0
 > "No duplicamos Engram dentro de `demos/`.
 > La instalacin soportada vive en el stack (`wf.ps1 install-engram`) para evitar deriva entre mquinas."
 
-> "Si Engram est activo, el ciclo es:"
+> "Si Engram está activo, el ciclo es:"
 
 ```
 mem_save    guarda decisiones clave (bug encontrado, patrn elegido, deuda tcnica identificada)
@@ -274,7 +274,7 @@ Closure report guardado en `docs/sessions/` con:
 ### "Qu pasa si alguien no sigue el proceso?"
 
 > "El workflow es permisivo  no bloquea.
-> Pero el orchestrator y el GGA lanzan advertencias que quedan en logs.
+> Pero el orchestrator y el native lanzan advertencias que quedan en logs.
 > A nivel de PR, si la review generada no pasa los puntos de governance, el revisor lo ve."
 
 ### "Funciona con nuestro stack actual?"
@@ -302,3 +302,4 @@ Closure report guardado en `docs/sessions/` con:
 3. Para audiencia 100% tcnica: ampliar Segmento 3 con un cambio real de cdigo y commit en vivo.
 4. El proyecto task-tracker es intencionalmente simple  si alguien pregunta "es solo esto?", la respuesta es: "El proyecto es simple para que el proceso sea el protagonista, no el cdigo."
 5. Limpiar `demos/shared/task-tracker/tasks.json` antes de cada demo si hiciste una corrida de prueba.
+

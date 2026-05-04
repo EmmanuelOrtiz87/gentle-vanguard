@@ -33,7 +33,7 @@
       "successRate": 0,
       "commandsExecuted": 0
     },
-    "gga": {
+    "": {
       "reviewsCompleted": 0,
       "issuesFound": 0,
       "issuesFixed": 0
@@ -84,3 +84,4 @@
   },
   "recommendations": []
 }
+

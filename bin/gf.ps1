@@ -47,7 +47,7 @@ $ScriptsDir = $null
 $possibleScriptsDirs = @(
     (Join-Path $env:USERPROFILE ".gentleman\scripts"),
     (Join-Path $GFRoot "..\scripts"),
-    "C:\Workspace_local\workspace-foundation\scripts"
+    ".\workspace-foundation\scripts"
 )
 foreach ($dir in $possibleScriptsDirs) {
     if (Test-Path $dir) {
@@ -316,9 +316,9 @@ function Show-Tools {
     Write-Host ""
     
     $tools = @(
-        @{ name = "gga"; desc = "GGA CLI - Code review" }
+        @{ name = "native"; desc = "native CLI - Code review" }
         @{ name = "engram"; desc = "Engram (opencode plugin)" }
-        @{ name = "gentle-ai"; desc = "Gentle-AI CLI" }
+        @{ name = "native-tools"; desc = "native-tools CLI" }
     )
     
     foreach ($tool in $tools) {

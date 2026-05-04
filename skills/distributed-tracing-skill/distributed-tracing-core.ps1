@@ -10,7 +10,7 @@
     - Centralized telemetry reporting
     
 .NOTES
-    Author: gentleman-programming
+    Author: workspace-foundation
     Version: 1.0
 #>
 

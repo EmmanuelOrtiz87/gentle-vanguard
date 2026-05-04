@@ -4,9 +4,9 @@ Unified reporting system for Gentleman Foundation.
 
 ## Overview
 
-Single CSV file per month containing ALL workspace activity metrics for executive visibility and decision-making.
+Single CSV file per month containing ALL workspace activity metrics for executive visibility and decisión-making.
 
-## Architecture Decision
+## Architecture decisión
 
 **Unified approach**: The on-demand documentation system has been integrated into this single CSV reporting system. This is the ONLY reporting system - no separate processes.
 
@@ -75,7 +75,7 @@ Configured in `opencode.json`:
 - **Single Source**: One CSV = all metrics
 - **Filterable**: By date, user, project, outcome in Excel
 - **Traceability**: Session ID  Engram  CSV  Management
-- **Cost Tracking**: Token usage  USD conversion
+- **Cost Tracking**: Token usage  USD conversión
 - **Historical**: One file per month, never overwritten
 - **Excel-Ready**: No special tools needed
 

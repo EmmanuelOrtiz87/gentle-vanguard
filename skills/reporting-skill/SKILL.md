@@ -1,22 +1,22 @@
-﻿---
+---
 name: reporting-skill
 description: >
   Comprehensive reporting skill for generating management reports, session metrics,
   cost analysis, performance dashboards, and technical documentation on demand.
   Trigger: "informe", "report", "reporte", "mtricas", "metrics", "dashboard",
   "gerencia", "costos", "tokens", "consumo", "performance", "analytics",
-  "sesiones", "telemetry", "estadsticas", "resumen"
+  "sesiónes", "telemetry", "estadsticas", "resumen"
 license: Apache-2.0
 metadata:
   author: workspace-local
-  version: "1.0"
+  versión: "1.0"
 ---
 
 # Reporting Skill
 
 ## Purpose
 
-Generate comprehensive reports for management, technical analysis, and decision-making.
+Generate comprehensive reports for management, technical analysis, and decisión-making.
 Reports can be requested on-demand and are structured for executive presentation.
 
 ## Trigger Keywords
@@ -28,7 +28,7 @@ Reports can be requested on-demand and are structured for executive presentation
 | Analytics | "analytics", "anlisis", "dashboard" |
 | Costs | "costos", "costs", "gastos", "consumo" |
 | Performance | "performance", "rendimiento", "eficiencia" |
-| Sessions | "sesiones", "sessions", "tokens" |
+| Sessions | "sesiónes", "sessions", "tokens" |
 | Gerencia | "gerencia", "ejecutivo", "management" |
 
 ## Data Sources
@@ -42,7 +42,7 @@ Reports can be requested on-demand and are structured for executive presentation
 
 ## Report Types
 
-### 1. Session Report (`informe sesiones`)
+### 1. Session Report (`informe sesiónes`)
 
 ```powershell
 .\scripts\utilities\session-metrics-collector.ps1 -Period 7days
@@ -150,7 +150,7 @@ Reports can be requested on-demand and are structured for executive presentation
 
 ### On-demand via orchestrator
 ```
-User: "generame un informe de las sesiones de ayer"
+User: "generame un informe de las sesiónes de ayer"
  Auto-detects: REPORT + Sessions
  Delegates to: session-metrics-collector.ps1
  Output: markdown report
@@ -161,7 +161,7 @@ User: "generame un informe de las sesiones de ayer"
 User: "quiero un informe" (vago)
  Clarification menu:
    "Qu tipo de informe necesitas?"
-   - Sesiones (resumen de actividad)
+   - sesiónes (resumen de actividad)
    - Costos (anlisis de gastos)
    - Rendimiento (mtricas de performance)
    - Ejecutivo (para gerencia)
@@ -225,5 +225,6 @@ Timestamp,User_ID,Session_ID,Task_Scope,Tokens_Estimated,Judgment_Result,Review_
 
 ---
 
-*Skill version: 1.0*  
+*Skill versión: 1.0*  
 *Last updated: 2026-04-26*
+

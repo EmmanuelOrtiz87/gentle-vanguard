@@ -4,6 +4,7 @@
 
 pre-commit:
   run:
+    - powershell -NoProfile -ExecutionPolicy Bypass -File "hooks/pre-commit-opencode-validation.ps1" 2>&1
     - powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/utilities/wf-report.ps1" -Type clarify 2>&1 || true
     - echo "[pre-commit] Running format check..."
 

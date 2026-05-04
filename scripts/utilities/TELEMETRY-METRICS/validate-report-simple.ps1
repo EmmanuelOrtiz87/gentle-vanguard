@@ -1,7 +1,7 @@
 # validate-report-simple.ps1
 # Simple validation of management report
 
-$reportFile = "C:\Workspace_local\workspace-foundation\reports\MANAGEMENT-REPORT-2026-04.csv"
+$reportFile = ".\workspace-foundation\reports\MANAGEMENT-REPORT-2026-04.csv"
 
 if (-not (Test-Path $reportFile)) {
     Write-Host "ERROR: Report file not found"

@@ -1,4 +1,4 @@
-﻿#  Tareas Pendientes - Foundation
+#  Tareas Pendientes - Foundation
 
 **Fecha**: 2026-04-26  
 **Estado**: En Progreso
@@ -32,7 +32,7 @@
 
 | Mtrica | Valor |
 |--------|------|
-| Sesiones totales (7 das) | 17 |
+| sesiónes totales (7 das) | 17 |
 | Token Guard |  Activo (128K) |
 | Orchestrator |  Funcionando (70% confidence) |
 | Auto-delegation |  REPORT + 6 categoras |
@@ -41,7 +41,7 @@
 
 ##  Documentacin related
 
-| Archivo | Ubicacin |
+| archivo | Ubicacin |
 |---------|-----------|
 | Recomendaciones producto | `reports/RECOMENDACIONES-FOUNDATION-PRODUCTO.md` |
 | Implementation status | `reports/IMPLEMENTATION-STATUS.md` |

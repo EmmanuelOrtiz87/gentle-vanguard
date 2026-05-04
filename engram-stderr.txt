@@ -1,5 +1,0 @@
-Update available: 1.14.5 -> 1.15.0
-To update:
-  go install github.com/Gentleman-Programming/engram/cmd/engram@latest
-  or: https://github.com/Gentleman-Programming/engram/releases/latest
-

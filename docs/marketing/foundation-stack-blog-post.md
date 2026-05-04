@@ -1,4 +1,4 @@
-﻿#  Foundation: Mi AI Development Workspace
+#  Foundation: Mi AI Development Workspace
 
 **Cmo optimizar tu desarrollo con AI assistants usando un workspace agnstico**
 
@@ -8,7 +8,7 @@
 
 Cada da, ms equipos usan AI assistants como OpenCode, Claude, Cursor o GitHub Copilot. Pero:
 
--  Sin tracking de sesiones
+-  Sin tracking de sesiónes
 -  Sin mtricas de consumo
 -  Sin estructura para delegar a subagentes
 -  Informes scattered
@@ -43,7 +43,7 @@ Un workspace agnstico que funciona con **cualquier** AI assistant.
 ```
 
 Tracking automtico de:
-- Sesiones activas
+- sesiónes activas
 - Duracin
 - Mtricas de tokens
 
@@ -81,13 +81,13 @@ Control de contexto:
 
 ## Mtricas Reales
 
-| Da | Sesiones | Activas | Tendencia |
+| Da | sesiónes | Activas | Tendencia |
 |-----|---------|--------|----------|
 | 24-Abr | 5 | 5 |  |
 | 25-Abr | 7 | 7 | +40% |
 | 26-Abr | 1 | 1 | En curso |
 
-**Sistema**:  Operativo  
+**sistema**:  Operativo  
 **Token Guard**:  Activo (128K budget)  
 **Reporting**:  Implementado
 

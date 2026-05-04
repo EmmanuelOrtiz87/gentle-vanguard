@@ -14,8 +14,7 @@ param(
 $ErrorActionPreference = 'Stop'
 
 # Origin Configuration (Git Provider Agnostic)
-$ENGRAM_REPO_URL = "https://github.com/Gentleman-Programming/engram.git"
-$SKILLS_REPO_URL = "https://github.com/Gentleman-Programming/Gentleman-Skills.git"
+$ENGRAM_REPO_URL = "https://github.com/workspace-foundation/engram.git"
 
 function Write-Step { param([string]$msg) Write-Host "`n>> $msg" -ForegroundColor Cyan }
 function Write-Success { param([string]$msg) Write-Host "   OK: $msg" -ForegroundColor Green }
@@ -79,7 +78,7 @@ if (Get-Command engram -ErrorAction SilentlyContinue) {
     Write-Success "Engram CLI detected."
 } else {
     Write-Step "Installing Engram CLI from repository..."
-    $engramToolDir = Join-Path $workspaceRoot "tools/engram"
+    $engramToolDir = Join-Path $workspaceRoot "scripts/utilities/engram"
     if (-not (Test-Path $engramToolDir)) {
         git clone $ENGRAM_REPO_URL "$engramToolDir"
     }

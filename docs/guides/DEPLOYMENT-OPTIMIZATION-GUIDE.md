@@ -1,4 +1,4 @@
-# Deployment Optimization Guide
+﻿# Deployment Optimization Guide
 
 **Date**: 2026-04-22  
 **Status**: RECOMMENDATIONS  
@@ -99,7 +99,7 @@ function Predict-ContextNeeds {
 #### Current State
 - Standard JSON format
 - Tool-specific adaptations
-- Manual format conversion
+- Manual format conversión
 
 #### Optimization: Format Auto-Detection
 **Benefit**: Automatic format selection based on tool  
@@ -114,7 +114,7 @@ function Convert-MessageFormat {
 }
 ```
 
-**Expected Improvement**: 10-15% reduction in conversion overhead
+**Expected Improvement**: 10-15% reduction in conversión overhead
 
 ---
 
@@ -157,7 +157,7 @@ $diskCachePath = "$env:TEMP\workspace-cache"
 # - User behavior patterns
 ```
 
-**Benefit**: Data-driven optimization decisions
+**Benefit**: Data-driven optimization decisións
 
 ---
 
@@ -296,7 +296,7 @@ $diskCachePath = "$env:TEMP\workspace-cache"
 ```
 Script Execution: ~500ms average
 Token Processing: ~100ms per 1000 tokens
-Message Conversion: ~50ms per message
+Message Conversión: ~50ms per message
 Context Compression: ~200ms per 10KB
 ```
 
@@ -304,7 +304,7 @@ Context Compression: ~200ms per 10KB
 ```
 Script Execution: ~300ms average (40% improvement)
 Token Processing: ~75ms per 1000 tokens (25% improvement)
-Message Conversion: ~30ms per message (40% improvement)
+Message Conversión: ~30ms per message (40% improvement)
 Context Compression: ~120ms per 10KB (40% improvement)
 ```
 

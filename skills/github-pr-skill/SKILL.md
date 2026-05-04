@@ -4,8 +4,8 @@ description: >
   Create high-quality Pull Requests with conventional commits and proper descriptions.
   Trigger: When creating PRs, writing PR descriptions, or using gh CLI for pull requests.
 metadata:
-  author: gentleman-programming
-  version: "1.0"
+  author: workspace-foundation
+  versión: "1.0"
 ---
 
 ## When to Use
@@ -19,18 +19,40 @@ metadata:
 
 ## Critical Patterns
 
-### PR Title = Conventional Commit
+### PR Title = Conventional Commit (native-tools branch-pr adapted)
 
 ```
 <type>(<scope>): <short description>
 
-feat     New feature
-fix      Bug fix  
-docs     Documentation
-refactor Code refactoring
-test     Adding tests
-chore    Maintenance
+feat        New feature
+fix         Bug fix  
+docs        Documentation
+refactor   Code refactoring
+test        Adding tests
+chore       Maintenance
+build        Build system
+ci          CI configuration
+style       Formatting (no logic change)
+perf        Performance improvement
+revert      Reverts a previous commit
 ```
+
+**Breaking changes**: Add `!` after type: `feat(auth)!: rename config flag`
+
+### Cognitive Budget (native-tools branch-pr rule)
+- **Max 400 changed lines** (`additions + deletions`) per PR
+- **Request `size:exception`** if unavoidable (with rationale documented)
+- **Review time**: Design each PR for ≤60-minute human review
+
+### PR Labels (native-tools branch-pr rule)
+- **Exactly ONE `type:*` label** per PR:
+  - `type:bug` → Bug fix
+  - `type:feature` → New feature
+  - `type:docs` → Documentation
+  - `type:refactor` → Code refactoring
+  - `type:chore` → Maintenance/tooling
+  - `type:breaking-change` → Breaking change
+- CI automatically rejects PRs with zero or multiple type labels
 
 ### PR Description Structure
 
@@ -208,3 +230,5 @@ Closes #123"
 
 - [Conventional Commits](https://www.conventionalcommits.org/)
 - [GitHub CLI Manual](https://cli.github.com/manual/gh_pr_create)
+
+

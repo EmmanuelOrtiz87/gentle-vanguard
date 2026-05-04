@@ -6,8 +6,8 @@ description: >
   "robots.txt", "canonical", "keywords", "ranking", "search engine"
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
-  version: "1.0"
+  author: workspace-foundation
+  versión: "1.0"
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task
 ---
 
@@ -139,7 +139,7 @@ Comprehensive SEO auditing and optimization for web applications.
 ### 3. Sitemap.xml
 
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml versión="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://example.com/</loc>
@@ -272,3 +272,4 @@ Sitemap: https://example.com/sitemap.xml
 - [Schema Markup Validator](https://validator.schema.org)
 - [Google PageSpeed Insights](https://pagespeed.web.dev)
 - [Sitemap Generator](https://www.xml-sitemaps.com)
+

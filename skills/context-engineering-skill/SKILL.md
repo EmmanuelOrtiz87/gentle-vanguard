@@ -1,4 +1,4 @@
-﻿---
+---
 name: context-engineering-skill
 description: >
   Context engineering patterns for token-efficient AI sessions: context packing,
@@ -7,8 +7,8 @@ description: >
   "context budget", "context engineering", "reduce context", "@/context".
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
-  version: "1.0"
+  author: workspace-foundation
+  versión: "1.0"
 ---
 
 ## When to Use
@@ -27,7 +27,7 @@ metadata:
 | `scripts/utilities/context-pack.ps1` | Pack current state: changed files + recent commits | Before handing off or compacting |
 | `scripts/utilities/context-metrics-report.ps1` | Report token usage metrics | End of session or weekly review |
 | `scripts/utilities/token-efficiency-estimator.ps1` | Estimate ROI of context optimization | Planning and governance reviews |
-| `tools/token-efficiency-estimator.ps1` | Workspace-level token efficiency | Cross-project analysis |
+| `scripts/utilities/token-efficiency-estimator.ps1` | Workspace-level token efficiency | Cross-project analysis |
 
 ## Critical Patterns
 
@@ -85,7 +85,7 @@ Before ending a session or triggering `/compact`:
 
 - Do NOT repeat large file contents when they're already in context  reference them by path
 - Do NOT include full file trees when only 23 files changed  use `git diff --stat`
-- Do NOT re-explain prior decisions already made  reference the session artifact
+- Do NOT re-explain prior decisións already made  reference the session artifact
 - Avoid loading all skills and all docs at once when only 12 are needed
 
 ## Metrics Interpretation
@@ -96,3 +96,5 @@ The `context-usage.csv` tracks:
 - `changed_count`: number of changed files included
 
 Target: `prompt_chars` < 8000 for compact-start, < 15000 for context-pack.
+
+

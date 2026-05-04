@@ -111,7 +111,8 @@ function Get-UsedTokensToday {
     foreach ($row in $rows) {
         if ($row.date -eq $today) {
             $tokens = 0
-            if ([int]::TryParse([string]$row.estimated_tokens, [ref]$tokens)) {
+            if ($row.estimated_tokens -match '^\d+$') {
+                $tokens = [int]$row.estimated_tokens
                 $sum += $tokens
             }
         }

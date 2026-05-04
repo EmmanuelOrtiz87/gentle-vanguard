@@ -59,7 +59,7 @@ function New-SessionBriefContent {
         [string]$GitState,
         [string]$OrchestratorState,
         [string]$EngramState,
-        [string]$GgaState,
+        [string]$State,
         [string]$CustomRulesState,
         [string]$ResponseModeState,
         [string]$ResponseModeAutoState,
@@ -80,7 +80,7 @@ function New-SessionBriefContent {
 - Git state: $GitState
 - Orchestrator: $OrchestratorState
 - Engram: $EngramState
-- GGA: $GgaState
+- : $State
 - Custom rules: $CustomRulesState
 - Response profile: $ResponseModeState
 - Response auto-apply: $ResponseModeAutoState
@@ -105,7 +105,7 @@ function New-SessionBriefContent {
 
 ## Recommended Commands
 
-- Validate stack: powershell -NoProfile -ExecutionPolicy Bypass -File c:\Workspace_local\tools\validate-session-stack.ps1
+- Validate stack: powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\validate-session-stack.ps1
 - Project health: .\scripts\utilities\wf.ps1 health
 - Project status: .\scripts\utilities\wf.ps1 status
 $taskReference
@@ -342,7 +342,7 @@ $gitState = if ([string]::IsNullOrWhiteSpace(($gitStatus -join '').Trim())) { 'c
 $orchestratorMarker = Test-Path (Join-Path $repoRoot '.orchestrator-active')
 $orchestratorState = if ($orchestratorMarker) { 'active marker present' } else { 'marker missing' }
 $engramState = Get-ToolState -Name 'engram' -RelativeWrapper 'scripts\utilities\run-engram.ps1'
-$ggaState = Get-ToolState -Name 'gga' -RelativeWrapper 'scripts\utilities\run-gga.ps1'
+$State = Get-ToolState -Name '' -RelativeWrapper 'scripts\utilities\run-.ps1'
 $customRulesState = Get-CustomRulesState
 $presetConfig = Get-CommunicationPresetConfig
 $responseModeAutoState = 'disabled by config'
@@ -374,7 +374,7 @@ if (-not [string]::IsNullOrWhiteSpace($TaskName)) {
     }
 }
 
-New-SessionBriefContent -Branch $branch -GitState $gitState -OrchestratorState $orchestratorState -EngramState $engramState -GgaState $ggaState -CustomRulesState $customRulesState -ResponseModeState $responseModeState -ResponseModeAutoState $responseModeAutoState -SessionFile $sessionFile -TaskFile $taskFile | Out-File -FilePath $sessionFile -Encoding UTF8
+New-SessionBriefContent -Branch $branch -GitState $gitState -OrchestratorState $orchestratorState -EngramState $engramState -State $State -CustomRulesState $customRulesState -ResponseModeState $responseModeState -ResponseModeAutoState $responseModeAutoState -SessionFile $sessionFile -TaskFile $taskFile | Out-File -FilePath $sessionFile -Encoding UTF8
 
 Write-Ok "Session brief created: $sessionFile"
 

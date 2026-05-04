@@ -15,7 +15,6 @@ param(
     [string]$ProjectAiModelNotes = '',
     [string]$RepoUrl = '',
     [string]$ProjectRoot = '',
-    [string]$GgaProvider = 'opencode',
     [switch]$CreateProject,
     [switch]$RunToolInstallers
 )
@@ -388,92 +387,41 @@ function Install-ReviewHook {
 }
 
 # ============================================================================
-# Native Integration (GGA absorbed natively)
+# Native Integration
 # ============================================================================
 
-# GGA functionality has been absorbed natively into the workspace.
-# No external dependencies required - all features are now built-in.
+# All functionality is native to the workspace.
+# No external dependencies required - all features are built-in.
 
 # ============================================================================
-# Gentle-AI Integration
+# Skills Integration
 # ============================================================================
 
-function Install-GentleAi {
+function Install-Skills {
     param()
 
-    # Check if already installed
-    $gentleAi = Get-Command gentle-ai -ErrorAction SilentlyContinue
-    if ($gentleAi) {
-        Write-Host "[Gentle-AI] Already installed: $($gentleAi.Source)" -ForegroundColor Green
-        return $true
+    $skillsDir = Join-Path $config.toolsRoot "skills"
+
+    if (-not (Test-Path $skillsDir)) {
+        Write-Host "[Skills] Creating skills directory..." -ForegroundColor Blue
+        New-Item -ItemType Directory -Path $skillsDir -Force | Out-Null
     }
 
-    # Check if Go is available
-    $go = Get-Command go -ErrorAction SilentlyContinue
-    if (-not $go) {
-        Write-Host "[Gentle-AI] Go not found. Please install Go 1.24+ to install Gentle-AI." -ForegroundColor Yellow
-        return $false
-    }
-
-    Write-Host "[Gentle-AI] Installing AI Gentle Stack..." -ForegroundColor Blue
-
-    try {
-        & go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest 2>$null
-
-        # Verify installation
-        $installed = Get-Command gentle-ai -ErrorAction SilentlyContinue
-        if ($installed) {
-            Write-Host "[Gentle-AI] Installation complete!" -ForegroundColor Green
-            Write-Host "[Gentle-AI] Run 'gentle-ai' in your AI agent to configure the ecosystem." -ForegroundColor Cyan
-            return $true
-        }
-    }
-    catch {
-        Write-Host "[Gentle-AI] Installation failed: $_" -ForegroundColor Red
-    }
-
-    return $false
-}
-
-# ============================================================================
-# Gentleman-Skills Integration
-# ============================================================================
-
-function Install-GentlemanSkills {
-    param()
-
-    $skillsRepo = Join-Path $config.toolsRoot "Gentleman-Skills"
-
-    if (-not (Test-Path $skillsRepo)) {
-        Write-Host "[Gentleman-Skills] Cloning repository..." -ForegroundColor Blue
-        try {
-            git clone https://github.com/Gentleman-Programming/Gentleman-Skills.git $skillsRepo 2>$null
-        }
-        catch {
-            Write-Host "[Gentleman-Skills] Failed to clone repository: $_" -ForegroundColor Red
-            return $false
-        }
-    }
-    else {
-        Write-Host "[Gentleman-Skills] Repository already exists at: $skillsRepo" -ForegroundColor Green
-    }
-
-    Write-Host "[Gentleman-Skills] Skills available for installation." -ForegroundColor Cyan
-    Write-Host "[Gentleman-Skills] To install skills for your AI agent, run:" -ForegroundColor Cyan
-    Write-Host "[Gentleman-Skills]   cp -r $skillsRepo\curated\* ~/.claude/skills\" -ForegroundColor White
+    Write-Host "[Skills] Skills directory available at: $skillsDir" -ForegroundColor Green
+    Write-Host "[Skills] Native workspace skills are automatically available." -ForegroundColor Cyan
 
     return $true
 }
 
-function Install-GentlemanSkillsToAgent {
+function Install-SkillsToAgent {
     param(
         [string]$Agent = "claude"
     )
 
-    $skillsRepo = Join-Path $config.toolsRoot "Gentleman-Skills"
+    $skillsRepo = Join-Path $config.toolsRoot "workspace-skills"
 
     if (-not (Test-Path $skillsRepo)) {
-        Write-Host "[Gentleman-Skills] Repository not found. Skipping skill installation." -ForegroundColor Yellow
+        Write-Host "[Workspace-Skills] Repository not found. Skipping skill installation." -ForegroundColor Yellow
         return $false
     }
 
@@ -483,7 +431,7 @@ function Install-GentlemanSkillsToAgent {
         "gemini" { "$env:USERPROFILE\.gemini\skills" }
         "cursor" { "$env:USERPROFILE\.cursor\skills" }
         default {
-            Write-Host "[Gentleman-Skills] Unknown agent: $Agent" -ForegroundColor Yellow
+            Write-Host "[Workspace-Skills] Unknown agent: $Agent" -ForegroundColor Yellow
             return $false
         }
     }
@@ -494,12 +442,12 @@ function Install-GentlemanSkillsToAgent {
         $curatedPath = Join-Path $skillsRepo "curated"
         if (Test-Path $curatedPath) {
             Copy-Item -Path (Join-Path $curatedPath "*") -Destination $skillsDir -Recurse -Force -ErrorAction SilentlyContinue
-            Write-Host "[Gentleman-Skills] Installed curated skills for $Agent" -ForegroundColor Green
+            Write-Host "[Workspace-Skills] Installed curated skills for $Agent" -ForegroundColor Green
             return $true
         }
     }
     catch {
-        Write-Host "[Gentleman-Skills] Failed to install skills: $_" -ForegroundColor Red
+        Write-Host "[Workspace-Skills] Failed to install skills: $_" -ForegroundColor Red
     }
 
     return $false
@@ -754,17 +702,8 @@ if ($CreateProject) {
     }
     Install-ProjectSkills -ProjectPath $destination -WorkspaceSkillsPath $config.toolsRoot -SkillNames $projectSkills
 
-    # Install GGA (Gentleman Guardian Angel) for AI-powered code review
-    Install-Gga -ProjectPath $destination -GgaProvider $GgaProvider
-
-    # Try to install GGA globally if not already installed
-    Install-GgaGlobal
-
-    # Install Gentle-AI (AI Gentle Stack ecosystem configurator)
-    Install-GentleAi
-
-    # Install Gentleman-Skills (community-curated AI agent skills)
-    Install-GentlemanSkills
+    # Install native workspace skills
+    Install-Skills
 
     # Try to auto-detect and install skills for available AI agent
     $detectedAgent = $null
@@ -774,7 +713,7 @@ if ($CreateProject) {
     elseif (Get-Command cursor -ErrorAction SilentlyContinue) { $detectedAgent = "cursor" }
 
     if ($detectedAgent) {
-        Install-GentlemanSkillsToAgent -Agent $detectedAgent
+        Install-SkillsToAgent -Agent $detectedAgent
     }
 
     # Install CI/CD templates

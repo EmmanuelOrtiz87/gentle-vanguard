@@ -1,4 +1,4 @@
-﻿# generate-executive-summary.ps1
+# generate-executive-summary.ps1
 # Generates comprehensive executive summary report for management
 
 param(
@@ -6,7 +6,7 @@ param(
     [string]$Period = "7days",
     [ValidateSet("markdown", "json")]
     [string]$Format = "markdown",
-    [string]$ProjectRoot = "C:\Workspace_local\workspace-foundation",
+    [string]$ProjectRoot = ".\workspace-foundation",
     [switch]$Silent
 )
 

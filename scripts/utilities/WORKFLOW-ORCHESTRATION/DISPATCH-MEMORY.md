@@ -2,22 +2,22 @@
 
 ## Descripcin General
 
-El **Dispatch Memory Manager** es un mdulo que resuelve el gap de "No hay memoria persistente entre dispatches" integrando Engram con el sistema de dispatch-agent para mantener contexto entre ejecuciones.
+El **Dispatch Memory Manager** es un mdulo que resuelve el gap de "No hay memoria persistente entre dispatches" integrando Engram con el sistema de dispatch-agent para mantener contexto entre ejecuciónes.
 
 ## Problema Identificado
 
 Antes de esta implementacin:
 - Cada dispatch era aislado sin memoria del contexto anterior
-- Los resultados de ejecuciones anteriores se perdan
+- Los resultados de ejecuciónes anteriores se perdan
 - No haba forma de recuperar informacin de dispatches previos
-- El sistema no poda aprender o mejorar basndose en ejecuciones anteriores
+- El sistema no poda aprender o mejorar basndose en ejecuciónes anteriores
 
 ## Solucin Implementada
 
 ### Componentes
 
 #### 1. **dispatch-memory-manager.ps1**
-Mdulo central que gestiona la persistencia de memoria de dispatch.
+Mdulo central que gestióna la persistencia de memoria de dispatch.
 
 **Ubicacin:** `scripts/utilities/WORKFLOW-ORCHESTRATION/dispatch-memory-manager.ps1`
 
@@ -173,10 +173,10 @@ Save-DispatchContext -ExecutionId $result.execution_id -Context $dispatchContext
 ## Beneficios
 
  **Continuidad**: Mantiene contexto entre dispatches  
- **Recuperabilidad**: Puede recuperar informacin de ejecuciones anteriores  
- **Trazabilidad**: Registro completo de todas las ejecuciones  
+ **Recuperabilidad**: Puede recuperar informacin de ejecuciónes anteriores  
+ **Trazabilidad**: Registro completo de todas las ejecuciónes  
  **Aprendizaje**: Los agentes pueden acceder a contexto histrico  
- **Debugging**: Facilita diagnstico de problemas en ejecuciones anteriores  
+ **Debugging**: Facilita diagnstico de problemas en ejecuciónes anteriores  
  **Optimizacin**: Permite mejorar basndose en resultados previos  
 
 ## Casos de Uso
@@ -185,13 +185,13 @@ Save-DispatchContext -ExecutionId $result.execution_id -Context $dispatchContext
 Si un dispatch falla, el siguiente puede recuperar el contexto anterior y continuar.
 
 ### 2. Anlisis de Tendencias
-Analizar patrones de xito/fallo en mltiples ejecuciones.
+Analizar patrones de xito/fallo en mltiples ejecuciónes.
 
 ### 3. Optimizacin Adaptativa
 Ajustar parmetros (modo, riesgo) basndose en resultados histricos.
 
 ### 4. Auditora y Compliance
-Mantener registro completo de todas las operaciones de dispatch.
+Mantener registro completo de todas las operaciónes de dispatch.
 
 ## Integracin Futura con Engram
 
@@ -202,7 +202,7 @@ Esta implementacin est diseada para ser compatible con Engram:
 3. Puede sincronizarse con Engram para anlisis ms profundo
 4. Preparado para integracin con bsqueda y anlisis de Engram
 
-## Configuracin
+## configuración
 
 ### Variables de Entorno
 - `WFS_SESSION_ID`: ID de sesin actual (se usa automticamente)
@@ -253,7 +253,7 @@ Get-ChildItem -Path ".engram-data/dispatch-memory" -Recurse |
 2. **Analytics**: Dashboard de mtricas de dispatch
 3. **Machine Learning**: Prediccin de xito basada en contexto histrico
 4. **Auto-tuning**: Ajuste automtico de parmetros
-5. **Distributed Memory**: Compartir contexto entre sesiones/mquinas
+5. **Distributed Memory**: Compartir contexto entre sesiónes/mquinas
 
 ## Referencias
 

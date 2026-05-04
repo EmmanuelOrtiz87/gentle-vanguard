@@ -1,4 +1,4 @@
-﻿---
+---
 name: testing-skill
 description: Use when writing tests, setting up test coverage, choosing test frameworks, or improving test quality. Triggers: "write test", "add test", "test coverage", "unit test", "integration test", "e2e test", "testing framework", "test setup".
 ---
@@ -158,3 +158,4 @@ npm run test:watch
 # Run E2E
 npx playwright test
 ```
+

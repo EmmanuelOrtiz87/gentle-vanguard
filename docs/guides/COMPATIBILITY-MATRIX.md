@@ -1,4 +1,4 @@
-# AI Tools Compatibility Matrix
+﻿# AI Tools Compatibility Matrix
 
 This document tracks feature parity across all supported AI tools in workspace-foundation.
 
@@ -44,9 +44,9 @@ When using Claude or Copilot, watch for these keywords and manually load the cor
 | security, authentication, authorization, vulnerability, CVE, OWASP, XSS, SQL injection, secrets, encryption | `security-skill` |
 | test, write test, test coverage, unit test, integration test, e2e test, testing framework, test setup | `testing-skill` |
 | testing strategy, test pyramid, what to test, coverage target, unit test, integration test | `testing-strategy-skill` |
-| iniciar sesion, session, start session | `session-lifecycle` |
+| iniciar sesión, session, start session | `session-lifecycle` |
 | audit foundation, validate docs, sweep project, check links, find duplicates, fix references, homologate, validation sweep, wf audit | `foundation-audit-skill` |
-| new project, assess project, setup project, migrate, refactor decision, organize docs | `project-orchestrator-skill` |
+| new project, assess project, setup project, migrate, refactor decisión, organize docs | `project-orchestrator-skill` |
 | create project, new project, bootstrap, scaffold, template, workspace setup, initialize project, wf CLI | `project-scaffolding` |
 | sdd init, iniciar sdd, openspec init | `sdd-init` |
 
@@ -104,9 +104,9 @@ Features that CANNOT be implemented in certain tools due to architectural limita
 2. The tool's config file with a `note` field
 3. Developer communication when relevant
 
-## Version Tracking
+## versión Tracking
 
 - **Last Updated**: 2026-04-30
-- **Matrix Version**: 1.0.0
+- **Matrix versión**: 1.0.0
 - **Tools Supported**: 8
 - **Features Tracked**: 12 core features

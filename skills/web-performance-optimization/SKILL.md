@@ -1,4 +1,4 @@
-﻿---
+---
 name: web-performance-optimization
 description: >
   Optimize web application performance using code splitting, lazy loading,
@@ -76,3 +76,4 @@ Replace this section with native examples and checklists directly in this skill 
 - Skip testing or validation
 - Ignore error handling
 - Hard-code configuration values
+

@@ -1,4 +1,4 @@
-﻿---
+---
 name: brand-guide-skill
 description: >
   Brand consistency: colors, typography, voice, tone, identity.
@@ -6,8 +6,8 @@ description: >
   "visual identity", "logo usage", "brand colors"
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
-  version: "1.0"
+  author: workspace-foundation
+  versión: "1.0"
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task
 ---
 
@@ -250,3 +250,4 @@ Our voice is:
 - Marketing: Enthusiastic, benefit-driven  
 - Docs: Clear, authoritative
 ```
+

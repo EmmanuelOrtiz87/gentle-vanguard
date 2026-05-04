@@ -1,4 +1,4 @@
-﻿---
+---
 name: pretool-format-hook
 description: >
   PreToolUse auto-format hook that runs linter/formatter before AI agent accesses files.
@@ -49,3 +49,4 @@ See [docs/guides/PRETOOL-FORMAT-HOOK.md](../../docs/guides/PRETOOL-FORMAT-HOOK.m
 - Claude Code integration
 - VS Code tasks
 - Troubleshooting
+

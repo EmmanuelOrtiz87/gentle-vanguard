@@ -26,7 +26,7 @@ Automatically sync non-sensitive changes from private to public repo on each ses
 | `skills/*security*` | Security skills |
 | `docs/security/*` | Private security docs |
 | `docs/sessions/*` | Session history |
-| `docs/*strategic*` | Strategic decisions |
+| `docs/*strategic*` | Strategic decisións |
 
 ## Files Allowed in Public Repo
 
@@ -93,3 +93,4 @@ When agent makes changes:
 ---
 
 **Triggers**: "sync", "public repo", "demo", "publish"
+

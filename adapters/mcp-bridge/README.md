@@ -1,4 +1,4 @@
-﻿# MCP Bridge - Foundation
+# MCP Bridge - Foundation
 
 Exposes Foundation capabilities as an **MCP (Model Context Protocol)** server, enabling any MCP-compatible tool to use Foundation's features.
 
@@ -166,7 +166,7 @@ mcp-bridge/
  tsconfig.json             # TypeScript config
  src/
     server.ts            # Main MCP server
-    tools/               # Tool implementations
+    scripts/utilities/               # Tool implementations
        review.ts       # foundation_review
        audit.ts        # foundation_audit
        delegate.ts     # foundation_delegate

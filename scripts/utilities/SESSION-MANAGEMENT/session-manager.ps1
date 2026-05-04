@@ -9,7 +9,6 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $root = (Resolve-Path (Join-Path $scriptDir '..')).Path
 $wf = Join-Path $root 'workspace-foundation\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1'
 $dayEnd = Join-Path $root 'workspace-foundation\scripts\utilities\UTILITIES\day-end-closure.ps1'
-$runGentleAi = Join-Path $root 'workspace-foundation\scripts\utilities\UTILITIES\run-gentle-ai.ps1'
 $runEngram = Join-Path $root 'workspace-foundation\scripts\utilities\UTILITIES\run-engram.ps1'
 $agentRouter = Join-Path $root 'workspace-foundation\scripts\utilities\AI-AGENT-MANAGEMENT\agent-router.ps1'
 $enforce = Join-Path $root 'workspace-foundation\scripts\utilities\UTILITIES\enforce-response-mode.ps1'
@@ -33,7 +32,6 @@ function Get-Config {
     $defaults = [pscustomobject]@{
         idleTimeoutMinutes = 60
         enableIdleAutoClose = $true
-        autoStartGentleAi = $true
         strictCompatibilityChecks = $true
     }
     if (-not (Test-Path $configPath)) { return $defaults }
@@ -45,9 +43,6 @@ function Get-Config {
         }
         if (-not $cfg.PSObject.Properties['enableIdleAutoClose']) {
             $cfg | Add-Member -MemberType NoteProperty -Name enableIdleAutoClose -Value $true
-        }
-        if (-not $cfg.PSObject.Properties['autoStartGentleAi']) {
-            $cfg | Add-Member -MemberType NoteProperty -Name autoStartGentleAi -Value $true
         }
         if (-not $cfg.PSObject.Properties['strictCompatibilityChecks']) {
             $cfg | Add-Member -MemberType NoteProperty -Name strictCompatibilityChecks -Value $true
@@ -75,7 +70,9 @@ function Get-NewSessionId {
     $n = 0
     if (Test-Path $counterPath) {
         $raw = Get-Content -Path $counterPath -Raw -Encoding UTF8
-        [void][int]::TryParse(($raw.Trim()), [ref]$n)
+        if ($raw -match '^\d+$') {
+            $n = [int]$raw.Trim()
+        }
     }
     $n++
     Set-Content -Path $counterPath -Value $n -Encoding ASCII
@@ -133,17 +130,11 @@ function Assert-Prereqs {
 
 function Invoke-CompatibilityChecks {
     param(
-        [bool]$AutoStartGentleAi,
         [bool]$Strict
     )
 
     Write-Step "Runtime compatibility checks"
     $failures = @()
-
-    # gentle-ai is DEPRECATED - skip check
-    if ($AutoStartGentleAi) {
-        Write-Warn "gentle-ai auto-start is DEPRECATED. Skipping check."
-    }
 
     & $wf orchestrator-status
     if ($LASTEXITCODE -ne 0) {
@@ -164,7 +155,51 @@ function Invoke-CompatibilityChecks {
     }
 
     if ($failures.Count -eq 0) {
-        Write-Ok "Compatibility checks passed (gentle-ai + engram + orchestrator + agents)."
+        Write-Ok "Compatibility checks passed (engram + orchestrator + agents)."
+        return
+    }
+
+    foreach ($f in $failures) {
+        Write-Warn $f
+    }
+
+    if ($Strict) {
+        Write-Host ""
+        Write-Warn "Session start blocked by strict compatibility policy."
+        Write-Host "How to proceed:" -ForegroundColor Cyan
+        Write-Host "  1) Keep strict mode (recommended) and fix missing components." -ForegroundColor White
+        Write-Host "     - .\tools\validate-session-stack.ps1 -Quiet" -ForegroundColor Gray
+        Write-Host "     - .\workspace-foundation\scripts\utilities\wf.ps1 orchestrator-status" -ForegroundColor Gray
+        Write-Host "     - .\workspace-foundation\scripts\utilities\agent-router.ps1 status" -ForegroundColor Gray
+        Write-Host "  2) Temporary continuity mode (degraded startup)." -ForegroundColor White
+        Write-Host "     - Set strictCompatibilityChecks=false in scripts/utilities/session-autostart.config.json" -ForegroundColor Gray
+        Write-Host "     - Re-run: .\tools\session-autostart.cmd" -ForegroundColor Gray
+        throw "Compatibility checks failed in strict mode."
+    }
+
+    Write-Warn "Continuing because strictCompatibilityChecks=false."
+}
+
+    & $wf orchestrator-status
+    if ($LASTEXITCODE -ne 0) {
+        $failures += "wf orchestrator-status failed with exit $LASTEXITCODE"
+    }
+
+    $engramCmd = Get-Command engram -ErrorAction SilentlyContinue
+    if (-not $engramCmd) {
+        $failures += "engram command not found in PATH"
+    }
+    if (-not (Test-Path $runEngram)) {
+        $failures += "run-engram.ps1 not found"
+    }
+
+    & $agentRouter status
+    if ($LASTEXITCODE -ne 0) {
+        $failures += "agent-router status failed with exit $LASTEXITCODE"
+    }
+
+    if ($failures.Count -eq 0) {
+        Write-Ok "Compatibility checks passed (engram + orchestrator + agents)."
         return
     }
 
@@ -178,11 +213,11 @@ function Invoke-CompatibilityChecks {
         Write-Host "How to proceed:" -ForegroundColor Cyan
         Write-Host "  1) Keep strict mode (recommended) and fix missing components." -ForegroundColor White
         Write-Host "     - .\\tools\\validate-session-stack.ps1 -Quiet" -ForegroundColor Gray
-        Write-Host "     - .\\workspace-foundation\\scripts\\utilities\\run-gentle-ai.ps1 status" -ForegroundColor Gray
+        Write-Host "     - .\\workspace-foundation\\scripts\\utilities\\wf.ps1 orchestrator-status" -ForegroundColor Gray
         Write-Host "     - .\\workspace-foundation\\scripts\\utilities\\wf.ps1 orchestrator-status" -ForegroundColor Gray
         Write-Host "     - .\\workspace-foundation\\scripts\\utilities\\agent-router.ps1 status" -ForegroundColor Gray
         Write-Host "  2) Temporary continuity mode (degraded startup)." -ForegroundColor White
-        Write-Host "     - Set strictCompatibilityChecks=false in tools/session-autostart.config.json" -ForegroundColor Gray
+        Write-Host "     - Set strictCompatibilityChecks=false in scripts/utilities/session-autostart.config.json" -ForegroundColor Gray
         Write-Host "     - Re-run: .\\tools\\session-autostart.cmd" -ForegroundColor Gray
         throw "Compatibility checks failed in strict mode."
     }
@@ -210,7 +245,7 @@ function Run-StartFlow {
     & $wf health
     if ($LASTEXITCODE -ne 0) { throw "wf health failed with exit $LASTEXITCODE" }
 
-    Invoke-CompatibilityChecks -AutoStartGentleAi ([bool]$cfg.autoStartGentleAi) -Strict ([bool]$cfg.strictCompatibilityChecks)
+    Invoke-CompatibilityChecks -Strict ([bool]$cfg.strictCompatibilityChecks)
 
     Write-Step "Session tracking"
     $sessionId = Get-NewSessionId
@@ -289,3 +324,6 @@ switch ($Mode) {
         Write-Host ("Session: {0} | Status: {1} | Started: {2} | Monitor PID: {3}" -f $state.sessionId, $state.status, $state.startedAt, $state.monitorPid) -ForegroundColor White
     }
 }
+
+
+

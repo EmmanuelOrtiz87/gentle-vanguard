@@ -53,7 +53,7 @@
 |------|----------|--------------|------------|
 | Claude | {{CLAUDE_REQUESTS}} | {{CLAUDE_SUCCESS}}% | {{CLAUDE_RATING}}/5 |
 | OpenCode | {{OPENCODE_REQUESTS}} | {{OPENCODE_SUCCESS}}% | {{OPENCODE_RATING}}/5 |
-| GGA | {{GGA_INVOCATIONS}} | {{GGA_SUCCESS}}% | N/A |
+| native | {{GGA_INVOCATIONS}} | {{GGA_SUCCESS}}% | N/A |
 
 ### Suggestion Acceptance
 

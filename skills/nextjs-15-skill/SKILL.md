@@ -1,4 +1,4 @@
-﻿---
+---
 name: nextjs-15-skill
 description: >
   Next.js 15 App Router patterns: Server Components, Server Actions, data fetching.
@@ -186,3 +186,4 @@ export const config = {
 | Route Handler | app/api/*/route.ts |
 | Revalidate | revalidatePath('/path') |
 | Redirect | redirect('/path') |
+

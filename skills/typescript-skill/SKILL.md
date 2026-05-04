@@ -233,3 +233,4 @@ declare module '*.svg' {
 | Intersection | `A & B` |
 | Key selection | `Pick<T, K>`, `Omit<T, K>` |
 | Type guard | `x is Type` |
+

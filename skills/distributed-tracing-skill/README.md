@@ -1,22 +1,22 @@
-﻿# Distributed Tracing Skill - Gua Completa
+# Distributed Tracing Skill - Gua Completa
 
 ##  Tabla de Contenidos
 
 1. [Descripcin General](#descripcin-general)
 2. [Caractersticas Principales](#caractersticas-principales)
-3. [Instalacin y Configuracin](#instalacin-y-configuracin)
+3. [Instalacin y configuración](#instalacin-y-configuración)
 4. [Uso Bsico](#uso-bsico)
 5. [Casos de Uso Avanzados](#casos-de-uso-avanzados)
-6. [Estructura de Directorios](#estructura-de-directorios)
+6. [estructura de directorios](#estructura-de-directorios)
 7. [Reportes y Anlisis](#reportes-y-anlisis)
 8. [Troubleshooting](#troubleshooting)
 
 ## Descripcin General
 
-El **Distributed Tracing Skill** proporciona un sistema completo de observabilidad para el workspace-foundation, permitiendo rastrear la ejecucin de dispatches, orchestration y automatizacin con:
+El **Distributed Tracing Skill** proporciona un sistema completo de observabilidad para el workspace-foundation, permitiendo rastrear la ejecucin de dispatches, orchestration y automatización con:
 
-- **Correlation IDs**: Identificadores nicos para rastrear operaciones a travs de mltiples componentes
-- **Span Hierarchy**: Estructura jerrquica de spans para visualizar relaciones entre operaciones
+- **Correlation IDs**: Identificadores nicos para rastrear operaciónes a travs de mltiples componentes
+- **Span Hierarchy**: estructura jerrquica de spans para visualizar relaciones entre operaciónes
 - **Performance Metrics**: Mtricas de rendimiento en tiempo real
 - **Centralized Reporting**: Reportes centralizados en un nico directorio
 - **OpenTelemetry Compatible**: Compatible con estndares de observabilidad
@@ -24,7 +24,7 @@ El **Distributed Tracing Skill** proporciona un sistema completo de observabilid
 ## Caractersticas Principales
 
 ### 1. Correlation IDs
-Cada sesin obtiene un identificador nico que se propaga a travs de todas las operaciones:
+Cada sesin obtiene un identificador nico que se propaga a travs de todas las operaciónes:
 
 ```
 Formato: session-YYYY-MM-DD-XX-XXXXXXXX-YYYYMMDDHHMMSS-XXXXXXXX
@@ -32,7 +32,7 @@ Ejemplo: session-2026-04-23-24-20260423143500-a1b2c3d4
 ```
 
 ### 2. Span Hierarchy
-Estructura jerrquica que muestra relaciones entre operaciones:
+estructura jerrquica que muestra relaciones entre operaciónes:
 
 ```
 Root Span (Session)
@@ -49,7 +49,7 @@ Root Span (Session)
 ```
 
 ### 3. Performance Metrics
-- Latencia de operaciones (ms)
+- Latencia de operaciónes (ms)
 - Throughput de dispatches (ops/sec)
 - Tasa de xito/error (%)
 - Utilizacin de recursos
@@ -62,20 +62,20 @@ Todos los reportes se generan automticamente en `.telemetry/reports/`:
 - `error-analysis-YYYY-MM-DD.md` - Anlisis de errores
 - `dispatch-metrics-YYYY-MM-DD.md` - Mtricas de dispatches
 
-## Instalacin y Configuracin
+## Instalacin y configuración
 
-### Paso 1: Verificar Archivos Instalados
+### Paso 1: Verificar archivos Instalados
 
 ```powershell
 # Verificar que los archivos existan
 Test-Path "skills/distributed-tracing-skill/distributed-tracing-core.ps1"
 Test-Path "skills/distributed-tracing-skill/report-generator.ps1"
 Test-Path "config/distributed-tracing-config.json"
-Test-Path "tools/initialize-distributed-tracing.ps1"
-Test-Path "tools/telemetry-dashboard.ps1"
+Test-Path "scripts/utilities/initialize-distributed-tracing.ps1"
+Test-Path "scripts/utilities/telemetry-dashboard.ps1"
 ```
 
-### Paso 2: Configuracin Automtica
+### Paso 2: configuración Automtica
 
 El sistema se inicializa automticamente durante el `session-autostart`:
 
@@ -193,17 +193,17 @@ try {
     Add-SpanMetric -Span $keywordSpan -MetricName "keywords-found" -Value $keywords.Count
     End-Span -Span $keywordSpan -Status "success"
     
-    # Span para decision tree
-    $decisionSpan = Start-Span -Name "decision-tree-evaluation" -SpanType "operation" `
+    # Span para decisión tree
+    $decisiónSpan = Start-Span -Name "decisión-tree-evaluation" -SpanType "operation" `
         -ParentSpanId $dispatchSpan.SpanId -Attributes @{
         KeywordCount = $keywords.Count
     }
     
-    # ... evaluar decision tree ...
+    # ... evaluar decisión tree ...
     $confidence = 0.95
     
-    Add-SpanMetric -Span $decisionSpan -MetricName "confidence-score" -Value $confidence
-    End-Span -Span $decisionSpan -Status "success"
+    Add-SpanMetric -Span $decisiónSpan -MetricName "confidence-score" -Value $confidence
+    End-Span -Span $decisiónSpan -Status "success"
     
     # Span para agent execution
     $agentSpan = Start-Span -Name "agent-execution" -SpanType "operation" `
@@ -264,7 +264,7 @@ function Route-TaskToAgent {
 }
 ```
 
-## Estructura de Directorios
+## estructura de directorios
 
 ```
 .telemetry/
@@ -289,7 +289,7 @@ function Route-TaskToAgent {
  index.json
 ```
 
-### Nomenclatura de Archivos
+### Nomenclatura de archivos
 
 | Patrn | Descripcin |
 |--------|-------------|
@@ -403,7 +403,7 @@ $corrId = Get-CorrelationId
 $span = Start-Span -Name "operation" -CorrelationId $corrId
 ```
 
-## Configuracin Avanzada
+## configuración Avanzada
 
 Ver: `config/distributed-tracing-config.json`
 
@@ -430,14 +430,14 @@ Ver: `config/distributed-tracing-config.json`
 }
 ```
 
-## Archivos Relacionados
+## archivos Relacionados
 
 - `skills/distributed-tracing-skill/distributed-tracing-core.ps1` - Core implementation
 - `skills/distributed-tracing-skill/report-generator.ps1` - Report generation
 - `config/distributed-tracing-config.json` - Configuration
-- `tools/initialize-distributed-tracing.ps1` - Initialization script
-- `tools/telemetry-dashboard.ps1` - Dashboard and management tool
-- `tools/session-autostart.cmd` - Autostart integration
+- `scripts/utilities/initialize-distributed-tracing.ps1` - Initialization script
+- `scripts/utilities/telemetry-dashboard.ps1` - Dashboard and management tool
+- `scripts/utilities/session-autostart.cmd` - Autostart integration
 
 ## Soporte y Contribuciones
 

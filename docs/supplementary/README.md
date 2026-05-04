@@ -1,4 +1,4 @@
-﻿# Supplementary
+# Supplementary
 
 Additional documentation and resources.
 
@@ -36,3 +36,4 @@ Code reviews are stored **per project**, not in the foundation:
 ```
 
 See project AGENTS.md for review workflow.
+

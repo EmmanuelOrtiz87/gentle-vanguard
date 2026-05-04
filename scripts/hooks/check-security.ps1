@@ -17,6 +17,19 @@ $CriticalPatterns = @(
 
 foreach ($file in $StagedFiles.Split("`n")) {
     if ([string]::IsNullOrWhiteSpace($file)) { continue }
+    # Skip known documentation/example files that intentionally contain example patterns
+    $ExcludedPaths = @(
+        'docs/reference/ARCHITECTURE.md',
+        'hooks/pre-commit.ps1',
+        'hooks/pre-commit-privacy.ps1',
+        'scripts/hooks/check-security.ps1',
+        'scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1',
+        'skills/docker-devops-skill/SKILL.md',
+        'skills/security-expert-skill/references/security-patterns.md',
+        'config/security-privacy.json',
+        'config/security-policy.json'
+    )
+    if ($ExcludedPaths -contains $file) { continue }
     $content = git show ":0:$file" 2>$null
     if (-not $content) { continue }
     foreach ($pattern in $CriticalPatterns) {

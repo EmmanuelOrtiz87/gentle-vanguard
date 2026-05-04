@@ -1,4 +1,4 @@
-﻿---
+---
 name: mcp-skill
 description: >
   Model Context Protocol: MCP servers, tools, resources, prompts.
@@ -41,7 +41,7 @@ import { z } from 'zod';
 
 const server = new McpServer({
   name: 'my-mcp-server',
-  version: '1.0.0',
+  versión: '1.0.0',
 });
 ```
 
@@ -139,7 +139,7 @@ async function main() {
   const transport = new StdioServerTransport();
   const server = new McpServer({
     name: 'filesystem-server',
-    version: '1.0.0',
+    versión: '1.0.0',
   });
 
   // Register tools, resources, prompts...
@@ -219,7 +219,7 @@ import { z } from 'zod';
 
 const server = new McpServer({
   name: 'todo-server',
-  version: '1.0.0',
+  versión: '1.0.0',
 });
 
 const todos = new Map<string, Todo>();
@@ -273,3 +273,5 @@ server.connect(transport);
 | Prompt | Predefined prompts |
 | Server | MCP server implementation |
 | Transport | Communication (stdio, HTTP) |
+
+

@@ -1,4 +1,4 @@
-﻿---
+---
 name: web-artifacts-builder-skill
 description: >
   Build interactive web artifacts: single-page HTML, React components, prototypes.
@@ -6,8 +6,8 @@ description: >
   "single page", "runnable code", "rich preview"
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
-  version: "1.0"
+  author: workspace-foundation
+  versión: "1.0"
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task
 ---
 
@@ -265,8 +265,8 @@ button:active{transform:scale(.95)}
 ```html
 <!-- Reorderable list component -->
 <ul id="list">
-  <li draggable="true">Item 1</li>
-  <li draggable="true">Item 2</li>
+  <li drable="true">Item 1</li>
+  <li drable="true">Item 2</li>
 </ul>
 <script>
 // Standard Drag and Drop API
@@ -283,3 +283,4 @@ Before output, verify:
 3.  JS funcional
 4.  CDNs accesibles
 5.  Responsive funciona
+

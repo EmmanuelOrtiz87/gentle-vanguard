@@ -1,4 +1,4 @@
-﻿---
+---
 name: react-19-skill
 description: >
   React 19 patterns with React Compiler: no useMemo/useCallback needed, useActionState, useFormStatus.
@@ -207,3 +207,4 @@ class ErrorBoundary extends Component {
 | useFormStatus | Submit button pending state |
 | useOptimistic | Optimistic UI updates |
 | React Compiler | No useMemo/useCallback |
+

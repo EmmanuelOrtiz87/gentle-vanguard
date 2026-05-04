@@ -1,4 +1,4 @@
-﻿---
+---
 name: ui-mobile
 description: Mobile UI patterns - React Native, iOS/Android, touch targets
 when-to-use: When building mobile UI components
@@ -952,3 +952,4 @@ Shadow: iOS shadowOpacity 0.08-0.15, Android elevation 2-8
  Haptic feedback on actions
  Pull-to-refresh where appropriate
 ```
+

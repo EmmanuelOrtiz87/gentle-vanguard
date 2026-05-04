@@ -100,14 +100,14 @@ git push -u origin hotfix/critical-description
 
 # Option 2: Manual
 git checkout -b release/v1.2.0
-# Make final changes (versioning, changelog, etc)
+# Make final changes (versióning, changelog, etc)
 git add .
 git commit -m "release v1.2.0"
 git push -u origin release/v1.2.0
 # Open PR to 'main'
 ```
 
-**When to use**: For preparing a new version of the project
+**When to use**: For preparing a new versión of the project
 
 ---
 
@@ -264,7 +264,7 @@ temp-branch
 ```
 "Add user authentication with JWT"
 "Fix login timeout issue"
-"Update dependencies to latest versions"
+"Update dependencies to latest versións"
 "Critical security patch for SQL injection"
 ```
 
@@ -283,7 +283,7 @@ temp-branch
 
 ### Pre-Commit Hook
 Runs automatically when you run `git commit`
-- Validates code with GGA
+- Validates code with native
 - Verifies review policies
 
 ### Pre-Push Hook

@@ -1,25 +1,25 @@
 ---
 name: release-management-skill
 description: >
-  Release planning, semantic versioning, changelog hygiene, and cutover readiness.
-  Trigger: "release", "changelog", "version bump", "ship", "cut release",
+  Release planning, semantic versióning, changelog hygiene, and cutover readiness.
+  Trigger: "release", "changelog", "versión bump", "ship", "cut release",
   "release notes", "hotfix", "deployment readiness", "semver".
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
-  version: "1.0"
+  author: workspace-foundation
+  versión: "1.0"
 ---
 
 ## When to Use
 
 - Preparing a release or hotfix
 - Writing release notes or updating CHANGELOG.md
-- Deciding version bump level
+- Deciding versión bump level
 - Reviewing release readiness and rollback plan
 
-## Versioning Rules
+## versióning Rules
 
-Use semantic versioning:
+Use semantic versióning:
 - MAJOR: breaking changes
 - MINOR: backward-compatible features
 - PATCH: backward-compatible fixes
@@ -28,7 +28,7 @@ Use semantic versioning:
 
 1. All intended changes are merged and verified
 2. CHANGELOG.md updated with user-visible changes
-3. Version bump matches actual impact
+3. versión bump matches actual impact
 4. Migration notes included for breaking changes
 5. Rollback plan defined
 6. Post-release verification steps documented
@@ -72,3 +72,5 @@ Keep hotfix scope minimal. No opportunistic refactors.
 - Mention risk areas and migrations explicitly
 - Link to specs, ADRs, or issue IDs when helpful
 - Keep notes short enough to scan quickly
+
+

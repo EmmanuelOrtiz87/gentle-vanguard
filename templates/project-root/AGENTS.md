@@ -39,7 +39,7 @@
 
 ## Review
 
-- Use GGA hook for pre-commit review when available.
+- Use native review hooks for pre-commit when available.
 - Address AI feedback before committing.
 - Follow the Definition of Done.
 

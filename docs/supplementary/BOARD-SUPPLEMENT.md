@@ -1,4 +1,4 @@
-﻿# Workspace Foundation
+# Workspace Foundation
 ## Suplemento para Presentacin al Consejo
 
 **Versin:** 1.0  
@@ -24,7 +24,7 @@
 Mtrica                          | Antes  | Despus | Mejora
 --------------------------------|--------|---------|--------
 Tiempo setup nuevo proyecto       | 4 hrs  | 15 min  | 93%
-Tiempo en configuracin/semana   | 2 hrs  | 5 min   | 92%
+Tiempo en configuración/semana   | 2 hrs  | 5 min   | 92%
 Bugs en produccin/mes           | 15     | 10      | 33%
 Tiempo code review/PR             | 45 min | 20 min  | 56%
 Lneas de cdigo/semana          | 200    | 300     | 50%
@@ -57,7 +57,7 @@ Indicadores de monitoreo:
 
 Mitigacin:
 1. Definir % mximo de cdigo generado (recomendado: 40%)
-2. Requerir revisin humana para cdigo > 50 lneas
+2. Requerir revisión humana para cdigo > 50 lneas
 3. Code review obligatorio para todo PR
 ```
 
@@ -126,7 +126,7 @@ Target: >80% active para fin de mes 2
 
 ## D. Plan de Capacitacin
 
-### D.1 Estructura de Training
+### D.1 estructura de Training
 
 ```
 
@@ -175,7 +175,7 @@ Champion por equipo:
 
 Equipo Core:
  1-2 developers principales
- Desarrollo de features
+ desarrollo de features
  Resolucin de issues
  Training del equipo
 ```
@@ -223,7 +223,7 @@ Workspace Foundation vs Alternativas
 | Developers | Tool til, fcil, mejora productividad | Slack, Town halls | Ongoing |
 | Tech Leads | Estndares, mtricas, governance | Email, 1:1s | Weekly |
 | Product Owners | Visibility, ROI, timelines | Meetings | Bi-weekly |
-| CTO | Progress, risks, decisions | Executive summary | Monthly |
+| CTO | Progress, risks, decisións | Executive summary | Monthly |
 | Executives | ROI, adoption, strategic value | Board updates | Quarterly |
 
 ### F.2 messaging para Developers
@@ -364,7 +364,7 @@ ROI = ($1,066,250 - $116,000) / $116,000  100 = 819%
 
 ---
 
-## I. Decision Framework
+## I. decisión Framework
 
 ### I.1 Go/No-Go Criteria
 
@@ -421,6 +421,8 @@ SI ROLLOUT FALLA:
 
 ---
 
-**Documento preparado por:** Equipo de Desarrollo  
+**Documento preparado por:** Equipo de desarrollo  
 **ltima actualizacin:** Abril 2026  
 **Versin:** 1.0
+
+

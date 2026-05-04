@@ -1,4 +1,4 @@
-﻿---
+---
 name: commit-hygiene
 description: >
   Enforce conventional commits and clean commit history.
@@ -62,3 +62,4 @@ Use `invoke-ai-review.ps1` with commit-msg hook:
 ```powershell
 .\invoke-ai-review.ps1 install --commit-msg
 ```
+

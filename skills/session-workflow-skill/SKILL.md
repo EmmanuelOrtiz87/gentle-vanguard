@@ -1,9 +1,9 @@
-﻿---
+---
 name: session-workflow
 description: >
   Session workflow executor: handles the mechanics of session management.
   Coordinate with project-orchestrator for context detection.
-  Trigger: "iniciar sesion", "guardar sesion", "continuar", "estado", "pr", "push", "review", "auditar".
+  Trigger: "iniciar sesión", "guardar sesión", "continuar", "estado", "pr", "push", "review", "auditar".
 ---
 
 # SESSION WORKFLOW
@@ -14,12 +14,12 @@ Execute the mechanical aspects of session management while coordinating with the
 
 ## Commands
 
-### "Iniciar sesion" / "Start session"
+### "Iniciar sesión" / "Start session"
 
-**Note: This skill should be AUTO-LOADED when user says "iniciar sesion" via pre-process-input.ps1**
+**Note: This skill should be AUTO-LOADED when user says "iniciar sesión" via pre-process-input.ps1**
 
 ```markdown
-1. tools/session-autostart.cmd  # Ejecutar autostart (notificaciones, optimizacin, validaciones)
+1. scripts/utilities/session-autostart.cmd  # Ejecutar autostart (notificaciones, optimizacin, validaciónes)
 2. mem_context                  # Check engram memory
 3. git status                   # Current branch
 4. todowrite                    # Create session plan
@@ -61,7 +61,7 @@ Execute the mechanical aspects of session management while coordinating with the
 1. Run code review (7 dimensions)
 2. Classify findings by severity
 3. Present findings summary
-4. Ask: decision options
+4. Ask: decisión options
 5. Execute user choice
 ```
 
@@ -144,12 +144,12 @@ Brief description of session work.
 2. If findings:
    - Classify by severity
    - Present to user
-   - Ask decision
+   - Ask decisión
 3. If no critical/high:
    - Proceed with PR option
 ```
 
-### Findings Decision
+### Findings decisión
 
 ```markdown
 ## Findings Summary
@@ -253,3 +253,5 @@ todowrite([
 ---
 
 **Coordinate with project-orchestrator for technical guidance.**
+
+

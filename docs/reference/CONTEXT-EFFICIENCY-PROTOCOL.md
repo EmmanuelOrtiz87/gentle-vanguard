@@ -1,6 +1,6 @@
 # Context Efficiency Protocol
 
-**Version:** 1.0 (Apr 20, 2026)  
+**versión:** 1.0 (Apr 20, 2026)  
 **Effective:** Immediate  
 
 Defines how to maintain and improve context efficiency across all workspace interactions to achieve > 70% efficiency rating.
@@ -29,12 +29,12 @@ During compaction, these content types are preserved:
 - FIXME
 - TODO
 - BUG
-- DECISION
+- decisión
 - RESULT
 
 ### 2.3 Configuration
-Pre-compact hook located at: `tools/pre-compact-hook.ps1`
-Configuration: `tools/context-efficiency-config.json`
+Pre-compact hook located at: `scripts/utilities/pre-compact-hook.ps1`
+Configuration: `scripts/utilities/context-efficiency-config.json`
 
 ## 3. Engram Optimization
 
@@ -48,7 +48,7 @@ Additional to standard Engram protocol, save context efficiency optimizations:
 Always reference existing Engram entries instead of repeating full content:
 - Use `engram mem_search` before explaining concepts
 - Reference observation IDs in communications
-- Link to previous decisions rather than re-explaining
+- Link to previous decisións rather than re-explaining
 
 ### 3.3 Redundancy Reduction
 Reduce redundancy by:
@@ -122,13 +122,13 @@ At session end:
 ## 7. Tools and Scripts
 
 ### 7.1 Primary Scripts
-- `tools/optimize-engram-usage.ps1`: Main optimization script
-- `tools/pre-compact-hook.ps1`: Automatic compaction hook
-- `tools/session-autostart.cmd`: Enhanced startup with optimization
+- `scripts/utilities/optimize-engram-usage.ps1`: Main optimization script
+- `scripts/utilities/pre-compact-hook.ps1`: Automatic compaction hook
+- `scripts/utilities/session-autostart.cmd`: Enhanced startup with optimization
 
 ### 7.2 Configuration Files
-- `tools/context-efficiency-config.json`: Efficiency configuration
-- `tools/session-autostart.config.json`: Session configuration with efficiency settings
+- `scripts/utilities/context-efficiency-config.json`: Efficiency configuration
+- `scripts/utilities/session-autostart.config.json`: Session configuration with efficiency settings
 
 ## 8. Monitoring and Alerts
 
@@ -143,7 +143,7 @@ System alerts when:
 - Efficiency drops below 60%: Warning level
 - Efficiency drops below 50%: Critical level
 - Auto-compaction triggered: Informational
-- Optimization opportunities detected: Suggestions
+- Optimization opportunities detected: Suggestións
 
 ## 9. Best Practices
 

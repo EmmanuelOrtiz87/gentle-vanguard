@@ -12,10 +12,10 @@ Use this workspace foundation as the standard starting point for new repositorie
 6. Run the workspace bootstrap once per machine.
 7. Run the local memory launcher if you want isolated Engram state.
 8. Create or clone the project using the project scripts.
-9. Record architecture decisions and follow-up notes in `docs/project-context.md`.
+9. Record architecture decisións and follow-up notes in `docs/project-context.md`.
 10. If the project uses AI assistance, document whether it relies on a local model, a cloud model, or no model at all.
 11. Record the selected AI provider, mode, model name, and endpoint in `docs/project-context.md`.
-12. Review `docs/defaults-vs-decisions.md` before making a choice that could affect future projects.
+12. Review `docs/defaults-vs-decisións.md` before making a choice that could affect future projects.
 
 ## Recommended Order
 
@@ -46,7 +46,7 @@ If the user has not decided yet, keep the defaults and let the AI helper or proj
 ## Generated Project Context
 
 Every scaffolded project gets a `docs/project-context.md` file with the selected defaults.
-That file is intentionally safe to edit later and should be the first place to record design follow-ups, including AI provider and model decisions.
+That file is intentionally safe to edit later and should be the first place to record design follow-ups, including AI provider and model decisións.
 
 ## What Every Future Project Should Document
 
@@ -54,14 +54,14 @@ That file is intentionally safe to edit later and should be the first place to r
 2. How to load secrets without publishing them.
 3. How to start the app locally.
 4. How to clean runtime leftovers.
-5. How to register architecture decisions and session reviews.
+5. How to register architecture decisións and session reviews.
 6. Which documentation and architecture skills the project follows.
 7. Which AI model mode, provider, and endpoint the project uses, if any.
 
 ## Default Runtime Rules
 
 - Keep local memory outside the repository checkout.
-- Keep encrypted secrets outside version control.
+- Keep encrypted secrets outside versión control.
 - Prefer one launcher per concern:
   - workspace bootstrap
   - secrets bootstrap
@@ -77,15 +77,16 @@ That file is intentionally safe to edit later and should be the first place to r
 5. `docs/setup/secrets.md` when credentials exist
 6. `docs/ai-models.md` when AI-assisted workflows exist
 7. `docs/project-context.md`
-8. `docs/defaults-vs-decisions.md`
+8. `docs/defaults-vs-decisións.md`
 9. `scripts/start-*.ps1`
 10. `scripts/secrets-*.ps1`
 11. `scripts/cleanup-runtime.ps1`
 
 ## Portability Checklist
 
-- Tool versions are documented.
+- Tool versións are documented.
 - External tools stay outside the project checkout.
 - Secrets are encrypted locally or injected at runtime.
 - Runtime cleanup is automatic or one command away.
 - New developers can follow the README without tribal knowledge.
+

@@ -45,7 +45,7 @@ wf review --track
 - **Architecture** - Structure, coupling, design
 - **Testing** - Coverage, patterns, maintenance
 - **Documentation** - Completeness, accuracy, clarity
-- **API Design** - Contracts, versioning, errors
+- **API Design** - Contracts, versióning, errors
 - **Git Workflow** - Commits, branches, history
 
 ## Severity Levels
@@ -69,3 +69,4 @@ wf review --export-csv
 # Generate report
 wf review --report
 ```
+

@@ -21,7 +21,7 @@ function Repair-Tools {
 
     Write-Host "`n[2/3] Reinstalling Engram..." -ForegroundColor Cyan
     try {
-        go install github.com/Gentleman-Programming/engram@latest
+        go install github.com/workspace-foundation/engram@latest
         Write-Host "[OK] Engram reinstalled." -ForegroundColor Green
     } catch {
         Write-Host "[FAIL] Engram installation failed. Check Go environment." -ForegroundColor Red

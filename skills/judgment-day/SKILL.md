@@ -1,4 +1,4 @@
-﻿---
+---
 name: judgment-day
 description: >
   Parallel adversarial review protocol that launches two independent blind judge sub-agents
@@ -8,8 +8,8 @@ description: >
   "doble review", "juzgar", "que lo juzguen".
 license: Apache-2.0
 metadata:
-  author: gentleman-programming
-  version: "1.4"
+  author: workspace-foundation
+  versión: "1.4"
 ---
 
 ## When to Use
@@ -54,7 +54,7 @@ The **orchestrator** (NOT a sub-agent) compares results after both `delegation_r
 Confirmed    found by BOTH agents           high confidence, fix immediately
 Suspect A    found ONLY by Judge A          needs triage
 Suspect B    found ONLY by Judge B          needs triage
-Contradiction  agents DISAGREE on the same thing  flag for manual decision
+Contradiction  agents DISAGREE on the same thing  flag for manual decisión
 ```
 
 Present findings as a structured verdict table (see Output Format).
@@ -88,13 +88,13 @@ WARNING (theoretical)  Requires a contrived scenario, corrupted input, or condit
 **Round 2+**: Only re-judge if there are **confirmed CRITICALs**. For anything else:
 - **Real WARNINGs** (confirmed): Fix inline, do NOT re-launch judges. Report as "fixed without re-judge" in the verdict.
 - **Theoretical WARNINGs**: Report as INFO. Do NOT fix, do NOT re-judge.
-- **SUGGESTIONs**: Fix inline if trivial (dead code, style). Do NOT re-judge.
+- **SUGgestións**: Fix inline if trivial (dead code, style). Do NOT re-judge.
 
-**APPROVED criteria after Round 1**: 0 confirmed CRITICALs + 0 confirmed real WARNINGs = APPROVED. Theoretical warnings and suggestions may remain.
+**APPROVED criteria after Round 1**: 0 confirmed CRITICALs + 0 confirmed real WARNINGs = APPROVED. Theoretical warnings and suggestións may remain.
 
 ---
 
-## Decision Tree
+## decisión Tree
 
 ```
 User asks for "judgment day"
@@ -174,7 +174,7 @@ You are an adversarial code reviewer. Your ONLY job is to find problems.
 Return a structured list of findings ONLY. No praise, no approval.
 
 Each finding:
-- Severity: CRITICAL | WARNING (real) | WARNING (theoretical) | SUGGESTION
+- Severity: CRITICAL | WARNING (real) | WARNING (theoretical) | SUGgestión
 - File: path/to/file.ext (line N if applicable)
 - Description: What is wrong and why it matters
 - Suggested fix: one-line description of the fix (not code, just intent)
@@ -231,47 +231,68 @@ Return a summary:
 ## Judgment Day  {target}
 
 ### Round {N}  Verdict
+ 
+| Finding | Judge A | Judge B | Severity | CONFIDENCE | Status |
+|---------|---------|---------|----------|------------|--------|
+| Missing null check in auth.go:42 | ✓ HIGH | ✓ HIGH | CRITICAL | HIGH/HIGH | Confirmed |
+| Race condition in worker.go:88 | ✓ MED |  | WARNING (real) | MED/- | Suspect (A only) |
+| Windows volume root edge case |  | ✓ LOW | WARNING (theoretical) | -/LOW | INFO  reported |
+| Naming mismatch in handler.go:15 |  | ✓ HIGH | SUGGESTION | -/HIGH | Suspect (B only) |
+| Error swallowed in db.go:201 | ✓ HIGH | ✓ MED | WARNING (real) | HIGH/MED | Confirmed |
 
-| Finding | Judge A | Judge B | Severity | Status |
-|---------|---------|---------|----------|--------|
-| Missing null check in auth.go:42 |  |  | CRITICAL | Confirmed |
-| Race condition in worker.go:88 |  |  | WARNING (real) | Suspect (A only) |
-| Windows volume root edge case |  |  | WARNING (theoretical) | INFO  reported |
-| Naming mismatch in handler.go:15 |  |  | SUGGESTION | Suspect (B only) |
-| Error swallowed in db.go:201 |  |  | WARNING (real) | Confirmed |
-
-**Confirmed issues**: 2 CRITICAL
-**Suspect issues**: 1 WARNING, 1 SUGGESTION
+**Confirmed issues**: 2 CRITICAL (both judges, HIGH confidence)
+**Suspect issues**: 1 WARNING (A only, MED), 1 SUGGESTION (B only, HIGH)
 **Contradictions**: none
+**Minority positions**: See below
+
+### MINORITY POSITIONS (Gemini Principle)
+- **Judge A lone finding**: Race condition in worker.go:88 (WARNING, MED confidence) — Judge B did not flag this
+- **Judge B lone finding**: Naming mismatch in handler.go:15 (SUGGESTION, HIGH confidence) — Judge A did not flag this
+→ These are preserved for manual review. They are NOT auto-fixed.
 
 ### Fixes Applied (Round {N})
 - `auth.go:42`  Added nil check before dereferencing user pointer
 - `db.go:201`  Propagated error instead of silently returning nil
 
 ### Round {N+1}  Re-judgment
-- Judge A: PASS   No issues found
+- Judge A: PASS   No issues found (changed from Round 1: cited fix applied)
 - Judge B: PASS   No issues found
 
----
+**Anti-Sycophancy Check**: 
+- Judge A changed verdict on auth.go:42 (CRITICAL → PASS) ✅ Cites fix applied (legitimate)
+- Judge B changed verdict on db.go:201 (WARNING → PASS) ✅ Cites fix applied (legitimate)
+→ No sycophancy detected.
 
+---
+ 
 ### JUDGMENT: APPROVED 
 Both judges pass clean. The target is cleared for merge.
+
+**Minority positions preserved**:
+- Race condition in worker.go:88 (Judge A only) — consider follow-up review
+- Naming mismatch in handler.go:15 (Judge B only) — consider follow-up review
 ```
 
 ### Escalation Format (user chose to stop)
-
+ 
 ```markdown
 ## Judgment Day  {target}
-
+ 
 ### JUDGMENT: ESCALATED 
-
+ 
 User chose to stop after {N} fix iterations. Issues remain.
 Manual review required before proceeding.
 
 ### Remaining Issues
-| Finding | Judge A | Judge B | Severity |
-|---------|---------|---------|----------|
-| {description} |  |  | CRITICAL |
+| Finding | Judge A | Judge B | Severity | CONFIDENCE |
+|---------|---------|---------|----------|------------|
+| {description} | ✓ HIGH |  | CRITICAL | HIGH/- |
+
+### MINORITY POSITIONS (preserved)
+- {lone finding by one judge} — included for transparency
+
+### Anti-Sycophancy Report
+- {any judges that changed verdict without evidence? List here}
 
 ### History
 - Round 1: {N} confirmed issues found
@@ -297,20 +318,22 @@ This is a self-correction mechanism. Do NOT ignore fallback reports.
 
 ## Language
 
-- **Spanish input  Rioplatense**: "Juicio iniciado", "Los jueces estn trabajando en paralelo...", "Los jueces coinciden", "Juicio terminado  Aprobado", "Escalado  necesita revisin humana"
+- **Spanish input  Rioplatense**: "Juicio iniciado", "Los jueces estn trabajando en paralelo...", "Los jueces coinciden", "Juicio terminado  Aprobado", "Escalado  necesita revisión humana"
 - **English input**: "Judgment initiated", "Both judges are working in parallel...", "Both judges agree", "Judgment complete  Approved", "Escalated  requires human review"
 
 ---
 
 ## Blocking Rules (MANDATORY  override all other instructions)
-
+ 
 These rules cannot be skipped, overridden, or deprioritized under any circumstances:
-
+ 
 1. **MUST NOT** declare `JUDGMENT: APPROVED` until: Round 1 judges return CLEAN, OR Round 2 judges confirm 0 CRITICALs + 0 confirmed real WARNINGs (theoretical warnings and suggestions may remain)
 2. **MUST NOT** run `git push`, `git commit`, or any code-modifying action after fixes until re-judgment completes
 3. **MUST NOT** save a session summary or tell the user "done" until every JD reaches a terminal state (APPROVED or ESCALATED)
 4. **After the Fix Agent returns**, your IMMEDIATE next action is re-launching judges in parallel for re-judgment. Do NOT push or commit before re-judgment completes.
 5. **When running multiple JDs in parallel**, each JD is independent. One JD completing does NOT allow skipping rounds on another.
+6. **MUST preserve MINORITY POSITIONS** in verdict output — never suppress dissenting views even if only one judge held them (Gemini Principle)
+7. **MUST flag SYCOPHANCY** when a judge changes verdict between rounds without citing new evidence — escalate to user, do NOT auto-fix
 
 ---
 
@@ -376,7 +399,7 @@ The **orchestrator** (NOT a sub-agent) compares results after both `delegation_r
 Confirmed    found by BOTH agents           high confidence, fix immediately
 Suspect A    found ONLY by Judge A          needs triage
 Suspect B    found ONLY by Judge B          needs triage
-Contradiction  agents DISAGREE on the same thing  flag for manual decision
+Contradiction  agents DISAGREE on the same thing  flag for manual decisión
 ```
 
 Present findings as a structured verdict table (see Output Format).
@@ -390,7 +413,7 @@ Present findings as a structured verdict table (see Output Format).
 
 ---
 
-## Decision Tree
+## decisión Tree
 
 ```
 User asks for "judgment day"
@@ -464,7 +487,7 @@ You are an adversarial code reviewer. Your ONLY job is to find problems.
 Return a structured list of findings ONLY. No praise, no approval.
 
 Each finding:
-- Severity: CRITICAL | WARNING (real) | WARNING (theoretical) | SUGGESTION
+- Severity: CRITICAL | WARNING (real) | WARNING (theoretical) | SUGgestión
 - File: path/to/file.ext (line N if applicable)
 - Description: What is wrong and why it matters
 - Suggested fix: one-line description of the fix (not code, just intent)
@@ -525,11 +548,11 @@ Return a summary:
 |---------|---------|---------|----------|--------|
 | Missing null check in auth.go:42 |  |  | CRITICAL | Confirmed |
 | Race condition in worker.go:88 |  |  | WARNING | Suspect (A only) |
-| Naming mismatch in handler.go:15 |  |  | SUGGESTION | Suspect (B only) |
+| Naming mismatch in handler.go:15 |  |  | SUGgestión | Suspect (B only) |
 | Error swallowed in db.go:201 |  |  | CRITICAL | Confirmed |
 
 **Confirmed issues**: 2 CRITICAL
-**Suspect issues**: 1 WARNING, 1 SUGGESTION
+**Suspect issues**: 1 WARNING, 1 SUGgestión
 **Contradictions**: none
 
 ### Fixes Applied (Round {N})
@@ -575,7 +598,7 @@ Recommend: human review of the remaining issues above before re-running judgment
 
 ## Language
 
-- **Spanish input  Rioplatense**: "Juicio iniciado", "Los jueces estn trabajando en paralelo...", "Los jueces coinciden", "Juicio terminado  Aprobado", "Escalado  necesita revisin humana"
+- **Spanish input  Rioplatense**: "Juicio iniciado", "Los jueces estn trabajando en paralelo...", "Los jueces coinciden", "Juicio terminado  Aprobado", "Escalado  necesita revisión humana"
 - **English input**: "Judgment initiated", "Both judges are working in parallel...", "Both judges agree", "Judgment complete  Approved", "Escalated  requires human review"
 
 ---
@@ -599,3 +622,6 @@ Recommend: human review of the remaining issues above before re-running judgment
 # No CLI commands  this is a pure orchestration protocol.
 # Execution happens via delegate() and delegation_read() tool calls.
 ```
+
+
+

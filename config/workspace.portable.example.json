@@ -29,9 +29,9 @@
       "checkCommand": "engram",
       "requires": ["go"],
       "install": {
-        "windows": "go install github.com/Gentleman-Programming/engram/cmd/engram@latest",
-        "linux": "go install github.com/Gentleman-Programming/engram/cmd/engram@latest",
-        "macos": "go install github.com/Gentleman-Programming/engram/cmd/engram@latest"
+        "windows": "go install github.com/workspace-foundation/engram/cmd/engram@latest",
+        "linux": "go install github.com/workspace-foundation/engram/cmd/engram@latest",
+        "macos": "go install github.com/workspace-foundation/engram/cmd/engram@latest"
       }
     },
   ]

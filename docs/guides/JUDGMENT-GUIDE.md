@@ -21,7 +21,7 @@ The Judgment system provides automated auditing, quality validation, and self-he
 Judgment Day now runs with a bounded policy to avoid loops:
 
 1. Default max passes: **3**
-2. After each non-approved pass, it shows findings and suggestions
+2. After each non-approved pass, it shows findings and suggestións
 3. It asks the user whether to run another pass or stop
 
 Connection/credential issues for unconfigured providers (Difi/Bedrock/other external providers) are treated as **warnings** and are not blocking by default.

@@ -131,7 +131,7 @@ if ($All -or $Tools) {
         Write-Check "engram" "OK" "Persistent memory"
     } else {
         Write-Check "engram" "MISSING" "Persistent memory"
-        Write-Host "       Install: go install github.com/Gentleman-Programming/engram/cmd/engram@latest" -ForegroundColor Gray
+        Write-Host "       Install: go install github.com/workspace-foundation/engram/cmd/engram@latest" -ForegroundColor Gray
     }
 
     Write-Host ""

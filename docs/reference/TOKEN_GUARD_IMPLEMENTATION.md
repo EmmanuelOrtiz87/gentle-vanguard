@@ -1,4 +1,4 @@
-﻿# Token Guard - Proteccin Automtica contra Overflow de Tokens
+# Token Guard - Proteccin Automtica contra Overflow de Tokens
 
 ## Resumen Ejecutivo
 
@@ -7,10 +7,10 @@ Se ha implementado un sistema completo de **Token Overflow Protection** que se e
 ## Caractersticas Implementadas
 
 ### 1.  Token Guard Automtico
-- **Script**: `tools/token-guard.ps1`
-- **Configuracin**: `tools/token-guard-config.json`
+- **Script**: `scripts/utilities/token-guard.ps1`
+- **configuración**: `scripts/utilities/token-guard-config.json`
 - **Estado**: `.session/token-guard-state.json`
-- Se inicializa automticamente al ejecutar `tools/session-autostart.cmd`
+- Se inicializa automticamente al ejecutar `scripts/utilities/session-autostart.cmd`
 - Monitorea tokens en tiempo real
 
 ### 2.  Pausar Dispatch por Presupuesto
@@ -39,10 +39,10 @@ Se ha implementado un sistema completo de **Token Overflow Protection** que se e
 
 ```
 Token Guard System
- tools/token-guard.ps1 (Motor principal)
- tools/token-guard-config.json (Configuracin)
- tools/session-autostart.cmd (Integracin)
- tools/session-autostart.config.json (Config de sesin)
+ scripts/utilities/token-guard.ps1 (Motor principal)
+ scripts/utilities/token-guard-config.json (configuración)
+ scripts/utilities/session-autostart.cmd (Integracin)
+ scripts/utilities/session-autostart.config.json (Config de sesin)
  .session/token-guard-state.json (Estado en tiempo real)
 ```
 
@@ -58,7 +58,7 @@ Validacin cross-workspace
 Inicializacin de sesin
     
 [NUEVO] Inicializacin de Token Guard
-     Cargar configuracin
+     Cargar configuración
      Crear archivo de estado
      Inicializar monitoreo
      Mostrar parmetros
@@ -66,7 +66,7 @@ Inicializacin de sesin
 Inicializacin de orquestador
 ```
 
-## Configuracin
+## configuración
 
 ### Presupuesto de Tokens
 
@@ -142,16 +142,16 @@ Generate-TokenReport -StateFile ".\.session\token-guard-state.json" `
 
 ### Monitor Mode (Predeterminado)
 ```powershell
-.\tools\token-guard.ps1 -ConfigPath "tools/token-guard-config.json" `
+.\tools\token-guard.ps1 -ConfigPath "scripts/utilities/token-guard-config.json" `
   -SessionId "session-2026-04-23-15" -Mode "monitor"
 ```
 - Inicializa Token Guard
 - Crea archivo de estado
-- Muestra parmetros de configuracin
+- Muestra parmetros de configuración
 
 ### Enforce Mode
 ```powershell
-.\tools\token-guard.ps1 -ConfigPath "tools/token-guard-config.json" `
+.\tools\token-guard.ps1 -ConfigPath "scripts/utilities/token-guard-config.json" `
   -SessionId "session-2026-04-23-15" -Mode "enforce"
 ```
 - Valida tokens actuales
@@ -160,7 +160,7 @@ Generate-TokenReport -StateFile ".\.session\token-guard-state.json" `
 
 ### Report Mode
 ```powershell
-.\tools\token-guard.ps1 -ConfigPath "tools/token-guard-config.json" `
+.\tools\token-guard.ps1 -ConfigPath "scripts/utilities/token-guard-config.json" `
   -SessionId "session-2026-04-23-15" -Mode "report"
 ```
 - Genera reporte detallado
@@ -187,7 +187,7 @@ El archivo `.session/token-guard-state.json` contiene:
 
 ## Integracin con Session Autostart
 
-El Token Guard se integra automticamente en `tools/session-autostart.cmd`:
+El Token Guard se integra automticamente en `scripts/utilities/session-autostart.cmd`:
 
 ```batch
 REM Extraer SessionId del archivo de sesin
@@ -197,21 +197,21 @@ REM Inicializar Token Guard para proteccin de tokens
 echo [INFO] Initializing Token Guard...
 if exist "%TOKEN_GUARD_SCRIPT%" (
   powershell -NoProfile -ExecutionPolicy Bypass -File "%TOKEN_GUARD_SCRIPT%" `
-    -ConfigPath "tools/token-guard-config.json" `
+    -ConfigPath "scripts/utilities/token-guard-config.json" `
     -SessionId "%SESSION_ID%" -Mode "monitor"
 )
 ```
 
-## Configuracin de Sesin
+## configuración de Sesin
 
-El `tools/session-autostart.config.json` incluye la seccin de Token Guard:
+El `scripts/utilities/session-autostart.config.json` incluye la seccin de Token Guard:
 
 ```json
 {
   "tokenGuard": {
     "enabled": true,
     "autoStart": true,
-    "configPath": "tools/token-guard-config.json",
+    "configPath": "scripts/utilities/token-guard-config.json",
     "tokenBudget": 128000,
     "alertThreshold": 0.80,
     "pauseThreshold": 0.95,
@@ -246,7 +246,7 @@ El `tools/session-autostart.config.json` incluye la seccin de Token Guard:
 ## Flujo de Ejecucin
 
 ### Inicio de Sesin
-1.  Ejecutar `tools/session-autostart.cmd`
+1.  Ejecutar `scripts/utilities/session-autostart.cmd`
 2.  Optimizar Engram
 3.  Validar cross-workspace
 4.  Inicializar sesin
@@ -288,11 +288,11 @@ El `tools/session-autostart.config.json` incluye la seccin de Token Guard:
 
 ### Token Guard no se inicializa
 ```powershell
-# Verificar que el archivo de configuracin existe
-Test-Path "tools/token-guard-config.json"
+# Verificar que el archivo de configuración existe
+Test-Path "scripts/utilities/token-guard-config.json"
 
 # Verificar que el script existe
-Test-Path "tools/token-guard.ps1"
+Test-Path "scripts/utilities/token-guard.ps1"
 
 # Ejecutar manualmente
 .\tools\token-guard.ps1 -Mode "monitor"
@@ -309,8 +309,8 @@ New-Item -ItemType Directory -Path ".\.session" -Force
 
 ### Alertas no se disparan
 ```powershell
-# Verificar configuracin
-Get-Content "tools/token-guard-config.json" | ConvertFrom-Json
+# Verificar configuración
+Get-Content "scripts/utilities/token-guard-config.json" | ConvertFrom-Json
 
 # Verificar estado
 Get-Content ".\.session\token-guard-state.json" | ConvertFrom-Json
@@ -320,10 +320,10 @@ Get-Content ".\.session\token-guard-state.json" | ConvertFrom-Json
 
 | Archivo | Descripcin |
 |---------|-------------|
-| `tools/token-guard.ps1` | Motor principal del Token Guard |
-| `tools/token-guard-config.json` | Configuracin de presupuestos y umbrales |
-| `tools/session-autostart.cmd` | Integracin en autostart (modificado) |
-| `tools/session-autostart.config.json` | Config de sesin (modificado) |
+| `scripts/utilities/token-guard.ps1` | Motor principal del Token Guard |
+| `scripts/utilities/token-guard-config.json` | configuración de presupuestos y umbrales |
+| `scripts/utilities/session-autostart.cmd` | Integracin en autostart (modificado) |
+| `scripts/utilities/session-autostart.config.json` | Config de sesin (modificado) |
 | `.session/token-guard-state.json` | Estado en tiempo real (generado) |
 | `docs/TOKEN_GUARD_IMPLEMENTATION.md` | Esta documentacin |
 
