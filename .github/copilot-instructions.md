@@ -1,84 +1,51 @@
-﻿# Master Instructions - Local-First Policy
+﻿# Agent Instructions — Local-First
 
-These are the global instructions for all AI agents.
+## Principles
+- **LOCAL-FIRST**: project knowledge → engram memory → grep/read → external (only if authorized)
+- **NO** web search / codesearch / webfetch by default; require explicit user/orchestrator approval
+- Run `tools/pre-process-input.ps1` BEFORE responding — all trigger routing is automated
 
-## Core Principle: LOCAL-FIRST
-Prioritize local project knowledge over external sources.
+## Workflow
+1. `tools/pre-process-input.ps1` → `TRIGGER_MATCH_FOUND` → load skill | `PLAN_MODE_REQUIRED` → activate BA | `NO_TRIGGER_MATCH` → continue
+2. Check `skills/` for patterns; query `engram context gentleman-foundation` for session context
+3. Full mappings: `config/auto-delegation.json#keywordMappings`
 
-## Tool Restrictions
-- **NO web search** by default
-- **NO external API calls** unless authorized by orchestrator
-- **NO deep reasoning** for simple tasks
-
-## Allowed External Tools
-Only when explicitly authorized:
-- `websearch`: Requires user or orchestrator approval
-- `codesearch`: Use Context7 MCP only if local skills insufficient
-- `webfetch`: Only for specific URLs provided by user
-
-## Preferred Workflow
-1. Check `skills/` directory for relevant patterns
-2. Query engram memory: `mem_search` or `mem_context`
-3. Use `grep` and `read` for code exploration
-4. Only if insufficient: request orchestrator to enable external tools
-
-## Embedded Skill Triggers (Manual Detection)
-When you detect these keywords, manually load the corresponding skill using available tools:
-
-### 8 Governance Layers (from auto-delegation.json)
-| Trigger Keywords | Layer | Skill to Load |
-|---------------|-------|---------------|
-| governance, compliance, metrics, monitoring, observability, incident, security audit, review, audit | **GOV** | `project-orchestrator-skill` |
-| architecture, design, sdd, api design, database, schema, technical decision, system design, microservice, integration | **SAD** | `sdd-design` |
-| implement, code, develop, feature, refactor, bug fix, component, endpoint, frontend, backend, security, performance | **DEV** | `sdd-apply` |
-| test, testing, qa, validation, e2e, unit test, integration test, playwright, pytest, quality, judgment day | **QA** | `sdd-verify` |
-| deploy, ci/cd, docker, kubernetes, infrastructure, terraform, helm, release, devops, pipeline | **OPS** | `docker-devops-skill` |
-| documentation, docs, readme, guide, runbook, specification, bdd specs, sdd specs | **DOC** | `documentation-governance` |
-| script, powershell, parser error, syntax error, validate script, governance script, hook, pre-push, pre-commit, fix script, auto fix, autofix, script error, correct script | **SCRIPT-GOV** | `sdd-apply` |
-| informe, report, reporte, metricas, metrics, analytics, analisis, dashboard, resumen ejecutivo, gerencia, tokens, costos, consumo, sesiones, telemetry, telemetria, estadisticas, stats, resumen de sesion | **REPORT** | `management-reporting-skill` |
-
-### Core Skills
-| Trigger Keywords | Skill to Load |
-|---------------|---------------|
-| Angular, Angular component, Angular service, @defer, standalone component | `angular-spa-skill` |
-| React, React 19, useActionState, React Compiler | `react-19-skill` |
-| Next.js, App Router, Server Component, next.config | `nextjs-15-skill` |
-| Go API, Go backend, REST endpoint, Go HTTP handler | `golang-api-skill` |
-| TypeScript, interface, type, generic, utility types | `typescript-skill` |
-| Zod, schema validation, input validation, type safety | `zod-4-skill` |
-| Zustand, state management, store, useStore, persistence | `zustand-5-skill` |
-| Tailwind, Tailwind CSS, cn(), className, tailwind-4 | `tailwind-4-skill` |
-| AI SDK, AI SDK 5, streamText, generateText, AI provider | `ai-sdk-5-skill` |
-| MCP, Model Context Protocol, MCP server, MCP tool, MCP resource | `mcp-skill` |
-| Docker, container, kubernetes, k8s, deployment, docker-compose, dockerfile, pod, ingress, helm | `docker-devops-skill` |
-| MongoDB, Redis, NoSQL, document database, caching, cache | `database-nosql-skill` |
-| PostgreSQL, MySQL, SQL, database, SQLAlchemy, migration, transaction | `database-relational-skill` |
-| Django, Django REST Framework, DRF, ViewSet, Serializer, APIView | `django-drf-skill` |
-| security, authentication, authorization, vulnerability, CVE, OWASP, XSS, SQL injection, secrets, encryption | `security-skill` |
-| test, write test, test coverage, unit test, integration test, e2e test, testing framework, test setup | `testing-skill` |
-| testing strategy, test pyramid, what to test, coverage target, unit test, integration test | `testing-strategy-skill` |
-| iniciar sesion, session, start session | `session-lifecycle` |
-| audit foundation, validate docs, sweep project, check links, find duplicates, fix references, homologate, validation sweep, wf audit | `foundation-audit-skill` |
-| new project, assess project, setup project, migrate, refactor decision, organize docs | `project-orchestrator-skill` |
-| create project, new project, bootstrap, scaffold, template, workspace setup, initialize project, wf CLI | `project-scaffolding` |
-| sdd init, iniciar sdd, openspec init | `sdd-init` |
-
-### 7 GitFlow Capabilities
-| Trigger Keywords | GitFlow Layer | Action |
-|---------------|----------------|--------|
-| create branch, feature branch, bugfix branch, hotfix branch, release branch | **Branch Management** | `create-gitflow-branch.ps1` |
-| pull request, PR, create PR, open PR | **PR Management** | `create-pull-request.ps1` |
-| pre-commit, pre-push, git hook, hook validation | **Hooks** | `pre-commit-validation.ps1` |
-| post-merge, merge sync, sync after merge | **Merge Sync** | `post-merge-sync.ps1` |
-| gitflow, workflow, checkout, branch switching | **Workflow** | `git-workflow-skill` |
-| commit, conventional commit, commit message | **Commit** | `git-workflow-skill` |
-| conflict, merge conflict, resolve conflict | **Conflict Resolution** | `git-workflow-skill` |
+## Agent → Skill Map
+| Agent / Domain | Key triggers | Skill |
+|---|---|---|
+| BA (plan/explore) | iniciar sesion, requirements, start session, explore | `sdd-lifecycle` |
+| SAD (architecture) | architecture, design, sdd, schema, system design | `sdd-design` |
+| DEV (implement) | implement, code, feature, refactor, bug fix | `sdd-apply` |
+| QA (testing) | test, testing, qa, validation, e2e, playwright | `sdd-verify` |
+| OPS (deploy) | deploy, docker, kubernetes, release, ci/cd, helm | `docker-devops-skill` |
+| GOV (governance) | governance, audit, compliance, security review | `project-orchestrator-skill` |
+| DOC (docs) | documentation, docs, readme, guide, runbook | `documentation-governance` |
+| SCRIPT-GOV | script, powershell, hook, pre-commit, fix script | `sdd-apply` |
+| REPORT | informe, metrics, analytics, dashboard, costos | `management-reporting-skill` |
+| PR-REVIEW | review PR, pull request check, merge gate | `code-review-orchestrator` |
+| RELEASE | cut release, changelog, version bump, semver | `release-management-skill` |
+| SESSION-CLOSE | cerrar sesion, close session, fin de sesion | `project-orchestrator-skill` |
+| Angular | Angular, component, @defer, standalone | `angular-spa-skill` |
+| React | React 19, useActionState, React Compiler | `react-19-skill` |
+| Next.js | Next.js, App Router, Server Component | `nextjs-15-skill` |
+| Go | Go API, Go backend, REST endpoint Go | `golang-api-skill` |
+| TypeScript | TypeScript, interface, type, generic | `typescript-skill` |
+| Zod | Zod, schema validation, input validation | `zod-4-skill` |
+| Zustand | Zustand, state management, store, useStore | `zustand-5-skill` |
+| Tailwind | Tailwind, Tailwind CSS, cn(), className | `tailwind-4-skill` |
+| AI SDK | AI SDK, streamText, generateText, AI provider | `ai-sdk-5-skill` |
+| MCP | MCP, Model Context Protocol, MCP server | `mcp-skill` |
+| Security | security, auth, OWASP, XSS, SQL injection | `security-skill` |
+| Testing | write test, test coverage, unit test, e2e test | `testing-skill` |
+| DB-NoSQL | MongoDB, Redis, NoSQL, caching | `database-nosql-skill` |
+| DB-SQL | PostgreSQL, MySQL, SQL, SQLAlchemy | `database-relational-skill` |
+| Django | Django, DRF, ViewSet, Serializer | `django-drf-skill` |
+| GitFlow | branch, PR, commit, merge, conflict, hook | `git-workflow-skill` |
+| Project/Audit | new project, audit foundation, validate docs | `project-orchestrator-skill` |
+| Scaffold | create project, bootstrap, scaffold, template | `project-scaffolding` |
 
 ## Orchestrator Delegation
-When trigger detected but cannot auto-load (no skill tool available):
-1. Respond: "Trigger detected for [skill-name]. This feature requires @orchestrator for full functionality."
-2. Suggest: "Use OpenCode or another supported tool for full feature parity."
-3. Delegate complex tasks: "Delegating to @orchestrator for execution."
+If skill tool unavailable: `"Trigger detected for [skill]. Requires @orchestrator."`
 
 ## Role
 You are a senior developer and technical mentor.

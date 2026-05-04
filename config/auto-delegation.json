@@ -18,7 +18,6 @@
                        "lowConfidence":  40
                    },
     "agentCodeToSkill":  {
-                             "description":  "Canonical map: agent keyword code -> skill name. Source of truth for pre-process-input.ps1. Add entries here to register new agents - no script edits needed.",
                              "BA":           "sdd-lifecycle",
                              "GOV":          "judgment-day",
                              "SAD":          "sdd-design",
@@ -40,7 +39,6 @@
                              "GITFLOW-CONFLICT": "git-workflow-skill"
                          },
     "skillToAgentProfile":  {
-                                "description":  "Override: skill name -> agent profile code for lookup. When a skill serves a different role than its keyword code suggests, map it here. No script edits needed.",
                                 "code-review-orchestrator":  "QA",
                                 "release-management-skill":  "OPS",
                                 "project-orchestrator-skill": "GOV",
@@ -59,7 +57,6 @@
                             },
     "clarifyBaStrategy":  {
                               "enabled":  true,
-                              "description":  "When confidence < lowConfidence threshold, auto-activate AGENT-BA (plan mode) before execution",
                               "triggerThreshold":  40,
                               "agent":  "BA",
                               "skill":  "sdd-lifecycle",
@@ -75,7 +72,6 @@
                                             ]
                           },
     "unmappedFlows":  {
-                          "description":  "Flows not covered by keywordMappings - each has an agent gate and precision profile applied before execution",
                           "prReview":  {
                                            "triggers":  [ "pull request", "PR", "create PR", "open PR", "merge", "review PR" ],
                                            "gate":  {
@@ -371,7 +367,6 @@
                                                    }
                       },
     "agentProfiles":  {
-                          "description":  "Per-agent precision profiles: temperature controls creativity vs determinism; hallucinationGuard enforces output verification before task completion; requiredEvidence lists mandatory output artifacts; hedgingBlocked prevents 'could/should/probably' language in critical agents",
                           "BA":  {
                                      "temperature":  0.7,
                                      "hallucinationGuard":  "low",
