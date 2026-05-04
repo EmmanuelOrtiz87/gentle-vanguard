@@ -45,32 +45,47 @@ foreach ($file in $skillFiles) {
     }
 }
 
-# Source 2: auto-delegation.json (keyword mappings)
+# Source 2: auto-delegation.json — single config load, all mappings driven by config
 $autoDelegationConfig = Join-Path $workspaceRoot "config/auto-delegation.json"
+$delegationConfig = $null
 if (Test-Path $autoDelegationConfig) {
-    $config = Get-Content $autoDelegationConfig -Raw | ConvertFrom-Json
-    if ($config.keywordMappings) {
-        # Map agent codes to skill names
-        $skillMapping = @{
-            "GOV" = "judgment-day"
-            "SAD" = "sdd-design"
-            "DEV" = "sdd-apply"
-            "QA" = "sdd-verify"
-            "OPS" = "docker-devops-skill"
-            "DOC" = "documentation-governance"
-            "SCRIPT-GOV" = "script-governance-skill"
-            "REPORT" = "reporting-skill"
+    $delegationConfig = Get-Content $autoDelegationConfig -Raw | ConvertFrom-Json
+}
+
+if ($delegationConfig -and $delegationConfig.keywordMappings) {
+    # agentCodeToSkill: loaded from config — no hardcoding in script
+    $skillMapping = @{}
+    if ($delegationConfig.agentCodeToSkill) {
+        foreach ($prop in $delegationConfig.agentCodeToSkill.PSObject.Properties) {
+            if ($prop.Name -notin @("description")) {
+                $skillMapping[$prop.Name] = $prop.Value
+            }
         }
-        
-        foreach ($agent in $config.keywordMappings.PSObject.Properties.Name) {
-            $keywords = $config.keywordMappings.$agent
-            $skillName = $skillMapping[$agent]
-            if (-not $skillName) { $skillName = $agent.ToLower() }
-            
-            foreach ($keyword in $keywords) {
-                if ($keyword -and -not $triggerMap.ContainsKey($keyword)) {
-                    $triggerMap[$keyword] = $skillName
-                }
+    }
+
+    # skillToAgentProfile overrides: loaded from config
+    $skillToAgent = @{}
+    if ($delegationConfig.skillToAgentProfile) {
+        foreach ($prop in $delegationConfig.skillToAgentProfile.PSObject.Properties) {
+            if ($prop.Name -ne "description") {
+                $skillToAgent[$prop.Name] = $prop.Value
+            }
+        }
+    }
+    # Fallback reverse map for any skills not in override
+    foreach ($kv in $skillMapping.GetEnumerator()) {
+        if (-not $skillToAgent.ContainsKey($kv.Value)) {
+            $skillToAgent[$kv.Value] = $kv.Key
+        }
+    }
+
+    foreach ($agent in $delegationConfig.keywordMappings.PSObject.Properties.Name) {
+        $keywords = $delegationConfig.keywordMappings.$agent
+        $skillName = if ($skillMapping.ContainsKey($agent)) { $skillMapping[$agent] } else { $agent.ToLower() }
+
+        foreach ($keyword in $keywords) {
+            if ($keyword -and -not $triggerMap.ContainsKey($keyword)) {
+                $triggerMap[$keyword] = $skillName
             }
         }
     }
@@ -91,18 +106,102 @@ foreach ($trigger in $sortedTriggers) {
     }
 }
 
+# Compute confidence score
+$confidenceScore = if ($matchingSkill) { 80 } else { 0 }
+
+# Read strategy and profiles from already-loaded config
+$fallbackStrategy  = if ($delegationConfig -and $delegationConfig.fallbackStrategy) { $delegationConfig.fallbackStrategy } else { "manual" }
+$clarifyBaStrategy = if ($delegationConfig) { $delegationConfig.clarifyBaStrategy } else { $null }
+$agentProfiles     = if ($delegationConfig) { $delegationConfig.agentProfiles } else { $null }
+$unmappedFlows     = if ($delegationConfig) { $delegationConfig.unmappedFlows } else { $null }
+
+$lowConfidenceThreshold = if ($clarifyBaStrategy -and $clarifyBaStrategy.triggerThreshold) { $clarifyBaStrategy.triggerThreshold } else { 40 }
+
+# Resolve agent profile for matched skill
+# For GITFLOW-* aliases and SCRIPT aliases, resolve to the parent profile
+function Resolve-AgentProfile {
+    param($AgentCode, $Profiles)
+    if (-not $AgentCode -or -not $Profiles) { return $null }
+    if ($Profiles.PSObject.Properties[$AgentCode]) {
+        return $Profiles.PSObject.Properties[$AgentCode].Value
+    }
+    # Check aliases in profiles
+    foreach ($prof in $Profiles.PSObject.Properties) {
+        if ($prof.Value -and $prof.Value.aliases -and $AgentCode -in $prof.Value.aliases) {
+            return $prof.Value
+        }
+    }
+    return $null
+}
+
+$resolvedAgent  = if ($matchingSkill -and $skillToAgent.ContainsKey($matchingSkill)) { $skillToAgent[$matchingSkill] } else { $null }
+$activeProfile  = Resolve-AgentProfile -AgentCode $resolvedAgent -Profiles $agentProfiles
+
+function Write-AgentProfile {
+    param($Profile, $AgentCode)
+    if (-not $Profile) { return }
+    Write-Output "AGENT_PROFILE: $AgentCode"
+    Write-Output "  temperature: $($Profile.temperature)"
+    Write-Output "  hallucinationGuard: $($Profile.hallucinationGuard)"
+    Write-Output "  hedgingBlocked: $($Profile.hedgingBlocked)"
+    Write-Output "  maxRetries: $($Profile.maxRetries)"
+    Write-Output "  escalateOnFailure: $($Profile.escalateOnFailure)"
+    if ($Profile.requiredEvidence) {
+        Write-Output "  requiredEvidence:"
+        foreach ($e in $Profile.requiredEvidence) { Write-Output "    - $e" }
+    }
+}
+
+function Write-FlowGate {
+    param($Flows, $Skill)
+    if (-not $Flows) { return }
+    foreach ($flow in $Flows.PSObject.Properties) {
+        if ($flow.Value -and $flow.Value.skill -eq $Skill) {
+            $gate = $flow.Value.gate
+            if (-not $gate) { return }
+            Write-Output "FLOW_GATE: $($flow.Name)"
+            $reqKey   = $gate.PSObject.Properties.Name | Where-Object { $_ -like "required*" } | Select-Object -First 1
+            $blockKey = $gate.PSObject.Properties.Name | Where-Object { $_ -like "block*"    } | Select-Object -First 1
+            if ($reqKey)   { Write-Output "REQUIRED_BEFORE_PROCEED:"; foreach ($i in $gate.$reqKey)   { Write-Output "  - $i" } }
+            if ($blockKey) { Write-Output "BLOCKS_IF:";               foreach ($i in $gate.$blockKey) { Write-Output "  - $i" } }
+            return
+        }
+    }
+}
+
 if ($matchingSkill) {
     Write-Output "TRIGGER_MATCH_FOUND"
     Write-Output "SKILL: $matchingSkill"
     Write-Output "TRIGGER_MATCHED: $matchingTrigger"
+    Write-Output "CONFIDENCE: $confidenceScore"
     Write-Output "ACTION: Load skill '$matchingSkill' using skill tool"
+    Write-AgentProfile -Profile $activeProfile -AgentCode $resolvedAgent
+    Write-FlowGate -Flows $unmappedFlows -Skill $matchingSkill
+} elseif ($fallbackStrategy -eq "clarify-ba" -and $confidenceScore -lt $lowConfidenceThreshold) {
+    $baProfile = Resolve-AgentProfile -AgentCode "BA" -Profiles $agentProfiles
+    Write-Output "PLAN_MODE_REQUIRED"
+    Write-Output "CONFIDENCE: $confidenceScore"
+    Write-Output "AGENT: BA"
+    Write-Output "SKILL: sdd-lifecycle"
+    Write-Output "PHASE: EXPLORE"
+    Write-Output "ACTION: $($clarifyBaStrategy.instructions)"
+    Write-AgentProfile -Profile $baProfile -AgentCode "BA"
+    if ($clarifyBaStrategy.questions) {
+        Write-Output "CLARIFICATION_QUESTIONS:"
+        foreach ($q in $clarifyBaStrategy.questions) { Write-Output "  - $q" }
+    }
 } else {
     Write-Output "NO_TRIGGER_MATCH"
+    Write-Output "CONFIDENCE: $confidenceScore"
     Write-Output "ACTION: Continue with normal behavior"
 }
 
 return @{
-    HasMatch = ($matchingSkill -ne $null)
-    Skill = $matchingSkill
-    Trigger = $matchingTrigger
+    HasMatch       = ($matchingSkill -ne $null)
+    Skill          = $matchingSkill
+    Trigger        = $matchingTrigger
+    Confidence     = $confidenceScore
+    PlanMode       = ($fallbackStrategy -eq "clarify-ba" -and $confidenceScore -lt $lowConfidenceThreshold)
+    AgentCode      = $resolvedAgent
+    AgentProfile   = $activeProfile
 }

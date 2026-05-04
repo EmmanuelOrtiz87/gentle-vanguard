@@ -2,7 +2,7 @@
     "enabled":  true,
     "confidenceThreshold":  60,
     "maxParallelAgents":  3,
-    "fallbackStrategy":  "manual",
+    "fallbackStrategy":  "clarify-ba",
     "loggingEnabled":  true,
     "metricsEnabled":  true,
     "features":  {
@@ -17,6 +17,155 @@
                        "mediumConfidence":  60,
                        "lowConfidence":  40
                    },
+    "agentCodeToSkill":  {
+                             "description":  "Canonical map: agent keyword code -> skill name. Source of truth for pre-process-input.ps1. Add entries here to register new agents - no script edits needed.",
+                             "BA":           "sdd-lifecycle",
+                             "GOV":          "judgment-day",
+                             "SAD":          "sdd-design",
+                             "DEV":          "sdd-apply",
+                             "QA":           "sdd-verify",
+                             "OPS":          "docker-devops-skill",
+                             "DOC":          "documentation-governance",
+                             "SCRIPT-GOV":   "script-governance-skill",
+                             "REPORT":       "reporting-skill",
+                             "PR-REVIEW":    "code-review-orchestrator",
+                             "RELEASE":      "release-management-skill",
+                             "SESSION-CLOSE": "project-orchestrator-skill",
+                             "GITFLOW-BRANCH": "gitflow-orchestrator-skill",
+                             "GITFLOW-PR":   "branch-pr",
+                             "GITFLOW-HOOKS": "gitflow-orchestrator-skill",
+                             "GITFLOW-MERGE": "gitflow-orchestrator-skill",
+                             "GITFLOW-WORKFLOW": "git-workflow-skill",
+                             "GITFLOW-COMMIT": "git-workflow-skill",
+                             "GITFLOW-CONFLICT": "git-workflow-skill"
+                         },
+    "skillToAgentProfile":  {
+                                "description":  "Override: skill name -> agent profile code for lookup. When a skill serves a different role than its keyword code suggests, map it here. No script edits needed.",
+                                "code-review-orchestrator":  "QA",
+                                "release-management-skill":  "OPS",
+                                "project-orchestrator-skill": "GOV",
+                                "reporting-skill":           "DOC",
+                                "judgment-day":              "GOV",
+                                "gitflow-orchestrator-skill": "GOV",
+                                "branch-pr":                 "QA",
+                                "git-workflow-skill":        "DEV",
+                                "script-governance-skill":   "DEV",
+                                "sdd-design":                "SAD",
+                                "sdd-apply":                 "DEV",
+                                "sdd-verify":                "QA",
+                                "sdd-lifecycle":             "BA",
+                                "docker-devops-skill":       "OPS",
+                                "documentation-governance":  "DOC"
+                            },
+    "clarifyBaStrategy":  {
+                              "enabled":  true,
+                              "description":  "When confidence < lowConfidence threshold, auto-activate AGENT-BA (plan mode) before execution",
+                              "triggerThreshold":  40,
+                              "agent":  "BA",
+                              "skill":  "sdd-lifecycle",
+                              "phase":  "EXPLORE",
+                              "action":  "PLAN_MODE_REQUIRED",
+                              "instructions":  "Activate AGENT-BA to gather requirements before proceeding. Use sdd-lifecycle EXPLORE phase: understand user needs, constraints, and acceptance criteria. Do NOT implement until BA exploration is complete.",
+                              "questions":  [
+                                                "What problem are you trying to solve?",
+                                                "What does success look like for you?",
+                                                "Are there any constraints (time, tech, budget)?",
+                                                "Who are the end users affected?",
+                                                "What should NOT change?"
+                                            ]
+                          },
+    "unmappedFlows":  {
+                          "description":  "Flows not covered by keywordMappings - each has an agent gate and precision profile applied before execution",
+                          "prReview":  {
+                                           "triggers":  [ "pull request", "PR", "create PR", "open PR", "merge", "review PR" ],
+                                           "gate":  {
+                                                        "agent":  "QA",
+                                                        "profile":  "$ref:agentProfiles.QA",
+                                                        "requiredBeforeMerge":  [
+                                                                                    "all automated checks pass (exit 0)",
+                                                                                    "linked issue has status:approved label",
+                                                                                    "branch name matches naming convention regex",
+                                                                                    "no secrets detected in diff",
+                                                                                    "at least 1 reviewer assigned"
+                                                                                ],
+                                                        "blockMergeIf":  [
+                                                                             "any requiredBeforeMerge item fails",
+                                                                             "hedging language in PR description (could/should/probably)",
+                                                                             "no issue linkage (Closes/Fixes/Resolves #N)"
+                                                                         ],
+                                                        "escalateOnFailure":  "orchestrator"
+                                                    },
+                                           "skill":  "code-review-orchestrator",
+                                           "dimensions":  [ "Security", "Quality", "Architecture", "Testing", "Docs", "API", "GitFlow" ]
+                                       },
+                          "releaseManagement":  {
+                                                    "triggers":  [ "release", "changelog", "version bump", "ship", "cut release", "release notes", "hotfix", "semver" ],
+                                                    "gate":  {
+                                                                 "agent":  "OPS",
+                                                                 "profile":  "$ref:agentProfiles.OPS",
+                                                                 "requiredBeforeRelease":  [
+                                                                                               "CHANGELOG.md updated with user-visible changes",
+                                                                                               "version bump validated against actual impact (semver)",
+                                                                                               "rollback plan documented",
+                                                                                               "all QA gates passed",
+                                                                                               "no hedging in release notes (verified, not speculative)"
+                                                                                           ],
+                                                                 "blockReleaseIf":  [
+                                                                                        "CHANGELOG.md not updated",
+                                                                                        "rollback plan missing",
+                                                                                        "QA gate not passed",
+                                                                                        "version bump unjustified"
+                                                                                    ],
+                                                                 "escalateOnFailure":  "orchestrator"
+                                                             },
+                                                    "skill":  "release-management-skill",
+                                                    "govCoReview":  true,
+                                                    "govProfile":  "$ref:agentProfiles.GOV"
+                                                },
+                          "sessionClose":  {
+                                               "triggers":  [ "cerrar sesion", "close session", "session end", "guardar sesion", "fin de sesion" ],
+                                               "gate":  {
+                                                            "agent":  "GOV",
+                                                            "profile":  "$ref:agentProfiles.GOV",
+                                                            "requiredBeforeClose":  [
+                                                                                        "changes summarized (what changed, what is pending)",
+                                                                                        "documentation updated if architecture/workflow changed",
+                                                                                        "touched work validated (test/build/check)",
+                                                                                        "session audit recorded (intended vs completed vs risks)",
+                                                                                        "learnings persisted to memory if durable",
+                                                                                        "repository state reviewed",
+                                                                                        "blockers stated explicitly"
+                                                                                    ],
+                                                            "blockCloseIf":  [
+                                                                                 "audit not recorded",
+                                                                                 "open FIXME/TODO items not documented"
+                                                                             ],
+                                                            "escalateOnFailure":  "orchestrator"
+                                                        },
+                                               "skill":  "project-orchestrator-skill",
+                                               "phase":  "SESSION_CLOSURE_PROTOCOL"
+                                           },
+                          "reporting":  {
+                                            "triggers":  [ "informe", "report", "reporte", "metrics", "dashboard", "resumen ejecutivo", "tokens", "costos", "telemetry", "stats" ],
+                                            "gate":  {
+                                                         "agents":  [ "DOC", "GOV" ],
+                                                         "profiles":  { "DOC":  "$ref:agentProfiles.DOC", "GOV":  "$ref:agentProfiles.GOV" },
+                                                         "requiredBeforePublish":  [
+                                                                                       "all referenced data paths exist",
+                                                                                       "no fabricated metrics (each number has a source file cited)",
+                                                                                       "GOV sign-off: no sensitive data exposed in report",
+                                                                                       "report file written to disk before presenting"
+                                                                                   ],
+                                                         "blockPublishIf":  [
+                                                                                "any metric has no source citation",
+                                                                                "sensitive paths/tokens present in output",
+                                                                                "report file missing from disk"
+                                                                            ],
+                                                         "escalateOnFailure":  "orchestrator"
+                                                     },
+                                            "skill":  "reporting-skill"
+                                        }
+                      },
     "keywordMappings":  {
                             "GOV":  [
                                         "governance",
@@ -175,6 +324,32 @@
                                             "merge conflict",
                                             "resolve conflict",
                                             "git conflict"
+                                        ],
+                             "PR-REVIEW":  [
+                                            "pull request",
+                                            "create PR",
+                                            "open PR",
+                                            "review PR",
+                                            "merge PR",
+                                            "PR review"
+                                        ],
+                             "RELEASE":  [
+                                            "release",
+                                            "changelog",
+                                            "version bump",
+                                            "cut release",
+                                            "release notes",
+                                            "hotfix",
+                                            "semver",
+                                            "ship release"
+                                        ],
+                             "SESSION-CLOSE":  [
+                                            "cerrar sesion",
+                                            "close session",
+                                            "session end",
+                                            "guardar sesion",
+                                            "fin de sesion",
+                                            "finalizar sesion"
                                         ]
                           },
     "adaptive_mode":  {
@@ -194,5 +369,97 @@
                                                                                    "high-risk"
                                                                                ]
                                                    }
+                      },
+    "agentProfiles":  {
+                          "description":  "Per-agent precision profiles: temperature controls creativity vs determinism; hallucinationGuard enforces output verification before task completion; requiredEvidence lists mandatory output artifacts; hedgingBlocked prevents 'could/should/probably' language in critical agents",
+                          "BA":  {
+                                     "temperature":  0.7,
+                                     "hallucinationGuard":  "low",
+                                     "requiredEvidence":  [ "at least 3 clarification questions answered", "problem statement documented" ],
+                                     "hedgingBlocked":  false,
+                                     "maxRetries":  2,
+                                     "escalateOnFailure":  "orchestrator",
+                                     "rationale":  "BA explores and asks questions - creative latitude needed"
+                                 },
+                          "SAD":  {
+                                      "temperature":  0.3,
+                                      "hallucinationGuard":  "medium",
+                                      "requiredEvidence":  [ "architecture decision documented", "API contract defined", "at least 1 tradeoff explained" ],
+                                      "hedgingBlocked":  false,
+                                      "maxRetries":  2,
+                                      "escalateOnFailure":  "orchestrator",
+                                      "rationale":  "SAD decides with precision - must justify decisions but needs some reasoning latitude"
+                                  },
+                          "DEV":  {
+                                      "temperature":  0.15,
+                                      "hallucinationGuard":  "high",
+                                      "requiredEvidence":  [ "file exists on disk", "no lint/compile errors", "at least 1 test covers the change" ],
+                                      "hedgingBlocked":  true,
+                                      "maxRetries":  3,
+                                      "escalateOnFailure":  "QA",
+                                      "rationale":  "DEV writes code - deterministic, no invention, must be verifiable"
+                                  },
+                          "QA":  {
+                                     "temperature":  0.1,
+                                     "hallucinationGuard":  "critical",
+                                     "requiredEvidence":  [ "test file exists", "test passes (exit code 0)", "coverage report generated" ],
+                                     "hedgingBlocked":  true,
+                                     "maxRetries":  1,
+                                     "escalateOnFailure":  "orchestrator",
+                                     "rationale":  "QA is binary pass/fail - no ambiguity allowed"
+                                 },
+                          "OPS":  {
+                                      "temperature":  0.1,
+                                      "hallucinationGuard":  "critical",
+                                      "requiredEvidence":  [ "deployment config validated", "rollback plan documented", "environment verified" ],
+                                      "hedgingBlocked":  true,
+                                      "maxRetries":  1,
+                                      "escalateOnFailure":  "orchestrator",
+                                      "rationale":  "OPS touches production - error = outage"
+                                  },
+                          "GOV":  {
+                                      "temperature":  0.1,
+                                      "hallucinationGuard":  "critical",
+                                      "requiredEvidence":  [ "audit trail with file path and line", "no secrets detected", "compliance checklist signed off" ],
+                                      "hedgingBlocked":  true,
+                                      "maxRetries":  1,
+                                      "escalateOnFailure":  "orchestrator",
+                                      "rationale":  "GOV is security/compliance - zero tolerance for ambiguity"
+                                  },
+                          "DOC":  {
+                                      "temperature":  0.4,
+                                      "hallucinationGuard":  "low",
+                                      "requiredEvidence":  [ "doc file written to disk", "all referenced paths exist" ],
+                                      "hedgingBlocked":  false,
+                                      "maxRetries":  2,
+                                      "escalateOnFailure":  "orchestrator",
+                                      "rationale":  "DOC needs clarity and style - some creative latitude acceptable"
+                                  },
+                          "GITFLOW":  {
+                                          "temperature":  0.1,
+                                          "hallucinationGuard":  "critical",
+                                          "requiredEvidence":  [ "branch name matches naming convention", "commit follows conventional commits format", "no push to protected branch (main/develop) without PR" ],
+                                          "hedgingBlocked":  true,
+                                          "maxRetries":  1,
+                                          "escalateOnFailure":  "orchestrator",
+                                          "rationale":  "GitFlow is structural governance - wrong branch = broken history",
+                                          "aliases":  [ "GITFLOW-BRANCH", "GITFLOW-PR", "GITFLOW-HOOKS", "GITFLOW-MERGE", "GITFLOW-WORKFLOW", "GITFLOW-COMMIT", "GITFLOW-CONFLICT" ]
+                                      },
+                          "SCRIPT":  {
+                                         "temperature":  0.15,
+                                         "hallucinationGuard":  "high",
+                                         "requiredEvidence":  [ "script parses without syntax errors (pwsh -NoProfile -Command)", "no hardcoded secrets", "idempotent execution verified" ],
+                                         "hedgingBlocked":  true,
+                                         "maxRetries":  2,
+                                         "escalateOnFailure":  "orchestrator",
+                                         "rationale":  "Scripts are automation - a bad script runs unattended and causes damage",
+                                         "aliases":  [ "SCRIPT-GOV" ]
+                                     },
+                          "hallucinationGuardLevels":  {
+                                                           "low":      "Log only - agent self-reports output, no external verification",
+                                                           "medium":   "Spot-check - orchestrator verifies at least 1 requiredEvidence item",
+                                                           "high":     "Full check - ALL requiredEvidence items verified before task marked done",
+                                                           "critical": "Full check + hedging language scan + external command verification required"
+                                                       }
                       }
 }
