@@ -11,16 +11,17 @@
         "WorkspaceRoot": "."
       },
       "fallbackBehavior": "continue",
-      "toolsSupported": [
-        "opencode",
-        "cline",
-        "cursor",
-        "windsurf",
-        "continue_dev",
-        "claude",
-        "copilot",
-        "antigravity"
-      ]
+                "toolsSupported": [
+                  "opencode",
+                  "cline",
+                  "cursor",
+                  "windsurf",
+                  "continue_dev",
+                  "claude",
+                  "copilot",
+                  "antigravity",
+                  "codex"
+                ]
     },
     "triggerDetection": {
       "enabled": true,

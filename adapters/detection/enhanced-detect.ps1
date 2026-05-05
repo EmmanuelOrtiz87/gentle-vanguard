@@ -117,37 +117,68 @@ $source = 'none'
 $confidence = 'low'
 $detectionMethod = 'none'
 
-# Check for specific tools (order matters - most specific first)
-if ($env:WINDSURF_ -or $parentNames -match 'windsurf|Windsurf') {
+# Check for specific tools - Environment variables first (higher priority)
+if ($env:WINDSURF_CHAT_MODE) {
     $toolName = 'windsurf'
-    $source = 'env/process'
-    $confidence = 'medium'
-    $detectionMethod = 'WINDSURF_ env or process name'
-} elseif ($env:CODEX_ -or $termProgram -match 'codex') {
+    $source = 'env'
+    $confidence = 'high'
+    $detectionMethod = 'WINDSURF_CHAT_MODE env'
+} elseif ($env:CODEX_SESSION) {
     $toolName = 'codex'
-    $source = 'env/process'
-    $confidence = 'medium'
-    $detectionMethod = 'CODEX_ env or TERM_PROGRAM'
-} elseif ($env:ANTIGRAVITY_ -or $parentNames -match 'antigravity') {
+    $source = 'env'
+    $confidence = 'high'
+    $detectionMethod = 'CODEX_SESSION env'
+} elseif ($env:ANTIGRAVITY_SESSION) {
     $toolName = 'antigravity'
-    $source = 'env/process'
-    $confidence = 'low'
-    $detectionMethod = 'ANTIGRAVITY_ env or process name'
-} elseif ($env:OPENCODE_ -or $parentNames -match 'opencode|OpenCode') {
+    $source = 'env'
+    $confidence = 'high'
+    $detectionMethod = 'ANTIGRAVITY_SESSION env'
+} elseif ($env:OPENCODE_CHAT_MODE) {
     $toolName = 'opencode'
-    $source = 'env/process'
+    $source = 'env'
     $confidence = 'high'
-    $detectionMethod = 'OPENCODE_ env or process name'
-} elseif ($env:CURSOR_ -or $parentNames -match 'cursor|Cursor') {
+    $detectionMethod = 'OPENCODE_CHAT_MODE env'
+} elseif ($env:CURSOR_TRACE_ID) {
     $toolName = 'cursor'
-    $source = 'env/process'
+    $source = 'env'
     $confidence = 'high'
-    $detectionMethod = 'CURSOR_ env or process name'
-} elseif ($env:VSCODE_GIT_IPC_HANDLE -or $termProgram -eq 'vscode' -or ($parentNames -match 'Code.exe|Code - Insiders.exe')) {
+    $detectionMethod = 'CURSOR_TRACE_ID env'
+} elseif ($env:VSCODE_GIT_IPC_HANDLE -or $termProgram -eq 'vscode') {
     $toolName = 'vscode'
-    $source = 'env/process'
+    $source = 'env'
     $confidence = 'high'
-    $detectionMethod = 'VSCODE env or process name'
+    $detectionMethod = 'VSCODE env or TERM_PROGRAM'
+# Process name detection (fallback if no env vars)
+} elseif ($parentNames -match 'windsurf|Windsurf') {
+    $toolName = 'windsurf'
+    $source = 'process'
+    $confidence = 'medium'
+    $detectionMethod = 'windsurf process name'
+} elseif ($termProgram -match 'codex') {
+    $toolName = 'codex'
+    $source = 'process'
+    $confidence = 'medium'
+    $detectionMethod = 'codex TERM_PROGRAM'
+} elseif ($parentNames -match 'antigravity') {
+    $toolName = 'antigravity'
+    $source = 'process'
+    $confidence = 'medium'
+    $detectionMethod = 'antigravity process name'
+} elseif ($parentNames -match 'opencode|OpenCode') {
+    $toolName = 'opencode'
+    $source = 'process'
+    $confidence = 'medium'
+    $detectionMethod = 'OpenCode process name'
+} elseif ($parentNames -match 'cursor|Cursor') {
+    $toolName = 'cursor'
+    $source = 'process'
+    $confidence = 'medium'
+    $detectionMethod = 'cursor process name'
+} elseif ($parentNames -match 'Code.exe|Code - Insiders.exe') {
+    $toolName = 'vscode'
+    $source = 'process'
+    $confidence = 'high'
+    $detectionMethod = 'VS Code process name'
 } elseif ($env:JETBRAINS_IDE -or $env:IDEA_INITIAL_DIRECTORY -or ($parentNames -match 'idea64.exe|pycharm64.exe|webstorm64.exe|rider64.exe')) {
     $toolName = 'jetbrains'
     $source = 'env/process'

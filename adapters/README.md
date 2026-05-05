@@ -123,12 +123,12 @@ Translates between Foundation's standard format and tool-specific formats.
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| MCP Bridge Server |  Pending | Main server implementation |
-| Windsurf Adapter |  Pending | Plugin format research needed |
-| Codex Adapter |  Pending | OpenAI-compatible endpoint |
-| Antigravity Adapter |  Pending | Mission Control integration |
-| Enhanced Detection |  Ready | Based on `detect-ide-session.ps1` |
-| Documentation |  In Progress | This README complete |
+| MCP Bridge Server | ✅ Ready | Main server implemented (server.ts, tools.ts) |
+| Windsurf Adapter | ✅ Ready | Plugin format converter complete |
+| Codex Adapter | ✅ Ready | OpenAI function calling format complete |
+| Antigravity Adapter | ✅ Ready | Mission Control integration complete |
+| Enhanced Detection | ✅ Ready | Variables env corregidas |
+| Documentation | ✅ Complete | Multi-tool guide created |
 
 ---
 ## Next Steps

@@ -12,11 +12,39 @@ param(
 $triggerMap = @{}
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $workspaceRoot = if ($PSBoundParameters.ContainsKey("WorkspaceRoot") -and $WorkspaceRoot -ne ".") {
-    try { (Resolve-Path -Path $WorkspaceRoot -ErrorAction Stop).Path } catch { Split-Path -Parent $scriptDir }
+    try { (Resolve-Path -Path $WorkspaceRoot -ErrorAction Stop).Path } catch { Split-Path -Parent (Split-Path -Parent $scriptDir) }
 } else {
-    Split-Path -Parent $scriptDir
+    Split-Path -Parent (Split-Path -Parent $scriptDir)
 }
 $skillsFullPath = Join-Path $workspaceRoot $SkillsPath
+
+# Detect which AI tool is calling this script
+$detectScript = Join-Path $workspaceRoot "adapters/detection/enhanced-detect.ps1"
+$detectedTool = $null
+$toolCapabilities = @()
+if (Test-Path $detectScript) {
+    $detectionResult = & $detectScript -AsJson | ConvertFrom-Json
+    $detectedTool = $detectionResult.toolName
+    $toolCapabilities = $detectionResult.capabilities
+    Write-Output "DETECTED_TOOL: $detectedTool"
+    Write-Output "DETECTION_CONFIDENCE: $($detectionResult.confidence)"
+    Write-Output "DETECTION_METHOD: $($detectionResult.detectionMethod)"
+    Write-Output "TOOL_CAPABILITIES: $($toolCapabilities -join ', ')"
+} else {
+    Write-Output "DETECTED_TOOL: unknown"
+    Write-Output "DETECTION_CONFIDENCE: low"
+    Write-Output "DETECTION_METHOD: fallback"
+}
+
+# Load tool-specific configuration if available
+$toolConfigPath = Join-Path $workspaceRoot "config/tool-$detectedTool.json"
+if (Test-Path $toolConfigPath) {
+    $toolConfig = Get-Content $toolConfigPath -Raw | ConvertFrom-Json
+    Write-Output "TOOL_CONFIG_LOADED: $detectedTool"
+    if ($toolConfig.preProcess) {
+        Write-Output "TOOL_PREPROCESS: $($toolConfig.preProcess)"
+    }
+}
 
 function Add-TriggersFromSkillFiles {
     param(
@@ -200,6 +228,13 @@ if ($matchingSkill) {
     Write-Output "TRIGGER_MATCHED: $matchingTrigger"
     Write-Output "CONFIDENCE: $confidenceScore"
     Write-Output "ACTION: Load skill '$matchingSkill' using skill tool"
+    Write-Output "TOOL_DETECTED: $detectedTool"
+    if ($toolCapabilities -contains 'skills') {
+        Write-Output "TOOL_SUPPORTS_SKILLS: true"
+    } else {
+        Write-Output "TOOL_SUPPORTS_SKILLS: false"
+        Write-Output "FALLBACK: Load skill manually for $detectedTool"
+    }
     Write-AgentProfile -Profile $activeProfile -AgentCode $resolvedAgent
     Write-FlowGate -Flows $unmappedFlows -Skill $matchingSkill
 } elseif ($fallbackStrategy -eq "clarify-ba" -and $confidenceScore -lt $lowConfidenceThreshold) {
@@ -210,6 +245,7 @@ if ($matchingSkill) {
     Write-Output "SKILL: sdd-lifecycle"
     Write-Output "PHASE: EXPLORE"
     Write-Output "ACTION: $($clarifyBaStrategy.instructions)"
+    Write-Output "TOOL_DETECTED: $detectedTool"
     Write-AgentProfile -Profile $baProfile -AgentCode "BA"
     if ($clarifyBaStrategy.questions) {
         Write-Output "CLARIFICATION_QUESTIONS:"
@@ -219,6 +255,7 @@ if ($matchingSkill) {
     Write-Output "NO_TRIGGER_MATCH"
     Write-Output "CONFIDENCE: $confidenceScore"
     Write-Output "ACTION: Continue with normal behavior"
+    Write-Output "TOOL_DETECTED: $detectedTool"
 }
 
 return @{
@@ -229,4 +266,6 @@ return @{
     PlanMode       = ($fallbackStrategy -eq "clarify-ba" -and $confidenceScore -lt $lowConfidenceThreshold)
     AgentCode      = $resolvedAgent
     AgentProfile   = $activeProfile
+    DetectedTool   = $detectedTool
+    ToolCapabilities = $toolCapabilities
 }
