@@ -1,3 +1,8 @@
+---
+name: foundation-manager-skill
+description: FF-017 Auto-Actualización Skills/Tools. Implementa mecanismos de auto-actualización para skills y herramientas.
+---
+
 # foundation-manager-skill
 # FF-017: Auto-Actualización Skills/Tools
 

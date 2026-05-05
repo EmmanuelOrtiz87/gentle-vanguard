@@ -1,3 +1,8 @@
+---
+name: sync-automation
+description: Auto-sync for Foundation. Automates synchronization between local Foundation and public repository.
+---
+
 # sync-automation
 # Auto-sync for Foundation
 
