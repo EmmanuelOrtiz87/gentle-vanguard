@@ -1,17 +1,22 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Canonical quality gates for CI and branch protection.",
   "requiredWorkflows": [
     "script-governance",
     "workflow-lint",
-    "foundation-quality-gate"
+    "foundation-quality-gate",
+    "ps-lint",
+    "sdd-gate",
+    "owasp-scan"
   ],
   "requiredStatusChecks": {
     "strict": true,
     "contexts": [
       "Validate Script Governance and Process Alerts",
       "Workflow Lint",
-      "Foundation Quality Gate"
+      "Foundation Quality Gate",
+      "PSScriptAnalyzer Static Analysis",
+      "SDD Spec Gate"
     ]
   },
   "pullRequestRules": {

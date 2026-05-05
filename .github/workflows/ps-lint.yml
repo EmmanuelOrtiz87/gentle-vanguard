@@ -1,0 +1,123 @@
+name: PowerShell Lint (PSScriptAnalyzer)
+
+# CI-HARDENING-STANDARD: all workflows must have permissions, concurrency, timeout.
+permissions:
+  contents: read
+
+concurrency:
+  group: ps-lint-${{ github.ref }}
+  cancel-in-progress: true
+
+# Triggers: any PS1 change on protected branches or PRs.
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - '**/*.ps1'
+      - '.github/workflows/ps-lint.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - '**/*.ps1'
+      - '.github/workflows/ps-lint.yml'
+  workflow_dispatch:
+
+jobs:
+  ps-lint:
+    name: PSScriptAnalyzer Static Analysis
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Install PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted -ErrorAction SilentlyContinue
+          if (-not (Get-Module -ListAvailable -Name PSScriptAnalyzer)) {
+            Install-Module -Name PSScriptAnalyzer -Scope CurrentUser -Force -SkipPublisherCheck
+          }
+          Write-Host "PSScriptAnalyzer version: $(Get-Module -ListAvailable PSScriptAnalyzer | Select-Object -First 1 -ExpandProperty Version)"
+
+      - name: Run PSScriptAnalyzer
+        id: pssa
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Continue'
+
+          # Rules: Error-level → blocking; Warning-level → annotated only.
+          # Excluded: PSAvoidUsingWriteHost (output scripts intentionally use it),
+          #           PSUseDeclaredVarsMoreThanAssignments (PowerShell scoping FP),
+          #           PSAvoidGlobalVars (framework needs module-level globals).
+          $excludedRules = @(
+            'PSAvoidUsingWriteHost',
+            'PSUseDeclaredVarsMoreThanAssignments',
+            'PSAvoidGlobalVars',
+            'PSReviewUnusedParameter'
+          )
+
+          $scriptPaths = @(
+            'scripts',
+            'hooks'
+          )
+
+          $allResults = @()
+          foreach ($path in $scriptPaths) {
+            if (Test-Path $path) {
+              $results = Invoke-ScriptAnalyzer -Path $path -Recurse `
+                -ExcludeRule $excludedRules `
+                -Severity @('Error', 'Warning', 'Information') `
+                -ErrorAction SilentlyContinue
+              $allResults += $results
+            }
+          }
+
+          $errors   = @($allResults | Where-Object Severity -eq 'Error')
+          $warnings = @($allResults | Where-Object Severity -eq 'Warning')
+          $infos    = @($allResults | Where-Object Severity -eq 'Information')
+
+          # Emit GitHub workflow annotations
+          foreach ($r in $allResults) {
+            $level = switch ($r.Severity) {
+              'Error'       { 'error' }
+              'Warning'     { 'warning' }
+              'Information' { 'notice' }
+              default       { 'notice' }
+            }
+            $relPath = $r.ScriptPath -replace [regex]::Escape((Get-Location).Path + '\'), ''
+            $relPath = $relPath -replace '\\', '/'
+            Write-Host "::${level} file=${relPath},line=$($r.Line),col=$($r.Column),title=$($r.RuleName)::$($r.Message)"
+          }
+
+          # Summary
+          Write-Host ''
+          Write-Host "PSScriptAnalyzer: errors=$($errors.Count) warnings=$($warnings.Count) info=$($infos.Count)"
+
+          # GitHub step summary
+          $summaryLines = @(
+            '## PSScriptAnalyzer Results',
+            '',
+            "| Severity | Count |",
+            "|----------|-------|",
+            "| Error    | $($errors.Count) |",
+            "| Warning  | $($warnings.Count) |",
+            "| Info     | $($infos.Count) |",
+            ''
+          )
+          if ($errors.Count -gt 0) {
+            $summaryLines += '### Errors (blocking)'
+            foreach ($e in $errors) {
+              $rel = $e.ScriptPath -replace [regex]::Escape((Get-Location).Path + '\'), '' -replace '\\', '/'
+              $summaryLines += "- **$($e.RuleName)** — ``$rel``:$($e.Line) — $($e.Message)"
+            }
+          }
+          $summaryLines | Out-File -FilePath $Env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+
+          if ($errors.Count -gt 0) {
+            Write-Error "PSScriptAnalyzer found $($errors.Count) error(s). Fix before merging."
+            exit 1
+          }
+          exit 0

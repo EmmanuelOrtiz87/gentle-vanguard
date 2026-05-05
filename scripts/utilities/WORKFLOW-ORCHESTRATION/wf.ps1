@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -1623,6 +1623,7 @@ COMMANDS:
     sdd-metrics          FF-002: SDD process KPIs: spec coverage, lead time, rework ratio
     sync-drift           FF-004: Detect drift between declared config and actual skills/files
     benchmark [cmds]     FF-006: Profile wf commands vs SLO thresholds (default: status,health)
+    version              Show current stack version (from VERSION file + orchestrator.json)
     help                 Show this help
 
 OPTIONS:
@@ -2396,6 +2397,27 @@ switch ($Command) {
         $cmds = if ($Scope) { $Scope -split ',' } else { @('status', 'health') }
         & $benchScript -Commands $cmds
         exit $LASTEXITCODE
+    }
+
+    'version' {
+        # Show current stack version from VERSION file
+        $versionFile = Join-Path $repoRoot 'VERSION'
+        $ver = if (Test-Path $versionFile) {
+            (Get-Content $versionFile -Raw -Encoding UTF8).Trim()
+        } else {
+            'unknown'
+        }
+        $orchConfig = Join-Path $repoRoot 'config\orchestrator.json'
+        $orchVer = ''
+        if (Test-Path $orchConfig) {
+            try {
+                $oc = Get-Content $orchConfig -Raw -Encoding UTF8 | ConvertFrom-Json
+                $orchVer = if ($oc.version) { " | orchestrator: $($oc.version)" } else { '' }
+            } catch {}
+        }
+        Write-Host "Gentleman Foundation v${ver}${orchVer}" -ForegroundColor Cyan
+        Write-Host "  Stack: $($PSVersionTable.PSVersion) on $(if($IsWindows){'windows'}elseif($IsMacOS){'macos'}else{'linux'})" -ForegroundColor Gray
+        Write-Host "  Skills: $(if(Test-Path (Join-Path $repoRoot 'skills')){(Get-ChildItem (Join-Path $repoRoot 'skills') -Dir -EA SilentlyContinue).Count}else{'n/a'})" -ForegroundColor Gray
     }
 
     'context-pack' {
