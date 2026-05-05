@@ -1,8 +1,47 @@
-﻿# Gua para Prxima Sesin - Auto-Delegation Router
+﻿# Guía para Próxima Sesión
 
-**ltima sesin**: 2026-04-23 09:00:30  
-**Estado**:  Auto-Delegation Router completado  
-**Prxima tarea**: Integracin en orchestrator principal
+**Última sesión**: 2026-05-04  
+**Estado**: PASS 9/9 — workspace completamente limpio y verificado  
+**Branch activo**: `main` (develop sincronizado)
+
+## Estado del Workspace
+
+Todo limpio. Para verificar al inicio de la próxima sesión:
+```powershell
+pwsh -File scripts/utilities/agent-verify.ps1
+```
+
+## Herramientas Disponibles
+
+| Herramienta | Uso |
+|-------------|-----|
+| `scripts/utilities/agent-verify.ps1` | Auto-verificación del agente — correr después de cualquier trabajo significativo |
+| `scripts/utilities/validate-configs.ps1` | Gate de integridad de configuración |
+| `scripts/utilities/pre-process-input.ps1` | Pre-procesado de inputs (routing automático) |
+| `scripts/utilities/install-hooks.ps1` | Instalar git hooks |
+
+## Logros de Esta Sesión (2026-05-04)
+
+- ✅ Multi-tool consistency: todos apuntan a `config/auto-delegation.json` como source of truth
+- ✅ sdd-lifecycle como skill canónico (sdd-design/apply/verify deprecados)
+- ✅ code-review-orchestrator-skill (fix de typo de sufijo)
+- ✅ Git hooks instalados y funcionando (pre-commit 7-dimensiones)
+- ✅ `scripts/utilities/validate-configs.ps1` — gate de integridad (PASS)
+- ✅ `scripts/utilities/agent-verify.ps1` — feedback loop de auto-verificación
+- ✅ `rules/AI-NORMATIVES.md` — 13 normativas formales
+- ✅ JSON fijos: security-deploy.json, security-privacy.json
+- ✅ Pre-commit false positives corregidos (3 scanners alineados)
+- ✅ 12/12 unit tests passing
+- ✅ Merge con remote main completado (remote había reestructurado tools/ → scripts/utilities/)
+- ✅ Push a develop y main
+
+## Posibles Próximas Tareas
+
+- Backlog en `workspace-foundation/docs/reference/FUTURE-FEATURES-BACKLOG.md`
+- API check en pre-commit tiene bug de `exit 1` syntax en PowerShell — no bloqueante pero genera noise
+- Engram update disponible: v1.15.4 → v1.15.6
+
+
 
 ## Inicio Rpido
 
@@ -190,20 +229,17 @@ Para preguntas o problemas:
 ## Estado Actual
 
 ```
- Auto-Delegation Router: IMPLEMENTADO
- Tests: 26 PASANDO
- Documentacin: COMPLETA
- Configuracin: LISTA
- Integracin: PENDIENTE
- Staging: PENDIENTE
- Produccin: PENDIENTE
+✅ Auto-Delegation Router: IMPLEMENTADO (skills/auto-delegation-router/)
+✅ Tests: 26 PASANDO + 11 integration tests routing-flow.tests.ps1
+✅ Documentación: COMPLETA
+✅ Configuración: LISTA (config/auto-delegation.json — fuente canónica)
+✅ Integración: COMPLETA (pre-process-input.ps1 + config/auto-delegation.json en producción)
+✅ Staging: VALIDADO (agent-verify 14/14 PASS — 2026-05-05)
+✅ Producción: ACTIVO — gentleman-foundation v2.6.5 main
 ```
 
 ---
 
 **Creado**: 2026-04-23 09:00:30  
-**Para**: Prxima sesin de desarrollo  
-**Duracin estimada**: 2-3 horas  
-**Complejidad**: Media  
-
- **LISTO PARA CONTINUAR!**
+**Actualizado**: 2026-05-05 — homologación completada, routing en producción  
+**Estado**: COMPLETADO — no se requieren acciones adicionales

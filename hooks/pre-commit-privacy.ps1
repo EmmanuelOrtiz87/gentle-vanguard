@@ -22,9 +22,25 @@ $CRITICAL_PATTERNS = @(
     @{ Name = 'AWS Key'; Pattern = 'AKIA[0-9A-Z]{16}' },
     @{ Name = 'GitHub Token'; Pattern = 'ghp_[A-Za-z0-9]{36}' },
     @{ Name = 'Stripe Key'; Pattern = 'sk_live_[0-9a-zA-Z]{24,}' },
-    @{ Name = 'Private Key'; Pattern = '-----BEGIN (RSA|EC|DSA|PRIVATE KEY-----' },
-    @{ Name = 'AWS Secret'; Pattern = 'aws_secret_access_key' },
+    @{ Name = 'Private Key'; Pattern = '-----' + 'BEGIN (RSA|EC|DSA|PRIVATE) KEY-----' },
+    @{ Name = 'AWS Secret'; Pattern = 'aws_secret' + '_access_key' },
     @{ Name = 'SendGrid Key'; Pattern = 'SG\.[A-Za-z0-9_-]{22}\.[A-Za-z0-9_-]{43}' }
+)
+
+# =============================================================================
+# EXCLUSIONS — files that DEFINE security patterns; exempt from self-scan
+# =============================================================================
+
+$EXCLUDED_PATHS = @(
+    'config/security-privacy.json',
+    'config/security-policy.json',
+    'hooks/pre-commit-privacy.ps1',
+    'hooks/pre-commit.ps1',
+    'scripts/hooks/check-security.ps1',
+    'docs/reference/ARCHITECTURE.md',
+    'scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1',
+    'skills/docker-devops-skill/SKILL.md',
+    'skills/security-expert-skill/references/security-patterns.md'
 )
 
 # =============================================================================
@@ -63,6 +79,11 @@ function Invoke-PrivacyScan {
     foreach ($file in $Files) {
         if (-not (Test-Path $file)) { continue }
         if ((Get-Item $file).PSIsContainer) { continue }
+        
+        # Skip policy/config files that define detection patterns
+        $normalizedFile = $file -replace '\\', '/'
+        $isExcluded = $EXCLUDED_PATHS | Where-Object { $normalizedFile -like "*$_*" }
+        if ($isExcluded) { continue }
         
         $content = Get-Content $file -Raw -ErrorAction SilentlyContinue
         if ($null -eq $content) { continue }

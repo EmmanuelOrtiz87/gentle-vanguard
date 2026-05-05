@@ -7,6 +7,7 @@
 1. **Run trigger detection** - Execute: `powershell -File scripts/utilities/pre-process-input.ps1 -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
 2. **Parse output**:
    - If `TRIGGER_MATCH_FOUND` → Load indicated skill using `skill` tool BEFORE any other action
+   - If `PLAN_MODE_REQUIRED` → Activate BA agent, load `sdd-lifecycle` skill
    - If `NO_TRIGGER_MATCH` → Continue with normal behavior
 3. **Session start** - Always run `scripts/utilities/session-autostart.cmd` on Windows for notifications, optimizations, validations
 4. **Special case "iniciar sesion"** - Load `session-workflow-skill`, then follow its workflow
@@ -60,12 +61,12 @@ Only when:
 ## 8 Governance Layers (from auto-delegation.json)
 When trigger detected, load corresponding skill:
 - **GOV**: governance, compliance, metrics, monitoring, observability, incident, security audit, review, audit → `project-orchestrator-skill`
-- **SAD**: architecture, design, sdd, api design, database, schema, technical decision, system design, microservice, integration → `sdd-design`
-- **DEV**: implement, code, develop, feature, refactor, bug fix, component, endpoint, frontend, backend, security, performance → `sdd-apply`
-- **QA**: test, testing, qa, validation, e2e, unit test, integration test, playwright, pytest, quality, judgment day → `sdd-verify`
+- **SAD**: architecture, design, sdd, api design, database, schema, technical decision, system design, microservice, integration → `sdd-lifecycle`
+- **DEV**: implement, code, develop, feature, refactor, bug fix, component, endpoint, frontend, backend, security, performance → `sdd-lifecycle`
+- **QA**: test, testing, qa, validation, e2e, unit test, integration test, playwright, pytest, quality, judgment day → `sdd-lifecycle`
 - **OPS**: deploy, ci/cd, docker, kubernetes, infrastructure, terraform, helm, release, devops, pipeline → `docker-devops-skill`
 - **DOC**: documentation, docs, readme, guide, runbook, specification, bdd specs, sdd specs → `documentation-governance`
-- **SCRIPT-GOV**: script, powershell, parser error, syntax error, validate script, governance script, hook, pre-push, pre-commit, fix script, auto fix, autofix, script error, correct script → `sdd-apply`
+- **SCRIPT-GOV**: script, powershell, parser error, syntax error, validate script, governance script, hook, pre-push, pre-commit, fix script, auto fix, autofix, script error, correct script → `sdd-lifecycle`
 - **REPORT**: informe, report, reporte, metricas, metrics, analytics, analisis, dashboard, resumen ejecutivo, gerencia, tokens, costos, consumo, sesiones, telemetry, telemetria, estadisticas, stats, resumen de sesion → `management-reporting-skill`
 
 ## 7 GitFlow Capabilities

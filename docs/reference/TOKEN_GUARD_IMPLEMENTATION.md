@@ -1,14 +1,25 @@
-# Token Guard - Proteccin Automtica contra Overflow de Tokens
+# Token Guard - Protección Automática contra Overflow de Tokens
+
+> **ESTADO**: Actualizado 2026-05-04 — refleja rutas operacionales reales.
 
 ## Resumen Ejecutivo
 
-Se ha implementado un sistema completo de **Token Overflow Protection** que se ejecuta automticamente desde el inicio de sesin. El sistema monitorea el consumo de tokens y toma acciones preventivas cuando se aproxima al lmite presupuestado.
+El sistema **Token Budget Guard** monitorea consumo de tokens y bloquea dispatch cuando se superan los umbrales configurados. Existen dos scripts; solo uno es operacional.
+
+## Scripts: Operacional vs Legacy
+
+| Script | Estado | Fuente de config |
+|--------|--------|-----------------|
+| `scripts/utilities/TELEMETRY-METRICS/token-budget-guard.ps1` | ✅ **OPERACIONAL** | `config/orchestrator.json#subagent_orchestration.token_budget_guard` |
+| `scripts/utilities/token-guard.ps1` | ⛔ **DEPRECATED** | `token-guard-config.json` (no existe en disco) |
+
+**Usar solo el script operacional.** El legacy tiene thresholds distintos y referencia un archivo de config inexistente.
 
 ## Caractersticas Implementadas
 
-### 1.  Token Guard Automtico
-- **Script**: `scripts/utilities/token-guard.ps1`
-- **configuración**: `scripts/utilities/token-guard-config.json`
+### 1.  Token Budget Guard (Operacional)
+- **Script**: `scripts/utilities/TELEMETRY-METRICS/token-budget-guard.ps1`
+- **Configuración canónica**: `config/orchestrator.json` → `subagent_orchestration.token_budget_guard`
 - **Estado**: `.session/token-guard-state.json`
 - Se inicializa automticamente al ejecutar `scripts/utilities/session-autostart.cmd`
 - Monitorea tokens en tiempo real
@@ -38,12 +49,14 @@ Se ha implementado un sistema completo de **Token Overflow Protection** que se e
 ### Componentes Principales
 
 ```
-Token Guard System
- scripts/utilities/token-guard.ps1 (Motor principal)
- scripts/utilities/token-guard-config.json (configuración)
- scripts/utilities/session-autostart.cmd (Integracin)
- scripts/utilities/session-autostart.config.json (Config de sesin)
- .session/token-guard-state.json (Estado en tiempo real)
+Token Budget Guard System (Operacional)
+ scripts/utilities/TELEMETRY-METRICS/token-budget-guard.ps1  ← motor principal
+ config/orchestrator.json#subagent_orchestration.token_budget_guard  ← config canónica
+ docs/sessions/metrics/token-guard-usage.csv  ← historial de uso
+
+[DEPRECATED — no usar]
+ scripts/utilities/token-guard.ps1
+ scripts/utilities/token-guard-config.json  (no existe en disco)
 ```
 
 ### Flujo de Inicializacin
@@ -66,27 +79,32 @@ Inicializacin de sesin
 Inicializacin de orquestador
 ```
 
-## configuración
+## Configuración (fuente canónica)
 
-### Presupuesto de Tokens
+Editar en `config/orchestrator.json` bajo `subagent_orchestration.token_budget_guard`:
 
 ```json
 {
-  "tokenBudget": 128000,           // Presupuesto total
-  "alertThreshold": 0.80,          // Alerta a 80%
-  "pauseThreshold": 0.95,          // Pausa a 95%
-  "maxRounds": 5,                  // Mximo de rounds
-  "roundTokenBudget": 25600        // Tokens por round
+  "enabled": true,
+  "unit": "tokens",
+  "estimation": { "method": "chars_div_4", "chars_per_token": 4 },
+  "daily_budget_tokens": 30000,
+  "soft_threshold_pct": 70,
+  "hard_threshold_pct": 90,
+  "per_agent_budget_tokens": 750,
+  "coordination_overhead_tokens": 125
 }
 ```
 
-### Umbrales de Alerta
+> **Unidad canónica: tokens.** Fórmula de estimación: `chars / 4 = tokens`.
+> Usar esta fórmula en todos los scripts. El script legacy usaba chars directamente — causa de inconsistencias.
 
-| Umbral | Accin | Tipo |
+### Umbrales de Alerta (Operacionales)
+
+| Umbral | Acción | Tipo |
 |--------|--------|------|
-| 80% | Alerta WARNING | Notificacin |
-| 90% | Alerta WARNING | Notificacin |
-| 95% | Alerta CRITICAL + PAUSA | Pausa de dispatch |
+| 70% (`soft_threshold_pct`) | WARN — log y continúa | Notificación |
+| 90% (`hard_threshold_pct`) | BLOCK — rechaza dispatch | Bloqueo |
 
 ## Funciones Disponibles
 

@@ -20,6 +20,8 @@ New to Workspace Foundation? Start here:
 - **[SCRIPT-NORMALIZATION-STANDARDS.md](SCRIPT-NORMALIZATION-STANDARDS.md)** - Script normalization and best practices
 - **[AI-TOOLS-COMPATIBILITY-MATRIX.md](AI-TOOLS-COMPATIBILITY-MATRIX.md)** - AI tool integration (Claude, Cline, etc.)
 - **[TOKEN-CONTEXT-STANDARDS.md](TOKEN-CONTEXT-STANDARDS.md)** - Token budgets and efficiency modes
+- **[TOKEN-AUTOPILOT-OPERATIONS.md](TOKEN-AUTOPILOT-OPERATIONS.md)** - Hard/balanced token autopilot operations and quick commands
+- **[DASHBOARD-EXECUTIVE-GUIDE.md](DASHBOARD-EXECUTIVE-GUIDE.md)** - Dashboard interpretation, ROI reading, and automation lifecycle
 
 ### Architecture
 - **[ARCHITECTURE.md](../architecture/ARCHITECTURE.md)** - System design and overview
@@ -69,6 +71,8 @@ New to Workspace Foundation? Start here:
 | SCRIPT-NORMALIZATION-STANDARDS.md | Code quality |
 | AI-TOOLS-COMPATIBILITY-MATRIX.md | Tool integration |
 | TOKEN-CONTEXT-STANDARDS.md | Token optimization |
+| TOKEN-AUTOPILOT-OPERATIONS.md | Token autopilot operations |
+| DASHBOARD-EXECUTIVE-GUIDE.md | Dashboard interpretation and ROI |
 | ARCHITECTURE.md | Architecture |
 | DEVELOPMENT-WORKFLOW.md | Development workflow |
 

@@ -1,0 +1,78 @@
+name: Release
+
+# Automated release workflow: creates a GitHub Release with auto-generated
+# release notes whenever a semver tag (v*.*.*) is pushed.
+#
+# Conventional commit categories used for auto-notes:
+#   feat → New features
+#   fix  → Bug fixes
+#   perf → Performance improvements
+#   chore/refactor/ci/docs → Maintenance
+
+permissions:
+  contents: write    # Required to create GitHub Releases
+  pull-requests: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false   # Never cancel a release in flight
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'   # semver tags only: v1.2.3
+
+jobs:
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0   # Full history needed for release notes
+
+      - name: Read VERSION file
+        id: version
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          # Strip leading 'v' for comparison with VERSION file
+          FILE_VERSION=$(cat VERSION 2>/dev/null | tr -d '[:space:]' || echo "unknown")
+          echo "file_version=${FILE_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Release tag: ${TAG} | VERSION file: ${FILE_VERSION}"
+
+      - name: Verify tag matches VERSION file
+        run: |
+          TAG_VER="${{ steps.version.outputs.tag }}"
+          FILE_VER="v${{ steps.version.outputs.file_version }}"
+          if [ "${TAG_VER}" != "${FILE_VER}" ]; then
+            echo "::warning::Tag ${TAG_VER} does not match VERSION file (${FILE_VER}). Proceeding anyway."
+          else
+            echo "Tag and VERSION file match: ${TAG_VER}"
+          fi
+
+      - name: Extract CHANGELOG section for this version
+        id: changelog
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          VERSION="${TAG#v}"
+          # Extract the section between this version header and the next
+          NOTES=$(awk "/^## \[${VERSION}\]/{found=1; next} found && /^## \[/{exit} found{print}" docs/CHANGELOG.md || echo "")
+          if [ -z "$NOTES" ]; then
+            NOTES="See [CHANGELOG.md](docs/CHANGELOG.md) for details."
+          fi
+          # Write to temp file (avoids multiline env var issues)
+          printf '%s' "$NOTES" > /tmp/release_notes.md
+          echo "Generated release notes ($(wc -l < /tmp/release_notes.md) lines)"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: "${{ steps.version.outputs.tag }} — Gentleman Foundation"
+          body_path: /tmp/release_notes.md
+          draft: false
+          prerelease: false
+          generate_release_notes: true   # Also use GitHub's auto-generated notes as fallback

@@ -23,8 +23,32 @@ function Write-Warn { param([string]$Message)
     Write-Host "[WARN] $Message" -ForegroundColor Yellow
 }
 
+function Write-Info { param([string]$Message)
+    Write-Host "[INFO] $Message" -ForegroundColor Cyan
+}
+
 function Write-Error { param([string]$Message)
     Write-Host "[ERROR] $Message" -ForegroundColor Red
+}
+
+function Resolve-EngramBinary {
+    $candidates = @(
+        (Join-Path $PSScriptRoot "engram.exe"),
+        (Join-Path (Split-Path -Parent $PSScriptRoot) "tools\engram.exe")
+    )
+
+    foreach ($candidate in $candidates) {
+        if (Test-Path $candidate) {
+            return (Resolve-Path $candidate).Path
+        }
+    }
+
+    $command = Get-Command "engram" -ErrorAction SilentlyContinue
+    if ($command -and $command.Source) {
+        return $command.Source
+    }
+
+    return $null
 }
 
 Write-Host "STARTING: Pre-close validation for $ProjectName" -ForegroundColor Cyan
@@ -137,11 +161,13 @@ try {
     }
     
     if ($foundTasks.Count -gt 0) {
-        Write-Warn "Critical pending tasks found: $($foundTasks.Count)"
-        $foundTasks | Select-Object -First 5 | ForEach-Object { Write-Host "  $_" -ForegroundColor Yellow }
         if (-not $Force) {
+            Write-Warn "Critical pending tasks found: $($foundTasks.Count)"
+            $foundTasks | Select-Object -First 5 | ForEach-Object { Write-Host "  $_" -ForegroundColor Yellow }
             $allPassed = $false
             $failedChecks += "PendingTasks"
+        } else {
+            Write-Info "Pending task markers observed: $($foundTasks.Count) (non-blocking with Force)"
         }
     } else {
         Write-Ok "No critical pending tasks"
@@ -175,21 +201,23 @@ try {
 # 4. Engram Check (non-blocking)
 Write-Step "Checking Engram (non-critical)"
 try {
-    $engramBin = Join-Path $PSScriptRoot "engram.exe"
-    if (Test-Path $engramBin) {
+    $engramBin = Resolve-EngramBinary
+    if (-not [string]::IsNullOrWhiteSpace($engramBin) -and (Test-Path $engramBin)) {
         $env:ENGRAM_SKIP_UPDATE = "1"
-        $sessionList = & $engramBin session-list 2>&1 | Out-String
+        $sessionList = & $engramBin doctor --project $ProjectName 2>$null | Out-String
         if ($LASTEXITCODE -eq 0) {
             Write-Ok "Engram is responsive"
         } else {
-            Write-Warn "Engram check failed - non-critical for session closure"
-            Write-Warn "Engram output: $($sessionList.Substring(0, [Math]::Min(100, $sessionList.Length)))"
+            Write-Info "Engram check did not pass; non-critical for session closure"
+            if (-not [string]::IsNullOrWhiteSpace($sessionList)) {
+                Write-Info "Engram output: $($sessionList.Substring(0, [Math]::Min(100, $sessionList.Length)))"
+            }
         }
     } else {
-        Write-Warn "Engram binary not found"
+        Write-Info "Engram binary not found; skipping non-critical check"
     }
 } catch {
-    Write-Warn "Engram check error (non-critical): $_"
+    Write-Info "Engram check error (non-critical): $_"
 }
 
 # Final Result

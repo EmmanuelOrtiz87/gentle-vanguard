@@ -4,6 +4,8 @@
 
 Telemetry tracks estimated token usage and cost impact for workflow tasks.
 
+It is also the primary input for `reports/dashboard.html` (executive KPIs, costs, ROI, and trend charts).
+
 ## Data Sources
 
 - `docs/sessions/metrics/token-guard-usage.csv`
@@ -22,6 +24,16 @@ JSON output:
 ```powershell
 .\scripts\utilities\token-telemetry-report.ps1 -AsJson
 ```
+
+Dashboard generation:
+
+```powershell
+.\scripts\utilities\TELEMETRY-METRICS\generate-dashboard.ps1
+```
+
+Automated refresh (no manual trigger required in CI):
+- `.github/workflows/dashboard-auto-refresh.yml`
+- `.github/workflows/monthly-management-report.yml`
 
 ## Cost Settings
 

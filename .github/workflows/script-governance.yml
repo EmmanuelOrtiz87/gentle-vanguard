@@ -1,5 +1,12 @@
 name: Script Governance
 
+permissions:
+  contents: read
+
+concurrency:
+  group: script-governance-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [main, develop]
@@ -20,14 +27,11 @@ on:
       - '.github/workflows/script-governance.yml'
   workflow_dispatch:
 
-concurrency:
-  group: script-governance-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
-  cancel-in-progress: true
-
 jobs:
   script-governance:
     name: Validate Script Governance and Process Alerts
     runs-on: windows-latest
+    timeout-minutes: 25
     steps:
       - name: Configure Git for Windows
         shell: bash
@@ -36,7 +40,7 @@ jobs:
           git config --global core.longpaths true
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -50,8 +54,8 @@ jobs:
         shell: pwsh
         continue-on-error: true
         run: |
-          if (Test-Path '.\scripts\utilities\foundation-sync.ps1') {
-            powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\foundation-sync.ps1 -Mode check
+          if (Test-Path '.\scripts\utilities\UTILITIES\foundation-sync.ps1') {
+            powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\UTILITIES\foundation-sync.ps1 -Mode check
           } else {
             Write-Host '::notice::foundation-sync.ps1 not found -- skipping drift check.'
           }

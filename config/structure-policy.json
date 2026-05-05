@@ -13,11 +13,12 @@
   ],
   "allowedRootFiles": ["README.md", "config/mcp-servers.json"],
   "allowedRootMarkdownFiles": [
-    "README.md",
-    "AGENTS.md",
-    "CHANGELOG.md",
-    "CONTRIBUTING.md",
-    "MIGRATION.md"
+    "CLAUDE.md",
+    "SECURITY.md"
+  ],
+  "allowedRootJsonFiles": [
+    "opencode.json",
+    "engram-export.json"
   ],
   "deprecatedPathPatterns": [
     ".\\scripts\\update-all.ps1",

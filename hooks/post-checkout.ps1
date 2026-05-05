@@ -64,7 +64,7 @@ if ($autoInitScript) {
     Write-Host "Verifying environment..." -ForegroundColor Yellow
     $null = Invoke-LocalPowerShellScript -ScriptPath $autoInitScript -ScriptArgs @('-Quiet', '-Force')
 } else {
-    Write-Host "[WARN] Auto-init script not found" -ForegroundColor Yellow
+    Write-Host "[INFO] Optional auto-init script not found (skipped)" -ForegroundColor Gray
 }
 
 Write-Host "[OK] Post-checkout completion check finished" -ForegroundColor Green

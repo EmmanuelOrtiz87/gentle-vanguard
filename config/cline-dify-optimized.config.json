@@ -168,12 +168,12 @@
     },
     "governanceLayers": {
       "GOV": ["project-orchestrator-skill"],
-      "SAD": ["sdd-design"],
-      "DEV": ["sdd-apply"],
-      "QA": ["sdd-verify"],
+      "SAD": ["sdd-lifecycle"],
+      "DEV": ["sdd-lifecycle"],
+      "QA": ["sdd-lifecycle"],
       "OPS": ["docker-devops-skill"],
       "DOC": ["documentation-governance"],
-      "SCRIPT-GOV": ["sdd-apply"],
+      "SCRIPT-GOV": ["sdd-lifecycle"],
       "REPORT": ["management-reporting-skill"]
     },
     "gitflowCapabilities": {
@@ -187,7 +187,7 @@
     },
     "rulesPath": "rules/adaptive/",
     "cacheSkills": true,
-    "cacheDuration": 3600,
+    "cacheDuration": 7200,
     "maxSkillsPerSession": 5,
     "prioritizeByFrequency": true
   },
@@ -218,7 +218,7 @@
     },
     "responseFormat": {
       "enforceStructure": true,
-      "maxResponseTokens": 3500,
+      "maxResponseTokens": 2000,
       "requireSummary": true,
       "requireActionItems": false,
       "compressResponses": true
@@ -265,7 +265,7 @@
   },
   "performanceTuning": {
     "cacheResponses": true,
-    "cacheDuration": 3600,
+    "cacheDuration": 7200,
     "batchRequests": true,
     "maxBatchSize": 5,
     "requestTimeout": 30000,
@@ -325,7 +325,7 @@
       "enabled": true,
       "cacheFrequentPatterns": true,
       "cacheProjectStructure": true,
-      "cacheDuration": 3600
+      "cacheDuration": 7200
     },
     "adaptiveCompression": {
       "enabled": true,
