@@ -30,7 +30,7 @@ jobs:
           ignore-unfixed: true
           severity: CRITICAL,HIGH
       - name: Upload Trivy report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: trivy-report
           path: trivy-report.json
@@ -47,7 +47,7 @@ jobs:
           archive_name="backup-$(date +%Y-%m-%d).tar.gz"
           tar -czf "$archive_name" docs/ config/
       - name: Upload backup
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: workspace-backup
           path: backup-*.tar.gz
