@@ -1,67 +1,67 @@
 {
   "schemaVersion": 1,
   "role": "source",
-  "foundationVersion": "2.1.0",
-  "lastUpdated": "2026-04-17",
+  "foundationVersion": "2.6.5",
+  "lastUpdated": "2026-05-05",
   "assets": [
     {
       "type": "script",
-      "path": "scripts/utilities/invoke-cloud-agent.ps1",
+      "path": "scripts/utilities/AI-AGENT-MANAGEMENT/invoke-cloud-agent.ps1",
       "description": "Cloud Agent Connector - Invoke external AI models (Bedrock, Difi, Azure, etc.)"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/invoke-judgment.ps1",
+      "path": "scripts/utilities/AI-AGENT-MANAGEMENT/invoke-judgment.ps1",
       "description": "Judgment Day - Dual-agent adversarial review protocol"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/manage-backlog.ps1",
+      "path": "scripts/utilities/UTILITIES/manage-backlog.ps1",
       "description": "Backlog Management - JSON-based task management"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/create-skill.ps1",
+      "path": "scripts/utilities/SKILLS-TOOLS/create-skill.ps1",
       "description": "Skill Factory - Automated skill generation"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/consolidate-telemetry.ps1",
+      "path": "scripts/utilities/TELEMETRY-METRICS/consolidate-telemetry.ps1",
       "description": "Business Telemetry - Centralized metrics reporting"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/compact-memory.ps1",
+      "path": "scripts/utilities/PERFORMANCE-OPTIMIZATION/compact-memory.ps1",
       "description": "Compact Memory - Session summarization"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/read-once-guard.ps1",
+      "path": "scripts/utilities/UTILITIES/read-once-guard.ps1",
       "description": "Read Once Guard - Prevent redundant file reads"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/mcp-monitor.ps1",
+      "path": "scripts/utilities/UTILITIES/mcp-monitor.ps1",
       "description": "MCP Monitor - Auto-shutdown inactive MCP servers"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/setup-wizard.ps1",
+      "path": "scripts/utilities/DEPLOYMENT/setup-wizard.ps1",
       "description": "Setup Wizard - Interactive dependency installation"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/sync-agent-instructions.ps1",
+      "path": "scripts/utilities/AI-AGENT-MANAGEMENT/sync-agent-instructions.ps1",
       "description": "Agent Instructions Sync - Cross-platform sync for Claude, Copilot, etc."
     },
     {
       "type": "script",
-      "path": "scripts/utilities/manual-recovery.ps1",
+      "path": "scripts/utilities/UTILITIES/manual-recovery.ps1",
       "description": "Manual Recovery - Fallback when self-healing fails"
     },
     {
       "type": "script",
-      "path": "scripts/utilities/invoke-ai-review.ps1",
+      "path": "scripts/utilities/AI-AGENT-MANAGEMENT/invoke-ai-review.ps1",
       "description": "-Native AI Review - Multi-provider code review with caching"
     },
     {
@@ -111,7 +111,7 @@
     },
     {
       "type": "guide",
-      "path": "docs/reference/-ABSORPTION-PLAN.md",
+      "path": "docs/guides/TELEMETRY.md",
       "description": " Native Integration Plan"
     },
     {
@@ -173,30 +173,50 @@
       "type": "guide",
       "path": "docs/guides/GUARDIAN-FALLBACK-PROTOCOL.md",
       "description": "Guardian Fallback Protocol - When and how to invoke  as fallback"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/AI-AGENT-MANAGEMENT/collect-provider-telemetry.ps1",
+      "description": "Provider Telemetry Collection - Probes configured AI providers and records real status/latency"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/TELEMETRY-METRICS/generate-dashboard.ps1",
+      "description": "Dashboard Generator - HTML dashboard with PDF/PNG export and configurable thresholds"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1",
+      "description": "Workflow CLI - Main orchestrator entry point"
+    },
+    {
+      "type": "config",
+      "path": "config/metrics-config.json",
+      "description": "Metrics and observability config with configurable alert_thresholds and cost_model blocks"
     }
   ],
   "breakingChanges": [],
   "newInThisVersion": [
     {
+      "type": "script",
+      "path": "scripts/utilities/AI-AGENT-MANAGEMENT/collect-provider-telemetry.ps1",
+      "description": "Real provider telemetry collection with latency/status probing"
+    },
+    {
       "type": "config",
-      "path": "config/mcp-servers.json",
-      "description": "MCP Server Configuration (filesystem, git, sqlite)"
+      "path": "config/metrics-config.json",
+      "description": "Alert thresholds (alert_thresholds) and cost model (cost_model) blocks added"
     },
     {
-      "type": "skill",
-      "path": "skills/incident-response-skill",
-      "description": "Incident Response - Automated detection and recovery"
-    },
-    {
-      "type": "tests",
-      "path": "tests/",
-      "description": "Test suite structure (unit, integration, regression, performance, security)"
+      "type": "script",
+      "path": "scripts/utilities/TELEMETRY-METRICS/generate-dashboard.ps1",
+      "description": "Dashboard PDF/PNG export buttons and config-driven thresholds"
     }
   ],
   "migrationNotes": [
     "cloud-agents.local.json is now gitignored - create from cloud-agents.local.example",
     "PreTool hooks install to ~/.pretool-hooks/ via bootstrap-machine.ps1",
-    "Foundation operates with Opencode + judgment-day for code review"
+    "Foundation operates with Opencode + judgment-day for code review",
+    "Scripts reorganized into subdirectories: AI-AGENT-MANAGEMENT, UTILITIES, SKILLS-TOOLS, TELEMETRY-METRICS, PERFORMANCE-OPTIMIZATION, DEPLOYMENT, WORKFLOW-ORCHESTRATION"
   ]
 }
-
