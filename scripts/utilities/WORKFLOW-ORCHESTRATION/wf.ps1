@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -67,12 +67,199 @@ function Invoke-TokenBudgetGuard {
         return
     }
 
-    # Guard alerts are non-blocking by default to avoid blocking session completion.
-    if ($EstimatedChars -gt 0) {
-        & $guardScript -Mode check -Task $Task -Risk $Risk -EstimatedChars $EstimatedChars -Record
-    } else {
-        & $guardScript -Mode check -Task $Task -Risk $Risk -Record
+    $guardArgs = @{
+        Mode = 'check'
+        Task = $Task
+        Risk = $Risk
+        Record = $true
+        AsJson = $true
+        Quiet = $true
     }
+    if ($EstimatedChars -gt 0) {
+        $guardArgs['EstimatedChars'] = $EstimatedChars
+    }
+
+    $guardResult = $null
+    try {
+        $guardRaw = & $guardScript @guardArgs
+        if ($guardRaw) {
+            $guardText = [string]$guardRaw
+            $guardResult = $guardText | ConvertFrom-Json -ErrorAction Stop
+        }
+    }
+    catch {
+        # Fallback to legacy output mode if JSON parsing fails.
+        if ($EstimatedChars -gt 0) {
+            & $guardScript -Mode check -Task $Task -Risk $Risk -EstimatedChars $EstimatedChars -Record
+        } else {
+            & $guardScript -Mode check -Task $Task -Risk $Risk -Record
+        }
+        return
+    }
+
+    if ($guardResult -and $guardResult.status -ne 'PASS') {
+        Write-Warning ("Token guard status={0} projected={1}% for task={2}" -f $guardResult.status, $guardResult.projected_pct, $Task)
+    }
+
+    Invoke-TokenAutopilot -Task $Task -GuardResult $guardResult
+}
+
+function Get-TokenAutopilotPolicy {
+    $defaults = [ordered]@{
+        enabled = $true
+        triggerStatuses = @('SOFT_LIMIT', 'HARD_LIMIT')
+        minConsecutiveAlerts = 2
+        autoApplyOnCommands = @('context-pack', 'compact-start', 'audit', 'publish', 'end-session', 'dispatch')
+        applyChatLevel = 'chat-compact'
+        stateFile = '.session/token-autopilot-state.json'
+    }
+
+    $configPath = Join-Path $repoRoot 'config\context-efficiency.json'
+    if (-not (Test-Path $configPath)) {
+        return [pscustomobject]$defaults
+    }
+
+    try {
+        $cfg = Get-Content -Path $configPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        if ($cfg -and $cfg.PSObject.Properties['tokenAutopilot']) {
+            $custom = $cfg.tokenAutopilot
+            foreach ($k in @($defaults.Keys)) {
+                if ($custom.PSObject.Properties[$k]) {
+                    $defaults[$k] = $custom.$k
+                }
+            }
+        }
+    }
+    catch {
+        return [pscustomobject]$defaults
+    }
+
+    return [pscustomobject]$defaults
+}
+
+function Get-TokenAutopilotState {
+    param([string]$StatePath)
+
+    if (Test-Path $StatePath) {
+        try {
+            return Get-Content -Path $StatePath -Raw -Encoding UTF8 | ConvertFrom-Json
+        }
+        catch {
+            # Fall through to defaults.
+        }
+    }
+
+    return [pscustomobject]@{
+        consecutiveAlerts = 0
+        lastStatus = 'PASS'
+        lastTask = ''
+        lastAppliedChatLevel = ''
+        lastAppliedAt = ''
+    }
+}
+
+function Save-TokenAutopilotState {
+    param(
+        [string]$StatePath,
+        [pscustomobject]$State
+    )
+
+    $stateDir = Split-Path -Parent $StatePath
+    if (-not (Test-Path $stateDir)) {
+        New-Item -ItemType Directory -Path $stateDir -Force | Out-Null
+    }
+
+    $State | ConvertTo-Json -Depth 10 | Set-Content -Path $StatePath -Encoding UTF8
+}
+
+function Set-TokenAutopilotProfile {
+    param(
+        [ValidateSet('hard', 'balanced')]
+        [string]$Profile
+    )
+
+    $configPath = Join-Path $repoRoot 'config\context-efficiency.json'
+    if (-not (Test-Path $configPath)) {
+        throw "Context efficiency config not found: $configPath"
+    }
+
+    $config = Get-Content -Path $configPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    if (-not $config.PSObject.Properties['tokenAutopilot']) {
+        $config | Add-Member -MemberType NoteProperty -Name 'tokenAutopilot' -Value ([pscustomobject]@{})
+    }
+
+    if ($Profile -eq 'hard') {
+        $config.tokenAutopilot.profile = 'hard'
+        $config.tokenAutopilot.triggerStatuses = @('HARD_LIMIT')
+        $config.tokenAutopilot.minConsecutiveAlerts = 1
+        $config.tokenAutopilot.applyChatLevel = 'chat-compact'
+    }
+    else {
+        $config.tokenAutopilot.profile = 'balanced'
+        $config.tokenAutopilot.triggerStatuses = @('SOFT_LIMIT', 'HARD_LIMIT')
+        $config.tokenAutopilot.minConsecutiveAlerts = 2
+        $config.tokenAutopilot.applyChatLevel = 'chat-compact'
+    }
+
+    $json = $config | ConvertTo-Json -Depth 30
+    Set-Content -Path $configPath -Value $json -Encoding UTF8
+}
+
+function Invoke-TokenAutopilot {
+    param(
+        [string]$Task,
+        [pscustomobject]$GuardResult
+    )
+
+    if (-not $GuardResult) {
+        return
+    }
+
+    $policy = Get-TokenAutopilotPolicy
+    if (-not $policy.enabled) {
+        return
+    }
+
+    $normalizedTask = if ($Task) { $Task.Trim().ToLowerInvariant() } else { 'general' }
+    $taskAllowList = @($policy.autoApplyOnCommands | ForEach-Object { [string]$_ })
+    if ($taskAllowList.Count -gt 0 -and ($taskAllowList -notcontains $normalizedTask)) {
+        return
+    }
+
+    $status = [string]$GuardResult.status
+    $triggerStatuses = @($policy.triggerStatuses | ForEach-Object { [string]$_ })
+    $statePath = Join-Path $repoRoot ([string]$policy.stateFile)
+    $state = Get-TokenAutopilotState -StatePath $statePath
+
+    if ($triggerStatuses -contains $status) {
+        $state.consecutiveAlerts = [int]$state.consecutiveAlerts + 1
+    }
+    else {
+        $state.consecutiveAlerts = 0
+    }
+
+    $state.lastStatus = $status
+    $state.lastTask = $normalizedTask
+
+    $requiredAlerts = [int]$policy.minConsecutiveAlerts
+    if ($requiredAlerts -lt 1) {
+        $requiredAlerts = 1
+    }
+
+    if (($triggerStatuses -contains $status) -and ([int]$state.consecutiveAlerts -ge $requiredAlerts)) {
+        $modeScript = Join-Path $scriptDir '..\UTILITIES\response-mode.ps1'
+        if (Test-Path $modeScript) {
+            $chatLevel = [string]$policy.applyChatLevel
+            & $modeScript -Mode set-chat-level -ChatLevel $chatLevel -SkipEngramLog 2>$null | Out-Null
+            if ($LASTEXITCODE -eq 0) {
+                $state.lastAppliedChatLevel = $chatLevel
+                $state.lastAppliedAt = (Get-Date -Format 'yyyy-MM-ddTHH:mm:ssK')
+                Write-Warning ("Token autopilot applied chat-level={0} after {1} consecutive alerts (status={2})." -f $chatLevel, $state.consecutiveAlerts, $status)
+            }
+        }
+    }
+
+    Save-TokenAutopilotState -StatePath $statePath -State $state
 }
 
 function Get-GitInfo {
@@ -1406,6 +1593,7 @@ COMMANDS:
     orchestrator-status  Validate orchestrator and Engram integration
     stack-dashboard      Show one-shot stack health, token risk, and next action recommendation
     runtime-route        Resolve runtime mode (AI/Hybrid/Offline) and delegation strategy
+    runtime-gate [type]  Gate check: is task type allowed? type=ai|heavy-ai|network|local|metrics|any
     custom-rules-status  Show custom technical/business/review rule loading status
     response-mode [arg]  Show/set language, detail, profile, chat level, presets, and recommendation
     ide-status           Detect IDE session and suggest activation command
@@ -1419,7 +1607,7 @@ COMMANDS:
     compact-start [goal]  Generate context pack and copy compact continuation prompt
     simplify-text [text]   Simplify input text (remove emojis, normalize, abbreviate)
     context-metrics [days] Show context/token usage metrics from local logs
-    token-guard [task]   Check token budget thresholds and continuity alternatives (Engram-aware)
+    token-guard [task]   Check token budget thresholds and continuity alternatives (Engram-aware/autopilot-aware)
     checkpoint [label]   Save a live rollback point (git stash -u) before risky edits
     list-checkpoints     List workflow-created checkpoints
     rollback-checkpoint [selector] Restore latest checkpoint or one matching selector
@@ -1427,6 +1615,16 @@ COMMANDS:
     homologate [apply]  Normalize docs/artifacts and update references (dry-run default)
     agent-alert [strict] Check process-compliance signals for off-process AI activity
     agent <AGENT> [TASK] Route task to specialized sub-agent (BA|SAD|DEV|QA|OPS|GOV|DOC)
+    dashboard [open]     Generate static HTML dashboard from telemetry JSON (open = auto-open browser)
+    mq [action]          Message queue adapter: status|publish|consume|test (file/redis/webhook)
+    export-metrics [fmt] Export metrics to analytical store: csv|jsonl|sqlite|all (default: csv)
+    monthly-report [fmt] Run export-metrics + generate-management-report (fmt: csv|jsonl|sqlite|all)
+    platform-info        Show current platform and PowerShell version
+    sdd-gate             FF-001: Validate SDD spec status before merging to protected branches
+    sdd-metrics          FF-002: SDD process KPIs: spec coverage, lead time, rework ratio
+    sync-drift           FF-004: Detect drift between declared config and actual skills/files
+    benchmark [cmds]     FF-006: Profile wf commands vs SLO thresholds (default: status,health)
+    version              Show current stack version (from VERSION file + orchestrator.json)
     help                 Show this help
 
 OPTIONS:
@@ -1468,6 +1666,9 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 response-mode detail:expanded Set detail level
     .\scripts\utilities\wf.ps1 response-mode preset:bugfix Apply preset for task type
     .\scripts\utilities\wf.ps1 response-mode recommend:docs:high Recommend mode for preset+risk
+    .\scripts\utilities\wf.ps1 response-mode ahorro         On-demand token saving mode (chat-compact)
+    .\scripts\utilities\wf.ps1 response-mode normal         On-demand balanced mode (chat-balanced, override)
+    .\scripts\utilities\wf.ps1 response-mode detallado      On-demand detailed mode (chat-detailed, override)
     .\scripts\utilities\wf.ps1 ide-status          Detect IDE and show recommended activation
     .\scripts\utilities\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
     .\scripts\utilities\wf.ps1 update-tools         Update required tools and optional integrations
@@ -1476,6 +1677,9 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 context-metrics 14  Show 14-day context usage summary
     .\scripts\utilities\wf.ps1 token-guard         Show token budget status for current session
     .\scripts\utilities\wf.ps1 token-guard publish Check token budget for publish-level workflow
+    .\scripts\utilities\wf.ps1 token-guard auto    Run token check and execute autopilot if thresholds persist
+    .\scripts\utilities\wf.ps1 token-guard profile:hard      Set autopilot default to hard mode
+    .\scripts\utilities\wf.ps1 token-guard profile:balanced  Set autopilot default to balanced mode
     .\scripts\utilities\wf.ps1 checkpoint feature-doc-cleanup  Save rollback point including untracked files
     .\scripts\utilities\wf.ps1 list-checkpoints        Show available rollback points
     .\scripts\utilities\wf.ps1 rollback-checkpoint     Restore latest checkpoint
@@ -1486,6 +1690,7 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 homologate          Preview normalization actions
     .\scripts\utilities\wf.ps1 homologate apply    Execute normalization and reference updates
     .\scripts\utilities\wf.ps1 health -StrictCleanup  Run health and fail if cleanup drift exists
+    .\scripts\utilities\wf.ps1 monthly-report all      Export metrics and build monthly management report
     .\scripts\utilities\wf.ps1 agent-alert           Show process-compliance warnings (non-blocking)
     .\scripts\utilities\wf.ps1 agent-alert strict    Fail if process-compliance warnings are detected
     .\scripts\utilities\wf.ps1 agent list            List all available specialized agents
@@ -1629,7 +1834,7 @@ switch ($Command) {
     'day-end-closure' {
         Write-Step "Running automated day-end closure"
         Invoke-TokenBudgetGuard -Task 'end-session' -Risk 'high' -EstimatedChars 14000
-        $dayEndScript = Join-Path $scriptDir 'day-end-closure.ps1'
+        $dayEndScript = Join-Path $scriptDir '..\UTILITIES\day-end-closure.ps1'
         if (Test-Path $dayEndScript) {
             if (-not [string]::IsNullOrWhiteSpace($Scope)) {
                 & $dayEndScript -SessionId $Scope -SkipValidation:$SkipTests -Force:$Force
@@ -1932,6 +2137,21 @@ switch ($Command) {
         }
     }
 
+    'runtime-gate' {
+        $routeScript = Join-Path $scriptDir 'runtime-router.ps1'
+        if (-not (Test-Path $routeScript)) {
+            Write-Error "Runtime router script not found: $routeScript"
+            exit 1
+        }
+        $taskType = if ($Scope) { $Scope } else { 'any' }
+        if ($JSON) {
+            & $routeScript -Mode gate -TaskType $taskType -AsJson
+        } else {
+            Write-Step "Runtime Gate — task: $taskType"
+            & $routeScript -Mode gate -TaskType $taskType
+        }
+    }
+
     'custom-rules-status' {
         Write-Step "Custom Rules Status"
         $rulesScript = Join-Path $scriptDir '..\UTILITIES\custom-rules.ps1'
@@ -1993,6 +2213,15 @@ switch ($Command) {
             }
             elseif ($scopeText -in @('chat-compact', 'chat-balanced', 'chat-detailed')) {
                 $modeParams = @{ Mode = 'set-chat-level'; ChatLevel = $scopeText }
+            }
+            elseif ($scopeText -in @('ahorro', 'modo-ahorro', 'ahorro-on', 'economy', 'token-save')) {
+                $modeParams = @{ Mode = 'set-chat-level'; ChatLevel = 'chat-compact' }
+            }
+            elseif ($scopeText -in @('normal', 'balanceado', 'modo-normal', 'ahorro-off')) {
+                $modeParams = @{ Mode = 'set-chat-level'; ChatLevel = 'chat-balanced'; AllowPolicyOverride = $true; OverrideReason = 'manual-demand:balanced-chat' }
+            }
+            elseif ($scopeText -in @('detallado', 'detalle', 'full', 'verbose')) {
+                $modeParams = @{ Mode = 'set-chat-level'; ChatLevel = 'chat-detailed'; AllowPolicyOverride = $true; OverrideReason = 'manual-demand:detailed-chat' }
             }
             elseif ($scopeText -in @('bugfix', 'refactor', 'docs', 'audit-review', 'executive-demo')) {
                 $modeParams = @{ Mode = 'set-preset'; Preset = $scopeText }
@@ -2076,6 +2305,155 @@ switch ($Command) {
         Invoke-LocalPowerShellScript -ScriptPath $migrateScript -ScriptArgs $migrateArgs
     }
 
+    'context-dashboard' {
+        $dashScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\context-dashboard.ps1'
+        if (-not (Test-Path $dashScript)) {
+            Write-Error "context-dashboard.ps1 not found at: $dashScript"
+            exit 1
+        }
+        $promptCharsArg = if ($Scope -match '^\d+$') { [int]$Scope } else { 0 }
+        & $dashScript -PromptChars $promptCharsArg
+    }
+
+    'dashboard' {
+        $genScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\generate-dashboard.ps1'
+        if (-not (Test-Path $genScript)) {
+            Write-Error "generate-dashboard.ps1 not found at: $genScript"; exit 1
+        }
+        $openFlag = if ($Scope -eq 'open') { $true } else { $false }
+        if ($openFlag) { & $genScript -Open }
+        else           { & $genScript }
+    }
+
+    'mq' {
+        $mqScript = Join-Path $repoRoot 'scripts\utilities\WORKFLOW-ORCHESTRATION\mq-adapter.ps1'
+        if (-not (Test-Path $mqScript)) {
+            Write-Error "mq-adapter.ps1 not found at: $mqScript"; exit 1
+        }
+        $mqAction = if ($Scope) { $Scope } else { 'status' }
+        & $mqScript -Action $mqAction
+    }
+
+    'export-metrics' {
+        $exportScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\export-metrics.ps1'
+        if (-not (Test-Path $exportScript)) {
+            Write-Error "export-metrics.ps1 not found at: $exportScript"; exit 1
+        }
+        $fmt = if ($Scope -in @('csv','jsonl','sqlite','all')) { $Scope } else { 'csv' }
+        & $exportScript -Format $fmt
+    }
+
+    'monthly-report' {
+        Write-Step "Monthly management report pipeline"
+
+        $fmt = if ($Scope -in @('csv','jsonl','sqlite','all')) { $Scope } else { 'csv' }
+        $exportScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\export-metrics.ps1'
+        $reportScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\generate-management-report.ps1'
+
+        if (-not (Test-Path $exportScript)) {
+            Write-Error "export-metrics.ps1 not found at: $exportScript"
+            exit 1
+        }
+
+        if (-not (Test-Path $reportScript)) {
+            Write-Error "generate-management-report.ps1 not found at: $reportScript"
+            exit 1
+        }
+
+        & $exportScript -Format $fmt
+        if (-not $?) {
+            Write-Error "export-metrics failed."
+            exit 1
+        }
+
+        & $reportScript -OnDemand
+        if (-not $?) {
+            Write-Error "generate-management-report failed."
+            exit 1
+        }
+
+        Write-Success "Monthly report pipeline finished."
+    }
+
+    'platform-info' {
+        $compat = Join-Path $repoRoot 'scripts\utilities\platform-compat.ps1'
+        if (Test-Path $compat) {
+            . $compat
+            Write-Host (Get-PlatformInfo) -ForegroundColor Cyan
+        } else {
+            $platform = if ($IsWindows) { 'windows' } elseif ($IsMacOS) { 'macos' } else { 'linux' }
+            Write-Host "[platform: $platform | pwsh: $($PSVersionTable.PSVersion)]" -ForegroundColor Cyan
+        }
+    }
+
+    'sdd-gate' {
+        # FF-001: Run SDD gate check (local validation)
+        $sddGateScript = Join-Path $repoRoot 'scripts\hooks\check-sdd-gate.ps1'
+        if (-not (Test-Path $sddGateScript)) {
+            Write-Error "check-sdd-gate.ps1 not found: $sddGateScript"
+            exit 1
+        }
+        & $sddGateScript
+        exit $LASTEXITCODE
+    }
+
+    'sdd-metrics' {
+        # FF-002: SDD process KPIs — spec coverage, lead time, rework ratio
+        $metricsScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\sdd-process-metrics.ps1'
+        if (-not (Test-Path $metricsScript)) {
+            Write-Error "sdd-process-metrics.ps1 not found: $metricsScript"
+            exit 1
+        }
+        $asJson = $Scope -eq '-JSON' -or $Scope -eq 'json'
+        if ($asJson) { & $metricsScript -AsJson } else { & $metricsScript }
+        exit $LASTEXITCODE
+    }
+
+    'sync-drift' {
+        # FF-004: Sync drift report — declared config vs actual filesystem
+        $driftScript = Join-Path $repoRoot 'scripts\utilities\sync-drift-report.ps1'
+        if (-not (Test-Path $driftScript)) {
+            Write-Error "sync-drift-report.ps1 not found: $driftScript"
+            exit 1
+        }
+        $asJson = $Scope -eq '-JSON' -or $Scope -eq 'json'
+        if ($asJson) { & $driftScript -AsJson } else { & $driftScript }
+        exit $LASTEXITCODE
+    }
+
+    'benchmark' {
+        # FF-006: Profile key wf commands against SLO thresholds
+        $benchScript = Join-Path $repoRoot 'scripts\utilities\wf-benchmark.ps1'
+        if (-not (Test-Path $benchScript)) {
+            Write-Error "wf-benchmark.ps1 not found: $benchScript"
+            exit 1
+        }
+        $cmds = if ($Scope) { $Scope -split ',' } else { @('status', 'health') }
+        & $benchScript -Commands $cmds
+        exit $LASTEXITCODE
+    }
+
+    'version' {
+        # Show current stack version from VERSION file
+        $versionFile = Join-Path $repoRoot 'VERSION'
+        $ver = if (Test-Path $versionFile) {
+            (Get-Content $versionFile -Raw -Encoding UTF8).Trim()
+        } else {
+            'unknown'
+        }
+        $orchConfig = Join-Path $repoRoot 'config\orchestrator.json'
+        $orchVer = ''
+        if (Test-Path $orchConfig) {
+            try {
+                $oc = Get-Content $orchConfig -Raw -Encoding UTF8 | ConvertFrom-Json
+                $orchVer = if ($oc.version) { " | orchestrator: $($oc.version)" } else { '' }
+            } catch {}
+        }
+        Write-Host "Gentleman Foundation v${ver}${orchVer}" -ForegroundColor Cyan
+        Write-Host "  Stack: $($PSVersionTable.PSVersion) on $(if($IsWindows){'windows'}elseif($IsMacOS){'macos'}else{'linux'})" -ForegroundColor Gray
+        Write-Host "  Skills: $(if(Test-Path (Join-Path $repoRoot 'skills')){(Get-ChildItem (Join-Path $repoRoot 'skills') -Dir -EA SilentlyContinue).Count}else{'n/a'})" -ForegroundColor Gray
+    }
+
     'context-pack' {
         Write-Step "Generating Compact Context Pack"
         $scopeChars = if ([string]::IsNullOrWhiteSpace($Scope)) { 0 } else { $Scope.Length }
@@ -2154,6 +2532,19 @@ switch ($Command) {
         if (-not (Test-Path $guardScript)) {
             Write-Error "Token budget guard script not found: $guardScript"
             exit 1
+        }
+
+        if ($Scope -match '^profile:(hard|balanced)$') {
+            $selectedProfile = [string]$matches[1]
+            Set-TokenAutopilotProfile -Profile $selectedProfile
+            Write-Success "Token autopilot profile updated to: $selectedProfile"
+            break
+        }
+
+        if ($Scope -eq 'auto') {
+            Invoke-TokenBudgetGuard -Task 'general' -Risk 'medium' -EstimatedChars 4500
+            Write-Success 'Token autopilot check completed.'
+            break
         }
 
         $taskName = if ([string]::IsNullOrWhiteSpace($Scope)) { 'general' } else { $Scope }
