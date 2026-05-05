@@ -31,7 +31,7 @@ cd workspace-foundation
 |----------|-------------|
 | [Getting Started](docs/getting-started/README.md) | New user setup guide |
 | [Architecture](docs/architecture/README.md) | System architecture overview |
-| [Skills Catalog](docs/reference/SKILLS-CATALOG.md) | Available skills reference (generate with: wf.ps1 skills) |
+| [Skills Catalog](docs/reference/SKILL-ORGANIZATION.md) | Available skills reference (generate with: wf.ps1 skills) |
 | [Token Tracking](docs/reference/REAL-TOKEN-TRACKING.md) | AI token monitoring guide |
 | [Plugin System](docs/reference/PLUGIN-ARCHITECTURE.md) | Plugin development guide |
 
@@ -55,7 +55,7 @@ workspace-foundation/
 
 ## Version
 
-Current version: **2.6.5**
+Current version: **2.7.0**
 
 ## License
 
