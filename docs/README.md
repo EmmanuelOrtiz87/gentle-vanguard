@@ -105,7 +105,7 @@ Foundation uses a layered, modular architecture with on-demand activation:
 └─────────────────────────────────────────────────────────────┘
 ```
 
-Refer to [docs/reference/ARCHITECTURE.md](docs/reference/ARCHITECTURE.md) for full details.
+Refer to [reference/ARCHITECTURE.md](reference/ARCHITECTURE.md) for full details.
 
 ---
 
@@ -274,21 +274,21 @@ Normalizes workspace before release or when strict cleanup reports drift.
 
 
 ### For Developers
-- **[Session Guide](docs/guides/SESSION-GUIDE.md)**: Daily workflow and commands
-- **[Tool Activation](docs/guides/TOOL-ACTIVATION.md)**: Auto-activation system
-- **[Testing Standards](rules/TESTING-STANDARDS.md)**: Testing pyramid + coverage targets
-- **[PowerShell Standards](rules/POWERSHELL-STANDARDS.md)**: PS1 coding standards
+- **[Session Guide](guides/SESSION-GUIDE.md)**: Daily workflow and commands
+- **[Tool Activation](guides/TOOL-ACTIVATION.md)**: Auto-activation system
+- **[Testing Standards](../rules/TESTING-STANDARDS.md)**: Testing pyramid + coverage targets
+- **[PowerShell Standards](../rules/POWERSHELL-STANDARDS.md)**: PS1 coding standards
 
 ### For Project Leads
-- **[Architecture Overview](docs/reference/ARCHITECTURE.md)**: System design rationale
-- **[CI Hardening Standards](rules/CI-HARDENING-STANDARDS.md)**: Workflow requirements
-- **[Status Report](docs/reports/FOUNDATION-STATUS-REPORT-2026-05-05.md)**: Full operational status v2.6.5
+- **[Architecture Overview](reference/ARCHITECTURE.md)**: System design rationale
+- **[CI Hardening Standards](../rules/CI-HARDENING-STANDARDS.md)**: Workflow requirements
+- **[Status Report](reports/FOUNDATION-STATUS-REPORT-2026-05-05.md)**: Full operational status v2.6.5
 
 ### For Administrators
-- **[Installation Guide](docs/getting-started/installation.md)**: Complete setup instructions
-- **[AI Configuration](docs/guides/AI-CONFIGURATION.md)**: AI provider setup
-- **[Getting Started](docs/getting-started/README.md)**: All setup guides
-- **[Security Policy](SECURITY.md)**: Vulnerability reporting + security controls
+- **[Installation Guide](getting-started/installation.md)**: Complete setup instructions
+- **[AI Configuration](guides/AI-CONFIGURATION.md)**: AI provider setup
+- **[Getting Started](getting-started/README.md)**: All setup guides
+- **[Security Policy](../SECURITY.md)**: Vulnerability reporting + security controls
 
 ---
 
@@ -466,7 +466,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 ---
 
 ## 🆘 Support & Community
-- **Documentation**: [docs/](docs/)
+- **Documentation**: [Docs Root](./)
 - **Issues**: [GitHub Issues](https://github.com/EmmanuelOrtiz87/workspace-foundation/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/EmmanuelOrtiz87/workspace-foundation/discussions)
 
