@@ -115,6 +115,6 @@ Custom files outside managed assets are not touched.
 
 ## Related Files
 
-1. `scripts/utilities/foundation-sync.ps1`
+1. `scripts/utilities/UTILITIES/foundation-sync.ps1`
 2. `config/foundation-sync.json`
 3. `scripts/utilities/wf.ps1`

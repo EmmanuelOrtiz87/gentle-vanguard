@@ -1,1 +1,12 @@
-C:/Workspace_local/workspace-foundation/scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1
+#!/usr/bin/env pwsh
+
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$wfPath = Join-Path $scriptDir 'WORKFLOW-ORCHESTRATION\wf.ps1'
+
+if (-not (Test-Path $wfPath)) {
+	Write-Error "Canonical wf entrypoint not found: $wfPath"
+	exit 1
+}
+
+& $wfPath @args
+exit $LASTEXITCODE

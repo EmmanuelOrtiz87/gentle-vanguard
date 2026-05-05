@@ -48,8 +48,8 @@ jobs:
         shell: pwsh
         continue-on-error: true
         run: |
-          if (Test-Path '.\scripts\utilities\foundation-sync.ps1') {
-            powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\foundation-sync.ps1 -Mode check
+          if (Test-Path '.\scripts\utilities\UTILITIES\foundation-sync.ps1') {
+            powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\UTILITIES\foundation-sync.ps1 -Mode check
           } else {
             Write-Host '::notice::foundation-sync.ps1 not found -- skipping drift check.'
           }

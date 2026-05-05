@@ -19,7 +19,7 @@ param(
 
 $ErrorActionPreference = 'Continue'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot  = (Resolve-Path (Join-Path $scriptDir '..\..\..')).Path
+$repoRoot  = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 
 # ─── Load configs ─────────────────────────────────────────────────────────────
 $autoDelegPath  = Join-Path $repoRoot 'config\auto-delegation.json'
@@ -36,7 +36,9 @@ $broken_refs    = @()
 if (Test-Path $autoDelegPath) {
     try {
         $autoCfg = Get-Content $autoDelegPath -Raw -Encoding UTF8 | ConvertFrom-Json
-        # Collect all skill values from agentCodeToSkill and skillToAgentProfile
+        # Collect all routable skill values from config.
+        # The foundation repo can legitimately contain many more optional skills,
+        # so only missing declared skills count as drift.
         $declaredSkills = @()
         if ($autoCfg.PSObject.Properties['agentCodeToSkill']) {
             $declaredSkills += @($autoCfg.agentCodeToSkill.PSObject.Properties.Value | Where-Object { $_ })
@@ -56,12 +58,6 @@ if (Test-Path $autoDelegPath) {
             foreach ($declared in $declaredSkills) {
                 if ($actualSkills -notcontains $declared) {
                     $missing_skills += $declared
-                }
-            }
-
-            foreach ($actual in $actualSkills) {
-                if ($declaredSkills -notcontains $actual) {
-                    $extra_skills += $actual
                 }
             }
         }
@@ -85,10 +81,22 @@ if (Test-Path $mcpConfigPath) {
         }
 
         foreach ($srv in $serverNames) {
-            # A server is "present" if there's a matching skill dir or known local binary
+            $serverConfig = if ($mcpCfg.PSObject.Properties['mcpServers']) {
+                $mcpCfg.mcpServers.PSObject.Properties[$srv].Value
+            } else {
+                $null
+            }
+            # A server is "present" if there's a matching skill dir, local script,
+            # or an external MCP command/package configured explicitly.
             $hasSkillDir = Test-Path (Join-Path $skillsDir $srv)
             $hasScript   = (Get-ChildItem -Path $repoRoot -Recurse -Filter "*$srv*" -File -EA SilentlyContinue | Select-Object -First 1)
-            if (-not $hasSkillDir -and -not $hasScript) {
+            $hasExternalCommand = $false
+            if ($serverConfig) {
+                $hasCommand = $serverConfig.PSObject.Properties.Name -contains 'command' -and -not [string]::IsNullOrWhiteSpace([string]$serverConfig.command)
+                $hasArgs = $serverConfig.PSObject.Properties.Name -contains 'args' -and $serverConfig.args -and @($serverConfig.args).Count -gt 0
+                $hasExternalCommand = $hasCommand -or $hasArgs
+            }
+            if (-not $hasSkillDir -and -not $hasScript -and -not $hasExternalCommand) {
                 $missing_mcp += $srv
             }
         }
@@ -109,7 +117,19 @@ if (Test-Path $backlogPath) {
                 $candidate = $m.Value -replace '/', [System.IO.Path]::DirectorySeparatorChar
                 # Try relative to repo root
                 $fullPath = Join-Path $repoRoot $candidate
-                if (-not (Test-Path $fullPath) -and -not (Test-Path (Join-Path $repoRoot "scripts" $candidate))) {
+                $scriptsPath = Join-Path $repoRoot "scripts\$candidate"
+                $dotPath = if ($candidate -match '^(github|vscode|devcontainer)\\') {
+                    Join-Path $repoRoot ('.' + $candidate)
+                } else {
+                    ''
+                }
+                $filename = Split-Path -Leaf $candidate
+                $recursiveMatch = if ($filename -ne $candidate) {
+                    $null
+                } else {
+                    Get-ChildItem -Path $repoRoot -Recurse -Filter $filename -File -EA SilentlyContinue | Select-Object -First 1
+                }
+                if (-not (Test-Path $fullPath) -and -not (Test-Path $scriptsPath) -and -not (Test-Path $dotPath) -and -not $recursiveMatch) {
                     $broken_refs += [pscustomobject]@{ item = $item.id; ref = $m.Value }
                 }
             }
