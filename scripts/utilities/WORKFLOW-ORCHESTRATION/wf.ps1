@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'platform-info', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -1614,6 +1614,10 @@ COMMANDS:
     homologate [apply]  Normalize docs/artifacts and update references (dry-run default)
     agent-alert [strict] Check process-compliance signals for off-process AI activity
     agent <AGENT> [TASK] Route task to specialized sub-agent (BA|SAD|DEV|QA|OPS|GOV|DOC)
+    dashboard [open]     Generate static HTML dashboard from telemetry JSON (open = auto-open browser)
+    mq [action]          Message queue adapter: status|publish|consume|test (file/redis/webhook)
+    export-metrics [fmt] Export metrics to analytical store: csv|jsonl|sqlite|all (default: csv)
+    platform-info        Show current platform and PowerShell version
     help                 Show this help
 
 OPTIONS:
@@ -2286,6 +2290,45 @@ switch ($Command) {
         }
         $promptCharsArg = if ($Scope -match '^\d+$') { [int]$Scope } else { 0 }
         & $dashScript -PromptChars $promptCharsArg
+    }
+
+    'dashboard' {
+        $genScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\generate-dashboard.ps1'
+        if (-not (Test-Path $genScript)) {
+            Write-Error "generate-dashboard.ps1 not found at: $genScript"; exit 1
+        }
+        $openFlag = if ($Scope -eq 'open') { $true } else { $false }
+        if ($openFlag) { & $genScript -Open }
+        else           { & $genScript }
+    }
+
+    'mq' {
+        $mqScript = Join-Path $repoRoot 'scripts\utilities\WORKFLOW-ORCHESTRATION\mq-adapter.ps1'
+        if (-not (Test-Path $mqScript)) {
+            Write-Error "mq-adapter.ps1 not found at: $mqScript"; exit 1
+        }
+        $mqAction = if ($Scope) { $Scope } else { 'status' }
+        & $mqScript -Action $mqAction
+    }
+
+    'export-metrics' {
+        $exportScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\export-metrics.ps1'
+        if (-not (Test-Path $exportScript)) {
+            Write-Error "export-metrics.ps1 not found at: $exportScript"; exit 1
+        }
+        $fmt = if ($Scope -in @('csv','jsonl','sqlite','all')) { $Scope } else { 'csv' }
+        & $exportScript -Format $fmt
+    }
+
+    'platform-info' {
+        $compat = Join-Path $repoRoot 'scripts\utilities\platform-compat.ps1'
+        if (Test-Path $compat) {
+            . $compat
+            Write-Host (Get-PlatformInfo) -ForegroundColor Cyan
+        } else {
+            $platform = if ($IsWindows) { 'windows' } elseif ($IsMacOS) { 'macos' } else { 'linux' }
+            Write-Host "[platform: $platform | pwsh: $($PSVersionTable.PSVersion)]" -ForegroundColor Cyan
+        }
     }
 
     'context-pack' {

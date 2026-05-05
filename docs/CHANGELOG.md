@@ -7,7 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.6.0] - 2026-05-04
+## [2.6.2] - 2026-05-05
+
+### Added
+
+#### Item 7 — Static HTML Dashboard (O-31)
+- `scripts/utilities/TELEMETRY-METRICS/generate-dashboard.ps1` — generates `reports/dashboard.html` from telemetry JSON.
+- Self-contained: no CDN dependency; minimal bar chart renderer embedded in HTML.
+- Sources: `metrics-config.json`, `.event-bus/history.json`, `.event-bus/rate-limit-state.json`, `token-guard-usage.csv`.
+- Registered as `wf dashboard [open]` — optional `open` argument auto-opens browser.
+
+#### Item 8 — MQ Adapter for Event Bus (O-32)
+- `scripts/utilities/WORKFLOW-ORCHESTRATION/mq-adapter.ps1` — pluggable MQ backend for team environments.
+- Supports three adapters: `file` (default, always available), `redis` (pub/sub via redis-cli), `webhook` (HTTP POST relay).
+- Graceful fallback: if redis/webhook unreachable, falls back to file adapter automatically.
+- Config: `config/mq-config.json` (adapter, redis host/port/channel, webhook url/secret_env).
+- Registered as `wf mq [action]` — actions: `status | publish | consume | test`.
+
+#### Item 9 — Native Linux/macOS Support (O-33)
+- `scripts/utilities/platform-compat.ps1` — cross-platform helpers: `Get-Platform`, `Join-NativePath`, `Get-RepoRoot`,
+  `Invoke-NativeOpen`, `Get-PwshPath`, `Test-CommandAvailable`, `Get-TempDir`, `ConvertTo-NativePath`, `Get-PlatformInfo`.
+- `wf.sh` extended: `run_pwsh` helper, `verify-full`, `dashboard`, `mq`, `export-metrics`, `events` commands added.
+  All new commands delegate to PS1 scripts via `pwsh` with graceful error if not installed.
+- Registered as `wf platform-info`.
+
+#### Item 10 — Metrics Export to Analytical Store (O-34)
+- `scripts/utilities/TELEMETRY-METRICS/export-metrics.ps1` — unified metrics exporter.
+- Sources: event history, token-guard CSV, override audit log, runtime state snapshot.
+- Formats: `csv` (default), `jsonl`, `sqlite` (requires sqlite3 CLI), `all`.
+- Registered as `wf export-metrics [fmt]`.
+
+
 
 ### Added
 
