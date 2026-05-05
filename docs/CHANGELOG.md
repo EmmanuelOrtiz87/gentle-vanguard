@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.5] - 2026-05-05
+
+### Added
+
+#### Enterprise CI Hardening
+- `.github/workflows/ps-lint.yml`: PSScriptAnalyzer static analysis CI — Error severity blocks merge; warnings annotate PRs
+- `.github/workflows/release.yml`: Automated GitHub Release creation on semver tag push; validates tag vs VERSION file
+- `.github/dependabot.yml`: Weekly GitHub Actions version update automation (minor+patch grouped, max 5 PRs)
+- `VERSION`: Single source of truth for current project version (`2.6.5`)
+- `SECURITY.md`: Security policy — vulnerability reporting process, supported versions, 48h ack SLA, security controls table
+
+#### Normativas (Rules)
+- `rules/POWERSHELL-STANDARDS.md`: Canonical PS1 coding standards — file headers, param declarations, error handling, output safety, path handling, security rules, naming conventions, PSSA configuration
+- `rules/CI-HARDENING-STANDARDS.md`: Mandatory CI workflow requirements — permissions, concurrency, timeout defaults, action pinning, secrets handling, audit checklist
+- `rules/TESTING-STANDARDS.md`: Testing pyramid, coverage targets, Pester 5 patterns, new-script test rule, quality gates
+
+#### wf CLI Improvements
+- `wf version`: New command — shows stack version from VERSION file, orchestrator version, PS version, and skill count
+
+#### Tests
+- `tests/unit/v264-scripts.tests.ps1`: Existence + parse + behavior tests for FF-001/002/004/006 scripts
+
+### Fixed
+- `.github/workflows/script-governance.yml`: Added missing `permissions: contents: read`, `timeout-minutes: 25`, `concurrency` block
+- `.editorconfig` copied to workspace root (was only in `templates/editor/`)
+
+### Changed
+- `.gitignore`: Added entries for `reports/dashboard.html`, `reports/metrics-export.csv`, `reports/wf-benchmark.json`, `trivy-report.json`, `.event-bus/`, `.session/`
+- `config/quality-gates.json`: Added `ps-lint`, `sdd-gate`, `owasp-scan` to `requiredWorkflows` (v1.1.0)
+
 ## [2.6.4] - 2026-05-05
 
 ### Added
