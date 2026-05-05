@@ -1,0 +1,36 @@
+name: Monthly Management Report
+
+permissions:
+  contents: read
+
+concurrency:
+  group: monthly-management-report
+  cancel-in-progress: false
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 1 * *' # 06:00 UTC | 03:00 GMT-3
+
+jobs:
+  report:
+    name: Export Metrics and Build Report
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run monthly report pipeline
+        shell: pwsh
+        run: |
+          ./scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1 monthly-report all
+
+      - name: Upload report artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: management-report-${{ github.run_id }}
+          path: |
+            reports/MANAGEMENT-REPORT-*.csv
+            reports/metrics-export.*
+          if-no-files-found: warn

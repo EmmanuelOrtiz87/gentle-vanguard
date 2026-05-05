@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -1618,6 +1618,7 @@ COMMANDS:
     dashboard [open]     Generate static HTML dashboard from telemetry JSON (open = auto-open browser)
     mq [action]          Message queue adapter: status|publish|consume|test (file/redis/webhook)
     export-metrics [fmt] Export metrics to analytical store: csv|jsonl|sqlite|all (default: csv)
+    monthly-report [fmt] Run export-metrics + generate-management-report (fmt: csv|jsonl|sqlite|all)
     platform-info        Show current platform and PowerShell version
     sdd-gate             FF-001: Validate SDD spec status before merging to protected branches
     sdd-metrics          FF-002: SDD process KPIs: spec coverage, lead time, rework ratio
@@ -1689,6 +1690,7 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 homologate          Preview normalization actions
     .\scripts\utilities\wf.ps1 homologate apply    Execute normalization and reference updates
     .\scripts\utilities\wf.ps1 health -StrictCleanup  Run health and fail if cleanup drift exists
+    .\scripts\utilities\wf.ps1 monthly-report all      Export metrics and build monthly management report
     .\scripts\utilities\wf.ps1 agent-alert           Show process-compliance warnings (non-blocking)
     .\scripts\utilities\wf.ps1 agent-alert strict    Fail if process-compliance warnings are detected
     .\scripts\utilities\wf.ps1 agent list            List all available specialized agents
@@ -2339,6 +2341,38 @@ switch ($Command) {
         }
         $fmt = if ($Scope -in @('csv','jsonl','sqlite','all')) { $Scope } else { 'csv' }
         & $exportScript -Format $fmt
+    }
+
+    'monthly-report' {
+        Write-Step "Monthly management report pipeline"
+
+        $fmt = if ($Scope -in @('csv','jsonl','sqlite','all')) { $Scope } else { 'csv' }
+        $exportScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\export-metrics.ps1'
+        $reportScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\generate-management-report.ps1'
+
+        if (-not (Test-Path $exportScript)) {
+            Write-Error "export-metrics.ps1 not found at: $exportScript"
+            exit 1
+        }
+
+        if (-not (Test-Path $reportScript)) {
+            Write-Error "generate-management-report.ps1 not found at: $reportScript"
+            exit 1
+        }
+
+        & $exportScript -Format $fmt
+        if (-not $?) {
+            Write-Error "export-metrics failed."
+            exit 1
+        }
+
+        & $reportScript -OnDemand
+        if (-not $?) {
+            Write-Error "generate-management-report failed."
+            exit 1
+        }
+
+        Write-Success "Monthly report pipeline finished."
     }
 
     'platform-info' {
