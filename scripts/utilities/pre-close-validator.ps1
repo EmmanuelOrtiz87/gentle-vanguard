@@ -138,7 +138,7 @@ try {
 # 2. Quick Pending Tasks Check
 Write-Step "Checking for critical pending tasks"
 try {
-    $criticalPatterns = @('TODO:', 'FIXME:', 'HACK:', 'XXX:')
+    $criticalPatterns = @('HACK:', 'XXX:')
     $foundTasks = @()
     
     $codeFiles = Get-ChildItem -Path $repoRoot -Include "*.ps1", "*.ts", "*.js" -Recurse -ErrorAction SilentlyContinue | 

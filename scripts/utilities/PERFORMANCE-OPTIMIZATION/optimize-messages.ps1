@@ -85,13 +85,27 @@ class MessageOptimizer {
         Write-Log "Compressing data using $($this.CompressionMethod)" "DEBUG"
         
         $memStream = New-Object System.IO.MemoryStream
+        $compressionType = if ($this.CompressionMethod -eq "gzip") {
+            [System.IO.Compression.CompressionMode]::Compress
+        } else {
+            [System.IO.Compression.CompressionMode]::Compress
+        }
         
         try {
             if ($this.CompressionMethod -eq "gzip") {
-                $gzipStream = New-Object System.IO.Compression.GZipStream($memStream, [System.IO.Compression.CompressionMode]::Compress)
-                $gzipStream.Write($Data, 0, $Data.Length)
-                $gzipStream.Close()
+                $compStream = New-Object System.IO.Compression.GZipStream($memStream, $compressionType)
+            } else {
+                $compStream = New-Object System.IO.Compression.DeflateStream($memStream, $compressionType)
             }
+            
+            $compStream.Write($Data, 0, $Data.Length)
+            $compStream.Close()
+        } finally {
+            $memStream.Close()
+        }
+        
+        return $memStream.ToArray()
+    }
             else {
                 $deflateStream = New-Object System.IO.Compression.DeflateStream($memStream, [System.IO.Compression.CompressionMode]::Compress)
                 $deflateStream.Write($Data, 0, $Data.Length)
