@@ -363,7 +363,8 @@
                                         "or after installing/removing skills.",
                                         "\"sync\"",
                                         "\"public repo\"",
-                                        "\"auto-sync\""
+                                        "\"auto-sync\"",
+                                        "\"maintenance\""
                                     ],
                             "SAD":  [
                                         "architecture",
