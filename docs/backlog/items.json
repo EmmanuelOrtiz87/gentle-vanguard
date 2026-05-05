@@ -1,7 +1,7 @@
 [
   {
     "id": "FF-001",
-    "defer_reason": "Legacy item",
+    "defer_reason": "Trigger not met: SDD baseline not yet stable for one full sprint.",
     "value_prop": "",
     "created_at": "2026-04-13",
     "linked_sessions": [],
@@ -16,7 +16,7 @@
   },
   {
     "id": "FF-002",
-    "defer_reason": "Legacy item",
+    "defer_reason": "Trigger not met: fewer than 10 PRs through SDD gate.",
     "value_prop": "",
     "created_at": "2026-04-13",
     "linked_sessions": [],
@@ -31,22 +31,23 @@
   },
   {
     "id": "FF-003",
-    "defer_reason": "Legacy item",
-    "value_prop": "",
+    "defer_reason": "",
+    "value_prop": "Advisory findings no longer block commits; only real errors reject the push.",
     "created_at": "2026-04-13",
-    "linked_sessions": [],
+    "linked_sessions": ["2026-05-05"],
     "title": "Check Noise Reduction",
     "description": "Reduce non-actionable CI warnings and improve blocking/advisory classification.",
     "owner": "orchestrator",
     "priority": "medium",
     "trigger": "When warning volume affects merge throughput.",
     "linked_prs": [],
-    "status": "pending",
-    "type": "feature"
+    "status": "done",
+    "type": "feature",
+    "resolved_by": "scripts/hooks/hook-advisory-classifier.ps1 + check-quality.ps1 updated (prettier/golint advisory, eslint/gofmt blocking)."
   },
   {
     "id": "FF-004",
-    "defer_reason": "Legacy item",
+    "defer_reason": "Trigger not met: single-repo workspace, no multi-repo sync cadence.",
     "value_prop": "",
     "created_at": "2026-04-13",
     "linked_sessions": [],
@@ -61,22 +62,23 @@
   },
   {
     "id": "FF-005",
-    "defer_reason": "Legacy item",
-    "value_prop": "",
+    "defer_reason": "",
+    "value_prop": "PR reviewers can verify spec coverage and validation evidence at a glance.",
     "created_at": "2026-04-13",
-    "linked_sessions": [],
+    "linked_sessions": ["2026-05-05"],
     "title": "PR Template Quality",
     "description": "Standardize PR templates to include spec traceability and validation evidence.",
     "owner": "orchestrator",
     "priority": "medium",
     "trigger": "When next workflow template update is scheduled.",
     "linked_prs": [],
-    "status": "pending",
-    "type": "feature"
+    "status": "done",
+    "type": "feature",
+    "resolved_by": ".github/PULL_REQUEST_TEMPLATE.md: added SDD ref input, spec status dropdown, validation evidence textarea."
   },
   {
     "id": "FF-006",
-    "defer_reason": "Legacy item",
+    "defer_reason": "Trigger not met: wf health/verify runtime has not exceeded agreed SLO.",
     "value_prop": "",
     "created_at": "2026-04-13",
     "linked_sessions": [],
@@ -88,5 +90,21 @@
     "linked_prs": [],
     "status": "pending",
     "type": "feature"
+  },
+  {
+    "id": "FF-013",
+    "defer_reason": "",
+    "value_prop": "Tasks gated dynamically: AI blocked at HARD_LIMIT, warned at SOFT_LIMIT, blocked offline. Event-bus rate-limit contributes to gate decision.",
+    "created_at": "2026-04-15",
+    "linked_sessions": ["2026-05-05"],
+    "title": "Runtime Router Gating",
+    "description": "Dynamic gating based on real runtime load: token usage, event-bus rate limits, network/AI availability.",
+    "owner": "AGENT-GOV",
+    "priority": "high",
+    "trigger": "When runtime mode detection is needed before task execution.",
+    "linked_prs": [],
+    "status": "done",
+    "type": "feature",
+    "resolved_by": "runtime-router.ps1 -Mode gate -TaskType (ai|heavy-ai|network|local|metrics|any) + rate-limit integration + wf runtime-gate [type]."
   }
 ]

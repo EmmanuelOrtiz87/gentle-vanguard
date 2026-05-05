@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.3] - 2026-05-05
+
+### Added
+
+#### FF-013 — Runtime Router Gating (O-35)
+- `runtime-router.ps1` extended with `-Mode gate -TaskType (ai|heavy-ai|network|local|metrics|any)`:
+  - Exit 0=allowed, 1=warned, 2=blocked based on runtime mode + token status + event-bus rate limit.
+  - `Get-RateLimitLoad` reads `.event-bus/rate-limit-state.json` dynamically; contributes to gate decision.
+  - `Invoke-Gate` function encodes all gating logic: offline blocks network/AI; HARD_LIMIT blocks AI; SOFT_LIMIT warns AI, blocks heavy-AI.
+- `wf.ps1`: `runtime-gate [type]` command registered in ValidateSet + switch + help.
+- Bug fix: `runtime-router.ps1` was pointing to wrong `token-budget-guard.ps1` path (fixed to `../TELEMETRY-METRICS/`).
+- `runtime-router.ps1 status` output now includes `rate_limit_pct` and `rate_limit_near` fields.
+
+#### FF-003 — Check Noise Reduction (O-36)
+- `scripts/hooks/hook-advisory-classifier.ps1` — shared module with `Add-BlockingFinding`, `Add-AdvisoryFinding`, `Exit-HookCheck`.
+  - `Exit-HookCheck` exits 1 only when blocking findings exist; advisories print warnings but do not block the commit.
+- `check-quality.ps1` updated: prettier and golint → advisory; eslint and gofmt → blocking.
+
+#### FF-005 — PR Template Quality (O-37)
+- `.github/PULL_REQUEST_TEMPLATE.md` extended with:
+  - `SDD / Spec Reference` input field.
+  - `Spec Status` dropdown (N/A | draft | validated | done).
+  - `Validation Evidence` textarea for agent-verify output, test results, smoke test notes.
+
+### Changed
+- `docs/backlog/items.json`: FF-003/FF-005/FF-013 marked `done` with `resolved_by`; FF-001/FF-002/FF-004/FF-006 defer reasons updated (trigger not met).
+
 ## [2.6.2] - 2026-05-05
 
 ### Added

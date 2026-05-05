@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'platform-info', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'platform-info', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -1593,6 +1593,7 @@ COMMANDS:
     orchestrator-status  Validate orchestrator and Engram integration
     stack-dashboard      Show one-shot stack health, token risk, and next action recommendation
     runtime-route        Resolve runtime mode (AI/Hybrid/Offline) and delegation strategy
+    runtime-gate [type]  Gate check: is task type allowed? type=ai|heavy-ai|network|local|metrics|any
     custom-rules-status  Show custom technical/business/review rule loading status
     response-mode [arg]  Show/set language, detail, profile, chat level, presets, and recommendation
     ide-status           Detect IDE session and suggest activation command
@@ -2126,6 +2127,21 @@ switch ($Command) {
             } else {
                 & $routeScript -Mode route
             }
+        }
+    }
+
+    'runtime-gate' {
+        $routeScript = Join-Path $scriptDir 'runtime-router.ps1'
+        if (-not (Test-Path $routeScript)) {
+            Write-Error "Runtime router script not found: $routeScript"
+            exit 1
+        }
+        $taskType = if ($Scope) { $Scope } else { 'any' }
+        if ($JSON) {
+            & $routeScript -Mode gate -TaskType $taskType -AsJson
+        } else {
+            Write-Step "Runtime Gate — task: $taskType"
+            & $routeScript -Mode gate -TaskType $taskType
         }
     }
 
