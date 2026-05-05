@@ -1,3 +1,5 @@
 *.cmd text eol=lf
 *.ps1 text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
 .gitignore text eol=lf

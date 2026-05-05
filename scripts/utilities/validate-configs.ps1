@@ -30,7 +30,7 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
-$Root    = Split-Path -Parent $PSScriptRoot
+$Root    = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $errors  = 0
 $warns   = 0
 
@@ -62,9 +62,9 @@ if (Test-Path $adPath) {
 # ─── 3. Critical scripts exist ─────────────────────────────────────────────────
 Write-Host "`n[3/6] Critical scripts" -ForegroundColor Cyan
 $criticalScripts = @(
-    'tools/pre-process-input.ps1',
-    'tools/session-autostart.cmd',
-    'tools/install-hooks.ps1',
+    'scripts/utilities/pre-process-input.ps1',
+    'scripts/utilities/session-autostart.cmd',
+    'scripts/utilities/install-hooks.ps1',
     'hooks/pre-commit.ps1'
 )
 foreach ($rel in $criticalScripts) {
