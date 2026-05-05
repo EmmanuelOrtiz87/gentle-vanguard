@@ -93,6 +93,41 @@
   "reporting": {
     "save_interval_seconds": 300,
     "path": ".session/metrics-report.json",
-    "engram_sync": true
+    "engram_sync": true,
+    "persistence": {
+      "enabled": true,
+      "strategy": "incremental_merge",
+      "store_runtime_state_in_config": true
+    }
+  },
+  "runtime_state": {
+    "session_count": 0,
+    "total_delegations": 0,
+    "success_count": 0,
+    "failure_count": 0,
+    "cumulative_duration_seconds": 0,
+    "cumulative_token_usage": 0,
+    "circuit_breaker_trips": 0,
+    "skill_dependency_violations": 0,
+    "last_updated": null
+  },
+  "alert_thresholds": {
+    "_description": "Configurable thresholds for proactive alert generation in generate-dashboard.ps1",
+    "data_stale_days": 3,
+    "budget_forecast_red_pct": 90,
+    "budget_forecast_yellow_pct": 70,
+    "token_spike_multiplier": 2.0,
+    "runtime_error_rate_high_pct": 20,
+    "runtime_error_rate_moderate_pct": 10,
+    "latency_high_ms": 8000,
+    "latency_elevated_ms": 4000,
+    "cost_regression_warn_pct": 20,
+    "efficiency_low_threshold": 0.5
+  },
+  "cost_model": {
+    "_description": "Parameters for token cost estimation and ROI calculations in generate-dashboard.ps1",
+    "cost_per_1m_tokens_usd": 10.0,
+    "baseline_tokens_per_task": 14000,
+    "reduction_policy_pct": 40.0
   }
 }
