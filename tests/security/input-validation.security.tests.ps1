@@ -15,117 +15,117 @@ Describe "Security Tests - Input Validation" {
     Context "Input Sanitization" {
         It "Should reject null input" {
             $input = $null
-            [string]::IsNullOrEmpty($input) | Should -Be $true
+            [string]::IsNullOrEmpty($input) | Should Be $true
         }
         
         It "Should reject empty input" {
             $input = ""
-            [string]::IsNullOrEmpty($input) | Should -Be $true
+            [string]::IsNullOrEmpty($input) | Should Be $true
         }
         
         It "Should reject whitespace-only input" {
             $input = "   "
-            [string]::IsNullOrWhiteSpace($input) | Should -Be $true
+            [string]::IsNullOrWhiteSpace($input) | Should Be $true
         }
         
         It "Should accept valid input" {
             $input = "valid-input-123"
-            [string]::IsNullOrEmpty($input) | Should -Be $false
+            [string]::IsNullOrEmpty($input) | Should Be $false
         }
     }
     
     Context "Type Validation" {
         It "Should validate integer type" {
             $value = 250
-            $value -is [int] | Should -Be $true
+            $value -is [int] | Should Be $true
         }
         
         It "Should validate string type" {
             $value = "test-string"
-            $value -is [string] | Should -Be $true
+            $value -is [string] | Should Be $true
         }
         
         It "Should validate array type" {
             $value = @(1, 2, 3)
-            $value -is [array] | Should -Be $true
+            $value -is [array] | Should Be $true
         }
         
         It "Should reject invalid type" {
             $value = "not-a-number"
-            [int]::TryParse($value, [ref]0) | Should -Be $false
+            [int]::TryParse($value, [ref]0) | Should Be $false
         }
     }
     
     Context "Range Validation" {
         It "Should validate token range" {
             $tokens = 250
-            $tokens -ge 0 -and $tokens -le 10000 | Should -Be $true
+            $tokens -ge 0 -and $tokens -le 10000 | Should Be $true
         }
         
         It "Should reject negative tokens" {
             $tokens = -100
-            $tokens -ge 0 | Should -Be $false
+            $tokens -ge 0 | Should Be $false
         }
         
         It "Should reject excessive tokens" {
             $tokens = 50000
-            $tokens -le 10000 | Should -Be $false
+            $tokens -le 10000 | Should Be $false
         }
     }
     
     Context "String Validation" {
         It "Should validate string length" {
             $input = "test"
-            $input.Length -le 1000 | Should -Be $true
+            $input.Length -le 1000 | Should Be $true
         }
         
         It "Should reject oversized strings" {
             $input = "x" * 10001
-            $input.Length -le 1000 | Should -Be $false
+            $input.Length -le 1000 | Should Be $false
         }
         
         It "Should validate string pattern" {
             $input = "pack-001"
-            $input -match "^[a-z0-9\-]+$" | Should -Be $true
+            $input -match "^[a-z0-9\-]+$" | Should Be $true
         }
         
         It "Should reject invalid pattern" {
             $input = "pack@001!"
-            $input -match "^[a-z0-9\-]+$" | Should -Be $false
+            $input -match "^[a-z0-9\-]+$" | Should Be $false
         }
     }
     
     Context "Path Validation" {
         It "Should validate safe path" {
             $path = ".\config\test.json"
-            $path -notmatch "\.\." | Should -Be $true
+            $path -notmatch "\.\." | Should Be $true
         }
         
         It "Should reject path traversal" {
             $path = "..\..\sensitive\file.txt"
-            $path -match "\.\." | Should -Be $true
+            $path -match "\.\." | Should Be $true
         }
         
         It "Should reject absolute paths" {
             $path = "C:\Windows\System32\config.sys"
-            [System.IO.Path]::IsPathRooted($path) | Should -Be $true
+            [System.IO.Path]::IsPathRooted($path) | Should Be $true
         }
     }
     
     Context "Command Injection Prevention" {
         It "Should escape special characters" {
             $input = "test; rm -rf /"
-            $input -match "[;&|`$]" | Should -Be $true
+            $input -match "[;&|`$]" | Should Be $true
         }
         
         It "Should reject command operators" {
             $input = "test && malicious"
-            $input -match "&&" | Should -Be $true
+            $input -match "&&" | Should Be $true
         }
         
         It "Should reject pipe operators" {
             $input = "test | malicious"
-            $input -match "\|" | Should -Be $true
+            $input -match "\|" | Should Be $true
         }
     }
     
@@ -133,13 +133,13 @@ Describe "Security Tests - Input Validation" {
         It "Should validate checksum" {
             $data = "test-data"
             $checksum = [System.Security.Cryptography.SHA256]::Create().ComputeHash([System.Text.Encoding]::UTF8.GetBytes($data))
-            $checksum.Length | Should -Be 32
+            $checksum.Length | Should Be 32
         }
         
         It "Should detect data corruption" {
             $originalChecksum = "abc123"
             $currentChecksum = "xyz789"
-            $originalChecksum -eq $currentChecksum | Should -Be $false
+            $originalChecksum -eq $currentChecksum | Should Be $false
         }
         
         It "Should validate pack integrity" {
@@ -149,7 +149,7 @@ Describe "Security Tests - Input Validation" {
                 checksum = "valid"
                 verified = $true
             }
-            $pack.verified | Should -Be $true
+            $pack.verified | Should Be $true
         }
     }
     
@@ -157,20 +157,20 @@ Describe "Security Tests - Input Validation" {
         It "Should handle null gracefully" {
             try {
                 $result = $null.ToString()
-                $result | Should -BeNullOrEmpty
+                $result | Should BeNullOrEmpty
             }
             catch {
-                $_ | Should -Not -BeNullOrEmpty
+                $_ | Should Not -BeNullOrEmpty
             }
         }
         
         It "Should handle invalid operations" {
             try {
                 $result = 1 / 0
-                $result | Should -BeNullOrEmpty
+                $result | Should BeNullOrEmpty
             }
             catch {
-                $_.Exception | Should -Not -BeNullOrEmpty
+                $_.Exception | Should Not -BeNullOrEmpty
             }
         }
         
@@ -179,7 +179,7 @@ Describe "Security Tests - Input Validation" {
                 throw "Test error message"
             }
             catch {
-                $_.Exception.Message | Should -Be "Test error message"
+                $_.Exception.Message | Should Be "Test error message"
             }
         }
     }
@@ -189,31 +189,31 @@ Describe "Security Tests - Input Validation" {
             $testFile = ".\config\test.json"
             if (Test-Path $testFile) {
                 $acl = Get-Acl $testFile
-                $acl | Should -Not -BeNullOrEmpty
+                $acl | Should Not -BeNullOrEmpty
             }
         }
         
         It "Should restrict sensitive operations" {
             $operation = "delete-all-data"
             $allowedOperations = @("read", "write", "backup")
-            $allowedOperations -contains $operation | Should -Be $false
+            $allowedOperations -contains $operation | Should Be $false
         }
     }
     
     Context "Encryption Validation" {
         It "Should use strong encryption" {
             $algorithm = "AES-256"
-            $algorithm -match "AES-256" | Should -Be $true
+            $algorithm -match "AES-256" | Should Be $true
         }
         
         It "Should validate key length" {
             $keyLength = 256
-            $keyLength -ge 256 | Should -Be $true
+            $keyLength -ge 256 | Should Be $true
         }
         
         It "Should use secure random generation" {
             $random1 = [System.Security.Cryptography.RNGCryptoServiceProvider]::new()
-            $random1 | Should -Not -BeNullOrEmpty
+            $random1 | Should Not -BeNullOrEmpty
         }
     }
     
@@ -224,12 +224,12 @@ Describe "Security Tests - Input Validation" {
                 eventType = "security"
                 severity = "high"
             }
-            $event.eventType | Should -Be "security"
+            $event.eventType | Should Be "security"
         }
         
         It "Should not log sensitive data" {
             $log = "User login successful"
-            $log -match "password|secret|key" | Should -Be $false
+            $log -match "password|secret|key" | Should Be $false
         }
         
         It "Should maintain audit trail" {
@@ -238,7 +238,7 @@ Describe "Security Tests - Input Validation" {
                 @{ action = "modify"; timestamp = (Get-Date).AddHours(-1) },
                 @{ action = "delete"; timestamp = (Get-Date) }
             )
-            $auditLog.Count | Should -Be 3
+            $auditLog.Count | Should Be 3
         }
     }
 }

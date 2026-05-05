@@ -25,3 +25,4 @@ timestamp,date,task,risk,estimated_tokens,status,engram_available,notes
 2026-05-04T15:27:32-03:00,2026-05-04,audit,medium,2200,PASS,True,projected_pct=40.71
 2026-05-05T11:28:24-03:00,2026-05-05,end-session,medium,1800,PASS,True,projected_pct=1.5
 2026-05-05T11:28:28-03:00,2026-05-05,end-session,medium,1800,PASS,True,projected_pct=3
+2026-05-05T17:18:40-03:00,2026-05-05,general,medium,1000,PASS,True,projected_pct=3.83

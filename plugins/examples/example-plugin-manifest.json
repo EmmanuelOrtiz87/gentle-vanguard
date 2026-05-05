@@ -1,0 +1,17 @@
+{
+  "name": "example-hello-world",
+  "version": "1.0.0",
+  "description": "Example plugin that adds a simple 'hello' command to wf.ps1",
+  "author": "Foundation Team",
+  "main": "hello-world.ps1",
+  "commands": [
+    {
+      "name": "hello",
+      "description": "Prints a hello message",
+      "script": "hello-world.ps1"
+    }
+  ],
+  "dependencies": {
+    "PowerShell": ">=7.0"
+  }
+}

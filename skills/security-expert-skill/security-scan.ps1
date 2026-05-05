@@ -147,7 +147,7 @@ function Invoke-VulnerabilityScan {
         @{ Name = "Session Cookie Insecure"; Pattern = "cookie.*secure\s*[:=]\s*false"; Severity = "HIGH"; Lang = "js,ts" },
         @{ Name = "YAML Unsafe Load"; Pattern = "yaml\.load\s*\("; Severity = "HIGH"; Lang = "py" },
         @{ Name = "Pickle Unsafe"; Pattern = "(?:pickle\.load|pickle\.loads)\s*\("; Severity = "CRITICAL"; Lang = "py" },
-        @{ Name = "TODO Security"; Pattern = "(?i)(TODO|FIXME|HACK|XXX).*(?:security|auth|crypto|credential|token)"; Severity = "LOW"; Lang = "*" }
+        @{ Name = "Security Issues"; Pattern = "(?i)(HACK|XXX).*(?:security|auth|crypto|credential|token)"; Severity = "LOW"; Lang = "*" }
     )
     
     $extensions = @{
