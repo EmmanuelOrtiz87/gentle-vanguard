@@ -25,8 +25,12 @@ jobs:
       - name: Setup PowerShell
         shell: pwsh
         run: |
-          Install-Module -Name PowerShellGet -Force -AllowClobber
-          Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+          if ($IsLinux -or $IsMacOS) {
+            Write-Host "PowerShell setup not required on this platform."
+          } else {
+            Install-Module -Name PowerShellGet -Force -AllowClobber
+            Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+          }
 
       - name: Run Comprehensive Validation
         shell: pwsh
