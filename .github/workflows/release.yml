@@ -29,7 +29,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0   # Full history needed for release notes
 
@@ -68,7 +68,7 @@ jobs:
           echo "Generated release notes ($(wc -l < /tmp/release_notes.md) lines)"
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.version.outputs.tag }}
           name: "${{ steps.version.outputs.tag }} — Gentleman Foundation"
