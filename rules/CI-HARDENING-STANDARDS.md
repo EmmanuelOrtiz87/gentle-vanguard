@@ -73,8 +73,8 @@ Use the minimum permissions required:
 
 ```yaml
 # CORRECT: pin to major version tag (managed by Dependabot)
-- uses: actions/checkout@v4
-- uses: softprops/action-gh-release@v2
+- uses: actions/checkout@v6
+- uses: softprops/action-gh-release@v3
 
 # WRONG: floating tags or branch refs
 - uses: actions/checkout@main   # unpinned — supply-chain risk

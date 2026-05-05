@@ -15,7 +15,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       - name: Setup runtime
         uses: ./.github/actions/setup
@@ -29,7 +29,7 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       - name: Setup runtime
         uses: ./.github/actions/setup
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [lint, test]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       - name: Setup runtime
         uses: ./.github/actions/setup
@@ -57,7 +57,7 @@ jobs:
         shell: bash
         
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: artifacts
           path: |
@@ -67,7 +67,7 @@ jobs:
     name: Security Scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       - name: Run security scan
         run: |
@@ -81,7 +81,7 @@ jobs:
     if: github.ref == 'refs/heads/develop'
     environment: staging
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       - name: Deploy to staging
         run: |
@@ -98,7 +98,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     environment: production
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       - name: Deploy to production
         run: |
