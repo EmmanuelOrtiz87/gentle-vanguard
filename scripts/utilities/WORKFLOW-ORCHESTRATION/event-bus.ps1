@@ -92,6 +92,54 @@ function Get-History {
     return $null
 }
 
+# ─── Rate-limit state persistence (sliding window cross-restart) ─────────────
+function Get-RateLimitState {
+    $statePath = Join-Path $eventBusPath 'rate-limit-state.json'
+    if (Test-Path $statePath) {
+        try { return (Get-Content $statePath -Raw -ErrorAction Stop | ConvertFrom-Json) } catch { }
+    }
+    return [PSCustomObject]@{
+        version        = '1.0'
+        window_seconds = 60
+        updated        = $null
+        events         = [PSCustomObject]@{}
+    }
+}
+
+function Update-RateLimitState {
+    param([string]$EventName)
+    $statePath = Join-Path $eventBusPath 'rate-limit-state.json'
+    $state     = Get-RateLimitState
+    $now       = Get-Date
+    $cutoff    = $now.AddSeconds(-[int]$state.window_seconds)
+    $nowIso    = $now.ToString('yyyy-MM-ddTHH:mm:sszzz')
+
+    # Prune timestamps older than the window for this event and append new one
+    $existing = @()
+    $prop = $state.events.PSObject.Properties[$EventName]
+    if ($prop) {
+        foreach ($ts in $prop.Value) {
+            try { if ([datetime]::Parse($ts) -ge $cutoff) { $existing += $ts } } catch { }
+        }
+    }
+    $existing += $nowIso
+
+    # Rebuild events hashtable preserving other event keys
+    $newEvents = @{}
+    foreach ($p in $state.events.PSObject.Properties) {
+        if ($p.Name -ne $EventName) { $newEvents[$p.Name] = @($p.Value) }
+    }
+    $newEvents[$EventName] = $existing
+
+    @{
+        version        = '1.0'
+        window_seconds = [int]$state.window_seconds
+        updated        = $nowIso
+        events         = $newEvents
+    } | ConvertTo-Json -Depth 4 | Out-File -FilePath $statePath -Encoding UTF8 -Force
+}
+# ─────────────────────────────────────────────────────────────────────────────
+
 function Add-HistoryEntry {
     param(
         [string]$EventName,
@@ -258,24 +306,36 @@ function Invoke-EventGovernance {
         }
     }
 
-    # 6. Rate limit check (sliding window — count events in last 60s from history)
+    # 6. Rate limit check — rate-limit-state.json (persistent) as primary, history.json as fallback
     $rateLimitEnabled = $governance.governance.rate_limiting.enabled
     if ($rateLimitEnabled) {
         $rateLimit = $eventDef.Value.rate_limit
         if ($rateLimit -and $rateLimit.max_per_minute) {
-            $history = Get-History
             $windowStart = (Get-Date).AddSeconds(-60)
             $recentCount = 0
-            if ($history.events) {
-                foreach ($entry in $history.events) {
-                    if ($entry.event -eq $EventName) {
-                        try {
-                            $ts = [datetime]::Parse($entry.timestamp)
-                            if ($ts -ge $windowStart) { $recentCount++ }
-                        } catch { }
+
+            $rlState  = Get-RateLimitState
+            $stateProp = $rlState.events.PSObject.Properties[$EventName]
+            if ($stateProp) {
+                # Use persistent state file (survives restarts)
+                foreach ($ts in $stateProp.Value) {
+                    try { if ([datetime]::Parse($ts) -ge $windowStart) { $recentCount++ } } catch { }
+                }
+            } else {
+                # Fallback: scan history.json (covers events before state file existed)
+                $history = Get-History
+                if ($history -and $history.events) {
+                    foreach ($entry in $history.events) {
+                        if ($entry.event -eq $EventName) {
+                            try {
+                                $ts = [datetime]::Parse($entry.timestamp)
+                                if ($ts -ge $windowStart) { $recentCount++ }
+                            } catch { }
+                        }
                     }
                 }
             }
+
             $maxPerMin = $rateLimit.max_per_minute
             $softLimit = [math]::Floor($maxPerMin * 0.8)
             if ($recentCount -ge $maxPerMin) {
@@ -381,23 +441,33 @@ switch ($Action) {
             Write-Host "[ERROR] Event name required" -ForegroundColor Red
             exit 1
         }
-        
+
         $normalizedEvent = $Event.ToLower()
+
+        # ── Governance gate ──────────────────────────────────────────────────
+        $govResult = Invoke-EventGovernance -EventName $normalizedEvent -PayloadJson $Payload
+        if (-not $govResult.Allowed) {
+            Write-Host "[GOV-BLOCK] Event '$normalizedEvent' blocked: $($govResult.Reason)" -ForegroundColor Red
+            Add-HistoryEntry -EventName $normalizedEvent -PayloadJson $Payload -Status "blocked:$($govResult.Reason)"
+            exit 1
+        }
+        # ─────────────────────────────────────────────────────────────────────
+
         $subs = Get-Subscriptions
-        
+
         Write-Host "Emitting: $normalizedEvent" -ForegroundColor Cyan
         if ($Payload) {
             Write-Host "  Payload: $Payload" -ForegroundColor Gray
         }
-        
+
         $handlersTriggered = 0
-        
+
         if ($subs.subscriptions.PSObject.Properties[$normalizedEvent]) {
             foreach ($handler in (Get-EventHandlers -Subscriptions $subs -EventName $normalizedEvent)) {
                 if ($handler.active) {
                     Write-Host "  [HANDLER] $($handler.id): $($handler.script)" -ForegroundColor Green
                     $handlersTriggered++
-                    
+
                     if ($handler.script -ne 'default-logger') {
                         try {
                             $handlerPath = Resolve-HandlerScriptPath -Path $handler.script
@@ -413,11 +483,13 @@ switch ($Action) {
                 }
             }
         }
-        
+
         Add-HistoryEntry -EventName $normalizedEvent -PayloadJson $Payload -Status 'emitted'
+        # Persist rate-limit sliding window cross-restart
+        Update-RateLimitState -EventName $normalizedEvent
         Write-Host "[OK] Event emitted. Handlers triggered: $handlersTriggered" -ForegroundColor Green
     }
-    
+
     'handlers' {
         if ([string]::IsNullOrWhiteSpace($Event)) {
             $subs = Get-Subscriptions
@@ -465,33 +537,4 @@ switch ($Action) {
         }
     }
     
-    'emit' {
-        if ([string]::IsNullOrWhiteSpace($Event)) {
-            Write-Host "[ERROR] Event name required" -ForegroundColor Red
-            exit 1
-        }
-        
-        $normalizedEvent = $Event.ToLower()
-
-        # ── Governance gate ──────────────────────────────────────────────────
-        $govResult = Invoke-EventGovernance -EventName $normalizedEvent -PayloadJson $Payload
-        if (-not $govResult.Allowed) {
-            Write-Host "[GOV-BLOCK] Event '$normalizedEvent' blocked: $($govResult.Reason)" -ForegroundColor Red
-            Add-HistoryEntry -EventName $normalizedEvent -PayloadJson $Payload -Status "blocked:$($govResult.Reason)"
-            exit 1
-        }
-        # ─────────────────────────────────────────────────────────────────────
-
-        $subs = Get-Subscriptions
-        
-        Write-Host "Emitting: $normalizedEvent" -ForegroundColor Cyan
-        if ($Payload) {
-            Write-Host "  Payload: $Payload" -ForegroundColor Gray
-        }
-        
-        $handlersTriggered = 0
-    Write-Host "  .\wf.ps1 events emit <EVENT> [P]  Emit event with optional payload"
-    Write-Host "  .\wf.ps1 events handlers [EVENT]  List handlers"
-    Write-Host "  .\wf.ps1 events history           Show event history"
-    Write-Host "  .\wf.ps1 events clear             Clear event history"
 }
