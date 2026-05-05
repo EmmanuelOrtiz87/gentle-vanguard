@@ -7,6 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.4] - 2026-05-05
+
+### Added
+
+#### FF-001 — SDD CI Hardening (O-38)
+- `scripts/hooks/check-sdd-gate.ps1`: validates that at least one SDD doc with status `validated`, `done`, or `active` exists before committing/pushing to protected branches.
+  - Blocking for `main`; advisory for `develop`; skipped on feature/bugfix branches.
+  - Integrates with `hook-advisory-classifier.ps1` (Add-BlockingFinding/Add-AdvisoryFinding).
+- `.github/workflows/sdd-gate.yml`: CI workflow triggered on PRs to main/develop; runs `check-sdd-gate.ps1` on Windows runner.
+- `wf.ps1`: `sdd-gate` command registered in ValidateSet + switch + help.
+
+#### FF-002 — SDD Process Metrics (O-39)
+- `scripts/utilities/TELEMETRY-METRICS/sdd-process-metrics.ps1`: computes spec coverage %, avg lead time (days), rework ratio %, and SDD document status breakdown.
+  - Reads `docs/backlog/items.json` + `docs/sdd/*.md`.
+  - Health signals: GREEN/YELLOW/RED per KPI; `-AsJson` for machine-readable output.
+- `wf.ps1`: `sdd-metrics` command registered in ValidateSet + switch + help.
+
+#### FF-004 — Sync Drift Prevention (O-40)
+- `scripts/utilities/sync-drift-report.ps1`: compares declared config vs actual filesystem.
+  - Checks: skills declared in `auto-delegation.json` vs `skills/` dirs; MCP servers vs local presence; done backlog `resolved_by` script refs vs actual files.
+  - Outputs drift score + categorized findings; exits 1 when drift > 0.
+  - `-AsJson` for machine-readable output.
+- `wf.ps1`: `sync-drift` command registered in ValidateSet + switch + help.
+
+#### FF-006 — Local Workflow Performance (O-41)
+- `scripts/utilities/wf-benchmark.ps1`: profiles key `wf` commands with `Measure-Command` and compares against configurable SLO thresholds.
+  - Default commands: `status`, `health`. Custom via `-Commands status,health,verify`.
+  - PASS/WARN/FAIL per command; report persisted to `reports/wf-benchmark.json`.
+  - SLO defaults: status ≤5 s, health ≤15 s, verify ≤30 s (override via `config/testing.config.json#benchmark.slo`).
+- `wf.ps1`: `benchmark [cmds]` command registered in ValidateSet + switch + help.
+
+### Changed
+- `docs/backlog/items.json`: all 7 backlog items now `done` — FF-001/002/004/006 resolved this release.
+
 ## [2.6.3] - 2026-05-05
 
 ### Added
