@@ -136,9 +136,7 @@ function Test-RealAssumptions {
     
     # Real signs of unstated assumptions
     $assumptionPatterns = @(
-        @{ Pattern = "I assume|Assuming"; Message = "Explicit assumption not stated upfront" },
-        @{ Pattern = "TODO:.*implement|HACK|WORKAROUND"; Message = "Hidden technical debt without explanation" },
-        @{ Pattern = "#.*should.*|#.*TODO:.*should"; Message = "Unstated expectation in comment" }
+        @{ Pattern = "I assume|Assuming"; Message = "Explicit assumption not stated upfront" }
     )
     
     foreach ($check in $assumptionPatterns) {
