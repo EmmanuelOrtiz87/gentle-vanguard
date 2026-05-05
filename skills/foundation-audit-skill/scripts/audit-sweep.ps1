@@ -152,7 +152,8 @@ function Test-MarkdownLinks {
     $brokenLinks = 0
     
     foreach ($file in $mdFiles) {
-        $content = Get-Content $file.FullName -Raw
+        $content = Get-Content $file.FullName -Raw -ErrorAction SilentlyContinue
+        if ([string]::IsNullOrEmpty($content)) { continue }
         $dir = $file.DirectoryName
         
         # Match markdown links: [text](path)
