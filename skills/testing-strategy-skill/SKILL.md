@@ -209,7 +209,7 @@ it('should call API', () => {
     cd web && npm test -- --watch=false
 
 - name: Upload coverage
-  uses: actions/upload-artifact@v4
+  uses: actions/upload-artifact@v7
   with:
     name: coverage
     path: coverage.out
