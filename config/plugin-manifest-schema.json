@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Plugin Manifest",
+  "description": "Plugin manifest for Foundation plugins",
+  "type": "object",
+  "required": ["name", "version", "author", "description"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Plugin identifier"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version"
+    },
+    "author": {
+      "type": "string",
+      "description": "Plugin author"
+    },
+    "description": {
+      "type": "string",
+      "description": "Plugin description"
+    },
+    "minFoundationVersion": {
+      "type": "string",
+      "description": "Minimum Foundation version required"
+    },
+    "provides": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Capabilities provided by this plugin"
+    },
+    "requires": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Plugin dependencies"
+    },
+    "hooks": {
+      "type": "array",
+      "items": { "enum": ["pre-commit", "pre-push", "post-checkout", "commit-msg"] },
+      "description": "Git hooks the plugin registers"
+    },
+    "commands": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Custom wf.ps1 subcommands provided"
+    }
+  }
+}
