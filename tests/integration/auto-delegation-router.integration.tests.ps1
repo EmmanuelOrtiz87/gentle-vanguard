@@ -224,3 +224,4 @@ Describe "Auto-Delegation Router" {
 
 # Run tests
 Invoke-Pester -Path $PSCommandPath -Verbose
+
