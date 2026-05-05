@@ -1,21 +1,30 @@
 # lefthook.yml
 # Git hooks configuration for Foundation
-# Install lefthook: npm install -g lefthook
+# Install: npm install lefthook && npx lefthook install
 
 pre-commit:
   run:
-    - powershell -NoProfile -ExecutionPolicy Bypass -File "hooks/pre-commit-opencode-validation.ps1" 2>&1
-    - powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/utilities/wf-report.ps1" -Type clarify 2>&1 || true
-    - echo "[pre-commit] Running format check..."
+    - name: opencode-validation
+      run: powershell -NoProfile -ExecutionPolicy Bypass -File "hooks/pre-commit-opencode-validation.ps1" 2>&1
+    - name: trufflehog-secrets
+      run: trufflehog git file://. --since-commit HEAD --fail
+      only: powershell -Command "git diff --cached --name-only | Select-String -Pattern '\.(env|key|pem|p12|pfx|keystore|jks)$'"
+    - name: format-check
+      run: echo "[pre-commit] Running format check..."
 
 pre-push:
   run:
-    - powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/orchestrate-auto-fix.ps1" -Fix
-    - echo "[pre-push] Running judgment day..."
+    - name: orchestrator-auto-fix
+      run: powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/orchestrate-auto-fix.ps1" -Fix
+    - name: trufflehog-full
+      run: trufflehog git file://. --since-commit origin/develop --fail
+    - name: judgment-day
+      run: echo "[pre-push] Running judgment day..."
 
 commit-msg:
   run:
-    - echo "[commit-msg] Validating commit message format..."
+    - name: commitlint
+      run: echo "[commit-msg] Validating commit message format..."
 
 # Extensions to run hooks on
 # extensions:
