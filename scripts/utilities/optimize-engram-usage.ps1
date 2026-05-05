@@ -10,24 +10,28 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$engramBin = Join-Path $scriptDir 'engram.exe'
 
-# Suppress stderr function
-function Invoke-EngramCommand {
-    param([string]$Command)
-    $output = ""
-    $errorOutput = ""
-    $process = Start-Process -FilePath $engramBin -ArgumentList $Command -NoNewWindow -Wait -RedirectStandardOutput "temp_out.txt" -RedirectStandardError "temp_err.txt" -PassThru
-    if (Test-Path "temp_out.txt") {
-        $output = Get-Content "temp_out.txt" -Raw
-        Remove-Item "temp_out.txt" -Force
+function Resolve-EngramBinary {
+    $candidates = @(
+        (Join-Path $scriptDir 'engram.exe'),
+        (Join-Path (Split-Path -Parent $scriptDir) 'tools\engram.exe')
+    )
+
+    foreach ($candidate in $candidates) {
+        if (Test-Path $candidate) {
+            return (Resolve-Path $candidate).Path
+        }
     }
-    if (Test-Path "temp_err.txt") {
-        $errorOutput = Get-Content "temp_err.txt" -Raw
-        Remove-Item "temp_err.txt" -Force
+
+    $command = Get-Command 'engram' -ErrorAction SilentlyContinue
+    if ($command -and $command.Source) {
+        return $command.Source
     }
-    return $output
+
+    return $null
 }
+
+$engramBin = Resolve-EngramBinary
 
 function Write-Status {
     param([string]$m) Write-Host "[OPTIMIZE] $m" -ForegroundColor Green
@@ -45,49 +49,73 @@ function Write-Success {
     param([string]$m) Write-Host "[OK] $m" -ForegroundColor Green
 }
 
+function Invoke-Engram {
+    param(
+        [string[]]$Arguments,
+        [switch]$AllowFailure
+    )
+
+    $stderrFile = Join-Path $env:TEMP ("engram-stderr-{0}.txt" -f ([guid]::NewGuid()))
+    $previousErrorActionPreference = $ErrorActionPreference
+    try {
+        $ErrorActionPreference = 'Continue'
+        $output = & $engramBin @Arguments 2>$stderrFile
+        $exitCode = $LASTEXITCODE
+        if ($exitCode -ne 0 -and -not $AllowFailure) {
+            $stderr = if (Test-Path $stderrFile) { Get-Content $stderrFile -Raw } else { '' }
+            throw "engram $($Arguments -join ' ') failed with exit code $exitCode. $stderr"
+        }
+
+        return $output
+    }
+    finally {
+        $ErrorActionPreference = $previousErrorActionPreference
+        if (Test-Path $stderrFile) {
+            Remove-Item $stderrFile -Force
+        }
+    }
+}
+
 Write-Status "Starting Engram optimization for project: $ProjectName"
 
 # Verify Engram is available
-if (-not (Test-Path $engramBin)) {
-    Write-Warning "Engram binary not found at $engramBin"
+if ([string]::IsNullOrWhiteSpace($engramBin) -or -not (Test-Path $engramBin)) {
+    Write-Warning "Engram binary not found in scripts, tools, or PATH"
     exit 1
 }
 
-# 1. Find and remove duplicate entries
+Write-Info "Using Engram binary: $engramBin"
+
+# 1. Find duplicate-related entries
 Write-Info "Checking for duplicate entries..."
-$duplicates = & $engramBin search "duplicate OR repeated" --project $ProjectName --limit 50 2>&1 | Where-Object { $_ -notmatch "Update available" }
+$duplicates = Invoke-Engram -Arguments @('search', 'duplicate OR repeated', '--project', $ProjectName, '--limit', '50') -AllowFailure
 
 if ($duplicates) {
-    Write-Info "Found potential duplicates. Analyzing..."
-    # In real implementation, would parse and remove duplicates
-    # For now, log the finding
+    Write-Info "Duplicate-related entries found; recording maintenance observation"
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    & $engramBin save --title "Duplicate cleanup check" --content "Duplicate check run at $timestamp. Found entries needing review." --project $ProjectName 2>&1 | Where-Object { $_ -notmatch "Update available" } | Out-Null
+    Invoke-Engram -Arguments @(
+        'save',
+        'Duplicate cleanup check',
+        "Duplicate check run at $timestamp. Found entries needing review.",
+        '--project',
+        $ProjectName
+    ) | Out-Null
 }
 
-# 2. Remove old entries (older than KeepRecentDays)
-Write-Info "Cleaning entries older than $KeepRecentDays days..."
-$oldDate = (Get-Date).AddDays(-$KeepRecentDays).ToString("yyyy-MM-dd")
-$oldEntries = & $engramBin search --project $ProjectName --before $oldDate --limit 100 2>&1 | Where-Object { $_ -notmatch "Update available" }
-
-if ($oldEntries -and $AutoApply) {
-    Write-Info "Removing old entries..."
-    # Would call delete command here
-    Write-Success "Old entries cleanup completed"
-} elseif ($oldEntries) {
-    Write-Info "Found old entries (use -AutoApply to clean automatically)"
-}
+# 2. Run supported memory diagnostics
+Write-Info "Running Engram diagnostics..."
+Invoke-Engram -Arguments @('doctor', '--project', $ProjectName) -AllowFailure | Out-Null
 
 # 3. Optimize reference search
 Write-Info "Optimizing reference search..."
-$recentContext = & $engramBin context --limit 10 2>$null
+$recentContext = Invoke-Engram -Arguments @('context', $ProjectName) -AllowFailure
 if ($recentContext) {
     Write-Info "Loaded recent context for reference optimization"
 }
 
-# 4. Compress large entries
-Write-Info "Checking for large entries to compress..."
-# Would implement compression logic here
+# 4. Inspect conflict state
+Write-Info "Inspecting conflict state..."
+Invoke-Engram -Arguments @('conflicts', 'stats', '--project', $ProjectName) -AllowFailure | Out-Null
 
 # 5. Show recommendations
 Write-Status "Optimization completed"
@@ -97,11 +125,17 @@ Write-Host "  1. Use 'engram search' before repeating explanations" -ForegroundC
 Write-Host "  2. Save decisions > 5min to Engram automatically" -ForegroundColor Gray
 Write-Host "  3. Reference Engram IDs instead of full content" -ForegroundColor Gray
 Write-Host "  4. Run this script regularly for maintenance" -ForegroundColor Gray
-Write-Host "  5. Use -AutoApply to perform automatic cleanup" -ForegroundColor Gray
+Write-Host "  5. Run 'engram conflicts scan --apply' for explicit conflict cleanup" -ForegroundColor Gray
 
 # Log optimization run
 $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-& $engramBin save --title "Context efficiency optimization run" --content "Optimization script executed at $timestamp. Project: $ProjectName. AutoApply: $AutoApply" --project $ProjectName 2>$null | Out-Null
+Invoke-Engram -Arguments @(
+    'save',
+    'Context efficiency optimization run',
+    "Optimization script executed at $timestamp. Project: $ProjectName.",
+    '--project',
+    $ProjectName
+) | Out-Null
 
 Write-Success "Engram usage optimization completed"
 exit 0

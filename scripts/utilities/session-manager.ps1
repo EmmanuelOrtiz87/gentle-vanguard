@@ -63,39 +63,18 @@ function Initialize-Session {
     Write-Status "Session initialized: $sessionId"
     Write-Info "Session file: $sessionFile"
     
-    # Autonomous norm enforcement at session start
-    Write-Status "Running autonomous norm enforcement (session-start)..."
+    # Autonomous norm baseline at session start
+    Write-Status "Capturing autonomous norm baseline (session-start)..."
     $enforcerScript = Join-Path $PSScriptRoot "..\adaptive\karpathy-enforcer.ps1"
     if (-not (Test-Path $enforcerScript)) {
         $enforcerScript = Join-Path $PSScriptRoot "karpathy-enforcer.ps1"
     }
     if (Test-Path $enforcerScript) {
         $verboseFlag = $VerbosePreference -eq "Continue"
-        & $enforcerScript -Trigger session-start -AutoFix:$false -VerboseOutput:$verboseFlag
-        Write-Info "Karpathy enforcement completed"
+        & $enforcerScript -Trigger session-start -AutoFix -VerboseOutput:$verboseFlag
+        Write-Info "Karpathy baseline completed"
     } else {
         Write-Warning "Karpathy enforcer not found, skipping..."
-    }
-    
-    # Autonomous learning at session start
-    Write-Status "Running autonomous norm learner (session-start)..."
-    $learnerScript = Join-Path $PSScriptRoot "..\adaptive\auto-norm-learner.ps1"
-    if (-not (Test-Path $learnerScript)) {
-        $learnerScript = Join-Path $PSScriptRoot "auto-norm-learner.ps1"
-    }
-    if (Test-Path $learnerScript) {
-        $verboseFlag = $VerbosePreference -eq "Continue"
-        & $learnerScript -Trigger session-start -VerboseOutput:$verboseFlag
-        Write-Info "Norm learner completed"
-    } else {
-        Write-Warning "Norm learner not found, skipping..."
-    }
-    if (Test-Path $enforcerScript) {
-        $verboseFlag = $VerbosePreference -eq "Continue"
-        & $enforcerScript -Trigger session-start -AutoFix -VerboseOutput:$verboseFlag
-        Write-Info "Norm enforcement completed"
-    } else {
-        Write-Warning "Norm enforcer not found, skipping..."
     }
     
     # Autonomous learning at session start

@@ -253,6 +253,23 @@ function Invoke-KarpathyEnforcement {
     if ($allViolations.Count -eq 0) {
         Write-Host "[KARPATHY] No Karpathy violations found" -ForegroundColor Green
         return 0
+    } elseif ($Trigger -eq 'session-start') {
+        $baselineDir = Join-Path $TargetPath ".runtime\quality"
+        if (-not (Test-Path $baselineDir)) {
+            New-Item -ItemType Directory -Path $baselineDir -Force | Out-Null
+        }
+
+        $baselinePath = Join-Path $baselineDir "karpathy-baseline.json"
+        @{
+            timestamp = Get-Date -Format "o"
+            trigger = $Trigger
+            count = $allViolations.Count
+            items = $allViolations
+        } | ConvertTo-Json -Depth 4 | Set-Content -Path $baselinePath -Encoding UTF8
+
+        Write-Host "[KARPATHY] Baseline captured: $($allViolations.Count) item(s)" -ForegroundColor Cyan
+        Write-Host "[KARPATHY] Baseline file: $baselinePath" -ForegroundColor Gray
+        return 0
     } else {
         Write-Host "[KARPATHY-WARNING] Found $($allViolations.Count) REAL violation(s):" -ForegroundColor Yellow
         foreach ($v in $allViolations) {
