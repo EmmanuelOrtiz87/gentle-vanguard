@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'platform-info', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -1619,6 +1619,10 @@ COMMANDS:
     mq [action]          Message queue adapter: status|publish|consume|test (file/redis/webhook)
     export-metrics [fmt] Export metrics to analytical store: csv|jsonl|sqlite|all (default: csv)
     platform-info        Show current platform and PowerShell version
+    sdd-gate             FF-001: Validate SDD spec status before merging to protected branches
+    sdd-metrics          FF-002: SDD process KPIs: spec coverage, lead time, rework ratio
+    sync-drift           FF-004: Detect drift between declared config and actual skills/files
+    benchmark [cmds]     FF-006: Profile wf commands vs SLO thresholds (default: status,health)
     help                 Show this help
 
 OPTIONS:
@@ -2345,6 +2349,53 @@ switch ($Command) {
             $platform = if ($IsWindows) { 'windows' } elseif ($IsMacOS) { 'macos' } else { 'linux' }
             Write-Host "[platform: $platform | pwsh: $($PSVersionTable.PSVersion)]" -ForegroundColor Cyan
         }
+    }
+
+    'sdd-gate' {
+        # FF-001: Run SDD gate check (local validation)
+        $sddGateScript = Join-Path $repoRoot 'scripts\hooks\check-sdd-gate.ps1'
+        if (-not (Test-Path $sddGateScript)) {
+            Write-Error "check-sdd-gate.ps1 not found: $sddGateScript"
+            exit 1
+        }
+        & $sddGateScript
+        exit $LASTEXITCODE
+    }
+
+    'sdd-metrics' {
+        # FF-002: SDD process KPIs — spec coverage, lead time, rework ratio
+        $metricsScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\sdd-process-metrics.ps1'
+        if (-not (Test-Path $metricsScript)) {
+            Write-Error "sdd-process-metrics.ps1 not found: $metricsScript"
+            exit 1
+        }
+        $asJson = $Scope -eq '-JSON' -or $Scope -eq 'json'
+        if ($asJson) { & $metricsScript -AsJson } else { & $metricsScript }
+        exit $LASTEXITCODE
+    }
+
+    'sync-drift' {
+        # FF-004: Sync drift report — declared config vs actual filesystem
+        $driftScript = Join-Path $repoRoot 'scripts\utilities\sync-drift-report.ps1'
+        if (-not (Test-Path $driftScript)) {
+            Write-Error "sync-drift-report.ps1 not found: $driftScript"
+            exit 1
+        }
+        $asJson = $Scope -eq '-JSON' -or $Scope -eq 'json'
+        if ($asJson) { & $driftScript -AsJson } else { & $driftScript }
+        exit $LASTEXITCODE
+    }
+
+    'benchmark' {
+        # FF-006: Profile key wf commands against SLO thresholds
+        $benchScript = Join-Path $repoRoot 'scripts\utilities\wf-benchmark.ps1'
+        if (-not (Test-Path $benchScript)) {
+            Write-Error "wf-benchmark.ps1 not found: $benchScript"
+            exit 1
+        }
+        $cmds = if ($Scope) { $Scope -split ',' } else { @('status', 'health') }
+        & $benchScript -Commands $cmds
+        exit $LASTEXITCODE
     }
 
     'context-pack' {
