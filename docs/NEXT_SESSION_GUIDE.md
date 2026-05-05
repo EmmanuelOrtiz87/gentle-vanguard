@@ -229,20 +229,17 @@ Para preguntas o problemas:
 ## Estado Actual
 
 ```
- Auto-Delegation Router: IMPLEMENTADO
- Tests: 26 PASANDO
- Documentacin: COMPLETA
- Configuracin: LISTA
- Integracin: PENDIENTE
- Staging: PENDIENTE
- Produccin: PENDIENTE
+✅ Auto-Delegation Router: IMPLEMENTADO (skills/auto-delegation-router/)
+✅ Tests: 26 PASANDO + 11 integration tests routing-flow.tests.ps1
+✅ Documentación: COMPLETA
+✅ Configuración: LISTA (config/auto-delegation.json — fuente canónica)
+✅ Integración: COMPLETA (pre-process-input.ps1 + config/auto-delegation.json en producción)
+✅ Staging: VALIDADO (agent-verify 14/14 PASS — 2026-05-05)
+✅ Producción: ACTIVO — gentleman-foundation v2.6.5 main
 ```
 
 ---
 
 **Creado**: 2026-04-23 09:00:30  
-**Para**: Prxima sesin de desarrollo  
-**Duracin estimada**: 2-3 horas  
-**Complejidad**: Media  
-
- **LISTO PARA CONTINUAR!**
+**Actualizado**: 2026-05-05 — homologación completada, routing en producción  
+**Estado**: COMPLETADO — no se requieren acciones adicionales
