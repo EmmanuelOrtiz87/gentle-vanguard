@@ -58,10 +58,11 @@ $orchVersion = if ($orch) { $orch.version } else { 'N/A' }
 $dailyBudget = if ($orch) { $orch.subagent_orchestration.token_budget_guard.daily_budget_tokens } else { 30000 }
 
 # Agent dispatch counts from metrics runtime_state
+# Fields map: session_count, total_delegations, cumulative_token_usage
 $runtimeState = if ($metrics -and $metrics.runtime_state) { $metrics.runtime_state } else { $null }
-$sessionsTotal   = if ($runtimeState -and $runtimeState.total_sessions) { $runtimeState.total_sessions } else { 0 }
-$dispatchTotal   = if ($runtimeState -and $runtimeState.total_dispatches) { $runtimeState.total_dispatches } else { 0 }
-$tokensAllTime   = if ($runtimeState -and $runtimeState.total_tokens_used) { $runtimeState.total_tokens_used } else { 0 }
+$sessionsTotal   = if ($runtimeState -and $runtimeState.session_count)          { [int]$runtimeState.session_count }          else { 0 }
+$dispatchTotal   = if ($runtimeState -and $runtimeState.total_delegations)      { [int]$runtimeState.total_delegations }      else { 0 }
+$tokensAllTime   = if ($runtimeState -and $runtimeState.cumulative_token_usage) { [int]$runtimeState.cumulative_token_usage } else { 0 }
 
 # Event history stats
 $eventCount = 0
@@ -82,16 +83,20 @@ if ($eventHist -and $eventHist.events) {
 $rlSummary = ''
 if ($rlState -and $rlState.updated) { $rlSummary = "Last updated: $($rlState.updated)" }
 
-# Token CSV — last 7 days
+# Token CSV — last 14 entries (columns: timestamp,date,task,risk,estimated_tokens,status,...)
 $tokenRows = @()
 if (Test-Path $tokenCsv) {
     try {
-        $csvLines = Get-Content $tokenCsv -Encoding UTF8 | Select-Object -Skip 1 | Select-Object -Last 14
-        foreach ($line in $csvLines) {
-            $parts = $line -split ','
-            if ($parts.Count -ge 3) {
-                $tokenRows += @{ date = $parts[0].Trim(); tokens = $parts[1].Trim(); budget = $parts[2].Trim() }
-            }
+        $csvData = Import-Csv -Path $tokenCsv -Encoding UTF8 | Select-Object -Last 14
+        foreach ($row in $csvData) {
+            $label = if ($row.date) { $row.date } elseif ($row.timestamp) { $row.timestamp.Substring(0,10) } else { '?' }
+            $tokens = if ($row.estimated_tokens) { [int]$row.estimated_tokens } else { 0 }
+            $tokenRows += @{ date = $label; tokens = $tokens }
+        }
+        # Also accumulate total tokens from CSV if runtime_state has none
+        if ($tokensAllTime -eq 0) {
+            $allRows = Import-Csv -Path $tokenCsv -Encoding UTF8
+            $tokensAllTime = ($allRows | ForEach-Object { if ($_.estimated_tokens) { [int]$_.estimated_tokens } else { 0 } } | Measure-Object -Sum).Sum
         }
     } catch { }
 }
@@ -101,7 +106,7 @@ $eventTypeLabels = ($eventByType.Keys | ForEach-Object { "'$_'" }) -join ','
 $eventTypeValues = ($eventByType.Values | ForEach-Object { $_ }) -join ','
 
 $tokenLabels = ($tokenRows | ForEach-Object { "'$($_.date)'" }) -join ','
-$tokenValues = ($tokenRows | ForEach-Object { $_.tokens }) -join ','
+$tokenValues = ($tokenRows | ForEach-Object { [int]$_.tokens }) -join ','
 
 # Recent events table (last 20)
 $recentEventsHtml = ''
