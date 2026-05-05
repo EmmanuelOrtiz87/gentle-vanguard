@@ -220,6 +220,48 @@ if ($eventHist -and $eventHist.events) {
     }
 }
 
+  function Build-RecentDailySeries {
+    param(
+      [array]$Rows,
+      [int]$Days = 14
+    )
+
+    $daysSafe = [Math]::Max(1, $Days)
+    $endDate = (Get-Date).Date
+    $startDate = $endDate.AddDays(-($daysSafe - 1))
+    $map = @{}
+
+    foreach ($row in $Rows) {
+      $dateRef = $null
+      if ($row.PSObject.Properties['DateRef']) {
+        $dateRef = $row.DateRef
+      }
+      if (-not $dateRef) {
+        continue
+      }
+
+      $dayKey = ([datetime]$dateRef).ToString('yyyy-MM-dd')
+      if (-not $map.ContainsKey($dayKey)) {
+        $map[$dayKey] = 0
+      }
+      $map[$dayKey] += (Get-IntValue $row.Tokens)
+    }
+
+    $result = @()
+    for ($i = 0; $i -lt $daysSafe; $i++) {
+      $day = $startDate.AddDays($i)
+      $key = $day.ToString('yyyy-MM-dd')
+      $tokens = if ($map.ContainsKey($key)) { [int]$map[$key] } else { 0 }
+
+      $result += [pscustomobject]@{
+        Day = $key
+        Tokens = $tokens
+      }
+    }
+
+    return $result
+  }
+
 # Context metrics
 $totalContextEvents = $contextRows.Count
 $compactEvents = @($contextRows | Where-Object { $_.event -eq 'compact-start' }).Count
@@ -330,6 +372,22 @@ $roiValues = @(
   ('{0}' -f $modeledMtdSavingsCost.ToString([System.Globalization.CultureInfo]::InvariantCulture))
 ) -join ','
 
+$latestTokenDate = $null
+if ($tokenTimeRows.Count -gt 0) {
+  $latestTokenDate = ($tokenTimeRows | Sort-Object DateRef -Descending | Select-Object -First 1).DateRef
+}
+
+$tokenDataFreshness = 'no token data'
+if ($latestTokenDate) {
+  $staleDays = [int]((Get-Date).Date.Subtract(([datetime]$latestTokenDate).Date).TotalDays)
+  if ($staleDays -le 1) {
+    $tokenDataFreshness = "fresh (last data: $(([datetime]$latestTokenDate).ToString('yyyy-MM-dd')) )"
+  }
+  else {
+    $tokenDataFreshness = "stale by $staleDays days (last data: $(([datetime]$latestTokenDate).ToString('yyyy-MM-dd')) )"
+  }
+}
+
 # Runtime cost by model
 $modelCostMap = @{}
 foreach ($r in $runtimeRows) {
@@ -398,32 +456,17 @@ $agentCostRows = @($agentCostRows | Sort-Object Invocations -Descending)
 $agentCostTable = Build-TableHtml -Rows $agentCostRows -Columns @('Agent','Invocations','Share_Pct','Allocated_Tokens','Allocated_Cost_USD') -MaxRows 20
 
 # Charts data
-$tokenDaily = @{}
-foreach ($r in $tokenGuardRows) {
-    $day = if ($r.date) { [string]$r.date } else { '' }
-    if (-not $day) {
-        try {
-            $day = ([datetime]$r.timestamp).ToString('yyyy-MM-dd')
-        }
-        catch {
-            $day = 'unknown'
-        }
-    }
-    if (-not $tokenDaily.ContainsKey($day)) {
-        $tokenDaily[$day] = 0
-    }
-    $tokenDaily[$day] += Get-IntValue $r.estimated_tokens
-}
+$trendWindowDays = 14
+$tokenTrendRows = Build-RecentDailySeries -Rows $tokenTimeRows -Days $trendWindowDays
+$tokenLabels = ($tokenTrendRows | ForEach-Object { "'" + $_.Day + "'" }) -join ','
+$tokenValues = ($tokenTrendRows | ForEach-Object { [int]$_.Tokens }) -join ','
 
-$tokenDailyRows = @($tokenDaily.GetEnumerator() | Sort-Object Name | Select-Object -Last 30)
-$tokenLabels = ($tokenDailyRows | ForEach-Object { "'" + $_.Name + "'" }) -join ','
-$tokenValues = ($tokenDailyRows | ForEach-Object { [int]$_.Value }) -join ','
+$costLabels = ($tokenTrendRows | ForEach-Object { "'" + $_.Day + "'" }) -join ','
+$costValues = ($tokenTrendRows | ForEach-Object { [math]::Round(([double]$_.Tokens / 1000000.0) * $costPer1M, 4).ToString([System.Globalization.CultureInfo]::InvariantCulture) }) -join ','
 
-$costLabels = ($tokenDailyRows | ForEach-Object { "'" + $_.Name + "'" }) -join ','
-$costValues = ($tokenDailyRows | ForEach-Object { [math]::Round(([double]$_.Value / 1000000.0) * $costPer1M, 4).ToString([System.Globalization.CultureInfo]::InvariantCulture) }) -join ','
-
-$eventTypeLabels = ($eventByType.Keys | ForEach-Object { "'" + $_ + "'" }) -join ','
-$eventTypeValues = ($eventByType.Values | ForEach-Object { [int]$_ }) -join ','
+$eventTypeRows = @($eventByType.GetEnumerator() | Sort-Object Value -Descending | Select-Object -First 8)
+$eventTypeLabels = ($eventTypeRows | ForEach-Object { "'" + $_.Name + "'" }) -join ','
+$eventTypeValues = ($eventTypeRows | ForEach-Object { [int]$_.Value }) -join ','
 
 # Recent events table
 $recentEventsHtml = ''
@@ -661,7 +704,8 @@ $html = @"
     </div>
     <div class="two-col" style="margin-top:12px;">
       <div class="panel">
-        <h3>Token Trend (daily)</h3>
+        <h3>Token Trend (last $trendWindowDays days)</h3>
+        <p class="muted">Data freshness: $tokenDataFreshness</p>
         <canvas id="tokenChart"></canvas>
       </div>
       <div class="panel">
@@ -824,18 +868,40 @@ $html = @"
   </footer>
 
 <script>
-function drawBarChart(canvasId, labels, values, color) {
+function resizeCanvasForDpi(canvas, targetHeight) {
+  const dpr = window.devicePixelRatio || 1;
+  const cssWidth = Math.max(320, (canvas.parentElement ? canvas.parentElement.clientWidth : 640) - 12);
+  const cssHeight = targetHeight || 240;
+  canvas.style.width = cssWidth + 'px';
+  canvas.style.height = cssHeight + 'px';
+  canvas.width = Math.floor(cssWidth * dpr);
+  canvas.height = Math.floor(cssHeight * dpr);
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, W: cssWidth, H: cssHeight };
+}
+
+function fmtShort(value) {
+  const abs = Math.abs(value);
+  if (abs >= 1000000) return (value / 1000000).toFixed(1) + 'M';
+  if (abs >= 1000) return (value / 1000).toFixed(1) + 'k';
+  if (abs >= 1) return value.toFixed(0);
+  return value.toFixed(2);
+}
+
+function drawBarChart(canvasId, labels, values, color, yFormatter) {
   const canvas = document.getElementById(canvasId);
   if (!canvas || !labels || labels.length === 0) return;
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width = canvas.parentElement.clientWidth - 16;
-  const H = canvas.height = 240;
-  const pad = { top: 12, right: 10, bottom: 54, left: 50 };
+  const resized = resizeCanvasForDpi(canvas, 240);
+  const ctx = resized.ctx;
+  const W = resized.W;
+  const H = resized.H;
+  const pad = { top: 16, right: 14, bottom: 54, left: 62 };
   const chartW = W - pad.left - pad.right;
   const chartH = H - pad.top - pad.bottom;
   const max = Math.max(...values, 1);
   const step = chartW / labels.length;
-  const barW = Math.max(8, step - 4);
+  const barW = Math.max(8, step - 8);
 
   ctx.clearRect(0, 0, W, H);
   ctx.fillStyle = '#0b161f';
@@ -851,9 +917,10 @@ function drawBarChart(canvasId, labels, values, color) {
     ctx.stroke();
 
     ctx.fillStyle = '#86a6ba';
-    ctx.font = '10px Segoe UI';
+    ctx.font = '11px Segoe UI';
     ctx.textAlign = 'right';
-    ctx.fillText(Math.round(max * i / 4), pad.left - 4, y + 3);
+    const yValue = (max * i / 4);
+    ctx.fillText(yFormatter ? yFormatter(yValue) : fmtShort(yValue), pad.left - 6, y + 4);
   }
 
   labels.forEach((label, i) => {
@@ -866,10 +933,82 @@ function drawBarChart(canvasId, labels, values, color) {
     ctx.fillRect(x, y, barW, h);
 
     ctx.fillStyle = '#87a8bb';
-    ctx.font = '9px Segoe UI';
+    ctx.font = '10px Segoe UI';
     ctx.textAlign = 'center';
-    const shortLabel = String(label).length > 10 ? String(label).slice(5) : label;
+    const shortLabel = String(label).length > 10 ? String(label).slice(5) : String(label);
     ctx.fillText(shortLabel, x + barW / 2, H - 28);
+  });
+}
+
+function drawLineChart(canvasId, labels, values, color, yFormatter) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas || !labels || labels.length === 0) return;
+  const resized = resizeCanvasForDpi(canvas, 240);
+  const ctx = resized.ctx;
+  const W = resized.W;
+  const H = resized.H;
+  const pad = { top: 16, right: 14, bottom: 54, left: 62 };
+  const chartW = W - pad.left - pad.right;
+  const chartH = H - pad.top - pad.bottom;
+  const max = Math.max(...values, 1);
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#0b161f';
+  ctx.fillRect(0, 0, W, H);
+
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.top + chartH * (1 - i / 4);
+    ctx.strokeStyle = '#244256';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(W - pad.right, y);
+    ctx.stroke();
+
+    ctx.fillStyle = '#86a6ba';
+    ctx.font = '11px Segoe UI';
+    ctx.textAlign = 'right';
+    const yValue = (max * i / 4);
+    ctx.fillText(yFormatter ? yFormatter(yValue) : fmtShort(yValue), pad.left - 6, y + 4);
+  }
+
+  const points = values.map((val, i) => {
+    const x = pad.left + (i * chartW / Math.max(1, values.length - 1));
+    const y = pad.top + chartH - ((Number(val || 0) / max) * chartH);
+    return { x, y, v: Number(val || 0) };
+  });
+
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+  points.forEach((p) => ctx.lineTo(p.x, p.y));
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+  points.forEach((p) => ctx.lineTo(p.x, p.y));
+  ctx.lineTo(points[points.length - 1].x, pad.top + chartH);
+  ctx.lineTo(points[0].x, pad.top + chartH);
+  ctx.closePath();
+  ctx.fillStyle = color + '33';
+  ctx.fill();
+
+  points.forEach((p) => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+  });
+
+  labels.forEach((label, i) => {
+    if (i % 2 !== 0 && labels.length > 8) return;
+    const x = pad.left + (i * chartW / Math.max(1, labels.length - 1));
+    ctx.fillStyle = '#87a8bb';
+    ctx.font = '10px Segoe UI';
+    ctx.textAlign = 'center';
+    const shortLabel = String(label).length > 10 ? String(label).slice(5) : String(label);
+    ctx.fillText(shortLabel, x, H - 28);
   });
 }
 
@@ -890,10 +1029,10 @@ function initTabs() {
 
 window.addEventListener('load', () => {
   initTabs();
-  drawBarChart('tokenChart', [$tokenLabels], [$tokenValues], '#37b8a8');
+  drawLineChart('tokenChart', [$tokenLabels], [$tokenValues], '#37b8a8', (v) => fmtShort(v));
   drawBarChart('eventChart', [$eventTypeLabels], [$eventTypeValues], '#f5b800');
-  drawBarChart('costChart', [$costLabels], [$costValues], '#6ea8ff');
-  drawBarChart('roiChart', [$roiLabels], [$roiValues], '#fd8f4d');
+  drawLineChart('costChart', [$costLabels], [$costValues], '#6ea8ff', (v) => '$' + Number(v).toFixed(3));
+  drawBarChart('roiChart', [$roiLabels], [$roiValues], '#fd8f4d', (v) => '$' + Number(v).toFixed(2));
 });
 </script>
 </body>

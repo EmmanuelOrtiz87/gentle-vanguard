@@ -26,6 +26,11 @@ jobs:
         run: |
           ./scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1 monthly-report all
 
+      - name: Build executive dashboard snapshot
+        shell: pwsh
+        run: |
+          ./scripts/utilities/TELEMETRY-METRICS/generate-dashboard.ps1
+
       - name: Upload report artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -33,4 +38,5 @@ jobs:
           path: |
             reports/MANAGEMENT-REPORT-*.csv
             reports/metrics-export.*
+            reports/dashboard.html
           if-no-files-found: warn
