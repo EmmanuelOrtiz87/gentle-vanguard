@@ -379,6 +379,42 @@ if ($Domain -in @("all","structure")) {
 
                         if ($violations.Count -gt 0) {
                             Add-Result "override-abuse-audit" "WARN" "Governed override usage above threshold in last $($abuse.window_hours)h: $($violations -join '; ')" "structure"
+
+                            # Active notification: write alert file for dashboard / CI pickup
+                            $alertDir = Join-Path $Root '.logs'
+                            if (-not (Test-Path $alertDir)) { New-Item -ItemType Directory -Path $alertDir -Force | Out-Null }
+                            $alertPath = Join-Path $alertDir 'override-abuse-alert.json'
+                            $alertPayload = @{
+                                generated_at = (Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz')
+                                window_hours = $abuse.window_hours
+                                violations   = $violations
+                                total_recent_overrides = $recent.Count
+                                per_agent    = $perAgent
+                                per_profile  = $perProfile
+                                remediation  = @(
+                                    "Review .logs/override-audit.jsonl for the full override history.",
+                                    "If overrides are legitimate, increase thresholds in config/orchestrator.json#governed_override_profiles.abuse_detection.",
+                                    "If overrides are abusive, remove excess entries from override-audit.jsonl and notify the team.",
+                                    "Run 'wf verify' after remediation to confirm the alert clears."
+                                )
+                            }
+                            $alertPayload | ConvertTo-Json -Depth 5 | Out-File -FilePath $alertPath -Encoding UTF8 -Force
+
+                            # Print prominent remediation block
+                            if (-not $Json) {
+                                Write-Host "" -ForegroundColor Red
+                                Write-Host "  ╔══════════════════════════════════════════════════════════════╗" -ForegroundColor Red
+                                Write-Host "  ║  OVERRIDE ABUSE ALERT — ACTION REQUIRED                    ║" -ForegroundColor Red
+                                Write-Host "  ╚══════════════════════════════════════════════════════════════╝" -ForegroundColor Red
+                                Write-Host "  Violations: $($violations -join ' | ')" -ForegroundColor Yellow
+                                Write-Host "  Alert file: .logs/override-abuse-alert.json" -ForegroundColor Yellow
+                                Write-Host "  Remediation:" -ForegroundColor Cyan
+                                Write-Host "    1. Check .logs/override-audit.jsonl for the full override history." -ForegroundColor Cyan
+                                Write-Host "    2. If legitimate, raise thresholds in orchestrator.json." -ForegroundColor Cyan
+                                Write-Host "    3. If abusive, purge excess entries and notify the team." -ForegroundColor Cyan
+                                Write-Host "    4. Run 'wf verify' again after remediation to confirm the alert clears." -ForegroundColor Cyan
+                                Write-Host "" -ForegroundColor Red
+                            }
                         } else {
                             Add-Result "override-abuse-audit" "PASS" "Governed override usage within threshold in last $($abuse.window_hours)h" "structure"
                         }
