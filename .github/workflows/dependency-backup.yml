@@ -44,7 +44,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Archive docs and config
         run: |
-          tar -czf backup-$(date +%Y-%m-%d).tar.gz docs/ config/
+          archive_name="backup-$(date +%Y-%m-%d).tar.gz"
+          tar -czf "$archive_name" docs/ config/
       - name: Upload backup
         uses: actions/upload-artifact@v4
         with:
