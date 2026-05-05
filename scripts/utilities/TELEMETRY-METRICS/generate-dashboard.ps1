@@ -372,6 +372,48 @@ $roiValues = @(
   ('{0}' -f $modeledMtdSavingsCost.ToString([System.Globalization.CultureInfo]::InvariantCulture))
 ) -join ','
 
+# Monthly historical ROI context (current + previous + 3-month trend)
+$monthTokenMap = @{}
+foreach ($row in $tokenTimeRows) {
+  $monthKey = ([datetime]$row.DateRef).ToString('yyyy-MM')
+  if (-not $monthTokenMap.ContainsKey($monthKey)) {
+    $monthTokenMap[$monthKey] = 0
+  }
+  $monthTokenMap[$monthKey] += [int]$row.Tokens
+}
+
+$roiMonthRows = @()
+for ($i = 2; $i -ge 0; $i--) {
+  $monthDate = (Get-Date -Day 1).AddMonths(-$i)
+  $monthKey = $monthDate.ToString('yyyy-MM')
+  $monthLabel = $monthDate.ToString('MMM yyyy', [System.Globalization.CultureInfo]::InvariantCulture)
+  $monthTokens = if ($monthTokenMap.ContainsKey($monthKey)) { [int]$monthTokenMap[$monthKey] } else { 0 }
+  $monthCost = [math]::Round(($monthTokens / 1000000.0) * $costPer1M, 2)
+
+  $roiMonthRows += [pscustomobject]@{
+    Month = $monthLabel
+    Tokens = [string]::Format('{0:N0}', $monthTokens)
+    Cost_USD = ('{0:N2}' -f $monthCost)
+    CostRaw = $monthCost
+  }
+}
+
+$currentMonthCostHist = if ($roiMonthRows.Count -gt 0) { [double]$roiMonthRows[-1].CostRaw } else { 0.0 }
+$previousMonthCostHist = if ($roiMonthRows.Count -gt 1) { [double]$roiMonthRows[-2].CostRaw } else { 0.0 }
+$monthOverMonthPct = if ($previousMonthCostHist -gt 0) { [math]::Round((($currentMonthCostHist - $previousMonthCostHist) * 100.0) / $previousMonthCostHist, 1) } else { 0 }
+$monthOverMonthLabel = if ($monthOverMonthPct -gt 0) { '+' + $monthOverMonthPct + '%' } else { $monthOverMonthPct.ToString() + '%' }
+
+$roiHistoryLabels = ($roiMonthRows | ForEach-Object { "'" + $_.Month + "'" }) -join ','
+$roiHistoryValues = ($roiMonthRows | ForEach-Object { [double]$_.CostRaw } | ForEach-Object { $_.ToString([System.Globalization.CultureInfo]::InvariantCulture) }) -join ','
+$roiHistoryTableRows = @($roiMonthRows | ForEach-Object {
+  [pscustomobject]@{
+    Month = $_.Month
+    Tokens = $_.Tokens
+    Cost_USD = $_.Cost_USD
+  }
+})
+$roiHistoryTable = Build-TableHtml -Rows $roiHistoryTableRows -Columns @('Month','Tokens','Cost_USD') -MaxRows 12
+
 $latestTokenDate = $null
 if ($tokenTimeRows.Count -gt 0) {
   $latestTokenDate = ($tokenTimeRows | Sort-Object DateRef -Descending | Select-Object -First 1).DateRef
@@ -532,6 +574,8 @@ $cardsRoi += Build-MetricCard -Title 'Budget Consumed' -Value "$budgetConsumedPc
 $cardsRoi += Build-MetricCard -Title 'Forecast vs Budget' -Value "$budgetForecastPct%" -Label "projected month-end utilization"
 $cardsRoi += Build-MetricCard -Title 'Forecast Variance' -Value ('$' + $forecastVarianceUsd) -Label "$forecastVariancePct% vs budget"
 $cardsRoi += Build-MetricCard -Title 'ROI Status' -Value $roiStatus -Label "thresholds: 70/90"
+$cardsRoi += Build-MetricCard -Title 'Prev Month Cost' -Value ('$' + ('{0:N2}' -f $previousMonthCostHist)) -Label 'historical reference'
+$cardsRoi += Build-MetricCard -Title 'MoM Cost Trend' -Value $monthOverMonthLabel -Label 'current vs previous month'
 $cardsRoi += Build-MetricCard -Title 'Net Benefit MTD' -Value ('$' + $netModeledBenefitMtd) -Label 'modeled savings - actual cost'
 $cardsRoi += Build-MetricCard -Title 'Net Benefit YTD' -Value ('$' + $netModeledBenefitYtd) -Label 'modeled savings - actual cost'
 $cardsRoi += Build-MetricCard -Title 'Text Savings Share' -Value $textSavingsShare -Label 'of MTD actual cost'
@@ -735,6 +779,17 @@ $html = @"
           <li>Variance is computed as <strong>forecast - budget</strong>.</li>
           <li>Net benefit is a modeled indicator, not accounting P&amp;L.</li>
         </ul>
+      </div>
+    </div>
+    <div class="two-col" style="margin-top:12px;">
+      <div class="panel">
+        <h3>3-Month Cost Trend (USD)</h3>
+        <canvas id="roiHistoryChart"></canvas>
+      </div>
+      <div class="panel">
+        <h3>Recent Monthly Breakdown</h3>
+        <p class="muted">Current month and two previous months.</p>
+        $roiHistoryTable
       </div>
     </div>
   </section>
@@ -1033,6 +1088,7 @@ window.addEventListener('load', () => {
   drawBarChart('eventChart', [$eventTypeLabels], [$eventTypeValues], '#f5b800');
   drawLineChart('costChart', [$costLabels], [$costValues], '#6ea8ff', (v) => '$' + Number(v).toFixed(3));
   drawBarChart('roiChart', [$roiLabels], [$roiValues], '#fd8f4d', (v) => '$' + Number(v).toFixed(2));
+  drawLineChart('roiHistoryChart', [$roiHistoryLabels], [$roiHistoryValues], '#6ed4a7', (v) => '$' + Number(v).toFixed(2));
 });
 </script>
 </body>
