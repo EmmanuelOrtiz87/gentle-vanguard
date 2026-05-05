@@ -42,48 +42,57 @@ function Write-Delegate {
 }
 
 function Test-ParserErrors {
-    param([string]$Path)
-    $errors = $null
-    try {
-        [System.Management.Automation.Language.Parser]::ParseFile(
-            $Path,
-            [ref]$null,
-            [ref]$errors
-        ) | Out-Null
-        return $errors.Count -eq 0
-    } catch {
-        return $false
-    }
-}
+    param(
+        [switch]$AutoFix,
+        [switch]$Strict,
+        [switch]$AutoDelegate
+    )
 
-function Test-PatternErrors {
-    param([string]$Path, [string]$Content)
+    $ErrorActionPreference = 'Stop'
+    $repoRoot = $PSScriptRoot
 
-    $lines = $Content -split "`r?`n"
-    $totalLines = $lines.Length
-    $hasError = $false
-
-    for ($i = 0; $i -lt $totalLines; $i++) {
-        $line = $lines[$i]
-        $lineNum = $i + 1
-
-        if ($line -match '^\s*\[(OK|ERROR|FAIL|PASS|WARN)\]\s+\w+') {
-            $script:Issues += [ordered]@{
-                file = Split-Path -Leaf $Path
-                path = $Path
-                line = $lineNum
-                issue = "Parser-breaking pattern '[$($matches[1])]' at start of line"
-                fullLine = $line.Trim()
-            }
-            $hasError = $true
-        }
+    if (-not $repoRoot) {
+        $repoRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+        $repoRoot = (Resolve-Path (Join-Path $repoRoot '..')).Path
     }
 
-    return -not $hasError
-}
+    # FF-015: hook output safety
+    $_safety = Join-Path $PSScriptRoot 'hook-output-safety.ps1'
+    if (Test-Path $_safety) { . $_safety }
 
-function Invoke-AutoFix {
-    param([string]$Path, [string]$Content)
+    $script:Issues = @()
+    $script:Fixed = @()
+    $script:Delegated = @()
+
+    function Write-Check {
+        param([string]$Message)
+        if (Get-Command 'Write-SafeHook' -EA SilentlyContinue) { Write-SafeHook "[CHECK] $Message" -Color Cyan }
+        else { Write-Host "[CHECK] $Message" -ForegroundColor Cyan }
+    }
+
+    function Write-Fix {
+        param([string]$Message)
+        if (Get-Command 'Write-SafeHook' -EA SilentlyContinue) { Write-SafeHook "[FIX] $Message" -Color Yellow }
+        else { Write-Host "[FIX] $Message" -ForegroundColor Yellow }
+    }
+
+    function Write-Fail {
+        param([string]$Message)
+        if (Get-Command 'Write-SafeHook' -EA SilentlyContinue) { Write-SafeHook "[FAIL] $Message" -Color Red }
+        else { Write-Host "[FAIL] $Message" -ForegroundColor Red }
+    }
+
+    function Write-Pass {
+        param([string]$Message)
+        if (Get-Command 'Write-SafeHook' -EA SilentlyContinue) { Write-SafeHook "[PASS] $Message" -Color Green }
+        else { Write-Host "[PASS] $Message" -ForegroundColor Green }
+    }
+
+    function Write-Delegate {
+        param([string]$Message, [string]$Agent)
+        if (Get-Command 'Write-SafeHook' -EA SilentlyContinue) { Write-SafeHook "[DELEGATE] $Message  $Agent" -Color Magenta }
+        else { Write-Host "[DELEGATE] $Message  $Agent" -ForegroundColor Magenta }
+    }
 
     $fixed = $Content
     $lines = $fixed -split "`r?`n"
@@ -134,8 +143,8 @@ Set-Location $repoRoot
 Write-Check "Scanning PowerShell scripts in $repoRoot..."
 
 Get-ChildItem -Path $repoRoot -Include $patterns -Recurse -File | Where-Object {
-    $_.FullName -notmatch '\\\.git\\' -and
-    $_.FullName -notmatch '\\node_modules\\'
+    $_.FullName -notmatch '[\\/]\.git[\\/]' -and
+    $_.FullName -notmatch '[\\/]node_modules[\\/]'
 } | ForEach-Object {
     $scanned++
     $content = Get-Content -Path $_.FullName -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
@@ -204,8 +213,8 @@ if ($script:Issues.Count -gt 0) {
             $script:Issues = @()
             $passCount = 0
             Get-ChildItem -Path $repoRoot -Include $patterns -Recurse -File | Where-Object {
-                $_.FullName -notmatch '\\\.git\\' -and
-                $_.FullName -notmatch '\\node_modules\\'
+                $_.FullName -notmatch '[\\/]\.git[\\/]' -and
+                $_.FullName -notmatch '[\\/]node_modules[\\/]'
             } | ForEach-Object {
                 $content = Get-Content -Path $_.FullName -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
                 if ($content) {

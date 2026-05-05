@@ -1,5 +1,16 @@
 <#
 .SYNOPSIS
+    [DEPRECATED] Token Guard - Legacy script. Use TELEMETRY-METRICS/token-budget-guard.ps1 instead.
+
+.DEPRECATED
+    This script is DEPRECATED as of 2026-05-04.
+    Operational replacement: scripts/utilities/TELEMETRY-METRICS/token-budget-guard.ps1
+    Configuration source:    config/orchestrator.json#subagent_orchestration.token_budget_guard
+    Reason: inconsistent thresholds, references non-existent token-guard-config.json,
+            superseded by token-budget-guard.ps1 which reads canonical config.
+    DO NOT add new callers. Existing callers should be migrated.
+
+.SYNOPSIS
     Token Guard - Proteccin automtica contra overflow de tokens
     
 .DESCRIPTION

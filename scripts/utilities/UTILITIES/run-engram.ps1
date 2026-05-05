@@ -49,7 +49,7 @@ function Ensure-Directory {
     }
 }
 
-$workspaceRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
+$workspaceRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..')).Path
 $defaultDataRoot = Join-Path $workspaceRoot '.engram-data'
 
 if ([string]::IsNullOrWhiteSpace($ConfigPath)) {

@@ -1,91 +1,227 @@
 {
   "schemaVersion": 1,
-  "foundationPath": "C:\\\\Workspace_local\\\\gentleman-foundation",
+  "role": "source",
   "foundationVersion": "2.6.5",
-  "lastSynced": "2026-05-05",
-  "role": "consumer",
+  "lastUpdated": "2026-05-05",
   "assets": [
     {
-      "target": "scripts/utilities/AI-AGENT-MANAGEMENT/invoke-cloud-agent.ps1",
-      "source": "scripts/utilities/AI-AGENT-MANAGEMENT/invoke-cloud-agent.ps1"
+      "type": "script",
+      "path": "scripts/utilities/AI-AGENT-MANAGEMENT/invoke-cloud-agent.ps1",
+      "description": "Cloud Agent Connector - Invoke external AI models (Bedrock, Difi, Azure, etc.)"
     },
     {
-      "target": "scripts/utilities/AI-AGENT-MANAGEMENT/invoke-judgment.ps1",
-      "source": "scripts/utilities/AI-AGENT-MANAGEMENT/invoke-judgment.ps1"
+      "type": "script",
+      "path": "scripts/utilities/AI-AGENT-MANAGEMENT/invoke-judgment.ps1",
+      "description": "Judgment Day - Dual-agent adversarial review protocol"
     },
     {
-      "target": "scripts/utilities/AI-AGENT-MANAGEMENT/invoke-ai-review.ps1",
-      "source": "scripts/utilities/AI-AGENT-MANAGEMENT/invoke-ai-review.ps1"
+      "type": "script",
+      "path": "scripts/utilities/UTILITIES/manage-backlog.ps1",
+      "description": "Backlog Management - JSON-based task management"
     },
     {
-      "target": "scripts/utilities/AI-AGENT-MANAGEMENT/sync-agent-instructions.ps1",
-      "source": "scripts/utilities/AI-AGENT-MANAGEMENT/sync-agent-instructions.ps1"
+      "type": "script",
+      "path": "scripts/utilities/SKILLS-TOOLS/create-skill.ps1",
+      "description": "Skill Factory - Automated skill generation"
     },
     {
-      "target": "scripts/utilities/AI-AGENT-MANAGEMENT/collect-provider-telemetry.ps1",
-      "source": "scripts/utilities/AI-AGENT-MANAGEMENT/collect-provider-telemetry.ps1"
+      "type": "script",
+      "path": "scripts/utilities/TELEMETRY-METRICS/consolidate-telemetry.ps1",
+      "description": "Business Telemetry - Centralized metrics reporting"
     },
     {
-      "target": "scripts/utilities/TELEMETRY-METRICS/generate-dashboard.ps1",
-      "source": "scripts/utilities/TELEMETRY-METRICS/generate-dashboard.ps1"
+      "type": "script",
+      "path": "scripts/utilities/PERFORMANCE-OPTIMIZATION/compact-memory.ps1",
+      "description": "Compact Memory - Session summarization"
     },
     {
-      "target": "scripts/utilities/TELEMETRY-METRICS/consolidate-telemetry.ps1",
-      "source": "scripts/utilities/TELEMETRY-METRICS/consolidate-telemetry.ps1"
+      "type": "script",
+      "path": "scripts/utilities/UTILITIES/read-once-guard.ps1",
+      "description": "Read Once Guard - Prevent redundant file reads"
     },
     {
-      "target": "scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1",
-      "source": "scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1"
+      "type": "script",
+      "path": "scripts/utilities/UTILITIES/mcp-monitor.ps1",
+      "description": "MCP Monitor - Auto-shutdown inactive MCP servers"
     },
     {
-      "target": "scripts/utilities/wf-benchmark.ps1",
-      "source": "scripts/utilities/wf-benchmark.ps1"
+      "type": "script",
+      "path": "scripts/utilities/DEPLOYMENT/setup-wizard.ps1",
+      "description": "Setup Wizard - Interactive dependency installation"
     },
     {
-      "target": "scripts/utilities/wf.ps1",
-      "source": "scripts/utilities/wf.ps1"
+      "type": "script",
+      "path": "scripts/utilities/AI-AGENT-MANAGEMENT/sync-agent-instructions.ps1",
+      "description": "Agent Instructions Sync - Cross-platform sync for Claude, Copilot, etc."
     },
     {
-      "target": "scripts/utilities/agent-verify.ps1",
-      "source": "scripts/utilities/agent-verify.ps1"
+      "type": "script",
+      "path": "scripts/utilities/UTILITIES/manual-recovery.ps1",
+      "description": "Manual Recovery - Fallback when self-healing fails"
     },
     {
-      "target": "scripts/utilities/sync-drift-report.ps1",
-      "source": "scripts/utilities/sync-drift-report.ps1"
+      "type": "script",
+      "path": "scripts/utilities/AI-AGENT-MANAGEMENT/invoke-ai-review.ps1",
+      "description": "AI Review - Multi-provider code review with caching"
     },
     {
-      "target": "scripts/utilities/pre-process-input.ps1",
-      "source": "scripts/utilities/pre-process-input.ps1"
+      "type": "hook",
+      "path": "hooks/pre-tool-format.ps1",
+      "description": "PreTool Auto-Format Hook - Lint/format before AI agent access"
     },
     {
-      "target": "config/metrics-config.json",
-      "source": "config/metrics-config.json"
+      "type": "config",
+      "path": "config/cloud-agents.json",
+      "description": "Cloud Agents Template Config (no secrets)"
     },
     {
-      "target": "config/cloud-agents.json",
-      "source": "config/cloud-agents.json"
+      "type": "config",
+      "path": "config/cloud-agents.local.example",
+      "description": "Cloud Agents Local Config Template"
     },
     {
-      "target": "config/cloud-agents.local.example",
-      "source": "config/cloud-agents.local.example"
+      "type": "config",
+      "path": "config/ai-review.example.json",
+      "description": "AI Review Config Template (-native)"
     },
     {
-      "target": "config/quality-gates.json",
-      "source": "config/quality-gates.json"
+      "type": "guide",
+      "path": "docs/guides/CLOUD-AGENT-CONNECTOR.md",
+      "description": "Complete Cloud Agent Connector Setup Guide"
     },
     {
-      "target": "config/auto-delegation.json",
-      "strategy": "preserve-local",
-      "source": "config/auto-delegation.json"
+      "type": "guide",
+      "path": "docs/guides/cloud-agent-security.md",
+      "description": "Cloud Agent Security Reference"
     },
     {
-      "target": "config/testing.config.json",
-      "source": "config/testing.config.json"
+      "type": "guide",
+      "path": "docs/guides/PRETOOL-FORMAT-HOOK.md",
+      "description": "PreTool Auto-Format Hook Integration Guide"
     },
     {
-      "target": "config/hooks-config.json",
-      "strategy": "preserve-local",
-      "source": "config/hooks-config.json"
+      "type": "guide",
+      "path": "docs/guides/JUDGMENT-GUIDE.md",
+      "description": "Judgment Day Protocol Guide"
+    },
+    {
+      "type": "guide",
+      "path": "docs/guides/TELEMETRY.md",
+      "description": "Business Telemetry Guide"
+    },
+    {
+      "type": "guide",
+      "path": "docs/guides/FOUNDATION-SYNC.md",
+      "description": "Foundation Sync Guide"
+    },
+    {
+      "type": "skill",
+      "path": "skills/cloud-agent-connector-skill",
+      "description": "Cloud Agent Connector Skill"
+    },
+    {
+      "type": "skill",
+      "path": "skills/pretool-format-hook-skill",
+      "description": "PreTool Auto-Format Hook Skill"
+    },
+    {
+      "type": "skill",
+      "path": "skills/business-telemetry-skill",
+      "description": "Business Telemetry Skill"
+    },
+    {
+      "type": "skill",
+      "path": "skills/backlog-management-skill",
+      "description": "Backlog Management Skill"
+    },
+    {
+      "type": "skill",
+      "path": "skills/skill-factory-skill",
+      "description": "Skill Factory Skill"
+    },
+    {
+      "type": "skill",
+      "path": "skills/judgment-day",
+      "description": "Judgment Day Skill"
+    },
+    {
+      "type": "skill",
+      "path": "skills/commit-hygiene-skill",
+      "description": "Commit Hygiene (-native)"
+    },
+    {
+      "type": "skill",
+      "path": "skills/docs-alignment-skill",
+      "description": "Docs Alignment (-native)"
+    },
+    {
+      "type": "skill",
+      "path": "skills/shellcheck-standards-skill",
+      "description": "Shell Standards (-native)"
+    },
+    {
+      "type": "skill",
+      "path": "skills/testing-coverage-skill",
+      "description": "Testing Coverage Skill"
+    },
+    {
+      "type": "skill",
+      "path": "skills/guardian-fallback-skill",
+      "description": "Guardian Fallback Skill"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/AI-AGENT-MANAGEMENT/collect-provider-telemetry.ps1",
+      "description": "Provider Telemetry Collection - Probes configured AI providers and records real status/latency"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/TELEMETRY-METRICS/generate-dashboard.ps1",
+      "description": "Dashboard Generator - HTML dashboard with PDF/PNG export and configurable thresholds"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1",
+      "description": "Workflow CLI - Main orchestrator entry point"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/wf.ps1",
+      "description": "Workflow CLI Wrapper - Stable entrypoint that forwards to the canonical CLI"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/UTILITIES/foundation-sync.ps1",
+      "description": "Foundation Sync Runner - Syncs managed assets from the foundation manifest"
+    },
+    {
+      "type": "config",
+      "path": "config/metrics-config.json",
+      "description": "Metrics and observability config with configurable alert_thresholds and cost_model blocks"
     }
+  ],
+  "breakingChanges": [],
+  "newInThisVersion": [
+    {
+      "type": "script",
+      "path": "scripts/utilities/AI-AGENT-MANAGEMENT/collect-provider-telemetry.ps1",
+      "description": "Real provider telemetry collection with latency/status probing"
+    },
+    {
+      "type": "config",
+      "path": "config/metrics-config.json",
+      "description": "Alert thresholds (alert_thresholds) and cost model (cost_model) blocks added"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/TELEMETRY-METRICS/generate-dashboard.ps1",
+      "description": "Dashboard PDF/PNG export buttons and config-driven thresholds"
+    }
+  ],
+  "migrationNotes": [
+    "cloud-agents.local.json is now gitignored - create from cloud-agents.local.example",
+    "PreTool hooks install to ~/.pretool-hooks/ via bootstrap-machine.ps1",
+    "Foundation operates with Opencode + judgment-day for code review",
+    "Scripts reorganized into subdirectories: AI-AGENT-MANAGEMENT, UTILITIES, SKILLS-TOOLS, TELEMETRY-METRICS, PERFORMANCE-OPTIMIZATION, DEPLOYMENT, WORKFLOW-ORCHESTRATION"
   ]
 }

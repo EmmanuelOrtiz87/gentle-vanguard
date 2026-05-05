@@ -19,3 +19,7 @@
 [2026-04-23 11:51:44] [REPORT] 
 [2026-04-23 11:51:44] [INFO] Ejecutando verificacion de estado del workspace...
 [2026-04-23 11:51:44] [ERROR] Error al generar reporte: El término '.\scripts\utilities\wf.ps1' no se reconoce como nombre de un cmdlet, función, archivo de script o programa ejecutable. Compruebe si escribió correctamente el nombre o, si incluyó una ruta de acceso, compruebe que dicha ruta es correcta e inténtelo de nuevo.
+[2026-05-04 19:44:44] [INFO] Registrando tarea programada...
+[2026-05-04 19:44:47] [INFO] Tarea programada existente eliminada
+[2026-05-04 19:44:47] [SUCCESS] Tarea programada registrada: WorkspaceStatusMonitor
+[2026-05-04 19:44:47] [INFO] Se ejecutara diariamente a las 13:30

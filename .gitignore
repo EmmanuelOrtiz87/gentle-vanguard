@@ -48,10 +48,25 @@ Thumbs.db
 
 # Workspace Security (NEVER commit)
 .workspace/config/owner-auth.json
+
+# Generated reports (runtime artifacts — not source)
+reports/dashboard.html
+reports/metrics-export.csv
+reports/wf-benchmark.json
+reports/trivy-report.json
+trivy-report.json
+
+# Rate-limit and event-bus runtime state
+.event-bus/rate-limit-state.json
+scripts/.event-bus/
+
+# Session temp
+.session/
 .workspace/config/session-auth.json
 .workspace/config/dev-credentials.json
 .runtime/security-*.json
 .runtime/*-audit.log
+.runtime/quality/
 
 # Dependencies
 node_modules/

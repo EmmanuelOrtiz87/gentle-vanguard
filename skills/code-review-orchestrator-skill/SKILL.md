@@ -323,7 +323,7 @@ The Code Review Orchestrator is the **single, unified system** for all code qual
     ./scripts/utilities/wf.ps1 review --track
 
 - name: Upload Review Report
-  uses: actions/upload-artifact@v4
+  uses: actions/upload-artifact@v7
   with:
     name: code-review-report
     path: docs/code-reviews/

@@ -2,21 +2,21 @@
   "version": "1.0.0",
   "description": "Artifact retention policy for Foundation v2.1+",
   "defaultMaxRepo": 1,
-  "defaultMaxLocal": 30,
+  "defaultMaxLocal": 14,
   "categories": {
     "audits": {
-      "maxRepo": 5,
-      "maxLocal": 30,
-      "description": "Keep last 5 audit reports in repo for weekly trend analysis"
+      "maxRepo": 3,
+      "maxLocal": 14,
+      "description": "Keep last 3 audit reports in repo for trend visibility with lower storage cost"
     },
     "sessions": {
       "maxRepo": 1,
-      "maxLocal": 30,
+      "maxLocal": 14,
       "description": "Keep only latest session-start file in repo, archive rest"
     },
     "code-reviews": {
       "maxRepo": 1,
-      "maxLocal": 30,
+      "maxLocal": 14,
       "description": "Keep only latest code review in repo"
     }
   },
