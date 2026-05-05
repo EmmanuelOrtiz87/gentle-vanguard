@@ -1,156 +1,45 @@
----
-name: foundation-manager
-description: Use when checking updates, synchronizing foundation, managing tools, or maintaining the development stack. Triggers for: "update foundation", "check updates", "sync skills", "install tools", "maintenance".
----
+# foundation-manager-skill
+# FF-017: Auto-Actualización Skills/Tools
 
-# Foundation Manager Skill
+## Trigger
+for: "update foundation", "check updates", "sync skills", "install tools", "maintenance"
 
-## Purpose
+## Description
+Implementa mecanismos de auto-actualización para skills y herramientas nativas, reduciendo mantenimiento manual y asegurando mejoras continuas.
 
-Manage Gentleman Foundation installation, keep skills and tools updated, and coordinate the development stack.
+## When to use
+- Cuando se detecten skills/herramientas desactualizadas
+- Próxima release o mantenimiento programado
+- Después de instalar nuevas skills
 
-## When Activated
+## Execution Steps
 
-This skill activates when:
-- User asks to update or sync skills
-- User asks to check for updates
-- User asks about installed tools or their status
-- User needs to install or configure tools
-- User mentions maintenance or versión checking
+1. **Check for updates**
+   - Scan skills/ directory for SKILL.md files
+   - Compare version/fecha in SKILL.md vs current date
+   - Identify tools in package.json, go.mod, requirements.txt
 
-## Core Commands
+2. **Auto-update skills**
+   - If skill has git remote: `git submodule update --remote`
+   - If skill has package.json: `npm update` in skill directory
+   - Log updates to `.runtime/skill-updates.log`
 
-### Check for Updates
+3. **Auto-update tools**
+   - Check npm global packages: `npm outdated -g`
+   - Update lefthook, prettier, commitlint if needed
+   - Update trufflehog via chocolatey if available
 
-```powershell
-gf check
-```
+4. **Validate after update**
+   - Run `wf.ps1 health` to verify Foundation integrity
+   - Run `wf.ps1 verify` to check all skills load correctly
+   - Generate update report in `docs/sessions/`
 
-Checks:
-- Foundation source for new commits
-- Skills count vs available
-- Tools installation status
+## Expected Deliverables
+- `docs/sessions/skill-update-report-YYYY-MM-DD.md`
+- `.runtime/skill-updates.log`
+- Updated skills/ directory with latest versions
 
-### Update Skills
-
-```powershell
-gf update
-```
-
-Syncs skills from source to `~/.gentleman/skills/`.
-
-### Update Everything
-
-```powershell
-gf update-all
-```
-
-Updates:
-1. Foundation source (git pull)
-2. All skills
-3. Tools status
-
-### Tools Status
-
-```powershell
-gf tools
-```
-
-Shows installation status for:
-- `gg` - Gentleman 
-- `engram` - Engram Memory
-
-## Update Workflow
-
-```
-
-                    UPDATE WORKFLOW                           
-
-
-     gf check
-         
-         
-    
-     Updates?    
-    
-           
-     
-                
-    YES          NO
-                
-                
-gf update-all   Already current
-     
-     
-
-  1. Update foundation (git pull)        
-  2. Sync skills (symlink/copy)          
-  3. Check tools status                  
-  4. Validate installation               
-
-```
-
-## versión Strategy
-
-### Semantic versióning
-
-Foundation versións follow `vMAJOR.MINOR.PATCH`:
-- `MAJOR` - Breaking changes
-- `MINOR` - New skills/features
-- `PATCH` - Bug fixes
-
-### Update Frequency
-
-| Component | Recommended | Reason |
-|-----------|-------------|--------|
-| Foundation | Weekly | Core stability |
-| Skills | Daily/On-demand | Rapid iteration |
-| Tools | Monthly | Stability |
-
-## Troubleshooting
-
-### Skills Out of Sync
-
-```powershell
-# Force resync
-gf update --force
-```
-
-### Tools Not Found
-
-```powershell
-# Install missing tools
-winget install Gentleman.GG
-npm install -g @engram/memory
-```
-
-### Git Conflict on Update
-
-```powershell
-# Manual resolution needed
-cd $GFRoot
-git status
-git stash
-git pull
-git stash pop
-```
-
-## Skill Dependencies
-
-This skill coordinates with:
-- `project-scaffolding-skill` - Project setup
-- `security-skill` - Pre-commit hooks
-- `git-workflow-skill` - versión control
-
-## Quick Reference
-
-```powershell
-# Full workflow
-gf check          # Check what needs updating
-gf update         # Update skills only
-gf update-all     # Update everything
-gf validate       # Verify after update
-gf tools          # Check tool status
-```
-
-
+## Notes
+- Uses `scripts/utilities/skills-auto-discovery.ps1` for skill detection
+- Integrates with `scripts/utilities/foundation-sync.ps1` for sync
+- Respects user preferences for auto-updates (config in `config/orchestrator.json`)
