@@ -1,39 +1,68 @@
-# Demo Suite Index
+# Demo Suite — Gentleman Foundation v2.6.5
 
-This directory contains audience-oriented demos for the stack.
+Audience-oriented demos. Each includes run steps, expected output, and talking points.
+Use `demos/shared/task-tracker/` as the sample project for live demos.
 
-## Start Here
+---
 
-1. Choose audience first.
-2. Run only the demos mapped to that audience.
-3. Use the shared sample project in `demos/shared/task-tracker/`.
+## Demo Index
 
-## Audience Mapping
+| # | Directory | Audience | Focus | Duration |
+|---|-----------|----------|-------|----------|
+| 01 | `01-dev-developer-onboarding/` | Dev Team | First session setup, hooks, CLI basics | 10 min |
+| 02 | `02-dev-orchestrator-and-ai-cycle/` | Dev Team | Agent routing, dispatch, skill loading | 15 min |
+| 03 | `03-dev-engram-memory-and-continuity/` | Dev Team | Engram persistent memory, context handoff | 10 min |
+| 04 | `04-dev-quality-gate-review-audit/` | Dev / Tech Lead | PSScriptAnalyzer CI, SDD gate, Judgment Day | 15 min |
+| 05 | `05-dev-documentation-and-closure/` | Dev / DOC | Session closure, audit artifacts, docs | 10 min |
+| 06 | `06-exec-executive-overview/` | Executives | Business impact, dashboard, KPIs | 20 min |
+| 07 | `07-mixed-cookbook-real-request/` | Mixed | End-to-end real-world feature request | 25 min |
+| 08 | `08-dev-enterprise-hardening-v265/` | Dev / DevOps | New v2.6.4+v2.6.5 features deep-dive | 20 min |
 
-1. Development Team demos:
-- `01-dev-developer-onboarding/`
-- `02-dev-orchestrator-and-ai-cycle/`
-- `03-dev-engram-memory-and-continuity/`
-- `04-dev-quality-gate-review-audit/`
-- `05-dev-documentation-and-closure/`
+---
 
-2. Executive/Board demo:
-- `06-exec-executive-overview/`
+## Quick Audience Guide
 
-3. Mixed audience end-to-end recipe:
-- `07-mixed-cookbook-real-request/`
+**For a Developer onboarding:**
+```
+01 → 02 → 03 → 04
+```
 
-## Coverage Matrix
+**For an Executive or Management meeting:**
+```
+06 (standalone, 20 min, visual-first)
+```
 
-1. Engram usage: demos 03, 05, 06.
-2. Orchestrator + skills: demos 02, 03, 05.
-3. Documentation flow: demos 01, 05.
-4. Audit and review: demo 04, plus summary in 06.
-5. Productivity and technical debt impact: demos 04 and 06.
+**For a Tech Lead / DevOps review:**
+```
+04 → 08
+```
 
-## Recommended Order
+**For a full mixed walkthrough:**
+```
+01 → 02 → 04 → 06 → 07
+```
 
-1. For developers: 01 -> 02 -> 03 -> 04 -> 05.
-2. For executives: 06.
-3. For mixed audience session: 07 (single end-to-end story).
-4. For deep mixed walkthrough: 01 -> 02 -> 04 -> 06 -> 07.
+**For "what's new in v2.6.5":**
+```
+08 (all new features in one place)
+```
+
+---
+
+## Coverage Matrix (v2.6.5)
+
+| Capability | Demos |
+|------------|-------|
+| Agent orchestration + routing | 02, 07 |
+| Engram persistent memory | 03, 05, 06 |
+| SDD enforcement gate | 04, 08 |
+| PSScriptAnalyzer CI | 04, 08 |
+| WF Benchmark (SLOs) | 08 |
+| Sync Drift detection | 08 |
+| Quality gates (7D) | 04, 07 |
+| HTML Dashboard + metrics | 06 |
+| Executive business value | 06 |
+| Automated releases | 08 |
+| Normativas vivas | 08 |
+| Judgment Day review | 04, 07 |
+| Session lifecycle | 01, 05 |
