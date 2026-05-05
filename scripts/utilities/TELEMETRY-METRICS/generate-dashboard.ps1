@@ -160,6 +160,25 @@ $orchCfg = Read-JsonFile (Join-Path $repoRoot 'config\orchestrator.json')
 $eventHist = Read-JsonFile (Join-Path $repoRoot '.event-bus\history.json')
 $rateLimit = Read-JsonFile (Join-Path $repoRoot '.event-bus\rate-limit-state.json')
 
+# Alert thresholds — read from metrics-config.json alert_thresholds, with hardcoded fallbacks
+$cfgThresh              = if ($metricsCfg -and $metricsCfg.alert_thresholds) { $metricsCfg.alert_thresholds } else { $null }
+$staleDaysThreshold     = if ($cfgThresh -and $null -ne $cfgThresh.data_stale_days)                 { [int]$cfgThresh.data_stale_days }                 else { 3 }
+$budgetRedPct           = if ($cfgThresh -and $null -ne $cfgThresh.budget_forecast_red_pct)         { [int]$cfgThresh.budget_forecast_red_pct }         else { 90 }
+$budgetYellowPct        = if ($cfgThresh -and $null -ne $cfgThresh.budget_forecast_yellow_pct)      { [int]$cfgThresh.budget_forecast_yellow_pct }      else { 70 }
+$spikeMultiplier        = if ($cfgThresh -and $null -ne $cfgThresh.token_spike_multiplier)          { [double]$cfgThresh.token_spike_multiplier }       else { 2.0 }
+$errorRateHighPct       = if ($cfgThresh -and $null -ne $cfgThresh.runtime_error_rate_high_pct)     { [int]$cfgThresh.runtime_error_rate_high_pct }     else { 20 }
+$errorRateModeratePct   = if ($cfgThresh -and $null -ne $cfgThresh.runtime_error_rate_moderate_pct) { [int]$cfgThresh.runtime_error_rate_moderate_pct } else { 10 }
+$latencyHighMs          = if ($cfgThresh -and $null -ne $cfgThresh.latency_high_ms)                 { [int]$cfgThresh.latency_high_ms }                 else { 8000 }
+$latencyElevatedMs      = if ($cfgThresh -and $null -ne $cfgThresh.latency_elevated_ms)             { [int]$cfgThresh.latency_elevated_ms }             else { 4000 }
+$costRegressionWarnPct  = if ($cfgThresh -and $null -ne $cfgThresh.cost_regression_warn_pct)        { [int]$cfgThresh.cost_regression_warn_pct }        else { 20 }
+$efficiencyLowThreshold = if ($cfgThresh -and $null -ne $cfgThresh.efficiency_low_threshold)        { [double]$cfgThresh.efficiency_low_threshold }     else { 0.5 }
+
+# Cost model — read from metrics-config.json cost_model, with hardcoded fallbacks
+$cfgCostModel          = if ($metricsCfg -and $metricsCfg.cost_model) { $metricsCfg.cost_model } else { $null }
+$costPer1M             = if ($cfgCostModel -and $null -ne $cfgCostModel.cost_per_1m_tokens_usd)  { [double]$cfgCostModel.cost_per_1m_tokens_usd }  else { 10.0 }
+$baselineTokensPerTask = if ($cfgCostModel -and $null -ne $cfgCostModel.baseline_tokens_per_task) { [int]$cfgCostModel.baseline_tokens_per_task }   else { 14000 }
+$reductionPolicyPct    = if ($cfgCostModel -and $null -ne $cfgCostModel.reduction_policy_pct)    { [double]$cfgCostModel.reduction_policy_pct }    else { 40.0 }
+
 $telemetryMasterPath = Join-Path $repoRoot 'docs\management\telemetry-master.csv'
 $tokenGuardPath = Join-Path $repoRoot 'docs\sessions\metrics\token-guard-usage.csv'
 $contextUsagePath = Join-Path $repoRoot 'docs\sessions\metrics\context-usage.csv'
@@ -277,15 +296,12 @@ $runtimeSuccess = @($runtimeRows | Where-Object { $_.Status -eq 'SUCCESS' }).Cou
 $runtimeLatencyAvg = [math]::Round((($runtimeRows | ForEach-Object { Get-DoubleValue $_.LatencyMs } | Where-Object { $_ -gt 0 } | Measure-Object -Average).Average), 1)
 if (-not $runtimeLatencyAvg) { $runtimeLatencyAvg = 0 }
 
-# Cost and savings model
-$costPer1M = 10.0
+# Cost and savings model (variables loaded from config above)
 $actualCost = [math]::Round(($tokensAllTime / 1000000.0) * $costPer1M, 2)
 
-$baselineTokensPerTask = 14000
 $tasksObserved = if ($tokenGuardRows.Count -gt 0) { $tokenGuardRows.Count } else { [math]::Max(1, $sessionsTotal) }
 $baselineModelTokens = $tasksObserved * $baselineTokensPerTask
 
-$reductionPolicyPct = 40.0
 $optimizedModelTokens = [math]::Round($baselineModelTokens * (1 - ($reductionPolicyPct / 100.0)), 0)
 $modeledSavingsTokens = [int]($baselineModelTokens - $optimizedModelTokens)
 $modeledSavingsCost = [math]::Round(($modeledSavingsTokens / 1000000.0) * $costPer1M, 2)
@@ -353,11 +369,11 @@ $modeledYtdSavingsCost = [math]::Round(($modeledYtdSavingsTokens / 1000000.0) * 
 
 $roiStatus = 'GREEN'
 $roiStatusClass = 'ok'
-if ($budgetForecastPct -ge 90) {
+if ($budgetForecastPct -ge $budgetRedPct) {
   $roiStatus = 'RED'
   $roiStatusClass = 'err'
 }
-elseif ($budgetForecastPct -ge 70) {
+elseif ($budgetForecastPct -ge $budgetYellowPct) {
   $roiStatus = 'YELLOW'
   $roiStatusClass = 'warn'
 }
@@ -434,7 +450,7 @@ if ($latestTokenDate) {
 $alerts = @()   # each entry: [severity, code, title, detail, recommendation]
 
 # 1. Data freshness alert
-if ($staleDays -gt 3) {
+if ($staleDays -gt $staleDaysThreshold) {
   $alerts += [pscustomobject]@{
     Severity = 'warn'
     Code     = 'DATA_STALE'
@@ -445,7 +461,7 @@ if ($staleDays -gt 3) {
 }
 
 # 2. Budget forecast alert (RED / YELLOW)
-if ($budgetForecastPct -ge 90) {
+if ($budgetForecastPct -ge $budgetRedPct) {
   $alerts += [pscustomobject]@{
     Severity = 'err'
     Code     = 'BUDGET_CRITICAL'
@@ -453,7 +469,7 @@ if ($budgetForecastPct -ge 90) {
     Detail   = "Month-end forecast at $budgetForecastPct% of budget (USD $projectedMonthCost vs budget USD $budgetMonthCost)."
     Recommendation = 'Review task volume and apply stricter token-guard thresholds immediately.'
   }
-} elseif ($budgetForecastPct -ge 70) {
+} elseif ($budgetForecastPct -ge $budgetYellowPct) {
   $alerts += [pscustomobject]@{
     Severity = 'warn'
     Code     = 'BUDGET_WARNING'
@@ -467,7 +483,7 @@ if ($budgetForecastPct -ge 90) {
 $nonZeroDays = @($tokenTrendRows | Where-Object { $_.Tokens -gt 0 })
 if ($nonZeroDays.Count -gt 1) {
   $avgDailyTokens = ($nonZeroDays | ForEach-Object { [double]$_.Tokens } | Measure-Object -Average).Average
-  $spikeThreshold = $avgDailyTokens * 2.0
+  $spikeThreshold = $avgDailyTokens * $spikeMultiplier
   $spikedDays = @($nonZeroDays | Where-Object { [double]$_.Tokens -gt $spikeThreshold })
   if ($spikedDays.Count -gt 0) {
     $spikeDay = $spikedDays | Sort-Object Tokens -Descending | Select-Object -First 1
@@ -484,7 +500,7 @@ if ($nonZeroDays.Count -gt 1) {
 
 # 4. Runtime error rate alert
 $runtimeErrorRate = if ($runtimeRequests -gt 0) { [math]::Round(($runtimeErrors * 100.0) / $runtimeRequests, 1) } else { 0 }
-if ($runtimeErrorRate -ge 20) {
+if ($runtimeErrorRate -ge $errorRateHighPct) {
   $alerts += [pscustomobject]@{
     Severity = 'err'
     Code     = 'RUNTIME_ERRORS_HIGH'
@@ -492,7 +508,7 @@ if ($runtimeErrorRate -ge 20) {
     Detail   = "Error rate is ${runtimeErrorRate}% ($runtimeErrors errors out of $runtimeRequests requests)."
     Recommendation = 'Review cloud-agent-telemetry.csv ErrorMessage column to identify the failing provider or model.'
   }
-} elseif ($runtimeErrorRate -ge 10) {
+} elseif ($runtimeErrorRate -ge $errorRateModeratePct) {
   $alerts += [pscustomobject]@{
     Severity = 'warn'
     Code     = 'RUNTIME_ERRORS_MODERATE'
@@ -504,27 +520,27 @@ if ($runtimeErrorRate -ge 20) {
 
 # 5. High latency alert
 if ($runtimeLatencyAvg -gt 0) {
-  if ($runtimeLatencyAvg -gt 8000) {
+  if ($runtimeLatencyAvg -gt $latencyHighMs) {
     $alerts += [pscustomobject]@{
       Severity = 'err'
       Code     = 'LATENCY_HIGH'
       Title    = 'High Runtime Latency'
-      Detail   = "Average latency is ${runtimeLatencyAvg} ms."
+      Detail   = "Average latency is ${runtimeLatencyAvg} ms (threshold: $latencyHighMs ms)."
       Recommendation = 'Check provider health or switch to a lower-latency model.'
     }
-  } elseif ($runtimeLatencyAvg -gt 4000) {
+  } elseif ($runtimeLatencyAvg -gt $latencyElevatedMs) {
     $alerts += [pscustomobject]@{
       Severity = 'warn'
       Code     = 'LATENCY_ELEVATED'
       Title    = 'Elevated Latency'
-      Detail   = "Average latency is ${runtimeLatencyAvg} ms (threshold: 4000 ms)."
+      Detail   = "Average latency is ${runtimeLatencyAvg} ms (threshold: $latencyElevatedMs ms)."
       Recommendation = 'Consider reviewing provider selection or request concurrency.'
     }
   }
 }
 
 # 6. Month-over-month cost regression
-if ($monthOverMonthPct -gt 20) {
+if ($monthOverMonthPct -gt $costRegressionWarnPct) {
   $alerts += [pscustomobject]@{
     Severity = 'warn'
     Code     = 'COST_REGRESSION'
@@ -535,12 +551,12 @@ if ($monthOverMonthPct -gt 20) {
 }
 
 # 7. Low efficiency alert
-if ($avgEfficiency -gt 0 -and $avgEfficiency -lt 0.5) {
+if ($avgEfficiency -gt 0 -and $avgEfficiency -lt $efficiencyLowThreshold) {
   $alerts += [pscustomobject]@{
     Severity = 'warn'
     Code     = 'LOW_EFFICIENCY'
     Title    = 'Low Avg Efficiency Score'
-    Detail   = "Average efficiency score is $avgEfficiency (threshold: 0.5)."
+    Detail   = "Average efficiency score is $avgEfficiency (threshold: $efficiencyLowThreshold)."
     Recommendation = 'Review recent telemetry for tasks with low Efficiency_Score and identify patterns.'
   }
 }
@@ -717,7 +733,7 @@ $cardsRoi += Build-MetricCard -Title 'Monthly Budget (USD)' -Value ('$' + $budge
 $cardsRoi += Build-MetricCard -Title 'Budget Consumed' -Value "$budgetConsumedPct%" -Label "MTD actual vs monthly budget"
 $cardsRoi += Build-MetricCard -Title 'Forecast vs Budget' -Value "$budgetForecastPct%" -Label "projected month-end utilization"
 $cardsRoi += Build-MetricCard -Title 'Forecast Variance' -Value ('$' + $forecastVarianceUsd) -Label "$forecastVariancePct% vs budget"
-$cardsRoi += Build-MetricCard -Title 'ROI Status' -Value $roiStatus -Label "thresholds: 70/90"
+$cardsRoi += Build-MetricCard -Title 'ROI Status' -Value $roiStatus -Label "thresholds: $budgetYellowPct/$budgetRedPct"
 $cardsRoi += Build-MetricCard -Title 'Prev Month Cost' -Value ('$' + ('{0:N2}' -f $previousMonthCostHist)) -Label 'historical reference'
 $cardsRoi += Build-MetricCard -Title 'MoM Cost Trend' -Value $monthOverMonthLabel -Label 'current vs previous month'
 $cardsRoi += Build-MetricCard -Title 'Net Benefit MTD' -Value ('$' + $netModeledBenefitMtd) -Label 'modeled savings - actual cost'
@@ -932,7 +948,31 @@ $html = @"
     margin-left: 8px;
     vertical-align: middle;
   }
+  /* Export buttons */
+  .export-btn {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .export-btn:hover { background: #1d3142; }
+  /* Print / PDF */
+  @media print {
+    body { background: #fff !important; color: #111 !important; padding: 8px; }
+    .nav, footer, .export-btn { display: none !important; }
+    .section { display: block !important; border: 1px solid #ccc; background: #fff !important; page-break-after: avoid; }
+    .card { border: 1px solid #ccc; background: #f9f9f9 !important; }
+    .value { color: #0a6e66 !important; }
+    canvas { max-height: 200px; }
+    a { color: #000; }
+  }
 </style>
+<!-- html2canvas for PNG export (requires internet connection) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
   <h1>Gentleman Foundation - Full Metrics Dashboard</h1>
@@ -945,6 +985,8 @@ $html = @"
     <button data-target="stack">Stack Metrics</button>
     <button data-target="explorer">Metrics Explorer</button>
     <button data-target="events">Events</button>
+    <button class="export-btn" onclick="exportDashboardPdf()" title="Print or save as PDF using the browser print dialog">&#128461; PDF</button>
+    <button class="export-btn" onclick="exportDashboardPng()" title="Export current section as PNG (requires internet for html2canvas)">&#128247; PNG</button>
   </div>
 
   <section id="overview" class="section active">
@@ -983,9 +1025,9 @@ $html = @"
         <h3>Governance Signal</h3>
         <p>Current executive status: <strong class="$roiStatusClass">$roiStatus</strong></p>
         <ul>
-          <li><strong>GREEN</strong>: forecast under 70% of monthly budget.</li>
-          <li><strong>YELLOW</strong>: forecast between 70% and 90% of monthly budget.</li>
-          <li><strong>RED</strong>: forecast at or above 90% of monthly budget.</li>
+          <li><strong>GREEN</strong>: forecast under $budgetYellowPct% of monthly budget.</li>
+          <li><strong>YELLOW</strong>: forecast between $budgetYellowPct% and $budgetRedPct% of monthly budget.</li>
+          <li><strong>RED</strong>: forecast at or above $budgetRedPct% of monthly budget.</li>
           <li>Variance is computed as <strong>forecast - budget</strong>.</li>
           <li>Net benefit is a modeled indicator, not accounting P&amp;L.</li>
         </ul>
@@ -1316,6 +1358,33 @@ window.addEventListener('load', () => {
   drawBarChart('roiChart', [$roiLabels], [$roiValues], '#fd8f4d', (v) => '$' + Number(v).toFixed(2));
   drawLineChart('roiHistoryChart', [$roiHistoryLabels], [$roiHistoryValues], '#6ed4a7', (v) => '$' + Number(v).toFixed(2));
 });
+
+function exportDashboardPdf() {
+  window.print();
+}
+
+function exportDashboardPng() {
+  const activeSection = document.querySelector('.section.active');
+  if (!activeSection) { alert('No active section found.'); return; }
+  if (typeof html2canvas === 'undefined') {
+    alert('PNG export requires the html2canvas library (internet connection needed).\nUse the PDF button or a browser screenshot instead.');
+    return;
+  }
+  const activeBtn = document.querySelector('.nav button.active');
+  const sectionName = activeBtn ? activeBtn.textContent.trim() : 'dashboard';
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const fileName = 'dashboard-' + sectionName.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + dateStr + '.png';
+  html2canvas(activeSection, { backgroundColor: '#081016', scale: 1.5, useCORS: true, logging: false })
+    .then(function(canvas) {
+      const link = document.createElement('a');
+      link.download = fileName;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    })
+    .catch(function(err) {
+      alert('PNG export failed: ' + err.message + '.\nTry using the PDF button or a browser screenshot instead.');
+    });
+}
 </script>
 </body>
 </html>
