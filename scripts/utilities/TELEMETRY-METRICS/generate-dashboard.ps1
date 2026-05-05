@@ -291,6 +291,13 @@ $costYTD = [math]::Round(($tokensYTD / 1000000.0) * $costPer1M, 2)
 $projectedMonthTokens = [int][math]::Round(($tokensMTD / $daysElapsedInMonth) * $daysInMonth, 0)
 $projectedMonthCost = [math]::Round(($projectedMonthTokens / 1000000.0) * $costPer1M, 2)
 
+$budgetMonthTokens = [int]($dailyBudget * $daysInMonth)
+$budgetMonthCost = [math]::Round(($budgetMonthTokens / 1000000.0) * $costPer1M, 2)
+$budgetConsumedPct = if ($budgetMonthCost -gt 0) { [math]::Round(($costMTD * 100.0) / $budgetMonthCost, 1) } else { 0 }
+$budgetForecastPct = if ($budgetMonthCost -gt 0) { [math]::Round(($projectedMonthCost * 100.0) / $budgetMonthCost, 1) } else { 0 }
+$forecastVarianceUsd = [math]::Round($projectedMonthCost - $budgetMonthCost, 2)
+$forecastVariancePct = if ($budgetMonthCost -gt 0) { [math]::Round((($projectedMonthCost - $budgetMonthCost) * 100.0) / $budgetMonthCost, 1) } else { 0 }
+
 $mtdTaskCount = $mtdRows.Count
 $ytdTaskCount = $ytdRows.Count
 $baselineMtdTokens = $mtdTaskCount * $baselineTokensPerTask
@@ -301,6 +308,27 @@ $modeledMtdSavingsTokens = [int]($baselineMtdTokens - $optimizedMtdTokens)
 $modeledYtdSavingsTokens = [int]($baselineYtdTokens - $optimizedYtdTokens)
 $modeledMtdSavingsCost = [math]::Round(($modeledMtdSavingsTokens / 1000000.0) * $costPer1M, 2)
 $modeledYtdSavingsCost = [math]::Round(($modeledYtdSavingsTokens / 1000000.0) * $costPer1M, 2)
+
+$roiStatus = 'GREEN'
+$roiStatusClass = 'ok'
+if ($budgetForecastPct -ge 90) {
+  $roiStatus = 'RED'
+  $roiStatusClass = 'err'
+}
+elseif ($budgetForecastPct -ge 70) {
+  $roiStatus = 'YELLOW'
+  $roiStatusClass = 'warn'
+}
+
+$netModeledBenefitMtd = [math]::Round($modeledMtdSavingsCost - $costMTD, 2)
+$netModeledBenefitYtd = [math]::Round($modeledYtdSavingsCost - $costYTD, 2)
+$roiLabels = "'Budget','MTD Actual','Forecast','MTD Saved'"
+$roiValues = @(
+  ('{0}' -f $budgetMonthCost.ToString([System.Globalization.CultureInfo]::InvariantCulture)),
+  ('{0}' -f $costMTD.ToString([System.Globalization.CultureInfo]::InvariantCulture)),
+  ('{0}' -f $projectedMonthCost.ToString([System.Globalization.CultureInfo]::InvariantCulture)),
+  ('{0}' -f $modeledMtdSavingsCost.ToString([System.Globalization.CultureInfo]::InvariantCulture))
+) -join ','
 
 # Runtime cost by model
 $modelCostMap = @{}
@@ -449,6 +477,21 @@ $cardsCosts += Build-MetricCard -Title 'Text USD Saved' -Value ('$' + $simplific
 $cardsCosts += Build-MetricCard -Title 'Avg Reduction' -Value "$avgReductionPct%" -Label 'text simplification'
 $cardsCosts += Build-MetricCard -Title 'Avg Prompt Chars' -Value $avgPromptChars -Label 'context usage'
 $cardsCosts += Build-MetricCard -Title 'Context Events' -Value $totalContextEvents -Label "packs=$contextPackEvents compact=$compactEvents"
+
+$textSavingsShare = '0%'
+if ($costMTD -gt 0) {
+  $textSavingsShare = [math]::Round(($simplificationSavedCost * 100.0) / $costMTD, 1).ToString() + '%'
+}
+
+$cardsRoi = @()
+$cardsRoi += Build-MetricCard -Title 'Monthly Budget (USD)' -Value ('$' + $budgetMonthCost) -Label "daily budget x $daysInMonth days"
+$cardsRoi += Build-MetricCard -Title 'Budget Consumed' -Value "$budgetConsumedPct%" -Label "MTD actual vs monthly budget"
+$cardsRoi += Build-MetricCard -Title 'Forecast vs Budget' -Value "$budgetForecastPct%" -Label "projected month-end utilization"
+$cardsRoi += Build-MetricCard -Title 'Forecast Variance' -Value ('$' + $forecastVarianceUsd) -Label "$forecastVariancePct% vs budget"
+$cardsRoi += Build-MetricCard -Title 'ROI Status' -Value $roiStatus -Label "thresholds: 70/90"
+$cardsRoi += Build-MetricCard -Title 'Net Benefit MTD' -Value ('$' + $netModeledBenefitMtd) -Label 'modeled savings - actual cost'
+$cardsRoi += Build-MetricCard -Title 'Net Benefit YTD' -Value ('$' + $netModeledBenefitYtd) -Label 'modeled savings - actual cost'
+$cardsRoi += Build-MetricCard -Title 'Text Savings Share' -Value $textSavingsShare -Label 'of MTD actual cost'
 
 $html = @"
 <!DOCTYPE html>
@@ -605,6 +648,7 @@ $html = @"
   <div class="nav">
     <button class="active" data-target="overview">Overview</button>
     <button data-target="costs">Costs & Savings</button>
+    <button data-target="roi">Executive ROI</button>
     <button data-target="stack">Stack Metrics</button>
     <button data-target="explorer">Metrics Explorer</button>
     <button data-target="events">Events</button>
@@ -623,6 +667,30 @@ $html = @"
       <div class="panel">
         <h3>Event Distribution</h3>
         <canvas id="eventChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <section id="roi" class="section">
+    <h2>Executive ROI and Budget Control</h2>
+    <div class="grid">
+      $($cardsRoi -join "`n")
+    </div>
+    <div class="two-col" style="margin-top:12px;">
+      <div class="panel">
+        <h3>Monthly ROI Comparison (USD)</h3>
+        <canvas id="roiChart"></canvas>
+      </div>
+      <div class="panel">
+        <h3>Governance Signal</h3>
+        <p>Current executive status: <strong class="$roiStatusClass">$roiStatus</strong></p>
+        <ul>
+          <li><strong>GREEN</strong>: forecast under 70% of monthly budget.</li>
+          <li><strong>YELLOW</strong>: forecast between 70% and 90% of monthly budget.</li>
+          <li><strong>RED</strong>: forecast at or above 90% of monthly budget.</li>
+          <li>Variance is computed as <strong>forecast - budget</strong>.</li>
+          <li>Net benefit is a modeled indicator, not accounting P&amp;L.</li>
+        </ul>
       </div>
     </div>
   </section>
@@ -825,6 +893,7 @@ window.addEventListener('load', () => {
   drawBarChart('tokenChart', [$tokenLabels], [$tokenValues], '#37b8a8');
   drawBarChart('eventChart', [$eventTypeLabels], [$eventTypeValues], '#f5b800');
   drawBarChart('costChart', [$costLabels], [$costValues], '#6ea8ff');
+  drawBarChart('roiChart', [$roiLabels], [$roiValues], '#fd8f4d');
 });
 </script>
 </body>
