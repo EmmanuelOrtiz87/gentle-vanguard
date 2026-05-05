@@ -1,59 +1,72 @@
-# 🏗️ Foundation - Development Stack
+# 🏗️ Gentleman Foundation — AI Development Stack
 
-> **💡 Mission Statement:** "Where governance, automation, and AI converge to empower modern development teams."
+> **"Where governance, automation, and AI converge to empower modern development teams."**
 
-Framework for orchestration, automation, and governance with native AI skill integration, adversarial review, SDD enforcement, and persistent memory (Engram).
+Local-first platform for AI-assisted software development. Unifies agent orchestration, SDD enforcement, token governance, quality gates, and 125+ on-demand skills — all wired into a single CLI and automated CI pipeline.
 
+[![Version](https://img.shields.io/badge/version-2.6.5-blue.svg)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![PowerShell](https://img.shields.io/badge/PowerShell-7+-blue.svg)](https://github.com/PowerShell/PowerShell)
-[![Go](https://img.shields.io/badge/Go-1.19+-blue.svg)](https://golang.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![CI](https://img.shields.io/badge/CI-10_workflows-green.svg)](.github/workflows/)
+[![Skills](https://img.shields.io/badge/skills-125-blueviolet.svg)](skills/)
+[![Security](https://img.shields.io/badge/security-OWASP_%2B_dependabot-orange.svg)](SECURITY.md)
 
 ---
 
 ## 📖 What is Foundation?
 
-> 💡 **Vision:** Comprehensive platform for teams pursuing operational excellence.
+Foundation is a **governance-first AI development stack** that unifies:
 
-Foundation is a governance-first development stack that unifies:
-- AI orchestration and sub-agent coordination
-- 7-dimension automated validation (security, quality, architecture, testing, API, docs, gitflow)
-- Adversarial judgment protocol for critical changes
-- Persistent session memory via Engram
-- SDD (Specification-Driven Development) enforcement
-- On-demand skill and stack activation
-- Homologated project templates and scaffolding
+| Capability | What it does |
+|------------|-------------|
+| **7-agent orchestration** | Routes tasks automatically to BA, SAD, DEV, QA, OPS, GOV, DOC agents |
+| **125+ on-demand skills** | Angular, React, Next.js, Go, Django, TypeScript, Zod, AI SDK, MCP, and more |
+| **SDD enforcement** | Blocks commits without a validated spec — no specification, no code |
+| **Token Budget Guard** | 30K tokens/day cap with 70%/90% soft/hard thresholds |
+| **Event bus + telemetry** | 10 standard events with governance gate and distributed tracing |
+| **Enterprise CI pipeline** | 10 workflows: quality gate, PSScriptAnalyzer, OWASP, SDD gate, automated releases |
+| **7D validation hooks** | Pre-commit checks: security, quality, architecture, testing, API, docs, gitflow |
+| **Persistent memory** | Engram — context survives session restarts |
 
 ---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Windows 10/11, Linux, or macOS
-- PowerShell 7+
+- Windows 10/11 / Linux / macOS
+- PowerShell 7+ (`winget install Microsoft.PowerShell`)
 - Git 2.30+
-- Node.js 18+
-- Go 1.19+ (optional, for backend development)
-- Engram (bundled, no separate install required)
+- Node.js 18+ | Go 1.19+ (optional)
 
-### Setup Steps
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/EmmanuelOrtiz87/workspace-foundation.git
-   cd workspace-foundation
-   ```
-2. **Bootstrap your machine**:
-   ```powershell
-   .\scripts\foundation\bootstrap-machine.ps1
-   ```
-3. **Start a new session**:
-   ```powershell
-   .\scripts\wf.ps1 start-session
-   ```
+### Setup — 3 steps
+```powershell
+# 1. Clone
+git clone https://github.com/EmmanuelOrtiz87/gentleman-foundation.git
+cd gentleman-foundation
+
+# 2. Bootstrap
+.\scripts\foundation\bootstrap-machine.ps1
+
+# 3. Start working
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1 start-session
+```
+
+### Daily usage
+```powershell
+wf verify          # Check all 14 quality gates
+wf version         # Show stack version + skills count
+wf start-session   # Begin tracked session
+wf judgment-day    # Full QA gate before release
+wf dashboard       # Open HTML metrics dashboard
+wf benchmark       # SLO benchmark of key commands
+wf sync-drift      # Detect drift between foundation and projects
+```
 
 ---
 
 ## Architecture Overview
+
+## Architecture
 
 Foundation uses a layered, modular architecture with on-demand activation:
 
@@ -98,51 +111,59 @@ Refer to [docs/reference/ARCHITECTURE.md](docs/reference/ARCHITECTURE.md) for fu
 
 ## 📋 Stack & Governance Policies
 
-> 💡 **Note:** Foundation is a governance framework, not a closed tool.
+## 📋 Stack Policies
 
-| Concept | Description | Status |
-|---------|-------------|--------|
-| **Identity** | Governance framework, not a closed tool | ✅ Active |
-| **Strategy** | Native orchestration, modular skills, 7-dimension validation | ✅ Active |
-| **Engram** | Mandatory for session continuity and persistent memory | ✅ Mandatory |
-| **SDD** | Mandatory specifications and criteria enforcement | ✅ Mandatory |
-| **Adversarial Judgment** | Always available for critical changes | ✅ Active |
-| **Backlog** | Unified, CSV-exportable, audited | ✅ Active |
+| Concept | Description | Enforcement |
+|---------|-------------|-------------|
+| **SDD-first** | No code without a validated specification | `sdd-gate.yml` + pre-commit hook |
+| **Adversarial Judgment** | Dual-agent review for critical changes | `wf judgment-day` |
+| **Token governance** | Hard budget cap — no runaway AI spend | Token Budget Guard |
+| **Normativas vivas** | PS, CI, Testing standards enforced in CI | `ps-lint.yml` + agent-verify |
+| **RBAC** | Owner-level ops require explicit auth | `config/access-control.json` |
+| **Security** | OWASP + dependabot + PSScriptAnalyzer | Automated weekly |
 
 ---
 
 ## ⚙️ Skills & Automation
 
-Skills align to 7 validation dimensions (see [docs/code-reviews/REVIEW-INDEX.md](docs/code-reviews/REVIEW-INDEX.md)):
-- Automated hooks: `scripts/hooks/check-*.ps1` (pre-commit, pre-push)
-- Adversarial judgment: `scripts/utilities/judgment-day.ps1`, `skills/judgment-day/SKILL.md`
-- Orchestration: `scripts/wf.ps1 agent <NAME> <TASK>`
+## ⚙️ Skills & CLI
 
-### Core CLI (`wf.ps1`)
+**125 skills** activated on-demand by keyword trigger. Zero memory overhead for inactive skills.
+
+### Core CLI — `wf.ps1` (44+ commands)
+
 ```powershell
-# Project status
-.\scripts\wf.ps1 status
-# Operations dashboard
-.\scripts\wf.ps1 stack-dashboard
-# Validation and review
-.\scripts\wf.ps1 review
-.\scripts\wf.ps1 audit
-# Health check
-.\scripts\wf.ps1 health
-# PR and push
-.\scripts\wf.ps1 pr
-.\scripts\wf.ps1 push
-# Update stack and skills
-.\scripts\wf.ps1 update
+# Session
+wf start-session       wf end-session         wf day-end-closure
+
+# Quality
+wf verify              wf judgment-day        wf review
+wf audit               wf sdd-gate            wf sdd-metrics
+
+# Metrics & benchmarks
+wf benchmark           wf sync-drift          wf export-metrics
+wf dashboard           wf context-dashboard   wf token-guard
+
+# Agents
+wf dispatch DEV,QA "add unit tests for auth module"
+wf agent SAD "design pagination API contract"
+wf skills              # list all 125 skills
+
+# Version & info
+wf version             wf platform-info       wf health
 ```
 
 ### Dashboard Signal Coverage
-1. Executive traffic light (GREEN/YELLOW/RED)
-2. Token budget burn rate and exhaustion ETA
-3. Engram continuity posture
-4. Recommended next actions to avoid session blockage
-5. Strict gate signal (`strict_violation`) for pipeline automation
-6. Local telemetry stored at `docs/sessions/metrics/token-guard-usage.csv` (gitignored)
+### Dashboard (`wf dashboard`)
+
+Generates `reports/dashboard.html` — open in any browser:
+
+1. **KPI cards**: Sessions, Dispatches, Tokens Used, Events Emitted
+2. **Event Distribution** bar chart (last 14 days)
+3. **Token Usage** trend chart
+4. **Recent Events** table with timestamp and governance status
+5. Executive traffic light: GREEN / YELLOW / RED
+6. Budget burn rate + exhaustion ETA
 
 ### Runtime Routing Model
 1. `ai_orchestrated`: Orchestrator delegates to subagents and skills
@@ -166,9 +187,31 @@ Foundation provides homologated templates for:
 ---
 
 ## 🔄 Workflow Cycle
-1. **Initialization**: Stack, skills, and hooks activate on-demand
-2. **Session**: Orchestrator with persistent memory, automated review and validation
-3. **Closure**: Adversarial review, session artifacts, publish and archive
+## 🔄 Development Workflow
+
+```
+START SESSION → pre-process-input.ps1 → trigger routing
+                    │
+          ┌─────────▼──────────┐
+          │  Agent dispatched  │  (BA / SAD / DEV / QA / OPS / GOV / DOC)
+          │  + skill loaded    │
+          └─────────┬──────────┘
+                    │ code produced
+          ┌─────────▼──────────┐
+          │  pre-commit hook   │  7D validation (security, quality, arch, tests, API, docs, gitflow)
+          │  SDD gate check    │  blocks if no validated SDD spec
+          └─────────┬──────────┘
+                    │ commit passes
+          ┌─────────▼──────────┐
+          │  CI pipeline       │  10 workflows: lint, PSScriptAnalyzer, OWASP, quality gate
+          └─────────┬──────────┘
+                    │ CI passes
+          ┌─────────▼──────────┐
+          │  judgment-day      │  adversarial dual-agent review (optional for critical changes)
+          └─────────┬──────────┘
+                    │ approved
+          tag v*.*.* → release.yml → GitHub Release (automated)
+```
 
 ---
 
@@ -227,20 +270,25 @@ Normalizes workspace before release or when strict cleanup reports drift.
 ---
 
 ## 📚 Documentation
+## 📚 Documentation
+
 
 ### For Developers
 - **[Session Guide](docs/guides/SESSION-GUIDE.md)**: Daily workflow and commands
 - **[Tool Activation](docs/guides/TOOL-ACTIVATION.md)**: Auto-activation system
-- **[Testing Strategy](skills/testing-strategy-skill/SKILL.md)**: Quality assurance (see `testing-strategy-skill`)
+- **[Testing Standards](rules/TESTING-STANDARDS.md)**: Testing pyramid + coverage targets
+- **[PowerShell Standards](rules/POWERSHELL-STANDARDS.md)**: PS1 coding standards
 
 ### For Project Leads
 - **[Architecture Overview](docs/reference/ARCHITECTURE.md)**: System design rationale
-- **[Skill Development](skills/SKILL-DEVELOPMENT.md)**: Creating new AI skills (see `project-scaffolding` skill)
+- **[CI Hardening Standards](rules/CI-HARDENING-STANDARDS.md)**: Workflow requirements
+- **[Status Report](docs/reports/FOUNDATION-STATUS-REPORT-2026-05-05.md)**: Full operational status v2.6.5
 
 ### For Administrators
 - **[Installation Guide](docs/getting-started/installation.md)**: Complete setup instructions
 - **[AI Configuration](docs/guides/AI-CONFIGURATION.md)**: AI provider setup
 - **[Getting Started](docs/getting-started/README.md)**: All setup guides
+- **[Security Policy](SECURITY.md)**: Vulnerability reporting + security controls
 
 ---
 

@@ -1,33 +1,101 @@
-# Demo 04 - Quality Gates, Review, and Audit
+# Demo 04 — Quality Gates, Review & Audit (v2.6.5)
 
-Audience: Development Team
+**Audience:** Development Team / Tech Lead  
+**Duration:** ~15 min  
+**Stack version:** v2.6.5+
+
+---
 
 ## Goal
 
-Show automated quality control, AI review, and audit generation.
+Show the full quality enforcement pipeline: from PSScriptAnalyzer static analysis in CI, through SDD gate, to Judgment Day adversarial review — all automated and integrated into the daily git workflow.
 
-## Scope
+---
 
-1. AI-assisted code review.
-2. Session review generation.
-3. Audit report generation.
-4. Governance signal before publish.
+## What You'll Demonstrate
 
-## Components Demonstrated
+| # | Capability | Command / Artifact |
+|---|------------|-------------------|
+| 1 | Static analysis (PSScriptAnalyzer) | `ps-lint.yml` in CI |
+| 2 | SDD spec gate | `wf sdd-gate` |
+| 3 | 7D pre-commit validation | `git commit` (hook fires automatically) |
+| 4 | Full QA gate | `wf judgment-day` |
+| 5 | Code review | `wf review` |
+| 6 | Audit report | `wf audit` |
+| 7 | Agent-verify (14 checks) | `wf verify` |
 
-1. `generate-session-review.ps1`
-3. `generate-audit-report.ps1`
-4. `generate-session-audit.ps1`
-5. Review and governance skills
+---
 
 ## Run Steps
 
-1. `./scripts/utilities/generate-session-review.ps1`
-3. `./scripts/utilities/generate-session-audit.ps1`
-4. `./scripts/utilities/generate-audit-report.ps1 -Period weekly`
+### Step 1 — Check quality gate status
+```powershell
+wf verify
+# Expected: 14/14 PASS
+# Look for: quality-gate-workflows, workflow-hardening, tests-passing
+```
+
+### Step 2 — SDD Gate (blocks without spec)
+```powershell
+wf sdd-gate
+# Shows: status of SDD docs (validated/active/done required)
+
+# What happens without SDD:
+# → hook fires on git commit → EXIT 1 → commit blocked
+# → CI sdd-gate.yml → fails PR check
+```
+
+### Step 3 — Make a commit, watch hooks fire
+```powershell
+# Stage a change
+git add scripts/utilities/my-new-script.ps1
+git commit -m "feat: add new utility"
+
+# Pre-commit output:
+# [QUALITY] All checks passed.
+# [TESTING] Todos los tests pasaron.
+# [GITFLOW] Mensaje sigue convención: ✓
+# [OK] Pre-commit checks passed!
+```
+
+### Step 4 — PSScriptAnalyzer (shows in CI)
+```powershell
+# Locally simulate what ps-lint.yml does:
+Import-Module PSScriptAnalyzer
+Invoke-ScriptAnalyzer -Path scripts/ -Recurse -Severity Error
+# Expected: 0 errors (warnings are advisory only)
+```
+
+### Step 5 — Full QA Gate (Judgment Day)
+```powershell
+wf judgment-day
+# Runs: dual adversarial review
+# Agents: DEV reviews → QA adversarial → synthesis
+# Output: docs/judgment/YYYY-MM-DD-judgment.md
+```
+
+### Step 6 — Review + Audit
+```powershell
+wf review
+# AI-assisted multi-dimension review
+
+wf audit
+# Full audit report → docs/audits/YYYY-MM-DD-HHmmss-audit.md
+```
+
+### Step 7 — SDD Metrics
+```powershell
+wf sdd-metrics
+# Shows: SDD status distribution, cycle time per phase, SLO compliance
+# -AsJson flag for programmatic use
+```
+
+---
 
 ## Expected Outcome
 
-1. Review findings are visible before merge.
-2. Audit artifacts are generated for traceability.
-3. Team sees debt-reduction and quality gate automation.
+- Audience sees that quality is **built into the workflow** — not an afterthought
+- Every commit is validated by 7 dimensions automatically
+- PSScriptAnalyzer blocks broken PS1 code before it reaches `main`
+- SDD gate proves that "no spec = no merge" is enforced, not optional
+- Management can see traceable audit artifacts for compliance
