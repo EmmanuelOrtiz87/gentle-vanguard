@@ -33,6 +33,6 @@
         "linux": "go install github.com/workspace-foundation/engram/cmd/engram@latest",
         "macos": "go install github.com/workspace-foundation/engram/cmd/engram@latest"
       }
-    },
+    }
   ]
 }

@@ -30,9 +30,18 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Continue"
 
+$sessionRoot = ".session"
+$sessionLogsDir = Join-Path $sessionRoot "logs"
+$sessionReportsDir = Join-Path $sessionRoot "reports"
+foreach ($dir in @($sessionRoot, $sessionLogsDir, $sessionReportsDir)) {
+    if (-not (Test-Path $dir)) {
+        New-Item -ItemType Directory -Path $dir -Force | Out-Null
+    }
+}
+
 # Initialize
 $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-$logFile = ".session/logs/comprehensive-validation-$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
+$logFile = Join-Path $sessionLogsDir "comprehensive-validation-$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
 $validationReport = @{
     timestamp = $timestamp
     sections = @{}
@@ -191,8 +200,8 @@ $requiredDirs = @(
     "scripts/utilities/WORKFLOW-ORCHESTRATION",
     "scripts/utilities/GIT-VERSION-CONTROL",
     "docs",
-    ".session/logs",
-    ".session/reports"
+    $sessionLogsDir,
+    $sessionReportsDir
 )
 
 foreach ($dir in $requiredDirs) {
@@ -346,7 +355,7 @@ foreach ($doc in $autonomousDocs) {
 # ============================================================================
 Write-Log "=== GENERATING SUMMARY REPORT ===" "INFO"
 
-$reportPath = ".session/reports/comprehensive-validation-$(Get-Date -Format 'yyyyMMdd-HHmmss').json"
+$reportPath = Join-Path $sessionReportsDir "comprehensive-validation-$(Get-Date -Format 'yyyyMMdd-HHmmss').json"
 if (-not (Test-Path (Split-Path $reportPath))) {
     New-Item -ItemType Directory -Path (Split-Path $reportPath) -Force | Out-Null
 }
