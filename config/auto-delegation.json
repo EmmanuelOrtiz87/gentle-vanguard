@@ -15,10 +15,10 @@
                  },
     "concurrencyLimits":  {
                               "perAgent":  {
-                                               "BA":   1,
+                                               "BA":  1,
                                                "SAD":  1,
                                                "DEV":  2,
-                                               "QA":   2,
+                                               "QA":  2,
                                                "OPS":  1,
                                                "GOV":  1,
                                                "DOC":  1
@@ -30,21 +30,21 @@
     "routingBindings":  {
                             "tiers":  {
                                           "tier1_direct":  {
-                                              "confidenceMin":  80,
-                                              "action":  "dispatch_immediately",
-                                              "description":  "High confidence — dispatch without clarification"
-                                          },
+                                                               "confidenceMin":  80,
+                                                               "action":  "dispatch_immediately",
+                                                               "description":  "High confidence — dispatch without clarification"
+                                                           },
                                           "tier2_confirm":  {
-                                              "confidenceMin":  60,
-                                              "confidenceMax":  79,
-                                              "action":  "dispatch_with_summary",
-                                              "description":  "Medium confidence — dispatch but surface agent + skill to user"
-                                          },
+                                                                "confidenceMin":  60,
+                                                                "confidenceMax":  79,
+                                                                "action":  "dispatch_with_summary",
+                                                                "description":  "Medium confidence — dispatch but surface agent + skill to user"
+                                                            },
                                           "tier3_clarify":  {
-                                              "confidenceMax":  59,
-                                              "action":  "activate_ba_exploration",
-                                              "description":  "Low confidence — activate BA before dispatching"
-                                          }
+                                                                "confidenceMax":  59,
+                                                                "action":  "activate_ba_exploration",
+                                                                "description":  "Low confidence — activate BA before dispatching"
+                                                            }
                                       },
                             "_comment":  "Consumed by auto-delegate-orchestrator.ps1 Invoke-TieredRouting"
                         },
@@ -54,38 +54,38 @@
                        "lowConfidence":  40
                    },
     "agentCodeToSkill":  {
-                             "BA":           "sdd-lifecycle",
-                             "GOV":          "judgment-day",
-                             "SAD":          "sdd-lifecycle",
-                             "DEV":          "sdd-lifecycle",
-                             "QA":           "sdd-lifecycle",
-                             "OPS":          "docker-devops-skill",
-                             "DOC":          "documentation-governance",
-                             "SCRIPT-GOV":   "script-governance-skill",
-                             "REPORT":       "reporting-skill",
-                             "PR-REVIEW":    "code-review-orchestrator-skill",
-                             "RELEASE":      "release-management-skill",
-                             "SESSION-CLOSE": "project-orchestrator-skill",
-                             "GITFLOW-BRANCH": "gitflow-orchestrator-skill",
-                             "GITFLOW-PR":   "branch-pr",
-                             "GITFLOW-HOOKS": "gitflow-orchestrator-skill",
-                             "GITFLOW-MERGE": "gitflow-orchestrator-skill",
-                             "GITFLOW-WORKFLOW": "git-workflow-skill",
-                             "GITFLOW-COMMIT": "git-workflow-skill",
-                             "GITFLOW-CONFLICT": "git-workflow-skill"
+                             "BA":  "sdd-lifecycle",
+                             "GOV":  "judgment-day",
+                             "SAD":  "sdd-lifecycle",
+                             "DEV":  "sdd-lifecycle",
+                             "QA":  "sdd-lifecycle",
+                             "OPS":  "docker-devops-skill",
+                             "DOC":  "documentation-governance",
+                             "SCRIPT-GOV":  "script-governance-skill",
+                             "REPORT":  "reporting-skill",
+                             "PR-REVIEW":  "code-review-orchestrator-skill",
+                             "RELEASE":  "release-management-skill",
+                             "SESSION-CLOSE":  "project-orchestrator-skill",
+                             "GITFLOW-BRANCH":  "gitflow-orchestrator-skill",
+                             "GITFLOW-PR":  "branch-pr",
+                             "GITFLOW-HOOKS":  "gitflow-orchestrator-skill",
+                             "GITFLOW-MERGE":  "gitflow-orchestrator-skill",
+                             "GITFLOW-WORKFLOW":  "git-workflow-skill",
+                             "GITFLOW-COMMIT":  "git-workflow-skill",
+                             "GITFLOW-CONFLICT":  "git-workflow-skill"
                          },
     "skillToAgentProfile":  {
                                 "code-review-orchestrator-skill":  "QA",
                                 "release-management-skill":  "OPS",
-                                "project-orchestrator-skill": "GOV",
-                                "reporting-skill":           "DOC",
-                                "judgment-day":              "GOV",
-                                "gitflow-orchestrator-skill": "GOV",
-                                "branch-pr":                 "QA",
-                                "git-workflow-skill":        "DEV",
-                                "script-governance-skill":   "DEV",
-                                "sdd-lifecycle":             "BA",
-                                "docker-devops-skill":       "OPS",
+                                "project-orchestrator-skill":  "GOV",
+                                "reporting-skill":  "DOC",
+                                "judgment-day":  "GOV",
+                                "gitflow-orchestrator-skill":  "GOV",
+                                "branch-pr":  "QA",
+                                "git-workflow-skill":  "DEV",
+                                "script-governance-skill":  "DEV",
+                                "sdd-lifecycle":  "BA",
+                                "docker-devops-skill":  "OPS",
                                 "documentation-governance":  "DOC"
                             },
     "clarifyBaStrategy":  {
@@ -106,7 +106,14 @@
                           },
     "unmappedFlows":  {
                           "prReview":  {
-                                           "triggers":  [ "pull request", "PR", "create PR", "open PR", "merge", "review PR" ],
+                                           "triggers":  [
+                                                            "pull request",
+                                                            "PR",
+                                                            "create PR",
+                                                            "open PR",
+                                                            "merge",
+                                                            "review PR"
+                                                        ],
                                            "gate":  {
                                                         "agent":  "QA",
                                                         "profile":  "$ref:agentProfiles.QA",
@@ -125,10 +132,27 @@
                                                         "escalateOnFailure":  "orchestrator"
                                                     },
                                            "skill":  "code-review-orchestrator",
-                                           "dimensions":  [ "Security", "Quality", "Architecture", "Testing", "Docs", "API", "GitFlow" ]
+                                           "dimensions":  [
+                                                              "Security",
+                                                              "Quality",
+                                                              "Architecture",
+                                                              "Testing",
+                                                              "Docs",
+                                                              "API",
+                                                              "GitFlow"
+                                                          ]
                                        },
                           "releaseManagement":  {
-                                                    "triggers":  [ "release", "changelog", "version bump", "ship", "cut release", "release notes", "hotfix", "semver" ],
+                                                    "triggers":  [
+                                                                     "release",
+                                                                     "changelog",
+                                                                     "version bump",
+                                                                     "ship",
+                                                                     "cut release",
+                                                                     "release notes",
+                                                                     "hotfix",
+                                                                     "semver"
+                                                                 ],
                                                     "gate":  {
                                                                  "agent":  "OPS",
                                                                  "profile":  "$ref:agentProfiles.OPS",
@@ -152,7 +176,13 @@
                                                     "govProfile":  "$ref:agentProfiles.GOV"
                                                 },
                           "sessionClose":  {
-                                               "triggers":  [ "cerrar sesion", "close session", "session end", "guardar sesion", "fin de sesion" ],
+                                               "triggers":  [
+                                                                "cerrar sesion",
+                                                                "close session",
+                                                                "session end",
+                                                                "guardar sesion",
+                                                                "fin de sesion"
+                                                            ],
                                                "gate":  {
                                                             "agent":  "GOV",
                                                             "profile":  "$ref:agentProfiles.GOV",
@@ -175,10 +205,27 @@
                                                "phase":  "SESSION_CLOSURE_PROTOCOL"
                                            },
                           "reporting":  {
-                                            "triggers":  [ "informe", "report", "reporte", "metrics", "dashboard", "resumen ejecutivo", "tokens", "costos", "telemetry", "stats" ],
+                                            "triggers":  [
+                                                             "informe",
+                                                             "report",
+                                                             "reporte",
+                                                             "metrics",
+                                                             "dashboard",
+                                                             "resumen ejecutivo",
+                                                             "tokens",
+                                                             "costos",
+                                                             "telemetry",
+                                                             "stats"
+                                                         ],
                                             "gate":  {
-                                                         "agents":  [ "DOC", "GOV" ],
-                                                         "profiles":  { "DOC":  "$ref:agentProfiles.DOC", "GOV":  "$ref:agentProfiles.GOV" },
+                                                         "agents":  [
+                                                                        "DOC",
+                                                                        "GOV"
+                                                                    ],
+                                                         "profiles":  {
+                                                                          "DOC":  "$ref:agentProfiles.DOC",
+                                                                          "GOV":  "$ref:agentProfiles.GOV"
+                                                                      },
                                                          "requiredBeforePublish":  [
                                                                                        "all referenced data paths exist",
                                                                                        "no fabricated metrics (each number has a source file cited)",
@@ -205,7 +252,33 @@
                                         "incident",
                                         "security audit",
                                         "review",
-                                        "audit"
+                                        "audit",
+                                        "de rollback",
+                                        "\"enforce norms\"",
+                                        "\"learn norms\"",
+                                        "\"validate documentation placement\"",
+                                        "- user mentions \"backup strategy\" or \"estrategia de backup\"",
+                                        "git",
+                                        "branch",
+                                        "git hooks",
+                                        "when user says \"judgment day\"",
+                                        "\"judgment-day\"",
+                                        "\"review adversarial\"",
+                                        "\"dual review\"",
+                                        "session start",
+                                        "project setup",
+                                        "orchestration checks",
+                                        "repository governance.",
+                                        "\"security\"",
+                                        "\"authentication\"",
+                                        "\"authorization\"",
+                                        "\"vulnerability\"",
+                                        "\"cve\"",
+                                        "\"xss\"",
+                                        "\"sql injection\"",
+                                        "\"secrets\"",
+                                        "\"encryption\".",
+                                        "- user mentions \"workflow\" or \"flujo de trabajo\""
                                     ],
                             "SAD":  [
                                         "architecture",
@@ -217,7 +290,51 @@
                                         "technical decision",
                                         "system design",
                                         "microservice",
-                                        "integration"
+                                        "integration",
+                                        "\"design api\"",
+                                        "\"rest endpoint\"",
+                                        "\"graphql\"",
+                                        "\"openapi\"",
+                                        "\"api versióning\"",
+                                        "\"pagination\"",
+                                        "\"api documentation\"",
+                                        "\"api error handling\".",
+                                        "\"mongodb\"",
+                                        "\"redis\"",
+                                        "\"nosql\"",
+                                        "\"document database\"",
+                                        "\"caching\"",
+                                        "\"cache\".",
+                                        "\"postgresql\"",
+                                        "\"mysql\"",
+                                        "\"sql\"",
+                                        "\"database\"",
+                                        "\"sqlalchemy\"",
+                                        "\"migration\"",
+                                        "\"transaction\".",
+                                        "\"design.md\"",
+                                        "\"design tokens\"",
+                                        "\"design system\"",
+                                        "\"create design md\"",
+                                        "\"validate design\"",
+                                        "\"ui tokens\".",
+                                        "\"ui design\"",
+                                        "\"component library\"",
+                                        "\"pixel-perfect\"",
+                                        "\"interface\"",
+                                        "\"visual design\".",
+                                        "\"ux research\"",
+                                        "\"user testing\"",
+                                        "\"usability\"",
+                                        "\"user behavior\"",
+                                        "\"persona\"",
+                                        "\"journey map\".",
+                                        "\"game design\"",
+                                        "\"game mechanics\"",
+                                        "\"balance\"",
+                                        "\"player experience\"",
+                                        "\"level design\"",
+                                        "\"gamedev\"."
                                     ],
                             "DEV":  [
                                         "implement",
@@ -231,7 +348,91 @@
                                         "frontend",
                                         "backend",
                                         "security",
-                                        "performance"
+                                        "performance",
+                                        "\"angular\"",
+                                        "\"angular component\"",
+                                        "\"angular service\"",
+                                        "\"angular signal\"",
+                                        "\"angular spa\"",
+                                        "\"@defer\"",
+                                        "\"standalone component\".",
+                                        "\"brand\"",
+                                        "\"brand guide\"",
+                                        "\"brand identity\"",
+                                        "\"branding\"",
+                                        "\"voice\"",
+                                        "\"tone\"",
+                                        "\"frontend\"",
+                                        "\"react component\"",
+                                        "\"ui implementation\"",
+                                        "\"responsive\"",
+                                        "\"state management\"",
+                                        "\"css\".",
+                                        "\"git branch\"",
+                                        "\"git merge\"",
+                                        "\"conflict\"",
+                                        "\"pull request\"",
+                                        "\"commit\"",
+                                        "\"rebase\"",
+                                        "\"cherry-pick\"",
+                                        "\"stash\".",
+                                        "\"go api\"",
+                                        "\"go backend\"",
+                                        "\"rest endpoint go\"",
+                                        "\"go json\"",
+                                        "\"go spa\"",
+                                        "\"go http handler\".",
+                                        "\"hiring\"",
+                                        "\"recruiting\"",
+                                        "\"interview\"",
+                                        "\"candidate\"",
+                                        "\"onboarding\"",
+                                        "\"job description\".",
+                                        "when writing code",
+                                        "refactoring",
+                                        "or implementing features.",
+                                        "\"next.js\"",
+                                        "\"next.js 15\"",
+                                        "\"app router\"",
+                                        "\"server component\"",
+                                        "\"server action\"",
+                                        "\"next.config\".",
+                                        "\"react\"",
+                                        "\"react 19\"",
+                                        "\"useactionstate\"",
+                                        "\"useformstatus\"",
+                                        "\"react compiler\".",
+                                        "\"script\"",
+                                        "\"hook\"",
+                                        "\"startup\"",
+                                        "\"auto-init\"",
+                                        "\"orchestrator script\"",
+                                        "\"powershell\"",
+                                        "\"bash\".",
+                                        "\"tailwind\"",
+                                        "\"tailwind css\"",
+                                        "\"cn()\"",
+                                        "\"classname\"",
+                                        "\"tailwind-4\"",
+                                        "\"ui\"",
+                                        "\"interface\".",
+                                        "\"typescript\"",
+                                        "\"type\"",
+                                        "\"generic\"",
+                                        "\"utility types\"",
+                                        "\"typescript strict\".",
+                                        "\"web artifact\"",
+                                        "\"html component\"",
+                                        "\"interactive demo\"",
+                                        "\"prototype\"",
+                                        "\"zod\"",
+                                        "\"schema validation\"",
+                                        "\"input validation\"",
+                                        "\"type safety\".",
+                                        "\"zustand\"",
+                                        "\"store\"",
+                                        "\"usestore\"",
+                                        "\"persistence\"."
                                     ],
                             "QA":  [
                                        "test",
@@ -244,7 +445,50 @@
                                        "playwright",
                                        "pytest",
                                        "quality",
-                                       "judgment day"
+                                       "judgment day",
+                                       "when creating a pull request",
+                                       "opening a pr",
+                                       "or preparing changes for review.",
+                                       "\"code review\"",
+                                       "\"review all\"",
+                                       "\"quality check\"",
+                                       "\"orchestrator\"",
+                                       "when writing go tests",
+                                       "using teatest",
+                                       "or adding test coverage.",
+                                       "when writing e2e tests - page objects",
+                                       "selectors",
+                                       "mcp workflow.",
+                                       "when writing python tests - fixtures",
+                                       "mocking",
+                                       "markers.",
+                                       "\"pentest\"",
+                                       "\"vulnerability scan\"",
+                                       "\"security audit\"",
+                                       "\"owasp\"",
+                                       "\"exploit\"",
+                                       "\"burp suite\".",
+                                       "\"test\"",
+                                       "\"testing\"",
+                                       "\"coverage\"",
+                                       "\"unit test\"",
+                                       "\"evidence qa\"",
+                                       "\"screenshot test\"",
+                                       "\"visual testing\"",
+                                       "\"qa certification\"",
+                                       "\"production readiness\".",
+                                       "\"write test\"",
+                                       "\"add test\"",
+                                       "\"test coverage\"",
+                                       "\"integration test\"",
+                                       "\"e2e test\"",
+                                       "\"testing framework\"",
+                                       "\"test setup\".",
+                                       "\"testing strategy\"",
+                                       "\"test pyramid\"",
+                                       "\"what to test\"",
+                                       "\"coverage target\"",
+                                       "\"integration test\"."
                                    ],
                             "OPS":  [
                                         "deploy",
@@ -256,7 +500,29 @@
                                         "helm",
                                         "release",
                                         "devops",
-                                        "pipeline"
+                                        "pipeline",
+                                        "\"sre\"",
+                                        "\"incident response\"",
+                                        "\"monitoring\"",
+                                        "\"on-call\"",
+                                        "\"automation\"",
+                                        "\"scalability\"",
+                                        "\"kubernetes\".",
+                                        "\"docker\"",
+                                        "\"container\"",
+                                        "\"kubernetes\"",
+                                        "\"k8s\"",
+                                        "\"deployment\"",
+                                        "\"docker-compose\"",
+                                        "\"dockerfile\"",
+                                        "\"pod\"",
+                                        "\"ingress\"",
+                                        "\"helm\".",
+                                        "\"release\"",
+                                        "\"changelog\"",
+                                        "\"versión bump\"",
+                                        "\"ship\"",
+                                        "\"cut release\""
                                     ],
                             "DOC":  [
                                         "documentation",
@@ -266,103 +532,117 @@
                                         "runbook",
                                         "specification",
                                         "bdd specs",
-                                        "sdd specs"
+                                        "sdd specs",
+                                        "when writing guides",
+                                        "readmes",
+                                        "rfcs",
+                                        "onboarding docs",
+                                        "\"docs\"",
+                                        "\"documentation\"",
+                                        "\"update docs\"",
+                                        "\"doc sync\"",
+                                        "\"informe\"",
+                                        "\"report\"",
+                                        "\"reporte\"",
+                                        "\"mtricas\"",
+                                        "\"metrics\"",
+                                        "\"dashboard\""
                                     ],
-"SCRIPT-GOV":  [
-                                                "script",
-                                                "powershell",
-                                                "parser error",
-                                                "syntax error",
-                                                "validate script",
-                                                "script validation",
-                                                "governance script",
-                                                "hook",
-                                                "pre-push",
-                                                "pre-commit",
-                                                "fix script",
-                                                "auto fix",
-                                                "auto-fix",
-                                                "autofix",
-                                                "script error",
-                                                "correct script"
-                                            ],
-"REPORT":  [
-                                            "informe",
-                                            "report",
-                                            "reporte",
-                                            "mtricas",
-                                            "metrics",
-                                            "analytics",
-                                            "anlisis",
-                                            "dashboard",
-                                            "resumen ejecutivo",
-                                            "gerencia",
-                                            "tokens",
-                                            "costos",
-                                            "consumo",
-                                            "sesiones",
-                                            "telemetry",
-                                            "telemetra",
-                                            "estadsticas",
-                                            "stats",
-                                            "resumen de sesin"
-                                        ],
-                             "GITFLOW-BRANCH":  [
-                                            "create branch",
-                                            "feature branch",
-                                            "bugfix branch",
-                                            "hotfix branch",
-                                            "release branch",
-                                            "git checkout",
-                                            "switch branch"
-                                        ],
-                             "GITFLOW-PR":  [
-                                            "pull request",
-                                            "PR",
-                                            "create PR",
-                                            "open PR",
-                                            "pr created"
-                                        ],
-                             "GITFLOW-HOOKS":  [
-                                            "pre-commit",
-                                            "pre-push",
-                                            "git hook",
-                                            "hook validation",
-                                            "git-hook"
-                                        ],
-                             "GITFLOW-MERGE":  [
-                                            "post-merge",
-                                            "merge sync",
-                                            "sync after merge",
-                                            "post-merge-sync"
-                                        ],
-                             "GITFLOW-WORKFLOW":  [
-                                            "gitflow",
-                                            "workflow",
-                                            "git workflow",
-                                            "git flow"
-                                        ],
-                             "GITFLOW-COMMIT":  [
-                                            "commit",
-                                            "conventional commit",
-                                            "commit message",
-                                            "git commit"
-                                        ],
-                             "GITFLOW-CONFLICT": [
-                                            "conflict",
-                                            "merge conflict",
-                                            "resolve conflict",
-                                            "git conflict"
-                                        ],
-                             "PR-REVIEW":  [
-                                            "pull request",
-                                            "create PR",
-                                            "open PR",
-                                            "review PR",
-                                            "merge PR",
-                                            "PR review"
-                                        ],
-                             "RELEASE":  [
+                            "SCRIPT-GOV":  [
+                                               "script",
+                                               "powershell",
+                                               "parser error",
+                                               "syntax error",
+                                               "validate script",
+                                               "script validation",
+                                               "governance script",
+                                               "hook",
+                                               "pre-push",
+                                               "pre-commit",
+                                               "fix script",
+                                               "auto fix",
+                                               "auto-fix",
+                                               "autofix",
+                                               "script error",
+                                               "correct script"
+                                           ],
+                            "REPORT":  [
+                                           "informe",
+                                           "report",
+                                           "reporte",
+                                           "mtricas",
+                                           "metrics",
+                                           "analytics",
+                                           "anlisis",
+                                           "dashboard",
+                                           "resumen ejecutivo",
+                                           "gerencia",
+                                           "tokens",
+                                           "costos",
+                                           "consumo",
+                                           "sesiones",
+                                           "telemetry",
+                                           "telemetra",
+                                           "estadsticas",
+                                           "stats",
+                                           "resumen de sesin"
+                                       ],
+                            "GITFLOW-BRANCH":  [
+                                                   "create branch",
+                                                   "feature branch",
+                                                   "bugfix branch",
+                                                   "hotfix branch",
+                                                   "release branch",
+                                                   "git checkout",
+                                                   "switch branch"
+                                               ],
+                            "GITFLOW-PR":  [
+                                               "pull request",
+                                               "PR",
+                                               "create PR",
+                                               "open PR",
+                                               "pr created"
+                                           ],
+                            "GITFLOW-HOOKS":  [
+                                                  "pre-commit",
+                                                  "pre-push",
+                                                  "git hook",
+                                                  "hook validation",
+                                                  "git-hook"
+                                              ],
+                            "GITFLOW-MERGE":  [
+                                                  "post-merge",
+                                                  "merge sync",
+                                                  "sync after merge",
+                                                  "post-merge-sync"
+                                              ],
+                            "GITFLOW-WORKFLOW":  [
+                                                     "gitflow",
+                                                     "workflow",
+                                                     "git workflow",
+                                                     "git flow"
+                                                 ],
+                            "GITFLOW-COMMIT":  [
+                                                   "commit",
+                                                   "conventional commit",
+                                                   "commit message",
+                                                   "git commit"
+                                               ],
+                            "GITFLOW-CONFLICT":  [
+                                                     "conflict",
+                                                     "merge conflict",
+                                                     "resolve conflict",
+                                                     "git conflict"
+                                                 ],
+                            "PR-REVIEW":  [
+                                              "pull request",
+                                              "create PR",
+                                              "open PR",
+                                              "review PR",
+                                              "merge PR",
+                                              "PR review"
+                                          ],
+                            "RELEASE":  [
                                             "release",
                                             "changelog",
                                             "version bump",
@@ -372,15 +652,22 @@
                                             "semver",
                                             "ship release"
                                         ],
-                             "SESSION-CLOSE":  [
-                                            "cerrar sesion",
-                                            "close session",
-                                            "session end",
-                                            "guardar sesion",
-                                            "fin de sesion",
-                                            "finalizar sesion"
-                                        ]
-                          },
+                            "SESSION-CLOSE":  [
+                                                  "cerrar sesion",
+                                                  "close session",
+                                                  "session end",
+                                                  "guardar sesion",
+                                                  "fin de sesion",
+                                                  "finalizar sesion"
+                                              ],
+                            "BA":  [
+                                       "\"sdd\"",
+                                       "\"spec\"",
+                                       "\"spec-driven\"",
+                                       "\"write spec\"",
+                                       "\"feature spec\""
+                                   ]
+                        },
     "adaptive_mode":  {
                           "enabled":  true,
                           "integration":  "orchestrator",
@@ -403,7 +690,10 @@
                           "BA":  {
                                      "temperature":  0.7,
                                      "hallucinationGuard":  "low",
-                                     "requiredEvidence":  [ "at least 3 clarification questions answered", "problem statement documented" ],
+                                     "requiredEvidence":  [
+                                                              "at least 3 clarification questions answered",
+                                                              "problem statement documented"
+                                                          ],
                                      "hedgingBlocked":  false,
                                      "maxRetries":  2,
                                      "escalateOnFailure":  "orchestrator",
@@ -412,7 +702,11 @@
                           "SAD":  {
                                       "temperature":  0.3,
                                       "hallucinationGuard":  "medium",
-                                      "requiredEvidence":  [ "architecture decision documented", "API contract defined", "at least 1 tradeoff explained" ],
+                                      "requiredEvidence":  [
+                                                               "architecture decision documented",
+                                                               "API contract defined",
+                                                               "at least 1 tradeoff explained"
+                                                           ],
                                       "hedgingBlocked":  false,
                                       "maxRetries":  2,
                                       "escalateOnFailure":  "orchestrator",
@@ -421,7 +715,11 @@
                           "DEV":  {
                                       "temperature":  0.15,
                                       "hallucinationGuard":  "high",
-                                      "requiredEvidence":  [ "file exists on disk", "no lint/compile errors", "at least 1 test covers the change" ],
+                                      "requiredEvidence":  [
+                                                               "file exists on disk",
+                                                               "no lint/compile errors",
+                                                               "at least 1 test covers the change"
+                                                           ],
                                       "hedgingBlocked":  true,
                                       "maxRetries":  3,
                                       "escalateOnFailure":  "QA",
@@ -430,7 +728,11 @@
                           "QA":  {
                                      "temperature":  0.1,
                                      "hallucinationGuard":  "critical",
-                                     "requiredEvidence":  [ "test file exists", "test passes (exit code 0)", "coverage report generated" ],
+                                     "requiredEvidence":  [
+                                                              "test file exists",
+                                                              "test passes (exit code 0)",
+                                                              "coverage report generated"
+                                                          ],
                                      "hedgingBlocked":  true,
                                      "maxRetries":  1,
                                      "escalateOnFailure":  "orchestrator",
@@ -439,7 +741,11 @@
                           "OPS":  {
                                       "temperature":  0.1,
                                       "hallucinationGuard":  "critical",
-                                      "requiredEvidence":  [ "deployment config validated", "rollback plan documented", "environment verified" ],
+                                      "requiredEvidence":  [
+                                                               "deployment config validated",
+                                                               "rollback plan documented",
+                                                               "environment verified"
+                                                           ],
                                       "hedgingBlocked":  true,
                                       "maxRetries":  1,
                                       "escalateOnFailure":  "orchestrator",
@@ -448,7 +754,11 @@
                           "GOV":  {
                                       "temperature":  0.1,
                                       "hallucinationGuard":  "critical",
-                                      "requiredEvidence":  [ "audit trail with file path and line", "no secrets detected", "compliance checklist signed off" ],
+                                      "requiredEvidence":  [
+                                                               "audit trail with file path and line",
+                                                               "no secrets detected",
+                                                               "compliance checklist signed off"
+                                                           ],
                                       "hedgingBlocked":  true,
                                       "maxRetries":  1,
                                       "escalateOnFailure":  "orchestrator",
@@ -457,7 +767,10 @@
                           "DOC":  {
                                       "temperature":  0.4,
                                       "hallucinationGuard":  "low",
-                                      "requiredEvidence":  [ "doc file written to disk", "all referenced paths exist" ],
+                                      "requiredEvidence":  [
+                                                               "doc file written to disk",
+                                                               "all referenced paths exist"
+                                                           ],
                                       "hedgingBlocked":  false,
                                       "maxRetries":  2,
                                       "escalateOnFailure":  "orchestrator",
@@ -466,28 +779,46 @@
                           "GITFLOW":  {
                                           "temperature":  0.1,
                                           "hallucinationGuard":  "critical",
-                                          "requiredEvidence":  [ "branch name matches naming convention", "commit follows conventional commits format", "no push to protected branch (main/develop) without PR" ],
+                                          "requiredEvidence":  [
+                                                                   "branch name matches naming convention",
+                                                                   "commit follows conventional commits format",
+                                                                   "no push to protected branch (main/develop) without PR"
+                                                               ],
                                           "hedgingBlocked":  true,
                                           "maxRetries":  1,
                                           "escalateOnFailure":  "orchestrator",
                                           "rationale":  "GitFlow is structural governance - wrong branch = broken history",
-                                          "aliases":  [ "GITFLOW-BRANCH", "GITFLOW-PR", "GITFLOW-HOOKS", "GITFLOW-MERGE", "GITFLOW-WORKFLOW", "GITFLOW-COMMIT", "GITFLOW-CONFLICT" ]
+                                          "aliases":  [
+                                                          "GITFLOW-BRANCH",
+                                                          "GITFLOW-PR",
+                                                          "GITFLOW-HOOKS",
+                                                          "GITFLOW-MERGE",
+                                                          "GITFLOW-WORKFLOW",
+                                                          "GITFLOW-COMMIT",
+                                                          "GITFLOW-CONFLICT"
+                                                      ]
                                       },
                           "SCRIPT":  {
                                          "temperature":  0.15,
                                          "hallucinationGuard":  "high",
-                                         "requiredEvidence":  [ "script parses without syntax errors (pwsh -NoProfile -Command)", "no hardcoded secrets", "idempotent execution verified" ],
+                                         "requiredEvidence":  [
+                                                                  "script parses without syntax errors (pwsh -NoProfile -Command)",
+                                                                  "no hardcoded secrets",
+                                                                  "idempotent execution verified"
+                                                              ],
                                          "hedgingBlocked":  true,
                                          "maxRetries":  2,
                                          "escalateOnFailure":  "orchestrator",
                                          "rationale":  "Scripts are automation - a bad script runs unattended and causes damage",
-                                         "aliases":  [ "SCRIPT-GOV" ]
+                                         "aliases":  [
+                                                         "SCRIPT-GOV"
+                                                     ]
                                      },
                           "hallucinationGuardLevels":  {
-                                                           "low":      "Log only - agent self-reports output, no external verification",
-                                                           "medium":   "Spot-check - orchestrator verifies at least 1 requiredEvidence item",
-                                                           "high":     "Full check - ALL requiredEvidence items verified before task marked done",
-                                                           "critical": "Full check + hedging language scan + external command verification required"
+                                                           "low":  "Log only - agent self-reports output, no external verification",
+                                                           "medium":  "Spot-check - orchestrator verifies at least 1 requiredEvidence item",
+                                                           "high":  "Full check - ALL requiredEvidence items verified before task marked done",
+                                                           "critical":  "Full check + hedging language scan + external command verification required"
                                                        }
                       }
 }
