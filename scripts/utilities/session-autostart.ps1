@@ -84,11 +84,11 @@ if (Test-Path $engramPolicy) {
 Write-Step 5 "Checking token budget and recording session start..."
 $tokenGuard = Join-Path $PSScriptRoot "TELEMETRY-METRICS\token-budget-guard.ps1"
 if (Test-Path $tokenGuard) {
-    & $tokenGuard -Task "session-start" -Risk "low" -Record
+    & $tokenGuard -Task "session-start" -Risk "low" -Record -ActualPromptTokens 0 -ActualCompletionTokens 0
     if ($LASTEXITCODE -ne 0) {
         Write-Warning "Token budget check completed with warnings"
     } else {
-        Write-Success "Token budget recorded - session tracking active"
+        Write-Success "Token budget recorded - session tracking active (real token tracking ready)"
     }
 } else {
     Write-Host "[SKIP] Token budget guard not found" -ForegroundColor Gray

@@ -62,7 +62,9 @@ function Invoke-TokenBudgetGuard {
         [string]$Task,
         [ValidateSet('low', 'medium', 'high')]
         [string]$Risk = 'medium',
-        [int]$EstimatedChars = 0
+        [int]$EstimatedChars = 0,
+        [int]$ActualPromptTokens = 0,
+        [int]$ActualCompletionTokens = 0
     )
 
     $guardScript = Join-Path $scriptDir '..\TELEMETRY-METRICS\token-budget-guard.ps1'
@@ -81,6 +83,12 @@ function Invoke-TokenBudgetGuard {
     if ($EstimatedChars -gt 0) {
         $guardArgs['EstimatedChars'] = $EstimatedChars
     }
+    if ($ActualPromptTokens -gt 0) {
+        $guardArgs['ActualPromptTokens'] = $ActualPromptTokens
+    }
+    if ($ActualCompletionTokens -gt 0) {
+        $guardArgs['ActualCompletionTokens'] = $ActualCompletionTokens
+    }
 
     $guardResult = $null
     try {
@@ -92,11 +100,11 @@ function Invoke-TokenBudgetGuard {
     }
     catch {
         # Fallback to legacy output mode if JSON parsing fails.
-        if ($EstimatedChars -gt 0) {
-            & $guardScript -Mode check -Task $Task -Risk $Risk -EstimatedChars $EstimatedChars -Record
-        } else {
-            & $guardScript -Mode check -Task $Task -Risk $Risk -Record
-        }
+        $fallbackArgs = @('-Mode', 'check', '-Task', $Task, '-Risk', $Risk, '-Record')
+        if ($EstimatedChars -gt 0) { $fallbackArgs += @('-EstimatedChars', $EstimatedChars) }
+        if ($ActualPromptTokens -gt 0) { $fallbackArgs += @('-ActualPromptTokens', $ActualPromptTokens) }
+        if ($ActualCompletionTokens -gt 0) { $fallbackArgs += @('-ActualCompletionTokens', $ActualCompletionTokens) }
+        & $guardScript @fallbackArgs
         return
     }
 
