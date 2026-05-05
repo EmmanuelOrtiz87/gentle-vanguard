@@ -40,12 +40,12 @@ jobs:
       - name: Validate config files
         shell: pwsh
         run: |
-          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\validate-configs.ps1
+          .\scripts\utilities\validate-configs.ps1
 
       - name: Agent self verification
         shell: pwsh
         run: |
-          $json = powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\agent-verify.ps1 -Json
+          $json = .\scripts\utilities\agent-verify.ps1 -Json
           $result = $json | ConvertFrom-Json
           if ($result.summary.failed -gt 0) {
             Write-Error "agent-verify reported failures"
