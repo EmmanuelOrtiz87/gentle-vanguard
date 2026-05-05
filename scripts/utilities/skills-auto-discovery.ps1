@@ -80,6 +80,7 @@ function Get-AgentFromSkillName {
         'testing-strategy-skill' = 'QA'
         'playwright-skill' = 'QA'
         'pytest-skill' = 'QA'
+        'go-testing' = 'QA'
         'docker-devops-skill' = 'OPS'
         'git-workflow-skill' = 'DEV'
         'architecture-governance' = 'SAD'
@@ -102,6 +103,91 @@ function Get-AgentFromSkillName {
         'release-management-skill' = 'OPS'
         'gitflow-orchestrator-skill' = 'GOV'
         'branch-pr' = 'QA'
+        'karpathy-guidelines' = 'DEV'
+        'auto-delegation-router' = 'GOV'
+        'github-pr-skill' = 'QA'
+        'mcp-skill' = 'GOV'
+        'ai-sdk-5-skill' = 'DEV'
+        'firecrawl-web-skill' = 'DEV'
+        'distributed-tracing-skill' = 'GOV'
+        'cloud-agent-connector-skill' = 'GOV'
+        'context-engineering-skill' = 'GOV'
+        'session-workflow-skill' = 'GOV'
+        'shellcheck-standards-skill' = 'DEV'
+        'script-runtime-engineering-skill' = 'DEV'
+        'skill-creator-skill' = 'GOV'
+        'skill-factory-skill' = 'GOV'
+        'skill-registry' = 'GOV'
+        'project-scaffolding-skill' = 'DEV'
+        'gitflow-skill' = 'DEV'
+        'commit-hygiene-skill' = 'DEV'
+        'issue-creation' = 'QA'
+        'chained-pr' = 'QA'
+        'config-risk-analyzer' = 'GOV'
+        'foundation-audit-skill' = 'GOV'
+        'foundation-manager-skill' = 'GOV'
+        'sync-automation' = 'GOV'
+        'cross-workspace-sync' = 'GOV'
+        'monitoring-aggregator' = 'GOV'
+        'parallel-execution-limits' = 'GOV'
+        'guardian-fallback-skill' = 'GOV'
+        'technical-debt-skill' = 'QA'
+        'testing-coverage-skill' = 'QA'
+        'testing-evidence-qa' = 'QA'
+        'security-pentester' = 'QA'
+        'security-expert-skill' = 'GOV'
+        'incident-response-skill' = 'GOV'
+        'incident-response-plan' = 'GOV'
+        'observability-skill' = 'GOV'
+        'workflow-orchestrator' = 'GOV'
+        'adaptive-orchestrator' = 'GOV'
+        'adaptive-mode-orchestrator' = 'GOV'
+        'backend-engineer' = 'DEV'
+        'frontend-engineer' = 'DEV'
+        'android-architecture-skill' = 'SAD'
+        'android-kotlin-skill' = 'DEV'
+        'android-kotlin-coroutines-skill' = 'DEV'
+        'android-jetpack-compose-skill' = 'DEV'
+        'ios-swiftui-patterns-skill' = 'DEV'
+        'flutter-skill' = 'DEV'
+        'react-native-skill' = 'DEV'
+        'ui-mobile-skill' = 'DEV'
+        'mobile-developer' = 'DEV'
+        'mobile-app-debugging' = 'QA'
+        'ios-swift-development' = 'DEV'
+        'flutter-development' = 'DEV'
+        'design-md' = 'SAD'
+        'design-ui-designer' = 'SAD'
+        'design-ux-researcher' = 'SAD'
+        'brand-guide-skill' = 'DOC'
+        'visual-content-skill' = 'DOC'
+        'content-output-skill' = 'DOC'
+        'content-strategist' = 'DOC'
+        'marketing-content-writer' = 'DOC'
+        'marketing-growth-hacker' = 'DOC'
+        'seo-specialist' = 'DOC'
+        'seo-audit-skill' = 'DOC'
+        'terraform-infrastructure' = 'OPS'
+        'kubernetes-deployment' = 'OPS'
+        'devops-sre' = 'OPS'
+        'web-artifacts-builder-skill' = 'DEV'
+        'web-performance-optimization' = 'DEV'
+        'game-designer' = 'SAD'
+        'product-manager' = 'BA'
+        'project-manager' = 'BA'
+        'data-analyst' = 'SAD'
+        'data-scientist' = 'SAD'
+        'business-telemetry-skill' = 'GOV'
+        'hr-talent-acquisition' = 'BA'
+        'customer-success-manager' = 'BA'
+        'customer-support-lead' = 'BA'
+        'sales-account-executive' = 'BA'
+        'sales-outbound-strategist' = 'BA'
+        'operations-manager' = 'OPS'
+        'finance-financial-analyst' = 'SAD'
+        'legal-compliance-officer' = 'GOV'
+        'backlog-management-skill' = 'BA'
+        'multi-agent-registry' = 'GOV'
     }
     
     if ($skillToAgent.ContainsKey($SkillName)) {
@@ -109,13 +195,13 @@ function Get-AgentFromSkillName {
     }
     
     # Fallback: try to infer from skill name
-    if ($SkillName -match 'orchestrator|governance|judgment') { return 'GOV' }
-    if ($SkillName -match 'test|playwright|pytest|quality') { return 'QA' }
-    if ($SkillName -match 'devops|docker|kubernetes|release|deploy') { return 'OPS' }
-    if ($SkillName -match 'doc|readme|markdown|report') { return 'DOC' }
-    if ($SkillName -match 'arch|api|database|design') { return 'SAD' }
-    if ($SkillName -match 'angular|react|next|vue|svelte|frontend|ui') { return 'DEV' }
-    if ($SkillName -match 'bdd|scenario|requirement|sdd') { return 'BA' }
+    if ($SkillName -match 'orchestrator|governance|judgment|workflow|monitoring|observability|incident|security|compliance') { return 'GOV' }
+    if ($SkillName -match 'test|playwright|pytest|quality|pentest|evidence|coverage|chained-pr|branch-pr|github-pr') { return 'QA' }
+    if ($SkillName -match 'devops|docker|kubernetes|release|deploy|terraform|sre|operations') { return 'OPS' }
+    if ($SkillName -match 'doc|readme|markdown|report|content|brand|seo|marketing|cognitive') { return 'DOC' }
+    if ($SkillName -match 'arch|api|database|design|data-analyst|data-scientist|finance|game-designer') { return 'SAD' }
+    if ($SkillName -match 'angular|react|next|vue|svelte|frontend|backend|ui|mobile|flutter|ios|android|kotlin|swift|typescript|golang|zod|zustand|tailwind|web-artifacts|web-performance|karpathy|script-runtime|git-workflow|gitflow|commit-hygiene|project-scaffolding|firecrawl|ai-sdk') { return 'DEV' }
+    if ($SkillName -match 'bdd|scenario|requirement|sdd|product|project|backlog|hr|customer|sales|talent') { return 'BA' }
     
     return $null
 }
