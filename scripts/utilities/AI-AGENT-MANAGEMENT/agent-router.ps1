@@ -170,16 +170,17 @@ function Get-AgentResult {
     $baseTokenEstimate = if ($execCtx) { $execCtx.token_estimate + 500 } else { 2000 }
 
     $result = @{
-        lane_id = "agent-$AgentName-$($timestamp -replace '[:\.]', '-' -replace 'T', '-')"
-        agent = $AgentName
-        role = $AGENT_DESCRIPTIONS[$AgentName]
+        agent_id = $AgentName
+        agent_name = $AGENT_DESCRIPTIONS[$AgentName]
         status = 'dispatched'
         task = $TaskText
         action = $ActionType
         timestamp = $timestamp
+        duration_ms = 0
         skills_loaded = @($availableSkills | ForEach-Object { $_.name })
         skills_missing = @($missingSkills | ForEach-Object { $_.name })
         deliverables_expected = $deliverables
+        deliverables = @()
         files_touched = @()
         findings = @()
         validation_result = $null
@@ -192,6 +193,17 @@ function Get-AgentResult {
             continuity_instruction = "Maintain current session context, rules, and definitions. Do not deviate from established workflow."
             required_skills_enforced = @($availableSkills | ForEach-Object { $_.name })
         }
+        metrics = @{
+            tokens_used = 0
+            files_touched = 0
+            lines_added = 0
+            lines_deleted = 0
+        }
+        issues = @()
+        next_steps = @()
+        confidence = 0
+        summary = ""
+        details = ""
     }
     
     if ($result.skills_missing.Count -eq 0) {
