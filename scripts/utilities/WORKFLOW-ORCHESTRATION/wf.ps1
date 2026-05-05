@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'foundation-sync', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'foundation-sync', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -2715,6 +2715,16 @@ switch ($Command) {
                 & $dispatchScript @dispatchArgs
             }
         }
+    }
+
+    'install' {
+        Write-Step "Foundation TUI Installer (FF-018)"
+        $installScript = Join-Path $scriptDir '..\foundation-installer-tui.ps1'
+        if (-not (Test-Path $installScript)) {
+            Write-Error "Installer script not found: $installScript"
+            exit 1
+        }
+        & $installScript @RemainingArgs
     }
 
     'events' {
