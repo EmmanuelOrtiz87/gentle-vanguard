@@ -55,6 +55,28 @@ Chart:
   - `fresh`: data updated in 0-1 days,
   - `stale by N days`: no recent token records.
 
+Proactive Alerts panel:
+- Displayed at the bottom of Overview.
+- Automatically derived from current telemetry on every generation.
+- Green "No alerts" when all thresholds pass.
+- Alert codes and their meanings:
+
+| Code | Severity | Trigger condition |
+|---|---|---|
+| `DATA_STALE` | warn | Last token record older than 3 days |
+| `BUDGET_WARNING` | warn | Forecast 70–89% of monthly budget |
+| `BUDGET_CRITICAL` | err | Forecast ≥ 90% of monthly budget |
+| `TOKEN_SPIKE` | warn | Any single day > 2× 14-day daily average |
+| `RUNTIME_ERRORS_MODERATE` | warn | Error rate 10–19% |
+| `RUNTIME_ERRORS_HIGH` | err | Error rate ≥ 20% |
+| `LATENCY_ELEVATED` | warn | Avg latency 4 000–8 000 ms |
+| `LATENCY_HIGH` | err | Avg latency > 8 000 ms |
+| `COST_REGRESSION` | warn | Current month cost > +20% vs previous month |
+| `LOW_EFFICIENCY` | warn | Avg efficiency score < 0.5 |
+
+Each badge includes the anomaly detail and an actionable recommendation.
+Alerts are stateless: they recompute every time the dashboard is generated.
+
 Expected interpretation:
 - A stale label does not always mean failure; it may mean no activity.
 - A drop to zero with stale data usually means telemetry inactivity, not optimization.
