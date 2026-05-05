@@ -5,6 +5,9 @@
 #   . (Join-Path $PSScriptRoot 'hook-output-safety.ps1')
 # Then replace Write-Host with Write-SafeHook for lines that may contain variable expansions.
 
+$homePath = if ($env:USERPROFILE) { $env:USERPROFILE } elseif ($env:HOME) { $env:HOME } else { '/home/' }
+$winDirPath = if ($env:SystemRoot) { $env:SystemRoot } else { Join-Path 'C:' 'Windows' }
+
 $script:_SENSITIVE_PATTERNS = @(
     # Raw env var values injected into strings
     @{ Name = 'API_KEY';         Pattern = '(?i)(api[_-]?key|apikey)[^\s]*\s*[:=]\s*\S{8,}' },
@@ -14,8 +17,8 @@ $script:_SENSITIVE_PATTERNS = @(
     @{ Name = 'GITHUB_TOKEN';    Pattern = 'ghp_[A-Za-z0-9]{36}' },
     @{ Name = 'STRIPE_KEY';      Pattern = 'sk_live_[0-9a-zA-Z]{24,}' },
     # Full absolute paths that reveal home dir or infra layout
-    @{ Name = 'ABS_PATH_HOME';   Pattern = [regex]::Escape($env:USERPROFILE ?? 'C:\Users\') + '[^\s]+' },
-    @{ Name = 'ABS_PATH_WINDIR'; Pattern = [regex]::Escape($env:SystemRoot ?? 'C:\Windows') + '[^\s]+' }
+    @{ Name = 'ABS_PATH_HOME';   Pattern = [regex]::Escape($homePath) + '[^\s]+' },
+    @{ Name = 'ABS_PATH_WINDIR'; Pattern = [regex]::Escape($winDirPath) + '[^\s]+' }
 )
 
 <#

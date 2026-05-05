@@ -143,8 +143,8 @@ Set-Location $repoRoot
 Write-Check "Scanning PowerShell scripts in $repoRoot..."
 
 Get-ChildItem -Path $repoRoot -Include $patterns -Recurse -File | Where-Object {
-    $_.FullName -notmatch '\\\.git\\' -and
-    $_.FullName -notmatch '\\node_modules\\'
+    $_.FullName -notmatch '[\\/]\.git[\\/]' -and
+    $_.FullName -notmatch '[\\/]node_modules[\\/]'
 } | ForEach-Object {
     $scanned++
     $content = Get-Content -Path $_.FullName -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
@@ -213,8 +213,8 @@ if ($script:Issues.Count -gt 0) {
             $script:Issues = @()
             $passCount = 0
             Get-ChildItem -Path $repoRoot -Include $patterns -Recurse -File | Where-Object {
-                $_.FullName -notmatch '\\\.git\\' -and
-                $_.FullName -notmatch '\\node_modules\\'
+                $_.FullName -notmatch '[\\/]\.git[\\/]' -and
+                $_.FullName -notmatch '[\\/]node_modules[\\/]'
             } | ForEach-Object {
                 $content = Get-Content -Path $_.FullName -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
                 if ($content) {
