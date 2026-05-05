@@ -28,13 +28,26 @@ function Write-Header {
 }
 
 function Write-Step {
-    param([int]$Step, [int]$Total, [string]$Message)
+    param(
+        [int]$Step,
+        [int]$Total,
+        [string]$Message
+    )
     Write-Host "[$Step/$Total] $Message" -ForegroundColor $colorMenu
 }
 
-function Write-Success { param([string]$Message) Write-Host "  [✓] $Message" -ForegroundColor $colorSuccess }
-function Write-Warning { param([string]$Message) Write-Host "  [!] $Message" -ForegroundColor $colorWarning }
-function Write-Error { param([string]$Message) Write-Host "  [X] $Message" -ForegroundColor $colorError }
+function Write-Success {
+    param([string]$Message)
+    Write-Host "  [✓] $Message" -ForegroundColor $colorSuccess
+}
+function Write-Warning {
+    param([string]$Message)
+    Write-Host "  [!] $Message" -ForegroundColor $colorWarning
+}
+function Write-Error {
+    param([string]$Message)
+    Write-Host "  [X] $Message" -ForegroundColor $colorError
+}
 
 function Read-Choice {
     param(
