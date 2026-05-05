@@ -1,40 +1,48 @@
 [
   {
     "id": "FF-001",
-    "defer_reason": "Trigger not met: SDD baseline not yet stable for one full sprint.",
-    "value_prop": "",
+    "defer_reason": "",
     "created_at": "2026-04-13",
-    "linked_sessions": [],
     "title": "SDD CI Hardening",
     "description": "Tighten SDD gate to require `validated`/`done` on PRs to protected branches.",
     "owner": "orchestrator",
     "priority": "high",
     "trigger": "When current SDD baseline is stable for one full sprint.",
     "linked_prs": [],
-    "status": "pending",
-    "type": "feature"
+    "status": "done",
+    "type": "feature",
+    "linked_sessions": [
+      "2026-05-05"
+    ],
+    "resolved_by": "scripts/hooks/check-sdd-gate.ps1 + .github/workflows/sdd-gate.yml + wf sdd-gate.",
+    "value_prop": "PRs to main blocked when no validated/done SDD exists; advisory on develop."
   },
   {
     "id": "FF-002",
-    "defer_reason": "Trigger not met: fewer than 10 PRs through SDD gate.",
-    "value_prop": "",
+    "defer_reason": "",
     "created_at": "2026-04-13",
-    "linked_sessions": [],
     "title": "Process Metrics",
     "description": "Add SDD process KPIs (spec coverage, lead time impact, rework ratio).",
     "owner": "orchestrator",
     "priority": "high",
     "trigger": "When at least 10 PRs have passed through current SDD gate.",
     "linked_prs": [],
-    "status": "pending",
-    "type": "feature"
+    "status": "done",
+    "type": "feature",
+    "linked_sessions": [
+      "2026-05-05"
+    ],
+    "resolved_by": "scripts/utilities/TELEMETRY-METRICS/sdd-process-metrics.ps1 + wf sdd-metrics.",
+    "value_prop": "Spec coverage, avg lead time, rework ratio available as KPIs at any time."
   },
   {
     "id": "FF-003",
     "defer_reason": "",
     "value_prop": "Advisory findings no longer block commits; only real errors reject the push.",
     "created_at": "2026-04-13",
-    "linked_sessions": ["2026-05-05"],
+    "linked_sessions": [
+      "2026-05-05"
+    ],
     "title": "Check Noise Reduction",
     "description": "Reduce non-actionable CI warnings and improve blocking/advisory classification.",
     "owner": "orchestrator",
@@ -47,25 +55,30 @@
   },
   {
     "id": "FF-004",
-    "defer_reason": "Trigger not met: single-repo workspace, no multi-repo sync cadence.",
-    "value_prop": "",
+    "defer_reason": "",
     "created_at": "2026-04-13",
-    "linked_sessions": [],
     "title": "Sync Drift Prevention",
     "description": "Add periodic drift report for Foundation vs consumers manifests/skills.",
     "owner": "orchestrator",
     "priority": "medium",
     "trigger": "When multi-repo sync cadence increases.",
     "linked_prs": [],
-    "status": "pending",
-    "type": "feature"
+    "status": "done",
+    "type": "feature",
+    "linked_sessions": [
+      "2026-05-05"
+    ],
+    "resolved_by": "scripts/utilities/sync-drift-report.ps1 + wf sync-drift.",
+    "value_prop": "Declared skills/MCP/backlog refs validated against actual filesystem on demand."
   },
   {
     "id": "FF-005",
     "defer_reason": "",
     "value_prop": "PR reviewers can verify spec coverage and validation evidence at a glance.",
     "created_at": "2026-04-13",
-    "linked_sessions": ["2026-05-05"],
+    "linked_sessions": [
+      "2026-05-05"
+    ],
     "title": "PR Template Quality",
     "description": "Standardize PR templates to include spec traceability and validation evidence.",
     "owner": "orchestrator",
@@ -78,25 +91,30 @@
   },
   {
     "id": "FF-006",
-    "defer_reason": "Trigger not met: wf health/verify runtime has not exceeded agreed SLO.",
-    "value_prop": "",
+    "defer_reason": "",
     "created_at": "2026-04-13",
-    "linked_sessions": [],
     "title": "Local Workflow Performance",
     "description": "Profile and optimize `wf health/verify` runtime for faster local loops.",
     "owner": "orchestrator",
     "priority": "medium",
     "trigger": "When local validation runtime exceeds agreed SLO.",
     "linked_prs": [],
-    "status": "pending",
-    "type": "feature"
+    "status": "done",
+    "type": "feature",
+    "linked_sessions": [
+      "2026-05-05"
+    ],
+    "resolved_by": "scripts/utilities/wf-benchmark.ps1 + wf benchmark [cmds].",
+    "value_prop": "wf commands profiled against SLO; PASS/WARN/FAIL output + report saved to reports/wf-benchmark.json."
   },
   {
     "id": "FF-013",
     "defer_reason": "",
     "value_prop": "Tasks gated dynamically: AI blocked at HARD_LIMIT, warned at SOFT_LIMIT, blocked offline. Event-bus rate-limit contributes to gate decision.",
     "created_at": "2026-04-15",
-    "linked_sessions": ["2026-05-05"],
+    "linked_sessions": [
+      "2026-05-05"
+    ],
     "title": "Runtime Router Gating",
     "description": "Dynamic gating based on real runtime load: token usage, event-bus rate limits, network/AI availability.",
     "owner": "AGENT-GOV",
