@@ -18,8 +18,8 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
-$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot  = (Resolve-Path (Join-Path $scriptDir '..\..\..\..')).Path
+$scriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+$repoRoot  = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 $wfScript  = Join-Path $repoRoot 'scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1'
 
 # ─── SLO defaults ────────────────────────────────────────────────────────────
