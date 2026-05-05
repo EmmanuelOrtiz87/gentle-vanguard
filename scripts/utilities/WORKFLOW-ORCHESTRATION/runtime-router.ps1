@@ -1,6 +1,8 @@
 param(
-    [ValidateSet('status', 'route')]
+    [ValidateSet('status', 'route', 'gate')]
     [string]$Mode = 'status',
+    [ValidateSet('ai', 'heavy-ai', 'network', 'local', 'metrics', 'any')]
+    [string]$TaskType = 'any',
     [switch]$Strict,
     [switch]$AsJson,
     [switch]$Quiet
@@ -10,8 +12,9 @@ $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 $configPath = Join-Path $repoRoot 'config\orchestrator.json'
-$tokenGuardScript = Join-Path $scriptDir 'token-budget-guard.ps1'
+$tokenGuardScript = Join-Path $scriptDir '..\TELEMETRY-METRICS\token-budget-guard.ps1'
 $runEngramScript = Join-Path $scriptDir 'run-engram.ps1'
+$rateLimitStatePath = Join-Path $repoRoot '.event-bus\rate-limit-state.json'
 
 function Write-InfoLine {
     param([string]$Message)
@@ -74,6 +77,114 @@ function Get-AICapability {
     }
 }
 
+function Get-RateLimitLoad {
+    if (-not (Test-Path $rateLimitStatePath)) {
+        return @{ pct = 0; near_limit = $false; at_limit = $false; window_key = '' }
+    }
+    try {
+        $state = Get-Content -Path $rateLimitStatePath -Raw -Encoding UTF8 | ConvertFrom-Json
+        $windowKey = [string]$state.window_key
+        $count = [int]$state.count
+        $limit = if ([int]$state.limit -gt 0) { [int]$state.limit } else { 60 }
+        $pct = [math]::Round(($count / $limit) * 100, 1)
+        return @{
+            pct        = $pct
+            near_limit = ($pct -ge 75)
+            at_limit   = ($pct -ge 100)
+            window_key = $windowKey
+            count      = $count
+            limit      = $limit
+        }
+    } catch {
+        return @{ pct = 0; near_limit = $false; at_limit = $false; window_key = '' }
+    }
+}
+
+function Invoke-Gate {
+    param(
+        [string]$RuntimeMode,
+        [string]$TokenStatus,
+        [string]$GateReason,
+        [string]$Task,
+        [hashtable]$RateLimit
+    )
+
+    # Task categories: local/metrics always pass; network/ai/heavy-ai depend on mode
+    $alwaysLocal = @('local', 'metrics', 'any')
+
+    if ($Task -in $alwaysLocal) {
+        $decision = 'allowed'
+        $gateNote  = 'Local/metrics tasks always allowed.'
+    } elseif ($RuntimeMode -eq 'ai_orchestrated') {
+        $decision = 'allowed'
+        $gateNote  = 'Full runtime available.'
+    } elseif ($RuntimeMode -eq 'offline_deterministic') {
+        if ($Task -in @('network', 'ai', 'heavy-ai')) {
+            $decision = 'blocked'
+            $gateNote  = "Offline mode: $GateReason. Network/AI tasks blocked."
+        } else {
+            $decision = 'allowed'
+            $gateNote  = 'Offline mode: local-only tasks allowed.'
+        }
+    } elseif ($RuntimeMode -eq 'hybrid_guarded') {
+        if ($TokenStatus -eq 'HARD_LIMIT') {
+            if ($Task -in @('ai', 'heavy-ai')) {
+                $decision = 'blocked'
+                $gateNote  = 'Token HARD_LIMIT: AI tasks blocked.'
+            } else {
+                $decision = 'warned'
+                $gateNote  = 'Token HARD_LIMIT: proceed with caution, prefer local scripts.'
+            }
+        } elseif ($TokenStatus -eq 'SOFT_LIMIT') {
+            if ($Task -eq 'heavy-ai') {
+                $decision = 'blocked'
+                $gateNote  = 'Token SOFT_LIMIT: heavy-AI tasks blocked.'
+            } elseif ($Task -eq 'ai') {
+                $decision = 'warned'
+                $gateNote  = 'Token SOFT_LIMIT: AI tasks allowed but monitor usage.'
+            } else {
+                $decision = 'allowed'
+                $gateNote  = 'Token SOFT_LIMIT: non-AI tasks allowed.'
+            }
+        } else {
+            # engram missing or other hybrid reason
+            $decision = 'warned'
+            $gateNote  = "Hybrid guarded ($GateReason): continuity risk, proceed carefully."
+        }
+    } else {
+        $decision = 'allowed'
+        $gateNote  = 'Unknown mode: defaulting to allowed.'
+    }
+
+    # Rate-limit overlay: if event bus near capacity, add advisory
+    $rlNote = ''
+    if ($RateLimit.near_limit -and $decision -eq 'allowed') {
+        $decision = 'warned'
+        $rlNote = " Event-bus rate limit at $($RateLimit.pct)% ($($RateLimit.count)/$($RateLimit.limit))."
+    } elseif ($RateLimit.at_limit) {
+        if ($decision -ne 'blocked') { $decision = 'warned' }
+        $rlNote = " Event-bus rate limit FULL — new events will be rejected."
+    }
+
+    # Exit code mapping
+    $exitCode = switch ($decision) {
+        'allowed' { 0 }
+        'warned'  { 1 }
+        'blocked' { 2 }
+        default   { 0 }
+    }
+
+    return @{
+        decision   = $decision
+        exit_code  = $exitCode
+        note       = ($gateNote + $rlNote).Trim()
+        task_type  = $Task
+        runtime_mode = $RuntimeMode
+        token_status = $TokenStatus
+        rate_limit_pct = $RateLimit.pct
+    }
+}
+
 function Get-TokenStatus {
     if (-not (Test-Path $tokenGuardScript)) {
         return @{
@@ -114,6 +225,7 @@ $aiCapability = Get-AICapability
 $token = Get-TokenStatus
 $engramPath = Resolve-EngramCommand
 $engramAvailable = [bool]$engramPath
+$rateLimit = Get-RateLimitLoad
 
 $runtimeMode = 'ai_orchestrated'
 $reason = 'AI and network capabilities available'
@@ -162,6 +274,28 @@ if ($runtimeMode -eq 'offline_deterministic') {
     $actions += '.\\scripts\\utilities\\wf.ps1 stack-dashboard'
 }
 
+# ─── GATE MODE ────────────────────────────────────────────────────────────────
+if ($Mode -eq 'gate') {
+    $gateResult = Invoke-Gate -RuntimeMode $runtimeMode -TokenStatus $token.status `
+        -GateReason $reason -Task $TaskType -RateLimit $rateLimit
+
+    if ($AsJson) {
+        $gateResult | ConvertTo-Json -Depth 3
+    } else {
+        $color = switch ($gateResult.decision) {
+            'allowed' { 'Green'  }
+            'warned'  { 'Yellow' }
+            'blocked' { 'Red'    }
+            default   { 'White'  }
+        }
+        Write-Host "[GATE] $($gateResult.decision.ToUpper())" -ForegroundColor $color -NoNewline
+        Write-Host " — task: $($gateResult.task_type) | mode: $($gateResult.runtime_mode) | token: $($gateResult.token_status) | event-bus: $($gateResult.rate_limit_pct)%"
+        Write-Host "       $($gateResult.note)" -ForegroundColor $color
+    }
+    exit $gateResult.exit_code
+}
+# ─────────────────────────────────────────────────────────────────────────────
+
     $result = [ordered]@{
         runtime_mode = $runtimeMode
         reason = $reason
@@ -174,6 +308,8 @@ if ($runtimeMode -eq 'offline_deterministic') {
         engram_path = if ($engramPath) { $engramPath } else { '' }
         token_status = $token.status
         token_projected_pct = $token.projected_pct
+        rate_limit_pct = $rateLimit.pct
+        rate_limit_near = $rateLimit.near_limit
         recommended_next_actions = $actions
     }
 
@@ -185,7 +321,7 @@ if ($AsJson) {
     Write-Host "Reason: $($result.reason)" -ForegroundColor Cyan
     Write-Host "Delegation: $($result.delegation_strategy)" -ForegroundColor Cyan
     Write-Host "Network: $($result.network_available) | AI: $($result.ai_available) | Engram: $($result.engram_available)" -ForegroundColor White
-    Write-Host "Token status: $($result.token_status) ($($result.token_projected_pct)%)" -ForegroundColor White
+    Write-Host "Token status: $($result.token_status) ($($result.token_projected_pct)%) | Event-bus: $($result.rate_limit_pct)%" -ForegroundColor White
     Write-Host 'Recommended next actions:' -ForegroundColor Yellow
     foreach ($action in $actions) {
         Write-Host "  - $action" -ForegroundColor Yellow
