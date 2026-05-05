@@ -90,10 +90,14 @@ Cards:
 - Forecast vs Budget: projected month-end utilization.
 - Forecast Variance: forecast minus budget.
 - ROI Status: governance traffic light.
+- Prev Month Cost: historical reference baseline.
+- MoM Cost Trend: current month vs previous month percentage variation.
 - Net Benefit MTD/YTD: modeled savings minus actual estimated cost.
 
-Chart:
+Charts:
 - Monthly ROI Comparison (Budget vs MTD Actual vs Forecast vs MTD Saved).
+- 3-Month Cost Trend (current month + previous two months).
+- Recent Monthly Breakdown table for month-by-month token and USD context.
 
 Traffic-light policy:
 - GREEN: forecast below 70% of monthly budget.
