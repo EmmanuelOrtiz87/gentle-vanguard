@@ -51,6 +51,7 @@ $orch       = Read-JsonFile (Join-Path $repoRoot 'config\orchestrator.json')
 $eventHist  = Read-JsonFile (Join-Path $repoRoot '.event-bus\history.json')
 $rlState    = Read-JsonFile (Join-Path $repoRoot '.event-bus\rate-limit-state.json')
 $tokenCsv   = Join-Path $repoRoot 'docs\sessions\metrics\token-guard-usage.csv'
+$telemetryCsv = Join-Path $repoRoot 'docs\management\telemetry-master.csv'
 
 # ── Extract metrics ────────────────────────────────────────────────────────────
 $generated = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
@@ -63,6 +64,9 @@ $runtimeState = if ($metrics -and $metrics.runtime_state) { $metrics.runtime_sta
 $sessionsTotal   = if ($runtimeState -and $runtimeState.session_count)          { [int]$runtimeState.session_count }          else { 0 }
 $dispatchTotal   = if ($runtimeState -and $runtimeState.total_delegations)      { [int]$runtimeState.total_delegations }      else { 0 }
 $tokensAllTime   = if ($runtimeState -and $runtimeState.cumulative_token_usage) { [int]$runtimeState.cumulative_token_usage } else { 0 }
+$avgDurationMin  = 0
+$efficiencyAvg   = 0
+$telemetryRowsCount = 0
 
 # Event history stats
 $eventCount = 0
@@ -100,6 +104,70 @@ if (Test-Path $tokenCsv) {
         }
     } catch { }
 }
+
+  # Telemetry master CSV (accumulated executive history)
+  $telemetryRows = @()
+  if (Test-Path $telemetryCsv) {
+    try {
+      $telemetryRows = Import-Csv -Path $telemetryCsv -Encoding UTF8
+      $telemetryRowsCount = @($telemetryRows).Count
+
+      if ($telemetryRowsCount -gt 0) {
+        # Use real accumulated sessions from telemetry history.
+        $sessionIds = @($telemetryRows | Where-Object { $_.Session_ID } | Select-Object -ExpandProperty Session_ID -Unique)
+        if ($sessionIds.Count -gt 0) {
+          $sessionsTotal = $sessionIds.Count
+        }
+
+        $telemetryTokenSum = ($telemetryRows | ForEach-Object {
+          $value = 0
+          [void][int]::TryParse([string]$_.Tokens_Estimated, [ref]$value)
+          $value
+        } | Measure-Object -Sum).Sum
+
+        if ($telemetryTokenSum -gt 0) {
+          $tokensAllTime = [int]$telemetryTokenSum
+        }
+
+        $durationValues = @($telemetryRows | ForEach-Object {
+          $v = 0.0
+          [void][double]::TryParse(([string]$_.Duration_Min).Replace(',', '.'), [System.Globalization.NumberStyles]::Any, [System.Globalization.CultureInfo]::InvariantCulture, [ref]$v)
+          if ($v -gt 0) { $v }
+        })
+        if ($durationValues.Count -gt 0) {
+          $avgDurationMin = [math]::Round(($durationValues | Measure-Object -Average).Average, 1)
+        }
+
+        $effValues = @($telemetryRows | ForEach-Object {
+          $v = 0.0
+          [void][double]::TryParse(([string]$_.Efficiency_Score).Replace(',', '.'), [System.Globalization.NumberStyles]::Any, [System.Globalization.CultureInfo]::InvariantCulture, [ref]$v)
+          if ($v -gt 0) { $v }
+        })
+        if ($effValues.Count -gt 0) {
+          $efficiencyAvg = [math]::Round(($effValues | Measure-Object -Average).Average, 2)
+        }
+
+        # Prefer the accumulated telemetry timeline for token chart.
+        $tokenRows = @(
+          $telemetryRows |
+            Group-Object { 
+              try { ([datetime]$_.Timestamp).ToString('yyyy-MM-dd') } catch { 'unknown' }
+            } |
+            Sort-Object Name |
+            Select-Object -Last 14 |
+            ForEach-Object {
+              $sum = 0
+              foreach ($r in $_.Group) {
+                $current = 0
+                [void][int]::TryParse([string]$r.Tokens_Estimated, [ref]$current)
+                $sum += $current
+              }
+              @{ date = $_.Name; tokens = $sum }
+            }
+        )
+      }
+    } catch { }
+  }
 
 # ── Build chart data ──────────────────────────────────────────────────────────
 $eventTypeLabels = ($eventByType.Keys | ForEach-Object { "'$_'" }) -join ','
@@ -187,6 +255,16 @@ $html = @"
     <div class="value">$eventEmitted</div>
     <div class="label">of $eventCount total ($eventBlocked blocked)</div>
   </div>
+  <div class="card">
+    <h3>Avg Duration</h3>
+    <div class="value">$avgDurationMin</div>
+    <div class="label">minutes (telemetry-master)</div>
+  </div>
+  <div class="card">
+    <h3>Efficiency Avg</h3>
+    <div class="value">$efficiencyAvg</div>
+    <div class="label">score (telemetry-master)</div>
+  </div>
 </div>
 
 <div class="two-col">
@@ -195,7 +273,7 @@ $html = @"
     <canvas id="eventChart"></canvas>
   </div>
   <div class="section">
-    <h2>Token Usage (last 14 entries)</h2>
+    <h2>Token Usage (last 14 days)</h2>
     <canvas id="tokenChart"></canvas>
   </div>
 </div>
@@ -208,7 +286,7 @@ $html = @"
   </table>
 </div>
 
-<footer>Gentleman Foundation &mdash; Local-First AI Orchestration Platform &mdash; $generated</footer>
+<footer>Gentleman Foundation &mdash; telemetry rows: $telemetryRowsCount &mdash; generated: $generated</footer>
 
 <script>
 // Minimal bar chart renderer (no CDN dependency)
