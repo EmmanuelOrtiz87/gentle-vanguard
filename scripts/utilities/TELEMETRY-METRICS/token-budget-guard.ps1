@@ -5,6 +5,8 @@ param(
     [ValidateSet('low', 'medium', 'high')]
     [string]$Risk = 'medium',
     [int]$EstimatedChars = 0,
+    [int]$ActualPromptTokens = 0,
+    [int]$ActualCompletionTokens = 0,
     [switch]$Record,
     [switch]$Strict,
     [switch]$AsJson,
@@ -126,14 +128,16 @@ function Save-UsageRecord {
         [string]$TaskName,
         [string]$RiskLevel,
         [int]$EstimatedTokens,
+        [int]$ActualPromptTokens = 0,
+        [int]$ActualCompletionTokens = 0,
         [string]$Status,
         [bool]$EngramAvailable,
         [string]$Notes
     )
 
     Ensure-MetricsFile
-    $line = '{0},{1},{2},{3},{4},{5},{6},{7}' -f (Get-Date -Format 'yyyy-MM-ddTHH:mm:ssK'), (Get-Date -Format 'yyyy-MM-dd'), $TaskName, $RiskLevel, $EstimatedTokens, $Status, $EngramAvailable, ($Notes -replace ',', ';')
-
+    $actualTotal = $ActualPromptTokens + $ActualCompletionTokens
+    $line = '{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}' -f (Get-Date -Format 'yyyy-MM-ddTHH:mm:ssK'), (Get-Date -Format 'yyyy-MM-dd'), $TaskName, $RiskLevel, $EstimatedTokens, $ActualPromptTokens, $ActualCompletionTokens, $actualTotal, $Status, $EngramAvailable, ($Notes -replace ',', ';')
     Add-Content -Path $usageFile -Value $line -Encoding UTF8
 }
 
@@ -203,7 +207,9 @@ if (-not $engram.available) {
 }
 
 if ($Mode -eq 'check' -or $Record) {
-    Save-UsageRecord -TaskName $Task -RiskLevel $Risk -EstimatedTokens $estimatedTokens -Status $status -EngramAvailable:$engram.available -Notes "projected_pct=$pct"
+    $actualPrompt = if ($ActualPromptTokens -gt 0) { $ActualPromptTokens } else { 0 }
+    $actualCompletion = if ($ActualCompletionTokens -gt 0) { $ActualCompletionTokens } else { 0 }
+    Save-UsageRecord -TaskName $Task -RiskLevel $Risk -EstimatedTokens $estimatedTokens -ActualPromptTokens $actualPrompt -ActualCompletionTokens $actualCompletion -Status $status -EngramAvailable:$engram.available -Notes "projected_pct=$pct; actual_tracking=$($actualPrompt -gt 0 -or $actualCompletion -gt 0)"
 }
 
 $result = [ordered]@{
