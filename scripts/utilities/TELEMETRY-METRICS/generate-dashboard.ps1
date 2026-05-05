@@ -430,6 +430,150 @@ if ($latestTokenDate) {
   }
 }
 
+# ── Proactive Alerts / Anomaly Detection ───────────────────────────────────────
+$alerts = @()   # each entry: [severity, code, title, detail, recommendation]
+
+# 1. Data freshness alert
+if ($staleDays -gt 3) {
+  $alerts += [pscustomobject]@{
+    Severity = 'warn'
+    Code     = 'DATA_STALE'
+    Title    = 'Stale Token Data'
+    Detail   = "Last token record is $staleDays days old."
+    Recommendation = 'Run a session or push new telemetry to refresh the dashboard data.'
+  }
+}
+
+# 2. Budget forecast alert (RED / YELLOW)
+if ($budgetForecastPct -ge 90) {
+  $alerts += [pscustomobject]@{
+    Severity = 'err'
+    Code     = 'BUDGET_CRITICAL'
+    Title    = 'Budget Critical'
+    Detail   = "Month-end forecast at $budgetForecastPct% of budget (USD $projectedMonthCost vs budget USD $budgetMonthCost)."
+    Recommendation = 'Review task volume and apply stricter token-guard thresholds immediately.'
+  }
+} elseif ($budgetForecastPct -ge 70) {
+  $alerts += [pscustomobject]@{
+    Severity = 'warn'
+    Code     = 'BUDGET_WARNING'
+    Title    = 'Budget Warning'
+    Detail   = "Month-end forecast at $budgetForecastPct% of budget (USD $projectedMonthCost)."
+    Recommendation = 'Monitor daily token consumption closely for the remainder of the month.'
+  }
+}
+
+# 3. Token spike anomaly (any single day > 2x daily avg over 14-day window)
+$nonZeroDays = @($tokenTrendRows | Where-Object { $_.Tokens -gt 0 })
+if ($nonZeroDays.Count -gt 1) {
+  $avgDailyTokens = ($nonZeroDays | ForEach-Object { [double]$_.Tokens } | Measure-Object -Average).Average
+  $spikeThreshold = $avgDailyTokens * 2.0
+  $spikedDays = @($nonZeroDays | Where-Object { [double]$_.Tokens -gt $spikeThreshold })
+  if ($spikedDays.Count -gt 0) {
+    $spikeDay = $spikedDays | Sort-Object Tokens -Descending | Select-Object -First 1
+    $spikePct = [math]::Round(([double]$spikeDay.Tokens / $avgDailyTokens) * 100.0 - 100.0, 0)
+    $alerts += [pscustomobject]@{
+      Severity = 'warn'
+      Code     = 'TOKEN_SPIKE'
+      Title    = 'Token Spike Detected'
+      Detail   = "Day $($spikeDay.Day) was ${spikePct}% above the 14-day daily average ($([string]::Format('{0:N0}', [int]$spikeDay.Tokens)) tokens)."
+      Recommendation = 'Investigate what task or agent drove the spike on that date.'
+    }
+  }
+}
+
+# 4. Runtime error rate alert
+$runtimeErrorRate = if ($runtimeRequests -gt 0) { [math]::Round(($runtimeErrors * 100.0) / $runtimeRequests, 1) } else { 0 }
+if ($runtimeErrorRate -ge 20) {
+  $alerts += [pscustomobject]@{
+    Severity = 'err'
+    Code     = 'RUNTIME_ERRORS_HIGH'
+    Title    = 'High Runtime Error Rate'
+    Detail   = "Error rate is ${runtimeErrorRate}% ($runtimeErrors errors out of $runtimeRequests requests)."
+    Recommendation = 'Review cloud-agent-telemetry.csv ErrorMessage column to identify the failing provider or model.'
+  }
+} elseif ($runtimeErrorRate -ge 10) {
+  $alerts += [pscustomobject]@{
+    Severity = 'warn'
+    Code     = 'RUNTIME_ERRORS_MODERATE'
+    Title    = 'Elevated Runtime Error Rate'
+    Detail   = "Error rate is ${runtimeErrorRate}% ($runtimeErrors errors out of $runtimeRequests requests)."
+    Recommendation = 'Monitor runtime errors; check provider status if the trend continues.'
+  }
+}
+
+# 5. High latency alert
+if ($runtimeLatencyAvg -gt 0) {
+  if ($runtimeLatencyAvg -gt 8000) {
+    $alerts += [pscustomobject]@{
+      Severity = 'err'
+      Code     = 'LATENCY_HIGH'
+      Title    = 'High Runtime Latency'
+      Detail   = "Average latency is ${runtimeLatencyAvg} ms."
+      Recommendation = 'Check provider health or switch to a lower-latency model.'
+    }
+  } elseif ($runtimeLatencyAvg -gt 4000) {
+    $alerts += [pscustomobject]@{
+      Severity = 'warn'
+      Code     = 'LATENCY_ELEVATED'
+      Title    = 'Elevated Latency'
+      Detail   = "Average latency is ${runtimeLatencyAvg} ms (threshold: 4000 ms)."
+      Recommendation = 'Consider reviewing provider selection or request concurrency.'
+    }
+  }
+}
+
+# 6. Month-over-month cost regression
+if ($monthOverMonthPct -gt 20) {
+  $alerts += [pscustomobject]@{
+    Severity = 'warn'
+    Code     = 'COST_REGRESSION'
+    Title    = 'Cost Regression MoM'
+    Detail   = "Current month cost is ${monthOverMonthLabel} vs previous month."
+    Recommendation = 'Verify whether new agents or expanded task scope are driving the increase.'
+  }
+}
+
+# 7. Low efficiency alert
+if ($avgEfficiency -gt 0 -and $avgEfficiency -lt 0.5) {
+  $alerts += [pscustomobject]@{
+    Severity = 'warn'
+    Code     = 'LOW_EFFICIENCY'
+    Title    = 'Low Avg Efficiency Score'
+    Detail   = "Average efficiency score is $avgEfficiency (threshold: 0.5)."
+    Recommendation = 'Review recent telemetry for tasks with low Efficiency_Score and identify patterns.'
+  }
+}
+
+# Build alerts HTML panel
+function Build-AlertBadge {
+  param([string]$Severity, [string]$Code, [string]$Title, [string]$Detail, [string]$Recommendation)
+  return @"
+<div class="alert-badge alert-$Severity">
+  <div class="alert-header">
+    <span class="alert-icon">$(if ($Severity -eq 'err') { '&#9888;' } else { '&#9654;' })</span>
+    <strong class="alert-title">$Title</strong>
+    <code class="alert-code">$Code</code>
+  </div>
+  <p class="alert-detail">$Detail</p>
+  <p class="alert-rec"><em>Recommendation:</em> $Recommendation</p>
+</div>
+"@
+}
+
+$alertBadgesHtml = ''
+if ($alerts.Count -eq 0) {
+  $alertBadgesHtml = '<p class="alert-ok">&#10003; All systems nominal &mdash; no active alerts.</p>'
+} else {
+  foreach ($a in $alerts) {
+    $alertBadgesHtml += Build-AlertBadge -Severity $a.Severity -Code $a.Code -Title $a.Title -Detail $a.Detail -Recommendation $a.Recommendation
+  }
+}
+$alertCount = $alerts.Count
+$alertSummaryClass = if (($alerts | Where-Object { $_.Severity -eq 'err' }).Count -gt 0) { 'err' } elseif ($alertCount -gt 0) { 'warn' } else { 'ok' }
+$alertSummaryLabel = if ($alertCount -eq 0) { 'No alerts' } elseif ($alertCount -eq 1) { '1 alert' } else { "$alertCount alerts" }
+# ── End Alert Computation ───────────────────────────────────────────────────────
+
 # Runtime cost by model
 $modelCostMap = @{}
 foreach ($r in $runtimeRows) {
@@ -726,6 +870,68 @@ $html = @"
   @media (max-width: 900px) {
     .two-col { grid-template-columns: 1fr; }
   }
+  /* Proactive alerts */
+  .alerts-panel {
+    margin-top: 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    background: rgba(8, 16, 24, 0.75);
+  }
+  .alerts-panel h3 {
+    margin: 0 0 10px;
+    font-size: 0.95rem;
+    color: var(--accent-2);
+  }
+  .alert-ok {
+    color: var(--ok);
+    margin: 0;
+    font-weight: 600;
+  }
+  .alert-badge {
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    border-left: 4px solid;
+  }
+  .alert-warn {
+    background: rgba(240, 177, 58, 0.08);
+    border-color: var(--warn);
+  }
+  .alert-err {
+    background: rgba(242, 100, 100, 0.08);
+    border-color: var(--err);
+  }
+  .alert-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .alert-icon { font-size: 1rem; }
+  .alert-title { font-size: 0.92rem; }
+  .alert-code {
+    font-size: 10px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--muted);
+  }
+  .alert-detail, .alert-rec {
+    margin: 3px 0 0 20px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .alert-rec em { color: #9fd8ff; font-style: normal; font-weight: 600; }
+  .alerts-summary-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
 </style>
 </head>
 <body>
@@ -756,6 +962,10 @@ $html = @"
         <h3>Event Distribution</h3>
         <canvas id="eventChart"></canvas>
       </div>
+    </div>
+    <div class="alerts-panel" style="margin-top:12px;">
+      <h3>Proactive Alerts <span class="alerts-summary-badge $alertSummaryClass">$alertSummaryLabel</span></h3>
+      $alertBadgesHtml
     </div>
   </section>
 
