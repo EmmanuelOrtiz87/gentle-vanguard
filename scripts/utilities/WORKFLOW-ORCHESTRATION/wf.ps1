@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'foundation-sync', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'foundation-sync', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -62,7 +62,9 @@ function Invoke-TokenBudgetGuard {
         [string]$Task,
         [ValidateSet('low', 'medium', 'high')]
         [string]$Risk = 'medium',
-        [int]$EstimatedChars = 0
+        [int]$EstimatedChars = 0,
+        [int]$ActualPromptTokens = 0,
+        [int]$ActualCompletionTokens = 0
     )
 
     $guardScript = Join-Path $scriptDir '..\TELEMETRY-METRICS\token-budget-guard.ps1'
@@ -81,6 +83,12 @@ function Invoke-TokenBudgetGuard {
     if ($EstimatedChars -gt 0) {
         $guardArgs['EstimatedChars'] = $EstimatedChars
     }
+    if ($ActualPromptTokens -gt 0) {
+        $guardArgs['ActualPromptTokens'] = $ActualPromptTokens
+    }
+    if ($ActualCompletionTokens -gt 0) {
+        $guardArgs['ActualCompletionTokens'] = $ActualCompletionTokens
+    }
 
     $guardResult = $null
     try {
@@ -92,11 +100,11 @@ function Invoke-TokenBudgetGuard {
     }
     catch {
         # Fallback to legacy output mode if JSON parsing fails.
-        if ($EstimatedChars -gt 0) {
-            & $guardScript -Mode check -Task $Task -Risk $Risk -EstimatedChars $EstimatedChars -Record
-        } else {
-            & $guardScript -Mode check -Task $Task -Risk $Risk -Record
-        }
+        $fallbackArgs = @('-Mode', 'check', '-Task', $Task, '-Risk', $Risk, '-Record')
+        if ($EstimatedChars -gt 0) { $fallbackArgs += @('-EstimatedChars', $EstimatedChars) }
+        if ($ActualPromptTokens -gt 0) { $fallbackArgs += @('-ActualPromptTokens', $ActualPromptTokens) }
+        if ($ActualCompletionTokens -gt 0) { $fallbackArgs += @('-ActualCompletionTokens', $ActualCompletionTokens) }
+        & $guardScript @fallbackArgs
         return
     }
 
@@ -2707,6 +2715,16 @@ switch ($Command) {
                 & $dispatchScript @dispatchArgs
             }
         }
+    }
+
+    'install' {
+        Write-Step "Foundation TUI Installer (FF-018)"
+        $installScript = Join-Path $scriptDir '..\foundation-installer-tui.ps1'
+        if (-not (Test-Path $installScript)) {
+            Write-Error "Installer script not found: $installScript"
+            exit 1
+        }
+        & $installScript @RemainingArgs
     }
 
     'events' {
