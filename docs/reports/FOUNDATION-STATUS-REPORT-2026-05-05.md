@@ -24,7 +24,7 @@ Gentleman Foundation es una **plataforma de orquestación de agentes de IA** loc
 | Skills disponibles | 125 skills bajo demanda |
 | Backlog oficial | 7/7 items completados (FF-001 a FF-013) |
 | Sync drift | CLEAN — 0 drifts detectados |
-| Homologación workspace_local | **PENDIENTE — ver sección 9** |
+| Homologación workspace_local | **EN PROGRESO** — `workspace-foundation` sincronizado; `bitbucket-dashboard` bloqueado por manifest legacy + working tree sucio |
 
 **Propuesta de valor central:**
 - Reducción de re-trabajo mediante routing inteligente de agentes especializados
@@ -459,38 +459,38 @@ Propagar los assets, skills, scripts y configuraciones de `gentleman-foundation`
 
 | Prerequisite | Estado | Detalle |
 |---|---|---|
-| agent-verify 14/14 PASS | ✅ Cumplido | 0 errors, 0 warnings, working tree clean |
+| agent-verify | ⚠️ Parcial | `PASS with warnings` (13/14 + 1 warning) — único warning: working tree con cambios sin commit |
 | Backlog limpio | ✅ Cumplido | 7/7 ítems completados |
 | Sync drift CLEAN | ✅ Cumplido | 0 drifts detectados por sync-drift-report |
 | CI/CD pipeline verde | ✅ Cumplido | HEAD `6aa883a` — todos los workflows passing |
 | Telemetría real | ✅ Cumplido | collect-provider-telemetry.ps1 operacional (rev. 2) |
 | Dashboard documentado | ✅ Cumplido | PDF/PNG export + thresholds configurables (rev. 2) |
-| foundation-sync.json presente | ✅ Cumplido | `config/foundation-sync.json` con role: "source" |
-| wf.ps1 accesible | ⚠️ Parcial | 3 copias detectadas — path canónico: `scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1`; wf-benchmark usa ruta incorrecta |
-| Tests de integración | ⚠️ Parcial | `tests/integration/` disponible pero vacío; solo unit tests activos |
-| Portabilidad Windows/Linux | ⚠️ Parcial | Hooks y `wf-benchmark.ps1` con rutas Windows; autonomous-validation corregido |
+| foundation-sync.json presente | ✅ Cumplido | `config/foundation-sync.json` actualizado a v2.6.5 y catálogo validado por test de integración |
+| wf.ps1 accesible | ✅ Cumplido | wrapper `scripts/utilities/wf.ps1` reparado y path canónico `scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1` operativo |
+| Tests de integración | ✅ Cumplido | `tests/integration/` con specs activas; `routing-flow.tests.ps1` ampliado a 13 tests PASS |
+| Portabilidad Windows/Linux | ⚠️ Parcial | benchmark/sync/foundation-sync corregidos; persisten rutas Windows en hooks y scripts heredados |
 
 ### 9.3 Bloqueadores antes de homologar
 
-Son ítems pequeños pero deben resolverse para que la homologación no propague deuda técnica:
+Los bloqueadores iniciales ya fueron resueltos en esta sesión. Los bloqueadores remanentes para completar toda la cadena de `workspace_local` son:
 
-1. **wf-benchmark.ps1 no encuentra wf.ps1** — `SKIP` en todas las mediciones porque busca en path incorrecto. Antes de homologar, el benchmark debe poder ejecutarse limpio; de lo contrario los proyectos destino no tendrán SLO baseline.
+1. **agent-verify no llega a 14/14 por working tree dirty** — el stack ya valida funcionalmente, pero el warning de `uncommitted-changes` no desaparece sin commit o stash.
 
-2. **foundation-sync.json desactualizado** — El JSON declara `foundationVersion: "2.1.0"` y lista paths de scripts con estructura anterior (`scripts/utilities/invoke-cloud-agent.ps1` en vez de `scripts/utilities/AI-AGENT-MANAGEMENT/`). Propagar esta versión rompería la sincronización en proyectos destino.
+2. **`bitbucket-dashboard` tiene manifest consumer legacy** — su `config/foundation-sync.json` todavía referencia 5 sources que no existen en `workspace-foundation` (`rotate-artifacts.ps1`, `day-end-closure.ps1`, `end-session.ps1`, `judgment-day.ps1`, `token-telemetry-report.ps1`).
 
-3. **Tests de integración vacíos** — `tests/integration/` existe pero no tiene specs. Homologar sin cobertura de integración implica que los proyectos destino no tendrán gate de regresión para los flujos de routing críticos.
+3. **`bitbucket-dashboard` tiene working tree sucio** — aplicar `foundation-sync` ahí hoy sería riesgoso porque mezclaría la homologación con cambios locales no relacionados.
 
 ### 9.4 Recomendación de secuencia
 
 ```
-1. Fix wf-benchmark path  (rápido — 1 línea en wf-benchmark.ps1)
-2. Actualizar foundation-sync.json  (catálogo de assets + versión actual 2.6.5)
-3. Agregar ≥1 test de integración  (routing crítico: pre-process-input → skill load)
-4. agent-verify 14/14 + benchmark PASS → verde completo
-5. Ejecutar homologación  (sync-drift + distribute assets a workspace_local)
+1. [DONE] Corregir benchmark + wrapper/entrypoints (`wf benchmark` PASS)
+2. [DONE] Actualizar `foundation-sync.json` (catálogo validado, v2.6.5)
+3. [DONE] Agregar test de integración (routing + asset catalog + wrapper)
+4. [PARTIAL] `agent-verify` PASS with warnings; benchmark PASS
+5. [PARTIAL] `sync-drift` CLEAN; `workspace-foundation` sincronizado; `bitbucket-dashboard` pendiente por dirty tree + manifest legacy
 ```
 
-**Estimación:** ítems 1–3 son sesión corta (1–2h). Item 5 depende de cuántos proyectos destino existen en `C:\Workspace_local\`.
+**Estado post-sesión:** `workspace-foundation` quedó alineado con `gentleman-foundation` (`foundation-sync check` = sin cambios requeridos). La homologación completa de `workspace_local` requiere una sesión aparte para sanear el manifest y el working tree de `bitbucket-dashboard`.
 
 ---
 

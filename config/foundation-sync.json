@@ -62,7 +62,7 @@
     {
       "type": "script",
       "path": "scripts/utilities/AI-AGENT-MANAGEMENT/invoke-ai-review.ps1",
-      "description": "-Native AI Review - Multi-provider code review with caching"
+      "description": "AI Review - Multi-provider code review with caching"
     },
     {
       "type": "hook",
@@ -111,8 +111,8 @@
     },
     {
       "type": "guide",
-      "path": "docs/guides/TELEMETRY.md",
-      "description": " Native Integration Plan"
+      "path": "docs/guides/FOUNDATION-SYNC.md",
+      "description": "Foundation Sync Guide"
     },
     {
       "type": "skill",
@@ -162,17 +162,12 @@
     {
       "type": "skill",
       "path": "skills/testing-coverage-skill",
-      "description": "Testing Coverage (-native)"
+      "description": "Testing Coverage Skill"
     },
     {
       "type": "skill",
       "path": "skills/guardian-fallback-skill",
-      "description": "Guardian Fallback -  as optional secondary skill"
-    },
-    {
-      "type": "guide",
-      "path": "docs/guides/GUARDIAN-FALLBACK-PROTOCOL.md",
-      "description": "Guardian Fallback Protocol - When and how to invoke  as fallback"
+      "description": "Guardian Fallback Skill"
     },
     {
       "type": "script",
@@ -188,6 +183,16 @@
       "type": "script",
       "path": "scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1",
       "description": "Workflow CLI - Main orchestrator entry point"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/wf.ps1",
+      "description": "Workflow CLI Wrapper - Stable entrypoint that forwards to the canonical CLI"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/UTILITIES/foundation-sync.ps1",
+      "description": "Foundation Sync Runner - Syncs managed assets from the foundation manifest"
     },
     {
       "type": "config",

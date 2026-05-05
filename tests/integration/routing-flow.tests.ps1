@@ -91,5 +91,26 @@ Describe 'Routing Flow Integration' {
             }
             $missing.Count | Should Be 0
         }
+
+        It 'all declared asset paths exist on disk' {
+            $missing = @()
+            foreach ($asset in $script:sync.assets) {
+                $full = Join-Path $script:root ($asset.path -replace '/', '\')
+                if (-not (Test-Path $full)) {
+                    $missing += $asset.path
+                }
+            }
+            $missing.Count | Should Be 0
+        }
+    }
+
+    Context 'wf wrapper entrypoint' {
+        It 'forwards commands to the canonical CLI' {
+            $wrapperPath = Join-Path $script:root 'scripts\utilities\wf.ps1'
+            $output = & pwsh -NoProfile -ExecutionPolicy Bypass -File $wrapperPath version 2>&1
+
+            $LASTEXITCODE | Should Be 0
+            (($output | Out-String) -match 'Gentleman Foundation v') | Should Be $true
+        }
     }
 }
