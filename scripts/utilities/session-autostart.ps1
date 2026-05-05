@@ -80,8 +80,22 @@ if (Test-Path $engramPolicy) {
     Write-Host "[SKIP] Engram policy script not found" -ForegroundColor Gray
 }
 
-# 5. Engram Optimization
-Write-Step 5 "Running Engram optimization..."
+# 5. Token Budget Guard - Real token tracking
+Write-Step 5 "Checking token budget and recording session start..."
+$tokenGuard = Join-Path $PSScriptRoot "TELEMETRY-METRICS\token-budget-guard.ps1"
+if (Test-Path $tokenGuard) {
+    & $tokenGuard -Task "session-start" -Risk "low" -Record
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "Token budget check completed with warnings"
+    } else {
+        Write-Success "Token budget recorded - session tracking active"
+    }
+} else {
+    Write-Host "[SKIP] Token budget guard not found" -ForegroundColor Gray
+}
+
+# 6. Engram Optimization
+Write-Step 6 "Running Engram optimization..."
 $optimizeScript = Join-Path $PSScriptRoot "optimize-engram-usage.ps1"
 if (Test-Path $optimizeScript) {
     & $optimizeScript -ProjectName $ProjectName
@@ -94,8 +108,8 @@ if (Test-Path $optimizeScript) {
     Write-Host "[SKIP] Engram optimization script not found" -ForegroundColor Gray
 }
 
-# 6. Cross-workspace validation
-Write-Step 6 "Validating cross-workspace consistency..."
+# 7. Cross-workspace validation
+Write-Step 7 "Validating cross-workspace consistency..."
 $crossValidator = Join-Path $PSScriptRoot "cross-workspace-validator.ps1"
 if (Test-Path $crossValidator) {
     & $crossValidator -Detailed
@@ -108,8 +122,8 @@ if (Test-Path $crossValidator) {
     Write-Host "[SKIP] Cross-workspace validator not found" -ForegroundColor Gray
 }
 
-# 7. Security Orchestrator
-Write-Step 7 "Initializing Security Orchestrator..."
+# 8. Security Orchestrator
+Write-Step 8 "Initializing Security Orchestrator..."
 $securityScript = Join-Path $PSScriptRoot "security-orchestrator.ps1"
 if (Test-Path $securityScript) {
     & $securityScript -Action init -AsJson
@@ -122,8 +136,8 @@ if (Test-Path $securityScript) {
     Write-Host "[SKIP] Security Orchestrator not found" -ForegroundColor Gray
 }
 
-# 8. Skill Router
-Write-Step 8 "Initializing Skill Router..."
+# 9. Skill Router
+Write-Step 9 "Initializing Skill Router..."
 $skillRouter = Join-Path $PSScriptRoot "skill-router.ps1"
 if (Test-Path $skillRouter) {
     & $skillRouter -Query "session-start"
@@ -136,8 +150,8 @@ if (Test-Path $skillRouter) {
     Write-Host "[SKIP] Skill Router not found" -ForegroundColor Gray
 }
 
-# 9. Karpathy Guidelines Enforcement (Next-Level Feature)
-Write-Step 9 "Enforcing Karpathy Guidelines (Think, Simplicity, Surgical, Goal-Driven)..."
+# 10. Karpathy Guidelines Enforcement (Next-Level Feature)
+Write-Step 10 "Enforcing Karpathy Guidelines (Think, Simplicity, Surgical, Goal-Driven)..."
 $karpathyEnforcer = Join-Path $PSScriptRoot "karpathy-enforcer.ps1"
 if (Test-Path $karpathyEnforcer) {
     & $karpathyEnforcer -Trigger session-start -VerboseOutput
