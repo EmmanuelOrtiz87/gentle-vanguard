@@ -72,8 +72,8 @@ function Test-ScriptNormalization {
     ) | Out-Null
     
     if ($errors.Count -gt 0) {
-        foreach ($error in $errors) {
-            $scriptIssues += "Syntax error: $($error.Message)"
+        foreach ($parseError in $errors) {
+            $scriptIssues += "Syntax error: $($parseError.Message)"
         }
     }
     
