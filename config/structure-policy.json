@@ -13,16 +13,8 @@
   ],
   "allowedRootFiles": ["README.md", "config/mcp-servers.json"],
   "allowedRootMarkdownFiles": [
-    "README.md",
-    "AGENTS.md",
-    "ANTIGRAVITY.md",
-    "AI-MANDATORY-BEHAVIOR.md",
-    "CHANGELOG.md",
     "CLAUDE.md",
-    "CODEX.md",
-    "CONTRIBUTING.md",
-    "NEXT_SESSION_GUIDE.md",
-    "TOKEN-REPORTING-PROCESS.md"
+    "SECURITY.md"
   ],
   "allowedRootJsonFiles": [
     "opencode.json",
