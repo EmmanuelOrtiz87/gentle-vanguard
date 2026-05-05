@@ -1,0 +1,6 @@
+# Disable symlinks in repository
+*.ps1 -symlink
+*.ps1 text eol=lf
+*.yml text eol=lf
+*.md text eol=lf
+*.json text eol=lf

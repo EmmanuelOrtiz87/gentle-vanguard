@@ -12,6 +12,11 @@ jobs:
   autonomous-validation:
     runs-on: ubuntu-latest
     steps:
+      - name: Configure Git
+        run: |
+          git config --global core.symlinks false
+          git config --global core.longpaths true
+
       - uses: actions/checkout@v4
 
       - name: Setup PowerShell

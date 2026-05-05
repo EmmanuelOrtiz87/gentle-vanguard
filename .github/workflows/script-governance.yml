@@ -29,6 +29,12 @@ jobs:
     name: Validate Script Governance and Process Alerts
     runs-on: windows-latest
     steps:
+      - name: Configure Git for Windows
+        shell: bash
+        run: |
+          git config --global core.symlinks false
+          git config --global core.longpaths true
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
