@@ -1,0 +1,51 @@
+name: SDD Gate — Spec Validation
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: sdd-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+# FF-001: runs on PRs to protected branches; enforces that at least one SDD
+# document with status validated/done exists before merging.
+on:
+  pull_request:
+    branches: [main, develop]
+    # Trigger on changes to docs, scripts, config, or hooks (not just sdd/ so
+    # that any code PR is checked, not only doc-only PRs).
+    paths:
+      - 'docs/**'
+      - 'scripts/**'
+      - 'config/**'
+      - 'hooks/**'
+  workflow_dispatch:
+
+jobs:
+  sdd-gate:
+    name: SDD Spec Gate
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run SDD gate check
+        shell: pwsh
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass `
+            -File scripts/hooks/check-sdd-gate.ps1
+          $ec = $LASTEXITCODE
+          if ($ec -eq 2) {
+            Write-Host "::error::SDD gate BLOCKED — merge to main requires a validated/done SDD."
+            exit 1
+          }
+          if ($ec -eq 1) {
+            Write-Host "::error::SDD gate failed."
+            exit 1
+          }
+          Write-Host "SDD gate passed (exit $ec)."
+          exit 0
