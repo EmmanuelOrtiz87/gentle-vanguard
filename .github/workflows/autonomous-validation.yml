@@ -22,16 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Setup PowerShell
-        shell: pwsh
-        run: |
-          if ($IsLinux -or $IsMacOS) {
-            Write-Host "PowerShell setup not required on this platform."
-          } else {
-            Install-Module -Name PowerShellGet -Force -AllowClobber
-            Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-          }
-
       - name: Run Comprehensive Validation
         shell: pwsh
         run: |
