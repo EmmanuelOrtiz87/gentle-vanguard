@@ -24,10 +24,31 @@
 
 param(
     [switch]$Fix,
-    [switch]$Detailed
+    [switch]$Detailed,
+    [string]$FoundationRoot = ''
 )
 
 $ErrorActionPreference = "Continue"
+$repoRoot = (Resolve-Path ".").Path
+
+function Get-FoundationSyncManifest {
+    $manifestPath = Join-Path $repoRoot "config/foundation-sync.json"
+    if (-not (Test-Path $manifestPath)) {
+        return $null
+    }
+
+    return Get-Content $manifestPath -Raw | ConvertFrom-Json
+}
+
+function Resolve-WorkspacePath {
+    param([string]$Path)
+
+    if ([System.IO.Path]::IsPathRooted($Path)) {
+        return $Path
+    }
+
+    return Join-Path $repoRoot $Path
+}
 
 function Write-Status {
     param([string]$Message, [string]$Status = "INFO")
@@ -112,19 +133,42 @@ function Sync-ConfigFile {
 Write-Host "`n=== Validacion Cross-Workspace ===" -ForegroundColor Cyan
 Write-Host "Comparando configuraciones entre local y foundation`n" -ForegroundColor Gray
 
+$manifest = Get-FoundationSyncManifest
+if ($manifest -and $manifest.PSObject.Properties['role'] -and [string]$manifest.role -eq 'source') {
+    Write-Status "Repositorio marcado como foundation source; no requiere comparacion contra workspace externo" "OK"
+    Write-Host "`nTodos los archivos estan sincronizados" -ForegroundColor Green
+    exit 0
+}
+
+if ([string]::IsNullOrWhiteSpace($FoundationRoot)) {
+    if ($manifest -and $manifest.PSObject.Properties['foundationPath'] -and -not [string]::IsNullOrWhiteSpace([string]$manifest.foundationPath)) {
+        $FoundationRoot = [string]$manifest.foundationPath
+    } elseif ($env:FOUNDATION_REPO_PATH) {
+        $FoundationRoot = [string]$env:FOUNDATION_REPO_PATH
+    } else {
+        $FoundationRoot = '..\workspace-foundation'
+    }
+}
+
+$FoundationRoot = Resolve-WorkspacePath -Path $FoundationRoot
+if (-not (Test-Path $FoundationRoot)) {
+    Write-Status "Foundation root no existe: $FoundationRoot" "ERROR"
+    exit 1
+}
+
 $validations = @()
 $issues = 0
 
 # 1. Context Efficiency Config
 $result = Compare-ConfigFiles `
     -File1 "scripts/utilities/context-efficiency-config.json" `
-    -File2 "workspace-foundation/scripts/utilities/context-efficiency-config.json" `
+    -File2 (Join-Path $FoundationRoot "scripts/utilities/context-efficiency-config.json") `
     -Description "Context Efficiency Config"
 
 $validations += @{
     Name = "Context Efficiency Config"
     Local = "scripts/utilities/context-efficiency-config.json"
-    Foundation = "workspace-foundation/scripts/utilities/context-efficiency-config.json"
+    Foundation = (Join-Path $FoundationRoot "scripts/utilities/context-efficiency-config.json")
     Status = $result
 }
 
@@ -133,13 +177,13 @@ if (-not $result) { $issues++ }
 # 2. Session Autostart Config
 $result = Compare-ConfigFiles `
     -File1 "scripts/utilities/session-autostart.config.json" `
-    -File2 "workspace-foundation/scripts/utilities/session-autostart.config.json" `
+    -File2 (Join-Path $FoundationRoot "scripts/utilities/session-autostart.config.json") `
     -Description "Session Autostart Config"
 
 $validations += @{
     Name = "Session Autostart Config"
     Local = "scripts/utilities/session-autostart.config.json"
-    Foundation = "workspace-foundation/scripts/utilities/session-autostart.config.json"
+    Foundation = (Join-Path $FoundationRoot "scripts/utilities/session-autostart.config.json")
     Status = $result
 }
 
@@ -149,13 +193,13 @@ if (-not $result) { $issues++ }
 if (Test-Path "config/adaptive-config.json") {
     $result = Compare-ConfigFiles `
         -File1 "config/adaptive-config.json" `
-        -File2 "workspace-foundation/config/adaptive-config.json" `
+        -File2 (Join-Path $FoundationRoot "config/adaptive-config.json") `
         -Description "Adaptive Config"
     
     $validations += @{
         Name = "Adaptive Config"
         Local = "config/adaptive-config.json"
-        Foundation = "workspace-foundation/config/adaptive-config.json"
+        Foundation = (Join-Path $FoundationRoot "config/adaptive-config.json")
         Status = $result
     }
     
@@ -165,29 +209,29 @@ if (Test-Path "config/adaptive-config.json") {
 # 4. AGENTS.md
 $result = Compare-ConfigFiles `
     -File1 "AGENTS.md" `
-    -File2 "workspace-foundation/AGENTS.md" `
+    -File2 (Join-Path $FoundationRoot "AGENTS.md") `
     -Description "AGENTS.md"
 
 $validations += @{
     Name = "AGENTS.md"
     Local = "AGENTS.md"
-    Foundation = "workspace-foundation/AGENTS.md"
+    Foundation = (Join-Path $FoundationRoot "AGENTS.md")
     Status = $result
 }
 
 if (-not $result) { $issues++ }
 
 # 5. WF.ps1 Script
-if ((Test-Path "scripts/utilities/wf.ps1") -and (Test-Path "workspace-foundation/scripts/utilities/wf.ps1")) {
+if ((Test-Path "scripts/utilities/wf.ps1") -and (Test-Path (Join-Path $FoundationRoot "scripts/utilities/wf.ps1"))) {
     $result = Compare-ConfigFiles `
         -File1 "scripts/utilities/wf.ps1" `
-        -File2 "workspace-foundation/scripts/utilities/wf.ps1" `
+        -File2 (Join-Path $FoundationRoot "scripts/utilities/wf.ps1") `
         -Description "Workflow Script (wf.ps1)"
     
     $validations += @{
         Name = "Workflow Script"
         Local = "scripts/utilities/wf.ps1"
-        Foundation = "workspace-foundation/scripts/utilities/wf.ps1"
+        Foundation = (Join-Path $FoundationRoot "scripts/utilities/wf.ps1")
         Status = $result
     }
     
