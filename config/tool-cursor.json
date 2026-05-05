@@ -1,0 +1,31 @@
+{
+  "tool": "cursor",
+  "displayName": "Cursor",
+  "version": "latest",
+  "preProcess": {
+    "loadSkills": true,
+    "skillTool": "skill",
+    "autoLoad": true,
+    "mcpBridge": true,
+    "parallelExecution": true
+  },
+  "capabilities": [
+    "parallel_execution",
+    "mcp",
+    "skills",
+    "code_completion"
+  ],
+  "configFiles": [
+    ".cursorrules",
+    ".cursor/config.json"
+  ],
+  "adapter": {
+    "type": "mcp-bridge",
+    "path": "adapters/mcp-bridge",
+    "status": "available"
+  },
+  "hooks": {
+    "preToolCall": "scripts/utilities/pre-process-input.ps1",
+    "sessionStart": "scripts/utilities/session-autostart.cmd"
+  }
+}

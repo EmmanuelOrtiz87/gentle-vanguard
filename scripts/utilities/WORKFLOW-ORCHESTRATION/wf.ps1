@@ -3,11 +3,14 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'foundation-sync', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
     [string]$Scope = '',
+
+    [Parameter(Position=2, ValueFromRemainingArguments=$true)]
+    [string[]]$RemainingArgs = @(),
     
     [switch]$SkipTests,
     [switch]$SkipReview,
@@ -572,7 +575,7 @@ function Invoke-AutomaticSuggestions {
     $actions = @()
     $hasGovernanceFinding = $Findings | Where-Object { $_.Code -eq 'governance' -and $_.Fixable }
     if ($hasGovernanceFinding) {
-        $homologateScript = Join-Path $scriptDir '..\validation\homologate-workspace.ps1'
+        $homologateScript = Join-Path $scriptDir '..\..\validation\homologate-workspace.ps1'
         if (Test-Path $homologateScript) {
             Write-Step 'Applying homologation suggestions...'
             Invoke-LocalPowerShellScript -ScriptPath $homologateScript -ScriptArgs @('-Apply')
@@ -1613,6 +1616,7 @@ COMMANDS:
     rollback-checkpoint [selector] Restore latest checkpoint or one matching selector
     clean-branches [apply] Preview or clean merged local feature/release branches
     homologate [apply]  Normalize docs/artifacts and update references (dry-run default)
+    foundation-sync [apply] [optional -CreatePr]  Sync managed assets declared in foundation manifest
     agent-alert [strict] Check process-compliance signals for off-process AI activity
     agent <AGENT> [TASK] Route task to specialized sub-agent (BA|SAD|DEV|QA|OPS|GOV|DOC)
     dashboard [open]     Generate static HTML dashboard from telemetry JSON (open = auto-open browser)
@@ -2059,7 +2063,7 @@ switch ($Command) {
             exit 1
         }
 
-        $homologateScript = Join-Path $scriptDir '..\validation\homologate-workspace.ps1'
+        $homologateScript = Join-Path $scriptDir '..\..\validation\homologate-workspace.ps1'
         if (Test-Path $homologateScript) {
             Write-Step "Homologation Drift Preview"
             $homologateArgs = @('-OrganizeRootDocs')
@@ -2421,6 +2425,23 @@ switch ($Command) {
         exit $LASTEXITCODE
     }
 
+    'foundation-sync' {
+        $syncScript = Join-Path $repoRoot 'scripts\utilities\UTILITIES\foundation-sync.ps1'
+        if (-not (Test-Path $syncScript)) {
+            Write-Error "foundation-sync.ps1 not found: $syncScript"
+            exit 1
+        }
+
+        $createPr = $RemainingArgs -contains '-CreatePr' -or $RemainingArgs -contains '-CreatePR'
+
+        if ($Scope -eq 'apply') {
+            & $syncScript -Mode apply -Force:$Force -CreatePR:$createPr
+        } else {
+            & $syncScript -Mode check -Force:$Force
+        }
+        exit $LASTEXITCODE
+    }
+
     'benchmark' {
         # FF-006: Profile key wf commands against SLO thresholds
         $benchScript = Join-Path $repoRoot 'scripts\utilities\wf-benchmark.ps1'
@@ -2428,7 +2449,17 @@ switch ($Command) {
             Write-Error "wf-benchmark.ps1 not found: $benchScript"
             exit 1
         }
-        $cmds = if ($Scope) { $Scope -split ',' } else { @('status', 'health') }
+        $cmds = @()
+        if ($Scope) {
+            $cmds += $Scope -split ','
+        }
+        if ($RemainingArgs) {
+            $cmds += $RemainingArgs
+        }
+        $cmds = @($cmds | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+        if ($cmds.Count -eq 0) {
+            $cmds = @('status', 'health')
+        }
         & $benchScript -Commands $cmds
         exit $LASTEXITCODE
     }
@@ -2553,7 +2584,7 @@ switch ($Command) {
 
     'homologate' {
         Write-Step "Workspace Homologation"
-        $homologateScript = Join-Path $scriptDir '..\validation\homologate-workspace.ps1'
+        $homologateScript = Join-Path $scriptDir '..\..\validation\homologate-workspace.ps1'
         if (-not (Test-Path $homologateScript)) {
             Write-Error "Homologation script not found: $homologateScript"
             exit 1

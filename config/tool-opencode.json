@@ -1,0 +1,31 @@
+{
+  "tool": "opencode",
+  "displayName": "OpenCode",
+  "version": "2.1.98",
+  "preProcess": {
+    "loadSkills": true,
+    "skillTool": "skill",
+    "autoLoad": true,
+    "mcpBridge": true,
+    "subagents": true
+  },
+  "capabilities": [
+    "mcp",
+    "subagents",
+    "token_management",
+    "skills"
+  ],
+  "configFiles": [
+    ".opencode/config.json",
+    ".opencode/skills/*/SKILL.md"
+  ],
+  "adapter": {
+    "type": "mcp-bridge",
+    "path": "adapters/mcp-bridge",
+    "status": "available"
+  },
+  "hooks": {
+    "preToolCall": "scripts/utilities/pre-process-input.ps1",
+    "sessionStart": "scripts/utilities/session-autostart.cmd"
+  }
+}

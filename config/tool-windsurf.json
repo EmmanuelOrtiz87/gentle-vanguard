@@ -1,0 +1,27 @@
+{
+  "tool": "windsurf",
+  "displayName": "Windsurf",
+  "version": "latest",
+  "preProcess": {
+    "loadSkills": false,
+    "skillTool": "none",
+    "autoLoad": false,
+    "mcpBridge": false
+  },
+  "capabilities": [
+    "ai_chat",
+    "code_generation"
+  ],
+  "configFiles": [
+    ".windsurf/config.json"
+  ],
+  "adapter": {
+    "type": "format-adapter",
+    "path": "adapters/format-adapters/windsurf-adapter",
+    "status": "ready"
+  },
+  "hooks": {
+    "preToolCall": "scripts/utilities/pre-process-input.ps1",
+    "sessionStart": "scripts/utilities/session-autostart.cmd"
+  }
+}

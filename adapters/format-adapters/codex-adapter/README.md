@@ -1,98 +1,116 @@
 ﻿# Codex Adapter
 
-Exposes Foundation capabilities via OpenAI-compatible function calling API.
+Converts Foundation skills to OpenAI Codex function calling format.
 
 ---
-## OpenAI Function Calling Format
+## OpenAI Codex Format
 
-Codex uses OpenAI's function calling. We can create a proxy that:
-1. Accepts OpenAI-style function calls
-2. Translates to Foundation CLI commands
-3. Returns results in OpenAI format
+Codex uses:
+- **Function calling**: JSON Schema for tool definitions
+- **Chat Completions API**: `/v1/chat/completions` endpoint
+- **Tools array**: List of available functions
 
 ---
-## Implementation
+## Features
 
-### 1. Function Definitions (`functions.json`)
+✅ Converts `SKILL.md` → OpenAI function format  
+✅ Generates tools array (all Foundation skills)  
+✅ Creates proxy server for Codex integration  
+✅ Strict JSON Schema (no additional properties)  
+
+---
+## Usage
+
+### 1. Convert a Foundation Skill
+
+```bash
+node adapter.js convert-skill skills/react-19-skill/SKILL.md react-19.json
+```
+
+**Output**: OpenAI-compatible function definition.
+
+### 2. Generate All Tools
+
+```bash
+node adapter.js generate-tools skills/ tools.json
+```
+
+Creates `tools.json` with all Foundation skills as OpenAI functions.
+
+### 3. Generate Proxy Server
+
+```bash
+node adapter.js generate-proxy proxy.js
+npm install express
+node proxy.js
+```
+
+Creates a proxy that translates between Codex and Foundation.
+
+---
+## Function Format
 
 ```json
-[
-  {
-    "name": "foundation_review",
-    "description": "Run 7D code review",
+{
+  "type": "function",
+  "function": {
+    "name": "react_19_skill",
+    "description": "React 19 patterns with React Compiler",
     "parameters": {
       "type": "object",
       "properties": {
-        "path": { "type": "string" },
-        "dimensions": { 
-          "type": "array",
-          "items": { "type": "string" }
+        "task": {
+          "type": "string",
+          "description": "The task to execute using this skill"
         }
       },
-      "required": ["path"]
-    }
-  },
-  {
-    "name": "foundation_audit",
-    "description": "Run workspace audit",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "mode": { "type": "string", "enum": ["quick", "full"] }
-      }
+      "required": ["task"],
+      "additionalProperties": false
     }
   }
-]
-```
-
-### 2. Proxy Server (`proxy.js`)
-
-```javascript
-const express = require('express');
-const { execSync } = require('child_process');
-const app = express();
-
-app.post('/v1/chat/completions', (req, res) => {
-  const { function_call, functions } = req.body;
-  
-  // Execute Foundation CLI based on function_call
-  const result = executeFoundationFunction(function_call, functions);
-  
-  res.json({
-    choices: [{
-      message: {
-        role: 'assistant',
-        content: result,
-      }
-    }]
-  });
-});
-
-app.listen(8080, () => {
-  console.log('Codex adapter proxy running on port 8080');
-});
+}
 ```
 
 ---
-## Usage with Codex
+## Integration with Foundation
+
+1. **Detection**: `enhanced-detect.ps1` identifies Codex via `CODEX_SESSION` env var
+2. **Pre-processing**: `pre-process-input.ps1` loads `tool-codex.json`
+3. **Adapter path**: `adapters/format-adapters/codex-adapter/`
+
+---
+## Proxy Server
+
+The proxy server allows Codex to use Foundation skills:
 
 ```bash
 # Start proxy
-node adapters/format-adapters/codex-adapter/proxy.js
+node proxy.js
 
-# Configure Codex to use local endpoint
-export OPENAI_API_BASE="http://localhost:8080/v1"
-export OPENAI_API_KEY="dummy"  # Not needed for local
-
-# Codex now uses Foundation via OpenAI-compatible API
+# Configure Codex to use proxy
+export CODEX_API_BASE="http://localhost:3000/v1"
 ```
 
 ---
 ## Status
 
- **Implementation Pending**
+| Component | Status | Notes |
+|-----------|--------|-------|
+| Skill Converter | ✅ Ready | SKILL.md → OpenAI function |
+| Tools Generator | ✅ Ready | Batch conversion |
+| Proxy Server | ✅ Ready | Express-based proxy |
+| Detection Integration | ✅ Ready | Uses `CODEX_SESSION` env |
+| Pre-process Integration | ✅ Ready | Loads `tool-codex.json` |
 
-Next steps:
-1. Implement `proxy.js` with Express
-2. Map OpenAI functions to Foundation CLI
-3. Test with Codex
+---
+## Next Steps
+
+1. ✅ **Implement adapter** (completed)
+2. ⏳ **Test with real Codex**
+3. ⏳ **Add streaming support**
+4. ⏳ **Support OpenAI SDK directly**
+
+---
+**Version**: 1.0.0  
+**Status**: Ready for testing  
+**Compatibility**: OpenAI Codex, OpenAI API

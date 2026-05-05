@@ -1,0 +1,26 @@
+{
+  "tool": "antigravity",
+  "displayName": "Antigravity",
+  "version": "latest",
+  "preProcess": {
+    "loadSkills": false,
+    "skillTool": "none",
+    "autoLoad": false,
+    "mcpBridge": false
+  },
+  "capabilities": [
+    "mission_control"
+  ],
+  "configFiles": [
+    ".antigravity/config.json"
+  ],
+  "adapter": {
+    "type": "format-adapter",
+    "path": "adapters/format-adapters/antigravity-adapter",
+    "status": "ready"
+  },
+  "hooks": {
+    "preToolCall": "scripts/utilities/pre-process-input.ps1",
+    "sessionStart": "scripts/utilities/session-autostart.cmd"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "antigravity-adapter",
+  "version": "1.0.0",
+  "description": "Converts Foundation skills to Antigravity Mission Control format",
+  "main": "adapter.js",
+  "scripts": {
+    "test": "node test.js",
+    "convert-skill": "node adapter.js convert-skill",
+    "generate-agents-md": "node adapter.js generate-agents-md",
+    "generate-mission": "node adapter.js generate-mission"
+  },
+  "keywords": ["foundation", "antigravity", "mission-control", "adapter", "multi-agent"],
+  "dependencies": {
+    "fs": "built-in",
+    "path": "built-in"
+  },
+  "foundation": {
+    "adapterType": "format-adapter",
+    "targetTool": "antigravity",
+    "targetFormat": "mission-control",
+    "compatibility": ["Antigravity Mission Control", "AgentKit 2.0"]
+  }
+}
