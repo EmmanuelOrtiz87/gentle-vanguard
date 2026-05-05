@@ -174,32 +174,94 @@ cmd_init() {
     bash "$TOOLS_DIR/auto-init-dev-environment.sh" true false
 }
 
+# Helper: run a PS1 script via pwsh if available
+run_pwsh() {
+    local script="$1"; shift
+    if command -v pwsh &> /dev/null; then
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "$script" "$@"
+    else
+        log_warn "pwsh not found. Install PowerShell Core: https://aka.ms/install-powershell"
+        return 1
+    fi
+}
+
+# Command: agent-verify
+cmd_verify_full() {
+    log_header "Agent Self-Verification (agent-verify.ps1)"
+    run_pwsh "$TOOLS_DIR/agent-verify.ps1" "$@"
+}
+
+# Command: dashboard (static HTML from telemetry)
+cmd_dashboard() {
+    log_header "Generate HTML Dashboard"
+    local out="$PROJECT_ROOT/reports/dashboard.html"
+    if run_pwsh "$TOOLS_DIR/TELEMETRY-METRICS/generate-dashboard.ps1" -OutputPath "$out"; then
+        log_success "Dashboard generated: $out"
+        # Open if xdg-open / open available
+        if command -v xdg-open &> /dev/null; then xdg-open "$out" 2>/dev/null &
+        elif command -v open &> /dev/null; then open "$out" 2>/dev/null &
+        fi
+    fi
+}
+
+# Command: mq (message queue adapter)
+cmd_mq() {
+    local action="${1:-status}"; shift || true
+    log_header "MQ Adapter ($action)"
+    run_pwsh "$TOOLS_DIR/WORKFLOW-ORCHESTRATION/mq-adapter.ps1" -Action "$action" "$@"
+}
+
+# Command: export-metrics
+cmd_export_metrics() {
+    log_header "Export Metrics"
+    run_pwsh "$TOOLS_DIR/TELEMETRY-METRICS/export-metrics.ps1" "$@"
+}
+
+# Command: events
+cmd_events() {
+    local action="${1:-list}"; shift || true
+    run_pwsh "$TOOLS_DIR/WORKFLOW-ORCHESTRATION/event-bus.ps1" -Action "$action" "$@"
+}
+
 # Command: help
 cmd_help() {
     cat << 'EOF'
 
 Foundation - Development Stack Workflow CLI (bash version)
+Works on Linux, macOS, Windows (WSL/Git Bash). Requires pwsh for PS1 features.
 
 USAGE:
     wf <command> [options]
 
 COMMANDS:
-    status          Show current project status and dependencies
-    health          Run health checks and auto-install missing tools
-    diagnose        Detailed system diagnostics
-    verify          Verify environment is properly configured
-    init            Initialize development environment
-    help            Show this help message
+    status           Show current project status and dependencies
+    health           Run health checks and auto-install missing tools
+    diagnose         Detailed system diagnostics
+    verify           Verify environment (basic bash checks)
+    verify-full      Full agent self-verification via agent-verify.ps1 (needs pwsh)
+    init             Initialize development environment
+    dashboard        Generate static HTML dashboard from telemetry JSON
+    mq [action]      Message queue adapter: status | publish | consume | test
+    export-metrics   Export metrics to CSV/JSONL/SQLite store
+    events [action]  Event bus: list | emit | history | subscribe
+    help             Show this help message
 
 EXAMPLES:
-    ./wf status          # Show project status
-    ./wf health          # Run health checks
-    ./wf diagnose        # Detailed diagnostics
-    ./wf verify          # Verify setup
-    ./wf init            # Initialize environment
+    ./wf status                  # Show project status
+    ./wf health                  # Run health checks
+    ./wf verify-full             # Full PS1-based verification (needs pwsh)
+    ./wf dashboard               # Generate dashboard.html and open it
+    ./wf mq status               # Check MQ adapter connectivity
+    ./wf mq test                 # Test all MQ adapters
+    ./wf export-metrics          # Export metrics to reports/metrics-export.csv
+    ./wf events list             # List standard events
 
 ENVIRONMENT VARIABLES:
     ENGRAM_DATA_DIR      Location of Engram data (default: ./.engram-data)
+
+PWSH NOTE:
+    Commands marked (needs pwsh) require PowerShell Core (pwsh).
+    Install: https://aka.ms/install-powershell
 
 EOF
 }
@@ -207,13 +269,19 @@ EOF
 # Main
 main() {
     local cmd="${1:-help}"
+    shift || true
     
     case "$cmd" in
-        status)     cmd_status;;
-        health)     cmd_health;;
-        diagnose)   cmd_diagnose;;
-        verify)     cmd_verify;;
-        init)       cmd_init;;
+        status)          cmd_status;;
+        health)          cmd_health;;
+        diagnose)        cmd_diagnose;;
+        verify)          cmd_verify;;
+        verify-full)     cmd_verify_full "$@";;
+        init)            cmd_init;;
+        dashboard)       cmd_dashboard "$@";;
+        mq)              cmd_mq "$@";;
+        export-metrics)  cmd_export_metrics "$@";;
+        events)          cmd_events "$@";;
         help|-h|--help)  cmd_help;;
         *)
             log_error "Unknown command: $cmd"
