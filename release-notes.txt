@@ -1,0 +1,26 @@
+## Summary
+- ✅ Priority 1: Test Coverage 70%+ (15+ test files, Pester 3.4.0 syntax fixed)
+- ✅ Priority 2: Real Token Tracking implemented (token-budget-guard.ps1, wf.ps1, session-autostart.ps1)
+- ✅ Priority 3: Interactive TUI Installer (FF-018) complete (script + wf.ps1 integration + docs)
+- ✅ Priority 4: Marketing materials created (docs/MARKETING/)
+- ✅ Priority 5: Plugin ecosystem initiated (plugins/examples/)
+- ✅ Fix audit-sweep.ps1 null content bug
+- ✅ Create root README.md with valid links
+- ✅ All Pester syntax errors corrected
+- ✅ No partial states, no errors, no warnings
+
+## Changes
+- 28 files in commit 8de8387 (token tracking + tests)
+- 15 files in commit 141dc2c (priorities 3-5 + fixes)
+- 3 files in commit 1f90c1b (final cleanup)
+
+## Testing
+- All unit tests pass (Pester 3.4.0)
+- Audit script fixed (0 issues in quick scope)
+- TUI installer syntax validated
+
+## Breaking Changes
+None - backward compatible
+
+## Version
+Previous: v2.6.5 → New: v2.6.6
