@@ -66,6 +66,7 @@ scripts/.event-bus/
 .workspace/config/dev-credentials.json
 .runtime/security-*.json
 .runtime/*-audit.log
+.runtime/quality/
 
 # Dependencies
 node_modules/

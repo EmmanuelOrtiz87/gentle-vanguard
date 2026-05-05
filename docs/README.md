@@ -64,8 +64,6 @@ wf sync-drift      # Detect drift between foundation and projects
 
 ---
 
-## Architecture Overview
-
 ## Architecture
 
 Foundation uses a layered, modular architecture with on-demand activation:
@@ -109,8 +107,6 @@ Refer to [reference/ARCHITECTURE.md](reference/ARCHITECTURE.md) for full details
 
 ---
 
-## 📋 Stack & Governance Policies
-
 ## 📋 Stack Policies
 
 | Concept | Description | Enforcement |
@@ -118,13 +114,11 @@ Refer to [reference/ARCHITECTURE.md](reference/ARCHITECTURE.md) for full details
 | **SDD-first** | No code without a validated specification | `sdd-gate.yml` + pre-commit hook |
 | **Adversarial Judgment** | Dual-agent review for critical changes | `wf judgment-day` |
 | **Token governance** | Hard budget cap — no runaway AI spend | Token Budget Guard |
-| **Normativas vivas** | PS, CI, Testing standards enforced in CI | `ps-lint.yml` + agent-verify |
+| **Live Standards** | PS, CI, Testing standards enforced in CI | `ps-lint.yml` + agent-verify |
 | **RBAC** | Owner-level ops require explicit auth | `config/access-control.json` |
 | **Security** | OWASP + dependabot + PSScriptAnalyzer | Automated weekly |
 
 ---
-
-## ⚙️ Skills & Automation
 
 ## ⚙️ Skills & CLI
 
@@ -153,7 +147,6 @@ wf skills              # list all 125 skills
 wf version             wf platform-info       wf health
 ```
 
-### Dashboard Signal Coverage
 ### Dashboard (`wf dashboard`)
 
 Generates `reports/dashboard.html` — open in any browser:
@@ -188,31 +181,22 @@ Foundation provides homologated templates for:
 
 ---
 
-## 🔄 Workflow Cycle
 ## 🔄 Development Workflow
 
-```
-START SESSION → pre-process-input.ps1 → trigger routing
-                    │
-          ┌─────────▼──────────┐
-          │  Agent dispatched  │  (BA / SAD / DEV / QA / OPS / GOV / DOC)
-          │  + skill loaded    │
-          └─────────┬──────────┘
-                    │ code produced
-          ┌─────────▼──────────┐
-          │  pre-commit hook   │  7D validation (security, quality, arch, tests, API, docs, gitflow)
-          │  SDD gate check    │  blocks if no validated SDD spec
-          └─────────┬──────────┘
-                    │ commit passes
-          ┌─────────▼──────────┐
-          │  CI pipeline       │  10 workflows: lint, PSScriptAnalyzer, OWASP, quality gate
-          └─────────┬──────────┘
-                    │ CI passes
-          ┌─────────▼──────────┐
-          │  judgment-day      │  adversarial dual-agent review (optional for critical changes)
-          └─────────┬──────────┘
-                    │ approved
-          tag v*.*.* → release.yml → GitHub Release (automated)
+```mermaid
+flowchart TD
+    A([🚀 Start Session]) --> B[/pre-process-input.ps1\nTrigger Routing/]
+    B --> C{Agent\nDispatched}
+    C --> D["🤖 BA · SAD · DEV · QA\nOPS · GOV · DOC\n+ Skill Loaded"]
+    D --> E([Code Produced])
+    E --> F[/pre-commit hook\n7D Validation/]
+    F --> G{SDD Gate\nCheck}
+    G -->|No validated spec| H[🚫 BLOCKED]
+    G -->|Spec OK| I["CI Pipeline\n11 Workflows\nlint · OWASP · PSScriptAnalyzer · quality gate"]
+    I --> J{CI Green?}
+    J -->|Failures| K([❌ Fix & Retry])
+    J -->|All green| L[/judgment-day\nAdversarial Dual-Agent Review/]
+    L --> M([🏷️ tag v*.*.* → GitHub Release])
 ```
 
 ---
@@ -271,7 +255,6 @@ Normalizes workspace before release or when strict cleanup reports drift.
 
 ---
 
-## 📚 Documentation
 ## 📚 Documentation
 
 
@@ -375,22 +358,27 @@ Each project uses a `.foundation` configuration file:
 
 ### Review Flow
 
-```
-                            AUTOMATIC (Pre-commit)                               
+```mermaid
+flowchart TB
+    subgraph AUTO ["⚡ AUTOMATIC — Pre-commit"]
+        direction LR
+        A([git commit]) --> B[/pre-commit hook/]
+        B --> C{Fast Scan\nSecrets + Quality}
+        C -->|Critical| D[🚫 BLOCKED\ndocs/reviews/]
+        C -->|Clean| E([✅ Commit Allowed])
+    end
 
-      git commit → pre-commit hook → Fast scan (Secrets + Quality)     
+    subgraph MANUAL ["🔍 MANUAL — On Demand"]
+        direction TB
+        G([wf review]) --> H[Full · All 7 Dimensions]
+        G --> I[security · OWASP + secrets]
+        G --> J[quality · smell + complexity]
+        G --> K[quick · ~30 seconds]
+        G --> L[--report · detailed HTML]
+        G --> M[--track · export to CSV]
+    end
 
-                          Critical?         Report saved      Allow               
-                          [X] BLOCK     docs/reviews/    [OK] Proceed         
-
-                              MANUAL (On Demand)                                
-
-      wf review              --> Full review (all 7 dimensions)                
-      wf review security     --> Security only                                 
-      wf review quality      --> Quality only                                   
-      wf review quick       --> Fast scan (~30s)                              
-      wf review --report    --> Generate detailed report                       
-      wf review --track     --> Export issues to CSV                           
+    AUTO -.->|On demand| MANUAL
 ```
 
 ---
