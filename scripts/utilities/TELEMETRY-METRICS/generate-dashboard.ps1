@@ -857,7 +857,7 @@ $html = @"
     color: #b0d2e5;
     font-weight: 600;
   }
-  canvas { width: 100%; height: 240px; max-height: 240px; }
+  canvas { width: 100%; height: 240px; max-height: 320px; }
   .ok { color: var(--ok); }
   .warn { color: var(--warn); }
   .err { color: var(--err); }
@@ -1208,11 +1208,15 @@ function drawBarChart(canvasId, labels, values, color, yFormatter) {
 function drawLineChart(canvasId, labels, values, color, yFormatter) {
   const canvas = document.getElementById(canvasId);
   if (!canvas || !labels || labels.length === 0) return;
-  const resized = resizeCanvasForDpi(canvas, 240);
+  const rotateLabels = labels.length > 7;
+  const bottomPad = rotateLabels ? 80 : 54;
+  const canvasHeight = rotateLabels ? 290 : 240;
+  const resized = resizeCanvasForDpi(canvas, canvasHeight);
+  canvas.style.height = canvasHeight + 'px';
   const ctx = resized.ctx;
   const W = resized.W;
   const H = resized.H;
-  const pad = { top: 16, right: 14, bottom: 54, left: 62 };
+  const pad = { top: 16, right: 14, bottom: bottomPad, left: 62 };
   const chartW = W - pad.left - pad.right;
   const chartH = H - pad.top - pad.bottom;
   const max = Math.max(...values, 1);
@@ -1267,13 +1271,25 @@ function drawLineChart(canvasId, labels, values, color, yFormatter) {
   });
 
   labels.forEach((label, i) => {
-    if (i % 2 !== 0 && labels.length > 8) return;
+    // Skip every other label only when not rotating and many labels present
+    if (!rotateLabels && i % 2 !== 0 && labels.length > 8) return;
     const x = pad.left + (i * chartW / Math.max(1, labels.length - 1));
+    // For dates like "2026-04-22" shorten to "MM-DD"
+    const raw = String(label);
+    const shortLabel = raw.length === 10 && raw[4] === '-' ? raw.slice(5) : (raw.length > 8 ? raw.slice(-8) : raw);
+    ctx.save();
     ctx.fillStyle = '#87a8bb';
     ctx.font = '10px Segoe UI';
-    ctx.textAlign = 'center';
-    const shortLabel = String(label).length > 10 ? String(label).slice(5) : String(label);
-    ctx.fillText(shortLabel, x, H - 28);
+    if (rotateLabels) {
+      ctx.translate(x, pad.top + chartH + 8);
+      ctx.rotate(-Math.PI / 4);
+      ctx.textAlign = 'right';
+      ctx.fillText(shortLabel, 0, 0);
+    } else {
+      ctx.textAlign = 'center';
+      ctx.fillText(shortLabel, x, H - 28);
+    }
+    ctx.restore();
   });
 }
 
