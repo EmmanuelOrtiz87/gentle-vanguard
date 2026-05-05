@@ -210,7 +210,9 @@ if ($Domain -in @("all","structure")) {
         "config/auto-delegation.json",
         "config/orchestrator.json",
         "rules/AI-NORMATIVES.md",
-        "CLAUDE.md"
+        "CLAUDE.md",
+        "VERSION",
+        "SECURITY.md"
     )
     $missing = $RequiredFiles | Where-Object { -not (Test-Path "$Root\$_") }
     if ($missing.Count -eq 0) {

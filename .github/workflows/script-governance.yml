@@ -1,5 +1,12 @@
 name: Script Governance
 
+permissions:
+  contents: read
+
+concurrency:
+  group: script-governance-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [main, develop]
@@ -20,14 +27,11 @@ on:
       - '.github/workflows/script-governance.yml'
   workflow_dispatch:
 
-concurrency:
-  group: script-governance-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
-  cancel-in-progress: true
-
 jobs:
   script-governance:
     name: Validate Script Governance and Process Alerts
     runs-on: windows-latest
+    timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@v4
