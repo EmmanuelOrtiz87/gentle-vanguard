@@ -7,7 +7,7 @@ Local-first platform for AI-assisted software development. Unifies agent orchest
 [![Version](https://img.shields.io/badge/version-2.6.5-blue.svg)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![PowerShell](https://img.shields.io/badge/PowerShell-7+-blue.svg)](https://github.com/PowerShell/PowerShell)
-[![CI](https://img.shields.io/badge/CI-10_workflows-green.svg)](.github/workflows/)
+[![CI](https://img.shields.io/badge/CI-11_workflows-green.svg)](.github/workflows/)
 [![Skills](https://img.shields.io/badge/skills-125-blueviolet.svg)](skills/)
 [![Security](https://img.shields.io/badge/security-OWASP_%2B_dependabot-orange.svg)](SECURITY.md)
 
@@ -24,7 +24,7 @@ Foundation is a **governance-first AI development stack** that unifies:
 | **SDD enforcement** | Blocks commits without a validated spec — no specification, no code |
 | **Token Budget Guard** | 30K tokens/day cap with 70%/90% soft/hard thresholds |
 | **Event bus + telemetry** | 10 standard events with governance gate and distributed tracing |
-| **Enterprise CI pipeline** | 10 workflows: quality gate, PSScriptAnalyzer, OWASP, SDD gate, automated releases |
+| **Enterprise CI pipeline** | 11 workflows: quality gate, PSScriptAnalyzer, OWASP, SDD gate, reporting and dashboard automation |
 | **7D validation hooks** | Pre-commit checks: security, quality, architecture, testing, API, docs, gitflow |
 | **Persistent memory** | Engram — context survives session restarts |
 
@@ -159,11 +159,13 @@ wf version             wf platform-info       wf health
 Generates `reports/dashboard.html` — open in any browser:
 
 1. **KPI cards**: Sessions, Dispatches, Tokens Used, Events Emitted
-2. **Event Distribution** bar chart (last 14 days)
-3. **Token Usage** trend chart
-4. **Recent Events** table with timestamp and governance status
-5. Executive traffic light: GREEN / YELLOW / RED
-6. Budget burn rate + exhaustion ETA
+2. **Token Trend**: crisp HiDPI line chart (last 14 days + freshness label)
+3. **Costs & Savings**: MTD/YTD/forecast + model and agent allocation
+4. **Executive ROI**: budget control cards + ROI comparison chart + traffic light
+5. **Event Distribution** chart (top event categories)
+6. **Recent Events** table with timestamp and governance status
+7. **Metrics Explorer** tables for full traceability
+8. **Automation**: daily CI refresh with artifact publication
 
 ### Runtime Routing Model
 1. `ai_orchestrated`: Orchestrator delegates to subagents and skills
@@ -276,6 +278,7 @@ Normalizes workspace before release or when strict cleanup reports drift.
 ### For Developers
 - **[Session Guide](guides/SESSION-GUIDE.md)**: Daily workflow and commands
 - **[Tool Activation](guides/TOOL-ACTIVATION.md)**: Auto-activation system
+- **[Dashboard Executive Guide](guides/DASHBOARD-EXECUTIVE-GUIDE.md)**: Full interpretation and ROI reading manual
 - **[Testing Standards](../rules/TESTING-STANDARDS.md)**: Testing pyramid + coverage targets
 - **[PowerShell Standards](../rules/POWERSHELL-STANDARDS.md)**: PS1 coding standards
 

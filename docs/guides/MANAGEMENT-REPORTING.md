@@ -6,6 +6,10 @@ Unified reporting system for Gentleman Foundation.
 
 Single CSV file per month containing ALL workspace activity metrics for executive visibility and decisión-making.
 
+Dashboard integration:
+- Executive dashboard snapshot is generated as part of monthly CI and uploaded as artifact.
+- See `DASHBOARD-EXECUTIVE-GUIDE.md` for complete interpretation details.
+
 ## Architecture decisión
 
 **Unified approach**: The on-demand documentation system has been integrated into this single CSV reporting system. This is the ONLY reporting system - no separate processes.
@@ -50,6 +54,11 @@ Configured in `opencode.json`:
   "script": "scripts/utilities/TELEMETRY-METRICS/generate-management-report.ps1"
 }
 ```
+
+### Automated (CI)
+
+- `.github/workflows/monthly-management-report.yml` generates monthly report and `reports/dashboard.html`.
+- `.github/workflows/dashboard-auto-refresh.yml` refreshes dashboard daily and on relevant pushes to `main`.
 
 ### On-Demand
 ```powershell
