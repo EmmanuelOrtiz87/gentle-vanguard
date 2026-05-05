@@ -54,8 +54,11 @@ Set-Location $repoRoot
 # Pre-close validation
 Write-Step "Running pre-close validation"
 $validator = Join-Path $repoRoot "tools\pre-close-validator.ps1"
+if (-not (Test-Path $validator)) {
+    $validator = Join-Path $repoRoot "scripts\utilities\pre-close-validator.ps1"
+}
 if (Test-Path $validator) {
-    & $validator -AutoResolve
+    & $validator -AutoResolve -Force:$Force
     if ($LASTEXITCODE -ne 0) {
         Write-Warn "Pre-close validation failed. Session closure blocked."
         Write-Warn "Fix issues or use -Force to override."
@@ -177,7 +180,7 @@ $taskLine
 - Commands can be skipped with: `-SkipReview`, `-SkipAudit`, `-SkipGovernance`.
 "@
 
-$content | Out-File -FilePath $outputPath -Encoding UTF8BOM
+$content | Out-File -FilePath $outputPath -Encoding UTF8
 Write-Ok "Delivery closure created: $outputPath"
 
 if (-not $SkipRotation -and (Test-Path $rotateScript)) {
