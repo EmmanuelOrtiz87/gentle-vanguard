@@ -364,7 +364,12 @@
                                         "\"sync\"",
                                         "\"public repo\"",
                                         "\"auto-sync\"",
-                                        "\"maintenance\""
+                                        "\"maintenance\"",
+                                        "\"semantic match\"",
+                                        "\"find skill\"",
+                                        "\"skill routing\"",
+                                        "\"embeddings\"",
+                                        "\"context7\"."
                                     ],
                             "SAD":  [
                                         "architecture",
@@ -578,7 +583,17 @@
                                         "\"wf script\".",
                                         "\"bash\"",
                                         "\"shell\"",
-                                        "\"shellcheck\""
+                                        "\"shellcheck\"",
+                                        "\"django\"",
+                                        "\"django rest framework\"",
+                                        "\"drf\"",
+                                        "\"viewset\"",
+                                        "\"serializer\"",
+                                        "\"apiview\".",
+                                        "\"auto-format\"",
+                                        "\"pretool\"",
+                                        "\"format hook\"",
+                                        "\"format before save\""
                                     ],
                             "QA":  [
                                        "test",
