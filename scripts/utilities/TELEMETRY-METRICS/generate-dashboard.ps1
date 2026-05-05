@@ -90,6 +90,20 @@ function Get-DoubleValue {
     return 0.0
 }
 
+  function Get-DateValue {
+    param($Value)
+    if ($null -eq $Value) {
+      return $null
+    }
+
+    try {
+      return [datetime]$Value
+    }
+    catch {
+      return $null
+    }
+  }
+
 function ConvertTo-HtmlSafe {
     param([string]$Value)
     return [System.Net.WebUtility]::HtmlEncode([string]$Value)
@@ -239,6 +253,122 @@ $simplificationSavedCost = [math]::Round(($simplificationSavedTokens / 1000000.0
 $avgReductionPct = [math]::Round((($textRows | ForEach-Object { Get-DoubleValue $_.reduction_pct } | Where-Object { $_ -ge 0 } | Measure-Object -Average).Average), 1)
 if (-not $avgReductionPct) { $avgReductionPct = 0 }
 
+# Financial cadence (MTD / YTD / projection)
+$today = Get-Date
+$currentYear = $today.Year
+$currentMonth = $today.Month
+$daysElapsedInMonth = [Math]::Max(1, $today.Day)
+$daysInMonth = [DateTime]::DaysInMonth($currentYear, $currentMonth)
+
+$tokenTimeRows = @()
+foreach ($r in $tokenGuardRows) {
+  $dateRef = $null
+  if ($r.date) {
+    $dateRef = Get-DateValue $r.date
+  }
+  if (-not $dateRef) {
+    $dateRef = Get-DateValue $r.timestamp
+  }
+  if (-not $dateRef) {
+    continue
+  }
+
+  $tokenTimeRows += [pscustomobject]@{
+    DateRef = $dateRef
+    Tokens = (Get-IntValue $r.estimated_tokens)
+    Task = [string]$r.task
+  }
+}
+
+$mtdRows = @($tokenTimeRows | Where-Object { $_.DateRef.Year -eq $currentYear -and $_.DateRef.Month -eq $currentMonth })
+$ytdRows = @($tokenTimeRows | Where-Object { $_.DateRef.Year -eq $currentYear })
+
+$tokensMTD = [int](($mtdRows | ForEach-Object { $_.Tokens } | Measure-Object -Sum).Sum)
+$tokensYTD = [int](($ytdRows | ForEach-Object { $_.Tokens } | Measure-Object -Sum).Sum)
+$costMTD = [math]::Round(($tokensMTD / 1000000.0) * $costPer1M, 2)
+$costYTD = [math]::Round(($tokensYTD / 1000000.0) * $costPer1M, 2)
+
+$projectedMonthTokens = [int][math]::Round(($tokensMTD / $daysElapsedInMonth) * $daysInMonth, 0)
+$projectedMonthCost = [math]::Round(($projectedMonthTokens / 1000000.0) * $costPer1M, 2)
+
+$mtdTaskCount = $mtdRows.Count
+$ytdTaskCount = $ytdRows.Count
+$baselineMtdTokens = $mtdTaskCount * $baselineTokensPerTask
+$baselineYtdTokens = $ytdTaskCount * $baselineTokensPerTask
+$optimizedMtdTokens = [math]::Round($baselineMtdTokens * (1 - ($reductionPolicyPct / 100.0)), 0)
+$optimizedYtdTokens = [math]::Round($baselineYtdTokens * (1 - ($reductionPolicyPct / 100.0)), 0)
+$modeledMtdSavingsTokens = [int]($baselineMtdTokens - $optimizedMtdTokens)
+$modeledYtdSavingsTokens = [int]($baselineYtdTokens - $optimizedYtdTokens)
+$modeledMtdSavingsCost = [math]::Round(($modeledMtdSavingsTokens / 1000000.0) * $costPer1M, 2)
+$modeledYtdSavingsCost = [math]::Round(($modeledYtdSavingsTokens / 1000000.0) * $costPer1M, 2)
+
+# Runtime cost by model
+$modelCostMap = @{}
+foreach ($r in $runtimeRows) {
+  $modelName = [string]$r.Model
+  if ([string]::IsNullOrWhiteSpace($modelName)) {
+    $modelName = '(unknown)'
+  }
+
+  if (-not $modelCostMap.ContainsKey($modelName)) {
+    $modelCostMap[$modelName] = [pscustomobject]@{
+      Model = $modelName
+      Requests = 0
+      Tokens = 0
+      CostUsd = 0.0
+    }
+  }
+
+  $reqTokens = (Get-IntValue $r.InputTokens) + (Get-IntValue $r.OutputTokens)
+  $entry = $modelCostMap[$modelName]
+  $entry.Requests += 1
+  $entry.Tokens += $reqTokens
+  $entry.CostUsd = [math]::Round(($entry.Tokens / 1000000.0) * $costPer1M, 4)
+}
+
+$modelCostRows = @($modelCostMap.Values | Sort-Object CostUsd -Descending)
+$modelCostRowsFormatted = @($modelCostRows | ForEach-Object {
+  [pscustomobject]@{
+    Model = $_.Model
+    Requests = $_.Requests
+    Tokens = [string]::Format('{0:N0}', $_.Tokens)
+    Cost_USD = ('{0:N4}' -f $_.CostUsd)
+  }
+})
+$modelCostTable = Build-TableHtml -Rows $modelCostRowsFormatted -Columns @('Model','Requests','Tokens','Cost_USD') -MaxRows 20
+
+# Agent cost allocation (proportional by dispatch volume)
+$agentCountMap = @{}
+foreach ($r in $agentRows) {
+  $agentName = [string]$r.agent
+  if ([string]::IsNullOrWhiteSpace($agentName)) {
+    $agentName = '(unknown)'
+  }
+  if (-not $agentCountMap.ContainsKey($agentName)) {
+    $agentCountMap[$agentName] = 0
+  }
+  $agentCountMap[$agentName] += 1
+}
+
+$agentTotalInvocations = [int](($agentCountMap.Values | Measure-Object -Sum).Sum)
+$agentCostRows = @()
+foreach ($agentName in $agentCountMap.Keys) {
+  $invocations = [int]$agentCountMap[$agentName]
+  $sharePct = if ($agentTotalInvocations -gt 0) { ($invocations * 100.0) / $agentTotalInvocations } else { 0 }
+  $allocatedTokens = [int][math]::Round(($tokensGuard * $sharePct) / 100.0, 0)
+  $allocatedCost = [math]::Round(($allocatedTokens / 1000000.0) * $costPer1M, 4)
+
+  $agentCostRows += [pscustomobject]@{
+    Agent = $agentName
+    Invocations = $invocations
+    Share_Pct = ('{0:N1}%' -f $sharePct)
+    Allocated_Tokens = [string]::Format('{0:N0}', $allocatedTokens)
+    Allocated_Cost_USD = ('{0:N4}' -f $allocatedCost)
+  }
+}
+$agentCostRows = @($agentCostRows | Sort-Object Invocations -Descending)
+$agentCostTable = Build-TableHtml -Rows $agentCostRows -Columns @('Agent','Invocations','Share_Pct','Allocated_Tokens','Allocated_Cost_USD') -MaxRows 20
+
 # Charts data
 $tokenDaily = @{}
 foreach ($r in $tokenGuardRows) {
@@ -305,10 +435,15 @@ $cardsOverview += Build-MetricCard -Title 'Runtime Latency' -Value "$runtimeLate
 
 $cardsCosts = @()
 $cardsCosts += Build-MetricCard -Title 'Actual Cost' -Value ('$' + $actualCost) -Label 'using $10 / 1M tokens'
+$cardsCosts += Build-MetricCard -Title 'MTD Cost' -Value ('$' + $costMTD) -Label 'month-to-date'
+$cardsCosts += Build-MetricCard -Title 'YTD Cost' -Value ('$' + $costYTD) -Label 'year-to-date'
+$cardsCosts += Build-MetricCard -Title 'Month-End Forecast' -Value ('$' + $projectedMonthCost) -Label "run-rate projection ($daysElapsedInMonth/$daysInMonth days)"
 $cardsCosts += Build-MetricCard -Title 'Modeled Baseline' -Value ([string]::Format('{0:N0}', $baselineModelTokens)) -Label "tokens ($tasksObserved tasks x 14k)"
 $cardsCosts += Build-MetricCard -Title 'Optimized Model' -Value ([string]::Format('{0:N0}', $optimizedModelTokens)) -Label "tokens (policy $reductionPolicyPct%)"
 $cardsCosts += Build-MetricCard -Title 'Modeled Savings' -Value ([string]::Format('{0:N0}', $modeledSavingsTokens)) -Label 'tokens saved vs baseline'
 $cardsCosts += Build-MetricCard -Title 'Modeled USD Saved' -Value ('$' + $modeledSavingsCost) -Label 'policy-based estimate'
+$cardsCosts += Build-MetricCard -Title 'MTD USD Saved' -Value ('$' + $modeledMtdSavingsCost) -Label 'modeled month-to-date'
+$cardsCosts += Build-MetricCard -Title 'YTD USD Saved' -Value ('$' + $modeledYtdSavingsCost) -Label 'modeled year-to-date'
 $cardsCosts += Build-MetricCard -Title 'Text Saved Tokens' -Value ([string]::Format('{0:N0}', $simplificationSavedTokens)) -Label 'from simplification log'
 $cardsCosts += Build-MetricCard -Title 'Text USD Saved' -Value ('$' + $simplificationSavedCost) -Label 'from simplification log'
 $cardsCosts += Build-MetricCard -Title 'Avg Reduction' -Value "$avgReductionPct%" -Label 'text simplification'
@@ -499,6 +634,17 @@ $html = @"
     </div>
     <div class="two-col" style="margin-top:12px;">
       <div class="panel">
+        <h3>Cost Allocation by Model</h3>
+        $modelCostTable
+      </div>
+      <div class="panel">
+        <h3>Estimated Cost Allocation by Agent</h3>
+        <p class="muted">Estimated by dispatch share over token-guard total.</p>
+        $agentCostTable
+      </div>
+    </div>
+    <div class="two-col" style="margin-top:12px;">
+      <div class="panel">
         <h3>Daily Cost Trend (USD)</h3>
         <canvas id="costChart"></canvas>
       </div>
@@ -506,8 +652,12 @@ $html = @"
         <h3>Cost Model Notes</h3>
         <ul>
           <li>Actual cost uses token estimate and a default price of <strong>USD $costPer1M per 1M tokens</strong>.</li>
+          <li>MTD and YTD use calendar grouping from token-guard timestamps/dates.</li>
+          <li>Month-end forecast uses run-rate: current MTD normalized by elapsed days.</li>
           <li>Modeled baseline assumes <strong>$baselineTokensPerTask tokens/task</strong> across observed tasks.</li>
           <li>Optimized model applies stack policy reduction of <strong>$reductionPolicyPct%</strong>.</li>
+          <li>Model allocation uses runtime telemetry tokens per model.</li>
+          <li>Agent allocation is estimated proportionally by agent invocation count.</li>
           <li>Text simplification savings come from <strong>text-simplification.csv</strong> token_saved_estimate values.</li>
           <li>These values are estimates intended for executive trend visibility.</li>
         </ul>
