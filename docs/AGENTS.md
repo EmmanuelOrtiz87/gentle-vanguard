@@ -6,10 +6,10 @@ This file defines agent-agnostic startup behavior for this workspace.
 
 Before substantial work in a new conversation, run:
 
-1. `tools/session-autostart.cmd` on Windows, or
-2. `bash ./tools/session-autostart.sh` on Linux/macOS/WSL.
+1. `scripts/utilities/session-autostart.cmd` on Windows, or
+2. `bash ./scripts/utilities/session-autostart.sh` on Linux/macOS/WSL.
 
-Default behavior is controlled by `tools/session-autostart.config.json`.
+Default behavior is controlled by `config/orchestrator.json`.
 
 ## Session Tracking Rule
 
