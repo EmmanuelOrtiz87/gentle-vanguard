@@ -19,7 +19,7 @@ Only enable when explicitly requested:
 1. Check `skills/` directory for relevant patterns
 2. Query engram memory: `mem_search` or `mem_context`
 3. Use `grep` and `read` for code exploration
-4. Trigger routing: `tools/pre-process-input.ps1` BEFORE responding — all mappings in `config/auto-delegation.json`
+4. Trigger routing: `scripts/utilities/pre-process-input.ps1` BEFORE responding — all mappings in `config/auto-delegation.json`
 
 ## Canonical Routing Source
 - Trigger keywords and agent routing: `config/auto-delegation.json#keywordMappings`
