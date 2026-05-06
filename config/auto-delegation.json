@@ -73,7 +73,8 @@
     "GITFLOW-MERGE": "gitflow-orchestrator-skill",
     "GITFLOW-WORKFLOW": "git-workflow-skill",
     "GITFLOW-COMMIT": "git-workflow-skill",
-    "GITFLOW-CONFLICT": "git-workflow-skill"
+    "GITFLOW-CONFLICT": "git-workflow-skill",
+    "DAILY": "daily-workflow"
   },
   "skillToAgentProfile": {
     "code-review-orchestrator-skill": "QA",
@@ -87,7 +88,8 @@
     "script-governance-skill": "DEV",
     "sdd-lifecycle": "BA",
     "docker-devops-skill": "OPS",
-    "documentation-governance": "DOC"
+    "documentation-governance": "DOC",
+    "daily-workflow": "DEV"
   },
   "clarifyBaStrategy": {
     "enabled": true,
@@ -369,10 +371,22 @@
       "\"semantic match\"",
       "\"find skill\"",
       "\"skill routing\"",
-      "\"embeddings\"",
-      "\"context7\"."
-    ],
-    "SAD": [
+       "\"embeddings\"",
+       "\"context7\"."
+     ],
+     "DAILY": [
+       "daily check",
+       "daily workflow",
+       "morning routine",
+       "start day",
+       "daily tasks",
+       "\"daily\"",
+       "\"check daily\"",
+       "\"morning check\"",
+       "routine",
+       "mantenimiento diario"
+     ],
+     "SAD": [
       "architecture",
       "design",
       "sdd",
