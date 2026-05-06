@@ -1,154 +1,157 @@
-#  Foundation: Mi AI Development Workspace
+# 🏛️ Foundation: Mi AI Development Workspace
 
-**Cmo optimizar tu desarrollo con AI assistants usando un workspace agnstico**
-
----
-
-## El Problema
-
-Cada da, ms equipos usan AI assistants como OpenCode, Claude, Cursor o GitHub Copilot. Pero:
-
--  Sin tracking de sesiónes
--  Sin mtricas de consumo
--  Sin estructura para delegar a subagentes
--  Informes scattered
--  Sin gobernanza
-
-**Foundation** resuelve esto.
+<p align="center">
+  <b>🌐 Cómo optimizar tu desarrollo con AI assistants usando un workspace agnóstico</b>
+</p>
 
 ---
 
-## Qu es Foundation?
+## 🚨 El Problema
+
+Cada día, más equipos usan AI assistants como **OpenCode, Claude, Cursor o GitHub Copilot**. Pero:
+
+| Desafío | Impacto |
+|---------|---------|
+| ❌ Sin tracking de sesiones | No hay visibilidad del trabajo |
+| ❌ Sin métricas de consumo | Costos descontrolados de tokens |
+| ❌ Sin estructura para delegar | Agents trabajando aisladamente |
+| ❌ Informes scattered | No hay visión unificada |
+| ❌ Sin gobernanza | Riesgos de seguridad y calidad |
+
+> **Foundation** resuelve esto.
+
+---
+
+## 🤔 ¿Qué es Foundation?
 
 ```
-
-           FOUNDATION v1.0                         
-     AI Development Workspace                    
-
-  Session Manager    Auto-Delegation    Reporting  
-  Token Guard     Orchestrator      Tracing    
-
+            🏛️ FOUNDATION v2.7.0                         
+      AI Development Workspace                    
+ 
+   🎮 Session Manager    🚀 Auto-Delegation    📈 Reporting  
+   💰 Token Guard     🎭 Orchestrator      🔍 Tracing    
+ 
+ Un workspace agnóstico que funciona con **cualquier** AI assistant.
 ```
-
-Un workspace agnstico que funciona con **cualquier** AI assistant.
 
 ---
 
-## Componentes Core
+## 🧩 Componentes Core
 
-### 1. Session Manager
+### 1️⃣ 🎮 Session Manager
 ```powershell
-.\tools\session-autostart.cmd
-#  Inicia sesintrackeada
+.\scripts\utilities\session-autostart.cmd
+# Inicia sesión trackeada automáticamente
 ```
 
-Tracking automtico de:
-- sesiónes activas
-- Duracin
-- Mtricas de tokens
+Tracking automático de:
+- 📊 Sesiones activas
+- ⏱️ Duración
+- 💰 Métricas de tokens
 
-### 2. Auto-Delegation
-El orquestador detecta qu necesitas y delega al skill/subagente correcto:
+### 2️⃣ 🚀 Auto-Delegation
+El orquestador detecta qué necesitas y delega al skill/subagente correcto:
 
 ```
-"generame un informe"
- REPORT agent  wf-report.ps1
-
-"implementa login"
- DEV agent  implementation skill
+"génerame un informe"        → 📈 REPORT agent + wf-report.ps1
+"implementa login"              → 🛠️ DEV agent + implementation skill
+"audita seguridad"             → 🔒 GOV agent + judgment-day
 ```
 
-**15+ categoras**: GOV, DEV, QA, DOC, SAD, OPS, REPORT, etc.
+**15+ categorías**: GOV, DEV, QA, DOC, SAD, OPS, REPORT, etc.
 
-### 3. Reporting On-Demand
+### 3️⃣ 📈 Reporting On-Demand
 ```powershell
-# informes desde CLI:
-.\wf-report.ps1 -Type sessions -Period 7days
-.\wf-report.ps1 -Type executive
-.\wf-report.ps1 -Type costs
+# Informes desde CLI:
+.\scripts\utilities\wf-report.ps1 -Type sessions -Period 7days
+.\scripts\utilities\wf-report.ps1 -Type executive
+.\scripts\utilities\wf-report.ps1 -Type costs
 ```
 
 O simplemente:
-> "generame un resumen ejecutivo" auto-delegation  reporting skill
+> *"génerame un resumen ejecutivo"* → auto-delegación al reporting skill
 
-### 4. Token Guard
+### 4️⃣ 💰 Token Guard
 Control de contexto:
-- Budget: 128K tokens
-- Alertas: 80%, 90%, 95%
-- Fragmentation strategy
+- 📊 Budget: 128K tokens
+- ⚠️ Alertas: 80%, 90%, 95%
+- 🧩 Fragmentation strategy
 
 ---
 
-## Mtricas Reales
+## 📊 Métricas Reales
 
-| Da | sesiónes | Activas | Tendencia |
-|-----|---------|--------|----------|
-| 24-Abr | 5 | 5 |  |
-| 25-Abr | 7 | 7 | +40% |
-| 26-Abr | 1 | 1 | En curso |
+| Fecha | Sesiones | Activas | Tendencia |
+|-------|-----------|--------|----------|
+| 24-Abr | 5 | 5 | ➡️ |
+| 25-Abr | 7 | 7 | 📈 +40% |
+| 26-Abr | 1 | 1 | 🔄 En curso |
 
-**sistema**:  Operativo  
-**Token Guard**:  Activo (128K budget)  
-**Reporting**:  Implementado
+**🖥️ Sistema**: Operativo  
+**💰 Token Guard**: Activo (128K budget)  
+**📈 Reporting**: Implementado
 
 ---
 
-## Por qu agnstico?
+## 🌐 ¿Por qué agnóstico?
 
-Foundation NO depende de un AI specific:
+Foundation **NO depende de un AI específico**:
 
 | AI Assistant | Compatible |
 |------------|-----------|
-| OpenCode |  |
-| Claude (Anthropic) |  |
-| Cursor |  |
-| GitHub Copilot |  |
-| Any LLM |  |
+| ✅ OpenCode | 🟢 Total |
+| ✅ Claude (Anthropic) | 🟢 Total |
+| ✅ Cursor | 🟢 Total |
+| ✅ GitHub Copilot | 🟢 Total |
+| ✅ Any LLM | 🟢 Total |
 
-El workspace es **agnstico** - trabaja con el tool que vos elijas.
+El workspace es **agnóstico** - trabaja con la herramienta que vos elijas.
 
 ---
 
-## Installing
+## 🛠️ Installing
 
 ```powershell
 # Clone
-git clone https://github.com/anomalyco/workspace-foundation.git
+git clone https://github.com/anomalyco/opencode.git
 
 # Setup
-.\tools\session-autostart.cmd
+.\scripts\utilities\session-autostart.cmd
 
-# Listo!
+# ¡Listo!
 ```
 
 ---
 
-## Prximos Pasos
+## 🎯 Próximos Pasos
 
-1. [ ] Git hooks (pre-commit, pre-push)
-2. [ ] MCP servers
-3. [ ] Dashboard UI
-4. [ ] Plugin marketplace
+| Tarea | Estado |
+|-------|--------|
+| 1. [ ] Git hooks (pre-commit, pre-push) | 📋 Pendiente |
+| 2. [ ] MCP servers | 📋 Pendiente |
+| 3. [ ] Dashboard UI | 📋 Pendiente |
+| 4. [ ] Plugin marketplace | 📋 Pendiente |
 
 Ver: `reports/RECOMENDACIONES-FOUNDATION-PRODUCTO.md`
 
 ---
 
-## Conclusin
+## 🎓 Conclusión
 
 Foundation transforma tu AI assistant en un **sistema de desarrollo completo** con:
 
--  Mtricas reales
--  Auto-delegation
--  Reporting
--  Gobernanza
+- 📊 Métricas reales
+- 🚀 Auto-delegación
+- 📈 Reporting
+- 🔒 Gobernanza
 
-**Quers probarlo?** Clonealo y corr `.\tools\session-autostart.cmd`
+> **¿Querés probarlo?** Clonalo y corré `.\scripts\utilities\session-autostart.cmd`
 
 ---
 
-* Built for AI-first teams*  
-* Open source*  
-* Mejorando continuamente*
+<p align="center">
+  <i>* Built for AI-first teams*</i><br>
+  <i>* Open source • Mejorando continuamente*</i>
+</p>
 
 `#FoundationStack` `#AIDevelopment` `#DevTools`
