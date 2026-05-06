@@ -1,6 +1,6 @@
-# foundation-installer-tui-IMPROVED.ps1
-# FF-018: Enhanced Interactive TUI Installer for Foundation
-# Improvements: real git clone, dynamic component copy, post-install verification, logging, uninstall
+# foundation-installer-tui.ps1
+# FF-018: Interactive TUI Installer for Foundation
+# Terminal-Based Setup Wizard with Logo, Help, and Quit support
 
 param(
     [string]$InstallPath = "$env:USERPROFILE\workspace-foundation",
@@ -31,6 +31,12 @@ function Write-Log {
     }
 }
 
+function Write-Step {
+    param([int]$Step, [int]$Total, [string]$Message)
+    Write-Host "[$Step/$Total] $Message" -ForegroundColor $colorMenu
+    Write-Log "Step $Step/$Total`: $Message"
+}
+
 # Colors
 $colorHighlight = "Cyan"
 $colorSuccess = "Green"
@@ -40,27 +46,62 @@ $colorMenu = "White"
 
 function Write-Header {
     Clear-Host
+    Write-Host ""
+    Write-Host "   ██████╗ ██╗   ██╗ ██████╗ ███╗   ██╗ ██████╗ " -ForegroundColor Cyan
+    Write-Host "   ██╔══██╗██║   ██║██╔═══██╗████╗  ██║██╔═══██╗" -ForegroundColor Cyan
+    Write-Host "   ██████╔╝██║   ██║██║    ██║██╔██╗ ██║██║    ██║" -ForegroundColor Cyan
+    Write-Host "   ██╔══██╗██║   ██║██║    ██║██║╚██╗██║██║    ██║" -ForegroundColor Cyan
+    Write-Host "   ██████╔╝╚██████╔╝╚██████╔╝██║ ╚████║╚██████╔╝" -ForegroundColor Cyan
+    Write-Host "   ╚═════╝  ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ " -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "            Terminal-Based Setup Wizard" -ForegroundColor White
+    Write-Host "                  v2.7.0" -ForegroundColor Green
+    Write-Host ""
     Write-Host "========================================" -ForegroundColor $colorHighlight
-    Write-Host "  Foundation TUI Installer (Enhanced)" -ForegroundColor $colorHighlight
-    Write-Host "  Terminal-Based Setup Wizard v2.7.0" -ForegroundColor $colorHighlight
+    Write-Host "  [Q] Quit anytime | [H] Help/Commands" -ForegroundColor Yellow
     Write-Host "========================================" -ForegroundColor $colorHighlight
     Write-Host ""
-    Write-Log "Installer started. Log: $logFile"
 }
 
-function Write-Step {
-    param([int]$Step, [int]$Total, [string]$Message)
-    Write-Host "[$Step/$Total] $Message" -ForegroundColor $colorMenu
-    Write-Log "Step $Step/$Total`: $Message"
+# Write-Step is defined earlier in the file (around line 60)
+
+function Show-Help {
+    Write-Header
+    Write-Host "  AVAILABLE COMMANDS & SHORTCUTS" -ForegroundColor $colorHighlight
+    Write-Host "========================================" -ForegroundColor $colorHighlight
+    Write-Host "  [Q] [q]       - Quit installer immediately" -ForegroundColor Yellow
+    Write-Host "  [H] [h]       - Show this help screen" -ForegroundColor Yellow
+    Write-Host "  [Enter]        - Accept default option" -ForegroundColor White
+    Write-Host "  1,2,3...       - Select menu option by number" -ForegroundColor White
+    Write-Host ""
+    Write-Host "  NAVIGATION" -ForegroundColor $colorHighlight
+    Write-Host "  - Every menu allows 'Q' to quit" -ForegroundColor Gray
+    Write-Host "  - 'H' shows help from any prompt" -ForegroundColor Gray
+    Write-Host "  - Enter accepts the default (>) option" -ForegroundColor Gray
+    Write-Host ""
+    Write-Host "  INSTALLATION PATHS" -ForegroundColor $colorHighlight
+    Write-Host "  - Default: $env:USERPROFILE\workspace-foundation" -ForegroundColor Gray
+    Write-Host "  - Change it in Step 2 of installer" -ForegroundColor Gray
+    Write-Host ""
+    Write-Host "  LOGS" -ForegroundColor $colorHighlight
+    Write-Host "  - Location: $logDir" -ForegroundColor Gray
+    Write-Host "  - Current: $(Split-Path $logFile -Leaf)" -ForegroundColor Gray
+    Write-Host ""
+    Read-Host "Press Enter to continue..."
 }
 
 function Read-Choice {
-    param([string]$Prompt, [string[]]$Options, [int]$Default = 0)
+    param([string]$Prompt, [string[]]$Options, [int]$Default = 0, [switch]$AllowQuit)
     Write-Host $Prompt -ForegroundColor $colorMenu
     for ($i = 0; $i -lt $Options.Count; $i++) {
         $prefix = if ($i -eq $Default) { ">" } else { "  " }
         $color = if ($i -eq $Default) { $colorHighlight } else { $colorMenu }
         Write-Host "$prefix $($i+1). $($Options[$i])" -ForegroundColor $color
+    }
+    if ($AllowQuit) {
+        Write-Host "  0. Quit / Exit" -ForegroundColor Red
+    } else {
+        Write-Host "  [Q] Quit | [H] Help" -ForegroundColor Yellow
     }
     $validInput = $false
     $result = $Default
@@ -71,20 +112,49 @@ function Read-Choice {
             $result = $Default
         } elseif ($input -match '^\d+$') {
             $num = [int]$input
+            if ($num -eq 0 -and $AllowQuit) { exit 0 }
             if ($num -ge 1 -and $num -le $Options.Count) {
                 $validInput = $true
                 $result = $num - 1
             }
+        } elseif ($input -match '^[Qq]$') {
+            Write-Host "  [!] Quitting Foundation TUI..." -ForegroundColor Yellow
+            exit 0
+        } elseif ($input -match '^[Hh]$') {
+            Show-Help
+            return Read-Choice -Prompt $Prompt -Options $Options -Default $Default -AllowQuit:$AllowQuit
         }
         if (-not $validInput) {
-            Write-Host "  [!] Invalid input. Enter 1-$($Options.Count)." -ForegroundColor $colorWarning
+            Write-Host "  [!] Invalid input. Enter 1-$($Options.Count), Q=Quit, H=Help." -ForegroundColor $colorWarning
         }
     }
     return $result
 }
 
+function Read-Input {
+    param(
+        [string]$Prompt,
+        [string]$Default = "",
+        [switch]$Required
+    )
+    $suffix = if ($Default) { " [$Default]" } else { "" }
+    $input = Read-Host "$Prompt$suffix"
+    
+    if ([string]::IsNullOrWhiteSpace($input) -and $Default) {
+        return $Default
+    }
+    
+    if ($Required -and [string]::IsNullOrWhiteSpace($input)) {
+        Write-Warning "This field is required."
+        return Read-Input -Prompt $Prompt -Default $Default -Required:$Required
+    }
+    
+    return $input
+}
+
 function Test-Prerequisites {
     Write-Step 1 6 "Checking prerequisites..."
+    
     $allPass = $true
 
     # PowerShell 7+
@@ -125,8 +195,7 @@ function Select-InstallPath {
     
     $choice = Read-Choice -Prompt "Would you like to change it?" -Options @("Yes, change path", "No, use current path") -Default 1
     if ($choice -eq 0) {
-        $newPath = Read-Host "Enter new install path [$InstallPath]"
-        if ([string]::IsNullOrWhiteSpace($newPath)) { $newPath = $InstallPath }
+        $newPath = Read-Input -Prompt "Enter new install path" -Default $InstallPath
         if ((Test-Path $newPath) -and -not $Force) {
             $overwrite = Read-Choice -Prompt "Path exists. Overwrite?" -Options @("Yes, overwrite", "No, choose another") -Default 0
             if ($overwrite -eq 1) { return Select-InstallPath }
@@ -141,13 +210,13 @@ function Select-InstallPath {
 function Select-Components {
     Write-Step 3 6 "Select components to install..."
     $components = @(
-        @{ Name = "Core Scripts"; Description = "Essential workflow scripts (wf.ps1, utilities)"; Selected = $true },
-        @{ Name = "Skills Framework"; Description = "125+ specialized skills library"; Selected = $true },
+        @{ Name = "Core Scripts"; Description = "Essential workflow scripts"; Selected = $true },
+        @{ Name = "Skills Framework"; Description = "125+ skills library"; Selected = $true },
         @{ Name = "Git Hooks"; Description = "Lefthook + Trufflehog security"; Selected = $true },
         @{ Name = "Telemetry & Metrics"; Description = "Token tracking and benchmarks"; Selected = $false },
         @{ Name = "Dev Tools"; Description = "Testing, linting, diagnostics"; Selected = $false }
     )
-    Write-Log "Component selection: Core=$($components[0].Selected), Skills=$($components[1].Selected), Hooks=$($components[2].Selected), Telemetry=$($components[3].Selected), DevTools=$($components[4].Selected)"
+    Write-Log "Component selection: Core=$($components[0].Selected), Skills=$($components[1].Selected), Hooks=$($components[2].Selected)"
     return $components
 }
 
@@ -158,8 +227,8 @@ function Configure-Settings {
     # Git config
     $gitUser = try { git config --global user.name 2>$null } catch { "" }
     $gitEmail = try { git config --global user.email 2>$null } catch { "" }
-    $settings.GitUser = Read-Host "Git user.name [$gitUser]"
-    $settings.GitEmail = Read-Host "Git user.email [$gitEmail]"
+    $settings.GitUser = Read-Input -Prompt "Git user.name" -Default $gitUser
+    $settings.GitEmail = Read-Input -Prompt "Git user.email" -Default $gitEmail
 
     # AI Provider
     Write-Host "  AI Provider (for token tracking):" -ForegroundColor $colorMenu
@@ -260,7 +329,7 @@ if ($Uninstall) {
 
 if (-not $Silent) {
     Write-Header
-    $continue = Read-Choice -Prompt "Start Foundation installation?" -Options @("Yes, start installation", "No, exit") -Default 0
+    $continue = Read-Choice -Prompt "Start Foundation installation?" -Options @("Yes, start installation", "No, exit") -Default 0 -AllowQuit
     if ($continue -eq 1) {
         Write-Host "Installation cancelled." -ForegroundColor $colorWarning
         exit 0
