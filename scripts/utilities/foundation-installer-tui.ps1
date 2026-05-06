@@ -33,6 +33,7 @@ function Write-Log {
 
 function Write-Step {
     param([int]$Step, [int]$Total, [string]$Message)
+    if ($env:FOUNDATION_VERBOSE -ne "1") { return }
     Write-Host "[$Step/$Total] $Message" -ForegroundColor $colorMenu
     Write-Log "Step $Step/$Total`: $Message"
 }
