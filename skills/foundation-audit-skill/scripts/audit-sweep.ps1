@@ -148,7 +148,7 @@ function Test-MarkdownLinks {
     
     Write-AuditHeader "Markdown Link Validation"
     
-    $mdFiles = Get-ChildItem -Path $RootPath -Recurse -Filter '*.md' -File | Where-Object { $_.FullName -notmatch '\\tools\\' }
+    $mdFiles = Get-ChildItem -Path $RootPath -Recurse -Filter '*.md' -File | Where-Object { $_.FullName -notmatch '\\tools\\|\\.opencode\\node_modules\\' }
     $brokenLinks = 0
     
     foreach ($file in $mdFiles) {
