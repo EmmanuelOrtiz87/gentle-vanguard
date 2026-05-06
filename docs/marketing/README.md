@@ -1,60 +1,110 @@
-# Foundation Marketing Materials
+# 🏛️ Foundation Marketing Materials
 
-Materials for promoting Foundation project.
+<p align="center">
+  <img src="https://img.shields.io/badge/Version-2.7.0-brightgreen?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge" alt="Status">
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License">
+</p>
 
-## Key Messages
+<p align="center">
+  <b>🌐 100% Local-First • 🔒 Privacidad Total • 🚀 125+ Skills Especializados</b>
+</p>
 
-- **Local-First**: All processing happens locally, no external dependencies
-- **125+ Skills**: Specialized AI agent skills for common development tasks
-- **Zero Token Overhead**: Audit and validation with zero AI token usage
-- **Enterprise Security**: Lefthook + Trufflehog integration for secrets detection
-- **Plugin Architecture**: Extensible system for custom workflows
+---
 
-## Elevator Pitch
+## 🎯 Key Messages
 
-"Foundation is a local-first workspace orchestration system that gives AI agents 125+ specialized skills while keeping all processing on your machine. Zero cloud dependencies, enterprise-grade security, and extensible plugin architecture."
+| Concepto | Mensaje | Impacto |
+|-----------|---------|---------|
+| **Local-First** | Todo el procesamiento ocurre localmente, cero dependencias externas | 🔒 Privacidad total |
+| **125+ Skills** | Skills especializados de IA para tareas comunes de desarrollo | 🚀 Cobertura total |
+| **Zero Token Overhead** | Auditoría y validación con cero uso de tokens de IA | 💰 Eficiencia máxima |
+| **Enterprise Security** | Integración con Lefthook + Trufflehog para detección de secretos | 🔐 Seguridad empresarial |
+| **Plugin Architecture** | Sistema extensible para workflows personalizados | 🧩 Escalabilidad |
 
-## Target Audiences
+---
 
-1. **Developers**: Building AI-assisted development workflows
-2. **Teams**: Needing standardized AI agent skills and security
-3. **Enterprises**: Requiring local-first, secure AI development tools
+## 🎙️ Elevator Pitch
 
-## Marketing Channels
+> **"Foundation es un sistema de orquestación de workspace local-first que dota a los agentes de IA de 125+ skills especializados mientras mantiene todo el procesamiento en tu máquina. Cero dependencias en la nube, seguridad empresarial, y arquitectura de plugins extensible."**
 
-- GitHub README badges and documentation
-- Developer forums and communities
-- Technical blog posts and articles
-- Conference talks and workshops
+---
 
-## Assets Needed
+## 🎯 Target Audiences
 
-- [ ] Project logo and visual identity
-- [ ] Screenshot gallery (TUI installer, wf.ps1 CLI)
-- [ ] Demo videos (installation, first session)
-- [ ] Case studies (real-world usage)
-- [ ] Comparison charts (vs other solutions)
+| Audiencia | Necesidad | Solución Foundation |
+|------------|-----------|-------------------|
+| **🛠️ Developers** | Workflows de desarrollo asistido por IA | Auto-delegación + 125 skills |
+| **👥 Teams** | Skills de agentes estandarizados y seguridad | GOV + OPS + QA workflows |
+| **🏢 Enterprises** | Herramientas de desarrollo IA seguras y local-first | 100% local + OWASP + Trufflehog |
 
-## Taglines
+---
 
-- "AI agent skills, locally orchestrated"
-- "125+ skills, zero cloud, total control"
-- "Local-first AI development workspace"
-- "Enterprise AI security, developer simplicity"
+## 📢 Marketing Channels
 
-## Quick Facts
+| Canal | Estrategia | Formato |
+|-------|------------|----------|
+| **GitHub** | README badges y documentación atractiva | Badges + emojis + tablas |
+| **Developer Forums** | Comunidades técnicas | Posts con código copy-paste |
+| **Blog Posts** | Artículos técnicos detallados | Markdown enriquecido |
+| **Conferences** | Charlas y talleres | Slides + demos en vivo |
 
-- **Version**: 2.6.5
-- **Skills**: 125+ specialized skills
-- **Scripts**: 243 utility and workflow scripts
-- **Security**: Lefthook + Trufflehog integration
-- **Compatibility**: PowerShell 7+, Windows/Linux/macOS
-- **License**: MIT
+---
 
-## Call to Action
+## 🎨 Assets Needed
+
+| Asset | Estado | Descripción |
+|-------|--------|-------------|
+| **🎨 Logo y identidad visual** | 📋 Pendiente | Diseño de marca completo |
+| **📸 Screenshot gallery** | 📋 Pendiente | TUI installer, wf.ps1 CLI, dashboards |
+| **🎥 Demo videos** | 📋 Pendiente | Instalación, primera sesión, delegación |
+| **📚 Case studies** | 📋 Pendiente | Casos de uso reales |
+| **📊 Comparison charts** | 📋 Pendiente | vs otras soluciones |
+
+---
+
+## 🏷️ Taglines
+
+| Tagline | Enfoque |
+|---------|---------|
+| `"AI agent skills, locally orchestrated"` | Orquestación local |
+| `"125+ skills, zero cloud, total control"` | Control total |
+| `"Local-first AI development workspace"` | Desarrollo IA local |
+| `"Enterprise AI security, developer simplicity"` | Seguridad + simplicidad |
+
+---
+
+## 🚀 Quick Facts
+
+| Métrica | Valor | Nota |
+|---------|-------|------|
+| **🏷️ Version** | 2.7.0 | Production Ready |
+| **🧩 Skills** | 125+ | Especializados |
+| **📜 Scripts** | 248 | PowerShell utilities |
+| **🔒 Security** | Lefthook + Trufflehog | Integración activa |
+| **💻 Compatibility** | PowerShell 7+, Windows/Linux/macOS | Cross-platform |
+| **⚖️ License** | MIT | Open source |
+
+---
+
+## 📣 Call to Action
 
 ```powershell
-git clone https://github.com/yourorg/workspace-foundation.git
+# 🚀 PASO 1: Clonar
+git clone https://github.com/anomalyco/opencode.git
 cd workspace-foundation
+
+# 💡 PASO 2: Configurar
 .\scripts\utilities\foundation-installer-tui.ps1
+
+# 📖 PASO 3: ¡Listo para usar!
+.\scripts\utilities\wf.ps1 health
 ```
+
+---
+
+<p align="center">
+  <b>🏛️ Foundation v2.7.0 — El Stack Definitivo para IA-First Development</b><br>
+  <i>100% Local-First • Privacidad Total • Listo para Producción</i><br><br>
+  <code>git clone https://github.com/anomalyco/opencode.git</code>
+</p>

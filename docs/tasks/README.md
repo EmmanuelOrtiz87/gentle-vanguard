@@ -1,58 +1,113 @@
-﻿# Task Briefs
+﻿# 📋 Task Briefs#
 
-This directory contains task briefs that provide context, scope, and acceptance criteria for development work.
+<p align="center">
+  <b>Lightweight documentation for development tasks</b>
+</p>
 
-## Purpose
+---
 
-Task briefs serve as lightweight documentation for development tasks, capturing essential information that helps maintain focus and alignment during implementation.
+## 📋 Purpose#
 
-## Directory Structure
+Task briefs provide context, scope, and acceptance criteria for development work.
+
+| Goal | Description |
+|------|-------------|
+| **🎯 Focus** | Clear problem statement and desired outcome |
+| **📏 Scope** | What's in scope and out of scope |
+| **✅ Acceptance** | Conditions for completion |
+| **⚠️ Risks** | Known technical or workflow risks |
+| **🔄 Status** | Current state and next steps |
+
+> 💡 **TIP:** Use task briefs for any significant work that spans multiple sessions.
+
+---
+
+## 📂 Directory Structure#
 
 ```
 tasks/
- [task-name].md             # Individual task briefs
- TASK-BRIEF-TEMPLATE.md     # Template for new task briefs
+├── 📄 README.md              # This file - task briefs hub
+├── 📋 task-name.md          # Individual task briefs
+├── 🔥 PENDING-TASKS.md      # Task backlog
+└── 📑 TASK-BRIEF-TEMPLATE.md # Template for new task briefs
 ```
 
-## Task Brief Components
+---
 
-Each task brief should include:
+## 🚀 Quick Start#
 
-1. **Goal** - Clear problem statement and desired outcome
-2. **Scope** - What's in scope and out of scope
-3. **Key Files** - Primary files to work with
-4. **Acceptance Criteria** - Conditions for completion
-5. **Risks** - Known technical or workflow risks
-6. **Status** - Current state and next steps
-7. **Future Release Backlog** - Items deferred to future releases
-
-## When to Create a Task Brief
-
-- For any significant work that spans multiple sessions
-- When tackling complex problems requiring detailed planning
-- For tasks that others might need to understand or take over
-- As part of the session workflow (`wf.ps1 start-session [task-name]`)
-
-## Creating New Task Briefs
-
-Use the template [TASK-BRIEF-TEMPLATE.md](../supplementary/TASK-BRIEF.template.md) as a starting point for new task briefs.
-
-You can also generate a task brief using the workflow CLI:
+### Create New Task Brief#
 ```powershell
+# Use the template
+cp ../supplementary/TASK-BRIEF.template.md task-name.md
+
+# Or generate via workflow CLI
 .\scripts\utilities\wf.ps1 task-brief <task-name>
 ```
 
-## Current Task Briefs
+### Task Brief Components#
 
-### Active Development
-- [foundation-session-hardening.md](foundation-session-hardening.md) - Task brief for governance improvements
-- [chat-baseline-architecture-validation.md](chat-baseline-architecture-validation.md) - Chat architecture validation task
+Each task brief should include:
 
-### Templates
-- [TASK-BRIEF-TEMPLATE.md](../supplementary/TASK-BRIEF.template.md) - Template for new task briefs
+| Component | Description |
+|------------|-------------|
+| **🎯 Goal** | Clear problem statement and desired outcome |
+| **📏 Scope** | What's in scope and out of scope |
+| **📂 Key Files** | Primary files to work with |
+| **✅ Acceptance Criteria** | Conditions for completion |
+| **⚠️ Risks** | Known technical or workflow risks |
+| **🔄 Status** | Current state and next steps |
+| **🔮 Future Release Backlog** | Items deferred to future releases |
 
-## Related Documentation
+---
 
-- [Session Guide](../guides/SESSION-GUIDE.md)
-- [Development Workflow](../guides/DEVELOPMENT-WORKFLOW.md)
-- [Specification Driven Development](../sdd/README.md)
+## 📊 Active Task Briefs#
+
+### Active Development#
+| Task | Description | Link |
+|------|-------------|------|
+| **🏗️ Foundation Session Hardening** | Governance improvements | [foundation-session-hardening.md](foundation-session-hardening.md) |
+| **📊 Chat Baseline Architecture** | Chat architecture validation | [chat-baseline-architecture-validation.md](chat-baseline-architecture-validation.md) |
+
+### Templates#
+| Template | Description | Link |
+|-----------|-------------|------|
+| **📑 Task Brief Template** | Template for new task briefs | [../supplementary/TASK-BRIEF.template.md](../supplementary/TASK-BRIEF.template.md) |
+| **📑 Prompt Playbook** | Prompt engineering guide | [../supplementary/PROMPT-PLAYBOOK.md](../supplementary/PROMPT-PLAYBOOK.md) |
+
+---
+
+## 🔍 When to Create a Task Brief#
+
+- ✅ For any significant work that spans multiple sessions
+- ✅ When tackling complex problems requiring detailed planning
+- ✅ For tasks that others might need to understand or take over
+- ✅ As part of the session workflow (`wf.ps1 start-session [task-name]`)
+
+---
+
+## 📚 Related Documentation#
+
+| Document | Purpose |
+|-----------|---------|
+| **📖 Session Guide** | [../guides/SESSION-GUIDE.md](../guides/SESSION-GUIDE.md) |
+| **🏗️ Architecture** | [../architecture/README.md](../architecture/README.md) |
+| **📋 SDD Lifecycle** | [../sdd/README.md](../sdd/README.md) |
+| **📂 Supplementary** | [../supplementary/README.md](../supplementary/README.md) |
+
+---
+
+## 🚀 Quick Commands Reference#
+
+| Command | Description | Output |
+|----------|-------------|--------|
+| `wf task-brief <name>` | Generate task brief | `tasks/<name>.md` |
+| `wf start-session <task>` | Start session with task | `docs/sessions/YYYY-MM-DD-HHmmss-session-start.md` |
+| `wf end-session` | End session | `docs/sessions/YYYY-MM-DD-HHmmss-delivery-closure.md` |
+
+---
+
+<p align="center">
+  <b>📋 Ready to create a task brief?</b><br>
+  <code>.\scripts\utilities\wf.ps1 task-brief &lt;task-name&gt;</code>
+</p>
