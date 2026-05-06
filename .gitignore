@@ -104,3 +104,4 @@ config/opencode.schema.json
 # Audit reports (auto-generated)
 LESSONS-LEARNED-*.md
 docs/reference/LESSONS-LEARNED-*.md
+keys/
