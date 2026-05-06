@@ -265,10 +265,11 @@ function Test-OrphanedDocs {
     $allMdFiles = Get-ChildItem -Path $docsPath -Recurse -Filter '*.md' -File -ErrorAction SilentlyContinue
     $referenced = @{}
     
-    # Scan all content for references
-    $allFiles = Get-ChildItem -Path $RootPath -Recurse -Filter '*.md' -File
+    # Scan all content for references (exclude node_modules and .git)
+    $allFiles = Get-ChildItem -Path $RootPath -Recurse -Filter '*.md' -File -ErrorAction SilentlyContinue | Where-Object { $_.FullName -notmatch '[\\/]node_modules[\\/]' -and $_.FullName -notmatch '[\\/]\.git[\\/]' }
     foreach ($file in $allFiles) {
-        $content = Get-Content $file.FullName -Raw
+        $content = Get-Content $file.FullName -Raw -ErrorAction SilentlyContinue
+        if ([string]::IsNullOrEmpty($content)) { continue }
         $mdLinkMatches = [regex]::Matches($content, '\[[^\]]+\]\(([^)#]+\.md)(?:#[^)]+)?\)')
         foreach ($match in $mdLinkMatches) {
             $linkedPath = $match.Groups[1].Value

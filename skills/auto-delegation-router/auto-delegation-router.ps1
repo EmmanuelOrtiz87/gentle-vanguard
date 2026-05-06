@@ -78,18 +78,9 @@ function Set-AutoDelegationConfig {
     
     try {
         $Config | ConvertTo-Json -Depth 10 | Set-Content $ConfigPath
-        return @{
-            Status = "Success"
-            Message = "Auto-delegation configuration updated"
-            ConfigPath = $ConfigPath
-        }
     }
     catch {
-        return @{
-            Status = "Error"
-            Message = "Failed to save configuration: $_"
-            Error = $_
-        }
+        Write-Error "Failed to save configuration: $_"
     }
 }
 
@@ -176,10 +167,12 @@ function Evaluate-DecisionTree {
     
     $decisions = @()
     
-    # Level 1: Primary domain detection
+    # Level 1: Primary domain detection (sorted by score descending)
     if ($Keywords.Count -gt 0) {
-        $primaryAgent = ($Keywords.GetEnumerator() | Select-Object -First 1).Name
-        $primaryScore = $Keywords[$primaryAgent]
+        $sortedKeywords = $Keywords.GetEnumerator() | Sort-Object Value -Descending
+        $primary = $sortedKeywords | Select-Object -First 1
+        $primaryAgent = $primary.Name
+        $primaryScore = $primary.Value
         
         $decisions += @{
             Level = 1
@@ -190,8 +183,9 @@ function Evaluate-DecisionTree {
         
         # Level 2: Secondary agent detection
         if ($Keywords.Count -gt 1) {
-            $secondaryAgent = ($Keywords.GetEnumerator() | Select-Object -Index 1).Name
-            $secondaryScore = $Keywords[$secondaryAgent]
+            $secondary = $sortedKeywords | Select-Object -Index 1
+            $secondaryAgent = $secondary.Name
+            $secondaryScore = $secondary.Value
             
             if ($secondaryScore -ge ($primaryScore * 0.6)) {
                 $decisions += @{
@@ -307,12 +301,10 @@ function Calculate-ConfidenceScore {
     # Cap at 100
     $finalScore = [Math]::Min(100, [Math]::Max(0, $baseScore))
     
-    $confidenceLevel = switch ($finalScore) {
-        { $_ -ge 80 } { "High" }
-        { $_ -ge 60 } { "Medium" }
-        { $_ -ge 40 } { "Low" }
-        default { "Very Low" }
-    }
+    $confidenceLevel = if ($finalScore -ge 80) { "High" }
+                      elseif ($finalScore -ge 60) { "Medium" }
+                      elseif ($finalScore -ge 40) { "Low" }
+                      else { "Very Low" }
     
     return @{
         Score = $finalScore
@@ -426,7 +418,7 @@ function Enable-AutoDelegation {
     $config = Get-AutoDelegationConfig -ConfigPath $ConfigPath
     $config.Enabled = $true
     
-    Set-AutoDelegationConfig -Config $config -ConfigPath $ConfigPath
+    Set-AutoDelegationConfig -Config $config -ConfigPath $ConfigPath | Out-Null
     
     return @{
         Status = "Enabled"
@@ -446,7 +438,7 @@ function Disable-AutoDelegation {
     $config = Get-AutoDelegationConfig -ConfigPath $ConfigPath
     $config.Enabled = $false
     
-    Set-AutoDelegationConfig -Config $config -ConfigPath $ConfigPath
+    Set-AutoDelegationConfig -Config $config -ConfigPath $ConfigPath | Out-Null
     
     return @{
         Status = "Disabled"
