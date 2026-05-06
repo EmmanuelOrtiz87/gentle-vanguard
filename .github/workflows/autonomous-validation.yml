@@ -1,5 +1,12 @@
 name: Autonomous Validation
 
+permissions:
+  contents: read
+
+concurrency:
+  group: autonomous-validation-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [ main, master ]
@@ -10,7 +17,9 @@ on:
 
 jobs:
   autonomous-validation:
+    name: Autonomous Validation
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Configure Git
         run: |
