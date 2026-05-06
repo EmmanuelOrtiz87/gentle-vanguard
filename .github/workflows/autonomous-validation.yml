@@ -13,7 +13,7 @@ on:
   pull_request:
     branches: [ main, master ]
   schedule:
-    - cron: '0 10 * * 1'  # Weekly on Monday at 10:00 GMT-3
+    - cron: '0 13 * * 1'  # Weekly on Monday at 10:00 GMT-3 (13:00 UTC)
 
 jobs:
   autonomous-validation:
