@@ -112,7 +112,7 @@
 
 | Plataforma | Enlace |
 |------------|--------|
-| **🐙 GitHub** | github.com/anomalyco/opencode |
+| **🐙 GitHub** | github.com/EmmanuelOrtiz87/foundation-public |
 | **📚 Docs** | docs.foundation.local |
 
 ---

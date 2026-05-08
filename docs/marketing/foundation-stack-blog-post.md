@@ -113,7 +113,7 @@ El workspace es **agnóstico** - trabaja con la herramienta que vos elijas.
 
 ```powershell
 # Clone
-git clone https://github.com/anomalyco/opencode.git
+git clone https://github.com/EmmanuelOrtiz87/foundation-public.git
 
 # Setup
 .\scripts\utilities\session-autostart.cmd
@@ -127,7 +127,7 @@ git clone https://github.com/anomalyco/opencode.git
 
 | Tarea | Estado |
 |-------|--------|
-| 1. [ ] Git hooks (pre-commit, pre-push) | 📋 Pendiente |
+| 1. [x] Git hooks (pre-commit, pre-push) | ✅ Activo |
 | 2. [ ] MCP servers | 📋 Pendiente |
 | 3. [ ] Dashboard UI | 📋 Pendiente |
 | 4. [ ] Plugin marketplace | 📋 Pendiente |
