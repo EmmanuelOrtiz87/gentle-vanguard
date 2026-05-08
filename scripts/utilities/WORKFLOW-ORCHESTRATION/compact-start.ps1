@@ -5,7 +5,8 @@ param(
     [string]$Objective = "Foundation maintenance"
 )
 
-$engramData = ".engram-data"
+$dataRoot = if ($env:FOUNDATION_DATA_DIR) { $env:FOUNDATION_DATA_DIR } else { "$env:LOCALAPPDATA\Foundation\data" }
+$engramData = "$dataRoot\.engram-data"
 if (-not (Test-Path $engramData)) {
     New-Item -ItemType Directory -Path $engramData -Force | Out-Null
 }
@@ -25,4 +26,5 @@ $context | ConvertTo-Json | Out-File -FilePath "$engramData\compact-start-$times
 Write-Output "=== Compact Start Initialized ==="
 Write-Output "Session: $sessionId"
 Write-Output "Objective: $Objective"
+Write-Output "Data dir: $dataRoot"
 Write-Output "Context tracking active."

@@ -20,9 +20,16 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
-$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-# repoRoot: go up 3 levels from wf.ps1 (WORKFLOW-ORCHESTRATION -> utilities -> scripts -> repo)
-$repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..\..')).Path
+# Prefer FOUNDATION_BASE_DIR when running cached from AppData (launcher v2.1+)
+# Falls back to $MyInvocation for development mode
+if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) {
+    $scriptDir = "$env:FOUNDATION_APPDATA_DIR\scripts\utilities\WORKFLOW-ORCHESTRATION"
+    $repoRoot = $env:FOUNDATION_BASE_DIR
+} else {
+    $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+    # repoRoot: go up 3 levels from wf.ps1 (WORKFLOW-ORCHESTRATION -> utilities -> scripts -> repo)
+    $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..\..')).Path
+}
 
 function Write-Step {
     param([string]$Message)
