@@ -414,7 +414,8 @@ SI ROLLOUT FALLA:
 
 ### Recursos
 
-- **Repo:** github.com/EmmanuelOrtiz87/AI-development-stack
+- **Repo (Public):** github.com/EmmanuelOrtiz87/foundation-public
+- **Repo (Private):** github.com/EmmanuelOrtiz87/gentleman-foundation
 - **Docs:** docs/technical-onboarding.md
 - **Slack:** #workspace-foundation
 - **Issues:** Crear issue en repo
