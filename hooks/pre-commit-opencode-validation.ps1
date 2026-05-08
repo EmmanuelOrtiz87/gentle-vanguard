@@ -75,7 +75,7 @@ function Test-Normativas {
         $normativas = Get-Content $normativasPath -Raw
         
         # Check required sections
-        $requiredSections = @("Identity", "Purpose", "Scope", "Decisions")
+        $requiredSections = @("Objetivo", "Ubicación", "Contenido", "Decisiones")
         foreach ($section in $requiredSections) {
             if ($normativas -notmatch "##\s*$section") {
                 Write-Log "Missing section in NORMATIVAS: $section" "Warning"
