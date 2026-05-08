@@ -1,7 +1,7 @@
 # 🏛️ Foundation Marketing Materials
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.7.0-brightgreen?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.8.0-brightgreen?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License">
 </p>
@@ -78,7 +78,7 @@
 
 | Métrica | Valor | Nota |
 |---------|-------|------|
-| **🏷️ Version** | 2.7.0 | Production Ready |
+| **🏷️ Version** | 2.8.0 | Production Ready |
 | **🧩 Skills** | 125+ | Especializados |
 | **📜 Scripts** | 248 | PowerShell utilities |
 | **🔒 Security** | Lefthook + Trufflehog | Integración activa |
@@ -104,7 +104,7 @@ cd foundation-public
 ---
 
 <p align="center">
-  <b>🏛️ Foundation v2.7.0 — El Stack Definitivo para IA-First Development</b><br>
+  <b>🏛️ Foundation v2.8.0 — El Stack Definitivo para IA-First Development</b><br>
   <i>100% Local-First • Privacidad Total • Listo para Producción</i><br><br>
   <code>git clone https://github.com/EmmanuelOrtiz87/foundation-public.git</code>
 </p>

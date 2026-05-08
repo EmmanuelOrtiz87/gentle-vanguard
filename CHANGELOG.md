@@ -13,6 +13,104 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.8.0] - 2026-05-08#
+
+### ✨ Added#
+
+#### 🏗️ Project Infrastructure#
+- **CODE_OF_CONDUCT.md**: Standard contributor covenant
+- **PR template**: `.github/PULL_REQUEST_TEMPLATE.md` — conventional commit checklist
+- **Dependabot**: `.github/dependabot.yml` — weekly GitHub Actions updates
+- **CodeQL**: `.github/workflows/codeql-analysis.yml` — `actions` language only, `continue-on-error: true`
+- **Labeler**: `.github/labeler.yml` — auto-labels PRs by changed paths
+- **Linting configs**: `.markdownlint.json` (MD033 with allowed elements), `.prettierrc`
+- **Security configs**: `.trivyignore`, `.secretlintrc.json`, `.secretlintignore`
+- **Architecture Decision Records**: `docs/adr/ADR-0001-foundation-architecture-decisions.md` — 7 decisions documented
+
+#### 🧪 CI/CD Pipeline#
+- **test-suite.yml**: Full CI test workflow — runs on push/PR to main/develop, executes 28 tests, uploads results artifact
+- **quality-gate.yml**: Central quality gate with `timeout-minutes` fixed (duplicate removed)
+- **ps-lint.yml**: Caching enabled for PSScriptAnalyzer
+
+#### 🔧 Git Hooks#
+- **json-lint.ps1**: Pre-commit JSON validation script (replaces inline `-Command` to fix quoting)
+- **workflow-lint.ps1**: Pre-commit workflow YAML validation — detects unsupported CodeQL languages, missing Trivy format/output
+
+#### 🛠️ Installer Improvements#
+- **Go auto-install**: `install-prerequisites.ps1` — checks via `go version`, installs via `winget install GoLang.Go`
+- **Engram auto-install**: `install-prerequisites.ps1` — checks via `engram`, installs via `go install github.com/workspace-foundation/engram/cmd/engram@latest`
+- **TUI installer**: Interactive prompts for Go and Engram installation post-clone
+- **sync-to-public.ps1**: Now copies `CONTRIBUTING.md`, `SECURITY.md`, `CHANGELOG.md` to public repo
+
+---
+
+### 🔄 Changed#
+
+#### 🔧 Lefthook v2 Migration#
+- `.lefthook.yml`: Full rewrite to v2 syntax — `commands:` with `run:` for inline, `scripts:` without `run:` for script files
+- Pre-commit: 3 hooks (json-lint, opencode-validation, workflow-lint)
+- Pre-push: 4 hooks (audit-check, orchestrator-auto-fix, test-suite, trufflehog)
+- commit-msg: commitlint via `@commitlint/cli`
+
+#### 📚 Documentation#
+- **README.md**: URLs updated from `anomalyco/workspace-foundation` to `EmmanuelOrtiz87/foundation-public`
+- **BOARD-SUPPLEMENT.md**: Repo URLs updated — both public and private repos listed
+- **CONTRIBUTING.md**: Clone URL updated to `foundation-public`
+- **TESTING-STRATEGY.md**: Rewritten with actual test states (22 unit + 3 integration + 2 security + 1 perf)
+- **tests/README.md**: Corrected test counts and categories
+- **SECURITY-HARDENING.md**: Fixed corrupted accented characters (32 patterns restored)
+- **COMPATIBILITY-MATRIX.md**: Updated with code quality standards checklist
+- **Marketing URLs**: All 3 marketing files updated from `anomalyco/opencode` to `EmmanuelOrtiz87/foundation-public`
+- **Bitbucket references**: SUITE-OVERVIEW.md URL fixed
+
+#### 🧩 Skills Reorganization#
+- 8 business skills moved to `skills/business/` subdirectory
+- `skills/documentation-manager.ps1` → `skills/documentation-manager-skill/` with proper `SKILL.md`
+- `skills/SKILL_INDEX.md`: Links updated to reflect new paths
+
+#### 🧹 Workspace Homologation#
+- 52 stale files at `C:\Workspace_local\` root archived to `_archive/`
+- `C:\Workspace_local\` now contains only: `workspace-foundation`, `foundation-public`, `bitbucket-dashboard`, and system dirs
+
+---
+
+### ✅ Fixed#
+
+#### 🐛 Pre-Push Hooks#
+- **audit-check**: Path switched to forward slashes for cross-platform compatibility
+- **config validator**: Changed from output regex to `$LASTEXITCODE` for reliability
+- **trufflehog**: Flags updated to `--no-update`, `--since-commit origin/main`
+- **orchestrator-auto-fix**: Reliable exit code detection
+
+#### 🐛 Pre-Commit Hooks#
+- **json-lint**: Moved from inline `-Command` (backtick escaping issues) to `hooks/json-lint.ps1` with `-File`
+- **opencode-validation**: Required sections changed to Spanish to match actual NORMATIVAS docs
+
+#### 🐛 CI/CD#
+- **CodeQL**: Removed unsupported `powershell` language from matrix (kept `actions` only)
+- **CodeQL**: Added `continue-on-error: true` for private repos without Advanced Security
+- **Trivy**: Added explicit `format: json` + `output: trivy-report.json` + `if: always()` + `retention-days: 30` in OWASP and dependency-backup workflows
+- **quality-gate**: Removed duplicate `timeout-minutes` line
+
+#### 🐛 Documentation & Orphaned Files#
+- **25 broken Markdown links**: Fixed across 10 documentation files
+- **NORMATIVAS link**: Last broken link resolved
+- **Dead code**: Removed Spanish duplicate section in `pre-commit-config-validation.ps1` (after `exit 0`)
+- **Orphaned AI-TOOLS-COMPATIBILITY-MATRIX.md**: Removed from `foundation-public` (superseded by `COMPATIBILITY-MATRIX.md` v1.1.0)
+
+#### 🐛 Installer#
+- **NSIS case**: Fixed `Foundation-Installer.nsi` → `foundation-installer.nsi` in sync script
+
+---
+
+### 🧪 Tests#
+- **Reorganized**: Tests split into unit (22), integration (3), security (2), performance (1) — 28 total, 100% PASS
+- **tests/README.md**: Added with test documentation
+- **categories updated**: `COMPATIBILITY-MATRIX.md` reflects new test structure
+- **Pre-push test-suite**: Runs all 28 tests before push — 0 failures
+
+---
+
 ## [2.7.0] - 2026-05-06#
 
 ### ✨ Added#
