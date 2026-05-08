@@ -1,4 +1,4 @@
-# 🤝 Contributing to Workspace Foundation#
+# 🤝 Contributing to Foundation
 
 <p align="center">
   <b>Thank you for your interest in contributing!</b>
@@ -6,28 +6,28 @@
 
 ---
 
-## 📏 Code of Conduct#
+## 📏 Code of Conduct
 
 By participating, you agree to maintain a **respectful and inclusive environment** for everyone.
 
 ---
 
-## 🚀 How to Contribute#
+## 🚀 How to Contribute
 
-### 1️⃣ Fork and Clone#
+### 1️⃣ Fork and Clone
 
 ```bash
 # Fork the repository on GitHub
 
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/workspace-foundation.git
-cd workspace-foundation
+git clone https://github.com/YOUR_USERNAME/foundation-public.git
+cd foundation-public
 
 # Add upstream remote
-git remote add upstream https://github.com/EmmanuelOrtiz87/workspace-foundation.git
+git remote add upstream https://github.com/EmmanuelOrtiz87/foundation-public.git
 ```
 
-### 2️⃣ Create a Branch#
+### 2️⃣ Create a Branch
 
 ```bash
 # Sync with upstream
@@ -40,22 +40,22 @@ git checkout -b feat/your-feature-name
 # Or: git checkout -b fix/issue-number
 ```
 
-### 3️⃣ Development#
+### 3️⃣ Development
 
 ```bash
 # Install dependencies
-./scripts/project/init-workspace.ps1
+npm install
 
 # Validate your changes
-./scripts/foundation/wf.ps1 validate
+npm test
 
 # Check workflow health
-./scripts/utilities/wf.ps1 health
+.\scripts\utilities\wf.ps1 health
 ```
 
-### 4️⃣ Make Changes#
+### 4️⃣ Make Changes
 
-#### Commit Messages#
+#### Commit Messages
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
@@ -72,35 +72,40 @@ Types:
 - chore: Maintenance tasks
 ```
 
-#### Documentation Standards#
+#### Code Quality
 
-All official documentation MUST follow **Section 7: Default Documentation Behavior** in:
-- [Documentation Standards](https://github.com/EmmanuelOrtiz87/workspace-foundation/blob/main/.claude/skills/documentation-governance/references/documentation-standards.md)
+```bash
+# Lint checks
+npm run lint:json       # JSON validation
+npm run lint:workflows  # Workflow YAML validation
+npm run format:check    # Prettier formatting check
+```
+
+#### Documentation Standards
+
+All official documentation MUST follow the project's documentation standards.
 
 **Requirements:**
 - ✅ Use shields.io badges (version, status, license, runtime)
 - ✅ Use strategic emojis in headers, list items, callouts
 - ✅ Use tables for structured data with emojis
 - ✅ Use blockquote callouts: 🚨 WARNING, 💡 TIP, ✅ SUCCESS, ℹ️ INFO
-- ✅ Use ASCII art boxes for architecture diagrams
-- ✅ Use horizontal rules (`---`) between major sections
 - ✅ Write in friendly, conversational tone with Spanish accents
-- ✅ Include 3-step wizards with emojis for complex processes
 
-### 5️⃣ Test Your Changes#
+### 5️⃣ Test Your Changes
 
 ```bash
-# Run unit tests
-./scripts/run-tests-simple.ps1
+# Run all tests
+npm test
 
-# Run integration tests
-./tests/integration/auto-delegation-router.integration.tests.ps1
+# Or directly
+.\scripts\run-tests-simple.ps1
 
 # Full validation
-./scripts/utilities/agent-verify.ps1 -Domain all
+.\scripts\utilities\wf.ps1 verify
 ```
 
-### 6️⃣ Submit PR#
+### 6️⃣ Submit PR
 
 ```bash
 # Push to your fork
@@ -115,111 +120,94 @@ git push origin feat/your-feature-name
 
 ---
 
-## 📋 Development Setup#
+## 📋 Development Setup
 
-### Prerequisites#
+### Prerequisites
 
 | Requirement | Version | Status |
 |------------|---------|--------|
 | **🪟 Windows 10/11 / Linux / macOS** | Any | ✅ Required |
-| **⚡ PowerShell 7+** | 7.0+ | ✅ Required (`winget install Microsoft.PowerShell`) |
+| **⚡ PowerShell 7+** | 7.0+ | ✅ Required |
 | **🌿 Git** | 2.30+ | ✅ Required |
-| **🟢 Node.js** | 18+ | ⚠️ Optional |
-| **🐹 Go** | 1.19+ | ⚠️ Optional |
+| **🟢 Node.js** | 18+ | ⚠️ Optional (for lefthook, prettier) |
+| **🐹 Go** | 1.19+ | ⚠️ Optional (for Engram) |
 
-### Quick Start#
+### Quick Start
 
 ```powershell
 # Bootstrap your machine
-./scripts/foundation/bootstrap-machine.ps1
+.\scripts\utilities\install-prerequisites.ps1
 
 # Start working
-./scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1 start-session
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1 start-session
 ```
 
 ---
 
-## 🏗️ Documentation Guidelines#
+## 🚧 Testing
 
-### For New Documentation#
-
-1. ✅ Follow **Section 7: Default Documentation Behavior**
-2. ✅ Use the [Documentation Standards](https://github.com/EmmanuelOrtiz87/workspace-foundation/blob/main/.claude/skills/documentation-governance/references/documentation-standards.md)
-3. ✅ Update relevant README files
-4. ✅ Link from related sections
-5. ✅ Keep files under 2000 lines
-
-### For Code Changes#
-
-1. ✅ Follow [POWERSHELL-STANDARDS.md](rules/POWERSHELL-STANDARDS.md)
-2. ✅ Add/update tests for new functionality
-3. ✅ Update documentation if behavior changes
-4. ✅ Run `wf validate` before committing
-5. ✅ Ensure all CI checks pass
-
----
-
-## 🚧 Testing#
-
-### Test Structure#
+### Test Structure
 
 | Type | Location | Count |
 |------|----------|-------|
-| **Unit Tests** | `tests/unit/` | 20 tests |
-| **Integration Tests** | `tests/integration/` | 10 tests |
-| **Total** | | **30 tests — 100% PASS** |
+| **Unit Tests** | `tests/unit/` | 22 tests |
+| **Integration Tests** | `tests/integration/` | 3 tests |
+| **Security Tests** | `tests/security/` | 2 tests |
+| **Performance Tests** | `tests/perf/` | 1 test |
+| **Total** | | **28 tests — 100% PASS** |
 
-### Running Tests#
+### Running Tests
 
 ```bash
 # All tests
-./scripts/run-tests-simple.ps1
+npm test
 
 # Specific test file
-./tests/unit/config-validaton.tests.ps1
+.\tests\unit\config-validaton.tests.ps1
 
 # With timing
-Measure-Command { ./scripts/run-tests-simple.ps1 }
+Measure-Command { .\scripts\run-tests-simple.ps1 }
 ```
 
 ---
 
-## 📚 Related Documentation#
+## 📚 Related Documentation
 
 | Document | Purpose |
 |-----------|---------|
-| **[Session Guide](docs/guides/SESSION-GUIDE.md)** | Daily workflow and commands |
-| **[Architecture Overview](docs/architecture/README.md)** | System design rationale |
-| **[Documentation Standards](https://github.com/EmmanuelOrtiz87/workspace-foundation/blob/main/.claude/skills/documentation-governance/references/documentation-standards.md)** | How to write docs |
-| **[PowerShell Standards](rules/POWERSHELL-STANDARDS.md)** | PS1 coding standards |
-| **[CI Hardening Standards](rules/CI-HARDENING-STANDARDS.md)** | Workflow requirements |
+| [Session Guide](docs/guides/SESSION-GUIDE.md) | Daily workflow and commands |
+| [Architecture Overview](docs/architecture/README.md) | System design rationale |
+| [Release Process](docs/guides/RELEASE-PROCESS.md) | How releases work |
+| [Branch Strategy](docs/guides/BRANCH-STRATEGY.md) | Git flow conventions |
+| [Testing Strategy](docs/guides/TESTING-STRATEGY.md) | Test pyramid and patterns |
 
 ---
 
-## 🚨 Critical Rules#
+## 🚨 Critical Rules
 
 > **🚨 WARNING:** Hooks run automatically before every commit.
 
 | Mechanism | Description | Status |
 |-----------|-------------|--------|
-| **Automated Hooks** | pre-commit, pre-push, 7D validation | ✅ Active |
-| **Adversarial Review** | Judgment day protocol | ✅ Active |
-| **Testing & Coverage** | `testing-strategy-skill` integration | ✅ Active |
-| **SDD Enforcement** | Specification and criteria validation | ✅ Mandatory |
+| **Automated Hooks** | pre-commit, pre-push | ✅ Active |
+| **CI/CD** | 14 GitHub Actions workflows | ✅ Active |
+| **Secret Detection** | TruffleHog on pre-push | ✅ Active |
+| **Dependency Scanning** | Trivy + Dependabot | ✅ Active |
+| **Testing** | 28 tests, 100% PASS | ✅ Active |
 
 ---
 
-## 🎯 Project Goals#
+## 🎯 Project Goals
 
-- ✅ **125+ Skills**: Specialized AI agent skills for common development tasks
+- ✅ **AI-First Workspace**: Specialized AI agent skills for common development tasks
 - ✅ **Local-First**: All processing happens locally, no external dependencies
 - ✅ **Zero Token Overhead**: Audit and validation with zero AI token usage
-- ✅ **Enterprise Security**: Lefthook + Trufflehog integration
+- ✅ **Enterprise Security**: Lefthook + Trufflehog + Trivy integration
 - ✅ **Plugin Architecture**: Extensible system for custom workflows
 
 ---
 
 <p align="center">
   <b>🤝 Ready to contribute?</b><br>
-  <code>git clone https://github.com/EmmanuelOrtiz87/workspace-foundation.git</code>
+  <code>git clone https://github.com/EmmanuelOrtiz87/foundation-public.git</code>
 </p>
