@@ -28,7 +28,6 @@ on:
 
 jobs:
   quality-gate:
-    timeout-minutes: 30
     name: Foundation Quality Gate
     runs-on: windows-latest
     timeout-minutes: 35

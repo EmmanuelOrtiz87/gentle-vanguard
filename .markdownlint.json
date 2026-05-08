@@ -2,6 +2,6 @@
   "default": true,
   "MD013": { "line_length": 120, "code_blocks": false },
   "MD024": { "allow_different_nesting": true },
-  "MD033": false,
+  "MD033": { "allowed_elements": ["h3", "p", "img", "br", "code", "center"] },
   "MD041": false
 }

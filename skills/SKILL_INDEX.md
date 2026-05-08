@@ -552,7 +552,7 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 
 **Use when**: Capturing and reporting business-relevant telemetry data
 
-**See**: [business-telemetry-skill](business-telemetry-skill/SKILL.md)
+**See**: [business-telemetry-skill](business/business-telemetry-skill/SKILL.md)
 
 ---
 
@@ -911,7 +911,7 @@ Advanced parallel execution management with dependency graphs, resource pooling,
 
 **Use when**: Capturing and reporting business-relevant telemetry data
 
-**See**: [business-telemetry-skill](business-telemetry-skill/SKILL.md)
+**See**: [business-telemetry-skill](business/business-telemetry-skill/SKILL.md)
 
 ---
 
