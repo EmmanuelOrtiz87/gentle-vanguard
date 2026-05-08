@@ -1,43 +1,29 @@
-# lefthook.yml
-# Git hooks configuration for Foundation
+# lefthook.yml v2 — Git hooks for Foundation
 # Install: npm install lefthook && npx lefthook install
 
 pre-commit:
-  run:
-    - name: opencode-validation
-      run: powershell -NoProfile -ExecutionPolicy Bypass -File "hooks/pre-commit-opencode-validation.ps1" 2>&1
-    - name: trufflehog-secrets
+  commands:
+    opencode-validation:
+      run: powershell -NoProfile -ExecutionPolicy Bypass -File "hooks/pre-commit-opencode-validation.ps1"
+    trufflehog-secrets:
       run: trufflehog git file://. --since-commit HEAD --fail
-      only: powershell -Command "git diff --cached --name-only | Select-String -Pattern '\.(env|key|pem|p12|pfx|keystore|jks)$'"
-    - name: format-check
-      run: echo "[pre-commit] Running format check..."
+      skip:
+        - powershell -Command "git diff --cached --name-only | Select-String -Pattern '\.(env|key|pem|p12|pfx|keystore|jks)$'"
+    json-lint:
+      run: powershell -NoProfile "git diff --cached --name-only --diff-filter=ACM | Select-String '\.json$' | ForEach-Object { Get-Content $_ | ConvertFrom-Json | Out-Null }"
 
 pre-push:
-  run:
-    - name: orchestrator-auto-fix
+  commands:
+    orchestrator-auto-fix:
       run: powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/orchestrate-auto-fix.ps1" -Fix
-    - name: trufflehog-full
+    test-suite:
+      run: powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/run-tests-simple.ps1"
+    trufflehog-full:
       run: trufflehog git file://. --since-commit origin/develop --fail
-    - name: judgment-day
-      run: echo "[pre-push] Running judgment day..."
+    audit-check:
+      run: powershell -NoProfile -ExecutionPolicy Bypass -Command "& '.\skills\foundation-audit-skill\scripts\audit-sweep.ps1' -Scope quick"
 
 commit-msg:
-  run:
-    - name: commitlint
-      run: echo "[commit-msg] Validating commit message format..."
-
-# Extensions to run hooks on
-# extensions:
-#   filter:
-#     - .ps1
-#     - .ts
-#     - .tsx
-#     - .js
-#     - .go
-#     - .py
-
-# Exclude files from hooks
-# exclude:
-#   - "*.min.js"
-#   - "vendor/**"
-#   - "node_modules/**"
+  commands:
+    commitlint:
+      run: powershell -NoProfile -ExecutionPolicy Bypass -File "hooks/commitlint.ps1" {1}

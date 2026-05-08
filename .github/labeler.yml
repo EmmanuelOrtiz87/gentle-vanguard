@@ -1,0 +1,25 @@
+# Auto-label PRs based on changed paths
+documentation:
+- changed-files:
+  - any-glob-to-any-file: ['docs/**', '**/*.md']
+testing:
+- changed-files:
+  - any-glob-to-any-file: ['tests/**']
+ci-cd:
+- changed-files:
+  - any-glob-to-any-file: ['.github/**']
+scripts:
+- changed-files:
+  - any-glob-to-any-file: ['scripts/**']
+skills:
+- changed-files:
+  - any-glob-to-any-file: ['skills/**']
+config:
+- changed-files:
+  - any-glob-to-any-file: ['config/**', '*.json']
+dependencies:
+- changed-files:
+  - any-glob-to-any-file: ['package.json']
+security:
+- changed-files:
+  - any-glob-to-any-file: ['**/SECURITY.md', '.github/workflows/*security*']

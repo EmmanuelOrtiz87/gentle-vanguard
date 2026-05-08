@@ -28,6 +28,12 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 15
     steps:
+      - name: Cache PSScriptAnalyzer
+        id: cache-psanalyzer
+        uses: actions/cache@v4
+        with:
+          path: ~\Documents\PowerShell\Modules\PSScriptAnalyzer
+          key: ${{ runner.os }}-psanalyzer-1.23.0
       - name: Checkout
         uses: actions/checkout@v6
         with:
