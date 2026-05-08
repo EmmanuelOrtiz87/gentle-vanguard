@@ -24,7 +24,7 @@ if (Test-Path "$buildDir\public") {
 $makensis = Get-Command makensis -ErrorAction SilentlyContinue
 if ($makensis) {
     Write-Output "🔨 Rebuilding installer..."
-    & makensis "$buildDir\Foundation-Installer.nsi" 2>&1 | Out-Null
+    & makensis "$buildDir\foundation-installer.nsi" 2>&1 | Out-Null
     if (Test-Path "$buildDir\Foundation-Setup.exe") {
         Copy-Item "$buildDir\Foundation-Setup.exe" "$publicRepo\Foundation-Setup.exe" -Force
         Write-Output "✅ Installer updated"
