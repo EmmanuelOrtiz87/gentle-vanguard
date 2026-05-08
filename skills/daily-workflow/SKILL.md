@@ -1,3 +1,10 @@
+---
+name: daily-workflow
+description: >
+  Daily Foundation tasks: status check, context tracking, audit, and sync verification.
+  Trigger: "daily check", "daily workflow", "morning routine", "start day", "daily tasks".
+---
+
 # Daily Workflow Skill
 
 ## Trigger
