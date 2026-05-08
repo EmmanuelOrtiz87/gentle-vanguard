@@ -276,6 +276,44 @@ function Install-Foundation {
         Write-Log "Git hooks installed" -Level "SUCCESS"
     }
 
+    # Optional: Install Go (needed for Engram)
+    if (-not (Get-Command go -ErrorAction SilentlyContinue)) {
+        $installGo = Read-Choice -Prompt "Install Go (required for Engram persistent memory)?" -Options @("Yes, install Go", "No, skip") -Default 1
+        if ($installGo -eq 0) {
+            try {
+                Write-Log "Installing Go via winget..." -Level "INFO"
+                & winget install GoLang.Go --accept-package-agreements --silent 2>&1 | ForEach-Object { Write-Log $_ }
+                $env:Path = [Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [Environment]::GetEnvironmentVariable("Path", "User")
+                Write-Log "Go installed. You may need to restart your terminal." -Level "SUCCESS"
+            } catch {
+                Write-Log "Go installation failed: $($_.Exception.Message)" -Level "WARN"
+                Write-Log "Install manually: winget install GoLang.Go or https://go.dev/dl/" -Level "INFO"
+            }
+        }
+    } else {
+        Write-Log "Go already installed" -Level "SUCCESS"
+    }
+
+    # Optional: Install Engram (persistent memory)
+    if (-not (Get-Command engram -ErrorAction SilentlyContinue)) {
+        if (Get-Command go -ErrorAction SilentlyContinue) {
+            $installEngram = Read-Choice -Prompt "Install Engram (persistent memory engine)?" -Options @("Yes, install Engram", "No, skip") -Default 1
+            if ($installEngram -eq 0) {
+                try {
+                    Write-Log "Installing Engram via go install..." -Level "INFO"
+                    & go install github.com/workspace-foundation/engram/cmd/engram@latest 2>&1 | ForEach-Object { Write-Log $_ }
+                    Write-Log "Engram installed. Configure with: engram setup <agent>" -Level "SUCCESS"
+                } catch {
+                    Write-Log "Engram installation failed: $($_.Exception.Message)" -Level "WARN"
+                }
+            }
+        } else {
+            Write-Log "Engram requires Go. Install Go first then run: go install github.com/workspace-foundation/engram/cmd/engram@latest" -Level "INFO"
+        }
+    } else {
+        Write-Log "Engram already installed" -Level "SUCCESS"
+    }
+
     # Run post-install verification
     Write-Log "Running post-install verification..." -Level "INFO"
     $wfScript = Join-Path $InstallPath "scripts\utilities\wf.ps1"

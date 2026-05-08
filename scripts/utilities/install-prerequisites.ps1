@@ -173,6 +173,23 @@ $prerequisites = @(
         Command = "pip"
         Description = "Python package manager (optional)"
         Required = $false
+    },
+    @{
+        Name = "Go"
+        Type = "command"
+        Command = "go"
+        Description = "Go programming language (optional, needed for Engram)"
+        Required = $false
+        InstallHint = "winget install GoLang.Go"
+    },
+    @{
+        Name = "Engram"
+        Type = "manual"
+        InstallCommand = "go install github.com/workspace-foundation/engram/cmd/engram@latest"
+        Description = "Persistent memory engine (optional)"
+        Required = $false
+        ManualHint = "Requires Go: go install github.com/workspace-foundation/engram/cmd/engram@latest"
+        AlternativeCheck = { $null -ne (Get-Command engram -ErrorAction SilentlyContinue) }
     }
 )
 
@@ -232,6 +249,33 @@ if ($missing.Count -gt 0 -and -not $CheckOnly) {
             Install-Tool -Name $tool.Name -InstallCommand "npm install -g prettier" -Type npm -Description $tool.Description
         } elseif ($tool.Name -eq "commitlint") {
             Install-Tool -Name $tool.Name -InstallCommand "npm install -g @commitlint/cli @commitlint/config-conventional" -Type npm -Description $tool.Description
+        } elseif ($tool.Name -eq "Go") {
+            $goInstalled = $false
+            try {
+                $goResult = & winget install GoLang.Go --accept-package-agreements --silent 2>&1
+                if ($LASTEXITCODE -eq 0) {
+                    Install-Tool -Name $tool.Name -InstallCommand "winget install GoLang.Go --accept-package-agreements" -Type "winget" -Description $tool.Description
+                    $goInstalled = $true
+                }
+            } catch { }
+            if (-not $goInstalled) {
+                Write-Warn "Go: Install manually from https://go.dev/dl/ or run: winget install GoLang.Go"
+            }
+        } elseif ($tool.Name -eq "Engram") {
+            if (Get-Command go -ErrorAction SilentlyContinue) {
+                try {
+                    & go install github.com/workspace-foundation/engram/cmd/engram@latest 2>&1 | Out-Null
+                    if ($LASTEXITCODE -eq 0) {
+                        Write-Ok "Engram installed via go install"
+                    } else {
+                        Write-Warn "Engram: go install failed - $($tool.ManualHint)"
+                    }
+                } catch {
+                    Write-Warn "Engram: $($tool.ManualHint)"
+                }
+            } else {
+                Write-Warn "Engram requires Go. Install Go first, then: $($tool.ManualHint)"
+            }
         } else {
             Write-Warn "$($tool.Name): Manual install required - $($tool.Description)"
         }
@@ -248,10 +292,10 @@ if ($missing.Count -gt 0) {
     Write-Host ""
     Write-Host "=== Tools Requiring Manual Install ===" -ForegroundColor Yellow
     foreach ($tool in $missing) {
-        $hint = switch ($tool.Name) {
+        $hint = if ($tool.ManualHint) { $tool.ManualHint } else { switch ($tool.Name) {
             "trufflehog" { "choco install trufflehog" }
             default { "See tool documentation" }
-        }
+        }}
         Write-Host "  - $($tool.Name): $hint" -ForegroundColor Yellow
     }
 }
