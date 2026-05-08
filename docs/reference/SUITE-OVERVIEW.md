@@ -106,7 +106,7 @@ Gentleman Foundation Suite
 ### 1. Environment Setup (One-time)
 ```powershell
 # Clone foundation template
-git clone https://github.com/EmmanuelOrtiz87/workspace-foundation.git
+git clone https://github.com/EmmanuelOrtiz87/foundation-public.git
 
 # Optional Windows PowerShell profile setup
 Copy-Item "scripts/utilities/Microsoft.PowerShell_profile.ps1" $PROFILE

@@ -91,8 +91,8 @@
 
 ```powershell
 # 🚀 PASO 1: Clonar
-git clone https://github.com/anomalyco/opencode.git
-cd workspace-foundation
+git clone https://github.com/EmmanuelOrtiz87/foundation-public.git
+cd foundation-public
 
 # 💡 PASO 2: Configurar
 .\scripts\utilities\foundation-installer-tui.ps1
@@ -106,5 +106,5 @@ cd workspace-foundation
 <p align="center">
   <b>🏛️ Foundation v2.7.0 — El Stack Definitivo para IA-First Development</b><br>
   <i>100% Local-First • Privacidad Total • Listo para Producción</i><br><br>
-  <code>git clone https://github.com/anomalyco/opencode.git</code>
+  <code>git clone https://github.com/EmmanuelOrtiz87/foundation-public.git</code>
 </p>
