@@ -81,10 +81,10 @@ wf sync-drift      # Detect drift between foundation and projects
 
 ## 🎯 Next Steps
 
-1. **[Read the Architecture Overview](architecture/README.md)** — Understand the 5-layer topology
-2. **[Explore Available Skills](reference/SKILL-ORGANIZATION.md)** — 125+ specialized skills
-3. **[Set Up Your First Project](guides/GETTING-STARTED.md)** — Use scaffolding tools
-4. **[Configure AI Agent](guides/AI-TOOL-COMPATIBILITY-MATRIX.md)** — OpenCode, Claude, Cursor, etc.
+1. **[Read the Architecture Overview](../architecture/README.md)** — Understand the 5-layer topology
+2. **[Explore Available Skills](../reference/SKILL-ORGANIZATION.md)** — 125+ specialized skills
+3. **[Set Up Your First Project](../guides/GETTING-STARTED.md)** — Use scaffolding tools
+4. **[Configure AI Agent](../guides/COMPATIBILITY-MATRIX.md)** — OpenCode, Claude, Cursor, etc.
 
 ---
 

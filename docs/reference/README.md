@@ -57,11 +57,11 @@
 | **[SKILL-RESOLVER-PROTOCOL.md](SKILL-RESOLVER-PROTOCOL.md)** | Skill resolver protocol |
 | **[VALIDATION-REPORT.md](VALIDATION-REPORT.md)** | Validation report |
 | **[FUTURE-FEATURES-BACKLOG.md](FUTURE-FEATURES-BACKLOG.md)** | Future features backlog |
-| **[MIGRATION-NORMATIVAS-GLOBALES.md](MIGRATION-NORMATIVAS-GLOBALES.md)** | Migration guide |
+| ~~MIGRATION-NORMATIVAS-GLOBALES.md~~ | *(archived — ver NORMATIVAS-ORQUESTADOR.md)* |
 | **[NORMATIVAS-ORQUESTADOR.md](../../NORMATIVAS-ORQUESTADOR.md)** | Orchestrator norms |
 | **[master-instructions.md](master-instructions.md)** | Master instructions |
 | **[shared-knowledge.md](shared-knowledge.md)** | Shared knowledge base |
-| **[OBSERVABILITY.md](OBSERVABILITY.md)** | Observability guide |
+| **[OBSERVABILIDAD.md](OBSERVABILIDAD.md)** | Observability guide |
 | **[SUPPLEMENTARY/README.md](../supplementary/README.md)** | Supplementary docs hub |
 
 ---

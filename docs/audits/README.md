@@ -25,7 +25,7 @@ docs/audits/
 ├── 📄 README.md                    # This file - audit hub
 ├── 📊 YYYY-MM-DD-HHmmss-audit.md    # Individual audit reports
 ├── 📋 script-normalization-report.md   # Script governance report
-└── 🗂️ .local-archive/              # Archived older audits
+└── (archived in git history)        # Older audits via git log
 ```
 
 ---
@@ -58,7 +58,6 @@ docs/audits/
 |--------|-------------|------|
 | **📋 Latest Audit** | Current repository state | Auto-generated timestamp |
 | **📊 Normalization** | Script governance compliance | [script-normalization-report.md](script-normalization-report.md) |
-| **📂 Archive** | Historical audits | [.local-archive/](.local-archive/) |
 
 ---
 
@@ -118,7 +117,7 @@ Normalizes workspace before release or when strict cleanup reports drift.
 | **📖 Session Guide** | [../guides/SESSION-GUIDE.md](../guides/SESSION-GUIDE.md) |
 | **🏗️ Architecture** | [../architecture/README.md](../architecture/README.md) |
 | **📋 Audit Workflow** | [../guides/AUDIT-WORKFLOW.md](../guides/AUDIT-WORKFLOW.md) |
-| **📅 Audit System** | [AUTONOMOUS-AUDIT-SYSTEM.md](AUTONOMOUS-AUDIT-SYSTEM.md) |
+| **📅 Audit Workflow** | [../guides/AUDIT-WORKFLOW.md](../guides/AUDIT-WORKFLOW.md) |
 
 ---
 

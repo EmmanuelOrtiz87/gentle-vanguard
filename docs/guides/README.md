@@ -26,7 +26,7 @@ New to Workspace Foundation? Start here:
 | Guide | Purpose |
 |-------|---------|
 | **[SCRIPT-NORMALIZATION-STANDARDS.md](SCRIPT-NORMALIZATION-STANDARDS.md)** | Script normalization and best practices |
-| **[AI-TOOLS-COMPATIBILITY-MATRIX.md](AI-TOOLS-COMPATIBILITY-MATRIX.md)** | AI tool integration (Claude, Cline, etc.) |
+| **[COMPATIBILITY-MATRIX.md](COMPATIBILITY-MATRIX.md)** | AI tool integration (Claude, Cline, etc.) |
 | **[TOKEN-CONTEXT-STANDARDS.md](TOKEN-CONTEXT-STANDARDS.md)** | Token budgets and efficiency modes |
 | **[TOKEN-AUTOPILOT-OPERATIONS.md](TOKEN-AUTOPILOT-OPERATIONS.md)** | Hard/balanced token autopilot operations and quick commands |
 | **[DASHBOARD-EXECUTIVE-GUIDE.md](DASHBOARD-EXECUTIVE-GUIDE.md)** | Dashboard interpretation, ROI reading, and automation lifecycle |
@@ -64,7 +64,7 @@ New to Workspace Foundation? Start here:
 1. [SESSION-GUIDE.md](SESSION-GUIDE.md)
 2. [GITFLOW-QUICK-REFERENCE.md](GITFLOW-QUICK-REFERENCE.md)
 3. [SCRIPT-NORMALIZATION-STANDARDS.md](SCRIPT-NORMALIZATION-STANDARDS.md)
-4. [AI-TOOLS-COMPATIBILITY-MATRIX.md](AI-TOOLS-COMPATIBILITY-MATRIX.md)
+4. [COMPATIBILITY-MATRIX.md](COMPATIBILITY-MATRIX.md)
 
 ### For DevOps
 1. [ARCHITECTURE.md](../architecture/ARCHITECTURE.md)
@@ -84,7 +84,7 @@ New to Workspace Foundation? Start here:
 | SESSION-GUIDE.md | Session management |
 | GITFLOW-QUICK-REFERENCE.md | GitFlow workflow |
 | SCRIPT-NORMALIZATION-STANDARDS.md | Code quality |
-| AI-TOOLS-COMPATIBILITY-MATRIX.md | Tool integration |
+| COMPATIBILITY-MATRIX.md | Tool integration |
 | TOKEN-CONTEXT-STANDARDS.md | Token optimization |
 | TOKEN-AUTOPILOT-OPERATIONS.md | Token autopilot operations |
 | DASHBOARD-EXECUTIVE-GUIDE.md | Dashboard interpretation and ROI |

@@ -106,10 +106,10 @@ wf sync-drift
 
 | Document | Purpose |
 |-----------|---------|
-| **[Session Guide](../guides/SESSION-GUIDE.md)** | Daily workflow and commands |
-| **[Architecture Overview](../architecture/README.md)** | System design rationale |
-| **[Auto-Delegation Config](../../config/auto-delegation.json)** | Trigger mappings and agent profiles |
-| **[Tool Activation](../guides/TOOL-ACTIVATION.md)** | Auto-activation system |
+| **[Session Guide](guides/SESSION-GUIDE.md)** | Daily workflow and commands |
+| **[Architecture Overview](architecture/README.md)** | System design rationale |
+| **[Auto-Delegation Config](../config/auto-delegation.json)** | Trigger mappings and agent profiles |
+| **[Tool Activation](guides/TOOL-ACTIVATION.md)** | Auto-activation system |
 
 ---
 

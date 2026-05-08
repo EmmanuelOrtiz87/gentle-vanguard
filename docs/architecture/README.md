@@ -107,10 +107,10 @@ docs/architecture/
 
 | Document | Purpose | Link |
 |-----------|---------|------|
-| **System Overview** | Full architecture rationale | [reference/ARCHITECTURE.md](reference/ARCHITECTURE.md) |
-| **SDD Governance** | Specification-driven development policy | [reference/SDD-GOVERNANCE-POLICY.md](reference/SDD-GOVERNANCE-POLICY.md) |
-| **Plugin System** | Plugin development guide | [reference/PLUGIN-ARCHITECTURE.md](reference/PLUGIN-ARCHITECTURE.md) |
-| **Token Tracking** | AI token monitoring guide | [reference/REAL-TOKEN-TRACKING.md](reference/REAL-TOKEN-TRACKING.md) |
+| **System Overview** | Full architecture rationale | [../reference/ARCHITECTURE.md](../reference/ARCHITECTURE.md) |
+| **SDD Governance** | Specification-driven development policy | [../reference/SDD-GOVERNANCE-POLICY.md](../reference/SDD-GOVERNANCE-POLICY.md) |
+| **Plugin System** | Plugin development guide | [../reference/PLUGIN-ARCHITECTURE.md](../reference/PLUGIN-ARCHITECTURE.md) |
+| **Token Tracking** | AI token monitoring guide | [../reference/REAL-TOKEN-TRACKING.md](../reference/REAL-TOKEN-TRACKING.md) |
 
 ---
 

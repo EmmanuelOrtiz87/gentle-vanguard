@@ -73,7 +73,7 @@ Each task brief should include:
 | Template | Description | Link |
 |-----------|-------------|------|
 | **📑 Task Brief Template** | Template for new task briefs | [../supplementary/TASK-BRIEF.template.md](../supplementary/TASK-BRIEF.template.md) |
-| **📑 Prompt Playbook** | Prompt engineering guide | [../supplementary/PROMPT-PLAYBOOK.md](../supplementary/PROMPT-PLAYBOOK.md) |
+| **📑 Prompt Playbook** | Prompt engineering guide | [../supplementary/templates/PROMPT-PLAYBOOK.md](../supplementary/templates/PROMPT-PLAYBOOK.md) |
 
 ---
 
