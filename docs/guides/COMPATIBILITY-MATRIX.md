@@ -87,6 +87,18 @@ IF trigger detected BUT skill cannot auto-load:
 - [ ] Orchestrator: Update `config/orchestrator.json`
 - [ ] Update `docs/guides/COMPATIBILITY-MATRIX.md`
 
+**Code Quality Standards:**
+
+- [ ] `.markdownlint.json` — Markdown formatting enforced via pre-commit hook
+- [ ] `.prettierrc` — Consistent code formatting (JSON, YAML, Markdown)
+- [ ] `.editorconfig` — Universal editor settings (UTF-8, LF, trailing newline)
+- [ ] `CODE_OF_CONDUCT.md` — Community standards
+- [ ] `.github/PULL_REQUEST_TEMPLATE.md` — PR checklist
+- [ ] `.github/labeler.yml` — Auto-label PRs by path
+- [ ] Tests organized: `tests/unit/`, `tests/integration/`, `tests/security/`, `tests/performance/`
+- [ ] `scripts/run-tests-simple.ps1` — Runs all test categories
+- [ ] `pre-push` hook runs test suite + audit check
+
 ## Incompatible Features
 
 Features that CANNOT be implemented in certain tools due to architectural limitations:
