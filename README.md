@@ -138,7 +138,7 @@ Sistema extensible con **manifest schema**:
 
 ---
 
-## 🚦 CI/CD Pipeline (9 Workflows Automáticos)
+## 🚦 CI/CD Pipeline (14 Workflows Automáticos)
 
 | Workflow | Propósito | Frecuencia | Estado |
 |----------|-----------|-----------|--------|
@@ -147,10 +147,15 @@ Sistema extensible con **manifest schema**:
 | 📊 `dashboard-auto-refresh.yml` | Actualización de dashboards | Diario 07:00 UTC | ✅ Activo |
 | 💾 `dependency-backup.yml` | Backup de dependencias | Domingos 13:30 GMT-3 | ✅ Activo |
 | 🔒 `owasp-scan.yml` | Escaneo de seguridad OWASP | Domingos 13:30 GMT-3 | ✅ Activo |
+| 🔐 `codeql-analysis.yml` | Análisis CodeQL (security-quality) | Lunes 10:00 | ✅ Activo |
+| 🧪 `test-suite.yml` | Suite completa de tests (28 tests, 4 categorías) | Por PR/Push | ✅ Activo |
 | 📈 `monthly-management-report.yml` | Reporte gerencial | Mensual 06:00 UTC | ✅ Activo |
 | 🚀 `release.yml` | Gestión de releases | Manual/Tag | ✅ Activo |
-| 🧹 `ps-lint.yml` | Linting de PowerShell | Por PR | ✅ Activo |
+| 🧹 `ps-lint.yml` | Linting de PowerShell con PSScriptAnalyzer | Por PR | ✅ Activo |
 | 📋 `script-governance.yml` | Governanza de scripts | Por PR | ✅ Activo |
+| 🏷️ `labeler.yml` | Auto-etiquetado de PRs | Por PR | ✅ Activo |
+| 📝 `sdd-gate.yml` | Bloqueo de PRs sin SDD validado | Por PR | ✅ Activo |
+| ✅ `workflow-lint.yml` | Validación de sintaxis de workflows | Por cambio en .github/ | ✅ Activo |
 
 ---
 
@@ -175,7 +180,7 @@ Sistema extensible con **manifest schema**:
 |------------|---------|--------|----------|
 | 🔷 **PowerShell** | 7+ | ✅ Requerido | ❌ |
 | 🌿 **Git** | 2.50+ | ✅ Requerido | ❌ |
-| 🔷 **Go** | 1.26+ | ✅ Requerido | ❌ |
+| 🔷 **Go** | 1.26+ | ⚠️ Opcional | ✅ Solo scripts específicos |
 | 🟢 **Node.js** | 18+ | ⚠️ Opcional | ✅ Solo algunas herramientas |
 
 ---
@@ -188,7 +193,7 @@ workspace-foundation/
 ├── 🧩 skills/            # 125+ skills especializados de IA
 ├── ⚙️ config/            # Configuraciones (auto-delegation, DAG, tokens)
 ├── 📖 docs/              # 16 documentos principales
-├── 🧪 tests/             # 30 tests (20 unit + 10 integration) - 100% PASS
+├── 🧪 tests/             # 28 tests (22 unit + 3 integration + 2 security + 1 perf) - 100% PASS
 ├── 📋 rules/             # Reglas y estándares del proyecto
 └── 💾 .engram-data/     # Memoria persistente (607 observations)
 ```
@@ -241,7 +246,7 @@ cd workspace-foundation
 |----------|---------|---------|
 | ⏱️ **Reducción de tiempo** | 80% menos tiempo en setup | TUI installer: 5 min vs 2+ horas manual |
 | 🎯 **Consistencia** | 100% adherencia a estándares | Auto-delegación + judgment-day |
-| 🧪 **Cobertura** | ~75% (objetivo superado) | 30 tests automatizados |
+| 🧪 **Cobertura** | ~75% objetivos cubiertos | 28 tests automatizados (4 categorías) |
 | 🔒 **Seguridad** | Detección temprana | Trufflehog + OWASP scan |
 | 🔄 **Continuidad** | Memoria persistente | Engram: 607 observations |
 | 👁️ **Visibilidad** | Reportes automáticos | Dashboards semanales y mensuales |

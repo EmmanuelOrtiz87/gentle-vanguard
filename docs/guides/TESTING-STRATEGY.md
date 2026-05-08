@@ -1,41 +1,49 @@
 # Automated Testing and CI/CD Enforcement
 
 ## Current Status
-No automated test scripts or test coverage were found in the workspace-foundation project. Automated testing is critical for reliability and maintainability.
+The project has **28 automated tests** organized in 4 categories:
+- **22 Unit tests** — Individual component validation
+- **3 Integration tests** — Cross-component interaction
+- **2 Security tests** — Input validation, secret detection
+- **1 Performance test** — Engram memory benchmarks
 
-## Recommendations
-- Add unit and integration tests for all critical scripts and modules.
-- Use a standard test framework for each language (e.g., Pester for PowerShell, Go test for Go modules, Jest for Node.js, Pytest for Python).
-- Place all test scripts in a `tests/` or `test/` directory at the project root or within each module.
-- Integrate test execution into CI/CD pipelines (e.g., GitHub Actions, Azure Pipelines).
-- Enforce test pass status before allowing merges or deployments.
+All tests use **Pester 5.x** and run via `scripts/run-tests-simple.ps1`.
 
-## Example: PowerShell Test with Pester
-```powershell
-# tests/sample.tests.ps1
-Describe "Sample Test" {
-    It "Should pass" {
-        $true | Should -Be $true
-    }
-}
-```
+## Test Categories
 
-## Example: Go Test
-```go
-// internal/foo/foo_test.go
-func TestFoo(t *testing.T) {
-    got := Foo()
-    want := "bar"
-    if got != want {
-        t.Errorf("got %q, want %q", got, want)
-    }
-}
-```
+| Category | Count | Location | Purpose |
+|----------|-------|----------|---------|
+| Unit | 22 | `tests/unit/` | Validate individual scripts, configs, and modules |
+| Integration | 3 | `tests/integration/` | Cross-component flows (routing, delegation, engram) |
+| Security | 2 | `tests/security/` | Input sanitization, credential handling |
+| Performance | 1 | `tests/performance/` | Engram memory operation benchmarks |
 
 ## CI/CD Integration
-- Add a test step to your pipeline configuration (e.g., `.github/workflows/ci.yml`).
-- Fail the pipeline if any test fails.
+Tests run automatically in CI via `test-suite.yml` (GitHub Actions):
+- On every push to `main` and `develop`
+- On every PR targeting `main`
+- All 4 categories execute sequentially
+- Failure blocks merge
+
+## Code Coverage
+Coverage is generated via Pester's built-in `CodeCoverage` configuration:
+```powershell
+$config = New-PesterConfiguration
+$config.CodeCoverage.Enabled = $true
+$config.CodeCoverage.OutputFormat = 'JaCoCo'
+$config.CodeCoverage.OutputPath = 'coverage.xml'
+Invoke-Pester -Configuration $config
+```
+Coverage reports are uploaded as artifacts in CI.
+
+## Adding Tests
+1. Create `*.tests.ps1` in the appropriate `tests/<category>/` directory
+2. Use Pester `Describe` / `It` / `Should` syntax
+3. Update `tests/README.md` if category counts change
+4. Run locally: `.\scripts\run-tests-simple.ps1`
 
 ## References
-- See [skills/testing-strategy-skill/SKILL.md](../../skills/testing-strategy-skill/SKILL.md) for more details.
-- See [docs/guides/SECURITY-AUTH-SECRETS.md](SECURITY-AUTH-SECRETS.md) for secret management during tests.
+- Test runner: `scripts/run-tests-simple.ps1`
+- CI workflow: `.github/workflows/test-suite.yml`
+- See [skills/testing-strategy-skill/SKILL.md](../../skills/testing-strategy-skill/SKILL.md) for strategy details
+- See [docs/guides/SECURITY-AUTH-SECRETS.md](SECURITY-AUTH-SECRETS.md) for secret management during tests

@@ -34,8 +34,12 @@ jobs:
           scan-type: fs
           ignore-unfixed: true
           severity: CRITICAL,HIGH
+          format: json
+          output: trivy-report.json
       - name: Upload Trivy report
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: trivy-owasp-report
           path: trivy-report.json
+          retention-days: 30
