@@ -106,7 +106,7 @@ Features that CANNOT be implemented in certain tools due to architectural limita
 
 ## versión Tracking
 
-- **Last Updated**: 2026-04-30
-- **Matrix versión**: 1.0.0
+- **Last Updated**: 2026-05-08
+- **Matrix versión**: 1.1.0
 - **Tools Supported**: 8
 - **Features Tracked**: 12 core features

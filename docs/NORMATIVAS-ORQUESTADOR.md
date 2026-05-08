@@ -167,7 +167,7 @@ Para transferencias agente-a-agente:
 ```powershell
 .\tools\handoff-compress.ps1
 ```
-- Preserva: decisions, results, FIXMEs, status flags
+- Preserva: decisions, results, pendientes, status flags
 - Trunca: verbose outputs, repeated patterns
 - Output: state-only handoff (~30% size reduction)
 
