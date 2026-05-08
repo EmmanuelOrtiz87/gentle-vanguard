@@ -1,7 +1,7 @@
 # 🏛️ Gentleman Foundation — AI Development Stack
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.7.0-brightgreen?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.8.0-brightgreen?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-purple?style=for-the-badge" alt="PowerShell">
@@ -474,6 +474,6 @@ MIT License - see [LICENSE](LICENSE) for details.
 Start with `.\scripts\wf.ps1 health` and consult the documentation for workflows, skills, and active policies.
 
 <p align="center">
-  <b>🏛️ Gentleman Foundation v2.7.0 — Where governance, automation, and AI converge</b><br>
+  <b>🏛️ Gentleman Foundation v2.8.0 — Where governance, automation, and AI converge</b><br>
   <i>Production-Ready • 125+ Skills • 100% Local-First</i>
 </p>

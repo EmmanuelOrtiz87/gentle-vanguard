@@ -56,7 +56,7 @@ function Write-Header {
     Write-Host "   ╚═════╝  ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ " -ForegroundColor Cyan
     Write-Host ""
     Write-Host "            Terminal-Based Setup Wizard" -ForegroundColor White
-    Write-Host "                  v2.7.0" -ForegroundColor Green
+    Write-Host "                  v2.8.0" -ForegroundColor Green
     Write-Host ""
     Write-Host "========================================" -ForegroundColor $colorHighlight
     Write-Host "  [Q] Quit anytime | [H] Help/Commands" -ForegroundColor Yellow

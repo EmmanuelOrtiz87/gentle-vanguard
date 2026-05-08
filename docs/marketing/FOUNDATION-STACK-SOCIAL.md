@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.7.0-brightgreen?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.8.0-brightgreen?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/AI_Agents-125+-blueviolet?style=for-the-badge" alt="Skills">
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License">
 </p>
@@ -18,7 +18,7 @@
 
 ```
                               
-          🏛️ FOUNDATION v2.7.0                        
+          🏛️ FOUNDATION v2.8.0                        
           AI Development Workspace                    
   
           🎯 SESSION MANAGER  🚀 AUTO-DELEGATION

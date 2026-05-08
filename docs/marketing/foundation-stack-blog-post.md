@@ -25,7 +25,7 @@ Cada día, más equipos usan AI assistants como **OpenCode, Claude, Cursor o Git
 ## 🤔 ¿Qué es Foundation?
 
 ```
-            🏛️ FOUNDATION v2.7.0                         
+            🏛️ FOUNDATION v2.8.0                         
       AI Development Workspace                    
  
    🎮 Session Manager    🚀 Auto-Delegation    📈 Reporting  

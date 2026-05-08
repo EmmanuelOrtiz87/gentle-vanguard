@@ -3,7 +3,7 @@
 <h3 align="center">El Stack Definitivo para Desarrollo Asistido por IA</h3>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.7.0-brightgreen?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.8.0-brightgreen?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-purple?style=for-the-badge" alt="PowerShell">
@@ -168,7 +168,7 @@ Sistema extensible con **manifest schema**:
 | 📚 **Skills Catalog** | Referencia de 125+ skills | [docs/reference/SKILL-ORGANIZATION.md](docs/reference/SKILL-ORGANIZATION.md) |
 | 💰 **Token Tracking** | Guía de monitoreo de tokens | [docs/reference/REAL-TOKEN-TRACKING.md](docs/reference/REAL-TOKEN-TRACKING.md) |
 | 🧩 **Plugin System** | Guía de desarrollo de plugins | [docs/reference/PLUGIN-ARCHITECTURE.md](docs/reference/PLUGIN-ARCHITECTURE.md) |
-| 📜 **Changelog** | Historial de cambios v2.7.0 | [CHANGELOG.md](CHANGELOG.md) |
+| 📜 **Changelog** | Historial de cambios v2.8.0 | [CHANGELOG.md](CHANGELOG.md) |
 | 🎯 **Next Session** | Guía para la próxima sesión | [docs/NEXT_SESSION_GUIDE.md](docs/NEXT_SESSION_GUIDE.md) |
 | 📋 **Contributing** | Cómo contribuir al proyecto | [CONTRIBUTING.md](CONTRIBUTING.md) |
 
@@ -284,7 +284,7 @@ MIT License - Ver archivo [LICENSE](LICENSE) para detalles.
 ---
 
 <p align="center">
-  <b>🏛️ Workspace Foundation v2.7.0 — El Stack Definitivo para IA-First Development</b><br>
+  <b>🏛️ Workspace Foundation v2.8.0 — El Stack Definitivo para IA-First Development</b><br>
   <i>100% Local-First • Privacidad Total • Listo para Producción</i><br><br>
   <code>git clone https://github.com/EmmanuelOrtiz87/foundation-public.git</code>
 </p>
