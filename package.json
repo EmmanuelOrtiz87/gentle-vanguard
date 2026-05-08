@@ -1,4 +1,10 @@
 {
+  "scripts": {
+    "test": "pwsh ./scripts/run-tests-simple.ps1",
+    "lint:json": "pwsh ./hooks/json-lint.ps1",
+    "lint:workflows": "pwsh ./hooks/workflow-lint.ps1",
+    "prepare": "npx lefthook install"
+  },
   "devDependencies": {
     "lefthook": "^2.1.6"
   }
