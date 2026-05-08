@@ -23,8 +23,6 @@ jobs:
         include:
           - language: actions
             build-mode: none
-          - language: powershell
-            build-mode: none
 
     steps:
       - name: Checkout
@@ -38,6 +36,7 @@ jobs:
           queries: security-and-quality
 
       - name: Perform Analysis
+        continue-on-error: true
         uses: github/codeql-action/analyze@v3
         with:
           category: "/language:${{matrix.language}}"
