@@ -1,6 +1,7 @@
-# Foundation-Launcher.exe - Smart Launcher v2.0
+# Foundation-Launcher.exe - Smart Launcher v2.1
 # Automatically finds its components in relative or parent paths
-# Full AES-256 decryption and execution pipeline
+# Full AES-256 decryption pipeline with AppData caching and path injection
+# Fixes: compact-start, token-guard, and writable paths
 
 param([string]$Command = "wf")
 
@@ -39,7 +40,7 @@ function Decrypt-Script {
     return [System.Text.Encoding]::UTF8.GetString($decryptedBytes)
 }
 
-# Get the directory where this .exe is running from
+# Get the directory where this launcher is running from
 $exePath = $MyInvocation.MyCommand.Path
 if ($exePath) {
     $baseDir = Split-Path -Parent $exePath
@@ -47,8 +48,12 @@ if ($exePath) {
     $baseDir = Get-Location
 }
 
-Write-Log "Foundation Launcher v2.0" "Green"
-Write-Log "Base directory: $baseDir" "Gray"
+$appDataDir = "$env:LOCALAPPDATA\Foundation\scripts"
+$dataDir = "$env:LOCALAPPDATA\Foundation\data"
+
+Write-Log "Foundation Launcher v2.1" "Green"
+Write-Log "Install dir: $baseDir" "Gray"
+Write-Log "Cache dir:   $appDataDir" "Gray"
 Write-Log ""
 
 # Strategy 1: Check for master.key in standard locations
@@ -129,64 +134,73 @@ try {
     exit 1
 }
 
-# Find encrypted script to run
-$scriptName = "wf.ps1.enc"
-if ($Command -eq "help") { $scriptName = "foundation-installer-tui.ps1.enc" }
-
-# Strategy 1: Check standard paths
-$scriptPaths = @(
-    (Join-Path $baseDir "protected\scripts\utilities\WORKFLOW-ORCHESTRATION\$scriptName"),
-    (Join-Path $baseDir "scripts\utilities\WORKFLOW-ORCHESTRATION\$scriptName"),
-    (Join-Path $baseDir "protected\$scriptName")
-)
-
-$scriptPath = $null
-foreach ($path in $scriptPaths) {
-    if (Test-Path $path) {
-        $scriptPath = $path
-        Write-Log "Found script at: $path" "Green"
-        break
-    }
+# Find all encrypted scripts and cache them to AppData
+$encryptedBasePath = $null
+foreach ($p in @((Join-Path $baseDir "protected"), (Join-Path $baseDir "..\protected"), $baseDir)) {
+    $testPath = Join-Path $p "scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1.enc"
+    if (Test-Path $testPath) { $encryptedBasePath = $p; break }
 }
 
-# Strategy 2: Search recursively
-if (-not $scriptPath) {
-    Write-Log "Searching for $scriptName..." "Yellow"
-    $foundScript = Find-File $scriptName $baseDir
-    if ($foundScript) {
-        $scriptPath = $foundScript
-        Write-Log "Found script at: $scriptPath" "Green"
-    }
+if (-not $encryptedBasePath) {
+    Write-Log "ERROR: No protected scripts found." "Red"
+    Write-Log "Install Foundation properly first." "Yellow"
+    Read-Host "Press Enter to exit"
+    exit 1
 }
 
-if (-not $scriptPath) {
-    Write-Log "ERROR: Encrypted script not found: $scriptName" "Red"
-    Write-Log ""
-    Write-Log "TIP: Run protect-foundation.ps1 to encrypt scripts first." "Yellow"
+try {
+    # Ensure AppData directories exist
+    New-Item -ItemType Directory -Path $appDataDir -Force | Out-Null
+    New-Item -ItemType Directory -Path $dataDir -Force | Out-Null
+
+    # Find and cache ALL encrypted scripts
+    $encFiles = Get-ChildItem -Path $encryptedBasePath -Recurse -Filter "*.enc" -File
+    $cachedCount = 0
+
+    foreach ($encFile in $encFiles) {
+        # Build relative path from enc to ps1
+        $relativePath = $encFile.FullName.Substring($encryptedBasePath.Length + 1)
+        $relativePath = $relativePath -replace '\.enc$', ''
+        $outputFile = Join-Path $appDataDir $relativePath
+
+        # Only decrypt if cache doesn't exist (or enc is newer)
+        if (-not (Test-Path $outputFile) -or (Get-Item $encFile.FullName).LastWriteTime -gt (Get-Item $outputFile -ErrorAction SilentlyContinue).LastWriteTime) {
+            $outputDir = Split-Path $outputFile -Parent
+            New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
+            $decrypted = Decrypt-Script -EncryptedPath $encFile.FullName -Key $key
+            [System.IO.File]::WriteAllText($outputFile, $decrypted, [System.Text.Encoding]::UTF8)
+            $cachedCount++
+        }
+    }
+
+    Write-Log "Cached $cachedCount scripts to AppData" "Green"
+} catch {
+    Write-Log "ERROR: Failed to cache scripts: $_" "Red"
+    Read-Host "Press Enter to exit"
+    exit 1
+}
+
+# Inject environment variables for child scripts
+$env:FOUNDATION_BASE_DIR = $baseDir
+$env:FOUNDATION_APPDATA_DIR = $appDataDir
+$env:FOUNDATION_DATA_DIR = $dataDir
+
+# Find the wf.ps1 in AppData cache
+$cacheScript = Join-Path $appDataDir "scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1"
+if (-not (Test-Path $cacheScript)) {
+    Write-Log "ERROR: wf.ps1 not found in AppData cache." "Red"
     Read-Host "Press Enter to exit"
     exit 1
 }
 
 Write-Log ""
-Write-Log "Decrypting and launching..." "Cyan"
+Write-Log "Launching from AppData cache..." "Cyan"
 
-# Decrypt and execute
+# Execute from AppData (MyInvocation resolves correctly)
 try {
-    $decryptedScript = Decrypt-Script -EncryptedPath $scriptPath -Key $key
-
-    # Create a temporary file to run the decrypted script
-    $tempDir = [System.IO.Path]::GetTempPath()
-    $tempFile = Join-Path $tempDir "foundation_$([System.Guid]::NewGuid().ToString('N')).ps1"
-    [System.IO.File]::WriteAllText($tempFile, $decryptedScript, [System.Text.Encoding]::UTF8)
-
-    # Execute the decrypted script and pass through arguments
-    & $tempFile @args
-
-    # Clean up temp file
-    Remove-Item $tempFile -Force -ErrorAction SilentlyContinue
+    & $cacheScript @args
 } catch {
-    Write-Log "ERROR: Failed to decrypt/execute script: $_" "Red"
-    Write-Log "This may indicate a corrupted key or encrypted file." "Yellow"
+    Write-Log "ERROR: Failed to execute script: $_" "Red"
     Read-Host "Press Enter to exit"
     exit 1
 }
