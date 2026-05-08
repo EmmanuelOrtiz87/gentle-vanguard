@@ -15,9 +15,9 @@ pre-push:
     test-suite:
       run: powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/run-tests-simple.ps1"
     trufflehog-full:
-      run: trufflehog git file://. --since-commit origin/develop --fail
+      run: trufflehog git file://. --since-commit origin/main --fail --no-update
     audit-check:
-      run: powershell -NoProfile -ExecutionPolicy Bypass -File "skills\foundation-audit-skill\scripts\audit-sweep.ps1" -Scope quick
+      run: powershell -NoProfile -ExecutionPolicy Bypass -File "skills/foundation-audit-skill/scripts/audit-sweep.ps1" -Scope quick
 
 commit-msg:
   commands:

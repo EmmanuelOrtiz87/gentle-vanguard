@@ -192,9 +192,9 @@ function Invoke-SkillsValidation {
 function Invoke-ConfigValidation {
     param($validator)
     try {
-        $output = & pwsh -NoProfile -ExecutionPolicy Bypass -File $validator.path.FullName 2>&1 | Out-String
+        $null = & pwsh -NoProfile -ExecutionPolicy Bypass -File $validator.path.FullName 2>&1
 
-        if ($output -match "0|inconsistencies|sin diferencias") {
+        if ($LASTEXITCODE -eq 0) {
             Write-Success "Configuration" "No inconsistencies"
         } else {
             Write-Issue "Configuration" "Differences found"
