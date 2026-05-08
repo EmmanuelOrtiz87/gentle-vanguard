@@ -23,8 +23,8 @@
 
 ```powershell
 # 🚀 PASO 1: Clona y configura (5 minutos)
-git clone https://github.com/anomalyco/workspace-foundation.git
-cd workspace-foundation
+git clone https://github.com/EmmanuelOrtiz87/foundation-public.git
+cd foundation-public
 .\scripts\utilities\foundation-installer-tui.ps1  # 🎨 Wizard interactivo
 
 # ⚡ PASO 2: Inicia sesión automática
@@ -222,9 +222,9 @@ workspace-foundation/
 ## 🚀 Inicio Rápido (Resumido)
 
 ```powershell
-# 1️⃣ Clonar el repositorio
-git clone https://github.com/anomalyco/workspace-foundation.git
-cd workspace-foundation
+# 1️⃣ Clonar el repositorio público
+git clone https://github.com/EmmanuelOrtiz87/foundation-public.git
+cd foundation-public
 
 # 2️⃣ Ejecutar el instalador interactivo (o usa wf.ps1)
 .\scripts\utilities\foundation-installer-tui.ps1
@@ -257,9 +257,9 @@ cd workspace-foundation
 
 | Plataforma | Enlace |
 |------------|---------|
-| 🐙 **GitHub** | [github.com/anomalyco/workspace-foundation](https://github.com/anomalyco/workspace-foundation) |
+| 🐙 **GitHub (Public)** | [github.com/EmmanuelOrtiz87/foundation-public](https://github.com/EmmanuelOrtiz87/foundation-public) |
+| 🔒 **GitHub (Private)** | [github.com/EmmanuelOrtiz87/gentleman-foundation](https://github.com/EmmanuelOrtiz87/gentleman-foundation) |
 | 📖 **Docs** | [docs.foundation.local](docs/README.md) |
-| 💬 **Discussions** | [GitHub Discussions](https://github.com/anomalyco/workspace-foundation/discussions) |
 
 ### #️⃣ Hashtags
 `#FoundationStack` `#AIDevelopment` `#DevTools` `#OpenCode` `#Productivity` `#LocalFirst` `#AIAgents`
@@ -286,5 +286,5 @@ MIT License - Ver archivo [LICENSE](LICENSE) para detalles.
 <p align="center">
   <b>🏛️ Workspace Foundation v2.7.0 — El Stack Definitivo para IA-First Development</b><br>
   <i>100% Local-First • Privacidad Total • Listo para Producción</i><br><br>
-  <code>git clone https://github.com/anomalyco/workspace-foundation.git</code>
+  <code>git clone https://github.com/EmmanuelOrtiz87/foundation-public.git</code>
 </p>
