@@ -5,12 +5,8 @@ pre-commit:
   commands:
     opencode-validation:
       run: powershell -NoProfile -ExecutionPolicy Bypass -File "hooks/pre-commit-opencode-validation.ps1"
-    trufflehog-secrets:
-      run: trufflehog git file://. --since-commit HEAD --fail
-      skip:
-        - powershell -Command "git diff --cached --name-only | Select-String -Pattern '\.(env|key|pem|p12|pfx|keystore|jks)$'"
     json-lint:
-      run: powershell -NoProfile "git diff --cached --name-only --diff-filter=ACM | Select-String '\.json$' | ForEach-Object { Get-Content $_ | ConvertFrom-Json | Out-Null }"
+      run: powershell -NoProfile -Command "& { git diff --cached --name-only --diff-filter=ACM | Select-String '\.json$' | ForEach-Object { Get-Content `$_ | ConvertFrom-Json | Out-Null } }"
 
 pre-push:
   commands:
@@ -21,7 +17,7 @@ pre-push:
     trufflehog-full:
       run: trufflehog git file://. --since-commit origin/develop --fail
     audit-check:
-      run: powershell -NoProfile -ExecutionPolicy Bypass -Command "& '.\skills\foundation-audit-skill\scripts\audit-sweep.ps1' -Scope quick"
+      run: powershell -NoProfile -ExecutionPolicy Bypass -File "skills\foundation-audit-skill\scripts\audit-sweep.ps1" -Scope quick
 
 commit-msg:
   commands:
