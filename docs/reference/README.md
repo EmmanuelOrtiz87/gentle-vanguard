@@ -58,7 +58,7 @@
 | **[VALIDATION-REPORT.md](VALIDATION-REPORT.md)** | Validation report |
 | **[FUTURE-FEATURES-BACKLOG.md](FUTURE-FEATURES-BACKLOG.md)** | Future features backlog |
 | ~~MIGRATION-NORMATIVAS-GLOBALES.md~~ | *(archived — ver NORMATIVAS-ORQUESTADOR.md)* |
-| **[NORMATIVAS-ORQUESTADOR.md](../../NORMATIVAS-ORQUESTADOR.md)** | Orchestrator norms |
+| **[NORMATIVAS-ORQUESTADOR.md](../NORMATIVAS-ORQUESTADOR.md)** | Orchestrator norms |
 | **[master-instructions.md](master-instructions.md)** | Master instructions |
 | **[shared-knowledge.md](shared-knowledge.md)** | Shared knowledge base |
 | **[OBSERVABILIDAD.md](OBSERVABILIDAD.md)** | Observability guide |
