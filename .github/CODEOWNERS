@@ -42,3 +42,17 @@
 # Docker
 **/Dockerfile* @devops-team
 **/docker-compose*.yml @devops-team
+
+# Quality configs (markdownlint, prettier, editorconfig)
+/.markdownlint.json @platform-team
+/.prettierrc @platform-team
+
+# PR and issue templates
+/.github/PULL_REQUEST_TEMPLATE.md @platform-team
+/.github/labeler.yml @platform-team
+
+# Code of Conduct
+/CODE_OF_CONDUCT.md @platform-team
+
+# Hooks
+/hooks/commitlint.ps1 @platform-team
