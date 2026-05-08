@@ -151,7 +151,7 @@ git push origin feat/your-feature-name
 
 ### For Code Changes#
 
-1. ✅ Follow [POWERSHELL-STANDARDS.md](../rules/POWERSHELL-STANDARDS.md)
+1. ✅ Follow [POWERSHELL-STANDARDS.md](rules/POWERSHELL-STANDARDS.md)
 2. ✅ Add/update tests for new functionality
 3. ✅ Update documentation if behavior changes
 4. ✅ Run `wf validate` before committing
@@ -191,8 +191,8 @@ Measure-Command { ./scripts/run-tests-simple.ps1 }
 | **[Session Guide](docs/guides/SESSION-GUIDE.md)** | Daily workflow and commands |
 | **[Architecture Overview](docs/architecture/README.md)** | System design rationale |
 | **[Documentation Standards](https://github.com/EmmanuelOrtiz87/workspace-foundation/blob/main/.claude/skills/documentation-governance/references/documentation-standards.md)** | How to write docs |
-| **[PowerShell Standards](../rules/POWERSHELL-STANDARDS.md)** | PS1 coding standards |
-| **[CI Hardening Standards](../rules/CI-HARDENING-STANDARDS.md)** | Workflow requirements |
+| **[PowerShell Standards](rules/POWERSHELL-STANDARDS.md)** | PS1 coding standards |
+| **[CI Hardening Standards](rules/CI-HARDENING-STANDARDS.md)** | Workflow requirements |
 
 ---
 

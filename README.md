@@ -164,7 +164,7 @@ Sistema extensible con **manifest schema**:
 | 💰 **Token Tracking** | Guía de monitoreo de tokens | [docs/reference/REAL-TOKEN-TRACKING.md](docs/reference/REAL-TOKEN-TRACKING.md) |
 | 🧩 **Plugin System** | Guía de desarrollo de plugins | [docs/reference/PLUGIN-ARCHITECTURE.md](docs/reference/PLUGIN-ARCHITECTURE.md) |
 | 📜 **Changelog** | Historial de cambios v2.7.0 | [CHANGELOG.md](CHANGELOG.md) |
-| 🎯 **Next Session** | Guía para la próxima sesión | [docs/NEXT-SESSION-GUIDE.md](docs/NEXT-SESSION-GUIDE.md) |
+| 🎯 **Next Session** | Guía para la próxima sesión | [docs/NEXT_SESSION_GUIDE.md](docs/NEXT_SESSION_GUIDE.md) |
 | 📋 **Contributing** | Cómo contribuir al proyecto | [CONTRIBUTING.md](CONTRIBUTING.md) |
 
 ---
