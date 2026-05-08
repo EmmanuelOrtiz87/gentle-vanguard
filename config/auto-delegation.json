@@ -371,22 +371,22 @@
       "\"semantic match\"",
       "\"find skill\"",
       "\"skill routing\"",
-       "\"embeddings\"",
-       "\"context7\"."
-     ],
-     "DAILY": [
-       "daily check",
-       "daily workflow",
-       "morning routine",
-       "start day",
-       "daily tasks",
-       "\"daily\"",
-       "\"check daily\"",
-       "\"morning check\"",
-       "routine",
-       "mantenimiento diario"
-     ],
-     "SAD": [
+      "\"embeddings\"",
+      "\"context7\"."
+    ],
+    "DAILY": [
+      "daily check",
+      "daily workflow",
+      "morning routine",
+      "start day",
+      "daily tasks",
+      "\"daily\"",
+      "\"check daily\"",
+      "\"morning check\"",
+      "routine",
+      "mantenimiento diario"
+    ],
+    "SAD": [
       "architecture",
       "design",
       "sdd",
