@@ -13,6 +13,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.8.1] - 2026-05-08#
+
+### ✨ Added#
+
+- **ROADMAP.md**: Project vision with short/mid/long-term milestones
+- **docs/guides/RELEASE-PROCESS.md**: Documented release checklist
+- **docs/guides/BRANCH-STRATEGY.md**: Git flow conventions documented
+- **format-check.yml**: Prettier formatting CI workflow (15 workflows total)
+- **npm scripts**: `format:check`, `format:fix` added to package.json
+- **prettier**: Added as devDependency
+
+### 🔄 Changed#
+
+- **CONTRIBUTING.md**: Complete rewrite — URLs fixed to `foundation-public`, test counts corrected (28), prerequisites updated
+- **VERSION**: Synced from `2.6.5` to `2.8.0`
+- **Stale branches**: 4 merged branches deleted (`feature/judgment-day`, `feature/security-system`, `pr/judgment-day-native`, `release/v1.0.0`)
+
+---
+
 ## [2.8.0] - 2026-05-08#
 
 ### ✨ Added#
