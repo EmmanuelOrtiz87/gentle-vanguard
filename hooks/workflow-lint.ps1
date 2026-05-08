@@ -3,13 +3,19 @@ $workflows = Get-ChildItem -Path ".github/workflows" -Filter "*.yml" -ErrorActio
 $hasErrors = $false
 
 foreach ($wf in $workflows) {
-    # Basic YAML syntax check via PowerShell
     try {
         $content = Get-Content $wf.FullName -Raw -ErrorAction Stop
-        # Check for common issues: unclosed quotes, invalid matrix languages
+
         if ($wf.Name -eq "codeql-analysis.yml") {
             if ($content -match "language:\s*powershell") {
-                Write-Host "[WARN] $($wf.Name): 'powershell' language may fail on ubuntu-latest - use 'actions' instead" -ForegroundColor Yellow
+                Write-Host "[WARN] $($wf.Name): 'powershell' language may fail on ubuntu-latest - use 'actions' or 'javascript' instead" -ForegroundColor Yellow
+            }
+        }
+
+        $trivyFlows = @("owasp-scan.yml", "dependency-backup.yml")
+        if ($wf.Name -in $trivyFlows) {
+            if ($content -match "aquasecurity/trivy-action" -and $content -notmatch "format:\s") {
+                Write-Host "[WARN] $($wf.Name): Trivy action missing 'format:' and 'output:' parameters - report artifact may be empty" -ForegroundColor Yellow
             }
         }
     } catch {
