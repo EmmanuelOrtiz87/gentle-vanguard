@@ -1,0 +1,40 @@
+name: Gitleaks Secret Scan
+
+permissions:
+  contents: read
+  pull-requests: write
+  security-events: write
+
+concurrency:
+  group: gitleaks-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  scan:
+    name: Gitleaks Secret Detection
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: gacts/gitleaks@v1
+        id: gitleaks
+        with:
+          version: latest
+          config-path: .gitleaks.toml
+
+      - name: Upload SARIF artifact
+        if: ${{ always() && steps.gitleaks.outputs.sarif != '' }}
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ${{ steps.gitleaks.outputs.sarif }}
+          category: gitleaks

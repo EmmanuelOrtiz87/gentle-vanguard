@@ -1,0 +1,52 @@
+name: Sync Public Repository
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-public
+  cancel-in-progress: false
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'build/**'
+      - 'config/**'
+      - 'scripts/utilities/DEPLOYMENT/**'
+      - 'skills/**'
+      - 'docs/**'
+      - 'README.md'
+      - 'LICENSE'
+      - 'CONTRIBUTING.md'
+      - 'SECURITY.md'
+      - 'CHANGELOG.md'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    name: Sync to foundation-public
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout private repo
+        uses: actions/checkout@v4
+        with:
+          path: private
+
+      - name: Checkout public repo
+        uses: actions/checkout@v4
+        with:
+          repository: EmmanuelOrtiz87/foundation-public
+          token: ${{ secrets.PAT_SYNC }}
+          path: public
+
+      - name: Run sync script
+        shell: pwsh
+        run: |
+          $privateRepo = Join-Path $env:GITHUB_WORKSPACE "private"
+          $publicRepo  = Join-Path $env:GITHUB_WORKSPACE "public"
+          & "$privateRepo\scripts\utilities\DEPLOYMENT\sync-to-public.ps1" -privateRepo $privateRepo -publicRepo $publicRepo
+        env:
+          PRIVATE_REPO: ${{ github.workspace }}\private
+          PUBLIC_REPO: ${{ github.workspace }}\public

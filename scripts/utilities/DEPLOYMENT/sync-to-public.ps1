@@ -1,9 +1,29 @@
 #!/usr/bin/env pwsh
-# Sync changes from private repo to public repo - v2.1
-# Includes skills, configs, installer, public stubs, and docs
+<#
+.SYNOPSIS
+    Sync changes from private repo to public repo.
+.DESCRIPTION
+    Copies skills (public stubs for protected ones), configs, installer,
+    compiled launcher, and docs from private to public repo, then commits
+    and pushes. Supports both local and CI (GitHub Actions) execution.
+.PARAMETER privateRepo
+    Path to private repo root. Default: $env:PRIVATE_REPO or ..\..\..\..
+.PARAMETER publicRepo
+    Path to public repo root. Default: $env:PUBLIC_REPO or ..\..\..\foundation-public
+.PARAMETER skipPush
+    If set, skips git commit and push (useful for CI dry-runs).
+.EXAMPLE
+    .\sync-to-public.ps1
+    .\sync-to-public.ps1 -skipPush
+#>
 
-$privateRepo = "C:\Workspace_local\workspace-foundation"
-$publicRepo = "C:\Workspace_local\foundation-public"
+param(
+    [string]$privateRepo = "$(if ($env:PRIVATE_REPO) { $env:PRIVATE_REPO } else { Resolve-Path "$PSScriptRoot\..\..\.." })",
+    [string]$publicRepo = "$(if ($env:PUBLIC_REPO) { $env:PUBLIC_REPO } else { Join-Path (Resolve-Path "$PSScriptRoot\..\..\..") "foundation-public" })",
+    [switch]$skipPush
+)
+
+$ErrorActionPreference = "Stop"
 $buildDir = "$privateRepo\build"
 
 Write-Output "=== Syncing Private → Public Repo ==="
@@ -108,13 +128,23 @@ Write-Output "🚀 Syncing compiled launcher..."
 Copy-Item "$buildDir\compiled\Foundation-Launcher.exe" "$publicRepo\Foundation-Launcher.exe" -Force
 
 # 7. Commit and push to public repo
-Push-Location $publicRepo
-git add .
-$timestamp = Get-Date -Format "yyyy-MM-dd HH:mm"
-$commitMsg = "sync: automated sync from private repo - $timestamp"
-git commit -m $commitMsg 2>&1 | Out-Null
-git push origin master 2>&1 | Select-Object -First 10
-Pop-Location
+if (-not $skipPush) {
+    Push-Location $publicRepo
+    git add .
+    $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm"
+    $commitMsg = "sync: automated sync from private repo - $timestamp"
+    $commitResult = git commit -m $commitMsg 2>&1
+    if ($LASTEXITCODE -eq 0) {
+        Write-Output "✅ Committed: $commitMsg"
+        git push origin master 2>&1 | Select-Object -First 5
+        Write-Output "✅ Pushed to origin/master"
+    } else {
+        Write-Output "ℹ️  Nothing to commit — public repo is up to date"
+    }
+    Pop-Location
+} else {
+    Write-Output "ℹ️  skipPush enabled — commit/push skipped"
+}
 
 Write-Output ""
 Write-Output "=== Sync Complete ==="
