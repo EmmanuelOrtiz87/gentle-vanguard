@@ -38,9 +38,9 @@ Section "Core (Protected)" SecCore
   SetOutPath "$INSTDIR\public"
   File /r "C:\Workspace_local\workspace-foundation\build\public\*.*"
   
-  ; Install launcher v2.0
+  ; Install launcher v2.2 (compiled EXE - silent, no interactive prompts)
   SetOutPath "$INSTDIR"
-  File "C:\Workspace_local\workspace-foundation\build\Foundation-Launcher.ps1"
+  File "C:\Workspace_local\workspace-foundation\build\compiled\Foundation-Launcher.exe"
   
   ; Create keys directory
   CreateDirectory "$INSTDIR\keys"
@@ -58,8 +58,8 @@ Section "Core (Protected)" SecCore
   
   ; Create shortcuts
   CreateDirectory "$SMPROGRAMS\Foundation"
-  CreateShortcut "$SMPROGRAMS\Foundation\Foundation.lnk" "powershell.exe" "-ExecutionPolicy Bypass -File \`"$INSTDIR\Foundation-Launcher.ps1\`""
-  CreateShortcut "$DESKTOP\Foundation.lnk" "powershell.exe" "-ExecutionPolicy Bypass -File \`"$INSTDIR\Foundation-Launcher.ps1\`""
+  CreateShortcut "$SMPROGRAMS\Foundation\Foundation.lnk" "$INSTDIR\Foundation-Launcher.exe" ""
+  CreateShortcut "$DESKTOP\Foundation.lnk" "$INSTDIR\Foundation-Launcher.exe" ""
   
   WriteUninstaller "$INSTDIR\uninstall.exe"
 
@@ -72,7 +72,7 @@ Section "Uninstall"
   RMDir /r "$INSTDIR\public"
   Delete "$INSTDIR\keys\*.*"
   RMDir /r "$INSTDIR\keys"
-  Delete "$INSTDIR\Foundation-Launcher.ps1"
+  Delete "$INSTDIR\Foundation-Launcher.exe"
   Delete "$INSTDIR\uninstall.exe"
   RMDir "$INSTDIR"
   

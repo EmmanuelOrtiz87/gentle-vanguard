@@ -108,6 +108,18 @@ Check exactly ONE in the template and add the matching label:
 ### 5. Test Plan
 
 ```markdown
+## Test Plan
+
+**Unit Tests**
+```bash
+go test ./...
+```
+
+**E2E Tests** (if applicable)
+```bash
+cd e2e && ./docker-test.sh
+```
+
 - [x] Scripts run without errors: `shellcheck scripts/*.sh`
 - [x] Manually tested the affected functionality
 - [x] Skills load correctly in target agent
@@ -116,13 +128,14 @@ Check exactly ONE in the template and add the matching label:
 ### 6. Contributor Checklist
 
 All boxes must be checked:
-- Linked an approved issue
-- Added exactly one `type:*` label
-- Ran shellcheck on modified scripts
-- Skills tested in at least one agent
-- Docs updated if behavior changed
-- Conventional commit format
-- No `Co-Authored-By` trailers
+- [ ] PR is linked to an issue with `status:approved`
+- [ ] PR stays within 400 changed lines, or has `size:exception` with rationale documented
+- [ ] Added exactly one `type:*` label
+- [ ] Ran shellcheck on modified scripts
+- [ ] Skills tested in at least one agent
+- [ ] Docs updated if behavior changed
+- [ ] Conventional commit format
+- [ ] No `Co-Authored-By` trailers
 
 ---
 

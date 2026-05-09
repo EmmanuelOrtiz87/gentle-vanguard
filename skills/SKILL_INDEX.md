@@ -268,6 +268,14 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 
 ---
 
+### work-unit-commits
+
+**Trigger**: `commit splitting`, `work unit`, `atomic commits`, `chained PR`, `review workload`
+
+**Use when**: Planning commits as reviewable work units with SDD integration
+
+---
+
 ### seo-audit-skill
 
 **Trigger**: `SEO`, `audit SEO`, `meta tags`, `structured data`, `sitemap`, `robots.txt`, `canonical`
@@ -552,7 +560,7 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 
 **Use when**: Capturing and reporting business-relevant telemetry data
 
-**See**: [business-telemetry-skill](business/business-telemetry-skill/SKILL.md)
+**See**: [business-telemetry-skill](business-telemetry-skill/SKILL.md)
 
 ---
 
@@ -759,6 +767,14 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 
 ---
 
+### comment-writer
+
+**Trigger**: `PR feedback`, `comment`, `review`, `collaboration`, `feedback`
+
+**Use when**: Writing warm and direct collaboration comments for PRs, issues, and reviews
+
+---
+
 ### commit-hygiene-skill
 
 **Trigger**: `commit`, `message`, `conventional`, `changelog`, `semantic`
@@ -911,7 +927,7 @@ Advanced parallel execution management with dependency graphs, resource pooling,
 
 **Use when**: Capturing and reporting business-relevant telemetry data
 
-**See**: [business-telemetry-skill](business/business-telemetry-skill/SKILL.md)
+**See**: [business-telemetry-skill](business-telemetry-skill/SKILL.md)
 
 ---
 
