@@ -164,20 +164,36 @@ Manually symlinking, but that defeats the purpose of the setup script.
 
 ## Label System
 
-### Applied Automatically on Issue Creation
+### Status Labels (applied to Issues)
 
-| Template | Labels added |
-|----------|-------------|
-| Bug Report | `bug`, `status:needs-review` |
-| Feature Request | `enhancement`, `status:needs-review` |
+| Label | Description | Who Applies |
+|-------|-------------|-------------|
+| `status:needs-review` | Newly opened, awaiting maintainer review | **Auto** (template) |
+| `status:approved` | Approved — work can begin | Maintainer only |
+| `status:in-progress` | Being actively worked on | Contributor |
+| `status:blocked` | Blocked by another issue or external dependency | Maintainer / Contributor |
+| `status:wont-fix` | Out of scope or won't be addressed | Maintainer only |
 
-### Applied by Maintainers
+### Type Labels (applied to Issues and PRs)
 
-| Label | When to apply |
-|-------|--------------|
-| `status:approved` | Issue accepted for implementation  PRs can now be opened |
-| `priority:high` | Critical bug or urgent feature |
-| `priority:medium` | Important but not blocking |
+| Label | Description |
+|-------|-------------|
+| `bug` | Defect report |
+| `enhancement` | Feature or improvement request |
+| `type:bug` | Bug fix (used on PRs) |
+| `type:feature` | New feature (used on PRs) |
+| `type:docs` | Documentation only (used on PRs) |
+| `type:refactor` | Refactoring, no functional changes (used on PRs) |
+| `type:chore` | Build, CI, tooling (used on PRs) |
+| `type:breaking-change` | Breaking change (used on PRs) |
+
+### Priority Labels
+
+| Label | Description |
+|-------|-------------|
+| `priority:critical` | Blocking issues, security vulnerabilities |
+| `priority:high` | Important, affects many users |
+| `priority:medium` | Normal priority |
 | `priority:low` | Nice to have |
 
 ---
@@ -185,22 +201,45 @@ Manually symlinking, but that defeats the purpose of the setup script.
 ## Maintainer Approval Workflow
 
 ```
-1. New issue arrives with status:needs-review
-2. Review the issue  is it valid, clear, and in scope?
-3. If YES  add status:approved label
-4. If NO  comment with reason, close if needed
-5. Contributor can now open a PR linking this issue
+Issue submitted
+      │
+      ▼
+status:needs-review  ← auto-applied by template
+      │
+      ▼
+Maintainer reviews
+      │
+  ┌───┴────────────────┐
+  │                    │
+  ▼                    ▼
+status:approved    Closed
+(work can begin)   (invalid / duplicate / wont-fix)
+      │
+      ▼
+Contributor comments "I'll work on this"
+      │
+      ▼
+status:in-progress
+      │
+      ▼
+PR opened with `Closes #<N>`
 ```
 
 ---
 
-## decisión Tree
+## Decision Tree
 
 ```
-Is it a bug?                     Use Bug Report template
-Is it a new feature/improvement?  Use Feature Request template
-Is it a question?                Use Discussions, NOT issues
-Is it a duplicate?               Link to existing issue, close
+Do you have a question or idea to discuss?
+├── YES → GitHub Discussions (NOT issues)
+└── NO  → Is it a defect?
+          ├── YES → Bug Report template
+          └── NO  → Feature Request template
+                    │
+                    ▼
+          Does a similar issue already exist?
+          ├── YES → Comment on existing issue instead
+          └── NO  → Submit new issue → wait for status:approved
 ```
 
 ---
@@ -210,6 +249,11 @@ Is it a duplicate?               Link to existing issue, close
 ```bash
 # Search existing issues before creating
 gh issue list --search "keyword"
+gh issue list --state open --search "your keywords"
+gh issue list --state all --search "your keywords"
+
+# Check issue status
+gh issue view <number>
 
 # Create bug report
 gh issue create --template "bug_report.yml" --title "fix(scope): description"

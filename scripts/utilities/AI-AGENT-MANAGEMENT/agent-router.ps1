@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory=$false)]
-    [ValidateSet('BA', 'SAD', 'DEV', 'QA', 'OPS', 'GOV', 'DOC', 'status', 'list')]
+    [ValidateSet('BA', 'SAD', 'DEV', 'QA', 'OPS', 'GOV', 'DOC', 'MKT', 'SALES', 'FINANCE', 'HR', 'LEGAL', 'BUS-TELE', 'status', 'list')]
     [string]$Agent,
     
     [Parameter(Mandatory=$false)]
@@ -30,11 +30,17 @@ function Write-AgentLine {
 $AGENT_SKILLS = @{
     'BA'  = @('bdd-scenarios-skill', 'documentation-governance')
     'SAD' = @('architecture-governance', 'api-design-skill', 'database-relational-skill', 'database-nosql-skill', 'typescript-skill', 'golang-api-skill', 'sdd-lifecycle')
-    'DEV' = @('angular-spa-skill', 'react-19-skill', 'nextjs-15-skill', 'tailwind-4-skill', 'zustand-5-skill', 'zod-4-skill', 'security-skill', 'technical-debt-skill', 'typescript-skill')
+    'DEV' = @('angular-spa-skill', 'react-19-skill', 'nextjs-15-skill', 'tailwind-4-skill', 'zustand-5-skill', 'zod-4-skill', 'security-skill', 'technical-debt-skill', 'typescript-skill', 'work-unit-commits')
     'QA'  = @('testing-strategy-skill', 'testing-skill', 'playwright-skill', 'pytest-skill')
     'OPS' = @('docker-devops-skill', 'kubernetes-deployment', 'terraform-infrastructure', 'git-workflow-skill', 'release-management-skill')
-    'GOV' = @('observability-skill', 'incident-response-plan', 'security-skill', 'code-review-orchestrator-skill')
+    'GOV' = @('observability-skill', 'incident-response-plan', 'security-skill', 'code-review-orchestrator-skill', 'comment-writer')
     'DOC' = @('documentation-governance', 'sdd-lifecycle', 'bdd-scenarios-skill', 'github-pr-skill')
+    'MKT' = @('marketing-content-writer', 'marketing-growth-hacker', 'seo-audit-skill')
+    'SALES' = @('sales-account-executive', 'sales-outbound-strategist')
+    'FINANCE' = @('finance-financial-analyst')
+    'HR' = @('hr-talent-acquisition')
+    'LEGAL' = @('legal-compliance-officer')
+    'BUS-TELE' = @('business-telemetry-skill')
 }
 
 $AGENT_DESCRIPTIONS = @{
@@ -45,6 +51,12 @@ $AGENT_DESCRIPTIONS = @{
     'OPS' = 'DevOps - Deployment, CI/CD, Infrastructure'
     'GOV' = 'Governance - Compliance, Observability, Security Audits'
     'DOC' = 'Documentation - BDD/SDD Specs, Guides, README'
+    'MKT' = 'Marketing - Content Writing, Growth Hacking, SEO'
+    'SALES' = 'Sales - Enterprise Sales, Outbound, Pipeline'
+    'FINANCE' = 'Finance - Financial Analysis, Budgeting, Forecasting'
+    'HR' = 'HR - Talent Acquisition, Recruiting'
+    'LEGAL' = 'Legal - Compliance, Regulatory, Privacy'
+    'BUS-TELE' = 'Business Telemetry - Metrics, Reporting, Analytics'
 }
 
 $AGENT_DELIVERABLES = @{
@@ -55,6 +67,12 @@ $AGENT_DELIVERABLES = @{
     'OPS' = @('docker-configs', 'k8s-manifests', 'cicd-pipelines', 'deployment-runbooks')
     'GOV' = @('audit-reports', 'compliance-docs', 'incident-runbooks', 'monitoring-dashboards')
     'DOC' = @('readme-files', 'api-docs', 'runbooks', 'bdd-sdd-specs')
+    'MKT' = @('blog-posts', 'landing-pages', 'email-campaigns', 'growth-experiments', 'seo-audits')
+    'SALES' = @('account-plans', 'deal-proposals', 'pipeline-reports', 'outreach-sequences')
+    'FINANCE' = @('financial-models', 'variance-reports', 'budget-analysis', 'roi-calculations')
+    'HR' = @('job-descriptions', 'interview-rubrics', 'offer-letters', 'onboarding-plans')
+    'LEGAL' = @('privacy-policies', 'compliance-checklists', 'dpias', 'audit-evidence')
+    'BUS-TELE' = @('telemetry-reports', 'efficiency-scores', 'management-summaries')
 }
 
 function Get-AgentSkills {
@@ -366,7 +384,7 @@ if ([string]::IsNullOrWhiteSpace($Task)) {
     exit 1
 }
 
-$validAgents = @('BA', 'SAD', 'DEV', 'QA', 'OPS', 'GOV', 'DOC')
+$validAgents = @('BA', 'SAD', 'DEV', 'QA', 'OPS', 'GOV', 'DOC', 'MKT', 'SALES', 'FINANCE', 'HR', 'LEGAL', 'BUS-TELE')
 if ($validAgents -notcontains $Agent) {
     Write-AgentLine "Unknown agent: $Agent" 'Red'
     Write-Host "Valid agents: $($validAgents -join ', ')" -ForegroundColor Gray
