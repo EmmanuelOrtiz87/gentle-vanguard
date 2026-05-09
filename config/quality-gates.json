@@ -7,7 +7,7 @@
     "foundation-quality-gate",
     "ps-lint",
     "sdd-gate",
-    "owasp-scan"
+    "security-scan"
   ],
   "requiredStatusChecks": {
     "strict": true,
