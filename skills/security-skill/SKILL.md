@@ -1,225 +1,78 @@
 ---
 name: security-skill
-description: Use when reviewing code for security vulnerabilities, implementing authentication/authorization, handling sensitive data, or setting up security practices. Triggers: "security", "authentication", "authorization", "vulnerability", "CVE", "OWASP", "XSS", "SQL injection", "secrets", "encryption".
+description: 'Trigger: "security", "authentication", "authorization", "vulnerability", "OWASP", "XSS", "SQL injection", "secrets". Use when reviewing code for security vulnerabilities, implementing auth, or setting up security practices.'
 ---
 
 # Security Skill
 
-## Purpose
+## Activation Contract
 
-Identify and prevent security vulnerabilities, implement secure authentication/authorization, and follow security best practices.
+Load this skill when the user asks to:
+- Review code for security vulnerabilities
+- Implement authentication or authorization
+- Handle sensitive data or secrets
+- Set up security practices (headers, rate limiting, CSP)
+- Audit dependencies or run security scans
+- Responds to triggers: "security", "authentication", "authorization", "vulnerability", "CVE", "OWASP", "XSS", "SQL injection", "secrets", "encryption"
 
-## Core Principles
+## Hard Rules
 
-1. **Defense in Depth** - Multiple layers of security
-2. **Least Privilege** - Grant minimum necessary permissions
-3. **Fail Securely** - Default to secure behavior on errors
-4. **Secure by Default** - Safe defaults, opt-in for insecurity
-5. **Input Validation** - Validate all external input
-6. **Output Encoding** - Encode data for the context
+1. **MUST** use parameterized queries or prepared statements — never string concatenation for SQL
+2. **MUST** hash passwords with bcrypt or argon2
+3. **MUST** encode output for context (HTML escape, URL encode, etc.)
+4. **MUST** validate all external input on every entry point
+5. **MUST** use httpOnly, secure, sameSite cookies for sessions
+6. **MUST NOT** commit secrets, API keys, or credentials to version control
+7. **MUST NOT** expose internal implementation details in error messages
 
-## OWASP Top 10 (2021)
+## Decision Gates
 
-| # | Vulnerability | Prevention |
-|---|---------------|------------|
-| 1 | Broken Access Control | Implement proper authorization checks |
-| 2 | Cryptographic Failures | Use strong encryption, hash passwords |
-| 3 | Injection | Use parameterized queries, input validation |
-| 4 | Insecure Design | Threat modeling, secure patterns |
-| 5 | Security Misconfiguration | Harden configurations, minimal attack surface |
-| 6 | Vulnerable Components | Keep dependencies updated |
-| 7 | Auth Failures | Strong passwords, MFA, session management |
-| 8 | Data Integrity Failures | Verify CI/CD integrity |
-| 9 | Logging Failures | Log security events, monitor alerts |
-| 10 | SSRF | Validate URLs, block internal requests |
+| Context | Action | Reference |
+|---------|--------|-----------|
+| Authentication | Implement MFA, strong password hashing, rate limiting, session management | `references/checklists.md` |
+| Authorization | Check per-request, RBAC, ownership validation | `references/checklists.md` |
+| Input validation | Validate type, length, range, format; use parameterized queries | `references/code-examples.md` |
+| Secrets | Environment variables or vault — never in code | `references/checklists.md` |
+| Security headers | CSP, HSTS, X-Frame-Options via helmet or equivalent | `references/code-examples.md` |
+| Dependency audit | Run `npm audit`, check for known CVEs | `references/checklists.md` |
 
-## Authentication Checklist
+## Execution Steps
 
-- [ ] Use strong password hashing (bcrypt, argon2)
-- [ ] Implement MFA/2FA
-- [ ] Secure session management (httpOnly, secure, sameSite)
-- [ ] Rate limit authentication endpoints
-- [ ] Use secure token generation
-- [ ] Implement account lockout policies
-- [ ] Secure password reset flows
+1. **Identify scope** — What code/feature needs security review?
+2. **Check authentication** — Are auth mechanisms secure? Password hashing? MFA? Session config?
+3. **Check authorization** — Are permissions checked on every request? RBAC in place?
+4. **Check input validation** — Every external input validated? SQL injection prevented?
+5. **Check output encoding** — XSS prevented? Context-appropriate encoding?
+6. **Check secrets management** — No secrets in code? Proper env var or vault usage?
+7. **Check security headers** — CSP, HSTS, etc. properly configured?
+8. **Check dependencies** — Run `npm audit`. Any known vulnerabilities?
+9. **Apply fixes** — Use reference files for patterns and examples.
+10. **Verify** — Run security scans if available. Check that fixes don't block valid usage.
 
-## Authorization Checklist
+## Output Contract
 
-- [ ] Check permissions on every request
-- [ ] Implement role-based access control (RBAC)
-- [ ] Use policy-based authorization
-- [ ] Validate ownership of resources
-- [ ] Log authorization failures
-- [ ] Don't expose internal IDs
+Return a structured security report:
 
-## Input Validation
+```
+## Security Review — {target}
 
-```typescript
-// DANGEROUS - SQL Injection
-const query = `SELECT * FROM users WHERE id = ${userId}`;
+### Findings
+| Severity | Category | Description | File:Line |
+|----------|----------|-------------|-----------|
+| CRITICAL | {category} | {issue} | {path} |
 
-// SAFE - Parameterized Query
-const query = `SELECT * FROM users WHERE id = $1`;
-await db.query(query, [userId]);
+### Status
+- ✅ PASS — all checks pass
+- ⚠️ WARNING — non-critical issues found
+- ❌ FAIL — critical security issues
+
+### Summary
+- {N} findings total
+- {N} critical, {N} warnings
+- Recommended actions: {list}
 ```
 
-```typescript
-// DANGEROUS - XSS
-const html = `<div>${userInput}</div>`;
+## References
 
-// SAFE - Output Encoding
-import DOMPurify from 'dompurify';
-const html = DOMPurify.sanitize(userInput);
-```
-
-## Secrets Management
-
-| Environment | Storage |
-|-------------|---------|
-| Development | `.env.local` (not committed) |
-| Staging | Environment variables |
-| Production | Vault, AWS Secrets Manager, Azure Key Vault |
-
-```bash
-# .gitignore
-.env
-.env.*
-!.env.example
-
-# .env.example (safe to commit)
-DATABASE_URL=postgresql://user:password@host:5432/db  # Replace in production
-API_KEY=your-api-key-here
-```
-
-## Security Headers
-
-```typescript
-// helmet.js for Express
-import helmet from 'helmet';
-
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'"],
-      fontSrc: ["'self'"],
-      objectSrc: ["'none'"],
-      mediaSrc: ["'self'"],
-      frameSrc: ["'none'"]
-    }
-  },
-  hsts: {
-    maxAge: 31536000,
-    includeSubDomains: true,
-    preload: true
-  }
-}));
-```
-
-## Secure Coding Patterns
-
-```typescript
-// File uploads
-const upload = multer({
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
-  fileFilter: (req, file, cb) => {
-    const allowed = ['image/jpeg', 'image/png', 'image/gif'];
-    if (allowed.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error('Invalid file type'));
-    }
-  }
-});
-
-// Rate limiting
-import rateLimit from 'express-rate-limit';
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests'
-});
-```
-
-## Dependency Security
-
-```bash
-# Audit dependencies
-npm audit --audit-level=high
-
-# Update dependencies
-npm outdated
-npm update
-
-# Lock versións in production
-npm ci  # Uses package-lock.json exactly
-```
-
-## Security Checklist for New Features
-
-- [ ] Input validation on all entry points
-- [ ] Output encoding for context
-- [ ] Authentication required?
-- [ ] Authorization checked?
-- [ ] Sensitive data handled securely?
-- [ ] Logging for security events?
-- [ ] Error messages don't leak info?
-- [ ] Dependencies vetted?
-
-## Security Testing Commands
-
-```bash
-# Dependency audit
-npm audit
-
-# OWASP dependency check
-npx owasp-dependency-check
-
-# Security headers check
-curl -I https://your-site.com
-
-# Secret scanning
-gitrob scan
-
-# SAST
-semgrep --config=auto .
-```
-
-## Workspace Access Control (Foundation)
-
-Foundation implements Role-Based Access Control (RBAC) for workspace operations:
-
-### Roles
-
-| Role | Description | Access |
-|------|-------------|--------|
-| `owner` | Workspace owner | Full access to all operations |
-| `developer` | Developer | Restricted to development tasks |
-
-### Authentication
-
-```powershell
-# Check access level
-.\scripts\utilities\access-control-middleware.ps1 -CheckOnly
-
-# Authenticate with API key (8hr session)
-.\scripts\utilities\auth-session.ps1 -ApiKey "fnd_local_2026_Emmanuel_"
-
-# Authenticate via security questions (recovery)
-.\scripts\utilities\auth-session.ps1 -UseSecurityQuestions
-```
-
-### Blocked Operations (developers)
-
-- Modifying skills (`skills/*`)
-- Modifying orchestrator
-- Accessing workspace config (`.workspace/config/*`)
-- Running skill-optimizer
-- Running foundation-audit
-- Managing users
-
-
+- `references/code-examples.md` — SQL injection, XSS, CSRF, secure headers, file uploads, rate limiting examples
+- `references/checklists.md` — OWASP Top 10, auth checklist, secrets management, dependency audit, security checklist for new features
