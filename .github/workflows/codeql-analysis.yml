@@ -1,8 +1,15 @@
 name: CodeQL Security Analysis
 
+permissions:
+  contents: read
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   schedule:
-    - cron: '0 10 * * 1'
+    - cron: '0 10 * * 1'  # Weekly on Monday at 07:00 GMT-3 (10:00 UTC)
   push:
     branches: [main, develop]
   pull_request:
@@ -12,6 +19,7 @@ jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       security-events: write
       actions: read

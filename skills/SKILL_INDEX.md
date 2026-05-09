@@ -51,11 +51,11 @@ Skill lifecycle is on-demand and Foundation-first:
 
 These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
-### architecture-skill
+### architecture-governance (replaces architecture-skill)
 
 **Trigger**: `architecture`, `structure`, `layers`
 
-**Use when**: Architecture governance, project structure, layer separation
+**Use when**: Architecture governance, project structure, layer separation, architecture decisions
 
 ---
 
@@ -75,19 +75,19 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 ---
 
-### documentation-skill
+### documentation-governance (replaces documentation-skill)
 
 **Trigger**: `documentation`, `docs`, `readme`
 
-**Use when**: Documentation standards and quality
+**Use when**: Documentation standards, quality, and governance
 
 ---
 
-### gitflow-skill
+### gitflow-orchestrator-skill (replaces gitflow-skill)
 
 **Trigger**: `gitflow`, `branch`, `merge`
 
-**Use when**: Git workflow and branching strategy
+**Use when**: Git workflow validation, branching strategy, and orchestration
 
 ---
 
@@ -199,7 +199,7 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 | **Workflow** | github-pr, jira-task, jira-epic, release-management, skill-factory |
 | **Quality** | typescript, code-review, security, technical-debt, web-performance-optimization, judgment-day |
 | **Operations** | observability, incident-response-plan |
-| **Governance** | project-scaffolding, documentation, architecture, git-workflow, foundation-manager |
+| **Governance** | project-scaffolding, documentation-governance, architecture-governance, git-workflow, foundation-manager |
 | **SDD Lifecycle** | sdd-lifecycle (CONSOLIDATED - 9 phases in 1) |
 
 ---
@@ -350,15 +350,11 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 
 ---
 
-### flutter-development
+### flutter-skill (consolidated, replaces flutter-development)
 
-**Trigger**: `Flutter`, `Dart`, `Provider`, `Widget`, `pubspec`
+**Trigger**: `Flutter`, `Dart`, `Riverpod`, `Provider`, `GoRouter`
 
-**Use when**: Cross-platform mobile development in Flutter
-
----
-
-### flutter-skill
+**Use when**: Cross-platform mobile development in Flutter with Riverpod state management
 
 **Trigger**: `Flutter`, `Riverpod`, `GoRouter`, `Impeller`, `Dart`
 
@@ -849,7 +845,7 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 | **Workflow** | github-pr, jira-task, jira-epic, release-management |
 | **Quality** | typescript, code-review, security, technical-debt, web-performance-optimization |
 | **Operations** | observability, incident-response-plan |
-| **Governance** | foundation-manager, project-scaffolding, architecture, documentation, git-workflow, foundation-audit |
+| **Governance** | foundation-manager, project-scaffolding, architecture-governance, documentation-governance, git-workflow, foundation-audit |
 
 ## Skill Loading
 
