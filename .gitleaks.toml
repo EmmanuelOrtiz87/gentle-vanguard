@@ -1,0 +1,38 @@
+# Gitleaks configuration - extends default rules with project-specific patterns
+# Docs: https://github.com/gitleaks/gitleaks
+
+[extend]
+useDefault = true
+
+# Custom allowlist for known test/fake secrets
+[allowlist]
+description = "Global allowlist for workspace-foundation"
+paths = [
+    # Test fixtures with intentional secrets
+    "tests/",
+    "skills/testing-skill/",
+    "demos/",
+]
+
+regexes = [
+    # Allow example.com and test domains
+    "(?i)example\\.(com|org|net)",
+    # Allow generic placeholder tokens
+    "(?i)your-(api-key|token|secret|password)",
+    # Allow RFC 5735 test IPs
+    "^192\\.0\\.2\\.",
+    "^198\\.51\\.100\\.",
+    "^203\\.0\\.113\\.",
+]
+
+# Custom rules for project-specific patterns
+[[rules]]
+id = "foundation-master-key-reference"
+description = "Reference to master.key file path (not the actual key)"
+regex = '''(?i)(master\.key|master-key)'''
+path = '''(?i)\.md$|readme|docs/'''
+allowlist = [
+    "keys/master.key is not committed",
+    "encrypted with AES-256 using master.key",
+    "master.key file is required",
+]

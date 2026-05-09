@@ -1,8 +1,8 @@
 # NORMATIVAS-ORQUESTADOR.md
 
-Versión: 1.0.0  
+Versión: 2.0.0  
 Autor: workspace-foundation  
-Fecha: 2026-05-02
+Fecha: 2026-05-09
 
 ---
 
@@ -70,6 +70,28 @@ TODO behavior prompt DEBE tener:
 - **emoji**: Emojis representativos (e.g., "🏗️📦⚙️")
 - **communication_style**: Formato estructurado igual que SKILL.md
 
+### 3.4 PR Template Standards
+TODO PR DEBE seguir `.github/PULL_REQUEST_TEMPLATE.md`:
+- **Summary**: Qué y por qué (una línea)
+- **Changes**: Lista de cambios clave
+- **Testing**: Checklist de pruebas realizadas
+- **Related**: Issues, ADRs, SDDs relacionados
+
+### 3.5 Python Code Standards (via Ruff)
+TODO archivo `.py` DEBE cumplir con las reglas definidas en `pyproject.toml`:
+- `ruff check .` — linting obligatorio
+- `ruff format .` — formato obligatorio
+- `pytest --cov` — coverage mínimo 80%
+- `pyproject.toml` contiene toda la configuración centralizada
+
+### 3.6 Secret Scanning Standards
+TODO commit DEBE pasar:
+1. **TruffleHog** (pre-push hook): scan completo de diff
+2. **Gitleaks** (CI workflow): scan en PR/push a main/develop
+3. **Secretlint** (pre-commit hook): scan de archivos staged
+- `.gitleaks.toml` extiende reglas default con allowlists del proyecto
+- Falsos positivos documentados en `.gitleaksignore` o `.secretlintignore`
+
 ### 3.3 Subagent Mapping (config/subagent-mapping.json)
 - Mapear 7 agentes → opencode subagent types
 - `BA` → `sdd-explore`
@@ -100,7 +122,19 @@ TODO behavior prompt DEBE tener:
 - **Record-Success**: Reset on recovery
 - **Record-Failure**: Incrementa failure count
 
-### 4.4 Skill Dependency Graph (config/skill-dependencies.json)
+### 4.4 Cross-Repo Sync Automation
+- `sync-public.yml` workflow corre automáticamente en push a `main`
+- Sincroniza skills (stubs públicos), configs, installer y docs
+- Usa `PAT_SYNC` secret para autenticarse en foundation-public
+- Requiere `skipPush` para dry-runs locales
+
+### 4.5 Branch Protection Rulesets
+- `main`: Requiere PR + 1 approval + status checks (tests, gitleaks, lint, format)
+- `develop`: Requiere PR + 1 approval (lighter rules)
+- Rulesets gestionados via `setup-branch-protection.ps1` usando `gh api`
+- **MUST** ejecutar script después de crear nuevo repo
+
+### 4.6 Skill Dependency Graph (config/skill-dependencies.json)
 - `sdd-apply` REQUIRES `sdd-design` + `sdd-spec` (blocking)
 - `sdd-verify` REQUIRES `sdd-apply` (blocking)
 - `sdd-archive` REQUIRES `sdd-verify` (blocking)
@@ -179,7 +213,13 @@ Para transferencias agente-a-agente:
 - **MUST NOT** commitear `.env`, `credentials.json`, o archivos con secretos
 - **MUST** usar `engram_mem_save` para persistir API keys (NO en archivos)
 
-### 8.2 Code Safety
+### 8.2 Secret Scanning
+- **3-layer defense**: Secretlint (pre-commit) → TruffleHog (pre-push) → Gitleaks (CI)
+- Gitleaks corre en cada PR/push a main/develop
+- `.gitleaks.toml` extiende reglas default de Gitleaks
+- Falsos positivos: añadir a allowlist en `.gitleaks.toml` o a `.gitleaksignore`
+
+### 8.3 Code Safety
 - **MUST NOT** usar `git push --force` a main/master sin permiso explicito
 - **MUST NOT** commitear cambios sin revisión (Judgment Day)
 - **MUST** verificar si hay autorización global antes de preguntar
@@ -200,7 +240,7 @@ TODO subagente DEBE verificar:
 ## 10. ORQUESTADOR DEBE CONOCER Y SABER
 
 El orquestador **DEBE** conocer:
-1. **Todos los skills disponibles** (25+ skills) con sus triggers
+1. **Todos los skills disponibles** (130+ skills) con sus triggers
 2. **Mapeo a subagent types** (config/subagent-mapping.json)
 3. **Tiered routing** (auto-delegation.json)
 4. **Concurrency limits** (agentSemaphores)
@@ -224,6 +264,9 @@ El orquestador **DEBE** conocer:
 | `Save-OrchestratorState` | Guardar estado para cross-session |
 | `Invoke-AutoDelegate` | Delegar a subagente con resilience |
 | `Test-SkillDependencies` | Verificar deps antes de ejecutar |
+| `setup-branch-protection.ps1` | Configurar rulesets via API |
+| `sync-to-public.ps1` | Sincronizar repo privado → público |
+| `gitleaks` (CI) | Secret scanning automático en PRs |
 
 ### Formato de Comunicación
 - **Be [X]**: "Be architectural: 'Built 3-tier...'"
