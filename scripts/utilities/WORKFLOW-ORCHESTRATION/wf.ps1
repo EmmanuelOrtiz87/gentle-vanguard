@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'foundation-sync', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'foundation-sync', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -2752,6 +2752,62 @@ switch ($Command) {
         }
 
         & $eventScript @eventArgs
+    }
+
+    'route' {
+        $routerScript = Join-Path $scriptDir '..\MODEL-ROUTER\model-router.ps1'
+        if (-not (Test-Path $routerScript)) {
+            Write-Error "Model router script not found: $routerScript"
+            exit 1
+        }
+
+        $scopeParts = $Scope -split ' ', 2
+        $routeAction = if ($scopeParts[0]) { $scopeParts[0] } else { '' }
+
+        $routeParams = @{
+            Action       = $routeAction
+            Agent        = ''
+            Model        = ''
+            Provider     = ''
+            Temperature  = ''
+            AdminPassword = ''
+            AdminKeyFile = ''
+        }
+
+        $allRawArgs = @($RemainingArgs)
+        if ($scopeParts.Count -gt 1) {
+            $allRawArgs = @($scopeParts[1]) + $allRawArgs
+        }
+
+        $i = 0
+        while ($i -lt $allRawArgs.Count) {
+            $arg = $allRawArgs[$i]
+            if ($arg.StartsWith('-')) {
+                $key = $arg.TrimStart('-').ToLower()
+                $i++
+                $val = if ($i -lt $allRawArgs.Count) { $allRawArgs[$i] } else { '' }
+                switch ($key) {
+                    'agent'       { $routeParams.Agent = $val }
+                    'model'       { $routeParams.Model = $val }
+                    'provider'    { $routeParams.Provider = $val }
+                    'temperature' { $routeParams.Temperature = $val }
+                    'adminpassword' { $routeParams.AdminPassword = $val }
+                    'adminkeyfile'  { $routeParams.AdminKeyFile = $val }
+                    'json'        { $routeParams.JSON = $true; $i-- }
+                }
+            } else {
+                if ([string]::IsNullOrWhiteSpace($routeParams.Agent)) {
+                    $routeParams.Agent = $arg
+                } elseif ([string]::IsNullOrWhiteSpace($routeParams.Model)) {
+                    $routeParams.Model = $arg
+                } elseif ([string]::IsNullOrWhiteSpace($routeParams.Provider)) {
+                    $routeParams.Provider = $arg
+                }
+            }
+            $i++
+        }
+
+        & $routerScript @routeParams
     }
 }
 
