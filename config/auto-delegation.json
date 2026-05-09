@@ -21,7 +21,13 @@
       "QA": 2,
       "OPS": 1,
       "GOV": 1,
-      "DOC": 1
+      "DOC": 1,
+      "MKT": 1,
+      "SALES": 1,
+      "FINANCE": 1,
+      "HR": 1,
+      "LEGAL": 1,
+      "BUS-TELE": 1
     },
     "default": 1,
     "globalMax": 3,
@@ -74,7 +80,13 @@
     "GITFLOW-WORKFLOW": "git-workflow-skill",
     "GITFLOW-COMMIT": "git-workflow-skill",
     "GITFLOW-CONFLICT": "git-workflow-skill",
-    "DAILY": "daily-workflow"
+    "DAILY": "daily-workflow",
+    "MKT": "marketing-content-writer",
+    "SALES": "sales-account-executive",
+    "FINANCE": "finance-financial-analyst",
+    "HR": "hr-talent-acquisition",
+    "LEGAL": "legal-compliance-officer",
+    "BUS-TELE": "business-telemetry-skill"
   },
   "skillToAgentProfile": {
     "code-review-orchestrator-skill": "QA",
@@ -89,7 +101,17 @@
     "sdd-lifecycle": "BA",
     "docker-devops-skill": "OPS",
     "documentation-governance": "DOC",
-    "daily-workflow": "DEV"
+    "daily-workflow": "DEV",
+    "comment-writer": "GOV",
+    "work-unit-commits": "DEV",
+    "marketing-content-writer": "MKT",
+    "marketing-growth-hacker": "MKT",
+    "sales-account-executive": "SALES",
+    "sales-outbound-strategist": "SALES",
+    "finance-financial-analyst": "FINANCE",
+    "hr-talent-acquisition": "HR",
+    "legal-compliance-officer": "LEGAL",
+    "business-telemetry-skill": "BUS-TELE"
   },
   "clarifyBaStrategy": {
     "enabled": true,
@@ -372,7 +394,13 @@
       "\"find skill\"",
       "\"skill routing\"",
       "\"embeddings\"",
-      "\"context7\"."
+      "\"context7\".",
+      "\"PR feedback\"",
+      "\"code review comment\"",
+      "\"review feedback\"",
+      "\"comment style\"",
+      "\"collaboration comment\"",
+      "\"warm feedback\""
     ],
     "DAILY": [
       "daily check",
@@ -608,7 +636,14 @@
       "\"auto-format\"",
       "\"pretool\"",
       "\"format hook\"",
-      "\"format before save\""
+      "\"format before save\"",
+      "\"commit splitting\"",
+      "\"work unit\"",
+      "\"atomic commit\"",
+      "\"chained pr\"",
+      "\"review workload\"",
+      "\"commit story\"",
+      "\"commit by work unit\""
     ],
     "QA": [
       "test",
@@ -748,6 +783,14 @@
       "\"linkedin\"",
       "\"redes\"",
       "\"social\"",
+      "\"ascii\"",
+      "\"diagram\"",
+      "\"mermaid\"",
+      "\"visual\"",
+      "\"presentacion\"",
+      "\"slide\""
+    ],
+    "MKT": [
       "\"marketing\"",
       "\"promocionar\"",
       "\"content strategy\"",
@@ -777,13 +820,69 @@
       "\"technical seo\"",
       "\"site audit\"",
       "\"backlinks\"",
-      "\"serp\".",
-      "\"ascii\"",
-      "\"diagram\"",
-      "\"mermaid\"",
-      "\"visual\"",
-      "\"presentacion\"",
-      "\"slide\""
+      "\"serp\"."
+    ],
+    "SALES": [
+      "\"enterprise sales\"",
+      "\"deal negotiation\"",
+      "\"pipeline\"",
+      "\"account management\"",
+      "\"sales cycle\"",
+      "\"closing\".",
+      "\"outbound sales\"",
+      "\"cold outreach\"",
+      "\"prospecting\"",
+      "\"icp\"",
+      "\"sequence\"",
+      "\"buyer persona\"."
+    ],
+    "FINANCE": [
+      "\"financial model\"",
+      "\"forecast\"",
+      "\"financial analysis\"",
+      "\"budget\"",
+      "\"cash flow\"",
+      "\"variance analysis\"",
+      "\"roi\"",
+      "\"scenario analysis\".",
+      "\"finance\"",
+      "\"cost analysis\"",
+      "\"p&l\"",
+      "\"balance sheet\""
+    ],
+    "HR": [
+      "\"hiring\"",
+      "\"recruiting\"",
+      "\"interview\"",
+      "\"candidate\"",
+      "\"onboarding\"",
+      "\"job description\"",
+      "\"talent acquisition\"",
+      "\"hr\""
+    ],
+    "LEGAL": [
+      "\"compliance\"",
+      "\"gdpr\"",
+      "\"hipaa\"",
+      "\"policy\"",
+      "\"audit\"",
+      "\"regulatory\"",
+      "\"privacy\"",
+      "\"legal\"",
+      "\"data protection\"",
+      "\"dpa\"",
+      "\"terms of service\"",
+      "\"data subject request\""
+    ],
+    "BUS-TELE": [
+      "\"telemetry\"",
+      "\"metrics\"",
+      "\"management report\"",
+      "\"roi analysis\"",
+      "\"efficiency score\"",
+      "\"business metrics\"",
+      "\"kpi\"",
+      "\"usage tracking\""
     ],
     "SCRIPT-GOV": [
       "script",
@@ -930,18 +1029,29 @@
       "\"risk register\"",
       "\"stakeholder\"",
       "\"gantt\".",
-      "\"enterprise sales\"",
-      "\"deal negotiation\"",
-      "\"pipeline\"",
-      "\"account management\"",
-      "\"sales cycle\"",
-      "\"closing\".",
-      "\"outbound sales\"",
-      "\"cold outreach\"",
-      "\"prospecting\"",
-      "\"icp\"",
-      "\"sequence\"",
-      "\"buyer persona\"."
+      "\"customer success\"",
+      "\"retention\"",
+      "\"churn\"",
+      "\"health score\"",
+      "\"nps\"",
+      "\"customer health\".",
+      "\"customer support\"",
+      "\"ticket triage\"",
+      "\"escalation\"",
+      "\"knowledge base\"",
+      "\"sla\"",
+      "\"help desk\".",
+      "\"product management\"",
+      "\"prd\"",
+      "\"user story\"",
+      "\"gtm\"",
+      "\"product strategy\".",
+      "\"project management\"",
+      "\"agile\"",
+      "\"sprint\"",
+      "\"risk register\"",
+      "\"stakeholder\"",
+      "\"gantt\"."
     ]
   },
   "adaptive_mode": {
@@ -1073,6 +1183,78 @@
         "GITFLOW-COMMIT",
         "GITFLOW-CONFLICT"
       ]
+    },
+    "MKT": {
+      "temperature": 0.5,
+      "hallucinationGuard": "low",
+      "requiredEvidence": [
+        "content piece drafted with clear value proposition",
+        "SEO keywords integrated naturally"
+      ],
+      "hedgingBlocked": false,
+      "maxRetries": 2,
+      "escalateOnFailure": "DOC",
+      "rationale": "Marketing needs creativity and brand voice - some latitude needed"
+    },
+    "SALES": {
+      "temperature": 0.3,
+      "hallucinationGuard": "medium",
+      "requiredEvidence": [
+        "account plan or deal proposal documented",
+        "pipeline stage and next action defined"
+      ],
+      "hedgingBlocked": false,
+      "maxRetries": 2,
+      "escalateOnFailure": "orchestrator",
+      "rationale": "Sales needs structured methodology (MEDDIC) but relationship nuance matters"
+    },
+    "FINANCE": {
+      "temperature": 0.15,
+      "hallucinationGuard": "high",
+      "requiredEvidence": [
+        "assumptions documented with sources",
+        "model includes error checks (balance sheet must balance)"
+      ],
+      "hedgingBlocked": true,
+      "maxRetries": 2,
+      "escalateOnFailure": "orchestrator",
+      "rationale": "Finance is precision - incorrect numbers drive bad decisions"
+    },
+    "HR": {
+      "temperature": 0.4,
+      "hallucinationGuard": "medium",
+      "requiredEvidence": [
+        "job description or rubric uses inclusive language",
+        "process documented with clear stages"
+      ],
+      "hedgingBlocked": false,
+      "maxRetries": 2,
+      "escalateOnFailure": "orchestrator",
+      "rationale": "HR needs fairness and consistency - structured process with inclusive approach"
+    },
+    "LEGAL": {
+      "temperature": 0.1,
+      "hallucinationGuard": "critical",
+      "requiredEvidence": [
+        "applicable regulation cited (GDPR, HIPAA, etc.)",
+        "compliance checklist completed"
+      ],
+      "hedgingBlocked": true,
+      "maxRetries": 1,
+      "escalateOnFailure": "orchestrator",
+      "rationale": "Legal is non-negotiable - regulatory compliance is binary"
+    },
+    "BUS-TELE": {
+      "temperature": 0.2,
+      "hallucinationGuard": "high",
+      "requiredEvidence": [
+        "telemetry record has User_ID, Timestamp, and metric value",
+        "data source path validated"
+      ],
+      "hedgingBlocked": true,
+      "maxRetries": 2,
+      "escalateOnFailure": "REPORT",
+      "rationale": "Business telemetry drives decisions - fabricated metrics = bad decisions"
     },
     "SCRIPT": {
       "temperature": 0.15,
