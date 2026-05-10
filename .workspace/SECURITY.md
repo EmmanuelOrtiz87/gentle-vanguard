@@ -36,7 +36,7 @@
 ## API Key
 
 ```
-Key: fnd_local_2026_Emmanuel_
+Key: BraianAmir1487!
 
 Location: .workspace/config/owner-auth.json (ENCRYPTED)
 ```
@@ -53,7 +53,7 @@ Location: .workspace/config/owner-auth.json (ENCRYPTED)
 
 ### Option 1: API Key (Fast)
 ```powershell
-.\scripts\utilities\auth-session.ps1 -ApiKey "fnd_local_2026_Emmanuel_"
+.\scripts\utilities\auth-session.ps1 -ApiKey "BraianAmir1487!"
 # Result: Session authenticated for 8 hours
 ```
 
