@@ -40,9 +40,9 @@ v1.0.0
 
 - Created from `main` branch
 - Tag format: `v1.0.0`, `v1.2.0`, `v2.1.0`
-- Process: develop on `develop` merge to `main` tag GitHub Release
+- Process: accumulate validated work on `develop`, open a release PR to `main`, then tag from `main`
 - Supported for at least 3 subsequent minor versións
-- **Current strategy**: Quarterly stable releases
+- **Current strategy**: develop-first with stable releases cut when a coherent batch is ready
 
 #### 2. **Prerelease (Optional)**
 
@@ -109,20 +109,20 @@ change is announced.
 ### Git Flow (Current)
 
 ```
-main (production branch)        GitHub Release points here
+main (stable release branch)    GitHub Release points here
 
-   Merged from: develop
+   Receives only release/* and hotfix/* PRs
 
-develop (integration branch)
+develop (integration and publication branch)
 
-   Feature branches (feature/*, bugfix/*, chore/*)
+   Receives feature/*, bugfix/*, chore/* PRs and frequent publication
 
 Hotfix (if critical)
 hotfix/*    main  (tag)
            develop
 ```
 
-### Release Process (Develop Main Tag)
+### Release Process (Develop -> Main -> Tag)
 
 ```bash
 # 1. Ensure develop is ready
@@ -132,13 +132,13 @@ git pull origin develop
 # 2. Update CHANGELOG: [Unreleased]  [1.0.0]
 # (manually edit or use script)
 
-# 3. Create release PR from develop to main
+# 3. Create release branch and PR to main
 git checkout -b release/v1.0.0
 git add CHANGELOG.md
 git commit -m "chore(release): prepare v1.0.0"
 git push origin release/v1.0.0
 
-# Use gh or GitHub UI to create PR: release/v1.0.0  main
+# Use gh or GitHub UI to create PR: release/v1.0.0 -> main
 
 # 4. Merge PR (squash or merge commit both ok)
 gh pr merge <number> --squash
@@ -152,11 +152,22 @@ git push origin v1.0.0
 # 6. GitHub Release created automatically (or manual)
 gh release create v1.0.0 --generate-notes
 
-# 7. Sync back to develop (optional but recommended)
+# 7. Sync back to develop (required after release)
 git checkout develop
 git merge main
 git push origin develop
 ```
+
+## Release Trigger Threshold
+
+Cut a stable release when at least one of these conditions is met:
+
+- `develop` accumulated 8-12 validated publications since the last stable tag.
+- 3-5 coherent backlog items are complete and documented.
+- A governance, security, or architecture change should not wait longer than 10-14 days.
+
+Do not cut a release only by count. The batch must also pass `wf judgment-day`, have an updated
+CHANGELOG, and be understandable as a single release story.
 
 ## Checklist Before Release
 
@@ -194,9 +205,9 @@ Foundation does NOT store versión in `scripts/utilities/wf.ps1` or source files
 
 **Q: When should I release?**
 
-- After completing a significant feature set (3-5 items from backlog)
-- When governance or architecture changes require documentation
-- For security patches: immediately as v1.0.1 hotfix
+- After 8-12 validated publications to `develop`, if they form a coherent release batch
+- After completing 3-5 significant backlog items with updated docs and changelog
+- Immediately for security/stability fixes as a hotfix on `main`
 
 **Q: Can I skip versións?**
 
