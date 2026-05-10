@@ -378,11 +378,24 @@ New-SessionBriefContent -Branch $branch -GitState $gitState -OrchestratorState $
 
 Write-Ok "Session brief created: $sessionFile"
 
-$compactScript = Join-Path $PSScriptRoot 'compact-start.ps1'
-if (Test-Path $compactScript) {
+$compactScript = Join-Path $repoRoot 'scripts\utilities\WORKFLOW-ORCHESTRATION\compact-start.ps1'
+$compactMarker = Join-Path $repoRoot '.session\.compact-marker'
+$skipCompact = $false
+if (Test-Path $compactMarker) {
+    $lastCompact = Get-Content $compactMarker -Raw -ErrorAction SilentlyContinue
+    if ($lastCompact -and ($lastCompact -match '\d')) {
+        $lastTime = [datetime]::Parse($lastCompact, [System.Globalization.CultureInfo]::InvariantCulture, [System.Globalization.DateTimeStyles]::AssumeUniversal)
+        if ((Get-Date).ToUniversalTime() - $lastTime -lt [timespan]::FromMinutes(60)) {
+            $skipCompact = $true
+        }
+    }
+}
+if ($skipCompact) {
+    Write-Ok "compact-start skipped (already run recently in this session)"
+} elseif (Test-Path $compactScript) {
     Write-Step "Optimizing context for efficiency"
     try {
-        & $compactScript -Objective "Session $($branch): $($TaskName)" -NoClipboard | Out-Null
+        & $compactScript -Objective "Session $($branch): $($TaskName)" | Out-Null
         Write-Ok "Context optimized with compact-start"
     }
     catch {

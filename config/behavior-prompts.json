@@ -11,7 +11,14 @@
       "applies_to": ["DEV", "SAD"],
       "opencode_subagent": ["sdd-apply", "sdd-design"],
       "expected_output": ["architecture-doc", "file-structure", "db-schema", "api-endpoints", "ui-components", "source-code"],
-      "compliance_checkpoints": ["security-review", "scalability-check", "mvp-scope-validation"]
+      "compliance_checkpoints": ["security-review", "scalability-check", "mvp-scope-validation"],
+      "earned_trust": {
+        "enabled": true,
+        "passes_required": 3,
+        "state_file": ".session/earned-trust-state.json",
+        "track_checkpoints": true,
+        "track_expected_output": false
+      }
     },
     "codebase-refactor": {
       "name": "Codebase Understanding & Refactoring",
@@ -22,7 +29,14 @@
       "applies_to": ["DEV", "SAD"],
       "opencode_subagent": ["sdd-explore", "sdd-apply"],
       "expected_output": ["architecture-summary", "problem-areas", "refactoring-strategy", "improved-code"],
-      "compliance_checkpoints": ["no-functionality-change", "maintainability-check", "technical-debt-tracking"]
+      "compliance_checkpoints": ["no-functionality-change", "maintainability-check", "technical-debt-tracking"],
+      "earned_trust": {
+        "enabled": true,
+        "passes_required": 3,
+        "state_file": ".session/earned-trust-state.json",
+        "track_checkpoints": true,
+        "track_expected_output": false
+      }
     },
     "debugging-engineer": {
       "name": "Senior Debugging Engineer",
@@ -33,7 +47,14 @@
       "applies_to": ["DEV", "QA"],
       "opencode_subagent": ["sdd-apply", "sdd-verify"],
       "expected_output": ["code-analysis", "root-cause", "failure-reason", "edge-cases", "production-ready-fix"],
-      "compliance_checkpoints": ["root-cause-verification", "edge-case-testing", "production-readiness"]
+      "compliance_checkpoints": ["root-cause-verification", "edge-case-testing", "production-readiness"],
+      "earned_trust": {
+        "enabled": true,
+        "passes_required": 3,
+        "state_file": ".session/earned-trust-state.json",
+        "track_checkpoints": true,
+        "track_expected_output": false
+      }
     },
     "system-architect": {
       "name": "System Design + Implementation",
@@ -44,7 +65,14 @@
       "applies_to": ["SAD", "DEV"],
       "opencode_subagent": ["sdd-design", "sdd-apply"],
       "expected_output": ["system-architecture", "component-structure", "data-flow", "api-design", "db-schema", "cache-strategy", "implementation-code"],
-      "compliance_checkpoints": ["scalability-review", "cache-efficiency", "data-flow-validation"]
+      "compliance_checkpoints": ["scalability-review", "cache-efficiency", "data-flow-validation"],
+      "earned_trust": {
+        "enabled": true,
+        "passes_required": 3,
+        "state_file": ".session/earned-trust-state.json",
+        "track_checkpoints": true,
+        "track_expected_output": false
+      }
     },
     "performance-engineer": {
       "name": "Performance Optimization Advisor",
@@ -55,7 +83,14 @@
       "applies_to": ["DEV", "QA"],
       "opencode_subagent": ["sdd-apply", "sdd-verify"],
       "expected_output": ["performance-bottlenecks", "optimization-strategies", "improved-code"],
-      "compliance_checkpoints": ["performance-benchmark", "memory-usage-check", "scalability-validation"]
+      "compliance_checkpoints": ["performance-benchmark", "memory-usage-check", "scalability-validation"],
+      "earned_trust": {
+        "enabled": true,
+        "passes_required": 3,
+        "state_file": ".session/earned-trust-state.json",
+        "track_checkpoints": true,
+        "track_expected_output": false
+      }
     },
     "clean-architecture": {
       "name": "Clean Architecture Reconstruction",
@@ -66,7 +101,14 @@
       "applies_to": ["SAD", "DEV"],
       "opencode_subagent": ["sdd-design", "sdd-apply"],
       "expected_output": ["responsibility-map", "modular-structure", "decoupled-components", "architecture-doc"],
-      "compliance_checkpoints": ["single-responsibility", "dependency-inversion", "engram-documentation"]
+      "compliance_checkpoints": ["single-responsibility", "dependency-inversion", "engram-documentation"],
+      "earned_trust": {
+        "enabled": true,
+        "passes_required": 3,
+        "state_file": ".session/earned-trust-state.json",
+        "track_checkpoints": true,
+        "track_expected_output": false
+      }
     }
   },
   "global_principles": [

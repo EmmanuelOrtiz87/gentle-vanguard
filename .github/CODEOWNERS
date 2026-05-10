@@ -1,58 +1,21 @@
-# Code Owners
-# https://help.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners
-#
-# Any file not covered by a specific rule falls to the default owner.
-# Rules are evaluated from bottom to top — last matching rule wins.
+# Default owner for all files
+* @EmmanuelOrtiz87
 
-# Default owner for everything
-* @platform-team
+# Security-critical areas - require review
+config/security-* @EmmanuelOrtiz87
+config/access-control.json @EmmanuelOrtiz87
+config/owner-auth.json @EmmanuelOrtiz87
+docs/NORMATIVAS-SEGURIDAD.md @EmmanuelOrtiz87
 
-# Core automation scripts — require platform-team review
-/scripts/ @platform-team
-/scripts/utilities/ @platform-team
-/scripts/diagnostics/ @platform-team
+# Architecture and governance
+config/orchestrator.json @EmmanuelOrtiz87
+config/auto-delegation.json @EmmanuelOrtiz87
+config/adaptive-*.json @EmmanuelOrtiz87
+docs/NORMATIVAS-*.md @EmmanuelOrtiz87
 
-# Governance validator — extra visibility (notify both teams)
-/scripts/diagnostics/validate-script-governance.ps1 @platform-team @devops-team
+# CI/CD workflows
+.github/workflows/ @EmmanuelOrtiz87
 
-# Script registry — single source of truth, changes need careful review
-/docs/reference/script-registry.md @platform-team @devops-team
-
-# CI/CD workflows — devops owns, platform-team co-reviews
-/.github/workflows/ @devops-team @platform-team
-/.github/CODEOWNERS @platform-team
-
-# Skills / AI prompting layer
-/skills/ @platform-team
-
-# Templates
-/templates/ @platform-team
-/templates/project-types/ @platform-team
-
-# Configuration
-/config/ @platform-team
-
-# Documentation
-/docs/ @docs-team @platform-team
-*.md @docs-team
-
-# Kubernetes
-**/k8s/ @devops-team
-
-# Docker
-**/Dockerfile* @devops-team
-**/docker-compose*.yml @devops-team
-
-# Quality configs (markdownlint, prettier, editorconfig)
-/.markdownlint.json @platform-team
-/.prettierrc @platform-team
-
-# PR and issue templates
-/.github/PULL_REQUEST_TEMPLATE.md @platform-team
-/.github/labeler.yml @platform-team
-
-# Code of Conduct
-/CODE_OF_CONDUCT.md @platform-team
-
-# Hooks
-/hooks/commitlint.ps1 @platform-team
+# Testing infrastructure
+config/testing-policy.json @EmmanuelOrtiz87
+tests/ @EmmanuelOrtiz87

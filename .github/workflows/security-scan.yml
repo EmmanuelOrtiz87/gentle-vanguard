@@ -1,10 +1,11 @@
-name: Security Scan and Backup (consolidated)
+name: Security Scan (consolidated)
 
 permissions:
   contents: read
+  security-events: write
 
 concurrency:
-  group: dependency-backup-${{ github.ref }}
+  group: security-scan-${{ github.ref }}
   cancel-in-progress: true
 
 on:
@@ -13,50 +14,77 @@ on:
   pull_request:
     branches: [main, develop]
   schedule:
-    - cron: '30 16 * * 0' # Weekly on Sunday at 13:30 GMT-3 (16:30 UTC)
+    - cron: '30 16 * * 0'
 
 jobs:
   dependency-scan:
-    name: Dependency Scanning
+    name: Dependency Scan (Trivy)
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - name: Configure Git
-        run: |
-          git config --global core.symlinks false
-          git config --global core.longpaths true
-
-      - name: Checkout
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
           ignore-unfixed: true
           severity: CRITICAL,HIGH
-          format: json
-          output: trivy-report.json
-      - name: Upload Trivy report
+          format: sarif
+          output: trivy-report.sarif
+      - name: Upload Trivy SARIF
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: github/codeql-action/upload-sarif@v3
         with:
-          name: trivy-report
-          path: trivy-report.json
-          retention-days: 30
+          sarif_file: trivy-report.sarif
+          category: trivy
 
-  backup:
-    name: Backup Artifacts
+  secret-scan:
+    name: Secret Scan (Gitleaks)
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-      - name: Archive docs and config
-        run: |
-          archive_name="backup-$(date +%Y-%m-%d).tar.gz"
-          tar -czf "$archive_name" docs/ config/
-      - name: Upload backup
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  sast-scan:
+    name: SAST - ${{ matrix.language }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [powershell, python, actions]
+    steps:
+      - uses: actions/checkout@v6
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-and-quality
+      - uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
+
+  sbom-generate:
+    name: SBOM Generation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - name: Generate SBOM with Trivy
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: fs
+          format: cyclonedx
+          output: sbom-cyclonedx.json
+      - name: Upload SBOM
         uses: actions/upload-artifact@v7
         with:
-          name: workspace-backup
-          path: backup-*.tar.gz
+          name: sbom
+          path: sbom-cyclonedx.json
+          retention-days: 90
