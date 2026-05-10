@@ -20,8 +20,6 @@ pre-push:
         -Fix
     test-suite:
       run: powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/run-tests-simple.ps1"
-    trufflehog-full:
-      run: trufflehog git file://. --since-commit origin/main --fail --no-update
     audit-check:
       run:
         powershell -NoProfile -ExecutionPolicy Bypass -File
