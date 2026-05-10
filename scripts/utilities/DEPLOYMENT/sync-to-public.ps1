@@ -19,7 +19,7 @@
 
 param(
     [string]$privateRepo = "$(if ($env:PRIVATE_REPO) { $env:PRIVATE_REPO } else { Resolve-Path "$PSScriptRoot\..\..\.." })",
-    [string]$publicRepo = "$(if ($env:PUBLIC_REPO) { $env:PUBLIC_REPO } else { Join-Path (Resolve-Path "$PSScriptRoot\..\..\..") "foundation-public" })",
+    [string]$publicRepo = "$(if ($env:PUBLIC_REPO) { $env:PUBLIC_REPO } else { Resolve-Path "$PSScriptRoot\..\..\..\..\foundation-public" })",
     [switch]$skipPush
 )
 

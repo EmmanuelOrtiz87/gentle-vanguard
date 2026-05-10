@@ -1127,7 +1127,19 @@ function Invoke-ContextEfficiencyLiveAssist {
     Write-Host '  Suggested action now:' -ForegroundColor Cyan
     Write-Host '    .\scripts\utilities\wf.ps1 compact-start "one-sentence objective"' -ForegroundColor Cyan
 
-    if ($livePolicy.AutoRunOnStartSessionWhenRed -and $normalized -eq 'start-session' -and ($metrics.HealthStatus -like 'RED*')) {
+    $compactMarker = Join-Path $repoRoot '.session\.compact-marker'
+    $compactAlreadyRun = $false
+    if (Test-Path $compactMarker) {
+        $lastCompact = Get-Content $compactMarker -Raw -ErrorAction SilentlyContinue
+        if ($lastCompact -and ($lastCompact -match '\d')) {
+            $lastTime = [datetime]::Parse($lastCompact, [System.Globalization.CultureInfo]::InvariantCulture, [System.Globalization.DateTimeStyles]::AssumeUniversal)
+            if ((Get-Date).ToUniversalTime() - $lastTime -lt [timespan]::FromMinutes(60)) {
+                $compactAlreadyRun = $true
+            }
+        }
+    }
+
+    if ($livePolicy.AutoRunOnStartSessionWhenRed -and $normalized -eq 'start-session' -and ($metrics.HealthStatus -like 'RED*') -and -not $compactAlreadyRun) {
         $compactScript = Join-Path $scriptDir 'compact-start.ps1'
         if (Test-Path $compactScript) {
             $autoObjective = if ([string]::IsNullOrWhiteSpace($Objective)) {
@@ -2532,6 +2544,11 @@ switch ($Command) {
         } else {
             & $compactScript -Objective $Scope
         }
+
+        $markerDir = Join-Path $repoRoot '.session'
+        if (-not (Test-Path $markerDir)) { New-Item -ItemType Directory -Path $markerDir -Force | Out-Null }
+        Set-Content -Path (Join-Path $markerDir '.compact-marker') -Value ((Get-Date).ToUniversalTime().ToString('o')) -Encoding UTF8
+        Write-Success 'compact-start marker updated'
     }
 
     'simplify-text' {

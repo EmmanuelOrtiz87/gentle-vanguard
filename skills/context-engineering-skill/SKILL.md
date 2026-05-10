@@ -38,8 +38,32 @@ Load when: starting a new AI session that continues from a previous one, context
 - **context-pack**: Snapshot file <15000 chars tracking event, prompt_chars, changed_count
 - **metrics**: `docs/sessions/metrics/context-usage.csv` with `event`, `prompt_chars`, `changed_count`
 
+## Activation Policy (compact-start)
+
+| Condition | Action |
+|-----------|--------|
+| Context health RED (>60% used) | Run `compact-start` before next message |
+| Starting new thread/session | Run `compact-start` OR check `.session/.compact-marker` |
+| Health GREEN or YELLOW | Skip — no handoff needed yet |
+| `.compact-marker` <60 min old | Skip — already ran recently |
+
+**Objective rules:**
+- MUST be ≤100 chars — one sentence, no filler
+- MUST describe what to resume, not how
+- Examples: ✅ `"fix ci noise in build pipeline"` — ❌ `"we need to continue working on the issue with the CI pipeline where..."`
+
+## When to Use the Reference Files
+
+Read `references/scripts.md` when you need:
+- exact script paths, parameters, defaults, and usage examples
+
+Read `references/decision-gates.md` when you need:
+- threshold values for context usage, token budgets per task, objective rules
+
+Read `references/session-handoff-protocol.md` when you need:
+- the full handoff sequence and marker-based dedup protocol
+
 ## References
-- Scripts: `scripts/utilities/compact-start.ps1`
-- Scripts: `scripts/utilities/context-pack.ps1`
-- Scripts: `scripts/utilities/context-metrics-report.ps1`
-- Scripts: `scripts/utilities/token-efficiency-estimator.ps1`
+- Scripts: `scripts/utilities/compact-start.ps1`, `context-pack.ps1`, `context-metrics-report.ps1`
+- Metrics: `scripts/utilities/token-efficiency-estimator.ps1`
+- Config: `config/context-efficiency.json`
