@@ -21,6 +21,11 @@
     },
     {
       "type": "script",
+      "path": "scripts/utilities/SESSION-MANAGEMENT/ensure-github-bypass.ps1",
+      "description": "Session Bypass Guard - Ensures owner bypass is active on develop rulesets for foundation and foundation-public"
+    },
+    {
+      "type": "script",
       "path": "scripts/utilities/DEPLOYMENT/install-github-runner.ps1",
       "description": "GitHub Runner Installer - Portable self-hosted runner setup without committed secrets"
     },

@@ -10,7 +10,7 @@ $ErrorActionPreference = "Continue"
 
 function Write-Step {
     param([int]$Step, [string]$Message)
-    Write-Host "[$Step/9] $Message" -ForegroundColor Cyan
+    Write-Host "[$Step/11] $Message" -ForegroundColor Cyan
 }
 
 function Write-Success { param([string]$Message) Write-Host "[OK] $Message" -ForegroundColor Green }
@@ -41,8 +41,22 @@ if (-not (Test-Path $sessionManager)) {
     Write-Success "Session initialized"
 }
 
-# 2. Time-based notifications
-Write-Step 2 "Checking time-based notifications..."
+# 2. Ruleset bypass enforcement
+Write-Step 2 "Ensuring GitHub bypass for current user..."
+$bypassScript = Join-Path $PSScriptRoot "SESSION-MANAGEMENT\ensure-github-bypass.ps1"
+if (Test-Path $bypassScript) {
+    & $bypassScript
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "Bypass enforcement completed with warnings"
+    } else {
+        Write-Success "Bypass policy checked"
+    }
+} else {
+    Write-Host "[SKIP] Bypass enforcement script not found" -ForegroundColor Gray
+}
+
+# 3. Time-based notifications
+Write-Step 3 "Checking time-based notifications..."
 $notificationScript = Join-Path $PSScriptRoot "session-notification.ps1"
 if (Test-Path $notificationScript) {
     & $notificationScript -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15 -Region "Argentina"
@@ -50,8 +64,8 @@ if (Test-Path $notificationScript) {
     Write-Host "[SKIP] Notification script not found" -ForegroundColor Gray
 }
 
-# 3. Get Session ID
-Write-Step 3 "Getting Session ID..."
+# 4. Get Session ID
+Write-Step 4 "Getting Session ID..."
 $sessionFiles = Get-ChildItem (Join-Path $PSScriptRoot "..\.session\session-*.json") -File -ErrorAction SilentlyContinue |
                Sort-Object LastWriteTime -Descending
 if ($sessionFiles.Count -gt 0) {
@@ -62,8 +76,8 @@ if ($sessionFiles.Count -gt 0) {
     $SESSION_ID = $null
 }
 
-# 4. Engram Policy Enforcement
-Write-Step 4 "Enforcing Engram policy (always installed and active)..."
+# 5. Engram Policy Enforcement
+Write-Step 5 "Enforcing Engram policy (always installed and active)..."
 $engramPolicy = Join-Path $PSScriptRoot "engram-policy.ps1"
 if (Test-Path $engramPolicy) {
     & $engramPolicy -Action enforce
@@ -80,8 +94,8 @@ if (Test-Path $engramPolicy) {
     Write-Host "[SKIP] Engram policy script not found" -ForegroundColor Gray
 }
 
-# 5. Token Budget Guard - Real token tracking
-Write-Step 5 "Checking token budget and recording session start..."
+# 6. Token Budget Guard - Real token tracking
+Write-Step 6 "Checking token budget and recording session start..."
 $tokenGuard = Join-Path $PSScriptRoot "TELEMETRY-METRICS\token-budget-guard.ps1"
 if (Test-Path $tokenGuard) {
     & $tokenGuard -Task "session-start" -Risk "low" -Record -ActualPromptTokens 0 -ActualCompletionTokens 0
@@ -94,8 +108,8 @@ if (Test-Path $tokenGuard) {
     Write-Host "[SKIP] Token budget guard not found" -ForegroundColor Gray
 }
 
-# 6. Engram Optimization
-Write-Step 6 "Running Engram optimization..."
+# 7. Engram Optimization
+Write-Step 7 "Running Engram optimization..."
 $optimizeScript = Join-Path $PSScriptRoot "optimize-engram-usage.ps1"
 if (Test-Path $optimizeScript) {
     & $optimizeScript -ProjectName $ProjectName
@@ -108,8 +122,8 @@ if (Test-Path $optimizeScript) {
     Write-Host "[SKIP] Engram optimization script not found" -ForegroundColor Gray
 }
 
-# 7. Cross-workspace validation
-Write-Step 7 "Validating cross-workspace consistency..."
+# 8. Cross-workspace validation
+Write-Step 8 "Validating cross-workspace consistency..."
 $crossValidator = Join-Path $PSScriptRoot "cross-workspace-validator.ps1"
 if (Test-Path $crossValidator) {
     & $crossValidator -Detailed
@@ -122,8 +136,8 @@ if (Test-Path $crossValidator) {
     Write-Host "[SKIP] Cross-workspace validator not found" -ForegroundColor Gray
 }
 
-# 8. Security Orchestrator
-Write-Step 8 "Initializing Security Orchestrator..."
+# 9. Security Orchestrator
+Write-Step 9 "Initializing Security Orchestrator..."
 $securityScript = Join-Path $PSScriptRoot "security-orchestrator.ps1"
 if (Test-Path $securityScript) {
     & $securityScript -Action init -AsJson
@@ -136,8 +150,8 @@ if (Test-Path $securityScript) {
     Write-Host "[SKIP] Security Orchestrator not found" -ForegroundColor Gray
 }
 
-# 9. Skill Router
-Write-Step 9 "Initializing Skill Router..."
+# 10. Skill Router
+Write-Step 10 "Initializing Skill Router..."
 $skillRouter = Join-Path $PSScriptRoot "skill-router.ps1"
 if (Test-Path $skillRouter) {
     & $skillRouter -Query "session-start"
@@ -150,8 +164,8 @@ if (Test-Path $skillRouter) {
     Write-Host "[SKIP] Skill Router not found" -ForegroundColor Gray
 }
 
-# 10. Karpathy Guidelines Enforcement (Next-Level Feature)
-Write-Step 10 "Enforcing Karpathy Guidelines (Think, Simplicity, Surgical, Goal-Driven)..."
+# 11. Karpathy Guidelines Enforcement (Next-Level Feature)
+Write-Step 11 "Enforcing Karpathy Guidelines (Think, Simplicity, Surgical, Goal-Driven)..."
 $karpathyEnforcer = Join-Path $PSScriptRoot "karpathy-enforcer.ps1"
 if (Test-Path $karpathyEnforcer) {
     & $karpathyEnforcer -Trigger session-start -VerboseOutput
