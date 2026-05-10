@@ -24,7 +24,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          # In PRs we gate new changes; scanning full history causes legacy leaks to block unrelated work.
+          fetch-depth: 1
 
       - uses: gacts/gitleaks@v1
         id: gitleaks

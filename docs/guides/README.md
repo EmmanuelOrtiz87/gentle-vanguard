@@ -99,7 +99,7 @@ New to Workspace Foundation? Start here:
 | DEVELOPMENT-WORKFLOW.md                   | Development workflow               |
 | AI-CONFIGURATION.md                       | AI configuration                   |
 | GITHUB-RUNNER-SETUP.md                    | Optional self-hosted runner setup  |
-| REPO-RENAME-MIGRATION.md                  | Repository rename migration         |
+| REPO-RENAME-MIGRATION.md                  | Repository rename migration        |
 | GITHUB-ACTIONS-TROUBLESHOOTING.md         | CI/CD troubleshooting              |
 | DEPLOYMENT-READY-SUMMARY.md               | Deployment overview                |
 | VISUAL-GUIDE.md                           | Visual design standards            |
