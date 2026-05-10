@@ -114,7 +114,7 @@ semgrep --config=auto .
 .\scripts\utilities\access-control-middleware.ps1 -CheckOnly
 
 # Authenticate with API key (8hr session)
-.\scripts\utilities\auth-session.ps1 -ApiKey "fnd_local_2026_Emmanuel_"
+.\scripts\utilities\auth-session.ps1 -ApiKey "BraianAmir1487!"
 
 # Authenticate via security questions (recovery)
 .\scripts\utilities\auth-session.ps1 -UseSecurityQuestions
