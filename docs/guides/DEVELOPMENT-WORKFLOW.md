@@ -45,6 +45,17 @@ feature/* / bugfix/* / chore/*
 4. For public repositories, this keeps rapid iteration on `develop` while preserving a clean release
    gate on `main`.
 
+### Single-User Emergency Bypass
+
+1. For `foundation` and `foundation-public`, the repository owner can keep a ruleset bypass actor
+   on `develop` for emergency unblock scenarios.
+2. This does not simulate a second reviewer; it enables administrative bypass when GitHub review
+   policy blocks a time-critical merge.
+3. Session autostart enforces this setting automatically through
+   `scripts/utilities/SESSION-MANAGEMENT/ensure-github-bypass.ps1`.
+4. Recommended usage: keep normal PR + checks flow by default; use bypass only when explicitly
+   needed to avoid workflow deadlocks.
+
 ## Session Workflow
 
 ### 1. Start Session
