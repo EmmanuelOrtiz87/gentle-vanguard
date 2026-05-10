@@ -1,136 +1,51 @@
 ---
 name: script-governance-skill
-description: >
-  Governance patterns for development scripts: lifecycle, naming, safety, observability, and automation boundaries.
-  Trigger: "script", "automation", "hook", "startup", "auto-init", "orchestrator script", "powershell", "bash".
-license: Apache-2.0
-metadata:
-  author: workspace-foundation
-  versión: "1.0"
+description: "Trigger: script, automation, hook, startup, auto-init, orchestrator script, powershell, bash. Governance patterns for development scripts: lifecycle, naming, safety, observability, and automation boundaries."
 ---
 
-## When to Use
+## Activation Contract
 
-Use this skill when:
-1. Creating or refactoring scripts under `scripts/`, `hooks/`, or `.githooks/`.
-2. Defining startup automation (IDE/session activation, auto-init, health checks).
-3. Implementing git hooks, background tooling, or environment bootstrap flows.
-4. Reviewing script reliability, side effects, and failure behavior.
+Use when creating or refactoring scripts under scripts/, hooks/, or .githooks/; defining startup automation; implementing git hooks or environment bootstrap; or reviewing script reliability and failure behavior.
 
-## Script Architecture Rules
+## Hard Rules
 
-1. One clear entrypoint per concern:
-- `wf.ps1` for operator commands.
-- `auto-init` for startup activation.
-- `ensure-tools-active` for dependency/tool checks.
-- `detect-ide-session` for environment inference.
+- MUST use verb-noun naming (e.g., detect-ide-session.ps1)
+- MUST keep utility scripts in scripts/utilities/
+- MUST keep scripts idempotent — safe to run multiple times
+- MUST NOT mutate state in detection scripts
+- MUST log all state mutations in activation scripts
+- MUST resolve repository root dynamically with git rev-parse --show-toplevel in hooks
+- MUST expose clear status output (what failed, why, exact command to fix)
+- MUST validate file paths before execution
+- MUST keep logs deterministic for auditability
 
-2. Keep scripts idempotent:
-- Safe if executed multiple times.
-- Do not duplicate heavy installs by default.
-- Use explicit force flags for disruptive actions.
+## Decision Gates
 
-3. Explicit boundaries:
-- Detection scripts should not mutate state.
-- Activation scripts can mutate state but must log actions.
-- Hooks should only block on security-critical failures.
+| Gate | Condition | Action |
+|------|-----------|--------|
+| Script type | Detection-only? | Must not mutate state |
+| Script type | Activation? | May mutate; must log all actions |
+| Script type | Hook? | Block only on security-critical failures |
+| Installation | Auto-init path? | Require -Force flag |
+| Failure | Non-critical? | Warn + suggest remediation, do not block |
+| Severity | Reliability/security/integrity risk? | Blocking allowed |
+| Severity | Style/maintainability? | Advisory only |
 
-## Safety and Stability
+## Execution Steps
 
-1. Prefer warning + remediation command over hard-fail for non-critical issues.
-2. Avoid auto-install in startup paths unless `-Force` is passed.
-3. Always validate file paths before execution.
-4. Resolve repository root dynamically (`git rev-parse --show-toplevel`) in hooks.
-5. Use fallback command recommendations when automatic detection is uncertain.
+1. Determine script purpose: detection, activation, or hook
+2. Apply verb-noun naming with .ps1 or .sh extension
+3. Place in correct directory (scripts/utilities/ for tools, scripts/git-hooks/ for hooks)
+4. Implement idempotent behavior with -Force flag for destructive operations
+5. Add clear status output with actionable error messages
+6. Validate: run directly, run in fallback mode, confirm no side effects
+7. Document in scripts/utilities/README.md
 
-## Observability and UX
+## Output Contract
 
-1. Every script must expose a clear status output.
-2. Provide concise, actionable messages:
-- what failed,
-- why,
-- exact command to fix.
-3. Avoid noisy output in quiet/automation modes.
-4. Keep logs deterministic for auditability.
+Return script path, type, purpose, usage example, and validation results (direct execution + fallback scenario).
 
-## Naming and Location Convention
+## References
 
-1. Use verb-noun names (`detect-ide-session.ps1`, `ensure-tools-active.ps1`).
-2. Keep utility scripts in `scripts/utilities/`.
-3. Keep hook installers near hook logic (`scripts/project/`, `scripts/git-hooks/`).
-4. Document each script in `scripts/utilities/README.md`.
-
-## Validation Checklist
-
-Before publishing script changes:
-1. Run script directly with expected args.
-2. Run script in fallback mode (missing dependency scenario).
-3. Confirm non-critical failures do not block session work.
-4. Confirm repository stays clean after expected command runs.
-5. Update docs and orchestrator guidance if behavior changes.
-
-## Change Admission Criteria
-
-Before adding new script behavior, governance checks, or startup automation:
-
-1. State why this change is needed now.
-2. Question whether existing flow already solves the need.
-3. Prefer simpler change with lower operational burden.
-4. Define measurable validation before codifying behavior.
-
-Required evidence to promote a change into permanent script behavior:
-1. At least one executable validation command was run.
-2. Expected and observed outcomes are documented.
-3. Rollback or disable path is explicit.
-
-If any evidence is missing, keep the change as proposal/hypothesis and do not harden it into defaults.
-
-## Toolchain Contract
-
-Use this contract to keep governance behavior predictable and non-conflicting:
-
-1. MUST persist durable decisións and session closure notes in Engram.
-2. MUST follow orchestrator skill flow for assessment, validation, audit, and publication.
-3. SHOULD use available native tools when present; if absent, emit warnings with install/remediation commands.
-4. MUST keep validators deterministic and quiet-safe in automation mode.
-5. MUST avoid introducing startup behavior that changes state unexpectedly.
-6. MUST classify new checks by severity: blocking only for reliability/security/integrity risks.
-7. SHOULD keep style and maintainability checks advisory unless explicitly elevated by policy.
-
-## Enforcement Automation
-
-These controls must be validated before publication:
-
-1. No loose operational scripts at `scripts/` root (except explicit allowlist files like `README.md`).
-2. Deprecated command paths must not remain in docs/scripts once a canonical path is defined.
-3. Script registry must reflect canonical locations used by current commands.
-4. Generated-by-agent and manual changes follow the same governance checks.
-
-Legacy-safe mode:
-1. Existing repos can run advisory structure checks by default to avoid noisy, high-risk migrations.
-2. Canonical structure enforcement should be explicitly enabled only when repository owners approve migration.
-3. Any enforcement change must include rollback instructions.
-
-Suggested command:
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1
-```
-
-## Commands
-
-```powershell
-# IDE/session detection
-.\scripts\utilities\wf.ps1 ide-status
-
-# Health and activation
-.\scripts\utilities\wf.ps1 health
-
-# Session start
-.\scripts\utilities\wf.ps1 start-session <task>
-
-# On-demand orchestration fallback (if available)
-.\scripts\utilities\stack-on-demand.ps1 -Action activate
-```
-
-
+- `references/commands.md` — Common script commands reference
+- `references/validation.md` — Validation checklist, enforcement, and change admission criteria

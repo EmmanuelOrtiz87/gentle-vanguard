@@ -1,76 +1,44 @@
 ---
 name: release-management-skill
-description: >
-  Release planning, semantic versióning, changelog hygiene, and cutover readiness.
-  Trigger: "release", "changelog", "versión bump", "ship", "cut release",
-  "release notes", "hotfix", "deployment readiness", "semver".
-license: Apache-2.0
-metadata:
-  author: workspace-foundation
-  versión: "1.0"
+description: "Trigger: release, changelog, version bump, ship, cut release, release notes, hotfix, deployment readiness, semver. Release planning, semantic versioning, changelog hygiene, and cutover readiness."
 ---
 
-## When to Use
+## Activation Contract
 
-- Preparing a release or hotfix
-- Writing release notes or updating CHANGELOG.md
-- Deciding versión bump level
-- Reviewing release readiness and rollback plan
+Use when input matches trigger words or user asks about release planning, version bumps, changelog updates, hotfixes, or release readiness.
 
-## versióning Rules
+## Hard Rules
 
-Use semantic versióning:
-- MAJOR: breaking changes
-- MINOR: backward-compatible features
-- PATCH: backward-compatible fixes
+- MUST use semver: MAJOR (breaking), MINOR (feature), PATCH (fix)
+- MUST update CHANGELOG.md before every release
+- MUST include migration notes for breaking changes
+- MUST define a rollback plan before cutover
+- MUST keep hotfix scope minimal — no opportunistic refactors
+- MUST focus release notes on user impact, not implementation details
 
-## Release Checklist
+## Decision Gates
 
-1. All intended changes are merged and verified
-2. CHANGELOG.md updated with user-visible changes
-3. versión bump matches actual impact
-4. Migration notes included for breaking changes
-5. Rollback plan defined
-6. Post-release verification steps documented
+| Gate | Condition | Action |
+|------|-----------|--------|
+| Bump level | Breaking change? | MAJOR |
+| Bump level | New backward-compatible feature? | MINOR |
+| Bump level | Backward-compatible bug fix? | PATCH |
+| Release type | Production incident or security fix? | Hotfix (fast-track) |
+| Release type | Standard release? | Normal pipeline |
 
-## CHANGELOG Structure
+## Execution Steps
 
-```markdown
-## [x.y.z] - YYYY-MM-DD
+1. Verify all intended changes merged and verified
+2. Update CHANGELOG.md with user-visible changes
+3. Bump version per semver rules
+4. Write migration notes for breaking changes
+5. Define rollback plan
+6. Document post-release verification steps
 
-### Added
-- New user-visible features
+## Output Contract
 
-### Changed
-- Backward-compatible behavior changes
+Return version bumped, CHANGELOG additions, migration notes, rollback plan, and post-release verification steps.
 
-### Fixed
-- Bugs resolved in this release
+## References
 
-### Deprecated
-- Features scheduled for removal
-
-### Removed
-- Removed functionality
-
-### Security
-- Security fixes and relevant notes
-```
-
-## Hotfix Guidance
-
-Use a hotfix release when:
-- Production incident needs urgent correction
-- Security fix must ship immediately
-- Rollback is impossible or more risky than fix-forward
-
-Keep hotfix scope minimal. No opportunistic refactors.
-
-## Release Notes Rules
-
-- Focus on user impact, not internal implementation
-- Mention risk areas and migrations explicitly
-- Link to specs, ADRs, or issue IDs when helpful
-- Keep notes short enough to scan quickly
-
-
+- `references/CHANGELOG-template.md` — CHANGELOG entry format
