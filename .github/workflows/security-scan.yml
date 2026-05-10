@@ -1,6 +1,7 @@
 name: Security Scan (consolidated)
 
 permissions:
+  actions: read
   contents: read
   security-events: write
 
