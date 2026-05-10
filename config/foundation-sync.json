@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "role": "source",
-  "foundationVersion": "2.6.5",
-  "lastUpdated": "2026-05-05",
+  "foundationVersion": "2.8.1",
+  "lastUpdated": "2026-05-09",
   "assets": [
     {
       "type": "script",
