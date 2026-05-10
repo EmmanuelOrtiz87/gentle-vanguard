@@ -105,6 +105,10 @@ config/opencode.schema.json
 # Audit reports (auto-generated)
 LESSONS-LEARNED-*.md
 docs/reference/LESSONS-LEARNED-*.md
+
+# Judgment-day auto-generated artifacts
+scripts/docs/judgment/
+docs/judgment/
 keys/
 
 # Runtime audit logs
