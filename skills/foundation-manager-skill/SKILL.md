@@ -1,50 +1,39 @@
 ---
 name: foundation-manager-skill
-description: FF-017 Auto-Actualización Skills/Tools. Implementa mecanismos de auto-actualización para skills y herramientas.
+description: "Trigger: 'update foundation', 'check updates', 'sync skills', 'install tools', 'maintenance'. Auto-actualización de skills y herramientas nativas reduciendo mantenimiento manual."
 ---
 
-# foundation-manager-skill
-# FF-017: Auto-Actualización Skills/Tools
+# Foundation Manager Skill
 
-## Trigger
-for: "update foundation", "check updates", "sync skills", "install tools", "maintenance"
+## Activation Contract
+Load when user requests any update/sync/maintenance operation. Triggers on: outdated skills detected, scheduled maintenance, post-install validation, or explicit update request.
 
-## Description
-Implementa mecanismos de auto-actualización para skills y herramientas nativas, reduciendo mantenimiento manual y asegurando mejoras continuas.
+## Hard Rules
+- Never auto-update without logging all changes to `.runtime/skill-updates.log`
+- Validate integrity after every update via `wf.ps1 health` and `wf.ps1 verify`
+- Respect user auto-update preferences in `config/orchestrator.json`
 
-## When to use
-- Cuando se detecten skills/herramientas desactualizadas
-- Próxima release o mantenimiento programado
-- Después de instalar nuevas skills
+## Decision Gates
+
+| Update Type | Method | Validation |
+|-------------|--------|------------|
+| Skill with git remote | `git submodule update --remote` | SKILL.md loads correctly |
+| Skill with package.json | `npm update` in skill dir | Tests pass |
+| npm global tools | `npm outdated -g` | Lefthook, prettier, commitlint |
+| trufflehog | Chocolatey update | Version check |
 
 ## Execution Steps
+1. Scan skills/ for SKILL.md files and determine update needs
+2. Apply updates per Decision Gates (log each change)
+3. Run `wf.ps1 health` then `wf.ps1 verify` for integrity
+4. Generate update report
 
-1. **Check for updates**
-   - Scan skills/ directory for SKILL.md files
-   - Compare version/fecha in SKILL.md vs current date
-   - Identify tools in package.json, go.mod, requirements.txt
-
-2. **Auto-update skills**
-   - If skill has git remote: `git submodule update --remote`
-   - If skill has package.json: `npm update` in skill directory
-   - Log updates to `.runtime/skill-updates.log`
-
-3. **Auto-update tools**
-   - Check npm global packages: `npm outdated -g`
-   - Update lefthook, prettier, commitlint if needed
-   - Update trufflehog via chocolatey if available
-
-4. **Validate after update**
-   - Run `wf.ps1 health` to verify Foundation integrity
-   - Run `wf.ps1 verify` to check all skills load correctly
-   - Generate update report in `docs/sessions/`
-
-## Expected Deliverables
-- `docs/sessions/skill-update-report-YYYY-MM-DD.md`
-- `.runtime/skill-updates.log`
+## Output Contract
+- `docs/sessions/skill-update-report-YYYY-MM-DD.md` — full report
+- `.runtime/skill-updates.log` — incremental log
 - Updated skills/ directory with latest versions
 
-## Notes
-- Uses `scripts/utilities/skills-auto-discovery.ps1` for skill detection
-- Integrates with `scripts/utilities/foundation-sync.ps1` for sync
-- Respects user preferences for auto-updates (config in `config/orchestrator.json`)
+## References
+- Skill detection: `scripts/utilities/skills-auto-discovery.ps1`
+- Foundation sync: `scripts/utilities/foundation-sync.ps1`
+- User config: `config/orchestrator.json`
