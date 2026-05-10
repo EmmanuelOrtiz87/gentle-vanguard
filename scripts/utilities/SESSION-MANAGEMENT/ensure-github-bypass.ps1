@@ -1,11 +1,11 @@
 #!/usr/bin/env pwsh
-<#!
+<#
 .SYNOPSIS
-    Ensures current authenticated GitHub user has bypass permissions on develop rulesets.
+    Ensures the authenticated GitHub user can bypass develop rulesets.
 .DESCRIPTION
-    Finds branch rulesets targeting refs/heads/<Branch> and guarantees the current user
-    is present in bypass_actors with bypass_mode=always.
-    By default, failures are warnings (non-blocking). Use -Strict to fail hard.
+    Resolves the current GitHub user via gh, locates branch rulesets targeting develop,
+    and ensures the user is added as a bypass actor with bypass_mode=always in both
+    foundation and foundation-public.
 .PARAMETER Owner
     Repository owner/user.
 .PARAMETER Repos
@@ -103,11 +103,11 @@ foreach ($repo in $Repos) {
         }
 
         $body = [ordered]@{
-            name        = $target.name
-            target      = $target.target
-            enforcement = $target.enforcement
-            conditions  = $target.conditions
-            rules       = $target.rules
+            name          = $target.name
+            target        = $target.target
+            enforcement   = $target.enforcement
+            conditions    = $target.conditions
+            rules         = $target.rules
             bypass_actors = $newActors
         }
 
