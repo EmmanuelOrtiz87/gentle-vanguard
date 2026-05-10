@@ -1,257 +1,47 @@
 ---
 name: session-workflow
-description: >
-  Session workflow executor: handles the mechanics of session management.
-  Coordinate with project-orchestrator for context detection.
-  Trigger: "iniciar sesión", "guardar sesión", "continuar", "estado", "pr", "push", "review", "auditar".
+description: "Trigger: iniciar sesion, guardar sesion, continuar, estado, pr, push, review, auditar. Session workflow executor handling session management mechanics. Coordinates with project-orchestrator for technical guidance."
 ---
 
-# SESSION WORKFLOW
+# Session Workflow
 
-## Purpose
+## Activation Contract
+Load when user triggers session commands: "iniciar sesion" / "start session", "continuar" / "continue", "estado" / "status", "push" / "guardar", "review" / "auditar", or "PR" / "create PR". Coordinates with project-orchestrator for technical decisions.
 
-Execute the mechanical aspects of session management while coordinating with the orchestrator.
+## Hard Rules
+- MUST generate AUDIT DOCUMENT before any push
+- MUST run code review before PR creation
+- MUST create todowrite at session start
+- MUST save session summary via mem_save after significant work
+- MUST coordinate with project-orchestrator for technical guidance
 
-## Commands
+## Decision Gates
 
-### "Iniciar sesión" / "Start session"
+| Command | Trigger Words | Action |
+|---------|--------------|--------|
+| Start | "iniciar sesion", "start session" | Autostart, mem_context, git status, todowrite |
+| Continue | "continuar", "continue" | mem_context, git status, show next step, resume |
+| Status | "estado", "status" | Show project, git branch/status, todos, suggest next |
+| Push | "push", "guardar" | Review todos, generate audit doc, commit, push, mem_save |
+| Review | "review", "auditar" | Quick scan (Security + Quality), classify, present, decide |
+| PR | "pr" | Validate spec, run review, handle findings, create PR |
 
-**Note: This skill should be AUTO-LOADED when user says "iniciar sesión" via pre-process-input.ps1**
+## Execution Steps
+1. **Start session**: `scripts/utilities/session-autostart.cmd` → `mem_context` → `git status` → `todowrite` → present status
+2. **Continue session**: `mem_context` → `git status` → show next step → resume work
+3. **Show status**: Show project info → git branch/status → todos → suggest next step
+4. **Push / Guardar**: Review todos completed → generate audit doc → git status/diff → commit → push → mem_save summary
+5. **Review / Auditar**: Run code review (7 dimensions) → classify findings by severity → present summary → ask decision options → execute choice
+6. **Create PR**: Validate spec → run code review → handle findings → ask: met spec? → ask: create PR? → branch → commit → push → create PR with template
 
-```markdown
-1. scripts/utilities/session-autostart.cmd  # Ejecutar autostart (notificaciones, optimizacin, validaciónes)
-2. mem_context                  # Check engram memory
-3. git status                   # Current branch
-4. todowrite                    # Create session plan
-5. Present status
-```
+## Output Contract
+- **Push**: Audit document + session summary + git commit/push + mem_save
+- **Review**: Findings summary with severity classification (CRITICAL/HIGH/MEDIUM/LOW)
+- **PR**: GitHub PR created with template
+- **Session start**: todowrite + status presentation
+- **Session summary**: Structured mem_save with goal, accomplishments, findings, next steps
 
-### "Continuar" / "Continue"
-
-```markdown
-1. mem_context             # Get context
-2. git status              # Current branch
-3. Show next step
-4. Resume work
-```
-
-### "Estado" / "Status"
-
-```markdown
-1. Show project info
-2. Show git branch/status
-3. Show todos
-4. Suggest next step
-```
-
-### "Push" / "Guardar"
-
-```markdown
-1. Review todos completed
-2. Generate AUDIT DOCUMENT
-3. git status / diff
-4. Commit if changes
-5. Push to remote
-6. mem_save summary
-```
-
-### "Review" / "Auditar"
-
-```markdown
-1. Run code review (7 dimensions)
-2. Classify findings by severity
-3. Present findings summary
-4. Ask: decisión options
-5. Execute user choice
-```
-
-### "PR" / "Create PR"
-
-```markdown
-1. Validate specification
-2. Run code review
-3. Handle findings (if any)
-4. Ask: Did we meet the spec?
-5. Ask: Create PR?
-6. If YES:
-   - Create branch (if needed)
-   - Commit
-   - Push
-   - Create PR with template
-```
-
----
-
-## AUDIT DOCUMENT GENERATION
-
-### When
-- Before any push
-- On user request: "audit", "push", "guardar"
-
-### Format
-```markdown
-# Audit Document - [DATE]
-
-**Project:** [project-name]
-**Session:** [session-id]
-**Date:** [ISO date]
-
-## Summary
-Brief description of session work.
-
-## Changes
-| File | Change | Lines |
-|------|--------|-------|
-| file.go | Added feature | +150/-20 |
-
-## Commits
-| Hash | Type | Message |
-|------|------|---------|
-| abc123 | feat | description |
-
-## Findings
-| Severity | Count |
-|----------|-------|
-| CRITICAL | 0 |
-| HIGH | 1 |
-| MEDIUM | 2 |
-| LOW | 3 |
-
-## Tests
-- Go: X passed
-- Angular: Y passed
-
-## Specification
-- Status: COMPLETE
-- Notes: ...
-
-## Next Steps
-- [ ] Item 1
-- [ ] Item 2
-```
-
----
-
-## CODE REVIEW WORKFLOW
-
-### Trigger
-- "review", "auditar", "code review"
-- Before PR creation
-
-### Process
-```
-1. Run quick scan (Security + Quality)
-2. If findings:
-   - Classify by severity
-   - Present to user
-   - Ask decisión
-3. If no critical/high:
-   - Proceed with PR option
-```
-
-### Findings decisión
-
-```markdown
-## Findings Summary
-
-**Found:** X issues
-- [X] CRITICAL: N (blocks if any)
-- [!] HIGH: N
-- [-] MEDIUM: N  
-- [*] LOW: N
-
-### Options
-
-1) Fix everything now (recommended)
-2) Fix CRITICAL/HIGH now, handle the rest later
-3) Create the PR, then fix later
-4) Only create the PR
-5) Go back to implementation
-
-**Choose:**
-```
-
----
-
-## Todo Management
-
-```typescript
-todowrite([
-  { content: "Task 1", status: "in_progress", priority: "high" },
-  { content: "Task 2", status: "pending", priority: "medium" }
-])
-```
-
----
-
-## Session Summary Format
-
-```markdown
-## Session Summary - [DATE]
-
-### Goal
-[What we worked on]
-
-### Accomplished
-- [Completed item 1]
-- [Completed item 2]
-
-### Findings
-- [X] Critical: N
-- [!] High: N
-- [-] Medium: N
-- [*] Low: N
-
-### Git
-- Branch: [branch]
-- Commits: [list]
-
-### Specification
-- Validated: YES/NO
-- Notes: ...
-
-### Next Steps
-- [ ] Item 1
-- [ ] Item 2
-
-### Skills Used
-- skill-1
-- skill-2
-
-### Relevant Files
-- path - description
-```
-
----
-
-## Memory Commands
-
-| Command | When |
-|---------|------|
-| `mem_context` | Session start |
-| `mem_save` | After significant work |
-| `mem_search` | User mentions past work |
-| `mem_update` | Correct previous |
-
----
-
-## Workflow Checklist
-
-- [ ] Session start: todowrite created
-- [ ] Git branch checked
-- [ ] Skills loaded
-- [ ] Work executed
-- [ ] Tests verified
-- [ ] Audit document generated (before push)
-- [ ] Code review run (before PR)
-- [ ] Findings handled
-- [ ] Commit follows convention
-- [ ] User asked: Create PR?
-- [ ] Pushed if confirmed
-- [ ] mem_save executed
-
----
-
-**Coordinate with project-orchestrator for technical guidance.**
-
-
+## References
+- Templates (audit doc, code review, session summary, todo): `references/templates.md`
+- Scripts: `scripts/utilities/session-autostart.cmd`
+- Coordination: `../project-orchestrator-skill/SKILL.md`

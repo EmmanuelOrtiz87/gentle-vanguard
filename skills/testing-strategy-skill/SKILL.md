@@ -1,257 +1,45 @@
 ---
 name: testing-strategy-skill
-description: >
-  Testing strategy: when to test, what to test, test pyramid, coverage targets.
-  Trigger: "testing strategy", "test pyramid", "what to test", "coverage target", "unit test", "integration test".
+description: "Trigger: testing strategy, test pyramid, what to test, coverage target, unit test, integration test. Decides what, when, and how to test across Go, Angular, and Python stacks."
 ---
 
-## When to Use
+## Activation Contract
 
-- Setting up test infrastructure
-- Deciding what to test
-- Choosing test levels
-- Improving coverage
-- Debugging test failures
+Use when setting up test infrastructure, deciding what to test, choosing test levels, improving coverage, or debugging test failures.
 
-## Test Pyramid
+## Hard Rules
 
-```
-         /E2E\         <- 10% (Playwright, Cypress)
-        /Int\          <- 20% (API tests, component tests)
-       /Unit\          <- 70% (Vitest, Jest, Go test, pytest)
-```
+- MUST follow test pyramid: 70% unit, 20% integration, 10% E2E
+- MUST test business logic, API handlers, critical paths, and edge cases
+- MUST NOT test framework internals, trivial getters, configuration, or third-party code
+- MUST use Arrange-Act-Assert pattern
+- MUST keep tests independent (no order dependency)
+- MUST write tests in same package (Go) or alongside source (Angular)
 
-## What to Test
+## Decision Gates
 
-### Always Test
+| Gate | Condition | Action |
+|------|-----------|--------|
+| What to test | Business logic, API handlers, critical paths? | Always test |
+| What to test | UI components, error paths? | Consider testing |
+| What to test | Framework code, config, third-party? | Never test |
+| Coverage | Below 60% stmts / 50% branches / 70% funcs? | Block or improve before PR |
+| Coverage | Below 80% stmts / 70% branches / 90% funcs? | Recommended improvement |
 
-| Category | Examples |
-|----------|----------|
-| Business logic | Calculations, transformations, validations |
-| API handlers | HTTP responses, error handling |
-| Critical paths | Auth, payments, data mutations |
-| Edge cases | Empty inputs, null values, boundaries |
+## Execution Steps
 
-### Consider Testing
+1. Identify scope: business logic, API handlers, critical paths, edge cases
+2. Write tests using Arrange-Act-Assert for each scope item
+3. Apply test pyramid ratios (70% unit, 20% integration, 10% E2E)
+4. Run coverage check against minimum thresholds
+5. Verify no anti-patterns (testing internals, brittle selectors, order dependencies)
 
-| Category | Notes |
-|----------|-------|
-| UI components | If complex logic, not styling |
-| Utility functions | Pure functions with business rules |
-| Error paths | What happens when things fail |
+## Output Contract
 
-### Never Test
+Return test plan (what was tested and at what level), coverage report, and any detected anti-patterns.
 
-| Category | Reason |
-|----------|--------|
-| Framework code | Angular, React internals |
-| Trivial getters | `getName() { return this.name }` |
-| Configuration | Environment setup |
-| Third-party code | Already tested |
+## References
 
-## Test Levels by Stack
-
-### Go
-
-```go
-// Test file: *_test.go
-func TestHandleMetrics(t *testing.T) {
-    req, _ := http.NewRequest("GET", "/api/v1/metrics", nil)
-    rr := httptest.NewRecorder()
-
-    handler := handleMetrics(cfg, factory, auth)
-    handler.ServeHTTP(rr, req)
-
-    if rr.Code != http.StatusOK {
-        t.Errorf("Expected 200, got %d", rr.Code)
-    }
-
-    if ct := rr.Header().Get("Content-Type"); ct != "application/json" {
-        t.Errorf("Expected application/json")
-    }
-}
-
-// Table-driven test
-func TestTimeframeDays(t *testing.T) {
-    cases := []struct {
-        name  string
-        input string
-        want  int
-    }{
-        {"empty", "", 7},
-        {"7d", "7d", 7},
-        {"30d", "30d", 30},
-    }
-
-    for _, tc := range cases {
-        t.Run(tc.name, func(t *testing.T) {
-            if got := timeframeDays(tc.input); got != tc.want {
-                t.Errorf("got %d, want %d", got, tc.want)
-            }
-        })
-    }
-}
-```
-
-### Angular/Vitest
-
-```typescript
-// Model/Interface tests
-describe('RepoMetrics', () => {
-  it('should have correct structure', () => {
-    const metrics: RepoMetrics = {
-      RepoName: 'test',
-      OpenPRs: 5,
-      PullRequests: []
-    };
-    expect(metrics.OpenPRs).toBe(5);
-  });
-});
-
-// URL construction tests
-describe('API URLs', () => {
-  it('should construct metrics endpoint', () => {
-    const url = `/api/v1/metrics?workspace=test&repo=my-repo`;
-    expect(url).toContain('workspace=test');
-    expect(url).toContain('repo=my-repo');
-  });
-});
-
-// Signal tests
-describe('Signals', () => {
-  it('should update signal', () => {
-    const data = signal<string>('initial');
-    data.set('updated');
-    expect(data()).toBe('updated');
-  });
-});
-```
-
-## Coverage Targets
-
-| Level | Minimum | Target | Focus |
-|-------|---------|--------|-------|
-| Statements | 60% | 80% | Core logic |
-| Branches | 50% | 70% | Conditionals |
-| Functions | 70% | 90% | Public APIs |
-| Lines | 60% | 80% | Overall |
-
-## Test Naming
-
-```
-# Go: TestSubject_Scenario_ExpectedBehavior
-TestHandleMetrics_ValidToken_ReturnsMetrics
-TestTimeframeDays_EmptyInput_Returns7Days
-
-# JS/TS: should_subject_expectedBehavior
-it('should return metrics for valid request')
-it('should handle API error gracefully')
-```
-
-## Arrange-Act-Assert
-
-```typescript
-describe('UserService', () => {
-  it('should update user age on birthday', () => {
-    // Arrange
-    const user = createUser({ name: 'John', age: 30 });
-
-    // Act
-    user.birthday();
-
-    // Assert
-    expect(user.age).toBe(31);
-  });
-});
-```
-
-## Mocking
-
-### Go
-```go
-// Use interfaces for testability
-type DashboardService interface {
-    FetchMetrics(ctx context.Context, repo, timeframe string) (*RepoMetrics, error)
-}
-
-// Mock in test
-type mockService struct{}
-func (m *mockService) FetchMetrics(ctx context.Context, repo, tf string) (*RepoMetrics, error) {
-    return &RepoMetrics{RepoSlug: repo}, nil
-}
-```
-
-### Angular
-```typescript
-// HttpClientTestingModule
-beforeEach(() => {
-  TestBed.configureTestingModule({
-    imports: [HttpClientTestingModule],
-    providers: [ApiService]
-  });
-  httpMock = TestBed.inject(HttpTestingController);
-});
-
-it('should call API', () => {
-  service.getData().subscribe();
-  const req = httpMock.expectOne('/api/v1/data');
-  req.flush(mockData);
-});
-```
-
-## CI Integration
-
-```yaml
-# GitHub Actions
-- name: Run tests
-  run: |
-    go test ./... -coverprofile=coverage.out
-    cd web && npm test -- --watch=false
-
-- name: Upload coverage
-  uses: actions/upload-artifact@v7
-  with:
-    name: coverage
-    path: coverage.out
-```
-
-## Test File Location
-
-```
-Go:
-  internal/web/
-   server.go
-   server_test.go     # Same package
-
-Angular:
-  src/app/
-   core/services/
-      api.service.ts
-      api.service.spec.ts
-   features/
-       dashboard/
-           dashboard.ts
-           dashboard.spec.ts
-```
-
-## Anti-Patterns
-
-| Anti-pattern | Solution |
-|--------------|----------|
-| Test private methods | Test public interface |
-| Assert on timestamps | Mock time |
-| Order-dependent tests | Reset state |
-| Test third-party code | Mock external services |
-| Brittle selectors | Use semantic queries |
-
-## Quick Reference
-
-| Task | Command |
-|------|---------|
-| Go tests | `go test ./...` |
-| Go coverage | `go test -coverprofile=out ./...` |
-| Angular tests | `npm test -- --watch=false` |
-| Angular coverage | `npm test -- --coverage` |
-| Run file | `npm test -- file.spec.ts` |
-| Watch mode | `npm test` |
-
+- `references/code-examples.md` — Go and Angular test examples with mocking
+- `references/quick-reference.md` — Naming conventions, file locations, commands
+- `references/ci-integration.md` — CI/CD test configuration
