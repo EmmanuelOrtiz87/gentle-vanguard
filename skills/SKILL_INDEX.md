@@ -662,6 +662,16 @@ Gemini, Ollama)
 
 ---
 
+### daily-workflow
+
+**Trigger**: `daily`, `daily workflow`, `start day`, `session start`
+
+**Use when**: Starting a daily coding session, running morning checks, loading session context
+
+**See**: [daily-workflow](daily-workflow/SKILL.md)
+
+---
+
 ### skill-factory-skill
 
 **Trigger**: `create skill`, `skill factory`, `new skill`, `generate skill`
@@ -776,6 +786,16 @@ workflow diagram.
 **Trigger**: `update`, `sync`, `check`, `maintenance`, `tools`, `versión`
 
 **Use when**: Update foundation, sync skills, check versións, manage tools, maintenance
+
+---
+
+### premortem-skill
+
+**Trigger**: `premortem`, `risk analysis`, `failure mode`, `what could go wrong`, `Klein`, `prospective hindsight`
+
+**Use when**: Running premortem analysis using Klein + Kahneman methods to identify risks before starting significant work
+
+**See**: [premortem-skill](premortem-skill/SKILL.md)
 
 ---
 

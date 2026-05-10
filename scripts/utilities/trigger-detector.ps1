@@ -23,10 +23,8 @@ function Get-SkillTriggers {
         $skillName = $file.Directory.Name
         
         # Extract trigger from frontmatter or content
-        if ($content -match '(?s)Trigger:\s*"([^"]+)"') {
-            $triggerText = $matches[1]
-        } elseif ($content -match '(?s)Trigger:\s*([^\n]+)') {
-            $triggerText = $matches[1]
+        if ($content -match '(?s)Trigger:\s*([^\n]+)') {
+            $triggerText = $matches[1].Trim()
         } else {
             continue
         }

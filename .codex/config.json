@@ -1,0 +1,23 @@
+{
+  "name": "Codex - Foundation Workspace",
+  "version": "1.0.0",
+  "description": "Local-first policy for Codex CLI",
+  "aiSettings": {
+    "model": "claude-sonnet-4-5",
+    "temperature": 0.3,
+    "maxTokens": 4500,
+    "localFirst": true
+  },
+  "toolPermissions": {
+    "websearch": "deny",
+    "codesearch": "deny",
+    "webfetch": "deny"
+  },
+  "preProcessing": {
+    "enabled": true,
+    "script": "scripts/utilities/pre-process-input.ps1",
+    "scriptArgs": { "UserInput": "USER_INPUT_HERE", "WorkspaceRoot": "." }
+  },
+  "language": { "default": "es", "technicalTerms": "en" },
+  "rules": ["docs/AGENTS.md", "rules/AI-NORMATIVES.md", "rules/DEVELOPMENT-STANDARDS.md", "rules/NORMATIVAS-CODIGO.md", "rules/NORMATIVAS-ERROR-HANDLING.md"]
+}

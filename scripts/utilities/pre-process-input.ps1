@@ -12,9 +12,9 @@ param(
 $triggerMap = @{}
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $workspaceRoot = if ($PSBoundParameters.ContainsKey("WorkspaceRoot") -and $WorkspaceRoot -ne ".") {
-    try { (Resolve-Path -Path $WorkspaceRoot -ErrorAction Stop).Path } catch { Split-Path -Parent $scriptDir }
+    try { (Resolve-Path -Path $WorkspaceRoot -ErrorAction Stop).Path } catch { (Split-Path -Parent (Split-Path -Parent $scriptDir)) }
 } else {
-    Split-Path -Parent $scriptDir
+    (Split-Path -Parent (Split-Path -Parent $scriptDir))
 }
 $skillsFullPath = Join-Path $workspaceRoot $SkillsPath
 
@@ -39,11 +39,10 @@ function Add-TriggersFromSkillFiles {
                 # Find trigger line (allowing leading whitespace)
                 $lines = $frontMatter -split "`n"
                 foreach ($line in $lines) {
-                    if ($line -match '\s*[Tt]rigger:\s*"([^"]+)"') {
-                        $triggerText = $matches[1]
-                        $triggers = $triggerText -split ',' | ForEach-Object { $_.Trim().Trim('"') } | Where-Object { $_.Length -gt 0 }
-
-                        foreach ($trigger in $triggers) {
+                    if ($line -match '\s*[Tt]rigger:\s*') {
+                        $allMatches = [regex]::Matches($line, '"([^"]+)"')
+                        foreach ($match in $allMatches) {
+                            $trigger = $match.Groups[1].Value.Trim()
                             if ($trigger -and -not $Map.ContainsKey($trigger)) {
                                 $Map[$trigger] = $skillName
                             }

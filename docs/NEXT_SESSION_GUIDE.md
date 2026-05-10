@@ -1,267 +1,112 @@
 ﻿# Guía para Próxima Sesión
 
-**Última sesión**: 2026-05-04  
-**Estado**: PASS 9/9 — workspace completamente limpio y verificado  
-**Branch activo**: `main` (develop sincronizado)
+**Última sesión**: 2026-05-10  
+**Sesión**: session-2026-05-10-03  
+**Estado**: Foundation v2.9.0 — workspace verificado  
+**Branch activo**: `main`
 
 ## Estado del Workspace
 
-Todo limpio. Para verificar al inicio de la próxima sesión:
+Workspace completamente operativo con 126 skills, auto-delegación activa, CI/CD con 15 workflows, 6 normativas activas, y tool configs para 8 herramientas.
 
+**Fuente de verdad canónica**: `docs/AGENTS.md` (tool-agnostic) + `config/auto-delegation.json` + `rules/` + Engram.
+
+Para verificar al inicio:
 ```powershell
 pwsh -File scripts/utilities/agent-verify.ps1
 ```
 
-## Herramientas Disponibles
-
-| Herramienta                               | Uso                                                                              |
-| ----------------------------------------- | -------------------------------------------------------------------------------- |
-| `scripts/utilities/agent-verify.ps1`      | Auto-verificación del agente — correr después de cualquier trabajo significativo |
-| `scripts/utilities/validate-configs.ps1`  | Gate de integridad de configuración                                              |
-| `scripts/utilities/pre-process-input.ps1` | Pre-procesado de inputs (routing automático)                                     |
-| `scripts/utilities/install-hooks.ps1`     | Instalar git hooks                                                               |
-
-## Logros de Esta Sesión (2026-05-04)
-
-- ✅ Multi-tool consistency: todos apuntan a `config/auto-delegation.json` como source of truth
-- ✅ sdd-lifecycle como skill canónico (sdd-design/apply/verify deprecados)
-- ✅ code-review-orchestrator-skill (fix de typo de sufijo)
-- ✅ Git hooks instalados y funcionando (pre-commit 7-dimensiones)
-- ✅ `scripts/utilities/validate-configs.ps1` — gate de integridad (PASS)
-- ✅ `scripts/utilities/agent-verify.ps1` — feedback loop de auto-verificación
-- ✅ `rules/AI-NORMATIVES.md` — 13 normativas formales
-- ✅ JSON fijos: security-deploy.json, security-privacy.json
-- ✅ Pre-commit false positives corregidos (3 scanners alineados)
-- ✅ 12/12 unit tests passing
-- ✅ Merge con remote main completado (remote había reestructurado tools/ → scripts/utilities/)
-- ✅ Push a develop y main
-
-## Posibles Próximas Tareas
-
-- Backlog en `workspace-foundation/docs/reference/FUTURE-FEATURES-BACKLOG.md`
-- API check en pre-commit tiene bug de `exit 1` syntax en PowerShell — no bloqueante pero genera
-  noise
-- Engram update disponible: v1.15.4 → v1.15.6
-
-## Inicio Rpido
-
-### 1. Verificar Estado Actual
-
-```powershell
-# Cargar mdulo
-Import-Module ".\skills\auto-delegation-router\auto-delegation-router.ps1" -Force
-
-# Verificar configuracin
-$config = Get-AutoDelegationConfig
-Write-Host "Auto-Delegation Status: $($config.Enabled)"
-Write-Host "Confidence Threshold: $($config.ConfidenceThreshold)%"
-```
-
-### 2. Ejecutar Tests
-
-```powershell
-# Ejecutar suite de tests
-.\tests\integration\auto-delegation-router.integration.tests.ps1
-
-# Verificar que todos pasen
-```
-
-### 3. Verificar Archivos Creados
-
-```powershell
-# Listar archivos
-Get-ChildItem -Path "skills/auto-delegation-router" -Recurse
-Get-ChildItem -Path "config/auto-delegation.json"
-Get-ChildItem -Path "tests/integration/auto-delegation-router*"
-```
-
-## Tareas para Prxima Sesin
-
-### Fase 2: Integracin en Orchestrator (Prioridad Alta)
-
-#### 2.1 Integrar en Orchestrator Principal
-
-- [ ] Abrir `skills/project-orchestrator-skill/SKILL.md`
-- [ ] Agregar import del mdulo auto-delegation-router
-- [ ] Integrar `Route-TaskToAgent` en flujo de despacho
-- [ ] Conectar con agent dispatcher existente
-
-#### 2.2 Modificar Flujo de Despacho
-
-- [ ] Actualizar `Invoke-Agent` para usar auto-routing
-- [ ] Agregar lgica de fallback a manual si es necesario
-- [ ] Registrar decisiones de enrutamiento
-- [ ] Agregar logging de mtricas
-
-#### 2.3 Actualizar Configuracin del Orchestrator
-
-- [ ] Agregar flag `useAutoRouting` en `config/orchestrator.json`
-- [ ] Establecer por defecto en `false` (seguro)
-- [ ] Documentar cmo habilitar
-
-### Fase 3: Testing en Staging (Prioridad Alta)
-
-#### 3.1 Pruebas Funcionales
-
-- [ ] Crear suite de tests con tareas reales
-- [ ] Validar enrutamiento correcto
-- [ ] Verificar fallback manual
-- [ ] Probar con diferentes tipos de tareas
-
-#### 3.2 Pruebas de Rendimiento
-
-- [ ] Medir tiempo de enrutamiento
-- [ ] Validar que sea < 300ms
-- [ ] Verificar uso de memoria
-- [ ] Probar con mltiples tareas simultneas
-
-#### 3.3 Pruebas de Confiabilidad
-
-- [ ] Verificar manejo de errores
-- [ ] Probar con tareas ambiguas
-- [ ] Validar fallback a manual
-- [ ] Verificar logging de errores
-
-### Fase 4: Documentacin (Prioridad Media)
-
-#### 4.1 Actualizar Documentacin Existente
-
-- [ ] Actualizar README principal
-- [ ] Agregar seccin de auto-delegation
-- [ ] Actualizar gua de operaciones
-- [ ] Agregar troubleshooting
-
-#### 4.2 Crear Guas de Usuario
-
-- [ ] Gua de habilitacin/deshabilitacin
-- [ ] Gua de ajuste de umbrales
-- [ ] Gua de interpretacin de mtricas
-- [ ] FAQ de auto-delegation
-
-### Fase 5: Produccin (Prioridad Baja)
-
-#### 5.1 Preparacin para Produccin
-
-- [ ] Habilitar auto-delegation (opt-in)
-- [ ] Configurar umbrales conservadores
-- [ ] Establecer alertas de mtricas
-- [ ] Crear runbook de operaciones
-
-#### 5.2 Monitoreo en Vivo
-
-- [ ] Monitorear mtricas de enrutamiento
-- [ ] Recopilar feedback de usuarios
-- [ ] Ajustar umbrales segn uso real
-- [ ] Documentar lecciones aprendidas
-
-## Archivos Clave para Referencia
-
-### Documentacin
-
-- `skills/auto-delegation-router/SKILL.md` - Documentacin completa
-- `skills/auto-delegation-router/INTEGRATION.md` - Gua de integracin
-- `docs/reference/AUTO-DELEGATION-IMPLEMENTATION.md` - Resumen de implementacin
-- `SESSION_CHECKPOINT.md` - Registro de esta sesin
-
-### Implementacin
-
-- `skills/auto-delegation-router/auto-delegation-router.ps1` - Mdulo PowerShell
-- `config/auto-delegation.json` - Configuracin
-- `tests/integration/auto-delegation-router.integration.tests.ps1` - Tests
-
-### Referencia de Arquitectura
-
-- `docs/reference/SUBAGENT-ARCHITECTURE.md` - Arquitectura de subagentes
-- `skills/multi-agent-registry/SKILL.md` - Definicin de agentes
-- `skills/project-orchestrator-skill/SKILL.md` - Orchestrator principal
-
-## Comandos tiles
-
-```powershell
-# Cargar mdulo
-Import-Module ".\skills\auto-delegation-router\auto-delegation-router.ps1" -Force
-
-# Habilitar para testing
-Enable-AutoDelegation
-
-# Probar enrutamiento
-$routing = Route-TaskToAgent -TaskDescription "Implement login feature"
-$routing | ConvertTo-Json -Depth 10
-
-# Ver mtricas
-$metrics = Get-RoutingMetrics
-$metrics | ConvertTo-Json
-
-# Deshabilitar despus de testing
-Disable-AutoDelegation
-
-# Ejecutar tests
-.\tests\integration\auto-delegation-router.integration.tests.ps1 -Verbose
-```
-
-## Checklist para Prxima Sesin
-
-### Inicio
-
-- [ ] Verificar que todos los archivos estn presentes
-- [ ] Ejecutar tests para validar estado
-- [ ] Revisar SESSION_CHECKPOINT.md
-- [ ] Revisar NEXT_SESSION_GUIDE.md (este archivo)
-
-### Integracin
-
-- [ ] Integrar en orchestrator principal
-- [ ] Actualizar configuracin
-- [ ] Crear tests de integracin
-- [ ] Validar flujo completo
-
-### Testing
-
-- [ ] Ejecutar tests en staging
-- [ ] Validar rendimiento
-- [ ] Probar fallback manual
-- [ ] Recopilar mtricas
-
-### Documentacin
-
-- [ ] Actualizar README
-- [ ] Crear guas de usuario
-- [ ] Documentar cambios
-- [ ] Crear runbooks
-
-## Notas Importantes
-
-**RECORDAR**:
-
-- Auto-delegation est **DISABLED por defecto**
-- Siempre hay **fallback a manual**
-- Configuracin es **persistente en JSON**
-- Mtricas se registran **automticamente**
-- Tests cubren **todos los escenarios**
-
-## Contacto y Soporte
-
-Para preguntas o problemas:
-
-1. Revisar `skills/auto-delegation-router/SKILL.md`
-2. Revisar `skills/auto-delegation-router/INTEGRATION.md`
-3. Revisar `docs/reference/AUTO-DELEGATION-IMPLEMENTATION.md`
-4. Ejecutar tests para validar
-
-## Estado Actual
-
-```
-✅ Auto-Delegation Router: IMPLEMENTADO (skills/auto-delegation-router/)
-✅ Tests: 26 PASANDO + 11 integration tests routing-flow.tests.ps1
-✅ Documentación: COMPLETA
-✅ Configuración: LISTA (config/auto-delegation.json — fuente canónica)
-✅ Integración: COMPLETA (pre-process-input.ps1 + config/auto-delegation.json en producción)
-✅ Staging: VALIDADO (agent-verify 14/14 PASS — 2026-05-05)
-✅ Producción: ACTIVO — gentleman-foundation v2.6.5 main
-```
+## Novedades de esta Sesión (2026-05-10-02)
+
+### Fix: Fuente de Verdad
+- **ROTO**: `.clinerules` + `.cursorrules` decían "See `CLAUDE.md` for the single source of truth"
+- **CORREGIDO**: Ahora apuntan a `docs/AGENTS.md` + `config/auto-delegation.json` + `rules/` + Engram
+- `CLAUDE.md` es ahora tool-specific, referencia a `docs/AGENTS.md` como canonical entry point
+
+### Fix: SKILL.md Frontmatter Regex
+- `pre-process-input.ps1:42` — regex capturaba solo el primer trigger quoteado; corregido con `[regex]::Matches()` multi-capture
+- `trigger-detector.ps1:26` — mismo bug; corregido con capture broader primero
+- `skills/session-workflow-skill/SKILL.md` — frontmatter cambiado de YAML single-quoted a `description: >` estándar
+
+### Mejora: session-autostart.cmd
+- Workspace root detection automática
+- Pre-flight health check (CRITICAL + WARN)
+- Paths consistentes relativos a workspace root
+
+### Nuevo: session-autostart.sh (Linux/macOS/WSL)
+- `scripts/utilities/session-autostart.sh` — creado, análogo al .cmd
+- Mismos health checks + 8 fases de autostart
+- Usa `pwsh` para invocar los scripts PowerShell compartidos
+
+### Nuevo: Tool Configs para 7 Herramientas
+- `.cursor/config.json`, `.cline/config.json`, `.vscode/settings.json`
+- `.codex/config.json`, `.antigravity/config.json`
+- Todos con LOCAL-FIRST, pre-processing mandatory, español default
+- `.windsurf/config.json` + `.continue/config.json` ya existían y fueron verificados
+
+### Nuevo: Premortem Skill
+- `skills/premortem-skill/SKILL.md` — método Klein (HBR) + Kahneman
+- Registrado en `auto-delegation.json` como agente `PREMORTEM` (temp 0.5, parallel_capacity 8)
+- 18 keywords mapeadas, perfil dedicado, subagent-mapping con parallel_subagents: true
+
+### FF-011: Plugin Architecture Implementado
+- `scripts/utilities/SKILLS-TOOLS/plugins-discovery.ps1` — Nuevo: descubrimiento, listado, validación de plugins con 4 acciones (discover/list/validate/paths)
+- `scripts/utilities/SKILLS-TOOLS/plugin-loader.ps1` — Nuevo: motor runtime con 7 funciones (Get-PluginManifest, Get-PluginMetadata, Invoke-Plugin, Register-Plugin, Unregister-Plugin, Get-RegisteredPlugins, Initialize-Plugins)
+- `config/plugin-manifest-schema.json` — Mejorado: añadidos campos `main`, `dependencies`, estructura commands con oneOf (string | object)
+- `plugins/examples/hello-world.ps1` — Fix: referencia FF-016 → FF-011
+- `.github/workflows/autonomous-validation.yml` — Nuevo step `Validate Plugins` que corre `plugins-discovery.ps1 -Action validate`
+- `tests/unit/plugin-architecture.tests.ps1` — Expandido: 24 tests (antes 7) incluyendo discovery, loader, CI integration
+- `docs/reference/PLUGIN-ARCHITECTURE.md` — Actualizado con sección Implementation y CI Integration
+
+### Tool Configs Verificadas
+- `.cline/config.json`, `.cursor/config.json`, `.antigravity/config.json` — No referencian directamente AGENTS.md (usan tool-specific rules)
+- `.cursorrules`, `.clinerules`, `.github/copilot-instructions.md` — Todos referencian `docs/AGENTS.md` como canonical source ✓
+- `.windsurf/config.json`, `.continue/config.json` — Incluyen `AGENTS.md` en configFiles ✓
+- `.codex/config.json` — Incluye `AGENTS.md` en rules array ✓
+
+### Backlog Actualizado
+- `docs/backlog/items.json` — Añadidos FF-007/008/017 (done) y FF-011/016/018 (pending) — ahora 13 items total (10 done, 3 pending)
+- `docs/backlog/README.md` — Regenerado con tabla actualizada
+
+### TypeScript CI/CD Añadido
+- `test-suite.yml` — Nuevo step `tsc --noEmit` para `adapters/mcp-bridge/` que verifica tipos TypeScript en CI
+
+### Cross-Link: Normativas
+- NORMATIVAS-CODIGO, ERROR-HANDLING, PERFORMANCE, SESSION, AI-NORMATIVES
+- Ahora todas tienen references recíprocas completas
+
+## Auditoría Completa (2026-05-10)
+- ✅ `plugins/examples/hello-world.ps1` — Eliminado (duplicado de `plugins/example-hello-world/`)
+- ✅ `docs/reference/MIGRACION-NORMATIVAS-GLOBALES.md` — Eliminado (huérfano, nunca referenciado)
+- ✅ `skills/SKILL_INDEX.md` — Añadidos `daily-workflow` y `premortem-skill` (faltaban)
+- ✅ `docs/reference/FUTURE-FEATURES-BACKLOG.md` — Ya tiene notice de deprecation (ok)
+- ⚠️ `.agents/skills/accessibility|seo/SKILL.md` — 4 broken links EXTERNOS (URLs web, no locales) — pre-existentes, no requieren acción
+- ✅ Audit sweep: 0 errores, 0 duplicados, SKILL_INDEX sincronizado (126 skills)
+- ✅ Plugin tests: 28/28 pass (sin regresión)
+
+### Estado Final del Backlog
+- **FF-016** — Token Efficiency / RTK: Evaluado → **deferred**. Stack actual suficiente (11+ scripts, 30-40% compresión, ~32% max budget). No justificado sin bottleneck real.
+- **FF-018** — TUI Installer: Verificado → **done**. Ya existía en `scripts/utilities/foundation-installer-tui.ps1` (395 líneas, TUI completo).
+- **Todos los FF-001 a FF-018 resueltos** — 12 done, 1 deferred, 0 pendientes.
+
+## Archivos Clave
+
+| Archivo | Propósito |
+|---------|-----------|
+| `docs/AGENTS.md` | **Entry point canónico (tool-agnostic)** |
+| `config/auto-delegation.json` | Routing + agent profiles |
+| `config/orchestrator.json` | Config del orquestador principal |
+| `opencode.json` | Tool-agnostic agent config |
+| `rules/AI-NORMATIVES.md` | Normativas AI (13 reglas) |
+| `rules/NORMATIVAS-CODIGO.md` | Estándares de código |
+| `rules/NORMATIVAS-ERROR-HANDLING.md` | Manejo de errores |
+| `rules/NORMATIVAS-PERFORMANCE.md` | Performance budgets + SLOs |
+| `rules/NORMATIVAS-SESSION.md` | Session lifecycle |
+| `rules/DEVELOPMENT-STANDARDS.md` | Estándares de desarrollo |
+| `skills/premortem-skill/SKILL.md` | Premortem analysis |
+| `scripts/utilities/session-autostart.cmd` | Autostart Windows |
+| `scripts/utilities/session-autostart.sh` | Autostart Linux/macOS |
 
 ---
 
-**Creado**: 2026-04-23 09:00:30  
-**Actualizado**: 2026-05-05 — homologación completada, routing en producción  
-**Estado**: COMPLETADO — no se requieren acciones adicionales
+**Creado**: 2026-05-10 — **Estado**: ACTUALIZADO — **Foundation v2.9.0**

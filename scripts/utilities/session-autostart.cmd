@@ -1,135 +1,129 @@
 @echo off
-setlocal
+setlocal enabledelayedexpansion
 
-set SCRIPT=%~dp0session-manager.ps1
-set OPTIMIZE_SCRIPT=%~dp0optimize-engram-usage.ps1
-set TOKEN_GUARD_SCRIPT=%~dp0token-guard.ps1
+REM ============================================================
+REM Session Autostart
+REM Location: scripts/utilities/session-autostart.cmd
+REM Resolves workspace root 2 levels up (scripts/utilities/ -> ./ )
+REM ============================================================
 
-echo === Session Autostart with Engram Optimization ===
+REM === Phase 0: Workspace Detection ===
+for %%I in ("%~dp0..\..") do set WORKSPACE_ROOT=%%~fI
+set UTILS_DIR=%WORKSPACE_ROOT%\scripts\utilities
+
 echo.
+echo === Session Autostart ===
+echo Workspace: %WORKSPACE_ROOT%
 echo.
 
-REM 1. Validar y ejecutar session-manager
-if not exist "%SCRIPT%" (
-    echo [ERROR] session-manager.ps1 not found: %SCRIPT%
-    echo [FALLBACK] Intentando wf.ps1...
-    if exist ".\scripts\utilities\wf.ps1" (
-        powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\utilities\wf.ps1" start-session
-    ) else (
-        echo [ERROR] No se encontro metodo alternativo de inicio de sesion
-        exit /b 1
-    )
-    goto :session_end
+REM === Pre-flight Health Check ===
+set HEALTH_CRITICAL=1
+
+if not exist "%WORKSPACE_ROOT%\.git" (
+    echo [CRITICAL] Not a git repository: %WORKSPACE_ROOT%
+    set HEALTH_CRITICAL=0
+) else ( echo [PASS] Git repository )
+
+if not exist "%WORKSPACE_ROOT%\config\auto-delegation.json" (
+    echo [CRITICAL] Missing routing config: config\auto-delegation.json
+    set HEALTH_CRITICAL=0
+) else ( echo [PASS] Routing config )
+
+if not exist "%UTILS_DIR%\session-manager.ps1" (
+    echo [CRITICAL] Missing session-manager.ps1
+    set HEALTH_CRITICAL=0
+) else ( echo [PASS] Session manager )
+
+if not exist "%WORKSPACE_ROOT%\opencode.json" (
+    echo [WARN] Missing opencode.json - AI config may be incomplete
 )
 
-echo [1/8] Running session-manager...
-powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT%" -Mode AutoStart
-if errorlevel 1 (
-    echo [ERROR] session-manager.ps1 fallo con codigo: %errorlevel%
+if not exist "%UTILS_DIR%\token-guard.ps1" (
+    echo [WARN] Missing token-guard.ps1 - token limits not enforced
+)
+
+echo.
+if %HEALTH_CRITICAL% equ 0 (
+    echo [ABORTED] Health check failed. Resolve critical issues and retry.
     exit /b 1
 )
-echo [OK] Session initialized
+echo [HEALTH] All critical checks passed.
+echo.
 
-REM 2. Mostrar notificacion de zona horaria (configurable)
-set NOTIFICATION_SCRIPT=%~dp0session-notification.ps1
-if exist "%NOTIFICATION_SCRIPT%" (
-    echo [2/8] Checking time-based notifications...
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%NOTIFICATION_SCRIPT%" -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15 -Region "Argentina"
-) else (
-    echo [SKIP] Notification script not found
-)
+REM === Phase 1: Session Manager ===
+echo [1/8] Initializing session manager...
+powershell -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\session-manager.ps1" -Mode AutoStart
+if errorlevel 1 (
+    echo [ERROR] session-manager.ps1 failed (code: !errorlevel!)
+    echo [FALLBACK] Attempting wf.ps1...
+    if exist "%UTILS_DIR%\wf.ps1" (
+        powershell -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\wf.ps1" start-session
+    ) else (
+        echo [FATAL] No fallback available. Aborting.
+        exit /b 1
+    )
+) else ( echo [OK] Session initialized )
 
-REM 3. Extraer SessionId del archivo de sesion mas reciente
+REM === Phase 2: Notifications ===
+echo [2/8] Time-based notifications...
+if exist "%UTILS_DIR%\session-notification.ps1" (
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\session-notification.ps1" -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15 -Region "Argentina"
+    if errorlevel 1 ( echo [WARN] Notification check had warnings ) else ( echo [OK] Notifications checked )
+) else ( echo [SKIP] session-notification.ps1 not found )
+
+REM === Phase 3: Session ID ===
+echo [3/8] Resolving session ID...
 set SESSION_ID=
-for /f "tokens=*" %%i in ('powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0get-session-id.ps1"') do set SESSION_ID=%%i
+for /f "tokens=*" %%i in ('powershell -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\get-session-id.ps1"') do set SESSION_ID=%%i
 if defined SESSION_ID (
-    echo [3/8] Session ID: %SESSION_ID%
-) else (
-    echo [WARNING] No se pudo obtener Session ID
-)
+    echo [OK] Session ID: %SESSION_ID%
+) else ( echo [WARN] Could not resolve session ID )
 
-REM 4. Engram Policy Enforcement
-set ENGRAM_POLICY=%~dp0..\foundation\engram-policy.ps1
-set ENGRAM_ORCHESTRATOR=%~dp0engram-orchestrator.ps1
-set FAILURE_LEARNING=%~dp0..\adaptive\failure-learning-system.ps1
-
+REM === Phase 4: Engram Policy Enforcement ===
+echo [4/8] Engram policy enforcement...
+set ENGRAM_POLICY=%WORKSPACE_ROOT%\scripts\foundation\engram-policy.ps1
 if exist "%ENGRAM_POLICY%" (
-    echo [4/8] Enforcing Engram policy ^(always installed and active^)...
     powershell -NoProfile -ExecutionPolicy Bypass -File "%ENGRAM_POLICY%" -Action enforce
     if errorlevel 1 (
-        echo [WARNING] Engram policy enforcement found issues, running orchestrator...
-        if exist "%ENGRAM_ORCHESTRATOR%" (
-            powershell -NoProfile -ExecutionPolicy Bypass -File "%ENGRAM_ORCHESTRATOR%" -Action orchestrate
+        echo [WARN] Engram policy issues detected
+        if exist "%UTILS_DIR%\engram-orchestrator.ps1" (
+            powershell -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\engram-orchestrator.ps1" -Action orchestrate
         )
-    ) else (
-        echo [OK] Engram policy enforced - engram active
-    )
-) else (
-    echo [SKIP] Engram policy script not found
-)
+    ) else ( echo [OK] Engram policy enforced )
+) else ( echo [SKIP] engram-policy.ps1 not found )
 
-REM 5. Engram Optimization
+REM === Phase 5: Engram Optimization ===
+echo [5/8] Engram optimization...
+set OPTIMIZE_SCRIPT=%WORKSPACE_ROOT%\scripts\utilities\PERFORMANCE-OPTIMIZATION\optimize-engram-usage.ps1
 if exist "%OPTIMIZE_SCRIPT%" (
-    echo [5/8] Running Engram optimization...
     powershell -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_local"
-    if errorlevel 1 (
-        echo [WARNING] Engram optimization completed with warnings
-    ) else (
-        echo [OK] Engram optimization completed
-    )
-) else (
-    echo [SKIP] Engram optimization script not found
-)
+    if errorlevel 1 ( echo [WARN] Optimization had warnings ) else ( echo [OK] Engram optimized )
+) else ( echo [SKIP] optimize-engram-usage.ps1 not found )
 
-REM 6. Validacion cross-workspace
-set CROSS_VALIDATOR=.\scripts\monitoring\cross-workspace-validator.ps1
+REM === Phase 6: Cross-Workspace Validation ===
+echo [6/8] Cross-workspace validation...
+set CROSS_VALIDATOR=%WORKSPACE_ROOT%\scripts\monitoring\cross-workspace-validator.ps1
 if exist "%CROSS_VALIDATOR%" (
-    echo [6/8] Validating cross-workspace consistency...
     powershell -NoProfile -ExecutionPolicy Bypass -File "%CROSS_VALIDATOR%" -Detailed
-    if errorlevel 1 (
-        echo [WARNING] Cross-workspace validation found issues
-    ) else (
-        echo [OK] Cross-workspace validated
-    )
-) else (
-    echo [SKIP] Cross-workspace validator not found
-)
+    if errorlevel 1 ( echo [WARN] Validation found issues ) else ( echo [OK] Cross-workspace validated )
+) else ( echo [SKIP] cross-workspace-validator.ps1 not found )
 
-REM 7. Security Orchestrator
-set SECURITY_SCRIPT=.\scripts\security\security-orchestrator.ps1
-set SECURITY_CONFIG=config\security-privacy.json
+REM === Phase 7: Security Orchestrator ===
+echo [7/8] Security orchestrator...
+set SECURITY_SCRIPT=%WORKSPACE_ROOT%\scripts\security\security-orchestrator.ps1
 if exist "%SECURITY_SCRIPT%" (
-    echo [7/8] Initializing Security Orchestrator...
     powershell -NoProfile -ExecutionPolicy Bypass -File "%SECURITY_SCRIPT%" -Action init -AsJson
-    if errorlevel 1 (
-        echo [WARNING] Security Orchestrator initialized with warnings
-    ) else (
-        echo [OK] Security Orchestrator initialized
-    )
-) else (
-    echo [SKIP] Security Orchestrator not found
-)
+    if errorlevel 1 ( echo [WARN] Security init had warnings ) else ( echo [OK] Security initialized )
+) else ( echo [SKIP] security-orchestrator.ps1 not found )
 
-REM 8. Skill Router / Auto-delegation
-set SKILL_ROUTER=%~dp0skill-router.ps1
+REM === Phase 8: Skill Router ===
+echo [8/8] Skill router...
+set SKILL_ROUTER=%UTILS_DIR%\skill-router.ps1
 if exist "%SKILL_ROUTER%" (
-    echo [8/8] Initializing Skill Router...
     powershell -NoProfile -ExecutionPolicy Bypass -File "%SKILL_ROUTER%" -Query "session-start"
-    if errorlevel 1 (
-        echo [WARNING] Skill Router validation issue
-    ) else (
-        echo [OK] Skill Router active
-    )
-) else (
-    echo [SKIP] Skill Router not found
-)
+    if errorlevel 1 ( echo [WARN] Skill router validation issue ) else ( echo [OK] Skill router active )
+) else ( echo [SKIP] skill-router.ps1 not found )
 
-echo.
-echo === Session Autostart Complete ===
-echo [READY] Workspace ready for operations
-exit /b 0
-
-:session_end
 echo.
 echo === Session Autostart Complete ===
 echo [READY] Workspace ready for operations

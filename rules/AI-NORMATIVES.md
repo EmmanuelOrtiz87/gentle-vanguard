@@ -56,15 +56,16 @@ Key sections:
 
 ## 4. Agent Profiles
 
-| Code | Role               | Temperature | Max Tokens |
-| ---- | ------------------ | ----------- | ---------- |
-| BA   | Business Analyst   | 0.3         | 4500       |
-| SAD  | Solution Architect | 0.2         | 4500       |
-| DEV  | Developer          | 0.2         | 4500       |
-| QA   | QA Engineer        | 0.1         | 3000       |
-| OPS  | DevOps Engineer    | 0.2         | 3500       |
-| GOV  | Governance         | 0.1         | 3000       |
-| DOC  | Documentation      | 0.4         | 4000       |
+| Code    | Role                  | Temperature | Max Tokens |
+| ------- | --------------------- | ----------- | ---------- |
+| BA      | Business Analyst      | 0.3         | 4500       |
+| SAD     | Solution Architect    | 0.2         | 4500       |
+| DEV     | Developer             | 0.2         | 4500       |
+| QA      | QA Engineer           | 0.1         | 3000       |
+| OPS     | DevOps Engineer       | 0.2         | 3500       |
+| GOV     | Governance            | 0.1         | 3000       |
+| DOC     | Documentation         | 0.4         | 4000       |
+| SESSION | Session Management    | 0.1         | 3000       |
 
 Overrides are defined in `config/auto-delegation.json#agentProfiles`.
 
@@ -234,13 +235,18 @@ workflows.
 
 ## References
 
-| Resource          | Path                                                           |
-| ----------------- | -------------------------------------------------------------- |
-| Routing config    | `config/auto-delegation.json`                                  |
-| DAG phases        | `config/adaptive-dag-config.json`                              |
-| Security policy   | `config/security-policy.json` + `config/security-privacy.json` |
-| Hook config       | `config/hooks-config.json`                                     |
-| Testing config    | `config/testing.config.json`                                   |
-| Structure policy  | `config/structure-policy.json`                                 |
-| Orchestrator      | `config/orchestrator.json`                                     |
-| Self-verification | `scripts/utilities/agent-verify.ps1`                           |
+| Resource             | Path                                                   |
+| -------------------- | ------------------------------------------------------ |
+| Routing config       | `config/auto-delegation.json`                          |
+| DAG phases           | `config/adaptive-dag-config.json`                      |
+| Security policy      | `config/security-policy.json` + `config/security-privacy.json` |
+| Hook config          | `config/hooks-config.json`                             |
+| Testing config       | `config/testing.config.json`                           |
+| Structure policy     | `config/structure-policy.json`                         |
+| Orchestrator         | `config/orchestrator.json`                             |
+| Development standards| `rules/DEVELOPMENT-STANDARDS.md`                      |
+| Code standards       | `rules/NORMATIVAS-CODIGO.md`                          |
+| Error handling       | `rules/NORMATIVAS-ERROR-HANDLING.md`                  |
+| Performance & Efficiency | `rules/NORMATIVAS-PERFORMANCE.md`                  |
+| Session Lifecycle    | `rules/NORMATIVAS-SESSION.md`                         |
+| Self-verification    | `scripts/utilities/agent-verify.ps1`                   |

@@ -9,13 +9,19 @@
    - If `TRIGGER_MATCH_FOUND` → Load indicated skill using `skill` tool BEFORE any other action
    - If `NO_TRIGGER_MATCH` → Continue with normal behavior
 3. **Session start** - Always run `scripts/utilities/session-autostart.cmd` on Windows for notifications, optimizations, validations
-4. **Special case "iniciar sesion"** - Load `session-workflow-skill`, then follow its workflow
+4. **Session commands** - If `SESSION` trigger matched, load `session-workflow-skill` via skill tool, then follow its workflow
 
 **This rule is MANDATORY and MUST be followed automatically. Do NOT wait to be asked.**
 
 ## Principle: LOCAL-FIRST
 Prioritize local project knowledge over external searches.
 
-## Reference to Shared Rules
-See `.ai-rules/shared-context.md` for complete shared rules.
-See `CLAUDE.md` for the single source of truth.
+## Canonical Sources (Tool-Agnostic)
+- **Bootstrap & entry point**: `docs/AGENTS.md`
+- **Routing & agent profiles**: `config/auto-delegation.json`
+- **AI normatives**: `rules/AI-NORMATIVES.md`
+- **Development standards**: `rules/DEVELOPMENT-STANDARDS.md`
+- **Code standards**: `rules/NORMATIVAS-CODIGO.md`
+- **Error handling**: `rules/NORMATIVAS-ERROR-HANDLING.md`
+- **Orchestrator config**: `config/orchestrator.json`
+- **Persistent memory**: Engram (`mem_search`, `mem_context`)

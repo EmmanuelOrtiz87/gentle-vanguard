@@ -1,4 +1,6 @@
-﻿# CLAUDE.md - Local-First Policy
+﻿# CLAUDE.md - Claude-Specific Instructions
+
+**This file is Claude-specific. The canonical tool-agnostic entry point is `docs/AGENTS.md`.**
 
 ## Workspace Configuration
 
@@ -21,21 +23,25 @@ Only enable when explicitly requested:
 
 ## Preferred Workflow
 
-1. Check `skills/` directory for relevant patterns
-2. Query engram memory: `mem_search` or `mem_context`
-3. Use `grep` and `read` for code exploration
-4. Trigger routing: `scripts/utilities/pre-process-input.ps1` BEFORE responding — all mappings in
+1. Read `docs/AGENTS.md` for tool-agnostic bootstrap
+2. Check `skills/` directory for relevant patterns
+3. Query engram memory: `mem_search` or `mem_context`
+4. Use `grep` and `read` for code exploration
+5. Trigger routing: `scripts/utilities/pre-process-input.ps1` BEFORE responding — all mappings in
    `config/auto-delegation.json`
 
-## Canonical Routing Source
+## Canonical Sources (Tool-Agnostic)
 
-- Trigger keywords and agent routing: `config/auto-delegation.json#keywordMappings`
-- Agent code to skill mapping: `config/auto-delegation.json#agentCodeToSkill`
-- Keep this file minimal; do not duplicate long keyword tables here.
-
-## Orchestrator Delegation
-
-If skill tool unavailable: `"Trigger detected for [skill]. Requires @orchestrator."`
+- **Bootstrap & entry point**: `docs/AGENTS.md`
+- **Routing & agent profiles**: `config/auto-delegation.json`
+- **AI normatives**: `rules/AI-NORMATIVES.md`
+- **Development standards**: `rules/DEVELOPMENT-STANDARDS.md`
+- **Code standards**: `rules/NORMATIVAS-CODIGO.md`
+- **Error handling**: `rules/NORMATIVAS-ERROR-HANDLING.md`
+- **Performance**: `rules/NORMATIVAS-PERFORMANCE.md`
+- **Session lifecycle**: `rules/NORMATIVAS-SESSION.md`
+- **Orchestrator config**: `config/orchestrator.json`
+- **Persistent memory**: Engram (`mem_search`, `mem_context`)
 
 ## Role
 

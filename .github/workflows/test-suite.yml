@@ -23,6 +23,22 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: TypeScript Type Check (mcp-bridge)
+        shell: pwsh
+        run: |
+          if (Test-Path "adapters/mcp-bridge") {
+            Push-Location "adapters/mcp-bridge"
+            npm ci --ignore-scripts
+            npx tsc --noEmit
+            if ($LASTEXITCODE -ne 0) {
+              Write-Error "TypeScript type check failed"
+              exit 1
+            }
+            Pop-Location
+          } else {
+            Write-Warning "mcp-bridge directory not found, skipping TypeScript check"
+          }
+
       - name: Run All Tests
         shell: pwsh
         run: ./scripts/run-tests-simple.ps1

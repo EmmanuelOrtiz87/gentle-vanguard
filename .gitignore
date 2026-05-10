@@ -90,8 +90,7 @@ coverage/
 # Encrypted backups (security)
 .backups/
 
-# Session data (runtime)
-.session/
+# Engram data
 .engram-data/
 logs/*.json
 logs/.session-active
@@ -101,6 +100,7 @@ logs/.session-active
 
 # OpenCode generated
 config/opencode.schema.json
+.opencode/
 
 # Audit reports (auto-generated)
 LESSONS-LEARNED-*.md
