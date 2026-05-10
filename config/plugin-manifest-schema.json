@@ -1,51 +1,74 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Plugin Manifest",
-  "description": "Plugin manifest for Foundation plugins",
+  "description": "Plugin manifest for Foundation plugins. Validates plugin.json structure for FF-011.",
   "type": "object",
   "required": ["name", "version", "author", "description"],
   "properties": {
     "name": {
       "type": "string",
       "pattern": "^[a-z0-9-]+$",
-      "description": "Plugin identifier"
+      "description": "Plugin identifier in kebab-case"
     },
     "version": {
       "type": "string",
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
-      "description": "Semantic version"
+      "description": "Semantic version (MAJOR.MINOR.PATCH)"
     },
     "author": {
       "type": "string",
-      "description": "Plugin author"
+      "description": "Plugin author name or organization"
     },
     "description": {
       "type": "string",
-      "description": "Plugin description"
+      "description": "Human-readable plugin description"
+    },
+    "main": {
+      "type": "string",
+      "description": "Entry point script relative to plugin directory (e.g. plugin.ps1)",
+      "default": "plugin.ps1"
     },
     "minFoundationVersion": {
       "type": "string",
-      "description": "Minimum Foundation version required"
+      "description": "Minimum Foundation version required (semver)"
     },
     "provides": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "Capabilities provided by this plugin"
+      "description": "Capabilities or skills provided by this plugin"
     },
     "requires": {
       "type": "array",
       "items": { "type": "string" },
-      "description": "Plugin dependencies"
+      "description": "Other plugin names this plugin depends on"
+    },
+    "dependencies": {
+      "type": "object",
+      "description": "Runtime dependency requirements (e.g. PowerShell version)",
+      "additionalProperties": { "type": "string" }
     },
     "hooks": {
       "type": "array",
-      "items": { "enum": ["pre-commit", "pre-push", "post-checkout", "commit-msg"] },
+      "items": { "enum": ["pre-commit", "pre-push", "post-checkout", "commit-msg", "pre-receive"] },
       "description": "Git hooks the plugin registers"
     },
     "commands": {
       "type": "array",
-      "items": { "type": "string" },
-      "description": "Custom wf.ps1 subcommands provided"
+      "description": "wf.ps1 subcommands provided by this plugin",
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string", "description": "Command name" },
+              "description": { "type": "string", "description": "Command description" },
+              "script": { "type": "string", "description": "Script to execute relative to plugin dir" }
+            }
+          }
+        ]
+      }
     }
   }
 }

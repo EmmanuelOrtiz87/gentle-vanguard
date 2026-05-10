@@ -7,7 +7,7 @@ param(
     [switch]$Silent,
     [switch]$Force,
     [switch]$Uninstall,
-    [string]$RepoURL = "https://github.com/EmmanuelOrtiz87/gentleman-foundation.git"
+    [string]$RepoURL = "https://github.com/EmmanuelOrtiz87/foundation.git"
 )
 
 $ErrorActionPreference = "Continue"

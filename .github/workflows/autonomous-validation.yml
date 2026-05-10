@@ -44,6 +44,17 @@ jobs:
         run: |
           ./scripts/utilities/WORKFLOW-ORCHESTRATION/comprehensive-validation.ps1 -Verbose
 
+      - name: Validate Plugins
+        shell: pwsh
+        run: |
+          $result = .\scripts\utilities\SKILLS-TOOLS\plugins-discovery.ps1 -Action validate -AsJson
+          $parsed = $result | ConvertFrom-Json
+          if ($parsed.errors -and $parsed.errors -gt 0) {
+            Write-Error "Plugin validation failed: $($parsed.errors) error(s)"
+            exit 1
+          }
+          Write-Host "Plugin validation: PASS ($($parsed.total_plugins) plugins, $($parsed.errors) errors, $($parsed.warnings) warnings)"
+
       - name: Run Cross-Workspace Validation
         shell: pwsh
         run: |

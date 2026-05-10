@@ -1,6 +1,6 @@
 {
-  "version": "1.0",
-  "description": "Maps 7-agent specialization model to opencode subagent types",
+  "version": "1.1",
+  "description": "Maps 8-agent specialization model (incl. SESSION) to opencode subagent types",
   "mapping": {
     "BA": {
       "name": "Business Analyst",
@@ -42,6 +42,14 @@
       "skills": ["docker-devops-skill", "git-workflow-skill"],
       "triggers": ["deploy", "ci/cd", "docker", "kubernetes", "infrastructure"]
     },
+    "SESSION": {
+      "name": "Session Manager",
+      "opencode_subagents": ["general"],
+      "primary_subagent": "general",
+      "fallback": "general",
+      "skills": ["session-workflow-skill", "project-orchestrator-skill"],
+      "triggers": ["iniciar sesion", "start session", "guardar sesion", "cerrar sesion", "continuar", "estado"]
+    },
     "GOV": {
       "name": "Governance",
       "opencode_subagents": ["sdd-verify", "general"],
@@ -57,6 +65,16 @@
       "fallback": "general",
       "skills": ["documentation-governance", "sdd-skill"],
       "triggers": ["documentation", "docs", "readme", "guide", "specification"]
+    },
+    "PREMORTEM": {
+      "name": "Premortem Analyst",
+      "opencode_subagents": ["general"],
+      "primary_subagent": "general",
+      "fallback": "orchestrator",
+      "skills": ["premortem-skill"],
+      "triggers": ["premortem", "stress test plan", "find blind spots", "abogado del diablo", "que podria salir mal"],
+      "parallel_subagents": true,
+      "parallel_capacity": 8
     }
   },
   "opencode_subagent_capabilities": {
