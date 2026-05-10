@@ -1,0 +1,22 @@
+{
+  "enabled": false,
+  "repository": {
+    "owner": "EmmanuelOrtiz87",
+    "name": "foundation-public",
+    "url": "https://github.com/EmmanuelOrtiz87/foundation-public"
+  },
+  "runner": {
+    "root": "{userProfile}/actions-runner/foundation-public",
+    "name": "{machineName}-foundation-public",
+    "group": "Default",
+    "labels": ["self-hosted", "windows", "x64", "foundation"],
+    "workFolder": "_work",
+    "installService": true,
+    "replaceExisting": true,
+    "version": "2.329.0"
+  },
+  "notes": {
+    "registration": "Create config/github-runner.local.json from this file and provide a one-time registration token or sign in with gh auth.",
+    "security": "Do not route untrusted pull_request_target workflows to self-hosted runners on public repositories."
+  }
+}

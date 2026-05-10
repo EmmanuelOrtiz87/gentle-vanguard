@@ -45,6 +45,7 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
+config/github-runner.local.json
 
 # Workspace Security (NEVER commit)
 .workspace/config/owner-auth.json
