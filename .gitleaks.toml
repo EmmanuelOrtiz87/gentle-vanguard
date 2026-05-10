@@ -41,6 +41,9 @@ description = "Reference to master.key file path (not the actual key)"
 regex = '''(?i)(master\.key|master-key)'''
 path = '''(?i)\.md$|readme|docs/'''
 [rules.allowlist]
+paths = [
+    "build/README\\.md",
+]
 regexes = [
     "keys/master.key is not committed",
     "encrypted with AES-256 using master.key",
