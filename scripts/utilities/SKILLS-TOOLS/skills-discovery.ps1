@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory=$false)]
-    [ValidateSet('discover', 'map', 'agents', 'validate', 'sync')]
+    [ValidateSet('discover', 'map', 'agents', 'validate', 'sync', 'sync-delegation')]
     [string]$Action = 'discover',
     
     [Parameter(Mandatory=$false)]
@@ -62,10 +62,12 @@ function Get-SkillMetadata {
         $description = $null 
     }
     
-    if ($content -match '(?m)^Trigger:\s*(.+)$') { 
-        $trigger = $matches[1].Trim() 
-    } else { 
-        $trigger = $null 
+    if ($description -and $description -match '(?i)Trigger(?:s for)?:\s*(.+)') {
+        $trigger = $matches[1].Trim()
+    } elseif ($content -match '(?m)^Trigger:\s*(.+)$') {
+        $trigger = $matches[1].Trim()
+    } else {
+        $trigger = $null
     }
     
     $hasAssets = Test-Path (Join-Path $SkillPath 'assets')
@@ -312,6 +314,142 @@ function Invoke-SkillsValidate {
     }
 }
 
+function Invoke-SkillsSyncDelegation {
+    $autoDelegationPath = Join-Path $configPath 'auto-delegation.json'
+
+    if (-not (Test-Path $autoDelegationPath)) {
+        Write-Host "[ERROR] Config file not found: $autoDelegationPath" -ForegroundColor Red
+        return
+    }
+
+    $autoConfig = $null
+    try {
+        $autoConfig = Get-Content -Path $autoDelegationPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    } catch {
+        Write-Host "[ERROR] Failed to parse auto-delegation.json: $_" -ForegroundColor Red
+        return
+    }
+
+    if (-not $autoConfig.skillToAgentProfile) {
+        Write-Host "[ERROR] auto-delegation.json is missing 'skillToAgentProfile' section" -ForegroundColor Red
+        return
+    }
+
+    $skillToAgent = @{}
+    $autoConfig.skillToAgentProfile.PSObject.Properties | ForEach-Object {
+        $skillToAgent[$_.Name] = $_.Value
+    }
+
+    $agentToSkill = @{}
+    if ($autoConfig.agentCodeToSkill) {
+        $autoConfig.agentCodeToSkill.PSObject.Properties | ForEach-Object {
+            $agentToSkill[$_.Name] = $_.Value
+        }
+    }
+
+    $skills = Discover-AllSkills
+
+    $fsSkills = @{}
+    foreach ($skill in $skills) {
+        $dirName = Split-Path $skill.path -Leaf
+        $fsSkills[$dirName] = $skill
+    }
+
+    $orphaned = @()
+    $unmapped = @()
+    $nameMismatches = @()
+
+    $fsSkillNames = @($fsSkills.Values | ForEach-Object { $_.name })
+
+    foreach ($skillName in $skillToAgent.Keys) {
+        if ($skillName -notin $fsSkillNames) {
+            $orphaned += @{
+                skill_name = $skillName
+                agent = $skillToAgent[$skillName]
+            }
+        }
+    }
+
+    foreach ($dirName in $fsSkills.Keys) {
+        $skillName = $fsSkills[$dirName].name
+        if (-not $skillToAgent.ContainsKey($skillName)) {
+            $unmapped += @{
+                skill_name = $skillName
+                directory = $dirName
+            }
+        }
+    }
+
+    foreach ($dirName in $fsSkills.Keys) {
+        if ($dirName -ne $fsSkills[$dirName].name) {
+            $nameMismatches += @{
+                directory = $dirName
+                skill_name = $fsSkills[$dirName].name
+            }
+        }
+    }
+
+    if ($AsJson) {
+        $result = @{
+            timestamp = (Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz')
+            total_skills_in_config = $skillToAgent.Count
+            total_skills_in_fs = $fsSkills.Count
+            orphaned_config = $orphaned
+            unmapped_skills = $unmapped
+            name_mismatches = $nameMismatches
+            summary = @{
+                orphaned_config_count = $orphaned.Count
+                unmapped_skills_count = $unmapped.Count
+                name_mismatches_count = $nameMismatches.Count
+            }
+        }
+        $result | ConvertTo-Json -Depth 4
+        return
+    }
+
+    Write-Host "`n=== SYNC-DELEGATION REPORT ===" -ForegroundColor Cyan
+    Write-Host "Config: $autoDelegationPath" -ForegroundColor Gray
+    Write-Host "Skills dir: $skillsPath" -ForegroundColor Gray
+    Write-Host ""
+
+    Write-Host "1. ORPHANED CONFIG ENTRIES (in skillToAgentProfile but missing from skills/)" -ForegroundColor Yellow
+    if ($orphaned.Count -eq 0) {
+        Write-SuccessLine "None — all config entries have matching skill directories"
+    } else {
+        foreach ($entry in $orphaned | Sort-Object { $_.skill_name }) {
+            Write-Host "  [MISSING] $($entry.skill_name) -> agent $($entry.agent)" -ForegroundColor Red
+        }
+    }
+    Write-Host ""
+
+    Write-Host "2. UNMAPPED SKILLS (in filesystem but missing from skillToAgentProfile)" -ForegroundColor Yellow
+    if ($unmapped.Count -eq 0) {
+        Write-SuccessLine "None — all filesystem skills have entries in skillToAgentProfile"
+    } else {
+        foreach ($entry in $unmapped | Sort-Object { $_.skill_name }) {
+            Write-Host "  [UNMAPPED] $($entry.skill_name) (dir: $($entry.directory))" -ForegroundColor Yellow
+        }
+    }
+    Write-Host ""
+
+    Write-Host "3. NAME MISMATCHES (directory name != skill frontmatter name)" -ForegroundColor Yellow
+    if ($nameMismatches.Count -eq 0) {
+        Write-SuccessLine "None — all directory names match their frontmatter skill name"
+    } else {
+        foreach ($entry in $nameMismatches | Sort-Object { $_.directory }) {
+            Write-Host "  [MISMATCH] dir: '$($entry.directory)' -> name: '$($entry.skill_name)'" -ForegroundColor Yellow
+        }
+    }
+    Write-Host ""
+
+    Write-Host "=== SUMMARY ===" -ForegroundColor Cyan
+    Write-Host "  Skills in config (skillToAgentProfile): $($skillToAgent.Count)" -ForegroundColor White
+    Write-Host "  Skills in filesystem (skills/ dir):     $($fsSkills.Count)" -ForegroundColor White
+    Write-Host "  Orphaned config entries:                $($orphaned.Count)" -ForegroundColor $(if ($orphaned.Count -gt 0) { 'Red' } else { 'Green' })
+    Write-Host "  Unmapped skills:                        $($unmapped.Count)" -ForegroundColor $(if ($unmapped.Count -gt 0) { 'Yellow' } else { 'Green' })
+    Write-Host "  Name mismatches:                        $($nameMismatches.Count)" -ForegroundColor $(if ($nameMismatches.Count -gt 0) { 'Yellow' } else { 'Green' })
+}
+
 switch ($Action) {
     'discover' { Invoke-SkillsDiscover }
     'map' { Invoke-SkillsMap }
@@ -322,4 +460,5 @@ switch ($Action) {
         Write-Host ""
         Write-InfoLine "Use 'wf skills sync' to update agent-router.ps1 with auto-detected mapping"
     }
+    'sync-delegation' { Invoke-SkillsSyncDelegation }
 }

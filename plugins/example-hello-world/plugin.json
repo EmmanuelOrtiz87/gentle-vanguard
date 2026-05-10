@@ -4,6 +4,9 @@
   "description": "Example plugin that adds a simple 'hello' command to wf.ps1",
   "author": "Foundation Team",
   "main": "hello-world.ps1",
+  "minFoundationVersion": "2.6.0",
+  "provides": ["example", "greeting"],
+  "hooks": [],
   "commands": [
     {
       "name": "hello",

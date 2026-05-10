@@ -27,7 +27,8 @@
       "FINANCE": 1,
       "HR": 1,
       "LEGAL": 1,
-      "BUS-TELE": 1
+      "BUS-TELE": 1,
+      "PREMORTEM": 2
     },
     "default": 1,
     "globalMax": 3,
@@ -62,6 +63,7 @@
   "agentCodeToSkill": {
     "BA": "sdd-lifecycle",
     "GOV": "judgment-day",
+    "SESSION": "session-workflow-skill",
     "SAD": "sdd-lifecycle",
     "DEV": "sdd-lifecycle",
     "QA": "sdd-lifecycle",
@@ -86,9 +88,11 @@
     "FINANCE": "finance-financial-analyst",
     "HR": "hr-talent-acquisition",
     "LEGAL": "legal-compliance-officer",
-    "BUS-TELE": "business-telemetry-skill"
+    "BUS-TELE": "business-telemetry-skill",
+    "PREMORTEM": "premortem-skill"
   },
   "skillToAgentProfile": {
+    "session-workflow-skill": "SESSION",
     "code-review-orchestrator-skill": "QA",
     "release-management-skill": "OPS",
     "project-orchestrator-skill": "GOV",
@@ -156,7 +160,8 @@
     "context-engineering-skill": "SAD",
     "foundation-audit-skill": "GOV",
     "foundation-manager-skill": "GOV",
-    "quality-skill": "QA"
+    "quality-skill": "QA",
+    "premortem-skill": "PREMORTEM"
   },
   "clarifyBaStrategy": {
     "enabled": true,
@@ -383,9 +388,6 @@
       "\"fallback\"",
       "\"guardian\"",
       "\"assist\"",
-      "\"cerrar\"",
-      "\"completar tarea\"",
-      "\" blocker\"",
       "\"incident\"",
       "\"alert\"",
       "\"response\"",
@@ -413,10 +415,6 @@
       "or \"execution limits\"",
       "\"auth\"",
       "\"jwt\"",
-      "\"iniciar sesión\"",
-      "\"guardar sesión\"",
-      "\"continuar\"",
-      "\"estado\"",
       "\"pr\"",
       "\"push\"",
       "\"review\"",
@@ -446,6 +444,20 @@
       "\"comment style\"",
       "\"collaboration comment\"",
       "\"warm feedback\""
+    ],
+    "SESSION": [
+      "iniciar sesión",
+      "iniciar sesion",
+      "start session",
+      "guardar sesión",
+      "guardar sesion",
+      "continuar",
+      "estado",
+      "cerrar sesion",
+      "close session",
+      "session end",
+      "fin de sesion",
+      "finalizar sesion"
     ],
     "DAILY": [
       "daily check",
@@ -953,6 +965,25 @@
       "script error",
       "correct script"
     ],
+    "PREMORTEM": [
+      "premortem esto",
+      "premortem mi",
+      "ejecuta un premortem",
+      "que podria matar esto",
+      "prueba de estres este plan",
+      "que me estoy perdiendo aqui",
+      "encuentra los puntos ciegos",
+      "que podria salir mal",
+      "me estoy perdiendo algo",
+      "hazle agujeros a esto",
+      "donde va a romperse esto",
+      "abogado del diablo",
+      "stress test this plan",
+      "find the blind spots",
+      "run a premortem",
+      "what could kill this",
+      "premortem"
+    ],
     "REPORT": [
       "informe",
       "report",
@@ -1206,6 +1237,25 @@
       "escalateOnFailure": "orchestrator",
       "rationale": "SAD decides with precision - must justify decisions but needs some reasoning latitude"
     },
+    "SESSION": {
+      "temperature": 0.1,
+      "hallucinationGuard": "high",
+      "requiredEvidence": [
+        "session state captured",
+        "git status verified"
+      ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
+      "hedgingBlocked": true,
+      "maxRetries": 1,
+      "escalateOnFailure": "orchestrator",
+      "rationale": "Session management is deterministic state tracking — no ambiguity allowed"
+    },
     "DEV": {
       "temperature": 0.15,
       "hallucinationGuard": "high",
@@ -1447,6 +1497,25 @@
       "maxRetries": 2,
       "escalateOnFailure": "REPORT",
       "rationale": "Business telemetry drives decisions - fabricated metrics = bad decisions"
+    },
+    "PREMORTEM": {
+      "temperature": 0.5,
+      "hallucinationGuard": "medium",
+      "requiredEvidence": [
+        "premortem report generated on disk",
+        "reasoning grounded in plan details (not generic)"
+      ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
+      "hedgingBlocked": false,
+      "maxRetries": 2,
+      "escalateOnFailure": "orchestrator",
+      "rationale": "Premortem needs creative scenario generation + structured synthesis — moderate temp for failure exploration"
     },
     "SCRIPT": {
       "temperature": 0.15,

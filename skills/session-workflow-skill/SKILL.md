@@ -1,9 +1,9 @@
 ---
 name: session-workflow
-description:
-  'Trigger: iniciar sesion, guardar sesion, continuar, estado, pr, push, review, auditar. Session
+description: >
+  Trigger: "iniciar sesion", "guardar sesion", "continuar", "estado", "pr", "push", "review", "auditar". Session
   workflow executor handling session management mechanics. Coordinates with project-orchestrator for
-  technical guidance.'
+  technical guidance.
 ---
 
 # Session Workflow

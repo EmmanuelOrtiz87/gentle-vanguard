@@ -1,0 +1,20 @@
+{
+  "name": "Antigravity - Foundation Workspace",
+  "version": "1.0.0",
+  "description": "Local-first policy for Antigravity mission control",
+  "aiSettings": {
+    "temperature": 0.3,
+    "maxTokens": 4500,
+    "localFirst": true
+  },
+  "preProcessing": {
+    "enabled": true,
+    "script": "scripts/utilities/pre-process-input.ps1",
+    "scriptArgs": { "UserInput": "USER_INPUT_HERE", "WorkspaceRoot": "." }
+  },
+  "language": { "default": "es", "technicalTerms": "en" },
+  "missionParameters": {
+    "project": "workspace-foundation",
+    "governanceLayers": ["GOV", "DEV", "QA", "OPS", "DOC", "SESSION"]
+  }
+}
