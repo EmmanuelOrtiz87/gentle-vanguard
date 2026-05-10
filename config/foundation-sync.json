@@ -6,6 +6,56 @@
   "assets": [
     {
       "type": "script",
+      "path": "scripts/foundation/bootstrap.ps1",
+      "description": "Portable Bootstrap - Initializes a fresh clone on a new machine"
+    },
+    {
+      "type": "script",
+      "path": "scripts/foundation/bootstrap-machine.ps1",
+      "description": "Global Bootstrap - Installs Foundation into a user-scoped machine layout"
+    },
+    {
+      "type": "script",
+      "path": "scripts/foundation/setup-multi-machine.ps1",
+      "description": "Multi-PC Setup - Clones/updates foundation and foundation-public and runs bootstrap"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/DEPLOYMENT/install-github-runner.ps1",
+      "description": "GitHub Runner Installer - Portable self-hosted runner setup without committed secrets"
+    },
+    {
+      "type": "config",
+      "path": "config/workspace.example.json",
+      "description": "Workspace Config Template - Standard workspace bootstrap defaults"
+    },
+    {
+      "type": "config",
+      "path": "config/workspace.portable.example.json",
+      "description": "Portable Workspace Config Template - Repo-local bootstrap defaults"
+    },
+    {
+      "type": "config",
+      "path": "config/github-runner.example.json",
+      "description": "GitHub Runner Template Config - Secret-free self-hosted runner example"
+    },
+    {
+      "type": "guide",
+      "path": "docs/guides/GITHUB-RUNNER-SETUP.md",
+      "description": "GitHub Runner Setup Guide - Portable and secure self-hosted runner instructions"
+    },
+    {
+      "type": "script",
+      "path": "scripts/utilities/DEPLOYMENT/migrate-foundation-remotes.ps1",
+      "description": "Remote Migration Script - Updates local origin remotes after repository rename"
+    },
+    {
+      "type": "guide",
+      "path": "docs/guides/REPO-RENAME-MIGRATION.md",
+      "description": "Repository Rename Migration Guide - Steps for safe rename from gentleman-foundation to foundation"
+    },
+    {
+      "type": "script",
       "path": "scripts/utilities/AI-AGENT-MANAGEMENT/invoke-cloud-agent.ps1",
       "description": "Cloud Agent Connector - Invoke external AI models (Bedrock, Difi, Azure, etc.)"
     },

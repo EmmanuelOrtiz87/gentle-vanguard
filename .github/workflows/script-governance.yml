@@ -9,7 +9,7 @@ concurrency:
 
 on:
   push:
-    branches: [main]
+    branches: [develop]
     paths:
       - 'scripts/**'
       - 'docs/**'
@@ -18,7 +18,7 @@ on:
       - '.github/workflows/script-governance.yml'
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-    branches: [main]
+    branches: [develop, main]
     paths:
       - 'scripts/**'
       - 'docs/**'

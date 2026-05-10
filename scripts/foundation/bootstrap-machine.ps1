@@ -5,6 +5,7 @@
 param(
     [string]$Version = "latest",
     [string]$Source = "",
+    [string]$InstallRoot = "",
     [switch]$Portable,
     [switch]$Force,
     [switch]$DryRun
@@ -12,7 +13,20 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$GentlemanRoot = Join-Path $env:USERPROFILE ".gentleman"
+if ([string]::IsNullOrWhiteSpace($InstallRoot)) {
+    if ($env:FOUNDATION_HOME) {
+        $InstallRoot = $env:FOUNDATION_HOME
+    } else {
+        $InstallRoot = Join-Path $env:USERPROFILE ".foundation"
+    }
+}
+
+$legacyRoot = Join-Path $env:USERPROFILE ".gentleman"
+if ((-not (Test-Path $InstallRoot)) -and (Test-Path $legacyRoot)) {
+    $InstallRoot = $legacyRoot
+}
+
+$FoundationRoot = $InstallRoot
 $Global = -not $Portable
 
 function Write-Step {
@@ -50,14 +64,16 @@ function Ensure-Directory {
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Green
-Write-Host "  Gentleman Foundation Installer" -ForegroundColor Green
+Write-Host "  Foundation Installer" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green
 Write-Host ""
 
 if (-not $Source) {
     $possibleSources = @(
         ".\workspace-foundation",
+        ".\foundation",
         (Join-Path (Split-Path -Parent $PSScriptRoot) "workspace-foundation"),
+        (Join-Path (Split-Path -Parent $PSScriptRoot) "foundation"),
         (Join-Path (Split-Path -Parent $PSScriptRoot) "gentleman-foundation")
     )
     
@@ -79,7 +95,7 @@ if (-not $Source) {
 }
 
 Write-Host "Source:      $Source"
-Write-Host "Target:      $GentlemanRoot"
+Write-Host "Target:      $FoundationRoot"
 Write-Host "Mode:        $(if ($Global) { 'Global (Symlinks)' } else { 'Portable (Copy)' })"
 Write-Host "Version:     $Version"
 Write-Host ""
@@ -91,13 +107,13 @@ if ($DryRun) {
 
 Write-Step "1. Creating Directory Structure"
 $directories = @(
-    $GentlemanRoot,
-    (Join-Path $GentlemanRoot "skills"),
-    (Join-Path $GentlemanRoot "tools"),
-    (Join-Path $GentlemanRoot "hooks"),
-    (Join-Path $GentlemanRoot "bin"),
-    (Join-Path $GentlemanRoot "config"),
-    (Join-Path $GentlemanRoot "templates")
+    $FoundationRoot,
+    (Join-Path $FoundationRoot "skills"),
+    (Join-Path $FoundationRoot "tools"),
+    (Join-Path $FoundationRoot "hooks"),
+    (Join-Path $FoundationRoot "bin"),
+    (Join-Path $FoundationRoot "config"),
+    (Join-Path $FoundationRoot "templates")
 )
 
 foreach ($dir in $directories) {
@@ -106,7 +122,7 @@ foreach ($dir in $directories) {
 Write-Success "Directory structure created"
 
 Write-Step "2. Creating Foundation Version File"
-$versionFile = Join-Path $GentlemanRoot "foundation.version"
+$versionFile = Join-Path $FoundationRoot "foundation.version"
 @{
     version = $Version
     installed = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
@@ -116,7 +132,7 @@ Write-Success "Version file created"
 
 Write-Step "3. Processing Skills"
 $sourceSkills = Join-Path $Source "skills"
-$targetSkills = Join-Path $GentlemanRoot "skills"
+$targetSkills = Join-Path $FoundationRoot "skills"
 
 if (-not (Test-Path $sourceSkills)) {
     Write-Err "Skills source not found: $sourceSkills"
@@ -169,7 +185,7 @@ Write-Success "Skills processed: $syncCount synced, $skipCount skipped"
 
 Write-Step "4. Copying Templates"
 $sourceTemplates = Join-Path $Source "templates"
-$targetTemplates = Join-Path $GentlemanRoot "templates"
+$targetTemplates = Join-Path $FoundationRoot "templates"
 
 if (Test-Path $sourceTemplates) {
     $templateDirs = Get-ChildItem -Path $sourceTemplates -Directory
@@ -185,7 +201,6 @@ if (Test-Path $sourceTemplates) {
 }
 
 Write-Step "5. Installing Global Git Hooks"
-$globalHooksPath = Join-Path $GentlemanRoot "hooks"
 $gitHooksDir = Join-Path $env:USERPROFILE ".git-hooks"
 
 Ensure-Directory -Path $gitHooksDir
@@ -217,7 +232,7 @@ if ($gitConfigHookPath -ne $gitHooksDir) {
 }
 
 Write-Step "5b. Installing PreTool Auto-Format Hooks"
-$preToolHookSource = Join-Path $GentlemanRoot "hooks"
+$preToolHookSource = Join-Path $FoundationRoot "hooks"
 $preToolHookTarget = Join-Path $env:USERPROFILE ".pretool-hooks"
 
 Ensure-Directory -Path $preToolHookTarget
@@ -238,7 +253,7 @@ foreach ($hook in $preToolHooks) {
 $env:PRETOOL_HOOKS_PATH = $preToolHookTarget
 
 Write-Step "6. Creating CLI Wrapper"
-$cliPath = Join-Path (Join-Path $GentlemanRoot "bin") "gf.ps1"
+$cliPath = Join-Path (Join-Path $FoundationRoot "bin") "gf.ps1"
 
 $cliContent = @"
 # gf.ps1 - Gentleman Foundation CLI
@@ -282,7 +297,7 @@ Set-Content -Path $cliPath -Value $cliContent
 Write-Success "CLI created: $cliPath"
 
 Write-Step "7. Adding to PATH"
-$binPath = Join-Path $GentlemanRoot "bin"
+$binPath = Join-Path $FoundationRoot "bin"
 $currentPath = [Environment]::GetEnvironmentVariable("PATH", "User")
 
 if ($currentPath -notlike "*$binPath*") {
@@ -294,9 +309,9 @@ if ($currentPath -notlike "*$binPath*") {
 }
 
 Write-Step "8. Configuring Git Global Settings"
-git config --global init.defaultBranch "main" 2>$null | Out-Null
+git config --global init.defaultBranch "develop" 2>$null | Out-Null
 git config --global pull.rebase "false" 2>$null | Out-Null
-git config --global commit.template "$GentlemanRoot\config\commit-template.txt" 2>$null | Out-Null
+git config --global commit.template "$FoundationRoot\config\commit-template.txt" 2>$null | Out-Null
 
 $commitTemplate = @"
 # <type>(<scope>): <description>
@@ -309,7 +324,7 @@ $commitTemplate = @"
 #   docs(readme): update installation guide
 "@
 
-$templatePath = Join-Path $GentlemanRoot "config" "commit-template.txt"
+$templatePath = Join-Path $FoundationRoot "config" "commit-template.txt"
 Set-Content -Path $templatePath -Value $commitTemplate
 Write-Success "Git commit template configured"
 
@@ -319,7 +334,7 @@ Write-Host "========================================" -ForegroundColor Green
 Write-Host "  Installation Complete!" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green
 Write-Host ""
-Write-Host "Foundation Location: $GentlemanRoot"
+Write-Host "Foundation Location: $FoundationRoot"
 Write-Host "CLI Command:        gf"
 Write-Host "Skills Installed:   $syncCount"
 Write-Host "Git Hooks:          $gitHooksDir"
