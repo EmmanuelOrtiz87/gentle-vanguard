@@ -1,50 +1,42 @@
 ---
 name: documentation-governance
-description: Standardize and produce project documentation, technical docs, code reviews, setup guides, script comments, and markdown structure. Use when creating or updating README files, ARCHITECTURE docs, technical documents, code reviews, setup or secrets docs, script/help docs, or any markdown or comment work that must stay consistent, English-first, numbered, and easy to maintain.
+description: "Trigger: creating or updating README, ARCHITECTURE, setup guides, code reviews, script docs, or any markdown/comment work. Standardizes project documentation with English-first, numbered, easy-to-maintain structure."
 ---
 
 # Documentation Governance
 
-## Purpose
+## Activation Contract
+Load when creating or updating any project documentation: README files, ARCHITECTURE docs, setup guides, code reviews, script/help docs, secrets docs, or any markdown/comment work requiring consistent structure.
 
-Use this skill to keep project documentation consistent, English-first, and easy to follow across repos and sessions.
+## Hard Rules
+1. Write all documentation in English
+2. Use numbered steps when order matters
+3. Keep file names, headings, and script names aligned
+4. Remove stale references, temporary files, and duplicate guidance
+5. Validate links, headings, and filenames before finishing
 
-## Core Rules
+## Decision Gates
+Select document type from `references/documentation-standards.md`:
+- README → use README template
+- Installation/setup guide → use setup guide template
+- Technical document → use technical doc template
+- Code review → use code review template
+- Script comments → use commenting rules
 
-1. Write documentation in English.
-2. Use clear section names and numbered steps for ordered flows.
-3. Keep file names, headings, and script names aligned.
-4. Prefer short, specific notes over long prose.
-5. Call out the start point, the required order, and the files or scripts the reader should use first.
-6. Keep comments in code focused on non-obvious intent, tradeoffs, or constraints.
-7. Remove stale references, temporary files, and duplicate guidance.
+## Execution Steps
+1. Identify document type
+2. Apply matching template from `references/documentation-standards.md`
+3. Normalize language, naming, and ordering
+4. Verify script lists, file references, and paths are accurate
+5. Keep output concise but complete for a new developer
+6. Validate links, headings, and filenames
 
-## Workflow
+## Output Contract
+- Start with the main entry point
+- Number steps when order matters
+- Enumerate important files and scripts
+- Keep terminology stable across the repo
+- Keep docs synchronized with code and scripts they describe
 
-1. Identify the document type.
-2. Apply the matching template from `references/TOKEN-CONTEXT-STANDARDS.md`.
-3. Normalize language, naming, and ordering.
-4. Check that script lists, file references, and paths are accurate.
-5. Keep the output concise but complete enough that a new developer can act without tribal knowledge.
-6. Validate links, headings, and filenames before finishing.
-
-## When to Use the Reference File
-
-Read `references/TOKEN-CONTEXT-STANDARDS.md` when you need:
-
-- a README structure
-- an installation or setup guide
-- a technical document outline
-- a code review format
-- a script-commenting rule set
-- a cleanup checklist for stale docs
-
-## Output Expectations
-
-- Start with the main entry point.
-- Number steps when order matters.
-- Enumerate important files and scripts.
-- Keep terminology stable across the repo.
-- Keep docs synchronized with the code and scripts they describe.
-
-
+## References
+- Templates & standards: [references/documentation-standards.md](references/documentation-standards.md)
