@@ -14,6 +14,8 @@ paths = [
     "demos/",
     # Security skill examples with placeholder/demo API keys
     "skills/security-expert-skill/",
+    # Model router config with intentional password hash
+    "config/model-router\\.json",
 ]
 
 regexes = [
@@ -38,4 +40,6 @@ regexes = [
     "keys/master.key is not committed",
     "encrypted with AES-256 using master.key",
     "master.key file is required",
+    "is NEVER distributed",
+    "key stored in .keys/master.key",
 ]
