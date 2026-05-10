@@ -28,7 +28,10 @@
 # 🚀 PASO 1: Clona y configura (5 minutos)
 git clone https://github.com/EmmanuelOrtiz87/foundation-public.git
 cd foundation-public
-.\scripts\utilities\foundation-installer-tui.ps1  # 🎨 Wizard interactivo
+.\scripts\foundation\bootstrap.ps1  # Bootstrap portable y seguro
+
+# 🖥️ Opcional: setup completo de foundation + foundation-public en nueva PC
+.\scripts\foundation\setup-multi-machine.ps1
 
 # ⚡ PASO 2: Inicia sesión automática
 .\scripts\utilities\session-autostart.cmd
@@ -45,7 +48,9 @@ cd foundation-public
 
 | Acción                 | Comando                                                        | Descripción                    |
 | ---------------------- | -------------------------------------------------------------- | ------------------------------ |
-| 🎨 **Instalación GUI** | `.\scripts\utilities\foundation-installer-tui.ps1`             | Wizard interactivo paso a paso |
+| 🎨 **Bootstrap**       | `.\scripts\foundation\bootstrap.ps1`                        | Inicializa el workspace        |
+| 🖥️ **Multi-PC setup**  | `.\scripts\foundation\setup-multi-machine.ps1`              | Replica entorno en otra PC     |
+| 🤖 **Runner opcional** | `.\scripts\utilities\DEPLOYMENT\install-github-runner.ps1` | Instala self-hosted runner     |
 | 📊 **Health Check**    | `.\scripts\utilities\wf.ps1 health`                            | Verifica estado del workspace  |
 | 🔍 **Listar Skills**   | `.\scripts\utilities\wf.ps1 skills`                            | Catálogo de 125+ skills        |
 | 📈 **Dashboard**       | `.\scripts\monitoring\executive-dashboard.ps1 -Mode dashboard` | Monitoreo en tiempo real       |
@@ -53,6 +58,10 @@ cd foundation-public
 
 > 💡 **TIP:** Usa `wf.ps1 help` para ver todos los comandos disponibles. La CLI `wf.ps1` es tu
 > interfaz unificada para TODO.
+
+> 🔐 **Runner seguro:** usa `config/github-runner.example.json` como base local y no dirijas
+> workflows de `pull_request_target` o forks no confiables a un self-hosted runner en repos
+> públicos.
 
 ---
 
@@ -175,6 +184,11 @@ Sistema extensible con **manifest schema**:
 | 🏷️ `labeler.yml`                   | Auto-etiquetado de PRs                           | Por PR                 | ✅ Activo |
 | 📝 `sdd-gate.yml`                  | Bloqueo de PRs sin SDD validado                  | Por PR                 | ✅ Activo |
 | ✅ `workflow-lint.yml`             | Validación de sintaxis de workflows              | Por cambio en .github/ | ✅ Activo |
+
+---
+
+**Modo actual de publicación**: `develop-first`. Los pushes frecuentes y la validación continua
+corren sobre `develop`; `main` queda reservado para release PRs, hotfixes y tags semver.
 
 ---
 

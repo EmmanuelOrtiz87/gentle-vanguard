@@ -8,9 +8,9 @@ Foundation.
 ## Branch Strategy
 
 ```
-main (production)
+main (stable release)
 
-develop (integration)
+develop (default integration and publication)
 
 feature/* / bugfix/* / chore/*
 ```
@@ -19,8 +19,8 @@ feature/* / bugfix/* / chore/*
 
 | Branch      | Purpose             | Protection            |
 | ----------- | ------------------- | --------------------- |
-| `main`      | Production code     | Required PR + review  |
-| `develop`   | Integration         | Required PR + review  |
+| `main`      | Stable release cut  | Required PR + review  |
+| `develop`   | Daily integration   | Required PR + review  |
 | `feature/*` | New features        | PR after completion   |
 | `bugfix/*`  | Bug fixes           | PR after completion   |
 | `chore/*`   | Maintenance         | PR after completion   |
@@ -35,6 +35,13 @@ feature/* / bugfix/* / chore/*
 
 - `feature/*`, `bugfix/*`, `chore/*` -> `develop`
 - `hotfix/*`, `release/*` -> `main`
+
+### Publication Mode
+
+1. `develop` is the default branch for day-to-day publication, CI validation, and frequent pushes.
+2. `main` is reserved for release PRs, hotfixes, and semver tags.
+3. CI push validation runs on `develop`; PR validation still runs for `develop` and release PRs targeting `main`.
+4. For public repositories, this keeps rapid iteration on `develop` while preserving a clean release gate on `main`.
 
 ## Session Workflow
 
@@ -176,10 +183,10 @@ See: `templates/PULL_REQUEST_TEMPLATE.md`
 ### PR Merging
 
 ```bash
-# Squash merge (recommended for feature branches)
+# Squash merge into develop (recommended for feature branches)
 gh pr merge --squash
 
-# Merge with commit (for release branches)
+# Merge with commit into main (for release or hotfix branches)
 gh pr merge --admin --merge
 ```
 
