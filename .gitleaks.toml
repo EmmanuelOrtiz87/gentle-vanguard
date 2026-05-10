@@ -31,7 +31,8 @@ id = "foundation-master-key-reference"
 description = "Reference to master.key file path (not the actual key)"
 regex = '''(?i)(master\.key|master-key)'''
 path = '''(?i)\.md$|readme|docs/'''
-allowlist = [
+[rules.allowlist]
+regexes = [
     "keys/master.key is not committed",
     "encrypted with AES-256 using master.key",
     "master.key file is required",

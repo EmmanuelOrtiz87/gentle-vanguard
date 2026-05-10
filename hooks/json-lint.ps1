@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
 param([switch]$Fix)
 
-$jsonFiles = git diff --cached --name-only --diff-filter=ACM | Select-String '\.json$'
+$jsonFiles = git diff --cached --name-only --diff-filter=ACM | Select-String '\.json$' | Where-Object { $_ -notmatch 'package-lock\.json$' }
 $hasErrors = $false
 
 foreach ($file in $jsonFiles) {
