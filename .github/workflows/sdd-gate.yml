@@ -40,7 +40,7 @@ jobs:
             -File scripts/hooks/check-sdd-gate.ps1
           $ec = $LASTEXITCODE
           if ($ec -eq 2) {
-            Write-Host "::error::SDD gate BLOCKED — merge to main requires a validated/done SDD."
+            Write-Host "::error::SDD gate BLOCKED — merge to a protected branch requires a validated/done SDD."
             exit 1
           }
           if ($ec -eq 1) {

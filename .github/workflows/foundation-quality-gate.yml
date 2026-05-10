@@ -9,7 +9,7 @@ concurrency:
 
 on:
   push:
-    branches: [main]
+    branches: [develop]
     paths:
       - 'scripts/**'
       - 'hooks/**'
@@ -17,7 +17,7 @@ on:
       - 'rules/**'
       - '.github/workflows/**'
   pull_request:
-    branches: [main]
+    branches: [develop, main]
     paths:
       - 'scripts/**'
       - 'hooks/**'
