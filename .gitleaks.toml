@@ -12,6 +12,8 @@ paths = [
     "tests/",
     "skills/testing-skill/",
     "demos/",
+    # Security skill examples with placeholder/demo API keys
+    "skills/security-expert-skill/",
 ]
 
 regexes = [
