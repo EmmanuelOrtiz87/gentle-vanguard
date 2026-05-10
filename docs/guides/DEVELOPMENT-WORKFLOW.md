@@ -40,8 +40,10 @@ feature/* / bugfix/* / chore/*
 
 1. `develop` is the default branch for day-to-day publication, CI validation, and frequent pushes.
 2. `main` is reserved for release PRs, hotfixes, and semver tags.
-3. CI push validation runs on `develop`; PR validation still runs for `develop` and release PRs targeting `main`.
-4. For public repositories, this keeps rapid iteration on `develop` while preserving a clean release gate on `main`.
+3. CI push validation runs on `develop`; PR validation still runs for `develop` and release PRs
+   targeting `main`.
+4. For public repositories, this keeps rapid iteration on `develop` while preserving a clean release
+   gate on `main`.
 
 ## Session Workflow
 
