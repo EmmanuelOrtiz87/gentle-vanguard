@@ -5,29 +5,30 @@ description: Monitoring aggregation skill for collecting and analyzing workspace
 
 # Skill: monitoring-aggregator
 
-**versión**: 1.0.0
-**Created**: 2026-04-20
-**Status**: ACTIVE
-**Priority**: MEDIUM
+**versión**: 1.0.0 **Created**: 2026-04-20 **Status**: ACTIVE **Priority**: MEDIUM
 
 ---
 
 ## Overview
 
-The `monitoring-aggregator` skill provides comprehensive metrics aggregation, analysis, and insights from multiple data sources. It enables trend analysis, forecasting, and actionable recommendations for system optimization.
+The `monitoring-aggregator` skill provides comprehensive metrics aggregation, analysis, and insights
+from multiple data sources. It enables trend analysis, forecasting, and actionable recommendations
+for system optimization.
 
 ### Key Capabilities
--  Metrics aggregation from multiple sources
--  Trend analysis and pattern recognition
--  Forecasting and capacity planning
--  Intelligent recommendations
--  Visualization and reporting
+
+- Metrics aggregation from multiple sources
+- Trend analysis and pattern recognition
+- Forecasting and capacity planning
+- Intelligent recommendations
+- Visualization and reporting
 
 ---
 
 ## When to Use This Skill
 
 ### Activation Triggers
+
 - User mentions "analyze metrics" or "analizar mtricas"
 - User asks to "show trends" or "mostrar tendencias"
 - User requests "predict resource usage" or "predecir uso de recursos"
@@ -41,17 +42,18 @@ The `monitoring-aggregator` skill provides comprehensive metrics aggregation, an
 ### 1. Metrics Aggregation
 
 #### CPU Usage Tracking
+
 ```powershell
 function Get-CPUMetrics {
     param([int]$SampleCount = 10)
-    
+
     $samples = @()
     for ($i = 0; $i -lt $SampleCount; $i++) {
         $cpu = (Get-CimInstance Win32_Processor | Measure-Object -Property LoadPercentage -Average).Average
         $samples += $cpu
         Start-Sleep -Seconds 1
     }
-    
+
     return @{
         Average = ($samples | Measure-Object -Average).Average
         Peak = ($samples | Measure-Object -Maximum).Maximum
@@ -61,6 +63,7 @@ function Get-CPUMetrics {
 ```
 
 #### Memory Consumption
+
 ```powershell
 function Get-MemoryMetrics {
     $os = Get-CimInstance Win32_OperatingSystem
@@ -68,7 +71,7 @@ function Get-MemoryMetrics {
     $freeMemory = $os.FreePhysicalMemory * 1KB
     $usedMemory = $totalMemory - $freeMemory
     $usagePercent = ($usedMemory / $totalMemory) * 100
-    
+
     return @{
         TotalMemory = $totalMemory
         UsedMemory = $usedMemory
@@ -79,13 +82,14 @@ function Get-MemoryMetrics {
 ```
 
 #### Disk I/O Patterns
+
 ```powershell
 function Get-DiskIOMetrics {
     param([string]$Drive = "C:")
-    
-    $diskMetrics = Get-CimInstance Win32_PerfFormattedData_PerfDisk_PhysicalDisk | 
+
+    $diskMetrics = Get-CimInstance Win32_PerfFormattedData_PerfDisk_PhysicalDisk |
         Where-Object { $_.Name -match $Drive }
-    
+
     return @{
         Drive = $Drive
         ReadBytesPerSec = $diskMetrics.DiskReadBytesPerSec
@@ -100,59 +104,61 @@ function Get-DiskIOMetrics {
 ### 2. Trend Analysis
 
 #### Pattern Recognition
+
 ```powershell
 function Detect-Patterns {
     param([array]$DataPoints)
-    
+
     $patterns = @{
         Increasing = $false
         Decreasing = $false
         Stable = $false
         Volatile = $false
     }
-    
+
     if ($DataPoints.Count -lt 3) {
         return $patterns
     }
-    
+
     $diffs = @()
     for ($i = 1; $i -lt $DataPoints.Count; $i++) {
         $diffs += $DataPoints[$i] - $DataPoints[$i-1]
     }
-    
+
     $avgDiff = ($diffs | Measure-Object -Average).Average
     $stdDev = [math]::Sqrt(($diffs | ForEach-Object { [math]::Pow($_ - $avgDiff, 2) } | Measure-Object -Average).Average)
-    
+
     if ($stdDev -lt 5) { $patterns.Stable = $true }
     elseif ($avgDiff -gt 2) { $patterns.Increasing = $true }
     elseif ($avgDiff -lt -2) { $patterns.Decreasing = $true }
     else { $patterns.Volatile = $true }
-    
+
     return $patterns
 }
 ```
 
 #### Seasonality Detection
+
 ```powershell
 function Detect-Seasonality {
     param([array]$DataPoints, [int]$Period = 7)
-    
+
     if ($DataPoints.Count -lt $Period * 2) {
         return @{ Detected = $false; Reason = "Insufficient data" }
     }
-    
+
     $correlation = 0
     $count = 0
-    
+
     for ($i = 0; $i -lt $DataPoints.Count - $Period; $i++) {
         $val1 = $DataPoints[$i]
         $val2 = $DataPoints[$i + $Period]
         $correlation += $val1 * $val2
         $count++
     }
-    
+
     $correlation = $correlation / $count
-    
+
     return @{
         Detected = ($correlation -gt 0.7)
         Correlation = [math]::Round($correlation, 2)
@@ -162,16 +168,17 @@ function Detect-Seasonality {
 ```
 
 #### Anomaly Scoring
+
 ```powershell
 function Calculate-AnomalyScore {
     param([array]$DataPoints, [float]$CurrentValue)
-    
+
     $mean = ($DataPoints | Measure-Object -Average).Average
     $stdDev = [math]::Sqrt(($DataPoints | ForEach-Object { [math]::Pow($_ - $mean, 2) } | Measure-Object -Average).Average)
-    
+
     $zScore = ($CurrentValue - $mean) / $stdDev
     $anomalyScore = [math]::Min([math]::Abs($zScore) / 3, 1.0)
-    
+
     return @{
         ZScore = [math]::Round($zScore, 2)
         AnomalyScore = [math]::Round($anomalyScore, 2)
@@ -185,23 +192,24 @@ function Calculate-AnomalyScore {
 ### 3. Forecasting
 
 #### Resource Usage Predictions
+
 ```powershell
 function Predict-ResourceUsage {
     param(
         [array]$HistoricalData,
         [int]$ForecastDays = 7
     )
-    
+
     if ($HistoricalData.Count -lt 3) {
         return @{ Error = "Insufficient historical data" }
     }
-    
+
     $n = $HistoricalData.Count
     $sumX = 0
     $sumY = 0
     $sumXY = 0
     $sumX2 = 0
-    
+
     for ($i = 0; $i -lt $n; $i++) {
         $x = $i
         $y = $HistoricalData[$i]
@@ -210,16 +218,16 @@ function Predict-ResourceUsage {
         $sumXY += $x * $y
         $sumX2 += $x * $x
     }
-    
+
     $slope = ($n * $sumXY - $sumX * $sumY) / ($n * $sumX2 - $sumX * $sumX)
     $intercept = ($sumY - $slope * $sumX) / $n
-    
+
     $forecast = @()
     for ($i = 0; $i -lt $ForecastDays; $i++) {
         $predicted = $intercept + $slope * ($n + $i)
         $forecast += [math]::Max(0, $predicted)
     }
-    
+
     return @{
         Forecast = $forecast
         Slope = [math]::Round($slope, 2)
@@ -229,25 +237,26 @@ function Predict-ResourceUsage {
 ```
 
 #### Capacity Planning
+
 ```powershell
 function Plan-Capacity {
     param(
         [array]$HistoricalData,
         [float]$Threshold = 0.8
     )
-    
+
     $prediction = Predict-ResourceUsage -HistoricalData $HistoricalData -ForecastDays 30
-    
+
     $maxCapacity = 100
     $daysUntilThreshold = -1
-    
+
     for ($i = 0; $i -lt $prediction.Forecast.Count; $i++) {
         if ($prediction.Forecast[$i] -ge ($maxCapacity * $Threshold)) {
             $daysUntilThreshold = $i
             break
         }
     }
-    
+
     return @{
         DaysUntilThreshold = $daysUntilThreshold
         RecommendedAction = if ($daysUntilThreshold -lt 7) { "Urgent" } elseif ($daysUntilThreshold -lt 14) { "Soon" } else { "Plan" }
@@ -261,12 +270,13 @@ function Plan-Capacity {
 ### 4. Recommendations Engine
 
 #### Optimization Suggestións
+
 ```powershell
 function Get-OptimizationSuggestións {
     param([hashtable]$Metrics)
-    
+
     $suggestións = @()
-    
+
     if ($Metrics.CPUUsage -gt 80) {
         $suggestións += @{
             Priority = "High"
@@ -274,7 +284,7 @@ function Get-OptimizationSuggestións {
             Suggestión = "CPU usage is high. Consider optimizing processes or increasing resources."
         }
     }
-    
+
     if ($Metrics.MemoryUsage -gt 85) {
         $suggestións += @{
             Priority = "High"
@@ -282,7 +292,7 @@ function Get-OptimizationSuggestións {
             Suggestión = "Memory usage is critical. Review running processes and consider cleanup."
         }
     }
-    
+
     if ($Metrics.DiskUsage -gt 90) {
         $suggestións += @{
             Priority = "Critical"
@@ -290,30 +300,31 @@ function Get-OptimizationSuggestións {
             Suggestión = "Disk space is critically low. Archive or delete old files immediately."
         }
     }
-    
+
     return $suggestións
 }
 ```
 
 #### Resource Allocation Advice
+
 ```powershell
 function Get-ResourceAllocationAdvice {
     param([hashtable]$CurrentAllocation, [hashtable]$Usage)
-    
+
     $advice = @()
-    
+
     if ($Usage.CPUUsage -gt 75 -and $Usage.CPUUsage -lt 95) {
         $advice += "Consider allocating 20-30% more CPU resources"
     }
-    
+
     if ($Usage.MemoryUsage -gt 80) {
         $advice += "Increase memory allocation by 25-50%"
     }
-    
+
     if ($Usage.DiskUsage -gt 75) {
         $advice += "Expand storage or implement archival strategy"
     }
-    
+
     return $advice
 }
 ```
@@ -323,6 +334,7 @@ function Get-ResourceAllocationAdvice {
 ### 5. Visualization & Reporting
 
 #### Terminal-Based Charts
+
 ```powershell
 function Show-SimpleChart {
     param(
@@ -330,15 +342,15 @@ function Show-SimpleChart {
         [string]$Title,
         [int]$Height = 10
     )
-    
+
     Write-Host "=== $Title ===" -ForegroundColor Cyan
-    
+
     $max = $Data | Measure-Object -Maximum | Select-Object -ExpandProperty Maximum
-    
+
     for ($row = $Height; $row -gt 0; $row--) {
         $threshold = ($max / $Height) * $row
         Write-Host -NoNewline " "
-        
+
         foreach ($value in $Data) {
             if ($value -ge $threshold) {
                 Write-Host -NoNewline " "
@@ -348,19 +360,20 @@ function Show-SimpleChart {
         }
         Write-Host ""
     }
-    
+
     Write-Host ""
 }
 ```
 
 #### HTML Report Generation
+
 ```powershell
 function Generate-HTMLReport {
     param(
         [hashtable]$Metrics,
         [string]$OutputPath = "report.html"
     )
-    
+
     $html = @"
 <!DOCTYPE html>
 <html>
@@ -387,22 +400,23 @@ function Generate-HTMLReport {
 </body>
 </html>
 "@
-    
+
     $html | Set-Content -Path $OutputPath
     return @{ Generated = $true; Path = $OutputPath }
 }
 ```
 
 #### JSON Export
+
 ```powershell
 function Export-MetricsJSON {
     param(
         [hashtable]$Metrics,
         [string]$OutputPath = "metrics.json"
     )
-    
+
     $Metrics | ConvertTo-Json | Set-Content -Path $OutputPath
-    
+
     return @{
         Exported = $true
         Path = $OutputPath
@@ -416,6 +430,7 @@ function Export-MetricsJSON {
 ## Practical Examples
 
 ### Example 1: Weekly Performance Report
+
 ```powershell
 $cpu = Get-CPUMetrics -SampleCount 100
 $memory = Get-MemoryMetrics
@@ -432,6 +447,7 @@ Generate-HTMLReport -Metrics $metrics -OutputPath "weekly_report.html"
 ```
 
 ### Example 2: Capacity Planning
+
 ```powershell
 $historicalCPU = @(45, 48, 52, 55, 58, 62, 65)
 $plan = Plan-Capacity -HistoricalData $historicalCPU -Threshold 0.8
@@ -441,6 +457,7 @@ Write-Host "Recommended action: $($plan.RecommendedAction)"
 ```
 
 ### Example 3: Anomaly Detection
+
 ```powershell
 $normalData = @(50, 52, 51, 53, 50, 52, 51)
 $currentValue = 95
@@ -457,6 +474,7 @@ if ($anomaly.IsAnomaly) {
 ## Integration with Phase 1
 
 ### Dependencies
+
 - `session-lifecycle` - Track metrics across sessions
 - `backup-orchestrator` - Backup metrics data
 
@@ -464,23 +482,25 @@ if ($anomaly.IsAnomaly) {
 
 ## Performance Expectations
 
-| Operation | Target Time | Max Memory |
-|-----------|------------|-----------|
-| Metrics Collection | <2 seconds | <50MB |
-| Trend Analysis | <3 seconds | <75MB |
-| Forecasting | <5 seconds | <100MB |
-| Report Generation | <10 seconds | <150MB |
+| Operation          | Target Time | Max Memory |
+| ------------------ | ----------- | ---------- |
+| Metrics Collection | <2 seconds  | <50MB      |
+| Trend Analysis     | <3 seconds  | <75MB      |
+| Forecasting        | <5 seconds  | <100MB     |
+| Report Generation  | <10 seconds | <150MB     |
 
 ---
 
 ## Error Handling
 
 **Issue**: "Insufficient historical data"
+
 - **Solution**: Collect more data points before analysis
 
 **Issue**: "Anomaly detected"
+
 - **Solution**: Investigate cause, check system health
 
 **Issue**: "Forecast unreliable"
-- **Solution**: Increase data collection period
 
+- **Solution**: Increase data collection period

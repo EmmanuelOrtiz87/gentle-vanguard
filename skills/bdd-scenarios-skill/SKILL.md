@@ -1,6 +1,8 @@
 ---
 name: bdd-scenarios
-description: Use when writing effective BDD scenarios including acceptance criteria, edge cases, and scenario organization. Use when defining behavior specifications.
+description:
+  Use when writing effective BDD scenarios including acceptance criteria, edge cases, and scenario
+  organization. Use when defining behavior specifications.
 allowed-tools:
   - Bash
   - Read
@@ -8,7 +10,8 @@ allowed-tools:
 
 # BDD Scenarios
 
-Learn to write clear, maintainable BDD scenarios that effectively capture business requirements and drive implementation.
+Learn to write clear, maintainable BDD scenarios that effectively capture business requirements and
+drive implementation.
 
 ## Writing Good Scenarios
 
@@ -126,4 +129,3 @@ Use bdd-scenarios when you need to:
 - Using vague or ambiguous language
 - Forgetting negative test cases
 - Not organizing with tags effectively
-

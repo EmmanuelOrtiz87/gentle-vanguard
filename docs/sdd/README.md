@@ -1,10 +1,13 @@
 ﻿# Spec-Driven Development (SDD)
 
-This directory contains design documents and implementation specifications for Workspace Foundation and its components.
+This directory contains design documents and implementation specifications for Workspace Foundation
+and its components.
 
 ## Purpose
 
-Spec-Driven Development ensures that all features are designed, implemented, and validated according to documented specifications. Each spec serves as both a blueprint for implementation and a contract for validation.
+Spec-Driven Development ensures that all features are designed, implemented, and validated according
+to documented specifications. Each spec serves as both a blueprint for implementation and a contract
+for validation.
 
 ## Directory Structure
 
@@ -33,14 +36,17 @@ sdd/
 
 ## Governance
 
-Follow the guidelines in `docs/reference/SDD-GOVERNANCE-POLICY.md` for spec creation, review, and approval processes.
+Follow the guidelines in `docs/reference/SDD-GOVERNANCE-POLICY.md` for spec creation, review, and
+approval processes.
 
 ## Current Specs
 
 Main specification:
+
 - [foundation-sdd.md](foundation-sdd.md) - Core Workspace Foundation design
 
 Template:
+
 - [SPEC-TEMPLATE.md](../specs/SPEC-TEMPLATE.md) - Template for new specifications
 
 ## Related Documentation

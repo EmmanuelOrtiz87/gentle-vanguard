@@ -1,9 +1,11 @@
 ---
 name: android-kotlin-coroutines
-description: Kotlin Coroutines and Flow guidance for Android projects (structured concurrency, cancellation, testing)
+description:
+  Kotlin Coroutines and Flow guidance for Android projects (structured concurrency, cancellation,
+  testing)
 when-to-use: When implementing async logic in Android Kotlin code with coroutines or flow
 user-invocable: false
-paths: ["**/*.kt", "**/*.kts", "android/**", "**/build.gradle.kts"]
+paths: ['**/*.kt', '**/*.kts', 'android/**', '**/build.gradle.kts']
 effort: medium
 ---
 
@@ -11,7 +13,8 @@ effort: medium
 
 ## Core Practices
 
-1. Use structured concurrency with clear scope ownership (`viewModelScope`, `lifecycleScope`, or injected scope).
+1. Use structured concurrency with clear scope ownership (`viewModelScope`, `lifecycleScope`, or
+   injected scope).
 2. Expose immutable state with `StateFlow` and one-off events with `SharedFlow`.
 3. Keep cancellation cooperative: avoid blocking calls inside coroutines.
 4. Encapsulate dispatcher usage (do not hardcode `Dispatchers.IO` deep in domain logic).
@@ -43,4 +46,3 @@ class ExampleViewModel(
 1. Use `runTest` and a `StandardTestDispatcher`.
 2. Replace production dispatchers with test dispatchers via dependency injection.
 3. Assert `StateFlow` emissions in order for success and failure paths.
-

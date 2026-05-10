@@ -10,12 +10,12 @@
 
 Technical specifications for system components and interfaces.
 
-| Goal | Description |
-|------|-------------|
-| **🏗️ Design** | System design rationale and architecture decisions |
-| **📏 Scope** | Clear boundaries and interfaces |
-| **📊 Validation** | Acceptance criteria and test specifications |
-| **🔄 Continuity** | Reference implementations and examples |
+| Goal              | Description                                        |
+| ----------------- | -------------------------------------------------- |
+| **🏗️ Design**     | System design rationale and architecture decisions |
+| **📏 Scope**      | Clear boundaries and interfaces                    |
+| **📊 Validation** | Acceptance criteria and test specifications        |
+| **🔄 Continuity** | Reference implementations and examples             |
 
 ---
 
@@ -33,6 +33,7 @@ specs/
 ## 🚀 Quick Start#
 
 ### Create New Spec#
+
 ```powershell
 # Use the template
 cp SPEC-TEMPLATE.md <component>-spec.md
@@ -42,21 +43,21 @@ cp SPEC-TEMPLATE.md <component>-spec.md
 
 Each specification should include:
 
-| Component | Description |
-|------------|-------------|
-| **🎯 Overview** | Purpose and scope of the component |
-| **🏗️ Architecture** | Design decisions and rationale |
-| **📏 Interfaces** | APIs, contracts, and boundaries |
+| Component                  | Description                        |
+| -------------------------- | ---------------------------------- |
+| **🎯 Overview**            | Purpose and scope of the component |
+| **🏗️ Architecture**        | Design decisions and rationale     |
+| **📏 Interfaces**          | APIs, contracts, and boundaries    |
 | **📊 Acceptance Criteria** | Testable conditions for completion |
-| **💻 Implementation** | Reference code and examples |
-| **🔄 Status** | Current state and next steps |
+| **💻 Implementation**      | Reference code and examples        |
+| **🔄 Status**              | Current state and next steps       |
 
 ---
 
 ## 📊 Available Specs#
 
-| Spec | Description | Link |
-|------|-------------|------|
+| Spec                 | Description                     | Link                                 |
+| -------------------- | ------------------------------- | ------------------------------------ |
 | **📋 Spec Template** | Template for new specifications | [SPEC-TEMPLATE.md](SPEC-TEMPLATE.md) |
 
 ---
@@ -72,10 +73,10 @@ Each specification should include:
 
 ## 📚 Related Documentation#
 
-| Document | Purpose |
-|-----------|---------|
-| **🏗️ Architecture** | [../architecture/README.md](../architecture/README.md) |
-| **📋 SDD Lifecycle** | [../sdd/README.md](../sdd/README.md) |
+| Document             | Purpose                                                  |
+| -------------------- | -------------------------------------------------------- |
+| **🏗️ Architecture**  | [../architecture/README.md](../architecture/README.md)   |
+| **📋 SDD Lifecycle** | [../sdd/README.md](../sdd/README.md)                     |
 | **📂 Supplementary** | [../supplementary/README.md](../supplementary/README.md) |
 | **📖 Session Guide** | [../guides/SESSION-GUIDE.md](../guides/SESSION-GUIDE.md) |
 
@@ -83,11 +84,11 @@ Each specification should include:
 
 ## 🚀 Quick Commands Reference#
 
-| Command | Description | Output |
-|----------|-------------|--------|
-| `wf start-session <spec>` | Start session with spec | `docs/sessions/YYYY-MM-DD-HHmmss-session-start.md` |
-| `wf sdd-gate` | Validate spec compliance | Console output |
-| `wf review` | Full code review | HTML report |
+| Command                   | Description              | Output                                             |
+| ------------------------- | ------------------------ | -------------------------------------------------- |
+| `wf start-session <spec>` | Start session with spec  | `docs/sessions/YYYY-MM-DD-HHmmss-session-start.md` |
+| `wf sdd-gate`             | Validate spec compliance | Console output                                     |
+| `wf review`               | Full code review         | HTML report                                        |
 
 ---
 

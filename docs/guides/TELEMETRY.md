@@ -4,7 +4,8 @@
 
 Telemetry tracks estimated token usage and cost impact for workflow tasks.
 
-It is also the primary input for `reports/dashboard.html` (executive KPIs, costs, ROI, and trend charts).
+It is also the primary input for `reports/dashboard.html` (executive KPIs, costs, ROI, and trend
+charts).
 
 ## Data Sources
 
@@ -32,12 +33,14 @@ Dashboard generation:
 ```
 
 Automated refresh (no manual trigger required in CI):
+
 - `.github/workflows/dashboard-auto-refresh.yml`
 - `.github/workflows/monthly-management-report.yml`
 
 ## Cost Settings
 
 Defaults:
+
 - `CostPer1MTokens = 10`
 - `BaselineTokensPerTask = 14000`
 - `ReductionPercent = 40`

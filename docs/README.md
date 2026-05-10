@@ -18,16 +18,16 @@
 
 Foundation is a **governance-first AI development stack** that unifies:
 
-| Capability | What it does | Benefit |
-|------------|-------------|---------|
-| **🤖 7-agent orchestration** | Routes tasks automatically to BA, SAD, DEV, QA, OPS, GOV, DOC agents | ✅ Smart delegation |
-| **🧩 125+ on-demand skills** | Angular, React, Next.js, Go, Django, TypeScript, Zod, AI SDK, MCP, and more | ✅ Total coverage |
-| **📋 SDD enforcement** | Blocks commits without a validated spec — no specification, no code | ✅ Quality first |
-| **💰 Token Budget Guard** | 30K tokens/day cap with 70%/90% soft/hard thresholds | ✅ Cost control |
-| **📈 Event bus + telemetry** | 10 standard events with governance gate and distributed tracing | ✅ Full visibility |
-| **🏭 Enterprise CI pipeline** | 11 workflows: quality gate, PSScriptAnalyzer, OWASP, SDD gate, reporting and dashboard automation | ✅ Production-ready |
-| **🔗 7D validation hooks** | Pre-commit checks: security, quality, architecture, testing, API, docs, gitflow | ✅ Multi-layer safety |
-| **🧠 Persistent memory** | Engram — context survives session restarts | ✅ Continuity |
+| Capability                    | What it does                                                                                      | Benefit               |
+| ----------------------------- | ------------------------------------------------------------------------------------------------- | --------------------- |
+| **🤖 7-agent orchestration**  | Routes tasks automatically to BA, SAD, DEV, QA, OPS, GOV, DOC agents                              | ✅ Smart delegation   |
+| **🧩 125+ on-demand skills**  | Angular, React, Next.js, Go, Django, TypeScript, Zod, AI SDK, MCP, and more                       | ✅ Total coverage     |
+| **📋 SDD enforcement**        | Blocks commits without a validated spec — no specification, no code                               | ✅ Quality first      |
+| **💰 Token Budget Guard**     | 30K tokens/day cap with 70%/90% soft/hard thresholds                                              | ✅ Cost control       |
+| **📈 Event bus + telemetry**  | 10 standard events with governance gate and distributed tracing                                   | ✅ Full visibility    |
+| **🏭 Enterprise CI pipeline** | 11 workflows: quality gate, PSScriptAnalyzer, OWASP, SDD gate, reporting and dashboard automation | ✅ Production-ready   |
+| **🔗 7D validation hooks**    | Pre-commit checks: security, quality, architecture, testing, API, docs, gitflow                   | ✅ Multi-layer safety |
+| **🧠 Persistent memory**      | Engram — context survives session restarts                                                        | ✅ Continuity         |
 
 > **"Where governance, automation, and AI converge to empower modern development teams."**
 
@@ -36,15 +36,17 @@ Foundation is a **governance-first AI development stack** that unifies:
 ## 🚀 Quick Start
 
 ### Prerequisites
-| Requirement | Version | Status |
-|------------|---------|--------|
-| **🪟 Windows 10/11 / Linux / macOS** | Any | ✅ Required |
-| **⚡ PowerShell 7+** | 7.0+ | ✅ Required (`winget install Microsoft.PowerShell`) |
-| **🌿 Git** | 2.30+ | ✅ Required |
-| **🟢 Node.js** | 18+ | ⚠️ Optional |
-| **🐹 Go** | 1.19+ | ⚠️ Optional |
+
+| Requirement                          | Version | Status                                              |
+| ------------------------------------ | ------- | --------------------------------------------------- |
+| **🪟 Windows 10/11 / Linux / macOS** | Any     | ✅ Required                                         |
+| **⚡ PowerShell 7+**                 | 7.0+    | ✅ Required (`winget install Microsoft.PowerShell`) |
+| **🌿 Git**                           | 2.30+   | ✅ Required                                         |
+| **🟢 Node.js**                       | 18+     | ⚠️ Optional                                         |
+| **🐹 Go**                            | 1.19+   | ⚠️ Optional                                         |
 
 ### Setup — 3 Steps
+
 ```powershell
 # 1️⃣ Clone
 git clone https://github.com/EmmanuelOrtiz87/gentleman-foundation.git
@@ -58,6 +60,7 @@ cd gentleman-foundation
 ```
 
 ### Daily Usage
+
 ```powershell
 wf verify          # Check all 14 quality gates
 wf version         # Show stack version + skills count
@@ -115,14 +118,14 @@ Foundation uses a layered, modular architecture with on-demand activation:
 
 ## 📋 Stack Policies
 
-| Concept | Description | Enforcement |
-|---------|-------------|-------------|
-| **📋 SDD-first** | No code without a validated specification | `sdd-gate.yml` + pre-commit hook |
-| **⚖️ Adversarial Judgment** | Dual-agent review for critical changes | `wf judgment-day` |
-| **💰 Token governance** | Hard budget cap — no runaway AI spend | Token Budget Guard |
-| **📏 Live Standards** | PS, CI, Testing standards enforced in CI | `ps-lint.yml` + agent-verify |
-| **👑 RBAC** | Owner-level ops require explicit auth | `config/access-control.json` |
-| **🔒 Security** | OWASP + dependabot + PSScriptAnalyzer | Automated weekly |
+| Concept                     | Description                               | Enforcement                      |
+| --------------------------- | ----------------------------------------- | -------------------------------- |
+| **📋 SDD-first**            | No code without a validated specification | `sdd-gate.yml` + pre-commit hook |
+| **⚖️ Adversarial Judgment** | Dual-agent review for critical changes    | `wf judgment-day`                |
+| **💰 Token governance**     | Hard budget cap — no runaway AI spend     | Token Budget Guard               |
+| **📏 Live Standards**       | PS, CI, Testing standards enforced in CI  | `ps-lint.yml` + agent-verify     |
+| **👑 RBAC**                 | Owner-level ops require explicit auth     | `config/access-control.json`     |
+| **🔒 Security**             | OWASP + dependabot + PSScriptAnalyzer     | Automated weekly                 |
 
 ---
 
@@ -154,6 +157,7 @@ wf version             wf platform-info       wf health
 ```
 
 ### Dashboard (`wf dashboard`)
+
 Generates `reports/dashboard.html` — open in any browser:
 
 1. **📊 KPI cards**: Sessions, Dispatches, Tokens Used, Events Emitted
@@ -166,18 +170,22 @@ Generates `reports/dashboard.html` — open in any browser:
 8. **🤖 Automation**: daily CI refresh with artifact publication
 
 ### Runtime Routing Model
+
 1. `ai_orchestrated`: Orchestrator delegates to subagents and skills
 2. `hybrid_guarded`: Selective AI with deterministic script fallback
 3. `offline_deterministic`: Local scripts only (no network/AI dependency)
 
 ### Auto-Activation System
+
 - **Pre-commit Hooks**: Automatic validation before commits
 - **PowerShell Profile**: Auto-activation when entering project directories
 - **Health Checks**: Comprehensive tool availability validation
 - **Environment Init**: One-command setup for new sessions
 
 ### Project Templates
+
 Foundation provides homologated templates for:
+
 - **Web APIs** (Go + REST)
 - **Single Page Applications** (Angular + TypeScript)
 - **Microservices** (Docker + Kubernetes)
@@ -208,31 +216,40 @@ flowchart TD
 
 ## 📅 Weekly Audit Runbook
 
-Systematic 5-step process for governance-validated repository audits. All outputs use `YYYY-MM-DD-HHmmss` timestamps for unique identification.
+Systematic 5-step process for governance-validated repository audits. All outputs use
+`YYYY-MM-DD-HHmmss` timestamps for unique identification.
 
 ### Step 1: Generate Context Pack
+
 ```powershell
 .\scripts\wf.ps1 context-pack
 # Output: docs/sessions/YYYY-MM-DD-HHmmss-context-pack.md
 ```
+
 Captures current repository state: branch, recent commits, changed files, and platform health.
 
 ### Step 2: Activate Compact Context
+
 ```powershell
 .\scripts\wf.ps1 compact-start
 # Reads: latest context-pack from docs/sessions/ (by filename timestamp)
 # Logs: docs/sessions/metrics/context-usage.csv
 ```
-Loads latest context pack and records telemetry. Auto-activates on `wf.ps1 start-session` if health is RED.
+
+Loads latest context pack and records telemetry. Auto-activates on `wf.ps1 start-session` if health
+is RED.
 
 ### Step 3: Generate Audit Document
+
 ```powershell
 .\scripts\wf.ps1 audit
 # Output: docs/audits/YYYY-MM-DD-HHmmss-audit.md
 ```
+
 Full audit report with delivery status, operational risk, test suite availability, and git tracking.
 
 ### Step 4: Governance Validation
+
 ```powershell
 .\scripts\diagnostics\validate-script-governance.ps1
 # Expected: EXIT:0 (all checks passed)
@@ -240,16 +257,21 @@ Full audit report with delivery status, operational risk, test suite availabilit
 # Optional strict gate (CI)
 .\scripts\wf.ps1 health -StrictCleanup
 ```
+
 Validates canonical path references and no deprecated dependencies. Non-zero exit is blocking.
 
 ### Step 5: Review Session Metrics
+
 ```powershell
 .\scripts\wf.ps1 context-metrics
 # Reads: docs/sessions/metrics/context-usage.csv
 ```
-Displays accumulated session metrics: total events, context-pack calls, compact-start calls, and efficiency indicators.
+
+Displays accumulated session metrics: total events, context-pack calls, compact-start calls, and
+efficiency indicators.
 
 ### Step 6: Manual Homologation (Optional)
+
 ```powershell
 # Preview cleanup actions
 .\scripts\wf.ps1 homologate
@@ -257,6 +279,7 @@ Displays accumulated session metrics: total events, context-pack calls, compact-
 # Apply cleanup and reference updates
 .\scripts\wf.ps1 homologate apply
 ```
+
 Normalizes workspace before release or when strict cleanup reports drift.
 
 ---
@@ -264,18 +287,23 @@ Normalizes workspace before release or when strict cleanup reports drift.
 ## 📚 Documentation
 
 ### For Developers
+
 - **[Session Guide](guides/SESSION-GUIDE.md)**: Daily workflow and commands
 - **[Tool Activation](guides/TOOL-ACTIVATION.md)**: Auto-activation system
-- **[Dashboard Executive Guide](guides/DASHBOARD-EXECUTIVE-GUIDE.md)**: Full interpretation and ROI reading manual
+- **[Dashboard Executive Guide](guides/DASHBOARD-EXECUTIVE-GUIDE.md)**: Full interpretation and ROI
+  reading manual
 - **[Testing Standards](../rules/TESTING-STANDARDS.md)**: Testing pyramid + coverage targets
 - **[PowerShell Standards](../rules/POWERSHELL-STANDARDS.md)**: PS1 coding standards
 
 ### For Project Leads
+
 - **[Architecture Overview](reference/ARCHITECTURE.md)**: System design rationale
 - **[CI Hardening Standards](../rules/CI-HARDENING-STANDARDS.md)**: Workflow requirements
-- **[Status Report](reports/FOUNDATION-STATUS-REPORT-2026-05-05.md)**: Full operational status v2.6.5
+- **[Status Report](reports/FOUNDATION-STATUS-REPORT-2026-05-05.md)**: Full operational status
+  v2.6.5
 
 ### For Administrators
+
 - **[Installation Guide](getting-started/installation.md)**: Complete setup instructions
 - **[AI Configuration](guides/AI-CONFIGURATION.md)**: AI provider setup
 - **[Getting Started](getting-started/README.md)**: All setup guides
@@ -286,6 +314,7 @@ Normalizes workspace before release or when strict cleanup reports drift.
 ## ⚙️ Configuration
 
 ### Environment Variables
+
 ```bash
 # AI Tools
 export CLAUDE_API_KEY="your-key"
@@ -298,7 +327,9 @@ git config --global core.hooksPath "/path/to/foundation/hooks"
 ```
 
 ### Project Configuration
+
 Each project uses a `.foundation` configuration file:
+
 ```json
 {
   "project": {
@@ -323,19 +354,19 @@ Each project uses a `.foundation` configuration file:
 
 ## ✨ Key Features
 
-| Feature | Description | Benefit |
-|---------|-------------|---------|
-| **🌍 Global Installation** | Single installation per machine | Available to all projects |
-| **⚡ Unified CLI** | Single command (`wf.ps1`) | Simplified operations |
-| **🔗 Symlink Strategy** | Skills updated once, available everywhere | Always synced |
-| **🔒 Pre-commit Hooks** | Automatic secrets detection and 7D validation | Security-first workflow |
-| **🧩 125+ Skills** | Curated for Go, Angular, React, Python, etc. | Expert patterns |
-| **🔧 Multi-Technology** | Node.js, Go, Python, Rust support | Flexible stack |
-| **💻 Cross-Platform** | Windows, Linux, macOS support | Universal compatibility |
-| **📦 Templates** | Service, CLI, library, frontend, fullstack | Quick project start |
-| **🚀 CI/CD Ready** | GitHub Actions, GitLab CI, Azure DevOps | Deployment ready |
-| **🐳 Container Ready** | Docker and Kubernetes production manifests | Scalable infrastructure |
-| **🧠 AI-Ready** | Engram integration for persistent memory | Session continuity |
+| Feature                    | Description                                   | Benefit                   |
+| -------------------------- | --------------------------------------------- | ------------------------- |
+| **🌍 Global Installation** | Single installation per machine               | Available to all projects |
+| **⚡ Unified CLI**         | Single command (`wf.ps1`)                     | Simplified operations     |
+| **🔗 Symlink Strategy**    | Skills updated once, available everywhere     | Always synced             |
+| **🔒 Pre-commit Hooks**    | Automatic secrets detection and 7D validation | Security-first workflow   |
+| **🧩 125+ Skills**         | Curated for Go, Angular, React, Python, etc.  | Expert patterns           |
+| **🔧 Multi-Technology**    | Node.js, Go, Python, Rust support             | Flexible stack            |
+| **💻 Cross-Platform**      | Windows, Linux, macOS support                 | Universal compatibility   |
+| **📦 Templates**           | Service, CLI, library, frontend, fullstack    | Quick project start       |
+| **🚀 CI/CD Ready**         | GitHub Actions, GitLab CI, Azure DevOps       | Deployment ready          |
+| **🐳 Container Ready**     | Docker and Kubernetes production manifests    | Scalable infrastructure   |
+| **🧠 AI-Ready**            | Engram integration for persistent memory      | Session continuity        |
 
 ---
 
@@ -343,25 +374,27 @@ Each project uses a `.foundation` configuration file:
 
 > 🚨 **CRITICAL:** Hooks run automatically before every commit.
 
-| Mechanism | Description | Status |
-|-----------|-------------|--------|
-| **Automated Hooks** | pre-commit, pre-push, 7D validation | ✅ Active |
-| **Adversarial Review** | Judgment day protocol | ✅ Active |
-| **Testing & Coverage** | `testing-strategy-skill` integration | ✅ Active |
-| **SDD Enforcement** | Specification and criteria validation | ✅ Mandatory |
+| Mechanism              | Description                           | Status       |
+| ---------------------- | ------------------------------------- | ------------ |
+| **Automated Hooks**    | pre-commit, pre-push, 7D validation   | ✅ Active    |
+| **Adversarial Review** | Judgment day protocol                 | ✅ Active    |
+| **Testing & Coverage** | `testing-strategy-skill` integration  | ✅ Active    |
+| **SDD Enforcement**    | Specification and criteria validation | ✅ Mandatory |
 
 ### Code Review Dimensions
-| Dimension | Icon | Description | Focus |
-|-----------|------|-------------|-------|
-| **Security** | [S] | Secrets, vulnerabilities, OWASP | Critical protection |
-| **Quality** | [Q] | Code smell, complexity, error handling | Maintainability |
-| **Architecture** | [A] | Structure, patterns, modularity | Solid design |
-| **Testing** | [T] | Coverage, patterns, edge cases | Complete validation |
-| **Docs** | [D] | README, changelog, comments | Clear documentation |
-| **API Design** | [API] | REST, validation, versioning | Clear contracts |
-| **Git Flow** | [G] | Commits, branches, hooks | Ordered workflow |
+
+| Dimension        | Icon  | Description                            | Focus               |
+| ---------------- | ----- | -------------------------------------- | ------------------- |
+| **Security**     | [S]   | Secrets, vulnerabilities, OWASP        | Critical protection |
+| **Quality**      | [Q]   | Code smell, complexity, error handling | Maintainability     |
+| **Architecture** | [A]   | Structure, patterns, modularity        | Solid design        |
+| **Testing**      | [T]   | Coverage, patterns, edge cases         | Complete validation |
+| **Docs**         | [D]   | README, changelog, comments            | Clear documentation |
+| **API Design**   | [API] | REST, validation, versioning           | Clear contracts     |
+| **Git Flow**     | [G]   | Commits, branches, hooks               | Ordered workflow    |
 
 ### Review Flow
+
 ```mermaid
 flowchart TB
     subgraph AUTO ["⚡ AUTOMATIC — Pre-commit"]
@@ -389,50 +422,53 @@ flowchart TB
 
 ## 🤖 Supported AI Agents
 
-| Agent | Integration | Recommended | Why |
-|-------|-------------|-------------|-----|
-| **OpenCode** | Full (per-phase routing) | ✅ Default | Multi-provider support |
-| **Claude Code** | Full (sub-agents) | ✅ Yes | Native integration |
-| **Cursor** | Full (9 SDD agents) | ✅ Yes | Parallel execution |
-| **Gemini CLI** | Full (experimental) | ❌ No | Testing only |
-| **VS Code Copilot** | Full (parallel) | ❌ No | IDE only |
-| **Codex** | Solo-agent | ❌ No | Limited scope |
-| **Windsurf** | Solo-agent | ❌ No | Limited scope |
-| **Antigravity** | Solo-agent + Mission Control | ❌ No | Experimental |
+| Agent               | Integration                  | Recommended | Why                    |
+| ------------------- | ---------------------------- | ----------- | ---------------------- |
+| **OpenCode**        | Full (per-phase routing)     | ✅ Default  | Multi-provider support |
+| **Claude Code**     | Full (sub-agents)            | ✅ Yes      | Native integration     |
+| **Cursor**          | Full (9 SDD agents)          | ✅ Yes      | Parallel execution     |
+| **Gemini CLI**      | Full (experimental)          | ❌ No       | Testing only           |
+| **VS Code Copilot** | Full (parallel)              | ❌ No       | IDE only               |
+| **Codex**           | Solo-agent                   | ❌ No       | Limited scope          |
+| **Windsurf**        | Solo-agent                   | ❌ No       | Limited scope          |
+| **Antigravity**     | Solo-agent + Mission Control | ❌ No       | Experimental           |
 
 ---
 
 ## 🛠️ Available Skills
 
 ### Frontend
-| Skill | Description | Trigger |
-|-------|-------------|---------|
-| `angular/core` | Standalone components, signals, inject, zoneless | Angular components |
-| `angular/forms` | Signal Forms, Reactive Forms | Angular forms |
-| `angular/performance` | NgOptimizedImage, @defer, lazy loading | Angular optimization |
-| `angular/architecture` | Scope Rule, project structure, file naming | Angular projects |
-| `react-19` | React 19 patterns with React Compiler | React components |
-| `nextjs-15` | Next.js 15 App Router patterns | Next.js projects |
-| `typescript` | TypeScript strict patterns | TypeScript code |
-| `tailwind-4` | Tailwind CSS 4 patterns | Tailwind styling |
-| `zod-4` | Zod 4 schema validation | Zod validation |
-| `zustand-5` | Zustand 5 state management | React state |
+
+| Skill                  | Description                                      | Trigger              |
+| ---------------------- | ------------------------------------------------ | -------------------- |
+| `angular/core`         | Standalone components, signals, inject, zoneless | Angular components   |
+| `angular/forms`        | Signal Forms, Reactive Forms                     | Angular forms        |
+| `angular/performance`  | NgOptimizedImage, @defer, lazy loading           | Angular optimization |
+| `angular/architecture` | Scope Rule, project structure, file naming       | Angular projects     |
+| `react-19`             | React 19 patterns with React Compiler            | React components     |
+| `nextjs-15`            | Next.js 15 App Router patterns                   | Next.js projects     |
+| `typescript`           | TypeScript strict patterns                       | TypeScript code      |
+| `tailwind-4`           | Tailwind CSS 4 patterns                          | Tailwind styling     |
+| `zod-4`                | Zod 4 schema validation                          | Zod validation       |
+| `zustand-5`            | Zustand 5 state management                       | React state          |
 
 ### Backend & AI
-| Skill | Description | Trigger |
-|-------|-------------|---------|
-| `ai-sdk-5` | Vercel AI SDK 5 patterns | AI chat features |
+
+| Skill        | Description                    | Trigger          |
+| ------------ | ------------------------------ | ---------------- |
+| `ai-sdk-5`   | Vercel AI SDK 5 patterns       | AI chat features |
 | `django-drf` | Django REST Framework patterns | Django REST APIs |
-| `pytest` | Python pytest patterns | Python tests |
-| `go-api` | Go REST API standards | Go backend |
+| `pytest`     | Python pytest patterns         | Python tests     |
+| `go-api`     | Go REST API standards          | Go backend       |
 
 ### Workflow
-| Skill | Description | Trigger |
-|-------|-------------|---------|
-| `github-pr` | Quality PRs with conventional commits | PR creation |
-| `jira-task` | Jira task creation | Task creation |
-| `jira-epic` | Jira epic creation | Epic creation |
-| `project-scaffolding` | Project scaffolding and templates | New project setup |
+
+| Skill                 | Description                           | Trigger           |
+| --------------------- | ------------------------------------- | ----------------- |
+| `github-pr`           | Quality PRs with conventional commits | PR creation       |
+| `jira-task`           | Jira task creation                    | Task creation     |
+| `jira-epic`           | Jira epic creation                    | Epic creation     |
+| `project-scaffolding` | Project scaffolding and templates     | New project setup |
 
 ---
 
@@ -441,6 +477,7 @@ flowchart TB
 See [CONTRIBUTING.md](CONTRIBUTING.md) for full contribution guidelines.
 
 ### Development Setup
+
 ```bash
 git clone https://github.com/EmmanuelOrtiz87/workspace-foundation.git
 cd workspace-foundation
@@ -449,6 +486,7 @@ cd workspace-foundation
 ```
 
 ### Create New Skills
+
 ```powershell
 .\scripts\utilities\create-skill.ps1 -Name "my-skill" -Type "orchestrator"
 ```
@@ -465,13 +503,15 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 - **Documentation**: [Docs Root](./)
 - **Issues**: [GitHub Issues](https://github.com/EmmanuelOrtiz87/workspace-foundation/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/EmmanuelOrtiz87/workspace-foundation/discussions)
+- **Discussions**:
+  [GitHub Discussions](https://github.com/EmmanuelOrtiz87/workspace-foundation/discussions)
 
 ---
 
 **Ready to operate with governance, automation, and real AI?**
 
-Start with `.\scripts\wf.ps1 health` and consult the documentation for workflows, skills, and active policies.
+Start with `.\scripts\wf.ps1 health` and consult the documentation for workflows, skills, and active
+policies.
 
 <p align="center">
   <b>🏛️ Gentleman Foundation v2.8.0 — Where governance, automation, and AI converge</b><br>

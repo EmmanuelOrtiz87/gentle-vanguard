@@ -1,10 +1,12 @@
 ﻿# Audit Workflow - Foundation v2.1
 
-Unified audit system combining **foundation-audit** (batch validation) and **judgment-day** (adversarial review).
+Unified audit system combining **foundation-audit** (batch validation) and **judgment-day**
+(adversarial review).
 
 ## Quick Start
 
 ### Integrated (with Foundation)
+
 ```powershell
 # Quick check - 1 second
 .\scripts\utilities\wf.ps1 audit sweep --scope quick
@@ -17,6 +19,7 @@ Unified audit system combining **foundation-audit** (batch validation) and **jud
 ```
 
 ### Standalone (without Foundation)
+
 ```powershell
 # After sync:
 ~\.foundation-local\audit-workflow.ps1 -Mode quick
@@ -27,58 +30,60 @@ Unified audit system combining **foundation-audit** (batch validation) and **jud
 
 ```
 
-                    UNIFIED AUDIT WORKFLOW                        
+                    UNIFIED AUDIT WORKFLOW
 
-                                                                  
-                 
-     PHASE 1                   PHASE 2                      
-     foundation-audit           judgment-day                  
-                                                             
-      Batch script              Sub-agents                 
-      0 tokens                  ~$0.03                     
-      <5 seconds                10-15 minutes              
-                                                             
-     Checks:                   Reviewers:                   
-      Duplicates               Judge A (Impl)             
-      Links                    Judge B (Arch)             
-      Structure                                            
-      Sync                    Dimensions:                  
-                                 Security                  
-           Performance               
-                                  Architecture              
-                                  Tests                    
-                        Documentation            
-      PASS?                      Dependencies             
-                        Observability            
-                                 Maintainability          
-       YESNO                            
-                                                             
-            
-    Proceed        Fix Issues  Re-run Batch  JD         
-            
-                                                                  
+
+
+     PHASE 1                   PHASE 2
+     foundation-audit           judgment-day
+
+      Batch script              Sub-agents
+      0 tokens                  ~$0.03
+      <5 seconds                10-15 minutes
+
+     Checks:                   Reviewers:
+      Duplicates               Judge A (Impl)
+      Links                    Judge B (Arch)
+      Structure
+      Sync                    Dimensions:
+                                 Security
+           Performance
+                                  Architecture
+                                  Tests
+                        Documentation
+      PASS?                      Dependencies
+                        Observability
+                                 Maintainability
+       YESNO
+
+
+    Proceed        Fix Issues  Re-run Batch  JD
+
+
 
 ```
 
 ## Modes
 
-| Mode | Phase 1 | Phase 2 | Cost | Time | When |
-|------|--------|---------|------|------|------|
-| `quick` |  (basic) | - | $0 | 1s | Pre-commit |
-| `standard` |  (standard) | - | $0 | 3s | Pre-commit, CI |
-| `full` |  (all) | - | $0 | 5s | Pre-release, merge |
-| `judgment` |  (all) |  | ~$0.03 | 15min | Pre-release |
-| `unified` |  (all) |  | ~$0.03 | 15min | Major releases |
+| Mode       | Phase 1    | Phase 2 | Cost   | Time  | When               |
+| ---------- | ---------- | ------- | ------ | ----- | ------------------ |
+| `quick`    | (basic)    | -       | $0     | 1s    | Pre-commit         |
+| `standard` | (standard) | -       | $0     | 3s    | Pre-commit, CI     |
+| `full`     | (all)      | -       | $0     | 5s    | Pre-release, merge |
+| `judgment` | (all)      |         | ~$0.03 | 15min | Pre-release        |
+| `unified`  | (all)      |         | ~$0.03 | 15min | Major releases     |
 
 ## Workflow Integration
 
 ### Pre-Commit Hook
+
 ```powershell
 # Add to .git/hooks/pre-commit
 .\scripts\utilities\wf.ps1 audit sweep --scope quick --fail-on-issues
 ```
 
 ### CI/CD Pipeline
+
 ```yaml
 # GitHub Actions
 - name: Foundation Audit
@@ -86,6 +91,7 @@ Unified audit system combining **foundation-audit** (batch validation) and **jud
 ```
 
 ### Pre-Release Checklist
+
 ```powershell
 # 1. Batch validation
 .\scripts\utilities\wf.ps1 audit sweep --scope full
@@ -110,11 +116,11 @@ For use in projects without Foundation:
 
 ## Exit Codes
 
-| Code | Meaning |
-|------|---------|
-| 0 | No issues found |
-| 1 | Issues found (non-fatal) |
-| 2 | Fatal error (missing dependencies) |
+| Code | Meaning                            |
+| ---- | ---------------------------------- |
+| 0    | No issues found                    |
+| 1    | Issues found (non-fatal)           |
+| 2    | Fatal error (missing dependencies) |
 
 ## Output Formats
 
@@ -131,12 +137,12 @@ For use in projects without Foundation:
 
 ## Skills Reference
 
-| Skill | Purpose |
-|-------|---------|
-| `foundation-audit-skill` | Batch validation, zero tokens |
-| `judgment-day-skill` | Adversarial review, token cost |
-| `script-governance-skill` | Script validation |
-| `docs-alignment-skill` | Documentation synchronization |
+| Skill                     | Purpose                        |
+| ------------------------- | ------------------------------ |
+| `foundation-audit-skill`  | Batch validation, zero tokens  |
+| `judgment-day-skill`      | Adversarial review, token cost |
+| `script-governance-skill` | Script validation              |
+| `docs-alignment-skill`    | Documentation synchronization  |
 
 ## Related Documentation
 

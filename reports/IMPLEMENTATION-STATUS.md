@@ -8,31 +8,35 @@
 ## 📁 Archivos del Sistema de Reporting
 
 ### Scripts Principales
-| Script | Función |
-|--------|---------|
-| `wf-report.ps1` | CLI unificado - reporte a demanda |
-| `session-metrics-collector.ps1` | Colector de métricas de sesión |
-| `session-metrics-tracker.ps1` | Tracker en tiempo real |
-| `consolidate-metrics.ps1` | Consolidación automática |
-| `generate-executive-summary.ps1` | Generador de informes |
+
+| Script                           | Función                           |
+| -------------------------------- | --------------------------------- |
+| `wf-report.ps1`                  | CLI unificado - reporte a demanda |
+| `session-metrics-collector.ps1`  | Colector de métricas de sesión    |
+| `session-metrics-tracker.ps1`    | Tracker en tiempo real            |
+| `consolidate-metrics.ps1`        | Consolidación automática          |
+| `generate-executive-summary.ps1` | Generador de informes             |
 
 ### Skills
-| Skill | Función |
-|-------|---------|
-| `reporting-skill/SKILL.md` | Skill de reporting on-demand |
-| `business-telemetry-skill/SKILL.md` | Telemetría empresarial |
+
+| Skill                               | Función                      |
+| ----------------------------------- | ---------------------------- |
+| `reporting-skill/SKILL.md`          | Skill de reporting on-demand |
+| `business-telemetry-skill/SKILL.md` | Telemetría empresarial       |
 
 ### Configuración
-| Archivo | Función |
-|---------|---------|
-| `auto-delegation.json` | Categoría REPORT agregada |
-| `skill-registry.md` | Reporting skill registrado |
+
+| Archivo                | Función                    |
+| ---------------------- | -------------------------- |
+| `auto-delegation.json` | Categoría REPORT agregada  |
+| `skill-registry.md`    | Reporting skill registrado |
 
 ---
 
 ## 🚀 Uso
 
 ### CLI Directo
+
 ```powershell
 # Mostrar ayuda
 .\wf-report.ps1 -Type clarify
@@ -51,6 +55,7 @@
 ```
 
 ### Automático (Workflow)
+
 ```powershell
 # Consolidación diaria
 .\consolidate-metrics.ps1 -Period daily -GenerateReport
@@ -62,9 +67,10 @@
 ```
 
 ### On-Demand (cuando usuario solicite)
+
 ```
 "generame un informe de sesiones" → wf-report.ps1 -Type sessions
-"dame las metricas de costos" → wf-report.ps1 -Type costs  
+"dame las metricas de costos" → wf-report.ps1 -Type costs
 "quiero un resumen ejecutivo" → wf-report.ps1 -Type executive
 ```
 
@@ -92,17 +98,17 @@ telemetry-master.csv + informes .md
 
 ## 📊 Métricas Capturadas
 
-| Métrica | Estado | Fuente |
-|---------|--------|--------|
-| session_id | ✅ | .session/*.json |
-| start_time | ✅ | .session/*.json |
-| status | ✅ | .session/*.json |
-| input_tokens | 🔲 Pendiente | - |
-| output_tokens | 🔲 Pendiente | - |
-| estimated_cost_usd | 🔲 Pendiente | - |
-| tool_calls | 🔲 Pendiente | Instrumentar |
-| files_read | 🔲 Pendiente | Instrumentar |
-| files_edited | 🔲 Pendiente | Instrumentar |
+| Métrica            | Estado       | Fuente           |
+| ------------------ | ------------ | ---------------- |
+| session_id         | ✅           | .session/\*.json |
+| start_time         | ✅           | .session/\*.json |
+| status             | ✅           | .session/\*.json |
+| input_tokens       | 🔲 Pendiente | -                |
+| output_tokens      | 🔲 Pendiente | -                |
+| estimated_cost_usd | 🔲 Pendiente | -                |
+| tool_calls         | 🔲 Pendiente | Instrumentar     |
+| files_read         | 🔲 Pendiente | Instrumentar     |
+| files_edited       | 🔲 Pendiente | Instrumentar     |
 
 ---
 
@@ -123,4 +129,4 @@ telemetry-master.csv + informes .md
 
 ---
 
-*Estado: 2026-04-26*
+_Estado: 2026-04-26_

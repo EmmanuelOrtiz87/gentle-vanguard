@@ -11,6 +11,7 @@ Single CSV file per month containing ALL workspace activity metrics for executiv
 **File**: `reports/MANAGEMENT-REPORT-YYYY-MM.csv`
 
 **Columns**:
+
 - SessionID: Unique session identifier
 - Date: Session date (YYYY-MM-DD)
 - User: Who ran the session
@@ -23,12 +24,13 @@ Single CSV file per month containing ALL workspace activity metrics for executiv
 - Outcome: COMPLETE/ESCALATED/PENDING
 - IssuesFound: Number of issues found
 - Duration(min): Session duration in minutes
-- Cost(USD): Estimated cost (tokens  rate)
+- Cost(USD): Estimated cost (tokens rate)
 - Notes: Additional context
 
 ## Monthly Rotation
 
 When month changes:
+
 1. Script notifies: " Month changed! Export reports/MANAGEMENT-REPORT-YYYY-MM.csv"
 2. User exports old file (Excel-ready, filterable)
 3. Run with `-ForceNewMonth` to create new empty file
@@ -59,6 +61,7 @@ Recommended: Add to session-close hook to auto-append sessions.
 
 ## Skill
 
-Management reporting skill available at: `~/.config/opencode/skills/management-reporting-skill/SKILL.md`
+Management reporting skill available at:
+`~/.config/opencode/skills/management-reporting-skill/SKILL.md`
 
 Triggers: "management report", "generar informe", "reporte gerencial"

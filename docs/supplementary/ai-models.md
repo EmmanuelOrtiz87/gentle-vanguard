@@ -1,6 +1,7 @@
 # AI Model Setup
 
-This guide explains how to prepare an optional AI model layer for projects that use AI-assisted workflows.
+This guide explains how to prepare an optional AI model layer for projects that use AI-assisted
+workflows.
 
 ## Start Here
 
@@ -13,7 +14,8 @@ This guide explains how to prepare an optional AI model layer for projects that 
 ## Required or Optional
 
 - The workspace foundation does not require a local base model to be installed.
-- A model is only required when a specific project, agent workflow, or automation flow depends on it.
+- A model is only required when a specific project, agent workflow, or automation flow depends on
+  it.
 - When a model is required, prefer the simplest supported path for the target machine.
 
 ## Local Model Path
@@ -88,7 +90,8 @@ Use this path when the model runs in a hosted provider environment.
 
 ## Recommended Project Context Fields
 
-When a scaffolded project is created, record the AI choice in `docs/project-context.md` using these fields:
+When a scaffolded project is created, record the AI choice in `docs/project-context.md` using these
+fields:
 
 1. `ai-model-mode`
 2. `ai-model-provider`
@@ -97,4 +100,3 @@ When a scaffolded project is created, record the AI choice in `docs/project-cont
 5. `ai-model-notes`
 
 If the project does not use AI assistance, set `ai-model-mode` to `none` and leave the rest blank.
-

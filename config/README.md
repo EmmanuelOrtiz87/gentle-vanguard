@@ -4,13 +4,11 @@
 
 Directorio centralizado para toda la configuración del proyecto workspace-foundation.
 
-**Versión**: 2.0.0
-**última actualización**: 2026-04-21
-**Estado**:  PRODUCCIÓN
+**Versión**: 2.0.0 **última actualización**: 2026-04-21 **Estado**: PRODUCCIÓN
 
 ---
 
-##  Estructura de Directorios
+## Estructura de Directorios
 
 ```
 config/
@@ -28,12 +26,14 @@ config/
 
 ---
 
-##  Archivos de Configuración
+## Archivos de Configuración
 
 ### testing.config.json
+
 **Propósito**: Configuración de la suite de testing
 
 **Secciones principales**:
+
 ```json
 {
   "version": "1.0.0",
@@ -57,6 +57,7 @@ config/
 ```
 
 **Uso**:
+
 ```powershell
 $config = Get-Content .\config\testing.config.json | ConvertFrom-Json
 Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
@@ -65,9 +66,11 @@ Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
 ---
 
 ### engram-memory.json
+
 **Propósito**: Configuración del Engram Memory System
 
 **Secciones principales**:
+
 ```json
 {
   "version": "2.0.0",
@@ -91,6 +94,7 @@ Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
 ```
 
 **Parámetros clave**:
+
 - `threshold`: Lmite de tokens (250)
 - `triggerThreshold`: Nmero de packs para consolidar (5)
 - `compressionRatio`: Ratio de compresión (0.65 = 65%)
@@ -99,9 +103,11 @@ Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
 ---
 
 ### orchestrator.json
+
 **Propósito**: Configuración del Orquestador Universal
 
 **Secciones principales**:
+
 ```json
 {
   "orchestration": {
@@ -120,6 +126,7 @@ Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
 ```
 
 **herramientas soportadas**:
+
 - Cline (200,000 tokens)
 - Continue (100,000 tokens)
 - Cursor (150,000 tokens)
@@ -128,9 +135,11 @@ Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
 ---
 
 ### ai-tool-detector.json
+
 **Propósito**: Configuración de detección automática de herramientas
 
 **Caractersticas**:
+
 - Detección automática de herramientas IA
 - Configuración por herramienta
 - Parámetros especficos
@@ -139,9 +148,11 @@ Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
 ---
 
 ### dynamic-optimization.json
+
 **Propósito**: Configuración de optimización dinámica
 
 **Métricas monitoreadas**:
+
 - CPU usage
 - Memory usage
 - Token usage
@@ -152,6 +163,7 @@ Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
 - Error rate
 
 **Estrategias de optimización**:
+
 1. Ajuste de threshold
 2. Cambio de ratio de compresión
 3. Modificacin de consolidacin
@@ -161,9 +173,11 @@ Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
 ---
 
 ### security-policy.json
+
 **Propósito**: Configuración de políticas de seguridad
 
 **Secciones**:
+
 ```json
 {
   "encryption": {
@@ -190,9 +204,11 @@ Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
 ---
 
 ### tls-config.json
+
 **Propsito**: Configuración TLS/SSL
 
 **Parámetros**:
+
 - Certificados
 - Cipher suites
 - Validación de certificados
@@ -201,20 +217,23 @@ Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
 
 ---
 
-##  Cmo Usar configuraciónes
+## Cmo Usar configuraciónes
 
 ### Cargar configuración
+
 ```powershell
 $config = Get-Content .\config\testing.config.json | ConvertFrom-Json
 ```
 
 ### Modificar configuración
+
 ```powershell
 $config.testCoverage.minimumThreshold = 0.85
 $config | ConvertTo-Json | Set-Content .\config\testing.config.json
 ```
 
 ### Validar configuración
+
 ```powershell
 $schema = Get-Content .\config\schema.json | ConvertFrom-Json
 # Validar contra schema
@@ -222,9 +241,10 @@ $schema = Get-Content .\config\schema.json | ConvertFrom-Json
 
 ---
 
-##  Valores por Defecto
+## Valores por Defecto
 
 ### Engram Memory
+
 - Threshold: 250 tokens
 - Consolidation trigger: 5 packs
 - Compression ratio: 0.65 (65%)
@@ -232,6 +252,7 @@ $schema = Get-Content .\config\schema.json | ConvertFrom-Json
 - Cache hit rate: 70-80%
 
 ### Testing
+
 - Coverage mínimo: 80%
 - Coverage target: 90%
 - Timeout unit tests: 30s
@@ -239,6 +260,7 @@ $schema = Get-Content .\config\schema.json | ConvertFrom-Json
 - Timeout performance: 120s
 
 ### Seguridad
+
 - Algoritmo: AES-256
 - Key length: 256 bits
 - Mode: CBC
@@ -247,14 +269,16 @@ $schema = Get-Content .\config\schema.json | ConvertFrom-Json
 
 ---
 
-##  Configuración Inicial
+## Configuración Inicial
 
 ### 1. Copiar templates
+
 ```bash
 cp config/tool-configs-template.json config/tool-configs.json
 ```
 
 ### 2. Personalizar valores
+
 ```powershell
 $config = Get-Content .\config\engram-memory.json | ConvertFrom-Json
 $config.phases.phase1.threshold = 300  # Aumentar threshold
@@ -262,13 +286,14 @@ $config | ConvertTo-Json | Set-Content .\config\engram-memory.json
 ```
 
 ### 3. Validar configuración
+
 ```powershell
 .\scripts\testing\run-tests.ps1 -TestType all
 ```
 
 ---
 
-##  Checklist de Configuración
+## Checklist de Configuración
 
 - [ ] Revisar `testing.config.json`
 - [ ] Revisar `engram-memory.json`
@@ -280,14 +305,16 @@ $config | ConvertTo-Json | Set-Content .\config\engram-memory.json
 
 ---
 
-##  Seguridad
+## Seguridad
 
 ### Archivos Sensibles
+
 - `.secrets` - NO incluir en git
 - `*.key` - NO incluir en git
 - `credentials.json` - NO incluir en git
 
 ### Proteccin
+
 ```bash
 # Agregar a .gitignore
 echo ".secrets" >> .gitignore
@@ -297,7 +324,7 @@ echo "credentials.json" >> .gitignore
 
 ---
 
-##  Documentacin Relacionada
+## Documentacin Relacionada
 
 - `docs/guides/SECURITY-HARDENING.md` - Seguridad
 - `docs/guides/TESTING-GUIDE.md` - Testing
@@ -306,16 +333,20 @@ echo "credentials.json" >> .gitignore
 
 ---
 
-##  Troubleshooting
+## Troubleshooting
 
 ### Problema: Configuración inválida
+
 **Solucin**: Validar JSON
+
 ```powershell
 $config = Get-Content .\config\testing.config.json | ConvertFrom-Json
 ```
 
 ### Problema: Valores por defecto no funcionan
+
 **Solucin**: Revisar `engram-memory.json`
+
 ```powershell
 $config = Get-Content .\config\engram-memory.json | ConvertFrom-Json
 $config | ConvertTo-Json -Depth 10
@@ -323,13 +354,12 @@ $config | ConvertTo-Json -Depth 10
 
 ---
 
-##  Conclusin
+## Conclusin
 
 Todos los archivos de configuración estn centralizados, documentados y listos para usar.
 
-**Estado**:  PRODUCCIÓN
+**Estado**: PRODUCCIÓN
 
 ---
 
-**última actualización**: 2026-04-21
-**Versión**: 2.0.0
+**última actualización**: 2026-04-21 **Versión**: 2.0.0

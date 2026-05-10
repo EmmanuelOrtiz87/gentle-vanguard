@@ -72,11 +72,7 @@
     "enabled": true,
     "credentialSource": "keys/master.key",
     "passwordHash": "b229948ad10a27e95681cd4c0e41bc72c90c8231029fdb0ba6b38900520ffcdf",
-    "pcIdentitySource": [
-      "machineGuid",
-      "macAddress",
-      "hostname"
-    ],
+    "pcIdentitySource": ["machineGuid", "macAddress", "hostname"],
     "currentPcFingerprint": "60da6dc91981e0bb6c5868f29612f9e79752d5d45d426741620000002d35b6eb",
     "trustedPcs": [
       {
@@ -94,16 +90,7 @@
   },
   "providerPriority": {
     "description": "Ordered list for model selection UI (first = default)",
-    "order": [
-      "anthropic",
-      "openai",
-      "bedrock",
-      "gemini",
-      "azure",
-      "ollama",
-      "dify",
-      "custom"
-    ]
+    "order": ["anthropic", "openai", "bedrock", "gemini", "azure", "ollama", "dify", "custom"]
   },
   "audit": {
     "enabled": true,

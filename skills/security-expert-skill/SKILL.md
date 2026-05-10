@@ -7,11 +7,15 @@ description: >
 
 # Security Expert Skill
 
-**Trigger Keywords:** security, secure, credentials, secrets, api-key, token, password, auth, jwt, oauth, ssl, tls, https, csrf, xss, sqli, injection, vulnerability, exploit, cipher, encrypt, decrypt, hash, signature, certificate, pem, jwt, bearer, basic-auth, cors, csrf, rate-limit, sanitize, validate
+**Trigger Keywords:** security, secure, credentials, secrets, api-key, token, password, auth, jwt,
+oauth, ssl, tls, https, csrf, xss, sqli, injection, vulnerability, exploit, cipher, encrypt,
+decrypt, hash, signature, certificate, pem, jwt, bearer, basic-auth, cors, csrf, rate-limit,
+sanitize, validate
 
 ## Overview
 
 Security Expert is an AI-powered security assistant that provides:
+
 - **Pre-commit validation** - Scans code for exposed secrets, vulnerabilities, and security issues
 - **Interactive security reviews** - Generates detailed security audit reports
 - **Real-time coding assistance** - Helps developers write secure code
@@ -21,6 +25,7 @@ Security Expert is an AI-powered security assistant that provides:
 ## Activation Triggers
 
 This skill activates when:
+
 1. User commits code (`git commit`) - via pre-commit hook
 2. User requests security review (`wf security scan`, `wf security audit`)
 3. User asks about security topics
@@ -29,6 +34,7 @@ This skill activates when:
 ## Security Categories
 
 ### 1. Secrets & Credentials
+
 - API keys, tokens, passwords in code
 - Environment variables misconfiguration
 - Secrets in Git history
@@ -36,6 +42,7 @@ This skill activates when:
 - Private keys (PEM, RSA, etc.)
 
 ### 2. Authentication & Authorization
+
 - JWT implementation issues
 - Session management
 - Broken authentication
@@ -43,6 +50,7 @@ This skill activates when:
 - Insecure password storage
 
 ### 3. Input Validation & Injection
+
 - SQL Injection
 - Cross-Site Scripting (XSS)
 - Command Injection
@@ -52,6 +60,7 @@ This skill activates when:
 - Path Traversal
 
 ### 4. API Security
+
 - Missing authentication
 - Missing rate limiting
 - CORS misconfiguration
@@ -60,6 +69,7 @@ This skill activates when:
 - Mass assignment
 
 ### 5. Data Protection
+
 - Unencrypted sensitive data
 - Weak encryption algorithms
 - Improper key management
@@ -67,6 +77,7 @@ This skill activates when:
 - Missing data masking
 
 ### 6. Dependencies
+
 - Known CVEs in dependencies
 - Outdated packages with vulnerabilities
 - Malicious packages
@@ -103,6 +114,7 @@ This skill activates when:
 ### Coding Assistance
 
 When user asks about security or mentions security keywords:
+
 1. Analyze the context
 2. Provide secure implementation patterns
 3. Explain vulnerabilities to avoid
@@ -111,17 +123,18 @@ When user asks about security or mentions security keywords:
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `wf security scan` | Quick scan for critical issues |
-| `wf security audit` | Full security audit with report |
-| `wf security fix` | Auto-fix common issues |
-| `wf security report` | Generate security review document |
-| `wf security check <file>` | Scan specific file |
+| Command                    | Description                       |
+| -------------------------- | --------------------------------- |
+| `wf security scan`         | Quick scan for critical issues    |
+| `wf security audit`        | Full security audit with report   |
+| `wf security fix`          | Auto-fix common issues            |
+| `wf security report`       | Generate security review document |
+| `wf security check <file>` | Scan specific file                |
 
 ## Output Formats
 
 ### Console Output
+
 ```
 [SECURITY] Scanning...
 [CRITICAL] secrets/api-keys.md:3 - API key exposed
@@ -133,33 +146,39 @@ Found: 4 issues (1 critical, 1 high, 1 medium, 1 low)
 Action required: Review critical issues before commit
 ```
 
-### Report Format (docs/security-review.md)  output path, created by agent
+### Report Format (docs/security-review.md) output path, created by agent
+
 ```markdown
 # Security Review Report
 
-**Date:** YYYY-MM-DD
-**Scope:** Full codebase
-**Severity:** Critical/High/Medium/Low
+**Date:** YYYY-MM-DD **Scope:** Full codebase **Severity:** Critical/High/Medium/Low
 
 ## Executive Summary
+
 [High-level findings overview]
 
 ## Critical Issues
+
 [Must-fix before production]
 
 ## High Issues
+
 [Should-fix soon]
 
 ## Medium Issues
+
 [Consider fixing]
 
 ## Low Issues
+
 [Nice to have]
 
 ## Recommendations
+
 [Security hardening steps]
 
 ## Remediation Status
+
 - [ ] Issue 1 - Fixed
 - [ ] Issue 2 - In progress
 - [ ] Issue 3 - Accepted risk
@@ -178,6 +197,7 @@ When issues are found, the skill offers:
 ## Tech Stack Detection
 
 Automatically detects and applies relevant security rules:
+
 - **Node.js**: Express security, npm audit, node security
 - **Python**: Bandit, safety, pip-audit
 - **Go**: Gosec, govulncheck, depguard
@@ -187,6 +207,7 @@ Automatically detects and applies relevant security rules:
 ## Configuration
 
 Edit `config/security-rules.json` to customize:
+
 - Severity thresholds
 - Excluded paths (test files, examples)
 - Custom vulnerability patterns
@@ -201,19 +222,19 @@ Edit `config/security-rules.json` to customize:
 
 ## Severity Levels
 
-| Level | Description | Action |
-|-------|-------------|--------|
-| Critical | Remote code execution, data breach | Block + Report |
-| High | Authentication bypass, data exposure | Block + Fix required |
-| Medium | Information disclosure, DoS | Warn + Review |
-| Low | Best practice violation | Warn + Suggest |
+| Level    | Description                          | Action               |
+| -------- | ------------------------------------ | -------------------- |
+| Critical | Remote code execution, data breach   | Block + Report       |
+| High     | Authentication bypass, data exposure | Block + Fix required |
+| Medium   | Information disclosure, DoS          | Warn + Review        |
+| Low      | Best practice violation              | Warn + Suggest       |
 
 ## Best Practices Reference
 
 See `references/security-patterns.md` for:
+
 - Secure coding patterns by language
 - Authentication implementation guides
 - Encryption best practices
 - API security checklist
 - Dependency management
-

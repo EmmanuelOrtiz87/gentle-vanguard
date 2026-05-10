@@ -3,6 +3,7 @@
 Quick reference for using Foundation adapters with various tools.
 
 ---
+
 ## MCP Bridge Examples
 
 ### 1. Configure Windsurf to use Foundation
@@ -24,12 +25,14 @@ Quick reference for using Foundation adapters with various tools.
 ```
 
 **Use in Windsurf**:
+
 ```
 User: "Run a 7D review on src/components/App.tsx"
 Windsurf calls: foundation_review({ path: "src/components/App.tsx" })
 ```
 
 ---
+
 ### 2. Configure Codex to use Foundation
 
 **File**: `~/.codex/mcp.json` (if Codex supports MCP)
@@ -56,6 +59,7 @@ export OPENAI_API_BASE="http://localhost:8080/v1"
 ```
 
 ---
+
 ### 3. Call Foundation Tools via MCP
 
 **Example: Run 7D Code Review**
@@ -67,8 +71,8 @@ const result = await mcpClient.callTool({
   arguments: {
     path: 'src/components/App.tsx',
     dimensions: ['security', 'quality', 'architecture'],
-    mode: 'full'
-  }
+    mode: 'full',
+  },
 });
 
 console.log(result.content[0].text); // Review output
@@ -81,12 +85,13 @@ const result = await mcpClient.callTool({
   name: 'foundation_delegate',
   arguments: {
     agent: 'sdd-apply',
-    prompt: 'Implement the authentication feature from task #123'
-  }
+    prompt: 'Implement the authentication feature from task #123',
+  },
 });
 ```
 
 ---
+
 ## Format Adapter Examples
 
 ### Windsurf Adapter (Planned)
@@ -114,6 +119,7 @@ export OPENAI_API_KEY="dummy"  # Not needed for local
 ```
 
 ---
+
 ## Enhanced Detection Examples
 
 ### Run Detection
@@ -154,6 +160,7 @@ if (-not $detection.supportsMcp) {
 ```
 
 ---
+
 ## End-to-End Flow Examples
 
 ### Scenario 1: Windsurf User Wants 7D Review
@@ -183,6 +190,7 @@ if (-not $detection.supportsMcp) {
 ```
 
 ---
+
 ## Troubleshooting
 
 ### MCP Bridge not connecting
@@ -208,5 +216,6 @@ Get-ChildItem env: | Where-Object { $_.Name -like "*WINDSURF*" }
 ```
 
 ---
-**Status**:  Work in Progress  
+
+**Status**: Work in Progress  
 **Last Updated**: 2026-04-28

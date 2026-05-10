@@ -8,12 +8,8 @@
     "autoLoad": false,
     "mcpBridge": false
   },
-  "capabilities": [
-    "mission_control"
-  ],
-  "configFiles": [
-    ".antigravity/config.json"
-  ],
+  "capabilities": ["mission_control"],
+  "configFiles": [".antigravity/config.json"],
   "adapter": {
     "type": "format-adapter",
     "path": "adapters/format-adapters/antigravity-adapter",

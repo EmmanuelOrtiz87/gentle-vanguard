@@ -41,9 +41,7 @@
   "tokenAutopilot": {
     "enabled": true,
     "profile": "hard",
-    "triggerStatuses": [
-      "HARD_LIMIT"
-    ],
+    "triggerStatuses": ["HARD_LIMIT"],
     "minConsecutiveAlerts": 1,
     "autoApplyOnCommands": [
       "context-pack",
@@ -56,25 +54,9 @@
     "applyChatLevel": "chat-compact",
     "stateFile": ".session/token-autopilot-state.json",
     "manualAliases": {
-      "economy": [
-        "ahorro",
-        "modo-ahorro",
-        "ahorro-on",
-        "economy",
-        "token-save"
-      ],
-      "balanced": [
-        "normal",
-        "balanceado",
-        "modo-normal",
-        "ahorro-off"
-      ],
-      "detailed": [
-        "detallado",
-        "detalle",
-        "full",
-        "verbose"
-      ]
+      "economy": ["ahorro", "modo-ahorro", "ahorro-on", "economy", "token-save"],
+      "balanced": ["normal", "balanceado", "modo-normal", "ahorro-off"],
+      "detailed": ["detallado", "detalle", "full", "verbose"]
     }
   }
 }

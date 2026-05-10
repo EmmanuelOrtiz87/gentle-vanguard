@@ -22,7 +22,7 @@ Use these folders:
 
 Add one or more `.md` files per scope. Other formats are not loaded.
 
-## File Format  Mandatory
+## File Format Mandatory
 
 All rule files **must** be Markdown (`.md`). This is enforced by the loader and ensures:
 
@@ -30,7 +30,8 @@ All rule files **must** be Markdown (`.md`). This is enforced by the loader and 
 - Predictable parsing and truncation in `context-pack` output.
 - Clear section headers that AI agents can interpret without ambiguity.
 
-`README.md` files inside scope directories are reserved for scope documentation and are **excluded** from rule loading automatically.
+`README.md` files inside scope directories are reserved for scope documentation and are **excluded**
+from rule loading automatically.
 
 ### Required Template
 
@@ -41,11 +42,11 @@ Every rule file must follow this structure:
 
 ## Metadata
 
-| Field     | Value      |
-|-----------|------------|
-| Rule ID   | SCOPE-NNN  |
-| Scope     | [target]   |
-| Severity  | [HIGH / MEDIUM / LOW] |
+| Field    | Value                 |
+| -------- | --------------------- |
+| Rule ID  | SCOPE-NNN             |
+| Scope    | [target]              |
+| Severity | [HIGH / MEDIUM / LOW] |
 
 ## Requirement
 
@@ -53,7 +54,7 @@ Clear, actionable statement of what is required.
 
 ## Why It Matters
 
-Rationale  explain the risk or business reason.
+Rationale explain the risk or business reason.
 
 ## Validation
 
@@ -62,19 +63,19 @@ How to verify the rule is being followed (command, checklist, or acceptance crit
 
 ### Rule ID Convention
 
-| Scope          | Prefix   | Example    |
-|----------------|----------|------------|
-| `technical/`   | `TECH-`  | `TECH-001` |
-| `business/`    | `BIZ-`   | `BIZ-001`  |
-| `review/`      | `REV-`   | `REV-001`  |
+| Scope        | Prefix  | Example    |
+| ------------ | ------- | ---------- |
+| `technical/` | `TECH-` | `TECH-001` |
+| `business/`  | `BIZ-`  | `BIZ-001`  |
+| `review/`    | `REV-`  | `REV-001`  |
 
 ### Severity Levels
 
-| Level    | Meaning                                       |
-|----------|-----------------------------------------------|
-| HIGH     | Must be enforced; blocks merge or deployment. |
-| MEDIUM   | Should be enforced; flag in review.           |
-| LOW      | Advisory; informational in context output.    |
+| Level  | Meaning                                       |
+| ------ | --------------------------------------------- |
+| HIGH   | Must be enforced; blocks merge or deployment. |
+| MEDIUM | Should be enforced; flag in review.           |
+| LOW    | Advisory; informational in context output.    |
 
 ## Configuration
 
@@ -117,7 +118,7 @@ Export rule digest:
 ## Operational Notes
 
 1. Custom rules complement existing skills, not replace safety/compliance policy.
-2. Keep rule files concise and actionable  prefer short, explicit statements over long prose.
+2. Keep rule files concise and actionable prefer short, explicit statements over long prose.
 3. Review rule changes via normal PR workflow.
 4. Prefer advisory language unless a rule is truly blocking.
 5. Files that do not match the `.md` extension are silently ignored by the loader.

@@ -1,14 +1,14 @@
 ## Dimension Details
 
-| Dimension | Icon | Auto | Scope | What it Checks |
-|-----------|------|------|-------|----------------|
-| **Security** | [S] | Yes | security | Secrets, vulnerabilities, OWASP |
-| **Quality** | [Q] | Yes | quality | Code smells, complexity, patterns |
-| **Architecture** | [A] | No | architecture | Structure, coupling, design |
-| **Testing** | [T] | No | testing | Coverage, test quality |
-| **Documentation** | [D] | No | docs | README, comments, ADRs |
-| **API Design** | [API] | No | api | REST compliance, validation |
-| **Git Workflow** | [G] | No | git | Commits, branches, hooks |
+| Dimension         | Icon  | Auto | Scope        | What it Checks                    |
+| ----------------- | ----- | ---- | ------------ | --------------------------------- |
+| **Security**      | [S]   | Yes  | security     | Secrets, vulnerabilities, OWASP   |
+| **Quality**       | [Q]   | Yes  | quality      | Code smells, complexity, patterns |
+| **Architecture**  | [A]   | No   | architecture | Structure, coupling, design       |
+| **Testing**       | [T]   | No   | testing      | Coverage, test quality            |
+| **Documentation** | [D]   | No   | docs         | README, comments, ADRs            |
+| **API Design**    | [API] | No   | api          | REST compliance, validation       |
+| **Git Workflow**  | [G]   | No   | git          | Commits, branches, hooks          |
 
 ### Security Scan Details
 

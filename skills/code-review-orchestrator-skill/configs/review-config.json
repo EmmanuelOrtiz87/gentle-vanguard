@@ -6,7 +6,18 @@
   "review": {
     "scope": {
       "default": "all",
-      "available": ["all", "security", "quality", "architecture", "testing", "docs", "api", "git", "quick", "full"]
+      "available": [
+        "all",
+        "security",
+        "quality",
+        "architecture",
+        "testing",
+        "docs",
+        "api",
+        "git",
+        "quick",
+        "full"
+      ]
     },
     "output": {
       "path": "docs/code-reviews",
@@ -98,11 +109,7 @@
       "**/mocks/**",
       "**/*.min.js"
     ],
-    "filePatterns": [
-      "\\.min\\.(js|css)$",
-      "\\.bundle\\.js$",
-      "\\.compiled\\.ts$"
-    ]
+    "filePatterns": ["\\.min\\.(js|css)$", "\\.bundle\\.js$", "\\.compiled\\.ts$"]
   },
 
   "thresholds": {

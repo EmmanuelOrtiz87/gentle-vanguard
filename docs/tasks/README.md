@@ -10,13 +10,13 @@
 
 Task briefs provide context, scope, and acceptance criteria for development work.
 
-| Goal | Description |
-|------|-------------|
-| **🎯 Focus** | Clear problem statement and desired outcome |
-| **📏 Scope** | What's in scope and out of scope |
-| **✅ Acceptance** | Conditions for completion |
-| **⚠️ Risks** | Known technical or workflow risks |
-| **🔄 Status** | Current state and next steps |
+| Goal              | Description                                 |
+| ----------------- | ------------------------------------------- |
+| **🎯 Focus**      | Clear problem statement and desired outcome |
+| **📏 Scope**      | What's in scope and out of scope            |
+| **✅ Acceptance** | Conditions for completion                   |
+| **⚠️ Risks**      | Known technical or workflow risks           |
+| **🔄 Status**     | Current state and next steps                |
 
 > 💡 **TIP:** Use task briefs for any significant work that spans multiple sessions.
 
@@ -37,6 +37,7 @@ tasks/
 ## 🚀 Quick Start#
 
 ### Create New Task Brief#
+
 ```powershell
 # Use the template
 cp ../supplementary/TASK-BRIEF.template.md task-name.md
@@ -49,31 +50,33 @@ cp ../supplementary/TASK-BRIEF.template.md task-name.md
 
 Each task brief should include:
 
-| Component | Description |
-|------------|-------------|
-| **🎯 Goal** | Clear problem statement and desired outcome |
-| **📏 Scope** | What's in scope and out of scope |
-| **📂 Key Files** | Primary files to work with |
-| **✅ Acceptance Criteria** | Conditions for completion |
-| **⚠️ Risks** | Known technical or workflow risks |
-| **🔄 Status** | Current state and next steps |
-| **🔮 Future Release Backlog** | Items deferred to future releases |
+| Component                     | Description                                 |
+| ----------------------------- | ------------------------------------------- |
+| **🎯 Goal**                   | Clear problem statement and desired outcome |
+| **📏 Scope**                  | What's in scope and out of scope            |
+| **📂 Key Files**              | Primary files to work with                  |
+| **✅ Acceptance Criteria**    | Conditions for completion                   |
+| **⚠️ Risks**                  | Known technical or workflow risks           |
+| **🔄 Status**                 | Current state and next steps                |
+| **🔮 Future Release Backlog** | Items deferred to future releases           |
 
 ---
 
 ## 📊 Active Task Briefs#
 
 ### Active Development#
-| Task | Description | Link |
-|------|-------------|------|
-| **🏗️ Foundation Session Hardening** | Governance improvements | [foundation-session-hardening.md](foundation-session-hardening.md) |
-| **📊 Chat Baseline Architecture** | Chat architecture validation | [chat-baseline-architecture-validation.md](chat-baseline-architecture-validation.md) |
+
+| Task                                | Description                  | Link                                                                                 |
+| ----------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------ |
+| **🏗️ Foundation Session Hardening** | Governance improvements      | [foundation-session-hardening.md](foundation-session-hardening.md)                   |
+| **📊 Chat Baseline Architecture**   | Chat architecture validation | [chat-baseline-architecture-validation.md](chat-baseline-architecture-validation.md) |
 
 ### Templates#
-| Template | Description | Link |
-|-----------|-------------|------|
-| **📑 Task Brief Template** | Template for new task briefs | [../supplementary/TASK-BRIEF.template.md](../supplementary/TASK-BRIEF.template.md) |
-| **📑 Prompt Playbook** | Prompt engineering guide | [../supplementary/templates/PROMPT-PLAYBOOK.md](../supplementary/templates/PROMPT-PLAYBOOK.md) |
+
+| Template                   | Description                  | Link                                                                                           |
+| -------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------- |
+| **📑 Task Brief Template** | Template for new task briefs | [../supplementary/TASK-BRIEF.template.md](../supplementary/TASK-BRIEF.template.md)             |
+| **📑 Prompt Playbook**     | Prompt engineering guide     | [../supplementary/templates/PROMPT-PLAYBOOK.md](../supplementary/templates/PROMPT-PLAYBOOK.md) |
 
 ---
 
@@ -88,22 +91,22 @@ Each task brief should include:
 
 ## 📚 Related Documentation#
 
-| Document | Purpose |
-|-----------|---------|
+| Document             | Purpose                                                  |
+| -------------------- | -------------------------------------------------------- |
 | **📖 Session Guide** | [../guides/SESSION-GUIDE.md](../guides/SESSION-GUIDE.md) |
-| **🏗️ Architecture** | [../architecture/README.md](../architecture/README.md) |
-| **📋 SDD Lifecycle** | [../sdd/README.md](../sdd/README.md) |
+| **🏗️ Architecture**  | [../architecture/README.md](../architecture/README.md)   |
+| **📋 SDD Lifecycle** | [../sdd/README.md](../sdd/README.md)                     |
 | **📂 Supplementary** | [../supplementary/README.md](../supplementary/README.md) |
 
 ---
 
 ## 🚀 Quick Commands Reference#
 
-| Command | Description | Output |
-|----------|-------------|--------|
-| `wf task-brief <name>` | Generate task brief | `tasks/<name>.md` |
-| `wf start-session <task>` | Start session with task | `docs/sessions/YYYY-MM-DD-HHmmss-session-start.md` |
-| `wf end-session` | End session | `docs/sessions/YYYY-MM-DD-HHmmss-delivery-closure.md` |
+| Command                   | Description             | Output                                                |
+| ------------------------- | ----------------------- | ----------------------------------------------------- |
+| `wf task-brief <name>`    | Generate task brief     | `tasks/<name>.md`                                     |
+| `wf start-session <task>` | Start session with task | `docs/sessions/YYYY-MM-DD-HHmmss-session-start.md`    |
+| `wf end-session`          | End session             | `docs/sessions/YYYY-MM-DD-HHmmss-delivery-closure.md` |
 
 ---
 

@@ -5,13 +5,14 @@
 ### JWT Implementation
 
 **DO:**
+
 ```typescript
 import jwt from 'jsonwebtoken';
 
 const SECRET = process.env.JWT_SECRET;
 const options = {
   expiresIn: '1h',
-  algorithm: 'HS256'
+  algorithm: 'HS256',
 };
 
 const token = jwt.sign(payload, SECRET, options);
@@ -27,6 +28,7 @@ try {
 ```
 
 **DON'T:**
+
 ```typescript
 // No expiration
 jwt.sign(payload, secret);
@@ -42,6 +44,7 @@ const decoded = jwt.decode(token); // Just decode, don't verify!
 ### Password Hashing
 
 **DO (bcrypt):**
+
 ```typescript
 import bcrypt from 'bcrypt';
 const saltRounds = 12;
@@ -50,6 +53,7 @@ const match = await bcrypt.compare(password, hash);
 ```
 
 **DO (Argon2):**
+
 ```python
 from argon2 import PasswordHasher
 ph = PasswordHasher()
@@ -58,6 +62,7 @@ ph.verify(hash, password)
 ```
 
 **DON'T:**
+
 ```python
 # Never use these
 import hashlib
@@ -71,6 +76,7 @@ hashlib.sha256(password) # Better but no salt
 ### SQL Injection Prevention
 
 **DO (Parameterized Queries):**
+
 ```typescript
 // Node.js with pg
 const query = 'SELECT * FROM users WHERE id = $1';
@@ -81,6 +87,7 @@ cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
 ```
 
 **DON'T:**
+
 ```typescript
 // String concatenation - SQL INJECTION
 const query = `SELECT * FROM users WHERE id = ${userId}`;
@@ -90,6 +97,7 @@ const query = `SELECT * FROM users WHERE name = '${name}'`;
 ### XSS Prevention
 
 **DO:**
+
 ```typescript
 // React (auto-escapes)
 return <div>{userInput}</div>;
@@ -104,12 +112,13 @@ app.use(helmet.xssFilter());
 ```
 
 **DON'T:**
+
 ```typescript
 // Direct innerHTML
-element.innerHTML = userInput;  // VULNERABLE
+element.innerHTML = userInput; // VULNERABLE
 
 // jQuery
-$(selector).html(userInput);    // VULNERABLE
+$(selector).html(userInput); // VULNERABLE
 ```
 
 ## API Security
@@ -117,29 +126,34 @@ $(selector).html(userInput);    // VULNERABLE
 ### CORS Configuration
 
 **DO:**
+
 ```typescript
 import cors from 'cors';
 
-app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS?.split(','),
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(
+  cors({
+    origin: process.env.ALLOWED_ORIGINS?.split(','),
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  }),
+);
 ```
 
 **DON'T:**
+
 ```typescript
 // Allow all origins
-app.use(cors({ origin: '*' }));  // VULNERABLE
+app.use(cors({ origin: '*' })); // VULNERABLE
 
 // Allow credentials with wildcard
-app.use(cors({ origin: '*', credentials: true }));  // VULNERABLE
+app.use(cors({ origin: '*', credentials: true })); // VULNERABLE
 ```
 
 ### Rate Limiting
 
 **DO:**
+
 ```typescript
 import rateLimit from 'express-rate-limit';
 
@@ -148,7 +162,7 @@ const limiter = rateLimit({
   max: 100, // limit each IP to 100 requests per window
   message: 'Too many requests',
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
 });
 
 app.use('/api', limiter);
@@ -162,23 +176,26 @@ import helmet from 'helmet';
 app.use(helmet());
 
 // Specific headers
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "'strict-dynamic'"],
-    styleSrc: ["'self'", "https://fonts.googleapis.com"],
-    fontSrc: ["'self'", "https://fonts.gdn" ],
-    imgSrc: ["'self'", "data:"],
-    connectSrc: ["'self'"],
-    frameAncestors: ["'none'"],
-    upgradeInsecureRequests: []
-  }
-}));
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'strict-dynamic'"],
+      styleSrc: ["'self'", 'https://fonts.googleapis.com'],
+      fontSrc: ["'self'", 'https://fonts.gdn'],
+      imgSrc: ["'self'", 'data:'],
+      connectSrc: ["'self'"],
+      frameAncestors: ["'none'"],
+      upgradeInsecureRequests: [],
+    },
+  }),
+);
 ```
 
 ## Secrets Management
 
 ### DO:
+
 ```typescript
 // .env file (not committed)
 DATABASE_URL=postgres://user:password@host:5432/db
@@ -192,6 +209,7 @@ const dbUrl = process.env.DATABASE_URL;
 ```
 
 ### Environment Variables:
+
 ```bash
 # .gitignore
 .env
@@ -204,10 +222,11 @@ const dbUrl = process.env.DATABASE_URL;
 ```
 
 ### DON'T:
+
 ```typescript
 // Hardcoded secrets
-const API_KEY = "sk_live_1234567890abcdef";
-const DB_PASSWORD = "mySecretPassword123";
+const API_KEY = 'sk_live_1234567890abcdef';
+const DB_PASSWORD = 'mySecretPassword123';
 
 // In code comments
 // API Key: sk_live_1234567890abcdef
@@ -219,33 +238,36 @@ fetch('https://api.example.com?key=sk_live_1234567890');
 ## Cryptography
 
 ### DO:
+
 ```typescript
 import crypto from 'crypto';
 
 function encrypt(text, key) {
   const iv = crypto.randomBytes(16);
   const cipher = crypto.createCipheriv('aes-256-gcm', Buffer.from(key, 'hex'), iv);
-  
+
   let encrypted = cipher.update(text, 'utf8', 'hex');
   encrypted += cipher.final('hex');
-  
+
   const authTag = cipher.getAuthTag().toString('hex');
-  
+
   return iv.toString('hex') + ':' + encrypted + ':' + authTag;
 }
 ```
 
 ### DON'T:
+
 ```javascript
 // Weak algorithms
-crypto.createCipher('aes128', key);  // Weak
-crypto.createHash('md5');            // Weak
-crypto.createHash('sha1');           // Deprecated
+crypto.createCipher('aes128', key); // Weak
+crypto.createHash('md5'); // Weak
+crypto.createHash('sha1'); // Deprecated
 ```
 
 ## Command Injection Prevention
 
 ### DO:
+
 ```typescript
 import { execFile } from 'child_process';
 import { validateInput } from './validators';
@@ -259,6 +281,7 @@ execFile('node', ['--versión'], (error, stdout) => {
 ```
 
 ### DON'T:
+
 ```typescript
 const { exec } = require('child_process');
 
@@ -281,7 +304,7 @@ const storage = multer.diskStorage({
     // Generate random filename
     const uniqueSuffix = crypto.randomBytes(16).toString('hex');
     cb(null, uniqueSuffix + path.extname(file.originalname));
-  }
+  },
 });
 
 const upload = multer({
@@ -295,13 +318,14 @@ const upload = multer({
     } else {
       cb(new Error('Invalid file type'));
     }
-  }
+  },
 });
 ```
 
 ## Logging Security
 
 ### DON'T Log:
+
 ```typescript
 // Never log these
 console.log(req.body.password);
@@ -311,19 +335,21 @@ console.log(userCreditCardNumber);
 ```
 
 ### DO Log (Sanitized):
+
 ```typescript
 // Log safely
 logger.info('User login attempt', {
   userId: user.id,
   email: sanitize(user.email), // Remove sensitive parts
   ip: req.ip,
-  timestamp: new Date()
+  timestamp: new Date(),
 });
 ```
 
 ## Dependency Security
 
 ### npm:
+
 ```bash
 # Audit before install
 npm audit
@@ -336,6 +362,7 @@ npm ci  # Clean install from lock file
 ```
 
 ### Python:
+
 ```bash
 # Check for vulnerabilities
 pip audit
@@ -346,6 +373,7 @@ pip freeze > requirements.lock
 ```
 
 ### Go:
+
 ```bash
 # Vulnerability scanning
 govulncheck ./...
@@ -384,4 +412,3 @@ go mod verify
 - [ ] File uploads validated
 - [ ] Error messages don't leak information
 - [ ] Security headers set
-

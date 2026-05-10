@@ -1,6 +1,7 @@
 # Lecciones Aprendidas - Sesin 2026-04-23-02
 
 ## Resumen de la Sesin
+
 - **Fecha**: 2026-04-23
 - **Sesin ID**: session-2026-04-23-02
 - **Objetivo**: Iniciar sesin, validar y corregir scripts de PowerShell
@@ -8,10 +9,11 @@
 ## Problemas Identificados
 
 ### 1. Error: "Unexpected token 'Script' in expression or statement"
+
 **Ubicacin**: `skills/foundation-audit-skill/scripts/sync-local.ps1` (lneas 164-181)
 
-**Causa Raz**:
-Backticks escapando signos de dlar dentro de una cadena heredoc con comillas dobles:
+**Causa Raz**: Backticks escapando signos de dlar dentro de una cadena heredoc con comillas dobles:
+
 ```powershell
 # INCORRECTO
 $wrapperContent = @"
@@ -20,8 +22,8 @@ $wrapperContent = @"
 "@
 ```
 
-**Solucin**:
-Cambiar de comillas dobles a comillas simples en cadena heredoc:
+**Solucin**: Cambiar de comillas dobles a comillas simples en cadena heredoc:
+
 ```powershell
 # CORRECTO
 $wrapperContent = @'
@@ -30,20 +32,22 @@ $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 '@
 ```
 
-**Leccin**: En PowerShell, usar `@'...'@` para cadenas literales que contengan variables, evita interpretacin de backticks.
+**Leccin**: En PowerShell, usar `@'...'@` para cadenas literales que contengan variables, evita
+interpretacin de backticks.
 
 ### 2. Error: "Falta la cadena en el terminador"
+
 **Ubicacin**: `skills/foundation-audit-skill/scripts/audit-workflow.ps1` (lnea 161)
 
-**Causa Raz**:
-Backticks dentro de comillas dobles siendo interpretados como caracteres de escape:
+**Causa Raz**: Backticks dentro de comillas dobles siendo interpretados como caracteres de escape:
+
 ```powershell
 # INCORRECTO
 Write-Host "Working Dir: $WorkingDir`n"
 ```
 
-**Solucin**:
-Separar en mltiples lneas o usar comillas simples:
+**Solucin**: Separar en mltiples lneas o usar comillas simples:
+
 ```powershell
 # CORRECTO
 Write-Host "Working Dir: $WorkingDir"
@@ -54,23 +58,23 @@ Write-Host ""
 
 ## Patrones Problemticos Encontrados
 
-| Patrn | Problema | Solucin |
-|--------|----------|----------|
-| `@"...\`$var...\`n"@` | Backticks escapando variables | Usar `@'...$var...'@` |
-| `"text\`n"` | Backtick interpretado como escape | Usar mltiples Write-Host o `"`n"` |
-| `--SkipJudgment` en strings | Operador unario interpretado | Cambiar a `-Skip` o escapar |
+| Patrn                       | Problema                          | Solucin                           |
+| --------------------------- | --------------------------------- | --------------------------------- |
+| `@"...\`$var...\`n"@`       | Backticks escapando variables     | Usar `@'...$var...'@`             |
+| `"text\`n"`                 | Backtick interpretado como escape | Usar mltiples Write-Host o `"`n"` |
+| `--SkipJudgment` en strings | Operador unario interpretado      | Cambiar a `-Skip` o escapar       |
 
 ## Bsquedas Realizadas
 
--  Bsqueda de `@"[\s\S]*`\$[\s\S]*"@` en skills/ - 0 resultados despus de correccin
--  Bsqueda de `@"[\s\S]*`\$[\s\S]*"@` en scripts/ - 0 resultados
--  Bsqueda de `@"[\s\S]*`\$[\s\S]*"@` en scripts/utilities/ - 0 resultados
+- Bsqueda de `@"[\s\S]*`\$[\s\S]\*"@` en skills/ - 0 resultados despus de correccin
+- Bsqueda de `@"[\s\S]*`\$[\s\S]\*"@` en scripts/ - 0 resultados
+- Bsqueda de `@"[\s\S]*`\$[\s\S]\*"@` en scripts/utilities/ - 0 resultados
 
 ## Archivos Modificados
 
 1. **skills/foundation-audit-skill/scripts/sync-local.ps1**
    - Lneas: 164-181
-   - Cambio: Cadena heredoc con comillas dobles  comillas simples
+   - Cambio: Cadena heredoc con comillas dobles comillas simples
 
 2. **skills/foundation-audit-skill/scripts/audit-workflow.ps1**
    - Lneas: Reescritura completa
@@ -81,6 +85,7 @@ Write-Host ""
 ### Para Prevenir Errores Similares
 
 1. **Usar PSScriptAnalyzer** en CI/CD
+
    ```powershell
    Invoke-ScriptAnalyzer -Path "*.ps1" -Severity Warning
    ```
@@ -108,6 +113,5 @@ Write-Host ""
 
 ## Estado Final
 
- Todos los scripts de PowerShell funcionan correctamente
- No hay ms patrones problemticos detectados
- Sesin lista para cierre y documentacin
+Todos los scripts de PowerShell funcionan correctamente No hay ms patrones problemticos detectados
+Sesin lista para cierre y documentacin

@@ -70,6 +70,7 @@ Types:
 ```
 
 Examples:
+
 ```bash
 git commit -m "feat(cli): add interactive project wizard"
 git commit -m "fix(docker): resolve multi-stage build issue"
@@ -155,13 +156,13 @@ workspace-foundation/
 
 ## Scripts
 
-| Script | Purpose |
-|--------|---------|
-| `scripts/foundation/wf.ps1 init` | Initialize workspace |
-| `scripts/project/new-project.ps1 -Name <name> -Kind <kind>` | Create new project |
-| `scripts/foundation/wf.ps1 validate` | Validate workspace |
-| `scripts/utilities/wf.ps1 health` | Check tool activation and workflow health |
-| `scripts/validation/validate-project.ps1` | Run repository validation gate |
+| Script                                                      | Purpose                                   |
+| ----------------------------------------------------------- | ----------------------------------------- |
+| `scripts/foundation/wf.ps1 init`                            | Initialize workspace                      |
+| `scripts/project/new-project.ps1 -Name <name> -Kind <kind>` | Create new project                        |
+| `scripts/foundation/wf.ps1 validate`                        | Validate workspace                        |
+| `scripts/utilities/wf.ps1 health`                           | Check tool activation and workflow health |
+| `scripts/validation/validate-project.ps1`                   | Run repository validation gate            |
 
 ## Questions?
 

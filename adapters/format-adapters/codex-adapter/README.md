@@ -3,22 +3,26 @@
 Converts Foundation skills to OpenAI Codex function calling format.
 
 ---
+
 ## OpenAI Codex Format
 
 Codex uses:
+
 - **Function calling**: JSON Schema for tool definitions
 - **Chat Completions API**: `/v1/chat/completions` endpoint
 - **Tools array**: List of available functions
 
 ---
+
 ## Features
 
 ✅ Converts `SKILL.md` → OpenAI function format  
 ✅ Generates tools array (all Foundation skills)  
 ✅ Creates proxy server for Codex integration  
-✅ Strict JSON Schema (no additional properties)  
+✅ Strict JSON Schema (no additional properties)
 
 ---
+
 ## Usage
 
 ### 1. Convert a Foundation Skill
@@ -48,6 +52,7 @@ node proxy.js
 Creates a proxy that translates between Codex and Foundation.
 
 ---
+
 ## Function Format
 
 ```json
@@ -72,6 +77,7 @@ Creates a proxy that translates between Codex and Foundation.
 ```
 
 ---
+
 ## Integration with Foundation
 
 1. **Detection**: `enhanced-detect.ps1` identifies Codex via `CODEX_SESSION` env var
@@ -79,6 +85,7 @@ Creates a proxy that translates between Codex and Foundation.
 3. **Adapter path**: `adapters/format-adapters/codex-adapter/`
 
 ---
+
 ## Proxy Server
 
 The proxy server allows Codex to use Foundation skills:
@@ -92,17 +99,19 @@ export CODEX_API_BASE="http://localhost:3000/v1"
 ```
 
 ---
+
 ## Status
 
-| Component | Status | Notes |
-|-----------|--------|-------|
-| Skill Converter | ✅ Ready | SKILL.md → OpenAI function |
-| Tools Generator | ✅ Ready | Batch conversion |
-| Proxy Server | ✅ Ready | Express-based proxy |
-| Detection Integration | ✅ Ready | Uses `CODEX_SESSION` env |
-| Pre-process Integration | ✅ Ready | Loads `tool-codex.json` |
+| Component               | Status   | Notes                      |
+| ----------------------- | -------- | -------------------------- |
+| Skill Converter         | ✅ Ready | SKILL.md → OpenAI function |
+| Tools Generator         | ✅ Ready | Batch conversion           |
+| Proxy Server            | ✅ Ready | Express-based proxy        |
+| Detection Integration   | ✅ Ready | Uses `CODEX_SESSION` env   |
+| Pre-process Integration | ✅ Ready | Loads `tool-codex.json`    |
 
 ---
+
 ## Next Steps
 
 1. ✅ **Implement adapter** (completed)
@@ -111,6 +120,7 @@ export CODEX_API_BASE="http://localhost:3000/v1"
 4. ⏳ **Support OpenAI SDK directly**
 
 ---
+
 **Version**: 1.0.0  
 **Status**: Ready for testing  
 **Compatibility**: OpenAI Codex, OpenAI API

@@ -1,16 +1,19 @@
 ---
 name: config-risk-analyzer
 description: >
-  Analyze risks in configuration files, detect inconsistencies, validate schemas.
-  Trigger: "config-risk-analyze", "validate-config", "check-config-integrity".
+  Analyze risks in configuration files, detect inconsistencies, validate schemas. Trigger:
+  "config-risk-analyze", "validate-config", "check-config-integrity".
 ---
 
 # Config Risk Analyzer Skill
 
 ## Objetivo
-Analizar riesgos en archivos de configuración, detectar inconsistencias, validar esquemas y prevenir errores de configuración que puedan afectar la funcionalidad del proyecto.
+
+Analizar riesgos en archivos de configuración, detectar inconsistencias, validar esquemas y prevenir
+errores de configuración que puedan afectar la funcionalidad del proyecto.
 
 ## Triggers
+
 - `config-risk-analyze`
 - `validate-config`
 - `check-config-integrity`
@@ -19,30 +22,35 @@ Analizar riesgos en archivos de configuración, detectar inconsistencias, valida
 ## Responsabilidades
 
 ### 1. Análisis de Riesgos
+
 - Detectar cambios en archivos de configuración
 - Validar contra esquemas JSON
 - Identificar inconsistencias cross-workspace
 - Verificar compatibilidad entre configuraciones relacionadas
 
 ### 2. Validaciones Exhaustivas
+
 - Validar tipos de datos
 - Verificar valores requeridos
 - Comprobar patrones y formatos
 - Validar referencias cruzadas
 
 ### 3. Generación de Reportes
+
 - Crear análisis de riesgos detallado
 - Listar problemas encontrados
 - Proponer soluciones alternativas
 - Recomendar acciones correctivas
 
 ### 4. Delegación
+
 - Identificar quién debe resolver cada problema
 - Crear tickets de corrección
 - Registrar en lecciones aprendidas
 - Solicitar confirmación de resolución
 
 ## Archivos Monitoreados
+
 - `opencode.json` - Configuración principal de OpenCode
 - `config/*.json` - Todas las configuraciones del proyecto
 - `scripts/utilities/*.config.json` - Configuraciones de herramientas
@@ -51,6 +59,7 @@ Analizar riesgos en archivos de configuración, detectar inconsistencias, valida
 ## Riesgos Conocidos (Lecciones Aprendidas)
 
 ### Error: agent.default debe ser objeto, no string
+
 - **Fecha:** 2026-05-02
 - **Causa:** opencode.json tenía strings en lugar de objetos
 - **Impacto:** OpenCode no funcionaba
@@ -58,6 +67,7 @@ Analizar riesgos en archivos de configuración, detectar inconsistencias, valida
 - **Prevención:** Validar esquema antes de guardar
 
 ### Error: VerbosePreference incompatible con [switch]
+
 - **Fecha:** 2026-05-02
 - **Causa:** Pasar ActionPreference a parámetro switch
 - **Impacto:** Norm enforcement fallaba
@@ -65,6 +75,7 @@ Analizar riesgos en archivos de configuración, detectar inconsistencias, valida
 - **Prevención:** Validar tipos de parámetros en PowerShell
 
 ### Inconsistencias cross-workspace
+
 - **Fecha:** 2026-05-02
 - **Causa:** Archivos desincronizados entre local y foundation
 - **Impacto:** Comportamiento inconsistente
@@ -98,6 +109,7 @@ Analizar riesgos en archivos de configuración, detectar inconsistencias, valida
 ## Integración
 
 Este skill se integra con:
+
 - `config-validator` agent - Para aplicar validaciones
 - `cross-workspace-validator.ps1` - Para sincronización
 - Hooks pre-commit - Para validación automática
@@ -133,3 +145,4 @@ Este skill se integra con:
   ],
   "confirmationRequired": true|false
 }
+```

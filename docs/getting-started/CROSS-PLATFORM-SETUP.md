@@ -2,7 +2,8 @@
 
 ## Overview
 
-The Foundation - Development Stack now supports **all platforms** through orchestrator-coordinated shell routing:
+The Foundation - Development Stack now supports **all platforms** through orchestrator-coordinated
+shell routing:
 
 - **Windows**: PowerShell 5.1+ or PowerShell Core (pwsh)
 - **Linux**: Bash, sh, zsh
@@ -13,8 +14,10 @@ The Foundation - Development Stack now supports **all platforms** through orches
 
 1. The workspace is platform-aware for Windows, Linux, macOS, and WSL.
 2. The wrapper commands are shell-aware and route to the correct entrypoint.
-3. The tool activation and update scripts are PowerShell-based, but they now resolve platform-specific paths, home directories, and install metadata dynamically.
-4. This means the stack is highly portable across OSes, while PowerShell remains the canonical implementation runtime for automation.
+3. The tool activation and update scripts are PowerShell-based, but they now resolve
+   platform-specific paths, home directories, and install metadata dynamically.
+4. This means the stack is highly portable across OSes, while PowerShell remains the canonical
+   implementation runtime for automation.
 
 ## Quick Start
 
@@ -59,11 +62,11 @@ detect_shell  # Returns: bash, zsh, sh, powershell, pwsh
 
 When you run `./wf`, the system:
 
-1. Detects available shells (prioritizes: PowerShell  bash  sh)
+1. Detects available shells (prioritizes: PowerShell bash sh)
 2. Routes to appropriate implementation:
-   - Windows + PowerShell available  runs `wf.ps1`
-   - Linux/macOS + bash available  runs `wf.sh`
-   - Fallback  uses `wf` wrapper script
+   - Windows + PowerShell available runs `wf.ps1`
+   - Linux/macOS + bash available runs `wf.sh`
+   - Fallback uses `wf` wrapper script
 
 ### Unified Command Interface
 
@@ -82,43 +85,46 @@ Same commands work on **all platforms**:
 
 ### Setup Scripts
 
-| Script | Platform | Purpose |
-|--------|----------|---------|
-| `scripts/foundation/setup.sh` | Linux/macOS/WSL | Universal setup with platform detection |
-| `scripts/foundation/bootstrap.ps1` | Windows/PowerShell | Canonical PowerShell bootstrap entrypoint |
-| `wf` wrapper + `scripts/utilities/wf.*` | All | Auto-detects platform on execution |
+| Script                                  | Platform           | Purpose                                   |
+| --------------------------------------- | ------------------ | ----------------------------------------- |
+| `scripts/foundation/setup.sh`           | Linux/macOS/WSL    | Universal setup with platform detection   |
+| `scripts/foundation/bootstrap.ps1`      | Windows/PowerShell | Canonical PowerShell bootstrap entrypoint |
+| `wf` wrapper + `scripts/utilities/wf.*` | All                | Auto-detects platform on execution        |
 
 ### Diagnostic Scripts
 
-| Script | Platform | Purpose |
-|--------|----------|---------|
-| `scripts/diagnostics/system-diagnostics.sh` | Linux/macOS/WSL | Check Go, Git, Engram, Node.js |
+| Script                                       | Platform           | Purpose                                             |
+| -------------------------------------------- | ------------------ | --------------------------------------------------- |
+| `scripts/diagnostics/system-diagnostics.sh`  | Linux/macOS/WSL    | Check Go, Git, Engram, Node.js                      |
 | `scripts/diagnostics/system-diagnostics.ps1` | Windows/PowerShell | PowerShell diagnostics entrypoint for Windows hosts |
 
 ### Initialization Scripts
 
-| Script | Platform | Purpose |
-|--------|----------|---------|
-| `scripts/utilities/auto-init-dev-environment.sh` | Linux/macOS/WSL | Auto-detect and initialize stack |
+| Script                                            | Platform           | Purpose                                                   |
+| ------------------------------------------------- | ------------------ | --------------------------------------------------------- |
+| `scripts/utilities/auto-init-dev-environment.sh`  | Linux/macOS/WSL    | Auto-detect and initialize stack                          |
 | `scripts/utilities/auto-init-dev-environment.ps1` | Windows/PowerShell | PowerShell auto-init entrypoint with auto-install support |
 
 ### Workflow CLI
 
-| Script | Platform | Purpose |
-|--------|----------|---------|
-| `scripts/utilities/wf.sh` | Linux/macOS/WSL | Main workflow CLI (bash) |
-| `scripts/utilities/wf.ps1` | Windows/PowerShell | Main workflow CLI (PowerShell) |
-| `wf` (wrapper) | All | Smart router that detects shell |
+| Script                     | Platform           | Purpose                         |
+| -------------------------- | ------------------ | ------------------------------- |
+| `scripts/utilities/wf.sh`  | Linux/macOS/WSL    | Main workflow CLI (bash)        |
+| `scripts/utilities/wf.ps1` | Windows/PowerShell | Main workflow CLI (PowerShell)  |
+| `wf` (wrapper)             | All                | Smart router that detects shell |
 
 ## Command Reference
 
 ### status
+
 Shows project information and installed tools:
+
 ```bash
 ./wf status
 ```
 
 Output:
+
 - Project root
 - Operating system
 - Current shell
@@ -126,29 +132,36 @@ Output:
 - Project-specific info
 
 ### health
+
 Runs health checks and auto-installs missing tools:
+
 ```bash
 ./wf health
 ```
 
 Actions:
+
 - Checks Go, Git, Engram CLI
 - Auto-installs Engram CLI via `go install`
 - Initializes Engram data directory
 - Auto-links orchestrator skill
 
 Additional behavior:
+
 - Resolves system dependency installation metadata per platform from `config/workspace.config.json`
 - Detects `bash` as a cross-platform capability for shell-based helper tooling
 - Uses platform-aware PATH refresh logic after installation attempts
 
 ### diagnose
+
 Detailed system diagnostics (verbose):
+
 ```bash
 ./wf diagnose
 ```
 
 Checks:
+
 - Go compiler versión
 - Git versión
 - Node.js / npm (if applicable)
@@ -160,23 +173,29 @@ Checks:
 - MCP server status
 
 ### verify
+
 Quick environment verification:
+
 ```bash
 ./wf verify
 ```
 
 Verifies:
+
 - Critical tools installed
 - Configuration files present
 - Workspace readiness
 
 ### init
+
 Full environment initialization:
+
 ```bash
 ./wf init
 ```
 
 Actions:
+
 - Runs diagnostics
 - Installs Engram CLI if missing
 - Initializes data directories
@@ -228,6 +247,7 @@ Post-checkout and pre-commit hooks automatically manage environment state:
 ### Post-Checkout Hook
 
 On each branch checkout, automatically:
+
 - Runs diagnostics
 - Detects missing dependencies
 - Offers to auto-install Engram CLI
@@ -245,6 +265,7 @@ On each branch checkout, automatically:
 ### Pre-Commit Hook
 
 Before each commit:
+
 - Verifies environment state
 - Checks critical tools
 - Aborts commit if configuration is broken
@@ -256,11 +277,13 @@ Before each commit:
 1. `wf.ps1`, `ensure-tools-active.ps1`, and `update-tools.ps1` are the canonical automation scripts.
 2. On Linux or macOS, prefer `pwsh` when invoking the PowerShell scripts directly.
 3. Bash support is recommended when using shell-based helper tooling.
-4. AI tooling is configurable and optional; the workspace does not require a single IDE or AI provider to be hardcoded.
+4. AI tooling is configurable and optional; the workspace does not require a single IDE or AI
+   provider to be hardcoded.
 
 ### Problem: "Setup scripts not executable"
 
 **Linux/macOS:**
+
 ```bash
 chmod +x scripts/foundation/setup.sh wf
 chmod +x scripts/utilities/*.sh
@@ -277,12 +300,14 @@ Install Go: https://go.dev/dl/
 ### Problem: "Engram CLI won't install"
 
 Check Go installation:
+
 ```bash
 go versión
 go env GOPATH
 ```
 
 Manually install:
+
 ```bash
 go install github.com/workspace-foundation/engram/cmd/engram@latest
 ```
@@ -290,6 +315,7 @@ go install github.com/workspace-foundation/engram/cmd/engram@latest
 ### Problem: "Wrong shell detected"
 
 Explicitly use desired shell:
+
 ```bash
 # Force bash
 bash scripts/utilities/wf.sh status
@@ -371,10 +397,12 @@ project-root/
 
 ## What's Next
 
-1. Run setup: `bash scripts/foundation/setup.sh` (Linux/macOS) or `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\foundation\bootstrap.ps1` (Windows)
+1. Run setup: `bash scripts/foundation/setup.sh` (Linux/macOS) or
+   `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\foundation\bootstrap.ps1`
+   (Windows)
 2. Verify installation: `./wf health` or `.\scripts\utilities\wf.ps1 health`
 3. Start development: See project-specific README
 4. Monitor via orchestrator: `engram status`
 
-- Los hooks automticos de Foundation - Development Stack ejecutan chequeos de seguridad, calidad, arquitectura, testing, API, documentacin y gitflow en cada commit/push. Ver REVIEW-INDEX.md.
-
+- Los hooks automticos de Foundation - Development Stack ejecutan chequeos de seguridad, calidad,
+  arquitectura, testing, API, documentacin y gitflow en cada commit/push. Ver REVIEW-INDEX.md.

@@ -23,7 +23,7 @@
     "useEngramMemory": true,
     "useLocalSkills": true,
     "useProjectDocs": true,
-    "compressionRatio": 0.90,
+    "compressionRatio": 0.9,
     "memoryTiering": {
       "hot": "active session",
       "warm": "1 day",

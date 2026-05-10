@@ -16,7 +16,7 @@ Every file in this directory must follow this structure:
 ## Metadata
 
 | Field    | Value               |
-|----------|---------------------|
+| -------- | ------------------- |
 | Rule ID  | REV-NNN             |
 | Scope    | [PR type or area]   |
 | Severity | HIGH / MEDIUM / LOW |
@@ -47,11 +47,11 @@ File: `REV-001-security-and-regression.md`
 
 ## Metadata
 
-| Field    | Value                    |
-|----------|--------------------------|
-| Rule ID  | REV-001                  |
-| Scope    | All PRs to main          |
-| Severity | HIGH                     |
+| Field    | Value           |
+| -------- | --------------- |
+| Rule ID  | REV-001         |
+| Scope    | All PRs to main |
+| Severity | HIGH            |
 
 ## Requirement
 

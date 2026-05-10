@@ -16,6 +16,7 @@ The canonical and complete architecture document is:
 
 ## Notes
 
-1. Keep this file as a stable path for tools or links that expect an architecture file under `docs/architecture/`.
+1. Keep this file as a stable path for tools or links that expect an architecture file under
+   `docs/architecture/`.
 2. Do not duplicate long-form architecture content here.
 3. Update references when architecture docs are moved or renamed.

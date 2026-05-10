@@ -8,16 +8,8 @@
     "autoLoad": true,
     "mcpBridge": true
   },
-  "capabilities": [
-    "mcp",
-    "skills",
-    "code_completion",
-    "terminal"
-  ],
-  "configFiles": [
-    ".clinerules",
-    ".cline/config.json"
-  ],
+  "capabilities": ["mcp", "skills", "code_completion", "terminal"],
+  "configFiles": [".clinerules", ".cline/config.json"],
   "adapter": {
     "type": "mcp-bridge",
     "path": "adapters/mcp-bridge",

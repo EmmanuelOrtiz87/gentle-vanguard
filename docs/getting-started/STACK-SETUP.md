@@ -1,8 +1,9 @@
-#  Foundation - Development Stack Setup & Auto-Repair Guide
+# Foundation - Development Stack Setup & Auto-Repair Guide
 
 ## Overview
 
-The Foundation - Development Stack architecture includes an **automatic stack detection and repair system** that runs with minimal manual intervention. The stack is checked and repaired when:
+The Foundation - Development Stack architecture includes an **automatic stack detection and repair
+system** that runs with minimal manual intervention. The stack is checked and repaired when:
 
 - You open a terminal in a project directory
 - You run `git checkout` on a branch
@@ -33,22 +34,27 @@ The Foundation - Development Stack architecture includes an **automatic stack de
 
 ### Option 3: Automatic on Terminal Entry (Recommended)
 
-On Windows, the optional PowerShell profile can run `verify` automatically when it detects a Foundation - Development Stack project. On Linux and macOS, use `./wf verify` or invoke `wf.ps1` through `pwsh`.
+On Windows, the optional PowerShell profile can run `verify` automatically when it detects a
+Foundation - Development Stack project. On Linux and macOS, use `./wf verify` or invoke `wf.ps1`
+through `pwsh`.
 
 ## Stack Components
 
 The stack requires these components. The system verifies them automatically:
 
 ### Critical Components (Must Be Installed)
+
 - **Go** - Backend runtime
 - **Git** - versión control
 - **PowerShell 5.1+** - Script execution
 
 Additional for bitbucket-dashboard:
+
 - **Node.js** - Frontend runtime
 - **npm** - Package manager
 
 ### Optional Components (Installed Automatically When Supported)
+
 - **Engram CLI** - AI memory system
 - **Angular CLI** - Frontend tooling (bitbucket-dashboard)
 - **gh CLI** - GitHub automation
@@ -56,6 +62,7 @@ Additional for bitbucket-dashboard:
 ## Command Reference
 
 ### `.\scripts\utilities\wf.ps1 diagnose`
+
 Generates a full stack status report.
 
 ```powershell
@@ -67,6 +74,7 @@ Generates a full stack status report.
 ```
 
 **Output includes:**
+
 - Status of each component (PASS/FAIL/WARN)
 - Resolved tool paths
 - Workspace configuration
@@ -74,6 +82,7 @@ Generates a full stack status report.
 - Repair recommendations
 
 ### `.\scripts\utilities\wf.ps1 verify`
+
 Quick verification with auto-repair. Quiet by default.
 
 ```powershell
@@ -85,6 +94,7 @@ Quick verification with auto-repair. Quiet by default.
 ```
 
 **What `verify` does:**
+
 1. Detects the project type
 2. Verifies critical components
 3. Detects the Engram CLI and installs it if missing
@@ -92,6 +102,7 @@ Quick verification with auto-repair. Quiet by default.
 5. Reports the final status
 
 ### `.\scripts\utilities\wf.ps1 health`
+
 Health check with tool activation.
 
 ```powershell
@@ -99,6 +110,7 @@ Health check with tool activation.
 ```
 
 ### `.\scripts\utilities\wf.ps1 install-engram`
+
 Install or verify Engram CLI availability.
 
 ```powershell
@@ -107,7 +119,7 @@ Install or verify Engram CLI availability.
 
 ## Usage Flows
 
-###  Start a Project From Scratch
+### Start a Project From Scratch
 
 ```powershell
 cd c:\projects
@@ -123,7 +135,7 @@ Copy-Item -Path "c:\workspace-foundation\*" -Destination . -Recurse
 
 **Result:** Stack fully initialized and operational.
 
-###  Cloned Project or New Branch
+### Cloned Project or New Branch
 
 ```powershell
 # After git clone or git checkout
@@ -135,6 +147,7 @@ cd <project-root>
 ```
 
 **The post-checkout hook:**
+
 - Runs automatically after `git checkout`
 - Diagnoses the stack state
 - Repairs detected problems automatically
@@ -157,7 +170,8 @@ cd <project-root>
 
 ### PowerShell Profile Auto-Detection
 
-The optional PowerShell profile (`scripts/utilities/Microsoft.PowerShell_profile.ps1`) can detect when you are in a Foundation - Development Stack project and run:
+The optional PowerShell profile (`scripts/utilities/Microsoft.PowerShell_profile.ps1`) can detect
+when you are in a Foundation - Development Stack project and run:
 
 ```powershell
 # When opening a terminal in a project directory:
@@ -167,6 +181,7 @@ if (is_gentleman_foundation_project) {
 ```
 
 To enable it, copy the profile:
+
 ```powershell
 Copy-Item ".\scripts\utilities\Microsoft.PowerShell_profile.ps1" $PROFILE
 . $PROFILE
@@ -185,14 +200,14 @@ post-checkout -> system-diagnostics.ps1 + auto-init
 
 The system detects and repairs the following automatically:
 
-| Problem | Detection | Repair |
-|----------|-----------|-----------|
-| Missing Engram CLI |  | Installs via `go install` |
-| Missing workspace config |  | Creates it from the template |
-| Orchestrator not activated |  | Activates and initializes it |
-| Unsatisfied dependencies |  | Attempts automatic installation |
-| Missing Node/npm (dashboard) |  | Warns for manual installation |
-| Go not installed |  | Warns for manual installation |
+| Problem                      | Detection | Repair                          |
+| ---------------------------- | --------- | ------------------------------- |
+| Missing Engram CLI           |           | Installs via `go install`       |
+| Missing workspace config     |           | Creates it from the template    |
+| Orchestrator not activated   |           | Activates and initializes it    |
+| Unsatisfied dependencies     |           | Attempts automatic installation |
+| Missing Node/npm (dashboard) |           | Warns for manual installation   |
+| Go not installed             |           | Warns for manual installation   |
 
 ## Status Codes
 
@@ -284,6 +299,7 @@ git checkout feature/new-feature
 ### "Stack is CRITICAL - Go not found"
 
 **Solution:**
+
 ```powershell
 # Install Go from https://go.dev/
 # Add it to PATH
@@ -296,6 +312,7 @@ git checkout feature/new-feature
 ### "Engram CLI NOT FOUND (can auto-install)"
 
 **Solution:**
+
 ```powershell
 # Auto-install
 .\scripts\utilities\wf.ps1 install-engram
@@ -307,6 +324,7 @@ git checkout feature/new-feature
 ### "Orchestrator NOT ACTIVATED"
 
 **Solution:**
+
 ```powershell
 .\scripts\utilities\wf.ps1 orchestrator-status
 
@@ -319,6 +337,7 @@ git checkout feature/new-feature
 **Cause:** Git hooks are not configured correctly.
 
 **Solution:**
+
 ```powershell
 # Reconfigure the hooks path
 git config core.hooksPath scripts/git-hooks
@@ -356,8 +375,10 @@ if ($status.overallStatus -ne "HEALTHY") {
 
 - [scripts/utilities/README.md](../../scripts/utilities/README.md) - Available commands
 - [scripts/foundation/bootstrap.ps1](../../scripts/foundation/bootstrap.ps1) - Full initialization
-- [scripts/diagnostics/system-diagnostics.ps1](../../scripts/diagnostics/system-diagnostics.ps1) - Diagnostics engine
+- [scripts/diagnostics/system-diagnostics.ps1](../../scripts/diagnostics/system-diagnostics.ps1) -
+  Diagnostics engine
 - [hooks/post-checkout.ps1](../../hooks/post-checkout.ps1) - Automatic verification on checkout
 
-- Los hooks automticos de Foundation - Development Stack ejecutan chequeos de 7 dimensiones (seguridad, calidad, arquitectura, testing, API, documentacin, gitflow) en cada commit/push. Ver REVIEW-INDEX.md para detalles.
-
+- Los hooks automticos de Foundation - Development Stack ejecutan chequeos de 7 dimensiones
+  (seguridad, calidad, arquitectura, testing, API, documentacin, gitflow) en cada commit/push. Ver
+  REVIEW-INDEX.md para detalles.

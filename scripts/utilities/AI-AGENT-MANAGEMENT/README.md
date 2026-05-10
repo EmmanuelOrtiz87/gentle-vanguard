@@ -4,13 +4,14 @@ Mdulo centralizado para gestin, enrutamiento e invocacin de agentes IA especiali
 
 **Versin**: 2.0.0  
 **ltima actualizacin**: 2026-04-22  
-**Estado**:  PRODUCCIN
+**Estado**: PRODUCCIN
 
 ---
 
-##  Descripcin
+## Descripcin
 
 Este directorio contiene scripts para:
+
 - Enrutamiento inteligente de tareas a agentes especializados
 - Invocacin de procesos de juicio adversarial dual
 - Sincronizacin de instrucciones de agentes
@@ -19,16 +20,19 @@ Este directorio contiene scripts para:
 
 ---
 
-##  Agentes Disponibles
+## Agentes Disponibles
 
 ### 1. **BA** - Business Analyst
+
 **Especializacin**: Requisitos, BDD, Criterios de aceptación
 
 **Habilidades**:
+
 - bdd-scenarios-skill
 - documentation-governance
 
 **Entregables**:
+
 - Escenarios BDD
 - Criterios de aceptación
 - Historias de usuario
@@ -37,9 +41,11 @@ Este directorio contiene scripts para:
 ---
 
 ### 2. **SAD** - Solution Architect
+
 **Especializacin**: Arquitectura, SDD, decisiónes Tcnicas
 
 **Habilidades**:
+
 - architecture-governance
 - api-design-skill
 - database-relational-skill
@@ -49,6 +55,7 @@ Este directorio contiene scripts para:
 - sdd-lifecycle
 
 **Entregables**:
+
 - Documentos SDD
 - decisiónes arquitectnicas
 - Diseo de APIs
@@ -57,9 +64,11 @@ Este directorio contiene scripts para:
 ---
 
 ### 3. **DEV** - Developer
+
 **Especializacin**: Implementacin, Features, Refactoring
 
 **Habilidades**:
+
 - angular-spa-skill
 - react-19-skill
 - nextjs-15-skill
@@ -71,6 +80,7 @@ Este directorio contiene scripts para:
 - typescript-skill
 
 **Entregables**:
+
 - Cdigo implementado
 - Features completadas
 - Refactoring
@@ -79,15 +89,18 @@ Este directorio contiene scripts para:
 ---
 
 ### 4. **QA** - Quality Assurance
+
 **Especializacin**: Testing, Validacin, automatización
 
 **Habilidades**:
+
 - testing-strategy-skill
 - testing-skill
 - playwright-skill
 - pytest-skill
 
 **Entregables**:
+
 - Planes de testing
 - Casos de prueba
 - automatización de tests
@@ -96,9 +109,11 @@ Este directorio contiene scripts para:
 ---
 
 ### 5. **OPS** - DevOps
+
 **Especializacin**: Despliegue, CI/CD, Infraestructura
 
 **Habilidades**:
+
 - docker-devops-skill
 - kubernetes-deployment
 - terraform-infrastructure
@@ -106,6 +121,7 @@ Este directorio contiene scripts para:
 - release-management-skill
 
 **Entregables**:
+
 - configuración CI/CD
 - Scripts de despliegue
 - Infraestructura como cdigo
@@ -114,15 +130,18 @@ Este directorio contiene scripts para:
 ---
 
 ### 6. **GOV** - Governance
+
 **Especializacin**: Cumplimiento, Observabilidad, Auditora
 
 **Habilidades**:
+
 - observability-skill
 - incident-response-plan
 - security-skill
 - code-review-orchestrator-skill
 
 **Entregables**:
+
 - Reportes de auditora
 - Planes de respuesta a incidentes
 - configuración de observabilidad
@@ -131,15 +150,18 @@ Este directorio contiene scripts para:
 ---
 
 ### 7. **DOC** - Documentation
+
 **Especializacin**: Especificaciones BDD/SDD, Guas, README
 
 **Habilidades**:
+
 - documentation-governance
 - sdd-lifecycle
 - bdd-scenarios-skill
 - github-pr-skill
 
 **Entregables**:
+
 - Especificaciones
 - Guas de usuario
 - READMEs
@@ -147,12 +169,14 @@ Este directorio contiene scripts para:
 
 ---
 
-##  Scripts
+## Scripts
 
 ### `agent-router.ps1`
+
 **Propsito**: Enrutador central de agentes
 
 **Parmetros**:
+
 ```powershell
 -Agent <string>          # Agente: BA, SAD, DEV, QA, OPS, GOV, DOC, status, list
 -Task <string>           # Descripcin de la tarea
@@ -162,6 +186,7 @@ Este directorio contiene scripts para:
 ```
 
 **Uso**:
+
 ```powershell
 # Enrutar tarea a DEV
 .\agent-router.ps1 -Agent DEV -Task "implementar login"
@@ -179,15 +204,18 @@ Este directorio contiene scripts para:
 ---
 
 ### `judgment-day.ps1`
+
 **Propsito**: Protocolo de juicio adversarial dual completo
 
 **Caractersticas**:
+
 - revisión paralela (actor/critic)
 - Sntesis de resultados
 - Fix loop iterativo
 - Escalado automtico
 
 **Parmetros**:
+
 ```powershell
 -Target <string>         # Target a revisar (default: workspace)
 -Scope <string>          # Full, Quick, Focused (default: Full)
@@ -196,6 +224,7 @@ Este directorio contiene scripts para:
 ```
 
 **Uso**:
+
 ```powershell
 # Juicio completo del workspace
 .\judgment-day.ps1
@@ -210,9 +239,11 @@ Este directorio contiene scripts para:
 ---
 
 ### `invoke-judgment.ps1`
+
 **Propsito**: Invoca proceso de juicio dual (actor/critic/fix)
 
 **Parmetros**:
+
 ```powershell
 -Target <string>         # Target a revisar
 -ActorRole <string>      # Rol del actor
@@ -220,6 +251,7 @@ Este directorio contiene scripts para:
 ```
 
 **Uso**:
+
 ```powershell
 .\invoke-judgment.ps1 -Target "src/components" -ActorRole DEV -CriticRole QA
 ```
@@ -227,9 +259,11 @@ Este directorio contiene scripts para:
 ---
 
 ### `invoke-ai-review.ps1`
+
 **Propsito**: Invoca revisión de IA automatizada
 
 **Uso**:
+
 ```powershell
 .\invoke-ai-review.ps1 -Target "src/"
 ```
@@ -237,9 +271,11 @@ Este directorio contiene scripts para:
 ---
 
 ### `invoke-cloud-agent.ps1`
+
 **Propsito**: Invoca agentes en la nube
 
 **Uso**:
+
 ```powershell
 .\invoke-cloud-agent.ps1 -Agent DEV -Task "revisar cdigo"
 ```
@@ -247,40 +283,46 @@ Este directorio contiene scripts para:
 ---
 
 ### `sync-agent-instructions.ps1`
+
 **Propsito**: Sincroniza instrucciones de agentes
 
 **Uso**:
+
 ```powershell
 .\sync-agent-instructions.ps1
 ```
 
 ---
 
-##  Flujo de Trabajo Tpico
+## Flujo de Trabajo Tpico
 
 ### 1. Enrutar tarea a agente
+
 ```powershell
 .\agent-router.ps1 -Agent DEV -Task "implementar autenticacin"
 ```
 
 ### 2. Validar antes de ejecutar
+
 ```powershell
 .\agent-router.ps1 -Agent DEV -Task "implementar autenticacin" -Action validate
 ```
 
 ### 3. Ejecutar tarea
+
 ```powershell
 .\agent-router.ps1 -Agent DEV -Task "implementar autenticacin" -Action run
 ```
 
 ### 4. Revisar con juicio dual
+
 ```powershell
 .\judgment-day.ps1 -Target "src/auth" -Scope Quick
 ```
 
 ---
 
-##  Protocolo de Juicio Adversarial
+## Protocolo de Juicio Adversarial
 
 El protocolo de juicio adversarial dual sigue estos pasos:
 
@@ -291,9 +333,10 @@ El protocolo de juicio adversarial dual sigue estos pasos:
 
 ---
 
-##  Troubleshooting
+## Troubleshooting
 
 ### Problema: Agente no responde
+
 ```powershell
 # Verificar estado
 .\agent-router.ps1 -Agent status
@@ -303,6 +346,7 @@ El protocolo de juicio adversarial dual sigue estos pasos:
 ```
 
 ### Problema: Juicio no converge
+
 ```powershell
 # Aumentar mximo de passes
 .\judgment-day.ps1 -MaxPasses 5
@@ -310,15 +354,16 @@ El protocolo de juicio adversarial dual sigue estos pasos:
 
 ---
 
-##  Documentacin Relacionada
+## Documentacin Relacionada
 
-- [skills/judgment-day/SKILL.md](../../../skills/judgment-day/SKILL.md) - Skill de juicio adversarial
+- [skills/judgment-day/SKILL.md](../../../skills/judgment-day/SKILL.md) - Skill de juicio
+  adversarial
 - [../README.md](../README.md) - directorio principal de utilities
 - [../../README.md](../../README.md) - Documentacin principal de scripts
 
 ---
 
-##  Notas
+## Notas
 
 - Todos los scripts requieren PowerShell 7+
 - Logging automtico en `logs/`
@@ -329,5 +374,4 @@ El protocolo de juicio adversarial dual sigue estos pasos:
 
 **ltima actualizacin**: 2026-04-22  
 **Versin**: 2.0.0  
-**Estado**:  PRODUCCIN
-
+**Estado**: PRODUCCIN

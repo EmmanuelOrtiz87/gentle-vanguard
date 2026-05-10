@@ -10,13 +10,13 @@
 
 Cada día, más equipos usan AI assistants como **OpenCode, Claude, Cursor o GitHub Copilot**. Pero:
 
-| Desafío | Impacto |
-|---------|---------|
-| ❌ Sin tracking de sesiones | No hay visibilidad del trabajo |
-| ❌ Sin métricas de consumo | Costos descontrolados de tokens |
-| ❌ Sin estructura para delegar | Agents trabajando aisladamente |
-| ❌ Informes scattered | No hay visión unificada |
-| ❌ Sin gobernanza | Riesgos de seguridad y calidad |
+| Desafío                        | Impacto                         |
+| ------------------------------ | ------------------------------- |
+| ❌ Sin tracking de sesiones    | No hay visibilidad del trabajo  |
+| ❌ Sin métricas de consumo     | Costos descontrolados de tokens |
+| ❌ Sin estructura para delegar | Agents trabajando aisladamente  |
+| ❌ Informes scattered          | No hay visión unificada         |
+| ❌ Sin gobernanza              | Riesgos de seguridad y calidad  |
 
 > **Foundation** resuelve esto.
 
@@ -25,12 +25,12 @@ Cada día, más equipos usan AI assistants como **OpenCode, Claude, Cursor o Git
 ## 🤔 ¿Qué es Foundation?
 
 ```
-            🏛️ FOUNDATION v2.8.0                         
-      AI Development Workspace                    
- 
-   🎮 Session Manager    🚀 Auto-Delegation    📈 Reporting  
-   💰 Token Guard     🎭 Orchestrator      🔍 Tracing    
- 
+            🏛️ FOUNDATION v2.8.0
+      AI Development Workspace
+
+   🎮 Session Manager    🚀 Auto-Delegation    📈 Reporting
+   💰 Token Guard     🎭 Orchestrator      🔍 Tracing
+
  Un workspace agnóstico que funciona con **cualquier** AI assistant.
 ```
 
@@ -39,17 +39,20 @@ Cada día, más equipos usan AI assistants como **OpenCode, Claude, Cursor o Git
 ## 🧩 Componentes Core
 
 ### 1️⃣ 🎮 Session Manager
+
 ```powershell
 .\scripts\utilities\session-autostart.cmd
 # Inicia sesión trackeada automáticamente
 ```
 
 Tracking automático de:
+
 - 📊 Sesiones activas
 - ⏱️ Duración
 - 💰 Métricas de tokens
 
 ### 2️⃣ 🚀 Auto-Delegation
+
 El orquestador detecta qué necesitas y delega al skill/subagente correcto:
 
 ```
@@ -61,6 +64,7 @@ El orquestador detecta qué necesitas y delega al skill/subagente correcto:
 **15+ categorías**: GOV, DEV, QA, DOC, SAD, OPS, REPORT, etc.
 
 ### 3️⃣ 📈 Reporting On-Demand
+
 ```powershell
 # Informes desde CLI:
 .\scripts\utilities\wf-report.ps1 -Type sessions -Period 7days
@@ -69,10 +73,13 @@ El orquestador detecta qué necesitas y delega al skill/subagente correcto:
 ```
 
 O simplemente:
-> *"génerame un resumen ejecutivo"* → auto-delegación al reporting skill
+
+> _"génerame un resumen ejecutivo"_ → auto-delegación al reporting skill
 
 ### 4️⃣ 💰 Token Guard
+
 Control de contexto:
+
 - 📊 Budget: 128K tokens
 - ⚠️ Alertas: 80%, 90%, 95%
 - 🧩 Fragmentation strategy
@@ -81,11 +88,11 @@ Control de contexto:
 
 ## 📊 Métricas Reales
 
-| Fecha | Sesiones | Activas | Tendencia |
-|-------|-----------|--------|----------|
-| 24-Abr | 5 | 5 | ➡️ |
-| 25-Abr | 7 | 7 | 📈 +40% |
-| 26-Abr | 1 | 1 | 🔄 En curso |
+| Fecha  | Sesiones | Activas | Tendencia   |
+| ------ | -------- | ------- | ----------- |
+| 24-Abr | 5        | 5       | ➡️          |
+| 25-Abr | 7        | 7       | 📈 +40%     |
+| 26-Abr | 1        | 1       | 🔄 En curso |
 
 **🖥️ Sistema**: Operativo  
 **💰 Token Guard**: Activo (128K budget)  
@@ -97,13 +104,13 @@ Control de contexto:
 
 Foundation **NO depende de un AI específico**:
 
-| AI Assistant | Compatible |
-|------------|-----------|
-| ✅ OpenCode | 🟢 Total |
-| ✅ Claude (Anthropic) | 🟢 Total |
-| ✅ Cursor | 🟢 Total |
-| ✅ GitHub Copilot | 🟢 Total |
-| ✅ Any LLM | 🟢 Total |
+| AI Assistant          | Compatible |
+| --------------------- | ---------- |
+| ✅ OpenCode           | 🟢 Total   |
+| ✅ Claude (Anthropic) | 🟢 Total   |
+| ✅ Cursor             | 🟢 Total   |
+| ✅ GitHub Copilot     | 🟢 Total   |
+| ✅ Any LLM            | 🟢 Total   |
 
 El workspace es **agnóstico** - trabaja con la herramienta que vos elijas.
 
@@ -125,12 +132,12 @@ git clone https://github.com/EmmanuelOrtiz87/foundation-public.git
 
 ## 🎯 Próximos Pasos
 
-| Tarea | Estado |
-|-------|--------|
-| 1. [x] Git hooks (pre-commit, pre-push) | ✅ Activo |
-| 2. [ ] MCP servers | 📋 Pendiente |
-| 3. [ ] Dashboard UI | 📋 Pendiente |
-| 4. [ ] Plugin marketplace | 📋 Pendiente |
+| Tarea                                   | Estado       |
+| --------------------------------------- | ------------ |
+| 1. [x] Git hooks (pre-commit, pre-push) | ✅ Activo    |
+| 2. [ ] MCP servers                      | 📋 Pendiente |
+| 3. [ ] Dashboard UI                     | 📋 Pendiente |
+| 4. [ ] Plugin marketplace               | 📋 Pendiente |
 
 Ver: `reports/RECOMENDACIONES-FOUNDATION-PRODUCTO.md`
 

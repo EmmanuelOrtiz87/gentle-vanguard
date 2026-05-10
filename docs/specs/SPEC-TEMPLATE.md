@@ -1,9 +1,7 @@
 ﻿# Spec: {Feature Name}
 
-**Status**: draft | reviewed | implementing | validated | done
-**Author**: {name}
-**Date**: YYYY-MM-DD
-**Linked PR/Branch**: {link or N/A}
+**Status**: draft | reviewed | implementing | validated | done **Author**: {name} **Date**:
+YYYY-MM-DD **Linked PR/Branch**: {link or N/A}
 
 ## Problem Statement
 
@@ -40,17 +38,17 @@ Feature: {Feature Name}
 
 ## Validation Plan
 
-| Criteria | Test Type | Status |
-|---|---|---|
-| {AC 1} | Unit |  |
-| {AC 2} | Integration |  |
-| {AC 3} | E2E |  |
+| Criteria | Test Type   | Status |
+| -------- | ----------- | ------ |
+| {AC 1}   | Unit        |        |
+| {AC 2}   | Integration |        |
+| {AC 3}   | E2E         |        |
 
 ## Traceability
 
 | Spec Section | Implementation File/Area | Status |
-|---|---|---|
-| {Section} | {path} |  |
+| ------------ | ------------------------ | ------ |
+| {Section}    | {path}                   |        |
 
 ## References
 

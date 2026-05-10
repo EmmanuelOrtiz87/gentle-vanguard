@@ -19,4 +19,3 @@ This directory stores Judgment Day outputs and reporting artifacts.
 
 - `docs/guides/JUDGMENT-GUIDE.md`
 - `skills/judgment-day/SKILL.md`
-

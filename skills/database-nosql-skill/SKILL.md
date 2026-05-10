@@ -1,8 +1,8 @@
 ---
 name: database-nosql-skill
 description: >
-  NoSQL database patterns: MongoDB, Redis, document models, caching.
-  Trigger: "MongoDB", "Redis", "NoSQL", "document database", "caching", "cache".
+  NoSQL database patterns: MongoDB, Redis, document models, caching. Trigger: "MongoDB", "Redis",
+  "NoSQL", "document database", "caching", "cache".
 ---
 
 ## When to Use
@@ -38,19 +38,19 @@ class AsyncMongoDB:
     def __init__(self):
         self.client: Optional[AsyncIOMotorClient] = None
         self.db = None
-    
+
     async def connect(self):
         self.client = AsyncIOMotorClient(MONGO_URL)
         self.db = self.client.myapp
-    
+
     async def close(self):
         if self.client:
             self.client.close()
-    
+
     @property
     def users(self):
         return self.db.users
-    
+
     @property
     def posts(self):
         return self.db.posts
@@ -164,17 +164,17 @@ import json
 class RedisCache:
     def __init__(self):
         self.client = redis.Redis(host='localhost', port=6379, db=0)
-    
+
     def get(self, key: str) -> Optional[dict]:
         data = self.client.get(key)
         return json.loads(data) if data else None
-    
+
     def set(self, key: str, value: dict, expire: int = 300):
         self.client.setex(key, expire, json.dumps(value))
-    
+
     def delete(self, key: str):
         self.client.delete(key)
-    
+
     def exists(self, key: str) -> bool:
         return self.client.exists(key) > 0
 
@@ -190,7 +190,7 @@ def get_cached_user(user_id: str):
     cached = cache.get(key)
     if cached:
         return cached
-    
+
     user = db.users.find_one({"_id": ObjectId(user_id)})
     if user:
         user["_id"] = str(user["_id"])
@@ -211,13 +211,12 @@ def get_session(session_id: str):
 
 ## Quick Reference
 
-| Pattern | Code |
-|---------|------|
+| Pattern         | Code                                                  |
+| --------------- | ----------------------------------------------------- |
 | MongoDB connect | `pymongo.MongoClient()`, `motor.AsyncIOMotorClient()` |
-| Insert | `db.collection.insert_one(doc)` |
-| Find | `db.collection.find_one({filter})` |
-| Update | `db.collection.update_one({filter}, {"$set": data})` |
-| Delete | `db.collection.delete_one({filter})` |
-| Redis cache | `cache.set(key, value, expire)` |
-| Session | `cache.set(f"session:{id}", data)` |
-
+| Insert          | `db.collection.insert_one(doc)`                       |
+| Find            | `db.collection.find_one({filter})`                    |
+| Update          | `db.collection.update_one({filter}, {"$set": data})`  |
+| Delete          | `db.collection.delete_one({filter})`                  |
+| Redis cache     | `cache.set(key, value, expire)`                       |
+| Session         | `cache.set(f"session:{id}", data)`                    |

@@ -4,14 +4,14 @@ Detailed guide for each project type supported by Workspace Foundation.
 
 ## Overview
 
-| Type | Use Case | Default Stack |
-|------|----------|---------------|
-| service | REST APIs, microservices, workers | Node.js/Express |
-| cli | Command-line tools | Go |
-| library | Reusable packages | TypeScript |
-| frontend | Web applications | React |
-| fullstack | Frontend + Backend | Nx Monorepo |
-| microservices | Distributed systems | Multi-service |
+| Type          | Use Case                          | Default Stack   |
+| ------------- | --------------------------------- | --------------- |
+| service       | REST APIs, microservices, workers | Node.js/Express |
+| cli           | Command-line tools                | Go              |
+| library       | Reusable packages                 | TypeScript      |
+| frontend      | Web applications                  | React           |
+| fullstack     | Frontend + Backend                | Nx Monorepo     |
+| microservices | Distributed systems               | Multi-service   |
 
 ## Service
 
@@ -131,12 +131,12 @@ my-app/
 
 ### Frameworks
 
-| Framework | Template File | Description |
-|-----------|--------------|-------------|
-| React | package.json | React with Vite |
-| Vue | package.vue.json | Vue 3 with Vite |
-| Next.js | package.nextjs.json | Next.js 14 |
-| Angular | package.nx.json | Angular with Nx |
+| Framework | Template File       | Description     |
+| --------- | ------------------- | --------------- |
+| React     | package.json        | React with Vite |
+| Vue       | package.vue.json    | Vue 3 with Vite |
+| Next.js   | package.nextjs.json | Next.js 14      |
+| Angular   | package.nx.json     | Angular with Nx |
 
 ### Commands
 
@@ -206,13 +206,13 @@ my-microservices/
 
 ### Services
 
-| Service | Port | Description |
-|---------|------|-------------|
-| users | 3001 | User management |
-| orders | 3002 | Order processing |
-| payments | 3003 | Payment handling |
-| notifications | 3004 | Email/SMS |
-| api-gateway | 8080 | Request routing |
+| Service       | Port | Description      |
+| ------------- | ---- | ---------------- |
+| users         | 3001 | User management  |
+| orders        | 3002 | Order processing |
+| payments      | 3003 | Payment handling |
+| notifications | 3004 | Email/SMS        |
+| api-gateway   | 8080 | Request routing  |
 
 ### Commands
 

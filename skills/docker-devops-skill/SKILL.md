@@ -60,13 +60,14 @@ node_modules
 ## Docker Compose Patterns
 
 ### Development Setup
+
 ```yaml
 versión: '3.9'
 services:
   app:
     build: .
     ports:
-      - "3000:3000"
+      - '3000:3000'
     volumes:
       - .:/app
       - /app/node_modules
@@ -84,7 +85,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 5s
       timeout: 5s
       retries: 5
@@ -96,6 +97,7 @@ volumes:
 ```
 
 ### Production Setup
+
 ```yaml
 versión: '3.9'
 services:
@@ -103,7 +105,7 @@ services:
     image: myapp:latest
     restart: unless-stopped
     ports:
-      - "80:8080"
+      - '80:8080'
     environment:
       - NODE_ENV=production
       - DATABASE_URL=${DATABASE_URL}
@@ -118,7 +120,7 @@ services:
         delay: 5s
         max_attempts: 3
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      test: ['CMD', 'curl', '-f', 'http://localhost:8080/health']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -127,6 +129,7 @@ services:
 ## Kubernetes Manifests
 
 ### Deployment
+
 ```yaml
 apiversión: apps/v1
 kind: Deployment
@@ -151,11 +154,11 @@ spec:
             - containerPort: 8080
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: '128Mi'
+              cpu: '100m'
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: '512Mi'
+              cpu: '500m'
           readinessProbe:
             httpGet:
               path: /health
@@ -171,6 +174,7 @@ spec:
 ```
 
 ### Service
+
 ```yaml
 apiversión: v1
 kind: Service
@@ -186,6 +190,7 @@ spec:
 ```
 
 ### Horizontal Pod Autoscaler
+
 ```yaml
 apiversión: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -310,5 +315,3 @@ kubectl logs -f deployment/myapp
 kubectl rollout restart deployment/myapp
 kubectl rollout undo deployment/myapp
 ```
-
-

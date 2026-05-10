@@ -4,7 +4,9 @@
 pre-commit:
   commands:
     opencode-validation:
-      run: powershell -NoProfile -ExecutionPolicy Bypass -File "hooks/pre-commit-opencode-validation.ps1"
+      run:
+        powershell -NoProfile -ExecutionPolicy Bypass -File
+        "hooks/pre-commit-opencode-validation.ps1"
     json-lint:
       run: pwsh -NoProfile -ExecutionPolicy Bypass -File "hooks/json-lint.ps1"
     workflow-lint:
@@ -13,13 +15,17 @@ pre-commit:
 pre-push:
   commands:
     orchestrator-auto-fix:
-      run: powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/orchestrate-auto-fix.ps1" -Fix
+      run:
+        powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/orchestrate-auto-fix.ps1"
+        -Fix
     test-suite:
       run: powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/run-tests-simple.ps1"
     trufflehog-full:
       run: trufflehog git file://. --since-commit origin/main --fail --no-update
     audit-check:
-      run: powershell -NoProfile -ExecutionPolicy Bypass -File "skills/foundation-audit-skill/scripts/audit-sweep.ps1" -Scope quick
+      run:
+        powershell -NoProfile -ExecutionPolicy Bypass -File
+        "skills/foundation-audit-skill/scripts/audit-sweep.ps1" -Scope quick
 
 commit-msg:
   commands:

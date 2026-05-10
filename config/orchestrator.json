@@ -30,10 +30,7 @@
     },
     "triggerDetection": {
       "enabled": true,
-      "sources": [
-        "config/auto-delegation.json",
-        "skills/*/SKILL.md"
-      ],
+      "sources": ["config/auto-delegation.json", "skills/*/SKILL.md"],
       "matchMode": "wordBoundary",
       "partialMatch": {
         "enabled": true,
@@ -62,25 +59,13 @@
     }
   },
   "communication_language": "es",
-  "allowed_languages": [
-    "es",
-    "pt-BR",
-    "en"
-  ],
+  "allowed_languages": ["es", "pt-BR", "en"],
   "communication_response_mode": "simple",
-  "allowed_response_modes": [
-    "simple",
-    "executive",
-    "expanded"
-  ],
+  "allowed_response_modes": ["simple", "executive", "expanded"],
   "chat_response": {
     "default_level": "chat-compact",
     "enforce_on_session_start": true,
-    "allow": [
-      "chat-compact",
-      "chat-balanced",
-      "chat-detailed"
-    ],
+    "allow": ["chat-compact", "chat-balanced", "chat-detailed"],
     "decision": {
       "kind": "architecture",
       "title": "startup-chat-baseline",
@@ -89,13 +74,7 @@
   },
   "communication_presets": {
     "default": "bugfix",
-    "allow": [
-      "bugfix",
-      "refactor",
-      "docs",
-      "audit-review",
-      "executive-demo"
-    ],
+    "allow": ["bugfix", "refactor", "docs", "audit-review", "executive-demo"],
     "profiles": {
       "bugfix": {
         "language": "es",
@@ -126,19 +105,11 @@
   },
   "response_profiles": {
     "active": "ultra",
-    "allow": [
-      "lite",
-      "lleno",
-      "ultra"
-    ],
+    "allow": ["lite", "lleno", "ultra"],
     "profiles": {
       "lite": {
         "description": "Professional concise language with complete sentences; no filler.",
-        "guidelines": [
-          "No digressions.",
-          "Keep complete sentences.",
-          "Focus on actionable output."
-        ]
+        "guidelines": ["No digressions.", "Keep complete sentences.", "Focus on actionable output."]
       },
       "lleno": {
         "description": "Compressed language with short fragments accepted.",
@@ -196,10 +167,7 @@
       "passes_threshold": 3,
       "reset_on_failure": true,
       "notify_on_drop": false,
-      "track_from": [
-        "agentProfiles.constraint_retention",
-        "behavior-prompts.earned_trust"
-      ],
+      "track_from": ["agentProfiles.constraint_retention", "behavior-prompts.earned_trust"],
       "injection_point": "before_task_execution",
       "drop_strategy": "soft_drop",
       "integration": {
@@ -211,16 +179,8 @@
       "enabled": true,
       "description": "Multi-user artifact persistence — username prefix prevents collisions in parallel sessions.",
       "mode": "username_prefix",
-      "modes_available": [
-        "username_prefix",
-        "user_subdirectory",
-        "session_scoped"
-      ],
-      "username_sources": [
-        "$env:FOUNDATION_USERNAME",
-        "$env:USERNAME",
-        "git config user.name"
-      ],
+      "modes_available": ["username_prefix", "user_subdirectory", "session_scoped"],
+      "username_sources": ["$env:FOUNDATION_USERNAME", "$env:USERNAME", "git config user.name"],
       "sanitize": true,
       "separator": "-",
       "timestamp_format": "YYYY-MM-DD-HHmmss",

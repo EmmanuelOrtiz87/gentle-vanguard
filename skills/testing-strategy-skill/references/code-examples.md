@@ -43,7 +43,7 @@ describe('RepoMetrics', () => {
     const metrics: RepoMetrics = {
       RepoName: 'test',
       OpenPRs: 5,
-      PullRequests: []
+      PullRequests: [],
     };
     expect(metrics.OpenPRs).toBe(5);
   });
@@ -69,6 +69,7 @@ describe('Signals', () => {
 ## Mocking
 
 ### Go
+
 ```go
 type DashboardService interface {
     FetchMetrics(ctx context.Context, repo, timeframe string) (*RepoMetrics, error)
@@ -81,11 +82,12 @@ func (m *mockService) FetchMetrics(ctx context.Context, repo, tf string) (*RepoM
 ```
 
 ### Angular
+
 ```typescript
 beforeEach(() => {
   TestBed.configureTestingModule({
     imports: [HttpClientTestingModule],
-    providers: [ApiService]
+    providers: [ApiService],
   });
   httpMock = TestBed.inject(HttpTestingController);
 });

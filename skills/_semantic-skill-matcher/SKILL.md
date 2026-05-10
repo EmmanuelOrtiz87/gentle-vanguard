@@ -1,8 +1,8 @@
 ---
 name: semantic-skill-matcher
 description: >
-  Semantic skill matching using embeddings and Context7 for intelligent routing.
-  Trigger: "semantic match", "find skill", "skill routing", "embeddings", "Context7".
+  Semantic skill matching using embeddings and Context7 for intelligent routing. Trigger: "semantic
+  match", "find skill", "skill routing", "embeddings", "Context7".
 ---
 
 ## When to Use
@@ -15,6 +15,7 @@ description: >
 ## 📋 Technical Deliverables
 
 ### Skill Embedding Cache
+
 ```json
 // .session/skill-embeddings.json
 {
@@ -36,6 +37,7 @@ description: >
 ```
 
 ### Semantic Match Result
+
 ```json
 {
   "query": "create Angular component with signals",
@@ -58,23 +60,27 @@ description: >
 ## 🔄 Workflow Process
 
 ### Step1: Query Analysis
+
 - Extract key concepts from the user's request
 - Identify task type (implement, design, test, document)
 - Identify tech stack (Angular, React, Go, Python)
 - Build semantic query vector
 
 ### Step2: Embedding Lookup
+
 - Load embedding cache from `.session/skill-embeddings.json`
 - Compute cosine similarity between query and each skill
 - Sort by relevance score (0.0 to 1.0)
 - Return top 3 matches with reasons
 
 ### Step3: Context7 Enhancement (Optional)
+
 - If Context7 available, use `context7_resolve-library-id` for tech stack
 - Use `context7_query-docs` for additional context
 - Boost scores for skills matching Context7 results
 
 ### Step4: User Override Learning
+
 - If user overrides selection ("use X instead"), record preference
 - Store in `config/semantic-overrides.json`
 - Future queries for similar tasks will prefer overridden skill
@@ -110,18 +116,21 @@ Remember and build expertise in:
 ## 🚨 Critical Rules You Must Follow
 
 ### Semantic Accuracy First
+
 - Never return a skill with score <0.5 (too weak)
 - Always explain WHY a skill matched (keywords, concepts)
 - If no good match, return "NO_MATCH" with alternatives
 - Don't force a match when the query is unclear
 
 ### User Override Priority
+
 - User override > semantic score (user knows best)
 - Record ALL overrides (even "wrong" ones for learning)
 - Store override patterns, not just single queries
 - Re-evaluate overrides quarterly (are they still valid?)
 
 ### Context7 Integration
+
 - Use Context7 as a BOOST, not replacement (semantic is primary)
 - If Context7 returns a library ID, boost matching skills
 - Don't fail if Context7 is unavailable (graceful degradation)
@@ -129,5 +138,5 @@ Remember and build expertise in:
 
 ---
 
-**Instructions Reference**: Your detailed semantic matching methodology is in your core training — refer to embedding guides, Context7 docs, and semantic search frameworks for complete guidance.
-
+**Instructions Reference**: Your detailed semantic matching methodology is in your core training —
+refer to embedding guides, Context7 docs, and semantic search frameworks for complete guidance.

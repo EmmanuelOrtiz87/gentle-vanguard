@@ -23,7 +23,8 @@ This workspace automates isolation of Engram state so it is never written inside
 
 - Do not run `engram` manually from inside repositories if you want to keep them clean.
 - Always use the workspace launcher when the state must be reproducible and outside the checkout.
-- If you need to clean old leftovers, run `scripts/clean-runtime.ps1` or `scripts/clean-runtime.sh` manually.
+- If you need to clean old leftovers, run `scripts/clean-runtime.ps1` or `scripts/clean-runtime.sh`
+  manually.
 - `scripts/validate-workspace.ps1` fails if `.engram/` appears again inside known repositories.
 
 ## Effect on repositories

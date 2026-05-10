@@ -2,18 +2,18 @@
 
 ## OWASP Top 10 (2021)
 
-| # | Vulnerability | Prevention |
-|---|---------------|------------|
-| 1 | Broken Access Control | Implement proper authorization checks |
-| 2 | Cryptographic Failures | Use strong encryption, hash passwords |
-| 3 | Injection | Use parameterized queries, input validation |
-| 4 | Insecure Design | Threat modeling, secure patterns |
-| 5 | Security Misconfiguration | Harden configurations, minimal attack surface |
-| 6 | Vulnerable Components | Keep dependencies updated |
-| 7 | Auth Failures | Strong passwords, MFA, session management |
-| 8 | Data Integrity Failures | Verify CI/CD integrity |
-| 9 | Logging Failures | Log security events, monitor alerts |
-| 10 | SSRF | Validate URLs, block internal requests |
+| #   | Vulnerability             | Prevention                                    |
+| --- | ------------------------- | --------------------------------------------- |
+| 1   | Broken Access Control     | Implement proper authorization checks         |
+| 2   | Cryptographic Failures    | Use strong encryption, hash passwords         |
+| 3   | Injection                 | Use parameterized queries, input validation   |
+| 4   | Insecure Design           | Threat modeling, secure patterns              |
+| 5   | Security Misconfiguration | Harden configurations, minimal attack surface |
+| 6   | Vulnerable Components     | Keep dependencies updated                     |
+| 7   | Auth Failures             | Strong passwords, MFA, session management     |
+| 8   | Data Integrity Failures   | Verify CI/CD integrity                        |
+| 9   | Logging Failures          | Log security events, monitor alerts           |
+| 10  | SSRF                      | Validate URLs, block internal requests        |
 
 ## Authentication Checklist
 
@@ -36,11 +36,11 @@
 
 ## Secrets Management
 
-| Environment | Storage |
-|-------------|---------|
-| Development | `.env.local` (not committed) |
-| Staging | Environment variables |
-| Production | Vault, AWS Secrets Manager, Azure Key Vault |
+| Environment | Storage                                     |
+| ----------- | ------------------------------------------- |
+| Development | `.env.local` (not committed)                |
+| Staging     | Environment variables                       |
+| Production  | Vault, AWS Secrets Manager, Azure Key Vault |
 
 ```bash
 # .gitignore

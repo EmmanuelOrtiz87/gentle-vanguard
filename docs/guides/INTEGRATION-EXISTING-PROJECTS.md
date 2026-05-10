@@ -4,7 +4,8 @@ How to integrate Workspace Foundation into existing repositories and projects.
 
 ## Overview
 
-Workspace Foundation is **designed to be additive**, meaning it adds capabilities without modifying existing code. This guide covers integration into:
+Workspace Foundation is **designed to be additive**, meaning it adds capabilities without modifying
+existing code. This guide covers integration into:
 
 - Local repositories
 - Cloud repositories (GitHub, Bitbucket, GitLab)
@@ -15,18 +16,18 @@ Workspace Foundation is **designed to be additive**, meaning it adds capabilitie
 
 ### Required
 
-| Tool | versión | Purpose |
-|------|---------|---------|
-| Git | 2.30+ | versión control |
-| PowerShell | 7+ | Automation scripts |
+| Tool       | versión | Purpose            |
+| ---------- | ------- | ------------------ |
+| Git        | 2.30+   | versión control    |
+| PowerShell | 7+      | Automation scripts |
 
 ### Optional (Recommended)
 
-| Tool | Purpose |
-|------|---------|
-| Go 1.21+ | Go-based tooling (Engram and automation support) |
-| Node.js 20+ | Node.js projects |
-| Docker | Containerized development |
+| Tool        | Purpose                                          |
+| ----------- | ------------------------------------------------ |
+| Go 1.21+    | Go-based tooling (Engram and automation support) |
+| Node.js 20+ | Node.js projects                                 |
+| Docker      | Containerized development                        |
 
 ### Verify Installation
 
@@ -45,7 +46,7 @@ winget install Microsoft.PowerShell
 
 ```
 Existing Project          Foundation Integration
-        
+
 C:\my-project\           C:\my-project\
  src/                   src/
  tests/                 tests/
@@ -81,7 +82,7 @@ git status
 
 ```
 GitHub/Bitbucket          Local + Foundation
-        
+
 my-repo.git       my-repo/
                                src/
                                .audit/ (NEW)
@@ -189,13 +190,13 @@ See: `docs/guides/FOUNDATION-SYNC.md` for full behavior and examples.
 
 ### What Happens If...
 
-| Conflict | Resolution |
-|----------|-------------|
-| `.audit/` exists | Skip (keep existing) |
-| `AGENTS.md` exists | Skip (keep existing) |
-| `scripts/` has same name | Rename with prefix (`wf-`) |
-| `.gitignore` needs update | Merge prompt |
-| Template file exists | Skip (keep existing) |
+| Conflict                  | Resolution                 |
+| ------------------------- | -------------------------- |
+| `.audit/` exists          | Skip (keep existing)       |
+| `AGENTS.md` exists        | Skip (keep existing)       |
+| `scripts/` has same name  | Rename with prefix (`wf-`) |
+| `.gitignore` needs update | Merge prompt               |
+| Template file exists      | Skip (keep existing)       |
 
 ### Force Apply (If Needed)
 
@@ -241,16 +242,19 @@ Edit `AGENTS.md` to match your project standards:
 # Project Agent Rules
 
 ## Project Context
+
 - Language: TypeScript
 - Framework: Next.js 14
 - Architecture: App Router
 
 ## Code Standards
+
 - Use functional components only
 - TypeScript strict mode
 - ESLint + Prettier enforced
 
 ## AI Tool Configuration
+
 - Default: Claude Sonnet 4
 - For complex tasks: Claude Opus 4
 ```
@@ -397,12 +401,12 @@ $env:WFS_SESSION_FILE
 
 ## Summary
 
-| Step | Action |
-|------|--------|
-| 1 | Navigate to existing project |
-| 2 | Run `init-workspace.ps1` |
-| 3 | Review AGENTS.md |
-| 4 | Start working normally |
-| 5 | Run `finalize-session.ps1` daily |
+| Step | Action                           |
+| ---- | -------------------------------- |
+| 1    | Navigate to existing project     |
+| 2    | Run `init-workspace.ps1`         |
+| 3    | Review AGENTS.md                 |
+| 4    | Start working normally           |
+| 5    | Run `finalize-session.ps1` daily |
 
 **Result:** Foundation adds capabilities without touching existing code.

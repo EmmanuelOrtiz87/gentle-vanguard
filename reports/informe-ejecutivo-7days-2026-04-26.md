@@ -2,40 +2,38 @@
 
 **PerÃ­odo**: Ãšltimos 7 dÃ­as  
 **Fecha de generaciÃ³n**: 2026-04-26 01:17  
-**Proyecto**: workspace_local  
+**Proyecto**: workspace_local
 
 ---
 
 ## ðŸ“‹ Resumen Ejecutivo
 
-| MÃ©trica | Valor | Nota |
-|--------|-------|------|
-| **Sesiones totales** | 17 | â‰ˆ 2.4/dÃ­a |
-| **Sesiones activas** | 17 | En curso |
-| **DÃ­as analizados** | 7 | PerÃ­odo seleccionado |
+| MÃ©trica             | Valor | Nota                  |
+| -------------------- | ----- | --------------------- |
+| **Sesiones totales** | 17    | â‰ˆ 2.4/dÃ­a          |
+| **Sesiones activas** | 17    | En curso              |
+| **DÃ­as analizados** | 7     | PerÃ­odo seleccionado |
 
 ### ðŸ“ˆ Actividad por DÃ­a
 
-| Fecha | Sesiones |
-|-------|----------|| 2026-04-23 | 4 |
-| 2026-04-24 | 5 |
-| 2026-04-25 | 7 |
-| 2026-04-26 | 1 |
+| Fecha | Sesiones | |-------|----------|| 2026-04-23 | 4 | | 2026-04-24 | 5 | | 2026-04-25 | 7 | |
+2026-04-26 | 1 |
 
 ---
 
 ## âš™ï¸ Estado del Sistema
 
-| Componente | Estado |
-|------------|--------|
-| Token Guard | âœ… Activo (128K budget) |
-| Context Efficiency | âœ… Perfil recommended |
-| Auto-Delegation | âœ… Configurado |
-| Distributed Tracing | âœ… Activo |
+| Componente          | Estado                   |
+| ------------------- | ------------------------ |
+| Token Guard         | âœ… Activo (128K budget) |
+| Context Efficiency  | âœ… Perfil recommended   |
+| Auto-Delegation     | âœ… Configurado          |
+| Distributed Tracing | âœ… Activo               |
 
 ---
 
 ## ðŸ“Š Detalle de Sesiones
+
 ### 2026-04-23
 
 - $sessionId: 20:25:22 - active
@@ -69,14 +67,16 @@
 
 ## âš ï¸ Limitaciones y Notas
 
-> **Nota importantes**: Los ÑÐ»ÐµÐ´Ñƒientes mÃ©tricas aÃºn no estÃ¡n siendo capturadas automÃ¡ticamente:
+> **Nota importantes**: Los ÑÐ»ÐµÐ´Ñƒientes mÃ©tricas aÃºn no estÃ¡n siendo capturadas
+> automÃ¡ticamente:
+>
 > - Tokens consumidos por sesiÃ³n
 > - Costo estimado (USD)
 > - Contexto utilizado
 > - DuraciÃ³n real de sesiones
 > - Tool calls, files read/edited
 
-**PrÃ³ximas mejoras**: Ver eports/MEJORAS-REPORTING-TELEMETRY.md
+**PrÃ³ximas mejoras**: Ver eports/MEJORAS-REPORTING-TELEMETRY.md
 
 ---
 
@@ -88,6 +88,5 @@
 
 ---
 
-*Informe generado automÃ¡ticamente*  
-*Formato: Markdown (.md)*
-
+_Informe generado automÃ¡ticamente_  
+_Formato: Markdown (.md)_

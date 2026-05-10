@@ -3,12 +3,11 @@ name: android-kotlin
 description: Android Kotlin development with Coroutines, Jetpack Compose, Hilt, and MockK testing
 when-to-use: When working on Android Kotlin source files
 user-invocable: false
-paths: ["**/*.kt", "**/*.kts", "android/**", "**/build.gradle.kts"]
+paths: ['**/*.kt', '**/*.kts', 'android/**', '**/build.gradle.kts']
 effort: medium
 ---
 
 # Android Kotlin Skill
-
 
 ---
 
@@ -52,6 +51,7 @@ project/
 ## Gradle Configuration (Kotlin DSL)
 
 ### App-level build.gradle.kts
+
 ```kotlin
 plugins {
     id("com.android.application")
@@ -142,6 +142,7 @@ dependencies {
 ## Kotlin Coroutines & Flow
 
 ### ViewModel with StateFlow
+
 ```kotlin
 @HiltViewModel
 class UserViewModel @Inject constructor(
@@ -189,6 +190,7 @@ data class UserUiState(
 ```
 
 ### Repository with Flow
+
 ```kotlin
 interface UserRepository {
     fun getUser(userId: String): Flow<User>
@@ -227,6 +229,7 @@ class UserRepositoryImpl @Inject constructor(
 ## Jetpack Compose
 
 ### Screen with ViewModel
+
 ```kotlin
 @Composable
 fun UserScreen(
@@ -300,6 +303,7 @@ private fun UserScreenContent(
 ## Sealed Classes for State
 
 ### Result Wrapper
+
 ```kotlin
 sealed interface Result<out T> {
     data class Success<T>(val data: T) : Result<T>
@@ -321,6 +325,7 @@ inline fun <T, R> Result<T>.map(transform: (T) -> R): Result<R> = when (this) {
 ## Testing with MockK & Turbine
 
 ### ViewModel Tests
+
 ```kotlin
 @OptIn(ExperimentalCoroutinesApi::class)
 class UserViewModelTest {
@@ -418,6 +423,7 @@ jobs:
 ## Lint Configuration
 
 ### detekt.yml
+
 ```yaml
 build:
   maxIssues: 0
@@ -445,16 +451,13 @@ coroutines:
 
 ## Kotlin Anti-Patterns
 
--  **Blocking coroutines on Main** - Never use `runBlocking` on main thread
--  **GlobalScope usage** - Use structured concurrency with viewModelScope/lifecycleScope
--  **Collecting flows in init** - Use `repeatOnLifecycle` or `collectAsStateWithLifecycle`
--  **Mutable state exposure** - Expose `StateFlow` not `MutableStateFlow`
--  **Not handling exceptions in flows** - Always use `catch` operator
--  **Lateinit for nullable** - Use `lazy` or nullable with `?`
--  **Hardcoded dispatchers** - Inject dispatchers for testability
--  **Not using sealed classes** - Prefer sealed for finite state sets
--  **Side effects in Composables** - Use `LaunchedEffect`/`SideEffect`
--  **Unstable Compose parameters** - Use stable/immutable types or `@Stable`
-
-
-
+- **Blocking coroutines on Main** - Never use `runBlocking` on main thread
+- **GlobalScope usage** - Use structured concurrency with viewModelScope/lifecycleScope
+- **Collecting flows in init** - Use `repeatOnLifecycle` or `collectAsStateWithLifecycle`
+- **Mutable state exposure** - Expose `StateFlow` not `MutableStateFlow`
+- **Not handling exceptions in flows** - Always use `catch` operator
+- **Lateinit for nullable** - Use `lazy` or nullable with `?`
+- **Hardcoded dispatchers** - Inject dispatchers for testability
+- **Not using sealed classes** - Prefer sealed for finite state sets
+- **Side effects in Composables** - Use `LaunchedEffect`/`SideEffect`
+- **Unstable Compose parameters** - Use stable/immutable types or `@Stable`

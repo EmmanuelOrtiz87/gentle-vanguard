@@ -35,15 +35,7 @@
       "outputPath": ".telemetry/reports"
     },
     "spans": {
-      "types": [
-        "session",
-        "dispatch",
-        "orchestration",
-        "automation",
-        "operation",
-        "task",
-        "phase"
-      ],
+      "types": ["session", "dispatch", "orchestration", "automation", "operation", "task", "phase"],
       "exportFormat": "jsonl",
       "compressionEnabled": false
     },
@@ -63,11 +55,7 @@
     },
     "export": {
       "formats": ["json", "jsonl", "markdown"],
-      "destinations": [
-        ".telemetry/traces",
-        ".telemetry/metrics",
-        ".telemetry/reports"
-      ]
+      "destinations": [".telemetry/traces", ".telemetry/metrics", ".telemetry/reports"]
     },
     "alerts": {
       "enabled": true,

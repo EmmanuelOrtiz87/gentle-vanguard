@@ -4,40 +4,47 @@
 
 ## Resumen Ejecutivo
 
-El sistema **Token Budget Guard** monitorea consumo de tokens y bloquea dispatch cuando se superan los umbrales configurados. Existen dos scripts; solo uno es operacional.
+El sistema **Token Budget Guard** monitorea consumo de tokens y bloquea dispatch cuando se superan
+los umbrales configurados. Existen dos scripts; solo uno es operacional.
 
 ## Scripts: Operacional vs Legacy
 
-| Script | Estado | Fuente de config |
-|--------|--------|-----------------|
+| Script                                                       | Estado             | Fuente de config                                                     |
+| ------------------------------------------------------------ | ------------------ | -------------------------------------------------------------------- |
 | `scripts/utilities/TELEMETRY-METRICS/token-budget-guard.ps1` | ✅ **OPERACIONAL** | `config/orchestrator.json#subagent_orchestration.token_budget_guard` |
-| `scripts/utilities/token-guard.ps1` | ⛔ **DEPRECATED** | `token-guard-config.json` (no existe en disco) |
+| `scripts/utilities/token-guard.ps1`                          | ⛔ **DEPRECATED**  | `token-guard-config.json` (no existe en disco)                       |
 
-**Usar solo el script operacional.** El legacy tiene thresholds distintos y referencia un archivo de config inexistente.
+**Usar solo el script operacional.** El legacy tiene thresholds distintos y referencia un archivo de
+config inexistente.
 
 ## Caractersticas Implementadas
 
-### 1.  Token Budget Guard (Operacional)
+### 1. Token Budget Guard (Operacional)
+
 - **Script**: `scripts/utilities/TELEMETRY-METRICS/token-budget-guard.ps1`
-- **Configuración canónica**: `config/orchestrator.json` → `subagent_orchestration.token_budget_guard`
+- **Configuración canónica**: `config/orchestrator.json` →
+  `subagent_orchestration.token_budget_guard`
 - **Estado**: `.session/token-guard-state.json`
 - Se inicializa automticamente al ejecutar `scripts/utilities/session-autostart.cmd`
 - Monitorea tokens en tiempo real
 
-### 2.  Pausar Dispatch por Presupuesto
+### 2. Pausar Dispatch por Presupuesto
+
 - Pausa automtica cuando se alcanza el 95% del presupuesto
 - Funcin: `Pause-Dispatch`
 - Registra razn de pausa en archivo de estado
 - Permite reanudar con `Resume-Dispatch`
 
-### 3.  Fragmentacin en Mltiples Rounds
+### 3. Fragmentacin en Mltiples Rounds
+
 - Presupuesto dividido en 5 rounds de 25,600 tokens cada uno
 - Funcin: `Initialize-RoundFragmentation`
 - Estrategia: round-robin
 - Reinicio automtico al completar rounds
 - Tracking de rounds completados
 
-### 4.  Alertas Automticas
+### 4. Alertas Automticas
+
 - Alerta a 80% del presupuesto (WARNING)
 - Alerta a 90% del presupuesto (WARNING)
 - Alerta a 95% del presupuesto (CRITICAL)
@@ -63,19 +70,19 @@ Token Budget Guard System (Operacional)
 
 ```
 session-autostart.cmd
-    
+
 Optimizacin de Engram
-    
+
 Validacin cross-workspace
-    
+
 Inicializacin de sesin
-    
+
 [NUEVO] Inicializacin de Token Guard
      Cargar configuración
      Crear archivo de estado
      Inicializar monitoreo
      Mostrar parmetros
-    
+
 Inicializacin de orquestador
 ```
 
@@ -96,15 +103,15 @@ Editar en `config/orchestrator.json` bajo `subagent_orchestration.token_budget_g
 }
 ```
 
-> **Unidad canónica: tokens.** Fórmula de estimación: `chars / 4 = tokens`.
-> Usar esta fórmula en todos los scripts. El script legacy usaba chars directamente — causa de inconsistencias.
+> **Unidad canónica: tokens.** Fórmula de estimación: `chars / 4 = tokens`. Usar esta fórmula en
+> todos los scripts. El script legacy usaba chars directamente — causa de inconsistencias.
 
 ### Umbrales de Alerta (Operacionales)
 
-| Umbral | Acción | Tipo |
-|--------|--------|------|
-| 70% (`soft_threshold_pct`) | WARN — log y continúa | Notificación |
-| 90% (`hard_threshold_pct`) | BLOCK — rechaza dispatch | Bloqueo |
+| Umbral                     | Acción                   | Tipo         |
+| -------------------------- | ------------------------ | ------------ |
+| 70% (`soft_threshold_pct`) | WARN — log y continúa    | Notificación |
+| 90% (`hard_threshold_pct`) | BLOCK — rechaza dispatch | Bloqueo      |
 
 ## Funciones Disponibles
 
@@ -159,28 +166,34 @@ Generate-TokenReport -StateFile ".\.session\token-guard-state.json" `
 ## Modos de Operacin
 
 ### Monitor Mode (Predeterminado)
+
 ```powershell
 .\tools\token-guard.ps1 -ConfigPath "scripts/utilities/token-guard-config.json" `
   -SessionId "session-2026-04-23-15" -Mode "monitor"
 ```
+
 - Inicializa Token Guard
 - Crea archivo de estado
 - Muestra parmetros de configuración
 
 ### Enforce Mode
+
 ```powershell
 .\tools\token-guard.ps1 -ConfigPath "scripts/utilities/token-guard-config.json" `
   -SessionId "session-2026-04-23-15" -Mode "enforce"
 ```
+
 - Valida tokens actuales
 - Dispara alertas si es necesario
 - Pausa dispatch si se excede
 
 ### Report Mode
+
 ```powershell
 .\tools\token-guard.ps1 -ConfigPath "scripts/utilities/token-guard-config.json" `
   -SessionId "session-2026-04-23-15" -Mode "report"
 ```
+
 - Genera reporte detallado
 - Muestra consumo de tokens
 - Muestra estado de fragmentacin
@@ -231,7 +244,7 @@ El `scripts/utilities/session-autostart.config.json` incluye la seccin de Token 
     "autoStart": true,
     "configPath": "scripts/utilities/token-guard-config.json",
     "tokenBudget": 128000,
-    "alertThreshold": 0.80,
+    "alertThreshold": 0.8,
     "pauseThreshold": 0.95,
     "maxRounds": 5,
     "roundTokenBudget": 25600,
@@ -245,11 +258,13 @@ El `scripts/utilities/session-autostart.config.json` incluye la seccin de Token 
 ## Logging
 
 ### Archivo de Log
+
 - Ubicacin: `.session/token-guard.log`
 - Formato: JSON
 - Contiene: timestamp, tokens, accin, estado
 
 ### Ejemplo de Entrada de Log
+
 ```json
 {
   "timestamp": "2026-04-23 11:21:13",
@@ -264,34 +279,37 @@ El `scripts/utilities/session-autostart.config.json` incluye la seccin de Token 
 ## Flujo de Ejecucin
 
 ### Inicio de Sesin
+
 1.  Ejecutar `scripts/utilities/session-autostart.cmd`
 2.  Optimizar Engram
 3.  Validar cross-workspace
 4.  Inicializar sesin
-5.  **Inicializar Token Guard**  NUEVO
+5.  **Inicializar Token Guard** NUEVO
 6.  Inicializar orquestador
 
 ### Durante la Sesin
+
 1. Token Guard monitorea tokens
-2. Si tokens < 80%  Sin accin
-3. Si 80%  tokens < 95%  Alerta WARNING
-4. Si tokens  95%  Alerta CRITICAL + Pausa dispatch
+2. Si tokens < 80% Sin accin
+3. Si 80% tokens < 95% Alerta WARNING
+4. Si tokens 95% Alerta CRITICAL + Pausa dispatch
 
 ### Fragmentacin
+
 1. Presupuesto dividido en 5 rounds
 2. Cada round: 25,600 tokens
-3. Al completar round  Reiniciar contador
+3. Al completar round Reiniciar contador
 4. Tracking automtico de rounds
 
 ## Ventajas
 
- **Automtico**: Se ejecuta sin intervencin manual  
+**Automtico**: Se ejecuta sin intervencin manual  
  **Preventivo**: Alerta antes de exceder presupuesto  
  **Protector**: Pausa dispatch en caso crtico  
  **Fragmentado**: Divide trabajo en rounds manejables  
  **Observable**: Logging detallado y reportes  
  **Configurable**: Todos los parmetros ajustables  
- **Integrado**: Parte del flujo de sesin  
+ **Integrado**: Parte del flujo de sesin
 
 ## Prximas Mejoras
 
@@ -305,6 +323,7 @@ El `scripts/utilities/session-autostart.config.json` incluye la seccin de Token 
 ## Troubleshooting
 
 ### Token Guard no se inicializa
+
 ```powershell
 # Verificar que el archivo de configuración existe
 Test-Path "scripts/utilities/token-guard-config.json"
@@ -317,6 +336,7 @@ Test-Path "scripts/utilities/token-guard.ps1"
 ```
 
 ### No se crea archivo de estado
+
 ```powershell
 # Verificar permisos en .session
 Get-Item ".\.session" | Select-Object FullName, Mode
@@ -326,6 +346,7 @@ New-Item -ItemType Directory -Path ".\.session" -Force
 ```
 
 ### Alertas no se disparan
+
 ```powershell
 # Verificar configuración
 Get-Content "scripts/utilities/token-guard-config.json" | ConvertFrom-Json
@@ -336,15 +357,17 @@ Get-Content ".\.session\token-guard-state.json" | ConvertFrom-Json
 
 ## Resumen de Archivos Creados
 
-| Archivo | Descripcin |
-|---------|-------------|
-| `scripts/utilities/token-guard.ps1` | Motor principal del Token Guard |
-| `scripts/utilities/token-guard-config.json` | configuración de presupuestos y umbrales |
-| `scripts/utilities/session-autostart.cmd` | Integracin en autostart (modificado) |
-| `scripts/utilities/session-autostart.config.json` | Config de sesin (modificado) |
-| `.session/token-guard-state.json` | Estado en tiempo real (generado) |
-| `docs/TOKEN_GUARD_IMPLEMENTATION.md` | Esta documentacin |
+| Archivo                                           | Descripcin                               |
+| ------------------------------------------------- | ---------------------------------------- |
+| `scripts/utilities/token-guard.ps1`               | Motor principal del Token Guard          |
+| `scripts/utilities/token-guard-config.json`       | configuración de presupuestos y umbrales |
+| `scripts/utilities/session-autostart.cmd`         | Integracin en autostart (modificado)     |
+| `scripts/utilities/session-autostart.config.json` | Config de sesin (modificado)             |
+| `.session/token-guard-state.json`                 | Estado en tiempo real (generado)         |
+| `docs/TOKEN_GUARD_IMPLEMENTATION.md`              | Esta documentacin                        |
 
 ## Conclusin
 
-El sistema de **Token Overflow Protection** est completamente operativo y se ejecuta automticamente desde el inicio de sesin. Proporciona proteccin multinivel contra overflow de tokens con alertas preventivas, pausa automtica de dispatch y fragmentacin en rounds manejables.
+El sistema de **Token Overflow Protection** est completamente operativo y se ejecuta automticamente
+desde el inicio de sesin. Proporciona proteccin multinivel contra overflow de tokens con alertas
+preventivas, pausa automtica de dispatch y fragmentacin en rounds manejables.

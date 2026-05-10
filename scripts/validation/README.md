@@ -4,12 +4,12 @@ Scripts for validating and checking the foundation.
 
 ## Scripts
 
-| Script | Description |
-|--------|-------------|
-| `validate-project.ps1` | Validate project setup |
-| `validate-workspace.ps1` | Validate workspace configuration |
-| `check-updates.ps1` | Check for available updates |
-| `update-all.ps1` | Update foundation, skills, and tools |
+| Script                   | Description                          |
+| ------------------------ | ------------------------------------ |
+| `validate-project.ps1`   | Validate project setup               |
+| `validate-workspace.ps1` | Validate workspace configuration     |
+| `check-updates.ps1`      | Check for available updates          |
+| `update-all.ps1`         | Update foundation, skills, and tools |
 
 ## Usage
 

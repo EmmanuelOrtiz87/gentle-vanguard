@@ -11,19 +11,23 @@ allowed-tools:
 
 # DESIGN.md Skill for Foundation
 
-You are a design system specialist. Your goal is to create, validate, and maintain DESIGN.md files that define the visual identity of projects in a machine-readable and human-readable format.
+You are a design system specialist. Your goal is to create, validate, and maintain DESIGN.md files
+that define the visual identity of projects in a machine-readable and human-readable format.
 
 ## What is DESIGN.md?
 
 DESIGN.md is a format specification (from google-labs-code/design.md) that combines:
+
 1. **YAML front matter** - Machine-readable design tokens (colors, typography, spacing, components)
 2. **Markdown body** - Human-readable design rationale and guidelines
 
-This dual-layer approach allows both AI agents and humans to understand and apply design decisions consistently.
+This dual-layer approach allows both AI agents and humans to understand and apply design decisions
+consistently.
 
 ## When to Use This Skill
 
 Use this skill when:
+
 - Creating a new DESIGN.md for a project
 - Validating existing DESIGN.md files
 - Auditing design token consistency
@@ -38,32 +42,33 @@ A valid DESIGN.md has two parts:
 
 ```yaml
 ---
-version: "alpha"
-name: "Project Name"
-description: "Brief description"
+version: 'alpha'
+name: 'Project Name'
+description: 'Brief description'
 colors:
-  primary: "#1A1C1E"
-  secondary: "#4A5568"
+  primary: '#1A1C1E'
+  secondary: '#4A5568'
 typography:
   body:
-    fontFamily: "system-ui, sans-serif"
-    fontSize: "16px"
+    fontFamily: 'system-ui, sans-serif'
+    fontSize: '16px'
     fontWeight: 400
-    lineHeight: "1.6"
+    lineHeight: '1.6'
 layout:
-  spacing-md: "16px"
+  spacing-md: '16px'
 components:
   button-primary:
-    backgroundColor: "{colors.primary}"
-    textColor: "#FFFFFF"
-    rounded: "4px"
-    padding: "8px 16px"
+    backgroundColor: '{colors.primary}'
+    textColor: '#FFFFFF'
+    rounded: '4px'
+    padding: '8px 16px'
 ---
 ```
 
 ### 2. Markdown Body (sections with `##` headings)
 
 Sections must appear in this order (can be omitted):
+
 1. Overview (or Brand & Style)
 2. Colors
 3. Typography
@@ -77,19 +82,20 @@ Sections must appear in this order (can be omitted):
 
 When validating a DESIGN.md, check for:
 
-| Rule | Severity | Check |
-|------|----------|-------|
-| broken-ref | error | Token references like `{colors.primary}` resolve to defined tokens |
-| missing-primary | warning | Colors defined but no `primary` token exists |
-| contrast-ratio | warning | Component backgroundColor/textColor pairs meet WCAG AA (4.5:1) |
-| orphaned-tokens | warning | Color tokens defined but never referenced by components |
-| missing-typography | warning | Colors defined but no typography tokens |
-| section-order | warning | Sections appear in canonical order |
-| token-summary | info | Summary of token counts per section |
+| Rule               | Severity | Check                                                              |
+| ------------------ | -------- | ------------------------------------------------------------------ |
+| broken-ref         | error    | Token references like `{colors.primary}` resolve to defined tokens |
+| missing-primary    | warning  | Colors defined but no `primary` token exists                       |
+| contrast-ratio     | warning  | Component backgroundColor/textColor pairs meet WCAG AA (4.5:1)     |
+| orphaned-tokens    | warning  | Color tokens defined but never referenced by components            |
+| missing-typography | warning  | Colors defined but no typography tokens                            |
+| section-order      | warning  | Sections appear in canonical order                                 |
+| token-summary      | info     | Summary of token counts per section                                |
 
 ## Foundation Design Principles
 
 When creating DESIGN.md for Foundation projects, follow these principles:
+
 - **Agnostic**: ASCII-only, no emojis, no decorative elements
 - **Minimal**: Limited color palette (max 10 colors), simple typography
 - **Accessible**: All color pairs must meet WCAG AA (4.5:1 contrast)
@@ -101,15 +107,19 @@ When creating DESIGN.md for Foundation projects, follow these principles:
 While the `@google/design.md` CLI provides these commands, this skill implements them conceptually:
 
 ### Validate (lint)
+
 Check DESIGN.md for structural correctness and design token validity.
 
 ### Diff
+
 Compare two DESIGN.md files and report token-level changes.
 
 ### Export
+
 Convert DESIGN.md tokens to other formats (Tailwind config, CSS custom properties, DTCG).
 
 ### Spec
+
 Output the DESIGN.md format specification for reference.
 
 ## Usage Instructions
@@ -151,42 +161,48 @@ Output the DESIGN.md format specification for reference.
 ## Integration with Foundation
 
 This skill integrates with:
+
 - **foundation-audit-skill**: Validates DESIGN.md as part of project audits
-- **cognitive-doc-design**: DESIGN.md follows cognitive-doc-design principles (lead with answer, chunked info, tables)
+- **cognitive-doc-design**: DESIGN.md follows cognitive-doc-design principles (lead with answer,
+  chunked info, tables)
 - **AGENTS.md**: DESIGN.md path documented for session tracking
 
 ## Example: Minimal DESIGN.md
 
 ```markdown
 ---
-version: "alpha"
-name: "Minimal Project"
+version: 'alpha'
+name: 'Minimal Project'
 colors:
-  primary: "#000000"
-  background: "#FFFFFF"
-  text: "#333333"
+  primary: '#000000'
+  background: '#FFFFFF'
+  text: '#333333'
 typography:
   body:
-    fontFamily: "sans-serif"
-    fontSize: "16px"
+    fontFamily: 'sans-serif'
+    fontSize: '16px'
     fontWeight: 400
-    lineHeight: "1.5"
+    lineHeight: '1.5'
 ---
 
 ## Overview
+
 Minimal design system with high contrast and system fonts.
 
 ## Colors
-| Token | Hex | Role |
-|-------|-----|------|
-| primary | #000000 | Headings, buttons |
-| background | #FFFFFF | Page background |
-| text | #333333 | Body text |
+
+| Token      | Hex     | Role              |
+| ---------- | ------- | ----------------- |
+| primary    | #000000 | Headings, buttons |
+| background | #FFFFFF | Page background   |
+| text       | #333333 | Body text         |
 
 ## Typography
+
 Body text uses system sans-serif at 16px.
 
 ## Components
+
 **Buttons**: Black background, white text, 4px border radius.
 ```
 
@@ -229,4 +245,3 @@ Status: INVALID (1 error, 2 warnings)
 - Component variants (hover, active) are separate entries
 - Colors must be hex codes in sRGB space (#RRGGBB)
 - Dimensions use px, em, or rem units
-

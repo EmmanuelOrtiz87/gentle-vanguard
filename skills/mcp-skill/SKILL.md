@@ -1,8 +1,8 @@
 ---
 name: mcp-skill
 description: >
-  Model Context Protocol: MCP servers, tools, resources, prompts.
-  Trigger: "MCP", "Model Context Protocol", "MCP server", "MCP tool", "MCP resource".
+  Model Context Protocol: MCP servers, tools, resources, prompts. Trigger: "MCP", "Model Context
+  Protocol", "MCP server", "MCP tool", "MCP resource".
 ---
 
 ## When to Use
@@ -16,19 +16,19 @@ description: >
 ## MCP Architecture
 
 ```
-       
-   AI Agent   MCP Server  
-  (Client)                       
-        - Tools     
-                       - Resources  
-                       - Prompts   
-                      
-                             
-                             
-                      
-                        External  
-                         System   
-                      
+
+   AI Agent   MCP Server
+  (Client)
+        - Tools
+                       - Resources
+                       - Prompts
+
+
+
+
+                        External
+                         System
+
 ```
 
 ## MCP Server Structure
@@ -61,7 +61,7 @@ server.tool(
     return {
       content: [{ type: 'text', text: JSON.stringify(weather) }],
     };
-  }
+  },
 );
 
 server.tool(
@@ -77,7 +77,7 @@ server.tool(
     return {
       content: [{ type: 'text', text: JSON.stringify(task) }],
     };
-  }
+  },
 );
 ```
 
@@ -85,24 +85,16 @@ server.tool(
 
 ```typescript
 // Static resources
-server.resource(
-  'docs',
-  'https://example.com/api/docs',
-  async () => {
-    const docs = await fetchDocs();
-    return { contents: [{ uri: 'docs://full', text: docs }] };
-  }
-);
+server.resource('docs', 'https://example.com/api/docs', async () => {
+  const docs = await fetchDocs();
+  return { contents: [{ uri: 'docs://full', text: docs }] };
+});
 
 // Dynamic resources
-server.resource(
-  'user_profile',
-  'users://{userId}/profile',
-  async ({ userId }) => {
-    const profile = await db.users.findById(userId);
-    return { contents: [{ uri: `users://${userId}/profile`, text: JSON.stringify(profile) }] };
-  }
-);
+server.resource('user_profile', 'users://{userId}/profile', async ({ userId }) => {
+  const profile = await db.users.findById(userId);
+  return { contents: [{ uri: `users://${userId}/profile`, text: JSON.stringify(profile) }] };
+});
 ```
 
 ## Prompts
@@ -116,14 +108,16 @@ server.prompt(
     focus: z.string().optional(),
   },
   ({ language, focus }) => ({
-    messages: [{
-      role: 'user',
-      content: {
-        type: 'text',
-        text: `Review the following ${language || 'code'} focusing on: ${focus || 'general quality'}`,
+    messages: [
+      {
+        role: 'user',
+        content: {
+          type: 'text',
+          text: `Review the following ${language || 'code'} focusing on: ${focus || 'general quality'}`,
+        },
       },
-    }],
-  })
+    ],
+  }),
 );
 ```
 
@@ -143,7 +137,7 @@ async function main() {
   });
 
   // Register tools, resources, prompts...
-  
+
   await server.connect(transport);
   console.error('MCP server running on stdio');
 }
@@ -190,7 +184,7 @@ return {
   content: [
     { type: 'text', text: 'Result data' },
     { type: 'image', data: base64, mimeType: 'image/png' },
-    { type: 'resource', resource: { uri: 'file://...', name: 'file.txt' } }
+    { type: 'resource', resource: { uri: 'file://...', name: 'file.txt' } },
   ],
   isError: false,
 };
@@ -236,29 +230,19 @@ server.tool(
     const todo = { id, title, priority, completed: false, createdAt: new Date() };
     todos.set(id, todo);
     return { content: [{ type: 'text', text: JSON.stringify(todo) }] };
-  }
+  },
 );
 
-server.tool(
-  'list_todos',
-  'List all todos',
-  z.object({}),
-  () => {
-    return { content: [{ type: 'text', text: JSON.stringify([...todos.values()]) }] };
-  }
-);
+server.tool('list_todos', 'List all todos', z.object({}), () => {
+  return { content: [{ type: 'text', text: JSON.stringify([...todos.values()]) }] };
+});
 
-server.tool(
-  'complete_todo',
-  'Mark a todo as completed',
-  { id: z.string() },
-  ({ id }) => {
-    const todo = todos.get(id);
-    if (!todo) return { content: [{ type: 'text', text: 'Todo not found' }], isError: true };
-    todo.completed = true;
-    return { content: [{ type: 'text', text: JSON.stringify(todo) }] };
-  }
-);
+server.tool('complete_todo', 'Mark a todo as completed', { id: z.string() }, ({ id }) => {
+  const todo = todos.get(id);
+  if (!todo) return { content: [{ type: 'text', text: 'Todo not found' }], isError: true };
+  todo.completed = true;
+  return { content: [{ type: 'text', text: JSON.stringify(todo) }] };
+});
 
 const transport = new StdioServerTransport();
 server.connect(transport);
@@ -266,12 +250,10 @@ server.connect(transport);
 
 ## Quick Reference
 
-| Component | Purpose |
-|-----------|---------|
-| Tool | Executable actions |
-| Resource | Data to read |
-| Prompt | Predefined prompts |
-| Server | MCP server implementation |
+| Component | Purpose                     |
+| --------- | --------------------------- |
+| Tool      | Executable actions          |
+| Resource  | Data to read                |
+| Prompt    | Predefined prompts          |
+| Server    | MCP server implementation   |
 | Transport | Communication (stdio, HTTP) |
-
-

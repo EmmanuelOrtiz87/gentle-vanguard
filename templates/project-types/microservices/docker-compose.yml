@@ -4,7 +4,7 @@ services:
   api-gateway:
     build: ./api-gateway
     ports:
-      - "8080:8080"
+      - '8080:8080'
     environment:
       - USERS_URL=http://users:3001
       - ORDERS_URL=http://orders:3002
@@ -17,7 +17,7 @@ services:
   users:
     build: ./services/users
     ports:
-      - "3001:3001"
+      - '3001:3001'
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@users-db:5432/users
       - PORT=3001
@@ -36,7 +36,7 @@ services:
   orders:
     build: ./services/orders
     ports:
-      - "3002:3002"
+      - '3002:3002'
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@orders-db:5432/orders
       - USERS_URL=http://users:3001
@@ -58,7 +58,7 @@ services:
   payments:
     build: ./services/payments
     ports:
-      - "3003:3003"
+      - '3003:3003'
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@payments-db:5432/payments
       - RABBITMQ_URL=amqp://rabbitmq:5672
@@ -78,7 +78,7 @@ services:
   notifications:
     build: ./services/notifications
     ports:
-      - "3004:3004"
+      - '3004:3004'
     environment:
       - RABBITMQ_URL=amqp://rabbitmq:5672
       - SMTP_HOST=mailhog
@@ -90,16 +90,16 @@ services:
   rabbitmq:
     image: rabbitmq:3-management-alpine
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - '5672:5672'
+      - '15672:15672'
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
 
   mailhog:
     image: mailhog/mailhog:latest
     ports:
-      - "1025:1025"
-      - "8025:8025"
+      - '1025:1025'
+      - '8025:8025'
 
 volumes:
   users_db_data:

@@ -1,14 +1,13 @@
 ---
 name: chained-pr
 description: >
-  Split large changes into chained or stacked pull requests that protect reviewer
-  focus and stay within Foundation's 400-line cognitive review budget.
-  Trigger: when a PR would exceed 400 changed lines, when planning chained PRs, stacked
-  PRs, or reviewable slices.
+  Split large changes into chained or stacked pull requests that protect reviewer focus and stay
+  within Foundation's 400-line cognitive review budget. Trigger: when a PR would exceed 400 changed
+  lines, when planning chained PRs, stacked PRs, or reviewable slices.
 license: Apache-2.0
 metadata:
   author: workspace-foundation (adapted for Foundation)
-  version: "1.0"
+  version: '1.0'
 ---
 
 # Chained PRs (Foundation Adaptation)
@@ -22,49 +21,52 @@ Use this skill when:
 - A reviewer asks to split a PR for cognitive load, review fatigue, or burnout prevention.
 - You must protect Foundation's **micro-scoping rule**: Max 10 files/judgment (learned 2026-05-02).
 
-Do not use this skill for small fixes or single-purpose changes that fit comfortably under the review budget.
+Do not use this skill for small fixes or single-purpose changes that fit comfortably under the
+review budget.
 
 ## Critical Rules (Foundation)#
 
-| Rule | Requirement |
-|------|-------------|
-| Review budget | **MUST split** when a PR exceeds **400 changed lines** |
-| Review time | Design each PR for an approximately **≤60-minute** human review |
-| Review health | Optimize for sustainable maintainer attention, not just CI compliance |
-| Start and finish | Every chained PR MUST state where it starts, where it ends, what came before, and what comes next |
-| Autonomy | Every chained PR MUST be understandable and verifiable on its own |
-| Scope | One deliverable work unit per PR; do not mix unrelated refactors, features, tests, or docs |
-| Dependencies | State what each PR depends on and what follows next |
-| Exceptions | Use `size:exception` only when a maintainer agrees the large diff is unavoidable |
-| SDD handoff | If SDD forecasts a >400-line workload, honor `delivery_strategy`: ask, auto-chain, or require/record `size:exception` |
-| Visual map | Every chained PR MUST include a dependency diagram that marks the current PR |
-| Tracker PR | Every chain SHOULD have a draft tracker PR that lists every child PR and current status |
+| Rule             | Requirement                                                                                                           |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Review budget    | **MUST split** when a PR exceeds **400 changed lines**                                                                |
+| Review time      | Design each PR for an approximately **≤60-minute** human review                                                       |
+| Review health    | Optimize for sustainable maintainer attention, not just CI compliance                                                 |
+| Start and finish | Every chained PR MUST state where it starts, where it ends, what came before, and what comes next                     |
+| Autonomy         | Every chained PR MUST be understandable and verifiable on its own                                                     |
+| Scope            | One deliverable work unit per PR; do not mix unrelated refactors, features, tests, or docs                            |
+| Dependencies     | State what each PR depends on and what follows next                                                                   |
+| Exceptions       | Use `size:exception` only when a maintainer agrees the large diff is unavoidable                                      |
+| SDD handoff      | If SDD forecasts a >400-line workload, honor `delivery_strategy`: ask, auto-chain, or require/record `size:exception` |
+| Visual map       | Every chained PR MUST include a dependency diagram that marks the current PR                                          |
+| Tracker PR       | Every chain SHOULD have a draft tracker PR that lists every child PR and current status                               |
 
-The goal is not bureaucracy. The goal is preventing reviewer burnout so maintainers can review with care instead of skimming. Big PRs create fatigue, hide defects, and slow merge velocity.
+The goal is not bureaucracy. The goal is preventing reviewer burnout so maintainers can review with
+care instead of skimming. Big PRs create fatigue, hide defects, and slow merge velocity.
 
 ## Choosing the Split Strategy (Foundation)#
 
-| Scenario | Recommended approach | Why |
-|----------|----------------------|-----|
-| Fix links + move scripts + rename rules | Feature branch chain | Keeps unrelated work separate, each ≤400 lines |
-| Each slice can land independently | Stacked PRs to `main` | Reduces long-lived branch drift |
-| Docs refactor + new skills | Feature branch chain | Allows integration before final merge |
+| Scenario                                | Recommended approach  | Why                                            |
+| --------------------------------------- | --------------------- | ---------------------------------------------- |
+| Fix links + move scripts + rename rules | Feature branch chain  | Keeps unrelated work separate, each ≤400 lines |
+| Each slice can land independently       | Stacked PRs to `main` | Reduces long-lived branch drift                |
+| Docs refactor + new skills              | Feature branch chain  | Allows integration before final merge          |
 
 ## Chain Boundaries#
 
 Every PR in a chain needs explicit boundaries:
 
-| Boundary | What to document |
-|----------|------------------|
-| Start | The branch, PR, or state this PR builds on |
-| End | The finished unit this PR leaves behind |
-| Before | Prior PRs reviewers can assume already exist |
-| After | Follow-up PRs reviewers should ignore for now |
+| Boundary     | What to document                                     |
+| ------------ | ---------------------------------------------------- |
+| Start        | The branch, PR, or state this PR builds on           |
+| End          | The finished unit this PR leaves behind              |
+| Before       | Prior PRs reviewers can assume already exist         |
+| After        | Follow-up PRs reviewers should ignore for now        |
 | Out of scope | Related work intentionally excluded from this review |
 
 ## Tracker PR Requirement#
 
-For any chain with more than two PRs, create a draft tracker PR before review starts. The tracker PR is not the review surface. It is the map.
+For any chain with more than two PRs, create a draft tracker PR before review starts. The tracker PR
+is not the review surface. It is the map.
 
 It must include:
 
@@ -90,13 +92,13 @@ main
 
 Pair the diagram with a status table:
 
-| PR | Scope | Status |
-|----|-------|--------|
-| #101 | Foundation audit | ✅ Passing |
-| #102 | Fix links | ✅ Passing |
-| #103 | Move scripts | 📍 Review here |
-| #104 | Rename rules | ⚪ Pending |
-| #105 | Tracker | 🟡 Draft |
+| PR   | Scope            | Status         |
+| ---- | ---------------- | -------------- |
+| #101 | Foundation audit | ✅ Passing     |
+| #102 | Fix links        | ✅ Passing     |
+| #103 | Move scripts     | 📍 Review here |
+| #104 | Rename rules     | ⚪ Pending     |
+| #105 | Tracker          | 🟡 Draft       |
 
 ## Foundation Integration#
 
@@ -126,15 +128,19 @@ main
 2. Open a main/tracker PR from the feature branch to `main` early and mark it as draft/no-merge.
 3. Create each implementation branch from the feature branch.
 4. Target each chained PR back to the feature branch.
-5. Merge the final feature branch to `main` only after all chained PRs are merged and tested together.
+5. Merge the final feature branch to `main` only after all chained PRs are merged and tested
+   together.
 
 ### Tracker PR Expectations#
 
-The tracker PR is a **chain map**, not the review surface. Keep it draft/no-merge until the child PRs are reviewed and integrated.
+The tracker PR is a **chain map**, not the review surface. Keep it draft/no-merge until the child
+PRs are reviewed and integrated.
 
 - Reviewers should review the child PRs, where each slice stays within the 400-line budget.
-- The tracker PR may exceed 400 changed lines because it aggregates the full feature branch by design.
-- If the tracker PR exceeds the budget, request/obtain maintainer-applied `size:exception` and document why the aggregate diff is unavoidable.
+- The tracker PR may exceed 400 changed lines because it aggregates the full feature branch by
+  design.
+- If the tracker PR exceeds the budget, request/obtain maintainer-applied `size:exception` and
+  document why the aggregate diff is unavoidable.
 
 ## Stacked PRs to Main (Foundation)#
 
@@ -155,22 +161,24 @@ main <- PR 1: fix-links (50 lines)
 
 ## Chain Context Section#
 
-Insert this extra section into the existing `.github/PULL_REQUEST_TEMPLATE.md` body. Do **not** replace the repository PR template; the linked issue, PR type, summary, changes, test plan, automated checks, and contributor checklist sections are still required.
+Insert this extra section into the existing `.github/PULL_REQUEST_TEMPLATE.md` body. Do **not**
+replace the repository PR template; the linked issue, PR type, summary, changes, test plan,
+automated checks, and contributor checklist sections are still required.
 
-```markdown
+````markdown
 ## Chain Context#
 
-| Field | Value |
-|-------|-------|
-| Chain | <feature or stack name> |
-| Tracker PR | <#NNN or "Not needed"> |
-| Position | <N of total> |
-| Base | `<target branch>` |
-| Depends on | <PR/issue/link or "None"> |
-| Follow-up | <next PR or "None"> |
-| Review budget | <changed lines> / 400 |
-| Starts at | <branch, PR, or state this builds on> |
-| Ends with | <standalone result delivered by this PR> |
+| Field         | Value                                    |
+| ------------- | ---------------------------------------- |
+| Chain         | <feature or stack name>                  |
+| Tracker PR    | <#NNN or "Not needed">                   |
+| Position      | <N of total>                             |
+| Base          | `<target branch>`                        |
+| Depends on    | <PR/issue/link or "None">                |
+| Follow-up     | <next PR or "None">                      |
+| Review budget | <changed lines> / 400                    |
+| Starts at     | <branch, PR, or state this builds on>    |
+| Ends with     | <standalone result delivered by this PR> |
 
 ### Chain Overview#
 
@@ -181,12 +189,13 @@ main
            └── #NNN Next PR
                 └── #NNN Tracker
 ```
+````
 
 ### Chain Status#
 
-| PR | Scope | Status |
-|----|-------|--------|
-| #NNN | <scope> | <status> |
+| PR   | Scope   | Status     |
+| ---- | ------- | ---------- |
+| #NNN | <scope> | <status>   |
 | #NNN | <scope> | 📍 This PR |
 
 ## Scope#
@@ -205,12 +214,14 @@ main
 
 - Review this PR in isolation.
 - Do not review dependent PR changes here.
-- If this exceeds 400 changed lines, request/obtain maintainer-applied `size:exception` and document the rationale.
+- If this exceeds 400 changed lines, request/obtain maintainer-applied `size:exception` and document
+  the rationale.
 
 ## Test Plan#
 
 - <command or manual verification>
-```
+
+````
 
 ## Commands (Foundation)#
 
@@ -223,7 +234,7 @@ gh pr create --base feat/foundation-audit --title "fix: repair broken links" --b
 
 # Create a stacked PR targeting the previous branch
 gh pr create --base fix-links --title "refactor: move scripts to utilities" --body-file pr-body.md
-```
+````
 
 ## Reviewer Guidance#
 
@@ -232,7 +243,8 @@ gh pr create --base fix-links --title "refactor: move scripts to utilities" --bo
 - Recommend stacked PRs when each slice can merge independently.
 - Prefer clear dependency notes over clever branch gymnastics.
 - Push for autonomy: green CI, clear rollback, and tests or docs for the unit under review.
-- Protect reviewer energy. If the chain forces reviewers to reconstruct hidden context, ask for clearer boundaries.
+- Protect reviewer energy. If the chain forces reviewers to reconstruct hidden context, ask for
+  clearer boundaries.
 
 ## Foundation Lessons Applied (2026-05-02)#
 
@@ -240,4 +252,3 @@ gh pr create --base fix-links --title "refactor: move scripts to utilities" --bo
 - **Max 400 lines/PR** (cognitive load)
 - **Micro-scoping** → 2-5 minute reviews instead of "many minutes"
 - **Chained PRs** → No more massive audits that timeout
-

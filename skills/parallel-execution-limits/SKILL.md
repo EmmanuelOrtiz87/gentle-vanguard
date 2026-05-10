@@ -1,34 +1,37 @@
 ---
 name: parallel-execution-limits
-description: Advanced parallel execution management with dependency graphs, resource pooling, and token budget circuit breaker
+description:
+  Advanced parallel execution management with dependency graphs, resource pooling, and token budget
+  circuit breaker
 ---
 
 # Skill: parallel-execution-limits
 
-**versión**: 1.0.0
-**Created**: 2026-04-23
-**Status**: ACTIVE
-**Priority**: CRITICAL
+**versión**: 1.0.0 **Created**: 2026-04-23 **Status**: ACTIVE **Priority**: CRITICAL
 
 ---
 
 ## Overview
 
-The `parallel-execution-limits` skill provides enterprise-grade parallel execution management with explicit dependency graphs, custom parallelism rules, resource pooling with GPU/CPU awareness, and token budget circuit breaker protection.
+The `parallel-execution-limits` skill provides enterprise-grade parallel execution management with
+explicit dependency graphs, custom parallelism rules, resource pooling with GPU/CPU awareness, and
+token budget circuit breaker protection.
 
 ### Key Capabilities
--  **Explicit Dependency Graphs**: DAG visualization and validation
--  **Custom Parallelism Rules**: Define execution patterns per task type
--  **Resource Pooling**: GPU/CPU awareness with dynamic allocation
--  **Circuit Breaker**: Token budget protection and graceful degradation
--  **Real-time Monitoring**: Execution metrics and resource utilization
--  **Adaptive Scheduling**: Dynamic task prioritization based on resources
+
+- **Explicit Dependency Graphs**: DAG visualization and validation
+- **Custom Parallelism Rules**: Define execution patterns per task type
+- **Resource Pooling**: GPU/CPU awareness with dynamic allocation
+- **Circuit Breaker**: Token budget protection and graceful degradation
+- **Real-time Monitoring**: Execution metrics and resource utilization
+- **Adaptive Scheduling**: Dynamic task prioritization based on resources
 
 ---
 
 ## When to Use This Skill
 
 ### Activation Triggers
+
 - User mentions "parallel execution", "ejecucin paralela", or "execution limits"
 - Complex workflows with >10 tasks requiring optimization
 - GPU/CPU resource constraints need management
@@ -36,6 +39,7 @@ The `parallel-execution-limits` skill provides enterprise-grade parallel executi
 - Custom parallelism strategies needed
 
 ### Use Cases
+
 1. **Multi-Agent Orchestration**: "Ejecutar 5 agentes en paralelo con lmites de recursos"
 2. **Token Budget Protection**: "Proteger presupuesto de tokens con circuit breaker"
 3. **Resource-Aware Scheduling**: "Asignar tareas segn disponibilidad de GPU/CPU"
@@ -48,6 +52,7 @@ The `parallel-execution-limits` skill provides enterprise-grade parallel executi
 ### 1. Explicit Dependency Graph
 
 #### Graph Definition
+
 ```powershell
 # Define tasks with explicit dependencies
 $dependencyGraph = @{
@@ -107,17 +112,18 @@ $dependencyGraph = @{
 ```
 
 #### Graph Validation
+
 ```powershell
 function Validate-DependencyGraph {
     param([hashtable]$Graph)
-    
+
     $issues = @()
-    
+
     # Check for circular dependencies
     if (Test-CircularDependencies -Graph $Graph) {
         $issues += "Circular dependency detected"
     }
-    
+
     # Check for missing dependencies
     $taskIds = $Graph.Tasks | Select-Object -ExpandProperty Id
     foreach ($task in $Graph.Tasks) {
@@ -127,7 +133,7 @@ function Validate-DependencyGraph {
             }
         }
     }
-    
+
     return @{
         IsValid = $issues.Count -eq 0
         Issues = $issues
@@ -136,15 +142,16 @@ function Validate-DependencyGraph {
 ```
 
 #### Graph Visualization
+
 ```powershell
 function Export-DependencyGraphVisualization {
     param([hashtable]$Graph)
-    
+
     $visualization = @{
         Nodes = @()
         Edges = @()
     }
-    
+
     # Create nodes
     foreach ($task in $Graph.Tasks) {
         $visualization.Nodes += @{
@@ -154,7 +161,7 @@ function Export-DependencyGraphVisualization {
             Resources = $task.ResourceRequirements
         }
     }
-    
+
     # Create edges
     foreach ($task in $Graph.Tasks) {
         foreach ($dep in $task.DependsOn) {
@@ -164,7 +171,7 @@ function Export-DependencyGraphVisualization {
             }
         }
     }
-    
+
     return $visualization
 }
 ```
@@ -174,6 +181,7 @@ function Export-DependencyGraphVisualization {
 ### 2. Custom Parallelism Rules
 
 #### Rule Definition
+
 ```powershell
 # Define custom parallelism rules
 $parallelismRules = @{
@@ -209,25 +217,26 @@ $parallelismRules = @{
 ```
 
 #### Rule Application
+
 ```powershell
 function Apply-ParallelismRules {
     param(
         [hashtable]$Graph,
         [hashtable]$Rules
     )
-    
+
     $executionPlan = @{
         Phases = @()
         TaskAssignments = @{}
     }
-    
+
     foreach ($task in $Graph.Tasks) {
         $applicableRule = $Rules.Rules | Where-Object { & $_.Condition $task } | Select-Object -First 1
-        
+
         if (-not $applicableRule) {
             $applicableRule = $Rules.DefaultRule
         }
-        
+
         $executionPlan.TaskAssignments[$task.Id] = @{
             Rule = $applicableRule.Name
             MaxParallel = $applicableRule.MaxParallel
@@ -235,7 +244,7 @@ function Apply-ParallelismRules {
             ResourceMultiplier = $applicableRule.ResourceMultiplier
         }
     }
-    
+
     return $executionPlan
 }
 ```
@@ -245,6 +254,7 @@ function Apply-ParallelismRules {
 ### 3. Resource Pooling (GPU/CPU Awareness)
 
 #### Resource Pool Management
+
 ```powershell
 # Initialize resource pool
 $resourcePool = @{
@@ -276,6 +286,7 @@ $resourcePool = @{
 ```
 
 #### Resource Allocation
+
 ```powershell
 function Allocate-Resources {
     param(
@@ -283,9 +294,9 @@ function Allocate-Resources {
         [hashtable]$Task,
         [string]$TaskId
     )
-    
+
     $requirements = $Task.ResourceRequirements
-    
+
     # Check CPU availability
     if ($ResourcePool.CPU.Available -lt $requirements.CPU) {
         return @{
@@ -295,7 +306,7 @@ function Allocate-Resources {
             Available = $ResourcePool.CPU.Available
         }
     }
-    
+
     # Check Memory availability
     if ($ResourcePool.Memory.Available -lt $requirements.Memory) {
         return @{
@@ -305,11 +316,11 @@ function Allocate-Resources {
             Available = $ResourcePool.Memory.Available
         }
     }
-    
+
     # Check GPU availability
     if ($requirements.GPU -gt 0) {
         $availableGPUs = @($ResourcePool.GPU.Devices | Where-Object { $_.Available -ge ($requirements.GPU * 1024) })
-        
+
         if ($availableGPUs.Count -lt 1) {
             return @{
                 Success = $false
@@ -319,16 +330,16 @@ function Allocate-Resources {
             }
         }
     }
-    
+
     # Allocate resources
     $ResourcePool.CPU.Available -= $requirements.CPU
     $ResourcePool.Memory.Available -= $requirements.Memory
     $ResourcePool.GPU.Available -= $requirements.GPU
-    
+
     $ResourcePool.CPU.Allocated[$TaskId] = $requirements.CPU
     $ResourcePool.Memory.Allocated[$TaskId] = $requirements.Memory
     $ResourcePool.GPU.Allocated[$TaskId] = $requirements.GPU
-    
+
     return @{
         Success = $true
         Allocation = @{
@@ -341,28 +352,29 @@ function Allocate-Resources {
 ```
 
 #### Resource Release
+
 ```powershell
 function Release-Resources {
     param(
         [hashtable]$ResourcePool,
         [string]$TaskId
     )
-    
+
     if ($ResourcePool.CPU.Allocated.ContainsKey($TaskId)) {
         $ResourcePool.CPU.Available += $ResourcePool.CPU.Allocated[$TaskId]
         $ResourcePool.CPU.Allocated.Remove($TaskId)
     }
-    
+
     if ($ResourcePool.Memory.Allocated.ContainsKey($TaskId)) {
         $ResourcePool.Memory.Available += $ResourcePool.Memory.Allocated[$TaskId]
         $ResourcePool.Memory.Allocated.Remove($TaskId)
     }
-    
+
     if ($ResourcePool.GPU.Allocated.ContainsKey($TaskId)) {
         $ResourcePool.GPU.Available += $ResourcePool.GPU.Allocated[$TaskId]
         $ResourcePool.GPU.Allocated.Remove($TaskId)
     }
-    
+
     return @{ Success = $true }
 }
 ```
@@ -372,6 +384,7 @@ function Release-Resources {
 ### 4. Circuit Breaker for Token Budget
 
 #### Circuit Breaker Configuration
+
 ```powershell
 $circuitBreakerConfig = @{
     TokenBudget = @{
@@ -389,15 +402,16 @@ $circuitBreakerConfig = @{
 ```
 
 #### Circuit Breaker Logic
+
 ```powershell
 function Test-CircuitBreaker {
     param(
         [hashtable]$CircuitBreaker,
         [int]$TokensRequired
     )
-    
+
     $tokenUsagePercent = $CircuitBreaker.TokenBudget.Used / $CircuitBreaker.TokenBudget.Total
-    
+
     # Check hard limit
     if ($tokenUsagePercent -ge $CircuitBreaker.TokenBudget.HardLimit) {
         return @{
@@ -407,7 +421,7 @@ function Test-CircuitBreaker {
             UsagePercent = $tokenUsagePercent
         }
     }
-    
+
     # Check soft threshold
     if ($tokenUsagePercent -ge $CircuitBreaker.TokenBudget.Threshold) {
         if ($CircuitBreaker.State -eq "CLOSED") {
@@ -415,7 +429,7 @@ function Test-CircuitBreaker {
             $CircuitBreaker.LastStateChange = Get-Date
         }
     }
-    
+
     # Check if execution would exceed budget
     if (($CircuitBreaker.TokenBudget.Used + $TokensRequired) -gt $CircuitBreaker.TokenBudget.Total) {
         return @{
@@ -426,7 +440,7 @@ function Test-CircuitBreaker {
             Available = $CircuitBreaker.TokenBudget.Total - $CircuitBreaker.TokenBudget.Used
         }
     }
-    
+
     return @{
         CanExecute = $true
         State = $CircuitBreaker.State
@@ -436,6 +450,7 @@ function Test-CircuitBreaker {
 ```
 
 #### Token Tracking
+
 ```powershell
 function Track-TokenUsage {
     param(
@@ -444,11 +459,11 @@ function Track-TokenUsage {
         [int]$TokensUsed,
         [string]$Status = "Success"
     )
-    
+
     $CircuitBreaker.TokenBudget.Used += $TokensUsed
-    
+
     $usagePercent = $CircuitBreaker.TokenBudget.Used / $CircuitBreaker.TokenBudget.Total
-    
+
     return @{
         TaskId = $TaskId
         TokensUsed = $TokensUsed
@@ -466,6 +481,7 @@ function Track-TokenUsage {
 ## Practical Examples
 
 ### Example 1: Complete Parallel Execution with All Features
+
 ```powershell
 # Initialize all components
 $graph = Initialize-DependencyGraph
@@ -482,6 +498,7 @@ if ($validation.IsValid) {
 ```
 
 ### Example 2: Resource-Constrained Execution
+
 ```powershell
 # Execute with strict resource limits
 $execution = @{
@@ -503,12 +520,14 @@ Invoke-ConstrainedExecution -Execution $execution
 ## Integration with Foundation Stack
 
 ### Dependencies
+
 - `workflow-orchestrator` - Base workflow execution
 - `project-orchestrator-skill` - Task coordination
 - `monitoring-aggregator` - Metrics collection
 - `session-lifecycle` - Session tracking
 
 ### Integration Points
+
 1. **Workflow Orchestrator**: Extends with advanced parallelism
 2. **Project Orchestrator**: Provides task context and priorities
 3. **Monitoring**: Real-time resource and token tracking
@@ -518,29 +537,33 @@ Invoke-ConstrainedExecution -Execution $execution
 
 ## Performance Expectations
 
-| Operation | Target Time | Max Memory |
-|-----------|------------|-----------|
-| Graph Validation | <500ms | <50MB |
-| Dependency Resolution | <1s | <100MB |
-| Resource Allocation | <200ms | <30MB |
-| Circuit Breaker Check | <50ms | <10MB |
-| Parallel Execution | Variable | <2GB |
-| Metrics Collection | <100ms | <50MB |
+| Operation             | Target Time | Max Memory |
+| --------------------- | ----------- | ---------- |
+| Graph Validation      | <500ms      | <50MB      |
+| Dependency Resolution | <1s         | <100MB     |
+| Resource Allocation   | <200ms      | <30MB      |
+| Circuit Breaker Check | <50ms       | <10MB      |
+| Parallel Execution    | Variable    | <2GB       |
+| Metrics Collection    | <100ms      | <50MB      |
 
 ---
 
 ## Error Handling
 
 **Issue**: "Circular dependency detected"
+
 - **Solution**: Review task dependencies, use graph visualization to identify cycle
 
 **Issue**: "Insufficient resources"
+
 - **Solution**: Reduce parallelism, increase resource limits, or queue tasks
 
 **Issue**: "Token budget exceeded"
+
 - **Solution**: Circuit breaker activates, gracefully degrade execution or wait for budget reset
 
 **Issue**: "Resource allocation failed"
+
 - **Solution**: Release resources from lower-priority tasks, reschedule execution
 
 ---
@@ -548,6 +571,7 @@ Invoke-ConstrainedExecution -Execution $execution
 ## Configuration
 
 ### Environment Variables
+
 ```powershell
 $env:PARALLEL_MAX_TASKS = "8"
 $env:PARALLEL_CPU_THRESHOLD = "80"
@@ -558,6 +582,7 @@ $env:TOKEN_BUDGET_THRESHOLD = "0.85"
 ```
 
 ### Configuration File
+
 ```json
 {
   "parallelExecution": {
@@ -589,4 +614,3 @@ $env:TOKEN_BUDGET_THRESHOLD = "0.85"
 - [Workflow Orchestrator](../workflow-orchestrator/SKILL.md)
 - [Project Orchestrator](../project-orchestrator-skill/SKILL.md)
 - [Monitoring Aggregator](../monitoring-aggregator/SKILL.md)
-

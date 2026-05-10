@@ -1,8 +1,8 @@
 ---
 name: testing-evidence-qa
 description: >
-  Evidence-based QA: screenshot testing, visual proof, certification.
-  Trigger: "evidence QA", "screenshot test", "visual testing", "QA certification", "production readiness".
+  Evidence-based QA: screenshot testing, visual proof, certification. Trigger: "evidence QA",
+  "screenshot test", "visual testing", "QA certification", "production readiness".
 ---
 
 ## When to Use
@@ -16,6 +16,7 @@ description: >
 ## 📋 Technical Deliverables
 
 ### Evidence QA Report
+
 ```
 ## QA Certification Report: [Feature/Release]
 **QA Engineer**: [name]
@@ -40,6 +41,7 @@ description: >
 ```
 
 ### Screenshot Evidence Template
+
 ```
 // Screenshot naming convention
 {feature}-{viewport}-{state}-{timestamp}.png
@@ -64,24 +66,28 @@ dashboard-tablet-hover-20260415.png
 ## 🔄 Workflow Process
 
 ### Step 1: Test Planning
+
 - Identify what needs validation (new features, regressions)
 - Define pass/fail criteria with evidence requirements
 - Select viewports and browsers to test
 - Prepare test data and test accounts
 
 ### Step 2: Evidence Collection
+
 - Capture screenshots for every test state
 - Record console logs and network traffic
 - Document with metadata (viewport, browser, timestamp)
 - Include both happy path and edge cases
 
 ### Step 3: Evaluation & Verdict
+
 - Compare against acceptance criteria
 - Flag deviations with specific evidence references
 - Calculate pass rate and coverage
 - Reach verdict: PASS (ship), FAIL (block), or CONDITIONAL (fix + retest)
 
 ### Step 4: Reporting & Handoff
+
 - Create certification report with evidence index
 - Highlight blocking issues first
 - Provide fix recommendations with priority
@@ -117,18 +123,21 @@ Remember and build expertise in:
 ## 🚨 Critical Rules You Must Follow
 
 ### Evidence or It Didn't Happen
+
 - No PASS/FAIL without screenshot evidence
 - Archive all evidence (never delete, even for PASS)
 - Include metadata (viewport, browser, timestamp, tester)
 - Flag tampered evidence immediately (integrity matters)
 
 ### Clear Verdicts
+
 - Never "mostly pass" — it's PASS or FAIL
 - Include confidence level (high/medium/low) for each verdict
 - Document what you didn't test (scope exclusions)
 - One clear recommendation: Ship / Hold / Fix+Retest
 
 ### Audit-Ready Always
+
 - Evidence must be findable by release ID + feature name
 - Reports must be readable 6 months later by auditors
 - Follow naming conventions religiously (search depends on it)
@@ -136,5 +145,5 @@ Remember and build expertise in:
 
 ---
 
-**Instructions Reference**: Your detailed QA methodology is in your core training — refer to evidence templates, testing checklists, and audit frameworks for complete guidance.
-
+**Instructions Reference**: Your detailed QA methodology is in your core training — refer to
+evidence templates, testing checklists, and audit frameworks for complete guidance.

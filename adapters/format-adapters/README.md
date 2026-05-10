@@ -1,20 +1,24 @@
 ﻿# Format Adapters
 
-Translate between Foundation's standard format and tool-specific formats for tools that don't support MCP.
+Translate between Foundation's standard format and tool-specific formats for tools that don't
+support MCP.
 
 ---
+
 ## Why Format Adapters?
 
-While **MCP Bridge** is the optimal solution (covers all MCP-compatible tools), some tools have their own plugin systems:
+While **MCP Bridge** is the optimal solution (covers all MCP-compatible tools), some tools have
+their own plugin systems:
 
-| Tool | Protocol | Solution |
-|------|----------|----------|
-| **Windsurf** | Proprietary plugin format | `windsurf-adapter/` |
-| **Codex** | OpenAI function calling | `codex-adapter/` |
-| **Antigravity** | Mission Control API | `antigravity-adapter/` |
-| **Any MCP tool** | MCP (standard) | Use **MCP Bridge** instead |
+| Tool             | Protocol                  | Solution                   |
+| ---------------- | ------------------------- | -------------------------- |
+| **Windsurf**     | Proprietary plugin format | `windsurf-adapter/`        |
+| **Codex**        | OpenAI function calling   | `codex-adapter/`           |
+| **Antigravity**  | Mission Control API       | `antigravity-adapter/`     |
+| **Any MCP tool** | MCP (standard)            | Use **MCP Bridge** instead |
 
 ---
+
 ## Adapter Structure
 
 Each adapter follows the same pattern:
@@ -37,6 +41,7 @@ format-adapters/
 ```
 
 ---
+
 ## Usage
 
 ### Windsurf Adapter
@@ -69,27 +74,30 @@ node adapters/format-adapters/antigravity-adapter/adapter.js \
 ```
 
 ---
+
 ## Translation Process
 
 ```
-          
-  Foundation        Format           Tool-Specific  
-  SKILL.md              Adapter               Format          
-  (Standard)            (Translate)           (Windsurf/      
-            Codex/etc.)    
-                                                     
+
+  Foundation        Format           Tool-Specific
+  SKILL.md              Adapter               Format
+  (Standard)            (Translate)           (Windsurf/
+            Codex/etc.)
+
 ```
 
 ---
+
 ## Implementation Status
 
-| Adapter | Status | Priority | Notes |
-|---------|--------|----------|-------|
-| Windsurf |  Pending | HIGH | Research Windsurf plugin format |
-| Codex |  Pending | MEDIUM | OpenAI-compatible endpoint |
-| Antigravity |  Pending | LOW | Mission Control API research |
+| Adapter     | Status  | Priority | Notes                           |
+| ----------- | ------- | -------- | ------------------------------- |
+| Windsurf    | Pending | HIGH     | Research Windsurf plugin format |
+| Codex       | Pending | MEDIUM   | OpenAI-compatible endpoint      |
+| Antigravity | Pending | LOW      | Mission Control API research    |
 
 ---
+
 ## Adding a New Adapter
 
 1. Create directory: `adapters/format-adapters/{tool}-adapter/`
@@ -101,4 +109,5 @@ node adapters/format-adapters/antigravity-adapter/adapter.js \
 5. Add to compatibility matrix in `adapters/docs/COMPATIBILITY-MATRIX.md`
 
 ---
+
 **Note**: Prefer **MCP Bridge** when possible - it's more maintainable and future-proof.

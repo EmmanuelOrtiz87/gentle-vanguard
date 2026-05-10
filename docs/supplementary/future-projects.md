@@ -6,14 +6,18 @@ Use this workspace foundation as the standard starting point for new repositorie
 
 1. Decide whether the project is new or already exists.
 2. Decide whether you will scaffold from a template or clone an existing repository.
-3. If the structure is known, choose `-Kind`, `-Preset`, `-Architecture`, `-Profile`, and the AI model fields up front.
-4. If the structure is not known, keep the defaults and refine later with the project owner or the AI helper.
-5. Install the workspace skills so new projects inherit the same documentation and architecture standards.
+3. If the structure is known, choose `-Kind`, `-Preset`, `-Architecture`, `-Profile`, and the AI
+   model fields up front.
+4. If the structure is not known, keep the defaults and refine later with the project owner or the
+   AI helper.
+5. Install the workspace skills so new projects inherit the same documentation and architecture
+   standards.
 6. Run the workspace bootstrap once per machine.
 7. Run the local memory launcher if you want isolated Engram state.
 8. Create or clone the project using the project scripts.
 9. Record architecture decisións and follow-up notes in `docs/project-context.md`.
-10. If the project uses AI assistance, document whether it relies on a local model, a cloud model, or no model at all.
+10. If the project uses AI assistance, document whether it relies on a local model, a cloud model,
+    or no model at all.
 11. Record the selected AI provider, mode, model name, and endpoint in `docs/project-context.md`.
 12. Review `docs/defaults-vs-decisións.md` before making a choice that could affect future projects.
 
@@ -21,11 +25,14 @@ Use this workspace foundation as the standard starting point for new repositorie
 
 1. Copy or clone the new project into its own repository.
 2. Run `scripts/init-workspace.ps1` or `scripts/init-workspace.sh` once per machine.
-3. Run `scripts/install-workspace-skills.ps1` or `scripts/install-workspace-skills.sh` so the documentation and architecture skills are available in Codex.
+3. Run `scripts/install-workspace-skills.ps1` or `scripts/install-workspace-skills.sh` so the
+   documentation and architecture skills are available in Codex.
 4. Run `scripts/run-engram.ps1` or `scripts/run-engram.sh` if you want isolated local memory.
 5. Run `scripts/secrets-bootstrap.ps1` inside each application repo that uses local credentials.
-6. Use `scripts/new-project.ps1 -Name <project>` or `scripts/new-project.sh -Name <project>` for scaffolded repos.
-7. Use `scripts/validate-workspace.ps1` or `scripts/validate-workspace.sh` before changes are committed.
+6. Use `scripts/new-project.ps1 -Name <project>` or `scripts/new-project.sh -Name <project>` for
+   scaffolded repos.
+7. Use `scripts/validate-workspace.ps1` or `scripts/validate-workspace.sh` before changes are
+   committed.
 
 ## Project Shape Parameters
 
@@ -41,12 +48,14 @@ Use parameters when the desired structure is known ahead of time:
 - `-AiModelEndpoint <endpoint>`
 - `-AiModelNotes <free-form-notes>`
 
-If the user has not decided yet, keep the defaults and let the AI helper or project owner refine the choice later.
+If the user has not decided yet, keep the defaults and let the AI helper or project owner refine the
+choice later.
 
 ## Generated Project Context
 
-Every scaffolded project gets a `docs/project-context.md` file with the selected defaults.
-That file is intentionally safe to edit later and should be the first place to record design follow-ups, including AI provider and model decisións.
+Every scaffolded project gets a `docs/project-context.md` file with the selected defaults. That file
+is intentionally safe to edit later and should be the first place to record design follow-ups,
+including AI provider and model decisións.
 
 ## What Every Future Project Should Document
 
@@ -89,4 +98,3 @@ That file is intentionally safe to edit later and should be the first place to r
 - Secrets are encrypted locally or injected at runtime.
 - Runtime cleanup is automatic or one command away.
 - New developers can follow the README without tribal knowledge.
-

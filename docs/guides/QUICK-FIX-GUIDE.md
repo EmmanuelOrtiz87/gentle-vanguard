@@ -19,36 +19,46 @@ Get-Content .\docs\audit\script-normalization-report.md
 ## Top 5 Scripts to Fix First
 
 ### 1. wf.ps1
+
 **Problem**: Missing 1 closing brace, 2 extra closing parentheses  
 **Quick Fix**:
+
 1. Open: `scripts/foundation/wf.ps1`
 2. Search for: `function` and count braces
 3. Look for unclosed `if` or `foreach` statements
 
 ### 2. bootstrap-workspace.ps1
+
 **Problem**: Missing 2 closing braces  
 **Quick Fix**:
+
 1. Open: `scripts/foundation/bootstrap-workspace.ps1`
 2. Check all `function` definitions
 3. Verify all `if/else` blocks are closed
 
 ### 3. validate-script-governance.ps1
+
 **Problem**: Syntax error with token 'Script'  
 **Quick Fix**:
+
 1. Open: `scripts/diagnostics/validate-script-governance.ps1`
 2. Search for: `Script` keyword
 3. Check for incomplete statements
 
 ### 4. session-manager.ps1
+
 **Problem**: 2 extra closing parentheses  
 **Quick Fix**:
+
 1. Open: `scripts/utilities/session-manager.ps1`
 2. Remove 2 extra `)` characters
 3. Validate with audit tool
 
 ### 5. homologate-workspace.ps1
+
 **Problem**: 5 extra closing parentheses  
 **Quick Fix**:
+
 1. Open: `scripts/validation/homologate-workspace.ps1`
 2. Find and remove 5 extra `)` characters
 3. Validate with audit tool
@@ -89,6 +99,7 @@ Get-ChildItem .\scripts\utilities\*.ps1 | ForEach-Object {
 ## Common Issues & Fixes
 
 ### Extra Closing Parentheses
+
 ```powershell
 # WRONG - Extra )
 Write-Host "test"))
@@ -98,6 +109,7 @@ Write-Host "test"
 ```
 
 ### Missing Closing Brace
+
 ```powershell
 # WRONG - Missing }
 function Test {
@@ -110,6 +122,7 @@ function Test {
 ```
 
 ### Unbalanced Here-Strings
+
 ```powershell
 # WRONG - Missing "@
 $text = @"

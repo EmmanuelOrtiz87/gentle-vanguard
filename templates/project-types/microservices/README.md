@@ -17,13 +17,13 @@
 
 ## Services
 
-| Service | Port | Description |
-|---------|------|-------------|
-| users | 3001 | User management |
-| orders | 3002 | Order processing |
-| payments | 3003 | Payment handling |
+| Service       | Port | Description             |
+| ------------- | ---- | ----------------------- |
+| users         | 3001 | User management         |
+| orders        | 3002 | Order processing        |
+| payments      | 3003 | Payment handling        |
 | notifications | 3004 | Email/SMS notifications |
-| api-gateway | 8080 | Request routing |
+| api-gateway   | 8080 | Request routing         |
 
 ## Quick Start
 

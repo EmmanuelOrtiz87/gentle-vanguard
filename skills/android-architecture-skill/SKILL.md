@@ -1,7 +1,9 @@
 ---
 name: android-architecture
 user-invocable: false
-description: Use when implementing MVVM, clean architecture, dependency injection with Hilt, or structuring Android app layers.
+description:
+  Use when implementing MVVM, clean architecture, dependency injection with Hilt, or structuring
+  Android app layers.
 allowed-tools:
   - Read
   - Write
@@ -456,5 +458,3 @@ class GoodViewModel : ViewModel() {
 
 - **android-jetpack-compose**: UI layer patterns
 - **android-kotlin-coroutines**: Async operations
-
-

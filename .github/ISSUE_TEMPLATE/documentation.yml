@@ -1,7 +1,7 @@
 name: Documentation Update
 description: Improve documentation or fix outdated docs
-title: "[DOCS] "
-labels: ["documentation", "triage"]
+title: '[DOCS] '
+labels: ['documentation', 'triage']
 assignees: []
 body:
   - type: dropdown
@@ -26,7 +26,7 @@ body:
     attributes:
       label: File Path
       description: Path to the documentation file (if applicable)
-      placeholder: "e.g., docs/installation.md"
+      placeholder: 'e.g., docs/installation.md'
 
   - type: textarea
     id: current

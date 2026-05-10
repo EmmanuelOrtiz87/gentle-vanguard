@@ -34,30 +34,31 @@ GET    /users/123/orders   # User's orders
 ## HTTP Methods & Status Codes
 
 | Method | Purpose | Success Code | Idempotent |
-|--------|---------|--------------|------------|
-| GET | Read | 200 | Yes |
-| POST | Create | 201 | No |
-| PUT | Replace | 200/204 | Yes |
-| PATCH | Update | 200/204 | No |
-| DELETE | Remove | 204 | Yes |
+| ------ | ------- | ------------ | ---------- |
+| GET    | Read    | 200          | Yes        |
+| POST   | Create  | 201          | No         |
+| PUT    | Replace | 200/204      | Yes        |
+| PATCH  | Update  | 200/204      | No         |
+| DELETE | Remove  | 204          | Yes        |
 
-| Code | Meaning |
-|------|---------|
-| 200 | OK |
-| 201 | Created |
-| 204 | No Content |
-| 400 | Bad Request |
-| 401 | Unauthorized |
-| 403 | Forbidden |
-| 404 | Not Found |
-| 409 | Conflict |
-| 422 | Validation Error |
-| 429 | Rate Limited |
-| 500 | Server Error |
+| Code | Meaning          |
+| ---- | ---------------- |
+| 200  | OK               |
+| 201  | Created          |
+| 204  | No Content       |
+| 400  | Bad Request      |
+| 401  | Unauthorized     |
+| 403  | Forbidden        |
+| 404  | Not Found        |
+| 409  | Conflict         |
+| 422  | Validation Error |
+| 429  | Rate Limited     |
+| 500  | Server Error     |
 
 ## Response Format
 
 ### Success Response
+
 ```json
 {
   "data": {
@@ -76,6 +77,7 @@ GET    /users/123/orders   # User's orders
 ```
 
 ### List Response with Pagination
+
 ```json
 {
   "data": [...],
@@ -96,6 +98,7 @@ GET    /users/123/orders   # User's orders
 ```
 
 ### Error Response
+
 ```json
 {
   "error": {
@@ -132,16 +135,19 @@ Accept: application/vnd.api+json; versión=2
 ## Pagination Patterns
 
 ### Offset-based
+
 ```
 GET /users?page=1&limit=20
 ```
 
 ### Cursor-based (recommended for large datasets)
+
 ```
 GET /users?cursor=eyJpZCI6MTAwfQ&limit=20
 ```
 
 ### Time-based
+
 ```
 GET /users?after=2024-01-01T00:00:00Z&limit=20
 ```
@@ -174,11 +180,13 @@ Retry-After: 3600
 ## Authentication
 
 ### Bearer Token
+
 ```http
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
 ### API Key
+
 ```http
 X-API-Key: your-api-key-here
 ```
@@ -199,6 +207,7 @@ X-API-Key: your-api-key-here
 ## GraphQL Alternative
 
 When to use GraphQL:
+
 - Complex nested queries
 - Mobile apps (bandwidth optimization)
 - Multiple clients with different needs
@@ -254,5 +263,3 @@ type Mutation {
       '401':
         $ref: '#/components/responses/Unauthorized'
 ```
-
-

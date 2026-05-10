@@ -2,7 +2,8 @@
 
 ## Overview
 
-This document defines how Gentleman Foundation versións, releases, and manages backward compatibility across versións.
+This document defines how Gentleman Foundation versións, releases, and manages backward
+compatibility across versións.
 
 ## Semantic versióning (SemVer 2.0.0)
 
@@ -17,30 +18,34 @@ v1.0.0
 
 ### versión Increment Rules
 
-| Scenario | When | Example |
-|----------|------|---------|
-| MAJOR bump | Breaking changes to CLI, script API, or governance model | v1.0.0  v2.0.0 (new release strategy) |
-| MINOR bump | New skills, new SDD policy, new features, governance clarifications | v1.0.0  v1.1.0 (SDD gate tightened) |
-| PATCH bump | Bug fixes, security patches, documentation corrections | v1.0.0  v1.0.1 (fixed wf.ps1 bug) |
+| Scenario   | When                                                                | Example                              |
+| ---------- | ------------------------------------------------------------------- | ------------------------------------ |
+| MAJOR bump | Breaking changes to CLI, script API, or governance model            | v1.0.0 v2.0.0 (new release strategy) |
+| MINOR bump | New skills, new SDD policy, new features, governance clarifications | v1.0.0 v1.1.0 (SDD gate tightened)   |
+| PATCH bump | Bug fixes, security patches, documentation corrections              | v1.0.0 v1.0.1 (fixed wf.ps1 bug)     |
 
 ### Examples
 
--  **v1.0.0  v1.1.0**: Add 5 new skills; upgrade to SDD enforcement via CI gate (new but backward-compatible)
--  **v1.1.0  v1.1.1**: Fix wf.ps1 path issue; security patch in pre-commit (bug fixes)
--  **v1.1.1  v2.0.0**: Change branch strategy from `develop+main` to trunk-based; remove `scripts/project/` folder (architecture shift)
+- **v1.0.0 v1.1.0**: Add 5 new skills; upgrade to SDD enforcement via CI gate (new but
+  backward-compatible)
+- **v1.1.0 v1.1.1**: Fix wf.ps1 path issue; security patch in pre-commit (bug fixes)
+- **v1.1.1 v2.0.0**: Change branch strategy from `develop+main` to trunk-based; remove
+  `scripts/project/` folder (architecture shift)
 
 ## Release Cadence & Types
 
 ### Release Types
 
 #### 1. **Stable Release (Recommended)**
+
 - Created from `main` branch
 - Tag format: `v1.0.0`, `v1.2.0`, `v2.1.0`
-- Process: develop on `develop`  merge to `main`  tag  GitHub Release
+- Process: develop on `develop` merge to `main` tag GitHub Release
 - Supported for at least 3 subsequent minor versións
 - **Current strategy**: Quarterly stable releases
 
 #### 2. **Prerelease (Optional)**
+
 - Created from feature branches or `develop`
 - Tag format: `v1.1.0-beta.1`, `v1.1.0-rc.1`
 - For broad early testing before stable release
@@ -48,11 +53,12 @@ v1.0.0
 - Visibility: Pre-releases listed separately on GitHub
 
 #### 3. **Hotfix Release (Urgent)**
+
 - Created from `main` for critical security/stability issues
 - Branch: `hotfix/issue-description`
-- PATCH versión bump (e.g., v1.0.0  v1.0.1)
+- PATCH versión bump (e.g., v1.0.0 v1.0.1)
 - Merged back to `main` and `develop`
-- Process: hotfix on branch  PR to main  tag  PR same commit to develop
+- Process: hotfix on branch PR to main tag PR same commit to develop
 
 ## Breaking Changes & Deprecation Policy
 
@@ -60,14 +66,17 @@ v1.0.0
 
 When removing or changing a feature:
 
-1. **Announce deprecation** in CHANGELOG under current versión: "Deprecated: `wf old-cmd` will be removed in v2.0.0"
+1. **Announce deprecation** in CHANGELOG under current versión: "Deprecated: `wf old-cmd` will be
+   removed in v2.0.0"
 2. **Emit warnings** in CLI/scripts when deprecated feature is used
-3. **Maintain for 2+ minor versións** (e.g., deprecate in v1.1, remove in v2.0, but support in v1.2, v1.3)
+3. **Maintain for 2+ minor versións** (e.g., deprecate in v1.1, remove in v2.0, but support in v1.2,
+   v1.3)
 4. **Document migration path** in MIGRATION.md
 
 ### Breaking Change Examples
 
 **Scenario 1: CLI Command Removed**
+
 ```
 v1.0.0: wf verify                          (stable)
 v1.1.0: Deprecate wf verify in favor of wf validate
@@ -77,6 +86,7 @@ v2.0.0: wf verify removed completely       (breaking change in MAJOR)
 ```
 
 **Scenario 2: Governance Model Changes**
+
 ```
 v1.0.0: SDD optional (advisory only)
 v1.1.0: SDD mandatory for PRs (breaking for strict enforcement)
@@ -85,13 +95,14 @@ v1.1.0: SDD mandatory for PRs (breaking for strict enforcement)
 
 ## Compatibility & Support Matrix
 
-| versión | Status | Support Until | Go | Node | Python | PowerShell |
-|---------|--------|---------------|----|------|--------|------------|
-| v1.0.0  | Stable | v1.3 released | 1.19+ | 18+ | 3.9+ | 7+ |
-| v1.1.0+ | Stable | TBD | 1.19+ | 18+ | 3.9+ | 7+ |
-| v2.0.0  | Future | TBD | 1.20+ | 20+ | 3.11+ | 7+ |
+| versión | Status | Support Until | Go    | Node | Python | PowerShell |
+| ------- | ------ | ------------- | ----- | ---- | ------ | ---------- |
+| v1.0.0  | Stable | v1.3 released | 1.19+ | 18+  | 3.9+   | 7+         |
+| v1.1.0+ | Stable | TBD           | 1.19+ | 18+  | 3.9+   | 7+         |
+| v2.0.0  | Future | TBD           | 1.20+ | 20+  | 3.11+  | 7+         |
 
-**Support Rule**: Maintain backward compatibility for at least 2 minor versións after a breaking change is announced.
+**Support Rule**: Maintain backward compatibility for at least 2 minor versións after a breaking
+change is announced.
 
 ## Branch Strategy for Release
 
@@ -99,19 +110,19 @@ v1.1.0: SDD mandatory for PRs (breaking for strict enforcement)
 
 ```
 main (production branch)        GitHub Release points here
-  
+
    Merged from: develop
 
-develop (integration branch)  
-  
+develop (integration branch)
+
    Feature branches (feature/*, bugfix/*, chore/*)
-  
+
 Hotfix (if critical)
 hotfix/*    main  (tag)
            develop
 ```
 
-### Release Process (Develop  Main  Tag)
+### Release Process (Develop Main Tag)
 
 ```bash
 # 1. Ensure develop is ready
@@ -152,6 +163,7 @@ git push origin develop
 See [`RELEASE-CHECKLIST.md`](./RELEASE-CHECKLIST.md) for pre-release validation.
 
 **Minimum**:
+
 - [ ] CHANGELOG updated with all changes
 - [ ] All governance tests pass
 - [ ] Documentation updated
@@ -163,39 +175,44 @@ See [`RELEASE-CHECKLIST.md`](./RELEASE-CHECKLIST.md) for pre-release validation.
 
 - **Project Lead** (you) decides and documents in CHANGELOG before release
 - **AI Agent** (me) implements the release process
-- **Consumers** (Dashboard) pin to a specific versión or use "latest v1.*"
+- **Consumers** (Dashboard) pin to a specific versión or use "latest v1.\*"
 
 ### Where versión is Declared
 
-- `git tag v1.0.0`  Primary source of truth in Git
-- `CHANGELOG.md`  What changed in this versión
-- `versión.txt` (optional)  Can store versión for scripts if needed
+- `git tag v1.0.0` Primary source of truth in Git
+- `CHANGELOG.md` What changed in this versión
+- `versión.txt` (optional) Can store versión for scripts if needed
 
 ### No Hardcoded versión in Code
 
 Foundation does NOT store versión in `scripts/utilities/wf.ps1` or source files.
+
 - Reason: Sync risk between code and git tags
 - Instead: Query git tag at runtime if needed: `git describe --tags --abbrev=0`
 
 ## FAQ
 
 **Q: When should I release?**
+
 - After completing a significant feature set (3-5 items from backlog)
 - When governance or architecture changes require documentation
 - For security patches: immediately as v1.0.1 hotfix
 
 **Q: Can I skip versións?**
-- No. Always increment sequentially (v1.0.0  v1.1.0  v2.0.0)
+
+- No. Always increment sequentially (v1.0.0 v1.1.0 v2.0.0)
 - Reason: Consumers rely on predictable upgrade paths
 
 **Q: What if develop is behind main?**
+
 - Normally shouldn't happen; merge release back to develop after tagging
 - If it does: `git merge main` on develop and push
 
 **Q: How do consumers use this?**
+
 - **Pin versión**: `git clone... && git checkout v1.0.0`
 - **Latest stable**: Clone main directly
-- **Follow minor updates**: Pin to v1.* and update manually or via sync
+- **Follow minor updates**: Pin to v1.\* and update manually or via sync
 
 ---
 

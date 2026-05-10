@@ -6,11 +6,11 @@ Complete guide to configure AI tools for Workspace Foundation - both cloud and l
 
 ```
 
-                     AI CONFIGURATION OPTIONS                                  
+                     AI CONFIGURATION OPTIONS
 
 
 OPTION A: CLOUD (Recommended)              OPTION B: LOCAL
-              
+
 
 [OK] Quick setup                            [OK] 100% offline
 [OK] No GPU required                        [OK] No API costs
@@ -22,7 +22,8 @@ Both can run simultaneously for failover!
 
 ## Response Profile Compression (Token Efficiency)
 
-The stack supports configurable communication controls to reduce output/context tokens while keeping consistent style.
+The stack supports configurable communication controls to reduce output/context tokens while keeping
+consistent style.
 
 Three independent axes are used:
 
@@ -100,7 +101,8 @@ Config keys in `config/orchestrator.json`:
 Default behavior:
 
 1. Branch `hotfix/*` or `release/*` -> risk escalates to `high`.
-2. Task name keywords infer preset (`docs`, `audit-review`, `refactor`, `executive-demo`, fallback `bugfix`).
+2. Task name keywords infer preset (`docs`, `audit-review`, `refactor`, `executive-demo`, fallback
+   `bugfix`).
 3. Recommended mode is applied automatically before session brief generation.
 
 Disable auto-apply:
@@ -115,12 +117,12 @@ Disable auto-apply:
 
 ### Providers Supported
 
-| Provider | Models | Cost | Best For |
-|----------|--------|------|---------|
-| **Anthropic** | Claude 3.5 Sonnet, Opus | $15-20/mes | General coding |
-| **OpenAI** | GPT-4o, GPT-4 Turbo | $15-20/mes | Fast responses |
-| **Google** | Gemini 1.5, 2.0 | Free tier + pay | Budget-conscious |
-| **GitHub** | Copilot models | $10/mes | GitHub integration |
+| Provider      | Models                  | Cost            | Best For           |
+| ------------- | ----------------------- | --------------- | ------------------ |
+| **Anthropic** | Claude 3.5 Sonnet, Opus | $15-20/mes      | General coding     |
+| **OpenAI**    | GPT-4o, GPT-4 Turbo     | $15-20/mes      | Fast responses     |
+| **Google**    | Gemini 1.5, 2.0         | Free tier + pay | Budget-conscious   |
+| **GitHub**    | Copilot models          | $10/mes         | GitHub integration |
 
 ### Step 1: Get API Keys
 
@@ -220,7 +222,7 @@ MAX_DAILY_SPEND_USD=10
 
 ```
 ADVANTAGES                          DISADVANTAGES
-                         
+
 [OK] 100% offline                       Need decent GPU (8GB+ VRAM)
 [OK] No API costs                       Slower than cloud models
 [OK] Complete privacy                   Weaker reasoning
@@ -323,27 +325,27 @@ Foundation automatically detects availability:
 
 ```
 
-                    CONNECTION CHECK                          
+                    CONNECTION CHECK
 
 
 1. Try Cloud (Anthropic)     Available?  Use Claude
-                                    
-                                    
+
+
                                Not Available
-                                    
-                                    
+
+
 2. Try Fallback (OpenAI)       Available?  Use GPT-4
-                                    
-                                    
+
+
                                Not Available
-                                    
-                                    
+
+
 3. Try Local (Ollama)         Available?  Use Local
-                                    
-                                    
+
+
                                Not Available
-                                    
-                                    
+
+
                            Show Error / Queue Request
 ```
 
@@ -461,13 +463,13 @@ USE_LOCAL_FALLBACK=true
 ## Quick Reference: .env Template
 
 ```powershell
-# 
+#
 # WORKSPACE FOUNDATION - AI CONFIGURATION
-# 
+#
 
-# 
+#
 # CLOUD PROVIDERS (Get keys from their websites)
-# 
+#
 
 # Anthropic (Claude) - Recommended
 # Get: https://console.anthropic.com/
@@ -481,9 +483,9 @@ OPENAI_API_KEY=sk-xxxxx
 # Get: https://aistudio.google.com/
 GOOGLE_API_KEY=AIzaSyxxxxx
 
-# 
+#
 # LOCAL PROVIDER (Ollama)
-# 
+#
 
 # Base URL (default: localhost)
 OLLAMA_BASE_URL=http://localhost:11434
@@ -491,9 +493,9 @@ OLLAMA_BASE_URL=http://localhost:11434
 # Default model
 OLLAMA_MODEL=codellama:13b
 
-# 
+#
 # PROVIDER PRIORITY (First available is used)
-# 
+#
 
 # Options: anthropic, openai, google, ollama
 DEFAULT_AI_PROVIDER=anthropic
@@ -501,9 +503,9 @@ DEFAULT_AI_PROVIDER=anthropic
 # Fallback order
 AI_PROVIDER_PRIORITY=anthropic,openai,ollama
 
-# 
+#
 # MODEL SELECTION
-# 
+#
 
 # Standard model
 DEFAULT_MODEL=claude-sonnet-4-20250514
@@ -511,21 +513,21 @@ DEFAULT_MODEL=claude-sonnet-4-20250514
 # For complex tasks
 COMPLEX_TASK_MODEL=claude-opus-4-20250514
 
-# 
+#
 # COST MANAGEMENT
-# 
+#
 
 MAX_DAILY_SPEND_USD=10
 SHOW_TOKEN_USAGE=true
 
-# 
+#
 # PERFORMANCE
-# 
+#
 
 CACHE_PROMPTS=true
 STREAM_RESPONSES=true
 
-# 
+#
 ```
 
 ---
@@ -552,6 +554,7 @@ ollama list
 ```
 
 Expected output:
+
 ```
 [OK] Anthropic API configured
 [OK] OpenAI API configured
@@ -563,10 +566,10 @@ Expected output:
 
 ## Getting Help
 
-| Issue | Solution |
-|-------|-----------|
-| No API key | Sign up at provider website |
-| Invalid key | Check for typos, regenerate |
-| Rate limits | Wait, or reduce usage |
-| Slow responses | Use faster model, or local |
-| Offline | Use Ollama local models |
+| Issue          | Solution                    |
+| -------------- | --------------------------- |
+| No API key     | Sign up at provider website |
+| Invalid key    | Check for typos, regenerate |
+| Rate limits    | Wait, or reduce usage       |
+| Slow responses | Use faster model, or local  |
+| Offline        | Use Ollama local models     |

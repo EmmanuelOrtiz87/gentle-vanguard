@@ -8,10 +8,12 @@ trigger: tracing, telemetry, distributed, correlation, span
 
 ## Descripcin
 
-Este skill proporciona capacidades de tracing distribuido para el workspace-foundation, permitiendo rastrear la ejecucin de dispatches, orchestration y automatización con:
+Este skill proporciona capacidades de tracing distribuido para el workspace-foundation, permitiendo
+rastrear la ejecucin de dispatches, orchestration y automatización con:
 
 - **OpenTelemetry Integration**: Implementacin compatible con estndares de observabilidad
-- **Correlation IDs**: Identificadores nicos para rastrear operaciónes a travs de mltiples componentes
+- **Correlation IDs**: Identificadores nicos para rastrear operaciónes a travs de mltiples
+  componentes
 - **Span Hierarchy**: estructura jerrquica de spans para visualizar relaciones entre operaciónes
 - **Performance Metrics**: Mtricas de rendimiento en tiempo real
 - **Centralized Reporting**: Reportes centralizados en un nico directorio
@@ -19,11 +21,13 @@ Este skill proporciona capacidades de tracing distribuido para el workspace-foun
 ## Caractersticas
 
 ### 1. Correlation IDs
+
 - Generacin automtica de IDs nicos por sesin
 - Propagacin a travs de todas las operaciónes
 - Formato: `session-YYYY-MM-DD-XX-XXXXXXXX` (UUID)
 
 ### 2. Span Hierarchy
+
 ```
 Root Span (Session)
  Dispatch Span
@@ -39,13 +43,16 @@ Root Span (Session)
 ```
 
 ### 3. Performance Metrics
+
 - Latencia de operaciónes
 - Throughput de dispatches
 - Tasa de xito/error
 - Utilizacin de recursos
 
 ### 4. Reportes Centralizados
+
 estructura de directorios:
+
 ```
 .telemetry/
  traces/
@@ -66,6 +73,7 @@ estructura de directorios:
 ## Uso
 
 ### Inicializar Tracing
+
 ```powershell
 . ./skills/distributed-tracing-skill/distributed-tracing-core.ps1
 
@@ -73,6 +81,7 @@ $tracing = Initialize-DistributedTracing -SessionId "session-2026-04-23-24"
 ```
 
 ### Crear Spans
+
 ```powershell
 $span = Start-Span -Name "dispatch-task" -ParentSpanId $parentSpan.SpanId -Attributes @{
     TaskType = "feature-implementation"
@@ -85,6 +94,7 @@ End-Span -Span $span -Status "success"
 ```
 
 ### Registrar Mtricas
+
 ```powershell
 Record-Metric -Name "dispatch-latency" -Value 1250 -Unit "ms" -Tags @{
     DispatchType = "auto-delegation"
@@ -93,6 +103,7 @@ Record-Metric -Name "dispatch-latency" -Value 1250 -Unit "ms" -Tags @{
 ```
 
 ### Generar Reportes
+
 ```powershell
 Generate-DailyReport -Date (Get-Date) -OutputPath ".telemetry/reports"
 ```
@@ -100,16 +111,19 @@ Generate-DailyReport -Date (Get-Date) -OutputPath ".telemetry/reports"
 ## Integracin con Componentes Existentes
 
 ### Auto-Delegation Router
+
 - Cada dispatch genera un span raz
 - Sub-spans para keyword extraction, decisión tree, confidence scoring
 - Mtricas de routing accuracy
 
 ### Judgment Day Orchestrator
+
 - Span para cada fase de judgment
 - Mtricas de review time y approval rate
 - Trazabilidad de decisiónes
 
 ### Session Manager
+
 - Correlation ID propagado a toda la sesin
 - Mtricas de session lifecycle
 - Anlisis de session performance
@@ -125,4 +139,3 @@ Ver: `config/distributed-tracing-config.json`
 - `skills/distributed-tracing-skill/metrics-collector.ps1` - Metrics collection
 - `skills/distributed-tracing-skill/report-generator.ps1` - Report generation
 - `scripts/utilities/telemetry-dashboard.ps1` - Dashboard para visualizar traces
-

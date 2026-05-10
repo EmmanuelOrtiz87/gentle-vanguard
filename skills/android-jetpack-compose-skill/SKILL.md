@@ -1,7 +1,9 @@
 ---
 name: android-jetpack-compose
 user-invocable: false
-description: Use when building Android UIs with Jetpack Compose, managing state with remember/mutableStateOf, or implementing declarative UI patterns.
+description:
+  Use when building Android UIs with Jetpack Compose, managing state with remember/mutableStateOf,
+  or implementing declarative UI patterns.
 allowed-tools:
   - Read
   - Write
@@ -418,4 +420,3 @@ fun GoodList(items: List<Item>) {
 
 - **android-architecture**: MVVM and clean architecture patterns
 - **android-kotlin-coroutines**: Async operations in Compose
-

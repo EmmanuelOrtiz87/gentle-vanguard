@@ -12,6 +12,7 @@ Guide test creation, framework selection, and coverage improvement for all proje
 ## When to Use
 
 Activate this skill when:
+
 - Writing new tests (unit, integration, e2e)
 - Setting up test infrastructure
 - Improving test coverage
@@ -30,27 +31,27 @@ Activate this skill when:
 ## Test Pyramid
 
 ```
-        
+
            E2E      Few, slow, expensive (Playwright, Cypress)
-       
+
        Integration  Some, moderate (API tests, component tests)
-      
+
         Unit      Many, fast, cheap (Vitest, Jest, Go test)
-     
+
 ```
 
 ## Framework Selection
 
-| Type | Stack | Recommended |
-|------|-------|-------------|
-| Unit | Node.js/TypeScript | Vitest, Jest |
-| Unit | Go | testing package |
-| Unit | Python | pytest |
-| Integration | Node.js | Supertest, MSW |
-| E2E | React/Vue | Playwright, Cypress |
-| API | Any | REST Client, Postman |
-| Component | React | React Testing Library |
-| Component | Vue | Vue Test Utils |
+| Type        | Stack              | Recommended           |
+| ----------- | ------------------ | --------------------- |
+| Unit        | Node.js/TypeScript | Vitest, Jest          |
+| Unit        | Go                 | testing package       |
+| Unit        | Python             | pytest                |
+| Integration | Node.js            | Supertest, MSW        |
+| E2E         | React/Vue          | Playwright, Cypress   |
+| API         | Any                | REST Client, Postman  |
+| Component   | React              | React Testing Library |
+| Component   | Vue                | Vue Test Utils        |
 
 ## Test File Naming
 
@@ -85,10 +86,10 @@ describe('User', () => {
     it('should update age when birthday is called', () => {
       // Arrange
       const user = createUser({ name: 'John', age: 30 });
-      
+
       // Act
       user.birthday();
-      
+
       // Assert
       expect(user.age).toBe(31);
     });
@@ -101,7 +102,7 @@ describe('User', () => {
 ```typescript
 // Mock external dependencies
 vi.mock('./external-service', () => ({
-  fetchUser: vi.fn()
+  fetchUser: vi.fn(),
 }));
 
 // Mock time for consistent tests
@@ -116,11 +117,11 @@ afterEach(() => {
 ## Coverage Targets
 
 | Coverage Type | Minimum | Recommended |
-|---------------|---------|-------------|
-| Statements | 70% | 80% |
-| Branches | 60% | 70% |
-| Functions | 70% | 80% |
-| Lines | 70% | 80% |
+| ------------- | ------- | ----------- |
+| Statements    | 70%     | 80%         |
+| Branches      | 60%     | 70%         |
+| Functions     | 70%     | 80%         |
+| Lines         | 70%     | 80%         |
 
 ## CI/CD Integration
 
@@ -158,4 +159,3 @@ npm run test:watch
 # Run E2E
 npx playwright test
 ```
-

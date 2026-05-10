@@ -61,12 +61,12 @@ cd workspace-foundation
 
 ### Branch Types
 
-| Type | Purpose | Base |
-|------|---------|------|
-| feature/* | New features | develop |
-| bugfix/* | Bug fixes | develop |
-| hotfix/* | Production fixes | main |
-| release/* | Release prep | main |
+| Type       | Purpose          | Base    |
+| ---------- | ---------------- | ------- |
+| feature/\* | New features     | develop |
+| bugfix/\*  | Bug fixes        | develop |
+| hotfix/\*  | Production fixes | main    |
+| release/\* | Release prep     | main    |
 
 ### Creating Branch
 
@@ -78,11 +78,11 @@ cd workspace-foundation
 
 ## Common Commands
 
-| Command | Purpose |
-|---------|---------|
+| Command       | Purpose         |
+| ------------- | --------------- |
 | wf.ps1 doctor | Diagnose issues |
-| wf.ps1 audit | Run audit |
-| wf.ps1 tools | Manage tools |
+| wf.ps1 audit  | Run audit       |
+| wf.ps1 tools  | Manage tools    |
 
 ---
 

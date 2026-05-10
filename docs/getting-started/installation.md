@@ -5,10 +5,12 @@ Complete guide to set up Workspace Foundation on a new machine.
 ## Prerequisites
 
 ### Required
+
 - **Git** - https://git-scm.com/
 - **PowerShell 7+** - https://aka.ms/powershell
 
 ### Recommended
+
 - **Go 1.21+** - For Go-based tools
 - **Node.js 20+** - For Node.js projects
 - **Docker** - For containerized development
@@ -68,12 +70,12 @@ git config --global pull.rebase true
 
 The workspace-foundation includes integration with:
 
-| Tool | Purpose | Install |
-|------|---------|---------|
-| **OpenCode** | AI coding agent | https://opencode.ai |
-| **Claude Code** | AI coding agent | https://claude.ai/code |
-| **Native Review Engine** | Built-in workflow review | `./scripts/utilities/wf.ps1 review` |
-| **engram** | Persistent memory | `go install github.com/workspace-foundation/engram/cmd/engram@latest` |
+| Tool                     | Purpose                  | Install                                                               |
+| ------------------------ | ------------------------ | --------------------------------------------------------------------- |
+| **OpenCode**             | AI coding agent          | https://opencode.ai                                                   |
+| **Claude Code**          | AI coding agent          | https://claude.ai/code                                                |
+| **Native Review Engine** | Built-in workflow review | `./scripts/utilities/wf.ps1 review`                                   |
+| **engram**               | Persistent memory        | `go install github.com/workspace-foundation/engram/cmd/engram@latest` |
 
 Windows one-shot update (no brew required): `./scripts/utilities/wf.ps1 update-tools`
 
@@ -98,6 +100,7 @@ cp -r scripts/utilities/Workspace-Skills/curated/* ~/.config/opencode/skills/
 ```
 
 The wizard will ask:
+
 - Project name
 - Project type (service, cli, library, frontend, fullstack, microservices)
 - Architecture pattern
@@ -123,18 +126,18 @@ The wizard will ask:
 
 ## Available Options
 
-| Option | Description | Values |
-|--------|-------------|--------|
-| `--name` | Project name | String |
-| `--kind` | Project type | service, cli, library, frontend, fullstack, microservices |
-| `--framework` | Frontend framework | react, vue, angular, nextjs |
-| `--architecture` | Architecture pattern | layered, clean, modular, microservices |
-| `--preset` | Project preset | default |
-| `--ai-mode` | AI assistance mode | none, local, cloud |
-| `--ai-provider` | AI provider | openai, anthropic, gemini, ollama |
-| `--ai-model` | Model name | gpt-4, claude-3-opus, etc. |
-| `--clone` | Clone from URL | Git repository URL |
-| `--output` | Output path | Directory path |
+| Option           | Description          | Values                                                    |
+| ---------------- | -------------------- | --------------------------------------------------------- |
+| `--name`         | Project name         | String                                                    |
+| `--kind`         | Project type         | service, cli, library, frontend, fullstack, microservices |
+| `--framework`    | Frontend framework   | react, vue, angular, nextjs                               |
+| `--architecture` | Architecture pattern | layered, clean, modular, microservices                    |
+| `--preset`       | Project preset       | default                                                   |
+| `--ai-mode`      | AI assistance mode   | none, local, cloud                                        |
+| `--ai-provider`  | AI provider          | openai, anthropic, gemini, ollama                         |
+| `--ai-model`     | Model name           | gpt-4, claude-3-opus, etc.                                |
+| `--clone`        | Clone from URL       | Git repository URL                                        |
+| `--output`       | Output path          | Directory path                                            |
 
 ## Post-Installation
 

@@ -16,10 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      
+
       - name: Setup runtime
         uses: ./.github/actions/setup
-        
+
       - name: Run linter
         run: |
           {{lint-command}}
@@ -30,10 +30,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      
+
       - name: Setup runtime
         uses: ./.github/actions/setup
-        
+
       - name: Run tests
         run: |
           {{test-command}}
@@ -47,15 +47,15 @@ jobs:
     needs: [lint, test]
     steps:
       - uses: actions/checkout@v6
-      
+
       - name: Setup runtime
         uses: ./.github/actions/setup
-        
+
       - name: Build
         run: |
           {{build-command}}
         shell: bash
-        
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -68,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      
+
       - name: Run security scan
         run: |
           {{security-command}}
@@ -82,7 +82,7 @@ jobs:
     environment: staging
     steps:
       - uses: actions/checkout@v6
-      
+
       - name: Deploy to staging
         run: |
           {{deploy-staging-command}}
@@ -99,7 +99,7 @@ jobs:
     environment: production
     steps:
       - uses: actions/checkout@v6
-      
+
       - name: Deploy to production
         run: |
           {{deploy-production-command}}

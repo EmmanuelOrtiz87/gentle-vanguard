@@ -2,7 +2,9 @@
 
 ## Overview
 
-The audit system captures and stores structured records of AI-assisted development activity directly in the project repository. This provides transparency, metrics, and compliance tracking without requiring a central platform.
+The audit system captures and stores structured records of AI-assisted development activity directly
+in the project repository. This provides transparency, metrics, and compliance tracking without
+requiring a central platform.
 
 ## Quick Start
 
@@ -22,36 +24,36 @@ The system runs **automatically** - no manual intervention required:
 
 ```
 
-                    AUDIT WORKFLOW                                 
+                    AUDIT WORKFLOW
 
 
 start-session.ps1           finalize-session.ps1
-                                  
-                                  
-           
- Session Start             Session End           
-                                                
- - Timestamp              - Capture metrics    
- - User info             - Git changes        
+
+
+
+ Session Start             Session End
+
+ - Timestamp              - Capture metrics
+ - User info             - Git changes
  - AI tools              - Lines added/removed
-           
-                                      
-                                      
-                          
-                           Automatic Processing  
-                                                 
-                           - Session saved       
-                           - Daily metrics      
+
+
+
+
+                           Automatic Processing
+
+                           - Session saved
+                           - Daily metrics
                            - Weekly report       (Sun/Mon only)
-                          
-                                      
-                                      
-                          
-                           docs/ Directory      
-                                                 
-                           audits/              
-                           sessions/metrics/    
-                          
+
+
+
+
+                           docs/ Directory
+
+                           audits/
+                           sessions/metrics/
+
 ```
 
 ## Directory Structure
@@ -69,11 +71,11 @@ docs/
 
 ## Automatic Execution
 
-| When | What | Output |
-|------|------|--------|
-| `start-session.ps1` | Session starts | Session file created |
-| `finalize-session.ps1` | Session ends | Metrics captured |
-| Every finalize (Sun/Mon) | Weekly report | Report generated |
+| When                     | What           | Output               |
+| ------------------------ | -------------- | -------------------- |
+| `start-session.ps1`      | Session starts | Session file created |
+| `finalize-session.ps1`   | Session ends   | Metrics captured     |
+| Every finalize (Sun/Mon) | Weekly report  | Report generated     |
 
 ## Manual Commands
 
@@ -96,13 +98,13 @@ Import-Csv docs/sessions/metrics/context-usage.csv | Format-Table
 
 ### Session Records
 
-| Field | Description |
-|-------|-------------|
-| timestamp | Session start time |
-| user | Developer machine and username |
-| aiTools | Usage per tool (requests, tokens) |
-| activity | Actions, files modified, lines changed |
-| metrics | Duration, files created/updated/deleted |
+| Field     | Description                             |
+| --------- | --------------------------------------- |
+| timestamp | Session start time                      |
+| user      | Developer machine and username          |
+| aiTools   | Usage per tool (requests, tokens)       |
+| activity  | Actions, files modified, lines changed  |
+| metrics   | Duration, files created/updated/deleted |
 
 ### Metrics (CSV)
 
@@ -131,26 +133,27 @@ Generated automatically on Sundays/Mondays:
 
 ### Report Distribution
 
-| Audience | Report Type | Contents |
-|----------|-------------|----------|
-| Product Owners | Weekly | Sprint progress, AI adoption |
-| Technical Leads | Weekly | Detailed metrics, quality |
-| Management | Monthly | Executive summaries, trends |
+| Audience        | Report Type | Contents                     |
+| --------------- | ----------- | ---------------------------- |
+| Product Owners  | Weekly      | Sprint progress, AI adoption |
+| Technical Leads | Weekly      | Detailed metrics, quality    |
+| Management      | Monthly     | Executive summaries, trends  |
 
 ## OKR/KPI Integration
 
 The metrics directly support development KPIs:
 
-| KPI | Metric Source |
-|-----|---------------|
-| Development Velocity | `docs/sessions/metrics/` CSVs |
-| AI Adoption Rate | Session count with AI usage |
-| Code Quality | Issues found/resolved in reviews |
-| Cost Management | Audit report cost sections |
+| KPI                  | Metric Source                    |
+| -------------------- | -------------------------------- |
+| Development Velocity | `docs/sessions/metrics/` CSVs    |
+| AI Adoption Rate     | Session count with AI usage      |
+| Code Quality         | Issues found/resolved in reviews |
+| Cost Management      | Audit report cost sections       |
 
 ## Archival Process
 
-Historical audit files are archived to `docs/.local-archive/audits/` for retention. Archives preserve historical data while keeping the active `docs/audits/` directory focused on recent work.
+Historical audit files are archived to `docs/.local-archive/audits/` for retention. Archives
+preserve historical data while keeping the active `docs/audits/` directory focused on recent work.
 
 ## Privacy
 

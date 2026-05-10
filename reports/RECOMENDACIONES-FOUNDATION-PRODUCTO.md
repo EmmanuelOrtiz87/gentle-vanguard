@@ -9,25 +9,25 @@
 
 ### ✅ Lo que YA funciona:
 
-| Área | Componente | Estado |
-|------|-----------|--------|
-| **Session** | AutoStart, tracking | ✅ Operativo |
-| **Delegation** | Auto-delegation (15 categorías) | ✅ Configurado |
-| **Reporting** | CLI, skills, consolidación | ✅ Implementado |
-| **Tracing** | Distributed tracing | ✅ Activo |
-| **Security** | Token Guard, context efficiency | ✅ Monitorizando |
-| **Workflow** | Orchestrator, multi-agent | ✅ Estructurado |
+| Área           | Componente                      | Estado           |
+| -------------- | ------------------------------- | ---------------- |
+| **Session**    | AutoStart, tracking             | ✅ Operativo     |
+| **Delegation** | Auto-delegation (15 categorías) | ✅ Configurado   |
+| **Reporting**  | CLI, skills, consolidación      | ✅ Implementado  |
+| **Tracing**    | Distributed tracing             | ✅ Activo        |
+| **Security**   | Token Guard, context efficiency | ✅ Monitorizando |
+| **Workflow**   | Orchestrator, multi-agent       | ✅ Estructurado  |
 
 ### ⚠️ Lo que FALTA o requiere mejoras:
 
-| Área | Componente | Prioridad | Estado |
-|------|-----------|----------|--------|
-| **Git Hooks** | pre-commit, pre-push | 🔴 ALTA | No configurado |
-| **MCP** | Model Context Protocol | 🟡 MEDIA | No implementado |
-| **Plugin System** | Extensibilidad | 🟡 MEDIA | No definido |
-| **Security** | Audit hooks, secrets detection | 🔴 ALTA | Incompleto |
-| **Monitoring** | Dashboard, alerts | 🟡 MEDIA | No existe |
-| **Telemetría** | Captura de tokens real | 🔴 ALTA | Pendiente |
+| Área              | Componente                     | Prioridad | Estado          |
+| ----------------- | ------------------------------ | --------- | --------------- |
+| **Git Hooks**     | pre-commit, pre-push           | 🔴 ALTA   | No configurado  |
+| **MCP**           | Model Context Protocol         | 🟡 MEDIA  | No implementado |
+| **Plugin System** | Extensibilidad                 | 🟡 MEDIA  | No definido     |
+| **Security**      | Audit hooks, secrets detection | 🔴 ALTA   | Incompleto      |
+| **Monitoring**    | Dashboard, alerts              | 🟡 MEDIA  | No existe       |
+| **Telemetría**    | Captura de tokens real         | 🔴 ALTA   | Pendiente       |
 
 ---
 
@@ -40,12 +40,12 @@
 .\scripts\utilities\git-hooks-setup.ps1 -Install
 ```
 
-| Hook | Función | Estado |
-|------|---------|--------|
+| Hook         | Función                    | Estado            |
+| ------------ | -------------------------- | ----------------- |
 | `pre-commit` | Lint, format, secrets scan | ❌ No configurado |
-| `pre-push` | Test run, judgment day | ⚠️ Parcial |
-| `commit-msg` | Conventional commits | ❌ No configurado |
-| `post-merge` | Dependency update | ❌ No configurado |
+| `pre-push`   | Test run, judgment day     | ⚠️ Parcial        |
+| `commit-msg` | Conventional commits       | ❌ No configurado |
+| `post-merge` | Dependency update          | ❌ No configurado |
 
 **Instalar**: `lefthook` o `husky` para gestión de hooks
 
@@ -53,12 +53,12 @@
 
 MCP permite que herramientas externas seintegren con el LLM:
 
-| Server | Propósito | Prioridad |
-|--------|----------|---------|
-| **Filesystem** | Access to files | 🔴 ALTA |
-| **Git** | Git operations | 🔴 ALTA |
-| **Puppeteer** | Browser automation | 🟡 MEDIA |
-| **SQLite** | Database queries | 🟡 MEDIA |
+| Server         | Propósito          | Prioridad |
+| -------------- | ------------------ | --------- |
+| **Filesystem** | Access to files    | 🔴 ALTA   |
+| **Git**        | Git operations     | 🔴 ALTA   |
+| **Puppeteer**  | Browser automation | 🟡 MEDIA  |
+| **SQLite**     | Database queries   | 🟡 MEDIA  |
 
 **Instalar**: mcp-skill ya existe, configurar servers
 
@@ -76,20 +76,22 @@ plugins/
 ```
 
 **Plugins recomendados**:
+
 - `wf-plugin-auth` - Autenticación
 - `wf-plugin-deploy` - Despliegue
 - `wf-plugin-analytics` - Analytics
 
 ### 4. Security (CRÍTICO)
 
-| Herramienta | Función | Estado |
-|------------|---------|--------|
-| **Git Secrets** | Detect API keys | ❌ No configurado |
+| Herramienta         | Función             | Estado            |
+| ------------------- | ------------------- | ----------------- |
+| **Git Secrets**     | Detect API keys     | ❌ No configurado |
 | **Dependency Scan** | vulnerable packages | ❌ No configurado |
-| **Code Analysis** | Static analysis | ❌ No configurado |
-| **Audit Log** | Compliance | ⚠️ Parcial |
+| **Code Analysis**   | Static analysis     | ❌ No configurado |
+| **Audit Log**       | Compliance          | ⚠️ Parcial        |
 
 **Instalar**:
+
 - `trufflehog` (secrets scanning)
 - `npm audit` / `safety` (dependencies)
 - `sonarqube` (static analysis)
@@ -103,12 +105,12 @@ plugins/
 # - Alerts: PagerDuty, Slack
 ```
 
-| Métrica | Fuente | Estado |
-|--------|-------|--------|
-| Sessions | .session/*.json | ✅ |
-| Tokens | token-guard | ⚠️ Parcial |
-| Costs | calculations | ❌ No implementado |
-| Quality | judgment-day | ⚠️ Parcial |
+| Métrica  | Fuente           | Estado             |
+| -------- | ---------------- | ------------------ |
+| Sessions | .session/\*.json | ✅                 |
+| Tokens   | token-guard      | ⚠️ Parcial         |
+| Costs    | calculations     | ❌ No implementado |
+| Quality  | judgment-day     | ⚠️ Parcial         |
 
 ### 6. CLI Enhancement
 
@@ -128,36 +130,36 @@ wf plugins install <name>   # Install plugin
 
 ### Esenciales (Core)
 
-| Herramienta | Propósito | Instalación |
-|------------|----------|------------|
-| `lefthook` | Git hooks management | `npm install -g lefthook` |
-| `prettier` | Code formatting | `npm install -D prettier` |
-| `eslint` | Linting | `npm install -D eslint` |
-| `commitlint` | Commit validation | `npm install -D commitlint` |
+| Herramienta  | Propósito            | Instalación                 |
+| ------------ | -------------------- | --------------------------- |
+| `lefthook`   | Git hooks management | `npm install -g lefthook`   |
+| `prettier`   | Code formatting      | `npm install -D prettier`   |
+| `eslint`     | Linting              | `npm install -D eslint`     |
+| `commitlint` | Commit validation    | `npm install -D commitlint` |
 
 ### Security
 
-| Herramienta | Propósito | Instalación |
-|------------|----------|------------|
-| `trufflehog` | Secrets detection | `choco install trufflehog` |
-| `git-secrets` | AWS secrets | `git clone git@github.com:awslabs/git-secrets` |
-| `sops` | Secrets management | `choco install sops` |
+| Herramienta   | Propósito          | Instalación                                    |
+| ------------- | ------------------ | ---------------------------------------------- |
+| `trufflehog`  | Secrets detection  | `choco install trufflehog`                     |
+| `git-secrets` | AWS secrets        | `git clone git@github.com:awslabs/git-secrets` |
+| `sops`        | Secrets management | `choco install sops`                           |
 
 ### Monitoring
 
-| Herramienta | Propósito | Instalación |
-|------------|----------|------------|
-| `prometheus` | Metrics | docker |
-| `grafana` | Dashboard | docker |
-| `fastapi` | API metrics | pip |
+| Herramienta  | Propósito   | Instalación |
+| ------------ | ----------- | ----------- |
+| `prometheus` | Metrics     | docker      |
+| `grafana`    | Dashboard   | docker      |
+| `fastapi`    | API metrics | pip         |
 
 ### MCP Servers
 
-| Server | Propósito | Instalación |
-|--------|----------|------------|
-| `@modelcontextprotocol/server-filesystem` | File access | npm |
-| `@modelcontextprotocol/server-git` | Git operations | npm |
-| `@modelcontextprotocol/server-sqlite` | DB queries | npm |
+| Server                                    | Propósito      | Instalación |
+| ----------------------------------------- | -------------- | ----------- |
+| `@modelcontextprotocol/server-filesystem` | File access    | npm         |
+| `@modelcontextprotocol/server-git`        | Git operations | npm         |
+| `@modelcontextprotocol/server-sqlite`     | DB queries     | npm         |
 
 ---
 
@@ -192,15 +194,18 @@ El archivo `AGENTS.md` debería incluir:
 
 ```markdown
 ## Required Tools
-- lefthook     # Git hooks
-- prettier    # Formatting
-- trufflehog  # Secrets
+
+- lefthook # Git hooks
+- prettier # Formatting
+- trufflehog # Secrets
 
 ## Optional Tools
-- grafana     # Dashboard
-- fastapi     # API
+
+- grafana # Dashboard
+- fastapi # API
 
 ## Plugins
+
 - wf-plugin-auth
 - wf-plugin-deploy
 ```
@@ -210,32 +215,37 @@ El archivo `AGENTS.md` debería incluir:
 ## ✅ Checklist de Implementación
 
 ### Git Hooks
+
 - [ ] pre-commit hook (lint + secrets)
 - [ ] pre-push hook (tests + judgment)
 - [ ] commit-msg hook (conventional)
 - [ ] lefthook config
 
 ### MCP
+
 - [ ] filesystem server
 - [ ] git server
 - [ ] sqlite server
 
 ### Security
+
 - [ ] trufflehog integration
 - [ ] secrets.yaml config
 - [ ] dependency audit CI
 
 ### Monitoring
+
 - [ ] metrics API endpoint
 - [ ] Grafana dashboard
 - [ ] Slack alerts
 
 ### CLI
+
 - [ ] wf doctor (diagnostic)
 - [ ] wf update (self-update)
 - [ ] wf plugins (plugin management)
 
 ---
 
-*Documento de recomendaciones*  
-*Próxima revisión: cuando se implementen items críticos*
+_Documento de recomendaciones_  
+_Próxima revisión: cuando se implementen items críticos_

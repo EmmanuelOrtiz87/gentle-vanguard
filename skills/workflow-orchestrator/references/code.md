@@ -16,11 +16,13 @@ $workflow = @{
 ```
 
 ### Conditional Execution
+
 ```powershell
 @{ Name = "OptionalCleanup"; DependsOn = @("Sync"); Condition = "if (Get-DiskUsagePercent -gt 85)"; Action = "Remove-OldBackups" }
 ```
 
 ### Parallel Execution
+
 ```powershell
 $parallelTasks = @(
     @{ Name = "MetricsCollection"; DependsOn = @() }
@@ -153,14 +155,15 @@ function Detect-WorkflowAnomalies {
 
 ## Performance Expectations
 
-| Operation | Max Time | Max Memory |
-|-----------|----------|------------|
-| Workflow Definition | 1s | 10MB |
-| Dependency Resolution | 2s | 20MB |
-| State Tracking | 1s | 50MB |
-| Error Recovery | 5s | 100MB |
+| Operation             | Max Time | Max Memory |
+| --------------------- | -------- | ---------- |
+| Workflow Definition   | 1s       | 10MB       |
+| Dependency Resolution | 2s       | 20MB       |
+| State Tracking        | 1s       | 50MB       |
+| Error Recovery        | 5s       | 100MB      |
 
 ## Integration Dependencies
+
 - `session-lifecycle` — Track workflow execution
 - `backup-orchestrator` — Backup operations
 - `cross-workspace-sync` — Sync operations

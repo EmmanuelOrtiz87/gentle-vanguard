@@ -2,28 +2,29 @@
 
 ## Overview
 
-This document defines the standardized development workflow for all projects using Gentleman Foundation.
+This document defines the standardized development workflow for all projects using Gentleman
+Foundation.
 
 ## Branch Strategy
 
 ```
 main (production)
-     
+
 develop (integration)
-     
+
 feature/* / bugfix/* / chore/*
 ```
 
 ### Branch Types
 
-| Branch | Purpose | Protection |
-|--------|---------|------------|
-| `main` | Production code | Required PR + review |
-| `develop` | Integration | Required PR + review |
-| `feature/*` | New features | PR after completion |
-| `bugfix/*` | Bug fixes | PR after completion |
-| `chore/*` | Maintenance | PR after completion |
-| `hotfix/*` | Urgent fixes | Direct commit allowed |
+| Branch      | Purpose             | Protection            |
+| ----------- | ------------------- | --------------------- |
+| `main`      | Production code     | Required PR + review  |
+| `develop`   | Integration         | Required PR + review  |
+| `feature/*` | New features        | PR after completion   |
+| `bugfix/*`  | Bug fixes           | PR after completion   |
+| `chore/*`   | Maintenance         | PR after completion   |
+| `hotfix/*`  | Urgent fixes        | Direct commit allowed |
 | `release/*` | Release preparation | Direct commit allowed |
 
 ### GitFlow Enforcement
@@ -31,6 +32,7 @@ feature/* / bugfix/* / chore/*
 1. Protected branch direct push (`main`, `develop`) is blocked by default.
 2. Allowed branch naming is enforced: `feature/*`, `bugfix/*`, `chore/*`, `hotfix/*`, `release/*`.
 3. Expected PR base is enforced:
+
 - `feature/*`, `bugfix/*`, `chore/*` -> `develop`
 - `hotfix/*`, `release/*` -> `main`
 
@@ -39,10 +41,10 @@ feature/* / bugfix/* / chore/*
 ### 1. Start Session
 
 ```markdown
-1. mem_context              # Check memory
-2. git status              # Current branch
-3. Load skills             # Based on stack
-4. Present status          # Project, todos, next step
+1. mem_context # Check memory
+2. git status # Current branch
+3. Load skills # Based on stack
+4. Present status # Project, todos, next step
 ```
 
 ### 2. During Work
@@ -57,11 +59,11 @@ feature/* / bugfix/* / chore/*
 ### 3. Before End
 
 ```markdown
-1. wf.ps1 review           # Code review
-2. wf.ps1 audit           # Audit document
+1. wf.ps1 review # Code review
+2. wf.ps1 audit # Audit document
 3. Validate specification
 4. Ask: Create PR?
-5. wf.ps1 publish         # Full publish flow with gated merge decisión
+5. wf.ps1 publish # Full publish flow with gated merge decisión
 ```
 
 ## Commit Convention
@@ -97,24 +99,24 @@ docs(readme): update installation
 
 ### 7 Dimensions
 
-| # | Dimension | Scope | Auto | Blocking |
-|---|----------|-------|------|----------|
-| 1 | Security | Secrets, vulnerabilities | Yes | CRITICAL/HIGH |
-| 2 | Quality | Code smells, patterns | Yes | HIGH |
-| 3 | Architecture | Structure, design | No | MEDIUM |
-| 4 | Testing | Coverage, quality | No | MEDIUM |
-| 5 | Documentation | README, comments | No | LOW |
-| 6 | API Design | REST, validation | No | MEDIUM |
-| 7 | Git Workflow | Commits, branches | No | LOW |
+| #   | Dimension     | Scope                    | Auto | Blocking      |
+| --- | ------------- | ------------------------ | ---- | ------------- |
+| 1   | Security      | Secrets, vulnerabilities | Yes  | CRITICAL/HIGH |
+| 2   | Quality       | Code smells, patterns    | Yes  | HIGH          |
+| 3   | Architecture  | Structure, design        | No   | MEDIUM        |
+| 4   | Testing       | Coverage, quality        | No   | MEDIUM        |
+| 5   | Documentation | README, comments         | No   | LOW           |
+| 6   | API Design    | REST, validation         | No   | MEDIUM        |
+| 7   | Git Workflow  | Commits, branches        | No   | LOW           |
 
 ### Severity Actions
 
-| Severity | Icon | Action | Blocking |
-|----------|------|--------|----------|
-| CRITICAL | [X] | Block immediately | Yes |
-| HIGH | [!] | Must fix before PR | Yes |
-| MEDIUM | [-] | User choice | No |
-| LOW | [*] | Optional | No |
+| Severity | Icon | Action             | Blocking |
+| -------- | ---- | ------------------ | -------- |
+| CRITICAL | [X]  | Block immediately  | Yes      |
+| HIGH     | [!]  | Must fix before PR | Yes      |
+| MEDIUM   | [-]  | User choice        | No       |
+| LOW      | [*]  | Optional           | No       |
 
 ### Findings decisión
 
@@ -142,11 +144,17 @@ Generated automatically with `wf.ps1 audit`.
 # Audit Document - [DATE]
 
 ## Summary
+
 ## Git Information
+
 ## Commits
+
 ## Tests Status
+
 ## Findings
+
 ## Specification
+
 ## Next Steps
 ```
 
@@ -182,29 +190,30 @@ Use `wf.ps1 publish` for end-to-end execution with governance gates:
 1. If validations pass with no alerts, PR merge is authorized automatically.
 2. If alerts are detected, a summary + suggestións are shown.
 3. If suggestións are accepted, automated fixes are applied and the flow re-runs.
-4. If suggestións are rejected, a final explicit confirmation is required to merge with gaps under developer responsibility.
+4. If suggestións are rejected, a final explicit confirmation is required to merge with gaps under
+   developer responsibility.
 5. Every decisión path is documented in `docs/sessions/*-publish-decisión.md`.
 
 ## Automation
 
 ### Scripts
 
-| Script | Purpose |
-|--------|---------|
-| `wf.ps1 review` | Run code review |
-| `wf.ps1 audit` | Generate audit document |
-| `wf.ps1 pr` | Create PR template |
-| `wf.ps1 push` | Prepare for push |
+| Script           | Purpose                                                                               |
+| ---------------- | ------------------------------------------------------------------------------------- |
+| `wf.ps1 review`  | Run code review                                                                       |
+| `wf.ps1 audit`   | Generate audit document                                                               |
+| `wf.ps1 pr`      | Create PR template                                                                    |
+| `wf.ps1 push`    | Prepare for push                                                                      |
 | `wf.ps1 publish` | Validate, summarize alerts, apply suggestións, and merge according to decisión policy |
-| `wf.ps1 status` | Show current status |
+| `wf.ps1 status`  | Show current status                                                                   |
 
 ### Hooks
 
-| Hook | Trigger | Actions |
-|------|---------|---------|
-| `pre-commit` | `git commit` | Secrets scan, format check |
-| `pre-push` | `git push` | Native review + GitFlow policy + governance + homologation drift gate |
-| `commit-msg` | `git commit` | Commit message validation |
+| Hook         | Trigger      | Actions                                                               |
+| ------------ | ------------ | --------------------------------------------------------------------- |
+| `pre-commit` | `git commit` | Secrets scan, format check                                            |
+| `pre-push`   | `git push`   | Native review + GitFlow policy + governance + homologation drift gate |
+| `commit-msg` | `git commit` | Commit message validation                                             |
 
 ## Tools
 

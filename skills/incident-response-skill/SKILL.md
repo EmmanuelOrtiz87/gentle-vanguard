@@ -20,14 +20,14 @@ Automated incident detection, alerting, and recovery procedures for Foundation w
 
 ## Triggers
 
-| Event | Action |
-|-------|--------|
-| Token threshold 80% | Notify user, continue monitoring |
-| Token threshold 90% | Alert, suggest context compression |
-| Token threshold 95% | Force compression, block new tasks |
-| Auth failure >3 attempts | Lock for 15 minutes |
-| Security breach detected | Block operation, log, alert |
-| Session failure | Trigger recovery procedures |
+| Event                    | Action                             |
+| ------------------------ | ---------------------------------- |
+| Token threshold 80%      | Notify user, continue monitoring   |
+| Token threshold 90%      | Alert, suggest context compression |
+| Token threshold 95%      | Force compression, block new tasks |
+| Auth failure >3 attempts | Lock for 15 minutes                |
+| Security breach detected | Block operation, log, alert        |
+| Session failure          | Trigger recovery procedures        |
 
 ## Runbooks
 

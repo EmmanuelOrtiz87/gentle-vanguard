@@ -32,7 +32,7 @@
       ],
       "commands": [
         "skill-optimizer analyze",
-        "skill-optimizer optimize", 
+        "skill-optimizer optimize",
         "skill-optimizer improve",
         "skill-optimizer escalations",
         "orchestrator",

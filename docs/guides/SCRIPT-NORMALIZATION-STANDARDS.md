@@ -9,6 +9,7 @@
 ## Overview
 
 All PowerShell scripts in the project must follow strict normalization standards to ensure:
+
 - Compatibility with GitHub Actions CI/CD
 - Consistent behavior across environments
 - Prevention of parsing errors
@@ -21,11 +22,13 @@ All PowerShell scripts in the project must follow strict normalization standards
 ### 1. Character Encoding
 
 **REQUIRED**:
+
 - UTF-8 encoding without BOM (Byte Order Mark)
 - ASCII-only text content
 - No Unicode characters, emojis, or special symbols
 
 **NOT ALLOWED**:
+
 ```powershell
 # BAD - Contains emoji
 Write-Host "OK - Task completed"
@@ -38,6 +41,7 @@ Write-Host "Error: 'Invalid input'"
 ```
 
 **CORRECT**:
+
 ```powershell
 # GOOD - ASCII only
 Write-Host "[OK] Task completed"
@@ -48,6 +52,7 @@ Write-Host "Error: Invalid input"
 ### 2. Syntax Balance
 
 **REQUIRED**:
+
 - All opening braces `{` must have closing braces `}`
 - All opening parentheses `(` must have closing parentheses `)`
 - All opening here-strings `@"` must have closing `"@`
@@ -55,6 +60,7 @@ Write-Host "Error: Invalid input"
 - All opening double quotes `"` must have closing `"`
 
 **Validation**:
+
 ```powershell
 # Count braces
 $content = Get-Content script.ps1 -Raw
@@ -66,12 +72,14 @@ Write-Host "Braces: $openBraces open, $closeBraces closed"
 ### 3. PowerShell Syntax
 
 **REQUIRED**:
+
 - Valid PowerShell 5.1+ syntax
 - No shell operators like `||` or `&&` (use PowerShell equivalents)
 - Proper variable references with `$` prefix
 - Correct parameter syntax
 
 **NOT ALLOWED**:
+
 ```powershell
 # BAD - Shell operators
 command1 || command2
@@ -86,6 +94,7 @@ $_\"
 ```
 
 **CORRECT**:
+
 ```powershell
 # GOOD - PowerShell operators
 if (-not (command1)) { command2 }
@@ -102,11 +111,13 @@ $_
 ### 4. Output Messages
 
 **REQUIRED**:
+
 - Use text-based status indicators: `[OK]`, `[ERROR]`, `[WARN]`, `[INFO]`
 - Use simple ASCII characters for decoration
 - Use PowerShell color parameters for emphasis
 
 **NOT ALLOWED**:
+
 ```powershell
 # BAD - Emojis
 Write-Host "OK - Task completed"
@@ -120,6 +131,7 @@ Write-Host " Next step"
 ```
 
 **CORRECT**:
+
 ```powershell
 # GOOD - Text indicators
 Write-Host "[OK] Task completed" -ForegroundColor Green
@@ -135,12 +147,14 @@ Write-Host "========================================================" -Foregroun
 ### 5. File Organization
 
 **REQUIRED**:
+
 - One function per logical unit
 - Clear parameter documentation
 - Consistent indentation (4 spaces)
 - Comments for complex logic
 
 **STRUCTURE**:
+
 ```powershell
 param(
     [string]$Parameter1,
@@ -158,11 +172,11 @@ function Write-Info {
 
 function Do-Something {
     param([string]$Input)
-    
+
     Write-Info "Processing: $Input"
-    
+
     # Logic here
-    
+
     return $result
 }
 
@@ -178,6 +192,7 @@ exit 0
 ## Audit Results
 
 ### Current Status
+
 - **Total Scripts**: 116
 - **Compliant**: 74 (63.8%)
 - **Non-Compliant**: 42 (36.2%)
@@ -185,7 +200,9 @@ exit 0
 ### Issues by Category
 
 #### Non-ASCII Characters (18 scripts)
+
 Scripts containing emojis or special Unicode characters:
+
 - `validate-script-governance.ps1`
 - `check-api.ps1`
 - `check-documentation.ps1`
@@ -212,7 +229,9 @@ Scripts containing emojis or special Unicode characters:
 - `validate-workspace.ps1`
 
 #### Unbalanced Syntax (24 scripts)
+
 Scripts with unbalanced braces, parentheses, or here-strings:
+
 - `bootstrap-workspace.ps1` - Unbalanced braces
 - `wf.ps1` - Multiple unbalanced elements
 - `check-quality.ps1` - Invalid shell operators
@@ -231,7 +250,9 @@ Scripts with unbalanced braces, parentheses, or here-strings:
 - And others...
 
 #### Syntax Errors (Multiple)
+
 Scripts with invalid PowerShell syntax:
+
 - Shell operators (`||`, `&&`) not supported in PowerShell
 - Invalid variable references
 - Incomplete hash literals
@@ -242,19 +263,24 @@ Scripts with invalid PowerShell syntax:
 ## Remediation Plan
 
 ### Phase 1: Critical (Week 1)
+
 Fix scripts that cause GitHub Actions failures:
+
 1. Remove all non-ASCII characters
 2. Fix unbalanced syntax elements
 3. Replace shell operators with PowerShell equivalents
 4. Validate all scripts parse correctly
 
 ### Phase 2: Important (Week 2)
+
 Fix remaining compliance issues:
+
 1. Normalize all output messages
 2. Standardize encoding across all files
 3. Update documentation
 
 ### Phase 3: Verification (Week 3)
+
 1. Run full audit again
 2. Validate in GitHub Actions
 3. Update this document
@@ -264,6 +290,7 @@ Fix remaining compliance issues:
 ## How to Fix
 
 ### Automated Fix
+
 ```powershell
 # Run audit with automatic fixes
 .\scripts\utilities\audit-script-normalization.ps1 -Fix -Report
@@ -272,6 +299,7 @@ Fix remaining compliance issues:
 ### Manual Fix
 
 **Remove Non-ASCII Characters**:
+
 ```powershell
 $scriptPath = '.\scripts\path\to\script.ps1'
 $content = Get-Content $scriptPath -Raw
@@ -281,6 +309,7 @@ $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 ```
 
 **Replace Shell Operators**:
+
 ```powershell
 # Before
 command1 || command2
@@ -292,6 +321,7 @@ if (command1) { command2 }
 ```
 
 **Fix Unbalanced Syntax**:
+
 - Use PowerShell ISE or VS Code to identify unmatched braces
 - Ensure all `{` have matching `}`
 - Ensure all `(` have matching `)`
@@ -302,6 +332,7 @@ if (command1) { command2 }
 ## Validation
 
 ### Check Script Compliance
+
 ```powershell
 # Validate single script
 $errors = $null
@@ -320,6 +351,7 @@ if ($errors.Count -gt 0) {
 ```
 
 ### Run Full Audit
+
 ```powershell
 # Generate report
 .\scripts\utilities\audit-script-normalization.ps1 -Report
@@ -333,6 +365,7 @@ Get-Content .\docs\audit\script-normalization-report.md
 ## Best Practices
 
 ### DO
+
 - Use `[OK]`, `[ERROR]`, `[WARN]`, `[INFO]` for status messages
 - Use UTF-8 encoding without BOM
 - Use ASCII-only characters in code
@@ -341,6 +374,7 @@ Get-Content .\docs\audit\script-normalization-report.md
 - Use PowerShell operators, not shell operators
 
 ### DON'T
+
 - Use emojis or special Unicode characters in scripts
 - Use shell operators (`||`, `&&`)
 - Use UTF-8 BOM encoding
@@ -350,9 +384,11 @@ Get-Content .\docs\audit\script-normalization-report.md
 
 ### CRITICAL: Parser-Breaking Patterns
 
-**The `[OK]`, `[ERROR]`, `[FAIL]`, `[WARN]` pattern at the start of a line (without `Write-Host` or `Write-Output`) BREAKS the PowerShell parser.**
+**The `[OK]`, `[ERROR]`, `[FAIL]`, `[WARN]` pattern at the start of a line (without `Write-Host` or
+`Write-Output`) BREAKS the PowerShell parser.**
 
 **PROBLEM**:
+
 ```powershell
 # This breaks the parser - PowerShell interprets [OK] as an index expression
 [OK] Validation passed     ERROR: Index expression without array
@@ -364,6 +400,7 @@ Write-Host @"
 ```
 
 **CORRECT**:
+
 ```powershell
 # GOOD - Use Write-Host or Write-Output
 Write-Host "[OK] Validation passed" -ForegroundColor Green

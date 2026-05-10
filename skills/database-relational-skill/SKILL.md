@@ -1,8 +1,8 @@
 ---
 name: database-relational-skill
 description: >
-  Relational database patterns: PostgreSQL, MySQL, SQLAlchemy, migrations, transactions.
-  Trigger: "PostgreSQL", "MySQL", "SQL", "database", "SQLAlchemy", "migration", "transaction".
+  Relational database patterns: PostgreSQL, MySQL, SQLAlchemy, migrations, transactions. Trigger:
+  "PostgreSQL", "MySQL", "SQL", "database", "SQLAlchemy", "migration", "transaction".
 ---
 
 ## When to Use
@@ -43,7 +43,7 @@ from sqlalchemy.sql import func
 
 class User(Base):
     __tablename__ = "users"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String(255), unique=True, index=True, nullable=False)
     username = Column(String(100), unique=True, index=True)
@@ -51,22 +51,22 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-    
+
     posts = relationship("Post", back_populates="author")
-    
+
     def __repr__(self):
         return f"<User {self.username}>"
 
 class Post(Base):
     __tablename__ = "posts"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(255), nullable=False)
     content = Column(String, nullable=False)
     author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     published = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-    
+
     author = relationship("User", back_populates="posts")
     tags = relationship("Tag", secondary=post_tags, back_populates="posts")
 ```
@@ -170,13 +170,13 @@ def transfer_funds(db: Session, from_id: int, to_id: int, amount: Decimal):
     try:
         from_account = db.query(Account).filter(Account.id == from_id).with_for_update().first()
         to_account = db.query(Account).filter(Account.id == to_id).with_for_update().first()
-        
+
         if from_account.balance < amount:
             raise ValueError("Insufficient funds")
-        
+
         from_account.balance -= amount
         to_account.balance += amount
-        
+
         db.commit()
         return True
     except Exception as e:
@@ -186,13 +186,12 @@ def transfer_funds(db: Session, from_id: int, to_id: int, amount: Decimal):
 
 ## Quick Reference
 
-| Operation | Code |
-|-----------|------|
-| Create | `db.add(obj); db.commit()` |
-| Read | `db.query(Model).filter(...).first()` |
-| Update | `obj.attr = val; db.commit()` |
-| Delete | `db.delete(obj); db.commit()` |
-| Transaction | `try: ... except: db.rollback()` |
-| Join | `db.query(A, B).join(B, A.b_id == B.id)` |
-| Count | `db.query(func.count(Model.id)).scalar()` |
-
+| Operation   | Code                                      |
+| ----------- | ----------------------------------------- |
+| Create      | `db.add(obj); db.commit()`                |
+| Read        | `db.query(Model).filter(...).first()`     |
+| Update      | `obj.attr = val; db.commit()`             |
+| Delete      | `db.delete(obj); db.commit()`             |
+| Transaction | `try: ... except: db.rollback()`          |
+| Join        | `db.query(A, B).join(B, A.b_id == B.id)`  |
+| Count       | `db.query(func.count(Model.id)).scalar()` |

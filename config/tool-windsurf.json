@@ -8,13 +8,8 @@
     "autoLoad": false,
     "mcpBridge": false
   },
-  "capabilities": [
-    "ai_chat",
-    "code_generation"
-  ],
-  "configFiles": [
-    ".windsurf/config.json"
-  ],
+  "capabilities": ["ai_chat", "code_generation"],
+  "configFiles": [".windsurf/config.json"],
   "adapter": {
     "type": "format-adapter",
     "path": "adapters/format-adapters/windsurf-adapter",

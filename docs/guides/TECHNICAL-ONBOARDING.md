@@ -1,9 +1,10 @@
 ﻿# Gentleman Foundation
+
 ## AI Concepts & Best Practices
 
 **versión:** 1.0  
 **Date:** April 2026  
-**Audience:** Development Team  
+**Audience:** Development Team
 
 ---
 
@@ -29,23 +30,24 @@
 ╚═══════════════════════════════════════════════════════════════════╝
 
     Input:  "Write a function that adds two numbers"
-             
-             [Understands context]                                      
-             [Generates response based on learned patterns]             
-             
+
+             [Understands context]
+             [Generates response based on learned patterns]
+
     Output: "function sum(a, b) { return a + b; }"
 ```
 
-> **Note:** LLMs generate text based on patterns learned from massive datasets. They don't "understand" code like humans do, but they can generate syntactically correct code.
+> **Note:** LLMs generate text based on patterns learned from massive datasets. They don't
+> "understand" code like humans do, but they can generate syntactically correct code.
 
 ### Key Concepts
 
-| Concept | Description |
-|---------|-------------|
-| **Context Window** | How much text the model can "see" at once |
-| **Tokens** | Text chunks (roughly 4 characters = 1 token) |
-| **Temperature** | How random/creative the output is (0=deterministic, 1=creative) |
-| **System Prompt** | Instructions that define the AI's behavior |
+| Concept            | Description                                                     |
+| ------------------ | --------------------------------------------------------------- |
+| **Context Window** | How much text the model can "see" at once                       |
+| **Tokens**         | Text chunks (roughly 4 characters = 1 token)                    |
+| **Temperature**    | How random/creative the output is (0=deterministic, 1=creative) |
+| **System Prompt**  | Instructions that define the AI's behavior                      |
 
 ---
 
@@ -54,6 +56,7 @@
 ### What is an AI Agent?
 
 An AI agent is a system that:
+
 1. Receives a task
 2. Plans steps to complete it
 3. Uses tools (code execution, file access, etc.)
@@ -61,23 +64,23 @@ An AI agent is a system that:
 
 ### Foundation AI Stack
 
-| Component | Purpose |
-|-----------|---------|
-| **OpenCode** | AI agent for development tasks |
-| **Engram** | Persistent memory across sessions |
-| **Native Review Engine** | Code review with AI |
-| **Foundation Skills** | Context and patterns for AI |
+| Component                | Purpose                           |
+| ------------------------ | --------------------------------- |
+| **OpenCode**             | AI agent for development tasks    |
+| **Engram**               | Persistent memory across sessions |
+| **Native Review Engine** | Code review with AI               |
+| **Foundation Skills**    | Context and patterns for AI       |
 
 ### Tool Categories
 
 **🛠️ AI Development Tools Landscape**
 
-| Category | Tools | Purpose |
-|----------|-------|---------|
-| **Code Generation** | OpenCode, GitHub Copilot, Cursor | Generate and complete code |
-| **Code Review** | Native Review Engine, Human review | Validate and improve code |
-| **Memory & Context** | Engram, Foundation Skills | Persistent context across sessions |
-| **Execution** | Code interpreter, Terminal access | Run and test code |
+| Category             | Tools                              | Purpose                            |
+| -------------------- | ---------------------------------- | ---------------------------------- |
+| **Code Generation**  | OpenCode, GitHub Copilot, Cursor   | Generate and complete code         |
+| **Code Review**      | Native Review Engine, Human review | Validate and improve code          |
+| **Memory & Context** | Engram, Foundation Skills          | Persistent context across sessions |
+| **Execution**        | Code interpreter, Terminal access  | Run and test code                  |
 
 ---
 
@@ -92,11 +95,11 @@ An AI agent is a system that:
 
 ### Examples
 
-|  Bad Prompt | [OK] Good Prompt |
-|--------------|----------------|
-| "Fix my code" | "Fix the null pointer exception on line 45 in auth.go" |
-| "Write tests" | "Write unit tests for the validateEmail function in utils/validation.go" |
-| "Improve this" | "Refactor this function to be more readable, max 20 lines" |
+| Bad Prompt     | [OK] Good Prompt                                                         |
+| -------------- | ------------------------------------------------------------------------ |
+| "Fix my code"  | "Fix the null pointer exception on line 45 in auth.go"                   |
+| "Write tests"  | "Write unit tests for the validateEmail function in utils/validation.go" |
+| "Improve this" | "Refactor this function to be more readable, max 20 lines"               |
 
 ### Chain of Thought
 
@@ -118,13 +121,13 @@ Response:
 
 ### 4.1 When to Use AI
 
-| Good Use Cases | Avoid Using AI For |
-|----------------|-------------------|
-| Code generation | Critical security code |
-| Boilerplate | Complex business logic |
-| Documentation | Sensitive data handling |
-| Refactoring | Performance-critical code |
-| Testing | Architecture decisións |
+| Good Use Cases    | Avoid Using AI For           |
+| ----------------- | ---------------------------- |
+| Code generation   | Critical security code       |
+| Boilerplate       | Complex business logic       |
+| Documentation     | Sensitive data handling      |
+| Refactoring       | Performance-critical code    |
+| Testing           | Architecture decisións       |
 | Learning new tech | Understanding legacy systems |
 
 ### 4.2 Code Review Workflow
@@ -154,13 +157,13 @@ graph LR
 
 **🔄 Recommended Development Cycle**
 
-| Step | Phase | Description | Tools |
-|------|-------|-------------|-------|
-| 1 | **Plan** | Define task and constraints | Skills, Engram |
-| 2 | **Generate** | AI generates initial code | OpenCode, Copilot |
-| 3 | **Review** | Native review + human review | Native Review Engine |
-| 4 | **Iterate** | Refine based on feedback | Edit, Test cycles |
-| 5 | **Test** | Verify functionality | Test runners, Manual |
+| Step | Phase        | Description                  | Tools                |
+| ---- | ------------ | ---------------------------- | -------------------- |
+| 1    | **Plan**     | Define task and constraints  | Skills, Engram       |
+| 2    | **Generate** | AI generates initial code    | OpenCode, Copilot    |
+| 3    | **Review**   | Native review + human review | Native Review Engine |
+| 4    | **Iterate**  | Refine based on feedback     | Edit, Test cycles    |
+| 5    | **Test**     | Verify functionality         | Test runners, Manual |
 
 ### 4.4 Quality Guidelines
 
@@ -204,13 +207,15 @@ graph LR
 ### Q: Can I trust AI-generated code?
 
 **A:** Partially. AI can generate syntactically correct code that is logically wrong. Always:
+
 - Review the generated code
 - Test thoroughly
 - Have someone else review critical changes
 
 ### Q: How do I get better results from AI?
 
-**A:** 
+**A:**
+
 1. Provide more context (relevant files, existing patterns)
 2. Break complex tasks into smaller steps
 3. Iterate and refine your prompts
@@ -218,7 +223,8 @@ graph LR
 
 ### Q: What if AI suggests something wrong?
 
-**A:** 
+**A:**
+
 1. Question the suggestión
 2. Verify against documentation
 3. Test the proposed solution
@@ -227,6 +233,7 @@ graph LR
 ### Q: How do I measure AI effectiveness?
 
 **A:** The audit system tracks:
+
 - Lines of code generated vs written
 - Review cycles
 - Time saved
@@ -244,21 +251,20 @@ graph LR
 
 ### External Resources
 
-| Resource | URL |
-|----------|-----|
-| OpenCode | https://opencode.ai |
-| Anthropic Claude | https://anthropic.com |
+| Resource                 | URL                           |
+| ------------------------ | ----------------------------- |
+| OpenCode                 | https://opencode.ai           |
+| Anthropic Claude         | https://anthropic.com         |
 | Prompt Engineering Guide | https://promptengineering.org |
 
 ### Skills for AI Development
 
-| Skill | When to Use |
-|-------|-------------|
+| Skill            | When to Use              |
+| ---------------- | ------------------------ |
 | `ai-sdk-5-skill` | Building AI integrations |
-| `mcp-skill` | Model Context Protocol |
-| `security-skill` | Security best practices |
+| `mcp-skill`      | Model Context Protocol   |
+| `security-skill` | Security best practices  |
 
 ---
 
-**Last Updated:** April 2026
-**Next Review:** Quarterly
+**Last Updated:** April 2026 **Next Review:** Quarterly

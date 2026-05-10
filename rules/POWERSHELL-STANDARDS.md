@@ -2,7 +2,7 @@
 
 **Version:** 1.0.0  
 **Last reviewed:** 2026-05-05  
-**Enforced by:** `.github/workflows/ps-lint.yml` (PSScriptAnalyzer) + pre-commit hook  
+**Enforced by:** `.github/workflows/ps-lint.yml` (PSScriptAnalyzer) + pre-commit hook
 
 ---
 
@@ -39,6 +39,7 @@ param(
 ```
 
 Rules:
+
 - **No positional parameters without explicit `[Parameter(Position=N)]`** in public-facing scripts.
 - **No `$args`** — always use named params.
 - Mandatory params use `[Parameter(Mandatory)]`, NOT validation in the body.
@@ -60,9 +61,11 @@ try {
 ```
 
 Rules:
+
 - **Never use `$ErrorActionPreference = 'SilentlyContinue'`** at script scope.
 - **Always check `$LASTEXITCODE`** after calling external executables.
-- **Always `exit 1`** (not `throw`) when a script encounters a fatal condition; hooks and CI read exit codes.
+- **Always `exit 1`** (not `throw`) when a script encounters a fatal condition; hooks and CI read
+  exit codes.
 
 ---
 
@@ -84,6 +87,7 @@ $result | ConvertTo-Json -Depth 5
 ```
 
 Rules:
+
 - **No `Write-Host` of environment variables, tokens, or API keys** — ever.
 - **No `echo`** — use `Write-Host` or `Write-Output`.
 - **No `Write-Verbose`** unless the script accepts a `-Verbose` switch.
@@ -109,27 +113,28 @@ $path = "C:\hardcoded\path"                     # never hardcode absolute paths
 
 ## 7. Security Rules
 
-| Rule | Rationale |
-|------|-----------|
-| Never call `Invoke-Expression` on user input | Code injection |
-| Never call `[System.Reflection.Assembly]::Load` from user-supplied data | DLL injection |
-| Always validate file paths before `Test-Path` / `Get-Content` | Path traversal |
-| Never expand environment variables from external config without sanitizing | Injection |
+| Rule                                                                       | Rationale           |
+| -------------------------------------------------------------------------- | ------------------- |
+| Never call `Invoke-Expression` on user input                               | Code injection      |
+| Never call `[System.Reflection.Assembly]::Load` from user-supplied data    | DLL injection       |
+| Always validate file paths before `Test-Path` / `Get-Content`              | Path traversal      |
+| Never expand environment variables from external config without sanitizing | Injection           |
 | Never store credentials in scripts — use `config/owner-auth.json` workflow | Credential exposure |
 
-PSScriptAnalyzer rules enforced: `PSAvoidUsingInvokeExpression`, `PSAvoidUsingConvertToSecureStringWithPlainText`.
+PSScriptAnalyzer rules enforced: `PSAvoidUsingInvokeExpression`,
+`PSAvoidUsingConvertToSecureStringWithPlainText`.
 
 ---
 
 ## 8. Naming Conventions
 
-| Element | Convention | Example |
-|---------|-----------|---------|
-| Functions | `Verb-Noun` (approved PS verbs) | `Get-PlatformInfo`, `Invoke-Gate` |
-| Variables | `$camelCase` | `$repoRoot`, `$elapsedSec` |
-| Script-level constants | `$UPPER_CASE` | `$MAX_RETRIES` |
-| Parameters | `$PascalCase` | `$Mode`, `$TaskType` |
-| Private functions (module-only) | prefix `_` | `_WriteHeader` |
+| Element                         | Convention                      | Example                           |
+| ------------------------------- | ------------------------------- | --------------------------------- |
+| Functions                       | `Verb-Noun` (approved PS verbs) | `Get-PlatformInfo`, `Invoke-Gate` |
+| Variables                       | `$camelCase`                    | `$repoRoot`, `$elapsedSec`        |
+| Script-level constants          | `$UPPER_CASE`                   | `$MAX_RETRIES`                    |
+| Parameters                      | `$PascalCase`                   | `$Mode`, `$TaskType`              |
+| Private functions (module-only) | prefix `_`                      | `_WriteHeader`                    |
 
 Use **approved PowerShell verbs** only. Run `Get-Verb` to check.
 
@@ -151,11 +156,11 @@ else { ... }   # Linux
 
 ## 10. Script Size Limits
 
-| Metric | Threshold | Action |
-|--------|-----------|--------|
-| Lines per file | ≤ 500 | Refactor into sub-functions or modules |
-| Functions per file | ≤ 20 | Extract to a dedicated module |
-| Cyclomatic complexity per function | ≤ 10 | Simplify or split |
+| Metric                             | Threshold | Action                                 |
+| ---------------------------------- | --------- | -------------------------------------- |
+| Lines per file                     | ≤ 500     | Refactor into sub-functions or modules |
+| Functions per file                 | ≤ 20      | Extract to a dedicated module          |
+| Cyclomatic complexity per function | ≤ 10      | Simplify or split                      |
 
 Scripts exceeding these are **advisory** (not blocking) but must be addressed in the same sprint.
 
@@ -165,11 +170,11 @@ Scripts exceeding these are **advisory** (not blocking) but must be addressed in
 
 Excluded rules (documented justification required for each exclusion):
 
-| Rule | Reason |
-|------|--------|
-| `PSAvoidUsingWriteHost` | Output scripts intentionally write to console |
-| `PSUseDeclaredVarsMoreThanAssignments` | PowerShell scoping produces false positives |
-| `PSAvoidGlobalVars` | Framework-level scripts need module-scope variables |
-| `PSReviewUnusedParameter` | Hook and CLI parameters may be optional by design |
+| Rule                                   | Reason                                              |
+| -------------------------------------- | --------------------------------------------------- |
+| `PSAvoidUsingWriteHost`                | Output scripts intentionally write to console       |
+| `PSUseDeclaredVarsMoreThanAssignments` | PowerShell scoping produces false positives         |
+| `PSAvoidGlobalVars`                    | Framework-level scripts need module-scope variables |
+| `PSReviewUnusedParameter`              | Hook and CLI parameters may be optional by design   |
 
 Any new exclusion must be added to **both** the CI workflow and this document with justification.

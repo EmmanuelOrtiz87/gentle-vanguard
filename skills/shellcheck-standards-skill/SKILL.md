@@ -1,13 +1,14 @@
 ---
 name: shellcheck-standards
 description: >
-  Shell script quality and portability standards.
-  Trigger: "bash", "shell", "shellcheck", "bash script"
+  Shell script quality and portability standards. Trigger: "bash", "shell", "shellcheck", "bash
+  script"
 ---
 
 # Shell Script Standards
 
 ## Purpose
+
 Maintain shell script quality and portability across bash/PowerShell runtimes.
 
 ## Running Linters
@@ -23,6 +24,7 @@ shellcheck -x bin/* lib/*.sh
 ## PowerShell Standards
 
 ### Variables
+
 ```powershell
 # GOOD  use $ for variables
 $name = "value"
@@ -36,6 +38,7 @@ function Get-Value {
 ```
 
 ### Parameters
+
 ```powershell
 # GOOD  typed parameters
 param(
@@ -46,6 +49,7 @@ param(
 ```
 
 ### Error Handling
+
 ```powershell
 # GOOD  use ErrorAction
 Invoke-Something -ErrorAction Stop
@@ -55,6 +59,7 @@ $ErrorActionPreference = 'Stop'
 ## Bash Standards
 
 ### Quoting
+
 ```bash
 # GOOD  always quote
 echo "$var"
@@ -65,6 +70,7 @@ echo $var
 ```
 
 ### Conditionals
+
 ```bash
 # GOOD  use [[ ]]
 [[ "$var" == "value" ]]
@@ -74,6 +80,7 @@ echo $var
 ```
 
 ### Functions
+
 ```bash
 # GOOD  local variables
 my_function() {
@@ -85,6 +92,7 @@ my_function() {
 ## Cross-Platform
 
 ### Paths
+
 ```powershell
 # GOOD  Join-Path
 $path = Join-Path $dir $file
@@ -94,6 +102,7 @@ $uri = "https://example.com/path"
 ```
 
 ### Line Endings
+
 ```bash
 # Set in .gitattributes
 *.ps1 text eol=crlf
@@ -102,10 +111,9 @@ $uri = "https://example.com/path"
 
 ## Common Fixes
 
-| Issue | Fix |
-|-------|-----|
-| `$var` unquoted | Add `"$var"` |
-| `$?` without check | Use `if command; then` |
-| Global vars in functions | Add `local` keyword |
-| eval usage | Use arrays or parameter expansion |
-
+| Issue                    | Fix                               |
+| ------------------------ | --------------------------------- |
+| `$var` unquoted          | Add `"$var"`                      |
+| `$?` without check       | Use `if command; then`            |
+| Global vars in functions | Add `local` keyword               |
+| eval usage               | Use arrays or parameter expansion |

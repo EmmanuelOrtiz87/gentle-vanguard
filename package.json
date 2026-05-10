@@ -3,8 +3,8 @@
     "test": "pwsh ./scripts/run-tests-simple.ps1",
     "lint:json": "pwsh ./hooks/json-lint.ps1",
     "lint:workflows": "pwsh ./hooks/workflow-lint.ps1",
-    "format:check": "npx prettier --check \"**/*.{md,json,yml,yaml,ps1}\" --ignore-path .gitignore",
-    "format:fix": "npx prettier --write \"**/*.{md,json,yml,yaml,ps1}\" --ignore-path .gitignore",
+    "format:check": "npx prettier --check \"**/*.{md,json,yml,yaml}\" ",
+    "format:fix": "npx prettier --write \"**/*.{md,json,yml,yaml}\" ",
     "prepare": "npx lefthook install"
   },
   "devDependencies": {

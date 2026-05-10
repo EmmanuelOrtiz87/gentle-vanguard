@@ -43,22 +43,10 @@
       "**/examples/**",
       "**/mocks/**"
     ],
-    "patterns": [
-      "\\.min\\.(js|css)$",
-      "\\.bundle\\.js$",
-      "\\.compiled\\.ts$"
-    ],
+    "patterns": ["\\.min\\.(js|css)$", "\\.bundle\\.js$", "\\.compiled\\.ts$"],
     "allowInTest": {
-      "password": [
-        "test123",
-        "password123",
-        "Password123!",
-        "Test@123"
-      ],
-      "api_key": [
-        "test-api-key",
-        "sk_test_1234567890"
-      ]
+      "password": ["test123", "password123", "Password123!", "Test@123"],
+      "api_key": ["test-api-key", "sk_test_1234567890"]
     }
   },
 

@@ -4,10 +4,10 @@ This directory contains mobile app framework templates.
 
 ## Available Templates
 
-| Framework | Package File | Description |
-|-----------|--------------|-------------|
+| Framework    | Package File                | Description                  |
+| ------------ | --------------------------- | ---------------------------- |
 | React Native | `package.react-native.json` | React Native with TypeScript |
-| Flutter | `package.flutter.json` | Flutter with Dart |
+| Flutter      | `package.flutter.json`      | Flutter with Dart            |
 
 ## React Native
 

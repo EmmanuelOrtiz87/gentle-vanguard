@@ -1,12 +1,14 @@
 ---
 name: skill-factory-skill
 description: >
-  Automated skill creation and cross-platform synchronization.
-  Trigger: "create skill", "new skill", "sync skills", "update instructions"
+  Automated skill creation and cross-platform synchronization. Trigger: "create skill", "new skill",
+  "sync skills", "update instructions"
 ---
 
 ## Purpose
-Automate the creation of new skills and synchronize base instructions across all AI agents (OpenCode, Claude, Copilot, Gemini).
+
+Automate the creation of new skills and synchronize base instructions across all AI agents
+(OpenCode, Claude, Copilot, Gemini).
 
 ## Skill Creation Workflow
 
@@ -17,26 +19,30 @@ Automate the creation of new skills and synchronize base instructions across all
 5. **Documentation:** Add entry to `docs/reference/script-registry.md` if scripts are involved.
 
 ### Standard Skill Template
+
 ```markdown
 ---
-name: {skill-name}
+name: { skill-name }
 description: >
-  {Brief description}.
-  Trigger: "{keyword1}", "{keyword2}"
+  {Brief description}. Trigger: "{keyword1}", "{keyword2}"
 ---
 
 ## When to Use
+
 [Specific triggers for this skill]
 
 ## Core Rules
+
 1. [Rule 1]
 2. [Rule 2]
 
 ## Workflow
+
 1. [Step 1]
 2. [Step 2]
 
 ## Output Expectations
+
 [What the user should see]
 ```
 
@@ -45,17 +51,20 @@ description: >
 Maintain consistency across all AI tools by syncing from a single source of truth.
 
 ### Source of Truth
+
 `docs/reference/master-instructions.md` contains the global baseline for all agents.
 
 ### Target Files
-| Platform | Path | Sync Strategy |
-|----------|------|---------------|
-| OpenCode | `AGENTS.md` | Full overwrite |
+
+| Platform       | Path                              | Sync Strategy  |
+| -------------- | --------------------------------- | -------------- |
+| OpenCode       | `AGENTS.md`                       | Full overwrite |
 | GitHub Copilot | `.github/copilot-instructions.md` | Full overwrite |
-| Claude Code | `.claude/CLAUDE.md` | Full overwrite |
-| Gemini CLI | `.gemini/instructions.md` | Full overwrite |
+| Claude Code    | `.claude/CLAUDE.md`               | Full overwrite |
+| Gemini CLI     | `.gemini/instructions.md`         | Full overwrite |
 
 ### Sync Script
+
 Use `scripts/utilities/sync-agent-instructions.ps1` to propagate changes.
 
 ```powershell
@@ -67,7 +76,8 @@ Use `scripts/utilities/sync-agent-instructions.ps1` to propagate changes.
 ```
 
 ## Automation Rules
-- **Duplicate Detection:** Before creating a skill, search `skills/` for similar names or keywords.
-- **Naming Convention:** Use `kebab-case` for skill directories and `PascalCase` for internal references.
-- **Validation:** Every new skill must pass `gf validate` before being committed.
 
+- **Duplicate Detection:** Before creating a skill, search `skills/` for similar names or keywords.
+- **Naming Convention:** Use `kebab-case` for skill directories and `PascalCase` for internal
+  references.
+- **Validation:** Every new skill must pass `gf validate` before being committed.

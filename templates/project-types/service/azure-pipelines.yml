@@ -95,7 +95,9 @@ stages:
           - task: Docker@2
             inputs:
               command: 'run'
-              arguments: '--rm -v $(Build.SourcesDirectory):/src aquasec/trivy:latest fs --security-checks vuln,config /src'
+              arguments:
+                '--rm -v $(Build.SourcesDirectory):/src aquasec/trivy:latest fs --security-checks
+                vuln,config /src'
           - task: WhiteSource@21
             inputs:
               cwd: '$(Build.SourcesDirectory)'
@@ -120,7 +122,9 @@ stages:
                     connectionType: 'Kubernetes Service Connection'
                     namespace: 'staging'
                     command: 'set'
-                    arguments: 'image deployment/{{project-name}} {{project-name}}=$(dockerRegistryServiceConnection)/$(Build.Repository.Name):$(Build.BuildId)'
+                    arguments:
+                      'image deployment/{{project-name}}
+                      {{project-name}}=$(dockerRegistryServiceConnection)/$(Build.Repository.Name):$(Build.BuildId)'
                 - task: Kubernetes@1
                   inputs:
                     connectionType: 'Kubernetes Service Connection'
@@ -149,7 +153,9 @@ stages:
                     connectionType: 'Kubernetes Service Connection'
                     namespace: 'production'
                     command: 'set'
-                    arguments: 'image deployment/{{project-name}} {{project-name}}=$(dockerRegistryServiceConnection)/$(Build.Repository.Name):$(Build.BuildId)'
+                    arguments:
+                      'image deployment/{{project-name}}
+                      {{project-name}}=$(dockerRegistryServiceConnection)/$(Build.Repository.Name):$(Build.BuildId)'
                 - task: Kubernetes@1
                   inputs:
                     connectionType: 'Kubernetes Service Connection'

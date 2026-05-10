@@ -6,12 +6,13 @@ description: >
 license: Apache-2.0
 metadata:
   author: workspace-foundation
-  versión: "1.0"
+  versión: '1.0'
 ---
 
 ## When to Use
 
 Use this skill when:
+
 - Creating a GitHub issue (bug report or feature request)
 - Helping a contributor file an issue
 - Triaging or approving issues as a maintainer
@@ -20,7 +21,7 @@ Use this skill when:
 
 ## Critical Rules
 
-1. **Blank issues are disabled**  MUST use a template (bug report or feature request)
+1. **Blank issues are disabled** MUST use a template (bug report or feature request)
 2. **Every issue gets `status:needs-review` automatically** on creation
 3. **A maintainer MUST add `status:approved`** before any PR can be opened
 4. **Questions go to Discussions** of the project repository, not issues
@@ -45,30 +46,29 @@ Use this skill when:
 
 ### Bug Report
 
-Template: `.github/ISSUE_TEMPLATE/bug_report.yml`
-Auto-labels: `bug`, `status:needs-review`
+Template: `.github/ISSUE_TEMPLATE/bug_report.yml` Auto-labels: `bug`, `status:needs-review`
 
 #### Required Fields
 
-| Field | Description |
-|-------|-------------|
-| **Pre-flight Checks** | Checkboxes: no duplicate + understands approval workflow |
-| **Bug Description** | Clear description of the bug |
-| **Steps to Reproduce** | Numbered steps to reproduce |
-| **Expected Behavior** | What should have happened |
-| **Actual Behavior** | What happened instead (include errors/logs) |
-| **Operating System** | Dropdown: macOS, Linux variants, Windows, WSL |
-| **Agent / Client** | Dropdown: Claude Code, OpenCode, Gemini CLI, Cursor, Windsurf, Codex, Other |
-| **Shell** | Dropdown: bash, zsh, fish, Other |
+| Field                  | Description                                                                 |
+| ---------------------- | --------------------------------------------------------------------------- |
+| **Pre-flight Checks**  | Checkboxes: no duplicate + understands approval workflow                    |
+| **Bug Description**    | Clear description of the bug                                                |
+| **Steps to Reproduce** | Numbered steps to reproduce                                                 |
+| **Expected Behavior**  | What should have happened                                                   |
+| **Actual Behavior**    | What happened instead (include errors/logs)                                 |
+| **Operating System**   | Dropdown: macOS, Linux variants, Windows, WSL                               |
+| **Agent / Client**     | Dropdown: Claude Code, OpenCode, Gemini CLI, Cursor, Windsurf, Codex, Other |
+| **Shell**              | Dropdown: bash, zsh, fish, Other                                            |
 
 #### Optional Fields
 
-| Field | Description |
-|-------|-------------|
-| **Relevant Logs** | Log output (auto-formatted as code block) |
-| **Additional Context** | Screenshots, workarounds, extra info |
+| Field                  | Description                               |
+| ---------------------- | ----------------------------------------- |
+| **Relevant Logs**      | Log output (auto-formatted as code block) |
+| **Additional Context** | Screenshots, workarounds, extra info      |
 
-#### Example  Bug Report via CLI
+#### Example Bug Report via CLI
 
 ```bash
 gh issue create --template "bug_report.yml" \
@@ -112,26 +112,26 @@ zsh: no matches found: skills/*
 
 ### Feature Request
 
-Template: `.github/ISSUE_TEMPLATE/feature_request.yml`
-Auto-labels: `enhancement`, `status:needs-review`
+Template: `.github/ISSUE_TEMPLATE/feature_request.yml` Auto-labels: `enhancement`,
+`status:needs-review`
 
 #### Required Fields
 
-| Field | Description |
-|-------|-------------|
-| **Pre-flight Checks** | Checkboxes: no duplicate + understands approval workflow |
-| **Problem Description** | The pain point this feature solves |
-| **Proposed Solution** | How it should work from the user's perspective |
-| **Affected Area** | Dropdown: Scripts, Skills, Examples, Documentation, CI/Workflows, Other |
+| Field                   | Description                                                             |
+| ----------------------- | ----------------------------------------------------------------------- |
+| **Pre-flight Checks**   | Checkboxes: no duplicate + understands approval workflow                |
+| **Problem Description** | The pain point this feature solves                                      |
+| **Proposed Solution**   | How it should work from the user's perspective                          |
+| **Affected Area**       | Dropdown: Scripts, Skills, Examples, Documentation, CI/Workflows, Other |
 
 #### Optional Fields
 
-| Field | Description |
-|-------|-------------|
+| Field                       | Description                     |
+| --------------------------- | ------------------------------- |
 | **Alternatives Considered** | Other approaches or workarounds |
-| **Additional Context** | Mockups, examples, references |
+| **Additional Context**      | Mockups, examples, references   |
 
-#### Example  Feature Request via CLI
+#### Example Feature Request via CLI
 
 ```bash
 gh issue create --template "feature_request.yml" \
@@ -166,35 +166,35 @@ Manually symlinking, but that defeats the purpose of the setup script.
 
 ### Status Labels (applied to Issues)
 
-| Label | Description | Who Applies |
-|-------|-------------|-------------|
-| `status:needs-review` | Newly opened, awaiting maintainer review | **Auto** (template) |
-| `status:approved` | Approved — work can begin | Maintainer only |
-| `status:in-progress` | Being actively worked on | Contributor |
-| `status:blocked` | Blocked by another issue or external dependency | Maintainer / Contributor |
-| `status:wont-fix` | Out of scope or won't be addressed | Maintainer only |
+| Label                 | Description                                     | Who Applies              |
+| --------------------- | ----------------------------------------------- | ------------------------ |
+| `status:needs-review` | Newly opened, awaiting maintainer review        | **Auto** (template)      |
+| `status:approved`     | Approved — work can begin                       | Maintainer only          |
+| `status:in-progress`  | Being actively worked on                        | Contributor              |
+| `status:blocked`      | Blocked by another issue or external dependency | Maintainer / Contributor |
+| `status:wont-fix`     | Out of scope or won't be addressed              | Maintainer only          |
 
 ### Type Labels (applied to Issues and PRs)
 
-| Label | Description |
-|-------|-------------|
-| `bug` | Defect report |
-| `enhancement` | Feature or improvement request |
-| `type:bug` | Bug fix (used on PRs) |
-| `type:feature` | New feature (used on PRs) |
-| `type:docs` | Documentation only (used on PRs) |
-| `type:refactor` | Refactoring, no functional changes (used on PRs) |
-| `type:chore` | Build, CI, tooling (used on PRs) |
-| `type:breaking-change` | Breaking change (used on PRs) |
+| Label                  | Description                                      |
+| ---------------------- | ------------------------------------------------ |
+| `bug`                  | Defect report                                    |
+| `enhancement`          | Feature or improvement request                   |
+| `type:bug`             | Bug fix (used on PRs)                            |
+| `type:feature`         | New feature (used on PRs)                        |
+| `type:docs`            | Documentation only (used on PRs)                 |
+| `type:refactor`        | Refactoring, no functional changes (used on PRs) |
+| `type:chore`           | Build, CI, tooling (used on PRs)                 |
+| `type:breaking-change` | Breaking change (used on PRs)                    |
 
 ### Priority Labels
 
-| Label | Description |
-|-------|-------------|
+| Label               | Description                               |
+| ------------------- | ----------------------------------------- |
 | `priority:critical` | Blocking issues, security vulnerabilities |
-| `priority:high` | Important, affects many users |
-| `priority:medium` | Normal priority |
-| `priority:low` | Nice to have |
+| `priority:high`     | Important, affects many users             |
+| `priority:medium`   | Normal priority                           |
+| `priority:low`      | Nice to have                              |
 
 ---
 
@@ -267,5 +267,3 @@ gh issue edit <number> --add-label "status:approved"
 # Maintainer: add priority
 gh issue edit <number> --add-label "priority:high"
 ```
-
-

@@ -7,11 +7,13 @@ description: Use when creating projects, scaffolding code, bootstrapping workspa
 
 ## Purpose
 
-Use this skill to create projects, apply templates, and maintain workspace consistency across any technology stack.
+Use this skill to create projects, apply templates, and maintain workspace consistency across any
+technology stack.
 
 ## When Activated
 
 This skill activates when:
+
 - User asks to create/initialize/bootstrap a new project
 - User mentions scaffolding, templates, or workspace setup
 - User wants to apply a project template
@@ -24,13 +26,13 @@ This skill activates when:
 
 Ask (or infer) these if not provided:
 
-| Question | Options | Purpose |
-|----------|---------|---------|
-| Project name | User input | Unique identifier |
-| Project type | service, cli, library, frontend, fullstack, microservices | Determines template |
-| Technology | Node.js, Go, Python, Rust, etc. | Language-specific templates |
-| Architecture | layered, clean, modular, microservices | Structure pattern |
-| AI mode | none, local, cloud | AI integration |
+| Question     | Options                                                   | Purpose                     |
+| ------------ | --------------------------------------------------------- | --------------------------- |
+| Project name | User input                                                | Unique identifier           |
+| Project type | service, cli, library, frontend, fullstack, microservices | Determines template         |
+| Technology   | Node.js, Go, Python, Rust, etc.                           | Language-specific templates |
+| Architecture | layered, clean, modular, microservices                    | Structure pattern           |
+| AI mode      | none, local, cloud                                        | AI integration              |
 
 ### 2. Use the CLI
 
@@ -63,13 +65,13 @@ The primary interface is `wf.ps1` (PowerShell) or `wf.sh` (Bash).
 
 Templates use mustache-style placeholders. Replace before applying:
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `{{project-name}}` | Project name | my-api |
-| `{{namespace}}` | K8s namespace | production |
-| `{{domain}}` | Domain name | api.example.com |
-| `{{versión}}` | versión | 1.0.0 |
-| `{{image}}` | Docker image | ghcr.io/user/repo |
+| Variable           | Description   | Example           |
+| ------------------ | ------------- | ----------------- |
+| `{{project-name}}` | Project name  | my-api            |
+| `{{namespace}}`    | K8s namespace | production        |
+| `{{domain}}`       | Domain name   | api.example.com   |
+| `{{versión}}`      | versión       | 1.0.0             |
+| `{{image}}`        | Docker image  | ghcr.io/user/repo |
 
 ### 4. Available Templates
 
@@ -114,23 +116,23 @@ After scaffolding, always verify:
 
 ## Project Type Selection Guide
 
-| Type | When to Use | Default Stack |
-|------|-------------|---------------|
-| `service` | REST APIs, gRPC, workers, daemons | Node.js/Express |
-| `cli` | Tools, scripts, utilities | Go |
-| `library` | Reusable packages, SDKs | TypeScript |
-| `frontend` | Web apps (SPA/SSR) | React/Vue/Angular |
-| `fullstack` | Frontend + Backend in monorepo | Nx |
-| `microservices` | Distributed systems | Multi-service |
+| Type            | When to Use                       | Default Stack     |
+| --------------- | --------------------------------- | ----------------- |
+| `service`       | REST APIs, gRPC, workers, daemons | Node.js/Express   |
+| `cli`           | Tools, scripts, utilities         | Go                |
+| `library`       | Reusable packages, SDKs           | TypeScript        |
+| `frontend`      | Web apps (SPA/SSR)                | React/Vue/Angular |
+| `fullstack`     | Frontend + Backend in monorepo    | Nx                |
+| `microservices` | Distributed systems               | Multi-service     |
 
 ## Architecture Patterns
 
-| Pattern | Use When | Structure |
-|---------|----------|-----------|
-| `layered` | Traditional, simple projects | controller/service/repository |
-| `clean` | Complex business logic | domain/adapters/ports |
-| `modular` | Large monoliths to split | bounded contexts |
-| `microservices` | Distributed teams/systems | service-per-feature |
+| Pattern         | Use When                     | Structure                     |
+| --------------- | ---------------------------- | ----------------------------- |
+| `layered`       | Traditional, simple projects | controller/service/repository |
+| `clean`         | Complex business logic       | domain/adapters/ports         |
+| `modular`       | Large monoliths to split     | bounded contexts              |
+| `microservices` | Distributed teams/systems    | service-per-feature           |
 
 ## Validation Commands
 
@@ -173,5 +175,3 @@ git add . && git commit -m "Initial commit"
 - `templates/project-types/*/` - Type-specific templates
 - `skills/documentation-governance/` - Doc standards
 - `skills/architecture-governance/` - Architecture standards
-
-

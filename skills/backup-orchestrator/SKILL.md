@@ -5,29 +5,30 @@ description: Backup orchestration skill for workspace and project backup managem
 
 # Skill: backup-orchestrator
 
-**versión**: 1.0.0
-**Created**: 2026-04-20
-**Status**: ACTIVE
-**Priority**: HIGH
+**versión**: 1.0.0 **Created**: 2026-04-20 **Status**: ACTIVE **Priority**: HIGH
 
 ---
 
 ## Overview
 
-The `backup-orchestrator` skill provides advanced backup management with intelligent strategies, scheduling, retention policies, and integrity validation. It extends the Phase 1 Smart Backup foundation with enterprise-grade capabilities.
+The `backup-orchestrator` skill provides advanced backup management with intelligent strategies,
+scheduling, retention policies, and integrity validation. It extends the Phase 1 Smart Backup
+foundation with enterprise-grade capabilities.
 
 ### Key Capabilities
--  Multiple backup strategies (Full, Incremental, Differential)
--  Intelligent scheduling with resource awareness
--  Flexible retention policies
--  Integrity validation and repair
--  Compression and encryption support
+
+- Multiple backup strategies (Full, Incremental, Differential)
+- Intelligent scheduling with resource awareness
+- Flexible retention policies
+- Integrity validation and repair
+- Compression and encryption support
 
 ---
 
 ## When to Use This Skill
 
 ### Activation Triggers
+
 - User mentions "backup strategy" or "estrategia de backup"
 - User asks to "optimize backups" or "optimizar backups"
 - Backup complexity increases (>10 backup scenarios)
@@ -35,6 +36,7 @@ The `backup-orchestrator` skill provides advanced backup management with intelli
 - Backup performance concerns
 
 ### Use Cases
+
 1. **Strategy Design**: "Necesito una estrategia de backup para datos crticos"
 2. **Optimization**: "Los backups son demasiado grandes, cmo optimizar?"
 3. **Recovery**: "Restaurar estado de ayer a las 15:00"
@@ -50,6 +52,7 @@ The `backup-orchestrator` skill provides advanced backup management with intelli
 #### Strategy Types
 
 **Full Backup** - Complete snapshot of all data
+
 ```powershell
 $strategy = @{
     Type = "Full"
@@ -62,6 +65,7 @@ $strategy = @{
 ```
 
 **Incremental Backup** - Only changes since last backup
+
 ```powershell
 $strategy = @{
     Type = "Incremental"
@@ -74,6 +78,7 @@ $strategy = @{
 ```
 
 **Differential Backup** - Changes since last full backup
+
 ```powershell
 $strategy = @{
     Type = "Differential"
@@ -95,12 +100,12 @@ function Select-BackupStrategy {
         [int]$ExecutionWindowMinutes,
         [int]$StorageConstraintGB
     )
-    
+
     if ($IsFirstBackup) { return "Full" }
     if ($ChangeRatePercent -gt 50) { return "Full" }
     if ($ExecutionWindowMinutes -lt 10) { return "Incremental" }
     if ($StorageConstraintGB -lt $DataSizeGB * 2) { return "Incremental" }
-    
+
     return "Differential"
 }
 ```
@@ -110,6 +115,7 @@ function Select-BackupStrategy {
 ### 2. Intelligent Scheduling
 
 #### Time-Based Scheduling
+
 ```powershell
 function New-BackupSchedule {
     param(
@@ -118,7 +124,7 @@ function New-BackupSchedule {
         [int]$Hour,
         [int]$Minute
     )
-    
+
     return @{
         Name = $Name
         Pattern = $Pattern
@@ -129,16 +135,17 @@ function New-BackupSchedule {
 ```
 
 #### Resource-Aware Scheduling
+
 ```powershell
 function Test-ResourceAvailability {
     param(
         [int]$RequiredCPUPercent = 20,
         [int]$RequiredMemoryMB = 500
     )
-    
+
     $cpuUsage = (Get-CimInstance Win32_Processor | Measure-Object -Property LoadPercentage -Average).Average
     $memoryAvailable = (Get-CimInstance Win32_OperatingSystem).FreePhysicalMemory / 1024
-    
+
     return @{
         CPUAvailable = ($cpuUsage -lt (100 - $RequiredCPUPercent))
         MemoryAvailable = ($memoryAvailable -gt $RequiredMemoryMB)
@@ -152,10 +159,11 @@ function Test-ResourceAvailability {
 ### 3. Retention Management
 
 #### Time-Based Retention
+
 ```powershell
 function Set-RetentionPolicy-TimeBased {
     param([int]$KeepDays = 30)
-    
+
     return @{
         Type = "TimeBased"
         RetentionDays = $KeepDays
@@ -164,10 +172,11 @@ function Set-RetentionPolicy-TimeBased {
 ```
 
 #### Quantity-Based Retention
+
 ```powershell
 function Set-RetentionPolicy-QuantityBased {
     param([int]$KeepCount = 10)
-    
+
     return @{
         Type = "QuantityBased"
         RetentionCount = $KeepCount
@@ -176,10 +185,11 @@ function Set-RetentionPolicy-QuantityBased {
 ```
 
 #### Space-Based Retention
+
 ```powershell
 function Set-RetentionPolicy-SpaceBased {
     param([int]$MaxUsagePercent = 80)
-    
+
     return @{
         Type = "SpaceBased"
         MaxUsagePercent = $MaxUsagePercent
@@ -188,6 +198,7 @@ function Set-RetentionPolicy-SpaceBased {
 ```
 
 #### Importance-Weighted Retention
+
 ```powershell
 function Set-RetentionPolicy-ImportanceWeighted {
     param(
@@ -197,7 +208,7 @@ function Set-RetentionPolicy-ImportanceWeighted {
             "Standard" = 7
         }
     )
-    
+
     return @{
         Type = "ImportanceWeighted"
         Weights = $Weights
@@ -210,33 +221,34 @@ function Set-RetentionPolicy-ImportanceWeighted {
 ### 4. Integrity & Validation
 
 #### Checksum Verification
+
 ```powershell
 function New-BackupChecksum {
     param(
         [string]$BackupPath,
         [string]$Algorithm = "SHA256"
     )
-    
+
     $checksum = Get-FileHash -Path $BackupPath -Algorithm $Algorithm
     $checksumFile = "$BackupPath.checksum"
-    
+
     @{
         Algorithm = $Algorithm
         Hash = $checksum.Hash
         Timestamp = Get-Date
         FileSize = (Get-Item $BackupPath).Length
     } | ConvertTo-Json | Set-Content -Path $checksumFile
-    
+
     return $checksumFile
 }
 
 function Test-BackupIntegrity {
     param([string]$BackupPath)
-    
+
     $checksumFile = "$BackupPath.checksum"
     $stored = Get-Content $checksumFile | ConvertFrom-Json
     $current = Get-FileHash -Path $BackupPath -Algorithm $stored.Algorithm
-    
+
     return @{
         Valid = ($stored.Hash -eq $current.Hash)
         StoredHash = $stored.Hash
@@ -246,21 +258,22 @@ function Test-BackupIntegrity {
 ```
 
 #### Restore Test Validation
+
 ```powershell
 function Test-RestoreValidity {
     param(
         [string]$BackupPath,
         [string]$TestPath
     )
-    
+
     try {
         New-Item -ItemType Directory -Path $TestPath -Force -ErrorAction SilentlyContinue | Out-Null
         Expand-Archive -Path $BackupPath -DestinationPath $TestPath -Force
-        
+
         $files = Get-ChildItem -Path $TestPath -Recurse -File
-        
+
         Remove-Item -Path $TestPath -Recurse -Force
-        
+
         return @{
             Valid = ($files.Count -gt 0)
             FilesExtracted = $files.Count
@@ -277,16 +290,17 @@ function Test-RestoreValidity {
 ```
 
 #### Corruption Detection
+
 ```powershell
 function Detect-BackupCorruption {
     param([string]$BackupPath)
-    
+
     $results = @{
         CorruptionDetected = $false
         Issues = @()
         Severity = "None"
     }
-    
+
     # Check 1: File size
     $fileInfo = Get-Item $BackupPath
     if ($fileInfo.Length -eq 0) {
@@ -294,7 +308,7 @@ function Detect-BackupCorruption {
         $results.Issues += "Backup file is empty"
         $results.Severity = "Critical"
     }
-    
+
     # Check 2: Archive integrity
     if ($BackupPath -match "\.(zip|7z)$") {
         $testResult = Test-RestoreValidity -BackupPath $BackupPath -TestPath "$env:TEMP\backup_test"
@@ -304,7 +318,7 @@ function Detect-BackupCorruption {
             $results.Severity = "Critical"
         }
     }
-    
+
     # Check 3: Checksum validation
     $checksumTest = Test-BackupIntegrity -BackupPath $BackupPath
     if (-not $checksumTest.Valid) {
@@ -312,7 +326,7 @@ function Detect-BackupCorruption {
         $results.Issues += "Checksum mismatch"
         $results.Severity = "Critical"
     }
-    
+
     return $results
 }
 ```
@@ -322,6 +336,7 @@ function Detect-BackupCorruption {
 ### 5. Compression & Encryption
 
 #### Compression Support
+
 ```powershell
 function Compress-BackupData {
     param(
@@ -329,9 +344,9 @@ function Compress-BackupData {
         [string]$DestinationPath,
         [string]$Algorithm = "7z"
     )
-    
+
     Write-Host "Compressing backup with $Algorithm..."
-    
+
     switch ($Algorithm) {
         "7z" {
             & "C:\Program Files\7-Zip\7z.exe" a -t7z "$DestinationPath" "$SourcePath" -mx=9
@@ -343,11 +358,11 @@ function Compress-BackupData {
             tar -czf "$DestinationPath" -C (Split-Path $SourcePath) (Split-Path -Leaf $SourcePath)
         }
     }
-    
+
     $originalSize = (Get-Item $SourcePath).Length
     $compressedSize = (Get-Item $DestinationPath).Length
     $ratio = [math]::Round(($compressedSize / $originalSize) * 100, 2)
-    
+
     return @{
         OriginalSize = $originalSize
         CompressedSize = $compressedSize
@@ -358,6 +373,7 @@ function Compress-BackupData {
 ```
 
 #### Encryption Support
+
 ```powershell
 function Encrypt-BackupData {
     param(
@@ -365,23 +381,23 @@ function Encrypt-BackupData {
         [string]$Algorithm = "AES-256",
         [securestring]$Key
     )
-    
+
     Write-Host "Encrypting backup with $Algorithm..."
-    
+
     $encryptedPath = "$BackupPath.encrypted"
-    
+
     switch ($Algorithm) {
         "AES-256" {
             $keyBytes = [System.Text.Encoding]::UTF8.GetBytes($Key)
             $aes = New-Object System.Security.Cryptography.AesCryptoServiceProvider
             $aes.Key = $keyBytes
             $aes.Mode = [System.Security.Cryptography.CipherMode]::CBC
-            
+
             $encryptor = $aes.CreateEncryptor()
             # Encryption logic here
         }
     }
-    
+
     return @{
         OriginalPath = $BackupPath
         EncryptedPath = $encryptedPath
@@ -396,6 +412,7 @@ function Encrypt-BackupData {
 ## Practical Examples
 
 ### Example 1: Design Backup Strategy for Critical Data
+
 ```powershell
 # Scenario: Critical database requiring 99.9% availability
 
@@ -421,6 +438,7 @@ $strategy = @{
 ```
 
 ### Example 2: Optimize Large Backup Storage
+
 ```powershell
 # Scenario: 500GB of files growing 10% monthly
 
@@ -441,10 +459,11 @@ $recommendation = Select-BackupStrategy @{
 ```
 
 ### Example 3: Recovery Scenario
+
 ```powershell
 # Scenario: Restore specific files from 2 days ago
 
-$backups = Get-ChildItem -Path "D:\Backups" | 
+$backups = Get-ChildItem -Path "D:\Backups" |
     Where-Object { $_.CreationTime -gt (Get-Date).AddDays(-3) } |
     Sort-Object -Property CreationTime -Descending
 
@@ -463,11 +482,14 @@ if ($restoreTest.Valid) {
 ## Integration with Phase 1
 
 ### Dependencies
+
 - `session-lifecycle` - Track backup operations across sessions
 - PowerShell 7+ - Advanced features and performance
 
 ### Smart Backup Extension
+
 This skill extends Phase 1's Smart Backup with:
+
 - Advanced strategy selection algorithms
 - Intelligent retention policies
 - Automated validation and repair
@@ -477,14 +499,14 @@ This skill extends Phase 1's Smart Backup with:
 
 ## Performance Expectations
 
-| Operation | Target Time | Max Memory |
-|-----------|------------|-----------|
-| Strategy Selection | <1 second | <10MB |
-| Schedule Calculation | <1 second | <5MB |
-| Integrity Check | <5 seconds | <50MB |
-| Corruption Detection | <10 seconds | <100MB |
-| Compression (1GB) | <30 seconds | <200MB |
-| Encryption (1GB) | <20 seconds | <150MB |
+| Operation            | Target Time | Max Memory |
+| -------------------- | ----------- | ---------- |
+| Strategy Selection   | <1 second   | <10MB      |
+| Schedule Calculation | <1 second   | <5MB       |
+| Integrity Check      | <5 seconds  | <50MB      |
+| Corruption Detection | <10 seconds | <100MB     |
+| Compression (1GB)    | <30 seconds | <200MB     |
+| Encryption (1GB)     | <20 seconds | <150MB     |
 
 ---
 
@@ -493,14 +515,17 @@ This skill extends Phase 1's Smart Backup with:
 ### Common Issues & Solutions
 
 **Issue**: "Backup file is empty"
+
 - **Cause**: Backup process interrupted or failed
 - **Solution**: Retry backup, check disk space, verify source access
 
 **Issue**: "Checksum mismatch"
+
 - **Cause**: File corruption or transfer error
 - **Solution**: Re-backup, verify storage integrity, check for hardware issues
 
 **Issue**: "Restore test failed"
+
 - **Cause**: Archive corrupted or incomplete
 - **Solution**: Attempt repair, use previous backup, check restore path permissions
 
@@ -512,4 +537,3 @@ This skill extends Phase 1's Smart Backup with:
 - [7-Zip Documentation](https://www.7-zip.org/)
 - [AES Encryption Standards](https://csrc.nist.gov/publications/detail/fips/197/final)
 - [SHA256 Hashing](https://csrc.nist.gov/publications/detail/fips/180-4/final)
-

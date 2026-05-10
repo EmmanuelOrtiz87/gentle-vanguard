@@ -27,17 +27,17 @@ workspace-foundation/
 
 ## Rules
 
-| Category | Location | Legacy to Remove |
-|----------|----------|-----------------|
-| **Skills** | `skills/` | `scripts/utilities/skills/`  DONE |
-| **Config** | `config/` | `.workspace/config/`  DONE |
-| **Scripts** | `scripts/` | Various - review needed |
-| **Docs** | `docs/` | OK - no duplicates |
+| Category    | Location   | Legacy to Remove                 |
+| ----------- | ---------- | -------------------------------- |
+| **Skills**  | `skills/`  | `scripts/utilities/skills/` DONE |
+| **Config**  | `config/`  | `.workspace/config/` DONE        |
+| **Scripts** | `scripts/` | Various - review needed          |
+| **Docs**    | `docs/`    | OK - no duplicates               |
 
 ## Migration Status
 
-| Date | Change |Status|
-|------|-------|------|
-| 2026-04-27 | Eliminated `scripts/utilities/skills/` duplicate |  DONE |
-| 2026-04-27 | Merged `.workspace/config/`  `config/` |  DONE |
-| 2026-04-27 | Unified `content-output-skill` |  DONE |
+| Date       | Change                                           | Status |
+| ---------- | ------------------------------------------------ | ------ |
+| 2026-04-27 | Eliminated `scripts/utilities/skills/` duplicate | DONE   |
+| 2026-04-27 | Merged `.workspace/config/` `config/`            | DONE   |
+| 2026-04-27 | Unified `content-output-skill`                   | DONE   |

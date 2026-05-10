@@ -1,11 +1,14 @@
 # MCP Bridge - Foundation
 
-Exposes Foundation capabilities as an **MCP (Model Context Protocol)** server, enabling any MCP-compatible tool to use Foundation's features.
+Exposes Foundation capabilities as an **MCP (Model Context Protocol)** server, enabling any
+MCP-compatible tool to use Foundation's features.
 
 ---
+
 ## What is MCP?
 
 Model Context Protocol (MCP) is a standard for AI tools to:
+
 - **Expose tools** (executable actions)
 - **Share resources** (readable data)
 - **Use prompts** (predefined templates)
@@ -13,6 +16,7 @@ Model Context Protocol (MCP) is a standard for AI tools to:
 Any tool that supports MCP can connect to this server and access Foundation's capabilities.
 
 ---
+
 ## Quick Start
 
 ### Install Dependencies
@@ -37,22 +41,24 @@ npm run dev
 ```
 
 ---
+
 ## Exposed Tools
 
 Foundation exposes these tools via MCP:
 
-| Tool Name | Description | Input Schema |
-|-----------|-------------|--------------|
-| `foundation_review` | Run 7D code review | `{ path: string, dimensions: string[] }` |
-| `foundation_audit` | Run workspace audit | `{ mode: 'quick' \| 'full' }` |
-| `foundation_delegate` | Delegate to subagent | `{ agent: string, prompt: string }` |
-| `foundation_health` | Check workspace health | `{}` |
-| `foundation_session_start` | Start new session | `{ project: string }` |
-| `foundation_session_end` | End session with summary | `{ sessionId: string }` |
-| `foundation_skill_list` | List available skills | `{}` |
-| `foundation_skill_load` | Load specific skill | `{ skillName: string }` |
+| Tool Name                  | Description              | Input Schema                             |
+| -------------------------- | ------------------------ | ---------------------------------------- |
+| `foundation_review`        | Run 7D code review       | `{ path: string, dimensions: string[] }` |
+| `foundation_audit`         | Run workspace audit      | `{ mode: 'quick' \| 'full' }`            |
+| `foundation_delegate`      | Delegate to subagent     | `{ agent: string, prompt: string }`      |
+| `foundation_health`        | Check workspace health   | `{}`                                     |
+| `foundation_session_start` | Start new session        | `{ project: string }`                    |
+| `foundation_session_end`   | End session with summary | `{ sessionId: string }`                  |
+| `foundation_skill_list`    | List available skills    | `{}`                                     |
+| `foundation_skill_load`    | Load specific skill      | `{ skillName: string }`                  |
 
 ---
+
 ## Configuration for MCP Clients
 
 ### Windsurf (`~/.windsurf/mcp.json`)
@@ -111,6 +117,7 @@ Foundation exposes these tools via MCP:
 ```
 
 ---
+
 ## Tool Examples
 
 ### Run 7D Code Review
@@ -121,8 +128,8 @@ const result = await mcpClient.callTool({
   name: 'foundation_review',
   arguments: {
     path: 'src/components/App.tsx',
-    dimensions: ['security', 'quality', 'architecture']
-  }
+    dimensions: ['security', 'quality', 'architecture'],
+  },
 });
 // Returns: { content: [{ type: 'text', text: '...review results...' }] }
 ```
@@ -134,28 +141,30 @@ const result = await mcpClient.callTool({
   name: 'foundation_delegate',
   arguments: {
     agent: 'sdd-apply',
-    prompt: 'Implement the authentication feature from task #123'
-  }
+    prompt: 'Implement the authentication feature from task #123',
+  },
 });
 // Returns: { content: [{ type: 'text', text: '...delegation result...' }] }
 ```
 
 ---
+
 ## Architecture
 
 ```
-                  
-   MCP Client      MCP Bridge       Foundation    
- (Windsurf,                (this server)             Core          
-  Codex, etc.)                                                      
-                  
-                                                               
+
+   MCP Client      MCP Bridge       Foundation
+ (Windsurf,                (this server)             Core
+  Codex, etc.)
+
+
           MCP Protocol               Translates                  Calls
           (standard)                 to Foundation               Foundation
                                      CLI/Scripts                scripts
 ```
 
 ---
+
 ## Development
 
 ### Project Structure
@@ -178,6 +187,7 @@ mcp-bridge/
 ```
 
 ---
+
 ## Error Handling
 
 All tools return standardized error responses:
@@ -191,15 +201,18 @@ All tools return standardized error responses:
 ```
 
 ---
+
 ## Token Efficiency
 
 The MCP Bridge maintains Foundation's token efficiency:
+
 - Only sends necessary context
 - Uses Foundation's compression strategies
 - Respects memory tiering (hot/warm/cold)
 - Logs token usage for monitoring
 
 ---
-**Status**:  Implementation Pending  
+
+**Status**: Implementation Pending  
 **Priority**: HIGH (covers 80% of non-standard tools)  
 **Next**: Implement `server.ts` and `tools.ts`

@@ -9,6 +9,7 @@
 ## Problem Reported
 
 **Error in GitHub Actions**:
+
 ```
 Missing closing '}' in statement block or type definition.
     + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
@@ -67,7 +68,7 @@ foreach ($script in $scripts) {
         [ref]$null,
         [ref]$errors
     )
-    
+
     if ($errors.Count -gt 0) {
         Write-Host "ERRORS FOUND:" -ForegroundColor Red
         $errors | ForEach-Object { Write-Host "  - $_" }
@@ -91,10 +92,10 @@ $scripts = @(
 
 foreach ($script in $scripts) {
     $file = Get-Item $script
-    
+
     # Read first bytes to detect BOM
     $bytes = [System.IO.File]::ReadAllBytes($script)
-    
+
     if ($bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF) {
         Write-Host "$script: UTF-8 BOM (may cause problems)" -ForegroundColor Yellow
     } elseif ($bytes[0] -eq 0xFF -and $bytes[1] -eq 0xFE) {
@@ -121,12 +122,14 @@ Write-Host "File converted to UTF-8 without BOM" -ForegroundColor Green
 ### Solution 4: Remove Special Characters from Scripts
 
 **Important**: Scripts should NOT contain:
+
 - Emojis (OK, ERROR, etc.)
 - Special symbols
 - Colored text in code
 - Non-ASCII characters
 
 **Clean script example**:
+
 ```powershell
 # GOOD - No special characters
 Write-Host "[OK] Validation passed" -ForegroundColor Green
@@ -179,7 +182,7 @@ foreach ($script in $scripts) {
             [ref]$null,
             [ref]$errors
         ) | Out-Null
-        
+
         if ($errors.Count -gt 0) {
             Write-Host "ERROR - $script" -ForegroundColor Red
             $errors | ForEach-Object { Write-Host "   $_" }
@@ -233,3 +236,4 @@ Write-Host "=== PowerShell Script Diagnostics
   "time_to_first_token": 2.093,
   "time_to_generate": 45.656
 }
+```

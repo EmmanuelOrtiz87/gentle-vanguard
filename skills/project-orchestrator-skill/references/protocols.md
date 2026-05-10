@@ -1,14 +1,17 @@
 ## SDD Enforcement Policy
 
 Current baseline:
+
 1. SDD is active and handled by the orchestrator as part of normal workflow
 2. New feature work should be spec-first (`docs/specs/*`) before implementation
 3. Spec validation is required before PR merge when feature behavior changes
 
 Recommended policy:
+
 1. Treat SDD as mandatory for all net-new features and behavior changes
 2. Allow hotfix/incident exception only with a mini-spec written before merge
-3. Require evidence in PR: spec file path, acceptance criteria status, validation evidence, final spec status
+3. Require evidence in PR: spec file path, acceptance criteria status, validation evidence, final
+   spec status
 
 Role split: Orchestrator is source of truth for process and enforcement decisions.
 
@@ -19,9 +22,11 @@ Reference: `docs/reference/SDG-GOVERNANCE-POLICY.md`
 1. MUST use Engram for durable memory (context, decisions, closeout learnings)
 2. MUST use this orchestrator skill as the primary execution framework
 3. MUST keep session artifacts updated (`docs/sessions/YYYY-MM-DD-session-start.md` and task brief)
-4. SHOULD use available native skills; if unavailable, continue with warnings plus remediation commands
+4. SHOULD use available native skills; if unavailable, continue with warnings plus remediation
+   commands
 5. MUST run focused validation before push and include evidence in docs
-6. MUST load script-governance skill for any script move, command-path update, hook change, or script documentation change
+6. MUST load script-governance skill for any script move, command-path update, hook change, or
+   script documentation change
 
 ## Skill Distribution Model
 
@@ -29,7 +34,8 @@ Reference: `docs/reference/SDG-GOVERNANCE-POLICY.md`
 2. Skills maintained natively in `skills/<skill-name>/SKILL.md`
 3. Publication: update in Foundation, commit/publish, consumers run `wf.ps1 foundation-sync apply`
 4. Activation: on-demand — orchestrator loads only skills needed by current task
-5. New skills must be reflected in: `skills/SKILL_INDEX.md`, orchestrator stack mapping, consumer sync manifest
+5. New skills must be reflected in: `skills/SKILL_INDEX.md`, orchestrator stack mapping, consumer
+   sync manifest
 
 ## Token and Context Budget Protocol
 
@@ -44,6 +50,7 @@ Automation: context budgeting is command-driven, not silent background automatio
 ## Live Rollback Checkpoint Protocol
 
 For risky in-session edits not yet committed:
+
 1. Create checkpoint: `wf.ps1 checkpoint <scope-objective>` (label: lowercase kebab-case)
 2. Checkpoint MUST include untracked files (`git stash -u`)
 3. Rollback: `wf.ps1 rollback-checkpoint` (latest) or with label/stash-ref
@@ -54,30 +61,31 @@ Guardrails: no checkpoint for trivial single-line edits; one checkpoint per boun
 
 ## Guardian Fallback Protocol
 
- serves as optional fallback when Foundation cannot proceed autonomously.
+serves as optional fallback when Foundation cannot proceed autonomously.
 
-Architecture: ORCHESTRATOR (primary) → self-healing →  (optional) → manual intervention
+Architecture: ORCHESTRATOR (primary) → self-healing → (optional) → manual intervention
 
-| Condition | Action |
-|-----------|--------|
-| Unknown error | Invoke  for diagnosis |
-| Complex decision |  reasoning assist |
-| PR needs review | ` run --pr-mode` |
-| Commit validation |  commit-msg hook |
+| Condition         | Action               |
+| ----------------- | -------------------- |
+| Unknown error     | Invoke for diagnosis |
+| Complex decision  | reasoning assist     |
+| PR needs review   | ` run --pr-mode`     |
+| Commit validation | commit-msg hook      |
 
-Dependency:  is enhancement, not requirement. Foundation operates fully without it.
+Dependency: is enhancement, not requirement. Foundation operates fully without it.
 
 ## Decision Challenge Protocol
 
 Before accepting proposals affecting architecture, automation, docs, or workflow:
+
 1. State proposal and expected gain in one sentence
 2. Ask for driving constraint (cost, speed, reliability, maintainability, compliance)
 3. Identify downside risk (complexity, coupling, regression, maintenance)
 4. Provide at least one lower-complexity alternative
 5. Require explicit validation plan before implementation
 
-Validation plan: hypothesis, measurable signal, scope/rollback condition, pass/fail threshold.
-If plan is missing: mark as deferred, do not institutionalize.
+Validation plan: hypothesis, measurable signal, scope/rollback condition, pass/fail threshold. If
+plan is missing: mark as deferred, do not institutionalize.
 
 ## Deferred-Work Registry Protocol
 
@@ -95,6 +103,7 @@ If plan is missing: mark as deferred, do not institutionalize.
 ## Learning Quality Bar
 
 Only persist learning as durable guidance when ALL are true:
+
 1. Change was executed/tested against real repo slice
 2. Validation evidence exists (command/test/check result)
 3. Reusable pattern or decision rationale identified
@@ -105,6 +114,7 @@ If evidence weak: store as hypothesis in session notes, not as durable rule.
 ## Reasoning Cache Protocol
 
 At task start:
+
 1. Extract 2-4 keywords from user request
 2. Call `mem_search` scoped to current project
 3. Load top match via `mem_get_observation` for full context
@@ -112,6 +122,7 @@ At task start:
 5. If no results: proceed normally
 
 At task end:
+
 1. Call `mem_save` for distinct items in structured format
 2. Skip if task was trivial
 3. Do not duplicate existing observations
@@ -135,23 +146,23 @@ Guardrails: search adds at most one round-trip; saving after user confirms compl
 
 ## Anti-Patterns
 
-| Don't | Do |
-|-------|-----|
-| Push without audit | Generate audit doc |
-| PR without review | Run code review |
-| Skip critical issues | Block and fix |
-| Skip mem_save | Always save |
-| Skip user confirmation | Ask for decision |
+| Don't                  | Do                 |
+| ---------------------- | ------------------ |
+| Push without audit     | Generate audit doc |
+| PR without review      | Run code review    |
+| Skip critical issues   | Block and fix      |
+| Skip mem_save          | Always save        |
+| Skip user confirmation | Ask for decision   |
 
 ## Workflow Commands
 
-| User Says | AI Does |
-|-----------|---------|
-| (start) | Auto-detect, assess, load skills |
-| "Continuar" | Resume, show next step |
-| "Estado" | Show status, todos |
-| "Guardar" | Commit and push, audit doc |
-| "Review" / "Auditar" | Run code review |
-| "PR" | Validate, code review, decision |
-| "Push" | Generate audit, commit, push |
-| "Judgment Day" / "Juicio Final" / "Dual Review" | Run adversarial review |
+| User Says                                       | AI Does                          |
+| ----------------------------------------------- | -------------------------------- |
+| (start)                                         | Auto-detect, assess, load skills |
+| "Continuar"                                     | Resume, show next step           |
+| "Estado"                                        | Show status, todos               |
+| "Guardar"                                       | Commit and push, audit doc       |
+| "Review" / "Auditar"                            | Run code review                  |
+| "PR"                                            | Validate, code review, decision  |
+| "Push"                                          | Generate audit, commit, push     |
+| "Judgment Day" / "Juicio Final" / "Dual Review" | Run adversarial review           |

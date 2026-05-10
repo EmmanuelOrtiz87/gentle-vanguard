@@ -1,10 +1,12 @@
 ---
 name: work-unit-commits
-description: "Plan commits as reviewable work units. Trigger: implementation, commit splitting, chained PRs, or keeping tests and docs with code."
+description:
+  'Plan commits as reviewable work units. Trigger: implementation, commit splitting, chained PRs, or
+  keeping tests and docs with code.'
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  version: '1.0'
   origin: https://github.com/Gentleman-Programming/gentle-ai
 ---
 
@@ -22,15 +24,15 @@ Use it for:
 
 ## Critical Rules
 
-| Rule | Requirement |
-|------|-------------|
-| Commit by work unit | A commit represents a deliverable behavior, fix, migration, or docs unit. |
-| Do not commit by file type | Avoid `models`, then `services`, then `tests` if none works alone. |
-| Keep tests with code | Tests belong in the same commit as the behavior they verify. |
-| Keep docs with the user-visible change | Docs belong with the feature or workflow they explain. |
-| Tell a story | A reviewer should understand why each commit exists from its diff and message. |
-| Future PR-ready | Each commit should be a candidate chained PR when the change grows. |
-| SDD workload guard | If SDD tasks forecast a >400-line change, group commits into chained PR slices before implementation. |
+| Rule                                   | Requirement                                                                                           |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Commit by work unit                    | A commit represents a deliverable behavior, fix, migration, or docs unit.                             |
+| Do not commit by file type             | Avoid `models`, then `services`, then `tests` if none works alone.                                    |
+| Keep tests with code                   | Tests belong in the same commit as the behavior they verify.                                          |
+| Keep docs with the user-visible change | Docs belong with the feature or workflow they explain.                                                |
+| Tell a story                           | A reviewer should understand why each commit exists from its diff and message.                        |
+| Future PR-ready                        | Each commit should be a candidate chained PR when the change grows.                                   |
+| SDD workload guard                     | If SDD tasks forecast a >400-line change, group commits into chained PR slices before implementation. |
 
 ## Work Unit Checklist
 
@@ -44,12 +46,12 @@ Before committing, confirm:
 
 ## Split Examples
 
-| Weak split | Better work-unit split |
-|------------|------------------------|
-| `add models` | `feat(auth): add token validation domain model and tests` |
-| `add services` | `feat(auth): wire token validation into login flow` |
-| `add tests` | Tests included with each behavior commit |
-| `update docs` | Docs included with the user-facing change they explain |
+| Weak split     | Better work-unit split                                    |
+| -------------- | --------------------------------------------------------- |
+| `add models`   | `feat(auth): add token validation domain model and tests` |
+| `add services` | `feat(auth): wire token validation into login flow`       |
+| `add tests`    | Tests included with each behavior commit                  |
+| `update docs`  | Docs included with the user-facing change they explain    |
 
 ## PR Relationship
 
@@ -66,7 +68,9 @@ When `sdd-tasks` produces a Review Workload Forecast:
 
 - Low risk: keep work-unit commits inside one PR.
 - Medium risk: commit by work unit and monitor changed lines before PR creation.
-- High risk: follow SDD `delivery_strategy` — ask on `ask-on-risk`, auto-slice on `auto-chain`, require `size:exception` on over-budget `single-pr`, or record accepted `size:exception` on `exception-ok`.
+- High risk: follow SDD `delivery_strategy` — ask on `ask-on-risk`, auto-slice on `auto-chain`,
+  require `size:exception` on over-budget `single-pr`, or record accepted `size:exception` on
+  `exception-ok`.
 
 Each SDD work unit should map cleanly to a commit or PR with:
 
@@ -88,4 +92,5 @@ git log --oneline -5
 
 ---
 
-*Origin: [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai) — Apache-2.0 License. Powered by [Gentleman Programming](https://github.com/Gentleman-Programming).*
+_Origin: [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai) — Apache-2.0 License.
+Powered by [Gentleman Programming](https://github.com/Gentleman-Programming)._

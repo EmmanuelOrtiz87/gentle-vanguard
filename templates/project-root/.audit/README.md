@@ -4,10 +4,10 @@ The `.audit` directory contains structured records of AI-assisted development ac
 
 ## Quick Reference
 
-| Command | When | Result |
-|---------|------|--------|
-| `init-workspace.ps1` | Start work | Session begins |
-| `finalize-session.ps1` | End work | Audit + metrics captured |
+| Command                | When       | Result                   |
+| ---------------------- | ---------- | ------------------------ |
+| `init-workspace.ps1`   | Start work | Session begins           |
+| `finalize-session.ps1` | End work   | Audit + metrics captured |
 
 ## Files Generated
 

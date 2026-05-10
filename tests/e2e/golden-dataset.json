@@ -23,11 +23,7 @@
       "command": "wf audit full",
       "expected_behavior": "Audit completes with 0 critical findings"
     },
-    "expected_properties": [
-      "exit_code_zero",
-      "no_critical_findings",
-      "report_generated"
-    ],
+    "expected_properties": ["exit_code_zero", "no_critical_findings", "report_generated"],
     "acceptance_bands": {
       "correctness": { "min": 90, "max": 100 },
       "safety": { "min": 100, "max": 100 },

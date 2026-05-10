@@ -2,9 +2,11 @@
 
 ## Purpose
 
-This guide explains how to properly close a work session or end-of-day for maximum knowledge retention and continuity.
+This guide explains how to properly close a work session or end-of-day for maximum knowledge
+retention and continuity.
 
 Two modes available:
+
 1. **Automatic**: Triggered by system events (scheduled or on shell exit)
 2. **Manual**: Explicitly run when ready to close the day
 
@@ -65,31 +67,35 @@ Day End Closure Flow
 
 ## Files Involved
 
-| File | Purpose | Trigger |
-|------|---------|---------|
-| `scripts/utilities/day-end-closure.ps1` | Main orchestrator for daily closure | Manual or automatic |
-| `scripts/utilities/end-session.ps1` | Operational checks and artifact generation | Called by day-end-closure |
-| `scripts/utilities/wf.ps1` | CLI entry point | User command |
-| `docs/sessions/` | Artifact storage | Auto-created on closure |
+| File                                    | Purpose                                    | Trigger                   |
+| --------------------------------------- | ------------------------------------------ | ------------------------- |
+| `scripts/utilities/day-end-closure.ps1` | Main orchestrator for daily closure        | Manual or automatic       |
+| `scripts/utilities/end-session.ps1`     | Operational checks and artifact generation | Called by day-end-closure |
+| `scripts/utilities/wf.ps1`              | CLI entry point                            | User command              |
+| `docs/sessions/`                        | Artifact storage                           | Auto-created on closure   |
 
 ## Manual Execution Examples
 
 ### Close day with full checks
+
 ```powershell
 .\scripts\utilities\wf.ps1 day-end-closure
 ```
 
 ### Skip validation (fast closure)
+
 ```powershell
 .\scripts\utilities\wf.ps1 day-end-closure -SkipValidation
 ```
 
 ### Bypass Engram capture (operational only)
+
 ```powershell
 .\scripts\utilities\wf.ps1 day-end-closure -SkipEngram
 ```
 
 ### Force closure even with failures
+
 ```powershell
 .\scripts\utilities\wf.ps1 day-end-closure -Force
 ```
@@ -99,6 +105,7 @@ Day End Closure Flow
 Currently manual-trigger only. To enable automatic closure:
 
 ### Option A: Scheduled Task (Windows)
+
 ```powershell
 # Create scheduled task to run at shift end (e.g., 5:30 PM)
 $trigger = New-ScheduledTaskTrigger -Daily -At "17:30"
@@ -107,6 +114,7 @@ Register-ScheduledTask -TaskName "Gentleman-DayEndClosure" -Trigger $trigger -Ac
 ```
 
 ### Option B: PowerShell Profile Hook
+
 ```powershell
 # Add to your $PROFILE to run on shell exit
 Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action {
@@ -117,6 +125,7 @@ Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action {
 ```
 
 ### Option C: Git Hook (On Commit)
+
 ```bash
 #!/bin/bash
 # .git/hooks/post-commit or .git/hooks/post-push
@@ -150,19 +159,19 @@ When you start the next session:
 
 ```
 START SESSION                END OF DAY
-                                 
+
 wf start-session          wf day-end-closure
-                                 
+
 [WORK]                    [Operational Checks]
-                                 
+
 Engram captures           [Workspace Validation]
-learnings during              
+learnings during
                          [Memory Capture]
-[More work]                    
+[More work]
                          Reports & Artifacts
 Developer choice:         Generated
  Manual closure         Ready for resume
- Auto closure          
+ Auto closure
  Continue to next session
 ```
 
@@ -170,7 +179,8 @@ Developer choice:         Generated
 
 1. **Do not close sessions with unpublished changes**
    - `end-session.ps1` now enforces publication policy by default.
-   - Closure is blocked when there are uncommitted changes, no upstream, or local commits ahead of upstream.
+   - Closure is blocked when there are uncommitted changes, no upstream, or local commits ahead of
+     upstream.
    - Recommended flow: `wf.ps1 publish` before closure.
    - Explicit override only when intentional: `wf.ps1 end-session -AllowUnpublishedClose`.
 
@@ -179,16 +189,17 @@ Developer choice:         Generated
    - Validates state before next session
    - Prevents context loss
 
-2. **Use explicit session IDs if tracking multiple projects**
+1. **Use explicit session IDs if tracking multiple projects**
+
    ```powershell
    .\scripts\utilities\wf.ps1 day-end-closure -SessionId "bitbucket-dashboard-2026-04-14"
    ```
 
-3. **Keep closure artifacts for audit trail**
+1. **Keep closure artifacts for audit trail**
    - Never delete `docs/sessions/closure-report-*.md`
    - Useful for retrospectives and root cause analysis
 
-4. **Monitor closure reports weekly**
+1. **Monitor closure reports weekly**
    - Check `closure-report-*.md` for patterns
    - High failure rates may indicate process issues
    - Use as input for process improvements
@@ -203,6 +214,7 @@ Developer choice:         Generated
 2. `session-end:<session_id>` observation
 
 **Checks**:
+
 ```powershell
 # Verify launcher and CLI
 .\scripts\utilities\run-engram.ps1 --help
@@ -212,6 +224,7 @@ Developer choice:         Generated
 ```
 
 **Fallback (manual save)**:
+
 ```powershell
 engram save "session-summary:<session_id>" "<summary_text>" --project workspace-foundation
 engram save "session-end:<session_id>" "<end_message>" --project workspace-foundation
@@ -220,6 +233,7 @@ engram save "session-end:<session_id>" "<end_message>" --project workspace-found
 ### Delivery closure artifact not created
 
 **Check**: Verify end-session.ps1 ran successfully.
+
 ```powershell
 # Run end-session explicitly to debug
 .\scripts\utilities\end-session.ps1 -Verbose
@@ -228,12 +242,14 @@ engram save "session-end:<session_id>" "<end_message>" --project workspace-found
 ### Validation failures block closure
 
 **Allow**: Use `-Force` to proceed despite validation issues for now.
+
 ```powershell
 .\scripts\utilities\wf.ps1 day-end-closure -Force
 ```
 
 ## See Also
 
-- [Session Guide](SESSION-GUIDE.md)  Daily workflow orchestration
-- [DEVELOPER-COMMUNICATION-POLICY.md](DEVELOPER-COMMUNICATION-POLICY.md)  Response modes and escalation
-- [TOOL-ACTIVATION.md](TOOL-ACTIVATION.md)  Tool setup and verification
+- [Session Guide](SESSION-GUIDE.md) Daily workflow orchestration
+- [DEVELOPER-COMMUNICATION-POLICY.md](DEVELOPER-COMMUNICATION-POLICY.md) Response modes and
+  escalation
+- [TOOL-ACTIVATION.md](TOOL-ACTIVATION.md) Tool setup and verification

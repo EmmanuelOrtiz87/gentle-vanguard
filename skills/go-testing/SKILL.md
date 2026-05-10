@@ -1,17 +1,18 @@
 ---
 name: go-testing
 description: >
-  Go testing patterns for Gentleman.Dots, including Bubbletea TUI testing.
-  Trigger: When writing Go tests, using teatest, or adding test coverage.
+  Go testing patterns for Gentleman.Dots, including Bubbletea TUI testing. Trigger: When writing Go
+  tests, using teatest, or adding test coverage.
 license: Apache-2.0
 metadata:
   author: workspace-foundation
-  versión: "1.0"
+  versión: '1.0'
 ---
 
 ## When to Use
 
 Use this skill when:
+
 - Writing Go unit tests
 - Testing Bubbletea TUI components
 - Creating table-driven tests
@@ -353,5 +354,3 @@ go test -short ./...                    # Skip integration tests
 - **System Tests**: See `installer/internal/system/*_test.go`
 - **Golden Files**: See `installer/internal/tui/testdata/`
 - **Teatest Docs**: https://github.com/charmbracelet/bubbletea/tree/master/teatest
-
-

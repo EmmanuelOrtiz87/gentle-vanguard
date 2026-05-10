@@ -6,25 +6,25 @@ This file is **auto-maintained** by the adaptive learning system.
 
 ### Documentation Placement
 
-| ID | Norm | Confidence | Learned From | Date |
-|----|------|-------------|--------------|------|
-| DOC-001 | Documentation in project root instead of docs/ | high | auto-norm-learner | 2026-05-04 |
-| DOC-002 | Scripts README.md must be in English, normalized | high | manual | 2026-05-04 |
+| ID      | Norm                                             | Confidence | Learned From      | Date       |
+| ------- | ------------------------------------------------ | ---------- | ----------------- | ---------- |
+| DOC-001 | Documentation in project root instead of docs/   | high       | auto-norm-learner | 2026-05-04 |
+| DOC-002 | Scripts README.md must be in English, normalized | high       | manual            | 2026-05-04 |
 
 ### Auto-Correction
 
-| ID | Pattern | Confidence | Learned From | Date |
-|----|---------|-------------|--------------|------|
-| CORR-001 | PowerShell TryParse() must be replaced with regex match | high | auto-norm-learner | 2026-05-04 |
-| CORR-002 | Path references in wf.ps1 must use triple Split-Path | high | auto-norm-learner | 2026-05-04 |
-| CORR-003 | repoRoot calculation must use Resolve-Path with Join-Path | high | auto-norm-learner | 2026-05-04 |
+| ID       | Pattern                                                   | Confidence | Learned From      | Date       |
+| -------- | --------------------------------------------------------- | ---------- | ----------------- | ---------- |
+| CORR-001 | PowerShell TryParse() must be replaced with regex match   | high       | auto-norm-learner | 2026-05-04 |
+| CORR-002 | Path references in wf.ps1 must use triple Split-Path      | high       | auto-norm-learner | 2026-05-04 |
+| CORR-003 | repoRoot calculation must use Resolve-Path with Join-Path | high       | auto-norm-learner | 2026-05-04 |
 
 ### SESS-### (Session Patterns)
 
-| ID | Pattern | Confidence | Learned From | Date |
-|----|---------|-------------|--------------|------|
-| SESS-001 | Session files stored in .session/ directory | high | auto-norm-learner | 2026-05-04 |
-| SESS-002 | Session ID pattern: session-YYYY-MM-DD-XX | high | auto-norm-learner | 2026-05-04 |
+| ID       | Pattern                                     | Confidence | Learned From      | Date       |
+| -------- | ------------------------------------------- | ---------- | ----------------- | ---------- |
+| SESS-001 | Session files stored in .session/ directory | high       | auto-norm-learner | 2026-05-04 |
+| SESS-002 | Session ID pattern: session-YYYY-MM-DD-XX   | high       | auto-norm-learner | 2026-05-04 |
 
 ## Normative Rules for New Creations
 

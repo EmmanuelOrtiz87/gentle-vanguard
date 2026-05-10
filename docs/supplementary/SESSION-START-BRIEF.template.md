@@ -39,4 +39,3 @@
 
 - Update this brief when the goal or constraints change materially.
 - Save durable learnings to Engram, ADRs, or project docs before closing the session.
-

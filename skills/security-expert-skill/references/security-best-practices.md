@@ -4,16 +4,17 @@ This document provides security guidelines for projects created with Workspace F
 
 ## Quick Reference
 
-| Command | Description |
-|---------|-------------|
-| `wf security scan` | Quick scan for critical issues |
-| `wf security audit` | Full audit with detailed report |
+| Command              | Description                       |
+| -------------------- | --------------------------------- |
+| `wf security scan`   | Quick scan for critical issues    |
+| `wf security audit`  | Full audit with detailed report   |
 | `wf security report` | Generate security review document |
-| `git commit` | Runs automatic security scan |
+| `git commit`         | Runs automatic security scan      |
 
 ## Pre-commit Security
 
 The Security Expert skill automatically runs before each commit to:
+
 1. Scan for exposed secrets (API keys, tokens, passwords)
 2. Detect common vulnerability patterns
 3. Check dependencies for known vulnerabilities
@@ -22,6 +23,7 @@ The Security Expert skill automatically runs before each commit to:
 ## Security Categories
 
 ### Critical (Blocks Commit)
+
 - Hardcoded credentials
 - API keys in code
 - SQL injection vulnerabilities
@@ -29,6 +31,7 @@ The Security Expert skill automatically runs before each commit to:
 - Private keys committed
 
 ### High (Warning + Review)
+
 - XSS vulnerabilities
 - Missing authentication
 - Insecure crypto usage
@@ -36,12 +39,14 @@ The Security Expert skill automatically runs before each commit to:
 - Missing rate limiting
 
 ### Medium (Informational)
+
 - Weak password hashing
 - Information disclosure
 - Debug mode enabled
 - Missing security headers
 
 ### Low (Best Practices)
+
 - Verbose error messages
 - TODO comments with security notes
 - Missing input validation
@@ -49,32 +54,36 @@ The Security Expert skill automatically runs before each commit to:
 ## Common Issues and Fixes
 
 ### Exposed API Key
-**Problem:** `const API_KEY = "sk_live_1234567890abcdef"`
-**Fix:** Use environment variables
+
+**Problem:** `const API_KEY = "sk_live_1234567890abcdef"` **Fix:** Use environment variables
+
 ```typescript
 const API_KEY = process.env.API_KEY;
 ```
 
 ### SQL Injection
-**Problem:** `query = "SELECT * FROM users WHERE id = " + userId`
-**Fix:** Use parameterized queries
+
+**Problem:** `query = "SELECT * FROM users WHERE id = " + userId` **Fix:** Use parameterized queries
+
 ```typescript
 const result = await pool.query('SELECT * FROM users WHERE id = $1', [userId]);
 ```
 
 ### XSS Vulnerability
-**Problem:** `element.innerHTML = userInput`
-**Fix:** Use textContent or sanitization
+
+**Problem:** `element.innerHTML = userInput` **Fix:** Use textContent or sanitization
+
 ```typescript
 element.textContent = userInput;
 // Or use DOMPurify for HTML content
 ```
 
 ### Hardcoded Password
-**Problem:** `password: "mySecretPassword123"`
-**Fix:** Use environment variables
+
+**Problem:** `password: "mySecretPassword123"` **Fix:** Use environment variables
+
 ```typescript
-password: process.env.DB_PASSWORD
+password: process.env.DB_PASSWORD;
 ```
 
 ## Environment Variables
@@ -96,6 +105,7 @@ JWT_SECRET=your-jwt-secret
 ## Dependencies
 
 ### npm
+
 ```bash
 npm audit          # Check for vulnerabilities
 npm audit fix      # Auto-fix vulnerabilities
@@ -103,12 +113,14 @@ npm ci             # Install from lockfile
 ```
 
 ### Python
+
 ```bash
 pip audit          # Check for vulnerabilities
 safety check      # Check requirements
 ```
 
 ### Go
+
 ```bash
 govulncheck ./...  # Check for vulnerabilities
 go mod verify      # Verify dependencies
@@ -124,13 +136,15 @@ import helmet from 'helmet';
 app.use(helmet());
 
 // Content Security Policy
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc: ["'self'"],
-    styleSrc: ["'self'", "https://fonts.googleapis.com"]
-  }
-}));
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'", 'https://fonts.googleapis.com'],
+    },
+  }),
+);
 ```
 
 ## Rate Limiting
@@ -140,10 +154,13 @@ Protect APIs from abuse:
 ```typescript
 import rateLimit from 'express-rate-limit';
 
-app.use('/api', rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100
-}));
+app.use(
+  '/api',
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+  }),
+);
 ```
 
 ## OWASP Top 10 (2021)
@@ -168,6 +185,7 @@ app.use('/api', rateLimit({
 ## Reporting Security Issues
 
 If you find a security vulnerability:
+
 1. Do NOT create a public issue
 2. Email: security@example.com
 3. Include details about the issue

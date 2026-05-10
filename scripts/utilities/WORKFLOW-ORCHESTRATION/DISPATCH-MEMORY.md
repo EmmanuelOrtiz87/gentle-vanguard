@@ -2,11 +2,14 @@
 
 ## Descripcin General
 
-El **Dispatch Memory Manager** es un mdulo que resuelve el gap de "No hay memoria persistente entre dispatches" integrando Engram con el sistema de dispatch-agent para mantener contexto entre ejecuciónes.
+El **Dispatch Memory Manager** es un mdulo que resuelve el gap de "No hay memoria persistente entre
+dispatches" integrando Engram con el sistema de dispatch-agent para mantener contexto entre
+ejecuciónes.
 
 ## Problema Identificado
 
 Antes de esta implementacin:
+
 - Cada dispatch era aislado sin memoria del contexto anterior
 - Los resultados de ejecuciónes anteriores se perdan
 - No haba forma de recuperar informacin de dispatches previos
@@ -17,11 +20,13 @@ Antes de esta implementacin:
 ### Componentes
 
 #### 1. **dispatch-memory-manager.ps1**
+
 Mdulo central que gestióna la persistencia de memoria de dispatch.
 
 **Ubicacin:** `scripts/utilities/WORKFLOW-ORCHESTRATION/dispatch-memory-manager.ps1`
 
 **Funcionalidades:**
+
 - `save`: Guarda el contexto de un dispatch
 - `load`: Carga el contexto ms reciente o uno especfico
 - `list`: Lista todos los dispatches de una sesin
@@ -29,6 +34,7 @@ Mdulo central que gestióna la persistencia de memoria de dispatch.
 - `sync`: Sincroniza y reporta dispatches de una sesin
 
 **Estructura de Almacenamiento:**
+
 ```
 .engram-data/
  dispatch-memory/
@@ -40,25 +46,29 @@ Mdulo central que gestióna la persistencia de memoria de dispatch.
 ```
 
 #### 2. **dispatch-agent.ps1 (Modificado)**
+
 Integracin del dispatch-agent con el memory manager.
 
 **Cambios:**
+
 - Carga contexto anterior antes de ejecutar
 - Guarda contexto despus de ejecutar
 - Pasa contexto anterior a los agentes
 
 **Flujo:**
+
 ```
 1. Load-PreviousDispatchContext()
-   
+
 2. Invoke-ParallelDispatch()
-   
+
 3. Save-DispatchContext()
 ```
 
 ### Estructura de Datos
 
 #### Contexto de Dispatch
+
 ```json
 {
   "execution_id": "dispatch-20260423-120530",
@@ -82,6 +92,7 @@ Integracin del dispatch-agent con el memory manager.
 ```
 
 #### Registro de Dispatch
+
 ```json
 {
   "dispatches": [
@@ -99,6 +110,7 @@ Integracin del dispatch-agent con el memory manager.
 ## Uso
 
 ### Guardar Contexto
+
 ```powershell
 & .\dispatch-memory-manager.ps1 -Action save `
   -ExecutionId "dispatch-20260423-120530" `
@@ -111,11 +123,13 @@ Integracin del dispatch-agent con el memory manager.
 ```
 
 ### Cargar Contexto Anterior
+
 ```powershell
 & .\dispatch-memory-manager.ps1 -Action load -AsJson
 ```
 
 ### Cargar Contexto Especfico
+
 ```powershell
 & .\dispatch-memory-manager.ps1 -Action load `
   -ExecutionId "dispatch-20260423-120530" `
@@ -123,16 +137,19 @@ Integracin del dispatch-agent con el memory manager.
 ```
 
 ### Listar Dispatches de Sesin
+
 ```powershell
 & .\dispatch-memory-manager.ps1 -Action list -AsJson
 ```
 
 ### Sincronizar Memoria
+
 ```powershell
 & .\dispatch-memory-manager.ps1 -Action sync -AsJson
 ```
 
 ### Limpiar Contexto
+
 ```powershell
 # Limpiar contexto especfico
 & .\dispatch-memory-manager.ps1 -Action clear `
@@ -149,11 +166,13 @@ Integracin del dispatch-agent con el memory manager.
 El dispatch-agent ahora automticamente:
 
 1. **Carga contexto anterior** antes de ejecutar:
+
 ```powershell
 $previousContext = Load-PreviousDispatchContext
 ```
 
 2. **Construye contexto actual** con informacin relevante:
+
 ```powershell
 $dispatchContext = @{
     agents = $agentList
@@ -166,31 +185,36 @@ $dispatchContext = @{
 ```
 
 3. **Guarda contexto** despus de ejecutar:
+
 ```powershell
 Save-DispatchContext -ExecutionId $result.execution_id -Context $dispatchContext
 ```
 
 ## Beneficios
 
- **Continuidad**: Mantiene contexto entre dispatches  
+**Continuidad**: Mantiene contexto entre dispatches  
  **Recuperabilidad**: Puede recuperar informacin de ejecuciónes anteriores  
  **Trazabilidad**: Registro completo de todas las ejecuciónes  
  **Aprendizaje**: Los agentes pueden acceder a contexto histrico  
  **Debugging**: Facilita diagnstico de problemas en ejecuciónes anteriores  
- **Optimizacin**: Permite mejorar basndose en resultados previos  
+ **Optimizacin**: Permite mejorar basndose en resultados previos
 
 ## Casos de Uso
 
 ### 1. Recuperacin de Contexto
+
 Si un dispatch falla, el siguiente puede recuperar el contexto anterior y continuar.
 
 ### 2. Anlisis de Tendencias
+
 Analizar patrones de xito/fallo en mltiples ejecuciónes.
 
 ### 3. Optimizacin Adaptativa
+
 Ajustar parmetros (modo, riesgo) basndose en resultados histricos.
 
 ### 4. Auditora y Compliance
+
 Mantener registro completo de todas las operaciónes de dispatch.
 
 ## Integracin Futura con Engram
@@ -205,10 +229,13 @@ Esta implementacin est diseada para ser compatible con Engram:
 ## configuración
 
 ### Variables de Entorno
+
 - `WFS_SESSION_ID`: ID de sesin actual (se usa automticamente)
 
 ### Rutas Configurables
+
 Todas las rutas se derivan de `.engram-data/`:
+
 - Directorio de memoria: `.engram-data/dispatch-memory/`
 - Registro: `.engram-data/dispatch-memory/dispatch-registry.json`
 - Contextos: `.engram-data/dispatch-memory/contexts/`
@@ -216,6 +243,7 @@ Todas las rutas se derivan de `.engram-data/`:
 ## Mantenimiento
 
 ### Limpiar Memoria Antigua
+
 ```powershell
 # Limpiar dispatches de sesin anterior
 & .\dispatch-memory-manager.ps1 -Action clear `
@@ -224,25 +252,29 @@ Todas las rutas se derivan de `.engram-data/`:
 ```
 
 ### Monitorear Uso de Espacio
+
 ```powershell
 # Ver tamao de directorio de memoria
-Get-ChildItem -Path ".engram-data/dispatch-memory" -Recurse | 
+Get-ChildItem -Path ".engram-data/dispatch-memory" -Recurse |
   Measure-Object -Property Length -Sum
 ```
 
 ## Troubleshooting
 
 ### Contexto no se guarda
+
 - Verificar que `.engram-data/dispatch-memory/` existe
 - Verificar permisos de escritura
 - Revisar logs en `-Verbose`
 
 ### Contexto anterior no se carga
+
 - Verificar que hay dispatches previos en la sesin
 - Usar `-Action list` para ver dispatches disponibles
 - Verificar que `dispatch-registry.json` existe
 
 ### Errores de JSON
+
 - Verificar que los archivos de contexto no estn corruptos
 - Usar `-Verbose` para ms detalles
 - Limpiar y reintentar si es necesario

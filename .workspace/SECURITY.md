@@ -3,34 +3,34 @@
 ## Access Control Overview
 
 ```
-                    
-                         RESTRICTED OPERATION           
-                      (skill-optimizer, orchestrator)   
-                    
-                                   
-                    
-                      AUTHENTICATION REQUIRED           
-                      1. Check session (8hr cache)        
-                      2. If not  require credentials    
-                    
-                                   
-              
-                                                      
-        
-        API KEY             SECURITY         DENIED       
-        (preferred)         QUESTIONS        (wrong)      
-        
-                                  
-                        
-                         3 correct         
-                         recover API key    
-                          authenticate     
-                        
-               
-       
-        AUTHENTICATED   
-        Session: 8hrs   
-       
+
+                         RESTRICTED OPERATION
+                      (skill-optimizer, orchestrator)
+
+
+
+                      AUTHENTICATION REQUIRED
+                      1. Check session (8hr cache)
+                      2. If not  require credentials
+
+
+
+
+
+        API KEY             SECURITY         DENIED
+        (preferred)         QUESTIONS        (wrong)
+
+
+
+                         3 correct
+                         recover API key
+                          authenticate
+
+
+
+        AUTHENTICATED
+        Session: 8hrs
+
 ```
 
 ## API Key
@@ -43,21 +43,23 @@ Location: .workspace/config/owner-auth.json (ENCRYPTED)
 
 ## Security Questions
 
-| # | Question | Stored |
-|---|----------|--------|
-| Q1 | Nombre de tu primera mascota? | sha256:xxxxx |
-| Q2 | Ciudad donde naciste? | sha256:xxxxx |
-| Q3 | Nombre de tu mejor amigo de infancia? | sha256:xxxxx |
+| #   | Question                              | Stored       |
+| --- | ------------------------------------- | ------------ |
+| Q1  | Nombre de tu primera mascota?         | sha256:xxxxx |
+| Q2  | Ciudad donde naciste?                 | sha256:xxxxx |
+| Q3  | Nombre de tu mejor amigo de infancia? | sha256:xxxxx |
 
 ## How to Authenticate
 
 ### Option 1: API Key (Fast)
+
 ```powershell
 .\scripts\utilities\auth-session.ps1 -ApiKey "BraianAmir1487!"
 # Result: Session authenticated for 8 hours
 ```
 
 ### Option 2: Security Questions (Recovery)
+
 ```powershell
 .\scripts\utilities\auth-session.ps1 -UseSecurityQuestions
 # Prompt for 3 answers
@@ -68,11 +70,11 @@ Location: .workspace/config/owner-auth.json (ENCRYPTED)
 
 ### For Developers (without authentication)
 
-| Category | Blocked |
-|----------|---------|
-| Files | skills/*, AGENTS.md, .workspace/config/* |
-| Commands | skill-optimizer, orchestrator, admin, config |
-| Intents | "change orchestrator", "modify skill", "update architecture" |
+| Category | Blocked                                                      |
+| -------- | ------------------------------------------------------------ |
+| Files    | skills/_, AGENTS.md, .workspace/config/_                     |
+| Commands | skill-optimizer, orchestrator, admin, config                 |
+| Intents  | "change orchestrator", "modify skill", "update architecture" |
 
 ### Error Messages
 
@@ -118,25 +120,25 @@ No tienes permisos para realizar esta operacin.
 
 ```
 Developer wants to modify skill/orchestrator
-         
-         
+
+
 NO DIRECT ACCESS (BLOCKED)
-         
-         
+
+
 .Can submit escalation request
 .\wf.ps1 skill-optimizer request improve --skill "xxx" --reason "..."
-         
-         
+
+
 Goes to: .workspace/escalations/pending/
-         
-         
+
+
 Owner reviews (authenticated)
-         
-    
-             
+
+
+
 APPROVE  REJECT
-             
-             
+
+
 IMPLEMENT  NOTIFY
 ```
 
@@ -144,7 +146,7 @@ IMPLEMENT  NOTIFY
 
 - Authentication valid for: **8 hours**
 - Session file: `.workspace/config/session-auth.json`
-- After 8 hours  re-authenticate required
+- After 8 hours re-authenticate required
 
 ## Security Principles
 
@@ -156,5 +158,4 @@ IMPLEMENT  NOTIFY
 
 ---
 
-Generated: 2026-04-25
-Owner: Emmanuel (workspace_local)
+Generated: 2026-04-25 Owner: Emmanuel (workspace_local)

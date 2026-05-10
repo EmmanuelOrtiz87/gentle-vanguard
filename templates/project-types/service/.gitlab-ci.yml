@@ -10,7 +10,7 @@ stages:
 
 variables:
   DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: ""
+  DOCKER_TLS_CERTDIR: ''
 
 .services:
   - docker:24.0.5-dind
@@ -128,7 +128,8 @@ deploy:staging:
     - apk add --no-cache curl kubectl
   script:
     - kubectl config use-context $K8S_CONTEXT_STAGING
-    - kubectl set image deployment/{{project-name}} {{project-name}}=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA -n staging
+    - kubectl set image deployment/{{project-name}}
+      {{project-name}}=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA -n staging
     - kubectl rollout status deployment/{{project-name}} -n staging
   environment:
     name: staging
@@ -143,7 +144,8 @@ deploy:production:
     - apk add --no-cache curl kubectl
   script:
     - kubectl config use-context $K8S_CONTEXT_PROD
-    - kubectl set image deployment/{{project-name}} {{project-name}}=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA -n production
+    - kubectl set image deployment/{{project-name}}
+      {{project-name}}=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA -n production
     - kubectl rollout status deployment/{{project-name}} -n production
   environment:
     name: production

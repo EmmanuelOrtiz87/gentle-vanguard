@@ -4,12 +4,12 @@ Scripts for creating and managing projects.
 
 ## Scripts
 
-| Script | Description |
-|--------|-------------|
-| `setup-project.ps1` | Setup existing project with foundation |
-| `new-project.ps1` | Create new project (canonical entrypoint) |
-| `init-workspace.ps1` | Initialize workspace |
-| `migrate.ps1` | Migrate existing project to foundation |
+| Script               | Description                               |
+| -------------------- | ----------------------------------------- |
+| `setup-project.ps1`  | Setup existing project with foundation    |
+| `new-project.ps1`    | Create new project (canonical entrypoint) |
+| `init-workspace.ps1` | Initialize workspace                      |
+| `migrate.ps1`        | Migrate existing project to foundation    |
 
 ## Usage
 

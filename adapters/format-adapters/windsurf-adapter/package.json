@@ -7,7 +7,12 @@
     "convert-skill": "node adapter.js convert-skill",
     "generate-config": "node adapter.js generate-config"
   },
-  "keywords": ["foundation", "windsurf", "plugin", "adapter"],
+  "keywords": [
+    "foundation",
+    "windsurf",
+    "plugin",
+    "adapter"
+  ],
   "dependencies": {
     "fs": "built-in",
     "path": "built-in"
@@ -16,6 +21,8 @@
     "adapterType": "format-adapter",
     "targetTool": "windsurf",
     "targetFormat": "plugin",
-    "compatibility": ["Windsurf IDE"]
+    "compatibility": [
+      "Windsurf IDE"
+    ]
   }
 }
