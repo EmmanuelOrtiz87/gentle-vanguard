@@ -87,7 +87,7 @@ foreach ($repo in $Repos) {
         )
 
         if ($alreadyBypassed) {
-            Write-Ok "$repo: bypass already active for $actorLogin"
+            Write-Ok "${repo}: bypass already active for $actorLogin"
             continue
         }
 
@@ -118,11 +118,11 @@ foreach ($repo in $Repos) {
         if ($check.current_user_can_bypass -eq 'always') {
             Write-Ok "$repo: bypass enabled for $actorLogin"
         } else {
-            Write-Warn "$repo: update sent but bypass check did not return always."
+            Write-Warn "${repo}: update sent but bypass check did not return always."
             $hasFailure = $true
         }
     } catch {
-        Write-Warn "$repo: bypass enforcement failed ($($_.Exception.Message))"
+        Write-Warn "${repo}: bypass enforcement failed ($($_.Exception.Message))"
         $hasFailure = $true
     }
 }
