@@ -12,9 +12,9 @@
     },
     "integration": {
       "target_pct": 20,
-      "description": "Tests with real LLM calls - cheap model in CI, full model pre-release",
+      "description": "Tests with real LLM calls - cheap model on develop integration, full model pre-release on main",
       "coverage_target": "all_major_workflows",
-      "ci_frequency": "merge_to_main",
+      "ci_frequency": "merge_to_develop",
       "cheap_model": "gpt-4o-mini",
       "temperature": 0,
       "retry_budget": 3,
@@ -47,12 +47,12 @@
   "quality_gates": {
     "lint": { "pr_block": true, "main_block": true, "frequency": "every_commit" },
     "unit_tests": { "pr_block": true, "main_block": true, "frequency": "every_pr" },
-    "integration_tests": { "pr_block": false, "main_block": true, "frequency": "merge_main" },
+    "integration_tests": { "pr_block": false, "main_block": true, "frequency": "merge_develop" },
     "coverage_drop": {
       "threshold_pct": 5,
       "pr_block": false,
       "main_block": true,
-      "frequency": "merge_main"
+      "frequency": "merge_develop"
     },
     "safety_regressions": { "pr_block": true, "main_block": true, "frequency": "every_pr" },
     "format_compliance": { "pr_block": true, "main_block": true, "frequency": "every_pr" },
