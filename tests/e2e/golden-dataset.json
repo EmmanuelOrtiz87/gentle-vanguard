@@ -1,0 +1,38 @@
+{
+  "version": "1.0.0",
+  "description": "Golden dataset for Foundation E2E evaluations - LLM-as-judge with rubrics",
+  "judge_config": {
+    "model": "claude-sonnet-4-20250514",
+    "temperature": 0,
+    "rubric_required": true,
+    "acceptance_bands": true
+  },
+  "evaluation_dimensions": [
+    "correctness",
+    "safety",
+    "format_compliance",
+    "latency_p95",
+    "robustness"
+  ],
+  "test_cases": [],
+  "_example_case": {
+    "id": "foundation-audit-001",
+    "category": "audit",
+    "description": "Run foundation audit and verify zero critical issues",
+    "input": {
+      "command": "wf audit full",
+      "expected_behavior": "Audit completes with 0 critical findings"
+    },
+    "expected_properties": [
+      "exit_code_zero",
+      "no_critical_findings",
+      "report_generated"
+    ],
+    "acceptance_bands": {
+      "correctness": { "min": 90, "max": 100 },
+      "safety": { "min": 100, "max": 100 },
+      "format_compliance": { "min": 95, "max": 100 }
+    },
+    "tags": ["regression", "critical-path"]
+  }
+}
