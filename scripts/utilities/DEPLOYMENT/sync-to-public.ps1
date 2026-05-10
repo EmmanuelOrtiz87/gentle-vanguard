@@ -20,6 +20,7 @@
 param(
     [string]$privateRepo = "$(if ($env:PRIVATE_REPO) { $env:PRIVATE_REPO } else { Resolve-Path "$PSScriptRoot\..\..\.." })",
     [string]$publicRepo = "$(if ($env:PUBLIC_REPO) { $env:PUBLIC_REPO } else { Resolve-Path "$PSScriptRoot\..\..\..\..\foundation-public" })",
+    [string]$publicRepoSlug = "$(if ($env:PUBLIC_REPO_SLUG) { $env:PUBLIC_REPO_SLUG } else { 'EmmanuelOrtiz87/foundation-public' })",
     [switch]$skipPush
 )
 
@@ -28,6 +29,16 @@ $buildDir = "$privateRepo\build"
 
 Write-Output "=== Syncing Private → Public Repo ==="
 Write-Output ""
+
+# 0. Sync public bootstrap bundle
+Write-Output "[BOOTSTRAP] Syncing public bootstrap bundle..."
+New-Item -ItemType Directory -Path "$publicRepo\scripts\foundation" -Force | Out-Null
+New-Item -ItemType Directory -Path "$publicRepo\scripts\utilities\DEPLOYMENT" -Force | Out-Null
+Copy-Item "$privateRepo\scripts\foundation\bootstrap.ps1" "$publicRepo\scripts\foundation\bootstrap.ps1" -Force
+Copy-Item "$privateRepo\scripts\foundation\bootstrap-machine.ps1" "$publicRepo\scripts\foundation\bootstrap-machine.ps1" -Force
+Copy-Item "$privateRepo\scripts\foundation\setup-multi-machine.ps1" "$publicRepo\scripts\foundation\setup-multi-machine.ps1" -Force
+Copy-Item "$privateRepo\scripts\utilities\DEPLOYMENT\setup-wizard.ps1" "$publicRepo\scripts\utilities\DEPLOYMENT\setup-wizard.ps1" -Force
+Copy-Item "$privateRepo\scripts\utilities\DEPLOYMENT\install-github-runner.ps1" "$publicRepo\scripts\utilities\DEPLOYMENT\install-github-runner.ps1" -Force
 
 # 1. Update public docs
 Write-Output "📄 Syncing public docs..."
@@ -93,6 +104,9 @@ if (Test-Path "$publicRepo\config") {
 }
 New-Item -ItemType Directory -Path "$publicRepo\config" -Force | Out-Null
 Copy-Item "$privateRepo\config\auto-delegation.json" "$publicRepo\config\auto-delegation.json" -Force
+Copy-Item "$privateRepo\config\workspace.example.json" "$publicRepo\config\workspace.example.json" -Force
+Copy-Item "$privateRepo\config\workspace.portable.example.json" "$publicRepo\config\workspace.portable.example.json" -Force
+Copy-Item "$privateRepo\config\github-runner.example.json" "$publicRepo\config\github-runner.example.json" -Force
 
 # 4. Copy public stubs (pre-built public artifacts)
 if (Test-Path "$buildDir\public") {
@@ -137,17 +151,41 @@ if (-not $skipPush) {
     Push-Location $publicRepo
 
     # Detect default branch from remote
+    git fetch origin --prune 2>&1 | Out-Null
+    git remote set-head origin -a 2>&1 | Out-Null
     $remoteBranch = git symbolic-ref refs/remotes/origin/HEAD 2>$null
     if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrEmpty($remoteBranch)) {
-        $defaultBranch = "master"
+        $defaultBranch = "main"
     } else {
         $defaultBranch = $remoteBranch -replace '^refs/remotes/origin/', ''
+    }
+
+    # Ensure local branch matches remote default before committing
+    $remoteBranchExists = git ls-remote --heads origin $defaultBranch 2>$null
+    if ([string]::IsNullOrWhiteSpace($remoteBranchExists)) {
+        Write-Output "❌ Remote default branch '$defaultBranch' not found in $publicRepoSlug"
+        Pop-Location
+        exit 1
+    }
+
+    $localBranch = git branch --list $defaultBranch 2>$null
+    if ([string]::IsNullOrWhiteSpace($localBranch)) {
+        git checkout -B $defaultBranch "origin/$defaultBranch" 2>&1 | Out-Null
+    } else {
+        git checkout $defaultBranch 2>&1 | Out-Null
+    }
+
+    git pull --rebase origin $defaultBranch 2>&1 | Out-Null
+    if ($LASTEXITCODE -ne 0) {
+        Write-Output "❌ Could not rebase local $defaultBranch with origin/$defaultBranch"
+        Pop-Location
+        exit 1
     }
 
     git add .
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm"
     $commitMsg = "sync: automated sync from private repo - $timestamp"
-    $commitResult = git commit -m $commitMsg 2>&1
+    git commit -m $commitMsg 2>&1 | Out-Null
     if ($LASTEXITCODE -eq 0) {
         Write-Output "✅ Committed: $commitMsg"
         $pushResult = git push origin $defaultBranch 2>&1
