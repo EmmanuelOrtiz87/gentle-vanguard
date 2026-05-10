@@ -3,7 +3,14 @@
     "enabled": true,
     "version": "1.0",
     "telemetryDirectory": ".telemetry",
-    "correlationIdFormat": "session-YYYY-MM-DD-XX-XXXXXXXX",
+    "correlationIdFormat": "{user}-session-YYYY-MM-DD-XX-XXXXXXXX",
+    "correlationIdComponents": {
+      "user": "resolved from artifact_naming.username_sources",
+      "session": "permanent session ID",
+      "date": "YYYY-MM-DD",
+      "seq": "per-user sequential per day (01-99)",
+      "suffix": "random hex (8 chars)"
+    },
     "spanHierarchy": {
       "enabled": true,
       "maxDepth": 10,

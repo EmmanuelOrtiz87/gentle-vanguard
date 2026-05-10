@@ -1121,6 +1121,49 @@
         "cross-team",
         "high-risk"
       ]
+    },
+    "constraint_optimization": {
+      "enabled": true,
+      "passes_threshold": 3,
+      "state_file": ".session/constraint-retention-state.json",
+      "track_elements": [
+        "requiredEvidence",
+        "compliance_checkpoints"
+      ],
+      "soft_drop": true,
+      "reset_on_failure": true,
+      "notify_on_drop": false
+    },
+    "artifact_naming": {
+      "enabled": true,
+      "mode": "username_prefix",
+      "modes_available": [
+        "username_prefix",
+        "user_subdirectory",
+        "session_scoped"
+      ],
+      "username_sources": [
+        "$env:FOUNDATION_USERNAME",
+        "$env:USERNAME",
+        "git config user.name"
+      ],
+      "sanitize": true,
+      "separator": "-",
+      "timestamp_format": "YYYY-MM-DD-HHmmss",
+      "file_locking": {
+        "enabled": true,
+        "method": "lock_file",
+        "lock_directory": ".session/locks",
+        "retry_attempts": 3,
+        "retry_delay_ms": 200,
+        "scope": [
+          "telemetry-master.csv",
+          "agent-usage.csv",
+          "context-usage.csv",
+          "token-guard-usage.csv",
+          "cloud-agent-telemetry.csv"
+        ]
+      }
     }
   },
   "agentProfiles": {
@@ -1131,6 +1174,13 @@
         "at least 3 clarification questions answered",
         "problem statement documented"
       ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
       "hedgingBlocked": false,
       "maxRetries": 2,
       "escalateOnFailure": "orchestrator",
@@ -1144,6 +1194,13 @@
         "API contract defined",
         "at least 1 tradeoff explained"
       ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
       "hedgingBlocked": false,
       "maxRetries": 2,
       "escalateOnFailure": "orchestrator",
@@ -1157,6 +1214,13 @@
         "no lint/compile errors",
         "at least 1 test covers the change"
       ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
       "hedgingBlocked": true,
       "maxRetries": 3,
       "escalateOnFailure": "QA",
@@ -1170,6 +1234,13 @@
         "test passes (exit code 0)",
         "coverage report generated"
       ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
       "hedgingBlocked": true,
       "maxRetries": 1,
       "escalateOnFailure": "orchestrator",
@@ -1183,6 +1254,13 @@
         "rollback plan documented",
         "environment verified"
       ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
       "hedgingBlocked": true,
       "maxRetries": 1,
       "escalateOnFailure": "orchestrator",
@@ -1196,6 +1274,13 @@
         "no secrets detected",
         "compliance checklist signed off"
       ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
       "hedgingBlocked": true,
       "maxRetries": 1,
       "escalateOnFailure": "orchestrator",
@@ -1208,6 +1293,13 @@
         "doc file written to disk",
         "all referenced paths exist"
       ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
       "hedgingBlocked": false,
       "maxRetries": 2,
       "escalateOnFailure": "orchestrator",
@@ -1221,6 +1313,13 @@
         "commit follows conventional commits format",
         "no push to protected branch (main/develop) without PR"
       ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
       "hedgingBlocked": true,
       "maxRetries": 1,
       "escalateOnFailure": "orchestrator",
@@ -1242,6 +1341,13 @@
         "content piece drafted with clear value proposition",
         "SEO keywords integrated naturally"
       ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
       "hedgingBlocked": false,
       "maxRetries": 2,
       "escalateOnFailure": "DOC",
@@ -1254,6 +1360,13 @@
         "account plan or deal proposal documented",
         "pipeline stage and next action defined"
       ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
       "hedgingBlocked": false,
       "maxRetries": 2,
       "escalateOnFailure": "orchestrator",
@@ -1266,6 +1379,13 @@
         "assumptions documented with sources",
         "model includes error checks (balance sheet must balance)"
       ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
       "hedgingBlocked": true,
       "maxRetries": 2,
       "escalateOnFailure": "orchestrator",
@@ -1278,6 +1398,13 @@
         "job description or rubric uses inclusive language",
         "process documented with clear stages"
       ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
       "hedgingBlocked": false,
       "maxRetries": 2,
       "escalateOnFailure": "orchestrator",
@@ -1290,6 +1417,13 @@
         "applicable regulation cited (GDPR, HIPAA, etc.)",
         "compliance checklist completed"
       ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
       "hedgingBlocked": true,
       "maxRetries": 1,
       "escalateOnFailure": "orchestrator",
@@ -1302,6 +1436,13 @@
         "telemetry record has User_ID, Timestamp, and metric value",
         "data source path validated"
       ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
       "hedgingBlocked": true,
       "maxRetries": 2,
       "escalateOnFailure": "REPORT",
@@ -1315,6 +1456,13 @@
         "no hardcoded secrets",
         "idempotent execution verified"
       ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
       "hedgingBlocked": true,
       "maxRetries": 2,
       "escalateOnFailure": "orchestrator",
