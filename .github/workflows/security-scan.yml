@@ -61,7 +61,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [powershell, python, actions]
+        language: [python, actions]
     steps:
       - uses: actions/checkout@v6
       - uses: github/codeql-action/init@v4

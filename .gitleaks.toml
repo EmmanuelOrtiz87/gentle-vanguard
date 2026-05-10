@@ -29,6 +29,11 @@ regexes = [
     "^203\\.0\\.113\\.",
 ]
 
+commits = [
+    # Historical docs-only false positives for foundation-master-key-reference
+    "cea299f7b984b983b1f8765fc867af49bb7879b1",
+]
+
 # Custom rules for project-specific patterns
 [[rules]]
 id = "foundation-master-key-reference"
@@ -42,4 +47,6 @@ regexes = [
     "master.key file is required",
     "is NEVER distributed",
     "key stored in .keys/master.key",
+    "is NEVER distribut",
+    "key stored in `keys/",
 ]

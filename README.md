@@ -46,15 +46,15 @@ cd foundation-public
 
 ## 🚀 Inicio Rápido
 
-| Acción                 | Comando                                                        | Descripción                    |
-| ---------------------- | -------------------------------------------------------------- | ------------------------------ |
-| 🎨 **Bootstrap**       | `.\scripts\foundation\bootstrap.ps1`                        | Inicializa el workspace        |
-| 🖥️ **Multi-PC setup**  | `.\scripts\foundation\setup-multi-machine.ps1`              | Replica entorno en otra PC     |
-| 🤖 **Runner opcional** | `.\scripts\utilities\DEPLOYMENT\install-github-runner.ps1` | Instala self-hosted runner     |
-| 📊 **Health Check**    | `.\scripts\utilities\wf.ps1 health`                            | Verifica estado del workspace  |
-| 🔍 **Listar Skills**   | `.\scripts\utilities\wf.ps1 skills`                            | Catálogo de 125+ skills        |
-| 📈 **Dashboard**       | `.\scripts\monitoring\executive-dashboard.ps1 -Mode dashboard` | Monitoreo en tiempo real       |
-| 🧪 **Validación**      | `.\scripts\utilities\agent-verify.ps1 -Domain all`             | Auditoría completa             |
+| Acción                 | Comando                                                        | Descripción                   |
+| ---------------------- | -------------------------------------------------------------- | ----------------------------- |
+| 🎨 **Bootstrap**       | `.\scripts\foundation\bootstrap.ps1`                           | Inicializa el workspace       |
+| 🖥️ **Multi-PC setup**  | `.\scripts\foundation\setup-multi-machine.ps1`                 | Replica entorno en otra PC    |
+| 🤖 **Runner opcional** | `.\scripts\utilities\DEPLOYMENT\install-github-runner.ps1`     | Instala self-hosted runner    |
+| 📊 **Health Check**    | `.\scripts\utilities\wf.ps1 health`                            | Verifica estado del workspace |
+| 🔍 **Listar Skills**   | `.\scripts\utilities\wf.ps1 skills`                            | Catálogo de 125+ skills       |
+| 📈 **Dashboard**       | `.\scripts\monitoring\executive-dashboard.ps1 -Mode dashboard` | Monitoreo en tiempo real      |
+| 🧪 **Validación**      | `.\scripts\utilities\agent-verify.ps1 -Domain all`             | Auditoría completa            |
 
 > 💡 **TIP:** Usa `wf.ps1 help` para ver todos los comandos disponibles. La CLI `wf.ps1` es tu
 > interfaz unificada para TODO.

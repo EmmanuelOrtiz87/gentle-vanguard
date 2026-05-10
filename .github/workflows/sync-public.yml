@@ -26,7 +26,9 @@ on:
   workflow_dispatch:
     inputs:
       public_repo:
-        description: 'Optional override owner/repo for public sync target (example: EmmanuelOrtiz87/foundation-public)'
+        description:
+          'Optional override owner/repo for public sync target (example:
+          EmmanuelOrtiz87/foundation-public)'
         required: false
         default: ''
       public_repo_default_branch:
