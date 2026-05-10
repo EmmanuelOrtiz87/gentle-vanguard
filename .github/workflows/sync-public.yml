@@ -9,11 +9,12 @@ concurrency:
 
 on:
   push:
-    branches: [main]
+    branches: [develop]
     paths:
       - '.github/workflows/sync-public.yml'
       - 'build/**'
       - 'config/**'
+      - 'scripts/foundation/**'
       - 'scripts/utilities/DEPLOYMENT/**'
       - 'skills/**'
       - 'docs/**'
@@ -23,6 +24,15 @@ on:
       - 'SECURITY.md'
       - 'CHANGELOG.md'
   workflow_dispatch:
+    inputs:
+      public_repo:
+        description: 'Optional override owner/repo for public sync target (example: EmmanuelOrtiz87/foundation-public)'
+        required: false
+        default: ''
+      public_repo_default_branch:
+        description: 'Optional override for public repo default branch (example: main or master)'
+        required: false
+        default: ''
 
 jobs:
   sync:
@@ -40,6 +50,8 @@ jobs:
         shell: pwsh
         env:
           PAT_SYNC: ${{ secrets.PAT_SYNC }}
+          PUBLIC_REPO: ${{ github.event.inputs.public_repo }}
+          PUBLIC_REPO_DEFAULT_BRANCH: ${{ github.event.inputs.public_repo_default_branch }}
         run: |
           if ([string]::IsNullOrEmpty($env:PAT_SYNC)) {
             Write-Output "::warning::PAT_SYNC secret NOT configured. To fix:"
@@ -48,9 +60,15 @@ jobs:
             exit 0
           }
 
+          $publicRepoSlug = if ([string]::IsNullOrWhiteSpace($env:PUBLIC_REPO)) {
+            'EmmanuelOrtiz87/foundation-public'
+          } else {
+            $env:PUBLIC_REPO
+          }
+
           $publicDir = "$env:GITHUB_WORKSPACE\public"
           $privateRepo = "$env:GITHUB_WORKSPACE\private"
-          $authUrl = "https://x-access-token:$env:PAT_SYNC@github.com/EmmanuelOrtiz87/foundation-public.git"
+          $authUrl = "https://x-access-token:$env:PAT_SYNC@github.com/$publicRepoSlug.git"
 
           # --- Clone public repo ---
           Write-Output "::group::Clone foundation-public"
@@ -58,19 +76,31 @@ jobs:
           Set-Location $publicDir
           git init
           git remote add origin $authUrl
-          git fetch origin master --depth=1 2>&1
+
+          $defaultBranch = if ([string]::IsNullOrWhiteSpace($env:PUBLIC_REPO_DEFAULT_BRANCH)) {
+            $headLine = git ls-remote --symref origin HEAD 2>&1 | Select-String 'refs/heads/' | Select-Object -First 1
+            if ($headLine) {
+              (($headLine.ToString() -split '\s+')[1] -replace 'refs/heads/', '')
+            } else {
+              'main'
+            }
+          } else {
+            $env:PUBLIC_REPO_DEFAULT_BRANCH
+          }
+
+          git fetch origin $defaultBranch --depth=1 2>&1
           if ($LASTEXITCODE -ne 0) {
             Write-Output "::error::Failed to fetch foundation-public. Check PAT permissions."
             exit 1
           }
-          git checkout -b master FETCH_HEAD
+          git checkout -B $defaultBranch FETCH_HEAD
           git config --local user.name "foundation-bot"
-          git config --local user.email "bot@gentleman-foundation"
+          git config --local user.email "bot@foundation"
           Write-Output "::endgroup::"
 
           # --- Run sync script ---
           Write-Output "::group::Sync files"
-          & "$privateRepo\scripts\utilities\DEPLOYMENT\sync-to-public.ps1" -privateRepo $privateRepo -publicRepo $publicDir -skipPush
+          & "$privateRepo\scripts\utilities\DEPLOYMENT\sync-to-public.ps1" -privateRepo $privateRepo -publicRepo $publicDir -publicRepoSlug $publicRepoSlug -skipPush
           Write-Output "::endgroup::"
 
           # --- Commit and push ---
@@ -83,9 +113,9 @@ jobs:
           git add -A
           $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm"
           git commit -m "sync: automated sync from private repo - $timestamp"
-          git push origin master 2>&1
+          git push origin $defaultBranch 2>&1
           if ($LASTEXITCODE -eq 0) {
-            Write-Output "✅ Pushed to foundation-public master"
+            Write-Output "✅ Pushed to foundation-public $defaultBranch"
           } else {
             Write-Output "::error::Push failed (exit code $LASTEXITCODE)"
             exit 1

@@ -46,6 +46,8 @@ New to Workspace Foundation? Start here:
 | -------------------------------------------------------------------------- | --------------------------- |
 | **[AI-CONFIGURATION.md](AI-CONFIGURATION.md)**                             | AI tool configuration       |
 | **[DEVELOPMENT-WORKFLOW.md](DEVELOPMENT-WORKFLOW.md)**                     | Development workflow issues |
+| **[GITHUB-RUNNER-SETUP.md](GITHUB-RUNNER-SETUP.md)**                       | Optional self-hosted runner |
+| **[REPO-RENAME-MIGRATION.md](REPO-RENAME-MIGRATION.md)**                   | Rename migration workflow   |
 | **[GITHUB-ACTIONS-TROUBLESHOOTING.md](GITHUB-ACTIONS-TROUBLESHOOTING.md)** | CI/CD troubleshooting       |
 
 ---
@@ -96,6 +98,8 @@ New to Workspace Foundation? Start here:
 | ARCHITECTURE.md                           | Architecture                       |
 | DEVELOPMENT-WORKFLOW.md                   | Development workflow               |
 | AI-CONFIGURATION.md                       | AI configuration                   |
+| GITHUB-RUNNER-SETUP.md                    | Optional self-hosted runner setup  |
+| REPO-RENAME-MIGRATION.md                  | Repository rename migration         |
 | GITHUB-ACTIONS-TROUBLESHOOTING.md         | CI/CD troubleshooting              |
 | DEPLOYMENT-READY-SUMMARY.md               | Deployment overview                |
 | VISUAL-GUIDE.md                           | Visual design standards            |
