@@ -116,7 +116,7 @@ foreach ($repo in $Repos) {
 
         $check = gh api "repos/$Owner/$repo/rulesets/$($target.id)" | ConvertFrom-Json
         if ($check.current_user_can_bypass -eq 'always') {
-            Write-Ok "$repo: bypass enabled for $actorLogin"
+            Write-Ok "${repo}: bypass enabled for $actorLogin"
         } else {
             Write-Warn "${repo}: update sent but bypass check did not return always."
             $hasFailure = $true
