@@ -11,11 +11,11 @@ concurrency:
 
 on:
   push:
-    branches: [main, develop]
+    branches: [develop]
   pull_request:
-    branches: [main, develop]
+    branches: [develop, main]
   schedule:
-    - cron: '30 16 * * 0'
+    - cron: '30 16 * * 0' # Weekly on Sunday at 13:30 GMT-3 (16:30 UTC)
 
 jobs:
   dependency-scan:
@@ -61,7 +61,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [powershell, python, actions]
+        # CodeQL is kept on GitHub Actions workflows here to avoid unstable parsing on non-primary languages.
+        language: [actions]
     steps:
       - uses: actions/checkout@v6
       - uses: github/codeql-action/init@v4

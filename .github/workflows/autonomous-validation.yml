@@ -9,9 +9,9 @@ concurrency:
 
 on:
   push:
-    branches: [main, master]
+    branches: [develop]
   pull_request:
-    branches: [main, master]
+    branches: [develop, main]
   schedule:
     - cron: '0 13 * * 1' # Weekly on Monday at 10:00 GMT-3 (13:00 UTC)
 

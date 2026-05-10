@@ -8,7 +8,9 @@
 
 param(
     [string]$GitUser,
-    [string]$GitEmail
+    [string]$GitEmail,
+    [switch]$InstallGitHubRunner,
+    [string]$GitHubRunnerConfigPath = 'config/github-runner.local.json'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -149,6 +151,23 @@ if (Test-Path (Join-Path $workspaceRoot ".git")) {
     Write-Success "Git hooks path set to 'scripts/git-hooks'."
 } else {
     Write-InfoMsg "Not a Git repository. Skipping hook configuration."
+}
+
+if ($InstallGitHubRunner) {
+    Write-Step "Step 4b: Installing optional GitHub self-hosted runner..."
+    $runnerInstaller = Join-Path $workspaceRoot 'scripts/utilities/DEPLOYMENT/install-github-runner.ps1'
+    if (-not (Test-Path $runnerInstaller)) {
+        Write-ErrorMsg "Runner installer not found: $runnerInstaller"
+        exit 1
+    }
+
+    & $runnerInstaller -ConfigPath (Join-Path $workspaceRoot $GitHubRunnerConfigPath)
+    if ($LASTEXITCODE -eq 0) {
+        Write-Success 'GitHub runner installation finished.'
+    } else {
+        Write-ErrorMsg 'GitHub runner installation failed.'
+        exit 1
+    }
 }
 
 Write-Step "Step 5: System Health Report (Health Check)..."
