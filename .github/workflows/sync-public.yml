@@ -11,6 +11,7 @@ on:
   push:
     branches: [main]
     paths:
+      - '.github/workflows/sync-public.yml'
       - 'build/**'
       - 'config/**'
       - 'scripts/utilities/DEPLOYMENT/**'
