@@ -3,7 +3,7 @@
 **Version:** 1.0.0  
 **Last reviewed:** 2026-05-05  
 **Framework:** Pester 5.x (PowerShell unit/integration tests)  
-**Enforced by:** `agent-verify.ps1` (`tests` domain check) + CI `foundation-quality-gate.yml`  
+**Enforced by:** `agent-verify.ps1` (`tests` domain check) + CI `foundation-quality-gate.yml`
 
 ---
 
@@ -25,12 +25,12 @@ Target distribution: **70% unit · 20% integration · 10% E2E**.
 
 ## 2. Coverage Targets
 
-| Layer | Minimum Coverage | Target |
-|-------|-----------------|--------|
-| Critical scripts (hooks, wf.ps1, token-guard) | 80% | 90% |
-| Utility scripts (telemetry, metrics, reports) | 60% | 75% |
-| Config validation functions | 100% | 100% |
-| Integration flows (agent routing, SDD gate) | 50% | 70% |
+| Layer                                         | Minimum Coverage | Target |
+| --------------------------------------------- | ---------------- | ------ |
+| Critical scripts (hooks, wf.ps1, token-guard) | 80%              | 90%    |
+| Utility scripts (telemetry, metrics, reports) | 60%              | 75%    |
+| Config validation functions                   | 100%             | 100%   |
+| Integration flows (agent routing, SDD gate)   | 50%              | 70%    |
 
 `agent-verify.ps1` gates on: **0 test failures** + **minimum 12 passing unit tests**.
 
@@ -55,6 +55,7 @@ tests/
 ```
 
 Rules:
+
 - Unit test files: `<name>.tests.ps1`
 - Integration test files: `<name>.integration.tests.ps1`
 - Security test files: `<name>.security.tests.ps1`
@@ -92,6 +93,7 @@ Describe '<ComponentName> Tests' {
 ```
 
 Rules:
+
 - **Every `It` block must have a single, clear assertion**.
 - **Use `Should -Be` not `Should Be`** (Pester 5 syntax — no space).
 - **No `$global:` in tests** — use `$script:` for shared state.
@@ -102,6 +104,7 @@ Rules:
 ## 5. What to Test
 
 ### Always test:
+
 - ✅ Script file **exists** (`Test-Path`)
 - ✅ Script **parses without errors** (PSParser)
 - ✅ Critical config files **are valid JSON** and have **required keys**
@@ -109,12 +112,14 @@ Rules:
 - ✅ Output format for `-AsJson` flags (valid JSON)
 
 ### Also test where feasible:
+
 - ✅ Function return values with known inputs
 - ✅ Advisory vs blocking classification (hook-advisory-classifier)
 - ✅ SLO thresholds in benchmark script
 - ✅ Drift detection with known fixture data
 
 ### Do NOT test:
+
 - ❌ External services (git, engram, GitHub API) — mock or skip
 - ❌ File system mutations without cleanup
 - ❌ Time-dependent logic without mocking `Get-Date`
@@ -170,9 +175,9 @@ Invoke-Pester -CodeCoverage scripts/**/*.ps1 -CodeCoverageOutputFile coverage.xm
 
 ## 8. Test Quality Gates
 
-| Gate | Value | Enforcement |
-|------|-------|-------------|
-| Zero failing tests | 0 failures | `agent-verify.ps1` + CI |
-| Minimum unit tests | ≥ 12 passing | `agent-verify.ps1` |
-| Parse errors in test files | 0 | `ps-lint.yml` |
-| No `$global:` in tests | Enforced | PSScriptAnalyzer |
+| Gate                       | Value        | Enforcement             |
+| -------------------------- | ------------ | ----------------------- |
+| Zero failing tests         | 0 failures   | `agent-verify.ps1` + CI |
+| Minimum unit tests         | ≥ 12 passing | `agent-verify.ps1`      |
+| Parse errors in test files | 0            | `ps-lint.yml`           |
+| No `$global:` in tests     | Enforced     | PSScriptAnalyzer        |

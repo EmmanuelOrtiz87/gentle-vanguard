@@ -7,11 +7,13 @@
 ## Quick Start
 
 ### Create a new branch (Recommended - Interactive)
+
 ```powershell
 .\scripts\utilities\create-gitflow-branch.ps1
 ```
 
 The script will guide you through:
+
 1. Selecting the type of change (feature, bugfix, chore, hotfix, release)
 2. Describing the change
 3. Creating the branch automatically with the correct name
@@ -22,6 +24,7 @@ The script will guide you through:
 ## Standard Workflows
 
 ### For New Features
+
 ```bash
 # Option 1: Interactive (Recommended)
 .\scripts\utilities\create-gitflow-branch.ps1
@@ -40,6 +43,7 @@ git push -u origin feature/feature-name
 ---
 
 ### For Bug Fixes
+
 ```bash
 # Option 1: Interactive (Recommended)
 .\scripts\utilities\create-gitflow-branch.ps1
@@ -58,6 +62,7 @@ git push -u origin bugfix/bug-description
 ---
 
 ### For Maintenance and Updates
+
 ```bash
 # Option 1: Interactive (Recommended)
 .\scripts\utilities\create-gitflow-branch.ps1
@@ -76,6 +81,7 @@ git push -u origin chore/change-description
 ---
 
 ### For Critical Production Fixes (Hotfix)
+
 ```bash
 # Option 1: Interactive (Recommended)
 .\scripts\utilities\create-gitflow-branch.ps1
@@ -94,6 +100,7 @@ git push -u origin hotfix/critical-description
 ---
 
 ### For Release Preparation
+
 ```bash
 # Option 1: Interactive (Recommended)
 .\scripts\utilities\create-gitflow-branch.ps1
@@ -118,6 +125,7 @@ git push -u origin release/v1.2.0
 **Cause**: You tried to push directly to main or develop
 
 **Solution**:
+
 ```bash
 # Create a working branch
 .\scripts\utilities\create-gitflow-branch.ps1
@@ -134,6 +142,7 @@ git push -u origin feature/your-change
 **Cause**: Your branch does not have the correct prefix
 
 **Solution**: Your branch must start with:
+
 - `feature/` - for new functionality
 - `bugfix/` - for bug fixes
 - `chore/` - for maintenance
@@ -154,10 +163,12 @@ git checkout -b chore/update-dependencies
 **Cause**: Your PR has the incorrect base
 
 **Solution**: Depends on branch type:
+
 - `feature/*`, `bugfix/*`, `chore/*` - Base must be: **develop**
 - `hotfix/*`, `release/*` - Base must be: **main**
 
 **How to fix**:
+
 1. Close the current PR
 2. Create a new PR with the correct base
 3. Or edit the PR and change the base
@@ -167,20 +178,23 @@ git checkout -b chore/update-dependencies
 ## Branch Information
 
 ### Branch `main` (Production)
+
 - **Purpose**: Production code
 - **Protected**: Yes
 - **Who can merge**: Only through PR
-- **Allowed PR types**: hotfix/*, release/*
+- **Allowed PR types**: hotfix/_, release/_
 - **Requires review**: Yes
 
 ### Branch `develop` (Development)
+
 - **Purpose**: Development code
 - **Protected**: Yes
 - **Who can merge**: Only through PR
-- **Allowed PR types**: feature/*, bugfix/*, chore/*
+- **Allowed PR types**: feature/_, bugfix/_, chore/\*
 - **Requires review**: Yes
 
 ### Work Branches
+
 - **Naming**: `type/description`
 - **Duration**: Temporary (deleted after merge)
 - **Base**: Depends on type
@@ -191,36 +205,42 @@ git checkout -b chore/update-dependencies
 ## Complete Workflow Step by Step
 
 ### Step 1: Create branch
+
 ```bash
 .\scripts\utilities\create-gitflow-branch.ps1
 # Select type and description
 ```
 
 ### Step 2: Make changes
+
 ```bash
 # Edit the necessary files
 code .
 ```
 
 ### Step 3: Stage changes
+
 ```bash
 git add .
 git status  # Verify everything is correct
 ```
 
 ### Step 4: Create commit
+
 ```bash
 git commit -m "clear description of change"
 # Pre-commit hook will validate automatically
 ```
 
 ### Step 5: Push branch
+
 ```bash
 git push -u origin feature/your-branch
 # Pre-push hook will validate automatically
 ```
 
 ### Step 6: Open Pull Request
+
 1. Go to GitHub
 2. Click "Compare & pull request"
 3. Verify:
@@ -230,11 +250,13 @@ git push -u origin feature/your-branch
 4. Click "Create pull request"
 
 ### Step 7: Wait for review
+
 - Reviewers will validate your code
 - Respond to comments if needed
 - Make changes if requested
 
 ### Step 8: Merge
+
 - Once approved, merge the PR
 - Branch will be deleted automatically
 
@@ -243,6 +265,7 @@ git push -u origin feature/your-branch
 ## Best Practices
 
 ### Good Branch Names
+
 ```
 feature/add-user-authentication
 bugfix/fix-login-timeout
@@ -252,6 +275,7 @@ release/v1.2.0
 ```
 
 ### Bad Branch Names
+
 ```
 feature/my-changes
 fix/stuff
@@ -261,6 +285,7 @@ temp-branch
 ```
 
 ### Good Commit Messages
+
 ```
 "Add user authentication with JWT"
 "Fix login timeout issue"
@@ -269,6 +294,7 @@ temp-branch
 ```
 
 ### Bad Commit Messages
+
 ```
 "changes"
 "fix"
@@ -282,12 +308,16 @@ temp-branch
 ## Automation
 
 ### Pre-Commit Hook
+
 Runs automatically when you run `git commit`
+
 - Validates code with native
 - Verifies review policies
 
 ### Pre-Push Hook
+
 Runs automatically when you run `git push`
+
 - Validates GitFlow
 - Validates governance
 - Validates homologation
@@ -299,16 +329,19 @@ If any validation fails, the push will be blocked. Read the error message to kno
 ## Need Help?
 
 ### Interactive Command
+
 ```bash
 .\scripts\utilities\create-gitflow-branch.ps1
 ```
 
 ### Check Project Status
+
 ```bash
 .\wf.ps1 health
 ```
 
 ### Validate GitFlow Manually
+
 ```bash
 .\scripts\diagnostics\validate-gitflow.ps1
 ```
@@ -318,6 +351,7 @@ If any validation fails, the push will be blocked. Read the error message to kno
 ## Complete Documentation
 
 For more information, see:
+
 - `docs/guides/GITFLOW-ENFORCEMENT-ANALYSIS.md` - Detailed analysis
 - `docs/guides/DEVELOPER-COMMUNICATION-POLICY.md` - Development policies
 - `scripts/diagnostics/validate-gitflow.ps1` - GitFlow validator

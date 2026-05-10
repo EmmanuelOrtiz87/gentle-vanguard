@@ -5,6 +5,7 @@
 Operate the Foundation stack without keeping orchestrator controls permanently active.
 
 Default mode:
+
 1. Passive by default.
 2. Activate when implementation starts.
 3. Validate and close out.
@@ -19,6 +20,7 @@ Run from foundation root:
 `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\stack-on-demand.ps1`
 
 Actions:
+
 1. `-Action prepare`
 2. `-Action activate`
 3. `-Action validate`
@@ -26,6 +28,7 @@ Actions:
 5. `-Action deactivate`
 
 Optional:
+
 1. `-ProjectPath <path>` to apply to an existing project.
 2. `-AllowPassive` for validation when deactivation is expected.
 3. `-Detailed` for expanded validator output.

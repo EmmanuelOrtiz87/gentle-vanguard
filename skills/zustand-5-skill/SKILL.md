@@ -1,8 +1,8 @@
 ---
 name: zustand-5-skill
 description: >
-  Zustand 5 state management: create store, actions, slices, persistence.
-  Trigger: "Zustand", "state management", "store", "useStore", "persistence".
+  Zustand 5 state management: create store, actions, slices, persistence. Trigger: "Zustand", "state
+  management", "store", "useStore", "persistence".
 ---
 
 ## When to Use
@@ -34,7 +34,7 @@ const useCounterStore = create<CounterStore>((set) => ({
 // Usage
 function Counter() {
   const { count, increment, decrement, reset } = useCounterStore();
-  
+
   return (
     <div>
       <p>Count: {count}</p>
@@ -109,12 +109,10 @@ const createUserSlice = (set) => ({
 });
 
 // Combine slices
-const useStore = create(
-  (...a) => ({
-    ...createCounterSlice(...a),
-    ...createUserSlice(...a),
-  })
-);
+const useStore = create((...a) => ({
+  ...createCounterSlice(...a),
+  ...createUserSlice(...a),
+}));
 ```
 
 ## Persistence
@@ -134,8 +132,8 @@ const useSettingsStore = create(
     {
       name: 'settings-storage', // localStorage key
       partialize: (state) => ({ theme: state.theme }), // only persist theme
-    }
-  )
+    },
+  ),
 );
 ```
 
@@ -154,26 +152,24 @@ interface TodoStore {
 const useTodoStore = create<TodoStore>((set, get) => ({
   todos: [],
   isLoading: false,
-  
+
   fetchTodos: async () => {
     set({ isLoading: true });
     const todos = await api.getTodos();
     set({ todos, isLoading: false });
   },
-  
+
   addTodo: async (title) => {
     const todo = await api.createTodo({ title, completed: false });
     set((state) => ({ todos: [...state.todos, todo] }));
   },
-  
+
   toggleTodo: (id) => {
     set((state) => ({
-      todos: state.todos.map((t) =>
-        t.id === id ? { ...t, completed: !t.completed } : t
-      ),
+      todos: state.todos.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)),
     }));
   },
-  
+
   deleteTodo: (id) => {
     set((state) => ({
       todos: state.todos.filter((t) => t.id !== id),
@@ -189,9 +185,7 @@ const useTodoStore = create<TodoStore>((set, get) => ({
 const count = useCounterStore((state) => state.count);
 
 // Select multiple values
-const { count, user } = useStore(
-  (state) => ({ count: state.count, user: state.user })
-);
+const { count, user } = useStore((state) => ({ count: state.count, user: state.user }));
 
 // Derived value
 const doubleCount = useCounterStore((state) => state.count * 2);
@@ -199,17 +193,16 @@ const doubleCount = useCounterStore((state) => state.count * 2);
 // Selector with equality check
 const userName = useUserStore(
   (state) => state.user?.name,
-  (prev, next) => prev === next // custom equality
+  (prev, next) => prev === next, // custom equality
 );
 ```
 
 ## Quick Reference
 
-| Pattern | Code |
-|---------|------|
-| Basic store | `create<Store>((set) => ({ ... }))` |
-| Action | `set((state) => ({ ... }))` |
-| Selector | `useStore((s) => s.property)` |
-| Persist | `persist(store, { name: 'key' })` |
-| Async | `async (...) => { set({loading:true}); ... }` |
-
+| Pattern     | Code                                          |
+| ----------- | --------------------------------------------- |
+| Basic store | `create<Store>((set) => ({ ... }))`           |
+| Action      | `set((state) => ({ ... }))`                   |
+| Selector    | `useStore((s) => s.property)`                 |
+| Persist     | `persist(store, { name: 'key' })`             |
+| Async       | `async (...) => { set({loading:true}); ... }` |

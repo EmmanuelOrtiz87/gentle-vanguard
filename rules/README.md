@@ -11,30 +11,35 @@ Purpose:
 ## Structure
 
 `rules/custom/technical/`:
+
 - Coding standards and architecture constraints.
 
 `rules/custom/business/`:
+
 - Domain policies, workflows, and product constraints.
 
 `rules/custom/review/`:
+
 - Code review checklists, severity rules, and acceptance gates.
 
 ## Rule Authoring Guidance
 
-1. **Format is mandatory `.md`**  only Markdown files are loaded; other formats are ignored.
-2. `README.md` files in each scope directory are reserved for documentation and excluded from rule loading.
-3. Use one file per rule group, named with the rule ID prefix (e.g., `TECH-001-parser-validation.md`).
-4. Keep files concise and explicit  short actionable statements, not long prose.
+1. **Format is mandatory `.md`** only Markdown files are loaded; other formats are ignored.
+2. `README.md` files in each scope directory are reserved for documentation and excluded from rule
+   loading.
+3. Use one file per rule group, named with the rule ID prefix (e.g.,
+   `TECH-001-parser-validation.md`).
+4. Keep files concise and explicit short actionable statements, not long prose.
 5. Follow the mandatory template defined in `docs/guides/CUSTOM-RULES.md`.
 6. Avoid duplicating global security/compliance policies.
 
 ## Rule ID Convention
 
-| Scope         | Prefix  | Example    |
-|---------------|---------|------------|
-| `technical/`  | `TECH-` | `TECH-001` |
-| `business/`   | `BIZ-`  | `BIZ-001`  |
-| `review/`     | `REV-`  | `REV-001`  |
+| Scope        | Prefix  | Example    |
+| ------------ | ------- | ---------- |
+| `technical/` | `TECH-` | `TECH-001` |
+| `business/`  | `BIZ-`  | `BIZ-001`  |
+| `review/`    | `REV-`  | `REV-001`  |
 
 ## Runtime Integration
 

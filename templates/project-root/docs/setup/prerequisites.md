@@ -24,7 +24,8 @@
 
 - The workspace foundation does not require a base model installed locally.
 - If a project uses AI-assisted workflows, follow `docs/ai-models.md`.
-- Choose either a local model path or a cloud model path, not both unless the project explicitly needs a fallback.
+- Choose either a local model path or a cloud model path, not both unless the project explicitly
+  needs a fallback.
 - Record the selected provider and mode in `docs/project-context.md` or `ARCHITECTURE.md`.
 
 ## Validation

@@ -14,76 +14,78 @@
 
 ## 🎯 Key Messages
 
-| Concepto | Mensaje | Impacto |
-|-----------|---------|---------|
-| **Local-First** | Todo el procesamiento ocurre localmente, cero dependencias externas | 🔒 Privacidad total |
-| **125+ Skills** | Skills especializados de IA para tareas comunes de desarrollo | 🚀 Cobertura total |
-| **Zero Token Overhead** | Auditoría y validación con cero uso de tokens de IA | 💰 Eficiencia máxima |
-| **Enterprise Security** | Integración con Lefthook + Trufflehog para detección de secretos | 🔐 Seguridad empresarial |
-| **Plugin Architecture** | Sistema extensible para workflows personalizados | 🧩 Escalabilidad |
+| Concepto                | Mensaje                                                             | Impacto                  |
+| ----------------------- | ------------------------------------------------------------------- | ------------------------ |
+| **Local-First**         | Todo el procesamiento ocurre localmente, cero dependencias externas | 🔒 Privacidad total      |
+| **125+ Skills**         | Skills especializados de IA para tareas comunes de desarrollo       | 🚀 Cobertura total       |
+| **Zero Token Overhead** | Auditoría y validación con cero uso de tokens de IA                 | 💰 Eficiencia máxima     |
+| **Enterprise Security** | Integración con Lefthook + Trufflehog para detección de secretos    | 🔐 Seguridad empresarial |
+| **Plugin Architecture** | Sistema extensible para workflows personalizados                    | 🧩 Escalabilidad         |
 
 ---
 
 ## 🎙️ Elevator Pitch
 
-> **"Foundation es un sistema de orquestación de workspace local-first que dota a los agentes de IA de 125+ skills especializados mientras mantiene todo el procesamiento en tu máquina. Cero dependencias en la nube, seguridad empresarial, y arquitectura de plugins extensible."**
+> **"Foundation es un sistema de orquestación de workspace local-first que dota a los agentes de IA
+> de 125+ skills especializados mientras mantiene todo el procesamiento en tu máquina. Cero
+> dependencias en la nube, seguridad empresarial, y arquitectura de plugins extensible."**
 
 ---
 
 ## 🎯 Target Audiences
 
-| Audiencia | Necesidad | Solución Foundation |
-|------------|-----------|-------------------|
-| **🛠️ Developers** | Workflows de desarrollo asistido por IA | Auto-delegación + 125 skills |
-| **👥 Teams** | Skills de agentes estandarizados y seguridad | GOV + OPS + QA workflows |
+| Audiencia          | Necesidad                                           | Solución Foundation             |
+| ------------------ | --------------------------------------------------- | ------------------------------- |
+| **🛠️ Developers**  | Workflows de desarrollo asistido por IA             | Auto-delegación + 125 skills    |
+| **👥 Teams**       | Skills de agentes estandarizados y seguridad        | GOV + OPS + QA workflows        |
 | **🏢 Enterprises** | Herramientas de desarrollo IA seguras y local-first | 100% local + OWASP + Trufflehog |
 
 ---
 
 ## 📢 Marketing Channels
 
-| Canal | Estrategia | Formato |
-|-------|------------|----------|
-| **GitHub** | README badges y documentación atractiva | Badges + emojis + tablas |
-| **Developer Forums** | Comunidades técnicas | Posts con código copy-paste |
-| **Blog Posts** | Artículos técnicos detallados | Markdown enriquecido |
-| **Conferences** | Charlas y talleres | Slides + demos en vivo |
+| Canal                | Estrategia                              | Formato                     |
+| -------------------- | --------------------------------------- | --------------------------- |
+| **GitHub**           | README badges y documentación atractiva | Badges + emojis + tablas    |
+| **Developer Forums** | Comunidades técnicas                    | Posts con código copy-paste |
+| **Blog Posts**       | Artículos técnicos detallados           | Markdown enriquecido        |
+| **Conferences**      | Charlas y talleres                      | Slides + demos en vivo      |
 
 ---
 
 ## 🎨 Assets Needed
 
-| Asset | Estado | Descripción |
-|-------|--------|-------------|
-| **🎨 Logo y identidad visual** | 📋 Pendiente | Diseño de marca completo |
-| **📸 Screenshot gallery** | 📋 Pendiente | TUI installer, wf.ps1 CLI, dashboards |
-| **🎥 Demo videos** | 📋 Pendiente | Instalación, primera sesión, delegación |
-| **📚 Case studies** | 📋 Pendiente | Casos de uso reales |
-| **📊 Comparison charts** | 📋 Pendiente | vs otras soluciones |
+| Asset                          | Estado       | Descripción                             |
+| ------------------------------ | ------------ | --------------------------------------- |
+| **🎨 Logo y identidad visual** | 📋 Pendiente | Diseño de marca completo                |
+| **📸 Screenshot gallery**      | 📋 Pendiente | TUI installer, wf.ps1 CLI, dashboards   |
+| **🎥 Demo videos**             | 📋 Pendiente | Instalación, primera sesión, delegación |
+| **📚 Case studies**            | 📋 Pendiente | Casos de uso reales                     |
+| **📊 Comparison charts**       | 📋 Pendiente | vs otras soluciones                     |
 
 ---
 
 ## 🏷️ Taglines
 
-| Tagline | Enfoque |
-|---------|---------|
-| `"AI agent skills, locally orchestrated"` | Orquestación local |
-| `"125+ skills, zero cloud, total control"` | Control total |
-| `"Local-first AI development workspace"` | Desarrollo IA local |
+| Tagline                                          | Enfoque                 |
+| ------------------------------------------------ | ----------------------- |
+| `"AI agent skills, locally orchestrated"`        | Orquestación local      |
+| `"125+ skills, zero cloud, total control"`       | Control total           |
+| `"Local-first AI development workspace"`         | Desarrollo IA local     |
 | `"Enterprise AI security, developer simplicity"` | Seguridad + simplicidad |
 
 ---
 
 ## 🚀 Quick Facts
 
-| Métrica | Valor | Nota |
-|---------|-------|------|
-| **🏷️ Version** | 2.8.0 | Production Ready |
-| **🧩 Skills** | 125+ | Especializados |
-| **📜 Scripts** | 248 | PowerShell utilities |
-| **🔒 Security** | Lefthook + Trufflehog | Integración activa |
-| **💻 Compatibility** | PowerShell 7+, Windows/Linux/macOS | Cross-platform |
-| **⚖️ License** | MIT | Open source |
+| Métrica              | Valor                              | Nota                 |
+| -------------------- | ---------------------------------- | -------------------- |
+| **🏷️ Version**       | 2.8.0                              | Production Ready     |
+| **🧩 Skills**        | 125+                               | Especializados       |
+| **📜 Scripts**       | 248                                | PowerShell utilities |
+| **🔒 Security**      | Lefthook + Trufflehog              | Integración activa   |
+| **💻 Compatibility** | PowerShell 7+, Windows/Linux/macOS | Cross-platform       |
+| **⚖️ License**       | MIT                                | Open source          |
 
 ---
 

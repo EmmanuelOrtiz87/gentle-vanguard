@@ -3,12 +3,11 @@ name: react-native
 description: React Native mobile patterns, platform-specific code
 when-to-use: When working on React Native mobile app code
 user-invocable: false
-paths: ["**/*.tsx", "**/*.jsx", "ios/**", "android/**", "app.json"]
+paths: ['**/*.tsx', '**/*.jsx', 'ios/**', 'android/**', 'app.json']
 effort: medium
 ---
 
 # React Native Skill
-
 
 ---
 
@@ -47,6 +46,7 @@ project/
 ## Component Patterns
 
 ### Functional Components Only
+
 ```typescript
 // Good - simple, testable
 interface ButtonProps {
@@ -65,6 +65,7 @@ export function Button({ label, onPress, disabled = false }: ButtonProps): JSX.E
 ```
 
 ### Extract Logic to Hooks
+
 ```typescript
 // useHome.ts - all logic here
 export function useHome() {
@@ -84,7 +85,7 @@ export function useHome() {
 // HomeScreen.tsx - pure presentation
 export function HomeScreen(): JSX.Element {
   const { items, loading, refresh } = useHome();
-  
+
   return (
     <ItemList items={items} loading={loading} onRefresh={refresh} />
   );
@@ -92,6 +93,7 @@ export function HomeScreen(): JSX.Element {
 ```
 
 ### Props Interface Always Explicit
+
 ```typescript
 // Always define props interface, even if simple
 interface ItemCardProps {
@@ -109,12 +111,14 @@ export function ItemCard({ item, onPress }: ItemCardProps): JSX.Element {
 ## State Management
 
 ### Local State First
+
 ```typescript
 // Start with useState, escalate only when needed
 const [value, setValue] = useState('');
 ```
 
 ### Zustand for Global State (if needed)
+
 ```typescript
 // store/useAppStore.ts
 import { create } from 'zustand';
@@ -131,6 +135,7 @@ export const useAppStore = create<AppState>((set) => ({
 ```
 
 ### React Query for Server State
+
 ```typescript
 // hooks/useItems.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -144,7 +149,7 @@ export function useItems() {
 
 export function useCreateItem() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: createItem,
     onSuccess: () => {
@@ -159,6 +164,7 @@ export function useCreateItem() {
 ## Testing
 
 ### Component Testing with React Native Testing Library
+
 ```typescript
 import { render, fireEvent } from '@testing-library/react-native';
 import { Button } from './Button';
@@ -167,24 +173,25 @@ describe('Button', () => {
   it('calls onPress when pressed', () => {
     const onPress = jest.fn();
     const { getByText } = render(<Button label="Click me" onPress={onPress} />);
-    
+
     fireEvent.press(getByText('Click me'));
-    
+
     expect(onPress).toHaveBeenCalledTimes(1);
   });
 
   it('does not call onPress when disabled', () => {
     const onPress = jest.fn();
     const { getByText } = render(<Button label="Click me" onPress={onPress} disabled />);
-    
+
     fireEvent.press(getByText('Click me'));
-    
+
     expect(onPress).not.toHaveBeenCalled();
   });
 });
 ```
 
 ### Hook Testing
+
 ```typescript
 import { renderHook, act } from '@testing-library/react-hooks';
 import { useCounter } from './useCounter';
@@ -192,11 +199,11 @@ import { useCounter } from './useCounter';
 describe('useCounter', () => {
   it('increments counter', () => {
     const { result } = renderHook(() => useCounter());
-    
+
     act(() => {
       result.current.increment();
     });
-    
+
     expect(result.current.count).toBe(1);
   });
 });
@@ -207,6 +214,7 @@ describe('useCounter', () => {
 ## Platform-Specific Code
 
 ### Use Platform.select Sparingly
+
 ```typescript
 import { Platform } from 'react-native';
 
@@ -225,6 +233,7 @@ const styles = StyleSheet.create({
 ```
 
 ### Separate Files for Complex Differences
+
 ```
 Component/
  Component.tsx          # Shared logic
@@ -237,13 +246,12 @@ Component/
 
 ## React Native Anti-Patterns
 
--  Inline styles - use StyleSheet.create
--  Logic in render - extract to hooks
--  Deep component nesting - flatten hierarchy
--  Anonymous functions in props - use useCallback
--  Index as key in lists - use stable IDs
--  Direct state mutation - always use setter
--  Mixing business logic with UI - keep core/ pure
--  Ignoring TypeScript errors - fix them
--  Large components - split into smaller pieces
-
+- Inline styles - use StyleSheet.create
+- Logic in render - extract to hooks
+- Deep component nesting - flatten hierarchy
+- Anonymous functions in props - use useCallback
+- Index as key in lists - use stable IDs
+- Direct state mutation - always use setter
+- Mixing business logic with UI - keep core/ pure
+- Ignoring TypeScript errors - fix them
+- Large components - split into smaller pieces

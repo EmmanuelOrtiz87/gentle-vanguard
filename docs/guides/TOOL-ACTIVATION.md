@@ -6,7 +6,8 @@ This guide describes the current tool activation model for the workspace foundat
 
 1. Run the workflow health check from the repository root.
 2. Let the config decide which tools are required, optional, or shell-dependent.
-3. Use the shell wrapper on Linux or macOS, or run the PowerShell entrypoint directly when preferred.
+3. Use the shell wrapper on Linux or macOS, or run the PowerShell entrypoint directly when
+   preferred.
 
 ## Primary Commands
 
@@ -29,23 +30,28 @@ pwsh -NoProfile -File ./scripts/utilities/update-tools.ps1 -DryRun
 ## Activation Model
 
 1. `wf.ps1 health` is the canonical tool activation entrypoint.
-2. `ensure-tools-active.ps1` reads `config/workspace.config.json` and resolves platform-specific installation metadata for Windows, Linux, and macOS.
+2. `ensure-tools-active.ps1` reads `config/workspace.config.json` and resolves platform-specific
+   installation metadata for Windows, Linux, and macOS.
 3. Missing system dependencies are checked before tool installation.
-4. Tool activation is tolerant of optional tools and non-blocking installer failures when the tool is not required.
+4. Tool activation is tolerant of optional tools and non-blocking installer failures when the tool
+   is not required.
 
 ## Runtime Priority Model
 
 1. Session startup uses the native runtime router to select the primary runtime.
-2. The stack CLI (`stack-on-demand.ps1`) is used as fallback when primary startup fails or is unavailable.
+2. The stack CLI (`stack-on-demand.ps1`) is used as fallback when primary startup fails or is
+   unavailable.
 3. Runtime preference is persisted in `config/orchestrator.json` under `runtime_preference`.
 4. Fallback remains deterministic and policy-driven to avoid runtime inconsistency.
 
 ## Platform and Shell Behavior
 
 1. Platform selection is dynamic: `windows`, `linux`, or `macos`.
-2. Tool install metadata is resolved from the config per platform instead of hardcoded `.windows` paths.
+2. Tool install metadata is resolved from the config per platform instead of hardcoded `.windows`
+   paths.
 3. Bash is treated as a capability, not a Windows-only implementation detail.
-4. PowerShell remains the canonical automation runtime for these scripts, even when invoked through `pwsh` on Linux or macOS.
+4. PowerShell remains the canonical automation runtime for these scripts, even when invoked through
+   `pwsh` on Linux or macOS.
 
 ## Current Agnosticism Status
 
@@ -58,7 +64,8 @@ High portability is implemented for these areas:
 
 The remaining intentional constraint is:
 
-1. The activation and update workflows are still authored in PowerShell, so the stack is shell-compatible through routing, but not shell-neutral at the implementation layer.
+1. The activation and update workflows are still authored in PowerShell, so the stack is
+   shell-compatible through routing, but not shell-neutral at the implementation layer.
 
 ## Tools Covered
 
@@ -81,5 +88,6 @@ The activation flow validates:
 
 1. If a required dependency is missing, run the health check again with `-Force`.
 2. If a bash-based tool cannot install, verify that `bash` is available in `PATH`.
-3. If a tool installs but is not detected immediately, restart the terminal and re-run the health check.
+3. If a tool installs but is not detected immediately, restart the terminal and re-run the health
+   check.
 4. If you need a non-destructive check, use `update-tools.ps1 -DryRun`.

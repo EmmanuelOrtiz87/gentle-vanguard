@@ -9,16 +9,8 @@
     "mcpBridge": true,
     "parallelExecution": true
   },
-  "capabilities": [
-    "parallel_execution",
-    "mcp",
-    "skills",
-    "code_completion"
-  ],
-  "configFiles": [
-    ".cursorrules",
-    ".cursor/config.json"
-  ],
+  "capabilities": ["parallel_execution", "mcp", "skills", "code_completion"],
+  "configFiles": [".cursorrules", ".cursor/config.json"],
   "adapter": {
     "type": "mcp-bridge",
     "path": "adapters/mcp-bridge",

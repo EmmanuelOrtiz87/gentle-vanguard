@@ -1,11 +1,15 @@
 ---
 name: release-management-skill
-description: "Trigger: release, changelog, version bump, ship, cut release, release notes, hotfix, deployment readiness, semver. Release planning, semantic versioning, changelog hygiene, and cutover readiness."
+description:
+  'Trigger: release, changelog, version bump, ship, cut release, release notes, hotfix, deployment
+  readiness, semver. Release planning, semantic versioning, changelog hygiene, and cutover
+  readiness.'
 ---
 
 ## Activation Contract
 
-Use when input matches trigger words or user asks about release planning, version bumps, changelog updates, hotfixes, or release readiness.
+Use when input matches trigger words or user asks about release planning, version bumps, changelog
+updates, hotfixes, or release readiness.
 
 ## Hard Rules
 
@@ -18,13 +22,13 @@ Use when input matches trigger words or user asks about release planning, versio
 
 ## Decision Gates
 
-| Gate | Condition | Action |
-|------|-----------|--------|
-| Bump level | Breaking change? | MAJOR |
-| Bump level | New backward-compatible feature? | MINOR |
-| Bump level | Backward-compatible bug fix? | PATCH |
+| Gate         | Condition                            | Action              |
+| ------------ | ------------------------------------ | ------------------- |
+| Bump level   | Breaking change?                     | MAJOR               |
+| Bump level   | New backward-compatible feature?     | MINOR               |
+| Bump level   | Backward-compatible bug fix?         | PATCH               |
 | Release type | Production incident or security fix? | Hotfix (fast-track) |
-| Release type | Standard release? | Normal pipeline |
+| Release type | Standard release?                    | Normal pipeline     |
 
 ## Execution Steps
 
@@ -37,7 +41,8 @@ Use when input matches trigger words or user asks about release planning, versio
 
 ## Output Contract
 
-Return version bumped, CHANGELOG additions, migration notes, rollback plan, and post-release verification steps.
+Return version bumped, CHANGELOG additions, migration notes, rollback plan, and post-release
+verification steps.
 
 ## References
 

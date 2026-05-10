@@ -1,8 +1,10 @@
 # SKILL STYLE GUIDE
 
-**Source:** Adapted from [gentle-ai/docs/skill-style-guide.md](https://github.com/Gentleman-Programming/gentle-ai/blob/main/docs/skill-style-guide.md)
+**Source:** Adapted from
+[gentle-ai/docs/skill-style-guide.md](https://github.com/Gentleman-Programming/gentle-ai/blob/main/docs/skill-style-guide.md)
 
-A skill is a **runtime instruction contract for an LLM**, not human-facing documentation. Every `SKILL.md` MUST follow this structure.
+A skill is a **runtime instruction contract for an LLM**, not human-facing documentation. Every
+`SKILL.md` MUST follow this structure.
 
 ## Required Structure
 

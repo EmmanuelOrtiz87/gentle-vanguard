@@ -1,8 +1,8 @@
 ---
 name: ai-sdk-5-skill
 description: >
-  Vercel AI SDK 5 patterns: streaming, AI objects, tools, messages.
-  Trigger: "AI SDK", "AI SDK 5", "streamText", "generateText", "AI provider".
+  Vercel AI SDK 5 patterns: streaming, AI objects, tools, messages. Trigger: "AI SDK", "AI SDK 5",
+  "streamText", "generateText", "AI provider".
 ---
 
 ## When to Use
@@ -20,10 +20,7 @@ import { openai } from '@ai-sdk/openai';
 import { anthropic } from '@ai-sdk/anthropic';
 
 export const ai = createAI({
-  providers: [
-    openai('gpt-4o'),
-    anthropic('claude-3-5-sonnet'),
-  ],
+  providers: [openai('gpt-4o'), anthropic('claude-3-5-sonnet')],
   defaultId: 'openai',
 });
 ```
@@ -56,12 +53,12 @@ const result = await streamText({
 // In API route / streaming response
 export async function POST(req: Request) {
   const { prompt } = await req.json();
-  
+
   const result = await streamText({
     model: openai('gpt-4o'),
     prompt,
   });
-  
+
   return result.toDataStreamResponse();
 }
 ```
@@ -128,7 +125,7 @@ import { useChat } from 'ai/react';
 
 export function Chat() {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
-  
+
   return (
     <div>
       {messages.map((m) => (
@@ -136,13 +133,9 @@ export function Chat() {
           <strong>{m.role}:</strong> {m.content}
         </div>
       ))}
-      
+
       <form onSubmit={handleSubmit}>
-        <input
-          value={input}
-          onChange={handleInputChange}
-          placeholder="Type a message..."
-        />
+        <input value={input} onChange={handleInputChange} placeholder="Type a message..." />
         <button type="submit">Send</button>
       </form>
     </div>
@@ -202,12 +195,11 @@ try {
 
 ## Quick Reference
 
-| Pattern | Code |
-|---------|------|
+| Pattern    | Code                              |
+| ---------- | --------------------------------- |
 | Non-stream | `generateText({ model, prompt })` |
-| Streaming | `streamText({ model, prompt })` |
-| Messages | `messages: [{role, content}]` |
-| Tools | `tools: [{ tool, parameters }]` |
-| React UI | `useChat()` from 'ai/react' |
-| Response | `result.toDataStreamResponse()` |
-
+| Streaming  | `streamText({ model, prompt })`   |
+| Messages   | `messages: [{role, content}]`     |
+| Tools      | `tools: [{ tool, parameters }]`   |
+| React UI   | `useChat()` from 'ai/react'       |
+| Response   | `result.toDataStreamResponse()`   |

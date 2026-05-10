@@ -2,9 +2,9 @@
 
 ## Supported Versions
 
-| Version | Supported |
-|---------|-----------|
-| 2.6.x   | ✓ Active  |
+| Version | Supported             |
+| ------- | --------------------- |
+| 2.6.x   | ✓ Active              |
 | < 2.6   | ✗ No longer supported |
 
 ## Reporting a Vulnerability
@@ -25,32 +25,33 @@ Report vulnerabilities privately to the platform team:
 
 ### Response timeline
 
-| Phase | Target |
-|-------|--------|
-| Initial acknowledgement | 48 hours |
-| Severity assessment | 5 business days |
-| Fix or mitigation | Depends on severity (CRITICAL: 7d, HIGH: 14d, MEDIUM: 30d) |
-| Disclosure | Coordinated after fix is released |
+| Phase                   | Target                                                     |
+| ----------------------- | ---------------------------------------------------------- |
+| Initial acknowledgement | 48 hours                                                   |
+| Severity assessment     | 5 business days                                            |
+| Fix or mitigation       | Depends on severity (CRITICAL: 7d, HIGH: 14d, MEDIUM: 30d) |
+| Disclosure              | Coordinated after fix is released                          |
 
 ## Security Controls
 
 This project implements the following security controls:
 
-| Control | Implementation |
-|---------|----------------|
-| Secret scanning | Pre-commit hook (`check-secrets` patterns) + GitHub secret scanning |
-| Dependency scanning | Trivy (weekly, `.github/workflows/owasp-scan.yml`) |
-| SAST (PowerShell) | PSScriptAnalyzer (`.github/workflows/ps-lint.yml`) |
-| Workflow hardening | All workflows: `permissions: contents: read`, `timeout-minutes`, `concurrency` |
-| Action pinning | Dependabot weekly updates (`.github/dependabot.yml`) |
-| Access control | `config/access-control.json` + `config/security-policy.json` |
-| Hook output safety | `scripts/hooks/hook-output-safety.ps1` (redacts secrets from hook logs) |
-| RBAC | `config/owner-auth.json` (owner-only operations) |
+| Control             | Implementation                                                                 |
+| ------------------- | ------------------------------------------------------------------------------ |
+| Secret scanning     | Pre-commit hook (`check-secrets` patterns) + GitHub secret scanning            |
+| Dependency scanning | Trivy (weekly, `.github/workflows/owasp-scan.yml`)                             |
+| SAST (PowerShell)   | PSScriptAnalyzer (`.github/workflows/ps-lint.yml`)                             |
+| Workflow hardening  | All workflows: `permissions: contents: read`, `timeout-minutes`, `concurrency` |
+| Action pinning      | Dependabot weekly updates (`.github/dependabot.yml`)                           |
+| Access control      | `config/access-control.json` + `config/security-policy.json`                   |
+| Hook output safety  | `scripts/hooks/hook-output-safety.ps1` (redacts secrets from hook logs)        |
+| RBAC                | `config/owner-auth.json` (owner-only operations)                               |
 
 ## Hardening Checklist (for contributors)
 
 - [ ] No secrets, tokens, or credentials in committed files
 - [ ] No `Write-Host` of environment variables in hooks (use `Write-SafeHook`)
-- [ ] New CI workflows must include `permissions: contents: read`, `timeout-minutes`, and `concurrency`
+- [ ] New CI workflows must include `permissions: contents: read`, `timeout-minutes`, and
+      `concurrency`
 - [ ] PowerShell scripts must pass PSScriptAnalyzer with zero errors
 - [ ] External URLs only from the allow-list in `config/security-privacy.json`

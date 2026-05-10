@@ -8,17 +8,8 @@
     "autoLoad": true,
     "mcpBridge": true
   },
-  "capabilities": [
-    "file_ops",
-    "terminal",
-    "git",
-    "debugging",
-    "mcp"
-  ],
-  "configFiles": [
-    ".vscode/settings.json",
-    ".github/copilot-instructions.md"
-  ],
+  "capabilities": ["file_ops", "terminal", "git", "debugging", "mcp"],
+  "configFiles": [".vscode/settings.json", ".github/copilot-instructions.md"],
   "adapter": {
     "type": "mcp-bridge",
     "path": "adapters/mcp-bridge",

@@ -1,7 +1,5 @@
 {
-    "events":  [
-
-               ],
-    "version":  "1.0",
-    "max_history":  100
+  "events": [],
+  "version": "1.0",
+  "max_history": 100
 }

@@ -8,7 +8,8 @@
 
 ## Overview
 
-This document maps compatibility between Workspace Foundation and various AI scripts/utilities/plugins to ensure consistent behavior across all integrations.
+This document maps compatibility between Workspace Foundation and various AI
+scripts/utilities/plugins to ensure consistent behavior across all integrations.
 
 ---
 
@@ -17,20 +18,24 @@ This document maps compatibility between Workspace Foundation and various AI scr
 ### Primary Tools (Full Support)
 
 #### 1. Claude (Anthropic)
+
 **Status**: FULLY SUPPORTED  
 **versións**: Claude 3 Opus, Sonnet, Haiku  
 **Integration Points**:
+
 - Direct API integration
 - Context window: Up to 200K tokens
 - Message format: JSON with role/content
 - Tool use: Supported via tool_use blocks
 
 **Current Implementation**:
+
 - Token budget guard: `scripts/utilities/token-budget-guard.ps1`
 - Context metrics: `scripts/utilities/context-metrics-report.ps1`
 - Token telemetry: `scripts/utilities/token-telemetry.ps1`
 
 **Optimizations Available**:
+
 - Token efficiency matrix: `scripts/utilities/response-mode-efficiency-matrix.ps1`
 - Context packing: `scripts/utilities/context-pack.ps1`
 - Handoff compression: `scripts/utilities/handoff-compress.ps1`
@@ -38,20 +43,24 @@ This document maps compatibility between Workspace Foundation and various AI scr
 ---
 
 #### 2. Cline (VS Code Extension)
+
 **Status**: FULLY SUPPORTED  
 **versións**: Latest (compatible with Claude backend)  
 **Integration Points**:
+
 - VS Code extension API
 - File operations: Read/Write/Execute
 - Terminal integration: Command execution
 - Context: Workspace-aware
 
 **Current Implementation**:
+
 - IDE session detection: `scripts/utilities/detect-ide-session.ps1`
 - Response mode: `scripts/utilities/response-mode.ps1`
 - Enforce response mode: `scripts/utilities/enforce-response-mode.ps1`
 
 **Optimizations Available**:
+
 - Compact start: `scripts/utilities/compact-start.ps1`
 - Stack on demand: `scripts/utilities/stack-on-demand.ps1`
 - Stack dashboard: `scripts/utilities/stack-dashboard.ps1`
@@ -59,23 +68,28 @@ This document maps compatibility between Workspace Foundation and various AI scr
 ---
 
 #### 3. OpenCode (GitHub Copilot Integration)
+
 **Status**: PARTIALLY SUPPORTED  
 **versións**: Latest  
 **Integration Points**:
+
 - GitHub Copilot API
 - Code completion
 - Chat interface
 - Context: File-based
 
 **Current Implementation**:
+
 - Native workspace tooling
 
 **Limitations**:
+
 - Token context: Limited to file scope
 - Message format: Copilot-specific
 - Tool use: Limited support
 
 **Optimizations Needed**:
+
 - Context compression for Copilot
 - Message format adaptation
 - Token budget constraints
@@ -83,19 +97,23 @@ This document maps compatibility between Workspace Foundation and various AI scr
 ---
 
 #### 4. Continue.dev (IDE Extension)
+
 **Status**: SUPPORTED  
 **versións**: Latest  
 **Integration Points**:
+
 - IDE extension API
 - Multiple LLM backends
 - Chat interface
 - Context: Project-aware
 
 **Current Implementation**:
+
 - Response mode: Compatible
 - Context packing: Supported
 
 **Optimizations Needed**:
+
 - Backend-specific token handling
 - Message format standardization
 
@@ -106,6 +124,7 @@ This document maps compatibility between Workspace Foundation and various AI scr
 ### Current Definitions
 
 #### Token Budget Levels
+
 ```
 TIER_1_MINIMAL = 5000 tokens
 TIER_2_STANDARD = 15000 tokens
@@ -115,6 +134,7 @@ TIER_5_UNLIMITED = 200000 tokens (Claude only)
 ```
 
 #### Context Allocation
+
 ```
 System Prompt: 10-15%
 User Input: 20-30%
@@ -124,6 +144,7 @@ Reserved Buffer: 5-10%
 ```
 
 #### Token Efficiency Modes
+
 ```
 COMPACT = 60% token usage (prioritize speed)
 BALANCED = 80% token usage (default)
@@ -136,6 +157,7 @@ MAXIMUM = 99% token usage (use all available)
 ### Input Message Standardization
 
 #### Standard Format
+
 ```json
 {
   "role": "user",
@@ -160,6 +182,7 @@ MAXIMUM = 99% token usage (use all available)
 #### Tool-Specific Adaptations
 
 **Cline**:
+
 ```json
 {
   "role": "user",
@@ -173,6 +196,7 @@ MAXIMUM = 99% token usage (use all available)
 ```
 
 **Copilot**:
+
 ```json
 {
   "role": "user",
@@ -186,6 +210,7 @@ MAXIMUM = 99% token usage (use all available)
 ```
 
 **Continue.dev**:
+
 ```json
 {
   "role": "user",
@@ -203,6 +228,7 @@ MAXIMUM = 99% token usage (use all available)
 ### Output Message Standardization
 
 #### Standard Format
+
 ```json
 {
   "role": "assistant",
@@ -236,6 +262,7 @@ MAXIMUM = 99% token usage (use all available)
 #### Tool-Specific Adaptations
 
 **Cline**:
+
 ```json
 {
   "role": "assistant",
@@ -252,6 +279,7 @@ MAXIMUM = 99% token usage (use all available)
 ```
 
 **Copilot**:
+
 ```json
 {
   "role": "assistant",
@@ -272,6 +300,7 @@ MAXIMUM = 99% token usage (use all available)
 ### Session Management
 
 #### Session Initialization
+
 ```powershell
 # Standard session start
 {
@@ -285,6 +314,7 @@ MAXIMUM = 99% token usage (use all available)
 ```
 
 #### Session Termination
+
 ```powershell
 # Standard session end
 {
@@ -304,6 +334,7 @@ MAXIMUM = 99% token usage (use all available)
 ### Message Flow
 
 #### Turn-Based Conversation
+
 ```
 1. User sends message with context
 2. System evaluates token budget
@@ -314,6 +345,7 @@ MAXIMUM = 99% token usage (use all available)
 ```
 
 #### Error Handling
+
 ```json
 {
   "error": {
@@ -332,6 +364,7 @@ MAXIMUM = 99% token usage (use all available)
 ### System Prompts
 
 #### Standard System Prompt
+
 ```
 You are an AI assistant integrated with Workspace Foundation.
 
@@ -359,6 +392,7 @@ GUIDELINES:
 #### Tool-Specific System Prompts
 
 **Cline**:
+
 ```
 You are integrated with Cline VS Code extension.
 
@@ -377,6 +411,7 @@ CONSTRAINTS:
 ```
 
 **Copilot**:
+
 ```
 You are integrated with GitHub Copilot.
 
@@ -400,6 +435,7 @@ CONSTRAINTS:
 ### Standard Input Types
 
 #### Text Message
+
 ```json
 {
   "type": "text",
@@ -409,6 +445,7 @@ CONSTRAINTS:
 ```
 
 #### File Reference
+
 ```json
 {
   "type": "file",
@@ -419,6 +456,7 @@ CONSTRAINTS:
 ```
 
 #### Command Execution
+
 ```json
 {
   "type": "command",
@@ -429,6 +467,7 @@ CONSTRAINTS:
 ```
 
 #### Context Request
+
 ```json
 {
   "type": "context_request",
@@ -444,6 +483,7 @@ CONSTRAINTS:
 ### Standard Output Types
 
 #### Text Response
+
 ```json
 {
   "type": "text",
@@ -453,6 +493,7 @@ CONSTRAINTS:
 ```
 
 #### Code Block
+
 ```json
 {
   "type": "code",
@@ -464,6 +505,7 @@ CONSTRAINTS:
 ```
 
 #### Action Request
+
 ```json
 {
   "type": "action",
@@ -478,6 +520,7 @@ CONSTRAINTS:
 ```
 
 #### Status Report
+
 ```json
 {
   "type": "status",
@@ -496,6 +539,7 @@ CONSTRAINTS:
 ### Scripts for Tool Integration
 
 #### Tool Detection
+
 ```powershell
 # scripts/utilities/detect-ide-session.ps1
 - Detects active IDE/tool
@@ -504,6 +548,7 @@ CONSTRAINTS:
 ```
 
 #### Tool-Specific Routing
+
 ```powershell
 # scripts/utilities/dispatch-agent.ps1
 - Routes messages to correct tool
@@ -512,6 +557,7 @@ CONSTRAINTS:
 ```
 
 #### Response Mode Management
+
 ```powershell
 # scripts/utilities/response-mode.ps1
 - Manages efficiency modes
@@ -520,6 +566,7 @@ CONSTRAINTS:
 ```
 
 #### Token Management
+
 ```powershell
 # scripts/utilities/token-budget-guard.ps1
 - Enforces token limits
@@ -551,6 +598,7 @@ CONSTRAINTS:
 ## Current Implementation Status
 
 ### Implemented
+
 - [x] Claude integration (full)
 - [x] Cline integration (full)
 - [x] Token budget system
@@ -559,12 +607,14 @@ CONSTRAINTS:
 - [x] Session management
 
 ### In Progress
+
 - [ ] Copilot standardization
 - [ ] Continue.dev adaptation
 - [ ] Message format unification
 - [ ] Error handling standardization
 
 ### Planned
+
 - [ ] Additional tool integrations
 - [ ] Advanced context optimization
 - [ ] Multi-tool orchestration
@@ -577,6 +627,7 @@ CONSTRAINTS:
 ### Tool Configurations
 
 #### Cline Configuration
+
 ```json
 {
   "tool": "cline",
@@ -592,6 +643,7 @@ CONSTRAINTS:
 ```
 
 #### Copilot Configuration
+
 ```json
 {
   "tool": "copilot",
@@ -607,6 +659,7 @@ CONSTRAINTS:
 ```
 
 #### Continue.dev Configuration
+
 ```json
 {
   "tool": "continue",

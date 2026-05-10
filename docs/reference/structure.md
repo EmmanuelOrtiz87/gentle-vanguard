@@ -54,6 +54,7 @@ No project should depend on an embedded local copy of external tools.
 
 ## Portable Runtime Note
 
-1. `config/workspace.config.json` should prefer workspace-resolved paths such as `{workspaceRoot}/.engram-data`.
+1. `config/workspace.config.json` should prefer workspace-resolved paths such as
+   `{workspaceRoot}/.engram-data`.
 2. `scripts/utilities/run-engram.ps1` creates the Engram session directory on first use.
 3. A missing `.engram-data/` directory on a fresh machine is normal and should not block demos.

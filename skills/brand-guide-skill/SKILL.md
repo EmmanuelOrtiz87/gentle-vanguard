@@ -1,13 +1,12 @@
 ---
 name: brand-guide-skill
 description: >
-  Brand consistency: colors, typography, voice, tone, identity.
-  Trigger: "brand", "brand guide", "brand identity", "branding", "voice", "tone",
-  "visual identity", "logo usage", "brand colors"
+  Brand consistency: colors, typography, voice, tone, identity. Trigger: "brand", "brand guide",
+  "brand identity", "branding", "voice", "tone", "visual identity", "logo usage", "brand colors"
 license: Apache-2.0
 metadata:
   author: workspace-foundation
-  versión: "1.0"
+  versión: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task
 ---
 
@@ -18,12 +17,14 @@ Maintain brand consistency across all touchpoints.
 ## When to Use
 
 **USE this skill when:**
+
 - Creating new pages/components
 - Writing content
 - Designing communications
 - Establishing brand identity
 
 **DON'T use when:**
+
 - No brand guidelines exist (create first)
 - Brand already consistent (not needed)
 
@@ -42,13 +43,13 @@ Maintain brand consistency across all touchpoints.
   --brand-600: #2563eb;
   --brand-700: #1d4ed8;
   --brand-900: #1e3a8a;
-  
+
   /* Semantic */
   --color-primary: var(--brand-500);
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
-  
+
   /* Neutrals */
   --gray-50: #f9fafb;
   --gray-900: #111827;
@@ -61,13 +62,13 @@ Maintain brand consistency across all touchpoints.
 :root {
   /* Display - Headlines */
   --font-display: 'Inter', system-ui, sans-serif;
-  
+
   /* Body - Content */
   --font-body: 'Inter', system-ui, sans-serif;
-  
+
   /* Mono - Code */
   --font-mono: 'Fira Code', monospace;
-  
+
   /* Scale */
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
@@ -86,14 +87,17 @@ Maintain brand consistency across all touchpoints.
 ## Logo Guidelines
 
 ### Clear Space
+
 - Maintain 2x letter height clear space around logo
 - Never place logo on competing colors
 
 ### Minimum Size
+
 - Print: 1 inch / 25mm
 - Digital: 32px height
 
 ### Don'ts
+
 - [NO] Stretch or distort
 - [NO] Rotate
 - [NO] Change colors
@@ -107,26 +111,29 @@ Maintain brand consistency across all touchpoints.
 ## Voice Guidelines
 
 ### Voice
+
 - Professional but approachable
 - Clear and concise
 - Confident, not arrogant
 - Helpful, not patronizing
 
 ### Tone by Context
-| Situation | Tone |
-|-----------|------|
-| Error messages | Clear, solution-focused |
-| Success | Celebratory but not excessive |
-| Onboarding | Welcoming, guiding |
-| Technical docs | Precise, authoritative |
-| Marketing | Enthusiastic, benefits-focused |
+
+| Situation      | Tone                           |
+| -------------- | ------------------------------ |
+| Error messages | Clear, solution-focused        |
+| Success        | Celebratory but not excessive  |
+| Onboarding     | Welcoming, guiding             |
+| Technical docs | Precise, authoritative         |
+| Marketing      | Enthusiastic, benefits-focused |
 
 ### Example Transformations
-|  Don't |  Do |
-|----------|-----|
-| "Your request has been processed" | "Done! Your request is complete" |
-| "An error occurred" | "Something went wrong - here's how to fix it" |
-| "You must upgrade" | "Upgrade for pro features" |
+
+| Don't                             | Do                                            |
+| --------------------------------- | --------------------------------------------- |
+| "Your request has been processed" | "Done! Your request is complete"              |
+| "An error occurred"               | "Something went wrong - here's how to fix it" |
+| "You must upgrade"                | "Upgrade for pro features"                    |
 ```
 
 ---
@@ -212,10 +219,10 @@ body {
   --brand: #3b82f6;
   --brand-dark: #1d4ed8;
   --brand-light: #60a5fa;
-  
+
   /* Brand Fonts */
   --font-brand: 'Inter', system-ui;
-  
+
   /* Spacing */
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
@@ -240,14 +247,15 @@ body {
 # Brand Voice
 
 Our voice is:
+
 - Friendly but professional
 - Direct and clear
 - Confident but humble
 - Helpful and supportive
 
 # Tone Adjustments
+
 - Support: Empathetic, solution-focused
-- Marketing: Enthusiastic, benefit-driven  
+- Marketing: Enthusiastic, benefit-driven
 - Docs: Clear, authoritative
 ```
-

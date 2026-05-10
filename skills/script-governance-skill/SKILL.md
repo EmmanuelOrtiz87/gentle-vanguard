@@ -1,11 +1,16 @@
 ---
 name: script-governance-skill
-description: "Trigger: script, automation, hook, startup, auto-init, orchestrator script, powershell, bash. Governance patterns for development scripts: lifecycle, naming, safety, observability, and automation boundaries."
+description:
+  'Trigger: script, automation, hook, startup, auto-init, orchestrator script, powershell, bash.
+  Governance patterns for development scripts: lifecycle, naming, safety, observability, and
+  automation boundaries.'
 ---
 
 ## Activation Contract
 
-Use when creating or refactoring scripts under scripts/, hooks/, or .githooks/; defining startup automation; implementing git hooks or environment bootstrap; or reviewing script reliability and failure behavior.
+Use when creating or refactoring scripts under scripts/, hooks/, or .githooks/; defining startup
+automation; implementing git hooks or environment bootstrap; or reviewing script reliability and
+failure behavior.
 
 ## Hard Rules
 
@@ -21,15 +26,15 @@ Use when creating or refactoring scripts under scripts/, hooks/, or .githooks/; 
 
 ## Decision Gates
 
-| Gate | Condition | Action |
-|------|-----------|--------|
-| Script type | Detection-only? | Must not mutate state |
-| Script type | Activation? | May mutate; must log all actions |
-| Script type | Hook? | Block only on security-critical failures |
-| Installation | Auto-init path? | Require -Force flag |
-| Failure | Non-critical? | Warn + suggest remediation, do not block |
-| Severity | Reliability/security/integrity risk? | Blocking allowed |
-| Severity | Style/maintainability? | Advisory only |
+| Gate         | Condition                            | Action                                   |
+| ------------ | ------------------------------------ | ---------------------------------------- |
+| Script type  | Detection-only?                      | Must not mutate state                    |
+| Script type  | Activation?                          | May mutate; must log all actions         |
+| Script type  | Hook?                                | Block only on security-critical failures |
+| Installation | Auto-init path?                      | Require -Force flag                      |
+| Failure      | Non-critical?                        | Warn + suggest remediation, do not block |
+| Severity     | Reliability/security/integrity risk? | Blocking allowed                         |
+| Severity     | Style/maintainability?               | Advisory only                            |
 
 ## Execution Steps
 
@@ -43,7 +48,8 @@ Use when creating or refactoring scripts under scripts/, hooks/, or .githooks/; 
 
 ## Output Contract
 
-Return script path, type, purpose, usage example, and validation results (direct execution + fallback scenario).
+Return script path, type, purpose, usage example, and validation results (direct execution +
+fallback scenario).
 
 ## References
 

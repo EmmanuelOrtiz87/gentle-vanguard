@@ -1,10 +1,12 @@
 ---
 name: comment-writer
-description: "Write warm, direct collaboration comments. Trigger: PR feedback, issue replies, reviews, Slack messages, or GitHub comments."
+description:
+  'Write warm, direct collaboration comments. Trigger: PR feedback, issue replies, reviews, Slack
+  messages, or GitHub comments.'
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  version: '1.0'
   origin: https://github.com/Gentleman-Programming/gentle-ai
 ---
 
@@ -21,15 +23,15 @@ Use it for:
 
 ## Voice Rules
 
-| Rule | Requirement |
-|------|-------------|
-| Be useful fast | Start with the actionable point. Do not recap the whole PR before feedback. |
-| Be warm and direct | Sound like a thoughtful teammate, not a corporate bot. |
-| Keep it short | Prefer 1 to 3 short paragraphs or a tight bullet list. |
-| Explain why | Give the technical reason when asking for a change. |
-| Avoid pile-ons | Comment on the highest-value issue, not every tiny preference. |
+| Rule                  | Requirement                                                                                                                  |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Be useful fast        | Start with the actionable point. Do not recap the whole PR before feedback.                                                  |
+| Be warm and direct    | Sound like a thoughtful teammate, not a corporate bot.                                                                       |
+| Keep it short         | Prefer 1 to 3 short paragraphs or a tight bullet list.                                                                       |
+| Explain why           | Give the technical reason when asking for a change.                                                                          |
+| Avoid pile-ons        | Comment on the highest-value issue, not every tiny preference.                                                               |
 | Match thread language | Write in the thread/user language. If writing in Spanish, use Rioplatense Spanish/voseo: `podés`, `tenés`, `fijate`, `dale`. |
-| No em dashes | Use commas, periods, or parentheses instead. |
+| No em dashes          | Use commas, periods, or parentheses instead.                                                                                 |
 
 ## Comment Formula
 
@@ -46,7 +48,8 @@ Use it for:
 ### Request change
 
 ```markdown
-Buenísimo el enfoque. Acá separaría este cambio en otro commit porque mezcla la validación con el wiring de UI.
+Buenísimo el enfoque. Acá separaría este cambio en otro commit porque mezcla la validación con el
+wiring de UI.
 
 Eso le baja carga al reviewer y hace que el rollback sea más claro si falla la integración.
 ```
@@ -56,15 +59,18 @@ Eso le baja carga al reviewer y hace que el rollback sea más claro si falla la 
 ```markdown
 Está bien encaminado y el scope se entiende rápido.
 
-Dejo aprobado. Para el próximo PR, agregá el link al anterior y al siguiente así la cadena queda navegable.
+Dejo aprobado. Para el próximo PR, agregá el link al anterior y al siguiente así la cadena queda
+navegable.
 ```
 
 ### Ask for split
 
 ```markdown
-Este PR supera el presupuesto de 400 líneas cambiadas, así que necesitamos dividirlo o justificar `size:exception`.
+Este PR supera el presupuesto de 400 líneas cambiadas, así que necesitamos dividirlo o justificar
+`size:exception`.
 
-Mi sugerencia: primero foundation + tests, después integración, después docs. Así cada review tiene inicio y fin claros.
+Mi sugerencia: primero foundation + tests, después integración, después docs. Así cada review tiene
+inicio y fin claros.
 ```
 
 ## Commands
@@ -76,4 +82,5 @@ gh pr view <PR_NUMBER> --json title,body,additions,deletions,changedFiles
 
 ---
 
-*Origin: [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai) — Apache-2.0 License. Powered by [Gentleman Programming](https://github.com/Gentleman-Programming).*
+_Origin: [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai) — Apache-2.0 License.
+Powered by [Gentleman Programming](https://github.com/Gentleman-Programming)._

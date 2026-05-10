@@ -14,52 +14,53 @@
 
 ## 🤔 ¿Qué es Foundation?
 
-**Foundation** es un workspace agnóstico que potencia tu desarrollo con AI assistants como **OpenCode, Claude, Cursor y otros**.
+**Foundation** es un workspace agnóstico que potencia tu desarrollo con AI assistants como
+**OpenCode, Claude, Cursor y otros**.
 
 ```
-                              
-          🏛️ FOUNDATION v2.8.0                        
-          AI Development Workspace                    
-  
+
+          🏛️ FOUNDATION v2.8.0
+          AI Development Workspace
+
           🎯 SESSION MANAGER  🚀 AUTO-DELEGATION
           📈 REPORTING         💰 TOKEN GUARD
           🎭 ORCHESTRATOR      🔍 DISTRIBUTED TRACING
-                              
+
 ```
 
 ---
 
 ## ✨ Características Principales
 
-| Módulo | Función | Estado |
-|--------|---------|--------|
-| **🎭 Session Manager** | Tracking de sesiones, métricas | ✅ Activo |
+| Módulo                 | Función                             | Estado    |
+| ---------------------- | ----------------------------------- | --------- |
+| **🎭 Session Manager** | Tracking de sesiones, métricas      | ✅ Activo |
 | **🚀 Auto-Delegation** | Routing a subagentes especializados | ✅ Activo |
-| **📈 Reporting** | Informes on-demand para gerencia | ✅ Activo |
-| **💰 Token Guard** | Eficiencia de contexto | ✅ Activo |
-| **🎭 Orchestrator** | Workflow integrado multi-agent | ✅ Activo |
-| **🔍 Tracing** | Distributed tracing | ✅ Activo |
+| **📈 Reporting**       | Informes on-demand para gerencia    | ✅ Activo |
+| **💰 Token Guard**     | Eficiencia de contexto              | ✅ Activo |
+| **🎭 Orchestrator**    | Workflow integrado multi-agent      | ✅ Activo |
+| **🔍 Tracing**         | Distributed tracing                 | ✅ Activo |
 
 ---
 
 ## 🏗️ Arquitectura Inteligente
 
 ```
-             🎭 ORCHESTRATOR                     
-          (slim context)                      
- 
+             🎭 ORCHESTRATOR
+          (slim context)
+
            delegation
- 
- 🤖 AGENT-BA 🎨 AGENT-SAD 🛠️ AGENT-DEV 🧪 AGENT-QA 
-                             
-   📚 BDD     📐 SDD    💻 Code    🧪 Tests  
-          
-          🏛️ FOUNDATION SKILLS                     
-    📈 reporting-skill                          
-    🎮 session-workflow-skill                   
-    🧠 context-engineering-skill                
-    📚 documentation-skill                   
-    +125 ms...                           
+
+ 🤖 AGENT-BA 🎨 AGENT-SAD 🛠️ AGENT-DEV 🧪 AGENT-QA
+
+   📚 BDD     📐 SDD    💻 Code    🧪 Tests
+
+          🏛️ FOUNDATION SKILLS
+    📈 reporting-skill
+    🎮 session-workflow-skill
+    🧠 context-engineering-skill
+    📚 documentation-skill
+    +125 ms...
 ```
 
 ---
@@ -68,14 +69,14 @@
 
 ```
 📅 Fecha: 06-May-2026
- 
+
  📊 sesiones:    17 total
  🟢 Activas:     17
- 
+
  📅 24-Abr:      5 sesiones
  📅 25-Abr:      7 sesiones  +40%
  📅 26-Abr:      1 sesión (en curso)
- 
+
  💰 Token Guard:  Activo (128K)
 ```
 
@@ -83,13 +84,13 @@
 
 ## 💻 Tech Stack
 
-| Capa | Tecnología |
-|------|-----------|
-| **🖥️ CLI** | PowerShell 7+ |
-| **🧩 Skills** | 125+ skills modulares |
-| **🎭 Orchestration** | Multi-agent DAG |
-| **📈 Reporting** | CSV + Markdown |
-| **🔍 Tracing** | Distributed tracing |
+| Capa                 | Tecnología            |
+| -------------------- | --------------------- |
+| **🖥️ CLI**           | PowerShell 7+         |
+| **🧩 Skills**        | 125+ skills modulares |
+| **🎭 Orchestration** | Multi-agent DAG       |
+| **📈 Reporting**     | CSV + Markdown        |
+| **🔍 Tracing**       | Distributed tracing   |
 
 ---
 
@@ -110,10 +111,10 @@
 
 ## 🔗 Conectar
 
-| Plataforma | Enlace |
-|------------|--------|
+| Plataforma    | Enlace                                       |
+| ------------- | -------------------------------------------- |
 | **🐙 GitHub** | github.com/EmmanuelOrtiz87/foundation-public |
-| **📚 Docs** | docs.foundation.local |
+| **📚 Docs**   | docs.foundation.local                        |
 
 ---
 

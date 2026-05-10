@@ -3,6 +3,7 @@
 ## Concept
 
 Run linter/formatter **before** the AI agent accesses saved files. This eliminates:
+
 - Wasted tokens on "fix indentation" discussions
 - "The code has formatting issues" responses
 - Manual formatting feedback loops
@@ -12,7 +13,7 @@ Traditional Flow (Wasteful):
 Agent edits file  Agent reads file  "Fix indentation"  Agent edits  ...
 
 PreTool Hook Flow (Efficient):
-Agent edits file  Hook formats  Agent reads clean file  Done 
+Agent edits file  Hook formats  Agent reads clean file  Done
 ```
 
 ## Hook Script
@@ -21,21 +22,21 @@ Agent edits file  Hook formats  Agent reads clean file  Done
 
 ### Supported File Types
 
-| Extension | Formatter | Config Required |
-|-----------|-----------|-----------------|
-| `.ps1` | PowerShell Format | - |
-| `.js` | Prettier + ESLint | package.json |
-| `.ts` | Prettier + ESLint | tsconfig.json |
-| `.tsx` | Prettier | tsconfig.json |
-| `.jsx` | Prettier | package.json |
-| `.py` | Black + Ruff | pyproject.toml |
-| `.go` | gofmt | go.mod |
-| `.rs` | rustfmt | Cargo.toml |
-| `.json` | PowerShell Convert | - |
-| `.md` | Prettier | package.json |
-| `.yaml` | Prettier | - |
-| `.css` | Prettier + Stylelint | package.json |
-| `.html` | Prettier | - |
+| Extension | Formatter            | Config Required |
+| --------- | -------------------- | --------------- |
+| `.ps1`    | PowerShell Format    | -               |
+| `.js`     | Prettier + ESLint    | package.json    |
+| `.ts`     | Prettier + ESLint    | tsconfig.json   |
+| `.tsx`    | Prettier             | tsconfig.json   |
+| `.jsx`    | Prettier             | package.json    |
+| `.py`     | Black + Ruff         | pyproject.toml  |
+| `.go`     | gofmt                | go.mod          |
+| `.rs`     | rustfmt              | Cargo.toml      |
+| `.json`   | PowerShell Convert   | -               |
+| `.md`     | Prettier             | package.json    |
+| `.yaml`   | Prettier             | -               |
+| `.css`    | Prettier + Stylelint | package.json    |
+| `.html`   | Prettier             | -               |
 
 ## Integration by AI Agent
 
@@ -51,7 +52,11 @@ Add to `~/.config/opencode/settings.json`:
         "name": "auto-format",
         "trigger": "Edit",
         "command": "pwsh",
-        "args": ["-NoProfile", "-Command", "C:/Workspace_local/workspace-foundation/hooks/pre-tool-format.ps1 -FilePath {{file}}"]
+        "args": [
+          "-NoProfile",
+          "-Command",
+          "C:/Workspace_local/workspace-foundation/hooks/pre-tool-format.ps1 -FilePath {{file}}"
+        ]
       }
     ]
   }
@@ -65,15 +70,15 @@ hooks:
   pre_tool_use:
     - name: auto-format
       when:
-        tool_names: ["edit", "write"]
-        file_patterns: ["*.ps1", "*.ts", "*.js", "*.py", "*.go"]
+        tool_names: ['edit', 'write']
+        file_patterns: ['*.ps1', '*.ts', '*.js', '*.py', '*.go']
       run: pwsh
       args:
         - -NoProfile
         - -Command
         - C:/Workspace_local/workspace-foundation/hooks/pre-tool-format.ps1
         - -FilePath
-        - "{{file}}"
+        - '{{file}}'
 ```
 
 ### Claude Code
@@ -152,42 +157,42 @@ Create VS Code task in `.vscode/tasks.json`:
 
 ## Cost Savings Estimation
 
-| Scenario | Without Hook | With Hook |
-|----------|--------------|-----------|
-| Edit  Fix indentation | 500 tokens wasted | 0 tokens |
-| Edit  ESLint issues | 300 tokens wasted | 0 tokens |
-| Edit  Black formatting | 200 tokens wasted | 0 tokens |
-| **Per fix** | **~1,000 tokens** | **~50 tokens** (hook) |
-| **Monthly (50 fixes)** | **50,000 tokens** | **2,500 tokens** |
+| Scenario               | Without Hook      | With Hook             |
+| ---------------------- | ----------------- | --------------------- |
+| Edit Fix indentation   | 500 tokens wasted | 0 tokens              |
+| Edit ESLint issues     | 300 tokens wasted | 0 tokens              |
+| Edit Black formatting  | 200 tokens wasted | 0 tokens              |
+| **Per fix**            | **~1,000 tokens** | **~50 tokens** (hook) |
+| **Monthly (50 fixes)** | **50,000 tokens** | **2,500 tokens**      |
 
 ## How It Works
 
 ```
 
-                        Agent Edit                            
-                    (User or LLM)                             
+                        Agent Edit
+                    (User or LLM)
 
-                          
-                          
 
-                    File Saved                                
 
-                          
-                          
 
-                  PreToolUse Hook                            
-     
-    1. Detect file extension                              
-    2. Check formatter availability                       
-    3. Run appropriate formatter                         
-    4. Apply fixes                                        
-    5. Report if changes made                             
-     
+                    File Saved
 
-                          
-                          
 
-                   Agent Read (Clean File)                   
+
+
+                  PreToolUse Hook
+
+    1. Detect file extension
+    2. Check formatter availability
+    3. Run appropriate formatter
+    4. Apply fixes
+    5. Report if changes made
+
+
+
+
+
+                   Agent Read (Clean File)
 
 ```
 
@@ -198,6 +203,7 @@ Create VS Code task in `.vscode/tasks.json`:
 **Cause:** No config file for that language in project.
 
 **Solution:** Create config or install formatter globally:
+
 ```powershell
 # PowerShell
 Install-Module -Name PSScriptAnalyzer -Scope CurrentUser
@@ -217,6 +223,7 @@ go install golang.org/x/scripts/utilities/cmd/gofmt@latest
 **Cause:** Formatter not in PATH.
 
 **Solution:** Use full path or ensure PATH includes:
+
 ```powershell
 # Add to PATH
 $env:PATH += ";C:\Program Files\nodejs;C:\Python311;$env:USERPROFILE\go\bin"
@@ -227,6 +234,7 @@ $env:PATH += ";C:\Program Files\nodejs;C:\Python311;$env:USERPROFILE\go\bin"
 **Cause:** Hook script blocked by execution policy.
 
 **Solution:**
+
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```

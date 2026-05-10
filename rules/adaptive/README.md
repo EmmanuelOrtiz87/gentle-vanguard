@@ -22,16 +22,19 @@ rules/adaptive/
 ## Norm Types
 
 ### DOC-### (Documentation Placement)
+
 Rules about where documentation should be stored, naming conventions, and structure.
 
 **Example**: `DOC-001` - Documentation saved in project root instead of docs/
 
 ### CORR-### (Auto-Correction)
+
 Patterns for automatically fixing common mistakes (PowerShell syntax, etc.).
 
 **Example**: `CORR-001` - PowerShell [OK] parser error at line start
 
 ### SESS-### (Session Patterns)
+
 Norms about session behavior, startup/shutdown procedures, and agent interactions.
 
 **Example**: `SESS-001` - Missing directories created manually each session

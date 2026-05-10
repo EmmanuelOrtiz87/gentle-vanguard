@@ -1,13 +1,12 @@
 ---
 name: skill-creator
 description: >
-  Creates new AI agent skills following the Agent Skills spec.
-  Trigger: "create skill", "new skill", "add agent instructions", "document patterns",
-  "skill factory", "generate skill", "skill template"
+  Creates new AI agent skills following the Agent Skills spec. Trigger: "create skill", "new skill",
+  "add agent instructions", "document patterns", "skill factory", "generate skill", "skill template"
 license: Apache-2.0
 metadata:
   author: workspace-foundation
-  versión: "2.0"
+  versión: '2.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task
 ---
 
@@ -18,12 +17,14 @@ Create new AI agent skills following Foundation's Agent Skills specification.
 ## When to Create a Skill
 
 **CREATE a skill when:**
+
 - A pattern is used repeatedly and AI needs guidance
 - Project-specific conventions differ from generic best practices
 - Complex workflows need step-by-step instructions
 - decisión trees help AI choose the right approach
 
 **DON'T create a skill when:**
+
 - Documentation already exists (reference instead)
 - Pattern is trivial or self-explanatory
 - It's a one-off task
@@ -46,16 +47,15 @@ skills/{skill-name}/
 
 ## SKILL.md Template
 
-```markdown
+````markdown
 ---
-name: {skill-name}
+name: { skill-name }
 description: >
-  {One-line description of what this skill does}.
-  Trigger: {When the AI should load this skill}.
+  {One-line description of what this skill does}. Trigger: {When the AI should load this skill}.
 license: Apache-2.0
 metadata:
   author: workspace-foundation
-  versión: "1.0"
+  versión: '1.0'
 ---
 
 ## When to Use
@@ -72,13 +72,12 @@ metadata:
 
 ## Commands
 
-\`\`\`bash
-{Common commands}
-\`\`\`
+\`\`\`bash {Common commands} \`\`\`
 
 ## Resources
 
 <!-- Template placeholders - replace with actual paths when creating a skill -->
+
 - **Templates**: See `assets/` for code templates, schemas, examples
 - **Documentation**: See `references/` for local documentation links
 
@@ -86,24 +85,24 @@ metadata:
 
 ## Naming Conventions
 
-| Type | Pattern | Examples |
-|------|---------|----------|
-| Generic skill | `{technology}` | `pytest`, `playwright`, `typescript` |
-| Foundation-specific | `{name}-skill` | `foundation-manager`, `skill-creator` |
-| Workflow skill | `{action}-{target}` | `github-pr`, `jira-task` |
-| Architecture | `{component}-governance` | `documentation-governance` |
-| Testing skill | `{project}-test-{component}` | `myapp-test-sdk` |
+| Type                | Pattern                      | Examples                              |
+| ------------------- | ---------------------------- | ------------------------------------- |
+| Generic skill       | `{technology}`               | `pytest`, `playwright`, `typescript`  |
+| Foundation-specific | `{name}-skill`               | `foundation-manager`, `skill-creator` |
+| Workflow skill      | `{action}-{target}`          | `github-pr`, `jira-task`              |
+| Architecture        | `{component}-governance`     | `documentation-governance`            |
+| Testing skill       | `{project}-test-{component}` | `myapp-test-sdk`                      |
 
 ---
 
 ## decisión: assets/ vs references/
 
-| Need | Use |
-|------|-----|
-| Code templates | `assets/` |
-| JSON schemas | `assets/` |
-| Example configs | `assets/` |
-| Link to existing docs | `references/` |
+| Need                    | Use                             |
+| ----------------------- | ------------------------------- |
+| Code templates          | `assets/`                       |
+| JSON schemas            | `assets/`                       |
+| Example configs         | `assets/`                       |
+| Link to existing docs   | `references/`                   |
 | Link to external guides | `references/` (with local path) |
 
 **Key Rule**: `references/` should point to LOCAL files (`docs/*.md`), not web URLs.
@@ -112,25 +111,27 @@ metadata:
 
 ## Frontmatter Fields
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| `name` | Yes | Skill identifier (lowercase, hyphens) |
-| `description` | Yes | What + Trigger in one block |
-| `license` | Yes | Always `Apache-2.0` |
-| `metadata.author` | Yes | `workspace-foundation` |
-| `metadata.versión` | Yes | Semantic versión as string |
+| Field              | Required | Description                           |
+| ------------------ | -------- | ------------------------------------- |
+| `name`             | Yes      | Skill identifier (lowercase, hyphens) |
+| `description`      | Yes      | What + Trigger in one block           |
+| `license`          | Yes      | Always `Apache-2.0`                   |
+| `metadata.author`  | Yes      | `workspace-foundation`                |
+| `metadata.versión` | Yes      | Semantic versión as string            |
 
 ---
 
 ## Content Guidelines
 
 ### DO
+
 - Start with the most critical patterns
 - Use tables for decisión trees
 - Keep code examples minimal and focused
 - Include Commands section with copy-paste commands
 
 ### DON'T
+
 - Add Keywords section (agent searches frontmatter, not body)
 - Duplicate content from existing docs (reference instead)
 - Include lengthy explanations (link to docs)
@@ -159,6 +160,7 @@ After creating the skill, add it to `SKILL_INDEX.md`:
 ```markdown
 | **Category** | skill-name |
 ```
+````
 
 ---
 
@@ -167,5 +169,3 @@ After creating the skill, add it to `SKILL_INDEX.md`:
 - **Foundation**: See `~/.gentleman/` for global installation
 - **Skill Index**: See [SKILL_INDEX.md](../SKILL_INDEX.md) for all skills
 - **Documentation**: See [docs/](../../docs/) for guides
-
-

@@ -1,15 +1,15 @@
 ---
 name: adaptive-mode-orchestrator
 description: >
-  Adaptive Mode Mejorado - Orquestacin inteligente con DAG dinmico, feedback loops automticos
-  y rollback inteligente. Coordina mltiples agentes con dependencias reales, permite ciclos
-  de retroalimentacin (QA  DEV  QA) y ejecuta rollback automtico ante fallos crticos.
+  Adaptive Mode Mejorado - Orquestacin inteligente con DAG dinmico, feedback loops automticos y
+  rollback inteligente. Coordina mltiples agentes con dependencias reales, permite ciclos de
+  retroalimentacin (QA  DEV  QA) y ejecuta rollback automtico ante fallos crticos.
 license: Apache-2.0
 metadata:
   author: workspace-foundation
-  versión: "1.0"
-  status: "ACTIVE"
-  priority: "CRITICAL"
+  versión: '1.0'
+  status: 'ACTIVE'
+  priority: 'CRITICAL'
 ---
 
 # ADAPTIVE MODE ORCHESTRATOR SKILL
@@ -18,39 +18,44 @@ metadata:
 
 El **Adaptive Mode Orchestrator** es un sistema de orquestacin inteligente que:
 
-1. **Analiza dependencias reales** entre agentes (BA  SAD  DEV  QA  OPS)
+1. **Analiza dependencias reales** entre agentes (BA SAD DEV QA OPS)
 2. **Crea fases dinmicas** basadas en un DAG (Directed Acyclic Graph)
-3. **Permite feedback loops** automticos (QA  DEV  QA, GOV  DEV)
+3. **Permite feedback loops** automticos (QA DEV QA, GOV DEV)
 4. **Implementa rollback automtico** cuando QA o GOV fallan
 5. **Ejecuta en modo automtico** sin intervencin manual
 6. **Monitorea y adapta** el flujo en tiempo real
 
 ## Caractersticas Principales
 
-###  DAG-Based Orchestration
+### DAG-Based Orchestration
+
 - Anlisis automtico de dependencias entre agentes
 - Ejecucin topolgicamente ordenada
 - Paralelizacin inteligente donde es posible
 
-###  Feedback Loops
-- **QA  DEV**: Fallos de prueba disparan rework de desarrollo
-- **QA  SAD**: Problemas de arquitectura disparan revisión de diseo
-- **GOV  DEV**: Problemas de seguridad disparan fixes de cdigo
+### Feedback Loops
+
+- **QA DEV**: Fallos de prueba disparan rework de desarrollo
+- **QA SAD**: Problemas de arquitectura disparan revisión de diseo
+- **GOV DEV**: Problemas de seguridad disparan fixes de cdigo
 - Mximo de iteraciones configurable por loop
 
-###  Auto-Rollback
+### Auto-Rollback
+
 - Rollback automtico ante fallos crticos
 - Checkpoints automticos despus de cada fase
 - Preservacin de artefactos durante rollback
 - Mltiples intentos de rollback configurables
 
-###  Ejecucin Automtica
+### Ejecucin Automtica
+
 - Deteccin automtica de fases completadas
 - Transicin automtica entre fases
 - decisiónes automticas basadas en mtricas
 - Sin intervencin manual requerida
 
-###  Monitoreo en Tiempo Real
+### Monitoreo en Tiempo Real
+
 - Mtricas de ejecucin por agente
 - Tracking de feedback loops
 - Logs detallados de rollbacks
@@ -60,18 +65,18 @@ El **Adaptive Mode Orchestrator** es un sistema de orquestacin inteligente que:
 
 ```
 PLANNING (BA)
-    
+
 DESIGN (SAD)
-    
+
 IMPLEMENTATION (DEV)
      GOVERNANCE (GOV) [paralelo]
      DOCUMENTATION (DOC) [paralelo]
-    
+
 QUALITY_ASSURANCE (QA)
      Si falla  FEEDBACK LOOP  IMPLEMENTATION
      Si falla seguridad  FEEDBACK LOOP  GOVERNANCE
      Si pasa  DEPLOYMENT
-    
+
 DEPLOYMENT (OPS)
      Si falla  AUTO-ROLLBACK
      Si pasa  COMPLETE
@@ -144,7 +149,7 @@ DEPLOYMENT (OPS)
 
 ## Feedback Loops en Detalle
 
-### QA  DEV Loop
+### QA DEV Loop
 
 ```
 1. QA ejecuta pruebas
@@ -158,7 +163,7 @@ DEPLOYMENT (OPS)
    - Contina a siguiente fase
 ```
 
-### GOV  DEV Loop
+### GOV DEV Loop
 
 ```
 1. GOV revisa seguridad
@@ -261,29 +266,29 @@ else:
 
 ## Ventajas
 
- **automatización Completa**: Sin intervencin manual
- **Inteligencia Adaptativa**: Se adapta a resultados
- **Feedback Loops**: Ciclos automticos de mejora
- **Rollback Seguro**: Recuperacin automtica ante fallos
- **Monitoreo Real-time**: Visibilidad completa
- **Escalabilidad**: Maneja mltiples agentes
- **Confiabilidad**: Checkpoints y recuperacin
+**automatización Completa**: Sin intervencin manual **Inteligencia Adaptativa**: Se adapta a
+resultados **Feedback Loops**: Ciclos automticos de mejora **Rollback Seguro**: Recuperacin
+automtica ante fallos **Monitoreo Real-time**: Visibilidad completa **Escalabilidad**: Maneja
+mltiples agentes **Confiabilidad**: Checkpoints y recuperacin
 
 ## Casos de Uso
 
 ### 1. Feature Development
+
 ```
 BA  SAD  DEV  QA  OPS
 Con feedback loops automticos si QA falla
 ```
 
 ### 2. Bug Fixes
+
 ```
 DEV  QA  OPS
 Con rollback automtico si deployment falla
 ```
 
 ### 3. Security Patches
+
 ```
 DEV  GOV  QA  OPS
 Con rollback automtico si seguridad falla
@@ -292,12 +297,15 @@ Con rollback automtico si seguridad falla
 ## Troubleshooting
 
 ### Problema: Feedback loop infinito
+
 **Solucin**: Aumentar `max_iterations` en configuración
 
 ### Problema: Rollback no se ejecuta
+
 **Solucin**: Verificar `rollback_policy.enabled` en config
 
 ### Problema: Fases se saltan
+
 **Solucin**: Verificar dependencias en DAG
 
 ## Referencias
@@ -309,8 +317,4 @@ Con rollback automtico si seguridad falla
 
 ---
 
-**Estado**: ACTIVE
-**Versin**: 1.0
-**ltima actualizacin**: 2026-04-23
-
-
+**Estado**: ACTIVE **Versin**: 1.0 **ltima actualizacin**: 2026-04-23

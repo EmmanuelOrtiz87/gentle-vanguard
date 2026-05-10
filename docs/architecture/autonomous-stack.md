@@ -2,40 +2,43 @@
 
 ## Overview
 
-The Workspace Foundation implements a **100% autonomous development stack** with self-healing, self-learning, and self-scaling capabilities. All systems operate without human intervention in production.
+The Workspace Foundation implements a **100% autonomous development stack** with self-healing,
+self-learning, and self-scaling capabilities. All systems operate without human intervention in
+production.
 
 ## Stack Layered Architecture
 
 ```
 
-              Agent Layer (AI Agents)                
+              Agent Layer (AI Agents)
 
-         Orchestration Layer (adaptive/)             
-    
-   Auto-Backup  Auto-Norm     Auto-Scaling    
-   Orchestrator Enforcer      Delegation      
-    
-    
-   Auto-Norm    Auto-Doc      Auto-Testing    
-   Learner       Drift         Orchestrator    
-    
-    
-   Backup       Judgment Day                   
-   Resilience   Bridge                         
-    
+         Orchestration Layer (adaptive/)
 
-         Persistence Layer (Engram + .backups/)      
+   Auto-Backup  Auto-Norm     Auto-Scaling
+   Orchestrator Enforcer      Delegation
 
-         Security Layer (AES-256 Encryption)         
+
+   Auto-Norm    Auto-Doc      Auto-Testing
+   Learner       Drift         Orchestrator
+
+
+   Backup       Judgment Day
+   Resilience   Bridge
+
+
+         Persistence Layer (Engram + .backups/)
+
+         Security Layer (AES-256 Encryption)
 
 ```
 
 ## Component Details
 
 ### 1. Auto-Backup Orchestrator
-**File**: `scripts/adaptive/auto-backup-orchestrator.ps1`
-**Trigger**: session-start, session-close, manual
-**Function**:
+
+**File**: `scripts/adaptive/auto-backup-orchestrator.ps1` **Trigger**: session-start, session-close,
+manual **Function**:
+
 - AES-256 encrypted backups of:
   - Engram memory (`.backups/engram-memory.json.enc`)
   - Learned norms (`.backups/learned-norms.json.enc`)
@@ -43,15 +46,17 @@ The Workspace Foundation implements a **100% autonomous development stack** with
 - Key derivation: workspace path + machine name + salt
 - Metadata unencrypted (no sensitive data)
 
-**Security**: 
+**Security**:
+
 - AES-256 encryption
 - Key never stored
 - `.backups/` in `.gitignore` (never pushed to repo)
 
 ### 2. Auto-Norm Enforcer
-**File**: `scripts/adaptive/auto-norm-enforcer.ps1`
-**Trigger**: session-start, session-close, orchestrator, manual
-**Function**:
+
+**File**: `scripts/adaptive/auto-norm-enforcer.ps1` **Trigger**: session-start, session-close,
+orchestrator, manual **Function**:
+
 - Validates directory structure (`docs/`, `rules/adaptive/`)
 - Creates missing directories automatically
 - Checks documentation standards
@@ -60,23 +65,26 @@ The Workspace Foundation implements a **100% autonomous development stack** with
 **Output**: PASS/FAIL with issues and fixes applied
 
 ### 3. Auto-Norm Learner
-**File**: `scripts/adaptive/auto-norm-learner.ps1`
-**Trigger**: session-start, session-close, manual
+
+**File**: `scripts/adaptive/auto-norm-learner.ps1` **Trigger**: session-start, session-close, manual
 **Function**:
+
 - Queries Engram memory for patterns
 - Creates new norms in `rules/adaptive/LEARNED-NORMS.md`
 - Promotes norms to `rules/custom/` when confidence is "high"
 - Updates norm database
 
 **Norm Types**:
+
 - `DOC-###`: Documentation placement/organization
 - `CORR-###`: Correction patterns (PowerShell syntax, etc.)
 - `SESS-###`: Session patterns
 
 ### 4. Auto-Doc-Drift Detector
-**File**: `scripts/adaptive/auto-doc-drift-detector.ps1`
-**Trigger**: session-start, session-close, manual
-**Function**:
+
+**File**: `scripts/adaptive/auto-doc-drift-detector.ps1` **Trigger**: session-start, session-close,
+manual **Function**:
+
 - Scans code files vs documentation files
 - Compares `LastWriteTime` timestamps
 - Detects when code is newer than docs
@@ -85,9 +93,10 @@ The Workspace Foundation implements a **100% autonomous development stack** with
 **Output**: PASS (up-to-date) or FAIL (drift detected)
 
 ### 5. Auto-Testing Orchestrator
-**File**: `scripts/adaptive/auto-testing-final.ps1`
-**Trigger**: session-start, session-close, manual
-**Function**:
+
+**File**: `scripts/adaptive/auto-testing-final.ps1` **Trigger**: session-start, session-close,
+manual **Function**:
+
 - Non-blocking test execution
 - Logs results to `.session/testing-results.json`
 - Auto-repair capability (attempts fix on failure)
@@ -96,34 +105,38 @@ The Workspace Foundation implements a **100% autonomous development stack** with
 **Key Feature**: Non-blocking - logs for Judgment Day separate review
 
 ### 6. Auto-Scaling Delegation
-**File**: `scripts/adaptive/auto-scaling.ps1`
-**Trigger**: session-start, session-close, manual
+
+**File**: `scripts/adaptive/auto-scaling.ps1` **Trigger**: session-start, session-close, manual
 **Function**:
+
 - Learns which subagent works best for each task type
 - Tracks success/failure rates
 - Optimizes delegation over time
 - Database: `.session/scaling-db.json`
 
 **Default Patterns**:
-- `code-fix`  sdd-apply
-- `doc-update`  sdd-apply
-- `research`  explore
-- `test-fix`  sdd-verify
-- `general-task`  general
+
+- `code-fix` sdd-apply
+- `doc-update` sdd-apply
+- `research` explore
+- `test-fix` sdd-verify
+- `general-task` general
 
 ### 7. Backup Resilience Test
-**File**: `scripts/adaptive/backup-resilience-test.ps1`
-**Trigger**: manual (for validation)
+
+**File**: `scripts/adaptive/backup-resilience-test.ps1` **Trigger**: manual (for validation)
 **Function**:
+
 - Test 1: Tamper detection (modify encrypted backup, attempt restore)
 - Test 2: Fallback to older backup
 - Graceful failure handling
 - Results: `.backups/resilience-test-results.json`
 
 ### 8. Judgment Day Bridge
-**File**: `scripts/adaptive/judgment-day-bridge.ps1`
-**Trigger**: session-close, manual
+
+**File**: `scripts/adaptive/judgment-day-bridge.ps1` **Trigger**: session-close, manual
 **Function**:
+
 - Collects logs from all autonomous systems
 - Formats for Judgment Day review
 - Aggregates findings
@@ -132,6 +145,7 @@ The Workspace Foundation implements a **100% autonomous development stack** with
 ## Session Lifecycle Integration
 
 ### Session Start Flow
+
 ```
 1. Auto-Backup (backup current state)
 2. Auto-Norm-Enforcer (validate structure)
@@ -142,6 +156,7 @@ The Workspace Foundation implements a **100% autonomous development stack** with
 ```
 
 ### Session Close Flow
+
 ```
 1. Auto-Testing (final test run)
 2. Auto-Scaling (optimize patterns)
@@ -153,17 +168,20 @@ The Workspace Foundation implements a **100% autonomous development stack** with
 ## Security Architecture
 
 ### Encryption
+
 - **Algorithm**: AES-256-CBC
 - **Key Derivation**: SHA-256(workspaceId | machineId | salt)
 - **IV**: Cryptographically random (16 bytes)
 - **Storage**: Only encrypted files in `.backups/`
 
 ### What Gets Encrypted
+
 - Engram memory export (JSON)
 - Learned norms (JSON)
 - Session state (JSON)
 
 ### What Stays Unencrypted
+
 - Backup metadata (timestamps, component names only)
 - No sensitive code/doc content in logs
 - All logs contain metadata only
@@ -199,6 +217,7 @@ workspace-foundation/
 ## Usage Examples
 
 ### Manual Operations
+
 ```powershell
 # Backup now
 .\scripts\adaptive\auto-backup-orchestrator.ps1 -Action backup -Trigger manual
@@ -228,25 +247,27 @@ workspace-foundation/
 ## Troubleshooting
 
 ### Engram Binary Not Found
-**Symptom**: `[BKP-WARN] Engram binary not found, skipping`
-**Fix**: Ensure `scripts/utilities/engram.exe` exists. The script auto-detects via:
+
+**Symptom**: `[BKP-WARN] Engram binary not found, skipping` **Fix**: Ensure
+`scripts/utilities/engram.exe` exists. The script auto-detects via:
+
 ```powershell
 $engramPath = Join-Path $repoRoot "tools\engram.exe"
 ```
 
 ### Backup Metadata Only (No .enc Files)
-**Cause**: Engram not running or binary not found
-**Result**: Only metadata backup (unencrypted)
+
+**Cause**: Engram not running or binary not found **Result**: Only metadata backup (unencrypted)
 **Fix**: Verify Engram binary path
 
 ### PowerShell Parser Errors
-**Symptom**: `InvalidLeftHandSide` or `Missing ')'`
-**Cause**: Trailing commas in param blocks
+
+**Symptom**: `InvalidLeftHandSide` or `Missing ')'` **Cause**: Trailing commas in param blocks
 **Fix**: Ensure no trailing commas after parameter defaults
 
 ### Auto-Scaling Not Learning
-**Symptom**: All patterns show "low" confidence, 0 total
-**Cause**: New installation, no history yet
+
+**Symptom**: All patterns show "low" confidence, 0 total **Cause**: New installation, no history yet
 **Fix**: Use system normally; confidence increases after 5+ operations
 
 ## Future Enhancements

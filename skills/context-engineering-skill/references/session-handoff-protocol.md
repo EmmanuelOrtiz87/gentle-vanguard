@@ -15,6 +15,7 @@ flowchart LR
 ## Steps
 
 ### 1. Pre-Handoff
+
 ```powershell
 # Save session state
 .\wf.ps1 end-session
@@ -27,6 +28,7 @@ flowchart LR
 ```
 
 ### 2. Start New Session
+
 ```powershell
 # From new thread: paste compact prompt
 # Then run:
@@ -34,6 +36,7 @@ flowchart LR
 ```
 
 ### 3. Intra-Session Context Pack
+
 ```powershell
 # Mid-session snapshot
 .\wf.ps1 context-pack "current objective"

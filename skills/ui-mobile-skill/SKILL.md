@@ -3,12 +3,11 @@ name: ui-mobile
 description: Mobile UI patterns - React Native, iOS/Android, touch targets
 when-to-use: When building mobile UI components
 user-invocable: false
-paths: ["**/*.tsx", "**/*.jsx", "ios/**", "android/**", "**/*.dart"]
+paths: ['**/*.tsx', '**/*.jsx', 'ios/**', 'android/**', '**/*.dart']
 effort: medium
 ---
 
 # Mobile UI Design Skill (React Native)
-
 
 ---
 
@@ -17,6 +16,7 @@ effort: medium
 **These rules are NON-NEGOTIABLE. Every UI element must pass these checks.**
 
 ### 1. Touch Targets (CRITICAL)
+
 ```typescript
 // MINIMUM 44x44 points for ALL interactive elements
 const MINIMUM_TOUCH_SIZE = 44;
@@ -43,18 +43,19 @@ style={{ padding: 4 }}  //  RESULTS IN TINY TARGET
 ```
 
 ### 2. Color Contrast (CRITICAL)
+
 ```typescript
 // WCAG 2.1 AA: 4.5:1 for text, 3:1 for large text/UI
 
 // SAFE COMBINATIONS:
 const colors = {
   // Light mode
-  textPrimary: '#000000',     // on white = 21:1 
-  textSecondary: '#374151',   // gray-700 on white = 9.2:1 
+  textPrimary: '#000000', // on white = 21:1
+  textSecondary: '#374151', // gray-700 on white = 9.2:1
 
   // Dark mode
-  textPrimaryDark: '#FFFFFF', // on gray-900 = 16:1 
-  textSecondaryDark: '#E5E7EB', // gray-200 on gray-900 = 11:1 
+  textPrimaryDark: '#FFFFFF', // on gray-900 = 16:1
+  textSecondaryDark: '#E5E7EB', // gray-200 on gray-900 = 11:1
 };
 
 // FORBIDDEN - FAILS CONTRAST:
@@ -64,6 +65,7 @@ const colors = {
 ```
 
 ### 3. Visibility Rules
+
 ```typescript
 // ALL BUTTONS MUST HAVE visible boundaries
 
@@ -113,6 +115,7 @@ const styles = StyleSheet.create({
 ```
 
 ### 4. Accessibility Labels (REQUIRED)
+
 ```tsx
 // EVERY interactive element needs accessibility props
 
@@ -145,16 +148,12 @@ const styles = StyleSheet.create({
 ```
 
 ### 5. Focus/Selection States
+
 ```tsx
 // EVERY Pressable needs visible pressed state
-<Pressable
-  style={({ pressed }) => [
-    styles.button,
-    pressed && styles.buttonPressed,
-  ]}
->
+<Pressable style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}>
   {children}
-</Pressable>
+</Pressable>;
 
 const styles = StyleSheet.create({
   button: {
@@ -172,11 +171,13 @@ const styles = StyleSheet.create({
 
 ## Core Philosophy
 
-**Mobile UI is about touch, speed, and focus.** No hover states, smaller screens, thumb-friendly targets. Design for one-handed use and interruption recovery.
+**Mobile UI is about touch, speed, and focus.** No hover states, smaller screens, thumb-friendly
+targets. Design for one-handed use and interruption recovery.
 
 ## Platform Differences
 
 ### iOS vs Android
+
 ```typescript
 import { Platform } from 'react-native';
 
@@ -202,6 +203,7 @@ const styles = StyleSheet.create({
 ```
 
 ### Design Language
+
 ```
 iOS (Human Interface Guidelines)
 
@@ -223,6 +225,7 @@ Android (Material Design 3)
 ## Spacing System
 
 ### 4px Base Grid
+
 ```typescript
 // React Native spacing - consistent scale
 const spacing = {
@@ -244,6 +247,7 @@ const styles = StyleSheet.create({
 ```
 
 ### Safe Areas
+
 ```tsx
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -251,13 +255,15 @@ const Screen = ({ children }) => {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={{
-      flex: 1,
-      paddingTop: insets.top,
-      paddingBottom: insets.bottom,
-      paddingLeft: Math.max(insets.left, 16),
-      paddingRight: Math.max(insets.right, 16),
-    }}>
+    <View
+      style={{
+        flex: 1,
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        paddingLeft: Math.max(insets.left, 16),
+        paddingRight: Math.max(insets.right, 16),
+      }}
+    >
       {children}
     </View>
   );
@@ -267,6 +273,7 @@ const Screen = ({ children }) => {
 ## Typography
 
 ### Type Scale
+
 ```typescript
 const typography = {
   // Large titles (iOS style)
@@ -317,6 +324,7 @@ const typography = {
 ## Color System
 
 ### Semantic Colors
+
 ```typescript
 // Use semantic names, not literal colors
 const colors = {
@@ -332,7 +340,7 @@ const colors = {
   // Text
   label: '#000000',
   labelSecondary: '#3C3C43', // 60% opacity
-  labelTertiary: '#3C3C43',  // 30% opacity
+  labelTertiary: '#3C3C43', // 30% opacity
 
   // Actions
   primary: '#007AFF',
@@ -356,6 +364,7 @@ const darkColors = {
 ```
 
 ### Dynamic Colors (React Native)
+
 ```tsx
 import { useColorScheme } from 'react-native';
 
@@ -378,6 +387,7 @@ const MyComponent = () => {
 ## Touch Targets
 
 ### Minimum Sizes
+
 ```typescript
 // CRITICAL: Minimum 44pt touch targets
 const touchable = {
@@ -413,6 +423,7 @@ const styles = StyleSheet.create({
 ```
 
 ### Touch Feedback
+
 ```tsx
 import { Pressable } from 'react-native';
 
@@ -420,10 +431,7 @@ import { Pressable } from 'react-native';
 const Button = ({ children, onPress }) => (
   <Pressable
     onPress={onPress}
-    style={({ pressed }) => [
-      styles.button,
-      pressed && { opacity: 0.7 },
-    ]}
+    style={({ pressed }) => [styles.button, pressed && { opacity: 0.7 }]}
   >
     {children}
   </Pressable>
@@ -447,12 +455,9 @@ const AndroidButton = ({ children, onPress }) => (
 ## Component Patterns
 
 ### Cards
+
 ```tsx
-const Card = ({ children, style }) => (
-  <View style={[styles.card, style]}>
-    {children}
-  </View>
-);
+const Card = ({ children, style }) => <View style={[styles.card, style]}>{children}</View>;
 
 const styles = StyleSheet.create({
   card: {
@@ -475,6 +480,7 @@ const styles = StyleSheet.create({
 ```
 
 ### Buttons
+
 ```tsx
 // Primary button
 const PrimaryButton = ({ title, onPress, disabled }) => (
@@ -516,10 +522,7 @@ const styles = StyleSheet.create({
 const SecondaryButton = ({ title, onPress }) => (
   <Pressable
     onPress={onPress}
-    style={({ pressed }) => [
-      styles.secondaryButton,
-      pressed && { opacity: 0.7 },
-    ]}
+    style={({ pressed }) => [styles.secondaryButton, pressed && { opacity: 0.7 }]}
   >
     <Text style={styles.secondaryButtonText}>{title}</Text>
   </Pressable>
@@ -527,15 +530,14 @@ const SecondaryButton = ({ title, onPress }) => (
 ```
 
 ### Input Fields
+
 ```tsx
 const TextField = ({ label, value, onChangeText, error }) => {
   const [focused, setFocused] = useState(false);
 
   return (
     <View style={styles.textFieldContainer}>
-      {label && (
-        <Text style={styles.textFieldLabel}>{label}</Text>
-      )}
+      {label && <Text style={styles.textFieldLabel}>{label}</Text>}
       <TextInput
         value={value}
         onChangeText={onChangeText}
@@ -548,9 +550,7 @@ const TextField = ({ label, value, onChangeText, error }) => {
         ]}
         placeholderTextColor="#8E8E93"
       />
-      {error && (
-        <Text style={styles.errorText}>{error}</Text>
-      )}
+      {error && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
 };
@@ -589,24 +589,20 @@ const styles = StyleSheet.create({
 ```
 
 ### Lists
+
 ```tsx
 // Grouped list (iOS Settings style)
 const GroupedList = ({ sections }) => (
   <ScrollView style={styles.groupedList}>
     {sections.map((section, i) => (
       <View key={i} style={styles.section}>
-        {section.title && (
-          <Text style={styles.sectionHeader}>{section.title}</Text>
-        )}
+        {section.title && <Text style={styles.sectionHeader}>{section.title}</Text>}
         <View style={styles.sectionContent}>
           {section.items.map((item, j) => (
             <React.Fragment key={j}>
               {j > 0 && <View style={styles.separator} />}
               <Pressable
-                style={({ pressed }) => [
-                  styles.listRow,
-                  pressed && { backgroundColor: '#E5E5EA' },
-                ]}
+                style={({ pressed }) => [styles.listRow, pressed && { backgroundColor: '#E5E5EA' }]}
                 onPress={item.onPress}
               >
                 <Text style={styles.listRowText}>{item.title}</Text>
@@ -661,6 +657,7 @@ const styles = StyleSheet.create({
 ## Navigation Patterns
 
 ### Bottom Tab Bar
+
 ```tsx
 // Proper bottom tab sizing
 const tabBarStyle = {
@@ -676,17 +673,13 @@ const tabBarStyle = {
 const TabItem = ({ icon, label, active }) => (
   <View style={styles.tabItem}>
     <Icon name={icon} color={active ? '#007AFF' : '#8E8E93'} size={24} />
-    <Text style={[
-      styles.tabLabel,
-      { color: active ? '#007AFF' : '#8E8E93' }
-    ]}>
-      {label}
-    </Text>
+    <Text style={[styles.tabLabel, { color: active ? '#007AFF' : '#8E8E93' }]}>{label}</Text>
   </View>
 );
 ```
 
 ### Header
+
 ```tsx
 // Large title header (iOS)
 const LargeTitleHeader = ({ title, rightAction }) => {
@@ -726,6 +719,7 @@ const styles = StyleSheet.create({
 ## Animations
 
 ### Native Driver Animations
+
 ```tsx
 import { Animated } from 'react-native';
 
@@ -750,12 +744,9 @@ const bounce = (value: Animated.Value) => {
 ```
 
 ### Reanimated for Complex Animations
+
 ```tsx
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-} from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 
 const AnimatedCard = ({ children }) => {
   const scale = useSharedValue(1);
@@ -774,9 +765,7 @@ const AnimatedCard = ({ children }) => {
 
   return (
     <Pressable onPressIn={onPressIn} onPressOut={onPressOut}>
-      <Animated.View style={[styles.card, animatedStyle]}>
-        {children}
-      </Animated.View>
+      <Animated.View style={[styles.card, animatedStyle]}>{children}</Animated.View>
     </Pressable>
   );
 };
@@ -785,18 +774,16 @@ const AnimatedCard = ({ children }) => {
 ## Loading States
 
 ### Skeleton Loader
+
 ```tsx
 const SkeletonLoader = ({ width, height, borderRadius = 4 }) => {
   const opacity = useSharedValue(0.3);
 
   useEffect(() => {
     opacity.value = withRepeat(
-      withSequence(
-        withTiming(1, { duration: 500 }),
-        withTiming(0.3, { duration: 500 })
-      ),
+      withSequence(withTiming(1, { duration: 500 }), withTiming(0.3, { duration: 500 })),
       -1,
-      false
+      false,
     );
   }, []);
 
@@ -806,29 +793,23 @@ const SkeletonLoader = ({ width, height, borderRadius = 4 }) => {
 
   return (
     <Animated.View
-      style={[
-        { width, height, borderRadius, backgroundColor: '#E5E5EA' },
-        animatedStyle,
-      ]}
+      style={[{ width, height, borderRadius, backgroundColor: '#E5E5EA' }, animatedStyle]}
     />
   );
 };
 ```
 
 ### Activity Indicator
+
 ```tsx
 import { ActivityIndicator } from 'react-native';
 
 // Use platform-native indicator
-<ActivityIndicator size="large" color="#007AFF" />
+<ActivityIndicator size="large" color="#007AFF" />;
 
 // Button with loading state
 const LoadingButton = ({ loading, title, onPress }) => (
-  <Pressable
-    onPress={onPress}
-    disabled={loading}
-    style={styles.button}
-  >
+  <Pressable onPress={onPress} disabled={loading} style={styles.button}>
     {loading ? (
       <ActivityIndicator color="#FFFFFF" />
     ) : (
@@ -841,6 +822,7 @@ const LoadingButton = ({ loading, title, onPress }) => (
 ## Accessibility
 
 ### VoiceOver / TalkBack
+
 ```tsx
 // Accessible button
 <Pressable
@@ -874,6 +856,7 @@ const LoadingButton = ({ loading, title, onPress }) => (
 ```
 
 ### Dynamic Type (iOS)
+
 ```tsx
 import { PixelRatio } from 'react-native';
 
@@ -884,12 +867,13 @@ const scaledFontSize = (size: number) => size * fontScale;
 // Or use allowFontScaling
 <Text allowFontScaling={true} style={{ fontSize: 17 }}>
   This text scales with system settings
-</Text>
+</Text>;
 ```
 
 ## Anti-Patterns
 
 ### Never Do
+
 ```
  Touch targets smaller than 44pt
  Text smaller than 12pt
@@ -904,6 +888,7 @@ const scaledFontSize = (size: number) => size * fontScale;
 ```
 
 ### Common Mistakes
+
 ```tsx
 //  Hardcoded dimensions that break accessibility
 style={{ height: 40 }}  // Text might be larger
@@ -930,6 +915,7 @@ paddingTop: insets.top
 ## Quick Reference
 
 ### Mobile Defaults
+
 ```
 Touch targets: 44pt minimum
 Font sizes: 12pt min, 17pt body, 34pt large title
@@ -940,6 +926,7 @@ Shadow: iOS shadowOpacity 0.08-0.15, Android elevation 2-8
 ```
 
 ### Premium Feel Checklist
+
 ```
  All touch targets 44pt+
  Consistent spacing (4pt grid)
@@ -952,4 +939,3 @@ Shadow: iOS shadowOpacity 0.08-0.15, Android elevation 2-8
  Haptic feedback on actions
  Pull-to-refresh where appropriate
 ```
-

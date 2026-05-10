@@ -4,9 +4,7 @@
 
 directorio centralizado para todos los scripts del proyecto workspace-foundation.
 
-**Versión**: 2.0.0
-**última actualización**: 2026-04-21
-**Estado**:  PRODUCCIN
+**Versión**: 2.0.0 **última actualización**: 2026-04-21 **Estado**: PRODUCCIN
 
 ---
 
@@ -37,14 +35,16 @@ scripts/
 
 ---
 
-##  Scripts Disponibles
+## Scripts Disponibles
 
 ### Common (Funciones Compartidas)
 
 #### platform-helpers.ps1
+
 **Propósito**: Proporciona funciones de compatibilidad multiplataforma
 
 **Funciones principales**:
+
 - `Get-OSType` - Detecta el sistema operativo
 - `Get-SafePath` - Crea rutas agnsticas
 - `Get-UserHome` - Obtiene directorio del usuario
@@ -52,6 +52,7 @@ scripts/
 - `Set-ExecutablePermission` - Permisos ejecutables
 
 **Uso**:
+
 ```powershell
 . .\scripts\common\platform-helpers.ps1
 $osType = Get-OSType
@@ -64,32 +65,39 @@ Write-Log "Mensaje" "info"
 ### Testing (Scripts de Testing)
 
 #### run-tests.ps1
+
 **Propósito**: Ejecutor principal de tests
 
 **Parámetros**:
+
 - `-TestType` (all, unit, integration, performance, security)
 - `-GenerateReport` (genera reportes)
 - `-FailOnLowCoverage` (falla si coverage bajo)
 
 **Uso**:
+
 ```powershell
 .\scripts\testing\run-tests.ps1 -TestType all -GenerateReport
 ```
 
 **Salida**:
+
 - Reportes en `test-results/`
 - Cobertura en `coverage/`
 
 ---
 
 #### git-hooks-setup.ps1
+
 **Propósito**: Configura git hooks automáticamente
 
 **Hooks configurados**:
+
 - Pre-commit: Ejecuta unit tests
 - Pre-push: Ejecuta todos los tests
 
 **Uso**:
+
 ```powershell
 .\scripts\testing\git-hooks-setup.ps1
 ```
@@ -99,15 +107,18 @@ Write-Log "Mensaje" "info"
 ### Security (Scripts de Seguridad)
 
 #### encryption-manager.ps1
+
 **Propósito**: Gestión de encriptación AES-256
 
 **Acciones**:
+
 - `generate-key` - Genera clave de 256-bit
 - `encrypt` - Encripta datos
 - `decrypt` - Desencripta datos
 - `validate` - Valida configuración
 
 **Uso**:
+
 ```powershell
 # Generar clave
 .\scripts\security\encryption-manager.ps1 -Action generate-key
@@ -122,9 +133,11 @@ Write-Log "Mensaje" "info"
 ---
 
 #### input-validator.ps1
+
 **Propósito**: Validación y sanitizacin de entrada
 
 **Tipos de validacin**:
+
 - `string` - Strings con lmites
 - `integer` - Nmeros enteros
 - `path` - Rutas seguras
@@ -132,6 +145,7 @@ Write-Log "Mensaje" "info"
 - `email` - Emails vlidos
 
 **Uso**:
+
 ```powershell
 .\scripts\security\input-validator.ps1 -Input "test" -Type string
 .\scripts\security\input-validator.ps1 -Input ".\config\test.json" -Type path
@@ -140,9 +154,11 @@ Write-Log "Mensaje" "info"
 ---
 
 #### secrets-manager.ps1
+
 **Propósito**: Gestión segura de secretos
 
 **Acciones**:
+
 - `get` - Obtiene secreto
 - `set` - Establece secreto
 - `delete` - Elimina secreto
@@ -151,6 +167,7 @@ Write-Log "Mensaje" "info"
 - `validate` - Valida configuración
 
 **Uso**:
+
 ```powershell
 # Establecer
 .\scripts\security\secrets-manager.ps1 -Action set -SecretName "API_KEY" -SecretValue "secret123"
@@ -168,9 +185,11 @@ Write-Log "Mensaje" "info"
 ---
 
 #### security-logger.ps1
+
 **Propósito**: Logging y auditora de seguridad
 
 **Tipos de eventos**:
+
 - `access` - Acceso a recursos
 - `modification` - Cambios
 - `deletion` - Eliminaciones
@@ -179,6 +198,7 @@ Write-Log "Mensaje" "info"
 - `info` - Información
 
 **Uso**:
+
 ```powershell
 # Registrar evento
 .\scripts\security\security-logger.ps1 -EventType access -Message "User accessed config" -Severity low
@@ -195,9 +215,11 @@ Write-Log "Mensaje" "info"
 ### Monitoring (Scripts de Monitoreo)
 
 #### health-check.ps1
+
 **Propósito**: Verificación de salud del sistema
 
 **Verifica**:
+
 - Estado de Engram
 - Disponibilidad de recursos
 - Integridad de datos
@@ -208,9 +230,11 @@ Write-Log "Mensaje" "info"
 ### Utilities (Scripts Utilitarios)
 
 #### setup.ps1
+
 **Propósito**: Setup inicial del proyecto
 
 **Realiza**:
+
 - Creacin de directorios
 - Instalacin de dependencias
 - configuración inicial
@@ -219,9 +243,11 @@ Write-Log "Mensaje" "info"
 ---
 
 #### cleanup.ps1
+
 **Propósito**: Limpieza del proyecto
 
 **Limpia**:
+
 - archivos temporales
 - Logs antiguos
 - Cach
@@ -230,16 +256,19 @@ Write-Log "Mensaje" "info"
 ---
 
 #### simplify-text.ps1
+
 **Propósito**: Simplificación de texto para eficiencia de tokens
 
 **Transformaciones**:
+
 - Normaliza whitespace (tabs, saltos múltiples)
 - Remueve ruido de markdown (negrita, links, headers)
-- Abbrevia frases comunes ("por favor"  "pls", "es importante"  "imp")
+- Abbrevia frases comunes ("por favor" "pls", "es importante" "imp")
 - Remueve frases redundantes ("en conclusion", "por ultimo")
 - Deduplica palabras consecutivas
 
 **Uso**:
+
 ```powershell
 .\scripts\utilities\simplify-text.ps1 -InputText "Hola! Buenos dias, por favor necesito tu ayuda!"
 .\scripts\utilities\wf.ps1 simplify-text "texto a simplificar"
@@ -252,37 +281,42 @@ Write-Log "Mensaje" "info"
 
 ---
 
-##  Requisitos
+## Requisitos
 
 ### Mínimos
+
 - PowerShell 7.0+
 - .NET 6.0+
 - Pester (para tests)
 
 ### Recomendados
+
 - PowerShell 7.4+
 - .NET 8.0+
 - Git 2.40+
 
 ---
 
-##  Compatibilidad
+## Compatibilidad
 
 ### Sistemas Operativos
--  Windows 10/11
--  Linux (Ubuntu, CentOS, etc.)
--  macOS 11+
+
+- Windows 10/11
+- Linux (Ubuntu, CentOS, etc.)
+- macOS 11+
 
 ### Shells
--  PowerShell 7+
--  Bash 5+
--  Zsh
+
+- PowerShell 7+
+- Bash 5+
+- Zsh
 
 ---
 
-##  Seguridad
+## Seguridad
 
 ### Mejores Prácticas
+
 1. **Nunca hardcodear secretos**
    - Usar `secrets-manager.ps1`
    - Usar variables de entorno
@@ -301,31 +335,36 @@ Write-Log "Mensaje" "info"
 
 ---
 
-##  Ejemplos de Uso
+## Ejemplos de Uso
 
 ### Ejecutar Tests Completos
+
 ```powershell
 cd workspace-foundation
 .\scripts\testing\run-tests.ps1 -TestType all -GenerateReport
 ```
 
 ### Configurar Git Hooks
+
 ```powershell
 .\scripts\testing\git-hooks-setup.ps1
 ```
 
 ### Encriptar Datos
+
 ```powershell
 .\scripts\security\encryption-manager.ps1 -Action generate-key
 $encrypted = .\scripts\security\encryption-manager.ps1 -Action encrypt -Data "sensitive"
 ```
 
 ### Validar Entrada
+
 ```powershell
 .\scripts\security\input-validator.ps1 -Input "user@example.com" -Type email
 ```
 
 ### gestiónar Secretos
+
 ```powershell
 .\scripts\security\secrets-manager.ps1 -Action set -SecretName "DB_PASSWORD" -SecretValue "pass123"
 .\scripts\security\secrets-manager.ps1 -Action rotate
@@ -333,23 +372,29 @@ $encrypted = .\scripts\security\encryption-manager.ps1 -Action encrypt -Data "se
 
 ---
 
-##  Troubleshooting
+## Troubleshooting
 
 ### Problema: Script no ejecuta
+
 **Solución**: Verificar permisos de ejecución
+
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 ### Problema: Rutas no funcionan
+
 **Solución**: Usar `platform-helpers.ps1`
+
 ```powershell
 . .\scripts\common\platform-helpers.ps1
 $path = Get-SafePath @(".", "config", "test.json")
 ```
 
 ### Problema: Tests fallan
+
 **Solución**: Verificar Pester instalado
+
 ```powershell
 Install-Module -Name Pester -Force -SkipPublisherCheck
 ```
@@ -375,7 +420,7 @@ Install-Module -Name Pester -Force -SkipPublisherCheck
 
 ---
 
-##  Checklist de Uso
+## Checklist de Uso
 
 - [ ] Instalar PowerShell 7+
 - [ ] Clonar repositorio
@@ -388,9 +433,10 @@ Install-Module -Name Pester -Force -SkipPublisherCheck
 
 ---
 
-##  Soporte
+## Soporte
 
 Para reportar problemas o sugerencias:
+
 1. Revisar documentación
 2. Ejecutar `health-check.ps1`
 3. Revisar logs en `logs/`
@@ -398,6 +444,4 @@ Para reportar problemas o sugerencias:
 
 ---
 
-**última actualización**: 2026-04-21
-**Versión**: 2.0.0
-**Estado**:  PRODUCCIN
+**última actualización**: 2026-04-21 **Versión**: 2.0.0 **Estado**: PRODUCCIN

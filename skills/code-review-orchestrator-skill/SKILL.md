@@ -1,11 +1,14 @@
 ---
 name: code-review-orchestrator
-description: "Trigger: code review, review all, quality check, orchestrator, full review, check code, analyze code, audit code. Unified code quality and security review system across 7 dimensions."
+description:
+  'Trigger: code review, review all, quality check, orchestrator, full review, check code, analyze
+  code, audit code. Unified code quality and security review system across 7 dimensions.'
 ---
 
 ## Activation Contract
 
-Triggered on pre-commit hook or when user says "code review", "review all", "quality check", "audit code", "orchestrator", or similar.
+Triggered on pre-commit hook or when user says "code review", "review all", "quality check", "audit
+code", "orchestrator", or similar.
 
 ## Hard Rules
 
@@ -19,11 +22,11 @@ Triggered on pre-commit hook or when user says "code review", "review all", "qua
 
 ## Decision Gates
 
-| Gate | Options | Rule |
-|------|---------|------|
-| Scope | all, security, quality, testing, docs, api, git, quick, full | quick = Security+Quality; full = all 7 |
-| Severity action | CRITICAL block, HIGH warn+review, MEDIUM info, LOW suggest | CRITICAL always blocks (exit 1) |
-| Trigger | pre-commit auto vs manual | Auto runs quick scope only |
+| Gate            | Options                                                      | Rule                                   |
+| --------------- | ------------------------------------------------------------ | -------------------------------------- |
+| Scope           | all, security, quality, testing, docs, api, git, quick, full | quick = Security+Quality; full = all 7 |
+| Severity action | CRITICAL block, HIGH warn+review, MEDIUM info, LOW suggest   | CRITICAL always blocks (exit 1)        |
+| Trigger         | pre-commit auto vs manual                                    | Auto runs quick scope only             |
 
 ## Execution Steps
 
@@ -37,7 +40,8 @@ Triggered on pre-commit hook or when user says "code review", "review all", "qua
 
 ## Output Contract
 
-Return severity breakdown, categorized issues (file:line, description, recommendation), report file path, and exit code (1 if blocked).
+Return severity breakdown, categorized issues (file:line, description, recommendation), report file
+path, and exit code (1 if blocked).
 
 ## References
 

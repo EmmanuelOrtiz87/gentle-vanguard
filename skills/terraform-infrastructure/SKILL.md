@@ -1,9 +1,8 @@
 ---
 name: terraform-infrastructure
 description: >
-  Infrastructure as Code using Terraform with modular components, state
-  management, and multi-cloud deployments. Use for provisioning and managing
-  cloud resources.
+  Infrastructure as Code using Terraform with modular components, state management, and multi-cloud
+  deployments. Use for provisioning and managing cloud resources.
 ---
 
 # Terraform Infrastructure
@@ -17,7 +16,8 @@ description: >
 
 ## Overview
 
-Build scalable infrastructure as code with Terraform, managing AWS, Azure, GCP, and on-premise resources through declarative configuration, remote state, and automated provisioning.
+Build scalable infrastructure as code with Terraform, managing AWS, Azure, GCP, and on-premise
+resources through declarative configuration, remote state, and automated provisioning.
 
 ## When to Use
 
@@ -64,7 +64,7 @@ provider "aws" {
 
 ## Best Practices
 
-###  DO
+### DO
 
 - Use remote state (S3, Terraform Cloud)
 - Implement state locking (DynamoDB)
@@ -75,7 +75,7 @@ provider "aws" {
 - Implement code review before apply
 - Keep sensitive data in separate variable files
 
-###  DON'T
+### DON'T
 
 - Store state files locally in git
 - Use hardcoded values
@@ -84,5 +84,3 @@ provider "aws" {
 - Use root module for everything
 - Store secrets in code
 - Disable state locking
-
-

@@ -46,4 +46,3 @@ Before closing an architecture change, verify:
 3. The repo does not depend on embedded external tools.
 4. OS-specific behavior is documented.
 5. Scripts and docs match the selected structure.
-

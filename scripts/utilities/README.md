@@ -32,9 +32,11 @@ scripts/utilities/
 ## Directories by Functionality
 
 ### 1. **AI-AGENT-MANAGEMENT/**
+
 AI agent management and routing.
 
 **Main scripts:**
+
 - `agent-router.ps1` - Central agent router (BA, SAD, DEV, QA, OPS, GOV, DOC)
 - `invoke-ai-review.ps1` - Invoke AI review
 - `invoke-cloud-agent.ps1` - Invoke cloud agents
@@ -43,6 +45,7 @@ AI agent management and routing.
 - `sync-agent-instructions.ps1` - Sync agent instructions
 
 **Typical usage:**
+
 ```powershell
 .\scripts\utilities\AI-AGENT-MANAGEMENT\agent-router.ps1 -Agent DEV -Task "implement feature"
 ```
@@ -52,9 +55,11 @@ AI agent management and routing.
 ---
 
 ### 2. **AUDIT-REPORTING/**
+
 Audit, reporting, and session artifacts.
 
 **Main scripts:**
+
 - `audit-script-normalization.ps1` - Normalize scripts for audit
 - `context-metrics-report.ps1` - Context metrics report
 - `generate-audit-report.ps1` - Generate audit report
@@ -63,6 +68,7 @@ Audit, reporting, and session artifacts.
 - `generate-session-review.ps1` - Session review
 
 **Typical usage:**
+
 ```powershell
 .\scripts\utilities\AUDIT-REPORTING\generate-audit-report.ps1
 ```
@@ -72,9 +78,11 @@ Audit, reporting, and session artifacts.
 ---
 
 ### 3. **CONFIG/**
+
 Configuration, profiles, and config files.
 
 **Main files:**
+
 - `context-efficiency-config.json` - Context efficiency configuration
 - `session-autostart.config.json` - Session autostart configuration
 - `Microsoft.PowerShell_profile.ps1` - PowerShell profile
@@ -86,9 +94,11 @@ Configuration, profiles, and config files.
 ---
 
 ### 4. **DEPLOYMENT/**
+
 Deployment, migration, and remote configuration scripts.
 
 **Main scripts:**
+
 - `deploy.ps1` - Main deployment
 - `migrate-structure.ps1` - Structure migration
 - `setup-monitoring.ps1` - Monitoring setup
@@ -96,6 +106,7 @@ Deployment, migration, and remote configuration scripts.
 - `setup-wizard.ps1` - Setup wizard
 
 **Typical usage:**
+
 ```powershell
 .\scripts\utilities\DEPLOYMENT\deploy.ps1
 ```
@@ -105,14 +116,17 @@ Deployment, migration, and remote configuration scripts.
 ---
 
 ### 5. **GIT-VERSION-CONTROL/**
+
 Git version control, branches, and pull requests.
 
 **Main scripts:**
+
 - `create-gitflow-branch.ps1` - Create gitflow branch
 - `create-pull-request.ps1` - Create pull request
 - `generate-pr-artifacts.ps1` - Generate PR artifacts
 
 **Typical usage:**
+
 ```powershell
 .\scripts\utilities\GIT-VERSION-CONTROL\create-gitflow-branch.ps1 -Type feature -Name "new-feature"
 ```
@@ -122,9 +136,11 @@ Git version control, branches, and pull requests.
 ---
 
 ### 6. **PERFORMANCE-OPTIMIZATION/**
+
 Performance optimization, memory compaction, and Engram.
 
 **Main scripts:**
+
 - `clean-runtime.ps1` - Clean runtime
 - `compact-memory.ps1` - Compact memory
 - `compact-start.ps1` - Start with compaction
@@ -133,6 +149,7 @@ Performance optimization, memory compaction, and Engram.
 - `pre-compact-hook.ps1` - Pre-compaction hook
 
 **Typical usage:**
+
 ```powershell
 .\scripts\utilities\PERFORMANCE-OPTIMIZATION\optimize-performance.ps1
 ```
@@ -142,9 +159,11 @@ Performance optimization, memory compaction, and Engram.
 ---
 
 ### 7. **SESSION-MANAGEMENT/**
+
 Session management, start, end, and monitoring.
 
 **Main scripts:**
+
 - `start-session.ps1` - Start session
 - `end-session.ps1` - End session
 - `finalize-session.ps1` - Finalize session with artifacts
@@ -156,6 +175,7 @@ Session management, start, end, and monitoring.
 - `session-manual-end.cmd` - Manual end (Windows)
 
 **Typical usage:**
+
 ```powershell
 .\scripts\utilities\SESSION-MANAGEMENT\start-session.ps1
 .\scripts\utilities\SESSION-MANAGEMENT\end-session.ps1
@@ -166,9 +186,11 @@ Session management, start, end, and monitoring.
 ---
 
 ### 8. **SKILLS-TOOLS/**
+
 Installation and management of skills and tools.
 
 **Main scripts:**
+
 - `create-skill.ps1` - Create new skill
 - `ensure-tools-active.ps1` - Ensure tools are active
 - `install-architecture-governance-skill.ps1` - Install architecture governance skill
@@ -179,6 +201,7 @@ Installation and management of skills and tools.
 - `update-tools.ps1` - Update tools
 
 **Typical usage:**
+
 ```powershell
 .\scripts\utilities\SKILLS-TOOLS\install-workspace-skills.ps1
 ```
@@ -188,9 +211,11 @@ Installation and management of skills and tools.
 ---
 
 ### 9. **TELEMETRY-METRICS/**
+
 Telemetry, metrics, and token budget.
 
 **Main scripts:**
+
 - `agent-usage-metrics.ps1` - Agent usage metrics
 - `aggregate-metrics.ps1` - Aggregate metrics
 - `consolidate-telemetry.ps1` - Consolidate telemetry
@@ -205,6 +230,7 @@ Telemetry, metrics, and token budget.
 - `validate-report-simple.ps1` - Simplified version
 
 **Typical usage:**
+
 ```powershell
 .\scripts\utilities\TELEMETRY-METRICS\generate-management-report.ps1
 ```
@@ -214,9 +240,11 @@ Telemetry, metrics, and token budget.
 ---
 
 ### 10. **UTILITIES/**
+
 General utilities and general-purpose tools.
 
 **Main scripts:**
+
 - `auto-init-dev-environment.ps1` - Auto-initialize dev environment
 - `context-pack.ps1` - Pack context
 - `day-end-closure.ps1` - Day-end closure
@@ -238,6 +266,7 @@ General utilities and general-purpose tools.
 - `stack-on-demand.ps1` - Stack on demand
 
 **Typical usage:**
+
 ```powershell
 .\scripts\utilities\UTILITIES\auto-init-dev-environment.ps1
 ```
@@ -247,9 +276,11 @@ General utilities and general-purpose tools.
 ---
 
 ### 11. **WORKFLOW-ORCHESTRATION/**
+
 Workflow orchestration and runtime routing.
 
 **Main scripts:**
+
 - `dispatch-agent.ps1` - Dispatch agent
 - `event-bus.ps1` - Event bus
 - `orchestrator-next-steps.ps1` - Orchestrator next steps
@@ -260,6 +291,7 @@ Workflow orchestration and runtime routing.
 - `wf.sh` - Workflow CLI (Bash)
 
 **Typical usage:**
+
 ```powershell
 .\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1 diagnose
 .\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1 verify
@@ -272,21 +304,25 @@ Workflow orchestration and runtime routing.
 ## Quick Start
 
 ### Start Session
+
 ```powershell
 .\scripts\utilities\SESSION-MANAGEMENT\start-session.ps1
 ```
 
 ### Run Full Diagnostics
+
 ```powershell
 .\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1 diagnose
 ```
 
 ### End Session
+
 ```powershell
 .\scripts\utilities\SESSION-MANAGEMENT\end-session.ps1
 ```
 
 ### Install Tools
+
 ```powershell
 .\scripts\utilities\SKILLS-TOOLS\install-workspace-skills.ps1
 ```
@@ -314,6 +350,7 @@ Workflow orchestration and runtime routing.
 ## File Structure per Directory
 
 Each subdirectory contains:
+
 - `README.md` - Directory-specific documentation
 - `.ps1` scripts - Implementation
 - Configuration files (if applicable)
@@ -323,17 +360,20 @@ Each subdirectory contains:
 ## Troubleshooting
 
 ### Issue: Script not executing
+
 ```powershell
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 ### Issue: Permissions denied
+
 ```powershell
 # Run as administrator
 Start-Process powershell -Verb RunAs
 ```
 
 ### Issue: Missing modules
+
 ```powershell
 Install-Module -Name Pester -Force -SkipPublisherCheck
 ```

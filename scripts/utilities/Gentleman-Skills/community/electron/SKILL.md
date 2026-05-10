@@ -1,16 +1,17 @@
 ---
 name: electron
 description: >
-  Electron patterns for building cross-platform desktop applications.
-  Trigger: When building desktop apps, working with Electron main/renderer processes, IPC communication, or native integrations.
+  Electron patterns for building cross-platform desktop applications. Trigger: When building desktop
+  apps, working with Electron main/renderer processes, IPC communication, or native integrations.
 metadata:
   author: workspace-foundation
-  versión: "1.0"
+  versión: '1.0'
 ---
 
 ## When to Use
 
 Load this skill when:
+
 - Building cross-platform desktop applications
 - Working with Electron's main and renderer processes
 - Implementing IPC (Inter-Process Communication)
@@ -59,25 +60,22 @@ import type { IpcChannels } from '../shared/types';
 // Type-safe exposed API
 const electronAPI = {
   // One-way: renderer -> main
-  send: <T extends keyof IpcChannels>(
-    channel: T, 
-    data: IpcChannels[T]['request']
-  ) => {
+  send: <T extends keyof IpcChannels>(channel: T, data: IpcChannels[T]['request']) => {
     ipcRenderer.send(channel, data);
   },
 
   // Two-way: renderer -> main -> renderer
   invoke: <T extends keyof IpcChannels>(
-    channel: T, 
-    data: IpcChannels[T]['request']
+    channel: T,
+    data: IpcChannels[T]['request'],
   ): Promise<IpcChannels[T]['response']> => {
     return ipcRenderer.invoke(channel, data);
   },
 
   // Listen: main -> renderer
   on: <T extends keyof IpcChannels>(
-    channel: T, 
-    callback: (data: IpcChannels[T]['response']) => void
+    channel: T,
+    callback: (data: IpcChannels[T]['response']) => void,
   ) => {
     const subscription = (_: Electron.IpcRendererEvent, data: IpcChannels[T]['response']) => {
       callback(data);
@@ -151,9 +149,9 @@ async function createWindow() {
     minHeight: 600,
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js'),
-      contextIsolation: true,  // Required for security
-      nodeIntegration: false,  // Required for security
-      sandbox: true,           // Extra security
+      contextIsolation: true, // Required for security
+      nodeIntegration: false, // Required for security
+      sandbox: true, // Extra security
     },
     titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
     trafficLightPosition: { x: 15, y: 10 },
@@ -251,10 +249,7 @@ export function registerIpcHandlers() {
 // renderer/src/hooks/useIPC.ts
 import { useCallback, useEffect, useState } from 'react';
 
-export function useIPC<T>(
-  channel: string,
-  initialValue: T
-): [T, boolean, Error | null] {
+export function useIPC<T>(channel: string, initialValue: T): [T, boolean, Error | null] {
   const [data, setData] = useState<T>(initialValue);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -286,10 +281,7 @@ export function useIPC<T>(
 }
 
 // Hook for IPC subscriptions
-export function useIPCListener<T>(
-  channel: string,
-  callback: (data: T) => void
-) {
+export function useIPCListener<T>(channel: string, callback: (data: T) => void) {
   useEffect(() => {
     const unsubscribe = window.electron.on(channel, callback);
     return unsubscribe;
@@ -315,7 +307,7 @@ export function useIPCMutation<TRequest, TResponse>(channel: string) {
         setLoading(false);
       }
     },
-    [channel]
+    [channel],
   );
 
   return { mutate, loading, error };
@@ -384,20 +376,22 @@ export function createMenu(mainWindow: BrowserWindow) {
 
   const template: Electron.MenuItemConstructorOptions[] = [
     ...(isMac
-      ? [{
-          label: app.name,
-          submenu: [
-            { role: 'about' as const },
-            { type: 'separator' as const },
-            { role: 'services' as const },
-            { type: 'separator' as const },
-            { role: 'hide' as const },
-            { role: 'hideOthers' as const },
-            { role: 'unhide' as const },
-            { type: 'separator' as const },
-            { role: 'quit' as const },
-          ],
-        }]
+      ? [
+          {
+            label: app.name,
+            submenu: [
+              { role: 'about' as const },
+              { type: 'separator' as const },
+              { role: 'services' as const },
+              { type: 'separator' as const },
+              { role: 'hide' as const },
+              { role: 'hideOthers' as const },
+              { role: 'unhide' as const },
+              { type: 'separator' as const },
+              { role: 'quit' as const },
+            ],
+          },
+        ]
       : []),
     {
       label: 'File',
@@ -461,8 +455,8 @@ export function createMenu(mainWindow: BrowserWindow) {
 //  DANGEROUS - Never do this
 const win = new BrowserWindow({
   webPreferences: {
-    nodeIntegration: true,    // Security vulnerability!
-    contextIsolation: false,  // Security vulnerability!
+    nodeIntegration: true, // Security vulnerability!
+    contextIsolation: false, // Security vulnerability!
   },
 });
 
@@ -510,18 +504,18 @@ contextBridge.exposeInMainWorld('electron', {
 
 ## Quick Reference
 
-| Task | Pattern |
-|------|---------|
-| Create project | `npm create electron-vite@latest` |
-| Main process file access | Use Node.js `fs` module in main |
-| Renderer file access | IPC through preload |
-| Persistent storage | `electron-store` in main process |
-| Auto-updates | `electron-updater` |
-| Native notifications | `new Notification()` in main |
-| System tray | `Tray` class in main |
-| Keyboard shortcuts | `globalShortcut.register()` |
-| Deep linking | `app.setAsDefaultProtocolClient()` |
-| Code signing | `electron-builder` config |
+| Task                     | Pattern                            |
+| ------------------------ | ---------------------------------- |
+| Create project           | `npm create electron-vite@latest`  |
+| Main process file access | Use Node.js `fs` module in main    |
+| Renderer file access     | IPC through preload                |
+| Persistent storage       | `electron-store` in main process   |
+| Auto-updates             | `electron-updater`                 |
+| Native notifications     | `new Notification()` in main       |
+| System tray              | `Tray` class in main               |
+| Keyboard shortcuts       | `globalShortcut.register()`        |
+| Deep linking             | `app.setAsDefaultProtocolClient()` |
+| Code signing             | `electron-builder` config          |
 
 ## Resources
 

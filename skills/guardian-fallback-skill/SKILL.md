@@ -9,7 +9,9 @@ description: >
 # Guardian Fallback Skill
 
 ## Purpose
- serves as **optional guardian** when Foundation's orchestrator:
+
+serves as **optional guardian** when Foundation's orchestrator:
+
 - Cannot determine next step
 - Is blocked by unknown error
 - Needs second opinion on complex decisión
@@ -19,13 +21,13 @@ description: >
 
 ```
 ORCHESTRATOR (Primary)
-    
+
      Can proceed?  Execute normally
-    
+
      Blocked?  Try self-healing
-    
+
      Still blocked?   FALLBACK (optional)
-            
+
              Code review
              decisión assist
              Task completion
@@ -34,20 +36,21 @@ ORCHESTRATOR (Primary)
 
 ## Trigger Conditions
 
-Use  fallback when:
+Use fallback when:
 
-| Condition | Action |
-|-----------|--------|
-| Unknown error blocks progress | ` run` for diagnosis |
-| PR needs final review | ` run --pr-mode` |
-| Complex decisión needed |  reasoning assist |
-| Blocked on coding standards |  review |
-| Commit message validation | ` install --commit-msg` |
+| Condition                     | Action                  |
+| ----------------------------- | ----------------------- |
+| Unknown error blocks progress | ` run` for diagnosis    |
+| PR needs final review         | ` run --pr-mode`        |
+| Complex decisión needed       | reasoning assist        |
+| Blocked on coding standards   | review                  |
+| Commit message validation     | ` install --commit-msg` |
 
 ## Invocation
 
 ### Automatic (Recommended)
-Foundation invokes  automatically when blocked:
+
+Foundation invokes automatically when blocked:
 
 ```powershell
 # Automatic detection and fallback
@@ -58,6 +61,7 @@ if (-not $canProceed) {
 ```
 
 ### Manual
+
 ```powershell
 # Manual invocation
  run                    # Review staged files
@@ -78,7 +82,7 @@ function Invoke-Fallback {
         Write-Warn " not available - using Foundation native capabilities"
         return $false
     }
-    
+
     # Invoke  for assistance
      run
     return ($LASTEXITCODE -eq 0)
@@ -88,6 +92,7 @@ function Invoke-Fallback {
 ## Integration Points
 
 ### In Orchestrator
+
 ```powershell
 # Before escalation
 $canProceed = Test-CanProceed -Context $context
@@ -95,7 +100,7 @@ $canProceed = Test-CanProceed -Context $context
 if (-not $canProceed) {
     # Try self-healing
     $healed = Invoke-SelfHealing -Context $context
-    
+
     if (-not $healed) {
         #  fallback (optional)
         if (Test-Available) {
@@ -109,6 +114,7 @@ if (-not $canProceed) {
 ```
 
 ### In Session Close
+
 ```powershell
 # Before session end
 if (-not (Test-AllTasksComplete)) {
@@ -120,7 +126,7 @@ if (-not (Test-AllTasksComplete)) {
 
 ## Configuration
 
- reads from `.` config or environment:
+reads from `.` config or environment:
 
 ```bash
 # . (project level)
@@ -131,47 +137,48 @@ STRICT_MODE="true"
 
 ## Dependencies
 
-| Tool | Required | Purpose |
-|------|----------|---------|
-| Foundation Orchestrator | **YES** | Primary execution |
-| invoke-ai-review.ps1 | **YES** | Native review (replacement) |
-|  () | **NO** | Optional fallback guardian |
+| Tool                    | Required | Purpose                     |
+| ----------------------- | -------- | --------------------------- |
+| Foundation Orchestrator | **YES**  | Primary execution           |
+| invoke-ai-review.ps1    | **YES**  | Native review (replacement) |
+| ()                      | **NO**   | Optional fallback guardian  |
 
 ## Coexistence
 
 Foundation operates **fully** without :
+
 - Native AI review via `invoke-ai-review.ps1`
 - Pre-commit hooks via Foundation hooks
 - Code review via `code-review-orchestrator-skill`
 
- is **enhancement**, not **requirement**.
+is **enhancement**, not **requirement**.
 
 ## Error Handling
 
 ```
 
-              FALLBACK decisión TREE            
+              FALLBACK decisión TREE
 
-                                              
-  Orchestrator blocked?                       
-                                            
-                                            
-  Self-healing possible?                      
-                                            
-                                
-    YES       NO                          
-                                           
-  Apply       available?                  
-  healing                                   
-                                    
-            YES   NO                      
-                                          
-        Invoke   Flag for                    
-             manual                      
-            intervention                     
-                                               
-  Report result                                
-                                              
+
+  Orchestrator blocked?
+
+
+  Self-healing possible?
+
+
+    YES       NO
+
+  Apply       available?
+  healing
+
+            YES   NO
+
+        Invoke   Flag for
+             manual
+            intervention
+
+  Report result
+
 
 ```
 
@@ -193,14 +200,13 @@ wf review --scope full
 
 ## Skill Priority
 
-| Priority | Skill | Availability |
-|----------|-------|--------------|
-| 1 | project-orchestrator | Always |
-| 2 | invoke-ai-review | Always (native) |
-| 3 | code-review-orchestrator | Always |
-| **4** | **guardian-fallback ()** | **Optional** |
+| Priority | Skill                    | Availability    |
+| -------- | ------------------------ | --------------- |
+| 1        | project-orchestrator     | Always          |
+| 2        | invoke-ai-review         | Always (native) |
+| 3        | code-review-orchestrator | Always          |
+| **4**    | **guardian-fallback ()** | **Optional**    |
 
 ---
-**Note:**  is a convenience, not a requirement. Foundation works fully without it.
 
-
+**Note:** is a convenience, not a requirement. Foundation works fully without it.

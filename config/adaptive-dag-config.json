@@ -55,9 +55,9 @@
     },
     "profileSource": "config/auto-delegation.json#agentProfiles",
     "hallucinationGuardPolicy": {
-      "low":      "Agent self-reports - no external verification",
-      "medium":   "Orchestrator spot-checks 1 requiredEvidence item",
-      "high":     "ALL requiredEvidence items verified before phase advances",
+      "low": "Agent self-reports - no external verification",
+      "medium": "Orchestrator spot-checks 1 requiredEvidence item",
+      "high": "ALL requiredEvidence items verified before phase advances",
       "critical": "All evidence verified + hedging language scan + external command must exit 0"
     },
     "phases": {

@@ -1,6 +1,7 @@
 # Parallel Execution Limits Skill
 
-Advanced parallel execution management with explicit dependency graphs, custom parallelism rules, resource pooling with GPU/CPU awareness, and token budget circuit breaker protection.
+Advanced parallel execution management with explicit dependency graphs, custom parallelism rules,
+resource pooling with GPU/CPU awareness, and token budget circuit breaker protection.
 
 ## Quick Start
 
@@ -36,22 +37,26 @@ Export-ExecutionReport -Executor $executor -Path "report.json"
 ## Features
 
 ### 1. Explicit Dependency Graphs
+
 - DAG-based workflow graphs with circular dependency detection
 - Dependency level calculation and critical path analysis
 - Parallelization opportunity detection
 
 ### 2. Custom Parallelism Rules
+
 - Three strategies: Conservative, Balanced, Aggressive
 - Custom rule definition with conditions and priorities
 - Dynamic resource multiplier adjustment
 
 ### 3. Resource Pooling (GPU/CPU Awareness)
+
 - Automatic system resource detection
 - GPU device management with VRAM tracking
 - Three allocation strategies: FirstFit, BestFit, BalancedLoad
 - Real-time utilization monitoring
 
 ### 4. Circuit Breaker for Token Budget
+
 - Token budget tracking with soft/hard limits
 - Three states: CLOSED, OPEN, HALF_OPEN
 - Graceful degradation based on token usage
@@ -60,6 +65,7 @@ Export-ExecutionReport -Executor $executor -Path "report.json"
 ## Core Functions
 
 ### Dependency Graph
+
 - `Initialize-DependencyGraph` - Create graph
 - `Add-GraphTask` - Add task with dependencies
 - `Validate-DependencyGraph` - Validate structure
@@ -67,12 +73,14 @@ Export-ExecutionReport -Executor $executor -Path "report.json"
 - `Get-CriticalPath` - Identify bottlenecks
 
 ### Parallelism Rules
+
 - `Initialize-ParallelismRules` - Create rules
 - `Add-ParallelismRule` - Add custom rule
 - `Apply-ParallelismRules` - Apply to graph
 - `Generate-ExecutionPlan` - Create execution plan
 
 ### Resource Pooling
+
 - `Initialize-ResourcePool` - Create pool
 - `Allocate-Resources` - Allocate for task
 - `Release-Resources` - Free resources
@@ -80,6 +88,7 @@ Export-ExecutionReport -Executor $executor -Path "report.json"
 - `Optimize-ResourceAllocation` - Get recommendations
 
 ### Circuit Breaker
+
 - `Initialize-CircuitBreaker` - Create breaker
 - `Test-CircuitBreaker` - Check if execution allowed
 - `Track-TokenUsage` - Record token usage
@@ -87,6 +96,7 @@ Export-ExecutionReport -Executor $executor -Path "report.json"
 - `Get-DegradationStrategy` - Get execution strategy
 
 ### Executor
+
 - `Initialize-ParallelExecutor` - Initialize all components
 - `Plan-ParallelExecution` - Create execution plan
 - `Invoke-ParallelExecution` - Execute tasks

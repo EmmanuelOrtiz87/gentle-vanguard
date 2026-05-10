@@ -52,11 +52,13 @@ cd workspace-foundation
 ## 4. Manual Usage
 
 - Run a command:
+
   ```powershell
   .\scripts\utilities\AI-AGENT-MANAGEMENT\invoke-cloud-agent.ps1 -Provider dify -Command "What is the capital of France?"
   ```
 
 - Strict mode (automation):
+
   ```powershell
   .\scripts\utilities\AI-AGENT-MANAGEMENT\invoke-cloud-agent.ps1 -Provider dify -StrictJson -Command "return JSON"
   ```

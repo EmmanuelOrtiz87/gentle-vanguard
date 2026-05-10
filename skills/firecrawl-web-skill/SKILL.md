@@ -1,13 +1,13 @@
 ---
 name: firecrawl-web-skill
 description: >
-  Web scraping, data extraction, and browser automation using Firecrawl.
-  Trigger: "web scrape", "extract data", "crawl website", "markdown", "screenshot",
-  "web search", "scrape docs", "competitive analysis", "firecrawl"
+  Web scraping, data extraction, and browser automation using Firecrawl. Trigger: "web scrape",
+  "extract data", "crawl website", "markdown", "screenshot", "web search", "scrape docs",
+  "competitive analysis", "firecrawl"
 license: Apache-2.0
 metadata:
   author: workspace-foundation
-  versión: "1.0"
+  versión: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task, webfetch, websearch
 ---
 
@@ -18,6 +18,7 @@ Web scraping and data extraction capabilities using Firecrawl for AI agent workf
 ## When to Use
 
 **USE this skill when:**
+
 - Extracting content from websites for analysis
 - Converting web pages to markdown for processing
 - Taking screenshots of web pages
@@ -27,6 +28,7 @@ Web scraping and data extraction capabilities using Firecrawl for AI agent workf
 - Web search for current information
 
 **DON'T use when:**
+
 - Accessing authenticated routes (use dedicated MCP)
 - Scraping at scale (consider dedicated service)
 - Legal restrictions apply
@@ -208,4 +210,3 @@ except ExtractionError:
 3. **Caching** - Store results for future use
 4. **Error handling** - Plan for failures
 5. **Token efficient** - Trim unnecessary content
-

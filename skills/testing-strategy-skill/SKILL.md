@@ -1,11 +1,14 @@
 ---
 name: testing-strategy-skill
-description: "Trigger: testing strategy, test pyramid, what to test, coverage target, unit test, integration test. Decides what, when, and how to test across Go, Angular, and Python stacks."
+description:
+  'Trigger: testing strategy, test pyramid, what to test, coverage target, unit test, integration
+  test. Decides what, when, and how to test across Go, Angular, and Python stacks.'
 ---
 
 ## Activation Contract
 
-Use when setting up test infrastructure, deciding what to test, choosing test levels, improving coverage, or debugging test failures.
+Use when setting up test infrastructure, deciding what to test, choosing test levels, improving
+coverage, or debugging test failures.
 
 ## Hard Rules
 
@@ -18,13 +21,13 @@ Use when setting up test infrastructure, deciding what to test, choosing test le
 
 ## Decision Gates
 
-| Gate | Condition | Action |
-|------|-----------|--------|
-| What to test | Business logic, API handlers, critical paths? | Always test |
-| What to test | UI components, error paths? | Consider testing |
-| What to test | Framework code, config, third-party? | Never test |
-| Coverage | Below 60% stmts / 50% branches / 70% funcs? | Block or improve before PR |
-| Coverage | Below 80% stmts / 70% branches / 90% funcs? | Recommended improvement |
+| Gate         | Condition                                     | Action                     |
+| ------------ | --------------------------------------------- | -------------------------- |
+| What to test | Business logic, API handlers, critical paths? | Always test                |
+| What to test | UI components, error paths?                   | Consider testing           |
+| What to test | Framework code, config, third-party?          | Never test                 |
+| Coverage     | Below 60% stmts / 50% branches / 70% funcs?   | Block or improve before PR |
+| Coverage     | Below 80% stmts / 70% branches / 90% funcs?   | Recommended improvement    |
 
 ## Execution Steps
 
@@ -36,7 +39,8 @@ Use when setting up test infrastructure, deciding what to test, choosing test le
 
 ## Output Contract
 
-Return test plan (what was tested and at what level), coverage report, and any detected anti-patterns.
+Return test plan (what was tested and at what level), coverage report, and any detected
+anti-patterns.
 
 ## References
 

@@ -6,9 +6,11 @@
 **Status**: Active
 
 ---
+
 ## Rule
 
-All Foundation integrations MUST use the **enhanced detection system** (`adapters/detection/enhanced-detect.ps1`) to:
+All Foundation integrations MUST use the **enhanced detection system**
+(`adapters/detection/enhanced-detect.ps1`) to:
 
 1. **Identify the running tool/IDE** (VS Code, Cursor, Windsurf, Codex, etc.)
 2. **Determine capability level** (MCP support, skills, subagents)
@@ -16,6 +18,7 @@ All Foundation integrations MUST use the **enhanced detection system** (`adapter
 4. **Log detection results** for telemetry
 
 ---
+
 ## Detection Priority
 
 When multiple tools could be detected, use this priority (highest first):
@@ -30,6 +33,7 @@ When multiple tools could be detected, use this priority (highest first):
 8. **Terminal** - Fallback
 
 ---
+
 ## Adapter Selection Logic
 
 ```
@@ -42,22 +46,24 @@ ELSE:
 ```
 
 ---
+
 ## Required Environment Variables
 
 The detection system checks these environment variables:
 
-| Variable | Tool | Purpose |
-|----------|------|---------|
-| `WINDSURF_` | Windsurf | Detection |
-| `CODEX_` | Codex | Detection |
-| `ANTIGRAVITY_` | Antigravity | Detection |
-| `OPENCODE_` | OpenCode | Detection |
-| `CURSOR_` | Cursor | Detection |
-| `VSCODE_GIT_IPC_HANDLE` | VS Code | Detection |
-| `JETBRAINS_IDE` | JetBrains | Detection |
-| `FOUNDATION_ROOT` | Foundation | Root path for MCP Bridge |
+| Variable                | Tool        | Purpose                  |
+| ----------------------- | ----------- | ------------------------ |
+| `WINDSURF_`             | Windsurf    | Detection                |
+| `CODEX_`                | Codex       | Detection                |
+| `ANTIGRAVITY_`          | Antigravity | Detection                |
+| `OPENCODE_`             | OpenCode    | Detection                |
+| `CURSOR_`               | Cursor      | Detection                |
+| `VSCODE_GIT_IPC_HANDLE` | VS Code     | Detection                |
+| `JETBRAINS_IDE`         | JetBrains   | Detection                |
+| `FOUNDATION_ROOT`       | Foundation  | Root path for MCP Bridge |
 
 ---
+
 ## Output Format
 
 Detection results MUST include:
@@ -73,6 +79,7 @@ Detection results MUST include:
 ```
 
 ---
+
 ## Enforcement
 
 - **Pre-commit hook**: Validate detection script exists
@@ -80,11 +87,13 @@ Detection results MUST include:
 - **Telemetry**: Log detection results to `logs/tool-detection.log`
 
 ---
+
 ## Exceptions
 
 None. All tools MUST be detected before adapter selection.
 
 ---
+
 ## References
 
 - Detection script: `adapters/detection/enhanced-detect.ps1`
@@ -93,5 +102,6 @@ None. All tools MUST be detected before adapter selection.
 - Examples: `adapters/docs/EXAMPLES.md`
 
 ---
+
 **Created**: 2026-04-28  
 **Last Modified**: 2026-04-28

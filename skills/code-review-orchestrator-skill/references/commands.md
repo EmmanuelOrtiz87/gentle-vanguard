@@ -1,19 +1,19 @@
 ## Quick Reference
 
-| Command | Description |
-|---------|-------------|
-| `wf review` | Full review (all 7 dimensions) |
-| `wf review --scope security` | Security only |
-| `wf review --scope quality` | Quality only |
-| `wf review --scope testing` | Testing only |
-| `wf review --scope docs` | Documentation only |
-| `wf review --scope api` | API design only |
-| `wf review --scope git` | Git workflow only |
-| `wf review --scope quick` | Security + Quality (fast, ~30s) |
-| `wf review --scope full` | Alias for 'all' |
-| `wf review --report` | Generate detailed report |
-| `wf review --track` | Export issues to CSV |
-| `wf review --verbose` | Verbose output |
+| Command                      | Description                     |
+| ---------------------------- | ------------------------------- |
+| `wf review`                  | Full review (all 7 dimensions)  |
+| `wf review --scope security` | Security only                   |
+| `wf review --scope quality`  | Quality only                    |
+| `wf review --scope testing`  | Testing only                    |
+| `wf review --scope docs`     | Documentation only              |
+| `wf review --scope api`      | API design only                 |
+| `wf review --scope git`      | Git workflow only               |
+| `wf review --scope quick`    | Security + Quality (fast, ~30s) |
+| `wf review --scope full`     | Alias for 'all'                 |
+| `wf review --report`         | Generate detailed report        |
+| `wf review --track`          | Export issues to CSV            |
+| `wf review --verbose`        | Verbose output                  |
 
 ## Scope Selection Flow
 
@@ -33,11 +33,11 @@ wf review
 
 ## Performance Estimates
 
-| Scope | Dimensions | Est. Time |
-|-------|------------|-----------|
-| quick | 2 | ~30s |
-| security | 1 | ~15s |
-| quality | 1 | ~15s |
-| all | 7 | ~2-5min |
+| Scope    | Dimensions | Est. Time |
+| -------- | ---------- | --------- |
+| quick    | 2          | ~30s      |
+| security | 1          | ~15s      |
+| quality  | 1          | ~15s      |
+| all      | 7          | ~2-5min   |
 
-*Times vary based on project size and disk I/O*
+_Times vary based on project size and disk I/O_

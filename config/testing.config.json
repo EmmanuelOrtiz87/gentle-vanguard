@@ -7,14 +7,9 @@
   "testFrameworkBash": "bats",
   "testCoverage": {
     "enabled": true,
-    "minimumThreshold": 0.80,
-    "targetThreshold": 0.90,
-    "excludePaths": [
-      "node_modules",
-      ".git",
-      "docs",
-      ".session"
-    ]
+    "minimumThreshold": 0.8,
+    "targetThreshold": 0.9,
+    "excludePaths": ["node_modules", ".git", "docs", ".session"]
   },
   "testTypes": {
     "unit": {
@@ -85,11 +80,7 @@
     "ai_tool_detector": {
       "enabled": true,
       "description": "Tests for AI Tool Detector",
-      "functions": [
-        "Detect-AITool",
-        "Validate-Detection",
-        "Load-Configuration"
-      ]
+      "functions": ["Detect-AITool", "Validate-Detection", "Load-Configuration"]
     },
     "cleanup_project": {
       "enabled": true,
@@ -114,12 +105,7 @@
   },
   "reporting": {
     "enabled": true,
-    "formats": [
-      "console",
-      "json",
-      "html",
-      "junit"
-    ],
+    "formats": ["console", "json", "html", "junit"],
     "outputPath": "test-results",
     "coveragePath": "coverage",
     "archiveResults": true,
@@ -143,10 +129,6 @@
     "enabled": true,
     "onSuccess": true,
     "onFailure": true,
-    "channels": [
-      "console",
-      "log",
-      "email"
-    ]
+    "channels": ["console", "log", "email"]
   }
 }

@@ -1,9 +1,8 @@
 ---
 name: kubernetes-deployment
 description: >
-  Deploy, manage, and scale containerized applications on Kubernetes clusters
-  with best practices for production workloads, resource management, and rolling
-  updates.
+  Deploy, manage, and scale containerized applications on Kubernetes clusters with best practices
+  for production workloads, resource management, and rolling updates.
 ---
 
 # Kubernetes Deployment
@@ -17,7 +16,8 @@ description: >
 
 ## Overview
 
-Master Kubernetes deployments for managing containerized applications at scale, including multi-container services, resource allocation, health checks, and rolling deployment strategies.
+Master Kubernetes deployments for managing containerized applications at scale, including
+multi-container services, resource allocation, health checks, and rolling deployment strategies.
 
 ## When to Use
 
@@ -64,7 +64,7 @@ spec:
 
 ## Best Practices
 
-###  DO
+### DO
 
 - Use resource requests and limits
 - Implement health checks (liveness, readiness)
@@ -75,7 +75,7 @@ spec:
 - Use namespaces for isolation
 - Enable pod security policies
 
-###  DON'T
+### DON'T
 
 - Use latest image tags in production
 - Run containers as root
@@ -84,5 +84,3 @@ spec:
 - Deploy without resource limits
 - Mix configurations in container images
 - Use default service accounts
-
-

@@ -1,8 +1,8 @@
 ---
 name: finance-financial-analyst
 description: >
-  Financial Analyst: modeling, forecasting, scenario analysis, decision support.
-  Trigger: "financial model", "forecast", "scenario analysis", "variance", "budget", "cash flow".
+  Financial Analyst: modeling, forecasting, scenario analysis, decision support. Trigger: "financial
+  model", "forecast", "scenario analysis", "variance", "budget", "cash flow".
 ---
 
 ## When to Use
@@ -16,6 +16,7 @@ description: >
 ## 📋 Technical Deliverables
 
 ### Financial Model Template
+
 ```
 ## Financial Model: [Project/Company]
 **Period**: [3-year monthly / 5-year quarterly]
@@ -37,6 +38,7 @@ description: >
 ```
 
 ### Variance Analysis Report
+
 ```
 ## Monthly Variance Report - [Month/Year]
 **Budget**: $X | **Actual**: $Y | **Variance**: $Z (W/M)
@@ -53,24 +55,28 @@ description: >
 ## 🔄 Workflow Process
 
 ### Step 1: Requirements & Assumptions
+
 - Understand business context and key drivers
 - Define time horizon and reporting frequency
 - Document assumptions with sources
 - Align on scenarios to model (base/best/worst)
 
 ### Step 2: Model Construction
+
 - Build interconnected financial statements
 - Link assumptions to financial outputs
 - Add error checks and circular reference guards
 - Version control your model (cell comments, tabs)
 
 ### Step 3: Analysis & Validation
+
 - Test scenarios and sensitivity analyses
 - Validate outputs against benchmarks
 - Check for reasonableness (sanity checks)
 - Document key findings and sensitivities
 
 ### Step 4: Reporting & Recommendations
+
 - Create executive summary with visualization
 - Highlight risks and opportunities
 - Provide actionable recommendations
@@ -106,18 +112,21 @@ Remember and build expertise in:
 ## 🚨 Critical Rules You Must Follow
 
 ### Model Integrity
+
 - Never hardcode numbers that should be formulas
 - Document every assumption with source and date
 - Use consistent time periods (monthly vs quarterly) across all statements
 - Build in error checks (balance sheet must balance)
 
 ### Scenario Transparency
+
 - Label scenarios clearly (base/best/worst = too vague)
 - Document what changed between scenarios
 - Include probability weights for each scenario
 - Never bury bad scenarios — decision-makers need realism
 
 ### Decision Support Focus
+
 - Connect numbers to business decisions, not just reporting
 - Include confidence intervals, not just point estimates
 - Highlight what's actionable (not just interesting)
@@ -125,5 +134,5 @@ Remember and build expertise in:
 
 ---
 
-**Instructions Reference**: Your detailed financial analysis methodology is in your core training — refer to modeling templates, valuation guides, and reporting frameworks for complete guidance.
-
+**Instructions Reference**: Your detailed financial analysis methodology is in your core training —
+refer to modeling templates, valuation guides, and reporting frameworks for complete guidance.

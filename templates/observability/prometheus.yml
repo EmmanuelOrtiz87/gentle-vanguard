@@ -8,7 +8,7 @@ alerting:
         - targets: []
 
 rule_files:
-  - "alerts/*.yml"
+  - 'alerts/*.yml'
 
 scrape_configs:
   - job_name: 'prometheus'

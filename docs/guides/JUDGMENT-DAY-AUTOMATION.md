@@ -2,62 +2,65 @@
 
 ## Overview
 
-Judgment Day automation integrates the dual-review protocol with git hooks and the session orchestrator to ensure code quality before push and merge operations.
+Judgment Day automation integrates the dual-review protocol with git hooks and the session
+orchestrator to ensure code quality before push and merge operations.
 
-**Objetivo**: Ejecutar automticamente Judgment Day antes de PR merge, integrar con git hooks, fallar PR si Judgment Day falla, y requerir aprobacin de ambos reviewers.
+**Objetivo**: Ejecutar automticamente Judgment Day antes de PR merge, integrar con git hooks, fallar
+PR si Judgment Day falla, y requerir aprobacin de ambos reviewers.
 
 ## Architecture
 
 ```
 
-                    SESSION START                             
-              (session-autostart.cmd)                         
+                    SESSION START
+              (session-autostart.cmd)
 
-                     
-                     
 
-         Judgment Day Orchestrator Initialize                 
-     (judgment-day-orchestrator.ps1 -Action initialize)       
-                                                              
-   Register git hooks (pre-push, pre-merge-commit)          
-   Setup event bus subscriptions                            
-   Create logging directories                               
-   Load configuration                                       
 
-                     
-        
-                                 
-                                 
-      
-   PRE-PUSH HOOK         PRE-MERGE HOOK   
-  (git push)             (git merge)      
-      
-                                  
-                                  
 
-  Judgment Day Orchestrator               
-  (run-judgment -Scope changed_files)     
-  (run-judgment -Scope pr_files)          
-                                          
-   Launch Judge A (async)                
-   Launch Judge B (async)                
-   Synthesize verdict                    
-   Apply fixes if needed                 
-   Re-judge until convergence            
+         Judgment Day Orchestrator Initialize
+     (judgment-day-orchestrator.ps1 -Action initialize)
 
-         
-    
-              
-              
+   Register git hooks (pre-push, pre-merge-commit)
+   Setup event bus subscriptions
+   Create logging directories
+   Load configuration
+
+
+
+
+
+
+   PRE-PUSH HOOK         PRE-MERGE HOOK
+  (git push)             (git merge)
+
+
+
+
+  Judgment Day Orchestrator
+  (run-judgment -Scope changed_files)
+  (run-judgment -Scope pr_files)
+
+   Launch Judge A (async)
+   Launch Judge B (async)
+   Synthesize verdict
+   Apply fixes if needed
+   Re-judge until convergence
+
+
+
+
+
  APPROVED   ESCALATED
-              
-              
+
+
   PUSH      BLOCK MERGE
 ```
 
 ## Configuration Files
 
 ### 1. `config/judgment-day-automation.json`
+
 Core automation rules for pre-push and pre-merge execution.
 
 ```json
@@ -79,6 +82,7 @@ Core automation rules for pre-push and pre-merge execution.
 ```
 
 ### 2. `config/judgment-day-orchestrator-config.json`
+
 Orchestrator integration and workflow coordination.
 
 ```json
@@ -98,14 +102,18 @@ Orchestrator integration and workflow coordination.
 ## Git Hooks
 
 ### Pre-Push Hook (`.git/hooks/pre-push`)
+
 Executes before `git push`:
+
 - Detects changed files
 - Logs push event
 - Triggers Judgment Day orchestrator
 - Blocks push if CRITICAL issues found
 
 ### Pre-Merge Hook (`.git/hooks/pre-merge-commit`)
+
 Executes before `git merge`:
+
 - Detects files to merge
 - Logs merge event
 - Ensures both reviewers approved
@@ -143,7 +151,7 @@ git push origin feature/my-feature
 # [JUDGMENT-DAY] Verdict: 2 CRITICAL issues found
 # [JUDGMENT-DAY] Applying fixes...
 # [JUDGMENT-DAY] Re-judging...
-# [JUDGMENT-DAY] Verdict: APPROVED 
+# [JUDGMENT-DAY] Verdict: APPROVED
 # [JUDGMENT-DAY] Push allowed
 ```
 
@@ -159,13 +167,14 @@ git merge feature/my-feature
 # [JUDGMENT-DAY] Reviewer 1:  Approved
 # [JUDGMENT-DAY] Reviewer 2:  Approved
 # [JUDGMENT-DAY] Running Judgment Day review...
-# [JUDGMENT-DAY] Verdict: APPROVED 
+# [JUDGMENT-DAY] Verdict: APPROVED
 # [JUDGMENT-DAY] Merge allowed
 ```
 
 ## Commands
 
 ### Check Status
+
 ```powershell
 .\scripts\utilities\judgment-day-orchestrator.ps1 -Action status
 
@@ -183,16 +192,19 @@ git merge feature/my-feature
 ```
 
 ### Initialize Manually
+
 ```powershell
 .\scripts\utilities\judgment-day-orchestrator.ps1 -Action initialize
 ```
 
 ### Check PR Status
+
 ```powershell
 .\scripts\utilities\judgment-day-orchestrator.ps1 -Action check-pr
 ```
 
 ### Run Judgment Day
+
 ```powershell
 .\scripts\utilities\judgment-day-orchestrator.ps1 -Action run-judgment -Scope pr_files
 ```
@@ -200,30 +212,35 @@ git merge feature/my-feature
 ## decisión Tree
 
 ### No Issues Found
-- **Status**: APPROVED 
+
+- **Status**: APPROVED
 - **Action**: Allow push/merge
 - **Message**: Code passes Judgment Day review
 
 ### CRITICAL Issues Found
-- **Status**: BLOCK 
+
+- **Status**: BLOCK
 - **Action**: Block push/merge
 - **Message**: CRITICAL issues must be fixed
 - **Auto-fix**: No (requires manual intervention)
 
 ### Real WARNINGs Found
-- **Status**: BLOCK  (pre-merge only)
+
+- **Status**: BLOCK (pre-merge only)
 - **Action**: Block merge
 - **Message**: Real WARNINGs must be fixed
 - **Auto-fix**: Yes (if enabled)
 
 ### Theoretical WARNINGs Found
-- **Status**: INFO 
+
+- **Status**: INFO
 - **Action**: Allow push/merge
 - **Message**: Theoretical WARNINGs reported
 - **Auto-fix**: No
 
 ### Suggestións Found
-- **Status**: SUGgestión 
+
+- **Status**: SUGgestión
 - **Action**: Allow push/merge
 - **Message**: Suggestións for improvement
 - **Auto-fix**: Yes (if enabled)
@@ -231,12 +248,14 @@ git merge feature/my-feature
 ## Reviewer Requirements
 
 ### Both Reviewers Must Approve
+
 - Reviewer 1: Approval required
 - Reviewer 2: Approval required
 - Approval pattern: `LGTM`, `Approved`, ``
 - Self-approval: Not allowed
 
 ### PR Labels
+
 - `judgment-day-approved `: Judgment Day passed
 - `judgment-day-failed `: Judgment Day failed
 - `judgment-day-pending `: Judgment Day in progress
@@ -245,12 +264,15 @@ git merge feature/my-feature
 ## Escalation Policy
 
 ### After 2 Fix Iterations
+
 If issues remain after 2 fix iterations:
+
 1. Ask user: "Continue iterating or escalate?"
 2. If YES: Continue fix+judge cycle (max 5 total iterations)
 3. If NO: Escalate to manual review
 
 ### Escalation Actions
+
 - Flag PR as `judgment-day-escalated`
 - Require manual reviewer decisión
 - Log escalation reason
@@ -259,6 +281,7 @@ If issues remain after 2 fix iterations:
 ## Logging
 
 ### Log Location
+
 ```
 .session/judgment-day-logs/
  pre-push-2026-04-23-14-30-45.log
@@ -268,6 +291,7 @@ If issues remain after 2 fix iterations:
 ```
 
 ### Log Format
+
 ```
 === JUDGMENT DAY PRE-PUSH ===
 Timestamp: 2026-04-23-14-30-45
@@ -282,7 +306,9 @@ Changed files:
 ## Integration Points
 
 ### Event Bus
+
 Publishes events:
+
 - `judgment-day-initiated`
 - `judgment-day-judges-started`
 - `judgment-day-verdict-ready`
@@ -291,11 +317,13 @@ Publishes events:
 - `judgment-day-escalated`
 
 ### Session Orchestrator
+
 - Coordinates with workflow stages
 - Updates session status
 - Tracks Judgment Day results
 
 ### CI/CD
+
 - Fails build on Judgment Day failure
 - Reports results to CI system
 - Blocks merge on CI failure
@@ -303,23 +331,29 @@ Publishes events:
 ## Best Practices
 
 ### 1. Keep Judgment Day Enabled
+
 Always keep pre-push and pre-merge automation enabled for production branches.
 
 ### 2. Review Findings Carefully
+
 Even if Judgment Day auto-fixes issues, review the fixes to ensure correctness.
 
 ### 3. Require Both Reviewers
+
 Always require both reviewers to approve before merge to catch edge cases.
 
 ### 4. Monitor Escalations
+
 Track escalated Judgment Days to identify patterns and improve code quality.
 
 ### 5. Archive Logs
+
 Regularly archive old logs to keep `.session/judgment-day-logs` clean.
 
 ## Troubleshooting
 
 ### Pre-Push Hook Not Running
+
 ```bash
 # Make hook executable
 chmod +x .git/hooks/pre-push
@@ -329,6 +363,7 @@ ls -la .git/hooks/pre-push
 ```
 
 ### Pre-Merge Hook Not Running
+
 ```bash
 # Make hook executable
 chmod +x .git/hooks/pre-merge-commit
@@ -338,6 +373,7 @@ ls -la .git/hooks/pre-merge-commit
 ```
 
 ### Configuration Not Loaded
+
 ```powershell
 # Check config file exists
 Test-Path config/judgment-day-automation.json
@@ -347,6 +383,7 @@ Get-Content config/judgment-day-automation.json | ConvertFrom-Json
 ```
 
 ### Judgment Day Not Initializing
+
 ```powershell
 # Run initialization manually
 .\scripts\utilities\judgment-day-orchestrator.ps1 -Action initialize

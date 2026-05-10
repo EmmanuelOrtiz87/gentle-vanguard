@@ -13,6 +13,7 @@ cp templates/editor/.editorconfig .
 ```
 
 Supported editors (auto-detected):
+
 - VSCode, IntelliJ, WebStorm, PyCharm, GoLand
 - Vim, Neovim, Emacs, Sublime Text, Atom
 - Brackets, Notepad++, Visual Studio
@@ -37,19 +38,20 @@ cp templates/editor/vscode/extensions.json .vscode/
 
 Install these in VSCode for the best experience:
 
-| Extension | Purpose |
-|-----------|---------|
-| EditorConfig | Reads `.editorconfig` files |
-| Prettier | Code formatting |
-| ESLint | Linting |
-| GitLens | Git integration |
-| GitHub Copilot | AI assistance |
+| Extension      | Purpose                     |
+| -------------- | --------------------------- |
+| EditorConfig   | Reads `.editorconfig` files |
+| Prettier       | Code formatting             |
+| ESLint         | Linting                     |
+| GitLens        | Git integration             |
+| GitHub Copilot | AI assistance               |
 
 ## JetBrains IDEs
 
 Import settings in `File > Settings > Editor > Code Style`:
 
 ### General Settings
+
 ```
 Tab Size: 2
 Indent: 2 spaces
@@ -59,14 +61,14 @@ Encoding: UTF-8
 
 ### Language-Specific
 
-| Language | Quote Style | Semicolons |
-|----------|-------------|------------|
-| JavaScript/TypeScript | Single | Yes |
-| JSON | Double | N/A |
-| HTML | Double | N/A |
-| CSS | Single | N/A |
-| Python | Double | N/A |
-| Go | None | No |
+| Language              | Quote Style | Semicolons |
+| --------------------- | ----------- | ---------- |
+| JavaScript/TypeScript | Single      | Yes        |
+| JSON                  | Double      | N/A        |
+| HTML                  | Double      | N/A        |
+| CSS                   | Single      | N/A        |
+| Python                | Double      | N/A        |
+| Go                    | None        | No         |
 
 ## Vim/Neovim
 
@@ -81,14 +83,14 @@ Or install [editorconfig-vim](https://github.com/editorconfig/editorconfig-vim).
 
 ## Quick Reference
 
-| Setting | Value |
-|---------|-------|
-| Tab Size | 2 spaces |
-| Line Ending | LF (Unix) |
-| Charset | UTF-8 |
-| Trim Trailing Whitespace | Yes |
-| Insert Final Newline | Yes |
-| Max Line Length | 100 chars |
+| Setting                  | Value     |
+| ------------------------ | --------- |
+| Tab Size                 | 2 spaces  |
+| Line Ending              | LF (Unix) |
+| Charset                  | UTF-8     |
+| Trim Trailing Whitespace | Yes       |
+| Insert Final Newline     | Yes       |
+| Max Line Length          | 100 chars |
 
 ## File Structure
 

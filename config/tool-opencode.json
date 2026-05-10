@@ -9,16 +9,8 @@
     "mcpBridge": true,
     "subagents": true
   },
-  "capabilities": [
-    "mcp",
-    "subagents",
-    "token_management",
-    "skills"
-  ],
-  "configFiles": [
-    ".opencode/config.json",
-    ".opencode/skills/*/SKILL.md"
-  ],
+  "capabilities": ["mcp", "subagents", "token_management", "skills"],
+  "configFiles": [".opencode/config.json", ".opencode/skills/*/SKILL.md"],
   "adapter": {
     "type": "mcp-bridge",
     "path": "adapters/mcp-bridge",

@@ -1,6 +1,7 @@
 # Agent Runtime Recipe
 
-Practical setup guide to run agents consistently across local, cloud/self-hosted, and SaaS environments.
+Practical setup guide to run agents consistently across local, cloud/self-hosted, and SaaS
+environments.
 
 ## Objective
 
@@ -74,7 +75,8 @@ Recommended pattern:
 Operational tip:
 
 - Keep `strictCompatibilityChecks: true` in stable environments.
-- If environment has intermittent outbound restrictions, classify network update warnings as non-blocking (already supported by current flow).
+- If environment has intermittent outbound restrictions, classify network update warnings as
+  non-blocking (already supported by current flow).
 
 ### 3) SaaS-Contracted Agent Environments
 
@@ -99,12 +101,12 @@ decisión rule:
 
 ## Conflict Matrix
 
-| Component A | Component B | Conflict Risk | Notes |
-|---|---|---|---|
-| Runtime router | Orchestrator skills | Low | Router selects native available runtime; orchestrator governs workflow/skills. |
-| `engram` | Orchestrator memory integration | Low | Native complement; required by token guard policy. |
-| Agent lanes (`agent-router`) | Session governance | Low | Registry status is used as readiness gate. |
-| Update checks (network) | Strict startup | Medium | Treat as non-critical; avoid blocking startup on update warnings. |
+| Component A                  | Component B                     | Conflict Risk | Notes                                                                          |
+| ---------------------------- | ------------------------------- | ------------- | ------------------------------------------------------------------------------ |
+| Runtime router               | Orchestrator skills             | Low           | Router selects native available runtime; orchestrator governs workflow/skills. |
+| `engram`                     | Orchestrator memory integration | Low           | Native complement; required by token guard policy.                             |
+| Agent lanes (`agent-router`) | Session governance              | Low           | Registry status is used as readiness gate.                                     |
+| Update checks (network)      | Strict startup                  | Medium        | Treat as non-critical; avoid blocking startup on update warnings.              |
 
 ## Recommended Default Policy
 

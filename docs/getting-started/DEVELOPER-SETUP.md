@@ -5,6 +5,7 @@ Step-by-step guide for new developers joining the team.
 ## Overview
 
 This guide sets up your machine for development with:
+
 - Foundation - Development Stack (skills, hooks, CLI)
 - AI-assisted development workflow
 - Code review automation
@@ -66,6 +67,7 @@ New-Item -ItemType Directory -Path "$env:USERPROFILE\.foundation" -Force
 ```
 
 ### Verify Foundation
+
 ```powershell
 wf.ps1 health
 wf.ps1 status
@@ -74,7 +76,8 @@ wf.ps1 list
 
 ### Optional: Local Workspace Autostart (Local-only)
 
-If you keep a personal workspace root (example: `.`), you can add a local-only startup helper to run health checks automatically. This is optional and should stay **local** (not a shared repo rule).
+If you keep a personal workspace root (example: `.`), you can add a local-only startup helper to run
+health checks automatically. This is optional and should stay **local** (not a shared repo rule).
 
 ```powershell
 # Local-only helper
@@ -82,6 +85,7 @@ If you keep a personal workspace root (example: `.`), you can add a local-only s
 ```
 
 Notes:
+
 - Do not enforce this path for other developers.
 - Keep local-only helpers out of shared policies.
 
@@ -116,6 +120,7 @@ git config --global core.hooksPath "$env:USERPROFILE\.git-hooks"
 ### Other AI Agents
 
 Foundation works with any AI agent:
+
 - Claude Desktop
 - GitHub Copilot
 - Cursor
@@ -137,6 +142,7 @@ wf.ps1 new --name my-project --type service
 ## Daily Workflow
 
 ### Morning
+
 ```powershell
 # Check for updates
 wf.ps1 check
@@ -212,8 +218,8 @@ git config --global core.hooksPath
 2. Explore available [skills](../../skills/SKILL_INDEX.md)
 3. Setup your first project
 
-- Los hooks automticos de Foundation - Development Stack ahora cubren 7 dimensiones: Seguridad, Calidad, Arquitectura, Testing, API, Documentacin y Gitflow. Consulta REVIEW-INDEX.md para detalles y cmo personalizar reglas.
+- Los hooks automticos de Foundation - Development Stack ahora cubren 7 dimensiones: Seguridad,
+  Calidad, Arquitectura, Testing, API, Documentacin y Gitflow. Consulta REVIEW-INDEX.md para
+  detalles y cmo personalizar reglas.
 - Para personalizar reglas de revisión, edita los archivos SKILL.md en cada subcarpeta de skills/.
 - Los scripts de chequeo estn en scripts/hooks/ y pueden adaptarse a las necesidades del proyecto.
-
-

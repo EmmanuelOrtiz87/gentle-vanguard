@@ -2,15 +2,17 @@
 
 ## Overview
 
-Foundation automatically manages artifact retention to balance **historical context** with **repository cleanliness**. The system keeps recent files in the repo for AI agent context while archiving older files locally.
+Foundation automatically manages artifact retention to balance **historical context** with
+**repository cleanliness**. The system keeps recent files in the repo for AI agent context while
+archiving older files locally.
 
 ## Retention Limits
 
-| Category | Repo (Git) | Local Archive | Purpose |
-|----------|-----------|---------------|---------|
-| **Audits** | 5 files | 30 files | Weekly trend analysis |
-| **Sessions** | 1 file | 30 files | Current session context |
-| **Code Reviews** | 1 file | 30 files | Latest review reference |
+| Category         | Repo (Git) | Local Archive | Purpose                 |
+| ---------------- | ---------- | ------------- | ----------------------- |
+| **Audits**       | 5 files    | 30 files      | Weekly trend analysis   |
+| **Sessions**     | 1 file     | 30 files      | Current session context |
+| **Code Reviews** | 1 file     | 30 files      | Latest review reference |
 
 ### Why These Limits?
 
@@ -44,6 +46,7 @@ Edit `config/artifacts-retention.json`:
 ### Automatic Triggers
 
 Rotation runs automatically during:
+
 - `end-session` - Session closure
 - `day-end-closure` - End-of-day wrap-up
 
@@ -103,11 +106,13 @@ docs/
 
 ```markdown
 ## When analyzing project health:
+
 1. Read latest 5 audits from `docs/audits/`
 2. Compare metrics across time period
 3. If deeper context needed, check `.local-archive/audits/`
 
 ## When starting new task:
+
 1. Read current session brief from `docs/sessions/`
 2. Update session brief as scope changes
 3. Archive on session close (automatic)
@@ -119,7 +124,8 @@ docs/
 
 The rotation script includes safety mechanisms:
 
-1. **Non-artifact change detection**: Blocks rotation if there are uncommitted changes in other `docs/` files
+1. **Non-artifact change detection**: Blocks rotation if there are uncommitted changes in other
+   `docs/` files
 2. **Force override**: Use `-Force` flag to bypass checks
 3. **Error handling**: Continues on individual file errors, reports at end
 
@@ -137,6 +143,7 @@ The rotation script includes safety mechanisms:
 ## Metrics CSV Files
 
 CSV metrics files in `docs/sessions/metrics/` are **NOT rotated**:
+
 - `agent-usage.csv`
 - `context-usage.csv`
 - `token-guard-usage.csv`
@@ -180,9 +187,9 @@ cat .gitignore | Select-String "local-archive"
 
 ## versión History
 
-| versión | Date | Changes |
-|---------|------|---------|
-| 1.0.0 | 2026-04-17 | Initial policy: 5 audits, 1 session, 30 local |
+| versión | Date       | Changes                                       |
+| ------- | ---------- | --------------------------------------------- |
+| 1.0.0   | 2026-04-17 | Initial policy: 5 audits, 1 session, 30 local |
 
 ## Related Documents
 

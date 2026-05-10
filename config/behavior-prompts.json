@@ -10,7 +10,14 @@
       "prompt": "Piensa como un ingeniero full-stack senior que desarrolla una aplicación completa y lista para producción. Primero, diseña la arquitectura del sistema y luego desarrolla la versión mínima pero escalable. El resultado debe incluir:\n• Arquitectura\n• Estructura de archivos\n• Esquema de base de datos\n• Endpoints de API\n• Arquitectura de UI\n• Código completo.\n\nDiseñalo como un MVP real de startup y hazlo escalable.",
       "applies_to": ["DEV", "SAD"],
       "opencode_subagent": ["sdd-apply", "sdd-design"],
-      "expected_output": ["architecture-doc", "file-structure", "db-schema", "api-endpoints", "ui-components", "source-code"],
+      "expected_output": [
+        "architecture-doc",
+        "file-structure",
+        "db-schema",
+        "api-endpoints",
+        "ui-components",
+        "source-code"
+      ],
       "compliance_checkpoints": ["security-review", "scalability-check", "mvp-scope-validation"],
       "earned_trust": {
         "enabled": true,
@@ -28,8 +35,17 @@
       "prompt": "Piensa como un ingeniero senior que acaba de incorporarse a una base de código grande y desconocida. Primero, comprende la arquitectura y el flujo de datos. Luego identifica:\n• Problemas estructurales\n• Código duplicado\n• Cuellos de botella de rendimiento\n• Riesgos de mantenibilidad\n\nResultado:\n• Resumen de la arquitectura\n• Áreas problemáticas\n• Estrategias de refactorización\n• Código mejorado.\n\nLa funcionalidad permanece igual: se mejora la calidad.",
       "applies_to": ["DEV", "SAD"],
       "opencode_subagent": ["sdd-explore", "sdd-apply"],
-      "expected_output": ["architecture-summary", "problem-areas", "refactoring-strategy", "improved-code"],
-      "compliance_checkpoints": ["no-functionality-change", "maintainability-check", "technical-debt-tracking"],
+      "expected_output": [
+        "architecture-summary",
+        "problem-areas",
+        "refactoring-strategy",
+        "improved-code"
+      ],
+      "compliance_checkpoints": [
+        "no-functionality-change",
+        "maintainability-check",
+        "technical-debt-tracking"
+      ],
       "earned_trust": {
         "enabled": true,
         "passes_required": 3,
@@ -46,8 +62,18 @@
       "prompt": "Piensa como un ingeniero senior de depuración que investiga errores en un entorno de producción.\n• Analiza cuidadosamente el código\n• Piensa paso a paso\n• Encuentra la causa raíz\n• Propón soluciones robustas\n\nResultado:\n• Funcionalidad del código\n• Cuál es el problema\n• Por qué falla\n• Casos límite\n• Código corregido y listo para producción.",
       "applies_to": ["DEV", "QA"],
       "opencode_subagent": ["sdd-apply", "sdd-verify"],
-      "expected_output": ["code-analysis", "root-cause", "failure-reason", "edge-cases", "production-ready-fix"],
-      "compliance_checkpoints": ["root-cause-verification", "edge-case-testing", "production-readiness"],
+      "expected_output": [
+        "code-analysis",
+        "root-cause",
+        "failure-reason",
+        "edge-cases",
+        "production-ready-fix"
+      ],
+      "compliance_checkpoints": [
+        "root-cause-verification",
+        "edge-case-testing",
+        "production-readiness"
+      ],
       "earned_trust": {
         "enabled": true,
         "passes_required": 3,
@@ -64,7 +90,15 @@
       "prompt": "Piensa como un arquitecto de sistemas senior. Diseña un sistema escalable para el producto y luego desarrolla la versión mínima de producción.\nIncluye:\n• Arquitectura\n• Estructura de componentes\n• Flujo de datos\n• Diseño de API\n• Esquema de base de datos\n• Estrategia de caché\n• Código de implementación.",
       "applies_to": ["SAD", "DEV"],
       "opencode_subagent": ["sdd-design", "sdd-apply"],
-      "expected_output": ["system-architecture", "component-structure", "data-flow", "api-design", "db-schema", "cache-strategy", "implementation-code"],
+      "expected_output": [
+        "system-architecture",
+        "component-structure",
+        "data-flow",
+        "api-design",
+        "db-schema",
+        "cache-strategy",
+        "implementation-code"
+      ],
       "compliance_checkpoints": ["scalability-review", "cache-efficiency", "data-flow-validation"],
       "earned_trust": {
         "enabled": true,
@@ -83,7 +117,11 @@
       "applies_to": ["DEV", "QA"],
       "opencode_subagent": ["sdd-apply", "sdd-verify"],
       "expected_output": ["performance-bottlenecks", "optimization-strategies", "improved-code"],
-      "compliance_checkpoints": ["performance-benchmark", "memory-usage-check", "scalability-validation"],
+      "compliance_checkpoints": [
+        "performance-benchmark",
+        "memory-usage-check",
+        "scalability-validation"
+      ],
       "earned_trust": {
         "enabled": true,
         "passes_required": 3,
@@ -100,8 +138,17 @@
       "prompt": "Piensa como un ingeniero senior que convierte código a una arquitectura limpia.\n• Separa responsabilidades\n• Aumenta la modularidad\n• Reduce el acoplamiento.\n\nRespeta las normativas de la arquitectura definition y documenta los cambios en Engram para aprendizaje futuro.",
       "applies_to": ["SAD", "DEV"],
       "opencode_subagent": ["sdd-design", "sdd-apply"],
-      "expected_output": ["responsibility-map", "modular-structure", "decoupled-components", "architecture-doc"],
-      "compliance_checkpoints": ["single-responsibility", "dependency-inversion", "engram-documentation"],
+      "expected_output": [
+        "responsibility-map",
+        "modular-structure",
+        "decoupled-components",
+        "architecture-doc"
+      ],
+      "compliance_checkpoints": [
+        "single-responsibility",
+        "dependency-inversion",
+        "engram-documentation"
+      ],
       "earned_trust": {
         "enabled": true,
         "passes_required": 3,

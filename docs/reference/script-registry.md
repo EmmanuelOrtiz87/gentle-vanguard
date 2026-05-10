@@ -12,33 +12,33 @@ Central inventory of automation scripts with ownership, risk level, and executio
 
 ## Script Inventory
 
-| Script | Area | Level | Auto Mode | Owner | Notes |
-|---|---|---|---|---|---|
-| scripts/utilities/detect-ide-session.ps1 | Session Detection | A | yes | platform | Detection only, no mutations |
-| scripts/utilities/auto-init-dev-environment.ps1 | Startup | A | yes | platform | Quiet-safe activation checks |
-| scripts/utilities/ensure-tools-active.ps1 | Tooling | B | yes | platform | Avoids heavy auto-installs unless forced |
-| scripts/utilities/run-engram.ps1 | Memory Runtime | B | manual | platform | Canonical launcher for Engram session persistence |
-| scripts/utilities/wf.ps1 | Operator CLI | B | manual | dev-experience | Entrypoint for workflow commands |
-| scripts/utilities/enable-optional-post-commit.ps1 | Optional Hook Coverage | B | manual | dev-experience | Enables/disables optional post-commit automation (disabled by default) |
-| scripts/foundation/setup.sh | Foundation Setup | B | manual | platform | Cross-platform bootstrap entrypoint for Linux/macOS/WSL |
-| scripts/foundation/bootstrap.ps1 | Foundation Setup | B | manual | platform | Canonical PowerShell bootstrap entrypoint for workspace initialization |
-| scripts/foundation/wf.ps1 | Foundation CLI | B | manual | platform | Workspace bootstrap and scaffolding CLI (`init`, `new`, `validate`, `tools`, `skills`) |
-| scripts/project/new-project.ps1 | Project Scaffolding | B | manual | dev-experience | Canonical new-project entrypoint backed by bootstrap-workspace |
-| scripts/utilities/end-session.ps1 | Session Closure | B | manual | dev-experience | Runs review/audit/governance checks and generates delivery closure artifact |
-| scripts/utilities/context-pack.ps1 | Context Budgeting | B | manual | dev-experience | Generates compact continuation summary to reduce token usage |
-| scripts/utilities/compact-start.ps1 | Context Budgeting | B | manual | dev-experience | Generates context pack and compact prompt for new thread |
-| scripts/utilities/context-metrics-report.ps1 | Context Budgeting | B | manual | dev-experience | Reports context-pack and compact-start usage metrics |
-| scripts/utilities/generate-audit-report.ps1 | Audit Reporting | B | manual | platform | Generates weekly/monthly/executive audit reports in markdown |
-| scripts/utilities/generate-session-audit.ps1 | Session Audit | B | manual | platform | Manages session lifecycle audit logging |
-| scripts/utilities/aggregate-metrics.ps1 | Metrics Aggregation | B | manual | platform | Aggregates daily/weekly/monthly metrics |
-| scripts/validation/homologate-workspace.ps1 | Workspace Hygiene | B | manual | dev-experience | Normalizes artifacts/docs, removes stale files, updates references |
-| scripts/git-hooks/pre-push | Git Hook Runtime | B | git-event | platform | Runs governed pre-push checks (native review, governance validation, homologation drift gate); post-commit hook intentionally not enabled in Foundation |
-| scripts/utilities/stack-on-demand.ps1 | Orchestration Mode | B | manual | platform | Activate/validate/deactivate flow |
-| scripts/utilities/orchestrator-status.ps1 | Status | A | manual | platform | Read-oriented orchestration checks |
-| scripts/diagnostics/system-diagnostics.ps1 | Diagnostics | B | manual | platform | Health and repair checks |
-| scripts/diagnostics/validate-script-governance.ps1 | Governance | B | manual | platform | Validates script placement, naming, and governance policy compliance |
-| scripts/diagnostics/validate-sdd-governance.ps1 | Governance | B | ci-pr | platform | Enforces SDD gate on PRs with branch-aware mandatory/advisory behavior |
-| scripts/diagnostics/validate-gitflow.ps1 | GitFlow Policy | B | manual | platform | Enforces branch naming, protected branch push policy, and expected PR base |
+| Script                                             | Area                   | Level | Auto Mode | Owner          | Notes                                                                                                                                                   |
+| -------------------------------------------------- | ---------------------- | ----- | --------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| scripts/utilities/detect-ide-session.ps1           | Session Detection      | A     | yes       | platform       | Detection only, no mutations                                                                                                                            |
+| scripts/utilities/auto-init-dev-environment.ps1    | Startup                | A     | yes       | platform       | Quiet-safe activation checks                                                                                                                            |
+| scripts/utilities/ensure-tools-active.ps1          | Tooling                | B     | yes       | platform       | Avoids heavy auto-installs unless forced                                                                                                                |
+| scripts/utilities/run-engram.ps1                   | Memory Runtime         | B     | manual    | platform       | Canonical launcher for Engram session persistence                                                                                                       |
+| scripts/utilities/wf.ps1                           | Operator CLI           | B     | manual    | dev-experience | Entrypoint for workflow commands                                                                                                                        |
+| scripts/utilities/enable-optional-post-commit.ps1  | Optional Hook Coverage | B     | manual    | dev-experience | Enables/disables optional post-commit automation (disabled by default)                                                                                  |
+| scripts/foundation/setup.sh                        | Foundation Setup       | B     | manual    | platform       | Cross-platform bootstrap entrypoint for Linux/macOS/WSL                                                                                                 |
+| scripts/foundation/bootstrap.ps1                   | Foundation Setup       | B     | manual    | platform       | Canonical PowerShell bootstrap entrypoint for workspace initialization                                                                                  |
+| scripts/foundation/wf.ps1                          | Foundation CLI         | B     | manual    | platform       | Workspace bootstrap and scaffolding CLI (`init`, `new`, `validate`, `tools`, `skills`)                                                                  |
+| scripts/project/new-project.ps1                    | Project Scaffolding    | B     | manual    | dev-experience | Canonical new-project entrypoint backed by bootstrap-workspace                                                                                          |
+| scripts/utilities/end-session.ps1                  | Session Closure        | B     | manual    | dev-experience | Runs review/audit/governance checks and generates delivery closure artifact                                                                             |
+| scripts/utilities/context-pack.ps1                 | Context Budgeting      | B     | manual    | dev-experience | Generates compact continuation summary to reduce token usage                                                                                            |
+| scripts/utilities/compact-start.ps1                | Context Budgeting      | B     | manual    | dev-experience | Generates context pack and compact prompt for new thread                                                                                                |
+| scripts/utilities/context-metrics-report.ps1       | Context Budgeting      | B     | manual    | dev-experience | Reports context-pack and compact-start usage metrics                                                                                                    |
+| scripts/utilities/generate-audit-report.ps1        | Audit Reporting        | B     | manual    | platform       | Generates weekly/monthly/executive audit reports in markdown                                                                                            |
+| scripts/utilities/generate-session-audit.ps1       | Session Audit          | B     | manual    | platform       | Manages session lifecycle audit logging                                                                                                                 |
+| scripts/utilities/aggregate-metrics.ps1            | Metrics Aggregation    | B     | manual    | platform       | Aggregates daily/weekly/monthly metrics                                                                                                                 |
+| scripts/validation/homologate-workspace.ps1        | Workspace Hygiene      | B     | manual    | dev-experience | Normalizes artifacts/docs, removes stale files, updates references                                                                                      |
+| scripts/git-hooks/pre-push                         | Git Hook Runtime       | B     | git-event | platform       | Runs governed pre-push checks (native review, governance validation, homologation drift gate); post-commit hook intentionally not enabled in Foundation |
+| scripts/utilities/stack-on-demand.ps1              | Orchestration Mode     | B     | manual    | platform       | Activate/validate/deactivate flow                                                                                                                       |
+| scripts/utilities/orchestrator-status.ps1          | Status                 | A     | manual    | platform       | Read-oriented orchestration checks                                                                                                                      |
+| scripts/diagnostics/system-diagnostics.ps1         | Diagnostics            | B     | manual    | platform       | Health and repair checks                                                                                                                                |
+| scripts/diagnostics/validate-script-governance.ps1 | Governance             | B     | manual    | platform       | Validates script placement, naming, and governance policy compliance                                                                                    |
+| scripts/diagnostics/validate-sdd-governance.ps1    | Governance             | B     | ci-pr     | platform       | Enforces SDD gate on PRs with branch-aware mandatory/advisory behavior                                                                                  |
+| scripts/diagnostics/validate-gitflow.ps1           | GitFlow Policy         | B     | manual    | platform       | Enforces branch naming, protected branch push policy, and expected PR base                                                                              |
 
 ## Execution Policy
 
@@ -65,14 +65,14 @@ Default for Foundation and generated projects remains disabled.
 
 ## Homologation Contract (Tools and Process)
 
-| Item | Requirement | Enforcement |
-|---|---|---|
-| Engram memory | MUST | Validator advisory by default, strict-capable |
-| Orchestrator skill flow | MUST | Documented + validator file checks |
-| Session artifacts | MUST | Validator file checks |
-| Native review command path | MUST | Validator policy check |
-| Runtime router readiness | SHOULD | Validator advisory warning |
-| Focused validation before push | MUST | Validator execution + CI gate |
+| Item                           | Requirement | Enforcement                                   |
+| ------------------------------ | ----------- | --------------------------------------------- |
+| Engram memory                  | MUST        | Validator advisory by default, strict-capable |
+| Orchestrator skill flow        | MUST        | Documented + validator file checks            |
+| Session artifacts              | MUST        | Validator file checks                         |
+| Native review command path     | MUST        | Validator policy check                        |
+| Runtime router readiness       | SHOULD      | Validator advisory warning                    |
+| Focused validation before push | MUST        | Validator execution + CI gate                 |
 
 Default policy: keep development flow unblocked for advisory gaps, but never hide them.
 

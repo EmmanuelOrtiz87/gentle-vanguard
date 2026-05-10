@@ -1,4 +1,5 @@
 ﻿# Fullstack Project Template
+
 # Monorepo structure with frontend and backend
 
 ## Structure
@@ -40,10 +41,10 @@ docker-compose up
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start all apps in dev mode |
-| `npm run build` | Build all apps |
-| `npm run test` | Run all tests |
-| `npm run lint` | Lint all apps |
-| `docker-compose up` | Run full stack in Docker |
+| Command             | Description                |
+| ------------------- | -------------------------- |
+| `npm run dev`       | Start all apps in dev mode |
+| `npm run build`     | Build all apps             |
+| `npm run test`      | Run all tests              |
+| `npm run lint`      | Lint all apps              |
+| `docker-compose up` | Run full stack in Docker   |

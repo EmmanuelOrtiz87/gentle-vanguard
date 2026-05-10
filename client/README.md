@@ -1,6 +1,7 @@
 # Foundation Client - Lightweight Interface
 
 This is the **client-only** distribution of Foundation. It provides:
+
 - TUI interface for setup
 - Connection to Foundation API (server mode)
 - Public documentation and theory
@@ -44,6 +45,7 @@ To use full Foundation capabilities:
 ## Local Mode (Limited)
 
 Without server connection, you can:
+
 - Read documentation
 - Use TUI installer
 - View public architecture docs
@@ -52,6 +54,7 @@ Without server connection, you can:
 ## Intellectual Property Notice
 
 Foundation engine and core algorithms are:
+
 - **NOT open source** (despite public docs)
 - **Protected by EULA** (see LICENSE)
 - **Encrypted in distribution** (AES-256)

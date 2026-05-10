@@ -5,6 +5,7 @@ This template is used by the Code Review Orchestrator to track issues found duri
 ## Usage
 
 Issues are automatically added to this file when running:
+
 ```bash
 wf review --track
 ```
@@ -16,10 +17,10 @@ wf review --track
 
 ### Issues
 
-| ID | Severity | Category | Title | File | Status |
-|----|----------|----------|-------|------|--------|
-| 1 | CRITICAL | Security | API Key Exposed | src/config.ts | OPEN |
-| 2 | HIGH | Quality | Empty Catch Block | src/handler.ts | FIXED |
+| ID  | Severity | Category | Title             | File           | Status |
+| --- | -------- | -------- | ----------------- | -------------- | ------ |
+| 1   | CRITICAL | Security | API Key Exposed   | src/config.ts  | OPEN   |
+| 2   | HIGH     | Quality  | Empty Catch Block | src/handler.ts | FIXED  |
 
 ### Action Items
 
@@ -50,12 +51,12 @@ wf review --track
 
 ## Severity Levels
 
-| Level | Color | Description | SLA |
-|-------|-------|-------------|-----|
-| CRITICAL | [!C] | Security breach, data loss risk | Immediate |
-| HIGH | [!H] | Major quality/deployment issue | 24 hours |
-| MEDIUM | [!M] | Technical debt, maintainability | 1 week |
-| LOW | [!L] | Best practice, polish | Next sprint |
+| Level    | Color | Description                     | SLA         |
+| -------- | ----- | ------------------------------- | ----------- |
+| CRITICAL | [!C]  | Security breach, data loss risk | Immediate   |
+| HIGH     | [!H]  | Major quality/deployment issue  | 24 hours    |
+| MEDIUM   | [!M]  | Technical debt, maintainability | 1 week      |
+| LOW      | [!L]  | Best practice, polish           | Next sprint |
 
 ## Quick Reference
 
@@ -69,4 +70,3 @@ wf review --export-csv
 # Generate report
 wf review --report
 ```
-

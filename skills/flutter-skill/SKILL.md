@@ -1,14 +1,14 @@
 ---
 name: flutter
-description: Flutter development with Riverpod state management, Freezed, go_router, and mocktail testing
+description:
+  Flutter development with Riverpod state management, Freezed, go_router, and mocktail testing
 when-to-use: When working on Flutter/Dart code
 user-invocable: false
-paths: ["**/*.dart", "pubspec.yaml", "lib/**", "test/**"]
+paths: ['**/*.dart', 'pubspec.yaml', 'lib/**', 'test/**']
 effort: medium
 ---
 
 # Flutter Skill
-
 
 ---
 
@@ -55,6 +55,7 @@ project/
 ## Riverpod State Management
 
 ### Provider Types
+
 ```dart
 // Simple value provider
 final appNameProvider = Provider<String>((ref) => 'My App');
@@ -87,6 +88,7 @@ final userByIdProvider = FutureProvider.family<User, String>((ref, userId) async
 ```
 
 ### Notifier Pattern
+
 ```dart
 @riverpod
 class Users extends _$Users {
@@ -114,6 +116,7 @@ class Users extends _$Users {
 ```
 
 ### AsyncValue Handling
+
 ```dart
 class UsersScreen extends ConsumerWidget {
   const UsersScreen({super.key});
@@ -146,6 +149,7 @@ Widget build(BuildContext context, WidgetRef ref) {
 ```
 
 ### ref Methods
+
 ```dart
 // watch - rebuilds when provider changes
 final users = ref.watch(usersProvider);
@@ -175,6 +179,7 @@ final link = ref.keepAlive();
 ## Freezed Data Models
 
 ### Model Definition
+
 ```dart
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -206,6 +211,7 @@ sealed class AuthState with _$AuthState {
 ```
 
 ### Using Freezed Unions
+
 ```dart
 Widget build(BuildContext context, WidgetRef ref) {
   final authState = ref.watch(authProvider);
@@ -225,6 +231,7 @@ Widget build(BuildContext context, WidgetRef ref) {
 ## go_router Navigation
 
 ### Router Configuration
+
 ```dart
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
@@ -264,6 +271,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 ```
 
 ### Navigation
+
 ```dart
 // Navigate to route
 context.go('/user/123');
@@ -286,6 +294,7 @@ context.goNamed('user', pathParameters: {'id': '123'});
 ## Widget Patterns
 
 ### ConsumerWidget vs ConsumerStatefulWidget
+
 ```dart
 // Stateless with Riverpod
 class UserCard extends ConsumerWidget {
@@ -338,6 +347,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 ```
 
 ### HookConsumerWidget (with flutter_hooks)
+
 ```dart
 class AnimatedCounter extends HookConsumerWidget {
   const AnimatedCounter({super.key});
@@ -365,6 +375,7 @@ class AnimatedCounter extends HookConsumerWidget {
 ## Testing with Mocktail
 
 ### Unit Tests
+
 ```dart
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -402,6 +413,7 @@ void main() {
 ```
 
 ### Widget Tests
+
 ```dart
 void main() {
   testWidgets('UserCard displays user name', (tester) async {
@@ -539,8 +551,8 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   exclude:
-    - "**/*.g.dart"
-    - "**/*.freezed.dart"
+    - '**/*.g.dart'
+    - '**/*.freezed.dart'
   errors:
     invalid_annotation_target: ignore
   language:
@@ -568,18 +580,15 @@ linter:
 
 ## Flutter Anti-Patterns
 
--  **Provider without autoDispose** - Use `.autoDispose` to prevent memory leaks
--  **watch in callbacks** - Use `ref.read()` in onPressed/callbacks, not `ref.watch()`
--  **Business logic in widgets** - Move to Notifiers/providers
--  **Mutable state in providers** - Use Freezed for immutable models
--  **Not using AsyncValue** - Handle loading/error states with `when()`
--  **setState with Riverpod** - Use providers for shared state
--  **Passing ref to functions** - Keep ref usage within widgets/providers
--  **Deeply nested Consumer** - Use ConsumerWidget instead
--  **Not using family for params** - Use `.family` for parameterized providers
--  **Global GoRouter instance** - Use Provider for router with redirect logic
--  **BuildContext across async** - Store values before await, not context
--  **Ignoring dispose** - Clean up controllers in ConsumerStatefulWidget
-
-
-
+- **Provider without autoDispose** - Use `.autoDispose` to prevent memory leaks
+- **watch in callbacks** - Use `ref.read()` in onPressed/callbacks, not `ref.watch()`
+- **Business logic in widgets** - Move to Notifiers/providers
+- **Mutable state in providers** - Use Freezed for immutable models
+- **Not using AsyncValue** - Handle loading/error states with `when()`
+- **setState with Riverpod** - Use providers for shared state
+- **Passing ref to functions** - Keep ref usage within widgets/providers
+- **Deeply nested Consumer** - Use ConsumerWidget instead
+- **Not using family for params** - Use `.family` for parameterized providers
+- **Global GoRouter instance** - Use Provider for router with redirect logic
+- **BuildContext across async** - Store values before await, not context
+- **Ignoring dispose** - Clean up controllers in ConsumerStatefulWidget

@@ -1,8 +1,9 @@
 ---
 name: angular-spa-skill
 description: >
-  Angular 19+ SPA patterns: signals, zoneless, standalone components, defer loading.
-  Trigger: "Angular", "Angular component", "Angular service", "Angular signal", "Angular SPA", "@defer", "standalone component".
+  Angular 19+ SPA patterns: signals, zoneless, standalone components, defer loading. Trigger:
+  "Angular", "Angular component", "Angular service", "Angular signal", "Angular SPA", "@defer",
+  "standalone component".
 ---
 
 ## When to Use
@@ -49,10 +50,16 @@ import { ApiService } from '../../core/services/api.service';
       <div class="empty">No data</div>
     }
   `,
-  styles: [`
-    .loading { color: #666; }
-    .empty { color: #999; }
-  `]
+  styles: [
+    `
+      .loading {
+        color: #666;
+      }
+      .empty {
+        color: #999;
+      }
+    `,
+  ],
 })
 export class FeatureComponent {
   private readonly api = inject(ApiService);
@@ -66,8 +73,11 @@ export class FeatureComponent {
   loadData() {
     this.loading.set(true);
     this.api.getData().subscribe({
-      next: (data) => { this.data.set(data); this.loading.set(false); },
-      error: () => this.loading.set(false)
+      next: (data) => {
+        this.data.set(data);
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false),
     });
   }
 }
@@ -81,11 +91,7 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideZonelessChangeDetection(),
-    provideRouter(routes),
-    provideHttpClient()
-  ]
+  providers: [provideZonelessChangeDetection(), provideRouter(routes), provideHttpClient()],
 };
 ```
 
@@ -95,7 +101,7 @@ export const appConfig: ApplicationConfig = {
 // Writable signal
 const count = signal(0);
 count.set(1);
-count.update(c => c + 1);
+count.update((c) => c + 1);
 
 // Computed signal
 const doubled = computed(() => count() * 2);
@@ -104,7 +110,11 @@ const doubled = computed(() => count() * 2);
 effect(() => console.log('Count:', count()));
 
 // In template
-{{ count() }}
+{
+  {
+    count();
+  }
+}
 ```
 
 ## @defer (Lazy Loading)
@@ -113,15 +123,15 @@ effect(() => console.log('Count:', count()));
 @Component({
   template: `
     <div>Always loaded</div>
-    
+
     @defer (on viewport) {
       <heavy-component />
     }
-    
+
     @defer (on timer(500ms)) {
       <lazy-component />
     }
-    
+
     @defer (on hover; prefetch on idle) {
       <tooltip-component />
     }
@@ -143,13 +153,13 @@ export class ApiService {
 
   getMetrics(workspace: string, repo: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/metrics`, {
-      params: { workspace, repo }
+      params: { workspace, repo },
     });
   }
 
   getPrDetails(workspace: string, repo: string, prId: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/pr-details`, {
-      params: { workspace, repo, pr_id: prId.toString() }
+      params: { workspace, repo, pr_id: prId.toString() },
     });
   }
 }
@@ -161,12 +171,12 @@ export class ApiService {
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./features/dashboard/dashboard').then(m => m.DashboardComponent)
+    loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.DashboardComponent),
   },
   {
     path: 'prs',
-    loadChildren: () => import('./features/prs/routes').then(m => m.PR_ROUTES)
-  }
+    loadChildren: () => import('./features/prs/routes').then((m) => m.PR_ROUTES),
+  },
 ];
 ```
 
@@ -183,7 +193,7 @@ export const routes: Routes = [
         </div>
       </div>
     }
-  `
+  `,
 })
 export class PrListComponent {
   readonly selected = signal<any>(null);
@@ -254,16 +264,16 @@ describe('Component', () => {
 
 ## Quick Reference
 
-| Pattern | Code |
-|---------|------|
-| Signal | `signal<T>(initial)` |
-| Computed | `computed(() => expr)` |
-| Effect | `effect(() => sideEffect())` |
-| Inject | `inject(Service)` |
-| Zoneless | `provideZonelessChangeDetection()` |
-| HTTP | `provideHttpClient()` |
+| Pattern   | Code                               |
+| --------- | ---------------------------------- |
+| Signal    | `signal<T>(initial)`               |
+| Computed  | `computed(() => expr)`             |
+| Effect    | `effect(() => sideEffect())`       |
+| Inject    | `inject(Service)`                  |
+| Zoneless  | `provideZonelessChangeDetection()` |
+| HTTP      | `provideHttpClient()`              |
 | Lazy load | `loadComponent(() => import(...))` |
-| @defer | `@defer (on viewport)` |
+| @defer    | `@defer (on viewport)`             |
 
 ## Package.json Scripts
 
@@ -281,6 +291,7 @@ describe('Component', () => {
 ## 📋 Technical Deliverables
 
 ### Standalone Component Example
+
 ```typescript
 import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -299,10 +310,16 @@ import { ApiService } from '../../core/services/api.service';
       <div class="empty">No data</div>
     }
   `,
-  styles: [`
-    .loading { color: #666; }
-    .empty { color: #999; }
-  `]
+  styles: [
+    `
+      .loading {
+        color: #666;
+      }
+      .empty {
+        color: #999;
+      }
+    `,
+  ],
 })
 export class FeatureComponent {
   private readonly api = inject(ApiService);
@@ -316,19 +333,23 @@ export class FeatureComponent {
   loadData() {
     this.loading.set(true);
     this.api.getData().subscribe({
-      next: (data) => { this.data.set(data); this.loading.set(false); },
-      error: () => this.loading.set(false)
+      next: (data) => {
+        this.data.set(data);
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false),
     });
   }
 }
 ```
 
 ### Signal-Based State Management
+
 ```typescript
 // Writable signal
 const count = signal(0);
 count.set(1);
-count.update(c => c + 1);
+count.update((c) => c + 1);
 
 // Computed signal
 const doubled = computed(() => count() * 2);
@@ -352,10 +373,10 @@ You're successful when:
 
 ## 💭 Communication Style
 
-- **Be precise**: "Created standalone component with signal-based state, reducing boilerplate by 60%"
+- **Be precise**: "Created standalone component with signal-based state, reducing boilerplate by
+  60%"
 - **Focus on performance**: "Implemented @defer loading, cutting initial bundle from 450KB to 270KB"
 - **Think modern**: "Zoneless setup with provideZonelessChangeDetection() for better performance"
 - **Ensure accessibility**: "Added ARIA labels and semantic HTML for screen reader support"
 
 ---
-

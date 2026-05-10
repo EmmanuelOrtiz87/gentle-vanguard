@@ -1,9 +1,8 @@
 ---
 name: web-performance-optimization
 description: >
-  Optimize web application performance using code splitting, lazy loading,
-  caching, compression, and monitoring. Use when improving Core Web Vitals and
-  user experience.
+  Optimize web application performance using code splitting, lazy loading, caching, compression, and
+  monitoring. Use when improving Core Web Vitals and user experience.
 ---
 
 # Web Performance Optimization
@@ -17,7 +16,8 @@ description: >
 
 ## Overview
 
-Implement performance optimization strategies including lazy loading, code splitting, caching, compression, and monitoring to improve Core Web Vitals and user experience.
+Implement performance optimization strategies including lazy loading, code splitting, caching,
+compression, and monitoring to improve Core Web Vitals and user experience.
 
 ## When to Use
 
@@ -64,16 +64,15 @@ Replace this section with native examples and checklists directly in this skill 
 
 ## Best Practices
 
-###  DO
+### DO
 
 - Follow established patterns and conventions
 - Write clean, maintainable code
 - Add appropriate documentation
 - Test thoroughly before deploying
 
-###  DON'T
+### DON'T
 
 - Skip testing or validation
 - Ignore error handling
 - Hard-code configuration values
-

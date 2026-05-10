@@ -24,11 +24,11 @@ Angular:
 
 ## Quick Reference
 
-| Task | Command |
-|------|---------|
-| Go tests | `go test ./...` |
-| Go coverage | `go test -coverprofile=out ./...` |
-| Angular tests | `npm test -- --watch=false` |
-| Angular coverage | `npm test -- --coverage` |
-| Run single file | `npm test -- file.spec.ts` |
-| Watch mode | `npm test` |
+| Task             | Command                           |
+| ---------------- | --------------------------------- |
+| Go tests         | `go test ./...`                   |
+| Go coverage      | `go test -coverprofile=out ./...` |
+| Angular tests    | `npm test -- --watch=false`       |
+| Angular coverage | `npm test -- --coverage`          |
+| Run single file  | `npm test -- file.spec.ts`        |
+| Watch mode       | `npm test`                        |

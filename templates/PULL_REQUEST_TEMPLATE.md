@@ -42,10 +42,10 @@ Closes #[ISSUE_NUMBER]
 
 **Review Checklist:**
 
-| Dimension | Status | Notes |
-|-----------|--------|-------|
-| Security |  | |
-| Quality |  | |
-| Architecture |  | |
-| Testing |  | |
-| Documentation |  | |
+| Dimension     | Status | Notes |
+| ------------- | ------ | ----- |
+| Security      |        |       |
+| Quality       |        |       |
+| Architecture  |        |       |
+| Testing       |        |       |
+| Documentation |        |       |

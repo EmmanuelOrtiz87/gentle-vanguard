@@ -3,12 +3,7 @@
   "version": "1.0",
   "orchestrator_integration": {
     "description": "Judgment Day integration with project orchestrator",
-    "auto_trigger_events": [
-      "pre-push",
-      "pre-merge-commit",
-      "pr-created",
-      "pr-ready-for-merge"
-    ],
+    "auto_trigger_events": ["pre-push", "pre-merge-commit", "pr-created", "pr-ready-for-merge"],
     "coordinate_with_ci": true,
     "fail_ci_on_judgment_failure": true
   },
@@ -16,16 +11,8 @@
     "pre_push": {
       "enabled": true,
       "description": "Run Judgment Day before pushing to remote",
-      "trigger_on_branch_patterns": [
-        "feature/*",
-        "bugfix/*",
-        "hotfix/*",
-        "release/*"
-      ],
-      "skip_on_branch_patterns": [
-        "main",
-        "develop"
-      ],
+      "trigger_on_branch_patterns": ["feature/*", "bugfix/*", "hotfix/*", "release/*"],
+      "skip_on_branch_patterns": ["main", "develop"],
       "scope": "changed_files",
       "require_approval": true,
       "fail_on_critical": true,
@@ -36,12 +23,7 @@
     "pre_merge": {
       "enabled": true,
       "description": "Run Judgment Day before merging PR",
-      "trigger_on_branch_patterns": [
-        "feature/*",
-        "bugfix/*",
-        "hotfix/*",
-        "release/*"
-      ],
+      "trigger_on_branch_patterns": ["feature/*", "bugfix/*", "hotfix/*", "release/*"],
       "scope": "pr_files",
       "require_approval": true,
       "require_both_reviewers": true,
@@ -63,19 +45,8 @@
     "require_both_reviewers": true,
     "reviewer_approval_threshold": 2,
     "allow_self_approval": false,
-    "approval_patterns": [
-      "LGTM",
-      "Approved",
-      "",
-      "approved"
-    ],
-    "rejection_patterns": [
-      "NACK",
-      "Rejected",
-      "",
-      "rejected",
-      "needs work"
-    ]
+    "approval_patterns": ["LGTM", "Approved", "", "approved"],
+    "rejection_patterns": ["NACK", "Rejected", "", "rejected", "needs work"]
   },
   "pr_merge_policy": {
     "block_on_judgment_failure": true,

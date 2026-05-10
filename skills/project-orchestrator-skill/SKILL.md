@@ -1,11 +1,15 @@
 ---
 name: project-orchestrator
-description: "Trigger: session start, project setup, orchestration, repository governance, iniciar sesion. Master orchestrator for coordinated sessions: stack detection, skill loading, workflow management, and session activation."
+description:
+  'Trigger: session start, project setup, orchestration, repository governance, iniciar sesion.
+  Master orchestrator for coordinated sessions: stack detection, skill loading, workflow management,
+  and session activation.'
 ---
 
 ## Activation Contract
 
-ALWAYS ACTIVE. Loads on every session for coordination, stack detection, skill loading, and workflow governance. Do not wait to be triggered.
+ALWAYS ACTIVE. Loads on every session for coordination, stack detection, skill loading, and workflow
+governance. Do not wait to be triggered.
 
 ## Hard Rules
 
@@ -21,30 +25,32 @@ ALWAYS ACTIVE. Loads on every session for coordination, stack detection, skill l
 ## Communication Mode
 
 Default: executive. Override via config/orchestrator.json.
+
 - simple: "OK: <result>" / "ERROR: <cause> | ACTION: <step>"
 - Escalate to standard/deep only for medium/high risk or explicit request.
 
 ## Decision Gates
 
-| Gate | Condition | Action |
-|------|-----------|--------|
-| Pre-processing | Trigger match? | Load skill immediately |
-| Pre-processing | No match? | Continue normal behavior |
-| Session state | START | Detect IDE, refresh artifacts, capture context |
-| Session state | EXECUTE | Apply changes under loaded skills |
-| Session state | VALIDATE | Run governance and targeted checks |
-| Session state | AUDIT | Persist durable learnings to Engram |
-| Session state | PUBLISH | Commit, push, create PR |
-| Session state | HANDOFF | Compact-start before new thread |
-| Structure change | Existing conventions? | Adopt as-is, do not refactor |
-| Structure change | Greenfield repo? | Enforce canonical rules |
+| Gate             | Condition             | Action                                         |
+| ---------------- | --------------------- | ---------------------------------------------- |
+| Pre-processing   | Trigger match?        | Load skill immediately                         |
+| Pre-processing   | No match?             | Continue normal behavior                       |
+| Session state    | START                 | Detect IDE, refresh artifacts, capture context |
+| Session state    | EXECUTE               | Apply changes under loaded skills              |
+| Session state    | VALIDATE              | Run governance and targeted checks             |
+| Session state    | AUDIT                 | Persist durable learnings to Engram            |
+| Session state    | PUBLISH               | Commit, push, create PR                        |
+| Session state    | HANDOFF               | Compact-start before new thread                |
+| Structure change | Existing conventions? | Adopt as-is, do not refactor                   |
+| Structure change | Greenfield repo?      | Enforce canonical rules                        |
 
 ## Execution Steps
 
 1. Pre-process user input via pre-process-input.ps1
 2. Detect stack from project files (go.mod, package.json, etc.)
 3. Load skills matching detected stack
-4. Execute work using session state machine (START -> EXECUTE -> VALIDATE -> AUDIT -> PUBLISH -> HANDOFF)
+4. Execute work using session state machine (START -> EXECUTE -> VALIDATE -> AUDIT -> PUBLISH ->
+   HANDOFF)
 5. Validate acceptance criteria before PR
 6. Generate audit document before push
 7. Save durable learnings to Engram
@@ -52,7 +58,8 @@ Default: executive. Override via config/orchestrator.json.
 
 ## Output Contract
 
-Return session status: project, branch, stack, loaded skills, next step. For substantive changes: audit document + session summary persisted to Engram.
+Return session status: project, branch, stack, loaded skills, next step. For substantive changes:
+audit document + session summary persisted to Engram.
 
 ## References
 

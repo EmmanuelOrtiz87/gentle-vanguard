@@ -26,13 +26,8 @@
       ".runtime/security-state.json",
       ".runtime/*-audit.log"
     ],
-    "encryptBeforeCommit": [
-      "config/owner-auth.json"
-    ],
-    "templateFiles": [
-      "config/owner-auth.example.json",
-      "config/owner-auth.encrypted"
-    ]
+    "encryptBeforeCommit": ["config/owner-auth.json"],
+    "templateFiles": ["config/owner-auth.example.json", "config/owner-auth.encrypted"]
   },
 
   "setup": {

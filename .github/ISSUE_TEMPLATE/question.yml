@@ -1,16 +1,16 @@
 name: Question
 description: Ask a question about the project
-title: "[QUESTION] "
-labels: ["question", "triage"]
+title: '[QUESTION] '
+labels: ['question', 'triage']
 assignees: []
 body:
   - type: markdown
     attributes:
       value: |
         ## Question
-        
+
         Use this for general questions about the project.
-        
+
   - type: textarea
     id: question
     attributes:

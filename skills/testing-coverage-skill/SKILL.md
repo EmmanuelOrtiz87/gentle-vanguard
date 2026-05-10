@@ -1,13 +1,14 @@
 ---
 name: testing-coverage
 description: >
-  Test coverage requirements for script behavior changes.
-  Trigger: "test", "testing", "coverage", "spec", "unit test"
+  Test coverage requirements for script behavior changes. Trigger: "test", "testing", "coverage",
+  "spec", "unit test"
 ---
 
 # Testing Coverage Skill
 
 ## Purpose
+
 Ensure test coverage for all behavior changes in scripts.
 
 ## Test Framework
@@ -65,17 +66,16 @@ Describe "Get-Config" {
 
 ## Test Categories
 
-| Type | Purpose | Speed |
-|------|---------|-------|
-| Unit | Test functions in isolation | Fast |
-| Integration | Test full workflows | Slow |
-| Smoke | Quick sanity check | Very Fast |
+| Type        | Purpose                     | Speed     |
+| ----------- | --------------------------- | --------- |
+| Unit        | Test functions in isolation | Fast      |
+| Integration | Test full workflows         | Slow      |
+| Smoke       | Quick sanity check          | Very Fast |
 
 ## Coverage Requirements
 
-| Change Type | Min Coverage |
-|-------------|--------------|
-| New function | 80% |
-| Bug fix | Regression test |
-| Config change | Smoke test |
-
+| Change Type   | Min Coverage    |
+| ------------- | --------------- |
+| New function  | 80%             |
+| Bug fix       | Regression test |
+| Config change | Smoke test      |

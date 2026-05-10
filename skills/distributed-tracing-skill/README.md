@@ -1,6 +1,6 @@
 # Distributed Tracing Skill - Gua Completa
 
-##  Tabla de Contenidos
+## Tabla de Contenidos
 
 1. [Descripcin General](#descripcin-general)
 2. [Caractersticas Principales](#caractersticas-principales)
@@ -13,9 +13,12 @@
 
 ## Descripcin General
 
-El **Distributed Tracing Skill** proporciona un sistema completo de observabilidad para el workspace-foundation, permitiendo rastrear la ejecucin de dispatches, orchestration y automatización con:
+El **Distributed Tracing Skill** proporciona un sistema completo de observabilidad para el
+workspace-foundation, permitiendo rastrear la ejecucin de dispatches, orchestration y automatización
+con:
 
-- **Correlation IDs**: Identificadores nicos para rastrear operaciónes a travs de mltiples componentes
+- **Correlation IDs**: Identificadores nicos para rastrear operaciónes a travs de mltiples
+  componentes
 - **Span Hierarchy**: estructura jerrquica de spans para visualizar relaciones entre operaciónes
 - **Performance Metrics**: Mtricas de rendimiento en tiempo real
 - **Centralized Reporting**: Reportes centralizados en un nico directorio
@@ -24,6 +27,7 @@ El **Distributed Tracing Skill** proporciona un sistema completo de observabilid
 ## Caractersticas Principales
 
 ### 1. Correlation IDs
+
 Cada sesin obtiene un identificador nico que se propaga a travs de todas las operaciónes:
 
 ```
@@ -32,6 +36,7 @@ Ejemplo: session-2026-04-23-24-20260423143500-a1b2c3d4
 ```
 
 ### 2. Span Hierarchy
+
 estructura jerrquica que muestra relaciones entre operaciónes:
 
 ```
@@ -49,12 +54,14 @@ Root Span (Session)
 ```
 
 ### 3. Performance Metrics
+
 - Latencia de operaciónes (ms)
 - Throughput de dispatches (ops/sec)
 - Tasa de xito/error (%)
 - Utilizacin de recursos
 
 ### 4. Reportes Centralizados
+
 Todos los reportes se generan automticamente en `.telemetry/reports/`:
 
 - `daily-summary-YYYY-MM-DD.md` - Resumen diario
@@ -186,36 +193,36 @@ try {
         -ParentSpanId $dispatchSpan.SpanId -Attributes @{
         TaskLength = 100
     }
-    
+
     # ... realizar extraccin de keywords ...
     $keywords = @("login", "authentication", "security")
-    
+
     Add-SpanMetric -Span $keywordSpan -MetricName "keywords-found" -Value $keywords.Count
     End-Span -Span $keywordSpan -Status "success"
-    
+
     # Span para decisión tree
     $decisiónSpan = Start-Span -Name "decisión-tree-evaluation" -SpanType "operation" `
         -ParentSpanId $dispatchSpan.SpanId -Attributes @{
         KeywordCount = $keywords.Count
     }
-    
+
     # ... evaluar decisión tree ...
     $confidence = 0.95
-    
+
     Add-SpanMetric -Span $decisiónSpan -MetricName "confidence-score" -Value $confidence
     End-Span -Span $decisiónSpan -Status "success"
-    
+
     # Span para agent execution
     $agentSpan = Start-Span -Name "agent-execution" -SpanType "operation" `
         -ParentSpanId $dispatchSpan.SpanId -Attributes @{
         AgentType = "code-review"
         Confidence = $confidence
     }
-    
+
     # ... ejecutar agente ...
-    
+
     End-Span -Span $agentSpan -Status "success"
-    
+
     # Finalizar dispatch
     End-Span -Span $dispatchSpan -Status "success"
 }
@@ -235,25 +242,25 @@ Finalize-DistributedTracing
 
 function Route-TaskToAgent {
     param([string]$TaskDescription)
-    
+
     # Obtener correlation ID
     $correlationId = Get-CorrelationId
-    
+
     # Crear span para routing
     $routingSpan = Start-Span -Name "task-routing" -SpanType "dispatch" -Attributes @{
         TaskDescription = $TaskDescription
         CorrelationId = $correlationId
     }
-    
+
     try {
         # ... lgica de routing ...
         $agent = Select-BestAgent -Task $TaskDescription
-        
+
         Record-Metric -Name "routing-confidence" -Value $agent.Confidence -Unit "%" -Tags @{
             TaskType = $TaskDescription
             SelectedAgent = $agent.Name
         }
-        
+
         End-Span -Span $routingSpan -Status "success"
         return $agent
     }
@@ -291,16 +298,16 @@ function Route-TaskToAgent {
 
 ### Nomenclatura de archivos
 
-| Patrn | Descripcin |
-|--------|-------------|
-| `dispatch-traces-YYYY-MM-DD.jsonl` | Traces de dispatches |
+| Patrn                                   | Descripcin              |
+| --------------------------------------- | ----------------------- |
+| `dispatch-traces-YYYY-MM-DD.jsonl`      | Traces de dispatches    |
 | `orchestration-traces-YYYY-MM-DD.jsonl` | Traces de orchestration |
-| `automation-traces-YYYY-MM-DD.jsonl` | Traces de automation |
-| `metrics-YYYY-MM-DD.json` | Mtricas del da |
-| `daily-summary-YYYY-MM-DD.md` | Resumen diario |
-| `performance-analysis-YYYY-MM-DD.md` | Anlisis de rendimiento |
-| `error-analysis-YYYY-MM-DD.md` | Anlisis de errores |
-| `dispatch-metrics-YYYY-MM-DD.md` | Mtricas de dispatches |
+| `automation-traces-YYYY-MM-DD.jsonl`    | Traces de automation    |
+| `metrics-YYYY-MM-DD.json`               | Mtricas del da          |
+| `daily-summary-YYYY-MM-DD.md`           | Resumen diario          |
+| `performance-analysis-YYYY-MM-DD.md`    | Anlisis de rendimiento  |
+| `error-analysis-YYYY-MM-DD.md`          | Anlisis de errores      |
+| `dispatch-metrics-YYYY-MM-DD.md`        | Mtricas de dispatches   |
 
 ## Reportes y Anlisis
 
@@ -358,6 +365,7 @@ function Route-TaskToAgent {
 ### Problema: Los spans no se estn registrando
 
 **Solucin:**
+
 ```powershell
 # Verificar que tracing est inicializado
 $correlationId = Get-CorrelationId
@@ -371,6 +379,7 @@ if (-not $correlationId) {
 ### Problema: No se encuentran reportes
 
 **Solucin:**
+
 ```powershell
 # Verificar que el directorio de telemetra exista
 if (-not (Test-Path ".telemetry")) {
@@ -384,6 +393,7 @@ if (-not (Test-Path ".telemetry")) {
 ### Problema: Mtricas no se exportan
 
 **Solucin:**
+
 ```powershell
 # Asegurarse de finalizar tracing
 Finalize-DistributedTracing
@@ -395,6 +405,7 @@ Get-ChildItem -Path ".telemetry/metrics" -Filter "*.json"
 ### Problema: Correlation ID no se propaga
 
 **Solucin:**
+
 ```powershell
 # Obtener el correlation ID actual
 $corrId = Get-CorrelationId
@@ -442,5 +453,6 @@ Ver: `config/distributed-tracing-config.json`
 ## Soporte y Contribuciones
 
 Para reportar problemas o contribuir mejoras, consulta:
+
 - `CONTRIBUTING.md`
 - `docs/` - Documentacin adicional

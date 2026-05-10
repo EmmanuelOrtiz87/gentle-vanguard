@@ -86,6 +86,7 @@ npm run format:check    # Prettier formatting check
 All official documentation MUST follow the project's documentation standards.
 
 **Requirements:**
+
 - ✅ Use shields.io badges (version, status, license, runtime)
 - ✅ Use strategic emojis in headers, list items, callouts
 - ✅ Use tables for structured data with emojis
@@ -124,13 +125,13 @@ git push origin feat/your-feature-name
 
 ### Prerequisites
 
-| Requirement | Version | Status |
-|------------|---------|--------|
-| **🪟 Windows 10/11 / Linux / macOS** | Any | ✅ Required |
-| **⚡ PowerShell 7+** | 7.0+ | ✅ Required |
-| **🌿 Git** | 2.30+ | ✅ Required |
-| **🟢 Node.js** | 18+ | ⚠️ Optional (for lefthook, prettier) |
-| **🐹 Go** | 1.19+ | ⚠️ Optional (for Engram) |
+| Requirement                          | Version | Status                               |
+| ------------------------------------ | ------- | ------------------------------------ |
+| **🪟 Windows 10/11 / Linux / macOS** | Any     | ✅ Required                          |
+| **⚡ PowerShell 7+**                 | 7.0+    | ✅ Required                          |
+| **🌿 Git**                           | 2.30+   | ✅ Required                          |
+| **🟢 Node.js**                       | 18+     | ⚠️ Optional (for lefthook, prettier) |
+| **🐹 Go**                            | 1.19+   | ⚠️ Optional (for Engram)             |
 
 ### Quick Start
 
@@ -148,13 +149,13 @@ git push origin feat/your-feature-name
 
 ### Test Structure
 
-| Type | Location | Count |
-|------|----------|-------|
-| **Unit Tests** | `tests/unit/` | 22 tests |
-| **Integration Tests** | `tests/integration/` | 3 tests |
-| **Security Tests** | `tests/security/` | 2 tests |
-| **Performance Tests** | `tests/perf/` | 1 test |
-| **Total** | | **28 tests — 100% PASS** |
+| Type                  | Location             | Count                    |
+| --------------------- | -------------------- | ------------------------ |
+| **Unit Tests**        | `tests/unit/`        | 22 tests                 |
+| **Integration Tests** | `tests/integration/` | 3 tests                  |
+| **Security Tests**    | `tests/security/`    | 2 tests                  |
+| **Performance Tests** | `tests/perf/`        | 1 test                   |
+| **Total**             |                      | **28 tests — 100% PASS** |
 
 ### Running Tests
 
@@ -173,13 +174,13 @@ Measure-Command { .\scripts\run-tests-simple.ps1 }
 
 ## 📚 Related Documentation
 
-| Document | Purpose |
-|-----------|---------|
-| [Session Guide](docs/guides/SESSION-GUIDE.md) | Daily workflow and commands |
-| [Architecture Overview](docs/architecture/README.md) | System design rationale |
-| [Release Process](docs/guides/RELEASE-PROCESS.md) | How releases work |
-| [Branch Strategy](docs/guides/BRANCH-STRATEGY.md) | Git flow conventions |
-| [Testing Strategy](docs/guides/TESTING-STRATEGY.md) | Test pyramid and patterns |
+| Document                                             | Purpose                     |
+| ---------------------------------------------------- | --------------------------- |
+| [Session Guide](docs/guides/SESSION-GUIDE.md)        | Daily workflow and commands |
+| [Architecture Overview](docs/architecture/README.md) | System design rationale     |
+| [Release Process](docs/guides/RELEASE-PROCESS.md)    | How releases work           |
+| [Branch Strategy](docs/guides/BRANCH-STRATEGY.md)    | Git flow conventions        |
+| [Testing Strategy](docs/guides/TESTING-STRATEGY.md)  | Test pyramid and patterns   |
 
 ---
 
@@ -187,13 +188,13 @@ Measure-Command { .\scripts\run-tests-simple.ps1 }
 
 > **🚨 WARNING:** Hooks run automatically before every commit.
 
-| Mechanism | Description | Status |
-|-----------|-------------|--------|
-| **Automated Hooks** | pre-commit, pre-push | ✅ Active |
-| **CI/CD** | 14 GitHub Actions workflows | ✅ Active |
-| **Secret Detection** | TruffleHog on pre-push | ✅ Active |
-| **Dependency Scanning** | Trivy + Dependabot | ✅ Active |
-| **Testing** | 28 tests, 100% PASS | ✅ Active |
+| Mechanism               | Description                 | Status    |
+| ----------------------- | --------------------------- | --------- |
+| **Automated Hooks**     | pre-commit, pre-push        | ✅ Active |
+| **CI/CD**               | 14 GitHub Actions workflows | ✅ Active |
+| **Secret Detection**    | TruffleHog on pre-push      | ✅ Active |
+| **Dependency Scanning** | Trivy + Dependabot          | ✅ Active |
+| **Testing**             | 28 tests, 100% PASS         | ✅ Active |
 
 ---
 

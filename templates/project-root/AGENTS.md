@@ -35,7 +35,8 @@
 ## Orchestrator
 
 - The Project Orchestrator is responsible for analysis, design, architecture, and testing guidance.
-- Use `.\scripts\orchestrator-next-steps.ps1` to ask the orchestrator for the next development actions.
+- Use `.\scripts\orchestrator-next-steps.ps1` to ask the orchestrator for the next development
+  actions.
 
 ## Review
 
@@ -46,6 +47,7 @@
 ## Audit
 
 AI-assisted development activity is automatically tracked in the `.audit/` directory:
+
 - Sessions: Development session records
 - Code Reviews: PR/MR review records
 - Metrics: Velocity, effectiveness, and cost analytics

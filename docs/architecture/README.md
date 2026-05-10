@@ -8,17 +8,17 @@
 
 ## 🗺️ Topology and Workflows
 
-| Document | Description |
-|----------|-------------|
-| **[layer-topology.md](layer-topology.md)** | 5-layer topology: Agents, Commands, MCP, Skills, Memory |
+| Document                                   | Description                                                       |
+| ------------------------------------------ | ----------------------------------------------------------------- |
+| **[layer-topology.md](layer-topology.md)** | 5-layer topology: Agents, Commands, MCP, Skills, Memory           |
 | **[role-workflows.md](role-workflows.md)** | Role-based workflows: PM, Architect, Developer, QA, DevOps, UX/UI |
 
 ---
 
 ## 📏 Architecture Standards
 
-| Document | Description |
-|----------|-------------|
+| Document                                                   | Description                                              |
+| ---------------------------------------------------------- | -------------------------------------------------------- |
 | **[architecture-standards.md](architecture-standards.md)** | Default decision shape, common areas, repository targets |
 
 ---
@@ -65,20 +65,21 @@ docs/architecture/
 
 ## 🎭 Role-Based Workflows
 
-| Role | Agent Code | Primary Skill | Workflow |
-|------|------------|--------------|----------|
-| **📊 Project Manager** | PM | `project-manager` | Planning, tracking, delivery |
-| **🏗️ Architect** | SAD | `architecture-governance` | Design, standards, decisions |
-| **🛠️ Developer** | DEV | `sdd-lifecycle` | Implementation, testing |
-| **🧪 QA** | QA | `testing-strategy-skill` | Validation, coverage, evidence |
-| **🚀 DevOps** | OPS | `docker-devops-skill` | Deployment, CI/CD, infrastructure |
-| **🎨 UX/UI** | UX | `design-ux-researcher` | User research, interface design |
+| Role                   | Agent Code | Primary Skill             | Workflow                          |
+| ---------------------- | ---------- | ------------------------- | --------------------------------- |
+| **📊 Project Manager** | PM         | `project-manager`         | Planning, tracking, delivery      |
+| **🏗️ Architect**       | SAD        | `architecture-governance` | Design, standards, decisions      |
+| **🛠️ Developer**       | DEV        | `sdd-lifecycle`           | Implementation, testing           |
+| **🧪 QA**              | QA         | `testing-strategy-skill`  | Validation, coverage, evidence    |
+| **🚀 DevOps**          | OPS        | `docker-devops-skill`     | Deployment, CI/CD, infrastructure |
+| **🎨 UX/UI**           | UX         | `design-ux-researcher`    | User research, interface design   |
 
 ---
 
 ## 📏 Governance Rules
 
 ### Decision Shape
+
 ```json
 {
   "decision": "description",
@@ -90,12 +91,14 @@ docs/architecture/
 ```
 
 ### Common Areas
+
 - **Architecture**: Structure, patterns, modularity
 - **Security**: Authentication, authorization, vulnerabilities
 - **Quality**: Code smell, complexity, error handling
 - **Testing**: Coverage, patterns, edge cases
 
 ### Repository Targets
+
 - **config/**: Configuration files (auto-delegation, DAG, tokens)
 - **scripts/**: Workflow and utility scripts
 - **skills/**: Specialized AI skills
@@ -105,12 +108,12 @@ docs/architecture/
 
 ## 🔍 Key Architecture Documents
 
-| Document | Purpose | Link |
-|-----------|---------|------|
-| **System Overview** | Full architecture rationale | [../reference/ARCHITECTURE.md](../reference/ARCHITECTURE.md) |
-| **SDD Governance** | Specification-driven development policy | [../reference/SDD-GOVERNANCE-POLICY.md](../reference/SDD-GOVERNANCE-POLICY.md) |
-| **Plugin System** | Plugin development guide | [../reference/PLUGIN-ARCHITECTURE.md](../reference/PLUGIN-ARCHITECTURE.md) |
-| **Token Tracking** | AI token monitoring guide | [../reference/REAL-TOKEN-TRACKING.md](../reference/REAL-TOKEN-TRACKING.md) |
+| Document            | Purpose                                 | Link                                                                           |
+| ------------------- | --------------------------------------- | ------------------------------------------------------------------------------ |
+| **System Overview** | Full architecture rationale             | [../reference/ARCHITECTURE.md](../reference/ARCHITECTURE.md)                   |
+| **SDD Governance**  | Specification-driven development policy | [../reference/SDD-GOVERNANCE-POLICY.md](../reference/SDD-GOVERNANCE-POLICY.md) |
+| **Plugin System**   | Plugin development guide                | [../reference/PLUGIN-ARCHITECTURE.md](../reference/PLUGIN-ARCHITECTURE.md)     |
+| **Token Tracking**  | AI token monitoring guide               | [../reference/REAL-TOKEN-TRACKING.md](../reference/REAL-TOKEN-TRACKING.md)     |
 
 ---
 

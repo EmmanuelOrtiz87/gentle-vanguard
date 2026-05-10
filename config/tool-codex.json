@@ -8,13 +8,8 @@
     "autoLoad": false,
     "mcpBridge": false
   },
-  "capabilities": [
-    "function_calling",
-    "code_completion"
-  ],
-  "configFiles": [
-    ".codex/config.json"
-  ],
+  "capabilities": ["function_calling", "code_completion"],
+  "configFiles": [".codex/config.json"],
   "adapter": {
     "type": "format-adapter",
     "path": "adapters/format-adapters/codex-adapter",

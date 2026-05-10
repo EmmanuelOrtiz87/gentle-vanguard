@@ -1,7 +1,9 @@
 ---
 name: ios-swiftui-patterns
 user-invocable: false
-description: Use when building SwiftUI views, managing state with @State/@Binding/@ObservableObject, or implementing declarative UI patterns in iOS apps.
+description:
+  Use when building SwiftUI views, managing state with @State/@Binding/@ObservableObject, or
+  implementing declarative UI patterns in iOS apps.
 allowed-tools:
   - Read
   - Write
@@ -287,4 +289,3 @@ if let user {
 
 - **ios-swift-concurrency**: Async/await patterns for data loading
 - **ios-uikit-architecture**: When bridging UIKit and SwiftUI
-

@@ -7,7 +7,8 @@ description: Use when managing git branches, commits, pull requests, merge confl
 
 ## Purpose
 
-Standardize git usage, branch strategies, commit conventions, and collaborative workflows across projects.
+Standardize git usage, branch strategies, commit conventions, and collaborative workflows across
+projects.
 
 ## Branch Strategy
 
@@ -20,23 +21,27 @@ main (production)
         release/v1.2.0
 ```
 
-| Branch | Purpose | Protection |
-|--------|---------|------------|
-| `main` | Production code | Required PR + review |
-| `develop` | Integration branch | Required PR + review |
-| `feature/*` | New features | PR after completion |
-| `bugfix/*` | Bug fixes | PR after completion |
-| `release/*` | Release preparation | Direct commit allowed |
-| `hotfix/*` | Urgent production fixes | Direct commit allowed |
+| Branch      | Purpose                 | Protection            |
+| ----------- | ----------------------- | --------------------- |
+| `main`      | Production code         | Required PR + review  |
+| `develop`   | Integration branch      | Required PR + review  |
+| `feature/*` | New features            | PR after completion   |
+| `bugfix/*`  | Bug fixes               | PR after completion   |
+| `release/*` | Release preparation     | Direct commit allowed |
+| `hotfix/*`  | Urgent production fixes | Direct commit allowed |
 
 ## Enforcement Profile (Repository Runtime)
 
 1. Direct push to `main` and `develop` is blocked by default.
-2. Branch names must follow GitFlow patterns: `feature/*`, `bugfix/*`, `chore/*`, `hotfix/*`, `release/*`.
+2. Branch names must follow GitFlow patterns: `feature/*`, `bugfix/*`, `chore/*`, `hotfix/*`,
+   `release/*`.
 3. PR base mapping is enforced:
+
 - `feature/*`, `bugfix/*`, `chore/*` -> `develop`
 - `hotfix/*`, `release/*` -> `main`
-4. Override for protected direct push is allowed only with explicit environment variable `GITFLOW_ALLOW_PROTECTED_PUSH=1`.
+
+4. Override for protected direct push is allowed only with explicit environment variable
+   `GITFLOW_ALLOW_PROTECTED_PUSH=1`.
 
 ## Commit Convention (Conventional Commits)
 
@@ -50,19 +55,19 @@ main (production)
 
 ### Types
 
-| Type | Description |
-|------|-------------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `docs` | Documentation only |
-| `style` | Formatting, no code change |
+| Type       | Description                 |
+| ---------- | --------------------------- |
+| `feat`     | New feature                 |
+| `fix`      | Bug fix                     |
+| `docs`     | Documentation only          |
+| `style`    | Formatting, no code change  |
 | `refactor` | Code change, no feature/fix |
-| `test` | Adding tests |
-| `chore` | Maintenance, deps update |
-| `perf` | Performance improvement |
-| `ci` | CI/CD changes |
-| `build` | Build system changes |
-| `revert` | Revert previous commit |
+| `test`     | Adding tests                |
+| `chore`    | Maintenance, deps update    |
+| `perf`     | Performance improvement     |
+| `ci`       | CI/CD changes               |
+| `build`    | Build system changes        |
+| `revert`   | Revert previous commit      |
 
 ### Examples
 
@@ -153,20 +158,24 @@ git push
 
 ```markdown
 ## Summary
+
 Brief description of changes.
 
 ## Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Breaking change
 - [ ] Documentation update
 
 ## Testing
+
 How was this tested?
 
 ## Screenshots (if applicable)
 
 ## Checklist
+
 - [ ] My code follows the style guidelines
 - [ ] I have performed self-review
 - [ ] I have commented complex code
@@ -227,5 +236,3 @@ git log --oneline --graph --all
 git blame file.js
 git show commit-id
 ```
-
-

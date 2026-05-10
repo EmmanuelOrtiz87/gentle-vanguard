@@ -4,23 +4,23 @@ Additional documentation and resources.
 
 ## Documents
 
-| Document | Description |
-|----------|-------------|
-| [BOARD-SUPPLEMENT.md](BOARD-SUPPLEMENT.md) | Board presentation content |
-| [defaults-vs-decisions.md](defaults-vs-decisions.md) | Defaults vs decisions log |
-| [future-projects.md](future-projects.md) | Future roadmap |
-| [functional-spec.md](functional-spec.md) | Functional specifications |
-| [technical-spec.md](technical-spec.md) | Technical specifications |
-| [presentation-slides.md](presentation-slides.md) | Presentation materials |
-| [ai-models.md](ai-models.md) | AI models guide |
-| [TOKEN-EFFICIENCY-PACK.md](TOKEN-EFFICIENCY-PACK.md) | Token/context optimization operating model |
-| [templates/PROMPT-PLAYBOOK.md](templates/PROMPT-PLAYBOOK.md) | Standard prompt templates |
-| [templates/CLOSEOUT-REPORT-TEMPLATE.md](templates/CLOSEOUT-REPORT-TEMPLATE.md) | Standard task closeout format |
+| Document                                                                       | Description                                |
+| ------------------------------------------------------------------------------ | ------------------------------------------ |
+| [BOARD-SUPPLEMENT.md](BOARD-SUPPLEMENT.md)                                     | Board presentation content                 |
+| [defaults-vs-decisions.md](defaults-vs-decisions.md)                           | Defaults vs decisions log                  |
+| [future-projects.md](future-projects.md)                                       | Future roadmap                             |
+| [functional-spec.md](functional-spec.md)                                       | Functional specifications                  |
+| [technical-spec.md](technical-spec.md)                                         | Technical specifications                   |
+| [presentation-slides.md](presentation-slides.md)                               | Presentation materials                     |
+| [ai-models.md](ai-models.md)                                                   | AI models guide                            |
+| [TOKEN-EFFICIENCY-PACK.md](TOKEN-EFFICIENCY-PACK.md)                           | Token/context optimization operating model |
+| [templates/PROMPT-PLAYBOOK.md](templates/PROMPT-PLAYBOOK.md)                   | Standard prompt templates                  |
+| [templates/CLOSEOUT-REPORT-TEMPLATE.md](templates/CLOSEOUT-REPORT-TEMPLATE.md) | Standard task closeout format              |
 
 ## Moved to guides/
 
-| Document | Description |
-|----------|-------------|
+| Document                                                     | Description                    |
+| ------------------------------------------------------------ | ------------------------------ |
 | [TECHNICAL-ONBOARDING.md](../guides/TECHNICAL-ONBOARDING.md) | AI concepts and best practices |
 
 ## Project Code Reviews
@@ -36,4 +36,3 @@ Code reviews are stored **per project**, not in the foundation:
 ```
 
 See project AGENTS.md for review workflow.
-

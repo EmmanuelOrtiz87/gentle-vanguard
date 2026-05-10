@@ -1,8 +1,5 @@
 {
-  "pluginsPaths": [
-    "plugins",
-    "C:\\Users\\emman\\.foundation\\plugins"
-  ],
+  "pluginsPaths": ["plugins", "C:\\Users\\emman\\.foundation\\plugins"],
   "enabledPlugins": [],
   "security": {
     "requireSignature": false,

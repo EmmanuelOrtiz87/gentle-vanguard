@@ -1,31 +1,36 @@
 ---
 name: architecture-governance
-description: 'Trigger: "architecture", "project structure", "ADR". Standardize architecture decisions, project structure, defaults, and decision records.'
+description:
+  'Trigger: "architecture", "project structure", "ADR". Standardize architecture decisions, project
+  structure, defaults, and decision records.'
 ---
 
 # Architecture Governance
 
 ## Activation Contract
 
-Load this skill when defining or updating project architecture, layering, naming conventions, repository structure, scaffolding defaults, compatibility constraints, or architecture decision documents.
+Load this skill when defining or updating project architecture, layering, naming conventions,
+repository structure, scaffolding defaults, compatibility constraints, or architecture decision
+documents.
 
 ## Hard Rules
 
 1. Prefer defaults that are safe and portable.
 2. Ask the user only when a choice changes structure, compatibility, or operational cost.
-3. Keep architecture decisions independent from IDE, LLM, or language unless a constraint requires otherwise.
+3. Keep architecture decisions independent from IDE, LLM, or language unless a constraint requires
+   otherwise.
 4. Document the chosen shape in `docs/project-context.md` and `ARCHITECTURE.md`.
 5. Record decision rationale, impact, and fallback options.
 6. Avoid embedding vendor-specific or OS-specific assumptions unless explicitly required.
 
 ## Decision Gates
 
-| Situation | Action |
-|-----------|--------|
-| Project type known? | Use defaults from `references/architecture-standards.md` |
-| High-impact decision? | Ask user; document in decision record |
-| Repeatable choice? | Use project parameters and config defaults |
-| After decisions made | Capture in short decision record |
+| Situation             | Action                                                   |
+| --------------------- | -------------------------------------------------------- |
+| Project type known?   | Use defaults from `references/architecture-standards.md` |
+| High-impact decision? | Ask user; document in decision record                    |
+| Repeatable choice?    | Use project parameters and config defaults               |
+| After decisions made  | Capture in short decision record                         |
 
 ## Execution Steps
 
@@ -45,4 +50,5 @@ Load this skill when defining or updating project architecture, layering, naming
 
 ## References
 
-- `references/architecture-standards.md` — project structure outline, layered architecture summary, decision template, compatibility checklist, migration/refactor decision record
+- `references/architecture-standards.md` — project structure outline, layered architecture summary,
+  decision template, compatibility checklist, migration/refactor decision record

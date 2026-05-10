@@ -67,11 +67,11 @@ wf.ps1 install -Force   # Overwrite existing installation
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|-----------|
+| Issue                    | Solution                                                           |
+| ------------------------ | ------------------------------------------------------------------ |
 | "PowerShell 7+ required" | Install PowerShell 7 from https://github.com/PowerShell/PowerShell |
-| "Git not found" | Install Git from https://git-scm.com/ |
-| "Path already exists" | Use `-Force` or choose different path |
+| "Git not found"          | Install Git from https://git-scm.com/                              |
+| "Path already exists"    | Use `-Force` or choose different path                              |
 
 ## Files
 

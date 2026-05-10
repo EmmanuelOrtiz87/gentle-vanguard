@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Standardize agent-to-developer communication to reduce ambiguity, token waste, and unnecessary back-and-forth.
+Standardize agent-to-developer communication to reduce ambiguity, token waste, and unnecessary
+back-and-forth.
 
 ## Default Mode
 
@@ -35,7 +36,8 @@ The local workspace can override the global default response mode via orchestrat
 
 ## Global Enforcement (Local Machine)
 
-You can enforce `simple/ultra` globally on your machine (not per repo). This is a **local-only** helper and should not be committed to shared repositories.
+You can enforce `simple/ultra` globally on your machine (not per repo). This is a **local-only**
+helper and should not be committed to shared repositories.
 
 Example:
 
@@ -54,7 +56,8 @@ Keys:
 - `communication_response_mode`: `simple | executive | expanded`
 - `allowed_response_modes`: allowed values for local tooling checks and status visibility
 - `response_profiles.active`: `lite | lleno | ultra` (compression style)
-- `communication_presets.default`: default preset (`bugfix | refactor | docs | audit-review | executive-demo`)
+- `communication_presets.default`: default preset
+  (`bugfix | refactor | docs | audit-review | executive-demo`)
 
 Current local baseline for this workspace:
 
@@ -77,7 +80,8 @@ Session auto-apply workflow:
 
 ## Agent Chat Enforcement Layer
 
-To avoid relying only on runtime config/scripts, this workspace also defines explicit agent-layer style enforcement.
+To avoid relying only on runtime config/scripts, this workspace also defines explicit agent-layer
+style enforcement.
 
 File:
 
@@ -87,8 +91,8 @@ Behavior:
 
 1. Enforces `simple + ultra` as default chat contract.
 2. Requires closure-first output format:
-	- `OK: <minimum verifiable result>`
-	- `ERROR: <brief cause> | ACTION: <minimum required step>`
+   - `OK: <minimum verifiable result>`
+   - `ERROR: <brief cause> | ACTION: <minimum required step>`
 3. Restricts optional suggestións unless explicitly authorized.
 4. Allows detail escalation only on explicit request or critical-risk context.
 
@@ -128,17 +132,21 @@ Meaning:
 
 Override paths (controlled):
 
-1. Command: `response-mode.ps1 -Mode set-chat-level -ChatLevel <level> -AllowPolicyOverride -OverrideReason "<reason>"`
-2. Detail/profile override: `response-mode.ps1 -Mode set-detail -Detail <level> -AllowPolicyOverride -OverrideReason "<reason>"`
+1. Command:
+   `response-mode.ps1 -Mode set-chat-level -ChatLevel <level> -AllowPolicyOverride -OverrideReason "<reason>"`
+2. Detail/profile override:
+   `response-mode.ps1 -Mode set-detail -Detail <level> -AllowPolicyOverride -OverrideReason "<reason>"`
 3. Return to baseline: `response-mode.ps1 -Mode enforce-baseline`
 
 Default rule:
 
-1. No free-mode operation outside `simple + ultra + chat-compact` unless override is explicit and traceable.
+1. No free-mode operation outside `simple + ultra + chat-compact` unless override is explicit and
+   traceable.
 
 ## Engram Traceability for Communication Mode
 
-Communication mode changes executed through `scripts/utilities/response-mode.ps1` are persisted as Engram observations.
+Communication mode changes executed through `scripts/utilities/response-mode.ps1` are persisted as
+Engram observations.
 
 Observation key:
 
@@ -173,12 +181,12 @@ Escalation model:
 1. Minimal on request: `simple`.
 2. Default: `executive`.
 3. Escalate to `expanded` for medium/high explanation needs:
-	- ambiguous requirement with implementation impact
-	- non-trivial integration or migration risk
-	- handoff or decisión documentation requested explicitly
+   - ambiguous requirement with implementation impact
+   - non-trivial integration or migration risk
+   - handoff or decisión documentation requested explicitly
 4. Keep risk warnings mandatory in all modes:
-	- security, data-loss, compliance, or critical regression risk
-	- architecture decisións with broad blast radius
+   - security, data-loss, compliance, or critical regression risk
+   - architecture decisións with broad blast radius
 
 When escalation is applied, the agent must:
 
@@ -187,7 +195,8 @@ When escalation is applied, the agent must:
 
 ## Authorization Gate for Suggestións
 
-The agent must not proactively push optional improvements, refactors, or scope expansions unless the developer authorizes suggestións.
+The agent must not proactively push optional improvements, refactors, or scope expansions unless the
+developer authorizes suggestións.
 
 Approved trigger examples:
 
@@ -231,7 +240,8 @@ Do not compress core knowledge documents that require full traceability and tech
 2. Implementation and technical guides.
 3. Business and product documentation.
 
-Rule: keep foundational/technical/business documents complete; optimize only operational/transient artifacts.
+Rule: keep foundational/technical/business documents complete; optimize only operational/transient
+artifacts.
 
 ## Language Scope
 

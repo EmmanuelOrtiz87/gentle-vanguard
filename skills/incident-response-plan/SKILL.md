@@ -1,9 +1,9 @@
 ---
 name: incident-response-plan
 description: >
-  Create and execute incident response procedures for security breaches, data
-  leaks, and cyber attacks. Use when handling security incidents, creating
-  response playbooks, or conducting forensic analysis.
+  Create and execute incident response procedures for security breaches, data leaks, and cyber
+  attacks. Use when handling security incidents, creating response playbooks, or conducting forensic
+  analysis.
 ---
 
 # Incident Response Plan
@@ -17,7 +17,8 @@ description: >
 
 ## Overview
 
-Structured approach to detecting, responding to, containing, and recovering from security incidents with comprehensive playbooks and automation.
+Structured approach to detecting, responding to, containing, and recovering from security incidents
+with comprehensive playbooks and automation.
 
 ## When to Use
 
@@ -64,7 +65,7 @@ class IncidentType(Enum):
 
 ## Best Practices
 
-###  DO
+### DO
 
 - Maintain incident response plan
 - Define clear escalation paths
@@ -75,7 +76,7 @@ class IncidentType(Enum):
 - Conduct post-incident reviews
 - Update playbooks regularly
 
-###  DON'T
+### DON'T
 
 - Panic or rush
 - Delete evidence
@@ -83,4 +84,3 @@ class IncidentType(Enum):
 - Work in isolation
 - Ignore lessons learned
 - Delay notifications
-

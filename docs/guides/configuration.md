@@ -43,21 +43,25 @@ Each tool can define:
 - `install.linux`
 - `install.macos`
 
-Use `checkPath` when a tool is better validated by an existing directory than by a command in `PATH`.
-Use `requires` to declare installation prerequisites such as `git`, `go`, or `bash`.
+Use `checkPath` when a tool is better validated by an existing directory than by a command in
+`PATH`. Use `requires` to declare installation prerequisites such as `git`, `go`, or `bash`.
 
 ## Runtime State
 
 - `dataRoot` is the base used by launchers to create isolated state.
-- `scripts/run-engram.ps1` and `scripts/run-engram.sh` derive `ENGRAM_DATA_DIR` from `dataRoot` and create a dedicated Engram subdirectory.
+- `scripts/run-engram.ps1` and `scripts/run-engram.sh` derive `ENGRAM_DATA_DIR` from `dataRoot` and
+  create a dedicated Engram subdirectory.
 - Changing `dataRoot` also changes where the launcher stores the local database.
 
 ## Scaffolding Defaults
 
-- `projectDefaults.kind`, `preset`, `architecture`, and `profile` are safe values that the scaffold can use without asking the user.
-- `projectDefaults.aiModelMode`, `aiModelProvider`, `aiModelName`, `aiModelEndpoint`, and `aiModelNotes` let the scaffold capture AI intent without forcing a provider.
+- `projectDefaults.kind`, `preset`, `architecture`, and `profile` are safe values that the scaffold
+  can use without asking the user.
+- `projectDefaults.aiModelMode`, `aiModelProvider`, `aiModelName`, `aiModelEndpoint`, and
+  `aiModelNotes` let the scaffold capture AI intent without forcing a provider.
 - If the user already defined the structure, command-line parameters take priority over the config.
-- If there is no clear choice, the flow keeps the defaults and leaves the decisión open for the moment with more context.
+- If there is no clear choice, the flow keeps the defaults and leaves the decisión open for the
+  moment with more context.
 
 ## Maintenance Rule
 
@@ -66,5 +70,7 @@ The configuration describes behavior; it should not encode internal changes to e
 ## Included Examples
 
 - `config/workspace.example.json`: minimal and easy to adapt.
-- `config/workspace.portable.example.json`: example with workspace-relative paths and concrete commands per platform.
-- `config/workspace.config.json`: ready-to-use base that can be adjusted without starting from scratch.
+- `config/workspace.portable.example.json`: example with workspace-relative paths and concrete
+  commands per platform.
+- `config/workspace.config.json`: ready-to-use base that can be adjusted without starting from
+  scratch.

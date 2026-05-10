@@ -1,6 +1,7 @@
 # Foundation Release Checklist
 
-Use this checklist every time before publishing a release to ensure consistency, completeness, and quality.
+Use this checklist every time before publishing a release to ensure consistency, completeness, and
+quality.
 
 ## Pre-Release Validation (1-2 hours)
 
@@ -73,7 +74,7 @@ Use this checklist every time before publishing a release to ensure consistency,
   - [ ] `.github/workflows/*.yml` files are valid YAML
   - [ ] No hardcoded secrets or API keys
   - [ ] Workflows triggered on expected events (push to main/develop, PR, tag)
-  - [ ] Recent workflow runs show green 
+  - [ ] Recent workflow runs show green
 
 - [ ] **Pre-Commit Hooks**
   - [ ] `.githooks/pre-push` runs without blocking on clean code
@@ -85,7 +86,8 @@ Use this checklist every time before publishing a release to ensure consistency,
 - [ ] **License & CODEOWNERS**
   - [ ] LICENSE file present and unchanged (or updated if needed)
   - [ ] CODEOWNERS file current (if using code ownership rules)
-  - [ ] No security warnings from GitHub: https://github.com/EmmanuelOrtiz87/workspace-foundation/security
+  - [ ] No security warnings from GitHub:
+        https://github.com/EmmanuelOrtiz87/workspace-foundation/security
 
 - [ ] **No Secrets Exposed**
   - [ ] Run `git log --all --full-history --oneline` and scan for suspicious commits
@@ -98,7 +100,8 @@ Use this checklist every time before publishing a release to ensure consistency,
   - [ ] `docs/reference/SUITE-OVERVIEW.md` describes all major components
   - [ ] `docs/reference/project-types.md` current with scaffold types
   - [ ] `docs/reference/script-registry.md` includes all scripts
-  - [ ] `docs/guides/` folder has at least 3-5 guides (getting-started, deployment, troubleshooting, etc.)
+  - [ ] `docs/guides/` folder has at least 3-5 guides (getting-started, deployment, troubleshooting,
+        etc.)
 
 - [ ] **Architecture Docs**
   - [ ] `docs/reference/ARCHITECTURE.md` or equivalent architecture overview is present and current
@@ -119,9 +122,11 @@ git checkout -b release/v1.0.0
 ### Step 2: Update CHANGELOG
 
 Edit `CHANGELOG.md`:
+
 - Change `## [Unreleased]` to `## [1.0.0] - 2026-04-13`
 - Ensure all changes are listed
-- Add link at bottom: `[1.0.0]: https://github.com/EmmanuelOrtiz87/workspace-foundation/releases/tag/v1.0.0`
+- Add link at bottom:
+  `[1.0.0]: https://github.com/EmmanuelOrtiz87/workspace-foundation/releases/tag/v1.0.0`
 
 ### Step 3: Commit Release
 
@@ -156,6 +161,7 @@ See CHANGELOG.md for full details.
 ```
 
 Merge PR:
+
 ```powershell
 gh pr merge <number> --squash --delete-branch
 ```
@@ -170,6 +176,7 @@ git push origin v1.0.0
 ```
 
 Verify:
+
 ```powershell
 git tag -l v1.0.0 -n5
 ```
@@ -246,4 +253,5 @@ git push origin :v1.0.0  # Delete tag from remote
 
 ---
 
-**Ready to release? Run this checklist, confirm all boxes, then proceed to Release Execution section.**
+**Ready to release? Run this checklist, confirm all boxes, then proceed to Release Execution
+section.**

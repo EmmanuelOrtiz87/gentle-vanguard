@@ -123,11 +123,6 @@
   "reporting": {
     "enabled": true,
     "weekly": true,
-    "metrics": [
-      "sanitizedCount",
-      "violationsBlocked",
-      "patternsDetected",
-      "auditEntries"
-    ]
+    "metrics": ["sanitizedCount", "violationsBlocked", "patternsDetected", "auditEntries"]
   }
 }

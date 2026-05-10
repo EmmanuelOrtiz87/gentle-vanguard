@@ -85,6 +85,7 @@ function Calculate-ConfidenceScore {
 ## 4. Tiered Routing & Concurrency Control
 
 See [auto-delegation-router.ps1](../auto-delegation-router.ps1) for:
+
 - `Get-RoutingBindings`
 - `Resolve-Tier`
 - `Route-WithTieredSpecificity`
@@ -92,11 +93,13 @@ See [auto-delegation-router.ps1](../auto-delegation-router.ps1) for:
 
 ## 5. Full Routing Engine
 
-See [auto-delegation-router.ps1](../auto-delegation-router.ps1) for `Route-TaskToAgent` — the main routing function that orchestrates all sub-functions.
+See [auto-delegation-router.ps1](../auto-delegation-router.ps1) for `Route-TaskToAgent` — the main
+routing function that orchestrates all sub-functions.
 
 ## 6. Opt-In Configuration
 
 See [auto-delegation-router.ps1](../auto-delegation-router.ps1) for:
+
 - `Get-AutoDelegationConfig`
 - `Set-AutoDelegationConfig`
 - `Enable-AutoDelegation`
@@ -120,25 +123,26 @@ Route-TaskToAgent -TaskDescription "Fix the thing"
 
 ## Performance Targets
 
-| Operation | Max Time | Max Memory |
-|-----------|----------|------------|
-| Keyword extraction | 100ms | 5MB |
-| Decision tree evaluation | 50ms | 2MB |
-| Confidence calculation | 50ms | 2MB |
-| Full routing decision | 300ms | 10MB |
+| Operation                | Max Time | Max Memory |
+| ------------------------ | -------- | ---------- |
+| Keyword extraction       | 100ms    | 5MB        |
+| Decision tree evaluation | 50ms     | 2MB        |
+| Confidence calculation   | 50ms     | 2MB        |
+| Full routing decision    | 300ms    | 10MB       |
 
 ## Error Handling
 
-| Scenario | Behavior | Fallback |
-|----------|----------|----------|
-| No keywords found | Manual routing | Suggest generic agent |
-| Low confidence | Manual confirmation | Provide suggestions |
-| Multiple equally likely | Select primary + secondary | Manual selection |
-| Config file missing | Use defaults | Disable auto-delegation |
+| Scenario                | Behavior                   | Fallback                |
+| ----------------------- | -------------------------- | ----------------------- |
+| No keywords found       | Manual routing             | Suggest generic agent   |
+| Low confidence          | Manual confirmation        | Provide suggestions     |
+| Multiple equally likely | Select primary + secondary | Manual selection        |
+| Config file missing     | Use defaults               | Disable auto-delegation |
 
 ## Delegation Limits
 
 ### Never Auto-Delegate
+
 - AGENTS.md or `config/mcp-servers.json` changes
 - `session-autostart.cmd`, `enforce-response-mode.ps1` changes
 - Token budget/threshold adjustments
@@ -147,4 +151,6 @@ Route-TaskToAgent -TaskDescription "Fix the thing"
 - Release decisions
 
 ### Auto-Delegate Appropriate
-- Code implementation (DEV), Testing (QA), Architecture (SAD), Business analysis (BA), Deployment (OPS), Script validation (SCRIPT-GOV)
+
+- Code implementation (DEV), Testing (QA), Architecture (SAD), Business analysis (BA), Deployment
+  (OPS), Script validation (SCRIPT-GOV)

@@ -5,11 +5,12 @@
 **Path**: `scripts/utilities/WORKFLOW-ORCHESTRATION/compact-start.ps1`  
 **Description**: Initialize context tracking and generate compact handoff prompt.
 
-| Param | Type | Default | Description |
-|-------|------|---------|-------------|
+| Param        | Type   | Default                  | Description                    |
+| ------------ | ------ | ------------------------ | ------------------------------ |
 | `-Objective` | string | "Foundation maintenance" | One-sentence goal (<100 chars) |
 
 **Usage**:
+
 ```powershell
 # With objective
 .\wf.ps1 compact-start "fix ci noise in build pipeline"
@@ -27,14 +28,15 @@
 **Path**: `scripts/utilities/WORKFLOW-ORCHESTRATION/context-pack.ps1`  
 **Description**: Generate mid-session snapshot of working context.
 
-| Param | Type | Default | Description |
-|-------|------|---------|-------------|
-| `-Objective` | string | '' | Current goal |
-| `-MaxChangedFiles` | int | 12 | Max files to include |
-| `-MaxCommits` | int | 8 | Max commits to include |
-| `-PassThru` | switch | false | Return path instead of writing |
+| Param              | Type   | Default | Description                    |
+| ------------------ | ------ | ------- | ------------------------------ |
+| `-Objective`       | string | ''      | Current goal                   |
+| `-MaxChangedFiles` | int    | 12      | Max files to include           |
+| `-MaxCommits`      | int    | 8       | Max commits to include         |
+| `-PassThru`        | switch | false   | Return path instead of writing |
 
 **Usage**:
+
 ```powershell
 .\wf.ps1 context-pack "implementing search feature"
 ```
@@ -49,6 +51,7 @@
 **Description**: Report compact-start and context-pack usage metrics.
 
 **Usage**:
+
 ```powershell
 .\wf.ps1 context-metrics
 ```

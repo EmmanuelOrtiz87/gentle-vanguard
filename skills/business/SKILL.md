@@ -9,7 +9,7 @@ category: business
 This directory contains business-oriented skills organized by domain:
 
 - **accounting** — Financial accounting and bookkeeping
-- **compliance** — Legal and regulatory compliance  
+- **compliance** — Legal and regulatory compliance
 - **crm** — Customer relationship management
 - **erp** — Enterprise resource planning
 - **finance** — Financial analysis and planning

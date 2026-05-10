@@ -12,16 +12,7 @@
     "tests"
   ],
   "allowedRootFiles": ["README.md", "config/mcp-servers.json"],
-  "allowedRootMarkdownFiles": [
-    "CLAUDE.md",
-    "SECURITY.md"
-  ],
-  "allowedRootJsonFiles": [
-    "opencode.json",
-    "engram-export.json"
-  ],
-  "deprecatedPathPatterns": [
-    ".\\scripts\\update-all.ps1",
-    "scripts/update-all.ps1"
-  ]
+  "allowedRootMarkdownFiles": ["CLAUDE.md", "SECURITY.md"],
+  "allowedRootJsonFiles": ["opencode.json", "engram-export.json"],
+  "deprecatedPathPatterns": [".\\scripts\\update-all.ps1", "scripts/update-all.ps1"]
 }

@@ -1,9 +1,8 @@
 ---
 name: ios-swift-development
 description: >
-  Develop native iOS apps with Swift. Covers MVVM architecture, SwiftUI,
-  URLSession for networking, Combine for reactive programming, and Core Data
-  persistence.
+  Develop native iOS apps with Swift. Covers MVVM architecture, SwiftUI, URLSession for networking,
+  Combine for reactive programming, and Core Data persistence.
 ---
 
 # iOS Swift Development
@@ -17,7 +16,8 @@ description: >
 
 ## Overview
 
-Build high-performance native iOS applications using Swift with modern frameworks including SwiftUI, Combine, and async/await patterns.
+Build high-performance native iOS applications using Swift with modern frameworks including SwiftUI,
+Combine, and async/await patterns.
 
 ## When to Use
 
@@ -62,7 +62,7 @@ class UserViewModel: ObservableObject {
 
 ## Best Practices
 
-###  DO
+### DO
 
 - Use SwiftUI for modern UI development
 - Implement MVVM architecture
@@ -76,7 +76,7 @@ class UserViewModel: ObservableObject {
 - Use dependency injection
 - Follow Swift style guidelines
 
-###  DON'T
+### DON'T
 
 - Store tokens in UserDefaults
 - Make network calls on main thread
@@ -88,5 +88,3 @@ class UserViewModel: ObservableObject {
 - Ignore accessibility
 - Deploy untested code
 - Use hardcoded API URLs
-
-

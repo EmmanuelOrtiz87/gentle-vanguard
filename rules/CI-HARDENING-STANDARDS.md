@@ -2,7 +2,7 @@
 
 **Version:** 1.0.0  
 **Last reviewed:** 2026-05-05  
-**Enforced by:** `agent-verify.ps1` (`workflow-hardening` domain check)  
+**Enforced by:** `agent-verify.ps1` (`workflow-hardening` domain check)
 
 ---
 
@@ -13,12 +13,12 @@ name: Descriptive Name
 
 # 1. Least-privilege permissions — declare explicitly at top level
 permissions:
-  contents: read    # minimum; add others only if required
+  contents: read # minimum; add others only if required
 
 # 2. Concurrency — prevent redundant runs
 concurrency:
   group: <workflow-name>-${{ github.ref }}
-  cancel-in-progress: true   # false only for release/deploy workflows
+  cancel-in-progress: true # false only for release/deploy workflows
 
 on:
   push:
@@ -29,26 +29,27 @@ on:
 jobs:
   job-name:
     name: Human-readable job name
-    runs-on: ubuntu-latest   # or windows-latest if pwsh is required
+    runs-on: ubuntu-latest # or windows-latest if pwsh is required
     # 3. Timeout — prevent runaway jobs from consuming minutes
-    timeout-minutes: <N>    # see defaults table below
+    timeout-minutes: <N> # see defaults table below
 ```
 
 ---
 
 ## 2. Timeout Defaults
 
-| Workflow type | Default `timeout-minutes` |
-|---------------|--------------------------|
-| Lint / static analysis | 10–15 |
-| Unit tests | 15–20 |
-| Integration tests | 20–30 |
-| Build | 20–30 |
-| Security scan | 25 |
-| Deploy / release | 30–45 |
-| Scheduled cron | 30 |
+| Workflow type          | Default `timeout-minutes` |
+| ---------------------- | ------------------------- |
+| Lint / static analysis | 10–15                     |
+| Unit tests             | 15–20                     |
+| Integration tests      | 20–30                     |
+| Build                  | 20–30                     |
+| Security scan          | 25                        |
+| Deploy / release       | 30–45                     |
+| Scheduled cron         | 30                        |
 
-If a job consistently runs close to its timeout, revisit parallelism or caching before increasing the limit.
+If a job consistently runs close to its timeout, revisit parallelism or caching before increasing
+the limit.
 
 ---
 
@@ -56,14 +57,14 @@ If a job consistently runs close to its timeout, revisit parallelism or caching 
 
 Use the minimum permissions required:
 
-| Operation | Required scope |
-|-----------|---------------|
-| Read code | `contents: read` (default) |
-| Create releases | `contents: write` |
-| Comment on PRs | `pull-requests: write` |
-| Upload packages | `packages: write` |
-| Write checks/annotations | `checks: write` |
-| Read secrets | No special scope — use `secrets.*` in env |
+| Operation                | Required scope                            |
+| ------------------------ | ----------------------------------------- |
+| Read code                | `contents: read` (default)                |
+| Create releases          | `contents: write`                         |
+| Comment on PRs           | `pull-requests: write`                    |
+| Upload packages          | `packages: write`                         |
+| Write checks/annotations | `checks: write`                           |
+| Read secrets             | No special scope — use `secrets.*` in env |
 
 **Never use `permissions: write-all`**.
 
@@ -77,8 +78,8 @@ Use the minimum permissions required:
 - uses: softprops/action-gh-release@v3
 
 # WRONG: floating tags or branch refs
-- uses: actions/checkout@main   # unpinned — supply-chain risk
-- uses: actions/checkout        # no version — defaults to HEAD
+- uses: actions/checkout@main # unpinned — supply-chain risk
+- uses: actions/checkout # no version — defaults to HEAD
 ```
 
 Dependabot (`dependabot.yml`) keeps action versions updated weekly.  
@@ -92,7 +93,7 @@ All `schedule:` entries MUST include a UTC comment AND the local timezone (GMT-3
 
 ```yaml
 schedule:
-  - cron: '30 16 * * 0'  # Weekly Sunday at 13:30 GMT-3 (16:30 UTC)
+  - cron: '30 16 * * 0' # Weekly Sunday at 13:30 GMT-3 (16:30 UTC)
 ```
 
 ---

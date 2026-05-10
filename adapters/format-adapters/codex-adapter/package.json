@@ -8,7 +8,13 @@
     "generate-tools": "node adapter.js generate-tools",
     "generate-proxy": "node adapter.js generate-proxy"
   },
-  "keywords": ["foundation", "codex", "openai", "function-calling", "adapter"],
+  "keywords": [
+    "foundation",
+    "codex",
+    "openai",
+    "function-calling",
+    "adapter"
+  ],
   "dependencies": {
     "fs": "built-in",
     "path": "built-in"
@@ -17,6 +23,9 @@
     "adapterType": "format-adapter",
     "targetTool": "codex",
     "targetFormat": "openai-function-calling",
-    "compatibility": ["OpenAI Codex", "OpenAI API"]
+    "compatibility": [
+      "OpenAI Codex",
+      "OpenAI API"
+    ]
   }
 }

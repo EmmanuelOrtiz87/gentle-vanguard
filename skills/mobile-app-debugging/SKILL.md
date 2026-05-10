@@ -1,8 +1,8 @@
 ---
 name: mobile-app-debugging
 description: >
-  Debug issues specific to mobile applications including platform-specific
-  problems, device constraints, and connectivity issues.
+  Debug issues specific to mobile applications including platform-specific problems, device
+  constraints, and connectivity issues.
 ---
 
 # Mobile App Debugging
@@ -16,7 +16,8 @@ description: >
 
 ## Overview
 
-Mobile app debugging addresses platform-specific issues, device hardware limitations, and mobile-specific network conditions.
+Mobile app debugging addresses platform-specific issues, device hardware limitations, and
+mobile-specific network conditions.
 
 ## When to Use
 
@@ -61,16 +62,15 @@ App Crash (SIGABRT):
 
 ## Best Practices
 
-###  DO
+### DO
 
 - Follow established patterns and conventions
 - Write clean, maintainable code
 - Add appropriate documentation
 - Test thoroughly before deploying
 
-###  DON'T
+### DON'T
 
 - Skip testing or validation
 - Ignore error handling
 - Hard-code configuration values
-

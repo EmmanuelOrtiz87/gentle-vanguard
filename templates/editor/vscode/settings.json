@@ -81,13 +81,7 @@
     "javascriptreact": "html"
   },
   "emmet.triggerExpansionOnTab": true,
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "vue"
-  ],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "vue"],
   "eslint.format.enable": true,
   "eslint.workingDirectories": [
     {

@@ -1,8 +1,8 @@
 ---
 name: zod-4-skill
 description: >
-  Zod 4 schema validation: schemas, parsing, transformations, error handling.
-  Trigger: "Zod", "schema validation", "input validation", "type safety".
+  Zod 4 schema validation: schemas, parsing, transformations, error handling. Trigger: "Zod",
+  "schema validation", "input validation", "type safety".
 ---
 
 ## When to Use
@@ -160,15 +160,12 @@ const CreateUserSchema = z.object({
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  
+
   const result = CreateUserSchema.safeParse(body);
   if (!result.success) {
-    return NextResponse.json(
-      { error: result.error.flatten() },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: result.error.flatten() }, { status: 400 });
   }
-  
+
   // Use result.data (typed)
   const user = await db.user.create({ data: result.data });
   return NextResponse.json(user, { status: 201 });
@@ -177,14 +174,13 @@ export async function POST(req: NextRequest) {
 
 ## Quick Reference
 
-| Method | Purpose |
-|--------|---------|
-| `.parse()` | Validate and return data (throws) |
-| `.safeParse()` | Validate, return result object |
-| `.optional()` | Allow undefined |
-| `.nullable()` | Allow null |
-| `.default()` | Default value if undefined |
-| `.transform()` | Transform on parse |
-| `.refine()` | Custom validation |
-| `.superRefine()` | Advanced refinement |
-
+| Method           | Purpose                           |
+| ---------------- | --------------------------------- |
+| `.parse()`       | Validate and return data (throws) |
+| `.safeParse()`   | Validate, return result object    |
+| `.optional()`    | Allow undefined                   |
+| `.nullable()`    | Allow null                        |
+| `.default()`     | Default value if undefined        |
+| `.transform()`   | Transform on parse                |
+| `.refine()`      | Custom validation                 |
+| `.superRefine()` | Advanced refinement               |

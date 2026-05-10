@@ -15,7 +15,7 @@
     "maxContextWindow": 128000,
     "safetyMargin": 10000,
     "effectiveWindow": 118000,
-    "compressionRatio": 0.90,
+    "compressionRatio": 0.9,
     "rules": {
       "promptChars": {
         "yellowThreshold": 1100,
@@ -53,7 +53,7 @@
       "triggerAt": 15000,
       "script": "scripts/utilities/pre-compact-hook.ps1",
       "preservePatterns": ["FIXME", "TODO", "BUG", "DECISION", "RESULT"],
-      "compressionRatio": 0.90
+      "compressionRatio": 0.9
     },
     "handoffCompression": {
       "enabled": true,
@@ -114,12 +114,12 @@
       "includeCustomRules": true,
       "includeSessionContext": true
     },
-"responseFormat": {
-        "enforceStructure": true,
-  "maxResponseTokens": 2000,
-        "requireSummary": true,
-        "conciseMode": true
-      },
+    "responseFormat": {
+      "enforceStructure": true,
+      "maxResponseTokens": 2000,
+      "requireSummary": true,
+      "conciseMode": true
+    },
     "localFirst": {
       "enabled": true,
       "denyWebSearch": true,

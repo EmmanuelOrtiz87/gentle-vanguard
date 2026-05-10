@@ -2,19 +2,19 @@
 
 ## Main Branches
 
-| Branch | Purpose | Lifetime |
-|--------|---------|----------|
-| `main` | Stable, production-ready code. Protected by pre-push hooks. | Permanent |
+| Branch    | Purpose                                                              | Lifetime  |
+| --------- | -------------------------------------------------------------------- | --------- |
+| `main`    | Stable, production-ready code. Protected by pre-push hooks.          | Permanent |
 | `develop` | Integration branch. Fast-forward merged from `main` on each release. | Permanent |
 
 ## Supporting Branches
 
-| Branch | Purpose | Lifetime | Merges To |
-|--------|---------|----------|-----------|
-| `feat/*` | New features | Until merged | `main` via PR |
-| `fix/*` | Bug fixes | Until merged | `main` via PR |
-| `chore/*` | Maintenance, CI, docs | Until merged | `main` via PR |
-| `release/*` | Release preparation (legacy) | Deprecated — use tags | — |
+| Branch      | Purpose                      | Lifetime              | Merges To     |
+| ----------- | ---------------------------- | --------------------- | ------------- |
+| `feat/*`    | New features                 | Until merged          | `main` via PR |
+| `fix/*`     | Bug fixes                    | Until merged          | `main` via PR |
+| `chore/*`   | Maintenance, CI, docs        | Until merged          | `main` via PR |
+| `release/*` | Release preparation (legacy) | Deprecated — use tags | —             |
 
 ## Workflow
 

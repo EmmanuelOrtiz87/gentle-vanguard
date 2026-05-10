@@ -1,8 +1,8 @@
 ---
 name: skill-index
 description: >
-  Master index of all available skills with triggers and usage guidelines.
-  Trigger: "skills", "available skills", "what skill to use", "skill index".
+  Master index of all available skills with triggers and usage guidelines. Trigger: "skills",
+  "available skills", "what skill to use", "skill index".
 ---
 
 # SKILL INDEX
@@ -23,13 +23,15 @@ ORCHESTRATOR (slim context)
 ```
 
 **Quick commands:**
+
 ```powershell
 .\scripts\utilities\wf.ps1 agent list           # List all agents
 .\scripts\utilities\wf.ps1 agent status        # Check agent readiness
 .\scripts\utilities\wf.ps1 agent DEV "implement login"  # Delegate to DEV agent
 ```
 
-See [multi-agent-registry](multi-agent-registry/SKILL.md) for full agent definitions and skill mapping.
+See [multi-agent-registry](multi-agent-registry/SKILL.md) for full agent definitions and skill
+mapping.
 
 ---
 
@@ -42,7 +44,8 @@ This is the master reference for all available skills.
 Skill lifecycle is on-demand and Foundation-first:
 
 1. Skills are authored and updated in Foundation under `skills/`.
-2. New and updated skills must be native (self-contained) and must not depend on external `references/` files for core operation.
+2. New and updated skills must be native (self-contained) and must not depend on external
+   `references/` files for core operation.
 3. Foundation changes are published to repository.
 4. Consumer repositories update through `wf.ps1 foundation-sync apply`.
 5. The orchestrator activates skills on-demand based on task context.
@@ -120,6 +123,7 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 **Status**: ALWAYS ACTIVE - No trigger needed
 
 **This is the MASTER conductor.** It:
+
 - Auto-detects project and stack
 - Loads relevant skills
 - Delegates to specialized sub-agents
@@ -128,8 +132,10 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 **Never wait to be called - always active.**
 
 ### adaptive-orchestrator
-**Trigger**: `adaptive`, `auto-optimization`, `mode`, `performance`
-**Use when**: Adaptive mode, on-demand optimization, performance tuning
+
+**Trigger**: `adaptive`, `auto-optimization`, `mode`, `performance` **Use when**: Adaptive mode,
+on-demand optimization, performance tuning
+
 ---
 
 ### multi-agent-registry-skill
@@ -145,6 +151,7 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 **Trigger**: `iniciar sesión`, `guardar sesión`, `continuar`, `estado`
 
 **Handles session mechanics:**
+
 - Memory management (mem_context, mem_save)
 - Todo tracking (todowrite)
 - Session start/end execution
@@ -159,48 +166,55 @@ These skills coordinate everything. **ALWAYS ACTIVE** at session start.
 
 **Use when**: Creating new skills, adding AI guidance, documenting patterns
 
-**See**: [skill-creator-skill](skill-creator-skill/SKILL.md)
----
+## **See**: [skill-creator-skill](skill-creator-skill/SKILL.md)
 
 ### skill-registry
-**Trigger**: `update skills`, `skill registry`, `actualizar skills`, `update registry`
-**Use when**: Creating or updating the skill registry for the current project
+
+**Trigger**: `update skills`, `skill registry`, `actualizar skills`, `update registry` **Use when**:
+Creating or updating the skill registry for the current project
+
 ---
 
 ### github-pr-skill
-**Trigger**: github, PR, pull request, pr creation`n**Use when**: Creating GitHub pull requests with conventional commits and proper descriptions
----
+
+## **Trigger**: github, PR, pull request, pr creation`n**Use when**: Creating GitHub pull requests with conventional commits and proper descriptions
+
 ### gitflow-orchestrator-skill
-**Trigger**: gitflow, gitflow-orchestrator, ranch creation, git hooks`n**Use when**: GitFlow workflow validation, branch creation, pre-push hooks
----
+
+## **Trigger**: gitflow, gitflow-orchestrator, ranch creation, git hooks`n**Use when**: GitFlow workflow validation, branch creation, pre-push hooks
+
 ### incident-response-skill
-**Trigger**: incident, outage, production issue, 
-unbook, mitigation`n**Use when**: Handling incidents, response coordination, mitigation, and recovery planning
+
+**Trigger**: incident, outage, production issue, unbook, mitigation`n**Use when**: Handling
+incidents, response coordination, mitigation, and recovery planning
+
 ---
+
 ### issue-creation
-**Trigger**: issue, create issue, github issue, ug report`n**Use when**: Creating GitHub issues, reporting bugs, requesting features
----
+
+## **Trigger**: issue, create issue, github issue, ug report`n**Use when**: Creating GitHub issues, reporting bugs, requesting features
+
 ## Skill Categories
 
-| Category | Skills |
-|----------|--------|
-| **Orchestrators** | project-orchestrator, multi-agent-registry, session-workflow, skill-creator-skill |
-| **Context & Process** | context-engineering, sdd, bdd-scenarios |
-| **Frontend & Web** | angular-spa, react-19, nextjs-15, tailwind-4, firecrawl-web, web-artifacts-builder, seo-audit, brand-guide |
-| **Mobile** | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-kotlin-coroutines, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging |
-| **State** | zustand-5 |
-| **Validation** | zod-4 |
-| **Backend** | golang-api, api-design, django-drf |
-| **Database** | database-relational, database-nosql |
-| **DevOps** | docker-devops, terraform-infrastructure, kubernetes-deployment |
-| **Testing** | testing-strategy, testing-skill, playwright, pytest, go-testing |
-| **AI** | ai-sdk-5, mcp-skill, cloud-agent-connector, pretool-format-hook |
-| **Business** | business-telemetry, backlog-management |
-| **Workflow** | github-pr, jira-task, jira-epic, release-management, skill-factory |
-| **Quality** | typescript, code-review, security, technical-debt, web-performance-optimization, judgment-day |
-| **Operations** | observability, incident-response-plan |
-| **Governance** | project-scaffolding, documentation-governance, architecture-governance, git-workflow, foundation-manager |
-| **SDD Lifecycle** | sdd-lifecycle (CONSOLIDATED - 9 phases in 1) |
+| Category              | Skills                                                                                                                                                                                        |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Orchestrators**     | project-orchestrator, multi-agent-registry, session-workflow, skill-creator-skill                                                                                                             |
+| **Context & Process** | context-engineering, sdd, bdd-scenarios                                                                                                                                                       |
+| **Frontend & Web**    | angular-spa, react-19, nextjs-15, tailwind-4, firecrawl-web, web-artifacts-builder, seo-audit, brand-guide                                                                                    |
+| **Mobile**            | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-kotlin-coroutines, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging |
+| **State**             | zustand-5                                                                                                                                                                                     |
+| **Validation**        | zod-4                                                                                                                                                                                         |
+| **Backend**           | golang-api, api-design, django-drf                                                                                                                                                            |
+| **Database**          | database-relational, database-nosql                                                                                                                                                           |
+| **DevOps**            | docker-devops, terraform-infrastructure, kubernetes-deployment                                                                                                                                |
+| **Testing**           | testing-strategy, testing-skill, playwright, pytest, go-testing                                                                                                                               |
+| **AI**                | ai-sdk-5, mcp-skill, cloud-agent-connector, pretool-format-hook                                                                                                                               |
+| **Business**          | business-telemetry, backlog-management                                                                                                                                                        |
+| **Workflow**          | github-pr, jira-task, jira-epic, release-management, skill-factory                                                                                                                            |
+| **Quality**           | typescript, code-review, security, technical-debt, web-performance-optimization, judgment-day                                                                                                 |
+| **Operations**        | observability, incident-response-plan                                                                                                                                                         |
+| **Governance**        | project-scaffolding, documentation-governance, architecture-governance, git-workflow, foundation-manager                                                                                      |
+| **SDD Lifecycle**     | sdd-lifecycle (CONSOLIDATED - 9 phases in 1)                                                                                                                                                  |
 
 ---
 
@@ -208,17 +222,21 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 
 ### script-runtime-engineering-skill
 
-**Trigger**: `bash script`, `shell script`, `powershell script`, `hook`, `script parse error`, `cross-platform script`
+**Trigger**: `bash script`, `shell script`, `powershell script`, `hook`, `script parse error`,
+`cross-platform script`
 
-**Use when**: Creating, editing, or validating operational scripts across Bash/PowerShell runtimes with parser-safe quoting and cross-shell compatibility.
+**Use when**: Creating, editing, or validating operational scripts across Bash/PowerShell runtimes
+with parser-safe quoting and cross-shell compatibility.
 
 ---
 
 ### context-engineering-skill
 
-**Trigger**: `context pack`, `compact start`, `session handoff`, `token efficiency`, `context budget`
+**Trigger**: `context pack`, `compact start`, `session handoff`, `token efficiency`,
+`context budget`
 
-**Use when**: Compacting sessions, restoring context, measuring token usage, handoff between sessions or agents
+**Use when**: Compacting sessions, restoring context, measuring token usage, handoff between
+sessions or agents
 
 ---
 
@@ -233,28 +251,39 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 ## Frontend
 
 ### tailwind-4-skill
-**Trigger**: `Tailwind`, `Tailwind CSS`, `cn()`, `className`, `tailwind-4`, `frontend`, `UI`, `interface`
-**Use when**: Tailwind styling, component classes, dark mode, production-grade UI
+
+**Trigger**: `Tailwind`, `Tailwind CSS`, `cn()`, `className`, `tailwind-4`, `frontend`, `UI`,
+`interface` **Use when**: Tailwind styling, component classes, dark mode, production-grade UI
+
 ---
 
 ### angular-spa-skill
-**Trigger**: `Angular`, `Angular component`, `Angular service`, `Angular signal`, `Angular SPA`, `@defer`, `standalone component`
-**Use when**: Angular 19+ SPA patterns: signals, zoneless, standalone components, defer loading
+
+**Trigger**: `Angular`, `Angular component`, `Angular service`, `Angular signal`, `Angular SPA`,
+`@defer`, `standalone component` **Use when**: Angular 19+ SPA patterns: signals, zoneless,
+standalone components, defer loading
+
 ---
 
 ### nextjs-15-skill
-**Trigger**: `Next.js`, `Next.js 15`, `App Router`, `Server Action`, `next.config`
-**Use when**: Next.js 15 App Router patterns: Server Components, Server Actions, data fetching
+
+**Trigger**: `Next.js`, `Next.js 15`, `App Router`, `Server Action`, `next.config` **Use when**:
+Next.js 15 App Router patterns: Server Components, Server Actions, data fetching
+
 ---
 
 ### angular-spa-skill
-**Trigger**: `Angular`, `Angular component`, `Angular service`, `Angular signal`, `Angular SPA`, `@defer`, `standalone component`
-**Use when**: Angular 19+ SPA patterns: signals, zoneless, standalone components, defer loading
+
+**Trigger**: `Angular`, `Angular component`, `Angular service`, `Angular signal`, `Angular SPA`,
+`@defer`, `standalone component` **Use when**: Angular 19+ SPA patterns: signals, zoneless,
+standalone components, defer loading
+
 ---
 
 ### firecrawl-web-skill
 
-**Trigger**: `web scrape`, `extract data`, `crawl website`, `markdown`, `screenshot`, `web search`, `firecrawl`
+**Trigger**: `web scrape`, `extract data`, `crawl website`, `markdown`, `screenshot`, `web search`,
+`firecrawl`
 
 **Use when**: Web scraping, data extraction, competitive analysis
 
@@ -262,7 +291,8 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 
 ### web-artifacts-builder-skill
 
-**Trigger**: `web artifact`, `html component`, `interactive demo`, `prototype`, `single page`, `runnable code`
+**Trigger**: `web artifact`, `html component`, `interactive demo`, `prototype`, `single page`,
+`runnable code`
 
 **Use when**: Building interactive web artifacts, prototypes, single-page demos
 
@@ -278,7 +308,8 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 
 ### seo-audit-skill
 
-**Trigger**: `SEO`, `audit SEO`, `meta tags`, `structured data`, `sitemap`, `robots.txt`, `canonical`
+**Trigger**: `SEO`, `audit SEO`, `meta tags`, `structured data`, `sitemap`, `robots.txt`,
+`canonical`
 
 **Use when**: Technical SEO auditing, meta tags, structured data
 
@@ -286,7 +317,8 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 
 ### brand-guide-skill
 
-**Trigger**: `brand`, `brand guide`, `brand identity`, `branding`, `voice`, `tone`, `visual identity`
+**Trigger**: `brand`, `brand guide`, `brand identity`, `branding`, `voice`, `tone`,
+`visual identity`
 
 **Use when**: Brand consistency, visual identity, voice and tone
 
@@ -358,7 +390,8 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 
 **Trigger**: `Flutter`, `Riverpod`, `GoRouter`, `Impeller`, `Dart`
 
-**Use when**: Modern Flutter patterns, state management, navigation, and performance-sensitive mobile work
+**Use when**: Modern Flutter patterns, state management, navigation, and performance-sensitive
+mobile work
 
 ---
 
@@ -532,7 +565,8 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 
 **Trigger**: `cloud agent`, `bedrock`, `difi`, `external model`, `invoke cloud`
 
-**Use when**: Connecting to external AI providers (AWS Bedrock, Difi, Azure, OpenAI, Anthropic, Gemini, Ollama)
+**Use when**: Connecting to external AI providers (AWS Bedrock, Difi, Azure, OpenAI, Anthropic,
+Gemini, Ollama)
 
 **See**: [cloud-agent-connector-skill](cloud-agent-connector-skill/SKILL.md)
 
@@ -668,7 +702,8 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 
 **Trigger**: `performance`, `LCP`, `CLS`, `TTFB`, `bundle size`, `web vitals`
 
-**Use when**: Frontend performance tuning, asset optimization, caching, and monitoring performance regressions
+**Use when**: Frontend performance tuning, asset optimization, caching, and monitoring performance
+regressions
 
 ---
 
@@ -676,7 +711,8 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 
 **Trigger**: `technical debt`, `refactor`, `code smell`, `anti-pattern`, `cleanup`
 
-**Use when**: Debt assessment, maintainability reviews, remediation planning, and documenting debt records
+**Use when**: Debt assessment, maintainability reviews, remediation planning, and documenting debt
+records
 
 ---
 
@@ -710,11 +746,14 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 
 ### foundation-audit-skill
 
-**Trigger**: `audit foundation`, `validate`, `sweep`, `check links`, `find duplicates`, `homologate`, `validation sweep`, `wf audit`, `judgment`, `pre-release audit`
+**Trigger**: `audit foundation`, `validate`, `sweep`, `check links`, `find duplicates`,
+`homologate`, `validation sweep`, `wf audit`, `judgment`, `pre-release audit`
 
-**Use when**: Running comprehensive validation of Foundation, detecting duplicates, broken links, skill inconsistencies, and documentation issues. Zero agent tokens when using batch mode.
+**Use when**: Running comprehensive validation of Foundation, detecting duplicates, broken links,
+skill inconsistencies, and documentation issues. Zero agent tokens when using batch mode.
 
 **Unified Workflow** (foundation-audit + judgment-day):
+
 ```powershell
 # Batch validation only (0 tokens)
 .\scripts\utilities\wf.ps1 audit sweep --scope quick    # 1s
@@ -727,7 +766,8 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 .\scripts\utilities\wf.ps1 audit sync
 ```
 
-**Documentation**: See [docs/guides/AUDIT-WORKFLOW.md](../docs/guides/AUDIT-WORKFLOW.md) for full workflow diagram.
+**Documentation**: See [docs/guides/AUDIT-WORKFLOW.md](../docs/guides/AUDIT-WORKFLOW.md) for full
+workflow diagram.
 
 ---
 
@@ -807,7 +847,7 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 
 **Trigger**: `guardian fallback`, ` blocked`, `agent fallback`
 
-**Use when**: Alternative execution when  is blocked or unavailable
+**Use when**: Alternative execution when is blocked or unavailable
 
 ---
 
@@ -829,34 +869,36 @@ unbook, mitigation`n**Use when**: Handling incidents, response coordination, mit
 
 ## Quick Reference
 
-| Category | Skills |
-|----------|--------|
-| **Orchestrator** | project-orchestrator (load first!), session-workflow, skill-creator |
-| **Audit** | foundation-audit (validate, sweep, check) |
-| **Frontend** | angular-spa, react-19, nextjs-15, tailwind-4 |
-| **Mobile** | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-kotlin-coroutines, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging |
-| **State** | zustand-5 |
-| **Validation** | zod-4 |
-| **Backend** | golang-api, api-design, django-drf |
-| **Database** | database-relational, database-nosql |
-| **DevOps** | docker-devops, terraform-infrastructure, kubernetes-deployment |
-| **Testing** | testing-strategy, testing-skill, playwright, pytest, go-testing |
-| **AI** | ai-sdk-5, mcp-skill |
-| **Workflow** | github-pr, jira-task, jira-epic, release-management |
-| **Quality** | typescript, code-review, security, technical-debt, web-performance-optimization |
-| **Operations** | observability, incident-response-plan |
-| **Governance** | foundation-manager, project-scaffolding, architecture-governance, documentation-governance, git-workflow, foundation-audit |
+| Category         | Skills                                                                                                                                                                                        |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Orchestrator** | project-orchestrator (load first!), session-workflow, skill-creator                                                                                                                           |
+| **Audit**        | foundation-audit (validate, sweep, check)                                                                                                                                                     |
+| **Frontend**     | angular-spa, react-19, nextjs-15, tailwind-4                                                                                                                                                  |
+| **Mobile**       | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-kotlin-coroutines, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging |
+| **State**        | zustand-5                                                                                                                                                                                     |
+| **Validation**   | zod-4                                                                                                                                                                                         |
+| **Backend**      | golang-api, api-design, django-drf                                                                                                                                                            |
+| **Database**     | database-relational, database-nosql                                                                                                                                                           |
+| **DevOps**       | docker-devops, terraform-infrastructure, kubernetes-deployment                                                                                                                                |
+| **Testing**      | testing-strategy, testing-skill, playwright, pytest, go-testing                                                                                                                               |
+| **AI**           | ai-sdk-5, mcp-skill                                                                                                                                                                           |
+| **Workflow**     | github-pr, jira-task, jira-epic, release-management                                                                                                                                           |
+| **Quality**      | typescript, code-review, security, technical-debt, web-performance-optimization                                                                                                               |
+| **Operations**   | observability, incident-response-plan                                                                                                                                                         |
+| **Governance**   | foundation-manager, project-scaffolding, architecture-governance, documentation-governance, git-workflow, foundation-audit                                                                    |
 
 ## Skill Loading
 
 **Important**: Always load `project-orchestrator-skill` first for new projects.
 
 Skills load automatically based on:
+
 1. File patterns in context
 2. Keywords in conversation
 3. Explicit request
 
 For manual loading:
+
 ```
 Use the skill tool to load a specific skill
 ```
@@ -864,6 +906,7 @@ Use the skill tool to load a specific skill
 ## Adding New Skills
 
 Create skills following this structure:
+
 ```
 skills/
  new-skill/
@@ -872,22 +915,22 @@ skills/
 
 See `skill-creator-skill` for creation guidelines.
 
-
 ### parallel-execution-limits
 
-Advanced parallel execution management with dependency graphs, resource pooling, and token budget circuit breaker.
+Advanced parallel execution management with dependency graphs, resource pooling, and token budget
+circuit breaker.
 
 - **Trigger**: "parallel execution", "ejecucin paralela", "execution limits"
 - **Use when**: Complex workflows with >10 tasks, GPU/CPU constraints, token budget protection
-- **Key Functions**: 
+- **Key Functions**:
   - Initialize-ParallelExecutor - Initialize all components
   - Plan-ParallelExecution - Create execution plan
   - Invoke-ParallelExecution - Execute tasks in parallel
   - Get-ExecutionStatus - Monitor execution
   - Export-ExecutionReport - Generate reports
 
-**Path**: skills/parallel-execution-limits/
-**Documentation**: skills/parallel-execution-limits/SKILL.md
+**Path**: skills/parallel-execution-limits/ **Documentation**:
+skills/parallel-execution-limits/SKILL.md
 
 ---
 
@@ -947,7 +990,8 @@ Advanced parallel execution management with dependency graphs, resource pooling,
 
 **Trigger**: `React`, `React 19`, `useActionState`, `useFormStatus`, `React Compiler`
 
-**Use when**: React 19 patterns with React Compiler: no useMemo/useCallback needed, useActionState, useFormStatus
+**Use when**: React 19 patterns with React Compiler: no useMemo/useCallback needed, useActionState,
+useFormStatus
 
 ---
 
@@ -963,7 +1007,7 @@ Advanced parallel execution management with dependency graphs, resource pooling,
 
 **Trigger**: `sdd`, `spec-driven`, `lifecycle`, `openspec`
 
-**Use when**: Full SDD lifecycle management: explore  propose  spec  design  tasks  apply  verify  archive
+**Use when**: Full SDD lifecycle management: explore propose spec design tasks apply verify archive
 
 **See**: [sdd-lifecycle](sdd-lifecycle/SKILL.md)
 
@@ -985,7 +1029,7 @@ Advanced parallel execution management with dependency graphs, resource pooling,
 
 ---
 
-### _semantic-skill-matcher
+### \_semantic-skill-matcher
 
 **Trigger**: `semantic`, `skill match`, `similarity`
 
@@ -1232,5 +1276,3 @@ Advanced parallel execution management with dependency graphs, resource pooling,
 **Use when**: Quality assurance and testing evidence collection
 
 ---
-
-

@@ -1,34 +1,36 @@
 ---
 name: docs-alignment
 description: >
-  Keep documentation in sync with code and workflow changes.
-  Trigger: "docs", "documentation", "update docs", "doc sync"
+  Keep documentation in sync with code and workflow changes. Trigger: "docs", "documentation",
+  "update docs", "doc sync"
 ---
 
 # Documentation Alignment Skill
 
 ## Purpose
+
 Keep documentation synchronized with every code and workflow change.
 
 ## Docs Map
 
-| File | Covers |
-|------|--------|
-| `README.md` | Installation, usage, CLI flags, providers |
-| `CONTRIBUTING.md` | Dev setup, contribution workflow, testing |
-| `docs/guides/*.md` | User guides and how-tos |
+| File               | Covers                                    |
+| ------------------ | ----------------------------------------- |
+| `README.md`        | Installation, usage, CLI flags, providers |
+| `CONTRIBUTING.md`  | Dev setup, contribution workflow, testing |
+| `docs/guides/*.md` | User guides and how-tos                   |
 
-## Change  Doc Rules
+## Change Doc Rules
 
-| If you change... | Update... |
-|-----------------|-----------|
-| A CLI flag (add/remove/rename) | README.md  flags table |
-| A provider (behavior change) | README.md |
-| Test structure or commands | CONTRIBUTING.md |
-| Install/uninstall behavior | README.md |
-| Hook behavior | README.md |
+| If you change...               | Update...             |
+| ------------------------------ | --------------------- |
+| A CLI flag (add/remove/rename) | README.md flags table |
+| A provider (behavior change)   | README.md             |
+| Test structure or commands     | CONTRIBUTING.md       |
+| Install/uninstall behavior     | README.md             |
+| Hook behavior                  | README.md             |
 
 ## Critical Rules
+
 - NEVER reference CLI flags or commands that don't exist in code
 - NEVER let a PR with behavior changes ship without updating docs
 - Docs must describe FINAL state, not journey
@@ -55,4 +57,3 @@ Code: --cache-path   was renamed
 # BAD  docs reference non-existent script
 README: "run setup.sh"   setup.sh doesn't exist
 ```
-

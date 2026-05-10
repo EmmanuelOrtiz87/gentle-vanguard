@@ -35,11 +35,13 @@
 4. Never block work if auto-detection fails; degrade gracefully
 
 Preferred command order:
+
 1. `.\scripts\utilities\wf.ps1 ide-status`
 2. `.\scripts\utilities\wf.ps1 health`
 3. `.\scripts\utilities\wf.ps1 start-session [task]`
 
 On-demand fallback:
+
 1. `.\scripts\utilities\stack-on-demand.ps1 -Action activate`
 2. `.\scripts\utilities\stack-on-demand.ps1 -Action validate`
 3. `.\scripts\utilities\stack-on-demand.ps1 -Action deactivate` at closeout

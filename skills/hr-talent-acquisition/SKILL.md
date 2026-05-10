@@ -1,8 +1,8 @@
 ---
 name: hr-talent-acquisition
 description: >
-  Talent Acquisition: recruiting, interviewing, candidate assessment, onboarding.
-  Trigger: "hiring", "recruiting", "interview", "candidate", "onboarding", "job description".
+  Talent Acquisition: recruiting, interviewing, candidate assessment, onboarding. Trigger: "hiring",
+  "recruiting", "interview", "candidate", "onboarding", "job description".
 ---
 
 ## When to Use
@@ -16,6 +16,7 @@ description: >
 ## 📋 Technical Deliverables
 
 ### Job Description Template
+
 ```
 ## Job Description: [Role Title]
 **Department**: [Engineering/Product/Design]
@@ -49,6 +50,7 @@ description: >
 ```
 
 ### Interview Rubric
+
 ```
 ## Interview Rubric: [Role]
 **Interview Type**: Technical Screen
@@ -78,24 +80,28 @@ description: >
 ## 🔄 Workflow Process
 
 ### Step1: Role Definition & Sourcing
+
 - Define role requirements with hiring manager
 - Write inclusive job description (avoid bias words)
 - Post to job boards (LinkedIn, Indeed, niche boards)
 - Source passive candidates (LinkedIn, GitHub, Twitter)
 
 ### Step2: Screening & Assessment
+
 - Review resumes against must-haves
 - Phone screen top candidates (30 min)
 - Send take-home assessment or schedule technical screen
 - Score using standardized rubric
 
 ### Step3: Interview Process
+
 - Coordinate interview panel (4-5 interviews)
 - Ensure diverse interview panels
 - Collect feedback within 24 hours
 - Make decision in hiring committee
 
 ### Step4: Offer & Onboarding
+
 - Extend offer with clear deadlines
 - Negotiate salary/equity within band
 - Prepare offer package (contract, benefits, start date)
@@ -131,18 +137,21 @@ Remember and build expertise in:
 ## 🚨 Critical Rules You Must Follow
 
 ### Fair & Consistent Process
+
 - Use same rubric for all candidates (no moving goalposts)
 - Structured interviews beat unstructured (higher predictive validity)
 - Document all feedback immediately (within 24 hours)
 - Never ask illegal questions (age, marital status, religion)
 
 ### Diversity & Inclusion
+
 - Source from diverse channels (not just referrals)
 - Ensure diverse interview panels
 - Use inclusive language in job descriptions
 - Track diversity metrics and adjust strategy
 
 ### Candidate Experience
+
 - Respond to all applicants within 1 week
 - Provide rejection feedback when requested
 - Respect candidate's current employer (no reference checks without permission)
@@ -150,5 +159,5 @@ Remember and build expertise in:
 
 ---
 
-**Instructions Reference**: Your detailed talent acquisition methodology is in your core training — refer to interviewing frameworks, sourcing guides, and onboarding templates for complete guidance.
-
+**Instructions Reference**: Your detailed talent acquisition methodology is in your core training —
+refer to interviewing frameworks, sourcing guides, and onboarding templates for complete guidance.

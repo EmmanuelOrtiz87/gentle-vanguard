@@ -1,6 +1,9 @@
 ---
 name: security-skill
-description: 'Trigger: "security", "authentication", "authorization", "vulnerability", "OWASP", "XSS", "SQL injection", "secrets". Use when reviewing code for security vulnerabilities, implementing auth, or setting up security practices.'
+description:
+  'Trigger: "security", "authentication", "authorization", "vulnerability", "OWASP", "XSS", "SQL
+  injection", "secrets". Use when reviewing code for security vulnerabilities, implementing auth, or
+  setting up security practices.'
 ---
 
 # Security Skill
@@ -8,12 +11,14 @@ description: 'Trigger: "security", "authentication", "authorization", "vulnerabi
 ## Activation Contract
 
 Load this skill when the user asks to:
+
 - Review code for security vulnerabilities
 - Implement authentication or authorization
 - Handle sensitive data or secrets
 - Set up security practices (headers, rate limiting, CSP)
 - Audit dependencies or run security scans
-- Responds to triggers: "security", "authentication", "authorization", "vulnerability", "CVE", "OWASP", "XSS", "SQL injection", "secrets", "encryption"
+- Responds to triggers: "security", "authentication", "authorization", "vulnerability", "CVE",
+  "OWASP", "XSS", "SQL injection", "secrets", "encryption"
 
 ## Hard Rules
 
@@ -27,14 +32,14 @@ Load this skill when the user asks to:
 
 ## Decision Gates
 
-| Context | Action | Reference |
-|---------|--------|-----------|
-| Authentication | Implement MFA, strong password hashing, rate limiting, session management | `references/checklists.md` |
-| Authorization | Check per-request, RBAC, ownership validation | `references/checklists.md` |
-| Input validation | Validate type, length, range, format; use parameterized queries | `references/code-examples.md` |
-| Secrets | Environment variables or vault — never in code | `references/checklists.md` |
-| Security headers | CSP, HSTS, X-Frame-Options via helmet or equivalent | `references/code-examples.md` |
-| Dependency audit | Run `npm audit`, check for known CVEs | `references/checklists.md` |
+| Context          | Action                                                                    | Reference                     |
+| ---------------- | ------------------------------------------------------------------------- | ----------------------------- |
+| Authentication   | Implement MFA, strong password hashing, rate limiting, session management | `references/checklists.md`    |
+| Authorization    | Check per-request, RBAC, ownership validation                             | `references/checklists.md`    |
+| Input validation | Validate type, length, range, format; use parameterized queries           | `references/code-examples.md` |
+| Secrets          | Environment variables or vault — never in code                            | `references/checklists.md`    |
+| Security headers | CSP, HSTS, X-Frame-Options via helmet or equivalent                       | `references/code-examples.md` |
+| Dependency audit | Run `npm audit`, check for known CVEs                                     | `references/checklists.md`    |
 
 ## Execution Steps
 
@@ -74,5 +79,7 @@ Return a structured security report:
 
 ## References
 
-- `references/code-examples.md` — SQL injection, XSS, CSRF, secure headers, file uploads, rate limiting examples
-- `references/checklists.md` — OWASP Top 10, auth checklist, secrets management, dependency audit, security checklist for new features
+- `references/code-examples.md` — SQL injection, XSS, CSRF, secure headers, file uploads, rate
+  limiting examples
+- `references/checklists.md` — OWASP Top 10, auth checklist, secrets management, dependency audit,
+  security checklist for new features

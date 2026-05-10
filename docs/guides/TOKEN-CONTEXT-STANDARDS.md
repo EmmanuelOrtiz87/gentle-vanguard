@@ -11,8 +11,10 @@
 ### Token Budget Tiers
 
 #### Tier 1: Minimal (5,000 tokens)
+
 **Use Case**: Quick responses, simple tasks  
 **Allocation**:
+
 - System Prompt: 500 tokens (10%)
 - User Input: 1,000 tokens (20%)
 - History: 1,500 tokens (30%)
@@ -24,8 +26,10 @@
 ---
 
 #### Tier 2: Standard (15,000 tokens)
+
 **Use Case**: Normal development tasks  
 **Allocation**:
+
 - System Prompt: 1,500 tokens (10%)
 - User Input: 3,000 tokens (20%)
 - History: 4,500 tokens (30%)
@@ -37,8 +41,10 @@
 ---
 
 #### Tier 3: Extended (50,000 tokens)
+
 **Use Case**: Complex analysis, large files  
 **Allocation**:
+
 - System Prompt: 5,000 tokens (10%)
 - User Input: 10,000 tokens (20%)
 - History: 15,000 tokens (30%)
@@ -50,8 +56,10 @@
 ---
 
 #### Tier 4: Maximum (100,000 tokens)
+
 **Use Case**: Full project context, deep analysis  
 **Allocation**:
+
 - System Prompt: 10,000 tokens (10%)
 - User Input: 20,000 tokens (20%)
 - History: 30,000 tokens (30%)
@@ -63,8 +71,10 @@
 ---
 
 #### Tier 5: Unlimited (200,000 tokens)
+
 **Use Case**: Maximum context, Claude Opus only  
 **Allocation**:
+
 - System Prompt: 20,000 tokens (10%)
 - User Input: 40,000 tokens (20%)
 - History: 60,000 tokens (30%)
@@ -78,19 +88,23 @@
 ### Efficiency Modes
 
 #### Compact Mode (60% utilization)
+
 **Purpose**: Speed and cost optimization  
 **Characteristics**:
+
 - Minimal context history
 - Concise responses
 - Fast execution
 - Lower token usage
 
 **Use Cases**:
+
 - Quick fixes
 - Simple questions
 - Time-sensitive tasks
 
 **Configuration**:
+
 ```powershell
 $mode = 'compact'
 $token_budget = $tier * 0.60
@@ -101,19 +115,23 @@ $response_style = 'concise'
 ---
 
 #### Balanced Mode (80% utilization)
+
 **Purpose**: Default mode, balance quality and efficiency  
 **Characteristics**:
+
 - Moderate context history
 - Detailed responses
 - Normal execution
 - Reasonable token usage
 
 **Use Cases**:
+
 - Standard development
 - Code review
 - Problem solving
 
 **Configuration**:
+
 ```powershell
 $mode = 'balanced'
 $token_budget = $tier * 0.80
@@ -124,19 +142,23 @@ $response_style = 'detailed'
 ---
 
 #### Comprehensive Mode (95% utilization)
+
 **Purpose**: Quality optimization  
 **Characteristics**:
+
 - Full context history
 - Thorough responses
 - Slower execution
 - Higher token usage
 
 **Use Cases**:
+
 - Complex analysis
 - Architecture design
 - Comprehensive review
 
 **Configuration**:
+
 ```powershell
 $mode = 'comprehensive'
 $token_budget = $tier * 0.95
@@ -147,19 +169,23 @@ $response_style = 'thorough'
 ---
 
 #### Maximum Mode (99% utilization)
+
 **Purpose**: Use all available context  
 **Characteristics**:
+
 - Complete context history
 - Exhaustive responses
 - Slowest execution
 - Maximum token usage
 
 **Use Cases**:
+
 - Critical decisións
 - Full project analysis
 - Comprehensive documentation
 
 **Configuration**:
+
 ```powershell
 $mode = 'maximum'
 $token_budget = $tier * 0.99
@@ -174,6 +200,7 @@ $response_style = 'exhaustive'
 ### Input Message Structure
 
 #### Standard Schema
+
 ```json
 {
   "versión": "1.0",
@@ -189,7 +216,7 @@ $response_style = 'exhaustive'
     "tool": "cline|copilot|continue|claude",
     "mode": "compact|balanced|comprehensive|maximum",
     "token_budget": 50000,
-    "efficiency_target": 0.80
+    "efficiency_target": 0.8
   },
   "metadata": {
     "source": "IDE|CLI|API",
@@ -200,6 +227,7 @@ $response_style = 'exhaustive'
 ```
 
 #### Validation Rules
+
 - `versión`: Must be "1.0"
 - `session_id`: Must be valid UUID
 - `timestamp`: Must be ISO8601 format
@@ -213,6 +241,7 @@ $response_style = 'exhaustive'
 ### Output Message Structure
 
 #### Standard Schema
+
 ```json
 {
   "versión": "1.0",
@@ -239,6 +268,7 @@ $response_style = 'exhaustive'
 ```
 
 #### Validation Rules
+
 - `versión`: Must be "1.0"
 - `session_id`: Must match input
 - `timestamp`: Must be ISO8601 format
@@ -254,6 +284,7 @@ $response_style = 'exhaustive'
 ### Session Lifecycle
 
 #### 1. Session Initialization
+
 ```json
 {
   "action": "session_start",
@@ -267,6 +298,7 @@ $response_style = 'exhaustive'
 ```
 
 #### 2. Message Exchange
+
 ```json
 {
   "action": "message_exchange",
@@ -279,6 +311,7 @@ $response_style = 'exhaustive'
 ```
 
 #### 3. Context Update
+
 ```json
 {
   "action": "context_update",
@@ -290,6 +323,7 @@ $response_style = 'exhaustive'
 ```
 
 #### 4. Session Termination
+
 ```json
 {
   "action": "session_end",
@@ -306,6 +340,7 @@ $response_style = 'exhaustive'
 ### Error Handling Protocol
 
 #### Token Budget Exceeded
+
 ```json
 {
   "error": {
@@ -320,6 +355,7 @@ $response_style = 'exhaustive'
 ```
 
 #### Context Overflow
+
 ```json
 {
   "error": {
@@ -334,6 +370,7 @@ $response_style = 'exhaustive'
 ```
 
 #### Tool Error
+
 ```json
 {
   "error": {
@@ -352,6 +389,7 @@ $response_style = 'exhaustive'
 ## Implementation Scripts
 
 ### Token Management
+
 ```powershell
 # scripts/utilities/token-budget-guard.ps1
 - Enforces token limits
@@ -361,6 +399,7 @@ $response_style = 'exhaustive'
 ```
 
 ### Context Optimization
+
 ```powershell
 # scripts/utilities/context-pack.ps1
 - Compresses context
@@ -370,6 +409,7 @@ $response_style = 'exhaustive'
 ```
 
 ### Tool Integration
+
 ```powershell
 # scripts/utilities/dispatch-agent.ps1
 - Routes to correct tool
@@ -379,6 +419,7 @@ $response_style = 'exhaustive'
 ```
 
 ### Session Management
+
 ```powershell
 # scripts/utilities/session-manager.ps1
 - Creates sessions
@@ -392,6 +433,7 @@ $response_style = 'exhaustive'
 ## Configuration Examples
 
 ### Cline Configuration
+
 ```powershell
 $config = @{
     tool = 'cline'
@@ -407,6 +449,7 @@ $config = @{
 ```
 
 ### Copilot Configuration
+
 ```powershell
 $config = @{
     tool = 'copilot'
@@ -422,6 +465,7 @@ $config = @{
 ```
 
 ### Continue.dev Configuration
+
 ```powershell
 $config = @{
     tool = 'continue'
@@ -442,10 +486,11 @@ $config = @{
 ## Validation & Testing
 
 ### Message Validation
+
 ```powershell
 function Validate-Message {
     param([object]$Message, [string]$Type)
-    
+
     # Validate schema
     # Check required fields
     # Verify formats
@@ -454,10 +499,11 @@ function Validate-Message {
 ```
 
 ### Token Calculation
+
 ```powershell
 function Calculate-TokenUsage {
     param([object]$Message)
-    
+
     # Count tokens
     # Apply efficiency mode
     # Check budget
@@ -466,10 +512,11 @@ function Calculate-TokenUsage {
 ```
 
 ### Compatibility Check
+
 ```powershell
 function Check-ToolCompatibility {
     param([string]$Tool, [object]$Message)
-    
+
     # Verify tool support
     # Check message format
     # Validate constraints

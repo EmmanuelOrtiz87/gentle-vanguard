@@ -1,14 +1,17 @@
 # Operating decisións (2026-04-15)
 
-Consolidated lessons learned, rules, mechanisms, and definitions agreed during hardening of the Workspace + Foundation operating flow.
+Consolidated lessons learned, rules, mechanisms, and definitions agreed during hardening of the
+Workspace + Foundation operating flow.
 
 ## Global (Workspace-Level)
 
 ### Lessons Learned
 
-- ACL drift on Windows can silently break `.git` write operations (`index.lock` creation), artifact rotation, and cleanup.
+- ACL drift on Windows can silently break `.git` write operations (`index.lock` creation), artifact
+  rotation, and cleanup.
 - Network/proxy warnings (for update checks) must not be treated as critical startup blockers.
-- Session lifecycle reliability improves when startup and closure are handled by dedicated wrappers, not manual ad-hoc commands.
+- Session lifecycle reliability improves when startup and closure are handled by dedicated wrappers,
+  not manual ad-hoc commands.
 
 ### Rules Adopted
 
@@ -32,7 +35,8 @@ Consolidated lessons learned, rules, mechanisms, and definitions agreed during h
 
 - **Strict Mode**: startup stops if critical compatibility checks fail.
 - **Degraded Continuity Mode**: startup continues with warnings when strict mode is disabled.
-- **Compatibility Check**: operational readiness check for runtime + orchestration + memory + agent lanes.
+- **Compatibility Check**: operational readiness check for runtime + orchestration + memory + agent
+  lanes.
 
 ## Foundation (Repository-Level)
 

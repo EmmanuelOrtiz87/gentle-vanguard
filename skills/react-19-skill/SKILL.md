@@ -1,8 +1,8 @@
 ---
 name: react-19-skill
 description: >
-  React 19 patterns with React Compiler: no useMemo/useCallback needed, useActionState, useFormStatus.
-  Trigger: "React", "React 19", "useActionState", "useFormStatus", "React Compiler".
+  React 19 patterns with React Compiler: no useMemo/useCallback needed, useActionState,
+  useFormStatus. Trigger: "React", "React 19", "useActionState", "useFormStatus", "React Compiler".
 ---
 
 ## When to Use
@@ -25,6 +25,7 @@ src/
 ## React Compiler
 
 React Compiler automatically optimizes:
+
 - useMemo -> automatic
 - useCallback -> automatic
 - React.memo -> automatic
@@ -46,7 +47,7 @@ import { submitForm } from './actions';
 
 function Form() {
   const [state, action, isPending] = useActionState(submitForm, null);
-  
+
   return (
     <form action={action}>
       <input name="email" type="email" required />
@@ -61,11 +62,11 @@ function Form() {
 // actions.ts
 async function submitForm(prevState: any, formData: FormData) {
   const email = formData.get('email') as string;
-  
+
   if (!email.includes('@')) {
     return { error: 'Invalid email' };
   }
-  
+
   await saveEmail(email);
   return { success: true };
 }
@@ -78,7 +79,7 @@ import { useFormStatus } from 'react-dom';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
-  
+
   return (
     <button type="submit" disabled={pending}>
       {pending ? 'Saving...' : 'Save'}
@@ -103,21 +104,21 @@ import { useOptimistic, startTransition } from 'react';
 import { addComment, deleteComment } from './actions';
 
 function Comments({ comments, postId }) {
-  const [optimisticComments, addOptimistic] = useOptimistic(
-    comments,
-    (state, newComment) => [...state, newComment]
-  );
-  
+  const [optimisticComments, addOptimistic] = useOptimistic(comments, (state, newComment) => [
+    ...state,
+    newComment,
+  ]);
+
   async function handleAdd(text: string) {
     const tempComment = { id: 'temp', text, pending: true };
     addOptimistic(tempComment);
-    
+
     await addComment(postId, text);
   }
-  
+
   return (
     <ul>
-      {optimisticComments.map(c => (
+      {optimisticComments.map((c) => (
         <li key={c.id} style={{ opacity: c.pending ? 0.5 : 1 }}>
           {c.text}
         </li>
@@ -143,18 +144,27 @@ function Card({ children, title }) {
 // Render props pattern
 function DataFetcher({ render, url }) {
   const [data, setData] = useState(null);
-  
+
   useEffect(() => {
-    fetch(url).then(r => r.json()).then(setData);
+    fetch(url)
+      .then((r) => r.json())
+      .then(setData);
   }, [url]);
-  
+
   return render(data);
 }
 
 // Usage
-<DataFetcher url="/api/users" render={data => (
-  <ul>{data?.map(u => <li key={u.id}>{u.name}</li>)}</ul>
-)} />
+<DataFetcher
+  url="/api/users"
+  render={(data) => (
+    <ul>
+      {data?.map((u) => (
+        <li key={u.id}>{u.name}</li>
+      ))}
+    </ul>
+  )}
+/>;
 ```
 
 ## Custom Hooks
@@ -166,11 +176,11 @@ function useLocalStorage<T>(key: string, initialValue: T) {
     const stored = localStorage.getItem(key);
     return stored ? JSON.parse(stored) : initialValue;
   });
-  
+
   useEffect(() => {
     localStorage.setItem(key, JSON.stringify(value));
   }, [key, value]);
-  
+
   return [value, setValue] as const;
 }
 ```
@@ -180,11 +190,11 @@ function useLocalStorage<T>(key: string, initialValue: T) {
 ```tsx
 class ErrorBoundary extends Component {
   state = { hasError: false };
-  
+
   static getDerivedStateFromError() {
     return { hasError: true };
   }
-  
+
   render() {
     if (this.state.hasError) {
       return <h1>Something went wrong</h1>;
@@ -196,15 +206,14 @@ class ErrorBoundary extends Component {
 // Usage
 <ErrorBoundary>
   <MyComponent />
-</ErrorBoundary>
+</ErrorBoundary>;
 ```
 
 ## Quick Reference
 
-| Feature | Usage |
-|---------|-------|
+| Feature        | Usage                         |
+| -------------- | ----------------------------- |
 | useActionState | Form state with async actions |
-| useFormStatus | Submit button pending state |
-| useOptimistic | Optimistic UI updates |
-| React Compiler | No useMemo/useCallback |
-
+| useFormStatus  | Submit button pending state   |
+| useOptimistic  | Optimistic UI updates         |
+| React Compiler | No useMemo/useCallback        |

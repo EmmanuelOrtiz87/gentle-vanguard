@@ -1,8 +1,8 @@
 ---
 name: django-drf-skill
 description: >
-  Django REST Framework patterns: ViewSets, Serializers, Filters, Permissions.
-  Trigger: "Django", "Django REST Framework", "DRF", "ViewSet", "Serializer", "APIView".
+  Django REST Framework patterns: ViewSets, Serializers, Filters, Permissions. Trigger: "Django",
+  "Django REST Framework", "DRF", "ViewSet", "Serializer", "APIView".
 ---
 
 ## When to Use
@@ -44,7 +44,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserDetailSerializer(UserSerializer):
     groups = serializers.StringRelatedField(many=True)
-    
+
     class Meta(UserSerializer.Meta):
         fields = UserSerializer.Meta.fields + ['groups', 'date_joined']
 ```
@@ -59,7 +59,7 @@ class CommentSerializer(serializers.ModelSerializer):
         source='author',
         write_only=True
     )
-    
+
     class Meta:
         model = Comment
         fields = ['id', 'content', 'author', 'author_id', 'created_at']
@@ -92,7 +92,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    
+
     @action(detail=True, methods=['post'])
     def set_password(self, request, pk=None):
         user = self.get_object()
@@ -102,7 +102,7 @@ class UserViewSet(viewsets.ModelViewSet):
             user.save()
             return Response({'status': 'password set'})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     @action(detail=False, methods=['get'])
     def recent(self, request):
         recent_users = User.objects.order_by('-date_joined')[:10]
@@ -136,7 +136,7 @@ class UserFilter(filters.FilterSet):
     username = filters.CharFilter(lookup_expr='icontains')
     is_active = filters.BooleanFilter()
     created_after = filters.DateTimeFilter(field_name='date_joined', lookup_expr='gte')
-    
+
     class Meta:
         model = User
         fields = ['username', 'is_active', 'created_after']
@@ -196,21 +196,20 @@ from rest_framework.response import Response
 
 def custom_exception_handler(exc, context):
     response = exception_handler(exc, context)
-    
+
     if response is not None:
         response.data['status_code'] = response.status_code
-        
+
     return response
 ```
 
 ## Quick Reference
 
-| Component | Purpose |
-|-----------|---------|
+| Component       | Purpose                  |
+| --------------- | ------------------------ |
 | ModelSerializer | Auto-generate from model |
-| ViewSet | CRUD operations |
-| Router | URL generation |
-| FilterSet | Query filtering |
-| Permission | Access control |
-| Pagination | Response pagination |
-
+| ViewSet         | CRUD operations          |
+| Router          | URL generation           |
+| FilterSet       | Query filtering          |
+| Permission      | Access control           |
+| Pagination      | Response pagination      |

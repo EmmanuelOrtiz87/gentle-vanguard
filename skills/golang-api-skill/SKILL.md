@@ -1,8 +1,8 @@
 ---
 name: golang-api-skill
 description: >
-  Go backend API patterns: REST endpoints, JSON responses, middleware, SPA serving.
-  Trigger: "Go API", "Go backend", "REST endpoint Go", "Go JSON", "Go SPA", "Go HTTP handler".
+  Go backend API patterns: REST endpoints, JSON responses, middleware, SPA serving. Trigger: "Go
+  API", "Go backend", "REST endpoint Go", "Go JSON", "Go SPA", "Go HTTP handler".
 ---
 
 ## When to Use
@@ -35,10 +35,12 @@ web/                  # Frontend SPA
 ## API Standards
 
 ### versióning
+
 - Prefix: `/api/v1/`
 - Example: `/api/v1/metrics`, `/api/v1/users`
 
 ### JSON Response
+
 ```go
 func renderJSON(w http.ResponseWriter, status int, data any) {
     w.Header().Set("Content-Type", "application/json")
@@ -48,6 +50,7 @@ func renderJSON(w http.ResponseWriter, status int, data any) {
 ```
 
 ### Error Response
+
 ```go
 type APIError struct {
     Error string `json:"error"`
@@ -62,16 +65,17 @@ func renderError(w http.ResponseWriter, code int, msg string) {
 ```
 
 ### HTTP Status Codes
-| Code | Use |
-|------|-----|
-| 200 | OK |
-| 201 | Created |
-| 204 | No Content |
-| 400 | Bad Request |
-| 401 | Unauthorized |
-| 403 | Forbidden |
-| 404 | Not Found |
-| 500 | Internal Error |
+
+| Code | Use            |
+| ---- | -------------- |
+| 200  | OK             |
+| 201  | Created        |
+| 204  | No Content     |
+| 400  | Bad Request    |
+| 401  | Unauthorized   |
+| 403  | Forbidden      |
+| 404  | Not Found      |
+| 500  | Internal Error |
 
 ## Handler Pattern
 
@@ -111,7 +115,7 @@ func handleMetrics(cfg Config, factory HandlerFactory, auth *AuthManager) http.H
 func spaHandler(distPath string) http.HandlerFunc {
     return func(w http.ResponseWriter, r *http.Request) {
         filePath := filepath.Join(distPath, r.URL.Path)
-        
+
         if info, err := os.Stat(filePath); err == nil && !info.IsDir() {
             http.ServeFile(w, r, filePath)
             return
@@ -124,13 +128,14 @@ func spaHandler(distPath string) http.HandlerFunc {
 ## Middleware Pattern
 
 ### CORS
+
 ```go
 func corsMiddleware(next http.Handler) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         w.Header().Set("Access-Control-Allow-Origin", "*")
         w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
         w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-        
+
         if r.Method == "OPTIONS" {
             w.WriteHeader(http.StatusNoContent)
             return
@@ -141,6 +146,7 @@ func corsMiddleware(next http.Handler) http.Handler {
 ```
 
 ### Security Headers
+
 ```go
 func secureHeaders(next http.Handler) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -156,6 +162,7 @@ func secureHeaders(next http.Handler) http.Handler {
 ## Nested Response Structures
 
 When consuming external APIs, handle nested objects properly:
+
 ```go
 type Author struct {
     Username string `json:"username"`
@@ -179,14 +186,14 @@ type PullRequestSummary struct {
 func TestHandleMetrics(t *testing.T) {
     req, _ := http.NewRequest("GET", "/api/v1/metrics?workspace=test", nil)
     rr := httptest.NewRecorder()
-    
+
     handler := handleMetrics(cfg, factory, auth)
     handler.ServeHTTP(rr, req)
-    
+
     if rr.Code != http.StatusOK {
         t.Errorf("Expected 200, got %d", rr.Code)
     }
-    
+
     if ct := rr.Header().Get("Content-Type"); ct != "application/json" {
         t.Errorf("Expected application/json, got %s", ct)
     }
@@ -212,12 +219,10 @@ CMD ["./server"]
 
 ## Quick Reference
 
-| Pattern | Code |
-|---------|------|
-| JSON response | `renderJSON(w, 200, data)` |
-| JSON error | `renderError(w, 400, "msg")` |
-| SPA handler | `mux.Handle("/", spaHandler("./web/dist"))` |
-| CORS | `corsMiddleware(handler)` |
-| Test endpoint | `httptest.NewRecorder()` |
-
-
+| Pattern       | Code                                        |
+| ------------- | ------------------------------------------- |
+| JSON response | `renderJSON(w, 200, data)`                  |
+| JSON error    | `renderError(w, 400, "msg")`                |
+| SPA handler   | `mux.Handle("/", spaHandler("./web/dist"))` |
+| CORS          | `corsMiddleware(handler)`                   |
+| Test endpoint | `httptest.NewRecorder()`                    |

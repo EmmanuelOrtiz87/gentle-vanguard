@@ -6,13 +6,13 @@ This file is **auto-maintained** by the adaptive learning system.
 
 ### Documentation Placement
 
-| ID | Norm | Confidence | Learned From | Date |
-|----|------|-------------|--------------|------|
+| ID  | Norm | Confidence | Learned From | Date |
+| --- | ---- | ---------- | ------------ | ---- |
 
 ### Auto-Correction
 
-| ID | Pattern | Confidence | Learned From | Date |
-|----|---------|-------------|--------------|------|
+| ID  | Pattern | Confidence | Learned From | Date |
+| --- | ------- | ---------- | ------------ | ---- |
 
 ## Last Update
 

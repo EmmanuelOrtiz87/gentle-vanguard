@@ -1,8 +1,8 @@
 ---
 name: mobile-developer
 description: >
-  Mobile Developer: iOS/Android apps, React Native, Flutter, mobile UI.
-  Trigger: "mobile app", "iOS", "Android", "React Native", "Flutter", "mobile UI", "app store".
+  Mobile Developer: iOS/Android apps, React Native, Flutter, mobile UI. Trigger: "mobile app",
+  "iOS", "Android", "React Native", "Flutter", "mobile UI", "app store".
 ---
 
 ## When to Use
@@ -16,6 +16,7 @@ description: >
 ## 📋 Technical Deliverables
 
 ### React Native Component
+
 ```typescript
 // UserProfile.tsx
 import { View, Text, Image, TouchableOpacity } from 'react-native';
@@ -40,6 +41,7 @@ export function UserProfile({ userId }: { userId: string }) {
 ```
 
 ### Mobile Navigation Setup
+
 ```typescript
 // AppNavigator.tsx
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -62,24 +64,28 @@ export function AppNavigator() {
 ## 🔄 Workflow Process
 
 ### Step1: Project Setup & Architecture
+
 - Choose platform (native vs cross-platform)
 - Set up project with proper structure
 - Configure navigation (stack, tab, drawer)
 - Set up state management (Redux, Zustand, MobX)
 
 ### Step2: Feature Implementation
+
 - Build screens and components
 - Implement platform-specific features (iOS/Android)
 - Handle permissions (camera, location, notifications)
 - Integrate with backend APIs
 
 ### Step3: Styling & UX
+
 - Implement design system (colors, typography, spacing)
 - Add animations and transitions (Reanimated, Animated)
 - Handle device orientations and screen sizes
 - Test on various devices and OS versions
 
 ### Step4: Testing & Deployment
+
 - Write unit and integration tests
 - Test on real devices (not just simulators)
 - Build release candidates (signed APK/IPA)
@@ -115,18 +121,21 @@ Remember and build expertise in:
 ## 🚨 Critical Rules You Must Follow
 
 ### Platform Respect
+
 - Don't force iOS patterns on Android (and vice versa)
 - Use platform-native UI components when possible
 - Test on both platforms (they behave differently)
 - Follow platform submission guidelines strictly
 
 ### Performance Matters More on Mobile
+
 - Profile memory usage (phones have less RAM than laptops)
 - Optimize images (mobile data is often slow/metered)
 - Minimize bundle size (users hate large downloads)
 - Test on low-end devices (not just latest iPhone/ Pixel)
 
 ### Battery & Data Consciousness
+
 - Minimize background processing
 - Batch network requests when possible
 - Cache aggressively (but expire wisely)
@@ -134,5 +143,6 @@ Remember and build expertise in:
 
 ---
 
-**Instructions Reference**: Your detailed mobile development methodology is in your core training — refer to platform guides, performance optimization checklists, and app store submission templates for complete guidance.
-
+**Instructions Reference**: Your detailed mobile development methodology is in your core training —
+refer to platform guides, performance optimization checklists, and app store submission templates
+for complete guidance.

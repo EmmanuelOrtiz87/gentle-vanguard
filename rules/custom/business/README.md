@@ -15,11 +15,11 @@ Every file in this directory must follow this structure:
 
 ## Metadata
 
-| Field         | Value                 |
-|---------------|-----------------------|
-| Rule ID       | BIZ-NNN               |
-| Business Area | [domain or product]   |
-| Severity      | HIGH / MEDIUM / LOW   |
+| Field         | Value               |
+| ------------- | ------------------- |
+| Rule ID       | BIZ-NNN             |
+| Business Area | [domain or product] |
+| Severity      | HIGH / MEDIUM / LOW |
 
 ## Requirement
 
@@ -39,12 +39,12 @@ Acceptance criteria or review checklist item.
 File: `BIZ-001-release-governance.md`
 
 ```markdown
-# Release Governance  Notes Format
+# Release Governance Notes Format
 
 ## Metadata
 
 | Field         | Value              |
-|---------------|--------------------|
+| ------------- | ------------------ |
 | Rule ID       | BIZ-001            |
 | Business Area | Release governance |
 | Severity      | HIGH               |

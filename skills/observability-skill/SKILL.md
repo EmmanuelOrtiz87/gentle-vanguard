@@ -1,13 +1,13 @@
 ---
 name: observability-skill
 description: >
-  Observability patterns for logs, metrics, tracing, dashboards, and alerting.
-  Trigger: "observability", "monitoring", "tracing", "metrics", "logs", "alert",
-  "OpenTelemetry", "SLO", "incident triage", "Grafana", "Prometheus".
+  Observability patterns for logs, metrics, tracing, dashboards, and alerting. Trigger:
+  "observability", "monitoring", "tracing", "metrics", "logs", "alert", "OpenTelemetry", "SLO",
+  "incident triage", "Grafana", "Prometheus".
 license: Apache-2.0
 metadata:
   author: workspace-foundation
-  versión: "1.0"
+  versión: '1.0'
 ---
 
 ## When to Use
@@ -21,6 +21,7 @@ metadata:
 ## Core Model
 
 Observability has 3 pillars:
+
 - **Logs**: discrete events with structured context
 - **Metrics**: aggregated numeric signals over time
 - **Traces**: request and dependency flow across boundaries
@@ -30,6 +31,7 @@ Use all 3. Logs alone are not observability.
 ## Minimum Production Standard
 
 Every production service should have:
+
 1. Structured logs with correlation/request IDs
 2. Basic RED metrics: Rate, Errors, Duration
 3. Distributed tracing for external calls
@@ -44,6 +46,7 @@ Every production service should have:
 - Use stable field names across services
 
 Example fields:
+
 ```json
 {
   "timestamp": "2026-04-13T12:00:00Z",
@@ -60,6 +63,7 @@ Example fields:
 ## Metrics Rules
 
 Track at minimum:
+
 - Request count
 - Error count / error rate
 - Latency (p50 / p95 / p99)
@@ -76,6 +80,7 @@ Track at minimum:
 ## SLO Guidance
 
 Define SLOs for user-critical flows:
+
 - Availability: e.g. 99.9% successful responses
 - Latency: e.g. p95 under 400ms
 - Freshness/throughput for async systems where relevant
@@ -83,17 +88,20 @@ Define SLOs for user-critical flows:
 ## Alerting Rules
 
 Alerts should be:
+
 - Actionable
 - Based on symptoms first, causes second
 - Routed to owners
 - Rate-limited to avoid fatigue
 
 Good examples:
+
 - p95 latency > threshold for 15m
 - Error rate > 2% for 10m
 - Queue backlog above safe limit
 
 Bad examples:
+
 - CPU > 80% for 1m with no customer impact
 - Every individual exception as a page
 
@@ -104,5 +112,3 @@ Bad examples:
 3. Correlate traces to failing components
 4. Inspect logs with requestId/traceId
 5. Validate mitigation, then root cause
-
-

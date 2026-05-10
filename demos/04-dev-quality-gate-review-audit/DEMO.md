@@ -8,27 +8,29 @@
 
 ## Goal
 
-Show the full quality enforcement pipeline: from PSScriptAnalyzer static analysis in CI, through SDD gate, to Judgment Day adversarial review — all automated and integrated into the daily git workflow.
+Show the full quality enforcement pipeline: from PSScriptAnalyzer static analysis in CI, through SDD
+gate, to Judgment Day adversarial review — all automated and integrated into the daily git workflow.
 
 ---
 
 ## What You'll Demonstrate
 
-| # | Capability | Command / Artifact |
-|---|------------|-------------------|
-| 1 | Static analysis (PSScriptAnalyzer) | `ps-lint.yml` in CI |
-| 2 | SDD spec gate | `wf sdd-gate` |
-| 3 | 7D pre-commit validation | `git commit` (hook fires automatically) |
-| 4 | Full QA gate | `wf judgment-day` |
-| 5 | Code review | `wf review` |
-| 6 | Audit report | `wf audit` |
-| 7 | Agent-verify (14 checks) | `wf verify` |
+| #   | Capability                         | Command / Artifact                      |
+| --- | ---------------------------------- | --------------------------------------- |
+| 1   | Static analysis (PSScriptAnalyzer) | `ps-lint.yml` in CI                     |
+| 2   | SDD spec gate                      | `wf sdd-gate`                           |
+| 3   | 7D pre-commit validation           | `git commit` (hook fires automatically) |
+| 4   | Full QA gate                       | `wf judgment-day`                       |
+| 5   | Code review                        | `wf review`                             |
+| 6   | Audit report                       | `wf audit`                              |
+| 7   | Agent-verify (14 checks)           | `wf verify`                             |
 
 ---
 
 ## Run Steps
 
 ### Step 1 — Check quality gate status
+
 ```powershell
 wf verify
 # Expected: 14/14 PASS
@@ -36,6 +38,7 @@ wf verify
 ```
 
 ### Step 2 — SDD Gate (blocks without spec)
+
 ```powershell
 wf sdd-gate
 # Shows: status of SDD docs (validated/active/done required)
@@ -46,6 +49,7 @@ wf sdd-gate
 ```
 
 ### Step 3 — Make a commit, watch hooks fire
+
 ```powershell
 # Stage a change
 git add scripts/utilities/my-new-script.ps1
@@ -59,6 +63,7 @@ git commit -m "feat: add new utility"
 ```
 
 ### Step 4 — PSScriptAnalyzer (shows in CI)
+
 ```powershell
 # Locally simulate what ps-lint.yml does:
 Import-Module PSScriptAnalyzer
@@ -67,6 +72,7 @@ Invoke-ScriptAnalyzer -Path scripts/ -Recurse -Severity Error
 ```
 
 ### Step 5 — Full QA Gate (Judgment Day)
+
 ```powershell
 wf judgment-day
 # Runs: dual adversarial review
@@ -75,6 +81,7 @@ wf judgment-day
 ```
 
 ### Step 6 — Review + Audit
+
 ```powershell
 wf review
 # AI-assisted multi-dimension review
@@ -84,6 +91,7 @@ wf audit
 ```
 
 ### Step 7 — SDD Metrics
+
 ```powershell
 wf sdd-metrics
 # Shows: SDD status distribution, cycle time per phase, SLO compliance

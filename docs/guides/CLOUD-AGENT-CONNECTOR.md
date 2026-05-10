@@ -1,6 +1,8 @@
 # Cloud Agent Connector - Complete Security & Setup Guide
 
-> **Summary**: This guide covers secure setup, configuration, and usage of Foundation's Cloud Agent Connector for connecting to external AI providers (AWS Bedrock, Difi, Azure, OpenAI, Anthropic, Gemini, Ollama).
+> **Summary**: This guide covers secure setup, configuration, and usage of Foundation's Cloud Agent
+> Connector for connecting to external AI providers (AWS Bedrock, Difi, Azure, OpenAI, Anthropic,
+> Gemini, Ollama).
 
 ---
 
@@ -8,31 +10,31 @@
 
 ```
 
-                     CLOUD AGENT CONNECTOR                                    
+                     CLOUD AGENT CONNECTOR
 
-                                                                              
-               
-    Local Config          Template Config        Environment Vars      
-    (GITIGNORED)          (COMMITTED)            (Most Secure)         
-                                                                       
-   cloud-agents.         config/cloud-           AWS_ACCESS_KEY_ID     
-   local.json            agents.json             OPENAI_API_KEY        
-               
-                                                                           
-                         
-                                                                              
-                                                    
-                 invoke-cloud-agent                                          
-                      .ps1                                                  
-                                                    
-                                                                             
-                                           
-                                                                           
-                                    
-     AWS          OpenAI         Difi                                 
-    Bedrock       Azure          Custom API                           
-                                    
-                                                                              
+
+
+    Local Config          Template Config        Environment Vars
+    (GITIGNORED)          (COMMITTED)            (Most Secure)
+
+   cloud-agents.         config/cloud-           AWS_ACCESS_KEY_ID
+   local.json            agents.json             OPENAI_API_KEY
+
+
+
+
+
+                 invoke-cloud-agent
+                      .ps1
+
+
+
+
+
+     AWS          OpenAI         Difi
+    Bedrock       Azure          Custom API
+
+
 
 ```
 
@@ -42,11 +44,11 @@
 
 ### Three-Layer Configuration Management
 
-| Layer | Source | Git Status | Security Level | Use Case |
-|-------|--------|------------|----------------|----------|
-| **1 - Environment** | System env vars / `.env.local` | Never in repo | **HIGHEST** | Credentials |
-| **2 - Local Config** | `cloud-agents.local.json` | **GITIGNORED** | **HIGH** | Provider metadata and enablement |
-| **3 - Template** | `config/cloud-agents.json` | Committed | Template only | Shared defaults |
+| Layer                | Source                         | Git Status     | Security Level | Use Case                         |
+| -------------------- | ------------------------------ | -------------- | -------------- | -------------------------------- |
+| **1 - Environment**  | System env vars / `.env.local` | Never in repo  | **HIGHEST**    | Credentials                      |
+| **2 - Local Config** | `cloud-agents.local.json`      | **GITIGNORED** | **HIGH**       | Provider metadata and enablement |
+| **3 - Template**     | `config/cloud-agents.json`     | Committed      | Template only  | Shared defaults                  |
 
 ### Security Principles
 
@@ -96,9 +98,11 @@ AWS_ACCESS_KEY_ID=AKIA...
 AWS_SECRET_ACCESS_KEY=...
 ```
 
-`invoke-cloud-agent.ps1` automatically loads `.env.local` from repository root before resolving provider credentials, but keeps existing process environment variables as higher priority.
+`invoke-cloud-agent.ps1` automatically loads `.env.local` from repository root before resolving
+provider credentials, but keeps existing process environment variables as higher priority.
 
-For deterministic correlation, set `FOUNDATION_SESSION_ID` in session workflows before cloud requests.
+For deterministic correlation, set `FOUNDATION_SESSION_ID` in session workflows before cloud
+requests.
 
 ### Step 3: Configure Your Provider Metadata
 
@@ -174,10 +178,12 @@ Edit `config/cloud-agents.local.json` (no secrets):
 
 ### AWS Bedrock
 
-> Current status: direct `aws_sigv4` signing is not implemented in `invoke-cloud-agent.ps1` yet.
-> Use a signed proxy endpoint (`auth_type: proxy_signed`) or another provider mode until SigV4 support is added.
+> Current status: direct `aws_sigv4` signing is not implemented in `invoke-cloud-agent.ps1` yet. Use
+> a signed proxy endpoint (`auth_type: proxy_signed`) or another provider mode until SigV4 support
+> is added.
 
 **Requirements:**
+
 - AWS account with Bedrock access
 - IAM credentials with `bedrock:InvokeModel` permission
 - AWS CLI configured or environment variables
@@ -212,6 +218,7 @@ $env:AWS_DEFAULT_REGION = "us-east-1"
 ### OpenAI
 
 **Requirements:**
+
 - OpenAI API key from https://platform.openai.com
 
 **Setup:**
@@ -237,6 +244,7 @@ $env:OPENAI_API_KEY = "sk-proj-..."
 ### Anthropic (Direct)
 
 **Requirements:**
+
 - Anthropic API key from https://console.anthropic.com
 
 **Setup:**
@@ -262,6 +270,7 @@ $env:ANTHROPIC_API_KEY = "sk-ant-..."
 ### Azure OpenAI
 
 **Requirements:**
+
 - Azure subscription
 - OpenAI resource deployed
 
@@ -290,6 +299,7 @@ $env:AZURE_OPENAI_ENDPOINT = "https://your-resource.openai.azure.com/"
 ### Difi
 
 **Requirements:**
+
 - Difi API credentials from provider
 
 **Setup:**
@@ -315,6 +325,7 @@ $env:DIFI_API_KEY = "your-difi-api-key"
 ### Ollama (Local)
 
 **Requirements:**
+
 - Ollama installed locally
 - Model pulled
 
@@ -353,12 +364,14 @@ ollama serve
 ### 1. Environment Variables (Production)
 
 **Do:**
+
 ```powershell
 # Set at system/environment level, not in scripts
 [Environment]::SetEnvironmentVariable("OPENAI_API_KEY", "sk-...", "User")
 ```
 
 **Don't:**
+
 ```powershell
 # NEVER do this - commits to git!
 $config = @{
@@ -376,10 +389,7 @@ $config = @{
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": [
-        "bedrock:InvokeModel",
-        "bedrock:InvokeModelWithResponseStream"
-      ],
+      "Action": ["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream"],
       "Resource": "arn:aws:bedrock:us-east-1:*:foundation-model/anthropic.claude-*"
     }
   ]
@@ -398,9 +408,11 @@ $config = @{
 
 ### 4. Audit & Monitoring
 
-All runtime requests are logged to `.runtime/telemetry/cloud-agent-telemetry.csv` (local runtime artifact). If you need management consolidation, run `scripts/utilities/consolidate-telemetry.ps1`.
+All runtime requests are logged to `.runtime/telemetry/cloud-agent-telemetry.csv` (local runtime
+artifact). If you need management consolidation, run `scripts/utilities/consolidate-telemetry.ps1`.
 
-Consolidation requires `Session_ID` correlation from runtime telemetry; rows without matching session correlation are skipped by design.
+Consolidation requires `Session_ID` correlation from runtime telemetry; rows without matching
+session correlation are skipped by design.
 
 ```csv
 Timestamp,User_ID,Session_ID,Request_ID,Provider,Model,InputTokens,OutputTokens,LatencyMs,Status,ErrorMessage
@@ -410,10 +422,12 @@ Timestamp,User_ID,Session_ID,Request_ID,Provider,Model,InputTokens,OutputTokens,
 ### 5. Network Security
 
 **Use VPN for sensitive connections:**
+
 - Corporate VPN for production API calls
 - Consider VPC/private endpoints for AWS
 
 **Firewall rules:**
+
 ```powershell
 # Allow only necessary endpoints
 $allowedEndpoints = @(
@@ -442,6 +456,7 @@ $allowedEndpoints = @(
 **Cause:** Missing or incorrect API key.
 
 **Solution:**
+
 1. Verify environment variable is set: `$env:OPENAI_API_KEY`
 2. Check key is valid in provider dashboard
 3. Ensure config matches env var name
@@ -451,6 +466,7 @@ $allowedEndpoints = @(
 **Cause:** Network issue or endpoint unreachable.
 
 **Solution:**
+
 ```powershell
 # Test connectivity
 Test-NetConnection api.openai.com -Port 443
@@ -463,19 +479,20 @@ Test-NetConnection api.openai.com -Port 443
 
 **Cause:** Wrong model ID in configuration.
 
-**Solution:** Update provider metadata in `config/cloud-agents.local.json` with correct model ID from provider.
+**Solution:** Update provider metadata in `config/cloud-agents.local.json` with correct model ID
+from provider.
 
 ---
 
 ## File Reference
 
-| File | Purpose | Git Status |
-|------|---------|------------|
-| `scripts/utilities/invoke-cloud-agent.ps1` | Main connector script | Committed |
-| `config/cloud-agents.json` | Shared template config | Committed |
-| `config/cloud-agents.local.example` | Local config template | Committed |
-| `config/cloud-agents.local.json` | Local provider metadata (no secrets) | **GITIGNORED** |
-| `.runtime/telemetry/cloud-agent-telemetry.csv` | Request audit log | **GITIGNORED** |
+| File                                           | Purpose                              | Git Status     |
+| ---------------------------------------------- | ------------------------------------ | -------------- |
+| `scripts/utilities/invoke-cloud-agent.ps1`     | Main connector script                | Committed      |
+| `config/cloud-agents.json`                     | Shared template config               | Committed      |
+| `config/cloud-agents.local.example`            | Local config template                | Committed      |
+| `config/cloud-agents.local.json`               | Local provider metadata (no secrets) | **GITIGNORED** |
+| `.runtime/telemetry/cloud-agent-telemetry.csv` | Request audit log                    | **GITIGNORED** |
 
 ---
 

@@ -1,8 +1,8 @@
 ---
 name: typescript-skill
 description: >
-  TypeScript strict patterns: types, interfaces, generics, utility types.
-  Trigger: "TypeScript", "interface", "type", "generic", "utility types", "typescript strict".
+  TypeScript strict patterns: types, interfaces, generics, utility types. Trigger: "TypeScript",
+  "interface", "type", "generic", "utility types", "typescript strict".
 ---
 
 ## When to Use
@@ -125,12 +125,7 @@ if (x instanceof Error) {
 
 // Custom type guard
 function isUser(obj: unknown): obj is User {
-  return (
-    typeof obj === 'object' &&
-    obj !== null &&
-    'id' in obj &&
-    'name' in obj
-  );
+  return typeof obj === 'object' && obj !== null && 'id' in obj && 'name' in obj;
 }
 
 // Assertion function
@@ -174,9 +169,7 @@ async function fetchUser(): Promise<User> {
 type UserData = Awaited<ReturnType<typeof fetchUser>>;
 
 // Result type pattern
-type Result<T, E = Error> = 
-  | { success: true; data: T }
-  | { success: false; error: E };
+type Result<T, E = Error> = { success: true; data: T } | { success: false; error: E };
 
 async function safeFetch<T>(url: string): Promise<Result<T>> {
   try {
@@ -225,12 +218,11 @@ declare module '*.svg' {
 
 ## Quick Reference
 
-| Pattern | Example |
-|---------|---------|
-| Generic | `Array<T>`, `Promise<T>` |
-| Optional | `T?`, `Partial<T>` |
-| Union | `A \| B` |
-| Intersection | `A & B` |
+| Pattern       | Example                    |
+| ------------- | -------------------------- |
+| Generic       | `Array<T>`, `Promise<T>`   |
+| Optional      | `T?`, `Partial<T>`         |
+| Union         | `A \| B`                   |
+| Intersection  | `A & B`                    |
 | Key selection | `Pick<T, K>`, `Omit<T, K>` |
-| Type guard | `x is Type` |
-
+| Type guard    | `x is Type`                |

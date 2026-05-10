@@ -15,11 +15,11 @@ Every file in this directory must follow this structure:
 
 ## Metadata
 
-| Field    | Value                 |
-|----------|-----------------------|
-| Rule ID  | TECH-NNN              |
-| Scope    | [target files/paths]  |
-| Severity | HIGH / MEDIUM / LOW   |
+| Field    | Value                |
+| -------- | -------------------- |
+| Rule ID  | TECH-NNN             |
+| Scope    | [target files/paths] |
+| Severity | HIGH / MEDIUM / LOW  |
 
 ## Requirement
 
@@ -27,7 +27,7 @@ Clear, actionable statement of what is required.
 
 ## Why It Matters
 
-Rationale  explain the risk or consequence.
+Rationale explain the risk or consequence.
 
 ## Validation
 
@@ -38,16 +38,16 @@ How to verify: command, parser check, or acceptance criteria.
 
 File: `TECH-001-parser-validation.md`
 
-```markdown
+````markdown
 # PowerShell Parser Validation
 
 ## Metadata
 
-| Field    | Value                    |
-|----------|--------------------------|
-| Rule ID  | TECH-001                 |
-| Scope    | scripts/**/*.ps1         |
-| Severity | HIGH                     |
+| Field    | Value             |
+| -------- | ----------------- |
+| Rule ID  | TECH-001          |
+| Scope    | scripts/\*_/_.ps1 |
+| Severity | HIGH              |
 
 ## Requirement
 
@@ -63,4 +63,8 @@ Prevents parser and runtime regressions in hook and CI automation.
 [System.Management.Automation.Language.Parser]::ParseFile($path, [ref]$null, [ref]$errors)
 $errors.Count -eq 0
 ```
+````
+
+```
+
 ```

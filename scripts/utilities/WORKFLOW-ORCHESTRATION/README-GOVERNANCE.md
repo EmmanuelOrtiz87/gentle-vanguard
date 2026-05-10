@@ -3,17 +3,20 @@
 ## Quick Start
 
 Initialize:
+
 ```powershell
 .\event-governance-layer.ps1 -Action initialize
 .\orchestrator-governance-integration.ps1 -Action initialize
 ```
 
 Check Status:
+
 ```powershell
 .\orchestrator-governance-integration.ps1 -Action check-health
 ```
 
 Emit Event:
+
 ```powershell
 .\event-bus-enhanced.ps1 -Action emit -Event "dispatch.started" `
   -Payload '{"execution_id":"dispatch-20260423","mode":"parallel","agents":["DEV"]}' `
@@ -21,6 +24,7 @@ Emit Event:
 ```
 
 View Report:
+
 ```powershell
 .\orchestrator-governance-integration.ps1 -Action report
 ```
@@ -38,11 +42,11 @@ View Report:
 
 ## Features
 
- Validacin de esquemas  
+Validacin de esquemas  
  Polticas de seguridad  
  Rate limiting  
  Auditora completa  
  Monitoreo pasivo  
- Alertas automticas  
+ Alertas automticas
 
 Ver `docs/EVENT-GOVERNANCE-IMPLEMENTATION.md` para detalles.

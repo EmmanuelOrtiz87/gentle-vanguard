@@ -1,9 +1,10 @@
 # Workspace Foundation
+
 ## Suplemento para Presentacin al Consejo
 
 **Versin:** 1.0  
 **Fecha:** Abril 2026  
-**Propsito:** Complementar presentacin ejecutiva con anlisis detallado  
+**Propsito:** Complementar presentacin ejecutiva con anlisis detallado
 
 ---
 
@@ -11,12 +12,12 @@
 
 ### A.1 Estudios de Mercado
 
-| Estudio | Finding | Fuente |
-|---------|---------|--------|
-| McKinsey 2025 | Equipos con AI tools son 30-50% ms productivos | McKinsey Global Institute |
-| GitHub Copilot Study | 55% ms rpido en tareas de cdigo | GitHub User Research |
-| Accenture | 40% reduccin en bugs en produccin | Accenture Technology |
-| Deloitte | 25% menos tiempo en code review | Deloitte AI Survey |
+| Estudio              | Finding                                        | Fuente                    |
+| -------------------- | ---------------------------------------------- | ------------------------- |
+| McKinsey 2025        | Equipos con AI tools son 30-50% ms productivos | McKinsey Global Institute |
+| GitHub Copilot Study | 55% ms rpido en tareas de cdigo                | GitHub User Research      |
+| Accenture            | 40% reduccin en bugs en produccin              | Accenture Technology      |
+| Deloitte             | 25% menos tiempo en code review                | Deloitte AI Survey        |
 
 ### A.2 Benchmarks Internos (Esperados Post-Piloto)
 
@@ -36,14 +37,14 @@ Lneas de cdigo/semana          | 200    | 300     | 50%
 
 ### B.1 Matriz de Riesgos
 
-| Riesgo | Probabilidad | Impacto | Severidad | Mitigacin |
-|--------|-------------|---------|-----------|------------|
-| Dependencia excesiva de IA | Media | Alto | [!] | Training en uso responsable |
-| Calidad inconsistente de cdigo | Baja | Medio |  | Native review + code review obligatorio |
-| Informacin sensible en prompts | Media | Alto | [!] | Polticas de no enviar secrets |
-| Vendor lock-in | Baja | Medio |  | Multi-provider (Claude + OpenAI) |
-| Costos de API descontrolados | Baja | Medio |  | Audit system + budget alerts |
-| Resistencia del equipo | Media | Alto | [!] | Communication + champions |
+| Riesgo                         | Probabilidad | Impacto | Severidad | Mitigacin                               |
+| ------------------------------ | ------------ | ------- | --------- | --------------------------------------- |
+| Dependencia excesiva de IA     | Media        | Alto    | [!]       | Training en uso responsable             |
+| Calidad inconsistente de cdigo | Baja         | Medio   |           | Native review + code review obligatorio |
+| Informacin sensible en prompts | Media        | Alto    | [!]       | Polticas de no enviar secrets           |
+| Vendor lock-in                 | Baja         | Medio   |           | Multi-provider (Claude + OpenAI)        |
+| Costos de API descontrolados   | Baja         | Medio   |           | Audit system + budget alerts            |
+| Resistencia del equipo         | Media        | Alto    | [!]       | Communication + champions               |
 
 ### B.2 Mitigaciones Detalladas
 
@@ -81,14 +82,14 @@ Tools de seguridad:
 
 ### C.1 KPIs del Proyecto
 
-| KPI | Baseline | Target (3 meses) | Target (6 meses) |
-|-----|----------|------------------|------------------|
-| Tiempo setup proyecto | 4 hrs | 30 min | 15 min |
-| Productividad devs | 100% | 125% | 150% |
-| Bugs en produccin | 15/mes | 12/mes | 10/mes |
-| Adoption rate | 0% | 60% | 90% |
-| NPS del equipo | N/A | 40+ | 50+ |
-| Costo API/mes | $0 | $500 | $800 |
+| KPI                   | Baseline | Target (3 meses) | Target (6 meses) |
+| --------------------- | -------- | ---------------- | ---------------- |
+| Tiempo setup proyecto | 4 hrs    | 30 min           | 15 min           |
+| Productividad devs    | 100%     | 125%             | 150%             |
+| Bugs en produccin     | 15/mes   | 12/mes           | 10/mes           |
+| Adoption rate         | 0%       | 60%              | 90%              |
+| NPS del equipo        | N/A      | 40+              | 50+              |
+| Costo API/mes         | $0       | $500             | $800             |
 
 ### C.2 Definition of Success
 
@@ -114,7 +115,7 @@ XITO DE ROLLOUT (90 das)
 Dashboard de Adoption:
 
 [] 80% - 8/10 devs activos
-     
+
       Usando daily: 7 devs
       Usando weekly: 1 dev
       No activos: 2 devs
@@ -130,7 +131,7 @@ Target: >80% active para fin de mes 2
 
 ```
 
-                    PROGRAMA DE CAPACITACIN                      
+                    PROGRAMA DE CAPACITACIN
 
 
 Semana 1: Fundamentos
@@ -156,13 +157,13 @@ Semana 4: Optimization
 
 ### D.2 Materiales de Capacitacin
 
-| Material | Formato | Audiencia |
-|----------|---------|-----------|
-| Technical Onboarding Guide | PDF/MD | Todos los devs |
-| Quick Reference Card | A4 impreso | Todos los devs |
-| Video demos | Loom (5 min c/u) | Autoaprendizaje |
-| Live coding sessions | Zoom | Equipos |
-| Workshop prctico | Presencial | Piloto team |
+| Material                   | Formato          | Audiencia       |
+| -------------------------- | ---------------- | --------------- |
+| Technical Onboarding Guide | PDF/MD           | Todos los devs  |
+| Quick Reference Card       | A4 impreso       | Todos los devs  |
+| Video demos                | Loom (5 min c/u) | Autoaprendizaje |
+| Live coding sessions       | Zoom             | Equipos         |
+| Workshop prctico           | Presencial       | Piloto team     |
 
 ### D.3 Roles de Support
 
@@ -186,13 +187,13 @@ Equipo Core:
 
 ### E.1 Opciones del Mercado
 
-| Opcin | Pros | Contras | Costo |
-|--------|------|---------|-------|
-| **No hacer nada** | - | Sin estndares,perdida de tiempo | $0 |
-| **GitHub Copilot** | Integrado, popular | Solo MS ecosystem, limited governance | $19/user/mes |
-| **Amazon Q Developer** | AWS integrado | Solo AWS | $19-30/user/mes |
-| **Cursor/Windsurf** | Buena UX | No governance | $20/user/mes |
-| **Workspace Foundation** | Custom, governance, multi-vendor, $0 | Requiere impl | $0 + dev time |
+| Opcin                    | Pros                                 | Contras                               | Costo           |
+| ------------------------ | ------------------------------------ | ------------------------------------- | --------------- |
+| **No hacer nada**        | -                                    | Sin estndares,perdida de tiempo       | $0              |
+| **GitHub Copilot**       | Integrado, popular                   | Solo MS ecosystem, limited governance | $19/user/mes    |
+| **Amazon Q Developer**   | AWS integrado                        | Solo AWS                              | $19-30/user/mes |
+| **Cursor/Windsurf**      | Buena UX                             | No governance                         | $20/user/mes    |
+| **Workspace Foundation** | Custom, governance, multi-vendor, $0 | Requiere impl                         | $0 + dev time   |
 
 ### E.2 Por Qu WF Es Mejor
 
@@ -200,15 +201,15 @@ Equipo Core:
 Workspace Foundation vs Alternativas
 
 
- Feature           WF           Copilot  Amazon Q  Cursor   
+ Feature           WF           Copilot  Amazon Q  Cursor
 
- Multi-provider    [OK]                             [OK]        
- Audit system      [OK]                                     
- Templates         [OK]                                     
- Native review     [OK]                                     
- Code $0           [OK]                                     
- Customizable      [OK]                                     
- Open source       [OK]                                     
+ Multi-provider    [OK]                             [OK]
+ Audit system      [OK]
+ Templates         [OK]
+ Native review     [OK]
+ Code $0           [OK]
+ Customizable      [OK]
+ Open source       [OK]
 
 ```
 
@@ -218,13 +219,13 @@ Workspace Foundation vs Alternativas
 
 ### F.1 Stakeholder Communication
 
-| Stakeholder | Message | Canal | Frecuencia |
-|-------------|---------|-------|------------|
-| Developers | Tool til, fcil, mejora productividad | Slack, Town halls | Ongoing |
-| Tech Leads | Estndares, mtricas, governance | Email, 1:1s | Weekly |
-| Product Owners | Visibility, ROI, timelines | Meetings | Bi-weekly |
-| CTO | Progress, risks, decisións | Executive summary | Monthly |
-| Executives | ROI, adoption, strategic value | Board updates | Quarterly |
+| Stakeholder    | Message                              | Canal             | Frecuencia |
+| -------------- | ------------------------------------ | ----------------- | ---------- |
+| Developers     | Tool til, fcil, mejora productividad | Slack, Town halls | Ongoing    |
+| Tech Leads     | Estndares, mtricas, governance       | Email, 1:1s       | Weekly     |
+| Product Owners | Visibility, ROI, timelines           | Meetings          | Bi-weekly  |
+| CTO            | Progress, risks, decisións           | Executive summary | Monthly    |
+| Executives     | ROI, adoption, strategic value       | Board updates     | Quarterly  |
 
 ### F.2 messaging para Developers
 
@@ -312,26 +313,26 @@ Audit:
 INVERSIN AO 1
 
 
- Development & Implementation                                      
+ Development & Implementation
 
- Core development (1 dev, 3 months)              $45,000        
- Piloto (2 devs, 2 months)                       $30,000        
- Documentation & training                        $10,000         
- Subtotal                                       $85,000         
+ Core development (1 dev, 3 months)              $45,000
+ Piloto (2 devs, 2 months)                       $30,000
+ Documentation & training                        $10,000
+ Subtotal                                       $85,000
 
- Tools & Infrastructure                                              
+ Tools & Infrastructure
 
- API costs (Claude, OpenAI)                       $6,000/ao     
+ API costs (Claude, OpenAI)                       $6,000/ao
  Monitoring & logging                            $0 (self-hosted)
- Subtotal                                       $6,000/ao       
+ Subtotal                                       $6,000/ao
 
- Mantenimiento & Support                                           
+ Mantenimiento & Support
 
- Ongoing dev (20% time)                        $20,000/ao       
- Training & workshops                          $5,000/ao        
- Subtotal                                       $25,000/ao       
+ Ongoing dev (20% time)                        $20,000/ao
+ Training & workshops                          $5,000/ao
+ Subtotal                                       $25,000/ao
 
- TOTAL AO 1                                       $116,000       
+ TOTAL AO 1                                       $116,000
 
 ```
 
@@ -405,12 +406,12 @@ SI ROLLOUT FALLA:
 
 ## J. Contactos y Recursos
 
-| Rol | Responsabilidad | Canal |
-|-----|-----------------|-------|
-| Project Lead | Overall coordination | [email] |
-| Tech Champion | Technical support | [email] |
-| Documentation | Guides y tutorials | [email] |
-| Security | Policy compliance | [email] |
+| Rol           | Responsabilidad      | Canal   |
+| ------------- | -------------------- | ------- |
+| Project Lead  | Overall coordination | [email] |
+| Tech Champion | Technical support    | [email] |
+| Documentation | Guides y tutorials   | [email] |
+| Security      | Policy compliance    | [email] |
 
 ### Recursos
 
@@ -425,5 +426,3 @@ SI ROLLOUT FALLA:
 **Documento preparado por:** Equipo de desarrollo  
 **ltima actualizacin:** Abril 2026  
 **Versin:** 1.0
-
-

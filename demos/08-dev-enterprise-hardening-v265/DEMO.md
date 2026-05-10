@@ -3,24 +3,26 @@
 **Audience:** Tech Lead / Senior Developer / DevOps  
 **Duration:** ~20 min  
 **Stack version:** v2.6.5+  
-**Focus:** New capabilities from the enterprise hardening wave — SDD enforcement, benchmarks, drift detection, PSScriptAnalyzer CI, and automated releases.
+**Focus:** New capabilities from the enterprise hardening wave — SDD enforcement, benchmarks, drift
+detection, PSScriptAnalyzer CI, and automated releases.
 
 ---
 
 ## What This Demo Shows
 
-This is the "deep technical" demo for developers who want to see the **new v2.6.4+v2.6.5 capabilities** in action:
+This is the "deep technical" demo for developers who want to see the **new v2.6.4+v2.6.5
+capabilities** in action:
 
-| Feature | Version | Command |
-|---------|---------|---------|
-| SDD Gate (blocks commits without spec) | v2.6.4 | `wf sdd-gate` |
-| SDD Process Metrics (cycle time, SLO) | v2.6.4 | `wf sdd-metrics` |
-| Sync Drift Report (foundation ↔ projects) | v2.6.4 | `wf sync-drift` |
-| WF Benchmark (SLO measurement) | v2.6.4 | `wf benchmark` |
-| PSScriptAnalyzer CI (static analysis) | v2.6.5 | `.github/workflows/ps-lint.yml` |
-| Automated GitHub Releases | v2.6.5 | `git tag v*.*.*` |
-| Stack Version command | v2.6.5 | `wf version` |
-| Normativas vivas | v2.6.5 | `rules/` directory |
+| Feature                                   | Version | Command                         |
+| ----------------------------------------- | ------- | ------------------------------- |
+| SDD Gate (blocks commits without spec)    | v2.6.4  | `wf sdd-gate`                   |
+| SDD Process Metrics (cycle time, SLO)     | v2.6.4  | `wf sdd-metrics`                |
+| Sync Drift Report (foundation ↔ projects) | v2.6.4  | `wf sync-drift`                 |
+| WF Benchmark (SLO measurement)            | v2.6.4  | `wf benchmark`                  |
+| PSScriptAnalyzer CI (static analysis)     | v2.6.5  | `.github/workflows/ps-lint.yml` |
+| Automated GitHub Releases                 | v2.6.5  | `git tag v*.*.*`                |
+| Stack Version command                     | v2.6.5  | `wf version`                    |
+| Normativas vivas                          | v2.6.5  | `rules/` directory              |
 
 ---
 
@@ -38,7 +40,9 @@ wf version
 ## Part 1 — SDD Enforcement (FF-001)
 
 ### Why it matters
-> "The SDD gate is the technical enforcement of 'no spec = no code'. It's not a policy — it's a hard block."
+
+> "The SDD gate is the technical enforcement of 'no spec = no code'. It's not a policy — it's a hard
+> block."
 
 ```powershell
 # Check current SDD status
@@ -56,7 +60,8 @@ wf sdd-metrics
 # Shows: status breakdown, avg cycle time per phase, SLO compliance %
 ```
 
-**Key talking point:** Every SDD that reaches `validated` status has passed through BA → SAD → review. The gate enforces this end-to-end.
+**Key talking point:** Every SDD that reaches `validated` status has passed through BA → SAD →
+review. The gate enforces this end-to-end.
 
 ---
 
@@ -94,7 +99,8 @@ wf sync-drift
 # → {"status": "warn", "drift_score": 12, "issues": [...]}
 ```
 
-**Key talking point:** Drift detection prevents the common problem where the framework evolves but projects don't get the updates. Score 0 = perfectly synced.
+**Key talking point:** Drift detection prevents the common problem where the framework evolves but
+projects don't get the updates. Score 0 = perfectly synced.
 
 ---
 
@@ -117,7 +123,8 @@ wf benchmark status,health,verify
 # └─────────────────────────────────────────────┘
 ```
 
-**Key talking point:** SLOs are measured, not assumed. If a command starts degrading, we know before users complain.
+**Key talking point:** SLOs are measured, not assumed. If a command starts degrading, we know before
+users complain.
 
 ---
 
@@ -134,6 +141,7 @@ Get-Content .github/workflows/ps-lint.yml
 ```
 
 **Key talking point:**
+
 - `Error` severity = **blocks merge** (unreachable code, null dereference, etc.)
 - `Warning` severity = GitHub annotation (advisory, doesn't block)
 - 4 rules excluded with documented justification in `rules/POWERSHELL-STANDARDS.md`
@@ -156,7 +164,8 @@ git push origin v2.6.5
 Get-Content .github/workflows/release.yml
 ```
 
-**Key talking point:** Before v2.6.5, releases were created manually. Now: tag → push → release is fully automated. The changelog IS the release notes.
+**Key talking point:** Before v2.6.5, releases were created manually. Now: tag → push → release is
+fully automated. The changelog IS the release notes.
 
 ---
 
@@ -176,7 +185,9 @@ Get-Content rules/CI-HARDENING-STANDARDS.md | Select-Object -First 30
 Get-Content rules/TESTING-STANDARDS.md | Select-Object -First 30
 ```
 
-**Key talking point:** These are *living normatives* — they're versioned in git, enforced in CI, and referenced by the verification system. Changing a rule means updating the file AND the CI enforcement.
+**Key talking point:** These are _living normatives_ — they're versioned in git, enforced in CI, and
+referenced by the verification system. Changing a rule means updating the file AND the CI
+enforcement.
 
 ---
 
@@ -190,7 +201,8 @@ wf version
 #   Skills: 125
 ```
 
-**Key talking point:** `VERSION` file is the single source of truth. `release.yml` validates that the pushed tag matches `VERSION`. Drift between tag and file = blocked release.
+**Key talking point:** `VERSION` file is the single source of truth. `release.yml` validates that
+the pushed tag matches `VERSION`. Drift between tag and file = blocked release.
 
 ---
 
@@ -209,6 +221,7 @@ wf version           # v2.6.5: Stack version + skills count
 ## Expected Outcome
 
 Developers leave understanding:
+
 - The pipeline has **zero gaps** — every vector of quality is covered
 - New features are **benchmarked against SLOs** (not just "it works")
 - **Releasing is a single command** (tag + push)

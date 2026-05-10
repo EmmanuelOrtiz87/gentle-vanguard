@@ -3,16 +3,19 @@
 ## Quick Start
 
 ### 1. Load Module
+
 ```powershell
 Import-Module ".\skills\auto-delegation-router\auto-delegation-router.ps1" -Force
 ```
 
 ### 2. Enable Auto-Delegation
+
 ```powershell
 Enable-AutoDelegation
 ```
 
 ### 3. Route Tasks
+
 ```powershell
 $task = "Implement login feature with React"
 $routing = Route-TaskToAgent -TaskDescription $task
@@ -21,12 +24,14 @@ $routing = Route-TaskToAgent -TaskDescription $task
 ## Configuration
 
 ### Enable/Disable
+
 ```powershell
 Enable-AutoDelegation      # Enable
 Disable-AutoDelegation     # Disable
 ```
 
 ### Adjust Threshold
+
 ```powershell
 Set-ConfidenceThreshold -Threshold 70
 ```
@@ -38,19 +43,19 @@ Add to orchestrator initialization:
 ```powershell
 function Invoke-OrchestratorWithAutoRouting {
     param([string]$TaskDescription, [bool]$UseAutoRouting = $true)
-    
+
     if ($UseAutoRouting) {
         $routing = Route-TaskToAgent -TaskDescription $TaskDescription
-        
+
         if ($routing.Status -eq "Success") {
             # Dispatch to primary agent
             Invoke-Agent -AgentName $routing.PrimaryAgent -Task $TaskDescription
-            
+
             # Dispatch to secondary agents
             foreach ($agent in $routing.SecondaryAgents) {
                 Invoke-Agent -AgentName $agent -Task $TaskDescription -Mode "Secondary"
             }
-            
+
             Log-Routingdecisión -RoutingResult $routing
         }
     }

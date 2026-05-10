@@ -1,8 +1,8 @@
 ---
 name: nextjs-15-skill
 description: >
-  Next.js 15 App Router patterns: Server Components, Server Actions, data fetching.
-  Trigger: "Next.js", "Next.js 15", "App Router", "Server Component", "Server Action", "next.config".
+  Next.js 15 App Router patterns: Server Components, Server Actions, data fetching. Trigger:
+  "Next.js", "Next.js 15", "App Router", "Server Component", "Server Action", "next.config".
 ---
 
 ## When to Use
@@ -38,7 +38,7 @@ import { db } from '@/lib/db';
 
 export default async function Page() {
   const users = await db.user.findMany();
-  
+
   return (
     <main>
       <h1>Users</h1>
@@ -62,7 +62,7 @@ import { useState } from 'react';
 
 export function Counter() {
   const [count, setCount] = useState(0);
-  
+
   return (
     <button onClick={() => setCount(c => c + 1)}>
       Count: {count}
@@ -83,9 +83,9 @@ import { db } from '@/lib/db';
 
 export async function createUser(formData: FormData) {
   const name = formData.get('name') as string;
-  
+
   await db.user.create({ data: { name } });
-  
+
   revalidatePath('/users');
   redirect('/users');
 }
@@ -108,8 +108,8 @@ export default function NewUserPage() {
 ```typescript
 // Parallel fetching
 const [users, posts] = await Promise.all([
-  fetch('/api/users').then(r => r.json()),
-  fetch('/api/posts').then(r => r.json())
+  fetch('/api/users').then((r) => r.json()),
+  fetch('/api/posts').then((r) => r.json()),
 ]);
 
 // Sequential
@@ -140,15 +140,15 @@ export async function POST(req: NextRequest) {
 
 ```typescript
 // app/users/[id]/page.tsx
-export default async function UserPage({ 
-  params 
+export default async function UserPage({
+  params
 }: { params: { id: string } }) {
   const user = await db.user.findUnique({
     where: { id: params.id }
   });
-  
+
   if (!user) notFound();
-  
+
   return <div>{user.name}</div>;
 }
 ```
@@ -163,27 +163,26 @@ import type { NextRequest } from 'next/server';
 export function middleware(req: NextRequest) {
   // Check auth
   const token = req.cookies.get('token');
-  
+
   if (!token && req.nextUrl.pathname.startsWith('/dashboard')) {
     return NextResponse.redirect(new URL('/login', req.url));
   }
-  
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/admin/:path*']
+  matcher: ['/dashboard/:path*', '/admin/:path*'],
 };
 ```
 
 ## Quick Reference
 
-| Pattern | Code |
-|---------|------|
-| Server Component | Default (no 'use client') |
-| Client Component | 'use client' at top |
-| Server Action | 'use server' in async function |
-| Route Handler | app/api/*/route.ts |
-| Revalidate | revalidatePath('/path') |
-| Redirect | redirect('/path') |
-
+| Pattern          | Code                           |
+| ---------------- | ------------------------------ |
+| Server Component | Default (no 'use client')      |
+| Client Component | 'use client' at top            |
+| Server Action    | 'use server' in async function |
+| Route Handler    | app/api/\*/route.ts            |
+| Revalidate       | revalidatePath('/path')        |
+| Redirect         | redirect('/path')              |

@@ -4,7 +4,8 @@ Audience: Executive Council + Small Developer Team
 
 ## Summary
 
-This is a single end-to-end simulation that starts from a realistic business request and finishes with implementation, review, audit, and session closure.
+This is a single end-to-end simulation that starts from a realistic business request and finishes
+with implementation, review, audit, and session closure.
 
 ## Simulated Request Narrative
 
@@ -39,11 +40,12 @@ Or directly:
 ```
 
 This will:
--  Terminate any active sessions
--  Clean all task-tracker data (tasks.json)
--  Remove session/context artifacts
--  Re-run preflight to restore clean state
--  Verify all tools are ready
+
+- Terminate any active sessions
+- Clean all task-tracker data (tasks.json)
+- Remove session/context artifacts
+- Re-run preflight to restore clean state
+- Verify all tools are ready
 
 Then you can run the demo again without failures or warnings.
 
@@ -56,6 +58,7 @@ Then you can run the demo again without failures or warnings.
 ```
 
 This script will:
+
 - Verify Go and Git are installed.
 - Activate the orchestrator if needed.
 - Verify task-tracker can run.
@@ -66,7 +69,8 @@ After preflight, proceed with the recipe steps:
 1. Open terminal at repository root.
 2. Confirm stack status: `./scripts/utilities/wf.ps1 status`
 3. Start session with a meaningful task name.
-4. If you plan to show Step 4 (Engram segment) live, the preflight already verified availability. No additional setup needed.
+4. If you plan to show Step 4 (Engram segment) live, the preflight already verified availability. No
+   additional setup needed.
 
 ```powershell
 ./scripts/utilities/wf.ps1 status
@@ -221,4 +225,5 @@ Expected outcome:
 1. This cookbook intentionally prioritizes operational simplicity over product complexity.
 2. Use this as the default showcase for mixed audience sessions.
 3. If a shorter demo is needed, execute Step 1, Step 2, Step 5, and Executive Talking Points.
-4. Step 4 is optional for environments where Engram should not be demonstrated live; the rest of the demo remains fully runnable.
+4. Step 4 is optional for environments where Engram should not be demonstrated live; the rest of the
+   demo remains fully runnable.

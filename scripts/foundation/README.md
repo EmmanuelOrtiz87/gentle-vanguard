@@ -4,14 +4,14 @@ Scripts for installing and maintaining the foundation.
 
 ## Scripts
 
-| Script | Description |
-|--------|-------------|
-| `setup.sh` | Cross-platform foundation setup entrypoint (Linux/macOS/WSL) |
-| `bootstrap-machine.ps1` | Install foundation globally on machine |
-| `bootstrap-workspace.ps1` | Bootstrap workspace with skills and tools |
-| `bootstrap.ps1` | Main bootstrap script |
-| `sync-skills.ps1` | Sync skills from source to global |
-| `wf.ps1` | Main CLI entry point (alias: gf) |
+| Script                    | Description                                                  |
+| ------------------------- | ------------------------------------------------------------ |
+| `setup.sh`                | Cross-platform foundation setup entrypoint (Linux/macOS/WSL) |
+| `bootstrap-machine.ps1`   | Install foundation globally on machine                       |
+| `bootstrap-workspace.ps1` | Bootstrap workspace with skills and tools                    |
+| `bootstrap.ps1`           | Main bootstrap script                                        |
+| `sync-skills.ps1`         | Sync skills from source to global                            |
+| `wf.ps1`                  | Main CLI entry point (alias: gf)                             |
 
 ## Usage
 

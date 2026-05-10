@@ -6,18 +6,17 @@
 
 Use these commands to control your development session:
 
-| Command | Description | When to Use |
-|---------|-------------|-------------|
-| `Continuar` | Resume work, check context | Start of day |
-| `Estado` | Show project status | Check progress |
-| `Guardar` | Commit & push changes | Before breaks |
-| `Review` | Run code review | Before PR |
-| `PR` | Create pull request | Ready to merge |
-| `Health` | Check system health & activate tools | Troubleshooting |
-| `Start Session` | Create session brief and optional task brief | Beginning work |
-| `End Session` | Run closure checks and generate delivery closure artifact | End of day |
-| `Agent <NAME> <TASK>` | Delegate to specialized sub-agent (BA/SAD/DEV/QA/OPS/GOV/DOC) | Parallel work |
-
+| Command               | Description                                                   | When to Use     |
+| --------------------- | ------------------------------------------------------------- | --------------- |
+| `Continuar`           | Resume work, check context                                    | Start of day    |
+| `Estado`              | Show project status                                           | Check progress  |
+| `Guardar`             | Commit & push changes                                         | Before breaks   |
+| `Review`              | Run code review                                               | Before PR       |
+| `PR`                  | Create pull request                                           | Ready to merge  |
+| `Health`              | Check system health & activate tools                          | Troubleshooting |
+| `Start Session`       | Create session brief and optional task brief                  | Beginning work  |
+| `End Session`         | Run closure checks and generate delivery closure artifact     | End of day      |
+| `Agent <NAME> <TASK>` | Delegate to specialized sub-agent (BA/SAD/DEV/QA/OPS/GOV/DOC) | Parallel work   |
 
 ## 🔧 Automatic Tool Activation
 
@@ -25,21 +24,21 @@ The Gentleman Foundation automatically ensures all development tools are active 
 
 ### Auto-Activation Triggers
 
-| Trigger | Action | Notes |
-|---------|--------|-------|
-| **Pre-commit** | Tools validated before each commit | Runs automatically |
-| **Session start** | Session brief artifacts are generated | Daily workflow |
+| Trigger                | Action                                 | Notes                 |
+| ---------------------- | -------------------------------------- | --------------------- |
+| **Pre-commit**         | Tools validated before each commit     | Runs automatically    |
+| **Session start**      | Session brief artifacts are generated  | Daily workflow        |
 | **RED context health** | Orchestrator auto-runs `compact-start` | Recovers lost context |
-| **Manual** | Use `wf.ps1 health` anytime | On-demand check |
+| **Manual**             | Use `wf.ps1 health` anytime            | On-demand check       |
 
 ### Tools Activated
 
-| Tool | Purpose | Status Check |
-|------|---------|---------------|
-| **Engram** | Memory system for context persistence | `mem_context` |
-| **Native Review Engine** | Foundation code quality validation | Runs on commit |
-| **Native Runtime Orchestrator** | Policy-driven execution and guidance | `wf.ps1 status` |
-| **Orchestrator Skills** | Project coordination system | Auto-loaded |
+| Tool                            | Purpose                               | Status Check    |
+| ------------------------------- | ------------------------------------- | --------------- |
+| **Engram**                      | Memory system for context persistence | `mem_context`   |
+| **Native Review Engine**        | Foundation code quality validation    | Runs on commit  |
+| **Native Runtime Orchestrator** | Policy-driven execution and guidance  | `wf.ps1 status` |
+| **Orchestrator Skills**         | Project coordination system           | Auto-loaded     |
 
 ### Manual Activation Commands
 
@@ -64,14 +63,11 @@ The Gentleman Foundation automatically ensures all development tools are active 
 .\scripts\utilities\auto-init-dev-environment.ps1
 ```
 
-
 ## 📋 Workflow
 
 ### 0. Workspace Hygiene Checklist
 
 Before starting work, ensure your workspace is clean:
-
-
 
 ### 1. Session Start
 
@@ -87,22 +83,22 @@ Before starting work, ensure your workspace is clean:
 
 The orchestrator automatically detects:
 
-| Detection | Action |
-|-----------|--------|
-| **Project type** | Identifies stack (Node, Go, Python, etc.) |
-| **Tech stack** | Detects frameworks and libraries |
-| **Available skills** | Loads relevant skills for the project |
-| **Git branch status** | Shows current branch and status |
+| Detection             | Action                                    |
+| --------------------- | ----------------------------------------- |
+| **Project type**      | Identifies stack (Node, Go, Python, etc.) |
+| **Tech stack**        | Detects frameworks and libraries          |
+| **Available skills**  | Loads relevant skills for the project     |
+| **Git branch status** | Shows current branch and status           |
 
 **Step 2.1: Context Efficiency Assist**
 
 When health is degraded, the system helps you recover:
 
-| Health Status | Action |
-|---------------|--------|
-| **WARN/YELLOW** | CLI shows live guidance |
-| **RED** | Orchestrator auto-runs `compact-start` before session brief |
-| **Manual fallback** | `.\scripts\utilities\wf.ps1 compact-start "<objective>"` |
+| Health Status       | Action                                                      |
+| ------------------- | ----------------------------------------------------------- |
+| **WARN/YELLOW**     | CLI shows live guidance                                     |
+| **RED**             | Orchestrator auto-runs `compact-start` before session brief |
+| **Manual fallback** | `.\scripts\utilities\wf.ps1 compact-start "<objective>"`    |
 
 **Step 3: Memory Check**
 
@@ -117,12 +113,9 @@ mem_context
 
 Check these files were created:
 
-
 **Step 5: Status Presentation**
 
 The system will show:
-
-
 
 ### 2. During Work
 
@@ -137,46 +130,42 @@ Follow these steps for each task:
 
 **Tips:**
 
-
-
 ### 3. Before Push/PR
 
 **Pre-Push Checklist:**
 
 ```markdown
-1. ✅ Run: wf.ps1 review           # Code review
-2. ✅ Generate: Audit document     # wf.ps1 audit
+1. ✅ Run: wf.ps1 review # Code review
+2. ✅ Generate: Audit document # wf.ps1 audit
 3. ✅ Check: Specification complete?
-4. ✅ Optional: wf.ps1 push       # Guided commit/push
+4. ✅ Optional: wf.ps1 push # Guided commit/push
 5. ❓ Ask: Create PR?
 ```
-
 
 ### 4. Code Review (7 Dimensions)
 
 The Native Review Engine checks these dimensions:
 
-| # | Dimension | Severity | Auto-Check |
-|---|-----------|----------|------------|
-| 1 | **Security** | CRITICAL/HIGH | ✅ Yes |
-| 2 | **Quality** | HIGH/MEDIUM | ✅ Yes |
-| 3 | **Architecture** | MEDIUM | ❌ No |
-| 4 | **Testing** | MEDIUM | ❌ No |
-| 5 | **Documentation** | LOW | ❌ No |
-| 6 | **API Design** | MEDIUM | ❌ No |
-| 7 | **Git Workflow** | LOW | ❌ No |
-
+| #   | Dimension         | Severity      | Auto-Check |
+| --- | ----------------- | ------------- | ---------- |
+| 1   | **Security**      | CRITICAL/HIGH | ✅ Yes     |
+| 2   | **Quality**       | HIGH/MEDIUM   | ✅ Yes     |
+| 3   | **Architecture**  | MEDIUM        | ❌ No      |
+| 4   | **Testing**       | MEDIUM        | ❌ No      |
+| 5   | **Documentation** | LOW           | ❌ No      |
+| 6   | **API Design**    | MEDIUM        | ❌ No      |
+| 7   | **Git Workflow**  | LOW           | ❌ No      |
 
 ### 5. Review Findings decisión
 
 How to handle findings based on severity:
 
-| Severity | Icon | Action | Blocking |
-|----------|------|--------|----------|
-| **CRITICAL** | `[X]` | Block immediately, fix now | ✅ Yes |
-| **HIGH** | `[!]` | Must fix before PR | ✅ Yes |
-| **MEDIUM** | `[-]` | Your choice (fix/review) | ❌ No |
-| **LOW** | `[*]` | Optional fixes | ❌ No |
+| Severity     | Icon  | Action                     | Blocking |
+| ------------ | ----- | -------------------------- | -------- |
+| **CRITICAL** | `[X]` | Block immediately, fix now | ✅ Yes   |
+| **HIGH**     | `[!]` | Must fix before PR         | ✅ Yes   |
+| **MEDIUM**   | `[-]` | Your choice (fix/review)   | ❌ No    |
+| **LOW**      | `[*]` | Optional fixes             | ❌ No    |
 
 **decisión Flow:**
 
@@ -195,21 +184,19 @@ LOW found:
   → Can proceed with PR
 ```
 
-
 ## 📚 Commands Reference
 
 ### Orchestrator Commands (Natural Language)
 
 Use these in conversation with the AI agent:
 
-| Command | Description | Example |
-|---------|-------------|---------|
+| Command     | Description                | Example                          |
+| ----------- | -------------------------- | -------------------------------- |
 | `Continuar` | Resume work, check context | "Continuar with the auth module" |
-| `Estado` | Show project status | "Estado of the API project" |
-| `Guardar` | Commit & push changes | "Guardar these changes" |
-| `Review` | Run code review | "Review my last commit" |
-| `PR` | Create pull request | "PR for the feature branch" |
-
+| `Estado`    | Show project status        | "Estado of the API project"      |
+| `Guardar`   | Commit & push changes      | "Guardar these changes"          |
+| `Review`    | Run code review            | "Review my last commit"          |
+| `PR`        | Create pull request        | "PR for the feature branch"      |
 
 ### CLI Commands (PowerShell)
 
@@ -263,7 +250,6 @@ Use these in conversation with the AI agent:
 .\scripts\utilities\wf.ps1 health -StrictCleanup
 ```
 
-
 ### Git Commands
 
 **Basic Workflow:**
@@ -297,7 +283,6 @@ gh pr list
 gh pr status
 ```
 
-
 ## 🤖 Workflow Automation
 
 ### Automated wf.ps1 Workflow
@@ -320,18 +305,18 @@ Standard flow for validation and publishing:
 
 **Pro Tip:** Use `wf.ps1 publish` to run all steps with governance gates automatically.
 
-
 ### Git Hooks (Automatic)
 
 Git hooks run automatically during Git operations:
 
-| Hook | Trigger | Actions | Can Override? |
-|------|---------|---------|----------------|
-| **pre-commit** | `git commit` | Secrets scan, format check, project validation | ❌ No |
-| **pre-push** | `git push` | Native review + GitFlow policy + governance + homologation drift gate | ⚠️ With `-n` |
-| **commit-msg** | `git commit` | Commit message validation (conventional commits) | ❌ No |
+| Hook           | Trigger      | Actions                                                               | Can Override? |
+| -------------- | ------------ | --------------------------------------------------------------------- | ------------- |
+| **pre-commit** | `git commit` | Secrets scan, format check, project validation                        | ❌ No         |
+| **pre-push**   | `git push`   | Native review + GitFlow policy + governance + homologation drift gate | ⚠️ With `-n`  |
+| **commit-msg** | `git commit` | Commit message validation (conventional commits)                      | ❌ No         |
 
-**Note:** Hook installation depends on local Git hook wiring. Canonical script paths are under `scripts/git-hooks/`.
+**Note:** Hook installation depends on local Git hook wiring. Canonical script paths are under
+`scripts/git-hooks/`.
 
 **Manual hook setup (if needed):**
 
@@ -343,13 +328,11 @@ cp scripts/git-hooks/* .git/hooks/
 chmod +x .git/hooks/*
 ```
 
-
 ## ✅ Best Practices
 
 ### Before Any Commit
 
 Run through this checklist:
-
 
 **Quick Command:**
 
@@ -360,11 +343,9 @@ git add .
 git commit -m "feat(scope): description"
 ```
 
-
 ### Before Any PR
 
 Ensure these are complete:
-
 
 **Quick Command:**
 
@@ -375,11 +356,9 @@ wf.ps1 pr
 gh pr create
 ```
 
-
 ### Before Push
 
 Final checks:
-
 
 **Quick Command:**
 
@@ -388,7 +367,6 @@ Final checks:
 wf.ps1 push  # Shows guided commands
 git push -u origin feature/my-feature
 ```
-
 
 ## Questions to Ask
 
@@ -412,7 +390,4 @@ Code review findings?
 Create a PR or keep working?
 ```
 
-
 ## Resources
-
-

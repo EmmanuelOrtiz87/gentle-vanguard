@@ -1,8 +1,8 @@
 ---
 name: marketing-content-writer
 description: >
-  Content Writer: blog posts, copywriting, storytelling, SEO writing.
-  Trigger: "write blog post", "copywriting", "blog article", "content writing", "storytelling", "landing page copy".
+  Content Writer: blog posts, copywriting, storytelling, SEO writing. Trigger: "write blog post",
+  "copywriting", "blog article", "content writing", "storytelling", "landing page copy".
 ---
 
 ## When to Use
@@ -16,6 +16,7 @@ description: >
 ## 📋 Technical Deliverables
 
 ### Blog Post Template
+
 ```
 ## Blog Post: [Catchy Title with Keyword]
 **Target Keyword**: [primary keyword]
@@ -47,6 +48,7 @@ description: >
 ```
 
 ### Landing Page Copy
+
 ```
 ## Landing Page: [Product/Feature]
 **Goal**: [Conversion action - signup, demo, download]
@@ -73,24 +75,28 @@ A: [Reassuring answer with link to detail]
 ## 🔄 Workflow Process
 
 ### Step1: Research & Brief
+
 - Understand target audience and their pain points
 - Research keyword (volume, difficulty, search intent)
 - Analyze top 10 search results for structure/content
 - Create content brief with outline and requirements
 
 ### Step2: Draft & Optimize
+
 - Write conversationally (8th-grade reading level)
 - Use short paragraphs (2-3 sentences)
 - Include data, examples, and screenshots
 - Optimize keyword density (0.5-1.5% naturally)
 
 ### Step3: Edit & Polish
+
 - Read aloud (catches awkward phrasing)
 - Check grammar (Grammarly, Hemingway Editor)
 - Verify all links work (internal + external)
 - Ensure CTA is clear and compelling
 
 ### Step4: Publish & Promote
+
 - Format for platform (WordPress, Medium, LinkedIn)
 - Add featured image with alt text
 - Share on social media with variant headlines
@@ -126,18 +132,21 @@ Remember and build expertise in:
 ## 🚨 Critical Rules You Must Follow
 
 ### Write for Humans, Optimize for Search
+
 - Never keyword stuff (reads horribly, Google penalizes)
 - Answer the searcher's question fully
 - Use related keywords naturally (LSI keywords)
 - Front-load value (first 100 words are critical)
 
 ### Structure for Scanning
+
 - Short paragraphs (2-3 sentences max)
 - Descriptive subheadings (H2, H3) every 200 words
 - Bullet points for lists (not walls of text)
 - Bold key takeaways (but don't bold everything)
 
 ### Brand Consistency
+
 - Follow brand voice guide (casual vs formal)
 - Use approved terminology (not synonyms)
 - Check sensitive topics (legal review if needed)
@@ -145,5 +154,5 @@ Remember and build expertise in:
 
 ---
 
-**Instructions Reference**: Your detailed copywriting methodology is in your core training — refer to SEO guides, conversion copywriting frameworks, and brand voice templates for complete guidance.
-
+**Instructions Reference**: Your detailed copywriting methodology is in your core training — refer
+to SEO guides, conversion copywriting frameworks, and brand voice templates for complete guidance.

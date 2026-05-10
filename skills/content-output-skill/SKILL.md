@@ -1,19 +1,17 @@
 ---
 name: content-output-skill
 description: >
-  Unified content generation skill for all output types: technical documentation,
-  internal reports, marketing content, social media posts, persuasive copy,
-  storytelling, speeches, and external communication. Covers complete content
-  lifecycle: strategy  creation  distribution  metrics.
-  Trigger: "post", "twitter", "linkedin", "redes", "social", "marketing", "promocionar",
-  "publicar", "anuncio", "lanzamiento", "demo", "video", "branding", "logo",
-  "copywriting", "persuasivo", "storytelling", "discurso", "presentacion", "expo",
-  "congreso", "workshop", "reddit", "discord", "whatsapp", "informe", "report",
-  "reporte", "documentación", "docs", "publicacion", "comunicacion"
+  Unified content generation skill for all output types: technical documentation, internal reports,
+  marketing content, social media posts, persuasive copy, storytelling, speeches, and external
+  communication. Covers complete content lifecycle: strategy  creation  distribution  metrics.
+  Trigger: "post", "twitter", "linkedin", "redes", "social", "marketing", "promocionar", "publicar",
+  "anuncio", "lanzamiento", "demo", "video", "branding", "logo", "copywriting", "persuasivo",
+  "storytelling", "discurso", "presentacion", "expo", "congreso", "workshop", "reddit", "discord",
+  "whatsapp", "informe", "report", "reporte", "documentación", "docs", "publicacion", "comunicacion"
 license: Apache-2.0
 metadata:
   author: workspace-local
-  versión: "3.0"
+  versión: '3.0'
 ---
 
 # Content Output Skill (v3.0)
@@ -21,26 +19,27 @@ metadata:
 ## Purpose
 
 Unified skill for generating all types of content output from Foundation:
+
 - **Technical Docs**: API docs, README, guides, references
 - **Internal Reports**: Session metrics, costs, performance
 - **External Communication**: Marketing, social media, presentations
 - **Speeches**: Conferences, workshops, demos
 
-Part of the workflow: Input  Processing  Output (Docs + Communication)
+Part of the workflow: Input Processing Output (Docs + Communication)
 
 ## Content Types
 
-| Type | Platform | Format | Purpose |
-|------|----------|--------|---------|
-| **Tweet/X** | Twitter/X | 280 chars + thread | Quick announcement, engagement |
-| **LinkedIn** | LinkedIn | 3000 chars + media | Professional reach, B2B |
-| **Instagram** | Instagram | Caption + hashtags | Visual brand |
-| **Reddit** | Reddit | Text + links | Community discussion, feedback |
-| **Discord** | Discord | Embed + CTA | Community engagement |
-| **WhatsApp** | WhatsApp | Broadcast message | Direct reach, groups |
-| **Blog Post** | Web | MD  HTML | SEO, deep content |
-| **Demo Script** | Video | 2-3 min | Product demo |
-| **Speech** | Presentations | 5-30 min | Conferences, workshops |
+| Type            | Platform      | Format             | Purpose                        |
+| --------------- | ------------- | ------------------ | ------------------------------ |
+| **Tweet/X**     | Twitter/X     | 280 chars + thread | Quick announcement, engagement |
+| **LinkedIn**    | LinkedIn      | 3000 chars + media | Professional reach, B2B        |
+| **Instagram**   | Instagram     | Caption + hashtags | Visual brand                   |
+| **Reddit**      | Reddit        | Text + links       | Community discussion, feedback |
+| **Discord**     | Discord       | Embed + CTA        | Community engagement           |
+| **WhatsApp**    | WhatsApp      | Broadcast message  | Direct reach, groups           |
+| **Blog Post**   | Web           | MD HTML            | SEO, deep content              |
+| **Demo Script** | Video         | 2-3 min            | Product demo                   |
+| **Speech**      | Presentations | 5-30 min           | Conferences, workshops         |
 
 ---
 
@@ -48,13 +47,13 @@ Part of the workflow: Input  Processing  Output (Docs + Communication)
 
 ### Types (from `documentation-skill`)
 
-| Type | Purpose | Output |
-|------|---------|--------|
-| **README** | Project entry point | `README.md` |
-| **API Docs** | Auto-generated from code | OpenAPI/Swagger |
-| **Guides** | How-to tutorials | `docs/guides/*.md` |
-| **Reference** | Technical specs | `docs/reference/*.md` |
-| **Changelog** | versión history | `CHANGELOG.md` |
+| Type          | Purpose                  | Output                |
+| ------------- | ------------------------ | --------------------- |
+| **README**    | Project entry point      | `README.md`           |
+| **API Docs**  | Auto-generated from code | OpenAPI/Swagger       |
+| **Guides**    | How-to tutorials         | `docs/guides/*.md`    |
+| **Reference** | Technical specs          | `docs/reference/*.md` |
+| **Changelog** | versión history          | `CHANGELOG.md`        |
 
 ### Documentation Standards
 
@@ -71,6 +70,7 @@ PREFER:
 ```
 
 ### See Also
+
 - `skills/documentation-governance/SKILL.md` - Full governance rules
 - `docs/TOKEN-CONTEXT-STANDARDS.md` - Detailed standards
 
@@ -80,12 +80,12 @@ PREFER:
 
 ### Types
 
-| Type | Trigger | Output |
-|------|---------|--------|
-| **Session Report** | "informe sesiónes" | `docs/sessions/metrics/` |
-| **Cost Report** | "informe costos" | Token usage, USD |
-| **Performance** | "informe performance" | Velocity metrics |
-| **Executive** | "resumen ejecutivo" | Board-ready summary |
+| Type               | Trigger               | Output                   |
+| ------------------ | --------------------- | ------------------------ |
+| **Session Report** | "informe sesiónes"    | `docs/sessions/metrics/` |
+| **Cost Report**    | "informe costos"      | Token usage, USD         |
+| **Performance**    | "informe performance" | Velocity metrics         |
+| **Executive**      | "resumen ejecutivo"   | Board-ready summary      |
 
 ### Quick Commands
 
@@ -101,6 +101,7 @@ PREFER:
 ```
 
 ### See Also
+
 - `skills/reporting-skill/SKILL.md` - Full reporting details
 
 ---
@@ -110,6 +111,7 @@ PREFER:
 ### Frameworks
 
 #### AIDA (Attention, Interest, Desire, Action)
+
 ```
 A - Attention: Hook inicial shocking o pregunta
 I - Interest: Desarrollar con datos/historias
@@ -118,6 +120,7 @@ A - Action: CTA claro
 ```
 
 #### PAS (Problem, Agitation, Solution)
+
 ```
 P - Problem: Describir el dolor del usuario
 A - Agitation: Intensificar sin resolver
@@ -125,6 +128,7 @@ S - Solution: Presentar Foundation como solucin
 ```
 
 #### BAB (Before, After, Bridge)
+
 ```
 B - Before: Estado actual del usuario
 A - After: Estado deseada con Foundation
@@ -143,6 +147,7 @@ B - Bridge: Cmo llegar del Before al After
 ### Templates Persuasivos
 
 #### Announce Feature
+
 ```
  [PROBLEMA QUE RESUELVE]
 
@@ -158,9 +163,10 @@ B - Bridge: Cmo llegar del Before al After
 ```
 
 #### Testimonial Request
+
 ```
-Ya usas Foundation? 
-Cuntanos tu experiencia 
+Ya usas Foundation?
+Cuntanos tu experiencia
 
 Tu feedback nos ayuda a mejorar.
 [#FoundationStack]
@@ -173,6 +179,7 @@ Tu feedback nos ayuda a mejorar.
 ### Struktura deHistoria
 
 #### Hero's Journey Adaptado
+
 ```
 1. ORDINARIO: El developer sin herramientas
 2. LLAMADO: Descubrir Foundation
@@ -185,13 +192,14 @@ Tu feedback nos ayuda a mejorar.
 ### Story Formats
 
 #### Thread de Twitter
+
 ```
  1/x
 Cmo pas de 0 a 100 tasks/semana con AI...
 
 [SETUP - contexto breve]
 
-Thread 
+Thread
 
 2/x
 El problema: context hell, sesiónes perdidas...
@@ -207,6 +215,7 @@ Ento encontr Foundation:
 ```
 
 #### LinkedIn Story Post
+
 ```
  De developer frustrado a 10x productivity
 
@@ -223,7 +232,7 @@ Hoy:
 
 El cambio no fue el tool. Fue el sistema.
 
-Thread below 
+Thread below
 
 #Productivity #AI #Development
 ```
@@ -235,6 +244,7 @@ Thread below
 ### estructura de Discurso
 
 #### Opening (30-60 segundos)
+
 ```
 [HOOK]
 "Cuntas veces han perdido 30min recapitando lo que hicieron ayer?"
@@ -250,6 +260,7 @@ Thread below
 ```
 
 #### Presentacin tech conference (15 min)
+
 ```
 0:00-1:00  Hook + Introduccin
 1:00-4:00  Problema (con datos)
@@ -260,6 +271,7 @@ Thread below
 ```
 
 #### Workshop intro (30 min)
+
 ```
 0:00-5:00   Por qu aqu (pain compartido)
 5:00-12:00  Conceptos core
@@ -278,6 +290,7 @@ Thread below
 ## Foundation Stack Description Templates
 
 ### Short (Twitter/X - 280 chars)
+
 ```
 # FoundationStack
  AI Development Workspace
@@ -289,6 +302,7 @@ Thread below
 ```
 
 ### Medium (LinkedIn - 2-3 paragraphs)
+
 ```
  Presentando Foundation: Mi AI Development Workspace
 
@@ -306,6 +320,7 @@ Ideal para equipos que usan AI assistants (OpenCode, Claude, Cursor).
 ```
 
 ### Long (Blog Post)
+
 Ver: `docs/marketing/foundation-stack-blog-post.md`
 
 ---
@@ -315,6 +330,7 @@ Ver: `docs/marketing/foundation-stack-blog-post.md`
 ### Reddit (r/programming, r/devops, r/ArtificialIntelligence)
 
 #### Post Types
+
 ```
 - SHOW_RHNTHONIC: "I built X, feedback?" [Screenshots + code]
 - QUESTION: "[Topic] - best practices?" [Context + specific Q]
@@ -323,6 +339,7 @@ Ver: `docs/marketing/foundation-stack-blog-post.md`
 ```
 
 #### Reddit Template
+
 ```
 **Context**: [Brief background - 2-3 lines]
 
@@ -330,7 +347,7 @@ Ver: `docs/marketing/foundation-stack-blog-post.md`
 
 **The problem it solves**: [Pain point]
 
-**Looking for**: 
+**Looking for**:
 - Feedback on [specific areas]
 - Suggestións for [improvements]
 - Questions welcome
@@ -343,6 +360,7 @@ Ver: `docs/marketing/foundation-stack-blog-post.md`
 ### Discord (Community Servers)
 
 #### Message Types
+
 ```
 - ANNOUNCEMENT: New feature release with emoji + links
 - QUESTION: Thread con preguntas especficas
@@ -351,6 +369,7 @@ Ver: `docs/marketing/foundation-stack-blog-post.md`
 ```
 
 #### Discord Template
+
 ```
  **Nuevo en Foundation [v2.x]**
 
@@ -371,6 +390,7 @@ Ver: `docs/marketing/foundation-stack-blog-post.md`
 ### WhatsApp (Broadcasts + Groups)
 
 #### Message Types
+
 ```
 - BROADCAST: Announcement short + link
 - GROUP: Discussion topic
@@ -378,6 +398,7 @@ Ver: `docs/marketing/foundation-stack-blog-post.md`
 ```
 
 #### WhatsApp Template
+
 ```
  Foundation Update v2.x
 
@@ -385,7 +406,7 @@ Ver: `docs/marketing/foundation-stack-blog-post.md`
 
  [Link to full post]
 
-Preguntas? Responde aqu 
+Preguntas? Responde aqu
 #FoundationStack
 ```
 
@@ -394,51 +415,53 @@ Preguntas? Responde aqu
 ## Logo & Branding
 
 ### Foundation Logo (Text-based)
+
 ```
 
-                                        
-               
-             
-             
-           
-         
-           
-                                        
-     F O U N D A T I O N           
-                                        
+
+
+
+
+
+
+
+
+     F O U N D A T I O N
+
 
 ```
 
 ### ASCII Art Alternative
+
 ```
- 
-                             
-        
-  
-          
-          
-    
-        
-       FOUNDATION        
- 
+
+
+
+
+
+
+
+
+       FOUNDATION
+
 ```
 
 ## Hashtags
 
-| Category | Hashtags |
-|----------|---------|
-| Stack | #FoundationStack #AIDevelopment |
-| Tools | #OpenCode #Claude #Cursor |
-| Spanish | #DevES #desarrolloES |
-| General | #DevTools #AI #Productivity |
+| Category | Hashtags                        |
+| -------- | ------------------------------- |
+| Stack    | #FoundationStack #AIDevelopment |
+| Tools    | #OpenCode #Claude #Cursor       |
+| Spanish  | #DevES #desarrolloES            |
+| General  | #DevTools #AI #Productivity     |
 
 ## Posting Schedule
 
-| Day | Content |
-|-----|--------|
-| Monday | Feature highlight |
-| Wednesday | Tutorial/Tip |
-| Friday | Week recap |
+| Day       | Content           |
+| --------- | ----------------- |
+| Monday    | Feature highlight |
+| Wednesday | Tutorial/Tip      |
+| Friday    | Week recap        |
 
 ## Best Practices
 
@@ -470,7 +493,5 @@ Preguntas? Responde aqu
 
 ---
 
-*Skill versión: 3.0*  
-*Last updated: 2026-04-27*
-
-
+_Skill versión: 3.0_  
+_Last updated: 2026-04-27_

@@ -1,13 +1,13 @@
 ---
 name: technical-debt-skill
 description: >
-  Technical debt assessment, prioritization, remediation planning, and debt documentation.
-  Trigger: "technical debt", "debt audit", "refactor", "code smell", "anti-pattern",
-  "cleanup", "maintainability", "architecture erosion".
+  Technical debt assessment, prioritization, remediation planning, and debt documentation. Trigger:
+  "technical debt", "debt audit", "refactor", "code smell", "anti-pattern", "cleanup",
+  "maintainability", "architecture erosion".
 license: Apache-2.0
 metadata:
   author: workspace-foundation
-  versión: "1.0"
+  versión: '1.0'
 ---
 
 ## When to Use
@@ -28,6 +28,7 @@ metadata:
 ## Prioritization Model
 
 Rank debt by:
+
 1. Delivery drag: how much it slows feature work
 2. Incident risk: how likely it causes failures
 3. Change frequency: how often the area changes
@@ -41,24 +42,29 @@ Address debt where all four are high.
 # Debt Record: {title}
 
 ## Problem
+
 {What is wrong now?}
 
 ## Impact
+
 - Delivery drag:
 - Risk:
 - Scope:
 
 ## Evidence
+
 - Files/modules:
 - Incidents/bugs:
 - Test gaps:
 
 ## Remediation Options
+
 1. Minimal containment
 2. Local refactor
 3. Broader redesign
 
 ## Recommendation
+
 {Chosen path and why}
 ```
 
@@ -68,5 +74,3 @@ Address debt where all four are high.
 - Bundling debt cleanup into unrelated features with no scope control
 - Large refactors without specs, tests, or rollback plan
 - Treating documentation debt as low priority when onboarding or incident recovery suffers
-
-

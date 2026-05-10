@@ -1,8 +1,10 @@
 ﻿# Adapters & Integration Layer
 
-**Purpose**: Bridge Foundation capabilities to tools outside the Agent Skills standard (Windsurf, Codex, Antigravity, etc.)
+**Purpose**: Bridge Foundation capabilities to tools outside the Agent Skills standard (Windsurf,
+Codex, Antigravity, etc.)
 
 ---
+
 ## Structure
 
 ```
@@ -28,6 +30,7 @@ adapters/
 ```
 
 ---
+
 ## Quick Start
 
 ### 1. Start MCP Bridge (exposes Foundation to any MCP client)
@@ -42,6 +45,7 @@ npm start
 ### 2. Configure your tool to use the MCP server
 
 **Windsurf** (`~/.windsurf/mcp.json`):
+
 ```json
 {
   "mcpServers": {
@@ -54,28 +58,31 @@ npm start
 ```
 
 **Codex** (OpenAI-compatible endpoint):
+
 ```bash
 # Use format-adapter as proxy
 node adapters/format-adapters/codex-adapter/proxy.js
 ```
 
 ---
+
 ## Detection Capabilities
 
 The enhanced detection system identifies:
 
-| Tool | Detection Method | Confidence |
-|------|-----------------|------------|
-| VS Code / Cline | `VSCODE_GIT_IPC_HANDLE`, `TERM_PROGRAM=vscode` | High |
-| OpenCode | `OPENCODE_` env vars, process name | High |
-| Cursor | `CURSOR_` env vars, process name | High |
-| Windsurf | `WINDSURF_` env vars, process name | Medium |
-| Codex | `CODEX_` env vars, terminal detection | Medium |
-| Antigravity | `ANTIGRAVITY_` env vars | Low |
-| JetBrains | `JETBRAINS_IDE`, process detection | Medium |
-| Terminal | `TERM_PROGRAM`, fallback | Low |
+| Tool            | Detection Method                               | Confidence |
+| --------------- | ---------------------------------------------- | ---------- |
+| VS Code / Cline | `VSCODE_GIT_IPC_HANDLE`, `TERM_PROGRAM=vscode` | High       |
+| OpenCode        | `OPENCODE_` env vars, process name             | High       |
+| Cursor          | `CURSOR_` env vars, process name               | High       |
+| Windsurf        | `WINDSURF_` env vars, process name             | Medium     |
+| Codex           | `CODEX_` env vars, terminal detection          | Medium     |
+| Antigravity     | `ANTIGRAVITY_` env vars                        | Low        |
+| JetBrains       | `JETBRAINS_IDE`, process detection             | Medium     |
+| Terminal        | `TERM_PROGRAM`, fallback                       | Low        |
 
 ---
+
 ## Adapter Types
 
 ### 1. MCP Bridge (Recommended)
@@ -83,12 +90,14 @@ The enhanced detection system identifies:
 Converts Foundation into an **MCP Server** that any MCP-compatible tool can use.
 
 **Benefits**:
--  Universal compatibility (any MCP client)
--  Standard protocol (future-proof)
--  Exposes all Foundation capabilities
--  Token-efficient (MCP handles context)
+
+- Universal compatibility (any MCP client)
+- Standard protocol (future-proof)
+- Exposes all Foundation capabilities
+- Token-efficient (MCP handles context)
 
 **Exposed Tools**:
+
 - `foundation_review` - 7D code review
 - `foundation_audit` - Workspace audit
 - `foundation_delegate` - Subagent delegation
@@ -96,22 +105,25 @@ Converts Foundation into an **MCP Server** that any MCP-compatible tool can use.
 - `foundation_session` - Session management
 
 ---
+
 ### 2. Format Adapters
 
 Translates between Foundation's standard format and tool-specific formats.
 
 **When to use**: Tool doesn't support MCP but has its own plugin system.
 
-| Adapter | Input Format | Output Format |
-|---------|--------------|---------------|
-| windsurf-adapter | Foundation SKILL.md | Windsurf plugin format |
-| codex-adapter | Foundation tools | OpenAI function calling |
-| antigravity-adapter | Foundation context | Mission Control format |
+| Adapter             | Input Format        | Output Format           |
+| ------------------- | ------------------- | ----------------------- |
+| windsurf-adapter    | Foundation SKILL.md | Windsurf plugin format  |
+| codex-adapter       | Foundation tools    | OpenAI function calling |
+| antigravity-adapter | Foundation context  | Mission Control format  |
 
 ---
+
 ## Rule: ADAPTER-001
 
 **All adapters must**:
+
 1. Preserve token efficiency (no unnecessary context expansion)
 2. Log all translations (for debugging)
 3. Handle errors gracefully (fallback to basic mode)
@@ -119,18 +131,20 @@ Translates between Foundation's standard format and tool-specific formats.
 5. Support the detection system
 
 ---
+
 ## Implementation Status
 
-| Component | Status | Notes |
-|-----------|--------|-------|
-| MCP Bridge Server | ✅ Ready | Main server implemented (server.ts, tools.ts) |
-| Windsurf Adapter | ✅ Ready | Plugin format converter complete |
-| Codex Adapter | ✅ Ready | OpenAI function calling format complete |
-| Antigravity Adapter | ✅ Ready | Mission Control integration complete |
-| Enhanced Detection | ✅ Ready | Variables env corregidas |
-| Documentation | ✅ Complete | Multi-tool guide created |
+| Component           | Status      | Notes                                         |
+| ------------------- | ----------- | --------------------------------------------- |
+| MCP Bridge Server   | ✅ Ready    | Main server implemented (server.ts, tools.ts) |
+| Windsurf Adapter    | ✅ Ready    | Plugin format converter complete              |
+| Codex Adapter       | ✅ Ready    | OpenAI function calling format complete       |
+| Antigravity Adapter | ✅ Ready    | Mission Control integration complete          |
+| Enhanced Detection  | ✅ Ready    | Variables env corregidas                      |
+| Documentation       | ✅ Complete | Multi-tool guide created                      |
 
 ---
+
 ## Next Steps
 
 1. **Implement MCP Bridge** (highest priority - covers 80% of use cases)
@@ -140,6 +154,7 @@ Translates between Foundation's standard format and tool-specific formats.
 5. **Test end-to-end** with Windsurf, Codex, Antigravity
 
 ---
+
 **Generated**: 2026-04-28  
 **Version**: 1.0.0  
-**Status**:  In Development
+**Status**: In Development
