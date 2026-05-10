@@ -123,21 +123,39 @@ if ($makensis) {
     Write-Output "⚠️  NSIS not found, skipping installer rebuild"
 }
 
-# 6. Copy compiled launcher
-Write-Output "🚀 Syncing compiled launcher..."
-Copy-Item "$buildDir\compiled\Foundation-Launcher.exe" "$publicRepo\Foundation-Launcher.exe" -Force
+# 6. Copy compiled launcher (optional — may not exist if build step hasn't run)
+$launcherSource = "$buildDir\compiled\Foundation-Launcher.exe"
+if (Test-Path $launcherSource) {
+    Write-Output "🚀 Syncing compiled launcher..."
+    Copy-Item $launcherSource "$publicRepo\Foundation-Launcher.exe" -Force
+} else {
+    Write-Output "⚠️  Compiled launcher not found at $launcherSource, skipping"
+}
 
 # 7. Commit and push to public repo
 if (-not $skipPush) {
     Push-Location $publicRepo
+
+    # Detect default branch from remote
+    $remoteBranch = git symbolic-ref refs/remotes/origin/HEAD 2>$null
+    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrEmpty($remoteBranch)) {
+        $defaultBranch = "master"
+    } else {
+        $defaultBranch = $remoteBranch -replace '^refs/remotes/origin/', ''
+    }
+
     git add .
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm"
     $commitMsg = "sync: automated sync from private repo - $timestamp"
     $commitResult = git commit -m $commitMsg 2>&1
     if ($LASTEXITCODE -eq 0) {
         Write-Output "✅ Committed: $commitMsg"
-        git push origin master 2>&1 | Select-Object -First 5
-        Write-Output "✅ Pushed to origin/master"
+        $pushResult = git push origin $defaultBranch 2>&1
+        if ($LASTEXITCODE -eq 0) {
+            Write-Output "✅ Pushed to origin/$defaultBranch"
+        } else {
+            Write-Output "❌ Push failed: $pushResult"
+        }
     } else {
         Write-Output "ℹ️  Nothing to commit — public repo is up to date"
     }
