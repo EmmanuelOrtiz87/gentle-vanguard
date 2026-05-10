@@ -34,63 +34,59 @@ jobs:
         with:
           path: private
 
-      - name: Clone public repo
-        id: clone_public
+      - name: Sync to public repo
+        id: sync
         shell: pwsh
         env:
           PAT_SYNC: ${{ secrets.PAT_SYNC }}
         run: |
           if ([string]::IsNullOrEmpty($env:PAT_SYNC)) {
-            Write-Output "::warning::PAT_SYNC secret is NOT configured in repository secrets."
-            Write-Output "::warning::To fix this:"
-            Write-Output "::warning::  1. Create a classic PAT with 'repo' scope at https://github.com/settings/tokens"
-            Write-Output "::warning::  2. Add it as 'PAT_SYNC' in Settings → Secrets and variables → Actions"
-            Write-Output "pat_available=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-            return
+            Write-Output "::warning::PAT_SYNC secret NOT configured. To fix:"
+            Write-Output "::warning::  1. Create classic PAT (repo scope) at https://github.com/settings/tokens"
+            Write-Output "::warning::  2. Add as 'PAT_SYNC' in Settings → Secrets and variables → Actions"
+            exit 0
           }
+
           $publicDir = "$env:GITHUB_WORKSPACE\public"
+          $privateRepo = "$env:GITHUB_WORKSPACE\private"
+          $authUrl = "https://x-access-token:$env:PAT_SYNC@github.com/EmmanuelOrtiz87/foundation-public.git"
+
+          # --- Clone public repo ---
+          Write-Output "::group::Clone foundation-public"
           New-Item -ItemType Directory -Path $publicDir -Force | Out-Null
           Set-Location $publicDir
           git init
-          git remote add origin https://github.com/EmmanuelOrtiz87/foundation-public.git
-          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $([Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$env:PAT_SYNC")))"
+          git remote add origin $authUrl
           git fetch origin master --depth=1 2>&1
           if ($LASTEXITCODE -ne 0) {
-            Write-Output "::error::Failed to fetch foundation-public. Check PAT_SYNC has correct permissions."
-            Write-Output "pat_available=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+            Write-Output "::error::Failed to fetch foundation-public. Check PAT permissions."
             exit 1
           }
           git checkout -b master FETCH_HEAD
-          Write-Output "pat_available=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-
-      - name: Run sync script
-        if: steps.clone_public.outputs.pat_available == 'true'
-        shell: pwsh
-        run: |
-          $privateRepo = Join-Path $env:GITHUB_WORKSPACE "private"
-          $publicRepo  = Join-Path $env:GITHUB_WORKSPACE "public"
-          & "$privateRepo\scripts\utilities\DEPLOYMENT\sync-to-public.ps1" -privateRepo $privateRepo -publicRepo $publicRepo -skipPush
-        env:
-          PRIVATE_REPO: ${{ github.workspace }}\private
-          PUBLIC_REPO: ${{ github.workspace }}\public
-
-      - name: Push to public repo
-        if: steps.clone_public.outputs.pat_available == 'true'
-        shell: pwsh
-        env:
-          PAT_SYNC: ${{ secrets.PAT_SYNC }}
-        run: |
-          Set-Location "$env:GITHUB_WORKSPACE\public"
           git config --local user.name "foundation-bot"
           git config --local user.email "bot@gentleman-foundation"
+          Write-Output "::endgroup::"
+
+          # --- Run sync script ---
+          Write-Output "::group::Sync files"
+          & "$privateRepo\scripts\utilities\DEPLOYMENT\sync-to-public.ps1" -privateRepo $privateRepo -publicRepo $publicDir -skipPush
+          Write-Output "::endgroup::"
+
+          # --- Commit and push ---
+          Write-Output "::group::Push to foundation-public"
           $hasChanges = git status --porcelain
           if ([string]::IsNullOrEmpty($hasChanges)) {
             Write-Output "ℹ️  Nothing to push — public repo is up to date"
-            return
+            exit 0
           }
           git add -A
           $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm"
           git commit -m "sync: automated sync from private repo - $timestamp"
-          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $([Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$env:PAT_SYNC")))"
           git push origin master 2>&1
-          Write-Output "✅ Pushed to foundation-public master"
+          if ($LASTEXITCODE -eq 0) {
+            Write-Output "✅ Pushed to foundation-public master"
+          } else {
+            Write-Output "::error::Push failed (exit code $LASTEXITCODE)"
+            exit 1
+          }
+          Write-Output "::endgroup::"
