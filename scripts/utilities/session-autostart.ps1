@@ -51,7 +51,7 @@ foreach ($step in $steps) {
     $scriptId = $step.id
     $scriptPath = Join-Path $repoRoot $step.script
     $scriptArgs = $step.args
-    $isRequired = $step.required
+    $isRequired = [bool]$step.required
 
     Write-Step $stepNum $totalSteps "$scriptId..."
 
@@ -66,8 +66,9 @@ foreach ($step in $steps) {
     }
 
     try {
-        if ($scriptArgs) {
-            $result = & $scriptPath $scriptArgs.Split(' ') 2>&1
+        if ($scriptArgs -and $scriptArgs.Trim()) {
+            $invokeCmd = "& `"$scriptPath`" $scriptArgs"
+            $result = Invoke-Expression $invokeCmd 2>&1
         } else {
             $result = & $scriptPath 2>&1
         }
