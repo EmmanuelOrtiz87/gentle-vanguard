@@ -5,7 +5,6 @@ param(
     [Parameter(Position=0)]
     [string]$TaskDescription,
 
-    [ValidateSet('BA', 'SAD', 'DEV', 'QA', 'OPS', 'GOV', 'DOC')]
     [string]$Agent,
 
     [ValidateSet('run', 'plan', 'validate', 'status')]
@@ -28,17 +27,12 @@ function Write-WrapperLine {
 }
 
 function Get-RoutingConfig {
-    $keywordMappings = @{
-        'REPORT' = @('informe', 'report', 'reporte', 'metricas', 'metrics', 'costos', 'costs', 'gerencia', 'resumen', 'session', 'sesiones', 'estadisticas', 'telemetry', 'relatorio', 'custos', 'resumo', 'sessoes', 'telemetria')
-        'GOV'    = @('governance', 'modificar', 'config', 'seguridad', 'autenticacion', 'permission', 'orquestador', 'seguro', 'rules', 'policy', 'admin', 'normas', 'reglas', 'security', 'auth', 'access', 'governanca', 'seguranca', 'autenticacao', 'permissao', 'politica')
-        'DEV'    = @('implement', 'code', 'develop', 'feature', 'bug', 'crear', 'agregar', 'implementar', 'componente', 'endpoint', 'function', 'codigo', 'create', 'add', 'component', 'implementar', 'desenvolver', 'adicionar', 'funcao')
-        'QA'     = @('test', 'testing', 'qa', 'validation', 'prueba', 'verificar', 'review', 'judge', 'revisar', 'verify', 'judgment', 'validacao', 'julgar')
-        'DOC'    = @('documentation', 'docs', 'document', 'leer', 'documentacion', 'readme', 'guide', 'spec', 'documento', 'documentacao', 'guia', 'especificacao')
-        'SAD'    = @('architecture', 'design', 'sdd', 'database', 'schema', 'api', 'model', 'arquitectura', 'arquitetura', 'modelo')
-        'OPS'    = @('deploy', 'docker', 'kubernetes', 'release', 'infra', 'build', 'despliegue', 'infraestructura', 'infrastructure', 'infraestrutura')
+    $autoDelegationPath = Join-Path $PSScriptRoot '..\..\config\auto-delegation.json'
+    if (Test-Path $autoDelegationPath) {
+        $ad = Get-Content $autoDelegationPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        return @{ keywordMappings = $ad.keywordMappings; Enabled = $true }
     }
-
-    return @{ keywordMappings = $keywordMappings; Enabled = $true }
+    return @{ keywordMappings = @{}; Enabled = $false }
 }
 
 function Route-TaskToAgent {

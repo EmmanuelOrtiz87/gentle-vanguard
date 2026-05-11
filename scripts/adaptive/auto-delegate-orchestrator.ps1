@@ -157,13 +157,26 @@ function Find-AgentByTieredRouting {
         return $null
     }
     
-    $bindings = $AutoDelegation.routingBindings | Sort-Object { $_.tier }
+    # routingBindings can be array (legacy pattern-based) or object with tiers (confidence-based)
+    $raw = $AutoDelegation.routingBindings
+    if (-not $raw) { return $null }
+    
+    $bindings = @()
+    if ($raw -is [array]) {
+        $bindings = $raw
+    } elseif ($raw.tiers) {
+        # Convert confidence-based tiers: delegate tier action to keyword routing
+        if ($Verbose) { Write-Host "[ROUTING] Confidence-based tiers configured — falling back to keyword routing" }
+        return $null
+    }
     
     foreach ($binding in $bindings) {
-        $pattern = $binding.value
+        $pattern = if ($binding.value) { $binding.value } else { $binding.pattern }
+        if (-not $pattern) { continue }
         if ($TaskDescription -match $pattern) {
-            if ($Verbose) { Write-Host "[ROUTING] Tier $($binding.tier) match: $($binding.agent) for pattern: $pattern" }
-            return $binding.agent
+            $agent = $binding.agent
+            if ($Verbose) { Write-Host "[ROUTING] Tier $($binding.tier) match: $agent for pattern: $pattern" }
+            return $agent
         }
     }
     

@@ -34,6 +34,9 @@ $sessionFile = Join-Path $sessionDir 'model-router-auth.json'
 $auditLogDir = Join-Path $repoRootGlobal '.logs'
 $auditLogFile = Join-Path $auditLogDir 'model-router-audit.jsonl'
 
+# All supported agent codes
+$script:ALL_AGENTS = @('BA', 'SAD', 'DEV', 'QA', 'OPS', 'GOV', 'DOC', 'SESSION', 'MKT', 'SALES', 'FINANCE', 'HR', 'LEGAL', 'BUS-TELE', 'PREMORTEM', 'SCRIPT-GOV', 'GITFLOW-BRANCH', 'GITFLOW-PR', 'GITFLOW-HOOKS', 'GITFLOW-MERGE', 'GITFLOW-WORKFLOW', 'GITFLOW-COMMIT', 'GITFLOW-CONFLICT')
+
 # ============================================================================
 # PUBLIC API
 # ============================================================================
@@ -112,7 +115,7 @@ function Get-AgentBinding {
     if (-not $config) { return $null }
     if ($AgentCode) {
         $binding = $config.agentBindings.$AgentCode
-        if (-not $binding) { Write-Error "Unknown agent: $AgentCode. Valid: BA, SAD, DEV, QA, OPS, GOV, DOC"; return $null }
+        if (-not $binding) { Write-Error "Unknown agent: $AgentCode. Valid: $($script:ALL_AGENTS -join ', ')"; return $null }
         $effective = Resolve-AgentModelBinding -AgentCode $AgentCode -ConfigPath $ConfigPath
         return [PSCustomObject]@{
             agent              = $AgentCode
@@ -126,7 +129,7 @@ function Get-AgentBinding {
         }
     }
     $result = @()
-    foreach ($agent in @('BA', 'SAD', 'DEV', 'QA', 'OPS', 'GOV', 'DOC')) {
+    foreach ($agent in $script:ALL_AGENTS) {
         $effective = Resolve-AgentModelBinding -AgentCode $agent -ConfigPath $ConfigPath
         $binding = $config.agentBindings.$agent
         $result += [PSCustomObject]@{
@@ -199,7 +202,7 @@ function Reset-AgentBinding {
         $config.agentBindings.$AgentCode.temperature = $null
         Write-AuditEntry -Action 'binding.reset' -Detail "Agent=$AgentCode reset to defaults"
     } else {
-        foreach ($agent in @('BA', 'SAD', 'DEV', 'QA', 'OPS', 'GOV', 'DOC')) {
+        foreach ($agent in $script:ALL_AGENTS) {
             $config.agentBindings.$agent.model = $null
             $config.agentBindings.$agent.provider = $null
             $config.agentBindings.$agent.temperature = $null
@@ -223,26 +226,56 @@ function Set-ModelRouterDefaults {
         if (-not (Test-Path $ConfigPath)) {
             $template = @"
 {
-  "version": "2.0.0",
+  "version": "2.1.0",
   "enabled": true,
-  "description": "Model Router: agent-to-model binding and temperature management",
+  "description": "Model Router: per-agent model/temperature binding with opencode Go tier models and big-pickle fallback",
   "lastModified": "$(Get-Date -Format 'o')",
   "modifiedBy": "init",
   "defaults": {
-    "model": "claude-3-5-sonnet-20241022",
-    "provider": "anthropic",
+    "model": "gpt-5.4-mini",
+    "provider": "opencode",
     "temperature": 0.3,
     "hallucinationGuard": "medium",
-    "notes": "All agents inherit these values unless overridden in agentBindings"
+    "notes": "Base model for agents without specific override"
+  },
+  "fallback": {
+    "model": "opencode/big-pickle",
+    "description": "Free-tier opencode model when Go subscription quota exhausted",
+    "quotaExhaustedBehavior": "auto-switch",
+    "notifyOnSwitch": true,
+    "notificationMessage": "[QUOTA] Monthly Go subscription quota exhausted. Switched to opencode/big-pickle (free tier).",
+    "resetOnRenewal": true
   },
   "agentBindings": {
-    "BA":  { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null },
-    "SAD": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null },
-    "DEV": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null },
-    "QA":  { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null },
-    "OPS": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null },
-    "GOV": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null },
-    "DOC": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null }
+    "BA":  { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "SAD": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "DEV": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "QA":  { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "OPS": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "GOV": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "DOC": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "SESSION": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "MKT": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "SALES": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "FINANCE": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "HR": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "LEGAL": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "BUS-TELE": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "PREMORTEM": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "SCRIPT-GOV": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "GITFLOW-BRANCH": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "GITFLOW-PR": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "GITFLOW-HOOKS": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "GITFLOW-MERGE": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "GITFLOW-WORKFLOW": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "GITFLOW-COMMIT": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "GITFLOW-CONFLICT": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "REPORT": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "PR-REVIEW": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "RELEASE": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "SESSION-CLOSE": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "DAILY": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null },
+    "ORCHESTRATOR": { "model": null, "provider": null, "temperature": null, "hallucinationGuard": null, "subagent": null, "rationale": null }
   },
   "temperaturePolicy": {
     "description": "Temperature can ONLY be modified from the model assignment flow. Standalone temperature commands are blocked.",
@@ -671,7 +704,7 @@ function Invoke-RouteCommand {
             Write-Host "  admin-register-pc                  Register this PC as trusted (requires admin)" -ForegroundColor Gray
             Write-Host ""
             Write-Host "Options:" -ForegroundColor White
-            Write-Host "  --agent <CODE>        BA | SAD | DEV | QA | OPS | GOV | DOC" -ForegroundColor Gray
+            Write-Host "  --agent <CODE>        $($script:ALL_AGENTS -join ' | ')" -ForegroundColor Gray
             Write-Host "  --model <NAME>        Model identifier" -ForegroundColor Gray
             Write-Host "  --provider <CODE>     Provider from cloud-agents.json" -ForegroundColor Gray
             Write-Host "  --temperature <0-2>   Override temperature" -ForegroundColor Gray
