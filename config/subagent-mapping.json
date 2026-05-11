@@ -1,6 +1,6 @@
 {
-  "version": "1.2",
-  "description": "Maps 14-agent specialization model to opencode subagent types — includes all Go-tier custom agents",
+  "version": "1.3",
+  "description": "Maps 29-agent foundation model to opencode subagent types — complete coverage of all auto-delegation agent codes",
   "mapping": {
     "BA": {
       "name": "Business Analyst",
@@ -115,6 +115,126 @@
       "fallback": "general",
       "skills": ["hr-talent-acquisition"],
       "triggers": ["hiring", "recruiting", "interview", "candidate", "onboarding", "job description"]
+    },
+    "BUS-TELE": {
+      "name": "Business Telemetry",
+      "opencode_subagents": ["general", "doc-agent"],
+      "primary_subagent": "general",
+      "fallback": "general",
+      "skills": ["business-telemetry-skill"],
+      "triggers": ["telemetry", "metrics", "kpi", "management report", "efficiency score", "business metrics"]
+    },
+    "SCRIPT-GOV": {
+      "name": "Script Governance",
+      "opencode_subagents": ["sdd-verify", "general"],
+      "primary_subagent": "sdd-verify",
+      "fallback": "general",
+      "skills": ["script-governance-skill"],
+      "triggers": ["validate script", "parser error", "syntax error", "fix script", "script validation", "auto-fix", "hook"]
+    },
+    "REPORT": {
+      "name": "Reporting",
+      "opencode_subagents": ["doc-agent", "general"],
+      "primary_subagent": "doc-agent",
+      "fallback": "general",
+      "skills": ["reporting-skill"],
+      "triggers": ["report", "informe", "metrics", "dashboard", "resumen ejecutivo", "analytics", "telemetry"]
+    },
+    "PR-REVIEW": {
+      "name": "PR Review",
+      "opencode_subagents": ["sdd-verify", "general"],
+      "primary_subagent": "sdd-verify",
+      "fallback": "general",
+      "skills": ["code-review-orchestrator-skill"],
+      "triggers": ["pull request", "PR", "code review", "review PR", "merge PR"]
+    },
+    "RELEASE": {
+      "name": "Release Management",
+      "opencode_subagents": ["ops-agent", "general"],
+      "primary_subagent": "ops-agent",
+      "fallback": "general",
+      "skills": ["release-management-skill"],
+      "triggers": ["release", "changelog", "version bump", "ship", "cut release", "hotfix", "semver"]
+    },
+    "SESSION-CLOSE": {
+      "name": "Session Closure",
+      "opencode_subagents": ["session-agent", "general"],
+      "primary_subagent": "session-agent",
+      "fallback": "general",
+      "skills": ["session-workflow-skill", "project-orchestrator-skill"],
+      "triggers": ["close session", "session end", "cerrar sesion", "fin de sesion", "guardar sesion"]
+    },
+    "DAILY": {
+      "name": "Daily Workflow",
+      "opencode_subagents": ["general"],
+      "primary_subagent": "general",
+      "fallback": "general",
+      "skills": ["daily-workflow"],
+      "triggers": ["daily check", "daily workflow", "morning routine", "daily tasks"]
+    },
+    "GITFLOW-BRANCH": {
+      "name": "GitFlow Branch",
+      "opencode_subagents": ["general", "explore"],
+      "primary_subagent": "general",
+      "fallback": "general",
+      "skills": ["gitflow-orchestrator-skill"],
+      "triggers": ["create branch", "feature branch", "bugfix branch", "hotfix branch", "git checkout", "switch branch"]
+    },
+    "GITFLOW-PR": {
+      "name": "GitFlow PR",
+      "opencode_subagents": ["general", "explore"],
+      "primary_subagent": "general",
+      "fallback": "general",
+      "skills": ["branch-pr"],
+      "triggers": ["pull request", "PR", "create PR", "open PR"]
+    },
+    "GITFLOW-HOOKS": {
+      "name": "GitFlow Hooks",
+      "opencode_subagents": ["general"],
+      "primary_subagent": "general",
+      "fallback": "general",
+      "skills": ["gitflow-orchestrator-skill"],
+      "triggers": ["pre-commit", "pre-push", "git hook", "hook validation"]
+    },
+    "GITFLOW-MERGE": {
+      "name": "GitFlow Merge",
+      "opencode_subagents": ["general"],
+      "primary_subagent": "general",
+      "fallback": "general",
+      "skills": ["gitflow-orchestrator-skill"],
+      "triggers": ["post-merge", "merge sync", "sync after merge"]
+    },
+    "GITFLOW-WORKFLOW": {
+      "name": "GitFlow Workflow",
+      "opencode_subagents": ["general"],
+      "primary_subagent": "general",
+      "fallback": "general",
+      "skills": ["git-workflow-skill"],
+      "triggers": ["gitflow", "workflow", "git workflow"]
+    },
+    "GITFLOW-COMMIT": {
+      "name": "GitFlow Commit",
+      "opencode_subagents": ["general"],
+      "primary_subagent": "general",
+      "fallback": "general",
+      "skills": ["git-workflow-skill"],
+      "triggers": ["commit", "conventional commit", "commit message", "git commit"]
+    },
+    "GITFLOW-CONFLICT": {
+      "name": "GitFlow Conflict",
+      "opencode_subagents": ["general"],
+      "primary_subagent": "general",
+      "fallback": "general",
+      "skills": ["git-workflow-skill"],
+      "triggers": ["conflict", "merge conflict", "resolve conflict"]
+    },
+    "ORCHESTRATOR": {
+      "name": "Orchestrator",
+      "opencode_subagents": ["orchestrator", "general"],
+      "primary_subagent": "orchestrator",
+      "fallback": "general",
+      "skills": ["project-orchestrator-skill"],
+      "triggers": ["orchestrate", "delegate", "coordinate", "workflow", "session", "route"]
     }
   },
   "opencode_subagent_capabilities": {
@@ -226,6 +346,11 @@
     "hr-agent": {
       "description": "HR specialist — hiring, onboarding, job descriptions",
       "best_for": ["recruiting", "interview", "job description", "onboarding"],
+      "token_efficient": true
+    },
+    "orchestrator": {
+      "description": "Orchestrator — coordinates multi-agent workflows, delegates tasks, manages sessions",
+      "best_for": ["workflow orchestration", "agent delegation", "session lifecycle", "cross-agent coordination"],
       "token_efficient": true
     }
   }

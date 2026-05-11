@@ -62,7 +62,7 @@ $keywords = Extract-TaskKeywords -TaskDescription "Implement login feature"
 # Output: @{ "DEV" = 2; "GOV" = 1 }
 ```
 
-**Mapeos de palabras clave por agente:**
+**Mapeos de palabras clave por agente (core 7 — full 29 en `config/auto-delegation.json#keywordMappings`):**
 
 - **BA**: requirement, user story, bdd, gherkin, acceptance, specification
 - **SAD**: architecture, design, sdd, api design, database, schema
@@ -328,12 +328,14 @@ Ejecutar suite de pruebas:
 - [INTEGRATION.md](../../skills/auto-delegation-router/INTEGRATION.md) - Gua de integracin
 - [Multi-Agent Registry](../../skills/multi-agent-registry/SKILL.md) - Definicin de agentes
 - [Subagent Architecture](./SUBAGENT-ARCHITECTURE.md) - Arquitectura de subagentes
+- [Model Router](../../config/model-router.json) - Per-agent model/temperature bindings (29 agents)
+- [Subagent Mapping](../../config/subagent-mapping.json) - 29-agent → opencode subagent mapping
 
 ## Estado de Implementacin
 
 | Componente         | Estado   | Notas                         |
 | ------------------ | -------- | ----------------------------- |
-| Keyword Extraction | Completo | 7 agentes, 70+ palabras clave |
+| Keyword Extraction | Completo | 29 agentes, 200+ palabras clave en auto-delegation.json |
 | decisión Trees     | Completo | 4 niveles de decisin          |
 | Confidence Scoring | Completo | Ajustes dinmicos              |
 | Opt-In Control     | Completo | Flag enable/disable           |
