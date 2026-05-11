@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Backup Resilience Tester
     

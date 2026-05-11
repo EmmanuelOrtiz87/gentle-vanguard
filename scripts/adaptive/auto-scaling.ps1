@@ -1,4 +1,4 @@
-﻿param(
+param(
     [Parameter(Mandatory=$false)]
     [ValidateSet("status", "optimize", "reset")]
     [string]$Action = "status",
@@ -12,8 +12,15 @@
 )
 
 $ErrorActionPreference = 'Stop'
-$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
+if ($env:FOUNDATION_BASE_DIR) {
+    $repoRoot = $env:FOUNDATION_BASE_DIR
+} else {
+    $searchDir = $PSScriptRoot
+    while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
+        $searchDir = Split-Path -Parent $searchDir
+    }
+    $repoRoot = $searchDir
+}
 
 $scalingDbPath = Join-Path $repoRoot ".session\scaling-db.json"
 
@@ -51,7 +58,7 @@ function Set-ScalingDb {
         New-Item -Path $dbDir -ItemType Directory -Force | Out-Null
     }
     
-    $Db | ConvertTo-Json -Depth 10 | Out-File -FilePath $scalingDbPath -Encoding UTF8
+    $Db | ConvertTo-Json -Depth 10 | Set-Content -Path $scalingDbPath -Encoding UTF8NoBOM
 }
 
 function Show-Status {
@@ -88,7 +95,7 @@ function Show-Status {
     if ($db.history.Count -gt 0) {
         Write-Host "Recent History (last 5):" -ForegroundColor Gray
         $db.history | Select-Object -Last 5 | ForEach-Object {
-            $status = if ($_.success) { "" } else { "" }
+            $status = if ($_.success) { "[PASS]" } else { "[FAIL]" }
             Write-Host "  $status $($_.pattern) -> $($_.subagent) (rate: $($_.successRate))" -ForegroundColor Gray
         }
     }

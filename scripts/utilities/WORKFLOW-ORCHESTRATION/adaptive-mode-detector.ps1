@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Adaptive Mode Detector - Deteccin automtica de complejidad de tareas
     

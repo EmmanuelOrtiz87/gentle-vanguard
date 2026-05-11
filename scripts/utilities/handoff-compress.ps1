@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Handoff Compress - Compresses state for agent-to-agent transfer
     

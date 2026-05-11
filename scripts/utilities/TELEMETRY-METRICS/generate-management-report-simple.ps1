@@ -1,4 +1,4 @@
-﻿# generate-management-report-simple.ps1
+# generate-management-report-simple.ps1
 # Generates monthly management report in CSV format
 # Simplified version - works without Engram if needed
 

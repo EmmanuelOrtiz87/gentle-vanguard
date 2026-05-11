@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Orchestrator Governance Integration - Connects Orchestrator with Event Governance Layer
     

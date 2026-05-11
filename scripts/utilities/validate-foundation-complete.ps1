@@ -1,4 +1,4 @@
-﻿# validate-foundation-complete.ps1
+# validate-foundation-complete.ps1
 # Comprehensive validation of ALL project aspects before deployment
 
 $ErrorActionPreference = 'Stop'

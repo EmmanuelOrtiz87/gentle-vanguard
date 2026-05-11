@@ -20,15 +20,27 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+#region RepoRoot Resolution
+if ($env:FOUNDATION_BASE_DIR) {
+    $repoRoot = $env:FOUNDATION_BASE_DIR
+} else {
+    $searchDir = $PSScriptRoot
+    while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
+        $searchDir = Split-Path -Parent $searchDir
+    }
+    $repoRoot = $searchDir
+}
+#endregion
+
 #region Configuration Loading
-$ConfigPath = Join-Path $PSScriptRoot "..\..\config"
+$ConfigPath = Join-Path $repoRoot "config"
 $SubagentMapping = Get-Content (Join-Path $ConfigPath "subagent-mapping.json") | ConvertFrom-Json
 $AutoDelegation = Get-Content (Join-Path $ConfigPath "auto-delegation.json") | ConvertFrom-Json
 $SkillDeps = Get-Content (Join-Path $ConfigPath "skill-dependencies.json") | ConvertFrom-Json
 $MetricsConfig = Get-Content (Join-Path $ConfigPath "metrics-config.json") | ConvertFrom-Json
 $BehaviorPrompts = Get-Content (Join-Path $ConfigPath "behavior-prompts.json") | ConvertFrom-Json
 $OrchestratorConfig = Get-Content (Join-Path $ConfigPath "orchestrator.json") | ConvertFrom-Json
-$AutoDelegationWrapper = Join-Path $PSScriptRoot "..\utilities\auto-delegation-wrapper.ps1"
+$AutoDelegationWrapper = Join-Path $repoRoot "scripts\utilities\auto-delegation-wrapper.ps1"
 #endregion
 
 #region Global State
@@ -312,7 +324,7 @@ function Record-Metric {
 }
 
 function Write-MetricsSummary {
-    $summaryPath = Join-Path $PSScriptRoot "..\..\.session\metrics-report.json"
+    $summaryPath = Join-Path $repoRoot ".session\metrics-report.json"
     $script:MetricsData.timestamp = Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"
     
     # Calculate success rates
@@ -381,7 +393,7 @@ function Save-PersistentMetrics {
         $current = Get-Content $metricsPath -Raw | ConvertFrom-Json
 
         if (-not $current.runtime_state) {
-            $current | Add-Member -NotePropertyName runtime_state -NotePropertyValue @{}
+            $current | Add-Member -NotePropertyName runtime_state -NotePropertyValue @{} -Force
         }
 
         $durationToAdd = 0
@@ -421,7 +433,7 @@ function Save-PersistentMetrics {
 
 #region Cross-Session Continuity
 function Save-OrchestratorState {
-    $statePath = Join-Path $PSScriptRoot "..\..\.session\orchestrator-state.json"
+    $statePath = Join-Path $repoRoot ".session\orchestrator-state.json"
     
     $state = @{
         timestamp = Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ"
@@ -441,7 +453,7 @@ function Save-OrchestratorState {
 }
 
 function Restore-OrchestratorState {
-    $statePath = Join-Path $PSScriptRoot "..\..\.session\orchestrator-state.json"
+    $statePath = Join-Path $repoRoot ".session\orchestrator-state.json"
     
     if (Test-Path $statePath) {
         $state = Get-Content $statePath | ConvertFrom-Json
@@ -519,7 +531,7 @@ $(if ($BehaviorPrompt) { "Communication Style: $($BehaviorPrompt.communication_s
             throw "Canonical delegation wrapper not found: $AutoDelegationWrapper"
         }
 
-        if ($Verbose) { Write-Host "[DELEGATE] $DelegationId → $SubagentType`: $TaskDescription" }
+        if ($Verbose) { Write-Host "[DELEGATE] $DelegationId -> $SubagentType`: $TaskDescription" }
 
         $wrapperResult = & $AutoDelegationWrapper -Agent $AgentType -Task $TaskDescription -AsJson | ConvertFrom-Json
         $status = if ($wrapperResult -and $wrapperResult.status) { [string]$wrapperResult.status } else { "unknown" }
