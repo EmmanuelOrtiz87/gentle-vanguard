@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory=$false)]
-    [ValidateSet('BA', 'SAD', 'DEV', 'QA', 'OPS', 'GOV', 'DOC', 'MKT', 'SALES', 'FINANCE', 'HR', 'LEGAL', 'BUS-TELE', 'status', 'list')]
+    [ValidateSet('BA', 'SAD', 'DEV', 'QA', 'OPS', 'GOV', 'DOC', 'MKT', 'SALES', 'FINANCE', 'HR', 'LEGAL', 'BUS-TELE', 'SESSION', 'PREMORTEM', 'status', 'list')]
     [string]$Agent,
     
     [Parameter(Mandatory=$false)]
@@ -19,6 +19,46 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..\..')).Path
 $skillsPath = Join-Path $repoRoot 'skills'
 $userSkillsPath = 'C:\Users\emman\.claude\skills'
+$modelRouterPath = Join-Path $repoRoot 'config\model-router.json'
+$autoDelegationPath = Join-Path $repoRoot 'config\auto-delegation.json'
+
+function Get-AgentModelConfig {
+    param([string]$AgentName)
+    $info = @{ model = $null; temperature = $null; provider = $null; subagent = $null; fallback = $null; rationale = $null; source = 'none' }
+    if (Test-Path $modelRouterPath) {
+        try {
+            $mr = Get-Content $modelRouterPath -Raw -Encoding UTF8 | ConvertFrom-Json
+            if ($mr.enabled -and $mr.agentBindings.$AgentName) {
+                $b = $mr.agentBindings.$AgentName
+                $info.model = if ($b.model) { $b.model } else { $mr.defaults.model }
+                $info.temperature = if ($b.temperature -ne $null) { [double]$b.temperature } else { [double]$mr.defaults.temperature }
+                $info.provider = if ($b.provider) { $b.provider } else { $mr.defaults.provider }
+                $info.subagent = $b.subagent
+                $info.rationale = $b.rationale
+                $info.fallback = if ($mr.fallback) { $mr.fallback.model } else { $null }
+                $info.source = 'model-router'
+            } elseif ($mr.fallback) {
+                # Agent not in bindings — use defaults + fallback
+                $info.model = $mr.defaults.model
+                $info.temperature = [double]$mr.defaults.temperature
+                $info.provider = $mr.defaults.provider
+                $info.fallback = $mr.fallback.model
+                $info.source = 'defaults'
+            }
+        } catch {}
+    }
+    if ($info.source -eq 'none' -and (Test-Path $autoDelegationPath)) {
+        try {
+            $ad = Get-Content $autoDelegationPath -Raw -Encoding UTF8 | ConvertFrom-Json
+            $profile = $ad.agentProfiles.$AgentName
+            if ($profile -and $profile.temperature -ne $null) {
+                $info.temperature = [double]$profile.temperature
+                $info.source = 'auto-delegation'
+            }
+        } catch {}
+    }
+    return $info
+}
 
 function Write-AgentLine {
     param([string]$Message, [string]$Color = 'White')
@@ -41,6 +81,8 @@ $AGENT_SKILLS = @{
     'HR' = @('hr-talent-acquisition')
     'LEGAL' = @('legal-compliance-officer')
     'BUS-TELE' = @('business-telemetry-skill')
+    'SESSION' = @('session-workflow-skill', 'project-orchestrator-skill')
+    'PREMORTEM' = @('premortem-skill')
 }
 
 $AGENT_DESCRIPTIONS = @{
@@ -57,6 +99,8 @@ $AGENT_DESCRIPTIONS = @{
     'HR' = 'HR - Talent Acquisition, Recruiting'
     'LEGAL' = 'Legal - Compliance, Regulatory, Privacy'
     'BUS-TELE' = 'Business Telemetry - Metrics, Reporting, Analytics'
+    'SESSION' = 'Session Manager - Session lifecycle, state tracking, git verification'
+    'PREMORTEM' = 'Premortem Analyst - Risk analysis, failure scenarios, adversarial review'
 }
 
 $AGENT_DELIVERABLES = @{
@@ -73,6 +117,8 @@ $AGENT_DELIVERABLES = @{
     'HR' = @('job-descriptions', 'interview-rubrics', 'offer-letters', 'onboarding-plans')
     'LEGAL' = @('privacy-policies', 'compliance-checklists', 'dpias', 'audit-evidence')
     'BUS-TELE' = @('telemetry-reports', 'efficiency-scores', 'management-summaries')
+    'SESSION' = @('session-audit', 'state-report', 'git-status', 'continuity-context')
+    'PREMORTEM' = @('premortem-report', 'risk-register', 'blind-spot-analysis', 'failure-scenarios')
 }
 
 function Get-AgentSkills {
@@ -185,6 +231,7 @@ function Get-AgentResult {
             -Deliverables $deliverables
     }
 
+    $modelInfo = Get-AgentModelConfig -AgentName $AgentName
     $baseTokenEstimate = if ($execCtx) { $execCtx.token_estimate + 500 } else { 2000 }
 
     $result = @{
@@ -195,6 +242,7 @@ function Get-AgentResult {
         action = $ActionType
         timestamp = $timestamp
         duration_ms = 0
+        model_info = $modelInfo
         skills_loaded = @($availableSkills | ForEach-Object { $_.name })
         skills_missing = @($missingSkills | ForEach-Object { $_.name })
         deliverables_expected = $deliverables
@@ -366,7 +414,7 @@ if ($Agent -eq 'list') {
 if ([string]::IsNullOrWhiteSpace($Agent)) {
     Write-Host "Usage: .\wf.ps1 agent <AGENT> [TASK] [-AsJson]" -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "Agents: BA, SAD, DEV, QA, OPS, GOV, DOC" -ForegroundColor White
+    Write-Host "Agents: BA, SAD, DEV, QA, OPS, GOV, DOC, MKT, SALES, FINANCE, HR, LEGAL, BUS-TELE, SESSION, PREMORTEM" -ForegroundColor White
     Write-Host "Actions: run, plan, validate, status" -ForegroundColor White
     Write-Host "Flags: -AsJson for structured output" -ForegroundColor White
     Write-Host ""
@@ -384,7 +432,7 @@ if ([string]::IsNullOrWhiteSpace($Task)) {
     exit 1
 }
 
-$validAgents = @('BA', 'SAD', 'DEV', 'QA', 'OPS', 'GOV', 'DOC', 'MKT', 'SALES', 'FINANCE', 'HR', 'LEGAL', 'BUS-TELE')
+$validAgents = @('BA', 'SAD', 'DEV', 'QA', 'OPS', 'GOV', 'DOC', 'MKT', 'SALES', 'FINANCE', 'HR', 'LEGAL', 'BUS-TELE', 'SESSION', 'PREMORTEM')
 if ($validAgents -notcontains $Agent) {
     Write-AgentLine "Unknown agent: $Agent" 'Red'
     Write-Host "Valid agents: $($validAgents -join ', ')" -ForegroundColor Gray
