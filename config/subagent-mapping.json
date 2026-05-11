@@ -1,6 +1,6 @@
 {
-  "version": "1.1",
-  "description": "Maps 8-agent specialization model (incl. SESSION) to opencode subagent types",
+  "version": "1.2",
+  "description": "Maps 14-agent specialization model to opencode subagent types — includes all Go-tier custom agents",
   "mapping": {
     "BA": {
       "name": "Business Analyst",
@@ -36,45 +36,85 @@
     },
     "OPS": {
       "name": "DevOps",
-      "opencode_subagents": ["general"],
-      "primary_subagent": "general",
+      "opencode_subagents": ["ops-agent", "general"],
+      "primary_subagent": "ops-agent",
       "fallback": "general",
       "skills": ["docker-devops-skill", "git-workflow-skill"],
       "triggers": ["deploy", "ci/cd", "docker", "kubernetes", "infrastructure"]
     },
     "SESSION": {
       "name": "Session Manager",
-      "opencode_subagents": ["general"],
-      "primary_subagent": "general",
+      "opencode_subagents": ["session-agent", "general"],
+      "primary_subagent": "session-agent",
       "fallback": "general",
       "skills": ["session-workflow-skill", "project-orchestrator-skill"],
       "triggers": ["iniciar sesion", "start session", "guardar sesion", "cerrar sesion", "continuar", "estado"]
     },
     "GOV": {
       "name": "Governance",
-      "opencode_subagents": ["sdd-verify", "general"],
-      "primary_subagent": "general",
+      "opencode_subagents": ["gov-agent", "sdd-verify", "general"],
+      "primary_subagent": "gov-agent",
       "fallback": "general",
       "skills": ["security-skill", "documentation-governance"],
       "triggers": ["governance", "compliance", "audit", "security audit", "review"]
     },
     "DOC": {
       "name": "Documentation",
-      "opencode_subagents": ["sdd-spec", "sdd-onboard", "general"],
-      "primary_subagent": "sdd-spec",
+      "opencode_subagents": ["doc-agent", "sdd-spec", "sdd-onboard", "general"],
+      "primary_subagent": "doc-agent",
       "fallback": "general",
       "skills": ["documentation-governance", "sdd-skill"],
       "triggers": ["documentation", "docs", "readme", "guide", "specification"]
     },
     "PREMORTEM": {
       "name": "Premortem Analyst",
-      "opencode_subagents": ["general"],
-      "primary_subagent": "general",
+      "opencode_subagents": ["premortem-agent", "general"],
+      "primary_subagent": "premortem-agent",
       "fallback": "orchestrator",
       "skills": ["premortem-skill"],
       "triggers": ["premortem", "stress test plan", "find blind spots", "abogado del diablo", "que podria salir mal"],
       "parallel_subagents": true,
       "parallel_capacity": 8
+    },
+    "FINANCE": {
+      "name": "Finance",
+      "opencode_subagents": ["finance-agent", "general"],
+      "primary_subagent": "finance-agent",
+      "fallback": "general",
+      "skills": ["finance-financial-analyst"],
+      "triggers": ["financial model", "forecast", "budget", "cash flow", "roi"]
+    },
+    "LEGAL": {
+      "name": "Legal",
+      "opencode_subagents": ["legal-agent", "general"],
+      "primary_subagent": "legal-agent",
+      "fallback": "orchestrator",
+      "skills": ["legal-compliance-officer"],
+      "triggers": ["compliance", "gdpr", "hipaa", "policy", "regulatory", "privacy"]
+    },
+    "MKT": {
+      "name": "Marketing",
+      "opencode_subagents": ["mkt-agent", "general"],
+      "primary_subagent": "mkt-agent",
+      "fallback": "general",
+      "skills": ["marketing-content-writer"],
+      "triggers": ["marketing", "content strategy", "seo", "blog post", "brand voice"]
+    },
+    "SALES": {
+      "name": "Sales",
+      "opencode_subagents": ["sales-agent", "general"],
+      "primary_subagent": "sales-agent",
+      "fallback": "general",
+      "skills": ["sales-account-executive"],
+      "triggers": ["enterprise sales", "pipeline", "deal negotiation", "outbound"]
+    },
+    "HR": {
+      "name": "Human Resources",
+      "opencode_subagents": ["hr-agent", "general"],
+      "primary_subagent": "hr-agent",
+      "fallback": "general",
+      "skills": ["hr-talent-acquisition"],
+      "triggers": ["hiring", "recruiting", "interview", "candidate", "onboarding", "job description"]
     }
   },
   "opencode_subagent_capabilities": {
@@ -136,6 +176,56 @@
     "sdd-verify": {
       "description": "Validate implementation against specs",
       "best_for": ["verification", "testing", "validation", "judgment day"],
+      "token_efficient": true
+    },
+    "doc-agent": {
+      "description": "Documentation specialist — creates guides, specs, reports",
+      "best_for": ["documentation", "guides", "readmes", "specifications", "reports"],
+      "token_efficient": true
+    },
+    "ops-agent": {
+      "description": "DevOps specialist — pipelines, infra, deployments",
+      "best_for": ["ci/cd", "docker", "kubernetes", "terraform", "deployment", "release"],
+      "token_efficient": true
+    },
+    "gov-agent": {
+      "description": "Governance & security — audits, compliance, security review",
+      "best_for": ["security audit", "compliance", "vulnerability scan", "governance"],
+      "token_efficient": true
+    },
+    "session-agent": {
+      "description": "Session lifecycle manager — start/close/status",
+      "best_for": ["session management", "state tracking", "git verification"],
+      "token_efficient": true
+    },
+    "premortem-agent": {
+      "description": "Premortem analyst — stress tests plans, finds blind spots",
+      "best_for": ["risk analysis", "failure scenarios", "adversarial review"],
+      "token_efficient": true
+    },
+    "finance-agent": {
+      "description": "Financial analyst — models, forecasts, budgets",
+      "best_for": ["financial modeling", "forecast", "budget analysis", "roi calc"],
+      "token_efficient": true
+    },
+    "legal-agent": {
+      "description": "Legal & compliance — regulations, policies, data protection",
+      "best_for": ["gdpr", "hipaa", "compliance checklist", "regulatory review"],
+      "token_efficient": true
+    },
+    "mkt-agent": {
+      "description": "Marketing specialist — content, seo, brand strategy",
+      "best_for": ["blog posts", "seo audit", "content strategy", "brand voice"],
+      "token_efficient": true
+    },
+    "sales-agent": {
+      "description": "Sales specialist — pipeline, deals, outreach",
+      "best_for": ["sales methodology", "deal negotiation", "pipeline management"],
+      "token_efficient": true
+    },
+    "hr-agent": {
+      "description": "HR specialist — hiring, onboarding, job descriptions",
+      "best_for": ["recruiting", "interview", "job description", "onboarding"],
       "token_efficient": true
     }
   }
