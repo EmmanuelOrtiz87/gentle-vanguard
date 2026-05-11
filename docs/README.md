@@ -1,196 +1,169 @@
-# 🏛️ Gentleman Foundation — AI Development Stack
+# 🏛️ Foundation — AI Development Stack
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.8.0-brightgreen?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.9.0-brightgreen?style=for-the-badge" alt="Version 2.9.0">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License">
-  <img src="https://img.shields.io/badge/PowerShell-7+-purple?style=for-the-badge" alt="PowerShell">
-  <img src="https://img.shields.io/badge/Skills-125+-blueviolet?style=for-the-badge" alt="Skills">
+  <img src="https://img.shields.io/badge/Agents-29-orange?style=for-the-badge" alt="29 AI Agents">
+  <img src="https://img.shields.io/badge/Skills-132-blueviolet?style=for-the-badge" alt="132 Skills">
+  <img src="https://img.shields.io/badge/PowerShell-7+-purple?style=for-the-badge" alt="PowerShell 7+">
+  <img src="https://img.shields.io/badge/Platform-Win%20%7C%20Linux%20%7C%20macOS-lightgrey?style=for-the-badge" alt="Cross-Platform">
 </p>
 
 <p align="center">
-  <b>🌐 Where governance, automation, and AI converge to empower modern development teams.</b>
+  <b>A governance-first AI development stack — 29 agents, 132 on-demand skills, zero compromise.</b>
 </p>
 
 ---
 
-## 🔍 What is Foundation?
-
-Foundation is a **governance-first AI development stack** that unifies:
-
-| Capability                    | What it does                                                                                      | Benefit               |
-| ----------------------------- | ------------------------------------------------------------------------------------------------- | --------------------- |
-| **🤖 7-agent orchestration**  | Routes tasks automatically to BA, SAD, DEV, QA, OPS, GOV, DOC agents                              | ✅ Smart delegation   |
-| **🧩 125+ on-demand skills**  | Angular, React, Next.js, Go, Django, TypeScript, Zod, AI SDK, MCP, and more                       | ✅ Total coverage     |
-| **📋 SDD enforcement**        | Blocks commits without a validated spec — no specification, no code                               | ✅ Quality first      |
-| **💰 Token Budget Guard**     | 30K tokens/day cap with 70%/90% soft/hard thresholds                                              | ✅ Cost control       |
-| **📈 Event bus + telemetry**  | 10 standard events with governance gate and distributed tracing                                   | ✅ Full visibility    |
-| **🏭 Enterprise CI pipeline** | 11 workflows: quality gate, PSScriptAnalyzer, OWASP, SDD gate, reporting and dashboard automation | ✅ Production-ready   |
-| **🔗 7D validation hooks**    | Pre-commit checks: security, quality, architecture, testing, API, docs, gitflow                   | ✅ Multi-layer safety |
-| **🧠 Persistent memory**      | Engram — context survives session restarts                                                        | ✅ Continuity         |
-
-> **"Where governance, automation, and AI converge to empower modern development teams."**
+> 🚀 **What is Foundation?** Not a library. Not a framework. It's a **complete AI operating system for software delivery** — where every agent follows rules, every commit is validated, and every token is accounted for.
 
 ---
 
-## 🚀 Quick Start
-
-### Prerequisites
-
-| Requirement                          | Version | Status                                              |
-| ------------------------------------ | ------- | --------------------------------------------------- |
-| **🪟 Windows 10/11 / Linux / macOS** | Any     | ✅ Required                                         |
-| **⚡ PowerShell 7+**                 | 7.0+    | ✅ Required (`winget install Microsoft.PowerShell`) |
-| **🌿 Git**                           | 2.30+   | ✅ Required                                         |
-| **🟢 Node.js**                       | 18+     | ⚠️ Optional                                         |
-| **🐹 Go**                            | 1.19+   | ⚠️ Optional                                         |
-
-### Setup — 3 Steps
+## 🔥 Quick Start — 3 Commands
 
 ```powershell
 # 1️⃣ Clone
-git clone https://github.com/EmmanuelOrtiz87/gentleman-foundation.git
-cd gentleman-foundation
+git clone https://github.com/EmmanuelOrtiz87/foundation.git
+cd foundation
 
-# 2️⃣ Bootstrap
-.\scripts\foundation\bootstrap-machine.ps1
-
-# 3️⃣ Start working
+# 2️⃣ Bootstrap (installs hooks, verifies deps, configures your environment)
 .\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1 start-session
+
+# 3️⃣ Start working — tell the AI what to build
 ```
 
-### Daily Usage
+> ✅ Steps 2-3 are **fully automatic**. You only clone, bootstrap, and work.
 
-```powershell
-wf verify          # Check all 14 quality gates
-wf version         # Show stack version + skills count
-wf start-session   # Begin tracked session
-wf judgment-day    # Full QA gate before release
-wf dashboard       # Open HTML metrics dashboard
-wf benchmark       # SLO benchmark of key commands
-wf sync-drift      # Detect drift between foundation and projects
-```
+---
+
+## 🧭 Automatic vs. Manual — What the Stack Does for You
+
+### ⚡ Automatic (zero user effort)
+
+| What | How | Guardrails |
+|------|-----|------------|
+| **Session tracking** | Auto-starts on `wf.ps1 start-session` | Logs every dispatch, token, and event |
+| **Trigger routing** | `pre-process-input.ps1` parses your input → dispatches the right agent + skill | Falls back to BA if confidence < 60% |
+| **Pre-commit validation** | Lefthook runs 7D checks before every `git commit` | Blocks on secrets, lint errors, SDD violations |
+| **Token budget guard** | 30K tokens/day cap with 70% soft / 90% hard thresholds | Agents cannot exceed budget |
+| **Engram memory** | Saves observations across sessions automatically | Retrievable via `mem_search` |
+| **Telemetry + event bus** | 10 standard events with governance gate + distributed tracing | Audit trail for every action |
+| **Sync-drift detection** | `wf sync-drift` detects workspace inconsistencies | Reports before release |
+| **CI/CD pipeline** | 15 GitHub Actions workflows run on every push | Quality gate, PSScriptAnalyzer, OWASP, SDD gate |
+
+### 🔧 Manual (you decide when)
+
+| What | Command | When to Use |
+|------|---------|-------------|
+| Start a session | `wf start-session` | Beginning of any work block |
+| Request an agent | `wf dispatch DEV,QA "add tests for auth module"` | Need specialized AI assistance |
+| Full quality gate | `wf judgment-day` | Before any release or major merge |
+| Generate dashboard | `wf dashboard` | Weekly review, exec reporting |
+| Adversarial review | `wf review --all` | Before shipping critical changes |
+| SLO benchmark | `wf benchmark` | Performance regression check |
+| Version info | `wf version` | Check stack health and skills count |
 
 ---
 
 ## 🏗️ Architecture
 
-Foundation uses a layered, modular architecture with on-demand activation:
-
 ```
-┌─────────────────────────────────────────────────────┐
-│                     AI Agent Layer                          │
-│  (OpenCode, Claude Code, Cursor, etc.)                     │
-└───────────────────────────┬─────────────────────────────┘
-                              │ Integrates with
-┌───────────────────────────▼─────────────────────────────┐
-│                  Orchestration Layer                        │
-│  • Project Orchestrator (wf.ps1)                           │
-│  • Sub-agent delegation                                    │
-│  • Context management                                      │
-└───────────────────────────┬─────────────────────────────┘
-                              │ Coordinates
-┌───────────────────────────▼─────────────────────────────┐
-│                    Skill Layer                              │
-│  • 125+ Curated Skills (Angular, React, Go, Python, etc.)   │
-│  • 7D Validation (Security, Quality, Architecture, etc.)    │
-│  • Adversarial Judgment Protocol                           │
-└───────────────────────────┬─────────────────────────────┘
-                              │ Enforces
-┌───────────────────────────▼─────────────────────────────┐
-│                  Governance Layer                           │
-│  • SDD (Specification-Driven Development)                   │
-│  • Persistent Memory (Engram)                               │
-│  • Automated Hooks (pre-commit, pre-push)                   │
-└───────────────────────────┬─────────────────────────────┘
-                              │ Runs on
-┌───────────────────────────▼─────────────────────────────┐
-│                  Infrastructure Layer                       │
-│  • Cross-platform (Windows, Linux, macOS)                   │
-│  • Docker, Kubernetes, CI/CD integration                   │
-│  • Project Templates & Scaffolding                         │
-└─────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                    🤖 AI AGENT LAYER                            │
+│  OpenCode │ Claude Code │ Cursor │ Windsurf │ Copilot │ Codex   │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │  BA · SAD · DEV · QA · OPS · GOV · DOC · PREMORTEM      │   │
+│  │  MKT · SALES · FINANCE · HR · LEGAL · BUS-TELE           │   │
+│  │  SESSION · SCRIPT-GOV · REPORT · PR-REVIEW · RELEASE     │   │
+│  │  SESSION-CLOSE · DAILY · ORCHESTRATOR                    │   │
+│  │  7× GITFLOW (BRANCH · PR · HOOKS · MERGE · WORKFLOW      │   │
+│  │             COMMIT · CONFLICT)                            │   │
+│  └──────────────────────────────────────────────────────────┘   │
+└──────────────────────────────┬──────────────────────────────────┘
+                               │ Auto-delegation via config/auto-delegation.json
+┌──────────────────────────────▼──────────────────────────────────┐
+│                    ⚙️ ORCHESTRATION LAYER                        │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │  wf.ps1 CLI (40+ commands)                              │   │
+│  │  pre-process-input.ps1 (trigger detection + routing)     │   │
+│  │  session-autostart.cmd (platform bootstrap)              │   │
+│  │  Artifact naming · File locking · Concurrency limits     │   │
+│  └──────────────────────────────────────────────────────────┘   │
+└──────────────────────────────┬──────────────────────────────────┘
+                               │ On-demand loading
+┌──────────────────────────────▼──────────────────────────────────┐
+│                    🧩 SKILL LAYER                                │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │  132 on-demand skills activated by keyword               │   │
+│  │  Angular · React · Next.js · Go · Django · Python        │   │
+│  │  TypeScript · Zod · Zustand · Tailwind · AI SDK · MCP    │   │
+│  │  Docker · Kubernetes · Playwright · Pytest · Security    │   │
+│  │  API Design · Database · Session · Release · GitFlow     │   │
+│  └──────────────────────────────────────────────────────────┘   │
+└──────────────────────────────┬──────────────────────────────────┘
+                               │ Enforced by
+┌──────────────────────────────▼──────────────────────────────────┐
+│                    📋 GOVERNANCE LAYER                           │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │  SDD enforcement (no spec, no code)                      │   │
+│  │  Token budget guard (30K/day)                            │   │
+│  │  7D validation (Security · Quality · Architecture ·      │   │
+│  │    Testing · Docs · API · GitFlow)                       │   │
+│  │  Judgment day protocol (adversarial dual-review)         │   │
+│  │  Pre-commit hooks · Pre-push hooks · Commit-msg lint     │   │
+│  └──────────────────────────────────────────────────────────┘   │
+└──────────────────────────────┬──────────────────────────────────┘
+                               │ Runs on
+┌──────────────────────────────▼──────────────────────────────────┐
+│                    🖥️ INFRASTRUCTURE LAYER                       │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │  Windows · Linux · macOS                                 │   │
+│  │  PowerShell 7+ · Bash                                    │   │
+│  │  Docker · Kubernetes                                     │   │
+│  │  15 GitHub Actions workflows                             │   │
+│  │  Project templates (Web API, SPA, Microservices, etc.)   │   │
+│  └──────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
 ```
-
-> 💡 **TIP:** Refer to [reference/ARCHITECTURE.md](reference/ARCHITECTURE.md) for full details.
 
 ---
 
-## 📋 Stack Policies
+## 🤖 The 29 AI Agents
 
-| Concept                     | Description                               | Enforcement                      |
-| --------------------------- | ----------------------------------------- | -------------------------------- |
-| **📋 SDD-first**            | No code without a validated specification | `sdd-gate.yml` + pre-commit hook |
-| **⚖️ Adversarial Judgment** | Dual-agent review for critical changes    | `wf judgment-day`                |
-| **💰 Token governance**     | Hard budget cap — no runaway AI spend     | Token Budget Guard               |
-| **📏 Live Standards**       | PS, CI, Testing standards enforced in CI  | `ps-lint.yml` + agent-verify     |
-| **👑 RBAC**                 | Owner-level ops require explicit auth     | `config/access-control.json`     |
-| **🔒 Security**             | OWASP + dependabot + PSScriptAnalyzer     | Automated weekly                 |
+| Agent | Code | Temperature | Role | Hallucination Guard |
+|-------|------|-------------|------|---------------------|
+| **Orchestrator** | `ORCHESTRATOR` | — | Routes tasks, manages context, coordinates all agents | — |
+| **Business Analyst** | `BA` | 0.7 | Explores requirements, writes specs, asks clarifying questions | Low |
+| **System Architect** | `SAD` | 0.3 | Designs architecture, defines API contracts, documents tradeoffs | Medium |
+| **Developer** | `DEV` | 0.15 | Writes code, implements features, refactors | High |
+| **Quality Assurance** | `QA` | 0.1 | Writes tests, validates quality, runs gates | Critical |
+| **Operations** | `OPS` | 0.1 | Deploys, manages CI/CD, infrastructure | Critical |
+| **Governance** | `GOV` | 0.1 | Enforces policies, security, compliance, audit | Critical |
+| **Documentation** | `DOC` | 0.4 | Writes guides, READMEs, runbooks, reports | Low |
+| **Marketing** | `MKT` | 0.5 | Content strategy, SEO, blog posts, branding | Low |
+| **Sales** | `SALES` | 0.3 | Account plans, deal proposals, pipeline management | Medium |
+| **Finance** | `FINANCE` | 0.15 | Financial models, budgets, forecasts, ROI analysis | High |
+| **HR** | `HR` | 0.4 | Job descriptions, hiring rubrics, onboarding | Medium |
+| **Legal** | `LEGAL` | 0.1 | Regulatory compliance, GDPR, HIPAA, policy | Critical |
+| **Business Telemetry** | `BUS-TELE` | 0.2 | KPIs, usage tracking, metrics, ROI | High |
+| **Premortem** | `PREMORTEM` | 0.5 | Failure analysis, blind spot detection, stress testing | Medium |
+| **Session Manager** | `SESSION` | 0.1 | Tracks session state, git status, context | High |
+| **Script Governance** | `SCRIPT-GOV` | 0.15 | Validates scripts, enforces syntax, auto-fixes | High |
+| **Report** | `REPORT` | 0.3 | Generates metrics, dashboards, executive summaries | Medium |
+| **PR Review** | `PR-REVIEW` | 0.1 | Code review across 7 dimensions, blocks hedging | Critical |
+| **Release** | `RELEASE` | 0.1 | Version bumps, changelogs, rollback plans | Critical |
+| **Session Close** | `SESSION-CLOSE` | 0.1 | Session audit, learnings persistence, state summary | High |
+| **Daily** | `DAILY` | 0.2 | Morning checks, daily routines, maintenance | Medium |
+| **GitFlow Branch** | `GITFLOW-BRANCH` | 0.1 | Branch creation, naming convention enforcement | Critical |
+| **GitFlow PR** | `GITFLOW-PR` | 0.1 | Pull request creation and validation | Critical |
+| **GitFlow Hooks** | `GITFLOW-HOOKS` | 0.1 | Pre-commit, pre-push, hook validation | Critical |
+| **GitFlow Merge** | `GITFLOW-MERGE` | 0.1 | Post-merge sync, conflict prevention | Critical |
+| **GitFlow Workflow** | `GITFLOW-WORKFLOW` | 0.1 | Overall git flow enforcement | Critical |
+| **GitFlow Commit** | `GITFLOW-COMMIT` | 0.1 | Conventional commit validation | Critical |
+| **GitFlow Conflict** | `GITFLOW-CONFLICT` | 0.1 | Merge conflict resolution | Critical |
 
----
-
-## ⚙️ Skills & CLI
-
-**125 skills** activated on-demand by keyword trigger. Zero memory overhead for inactive skills.
-
-### Core CLI — `wf.ps1` (44+ commands)
-
-```powershell
-# Session
-wf start-session       wf end-session         wf day-end-closure
-
-# Quality
-wf verify              wf judgment-day        wf review
-wf audit               wf sdd-gate            wf sdd-metrics
-
-# Metrics & benchmarks
-wf benchmark           wf sync-drift          wf export-metrics
-wf dashboard           wf context-dashboard   wf token-guard
-
-# Agents
-wf dispatch DEV,QA "add unit tests for auth module"
-wf agent SAD "design pagination API contract"
-wf skills              # list all 125 skills
-
-# Version & info
-wf version             wf platform-info       wf health
-```
-
-### Dashboard (`wf dashboard`)
-
-Generates `reports/dashboard.html` — open in any browser:
-
-1. **📊 KPI cards**: Sessions, Dispatches, Tokens Used, Events Emitted
-2. **📈 Token Trend**: crisp HiDPI line chart (last 14 days + freshness label)
-3. **💰 Costs & Savings**: MTD/YTD/forecast + model and agent allocation
-4. **🎯 Executive ROI**: budget control cards + ROI comparison chart + traffic light
-5. **📊 Event Distribution** chart (top event categories)
-6. **📋 Recent Events** table with timestamp and governance status
-7. **📊 Metrics Explorer** tables for full traceability
-8. **🤖 Automation**: daily CI refresh with artifact publication
-
-### Runtime Routing Model
-
-1. `ai_orchestrated`: Orchestrator delegates to subagents and skills
-2. `hybrid_guarded`: Selective AI with deterministic script fallback
-3. `offline_deterministic`: Local scripts only (no network/AI dependency)
-
-### Auto-Activation System
-
-- **Pre-commit Hooks**: Automatic validation before commits
-- **PowerShell Profile**: Auto-activation when entering project directories
-- **Health Checks**: Comprehensive tool availability validation
-- **Environment Init**: One-command setup for new sessions
-
-### Project Templates
-
-Foundation provides homologated templates for:
-
-- **Web APIs** (Go + REST)
-- **Single Page Applications** (Angular + TypeScript)
-- **Microservices** (Docker + Kubernetes)
-- **Data Processing** (Python + FastAPI)
-- **DevOps Pipelines** (GitHub Actions + Azure)
+> 💡 **How it works:** You don't pick agents. The orchestrator detects intent from your input and routes to the right agent + skill automatically. Or use `wf dispatch BA,DEV "..."` for explicit delegation.
 
 ---
 
@@ -198,137 +171,102 @@ Foundation provides homologated templates for:
 
 ```mermaid
 flowchart TD
-    A([🚀 Start Session]) --> B[/pre-process-input.ps1\nTrigger Routing/]
-    B --> C{Agent\nDispatched}
-    C --> D["🤖 BA · SAD · DEV · QA\nOPS · GOV · DOC\n+ Skill Loaded"]
-    D --> E([Code Produced])
-    E --> F[/pre-commit hook\n7D Validation/]
-    F --> G{SDD Gate\nCheck}
-    G -->|No validated spec| H[🚫 BLOCKED]
-    G -->|Spec OK| I["CI Pipeline\n11 Workflows\nlint · OWASP · PSScriptAnalyzer · quality gate"]
-    I --> J{CI Green?}
-    J -->|Failures| K([❌ Fix & Retry])
-    J -->|All green| L[/judgment-day\nAdversarial Dual-Agent Review/]
-    L --> M([🏷️ tag v*.* → GitHub Release])
+    A(["🧑‍💻 User says: 'Build a REST API'"]) --> B[/pre-process-input.ps1\nTrigger Detection/]
+    B --> C{Confidence\n≥ 60%?}
+    C -->|Yes| D["Auto-dispatch\nDEV + golang-api-skill"]
+    C -->|No| E["BA activated\nRequirements clarification"]
+    E --> F([Spec written])
+    F --> G[/SDD Gate/]
+    G -->|Validated| H[/Skill Loaded/]
+    G -->|Missing| E
+    H --> I([Code produced])
+    I --> J[/Pre-commit Hook\n7D Validation/]
+    J --> K{Secrets?\nLint?\nSDD?}
+    K -->|Fail| L([🚫 BLOCKED])
+    K -->|Pass| M([✅ Commit])
+    M --> N[/CI Pipeline\n15 workflows/]
+    N --> O{All green?}
+    O -->|No| P([❌ Fix & retry])
+    O -->|Yes| Q[/judgment-day\nAdversarial dual-review/]
+    Q --> R([🏷️ Release])
 ```
+
+### Real Workflows
+
+| Scenario | What Happens | Time Saved |
+|----------|-------------|------------|
+| **Build a REST API** | `wf dispatch SAD,DEV "Go REST API with auth"` → SAD designs contract + DEV implements with `golang-api-skill` | ~4 hrs |
+| **Add auth to a React app** | `wf dispatch DEV "add JWT auth to React"` → DEV loads `react-19-skill` + `security-skill`, implements login flow | ~3 hrs |
+| **Release a new version** | `wf judgment-day` → OPS + GOV audit all gates → RELEASE bumps version → CI publishes | ~1 hr |
+| **Run a premortem** | `wf dispatch PREMORTEM "stress-test our launch plan"` → generates failure scenarios + mitigations | ~30 min |
+| **Weekly audit** | `wf audit` → full governance sweep with drift detection + context pack | ~5 min |
 
 ---
 
-## 📅 Weekly Audit Runbook
+## 📊 Dashboard Preview
 
-Systematic 5-step process for governance-validated repository audits. All outputs use
-`YYYY-MM-DD-HHmmss` timestamps for unique identification.
+Run `wf dashboard` to generate `reports/dashboard.html` — a full HTML metrics dashboard:
 
-### Step 1: Generate Context Pack
+| Section | What You See |
+|---------|-------------|
+| **KPI Cards** | Sessions, dispatches, tokens used, events emitted — at a glance |
+| **Token Trend** | 14-day HiDPI line chart with freshness labels and budget thresholds |
+| **Costs & Savings** | MTD, YTD, forecast — broken down by model and agent |
+| **Executive ROI** | Budget control cards, ROI comparison chart, traffic-light status |
+| **Event Distribution** | Top event categories with governance status |
+| **Recent Events** | Timestamped event log filtered by governance gate |
+| **Automation** | Daily CI refresh with artifact publication |
 
-```powershell
-.\scripts\wf.ps1 context-pack
-# Output: docs/sessions/YYYY-MM-DD-HHmmss-context-pack.md
-```
-
-Captures current repository state: branch, recent commits, changed files, and platform health.
-
-### Step 2: Activate Compact Context
-
-```powershell
-.\scripts\wf.ps1 compact-start
-# Reads: latest context-pack from docs/sessions/ (by filename timestamp)
-# Logs: docs/sessions/metrics/context-usage.csv
-```
-
-Loads latest context pack and records telemetry. Auto-activates on `wf.ps1 start-session` if health
-is RED.
-
-### Step 3: Generate Audit Document
-
-```powershell
-.\scripts\wf.ps1 audit
-# Output: docs/audits/YYYY-MM-DD-HHmmss-audit.md
-```
-
-Full audit report with delivery status, operational risk, test suite availability, and git tracking.
-
-### Step 4: Governance Validation
-
-```powershell
-.\scripts\diagnostics\validate-script-governance.ps1
-# Expected: EXIT:0 (all checks passed)
-
-# Optional strict gate (CI)
-.\scripts\wf.ps1 health -StrictCleanup
-```
-
-Validates canonical path references and no deprecated dependencies. Non-zero exit is blocking.
-
-### Step 5: Review Session Metrics
-
-```powershell
-.\scripts\wf.ps1 context-metrics
-# Reads: docs/sessions/metrics/context-usage.csv
-```
-
-Displays accumulated session metrics: total events, context-pack calls, compact-start calls, and
-efficiency indicators.
-
-### Step 6: Manual Homologation (Optional)
-
-```powershell
-# Preview cleanup actions
-.\scripts\wf.ps1 homologate
-
-# Apply cleanup and reference updates
-.\scripts\wf.ps1 homologate apply
-```
-
-Normalizes workspace before release or when strict cleanup reports drift.
+> 🔒 All data is **local**. No external services, no data leaks.
 
 ---
 
-## 📚 Documentation
+## 🤖 Supported AI Integrations
 
-### For Developers
+| Agent | Integration Level | Status | Notes |
+|-------|-------------------|--------|-------|
+| **OpenCode** | Full (per-phase routing) | ✅ Default | Multi-provider, full trigger detection |
+| **Claude Code** | Full (sub-agent delegation) | ✅ Recommended | Native Engram integration |
+| **Cursor** | Full (9 SDD agents) | ✅ Recommended | Parallel execution, IDE-native |
+| **Windsurf** | Solo-agent | ⚠️ Limited | Basic routing only |
+| **VS Code Copilot** | Full (parallel) | ⚠️ Partial | IDE-only, no CLI routing |
+| **Gemini CLI** | Full (experimental) | ❌ Testing | Not production-ready |
+| **Codex** | Solo-agent | ❌ Limited | Narrow scope |
+| **Antigravity** | Solo-agent + Mission Control | ❌ Experimental | Not production-ready |
 
-- **[Session Guide](guides/SESSION-GUIDE.md)**: Daily workflow and commands
-- **[Tool Activation](guides/TOOL-ACTIVATION.md)**: Auto-activation system
-- **[Dashboard Executive Guide](guides/DASHBOARD-EXECUTIVE-GUIDE.md)**: Full interpretation and ROI
-  reading manual
-- **[Testing Standards](../rules/TESTING-STANDARDS.md)**: Testing pyramid + coverage targets
-- **[PowerShell Standards](../rules/POWERSHELL-STANDARDS.md)**: PS1 coding standards
-
-### For Project Leads
-
-- **[Architecture Overview](reference/ARCHITECTURE.md)**: System design rationale
-- **[CI Hardening Standards](../rules/CI-HARDENING-STANDARDS.md)**: Workflow requirements
-- **[Status Report](reports/FOUNDATION-STATUS-REPORT-2026-05-05.md)**: Full operational status
-  v2.6.5
-
-### For Administrators
-
-- **[Installation Guide](getting-started/installation.md)**: Complete setup instructions
-- **[AI Configuration](guides/AI-CONFIGURATION.md)**: AI provider setup
-- **[Getting Started](getting-started/README.md)**: All setup guides
-- **[Security Policy](../SECURITY.md)**: Vulnerability reporting + security controls
+> All integrations are **local-first**. Foundation never requires an external API key unless you explicitly enable cloud features.
 
 ---
 
-## ⚙️ Configuration
+## ⚙️ Configuration Reference
+
+### Key Files
+
+| File | Purpose |
+|------|---------|
+| `config/auto-delegation.json` | Agent profiles, routing tiers, keyword mappings (1550 lines) |
+| `config/orchestrator.json` | Orchestrator behavior, token budget, session startup, response policies |
+| `config/security-hardening.json` | Security controls and compliance policies |
+| `config/testing-policy.json` | Testing standards and coverage requirements |
+| `.lefthook.yml` | Pre-commit, pre-push, commit-msg hooks (3 commands, 4 scripts) |
+| `.github/workflows/` | 15 CI workflows — quality gate, lint, security, SDD, release, sync |
+| `scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1` | Main CLI entry point (40+ commands) |
+| `scripts/utilities/pre-process-input.ps1` | Trigger detection + agent routing engine |
 
 ### Environment Variables
 
 ```bash
-# AI Tools
-export CLAUDE_API_KEY="your-key"
+# Optional — only if you need cloud AI features
+export CLAUDE_API_KEY="sk-..."           # Claude API key
+export OPENAI_API_KEY="sk-..."            # OpenAI API key
+export GEMINI_API_KEY="..."               # Gemini API key
 
-# Development Paths
+# Project paths — auto-detected, override if needed
 export FOUNDATION_ROOT="/path/to/foundation"
-
-# Git Configuration
-git config --global core.hooksPath "/path/to/foundation/hooks"
+export FOUNDATION_USERNAME="your-name"    # Multi-user artifact naming
 ```
 
-### Project Configuration
-
-Each project uses a `.foundation` configuration file:
+### Project Config (`.foundation`)
 
 ```json
 {
@@ -352,168 +290,124 @@ Each project uses a `.foundation` configuration file:
 
 ---
 
-## ✨ Key Features
+## 📋 Validation & QA
 
-| Feature                    | Description                                   | Benefit                   |
-| -------------------------- | --------------------------------------------- | ------------------------- |
-| **🌍 Global Installation** | Single installation per machine               | Available to all projects |
-| **⚡ Unified CLI**         | Single command (`wf.ps1`)                     | Simplified operations     |
-| **🔗 Symlink Strategy**    | Skills updated once, available everywhere     | Always synced             |
-| **🔒 Pre-commit Hooks**    | Automatic secrets detection and 7D validation | Security-first workflow   |
-| **🧩 125+ Skills**         | Curated for Go, Angular, React, Python, etc.  | Expert patterns           |
-| **🔧 Multi-Technology**    | Node.js, Go, Python, Rust support             | Flexible stack            |
-| **💻 Cross-Platform**      | Windows, Linux, macOS support                 | Universal compatibility   |
-| **📦 Templates**           | Service, CLI, library, frontend, fullstack    | Quick project start       |
-| **🚀 CI/CD Ready**         | GitHub Actions, GitLab CI, Azure DevOps       | Deployment ready          |
-| **🐳 Container Ready**     | Docker and Kubernetes production manifests    | Scalable infrastructure   |
-| **🧠 AI-Ready**            | Engram integration for persistent memory      | Session continuity        |
+### 7D Review Dimensions
 
----
+| Dimension | Focus | Enforcement |
+|-----------|-------|-------------|
+| **Security** | Secrets, OWASP, vulnerabilities | Pre-commit hook + CI scan |
+| **Quality** | Code smell, complexity, error handling | PSScriptAnalyzer + agent-verify |
+| **Architecture** | Structure, patterns, modularity | SDD gate |
+| **Testing** | Coverage, edge cases, test suite | `test-suite.yml` + pytest-skill |
+| **Docs** | README, changelog, inline docs | Docs lint + governance review |
+| **API Design** | REST contracts, validation, versioning | SAD agent + OpenAPI lint |
+| **GitFlow** | Branch names, commit messages, hooks | `commitlint.ps1` + hook-registry |
 
-## ✅ Validation & QA
+### CI Pipeline (15 Workflows)
 
-> 🚨 **CRITICAL:** Hooks run automatically before every commit.
-
-| Mechanism              | Description                           | Status       |
-| ---------------------- | ------------------------------------- | ------------ |
-| **Automated Hooks**    | pre-commit, pre-push, 7D validation   | ✅ Active    |
-| **Adversarial Review** | Judgment day protocol                 | ✅ Active    |
-| **Testing & Coverage** | `testing-strategy-skill` integration  | ✅ Active    |
-| **SDD Enforcement**    | Specification and criteria validation | ✅ Mandatory |
-
-### Code Review Dimensions
-
-| Dimension        | Icon  | Description                            | Focus               |
-| ---------------- | ----- | -------------------------------------- | ------------------- |
-| **Security**     | [S]   | Secrets, vulnerabilities, OWASP        | Critical protection |
-| **Quality**      | [Q]   | Code smell, complexity, error handling | Maintainability     |
-| **Architecture** | [A]   | Structure, patterns, modularity        | Solid design        |
-| **Testing**      | [T]   | Coverage, patterns, edge cases         | Complete validation |
-| **Docs**         | [D]   | README, changelog, comments            | Clear documentation |
-| **API Design**   | [API] | REST, validation, versioning           | Clear contracts     |
-| **Git Flow**     | [G]   | Commits, branches, hooks               | Ordered workflow    |
-
-### Review Flow
-
-```mermaid
-flowchart TB
-    subgraph AUTO ["⚡ AUTOMATIC — Pre-commit"]
-        direction LR
-        A([git commit]) --> B[/pre-commit hook/]
-        B --> C{Fast Scan\nSecrets + Quality}
-        C -->|Critical| D[🚫 BLOCKED\ndocs/reviews/]
-        C -->|Clean| E([✅ Commit Allowed])
-    end
-
-    subgraph MANUAL ["🔍 MANUAL — On Demand"]
-        direction TB
-        G([wf review]) --> H[Full · All 7 Dimensions]
-        G --> I[security · OWASP + secrets]
-        G --> J[quality · smell + complexity]
-        G --> K[quick · ~30 seconds]
-        G --> L[--report · detailed HTML]
-        G --> M[--track · export to CSV]
-    end
-
-    AUTO -.->|On demand| MANUAL
+```
+autonomous-validation.yml    📋 SDD + quality gates
+dashboard-auto-refresh.yml   📊 Daily dashboard rebuild
+format-check.yml             ✨ Prettier formatting
+foundation-quality-gate.yml  ✅ Main quality gate
+gitleaks.yml                 🔒 Secret detection
+labeler.yml                  🏷️ PR labeling
+monthly-management-report.yml📈 Executive reporting
+ps-lint.yml                  🔧 PowerShell linting
+release.yml                  🏷️ Automated releases
+script-governance.yml        📜 Script validation
+sdd-gate.yml                 📋 Spec enforcement
+security-scan.yml            🛡️ Trivy + OWASP
+sync-public.yml              🔄 Public repo sync
+test-suite.yml               🧪 Test execution
+workflow-lint.yml            ⚙️ Workflow integrity
 ```
 
 ---
 
-## 🤖 Supported AI Agents
+## 🧩 Skill Highlights (132 Total)
 
-| Agent               | Integration                  | Recommended | Why                    |
-| ------------------- | ---------------------------- | ----------- | ---------------------- |
-| **OpenCode**        | Full (per-phase routing)     | ✅ Default  | Multi-provider support |
-| **Claude Code**     | Full (sub-agents)            | ✅ Yes      | Native integration     |
-| **Cursor**          | Full (9 SDD agents)          | ✅ Yes      | Parallel execution     |
-| **Gemini CLI**      | Full (experimental)          | ❌ No       | Testing only           |
-| **VS Code Copilot** | Full (parallel)              | ❌ No       | IDE only               |
-| **Codex**           | Solo-agent                   | ❌ No       | Limited scope          |
-| **Windsurf**        | Solo-agent                   | ❌ No       | Limited scope          |
-| **Antigravity**     | Solo-agent + Mission Control | ❌ No       | Experimental           |
+| Category | Skills |
+|----------|--------|
+| **Frontend** | `angular-spa-skill`, `react-19-skill`, `nextjs-15-skill`, `tailwind-4-skill`, `typescript-skill`, `zustand-5-skill`, `zod-4-skill`, `flutter-skill`, `react-native-skill` |
+| **Backend** | `golang-api-skill`, `django-drf-skill`, `nodejs-backend-patterns`, `api-design-skill` |
+| **AI / SDK** | `ai-sdk-5-skill`, `mcp-skill`, `cloud-agent-connector-skill` |
+| **Database** | `database-relational-skill`, `database-nosql-skill` |
+| **Testing** | `playwright-skill`, `pytest-skill`, `testing-skill`, `testing-strategy-skill`, `testing-coverage-skill`, `testing-evidence-qa` |
+| **Security** | `security-skill`, `security-pentester`, `gitleaks` |
+| **DevOps** | `docker-devops-skill`, `kubernetes-deployment`, `terraform-infrastructure`, `observability-skill` |
+| **Mobile** | `android-kotlin-skill`, `android-jetpack-compose-skill`, `ios-swiftui-patterns-skill` |
+| **Governance** | `foundation-audit-skill`, `foundation-manager-skill`, `judgment-day`, `script-governance-skill` |
+| **Business** | `marketing-content-writer`, `sales-account-executive`, `finance-financial-analyst`, `hr-talent-acquisition`, `legal-compliance-officer`, `business-telemetry-skill` |
 
----
-
-## 🛠️ Available Skills
-
-### Frontend
-
-| Skill                  | Description                                      | Trigger              |
-| ---------------------- | ------------------------------------------------ | -------------------- |
-| `angular/core`         | Standalone components, signals, inject, zoneless | Angular components   |
-| `angular/forms`        | Signal Forms, Reactive Forms                     | Angular forms        |
-| `angular/performance`  | NgOptimizedImage, @defer, lazy loading           | Angular optimization |
-| `angular/architecture` | Scope Rule, project structure, file naming       | Angular projects     |
-| `react-19`             | React 19 patterns with React Compiler            | React components     |
-| `nextjs-15`            | Next.js 15 App Router patterns                   | Next.js projects     |
-| `typescript`           | TypeScript strict patterns                       | TypeScript code      |
-| `tailwind-4`           | Tailwind CSS 4 patterns                          | Tailwind styling     |
-| `zod-4`                | Zod 4 schema validation                          | Zod validation       |
-| `zustand-5`            | Zustand 5 state management                       | React state          |
-
-### Backend & AI
-
-| Skill        | Description                    | Trigger          |
-| ------------ | ------------------------------ | ---------------- |
-| `ai-sdk-5`   | Vercel AI SDK 5 patterns       | AI chat features |
-| `django-drf` | Django REST Framework patterns | Django REST APIs |
-| `pytest`     | Python pytest patterns         | Python tests     |
-| `go-api`     | Go REST API standards          | Go backend       |
-
-### Workflow
-
-| Skill                 | Description                           | Trigger           |
-| --------------------- | ------------------------------------- | ----------------- |
-| `github-pr`           | Quality PRs with conventional commits | PR creation       |
-| `jira-task`           | Jira task creation                    | Task creation     |
-| `jira-epic`           | Jira epic creation                    | Epic creation     |
-| `project-scaffolding` | Project scaffolding and templates     | New project setup |
+> Skills load **zero memory** until triggered by keyword. Run `wf skills` to see the full registry.
 
 ---
 
-## 🤝 Contributing
+## 📚 Documentation
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for full contribution guidelines.
+### Getting Started
 
-### Development Setup
+| Guide | What It Covers |
+|-------|----------------|
+| [Installation Guide](getting-started/installation.md) | Full setup for all platforms |
+| [Session Guide](guides/SESSION-GUIDE.md) | Daily workflow and commands |
+| [Tool Activation](guides/TOOL-ACTIVATION.md) | Auto-activation system |
+| [AI Configuration](guides/AI-CONFIGURATION.md) | Provider setup and keys |
+
+### Reference
+
+| Document | What It Covers |
+|----------|----------------|
+| [Architecture Overview](reference/ARCHITECTURE.md) | System design, rationale, tradeoffs |
+| [Auto-Delegation Config](../config/auto-delegation.json) | Agent profiles, routing, keywords |
+| [Orchestrator Config](../config/orchestrator.json) | All orchestrator behavior |
+| [Dashboard Executive Guide](guides/DASHBOARD-EXECUTIVE-GUIDE.md) | ROI reading manual |
+
+### Operations
+
+| Document | What It Covers |
+|----------|----------------|
+| [Weekly Audit Runbook](reference/ARCHITECTURE.md) | 6-step governance audit process |
+| [Release Process](guides/RELEASE-PROCESS.md) | Release checklist and semver policy |
+| [Branch Strategy](guides/BRANCH-STRATEGY.md) | Git flow conventions |
+| [Security Policy](../SECURITY.md) | Vulnerability reporting and controls |
+
+---
+
+## 🙌 Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for full guidelines.
 
 ```bash
-git clone https://github.com/EmmanuelOrtiz87/workspace-foundation.git
-cd workspace-foundation
-.\scripts\wf.ps1 update
-.\scripts\wf.ps1 review
-```
-
-### Create New Skills
-
-```powershell
-.\scripts\utilities\create-skill.ps1 -Name "my-skill" -Type "orchestrator"
+git clone https://github.com/EmmanuelOrtiz87/foundation.git
+cd foundation
+wf start-session    # Your first session
+wf health           # Verify everything works
 ```
 
 ---
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) for details.
+MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
-## 🆘 Support & Community
+## 🆘 Support
 
-- **Documentation**: [Docs Root](./)
-- **Issues**: [GitHub Issues](https://github.com/EmmanuelOrtiz87/workspace-foundation/issues)
-- **Discussions**:
-  [GitHub Discussions](https://github.com/EmmanuelOrtiz87/workspace-foundation/discussions)
+- **Issues**: [GitHub Issues](https://github.com/EmmanuelOrtiz87/foundation/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/EmmanuelOrtiz87/foundation/discussions)
+- **Docs**: Start at [docs/](.)
 
 ---
-
-**Ready to operate with governance, automation, and real AI?**
-
-Start with `.\scripts\wf.ps1 health` and consult the documentation for workflows, skills, and active
-policies.
 
 <p align="center">
-  <b>🏛️ Gentleman Foundation v2.8.0 — Where governance, automation, and AI converge</b><br>
-  <i>Production-Ready • 125+ Skills • 100% Local-First</i>
+  <b>🏛️ Foundation v2.9.0 — Where governance, automation, and AI converge</b><br>
+  <i>29 Agents · 132 Skills · 100% Local-First · Cross-Platform</i>
+</p>
+
+<p align="center">
+  <code>git clone https://github.com/EmmanuelOrtiz87/foundation.git && cd foundation && wf start-session</code>
 </p>
