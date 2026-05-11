@@ -3,7 +3,7 @@
 <h3 align="center">El Stack Definitivo para Desarrollo Asistido por IA</h3>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.8.0-brightgreen?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.9.0-brightgreen?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-purple?style=for-the-badge" alt="PowerShell">
@@ -326,7 +326,7 @@ MIT License - Ver archivo [LICENSE](LICENSE) para detalles.
 ---
 
 <p align="center">
-  <b>🏛️ Workspace Foundation v2.8.0 — El Stack Definitivo para IA-First Development</b><br>
-  <i>100% Local-First • Privacidad Total • Listo para Producción</i><br><br>
+  <b>🏛️ Workspace Foundation v2.9.0 — El Stack Definitivo para IA-First Development</b><br>
+  <i>100% Local-First • Open-Source Models • Privacidad Total • Listo para Producción</i><br><br>
   <code>git clone https://github.com/EmmanuelOrtiz87/foundation-public.git</code>
 </p>
