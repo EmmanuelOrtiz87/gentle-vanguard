@@ -7,10 +7,10 @@ Last reviewed: 2026-05-04 | Version: 1.0.0
 
 ## 1. Pre-Processing Rule (MANDATORY)
 
-Every AI agent **MUST** run `tools/pre-process-input.ps1` before responding.
+Every AI agent **MUST** run `scripts/utilities/pre-process-input.ps1` before responding.
 
 ```powershell
-pwsh -NoProfile -ExecutionPolicy Bypass -File tools/pre-process-input.ps1 `
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/pre-process-input.ps1 `
   -UserInput "<USER_INPUT>" -WorkspaceRoot "."
 ```
 
@@ -58,14 +58,14 @@ Key sections:
 
 | Code    | Role                  | Temperature | Max Tokens |
 | ------- | --------------------- | ----------- | ---------- |
-| BA      | Business Analyst      | 0.3         | 4500       |
-| SAD     | Solution Architect    | 0.2         | 4500       |
-| DEV     | Developer             | 0.2         | 4500       |
-| QA      | QA Engineer           | 0.1         | 3000       |
-| OPS     | DevOps Engineer       | 0.2         | 3500       |
-| GOV     | Governance            | 0.1         | 3000       |
-| DOC     | Documentation         | 0.4         | 4000       |
-| SESSION | Session Management    | 0.1         | 3000       |
+| BA      | Business Analyst      | 0.7         | 4500       |
+| SAD     | Solution Architect    | 0.3         | 4500       |
+| DEV     | Developer             | 0.15        | 4500       |
+| QA      | QA Engineer           | 0.1         | 5000       |
+| OPS     | DevOps Engineer       | 0.1         | 5000       |
+| GOV     | Governance            | 0.1         | 5000       |
+| DOC     | Documentation         | 0.4         | 5000       |
+| SESSION | Session Management    | 0.1         | 2000       |
 
 Overrides are defined in `config/auto-delegation.json#agentProfiles`.
 
@@ -102,9 +102,10 @@ Threshold source: `config/auto-delegation.json#confidenceThreshold` (default: 60
 
 Configured in `config/auto-delegation.json#hallucinationGuardLevels`:
 
-- `strict` — no fabrication of file paths, commands, or skill names
-- `standard` — warn when confidence < 60
-- `relaxed` — creative tasks only (disabled by default)
+- `low` — Log only — agent self-reports output, no external verification
+- `medium` — Spot-check — orchestrator verifies at least 1 requiredEvidence item
+- `high` — Full check — ALL requiredEvidence items verified before task marked done
+- `critical` — Full check + hedging language scan + external command verification required
 
 If a skill is not found locally → respond: _"Trigger detected for [skill]. Requires
 @orchestrator."_  
@@ -114,9 +115,9 @@ Do **NOT** invent skill paths or fake tool calls.
 
 ## 8. Session Lifecycle
 
-1. **Start**: Run `tools/session-autostart.cmd` (Windows) or `bash ./tools/session-autostart.sh`
+1. **Start**: Run `scripts/utilities/session-autostart.cmd` (Windows) or `bash ./scripts/utilities/session-autostart.sh`
 2. **Track**: Session ID pattern `session-YYYY-MM-DD-XX`, project `workspace_local`
-3. **End**: Run `tools/pre-close-validator.ps1` before closing; save key decisions to engram
+3. **End**: Run `scripts/utilities/pre-close-validator.ps1` before closing; save key decisions to engram
 
 ---
 
@@ -124,7 +125,7 @@ Do **NOT** invent skill paths or fake tool calls.
 
 - All commits follow Conventional Commits: `type(scope): message`
 - `pre-commit` hook runs `hooks/pre-commit.ps1` — validates JSON, privacy rules, script safety
-- Install hooks with `pwsh -File tools/install-hooks.ps1` (idempotent)
+- Install hooks with `pwsh -File scripts/utilities/install-hooks.ps1` (idempotent)
 - **Never** use `git commit --no-verify` unless authorized by GOV agent
 
 Valid types: `feat`, `fix`, `chore`, `docs`, `refactor`, `perf`, `test`, `ci`
@@ -136,8 +137,8 @@ Valid types: `feat`, `fix`, `chore`, `docs`, `refactor`, `perf`, `test`, `ci`
 - Default: `simple` + `ultra` response mode
 - Temperature: 0.3 (focused) — overridden per agent profile
 - Max tokens: 4500 (default agent)
-- Context compression: `tools/handoff-compress.ps1` for agent-to-agent handoffs
-- Pre-compact hook: `tools/pre-compact-hook.ps1 -ProjectName workspace_local -CompressionRatio 0.90`
+- Context compression: `scripts/utilities/handoff-compress.ps1` for agent-to-agent handoffs
+- Pre-compact hook: `scripts/utilities/pre-compact-hook.ps1 -ProjectName workspace_local -CompressionRatio 0.90`
 
 ---
 

@@ -43,8 +43,8 @@
       "script": "scripts/utilities/session-autostart.cmd",
       "platform": "windows",
       "alternatives": {
-        "linux": "bash ./tools/session-autostart.sh",
-        "macos": "bash ./tools/session-autostart.sh"
+        "linux": "bash ./scripts/utilities/session-autostart.sh",
+        "macos": "bash ./scripts/utilities/session-autostart.sh"
       }
     },
     "skillLoading": {
