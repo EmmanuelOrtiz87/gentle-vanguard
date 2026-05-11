@@ -13,6 +13,27 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [2.9.0] - 2026-05-11#
+
+### ✨ Added#
+
+- **Model Router v2.2.0**: Reassigned all agent models to open-source subscription stack (GLM5, Kimi K2.6, Qwen 3.6 Plus via OpenRouter)
+- **Agent visibility control**: All subagents marked `hidden: true` in opencode.json — only orchestrator is user-selectable; subagents are managed autonomously
+- **OpenRouter provider**: Primary LLM provider configured for open-source model access
+
+### 🔄 Changed#
+
+- **opencode.json**: Complete rewrite — removed Anthropic/OpenAI default model references, switched to OpenRouter as primary provider, added `hidden: true` + `mode: "subagent"` to all non-orchestrator agents
+- **config/model-router.json**: All 29 agent bindings updated from `opencode/gpt-*` to `openrouter/{glm-5|kimi-k2.6|qwen-3.6-plus}`
+- **Default model**: Changed from `anthropic/claude-sonnet-4-5` to `openrouter/z-ai/glm-5`
+- **Small model**: Set to `openrouter/qwen/qwen-3.6-plus` for lightweight tasks (title generation, compaction)
+
+### 🗑️ Removed#
+
+- **Direct Anthropic/OpenAI agent models**: All agents now route through OpenRouter for subscription-based open-source models
+
+---
+
 ## [2.8.1] - 2026-05-08#
 
 ### ✨ Added#

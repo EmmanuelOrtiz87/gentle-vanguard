@@ -228,15 +228,15 @@ function Set-ModelRouterDefaults {
 {
   "version": "2.1.0",
   "enabled": true,
-  "description": "Model Router: per-agent model/temperature binding with opencode Go tier models and big-pickle fallback",
+  "description": "Model Router: per-agent model/temperature binding with open-source subscription models (GLM5, Kimi K2.6, Qwen 3.6 Plus) and big-pickle fallback",
   "lastModified": "$(Get-Date -Format 'o')",
   "modifiedBy": "init",
   "defaults": {
-    "model": "gpt-5.4-mini",
-    "provider": "opencode",
+    "model": "glm-5",
+    "provider": "openrouter",
     "temperature": 0.3,
     "hallucinationGuard": "medium",
-    "notes": "Base model for agents without specific override"
+    "notes": "Base model for agents without specific override. GLM5 for code/precision, Kimi K2.6 for reasoning/long-context, Qwen 3.6 Plus for coordination/balance."
   },
   "fallback": {
     "model": "opencode/big-pickle",
@@ -301,7 +301,7 @@ function Set-ModelRouterDefaults {
     "lockoutDurationMinutes": 15
   },
   "providerPriority": {
-    "order": ["anthropic", "openai", "bedrock", "gemini", "azure", "ollama", "dify", "custom"]
+    "order": ["openrouter", "anthropic", "openai", "bedrock", "gemini", "azure", "ollama", "dify", "custom"]
   },
   "audit": {
     "enabled": true,

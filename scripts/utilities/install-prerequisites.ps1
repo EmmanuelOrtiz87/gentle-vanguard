@@ -190,6 +190,23 @@ $prerequisites = @(
         Required = $false
         ManualHint = "Requires Go: go install github.com/workspace-foundation/engram/cmd/engram@latest"
         AlternativeCheck = { $null -ne (Get-Command engram -ErrorAction SilentlyContinue) }
+    },
+    @{
+        Name = "cairosvg"
+        Type = "pip"
+        InstallCommand = "pip install cairosvg"
+        Description = "SVG to PNG renderer for tech-graph diagrams (optional)"
+        Required = $false
+        ManualHint = "pip install cairosvg"
+    },
+    @{
+        Name = "OpenCode"
+        Type = "manual"
+        InstallCommand = "curl -fsSL https://opencode.ai/install.sh | sh"
+        Description = "AI coding assistant (optional)"
+        Required = $false
+        ManualHint = "Download from https://opencode.ai or use: curl -fsSL https://opencode.ai/install.sh | sh"
+        AlternativeCheck = { $null -ne (Get-Command opencode -ErrorAction SilentlyContinue) }
     }
 )
 

@@ -1,5 +1,7 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "model": "openrouter/z-ai/glm-5",
+  "small_model": "openrouter/qwen/qwen-3.6-plus",
   "provider": {
     "openrouter": {
       "options": {
@@ -15,45 +17,33 @@
     }
   },
   "agent": {
-    "default": {
-      "model": "anthropic/claude-sonnet-4-5",
+    "orchestrator": {
+      "description": "Main orchestrator agent — coordinates all subagents autonomously",
+      "mode": "primary",
+      "model": "openrouter/qwen/qwen-3.6-plus",
       "options": {
         "minTokens": 2000,
         "maxTokens": 4500,
-        "temperature": 0.3,
-        "language": "es"
-      },
-      "permission": {
-        "websearch": "deny",
-        "codesearch": "deny",
-        "webfetch": "deny"
-      },
-      "routing": {
-        "preProcess": "scripts/utilities/pre-process-input.ps1",
-        "mappings": "config/auto-delegation.json#keywordMappings",
-        "agentProfiles": "config/auto-delegation.json#agentProfiles",
-        "fallbackStrategy": "clarify-ba"
-      }
-    },
-    "orchestrator": {
-      "model": "anthropic/claude-sonnet-4-5",
-      "options": {
-        "minTokens": 2000,
-        "maxTokens": 4500
+        "temperature": 0.3
       },
       "permission": {
         "websearch": "allow",
         "codesearch": "allow",
-        "webfetch": "allow"
+        "webfetch": "allow",
+        "task": {
+          "*": "allow"
+        }
       }
     },
     "sdd-explore": {
-      "model": "openai/gpt-5.3-codex",
+      "description": "BA exploration agent — requirements gathering and analysis",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "openrouter/moonshot/kimi-k2.6",
       "options": {
         "minTokens": 2000,
         "maxTokens": 5000,
-        "temperature": 0.7,
-        "language": "es"
+        "temperature": 0.7
       },
       "permission": {
         "websearch": "deny",
@@ -68,12 +58,14 @@
       }
     },
     "sdd-design": {
-      "model": "openai/gpt-5.5",
+      "description": "SAD architecture design agent — system design and API contracts",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "openrouter/moonshot/kimi-k2.6",
       "options": {
         "minTokens": 2000,
         "maxTokens": 5000,
-        "temperature": 0.3,
-        "language": "es"
+        "temperature": 0.3
       },
       "permission": {
         "websearch": "deny",
@@ -88,12 +80,14 @@
       }
     },
     "sdd-apply": {
-      "model": "openai/gpt-5.5",
+      "description": "DEV implementation agent — code generation and feature building",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "openrouter/z-ai/glm-5",
       "options": {
         "minTokens": 2000,
         "maxTokens": 6000,
-        "temperature": 0.15,
-        "language": "es"
+        "temperature": 0.15
       },
       "permission": {
         "websearch": "deny",
@@ -108,12 +102,14 @@
       }
     },
     "sdd-verify": {
-      "model": "openai/gpt-5.5",
+      "description": "QA verification agent — testing and validation",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "openrouter/z-ai/glm-5",
       "options": {
         "minTokens": 2000,
         "maxTokens": 5000,
-        "temperature": 0.1,
-        "language": "es"
+        "temperature": 0.1
       },
       "permission": {
         "websearch": "deny",
@@ -128,12 +124,14 @@
       }
     },
     "doc-agent": {
-      "model": "openai/gpt-5.4-mini",
+      "description": "Documentation agent — technical docs and guides",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "openrouter/qwen/qwen-3.6-plus",
       "options": {
         "minTokens": 2000,
         "maxTokens": 5000,
-        "temperature": 0.4,
-        "language": "es"
+        "temperature": 0.4
       },
       "permission": {
         "websearch": "deny",
@@ -148,12 +146,14 @@
       }
     },
     "ops-agent": {
-      "model": "openai/gpt-5.5",
+      "description": "Operations agent — deployment, CI/CD, infrastructure",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "openrouter/z-ai/glm-5",
       "options": {
         "minTokens": 2000,
         "maxTokens": 5000,
-        "temperature": 0.1,
-        "language": "es"
+        "temperature": 0.1
       },
       "permission": {
         "websearch": "deny",
@@ -168,12 +168,14 @@
       }
     },
     "gov-agent": {
-      "model": "anthropic/claude-sonnet-4-5",
+      "description": "Governance agent — compliance, security, audit",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "openrouter/moonshot/kimi-k2.6",
       "options": {
         "minTokens": 2000,
         "maxTokens": 5000,
-        "temperature": 0.1,
-        "language": "es"
+        "temperature": 0.1
       },
       "permission": {
         "websearch": "deny",
@@ -188,12 +190,14 @@
       }
     },
     "session-agent": {
-      "model": "openai/gpt-5.4-mini",
+      "description": "Session management agent — state tracking and lifecycle",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "openrouter/qwen/qwen-3.6-plus",
       "options": {
         "minTokens": 1000,
         "maxTokens": 2000,
-        "temperature": 0.1,
-        "language": "es"
+        "temperature": 0.1
       },
       "permission": {
         "websearch": "deny",
@@ -208,12 +212,14 @@
       }
     },
     "premortem-agent": {
-      "model": "openai/gpt-5.5",
+      "description": "Premortem analysis agent — risk identification and stress testing",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "openrouter/z-ai/glm-5",
       "options": {
         "minTokens": 2000,
         "maxTokens": 6000,
-        "temperature": 0.5,
-        "language": "es"
+        "temperature": 0.5
       },
       "permission": {
         "websearch": "deny",
@@ -228,12 +234,14 @@
       }
     },
     "finance-agent": {
-      "model": "openai/gpt-5.5",
+      "description": "Financial analysis agent — modeling and calculations",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "openrouter/z-ai/glm-5",
       "options": {
         "minTokens": 2000,
         "maxTokens": 5000,
-        "temperature": 0.15,
-        "language": "es"
+        "temperature": 0.15
       },
       "permission": {
         "websearch": "deny",
@@ -248,12 +256,14 @@
       }
     },
     "legal-agent": {
-      "model": "anthropic/claude-sonnet-4-5",
+      "description": "Legal compliance agent — regulatory and policy analysis",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "openrouter/moonshot/kimi-k2.6",
       "options": {
         "minTokens": 2000,
         "maxTokens": 5000,
-        "temperature": 0.1,
-        "language": "es"
+        "temperature": 0.1
       },
       "permission": {
         "websearch": "deny",
@@ -268,12 +278,14 @@
       }
     },
     "mkt-agent": {
-      "model": "openai/gpt-5.4-mini",
+      "description": "Marketing content agent — copywriting and SEO",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "openrouter/qwen/qwen-3.6-plus",
       "options": {
         "minTokens": 2000,
         "maxTokens": 5000,
-        "temperature": 0.5,
-        "language": "es"
+        "temperature": 0.5
       },
       "permission": {
         "websearch": "deny",
@@ -288,12 +300,14 @@
       }
     },
     "sales-agent": {
-      "model": "openai/gpt-5.4-mini",
+      "description": "Sales agent — pipeline and account management",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "openrouter/qwen/qwen-3.6-plus",
       "options": {
         "minTokens": 2000,
         "maxTokens": 5000,
-        "temperature": 0.3,
-        "language": "es"
+        "temperature": 0.3
       },
       "permission": {
         "websearch": "deny",
@@ -308,12 +322,14 @@
       }
     },
     "hr-agent": {
-      "model": "openai/gpt-5.4-mini",
+      "description": "HR agent — talent acquisition and people processes",
+      "mode": "subagent",
+      "hidden": true,
+      "model": "openrouter/qwen/qwen-3.6-plus",
       "options": {
         "minTokens": 2000,
         "maxTokens": 5000,
-        "temperature": 0.4,
-        "language": "es"
+        "temperature": 0.4
       },
       "permission": {
         "websearch": "deny",
