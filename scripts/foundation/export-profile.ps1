@@ -190,7 +190,7 @@ if ($ExternalDisk -and (Test-Path "${ExternalDisk}:\")) {
     Copy-Item $zipPath $destPath -Force
     Write-OK "Copiado a disco externo: $destPath"
 } elseif ($ExternalDisk) {
-    Write-Warn "Disco externo $(${ExternalDisk}:) no encontrado"
+    Write-Warn "Disco externo ${ExternalDisk}: no encontrado"
 }
 
 Remove-Item $tempBase -Recurse -Force
