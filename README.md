@@ -3,7 +3,7 @@
 <h3 align="center">El Stack Definitivo para Desarrollo Asistido por IA</h3>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.8.0-brightgreen?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.9.0-brightgreen?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-purple?style=for-the-badge" alt="PowerShell">
@@ -22,42 +22,43 @@
 > **orquestador inteligente** capaz de delegar, trackear, auditar y reportar todas tus tareas de
 > desarrollo.
 
-### ✨ La Magia en 3 Pasos:
+### 📦 Dos Formas de Usar Foundation
 
+**Opción 1 — Instalador (.exe) — ⭐ Recomendado**
 ```powershell
-# 🚀 PASO 1: Clona y configura (5 minutos)
+# Descarga Foundation-Setup.exe desde la raíz del repo
+# Ejecuta como Administrator → instala todo encriptado
+# Coloca master.key en C:\Program Files\Foundation\keys\
+# ¡Listo! Usa el acceso directo en el Desktop
+```
+
+> El `.exe` incluye el stack completo encriptado con AES-256 (scripts, configs, skills).
+> Solo es necesario el `master.key` para desbloquearlo. Ver `INSTALLATION.md`.
+
+**Opción 2 — Bootstrap manual (código abierto)**
+```powershell
+# 🚀 Clona y ejecuta bootstrap portable
 git clone https://github.com/EmmanuelOrtiz87/foundation-public.git
 cd foundation-public
-.\scripts\foundation\bootstrap.ps1  # Bootstrap portable y seguro
-
-# 🖥️ Opcional: setup completo de foundation + foundation-public en nueva PC
-.\scripts\foundation\setup-multi-machine.ps1
-
-# ⚡ PASO 2: Inicia sesión automática
-.\scripts\utilities\session-autostart.cmd
-
-# 🎯 PASO 3: ¡Pide lo que necesites!
-"Genera un informe ejecutivo de la sesión de ayer"
-"Implementa autenticación JWT con tests"
-"Audita la seguridad del proyecto"
+.\scripts\foundation\bootstrap.ps1
 ```
+
+> ⚠️ El bootstrap manual solo configura el workspace y skills públicos.
+> Para el stack completo (orquestación, agentes, skills encriptados), usa el instalador `.exe`.
 
 ---
 
 ## 🚀 Inicio Rápido
 
-| Acción                 | Comando                                                        | Descripción                   |
-| ---------------------- | -------------------------------------------------------------- | ----------------------------- |
-| 🎨 **Bootstrap**       | `.\scripts\foundation\bootstrap.ps1`                           | Inicializa el workspace       |
-| 🖥️ **Multi-PC setup**  | `.\scripts\foundation\setup-multi-machine.ps1`                 | Replica entorno en otra PC    |
-| 🤖 **Runner opcional** | `.\scripts\utilities\DEPLOYMENT\install-github-runner.ps1`     | Instala self-hosted runner    |
-| 📊 **Health Check**    | `.\scripts\utilities\wf.ps1 health`                            | Verifica estado del workspace |
-| 🔍 **Listar Skills**   | `.\scripts\utilities\wf.ps1 skills`                            | Catálogo de 125+ skills       |
-| 📈 **Dashboard**       | `.\scripts\monitoring\executive-dashboard.ps1 -Mode dashboard` | Monitoreo en tiempo real      |
-| 🧪 **Validación**      | `.\scripts\utilities\agent-verify.ps1 -Domain all`             | Auditoría completa            |
+| Acción                          | Comando / Recurso                                          | Descripción                          |
+| ------------------------------- | ---------------------------------------------------------- | ------------------------------------ |
+| 📦 **Instalador (.exe)**        | Descarga `Foundation-Setup.exe` de la raíz del repo        | Stack completo encriptado (AES-256)  |
+| 🎨 **Bootstrap manual**         | `.\scripts\foundation\bootstrap.ps1`                       | Inicializa workspace (solo público)  |
+| 🖥️ **Multi-PC setup**           | `.\scripts\foundation\setup-multi-machine.ps1`             | Replica entorno en otra PC           |
+| 📖 **Guía de instalación**      | `INSTALLATION.md`                                           | Paso a paso del instalador .exe      |
 
-> 💡 **TIP:** Usa `wf.ps1 help` para ver todos los comandos disponibles. La CLI `wf.ps1` es tu
-> interfaz unificada para TODO.
+> 💡 **TIP:** Para el stack completo (125+ skills, orquestación, agentes, dashboards),
+> usa el instalador `.exe`. El bootstrap manual solo configura lo público.
 
 > 🔐 **Runner seguro:** usa `config/github-runner.example.json` como base local y no dirijas
 > workflows de `pull_request_target` o forks no confiables a un self-hosted runner en repos
@@ -221,14 +222,16 @@ corren sobre `develop`; `main` queda reservado para release PRs, hotfixes y tags
 ## 📂 Estructura del Proyecto
 
 ```
-workspace-foundation/
-├── 📜 scripts/           # 248 scripts PowerShell (CLI, TUI, monitoreo)
-├── 🧩 skills/            # 125+ skills especializados de IA
-├── ⚙️ config/            # Configuraciones (auto-delegation, DAG, tokens)
-├── 📖 docs/              # 16 documentos principales
-├── 🧪 tests/             # 28 tests (22 unit + 3 integration + 2 security + 1 perf) - 100% PASS
-├── 📋 rules/             # Reglas y estándares del proyecto
-└── 💾 .engram-data/     # Memoria persistente (607 observations)
+foundation-public/                # Repositorio público (hub de distribución)
+├── 📦 Foundation-Setup.exe      # Instalador NSIS — stack completo encriptado
+├── 🚀 Foundation-Launcher.exe   # Launcher compilado con desencriptación AES-256
+├── 🔒 protected/                # Scripts y configs encriptados (.enc)
+├── 📢 public/                   # Skill stubs públicos (solo descubrimiento)
+├── 📖 docs/                     # Documentación pública
+├── 🎬 demos/                    # Material de demostración
+├── 🚀 scripts/foundation/       # Bootstrap portable (código abierto)
+├── ⚙️ config/                   # Configs de ejemplo (sin secretos)
+└── 📜 CHANGELOG.md / LICENSE    # Historial y licencia
 ```
 
 ---
@@ -254,21 +257,24 @@ workspace-foundation/
 
 ## 🚀 Inicio Rápido (Resumido)
 
+**Opción A — Instalador (.exe) — ⭐ Recomendado**
+```powershell
+# 1️⃣ Descargar Foundation-Setup.exe de la raíz del repo
+# 2️⃣ Ejecutar como Administrator → instala en C:\Program Files\Foundation\
+# 3️⃣ Copiar master.key del repo privado (o pegarlo al primer launch)
+# 4️⃣ ¡Listo! Usar acceso directo en Desktop
+```
+
+**Opción B — Bootstrap manual (sin .exe)**
 ```powershell
 # 1️⃣ Clonar el repositorio público
 git clone https://github.com/EmmanuelOrtiz87/foundation-public.git
 cd foundation-public
 
-# 2️⃣ Ejecutar el instalador interactivo (o usa wf.ps1)
-.\scripts\utilities\foundation-installer-tui.ps1
+# 2️⃣ Ejecutar bootstrap portable
+.\scripts\foundation\bootstrap.ps1
 
-# 3️⃣ Iniciar sesión automática
-.\scripts\utilities\session-autostart.cmd
-
-# 4️⃣ ¡Listo! El orquestador detectará y delegará automáticamente
-# "Implementa feature X" → DEV agent
-# "Genera tests" → QA agent
-# "Audita seguridad" → GOV agent
+# 3️⃣ ¡Listo! Workspace configurado con skills públicos
 ```
 
 ---
@@ -320,7 +326,7 @@ MIT License - Ver archivo [LICENSE](LICENSE) para detalles.
 ---
 
 <p align="center">
-  <b>🏛️ Workspace Foundation v2.8.0 — El Stack Definitivo para IA-First Development</b><br>
-  <i>100% Local-First • Privacidad Total • Listo para Producción</i><br><br>
+  <b>🏛️ Workspace Foundation v2.9.0 — El Stack Definitivo para IA-First Development</b><br>
+  <i>100% Local-First • Open-Source Models • Privacidad Total • Listo para Producción</i><br><br>
   <code>git clone https://github.com/EmmanuelOrtiz87/foundation-public.git</code>
 </p>
