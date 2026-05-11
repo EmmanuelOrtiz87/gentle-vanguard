@@ -14,7 +14,8 @@
 #>
 param(
     [string]$OutputDir = (Join-Path $HOME 'Downloads'),
-    [string]$ExternalDisk = ''
+    [string]$ExternalDisk = '',
+    [string]$RepoRoot = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -31,6 +32,14 @@ New-Item -ItemType Directory -Path $tempBase -Force | Out-Null
 $timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
 $zipName = "foundation-profile-$timestamp.zip"
 $zipPath = Join-Path $OutputDir $zipName
+
+if ([string]::IsNullOrWhiteSpace($RepoRoot)) {
+    $RepoRoot = if (Test-Path (Join-Path $PSScriptRoot '..\..')) {
+        (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
+    } else {
+        $PWD.Path
+    }
+}
 
 Write-Step 'Exportando Engram DB'
 
@@ -63,9 +72,19 @@ if (Test-Path (Join-Path $engramDir 'global')) {
 
 if (Test-Path (Join-Path $engramDir 'master.key')) {
     Copy-Item (Join-Path $engramDir 'master.key') $engramDest -Force
-    Write-OK 'master.key copiado'
+    Write-OK 'master.key (engram) copiado'
+}
+
+Write-Step 'Exportando master.key del repo'
+
+$repoMasterKey = Join-Path $RepoRoot 'keys\master.key'
+if (Test-Path $repoMasterKey) {
+    $keysDest = Join-Path $tempBase 'keys'
+    New-Item -ItemType Directory -Path $keysDest -Force | Out-Null
+    Copy-Item $repoMasterKey (Join-Path $keysDest 'master.key') -Force
+    Write-OK 'master.key (repo) copiado a keys/'
 } else {
-    Write-Warn 'No se encontro master.key - si usas encriptacion, la migracion no funcionara'
+    Write-Warn 'No se encontro keys/master.key en el repo - los scripts protegidos no se podran desencriptar'
 }
 
 Write-Step 'Exportando OpenCode config'
@@ -163,6 +182,7 @@ $manifest = @{
     machine      = $env:COMPUTERNAME
     engram_db    = $true
     opencode_cfg = $true
+    master_key   = (Test-Path (Join-Path $RepoRoot 'keys\master.key'))
     binarios     = @()
     ps_profile   = $profileFound
 }
@@ -200,7 +220,8 @@ Archivo: $zipPath
 Tamano: $([math]::Round($size, 2)) MB
 
 Contenido:
-  - engram/          (DB + WAL + global/ + master.key)
+  - engram/          (DB + WAL + global/)
+  - keys/            (master.key para desencriptar scripts protegidos)
   - opencode-config/ (opencode.json + tui.json + plugins/)
   - bin/             (engram.exe, opencode, gga, lib/)
   - powershell-profile/
