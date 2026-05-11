@@ -214,7 +214,7 @@ function End-Session {
 
     $enforcerScript = Join-Path $repoRoot 'scripts\adaptive\auto-norm-enforcer.ps1'
     if (Test-Path $enforcerScript) {
-        & $enforcerScript -Trigger session-close -AutoFix -VerboseOutput:$VerbosePreference
+        & $enforcerScript -Trigger session-close -AutoFix -VerboseOutput:($VerbosePreference -eq 'Continue')
         Write-Info "Norm enforcement completed"
     } else {
         Write-Warn "Norm enforcer not found at: $enforcerScript"
@@ -222,7 +222,7 @@ function End-Session {
 
     $learnerScript = Join-Path $repoRoot 'scripts\adaptive\auto-norm-learner.ps1'
     if (Test-Path $learnerScript) {
-        & $learnerScript -Trigger session-close -VerboseOutput:$VerbosePreference
+        & $learnerScript -Trigger session-close -VerboseOutput:($VerbosePreference -eq 'Continue')
         Write-Info "Norm learner completed"
     } else {
         Write-Warn "Norm learner not found at: $learnerScript"
@@ -254,10 +254,12 @@ function End-Session {
 
     $engramBin = Join-Path $repoRoot 'tools\engram.exe'
     if (-not (Test-Path $engramBin)) {
-        $engramBin = Join-Path $env:HOME 'bin\engram.exe'
+        $userProfile = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
+        $engramBin = Join-Path $userProfile 'bin\engram.exe'
     }
     if (-not (Test-Path $engramBin)) {
-        $engramBin = Join-Path $env:GOPATH 'bin\engram.exe'
+        $goPath = if ($env:GOPATH) { $env:GOPATH } else { Join-Path $env:USERPROFILE 'go' }
+        $engramBin = Join-Path $goPath 'bin\engram.exe'
     }
     if (Test-Path $engramBin) {
         $summaryContent = @"
