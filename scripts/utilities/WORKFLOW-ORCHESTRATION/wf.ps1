@@ -129,7 +129,7 @@ function Get-TokenAutopilotPolicy {
         minConsecutiveAlerts = 2
         autoApplyOnCommands = @('context-pack', 'compact-start', 'audit', 'publish', 'end-session', 'dispatch')
         applyChatLevel = 'chat-compact'
-        stateFile = '.session/token-autopilot-state.json'
+        stateFile = Join-Path $repoRoot '.session\token-autopilot-state.json'
     }
 
     $configPath = Join-Path $repoRoot 'config\context-efficiency.json'

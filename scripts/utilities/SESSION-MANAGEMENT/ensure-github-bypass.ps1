@@ -122,8 +122,13 @@ foreach ($repo in $Repos) {
             $hasFailure = $true
         }
     } catch {
-        Write-Warn "${repo}: bypass enforcement failed ($($_.Exception.Message))"
-        $hasFailure = $true
+        $errorMsg = $_.Exception.Message
+        if ($errorMsg -match 'HTTP 403|403') {
+            Write-Info "${repo}: bypass enforcement skipped (HTTP 403 - requires GitHub Pro or public repo)"
+        } else {
+            Write-Warn "${repo}: bypass enforcement failed ($errorMsg)"
+            $hasFailure = $true
+        }
     }
 }
 

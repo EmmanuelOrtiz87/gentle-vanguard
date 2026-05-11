@@ -3,6 +3,53 @@
   "model": "openrouter/z-ai/glm-5",
   "small_model": "openrouter/qwen/qwen-3.6-plus",
   "provider": {
+    "ollama": {
+      "id": "ollama",
+      "name": "Ollama Local",
+      "api": "openai",
+      "options": {
+        "baseURL": "http://localhost:11434/v1",
+        "apiKey": "ollama"
+      },
+      "models": {
+        "qwen2.5-coder:3b": {
+          "id": "qwen2.5-coder:3b",
+          "name": "Qwen2.5 Coder 3B",
+          "family": "qwen2.5-coder",
+          "attachment": false,
+          "reasoning": false,
+          "temperature": true,
+          "tool_call": true
+        },
+        "qwen2.5-coder:7b": {
+          "id": "qwen2.5-coder:7b",
+          "name": "Qwen2.5 Coder 7B",
+          "family": "qwen2.5-coder",
+          "attachment": false,
+          "reasoning": false,
+          "temperature": true,
+          "tool_call": true
+        },
+        "qwen2.5-coder:14b": {
+          "id": "qwen2.5-coder:14b",
+          "name": "Qwen2.5 Coder 14B",
+          "family": "qwen2.5-coder",
+          "attachment": false,
+          "reasoning": false,
+          "temperature": true,
+          "tool_call": true
+        },
+        "qwen3-coder:latest": {
+          "id": "qwen3-coder:latest",
+          "name": "Qwen3 Coder 30B MoE",
+          "family": "qwen3-coder",
+          "attachment": false,
+          "reasoning": true,
+          "temperature": true,
+          "tool_call": true
+        }
+      }
+    },
     "openrouter": {
       "options": {
         "setCacheKey": true,

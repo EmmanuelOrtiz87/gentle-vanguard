@@ -11,6 +11,13 @@ param(
 
 $ErrorActionPreference = 'Continue'
 
+$repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) { $env:FOUNDATION_BASE_DIR } else {
+    $root = Split-Path -Parent $PSScriptRoot
+    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
+    if (-not $root) { $root = $PSScriptRoot }
+    $root
+}
+
 function Write-Status {
     param([string]$Message)
     Write-Host "[SESSION] $Message" -ForegroundColor Green
@@ -84,10 +91,17 @@ function Clear-OrphanedSessions {
             }
 
             if ($startTime -lt $cutoff) {
-                $data.status = "orphaned"
-                $data.orphanedAt = (Get-Date).ToString("o")
-                $data.orphanedReason = "Session left active > $MaxAgeHours hours"
-                $data | ConvertTo-Json | Out-File -FilePath $file.FullName -Encoding UTF8
+                $updatedData = @{
+                    sessionId = $data.sessionId
+                    project = $data.project
+                    mode = $data.mode
+                    startTime = $data.startTime
+                    version = if ($data.PSObject.Properties['version']) { $data.version } else { '1.0' }
+                    status = "orphaned"
+                    orphanedAt = (Get-Date).ToString("o")
+                    orphanedReason = "Session left active > $MaxAgeHours hours"
+                }
+                $updatedData | ConvertTo-Json | Out-File -FilePath $file.FullName -Encoding UTF8
                 Write-Warn "Orphaned session closed: $($data.sessionId) (age: $([Math]::Round(($cutoff - $startTime).TotalHours * -1, 1))h)"
                 $cleaned++
             } else {
@@ -131,9 +145,9 @@ function Initialize-Session {
     Write-Status "Session initialized: $sessionId"
     Write-Info "Session file: $sessionFile"
 
-    $enforcerScript = Join-Path $PSScriptRoot "..\adaptive\karpathy-enforcer.ps1"
+    $enforcerScript = Join-Path $repoRoot 'scripts\utilities\karpathy-enforcer.ps1'
     if (-not (Test-Path $enforcerScript)) {
-        $enforcerScript = Join-Path $PSScriptRoot "karpathy-enforcer.ps1"
+        $enforcerScript = Join-Path $repoRoot 'scripts\adaptive\karpathy-enforcer.ps1'
     }
     if (Test-Path $enforcerScript) {
         $verboseFlag = $VerbosePreference -eq "Continue"
@@ -143,10 +157,7 @@ function Initialize-Session {
         Write-Warn "Karpathy enforcer not found, skipping..."
     }
 
-    $learnerScript = Join-Path $PSScriptRoot "..\adaptive\auto-norm-learner.ps1"
-    if (-not (Test-Path $learnerScript)) {
-        $learnerScript = Join-Path $PSScriptRoot "auto-norm-learner.ps1"
-    }
+    $learnerScript = Join-Path $repoRoot 'scripts\adaptive\auto-norm-learner.ps1'
     if (Test-Path $learnerScript) {
         $verboseFlag = $VerbosePreference -eq "Continue"
         & $learnerScript -Trigger session-start -VerboseOutput:$verboseFlag
@@ -155,10 +166,7 @@ function Initialize-Session {
         Write-Warn "Norm learner not found, skipping..."
     }
 
-    $authScript = Join-Path $PSScriptRoot "auth-session.ps1"
-    if (-not (Test-Path $authScript)) {
-        $authScript = Join-Path $repoRoot "scripts\utilities\auth-session.ps1"
-    }
+    $authScript = Join-Path $repoRoot 'scripts\utilities\auth-session.ps1'
     if (Test-Path $authScript) {
         Write-Status "Checking auth session integrity..."
         & $authScript -ManageAuth status -AsJson 2>$null | Out-Null
@@ -204,7 +212,7 @@ function Get-SessionHealth {
 function End-Session {
     Write-Status "Ending session..."
 
-    $enforcerScript = Join-Path $PSScriptRoot "..\scripts\adaptive\auto-norm-enforcer.ps1"
+    $enforcerScript = Join-Path $repoRoot 'scripts\adaptive\auto-norm-enforcer.ps1'
     if (Test-Path $enforcerScript) {
         & $enforcerScript -Trigger session-close -AutoFix -VerboseOutput:$VerbosePreference
         Write-Info "Norm enforcement completed"
@@ -212,7 +220,7 @@ function End-Session {
         Write-Warn "Norm enforcer not found at: $enforcerScript"
     }
 
-    $learnerScript = Join-Path $PSScriptRoot "..\scripts\adaptive\auto-norm-learner.ps1"
+    $learnerScript = Join-Path $repoRoot 'scripts\adaptive\auto-norm-learner.ps1'
     if (Test-Path $learnerScript) {
         & $learnerScript -Trigger session-close -VerboseOutput:$VerbosePreference
         Write-Info "Norm learner completed"
@@ -220,7 +228,7 @@ function End-Session {
         Write-Warn "Norm learner not found at: $learnerScript"
     }
 
-    $validator = Join-Path $PSScriptRoot "pre-close-validator.ps1"
+    $validator = Join-Path $repoRoot 'scripts\utilities\pre-close-validator.ps1'
     if (Test-Path $validator) {
         & $validator -AutoResolve
         if ($LASTEXITCODE -ne 0) {
@@ -244,7 +252,13 @@ function End-Session {
     $latestSession = $sessionFiles | Select-Object -First 1
     $sessionData = Get-Content -Path $latestSession.FullName -Raw | ConvertFrom-Json
 
-    $engramBin = Join-Path $PSScriptRoot "engram.exe"
+    $engramBin = Join-Path $repoRoot 'tools\engram.exe'
+    if (-not (Test-Path $engramBin)) {
+        $engramBin = Join-Path $env:HOME 'bin\engram.exe'
+    }
+    if (-not (Test-Path $engramBin)) {
+        $engramBin = Join-Path $env:GOPATH 'bin\engram.exe'
+    }
     if (Test-Path $engramBin) {
         $summaryContent = @"
 ## Goal
@@ -288,7 +302,7 @@ Session closure with full validation
 
     Write-Status "Session ended: $($sessionData.sessionId)"
 
-    $notifyScript = Join-Path $PSScriptRoot "notify-user.ps1"
+    $notifyScript = Join-Path $repoRoot 'scripts\utilities\notify-user.ps1'
     if (Test-Path $notifyScript) {
         & $notifyScript -Action "session-close" -Reason "Session ended (manual or idle timeout)" -RecoveryCommand ".\tools\session-quick-restart.ps1 -Components session" 2>$null
     }
