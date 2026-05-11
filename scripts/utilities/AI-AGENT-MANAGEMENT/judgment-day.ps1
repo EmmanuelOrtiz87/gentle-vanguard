@@ -1,198 +1,54 @@
-#!/usr/bin/env pwsh
-# judgment-day.ps1
-# Dual review orchestration with bounded passes and user confirmation.
-# Usage: .\judgment-day.ps1 [-Target <path>] [-MaxPasses <n>] [-Scope <Full|Quick>] [-NoPrompt]
+<#
+.SYNOPSIS
+    Judgment Day — Redirect to WORKFLOW-ORCHESTRATION implementation
+
+.DESCRIPTION
+    This script has been superseded by the full implementation at:
+    scripts/utilities/WORKFLOW-ORCHESTRATION/judgment-day.ps1
+
+    It delegates to the new implementation for backward compatibility.
+    All new development should use the WORKFLOW-ORCHESTRATION version.
+
+    The new implementation follows the full adversarial dual-review protocol:
+      Phase 1 — Judge A (security + quality) + Judge B (governance + structure)
+      Phase 2 — Synthesize findings (Confirmed / Suspect / Contradiction)
+      Phase 3 — Fix cycle with Fix Agent
+      Phase 4 — Re-judgment after fixes
+      Phase 5 — Iteration with escalation
+
+.PARAMETER Target
+    Path or scope to review
+
+.PARAMETER MaxPasses
+    Maximum judgment passes (default: 3)
+
+.PARAMETER Scope
+    Full or Quick
+
+.PARAMETER NoPrompt
+    Skip interactive prompts
+#>
 
 param(
     [string]$Target = ".",
-    [ValidateRange(1,10)]
+    [ValidateRange(1, 10)]
     [int]$MaxPasses = 3,
-    [ValidateSet('Full','Quick')]
+    [ValidateSet('Full', 'Quick')]
     [string]$Scope = 'Full',
     [switch]$NoPrompt
 )
 
 $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot = if ($scriptDir) { (Resolve-Path (Join-Path (Join-Path $scriptDir '..') '..')).Path } else { Get-Location }
+$repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
+$newScript = Join-Path $repoRoot 'scripts\utilities\WORKFLOW-ORCHESTRATION\judgment-day.ps1'
 
-$judgmentScript = Join-Path $scriptDir 'invoke-judgment.ps1'
-if (-not (Test-Path $judgmentScript)) {
-    Write-Host "[ERROR] invoke-judgment.ps1 not found: $judgmentScript" -ForegroundColor Red
+if (-not (Test-Path $newScript)) {
+    Write-Host "[ERROR] New judgment-day.ps1 not found at WORKFLOW-ORCHESTRATION" -ForegroundColor Red
+    Write-Host "[ERROR] Run 'wf verify' to restore the component" -ForegroundColor Red
     exit 1
 }
 
-function Write-Title {
-    param([string]$Text)
-    Write-Host "";
-    Write-Host "============================================================================" -ForegroundColor Magenta
-    Write-Host " $Text" -ForegroundColor Magenta
-    Write-Host "============================================================================" -ForegroundColor Magenta
-}
-
-function Write-PassSummary {
-    param(
-        [int]$Pass,
-        [bool]$Approved,
-        [array]$Warnings,
-        [array]$Suggestions
-    )
-
-    Write-Host "";
-    Write-Host "------------------------------------------------------------------------" -ForegroundColor Yellow
-    Write-Host " PASS $Pass - Results" -ForegroundColor Yellow
-    Write-Host "------------------------------------------------------------------------" -ForegroundColor Yellow
-    Write-Host " Verdict: $(if ($Approved) { 'APPROVED' } else { 'REQUIRES ATTENTION' })" -ForegroundColor $(if ($Approved) { 'Green' } else { 'Yellow' })
-
-    if ($Warnings.Count -gt 0) {
-        Write-Host " Warnings:" -ForegroundColor Yellow
-        foreach ($w in $Warnings) {
-            Write-Host "   - $w" -ForegroundColor Yellow
-        }
-    }
-
-    if ($Suggestions.Count -gt 0) {
-        Write-Host " Suggestions:" -ForegroundColor Cyan
-        foreach ($s in $Suggestions) {
-            Write-Host "   - $s" -ForegroundColor Cyan
-        }
-    }
-}
-
-function Get-JudgmentSignals {
-    param([string]$Stdout)
-
-    $warnings = @()
-    $suggestions = @()
-
-    foreach ($line in ($Stdout -split "`r?`n")) {
-        if ($line -match '(?i)\[WARN\]|warning') {
-            $warnings += $line.Trim()
-        }
-        if ($line -match '(?i)suggestion|recommend|next step') {
-            $suggestions += $line.Trim()
-        }
-    }
-
-    return @{
-        Warnings = @($warnings | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique)
-        Suggestions = @($suggestions | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique)
-    }
-}
-
-function Has-BlockingIssues {
-    param([string]$Stdout)
-
-    $text = $Stdout.ToLowerInvariant()
-
-    if ($text -match 'connection failed|unauthorized|credential|api[_ -]?key|auth failed|bedrock') {
-        return $false
-    }
-
-    if ($text -match '\[fail\]|verdict:\s*rejected|critical|error') {
-        return $true
-    }
-
-    return $false
-}
-
-function Is-ScopeApproved {
-    param(
-        [string]$ScopeName,
-        [string]$Stdout,
-        [int]$ExitCode
-    )
-
-    if ($ScopeName -eq 'Quick') {
-        return ($ExitCode -eq 0)
-    }
-
-    $hasBlocking = Has-BlockingIssues -Stdout $Stdout
-    return ($ExitCode -eq 0 -and -not $hasBlocking)
-}
-
-Write-Title "JUDGMENT DAY - Bounded Pass Mode"
-Write-Host " Target: $Target" -ForegroundColor Cyan
-Write-Host " Scope: $Scope" -ForegroundColor Cyan
-Write-Host " Max Passes: $MaxPasses" -ForegroundColor Cyan
-Write-Host " Connection/Credential errors are advisory warnings (non-blocking)." -ForegroundColor DarkGray
-
-$pass = 1
-$approved = $false
-$history = @()
-
-while ($pass -le $MaxPasses) {
-    Write-Host "";
-    Write-Host "[JUDGMENT] Starting pass $pass/$MaxPasses..." -ForegroundColor Cyan
-
-    if ($pass -gt 1) {
-        $output = & $judgmentScript -Scope $Scope -Remediate -MaxIterations 1 2>&1 | Out-String
-    } else {
-        $output = & $judgmentScript -Scope $Scope 2>&1 | Out-String
-    }
-    $exitCode = $LASTEXITCODE
-
-    $signals = Get-JudgmentSignals -Stdout $output
-    $hasBlocking = Has-BlockingIssues -Stdout $output
-    $approved = Is-ScopeApproved -ScopeName $Scope -Stdout $output -ExitCode $exitCode
-
-    $history += [pscustomobject]@{
-        pass = $pass
-        exitCode = $exitCode
-        approved = $approved
-        blocking = $hasBlocking
-        warnings = $signals.Warnings
-        suggestions = $signals.Suggestions
-    }
-
-    Write-PassSummary -Pass $pass -Approved $approved -Warnings $signals.Warnings -Suggestions $signals.Suggestions
-
-    if ($approved) {
-        break
-    }
-
-    if ($pass -ge $MaxPasses) {
-        break
-    }
-
-    if ($NoPrompt) {
-        $pass++
-        continue
-    }
-
-    Write-Host "";
-    Write-Host "Choose next action:" -ForegroundColor Cyan
-    Write-Host "  1) Run another pass" -ForegroundColor Yellow
-    Write-Host "  2) Stop and keep current findings" -ForegroundColor Yellow
-    Write-Host "  3) Stop and apply manual fixes first" -ForegroundColor Yellow
-    $choice = Read-Host "Option (1/2/3)"
-
-    if ($choice -ne '1') {
-        break
-    }
-
-    $pass++
-}
-
-Write-Host "";
-Write-Host "------------------------------------------------------------------------" -ForegroundColor Yellow
-Write-Host " JUDGMENT RUN SUMMARY" -ForegroundColor Yellow
-Write-Host "------------------------------------------------------------------------" -ForegroundColor Yellow
-foreach ($item in $history) {
-    Write-Host " Pass $($item.pass): approved=$($item.approved) exit=$($item.exitCode) blocking=$($item.blocking)" -ForegroundColor Gray
-}
-
-if ($approved) {
-    Write-Host "";
-    Write-Host "============================================================================" -ForegroundColor Green
-    Write-Host " JUDGMENT: APPROVED" -ForegroundColor Green
-    Write-Host "============================================================================" -ForegroundColor Green
-    exit 0
-}
-
-Write-Host "";
-Write-Host "============================================================================" -ForegroundColor Yellow
-Write-Host " JUDGMENT: ATTENTION REQUIRED" -ForegroundColor Yellow
-Write-Host " Max passes reached or stopped by user. Review warnings/suggestions above." -ForegroundColor Yellow
-Write-Host "============================================================================" -ForegroundColor Yellow
-exit 1
+Write-Host "[INFO] Delegating to WORKFLOW-ORCHESTRATION judgment-day.ps1 (v2.0)" -ForegroundColor DarkGray
+& $newScript -Target $Target -MaxPasses $MaxPasses -Scope $Scope -NoPrompt:$NoPrompt
+exit $LASTEXITCODE

@@ -217,7 +217,7 @@ function Invoke-Collect {
         $judgmentInput | ConvertTo-Json -Depth 10 | Out-File -FilePath $judgmentFile -Encoding UTF8
         
         Write-JWarn "Judgment Day input saved to: $judgmentFile"
-        Write-JWarn "Trigger Judgment Day manually: .\scripts\utilities\judgment-day-orchestrator.ps1"
+        Write-JWarn "Trigger: .\scripts\utilities\judgment-day-orchestrator.ps1 -Action run-judgment"
     }
     
     # Summary
@@ -238,11 +238,11 @@ switch ($Action) {
     "collect" { $result = Invoke-Collect }
     "trigger" { 
         Write-JWarn "Triggering Judgment Day..."
-        $judgmentScript = Join-Path $repoRoot "scripts\utilities\judgment-day-orchestrator.ps1"
-        if (Test-Path $judgmentScript) {
-            & $judgmentScript -Mode autonomous-review -VerboseOutput:$VerboseOutput
+        $orchestratorScript = Join-Path $repoRoot "scripts\utilities\judgment-day-orchestrator.ps1"
+        if (Test-Path $orchestratorScript) {
+            & $orchestratorScript -Action run-judgment -Scope full
         } else {
-            Write-JFail "Judgment Day script not found"
+            Write-JFail "judgment-day-orchestrator.ps1 not found"
             $result = @{ status = "SCRIPT_NOT_FOUND" }
         }
     }

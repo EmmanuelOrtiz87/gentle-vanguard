@@ -1,59 +1,54 @@
 {
-  "version": "2.0.0",
+  "version": "2.1.0",
   "enabled": true,
-  "description": "Model Router: agent-to-model binding and temperature management",
-  "lastModified": "2026-05-09T00:57:57.0854924-03:00",
-  "modifiedBy": null,
+  "description": "Model Router: per-agent model/temperature binding with opencode Go tier models and big-pickle fallback",
+  "lastModified": "2026-05-11T00:00:00.0000000-03:00",
+  "modifiedBy": "config-sync",
   "defaults": {
-    "model": "claude-3-5-sonnet-20241022",
-    "provider": "anthropic",
+    "model": "gpt-5.4-mini",
+    "provider": "opencode",
     "temperature": 0.3,
     "hallucinationGuard": "medium",
-    "notes": "All agents inherit these values unless overridden in agentBindings"
+    "notes": "Base model for agents without specific override. All Go-tier agents have per-binding models below."
+  },
+  "fallback": {
+    "model": "opencode/big-pickle",
+    "description": "Free-tier opencode model used when monthly Go subscription quota is exhausted",
+    "quotaExhaustedBehavior": "auto-switch",
+    "notifyOnSwitch": true,
+    "notificationMessage": "[QUOTA] Monthly Go subscription quota exhausted. Switched to opencode/big-pickle (free tier). Consider upgrading or waiting for reset.",
+    "resetOnRenewal": true
   },
   "agentBindings": {
-    "BA": {
-      "model": null,
-      "provider": null,
-      "temperature": null,
-      "hallucinationGuard": null
-    },
-    "SAD": {
-      "model": null,
-      "provider": null,
-      "temperature": null,
-      "hallucinationGuard": null
-    },
-    "DEV": {
-      "model": null,
-      "provider": null,
-      "temperature": null,
-      "hallucinationGuard": null
-    },
-    "QA": {
-      "model": null,
-      "provider": null,
-      "temperature": null,
-      "hallucinationGuard": null
-    },
-    "OPS": {
-      "model": null,
-      "provider": null,
-      "temperature": null,
-      "hallucinationGuard": null
-    },
-    "GOV": {
-      "model": null,
-      "provider": null,
-      "temperature": null,
-      "hallucinationGuard": null
-    },
-    "DOC": {
-      "model": null,
-      "provider": null,
-      "temperature": null,
-      "hallucinationGuard": null
-    }
+    "BA": { "model": "gpt-5.3-codex", "provider": "opencode", "temperature": 0.7, "hallucinationGuard": "low", "subagent": "sdd-explore", "rationale": "BA explora/analiza — codex para búsqueda rápida" },
+    "SAD": { "model": "gpt-5.5", "provider": "opencode", "temperature": 0.3, "hallucinationGuard": "medium", "subagent": "sdd-design", "rationale": "SAD diseña arquitectura — gpt-5.5 para razonamiento preciso" },
+    "DEV": { "model": "gpt-5.5", "provider": "opencode", "temperature": 0.15, "hallucinationGuard": "high", "subagent": "sdd-apply", "rationale": "DEV implementa código — gpt-5.5 para generación robusta" },
+    "QA": { "model": "gpt-5.5", "provider": "opencode", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "sdd-verify", "rationale": "QA valida — gpt-5.5 para precisión binaria" },
+    "OPS": { "model": "gpt-5.4-mini", "provider": "opencode", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "ops-agent", "rationale": "OPS despliega — mini para eficiencia, producción no necesita creatividad" },
+    "GOV": { "model": "gpt-5.5", "provider": "opencode", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "gov-agent", "rationale": "GOV audita — gpt-5.5 para precisión crítica" },
+    "DOC": { "model": "gpt-5.3-code", "provider": "opencode", "temperature": 0.4, "hallucinationGuard": "low", "subagent": "doc-agent", "rationale": "DOC documenta — code balanceado para documentación técnica" },
+    "SESSION": { "model": "gpt-5.4-mini", "provider": "opencode", "temperature": 0.1, "hallucinationGuard": "high", "subagent": "session-agent", "rationale": "SESSION trackea estado — mini suficiente para tareas determinísticas" },
+    "MKT": { "model": "gpt-5.5", "provider": "opencode", "temperature": 0.5, "hallucinationGuard": "low", "subagent": "mkt-agent", "rationale": "MKT crea contenido — gpt-5.5 para creatividad de marca" },
+    "SALES": { "model": "gpt-5.4-mini", "provider": "opencode", "temperature": 0.3, "hallucinationGuard": "medium", "subagent": "sales-agent", "rationale": "SALES sigue metodología — mini eficiente para procesos estructurados" },
+    "FINANCE": { "model": "gpt-5.5", "provider": "opencode", "temperature": 0.15, "hallucinationGuard": "high", "subagent": "finance-agent", "rationale": "FINANCE calcula — gpt-5.5 para precisión numérica" },
+    "HR": { "model": "gpt-5.4-mini", "provider": "opencode", "temperature": 0.4, "hallucinationGuard": "medium", "subagent": "hr-agent", "rationale": "HR procesa — mini eficiente para procesos estructurados" },
+    "LEGAL": { "model": "gpt-5.5", "provider": "opencode", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "legal-agent", "rationale": "LEGAL cumple normativa — gpt-5.5 para precisión regulatoria" },
+    "BUS-TELE": { "model": "gpt-5.4-mini", "provider": "opencode", "temperature": 0.2, "hallucinationGuard": "high", "subagent": "general", "rationale": "Telemetría — mini, datos estructurados" },
+    "PREMORTEM": { "model": "gpt-5.5", "provider": "opencode", "temperature": 0.5, "hallucinationGuard": "medium", "subagent": "premortem-agent", "rationale": "PREMORTEM analiza riesgos — gpt-5.5 para razonamiento adversarial" },
+    "SCRIPT-GOV": { "model": "gpt-5.5", "provider": "opencode", "temperature": 0.15, "hallucinationGuard": "high", "subagent": "sdd-verify", "rationale": "Script governance — hereda gpt-5.5 de sdd-verify" },
+    "GITFLOW-BRANCH": { "model": "gpt-5.4-mini", "provider": "opencode", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "general", "rationale": "GitFlow — mini, tareas determinísticas" },
+    "GITFLOW-PR": { "model": "gpt-5.4-mini", "provider": "opencode", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "general" },
+    "GITFLOW-HOOKS": { "model": "gpt-5.4-mini", "provider": "opencode", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "general" },
+    "GITFLOW-MERGE": { "model": "gpt-5.4-mini", "provider": "opencode", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "general" },
+    "GITFLOW-WORKFLOW": { "model": "gpt-5.4-mini", "provider": "opencode", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "general" },
+    "GITFLOW-COMMIT": { "model": "gpt-5.4-mini", "provider": "opencode", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "general" },
+    "GITFLOW-CONFLICT": { "model": "gpt-5.4-mini", "provider": "opencode", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "general" },
+    "REPORT": { "model": "gpt-5.3-code", "provider": "opencode", "temperature": 0.4, "hallucinationGuard": "low", "subagent": "doc-agent", "rationale": "Reportes — hereda code de doc-agent" },
+    "PR-REVIEW": { "model": "gpt-5.5", "provider": "opencode", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "sdd-verify", "rationale": "Code review — hereda gpt-5.5 de sdd-verify" },
+    "RELEASE": { "model": "gpt-5.4-mini", "provider": "opencode", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "ops-agent", "rationale": "Release — mini, procesos determinísticos" },
+    "SESSION-CLOSE": { "model": "gpt-5.4-mini", "provider": "opencode", "temperature": 0.1, "hallucinationGuard": "high", "subagent": "session-agent", "rationale": "Session close — mini, estado determinístico" },
+    "DAILY": { "model": "gpt-5.4-mini", "provider": "opencode", "temperature": 0.3, "hallucinationGuard": "medium", "subagent": "general", "rationale": "Daily — mini, rutina ligera" },
+    "ORCHESTRATOR": { "model": "gpt-5.4-mini", "provider": "opencode", "temperature": 0.2, "hallucinationGuard": "high", "subagent": "orchestrator", "rationale": "Orquestador — mini, coordinación eficiente" }
   },
   "temperaturePolicy": {
     "description": "Temperature can ONLY be modified from the model assignment flow (route set or TUI). Standalone temperature commands are blocked.",
@@ -90,7 +85,7 @@
   },
   "providerPriority": {
     "description": "Ordered list for model selection UI (first = default)",
-    "order": ["anthropic", "openai", "bedrock", "gemini", "azure", "ollama", "dify", "custom"]
+    "order": ["opencode", "anthropic", "openai", "bedrock", "gemini", "azure", "ollama", "dify", "custom"]
   },
   "audit": {
     "enabled": true,
