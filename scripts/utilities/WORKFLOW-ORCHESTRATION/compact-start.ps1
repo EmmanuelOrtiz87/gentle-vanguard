@@ -5,8 +5,10 @@ param(
     [string]$Objective = "Foundation maintenance"
 )
 
-$dataRoot = if ($env:FOUNDATION_DATA_DIR) { $env:FOUNDATION_DATA_DIR } else { "$env:LOCALAPPDATA\Foundation\data" }
-$engramData = "$dataRoot\.engram-data"
+$ErrorActionPreference = 'Continue'
+
+$dataRoot = if ($env:FOUNDATION_DATA_DIR) { $env:FOUNDATION_DATA_DIR } else { Join-Path $env:LOCALAPPDATA 'Foundation\data' }
+$engramData = Join-Path $dataRoot '.engram-data'
 if (-not (Test-Path $engramData)) {
     New-Item -ItemType Directory -Path $engramData -Force | Out-Null
 }
@@ -21,7 +23,7 @@ $context = @{
     project = "workspace-foundation"
 }
 
-$context | ConvertTo-Json | Out-File -FilePath "$engramData\compact-start-$timestamp.json" -Encoding utf8
+$context | ConvertTo-Json | Out-File -FilePath (Join-Path $engramData "compact-start-$timestamp.json") -Encoding utf8
 
 Write-Output "=== Compact Start Initialized ==="
 Write-Output "Session: $sessionId"

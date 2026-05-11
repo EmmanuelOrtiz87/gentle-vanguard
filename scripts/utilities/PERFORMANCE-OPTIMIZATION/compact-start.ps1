@@ -13,7 +13,12 @@ function Write-Metric {
         [string]$OutputFile
     )
 
-    $repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..\..')
+    $repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) { $env:FOUNDATION_BASE_DIR } else {
+    $root = Split-Path -Parent $PSScriptRoot
+    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
+    if (-not $root) { $root = $PSScriptRoot }
+    $root
+}
     $metricsDir = Join-Path $repoRoot 'docs/sessions/metrics'
     if (-not (Test-Path $metricsDir)) {
         New-Item -ItemType Directory -Path $metricsDir -Force | Out-Null
@@ -60,7 +65,12 @@ if ($contextRaw) {
     }
 }
 if (-not $contextPath) {
-    $repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..\..')
+    $repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) { $env:FOUNDATION_BASE_DIR } else {
+    $root = Split-Path -Parent $PSScriptRoot
+    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
+    if (-not $root) { $root = $PSScriptRoot }
+    $root
+}
     $sessionsDir = Join-Path $repoRoot 'docs/sessions'
     $latest = Get-ChildItem -Path $sessionsDir -Filter '*-context-pack.md' -File -ErrorAction SilentlyContinue |
         Sort-Object @{ Expression = {
