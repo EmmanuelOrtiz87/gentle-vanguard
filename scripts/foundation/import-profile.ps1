@@ -97,10 +97,38 @@ if (Test-Path $engramSrc) {
     $masterKey = Join-Path $engramSrc 'master.key'
     if (Test-Path $masterKey) {
         Copy-Item $masterKey $engramDest -Force
-        Write-OK 'master.key restaurado'
+        Write-OK 'master.key (engram) restaurado'
     }
 } else {
     Write-Err 'No se encontro directorio engram/ en el ZIP'
+}
+
+# --- Restaurar master.key del repo ---
+Write-Step 'Restaurando master.key del repo'
+
+$keysSrc = Join-Path $tempBase 'keys\master.key'
+if (Test-Path $keysSrc) {
+    $repoRoot = if (Test-Path (Join-Path $PSScriptRoot '..\..')) {
+        (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
+    } else {
+        Join-Path $HOME 'source\foundation'
+    }
+
+    $keysDest = Join-Path $repoRoot 'keys'
+    if (-not (Test-Path $keysDest)) {
+        New-Item -ItemType Directory -Path $keysDest -Force | Out-Null
+    }
+
+    if (Test-Path (Join-Path $keysDest 'master.key')) {
+        $backup = Join-Path $keysDest "master.key.backup.$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+        Copy-Item (Join-Path $keysDest 'master.key') $backup -Force
+        Write-Warn "master.key existente respaldado: $backup"
+    }
+
+    Copy-Item $keysSrc (Join-Path $keysDest 'master.key') -Force
+    Write-OK "master.key restaurado a $keysDest"
+} else {
+    Write-Warn 'No se encontro keys/master.key en el ZIP - scripts protegidos no podran desencriptarse'
 }
 
 # --- Restaurar OpenCode config ---
