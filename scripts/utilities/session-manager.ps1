@@ -275,10 +275,16 @@ Session closure with full validation
         }
     }
 
-    $sessionData.status = "ended"
-    $sessionData.endTime = Get-Date -Format "o"
-
-    $sessionData | ConvertTo-Json | Out-File -FilePath $latestSession.FullName -Encoding UTF8
+    $updatedData = @{
+        sessionId = $sessionData.sessionId
+        project = $sessionData.project
+        mode = $sessionData.mode
+        startTime = $sessionData.startTime
+        version = $sessionData.version
+        status = "ended"
+        endTime = Get-Date -Format "o"
+    }
+    $updatedData | ConvertTo-Json | Out-File -FilePath $latestSession.FullName -Encoding UTF8
 
     Write-Status "Session ended: $($sessionData.sessionId)"
 
