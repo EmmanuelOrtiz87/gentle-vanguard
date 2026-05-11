@@ -7,7 +7,13 @@ param(
 )
 
 $ErrorActionPreference = "Continue"
-$configPath = Join-Path $PSScriptRoot "..\config"
+$repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) { $env:FOUNDATION_BASE_DIR } else {
+    $root = Split-Path -Parent $PSScriptRoot
+    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
+    if (-not $root) { $root = $PSScriptRoot }
+    $root
+}
+$configPath = Join-Path $repoRoot "config"
 $securityPolicy = Join-Path $configPath "security-policy.json"
 $securityPrivacy = Join-Path $configPath "security-privacy.json"
 
