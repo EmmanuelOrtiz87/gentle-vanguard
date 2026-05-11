@@ -120,7 +120,7 @@ function Install-Foundation {
         }
         'team' {
             # Install team tools
-            $teamTools = @("scripts\team-collaboration", "scripts\ci-cd-setup")
+            $teamTools = @("scripts\utilities\WORKFLOW-ORCHESTRATION", "scripts\utilities\GIT-VERSION-CONTROL")
             foreach ($tool in $teamTools) {
                 $toolPath = Join-Path $InstallPath $tool
                 if (Test-Path $toolPath) {
@@ -130,7 +130,7 @@ function Install-Foundation {
         }
         'enterprise' {
             # Install enterprise features
-            $entTools = @("scripts\security", "scripts\compliance", "scripts\audit")
+            $entTools = @("scripts\security", "scripts\utilities\AUDIT-REPORTING", "scripts\diagnostics")
             foreach ($tool in $entTools) {
                 $toolPath = Join-Path $InstallPath $tool
                 if (Test-Path $toolPath) {
