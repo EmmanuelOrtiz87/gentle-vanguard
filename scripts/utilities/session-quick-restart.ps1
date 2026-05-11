@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Session Quick Restart - Restarts only what's needed without full stack
     

@@ -1,4 +1,4 @@
-﻿# fix-emoji-cleanup.ps1
+# fix-emoji-cleanup.ps1
 # Removes emojis and special characters from all PowerShell scripts
 # Ensures maximum compatibility across all CLI tools and shells
 

@@ -1,4 +1,4 @@
-﻿param(
+param(
     [switch]$AutoFix,
     [switch]$Strict,
     [switch]$AutoDelegate

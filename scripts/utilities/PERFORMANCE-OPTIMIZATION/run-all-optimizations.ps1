@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Runs all optimization scripts in sequence
 

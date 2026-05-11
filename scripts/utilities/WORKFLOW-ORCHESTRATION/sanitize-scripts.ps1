@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
 Sanitize PowerShell scripts by removing emojis and special characters
 
