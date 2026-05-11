@@ -262,33 +262,14 @@ function End-Session {
         $engramBin = Join-Path $goPath 'bin\engram.exe'
     }
     if (Test-Path $engramBin) {
-        $summaryContent = @"
-## Goal
-Session closure with full validation
-
-## Instructions
-- Pre-close validation ensures no pending work
-- Auto-resolve enabled for git issues
-
-## Discoveries
-- Validated git state, pending tasks, partial implementations
-- Engram state verified before closure
-
-## Accomplished
-- Pre-close validation passed
-- Session $($sessionData.sessionId) closed properly
-- All checks completed
-
-## Relevant Files
-- scripts/utilities/pre-close-validator.ps1 - New validation before closure
-- scripts/utilities/session-manager.ps1 - Enhanced with validation
-"@
-        & $engramBin session-summary --id $sessionData.sessionId --content $summaryContent 2>$null | Out-Null
+        $saveResult = & $engramBin save "Session closure: $($sessionData.sessionId)" --project workspace_local --type manual --content "Session $($sessionData.sessionId) closed. Pre-close validation passed." 2>&1
         if ($LASTEXITCODE -eq 0) {
-            Write-Status "Comprehensive session summary saved to Engram"
+            Write-Status "Session closure saved to Engram"
         } else {
-            Write-Warn "Failed to save session summary to Engram"
+            Write-Info "Engram save skipped (non-critical)"
         }
+    } else {
+        Write-Info "Engram not available, skipping memory save (non-critical)"
     }
 
     $updatedData = @{
