@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Session Authentication - Validates owner before restricted operations
 .DESCRIPTION
