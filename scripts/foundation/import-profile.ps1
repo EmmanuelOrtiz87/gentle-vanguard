@@ -283,7 +283,7 @@ if (-not $SkipBootstrap) {
     Write-Step 'Ejecutando setup-multi-machine.ps1'
 
     # Verificar prerequisitos minimos
-    $prereqs = @('git', 'node', 'go')
+    $prereqs = @('git', 'node')
     foreach ($cmd in $prereqs) {
         if (-not (Get-Command $cmd -ErrorAction SilentlyContinue)) {
             Write-Err "$cmd no esta instalado. Instala los prerequisitos antes de continuar."
@@ -299,6 +299,27 @@ Luego ejecuta: .\import-profile.ps1 -SkipBootstrap
 y finalmente:   .\scripts\foundation\setup-multi-machine.ps1
 '@ -ForegroundColor Yellow
             throw "Prerequisito faltante: $cmd"
+        }
+    }
+    if (-not (Get-Command go -ErrorAction SilentlyContinue)) {
+        Write-Warn 'Go no esta instalado. Se requiere solo si Engram no fue restaurado del perfil.'
+        $engramBin = Join-Path $HOME 'bin\engram.exe'
+        if (Test-Path $engramBin) {
+            Write-OK "engram.exe encontrado en $engramBin - continuando sin Go"
+        } else {
+            Write-Err 'Go no encontrado y engram.exe no esta en ~/bin/. Instala Go: winget install GoLang.Go'
+            Write-Host @'
+
+Prerequisitos:
+  1. Git:  winget install Git.Git
+  2. Node: winget install OpenJS.NodeJS.LTS
+  3. Go:   winget install GoLang.Go
+  4. Bun:  powershell -c "irm bun.sh/install.ps1 | iex"
+
+Luego ejecuta: .\import-profile.ps1 -SkipBootstrap
+y finalmente:   .\scripts\foundation\setup-multi-machine.ps1
+'@ -ForegroundColor Yellow
+            throw "Prerequisito faltante: go y engram.exe"
         }
     }
 
