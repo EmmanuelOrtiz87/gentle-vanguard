@@ -4,7 +4,8 @@
 param(
     [Parameter(Mandatory=$true)]
     [string]$Trigger,
-    [switch]$VerboseOutput
+    [switch]$VerboseOutput,
+    [switch]$AutoFix
 )
 
 $ErrorActionPreference = "Continue"
@@ -55,25 +56,25 @@ $allPassed = $true
 
 # Check Think guideline
 if (Test-ThinkGuideline -Content $Trigger) {
-    Write-Log "✓ Think guideline: Present"
+    Write-Log "[PASS] Think guideline: Present"
 } else {
-    Write-Log "✗ Think guideline: Missing - encourage reasoning"
+    Write-Log "[FAIL] Think guideline: Missing - encourage reasoning"
     $allPassed = $false
 }
 
 # Check Simplicity guideline
 if (Test-SimplicityGuideline -Content $Trigger) {
-    Write-Log "✓ Simplicity guideline: Present"
+    Write-Log "[PASS] Simplicity guideline: Present"
 } else {
-    Write-Log "✗ Simplicity guideline: Missing - keep it simple"
+    Write-Log "[FAIL] Simplicity guideline: Missing - keep it simple"
     $allPassed = $false
 }
 
 # Check Goal-Driven guideline
 if (Test-GoalDrivenGuideline -Content $Trigger) {
-    Write-Log "✓ Goal-Driven guideline: Present"
+    Write-Log "[PASS] Goal-Driven guideline: Present"
 } else {
-    Write-Log "✗ Goal-Driven guideline: Missing - define clear goals"
+    Write-Log "[FAIL] Goal-Driven guideline: Missing - define clear goals"
     $allPassed = $false
 }
 

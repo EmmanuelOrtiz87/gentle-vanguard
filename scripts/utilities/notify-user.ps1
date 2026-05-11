@@ -45,21 +45,21 @@ $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 
 # Color scheme
 $colors = @{
-    session-close = "Yellow"
-    cleanup = "Cyan"
-    disconnect = "Magenta"
-    block = "Red"
+    'session-close' = "Yellow"
+    'cleanup' = "Cyan"
+    'disconnect' = "Magenta"
+    'block' = "Red"
     'cache-clean' = "Green"
-    fragmentation = "Blue"
+    'fragmentation' = "Blue"
 }
 
 $icons = @{
-    session-close = "[SESSION]"
-    cleanup = "[CLEANUP]"
-    disconnect = "[DISCONNECT]"
-    block = "[BLOCKED]"
+    'session-close' = "[SESSION]"
+    'cleanup' = "[CLEANUP]"
+    'disconnect' = "[DISCONNECT]"
+    'block' = "[BLOCKED]"
     'cache-clean' = "[CACHE]"
-    fragmentation = "[FRAGMENT]"
+    'fragmentation' = "[FRAGMENT]"
 }
 
 function Save-ToEngram {
