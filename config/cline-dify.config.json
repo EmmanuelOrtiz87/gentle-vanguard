@@ -87,8 +87,8 @@
       "react": ["react-19"],
       "go": ["golang-api"],
       "docker": ["docker-devops"],
-      "powershell": ["workspace-automation"],
-      "session": ["session-lifecycle"]
+      "powershell": ["script-governance-skill"],
+      "session": ["session-workflow-skill"]
     },
     "rulesPath": "rules/adaptive/"
   },

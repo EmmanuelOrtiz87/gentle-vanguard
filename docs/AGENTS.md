@@ -60,14 +60,7 @@ When session tracking capability exists, initialize a session early using:
 
 ---
 
-## 🏗️ Workspace-Specific Skills#
 
-| Skill                      | Trigger                                         | Path                                   |
-| -------------------------- | ----------------------------------------------- | -------------------------------------- |
-| **`workspace-automation`** | PowerShell scripts, scheduled tasks, automation | `skills/workspace-automation/SKILL.md` |
-| **`session-lifecycle`**    | Session start/end, hooks, session state         | `skills/session-lifecycle/SKILL.md`    |
-
----
 
 ## 🚀 Quick Commands#
 
