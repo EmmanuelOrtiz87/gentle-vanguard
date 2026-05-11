@@ -1,332 +1,264 @@
-# 🏛️ Workspace Foundation
-
-<h3 align="center">El Stack Definitivo para Desarrollo Asistido por IA</h3>
+<h1 align="center">Workspace Foundation</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.9.0-brightgreen?style=for-the-badge" alt="Version">
-  <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge" alt="Status">
-  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License">
-  <img src="https://img.shields.io/badge/PowerShell-7+-purple?style=for-the-badge" alt="PowerShell">
+  <strong>The definitive AI-first development stack</strong><br>
+  <em>Local-first. Privacy-first. 125+ specialized skills. Zero external dependencies.</em>
 </p>
 
 <p align="center">
-  <b>🌐 100% Local-First • 🔒 Privacidad Total • 🚀 125+ Skills Especializados • ⚡ Cero Dependencias Externas</b>
+  <img src="https://img.shields.io/badge/Version-2.9.0-brightgreen?style=flat-square" alt="Version">
+  <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=flat-square" alt="Status">
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" alt="License">
+  <img src="https://img.shields.io/badge/PowerShell-7+-purple?style=flat-square" alt="PowerShell">
+  <img src="https://img.shields.io/badge/Agents-7-orange?style=flat-square" alt="Agents">
+  <img src="https://img.shields.io/badge/Skills-125+-teal?style=flat-square" alt="Skills">
 </p>
 
 ---
 
-## 🎯 ¿Qué es Workspace Foundation?
-
-> **Workspace Foundation** no es solo otra herramienta de desarrollo — es un **ecosistema completo**
-> que transforma cualquier AI assistant (OpenCode, Claude, Cursor, Windsurf, VS Code) en un
-> **orquestador inteligente** capaz de delegar, trackear, auditar y reportar todas tus tareas de
-> desarrollo.
-
-### 📦 Dos Formas de Usar Foundation
-
-**Opción 1 — Instalador (.exe) — ⭐ Recomendado**
-```powershell
-# Descarga Foundation-Setup.exe desde la raíz del repo
-# Ejecuta como Administrator → instala todo encriptado
-# Coloca master.key en C:\Program Files\Foundation\keys\
-# ¡Listo! Usa el acceso directo en el Desktop
-```
-
-> El `.exe` incluye el stack completo encriptado con AES-256 (scripts, configs, skills).
-> Solo es necesario el `master.key` para desbloquearlo. Ver `INSTALLATION.md`.
-
-**Opción 2 — Bootstrap manual (código abierto)**
-```powershell
-# 🚀 Clona y ejecuta bootstrap portable
-git clone https://github.com/EmmanuelOrtiz87/foundation-public.git
-cd foundation-public
-.\scripts\foundation\bootstrap.ps1
-```
-
-> ⚠️ El bootstrap manual solo configura el workspace y skills públicos.
-> Para el stack completo (orquestación, agentes, skills encriptados), usa el instalador `.exe`.
-
----
-
-## 🚀 Inicio Rápido
-
-| Acción                          | Comando / Recurso                                          | Descripción                          |
-| ------------------------------- | ---------------------------------------------------------- | ------------------------------------ |
-| 📦 **Instalador (.exe)**        | Descarga `Foundation-Setup.exe` de la raíz del repo        | Stack completo encriptado (AES-256)  |
-| 🎨 **Bootstrap manual**         | `.\scripts\foundation\bootstrap.ps1`                       | Inicializa workspace (solo público)  |
-| 🖥️ **Multi-PC setup**           | `.\scripts\foundation\setup-multi-machine.ps1`             | Replica entorno en otra PC           |
-| 📖 **Guía de instalación**      | `INSTALLATION.md`                                           | Paso a paso del instalador .exe      |
-
-> 💡 **TIP:** Para el stack completo (125+ skills, orquestación, agentes, dashboards),
-> usa el instalador `.exe`. El bootstrap manual solo configura lo público.
-
-> 🔐 **Runner seguro:** usa `config/github-runner.example.json` como base local y no dirijas
-> workflows de `pull_request_target` o forks no confiables a un self-hosted runner en repos
-> públicos.
-
----
-
-## 🌟 Características Principales
-
-### 🧠 Auto-Delegación Inteligente
-
-El orquestador analiza tu solicitud y **enruta automáticamente** al agente especializado:
-
-| Tu Solicitud                   | Agente Asignado | Skill Activado             |
-| ------------------------------ | --------------- | -------------------------- |
-| _"Implementa login con React"_ | 🛠️ **DEV**      | `react-19-skill`           |
-| _"Genera tests E2E"_           | 🧪 **QA**       | `playwright-skill`         |
-| _"Audita seguridad"_           | 🔒 **GOV**      | `judgment-day`             |
-| _"Despliega a producción"_     | ⚙️ **OPS**      | `docker-devops-skill`      |
-| _"Documenta la API"_           | 📚 **DOC**      | `documentation-governance` |
-
-### 📊 Token Budget Guard 💰
-
-Control total sobre el consumo de tokens de IA:
-
-- **Tracking en tiempo real**: Prompt + Completion tokens
-- **Presupuestos configurables**: Alertas al 80%, 90%, 95%
-- **Reporte automático**: `TOKEN-REPORTING-PROCESS.md`
-
-### 🔗 Git Hooks + Seguridad
-
-- ✅ **Lefthook**: Hooks automáticos de calidad
-- ✅ **Trufflehog**: Detección de secretos en tiempo real
-- ✅ **Pre-commit**: Validación de JSON, scripts y configuraciones
-
-### 🧩 Plugin Architecture
-
-Sistema extensible con **manifest schema**:
+## Quick Start
 
 ```powershell
-# Crear nuevo plugin
-.\scripts\utilities\wf.ps1 plugin create --name "mi-plugin"
+# Start a session
+.\scripts\utilities\session-autostart.cmd
+
+# Verify all 14 quality gates
+wf verify
+
+# Show version + skill count
+wf version
+
+# Available commands
+wf start-session | wf dashboard | wf benchmark | wf judgment-day
+```
+
+| # | Method | Command | Result |
+|---|--------|---------|--------|
+| 1 | **Installer (.exe)** | Download `Foundation-Setup.exe` from `dist/` | Full encrypted stack (AES-256), 125+ skills, orchestration |
+| 2 | **Bootstrap** | `.\scripts\foundation\bootstrap.ps1` | Full local dev environment |
+| 3 | **Multi-PC** | `.\scripts\foundation\setup-multi-machine.ps1` | Replicate on another machine |
+
+---
+
+## Architecture
+
+<img src="docs/assets/architecture-5-layers.svg" alt="5-Layer Architecture" width="960">
+
+### Data Flow
+
+```
+User Task
+  -> wf.ps1 (CLI entry)
+    -> pre-process-input.ps1 (auto-delegation routing)
+      -> Agent (BA|DEV|QA|OPS|GOV|DOC|SAD)
+        -> MCP Server (skill activation)
+          -> Skill execution
+            -> Engram (read/write persistent memory)
+              <- Result returned to user
+```
+
+### 5 Layers
+
+| Layer | Role | Components | Config |
+|-------|------|-----------|--------|
+| **1. Agents** | Task delegation | BA, DEV, QA, OPS, GOV, DOC, SAD | `config/auto-delegation.json` |
+| **2. Commands** | CLI entry points | `wf.ps1`, `pre-process-input.ps1` | `config/orchestrator.json` |
+| **3. MCP Servers** | Protocol bridge | Model Context Protocol, Engram MCP | `skills/*/SKILL.md` |
+| **4. Skills** | Specialized execution | 125+ skills (frontend, backend, DevOps, security, testing) | `config/skill-dependencies.json` |
+| **5. Memory** | Persistent context | Engram (hot/warm/cold tiers, 607+ observations) | `config/engram-config.json` |
+
+---
+
+## Auto-Delegation
+
+The orchestrator routes your request to the right agent automatically:
+
+| You Say | Agent | Skill |
+|---------|-------|-------|
+| "Implement login with React" | DEV | `react-19-skill` |
+| "Generate E2E tests" | QA | `playwright-skill` |
+| "Audit security" | GOV | `judgment-day` |
+| "Deploy to production" | OPS | `docker-devops-skill` |
+| "Document the API" | DOC | `documentation-governance` |
+| "Analyze business requirements" | BA | `business` |
+| "Review code quality" | SAD | `code-review-orchestrator-skill` |
+
+---
+
+## Skill Catalog
+
+| Category | Count | Key Skills |
+|----------|-------|-----------|
+| Frontend | 15 | `react-19-skill`, `angular-spa-skill`, `nextjs-15-skill`, `tailwind-4-skill`, `zustand-5-skill` |
+| Backend | 12 | `golang-api-skill`, `django-drf-skill`, `api-design-skill`, `database-relational-skill` |
+| Mobile | 8 | `flutter-skill`, `android-kotlin-skill`, `ios-swift-development`, `react-native-skill` |
+| Security & Governance | 18 | `security-skill`, `judgment-day`, `architecture-governance`, `documentation-governance` |
+| Testing | 12 | `testing-skill`, `playwright-skill`, `pytest-skill`, `testing-strategy-skill` |
+| Visualization | 3 | `fireworks-tech-graph`, `visual-content-skill`, `cognitive-doc-design` |
+| DevOps | 6 | `docker-devops-skill`, `terraform-skill`, `ci-cd-pipeline-skill` |
+
+> Full catalog: `docs/reference/SKILL-ORGANIZATION.md` or `wf.ps1 skills`
+
+---
+
+## CI/CD Pipeline (14 Workflows)
+
+| Workflow | Purpose | Trigger |
+|----------|---------|---------|
+| `foundation-quality-gate.yml` | Quality gates on PRs | Every PR |
+| `test-suite.yml` | 28 tests (4 categories) | Every PR/push |
+| `ps-lint.yml` | PSScriptAnalyzer lint | Every PR |
+| `sdd-gate.yml` | Block PRs without SDD | Every PR |
+| `script-governance.yml` | Script compliance | Every PR |
+| `owasp-scan.yml` | Security scanning | Weekly (Sun) |
+| `codeql-analysis.yml` | CodeQL analysis | Weekly (Mon) |
+| `autonomous-validation.yml` | Full validation suite | Weekly (Mon) |
+| `dashboard-auto-refresh.yml` | Metrics dashboard | Daily 07:00 UTC |
+| `monthly-management-report.yml` | Executive report | Monthly |
+| `dependency-backup.yml` | Dependency backup | Weekly (Sun) |
+| `release.yml` | Release management | On tag |
+| `labeler.yml` | Auto-label PRs | Every PR |
+| `workflow-lint.yml` | Workflow syntax validation | On `.github/` change |
+
+> Branching model: `develop` for active work, `main` for releases only.
+
+---
+
+## Session Management
+
+| Command | Purpose |
+|---------|---------|
+| `wf start-session` | Initialize tracked session with Engram |
+| `wf end-session` | Close session and save summary |
+| `wf dashboard` | Open HTML metrics dashboard |
+| `wf benchmark` | SLO benchmark of key commands |
+| `wf judgment-day` | Full QA gate (14 checks) |
+| `wf skills` | List available skills |
+| `wf version` | Show version + skill count |
+
+Token budget guardRuns automatically within sessions, alerting at 80%/90%/95% thresholds.
+
+---
+
+## Project Structure
+
+```
+foundation/
+  .agents/                    Agent configurations
+  .engram/                    Persistent memory store
+  .session/                   Session state and metrics
+  bin/                        CLI tools (gf.ps1)
+  build/                      NSIS installer definition
+  config/                     All configuration files
+    orchestrator.json           Main orchestrator config
+    auto-delegation.json        Agent routing and triggers
+    session-autostart.config.json  Pipeline steps
+    security-policy.json         Auth requirements
+    owner-auth.json             Owner authentication (encrypted)
+  demos/                      Demo materials
+  dist/                       Built installer (Foundation-Setup.exe)
+  docs/                       Documentation + architecture diagrams
+    assets/                    SVG/PNG architecture diagrams
+    architecture/              Architecture docs
+    reference/                 Skill catalog, token tracking, plugins
+    getting-started/           Onboarding guide
+  hooks/                      Git hooks (lefthook config)
+  keys/                       Encryption keys (master.key)
+  rules/                      Normativas (coding, error handling, performance)
+  scripts/
+    adaptive/                  Auto-orchestration (scaling, testing, docs)
+    diagnostics/               Auto-learn, diagnostics
+    foundation/                Bootstrap, setup, sync-public
+    git-hooks/                 Commit/PR validation
+    hooks/                     Pre/post processing hooks
+    project/                   Project scaffolding
+    security/                  Auth, token guard, security orchestrator
+    utilities/                 Core utilities (wf, session, auth, metrics)
+      SESSION-MANAGEMENT/      Session lifecycle scripts
+      WORKFLOW-ORCHESTRATION/  Event bus, dispatch, compact
+      DEPLOYMENT/             Setup monitoring, sync to public
+      PERFORMANCE-OPTIMIZATION/ Compact start, optimization
+      TELEMETRY-METRICS/      Token telemetry, reports
+      UTILITIES/              Response mode, auth, generation
+  skills/                     125+ specialized skill definitions
+  templates/                  Project templates (service, cli, frontend...)
+  tests/                      28 tests (4 categories)
 ```
 
 ---
 
-## 📚 Catálogo de Skills (125+ Disponibles)
+## Configuration
 
-### 🎨 Frontend (15 Skills)
-
-| Skill               | Tecnología                 | Estado    |
-| ------------------- | -------------------------- | --------- |
-| `react-19-skill`    | React 19 + Compiler        | ✅ Activo |
-| `angular-spa-skill` | Angular 19+ Standalone     | ✅ Activo |
-| `nextjs-15-skill`   | Next.js 15 App Router      | ✅ Activo |
-| `tailwind-4-skill`  | Tailwind CSS 4             | ✅ Activo |
-| `zustand-5-skill`   | Zustand 5 State Management | ✅ Activo |
-
-### ⚙️ Backend (12 Skills)
-
-| Skill                       | Tecnología             | Estado    |
-| --------------------------- | ---------------------- | --------- |
-| `golang-api-skill`          | Go 1.26+ REST APIs     | ✅ Activo |
-| `django-drf-skill`          | Django REST Framework  | ✅ Activo |
-| `database-relational-skill` | PostgreSQL, MySQL      | ✅ Activo |
-| `database-nosql-skill`      | MongoDB, Redis         | ✅ Activo |
-| `api-design-skill`          | REST, GraphQL, OpenAPI | ✅ Activo |
-
-### 📱 Mobile (8 Skills)
-
-`flutter-skill`, `android-kotlin-skill`, `ios-swiftui-patterns-skill`, `react-native-skill`,
-`mobile-developer`, `mobile-app-debugging`
-
-### 🔒 Security & Governance (18 Skills)
-
-`security-skill`, `security-expert-skill`, `judgment-day`, `architecture-governance`,
-`documentation-governance`, `owasp-scan` (CI/CD)
-
-### 🧪 Testing (12 Skills)
-
-`testing-skill`, `playwright-skill`, `pytest-skill`, `testing-strategy-skill`,
-`testing-coverage-skill`
-
-> 📖 **Ver catálogo completo**: `docs/reference/SKILL-ORGANIZATION.md` o ejecuta `wf.ps1 skills`
+| File | Purpose |
+|------|---------|
+| `config/orchestrator.json` | Main orchestrator (response mode, session, features) |
+| `config/auto-delegation.json` | Agent routing, profiles, keyword mappings |
+| `config/session-autostart.config.json` | 11-step pipeline definition |
+| `config/security-policy.json` | Auth requirements for restricted ops |
+| `config/owner-auth.json` | Owner API key + security questions (encrypted) |
+| `config/metrics-config.json` | Metrics collection and reporting config |
+| `config/behavior-prompts.json` | Agent behavior profiles |
+| `CLAUDE.md` | Claude-specific instructions |
+| `docs/AGENTS.md` | Tool-agnostic bootstrap (canonical entry point) |
 
 ---
 
-## 🏗️ Arquitectura de 5 Capas (100% Agnóstica)
+## Validation Status
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│  🎯 Layer 1: AGENTS (BA, DEV, QA, OPS, GOV, DOC, SAD)    │
-├─────────────────────────────────────────────────────────────┤
-│  ⚙️ Layer 2: COMMANDS (wf.ps1, pre-process-input.ps1)    │
-├─────────────────────────────────────────────────────────────┤
-│  🔌 Layer 3: MCP SERVERS (Model Context Protocol)         │
-├─────────────────────────────────────────────────────────────┤
-│  🧩 Layer 4: SKILLS (125+ specialized skills)              │
-├─────────────────────────────────────────────────────────────┤
-│  🧠 Layer 5: MEMORY (Engram - persistent cross-session)    │
-└─────────────────────────────────────────────────────────────┘
-```
-
-> 💡 **Agnóstico**: Funciona con OpenCode, Cursor, Codex, Windsurf, VS Code, Cline, Claude. ¡Tu
-> eliges!
+| Gate | Result |
+|------|--------|
+| CONFIG | 3/3 PASS (json-syntax, auto-delegation, quality) |
+| SKILLS | 1/1 PASS (125 validated) |
+| TESTS | 1/1 PASS (20 unit + 10 integration) |
+| HOOKS | 2/2 PASS (hook-scripts, git-hook-installed) |
+| STRUCTURE | 7/7 PASS (all checks) |
+| **Total** | **14/14 PASS, 0 errors, 0 warnings** |
 
 ---
 
-## 🚦 CI/CD Pipeline (14 Workflows Automáticos)
+## Prerequisites
 
-| Workflow                           | Propósito                                        | Frecuencia             | Estado    |
-| ---------------------------------- | ------------------------------------------------ | ---------------------- | --------- |
-| 🔍 `autonomous-validation.yml`     | Validación completa semanal                      | Lunes 10:00 GMT-3      | ✅ Activo |
-| 🧪 `foundation-quality-gate.yml`   | Quality gates en PRs                             | Por PR                 | ✅ Activo |
-| 📊 `dashboard-auto-refresh.yml`    | Actualización de dashboards                      | Diario 07:00 UTC       | ✅ Activo |
-| 💾 `dependency-backup.yml`         | Backup de dependencias                           | Domingos 13:30 GMT-3   | ✅ Activo |
-| 🔒 `owasp-scan.yml`                | Escaneo de seguridad OWASP                       | Domingos 13:30 GMT-3   | ✅ Activo |
-| 🔐 `codeql-analysis.yml`           | Análisis CodeQL (security-quality)               | Lunes 10:00            | ✅ Activo |
-| 🧪 `test-suite.yml`                | Suite completa de tests (28 tests, 4 categorías) | Por PR/Push            | ✅ Activo |
-| 📈 `monthly-management-report.yml` | Reporte gerencial                                | Mensual 06:00 UTC      | ✅ Activo |
-| 🚀 `release.yml`                   | Gestión de releases                              | Manual/Tag             | ✅ Activo |
-| 🧹 `ps-lint.yml`                   | Linting de PowerShell con PSScriptAnalyzer       | Por PR                 | ✅ Activo |
-| 📋 `script-governance.yml`         | Governanza de scripts                            | Por PR                 | ✅ Activo |
-| 🏷️ `labeler.yml`                   | Auto-etiquetado de PRs                           | Por PR                 | ✅ Activo |
-| 📝 `sdd-gate.yml`                  | Bloqueo de PRs sin SDD validado                  | Por PR                 | ✅ Activo |
-| ✅ `workflow-lint.yml`             | Validación de sintaxis de workflows              | Por cambio en .github/ | ✅ Activo |
+| Requirement | Version | Required? | Notes |
+|------------|---------|-----------|-------|
+| PowerShell | 7+ | Yes | Core runtime |
+| Git | 2.50+ | Yes | Version control |
+| Go | 1.26+ | Optional | Specific scripts |
+| Node.js | 18+ | Optional | Some tools |
 
 ---
 
-**Modo actual de publicación**: `develop-first`. Los pushes frecuentes y la validación continua
-corren sobre `develop`; `main` queda reservado para release PRs, hotfixes y tags semver.
+## Defensive Patterns
+
+All PowerShell scripts follow standardized defensive patterns documented in `scripts/DEFENSIVE-PATTERNS.md`:
+
+- Robust repoRoot resolution via `$env:FOUNDATION_BASE_DIR` + recursive config search
+- BOM-free UTF-8 encoding
+- ASCII-only output (no Unicode in scripts)
+- `Add-Member -Force` for PSCustomObject property assignment
+- Quoted hashtable keys with hyphens
+- `$ErrorActionPreference = 'Stop'` at script entry
+- SHA256 integrity baselines for security-critical config
 
 ---
 
-## 📖 Documentación Disponible
+## Documentation
 
-| Documento              | Descripción                         | Enlace                                                                         |
-| ---------------------- | ----------------------------------- | ------------------------------------------------------------------------------ |
-| 🚀 **Getting Started** | Guía de inicio para nuevos usuarios | [docs/getting-started/README.md](docs/getting-started/README.md)               |
-| 🏗️ **Architecture**    | Vista general de arquitectura       | [docs/architecture/README.md](docs/architecture/README.md)                     |
-| 📚 **Skills Catalog**  | Referencia de 125+ skills           | [docs/reference/SKILL-ORGANIZATION.md](docs/reference/SKILL-ORGANIZATION.md)   |
-| 💰 **Token Tracking**  | Guía de monitoreo de tokens         | [docs/reference/REAL-TOKEN-TRACKING.md](docs/reference/REAL-TOKEN-TRACKING.md) |
-| 🧩 **Plugin System**   | Guía de desarrollo de plugins       | [docs/reference/PLUGIN-ARCHITECTURE.md](docs/reference/PLUGIN-ARCHITECTURE.md) |
-| 📜 **Changelog**       | Historial de cambios v2.8.0         | [CHANGELOG.md](CHANGELOG.md)                                                   |
-| 🎯 **Next Session**    | Guía para la próxima sesión         | [docs/NEXT_SESSION_GUIDE.md](docs/NEXT_SESSION_GUIDE.md)                       |
-| 📋 **Contributing**    | Cómo contribuir al proyecto         | [CONTRIBUTING.md](CONTRIBUTING.md)                                             |
-
----
-
-## 🔧 Prerrequisitos
-
-| Requisito         | Versión | Estado       | Opcional                     |
-| ----------------- | ------- | ------------ | ---------------------------- |
-| 🔷 **PowerShell** | 7+      | ✅ Requerido | ❌                           |
-| 🌿 **Git**        | 2.50+   | ✅ Requerido | ❌                           |
-| 🔷 **Go**         | 1.26+   | ⚠️ Opcional  | ✅ Solo scripts específicos  |
-| 🟢 **Node.js**    | 18+     | ⚠️ Opcional  | ✅ Solo algunas herramientas |
-
----
-
-## 📂 Estructura del Proyecto
-
-```
-foundation-public/                # Repositorio público (hub de distribución)
-├── 📦 Foundation-Setup.exe      # Instalador NSIS — stack completo encriptado
-├── 🚀 Foundation-Launcher.exe   # Launcher compilado con desencriptación AES-256
-├── 🔒 protected/                # Scripts y configs encriptados (.enc)
-├── 📢 public/                   # Skill stubs públicos (solo descubrimiento)
-├── 📖 docs/                     # Documentación pública
-├── 🎬 demos/                    # Material de demostración
-├── 🚀 scripts/foundation/       # Bootstrap portable (código abierto)
-├── ⚙️ config/                   # Configs de ejemplo (sin secretos)
-└── 📜 CHANGELOG.md / LICENSE    # Historial y licencia
-```
-
----
-
-## 🎖️ Estado de Validación (100% PASS)
-
-```
-╔══════════════════════════════════════════════════════════════╗
-║           🏆 AGENT SELF-VERIFICATION REPORT 🏆             ║
-╠══════════════════════════════════════════════════════════════╣
-║  ✅ CONFIG: 3/3 PASS (json-syntax, auto-delegation, quality)  ║
-║  ✅ SKILLS: 1/1 PASS (125 skills validados)                 ║
-║  ✅ TESTS: 1/1 PASS (20 unit + 10 integration)             ║
-║  ✅ HOOKS: 2/2 PASS (hook-scripts, git-hook-installed)    ║
-║  ✅ STRUCTURE: 7/7 PASS (all checks)                       ║
-║                                                              ║
-║  📊 14/14 passed | 0 error(s) | 0 warning(s)              ║
-║  🏆 RESULT: ALL CHECKS PASS — work verified clean.           ║
-╚══════════════════════════════════════════════════════════════╝
-```
-
----
-
-## 🚀 Inicio Rápido (Resumido)
-
-**Opción A — Instalador (.exe) — ⭐ Recomendado**
-```powershell
-# 1️⃣ Descargar Foundation-Setup.exe de la raíz del repo
-# 2️⃣ Ejecutar como Administrator → instala en C:\Program Files\Foundation\
-# 3️⃣ Copiar master.key del repo privado (o pegarlo al primer launch)
-# 4️⃣ ¡Listo! Usar acceso directo en Desktop
-```
-
-**Opción B — Bootstrap manual (sin .exe)**
-```powershell
-# 1️⃣ Clonar el repositorio público
-git clone https://github.com/EmmanuelOrtiz87/foundation-public.git
-cd foundation-public
-
-# 2️⃣ Ejecutar bootstrap portable
-.\scripts\foundation\bootstrap.ps1
-
-# 3️⃣ ¡Listo! Workspace configurado con skills públicos
-```
-
----
-
-## 🌟 ¿Por qué elegir Workspace Foundation?
-
-| Beneficio                  | Impacto                      | Métrica                                 |
-| -------------------------- | ---------------------------- | --------------------------------------- |
-| ⏱️ **Reducción de tiempo** | 80% menos tiempo en setup    | TUI installer: 5 min vs 2+ horas manual |
-| 🎯 **Consistencia**        | 100% adherencia a estándares | Auto-delegación + judgment-day          |
-| 🧪 **Cobertura**           | ~75% objetivos cubiertos     | 28 tests automatizados (4 categorías)   |
-| 🔒 **Seguridad**           | Detección temprana           | Trufflehog + OWASP scan                 |
-| 🔄 **Continuidad**         | Memoria persistente          | Engram: 607 observations                |
-| 👁️ **Visibilidad**         | Reportes automáticos         | Dashboards semanales y mensuales        |
-
----
-
-## 📱 Conecta con Nosotros
-
-| Plataforma              | Enlace                                                                                                     |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------- |
-| 🐙 **GitHub (Public)**  | [github.com/EmmanuelOrtiz87/foundation-public](https://github.com/EmmanuelOrtiz87/foundation-public)       |
-| 🔒 **GitHub (Private)** | [github.com/EmmanuelOrtiz87/gentleman-foundation](https://github.com/EmmanuelOrtiz87/gentleman-foundation) |
-| 📖 **Docs**             | [docs.foundation.local](docs/README.md)                                                                    |
-
-### #️⃣ Hashtags
-
-`#FoundationStack` `#AIDevelopment` `#DevTools` `#OpenCode` `#Productivity` `#LocalFirst`
-`#AIAgents`
-
----
-
-## 📜 Licencia
-
-MIT License - Ver archivo [LICENSE](LICENSE) para detalles.
-
----
-
-## 🎯 Perfecto para:
-
-- ✅ **Nuevos proyectos**: Scaffolding con templates (service, cli, library, frontend, fullstack,
-  microservices)
-- ✅ **Desarrollo continuo**: Auto-delegación, code review, testing
-- ✅ **QA y testing**: E2E, unit, integration, security testing
-- ✅ **Operaciones**: Docker, K8s, Terraform, CI/CD
-- ✅ **Governanza**: Auditorías, compliance, reportes gerenciales
-- ✅ **Monitoreo**: Dashboards ejecutivos, métricas semanales
+| Document | Description |
+|----------|-------------|
+| [AGENTS.md](docs/AGENTS.md) | Tool-agnostic bootstrap (canonical entry) |
+| [Getting Started](docs/getting-started/README.md) | Setup guide |
+| [Architecture](docs/architecture/README.md) | System design |
+| [Skills Catalog](docs/reference/SKILL-ORGANIZATION.md) | 125+ skills reference |
+| [Session Auth Flow](docs/SESSION-AUTH-FLOW.md) | Authentication documentation |
+| [Token Tracking](docs/reference/REAL-TOKEN-TRACKING.md) | Token monitoring |
+| [Plugin System](docs/reference/PLUGIN-ARCHITECTURE.md) | Plugin development |
+| [Defensive Patterns](scripts/DEFENSIVE-PATTERNS.md) | PowerShell coding standards |
+| [Changelog](CHANGELOG.md) | Version history |
+| [Contributing](CONTRIBUTING.md) | How to contribute |
 
 ---
 
 <p align="center">
-  <b>🏛️ Workspace Foundation v2.9.0 — El Stack Definitivo para IA-First Development</b><br>
-  <i>100% Local-First • Open-Source Models • Privacidad Total • Listo para Producción</i><br><br>
-  <code>git clone https://github.com/EmmanuelOrtiz87/foundation-public.git</code>
+  <strong>Workspace Foundation v2.9.0</strong><br>
+  <em>100% Local-First | Privacy Total | Production Ready</em>
 </p>
