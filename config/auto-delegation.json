@@ -206,7 +206,7 @@
         ],
         "escalateOnFailure": "orchestrator"
       },
-      "skill": "code-review-orchestrator",
+      "skill": "code-review-orchestrator-skill",
       "dimensions": [
         "Security",
         "Quality",
