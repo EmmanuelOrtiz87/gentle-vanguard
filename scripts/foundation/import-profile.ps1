@@ -283,7 +283,7 @@ if (-not $SkipBootstrap) {
     Write-Step 'Ejecutando setup-multi-machine.ps1'
 
     # Verificar prerequisitos minimos
-    $prereqs = @('git', 'node')
+    $prereqs = @('git', 'node', 'go')
     foreach ($cmd in $prereqs) {
         if (-not (Get-Command $cmd -ErrorAction SilentlyContinue)) {
             Write-Err "$cmd no esta instalado. Instala los prerequisitos antes de continuar."

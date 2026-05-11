@@ -67,17 +67,26 @@ if ([string]::IsNullOrWhiteSpace($gitUserCheck) -or [string]::IsNullOrWhiteSpace
     }
 }
 
+$goAvailable = Get-Command go -ErrorAction SilentlyContinue
+$engramAvailable = Get-Command engram -ErrorAction SilentlyContinue
+
 # 2. Go (Tool engine and backend)
-if (Get-Command go -ErrorAction SilentlyContinue) {
+if ($goAvailable) {
     Write-Success "Go detected: $(go version)"
+} elseif ($engramAvailable) {
+    Write-InfoMsg "Go not found. Engram already available - skipping Go requirement."
+    Write-InfoMsg "Install Go later for full functionality: winget install GoLang.Go"
 } else {
-    Write-ErrorMsg "Go (Golang) not found. Install it at: https://go.dev/"
+    Write-ErrorMsg "Go (Golang) not found and Engram not available. Install Go: winget install GoLang.Go"
     exit 1
 }
 
 # 3. Engram (AI Orchestrator)
-if (Get-Command engram -ErrorAction SilentlyContinue) {
+if ($engramAvailable) {
     Write-Success "Engram CLI detected."
+} elseif (-not $goAvailable) {
+    Write-ErrorMsg "Cannot install Engram: Go not found. Install Go first."
+    exit 1
 } else {
     Write-Step "Installing Engram CLI from repository..."
     $engramToolDir = Join-Path $workspaceRoot "scripts/utilities/engram"
@@ -178,7 +187,7 @@ $report = @{
     } else { 
         if (Test-Path "$env:ProgramFiles\GitHub CLI\gh.exe") { "RESTART REQUIRED (Installed but not in PATH)" } else { "INFO: Not installed" }
     }
-    Go  = if (Get-Command go -ErrorAction SilentlyContinue) { "PASS" } else { "FAIL" }
+    Go  = if (Get-Command go -ErrorAction SilentlyContinue) { "PASS" } elseif (Get-Command engram -ErrorAction SilentlyContinue) { "WARN: Not installed (Engram available)" } else { "FAIL" }
     Engram = if (Get-Command engram -ErrorAction SilentlyContinue) { "PASS" } else { "FAIL" }
     Config = if (Test-Path $configPath) { "PASS" } else { "FAIL" }
 }
