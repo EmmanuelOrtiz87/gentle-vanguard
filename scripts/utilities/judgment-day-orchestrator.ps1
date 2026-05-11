@@ -1,227 +1,289 @@
 <#
 .SYNOPSIS
-    Judgment Day Orchestrator - Coordinates automated dual-review before push/merge
-    
+    Judgment Day Orchestrator — Coordinates dual-review before push/merge/session
+
 .DESCRIPTION
-    Manages Judgment Day execution, coordinates with git hooks, and integrates with
-    the session orchestrator to ensure code quality and dual-reviewer approval.
-    
+    Manages Judgment Day execution, coordinates with git hooks, and integrates
+    with the session orchestrator. Calls the real judgment-day.ps1 from
+    WORKFLOW-ORCHESTRATION for all review operations.
+
 .PARAMETER Action
-    Action to perform: initialize, check-pr, check-push, run-judgment, report
-    
+    Action to perform: initialize, check-pr, check-push, run-judgment, report, status
+
 .PARAMETER Scope
-    Scope of judgment: changed_files, pr_files, all
-    
+    Scope of judgment: changed_files, pr_files, all, full, quick
+
 .PARAMETER MaxIterations
     Maximum fix iterations before escalation (default: 2)
-    
+
 .EXAMPLE
     .\judgment-day-orchestrator.ps1 -Action initialize
     .\judgment-day-orchestrator.ps1 -Action check-pr
-    .\judgment-day-orchestrator.ps1 -Action run-judgment -Scope pr_files
+    .\judgment-day-orchestrator.ps1 -Action run-judgment -Scope full
 #>
 
 param(
     [ValidateSet('initialize', 'check-pr', 'check-push', 'run-judgment', 'report', 'status')]
     [string]$Action = 'status',
-    
-    [ValidateSet('changed_files', 'pr_files', 'all')]
+
+    [ValidateSet('changed_files', 'pr_files', 'all', 'full', 'quick')]
     [string]$Scope = 'changed_files',
-    
+
     [int]$MaxIterations = 2,
-    
+
     [switch]$Verbose
 )
 
-# ======== CONFIGURATION ========
-$ConfigPath = "config/judgment-day-automation.json"
-$LogDir = ".session/judgment-day-logs"
-$SessionDir = ".session"
+$ErrorActionPreference = 'Stop'
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$repoRoot = (Get-Item (Join-Path $scriptDir '..\..')).FullName
+$automationConfig = Join-Path $repoRoot 'config\judgment-day-automation.json'
+$orchestratorConfig = Join-Path $repoRoot 'config\judgment-day-orchestrator-config.json'
+$jdScript = Join-Path $repoRoot 'scripts\utilities\WORKFLOW-ORCHESTRATION\judgment-day.ps1'
+$logDir = Join-Path $repoRoot '.session\judgment-day-logs'
+$sessionDir = Join-Path $repoRoot '.session'
 
-# ======== FUNCTIONS ========
+function Write-OK   { param([string]$m) Write-Host "  [OK] $m" -ForegroundColor Green }
+function Write-Warn { param([string]$m) Write-Host "  [WARN] $m" -ForegroundColor Yellow }
+function Write-Fail { param([string]$m) Write-Host "  [FAIL] $m" -ForegroundColor Red }
+function Write-Step { param([string]$m) Write-Host "[JUDGMENT-DAY] $m" -ForegroundColor Cyan }
 
+# ======== INITIALIZE ========
 function Initialize-JudgmentDay {
-    Write-Host "[JUDGMENT-DAY] Initializing Judgment Day automation..." -ForegroundColor Cyan
-    
+    Write-Step "Initializing Judgment Day automation..."
+
     # Create directories
-    if (-not (Test-Path $SessionDir)) {
-        New-Item -ItemType Directory -Path $SessionDir -Force | Out-Null
+    foreach ($dir in @($sessionDir, $logDir)) {
+        if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
     }
-    if (-not (Test-Path $LogDir)) {
-        New-Item -ItemType Directory -Path $LogDir -Force | Out-Null
+
+    # Validate config exists
+    if (-not (Test-Path $automationConfig)) {
+        Write-Warn "Automation config not found: $automationConfig"
     }
-    
-    # Load configuration
-    if (-not (Test-Path $ConfigPath)) {
-        Write-Host "[JUDGMENT-DAY] Config not found: $ConfigPath" -ForegroundColor Yellow
+
+    # Validate main script exists
+    if (-not (Test-Path $jdScript)) {
+        Write-Fail "judgment-day.ps1 not found at WORKFLOW-ORCHESTRATION"
         return $false
     }
-    
-    $config = Get-Content $ConfigPath | ConvertFrom-Json
-    
-    # Register git hooks
-    Write-Host "[JUDGMENT-DAY] Registering git hooks..." -ForegroundColor Cyan
-    
-    $hooksDir = ".git/hooks"
-    $preCommitHook = Join-Path $hooksDir "pre-commit"
-    $prePushHook = Join-Path $hooksDir "pre-push"
-    $preMergeHook = Join-Path $hooksDir "pre-merge-commit"
-    
-    # Make hooks executable (Unix-style)
-    if (Test-Path $prePushHook) {
-        Write-Host "  [OK] pre-push hook registered" -ForegroundColor Green
-    }
-    if (Test-Path $preMergeHook) {
-        Write-Host "  [OK] pre-merge-commit hook registered" -ForegroundColor Green
-    }
-    
-    # Create event bus subscription for judgment day events
-    Write-Host "[JUDGMENT-DAY] Setting up event bus subscriptions..." -ForegroundColor Cyan
-    
-    $eventBusPath = ".event-bus/subscriptions.json"
-    if (Test-Path $eventBusPath) {
-        $subscriptions = Get-Content $eventBusPath -Raw | ConvertFrom-Json
-        
-        # Ensure subscriptions is an array
-        $subsList = @($subscriptions.subscriptions)
-        
-        # Add judgment day subscriptions if not present
-        $jdSubscription = $subsList | Where-Object { $_.name -eq "judgment-day-automation" }
-        if (-not $jdSubscription) {
-            $newSub = @{
-                name = "judgment-day-automation"
-                events = @("pre-push", "pre-merge", "pr-created")
-                handler = "judgment-day-orchestrator.ps1"
-                enabled = $true
-            }
-            $subsList += $newSub
-            $subscriptions.subscriptions = $subsList
-            $subscriptions | ConvertTo-Json -Depth 10 | Set-Content $eventBusPath
-            Write-Host "  [OK] Event subscriptions registered" -ForegroundColor Green
-        }
-    }
-    
-    Write-Host "[JUDGMENT-DAY] Initialization complete" -ForegroundColor Green
+    Write-OK "judgment-day.ps1 found"
+
+    # Install git hooks
+    Install-GitHooks
+
+    # Register event bus subscription
+    Register-EventBusSubscription
+
+    Write-Step "Initialization complete"
     return $true
 }
 
+function Install-GitHooks {
+    $hooksDir = Join-Path $repoRoot '.git\hooks'
+    if (-not (Test-Path $hooksDir)) {
+        Write-Warn "No .git/hooks directory — not a git repository?"
+        return
+    }
+
+    $hooks = @{
+        'pre-push' = @"
+#!/usr/bin/env pwsh
+# Judgment Day pre-push hook — auto-triggers dual-review before push
+`$repoRoot = Split-Path -Parent (Split-Path -Parent `$MyInvocation.MyCommand.Path)
+`$jdScript = Join-Path `$repoRoot 'scripts\utilities\judgment-day-orchestrator.ps1'
+if (Test-Path `$jdScript) {
+    & `$jdScript -Action check-push
+}
+"@
+        'pre-merge-commit' = @"
+#!/usr/bin/env pwsh
+# Judgment Day pre-merge-commit hook — auto-triggers review before merge
+`$repoRoot = Split-Path -Parent (Split-Path -Parent `$MyInvocation.MyCommand.Path)
+`$jdScript = Join-Path `$repoRoot 'scripts\utilities\judgment-day-orchestrator.ps1'
+if (Test-Path `$jdScript) {
+    & `$jdScript -Action check-pr
+}
+"@
+    }
+
+    foreach ($hook in $hooks.Keys) {
+        $hookPath = Join-Path $hooksDir $hook
+        if (-not (Test-Path $hookPath)) {
+            try {
+                $hooks[$hook] | Set-Content -Path $hookPath -Encoding UTF8 -NoNewline
+                Write-OK "Git hook installed: $hook"
+            } catch {
+                Write-Warn "Could not install hook $hook : $_"
+            }
+        } else {
+            Write-OK "Git hook already installed: $hook"
+        }
+    }
+}
+
+function Register-EventBusSubscription {
+    $eventBusPath = Join-Path $repoRoot '.event-bus\subscriptions.json'
+    if (-not (Test-Path $eventBusPath)) {
+        $busDir = Split-Path $eventBusPath -Parent
+        if (-not (Test-Path $busDir)) { New-Item -ItemType Directory -Path $busDir -Force | Out-Null }
+        $base = @{ subscriptions = @() }
+        $base | ConvertTo-Json -Depth 5 | Set-Content -Path $eventBusPath -Encoding UTF8
+    }
+
+    $subscriptions = Get-Content $eventBusPath -Raw | ConvertFrom-Json
+    $subsList = @($subscriptions.subscriptions)
+    $existing = $subsList | Where-Object { $_.name -eq 'judgment-day-automation' }
+
+    if (-not $existing) {
+        $newSub = @{
+            name = 'judgment-day-automation'
+            events = @('pre-push', 'pre-merge', 'pr-created', 'session-start')
+            handler = 'judgment-day-orchestrator.ps1'
+            enabled = $true
+        }
+        $subsList += $newSub
+        $subscriptions.subscriptions = $subsList
+        $subscriptions | ConvertTo-Json -Depth 10 | Set-Content $eventBusPath -Encoding UTF8
+        Write-OK "Event bus subscription registered"
+    } else {
+        Write-OK "Event bus subscription already exists"
+    }
+}
+
+# ======== CHECK PR ========
 function Check-PRStatus {
-    Write-Host "[JUDGMENT-DAY] Checking PR status..." -ForegroundColor Cyan
-    
-    # Check if we're in a PR context
+    Write-Step "Checking PR status..."
+
     $branch = git rev-parse --abbrev-ref HEAD 2>$null
     if (-not $branch) {
-        Write-Host "[JUDGMENT-DAY] Not in a git repository" -ForegroundColor Red
+        Write-Fail "Not in a git repository"
         return $false
     }
-    
-    # Check for PR metadata
-    $prFile = ".session/current-pr.json"
+
+    $prFile = Join-Path $sessionDir 'current-pr.json'
     if (Test-Path $prFile) {
         $pr = Get-Content $prFile | ConvertFrom-Json
-        Write-Host "  PR #$($pr.number): $($pr.title)" -ForegroundColor Green
-        Write-Host "  Target: $($pr.target_branch)" -ForegroundColor Cyan
+        Write-OK "PR #$($pr.number): $($pr.title) -> $($pr.target_branch)"
         return $true
     }
-    
-    Write-Host "[JUDGMENT-DAY] No active PR detected" -ForegroundColor Yellow
+
+    Write-Warn "No active PR detected (branch: $branch)"
     return $false
 }
 
+# ======== CHECK PUSH ========
 function Check-PushStatus {
-    Write-Host "[JUDGMENT-DAY] Checking push status..." -ForegroundColor Cyan
-    
+    Write-Step "Checking push status..."
+
     $branch = git rev-parse --abbrev-ref HEAD 2>$null
     if (-not $branch) {
-        Write-Host "[JUDGMENT-DAY] Not in a git repository" -ForegroundColor Red
+        Write-Fail "Not in a git repository"
         return $false
     }
-    
-    # Get changed files
-    $changedFiles = git diff --name-only origin/$branch...HEAD 2>$null
-    if (-not $changedFiles) {
-        $changedFiles = git diff --name-only HEAD~1...HEAD 2>$null
-    }
-    
-    if ($changedFiles) {
-        Write-Host "  Branch: $branch" -ForegroundColor Green
-        Write-Host "  Changed files: $($changedFiles.Count)" -ForegroundColor Cyan
+
+    $protected = @('main', 'develop', 'master')
+    if ($protected -contains $branch) {
+        Write-Warn "Protected branch: $branch — skipping auto-judgment"
         return $true
     }
-    
-    Write-Host "[JUDGMENT-DAY] No changes to push" -ForegroundColor Yellow
-    return $false
-}
 
-function Run-JudgmentDay {
-    param(
-        [string]$Scope = 'changed_files',
-        [int]$MaxIterations = 2
-    )
-    
-    Write-Host "[JUDGMENT-DAY] Running Judgment Day review..." -ForegroundColor Cyan
-    Write-Host "  Scope: $Scope" -ForegroundColor Cyan
-    Write-Host "  Max iterations: $MaxIterations" -ForegroundColor Cyan
-    
-    # Create judgment day session
-    $timestamp = Get-Date -Format "yyyy-MM-dd-HH-mm-ss"
-    $jdSessionFile = Join-Path $LogDir "judgment-day-$timestamp.json"
-    
-    $jdSession = @{
-        timestamp = $timestamp
-        scope = $Scope
-        max_iterations = $MaxIterations
-        status = "initiated"
-        judges = @{
-            judge_a = @{ status = "pending" }
-            judge_b = @{ status = "pending" }
-        }
-        findings = @()
-        fixes_applied = 0
-        iterations = 0
+    # Get changed files relative to upstream or last commit
+    $changedFiles = git diff --name-only 'origin/main...HEAD' 2>$null
+    if (-not $changedFiles) {
+        $changedFiles = git diff --name-only 'HEAD~1...HEAD' 2>$null
     }
-    
-    $jdSession | ConvertTo-Json -Depth 10 | Set-Content $jdSessionFile
-    
-    Write-Host "  [OK] Judgment Day session created: $jdSessionFile" -ForegroundColor Green
-    Write-Host "[JUDGMENT-DAY] Judgment Day review initiated" -ForegroundColor Green
-    
-    return $jdSessionFile
+
+    if ($changedFiles) {
+        Write-OK "Branch: $branch | Changed files: $($changedFiles.Count)"
+        # Run judgment on changed files
+        $target = ($changedFiles | Select-Object -First 20) -join ','
+        Write-Step "Auto-triggering judgment on $($changedFiles.Count) changed file(s)..."
+        & $jdScript -Target $target -Scope Full -NoPrompt
+        return ($LASTEXITCODE -eq 0)
+    }
+
+    Write-Warn "No changes detected"
+    return $true
 }
 
+# ======== RUN JUDGMENT ========
+function Run-JudgmentDay {
+    param([string]$ScopeName = 'full', [int]$MaxIter = 2)
+
+    Write-Step "Running Judgment Day review..."
+
+    $scopeArg = if ($ScopeName -in @('full', 'all')) { 'Full' } else { 'Quick' }
+
+    # Resolve scope to file path
+    $target = '.'
+    switch ($ScopeName) {
+        'changed_files' {
+            $changed = git diff --name-only 'HEAD~1...HEAD' 2>$null
+            if (-not $changed) { $changed = git diff --name-only --cached 2>$null }
+            if ($changed) { $target = $changed -join ' ' }
+        }
+        'pr_files' {
+            $prFile = Join-Path $sessionDir 'current-pr.json'
+            if (Test-Path $prFile) {
+                $pr = Get-Content $prFile | ConvertFrom-Json
+                Write-OK "PR context: $($pr.number)"
+            }
+        }
+    }
+
+    Write-OK "Target: $target | Scope: $scopeArg | MaxIterations: $MaxIter"
+
+    if (-not (Test-Path $jdScript)) {
+        Write-Fail "judgment-day.ps1 not found at $jdScript"
+        return $null
+    }
+
+    $result = & $jdScript -Target $target -Scope $scopeArg -MaxPasses $MaxIter -NoPrompt
+    $exitCode = $LASTEXITCODE
+
+    Write-Step "Judgment Day completed. Exit: $exitCode"
+    return @{ exitCode = $exitCode; approved = ($exitCode -eq 0) }
+}
+
+# ======== STATUS ========
 function Get-Status {
-    Write-Host "[JUDGMENT-DAY] Status Report" -ForegroundColor Cyan
+    Write-Step "Status Report"
     Write-Host "================================" -ForegroundColor Cyan
-    
-    # Check configuration
-    if (Test-Path $ConfigPath) {
-        $config = Get-Content $ConfigPath | ConvertFrom-Json
-        Write-Host "Configuration: Loaded" -ForegroundColor Green
+
+    # Config
+    if (Test-Path $automationConfig) {
+        $config = Get-Content $automationConfig | ConvertFrom-Json
+        Write-OK "Configuration loaded"
         Write-Host "  Pre-push enabled: $($config.automation_rules.pre_push.enabled)" -ForegroundColor Cyan
         Write-Host "  Pre-merge enabled: $($config.automation_rules.pre_merge.enabled)" -ForegroundColor Cyan
     } else {
-        Write-Host "Configuration: Not found" -ForegroundColor Red
+        Write-Warn "Configuration not found"
     }
-    
-    # Check git hooks
-    Write-Host ""
-    Write-Host "Git Hooks:" -ForegroundColor Cyan
-    if (Test-Path ".git/hooks/pre-push") {
-        Write-Host "  [OK] pre-push hook installed" -ForegroundColor Green
+
+    # Script
+    if (Test-Path $jdScript) {
+        Write-OK "judgment-day.ps1 available"
+    } else {
+        Write-Fail "judgment-day.ps1 missing"
     }
-    if (Test-Path ".git/hooks/pre-merge-commit") {
-        Write-Host "  [OK] pre-merge-commit hook installed" -ForegroundColor Green
+
+    # Git hooks
+    Write-Host "`nGit Hooks:" -ForegroundColor Cyan
+    $hooksToCheck = @('pre-push', 'pre-merge-commit')
+    foreach ($hook in $hooksToCheck) {
+        $hookPath = Join-Path $repoRoot ".git\hooks\$hook"
+        if (Test-Path $hookPath) { Write-OK "Git hook: $hook" } else { Write-Warn "Git hook: $hook (not installed)" }
     }
-    
-    # Check recent judgment day sessions
-    Write-Host ""
-    Write-Host "Recent Sessions:" -ForegroundColor Cyan
-    if (Test-Path $LogDir) {
-        $sessions = Get-ChildItem $LogDir -Filter "judgment-day-*.json" | Sort-Object LastWriteTime -Descending | Select-Object -First 5
+
+    # Recent sessions
+    Write-Host "`nRecent Sessions:" -ForegroundColor Cyan
+    if (Test-Path $logDir) {
+        $sessions = Get-ChildItem $logDir -Filter 'judgment-day-*.json' | Sort-Object LastWriteTime -Descending | Select-Object -First 5
         if ($sessions) {
             foreach ($session in $sessions) {
                 $content = Get-Content $session.FullName | ConvertFrom-Json
-                Write-Host "  $($session.BaseName): $($content.status)" -ForegroundColor Cyan
+                Write-Host "  $($session.BaseName): $($content.status) (rounds: $(@($content.rounds).Count))" -ForegroundColor $(if ($content.status -eq 'APPROVED') { 'Green' } else { 'Yellow' })
             }
         } else {
             Write-Host "  No sessions found" -ForegroundColor Yellow
@@ -230,28 +292,20 @@ function Get-Status {
 }
 
 # ======== MAIN ========
-
 switch ($Action) {
-    'initialize' {
-        Initialize-JudgmentDay
-    }
-    'check-pr' {
-        Check-PRStatus
-    }
-    'check-push' {
-        Check-PushStatus
-    }
+    'initialize' { Initialize-JudgmentDay }
+    'check-pr' { Check-PRStatus }
+    'check-push' { Check-PushStatus }
     'run-judgment' {
-        Run-JudgmentDay -Scope $Scope -MaxIterations $MaxIterations
+        $result = Run-JudgmentDay -ScopeName $Scope -MaxIter $MaxIterations
+        if ($result -and -not $result.approved) {
+            exit 1
+        }
     }
-    'report' {
-        Get-Status
-    }
-    'status' {
-        Get-Status
-    }
+    'report' { Get-Status }
+    'status' { Get-Status }
     default {
-        Write-Host "Unknown action: $Action" -ForegroundColor Red
+        Write-Fail "Unknown action: $Action"
         exit 1
     }
 }

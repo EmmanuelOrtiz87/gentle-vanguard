@@ -27,7 +27,9 @@ Responsibilities:
 
 **Implementation**: Slim orchestrator with ~5K tokens context.
 
-### 3.2 Specialized Sub-Agents (7 Agents)
+### 3.2 Specialized Sub-Agents (29 Agents)
+
+The foundation defines 29 agent codes mapped to opencode subagents. Below is the **core 7** — the full 29-agent mapping lives in `config/subagent-mapping.json`.
 
 | Agent   | Role                  | Skills Loaded                                    | Token Budget |
 | ------- | --------------------- | ------------------------------------------------ | ------------ |
@@ -38,6 +40,8 @@ Responsibilities:
 | **OPS** | DevOps                | docker, k8s, terraform, git-workflow             | ~2-3K        |
 | **GOV** | Governance            | observability, incident-response, security       | ~2-3K        |
 | **DOC** | Documentation         | sdd, bdd, github-pr                              | ~2K          |
+
+Extended agents (22 more): BUS-TELE, SCRIPT-GOV, REPORT, PR-REVIEW, RELEASE, SESSION, SESSION-CLOSE, DAILY, PREMORTEM, FINANCE, LEGAL, MKT, SALES, HR, ORCHESTRATOR, GITFLOW-BRANCH, GITFLOW-PR, GITFLOW-HOOKS, GITFLOW-MERGE, GITFLOW-WORKFLOW, GITFLOW-COMMIT, GITFLOW-CONFLICT. See `config/subagent-mapping.json` for full details.
 
 **Token Efficiency**: ~60% savings vs monolithic orchestrator (~20K vs ~50K tokens/session).
 
@@ -328,4 +332,4 @@ Metrics are persisted to Engram with topic_key `metrics/subagent-delegation` for
 **Full specification**: See
 [skills/multi-agent-registry/SKILL.md](../../skills/multi-agent-registry/SKILL.md)
 
-**Skill mapping matrix**: 35 skills distributed across 7 agents with zero overlap redundancy.
+**Skill mapping matrix**: 35+ skills distributed across 29 agents with zero overlap redundancy. See `config/subagent-mapping.json` for the complete agent→skill matrix and `config/auto-delegation.json` for trigger→keyword mappings.

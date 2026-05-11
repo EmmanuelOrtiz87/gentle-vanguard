@@ -33,3 +33,4 @@ timestamp,date,task,risk,estimated_tokens,status,engram_available,notes
 2026-05-06T02:07:27-03:00,2026-05-06,audit,medium,2200,0,0,0,PASS,True,projected_pct=3.33; actual_tracking=False
 2026-05-06T10:37:24-03:00,2026-05-06,audit,medium,2200,0,0,0,PASS,True,projected_pct=5.17; actual_tracking=False
 2026-05-06T10:37:55-03:00,2026-05-06,compact-start,medium,1561,0,0,0,PASS,True,projected_pct=6.47; actual_tracking=False
+2026-05-10T22:06:06-03:00,2026-05-10,compact-start,medium,1555,0,0,0,PASS,True,projected_pct=1.3; actual_tracking=False
