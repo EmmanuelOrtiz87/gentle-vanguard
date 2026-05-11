@@ -1904,12 +1904,12 @@ switch ($Command) {
         if ($Scope -eq 'judgment-day') {
             $jdScript = Join-Path $scriptDir 'judgment-day.ps1'
             if (-not (Test-Path $jdScript)) {
-                Write-Error "judgment-day.ps1 not found"
+                Write-Error "judgment-day.ps1 not found at WORKFLOW-ORCHESTRATION"
                 exit 1
             }
 
-            Write-Host " Running: judgment-day.ps1" -ForegroundColor Cyan
-            & $jdScript
+            Write-Host " Running: judgment-day.ps1 (dual-review adversarial protocol)" -ForegroundColor Cyan
+            & $jdScript -Scope Full -NoPrompt
             $exitCode = $LASTEXITCODE
         } else {
             $reviewScript = Join-Path $repoRoot 'skills\code-review-orchestrator-skill\code-review.ps1'
@@ -1939,24 +1939,26 @@ switch ($Command) {
     }
 
     'judgment-day' {
-        Write-Step "Judgment Day - Dual Review Protocol"
+        Write-Step "Judgment Day — Dual-Review Adversarial Protocol"
 
         $jdScript = Join-Path $scriptDir 'judgment-day.ps1'
         if (-not (Test-Path $jdScript)) {
-            Write-Error "judgment-day.ps1 not found"
+            Write-Error "judgment-day.ps1 not found at WORKFLOW-ORCHESTRATION"
             exit 1
         }
 
-        Write-Host " Running: judgment-day.ps1 (max 3 passes default)" -ForegroundColor Cyan
-        & $jdScript -MaxPasses 3
+        $jdArgs = @{}
+        if ($Scope) { $jdArgs.Target = $Scope }
+
+        & $jdScript @jdArgs
         $exitCode = $LASTEXITCODE
 
         if ($exitCode -ne 0) {
-            Write-Error "Judgment Day found issues"
+            Write-Error "Judgment Day found issues — escalation required"
             exit $exitCode
         }
 
-        Write-Success "Judgment Day complete"
+        Write-Success "Judgment Day complete — APPROVED"
     }
     
     'audit' {

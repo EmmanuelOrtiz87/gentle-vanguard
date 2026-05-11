@@ -54,10 +54,10 @@
     "require_all_checks_pass": true,
     "auto_label_judgment_status": true,
     "labels": {
-      "judgment_approved": "judgment-day-approved ",
-      "judgment_failed": "judgment-day-failed ",
-      "judgment_pending": "judgment-day-pending ",
-      "judgment_escalated": "judgment-day-escalated "
+      "judgment_approved": "judgment-day-approved",
+      "judgment_failed": "judgment-day-failed",
+      "judgment_pending": "judgment-day-pending",
+      "judgment_escalated": "judgment-day-escalated"
     }
   },
   "decision_tree": {
