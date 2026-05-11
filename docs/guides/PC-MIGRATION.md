@@ -13,8 +13,11 @@ Before importing, install these on the new machine:
 | Go | `winget install GoLang.Go` | Yes |
 | PowerShell 7 | `winget install Microsoft.PowerShell` | Yes |
 | Bun | `powershell -c "irm bun.sh/install.ps1 \| iex"` | Yes |
+| Cairo (GTK3) | `.\scripts\utilities\install-cairo.ps1` | No (needed for PNG diagram export) |
 
-> Run `.\scripts\utilities\install-prerequisites.ps1 -CheckOnly` to verify.
+> Run `.\scripts\utilities\verify-tools.ps1` to check tool availability with hash caching (only re-checks on version change or 7+ days).
+
+> Run `.\scripts\utilities\install-prerequisites.ps1 -Install` to install missing tools.
 
 ## Export (Current PC)
 
@@ -83,9 +86,9 @@ opencode --version
 .\wf.ps1 health
 ```
 
-## Updating Engram
+## Engram Updates
 
-Engram can be updated after migration or anytime:
+Engram can be updated at any time:
 
 ```powershell
 # Via wf CLI
@@ -94,6 +97,16 @@ Engram can be updated after migration or anytime:
 # Or directly
 go install github.com/workspace-foundation/engram/cmd/engram@latest
 ```
+
+## Cairo/GTK3 (Diagram PNG Export)
+
+For fireworks-tech-graph PNG export, install Cairo:
+
+```powershell
+.\scripts\utilities\install-cairo.ps1
+```
+
+This installs GTK3 Runtime which includes `libcairo-2.dll`. SVG generation works without Cairo; PNG export requires it.
 
 ## Syncing to Foundation-Public
 
