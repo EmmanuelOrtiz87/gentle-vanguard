@@ -120,7 +120,7 @@ See `plugins/examples/` for templates.
 | Scenario                | Use Foundation? | Reason                  |
 | ----------------------- | --------------- | ----------------------- |
 | Local-first development | ✅ Yes          | No cloud dependencies   |
-| AI-assisted coding      | ✅ Yes          | 125+ specialized skills |
+| AI-assisted coding      | ✅ Yes          | 127 specialized skills |
 | Enterprise security     | ✅ Yes          | Lefthook + Trufflehog   |
 | Team collaboration      | ✅ Yes          | Shared skills + configs |
 | Open source project     | ✅ Yes          | MIT license, extensible |

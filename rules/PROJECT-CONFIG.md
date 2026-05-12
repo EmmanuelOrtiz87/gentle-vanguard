@@ -70,7 +70,7 @@ Centralized configuration for project standards and enforcement.
 ```
 workspace-foundation/
 ├── scripts/           # All workflow/utility scripts
-├── skills/            # 125+ AI agent skills
+├── skills/            # 127 AI agent skills
 ├── config/            # Configuration files
 ├── docs/              # Documentation
 ├── tests/             # Test suites (unit/integration/perf/security)

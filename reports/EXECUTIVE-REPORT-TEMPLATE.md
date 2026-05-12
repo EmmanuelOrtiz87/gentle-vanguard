@@ -47,7 +47,7 @@ Priority 5: Plugin Ecosystem      [███████████░░] 70%
 ### Code Quality
 
 - **Total Scripts**: 243
-- **Skills Available**: 125+
+- **Skills Available**: 127
 - **Test Files**: 15+ unit, 6 integration
 - **Documentation**: 95% coverage
 - **Security Hooks**: Lefthook + Trufflehog active
