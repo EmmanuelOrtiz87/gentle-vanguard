@@ -75,7 +75,7 @@
       "platform": "windows"
     },
     "tracking": {
-      "project": "workspace-foundation",
+      "project": "foundation",
       "directory": ".",
       "sessionIdPattern": "session-YYYY-MM-DD-XX"
     }

@@ -7,18 +7,18 @@
     Saves session summary to Engram and preserves anchored content.
     
 .PARAMETER ProjectName
-    Project name for Engram (default: gentleman-foundation)
+    Project name for Engram (default: foundation)
     
 .PARAMETER CompressionRatio
     How much to compress (default: 0.90)
     
 .EXAMPLE
-    .\tools\pre-compact-hook.ps1 -ProjectName "gentleman-foundation" -CompressionRatio 0.90
+    .\tools\pre-compact-hook.ps1 -ProjectName "foundation" -CompressionRatio 0.90
 #>
 
 param(
     [Parameter(Mandatory=$false)]
-    [string]$ProjectName = "gentleman-foundation",
+    [string]$ProjectName = "foundation",
     
     [Parameter(Mandatory=$false)]
     [double]$CompressionRatio = 0.90

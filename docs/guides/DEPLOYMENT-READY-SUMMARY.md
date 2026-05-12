@@ -1,4 +1,4 @@
-﻿# Deployment Ready Summary
+# Deployment Ready Summary
 
 **Date**: 2026-04-22  
 **Status**: READY FOR PRODUCTION  
@@ -261,7 +261,7 @@ Context Compression: ~120ms per 10KB (40% improvement)
 
 ```bash
 git clone <repo-url>
-cd workspace-foundation
+cd foundation
 ```
 
 ### 2. Install Hooks

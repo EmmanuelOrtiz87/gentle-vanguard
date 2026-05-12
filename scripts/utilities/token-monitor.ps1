@@ -24,7 +24,7 @@
     Continuously monitors tokens, refreshing every 5 seconds
     
 .NOTES
-    Author: workspace-foundation
+    Author: foundation
     Version: 1.0
 #>
 
@@ -51,7 +51,7 @@ function Get-EngramTokenData {
     }
     
     try {
-        $result = & $engramBin context --project "gentleman-foundation" 2>$null | ConvertFrom-Json -ErrorAction SilentlyContinue
+        $result = & $engramBin context --project "foundation" 2>$null | ConvertFrom-Json -ErrorAction SilentlyContinue
         return $result
     } catch {
         return $null

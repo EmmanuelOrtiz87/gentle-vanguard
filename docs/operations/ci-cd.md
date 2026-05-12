@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the CI/CD configuration for **gentleman-foundation**, optimized for GitHub
+This document describes the CI/CD configuration for **foundation**, optimized for GitHub
 Free plan (2000 min/month on private repos).
 
 **Context**: Self-hosted runners are NOT available for private repositories on GitHub Free plan
@@ -71,7 +71,7 @@ Run locally on every `git push`. Catch issues before GHA minutes are consumed:
 - **Capacity**: ~40 full pushes/month or ~57 develop pushes/month (combined)
 - **Strategy**: Heavy hooks locally prevent broken pushes → fewer GHA runs wasted
 
-## Local Machine Setup (workspace-foundation)
+## Local Machine Setup (foundation)
 
 - **OS**: Windows (PowerShell 7)
 - **Tools**: `node`, `npm`, `trufflehog`, `gitleaks`, `lefthook`

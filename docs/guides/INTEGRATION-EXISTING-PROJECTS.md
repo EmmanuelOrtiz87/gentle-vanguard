@@ -1,4 +1,4 @@
-﻿# Integration Guide: Existing Projects
+# Integration Guide: Existing Projects
 
 How to integrate Workspace Foundation into existing repositories and projects.
 
@@ -68,7 +68,7 @@ cd C:\my-existing-project
 git status
 
 # 3. Initialize Foundation
-.\path\to\workspace-foundation\scripts\init-workspace.ps1
+.\path\to\foundation\\scripts\init-workspace.ps1
 
 # 4. The script will:
 #    - Detect existing project structure
@@ -97,7 +97,7 @@ git clone https://github.com/your-org/your-project.git
 cd your-project
 
 # 2. Integrate Foundation
-.\path\to\workspace-foundation\scripts\init-workspace.ps1
+.\path\to\foundation\\scripts\init-workspace.ps1
 
 # 3. Commit the Foundation files
 git add .
@@ -119,10 +119,10 @@ C:\Projects\
 ```powershell
 # Each project is independent
 cd C:\Projects\project-alpha
-.\path\to\workspace-foundation\scripts\init-workspace.ps1
+.\path\to\foundation\\scripts\init-workspace.ps1
 
 cd C:\Projects\project-beta
-.\path\to\workspace-foundation\scripts\init-workspace.ps1
+.\path\to\foundation\\scripts\init-workspace.ps1
 
 # Each project has its own:
 # - .audit/ directory
@@ -358,7 +358,7 @@ git push
 ```powershell
 # To bring Foundation back
 cd your-project
-.\path\to\workspace-foundation\scripts\init-workspace.ps1
+.\path\to\foundation\\scripts\init-workspace.ps1
 ```
 
 ## Troubleshooting

@@ -1,4 +1,4 @@
-﻿# Adapter Examples
+# Adapter Examples
 
 Quick reference for using Foundation adapters with various tools.
 
@@ -17,7 +17,7 @@ Quick reference for using Foundation adapters with various tools.
       "command": "node",
       "args": ["/absolute/path/to/adapters/mcp-bridge/dist/server.js"],
       "env": {
-        "FOUNDATION_ROOT": "/path/to/workspace-foundation"
+        "FOUNDATION_ROOT": "/path/to/foundation"
       }
     }
   }
@@ -202,7 +202,7 @@ node adapters/mcp-bridge/dist/server.js
 
 # Check FOUNDATION_ROOT
 echo $env:FOUNDATION_ROOT
-# Should point to workspace-foundation directory
+# Should point to foundation directory
 ```
 
 ### Detection showing "unknown"

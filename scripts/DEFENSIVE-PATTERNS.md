@@ -1,7 +1,7 @@
 # Defensive Patterns for PowerShell Scripts
 
 Living reference of established patterns and anti-patterns discovered and fixed
-during the workspace-foundation audit.
+during the foundation audit.
 
 ## RepoRoot Resolution
 

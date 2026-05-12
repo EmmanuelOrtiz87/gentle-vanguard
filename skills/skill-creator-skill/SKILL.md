@@ -5,7 +5,7 @@ description: >
   "add agent instructions", "document patterns", "skill factory", "generate skill", "skill template"
 license: Apache-2.0
 metadata:
-  author: workspace-foundation
+  author: foundation
   versión: '2.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task
 ---
@@ -54,7 +54,7 @@ description: >
   {One-line description of what this skill does}. Trigger: {When the AI should load this skill}.
 license: Apache-2.0
 metadata:
-  author: workspace-foundation
+  author: foundation
   versión: '1.0'
 ---
 
@@ -116,7 +116,7 @@ metadata:
 | `name`             | Yes      | Skill identifier (lowercase, hyphens) |
 | `description`      | Yes      | What + Trigger in one block           |
 | `license`          | Yes      | Always `Apache-2.0`                   |
-| `metadata.author`  | Yes      | `workspace-foundation`                |
+| `metadata.author`  | Yes      | `foundation`                |
 | `metadata.versión` | Yes      | Semantic versión as string            |
 
 ---

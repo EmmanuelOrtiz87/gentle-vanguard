@@ -1,4 +1,4 @@
-﻿# Agent Instructions — Local-First
+# Agent Instructions — Local-First
 
 ## Principles
 
@@ -25,7 +25,7 @@ use: `-Json`
 
 1. `scripts/utilities/pre-process-input.ps1` → `TRIGGER_MATCH_FOUND` → load skill |
    `PLAN_MODE_REQUIRED` → activate BA | `NO_TRIGGER_MATCH` → continue
-2. Check `skills/` for patterns; query `engram context gentleman-foundation` for session context
+2. Check `skills/` for patterns; query `engram context foundation` for session context
 3. Full mappings: `config/auto-delegation.json#keywordMappings`
 4. After work: **always run `agent-verify.ps1`** and fix failures before closing
 

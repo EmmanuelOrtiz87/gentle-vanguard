@@ -5,7 +5,7 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $root = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
-$wf = Join-Path $root 'workspace-foundation\scripts\utilities\wf.ps1'
+$wf = Join-Path $root 'foundation\\scripts\utilities\wf.ps1'
 
 if (-not (Test-Path $wf)) {
     Write-Error "wf.ps1 not found at expected path: $wf"

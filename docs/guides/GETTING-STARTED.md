@@ -18,7 +18,7 @@
 
 ```powershell
 git clone <repository-url>
-cd workspace-foundation
+cd foundation
 ```
 
 ### 2. Initialize Session

@@ -83,6 +83,23 @@ When session tracking capability exists, initialize a session early using:
 
 ---
 
+## 📝 Response Compression#
+
+All agents MUST follow `config/orchestrator.json#response_policy`:
+- **Profile**: ultra — aggressive compression, abbreviations
+- **Detail**: simple — no digressions, no preamble/postamble
+- **Chat level**: chat-compact — max 4 lines of text before tool calls
+
+Key rules:
+1. NO preamble ("Let me...", "I'll...") — just do it
+2. NO postamble — no summaries, no explanations of what was done
+3. NO echoing user's question
+4. NO progress commentary during multi-step tasks
+5. Batch independent tool calls in parallel
+6. Answer THEN act: 1-3 line answer, then tools
+
+---
+
 
 
 ## 🚀 Quick Commands#

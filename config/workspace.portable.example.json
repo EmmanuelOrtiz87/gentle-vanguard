@@ -1,5 +1,5 @@
 {
-  "workspaceName": "workspace-foundation-portable",
+  "workspaceName": "foundation-portable",
   "dataRoot": "{workspaceRoot}/.engram-data",
   "toolsRoot": "{workspaceRoot}/tools",
   "projectsRoot": "{workspaceRoot}/projects",
@@ -29,9 +29,9 @@
       "checkCommand": "engram",
       "requires": ["go"],
       "install": {
-        "windows": "go install github.com/workspace-foundation/engram/cmd/engram@latest",
-        "linux": "go install github.com/workspace-foundation/engram/cmd/engram@latest",
-        "macos": "go install github.com/workspace-foundation/engram/cmd/engram@latest"
+        "windows": "go install github.com/foundation/engram/cmd/engram@latest",
+        "linux": "go install github.com/foundation/engram/cmd/engram@latest",
+        "macos": "go install github.com/foundation/engram/cmd/engram@latest"
       }
     }
   ]

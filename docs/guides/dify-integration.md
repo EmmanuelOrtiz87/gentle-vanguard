@@ -1,4 +1,4 @@
-﻿# Dify.io Integration Example
+# Dify.io Integration Example
 
 This guide shows how to connect Foundation to Dify.io using the standard architecture.
 
@@ -43,7 +43,7 @@ $env:DIFY_API_KEY = "your_api_key_here"
 ## 3. Test the Connection
 
 ```powershell
-cd workspace-foundation
+cd foundation
 .\scripts\utilities\AI-AGENT-MANAGEMENT\invoke-cloud-agent.ps1 -Provider dify -TestConnection
 ```
 

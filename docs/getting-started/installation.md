@@ -20,9 +20,9 @@ Complete guide to set up Workspace Foundation on a new machine.
 ### Windows (PowerShell)
 
 ```powershell
-# Clone or download workspace-foundation
-git clone https://github.com/your-org/workspace-foundation.git
-cd workspace-foundation
+# Clone or download foundation
+git clone https://github.com/EmmanuelOrtiz87/foundation.git
+cd foundation
 
 # Initialize workspace
 .\scripts\foundation\wf.ps1 init
@@ -34,9 +34,9 @@ cd workspace-foundation
 ### Linux/macOS
 
 ```bash
-# Clone or download workspace-foundation
-git clone https://github.com/your-org/workspace-foundation.git
-cd workspace-foundation
+# Clone or download foundation
+git clone https://github.com/EmmanuelOrtiz87/foundation.git
+cd foundation
 
 # Initialize workspace
 pwsh ./scripts/foundation/wf.ps1 init
@@ -68,14 +68,14 @@ git config --global pull.rebase true
 
 ### 3. Install AI Tools (Optional but Recommended)
 
-The workspace-foundation includes integration with:
+The foundation includes integration with:
 
 | Tool                     | Purpose                  | Install                                                               |
 | ------------------------ | ------------------------ | --------------------------------------------------------------------- |
 | **OpenCode**             | AI coding agent          | https://opencode.ai                                                   |
 | **Claude Code**          | AI coding agent          | https://claude.ai/code                                                |
 | **Native Review Engine** | Built-in workflow review | `./scripts/utilities/wf.ps1 review`                                   |
-| **engram**               | Persistent memory        | `go install github.com/workspace-foundation/engram/cmd/engram@latest` |
+| **engram**               | Persistent memory        | `go install github.com/foundation/engram/cmd/engram@latest` |
 
 Windows one-shot update (no brew required): `./scripts/utilities/wf.ps1 update-tools`
 

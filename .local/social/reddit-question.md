@@ -10,4 +10,4 @@ Curious about other teams:
 
 Not selling. Genuinely want to understand.
 
-Foundation: github.com/EmmanuelOrtiz87/gentleman-foundation
+Foundation: github.com/EmmanuelOrtiz87/foundation

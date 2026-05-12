@@ -1,4 +1,4 @@
-﻿# Parallel Execution Limits Skill - Implementation Summary
+# Parallel Execution Limits Skill - Implementation Summary
 
 **Date**: 2026-04-23 | **Session**: session-2026-04-23-10 | **Status**: COMPLETED
 **Commit**: 6300e5b | **Branch**: develop
@@ -69,7 +69,7 @@ skills/parallel-execution-limits/
 Commit: 6300e5b
 Branch: develop -> origin/develop
 Files: 13 changed, 3804 insertions(+)
-Remote: https://github.com/EmmanuelOrtiz87/gentleman-foundation.git
+Remote: https://github.com/EmmanuelOrtiz87/foundation.git
 ```
 
 ##  Caractersticas Destacadas
