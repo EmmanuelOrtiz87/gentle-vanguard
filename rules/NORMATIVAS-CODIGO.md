@@ -48,6 +48,16 @@ scripts/
   foundation/   # Core del framework
   hooks/        # Git hooks
   testing/      # Testing utilities
+  sre/          # Site Reliability Engineering (error budgets, SLOs)
+  chaos/        # Chaos Engineering experiments
+  adaptive/     # Auto-scaling, backup, orchestration
+  diagnostics/  # System diagnostics, validation
+  security/     # Security operations, logging, encryption
+  common/       # Shared helpers, platform compat
+  docs/         # Documentation generators
+  project/      # Project-level scripts
+  reports/      # Report generators
+  git-hooks/    # Git hook scripts
 skills/
   <skill-name>/
     SKILL.md         # Frontmatter + descripción

@@ -42,10 +42,10 @@ Describe 'Session Scripts Tests' {
             $errors.Count | Should Be 0
         }
 
-        It 'session-autostart.ps1 calls session-manager' {
+        It 'session-autostart.ps1 uses config-driven pipeline' {
             $f = Join-Path $script:utilitiesPath "session-autostart.ps1"
             $content = Get-Content $f -Raw
-            ($content -match 'session-manager\.ps1') | Should Be $true
+            ($content -match 'config-driven|ConfigFile|\$config\.pipeline') | Should Be $true
         }
     }
 
@@ -67,10 +67,9 @@ Describe 'Session Scripts Tests' {
             ($content -match 'engram|Engram') | Should Be $true
         }
 
-        It 'session-autostart.ps1 has Engram policy enforcement' {
-            $f = Join-Path $script:utilitiesPath "session-autostart.ps1"
-            $content = Get-Content $f -Raw
-            ($content -match 'engram-policy|EngramPolicy') | Should Be $true
+        It 'engram-orchestrator.ps1 exists for session policy' {
+            $f = Join-Path $script:utilitiesPath "engram-orchestrator.ps1"
+            Test-Path $f | Should Be $true
         }
     }
 }

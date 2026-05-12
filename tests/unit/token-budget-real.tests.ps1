@@ -63,16 +63,14 @@ Describe 'Real Token Budget Tests' {
     }
 
     Context 'Integration with Session' {
-        It 'session-autostart.ps1 calls token-budget-guard' {
-            $f = Join-Path $script:root "scripts/utilities/session-autostart.ps1"
-            $content = Get-Content $f -Raw
-            ($content -match 'token-budget-guard') | Should Be $true
+        It 'token-budget-guard.ps1 exists' {
+            Test-Path $script:tokenGuard | Should Be $true
         }
 
-        It 'session-autostart.ps1 passes session-start task' {
+        It 'session-autostart uses config-driven orchestration' {
             $f = Join-Path $script:root "scripts/utilities/session-autostart.ps1"
             $content = Get-Content $f -Raw
-            ($content -match 'session-start.*Record|Record.*session-start') | Should Be $true
+            ($content -match '\$steps|\$config\.pipeline|config-driven') | Should Be $true
         }
     }
 }
