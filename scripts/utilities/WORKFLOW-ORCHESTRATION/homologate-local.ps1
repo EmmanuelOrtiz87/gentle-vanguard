@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
 Homologate local environment with production standards
 

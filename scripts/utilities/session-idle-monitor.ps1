@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Session Idle Monitor - Detects idle sessions and triggers auto-close with notification
     

@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Event Governance Layer - Validates, enforces policies, and audits event communications
     

@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Validates system health status
 .DESCRIPTION

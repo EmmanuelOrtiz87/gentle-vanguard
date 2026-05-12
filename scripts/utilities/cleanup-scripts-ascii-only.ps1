@@ -1,4 +1,4 @@
-﻿# cleanup-scripts-ascii-only.ps1
+# cleanup-scripts-ascii-only.ps1
 # FINAL aggressive cleanup: removes ALL non-ASCII chars from scripts/configs
 # Only .md docs and .csv reports may keep emojis
 

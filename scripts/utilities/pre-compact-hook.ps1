@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Pre-Compact Hook - Saves state before context compaction
     

@@ -24,6 +24,8 @@ param(
     [string]$ProjectName = "workspace_local"
 )
 
+$ErrorActionPreference = 'Continue'
+
 # Basic keyword-to-skill mapping
 $skillKeywords = @{
     "angular" = @("angular-core", "angular-spa", "angular-architecture")

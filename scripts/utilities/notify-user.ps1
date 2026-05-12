@@ -41,31 +41,47 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
+
+$repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) { $env:FOUNDATION_BASE_DIR } else {
+    $root = Split-Path -Parent $PSScriptRoot
+    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
+    if (-not $root) { $root = $PSScriptRoot }
+    $root
+}
+
 $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 
 # Color scheme
 $colors = @{
-    session-close = "Yellow"
-    cleanup = "Cyan"
-    disconnect = "Magenta"
-    block = "Red"
+    'session-close' = "Yellow"
+    'cleanup' = "Cyan"
+    'disconnect' = "Magenta"
+    'block' = "Red"
     'cache-clean' = "Green"
-    fragmentation = "Blue"
+    'fragmentation' = "Blue"
 }
 
 $icons = @{
-    session-close = "[SESSION]"
-    cleanup = "[CLEANUP]"
-    disconnect = "[DISCONNECT]"
-    block = "[BLOCKED]"
+    'session-close' = "[SESSION]"
+    'cleanup' = "[CLEANUP]"
+    'disconnect' = "[DISCONNECT]"
+    'block' = "[BLOCKED]"
     'cache-clean' = "[CACHE]"
-    fragmentation = "[FRAGMENT]"
+    'fragmentation' = "[FRAGMENT]"
 }
 
 function Save-ToEngram {
     param([string]$Action, [string]$Reason, [string]$Details)
     
-    $engramBin = Join-Path $PSScriptRoot "engram.exe"
+    $engramBin = Join-Path $repoRoot 'tools\engram.exe'
+    if (-not (Test-Path $engramBin)) {
+        $userProfile = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
+        $engramBin = Join-Path $userProfile 'bin\engram.exe'
+    }
+    if (-not (Test-Path $engramBin)) {
+        $goPath = if ($env:GOPATH) { $env:GOPATH } else { Join-Path $env:USERPROFILE 'go' }
+        $engramBin = Join-Path $goPath 'bin\engram.exe'
+    }
     
     if (-not (Test-Path $engramBin)) {
         return $false

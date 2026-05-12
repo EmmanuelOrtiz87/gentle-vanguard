@@ -1,4 +1,4 @@
-﻿# install-prerequisites.ps1
+# install-prerequisites.ps1
 # Instala automticamente las herramientas requeridas para Foundation
 # Ejecucin: .\scripts\utilities\install-prerequisites.ps1
 
