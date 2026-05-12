@@ -52,18 +52,18 @@ function Exit-HookCheck {
     if ($findings.has_advisory) {
         $aCount = $findings.advisory.Count
         if (Get-Command 'Write-SafeHook' -EA SilentlyContinue) {
-            Write-SafeHook "[$($CheckName.ToUpper())] $aCount advisory finding(s) — not blocking." -Color Yellow
+            Write-SafeHook "[$($CheckName.ToUpper())] $aCount advisory finding(s) - not blocking." -Color Yellow
         } else {
-            Write-Host "[$($CheckName.ToUpper())] $aCount advisory finding(s) — not blocking." -ForegroundColor Yellow
+            Write-Host "[$($CheckName.ToUpper())] $aCount advisory finding(s) - not blocking." -ForegroundColor Yellow
         }
     }
 
     if ($findings.has_blocking) {
         $bCount = $findings.blocking.Count
         if (Get-Command 'Write-SafeHook' -EA SilentlyContinue) {
-            Write-SafeHook "[$($CheckName.ToUpper())] $bCount blocking finding(s) — commit rejected." -Color Red
+            Write-SafeHook "[$($CheckName.ToUpper())] $bCount blocking finding(s) - commit rejected." -Color Red
         } else {
-            Write-Host "[$($CheckName.ToUpper())] $bCount blocking finding(s) — commit rejected." -ForegroundColor Red
+            Write-Host "[$($CheckName.ToUpper())] $bCount blocking finding(s) - commit rejected." -ForegroundColor Red
         }
         exit 1
     }

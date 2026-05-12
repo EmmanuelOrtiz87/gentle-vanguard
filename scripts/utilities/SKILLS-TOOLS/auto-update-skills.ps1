@@ -10,7 +10,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-# ── Workspace root detection ────────────────────────────────────────────
+# -- Workspace root detection --------------------------------------------
 $scriptDir = $PSScriptRoot
 if (-not $scriptDir) { $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path }
 # scripts/utilities/SKILLS-TOOLS -> up 3 levels
@@ -18,7 +18,7 @@ $workspaceRoot = (Resolve-Path (Join-Path $scriptDir '..\..\..')).Path
 $skillsDir = Join-Path $workspaceRoot 'skills'
 $trackingFile = Join-Path $workspaceRoot '.skill-tracking.json'
 
-# ── Helpers ─────────────────────────────────────────────────────────────
+# -- Helpers -------------------------------------------------------------
 
 function Write-Info {
     param([string]$Message)
@@ -104,7 +104,7 @@ function Get-TrackingSkills {
     return $skills
 }
 
-# ── Scan skills ─────────────────────────────────────────────────────────
+# -- Scan skills ---------------------------------------------------------
 
 function Get-AllSkillFiles {
     if (-not (Test-Path $skillsDir)) {
@@ -132,7 +132,7 @@ function Scan-Skills {
     return $results
 }
 
-# ── Classification ─────────────────────────────────────────────────────
+# -- Classification -----------------------------------------------------
 
 function Classify-Skills {
     param(
@@ -168,7 +168,7 @@ function Classify-Skills {
     }
 }
 
-# ── Actions ─────────────────────────────────────────────────────────────
+# -- Actions -------------------------------------------------------------
 
 function Invoke-ActionCheck {
     Write-Info "Scanning skills in: $skillsDir"
@@ -300,7 +300,7 @@ function Invoke-ActionStatus {
     Write-Host ""
 }
 
-# ── Main ────────────────────────────────────────────────────────────────
+# -- Main ----------------------------------------------------------------
 
 switch ($Action) {
     'check'  { Invoke-ActionCheck }

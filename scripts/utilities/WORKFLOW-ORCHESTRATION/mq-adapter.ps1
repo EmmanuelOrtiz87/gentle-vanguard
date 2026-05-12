@@ -4,7 +4,7 @@
 
 .DESCRIPTION
     Provides a real MQ backend for team environments. Supports three adapters:
-    - file   : default file-based (existing .event-bus/history.json) — no extra deps
+    - file   : default file-based (existing .event-bus/history.json) - no extra deps
     - redis  : Redis pub/sub via redis-cli (requires Redis server + redis-cli in PATH)
     - webhook: HTTP POST relay to a configured webhook URL (team shared endpoint)
 
@@ -53,7 +53,7 @@ if (-not $repoRoot) { $repoRoot = (Get-Item $scriptDir).Parent.Parent.Parent.Ful
 $configPath = Join-Path $repoRoot 'config\mq-config.json'
 $historyPath = Join-Path $repoRoot '.event-bus\history.json'
 
-# ── Load config ───────────────────────────────────────────────────────────────
+# -- Load config ---------------------------------------------------------------
 function Get-MqConfig {
     if (Test-Path $configPath) {
         try { return Get-Content $configPath -Raw -Encoding UTF8 | ConvertFrom-Json } catch { }
@@ -69,7 +69,7 @@ function Get-MqConfig {
 $cfg = Get-MqConfig
 $adapter = if ($cfg.adapter) { $cfg.adapter } else { 'file' }
 
-# ── Redis helpers ─────────────────────────────────────────────────────────────
+# -- Redis helpers -------------------------------------------------------------
 function Test-RedisAvailable {
     try {
         $out = & redis-cli -h $cfg.redis.host -p $cfg.redis.port PING 2>&1
@@ -90,7 +90,7 @@ function Consume-Redis {
     return $items
 }
 
-# ── Webhook helpers ───────────────────────────────────────────────────────────
+# -- Webhook helpers -----------------------------------------------------------
 function Test-WebhookAvailable {
     $url = $cfg.webhook.url
     if (-not $url) { return $false }
@@ -110,10 +110,10 @@ function Publish-Webhook {
     Invoke-RestMethod -Uri $url -Method POST -Body $body -Headers $headers -TimeoutSec 5 -ErrorAction Stop | Out-Null
 }
 
-# ── File adapter helpers (always available as fallback) ───────────────────────
+# -- File adapter helpers (always available as fallback) -----------------------
 function Publish-File {
     param([string]$Chan, [string]$Msg)
-    # File adapter just appends to .event-bus/history.json — handled by event-bus.ps1
+    # File adapter just appends to .event-bus/history.json - handled by event-bus.ps1
     # Here we just append a raw entry to an MQ fallback log
     $mqLog = Join-Path $repoRoot ".event-bus\mq-fallback.jsonl"
     $entry = @{ timestamp = (Get-Date -Format 'o'); channel = $Chan; payload = $Msg } | ConvertTo-Json -Compress
@@ -127,24 +127,24 @@ function Consume-File {
     return Get-Content $mqLog -Encoding UTF8 | Select-Object -Last $Max
 }
 
-# ── Effective adapter selection with fallback ─────────────────────────────────
+# -- Effective adapter selection with fallback ---------------------------------
 function Get-EffectiveAdapter {
     switch ($adapter) {
         'redis' {
             if (Test-RedisAvailable) { return 'redis' }
-            if (-not $Quiet) { Write-Host "  [WARN] Redis unavailable — falling back to file adapter" -ForegroundColor Yellow }
+            if (-not $Quiet) { Write-Host "  [WARN] Redis unavailable - falling back to file adapter" -ForegroundColor Yellow }
             return 'file'
         }
         'webhook' {
             if (Test-WebhookAvailable) { return 'webhook' }
-            if (-not $Quiet) { Write-Host "  [WARN] Webhook unavailable — falling back to file adapter" -ForegroundColor Yellow }
+            if (-not $Quiet) { Write-Host "  [WARN] Webhook unavailable - falling back to file adapter" -ForegroundColor Yellow }
             return 'file'
         }
         default { return 'file' }
     }
 }
 
-# ── Actions ───────────────────────────────────────────────────────────────────
+# -- Actions -------------------------------------------------------------------
 switch ($Action) {
 
     'publish' {
@@ -183,14 +183,14 @@ switch ($Action) {
                 $ok = Test-RedisAvailable
                 $status = if ($ok) { '[OK] Connected' } else { '[WARN] Unavailable' }
                 $color  = if ($ok) { 'Green' } else { 'Yellow' }
-                Write-Host "  Redis $($cfg.redis.host):$($cfg.redis.port) — $status" -ForegroundColor $color
+                Write-Host "  Redis $($cfg.redis.host):$($cfg.redis.port) - $status" -ForegroundColor $color
                 if (-not $ok) { Write-Host "  Fallback: file adapter active" -ForegroundColor Yellow }
             }
             'webhook' {
                 $ok = Test-WebhookAvailable
                 $status = if ($ok) { '[OK] Reachable' } else { '[WARN] Unreachable' }
                 $color  = if ($ok) { 'Green' } else { 'Yellow' }
-                Write-Host "  Webhook $($cfg.webhook.url) — $status" -ForegroundColor $color
+                Write-Host "  Webhook $($cfg.webhook.url) - $status" -ForegroundColor $color
                 if (-not $ok) { Write-Host "  Fallback: file adapter active" -ForegroundColor Yellow }
             }
             default {

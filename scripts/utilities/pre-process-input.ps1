@@ -56,7 +56,7 @@ function Add-TriggersFromSkillFiles {
     }
 }
 
-# Source 2: auto-delegation.json — single config load, all mappings driven by config
+# Source 2: auto-delegation.json - single config load, all mappings driven by config
 $autoDelegationConfig = Join-Path $workspaceRoot "config/auto-delegation.json"
 $delegationConfig = $null
 if (Test-Path $autoDelegationConfig) {
@@ -64,7 +64,7 @@ if (Test-Path $autoDelegationConfig) {
 }
 
 if ($delegationConfig -and $delegationConfig.keywordMappings) {
-    # agentCodeToSkill: loaded from config — no hardcoding in script
+    # agentCodeToSkill: loaded from config - no hardcoding in script
     $skillMapping = @{}
     if ($delegationConfig.agentCodeToSkill) {
         foreach ($prop in $delegationConfig.agentCodeToSkill.PSObject.Properties) {

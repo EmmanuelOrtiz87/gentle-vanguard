@@ -4,7 +4,7 @@
     Sync changes from private repo to public repo.
 .DESCRIPTION
     Copies ONLY public-safe files:
-    - Bootstrap scripts (plain text — needed for onboarding)
+    - Bootstrap scripts (plain text - needed for onboarding)
     - Public documentation (README, LICENSE, docs/, demos/)
     - Example configs (no secrets)
     - Pre-built encrypted artifacts (protected/)
@@ -26,21 +26,35 @@
 #>
 
 param(
-    [string]$privateRepo = "$(if ($env:PRIVATE_REPO) { $env:PRIVATE_REPO } else { Resolve-Path "$PSScriptRoot\..\..\.." })",
-    [string]$publicRepo = "$(if ($env:PUBLIC_REPO) { $env:PUBLIC_REPO } else { Resolve-Path "$PSScriptRoot\..\..\..\..\foundation-public" })",
+    [string]$privateRepo = '',
+    [string]$publicRepo = '',
     [string]$publicRepoSlug = "$(if ($env:PUBLIC_REPO_SLUG) { $env:PUBLIC_REPO_SLUG } else { 'EmmanuelOrtiz87/foundation-public' })",
     [switch]$skipPush
 )
 
 $ErrorActionPreference = "Stop"
-$buildDir = "$privateRepo\build"
-$distDir = "$privateRepo\dist"
 
-Write-Output "=== Syncing Private → Public Repo ==="
+if ($env:FOUNDATION_BASE_DIR) {
+    $resolvedRoot = $env:FOUNDATION_BASE_DIR
+} else {
+    $searchDir = $PSScriptRoot
+    while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
+        $searchDir = Split-Path -Parent $searchDir
+    }
+    $resolvedRoot = $searchDir
+}
+
+if ([string]::IsNullOrEmpty($privateRepo)) { $privateRepo = if ($env:PRIVATE_REPO) { $env:PRIVATE_REPO } else { $resolvedRoot } }
+if ([string]::IsNullOrEmpty($publicRepo)) { $publicRepo = if ($env:PUBLIC_REPO) { $env:PUBLIC_REPO } else { Join-Path (Split-Path -Parent (Split-Path -Parent $resolvedRoot)) 'foundation-public' } }
+
+$buildDir = Join-Path $privateRepo 'build'
+$distDir = Join-Path $privateRepo 'dist'
+
+Write-Output "=== Syncing Private -> Public Repo ==="
 Write-Output ""
 
 # ============================================================================
-# 0. Bootstrap scripts (plain text — needed for user onboarding)
+# 0. Bootstrap scripts (plain text - needed for user onboarding)
 # ============================================================================
 Write-Output "[BOOTSTRAP] Syncing bootstrap scripts..."
 $bootstrapDir = "$publicRepo\scripts\foundation"
@@ -52,7 +66,7 @@ Copy-Item "$privateRepo\scripts\foundation\setup-multi-machine.ps1" "$bootstrapD
 # ============================================================================
 # 1. Public documentation (root files)
 # ============================================================================
-Write-Output "📄 Syncing public docs..."
+Write-Output " Syncing public docs..."
 Copy-Item "$privateRepo\README.md" "$publicRepo\README.md" -Force
 Copy-Item "$privateRepo\LICENSE" "$publicRepo\LICENSE" -Force
 Copy-Item "$privateRepo\CONTRIBUTING.md" "$publicRepo\CONTRIBUTING.md" -Force
@@ -63,7 +77,7 @@ Copy-Item "$privateRepo\BUILD-README.md" "$publicRepo\BUILD-README.md" -Force -E
 # ============================================================================
 # 2. Documentation directory (ONLY public-safe docs, no internal IP)
 # ============================================================================
-Write-Output "📚 Syncing public-safe docs..."
+Write-Output " Syncing public-safe docs..."
 if (Test-Path "$publicRepo\docs") {
     Remove-Item "$publicRepo\docs" -Recurse -Force -ErrorAction SilentlyContinue
 }
@@ -94,7 +108,7 @@ foreach ($dir in $publicDocDirs) {
         $dstParent = "$publicRepo\$(Split-Path $dir -Parent)"
         if (-not (Test-Path $dstParent)) { New-Item -ItemType Directory -Path $dstParent -Force | Out-Null }
         Copy-Item $src "$publicRepo\$dir" -Recurse -Force
-        Write-Output "  ✅ $dir"
+        Write-Output "  [OK] $dir"
     }
 }
 
@@ -112,7 +126,7 @@ foreach ($f in $publicRefDocs) {
     $src = "$privateRepo\$f"
     if (Test-Path $src) {
         Copy-Item $src "$refDir\" -Force
-        Write-Output "  ✅ $f"
+        Write-Output "  [OK] $f"
     }
 }
 
@@ -122,20 +136,20 @@ if (Test-Path $archOverview) {
     $archDest = "$publicRepo\docs\architecture"
     New-Item -ItemType Directory -Path $archDest -Force | Out-Null
     Copy-Item $archOverview "$archDest\README.md" -Force
-    Write-Output "  ✅ docs/architecture/README.md"
+    Write-Output "  [OK] docs/architecture/README.md"
 }
 
 # Public examples
 $examples = "$privateRepo\docs\EXAMPLES.md"
 if (Test-Path $examples) {
     Copy-Item $examples "$publicRepo\docs\EXAMPLES.md" -Force
-    Write-Output "  ✅ docs/EXAMPLES.md"
+    Write-Output "  [OK] docs/EXAMPLES.md"
 }
 
 # ============================================================================
 # 3. Example configs only (no secrets)
 # ============================================================================
-Write-Output "⚙️ Syncing example configs..."
+Write-Output "[*] Syncing example configs..."
 $exampleDir = "$publicRepo\config"
 New-Item -ItemType Directory -Path $exampleDir -Force | Out-Null
 # Remove all first, then copy only example files
@@ -144,7 +158,7 @@ foreach ($example in @('workspace.example.json', 'workspace.portable.example.jso
     $src = "$privateRepo\config\$example"
     if (Test-Path $src) {
         Copy-Item $src "$exampleDir\$example" -Force
-        Write-Output "  ✅ config/$example"
+        Write-Output "  [OK] config/$example"
     }
 }
 # Copy config README if exists
@@ -155,64 +169,64 @@ if (Test-Path "$privateRepo\config\README.md") {
 # ============================================================================
 # 4. Encrypted artifacts (pre-built by protect-foundation.ps1)
 # ============================================================================
-Write-Output "🔒 Syncing encrypted protected/..."
+Write-Output " Syncing encrypted protected/..."
 if (Test-Path "$buildDir\protected") {
     if (Test-Path "$publicRepo\protected") {
         Remove-Item "$publicRepo\protected" -Recurse -Force -ErrorAction SilentlyContinue
     }
     Copy-Item "$buildDir\protected" "$publicRepo\" -Recurse -Force
-    Write-Output "  ✅ protected/"
+    Write-Output "  [OK] protected/"
 } else {
-    Write-Output "  ⚠️  build/protected/ not found — run protect-foundation.ps1 first"
+    Write-Output "  [WARN]  build/protected/ not found - run protect-foundation.ps1 first"
 }
 
 # ============================================================================
 # 5. Public skill stubs (pre-built by protect-foundation.ps1)
 # ============================================================================
-Write-Output "🧩 Syncing public skill stubs..."
+Write-Output " Syncing public skill stubs..."
 if (Test-Path "$buildDir\public") {
     if (Test-Path "$publicRepo\public") {
         Remove-Item "$publicRepo\public" -Recurse -Force -ErrorAction SilentlyContinue
     }
     Copy-Item "$buildDir\public" "$publicRepo\" -Recurse -Force
-    Write-Output "  ✅ public/"
+    Write-Output "  [OK] public/"
 } else {
-    Write-Output "  ⚠️  build/public/ not found — run protect-foundation.ps1 first"
+    Write-Output "  [WARN]  build/public/ not found - run protect-foundation.ps1 first"
 }
 
 # ============================================================================
 # 6. Public demos
 # ============================================================================
-Write-Output "🎯 Syncing public demos..."
+Write-Output " Syncing public demos..."
 if (Test-Path "$privateRepo\demos") {
     if (Test-Path "$publicRepo\demos") {
         Remove-Item "$publicRepo\demos" -Recurse -Force -ErrorAction SilentlyContinue
     }
     Copy-Item "$privateRepo\demos" "$publicRepo\" -Recurse -Force
-    Write-Output "  ✅ demos/"
+    Write-Output "  [OK] demos/"
 }
 
 # ============================================================================
 # 7. Compiled executables
 # ============================================================================
-Write-Output "🚀 Syncing executables..."
+Write-Output " Syncing executables..."
 
 # Compiled launcher
 $launcherExe = "$buildDir\compiled\Foundation-Launcher.exe"
 if (Test-Path $launcherExe) {
     Copy-Item $launcherExe "$publicRepo\Foundation-Launcher.exe" -Force
-    Write-Output "  ✅ Foundation-Launcher.exe"
+    Write-Output "  [OK] Foundation-Launcher.exe"
 } else {
-    Write-Output "  ⚠️  compiled launcher not found"
+    Write-Output "  [WARN]  compiled launcher not found"
 }
 
 # Installer
 $installerExe = "$distDir\Foundation-Setup.exe"
 if (Test-Path $installerExe) {
     Copy-Item $installerExe "$publicRepo\Foundation-Setup.exe" -Force
-    Write-Output "  ✅ Foundation-Setup.exe"
+    Write-Output "  [OK] Foundation-Setup.exe"
 } else {
-    Write-Output "  ⚠️  installer not found at $installerExe"
+    Write-Output "  [WARN]  installer not found at $installerExe"
 }
 
 # ============================================================================
@@ -221,13 +235,13 @@ if (Test-Path $installerExe) {
 # INSTALLATION.md should exist already in foundation-public from the installer.
 # If missing, create a basic version.
 if (-not (Test-Path "$publicRepo\INSTALLATION.md")) {
-    Write-Output "  ⚠️  INSTALLATION.md missing — keeping existing if any"
+    Write-Output "  [WARN]  INSTALLATION.md missing - keeping existing if any"
 }
 
 # ============================================================================
 # 9. Cleanup: remove any plain-text artifacts that shouldn't be in public repo
 # ============================================================================
-Write-Output "🧹 Cleaning up plain-text artifacts..."
+Write-Output " Cleaning up plain-text artifacts..."
 
 # Remove stray plain-text scripts (bootstrap dir is the only exception)
 $strayScriptDirs = @(
@@ -244,7 +258,7 @@ $strayScriptDirs = @(
 foreach ($dir in $strayScriptDirs) {
     if (Test-Path $dir) {
         Remove-Item $dir -Recurse -Force -ErrorAction SilentlyContinue
-        Write-Output "  🗑️  Removed: $dir"
+        Write-Output "    Removed: $dir"
     }
 }
 
@@ -252,7 +266,7 @@ foreach ($dir in $strayScriptDirs) {
 $plainSkills = "$publicRepo\skills"
 if (Test-Path $plainSkills) {
     Remove-Item $plainSkills -Recurse -Force -ErrorAction SilentlyContinue
-    Write-Output "  🗑️  Removed: skills/ (plain text — use protected/skills/ or public/skills/)"
+    Write-Output "    Removed: skills/ (plain text - use protected/skills/ or public/skills/)"
 }
 
 # Remove plain-text config files that are NOT examples (actual routing/IP)
@@ -261,7 +275,7 @@ Get-ChildItem "$publicRepo\config" -ErrorAction SilentlyContinue | Where-Object 
     $_.Name -notlike "*.example.*" -and $_.Name -ne "README.md"
 } | ForEach-Object {
     Remove-Item $_.FullName -Force -ErrorAction SilentlyContinue
-    Write-Output "  🗑️  Removed: config/$($_.Name)"
+    Write-Output "    Removed: config/$($_.Name)"
 }
 
 Write-Output ""
@@ -285,7 +299,7 @@ if (-not $skipPush) {
     # Ensure local branch matches remote default before committing
     $remoteBranchExists = git ls-remote --heads origin $defaultBranch 2>$null
     if ([string]::IsNullOrWhiteSpace($remoteBranchExists)) {
-        Write-Output "❌ Remote default branch '$defaultBranch' not found in $publicRepoSlug"
+        Write-Output "[FAIL] Remote default branch '$defaultBranch' not found in $publicRepoSlug"
         Pop-Location
         exit 1
     }
@@ -299,7 +313,7 @@ if (-not $skipPush) {
 
     git pull --rebase origin $defaultBranch 2>&1 | Out-Null
     if ($LASTEXITCODE -ne 0) {
-        Write-Output "❌ Could not rebase local $defaultBranch with origin/$defaultBranch"
+        Write-Output "[FAIL] Could not rebase local $defaultBranch with origin/$defaultBranch"
         Pop-Location
         exit 1
     }
@@ -309,19 +323,19 @@ if (-not $skipPush) {
     $commitMsg = "sync: automated sync from private repo - $timestamp"
     git commit -m $commitMsg 2>&1 | Out-Null
     if ($LASTEXITCODE -eq 0) {
-        Write-Output "✅ Committed: $commitMsg"
+        Write-Output "[OK] Committed: $commitMsg"
         $pushResult = git push origin $defaultBranch 2>&1
         if ($LASTEXITCODE -eq 0) {
-            Write-Output "✅ Pushed to origin/$defaultBranch"
+            Write-Output "[OK] Pushed to origin/$defaultBranch"
         } else {
-            Write-Output "❌ Push failed: $pushResult"
+            Write-Output "[FAIL] Push failed: $pushResult"
         }
     } else {
-        Write-Output "ℹ️  Nothing to commit — public repo is up to date"
+        Write-Output "i  Nothing to commit - public repo is up to date"
     }
     Pop-Location
 } else {
-    Write-Output "ℹ️  skipPush enabled — commit/push skipped"
+    Write-Output "i  skipPush enabled - commit/push skipped"
 }
 
 Write-Output ""

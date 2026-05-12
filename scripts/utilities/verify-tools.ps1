@@ -89,7 +89,7 @@ if ((-not $Force) -and (Test-Path $cacheFile)) {
 } elseif ($Force) {
     Write-Warn 'Forzando re-verificacion completa...'
 } else {
-    Write-Info 'Primera ejecucion — verificando todas las herramientas...'
+    Write-Info 'Primera ejecucion - verificando todas las herramientas...'
 }
 
 $results = @{ passed = @(); failed = @(); warned = @() }
@@ -113,10 +113,10 @@ foreach ($tool in $tools) {
         }
     } else {
         if ($tool.Required) {
-            Write-Err "$($tool.Name) NO ENCONTRADO (requerido) — Instalar: $($tool.InstallCmd)"
+            Write-Err "$($tool.Name) NO ENCONTRADO (requerido) - Instalar: $($tool.InstallCmd)"
             $results.failed += $tool.Name
         } else {
-            Write-Warn "$($tool.Name) no encontrado (opcional) — Instalar: $($tool.InstallCmd)"
+            Write-Warn "$($tool.Name) no encontrado (opcional) - Instalar: $($tool.InstallCmd)"
             $results.warned += $tool.Name
         }
     }

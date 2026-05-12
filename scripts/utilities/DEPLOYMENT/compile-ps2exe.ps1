@@ -7,7 +7,7 @@ param(
 )
 
 if (-not (Get-Command "ps2exe" -ErrorAction SilentlyContinue)) {
-    Write-Output "⚠️  PS2EXE not installed. Installing..."
+    Write-Output "[WARN]  PS2EXE not installed. Installing..."
     Install-Module -Name ps2exe -Scope CurrentUser -Force -AllowClobber
 }
 
@@ -19,11 +19,11 @@ if ($SourceScript -and (Test-Path $SourceScript)) {
     $fileName = [System.IO.Path]::GetFileNameWithoutExtension($SourceScript)
     $outputPath = Join-Path $OutputDir "$fileName.exe"
     
-    Write-Output "🔨 Compiling: $SourceScript"
+    Write-Output " Compiling: $SourceScript"
     ps2exe -inputFile $SourceScript -outputFile $outputPath -noConsole -iconFile "" -title "Foundation Utility" -description "Foundation automated utility"
     
     if (Test-Path $outputPath) {
-        Write-Output "✅ Created: $outputPath"
+        Write-Output "[OK] Created: $outputPath"
     }
 } else {
     Write-Output "Usage: .\compile-ps2exe.ps1 -SourceScript 'path\to\script.ps1'"

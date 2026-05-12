@@ -108,10 +108,14 @@ Write-Step 'Restaurando master.key del repo'
 
 $keysSrc = Join-Path $tempBase 'keys\master.key'
 if (Test-Path $keysSrc) {
-    $repoRoot = if (Test-Path (Join-Path $PSScriptRoot '..\..')) {
-        (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
+    $repoRoot = if ($env:FOUNDATION_BASE_DIR) {
+        $env:FOUNDATION_BASE_DIR
     } else {
-        Join-Path $HOME 'source\foundation'
+        $searchDir = $PSScriptRoot
+        while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
+            $searchDir = Split-Path -Parent $searchDir
+        }
+        if ($searchDir) { $searchDir } else { Join-Path $HOME 'source\foundation' }
     }
 
     $keysDest = Join-Path $repoRoot 'keys'

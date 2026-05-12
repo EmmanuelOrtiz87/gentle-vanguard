@@ -92,7 +92,7 @@ function Get-History {
     return $null
 }
 
-# ─── Rate-limit state persistence (sliding window cross-restart) ─────────────
+# --- Rate-limit state persistence (sliding window cross-restart) -------------
 function Get-RateLimitState {
     $statePath = Join-Path $eventBusPath 'rate-limit-state.json'
     if (Test-Path $statePath) {
@@ -138,7 +138,7 @@ function Update-RateLimitState {
         events         = $newEvents
     } | ConvertTo-Json -Depth 4 | Out-File -FilePath $statePath -Encoding UTF8 -Force
 }
-# ─────────────────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------------------
 
 function Add-HistoryEntry {
     param(
@@ -243,7 +243,7 @@ $STANDARD_EVENTS = @{
 
 Initialize-EventBus
 
-# ─── GOVERNANCE ENFORCEMENT ─────────────────────────────────────────────────
+# --- GOVERNANCE ENFORCEMENT -------------------------------------------------
 # Reads config/event-registry.json and config/event-governance-config.json.
 # Returns @{ Allowed=$true/$false; Reason='...' }
 function Invoke-EventGovernance {
@@ -257,7 +257,7 @@ function Invoke-EventGovernance {
 
     # 1. Load configs (fail-open: if configs missing, allow but warn)
     if (-not (Test-Path $registryPath) -or -not (Test-Path $governancePath)) {
-        Write-Host "  [GOV-WARN] Governance config not found — skipping enforcement" -ForegroundColor Yellow
+        Write-Host "  [GOV-WARN] Governance config not found - skipping enforcement" -ForegroundColor Yellow
         return @{ Allowed = $true; Reason = 'config-missing' }
     }
 
@@ -268,7 +268,7 @@ function Invoke-EventGovernance {
 
     # 2. Unknown event check
     if (-not $eventDef) {
-        Write-Host "  [GOV-WARN] '$EventName' is not in event-registry.json — proceeding unvalidated" -ForegroundColor Yellow
+        Write-Host "  [GOV-WARN] '$EventName' is not in event-registry.json - proceeding unvalidated" -ForegroundColor Yellow
         return @{ Allowed = $true; Reason = 'unregistered-event' }
     }
 
@@ -306,7 +306,7 @@ function Invoke-EventGovernance {
         }
     }
 
-    # 6. Rate limit check — rate-limit-state.json (persistent) as primary, history.json as fallback
+    # 6. Rate limit check - rate-limit-state.json (persistent) as primary, history.json as fallback
     $rateLimitEnabled = $governance.governance.rate_limiting.enabled
     if ($rateLimitEnabled) {
         $rateLimit = $eventDef.Value.rate_limit
@@ -349,7 +349,7 @@ function Invoke-EventGovernance {
 
     return @{ Allowed = $true; Reason = 'ok' }
 }
-# ─────────────────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------------------
 
 switch ($Action) {
     'list' {
@@ -444,14 +444,14 @@ switch ($Action) {
 
         $normalizedEvent = $Event.ToLower()
 
-        # ── Governance gate ──────────────────────────────────────────────────
+        # -- Governance gate --------------------------------------------------
         $govResult = Invoke-EventGovernance -EventName $normalizedEvent -PayloadJson $Payload
         if (-not $govResult.Allowed) {
             Write-Host "[GOV-BLOCK] Event '$normalizedEvent' blocked: $($govResult.Reason)" -ForegroundColor Red
             Add-HistoryEntry -EventName $normalizedEvent -PayloadJson $Payload -Status "blocked:$($govResult.Reason)"
             exit 1
         }
-        # ─────────────────────────────────────────────────────────────────────
+        # ---------------------------------------------------------------------
 
         $subs = Get-Subscriptions
 

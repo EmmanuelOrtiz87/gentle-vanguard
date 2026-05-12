@@ -15,8 +15,16 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
+if ($env:FOUNDATION_BASE_DIR) {
+    $repoRoot = $env:FOUNDATION_BASE_DIR
+} else {
+    $searchDir = $PSScriptRoot
+    while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
+        $searchDir = Split-Path -Parent $searchDir
+    }
+    $repoRoot = $searchDir
+}
+$scriptDir = $PSScriptRoot
 $agentRouter = Join-Path $scriptDir 'AI-AGENT-MANAGEMENT\agent-router.ps1'
 
 function Write-WrapperLine {
@@ -27,7 +35,7 @@ function Write-WrapperLine {
 }
 
 function Get-RoutingConfig {
-    $autoDelegationPath = Join-Path $PSScriptRoot '..\..\config\auto-delegation.json'
+    $autoDelegationPath = Join-Path $repoRoot 'config\auto-delegation.json'
     if (Test-Path $autoDelegationPath) {
         $ad = Get-Content $autoDelegationPath -Raw -Encoding UTF8 | ConvertFrom-Json
         return @{ keywordMappings = $ad.keywordMappings; Enabled = $true }

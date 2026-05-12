@@ -178,7 +178,7 @@ function Find-AgentByTieredRouting {
         $bindings = $raw
     } elseif ($raw.tiers) {
         # Convert confidence-based tiers: delegate tier action to keyword routing
-        if ($Verbose) { Write-Host "[ROUTING] Confidence-based tiers configured — falling back to keyword routing" }
+        if ($Verbose) { Write-Host "[ROUTING] Confidence-based tiers configured - falling back to keyword routing" }
         return $null
     }
     

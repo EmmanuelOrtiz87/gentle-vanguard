@@ -1,11 +1,11 @@
 # sync-drift-report.ps1
-# FF-004: Sync Drift Prevention — compares declared skills/config vs actual
+# FF-004: Sync Drift Prevention - compares declared skills/config vs actual
 # filesystem contents and reports any drift (missing, extra, or mismatched).
 #
 # Checks performed:
 #   1. Skills declared in config/auto-delegation.json vs skills/ directories
 #   2. MCP servers declared in config/mcp-servers.json vs actual connectivity
-#      (file presence only — no live TCP checks)
+#      (file presence only - no live TCP checks)
 #   3. Backlog items with resolved_by script ref vs actual file existence
 #
 # Usage:
@@ -21,7 +21,7 @@ $ErrorActionPreference = 'Continue'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot  = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 
-# ─── Load configs ─────────────────────────────────────────────────────────────
+# --- Load configs -------------------------------------------------------------
 $autoDelegPath  = Join-Path $repoRoot 'config\auto-delegation.json'
 $mcpConfigPath  = Join-Path $repoRoot 'config\mcp-servers.json'
 $backlogPath    = Join-Path $repoRoot 'docs\backlog\items.json'
@@ -32,7 +32,7 @@ $extra_skills   = @()
 $missing_mcp    = @()
 $broken_refs    = @()
 
-# ─── 1. Skill drift ───────────────────────────────────────────────────────────
+# --- 1. Skill drift -----------------------------------------------------------
 if (Test-Path $autoDelegPath) {
     try {
         $autoCfg = Get-Content $autoDelegPath -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -62,11 +62,11 @@ if (Test-Path $autoDelegPath) {
             }
         }
     } catch {
-        Write-Warning "sync-drift: could not parse auto-delegation.json — $_"
+        Write-Warning "sync-drift: could not parse auto-delegation.json - $_"
     }
 }
 
-# ─── 2. MCP server drift ─────────────────────────────────────────────────────
+# --- 2. MCP server drift -----------------------------------------------------
 if (Test-Path $mcpConfigPath) {
     try {
         $mcpCfg = Get-Content $mcpConfigPath -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -101,11 +101,11 @@ if (Test-Path $mcpConfigPath) {
             }
         }
     } catch {
-        Write-Warning "sync-drift: could not parse mcp-servers.json — $_"
+        Write-Warning "sync-drift: could not parse mcp-servers.json - $_"
     }
 }
 
-# ─── 3. Resolved-by script references ────────────────────────────────────────
+# --- 3. Resolved-by script references ----------------------------------------
 if (Test-Path $backlogPath) {
     try {
         $items = Get-Content $backlogPath -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -135,11 +135,11 @@ if (Test-Path $backlogPath) {
             }
         }
     } catch {
-        Write-Warning "sync-drift: could not parse backlog items.json — $_"
+        Write-Warning "sync-drift: could not parse backlog items.json - $_"
     }
 }
 
-# ─── Summary ─────────────────────────────────────────────────────────────────
+# --- Summary -----------------------------------------------------------------
 $driftScore = $missing_skills.Count + $extra_skills.Count + $missing_mcp.Count + $broken_refs.Count
 $status = if ($driftScore -eq 0) { 'CLEAN' } elseif ($driftScore -le 5) { 'WARN' } else { 'DRIFT' }
 

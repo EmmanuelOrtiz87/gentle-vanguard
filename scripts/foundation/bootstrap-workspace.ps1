@@ -1,8 +1,8 @@
 param(
-    [string]$ConfigPath = $(Join-Path $PSScriptRoot '..\..\config\workspace.config.json'),
-    [string]$TemplatePath = $(Join-Path $PSScriptRoot '..\..\templates\project-root'),
-    [string]$TemplateKindsRoot = $(Join-Path $PSScriptRoot '..\..\templates\project-types'),
-    [string]$WorkspaceRoot = $(Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path,
+    [string]$ConfigPath = '',
+    [string]$TemplatePath = '',
+    [string]$TemplateKindsRoot = '',
+    [string]$WorkspaceRoot = '',
     [string]$ProjectName = '',
     [string]$ProjectKind = '',
     [string]$ProjectPreset = '',
@@ -20,6 +20,21 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+
+if ($env:FOUNDATION_BASE_DIR) {
+    $repoRoot = $env:FOUNDATION_BASE_DIR
+} else {
+    $searchDir = $PSScriptRoot
+    while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
+        $searchDir = Split-Path -Parent $searchDir
+    }
+    $repoRoot = $searchDir
+}
+
+if ([string]::IsNullOrWhiteSpace($ConfigPath)) { $ConfigPath = Join-Path $repoRoot 'config\workspace.config.json' }
+if ([string]::IsNullOrWhiteSpace($TemplatePath)) { $TemplatePath = Join-Path $repoRoot 'templates\project-root' }
+if ([string]::IsNullOrWhiteSpace($TemplateKindsRoot)) { $TemplateKindsRoot = Join-Path $repoRoot 'templates\project-types' }
+if ([string]::IsNullOrWhiteSpace($WorkspaceRoot)) { $WorkspaceRoot = $repoRoot }
 
 function Get-PlatformKey {
     if ([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows)) { return 'windows' }

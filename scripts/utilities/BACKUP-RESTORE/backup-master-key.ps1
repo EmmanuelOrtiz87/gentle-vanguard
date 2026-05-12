@@ -20,7 +20,7 @@ $currentLink = "$backupDir\master.key.current"
 Copy-Item $source $backupPath
 Copy-Item $source $currentLink -Force
 
-Write-Output "✅ Backup created: $backupPath"
-Write-Output "✅ Current link updated: $currentLink"
+Write-Output "[OK] Backup created: $backupPath"
+Write-Output "[OK] Current link updated: $currentLink"
 Write-Output ""
-Write-Output "⚠️  Keep backups secure. These files decrypt 185 protected scripts."
+Write-Output "[WARN]  Keep backups secure. These files decrypt 185 protected scripts."

@@ -414,7 +414,7 @@ function Invoke-SkillsSyncDelegation {
 
     Write-Host "1. ORPHANED CONFIG ENTRIES (in skillToAgentProfile but missing from skills/)" -ForegroundColor Yellow
     if ($orphaned.Count -eq 0) {
-        Write-SuccessLine "None — all config entries have matching skill directories"
+        Write-SuccessLine "None - all config entries have matching skill directories"
     } else {
         foreach ($entry in $orphaned | Sort-Object { $_.skill_name }) {
             Write-Host "  [MISSING] $($entry.skill_name) -> agent $($entry.agent)" -ForegroundColor Red
@@ -424,7 +424,7 @@ function Invoke-SkillsSyncDelegation {
 
     Write-Host "2. UNMAPPED SKILLS (in filesystem but missing from skillToAgentProfile)" -ForegroundColor Yellow
     if ($unmapped.Count -eq 0) {
-        Write-SuccessLine "None — all filesystem skills have entries in skillToAgentProfile"
+        Write-SuccessLine "None - all filesystem skills have entries in skillToAgentProfile"
     } else {
         foreach ($entry in $unmapped | Sort-Object { $_.skill_name }) {
             Write-Host "  [UNMAPPED] $($entry.skill_name) (dir: $($entry.directory))" -ForegroundColor Yellow
@@ -434,7 +434,7 @@ function Invoke-SkillsSyncDelegation {
 
     Write-Host "3. NAME MISMATCHES (directory name != skill frontmatter name)" -ForegroundColor Yellow
     if ($nameMismatches.Count -eq 0) {
-        Write-SuccessLine "None — all directory names match their frontmatter skill name"
+        Write-SuccessLine "None - all directory names match their frontmatter skill name"
     } else {
         foreach ($entry in $nameMismatches | Sort-Object { $_.directory }) {
             Write-Host "  [MISMATCH] dir: '$($entry.directory)' -> name: '$($entry.skill_name)'" -ForegroundColor Yellow
