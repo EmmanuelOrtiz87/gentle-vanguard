@@ -75,7 +75,16 @@ cumplir estos controles o documentar desvio aprobado.
 3. **SHOULD** implementar circuit breakers para prevenir cascading failures
 4. **SHOULD** verificar integridad de comunicaciones multi-agente
 
-### 2.9 Observability & Incident Response
+### 2.9 Cross-Agent Communication Security (ASI03)
+
+1. **MUST** sanitize ALL data received FROM other agents via `pre-process-input.ps1 -FromAgent`
+2. **MUST** validate inter-agent payloads for critical patterns before processing
+3. **MUST** tag inter-agent communication with `SOURCE: AGENT` marker for auditability
+4. **MUST** block critical secrets (API keys, private keys) in cross-agent data
+5. **SHOULD** log inter-agent data flow for anomaly detection
+6. **SHOULD** implement circuit breaker when an agent produces repeated blocked patterns
+
+### 2.10 Observability & Incident Response
 
 1. **MUST** trackear token usage y costos por sesion/usuario
 2. **MUST** mantener audit trails de decisiones y acciones del agente
@@ -96,8 +105,9 @@ cumplir estos controles o documentar desvio aprobado.
 | Supply Chain          | HIGH      | 2.5     | Semanal        |
 | Memory Poisoning      | HIGH      | 2.6     | Cada sesion    |
 | Tool Misuse           | CRITICAL  | 2.7     | Cada tool call |
-| Inter-Agent Attack    | MEDIUM    | 2.8     | Cada sesion    |
-| Observability Gap     | MEDIUM    | 2.9     | Continuo       |
+| Inter-Agent Attack    | HIGH      | 2.8     | Cada sesion    |
+| Cross-Agent Data Poisoning | HIGH | 2.9     | Cada interaccion entre agentes |
+| Observability Gap     | MEDIUM    | 2.10    | Continuo       |
 
 ---
 
