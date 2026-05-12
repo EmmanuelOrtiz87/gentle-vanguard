@@ -286,23 +286,15 @@ Write-Output ""
 if (-not $skipPush) {
     Push-Location $publicRepo
 
-    # Detect default branch from remote
+    # Detect default branch from remote HEAD (more robust than local symref)
     git fetch origin --prune 2>&1 | Out-Null
-    git remote set-head origin -a 2>&1 | Out-Null
-    $remoteBranch = git symbolic-ref refs/remotes/origin/HEAD 2>$null
-    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrEmpty($remoteBranch)) {
-        $defaultBranch = "main"
+    $remoteHead = git ls-remote --symref origin HEAD 2>$null
+    $defaultBranch = if ($remoteHead -match 'ref: refs/heads/(\S+)') {
+        $Matches[1]
     } else {
-        $defaultBranch = $remoteBranch -replace '^refs/remotes/origin/', ''
+        "main"
     }
-
-    # Ensure local branch matches remote default before committing
-    $remoteBranchExists = git ls-remote --heads origin $defaultBranch 2>$null
-    if ([string]::IsNullOrWhiteSpace($remoteBranchExists)) {
-        Write-Output "[FAIL] Remote default branch '$defaultBranch' not found in $publicRepoSlug"
-        Pop-Location
-        exit 1
-    }
+    Write-Output "[DETECT] Remote HEAD points to '$defaultBranch'"
 
     $localBranch = git branch --list $defaultBranch 2>$null
     if ([string]::IsNullOrWhiteSpace($localBranch)) {
