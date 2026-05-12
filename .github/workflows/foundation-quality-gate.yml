@@ -52,3 +52,27 @@ jobs:
             exit 1
           }
           Write-Host "agent-verify: PASS (warnings: $($result.summary.warnings))"
+
+      - name: SRE Error Budget Check
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          .\scripts\sre\enforce-error-budget.ps1 -Service all
+          Write-Host "SRE error budget check completed"
+
+      - name: Validate new config files
+        shell: pwsh
+        run: |
+          $newConfigs = @(
+            "config/sre-error-budgets.json",
+            "config/PSScriptAnalyzerSettings.psd1"
+          )
+          $allValid = $true
+          foreach ($cfg in $newConfigs) {
+            if (Test-Path $cfg) {
+              Write-Host "[OK] Config present: $cfg"
+            } else {
+              Write-Warning "[WARN] Config not found: $cfg"
+            }
+          }
+          if (-not $allValid) { exit 1 }

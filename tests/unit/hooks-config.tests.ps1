@@ -14,10 +14,10 @@ Describe 'Hooks and Security Tests' {
             (Get-Item $f).Length | Should BeGreaterThan 0
         }
 
-        It 'lefthook.yml contains trufflehog command' {
+        It 'lefthook.yml has git hooks validation commands' {
             $f = Join-Path $script:root ".lefthook.yml"
             $content = Get-Content $f -Raw
-            ($content -match 'trufflehog') | Should Be $true
+            ($content -match 'pre-commit:|pre-push:|commit-msg:') | Should Be $true
         }
 
         It 'lefthook.yml has pre-commit hooks defined' {

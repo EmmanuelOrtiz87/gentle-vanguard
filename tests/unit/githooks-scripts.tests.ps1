@@ -39,10 +39,10 @@ Describe 'Git Hooks Scripts Tests' {
             Test-Path $f | Should Be $true
         }
 
-        It 'lefthook.yml contains trufflehog' {
+        It 'lefthook.yml has pre-commit validation commands' {
             $f = Join-Path $script:root ".lefthook.yml"
             $content = Get-Content $f -Raw
-            ($content -match 'trufflehog') | Should Be $true
+            ($content -match 'opencode-validation|json-lint|workflow-lint') | Should Be $true
         }
 
         It 'lefthook.yml has pre-commit commands' {

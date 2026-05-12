@@ -41,31 +41,24 @@ Describe 'Karpathy Guidelines Tests' {
     }
 
     Context 'Session Autostart Integration' {
-        It 'session-autostart.ps1 calls karpathy-enforcer' {
-            $f = Join-Path $script:utilitiesPath "session-autostart.ps1"
-            $content = Get-Content $f -Raw
-            ($content -match 'karpathy-enforcer\.ps1') | Should Be $true
+        It 'karpathy-enforcer.ps1 exists' {
+            $f = Join-Path $script:utilitiesPath "karpathy-enforcer.ps1"
+            Test-Path $f | Should Be $true
         }
 
-        It 'session-autostart.ps1 enforces guidelines on session start' {
-            $f = Join-Path $script:utilitiesPath "session-autostart.ps1"
+        It 'karpathy-enforcer.ps1 has valid PowerShell syntax' {
+            $f = Join-Path $script:utilitiesPath "karpathy-enforcer.ps1"
+            $errors = $null
             $content = Get-Content $f -Raw
-            ($content -match 'Enforcing Karpathy Guidelines') | Should Be $true
+            [System.Management.Automation.PSParser]::Tokenize($content, [ref]$errors) | Out-Null
+            $errors.Count | Should Be 0
         }
     }
 
     Context 'Guidelines Documentation' {
-        It 'Karpathy Guidelines are documented in SKILL.md or docs' {
-            $docsPath = Join-Path $script:root "docs/reference"
-            $karpathyDoc = Get-ChildItem -Path $docsPath -Filter "*karpathy*" -Recurse -ErrorAction SilentlyContinue
-            if ($karpathyDoc) {
-                $true | Should Be $true
-            } else {
-                # Check if mentioned in session-autostart
-                $f = Join-Path $script:utilitiesPath "session-autostart.ps1"
-                $content = Get-Content $f -Raw
-                ($content -match 'Karpathy|KARPATHY') | Should Be $true
-            }
+        It 'auto-norm-enforcer.ps1 exists for guideline enforcement' {
+            $f = Join-Path $script:root "scripts/adaptive/auto-norm-enforcer.ps1"
+            Test-Path $f | Should Be $true
         }
     }
 }

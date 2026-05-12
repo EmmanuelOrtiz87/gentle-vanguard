@@ -43,6 +43,20 @@ jobs:
         shell: pwsh
         run: ./scripts/run-tests-simple.ps1
 
+      - name: Accessibility Check
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          .\scripts\testing\check-accessibility.ps1 -FailOnViolations:$false
+          Write-Host "Accessibility check completed"
+
+      - name: I18n Validation
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          .\scripts\testing\check-i18n.ps1 -FailOnMissing:$false
+          Write-Host "i18n validation completed"
+
       - name: Upload Test Results
         if: always()
         uses: actions/upload-artifact@v7
