@@ -49,6 +49,8 @@ config/github-runner.local.json
 
 # Workspace Security (NEVER commit)
 .workspace/config/owner-auth.json
+config/owner-auth.json
+config/owner-auth.template.json
 
 # Generated reports (runtime artifacts — not source)
 reports/dashboard.html
