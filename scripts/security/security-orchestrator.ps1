@@ -51,8 +51,50 @@ function Get-SessionAuth {
     return $false
 }
 
+function Get-OwnerApiKey {
+    # Priority 1: Environment variable (most secure - not in repo)
+    $envKey = $env:FOUNDATION_OWNER_KEY
+    if (-not [string]::IsNullOrWhiteSpace($envKey)) {
+        return $envKey
+    }
+    
+    # Priority 2: Encrypted DPAPI file
+    $encryptedAuthPath = $ownerAuthPath + ".enc"
+    if (Test-Path $encryptedAuthPath) {
+        try {
+            $encrypted = [System.IO.File]::ReadAllBytes($encryptedAuthPath)
+            $decrypted = [System.Security.Cryptography.ProtectedData]::Unprotect(
+                $encrypted,
+                $null,
+                [System.Security.Cryptography.DataProtectionScope]::CurrentUser
+            )
+            $auth = [System.Text.Encoding]::UTF8.GetString($decrypted) | ConvertFrom-Json
+            if ($auth.apiKey -and $auth.apiKey -ne '__USE_ENV_VAR_FOUNDATION_OWNER_KEY__') {
+                return $auth.apiKey
+            }
+        }
+        catch {
+            # Fall through to plain file
+        }
+    }
+    
+    # Priority 3: Plain file (legacy fallback - avoid)
+    if (Test-Path $ownerAuthPath) {
+        $auth = Get-Content $ownerAuthPath -Raw | ConvertFrom-Json
+        if ($auth.apiKey -and $auth.apiKey -ne '__USE_ENV_VAR_FOUNDATION_OWNER_KEY__') {
+            return $auth.apiKey
+        }
+    }
+    
+    return $null
+}
+
 function Test-OwnerApiKey {
     param([string]$Key)
+    
+    if ([string]::IsNullOrWhiteSpace($Key)) {
+        return $false
+    }
     
     # Check lockout first
     $secureAuthScript = Join-Path (Split-Path $scriptDir) 'scripts\security\secure-auth.ps1'
@@ -64,38 +106,16 @@ function Test-OwnerApiKey {
         }
     }
     
-    # Check encrypted file first
-    $encryptedAuthPath = $ownerAuthPath + ".enc"
-    $auth = $null
-    
-    if (Test-Path $encryptedAuthPath) {
-        try {
-            $encrypted = [System.IO.File]::ReadAllBytes($encryptedAuthPath)
-            $decrypted = [System.Security.Cryptography.ProtectedData]::Unprotect(
-                $encrypted,
-                $null,
-                [System.Security.Cryptography.DataProtectionScope]::CurrentUser
-            )
-            $auth = [System.Text.Encoding]::UTF8.GetString($decrypted) | ConvertFrom-Json
-        }
-        catch {
-            # Can't decrypt, fall back to plain file
-            if (Test-Path $ownerAuthPath) {
-                $auth = Get-Content $ownerAuthPath -Raw | ConvertFrom-Json
-            }
-        }
-    }
-    elseif (Test-Path $ownerAuthPath) {
-        $auth = Get-Content $ownerAuthPath -Raw | ConvertFrom-Json
-    }
-    else {
+    $expectedKey = Get-OwnerApiKey
+    if ($null -eq $expectedKey) {
+        Write-Host "[WARN] No owner API key configured. Set FOUNDATION_OWNER_KEY env var." -ForegroundColor Yellow
         return $false
     }
     
-    $valid = ($Key -eq $auth.apiKey)
+    $valid = ($Key -eq $expectedKey)
     
     # Track failed attempts
-    if (-not $valid -and $Key) {
+    if (-not $valid) {
         & $secureAuthScript -Action status 2>$null | Out-Null
     }
     
@@ -143,8 +163,9 @@ function Write-AuthRequired {
     Write-Host "Usage:" -ForegroundColor Cyan
     Write-Host "  .\scripts\security\security-orchestrator.ps1 -Action '$Operation' -ApiKey <your-api-key>" -ForegroundColor Gray
     Write-Host ""
-    Write-Host "Get API key: Check .workspace\config\owner-auth.json" -ForegroundColor Gray
+    Write-Host "Get API key: Set FOUNDATION_OWNER_KEY env var (recommended)" -ForegroundColor Gray
     Write-Host "Or use: .\scripts\utilities\auth-session.ps1 -UseSecurityQuestions" -ForegroundColor Gray
+    Write-Host "Or check: .workspace\config\owner-auth.json (legacy)" -ForegroundColor Gray
     Write-Host ""
 }
 
