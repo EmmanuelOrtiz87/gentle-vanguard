@@ -1,15 +1,15 @@
 <#
 .SYNOPSIS
-    Judgment Day — Dual-Review Adversarial Protocol
+    Judgment Day - Dual-Review Adversarial Protocol
     Full implementation of the judgment-day SKILL.md protocol.
 
 .DESCRIPTION
     Implements the adversarial dual-review protocol:
-      Phase 1 — Judge A (security + quality) + Judge B (governance + structure)
-      Phase 2 — Synthesize findings (Confirmed / Suspect / Contradiction)
-      Phase 3 — Fix cycle with Fix Agent delegation
-      Phase 4 — Re-judgment after fixes
-      Phase 5 — Iteration with escalation
+      Phase 1 - Judge A (security + quality) + Judge B (governance + structure)
+      Phase 2 - Synthesize findings (Confirmed / Suspect / Contradiction)
+      Phase 3 - Fix cycle with Fix Agent delegation
+      Phase 4 - Re-judgment after fixes
+      Phase 5 - Iteration with escalation
 
 .PARAMETER Target
     Path or scope to review (file, directory, or "." for repo root)
@@ -101,7 +101,7 @@ function Save-JudgmentSession {
 }
 
 # ===================================================================
-# JUDGE A — Security, error handling, edge cases, performance
+# JUDGE A - Security, error handling, edge cases, performance
 # ===================================================================
 function Invoke-JudgeA {
     param([array]$Files, [string]$ScopeName)
@@ -148,8 +148,8 @@ function Invoke-JudgeA {
                 $findings += @{
                     severity = 'CRITICAL'
                     file = $relPath; line = $lineNo
-                    description = "Posible SQL Injection — concatenación en query"
-                    suggested_fix = "Usar parámetros/placeholders en vez de concatenación"
+                    description = "Posible SQL Injection - concatenacion en query"
+                    suggested_fix = "Usar parametros/placeholders en vez de concatenacion"
                     judge = 'A'; type = 'security'
                 }
             }
@@ -161,8 +161,8 @@ function Invoke-JudgeA {
             $findings += @{
                 severity = 'WARNING (real)'
                 file = $relPath; line = $lineNo
-                description = "Catch block vacío — traga errores silenciosamente"
-                suggested_fix = "Agregar logging o re-lanzar excepción"
+                description = "Catch block vacio - traga errores silenciosamente"
+                suggested_fix = "Agregar logging o re-lanzar excepcion"
                 judge = 'A'; type = 'error_handling'
             }
         }
@@ -172,7 +172,7 @@ function Invoke-JudgeA {
             $findings += @{
                 severity = 'WARNING (real)'
                 file = $relPath; line = 1
-                description = "Script sin ErrorActionPreference — puede continuar tras errores"
+                description = "Script sin ErrorActionPreference - puede continuar tras errores"
                 suggested_fix = "Agregar `$ErrorActionPreference = 'Stop' al inicio"
                 judge = 'A'; type = 'performance'
             }
@@ -203,7 +203,7 @@ function Invoke-JudgeA {
 }
 
 # ===================================================================
-# JUDGE B — Governance, structure, documentation, naming
+# JUDGE B - Governance, structure, documentation, naming
 # ===================================================================
 function Invoke-JudgeB {
     param([array]$Files, [string]$ScopeName)
@@ -239,8 +239,8 @@ function Invoke-JudgeB {
             $findings += @{
                 severity = 'SUGGESTION'
                 file = $relPath; line = $longLines[0]
-                description = "$($longLines.Count) línea(s) superan 200 caracteres"
-                suggested_fix = "Dividir líneas largas para mejorar legibilidad"
+                description = "$($longLines.Count) linea(s) superan 200 caracteres"
+                suggested_fix = "Dividir lineas largas para mejorar legibilidad"
                 judge = 'B'; type = 'governance'
             }
         }
@@ -250,8 +250,8 @@ function Invoke-JudgeB {
             $findings += @{
                 severity = 'SUGGESTION'
                 file = $relPath; line = $lines.Count
-                description = "Archivo muy largo ($($lines.Count) líneas)"
-                suggested_fix = "Considerar dividir en múltiples módulos"
+                description = "Archivo muy largo ($($lines.Count) lineas)"
+                suggested_fix = "Considerar dividir en multiples modulos"
                 judge = 'B'; type = 'structure'
             }
         }
@@ -267,7 +267,7 @@ function Invoke-JudgeB {
                 $findings += @{
                     severity = 'SUGGESTION'
                     file = $relPath; line = 0
-                    description = "Convención de nomenclatura mixta en funciones"
+                    description = "Convencion de nomenclatura mixta en funciones"
                     suggested_fix = "Usar Verb-Noun para funciones PowerShell"
                     judge = 'B'; type = 'naming'
                 }
@@ -282,7 +282,7 @@ function Invoke-JudgeB {
                     severity = 'SUGGESTION'
                     file = "$relPath (dir)"; line = 0
                     description = "Directorio sin README.md"
-                    suggested_fix = "Agregar README.md con propósito y estructura"
+                    suggested_fix = "Agregar README.md con proposito y estructura"
                     judge = 'B'; type = 'documentation'
                 }
             }
@@ -309,7 +309,7 @@ function Get-MatchingLine {
 }
 
 # ===================================================================
-# SYNTHESIS — Compare Judge A + Judge B findings
+# SYNTHESIS - Compare Judge A + Judge B findings
 # ===================================================================
 function Sync-Findings {
     param([array]$JudgeAResult, [array]$JudgeBResult)
@@ -368,7 +368,7 @@ function Sync-Findings {
 }
 
 # ===================================================================
-# FIX AGENT — Apply fixes for confirmed issues
+# FIX AGENT - Apply fixes for confirmed issues
 # ===================================================================
 function Invoke-FixAgent {
     param([array]$ConfirmedFindings)
@@ -434,7 +434,7 @@ function Invoke-FixAgent {
         }
 
         if (-not $applied) {
-            $fixes += @{ file = $finding.finding_a.file; line = $finding.finding_a.line; action = "Requiere revisión manual" }
+            $fixes += @{ file = $finding.finding_a.file; line = $finding.finding_a.line; action = "Requiere revision manual" }
         }
     }
 
@@ -442,7 +442,7 @@ function Invoke-FixAgent {
 }
 
 # ===================================================================
-# REPORTING — Output formatting
+# REPORTING - Output formatting
 # ===================================================================
 function Write-VerdictReport {
     param(
@@ -454,9 +454,9 @@ function Write-VerdictReport {
     )
 
     $report = @"
-## Judgment Day — $Target
+## Judgment Day - $Target
 
-### Round $Round — Verdict
+### Round $Round - Verdict
 
 | Finding | Judge A | Judge B | Severity | Status |
 |---------|---------|---------|----------|--------|
@@ -485,10 +485,10 @@ $(
 if ($Synthesis.suspectA.Count -gt 0 -or $Synthesis.suspectB.Count -gt 0) {
     "### Minority Positions"
     foreach ($sa in $Synthesis.suspectA) {
-        "`n- [$($sa.severity)] $($sa.file):$($sa.line) — $($sa.description) (Juez A solamente, no auto-fixed)"
+        "`n- [$($sa.severity)] $($sa.file):$($sa.line) - $($sa.description) (Juez A solamente, no auto-fixed)"
     }
     foreach ($sb in $Synthesis.suspectB) {
-        "`n- [$($sb.severity)] $($sb.file):$($sb.line) — $($sb.description) (Juez B solamente, no auto-fixed)"
+        "`n- [$($sb.severity)] $($sb.file):$($sb.line) - $($sb.description) (Juez B solamente, no auto-fixed)"
     }
 }
 )
@@ -497,7 +497,7 @@ $(
 if ($Fixes.Count -gt 0) {
     "### Fixes Applied (Round $Round)"
     foreach ($fx in $Fixes) {
-        "`n- `$($fx.file):$($fx.line) — $($fx.action)"
+        "`n- `$($fx.file):$($fx.line) - $($fx.action)"
     }
 }
 )
@@ -552,7 +552,7 @@ function Write-JudgmentSummary {
         Write-Host "$('='*76)" -ForegroundColor Green
     } else {
         Write-Host "$('='*76)" -ForegroundColor Yellow
-        Write-Host " JUDGMENT: ESCALATED — Review findings above" -ForegroundColor Yellow
+        Write-Host " JUDGMENT: ESCALATED - Review findings above" -ForegroundColor Yellow
         Write-Host "$('='*76)" -ForegroundColor Yellow
     }
 }
@@ -580,7 +580,7 @@ function Publish-JudgmentDayEvent { Publish-JudgmentEvent @args }
 # MAIN PROTOCOL
 # ===================================================================
 
-Write-Title "JUDGMENT DAY — Dual-Review Adversarial Protocol"
+Write-Title "JUDGMENT DAY - Dual-Review Adversarial Protocol"
 Write-Host " Target: $Target" -ForegroundColor Cyan
 Write-Host " Scope: $Scope" -ForegroundColor Cyan
 Write-Host " Max Passes: $MaxPasses" -ForegroundColor Cyan
@@ -644,9 +644,9 @@ for ($round = 1; $round -le $MaxPasses; $round++) {
             Write-Host $verdictReport -ForegroundColor Gray
 
             Write-Host "`nWould you like to fix confirmed issues?" -ForegroundColor Cyan
-            Write-Host "  1) Yes — auto-fix and continue" -ForegroundColor Yellow
-            Write-Host "  2) No — escalate (JUDGMENT: ESCALATED)" -ForegroundColor Yellow
-            Write-Host "  3) Custom — specify which issues to fix" -ForegroundColor Yellow
+            Write-Host "  1) Yes - auto-fix and continue" -ForegroundColor Yellow
+            Write-Host "  2) No - escalate (JUDGMENT: ESCALATED)" -ForegroundColor Yellow
+            Write-Host "  3) Custom - specify which issues to fix" -ForegroundColor Yellow
             $choice = Read-Host "Option (1/2/3)"
 
             if ($choice -eq '1') {
@@ -657,7 +657,7 @@ for ($round = 1; $round -le $MaxPasses; $round++) {
                 $verdict = 'ESCALATED'
                 break
             } elseif ($choice -eq '3') {
-                Write-Info "Manual fixes requested — user will apply changes"
+                Write-Info "Manual fixes requested - user will apply changes"
                 Write-Host "Apply your fixes, then continue" -ForegroundColor Yellow
                 $fixes = @()
             }

@@ -1,5 +1,5 @@
 # model-router.ps1
-# Model Router v2.0 — Agent-to-model binding + temperature management + admin auth
+# Model Router v2.0 - Agent-to-model binding + temperature management + admin auth
 # Dot-source: . .\scripts\utilities\MODEL-ROUTER\model-router.ps1
 # Standalone: & .\scripts\utilities\MODEL-ROUTER\model-router.ps1 -Action <action> [params...]
 
@@ -21,11 +21,26 @@ $ErrorActionPreference = 'Stop'
 
 # --- Paths ---
 if (-not $ConfigPath) {
-    $scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
-    $repoRoot = (Resolve-Path (Join-Path $scriptRoot '..\..\..')).Path
+    if ($env:FOUNDATION_BASE_DIR) {
+        $repoRoot = $env:FOUNDATION_BASE_DIR
+    } else {
+        $searchDir = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+        while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
+            $searchDir = Split-Path -Parent $searchDir
+        }
+        $repoRoot = $searchDir
+    }
     $ConfigPath = Join-Path $repoRoot 'config\model-router.json'
 }
-$repoRootGlobal = if ($PSScriptRoot) { (Resolve-Path (Join-Path $PSScriptRoot '..\..\..')).Path } else { (Get-Location).Path }
+if ($env:FOUNDATION_BASE_DIR) {
+    $repoRootGlobal = $env:FOUNDATION_BASE_DIR
+} else {
+    $searchDir = if ($PSScriptRoot) { $PSScriptRoot } else { (Get-Location).Path }
+    while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
+        $searchDir = Split-Path -Parent $searchDir
+    }
+    $repoRootGlobal = $searchDir
+}
 $keyFilePath = Join-Path $repoRootGlobal 'keys\master.key'
 $cloudAgentsPath = Join-Path $repoRootGlobal 'config\cloud-agents.json'
 $autoDelegationPath = Join-Path $repoRootGlobal 'config\auto-delegation.json'
@@ -576,7 +591,7 @@ function Invoke-RouteCommand {
             if ($JSON) {
                 $bindings | ConvertTo-Json -Depth 3
             } else {
-                Write-Host "`nModel Router — Agent Bindings" -ForegroundColor Cyan
+                Write-Host "`nModel Router - Agent Bindings" -ForegroundColor Cyan
                 Write-Host "  (null = inherits from defaults)" -ForegroundColor Gray
                 Format-RouteTable -Bindings $bindings
             }

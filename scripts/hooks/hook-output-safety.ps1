@@ -1,5 +1,5 @@
 # hook-output-safety.ps1
-# FF-015 — Centralized hook output safety filter.
+# FF-015 - Centralized hook output safety filter.
 # Prevents accidental leakage of environment variables and sensitive path info in hook stdout.
 # Usage: dot-source this file at the top of any hook:
 #   . (Join-Path $PSScriptRoot 'hook-output-safety.ps1')

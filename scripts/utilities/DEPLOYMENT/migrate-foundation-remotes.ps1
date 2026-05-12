@@ -1,8 +1,5 @@
 param(
-    [string[]]$RepoPaths = @(
-        (Resolve-Path (Join-Path $PSScriptRoot '..\..\..')).Path,
-        (Join-Path (Resolve-Path (Join-Path $PSScriptRoot '..\..\..\..')).Path 'foundation-public')
-    ),
+    [string[]]$RepoPaths = @(),
     [string]$Owner = 'EmmanuelOrtiz87',
     [string]$OldName = 'gentleman-foundation',
     [string]$NewName = 'foundation',
@@ -10,6 +7,23 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+
+if ($env:FOUNDATION_BASE_DIR) {
+    $resolvedRoot = $env:FOUNDATION_BASE_DIR
+} else {
+    $searchDir = $PSScriptRoot
+    while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
+        $searchDir = Split-Path -Parent $searchDir
+    }
+    $resolvedRoot = $searchDir
+}
+
+if ($RepoPaths.Count -eq 0) {
+    $RepoPaths = @(
+        $resolvedRoot,
+        (Join-Path (Split-Path -Parent (Split-Path -Parent $resolvedRoot)) 'foundation-public')
+    )
+}
 
 function Write-Step {
     param([string]$Message)

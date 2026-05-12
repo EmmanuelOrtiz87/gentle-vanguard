@@ -1,6 +1,6 @@
 # engram-policy.ps1
-# Política de disponibilidad de engram: siempre instalado, activo y disponible
-# desde el inicio de sesión hasta el cierre de sesión
+# Politica de disponibilidad de engram: siempre instalado, activo y disponible
+# desde el inicio de sesion hasta el cierre de sesion
 
 param(
     [ValidateSet('check', 'enforce', 'repair', 'install', 'start', 'status')]
@@ -33,7 +33,7 @@ function Write-PolicySuccess {
     Write-Host "[OK] $Message" -ForegroundColor Green
 }
 
-# Verificar instalación
+# Verificar instalacion
 function Test-EngramInstalled {
     $locations = @($EngramPath, $ToolsPath, $GoPath)
     $found = @()
@@ -49,7 +49,7 @@ function Test-EngramInstalled {
     return $found
 }
 
-# Verificar si engram está corriendo
+# Verificar si engram esta corriendo
 function Test-EngramRunning {
     $process = Get-Process -Name "engram" -ErrorAction SilentlyContinue
     if ($process) {
@@ -86,7 +86,7 @@ function Start-Engram {
 function Install-Engram {
     Write-PolicyStatus "Installing/updating engram..."
     
-    # Detener proceso si está corriendo
+    # Detener proceso si esta corriendo
     $process = Get-Process -Name "engram" -ErrorAction SilentlyContinue
     if ($process) {
         Stop-Process -Id $process.Id -Force
@@ -102,7 +102,7 @@ function Install-Engram {
         return $false
     }
     
-    # Copiar a ubicaciones estándar
+    # Copiar a ubicaciones estandar
     if (Test-Path $GoPath) {
         Copy-Item $GoPath $EngramPath -Force
         Copy-Item $GoPath $ToolsPath -Force
@@ -116,7 +116,7 @@ function Install-Engram {
     return $true
 }
 
-# Reparar instalación
+# Reparar instalacion
 function Repair-Engram {
     Write-PolicyStatus "Repairing engram installation..."
     
@@ -129,13 +129,13 @@ function Repair-Engram {
     # Verificar integridad
     foreach ($loc in $installed) {
         $size = (Get-Item $loc).Length
-        if ($size -lt 1000000) {  # Menos de 1MB probablemente está corrupto
+        if ($size -lt 1000000) {  # Menos de 1MB probablemente esta corrupto
             Write-PolicyWarning "$loc appears corrupted (size: $size bytes)"
             return Install-Engram
         }
     }
     
-    # Asegurar que esté en todas las ubicaciones
+    # Asegurar que este en todas las ubicaciones
     $source = $installed[0]
     Copy-Item $source $EngramPath -Force -ErrorAction SilentlyContinue
     Copy-Item $source $ToolsPath -Force -ErrorActionSilentlyContinue
@@ -144,7 +144,7 @@ function Repair-Engram {
     return $true
 }
 
-# Ejecutar acción
+# Ejecutar accion
 switch ($Action) {
     'status' {
         Write-PolicyStatus "=== Engram Policy Status ==="

@@ -160,7 +160,7 @@ $orchCfg = Read-JsonFile (Join-Path $repoRoot 'config\orchestrator.json')
 $eventHist = Read-JsonFile (Join-Path $repoRoot '.event-bus\history.json')
 $rateLimit = Read-JsonFile (Join-Path $repoRoot '.event-bus\rate-limit-state.json')
 
-# Alert thresholds — read from metrics-config.json alert_thresholds, with hardcoded fallbacks
+# Alert thresholds - read from metrics-config.json alert_thresholds, with hardcoded fallbacks
 $cfgThresh              = if ($metricsCfg -and $metricsCfg.alert_thresholds) { $metricsCfg.alert_thresholds } else { $null }
 $staleDaysThreshold     = if ($cfgThresh -and $null -ne $cfgThresh.data_stale_days)                 { [int]$cfgThresh.data_stale_days }                 else { 3 }
 $budgetRedPct           = if ($cfgThresh -and $null -ne $cfgThresh.budget_forecast_red_pct)         { [int]$cfgThresh.budget_forecast_red_pct }         else { 90 }
@@ -173,7 +173,7 @@ $latencyElevatedMs      = if ($cfgThresh -and $null -ne $cfgThresh.latency_eleva
 $costRegressionWarnPct  = if ($cfgThresh -and $null -ne $cfgThresh.cost_regression_warn_pct)        { [int]$cfgThresh.cost_regression_warn_pct }        else { 20 }
 $efficiencyLowThreshold = if ($cfgThresh -and $null -ne $cfgThresh.efficiency_low_threshold)        { [double]$cfgThresh.efficiency_low_threshold }     else { 0.5 }
 
-# Cost model — read from metrics-config.json cost_model, with hardcoded fallbacks
+# Cost model - read from metrics-config.json cost_model, with hardcoded fallbacks
 $cfgCostModel          = if ($metricsCfg -and $metricsCfg.cost_model) { $metricsCfg.cost_model } else { $null }
 $costPer1M             = if ($cfgCostModel -and $null -ne $cfgCostModel.cost_per_1m_tokens_usd)  { [double]$cfgCostModel.cost_per_1m_tokens_usd }  else { 10.0 }
 $baselineTokensPerTask = if ($cfgCostModel -and $null -ne $cfgCostModel.baseline_tokens_per_task) { [int]$cfgCostModel.baseline_tokens_per_task }   else { 14000 }
@@ -446,7 +446,7 @@ if ($latestTokenDate) {
   }
 }
 
-# ── Proactive Alerts / Anomaly Detection ───────────────────────────────────────
+# -- Proactive Alerts / Anomaly Detection ---------------------------------------
 $alerts = @()   # each entry: [severity, code, title, detail, recommendation]
 
 # 1. Data freshness alert
@@ -588,7 +588,7 @@ if ($alerts.Count -eq 0) {
 $alertCount = $alerts.Count
 $alertSummaryClass = if (($alerts | Where-Object { $_.Severity -eq 'err' }).Count -gt 0) { 'err' } elseif ($alertCount -gt 0) { 'warn' } else { 'ok' }
 $alertSummaryLabel = if ($alertCount -eq 0) { 'No alerts' } elseif ($alertCount -eq 1) { '1 alert' } else { "$alertCount alerts" }
-# ── End Alert Computation ───────────────────────────────────────────────────────
+# -- End Alert Computation -------------------------------------------------------
 
 # Runtime cost by model
 $modelCostMap = @{}
