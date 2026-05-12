@@ -68,7 +68,7 @@ Centralized configuration for project standards and enforcement.
 ## Project Structure
 
 ```
-workspace-foundation/
+foundation/
 ├── scripts/           # All workflow/utility scripts
 ├── skills/            # 127 AI agent skills
 ├── config/            # Configuration files

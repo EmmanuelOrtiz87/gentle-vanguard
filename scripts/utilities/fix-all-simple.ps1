@@ -1,7 +1,7 @@
 # fix-all-simple.ps1 - Simple and robust markdown fix
 # Only fixes: Spanish accents + broken links
 
-$basePath = ".\workspace-foundation"
+$basePath = ".\foundation"
 $totalFiles = 0
 $fixedFiles = 0
 

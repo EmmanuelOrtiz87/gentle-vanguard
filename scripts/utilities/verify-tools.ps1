@@ -57,7 +57,7 @@ $tools = @(
     @{ Name = 'PowerShell';  Command = 'pwsh';      Version = '7.0';    Required = $true;  InstallCmd = 'winget install Microsoft.PowerShell' }
     @{ Name = 'Bun';         Command = 'bun';       Version = '1.0';    Required = $false;  InstallCmd = 'powershell -c "irm bun.sh/install.ps1 | iex"' }
     @{ Name = 'GitHub CLI';  Command = 'gh';        Version = '2.0';    Required = $false;  InstallCmd = 'winget install GitHub.cli' }
-    @{ Name = 'Engram';      Command = 'engram';    Version = '0.0';    Required = $false;  InstallCmd = 'go install github.com/workspace-foundation/engram/cmd/engram@latest' }
+    @{ Name = 'Engram';      Command = 'engram';    Version = '0.0';    Required = $false;  InstallCmd = 'go install github.com/foundation/engram/cmd/engram@latest' }
     @{ Name = 'OpenCode';    Command = 'opencode';   Version = '0.0';   Required = $false;  InstallCmd = 'Download from https://opencode.ai' }
     @{ Name = 'lefthook';    Command = 'lefthook';  Version = '1.0';    Required = $true;   InstallCmd = 'npm install -g @evilmartians/lefthook' }
     @{ Name = 'Python';      Command = 'python';     Version = '3.10';  Required = $false;  InstallCmd = 'winget install Python.Python.3.12' }

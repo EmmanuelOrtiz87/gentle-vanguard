@@ -29,7 +29,7 @@ Before importing, install these on the new machine:
 .\scripts\foundation\export-profile.ps1 -ExternalDisk D
 
 # Specify custom repo root (default: auto-detected)
-.\scripts\foundation\export-profile.ps1 -ExternalDisk D -RepoRoot C:\Workspace_local\workspace-foundation
+.\scripts\foundation\export-profile.ps1 -ExternalDisk D -RepoRoot C:\Workspace_local\foundation
 ```
 
 ### What Gets Exported
@@ -48,8 +48,8 @@ Before importing, install these on the new machine:
 
 ```powershell
 # 1. Clone the Foundation repo first
-git clone https://github.com/EmmanuelOrtiz87/foundation.git C:\Workspace_local\workspace-foundation
-cd C:\Workspace_local\workspace-foundation
+git clone https://github.com/EmmanuelOrtiz87/foundation.git C:\Workspace_local\foundation
+cd C:\Workspace_local\foundation
 
 # 2. Import profile from external disk
 .\scripts\foundation\import-profile.ps1 -ExternalDisk D
@@ -95,7 +95,7 @@ Engram can be updated at any time:
 .\scripts\utilities\wf.ps1 install-engram
 
 # Or directly
-go install github.com/workspace-foundation/engram/cmd/engram@latest
+go install github.com/foundation/engram/cmd/engram@latest
 ```
 
 ## Cairo/GTK3 (Diagram PNG Export)

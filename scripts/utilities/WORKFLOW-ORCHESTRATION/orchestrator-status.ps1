@@ -9,7 +9,7 @@ $activationFile = Join-Path $projectRoot '.orchestrator-active'
 $configFile = Join-Path $projectRoot 'config\orchestrator.json'
 $skillCandidates = @(
     Join-Path $projectRoot 'skills\project-orchestrator-skill'
-    Join-Path $projectRoot '.workspace-foundation\skills\project-orchestrator-skill'
+    Join-Path $projectRoot '.foundation\\skills\project-orchestrator-skill'
 )
 $skillDir = $skillCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
 if (-not $skillDir) { $skillDir = $skillCandidates[0] }

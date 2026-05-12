@@ -21,7 +21,7 @@
   },
   "sessionManagement": {
     "autostart": "scripts/utilities/session-autostart.cmd",
-    "project": "workspace-foundation"
+    "project": "foundation"
   },
   "language": { "default": "es", "technicalTerms": "en" },
   "governanceLayers": {

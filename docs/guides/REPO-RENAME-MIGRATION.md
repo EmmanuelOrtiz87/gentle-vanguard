@@ -1,6 +1,6 @@
 # Repository Rename Migration
 
-This guide documents how to migrate from `gentleman-foundation` to `foundation` safely across
+This guide documents how to migrate from `foundation` to `foundation` safely across
 machines and local clones.
 
 ## Current State

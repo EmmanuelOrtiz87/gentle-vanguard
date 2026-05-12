@@ -9,7 +9,7 @@ SetCompressor lzma
 RequestExecutionLevel admin
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "C:\Workspace_local\workspace-foundation\dist\Foundation-Setup.exe"
+OutFile "C:\Workspace_local\foundation\dist\Foundation-Setup.exe"
 InstallDir "$PROGRAMFILES64\Foundation"
 
 !include "MUI2.nsh"
@@ -29,15 +29,15 @@ Section "Core (Protected)" SecCore
 
   ; All encrypted scripts and configs
   SetOutPath "$INSTDIR\protected"
-  File /r "C:\Workspace_local\workspace-foundation\build\protected\*.*"
+  File /r "C:\Workspace_local\foundation\build\protected\*.*"
 
   ; Public skill stubs
   SetOutPath "$INSTDIR\public"
-  File /r "C:\Workspace_local\workspace-foundation\build\public\*.*"
+  File /r "C:\Workspace_local\foundation\build\public\*.*"
 
   ; Compiled launcher
   SetOutPath "$INSTDIR"
-  File "C:\Workspace_local\workspace-foundation\build\compiled\Foundation-Launcher.exe"
+  File "C:\Workspace_local\foundation\build\compiled\Foundation-Launcher.exe"
 
   ; Keys directory + instructions
   CreateDirectory "$INSTDIR\keys"
@@ -45,7 +45,7 @@ Section "Core (Protected)" SecCore
   FileWrite $0 "FOUNDATION MASTER KEY REQUIRED$\r$\n$\r$\n"
   FileWrite $0 "This installation requires a master.key file to decrypt and run Foundation scripts.$\r$\n$\r$\n"
   FileWrite $0 "To obtain the key:$\r$\n"
-  FileWrite $0 "1. Clone the private repository: gentleman-foundation$\r$\n"
+  FileWrite $0 "1. Clone the private repository: foundation$\r$\n"
   FileWrite $0 "2. Copy keys/master.key to this directory: $INSTDIR\keys\master.key$\r$\n$\r$\n"
   FileWrite $0 "OR$\r$\n$\r$\n"
   FileWrite $0 "Run the launcher - it will prompt you to paste the key.$\r$\n"

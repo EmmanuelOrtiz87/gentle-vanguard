@@ -20,7 +20,7 @@ Before updating, completely close OpenCode (or any client using engram).
 **Option A (recommended - go install):**
 
 ```powershell
-go install github.com/workspace-foundation/engram/cmd/engram@latest
+go install github.com/foundation/engram/cmd/engram@latest
 ```
 
 Binary goes to `%USERPROFILE%\go\bin\engram.exe`
@@ -28,12 +28,12 @@ Binary goes to `%USERPROFILE%\go\bin\engram.exe`
 **Option B (copy from workspace tools):**
 
 ```powershell
-Copy-Item ".\workspace-foundation\tools\engram.exe" "$HOME\bin\engram.exe"
+Copy-Item ".\foundation\\tools\engram.exe" "$HOME\bin\engram.exe"
 ```
 
 **Option C (download release):**
 
-- Go to: https://github.com/workspace-foundation/engram/releases
+- Go to: https://github.com/foundation/engram/releases
 - Download `engram_<version>_windows_amd64.zip`
 - Extract `engram.exe` to `$HOME\bin\`
 
@@ -68,7 +68,7 @@ See: `scripts/utilities/update-engram.ps1`
 
 1. **Copying .exe alone is NOT enough** - the in-memory process must restart
 2. **Engram in PATH** (`$HOME\bin\`) vs **Engram in scripts/utilities/**
-   (`workspace-foundation/scripts/utilities/`)
+   (`foundation/scripts/utilities/`)
    - scripts/utilities/ is used for internal updates
    - PATH is what the system and MCP agents use
 3. **OpenCode on Windows** uses `~/.config/opencode/` (not `%APPDATA%\opencode\`)
@@ -76,9 +76,9 @@ See: `scripts/utilities/update-engram.ps1`
 
 ## References
 
-- https://github.com/workspace-foundation/engram/blob/main/README.md
-- https://github.com/workspace-foundation/engram/blob/main/docs/INSTALLATION.md
-- https://github.com/workspace-foundation/engram/blob/main/docs/AGENT-SETUP.md
+- https://github.com/foundation/engram/blob/main/README.md
+- https://github.com/foundation/engram/blob/main/docs/INSTALLATION.md
+- https://github.com/foundation/engram/blob/main/docs/AGENT-SETUP.md
 
 ## Key Quote from Official README
 

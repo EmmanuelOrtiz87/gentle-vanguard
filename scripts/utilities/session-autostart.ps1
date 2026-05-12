@@ -3,7 +3,7 @@
 
 param(
     [string]$ProjectName = "workspace_local",
-    [string]$WorkspaceRoot = ".\workspace-foundation",
+    [string]$WorkspaceRoot = ".\foundation",
     [string]$ConfigFile = ""
 )
 

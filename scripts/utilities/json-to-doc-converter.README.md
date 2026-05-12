@@ -1,4 +1,4 @@
-﻿# JSON to Document Converter
+# JSON to Document Converter
 
 Converts JSON output from agents/subagents to the correct document format automatically.
 
@@ -36,7 +36,7 @@ Converts JSON data to **7 output formats** based on what the document needs:
 ### Convert JSON string to Markdown (default)
 
 ```powershell
-$json = '{"title":"Session Report","user":"emman","project":"gentleman-foundation"}'
+$json = '{"title":"Session Report","user":"emman","project":"foundation"}'
 .\scripts\utilities\json-to-doc-converter.ps1 -InputJson $json
 ```
 
@@ -121,7 +121,7 @@ Use with: `-TemplatePath "templates/report-template.md"`
 {
   "type": "session",
   "sessionId": "session-2026-04-30-01",
-  "project": "gentleman-foundation",
+  "project": "foundation",
   "duration": 45,
   "tokensIn": 15000,
   "tokensOut": 12000
@@ -137,7 +137,7 @@ Use with: `-TemplatePath "templates/report-template.md"`
 
 - **type**: session
 - **sessionId**: session-2026-04-30-01
-- **project**: gentleman-foundation
+- **project**: foundation
 - **duration**: 45
 - **tokensIn**: 15000
 - **tokensOut**: 12000

@@ -1,12 +1,12 @@
-﻿{
+{
   "mcpServers": {
     "filesystem": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
-      "description": "File system access for workspace-foundation"
+      "description": "File system access for foundation"
     }
   },
   "version": "1.0.0",
-  "description": "MCP Server Configuration for workspace-foundation",
+  "description": "MCP Server Configuration for foundation",
   "autoStart": true
 }

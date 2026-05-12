@@ -17,7 +17,7 @@
     Target branch. Default: main.
 
 .EXAMPLE
-    pwsh -File scripts/utilities/apply-branch-protection.ps1 -Owner EmmanuelOrtiz87 -Repo workspace-foundation -Branch main
+    pwsh -File scripts/utilities/apply-branch-protection.ps1 -Owner EmmanuelOrtiz87 -Repo foundation -Branch main
 #>
 
 param(

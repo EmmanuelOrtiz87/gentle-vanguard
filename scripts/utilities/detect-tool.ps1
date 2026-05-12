@@ -36,6 +36,18 @@ function Get-DetectedTool {
         return $tool
     }
 
+    # 1b. Check for .opencode/ directory (fallback for OpenCode without env var)
+    $repoRoot = if ($env:FOUNDATION_BASE_DIR) { $env:FOUNDATION_BASE_DIR } else { (Get-Location).Path }
+    if (Test-Path (Join-Path $repoRoot ".opencode")) {
+        $tool.name = "opencode"
+        $tool.source = "dir:.opencode"
+        $tool.isOpenCode = $true
+        $tool.confidence = 85
+        $tool.configFile = "opencode.json"
+        $tool.promptFile = "CLAUDE.md"
+        return $tool
+    }
+
     # 2. Check CLAUDE_VSCODE_VERSION (Claude Code extension)
     if ($env:CLAUDE_VSCODE_VERSION) {
         $tool.name = "claude-code"

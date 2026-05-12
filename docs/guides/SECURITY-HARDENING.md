@@ -2,7 +2,7 @@
 
 ## Visión General
 
-Este documento describe las medidas de seguridad implementadas en workspace-foundation.
+Este documento describe las medidas de seguridad implementadas en foundation.
 
 **Versión**: 1.0.0 **Fecha**: 2026-04-21 **Estado**: IMPLEMENTADO
 

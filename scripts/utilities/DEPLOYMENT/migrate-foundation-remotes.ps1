@@ -1,7 +1,7 @@
 param(
     [string[]]$RepoPaths = @(),
     [string]$Owner = 'EmmanuelOrtiz87',
-    [string]$OldName = 'gentleman-foundation',
+    [string]$OldName = 'foundation',
     [string]$NewName = 'foundation',
     [switch]$DryRun
 )

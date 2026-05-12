@@ -6,7 +6,7 @@ param(
     [string]$Period = "7days",
     [ValidateSet("markdown", "json")]
     [string]$Format = "markdown",
-    [string]$ProjectRoot = ".\workspace-foundation",
+    [string]$ProjectRoot = ".\foundation",
     [switch]$Silent
 )
 

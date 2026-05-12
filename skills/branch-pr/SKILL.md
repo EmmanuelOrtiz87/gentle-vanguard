@@ -5,7 +5,7 @@ description: >
   When creating a pull request, opening a PR, or preparing changes for review.
 license: Apache-2.0
 metadata:
-  author: workspace-foundation
+  author: foundation
   versión: '2.0'
 ---
 

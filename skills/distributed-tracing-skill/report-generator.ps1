@@ -11,7 +11,7 @@
     - System health reports
     
 .NOTES
-    Author: workspace-foundation
+    Author: foundation
     Version: 1.0
 #>
 

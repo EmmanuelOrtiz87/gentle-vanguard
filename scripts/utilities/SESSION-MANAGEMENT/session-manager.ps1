@@ -7,11 +7,11 @@ $ErrorActionPreference = 'Stop'
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $root = (Resolve-Path (Join-Path $scriptDir '..')).Path
-$wf = Join-Path $root 'workspace-foundation\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1'
-$dayEnd = Join-Path $root 'workspace-foundation\scripts\utilities\UTILITIES\day-end-closure.ps1'
-$runEngram = Join-Path $root 'workspace-foundation\scripts\utilities\UTILITIES\run-engram.ps1'
-$agentRouter = Join-Path $root 'workspace-foundation\scripts\utilities\AI-AGENT-MANAGEMENT\agent-router.ps1'
-$enforce = Join-Path $root 'workspace-foundation\scripts\utilities\UTILITIES\enforce-response-mode.ps1'
+$wf = Join-Path $root 'foundation\\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1'
+$dayEnd = Join-Path $root 'foundation\\scripts\utilities\UTILITIES\day-end-closure.ps1'
+$runEngram = Join-Path $root 'foundation\\scripts\utilities\UTILITIES\run-engram.ps1'
+$agentRouter = Join-Path $root 'foundation\\scripts\utilities\AI-AGENT-MANAGEMENT\agent-router.ps1'
+$enforce = Join-Path $root 'foundation\\scripts\utilities\UTILITIES\enforce-response-mode.ps1'
 $monitor = Join-Path $scriptDir 'session-idle-monitor.ps1'
 $stateDir = Join-Path $scriptDir '.session'
 $stateFile = Join-Path $stateDir 'state.json'
@@ -169,8 +169,8 @@ function Invoke-CompatibilityChecks {
         Write-Host "How to proceed:" -ForegroundColor Cyan
         Write-Host "  1) Keep strict mode (recommended) and fix missing components." -ForegroundColor White
         Write-Host "     - .\tools\validate-session-stack.ps1 -Quiet" -ForegroundColor Gray
-        Write-Host "     - .\workspace-foundation\scripts\utilities\wf.ps1 orchestrator-status" -ForegroundColor Gray
-        Write-Host "     - .\workspace-foundation\scripts\utilities\agent-router.ps1 status" -ForegroundColor Gray
+        Write-Host "     - .\foundation\\scripts\utilities\wf.ps1 orchestrator-status" -ForegroundColor Gray
+        Write-Host "     - .\foundation\\scripts\utilities\agent-router.ps1 status" -ForegroundColor Gray
         Write-Host "  2) Temporary continuity mode (degraded startup)." -ForegroundColor White
         Write-Host "     - Set strictCompatibilityChecks=false in scripts/utilities/session-autostart.config.json" -ForegroundColor Gray
         Write-Host "     - Re-run: .\tools\session-autostart.cmd" -ForegroundColor Gray
@@ -213,9 +213,9 @@ function Invoke-CompatibilityChecks {
         Write-Host "How to proceed:" -ForegroundColor Cyan
         Write-Host "  1) Keep strict mode (recommended) and fix missing components." -ForegroundColor White
         Write-Host "     - .\\tools\\validate-session-stack.ps1 -Quiet" -ForegroundColor Gray
-        Write-Host "     - .\\workspace-foundation\\scripts\\utilities\\wf.ps1 orchestrator-status" -ForegroundColor Gray
-        Write-Host "     - .\\workspace-foundation\\scripts\\utilities\\wf.ps1 orchestrator-status" -ForegroundColor Gray
-        Write-Host "     - .\\workspace-foundation\\scripts\\utilities\\agent-router.ps1 status" -ForegroundColor Gray
+        Write-Host "     - .\\foundation\\\scripts\\utilities\\wf.ps1 orchestrator-status" -ForegroundColor Gray
+        Write-Host "     - .\\foundation\\\scripts\\utilities\\wf.ps1 orchestrator-status" -ForegroundColor Gray
+        Write-Host "     - .\\foundation\\\scripts\\utilities\\agent-router.ps1 status" -ForegroundColor Gray
         Write-Host "  2) Temporary continuity mode (degraded startup)." -ForegroundColor White
         Write-Host "     - Set strictCompatibilityChecks=false in scripts/utilities/session-autostart.config.json" -ForegroundColor Gray
         Write-Host "     - Re-run: .\\tools\\session-autostart.cmd" -ForegroundColor Gray

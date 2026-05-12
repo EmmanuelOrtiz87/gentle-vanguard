@@ -109,7 +109,7 @@ Currently manual-trigger only. To enable automatic closure:
 ```powershell
 # Create scheduled task to run at shift end (e.g., 5:30 PM)
 $trigger = New-ScheduledTaskTrigger -Daily -At "17:30"
-$action = New-ScheduledTaskAction -Execute "powershell" -Argument "-NoProfile -ExecutionPolicy Bypass -File .\workspace-foundation\scripts\utilities\wf.ps1 day-end-closure -Quiet"
+$action = New-ScheduledTaskAction -Execute "powershell" -Argument "-NoProfile -ExecutionPolicy Bypass -File .\foundation\\scripts\utilities\wf.ps1 day-end-closure -Quiet"
 Register-ScheduledTask -TaskName "Gentleman-DayEndClosure" -Trigger $trigger -Action $action
 ```
 
@@ -118,7 +118,7 @@ Register-ScheduledTask -TaskName "Gentleman-DayEndClosure" -Trigger $trigger -Ac
 ```powershell
 # Add to your $PROFILE to run on shell exit
 Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action {
-    Push-Location ".\workspace-foundation"
+    Push-Location ".\foundation"
     & .\scripts\utilities\wf.ps1 day-end-closure -Quiet -AutoTriggered
     Pop-Location
 } | Out-Null
@@ -220,14 +220,14 @@ Developer choice:         Generated
 .\scripts\utilities\run-engram.ps1 --help
 
 # Inspect recent project context
-.\scripts\utilities\run-engram.ps1 context workspace-foundation
+.\scripts\utilities\run-engram.ps1 context foundation
 ```
 
 **Fallback (manual save)**:
 
 ```powershell
-engram save "session-summary:<session_id>" "<summary_text>" --project workspace-foundation
-engram save "session-end:<session_id>" "<end_message>" --project workspace-foundation
+engram save "session-summary:<session_id>" "<summary_text>" --project foundation
+engram save "session-end:<session_id>" "<end_message>" --project foundation
 ```
 
 ### Delivery closure artifact not created

@@ -2,7 +2,7 @@
 
 ## Overview
 
-The workspace-foundation implements a 5-layer topology for AI agent tooling, designed to be fully
+The foundation implements a 5-layer topology for AI agent tooling, designed to be fully
 agnostic across agents, operating systems, tools, plugins, and programming languages.
 
 ## Layer Architecture

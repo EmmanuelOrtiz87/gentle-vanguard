@@ -2,7 +2,7 @@
 
 ## Descripción
 
-Directorio centralizado para toda la configuración del proyecto workspace-foundation.
+Directorio centralizado para toda la configuración del proyecto foundation.
 
 **Versión**: 2.0.0 **última actualización**: 2026-04-21 **Estado**: PRODUCCIÓN
 

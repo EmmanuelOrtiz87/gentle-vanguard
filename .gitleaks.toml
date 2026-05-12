@@ -6,7 +6,7 @@ useDefault = true
 
 # Custom allowlist for known test/fake secrets
 [allowlist]
-description = "Global allowlist for workspace-foundation"
+description = "Global allowlist for foundation"
 paths = [
     # Test fixtures with intentional secrets
     "tests/",

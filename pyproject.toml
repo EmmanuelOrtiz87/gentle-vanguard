@@ -1,5 +1,5 @@
 [project]
-name = "workspace-foundation"
+name = "foundation"
 description = "AI-powered development framework with skills, agents, and automation"
 requires-python = ">=3.11"
 

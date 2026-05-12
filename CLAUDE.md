@@ -1,73 +1,67 @@
-﻿# CLAUDE.md - Claude-Specific Instructions
+# foundation — Entry Point for Claude-Compatible Tools
 
-**This file is Claude-specific. The canonical tool-agnostic entry point is `docs/AGENTS.md`.**
+**Loaded by**: OpenCode, Claude Code, Windsurf, Claude | Canonical entry: `docs/AGENTS.md`
 
-## Workspace Configuration
+## 🔴 CRITICAL: First Action — Tool Detection
 
-You are operating in **workspace-foundation** - a local-first workspace.
+Run this IMMEDIATELY before any other action:
 
-## Core Rules
+```powershell
+$detected = pwsh -NoProfile -File scripts/utilities/detect-tool.ps1 -AsJson | ConvertFrom-Json
+$detected.name
+# → "opencode", "claude-code", "cline", "cursor", "windsurf", or "unknown"
+```
 
-1. **LOCAL-FIRST**: Use project knowledge before external sources
-2. **NO web search** unless orchestrator explicitly requires it
-3. **NO codesearch** - use local grep and project skills
-4. **NO webfetch** - rely on local documentation
+Based on result, load config from `config/orchestrator.json#toolProfiles.<name>`.
 
-## Allowed External Tools
+If **opencode**: promptFile=CLAUDE.md, configFile=opencode.json, responseProfile=ultra, lang=es
+If **claude-code**: promptFile=CLAUDE.md, configFile=.claude/settings.json, responseProfile=ultra, lang=es
+If **cline**: promptFile=.clinerules, configFile=.clinerules, responseProfile=ultra, lang=es
 
-Only enable when explicitly requested:
+**Why**: Each tool has different capabilities (skill tool, mem tools, file access). Detection ensures correct routing, compression, and security profiles.
 
-- `websearch`: Requires `@orchestrator` prefix or explicit user authorization
-- `codesearch`: Use Context7 MCP only if local skills insufficient
-- `webfetch`: Only for specific URLs provided by user
+## 🚀 Mandatory Startup Sequence
 
-## Preferred Workflow
+After detection, execute ALL steps in order:
 
-1. Read `docs/AGENTS.md` for tool-agnostic bootstrap
-2. Check `skills/` directory for relevant patterns
-3. Query engram memory: `mem_search` or `mem_context`
-4. Use `grep` and `read` for code exploration
-5. Trigger routing: `scripts/utilities/pre-process-input.ps1` BEFORE responding — all mappings in
-   `config/auto-delegation.json`
+1. `scripts/utilities/session-autostart.cmd` — activates notifications, security, engram, token guard, karpathy enforcer
+2. `engram_mem_session_start` — register session ID
+3. `engram_mem_context` — restore previous context
+4. `git status` — verify workspace state
+5. Read `docs/AGENTS.md` — completes canonical bootstrap
 
-## Canonical Sources (Tool-Agnostic)
+## 🗺️ Core Rules
 
-- **Bootstrap & entry point**: `docs/AGENTS.md`
-- **Routing & agent profiles**: `config/auto-delegation.json`
-- **AI normatives**: `rules/AI-NORMATIVES.md`
-- **Development standards**: `rules/DEVELOPMENT-STANDARDS.md`
-- **Code standards**: `rules/NORMATIVAS-CODIGO.md`
-- **Error handling**: `rules/NORMATIVAS-ERROR-HANDLING.md`
-- **Performance**: `rules/NORMATIVAS-PERFORMANCE.md`
-- **Session lifecycle**: `rules/NORMATIVAS-SESSION.md`
-- **Orchestrator config**: `config/orchestrator.json`
-- **Persistent memory**: Engram (`mem_search`, `mem_context`)
+1. **LOCAL-FIRST**: Project knowledge before external sources
+2. **NO websearch/codesearch/webfetch** unless orchestrator authorizes
+3. **pre-process-input.ps1** BEFORE responding — trigger routing via `config/auto-delegation.json`
+4. Check `skills/` directory for reusable patterns before writing code
+5. Use Engram memory: `mem_search` for past decisions, `mem_save` after significant work
 
-## Role
+## 📝 Response Compression (MANDATORY)
 
-You are a senior developer and technical mentor.
+Profile: **ultra** | Detail: **simple** | Chat: **chat-compact** (max 4 lines)
 
-## Communication
+1. NO preamble/postamble — just do it
+2. NO echoing user's question
+3. NO progress commentary during multi-step tasks
+4. Batch independent tool calls in parallel
+5. Answer THEN act: 1-3 line answer, then tools
+6. Use abbreviations: db/auth/config/req/res/fn/impl
 
-- Be concise and direct.
-- Use Spanish (es) for communication, English for technical terms.
-- Follow the project's coding standards.
+## ⚙️ Settings
 
-## Efficiency Settings
+- Temperature: 0.3 | Max tokens: 4500 | Cache: enabled (setCacheKey: true)
+- Lang: es | Session pattern: session-YYYY-MM-DD-XX
+- Engram project: workspace_local
 
-- Temperature: 0.3 (focused, deterministic)
-- Max tokens: 4500
-- Use response caching where possible
-- Leverage prompt caching (setCacheKey: true)
+## 📚 Key References
 
-## Memory & Context
-
-- Project: `workspace-foundation`
-- Engram project: `workspace_local`
-- Session pattern: `session-YYYY-MM-DD-XX`
-- Memory tiering: Hot (active) Warm (1 day) Cold (7 days)
-
-## Language Preference
-
-- Responses: Spanish (es)
-- Technical terms: English (preserve original)
+| Resource | Path |
+|----------|------|
+| Tool-agnostic bootstrap | `docs/AGENTS.md` |
+| Orchestrator config | `config/orchestrator.json` |
+| Trigger→skill mappings | `config/auto-delegation.json` |
+| AI normatives | `rules/AI-NORMATIVES.md` |
+| Session lifecycle | `rules/NORMATIVAS-SESSION.md` |
+| Performance | `rules/NORMATIVAS-PERFORMANCE.md` |

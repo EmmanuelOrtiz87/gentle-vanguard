@@ -1,4 +1,4 @@
-﻿# Architecture Standards
+# Architecture Standards
 
 ## Overview
 
@@ -55,7 +55,7 @@ decisións are stored in:
    - Format: `decisión-YYYYMMDD-XXX.md`
    - For project-specific decisións
 
-2. **Foundation decisións**: `decisións/` in workspace-foundation
+2. **Foundation decisións**: `decisións/` in foundation
    - Format: `decisión-YYYYMMDD-XXX.md`
    - For cross-project patterns and standards
 

@@ -16,4 +16,4 @@ PowerShell. Works on Win/Linux/macOS. Provider-agnostic.
 
 Would love feedback. What would make this useful?
 
-GitHub: github.com/EmmanuelOrtiz87/gentleman-foundation
+GitHub: github.com/EmmanuelOrtiz87/foundation

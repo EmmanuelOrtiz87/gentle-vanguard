@@ -2,7 +2,7 @@
 
 ## Descripción
 
-directorio centralizado para todos los scripts del proyecto workspace-foundation.
+directorio centralizado para todos los scripts del proyecto foundation.
 
 **Versión**: 2.0.0 **última actualización**: 2026-04-21 **Estado**: PRODUCCIN
 
@@ -340,7 +340,7 @@ Write-Log "Mensaje" "info"
 ### Ejecutar Tests Completos
 
 ```powershell
-cd workspace-foundation
+cd foundation
 .\scripts\testing\run-tests.ps1 -TestType all -GenerateReport
 ```
 

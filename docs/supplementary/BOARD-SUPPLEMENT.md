@@ -245,7 +245,7 @@ Lo que gans:
 Cmo empezar:
 1. ./scripts/init-workspace.ps1
 2. Sigue la gua en docs/TECHNICAL-ONBOARDING.md
-3. Pregunta en #workspace-foundation en Slack
+3. Pregunta en #foundation en Slack
 
 Preguntas? Contacta con [Nombre], tu referente tecnico.
 
@@ -416,9 +416,9 @@ SI ROLLOUT FALLA:
 ### Recursos
 
 - **Repo (Public):** github.com/EmmanuelOrtiz87/foundation-public
-- **Repo (Private):** github.com/EmmanuelOrtiz87/gentleman-foundation
+- **Repo (Private):** github.com/EmmanuelOrtiz87/foundation
 - **Docs:** docs/technical-onboarding.md
-- **Slack:** #workspace-foundation
+- **Slack:** #foundation
 - **Issues:** Crear issue en repo
 
 ---

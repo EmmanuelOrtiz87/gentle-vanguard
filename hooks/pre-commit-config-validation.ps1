@@ -7,7 +7,7 @@
     that configuration files are correct.
     
 .NOTES
-    Author: workspace-foundation
+    Author: foundation
     Version: 1.0.0
 #>
 
