@@ -288,9 +288,10 @@ if (-not $skipPush) {
 
     # Detect default branch from remote HEAD (more robust than local symref)
     git fetch origin --prune 2>&1 | Out-Null
-    $remoteHead = git ls-remote --symref origin HEAD 2>$null
-    $defaultBranch = if ($remoteHead -match 'ref: refs/heads/(\S+)') {
-        $Matches[1]
+    $remoteHead = (git ls-remote --symref origin HEAD 2>$null) -join "`n"
+    $headMatch = [regex]::Match($remoteHead, 'ref: refs/heads/(\S+)')
+    $defaultBranch = if ($headMatch.Success) {
+        $headMatch.Groups[1].Value
     } else {
         "main"
     }

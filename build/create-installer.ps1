@@ -40,9 +40,11 @@ if (-not $SkipEncrypt) {
         if ($DryRun) {
             Write-Warn "Dry run: would execute protect-foundation.ps1"
         } else {
-            & $protectScript
-            if ($LASTEXITCODE -ne 0) {
-                throw "protect-foundation.ps1 failed with exit code $LASTEXITCODE"
+            try {
+                & $protectScript
+            }
+            catch {
+                throw "protect-foundation.ps1 failed: $($_.Exception.Message)"
             }
         }
     } else {
