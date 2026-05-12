@@ -31,12 +31,34 @@ Based on the detected tool, load the correct config from `config/orchestrator.js
 
 ## 🚀 Startup Rule#
 
-Before substantial work in a new conversation, run:
+Before substantial work in a new conversation, execute ALL steps in order:
 
-| Platform               | Command                                         |
-| ---------------------- | ----------------------------------------------- |
-| **🪟 Windows**         | `scripts/utilities/session-autostart.cmd`       |
-| **🐧 Linux/macOS/WSL** | `bash ./scripts/utilities/session-autostart.sh` |
+### Phase A — Init
+
+0. **Run `pre-process-input.ps1`** BEFORE first response:
+   ```powershell
+   pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/pre-process-input.ps1 -UserInput "<first_message>" -WorkspaceRoot "."
+   ```
+   Parse output for routing (AI-NORMATIVES.md #1).
+
+1. **Start session** (OS-dependent):
+
+   | Platform               | Command                                         |
+   | ---------------------- | ----------------------------------------------- |
+   | **🪟 Windows**         | `scripts/utilities/session-autostart.cmd`       |
+   | **🐧 Linux/macOS/WSL** | `bash ./scripts/utilities/session-autostart.sh` |
+
+2. **Register session** with Engram: `engram_mem_session_start`
+3. **Restore context**: `engram_mem_context`
+4. **Check workspace**: `git status`
+5. **Read bootstrap**: this file (`docs/AGENTS.md`)
+
+### Phase B — Analysis (MOST OFTEN OMITTED)
+
+6. **Read `scripts/.session/startup-summary.json`** — check `isPeakHour`, `sessionId`, `workspaceClean`
+7. **Create task list**: `todowrite`
+8. **Self-verify**: `pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/agent-verify.ps1`
+9. **Report to user** compact block (peak hour, session ID, workspace state)
 
 > **Default behavior** is controlled by `config/orchestrator.json`.
 
