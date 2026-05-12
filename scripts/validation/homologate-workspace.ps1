@@ -270,7 +270,7 @@ foreach ($md in $mdFiles) {
     $content = Get-Content -Path $md.FullName -Raw -ErrorAction SilentlyContinue
     if (-not $content) { continue }
 
-    # Match markdown links: [text](path) — skip http/https and anchors-only
+    # Match markdown links: [text](path) - skip http/https and anchors-only
     $matches2 = [regex]::Matches($content, '\[([^\]]+)\]\(([^)#][^)]*)\)')
     foreach ($m in $matches2) {
         $linkTarget = $m.Groups[2].Value.Trim()

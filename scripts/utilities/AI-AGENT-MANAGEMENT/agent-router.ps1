@@ -38,7 +38,7 @@ function Get-AgentModelConfig {
                 $info.fallback = if ($mr.fallback) { $mr.fallback.model } else { $null }
                 $info.source = 'model-router'
             } elseif ($mr.fallback) {
-                # Agent not in bindings — use defaults + fallback
+                # Agent not in bindings - use defaults + fallback
                 $info.model = $mr.defaults.model
                 $info.temperature = [double]$mr.defaults.temperature
                 $info.provider = $mr.defaults.provider
@@ -180,7 +180,7 @@ function Build-ExecutionContext {
     $deliverableList = ($Deliverables | ForEach-Object { "- $_" }) -join "`n"
 
     $prompt = @"
-## AGENT: $AgentName — $Role
+## AGENT: $AgentName - $Role
 ## ACTION: $ActionType
 ## TASK: $TaskText
 
@@ -275,7 +275,7 @@ function Get-AgentResult {
     if ($result.skills_missing.Count -eq 0) {
         $result.status = 'ready'
         $result.token_estimate = $baseTokenEstimate
-        $result.completion_signal.message = "Agent $AgentName ready with full skill coverage. Execution context built — delegate prompt to AI backend."
+        $result.completion_signal.message = "Agent $AgentName ready with full skill coverage. Execution context built - delegate prompt to AI backend."
     } elseif ($result.skills_missing.Count -lt $availableSkills.Count) {
         $result.status = 'partial'
         $result.token_estimate = $baseTokenEstimate

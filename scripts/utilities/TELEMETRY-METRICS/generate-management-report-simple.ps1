@@ -33,7 +33,7 @@ if ($ForceNewMonth -or -not (Test-Path $reportFile)) {
         $firstLine = Get-Content $reportFile -First 1
         $fileMonth = ($firstLine -split ',')[1] -replace '"', '' -replace '-.*$', ''
         if ($fileMonth -ne $currentMonth) {
-            Write-Host "️ Month changed! Please export: $reportFile"
+            Write-Host " Month changed! Please export: $reportFile"
             Write-Host "   Then re-run with -ForceNewMonth to start new file"
             exit 0
         }
@@ -50,7 +50,7 @@ if ($needNewFile) {
 # Reminder if near month end
 $daysUntilMonthEnd = [DateTime]::DaysInMonth((Get-Date).Year, (Get-Date).Month) - (Get-Date).Day
 if ($daysUntilMonthEnd -le 3 -and $daysUntilMonthEnd -ge 0) {
-    Write-Host "️ REMINDER: Only $daysUntilMonthEnd day(s) left! Export: $reportFile"
+    Write-Host " REMINDER: Only $daysUntilMonthEnd day(s) left! Export: $reportFile"
 }
 
 # Collect data from session files
@@ -122,7 +122,7 @@ if (Test-Path $sessionDir) {
             Write-Host "    Added: $sessionId"
             
         } catch {
-            Write-Host "   ️ Error processing $($sessionFile.Name): $_"
+            Write-Host "    Error processing $($sessionFile.Name): $_"
         }
     }
 }

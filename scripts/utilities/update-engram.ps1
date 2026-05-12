@@ -47,7 +47,7 @@ if ($processes) {
         Write-Host "    PID $($p.Id) - $($p.Path)" -ForegroundColor Gray
     }
     
-    $response = Read-Host "  ¿Detener todos los procesos engram? (S/N)" 
+    $response = Read-Host "  ?Detener todos los procesos engram? (S/N)" 
     if ($response -match '^[Ss]') {
         foreach ($p in $processes) {
             try {
@@ -136,7 +136,7 @@ if (-not $SkipSetup) {
 }
 
 # Paso 4: Instrucciones finales
-Write-Host "`n[4/4] ¡Actualizacion completa!" -ForegroundColor Green
+Write-Host "`n[4/4] !Actualizacion completa!" -ForegroundColor Green
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "`nPASOS FINALES REQUERIDOS:" -ForegroundColor Yellow
 Write-Host "  1. Reinicia OpenCode (o tu cliente MCP)" -ForegroundColor White

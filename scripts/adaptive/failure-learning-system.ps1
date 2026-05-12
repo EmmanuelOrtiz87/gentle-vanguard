@@ -1,6 +1,6 @@
 # failure-learning-system.ps1
-# Sistema de aprendizaje y criterio ante fallos de configuración
-# Normaliza el comportamiento autónomo ante situaciones anormales
+# Sistema de aprendizaje y criterio ante fallos de configuracion
+# Normaliza el comportamiento autonomo ante situaciones anormales
 
 param(
     [Parameter(Mandatory=$true)]
@@ -121,7 +121,7 @@ function Learn-FromFailures {
     Write-Host "[LEARNING] Learning cycle completed" -ForegroundColor Green
 }
 
-# Aplicar criterio para decidir acción autónoma
+# Aplicar criterio para decidir accion autonoma
 function Apply-Criteria {
     param([string]$FailureType)
     
@@ -134,7 +134,7 @@ function Apply-Criteria {
         return $null
     }
     
-    # Verificar si se debe actuar autónomamente
+    # Verificar si se debe actuar autonomamente
     $recentFailures = $data.failures | Where-Object { $_.type -eq $FailureType } | 
                       Where-Object { (Get-Date) - (Get-Date $_.timestamp).TotalHours -lt 24 }
     
@@ -149,7 +149,7 @@ function Apply-Criteria {
     }
 }
 
-# Diagnosticar situación anormal
+# Diagnosticar situacion anormal
 function Diagnose-AbnormalSituation {
     param([string]$Context)
     
@@ -214,7 +214,7 @@ function Get-LearningReport {
     }
 }
 
-# Ejecutar acción
+# Ejecutar accion
 switch ($Action) {
     'record' {
         Record-Failure -Type $FailureType -Ctx $Context -Res $Resolution

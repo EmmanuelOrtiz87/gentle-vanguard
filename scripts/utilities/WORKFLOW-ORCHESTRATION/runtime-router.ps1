@@ -163,7 +163,7 @@ function Invoke-Gate {
         $rlNote = " Event-bus rate limit at $($RateLimit.pct)% ($($RateLimit.count)/$($RateLimit.limit))."
     } elseif ($RateLimit.at_limit) {
         if ($decision -ne 'blocked') { $decision = 'warned' }
-        $rlNote = " Event-bus rate limit FULL — new events will be rejected."
+        $rlNote = " Event-bus rate limit FULL - new events will be rejected."
     }
 
     # Exit code mapping
@@ -274,7 +274,7 @@ if ($runtimeMode -eq 'offline_deterministic') {
     $actions += '.\\scripts\\utilities\\wf.ps1 stack-dashboard'
 }
 
-# ─── GATE MODE ────────────────────────────────────────────────────────────────
+# --- GATE MODE ----------------------------------------------------------------
 if ($Mode -eq 'gate') {
     $gateResult = Invoke-Gate -RuntimeMode $runtimeMode -TokenStatus $token.status `
         -GateReason $reason -Task $TaskType -RateLimit $rateLimit
@@ -289,12 +289,12 @@ if ($Mode -eq 'gate') {
             default   { 'White'  }
         }
         Write-Host "[GATE] $($gateResult.decision.ToUpper())" -ForegroundColor $color -NoNewline
-        Write-Host " — task: $($gateResult.task_type) | mode: $($gateResult.runtime_mode) | token: $($gateResult.token_status) | event-bus: $($gateResult.rate_limit_pct)%"
+        Write-Host " - task: $($gateResult.task_type) | mode: $($gateResult.runtime_mode) | token: $($gateResult.token_status) | event-bus: $($gateResult.rate_limit_pct)%"
         Write-Host "       $($gateResult.note)" -ForegroundColor $color
     }
     exit $gateResult.exit_code
 }
-# ─────────────────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------------------
 
     $result = [ordered]@{
         runtime_mode = $runtimeMode

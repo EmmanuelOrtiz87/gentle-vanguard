@@ -12,7 +12,7 @@ function Test-Item($Description, $Condition, $Type = "ERROR") {
             Write-Host "    $Description" -ForegroundColor Red
             $script:errors++
         } else {
-            Write-Host "   ️ $Description" -ForegroundColor Yellow
+            Write-Host "    $Description" -ForegroundColor Yellow
             $script:warnings++
         }
     } else {
@@ -169,7 +169,7 @@ foreach ($script in $scriptsToCheck) {
             $errors++
         }
     } else {
-        Write-Host "   ️ $script not found" -ForegroundColor Yellow
+        Write-Host "    $script not found" -ForegroundColor Yellow
         $warnings++
     }
 }

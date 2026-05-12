@@ -23,13 +23,21 @@ function Write-Warn {
     Write-Host "[WARN] $Message" -ForegroundColor Yellow
 }
 
-$foundationRoot = Resolve-Path (Join-Path $PSScriptRoot "..\..")
+if ($env:FOUNDATION_BASE_DIR) {
+    $foundationRoot = $env:FOUNDATION_BASE_DIR
+} else {
+    $searchDir = $PSScriptRoot
+    while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
+        $searchDir = Split-Path -Parent $searchDir
+    }
+    $foundationRoot = $searchDir
+}
 $orchestratorSkill = Join-Path $foundationRoot "skills\project-orchestrator-skill"
 
 if ($ProjectPath) {
     $targetProject = (Resolve-Path $ProjectPath).Path
 } else {
-    $targetProject = $foundationRoot.Path
+    $targetProject = $foundationRoot
 }
 
 function Ensure-Engram {

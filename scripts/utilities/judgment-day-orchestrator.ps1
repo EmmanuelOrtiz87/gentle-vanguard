@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Judgment Day Orchestrator — Coordinates dual-review before push/merge/session
+    Judgment Day Orchestrator - Coordinates dual-review before push/merge/session
 
 .DESCRIPTION
     Manages Judgment Day execution, coordinates with git hooks, and integrates
@@ -82,14 +82,14 @@ function Initialize-JudgmentDay {
 function Install-GitHooks {
     $hooksDir = Join-Path $repoRoot '.git\hooks'
     if (-not (Test-Path $hooksDir)) {
-        Write-Warn "No .git/hooks directory — not a git repository?"
+        Write-Warn "No .git/hooks directory - not a git repository?"
         return
     }
 
     $hooks = @{
         'pre-push' = @"
 #!/usr/bin/env pwsh
-# Judgment Day pre-push hook — auto-triggers dual-review before push
+# Judgment Day pre-push hook - auto-triggers dual-review before push
 `$repoRoot = Split-Path -Parent (Split-Path -Parent `$MyInvocation.MyCommand.Path)
 `$jdScript = Join-Path `$repoRoot 'scripts\utilities\judgment-day-orchestrator.ps1'
 if (Test-Path `$jdScript) {
@@ -98,7 +98,7 @@ if (Test-Path `$jdScript) {
 "@
         'pre-merge-commit' = @"
 #!/usr/bin/env pwsh
-# Judgment Day pre-merge-commit hook — auto-triggers review before merge
+# Judgment Day pre-merge-commit hook - auto-triggers review before merge
 `$repoRoot = Split-Path -Parent (Split-Path -Parent `$MyInvocation.MyCommand.Path)
 `$jdScript = Join-Path `$repoRoot 'scripts\utilities\judgment-day-orchestrator.ps1'
 if (Test-Path `$jdScript) {
@@ -184,7 +184,7 @@ function Check-PushStatus {
 
     $protected = @('main', 'develop', 'master')
     if ($protected -contains $branch) {
-        Write-Warn "Protected branch: $branch — skipping auto-judgment"
+        Write-Warn "Protected branch: $branch - skipping auto-judgment"
         return $true
     }
 

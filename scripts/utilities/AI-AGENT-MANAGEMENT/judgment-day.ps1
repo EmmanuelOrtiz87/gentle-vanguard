@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Judgment Day — Redirect to WORKFLOW-ORCHESTRATION implementation
+    Judgment Day - Redirect to WORKFLOW-ORCHESTRATION implementation
 
 .DESCRIPTION
     This script has been superseded by the full implementation at:
@@ -10,11 +10,11 @@
     All new development should use the WORKFLOW-ORCHESTRATION version.
 
     The new implementation follows the full adversarial dual-review protocol:
-      Phase 1 — Judge A (security + quality) + Judge B (governance + structure)
-      Phase 2 — Synthesize findings (Confirmed / Suspect / Contradiction)
-      Phase 3 — Fix cycle with Fix Agent
-      Phase 4 — Re-judgment after fixes
-      Phase 5 — Iteration with escalation
+      Phase 1 - Judge A (security + quality) + Judge B (governance + structure)
+      Phase 2 - Synthesize findings (Confirmed / Suspect / Contradiction)
+      Phase 3 - Fix cycle with Fix Agent
+      Phase 4 - Re-judgment after fixes
+      Phase 5 - Iteration with escalation
 
 .PARAMETER Target
     Path or scope to review

@@ -34,10 +34,14 @@ $zipName = "foundation-profile-$timestamp.zip"
 $zipPath = Join-Path $OutputDir $zipName
 
 if ([string]::IsNullOrWhiteSpace($RepoRoot)) {
-    $RepoRoot = if (Test-Path (Join-Path $PSScriptRoot '..\..')) {
-        (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
+    if ($env:FOUNDATION_BASE_DIR) {
+        $RepoRoot = $env:FOUNDATION_BASE_DIR
     } else {
-        $PWD.Path
+        $searchDir = $PSScriptRoot
+        while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
+            $searchDir = Split-Path -Parent $searchDir
+        }
+        $RepoRoot = if ($searchDir) { $searchDir } else { $PWD.Path }
     }
 }
 

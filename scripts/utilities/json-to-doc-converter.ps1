@@ -278,11 +278,11 @@ try {
         }
     }
 
-    Write-Host "✅ Conversion complete: $OutputPath"
+    Write-Host "[OK] Conversion complete: $OutputPath"
     return $OutputPath
 
 } catch {
-    Write-Host "❌ Conversion failed: $_" -ForegroundColor Red
+    Write-Host "[FAIL] Conversion failed: $_" -ForegroundColor Red
     exit 1
 }
 #endregion

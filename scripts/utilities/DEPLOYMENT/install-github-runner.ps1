@@ -103,7 +103,15 @@ function Get-RegistrationTokenFromGh {
 }
 
 if ([string]::IsNullOrWhiteSpace($ConfigPath)) {
-    $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..')).Path
+    if ($env:FOUNDATION_BASE_DIR) {
+        $repoRoot = $env:FOUNDATION_BASE_DIR
+    } else {
+        $searchDir = $PSScriptRoot
+        while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
+            $searchDir = Split-Path -Parent $searchDir
+        }
+        $repoRoot = $searchDir
+    }
     $ConfigPath = Join-Path $repoRoot 'config\github-runner.local.json'
 }
 

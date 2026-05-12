@@ -35,7 +35,7 @@ $ErrorActionPreference = 'Stop'
 $scriptDir  = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot   = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 
-# ── Load configs ─────────────────────────────────────────────────────────────
+# -- Load configs -------------------------------------------------------------
 function Read-JsonFile {
     param([string]$Path)
     if (Test-Path $Path) {
@@ -51,21 +51,21 @@ $ctxConfig   = Read-JsonFile (Join-Path $repoRoot 'config\context-efficiency.jso
 $historyPath = Join-Path $repoRoot '.event-bus\history.json'
 $csvPath     = Join-Path $repoRoot 'docs\sessions\metrics\token-guard-usage.csv'
 
-# ── Context window thresholds ────────────────────────────────────────────────
+# -- Context window thresholds ------------------------------------------------
 $effectiveWindow   = if ($difyConfig) { $difyConfig.tokenOptimization.effectiveWindow } else { 113000 }
 $promptYellow      = if ($difyConfig) { $difyConfig.tokenOptimization.rules.promptChars.yellowThreshold } else { 1100 }
 $promptRed         = if ($difyConfig) { $difyConfig.tokenOptimization.rules.promptChars.redThreshold    } else { 1600 }
 $adoptYellow       = if ($difyConfig) { $difyConfig.tokenOptimization.rules.adoptionPercent.yellowMin   } else { 75 }
 $adoptRed          = if ($difyConfig) { $difyConfig.tokenOptimization.rules.adoptionPercent.redMin      } else { 50 }
 
-# ── Token budget guard settings ──────────────────────────────────────────────
+# -- Token budget guard settings ----------------------------------------------
 $tbg = if ($orchConfig) { $orchConfig.subagent_orchestration.token_budget_guard } else { $null }
 $dailyBudget     = if ($tbg) { $tbg.daily_budget_tokens     } else { 30000 }
 $softPct         = if ($tbg) { $tbg.soft_threshold_pct      } else { 70 }
 $hardPct         = if ($tbg) { $tbg.hard_threshold_pct      } else { 90 }
 $charsPerToken   = if ($tbg) { $tbg.estimation.chars_per_token } else { 4 }
 
-# ── Daily consumption from CSV ───────────────────────────────────────────────
+# -- Daily consumption from CSV -----------------------------------------------
 $tokensUsedToday = 0
 if (Test-Path $csvPath) {
     try {
@@ -79,11 +79,11 @@ if (Test-Path $csvPath) {
     } catch { }
 }
 
-# ── Token autopilot policy ───────────────────────────────────────────────────
+# -- Token autopilot policy ---------------------------------------------------
 $autopilotProfile = if ($ctxConfig) { $ctxConfig.tokenAutopilot.profile } else { 'unknown' }
 $autopilotTrigger = if ($ctxConfig) { ($ctxConfig.tokenAutopilot.triggerStatuses -join ', ') } else { 'HARD_LIMIT' }
 
-# ── Blocked events in last 60s ───────────────────────────────────────────────
+# -- Blocked events in last 60s -----------------------------------------------
 $blockedRecent = 0
 if (Test-Path $historyPath) {
     try {
@@ -98,7 +98,7 @@ if (Test-Path $historyPath) {
     } catch { }
 }
 
-# ── Compute health statuses ──────────────────────────────────────────────────
+# -- Compute health statuses --------------------------------------------------
 $promptStatus = 'GREEN'
 if ($PromptChars -ge $promptRed)    { $promptStatus = 'RED'    }
 elseif ($PromptChars -ge $promptYellow) { $promptStatus = 'YELLOW' }
@@ -116,13 +116,13 @@ elseif ($budgetPct -ge $softPct)  { $budgetStatus = 'YELLOW' }
 
 $eventStatus = if ($blockedRecent -gt 0) { 'YELLOW' } else { 'GREEN' }
 
-# ── Projected tokens from current prompt ─────────────────────────────────────
+# -- Projected tokens from current prompt -------------------------------------
 $promptTokens    = if ($PromptChars -gt 0) { [math]::Ceiling($PromptChars / $charsPerToken) } else { 0 }
 $windowUsedPct   = if ($effectiveWindow -gt 0 -and $promptTokens -gt 0) {
     [math]::Round(($promptTokens / $effectiveWindow) * 100, 1)
 } else { 0 }
 
-# ── Output ───────────────────────────────────────────────────────────────────
+# -- Output -------------------------------------------------------------------
 $dashboard = [ordered]@{
     timestamp          = Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz'
     prompt = [ordered]@{
@@ -163,7 +163,7 @@ if ($AsJson) {
     return
 }
 
-# ── Console display ───────────────────────────────────────────────────────────
+# -- Console display -----------------------------------------------------------
 $colorMap = @{ GREEN = 'Green'; YELLOW = 'Yellow'; RED = 'Red' }
 
 function Write-StatusRow {
@@ -176,9 +176,9 @@ function Write-StatusRow {
 }
 
 Write-Host ""
-Write-Host "╔══════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "║       CONTEXT DASHBOARD              ║" -ForegroundColor Cyan
-Write-Host "╚══════════════════════════════════════╝" -ForegroundColor Cyan
+Write-Host "+======================================+" -ForegroundColor Cyan
+Write-Host "|       CONTEXT DASHBOARD              |" -ForegroundColor Cyan
+Write-Host "+======================================+" -ForegroundColor Cyan
 Write-Host ""
 
 Write-Host "  [PROMPT]" -ForegroundColor White

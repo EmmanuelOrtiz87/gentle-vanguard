@@ -13,7 +13,7 @@ function Get-PluginManifest {
     try {
         return Get-Content $manifestFile -Raw -Encoding UTF8 | ConvertFrom-Json
     } catch {
-        Write-Warning "Failed to parse plugin manifest: $manifestFile — $_"
+        Write-Warning "Failed to parse plugin manifest: $manifestFile - $_"
         return $null
     }
 }
@@ -140,7 +140,15 @@ function Initialize-Plugins {
     $loaded = 0
     $failed = 0
 
-    $repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..\..\..')
+    if ($env:FOUNDATION_BASE_DIR) {
+        $repoRoot = $env:FOUNDATION_BASE_DIR
+    } else {
+        $searchDir = $PSScriptRoot
+        while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
+            $searchDir = Split-Path -Parent $searchDir
+        }
+        $repoRoot = $searchDir
+    }
     $configPath = Join-Path $repoRoot 'config\plugins.json'
 
     $searchPaths = @()

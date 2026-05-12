@@ -36,7 +36,7 @@ $configDir = Join-Path $repoRoot 'config'
 $telemetryPath = Join-Path $repoRoot '.runtime\telemetry\cloud-agent-telemetry.csv'
 $envFilePath   = Join-Path $repoRoot '.env.local'
 
-# ── Helpers ────────────────────────────────────────────────────────────────────
+# -- Helpers --------------------------------------------------------------------
 function Import-EnvFile {
     param([string]$Path)
     if (-not (Test-Path $Path)) { return }
@@ -106,7 +106,7 @@ function Write-TelemetryRow {
     }
 }
 
-# ── Load provider configs ──────────────────────────────────────────────────────
+# -- Load provider configs ------------------------------------------------------
 Import-EnvFile -Path $envFilePath
 
 $providerMap = [ordered]@{}
@@ -129,16 +129,16 @@ if ($providerMap.Count -eq 0) {
 }
 
 Write-Host "[INFO] Collecting telemetry for $($providerMap.Count) provider(s)..." -ForegroundColor Cyan
-if ($DryRun) { Write-Host '[INFO] DRY-RUN mode — CSV will not be modified.' -ForegroundColor Yellow }
+if ($DryRun) { Write-Host '[INFO] DRY-RUN mode - CSV will not be modified.' -ForegroundColor Yellow }
 
-# ── Process each provider ──────────────────────────────────────────────────────
+# -- Process each provider ------------------------------------------------------
 foreach ($providerName in $providerMap.Keys) {
     $cfg       = $providerMap[$providerName]
     $model     = if ($cfg.model)   { [string]$cfg.model }   else { 'unknown' }
     $isEnabled = [bool]$cfg.enabled
     $isLocal   = [bool]$cfg.local
 
-    # ── Disabled ────────────────────────────────────────────────────────────────
+    # -- Disabled ----------------------------------------------------------------
     if (-not $isEnabled) {
         if ($SkipDisabled) {
             Write-Host "  [$providerName] SKIP (disabled)" -ForegroundColor DarkGray
@@ -151,7 +151,7 @@ foreach ($providerName in $providerMap.Keys) {
         continue
     }
 
-    # ── Missing API key ─────────────────────────────────────────────────────────
+    # -- Missing API key ---------------------------------------------------------
     if ($cfg.api_key_env -and -not $isLocal) {
         $apiKeyValue = (Get-ChildItem "env:$($cfg.api_key_env)" -ErrorAction SilentlyContinue).Value
         if ([string]::IsNullOrWhiteSpace($apiKeyValue)) {
@@ -163,7 +163,7 @@ foreach ($providerName in $providerMap.Keys) {
         }
     }
 
-    # ── Validate endpoint URI ───────────────────────────────────────────────────
+    # -- Validate endpoint URI ---------------------------------------------------
     $endpoint  = [string]$cfg.endpoint
     $parsedUri = $null
     if (-not [Uri]::TryCreate($endpoint, [UriKind]::Absolute, [ref]$parsedUri)) {
@@ -181,7 +181,7 @@ foreach ($providerName in $providerMap.Keys) {
         continue
     }
 
-    # ── Build request headers ───────────────────────────────────────────────────
+    # -- Build request headers ---------------------------------------------------
     $headers = @{
         'Content-Type' = 'application/json'
         'User-Agent'   = 'Foundation-CloudAgent/1.0'
@@ -199,7 +199,7 @@ foreach ($providerName in $providerMap.Keys) {
         }
     }
 
-    # ── Build minimal test payload ──────────────────────────────────────────────
+    # -- Build minimal test payload ----------------------------------------------
     $testMsg = @(@{ role = 'user'; content = 'Reply with the single word: pong' })
     $body = switch ($providerName) {
         'anthropic' {
@@ -219,7 +219,7 @@ foreach ($providerName in $providerMap.Keys) {
         }
     }
 
-    # ── Execute test call ───────────────────────────────────────────────────────
+    # -- Execute test call -------------------------------------------------------
     Write-Host "  [$providerName] Testing $model @ $endpoint ..." -ForegroundColor Cyan
     $sw = [System.Diagnostics.Stopwatch]::StartNew()
     try {
