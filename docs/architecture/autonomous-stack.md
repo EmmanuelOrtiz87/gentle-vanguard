@@ -189,7 +189,7 @@ manual **Function**:
 ## Directory Structure
 
 ```
-workspace-foundation/
+foundation/
  .backups/              # Encrypted backups (in .gitignore)
     engram-memory.json.enc
     learned-norms.json.enc

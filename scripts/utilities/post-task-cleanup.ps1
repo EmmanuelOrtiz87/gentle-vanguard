@@ -16,7 +16,7 @@
     .\tools\post-task-cleanup.ps1 -TaskName "Corregir bug" -AgentType "DEV"
     
 .NOTES
-    Author: workspace-foundation
+    Author: foundation
     Version: 1.0
     Se invoca automticamente desde auto-delegation-router.ps1
 #>
@@ -29,7 +29,7 @@ param(
     [string]$AgentType = "GENERAL",
     
     [Parameter(Mandatory=$false)]
-    [string]$ProjectName = "gentleman-foundation"
+    [string]$ProjectName = "foundation"
 )
 
 $ErrorActionPreference = 'Continue'

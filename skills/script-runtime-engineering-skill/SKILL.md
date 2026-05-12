@@ -6,7 +6,7 @@ description: >
   "powershell script", "hook", "script parse error", "cross-platform script", "wf script".
 license: Apache-2.0
 metadata:
-  author: workspace-foundation
+  author: foundation
   versión: '1.0'
 ---
 

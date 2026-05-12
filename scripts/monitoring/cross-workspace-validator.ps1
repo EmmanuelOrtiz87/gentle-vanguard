@@ -4,7 +4,7 @@
     Valida consistencia entre workspace local y foundation.
 
 .DESCRIPTION
-    Compara archivos de configuracin y scripts entre workspace-foundation
+    Compara archivos de configuracin y scripts entre foundation
     y el workspace local para detectar inconsistencias.
 
 .PARAMETER Fix
@@ -146,7 +146,7 @@ if ([string]::IsNullOrWhiteSpace($FoundationRoot)) {
     } elseif ($env:FOUNDATION_REPO_PATH) {
         $FoundationRoot = [string]$env:FOUNDATION_REPO_PATH
     } else {
-        $FoundationRoot = '..\workspace-foundation'
+        $FoundationRoot = '..\foundation'
     }
 }
 

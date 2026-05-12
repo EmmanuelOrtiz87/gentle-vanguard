@@ -181,7 +181,7 @@ converter | ⚠️ | ✅ | | Windsurf | - | ⚠️ Via converter | ⚠️ | ✅ 
 ## Archivos Clave
 
 ```
-workspace-foundation/
+foundation/
 ├── adapters/
 │   ├── detection/
 │   │   └── enhanced-detect.ps1      # Detección de herramientas

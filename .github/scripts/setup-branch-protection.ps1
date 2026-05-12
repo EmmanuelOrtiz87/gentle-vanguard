@@ -13,7 +13,7 @@
 .PARAMETER dryRun
     If set, show payload without applying.
 .EXAMPLE
-    pwsh setup-branch-protection.ps1 -owner EmmanuelOrtiz87 -repo gentleman-foundation
+    pwsh setup-branch-protection.ps1 -owner EmmanuelOrtiz87 -repo foundation
 #>
 
 param(

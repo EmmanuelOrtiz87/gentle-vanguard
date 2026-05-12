@@ -1,7 +1,7 @@
 # Leccion Aprendida: Validacion Automatica de opencode.json
 
 **Fecha:** 2026-05-02  
-**Proyecto:** workspace-foundation  
+**Proyecto:** foundation  
 **Categoria:** Validacion de Configuracion | Prevencion de Errores
 
 ---
@@ -183,7 +183,7 @@ Si cambia la estructura de `opencode.json`:
 
 ```powershell
 # Ejecutar validacion manualmente
-cd workspace-foundation
+cd foundation
 .\hooks\pre-commit-opencode-validation.ps1
 
 # Resultado esperado:

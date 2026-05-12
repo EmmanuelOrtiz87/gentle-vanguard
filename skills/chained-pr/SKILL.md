@@ -6,7 +6,7 @@ description: >
   lines, when planning chained PRs, stacked PRs, or reviewable slices.
 license: Apache-2.0
 metadata:
-  author: workspace-foundation (adapted for Foundation)
+  author: foundation (adapted for Foundation)
   version: '1.0'
 ---
 

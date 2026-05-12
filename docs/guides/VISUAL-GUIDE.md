@@ -1,4 +1,4 @@
-﻿# Workspace Foundation - Visual Guide
+# Workspace Foundation - Visual Guide
 
 > Complete visual reference with diagrams, charts, and flow illustrations.
 
@@ -275,7 +275,7 @@ my-service/
  .git/                     # Git repository
     hooks/               # Pre-commit hooks (auto-installed)
 
- .workspace-foundation/    # Skills (auto-installed)
+ .foundation/    # Skills (auto-installed)
     skills/
         code-review-orchestrator/
 
@@ -619,7 +619,7 @@ my-service/
 
 
 
-       workspace-foundation      code-review-orchestrator
+       foundation      code-review-orchestrator
 
        [P] Project scaffold     [R] Unified review
        [B] Bootstrapping        [7] 7 dimensions

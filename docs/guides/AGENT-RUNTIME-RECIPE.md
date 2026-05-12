@@ -16,16 +16,16 @@ Ensure these capabilities work together without conflicts:
 ## Prerequisites
 
 - `go`, `git`, `node` available
-- `workspace-foundation` cloned
+- `foundation` cloned
 - `engram` installed and reachable in `PATH`
 
 Quick validation:
 
 ```powershell
 .\tools\validate-session-stack.ps1 -Quiet
-.\workspace-foundation\scripts\utilities\wf.ps1 orchestrator-status
-.\workspace-foundation\scripts\utilities\wf.ps1 runtime-route
-.\workspace-foundation\scripts\utilities\agent-router.ps1 status
+.\foundation\\scripts\utilities\wf.ps1 orchestrator-status
+.\foundation\\scripts\utilities\wf.ps1 runtime-route
+.\foundation\\scripts\utilities\agent-router.ps1 status
 ```
 
 ## Runtime Modes
@@ -121,9 +121,9 @@ If startup fails in strict mode:
 
 ```powershell
 .\tools\validate-session-stack.ps1 -Quiet
-.\workspace-foundation\scripts\utilities\wf.ps1 orchestrator-status
-.\workspace-foundation\scripts\utilities\wf.ps1 runtime-route
-.\workspace-foundation\scripts\utilities\agent-router.ps1 status
+.\foundation\\scripts\utilities\wf.ps1 orchestrator-status
+.\foundation\\scripts\utilities\wf.ps1 runtime-route
+.\foundation\\scripts\utilities\agent-router.ps1 status
 ```
 
 2. Resolve missing pieces and retry startup.

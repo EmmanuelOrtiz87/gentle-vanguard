@@ -57,7 +57,7 @@
     {
       "type": "guide",
       "path": "docs/guides/REPO-RENAME-MIGRATION.md",
-      "description": "Repository Rename Migration Guide - Steps for safe rename from gentleman-foundation to foundation"
+      "description": "Repository Rename Migration Guide - Steps for safe rename from foundation to foundation"
     },
     {
       "type": "script",

@@ -5,7 +5,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $roots = @(
-    ".\workspace-foundation",
+    ".\foundation",
     ".\bitbucket-dashboard"
 )
 

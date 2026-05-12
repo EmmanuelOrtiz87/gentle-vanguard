@@ -8,7 +8,7 @@ Features:
 - 7D validation
 - Judgment Day
 
-Get it: github.com/EmmanuelOrtiz87/gentleman-foundation
+Get it: github.com/EmmanuelOrtiz87/foundation
 
 Questions? Drop them here!
 

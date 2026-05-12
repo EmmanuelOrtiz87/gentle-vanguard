@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the hooks system implemented in workspace-foundation.
+This document describes the hooks system implemented in foundation.
 
 ## Available Hooks
 

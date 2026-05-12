@@ -5,7 +5,7 @@ description: >
   "brand identity", "branding", "voice", "tone", "visual identity", "logo usage", "brand colors"
 license: Apache-2.0
 metadata:
-  author: workspace-foundation
+  author: foundation
   versión: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task
 ---

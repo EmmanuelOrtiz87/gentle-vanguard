@@ -7,10 +7,10 @@ externo expuesto va API, usando solo la URL y la API key.
 
 ## 1. Crear configuración local de proveedores
 
-Desde PowerShell, en la raz de workspace-foundation:
+Desde PowerShell, en la raz de foundation:
 
 ```powershell
-cd .\workspace-foundation
+cd .\foundation
 .\scripts\utilities\invoke-cloud-agent.ps1 -Config
 ```
 

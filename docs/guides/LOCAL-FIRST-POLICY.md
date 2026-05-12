@@ -1,8 +1,8 @@
-﻿# Local-First Policy
+# Local-First Policy
 
 ## Purpose
 
-This document defines the **local-first** approach for AI tools in workspace-foundation.
+This document defines the **local-first** approach for AI tools in foundation.
 
 ## Core Principle
 
@@ -67,7 +67,7 @@ Each AI tool has a local-first configuration:
 
 ### Memory
 
-- **Project**: `workspace-foundation`
+- **Project**: `foundation`
 - **Engram project**: `workspace_local`
 - **Session pattern**: `session-YYYY-MM-DD-XX`
 

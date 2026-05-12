@@ -94,7 +94,7 @@ Timestamp: $timestamp
 - Status: $($Usage.status)
 "@
     
-    & $engramBin save --title "Token Telemetry Snapshot" --content $content --project "gentleman-foundation" --type manual 2>$null | Out-Null
+    & $engramBin save --title "Token Telemetry Snapshot" --content $content --project "foundation" --type manual 2>$null | Out-Null
     
     return ($LASTEXITCODE -eq 0)
 }

@@ -21,9 +21,9 @@ The goal is to clearly separate:
 
 - `{workspaceRoot}/` (workspace root)
 - `{workspaceRoot}/Workspace-Skills`
-- `{workspaceRoot}/workspace-foundation`
-- `{workspaceRoot}/workspace-foundation/.engram-data`
-- `{workspaceRoot}/workspace-foundation/skills`
+- `{workspaceRoot}/foundation`
+- `{workspaceRoot}/foundation/.engram-data`
+- `{workspaceRoot}/foundation/skills`
 
 ## Project Level
 

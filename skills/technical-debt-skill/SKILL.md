@@ -6,7 +6,7 @@ description: >
   "maintainability", "architecture erosion".
 license: Apache-2.0
 metadata:
-  author: workspace-foundation
+  author: foundation
   versión: '1.0'
 ---
 

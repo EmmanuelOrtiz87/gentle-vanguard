@@ -6,7 +6,7 @@ param(
     [Parameter(Mandatory=$true)]
     [string]$Action,
     
-    [string]$WorkspaceRoot = ".\workspace-foundation",
+    [string]$WorkspaceRoot = ".\foundation",
     [string]$EngramPolicyScript = "$WorkspaceRoot\scripts\foundation\engram-policy.ps1"
 )
 
@@ -80,7 +80,7 @@ function Test-EngramHealth {
     # Verificar instalacion
     $engramPaths = @(
         "$HOME\bin\engram.exe",
-        ".\workspace-foundation\tools\engram.exe",
+        ".\foundation\\tools\engram.exe",
         "$HOME\go\bin\engram.exe"
     )
     
