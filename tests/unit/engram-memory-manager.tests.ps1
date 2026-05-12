@@ -14,15 +14,7 @@ Describe "Engram Memory Manager - Unit Tests" {
     
     BeforeAll {
         $script:ManagerPath = ".\tools\engram-memory-manager.ps1"
-        $script:ConfigPath = ".\config\engram-memory.json"
-        # Create config directory if not exists
-        if (-not (Test-Path "config")) {
-            New-Item -ItemType Directory -Path "config" -Force | Out-Null
-        }
-        # Copy test config if not exists
-        if (-not (Test-Path $script:ConfigPath)) {
-            Copy-Item -Path "$(Split-Path $PSScriptRoot -Parent)\config\engram-memory.json" -Destination $script:ConfigPath -ErrorAction SilentlyContinue
-        }
+        $script:ConfigPath = Join-Path $PSScriptRoot "config\engram-memory.json"
     }
     
     Context "Configuration Loading" {

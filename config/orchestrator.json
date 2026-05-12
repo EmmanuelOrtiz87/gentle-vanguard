@@ -208,9 +208,21 @@
     "orchestrator": "docs/NORMATIVAS-ORQUESTADOR.md",
     "security": "docs/NORMATIVAS-SEGURIDAD.md",
     "testing": "docs/NORMATIVAS-TESTING.md",
+    "accessibility": "docs/NORMATIVAS-ACCESIBILIDAD.md",
+    "i18n_l10n": "docs/NORMATIVAS-I18N-L10N.md",
+    "api_design": "docs/NORMATIVAS-API-DESIGN.md",
+    "sre": "docs/NORMATIVAS-SRE.md",
+    "chaos_engineering": "docs/NORMATIVAS-CHAOS-ENGINEERING.md",
+    "sbom": "docs/NORMATIVAS-SBOM.md",
+    "iso_25010": "docs/NORMATIVAS-ISO25010.md",
+    "iso_27001": "docs/NORMATIVAS-ISO27001.md",
     "compliance": {
       "security_config": "config/security-hardening.json",
-      "testing_config": "config/testing-policy.json"
+      "testing_config": "config/testing-policy.json",
+      "sre_error_budgets": "config/sre-error-budgets.json",
+      "ps_analyzer": "config/PSScriptAnalyzerSettings.psd1",
+      "eslint": ".eslintrc.json",
+      "typescript": "tsconfig.json"
     }
   },
   "governed_override_profiles": {
