@@ -34,16 +34,24 @@ INACTIVE → STARTING → ACTIVE → CLOSING → CLOSED
 
 ### 2.2 Startup Protocol
 
-When starting a session:
+When starting a session, execute ALL steps in order:
 
-1. **MUST** run `scripts/utilities/session-autostart.cmd` (Windows) or equivalent
-2. **MUST** call `engram_mem_session_start` with unique session ID
-3. **MUST** call `engram_mem_context` to restore previous context
-4. **MUST** check `git status` for dirty workspace
-5. **MUST** create `todowrite` for tracking work
-6. **SHOULD** run `scripts/utilities/agent-verify.ps1` to validate state
+#### Phase A — Init
+
+1. **MUST** run `scripts/utilities/pre-process-input.ps1 -UserInput "<message>" -WorkspaceRoot "."` BEFORE first response (AI-NORMATIVES.md #1, CRITICAL)
+2. **MUST** run `scripts/utilities/session-autostart.cmd` (Windows) or equivalent
+3. **MUST** call `engram_mem_session_start` with unique session ID
+4. **MUST** call `engram_mem_context` to restore previous context
+5. **MUST** check `git status` for dirty workspace
 
 Session ID pattern: `session-YYYY-MM-DD-XX` (e.g., `session-2026-05-10-01`)
+
+#### Phase B — Analysis & Reporting
+
+6. **MUST** read `scripts/.session/startup-summary.json` — parse `isPeakHour`, `sessionId`, `workspaceClean`, `engramRunning`
+7. **MUST** create `todowrite` for tracking work
+8. **SHOULD** run `scripts/utilities/agent-verify.ps1` to validate state
+9. **MUST** report startup summary to user in compact block (peak hour, session ID, workspace state)
 
 ### 2.3 Active Session
 
@@ -166,13 +174,17 @@ Each session tracks:
 
 TODO sesión DEBE verificar:
 
-1. Session ID follows `session-YYYY-MM-DD-XX` pattern
-2. `mem_session_start` called before work
-3. Significant decisions saved to Engram
-4. Session state recoverable after compaction
-5. `mem_session_summary` called before close
-6. NEXT_SESSION_GUIDE.md updated
-7. Git workspace in clean/reported state before close
+1. `pre-process-input.ps1` executed BEFORE first response
+2. Session ID follows `session-YYYY-MM-DD-XX` pattern
+3. `startup-summary.json` read and peak hour reported to user
+4. `mem_session_start` called before work
+5. `todowrite` created at session start
+6. `agent-verify.ps1` run at session start (SHOULD)
+7. Significant decisions saved to Engram
+8. Session state recoverable after compaction
+9. `mem_session_summary` called before close
+10. NEXT_SESSION_GUIDE.md updated
+11. Git workspace in clean/reported state before close
 
 ---
 
@@ -183,6 +195,8 @@ TODO sesión DEBE verificar:
 | Session Workflow Skill | `skills/session-workflow-skill/SKILL.md` |
 | Session Autostart | `scripts/utilities/session-autostart.cmd` |
 | Pre-Process Input | `scripts/utilities/pre-process-input.ps1` |
+| Post-Autostart Summary | `scripts/utilities/post-autostart-summary.ps1` |
+| Startup Summary Data | `scripts/.session/startup-summary.json` |
 | Routing Config | `config/auto-delegation.json` |
 | Orchestrator Config | `config/orchestrator.json` |
 | AI Normatives | `rules/AI-NORMATIVES.md` |

@@ -9,6 +9,9 @@ Last reviewed: 2026-05-04 | Version: 1.0.0
 
 Every AI agent **MUST** run `scripts/utilities/pre-process-input.ps1` before responding.
 
+The **first call** in a session MUST use the first user message as input. Subsequent calls MUST
+re-process each new user message before responding.
+
 ```powershell
 pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/pre-process-input.ps1 `
   -UserInput "<USER_INPUT>" -WorkspaceRoot "."
@@ -115,9 +118,12 @@ Do **NOT** invent skill paths or fake tool calls.
 
 ## 8. Session Lifecycle
 
-1. **Start**: Run `scripts/utilities/session-autostart.cmd` (Windows) or `bash ./scripts/utilities/session-autostart.sh`
-2. **Track**: Session ID pattern `session-YYYY-MM-DD-XX`, project `workspace_local`
-3. **End**: Run `scripts/utilities/pre-close-validator.ps1` before closing; save key decisions to engram
+1. **Pre**: Run `pre-process-input.ps1` with first user message — MUST be before any response
+2. **Start**: Run `scripts/utilities/session-autostart.cmd` (Windows) or `bash ./scripts/utilities/session-autostart.sh`
+3. **Track**: Session ID pattern `session-YYYY-MM-DD-XX`, project `workspace_local`
+4. **Analyze**: Read `scripts/.session/startup-summary.json` — report peak hour and warnings to user
+5. **Verify**: Run `agent-verify.ps1` to validate workspace integrity (SHOULD)
+6. **End**: Run `scripts/utilities/pre-close-validator.ps1` before closing; save key decisions to engram
 
 ---
 
