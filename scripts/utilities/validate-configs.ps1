@@ -5,7 +5,7 @@
     Validates all JSON config files and critical workspace invariants.
 
 .DESCRIPTION
-    Gate script — run before commit, release, or audit.
+    Gate script - run before commit, release, or audit.
     Checks:
       1. All JSON config files parse without error
       2. auto-delegation.json has required top-level keys
@@ -38,7 +38,7 @@ function Write-Pass([string]$msg)  { Write-Host "  [PASS] $msg" -ForegroundColor
 function Write-Fail([string]$msg)  { Write-Host "  [FAIL] $msg" -ForegroundColor Red;    $script:errors++ }
 function Write-Warn([string]$msg)  { Write-Host "  [WARN] $msg" -ForegroundColor Yellow; $script:warns++ }
 
-# ─── 1. Parse all JSON config files ────────────────────────────────────────────
+# --- 1. Parse all JSON config files --------------------------------------------
 Write-Host "`n[1/6] JSON syntax" -ForegroundColor Cyan
 Get-ChildItem (Join-Path $Root $ConfigDir) -Filter "*.json" | ForEach-Object {
     $fileName = $_.Name
@@ -46,7 +46,7 @@ Get-ChildItem (Join-Path $Root $ConfigDir) -Filter "*.json" | ForEach-Object {
     catch { Write-Fail "${fileName}: $($_.Exception.Message.Split("`n")[0])" }
 }
 
-# ─── 2. auto-delegation.json required keys ─────────────────────────────────────
+# --- 2. auto-delegation.json required keys -------------------------------------
 Write-Host "`n[2/6] auto-delegation.json required keys" -ForegroundColor Cyan
 $adPath = Join-Path $Root $ConfigDir 'auto-delegation.json'
 if (Test-Path $adPath) {
@@ -59,7 +59,7 @@ if (Test-Path $adPath) {
     Write-Fail "auto-delegation.json not found"
 }
 
-# ─── 3. Critical scripts exist ─────────────────────────────────────────────────
+# --- 3. Critical scripts exist -------------------------------------------------
 Write-Host "`n[3/6] Critical scripts" -ForegroundColor Cyan
 $criticalScripts = @(
     'scripts/utilities/pre-process-input.ps1',
@@ -73,7 +73,7 @@ foreach ($rel in $criticalScripts) {
     else { Write-Fail "Missing or empty: $rel" }
 }
 
-# ─── 4. Root markdown files from structure-policy ──────────────────────────────
+# --- 4. Root markdown files from structure-policy ------------------------------
 Write-Host "`n[4/6] Root files (structure-policy.json)" -ForegroundColor Cyan
 $spPath = Join-Path $Root $ConfigDir 'structure-policy.json'
 if (Test-Path $spPath) {
@@ -84,10 +84,10 @@ if (Test-Path $spPath) {
         else                 { Write-Warn "Declared but missing: $f" }
     }
 } else {
-    Write-Warn "structure-policy.json not found — skipping root file check"
+    Write-Warn "structure-policy.json not found - skipping root file check"
 }
 
-# ─── 5. Hook scripts referenced in hooks-config.json ──────────────────────────
+# --- 5. Hook scripts referenced in hooks-config.json --------------------------
 Write-Host "`n[5/6] Hook scripts" -ForegroundColor Cyan
 $hcPath = Join-Path $Root $ConfigDir 'hooks-config.json'
 if (Test-Path $hcPath) {
@@ -97,30 +97,30 @@ if (Test-Path $hcPath) {
         $scriptRel  = $_.Value.script
         if ($scriptRel) {
             $full = Join-Path $Root $scriptRel
-            if (Test-Path $full) { Write-Pass "$hookName → $scriptRel" }
+            if (Test-Path $full) { Write-Pass "$hookName -> $scriptRel" }
             else                 { Write-Fail "$hookName script not found: $scriptRel" }
         }
     }
 } else {
-    Write-Warn "hooks-config.json not found — skipping hook script check"
+    Write-Warn "hooks-config.json not found - skipping hook script check"
 }
 
-# ─── 6. agentCodeToSkill → skills/ directory ──────────────────────────────────
-Write-Host "`n[6/6] agentCodeToSkill → skills/ directories" -ForegroundColor Cyan
+# --- 6. agentCodeToSkill -> skills/ directory ----------------------------------
+Write-Host "`n[6/6] agentCodeToSkill -> skills/ directories" -ForegroundColor Cyan
 if (Test-Path $adPath) {
     $ad = Get-Content $adPath -Raw | ConvertFrom-Json
     $ad.agentCodeToSkill.PSObject.Properties | ForEach-Object {
         $agent = $_.Name
         $skill = $_.Value
         $dir   = Join-Path $Root 'skills' $skill
-        if (Test-Path $dir) { Write-Pass "$agent → $skill" }
-        else                { Write-Warn "$agent → skills/$skill not found (may be in user skills)" }
+        if (Test-Path $dir) { Write-Pass "$agent -> $skill" }
+        else                { Write-Warn "$agent -> skills/$skill not found (may be in user skills)" }
     }
 }
 
-# ─── Summary ───────────────────────────────────────────────────────────────────
+# --- Summary -------------------------------------------------------------------
 Write-Host ""
-Write-Host "─────────────────────────────────────────" -ForegroundColor DarkGray
+Write-Host "-----------------------------------------" -ForegroundColor DarkGray
 if ($errors -gt 0) {
     Write-Host "RESULT: FAIL  ($errors errors, $warns warnings)" -ForegroundColor Red
     exit 1

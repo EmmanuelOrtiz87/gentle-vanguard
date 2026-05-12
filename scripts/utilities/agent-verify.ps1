@@ -1,6 +1,6 @@
 #!/usr/bin/env pwsh
 # =============================================================================
-#  agent-verify.ps1 — Self-Verification Tool for AI Agents
+#  agent-verify.ps1 - Self-Verification Tool for AI Agents
 # =============================================================================
 #
 #  Run this after completing ANY significant work to validate the result.
@@ -160,7 +160,7 @@ if ($Domain -in @("all","tests")) {
             if ($failed -eq 0) {
                 Add-Result "unit-tests" "PASS" "$passed tests passed, 0 failed" "tests"
             } else {
-                Add-Result "unit-tests" "FAIL" "$passed passed, $failed FAILED — run tests manually for details" "tests"
+                Add-Result "unit-tests" "FAIL" "$passed passed, $failed FAILED - run tests manually for details" "tests"
             }
         } else {
             # Fallback: parse last summary line
@@ -168,7 +168,7 @@ if ($Domain -in @("all","tests")) {
             if ($summary -match "0 Failed") {
                 Add-Result "unit-tests" "PASS" "$summary" "tests"
             } else {
-                Add-Result "unit-tests" "WARN" "Could not parse test output — check manually: pwsh -File '$TestFile'" "tests"
+                Add-Result "unit-tests" "WARN" "Could not parse test output - check manually: pwsh -File '$TestFile'" "tests"
             }
         }
     } else {
@@ -196,7 +196,7 @@ if ($Domain -in @("all","hooks")) {
     if (Test-Path "$Root\.git\hooks\pre-commit") {
         Add-Result "git-hook-installed" "PASS" ".git/hooks/pre-commit is installed" "hooks"
     } else {
-        Add-Result "git-hook-installed" "WARN" ".git/hooks/pre-commit not installed — run: pwsh -File scripts/utilities/install-hooks.ps1" "hooks"
+        Add-Result "git-hook-installed" "WARN" ".git/hooks/pre-commit not installed - run: pwsh -File scripts/utilities/install-hooks.ps1" "hooks"
     }
 }
 
@@ -315,7 +315,7 @@ if ($Domain -in @("all","structure")) {
     # Detect uncommitted changes (unstaged or staged)
     $DirtyFiles = git -C $Root status --porcelain 2>$null | Where-Object { $_ -match "^\s*[MADRCU?]" }
     if ($DirtyFiles.Count -gt 0) {
-        Add-Result "uncommitted-changes" "WARN" "$($DirtyFiles.Count) uncommitted file(s) — commit or stash before closing task" "structure"
+        Add-Result "uncommitted-changes" "WARN" "$($DirtyFiles.Count) uncommitted file(s) - commit or stash before closing task" "structure"
     } else {
         Add-Result "uncommitted-changes" "PASS" "Working tree clean" "structure"
     }
@@ -405,9 +405,9 @@ if ($Domain -in @("all","structure")) {
                             # Print prominent remediation block
                             if (-not $Json) {
                                 Write-Host "" -ForegroundColor Red
-                                Write-Host "  ╔══════════════════════════════════════════════════════════════╗" -ForegroundColor Red
-                                Write-Host "  ║  OVERRIDE ABUSE ALERT — ACTION REQUIRED                    ║" -ForegroundColor Red
-                                Write-Host "  ╚══════════════════════════════════════════════════════════════╝" -ForegroundColor Red
+                                Write-Host "  +==============================================================+" -ForegroundColor Red
+                                Write-Host "  |  OVERRIDE ABUSE ALERT - ACTION REQUIRED                    |" -ForegroundColor Red
+                                Write-Host "  +==============================================================+" -ForegroundColor Red
                                 Write-Host "  Violations: $($violations -join ' | ')" -ForegroundColor Yellow
                                 Write-Host "  Alert file: .logs/override-abuse-alert.json" -ForegroundColor Yellow
                                 Write-Host "  Remediation:" -ForegroundColor Cyan
@@ -472,13 +472,13 @@ if ($Json) {
 
     switch ($FinalResult) {
         "PASS" {
-            Write-Host "  RESULT: ALL CHECKS PASS — work verified clean." -ForegroundColor Green
+            Write-Host "  RESULT: ALL CHECKS PASS - work verified clean." -ForegroundColor Green
         }
         "PASS_WITH_WARNINGS" {
-            Write-Host "  RESULT: PASS with $Warnings warning(s) — review before closing." -ForegroundColor Yellow
+            Write-Host "  RESULT: PASS with $Warnings warning(s) - review before closing." -ForegroundColor Yellow
         }
         "FAIL" {
-            Write-Host "  RESULT: $Errors FAILURE(S) — fix before marking task done." -ForegroundColor Red
+            Write-Host "  RESULT: $Errors FAILURE(S) - fix before marking task done." -ForegroundColor Red
             Write-Host ""
             Write-Host "  FAILED CHECKS:" -ForegroundColor Red
             $Results | Where-Object { $_.status -eq "FAIL" } | ForEach-Object {

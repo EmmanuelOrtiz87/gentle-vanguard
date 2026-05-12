@@ -5,7 +5,15 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..\..')
+if ($env:FOUNDATION_BASE_DIR) {
+    $repoRoot = $env:FOUNDATION_BASE_DIR
+} else {
+    $searchDir = $PSScriptRoot
+    while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
+        $searchDir = Split-Path -Parent $searchDir
+    }
+    $repoRoot = $searchDir
+}
 $metricsPath = Join-Path $repoRoot 'docs/sessions/metrics/context-usage.csv'
 $sessionsDir = Join-Path $repoRoot 'docs/sessions'
 $windowStart = (Get-Date).AddHours(-1 * $WindowHours)

@@ -11,7 +11,15 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
+if ($env:FOUNDATION_BASE_DIR) {
+    $repoRoot = $env:FOUNDATION_BASE_DIR
+} else {
+    $searchDir = $PSScriptRoot
+    while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
+        $searchDir = Split-Path -Parent $searchDir
+    }
+    $repoRoot = $searchDir
+}
 $skillsFullPath = Join-Path $repoRoot $SkillsPath
 $configFullPath = Join-Path $repoRoot $OutputConfig
 

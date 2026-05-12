@@ -1,5 +1,5 @@
 # sdd-process-metrics.ps1
-# FF-002: SDD Process KPIs — spec coverage, lead time proxy, rework ratio.
+# FF-002: SDD Process KPIs - spec coverage, lead time proxy, rework ratio.
 #
 # Sources:
 #   - docs/backlog/items.json  (authoritative backlog)
@@ -23,7 +23,7 @@ $repoRoot   = (Resolve-Path (Join-Path $scriptDir '..\..\..\..')).Path
 $backlogPath = Join-Path $repoRoot 'docs\backlog\items.json'
 $sddDir      = Join-Path $repoRoot 'docs\sdd'
 
-# ─── Load backlog ────────────────────────────────────────────────────────────
+# --- Load backlog ------------------------------------------------------------
 $items = @()
 if (Test-Path $backlogPath) {
     try { $items = Get-Content $backlogPath -Raw -Encoding UTF8 | ConvertFrom-Json } catch {}
@@ -39,7 +39,7 @@ $discarded    = @($items | Where-Object { $_.status -eq 'discarded' }).Count
 $actionable = $totalItems - $discarded
 $specCoverage = if ($actionable -gt 0) { [math]::Round(($doneItems / $actionable) * 100, 1) } else { 0 }
 
-# ─── Lead time proxy ─────────────────────────────────────────────────────────
+# --- Lead time proxy ---------------------------------------------------------
 # Lead time = days from created_at to last linked_session date for done items.
 $leadTimes = @()
 foreach ($item in ($items | Where-Object { $_.status -eq 'done' -and $_.created_at })) {
@@ -57,7 +57,7 @@ $avgLeadTimeDays = if ($leadTimes.Count -gt 0) {
     [math]::Round(($leadTimes | Measure-Object -Average).Average, 1)
 } else { 0 }
 
-# ─── Rework ratio ─────────────────────────────────────────────────────────────
+# --- Rework ratio -------------------------------------------------------------
 # Items with more than 1 linked_session indicate rework (reopened/revisited).
 $reworkItems = @($items | Where-Object {
     $sessions = @($_.linked_sessions | Where-Object { $_ })
@@ -67,7 +67,7 @@ $reworkRatio = if ($doneItems -gt 0) {
     [math]::Round(($reworkItems / $doneItems) * 100, 1)
 } else { 0 }
 
-# ─── SDD document status ─────────────────────────────────────────────────────
+# --- SDD document status -----------------------------------------------------
 $sddDocs = @()
 if (Test-Path $sddDir) {
     foreach ($f in (Get-ChildItem -Path $sddDir -Filter '*.md' -File -EA SilentlyContinue)) {
@@ -81,12 +81,12 @@ if (Test-Path $sddDir) {
 $sddValidated = @($sddDocs | Where-Object { $_.status -in @('validated', 'done', 'active') }).Count
 $sddDraft     = @($sddDocs | Where-Object { $_.status -notin @('validated', 'done', 'active') }).Count
 
-# ─── Health signals ───────────────────────────────────────────────────────────
+# --- Health signals -----------------------------------------------------------
 $coverageHealth = if ($specCoverage -ge 70) { 'GREEN' } elseif ($specCoverage -ge 40) { 'YELLOW' } else { 'RED' }
 $reworkHealth   = if ($reworkRatio -le 20) { 'GREEN' } elseif ($reworkRatio -le 50) { 'YELLOW' } else { 'RED' }
 $sddHealth      = if ($sddValidated -ge 1) { 'GREEN' } elseif ($sddDocs.Count -gt 0) { 'YELLOW' } else { 'RED' }
 
-# ─── Result object ───────────────────────────────────────────────────────────
+# --- Result object -----------------------------------------------------------
 $result = [ordered]@{
     as_of              = (Get-Date -Format 'yyyy-MM-ddTHH:mm:ssK')
     backlog_total      = $totalItems
@@ -106,7 +106,7 @@ $result = [ordered]@{
     sdd_health         = $sddHealth
 }
 
-# ─── Output ──────────────────────────────────────────────────────────────────
+# --- Output ------------------------------------------------------------------
 if ($AsJson) {
     $result | ConvertTo-Json -Depth 4
     exit 0

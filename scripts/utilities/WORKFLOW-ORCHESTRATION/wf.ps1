@@ -1939,7 +1939,7 @@ switch ($Command) {
     }
 
     'judgment-day' {
-        Write-Step "Judgment Day — Dual-Review Adversarial Protocol"
+        Write-Step "Judgment Day - Dual-Review Adversarial Protocol"
 
         $jdScript = Join-Path $scriptDir 'judgment-day.ps1'
         if (-not (Test-Path $jdScript)) {
@@ -1954,11 +1954,11 @@ switch ($Command) {
         $exitCode = $LASTEXITCODE
 
         if ($exitCode -ne 0) {
-            Write-Error "Judgment Day found issues — escalation required"
+            Write-Error "Judgment Day found issues - escalation required"
             exit $exitCode
         }
 
-        Write-Success "Judgment Day complete — APPROVED"
+        Write-Success "Judgment Day complete - APPROVED"
     }
     
     'audit' {
@@ -2180,7 +2180,7 @@ switch ($Command) {
         if ($JSON) {
             & $routeScript -Mode gate -TaskType $taskType -AsJson
         } else {
-            Write-Step "Runtime Gate — task: $taskType"
+            Write-Step "Runtime Gate - task: $taskType"
             & $routeScript -Mode gate -TaskType $taskType
         }
     }
@@ -2431,7 +2431,7 @@ switch ($Command) {
     }
 
     'sdd-metrics' {
-        # FF-002: SDD process KPIs — spec coverage, lead time, rework ratio
+        # FF-002: SDD process KPIs - spec coverage, lead time, rework ratio
         $metricsScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\sdd-process-metrics.ps1'
         if (-not (Test-Path $metricsScript)) {
             Write-Error "sdd-process-metrics.ps1 not found: $metricsScript"
@@ -2443,7 +2443,7 @@ switch ($Command) {
     }
 
     'sync-drift' {
-        # FF-004: Sync drift report — declared config vs actual filesystem
+        # FF-004: Sync drift report - declared config vs actual filesystem
         $driftScript = Join-Path $repoRoot 'scripts\utilities\sync-drift-report.ps1'
         if (-not (Test-Path $driftScript)) {
             Write-Error "sync-drift-report.ps1 not found: $driftScript"

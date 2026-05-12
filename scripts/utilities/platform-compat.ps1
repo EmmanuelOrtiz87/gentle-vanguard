@@ -21,14 +21,14 @@
         Get-TempDir           - Platform-aware temp directory
 #>
 
-# ── Platform detection ────────────────────────────────────────────────────────
+# -- Platform detection --------------------------------------------------------
 function Get-Platform {
     if ($IsWindows -or $env:OS -eq 'Windows_NT') { return 'windows' }
     if ($IsMacOS)                                  { return 'macos' }
     return 'linux'
 }
 
-# ── Path helpers ──────────────────────────────────────────────────────────────
+# -- Path helpers --------------------------------------------------------------
 function Join-NativePath {
     param([string[]]$Parts)
     $sep = [System.IO.Path]::DirectorySeparatorChar
@@ -50,7 +50,7 @@ function Get-RepoRoot {
     return $StartDir
 }
 
-# ── Open file/URL cross-platform ──────────────────────────────────────────────
+# -- Open file/URL cross-platform ----------------------------------------------
 function Invoke-NativeOpen {
     param([string]$Path)
     $platform = Get-Platform
@@ -67,7 +67,7 @@ function Invoke-NativeOpen {
     }
 }
 
-# ── Locate pwsh ───────────────────────────────────────────────────────────────
+# -- Locate pwsh ---------------------------------------------------------------
 function Get-PwshPath {
     $candidates = @('pwsh', 'pwsh7', '/usr/bin/pwsh', '/usr/local/bin/pwsh', '/snap/bin/pwsh')
     foreach ($c in $candidates) {
@@ -78,13 +78,13 @@ function Get-PwshPath {
     return $null
 }
 
-# ── Command availability ──────────────────────────────────────────────────────
+# -- Command availability ------------------------------------------------------
 function Test-CommandAvailable {
     param([string]$Name)
     return [bool](Get-Command $Name -ErrorAction SilentlyContinue)
 }
 
-# ── Temp directory ────────────────────────────────────────────────────────────
+# -- Temp directory ------------------------------------------------------------
 function Get-TempDir {
     if ($env:TMPDIR)  { return $env:TMPDIR }
     if ($env:TEMP)    { return $env:TEMP }
@@ -94,14 +94,14 @@ function Get-TempDir {
     return '/tmp'
 }
 
-# ── Path separator normalizer for config JSON paths ──────────────────────────
+# -- Path separator normalizer for config JSON paths --------------------------
 function ConvertTo-NativePath {
     param([string]$Path)
     $sep = [System.IO.Path]::DirectorySeparatorChar
     return $Path -replace '[/\\]', [System.Text.RegularExpressions.Regex]::Escape($sep)
 }
 
-# ── Platform info string ──────────────────────────────────────────────────────
+# -- Platform info string ------------------------------------------------------
 function Get-PlatformInfo {
     $platform = Get-Platform
     $psver    = $PSVersionTable.PSVersion.ToString()

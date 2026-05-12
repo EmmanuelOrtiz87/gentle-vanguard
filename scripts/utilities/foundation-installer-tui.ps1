@@ -26,7 +26,7 @@ function Write-Log {
     switch ($Level) {
         "ERROR" { Write-Host "  [X] $Message" -ForegroundColor Red }
         "WARN"  { Write-Host "  [!] $Message" -ForegroundColor Yellow }
-        "SUCCESS" { Write-Host "  [✓] $Message" -ForegroundColor Green }
+        "SUCCESS" { Write-Host "  [[OK]] $Message" -ForegroundColor Green }
         default { Write-Host "  $Message" -ForegroundColor White }
     }
 }
@@ -48,12 +48,12 @@ $colorMenu = "White"
 function Write-Header {
     Clear-Host
     Write-Host ""
-    Write-Host "   ██████╗ ██╗   ██╗ ██████╗ ███╗   ██╗ ██████╗ " -ForegroundColor Cyan
-    Write-Host "   ██╔══██╗██║   ██║██╔═══██╗████╗  ██║██╔═══██╗" -ForegroundColor Cyan
-    Write-Host "   ██████╔╝██║   ██║██║    ██║██╔██╗ ██║██║    ██║" -ForegroundColor Cyan
-    Write-Host "   ██╔══██╗██║   ██║██║    ██║██║╚██╗██║██║    ██║" -ForegroundColor Cyan
-    Write-Host "   ██████╔╝╚██████╔╝╚██████╔╝██║ ╚████║╚██████╔╝" -ForegroundColor Cyan
-    Write-Host "   ╚═════╝  ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ " -ForegroundColor Cyan
+    Write-Host "   ######+ ##+   ##+ ######+ ###+   ##+ ######+ " -ForegroundColor Cyan
+    Write-Host "   ##+==##+##|   ##|##+===##+####+  ##|##+===##+" -ForegroundColor Cyan
+    Write-Host "   ######++##|   ##|##|    ##|##+##+ ##|##|    ##|" -ForegroundColor Cyan
+    Write-Host "   ##+==##+##|   ##|##|    ##|##|+##+##|##|    ##|" -ForegroundColor Cyan
+    Write-Host "   ######+++######+++######++##| +####|+######++" -ForegroundColor Cyan
+    Write-Host "   +=====+  +=====+  +=====+ +=+  +===+ +=====+ " -ForegroundColor Cyan
     Write-Host ""
     Write-Host "            Terminal-Based Setup Wizard" -ForegroundColor White
     Write-Host "                  v2.8.0" -ForegroundColor Green

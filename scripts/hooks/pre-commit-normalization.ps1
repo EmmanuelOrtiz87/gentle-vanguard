@@ -3,7 +3,15 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$repoRoot = Resolve-Path (Join-Path $PSScriptRoot '../../')
+if ($env:FOUNDATION_BASE_DIR) {
+    $repoRoot = $env:FOUNDATION_BASE_DIR
+} else {
+    $searchDir = $PSScriptRoot
+    while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
+        $searchDir = Split-Path -Parent $searchDir
+    }
+    $repoRoot = $searchDir
+}
 Set-Location $repoRoot
 
 function Test-ScriptNormalization {

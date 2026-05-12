@@ -142,7 +142,7 @@ function Invoke-PluginsDiscover {
         $status = if ($p.is_enabled) { '[*]' } else { '[ ]' }
         $hasMain = if ($p.has_main) { '*' } else { ' ' }
         Write-Host "$status $hasMain $($p.name) v$($p.version)" -ForegroundColor Green
-        Write-Host "       by $($p.author) — $($p.description)" -ForegroundColor Gray
+        Write-Host "       by $($p.author) - $($p.description)" -ForegroundColor Gray
         if ($p.commands.Count -gt 0) {
             Write-Host "       commands: $($p.commands -join ', ')" -ForegroundColor DarkGray
         }
@@ -171,7 +171,7 @@ function Invoke-PluginsList {
             Write-Host "       Commands:" -ForegroundColor Yellow
             foreach ($cmd in $p.commands) {
                 $cmdName = if ($cmd -is [PSCustomObject]) { $cmd.name } else { $cmd }
-                $cmdDesc = if ($cmd -is [PSCustomObject] -and $cmd.description) { " — $($cmd.description)" } else { '' }
+                $cmdDesc = if ($cmd -is [PSCustomObject] -and $cmd.description) { " - $($cmd.description)" } else { '' }
                 Write-Host "         - $cmdName$cmdDesc" -ForegroundColor Gray
             }
         }

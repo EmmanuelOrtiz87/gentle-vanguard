@@ -49,7 +49,15 @@ function Ensure-Directory {
     }
 }
 
-$workspaceRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..')).Path
+if ($env:FOUNDATION_BASE_DIR) {
+    $workspaceRoot = $env:FOUNDATION_BASE_DIR
+} else {
+    $searchDir = $PSScriptRoot
+    while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
+        $searchDir = Split-Path -Parent $searchDir
+    }
+    $workspaceRoot = $searchDir
+}
 $defaultDataRoot = Join-Path $workspaceRoot '.engram-data'
 
 if ([string]::IsNullOrWhiteSpace($ConfigPath)) {

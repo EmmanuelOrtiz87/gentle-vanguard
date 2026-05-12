@@ -1,6 +1,6 @@
 # engram-orchestrator.ps1
-# Orquestador con autonomía para manejar fallos de engram
-# Garantiza disponibilidad continua desde inicio hasta cierre de sesión
+# Orquestador con autonomia para manejar fallos de engram
+# Garantiza disponibilidad continua desde inicio hasta cierre de sesion
 
 param(
     [Parameter(Mandatory=$true)]
@@ -32,7 +32,7 @@ function Write-OrchSuccess {
     Write-Host "[OK] $Message" -ForegroundColor Green
 }
 
-# Función para detectar y resolver fallos de engram
+# Funcion para detectar y resolver fallos de engram
 function Resolve-EngramFailure {
     param([string]$FailureType)
     
@@ -68,7 +68,7 @@ function Resolve-EngramFailure {
     }
 }
 
-# Función para verificar salud de engram
+# Funcion para verificar salud de engram
 function Test-EngramHealth {
     $health = @{
         Installed = $false
@@ -77,7 +77,7 @@ function Test-EngramHealth {
         Status = "UNKNOWN"
     }
     
-    # Verificar instalación
+    # Verificar instalacion
     $engramPaths = @(
         "$HOME\bin\engram.exe",
         ".\workspace-foundation\tools\engram.exe",
@@ -92,7 +92,7 @@ function Test-EngramHealth {
         }
     }
     
-    # Verificar ejecución
+    # Verificar ejecucion
     $process = Get-Process -Name "engram" -ErrorAction SilentlyContinue
     if ($process) {
         $health.Running = $true
@@ -110,7 +110,7 @@ function Test-EngramHealth {
     return $health
 }
 
-# Función principal de orquestación
+# Funcion principal de orquestacion
 function Invoke-EngramOrchestration {
     param([string]$OrchAction)
     
@@ -124,7 +124,7 @@ function Invoke-EngramOrchestration {
         return $true
     }
     
-    # Resolución autónoma según el estado
+    # Resolucion autonoma segun el estado
     $resolved = $false
     switch ($health.Status) {
         "NOT_INSTALLED" {
@@ -150,24 +150,24 @@ function Invoke-EngramOrchestration {
     }
 }
 
-# Función para integrar con subagentes
+# Funcion para integrar con subagentes
 function Register-SubagentEngram {
     param([string]$SubagentName)
     
     Write-OrchStatus "Registering engram for subagent: $SubagentName"
     
-    # Verificar que engram esté disponible antes de registrar
+    # Verificar que engram este disponible antes de registrar
     $health = Test-EngramHealth
     if ($health.Status -ne "HEALTHY") {
         Write-OrchWarning "Engram not healthy, attempting to fix..."
         Invoke-EngramOrchestration -OrchAction "repair"
     }
     
-    # Aquí se registraría el subagente con engram
+    # Aqui se registraria el subagente con engram
     Write-OrchSuccess "Subagent $SubagentName registered with engram"
 }
 
-# Ejecutar acción solicitada
+# Ejecutar accion solicitada
 switch ($Action) {
     'check' {
         $health = Test-EngramHealth

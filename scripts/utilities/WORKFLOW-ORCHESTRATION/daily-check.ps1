@@ -8,17 +8,17 @@ Write-Output "=== Daily Foundation Check ==="
 Write-Output ""
 
 # Git status
-Write-Output "📍 Git Status:"
+Write-Output " Git Status:"
 & git status --short
 Write-Output ""
 
 # Quick verify
-Write-Output "✅ Stack Health:"
+Write-Output "[OK] Stack Health:"
 & $wfPath verify 2>&1 | Select-Object -First 15
 Write-Output ""
 
 # Context efficiency
-Write-Output "📊 Context Efficiency:"
+Write-Output " Context Efficiency:"
 & $wfPath status 2>&1 | Select-Object -First 10
 Write-Output ""
 

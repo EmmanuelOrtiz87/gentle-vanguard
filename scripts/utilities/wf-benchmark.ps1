@@ -1,11 +1,11 @@
 # wf-benchmark.ps1
-# FF-006: Local Workflow Performance — profiles key wf commands and compares
+# FF-006: Local Workflow Performance - profiles key wf commands and compares
 # against SLO thresholds. Emits advisory if any command exceeds its SLO.
 #
 # SLO defaults (configurable in config/testing.config.json under "benchmark"):
-#   status   ≤  5 s
-#   health   ≤ 15 s
-#   verify   ≤ 30 s
+#   status   <=  5 s
+#   health   <= 15 s
+#   verify   <= 30 s
 #
 # Usage:
 #   pwsh -File scripts/utilities/wf-benchmark.ps1
@@ -22,7 +22,7 @@ $scriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyI
 $repoRoot  = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 $wfScript  = Join-Path $repoRoot 'scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1'
 
-# ─── SLO defaults ────────────────────────────────────────────────────────────
+# --- SLO defaults ------------------------------------------------------------
 $sloDefaults = @{
     status = 5
     health = 15
@@ -48,7 +48,7 @@ if (-not $Commands -or $Commands.Count -eq 0) {
     $Commands = @('status', 'health')
 }
 
-# ─── Run benchmarks ───────────────────────────────────────────────────────────
+# --- Run benchmarks -----------------------------------------------------------
 $results = @()
 foreach ($cmd in $Commands) {
     $slo = if ($sloDefaults.ContainsKey($cmd)) { $sloDefaults[$cmd] } else { 30 }
@@ -93,7 +93,7 @@ foreach ($cmd in $Commands) {
     }
 }
 
-# ─── Persist to reports/ ──────────────────────────────────────────────────────
+# --- Persist to reports/ ------------------------------------------------------
 $reportsDir = Join-Path $repoRoot 'reports'
 if (-not (Test-Path $reportsDir)) { New-Item -ItemType Directory -Path $reportsDir -Force | Out-Null }
 $reportPath = Join-Path $reportsDir 'wf-benchmark.json'

@@ -1,12 +1,12 @@
 # check-sdd-gate.ps1
-# FF-001: SDD CI Hardening — validates that staged changes have an associated
+# FF-001: SDD CI Hardening - validates that staged changes have an associated
 # SDD document with status `validated` or `done` before allowing a commit/push
 # to protected branches (main, develop).
 #
 # Behaviour:
-#   - No SDD docs in docs/sdd/ → advisory (not blocking), warns author.
-#   - SDD found but status is 'draft' → blocking for main; advisory for develop.
-#   - SDD found with status 'validated' or 'done' → pass.
+#   - No SDD docs in docs/sdd/ -> advisory (not blocking), warns author.
+#   - SDD found but status is 'draft' -> blocking for main; advisory for develop.
+#   - SDD found with status 'validated' or 'done' -> pass.
 #   - Skips gate if commit is on a feature/bugfix/chore branch (not protected).
 #
 # Usage: called by pre-commit / pre-push hooks, or directly for local validation.
@@ -28,18 +28,18 @@ if (Test-Path $_classifier) { . $_classifier }
 $repoRoot = git rev-parse --show-toplevel 2>$null
 if (-not $repoRoot) { $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot) }
 
-# ─── Determine current branch ────────────────────────────────────────────────
+# --- Determine current branch ------------------------------------------------
 $branch = git rev-parse --abbrev-ref HEAD 2>$null
 $isProtected = $branch -in @('main', 'develop')
 $isMain = $branch -eq 'main'
 
 # If not on a protected branch, skip gate entirely
 if (-not $isProtected) {
-    _Wh "[SDD-GATE] Branch '$branch' is not protected — gate skipped." Gray
+    _Wh "[SDD-GATE] Branch '$branch' is not protected - gate skipped." Gray
     exit 0
 }
 
-# ─── Discover SDD docs ───────────────────────────────────────────────────────
+# --- Discover SDD docs -------------------------------------------------------
 $sddDir = Join-Path $repoRoot 'docs/sdd'
 if (-not (Test-Path $sddDir)) {
     if (Get-Command 'Add-AdvisoryFinding' -EA SilentlyContinue) {
@@ -62,7 +62,7 @@ if (-not $sddFiles -or $sddFiles.Count -eq 0) {
     }
 }
 
-# ─── Parse SDD statuses ──────────────────────────────────────────────────────
+# --- Parse SDD statuses ------------------------------------------------------
 $allStatuses = @()
 foreach ($sddFile in $sddFiles) {
     $content = Get-Content -Path $sddFile.FullName -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
@@ -85,12 +85,12 @@ $validDocs  = @($allStatuses | Where-Object { $_.Status -in @('validated', 'done
 
 _Wh "[SDD-GATE] Valid (validated/done/active): $($validDocs.Count) | Draft/Unknown: $($draftDocs.Count)" Cyan
 
-# ─── Gate decision ────────────────────────────────────────────────────────────
+# --- Gate decision ------------------------------------------------------------
 if ($validDocs.Count -eq 0 -and $draftDocs.Count -gt 0) {
     $draftList = ($draftDocs | ForEach-Object { "$($_.File) [status: $($_.Status)]" }) -join ', '
 
     if ($isMain) {
-        # main: blocking — must have at least one validated/done SDD
+        # main: blocking - must have at least one validated/done SDD
         if (Get-Command 'Add-BlockingFinding' -EA SilentlyContinue) {
             Add-BlockingFinding "SDD-GATE: No SDD with status 'validated' or 'done' found before merging to main. Drafts: $draftList"
             Exit-HookCheck "sdd-gate"
@@ -104,11 +104,11 @@ if ($validDocs.Count -eq 0 -and $draftDocs.Count -gt 0) {
             Add-AdvisoryFinding "SDD-GATE: All SDDs are in draft state on develop. Update spec status before merging to main. Drafts: $draftList"
             Exit-HookCheck "sdd-gate"
         } else {
-            _Wh "[SDD-GATE] ADVISORY: All SDDs are drafts — update before merging to main. Drafts: $draftList" Yellow
+            _Wh "[SDD-GATE] ADVISORY: All SDDs are drafts - update before merging to main. Drafts: $draftList" Yellow
             exit 0
         }
     }
 }
 
-_Wh "[SDD-GATE] PASS — at least one validated/done SDD present." Green
+_Wh "[SDD-GATE] PASS - at least one validated/done SDD present." Green
 exit 0

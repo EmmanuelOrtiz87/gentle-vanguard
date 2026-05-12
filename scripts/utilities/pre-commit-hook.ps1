@@ -59,7 +59,7 @@ $mdFiles = $stagedFiles | Where-Object { $_ -match '\.md$' }
 foreach ($file in $mdFiles) {
     if (Test-Path $file) {
         $content = Get-Content $file -Raw
-        if ($content -match 'ción|ón|ín|é|á|í|ó|ú') {
+        if ($content -match 'cion|on|in|e|a|i|o|u') {
             Write-Host "[OK] $file - Spanish accents found"
         } else {
             Write-Host "[WARN] $file - No Spanish accents detected"

@@ -46,7 +46,7 @@ if (-not $OutputDir) { $OutputDir = Join-Path $repoRoot 'reports' }
 if (-not (Test-Path $OutputDir)) { New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null }
 
 $sinceDate = $null
-if ($Since) { try { $sinceDate = [datetime]::Parse($Since) } catch { Write-Warning "Invalid -Since date: $Since — exporting all." } }
+if ($Since) { try { $sinceDate = [datetime]::Parse($Since) } catch { Write-Warning "Invalid -Since date: $Since - exporting all." } }
 
 function Read-JsonFile {
     param([string]$Path)
@@ -56,13 +56,13 @@ function Read-JsonFile {
     return $null
 }
 
-# ── Load sources ──────────────────────────────────────────────────────────────
+# -- Load sources --------------------------------------------------------------
 $metrics  = Read-JsonFile (Join-Path $repoRoot 'config\metrics-config.json')
 $orch     = Read-JsonFile (Join-Path $repoRoot 'config\orchestrator.json')
 $evHist   = Read-JsonFile (Join-Path $repoRoot '.event-bus\history.json')
 $rlState  = Read-JsonFile (Join-Path $repoRoot '.event-bus\rate-limit-state.json')
 
-# ── Build unified record set ──────────────────────────────────────────────────
+# -- Build unified record set --------------------------------------------------
 $records = [System.Collections.Generic.List[hashtable]]::new()
 
 # 1. Event history entries
@@ -150,7 +150,7 @@ if ($metrics -and $metrics.runtime_state) {
 
 Write-Host "[INFO] Total records to export: $($records.Count)" -ForegroundColor Cyan
 
-# ── Export functions ──────────────────────────────────────────────────────────
+# -- Export functions ----------------------------------------------------------
 function Export-ToCsv {
     $path = Join-Path $OutputDir 'metrics-export.csv'
     $header = 'source,timestamp,category,key,value,status,extra'
@@ -175,7 +175,7 @@ function Export-ToJsonl {
 function Export-ToSqlite {
     $dbPath = Join-Path $OutputDir 'metrics.db'
     if (-not (Get-Command sqlite3 -ErrorAction SilentlyContinue)) {
-        Write-Warning "[SKIP] sqlite3 not in PATH — skipping SQLite export. Install: https://sqlite.org/download.html"
+        Write-Warning "[SKIP] sqlite3 not in PATH - skipping SQLite export. Install: https://sqlite.org/download.html"
         return $null
     }
     # Create table if not exists
@@ -191,7 +191,7 @@ function Export-ToSqlite {
     return $dbPath
 }
 
-# ── Run exports ───────────────────────────────────────────────────────────────
+# -- Run exports ---------------------------------------------------------------
 switch ($Format) {
     'csv'    { Export-ToCsv | Out-Null }
     'jsonl'  { Export-ToJsonl | Out-Null }
