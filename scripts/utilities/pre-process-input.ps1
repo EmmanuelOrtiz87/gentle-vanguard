@@ -6,10 +6,45 @@ param(
     [string]$UserInput,
     [string]$SkillsPath = "skills",
     [string]$WorkspaceRoot = ".",
-    [switch]$DisableSkillFileFallback
+    [switch]$DisableSkillFileFallback,
+    [switch]$FromAgent
 )
 
 $ErrorActionPreference = 'Continue'
+
+# ============================================================================
+# SECURITY: Sanitize ALL input before processing (prevents prompt injection
+# and cross-agent data poisoning). When data comes FROM another agent,
+# apply strict mode with full sanitization + critical pattern blocking.
+# ============================================================================
+if (-not $FromAgent) {
+    # User input: sanitize for PII, secrets, and prompt injection patterns
+    $securityScript = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) '..\security\security-orchestrator.ps1'
+    if (Test-Path $securityScript) {
+        try {
+            $sanitized = & $securityScript -Action sanitize -Content $UserInput -Mode prompt -AsJson 2>$null | ConvertFrom-Json
+            if ($sanitized -and $sanitized.status -eq 'OK' -and $sanitized.sanitized) {
+                $UserInput = $sanitized.sanitized
+            }
+        } catch { }
+    }
+} else {
+    # Inter-agent data: full sanitize + critical pattern blocking
+    $securityScript = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) '..\security\security-orchestrator.ps1'
+    if (Test-Path $securityScript) {
+        try {
+            $sanitized = & $securityScript -Action sanitize -Content $UserInput -Mode prompt -AsJson 2>$null | ConvertFrom-Json
+            if ($sanitized -and $sanitized.status -eq 'OK' -and $sanitized.sanitized) {
+                $UserInput = $sanitized.sanitized
+            } elseif ($sanitized -and $sanitized.status -eq 'BLOCKED') {
+                Write-Output "TRIGGER_MATCH_FOUND"
+                Write-Output "SKILL: governance"
+                Write-Output "ACTION: Blocked by security - critical pattern in inter-agent data"
+                return @{ HasMatch = $true; Skill = 'governance'; Blocked = $true; Message = $sanitized.message }
+            }
+        } catch { }
+    }
+}
 
 $triggerMap = @{}
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -280,7 +315,10 @@ function Write-FlowGate {
     }
 }
 
+$sourceTag = if ($FromAgent) { 'AGENT' } else { 'USER' }
+
 if ($matchingSkill) {
+    Write-Output "SOURCE: $sourceTag"
     Write-Output "TRIGGER_MATCH_FOUND"
     Write-Output "SKILL: $matchingSkill"
     Write-Output "TRIGGER_MATCHED: $matchingTrigger"
@@ -290,6 +328,7 @@ if ($matchingSkill) {
     Write-FlowGate -Flows $unmappedFlows -Skill $matchingSkill
 } elseif ($fallbackStrategy -eq "clarify-ba" -and $confidenceScore -lt $lowConfidenceThreshold) {
     $baProfile = Resolve-AgentProfile -AgentCode "BA" -Profiles $agentProfiles
+    Write-Output "SOURCE: $sourceTag"
     Write-Output "PLAN_MODE_REQUIRED"
     Write-Output "CONFIDENCE: $confidenceScore"
     Write-Output "AGENT: BA"
@@ -302,6 +341,7 @@ if ($matchingSkill) {
         foreach ($q in $clarifyBaStrategy.questions) { Write-Output "  - $q" }
     }
 } else {
+    Write-Output "SOURCE: $sourceTag"
     Write-Output "NO_TRIGGER_MATCH"
     Write-Output "CONFIDENCE: $confidenceScore"
     Write-Output "ACTION: Continue with normal behavior"
