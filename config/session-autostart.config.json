@@ -6,6 +6,14 @@
   "pipeline": {
     "steps": [
       {
+        "id": "tool-detection",
+        "enabled": true,
+        "script": "scripts/utilities/detect-tool.ps1",
+        "args": "-AsJson",
+        "required": false,
+        "description": "Detect AI tool/agent and load tool-specific configuration"
+      },
+      {
         "id": "session-manager",
         "enabled": true,
         "script": "scripts/utilities/session-manager.ps1",
