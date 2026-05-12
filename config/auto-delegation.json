@@ -448,16 +448,27 @@
     "SESSION": [
       "iniciar sesión",
       "iniciar sesion",
+      "inicia sesion",
+      "inicia sesión",
+      "inicie sesion",
+      "inicie sesión",
       "start session",
       "guardar sesión",
       "guardar sesion",
+      "guarda sesion",
+      "guarda sesión",
       "continuar",
+      "continue",
       "estado",
+      "status",
       "cerrar sesion",
+      "cerrar sesión",
       "close session",
       "session end",
       "fin de sesion",
-      "finalizar sesion"
+      "fin de sesión",
+      "finalizar sesion",
+      "finalizar sesión"
     ],
     "DAILY": [
       "daily check",

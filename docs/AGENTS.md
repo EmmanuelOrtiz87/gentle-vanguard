@@ -1,8 +1,31 @@
 # 🤖 Workspace Agent Bootstrap (Agnostic)#
 
 <p align="center">
-  <b>Defines agent-agnostic startup behavior for this workspace</b>
+  <b>Defines agent-agnostic startup behavior for this workspace | TOOL-AGNOSTIC</b>
 </p>
+
+---
+
+## 🔧 Tool Detection Rule#
+
+**BEFORE** any other action, detect which AI tool is running:
+
+```powershell
+pwsh -NoProfile -File scripts/utilities/detect-tool.ps1 -AsJson
+```
+
+The detection script checks (in order):
+1. `$env:OPENCODE_SERVER_USERNAME` → opencode
+2. `$env:CLAUDE_VSCODE_VERSION` → claude-code
+3. `.clinerules` file → cline
+4. `.cursorrules` file → cursor
+5. `.windsurf/` directory → windsurf
+
+Based on the detected tool, load the correct config from `config/orchestrator.json#toolProfiles`.
+
+> **CRITICAL**: This file (`AGENTS.md`) is the canonical tool-agnostic entry point.  
+> Do NOT rely on `CLAUDE.md`, `.clinerules`, or `.cursorrules` as primary bootstrap —  
+> those are tool-specific and may be incomplete.
 
 ---
 
