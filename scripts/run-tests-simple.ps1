@@ -1,7 +1,8 @@
 # run-tests-simple.ps1
 # Multi-category test runner for Pester
 
-$testDir = "C:\Workspace_local\workspace-foundation\tests"
+$script:root = $PSScriptRoot | Split-Path -Parent
+$testDir = Join-Path $script:root "tests"
 $passed = 0
 $failed = 0
 $total = 0

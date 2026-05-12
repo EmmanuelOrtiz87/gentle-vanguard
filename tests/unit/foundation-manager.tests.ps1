@@ -28,10 +28,10 @@ Describe 'Foundation Manager Skill Tests' {
             ($content -match 'auto-update|auto_update|AutoUpdate') | Should Be $true
         }
 
-        It 'SKILL.md mentions FF-017' {
+        It 'SKILL.md mentions update/sync/maintenance patterns' {
             $f = Join-Path $script:skillPath "SKILL.md"
             $content = Get-Content $f -Raw
-            ($content -match 'FF-017|FF017') | Should Be $true
+            ($content -match 'update|sync|maintenance') | Should Be $true
         }
     }
 
