@@ -1,4 +1,4 @@
-﻿param(
+param(
     [ValidateSet('telemetry', 'health-checks', 'dashboard', 'all')]
     [string]$Component = 'all',
     [switch]$Enable

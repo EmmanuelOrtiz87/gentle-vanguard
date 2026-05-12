@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
 Comprehensive end-to-end validation of entire Foundation system
 

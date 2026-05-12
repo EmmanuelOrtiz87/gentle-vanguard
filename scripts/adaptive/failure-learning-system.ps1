@@ -10,10 +10,21 @@ param(
     [string]$FailureType,
     [string]$Context,
     [string]$Resolution,
-    [string]$LearningDb = ".\workspace-foundation\scripts\adaptive\.failure-learning.json"
+    [string]$LearningDb = ''
 )
 
 $ErrorActionPreference = "Continue"
+
+$repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) { $env:FOUNDATION_BASE_DIR } else {
+    $root = Split-Path -Parent $PSScriptRoot
+    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
+    if (-not $root) { $root = $PSScriptRoot }
+    $root
+}
+
+if (-not $LearningDb) {
+    $LearningDb = Join-Path $repoRoot 'scripts\adaptive\.failure-learning.json'
+}
 
 # Inicializar base de datos de aprendizaje
 function Initialize-LearningDb {

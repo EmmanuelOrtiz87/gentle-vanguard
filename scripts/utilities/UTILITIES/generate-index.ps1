@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Generates and updates INDEX.md automatically
 

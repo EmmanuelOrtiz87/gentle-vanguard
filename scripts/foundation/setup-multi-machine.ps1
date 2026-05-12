@@ -46,14 +46,20 @@ function Ensure-GitRepo {
 
     Write-Info "Updating $RepoSlug at $TargetPath"
     Push-Location $TargetPath
+    $prevEAP = $ErrorActionPreference
     try {
-        git fetch origin --prune
+        $ErrorActionPreference = 'Continue'
+        git fetch origin --prune 2>$null
+        if ($LASTEXITCODE -ne 0) { throw "Failed to fetch $RepoSlug" }
         $remoteHead = git symbolic-ref refs/remotes/origin/HEAD 2>$null
         $defaultBranch = if ($remoteHead) { $remoteHead -replace '^refs/remotes/origin/', '' } else { 'main' }
         git checkout $defaultBranch 2>$null
-        git pull --rebase origin $defaultBranch
+        if ($LASTEXITCODE -ne 0) { throw "Failed to checkout $defaultBranch" }
+        git pull --rebase origin $defaultBranch 2>$null
+        if ($LASTEXITCODE -ne 0) { throw "Failed to pull $RepoSlug" }
     }
     finally {
+        $ErrorActionPreference = $prevEAP
         Pop-Location
     }
 }

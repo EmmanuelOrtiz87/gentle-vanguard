@@ -1,4 +1,4 @@
-﻿# extract-engram-json.ps1
+# extract-engram-json.ps1
 # Extracts pure JSON from engram export output (which prints summary text first)
 
 param(

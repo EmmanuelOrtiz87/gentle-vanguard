@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Judgment Day Integration Bridge
     
@@ -37,8 +37,12 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$repoRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot = (Resolve-Path (Join-Path $repoRoot '..')).Path
+$repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) { $env:FOUNDATION_BASE_DIR } else {
+    $root = Split-Path -Parent $PSScriptRoot
+    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
+    if (-not $root) { $root = $PSScriptRoot }
+    $root
+}
 
 $judgmentDir = Join-Path $repoRoot "docs\judgment"
 $bridgeLog = Join-Path $repoRoot ".session\judgment-bridge-log.json"

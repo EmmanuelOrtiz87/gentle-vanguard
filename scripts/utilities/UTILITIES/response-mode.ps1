@@ -22,8 +22,15 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..\..')).Path
+if ($env:FOUNDATION_BASE_DIR) {
+    $repoRoot = $env:FOUNDATION_BASE_DIR
+} else {
+    $searchDir = $PSScriptRoot
+    while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
+        $searchDir = Split-Path -Parent $searchDir
+    }
+    $repoRoot = $searchDir
+}
 $configPath = Join-Path $repoRoot 'config\orchestrator.json'
 
 function Get-DefaultConfig {
@@ -244,7 +251,7 @@ function Save-ResponseModeObservation {
         return
     }
 
-    $runEngramScript = Join-Path $scriptDir 'run-engram.ps1'
+    $runEngramScript = Join-Path $PSScriptRoot 'run-engram.ps1'
     if (-not (Test-Path $runEngramScript)) {
         return
     }

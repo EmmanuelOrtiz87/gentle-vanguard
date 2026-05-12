@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Token Telemetry - Real-time token usage tracking
     
