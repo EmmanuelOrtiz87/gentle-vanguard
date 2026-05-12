@@ -236,18 +236,29 @@ workflows.
 
 ## References
 
-| Resource             | Path                                                   |
-| -------------------- | ------------------------------------------------------ |
-| Routing config       | `config/auto-delegation.json`                          |
-| DAG phases           | `config/adaptive-dag-config.json`                      |
-| Security policy      | `config/security-policy.json` + `config/security-privacy.json` |
-| Hook config          | `config/hooks-config.json`                             |
-| Testing config       | `config/testing.config.json`                           |
-| Structure policy     | `config/structure-policy.json`                         |
-| Orchestrator         | `config/orchestrator.json`                             |
-| Development standards| `rules/DEVELOPMENT-STANDARDS.md`                      |
-| Code standards       | `rules/NORMATIVAS-CODIGO.md`                          |
-| Error handling       | `rules/NORMATIVAS-ERROR-HANDLING.md`                  |
-| Performance & Efficiency | `rules/NORMATIVAS-PERFORMANCE.md`                  |
-| Session Lifecycle    | `rules/NORMATIVAS-SESSION.md`                         |
-| Self-verification    | `scripts/utilities/agent-verify.ps1`                   |
+| Resource | Path |
+| -------- | ---- |
+| Routing config | `config/auto-delegation.json` |
+| DAG phases | `config/adaptive-dag-config.json` |
+| Security policy | `config/security-policy.json` + `config/security-privacy.json` |
+| Hook config | `config/hooks-config.json` |
+| Testing config | `config/testing.config.json` |
+| Structure policy | `config/structure-policy.json` |
+| Orchestrator | `config/orchestrator.json` |
+| Development standards | `rules/DEVELOPMENT-STANDARDS.md` |
+| Code standards | `rules/NORMATIVAS-CODIGO.md` |
+| Error handling | `rules/NORMATIVAS-ERROR-HANDLING.md` |
+| Performance & Efficiency | `rules/NORMATIVAS-PERFORMANCE.md` |
+| Session Lifecycle | `rules/NORMATIVAS-SESSION.md` |
+| **Accessibility (WCAG 2.2)** | `docs/NORMATIVAS-ACCESIBILIDAD.md` |
+| **I18n/L10n Standards** | `docs/NORMATIVAS-I18N-L10N.md` |
+| **ISO/IEC 25010 Quality** | `docs/NORMATIVAS-ISO25010.md` |
+| **ISO/IEC 27001 Controls** | `docs/NORMATIVAS-ISO27001.md` |
+| **SRE Practices** | `docs/NORMATIVAS-SRE.md` |
+| **Chaos Engineering** | `docs/NORMATIVAS-CHAOS-ENGINEERING.md` |
+| **API Design Standards** | `docs/NORMATIVAS-API-DESIGN.md` |
+| **SBOM Validation** | `docs/NORMATIVAS-SBOM.md` |
+| PSScriptAnalyzer Config | `config/PSScriptAnalyzerSettings.psd1` |
+| ESLint Config | `.eslintrc.json` |
+| TypeScript Config | `tsconfig.json` |
+| Self-verification | `scripts/utilities/agent-verify.ps1` |

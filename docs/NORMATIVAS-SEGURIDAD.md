@@ -105,6 +105,10 @@ cumplir estos controles o documentar desvio aprobado.
 
 - OWASP LLM Top 10 2025: genai.owasp.org/resource/owasp-top-10-for-llm-applications-2025
 - OWASP Agentic Top 10 2026: genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026
-- OWASP AI Agent Security Cheat Sheet:
-  cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html
-- Config: config/security-hardening.json
+- OWASP AI Agent Security Cheat Sheet: cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html
+- ISO/IEC 27001 Controls Mapping: `docs/NORMATIVAS-ISO27001.md`
+- ISO/IEC 25010 Quality Mapping: `docs/NORMATIVAS-ISO25010.md`
+- SBOM Validation: `docs/NORMATIVAS-SBOM.md`
+- Config: `config/security-hardening.json`
+- Security Policy: `config/security-policy.json`
+- Security Privacy: `config/security-privacy.json`

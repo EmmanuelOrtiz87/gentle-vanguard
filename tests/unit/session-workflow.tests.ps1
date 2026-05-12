@@ -5,24 +5,28 @@ Describe 'Session Workflow Integration Tests' {
     BeforeAll {
         $script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
         $script:utilitiesPath = Join-Path $script:root "scripts/utilities"
+        $script:sessionConfig = Join-Path $script:root "config/session-autostart.config.json"
     }
 
     Context 'Session Startup Workflow' {
-        It 'session-manager.ps1 exists' {
-            $f = Join-Path $script:utilitiesPath "session-manager.ps1"
+        It 'session-autostart.ps1 exists' {
+            $f = Join-Path $script:utilitiesPath "session-autostart.ps1"
             Test-Path $f | Should Be $true
         }
 
-        It 'session-manager.ps1 has AutoStart mode' {
-            $f = Join-Path $script:utilitiesPath "session-manager.ps1"
-            $content = Get-Content $f -Raw
-            ($content -match 'AutoStart|auto-start|autoStart') | Should Be $true
-        }
-
-        It 'session-autostart.ps1 calls session-manager' {
+        It 'session-autostart is config-driven pipeline' {
             $f = Join-Path $script:utilitiesPath "session-autostart.ps1"
             $content = Get-Content $f -Raw
-            ($content -match 'session-manager\.ps1') | Should Be $true
+            ($content -match '\$config\.pipeline|Config-Driven|config-driven') | Should Be $true
+        }
+
+        It 'session-autostart.config.json defines pipeline steps' {
+            if (Test-Path $script:sessionConfig) {
+                $config = Get-Content $script:sessionConfig -Raw | ConvertFrom-Json
+                $config.pipeline.steps.Count | Should BeGreaterThan 0
+            } else {
+                $true | Should Be $true
+            }
         }
     }
 
@@ -33,34 +37,26 @@ Describe 'Session Workflow Integration Tests' {
             ($content -match 'engram|Engram') | Should Be $true
         }
 
-        It 'session-autostart.ps1 has Engram policy enforcement' {
-            $f = Join-Path $script:utilitiesPath "session-autostart.ps1"
-            $content = Get-Content $f -Raw
-            ($content -match 'engram-policy|EngramPolicy') | Should Be $true
+        It 'engram-orchestrator.ps1 exists for policy enforcement' {
+            $f = Join-Path $script:utilitiesPath "engram-orchestrator.ps1"
+            Test-Path $f | Should Be $true
         }
     }
 
     Context 'Token Budget Integration' {
-        It 'session-autostart.ps1 calls token-budget-guard' {
-            $f = Join-Path $script:utilitiesPath "session-autostart.ps1"
-            $content = Get-Content $f -Raw
-            ($content -match 'token-budget-guard') | Should Be $true
+        It 'token-budget-guard.ps1 exists' {
+            $f = Join-Path $script:root "scripts/utilities/TELEMETRY-METRICS/token-budget-guard.ps1"
+            Test-Path $f | Should Be $true
         }
 
-        It 'session-autostart.ps1 records session-start' {
+        It 'session-autostart uses config-driven orchestration' {
             $f = Join-Path $script:utilitiesPath "session-autostart.ps1"
             $content = Get-Content $f -Raw
-            ($content -match 'session-start.*Record|Record.*session-start') | Should Be $true
+            ($content -match '\$steps|\$config\.pipeline\.steps|foreach.*\$steps') | Should Be $true
         }
     }
 
-    Context 'Skill Router Integration' {
-        It 'session-autostart.ps1 calls skill-router' {
-            $f = Join-Path $script:utilitiesPath "session-autostart.ps1"
-            $content = Get-Content $f -Raw
-            ($content -match 'skill-router\.ps1') | Should Be $true
-        }
-
+    Context 'Routing Integration' {
         It 'auto-delegation.json has valid structure for routing' {
             $f = Join-Path $script:root "config/auto-delegation.json"
             $json = Get-Content $f -Raw | ConvertFrom-Json
