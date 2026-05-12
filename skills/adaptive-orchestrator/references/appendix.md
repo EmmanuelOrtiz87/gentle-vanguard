@@ -42,7 +42,7 @@ Session Event (Start/Close)
 ## Quick Test (Verify All Systems)
 
 ```powershell
-cd .\workspace-foundation
+cd .\foundation
 .\scripts\adaptive\auto-backup-orchestrator.ps1 -Action check -VerboseOutput
 .\scripts\adaptive\auto-norm-enforcer.ps1 -Trigger manual -AutoFix
 .\scripts\adaptive\auto-norm-learner.ps1 -Trigger manual

@@ -1,6 +1,6 @@
-﻿# AI Tools Compatibility Matrix
+# AI Tools Compatibility Matrix
 
-This document tracks feature parity across all supported AI tools in workspace-foundation.
+This document tracks feature parity across all supported AI tools in foundation.
 
 ## Core Features Matrix
 

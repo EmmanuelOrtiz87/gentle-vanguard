@@ -5,7 +5,7 @@
 After refactoring (April 2026), Foundation uses ONE single source of truth for each category:
 
 ```
-workspace-foundation/
+foundation/
  config/                 #  Single config location (was: .workspace/config/)
  docs/                  #  Documentation (no duplicates)
  hooks/                 #  Git hooks (unified)

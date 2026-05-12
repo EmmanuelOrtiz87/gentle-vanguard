@@ -6,7 +6,7 @@ description:
   sessions: context packing, compact-start, session handoff, and metrics tracking.'
 license: Apache-2.0
 metadata:
-  author: workspace-foundation
+  author: foundation
   versión: '1.0'
 ---
 

@@ -1,6 +1,6 @@
 # Reference Card Demo 07 Mixed Cookbook
 
-**Workspace:** `.\workspace-foundation` **Proyecto demo:** `demos/shared/task-tracker/`
+**Workspace:** `.\foundation` **Proyecto demo:** `demos/shared/task-tracker/`
 
 ---
 

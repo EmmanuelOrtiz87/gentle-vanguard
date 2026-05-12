@@ -19,7 +19,7 @@
     .\auto-norm-learner-simple.ps1 -Trigger session-close -VerboseOutput
     
 .NOTES
-    Author: workspace-foundation
+    Author: foundation
     Version: 1.0.0 (Simplified)
 #>
 

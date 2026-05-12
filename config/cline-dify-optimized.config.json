@@ -7,7 +7,7 @@
     "status": "OPTIMIZED",
     "targetReduction": "40-50%",
     "expectedTokenSavings": "significant",
-    "notes": "Fully aligned with workspace-foundation local-first policy"
+    "notes": "Fully aligned with foundation local-first policy"
   },
   "provider": {
     "type": "dify",

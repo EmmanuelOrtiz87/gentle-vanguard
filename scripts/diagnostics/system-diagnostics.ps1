@@ -100,7 +100,7 @@ $hasBootstrap = Test-Path (Join-Path $repoRoot 'scripts\foundation\bootstrap.ps1
 if ($hasAngular -and $hasGo) {
     $diagnostics.projectType = 'bitbucket-dashboard'
 } elseif ($hasBootstrap) {
-    $diagnostics.projectType = 'workspace-foundation'
+    $diagnostics.projectType = 'foundation'
 }
 
 Write-Diag ''

@@ -6,7 +6,7 @@ description: >
   READMEs, RFCs, onboarding docs, architecture docs, or review-facing documentation.
 license: Apache-2.0
 metadata:
-  author: workspace-foundation (adapted for Foundation)
+  author: foundation (adapted for Foundation)
   version: '1.0'
 ---
 

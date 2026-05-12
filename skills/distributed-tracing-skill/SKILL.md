@@ -8,7 +8,7 @@ trigger: tracing, telemetry, distributed, correlation, span
 
 ## Descripcin
 
-Este skill proporciona capacidades de tracing distribuido para el workspace-foundation, permitiendo
+Este skill proporciona capacidades de tracing distribuido para el foundation, permitiendo
 rastrear la ejecucin de dispatches, orchestration y automatización con:
 
 - **OpenTelemetry Integration**: Implementacin compatible con estndares de observabilidad

@@ -20,7 +20,7 @@ if (-not $Source) {
     $possibleSources = @(
         (Join-Path (Split-Path -Parent $scriptDir) 'skills'),
         (Join-Path $scriptDir '..\skills'),
-        ".\workspace-foundation\skills"
+        ".\foundation\\skills"
     )
     
     foreach ($loc in $possibleSources) {

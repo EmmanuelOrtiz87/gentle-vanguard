@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide covers the autonomous systems in workspace-foundation.
+This guide covers the autonomous systems in foundation.
 
 ## Systems
 

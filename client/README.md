@@ -63,5 +63,5 @@ Foundation engine and core algorithms are:
 ## Support
 
 - Docs: https://foundation.dev/docs
-- Issues: https://github.com/EmmanuelOrtiz87/gentleman-foundation/issues
+- Issues: https://github.com/EmmanuelOrtiz87/foundation/issues
 - Email: support@foundation.dev

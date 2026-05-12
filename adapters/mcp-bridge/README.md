@@ -70,7 +70,7 @@ Foundation exposes these tools via MCP:
       "command": "node",
       "args": ["/absolute/path/to/adapters/mcp-bridge/dist/server.js"],
       "env": {
-        "FOUNDATION_ROOT": "/path/to/workspace-foundation"
+        "FOUNDATION_ROOT": "/path/to/foundation"
       }
     }
   }

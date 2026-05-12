@@ -20,7 +20,7 @@
     .\auto-norm-enforcer.ps1 -Trigger session-start -AutoFix
     
 .NOTES
-    Author: workspace-foundation
+    Author: foundation
     Version: 1.0.0
 #>
 

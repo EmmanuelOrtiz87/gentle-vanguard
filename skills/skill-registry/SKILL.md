@@ -7,7 +7,7 @@ description: >
   installing/removing skills.
 license: MIT
 metadata:
-  author: workspace-foundation
+  author: foundation
   versión: '1.0'
 ---
 

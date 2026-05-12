@@ -8,7 +8,7 @@ param(
     [string]$Period = "7days",
     [ValidateSet("markdown", "json", "console")]
     [string]$Format = "markdown",
-    [string]$ProjectRoot = ".\workspace-foundation"
+    [string]$ProjectRoot = ".\foundation"
 )
 
 $ErrorActionPreference = 'Continue'
@@ -16,7 +16,7 @@ $ErrorActionPreference = 'Continue'
 function Get-ProjectRoot {
     $scriptRoot = $PSScriptRoot
     if ($scriptRoot -match 'scripts[\\]utilities$') {
-        return ".\workspace-foundation"
+        return ".\foundation"
     }
     return $scriptRoot
 }

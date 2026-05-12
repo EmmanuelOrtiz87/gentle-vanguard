@@ -1,6 +1,6 @@
-﻿{
+{
   "workspace": {
-    "name": "workspace-foundation",
+    "name": "foundation",
     "version": "1.0.0",
     "type": "foundation",
     "root": "."

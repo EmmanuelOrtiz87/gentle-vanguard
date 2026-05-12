@@ -115,7 +115,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **Go auto-install**: `install-prerequisites.ps1` — checks via `go version`, installs via
   `winget install GoLang.Go`
 - **Engram auto-install**: `install-prerequisites.ps1` — checks via `engram`, installs via
-  `go install github.com/workspace-foundation/engram/cmd/engram@latest`
+  `go install github.com/foundation/engram/cmd/engram@latest`
 - **TUI installer**: Interactive prompts for Go and Engram installation post-clone
 - **sync-to-public.ps1**: Now copies `CONTRIBUTING.md`, `SECURITY.md`, `CHANGELOG.md` to public repo
 
@@ -133,7 +133,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 #### 📚 Documentation#
 
-- **README.md**: URLs updated from `anomalyco/workspace-foundation` to
+- **README.md**: URLs updated from `anomalyco/foundation` to
   `EmmanuelOrtiz87/foundation-public`
 - **BOARD-SUPPLEMENT.md**: Repo URLs updated — both public and private repos listed
 - **CONTRIBUTING.md**: Clone URL updated to `foundation-public`
@@ -155,7 +155,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 #### 🧹 Workspace Homologation#
 
 - 52 stale files at `C:\Workspace_local\` root archived to `_archive/`
-- `C:\Workspace_local\` now contains only: `workspace-foundation`, `foundation-public`,
+- `C:\Workspace_local\` now contains only: `foundation`, `foundation-public`,
   `bitbucket-dashboard`, and system dirs
 
 ---

@@ -1,5 +1,5 @@
 # Fix Spanish accents in all markdown files
-$basePath = ".\workspace-foundation"
+$basePath = ".\foundation"
 $totalFixed = 0
 
 Get-ChildItem -Path $basePath -Filter *.md -Recurse | ForEach-Object {

@@ -3,7 +3,7 @@
 # Now performs REAL cleanup: removes duplicates, old entries, and optimizes storage
 
 param(
-    [string]$ProjectName = 'gentleman-foundation',
+    [string]$ProjectName = 'foundation',
     [switch]$AutoApply = $false,
     [int]$KeepRecentDays = 7
 )

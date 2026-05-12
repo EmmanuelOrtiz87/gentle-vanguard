@@ -244,7 +244,9 @@
       "communicationLang": "es",
       "supportsSkillTool": true,
       "supportsMemTools": true,
-      "note": "OpenCode uses CLAUDE.md by convention but canonical entry is AGENTS.md"
+      "detectFirst": true,
+      "mandatoryStartup": "scripts/utilities/session-autostart.cmd",
+      "note": "CLAUDE.md is auto-loaded by OpenCode — contains immediate detect-tool.ps1 directive atop"
     },
     "claude-code": {
       "promptFile": "CLAUDE.md",

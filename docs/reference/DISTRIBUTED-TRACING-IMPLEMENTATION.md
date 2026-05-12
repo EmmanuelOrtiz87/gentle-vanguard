@@ -2,7 +2,7 @@
 
 ## Descripcin General de la Mejora
 
-Se ha implementado un **sistema completo de distributed tracing** para el workspace-foundation que
+Se ha implementado un **sistema completo de distributed tracing** para el foundation que
 soluciona el GAP identificado: "No hay tracing distribuido de dispatches".
 
 ### Problema Identificado
@@ -338,7 +338,7 @@ Se ha implementado exitosamente un **sistema completo de distributed tracing** q
 7.  Incluye **documentacin completa** para uso
 
 El sistema est **100% funcional** y listo para ser utilizado en todos los componentes del
-workspace-foundation.
+foundation.
 
 ---
 

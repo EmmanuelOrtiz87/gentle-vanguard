@@ -85,8 +85,8 @@ function Update-Foundation {
     if (-not $Source) {
         $possibleSources = @(
             $repoRoot,
-            ".\workspace-foundation",
-            ".\gentleman-foundation"
+            ".\foundation",
+            ".\foundation"
         )
         
         foreach ($src in $possibleSources) {

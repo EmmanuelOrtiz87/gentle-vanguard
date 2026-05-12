@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env bash
+#!/usr/bin/env bash
 # scripts/foundation/setup.sh - Universal Gentleman Foundation Stack Setup
 # Works on: Linux, macOS, Windows (WSL, Git Bash, MSYS2)
 # No dependencies except bash, git, and go
@@ -110,7 +110,7 @@ detect_project_type() {
     if [ -f "$PROJECT_ROOT/go.mod" ] && [ -f "$PROJECT_ROOT/angular.json" ]; then
         echo "bitbucket-dashboard"
     elif [ -f "$PROJECT_ROOT/scripts/foundation/bootstrap.ps1" ]; then
-        echo "workspace-foundation"
+        echo "foundation"
     else
         echo "unknown"
     fi

@@ -16,7 +16,7 @@ Este documento describe el proceso completo para homologar (sincronizar) el repo
 ### Paso 1: Encriptar el stack
 
 ```powershell
-cd C:\Workspace_local\workspace-foundation
+cd C:\Workspace_local\foundation
 pwsh -NoProfile -File "build\protect-foundation.ps1" -CompileEXE
 ```
 

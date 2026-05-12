@@ -55,7 +55,7 @@ Add to `~/.config/opencode/settings.json`:
         "args": [
           "-NoProfile",
           "-Command",
-          "C:/Workspace_local/workspace-foundation/hooks/pre-tool-format.ps1 -FilePath {{file}}"
+          "C:/Workspace_local/foundation/hooks/pre-tool-format.ps1 -FilePath {{file}}"
         ]
       }
     ]
@@ -76,7 +76,7 @@ hooks:
       args:
         - -NoProfile
         - -Command
-        - C:/Workspace_local/workspace-foundation/hooks/pre-tool-format.ps1
+        - C:/Workspace_local/foundation/hooks/pre-tool-format.ps1
         - -FilePath
         - '{{file}}'
 ```
@@ -100,7 +100,7 @@ Add to `.claude/skills/` or project-level hook:
   "args": [
     "-NoProfile",
     "-Command",
-    "C:/Workspace_local/workspace-foundation/hooks/pre-tool-format.ps1",
+    "C:/Workspace_local/foundation/hooks/pre-tool-format.ps1",
     "-FilePath",
     "{{file}}"
   ]
@@ -122,7 +122,7 @@ Create VS Code task in `.vscode/tasks.json`:
       "args": [
         "-NoProfile",
         "-Command",
-        "C:/Workspace_local/workspace-foundation/hooks/pre-tool-format.ps1",
+        "C:/Workspace_local/foundation/hooks/pre-tool-format.ps1",
         "-FilePath",
         "${file}"
       ],
@@ -257,10 +257,10 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 ```powershell
 # Install to current project
-Copy-Item ".\workspace-foundation\hooks\pre-tool-format.ps1" ".git\hooks\pre-tool-format.ps1"
+Copy-Item ".\foundation\\hooks\pre-tool-format.ps1" ".git\hooks\pre-tool-format.ps1"
 
 # Or link for foundation updates
-New-Item -ItemType SymbolicLink -Path ".git\hooks\pre-tool-format.ps1" -Target ".\workspace-foundation\hooks\pre-tool-format.ps1"
+New-Item -ItemType SymbolicLink -Path ".git\hooks\pre-tool-format.ps1" -Target ".\foundation\\hooks\pre-tool-format.ps1"
 ```
 
 ---

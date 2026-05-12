@@ -24,7 +24,7 @@ param(
     [string]$Components = 'all',
     
     [Parameter(Mandatory=$false)]
-    [string]$ProjectName = "gentleman-foundation"
+    [string]$ProjectName = "foundation"
 )
 
 $ErrorActionPreference = 'Continue'

@@ -1,6 +1,6 @@
 # Skill Registry (Auto-Resolved)
 
-This file defines the enforceable skills and compact rules for the workspace-foundation project.
+This file defines the enforceable skills and compact rules for the foundation project.
 
 ## 5-Layer Topology Mapping
 

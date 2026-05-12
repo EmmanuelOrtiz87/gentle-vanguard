@@ -679,7 +679,7 @@ Rotation is automated on `end-session` and `day-end-closure`.
 ### 9.1 Directory Structure
 
 ```
-workspace-foundation/
+foundation/
 
  .github/                          # GitHub specific
     ISSUE_TEMPLATE/
@@ -716,7 +716,7 @@ workspace-foundation/
           commit-msg
 
  skills/                           # AI Skills
-    workspace-foundation/
+    foundation/
     code-review-orchestrator/
     security-expert/
     testing-skill/

@@ -6,7 +6,7 @@ description: >
   "rich preview"
 license: Apache-2.0
 metadata:
-  author: workspace-foundation
+  author: foundation
   versión: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task
 ---

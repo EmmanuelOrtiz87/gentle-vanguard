@@ -85,7 +85,7 @@ Priority 5: Plugin Ecosystem      [███████████░░] 70%
 
 ### References
 
-- [Foundation Repository](https://github.com/EmmanuelOrtiz87/gentleman-foundation)
+- [Foundation Repository](https://github.com/EmmanuelOrtiz87/foundation)
 - [Documentation](../docs/README.md)
 - [Skills Catalog](../docs/reference/SKILL-ORGANIZATION.md)
 

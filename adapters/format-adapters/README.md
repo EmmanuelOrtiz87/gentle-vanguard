@@ -1,4 +1,4 @@
-﻿# Format Adapters
+# Format Adapters
 
 Translate between Foundation's standard format and tool-specific formats for tools that don't
 support MCP.
@@ -59,7 +59,7 @@ node adapters/format-adapters/windsurf-adapter/adapter.js \
 # Start proxy server (OpenAI-compatible endpoint)
 node adapters/format-adapters/codex-adapter/proxy.js \
   --port 8080 \
-  --foundation-root /path/to/workspace-foundation
+  --foundation-root /path/to/foundation
 
 # Codex can now call: POST http://localhost:8080/v1/functions
 ```
@@ -69,7 +69,7 @@ node adapters/format-adapters/codex-adapter/proxy.js \
 ```bash
 # Generate Mission Control config
 node adapters/format-adapters/antigravity-adapter/adapter.js \
-  --foundation-root /path/to/workspace-foundation \
+  --foundation-root /path/to/foundation \
   --output ~/.antigravity/mission-control.json
 ```
 

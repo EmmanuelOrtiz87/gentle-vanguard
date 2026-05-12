@@ -53,7 +53,7 @@ if (-not (Test-Path $ConfigFile)) {
 $OrchestratorPath = $null
 $skillCandidates = @(
     Join-Path $ProjectRoot '.skills\project-orchestrator-skill',
-    Join-Path $ProjectRoot '.workspace-foundation\skills\project-orchestrator-skill',
+    Join-Path $ProjectRoot '.foundation\\skills\project-orchestrator-skill',
     Join-Path $ProjectRoot 'skills\project-orchestrator-skill'
 )
 
@@ -83,7 +83,7 @@ if ($OrchestratorPath) {
     Write-Success "Orchestrator skill found: $OrchestratorPath"
 } else {
     Write-Host "Orchestrator skill not found in expected locations." -ForegroundColor Yellow
-    Write-Host "Check '.skills/' or '.workspace-foundation/skills/' and validate the project setup." -ForegroundColor Yellow
+    Write-Host "Check '.skills/' or '.foundation/skills/' and validate the project setup." -ForegroundColor Yellow
 }
 
 if (Test-Path $ActivationFile) {

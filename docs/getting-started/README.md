@@ -45,8 +45,8 @@
 ### Step 1: Clone the Repository
 
 ```powershell
-git clone https://github.com/EmmanuelOrtiz87/gentleman-foundation.git
-cd gentleman-foundation
+git clone https://github.com/EmmanuelOrtiz87/foundation.git
+cd foundation
 ```
 
 ### Step 2: Bootstrap Your Machine
@@ -95,5 +95,5 @@ wf sync-drift      # Detect drift between foundation and projects
 
 <p align="center">
   <b>🚀 Ready to start?</b><br>
-  <code>git clone https://github.com/EmmanuelOrtiz87/gentleman-foundation.git</code>
+  <code>git clone https://github.com/EmmanuelOrtiz87/foundation.git</code>
 </p>

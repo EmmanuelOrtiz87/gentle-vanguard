@@ -184,7 +184,7 @@ Timestamp: $timestamp
 
 Context preserved before cleanup operation.
 "@
-        & $engramBin save --title "Pre-Cleanup Context Save" --content $summaryContent --project "gentleman-foundation" --type manual 2>$null | Out-Null
+        & $engramBin save --title "Pre-Cleanup Context Save" --content $summaryContent --project "foundation" --type manual 2>$null | Out-Null
         if ($LASTEXITCODE -eq 0) {
             Write-Log "Context saved to Engram" "info"
         } else {

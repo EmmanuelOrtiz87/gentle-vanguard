@@ -5,7 +5,7 @@ description:
   protocol using two blind judge sub-agents, synthesis, fix, and re-judge cycle.'
 license: Apache-2.0
 metadata:
-  author: workspace-foundation
+  author: foundation
   version: '1.4'
 ---
 

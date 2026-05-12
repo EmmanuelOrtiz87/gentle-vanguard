@@ -1,7 +1,7 @@
-# fix-all-markdown.ps1 - Comprehensive markdown fix for workspace-foundation
+# fix-all-markdown.ps1 - Comprehensive markdown fix for foundation
 # Fixes: Spanish accents, broken links, code blocks, emojis, tables, formatting
 
-$basePath = ".\workspace-foundation"
+$basePath = ".\foundation"
 $totalFiles = 0
 $fixedFiles = 0
 

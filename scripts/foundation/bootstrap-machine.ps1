@@ -70,11 +70,11 @@ Write-Host ""
 
 if (-not $Source) {
     $possibleSources = @(
-        ".\workspace-foundation",
         ".\foundation",
-        (Join-Path (Split-Path -Parent $PSScriptRoot) "workspace-foundation"),
+        ".\foundation",
         (Join-Path (Split-Path -Parent $PSScriptRoot) "foundation"),
-        (Join-Path (Split-Path -Parent $PSScriptRoot) "gentleman-foundation")
+        (Join-Path (Split-Path -Parent $PSScriptRoot) "foundation"),
+        (Join-Path (Split-Path -Parent $PSScriptRoot) "foundation")
     )
     
     foreach ($src in $possibleSources) {

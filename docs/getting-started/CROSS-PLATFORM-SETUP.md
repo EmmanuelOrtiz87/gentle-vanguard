@@ -309,7 +309,7 @@ go env GOPATH
 Manually install:
 
 ```bash
-go install github.com/workspace-foundation/engram/cmd/engram@latest
+go install github.com/foundation/engram/cmd/engram@latest
 ```
 
 ### Problem: "Wrong shell detected"

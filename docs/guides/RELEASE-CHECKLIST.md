@@ -87,7 +87,7 @@ quality.
   - [ ] LICENSE file present and unchanged (or updated if needed)
   - [ ] CODEOWNERS file current (if using code ownership rules)
   - [ ] No security warnings from GitHub:
-        https://github.com/EmmanuelOrtiz87/workspace-foundation/security
+        https://github.com/EmmanuelOrtiz87/foundation/security
 
 - [ ] **No Secrets Exposed**
   - [ ] Run `git log --all --full-history --oneline` and scan for suspicious commits
@@ -115,7 +115,7 @@ quality.
 ### Step 1: Create Release Branch
 
 ```powershell
-cd .\workspace-foundation
+cd .\foundation
 git checkout -b release/v1.0.0
 ```
 
@@ -126,7 +126,7 @@ Edit `CHANGELOG.md`:
 - Change `## [Unreleased]` to `## [1.0.0] - 2026-04-13`
 - Ensure all changes are listed
 - Add link at bottom:
-  `[1.0.0]: https://github.com/EmmanuelOrtiz87/workspace-foundation/releases/tag/v1.0.0`
+  `[1.0.0]: https://github.com/EmmanuelOrtiz87/foundation/releases/tag/v1.0.0`
 
 ### Step 3: Commit Release
 
@@ -189,7 +189,7 @@ gh release create v1.0.0 --target main \
   --notes "First stable release. See CHANGELOG.md for full details."
 ```
 
-Or use GitHub UI: https://github.com/EmmanuelOrtiz87/workspace-foundation/releases/new
+Or use GitHub UI: https://github.com/EmmanuelOrtiz87/foundation/releases/new
 
 ### Step 7: Sync Back to Develop (Optional)
 

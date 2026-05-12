@@ -14,7 +14,7 @@
 ## Descripcin General
 
 El **Distributed Tracing Skill** proporciona un sistema completo de observabilidad para el
-workspace-foundation, permitiendo rastrear la ejecucin de dispatches, orchestration y automatización
+foundation, permitiendo rastrear la ejecucin de dispatches, orchestration y automatización
 con:
 
 - **Correlation IDs**: Identificadores nicos para rastrear operaciónes a travs de mltiples
