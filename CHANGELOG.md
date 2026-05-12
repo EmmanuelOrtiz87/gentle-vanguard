@@ -34,6 +34,31 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [2.8.2] - 2026-05-10#
+
+### ✨ Added#
+
+- **Model Router v2.1.0**: 29-agent model-router with pipeline fixes and doc updates
+- **14 custom agents**: Added Go-tier custom agents with model assignments
+- **Portable multi-machine bootstrap**: Setup scripts for PC migration and runner installation
+- **Session GitHub bypass**: Permanent enforcement of GitHub bypass at session start
+- **Judgment Day paths**: Auto-generated paths added to `.gitignore`
+
+### 🔄 Changed#
+
+- **CI/CD optimization**: GHA workflow triggers optimized, pre-push hooks aligned
+- **Sync workflows**: Consolidated sync steps, fixed PAT_SYNC auth and hardcoded branch
+- **Dependencies**: Bumped `github/codeql-action` v3→v4, `actions/labeler` v5→v6, `actions/cache` v4→v5
+- **Gitleaks allowlist**: Expanded for security-expert-skill, fixed format
+- **Prettier config**: Added `.prettierignore`, excluded ps1/template/lefthook/package-lock
+
+### 🛠️ Fixed#
+
+- **GHA job permissions**: Added `actions:read` for CodeQL SARIF upload, `contents:read` to SAST
+- **Sync errors**: Resolved `sync-public PAT_SYNC error` and hardcoded branch reference
+
+---
+
 ## [2.8.1] - 2026-05-08#
 
 ### ✨ Added#
