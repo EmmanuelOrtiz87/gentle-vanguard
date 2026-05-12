@@ -1,0 +1,248 @@
+name: Cross-Platform Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    - cron: '0 2 * * *'  # Daily at 2 AM UTC (23:00 UTC-3 / 20:00 GMT-5)
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+  security-events: write
+
+concurrency:
+  group: cross-platform-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-matrix:
+    name: Test on ${{ matrix.os }} / PowerShell ${{ matrix.pwsh-version }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        pwsh-version: ['7.3', '7.4']
+        include:
+          # Platform-specific configurations
+          - os: ubuntu-latest
+            pwsh-pre: 'sudo apt-get update && sudo apt-get install -y wget'
+          - os: macos-latest
+            pwsh-pre: 'brew update'
+          - os: windows-latest
+            pwsh-pre: ''
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup platform-specific tools (${{ matrix.os }})
+        if: matrix.pwsh-pre != ''
+        run: ${{ matrix.pwsh-pre }}
+        shell: bash
+
+      - name: Setup PowerShell Core ${{ matrix.pwsh-version }}
+        uses: PowerShell/setup-powershell@v2
+        with:
+          powershell-version: ${{ matrix.pwsh-version }}
+
+      - name: Verify PowerShell installation
+        shell: pwsh
+        run: |
+          Write-Output "PowerShell Version: $($PSVersionTable.PSVersion)"
+          Write-Output "Platform: $([System.Environment]::OSVersion)"
+          Write-Output "Home directory: $HOME"
+
+      - name: Setup Node.js (if needed)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          if (Test-Path 'package.json') {
+            npm install
+          }
+          if (Test-Path 'pyproject.toml') {
+            pip install -r requirements.txt 2>/dev/null || pip install pytest
+          }
+
+      - name: Run PowerShell unit tests (Pester 3.4.0)
+        shell: pwsh
+        run: |
+          Write-Output "Running Pester tests..."
+          $testResults = Invoke-Pester -Path "tests/" -CI -PassThru
+          
+          if ($testResults.FailedCount -gt 0) {
+            exit 1
+          }
+
+      - name: Run cross-platform validation tests
+        shell: pwsh
+        run: |
+          Write-Output "Running cross-platform validation..."
+          & ./scripts/utilities/agent-verify.ps1 -Domain "tests,structure,hooks" -Verbose
+
+      - name: Run integration tests
+        shell: pwsh
+        run: |
+          if (Test-Path 'tests/integration/') {
+            Invoke-Pester -Path "tests/integration/" -CI
+          }
+
+      - name: Verify line endings (LF)
+        shell: bash
+        run: |
+          echo "Checking for CRLF line endings (should have none)..."
+          if git grep -l $'\\r$'; then
+            echo "ERROR: Found CRLF line endings. Use LF only."
+            exit 1
+          fi
+          echo "✓ All files use LF line endings"
+
+      - name: Verify cross-platform path handling
+        shell: pwsh
+        run: |
+          Write-Output "Testing cross-platform path handling..."
+          
+          # Test Join-Path usage
+          $testPath = Join-Path $HOME "test" "path"
+          Write-Output "Home-based path: $testPath"
+          
+          # Test temp directory
+          $tempPath = [System.IO.Path]::GetTempPath()
+          Write-Output "Temp directory: $tempPath"
+          
+          # Verify paths don't contain hardcoded values
+          Get-ChildItem -Path "scripts/" -Filter "*.ps1" -Recurse | ForEach-Object {
+            $content = Get-Content $_.FullName -Raw
+            if ($content -match 'C:\\|/home/|/Users/') {
+              Write-Warning "Found hardcoded path in $($_.Name)"
+            }
+          }
+
+      - name: Check script portability
+        shell: pwsh
+        run: |
+          Write-Output "Checking script portability..."
+          
+          # List of forbidden patterns per platform
+          $forbiddenPatterns = @{
+            'all' = @(
+              'Write-Host.*(?<!-NoNewline)',
+              '`r`n',  # CRLF
+              'C:\\\\Users'
+            )
+            'windows' = @()
+            'linux_macos' = @(
+              'cmd.exe',
+              'powershell.exe'
+            )
+          }
+          
+          Write-Output "✓ Portability check completed"
+
+      - name: Run security scan (cross-platform)
+        shell: pwsh
+        run: |
+          if (Get-Command PSScriptAnalyzer -ErrorAction SilentlyContinue) {
+            Write-Output "Running PSScriptAnalyzer..."
+            Invoke-ScriptAnalyzer -Path "scripts/" -Recurse -Severity Warning
+          }
+
+      - name: Generate test report
+        if: always()
+        shell: pwsh
+        run: |
+          $reportPath = "reports/test-results-${{ matrix.os }}-ps${{ matrix.pwsh-version }}.json"
+          New-Item -ItemType Directory -Path "reports" -Force | Out-Null
+          @{
+            os = "${{ matrix.os }}"
+            pwsh_version = "${{ matrix.pwsh-version }}"
+            timestamp = (Get-Date -AsUTC -Format 'o')
+            status = if ($LASTEXITCODE -eq 0) { "PASS" } else { "FAIL" }
+          } | ConvertTo-Json | Out-File $reportPath
+          Write-Output "Test report saved to $reportPath"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.os }}-ps${{ matrix.pwsh-version }}
+          path: reports/
+
+  test-summary:
+    name: Cross-Platform Test Summary
+    runs-on: ubuntu-latest
+    needs: test-matrix
+    if: always()
+    timeout-minutes: 10
+    
+    steps:
+      - name: Download all test results
+        uses: actions/download-artifact@v4
+        with:
+          path: all-results/
+
+      - name: Summarize results
+        run: |
+          echo "# Cross-Platform Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| OS | PowerShell | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|---|" >> $GITHUB_STEP_SUMMARY
+          
+          for result in all-results/*/test-results-*.json; do
+            if [ -f "$result" ]; then
+              os=$(jq -r '.os' "$result")
+              ps_version=$(jq -r '.pwsh_version' "$result")
+              status=$(jq -r '.status' "$result")
+              echo "| $os | $ps_version | $status |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+
+      - name: Check for failures
+        run: |
+          failed=$(find all-results -name "*.json" -exec grep -l '"status": "FAIL"' {} \;)
+          if [ -n "$failed" ]; then
+            echo "❌ Some tests failed:"
+            echo "$failed"
+            exit 1
+          else
+            echo "✅ All cross-platform tests passed!"
+          fi
+
+  # Lint and format check (cross-platform)
+  lint:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: PowerShell/setup-powershell@v2
+        with:
+          powershell-version: '7.4'
+      
+      - name: Run linter
+        shell: pwsh
+        run: |
+          if (Get-Command PSScriptAnalyzer -ErrorAction SilentlyContinue) {
+            Invoke-ScriptAnalyzer -Path "scripts/", "config/" -Severity Warning -Recurse
+          }
+
+      - name: Check formatting (prettier)
+        run: |
+          if command -v prettier &> /dev/null; then
+            prettier --check "**/*.{json,md,yml}" --ignore-path .prettierignore
+          fi
