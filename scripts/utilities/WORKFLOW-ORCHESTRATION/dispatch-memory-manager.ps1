@@ -1,4 +1,4 @@
-﻿# dispatch-memory-manager.ps1
+# dispatch-memory-manager.ps1
 # Gestor de memoria persistente para dispatch-agent
 # Integra Engram con el sistema de dispatch para mantener contexto entre ejecuciones
 

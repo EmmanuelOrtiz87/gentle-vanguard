@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Autonomous Backup & Recovery Orchestrator with Encryption
     

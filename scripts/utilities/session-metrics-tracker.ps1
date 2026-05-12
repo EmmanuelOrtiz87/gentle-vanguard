@@ -7,7 +7,7 @@ param(
     [ValidateSet("start", "update", "end", "status")]
     [string]$Action,
     [string]$SessionId,
-    [string]$ProjectRoot = ".\workspace-foundation",
+    [string]$ProjectRoot = "",
     [int]$InputTokens = 0,
     [int]$OutputTokens = 0,
     [int]$ContextChars = 0,
@@ -19,6 +19,15 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
+
+if (-not $ProjectRoot) {
+    $ProjectRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) { $env:FOUNDATION_BASE_DIR } else {
+        $root = Split-Path -Parent $PSScriptRoot
+        while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
+        if (-not $root) { $root = $PSScriptRoot }
+        $root
+    }
+}
 
 $metricsDir = Join-Path $ProjectRoot ".session\metrics"
 $stateFile = Join-Path $metricsDir "current-session.json"
@@ -81,8 +90,8 @@ switch ($Action) {
         
         $data = Get-Content $stateFile -Raw | ConvertFrom-Json
         
-        $data.lastUpdate = (Get-Date -Format "yyyy-MM-ddTHH:mm:ss")
-        $data.status = "active"
+        $data | Add-Member -NotePropertyName 'lastUpdate' -NotePropertyValue (Get-Date -Format "yyyy-MM-ddTHH:mm:ss") -Force
+        $data | Add-Member -NotePropertyName 'status' -NotePropertyValue 'active' -Force
         
         if ($InputTokens -gt 0) { $data.metrics.inputTokens += $InputTokens }
         if ($OutputTokens -gt 0) { $data.metrics.outputTokens += $OutputTokens }
@@ -108,12 +117,12 @@ switch ($Action) {
         $data = Get-Content $stateFile -Raw | ConvertFrom-Json
         
         $endTime = Get-Date
-        $data.endTime = $endTime.ToString("yyyy-MM-ddTHH:mm:ss")
-        $data.lastUpdate = $endTime.ToString("yyyy-MM-ddTHH:mm:ss")
-        $data.status = "completed"
+        $data | Add-Member -NotePropertyName 'endTime' -NotePropertyValue ($endTime.ToString("yyyy-MM-ddTHH:mm:ss")) -Force
+        $data | Add-Member -NotePropertyName 'lastUpdate' -NotePropertyValue ($endTime.ToString("yyyy-MM-ddTHH:mm:ss")) -Force
+        $data | Add-Member -NotePropertyName 'status' -NotePropertyValue 'completed' -Force
         
         $startTime = [DateTime]::Parse($data.startTime)
-        $data.durationSeconds = [math]::Round(($endTime - $startTime).TotalSeconds, 0)
+        $data | Add-Member -NotePropertyName 'durationSeconds' -NotePropertyValue ([math]::Round(($endTime - $startTime).TotalSeconds, 0)) -Force
         
         $sessionFile = Join-Path $ProjectRoot ".session\$($data.sessionId).json"
         if (Test-Path $sessionFile) {

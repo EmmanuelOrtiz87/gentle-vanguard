@@ -9,6 +9,8 @@ param(
     [switch]$DisableSkillFileFallback
 )
 
+$ErrorActionPreference = 'Continue'
+
 $triggerMap = @{}
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $workspaceRoot = if ($PSBoundParameters.ContainsKey("WorkspaceRoot") -and $WorkspaceRoot -ne ".") {

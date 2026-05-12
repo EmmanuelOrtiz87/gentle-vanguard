@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Enhanced Event Bus - Integrates governance, validation, and audit capabilities
     

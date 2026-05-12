@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Telemetry Dashboard - View and manage distributed tracing data
     

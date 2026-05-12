@@ -11,10 +11,21 @@ param(
     [string]$CodePath = ".",
     [string]$SessionId = $env:SESSION_ID,
     [string]$EngramPath = "$HOME\bin\engram.exe",
-    [string]$FailureLearningDb = ".\workspace-foundation\scripts\adaptive\.failure-learning.json"
+    [string]$FailureLearningDb = ''
 )
 
 $ErrorActionPreference = "Continue"
+
+$repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) { $env:FOUNDATION_BASE_DIR } else {
+    $root = Split-Path -Parent $PSScriptRoot
+    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
+    if (-not $root) { $root = $PSScriptRoot }
+    $root
+}
+
+if (-not $FailureLearningDb) {
+    $FailureLearningDb = Join-Path $repoRoot 'scripts\adaptive\.failure-learning.json'
+}
 
 function Write-KarpathyOrch {
     param([string]$Message)

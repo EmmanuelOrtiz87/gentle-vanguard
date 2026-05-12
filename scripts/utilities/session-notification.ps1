@@ -3,11 +3,13 @@
 
 param(
     [string]$SessionId = '',
-    [string]$TimeZone = 'Argentina Standard Time',  # Default: Argentina GMT-3
+    [string]$TimeZone = 'Argentina Standard Time',
     [int]$PeakStart = 9,
     [int]$PeakEnd = 15,
     [string]$Region = 'Argentina'
 )
+
+$ErrorActionPreference = 'Continue'
 
 function Get-LocalizedTime {
     param([string]$TimeZoneId)

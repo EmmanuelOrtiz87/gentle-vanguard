@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Orchestrator for automatic optimization and monitoring
 
