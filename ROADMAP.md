@@ -52,6 +52,6 @@ seguro, extensible, zero-drama.**
 | Version | Date       | Highlights                                                                                      |
 | ------- | ---------- | ----------------------------------------------------------------------------------------------- |
 | v2.8.0  | 2026-05-08 | CI/CD pipeline, Lefthook v2, security hardening, Go/Engram auto-install, workspace homologation |
-| v2.7.0  | 2026-05-06 | Marketing materials, documentation standards, 125+ skills                                       |
+| v2.7.0  | 2026-05-06 | Marketing materials, documentation standards, 127 skills                                       |
 | v2.6.5  | 2026-05-05 | CI hardening, rules, PSScriptAnalyzer, release workflow                                         |
 | v2.6.0  | 2026-05-05 | SDD CI gate, metrics, sync drift prevention, benchmarks                                         |
