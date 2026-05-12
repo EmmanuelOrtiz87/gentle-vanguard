@@ -113,3 +113,5 @@ keys/
 
 # Runtime audit logs
 .logs/
+
+*.lib
