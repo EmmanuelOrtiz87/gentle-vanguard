@@ -1,7 +1,7 @@
 # NORMATIVAS-ORQUESTADOR.md
 
 Versión: 2.0.0  
-Autor: workspace-foundation  
+Autor: foundation  
 Fecha: 2026-05-09
 
 ---
@@ -9,7 +9,7 @@ Fecha: 2026-05-09
 ## 1. PROPÓSITO
 
 Este documento define las normativas, reglas y restricciones que **TODO** agente y subagente debe
-respetar en el workspace `workspace-foundation`.
+respetar en el workspace `foundation`.
 
 ---
 

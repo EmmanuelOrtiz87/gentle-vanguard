@@ -24,7 +24,7 @@ Gentleman Foundation es una **plataforma de orquestación de agentes de IA** loc
 | Skills disponibles | 125 skills bajo demanda |
 | Backlog oficial | 7/7 items completados (FF-001 a FF-013) |
 | Sync drift | CLEAN — 0 drifts detectados |
-| Homologación workspace_local | **EN PROGRESO** — `workspace-foundation` sincronizado; `bitbucket-dashboard` bloqueado por manifest legacy + working tree sucio |
+| Homologación workspace_local | **EN PROGRESO** — `foundation` sincronizado; `bitbucket-dashboard` bloqueado por manifest legacy + working tree sucio |
 
 **Propuesta de valor central:**
 - Reducción de re-trabajo mediante routing inteligente de agentes especializados
@@ -453,7 +453,7 @@ El backlog oficial está vacío. Las siguientes áreas son sugerencias de madure
 
 ### 9.1 ¿Qué es la homologación workspace_local?
 
-Propagar los assets, skills, scripts y configuraciones de `gentleman-foundation` a todos los proyectos bajo `C:\Workspace_local\` para que operen con el mismo estándar de gobernanza, calidad y observabilidad.
+Propagar los assets, skills, scripts y configuraciones de `foundation` a todos los proyectos bajo `C:\Workspace_local\` para que operen con el mismo estándar de gobernanza, calidad y observabilidad.
 
 ### 9.2 Estado actual — Prerequisites
 
@@ -476,7 +476,7 @@ Los bloqueadores iniciales ya fueron resueltos en esta sesión. Los bloqueadores
 
 1. **agent-verify no llega a 14/14 por working tree dirty** — el stack ya valida funcionalmente, pero el warning de `uncommitted-changes` no desaparece sin commit o stash.
 
-2. **`bitbucket-dashboard` tiene manifest consumer legacy** — su `config/foundation-sync.json` todavía referencia 5 sources que no existen en `workspace-foundation` (`rotate-artifacts.ps1`, `day-end-closure.ps1`, `end-session.ps1`, `judgment-day.ps1`, `token-telemetry-report.ps1`).
+2. **`bitbucket-dashboard` tiene manifest consumer legacy** — su `config/foundation-sync.json` todavía referencia 5 sources que no existen en `foundation` (`rotate-artifacts.ps1`, `day-end-closure.ps1`, `end-session.ps1`, `judgment-day.ps1`, `token-telemetry-report.ps1`).
 
 3. **`bitbucket-dashboard` tiene working tree sucio** — aplicar `foundation-sync` ahí hoy sería riesgoso porque mezclaría la homologación con cambios locales no relacionados.
 
@@ -487,10 +487,10 @@ Los bloqueadores iniciales ya fueron resueltos en esta sesión. Los bloqueadores
 2. [DONE] Actualizar `foundation-sync.json` (catálogo validado, v2.6.5)
 3. [DONE] Agregar test de integración (routing + asset catalog + wrapper)
 4. [PARTIAL] `agent-verify` PASS with warnings; benchmark PASS
-5. [PARTIAL] `sync-drift` CLEAN; `workspace-foundation` sincronizado; `bitbucket-dashboard` pendiente por dirty tree + manifest legacy
+5. [PARTIAL] `sync-drift` CLEAN; `foundation` sincronizado; `bitbucket-dashboard` pendiente por dirty tree + manifest legacy
 ```
 
-**Estado post-sesión:** `workspace-foundation` quedó alineado con `gentleman-foundation` (`foundation-sync check` = sin cambios requeridos). La homologación completa de `workspace_local` requiere una sesión aparte para sanear el manifest y el working tree de `bitbucket-dashboard`.
+**Estado post-sesión:** `foundation` quedó alineado con `foundation` (`foundation-sync check` = sin cambios requeridos). La homologación completa de `workspace_local` requiere una sesión aparte para sanear el manifest y el working tree de `bitbucket-dashboard`.
 
 ---
 
@@ -527,5 +527,5 @@ git add . && git commit -m "feat: ..."
 ---
 
 *Gentleman Foundation v2.6.5 rev.2 — Local-First AI Orchestration Platform*  
-*Generado: 2026-05-05 | Rev. 2: 2026-05-05 | Repo: https://github.com/EmmanuelOrtiz87/gentleman-foundation*  
+*Generado: 2026-05-05 | Rev. 2: 2026-05-05 | Repo: https://github.com/EmmanuelOrtiz87/foundation*  
 *agent-verify: 14/14 PASS | sync-drift: CLEAN | backlog: 7/7 done*

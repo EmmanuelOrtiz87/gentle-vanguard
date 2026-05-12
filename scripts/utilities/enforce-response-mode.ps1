@@ -24,7 +24,7 @@
     Enforces maximum 5 lines per response
     
 .NOTES
-    Author: workspace-foundation
+    Author: foundation
     Version: 1.0
 #>
 

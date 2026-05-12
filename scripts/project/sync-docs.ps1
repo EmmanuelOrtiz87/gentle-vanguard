@@ -23,7 +23,7 @@ $repoRoot = if ($scriptDir) {
 
 $foundationRoot = $env:GENTLEMAN_ROOT
 if (-not $foundationRoot) {
-    $candidate = ".\workspace-foundation"
+    $candidate = ".\foundation"
     if (Test-Path $candidate) {
         $foundationRoot = $candidate
     }
@@ -31,7 +31,7 @@ if (-not $foundationRoot) {
 
 if (-not $foundationRoot) {
     Write-Host "[ERROR] Foundation root not found" -ForegroundColor Red
-    Write-Host "Set `$env:GENTLEMAN_ROOT or ensure .\workspace-foundation exists" -ForegroundColor Yellow
+    Write-Host "Set `$env:GENTLEMAN_ROOT or ensure .\foundation exists" -ForegroundColor Yellow
     exit 1
 }
 

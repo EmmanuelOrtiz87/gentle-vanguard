@@ -15,7 +15,7 @@ system** that runs with minimal manual intervention. The stack is checked and re
 ### Option 1: New Project
 
 ```powershell
-# In the workspace-foundation root
+# In the foundation root
 .\scripts\utilities\wf.ps1 init-stack
 
 # Or in the bitbucket-dashboard root
@@ -127,7 +127,7 @@ mkdir my-new-project
 cd my-new-project
 
 # Copy template
-Copy-Item -Path "c:\workspace-foundation\*" -Destination . -Recurse
+Copy-Item -Path "c:\foundation\\*" -Destination . -Recurse
 
 # Initialize stack
 .\scripts\utilities\wf.ps1 init-stack

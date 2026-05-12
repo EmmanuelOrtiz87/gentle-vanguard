@@ -65,7 +65,7 @@ function Get-EngramStats {
 function Get-SessionStats {
     Write-Host "Analizando sesiones..." -ForegroundColor Yellow
     
-    $sessionDocs = "workspace-foundation\docs\sessions"
+    $sessionDocs = "foundation\\docs\sessions"
     if (-not (Test-Path $sessionDocs)) {
         return "No se encontraron documentos de sesion"
     }

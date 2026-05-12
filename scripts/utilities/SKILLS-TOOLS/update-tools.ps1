@@ -2,7 +2,7 @@
 # Updates all foundation tools on the local machine.
 #
 # Tool installation:
-#   engram           - go install github.com/workspace-foundation/engram/cmd/engram@latest
+#   engram           - go install github.com/foundation/engram/cmd/engram@latest
 #   opencode         - installer script, package manager, npm, or manual binary install
 
 param(
@@ -89,12 +89,12 @@ function Test-Go {
 
 #  Version comparison helpers 
 
-# Fetches the latest release tag from a GitHub repo (e.g. "workspace-foundation/engram")
+# Fetches the latest release tag from a GitHub repo (e.g. "foundation/engram")
 function Get-GitHubLatestVersion {
     param([string]$Repo)
     try {
         $url  = "https://api.github.com/repos/$Repo/releases/latest"
-        $resp = Invoke-RestMethod -Uri $url -Headers @{ 'User-Agent' = 'workspace-foundation-updater' } -ErrorAction Stop
+        $resp = Invoke-RestMethod -Uri $url -Headers @{ 'User-Agent' = 'foundation-updater' } -ErrorAction Stop
         return ($resp.tag_name -replace '^v', '')
     } catch {
         return $null
@@ -127,7 +127,7 @@ function Get-InstalledVersion {
 }
 
 #  Tool: Engram 
-# Installed via: go install github.com/workspace-foundation/engram/cmd/engram@latest
+# Installed via: go install github.com/foundation/engram/cmd/engram@latest
 # Binary lands in $GOPATH/bin/engram.exe
 
 function Update-Engram {
@@ -138,7 +138,7 @@ function Update-Engram {
     if (-not (Test-Path $engramExe)) { $engramExe = Join-Path $goBin 'engram' }
 
     $installed = Get-InstalledVersion -BinaryPath $engramExe
-    $latest    = Get-GitHubLatestVersion -Repo 'workspace-foundation/engram'
+    $latest    = Get-GitHubLatestVersion -Repo 'foundation/engram'
 
     if ($installed) {
         Write-Info "Engram installed: v$installed"
@@ -156,14 +156,14 @@ function Update-Engram {
     }
 
     if ($DryRun) {
-        Write-Info "[DRY-RUN] Would run: go install github.com/workspace-foundation/engram/cmd/engram@latest"
+        Write-Info "[DRY-RUN] Would run: go install github.com/foundation/engram/cmd/engram@latest"
         return $true
     }
 
-    Write-Info "Running: go install github.com/workspace-foundation/engram/cmd/engram@latest"
+    Write-Info "Running: go install github.com/foundation/engram/cmd/engram@latest"
     # -mod=mod ensures Go fetches the latest even if module cache has an older version
     $env:GOFLAGS = '-mod=mod'
-    go install github.com/workspace-foundation/engram/cmd/engram@latest 2>&1 | ForEach-Object { Write-Host "  $_" }
+    go install github.com/foundation/engram/cmd/engram@latest 2>&1 | ForEach-Object { Write-Host "  $_" }
     $env:GOFLAGS = $null
 
     if ($LASTEXITCODE -ne 0) {
@@ -275,7 +275,7 @@ function Show-ToolStatus {
 
     Write-Host ""
     Write-Host "Install commands:" -ForegroundColor Gray
-    Write-Host "  engram    : go install github.com/workspace-foundation/engram/cmd/engram@latest" -ForegroundColor Gray
+    Write-Host "  engram    : go install github.com/foundation/engram/cmd/engram@latest" -ForegroundColor Gray
     Write-Host "  opencode  : official installer, package manager, npm, or manual binary (or wf.ps1 update-tools -Force)" -ForegroundColor Gray
 }
 

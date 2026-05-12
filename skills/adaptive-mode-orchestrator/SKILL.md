@@ -6,7 +6,7 @@ description: >
   retroalimentacin (QA  DEV  QA) y ejecuta rollback automtico ante fallos crticos.
 license: Apache-2.0
 metadata:
-  author: workspace-foundation
+  author: foundation
   versión: '1.0'
   status: 'ACTIVE'
   priority: 'CRITICAL'

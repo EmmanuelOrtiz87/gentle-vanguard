@@ -17,7 +17,7 @@
 
 .EXAMPLE
     .\update-engram.ps1 -Source tools-folder
-    Copia desde workspace-foundation/scripts/utilities/ a $HOME\bin\
+    Copia desde foundation/scripts/utilities/ a $HOME\bin\
 
 .EXAMPLE
     .\update-engram.ps1 -Source go-install
@@ -74,9 +74,9 @@ $newBinary = $null
 
 switch ($Source) {
     'go-install' {
-        Write-Host "  Ejecutando: go install github.com/workspace-foundation/engram/cmd/engram@latest" -ForegroundColor Gray
+        Write-Host "  Ejecutando: go install github.com/foundation/engram/cmd/engram@latest" -ForegroundColor Gray
         try {
-            go install github.com/workspace-foundation/engram/cmd/engram@latest
+            go install github.com/foundation/engram/cmd/engram@latest
             $newBinary = "$env:USERPROFILE\go\bin\engram.exe"
             if (Test-Path $newBinary) {
                 Copy-Item $newBinary $TargetPath -Force
@@ -89,7 +89,7 @@ switch ($Source) {
     }
     
     'tools-folder' {
-        $sourceBinary = ".\workspace-foundation\tools\engram.exe"
+        $sourceBinary = ".\foundation\\tools\engram.exe"
         if (-not (Test-Path $sourceBinary)) {
             Write-Host "  [ERROR] No se encuentra: $sourceBinary" -ForegroundColor Red
             exit 1
@@ -107,7 +107,7 @@ switch ($Source) {
     
     'github-release' {
         Write-Host "  [INFO] Descargando desde GitHub Releases..." -ForegroundColor Gray
-        Write-Host "  Ve a: https://github.com/workspace-foundation/engram/releases" -ForegroundColor Cyan
+        Write-Host "  Ve a: https://github.com/foundation/engram/releases" -ForegroundColor Cyan
         Write-Host "  Descarga engram_*_windows_amd64.zip y extrae engram.exe" -ForegroundColor Cyan
         Read-Host "  Presiona Enter cuando hayas copiado engram.exe a $TargetPath"
     }

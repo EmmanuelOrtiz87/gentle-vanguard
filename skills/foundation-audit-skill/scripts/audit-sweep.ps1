@@ -126,7 +126,7 @@ function Test-DeprecatedSkillReferences {
     }
 
     # Foundation contains active SDD skills by design; only flag legacy alias there.
-    if ((Split-Path $RootPath -Leaf) -eq 'workspace-foundation') {
+    if ((Split-Path $RootPath -Leaf) -eq 'foundation') {
         $deprecated = $deprecated | Where-Object { $_ -in @('sdd-skill') }
     }
     

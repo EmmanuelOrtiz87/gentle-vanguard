@@ -3,7 +3,7 @@
 # Terminal-Based Setup Wizard with Logo, Help, and Quit support
 
 param(
-    [string]$InstallPath = "$env:USERPROFILE\workspace-foundation",
+    [string]$InstallPath = "$env:USERPROFILE\foundation",
     [switch]$Silent,
     [switch]$Force,
     [switch]$Uninstall,
@@ -81,7 +81,7 @@ function Show-Help {
     Write-Host "  - Enter accepts the default (>) option" -ForegroundColor Gray
     Write-Host ""
     Write-Host "  INSTALLATION PATHS" -ForegroundColor $colorHighlight
-    Write-Host "  - Default: $env:USERPROFILE\workspace-foundation" -ForegroundColor Gray
+    Write-Host "  - Default: $env:USERPROFILE\foundation" -ForegroundColor Gray
     Write-Host "  - Change it in Step 2 of installer" -ForegroundColor Gray
     Write-Host ""
     Write-Host "  LOGS" -ForegroundColor $colorHighlight
@@ -301,14 +301,14 @@ function Install-Foundation {
             if ($installEngram -eq 0) {
                 try {
                     Write-Log "Installing Engram via go install..." -Level "INFO"
-                    & go install github.com/workspace-foundation/engram/cmd/engram@latest 2>&1 | ForEach-Object { Write-Log $_ }
+                    & go install github.com/foundation/engram/cmd/engram@latest 2>&1 | ForEach-Object { Write-Log $_ }
                     Write-Log "Engram installed. Configure with: engram setup <agent>" -Level "SUCCESS"
                 } catch {
                     Write-Log "Engram installation failed: $($_.Exception.Message)" -Level "WARN"
                 }
             }
         } else {
-            Write-Log "Engram requires Go. Install Go first then run: go install github.com/workspace-foundation/engram/cmd/engram@latest" -Level "INFO"
+            Write-Log "Engram requires Go. Install Go first then run: go install github.com/foundation/engram/cmd/engram@latest" -Level "INFO"
         }
     } else {
         Write-Log "Engram already installed" -Level "SUCCESS"

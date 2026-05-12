@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "name": "Testing Configuration",
-  "description": "Automated testing suite configuration for workspace-foundation",
+  "description": "Automated testing suite configuration for foundation",
   "enabled": true,
   "testFramework": "pester",
   "testFrameworkBash": "bats",

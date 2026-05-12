@@ -4,7 +4,7 @@
 param(
     [switch]$AutoResolve,
     [switch]$Force,
-    [string]$ProjectName = "workspace-foundation"
+    [string]$ProjectName = "foundation"
 )
 
 $ErrorActionPreference = 'Continue'

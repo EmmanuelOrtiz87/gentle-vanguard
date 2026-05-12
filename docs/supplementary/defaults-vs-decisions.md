@@ -14,7 +14,7 @@ itself.
 
 ## Workspace Defaults
 
-These belong to `workspace-foundation` and should remain reusable across projects:
+These belong to `foundation` and should remain reusable across projects:
 
 1. Portable directory layout.
 2. External tools consumed by command, not vendored in application repos.

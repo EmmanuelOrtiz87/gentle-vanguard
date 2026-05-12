@@ -23,7 +23,7 @@ integration on Windows
 
 ```
 Gentleman Foundation Suite
-  workspace-foundation/          # Foundation Template & Core Tools
+  foundation/          # Foundation Template & Core Tools
      AI Orchestration Layer     # Skills, Orchestrators, Memory
      Development Tools          # CLI, Scripts, Templates
      Quality Assurance          # Pre-commit, Testing, Reviews
@@ -51,7 +51,7 @@ Gentleman Foundation Suite
 | **Project Orchestrator**     | Active | `skills/project-orchestrator-skill/`     | Auto-detects project type, loads skills |
 | **Session Workflow**         | Active | `skills/session-workflow-skill/`         | Manages session lifecycle, memory       |
 | **Code Review Orchestrator** | Active | `skills/code-review-orchestrator-skill/` | Coordinates quality checks              |
-| **Foundation Manager**       | Active | `skills/workspace-foundation/`           | Template management                     |
+| **Foundation Manager**       | Active | `skills/foundation/`           | Template management                     |
 
 ### Development Tools
 
@@ -84,11 +84,11 @@ Gentleman Foundation Suite
 
 ## Projects Status
 
-### workspace-foundation (Foundation Template)
+### foundation (Foundation Template)
 
 | Aspect            | Status    | Details                                                 |
 | ----------------- | --------- | ------------------------------------------------------- |
-| **Repository**    | Active    | https://github.com/EmmanuelOrtiz87/workspace-foundation |
+| **Repository**    | Active    | https://github.com/EmmanuelOrtiz87/foundation |
 | **Documentation** | Complete  | README, guides, architecture                            |
 | **CI/CD**         | Ready     | GitHub Actions workflows                                |
 | **Templates**     | Available | Go, Angular, Python, React                              |

@@ -128,7 +128,7 @@ try {
         } elseif ($env:FOUNDATION_REPO_PATH) {
             $FoundationPath = [string]$env:FOUNDATION_REPO_PATH
         } else {
-            $FoundationPath = '..\workspace-foundation'
+            $FoundationPath = '..\foundation'
         }
     }
 

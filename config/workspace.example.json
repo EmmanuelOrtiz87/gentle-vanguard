@@ -1,5 +1,5 @@
 {
-  "workspaceName": "workspace-foundation",
+  "workspaceName": "foundation",
   "dataRoot": "{workspaceRoot}/.engram-data",
   "toolsRoot": "{workspaceRoot}/tools",
   "projectsRoot": "{workspaceRoot}/projects",

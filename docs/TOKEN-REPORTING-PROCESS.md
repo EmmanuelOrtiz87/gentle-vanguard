@@ -222,7 +222,7 @@ Can be integrated into release pipeline:
 ### Step 1: Basic Report
 
 ```powershell
-cd .\workspace-foundation
+cd .\foundation
 .\scripts\utilities\token-consumption-report.ps1
 ```
 
