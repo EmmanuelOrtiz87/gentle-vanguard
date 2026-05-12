@@ -326,5 +326,26 @@
     "reportFormat": "json",
     "reportPath": "reports/quality-gates-report.json",
     "dashboardUrl": "http://localhost:3000/dashboard"
+  },
+  "requiredWorkflows": [
+    "foundation-quality-gate",
+    "cross-platform-tests",
+    "security-scan"
+  ],
+  "requiredStatusChecks": [
+    "Foundation Quality Gate",
+    "Cross-Platform Tests",
+    "Security Scan",
+    "Code Coverage"
+  ],
+  "pullRequestRules": {
+    "requireStatusChecks": true,
+    "requireCodeReview": true,
+    "reviewerCount": 1,
+    "requireBranchUpdateBeforeMerge": true,
+    "dismissStaleReviews": true,
+    "restrictPushes": false,
+    "allowForcePushes": false,
+    "allowDeletions": false
   }
 }
