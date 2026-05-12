@@ -63,6 +63,7 @@ scripts/.event-bus/
 
 # Session temp
 .session/
+session/
 .workspace/config/session-auth.json
 .workspace/config/dev-credentials.json
 .runtime/security-*.json
