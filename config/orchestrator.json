@@ -1,6 +1,16 @@
 {
   "orchestrator": {
     "version": "2.6.0",
+    "activeToolDetection": {
+      "enabled": true,
+      "mandatory": true,
+      "script": "scripts/utilities/detect-tool.ps1",
+      "scriptArgs": "-ConfigPath config/orchestrator.json -AsJson",
+      "fallbackTool": "claude-generic",
+      "fallbackPromptFile": "CLAUDE.md",
+      "canonicalEntryPoint": "docs/AGENTS.md",
+      "note": "Detects tool at runtime and loads correct profile. Always use AGENTS.md over tool-specific files."
+    },
     "preProcessing": {
       "enabled": true,
       "mandatory": true,
@@ -223,6 +233,68 @@
       "ps_analyzer": "config/PSScriptAnalyzerSettings.psd1",
       "eslint": ".eslintrc.json",
       "typescript": "tsconfig.json"
+    }
+  },
+  "toolProfiles": {
+    "opencode": {
+      "promptFile": "CLAUDE.md",
+      "configFile": "opencode.json",
+      "primaryEntryPoint": "docs/AGENTS.md",
+      "responseProfile": "ultra",
+      "communicationLang": "es",
+      "supportsSkillTool": true,
+      "supportsMemTools": true,
+      "note": "OpenCode uses CLAUDE.md by convention but canonical entry is AGENTS.md"
+    },
+    "claude-code": {
+      "promptFile": "CLAUDE.md",
+      "configFile": ".claude/settings.json",
+      "primaryEntryPoint": "docs/AGENTS.md",
+      "responseProfile": "ultra",
+      "communicationLang": "es",
+      "supportsSkillTool": true,
+      "supportsMemTools": true,
+      "note": "Claude Code native — CLAUDE.md is auto-loaded"
+    },
+    "cline": {
+      "promptFile": ".clinerules",
+      "configFile": ".clinerules",
+      "primaryEntryPoint": "docs/AGENTS.md",
+      "responseProfile": "ultra",
+      "communicationLang": "es",
+      "supportsSkillTool": false,
+      "supportsMemTools": false,
+      "note": "Cline uses .clinerules — must reference AGENTS.md for canonical bootstrap"
+    },
+    "cursor": {
+      "promptFile": ".cursorrules",
+      "configFile": ".cursorrules",
+      "primaryEntryPoint": "docs/AGENTS.md",
+      "responseProfile": "ultra",
+      "communicationLang": "es",
+      "supportsSkillTool": false,
+      "supportsMemTools": false,
+      "note": "Cursor uses .cursorrules — must reference AGENTS.md for canonical bootstrap"
+    },
+    "windsurf": {
+      "promptFile": "CLAUDE.md",
+      "configFile": ".windsurf/config.json",
+      "primaryEntryPoint": "docs/AGENTS.md",
+      "responseProfile": "ultra",
+      "communicationLang": "es",
+      "supportsSkillTool": false,
+      "supportsMemTools": false,
+      "note": "Windsurf uses CLAUDE.md by convention — canonical entry is AGENTS.md"
+    },
+    "claude-generic": {
+      "promptFile": "CLAUDE.md",
+      "configFile": "",
+      "primaryEntryPoint": "docs/AGENTS.md",
+      "responseProfile": "ultra",
+      "communicationLang": "es",
+      "supportsSkillTool": true,
+      "supportsMemTools": true,
+      "note": "Fallback for Claude variants — always prefer AGENTS.md"
     }
   },
   "governed_override_profiles": {

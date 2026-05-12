@@ -100,28 +100,103 @@ if ($delegationConfig -and $delegationConfig.keywordMappings) {
 
 $sortedTriggers = $triggerMap.Keys | Sort-Object Length -Descending
 
+function Compute-MatchQuality {
+    param(
+        [string]$InputText,
+        [string]$Trigger,
+        [int]$InputWordCount
+    )
+    # Exact match: input is exactly the trigger
+    if ($InputText -eq $Trigger) { return 100 }
+    # Word boundary match: trigger appears as whole word
+    $pattern = '\b' + [regex]::Escape($Trigger) + '\b'
+    if ($InputText -match $pattern) { return 95 }
+    # Word-start match: trigger matches start of a word
+    $wordStartPattern = '\b' + [regex]::Escape($Trigger)
+    if ($InputText -match $wordStartPattern) { return 90 }
+    # Substring match: trigger is contained within input
+    if ($InputText.Contains($Trigger)) { return 85 }
+    # Word-fragment match: trigger words partially present
+    $triggerWords = $Trigger -split '\s+'
+    $matchedWords = 0
+    foreach ($w in $triggerWords) {
+        if ($w.Length -gt 2 -and $InputText.Contains($w)) { $matchedWords++ }
+    }
+    if ($matchedWords -gt 0 -and $triggerWords.Count -gt 0) {
+        $ratio = $matchedWords / $triggerWords.Count
+        return [math]::Max(40, [math]::Min(79, [int]($ratio * 70 + 10)))
+    }
+    return 0
+}
+
+function Compute-ConfidenceBonus {
+    param(
+        [string]$InputText,
+        [hashtable]$Map,
+        [ref]$MatchesRef
+    )
+    $bonus = 0
+    $foundMatches = @($MatchesRef.Value)
+    foreach ($kv in $Map.GetEnumerator()) {
+        $trigger = $kv.Key
+        if ($trigger -and $InputText.Contains($trigger)) {
+            $alreadyMatched = $foundMatches | Where-Object { $_ -eq $trigger }
+            if (-not $alreadyMatched) {
+                $bonus += 5
+                $foundMatches += $trigger
+            }
+        }
+    }
+    $MatchesRef.Value = $foundMatches
+    return [math]::Min(15, $bonus)
+}
+
 function Find-Match {
     param(
         [string]$InputText,
         [hashtable]$Map,
         [array]$Sorted
     )
+    $bestSkill = $null
+    $bestTrigger = $null
+    $bestConfidence = 0
+    $allMatches = @()
+
     foreach ($trigger in $Sorted) {
-        if ($InputText.Contains($trigger.ToLower())) {
-            return @($Map[$trigger], $trigger)
+        $quality = Compute-MatchQuality -InputText $InputText -Trigger $trigger
+        if ($quality -ge 40) {
+            $allMatches += @{Trigger = $trigger; Skill = $Map[$trigger]; Quality = $quality }
+            if ($quality -gt $bestConfidence) {
+                $bestConfidence = $quality
+                $bestSkill = $Map[$trigger]
+                $bestTrigger = $trigger
+            }
         }
     }
-    return @($null, $null)
+
+    if (-not $bestSkill) { return @($null, $null, 0) }
+
+    # Bonus for multiple matches on same skill
+    $skillMatches = $allMatches | Where-Object { $_['Skill'] -eq $bestSkill } | ForEach-Object { $_['Trigger'] }
+    $uniqueForSkill = $skillMatches | Select-Object -Unique
+    if ($uniqueForSkill.Count -gt 1) {
+        $bonus = [math]::Min(10, ($uniqueForSkill.Count - 1) * 5)
+        $bestConfidence = [math]::Min(100, $bestConfidence + $bonus)
+    }
+
+    return @($bestSkill, $bestTrigger, $bestConfidence)
 }
 
 # Check user input against triggers
 $inputLower = $UserInput.ToLower()
 $matchingSkill = $null
 $matchingTrigger = $null
+$confidenceScore = 0
 
 $firstPass = Find-Match -InputText $inputLower -Map $triggerMap -Sorted $sortedTriggers
 $matchingSkill = $firstPass[0]
 $matchingTrigger = $firstPass[1]
+$confidenceScore = $firstPass[2]
 
 # Fallback: parse SKILL.md only when config-based routing did not match.
 if (-not $matchingSkill -and -not $DisableSkillFileFallback) {
@@ -130,10 +205,20 @@ if (-not $matchingSkill -and -not $DisableSkillFileFallback) {
     $secondPass = Find-Match -InputText $inputLower -Map $triggerMap -Sorted $sortedTriggers
     $matchingSkill = $secondPass[0]
     $matchingTrigger = $secondPass[1]
+    $confidenceScore = $secondPass[2]
 }
 
-# Compute confidence score
-$confidenceScore = if ($matchingSkill) { 80 } else { 0 }
+# Final boost: if user input word count matches trigger ratio well
+$inputWords = $inputLower -split '\s+' | Where-Object { $_ -and $_.Length -gt 2 }
+if ($matchingTrigger -and $inputWords.Count -gt 0) {
+    $triggerWords = $matchingTrigger -split '\s+' | Where-Object { $_ -and $_.Length -gt 2 }
+    if ($triggerWords.Count -gt 0) {
+        $wordRatio = [math]::Min(1.0, $inputWords.Count / $triggerWords.Count)
+        if ($wordRatio -gt 0.3 -and $wordRatio -lt 0.8) {
+            $confidenceScore = [math]::Min(100, $confidenceScore + 3)
+        }
+    }
+}
 
 # Read strategy and profiles from already-loaded config
 $fallbackStrategy  = if ($delegationConfig -and $delegationConfig.fallbackStrategy) { $delegationConfig.fallbackStrategy } else { "manual" }
