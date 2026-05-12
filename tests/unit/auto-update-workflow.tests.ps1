@@ -21,10 +21,11 @@ Describe 'Auto-Update Workflow Integration Tests' {
     }
 
     Context 'Session Autostart Integration' {
-        It 'session-autostart.ps1 calls skill-router or karpathy-enforcer' {
-            $f = Join-Path $script:root "scripts/utilities/session-autostart.ps1"
+        It 'session-autostart.config.json includes skill-router and karpathy-enforcer' {
+            $f = Join-Path $script:root "config/session-autostart.config.json"
             $content = Get-Content $f -Raw
-            ($content -match 'skill-router|karpathy-enforcer') | Should Be $true
+            ($content -match 'skill-router') | Should Be $true
+            ($content -match 'karpathy-guidelines|karpathy-enforcer') | Should Be $true
         }
     }
 
