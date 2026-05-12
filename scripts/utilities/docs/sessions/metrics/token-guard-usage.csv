@@ -10,3 +10,10 @@
 2026-05-12T18:18:29-03:00,2026-05-12,end-session,medium,1800,0,0,0,PASS,True,projected_pct=11.3; actual_tracking=False
 2026-05-12T18:19:30-03:00,2026-05-12,audit,medium,2200,0,0,0,PASS,True,projected_pct=13.14; actual_tracking=False
 2026-05-12T18:26:57-03:00,2026-05-12,end-session,medium,1800,0,0,0,PASS,True,projected_pct=14.64; actual_tracking=False
+2026-05-12T18:27:58-03:00,2026-05-12,audit,medium,2200,0,0,0,PASS,True,projected_pct=16.47; actual_tracking=False
+2026-05-12T18:31:37-03:00,2026-05-12,compact-start,medium,1566,0,0,0,PASS,True,projected_pct=17.77; actual_tracking=False
+2026-05-12T18:31:45-03:00,2026-05-12,audit,medium,2200,0,0,0,PASS,True,projected_pct=19.61; actual_tracking=False
+2026-05-12T18:31:54-03:00,2026-05-12,audit,medium,2200,0,0,0,PASS,True,projected_pct=21.44; actual_tracking=False
+2026-05-12T18:34:19-03:00,2026-05-12,audit,medium,2200,0,0,0,PASS,True,projected_pct=23.27; actual_tracking=False
+2026-05-12T18:34:28-03:00,2026-05-12,audit,medium,2200,0,0,0,PASS,True,projected_pct=25.11; actual_tracking=False
+2026-05-12T18:37:59-03:00,2026-05-12,audit,medium,2200,0,0,0,PASS,True,projected_pct=26.94; actual_tracking=False
