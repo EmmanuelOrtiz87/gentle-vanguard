@@ -88,7 +88,7 @@ docs/reference/
 - **Architecture**: Understand the system design and components
 - **Project Types**: See available templates for scaffolding
 - **Tools**: Integrate external tools and services
-- **Skills**: Browse the 125+ specialized skills catalog
+- **Skills**: Browse the 127 specialized skills catalog
 
 ---
 
