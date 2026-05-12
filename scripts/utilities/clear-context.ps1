@@ -18,7 +18,7 @@
     .\tools\clear-context.ps1 -TaskSummary "Corregidas inconsistencias de inicio"
     
 .NOTES
-    Author: workspace-foundation
+    Author: foundation
     Version: 1.0
 #>
 
@@ -27,7 +27,7 @@ param(
     [string]$TaskSummary = "",
     
     [Parameter(Mandatory=$false)]
-    [string]$ProjectName = "gentleman-foundation"
+    [string]$ProjectName = "foundation"
 )
 
 $ErrorActionPreference = 'Continue'

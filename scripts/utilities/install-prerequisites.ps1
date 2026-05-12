@@ -185,10 +185,10 @@ $prerequisites = @(
     @{
         Name = "Engram"
         Type = "manual"
-        InstallCommand = "go install github.com/workspace-foundation/engram/cmd/engram@latest"
+        InstallCommand = "go install github.com/foundation/engram/cmd/engram@latest"
         Description = "Persistent memory engine (optional)"
         Required = $false
-        ManualHint = "Requires Go: go install github.com/workspace-foundation/engram/cmd/engram@latest"
+        ManualHint = "Requires Go: go install github.com/foundation/engram/cmd/engram@latest"
         AlternativeCheck = { $null -ne (Get-Command engram -ErrorAction SilentlyContinue) }
     },
     @{
@@ -281,7 +281,7 @@ if ($missing.Count -gt 0 -and -not $CheckOnly) {
         } elseif ($tool.Name -eq "Engram") {
             if (Get-Command go -ErrorAction SilentlyContinue) {
                 try {
-                    & go install github.com/workspace-foundation/engram/cmd/engram@latest 2>&1 | Out-Null
+                    & go install github.com/foundation/engram/cmd/engram@latest 2>&1 | Out-Null
                     if ($LASTEXITCODE -eq 0) {
                         Write-Ok "Engram installed via go install"
                     } else {

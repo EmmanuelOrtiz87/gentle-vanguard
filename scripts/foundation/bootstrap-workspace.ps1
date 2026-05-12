@@ -254,9 +254,9 @@ function Install-SecuritySkill {
     )
 
     $skillSource = Join-Path $WorkspaceSkillsPath $SkillName
-    $skillDest = Join-Path $ProjectPath '.workspace-foundation\skills\$SkillName'
+    $skillDest = Join-Path $ProjectPath '.foundation\\skills\$SkillName'
     
-    $skillDest = Join-Path $ProjectPath ".workspace-foundation\skills\$SkillName"
+    $skillDest = Join-Path $ProjectPath ".foundation\\skills\$SkillName"
     
     if (Test-Path $skillSource) {
         Write-Host "Installing $SkillName..."
@@ -318,7 +318,7 @@ function Install-ProjectSkills {
             continue
         }
         
-        $skillDest = Join-Path $ProjectPath ".workspace-foundation\skills\$skillName"
+        $skillDest = Join-Path $ProjectPath ".foundation\\skills\$skillName"
         Ensure-Directory -Path (Split-Path -Parent $skillDest)
         
         Copy-Item -Path $skillSource -Destination $skillDest -Recurse -Force
@@ -353,7 +353,7 @@ function Create-OrchestratorActivation {
 
     $config = @{
         active = $true
-        skill_path = ".workspace-foundation/skills/project-orchestrator-skill"
+        skill_path = ".foundation/skills/project-orchestrator-skill"
         auto_detect = $true
         workflow_mode = "coordinated"
         communication_response_mode = "simple"

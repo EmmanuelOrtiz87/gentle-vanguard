@@ -14,7 +14,7 @@
   },
   "language": { "default": "es", "technicalTerms": "en" },
   "missionParameters": {
-    "project": "workspace-foundation",
+    "project": "foundation",
     "governanceLayers": ["GOV", "DEV", "QA", "OPS", "DOC", "SESSION"]
   }
 }

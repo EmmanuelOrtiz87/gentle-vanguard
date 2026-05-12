@@ -39,7 +39,7 @@ param(
     [int]$MaxCacheAge = 5,
     
     [Parameter(Mandatory=$false)]
-    [string]$ProjectName = "gentleman-foundation"
+    [string]$ProjectName = "foundation"
 )
 
 $ErrorActionPreference = 'Continue'

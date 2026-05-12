@@ -1,8 +1,8 @@
-﻿# Testing Guide - Automated Test Suite
+# Testing Guide - Automated Test Suite
 
 ## Visin General
 
-Este documento describe la suite de testing automatizado para workspace-foundation.
+Este documento describe la suite de testing automatizado para foundation.
 
 **Versin**: 1.0.0 **Fecha**: 2026-04-21 **Estado**: ACTIVO
 

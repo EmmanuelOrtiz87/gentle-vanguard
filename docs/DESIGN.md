@@ -2,7 +2,7 @@
 version: 'alpha'
 name: 'Gentleman Foundation'
 description:
-  'Design system for workspace-foundation: agnostic, minimal, ASCII-only documentation and tooling'
+  'Design system for foundation: agnostic, minimal, ASCII-only documentation and tooling'
 colors:
   primary: '#1A1C1E'
   secondary: '#4A5568'

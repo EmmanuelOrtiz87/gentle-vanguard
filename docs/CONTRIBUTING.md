@@ -14,11 +14,11 @@ By participating, you agree to maintain a respectful and inclusive environment f
 # Fork the repository on GitHub
 
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/workspace-foundation.git
-cd workspace-foundation
+git clone https://github.com/EmmanuelOrtiz87/foundation.git
+cd foundation
 
 # Add upstream remote
-git remote add upstream https://github.com/EmmanuelOrtiz87/workspace-foundation.git
+git remote add upstream https://github.com/EmmanuelOrtiz87/foundation.git
 ```
 
 ### 2. Create a Branch
@@ -130,7 +130,7 @@ Include in your PR:
 ## Project Structure
 
 ```
-workspace-foundation/
+foundation/
  .github/           # GitHub templates
  config/            # Workspace configuration
  docs/              # Documentation
@@ -140,7 +140,7 @@ workspace-foundation/
     utilities/     # Workflow CLI and operational utilities
     validation/    # Validation scripts
  skills/            # Agent skills
-    workspace-foundation/
+    foundation/
     testing-skill/
     security-skill/
     ...

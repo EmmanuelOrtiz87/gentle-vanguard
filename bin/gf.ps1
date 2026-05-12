@@ -47,7 +47,7 @@ $ScriptsDir = $null
 $possibleScriptsDirs = @(
     (Join-Path $env:USERPROFILE ".gentleman\scripts"),
     (Join-Path $GFRoot "..\scripts"),
-    ".\workspace-foundation\scripts"
+    ".\foundation\scripts"
 )
 foreach ($dir in $possibleScriptsDirs) {
     if (Test-Path $dir) {

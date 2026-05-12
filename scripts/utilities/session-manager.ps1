@@ -1,10 +1,10 @@
 # session-manager.ps1
-# Gestor de sesiones para workspace-foundation
+# Gestor de sesiones para foundation
 
 param(
     [ValidateSet('AutoStart', 'Manual', 'Health', 'End', 'Cleanup')]
     [string]$Mode = 'Manual',
-    [string]$ProjectName = 'gentleman-foundation',
+    [string]$ProjectName = 'foundation',
     [string]$SessionDir = '.\.session',
     [int]$OrphanMaxAgeHours = 24
 )

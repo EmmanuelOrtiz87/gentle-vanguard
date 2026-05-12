@@ -66,7 +66,7 @@
 
 ```powershell
 # Navigate to Foundation scripts
-cd .\workspace-foundation
+cd .\foundation
 
 # Run the interactive config generator
 .\scripts\utilities\invoke-cloud-agent.ps1 -Config

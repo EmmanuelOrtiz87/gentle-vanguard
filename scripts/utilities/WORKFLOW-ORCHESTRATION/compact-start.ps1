@@ -20,7 +20,7 @@ $context = @{
     sessionId = $sessionId
     objective = $Objective
     startTime = $timestamp
-    project = "workspace-foundation"
+    project = "foundation"
 }
 
 $context | ConvertTo-Json | Out-File -FilePath (Join-Path $engramData "compact-start-$timestamp.json") -Encoding utf8
