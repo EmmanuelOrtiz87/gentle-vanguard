@@ -124,6 +124,11 @@ if exist "%SKILL_ROUTER%" (
     if errorlevel 1 ( echo [WARN] Skill router validation issue ) else ( echo [OK] Skill router active )
 ) else ( echo [SKIP] skill-router.ps1 not found )
 
+REM === Phase 9: Post-Autostart Summary ===
+echo [9/8] Generating startup summary...
+powershell -NoProfile -ExecutionPolicy Bypass -File "%WORKSPACE_ROOT%\scripts\utilities\post-autostart-summary.ps1" -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15 -Region "Argentina"
+if errorlevel 1 ( echo [WARN] Summary generation had warnings ) else ( echo [OK] Startup summary saved )
+
 echo.
 echo === Session Autostart Complete ===
 echo [READY] Workspace ready for operations
