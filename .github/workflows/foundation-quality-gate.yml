@@ -33,7 +33,7 @@ jobs:
     timeout-minutes: 35
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -76,3 +76,4 @@ jobs:
             }
           }
           if (-not $allValid) { exit 1 }
+
