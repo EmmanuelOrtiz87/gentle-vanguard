@@ -9,26 +9,47 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## [Unreleased]#
+## [1.0.0] - 2026-05-13 - Initial Production Release#
+
+### ✨ Added#
+
+- **Foundation Stack Update Strategy**: Documented three update scenarios (lightweight CLI updates, core .exe builds, dev synchronization)
+- **sync-stack.ps1**: New synchronization script for updating installed Foundation without reinstalling
+- **Comprehensive validation hardening**: Made LESSONS-LEARNED-HOOKS-INCIDENT.md optional, added safe property checks for opencode.json
+- **Foundation-Setup.exe**: Generated with complete hardening (v1.0.0)
+
+### 🔧 Fixed#
+
+- **Autonomous Validation**: Fixed exit code handling for optional documentation and missing JSON properties (commit a224090)
+- **cross-platform-tests.yml**: Corrected shellcheck SC2129 and SC2086 warnings in bash redirect blocks (commit 33e5cc5)
+- **Agent-verify**: Fixed domain parsing to use array syntax instead of CSV (commit 6e88e01)
+- **Gitleaks allowlist**: Added sanctioned sync references (PAT_SYNC, PRIVATE_REPO, x-access-token) for both repos
 
 ### 📚 Changed#
 
-- **README.md**: Complete overhaul — added live CLI example (auth with JWT workflow), replaced broken Mermaid sequence diagram with ASCII art (12-step numbered flow), restructured with comparison table and clearer value proposition
-- **NORMATIVAS-MULTI-REPO.md**: Added explicit `--delete-branch` safety guard — prohibited on PRs where head is `main` or `develop`
-- **Default branch**: Changed from `develop` to `main` on both foundation and foundation-public repos (best practices alignment)
-- **Branch cleanup**: Removed 20 stale branches from foundation remote, kept only `main`, `develop`, `release/v1.0.0`
-- **foundation-public**: Unified to single `main` branch, removed stale `master` and `develop`
+- **VERSION**: Set to 1.0.0 across all repos and build artifacts
+- **README badges**: Updated to reflect production 1.0.0 version
+- **package.json**: Added version field (1.0.0) for consistency
+- **Workflow standardization**: Unified line endings and formatting across all 13+ GitHub workflows
 
-### 🗑️ Removed#
+### 📋 Known Limitations#
 
-- **All "Workspace Foundation" references**: Purged 65+ files across docs, scripts, configs, skills, and assets
-- **dist/Foundation-Setup.exe**: Replaced by single `Foundation.exe` (NSIS installer, AES-256 encrypted)
-- **scripts/utilities/ENGAM-UPDATE.md**: Renamed to `ENGRAM-UPDATE.md` (typo fix)
-- **build/sfx-build.ps1**: Marked as DEPRECATED (portable replaced by NSIS)
+- Auto-update feature (remote version checking) marked for future release
+- Docker validator skipped in pre-push hooks (not yet implemented)
+- Links validator skipped in pre-push hooks (not yet implemented)
 
 ---
 
+## [Unreleased]#
 
+### 🚀 Planned#
+
+- [ ] Auto-update: Launcher checks remote version and prompts for upgrade
+- [ ] Docker validation: Integration tests in containerized environments
+- [ ] Links validation: Verify all documentation cross-references
+- [ ] Release artifacts: S3 distribution for global availability
+
+---
 
 ## [2.9.1] - 2026-05-12#
 

@@ -1,4 +1,5 @@
 {
+  "version": "1.0.0",
   "scripts": {
     "test": "pwsh ./scripts/run-tests-simple.ps1",
     "lint:json": "pwsh ./hooks/json-lint.ps1",
