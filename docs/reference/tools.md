@@ -1,6 +1,6 @@
 ﻿# External Tools
 
-The workspace foundation keeps external tools outside each project and versióned independently.
+The foundation keeps external tools outside each project and versióned independently.
 
 ## Start Here
 

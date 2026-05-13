@@ -117,7 +117,7 @@ function Show-GitFlowHelp {
 
     Write-Host "`n" -ForegroundColor Cyan
     Write-Host "" -ForegroundColor Cyan
-    Write-Host "            GUA DE GITFLOW - WORKSPACE FOUNDATION        " -ForegroundColor Cyan
+    Write-Host "            GUA DE GITFLOW - FOUNDATION        " -ForegroundColor Cyan
     Write-Host "" -ForegroundColor Cyan
 
     Write-Host "`n SOLUCIN RPIDA:" -ForegroundColor Green

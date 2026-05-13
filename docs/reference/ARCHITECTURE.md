@@ -1,4 +1,4 @@
-# Workspace Foundation - Architecture
+# Foundation - Architecture
 
 > System design, component relationships, and technical decisións.
 
@@ -835,4 +835,4 @@ All Spec-Driven Development (SDD) phases follow the `sdd-phase-common.md` standa
 
 ---
 
-_Architecture document for Workspace Foundation v2.1_
+_Architecture document for Foundation v2.1_

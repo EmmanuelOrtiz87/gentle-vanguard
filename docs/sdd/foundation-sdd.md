@@ -1,4 +1,4 @@
-# Software Design Document (SDD) - Workspace Foundation
+# Software Design Document (SDD) - Foundation
 
 **versión:** 1.0  
 **Date:** April 11, 2026  
@@ -9,7 +9,7 @@
 
 ### Purpose
 
-Workspace Foundation is the base framework for creating standardized, cross-platform development
+Foundation is the base framework for creating standardized, cross-platform development
 projects. It provides:
 
 - Project scaffolding and templates
@@ -46,7 +46,7 @@ projects. It provides:
 ### High-level Design
 
 ```
-Workspace Foundation
+Foundation
  Core Components
     Bootstrap System (scripts/foundation/bootstrap.ps1)
     Setup Scripts (scripts/foundation/setup.sh, scripts/utilities/wf.ps1)
@@ -338,5 +338,5 @@ And commands work identically
 
 ---
 
-**This SDD serves as the foundation for all projects created from Workspace Foundation. All
+**This SDD serves as the foundation for all projects created from Foundation. All
 generated projects should reference and extend this document.**

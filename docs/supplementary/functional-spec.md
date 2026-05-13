@@ -1,8 +1,8 @@
-# Functional Document: Workspace Foundation
+# Functional Document: Foundation
 
-## What is Workspace Foundation?
+## What is Foundation?
 
-Workspace Foundation is an agnostic development infrastructure platform designed to standardize,
+Foundation is an agnostic development infrastructure platform designed to standardize,
 automate, and enhance the software lifecycle through native Artificial Intelligence integration and
 robust quality protocols.
 

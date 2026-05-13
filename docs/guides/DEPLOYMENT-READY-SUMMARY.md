@@ -10,7 +10,7 @@
 
 ### All Systems Go
 
-The Workspace Foundation project is **fully optimized and ready for production deployment**.
+The Foundation project is **fully optimized and ready for production deployment**.
 
 ---
 

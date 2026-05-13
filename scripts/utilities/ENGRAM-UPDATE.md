@@ -1,4 +1,4 @@
-# Engram Update Procedure - Workspace Foundation
+# Engram Update Procedure - Foundation
 
 ## Problema Identificado
 
