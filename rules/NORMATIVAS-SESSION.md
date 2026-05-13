@@ -118,11 +118,13 @@ Session commands are routed via `config/auto-delegation.json`:
 
 | Trigger | Agent | Skill |
 |---------|-------|-------|
-| "iniciar sesion", "start session" | SESSION | session-workflow-skill |
 | "guardar sesion", "close session" | SESSION | session-workflow-skill |
 | "continuar", "continue" | SESSION | session-workflow-skill |
 | "estado", "status" | SESSION | session-workflow-skill |
 | "cerrar sesion", "fin de sesion" | SESSION | session-workflow-skill |
+
+> **Note**: "iniciar sesion" / "start session" is handled directly by the canonical startup
+> protocol in `CLAUDE.md` — NOT routed via auto-delegation.
 
 ### 4.2 SESSION Agent Profile
 

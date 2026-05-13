@@ -59,9 +59,9 @@ jobs:
           TAG="${{ steps.version.outputs.tag }}"
           VERSION="${TAG#v}"
           # Extract the section between this version header and the next
-          NOTES=$(awk "/^## \[${VERSION}\]/{found=1; next} found && /^## \[/{exit} found{print}" docs/CHANGELOG.md || echo "")
+          NOTES=$(awk "/^## \[${VERSION}\]/{found=1; next} found && /^## \[/{exit} found{print}" CHANGELOG.md || echo "")
           if [ -z "$NOTES" ]; then
-            NOTES="See [CHANGELOG.md](docs/CHANGELOG.md) for details."
+            NOTES="See [CHANGELOG.md](CHANGELOG.md) for details."
           fi
           # Write to temp file (avoids multiline env var issues)
           printf '%s' "$NOTES" > /tmp/release_notes.md
