@@ -62,7 +62,7 @@ cd foundation
 | Generate dashboard | `wf dashboard` | Weekly review, exec reporting |
 | Adversarial review | `wf review --all` | Before shipping critical changes |
 | SLO benchmark | `wf benchmark` | Performance regression check |
-| Version info | `wf version` | Check stack health and skills count |
+| Version info | `foundation version` | Check stack health and skills count |
 
 ---
 

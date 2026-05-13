@@ -1,3 +1,10 @@
+## Release 1.0.1
+- ✅ Stabilized `foundation dashboard live` so live updates no longer reset the active tab/view
+- ✅ Switched the live server default port to `8090` to avoid local conflicts seen on `8080`
+- ✅ Fixed SSE delivery so `/events` no longer blocks `/health` or `/dashboard.html`
+- ✅ Updated core docs to standardize on the `foundation` command
+- ✅ Prepared synchronized publication for `foundation` and `foundation-public` with refreshed `Foundation.exe`
+
 ## Release 2.9.1
 - ✅ Hardened installer build error handling
 - ✅ Fixed public sync branch detection

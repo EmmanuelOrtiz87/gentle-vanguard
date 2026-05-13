@@ -166,11 +166,17 @@ function Build-MetricCard {
     param(
         [string]$Title,
         [string]$Value,
-        [string]$Label
+    [string]$Label,
+    [string]$LiveKey = ''
     )
 
+  $attr = ''
+  if (-not [string]::IsNullOrWhiteSpace($LiveKey)) {
+    $attr = ' data-live-key="' + (ConvertTo-HtmlSafe $LiveKey) + '"'
+  }
+
     return @"
-<div class="card">
+<div class="card"$attr>
   <h3>$Title</h3>
   <div class="value">$Value</div>
   <div class="label">$Label</div>
@@ -844,10 +850,10 @@ if ($stackLive) {
 }
 
 $cardsOps = @()
-$cardsOps += Build-MetricCard -Title 'Live Traffic Light' -Value $liveTrafficLight -Label 'orchestrator + events + token + quality'
-$cardsOps += Build-MetricCard -Title 'Live Token Status' -Value $liveTokenStatus -Label 'token guard current status'
-$cardsOps += Build-MetricCard -Title 'Events (5m)' -Value $liveEvents5m -Label 'events seen in last 5 minutes'
-$cardsOps += Build-MetricCard -Title 'Routing Accuracy' -Value $liveRoutingAccuracy -Label 'live matrix quality snapshot'
+$cardsOps += Build-MetricCard -Title 'Live Traffic Light' -Value $liveTrafficLight -Label 'orchestrator + events + token + quality' -LiveKey 'traffic_light'
+$cardsOps += Build-MetricCard -Title 'Live Token Status' -Value $liveTokenStatus -Label 'token guard current status' -LiveKey 'token_status'
+$cardsOps += Build-MetricCard -Title 'Events (5m)' -Value $liveEvents5m -Label 'events seen in last 5 minutes' -LiveKey 'events_5m'
+$cardsOps += Build-MetricCard -Title 'Routing Accuracy' -Value $liveRoutingAccuracy -Label 'live matrix quality snapshot' -LiveKey 'routing_accuracy'
 
 $cardsBenchmark = @()
 $cardsBenchmark += Build-MetricCard -Title 'Benchmark Status' -Value $currentBenchStatus -Label 'full benchmark outcome'
@@ -1521,16 +1527,29 @@ function drawLineChart(canvasId, labels, values, color, yFormatter) {
 function initTabs() {
   const buttons = Array.from(document.querySelectorAll('.nav button'));
   const sections = Array.from(document.querySelectorAll('.section'));
+  const activate = (targetId, smooth) => {
+    const fallback = buttons[0] ? buttons[0].dataset.target : null;
+    const selected = targetId || fallback;
+    buttons.forEach((b) => b.classList.toggle('active', b.dataset.target === selected));
+    sections.forEach((s) => s.classList.toggle('active', s.id === selected));
+    if (selected) {
+      localStorage.setItem('foundation-dashboard-active-tab', selected);
+      history.replaceState(null, '', '#' + selected);
+    }
+    if (smooth) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   buttons.forEach((btn) => {
     btn.addEventListener('click', () => {
-      buttons.forEach((b) => b.classList.remove('active'));
-      sections.forEach((s) => s.classList.remove('active'));
-      btn.classList.add('active');
-      const target = document.getElementById(btn.dataset.target);
-      if (target) target.classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      activate(btn.dataset.target, true);
     });
   });
+
+  const fromHash = window.location.hash ? window.location.hash.slice(1) : '';
+  const fromStorage = localStorage.getItem('foundation-dashboard-active-tab') || '';
+  activate(fromHash || fromStorage, false);
 }
 
 window.addEventListener('load', () => {

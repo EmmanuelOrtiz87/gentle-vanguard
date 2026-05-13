@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-1.0.0-brightgreen?style=flat-square" alt="Version">
+  <img src="https://img.shields.io/badge/Version-1.0.1-brightgreen?style=flat-square" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=flat-square" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-purple?style=flat-square" alt="PowerShell">
@@ -53,11 +53,11 @@ flowchart LR
 > 👇 **See it in action**
 
 ```powershell
-$ wf implement auth with JWT
-
-🧭 Orchestrator analyzing request...
-   → Stack detected: Node.js + Express + PostgreSQL
-   → Assigning to DEV agent (sdd-lifecycle)
+$ foundation implement auth with JWT
+.\scripts\utilities\session-autostart.cmd   # Start a session
+foundation verify                            # Validate 14 quality gates
+foundation version                           # Version + skill count
+foundation dashboard live                    # Open live observability dashboard
 
 🏗️ DEV agent generating implementation...
    → src/middleware/auth.ts        JWT verification middleware
@@ -127,7 +127,7 @@ flowchart TB
     end
 
     subgraph CLI["⚡ Entry"]
-        WF[wf.ps1]
+        WF[foundation / wf.ps1]
         PP[pre-process-input.ps1]
     end
 
@@ -254,7 +254,7 @@ flowchart LR
 | Run unit tests | `Invoke-Pester tests/unit/ -Output Detailed` |
 | Run integration | `Invoke-Pester tests/integration/ -Output Detailed` |
 | Security audit | `.\scripts\security\audit.ps1` |
-| Quality gates | `wf verify` or `wf judgment-day` |
+| Quality gates | `foundation verify` or `foundation judgment-day` |
 
 See [build/README.md](build/README.md) for the full build pipeline.
 
@@ -274,7 +274,7 @@ See [build/README.md](build/README.md) for the full build pipeline.
 ---
 
 <p align="center">
-  <strong>🚀 Foundation v2.9.1</strong><br>
+  <strong>🚀 Foundation v1.0.1</strong><br>
   <em>🔒 Local-First · 🛡️ Total Privacy · ⚡ Production Ready</em><br>
   <sub>
     <a href="https://github.com/EmmanuelOrtiz87/foundation">Private repo</a>

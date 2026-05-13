@@ -56,6 +56,8 @@ $predictorScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\base
 $slaScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\sla-dashboard-generator.ps1'
 $escalationScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\auto-escalation.ps1'
 $predictorOutputPath = Join-Path $repoRoot 'reports\baseline-predictor-latest.json'
+$liveServerScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\websocket-live-server.ps1'
+$liveServerPort = 8090
 
 if (-not $OutputPath) {
     $OutputPath = Join-Path $repoRoot 'reports\dashboard.html'
@@ -103,6 +105,49 @@ function Get-MapValue {
   return $cursor
 }
 
+  function Test-LiveServer {
+    try {
+      $resp = Invoke-WebRequest -UseBasicParsing -Uri ("http://localhost:{0}/health" -f $liveServerPort) -TimeoutSec 2 -ErrorAction Stop
+      return $resp.StatusCode -eq 200
+    } catch {
+      return $false
+    }
+  }
+
+  function Ensure-LiveServer {
+    if (-not (Test-Path $liveServerScript)) {
+      return $false
+    }
+    if (Test-LiveServer) {
+      return $true
+    }
+
+    $pwshPath = (Get-Command pwsh -ErrorAction SilentlyContinue).Source
+    if (-not $pwshPath) {
+      $pwshPath = 'pwsh'
+    }
+
+    $stdoutLog = Join-Path $repoRoot 'reports/live-server-stdout.log'
+    $stderrLog = Join-Path $repoRoot 'reports/live-server-stderr.log'
+    if (Test-Path $stdoutLog) {
+      Remove-Item $stdoutLog -Force -ErrorAction SilentlyContinue
+    }
+    if (Test-Path $stderrLog) {
+      Remove-Item $stderrLog -Force -ErrorAction SilentlyContinue
+    }
+
+    $args = @(
+      '-NoProfile',
+      '-ExecutionPolicy', 'Bypass',
+      '-File', $liveServerScript,
+      '-Port', [string]$liveServerPort,
+      '-DashboardPath', $OutputPath
+    )
+    Start-Process -FilePath $pwshPath -ArgumentList $args -WorkingDirectory $repoRoot -WindowStyle Hidden -RedirectStandardOutput $stdoutLog -RedirectStandardError $stderrLog | Out-Null
+    Start-Sleep -Milliseconds 1200
+    return (Test-LiveServer)
+  }
+
 Write-Host ''
 Write-Host '=== DASHBOARD LIVE REFRESH ===' -ForegroundColor Cyan
 Write-Host "Output: $OutputPath" -ForegroundColor Gray
@@ -124,7 +169,7 @@ while ($true) {
       $statusAlert = @{
         previous_status = $lastTrafficLight
         current_status = $currentTrafficLight
-        dashboard_url = 'http://localhost:8080/dashboard.html'
+        dashboard_url = 'http://localhost:8090/dashboard.html'
       }
       & $webhookScript -WebhookUrl $WebhookUrl -Status $currentTrafficLight -AlertType 'status-change' -Provider $WebhookProvider -Details $statusAlert 2>$null | Out-Null
     }
@@ -158,7 +203,7 @@ while ($true) {
               layers_failed = ($failedLayers -join ', ')
               latency_wf = "$wfAverage s"
               routing_accuracy = "$routingAccuracy%"
-              dashboard_url = "http://localhost:8080/dashboard.html"
+                        dashboard_url = "http://localhost:8090/dashboard.html"
             }
             & $webhookScript -WebhookUrl $WebhookUrl -Status 'RED' -AlertType 'benchmark-fail' `
               -Provider $WebhookProvider -Details $alertDetails 2>$null | Out-Null
@@ -190,16 +235,28 @@ while ($true) {
       & $slaScript -OutputPath $slaPath -MonthlyTarget 99.5 2>$null
     }
 
-    # 3) Regenerate dashboard HTML with browser-side auto-refresh hint.
-    & $generateDashboard -OutputPath $OutputPath -AutoRefreshSeconds $refreshSafe | Out-Null
+    $pushReady = Test-LiveServer
+    if ($Open -and -not $opened -and -not $pushReady) {
+      $pushReady = Ensure-LiveServer
+    }
+
+    # 3) Regenerate dashboard HTML. Prefer SSE push updates, but keep timed refresh as fallback.
+    $autoRefreshSeconds = if ($pushReady) { 0 } else { $refreshSafe }
+    & $generateDashboard -OutputPath $OutputPath -AutoRefreshSeconds $autoRefreshSeconds | Out-Null
 
     if ($Open -and -not $opened) {
-        if ($IsWindows -or $env:OS -eq 'Windows_NT') {
-            Start-Process $OutputPath
+      $liveUrl = "http://localhost:$liveServerPort/dashboard.html"
+      $openedTarget = $OutputPath
+      if ($pushReady -or (Ensure-LiveServer)) {
+        $openedTarget = $liveUrl
+      }
+
+      if ($IsWindows -or $env:OS -eq 'Windows_NT') {
+        Start-Process $openedTarget
         } elseif ($IsMacOS) {
-            & open $OutputPath
+        & open $openedTarget
         } else {
-            & xdg-open $OutputPath 2>$null
+        & xdg-open $openedTarget 2>$null
         }
         $opened = $true
     }

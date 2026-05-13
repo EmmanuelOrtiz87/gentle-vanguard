@@ -73,8 +73,8 @@ This will:
 ## 📖 Daily Usage Commands
 
 ```powershell
-wf verify          # Check all 14 quality gates
-wf version         # Show stack version + skills count
+foundation verify  # Check all 14 quality gates
+foundation version # Show stack version + skills count
 wf start-session   # Begin tracked session
 wf judgment-day    # Full QA gate before release
 wf dashboard       # Open HTML metrics dashboard

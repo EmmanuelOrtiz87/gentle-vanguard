@@ -13,7 +13,7 @@
     - GET /health         → Server status
 
 .PARAMETER Port
-    HTTP server port. Default: 8080
+    HTTP server port. Default: 8090
 
 .PARAMETER DashboardPath
     Path to dashboard.html artifact. Default: ./reports/dashboard.html
@@ -25,11 +25,11 @@
     Interval (ms) to poll for new snapshot data. Default: 5000 (5 seconds)
 
 .EXAMPLE
-    .\\websocket-live-server.ps1 -Port 8080 -DashboardPath ./reports/dashboard.html
+    .\\websocket-live-server.ps1 -Port 8090 -DashboardPath ./reports/dashboard.html
 #>
 
 param(
-    [int]$Port = 8080,
+    [int]$Port = 8090,
     [string]$DashboardPath = './reports/dashboard.html',
     [string]$SnapshotPath = './reports/stack-live-observability-latest.json',
     [int]$RefreshInterval = 5000
@@ -50,6 +50,31 @@ if (-not (Test-Path $DashboardPath)) {
 $lastSnapshotData = @{}
 $lastSnapshotHash = ''
 $clients = New-Object System.Collections.Concurrent.ConcurrentBag[System.Net.HttpListenerResponse]
+
+function Get-MapValue {
+    param(
+        $Map,
+        [string[]]$Path,
+        $Default = $null
+    )
+
+    $cursor = $Map
+    foreach ($part in $Path) {
+        if ($null -eq $cursor) { return $Default }
+        if ($cursor -is [System.Collections.IDictionary]) {
+            if (-not $cursor.Contains($part)) { return $Default }
+            $cursor = $cursor[$part]
+            continue
+        }
+        if ($cursor.PSObject.Properties.Name -contains $part) {
+            $cursor = $cursor.$part
+            continue
+        }
+        return $Default
+    }
+    if ($null -eq $cursor) { return $Default }
+    return $cursor
+}
 
 function Get-SnapshotData {
     if (-not (Test-Path $SnapshotPath)) {
@@ -82,13 +107,6 @@ if (window.EventSource) {
             const data = JSON.parse(event.data);
             console.log('[DASHBOARD-SSE] Update received:', data);
             
-            // Update traffic light
-            const trafficLight = document.getElementById('live-traffic-light');
-            if (trafficLight) {
-                trafficLight.textContent = data.traffic_light || 'N/A';
-                trafficLight.className = 'traffic-light-' + (data.traffic_light || 'green').toLowerCase();
-            }
-            
             // Update timestamp
             const timestamp = document.getElementById('live-timestamp');
             if (timestamp) {
@@ -98,9 +116,12 @@ if (window.EventSource) {
             // Update metrics
             if (data.metrics) {
                 for (const [key, value] of Object.entries(data.metrics)) {
-                    const elem = document.getElementById('metric-' + key);
-                    if (elem) {
-                        elem.textContent = value;
+                    const card = document.querySelector('[data-live-key="' + key + '"]');
+                    if (card) {
+                        const valueElem = card.querySelector('.value');
+                        if (valueElem) {
+                            valueElem.textContent = value;
+                        }
                     }
                 }
             }
@@ -111,8 +132,7 @@ if (window.EventSource) {
     };
     
     eventSource.onerror = function() {
-        console.warn('[DASHBOARD-SSE] Connection error, will retry...');
-        eventSource.close();
+        console.warn('[DASHBOARD-SSE] Connection error, waiting for automatic reconnect...');
     };
     
     console.log('[DASHBOARD-SSE] Connected to /events stream');
@@ -151,6 +171,7 @@ try {
             switch ($request.RawUrl) {
                 '/dashboard.html' {
                     $dashboardHtml = Get-Content $DashboardPath -Raw
+                    $dashboardHtml = [regex]::Replace($dashboardHtml, '<meta\s+http-equiv=`?"refresh`?"[^>]*>', '', 'IgnoreCase')
                     $enhancedHtml = $dashboardHtml -replace '</body>', "$sseClientScript`n</body>"
                     $response.ContentType = 'text/html; charset=utf-8'
                     $data = [System.Text.Encoding]::UTF8.GetBytes($enhancedHtml)
@@ -162,40 +183,29 @@ try {
                 '/events' {
                     $response.ContentType = 'text/event-stream'
                     $response.Headers['Cache-Control'] = 'no-cache'
-                    $response.Headers['Connection'] = 'keep-alive'
                     $response.StatusCode = 200
-                    $response.OutputStream.Flush()
-                    
+
                     Write-Host "[OK] SSE /events connected" -ForegroundColor Gray
-                    
-                    # Send updates every RefreshInterval
-                    $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
-                    while ($response.OutputStream.CanWrite -and $stopwatch.ElapsedMilliseconds -lt 3600000) {
-                        $snapshot = Get-SnapshotData
-                        $hash = Get-SnapshotHash $snapshot
-                        
-                        if ($hash -ne $lastSnapshotHash) {
-                            $lastSnapshotHash = $hash
-                            $payload = @{
-                                timestamp     = Get-Date -Format 'o'
-                                traffic_light = $snapshot.executive_traffic_light ?? 'GREEN'
-                                metrics       = @{
-                                    active_sessions = $snapshot.orchestrator.active_sessions ?? 0
-                                    token_status    = $snapshot.token_guard.status ?? 'OK'
-                                    events_5m       = $snapshot.events_5m.count ?? 0
-                                    benchmark_status = $snapshot.benchmark.status ?? 'PASS'
-                                }
-                            }
-                            
-                            $sseMessage = "data: " + ($payload | ConvertTo-Json -Depth 5) + "`n`n"
-                            $sseBytes = [System.Text.Encoding]::UTF8.GetBytes($sseMessage)
-                            $response.OutputStream.Write($sseBytes, 0, $sseBytes.Length)
-                            $response.OutputStream.Flush()
+
+                    $snapshot = Get-SnapshotData
+                    $hash = Get-SnapshotHash $snapshot
+                    $lastSnapshotHash = $hash
+                    $payload = @{
+                        timestamp     = Get-Date -Format 'o'
+                        retry_ms      = $RefreshInterval
+                        metrics       = @{
+                            traffic_light    = [string](Get-MapValue -Map $snapshot -Path @('executive_traffic_light') -Default 'GREEN')
+                            token_status     = [string](Get-MapValue -Map $snapshot -Path @('token', 'status') -Default 'OK')
+                            events_5m        = [string](Get-MapValue -Map $snapshot -Path @('events', 'last_5m') -Default 0)
+                            routing_accuracy = [string](Get-MapValue -Map $snapshot -Path @('routing', 'accuracy') -Default 'N/A')
                         }
-                        
-                        Start-Sleep -Milliseconds $RefreshInterval
                     }
-                    
+
+                    $sseMessage = "retry: $RefreshInterval`n" + "data: " + ($payload | ConvertTo-Json -Depth 5) + "`n`n"
+                    $sseBytes = [System.Text.Encoding]::UTF8.GetBytes($sseMessage)
+                    $response.OutputStream.Write($sseBytes, 0, $sseBytes.Length)
+                    $response.OutputStream.Flush()
+
                     Write-Host "[INFO] SSE /events closed" -ForegroundColor Gray
                 }
                 
