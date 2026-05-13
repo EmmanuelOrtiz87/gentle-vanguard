@@ -109,6 +109,37 @@ if (Test-DomainEnabled 'config') {
         Add-Result "auto-delegation-keys" "FAIL" "config/auto-delegation.json not found" "config"
     }
 
+    # Guard: very short keyword triggers (1-2 chars) are high-risk for false positives
+    if (Test-Path $AdPath) {
+        try {
+            $ad = Get-Content $AdPath -Raw | ConvertFrom-Json
+            $shortTriggers = @()
+            $allowShort = @('ai', 'qa', 'ux', 'ui', 'hr')
+
+            foreach ($agentProp in $ad.keywordMappings.PSObject.Properties) {
+                $agentName = $agentProp.Name
+                foreach ($raw in $agentProp.Value) {
+                    if (-not $raw) { continue }
+                    $k = $raw.ToString().ToLowerInvariant().Trim()
+                    $k = $k.Trim('"').TrimEnd('.', ',', ';', ':')
+                    if ([string]::IsNullOrWhiteSpace($k)) { continue }
+                    if ($k.Length -le 2 -and ($allowShort -notcontains $k)) {
+                        $shortTriggers += "$agentName=$k"
+                    }
+                }
+            }
+
+            if ($shortTriggers.Count -eq 0) {
+                Add-Result "short-trigger-guard" "PASS" "No risky short triggers (<=2 chars) found in keywordMappings" "config"
+            } else {
+                $sample = ($shortTriggers | Select-Object -Unique | Select-Object -First 10) -join '; '
+                Add-Result "short-trigger-guard" "WARN" "Potential false-positive triggers found: $sample" "config"
+            }
+        } catch {
+            Add-Result "short-trigger-guard" "WARN" "Could not evaluate short trigger guard: $_" "config"
+        }
+    }
+
     # quality-gates.json required keys
     $QgPath = "$Root\config\quality-gates.json"
     if (Test-Path $QgPath) {

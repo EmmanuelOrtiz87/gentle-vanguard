@@ -99,6 +99,21 @@ if (Test-Path $autoDelegationConfig) {
 }
 
 if ($delegationConfig -and $delegationConfig.keywordMappings) {
+    function Normalize-Trigger {
+        param([string]$RawTrigger)
+
+        if (-not $RawTrigger) { return $null }
+
+        $normalized = $RawTrigger.ToLower().Trim()
+        # Remove paired wrappers commonly present in config entries
+        $normalized = $normalized.Trim('"')
+        # Remove trailing punctuation/noise from descriptive list items
+        $normalized = $normalized.TrimEnd('.', ',', ';', ':')
+
+        if ([string]::IsNullOrWhiteSpace($normalized)) { return $null }
+        return $normalized
+    }
+
     # agentCodeToSkill: loaded from config - no hardcoding in script
     $skillMapping = @{}
     if ($delegationConfig.agentCodeToSkill) {
@@ -126,8 +141,9 @@ if ($delegationConfig -and $delegationConfig.keywordMappings) {
         $skillName = if ($skillMapping.ContainsKey($agent)) { $skillMapping[$agent] } else { $agent.ToLower() }
 
         foreach ($keyword in $keywords) {
-            if ($keyword -and -not $triggerMap.ContainsKey($keyword)) {
-                $triggerMap[$keyword] = $skillName
+            $normalizedKeyword = Normalize-Trigger -RawTrigger $keyword
+            if ($normalizedKeyword -and -not $triggerMap.ContainsKey($normalizedKeyword)) {
+                $triggerMap[$normalizedKeyword] = $skillName
             }
         }
     }
@@ -146,7 +162,9 @@ function Compute-MatchQuality {
     # Word boundary match: trigger appears as whole word
     $pattern = '\b' + [regex]::Escape($Trigger) + '\b'
     if ($InputText -match $pattern) { return 95 }
-    # Word-start match: trigger matches start of a word
+    # For short triggers (e.g. "pr"), avoid partial matches like "proyecto"
+    if ($Trigger.Length -le 2) { return 0 }
+    # Word-start match: trigger matches start of a word (only for length >= 3)
     $wordStartPattern = '\b' + [regex]::Escape($Trigger)
     if ($InputText -match $wordStartPattern) { return 90 }
     # Substring match: trigger is contained within input

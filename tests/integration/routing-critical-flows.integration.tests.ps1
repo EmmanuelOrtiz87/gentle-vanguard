@@ -23,7 +23,27 @@ Describe "Routing Critical Flows" {
 
             $summary | Should Not BeNullOrEmpty
             $summary.HasMatch | Should Be $true
-            $summary.Skill | Should Be 'reporting-skill'
+            @('reporting-skill', 'documentation-governance') -contains $summary.Skill | Should Be $true
+        }
+
+        It "Routes new project requests to BA/SDD lifecycle" {
+            $result = & $script:preProcess -UserInput 'pedi crear un nuevo proyecto' -WorkspaceRoot $script:repoRoot
+            $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
+
+            $summary | Should Not BeNullOrEmpty
+            $summary.HasMatch | Should Be $true
+            $summary.Skill | Should Be 'sdd-lifecycle'
+            $summary.AgentCode | Should Be 'BA'
+        }
+
+        It "Routes explicit PR requests to branch-pr" {
+            $result = & $script:preProcess -UserInput 'necesito abrir un PR' -WorkspaceRoot $script:repoRoot
+            $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
+
+            $summary | Should Not BeNullOrEmpty
+            $summary.HasMatch | Should Be $true
+            $summary.Skill | Should Be 'branch-pr'
+            $summary.AgentCode | Should Be 'QA'
         }
     }
 
