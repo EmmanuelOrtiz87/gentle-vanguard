@@ -138,9 +138,12 @@ logs/.session-active
 # Telemetry
 .telemetry/
 
+# Tool-specific configs (local-only)
+.claude/
+.opencode/
+
 # OpenCode generated
 config/opencode.schema.json
-.opencode/
 
 # Audit reports (auto-generated)
 LESSONS-LEARNED-*.md
