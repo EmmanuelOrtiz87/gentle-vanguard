@@ -69,6 +69,9 @@ Workspace + Foundation operating flow.
 - `rotate-artifacts.ps1` hardened with explicit error accounting and non-zero exit on failures.
 - `wf day-end-closure`/`day-end-closure.ps1` invocation stabilized (named switch handling).
 - Session startup compatibility checks integrated into workspace startup manager.
+- Complementary release homologation gate automated via
+  `scripts/utilities/DEPLOYMENT/validate-release-homologation.ps1` and exposed as
+  `wf.ps1 release-homologation`.
 
 ### Definitions
 
