@@ -179,6 +179,7 @@ See [`RELEASE-CHECKLIST.md`](./RELEASE-CHECKLIST.md) for pre-release validation.
 - [ ] All governance tests pass
 - [ ] Documentation updated
 - [ ] No uncommitted changes on `develop`
+- [ ] Multi-repo homologation gate passes: `./scripts/utilities/wf.ps1 release-homologation`
 
 ## versióning Governance
 

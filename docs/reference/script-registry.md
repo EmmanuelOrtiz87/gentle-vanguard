@@ -19,6 +19,7 @@ Central inventory of automation scripts with ownership, risk level, and executio
 | scripts/utilities/ensure-tools-active.ps1          | Tooling                | B     | yes       | platform       | Avoids heavy auto-installs unless forced                                                                                                                |
 | scripts/utilities/run-engram.ps1                   | Memory Runtime         | B     | manual    | platform       | Canonical launcher for Engram session persistence                                                                                                       |
 | scripts/utilities/wf.ps1                           | Operator CLI           | B     | manual    | dev-experience | Entrypoint for workflow commands                                                                                                                        |
+| scripts/utilities/DEPLOYMENT/validate-release-homologation.ps1 | Release Governance     | B     | manual    | dev-experience | Complementary pre-release multi-repo gate (VERSION/branch/tag alignment)                                                                                |
 | scripts/utilities/enable-optional-post-commit.ps1  | Optional Hook Coverage | B     | manual    | dev-experience | Enables/disables optional post-commit automation (disabled by default)                                                                                  |
 | scripts/foundation/setup.sh                        | Foundation Setup       | B     | manual    | platform       | Cross-platform bootstrap entrypoint for Linux/macOS/WSL                                                                                                 |
 | scripts/foundation/bootstrap.ps1                   | Foundation Setup       | B     | manual    | platform       | Canonical PowerShell bootstrap entrypoint for workspace initialization                                                                                  |
@@ -114,6 +115,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\valida
 # Workspace homologation (dry-run / apply)
 .\scripts\utilities\wf.ps1 homologate
 .\scripts\utilities\wf.ps1 homologate apply
+
+# Release homologation complementary gate (multi-repo)
+.\scripts\utilities\wf.ps1 release-homologation
+.\scripts\utilities\wf.ps1 release-homologation v1.0.0
 
 # Context efficiency thresholds for audit semaphore
 Get-Content .\config\context-efficiency.json

@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'foundation-sync', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'foundation-sync', 'release-homologation', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -1644,6 +1644,7 @@ COMMANDS:
     clean-branches [apply] Preview or clean merged local feature/release branches
     homologate [apply]  Normalize docs/artifacts and update references (dry-run default)
     foundation-sync [apply] [optional -CreatePr]  Sync managed assets declared in foundation manifest
+    release-homologation [vX.Y.Z]  Run complementary release gate across foundation and foundation-public
     agent-alert [strict] Check process-compliance signals for off-process AI activity
     agent <AGENT> [TASK] Route task to specialized sub-agent (BA|SAD|DEV|QA|OPS|GOV|DOC)
     dashboard [open]     Generate static HTML dashboard from telemetry JSON (open = auto-open browser)
@@ -1720,6 +1721,8 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 clean-branches apply -Force  Delete merged branches without prompt, fallback to -D when needed
     .\scripts\utilities\wf.ps1 homologate          Preview normalization actions
     .\scripts\utilities\wf.ps1 homologate apply    Execute normalization and reference updates
+    .\scripts\utilities\wf.ps1 release-homologation         Validate VERSION + branch alignment across repos
+    .\scripts\utilities\wf.ps1 release-homologation v1.0.0  Validate alignment plus optional tag consistency
     .\scripts\utilities\wf.ps1 health -StrictCleanup  Run health and fail if cleanup drift exists
     .\scripts\utilities\wf.ps1 monthly-report all      Export metrics and build monthly management report
     .\scripts\utilities\wf.ps1 agent-alert           Show process-compliance warnings (non-blocking)
@@ -2468,6 +2471,25 @@ switch ($Command) {
         } else {
             & $syncScript -Mode check -Force:$Force
         }
+        exit $LASTEXITCODE
+    }
+
+    'release-homologation' {
+        $gateScript = Join-Path $repoRoot 'scripts\utilities\DEPLOYMENT\validate-release-homologation.ps1'
+        if (-not (Test-Path $gateScript)) {
+            Write-Error "validate-release-homologation.ps1 not found: $gateScript"
+            exit 1
+        }
+
+        $gateArgs = @{}
+        if (-not [string]::IsNullOrWhiteSpace($Scope)) {
+            $gateArgs['ExpectedTag'] = $Scope
+        }
+        if ($JSON) {
+            $gateArgs['AsJson'] = $true
+        }
+
+        & $gateScript @gateArgs
         exit $LASTEXITCODE
     }
 
