@@ -22,11 +22,15 @@ Coordinates with project-orchestrator for technical decisions.
 - MUST save session summary via mem_save after significant work
 - MUST coordinate with project-orchestrator for technical guidance
 
+## Notes
+
+- **Session start** (`inicia sesion` / `start session`) is handled by the canonical startup protocol
+  defined in `CLAUDE.md` (Phase A + Phase B). This skill handles all other session commands.
+
 ## Decision Gates
 
 | Command  | Trigger Words                     | Action                                                     |
 | -------- | --------------------------------- | ---------------------------------------------------------- |
-| Start    | "iniciar sesion", "start session" | Autostart, mem_context, git status, todowrite              |
 | Continue | "continuar", "continue"           | mem_context, git status, show next step, resume            |
 | Status   | "estado", "status"                | Show project, git branch/status, todos, suggest next       |
 | Push     | "push", "guardar"                 | Review todos, generate audit doc, commit, push, mem_save   |
@@ -35,9 +39,7 @@ Coordinates with project-orchestrator for technical decisions.
 
 ## Execution Steps
 
-1. **Start session**: `scripts/utilities/session-autostart.cmd` → `mem_context` → `git status` →
-   `todowrite` → present status
-2. **Continue session**: `mem_context` → `git status` → show next step → resume work
+1. **Continue session**: `mem_context` → `git status` → show next step → resume work
 3. **Show status**: Show project info → git branch/status → todos → suggest next step
 4. **Push / Guardar**: Review todos completed → generate audit doc → git status/diff → commit → push
    → mem_save summary
