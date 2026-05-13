@@ -99,6 +99,24 @@ Threshold source: `config/auto-delegation.json#confidenceThreshold` (default: 60
 
 ---
 
+## 5.1 Multilingual Routing (MANDATORY)
+
+Routing must support at least these user languages:
+
+1. Spanish (`es`)
+2. English (`en`)
+3. Portuguese Brazil (`pt-BR`)
+
+Operational requirements:
+
+1. Critical intents (session start/close, SDD start for new project/component, PR actions) must have
+  trigger coverage in all three languages in `config/auto-delegation.json#keywordMappings`.
+2. Regressions are blocked by automated matrix validation in
+  `tests/e2e/routing-language-matrix.json` executed by `scripts/utilities/routing-quality-eval.ps1`.
+3. `scripts/utilities/agent-verify.ps1` must fail if multilingual routing matrix has mismatches.
+
+---
+
 ## 6. Security Rules (OWASP-aligned)
 
 1. **No secrets in output** — API keys, tokens, passwords → always `<REDACTED>`
