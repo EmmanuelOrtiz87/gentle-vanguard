@@ -1,7 +1,7 @@
 ---
 name: session-workflow
 description: >
-  Trigger: "iniciar sesion", "guardar sesion", "continuar", "estado", "pr", "push", "review", "auditar". Session
+  Trigger: "guardar sesion", "continuar", "estado", "pr", "push", "review", "auditar". Session
   workflow executor handling session management mechanics. Coordinates with project-orchestrator for
   technical guidance.
 ---
@@ -10,7 +10,7 @@ description: >
 
 ## Activation Contract
 
-Load when user triggers session commands: "iniciar sesion" / "start session", "continuar" /
+Load when user triggers session commands: "continuar" /
 "continue", "estado" / "status", "push" / "guardar", "review" / "auditar", or "PR" / "create PR".
 Coordinates with project-orchestrator for technical decisions.
 
