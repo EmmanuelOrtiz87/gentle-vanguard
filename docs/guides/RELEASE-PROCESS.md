@@ -32,17 +32,20 @@ npm test
 # Update TUI installer version in foundation-installer-tui.ps1
 ```
 
-### 2.5 Homologation Gate (Complementary)
+### 2.5 Homologation Gate (Mandatory — auto-runs on publish)
 
-Run these checks before tagging. This complements the existing release process and does not replace
-tests, audit, or governance gates.
+This gate is **automatically executed** by `wf.ps1 publish` before any validation or merge attempt.
+If the gate fails, publish is blocked until issues are resolved.
 
 ```powershell
-# Standard automated gate
+# Run manually (same check that publish runs internally)
 .\scripts\utilities\wf.ps1 release-homologation
 
 # Optional: validate with a specific release tag
 .\scripts\utilities\wf.ps1 release-homologation vX.Y.Z
+
+# Skip gate on publish (not recommended — use only for emergencies)
+.\scripts\utilities\wf.ps1 publish -SkipHomologationGate
 ```
 
 Expected outcome:

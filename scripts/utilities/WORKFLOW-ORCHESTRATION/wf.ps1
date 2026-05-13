@@ -14,6 +14,7 @@ param(
     
     [switch]$SkipTests,
     [switch]$SkipReview,
+    [switch]$SkipHomologationGate,
     [switch]$StrictCleanup,
     [switch]$Force,
     [switch]$JSON
@@ -609,6 +610,7 @@ function Invoke-PublishWorkflow {
     param(
         [switch]$SkipReviewGate,
         [switch]$SkipTestsGate,
+        [switch]$SkipHomologationGate,
         [switch]$ForceMode
     )
 
@@ -617,6 +619,23 @@ function Invoke-PublishWorkflow {
     }
 
     Warn-OldWorkflowCheckpoints -ThresholdDays 7
+
+    # --- Homologation Gate (mandatory pre-publish check) ---
+    if (-not $SkipHomologationGate) {
+        Write-Step "Multi-Repo Homologation Gate"
+        $gateScript = Join-Path $repoRoot 'scripts\utilities\DEPLOYMENT\validate-release-homologation.ps1'
+        if (Test-Path $gateScript) {
+            & $gateScript -PrivateRepo $repoRoot
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "`n[BLOCKED] Homologation gate failed. Resolve issues before publishing." -ForegroundColor Red
+                Write-Host "  Run: .\scripts\utilities\wf.ps1 release-homologation" -ForegroundColor Yellow
+                Write-Host "  To skip (not recommended): .\scripts\utilities\wf.ps1 publish -SkipHomologationGate" -ForegroundColor Yellow
+                return
+            }
+        } else {
+            Write-Warning "Homologation gate script not found: $gateScript"
+        }
+    }
 
     $attempt = 1
     while ($attempt -le 2) {
@@ -2079,7 +2098,7 @@ switch ($Command) {
 
     'publish' {
         Invoke-TokenBudgetGuard -Task 'publish' -Risk 'high' -EstimatedChars 18000
-        Invoke-PublishWorkflow -SkipReviewGate:$SkipReview -SkipTestsGate:$SkipTests -ForceMode:$Force
+        Invoke-PublishWorkflow -SkipReviewGate:$SkipReview -SkipTestsGate:$SkipTests -SkipHomologationGate:$SkipHomologationGate -ForceMode:$Force
     }
     
     'health' {
