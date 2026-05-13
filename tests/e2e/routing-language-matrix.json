@@ -1,0 +1,147 @@
+{
+  "version": "1.0.0",
+  "description": "Routing quality matrix for multilingual users (es, en, pt-BR)",
+  "cases": [
+    {
+      "id": "es-session-start-01",
+      "language": "es",
+      "input": "inicia sesion en foundation",
+      "expected": {
+        "hasMatch": true,
+        "skill": "session-workflow-skill"
+      }
+    },
+    {
+      "id": "en-session-start-01",
+      "language": "en",
+      "input": "start session in foundation",
+      "expected": {
+        "hasMatch": true,
+        "skill": "session-workflow-skill"
+      }
+    },
+    {
+      "id": "pt-session-start-01",
+      "language": "pt-BR",
+      "input": "iniciar sessao no foundation",
+      "expected": {
+        "hasMatch": true,
+        "skill": "session-workflow-skill"
+      }
+    },
+    {
+      "id": "es-new-project-01",
+      "language": "es",
+      "input": "quiero crear un nuevo proyecto desde cero",
+      "expected": {
+        "hasMatch": true,
+        "skill": "sdd-lifecycle",
+        "agentCode": "BA"
+      }
+    },
+    {
+      "id": "en-new-project-01",
+      "language": "en",
+      "input": "create a new project from scratch",
+      "expected": {
+        "hasMatch": true,
+        "skill": "sdd-lifecycle",
+        "agentCode": "BA"
+      }
+    },
+    {
+      "id": "pt-new-project-01",
+      "language": "pt-BR",
+      "input": "quero criar um novo projeto do zero",
+      "expected": {
+        "hasMatch": true,
+        "skill": "sdd-lifecycle",
+        "agentCode": "BA"
+      }
+    },
+    {
+      "id": "es-new-component-01",
+      "language": "es",
+      "input": "crear componente nuevo para onboarding",
+      "expected": {
+        "hasMatch": true,
+        "skill": "sdd-lifecycle",
+        "agentCode": "BA"
+      }
+    },
+    {
+      "id": "en-new-component-01",
+      "language": "en",
+      "input": "create a new component for onboarding",
+      "expected": {
+        "hasMatch": true,
+        "skill": "sdd-lifecycle",
+        "agentCode": "BA"
+      }
+    },
+    {
+      "id": "pt-new-component-01",
+      "language": "pt-BR",
+      "input": "criar novo componente para onboarding",
+      "expected": {
+        "hasMatch": true,
+        "skill": "sdd-lifecycle",
+        "agentCode": "BA"
+      }
+    },
+    {
+      "id": "es-pr-01",
+      "language": "es",
+      "input": "necesito abrir un PR",
+      "expected": {
+        "hasMatch": true,
+        "skill": "branch-pr",
+        "agentCode": "QA"
+      }
+    },
+    {
+      "id": "en-pr-01",
+      "language": "en",
+      "input": "open a PR for review",
+      "expected": {
+        "hasMatch": true,
+        "skill": "branch-pr",
+        "agentCode": "QA"
+      }
+    },
+    {
+      "id": "pt-pr-01",
+      "language": "pt-BR",
+      "input": "criar PR para revisao",
+      "expected": {
+        "hasMatch": true,
+        "skill": "branch-pr",
+        "agentCode": "QA"
+      }
+    },
+    {
+      "id": "es-ambiguous-01",
+      "language": "es",
+      "input": "haz cosas rapido",
+      "expected": {
+        "planMode": true
+      }
+    },
+    {
+      "id": "en-ambiguous-01",
+      "language": "en",
+      "input": "do stuff quickly",
+      "expected": {
+        "planMode": true
+      }
+    },
+    {
+      "id": "pt-ambiguous-01",
+      "language": "pt-BR",
+      "input": "faz coisas rapido",
+      "expected": {
+        "planMode": true
+      }
+    }
+  ]
+}

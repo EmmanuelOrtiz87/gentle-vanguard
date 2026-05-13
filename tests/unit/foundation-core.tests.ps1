@@ -91,6 +91,16 @@ Describe 'Foundation Core Tests' {
             $summary.AgentCode | Should Be 'BA'
         }
 
+        It 'routes Portuguese new project requests to BA/SDD lifecycle' {
+            $result = & $script:preProcess -UserInput 'quero criar um novo projeto do zero' -WorkspaceRoot $script:root
+            $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
+
+            $summary | Should Not BeNullOrEmpty
+            $summary.HasMatch | Should Be $true
+            $summary.Skill | Should Be 'sdd-lifecycle'
+            $summary.AgentCode | Should Be 'BA'
+        }
+
         It 'routes explicit PR requests to branch-pr and not BA' {
             $result = & $script:preProcess -UserInput 'necesito abrir un PR' -WorkspaceRoot $script:root
             $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1

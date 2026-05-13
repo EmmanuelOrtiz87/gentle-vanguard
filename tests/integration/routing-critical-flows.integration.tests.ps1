@@ -45,6 +45,15 @@ Describe "Routing Critical Flows" {
             $summary.Skill | Should Be 'branch-pr'
             $summary.AgentCode | Should Be 'QA'
         }
+
+        It "Routes Portuguese session start requests to session workflow" {
+            $result = & $script:preProcess -UserInput 'iniciar sessao no foundation' -WorkspaceRoot $script:repoRoot
+            $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
+
+            $summary | Should Not BeNullOrEmpty
+            $summary.HasMatch | Should Be $true
+            $summary.Skill | Should Be 'session-workflow-skill'
+        }
     }
 
     Context "Low-confidence routing" {
