@@ -51,7 +51,7 @@ param(
 
     [string]$IncidentReportPath = '',
 
-    [string]$DashboardUrl = 'http://localhost:8080/dashboard.html',
+    [string]$DashboardUrl = 'http://localhost:8090/dashboard.html',
 
     [int]$FailureThreshold = 3,
 

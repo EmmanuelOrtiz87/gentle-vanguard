@@ -92,8 +92,8 @@ Captures: branch, recent commits, changed files, platform health.
 
 ```powershell
 # Daily commands
-wf verify          # Check all 14 quality gates
-wf version         # Show stack version + skills count
+foundation verify  # Check all 14 quality gates
+foundation version # Show stack version + skills count
 wf dashboard       # Open HTML metrics dashboard
 ```
 

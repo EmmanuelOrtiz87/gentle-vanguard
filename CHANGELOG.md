@@ -9,6 +9,26 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [1.0.1] - 2026-05-13 - Live Dashboard Stabilization#
+
+### ✨ Added#
+
+- **Dynamic observability dashboard**: Preserved active tab state, stabilized live metric hooks, and documented the `foundation dashboard live` flow for the current release.
+- **Public release alignment**: Prepared synchronized publication for both `foundation` and `foundation-public`, including the refreshed `Foundation.exe` artifact.
+
+### 🔧 Fixed#
+
+- **Live dashboard server**: Switched the default live port to `8090` to avoid local conflicts observed on `8080`.
+- **SSE delivery**: Refactored `/events` to emit one update per request so the single-listener server no longer blocks `/health` and `/dashboard.html`.
+- **Dashboard refresh UX**: Removed destructive refresh behavior in served mode and kept timed refresh only as a fallback when push mode is unavailable.
+
+### 📚 Changed#
+
+- **CLI guidance**: Updated core docs to promote `foundation` as the canonical command while keeping compatibility wrappers in place.
+- **Release artifacts**: Bumped patch version to `1.0.1` across repo metadata and release notes.
+
+---
+
 ## [1.0.0] - 2026-05-13 - Initial Production Release#
 
 ### ✨ Added#
