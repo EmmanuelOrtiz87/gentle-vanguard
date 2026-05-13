@@ -1653,6 +1653,7 @@ COMMANDS:
     install-engram       Install or verify Engram CLI availability
     orchestrator-status  Validate orchestrator and Engram integration
     stack-dashboard      Show one-shot stack health, token risk, and next action recommendation
+                        Scope: live (real-time observability loop)
     runtime-route        Resolve runtime mode (AI/Hybrid/Offline) and delegation strategy
     runtime-gate [type]  Gate check: is task type allowed? type=ai|heavy-ai|network|local|metrics|any
     custom-rules-status  Show custom technical/business/review rule loading status
@@ -1687,6 +1688,7 @@ COMMANDS:
     sdd-metrics          FF-002: SDD process KPIs: spec coverage, lead time, rework ratio
     sync-drift           FF-004: Detect drift between declared config and actual skills/files
     benchmark [cmds]     FF-006: Profile wf commands vs SLO thresholds (default: status,health)
+                        Scope: full (perf + routing coverage + tests-domain verification)
     version              Show current stack version (from VERSION file + orchestrator.json)
     help                 Show this help
 
@@ -1717,6 +1719,7 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 health              Check system health & activate tools
     .\scripts\utilities\wf.ps1 install-engram      Install or verify Engram CLI
     .\scripts\utilities\wf.ps1 stack-dashboard     One-shot operational dashboard (health + token risk + action)
+    .\scripts\utilities\wf.ps1 stack-dashboard live Real-time observability loop (agents/events/tokens/context)
     .\scripts\utilities\wf.ps1 stack-dashboard strict  Fail with non-zero exit when executive traffic light is RED
     .\scripts\utilities\wf.ps1 runtime-route        Resolve runtime mode and recommended fallback actions
     .\scripts\utilities\wf.ps1 runtime-route -JSON  Emit machine-readable runtime mode data
@@ -1732,6 +1735,7 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 response-mode ahorro         On-demand token saving mode (chat-compact)
     .\scripts\utilities\wf.ps1 response-mode normal         On-demand balanced mode (chat-balanced, override)
     .\scripts\utilities\wf.ps1 response-mode detallado      On-demand detailed mode (chat-detailed, override)
+    .\scripts\utilities\wf.ps1 benchmark full      Run full stack benchmark (latency + routing matrix + verify tests)
     .\scripts\utilities\wf.ps1 ide-status          Detect IDE and show recommended activation
     .\scripts\utilities\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
     .\scripts\utilities\wf.ps1 update-tools         Update required tools and optional integrations
@@ -2156,12 +2160,27 @@ switch ($Command) {
 
     'stack-dashboard' {
         $dashboardScript = Join-Path $scriptDir '..\UTILITIES\stack-dashboard.ps1'
+        $liveScript = Join-Path $scriptDir '..\UTILITIES\stack-live-observability.ps1'
         if (-not (Test-Path $dashboardScript)) {
             Write-Error "Stack dashboard script not found: $dashboardScript"
             exit 1
         }
 
         $isStrict = $StrictCleanup -or ($Scope -eq 'strict')
+
+        if ($Scope -eq 'live') {
+            if (-not (Test-Path $liveScript)) {
+                Write-Error "Live observability script not found: $liveScript"
+                exit 1
+            }
+
+            if ($JSON) {
+                & $liveScript -AsJson
+            } else {
+                & $liveScript -Watch
+            }
+            exit $LASTEXITCODE
+        }
 
         if ($JSON) {
             if ($isStrict) {
@@ -2525,6 +2544,21 @@ switch ($Command) {
     }
 
     'benchmark' {
+        if ($Scope -eq 'full') {
+            $fullBenchScript = Join-Path $repoRoot 'scripts\utilities\wf-stack-benchmark.ps1'
+            if (-not (Test-Path $fullBenchScript)) {
+                Write-Error "wf-stack-benchmark.ps1 not found: $fullBenchScript"
+                exit 1
+            }
+
+            if ($JSON) {
+                & $fullBenchScript -AsJson
+            } else {
+                & $fullBenchScript -Strict
+            }
+            exit $LASTEXITCODE
+        }
+
         # FF-006: Profile key wf commands against SLO thresholds
         $benchScript = Join-Path $repoRoot 'scripts\utilities\wf-benchmark.ps1'
         if (-not (Test-Path $benchScript)) {
