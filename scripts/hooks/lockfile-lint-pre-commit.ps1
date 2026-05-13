@@ -28,7 +28,9 @@ Write-Host "[lockfile-lint] Validating $LockfilePath..." -ForegroundColor Cyan
 # 1. Validate JSON structure
 try {
     $lockContent = Get-Content $LockfilePath -Raw
-    $lock = $lockContent | ConvertFrom-Json -ErrorAction Stop
+    # package-lock.json uses "" as a valid key in "packages".
+    # ConvertFrom-Json requires -AsHashtable for empty-string property names.
+    $lock = $lockContent | ConvertFrom-Json -AsHashtable -ErrorAction Stop
     Write-Host "[OK] JSON structure valid" -ForegroundColor Green
 }
 catch {
@@ -45,7 +47,7 @@ $requiredFields = @("lockfileVersion", "requires", "packages")
 $missingFields = @()
 
 foreach ($field in $requiredFields) {
-    if (-not (Get-Member -InputObject $lock -Name $field -ErrorAction SilentlyContinue)) {
+    if (-not $lock.ContainsKey($field)) {
         $missingFields += $field
     }
 }
@@ -60,7 +62,7 @@ if ($missingFields.Count -gt 0) {
 Write-Host "[OK] Required fields present (lockfileVersion=$($lock.lockfileVersion))" -ForegroundColor Green
 
 # 3. Validate packages object not empty
-if ($lock.packages.PSObject.Properties.Count -eq 0) {
+if ($lock.packages.Count -eq 0) {
     Write-Host "[WARNING] packages object is empty" -ForegroundColor Yellow
     Write-Host "  This might indicate a corrupted lockfile" -ForegroundColor Yellow
 }
@@ -69,7 +71,7 @@ if ($lock.packages.PSObject.Properties.Count -eq 0) {
 $issues = @()
 
 # Check for invalid version formats
-$invalidVersions = $lock.packages.PSObject.Properties | Where-Object {
+$invalidVersions = $lock.packages.GetEnumerator() | Where-Object {
     $_.Value.version -and $_.Value.version -notmatch '^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?(\+[a-zA-Z0-9.]+)?$'
 }
 
@@ -78,7 +80,7 @@ if ($invalidVersions) {
 }
 
 # Check for missing integrity hashes (can indicate corruption)
-$missingIntegrity = $lock.packages.PSObject.Properties | Where-Object {
+$missingIntegrity = $lock.packages.GetEnumerator() | Where-Object {
     $_.Value.resolved -and -not $_.Value.integrity
 } | Measure-Object | Select-Object -ExpandProperty Count
 
