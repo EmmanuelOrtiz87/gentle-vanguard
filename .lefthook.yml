@@ -11,9 +11,17 @@ pre-commit:
       run: pwsh -NoProfile -ExecutionPolicy Bypass -File "hooks/json-lint.ps1"
     workflow-lint:
       run: pwsh -NoProfile -ExecutionPolicy Bypass -File "hooks/workflow-lint.ps1"
+    lockfile-lint:
+      glob: "package-lock.json"
+      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/lockfile-lint-pre-commit.ps1"
 
 pre-push:
   commands:
+    npm-audit:
+      glob: "package.json"
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File
+        "scripts/hooks/npm-audit-pre-push.ps1" -AuditLevel moderate
     orchestrator-auto-fix:
       run:
         powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/orchestrate-auto-fix.ps1"

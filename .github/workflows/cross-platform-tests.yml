@@ -71,7 +71,7 @@ jobs:
         shell: pwsh
         run: |
           if (Test-Path 'package.json') {
-            npm install
+            npm ci --ignore-scripts
           }
           if (Test-Path 'pyproject.toml') {
             pip install -r requirements.txt 2>/dev/null || pip install pytest
