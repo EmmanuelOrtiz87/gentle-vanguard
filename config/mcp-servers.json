@@ -2,11 +2,25 @@
   "mcpServers": {
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
-      "description": "File system access for foundation"
+      "args": [
+        "--include-workspace-root",
+        "--workspace", "%USERPROFILE%\\mcp-workspace",
+        "--no",
+        "--offline",
+        "@modelcontextprotocol/server-filesystem",
+        "."
+      ],
+      "description": "File system access for foundation — offline hardened (npx supply-chain protection)",
+      "security": {
+        "hardened": true,
+        "mode": "offline",
+        "workspace": "%USERPROFILE%\\mcp-workspace",
+        "pinnedVersion": "2026.1.14",
+        "updateProcedure": "cd %USERPROFILE%\\mcp-workspace && npm update @modelcontextprotocol/server-filesystem && review package-lock.json changes before next use"
+      }
     }
   },
-  "version": "1.0.0",
-  "description": "MCP Server Configuration for foundation",
+  "version": "1.1.0",
+  "description": "MCP Server Configuration for foundation — hardened against supply chain attacks",
   "autoStart": true
 }
