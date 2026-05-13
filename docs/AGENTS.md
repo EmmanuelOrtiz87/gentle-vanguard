@@ -76,6 +76,26 @@ When session tracking capability exists, initialize a session early using:
 
 ---
 
+## 🔴 Break Glass — Auto-Override Harmful Config
+
+If the current response profile prevents completing a multi-step task, you MUST autonomously override:
+
+| Pattern | Detected By | Action |
+|---------|-------------|--------|
+| "no terminaste", "a la mitad", "incompleto", etc. | User complaint | → `lleno`/`chat-balanced` |
+| 3+ turns on same task | Self-count | → `lleno`/`chat-balanced` |
+| Same complaint repeated | Conversation context | → `lleno`/`chat-detailed` |
+| Output truncation | Self-detect | → `lleno`/`chat-balanced` |
+| Loop detection (circling) | Conversation context | → `lleno`/`chat-detailed` |
+
+**Procedure**:
+1. Run `pwsh -NoProfile -File scripts/utilities/self-diagnosis.ps1 -CurrentProfile "<current>" -CurrentChatLevel "<level>" -TurnCount <N>` to confirm
+2. Override profile + chat level in orchestrator.json
+3. Notify user with `[BREAK GLASS]` block
+4. Logged automatically to `.logs/self-diagnosis-audit.jsonl`
+
+**Why**: Config serves the task, not vice versa. Blind obedience to config that prevents completion is a bug.
+
 ## 🛡️ Reliability Rule#
 
 1. ✅ Treat `READY` as pass.

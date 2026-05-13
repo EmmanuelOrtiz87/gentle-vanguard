@@ -74,7 +74,9 @@
   "allowed_response_modes": ["simple", "executive", "expanded"],
   "chat_response": {
     "default_level": "chat-compact",
-    "enforce_on_session_start": true,
+    "enforce_on_session_start": false,
+    "auto_escalate_on_complex_tasks": true,
+    "auto_escalate_triggers": ["multi-step", "implement", "refactor", "bug fix", "crear", "build", "desarrollar", "arreglar", "implementar"],
     "allow": ["chat-compact", "chat-balanced", "chat-detailed"],
     "decision": {
       "kind": "architecture",
@@ -122,11 +124,11 @@
         "guidelines": ["No digressions.", "Keep complete sentences.", "Focus on actionable output."]
       },
       "lleno": {
-        "description": "Compressed language with short fragments accepted.",
+        "description": "Compressed language with short fragments accepted. Adequate detail for task completion.",
         "guidelines": [
-          "Prefer short clauses.",
-          "Drop non-essential connectors.",
-          "Keep meaning explicit."
+          "Complete sentences preferred.",
+          "Explain reasoning before actions.",
+          "Provide sufficient detail to finish tasks in one pass."
         ]
       },
       "ultra": {
@@ -145,8 +147,33 @@
     "baseline_detail": "simple",
     "baseline_profile": "ultra",
     "baseline_chat_level": "chat-compact",
-    "allow_overrides": false,
-    "require_override_reason": true
+    "allow_overrides": true,
+    "require_override_reason": true,
+    "break_glass": {
+      "enabled": true,
+      "description": "Auto-override when current response profile prevents completing multi-step tasks. Agent detects pattern (user reports incompleteness, task spans 3+ turns, loop detection) and overrides autonomously.",
+      "override_to_profile": "lleno",
+      "override_to_chat_level": "chat-balanced",
+      "override_to_detail": "simple",
+      "requires_notification": true,
+      "notification_template": "[BREAK GLASS] La configuración {old_profile}/{old_chat_level} impedía completar la tarea. Override automático a {new_profile}/{new_chat_level}. Motivo: {reason}",
+      "audit_log": ".logs/break-glass-audit.jsonl",
+      "detection_triggers": [
+        "usuario reporta tarea incompleta (no terminaste, a la mitad, incompleto, no finalizaste)",
+        "misma tarea se extiende 3+ turnos sin completarse",
+        "usuario repite el mismo reclamo",
+        "agente detecta que su output fue truncado o insuficiente",
+        "bucle detectado (misma conversación girando sin progreso)"
+      ],
+      "allowed_profiles": ["lleno", "lite"],
+      "allowed_chat_levels": ["chat-balanced", "chat-detailed"],
+      "cooldown_turns": 5,
+      "abuse_prevention": {
+        "max_overrides_per_session": 3,
+        "max_overrides_per_hour": 2,
+        "reset_on_session_start": true
+      }
+    }
   },
   "subagent_orchestration": {
     "token_budget_guard": {
