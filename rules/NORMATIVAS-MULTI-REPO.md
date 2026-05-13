@@ -531,6 +531,34 @@ Describe "Monorepo Integration" {
 
 ---
 
+## 8. Lessons Learned & Best Practices (Release Baseline v1.0.0)
+
+### Lessons Learned
+
+- Release history and current version state can diverge between repositories; always validate both.
+- Baseline homogenization is safer with non-destructive updates (`VERSION` + branch propagation)
+  instead of rewriting existing tag history.
+- `main` alignment alone is insufficient; `develop` must also contain the same release baseline.
+
+### Best Practices
+
+1. Validate in both repos before any release action:
+  - `VERSION`
+  - `git tag --sort=-creatordate`
+  - `git branch -vv`
+2. Apply baseline changes in this order:
+  - update `VERSION` on `main`
+  - commit and push
+  - merge `main` into `develop`
+  - push `develop`
+3. Keep tags immutable:
+  - if `v1.0.0` already exists, do not move it
+  - if `v1.0.0` is missing in one repo, create and push it once
+4. Keep mandatory validation gates enabled (pre-push hooks, tests, audit checks) during
+  homogenization.
+
+---
+
 ## References
 
 - [pnpm Workspaces](https://pnpm.io/workspaces)
