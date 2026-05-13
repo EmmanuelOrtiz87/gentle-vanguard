@@ -301,6 +301,137 @@ Test-Path .\logs\security
 
 ---
 
+## 5. NPX Supply-Chain Hardening
+
+**Archivos Afectados**:
+- `config/mcp-servers.json` - MCP server configuration
+- `.npmrc` - Global npm security policy
+
+**Threat Model**:
+
+NPX supply-chain attacks leverage two vectors:
+1. **Live registry fetching** - `npx -y @package` downloads latest version from npm registry on every invocation
+2. **Post-install scripts** - Malicious packages execute arbitrary code during installation
+
+**Mitigations Implemented**:
+
+| Flag | Purpose | Protection Against |
+|------|---------|-------------------|
+| `--offline` | Block all registry network requests at runtime | Live registry poisoning |
+| `--no` | Refuse to execute packages not already installed | Compromised version downloads |
+| `--workspace <dir>` | Use pre-vetted lockfile-based installation | Version drift/tampering |
+| `--include-workspace-root` | Enable workspace resolution mode | Path traversal attacks |
+| `.npmrc: ignore-scripts=true` | Disable post-install lifecycle scripts globally | Post-install code execution |
+| `.npmrc: min-release-age=3` | 3-day cooldown on new packages | Zero-day exploitation window |
+
+**Setup Instructions (New Machine)**:
+
+```powershell
+# 1. Create isolated MCP workspace
+mkdir $HOME\mcp-workspace
+cd $HOME\mcp-workspace
+
+# 2. Initialize with package-lock.json
+npm init -y
+
+# 3. Install pinned MCP server version
+npm install @modelcontextprotocol/server-filesystem@2026.1.14 --save-exact
+
+# 4. Verify lockfile created
+Test-Path package-lock.json  # Must be True
+Test-Path node_modules/@modelcontextprotocol/server-filesystem
+```
+
+**Current Configuration (mcp-servers.json)**:
+
+```json
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "--include-workspace-root",
+        "--workspace", "%USERPROFILE%\\mcp-workspace",
+        "--no",
+        "--offline",
+        "@modelcontextprotocol/server-filesystem",
+        "."
+      ],
+      "description": "File system access — offline hardened (npx supply-chain protection)",
+      "security": {
+        "hardened": true,
+        "mode": "offline",
+        "workspace": "%USERPROFILE%\\mcp-workspace",
+        "pinnedVersion": "2026.1.14",
+        "updateProcedure": "cd %USERPROFILE%\\mcp-workspace && npm update @modelcontextprotocol/server-filesystem && review package-lock.json changes before next use"
+      }
+    }
+  }
+}
+```
+
+**Global NPM Security Policy (.npmrc)**:
+
+```ini
+# npm Security Configuration — foundation
+# Hardened against supply chain attacks
+
+# Disable post-install lifecycle scripts
+ignore-scripts=true
+
+# Minimum release age: skip packages < 3 days old
+min-release-age=3
+
+# Block git-based dependencies (requires npm CLI 11.10.0+)
+allow-git=none
+```
+
+**Conscious Update Procedure**:
+
+When updating MCP server version:
+
+```powershell
+cd $HOME\mcp-workspace
+
+# 1. Review current version
+npm list @modelcontextprotocol/server-filesystem
+
+# 2. Check for vulnerabilities
+npm audit
+
+# 3. Update (respects min-release-age)
+npm update @modelcontextprotocol/server-filesystem --save-exact
+
+# 4. Review changes
+git diff package-lock.json  # OR manually inspect changes
+git add package-lock.json
+
+# 5. Commit with security review
+git commit -m "security(mcp): update @modelcontextprotocol/server-filesystem to vX.X.X
+
+Reviewed: [list changes reviewed]
+Vulnerabilities: [audit result]
+"
+```
+
+**Verification Commands**:
+
+```powershell
+# Verify offline mode works (should NOT make network requests)
+npx --include-workspace-root --workspace $HOME\mcp-workspace --no --offline @modelcontextprotocol/server-filesystem --version
+
+# Verify .npmrc is loaded
+npm config get ignore-scripts
+npm config get min-release-age
+
+# Audit current lockfile
+npm audit --workspace $HOME\mcp-workspace
+```
+
+**Reference**: Based on `lirantal/npm-security-best-practices` Section 8: Harden npx Execution
+
+---
+
 ## Referencias
 
 - `scripts/security/encryption-manager.ps1` - Encriptación
@@ -309,6 +440,8 @@ Test-Path .\logs\security
 - `scripts/security/security-logger.ps1` - Logging
 - `tests/security/input-validation.security.tests.ps1` - Tests
 - `config/security-policy.json` - Políticas
+- `config/mcp-servers.json` - MCP server hardening
+- `.npmrc` - npm security policy
 
 ---
 
@@ -317,6 +450,6 @@ Test-Path .\logs\security
 El proyecto tiene implementadas todas las medidas de seguridad crticas:
 
 Encriptación AES-256 Validación robusta de entrada Gestin segura de secretos Logging y Auditoría
-completos Tests de seguridad Detección de Anomalías
+completos Tests de seguridad Detección de Anomalías **NPX supply-chain hardening (offline + workspace mode)**
 
 **Estado**: LISTO PARA PRODUCCIN
