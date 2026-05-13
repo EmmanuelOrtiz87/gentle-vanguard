@@ -1,6 +1,6 @@
 # Future Projects Guide
 
-Use this workspace foundation as the standard starting point for new repositories.
+Use this Foundation as the standard starting point for new repositories.
 
 ## Start Here
 

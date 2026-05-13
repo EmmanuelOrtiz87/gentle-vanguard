@@ -1,7 +1,12 @@
-# sfx-build.ps1 — Builds Foundation.exe (single self-contained, encrypted file)
+# sfx-build.ps1 — Builds portable Foundation.exe (DEPRECATED)
 # Embeds encrypted (.enc) files as compressed ZIP, compiles with ps2exe.
-# On first run, user provides master.key to decrypt scripts.
-# Output: dist/Foundation.exe — single file, AES-256 protected, no installation.
+# Output: dist/Foundation.exe (portable, no installation).
+#
+# ⚠️ DEPRECATED: Use create-installer.ps1 instead.
+#    Foundation.exe is now the NSIS installer (professional wizard, all-in-one).
+#    This portable approach no longer represents the canonical distribution.
+#    Kept for reference only.
+#
 # Usage: pwsh -File build/sfx-build.ps1
 
 param([switch]$DryRun)

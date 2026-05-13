@@ -1,6 +1,6 @@
 ﻿# Spec-Driven Development (SDD)
 
-This directory contains design documents and implementation specifications for Workspace Foundation
+This directory contains design documents and implementation specifications for Foundation
 and its components.
 
 ## Purpose
@@ -43,7 +43,7 @@ approval processes.
 
 Main specification:
 
-- [foundation-sdd.md](foundation-sdd.md) - Core Workspace Foundation design
+- [foundation-sdd.md](foundation-sdd.md) - Core Foundation design
 
 Template:
 

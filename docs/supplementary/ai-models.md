@@ -13,7 +13,7 @@ workflows.
 
 ## Required or Optional
 
-- The workspace foundation does not require a local base model to be installed.
+- The foundation does not require a local base model to be installed.
 - A model is only required when a specific project, agent workflow, or automation flow depends on
   it.
 - When a model is required, prefer the simplest supported path for the target machine.

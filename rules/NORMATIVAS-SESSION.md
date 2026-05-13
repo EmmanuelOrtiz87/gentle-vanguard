@@ -7,7 +7,7 @@ Last updated: 2026-05-12
 
 ## 1. PROPOSITO
 
-Define el lifecycle completo de sesiones en el workspace Foundation. Aplica a todos los agentes AI que operan sesiones de desarrollo.
+Define el lifecycle completo de sesiones en Foundation. Aplica a todos los agentes AI que operan sesiones de desarrollo.
 
 ---
 

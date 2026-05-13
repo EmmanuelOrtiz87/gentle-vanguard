@@ -1,10 +1,10 @@
 # Integration Guide: Existing Projects
 
-How to integrate Workspace Foundation into existing repositories and projects.
+How to integrate Foundation into existing repositories and projects.
 
 ## Overview
 
-Workspace Foundation is **designed to be additive**, meaning it adds capabilities without modifying
+Foundation is **designed to be additive**, meaning it adds capabilities without modifying
 existing code. This guide covers integration into:
 
 - Local repositories
@@ -101,7 +101,7 @@ cd your-project
 
 # 3. Commit the Foundation files
 git add .
-git commit -m "feat: integrate Workspace Foundation"
+git commit -m "feat: integrate Foundation"
 git push
 ```
 
@@ -349,7 +349,7 @@ Remove-Item -Recurse scripts/
 
 # Commit the removal
 git add .
-git commit -m "chore: remove Workspace Foundation"
+git commit -m "chore: remove Foundation"
 git push
 ```
 

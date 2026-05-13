@@ -1,6 +1,6 @@
-# Workspace Foundation Installation
+# Foundation Installation
 
-Complete guide to set up Workspace Foundation on a new machine.
+Complete guide to set up Foundation on a new machine.
 
 ## Prerequisites
 
