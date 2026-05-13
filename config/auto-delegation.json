@@ -28,7 +28,8 @@
       "HR": 1,
       "LEGAL": 1,
       "BUS-TELE": 1,
-      "PREMORTEM": 2
+      "PREMORTEM": 2,
+      "SELF-DIAG": 1
     },
     "default": 1,
     "globalMax": 3,
@@ -82,6 +83,7 @@
     "GITFLOW-WORKFLOW": "git-workflow-skill",
     "GITFLOW-COMMIT": "git-workflow-skill",
     "GITFLOW-CONFLICT": "git-workflow-skill",
+    "SELF-DIAG": "self-diagnosis-skill",
     "DAILY": "daily-workflow",
     "MKT": "marketing-content-writer",
     "SALES": "sales-account-executive",
@@ -105,6 +107,7 @@
     "sdd-lifecycle": "BA",
     "docker-devops-skill": "OPS",
     "documentation-governance": "DOC",
+    "self-diagnosis-skill": "GOV",
     "daily-workflow": "DEV",
     "comment-writer": "GOV",
     "work-unit-commits": "DEV",
@@ -444,6 +447,33 @@
       "\"comment style\"",
       "\"collaboration comment\"",
       "\"warm feedback\""
+    ],
+    "SELF-DIAG": [
+      "no terminaste",
+      "no terminaste la tarea",
+      "no finalizaste",
+      "dejaste a la mitad",
+      "incompleto",
+      "tarea incompleta",
+      "no completaste",
+      "no completaste la tarea",
+      "quedo a medio hacer",
+      "no estas terminando",
+      "no estas terminando las tareas",
+      "te esta bloqueando",
+      "entraste en bucle",
+      "bucle",
+      "diste mas vueltas",
+      "calesita",
+      "terminated",
+      "no terminas nada",
+      "no cerraste",
+      "diagnostica tu configuracion",
+      "auto-diagnostico",
+      "self-diagnosis",
+      "break glass",
+      "overridea tu config",
+      "te esta afectando la config"
     ],
     "SESSION": [
       "inicia sesion",
@@ -1525,6 +1555,27 @@
       "maxRetries": 2,
       "escalateOnFailure": "orchestrator",
       "rationale": "Premortem needs creative scenario generation + structured synthesis — moderate temp for failure exploration"
+    },
+    "SELF-DIAG": {
+      "temperature": 0.1,
+      "hallucinationGuard": "critical",
+      "requiredEvidence": [
+        "current response profile identified (ultra/lleno/lite + chat level)",
+        "task completion failure pattern confirmed",
+        "break glass action documented in audit trail",
+        "user notified of config change and reason"
+      ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
+      "hedgingBlocked": true,
+      "maxRetries": 1,
+      "escalateOnFailure": "orchestrator",
+      "rationale": "Self-diagnosis is critical path — must break glass when config harms operability. No ambiguity."
     },
     "SCRIPT": {
       "temperature": 0.15,

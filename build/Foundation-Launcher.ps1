@@ -1,15 +1,30 @@
-# Foundation-Launcher.exe - Smart Launcher v2.2
-# Automatically finds its components in relative or parent paths
-# Full AES-256 decryption pipeline with AppData caching and path injection
-# Silent professional mode — no interactive prompts
+# Foundation-Launcher.exe — Smart Launcher v2.3
+# Dual-mode: embedded encrypted archive (single .exe) + file-based .enc (installed)
+# AES-256 decryption with master.key caching — secure single-file distribution
+# Silent professional mode — no interactive prompts except first-run key input
 
 param([string]$Command = "wf")
 
 $ErrorActionPreference = "Stop"
 
+# Self-contained mode: placeholder replaced by sfx-build.ps1 with Base64-encoded
+# ZIP of encrypted (.enc) files. If non-empty, embedded mode activates.
+$embeddedArchiveBase64 = "__EMBEDDED_SCRIPTS__"
+
+$appDataDir = "$env:LOCALAPPDATA\Foundation\scripts"
+$dataDir = "$env:LOCALAPPDATA\Foundation\data"
+$cacheKeyPath = Join-Path $dataDir "master.key"
+$cacheScript = Join-Path $appDataDir "scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1"
+$embeddedTempDir = Join-Path $env:TEMP "Foundation\embedded"
+
 function Write-Log {
     param($Message, $Color = "White")
     Write-Host $Message -ForegroundColor $Color
+}
+
+function Read-Host-Safe {
+    # Read-Host wrapper that works in both console and noConsole modes
+    try { return Read-Host @args } catch { return $null }
 }
 
 function Find-File {
@@ -17,9 +32,7 @@ function Find-File {
     try {
         $result = Get-ChildItem -Path $SearchPath -Recurse -Filter $FileName -ErrorAction Stop | Select-Object -First 1
         return $result.FullName
-    } catch {
-        return $null
-    }
+    } catch { return $null }
 }
 
 function Decrypt-Script {
@@ -35,113 +48,170 @@ function Decrypt-Script {
     return [System.Text.Encoding]::UTF8.GetString($decryptedBytes)
 }
 
-# Get the directory where this launcher is running from
-$exePath = $MyInvocation.MyCommand.Path
-if ($exePath) {
-    $baseDir = Split-Path -Parent $exePath
-} else {
-    $baseDir = Get-Location
+function Decrypt-Bytes {
+    param([byte[]]$Data, [byte[]]$Key)
+    $aes = [System.Security.Cryptography.Aes]::Create()
+    $aes.Key = $Key
+    $aes.IV = $Data[0..15]
+    $encryptedData = $Data[16..($Data.Length - 1)]
+    $decryptor = $aes.CreateDecryptor()
+    return $decryptor.TransformFinalBlock($encryptedData, 0, $encryptedData.Length)
 }
 
-$appDataDir = "$env:LOCALAPPDATA\Foundation\scripts"
-$dataDir = "$env:LOCALAPPDATA\Foundation\data"
-
-# Strategy 1: Check for master.key in standard locations
-$masterKeyPaths = @(
-    (Join-Path $baseDir "keys\master.key"),
-    (Join-Path $baseDir "master.key"),
-    (Join-Path $baseDir "..\keys\master.key")
-)
-
-$masterKeyPath = $null
-foreach ($path in $masterKeyPaths) {
-    if (Test-Path $path) {
-        $masterKeyPath = $path
-        break
-    }
+function Extract-EncryptedArchive {
+    param([string]$Base64, [string]$OutDir)
+    $zipBytes = [Convert]::FromBase64String($Base64)
+    $stream = [System.IO.MemoryStream]::new($zipBytes)
+    try {
+        $archive = [System.IO.Compression.ZipArchive]::new($stream, [System.IO.Compression.ZipArchiveMode]::Read)
+        $extracted = 0
+        foreach ($entry in $archive.Entries) {
+            $outPath = Join-Path $OutDir $entry.FullName
+            $outDir = Split-Path $outPath -Parent
+            if (-not (Test-Path $outDir)) { New-Item -ItemType Directory -Path $outDir -Force | Out-Null }
+            $reader = $entry.Open()
+            $bytes = [byte[]]::new($entry.Length)
+            $reader.Read($bytes, 0, $bytes.Length) | Out-Null
+            $reader.Dispose()
+            [System.IO.File]::WriteAllBytes($outPath, $bytes)
+            $extracted++
+        }
+        $archive.Dispose()
+        return $extracted
+    } finally { $stream.Dispose() }
 }
 
-# Strategy 2: If not found, search recursively
-if (-not $masterKeyPath) {
-    $foundKey = Find-File "master.key" $baseDir
-    if ($foundKey) {
-        $masterKeyPath = $foundKey
-    }
-}
-
-# If still not found, exit gracefully — no interactive prompts
-if (-not $masterKeyPath) {
-    Write-Log "FOUNDATION LAUNCHER: Master key not found." "Red"
-    Write-Log "Place master.key in: $baseDir\keys\master.key" "Yellow"
-    exit 1
-}
-
-# Load master key
-try {
-    $key = [System.IO.File]::ReadAllBytes($masterKeyPath)
-    if ($key.Length -ne 32) {
-        Write-Log "FOUNDATION LAUNCHER: Invalid master key (expected 32 bytes, got $($key.Length))" "Red"
-        exit 1
-    }
-} catch {
-    Write-Log "FOUNDATION LAUNCHER: Failed to load master.key: $_" "Red"
-    exit 1
-}
-
-# Find all encrypted scripts and cache them to AppData
-$encryptedBasePath = $null
-foreach ($p in @((Join-Path $baseDir "protected"), (Join-Path $baseDir "..\protected"), $baseDir)) {
-    $testPath = Join-Path $p "scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1.enc"
-    if (Test-Path $testPath) { $encryptedBasePath = $p; break }
-}
-
-if (-not $encryptedBasePath) {
-    Write-Log "FOUNDATION LAUNCHER: No protected scripts found." "Red"
-    Write-Log "Install Foundation properly first." "Yellow"
-    exit 1
-}
-
-try {
-    New-Item -ItemType Directory -Path $appDataDir -Force | Out-Null
-    New-Item -ItemType Directory -Path $dataDir -Force | Out-Null
-
-    $encFiles = Get-ChildItem -Path $encryptedBasePath -Recurse -Filter "*.enc" -File
-    $cachedCount = 0
-
-    foreach ($encFile in $encFiles) {
-        $relativePath = $encFile.FullName.Substring($encryptedBasePath.Length + 1)
-        $relativePath = $relativePath -replace '\.enc$', ''
-        $outputFile = Join-Path $appDataDir $relativePath
-
-        if (-not (Test-Path $outputFile) -or (Get-Item $encFile.FullName).LastWriteTime -gt (Get-Item $outputFile -ErrorAction SilentlyContinue).LastWriteTime) {
-            $outputDir = Split-Path $outputFile -Parent
-            New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
-            $decrypted = Decrypt-Script -EncryptedPath $encFile.FullName -Key $key
-            [System.IO.File]::WriteAllText($outputFile, $decrypted, [System.Text.Encoding]::UTF8)
-            $cachedCount++
+function Resolve-MasterKey {
+    # Returns byte[] key or $null
+    # Order: AppData cache → next to exe → user prompt
+    $keyPaths = @(
+        $cacheKeyPath,
+        (Join-Path $baseDir "master.key"),
+        (Join-Path $baseDir "keys\master.key"),
+        (Join-Path $baseDir "..\keys\master.key")
+    )
+    foreach ($p in $keyPaths) {
+        if (Test-Path $p) {
+            $bytes = [System.IO.File]::ReadAllBytes($p)
+            if ($bytes.Length -eq 32) { return $bytes }
         }
     }
-} catch {
-    Write-Log "FOUNDATION LAUNCHER: Failed to cache scripts: $_" "Red"
-    exit 1
+    # Recursive search in base dir
+    $found = Find-File "master.key" $baseDir
+    if ($found) {
+        $bytes = [System.IO.File]::ReadAllBytes($found)
+        if ($bytes.Length -eq 32) { return $bytes }
+    }
+    return $null
 }
 
-# Inject environment variables for child scripts
+function Prompt-For-Key {
+    Write-Log "`nFOUNDATION LAUNCHER: First-time setup" "Cyan"
+    Write-Log "No master.key found. This exe contains encrypted scripts." "Yellow"
+    Write-Log "Enter the master.key contents (Base64, 32 bytes):" "Yellow"
+    $input = Read-Host-Safe "> "
+    if (-not $input) { return $null }
+    $input = $input.Trim()
+    try {
+        $bytes = [Convert]::FromBase64String($input)
+        if ($bytes.Length -ne 32) {
+            Write-Log "Invalid key: expected 32 bytes, got $($bytes.Length)" "Red"
+            return $null
+        }
+        # Cache for next run
+        New-Item -ItemType Directory -Path $dataDir -Force | Out-Null
+        [System.IO.File]::WriteAllBytes($cacheKeyPath, $bytes)
+        Write-Log "Key cached to $cacheKeyPath" "Green"
+        return $bytes
+    } catch {
+        Write-Log "Invalid Base64: $_" "Red"
+        return $null
+    }
+}
+
+# Get base directory
+$exePath = $MyInvocation.MyCommand.Path
+$baseDir = if ($exePath) { Split-Path -Parent $exePath } else { Get-Location }
+
+# Ensure AppData dirs exist
+New-Item -ItemType Directory -Path $appDataDir -Force | Out-Null
+New-Item -ItemType Directory -Path $dataDir -Force | Out-Null
+
+# Detect mode
+$isEmbedded = ($embeddedArchiveBase64 -ne "" -and $embeddedArchiveBase64 -ne "__EMBEDDED_SCRIPTS__")
+
+if ($isEmbedded -and -not (Test-Path $cacheScript)) {
+    # MODE 1: Embedded encrypted archive — extract .enc files to temp
+    Write-Log "FOUNDATION LAUNCHER: Extracting encrypted scripts from archive..." "Green"
+    if (Test-Path $embeddedTempDir) { Remove-Item $embeddedTempDir -Recurse -Force }
+    New-Item -ItemType Directory -Path $embeddedTempDir -Force | Out-Null
+    $count = Extract-EncryptedArchive -Base64 $embeddedArchiveBase64 -OutDir $embeddedTempDir
+    Write-Log "FOUNDATION LAUNCHER: Extracted $count encrypted files" "Green"
+    $encryptedBasePath = $embeddedTempDir
+    $isEmbeddedEncrypted = $true
+} elseif ($isEmbedded) {
+    # Already cached — AppData has decrypted scripts, skip
+    $isEmbeddedEncrypted = $false
+} else {
+    # MODE 2: File-based encrypted distribution
+    $isEmbeddedEncrypted = $false
+    foreach ($p in @((Join-Path $baseDir "protected"), (Join-Path $baseDir "..\protected"), $baseDir)) {
+        if (Test-Path (Join-Path $p "scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1.enc")) {
+            $encryptedBasePath = $p; break
+        }
+    }
+    if (-not $encryptedBasePath) {
+        Write-Log "FOUNDATION LAUNCHER: No protected scripts found." "Red"
+        Write-Log "Install Foundation properly or use Foundation.exe (self-contained)." "Yellow"
+        exit 1
+    }
+}
+
+# Resolve master key (for both embedded-encrypted and file-based modes)
+if ($isEmbeddedEncrypted -or (-not $isEmbedded -and -not (Test-Path $cacheScript))) {
+    $key = Resolve-MasterKey
+    if (-not $key) {
+        $key = Prompt-For-Key
+        if (-not $key) {
+            Write-Log "FOUNDATION LAUNCHER: Master key required to decrypt scripts." "Red"
+            exit 1
+        }
+    }
+
+    # Decrypt all .enc files to AppData cache
+    try {
+        $encFiles = Get-ChildItem -Path $encryptedBasePath -Recurse -Filter "*.enc" -File
+        $decryptedCount = 0
+        foreach ($encFile in $encFiles) {
+            $relativePath = $encFile.FullName.Substring($encryptedBasePath.Length + 1)
+            $relativePath = $relativePath -replace '\.enc$', ''
+            $outputFile = Join-Path $appDataDir $relativePath
+            $outputDir = Split-Path $outputFile -Parent
+            if (-not (Test-Path $outputDir)) { New-Item -ItemType Directory -Path $outputDir -Force | Out-Null }
+            $decrypted = Decrypt-Script -EncryptedPath $encFile.FullName -Key $key
+            [System.IO.File]::WriteAllText($outputFile, $decrypted, [System.Text.Encoding]::UTF8)
+            $decryptedCount++
+        }
+    } catch {
+        Write-Log "FOUNDATION LAUNCHER: Failed to decrypt scripts: $_" "Red"
+        exit 1
+    }
+
+    if ($isEmbeddedEncrypted) {
+        # Clean up temp embedded files
+        Remove-Item $embeddedTempDir -Recurse -Force -ErrorAction SilentlyContinue
+    }
+}
+
+# Inject environment variables
 $env:FOUNDATION_BASE_DIR = $baseDir
 $env:FOUNDATION_APPDATA_DIR = $appDataDir
 $env:FOUNDATION_DATA_DIR = $dataDir
 
-# Find the wf.ps1 in AppData cache
-$cacheScript = Join-Path $appDataDir "scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1"
+# Execute from AppData
 if (-not (Test-Path $cacheScript)) {
     Write-Log "FOUNDATION LAUNCHER: wf.ps1 not found in AppData cache." "Red"
     exit 1
 }
-
-# Execute from AppData
-try {
-    & $cacheScript @args
-} catch {
-    Write-Log "FOUNDATION LAUNCHER: Failed to execute script: $_" "Red"
-    exit 1
-}
+try { & $cacheScript @args }
+catch { Write-Log "FOUNDATION LAUNCHER: Failed to execute script: $_" "Red"; exit 1 }
