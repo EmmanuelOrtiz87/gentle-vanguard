@@ -1,8 +1,0 @@
-﻿{
-    "ConfigPath":  "config\\distributed-tracing-config.json",
-    "CorrelationId":  "session-2026-04-29-01-20260429152550-a607c379",
-    "TelemetryDir":  ".telemetry",
-    "SessionId":  "session-2026-04-29-01",
-    "RootSpanId":  "d78193bc-2e2e-4f",
-    "InitializationTime":  "2026-04-29T15:25:50.8936031-03:00"
-}

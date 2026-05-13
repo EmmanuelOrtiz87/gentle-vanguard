@@ -1,7 +1,7 @@
 # NORMATIVAS-SESSION.md — Session Lifecycle Standards
 
-Version: 1.0.0
-Last updated: 2026-05-10
+Version: 1.1.0
+Last updated: 2026-05-12
 
 ---
 
@@ -9,6 +9,43 @@ Last updated: 2026-05-10
 
 Define el lifecycle completo de sesiones en el workspace Foundation. Aplica a todos los agentes AI que operan sesiones de desarrollo.
 
+---
+
+## 1.1 DOCUMENTOS LOCAL-ONLY — PROHIBICIÓN DE COMMIT
+
+> **REGLA CRÍTICA**: Los artefactos de sesión son información de trabajo interna. **NUNCA** deben ser commiteados al repo ni publicados.
+
+### Documentos que NUNCA van al repo
+
+| Tipo | Ejemplos | Ubicación local |
+|------|----------|-----------------|
+| Closure reports | `PROJECT-CLOSURE-REPORT.md`, `closure-report-*.md` | `.local/session-artifacts/` |
+| Delivery checklists | `FINAL-DELIVERY-CHECKLIST.md` | `.local/session-artifacts/` |
+| Implementation logs | `IMPLEMENTATION-LOG.md`, `README-IMPLEMENTATION.md` | `.local/session-artifacts/` |
+| Session start/context packs | `*-session-start.md`, `*-context-pack.md` | `docs/sessions/` (local-only) |
+| Next session guides | `NEXT_SESSION_GUIDE.md` | `.local/session-artifacts/` |
+| Strategic/phase plans de sesión | `STRATEGIC-OPTIMIZATION-PLAN.md`, `PHASE-*-ARCHITECTURE.md` | `.local/session-artifacts/` |
+| Lessons learned temporales | `LESSONS-LEARNED-*.md` | `.local/session-artifacts/` |
+| Session tasks pendientes | `docs/tasks/*session*.md` | `.local/session-artifacts/` |
+| Telemetry runtime | `.telemetry/initialization-session-*.json` | Local — cubierto por `.gitignore` |
+| Session logs | `logs/session-*.json`, `session/*.json` | Local — cubierto por `.gitignore` |
+| Engram session data | `.engram/session-*.md`, `.engram-data/` | Local — cubierto por `.gitignore` |
+| Métricas de sesión CSV | `docs/sessions/metrics/*.csv` | Local — cubierto por `.gitignore` |
+
+### Criterio de decisión: ¿Va al repo o no?
+
+```
+¿El documento es permanente y útil para CUALQUIER desarrollador futuro?
+   → SÍ: Puede ir al repo (normativas, guías de referencia, scripts, skills)
+   → NO: Queda en .local/ o en ruta cubierta por .gitignore
+```
+
+### Regla de enforcement
+
+1. Todo patrón local-only está declarado en `.gitignore` (sección "Session artifact docs")
+2. El directorio `.local/` es local-only: está en `.gitignore`, **nunca** se trackea
+3. Si un agente genera estos archivos durante una sesión, **DEBE** guardarlos en `.local/session-artifacts/` o en las rutas cubiertas por `.gitignore`
+4. No commitear con `git add .` sin revisar — siempre usar `git add <archivo>` explícito o revisar `git status` primero
 ---
 
 ## 2. SESSION LIFECYCLE

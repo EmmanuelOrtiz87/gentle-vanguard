@@ -63,14 +63,51 @@ trivy-report.json
 .event-bus/rate-limit-state.json
 scripts/.event-bus/
 
-# Session temp
+# Session temp & local-only artifacts (NORMATIVA: no subir al repo)
 .session/
 session/
+.local/
 .workspace/config/session-auth.json
 .workspace/config/dev-credentials.json
 .runtime/security-*.json
 .runtime/*-audit.log
 .runtime/quality/
+
+# Telemetry & engram runtime data
+.telemetry/
+.engram-data/
+.engram/session-*.md
+.engram/lessons-*.md
+logs/session-*.json
+logs/*.session.*
+
+# Session artifact docs — local-only, never commit to repo
+# Rule: closure reports, delivery checklists, implementation logs,
+# next-session guides, strategic plans, phase plans → stay in .local/
+docs/sessions/*-session-start.md
+docs/sessions/*-context-pack.md
+docs/sessions/*-delivery-closure.md
+docs/sessions/closure-report-*.md
+docs/sessions/metrics/*.csv
+docs/.local-archive/
+docs/*SESSION-COMPLETION-REPORT*.md
+docs/*SESSION-IMPLEMENTATION-START*.md
+docs/*SESSION-AUTH-FLOW*.md
+docs/*NEXT_SESSION_GUIDE*.md
+docs/*STRATEGIC-OPTIMIZATION-PLAN*.md
+docs/*IMPLEMENTATION-STRUCTURE*.md
+docs/*PHASE-*-ARCHITECTURE*.md
+docs/*TOKEN-REPORTING-PROCESS*.md
+docs/*LESSONS-LEARNED-*.md
+docs/tasks/*session-hardening*.md
+FINAL-DELIVERY-CHECKLIST.md
+IMPLEMENTATION-LOG.md
+PROJECT-CLOSURE-REPORT.md
+README-IMPLEMENTATION.md
+
+# Scripts runtime session data
+scripts/docs/sessions/
+scripts/utilities/docs/sessions/
 
 # Dependencies
 node_modules/
