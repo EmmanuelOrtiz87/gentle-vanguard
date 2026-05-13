@@ -264,5 +264,43 @@
         "routing_low_confidence_delta": 0
       }
     }
+  },
+  {
+    "timestamp": "2026-05-13T20:18:51.752946-03:00",
+    "status": "PASS",
+    "failed_layers": [],
+    "metrics": {
+      "wf_avg_elapsed_s": 1.16,
+      "routing_accuracy_pct": 100.0,
+      "routing_low_confidence": 4,
+      "benchmark_status": "PASS"
+    },
+    "regression": {
+      "status": "PASS",
+      "deltas": {
+        "wf_latency_pct": -12.78,
+        "routing_accuracy_drop_pct": 0.0,
+        "routing_low_confidence_delta": 0
+      }
+    }
+  },
+  {
+    "timestamp": "2026-05-13T20:20:00.9327918-03:00",
+    "status": "PASS",
+    "failed_layers": [],
+    "metrics": {
+      "wf_avg_elapsed_s": 1.313,
+      "routing_accuracy_pct": 100.0,
+      "routing_low_confidence": 4,
+      "benchmark_status": "PASS"
+    },
+    "regression": {
+      "status": "PASS",
+      "deltas": {
+        "wf_latency_pct": 1.31,
+        "routing_accuracy_drop_pct": 0.0,
+        "routing_low_confidence_delta": 0
+      }
+    }
   }
 ]

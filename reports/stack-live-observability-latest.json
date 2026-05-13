@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-13T20:13:55.3263188-03:00",
+  "timestamp": "2026-05-13T20:21:11.0574743-03:00",
   "orchestrator": {
     "active": true,
     "workflow_mode": "unknown",
@@ -17,8 +17,8 @@
   },
   "token": {
     "status": "PASS",
-    "projected_pct": 3.63,
-    "used_today": 3358,
+    "projected_pct": 6.97,
+    "used_today": 7358,
     "budget": 120000
   },
   "context": {
@@ -30,13 +30,13 @@
     "accuracy": "100%",
     "total": 15,
     "failed": 0,
-    "timestamp": "05/13/2026 20:13:10"
+    "timestamp": "05/13/2026 20:20:10"
   },
   "benchmark": {
     "pass": 3,
     "warn": 0,
     "fail": 0,
-    "last_report": "05/13/2026 20:13:04"
+    "last_report": "05/13/2026 20:20:04"
   },
   "executive_traffic_light": "GREEN"
 }
