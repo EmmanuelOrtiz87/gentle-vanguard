@@ -1,5 +1,5 @@
 # setup-wizard.ps1
-# Unified dependency checker and installer for Workspace Foundation.
+# Unified dependency checker and installer for Foundation.
 # Usage: .\setup-wizard.ps1
 
 param([switch]$Force)
@@ -36,7 +36,7 @@ function Test-Tool {
     return $false
 }
 
-Write-Step "Workspace Foundation Setup Wizard"
+Write-Step "Foundation Setup Wizard"
 
 # 1. Git
 Test-Tool -Name "git" -InstallCmd "winget install --id Git.Git -e --source winget"

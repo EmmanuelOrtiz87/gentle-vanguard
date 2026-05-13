@@ -218,7 +218,7 @@ function Show-MonitoringDashboard {
     
     Write-Host ""
     Write-Host "" -ForegroundColor Cyan
-    Write-Host "         WORKSPACE FOUNDATION MONITORING DASHBOARD         " -ForegroundColor Cyan
+    Write-Host "         FOUNDATION MONITORING DASHBOARD         " -ForegroundColor Cyan
     Write-Host "" -ForegroundColor Cyan
     
     Write-Host ""

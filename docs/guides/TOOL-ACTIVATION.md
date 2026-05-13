@@ -1,6 +1,6 @@
 # Tool Activation
 
-This guide describes the current tool activation model for the workspace foundation.
+This guide describes the current tool activation model for Foundation.
 
 ## Start Here
 

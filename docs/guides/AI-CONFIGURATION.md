@@ -1,6 +1,6 @@
 ﻿# AI Configuration Guide
 
-Complete guide to configure AI tools for Workspace Foundation - both cloud and local.
+Complete guide to configure AI tools for Foundation - both cloud and local.
 
 ## Overview
 
@@ -464,7 +464,7 @@ USE_LOCAL_FALLBACK=true
 
 ```powershell
 #
-# WORKSPACE FOUNDATION - AI CONFIGURATION
+# FOUNDATION - AI CONFIGURATION
 #
 
 #

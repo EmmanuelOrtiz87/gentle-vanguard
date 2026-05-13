@@ -1,4 +1,4 @@
-# Contributing to Workspace Foundation
+# Contributing to Foundation
 
 Thank you for your interest in contributing!
 

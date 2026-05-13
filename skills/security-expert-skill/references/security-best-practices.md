@@ -1,6 +1,6 @@
 # Security Best Practices Guide
 
-This document provides security guidelines for projects created with Workspace Foundation.
+This document provides security guidelines for projects created with Foundation.
 
 ## Quick Reference
 

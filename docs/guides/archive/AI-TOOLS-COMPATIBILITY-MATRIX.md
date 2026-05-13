@@ -8,7 +8,7 @@
 
 ## Overview
 
-This document maps compatibility between Workspace Foundation and various AI
+This document maps compatibility between Foundation and various AI
 scripts/utilities/plugins to ensure consistent behavior across all integrations.
 
 ---
@@ -366,7 +366,7 @@ MAXIMUM = 99% token usage (use all available)
 #### Standard System Prompt
 
 ```
-You are an AI assistant integrated with Workspace Foundation.
+You are an AI assistant integrated with Foundation.
 
 CAPABILITIES:
 - PowerShell scripting and execution
