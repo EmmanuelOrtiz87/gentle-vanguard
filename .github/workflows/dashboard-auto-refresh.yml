@@ -28,7 +28,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Generate dashboard
         shell: pwsh
@@ -36,8 +36,9 @@ jobs:
           ./scripts/utilities/TELEMETRY-METRICS/generate-dashboard.ps1
 
       - name: Upload dashboard artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: dashboard-${{ github.run_id }}
           path: reports/dashboard.html
           if-no-files-found: error
+

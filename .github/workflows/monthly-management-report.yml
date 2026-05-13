@@ -19,7 +19,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Run monthly report pipeline
         shell: pwsh
@@ -32,7 +32,7 @@ jobs:
           ./scripts/utilities/TELEMETRY-METRICS/generate-dashboard.ps1
 
       - name: Upload report artifacts
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: management-report-${{ github.run_id }}
           path: |
@@ -40,3 +40,4 @@ jobs:
             reports/metrics-export.*
             reports/dashboard.html
           if-no-files-found: warn
+

@@ -29,7 +29,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Full history needed for release notes
 
@@ -76,3 +76,4 @@ jobs:
           draft: false
           prerelease: false
           generate_release_notes: true # Also use GitHub's auto-generated notes as fallback
+
