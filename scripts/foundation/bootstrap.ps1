@@ -197,5 +197,5 @@ foreach ($item in $report.Keys) {
     Write-Host "   [Checking] $item : $($report[$item])" -ForegroundColor $color
 }
 
-Write-Host "`n[SUCCESS] Workspace Foundation Initialized and Verified!" -ForegroundColor Green
+Write-Host "`n[SUCCESS] Foundation Initialized and Verified!" -ForegroundColor Green
 Write-Host "You can now run 'scripts/run-engram.ps1' to start your assisted development session." -ForegroundColor Green

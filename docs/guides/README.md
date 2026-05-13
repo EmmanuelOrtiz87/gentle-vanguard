@@ -11,7 +11,7 @@
 
 ## 🚀 Quick Start
 
-New to Workspace Foundation? Start here:
+New to Foundation? Start here:
 
 | Guide                                                        | Purpose                               |
 | ------------------------------------------------------------ | ------------------------------------- |

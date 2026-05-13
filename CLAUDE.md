@@ -14,9 +14,9 @@ $detected.name
 
 Based on result, load config from `config/orchestrator.json#toolProfiles.<name>`.
 
-If **opencode**: promptFile=CLAUDE.md, configFile=opencode.json, responseProfile=lleno, lang=es
-If **claude-code**: promptFile=CLAUDE.md, configFile=.claude/settings.json, responseProfile=lleno, lang=es
-If **cline**: promptFile=.clinerules, configFile=.clinerules, responseProfile=lleno, lang=es
+If **opencode**: promptFile=CLAUDE.md, configFile=opencode.json, responseProfile=ultra, lang=es
+If **claude-code**: promptFile=CLAUDE.md, configFile=.claude/settings.json, responseProfile=ultra, lang=es
+If **cline**: promptFile=.clinerules, configFile=.clinerules, responseProfile=ultra, lang=es
 
 **Why**: Each tool has different capabilities (skill tool, mem tools, file access). Detection ensures correct routing, compression, and security profiles.
 

@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "name": "security-expert-rules",
-  "description": "Security rules configuration for Workspace Foundation",
+  "description": "Security rules configuration for Foundation",
 
   "severity": {
     "critical": {

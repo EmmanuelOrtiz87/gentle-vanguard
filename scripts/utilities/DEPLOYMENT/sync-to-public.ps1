@@ -9,7 +9,7 @@
     - Example configs (no secrets)
     - Pre-built encrypted artifacts (protected/)
     - Public skill stubs (public/)
-    - Compiled launcher and installer (.exe)
+    - Single installer executable: Foundation.exe (NSIS, AES-256, all-in-one)
     
     Does NOT copy:
     - Plain-text scripts, configs, or skills (should be encrypted in protected/)
@@ -208,26 +208,20 @@ if (Test-Path "$privateRepo\demos") {
 }
 
 # ============================================================================
-# 7. Compiled executables
+# 7. Single executable — Foundation.exe (NSIS installer, all-in-one)
 # ============================================================================
-Write-Output " Syncing executables..."
+Write-Output " Syncing installer executable..."
 
-# Compiled launcher
-$launcherExe = "$buildDir\compiled\Foundation-Launcher.exe"
-if (Test-Path $launcherExe) {
-    Copy-Item $launcherExe "$publicRepo\Foundation-Launcher.exe" -Force
-    Write-Output "  [OK] Foundation-Launcher.exe"
-} else {
-    Write-Output "  [WARN]  compiled launcher not found"
-}
-
-# Installer
-$installerExe = "$distDir\Foundation-Setup.exe"
+$installerExe = "$distDir\Foundation.exe"
 if (Test-Path $installerExe) {
-    Copy-Item $installerExe "$publicRepo\Foundation-Setup.exe" -Force
-    Write-Output "  [OK] Foundation-Setup.exe"
+    # Remove legacy exes if they exist (deprecated)
+    @("$publicRepo\Foundation-Launcher.exe", "$publicRepo\Foundation-Setup.exe") | ForEach-Object {
+        if (Test-Path $_) { Remove-Item $_ -Force; Write-Output "  [DEPRECATED] removed $($_ | Split-Path -Leaf)" }
+    }
+    Copy-Item $installerExe "$publicRepo\Foundation.exe" -Force
+    Write-Output "  [OK] Foundation.exe (NSIS installer, AES-256, all-in-one)"
 } else {
-    Write-Output "  [WARN]  installer not found at $installerExe"
+    Write-Output "  [WARN]  dist/Foundation.exe not found — run build/create-installer.ps1 first"
 }
 
 # ============================================================================
