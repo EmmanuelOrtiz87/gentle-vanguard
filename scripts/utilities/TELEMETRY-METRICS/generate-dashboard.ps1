@@ -1247,8 +1247,8 @@ $autoRefreshMeta
       <h3>Baseline Governance</h3>
       <ul>
         <li>Baseline is maintained in <strong>reports/stack-benchmark-baseline.json</strong> using EWMA smoothing.</li>
-        <li>Regression guard status is evaluated every run by <strong>wf benchmark full</strong>.</li>
-        <li>Use <strong>wf benchmark full remediate</strong> to execute local auto-remediation playbook and incident report.</li>
+        <li>Regression guard status is evaluated every run by <strong>foundation benchmark full</strong>.</li>
+        <li>Use <strong>foundation benchmark full remediate</strong> to execute local auto-remediation playbook and incident report.</li>
       </ul>
     </div>
   </section>
