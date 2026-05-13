@@ -45,6 +45,10 @@ Workspace + Foundation operating flow.
 - Broken doc links and legacy path references create governance friction and onboarding confusion.
 - Artifact rotation logic must fail loudly on filesystem errors to avoid false success.
 - Governance requires at least one active `session-start` artifact under `docs/sessions`.
+- In multi-repo releases, version baseline alignment must be validated per repository (`VERSION`,
+  tags, and branch state), not assumed.
+- Starting a new release baseline (v1.0.0) is safer with non-destructive history changes: update
+  `VERSION`, preserve existing tags, and add only missing tags in target repositories.
 
 ### Rules Adopted
 
@@ -54,6 +58,10 @@ Workspace + Foundation operating flow.
   - `docs/sessions`
   - `docs/code-reviews`
 - Session lifecycle artifacts are governance-critical and cannot be omitted.
+- Release baseline changes must be propagated from `main` to `develop` in both `foundation` and
+  `foundation-public`.
+- Existing release tags must never be force-moved; if a baseline tag is missing in a repo, create
+  it on the current homologated baseline commit.
 
 ### Mechanisms Implemented
 
