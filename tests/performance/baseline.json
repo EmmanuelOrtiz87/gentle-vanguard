@@ -1,0 +1,60 @@
+{
+  "_comment": "Pre-push hook timing baselines. Agent updates 'baseline_seconds' after each measured run.",
+  "version": "1.0.0",
+  "last_measured": "2026-05-13",
+  "baselines": {
+    "audit-check": {
+      "description": "Foundation audit sweep (skills, JSON, deprecated refs)",
+      "baseline_seconds": 1.1,
+      "max_seconds": 3,
+      "warn_seconds": 2
+    },
+    "npm-audit": {
+      "description": "npm audit for dependency vulnerabilities",
+      "baseline_seconds": 2.0,
+      "max_seconds": 10,
+      "warn_seconds": 5,
+      "note": "Skips if no package.json staged"
+    },
+    "orchestrator-auto-fix": {
+      "description": "Orchestrator discovery and config validation",
+      "baseline_seconds": 3.7,
+      "max_seconds": 15,
+      "warn_seconds": 8
+    },
+    "test-suite": {
+      "description": "Full Pester test suite (unit + integration + security + perf)",
+      "baseline_seconds": 53.0,
+      "max_seconds": 90,
+      "warn_seconds": 70,
+      "note": "Includes 33 test files, ~100 tests"
+    },
+    "pre-push-total": {
+      "description": "Total pre-push hook duration (all hooks combined)",
+      "baseline_seconds": 62.0,
+      "max_seconds": 120,
+      "warn_seconds": 90
+    },
+    "pre-commit-total": {
+      "description": "Total pre-commit hook duration (json-lint, opencode-validation, workflow-lint, lockfile-lint)",
+      "baseline_seconds": 1.7,
+      "max_seconds": 5,
+      "warn_seconds": 3
+    }
+  },
+  "trend": [
+    {
+      "date": "2026-05-13",
+      "test_suite_seconds": 53.0,
+      "pre-push-total_seconds": 62.0,
+      "pre-commit-total_seconds": 1.7,
+      "test_count": 33,
+      "notes": "Initial baseline after supply-chain hardening sprint"
+    }
+  ],
+  "alert_policy": {
+    "block_on_max": false,
+    "warn_on_warn": true,
+    "description": "Baselines are informational; only warn (not block) on threshold breach"
+  }
+}
