@@ -18,8 +18,7 @@
 # =============================================================================
 
 param(
-    [ValidateSet("all","config","tests","hooks","structure","skills")]
-    [string]$Domain = "all",
+    [string[]]$Domain = @("all"),
     [switch]$Json,
     [switch]$Verbose
 )
@@ -34,6 +33,30 @@ Set-Location $Root
 $Results  = [System.Collections.Generic.List[PSCustomObject]]::new()
 $Errors   = 0
 $Warnings = 0
+
+$AllowedDomains = @("all","config","tests","hooks","structure","skills")
+$NormalizedDomains = @(
+    $Domain |
+    ForEach-Object { $_ -split ',' } |
+    ForEach-Object { $_.Trim().ToLowerInvariant() } |
+    Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+)
+
+if ($NormalizedDomains.Count -eq 0) {
+    $NormalizedDomains = @('all')
+}
+
+foreach ($domainName in $NormalizedDomains) {
+    if ($AllowedDomains -notcontains $domainName) {
+        Write-Error "Invalid domain '$domainName'. Allowed values: $($AllowedDomains -join ', ')"
+        exit 1
+    }
+}
+
+function Test-DomainEnabled {
+    param([string]$Name)
+    return ($script:NormalizedDomains -contains 'all' -or $script:NormalizedDomains -contains $Name)
+}
 
 function Add-Result {
     param([string]$Check, [string]$Status, [string]$Message, [string]$Category)
@@ -53,7 +76,7 @@ function Add-Result {
 #  - auto-delegation.json has required keys
 #  - agentCodeToSkill values are non-empty strings
 # =============================================================================
-if ($Domain -in @("all","config")) {
+if (Test-DomainEnabled 'config') {
     # JSON syntax
     $ConfigFiles = Get-ChildItem "$Root\config\*.json" -ErrorAction SilentlyContinue
     $JsonFails = @()
@@ -111,7 +134,7 @@ if ($Domain -in @("all","config")) {
 #  - Every agentCodeToSkill value resolves to a real directory
 #    (checks user skill store first, then local skills/)
 # =============================================================================
-if ($Domain -in @("all","skills")) {
+if (Test-DomainEnabled 'skills') {
     $AdPath = "$Root\config\auto-delegation.json"
     if (Test-Path $AdPath) {
         try {
@@ -144,7 +167,7 @@ if ($Domain -in @("all","skills")) {
 #  DOMAIN: tests
 #  - Unit tests (Pester 3.4.0) all pass
 # =============================================================================
-if ($Domain -in @("all","tests")) {
+if (Test-DomainEnabled 'tests') {
     $TestFile = "$Root\tests\unit\foundation-core.tests.ps1"
     if (Test-Path $TestFile) {
         $TestOut = & pwsh -NoProfile -ExecutionPolicy Bypass -Command @"
@@ -181,7 +204,7 @@ if ($Domain -in @("all","tests")) {
 #  - Hook script files exist
 #  - Git pre-commit hook is installed in .git/hooks/
 # =============================================================================
-if ($Domain -in @("all","hooks")) {
+if (Test-DomainEnabled 'hooks') {
     $HookScripts = @(
         "hooks/pre-commit.ps1",
         "hooks/pre-commit-privacy.ps1"
@@ -205,7 +228,7 @@ if ($Domain -in @("all","hooks")) {
 #  - Required root files exist
 #  - Critical scripts exist
 # =============================================================================
-if ($Domain -in @("all","structure")) {
+if (Test-DomainEnabled 'structure') {
     $RequiredFiles = @(
         "config/auto-delegation.json",
         "config/orchestrator.json",
