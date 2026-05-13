@@ -163,7 +163,25 @@ Session commands are routed via `config/auto-delegation.json`:
 > **Note**: "iniciar sesion" / "start session" is handled directly by the canonical startup
 > protocol in `CLAUDE.md` — NOT routed via auto-delegation.
 
-### 4.2 SESSION Agent Profile
+### 4.2 BA/SDD Activation During Session
+
+BA + sdd-lifecycle is **automatically activated** when user triggers project/component creation:
+
+| Trigger | Context | SDD Phase | Action |
+|---------|---------|-----------|--------|
+| "create project", "nuevo proyecto" | User wants new project | EXPLORE | Gather requirements, constraints, tech stack |
+| "new component", "nueva componente" | User wants new feature/component | EXPLORE | Understand needs, acceptance criteria |
+| "bootstrap", "scaffold", "template" | User wants project template | EXPLORE | Specify project structure and conventions |
+
+**Important**: These triggers skip directly to BA/SDD EXPLORE. The user is NOT asked "do you want BA first?" — BA activation is automatic and transparent.
+
+Pre-process-input.ps1 detects these keywords → routes to BA agent + sdd-lifecycle skill → EXPLORE phase begins.
+
+See: `config/auto-delegation.json#keywordMappings.BA` for complete trigger list.
+
+---
+
+### 4.2 SESSION Agent Profile (unchanged)
 
 ```json
 {

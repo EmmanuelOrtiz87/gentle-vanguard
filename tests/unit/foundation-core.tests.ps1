@@ -65,4 +65,40 @@ Describe 'Foundation Core Tests' {
             Test-Path "$script:root\skills\sdd-lifecycle" | Should Be $true
         }
     }
+
+    Context 'Routing Regression Guards' {
+        BeforeAll {
+            $script:preProcess = Join-Path $script:root 'scripts\utilities\pre-process-input.ps1'
+        }
+
+        It 'routes new project creation to BA/SDD lifecycle' {
+            $result = & $script:preProcess -UserInput 'pedi crear un nuevo proyecto' -WorkspaceRoot $script:root
+            $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
+
+            $summary | Should Not BeNullOrEmpty
+            $summary.HasMatch | Should Be $true
+            $summary.Skill | Should Be 'sdd-lifecycle'
+            $summary.AgentCode | Should Be 'BA'
+        }
+
+        It 'routes new component creation to BA/SDD lifecycle' {
+            $result = & $script:preProcess -UserInput 'crear componente nuevo' -WorkspaceRoot $script:root
+            $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
+
+            $summary | Should Not BeNullOrEmpty
+            $summary.HasMatch | Should Be $true
+            $summary.Skill | Should Be 'sdd-lifecycle'
+            $summary.AgentCode | Should Be 'BA'
+        }
+
+        It 'routes explicit PR requests to branch-pr and not BA' {
+            $result = & $script:preProcess -UserInput 'necesito abrir un PR' -WorkspaceRoot $script:root
+            $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
+
+            $summary | Should Not BeNullOrEmpty
+            $summary.HasMatch | Should Be $true
+            $summary.Skill | Should Be 'branch-pr'
+            $summary.AgentCode | Should Be 'QA'
+        }
+    }
 }

@@ -17,9 +17,21 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/pre-process-inpu
   -UserInput "<USER_INPUT>" -WorkspaceRoot "."
 ```
 
-Parse output exactly: | Output | Action | |--------|--------| | `TRIGGER_MATCH_FOUND` | Load
-indicated skill via `skill` tool — before any other action | | `PLAN_MODE_REQUIRED` | Activate BA
-agent, load `sdd-lifecycle` skill | | `NO_TRIGGER_MATCH` | Continue with normal behavior |
+Parse output exactly:
+
+| Output | Action |
+|--------|--------|
+| `TRIGGER_MATCH_FOUND` → BA or BA/SDD | Load skill via tool — specializes to SDD EXPLORE phase for new projects/components |
+| `TRIGGER_MATCH_FOUND` → Other agent | Load skill via tool — dispatch to matched agent |
+| `PLAN_MODE_REQUIRED` | Activate BA agent + sdd-lifecycle skill (fallback for low-confidence matches) |
+| `NO_TRIGGER_MATCH` | Continue with normal behavior |
+
+**BA/SDD Activation**: When user requests project creation, new components, or features WITHOUT a formal spec, pre-process detects these triggers → routes to BA → SDD EXPLORE phase gathers requirements BEFORE implementation begins.
+
+Examples that activate BA/SDD:
+- "crear nuevo proyecto" → BA EXPLORE (understand scope, stack, constraints)
+- "new component" → BA EXPLORE (requirements, acceptance criteria)
+- "bootstrap template" → BA EXPLORE (project setup specifications)
 
 Violation: responding without running this hook is a **CRITICAL** non-compliance.
 
