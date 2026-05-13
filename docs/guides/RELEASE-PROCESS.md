@@ -1,5 +1,39 @@
 # Release Process
 
+## Prerequisites
+
+Before releasing, ensure your local machine is properly configured:
+
+### MCP Workspace Setup
+
+The MCP workspace (`$HOME\mcp-workspace`) must be initialized for release builds. This provides hardened, offline-only execution of MCP servers.
+
+**Check if setup**:
+
+```powershell
+# Verify MCP workspace exists
+Test-Path $HOME\mcp-workspace  # Must be True
+Get-Content $HOME\mcp-workspace\package-lock.json | ConvertFrom-Json | Out-Null
+# Must not error (valid JSON)
+```
+
+**If missing**: Follow [MCP-WORKSPACE-SETUP.md](MCP-WORKSPACE-SETUP.md) steps 1-4 to initialize.
+
+### Security Tools
+
+Verify security hardening is in place:
+
+```powershell
+# Check .npmrc policy loaded
+npm config get ignore-scripts  # Should return: true
+npm config get min-release-age  # Should return: 3
+
+# Verify no pending vulnerabilities
+npm audit  # Should return: 0 vulnerabilities
+```
+
+---
+
 ## Versioning
 
 Foundation follows [Semantic Versioning](https://semver.org/):
