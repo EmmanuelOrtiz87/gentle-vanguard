@@ -1679,7 +1679,7 @@ COMMANDS:
     release-homologation [vX.Y.Z]  Run complementary release gate across foundation and foundation-public
     agent-alert [strict] Check process-compliance signals for off-process AI activity
     agent <AGENT> [TASK] Route task to specialized sub-agent (BA|SAD|DEV|QA|OPS|GOV|DOC)
-    dashboard [open|live] Generate professional HTML dashboard (live = auto-refresh + background data refresh loop)
+    dashboard [open|live|auto|status|stop] Generate professional HTML dashboard (auto = background live service)
     mq [action]          Message queue adapter: status|publish|consume|test (file/redis/webhook)
     export-metrics [fmt] Export metrics to analytical store: csv|jsonl|sqlite|all (default: csv)
     monthly-report [fmt] Run export-metrics + generate-management-report (fmt: csv|jsonl|sqlite|all)
@@ -1722,7 +1722,10 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 stack-dashboard live Real-time observability loop (agents/events/tokens/context)
     .\scripts\utilities\wf.ps1 stack-dashboard strict  Fail with non-zero exit when executive traffic light is RED
     .\scripts\utilities\wf.ps1 dashboard open       Generate dashboard and open it in browser
-    .\scripts\utilities\wf.ps1 dashboard live       Continuous professional dashboard refresh (for dev + management)
+    .\scripts\utilities\wf.ps1 dashboard live       Continuous professional dashboard refresh (foreground)
+    .\scripts\utilities\wf.ps1 dashboard auto       Start automated background live dashboard and open browser
+    .\scripts\utilities\wf.ps1 dashboard status     Show automated live dashboard process status
+    .\scripts\utilities\wf.ps1 dashboard stop       Stop automated live dashboard process
     .\scripts\utilities\wf.ps1 runtime-route        Resolve runtime mode and recommended fallback actions
     .\scripts\utilities\wf.ps1 runtime-route -JSON  Emit machine-readable runtime mode data
     .\scripts\utilities\wf.ps1 custom-rules-status Show loaded custom rule scopes and files
@@ -2408,8 +2411,148 @@ switch ($Command) {
     'dashboard' {
         $genScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\generate-dashboard.ps1'
         $liveDashboardScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\dashboard-live-refresh.ps1'
+        $dashboardPidFile = Join-Path $repoRoot 'reports\dashboard-live.pid'
+        $liveUrl = 'http://localhost:8090/dashboard.html'
         if (-not (Test-Path $genScript)) {
             Write-Error "generate-dashboard.ps1 not found at: $genScript"; exit 1
+        }
+
+        if ($Scope -in @('auto', 'start', 'background', 'bg')) {
+            if (-not (Test-Path $liveDashboardScript)) {
+                Write-Error "dashboard-live-refresh.ps1 not found at: $liveDashboardScript"; exit 1
+            }
+
+            $existingMeta = $null
+            $existingPid = 0
+            if (Test-Path $dashboardPidFile) {
+                try {
+                    $existingMeta = Get-Content $dashboardPidFile -Raw | ConvertFrom-Json -ErrorAction Stop
+                    $existingPid = [int]$existingMeta.pid
+                }
+                catch {
+                    $existingMeta = $null
+                    $existingPid = 0
+                }
+            }
+
+            if ($existingPid -gt 0) {
+                $existingProc = Get-Process -Id $existingPid -ErrorAction SilentlyContinue
+                if ($existingProc) {
+                    Write-Success "Dashboard auto service already running (PID $existingPid)."
+                    Write-Host "Live URL: $liveUrl" -ForegroundColor Cyan
+                    if ($IsWindows -or $env:OS -eq 'Windows_NT') {
+                        Start-Process $liveUrl | Out-Null
+                    }
+                    exit 0
+                }
+            }
+
+            $pwshPath = (Get-Command pwsh -ErrorAction SilentlyContinue).Source
+            if (-not $pwshPath) {
+                $pwshPath = 'pwsh'
+            }
+
+            $liveArgs = @(
+                '-NoProfile',
+                '-ExecutionPolicy', 'Bypass',
+                '-File', $liveDashboardScript,
+                '-Open'
+            )
+
+            $i = 0
+            while ($i -lt $RemainingArgs.Count) {
+                $arg = [string]$RemainingArgs[$i]
+                if ($arg -in @('-RefreshSeconds', '-BenchmarkEvery', '-Iterations', '-WebhookUrl', '-WebhookProvider', '-GitHubRepo', '-GitHubToken') -and $i + 1 -lt $RemainingArgs.Count) {
+                    $liveArgs += $arg
+                    $liveArgs += [string]$RemainingArgs[$i + 1]
+                    $i += 2
+                }
+                elseif ($arg -in @('-AutoRemediateOnFail', '-EnablePredictor', '-EnableSLADashboard')) {
+                    $liveArgs += $arg
+                    $i++
+                }
+                else {
+                    $i++
+                }
+            }
+
+            $reportsDir = Split-Path -Parent $dashboardPidFile
+            if (-not (Test-Path $reportsDir)) {
+                New-Item -ItemType Directory -Path $reportsDir -Force | Out-Null
+            }
+
+            $proc = Start-Process -FilePath $pwshPath -ArgumentList $liveArgs -WorkingDirectory $repoRoot -WindowStyle Hidden -PassThru
+            $pidMeta = [ordered]@{
+                pid = $proc.Id
+                started_at = (Get-Date).ToString('o')
+                url = $liveUrl
+            }
+            $pidMeta | ConvertTo-Json | Set-Content -Path $dashboardPidFile -Encoding UTF8
+
+            Write-Success "Dashboard auto service started (PID $($proc.Id))."
+            Write-Host "Live URL: $liveUrl" -ForegroundColor Cyan
+            Write-Host "Use 'foundation dashboard status' to check and 'foundation dashboard stop' to stop." -ForegroundColor Gray
+            if ($IsWindows -or $env:OS -eq 'Windows_NT') {
+                Start-Process $liveUrl | Out-Null
+            }
+            exit 0
+        }
+
+        if ($Scope -eq 'status') {
+            if (-not (Test-Path $dashboardPidFile)) {
+                Write-Warning 'Dashboard auto service is not running (pid file not found).'
+                exit 0
+            }
+
+            try {
+                $pidMeta = Get-Content $dashboardPidFile -Raw | ConvertFrom-Json -ErrorAction Stop
+                $pidValue = [int]$pidMeta.pid
+            }
+            catch {
+                Write-Warning 'Dashboard pid metadata is invalid. Remove reports/dashboard-live.pid and restart auto mode.'
+                exit 1
+            }
+
+            $statusProc = Get-Process -Id $pidValue -ErrorAction SilentlyContinue
+            if ($statusProc) {
+                Write-Success "Dashboard auto service running (PID $pidValue)."
+                Write-Host "Started: $($pidMeta.started_at)" -ForegroundColor Gray
+                Write-Host "Live URL: $($pidMeta.url)" -ForegroundColor Cyan
+            }
+            else {
+                Write-Warning "Dashboard auto service is not running (stale pid $pidValue)."
+                Remove-Item $dashboardPidFile -Force -ErrorAction SilentlyContinue
+            }
+            exit 0
+        }
+
+        if ($Scope -eq 'stop') {
+            if (-not (Test-Path $dashboardPidFile)) {
+                Write-Warning 'Dashboard auto service is not running.'
+                exit 0
+            }
+
+            try {
+                $pidMeta = Get-Content $dashboardPidFile -Raw | ConvertFrom-Json -ErrorAction Stop
+                $pidValue = [int]$pidMeta.pid
+            }
+            catch {
+                Remove-Item $dashboardPidFile -Force -ErrorAction SilentlyContinue
+                Write-Warning 'Dashboard pid metadata was invalid and has been cleared.'
+                exit 0
+            }
+
+            $stopProc = Get-Process -Id $pidValue -ErrorAction SilentlyContinue
+            if ($stopProc) {
+                Stop-Process -Id $pidValue -Force
+                Write-Success "Dashboard auto service stopped (PID $pidValue)."
+            }
+            else {
+                Write-Warning "Dashboard process $pidValue was not running."
+            }
+
+            Remove-Item $dashboardPidFile -Force -ErrorAction SilentlyContinue
+            exit 0
         }
 
         if ($Scope -in @('live', 'live-open', 'open-live')) {
