@@ -6,11 +6,11 @@ Scripts and tools for encrypting, compiling, and distributing Foundation.
 
 ### Option A: Single-file executable (recommended)
 
-No installation needed. Just download `Foundation.exe` and run it.
+No installation needed. Download `Foundation.exe` and run it. AES-256 encrypted — master.key required on first run, cached afterwards.
 
 ```powershell
 pwsh -NoProfile -ExecutionPolicy Bypass -File "build\sfx-build.ps1"
-# Output: dist\Foundation.exe (0.8 MB, self-contained)
+# Output: dist\Foundation.exe (~2.7 MB, AES-256 encrypted, self-contained)
 ```
 
 ### Option B: Encrypted installer distribution
@@ -122,10 +122,10 @@ pwsh -File build/create-installer.ps1 -DryRun
 
 ## sfx-build.ps1
 
-Builds the single-file `Foundation.exe` (self-contained, no installation needed).
+Builds the single-file `Foundation.exe` (AES-256 encrypted, self-contained, no installation needed).
 
 ```powershell
-# Build
+# Build (requires build/protected/ from protect-foundation.ps1)
 pwsh -File build/sfx-build.ps1
 
 # Dry run
@@ -134,21 +134,30 @@ pwsh -File build/sfx-build.ps1 -DryRun
 
 ### How it works
 
-1. Collects all PS1 scripts + runtime configs (264 files, ~1.9 MB raw)
-2. Compresses into ZIP (~0.58 MB)
-3. Base64-encodes the ZIP (~0.77 MB)
+1. Collects encrypted `.enc` files from `build/protected/` (263 files, ~2.6 MB)
+2. Compresses into ZIP (~2.0 MB)
+3. Base64-encodes the ZIP (~2.6 MB)
 4. Embeds the Base64 data into `Foundation-Launcher.ps1` (replaces placeholder `__EMBEDDED_SCRIPTS__`)
-5. Compiles with ps2exe into `dist\Foundation.exe` (~0.81 MB)
+5. Compiles with ps2exe into `dist\Foundation.exe` (~2.7 MB)
 
 ### On first run
 
-- Extracts scripts from embedded archive to `%LOCALAPPDATA%\Foundation\scripts\`
-- Executes `wf.ps1` from cache
-- Subsequent runs use cache (faster)
+1. Extracts encrypted `.enc` files from embedded archive to `%TEMP%\Foundation\embedded\`
+2. Searches for `master.key`: local cache → next to exe → user prompt (one time)
+3. Decrypts `.enc` files with AES-256 and caches scripts to `%LOCALAPPDATA%\Foundation\scripts\`
+4. Key is cached to `%LOCALAPPDATA%\Foundation\data\master.key` for subsequent runs
+5. Executes `wf.ps1` from cache
+
+### Security
+
+- **Scripts are NEVER stored in plaintext inside the exe**. Only AES-256 encrypted `.enc` files are embedded.
+- **master.key is required** to decrypt on first run. After that, the key is cached locally so user doesn't need to re-enter.
+- **Same encryption** as the installed distribution (`build/protected/`).
+- Anyone with the exe CANNOT extract the scripts without the master.key.
 
 ### Output
 
-- `dist\Foundation.exe` — single file, no dependencies
+- `dist\Foundation.exe` — single file, AES-256 encrypted, master.key required on first run
 
 ## Important Notes
 
