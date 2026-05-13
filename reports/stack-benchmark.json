@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-05-13T20:13:00.4023142-03:00",
+  "timestamp": "2026-05-13T20:20:00.9327918-03:00",
   "layers": {
     "wf_benchmark": {
       "status": "PASS",
       "detail": "commands=3,failures=0",
       "data": {
-        "as_of": "2026-05-13T20:13:04-03:00",
+        "as_of": "2026-05-13T20:20:04-03:00",
         "results": [
           {
             "command": "status",
-            "elapsed_s": 0.86,
+            "elapsed_s": 0.88,
             "slo_s": 5,
             "status": "PASS",
             "exit_code": 0,
@@ -17,7 +17,7 @@
           },
           {
             "command": "health",
-            "elapsed_s": 2.47,
+            "elapsed_s": 2.49,
             "slo_s": 15,
             "status": "PASS",
             "exit_code": 0,
@@ -25,7 +25,7 @@
           },
           {
             "command": "verify",
-            "elapsed_s": 0.59,
+            "elapsed_s": 0.57,
             "slo_s": 30,
             "status": "PASS",
             "exit_code": 0,
@@ -57,19 +57,19 @@
       "detail": "within historical baseline thresholds",
       "data": {
         "baseline": {
-          "wf_avg_elapsed_s": 1.336,
+          "wf_avg_elapsed_s": 1.296,
           "routing_accuracy_pct": 100.0,
           "routing_low_confidence": 4,
           "benchmark_status": "PASS"
         },
         "current": {
-          "wf_avg_elapsed_s": 1.307,
+          "wf_avg_elapsed_s": 1.313,
           "routing_accuracy_pct": 100.0,
           "routing_low_confidence": 4,
           "benchmark_status": "PASS"
         },
         "deltas": {
-          "wf_latency_pct": -2.17,
+          "wf_latency_pct": 1.31,
           "routing_accuracy_drop_pct": 0.0,
           "routing_low_confidence_delta": 0
         }
@@ -83,6 +83,6 @@
   "baseline": {
     "updated": true,
     "path": "C:\\Workspace_local\\foundation\\reports\\stack-benchmark-baseline.json",
-    "sample_count": 14
+    "sample_count": 16
   }
 }

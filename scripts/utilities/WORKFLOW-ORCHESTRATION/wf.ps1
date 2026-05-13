@@ -1881,8 +1881,34 @@ switch ($Command) {
         Invoke-TokenBudgetGuard -Task 'end-session' -Risk 'medium' -EstimatedChars 7200
         $endScript = Join-Path $scriptDir '..\SESSION-MANAGEMENT\end-session.ps1'
         if (Test-Path $endScript) {
+            # Build end-session args robustly:
+            # - supports unquoted multi-word scope (first non-switch tokens)
+            # - forwards remaining args like -MaxArtifacts/-MaxLocalArtifacts
             $endArgs = @()
-            if (-not [string]::IsNullOrWhiteSpace($Scope)) { $endArgs += @('-TaskName', $Scope) }
+            $rawArgs = @()
+            if (-not [string]::IsNullOrWhiteSpace($Scope)) { $rawArgs += [string]$Scope }
+            if ($RemainingArgs) { $rawArgs += @($RemainingArgs | ForEach-Object { [string]$_ }) }
+
+            $taskParts = @()
+            $idx = 0
+            while ($idx -lt $rawArgs.Count) {
+                $token = [string]$rawArgs[$idx]
+                if ($token.StartsWith('-')) { break }
+                $taskParts += $token
+                $idx++
+            }
+
+            if ($taskParts.Count -gt 0) {
+                $taskName = ($taskParts -join ' ').Trim()
+                if (-not [string]::IsNullOrWhiteSpace($taskName)) {
+                    $endArgs += @('-TaskName', $taskName)
+                }
+            }
+
+            if ($idx -lt $rawArgs.Count) {
+                $endArgs += $rawArgs[$idx..($rawArgs.Count - 1)]
+            }
+
             if ($SkipReview) { $endArgs += '-SkipReview' }
             if ($SkipTests) { $endArgs += '-SkipTests' }
             if ($Force) { $endArgs += '-Force' }
