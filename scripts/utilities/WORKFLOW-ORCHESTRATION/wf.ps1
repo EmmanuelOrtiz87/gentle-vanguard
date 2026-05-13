@@ -637,6 +637,18 @@ function Invoke-PublishWorkflow {
         }
     }
 
+    # --- SBOM Generation (non-blocking, runs before PR) ---
+    Write-Step "Generating Software Bill of Materials (SBOM)"
+    $sbomScript = Join-Path $repoRoot 'scripts\utilities\DEPLOYMENT\generate-sbom.ps1'
+    if (Test-Path $sbomScript) {
+        & $sbomScript -RepoRoot $repoRoot
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warning "[SBOM] SBOM generation failed (non-blocking). Check reports/sbom/ for details."
+        }
+    } else {
+        Write-Warning "[SBOM] generate-sbom.ps1 not found, skipping SBOM generation."
+    }
+
     $attempt = 1
     while ($attempt -le 2) {
         Write-Step "Publish validation attempt $attempt/2"

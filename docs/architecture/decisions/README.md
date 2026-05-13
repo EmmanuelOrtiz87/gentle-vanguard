@@ -26,6 +26,8 @@ Each ADR is immutable once accepted. Updates create new ADRs (ADR-005, etc).
 | **[ADR-002](ADR-002-mcp-workspace-external.md)** | MCP Workspace: External Local | ✅ Accepted | May 2026 | Why MCP workspace is `$HOME/mcp-workspace`, not git-tracked |
 | **[ADR-003](ADR-003-npx-offline-hardening.md)** | NPX Hardening: Offline + Workspace | ✅ Accepted | May 2026 | Why npx uses offline mode with pre-vetted workspace |
 | **[ADR-004](ADR-004-homologation-gate.md)** | Homologation Gate: Mandatory | ✅ Accepted | May 2026 | Why release workflow has mandatory repo alignment check |
+| **[ADR-005](ADR-005-code-coverage-requirements.md)** | Code Coverage: Tiered Thresholds | ✅ Accepted | May 2026 | Coverage thresholds (70%/75%/65%) with quarterly targets |
+| **[ADR-006](ADR-006-automated-dependency-updates.md)** | Dependency Updates: Audit + Quarterly | ✅ Accepted | May 2026 | npm audit in pre-push + quarterly review + Renovate Q3 2026 |
 
 ---
 
