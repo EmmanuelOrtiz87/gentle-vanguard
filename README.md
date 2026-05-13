@@ -1,8 +1,8 @@
 <h1 align="center">🚀 Foundation</h1>
 
 <p align="center">
-  <strong>🤖 AI-first development stack · Zero vendor lock-in · 127 skills</strong><br>
-  <em>🔒 Local-first · 🛡️ Privacy-first · ⚡ Production Ready</em>
+  <strong>AI-powered development stack · 127 specialized skills · 16 autonomous agents</strong><br>
+  <em>🔒 100% local · 🧠 Persistent memory · ⚡ No vendor lock-in · ✅ Production ready</em>
 </p>
 
 <p align="center">
@@ -10,32 +10,102 @@
   <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=flat-square" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-purple?style=flat-square" alt="PowerShell">
+  <img src="https://img.shields.io/badge/Agents-16-orange?style=flat-square" alt="Agents">
   <img src="https://img.shields.io/badge/Skills-127-teal?style=flat-square" alt="Skills">
   <img src="https://img.shields.io/badge/Tests-33-passing-green?style=flat-square" alt="Tests">
 </p>
 
-> **📢 Public release**: [`foundation-public`](https://github.com/EmmanuelOrtiz87/foundation-public) — single installer, public documentation, and demos.
+<p align="center">
+  <a href="https://github.com/EmmanuelOrtiz87/foundation-public">📦 foundation-public</a>
+  &nbsp;·&nbsp;
+  <a href="docs/getting-started/README.md">📚 Getting Started</a>
+  &nbsp;·&nbsp;
+  <a href="docs/AGENTS.md">🤖 Bootstrap</a>
+  &nbsp;·&nbsp;
+  <a href="CHANGELOG.md">📋 Changelog</a>
+</p>
 
 ---
 
-## ⚡ Quick Start
+## What is Foundation?
+
+Foundation is an **AI orchestrator** that turns your CLI or IDE into a full engineering team. Not a chat wrapper — it **analyzes your project**, **delegates to specialized agents**, **executes real code**, and **remembers context across sessions**.
+
+```mermaid
+flowchart LR
+    YOU[You] --> WF[wf.ps1]
+    WF --> ORC[Orchestrator]
+    ORC --> BA[BA - Analysis]
+    ORC --> DEV[DEV - Code]
+    ORC --> QA[QA - Tests]
+    ORC --> OPS[OPS - DevOps]
+    ORC --> GOV[GOV - Security]
+    ORC --> DOC[DOC - Docs]
+    ORC --> MEM[Engram - Memory]
+    BA --> SKILLS[127 Skills]
+    DEV --> SKILLS
+    QA --> SKILLS
+    OPS --> SKILLS
+    GOV --> SKILLS
+    DOC --> SKILLS
+```
+
+> 👇 **See it in action**
 
 ```powershell
+$ wf implement auth with JWT
+
+🧭 Orchestrator analyzing request...
+   → Stack detected: Node.js + Express + PostgreSQL
+   → Assigning to DEV agent (sdd-lifecycle)
+
+🏗️ DEV agent generating implementation...
+   → src/middleware/auth.ts        JWT verification middleware
+   → src/lib/jwt.ts               Token utils (sign, verify, refresh)
+   → src/routes/login.ts          Login + register endpoints
+   → src/lib/validators.ts        Input validation schemas
+
+✅ QA agent running tests...
+   → 8/8 tests passing
+   → gitleaks: ✅ no secrets
+   → coverage: 92%
+
+🔮 PREMORTEM reviewing risks...
+   → 0 high · 2 low (documented in docs/risks/)
+
+📦 Delivered: 4 files · 8 tests · 0 issues
+   → Run time: 12.4s
+```
+
+---
+
+## Instead of... Foundation does
+
+| ❌ Instead of | ✅ Foundation |
+|--------------|--------------|
+| Prompting over and over | Auto-delegates to 16 specialized agents |
+| Losing context every session | Persistent memory (Engram) across days |
+| Chasing dead docs | Living skills that execute real tasks |
+| Vendor-dependent tools | 100% local, zero lock-in |
+
+---
+
+## ⚡ Quick Start (Developers)
+
+```powershell
+git clone https://github.com/EmmanuelOrtiz87/foundation.git
+cd foundation
+
 .\scripts\utilities\session-autostart.cmd   # Start a session
 wf verify                                    # Validate 14 quality gates
 wf version                                   # Version + skill count
-wf start-session | wf dashboard | wf judgment-day
 ```
 
-### Installation Methods
-
-| Method | Command | Audience |
-|--------|---------|----------|
-| 📥 Installer | `Foundation.exe` (from foundation-public) | End users |
+| Method | Command | For |
+|--------|---------|-----|
 | 🛠️ Bootstrap | `.\scripts\foundation\bootstrap.ps1` | Developers |
+| 📦 Installer | `Foundation.exe` (from [foundation-public](https://github.com/EmmanuelOrtiz87/foundation-public)) | End users |
 | 🔄 Multi-PC | `.\scripts\foundation\setup-multi-machine.ps1` | Enterprise |
-
-> 💡 **Single distributable**: `Foundation.exe` is the only file you need — professional NSIS wizard, AES-256 encrypted.
 
 ---
 
@@ -45,93 +115,80 @@ wf start-session | wf dashboard | wf judgment-day
 
 ```mermaid
 flowchart TB
-    subgraph Layer1["🤖 Layer 1: Agents"]
-        ORC[Orchestrator] --> BA[BA - Analysis]
+    subgraph AGT["🤖 Agents"]
+        ORC[Orchestrator]
+        ORC --> BA[BA - Analysis]
         ORC --> DEV[DEV - Code]
-        ORC --> QA[QA - Testing]
+        ORC --> QA[QA - Tests]
         ORC --> OPS[OPS - DevOps]
-        ORC --> GOV[GOV - Compliance]
+        ORC --> GOV[GOV - Security]
         ORC --> DOC[DOC - Docs]
         ORC --> PRE[PREMORTEM - Risk]
     end
 
-    subgraph Layer2["⚡ Layer 2: Commands"]
-        WF[wf.ps1 - CLI Entry]
-        PP[pre-process-input.ps1 - Router]
+    subgraph CLI["⚡ Entry"]
+        WF[wf.ps1]
+        PP[pre-process-input.ps1]
     end
 
-    subgraph Layer3["🔌 Layer 3: MCP Servers"]
-        MCP[MCP Protocol Bridge]
-        ENGRAM_MCP[Engram MCP - Memory]
-        SKILL_MCP[Skill MCP - Execution]
+    subgraph MCP["🔌 MCP Servers"]
+        BRIDGE[MCP Bridge]
+        EMCP[Engram MCP]
+        SMCP[Skill MCP]
     end
 
-    subgraph Layer4["🛠️ Layer 4: Skills"]
-        SKILLS[127 Specialized Skills]
-        FE[Frontend · Backend · Mobile]
-        DEVPS[DevOps · Security · Testing]
-        BIZ[Business · Finance · Legal · HR]
+    subgraph SK["🛠️ 127 Skills"]
+        FE[Frontend - Backend - Mobile]
+        OS[DevOps - Security - Testing]
+        BZ[Business - Finance - Legal]
     end
 
-    subgraph Layer5["🧠 Layer 5: Memory"]
-        ENGRAM[Engram Persistent Memory]
-        HOT[Hot - Active Session]
-        WARM[Warm - 24h, 90%]
-        COLD[Cold - 7d, 70%]
+    subgraph MEM["🧠 Engram Memory"]
+        H[Hot - Active]
+        W[Warm - 24h]
+        C[Cold - 7d]
     end
 
-    User --> WF
-    WF --> PP
-    PP --> ORC
-    ORC --> MCP
-    MCP --> SKILLS
-    SKILLS --> ENGRAM
-    ENGRAM --> HOT
-    ENGRAM --> WARM
-    ENGRAM --> COLD
+    User --> WF --> PP --> ORC
+    ORC --> BRIDGE --> SMCP --> SK
+    ORC --> EMCP --> MEM
+    SK -.-> MEM
 ```
 
 ### Request Flow
 
-```mermaid
-sequenceDiagram
-    actor User
-    participant CLI as wf.ps1
-    participant Router as pre-process-input.ps1
-    participant Agent as Orchestrator Agent
-    participant MCP as MCP Server
-    participant Skill as Skill
-    participant Mem as Engram
-
-    User->>CLI: wf &lt;command&gt;
-    CLI->>Router: pre-process input
-    Router-->>CLI: route to agent
-    CLI->>Agent: delegate task
-
-    Agent->>MCP: activate skill MCP
-    MCP->>Skill: execute skill
-    Skill->>Mem: save context
-    Mem-->>Skill: restore memory
-    Skill-->>MCP: result
-    MCP-->>Agent: skill output
-    Agent-->>CLI: final result
-    CLI-->>User: response
+```
+ User        wf.ps1       Router       Agent        MCP         Skill        Mem
+  │            │            │            │            │            │            │
+  │───────────▶│            │            │            │            │            │  ① wf [command]
+  │            │───────────▶│            │            │            │            │  ② pre-process
+  │            │◀───────────┤            │            │            │            │  ③ route to agent
+  │            │            │            │            │            │            │
+  │            │────────────────────────▶│            │            │            │  ④ delegate
+  │            │            │            │──────────▶│            │            │  ⑤ activate MCP
+  │            │            │            │            │──────────▶│            │  ⑥ execute skill
+  │            │            │            │            │            │──────────▶│  ⑦ persist
+  │            │            │            │            │            │◀───────────┤  ⑧ restore
+  │            │            │            │            │◀───────────┤            │  ⑨ result
+  │            │            │            │◀────────────┤            │            │  ⑩ output
+  │            │◀─────────────────────────┤            │            │            │  ⑪ final
+  │◀───────────┤            │            │            │            │            │  ⑫ response
 ```
 
 ---
 
 ## 🤖 Agent Ecosystem
 
-| Agent | Role | Skill |
-|-------|------|-------|
-| 🧭 Orchestrator | Main router | `project-orchestrator-skill` |
-| 🔍 BA | Requirements & analysis | `sdd-lifecycle` |
-| 🏗️ DEV | Code generation | `sdd-lifecycle` |
-| 🏛️ SAD | System design | `sdd-lifecycle` |
-| ✅ QA | Testing & validation | `sdd-lifecycle` |
+| Agent | Role | Delegates to |
+|-------|------|-------------|
+| 🧭 Orchestrator | Main router | All agents below |
+| 🔍 BA | Requirements & analysis | `sdd-lifecycle` (BA phase) |
+| 🏗️ DEV | Code generation | `sdd-lifecycle` (DEV phase) |
+| 🏛️ SAD | System design | `sdd-lifecycle` (SAD phase) |
+| ✅ QA | Testing & validation | `sdd-lifecycle` (QA phase) |
 | 🚀 OPS | Deployment & CI/CD | `docker-devops-skill` |
 | 📖 DOC | Technical docs | `documentation-governance` |
-| 🛡️ GOV | Compliance & security | `judgment-day` |
+| 🛡️ GOV | Compliance & audit | `judgment-day` |
 | 🔮 PREMORTEM | Risk assessment | `premortem-skill` |
 | 💰 FINANCE | Financial modeling | `finance-financial-analyst` |
 | ⚖️ LEGAL | Regulatory compliance | `legal-compliance-officer` |
@@ -139,110 +196,89 @@ sequenceDiagram
 | 💼 SALES | Pipeline management | `sales-account-executive` |
 | 👥 HR | Talent acquisition | `hr-talent-acquisition` |
 
-> Auto-delegation via `config/auto-delegation.json`. Sub-agents are `hidden: true` — only Orchestrator is exposed to the user.
+> Sub-agents are `hidden: true` — only Orchestrator interacts with the user. Auto-delegation in `config/auto-delegation.json`.
 
 ---
 
-## 🗂️ Project Ecosystem
+## 🗂️ Distribution Model
 
 ```mermaid
 flowchart LR
-    subgraph Private["foundation (private)"]
-        SRC[Source code · Skills · Configs]
+    subgraph Private["foundation (private repo)"]
+        SRC[Source · Skills · Configs]
         BUILD[Build pipeline · encrypt · compile]
         CI[CI/CD · 15 workflows]
     end
 
     subgraph Public["foundation-public (distribution)"]
         EXE[Foundation.exe - single installer]
-        PROTECTED[protected/ - encrypted scripts]
-        PUBLIC[public/ - skill stubs]
-        DOCS[docs/ · demos/ · config/]
+        PROTECTED[protected/ - encrypted]
+        PDOCS[docs/ · demos/ · templates/]
     end
 
-    subgraph User["End User"]
+    subgraph User["End User Machine"]
         INSTALL[Run Foundation.exe]
-        WIZARD[NSIS install wizard]
-        LAUNCHER[Foundation-Launcher.exe runtime]
-        WF[wf.ps1 CLI]
+        WIZARD[NSIS wizard · AES-256]
+        LAUNCHER[Foundation-Launcher.exe]
+        WF_CMD[wf.ps1 CLI]
     end
 
     SRC --> BUILD
     BUILD --> EXE
     BUILD --> PROTECTED
-    BUILD --> PUBLIC
-    EXE --> INSTALL
-    INSTALL --> WIZARD
-    WIZARD --> LAUNCHER
-    LAUNCHER --> WF
+    EXE --> INSTALL --> WIZARD --> LAUNCHER --> WF_CMD
     CI -.->|sync-public.yml| Public
 ```
 
 ---
 
-## 🔄 CI/CD (15 workflows)
-
-| Workflow | Purpose | Trigger |
-|----------|---------|---------|
-| `foundation-quality-gate.yml` | Quality gates | Every PR |
-| `test-suite.yml` | 33 tests | Every PR/push |
-| `ps-lint.yml` | PSScriptAnalyzer | Every PR |
-| `gitleaks.yml` | Secret scanning | Every PR |
-| `codeql-analysis.yml` | CodeQL analysis | Weekly |
-| `security-scan.yml` | OWASP scanning | Weekly |
-| `sync-public.yml` | Sync → foundation-public | Push to develop |
-
----
-
-## 📁 Project Structure
-
-```
-foundation/
-├── config/          # orchestrator.json, auto-delegation.json, model-router.json
-├── docs/            # Architecture, guides, reference, assets
-├── scripts/         # Utilities, bootstrap, git-hooks, security
-├── skills/          # 127 skill definitions (MCP servers)
-├── tests/           # 33 tests (unit + integration)
-├── .github/         # 15 CI/CD workflows
-├── build/           # Build pipeline (encrypt, compile installer)
-├── dist/            # Foundation.exe output
-└── templates/       # Project scaffolding (frontend, backend, mobile, CLI...)
-```
-
-> See `docs/architecture/` for detailed architecture documentation.
-
----
-
-## ✅ Validation
+## ✅ Project Status
 
 | Gate | Result |
 |------|--------|
-| ⚙️ CONFIG | ✅ 3/3 |
-| 🛠️ SKILLS | ✅ 127 validated |
-| 🧪 TESTS | ✅ 33 passing |
-| 🔗 HOOKS | ✅ 2/2 |
-| 📁 STRUCTURE | ✅ 7/7 |
-| **Total** | **✅ 14/14 PASS** |
+| ⚙️ Configuration | ✅ 3/3 |
+| 🛠️ Skills | ✅ 127 validated |
+| 🧪 Tests | ✅ 33 passing |
+| 🔗 Hooks | ✅ 2/2 |
+| 📁 Structure | ✅ 7/7 |
+| **Total** | **✅ 14/14 — Production Ready** |
 
 ---
 
-## 📚 Key Docs
+## 🛠️ Development
+
+| Action | Command |
+|--------|---------|
+| Build installer | `pwsh -File build/create-installer.ps1` |
+| Run all tests | `Invoke-Pester tests/ -Output Detailed` |
+| Run unit tests | `Invoke-Pester tests/unit/ -Output Detailed` |
+| Run integration | `Invoke-Pester tests/integration/ -Output Detailed` |
+| Security audit | `.\scripts\security\audit.ps1` |
+| Quality gates | `wf verify` or `wf judgment-day` |
+
+See [build/README.md](build/README.md) for the full build pipeline.
+
+---
+
+## 📚 Key Documentation
 
 | Resource | Description |
-|---------|-------------|
+|----------|-------------|
 | [AGENTS.md](docs/AGENTS.md) | Canonical bootstrap (tool-agnostic) |
-| [Getting Started](docs/getting-started/README.md) | Setup guide |
-| [Architecture](docs/architecture/README.md) | System design |
-| [Build Pipeline](build/README.md) | Encrypting, compiling, distributing |
-| [Skill Catalog](docs/reference/SKILL-ORGANIZATION.md) | 127 skills reference |
-| [Changelog](CHANGELOG.md) | Versions |
+| [Architecture](docs/architecture/README.md) | System design & decisions |
+| [Build Pipeline](build/README.md) | Encrypt, compile, distribute |
+| [Skill Catalog](docs/reference/SKILL-ORGANIZATION.md) | All 127 skills |
 | [Contributing](CONTRIBUTING.md) | How to contribute |
-| [Public Release](https://github.com/EmmanuelOrtiz87/foundation-public) | foundation-public |
+| [Changelog](CHANGELOG.md) | Version history |
 
 ---
 
 <p align="center">
   <strong>🚀 Foundation v2.9.1</strong><br>
-  <em>🔒 Local-First · 🛡️ Total Privacy · ✅ Production Ready</em><br>
-  <sub><a href="https://github.com/EmmanuelOrtiz87/foundation">github.com/EmmanuelOrtiz87/foundation</a></sub>
+  <em>🔒 Local-First · 🛡️ Total Privacy · ⚡ Production Ready</em><br>
+  <sub>
+    <a href="https://github.com/EmmanuelOrtiz87/foundation">Private repo</a>
+    ·
+    <a href="https://github.com/EmmanuelOrtiz87/foundation-public">Public distribution</a>
+  </sub>
 </p>
