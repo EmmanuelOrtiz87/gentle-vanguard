@@ -99,6 +99,38 @@ function Get-SnapshotHash {
 # HTML snippet for SSE client
 $sseClientScript = @'
 <script>
+if (!window.__foundationLiveSeries) {
+    window.__foundationLiveSeries = {
+        labels: [],
+        events5m: [],
+        routing: []
+    };
+}
+
+function foundationPushSeries(label, eventsVal, routingVal) {
+    const series = window.__foundationLiveSeries;
+    series.labels.push(label);
+    series.events5m.push(eventsVal);
+    series.routing.push(routingVal);
+
+    const maxPoints = 24;
+    if (series.labels.length > maxPoints) {
+        series.labels.shift();
+        series.events5m.shift();
+        series.routing.shift();
+    }
+}
+
+function foundationRefreshLiveCharts() {
+    const series = window.__foundationLiveSeries;
+    if (!series || series.labels.length === 0) return;
+
+    if (typeof drawLineChart === 'function') {
+        drawLineChart('benchRoutingChart', series.labels, series.routing, '#84e0a2', (v) => Number(v).toFixed(2) + '%');
+        drawLineChart('eventChart', series.labels, series.events5m, '#f5b800', (v) => Number(v).toFixed(0));
+    }
+}
+
 if (window.EventSource) {
     const eventSource = new EventSource('/events');
     
@@ -110,7 +142,7 @@ if (window.EventSource) {
             // Update timestamp
             const timestamp = document.getElementById('live-timestamp');
             if (timestamp) {
-                timestamp.textContent = new Date().toLocaleTimeString();
+                timestamp.textContent = data.server_time_local || new Date().toLocaleTimeString();
             }
             
             // Update metrics
@@ -125,6 +157,13 @@ if (window.EventSource) {
                     }
                 }
             }
+
+            const label = data.server_time_local || new Date().toLocaleTimeString();
+            const eventsVal = Number((data.metrics && data.metrics.events_5m) || 0);
+            const routingRaw = (data.metrics && data.metrics.routing_accuracy) || 0;
+            const routingVal = Number(String(routingRaw).replace('%', '').trim()) || 0;
+            foundationPushSeries(label, eventsVal, routingVal);
+            foundationRefreshLiveCharts();
             
         } catch (e) {
             console.error('[DASHBOARD-SSE] Parse error:', e);
@@ -190,14 +229,27 @@ try {
                     $snapshot = Get-SnapshotData
                     $hash = Get-SnapshotHash $snapshot
                     $lastSnapshotHash = $hash
+                    $snapshotTimestamp = [string](Get-MapValue -Map $snapshot -Path @('timestamp') -Default '')
+                    $snapshotTimeLocal = ''
+                    if ($snapshotTimestamp) {
+                        try {
+                            $snapshotTimeLocal = ([datetime]$snapshotTimestamp).ToString('HH:mm:ss')
+                        } catch {
+                            $snapshotTimeLocal = $snapshotTimestamp
+                        }
+                    }
                     $payload = @{
                         timestamp     = Get-Date -Format 'o'
+                        server_time_local = (Get-Date).ToString('HH:mm:ss')
+                        snapshot_timestamp = $snapshotTimestamp
+                        snapshot_time_local = $snapshotTimeLocal
                         retry_ms      = $RefreshInterval
                         metrics       = @{
                             traffic_light    = [string](Get-MapValue -Map $snapshot -Path @('executive_traffic_light') -Default 'GREEN')
                             token_status     = [string](Get-MapValue -Map $snapshot -Path @('token', 'status') -Default 'OK')
                             events_5m        = [string](Get-MapValue -Map $snapshot -Path @('events', 'last_5m') -Default 0)
                             routing_accuracy = [string](Get-MapValue -Map $snapshot -Path @('routing', 'accuracy') -Default 'N/A')
+                            snapshot_time    = if ($snapshotTimeLocal) { $snapshotTimeLocal } else { 'N/A' }
                         }
                     }
 
