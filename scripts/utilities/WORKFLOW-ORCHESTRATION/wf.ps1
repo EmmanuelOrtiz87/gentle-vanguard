@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'foundation-sync', 'release-homologation', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'foundation-sync', 'release-homologation', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'webhook', 'predictor', 'sla-dashboard', 'escalation', 'live-server', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -2437,8 +2437,26 @@ switch ($Command) {
                 } elseif ($arg -eq '-Iterations' -and $i + 1 -lt $RemainingArgs.Count) {
                     $liveParams['Iterations'] = [int]$RemainingArgs[$i + 1]
                     $i += 2
+                } elseif ($arg -eq '-WebhookUrl' -and $i + 1 -lt $RemainingArgs.Count) {
+                    $liveParams['WebhookUrl'] = [string]$RemainingArgs[$i + 1]
+                    $i += 2
+                } elseif ($arg -eq '-WebhookProvider' -and $i + 1 -lt $RemainingArgs.Count) {
+                    $liveParams['WebhookProvider'] = [string]$RemainingArgs[$i + 1]
+                    $i += 2
+                } elseif ($arg -eq '-GitHubRepo' -and $i + 1 -lt $RemainingArgs.Count) {
+                    $liveParams['GitHubRepo'] = [string]$RemainingArgs[$i + 1]
+                    $i += 2
+                } elseif ($arg -eq '-GitHubToken' -and $i + 1 -lt $RemainingArgs.Count) {
+                    $liveParams['GitHubToken'] = [string]$RemainingArgs[$i + 1]
+                    $i += 2
                 } elseif ($arg -eq '-AutoRemediateOnFail') {
                     $liveParams['AutoRemediateOnFail'] = $true
+                    $i++
+                } elseif ($arg -eq '-EnablePredictor') {
+                    $liveParams['EnablePredictor'] = $true
+                    $i++
+                } elseif ($arg -eq '-EnableSLADashboard') {
+                    $liveParams['EnableSLADashboard'] = $true
                     $i++
                 } else {
                     $i++
@@ -2963,6 +2981,102 @@ switch ($Command) {
         }
 
         & $routerScript @routeParams
+    }
+    
+    'webhook' {
+        Write-Step "Webhook Alerting Configuration"
+        $webhookScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\webhook-alerting.ps1'
+        if (-not (Test-Path $webhookScript)) {
+            Write-Error "Webhook script not found: $webhookScript"
+            exit 1
+        }
+        
+        if ($Scope -eq 'test') {
+            Write-Host "Testing webhook connection..." -ForegroundColor Cyan
+            & $webhookScript -WebhookUrl $env:WEBHOOK_URL -Status 'YELLOW' `
+                -AlertType 'status-change' -Provider ($env:WEBHOOK_PROVIDER ?? 'slack') `
+                -Details @{message="Test alert"} -DryRun
+        } else {
+            Write-Host "Usage: foundation webhook test" -ForegroundColor Yellow
+            Write-Host "Set env vars: WEBHOOK_URL, WEBHOOK_PROVIDER (slack|teams|discord|generic)" -ForegroundColor Gray
+        }
+    }
+    
+    'predictor' {
+        Write-Step "Baseline Predictor"
+        $predictorScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\baseline-predictor.ps1'
+        if (-not (Test-Path $predictorScript)) {
+            Write-Error "Predictor script not found: $predictorScript"
+            exit 1
+        }
+        
+        $forecastHours = 24
+        if ($Scope -match '^\d+$') {
+            $forecastHours = [int]$Scope
+        }
+        
+        & $predictorScript -ForecastHours $forecastHours
+    }
+    
+    'sla-dashboard' {
+        Write-Step "SLA Dashboard Generation"
+        $slaScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\sla-dashboard-generator.ps1'
+        if (-not (Test-Path $slaScript)) {
+            Write-Error "SLA dashboard script not found: $slaScript"
+            exit 1
+        }
+        
+        $slaPath = Join-Path $repoRoot 'reports\sla-dashboard.html'
+        $openFlag = $Scope -eq 'open'
+        $slaParams = @{
+            OutputPath = $slaPath
+            MonthlyTarget = 99.5
+            WeeklyTarget = 99.9
+        }
+        if ($openFlag) {
+            $slaParams['Open'] = $true
+        }
+
+        & $slaScript @slaParams
+    }
+    
+    'escalation' {
+        Write-Step "Auto-Escalation Configuration"
+        $escalationScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\auto-escalation.ps1'
+        if (-not (Test-Path $escalationScript)) {
+            Write-Error "Auto-escalation script not found: $escalationScript"
+            exit 1
+        }
+        
+        if ([string]::IsNullOrWhiteSpace($env:GITHUB_TOKEN)) {
+            Write-Error "GITHUB_TOKEN environment variable not set"
+            exit 1
+        }
+        
+        $repo = $Scope
+        if ([string]::IsNullOrWhiteSpace($repo)) {
+            Write-Error "Usage: foundation escalation <owner/repo>"
+            exit 1
+        }
+        
+        Write-Host "Auto-escalation enabled for: $repo" -ForegroundColor Green
+        Write-Host "Threshold: 3 consecutive failures" -ForegroundColor Gray
+    }
+    
+    'live-server' {
+        Write-Step "Live Dashboard Server (SSE)"
+        $liveServerScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\websocket-live-server.ps1'
+        if (-not (Test-Path $liveServerScript)) {
+            Write-Error "Live server script not found: $liveServerScript"
+            exit 1
+        }
+        
+        $port = 8080
+        if ($Scope -match '^\d+$') {
+            $port = [int]$Scope
+        }
+        
+        & $liveServerScript -Port $port
     }
 }
 

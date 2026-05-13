@@ -29,12 +29,19 @@
 #>
 
 param(
-    [int]$RefreshSeconds = 15,
-    [int]$BenchmarkEvery = 4,
-    [string]$OutputPath = '',
-    [switch]$Open,
-    [int]$Iterations = 0,
-    [switch]$AutoRemediateOnFail
+  [int]$RefreshSeconds = 15,
+  [int]$BenchmarkEvery = 4,
+  [string]$OutputPath = '',
+  [switch]$Open,
+  [int]$Iterations = 0,
+  [switch]$AutoRemediateOnFail,
+  [string]$WebhookUrl = '',
+  [ValidateSet('slack', 'teams', 'discord', 'generic')]
+  [string]$WebhookProvider = 'slack',
+  [switch]$EnablePredictor,
+  [switch]$EnableSLADashboard,
+  [string]$GitHubToken = $env:GITHUB_TOKEN,
+  [string]$GitHubRepo = ''
 )
 
 $ErrorActionPreference = 'Continue'
@@ -44,6 +51,11 @@ $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..\..')).Path
 $generateDashboard = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\generate-dashboard.ps1'
 $liveObs = Join-Path $repoRoot 'scripts\utilities\UTILITIES\stack-live-observability.ps1'
 $stackBenchmark = Join-Path $repoRoot 'scripts\utilities\wf-stack-benchmark.ps1'
+$webhookScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\webhook-alerting.ps1'
+$predictorScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\baseline-predictor.ps1'
+$slaScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\sla-dashboard-generator.ps1'
+$escalationScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\auto-escalation.ps1'
+$predictorOutputPath = Join-Path $repoRoot 'reports\baseline-predictor-latest.json'
 
 if (-not $OutputPath) {
     $OutputPath = Join-Path $repoRoot 'reports\dashboard.html'
@@ -62,11 +74,42 @@ if (-not (Test-Path $stackBenchmark)) {
 $refreshSafe = [Math]::Max(5, $RefreshSeconds)
 $cycle = 0
 $opened = $false
+$failureCount = 0
+$lastTrafficLight = 'GREEN'
+
+function Get-MapValue {
+  param(
+    $Map,
+    [string[]]$Path,
+    $Default = $null
+  )
+
+  $cursor = $Map
+  foreach ($part in $Path) {
+    if ($null -eq $cursor) { return $Default }
+    if ($cursor -is [System.Collections.IDictionary]) {
+      if (-not $cursor.Contains($part)) { return $Default }
+      $cursor = $cursor[$part]
+      continue
+    }
+    if ($cursor.PSObject.Properties.Name -contains $part) {
+      $cursor = $cursor.$part
+      continue
+    }
+    return $Default
+  }
+
+  if ($null -eq $cursor) { return $Default }
+  return $cursor
+}
 
 Write-Host ''
 Write-Host '=== DASHBOARD LIVE REFRESH ===' -ForegroundColor Cyan
 Write-Host "Output: $OutputPath" -ForegroundColor Gray
 Write-Host "RefreshSeconds: $refreshSafe | BenchmarkEvery: $BenchmarkEvery" -ForegroundColor Gray
+if ($WebhookUrl) { Write-Host "Webhook: $WebhookProvider enabled" -ForegroundColor Gray }
+if ($EnablePredictor) { Write-Host "Predictor: enabled" -ForegroundColor Gray }
+if ($EnableSLADashboard) { Write-Host "SLA Dashboard: enabled" -ForegroundColor Gray }
 Write-Host ''
 
 while ($true) {
@@ -74,15 +117,77 @@ while ($true) {
     $ts = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
 
     # 1) Refresh live observability snapshot artifact.
-    & $liveObs -AsJson | Out-Null
+  $liveSnapshot = & $liveObs -AsJson | ConvertFrom-Json -AsHashtable -ErrorAction SilentlyContinue
+  if ($liveSnapshot) {
+    $currentTrafficLight = [string](Get-MapValue -Map $liveSnapshot -Path @('executive_traffic_light') -Default 'GREEN')
+    if ($WebhookUrl -and $currentTrafficLight -ne $lastTrafficLight -and (Test-Path $webhookScript)) {
+      $statusAlert = @{
+        previous_status = $lastTrafficLight
+        current_status = $currentTrafficLight
+        dashboard_url = 'http://localhost:8080/dashboard.html'
+      }
+      & $webhookScript -WebhookUrl $WebhookUrl -Status $currentTrafficLight -AlertType 'status-change' -Provider $WebhookProvider -Details $statusAlert 2>$null | Out-Null
+    }
+    $lastTrafficLight = $currentTrafficLight
+  }
 
     # 2) Run full benchmark periodically to keep baseline/trend data fresh.
     if ($BenchmarkEvery -gt 0 -and ($cycle % $BenchmarkEvery -eq 0)) {
-        if ($AutoRemediateOnFail) {
-            & $stackBenchmark -AsJson -AutoRemediate | Out-Null
+      $benchOutput = if ($AutoRemediateOnFail) {
+        & $stackBenchmark -AsJson -AutoRemediate 2>&1
+      } else {
+        & $stackBenchmark -AsJson 2>&1
+      }
+        
+      $benchResult = $benchOutput | ConvertFrom-Json -AsHashtable -ErrorAction SilentlyContinue
+      if ($benchResult) {
+        $currentStatus = $benchResult.summary.status ?? 'UNKNOWN'
+        if ($currentStatus -eq 'FAIL') {
+          $failureCount++
+          $failedLayers = @(Get-MapValue -Map $benchResult -Path @('summary', 'failed_layers') -Default @())
+          $wfAverage = 0
+          $wfResults = @(Get-MapValue -Map $benchResult -Path @('layers', 'wf_benchmark', 'data', 'results') -Default @())
+          if ($wfResults.Count -gt 0) {
+            $wfAverage = [math]::Round((($wfResults | Measure-Object -Property elapsed_s -Average).Average), 3)
+          }
+          $routingAccuracy = [double](Get-MapValue -Map $benchResult -Path @('layers', 'routing_matrix', 'data', 'accuracy') -Default 0)
+                
+          # Send webhook alert on benchmark failure
+          if ($WebhookUrl -and (Test-Path $webhookScript)) {
+            $alertDetails = @{
+              layers_failed = ($failedLayers -join ', ')
+              latency_wf = "$wfAverage s"
+              routing_accuracy = "$routingAccuracy%"
+              dashboard_url = "http://localhost:8080/dashboard.html"
+            }
+            & $webhookScript -WebhookUrl $WebhookUrl -Status 'RED' -AlertType 'benchmark-fail' `
+              -Provider $WebhookProvider -Details $alertDetails 2>$null | Out-Null
+          }
+                
+          # Auto-escalate to GitHub if threshold reached
+          if ($GitHubRepo -and $GitHubToken -and $failureCount -ge 3 -and (Test-Path $escalationScript)) {
+            & $escalationScript -Repository $GitHubRepo -GitHubToken $GitHubToken `
+              -FailureCount $failureCount -IncidentDetails $alertDetails 2>$null | Out-Null
+            $failureCount = 0  # Reset after escalation
+          }
         } else {
-            & $stackBenchmark -AsJson | Out-Null
+          $failureCount = 0  # Reset on success
         }
+      }
+    }
+    
+    # 2b) Generate baseline prediction if enabled
+    if ($EnablePredictor -and (($cycle -eq 1) -or ($cycle % ([Math]::Max(1, $BenchmarkEvery) * 2) -eq 0)) -and (Test-Path $predictorScript)) {
+      $predictorJson = & $predictorScript -ForecastHours 24 -AsJson 2>$null
+      if ($predictorJson) {
+        Set-Content -Path $predictorOutputPath -Value $predictorJson -Encoding UTF8
+      }
+    }
+    
+    # 2c) Generate SLA dashboard if enabled
+    if ($EnableSLADashboard -and (($cycle -eq 1) -or ($cycle % ([Math]::Max(1, $BenchmarkEvery) * 4) -eq 0)) -and (Test-Path $slaScript)) {
+      $slaPath = Join-Path $repoRoot 'reports\sla-dashboard.html'
+      & $slaScript -OutputPath $slaPath -MonthlyTarget 99.5 2>$null
     }
 
     # 3) Regenerate dashboard HTML with browser-side auto-refresh hint.
@@ -99,7 +204,8 @@ while ($true) {
         $opened = $true
     }
 
-    Write-Host "[$ts] cycle=$cycle dashboard refreshed" -ForegroundColor Green
+    $failureInfo = if ($failureCount -gt 0) { " | failures=$failureCount" } else { "" }
+    Write-Host "[$ts] cycle=$cycle dashboard refreshed$failureInfo" -ForegroundColor Green
 
     if ($Iterations -gt 0 -and $cycle -ge $Iterations) {
         break
