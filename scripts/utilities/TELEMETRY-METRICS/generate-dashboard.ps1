@@ -22,7 +22,8 @@
 #>
 param(
     [string]$OutputPath = '',
-    [switch]$Open
+  [switch]$Open,
+  [int]$AutoRefreshSeconds = 0
 )
 
 $ErrorActionPreference = 'Continue'
@@ -35,6 +36,12 @@ if (-not $OutputPath) {
         New-Item -ItemType Directory -Path $reportsDir -Force | Out-Null
     }
     $OutputPath = Join-Path $reportsDir 'dashboard.html'
+}
+
+$autoRefreshMeta = ''
+if ($AutoRefreshSeconds -gt 0) {
+  $refreshSafe = [Math]::Max(5, $AutoRefreshSeconds)
+  $autoRefreshMeta = "<meta http-equiv=`"refresh`" content=`"$refreshSafe`">"
 }
 
 function Read-JsonFile {
@@ -102,6 +109,23 @@ function Get-DoubleValue {
     catch {
       return $null
     }
+  }
+
+  function Get-Percentile {
+    param(
+      [double[]]$Values,
+      [double]$Percentile = 95
+    )
+
+    if (-not $Values -or $Values.Count -eq 0) {
+      return 0
+    }
+
+    $sorted = @($Values | Sort-Object)
+    $index = [Math]::Ceiling(($Percentile / 100.0) * $sorted.Count) - 1
+    if ($index -lt 0) { $index = 0 }
+    if ($index -ge $sorted.Count) { $index = $sorted.Count - 1 }
+    return [math]::Round([double]$sorted[$index], 1)
   }
 
 function ConvertTo-HtmlSafe {
@@ -186,6 +210,10 @@ $agentUsagePath = Join-Path $repoRoot 'docs\sessions\metrics\agent-usage.csv'
 $judgmentPath = Join-Path $repoRoot 'docs\sessions\metrics\judgment-history.csv'
 $textSimplificationPath = Join-Path $repoRoot 'docs\sessions\metrics\text-simplification.csv'
 $runtimeTelemetryPath = Join-Path $repoRoot '.runtime\telemetry\cloud-agent-telemetry.csv'
+$stackLivePath = Join-Path $repoRoot 'reports\stack-live-observability-latest.json'
+$stackBenchmarkPath = Join-Path $repoRoot 'reports\stack-benchmark.json'
+$stackBenchmarkHistoryPath = Join-Path $repoRoot 'reports\stack-benchmark-history.json'
+$stackBenchmarkBaselinePath = Join-Path $repoRoot 'reports\stack-benchmark-baseline.json'
 
 $telemetryRows = Import-CsvSafe $telemetryMasterPath
 $tokenGuardRows = Import-CsvSafe $tokenGuardPath
@@ -194,6 +222,10 @@ $agentRows = Import-CsvSafe $agentUsagePath
 $judgmentRows = Import-CsvSafe $judgmentPath
 $textRows = Import-CsvSafe $textSimplificationPath
 $runtimeRows = Import-CsvSafe $runtimeTelemetryPath
+$stackLive = Read-JsonFile $stackLivePath
+$stackBenchmark = Read-JsonFile $stackBenchmarkPath
+$stackBenchmarkHistory = Read-JsonFile $stackBenchmarkHistoryPath
+$stackBenchmarkBaseline = Read-JsonFile $stackBenchmarkBaselinePath
 
 # Core metrics
 $generated = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
@@ -657,6 +689,66 @@ foreach ($agentName in $agentCountMap.Keys) {
 $agentCostRows = @($agentCostRows | Sort-Object Invocations -Descending)
 $agentCostTable = Build-TableHtml -Rows $agentCostRows -Columns @('Agent','Invocations','Share_Pct','Allocated_Tokens','Allocated_Cost_USD') -MaxRows 20
 
+# Agent and skill drill-down analytics
+$agentDrillRows = @()
+$agentGroups = @($agentRows | Group-Object -Property agent)
+foreach ($g in $agentGroups) {
+  $agentName = if ([string]::IsNullOrWhiteSpace([string]$g.Name)) { '(unknown)' } else { [string]$g.Name }
+  $durations = @($g.Group | ForEach-Object { Get-DoubleValue $_.duration_ms } | Where-Object { $_ -gt 0 })
+  $avgMs = if ($durations.Count -gt 0) { [math]::Round((($durations | Measure-Object -Average).Average), 1) } else { 0 }
+  $p95Ms = if ($durations.Count -gt 0) { Get-Percentile -Values $durations -Percentile 95 } else { 0 }
+  $topSkills = @($g.Group | Where-Object { $_.skill } | Group-Object -Property skill | Sort-Object Count -Descending | Select-Object -First 3 | ForEach-Object { [string]$_.Name })
+
+  $agentDrillRows += [pscustomobject]@{
+    Group = $agentName
+    Invocations = $g.Count
+    Avg_Duration_ms = $avgMs
+    P95_Duration_ms = $p95Ms
+    Skills = if ($topSkills.Count -gt 0) { $topSkills -join ', ' } else { '(none)' }
+  }
+}
+$agentDrillRows = @($agentDrillRows | Sort-Object Invocations -Descending)
+$agentDrillTable = Build-TableHtml -Rows $agentDrillRows -Columns @('Group','Invocations','Avg_Duration_ms','P95_Duration_ms','Skills') -MaxRows 30
+
+$skillDrillRows = @()
+$skillGroups = @($agentRows | Group-Object -Property skill)
+foreach ($g in $skillGroups) {
+  $skillName = if ([string]::IsNullOrWhiteSpace([string]$g.Name)) { '(unknown)' } else { [string]$g.Name }
+  $durations = @($g.Group | ForEach-Object { Get-DoubleValue $_.duration_ms } | Where-Object { $_ -gt 0 })
+  $avgMs = if ($durations.Count -gt 0) { [math]::Round((($durations | Measure-Object -Average).Average), 1) } else { 0 }
+  $p95Ms = if ($durations.Count -gt 0) { Get-Percentile -Values $durations -Percentile 95 } else { 0 }
+  $topAgents = @($g.Group | Where-Object { $_.agent } | Group-Object -Property agent | Sort-Object Count -Descending | Select-Object -First 3 | ForEach-Object { [string]$_.Name })
+
+  $skillDrillRows += [pscustomobject]@{
+    Skill = $skillName
+    Runs = $g.Count
+    Avg_Duration_ms = $avgMs
+    P95_Duration_ms = $p95Ms
+    Top_Agents = if ($topAgents.Count -gt 0) { $topAgents -join ', ' } else { '(none)' }
+  }
+}
+$skillDrillRows = @($skillDrillRows | Sort-Object Runs -Descending)
+$skillDrillTable = Build-TableHtml -Rows $skillDrillRows -Columns @('Skill','Runs','Avg_Duration_ms','P95_Duration_ms','Top_Agents') -MaxRows 30
+
+$agentBarLabels = ($agentDrillRows | Select-Object -First 8 | ForEach-Object { "'" + $_.Group + "'" }) -join ','
+$agentBarValues = ($agentDrillRows | Select-Object -First 8 | ForEach-Object { [int]$_.Invocations }) -join ','
+$skillBarLabels = ($skillDrillRows | Select-Object -First 8 | ForEach-Object { "'" + $_.Skill + "'" }) -join ','
+$skillBarValues = ($skillDrillRows | Select-Object -First 8 | ForEach-Object { [int]$_.Runs }) -join ','
+
+# Benchmark history and baseline
+$benchmarkHistoryRows = @()
+if ($stackBenchmarkHistory) {
+  $benchmarkHistoryRows = @($stackBenchmarkHistory | Select-Object -Last 20)
+}
+$benchHistoryLabels = ($benchmarkHistoryRows | ForEach-Object { "'" + ([datetime]$_.timestamp).ToString('MM-dd HH:mm') + "'" }) -join ','
+$benchHistoryLatency = ($benchmarkHistoryRows | ForEach-Object { ([double]$_.metrics.wf_avg_elapsed_s).ToString([System.Globalization.CultureInfo]::InvariantCulture) }) -join ','
+$benchHistoryRouting = ($benchmarkHistoryRows | ForEach-Object { ([double]$_.metrics.routing_accuracy_pct).ToString([System.Globalization.CultureInfo]::InvariantCulture) }) -join ','
+
+$baselineLatency = if ($stackBenchmarkBaseline -and $stackBenchmarkBaseline.metrics) { [double]$stackBenchmarkBaseline.metrics.wf_avg_elapsed_s } else { 0 }
+$baselineRouting = if ($stackBenchmarkBaseline -and $stackBenchmarkBaseline.metrics) { [double]$stackBenchmarkBaseline.metrics.routing_accuracy_pct } else { 0 }
+$currentBenchStatus = if ($stackBenchmark -and $stackBenchmark.summary) { [string]$stackBenchmark.summary.status } else { 'unknown' }
+$currentRegressionStatus = if ($stackBenchmark -and $stackBenchmark.layers -and $stackBenchmark.layers.baseline_regression) { [string]$stackBenchmark.layers.baseline_regression.status } else { 'unknown' }
+
 # Charts data
 $trendWindowDays = 14
 $tokenTrendRows = Build-RecentDailySeries -Rows $tokenTimeRows -Days $trendWindowDays
@@ -740,12 +832,36 @@ $cardsRoi += Build-MetricCard -Title 'Net Benefit MTD' -Value ('$' + $netModeled
 $cardsRoi += Build-MetricCard -Title 'Net Benefit YTD' -Value ('$' + $netModeledBenefitYtd) -Label 'modeled savings - actual cost'
 $cardsRoi += Build-MetricCard -Title 'Text Savings Share' -Value $textSavingsShare -Label 'of MTD actual cost'
 
+$liveTrafficLight = 'N/A'
+$liveTokenStatus = 'N/A'
+$liveEvents5m = '0'
+$liveRoutingAccuracy = 'N/A'
+if ($stackLive) {
+  if ($stackLive.executive_traffic_light) { $liveTrafficLight = [string]$stackLive.executive_traffic_light }
+  if ($stackLive.token -and $stackLive.token.status) { $liveTokenStatus = [string]$stackLive.token.status }
+  if ($stackLive.events -and $null -ne $stackLive.events.last_5m) { $liveEvents5m = [string]$stackLive.events.last_5m }
+  if ($stackLive.routing -and $stackLive.routing.accuracy) { $liveRoutingAccuracy = [string]$stackLive.routing.accuracy }
+}
+
+$cardsOps = @()
+$cardsOps += Build-MetricCard -Title 'Live Traffic Light' -Value $liveTrafficLight -Label 'orchestrator + events + token + quality'
+$cardsOps += Build-MetricCard -Title 'Live Token Status' -Value $liveTokenStatus -Label 'token guard current status'
+$cardsOps += Build-MetricCard -Title 'Events (5m)' -Value $liveEvents5m -Label 'events seen in last 5 minutes'
+$cardsOps += Build-MetricCard -Title 'Routing Accuracy' -Value $liveRoutingAccuracy -Label 'live matrix quality snapshot'
+
+$cardsBenchmark = @()
+$cardsBenchmark += Build-MetricCard -Title 'Benchmark Status' -Value $currentBenchStatus -Label 'full benchmark outcome'
+$cardsBenchmark += Build-MetricCard -Title 'Regression Guard' -Value $currentRegressionStatus -Label 'baseline drift check'
+$cardsBenchmark += Build-MetricCard -Title 'Baseline Latency' -Value ([string]$baselineLatency + ' s') -Label 'wf average elapsed baseline'
+$cardsBenchmark += Build-MetricCard -Title 'Baseline Routing' -Value ([string]$baselineRouting + '%') -Label 'routing accuracy baseline'
+
 $html = @"
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+$autoRefreshMeta
 <title>Gentleman Foundation - Metrics Dashboard</title>
 <style>
   :root {
@@ -980,8 +1096,11 @@ $html = @"
 
   <div class="nav">
     <button class="active" data-target="overview">Overview</button>
+    <button data-target="operations">Operations Live</button>
     <button data-target="costs">Costs & Savings</button>
     <button data-target="roi">Executive ROI</button>
+    <button data-target="benchmark">Benchmark Guard</button>
+    <button data-target="drilldown">Agent/Skill Drilldown</button>
     <button data-target="stack">Stack Metrics</button>
     <button data-target="explorer">Metrics Explorer</button>
     <button data-target="events">Events</button>
@@ -1008,6 +1127,31 @@ $html = @"
     <div class="alerts-panel" style="margin-top:12px;">
       <h3>Proactive Alerts <span class="alerts-summary-badge $alertSummaryClass">$alertSummaryLabel</span></h3>
       $alertBadgesHtml
+    </div>
+  </section>
+
+  <section id="operations" class="section">
+    <h2>Unified Live Operations Panel</h2>
+    <div class="grid">
+      $($cardsOps -join "`n")
+    </div>
+    <div class="two-col" style="margin-top:12px;">
+      <div class="panel">
+        <h3>Top Agent Groups by Invocations</h3>
+        <canvas id="agentVolumeChart"></canvas>
+      </div>
+      <div class="panel">
+        <h3>Top Skills by Runs</h3>
+        <canvas id="skillVolumeChart"></canvas>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:12px;">
+      <h3>Operational Notes</h3>
+      <ul>
+        <li>This section merges live observability snapshots with historical telemetry and benchmark guards.</li>
+        <li>Executive traffic light and token status come from the latest live stack snapshot file.</li>
+        <li>Group/skill charts are based on current agent dispatch logs and highlight workload concentration.</li>
+      </ul>
     </div>
   </section>
 
@@ -1080,6 +1224,45 @@ $html = @"
           <li>Text simplification savings come from <strong>text-simplification.csv</strong> token_saved_estimate values.</li>
           <li>These values are estimates intended for executive trend visibility.</li>
         </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="benchmark" class="section">
+    <h2>Benchmark Baseline and Regression Guard</h2>
+    <div class="grid">
+      $($cardsBenchmark -join "`n")
+    </div>
+    <div class="two-col" style="margin-top:12px;">
+      <div class="panel">
+        <h3>WF Latency Trend (history)</h3>
+        <canvas id="benchLatencyChart"></canvas>
+      </div>
+      <div class="panel">
+        <h3>Routing Accuracy Trend (history)</h3>
+        <canvas id="benchRoutingChart"></canvas>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:12px;">
+      <h3>Baseline Governance</h3>
+      <ul>
+        <li>Baseline is maintained in <strong>reports/stack-benchmark-baseline.json</strong> using EWMA smoothing.</li>
+        <li>Regression guard status is evaluated every run by <strong>wf benchmark full</strong>.</li>
+        <li>Use <strong>wf benchmark full remediate</strong> to execute local auto-remediation playbook and incident report.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="drilldown" class="section">
+    <h2>Agent and Skill Drilldown</h2>
+    <div class="two-col">
+      <div class="panel">
+        <h3>Agent Groups</h3>
+        $agentDrillTable
+      </div>
+      <div class="panel">
+        <h3>Skills</h3>
+        $skillDrillTable
       </div>
     </div>
   </section>
@@ -1357,6 +1540,10 @@ window.addEventListener('load', () => {
   drawLineChart('costChart', [$costLabels], [$costValues], '#6ea8ff', (v) => '$' + Number(v).toFixed(3));
   drawBarChart('roiChart', [$roiLabels], [$roiValues], '#fd8f4d', (v) => '$' + Number(v).toFixed(2));
   drawLineChart('roiHistoryChart', [$roiHistoryLabels], [$roiHistoryValues], '#6ed4a7', (v) => '$' + Number(v).toFixed(2));
+  drawBarChart('agentVolumeChart', [$agentBarLabels], [$agentBarValues], '#5cb2ff', (v) => fmtShort(v));
+  drawBarChart('skillVolumeChart', [$skillBarLabels], [$skillBarValues], '#39c8a6', (v) => fmtShort(v));
+  drawLineChart('benchLatencyChart', [$benchHistoryLabels], [$benchHistoryLatency], '#ffb347', (v) => Number(v).toFixed(2) + 's');
+  drawLineChart('benchRoutingChart', [$benchHistoryLabels], [$benchHistoryRouting], '#84e0a2', (v) => Number(v).toFixed(2) + '%');
 });
 
 function exportDashboardPdf() {

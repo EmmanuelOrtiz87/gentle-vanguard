@@ -41,6 +41,7 @@ $orchestratorConfigPath = Join-Path $repoRoot 'config\orchestrator.json'
 $eventHistoryPath = Join-Path $repoRoot '.event-bus\history.json'
 $routingQualityPath = Join-Path $repoRoot '.session\routing-quality-last.json'
 $wfBenchmarkPath = Join-Path $repoRoot 'reports\wf-benchmark.json'
+$latestSnapshotPath = Join-Path $repoRoot 'reports\stack-live-observability-latest.json'
 $tokenGuardScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\token-budget-guard.ps1'
 $contextDashboardScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\context-dashboard.ps1'
 
@@ -201,6 +202,21 @@ function Build-Snapshot {
     return $snapshot
 }
 
+function Save-LatestSnapshot {
+    param($Snapshot)
+
+    $dir = Split-Path -Parent $latestSnapshotPath
+    if (-not (Test-Path $dir)) {
+        New-Item -ItemType Directory -Path $dir -Force | Out-Null
+    }
+
+    try {
+        $Snapshot | ConvertTo-Json -Depth 8 | Set-Content -Path $latestSnapshotPath -Encoding UTF8
+    } catch {
+        # Non-blocking: live monitor should continue even if report write fails.
+    }
+}
+
 function Show-Snapshot {
     param($s)
 
@@ -243,6 +259,7 @@ function Show-Snapshot {
 
 if ($AsJson -or -not $Watch) {
     $single = Build-Snapshot
+    Save-LatestSnapshot -Snapshot $single
     if ($AsJson) {
         $single | ConvertTo-Json -Depth 8
     } else {
@@ -255,6 +272,7 @@ $counter = 0
 while ($true) {
     $counter++
     $snap = Build-Snapshot
+    Save-LatestSnapshot -Snapshot $snap
     Show-Snapshot -s $snap
 
     if ($Iterations -gt 0 -and $counter -ge $Iterations) {

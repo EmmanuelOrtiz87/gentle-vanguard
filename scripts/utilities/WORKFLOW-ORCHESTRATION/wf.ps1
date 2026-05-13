@@ -1679,7 +1679,7 @@ COMMANDS:
     release-homologation [vX.Y.Z]  Run complementary release gate across foundation and foundation-public
     agent-alert [strict] Check process-compliance signals for off-process AI activity
     agent <AGENT> [TASK] Route task to specialized sub-agent (BA|SAD|DEV|QA|OPS|GOV|DOC)
-    dashboard [open]     Generate static HTML dashboard from telemetry JSON (open = auto-open browser)
+    dashboard [open|live] Generate professional HTML dashboard (live = auto-refresh + background data refresh loop)
     mq [action]          Message queue adapter: status|publish|consume|test (file/redis/webhook)
     export-metrics [fmt] Export metrics to analytical store: csv|jsonl|sqlite|all (default: csv)
     monthly-report [fmt] Run export-metrics + generate-management-report (fmt: csv|jsonl|sqlite|all)
@@ -1688,7 +1688,7 @@ COMMANDS:
     sdd-metrics          FF-002: SDD process KPIs: spec coverage, lead time, rework ratio
     sync-drift           FF-004: Detect drift between declared config and actual skills/files
     benchmark [cmds]     FF-006: Profile wf commands vs SLO thresholds (default: status,health)
-                        Scope: full (perf + routing coverage + tests-domain verification)
+                        Scope: full [remediate] [baseline-update] (adds regression guard + optional auto-remediation)
     version              Show current stack version (from VERSION file + orchestrator.json)
     help                 Show this help
 
@@ -1721,6 +1721,8 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 stack-dashboard     One-shot operational dashboard (health + token risk + action)
     .\scripts\utilities\wf.ps1 stack-dashboard live Real-time observability loop (agents/events/tokens/context)
     .\scripts\utilities\wf.ps1 stack-dashboard strict  Fail with non-zero exit when executive traffic light is RED
+    .\scripts\utilities\wf.ps1 dashboard open       Generate dashboard and open it in browser
+    .\scripts\utilities\wf.ps1 dashboard live       Continuous professional dashboard refresh (for dev + management)
     .\scripts\utilities\wf.ps1 runtime-route        Resolve runtime mode and recommended fallback actions
     .\scripts\utilities\wf.ps1 runtime-route -JSON  Emit machine-readable runtime mode data
     .\scripts\utilities\wf.ps1 custom-rules-status Show loaded custom rule scopes and files
@@ -1735,7 +1737,9 @@ EXAMPLES:
     .\scripts\utilities\wf.ps1 response-mode ahorro         On-demand token saving mode (chat-compact)
     .\scripts\utilities\wf.ps1 response-mode normal         On-demand balanced mode (chat-balanced, override)
     .\scripts\utilities\wf.ps1 response-mode detallado      On-demand detailed mode (chat-detailed, override)
-    .\scripts\utilities\wf.ps1 benchmark full      Run full stack benchmark (latency + routing matrix + verify tests)
+    .\scripts\utilities\wf.ps1 benchmark full      Run full stack benchmark with baseline regression guard
+    .\scripts\utilities\wf.ps1 benchmark full remediate Run full benchmark + auto-remediation incident playbook
+    .\scripts\utilities\wf.ps1 benchmark full baseline-update Force baseline update with current run
     .\scripts\utilities\wf.ps1 ide-status          Detect IDE and show recommended activation
     .\scripts\utilities\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
     .\scripts\utilities\wf.ps1 update-tools         Update required tools and optional integrations
@@ -2403,9 +2407,27 @@ switch ($Command) {
 
     'dashboard' {
         $genScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\generate-dashboard.ps1'
+        $liveDashboardScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\dashboard-live-refresh.ps1'
         if (-not (Test-Path $genScript)) {
             Write-Error "generate-dashboard.ps1 not found at: $genScript"; exit 1
         }
+
+        if ($Scope -in @('live', 'live-open', 'open-live')) {
+            if (-not (Test-Path $liveDashboardScript)) {
+                Write-Error "dashboard-live-refresh.ps1 not found at: $liveDashboardScript"; exit 1
+            }
+
+            $liveArgs = @('-RefreshSeconds', '15', '-BenchmarkEvery', '4')
+            if ($Scope -in @('live', 'live-open', 'open-live')) {
+                $liveArgs += '-Open'
+            }
+            if ($StrictCleanup) {
+                $liveArgs += '-AutoRemediateOnFail'
+            }
+            & $liveDashboardScript @liveArgs
+            exit $LASTEXITCODE
+        }
+
         $openFlag = if ($Scope -eq 'open') { $true } else { $false }
         if ($openFlag) { & $genScript -Open }
         else           { & $genScript }
@@ -2551,11 +2573,17 @@ switch ($Command) {
                 exit 1
             }
 
-            if ($JSON) {
-                & $fullBenchScript -AsJson
-            } else {
-                & $fullBenchScript -Strict
-            }
+            $extraArgs = @($RemainingArgs | ForEach-Object { [string]$_ })
+            $autoRemediate = $extraArgs -contains 'remediate' -or $extraArgs -contains 'auto-remediate'
+            $updateBaseline = $extraArgs -contains 'baseline-update' -or $extraArgs -contains 'update-baseline'
+
+            $benchParams = @{}
+            if ($JSON) { $benchParams['AsJson'] = $true }
+            if (-not $JSON) { $benchParams['Strict'] = $true }
+            if ($autoRemediate) { $benchParams['AutoRemediate'] = $true }
+            if ($updateBaseline) { $benchParams['UpdateBaseline'] = $true }
+
+            & $fullBenchScript @benchParams
             exit $LASTEXITCODE
         }
 
