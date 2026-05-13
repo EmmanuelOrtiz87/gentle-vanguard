@@ -38,15 +38,11 @@ Run these checks before tagging. This complements the existing release process a
 tests, audit, or governance gates.
 
 ```powershell
-# In foundation
-git branch -vv
-Get-Content VERSION
+# Standard automated gate
+.\scripts\utilities\wf.ps1 release-homologation
 
-# In foundation-public
-Push-Location ..\foundation-public
-git branch -vv
-Get-Content VERSION
-Pop-Location
+# Optional: validate with a specific release tag
+.\scripts\utilities\wf.ps1 release-homologation vX.Y.Z
 ```
 
 Expected outcome:

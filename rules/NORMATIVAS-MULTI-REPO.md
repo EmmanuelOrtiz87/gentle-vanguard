@@ -543,9 +543,9 @@ Describe "Monorepo Integration" {
 ### Best Practices
 
 1. Validate in both repos before any release action:
-  - `VERSION`
-  - `git tag --sort=-creatordate`
-  - `git branch -vv`
+  - prefer automated gate: `./scripts/utilities/wf.ps1 release-homologation`
+  - optionally include target tag: `./scripts/utilities/wf.ps1 release-homologation vX.Y.Z`
+  - if manual checks are needed: `VERSION`, `git tag --sort=-creatordate`, `git branch -vv`
 2. Apply baseline changes in this order:
   - update `VERSION` on `main`
   - commit and push

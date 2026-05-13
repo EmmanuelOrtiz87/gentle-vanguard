@@ -83,6 +83,14 @@ quality.
 
 ### Multi-Repo Homologation (Complementary Gate)
 
+Run before tagging:
+
+```powershell
+.\scripts\utilities\wf.ps1 release-homologation
+# Optional tag-aware check:
+.\scripts\utilities\wf.ps1 release-homologation vX.Y.Z
+```
+
 - [ ] **Version Baseline Alignment**
   - [ ] `VERSION` is aligned in `foundation` and `foundation-public`
   - [ ] Planned release tag exists only when intentionally created for this release
