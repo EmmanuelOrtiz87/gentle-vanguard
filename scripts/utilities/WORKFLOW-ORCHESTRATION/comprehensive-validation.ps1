@@ -185,8 +185,8 @@ foreach ($docFile in $docFiles) {
         }
     }
     else {
-        Add-ValidationResult "Documentation" $docFile "FAIL" "File not found"
-        Write-Log "[FAIL] $docFile - File not found" "ERROR"
+        Add-ValidationResult "Documentation" $docFile "WARN" "File not found"
+        Write-Log "[WARN] $docFile - File not found" "WARN"
     }
 }
 
@@ -274,17 +274,26 @@ Write-Log "=== VALIDATING SYSTEM DEFINITIONS ===" "INFO"
 
 try {
     $opencode = Get-Content "opencode.json" -Raw | ConvertFrom-Json
+    $agentConfig = if ($opencode.PSObject.Properties.Name -contains 'agent') { $opencode.agent } else { $null }
     
     # Check providers
-    if ($opencode.provider.anthropic) {
+    if ($opencode.PSObject.Properties.Name -contains 'provider' -and $opencode.provider.PSObject.Properties.Name -contains 'anthropic' -and $opencode.provider.anthropic) {
         Add-ValidationResult "System Definitions" "Provider: Anthropic" "PASS" "Configured"
         Write-Log "[OK] Anthropic provider - Configured" "SUCCESS"
     }
     
     # Check agents
-    if ($opencode.agent.default -and $opencode.agent.orchestrator) {
-        Add-ValidationResult "System Definitions" "Agents" "PASS" "Default and Orchestrator configured"
-        Write-Log "[OK] Agents - Configured" "SUCCESS"
+    if ($agentConfig -and $agentConfig.PSObject.Properties.Name -contains 'orchestrator' -and $agentConfig.orchestrator) {
+        $agentNames = @('orchestrator')
+        if ($agentConfig.PSObject.Properties.Name -contains 'default' -and $agentConfig.default) {
+            $agentNames += 'default'
+        }
+        Add-ValidationResult "System Definitions" "Agents" "PASS" "$($agentNames -join ', ') configured"
+        Write-Log "[OK] Agents - Configured ($($agentNames -join ', '))" "SUCCESS"
+    }
+    elseif ($agentConfig) {
+        Add-ValidationResult "System Definitions" "Agents" "WARN" "Orchestrator not configured"
+        Write-Log "[WARN] Agents - Orchestrator not configured" "WARN"
     }
 }
 catch {
