@@ -1,3 +1,16 @@
+## Release 2.9.1
+- ✅ Hardened installer build error handling
+- ✅ Fixed public sync branch detection
+- ✅ Aligned release workflow notes with canonical `CHANGELOG.md`
+- ✅ Normalized session start routing to the canonical startup protocol
+- ✅ Rebuilt and published `Foundation-Setup.exe` for `foundation-public`
+- ✅ Verified clean state: 14/14 checks passing
+
+## Release 2.9.0
+- ✅ Model router moved to OpenRouter subscription stack
+- ✅ Agent visibility hardened with hidden subagents
+- ✅ Public/private sync and docs updated for v2.9.0
+
 ## Summary
 - ✅ Priority 1: Test Coverage 70%+ (15+ test files, Pester 3.4.0 syntax fixed)
 - ✅ Priority 2: Real Token Tracking implemented (token-budget-guard.ps1, wf.ps1, session-autostart.ps1)

@@ -13,6 +13,25 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [2.9.1] - 2026-05-12#
+
+### 🔧 Fixed#
+
+- **create-installer.ps1**: Hardened launcher build error handling so protected-artifact generation fails fast with a real exception instead of a false `$LASTEXITCODE` check
+- **sync-to-public.ps1**: Fixed remote HEAD detection to avoid null-match failures during public repository synchronization
+- **release workflow**: Aligned GitHub Release note extraction with the canonical root `CHANGELOG.md`
+- **Session routing**: Removed `iniciar sesion` / `start session` from auto-delegation in favor of the canonical startup protocol defined in `CLAUDE.md`
+- **SESSION skill docs**: Updated session workflow guidance to avoid duplicate start-session handling
+- **Documentation sync**: Rebuilt and published `Foundation-Setup.exe` for `foundation-public`, keeping the public installer current
+
+### 📚 Changed#
+
+- **VERSION**: Bumped from `2.9.0` to `2.9.1`
+- **README badge**: Updated visible version badge to `2.9.1`
+- **Public release process**: Foundation and foundation-public are now aligned on the same validated patch release
+
+---
+
 ## [2.9.0] - 2026-05-11#
 
 ### ✨ Added#
