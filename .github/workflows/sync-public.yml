@@ -21,7 +21,6 @@ on:
       - 'skills/SKILL_INDEX.md'
       - 'docs/**'
       - 'demos/**'
-      - 'README.md'
       - 'LICENSE'
       - 'CONTRIBUTING.md'
       - 'SECURITY.md'

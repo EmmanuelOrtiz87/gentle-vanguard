@@ -67,7 +67,8 @@ Copy-Item "$privateRepo\scripts\foundation\setup-multi-machine.ps1" "$bootstrapD
 # 1. Public documentation (root files)
 # ============================================================================
 Write-Output " Syncing public docs..."
-Copy-Item "$privateRepo\README.md" "$publicRepo\README.md" -Force
+# README.md is intentionally NOT synced — foundation-public has its own independent README
+# Copy-Item "$privateRepo\README.md" "$publicRepo\README.md" -Force
 Copy-Item "$privateRepo\LICENSE" "$publicRepo\LICENSE" -Force
 Copy-Item "$privateRepo\CONTRIBUTING.md" "$publicRepo\CONTRIBUTING.md" -Force
 Copy-Item "$privateRepo\SECURITY.md" "$publicRepo\SECURITY.md" -Force
