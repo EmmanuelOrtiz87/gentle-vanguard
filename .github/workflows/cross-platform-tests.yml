@@ -196,17 +196,19 @@ jobs:
 
       - name: Summarize results
         run: |
-          echo "# Cross-Platform Test Results" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| OS | PowerShell | Status |" >> $GITHUB_STEP_SUMMARY
-          echo "|---|---|---|" >> $GITHUB_STEP_SUMMARY
-          
+          {
+            echo "# Cross-Platform Test Results"
+            echo ""
+            echo "| OS | PowerShell | Status |"
+            echo "|---|---|---|"
+          } >> "$GITHUB_STEP_SUMMARY"
+
           for result in all-results/*/test-results-*.json; do
             if [ -f "$result" ]; then
               os=$(jq -r '.os' "$result")
               ps_version=$(jq -r '.pwsh_version' "$result")
               status=$(jq -r '.status' "$result")
-              echo "| $os | $ps_version | $status |" >> $GITHUB_STEP_SUMMARY
+              echo "| ${os} | ${ps_version} | ${status} |" >> "$GITHUB_STEP_SUMMARY"
             fi
           done
 
