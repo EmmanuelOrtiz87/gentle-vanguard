@@ -454,6 +454,19 @@ VERSION_MANIFEST.json
 - auto-merge: disabled
 ```
 
+### ⚠️ Critical Safety: `--delete-branch` Guard
+
+**🚫 NEVER use `--delete-branch` when the PR head branch is `main` or `develop`.**
+
+This will **permanently delete the protected branch** from the remote, breaking the repo's branching model.
+
+| Scenario | Safe? | Action |
+|----------|-------|--------|
+| PR head is a feature branch (`feat/*`, `fix/*`, `chore/*`, `docs/*`) | ✅ Safe | `gh pr merge --merge --delete-branch` |
+| PR head is `main` or `develop` | 🚫 **NEVER** | `gh pr merge --merge` (omit `--delete-branch`) |
+
+**GitFlow rule**: Only temporary/feature branches are auto-deleted. Protected branches (`main`, `develop`, `release/*`) must NEVER be passed as `--delete-branch` target.
+
 ---
 
 ## 9. Testing Multi-Repo Changes

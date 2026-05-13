@@ -11,7 +11,24 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]#
 
+### 📚 Changed#
+
+- **README.md**: Complete overhaul — added live CLI example (auth with JWT workflow), replaced broken Mermaid sequence diagram with ASCII art (12-step numbered flow), restructured with comparison table and clearer value proposition
+- **NORMATIVAS-MULTI-REPO.md**: Added explicit `--delete-branch` safety guard — prohibited on PRs where head is `main` or `develop`
+- **Default branch**: Changed from `develop` to `main` on both foundation and foundation-public repos (best practices alignment)
+- **Branch cleanup**: Removed 20 stale branches from foundation remote, kept only `main`, `develop`, `release/v1.0.0`
+- **foundation-public**: Unified to single `main` branch, removed stale `master` and `develop`
+
+### 🗑️ Removed#
+
+- **All "Workspace Foundation" references**: Purged 65+ files across docs, scripts, configs, skills, and assets
+- **dist/Foundation-Setup.exe**: Replaced by single `Foundation.exe` (NSIS installer, AES-256 encrypted)
+- **scripts/utilities/ENGAM-UPDATE.md**: Renamed to `ENGRAM-UPDATE.md` (typo fix)
+- **build/sfx-build.ps1**: Marked as DEPRECATED (portable replaced by NSIS)
+
 ---
+
+
 
 ## [2.9.1] - 2026-05-12#
 
