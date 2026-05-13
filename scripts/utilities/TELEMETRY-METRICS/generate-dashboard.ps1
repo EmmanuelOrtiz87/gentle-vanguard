@@ -842,11 +842,13 @@ $liveTrafficLight = 'N/A'
 $liveTokenStatus = 'N/A'
 $liveEvents5m = '0'
 $liveRoutingAccuracy = 'N/A'
+$liveSnapshotTimestamp = 'N/A'
 if ($stackLive) {
   if ($stackLive.executive_traffic_light) { $liveTrafficLight = [string]$stackLive.executive_traffic_light }
   if ($stackLive.token -and $stackLive.token.status) { $liveTokenStatus = [string]$stackLive.token.status }
   if ($stackLive.events -and $null -ne $stackLive.events.last_5m) { $liveEvents5m = [string]$stackLive.events.last_5m }
   if ($stackLive.routing -and $stackLive.routing.accuracy) { $liveRoutingAccuracy = [string]$stackLive.routing.accuracy }
+  if ($stackLive.timestamp) { $liveSnapshotTimestamp = [string]$stackLive.timestamp }
 }
 
 $cardsOps = @()
@@ -854,6 +856,7 @@ $cardsOps += Build-MetricCard -Title 'Live Traffic Light' -Value $liveTrafficLig
 $cardsOps += Build-MetricCard -Title 'Live Token Status' -Value $liveTokenStatus -Label 'token guard current status' -LiveKey 'token_status'
 $cardsOps += Build-MetricCard -Title 'Events (5m)' -Value $liveEvents5m -Label 'events seen in last 5 minutes' -LiveKey 'events_5m'
 $cardsOps += Build-MetricCard -Title 'Routing Accuracy' -Value $liveRoutingAccuracy -Label 'live matrix quality snapshot' -LiveKey 'routing_accuracy'
+$cardsOps += Build-MetricCard -Title 'Live Snapshot Time' -Value $liveSnapshotTimestamp -Label 'timestamp of latest live snapshot' -LiveKey 'snapshot_time'
 
 $cardsBenchmark = @()
 $cardsBenchmark += Build-MetricCard -Title 'Benchmark Status' -Value $currentBenchStatus -Label 'full benchmark outcome'
@@ -1098,7 +1101,7 @@ $autoRefreshMeta
 </head>
 <body>
   <h1>Gentleman Foundation - Full Metrics Dashboard</h1>
-  <p class="subtitle">Generated: $generated | Orchestrator: $orchVersion | Daily budget: $dailyBudget tokens</p>
+  <p class="subtitle">Generated: $generated | Live pulse: <span id="live-timestamp">$generated</span> | Orchestrator: $orchVersion | Daily budget: $dailyBudget tokens</p>
 
   <div class="nav">
     <button class="active" data-target="overview">Overview</button>
