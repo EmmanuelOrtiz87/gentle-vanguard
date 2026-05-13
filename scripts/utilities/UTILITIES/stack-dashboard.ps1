@@ -5,7 +5,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
+$repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..\..')).Path
 $configPath = Join-Path $repoRoot 'config\orchestrator.json'
 $activationFile = Join-Path $repoRoot '.orchestrator-active'
 $tokenGuardScript = Join-Path $scriptDir 'token-budget-guard.ps1'
