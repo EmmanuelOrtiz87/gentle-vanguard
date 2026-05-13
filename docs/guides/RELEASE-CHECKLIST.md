@@ -81,6 +81,22 @@ quality.
   - [ ] `.githooks/post-commit` runs without errors
   - [ ] Secret scanning pattern updated (if applicable)
 
+### Multi-Repo Homologation (Complementary Gate)
+
+- [ ] **Version Baseline Alignment**
+  - [ ] `VERSION` is aligned in `foundation` and `foundation-public`
+  - [ ] Planned release tag exists only when intentionally created for this release
+  - [ ] No tag force-move is required
+
+- [ ] **Branch Alignment**
+  - [ ] `main` is clean and up to date in both repos
+  - [ ] `develop` is clean and up to date in both repos
+  - [ ] Post-release propagation plan `main -> develop` is confirmed for both repos
+
+- [ ] **Distribution Consistency**
+  - [ ] `sync-to-public.ps1` reviewed for expected artifacts (protected/public/docs/bootstrap)
+  - [ ] Public repo does not contain plain-text protected assets
+
 ### Security & Terms
 
 - [ ] **License & CODEOWNERS**

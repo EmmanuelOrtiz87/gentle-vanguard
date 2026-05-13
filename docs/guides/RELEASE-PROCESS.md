@@ -32,6 +32,28 @@ npm test
 # Update TUI installer version in foundation-installer-tui.ps1
 ```
 
+### 2.5 Homologation Gate (Complementary)
+
+Run these checks before tagging. This complements the existing release process and does not replace
+tests, audit, or governance gates.
+
+```powershell
+# In foundation
+git branch -vv
+Get-Content VERSION
+
+# In foundation-public
+Push-Location ..\foundation-public
+git branch -vv
+Get-Content VERSION
+Pop-Location
+```
+
+Expected outcome:
+- Same release baseline in both repos (VERSION aligned)
+- `main` and `develop` aligned with their remotes in both repos
+- No forced tag rewrites required
+
 ### 3. Commit & Tag
 
 ```powershell
@@ -61,6 +83,9 @@ git push origin vX.Y.Z
 ```powershell
 .\scripts\utilities\DEPLOYMENT\sync-to-public.ps1
 ```
+
+This step is a distribution/homologation stage. It complements release creation and should run after
+the core release checks above are green.
 
 Then from the public repo:
 
