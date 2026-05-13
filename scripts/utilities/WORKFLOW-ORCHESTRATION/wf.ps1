@@ -2417,14 +2417,35 @@ switch ($Command) {
                 Write-Error "dashboard-live-refresh.ps1 not found at: $liveDashboardScript"; exit 1
             }
 
-            $liveArgs = @('-RefreshSeconds', '15', '-BenchmarkEvery', '4')
-            if ($Scope -in @('live', 'live-open', 'open-live')) {
-                $liveArgs += '-Open'
+            # Build hashtable for live dashboard parameters (supports RemainingArgs override)
+            $liveParams = @{
+                RefreshSeconds = 15
+                BenchmarkEvery = 4
+                Open = $true
             }
-            if ($StrictCleanup) {
-                $liveArgs += '-AutoRemediateOnFail'
+            
+            # Parse RemainingArgs for parameter overrides
+            $i = 0
+            while ($i -lt $RemainingArgs.Count) {
+                $arg = $RemainingArgs[$i]
+                if ($arg -eq '-RefreshSeconds' -and $i + 1 -lt $RemainingArgs.Count) {
+                    $liveParams['RefreshSeconds'] = [int]$RemainingArgs[$i + 1]
+                    $i += 2
+                } elseif ($arg -eq '-BenchmarkEvery' -and $i + 1 -lt $RemainingArgs.Count) {
+                    $liveParams['BenchmarkEvery'] = [int]$RemainingArgs[$i + 1]
+                    $i += 2
+                } elseif ($arg -eq '-Iterations' -and $i + 1 -lt $RemainingArgs.Count) {
+                    $liveParams['Iterations'] = [int]$RemainingArgs[$i + 1]
+                    $i += 2
+                } elseif ($arg -eq '-AutoRemediateOnFail') {
+                    $liveParams['AutoRemediateOnFail'] = $true
+                    $i++
+                } else {
+                    $i++
+                }
             }
-            & $liveDashboardScript @liveArgs
+            
+            & $liveDashboardScript @liveParams
             exit $LASTEXITCODE
         }
 

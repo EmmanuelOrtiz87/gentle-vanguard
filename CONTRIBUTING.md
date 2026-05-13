@@ -50,7 +50,7 @@ npm install
 npm test
 
 # Check workflow health
-.\scripts\utilities\wf.ps1 health
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\foundation.ps1 health
 ```
 
 ### 4️⃣ Make Changes
@@ -103,7 +103,7 @@ npm test
 .\scripts\run-tests-simple.ps1
 
 # Full validation
-.\scripts\utilities\wf.ps1 verify
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\foundation.ps1 verify
 ```
 
 ### 6️⃣ Submit PR
@@ -140,7 +140,7 @@ git push origin feat/your-feature-name
 .\scripts\utilities\install-prerequisites.ps1
 
 # Start working
-.\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1 start-session
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\foundation.ps1 start-session
 ```
 
 ---
