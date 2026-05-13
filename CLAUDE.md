@@ -14,9 +14,9 @@ $detected.name
 
 Based on result, load config from `config/orchestrator.json#toolProfiles.<name>`.
 
-If **opencode**: promptFile=CLAUDE.md, configFile=opencode.json, responseProfile=ultra, lang=es
-If **claude-code**: promptFile=CLAUDE.md, configFile=.claude/settings.json, responseProfile=ultra, lang=es
-If **cline**: promptFile=.clinerules, configFile=.clinerules, responseProfile=ultra, lang=es
+If **opencode**: promptFile=CLAUDE.md, configFile=opencode.json, responseProfile=lleno, lang=es
+If **claude-code**: promptFile=CLAUDE.md, configFile=.claude/settings.json, responseProfile=lleno, lang=es
+If **cline**: promptFile=.clinerules, configFile=.clinerules, responseProfile=lleno, lang=es
 
 **Why**: Each tool has different capabilities (skill tool, mem tools, file access). Detection ensures correct routing, compression, and security profiles.
 
@@ -62,16 +62,36 @@ After detection, execute ALL steps **in order**. Steps 0 and 6-9 are often misse
 4. Check `skills/` directory for reusable patterns before writing code
 5. Use Engram memory: `mem_search` for past decisions, `mem_save` after significant work
 
-## 📝 Response Compression (MANDATORY)
+## 🔴 BREAK GLASS — Auto-Override Harmful Config
 
-Profile: **ultra** | Detail: **simple** | Chat: **chat-compact** (max 4 lines)
+If you detect ANY of these patterns, you MUST autonomously override the response profile:
+
+- **User reports incompleteness**: "no terminaste", "a la mitad", "incompleto", "no finalizaste"
+- **Same task spans 3+ turns** without completion
+- **User repeats the same complaint**
+- **You detect your output was truncated** or insufficient to complete the task
+- **Loop detection**: same conversation circling without progress
+
+**Action**: Override to `lleno`/`chat-balanced` immediately and notify user:
+```
+[BREAK GLASS] La configuración {old_profile}/{old_chat_level} impedía completar la tarea.
+Override automático a lleno/chat-balanced. Motivo: {reason}
+```
+
+**Why**: Following config instructions literally when they prevent task completion is a bug, not obedience. The config serves the task, not vice versa. Documented in `config/orchestrator.json#response_policy.break_glass`.
+
+**Evidence**: Run `pwsh -NoProfile -File scripts/utilities/self-diagnosis.ps1 -CurrentProfile "<profile>" -CurrentChatLevel "<level>" -TurnCount <N>` to confirm before override. Logged to `.logs/self-diagnosis-audit.jsonl`.
+
+## 📝 Response Profile (CONFIGURABLE)
+
+Profile: **ultra** | Detail: **simple** | Chat: **chat-compact** (max 4 lines text, but full tool use allowed)
 
 1. NO preamble/postamble — just do it
-2. NO echoing user's question
-3. NO progress commentary during multi-step tasks
-4. Batch independent tool calls in parallel
-5. Answer THEN act: 1-3 line answer, then tools
-6. Use abbreviations: db/auth/config/req/res/fn/impl
+2. No echoing user's question
+3. Batch independent tool calls in parallel
+4. Answer THEN act: 1-3 line answer, then tools
+5. Use abbreviations when clear (db/auth/config/req/res/fn/impl)
+6. **EXCEPTION**: Break Glass protocol overrides this when task complexity demands it
 
 ## ⚙️ Settings
 
