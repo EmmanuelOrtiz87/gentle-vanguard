@@ -1,6 +1,6 @@
 ﻿# Project Types
 
-Detailed guide for each project type supported by Workspace Foundation.
+Detailed guide for each project type supported by Foundation.
 
 ## Overview
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Workspace Foundation implements a **100% autonomous development stack** with self-healing,
+Foundation implements a **100% autonomous development stack** with self-healing,
 self-learning, and self-scaling capabilities. All systems operate without human intervention in
 production.
 

@@ -1,4 +1,4 @@
-# Presentation Script: Workspace Foundation
+# Presentation Script: Foundation
 
 This document contains detailed content for the 13 slides in the executive presentation.
 
@@ -6,7 +6,7 @@ This document contains detailed content for the 13 slides in the executive prese
 
 ### Slide 1: Title
 
-**Title:** Workspace Foundation: The Future of Engineering Efficiency. **Subtitle:**
+**Title:** Foundation: The Future of Engineering Efficiency. **Subtitle:**
 Standardization, AI, and Quality as pillars of growth. **Notes:** Present the overall vision for
 modernizing the development area.
 
@@ -19,7 +19,7 @@ modernizing the development area.
 - Lack of up-to-date technical documentation.
 - Security risks (Secret leaks).
 
-### Slide 3: The Solution: Workspace Foundation
+### Slide 3: The Solution: Foundation
 
 **Message:** An abstraction layer that unifies development. **Phrase:** "We don't just build code,
 we build a platform to scale engineering."
@@ -86,7 +86,7 @@ each release.
 
 ### Slide 13: Conclusion
 
-**Closing:** "Workspace Foundation is the foundation of our technological agility." **Call to
+**Closing:** "Foundation is the foundation of our technological agility." **Call to
 action:** Standard implementation for all new developments.
 
 ---

@@ -1,6 +1,6 @@
 # Scripts Utilities - Main Directory
 
-Centralized collection of utility scripts organized by functionality for workspace foundation.
+Centralized collection of utility scripts organized by functionality for Foundation.
 
 **Version**: 3.0.0  
 **Last updated**: 2026-05-04  

@@ -37,7 +37,7 @@ function Show-GitFlowHelp {
     
     Write-Host ""
     Write-Host "========================================================" -ForegroundColor Cyan
-    Write-Host "GitFlow Validation Guide - Workspace Foundation" -ForegroundColor Cyan
+    Write-Host "GitFlow Validation Guide - Foundation" -ForegroundColor Cyan
     Write-Host "========================================================" -ForegroundColor Cyan
     
     Write-Host ""

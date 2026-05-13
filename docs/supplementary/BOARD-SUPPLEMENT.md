@@ -1,6 +1,6 @@
-# Workspace Foundation
+# Foundation
 
-## Suplemento para Presentacin al Consejo
+## Board Supplement
 
 **Versin:** 1.0  
 **Fecha:** Abril 2026  
@@ -135,7 +135,7 @@ Target: >80% active para fin de mes 2
 
 
 Semana 1: Fundamentos
- Sesin 1: Qu es Workspace Foundation? (1 hr)
+ Sesin 1: Qu es Foundation? (1 hr)
  Sesin 2: Tour de herramientas (1 hr)
  Hands-on: Setup de tu primer proyecto (2 hrs)
 
@@ -193,12 +193,12 @@ Equipo Core:
 | **GitHub Copilot**       | Integrado, popular                   | Solo MS ecosystem, limited governance | $19/user/mes    |
 | **Amazon Q Developer**   | AWS integrado                        | Solo AWS                              | $19-30/user/mes |
 | **Cursor/Windsurf**      | Buena UX                             | No governance                         | $20/user/mes    |
-| **Workspace Foundation** | Custom, governance, multi-vendor, $0 | Requiere impl                         | $0 + dev time   |
+| **Foundation** | Custom, governance, multi-vendor, $0 | Requiere impl                         | $0 + dev time   |
 
 ### E.2 Por Qu WF Es Mejor
 
 ```
-Workspace Foundation vs Alternativas
+Foundation vs Alternativas
 
 
  Feature           WF           Copilot  Amazon Q  Cursor
@@ -230,11 +230,11 @@ Workspace Foundation vs Alternativas
 ### F.2 messaging para Developers
 
 ```
-Subject: Nuevo: Workspace Foundation - Tu toolkit de IA para desarrollo
+Subject: Nuevo: Foundation - Tu toolkit de IA para desarrollo
 
 Hola [Nombre]!,
 
-Workspace Foundation est aqu para hacerte ms productivo.
+Foundation est aqu para hacerte ms productivo.
 
 Lo que gans:
 [OK] Setup en 5 minutos (vs 4 horas)
@@ -259,7 +259,7 @@ Happy coding!
 ### G.1 Polticas de Uso
 
 ```
-WORKSPACE FOUNDATION - POLICIES
+FOUNDATION - POLICIES
 
 1. REVISION REQUERIDA
    Todo cdigo generado por IA requiere review humano antes de commit.
