@@ -32,7 +32,7 @@ Esto genera:
 & "C:\Program Files (x86)\NSIS\makensis.exe" "build\foundation-installer.nsi"
 ```
 
-Genera: `dist/Foundation-Setup.exe` (~5.5 MB)
+Genera: `dist/Foundation.exe` (instalador unificado)
 
 ### Paso 3: Sincronizar al repo público
 
@@ -60,8 +60,8 @@ git push origin develop
 git checkout main
 git merge develop --no-edit
 git push origin main
-git tag -a v2.X.X -m "v2.X.X: descripción del release"
-git push origin v2.X.X
+git tag -a vX.Y.Z -m "vX.Y.Z: descripcion del release"
+git push origin vX.Y.Z
 git checkout develop
 Pop-Location
 ```
@@ -70,8 +70,7 @@ Pop-Location
 
 ```
 foundation-public/
-├── Foundation-Setup.exe       # Instalador NSIS (5.5MB)
-├── Foundation-Launcher.exe    # Launcher compilado (38KB)
+├── Foundation.exe             # Instalador NSIS unificado
 ├── protected/                 # Scripts encriptados (.enc)
 │   ├── scripts/               #   200+ scripts .ps1.enc
 │   ├── config/                #   50+ configs .json.enc
@@ -121,13 +120,13 @@ Get-ChildItem config/ | Where-Object { $_.Name -notlike "*.example.*" }
 (Get-ChildItem protected/ -Recurse -Include "*.enc").Count  # > 400
 
 # 4. .exe deben existir
-Test-Path Foundation-Setup.exe   # True
-Test-Path Foundation-Launcher.exe  # True
+Test-Path Foundation.exe   # True
 ```
 
 ## Notas importantes
 
 - **Master key**: Nunca se incluye en foundation-public. Los usuarios la obtienen del repo privado o la pegan al primer launch.
-- **Versionado**: foundation-public usa su propio versionado (v2.9.0+) independiente de foundation.
+- **Versionado**: foundation-public debe mantener el mismo baseline de release que foundation (ejemplo: v1.0.0 en adelante).
 - **CI**: foundation-public tiene su propio workflow (`public-quality-gate.yml`) que valida integridad del repo.
 - **Frecuencia**: Homologar después de cada release significativo o cuando se agreguen nuevos scripts/skills.
+- **Complementariedad**: esta homologacion no reemplaza el proceso de release; extiende la etapa de distribucion para el repo publico.
