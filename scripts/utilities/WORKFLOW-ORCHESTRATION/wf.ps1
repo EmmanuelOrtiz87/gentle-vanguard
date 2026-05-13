@@ -1881,10 +1881,10 @@ switch ($Command) {
         Invoke-TokenBudgetGuard -Task 'end-session' -Risk 'medium' -EstimatedChars 7200
         $endScript = Join-Path $scriptDir '..\SESSION-MANAGEMENT\end-session.ps1'
         if (Test-Path $endScript) {
-            # Build end-session args robustly:
+            # Build end-session params robustly:
             # - supports unquoted multi-word scope (first non-switch tokens)
-            # - forwards remaining args like -MaxArtifacts/-MaxLocalArtifacts
-            $endArgs = @()
+            # - forwards known options like -MaxArtifacts/-MaxLocalArtifacts
+            $endParams = @{}
             $rawArgs = @()
             if (-not [string]::IsNullOrWhiteSpace($Scope)) { $rawArgs += [string]$Scope }
             if ($RemainingArgs) { $rawArgs += @($RemainingArgs | ForEach-Object { [string]$_ }) }
@@ -1901,18 +1901,53 @@ switch ($Command) {
             if ($taskParts.Count -gt 0) {
                 $taskName = ($taskParts -join ' ').Trim()
                 if (-not [string]::IsNullOrWhiteSpace($taskName)) {
-                    $endArgs += @('-TaskName', $taskName)
+                    $endParams['TaskName'] = $taskName
                 }
             }
 
-            if ($idx -lt $rawArgs.Count) {
-                $endArgs += $rawArgs[$idx..($rawArgs.Count - 1)]
+            while ($idx -lt $rawArgs.Count) {
+                $arg = [string]$rawArgs[$idx]
+                $next = if ($idx + 1 -lt $rawArgs.Count) { [string]$rawArgs[$idx + 1] } else { '' }
+
+                switch ($arg.ToLowerInvariant()) {
+                    '-taskname' {
+                        if (-not [string]::IsNullOrWhiteSpace($next)) {
+                            $endParams['TaskName'] = $next
+                            $idx += 2
+                            continue
+                        }
+                    }
+                    '-skipreview' { $endParams['SkipReview'] = $true; $idx++; continue }
+                    '-skiptests' { $endParams['SkipTests'] = $true; $idx++; continue }
+                    '-skipaudit' { $endParams['SkipAudit'] = $true; $idx++; continue }
+                    '-skipgovernance' { $endParams['SkipGovernance'] = $true; $idx++; continue }
+                    '-skiprotation' { $endParams['SkipRotation'] = $true; $idx++; continue }
+                    '-allowunpublishedclose' { $endParams['AllowUnpublishedClose'] = $true; $idx++; continue }
+                    '-force' { $endParams['Force'] = $true; $idx++; continue }
+                    '-maxartifacts' {
+                        if ($next -match '^\d+$') {
+                            $endParams['MaxArtifacts'] = [int]$next
+                            $idx += 2
+                            continue
+                        }
+                    }
+                    '-maxlocalartifacts' {
+                        if ($next -match '^\d+$') {
+                            $endParams['MaxLocalArtifacts'] = [int]$next
+                            $idx += 2
+                            continue
+                        }
+                    }
+                }
+
+                $idx++
             }
 
-            if ($SkipReview) { $endArgs += '-SkipReview' }
-            if ($SkipTests) { $endArgs += '-SkipTests' }
-            if ($Force) { $endArgs += '-Force' }
-            Invoke-LocalPowerShellScript -ScriptPath $endScript -ScriptArgs $endArgs
+            if ($SkipReview) { $endParams['SkipReview'] = $true }
+            if ($SkipTests) { $endParams['SkipTests'] = $true }
+            if ($Force) { $endParams['Force'] = $true }
+
+            & $endScript @endParams
         } else {
             Write-Error "End session script not found: $endScript"
             exit 1
