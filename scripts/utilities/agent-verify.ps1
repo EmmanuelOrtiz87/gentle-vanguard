@@ -228,6 +228,33 @@ if (Test-DomainEnabled 'tests') {
     } else {
         Add-Result "unit-tests" "WARN" "Test file not found: tests/unit/foundation-core.tests.ps1" "tests"
     }
+
+    # Multilingual routing regression matrix (es/en/pt-BR)
+    $RoutingEvalScript = "$Root\scripts\utilities\routing-quality-eval.ps1"
+    $RoutingDataset = "$Root\tests\e2e\routing-language-matrix.json"
+    if ((Test-Path $RoutingEvalScript) -and (Test-Path $RoutingDataset)) {
+        $routingOut = & pwsh -NoProfile -ExecutionPolicy Bypass -File $RoutingEvalScript `
+            -DatasetPath "tests/e2e/routing-language-matrix.json" `
+            -WorkspaceRoot "$Root" `
+            -FailOnMismatch 2>&1
+
+        if ($LASTEXITCODE -eq 0) {
+            $summaryLine = ($routingOut | Select-String "Accuracy:" | Select-Object -Last 1)
+            if ($summaryLine) {
+                Add-Result "routing-language-matrix" "PASS" "$summaryLine" "tests"
+            } else {
+                Add-Result "routing-language-matrix" "PASS" "Routing language matrix passed" "tests"
+            }
+        } else {
+            $detail = ($routingOut | Out-String).Trim()
+            if ([string]::IsNullOrWhiteSpace($detail)) {
+                $detail = "Routing language matrix failed"
+            }
+            Add-Result "routing-language-matrix" "FAIL" $detail "tests"
+        }
+    } else {
+        Add-Result "routing-language-matrix" "WARN" "Routing evaluator or dataset not found" "tests"
+    }
 }
 
 # =============================================================================

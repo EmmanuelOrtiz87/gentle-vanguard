@@ -167,13 +167,20 @@ function Compute-MatchQuality {
     # Word-start match: trigger matches start of a word (only for length >= 3)
     $wordStartPattern = '\b' + [regex]::Escape($Trigger)
     if ($InputText -match $wordStartPattern) { return 90 }
-    # Substring match: trigger is contained within input
-    if ($InputText.Contains($Trigger)) { return 85 }
+    # Substring match: allow only for longer or multi-word triggers to reduce false positives
+    if ($InputText.Contains($Trigger)) {
+        if ($Trigger.Contains(' ') -or $Trigger.Length -ge 5) {
+            return 85
+        }
+    }
     # Word-fragment match: trigger words partially present
     $triggerWords = $Trigger -split '\s+'
     $matchedWords = 0
     foreach ($w in $triggerWords) {
-        if ($w.Length -gt 2 -and $InputText.Contains($w)) { $matchedWords++ }
+        if ($w.Length -gt 2) {
+            $wordPattern = '\b' + [regex]::Escape($w) + '\b'
+            if ($InputText -match $wordPattern) { $matchedWords++ }
+        }
     }
     if ($matchedWords -gt 0 -and $triggerWords.Count -gt 0) {
         $ratio = $matchedWords / $triggerWords.Count
