@@ -150,7 +150,8 @@ function Protect-File {
         New-Item -ItemType Directory -Path $destDir -Force | Out-Null
     }
 
-    [System.IO.File]::WriteAllBytes($DestPath, $result)
+    $resultBase64 = [Convert]::ToBase64String($result)
+    [System.IO.File]::WriteAllText($DestPath, $resultBase64, [System.Text.Encoding]::ASCII)
 }
 
 $encrypted = 0
