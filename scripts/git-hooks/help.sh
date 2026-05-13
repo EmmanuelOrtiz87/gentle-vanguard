@@ -2,7 +2,7 @@
 set -eu
 
 cat <<'EOF'
-Workspace Foundation
+Foundation
 
 Quick start:
   scripts/init-workspace.sh

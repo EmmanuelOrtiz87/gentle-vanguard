@@ -1,4 +1,4 @@
-# Workspace Foundation - Quick Reference
+# Foundation - Quick Reference
 
 ## CLI Commands
 

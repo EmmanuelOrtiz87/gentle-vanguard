@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
 
-Write-Host "Workspace Foundation"
+Write-Host "Foundation"
 Write-Host ""
 Write-Host "Quick start:"
 Write-Host "  scripts\init-workspace.ps1"

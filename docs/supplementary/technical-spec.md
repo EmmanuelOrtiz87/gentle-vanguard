@@ -1,4 +1,4 @@
-# Technical Document: Workspace Foundation Architecture
+# Technical Document: Foundation Architecture
 
 ## Directory Structure
 
