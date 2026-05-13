@@ -1,0 +1,26 @@
+{
+  "_comment": "Pester code coverage thresholds and configuration",
+  "version": "1.0.0",
+  "thresholds": {
+    "lines": 70,
+    "functions": 75,
+    "branches": 65
+  },
+  "include": [
+    "scripts/**/*.ps1"
+  ],
+  "exclude": [
+    "scripts/setup-complete.ps1",
+    "scripts/run-tests-simple.ps1",
+    "scripts/testing/run-tests.ps1",
+    "build/**",
+    "bin/**"
+  ],
+  "outputDir": "tests/coverage",
+  "reportFormats": ["JaCoCo"],
+  "_notes": {
+    "thresholds": "Set conservatively at start; raise by 5% each quarter",
+    "target_2026_Q3": { "lines": 75, "functions": 80, "branches": 70 },
+    "target_2026_Q4": { "lines": 80, "functions": 85, "branches": 75 }
+  }
+}
