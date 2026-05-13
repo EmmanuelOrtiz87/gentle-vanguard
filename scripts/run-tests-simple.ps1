@@ -87,19 +87,19 @@ if ($WithCoverage) {
             Where-Object { $_.Name -notmatch '\.e2e\.' } |
             Select-Object -ExpandProperty FullName
 
-        $coverageCmd = "
-            `$r = Invoke-Pester -Path @('$($allTestFiles -join "','")') -CodeCoverage @('$($scriptsToMeasure -join "','")') -PassThru -Quiet
-            `$cov = `$r.CodeCoverage
-            if (`$cov) {
-                `$hitLines = (`$cov.HitCommands | Measure-Object).Count
-                `$missLines = (`$cov.MissedCommands | Measure-Object).Count
-                `$totalLines = `$hitLines + `$missLines
-                `$pct = if (`$totalLines -gt 0) { [math]::Round((`$hitLines / `$totalLines) * 100, 1) } else { 100 }
-                Write-Host \"Lines covered: `$hitLines / `$totalLines (`$pct%)\"
-                if (`$pct -lt 70) { Write-Host '[WARNING] Coverage below threshold (70%)' ; exit 1 }
+        $coverageCmd = @'
+            $r = Invoke-Pester -Path $args[0] -CodeCoverage $args[1] -PassThru -Quiet
+            $cov = $r.CodeCoverage
+            if ($cov) {
+                $hitLines   = ($cov.HitCommands  | Measure-Object).Count
+                $missLines  = ($cov.MissedCommands | Measure-Object).Count
+                $totalLines = $hitLines + $missLines
+                $pct = if ($totalLines -gt 0) { [math]::Round(($hitLines / $totalLines) * 100, 1) } else { 100 }
+                Write-Host "Lines covered: $hitLines / $totalLines ($pct%)"
+                if ($pct -lt 70) { Write-Host '[WARNING] Coverage below threshold (70%)'; exit 1 }
             }
-        "
-        pwsh -NoProfile -Command $coverageCmd
+'@
+        pwsh -NoProfile -Command $coverageCmd -args @(,$allTestFiles) @(,$scriptsToMeasure)
         if ($LASTEXITCODE -ne 0) {
             Write-Host "[WARN] Coverage check failed or below threshold" -ForegroundColor Yellow
         }
