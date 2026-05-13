@@ -269,7 +269,7 @@ Each skill MUST declare its API version:
 - Added input validation for userId parameter
 
 ### Migration Guide
-See [MIGRATION-V1-TO-V2.md](docs/MIGRATION-V1-TO-V2.md)
+See release notes in [CHANGELOG.md](../CHANGELOG.md) and maintain migration steps in the API PR description.
 ```
 
 ---
@@ -379,7 +379,7 @@ Describe "API Versioning" {
 
 **Action required**:
 - ✅ Update your client before 2026-11-12 (6 months)
-- ✅ Follow [migration guide](docs/MIGRATION-V1-TO-V2.md)
+- ✅ Follow migration steps documented in [CHANGELOG.md](../CHANGELOG.md)
 - ✅ Test on staging first
 
 **Support**:
@@ -396,4 +396,4 @@ Describe "API Versioning" {
 - [Zod Schema Validation](https://zod.dev/)
 - [OpenAPI 3.0 Specification](https://spec.openapis.org/oas/v3.0.3)
 - Project: [config/auto-delegation.json](../config/auto-delegation.json)
-- Related: [NORMATIVAS-API-DESIGN.md](NORMATIVAS-API-DESIGN.md) (if exists)
+- Related: [NORMATIVAS-CODIGO.md](NORMATIVAS-CODIGO.md)

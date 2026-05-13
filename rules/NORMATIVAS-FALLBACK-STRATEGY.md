@@ -283,7 +283,7 @@ catch [Exception] {
 
 ---
 
-## 7. Configuration: config/fallback-strategy.json
+## 7. Configuration: config/auto-delegation.json (fallbackStrategy)
 
 ```json
 {
@@ -470,6 +470,6 @@ Need urgent processing? Reply: "PRIORITY"
 ## References
 
 - [config/auto-delegation.json](../config/auto-delegation.json) — Routing rules
-- [config/fallback-strategy.json](../config/fallback-strategy.json) — Fallback config
+- [config/auto-delegation.json](../config/auto-delegation.json) — Fallback config (`fallbackStrategy`)
 - [AI-NORMATIVES.md](AI-NORMATIVES.md) — Agent profiles
 - Project: sdd-lifecycle skill

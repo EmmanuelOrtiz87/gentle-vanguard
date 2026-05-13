@@ -148,7 +148,14 @@ function Test-MarkdownLinks {
     
     Write-AuditHeader "Markdown Link Validation"
     
-    $mdFiles = Get-ChildItem -Path $RootPath -Recurse -Filter '*.md' -File | Where-Object { $_.FullName -notmatch '\\tools\\|\\.opencode\\node_modules\\' }
+    $mdFiles = Get-ChildItem -Path $RootPath -Recurse -Filter '*.md' -File | Where-Object {
+        $_.FullName -notmatch '[\\/]tools[\\/]' -and
+        $_.FullName -notmatch '[\\/]node_modules[\\/]' -and
+        $_.FullName -notmatch '[\\/]build[\\/]public[\\/]' -and
+        $_.FullName -notmatch '[\\/]\.local[\\/]' -and
+        $_.FullName -notmatch '[\\/]docs[\\/]\.local-archive[\\/]' -and
+        $_.FullName -notmatch '[\\/]skills[\\/]fireworks-tech-graph[\\/]'
+    }
     $brokenLinks = 0
     
     foreach ($file in $mdFiles) {

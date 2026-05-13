@@ -473,7 +473,7 @@ Describe "Observability" {
 - [ ] PII masking tested
 - [ ] 30-day retention configured
 - [ ] Observability tests in `tests/observability/`
-- [ ] Documentation in [docs/OBSERVABILITY.md](../docs/OBSERVABILITY.md)
+- [ ] Documentation synchronized with [config/observability-config.json](../config/observability-config.json)
 
 ---
 

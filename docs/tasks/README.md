@@ -68,7 +68,7 @@ Each task brief should include:
 
 | Task                                | Description                  | Link                                                                                 |
 | ----------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------ |
-| **🏗️ Foundation Session Hardening** | Governance improvements      | [foundation-session-hardening.md](foundation-session-hardening.md)                   |
+| **🏗️ Session Governance** | Governance improvements      | [PENDING-TASKS.md](PENDING-TASKS.md)                   |
 | **📊 Chat Baseline Architecture**   | Chat architecture validation | [chat-baseline-architecture-validation.md](chat-baseline-architecture-validation.md) |
 
 ### Templates#

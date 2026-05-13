@@ -283,7 +283,7 @@ All PowerShell scripts follow standardized defensive patterns documented in `scr
 | [Getting Started](docs/getting-started/README.md) | 🏁 Setup guide |
 | [Architecture](docs/architecture/README.md) | 🏗️ System design |
 | [Skills Catalog](docs/reference/SKILL-ORGANIZATION.md) | 📚 127 skills reference |
-| [Session Auth Flow](docs/SESSION-AUTH-FLOW.md) | 🔐 Authentication documentation |
+| [Session Guide](docs/guides/SESSION-GUIDE.md) | 🔐 Session lifecycle and command flow |
 | [Token Tracking](docs/reference/REAL-TOKEN-TRACKING.md) | 📊 Token monitoring |
 | [Plugin System](docs/reference/PLUGIN-ARCHITECTURE.md) | 🔌 Plugin development |
 | [Defensive Patterns](scripts/DEFENSIVE-PATTERNS.md) | 🛡️ PowerShell coding standards |
