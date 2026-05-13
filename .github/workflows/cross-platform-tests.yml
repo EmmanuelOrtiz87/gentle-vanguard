@@ -91,7 +91,7 @@ jobs:
         shell: pwsh
         run: |
           Write-Output "Running cross-platform validation..."
-          & ./scripts/utilities/agent-verify.ps1 -Domain "tests,structure,hooks" -Verbose
+          & ./scripts/utilities/agent-verify.ps1 -Domain @('tests','structure','hooks') -Verbose
 
       - name: Run integration tests
         shell: pwsh
