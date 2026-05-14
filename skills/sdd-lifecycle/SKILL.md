@@ -187,14 +187,14 @@ wf sdd verify "user-authentication"
 ## Files
 
 ```
-docs/specs/
+docs/sdd/
  SDD-{name}/
-    01-exploration.md
-    02-proposal.md
-    03-specification.md
-    04-design.md
-    05-tasks.md
-    06-verification.md
+     01-exploration.md
+     02-proposal.md
+     03-specification.md
+     04-design.md
+     05-tasks.md
+     06-verification.md
 ```
 
 ## Integration
@@ -212,15 +212,35 @@ docs/specs/
 
 ## Enforcement
 
-**Mandatory phases:**
+**Mandatory phases (ENFORCED by pre-process-input.ps1):**
 
-- spec before apply
-- verify before archive
+- EXPLORE before SPEC — BA must explore requirements first
+- SPEC before APPLY — no implementation without approved spec
+- VERIFY before ARCHIVE — verification must pass before closing
+
+**SDD FLOW RULE (ENFORCED by pre-process-input.ps1):**
+
+When the system detects a feature/development request (keywords: implementar, crear, desarrollar, build, "nueva funcionalidad", etc.), the pre-process-input.ps1 hook automatically forces PLAN_MODE_REQUIRED → BA/sdd-explore. The agent MUST NOT skip to APPLY even if the trigger matched DEV-style keywords. See `rules/AI-NORMATIVES.md` for canonical definition.
+
+**Flow enforcement:**
+
+1. User request → pre-process-input.ps1 detects feature intent
+2. → PLAN_MODE_REQUIRED → activate BA (sdd-explore)
+3. BA completes EXPLORE → passes to SAD for SPEC+DESIGN
+4. SAD completes → passes to DEV for TASKS+APPLY
+5. DEV completes → passes to QA for VERIFY
+6. QA passes → ARCHIVE
+
+**If the agent receives TRIGGER_MATCH_FOUND with "implement"/"code"/"develop" and SKILL: sdd-lifecycle:**
+→ DO NOT jump to APPLY phase
+→ START from INIT or EXPLORE depending on context
+→ Check if spec exists in docs/sdd/ before implementing
 
 **Optional (with justification):**
 
-- Hotfixes: mini-spec only
-- Internal refactors: skip explore/propose
+- Hotfixes: mini-spec only (1-page spec, no explore/propose)
+- Internal refactors: skip explore/propose (must still have spec)
+- Bug fixes: skip explore if the bug is clearly understood (still need spec)
 
 ## Migration
 

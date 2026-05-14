@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/PowerShell-7+-purple?style=flat-square" alt="PowerShell">
   <img src="https://img.shields.io/badge/Agents-16-orange?style=flat-square" alt="Agents">
   <img src="https://img.shields.io/badge/Skills-127-teal?style=flat-square" alt="Skills">
-  <img src="https://img.shields.io/badge/Tests-33-passing-green?style=flat-square" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-442-blue?style=flat-square" alt="Tests">
 </p>
 
 <p align="center">
@@ -238,7 +238,7 @@ flowchart LR
 |------|--------|
 | ⚙️ Configuration | ✅ 3/3 |
 | 🛠️ Skills | ✅ 127 validated |
-| 🧪 Tests | ✅ 33 passing |
+| 🧪 Tests | ✅ 422 passing (442 total) |
 | 🔗 Hooks | ✅ 2/2 |
 | 📁 Structure | ✅ 7/7 |
 | **Total** | **✅ 14/14 — Production Ready** |

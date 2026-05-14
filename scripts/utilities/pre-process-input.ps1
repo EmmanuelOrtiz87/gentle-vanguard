@@ -342,7 +342,66 @@ function Write-FlowGate {
 
 $sourceTag = if ($FromAgent) { 'AGENT' } else { 'USER' }
 
-if ($matchingSkill) {
+# SDD pre-routing: detect feature/development intent and force BA exploration first
+$featureIntentPatterns = @(
+    'implementar', 'desarrollar', 'construir',
+    'implementa', 'desarrolla', 'construye',
+    'nueva funcionalidad', 'nuevo modulo', 'nuevo módulo',
+    'nuevo componente', 'nueva feature', 'nuevo endpoint',
+    'nueva api', 'nueva API', 'feature request',
+    'new feature', 'new module', 'new component',
+    'new endpoint', 'new api', 'new API',
+    'add feature', 'add module', 'add component'
+)
+$isFeatureIntent = $false
+if ($matchingSkill -eq 'sdd-lifecycle' -and $confidenceScore -ge 80) {
+    foreach ($pattern in $featureIntentPatterns) {
+        if ($inputLower -match [regex]::Escape($pattern)) {
+            $isFeatureIntent = $true
+            break
+        }
+    }
+    # Also check if DEV-style words triggered the match without explicit SDD mention
+    $devIntentTriggers = @('implement', 'develop', 'build', 'create', 'make', 'code')
+    if (-not $isFeatureIntent -and $matchingTrigger -in $devIntentTriggers -and
+        $inputLower -notmatch '\bsdd\b') {
+        $isFeatureIntent = $true
+    }
+}
+
+if ($isFeatureIntent) {
+    # Register feature in SDD state tracker for multi-turn orchestration
+    $sddOrch = Join-Path (Split-Path -Parent $PSCommandPath) 'sdd-orchestrator.ps1'
+    $wsRoot = if ($PSBoundParameters.ContainsKey("WorkspaceRoot") -and $WorkspaceRoot -ne ".") { $WorkspaceRoot } else { (Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSCommandPath))) }
+    if (Test-Path $sddOrch) {
+        $featureTag = "auto-" + (Get-Date -Format 'yyyyMMdd-HHmmss')
+        $null = & $sddOrch -Action register-feature -FeatureName $featureTag -WorkspaceRoot $wsRoot 2>&1
+        $null = & $sddOrch -Action update-phase -FeatureName $featureTag -Phase explore -WorkspaceRoot $wsRoot 2>&1
+    }
+
+    $baProfile = Resolve-AgentProfile -AgentCode "BA" -Profiles $agentProfiles
+    Write-Output "SOURCE: $sourceTag"
+    Write-Output "PLAN_MODE_REQUIRED"
+    Write-Output "CONFIDENCE: $confidenceScore"
+    Write-Output "AGENT: BA"
+    Write-Output "SKILL: sdd-lifecycle"
+    Write-Output "PHASE: EXPLORE"
+    Write-Output "ACTION: Feature/development request detected - activating BA (sdd-explore) first. Must complete EXPLORE phase before any implementation."
+    Write-AgentProfile -Profile $baProfile -AgentCode "BA"
+    if ($clarifyBaStrategy -and $clarifyBaStrategy.questions) {
+        Write-Output "CLARIFICATION_QUESTIONS:"
+        foreach ($q in $clarifyBaStrategy.questions) { Write-Output "  - $q" }
+    }
+    return @{
+        HasMatch       = $true
+        Skill          = 'sdd-lifecycle'
+        Trigger        = $matchingTrigger
+        Confidence     = $confidenceScore
+        PlanMode       = $true
+        AgentCode      = 'BA'
+        AgentProfile   = $baProfile
+    }
+} elseif ($matchingSkill) {
     Write-Output "SOURCE: $sourceTag"
     Write-Output "TRIGGER_MATCH_FOUND"
     Write-Output "SKILL: $matchingSkill"

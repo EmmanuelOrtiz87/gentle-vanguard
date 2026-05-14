@@ -39,6 +39,25 @@ sdd/
 Follow the guidelines in `docs/reference/SDD-GOVERNANCE-POLICY.md` for spec creation, review, and
 approval processes.
 
+### SDD Exemption
+
+In certain cases, a PR may be exempt from SDD requirements. To request an exemption, add these
+lines to the PR body:
+
+```
+SDD-EXEMPT: true
+SDD-EXEMPT-REASON: <brief justification, e.g., "documentation-only change" or "emergency hotfix">
+```
+
+Valid exemption reasons include:
+- **Documentation-only changes**: No code or behavior changes
+- **Emergency hotfixes**: Production issues requiring immediate fix (mini-spec still recommended)
+- **Internal refactors**: No external behavior changes (still requires a brief spec)
+- **Trivial changes**: One-line fixes, typo corrections, dependency updates
+
+Exemptions are validated by `scripts/diagnostics/validate-sdd-governance.ps1` in CI.
+The SDD gate (`scripts/hooks/check-sdd-gate.ps1`) enforces this on PRs to `main`/`develop`.
+
 ## Current Specs
 
 Main specification:
@@ -47,7 +66,7 @@ Main specification:
 
 Template:
 
-- [SPEC-TEMPLATE.md](../specs/SPEC-TEMPLATE.md) - Template for new specifications
+- [SPEC-TEMPLATE.md](SPEC-TEMPLATE.md) - Template for new specifications
 
 ## Related Documentation
 

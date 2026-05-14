@@ -91,13 +91,13 @@ if (Test-Path $templateFile) {
     $filesList = ($changedFiles | ForEach-Object { "- $_" }) -join "`n"
     if ([string]::IsNullOrWhiteSpace($filesList)) { $filesList = "- No modified files" }
     
-    $specsPath = Join-Path $projectRoot "docs/specs"
+    $specsPath = Join-Path $projectRoot "docs/sdd"
     $specLink = "None found"
     $specStatus = "N/A (Optional)"
     if (Test-Path $specsPath) {
         $specFiles = Get-ChildItem -Path $specsPath -File
         if ($specFiles.Count -gt 0) {
-            $specLink = "docs/specs/$($specFiles[0].Name)"
+            $specLink = "docs/sdd/$($specFiles[0].Name)"
             $specStatus = "Pending AI/Manual Review"
         }
     }

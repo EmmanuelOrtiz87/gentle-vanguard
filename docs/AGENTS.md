@@ -112,6 +112,7 @@ If the current response profile prevents completing a multi-step task, you MUST 
 | **Agent profiles**                   | `config/auto-delegation.json#agentProfiles`                                                               |
 | **Pre-processing hook (mandatory)**  | `scripts/utilities/pre-process-input.ps1`                                                                 |
 | **Parse output**                     | `TRIGGER_MATCH_FOUND` → load skill \| `PLAN_MODE_REQUIRED` → activate BA \| `NO_TRIGGER_MATCH` → continue |
+| **SDD FLOW RULE**                    | If pre-process outputs `PLAN_MODE_REQUIRED` + `AGENT: BA` + `SKILL: sdd-lifecycle`, MUST activate BA/sdd-explore first — do NOT jump to DEV/APPLY even if trigger matched "implement"/"code"/"develop". BA must complete EXPLORE before any implementation. If `TRIGGER_MATCH_FOUND` + `SKILL: sdd-lifecycle` with DEV trigger on a new feature, treat as PLAN_MODE_REQUIRED. |
 
 ---
 

@@ -5,7 +5,7 @@
 **Role**: Analyzes requirements, creates BDD scenarios, defines acceptance criteria. **Skills**:
 bdd-scenarios-skill, documentation-governance, requirements patterns **Triggers**: requirements,
 user story, BDD, Gherkin, acceptance criteria, feature analysis, especificación funcional
-**Deliverables**: BDD scenario files (`docs/specs/*.feature`), acceptance criteria documents, user
+**Deliverables**: BDD scenario files (`docs/sdd/*.feature`), acceptance criteria documents, user
 story mappings, requirements traceability matrix **Commands**:
 
 ```powershell
@@ -19,7 +19,7 @@ story mappings, requirements traceability matrix **Commands**:
 architecture-governance, api-design-skill, database-relational-skill, database-nosql-skill,
 typescript-skill, golang-api-skill **Triggers**: architecture, design, SDD, system design, API
 design, database schema, technical decision, arquitectura, diseño **Deliverables**: SDD documents
-(`docs/specs/SDD-*.md`), Architecture Decision Records (ADR), API contracts and schemas, database
+(`docs/sdd/SDD-*.md`), Architecture Decision Records (ADR), API contracts and schemas, database
 design documents **Commands**:
 
 ```powershell
