@@ -321,7 +321,52 @@ try {
 
 ---
 
-## 10. Utility Functions (Cross-Platform)
+## 10. pwsh Availability Check & Fallback
+
+### Problem
+All foundation scripts require PowerShell 7+ (pwsh). On Linux/macOS, pwsh may not be installed.
+Without a fallback, the agent wastes tokens attempting to run scripts that fail with "command not found".
+
+### Mandatory Check — Before Any Script Execution
+
+```powershell
+# Check pwsh availability before running foundation scripts
+if (-not (Get-Command pwsh -ErrorAction SilentlyContinue)) {
+    Write-Error "PowerShell 7+ (pwsh) is required. Install from: https://github.com/PowerShell/PowerShell"
+    exit 1
+}
+```
+
+### Fallback Behavior
+
+| Platform | pwsh installed? | Behavior |
+|----------|----------------|----------|
+| **Windows** | Always (shipped with tool) | Run `.cmd`/`.ps1` directly |
+| **Linux** | ✅ Yes | Run `pwsh ./script.ps1` |
+| **Linux** | ❌ No | **BLOCK**: report error with install instructions. No bash-native fallback exists |
+| **macOS** | ✅ Yes | Run `pwsh ./script.ps1` |
+| **macOS** | ❌ No | **BLOCK**: report error with `brew install powershell`. No zsh-native fallback exists |
+
+### Detection at Startup
+
+```powershell
+# In detect-tool.ps1 or session-autostart:
+$hasPwsh = [bool](Get-Command pwsh -ErrorAction SilentlyContinue)
+if (-not $hasPwsh -and -not $IsWindows) {
+    Write-Error "[FOUNDATION] PowerShell 7+ required. Run: brew install powershell (macOS) or see https://aka.ms/powershell"
+    exit 1
+}
+```
+
+### What If pwsh Is Missing?
+1. Agent MUST NOT attempt to run any .ps1/.cmd script
+2. Agent MUST report the missing dependency to user
+3. Agent MUST provide install command: `brew install powershell` (macOS) or `https://aka.ms/powershell`
+4. Agent MUST NOT fall back to bash — stack is PowerShell-native
+
+---
+
+## 11. Utility Functions (Cross-Platform)
 
 ### Portable Path Resolution
 
@@ -377,7 +422,7 @@ function Invoke-CrossPlatformCommand {
 
 ---
 
-## 11. CI/CD Cross-Platform
+## 12. CI/CD Cross-Platform
 
 ### GitHub Actions
 
@@ -414,7 +459,7 @@ RUN pwsh -Command 'Invoke-Pester tests/ -CI'
 
 ---
 
-## 12. Documentation Requirements
+## 13. Documentation Requirements
 
 ### README Platform-Specific Sections
 
@@ -446,7 +491,7 @@ pwsh ./scripts/setup.ps1
 
 ---
 
-## 13. Compliance Checklist
+## 14. Compliance Checklist
 
 - [ ] All PowerShell scripts use `Join-Path` for paths
 - [ ] `.gitattributes` configured with `eol=lf`

@@ -1,13 +1,18 @@
 {
-  "workspace": {
-    "name": "foundation",
-    "version": "1.0.0",
-    "type": "foundation",
-    "root": "."
-  },
-  "settings": {
-    "autoSave": true,
-    "contextEfficiencyTarget": 100,
-    "enableTelemetry": true
+  "workspaceName": "foundation",
+  "workspaceRoot": ".",
+  "projectRoot": "projects",
+  "dataRoot": ".engram-data",
+  "toolsRoot": "tools",
+  "projectTemplate": "templates/project-root",
+  "projectDefaults": {
+    "repositoryMode": "template",
+    "kind": "service",
+    "preset": "default",
+    "architecture": "layered",
+    "profile": "general",
+    "aiModelMode": "none",
+    "testCommand": "go test ./...",
+    "postInstallCommand": ""
   }
 }

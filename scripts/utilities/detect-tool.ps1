@@ -23,6 +23,29 @@ function Get-DetectedTool {
         isCopilot     = $false
         isAntigravity = $false
         confidence    = 0
+        os            = @{
+            platform      = "unknown"
+            shell         = "unknown"
+            pathSeparator = [System.IO.Path]::DirectorySeparatorChar.ToString()
+            isWindows     = $false
+            isLinux       = $false
+            isMacOS       = $false
+        }
+    }
+
+    # Detect OS
+    $tool.os.isWindows = [System.OperatingSystem]::IsWindows()
+    $tool.os.isLinux   = [System.OperatingSystem]::IsLinux()
+    $tool.os.isMacOS   = [System.OperatingSystem]::IsMacOS()
+    if ($tool.os.isWindows) {
+        $tool.os.platform = "windows"
+        $tool.os.shell    = "powershell"
+    } elseif ($tool.os.isMacOS) {
+        $tool.os.platform = "macos"
+        $tool.os.shell    = "zsh"
+    } elseif ($tool.os.isLinux) {
+        $tool.os.platform = "linux"
+        $tool.os.shell    = "bash"
     }
 
     # 1. Check OPENCODE env vars (most reliable for opencode)
@@ -132,13 +155,23 @@ function Get-ToolConfig {
         [string]$ConfigPath
     )
     $result = $DetectedTool
+    $sessionStartCmd = if ($DetectedTool.os.isWindows) {
+        "scripts/utilities/session-autostart.cmd"
+    } elseif ($DetectedTool.os.isLinux -or $DetectedTool.os.isMacOS) {
+        "bash ./scripts/utilities/session-autostart.sh"
+    } else {
+        "scripts/utilities/session-autostart.cmd"
+    }
+
     $result.instructions = @{
         primaryEntryPoint  = "docs/AGENTS.md"
         primaryConfig      = "config/orchestrator.json"
+        workspaceConfig    = "config/workspace.config.json"
         routingConfig      = "config/auto-delegation.json"
         normatives         = "rules/AI-NORMATIVES.md"
         sessionLifecycle   = "rules/NORMATIVAS-SESSION.md"
-        sessionAutostart   = "scripts/utilities/session-autostart.cmd"
+        developmentStandards = "rules/DEVELOPMENT-STANDARDS.md"
+        sessionAutostart   = $sessionStartCmd
         preProcessHook     = "scripts/utilities/pre-process-input.ps1"
         responseProfile    = "ultra"
         communicationLang  = "es"
