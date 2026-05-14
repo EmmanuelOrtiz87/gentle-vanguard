@@ -240,8 +240,9 @@ TODO sesión DEBE verificar:
 7. Significant decisions saved to Engram
 8. Session state recoverable after compaction
 9. `mem_session_summary` called before close
-10. NEXT_SESSION_GUIDE.md updated
-11. Git workspace in clean/reported state before close
+10. Post-session learning analysis — run `wf learning` to detect gaps and generate improvement proposals
+11. NEXT_SESSION_GUIDE.md updated
+12. Git workspace in clean/reported state before close
 
 ---
 
