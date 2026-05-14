@@ -241,6 +241,24 @@
       }
     }
   },
+  "workspace": {
+    "workspaceRoot": ".",
+    "projectRoot": "projects",
+    "dataRoot": ".engram-data",
+    "toolsRoot": "tools",
+    "templatesRoot": "templates",
+    "projectTemplate": "templates/project-root",
+    "configFile": "config/workspace.config.json",
+    "note": "All paths relative to workspace root (the directory containing this config). Agent MUST read workspace.config.json for detailed per-project settings. New projects are created under projectRoot/.",
+    "newProjectFlow": "sdd-lifecycle",
+    "projectDefaults": {
+      "kind": "service",
+      "preset": "default",
+      "architecture": "layered",
+      "profile": "general",
+      "testCommand": "go test ./..."
+    }
+  },
   "norms": {
     "orchestrator": "docs/NORMATIVAS-ORQUESTADOR.md",
     "security": "docs/NORMATIVAS-SEGURIDAD.md",

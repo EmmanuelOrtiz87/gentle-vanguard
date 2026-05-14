@@ -17,6 +17,11 @@
   },
   "hooks": {
     "preToolCall": "scripts/utilities/pre-process-input.ps1",
-    "sessionStart": "scripts/utilities/session-autostart.cmd"
+    "sessionStart": "scripts/utilities/session-autostart.cmd",
+    "sessionStartPlatform": {
+      "windows": "scripts/utilities/session-autostart.cmd",
+      "linux": "bash ./scripts/utilities/session-autostart.sh",
+      "macos": "bash ./scripts/utilities/session-autostart.sh"
+    }
   }
 }

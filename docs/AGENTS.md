@@ -11,7 +11,9 @@
 **BEFORE** any other action, detect which AI tool is running:
 
 ```powershell
-pwsh -NoProfile -File scripts/utilities/detect-tool.ps1 -AsJson
+$detected = pwsh -NoProfile -File scripts/utilities/detect-tool.ps1 -AsJson | ConvertFrom-Json
+$detected.name
+$detected.os.platform
 ```
 
 The detection script checks (in order):
@@ -20,6 +22,16 @@ The detection script checks (in order):
 3. `.clinerules` file → cline
 4. `.cursorrules` file → cursor
 5. `.windsurf/` directory → windsurf
+
+The output also includes **OS detection**:
+```
+$detected.os.platform      → "windows" | "linux" | "macos"
+$detected.os.shell         → "powershell" | "bash" | "zsh"  
+$detected.os.pathSeparator → "\" | "/"
+$detected.os.isWindows     → true/false
+```
+
+**Use this immediately**: Before running ANY command, check `$detected.os.platform` to pick the correct script extension (`.cmd`/`.ps1` for Windows, `.sh` for Linux/macOS) and path format.
 
 Based on the detected tool, load the correct config from `config/orchestrator.json#toolProfiles`.
 
@@ -55,10 +67,11 @@ Before substantial work in a new conversation, execute ALL steps in order:
 
 ### Phase B — Analysis (MOST OFTEN OMITTED)
 
-6. **Read `scripts/.session/startup-summary.json`** — check `isPeakHour`, `sessionId`, `workspaceClean`
+6. **Read `scripts/.session/startup-summary.json`** — check `isPeakHour`, `sessionId`, `workspaceClean`, `platform`, `shell`, `pathSeparator`
+   - **IMPORTANT**: Use `platform`/`pathSeparator` to choose correct script extension and path format for all subsequent commands
 7. **Create task list**: `todowrite`
 8. **Self-verify**: `pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/agent-verify.ps1`
-9. **Report to user** compact block (peak hour, session ID, workspace state)
+9. **Report to user** compact block (peak hour, session ID, workspace state, OS)
 
 > **Default behavior** is controlled by `config/orchestrator.json`.
 
@@ -126,6 +139,11 @@ If the current response profile prevents completing a multi-step task, you MUST 
 
 ---
 
+## 🆕 New Project & Modification Rules#
+
+- **New projects**: created under `config/orchestrator.json#workspace.projectRoot` (default: `projects/`). Run SDD lifecycle (BA explore → SAD design → DEV implement).
+- **Existing modifications**: BEFORE modifying any file, read `rules/DEVELOPMENT-STANDARDS.md#modification-protocol`. Protocol: explore project structure first → identify entry points/configs → scope change → modify → validate.
+
 ## 📝 Response Compression#
 
 All agents MUST follow `config/orchestrator.json#response_policy`:
@@ -185,6 +203,8 @@ wf sync-drift
 | **[Session Guide](guides/SESSION-GUIDE.md)**                 | Daily workflow and commands         |
 | **[Architecture Overview](architecture/README.md)**          | System design rationale             |
 | **[Auto-Delegation Config](../config/auto-delegation.json)** | Trigger mappings and agent profiles |
+| **[Workspace Config](../config/workspace.config.json)**      | Project root, defaults, templates   |
+| **[Dev Standards](../rules/DEVELOPMENT-STANDARDS.md)**       | Coding + modification protocol      |
 | **[Tool Activation](guides/TOOL-ACTIVATION.md)**             | Auto-activation system              |
 
 ---

@@ -204,6 +204,48 @@ Before marking ANY task as complete:
 
 ---
 
+## Modification Protocol (EXISTING PROJECTS)
+
+BEFORE modifying any existing file, follow this protocol to avoid incomplete/wrong changes:
+
+### Phase 1 — Explore Project Structure
+1. **List root directory**: understand project type (src/, lib/, cmd/, api/, frontend/)
+2. **Read package/build configs**: `package.json`, `Cargo.toml`, `go.mod`, `CMakeLists.txt`, `pom.xml`, etc.
+3. **Identify entry points**: `main.go`, `main.ts`, `app.tsx`, `index.js`, `Program.cs`, `routes/`, `handlers/`
+4. **Read README or equivalent**: understand project purpose and conventions
+5. **Check existing code style**: naming conventions, folder structure, import patterns
+
+### Phase 2 — Scope the Change
+1. **Understand the ask**: what needs to change functionally?
+2. **Find related files**: grep for existing patterns, imports, types, endpoints
+3. **Map dependencies**: what imports/exports/schemas will be affected?
+4. **Define boundaries**: what should NOT change (configs, APIs, tests of other features)
+5. **Document scope**: list exact files to read → modify → validate
+
+### Phase 3 — Validate Before Modifying
+1. **Run existing tests**: ensure baseline passes before your change
+2. **Check linter output**: `npm run lint`, `ruff`, `golangci-lint`, etc.
+3. **Note conventions**: mimic existing patterns (error handling, logging, naming)
+4. **Verify no secrets exposure** before touching sensitive paths
+
+### Phase 4 — Modify
+1. **Read the full file** before editing (not just snippets)
+2. **Make minimal changes**: one logical change per file
+3. **Follow project conventions**: don't impose your style over existing patterns
+4. **Update imports/types** if adding/removing dependencies
+5. **Update tests** alongside implementation (not after)
+
+### Phase 5 — Post-Modification Validation
+1. **Run affected tests**: not just the full suite, specifically touched modules
+2. **Run linter/typecheck**: ensure no new warnings
+3. **Verify integration points**: APIs, database migrations, UI components
+4. **Run `agent-verify.ps1`** if modifying foundation itself
+5. **Persist to engram** if architecture/pattern changed significantly
+
+**Why**: Existing projects have established conventions. Blind modifications break builds,
+introduce inconsistencies, and waste tokens on rework. This protocol enforces
+context-first development — understand before changing.
+
 ## AI Agent Standards
 
 - All agents MUST follow routing defined in `config/auto-delegation.json`
