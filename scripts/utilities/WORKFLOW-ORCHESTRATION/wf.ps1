@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'foundation-sync', 'release-homologation', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'webhook', 'predictor', 'sla-dashboard', 'escalation', 'live-server', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'foundation-sync', 'release-homologation', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'webhook', 'predictor', 'sla-dashboard', 'escalation', 'live-server', 'learning', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -2851,6 +2851,24 @@ switch ($Command) {
         exit $LASTEXITCODE
     }
 
+    'learning' {
+        # Post-session learning analysis — detect gaps, propose improvements
+        Write-Step "Post-Session Learning Analysis"
+        $learningScript = Join-Path $repoRoot 'scripts' 'utilities' 'post-session-learning.ps1'
+        if (-not (Test-Path $learningScript)) {
+            Write-Error "post-session-learning.ps1 not found"
+            exit 1
+        }
+        if ($Scope -eq 'auto') {
+            & $learningScript -AutoApplyLow
+        } else {
+            & $learningScript
+        }
+        Write-Host "`n[HINT] Review proposals in: .local/improvement-proposals/" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'wf learning auto' to auto-apply low-severity proposals" -ForegroundColor Yellow
+        exit $LASTEXITCODE
+    }
+
     'version' {
         # Show current stack version from VERSION file
         $versionFile = Join-Path $repoRoot 'VERSION'
@@ -3285,3 +3303,4 @@ switch ($Command) {
 }
 
 exit 0
+

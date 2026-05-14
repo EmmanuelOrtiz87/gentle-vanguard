@@ -71,6 +71,18 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [2.11.0] - 2026-05-14 - Post-Session Learning System + Business Skills#
+
+### ✨ Added#
+
+- **Post-Session Learning System**: New `skills/post-session-learning-skill/` with 5-step learning workflow. New `scripts/utilities/post-session-learning.ps1` that analyzes session artifacts (startup-summary, git log, engram) to detect gaps — missing skills, repeated errors, token waste, config gaps. Generates structured improvement proposals saved to `.local/improvement-proposals/`.
+- **`wf learning` command**: New CLI command to run post-session learning analysis. `wf learning auto` auto-applies low-severity proposals.
+- **Session close integration**: Step 10 in NORMATIVAS-SESSION.md close checklist — `wf learning` before session end.
+- **12 business skills**: Created real SKILL.md files for accounting, compliance, CRM, ERP, insurance, logistics, payroll, procurement, real-estate, recruitment, supply-chain, tax — each with domain-specific instructions, key metrics, triggers in ES/EN, and response patterns.
+- **Business skills index**: Updated `skills/business/SKILL.md` with active skills table and trigger keywords.
+
+---
+
 ## [2.10.0] - 2026-05-14 - Stack Hardening: OS Detection, Project Root, Modification Protocol#
 
 ### ✨ Added#
