@@ -28,6 +28,16 @@ if (Test-Path $_classifier) { . $_classifier }
 $repoRoot = git rev-parse --show-toplevel 2>$null
 if (-not $repoRoot) { $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot) }
 
+# --- Check for local SDD exemption ------------------------------------------
+$exemptFile = Join-Path $repoRoot '.sdd-exempt'
+if (Test-Path $exemptFile) {
+    $exemptContent = Get-Content $exemptFile -Raw -ErrorAction SilentlyContinue
+    if ($exemptContent -and $exemptContent.Trim().Length -gt 5) {
+        _Wh "[SDD-GATE] SDD-EXEMPT found ($exemptContent) - gate skipped." Yellow
+        exit 0
+    }
+}
+
 # --- Determine current branch ------------------------------------------------
 $branch = git rev-parse --abbrev-ref HEAD 2>$null
 $isProtected = $branch -in @('main', 'develop')

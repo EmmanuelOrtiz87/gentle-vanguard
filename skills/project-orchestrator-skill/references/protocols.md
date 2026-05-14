@@ -3,7 +3,7 @@
 Current baseline:
 
 1. SDD is active and handled by the orchestrator as part of normal workflow
-2. New feature work should be spec-first (`docs/specs/*`) before implementation
+2. New feature work should be spec-first (`docs/sdd/*`) before implementation
 3. Spec validation is required before PR merge when feature behavior changes
 
 Recommended policy:

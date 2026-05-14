@@ -111,4 +111,81 @@ Describe 'Foundation Core Tests' {
             $summary.AgentCode | Should Be 'QA'
         }
     }
+
+    Context 'SDD Feature Intent Detection (PLAN_MODE_REQUIRED)' {
+        BeforeAll {
+            $script:preProcess = Join-Path $script:root 'scripts\utilities\pre-process-input.ps1'
+        }
+
+        It 'forces PlanMode for Spanish feature request "implementar"' {
+            $result = & $script:preProcess -UserInput 'implementar login con jwt' -WorkspaceRoot $script:root
+            $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
+
+            $summary | Should Not BeNullOrEmpty
+            $summary.HasMatch | Should Be $true
+            $summary.PlanMode | Should Be $true
+            $summary.AgentCode | Should Be 'BA'
+            $summary.Skill | Should Be 'sdd-lifecycle'
+        }
+
+        It 'forces PlanMode for "nueva funcionalidad"' {
+            $result = & $script:preProcess -UserInput 'necesito una nueva funcionalidad de usuarios' -WorkspaceRoot $script:root
+            $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
+
+            $summary | Should Not BeNullOrEmpty
+            $summary.HasMatch | Should Be $true
+            $summary.PlanMode | Should Be $true
+            $summary.AgentCode | Should Be 'BA'
+        }
+
+        It 'forces PlanMode for English "implement" without SDD mention' {
+            $result = & $script:preProcess -UserInput 'implement login feature for the app' -WorkspaceRoot $script:root
+            $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
+
+            $summary | Should Not BeNullOrEmpty
+            $summary.HasMatch | Should Be $true
+            $summary.PlanMode | Should Be $true
+            $summary.AgentCode | Should Be 'BA'
+        }
+
+        It 'forces PlanMode for English "new feature" keyword' {
+            $result = & $script:preProcess -UserInput 'create a new feature for user dashboard' -WorkspaceRoot $script:root
+            $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
+
+            $summary | Should Not BeNullOrEmpty
+            $summary.HasMatch | Should Be $true
+            $summary.PlanMode | Should Be $true
+            $summary.AgentCode | Should Be 'BA'
+        }
+
+        It 'does NOT force PlanMode for bug fix requests' {
+            $result = & $script:preProcess -UserInput 'fix login bug error 401' -WorkspaceRoot $script:root
+            $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
+
+            $summary | Should Not BeNullOrEmpty
+            $summary.HasMatch | Should Be $true
+            # Bug fix goes to DEV/sdd-lifecycle, not PlanMode
+            $summary.Skill | Should Be 'sdd-lifecycle'
+        }
+
+        It 'forces PlanMode for "feature request" keyword' {
+            $result = & $script:preProcess -UserInput 'feature request: add dark mode' -WorkspaceRoot $script:root
+            $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
+
+            $summary | Should Not BeNullOrEmpty
+            $summary.HasMatch | Should Be $true
+            $summary.PlanMode | Should Be $true
+            $summary.AgentCode | Should Be 'BA'
+        }
+
+        It 'forces PlanMode for "new component" in English' {
+            $result = & $script:preProcess -UserInput 'create a new component for onboarding flow' -WorkspaceRoot $script:root
+            $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
+
+            $summary | Should Not BeNullOrEmpty
+            $summary.HasMatch | Should Be $true
+            $summary.PlanMode | Should Be $true
+            $summary.AgentCode | Should Be 'BA'
+        }
+    }
 }

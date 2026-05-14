@@ -113,8 +113,8 @@ if ($changedFiles.Count -eq 0) {
 
 $specFilesChanged = @(
     $changedFiles |
-    Where-Object { $_ -like 'docs/specs/*.md' } |
-    Where-Object { $_ -ne 'docs/specs/README.md' -and $_ -ne 'docs/specs/SPEC-TEMPLATE.md' }
+    Where-Object { $_ -like 'docs/sdd/*.md' } |
+    Where-Object { $_ -ne 'docs/sdd/README.md' -and $_ -ne 'docs/sdd/SPEC-TEMPLATE.md' -and $_ -ne 'docs/sdd/foundation-sdd.md' }
 )
 
 $behaviorChangeCandidates = @(
@@ -145,7 +145,7 @@ if ($hasExemptionFlag) {
 
 if (-not $sddRequired) {
     if ($behaviorChangeCandidates.Count -gt 0 -and $specFilesChanged.Count -eq 0) {
-        $message = 'Advisory: behavior-related files changed without docs/specs update. Use SDD-REQUIRED: true or add a spec when behavior changes.'
+        $message = 'Advisory: behavior-related files changed without docs/sdd update. Use SDD-REQUIRED: true or add a spec when behavior changes.'
         Write-Warn $message
         Add-GitHubAnnotation -Level warning -Message $message
         if ($FailOnAdvisory) {
@@ -159,8 +159,8 @@ if (-not $sddRequired) {
 }
 
 if ($specFilesChanged.Count -eq 0) {
-    Write-Fail 'SDD is required for this PR but no docs/specs/*.md file was changed.'
-    Add-GitHubAnnotation -Level error -Message 'SDD required: add/update a spec under docs/specs/ or declare documented exemption.'
+    Write-Fail 'SDD is required for this PR but no docs/sdd/*.md file was changed.'
+    Add-GitHubAnnotation -Level error -Message 'SDD required: add/update a spec under docs/sdd/ or declare documented exemption.'
     exit 1
 }
 

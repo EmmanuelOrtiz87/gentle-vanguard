@@ -100,7 +100,7 @@ $publicDocDirs = @(
     'docs/getting-started',
     'docs/guides',
     'docs/marketing',
-    'docs/specs',
+    'docs/sdd',
     'docs/supplementary'
 )
 foreach ($dir in $publicDocDirs) {

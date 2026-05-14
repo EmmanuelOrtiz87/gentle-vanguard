@@ -28,10 +28,14 @@ Parse output exactly:
 
 **BA/SDD Activation**: When user requests project creation, new components, or features WITHOUT a formal spec, pre-process detects these triggers → routes to BA → SDD EXPLORE phase gathers requirements BEFORE implementation begins.
 
+**SDD FLOW RULE (ENFORCED)**: When pre-process outputs `PLAN_MODE_REQUIRED` + `AGENT: BA` + `SKILL: sdd-lifecycle`, the agent MUST activate BA/sdd-explore first. Do NOT jump to DEV/APPLY even if the trigger matched "implement"/"code"/"develop". If `TRIGGER_MATCH_FOUND` + `SKILL: sdd-lifecycle` with a DEV trigger on a new feature request (not a bug fix), treat it as PLAN_MODE_REQUIRED and activate BA first.
+
 Examples that activate BA/SDD:
 - "crear nuevo proyecto" → BA EXPLORE (understand scope, stack, constraints)
 - "new component" → BA EXPLORE (requirements, acceptance criteria)
 - "bootstrap template" → BA EXPLORE (project setup specifications)
+- "implementar login" → BA EXPLORE (gather requirements before implementing)
+- "nueva funcionalidad de usuarios" → BA EXPLORE (explore needs, then spec)
 
 Violation: responding without running this hook is a **CRITICAL** non-compliance.
 
