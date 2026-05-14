@@ -4,7 +4,7 @@
   "mapping": {
     "BA": {
       "name": "Business Analyst",
-      "opencode_subagents": ["sdd-explore", "sdd-propose", "sdd-spec"],
+      "opencode_subagents": ["sdd-explore", "sdd-propose", "sdd-spec", "sdd-init"],
       "primary_subagent": "sdd-explore",
       "fallback": "general",
       "skills": ["bdd-scenarios-skill", "documentation-governance"],
@@ -60,7 +60,7 @@
     },
     "DOC": {
       "name": "Documentation",
-      "opencode_subagents": ["doc-agent", "sdd-spec", "sdd-onboard", "general"],
+      "opencode_subagents": ["doc-agent", "sdd-spec", "sdd-onboard", "sdd-archive", "general"],
       "primary_subagent": "doc-agent",
       "fallback": "general",
       "skills": ["documentation-governance", "sdd-skill"],

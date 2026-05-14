@@ -26,7 +26,7 @@ wf start-session && wf task-brief "Build a Go REST API for user management with 
 
 **🔄 Auto:** Agent routing, skill loading, spec generation, basic CRUD scaffold, test execution  
 **👤 Manual:** Answer BA exploration questions (3–5), review ADR tradeoffs, set env vars  
-**✅ Output:** `main.go`, `go.mod`, OpenAPI `docs/specs/user-api.yaml`, Dockerfile, CI workflow, passing tests
+**✅ Output:** `main.go`, `go.mod`, OpenAPI `docs/sdd/user-api.yaml`, Dockerfile, CI workflow, passing tests
 
 ---
 

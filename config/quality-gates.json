@@ -275,6 +275,16 @@
       "failureAction": "block"
     },
     {
+      "id": "governance-sdd-spec-validation",
+      "name": "SDD Spec Validation",
+      "stage": "governance",
+      "tool": "custom",
+      "required": true,
+      "description": "Validate that SDD spec exists with validated/done status for feature branches",
+      "command": "pwsh -NoProfile -File scripts/hooks/check-sdd-gate.ps1",
+      "failureAction": "block"
+    },
+    {
       "id": "deploy-readiness",
       "name": "Production Readiness",
       "stage": "deploy",
@@ -310,9 +320,14 @@
       "order": 5,
       "required": true
     },
+    "governance": {
+      "description": "Governance and compliance checks (SDD, policies)",
+      "order": 6,
+      "required": true
+    },
     "deploy": {
       "description": "Deployment readiness checks",
-      "order": 6,
+      "order": 7,
       "required": true
     }
   },

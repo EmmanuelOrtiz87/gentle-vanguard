@@ -37,7 +37,7 @@ Conditional exception (mini-spec required):
 
 For mandatory SDD work, all of the following are required before merge:
 
-1. Spec file in `docs/specs/`.
+1. Spec file in `docs/sdd/`.
 2. Acceptance criteria in testable format.
 3. Validation evidence (tests/check output).
 4. Final spec status as `validated` or `done`.
@@ -51,7 +51,7 @@ For exception paths, a mini-spec must exist before merge with:
 
 ## Default Workflow
 
-1. SPEC: create or update `docs/specs/{feature}.md`.
+1. SPEC: create or update `docs/sdd/{feature}.md`.
 2. REVIEW: verify goals, constraints, and non-goals.
 3. IMPLEMENT: map implementation work to spec sections.
 4. VALIDATE: run required checks and tests.
@@ -74,4 +74,4 @@ For exception paths, a mini-spec must exist before merge with:
 
 1. `skills/project-orchestrator-skill/SKILL.md`
 2. `skills/sdd-lifecycle/SKILL.md`
-3. `docs/specs/README.md`
+3. `docs/sdd/README.md`

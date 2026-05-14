@@ -59,8 +59,9 @@ After detection, execute ALL steps **in order**. Steps 0 and 6-9 are often misse
 1. **LOCAL-FIRST**: Project knowledge before external sources
 2. **NO websearch/codesearch/webfetch** unless orchestrator authorizes
 3. **pre-process-input.ps1** BEFORE responding — trigger routing via `config/auto-delegation.json`
-4. Check `skills/` directory for reusable patterns before writing code
-5. Use Engram memory: `mem_search` for past decisions, `mem_save` after significant work
+4. **SDD FLOW RULE**: If pre-process-input.ps1 outputs `PLAN_MODE_REQUIRED` with `AGENT: BA` and `SKILL: sdd-lifecycle`, you MUST activate BA (sdd-explore) first. Do NOT jump to DEV/APPLY even if the trigger matched "implement"/"code"/"develop". The BA must complete EXPLORE phase before any implementation begins. This is enforced by the pre-routing hook. If `TRIGGER_MATCH_FOUND` with `SKILL: sdd-lifecycle` and a DEV keyword trigger, check if it's a new feature (not a bug fix). If new feature, treat as PLAN_MODE_REQUIRED — activate BA first.
+6. Check `skills/` directory for reusable patterns before writing code
+7. Use Engram memory: `mem_search` for past decisions, `mem_save` after significant work
 
 ## 🔴 BREAK GLASS — Auto-Override Harmful Config
 
