@@ -49,6 +49,15 @@ if ($LASTEXITCODE -eq 0 -and [string]::IsNullOrWhiteSpace($gitStatus)) {
     $workspaceClean = $true
 }
 
+# Detect OS
+$platform = 'unknown'; $shell = 'unknown'
+$osIsWin = [System.OperatingSystem]::IsWindows()
+$osIsLinux = [System.OperatingSystem]::IsLinux()
+$osIsMacOS = [System.OperatingSystem]::IsMacOS()
+if ($osIsWin)     { $platform = 'windows'; $shell = 'powershell' }
+elseif ($osIsMacOS) { $platform = 'macos';   $shell = 'zsh' }
+elseif ($osIsLinux)  { $platform = 'linux';   $shell = 'bash' }
+
 # Check engram status
 $engramOk = $false
 try {
@@ -59,6 +68,9 @@ try {
 $summary = @{
     timestamp       = (Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz')
     tool            = 'opencode'
+    platform        = $platform
+    shell           = $shell
+    pathSeparator   = [System.IO.Path]::DirectorySeparatorChar.ToString()
     isPeakHour      = $peakHour
     peakHourWindow  = "$PeakStart`:00-$PeakEnd`:00 $Region"
     timezone        = $TimeZone

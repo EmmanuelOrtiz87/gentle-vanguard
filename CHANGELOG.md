@@ -71,6 +71,33 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [2.10.0] - 2026-05-14 - Stack Hardening: OS Detection, Project Root, Modification Protocol#
+
+### ✨ Added#
+
+- **OS detection integrado al startup flow**: detect-tool.ps1 ahora devuelve `$detected.os` con `platform/shell/pathSeparator/isWindows`. post-autostart-summary.ps1 incluye `platform/shell/pathSeparator` en startup-summary.json. CLAUDE.md y AGENTS.md instruyen al agente a leer `$detected.os.platform` antes de ejecutar comandos, eliminando tokens desperdiciados en scripts de plataforma equivocada.
+- **projectRoot en orchestrator.json**: Nueva sección `workspace` con `projectRoot: projects/`, `configFile`, `projectDefaults`. AGENTS.md/CLAUDE.md referencian la ruta canónica para nuevos proyectos.
+- **config/workspace.config.json**: Creado desde el example — fuente única de verdad para rutas de workspace, proyectos y defaults.
+- **Modification Protocol (5 fases)**: Nueva sección en `rules/DEVELOPMENT-STANDARDS.md` — Explore→Scope→Validate→Modify→Post-Validate. Define cómo el agente debe abordar proyectos existentes antes de modificar.
+- **SessionStart OS-aware**: detect-tool.ps1 resuelve `instructions.sessionAutostart` dinámicamente (.cmd en Windows, .sh en Linux/macOS).
+- **sessionStartPlatform en tool configs**: 7 archivos `config/tool-*.json` ahora incluyen `sessionStartPlatform` con alternativas por SO.
+- **pwsh fallback en NORMATIVAS-CROSS-PLATFORM.md**: Nueva sección 11 — availability check, tabla de fallback por plataforma, comportamiento cuando falta pwsh.
+
+### 🔧 Fixed#
+
+- **detect-tool.ps1**: sessionAutostart ya no es hardcodeado a .cmd — se resuelve según OS detectado.
+- **Tool configs**: 7 configs hardcodeaban `.cmd` sin alternativa Linux/macOS. Ahora tienen mapa `sessionStartPlatform`.
+- **8 backslashes hardcodeados**: detectados en auditoría (bootstrap-workspace.ps1, detect-tool.ps1, pre-process-input.ps1, auto-delegation-wrapper.ps1) — documentados para migración futura.
+- **post-autostart-summary.ps1**: Variables `$isLinux`/`$isMacOS` renombradas a `$osIsLinux`/`$osIsMacOS` por conflicto con variables automáticas read-only de PS7.
+
+### 📚 Changed#
+
+- **CLAUDE.md**: Startup step 1 usa `$detected.instructions.sessionAutostart` (OS-aware). Nuevas secciones: "New Project & Modification Rules", referencias a workspace.config.json y DEVELOPMENT-STANDARDS.md.
+- **docs/AGENTS.md**: Tool detection incluye OS output. Step 6 incluye platform/pathSeparator. Nuevas secciones: "New Project & Modification Rules", referencias a workspace.config.json.
+- **rules/NORMATIVAS-CROSS-PLATFORM.md**: Renumbered sections 10→14, añadida sección 10 (pwsh check & fallback).
+
+---
+
 ## [2.9.1] - 2026-05-12#
 
 ### 🔧 Fixed#
