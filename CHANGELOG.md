@@ -9,6 +9,43 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [1.2.0] - 2026-05-15 - Security, Compliance & Performance Sprint#
+
+### ✨ Added#
+
+- **`gf secret` CLI** (`scripts/security/secret-vault.ps1`): Full enterprise-grade secrets management with DPAPI-encrypted local vault (`~/.foundation/vault/`), 7 commands (`create`, `get`, `rotate`, `list`, `validate-compliance`, `audit-report`, `breach-response`), immutable JSONL audit trail, rotation-due tracking, and P1 breach response with incident reports.
+- **SIEM Audit Bridge** (`scripts/security/siem-audit-bridge.ps1`): Routes `logs/secret-audit.jsonl` to structured ECS-compatible output with anomaly detection (mass access, repeated failures, breach events). Supports Splunk HEC, Datadog, ELK, and generic webhook. Checkpoint-based incremental processing for scheduled runs.
+- **Intelligent Cache Manager** (`scripts/adaptive/cache-manager.ps1`): Multi-tier L1 (memory 2min) → L2 (file 30min) → L3 (persistent 4hr) → Archive caching with read-through promotion, auto-tier selection, tag-based invalidation, and GC. Zero external dependencies.
+- **GDPR Compliance Framework** (`rules/NORMATIVAS-GDPR.md`): 413-line normative covering 7 principles, user rights (Art.15-21), data retention schedules, 72-hour breach protocol, DPIA, third-party processors, and agent compliance checklist.
+- **SOC2 Type II Framework** (`rules/NORMATIVAS-SOC2.md`): 540-line normative covering 5 Trust Service principles (CC, A, PI, C, PR), P1-P4 incident SLAs (15min/1hr/24hr/1wk), 99.5% uptime target, and annual attestation framework.
+- **Secrets Governance Policy** (`config/secrets-governance.json`): 8 secret classifications with rotation frequencies, 4 authorized vault types, zero-trust RBAC, automated rotation schedule (cron), and pre-commit/pre-deployment enforcement gates.
+
+### 🔧 Fixed#
+
+- **AI-NORMATIVES.md Section 15**: Integrated all 3 compliance frameworks with mandatory agent checklist and enforcement gates.
+- **`config/observability-config.json`**: Added `siem` section (provider config, alert thresholds, compliance refs SOC2 CC7.2 / GDPR Art.33); bumped `audit_logs_days` 365 to 730 (2-year SOC2 retention).
+- **`.gitignore`**: Added `logs/*.jsonl` pattern to exclude runtime audit logs from version control.
+
+### 📚 Changed#
+
+- **`bin/gf.ps1`**: Added `gf secret` and `gf cache` command routing with full help text.
+- **VERSION**: Bumped to `1.2.0`.
+- **`build/foundation-installer-auto.nsi`**: Updated installer version to `1.2.0`.
+
+### 🔐 Compliance#
+
+- **Mandatory deadline**: GDPR + SOC2 + Secrets enforcement active from 2026-06-01.
+- **References**: GDPR Art.32/33, SOC2 CC6.1/CC7.2, `config/secrets-governance.json`.
+- **Validation**: `gf secret validate-compliance` scans workspace for hardcoded secrets and rotation overdue.
+
+---
+
+## [1.1.0] - 2026-05-15 - Compliance Frameworks (merged to main)#
+
+> Note: 1.1.0 compliance frameworks (GDPR, SOC2, Secrets Governance) are included in full in 1.2.0 above.
+
+---
+
 ## [1.0.1] - 2026-05-13 - Live Dashboard Stabilization#
 
 ### ✨ Added#
