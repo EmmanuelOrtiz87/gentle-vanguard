@@ -17,6 +17,11 @@ $repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DI
 }
 Set-Location $repoRoot
 
+$engramSafeScript = Join-Path $repoRoot 'scripts\utilities\engram-safe.ps1'
+if (Test-Path $engramSafeScript) {
+    . $engramSafeScript
+}
+
 function Write-Step { param([string]$Message)
     Write-Host "`n=== $Message ===" -ForegroundColor Cyan
 }
@@ -220,14 +225,13 @@ try {
 # 4. Engram Check (non-blocking)
 Write-Step "Checking Engram (non-critical)"
 try {
-    $engramBin = Resolve-EngramBinary
-    if (-not [string]::IsNullOrWhiteSpace($engramBin) -and (Test-Path $engramBin)) {
-        $env:ENGRAM_SKIP_UPDATE = "1"
-        $sessionList = & $engramBin doctor --project $ProjectName 2>$null | Out-String
-        if ($LASTEXITCODE -eq 0) {
+    if (Get-Command Invoke-FoundationEngram -ErrorAction SilentlyContinue) {
+        $result = Invoke-FoundationEngram -RepoRoot $repoRoot -Arguments @('doctor', '--project', $ProjectName)
+        if ($result.Success) {
             Write-Ok "Engram is responsive"
         } else {
             Write-Info "Engram check did not pass; non-critical for session closure"
+            $sessionList = $result.Output | Out-String
             if (-not [string]::IsNullOrWhiteSpace($sessionList)) {
                 Write-Info "Engram output: $($sessionList.Substring(0, [Math]::Min(100, $sessionList.Length)))"
             }
