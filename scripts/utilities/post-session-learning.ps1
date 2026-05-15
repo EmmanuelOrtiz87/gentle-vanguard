@@ -19,7 +19,8 @@
 param(
     [string]$SessionId = '',
     [switch]$AutoApplyLow,
-    [string]$ProjectName = 'foundation'
+    [string]$ProjectName = 'foundation',
+    [switch]$NoExit
 )
 
 $ErrorActionPreference = 'Continue'
@@ -42,6 +43,16 @@ function Write-Ok   { param([string]$Message) Write-Host "[OK] $Message" -Foregr
 function Write-Warn { param([string]$Message) Write-Host "[WARN] $Message" -ForegroundColor Yellow }
 function Write-Info { param([string]$Message) Write-Host "[INFO] $Message" -ForegroundColor Cyan }
 function Write-Hit  { param([string]$Message) Write-Host "[HIT] $Message" -ForegroundColor Magenta }
+
+function Complete-Script {
+    param([int]$ExitCode = 0)
+
+    if ($NoExit) {
+        return $ExitCode
+    }
+
+    exit $ExitCode
+}
 
 function Get-EngramBinary {
     $candidatePaths = @(
@@ -287,6 +298,7 @@ if ($proposals.Count -gt 0) {
     Write-Host "`n[HINT] Review proposals in: $proposalsDir" -ForegroundColor Yellow
     Write-Host "[HINT] Run 'foundation learning apply' to auto-execute pending proposals" -ForegroundColor Yellow
     Write-Host "[HINT] Run 'foundation learning auto' to analyze + auto-apply low-severity" -ForegroundColor Yellow
-    exit 1
+    Complete-Script -ExitCode 1
+    return
 }
-exit 0
+Complete-Script -ExitCode 0

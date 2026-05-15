@@ -6,7 +6,9 @@ param(
     [string]$Mode = 'Manual',
     [string]$ProjectName = 'foundation',
     [string]$SessionDir = '.\.session',
-    [int]$OrphanMaxAgeHours = 24
+    [int]$OrphanMaxAgeHours = 24,
+    [switch]$SkipPreCloseValidation,
+    [switch]$NoExit
 )
 
 $ErrorActionPreference = 'Continue'
@@ -36,6 +38,37 @@ function Write-Info {
 function Write-ErrorMsg {
     param([string]$Message)
     Write-Host "[ERROR] $Message" -ForegroundColor Red
+}
+
+function Get-ValidSessionEntries {
+    $sessionFiles = Get-ChildItem -Path $fullSessionDir -Filter "session-*.json" -ErrorAction SilentlyContinue |
+                    Sort-Object -Property LastWriteTime -Descending
+
+    $entries = @()
+    foreach ($file in $sessionFiles) {
+        try {
+            $data = Get-Content -Path $file.FullName -Raw | ConvertFrom-Json
+            $entries += [pscustomobject]@{
+                File = $file
+                Data = $data
+            }
+        }
+        catch {
+            Write-Warn "Corrupt session file ignored: $($file.Name)"
+        }
+    }
+
+    return $entries
+}
+
+function Complete-Script {
+    param([int]$ExitCode = 0)
+
+    if ($NoExit) {
+        return $ExitCode
+    }
+
+    exit $ExitCode
 }
 
 function Get-EngramBinary {
@@ -228,27 +261,23 @@ function Initialize-Session {
 function Get-SessionHealth {
     Write-Status "Checking session health..."
 
-    $sessionFiles = Get-ChildItem -Path $fullSessionDir -Filter "session-*.json" -ErrorAction SilentlyContinue |
-                    Sort-Object -Property LastWriteTime -Descending
+    $sessionEntries = @(Get-ValidSessionEntries)
 
-    if ($sessionFiles.Count -eq 0) {
+    if ($sessionEntries.Count -eq 0) {
         Write-Warn "No active sessions found"
         return $false
     }
 
-    $latestSession = $sessionFiles | Select-Object -First 1
-    $sessionData = Get-Content -Path $latestSession.FullName -Raw | ConvertFrom-Json
+    $latestSession = $sessionEntries | Select-Object -First 1
+    $sessionData = $latestSession.Data
 
     Write-Info "Latest session: $($sessionData.sessionId)"
     Write-Info "Status: $($sessionData.status)"
     Write-Info "Started: $($sessionData.startTime)"
 
-    $activeCount = ($sessionFiles | Where-Object {
-        $d = Get-Content $_.FullName -Raw | ConvertFrom-Json
-        $d.status -eq 'active'
-    }).Count
+    $activeCount = @($sessionEntries | Where-Object { $_.Data.status -eq 'active' }).Count
 
-    Write-Info "Total sessions: $($sessionFiles.Count)"
+    Write-Info "Total sessions: $($sessionEntries.Count)"
     Write-Info "Active sessions: $activeCount"
 
     return $true
@@ -274,12 +303,15 @@ function End-Session {
     }
 
     $validator = Join-Path $repoRoot 'scripts\utilities\pre-close-validator.ps1'
-    if (Test-Path $validator) {
+    if ($SkipPreCloseValidation) {
+        Write-Info "Pre-close validation skipped"
+    } elseif (Test-Path $validator) {
         & $validator -AutoResolve
         if ($LASTEXITCODE -ne 0) {
             Write-ErrorMsg "Pre-close validation failed. Session closure blocked."
             Write-ErrorMsg "Fix issues or use -Force to override."
-            exit 1
+            Complete-Script -ExitCode 1
+            return
         }
         Write-Status "Pre-close validation passed"
     } else {
@@ -293,16 +325,20 @@ function End-Session {
         Write-Status "Session metrics saved"
     }
 
-    $sessionFiles = Get-ChildItem -Path $fullSessionDir -Filter "session-*.json" -ErrorAction SilentlyContinue |
-                    Sort-Object -Property LastWriteTime -Descending
+    $sessionEntries = @(Get-ValidSessionEntries)
 
-    if ($sessionFiles.Count -eq 0) {
+    if ($sessionEntries.Count -eq 0) {
         Write-Warn "No active sessions to end"
         return
     }
 
-    $latestSession = $sessionFiles | Select-Object -First 1
-    $sessionData = Get-Content -Path $latestSession.FullName -Raw | ConvertFrom-Json
+    $latestSession = $sessionEntries | Where-Object { $_.Data.status -eq 'active' } | Select-Object -First 1
+    if (-not $latestSession) {
+        Write-Warn "No active session to end."
+        return
+    }
+
+    $sessionData = $latestSession.Data
 
     $null = Save-ToEngram -Title "Session closure: $($sessionData.sessionId)" -Content "Session $($sessionData.sessionId) closed. Pre-close validation passed." -Type 'session'
 
@@ -315,7 +351,7 @@ function End-Session {
         status = "ended"
         endTime = Get-Date -Format "o"
     }
-    $updatedData | ConvertTo-Json | Out-File -FilePath $latestSession.FullName -Encoding UTF8
+    $updatedData | ConvertTo-Json | Out-File -FilePath $latestSession.File.FullName -Encoding UTF8
 
     Write-Status "Session ended: $($sessionData.sessionId)"
 
@@ -358,9 +394,10 @@ switch ($Mode) {
 
     default {
         Write-ErrorMsg "Unknown mode: $Mode"
-        exit 1
+        Complete-Script -ExitCode 1
+        return
     }
 }
 
 Write-Status "Session manager operation completed"
-exit 0
+Complete-Script -ExitCode 0

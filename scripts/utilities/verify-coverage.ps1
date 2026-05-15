@@ -1,22 +1,10 @@
 <#
 .SYNOPSIS
-    Verify and report code coverage from Pester tests (fast version)
-    
-.DESCRIPTION
-    Quick coverage verification using agent-verify.ps1 existing tests.
-    Generates reports and validates against minimum coverage threshold (85%).
-    
-    Output:
-    - reports/coverage-report.json (detailed metrics)
-    - reports/coverage-summary.txt (human-readable)
-    - Exit code: 0 (pass), 1 (fail if below threshold)
-    
-.PARAMETER MinimumCoverage
-    Minimum code coverage percentage required (default: 85)
+    Verify and report real code coverage from Pester tests.
 
-.EXAMPLE
-    pwsh -File scripts/utilities/verify-coverage.ps1
-    pwsh -File scripts/utilities/verify-coverage.ps1 -MinimumCoverage 90
+.DESCRIPTION
+    Runs Pester CodeCoverage over declared workflow targets from tests/coverage-config.json,
+    writes JSON and text reports, and fails if the configured threshold is not met.
 #>
 
 param(
@@ -24,136 +12,183 @@ param(
     [switch]$Force
 )
 
-$ErrorActionPreference = 'Continue'
+$ErrorActionPreference = 'Stop'
 
-# ===== INIT =====
-$repoRoot = Get-Location
-$testsDir = Join-Path $repoRoot 'tests'
+function Get-RepoRoot {
+    $root = Split-Path -Parent $PSScriptRoot
+    while ($root) {
+        if ((Test-Path (Join-Path $root 'tests')) -and (Test-Path (Join-Path $root 'config'))) {
+            return $root
+        }
+
+        $parent = Split-Path -Parent $root
+        if (-not $parent -or $parent -eq $root) {
+            break
+        }
+        $root = $parent
+    }
+
+    return (Get-Location).Path
+}
+
+function Resolve-Paths {
+    param(
+        [string]$Root,
+        [object[]]$Paths
+    )
+
+    return @($Paths | ForEach-Object {
+        if ([System.IO.Path]::IsPathRooted($_)) {
+            $_
+        } else {
+            Join-Path $Root $_
+        }
+    })
+}
+
+$repoRoot = Get-RepoRoot
 $reportsDir = Join-Path $repoRoot 'reports'
+$coverageConfigPath = Join-Path $repoRoot 'tests\coverage-config.json'
 $coverageReportFile = Join-Path $reportsDir 'coverage-report.json'
 $coverageSummaryFile = Join-Path $reportsDir 'coverage-summary.txt'
 
-# Ensure reports directory exists
 if (-not (Test-Path $reportsDir)) {
     New-Item -ItemType Directory -Path $reportsDir -Force | Out-Null
 }
 
-Write-Host "`n╔════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "║ CODE COVERAGE VERIFICATION — Foundation" -ForegroundColor Cyan
-Write-Host "╚════════════════════════════════════════╝" -ForegroundColor Cyan
-
-# ===== PHASE 1: DISCOVER & COUNT =====
-Write-Host "`n[PHASE 1] Test Discovery" -ForegroundColor Blue
-
-$testFiles = @()
-if (Test-Path $testsDir) {
-    $testFiles = Get-ChildItem -Path $testsDir -Filter '*.tests.ps1' -Recurse
-}
-
-if (-not $testFiles) {
-    Write-Host "[FAIL] No Pester test files found in $testsDir" -ForegroundColor Red
+if (-not (Test-Path $coverageConfigPath)) {
+    Write-Host "[FAIL] Coverage config not found: $coverageConfigPath" -ForegroundColor Red
     exit 1
 }
 
-$testCount = @($testFiles).Count
-$scriptCount = @(Get-ChildItem -Path (Join-Path $repoRoot 'scripts') -Filter '*.ps1' -Recurse | Where-Object { $_.Name -notmatch 'test' }).Count
-
-Write-Host "[OK] Found $testCount test files, $scriptCount scripts to cover" -ForegroundColor Green
-
-# ===== PHASE 2: RUN AGENT-VERIFY =====
-Write-Host "`n[PHASE 2] Execute Test Suite" -ForegroundColor Blue
-
-$verifyResult = & pwsh -NoProfile -ExecutionPolicy Bypass -File 'scripts/utilities/agent-verify.ps1' -Domain tests 2>&1
-$verifyOutput = $verifyResult -join "`n"
-
-# Parse results
-$testsPassed = 0
-$testsFailed = 0
-if ($verifyOutput -match 'unit-tests:\s+(\d+)\s+tests?\s+passed,\s+(\d+)\s+failed') {
-    $testsPassed = [int]$Matches[1]
-    $testsFailed = [int]$Matches[2]
+$coverageConfig = Get-Content -Path $coverageConfigPath -Raw | ConvertFrom-Json
+$targets = @($coverageConfig.coverageTargets)
+if ($targets.Count -eq 0) {
+    Write-Host "[FAIL] No coverage targets declared in $coverageConfigPath" -ForegroundColor Red
+    exit 1
 }
 
-Write-Host $verifyOutput
-Write-Host "`n[OK] Tests executed: $testsPassed passed, $testsFailed failed" -ForegroundColor Green
+Write-Host "`n╔════════════════════════════════════════╗" -ForegroundColor Cyan
+Write-Host "║ REAL CODE COVERAGE — Foundation" -ForegroundColor Cyan
+Write-Host "╚════════════════════════════════════════╝" -ForegroundColor Cyan
 
-# ===== PHASE 3: CALCULATE COVERAGE =====
-Write-Host "`n[PHASE 3] Coverage Calculation" -ForegroundColor Blue
+Write-Host "`n[PHASE 1] Declared Targets" -ForegroundColor Blue
 
-# Estimate coverage percentage: tests_passed / test_files * 100
-# More sophisticated: estimate based on test execution success rate
-$testSuccessRate = if ($testsPassed -gt 0 -and ($testsPassed + $testsFailed) -gt 0) {
-    [math]::Round(($testsPassed / ($testsPassed + $testsFailed)) * 100, 2)
+$targetResults = @()
+$aggregateAnalyzed = 0
+$aggregateExecuted = 0
+$aggregatePassed = 0
+$aggregateFailed = 0
+
+foreach ($target in $targets) {
+    $targetName = [string]$target.name
+    $targetThreshold = if ($target.threshold) { [int]$target.threshold } else { $MinimumCoverage }
+    $testPaths = Resolve-Paths -Root $repoRoot -Paths $target.tests
+    $scriptPaths = Resolve-Paths -Root $repoRoot -Paths $target.scripts
+
+    Write-Host "[OK] $targetName" -ForegroundColor Green
+    Write-Host "     Tests:   $($testPaths.Count)" -ForegroundColor Gray
+    Write-Host "     Scripts: $($scriptPaths.Count)" -ForegroundColor Gray
+
+    $result = Invoke-Pester -Path $testPaths -CodeCoverage $scriptPaths -PassThru
+    $coverage = $result.CodeCoverage
+
+    if (-not $coverage) {
+        throw "No CodeCoverage data returned for target '$targetName'"
+    }
+
+    $analyzed = [int]$coverage.NumberOfCommandsAnalyzed
+    $executed = [int]$coverage.NumberOfCommandsExecuted
+    $percent = if ($analyzed -gt 0) { [math]::Round(($executed / $analyzed) * 100, 2) } else { 0 }
+
+    $aggregateAnalyzed += $analyzed
+    $aggregateExecuted += $executed
+    $aggregatePassed += [int]$result.PassedCount
+    $aggregateFailed += [int]$result.FailedCount
+
+    $targetResults += [ordered]@{
+        name = $targetName
+        threshold = $targetThreshold
+        tests = @($target.tests)
+        scripts = @($target.scripts)
+        passed = [int]$result.PassedCount
+        failed = [int]$result.FailedCount
+        analyzedCommands = $analyzed
+        executedCommands = $executed
+        coveragePercent = $percent
+        status = if ($percent -ge $targetThreshold -and $result.FailedCount -eq 0) { 'PASS' } else { 'FAIL' }
+    }
+}
+
+Write-Host "`n[PHASE 2] Aggregate Result" -ForegroundColor Blue
+
+$aggregateCoverage = if ($aggregateAnalyzed -gt 0) {
+    [math]::Round(($aggregateExecuted / $aggregateAnalyzed) * 100, 2)
 } else {
     0
 }
 
-# Conservative estimate: 75% baseline + 20% bonus for passed tests
-$estimatedCoverage = if ($testSuccessRate -gt 0) {
-    [math]::Min(100, [math]::Round(75 + ($testSuccessRate / 5), 2))
-} else {
-    0
+$hasTargetFailure = @($targetResults | Where-Object { $_.status -ne 'PASS' }).Count -gt 0
+$overallStatus = if (-not $hasTargetFailure -and $aggregateCoverage -ge $MinimumCoverage -and $aggregateFailed -eq 0) { 'PASS' } else { 'FAIL' }
+
+Write-Host "[OK] Passed tests: $aggregatePassed | Failed tests: $aggregateFailed" -ForegroundColor Cyan
+Write-Host "[OK] Real coverage: $aggregateCoverage%" -ForegroundColor Cyan
+
+$reportData = [ordered]@{
+    timestamp = (Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz')
+    method = 'pester_codecoverage_declared_targets'
+    scope = 'declared coverage targets'
+    minimumThreshold = $MinimumCoverage
+    aggregate = [ordered]@{
+        coveragePercent = $aggregateCoverage
+        analyzedCommands = $aggregateAnalyzed
+        executedCommands = $aggregateExecuted
+        testsPassed = $aggregatePassed
+        testsFailed = $aggregateFailed
+        status = $overallStatus
+    }
+    targets = $targetResults
 }
 
-Write-Host "[OK] Estimated code coverage: $estimatedCoverage%" -ForegroundColor Cyan
+$reportData | ConvertTo-Json -Depth 6 | Set-Content -Path $coverageReportFile -Encoding UTF8
 
-# ===== PHASE 4: REPORT GENERATION =====
-Write-Host "`n[PHASE 4] Report Generation" -ForegroundColor Blue
-
-$reportData = @{
-    timestamp         = (Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz')
-    testFiles         = $testCount
-    scripts           = $scriptCount
-    testsPassed       = $testsPassed
-    testsFailed       = $testsFailed
-    coveragePercent   = $estimatedCoverage
-    minimumThreshold  = $MinimumCoverage
-    status            = if ($estimatedCoverage -ge $MinimumCoverage) { 'PASS' } else { 'FAIL' }
-    method            = 'test_execution_rate_estimation'
-}
-
-# Save JSON report
-$reportData | ConvertTo-Json | Set-Content -Path $coverageReportFile -Encoding UTF8
-Write-Host "[OK] Report: $coverageReportFile" -ForegroundColor Green
-
-# Save human-readable summary
 $summary = @"
 ═══════════════════════════════════════════════════════════════
-  CODE COVERAGE REPORT — $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
+  REAL CODE COVERAGE REPORT — $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
 ═══════════════════════════════════════════════════════════════
 
-Test Execution:
-  Test Files:   $testCount
-  Passed:       $testsPassed
-  Failed:       $testsFailed
-  Success Rate: $testSuccessRate%
+Scope:
+  Method:       pester_codecoverage_declared_targets
+  Targets:      $($targets.Count)
 
-Coverage Metrics:
-  Estimated:    $estimatedCoverage%
+Aggregate:
+  Passed:       $aggregatePassed
+  Failed:       $aggregateFailed
+  Coverage:     $aggregateCoverage%
   Minimum:      $MinimumCoverage%
-  Status:       $(if ($estimatedCoverage -ge $MinimumCoverage) { "✓ PASS" } else { "✗ FAIL" })
-  Gap:          $(if ($estimatedCoverage -lt $MinimumCoverage) { "$($MinimumCoverage - $estimatedCoverage)% BELOW" } else { "MEETS THRESHOLD" })
+  Status:       $overallStatus
 
-Method: Estimated from test execution success rate
+Per Target:
+$((@($targetResults | ForEach-Object { "  - $($_.name): $($_.coveragePercent)% (threshold $($_.threshold)%) -> $($_.status)" }) -join "`n"))
+
 ═══════════════════════════════════════════════════════════════
 "@
 
 $summary | Set-Content -Path $coverageSummaryFile -Encoding UTF8
-Write-Host "[OK] Summary: $coverageSummaryFile" -ForegroundColor Green
 
-# ===== PHASE 5: VALIDATION & EXIT =====
-Write-Host "`n[PHASE 5] Validation" -ForegroundColor Blue
+Write-Host "`n[PHASE 3] Reports" -ForegroundColor Blue
+Write-Host "[OK] Report: $coverageReportFile" -ForegroundColor Green
+Write-Host "[OK] Summary: $coverageSummaryFile" -ForegroundColor Green
 
 if ($Force) {
     Write-Host "[SKIP] Force mode: Threshold validation disabled" -ForegroundColor Yellow
     exit 0
 }
 
-if ($estimatedCoverage -ge $MinimumCoverage) {
-    Write-Host "[PASS] Coverage $estimatedCoverage% meets threshold of $MinimumCoverage%" -ForegroundColor Green
+if ($overallStatus -eq 'PASS') {
+    Write-Host "[PASS] Coverage $aggregateCoverage% meets declared thresholds" -ForegroundColor Green
     exit 0
-} else {
-    Write-Host "[FAIL] Coverage $estimatedCoverage% is below threshold of $MinimumCoverage%" -ForegroundColor Red
-    Write-Host "[TIP] Use -Force to skip validation or increase tests" -ForegroundColor Yellow
-    exit 1
 }
+
+Write-Host "[FAIL] Real coverage validation failed" -ForegroundColor Red
+exit 1

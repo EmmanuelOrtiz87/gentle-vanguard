@@ -1,18 +1,19 @@
 ═══════════════════════════════════════════════════════════════
-  CODE COVERAGE REPORT — 2026-05-15 16:54:01
+  REAL CODE COVERAGE REPORT — 2026-05-15 17:21:38
 ═══════════════════════════════════════════════════════════════
 
-Test Execution:
-  Test Files:   34
-  Passed:       23
+Scope:
+  Method:       pester_codecoverage_declared_targets
+  Targets:      1
+
+Aggregate:
+  Passed:       6
   Failed:       0
-  Success Rate: 100%
-
-Coverage Metrics:
-  Estimated:    95%
+  Coverage:     85.56%
   Minimum:      85%
-  Status:       ✓ PASS
-  Gap:          MEETS THRESHOLD
+  Status:       PASS
 
-Method: Estimated from test execution success rate
+Per Target:
+  - session-manager-critical-workflow: 85.56% (threshold 85%) -> PASS
+
 ═══════════════════════════════════════════════════════════════

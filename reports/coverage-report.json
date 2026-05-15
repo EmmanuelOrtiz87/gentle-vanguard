@@ -1,11 +1,32 @@
 {
-  "timestamp": "2026-05-15T16:54:01-03:00",
-  "scripts": 297,
+  "timestamp": "2026-05-15T17:21:38-03:00",
+  "method": "pester_codecoverage_declared_targets",
+  "scope": "declared coverage targets",
   "minimumThreshold": 85,
-  "testFiles": 34,
-  "coveragePercent": 95,
-  "testsFailed": 0,
-  "status": "PASS",
-  "testsPassed": 23,
-  "method": "test_execution_rate_estimation"
+  "aggregate": {
+    "coveragePercent": 85.56,
+    "analyzedCommands": 284,
+    "executedCommands": 243,
+    "testsPassed": 6,
+    "testsFailed": 0,
+    "status": "PASS"
+  },
+  "targets": [
+    {
+      "name": "session-manager-critical-workflow",
+      "threshold": 85,
+      "tests": [
+        "tests/integration/engram-session-persistence.integration.tests.ps1"
+      ],
+      "scripts": [
+        "scripts/utilities/session-manager.ps1"
+      ],
+      "passed": 6,
+      "failed": 0,
+      "analyzedCommands": 284,
+      "executedCommands": 243,
+      "coveragePercent": 85.56,
+      "status": "PASS"
+    }
+  ]
 }
