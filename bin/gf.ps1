@@ -6,6 +6,14 @@ param(
     [string]$Name = "",
     [string]$Type = "service",
     [string]$Architecture = "clean",
+    # secret subcommand args
+    [string]$Subcommand = "",
+    [string]$SecretType = "",
+    [string]$Value = "",
+    [string]$Reason = "",
+    [string]$ReportType = "",
+    [string]$CompromisedSecret = "",
+    [string]$Tag = "",
     [switch]$Help,
     [switch]$List,
     [switch]$Validate,
@@ -91,14 +99,25 @@ COMMANDS:
   update-all  Update foundation + skills
   tools       Show optional tools status
   new         Create new project
+  secret      Manage secrets (vault, rotation, compliance, breach response)
+  cache       Multi-tier cache management (L1/L2/L3/Archive)
   help        Show this help
 
 OPTIONS:
-  --name <name>       Project name (for 'new' command)
+  --name <name>       Project name (for 'new') or secret identifier (UPPER_SNAKE_CASE)
   --type <type>       Project type: service, cli, library, frontend
   --arch <pattern>    Architecture: layered, clean, modular
   --force             Force update (overwrite existing)
   --help              Show this help
+
+SECRET SUBCOMMANDS:
+  gf secret create --name TOKEN --secrettype api-keys --value xxx
+  gf secret get    --name TOKEN --reason "CI pipeline"
+  gf secret rotate --name TOKEN [--value newval]
+  gf secret list
+  gf secret validate-compliance
+  gf secret audit-report [--reporttype access|rotation|violations]
+  gf secret breach-response --compromisedsecret TOKEN --reason "leaked"
 
 Examples:
   gf new --name my-api --type service --arch clean
@@ -107,6 +126,8 @@ Examples:
   gf update
   gf update-all
   gf tools
+  gf secret list
+  gf secret validate-compliance
 "@ -ForegroundColor White
     Write-CLI-Footer
 }
@@ -334,6 +355,41 @@ function Show-Tools {
     Write-CLI-Footer
 }
 
+function Invoke-Cache {
+    $cacheScript = Join-Path $GFRoot 'scripts' 'adaptive' 'cache-manager.ps1'
+    if (-not (Test-Path $cacheScript)) {
+        Write-Host "[ERROR] Cache manager script not found: $cacheScript" -ForegroundColor Red
+        return
+    }
+    $cacheArgs = @()
+    if ($Subcommand) { $cacheArgs += $Subcommand } else { $cacheArgs += 'stats' }
+    if ($Name)  { $cacheArgs += '--Key'; $cacheArgs += $Name }
+    if ($Value) { $cacheArgs += '--Value'; $cacheArgs += $Value }
+    if ($Tag)   { $cacheArgs += '--Tag'; $cacheArgs += $Tag }
+    & $cacheScript @cacheArgs
+}
+
+function Invoke-Secret {
+    $vaultScript = Join-Path $GFRoot 'scripts' 'security' 'secret-vault.ps1'
+    if (-not (Test-Path $vaultScript)) {
+        Write-Host "[ERROR] Secret vault script not found: $vaultScript" -ForegroundColor Red
+        return
+    }
+    
+    # Build argument list
+    $vaultArgs = @()
+    if ($Subcommand) { $vaultArgs += $Subcommand }
+    else              { $vaultArgs += 'validate-compliance' }
+    if ($Name)              { $vaultArgs += '--Name'; $vaultArgs += $Name }
+    if ($SecretType)        { $vaultArgs += '--Type'; $vaultArgs += $SecretType }
+    if ($Value)             { $vaultArgs += '--Value'; $vaultArgs += $Value }
+    if ($Reason)            { $vaultArgs += '--Reason'; $vaultArgs += $Reason }
+    if ($ReportType)        { $vaultArgs += '--ReportType'; $vaultArgs += $ReportType }
+    if ($CompromisedSecret) { $vaultArgs += '--CompromisedSecret'; $vaultArgs += $CompromisedSecret }
+    
+    & $vaultScript @vaultArgs
+}
+
 # Main command routing
 switch ($Command) {
     "new" { New-Project }
@@ -345,6 +401,8 @@ switch ($Command) {
     "list" { Show-List }
     "info" { Show-Info }
     "tools" { Show-Tools }
+    "secret" { Invoke-Secret }
+    "cache"  { Invoke-Cache }
     "help" { Show-Help }
     default {
         if ($Help) {
