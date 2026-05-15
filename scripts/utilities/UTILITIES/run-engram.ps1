@@ -59,6 +59,10 @@ if ($env:FOUNDATION_BASE_DIR) {
     $workspaceRoot = $searchDir
 }
 $defaultDataRoot = Join-Path $workspaceRoot '.engram-data'
+$engramSafeScript = Join-Path $workspaceRoot 'scripts\utilities\engram-safe.ps1'
+if (Test-Path $engramSafeScript) {
+    . $engramSafeScript
+}
 
 if ([string]::IsNullOrWhiteSpace($ConfigPath)) {
     $ConfigPath = Join-Path $workspaceRoot 'config\workspace.config.json'
@@ -95,10 +99,10 @@ $dataRoot = if ($config -and $config.dataRoot) {
 
 $dataRoot = Resolve-WorkspacePath -Path $dataRoot -WorkspaceRoot $workspaceRoot
 
-$engramDataDir = Join-Path $dataRoot 'engram-session'
+$engramDataDir = $dataRoot
 Ensure-Directory -Path $engramDataDir
 
-# Engram state stays outside any repository checkout.
+# Engram state uses the configured workspace data root.
 $env:ENGRAM_DATA_DIR = $engramDataDir
 Write-Host "[OK] Engram Session Data: $env:ENGRAM_DATA_DIR" -ForegroundColor Cyan
 
@@ -200,10 +204,20 @@ if (-not $engramPath) {
 }
 
 try {
-    & "$engramPath" @EngramArgs
-    if ($LASTEXITCODE -ne 0) {
-        Write-ContinuityLog -Message "Engram exited with code $LASTEXITCODE. Saving state to fallback." -Level 'WARN'
-        Save-ToFallback -Operation 'last-command' -Data @{ args = $EngramArgs; exitCode = $LASTEXITCODE }
+    if (Get-Command Invoke-FoundationEngram -ErrorAction SilentlyContinue) {
+        $result = Invoke-FoundationEngram -RepoRoot $workspaceRoot -Arguments $EngramArgs
+        $result.Output | ForEach-Object { Write-Host $_ }
+        if (-not $result.Success) {
+            Write-ContinuityLog -Message "Engram exited with code $($result.ExitCode). Saving state to fallback." -Level 'WARN'
+            Save-ToFallback -Operation 'last-command' -Data @{ args = $EngramArgs; exitCode = $result.ExitCode }
+        }
+        exit $result.ExitCode
+    } else {
+        & "$engramPath" @EngramArgs
+        if ($LASTEXITCODE -ne 0) {
+            Write-ContinuityLog -Message "Engram exited with code $LASTEXITCODE. Saving state to fallback." -Level 'WARN'
+            Save-ToFallback -Operation 'last-command' -Data @{ args = $EngramArgs; exitCode = $LASTEXITCODE }
+        }
     }
 } catch {
     Write-ContinuityLog -Message "Engram execution failed: $_. State saved to fallback." -Level 'ERROR'
