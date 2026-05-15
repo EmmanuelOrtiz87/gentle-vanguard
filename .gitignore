@@ -133,6 +133,7 @@ coverage/
 # Engram data
 .engram-data/
 logs/*.json
+logs/*.jsonl
 logs/.session-active
 
 # Telemetry
