@@ -241,6 +241,13 @@ function End-Session {
         Write-Warn "Pre-close validator not found, skipping validation"
     }
 
+    # Persist final metrics
+    $tracker = Join-Path $repoRoot 'scripts\utilities\session-metrics-tracker.ps1'
+    if (Test-Path $tracker) {
+        $null = & $tracker -Action end 2>&1
+        Write-Status "Session metrics saved"
+    }
+
     $sessionFiles = Get-ChildItem -Path $fullSessionDir -Filter "session-*.json" -ErrorAction SilentlyContinue |
                     Sort-Object -Property LastWriteTime -Descending
 

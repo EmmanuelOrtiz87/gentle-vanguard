@@ -111,6 +111,15 @@ if (-not $SkipGovernance -and (Test-Path $governanceScript)) {
     }
 }
 
+# Persist final metrics before closing
+$tracker = Join-Path $repoRoot 'scripts\utilities\session-metrics-tracker.ps1'
+if (Test-Path $tracker) {
+    $null = & $tracker -Action end 2>&1
+    if ($LASTEXITCODE -eq 0) { Write-Ok 'Session metrics saved' } else { Write-Warn 'Session metrics end failed' }
+} else {
+    Write-Warn 'session-metrics-tracker.ps1 not found'
+}
+
 $sessionsDir = Join-Path $repoRoot 'docs\sessions'
 New-Item -ItemType Directory -Path $sessionsDir -Force | Out-Null
 

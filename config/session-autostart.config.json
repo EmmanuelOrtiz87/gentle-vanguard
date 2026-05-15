@@ -101,6 +101,14 @@
         "args": "-Trigger session-start -VerboseOutput",
         "required": false,
         "description": "Enforce Karpathy guidelines (Think, Simplicity, Surgical, Goal-Driven)"
+      },
+      {
+        "id": "session-metrics-start",
+        "enabled": true,
+        "script": "scripts/utilities/session-metrics-tracker.ps1",
+        "args": "-Action start",
+        "required": false,
+        "description": "Initialize session metrics tracking (tokens, tool calls, files)"
       }
     ],
 
