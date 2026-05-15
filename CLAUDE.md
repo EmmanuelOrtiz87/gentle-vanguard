@@ -65,14 +65,27 @@ After detection, execute ALL steps **in order**. Steps 0 and 6-9 are often misse
    [PEAK] 09:00-15:00 | [SID] session-xxx | [WS] clean | [ENGRAM] OK
    ```
 
+## 🧑‍💻 Default Persona — Professional
+
+Foundation opera en **modo profesional** (equivalente a "neutral" de gentle-pi):
+- Misma disciplina y estándares técnicos, sin variantes regionales de lenguaje
+- ES/PT-BR/EN: responde en el idioma del usuario, manteniendo tono profesional
+- No usa voseo, modismos regionales ni jerga informal
+- La formalidad no es negociable: es el default único y no hay cambio de persona
+
 ## 🗺️ Core Rules
 
 1. **LOCAL-FIRST**: Project knowledge before external sources
 2. **NO websearch/codesearch/webfetch** unless orchestrator authorizes
 3. **pre-process-input.ps1** BEFORE responding — trigger routing via `config/auto-delegation.json`
 4. **SDD FLOW RULE**: If pre-process-input.ps1 outputs `PLAN_MODE_REQUIRED` with `AGENT: BA` and `SKILL: sdd-lifecycle`, you MUST activate BA (sdd-explore) first. Do NOT jump to DEV/APPLY even if the trigger matched "implement"/"code"/"develop". The BA must complete EXPLORE phase before any implementation begins. This is enforced by the pre-routing hook. If `TRIGGER_MATCH_FOUND` with `SKILL: sdd-lifecycle` and a DEV keyword trigger, check if it's a new feature (not a bug fix). If new feature, treat as PLAN_MODE_REQUIRED — activate BA first.
-6. Check `skills/` directory for reusable patterns before writing code
-7. Use Engram memory: `mem_search` for past decisions, `mem_save` after significant work
+5. **Delegation Rules** — Read `rules/DELEGATION-RULES.md` before any multi-step task. Follow the 4-file rule, multi-file write rule, PR rule, incident rule, and long-session rule. Mandatory delegation triggers are NOT optional.
+6. **SDD Preflight** — Run `scripts/utilities/sdd-preflight.ps1` before first SDD flow in a session. Establishes mode (interactive/auto), artifact store (openspec/engram/both), PR strategy, and review budget.
+7. **Model Routing** — See `config/model-routing.json` for per-agent model/effort assignments. Use these when dispatching subagents.
+8. **Review Workload Guard** — Before any multi-file implementation, run `scripts/utilities/review-workload-guard.ps1` to check if estimated changes exceed 400 lines. If so, recommend chained PRs.
+9. **Skill Registry** — `.atl/skill-registry.md` is auto-maintained. Run `scripts/utilities/build-skill-registry.ps1` after installing/removing skills.
+10. Check `skills/` directory for reusable patterns before writing code
+11. Use Engram memory: `mem_search` for past decisions, `mem_save` after significant work
 
 ## 🔴 BREAK GLASS — Auto-Override Harmful Config
 
@@ -122,6 +135,10 @@ Profile: **ultra** | Detail: **simple** | Chat: **chat-compact** (max 4 lines te
 | AI normatives | `rules/AI-NORMATIVES.md` |
 | Session lifecycle | `rules/NORMATIVAS-SESSION.md` |
 | Development standards (incl. modification protocol) | `rules/DEVELOPMENT-STANDARDS.md` |
+| Delegation rules (MANDATORY) | `rules/DELEGATION-RULES.md` |
+| Model routing per agent | `config/model-routing.json` |
+| SDD configuration | `openspec/config.yaml` |
+| Skill registry (auto-generated) | `.atl/skill-registry.md` |
 | Performance | `rules/NORMATIVAS-PERFORMANCE.md` |
 
 ## 🆕 New Project & Modification Rules

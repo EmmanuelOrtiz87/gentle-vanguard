@@ -137,13 +137,20 @@ if exist "%SECURITY_SCRIPT%" (
     if errorlevel 1 ( echo [WARN] Security init had warnings ) else ( echo [OK] Security initialized )
 ) else ( echo [SKIP] security-orchestrator.ps1 not found )
 
-REM === Phase 8: Skill Router ===
+REM === Phase 8: Skill Router + Registry Build ===
 echo [8/9] Skill router...
 set SKILL_ROUTER=%UTILS_DIR%\skill-router.ps1
 if exist "%SKILL_ROUTER%" (
     powershell -NoProfile -ExecutionPolicy Bypass -File "%SKILL_ROUTER%" -Query "session-start"
     if errorlevel 1 ( echo [WARN] Skill router validation issue ) else ( echo [OK] Skill router active )
 ) else ( echo [SKIP] skill-router.ps1 not found )
+
+REM Build skill registry in background
+set SKILL_REGISTRY=%UTILS_DIR%\build-skill-registry.ps1
+if exist "%SKILL_REGISTRY%" (
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%SKILL_REGISTRY%" -Quiet
+    if errorlevel 1 ( echo [WARN] Skill registry build had issues ) else ( echo [OK] Skill registry built )
+) else ( echo [SKIP] build-skill-registry.ps1 not found )
 
 REM === Phase 9: Post-Autostart Summary ===
 echo [9/10] Generating startup summary...

@@ -109,6 +109,14 @@ If the current response profile prevents completing a multi-step task, you MUST 
 
 **Why**: Config serves the task, not vice versa. Blind obedience to config that prevents completion is a bug.
 
+## 🧑‍💻 Default Persona — Professional#
+
+Foundation opera en modo profesional (equivalente a "neutral" de gentle-pi):
+- Misma disciplina técnica, sin variantes regionales de lenguaje
+- ES/PT-BR/EN: responde en el idioma del usuario, tono profesional consistente
+- Sin voseo, modismos ni jerga informal
+- Default único — no hay cambio de persona
+
 ## 🛡️ Reliability Rule#
 
 1. ✅ Treat `READY` as pass.
@@ -122,10 +130,15 @@ If the current response profile prevents completing a multi-step task, you MUST 
 | Concept                              | Reference                                                                                                 |
 | ------------------------------------ | --------------------------------------------------------------------------------------------------------- |
 | **Canonical trigger→skill mappings** | `config/auto-delegation.json#keywordMappings`                                                             |
-| **Agent profiles**                   | `config/auto-delegation.json#agentProfiles`                                                               |
+| **Agent profiles + model routing**   | `config/auto-delegation.json#agentProfiles` + `config/model-routing.json`                                 |
 | **Pre-processing hook (mandatory)**  | `scripts/utilities/pre-process-input.ps1`                                                                 |
 | **Parse output**                     | `TRIGGER_MATCH_FOUND` → load skill \| `PLAN_MODE_REQUIRED` → activate BA \| `NO_TRIGGER_MATCH` → continue |
 | **SDD FLOW RULE**                    | If pre-process outputs `PLAN_MODE_REQUIRED` + `AGENT: BA` + `SKILL: sdd-lifecycle`, MUST activate BA/sdd-explore first — do NOT jump to DEV/APPLY even if trigger matched "implement"/"code"/"develop". BA must complete EXPLORE before any implementation. If `TRIGGER_MATCH_FOUND` + `SKILL: sdd-lifecycle` with DEV trigger on a new feature, treat as PLAN_MODE_REQUIRED. |
+| **Delegation Rules**                 | `rules/DELEGATION-RULES.md` — mandatory 4-file, multi-file write, PR, incident, long-session rules        |
+| **SDD Config**                       | `openspec/config.yaml` — strict TDD, per-phase rules, testing layers                                      |
+| **SDD Preflight**                    | `scripts/utilities/sdd-preflight.ps1` — session-level SDD configuration (mode, store, PR strategy)        |
+| **Review Workload Guard**            | `scripts/utilities/review-workload-guard.ps1` — estimate changed lines, recommend chained PRs >400        |
+| **Skill Registry**                   | `.atl/skill-registry.md` — auto-built on session start by `scripts/utilities/build-skill-registry.ps1`    |
 
 ---
 
@@ -172,7 +185,7 @@ Key rules:
 # Start session (Linux/macOS)
 bash ./scripts/utilities/session-autostart.sh
 
-# Check all 14 quality gates
+# Check all quality gates
 foundation verify
 
 # Show stack version + skills count
@@ -183,6 +196,15 @@ foundation start-session
 
 # Full QA gate before release
 foundation judgment-day
+
+# SDD preflight (before first SDD flow in a session)
+.\scripts\utilities\sdd-preflight.ps1 -Interactive
+
+# Check review workload before implementation
+.\scripts\utilities\review-workload-guard.ps1
+
+# Rebuild skill registry (after installing/removing skills)
+.\scripts\utilities\build-skill-registry.ps1
 
 # Open HTML metrics dashboard
 foundation dashboard
@@ -198,14 +220,18 @@ foundation sync-drift
 
 ## 📚 Related Documentation#
 
-| Document                                                     | Purpose                             |
-| ------------------------------------------------------------ | ----------------------------------- |
-| **[Session Guide](guides/SESSION-GUIDE.md)**                 | Daily workflow and commands         |
-| **[Architecture Overview](architecture/README.md)**          | System design rationale             |
-| **[Auto-Delegation Config](../config/auto-delegation.json)** | Trigger mappings and agent profiles |
-| **[Workspace Config](../config/workspace.config.json)**      | Project root, defaults, templates   |
-| **[Dev Standards](../rules/DEVELOPMENT-STANDARDS.md)**       | Coding + modification protocol      |
-| **[Tool Activation](guides/TOOL-ACTIVATION.md)**             | Auto-activation system              |
+| Document                                                     | Purpose                                   |
+| ------------------------------------------------------------ | ----------------------------------------- |
+| **[Session Guide](guides/SESSION-GUIDE.md)**                 | Daily workflow and commands               |
+| **[Architecture Overview](architecture/README.md)**          | System design rationale                   |
+| **[Auto-Delegation Config](../config/auto-delegation.json)** | Trigger mappings and agent profiles       |
+| **[Delegation Rules](../rules/DELEGATION-RULES.md)**         | When to delegate vs. work inline          |
+| **[Model Routing](../config/model-routing.json)**            | Per-agent model/effort assignments        |
+| **[SDD Config](../openspec/config.yaml)**                    | SDD/OpenSpec phase configuration          |
+| **[Skill Registry](../.atl/skill-registry.md)**              | Auto-maintained skill index               |
+| **[Workspace Config](../config/workspace.config.json)**      | Project root, defaults, templates         |
+| **[Dev Standards](../rules/DEVELOPMENT-STANDARDS.md)**       | Coding + modification protocol            |
+| **[Tool Activation](guides/TOOL-ACTIVATION.md)**             | Auto-activation system                    |
 
 ---
 
