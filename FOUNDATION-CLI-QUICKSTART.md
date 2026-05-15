@@ -121,7 +121,7 @@ foundation verify
 pwsh -File .\scripts\utilities\verify-coverage.ps1
 ```
 - Executes declared Pester `CodeCoverage` targets from `tests/coverage-config.json`
-- Current declared workflows cover `session-manager.ps1` and `post-session-learning.ps1`
+- Current declared workflows cover `session-manager.ps1`, `post-session-learning.ps1`, and `session-autostart.ps1`
 
 #### Run Post-Session Learning Explicitly
 ```powershell

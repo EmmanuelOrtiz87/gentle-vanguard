@@ -28,6 +28,16 @@
       "scripts": [
         "scripts/utilities/post-session-learning.ps1"
       ]
+    },
+    {
+      "name": "session-autostart-critical-workflow",
+      "threshold": 85,
+      "tests": [
+        "tests/integration/session-autostart.integration.tests.ps1"
+      ],
+      "scripts": [
+        "scripts/utilities/session-autostart.ps1"
+      ]
     }
   ],
   "include": [
