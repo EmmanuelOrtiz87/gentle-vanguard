@@ -26,6 +26,12 @@ Describe 'Session Scripts Tests' {
             $content = Get-Content $f -Raw
             ($content -match 'AutoStart|auto-start') | Should Be $true
         }
+
+        It 'session-manager.ps1 defaults Engram project to workspace_local' {
+            $f = Join-Path $script:utilitiesPath "session-manager.ps1"
+            $content = Get-Content $f -Raw
+            ($content.Contains("[string]`$ProjectName = 'workspace_local'")) | Should Be $true
+        }
     }
 
     Context 'Session Autostart' {
@@ -46,6 +52,12 @@ Describe 'Session Scripts Tests' {
             $f = Join-Path $script:utilitiesPath "session-autostart.ps1"
             $content = Get-Content $f -Raw
             ($content -match 'config-driven|ConfigFile|\$config\.pipeline') | Should Be $true
+        }
+
+        It 'get-session-id.ps1 checks the active session marker' {
+            $f = Join-Path $script:utilitiesPath "get-session-id.ps1"
+            $content = Get-Content $f -Raw
+            ($content -match 'logs\\\.session-active|logs\\.session-active') | Should Be $true
         }
     }
 
@@ -70,6 +82,12 @@ Describe 'Session Scripts Tests' {
         It 'engram-orchestrator.ps1 exists for session policy' {
             $f = Join-Path $script:utilitiesPath "engram-orchestrator.ps1"
             Test-Path $f | Should Be $true
+        }
+
+        It 'start-session.ps1 can reuse an existing SessionId' {
+            $f = Join-Path $script:root "scripts/utilities/WORKFLOW-ORCHESTRATION/start-session.ps1"
+            $content = Get-Content $f -Raw
+            ($content -match '\[string\]\$SessionId = ') | Should Be $true
         }
     }
 }

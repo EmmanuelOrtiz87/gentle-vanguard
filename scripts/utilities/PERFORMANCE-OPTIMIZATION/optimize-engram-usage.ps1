@@ -48,6 +48,62 @@ function Write-Warn {
     Write-Host "[WARN] $m" -ForegroundColor Yellow
 }
 
+function Parse-CacheTimestamp {
+    param([AllowNull()][object]$Timestamp)
+
+    if ($null -eq $Timestamp) {
+        return $null
+    }
+
+    if ($Timestamp -is [DateTimeOffset]) {
+        return $Timestamp
+    }
+
+    if ($Timestamp -is [DateTime]) {
+        return [DateTimeOffset]$Timestamp
+    }
+
+    $timestampText = [string]$Timestamp
+    if ([string]::IsNullOrWhiteSpace($timestampText)) {
+        return $null
+    }
+
+    $parseStyles = [System.Globalization.DateTimeStyles]::AllowWhiteSpaces -bor [System.Globalization.DateTimeStyles]::AssumeLocal
+    $parseCultures = @(
+        [System.Globalization.CultureInfo]::InvariantCulture,
+        [System.Globalization.CultureInfo]::GetCultureInfo('en-US'),
+        [System.Globalization.CultureInfo]::CurrentCulture
+    )
+
+    foreach ($culture in $parseCultures) {
+        try {
+            return [DateTimeOffset]::Parse($timestampText, $culture, $parseStyles)
+        } catch {
+        }
+    }
+
+    $exactFormats = @(
+        'o',
+        'yyyy-MM-ddTHH:mm:ssK',
+        'yyyy-MM-ddTHH:mm:ss.fffffffK',
+        'M/d/yyyy H:mm:ss',
+        'M/d/yyyy HH:mm:ss',
+        'M/d/yyyy h:mm:ss tt',
+        'MM/dd/yyyy HH:mm:ss',
+        'MM/dd/yyyy hh:mm:ss tt',
+        'yyyy-MM-dd HH:mm:ss'
+    )
+
+    foreach ($culture in $parseCultures) {
+        try {
+            return [DateTimeOffset]::ParseExact($timestampText, $exactFormats, $culture, $parseStyles)
+        } catch {
+        }
+    }
+
+    return $null
+}
+
 function Get-EngramMemory {
     param([string]$Project)
 
@@ -99,7 +155,7 @@ function Save-PreloadCache {
     }
 
     $cacheFile = Join-Path $cacheDir 'preload-cache.json'
-    $Data.timestamp = (Get-Date -Format 'o')
+    $Data.timestamp = [DateTimeOffset]::Now.ToString('o')
     $Data.project = $ProjectName
 
     $Data | ConvertTo-Json -Depth 10 | Set-Content -Path $cacheFile -Encoding UTF8
@@ -115,7 +171,13 @@ function Get-PreloadCache {
     }
 
     $cache = Get-Content $cacheFile -Raw | ConvertFrom-Json
-    $age = (Get-Date) - [DateTime]::Parse($cache.timestamp)
+    $parsedTimestamp = Parse-CacheTimestamp -Timestamp $cache.timestamp
+    if ($null -eq $parsedTimestamp) {
+        Write-Warn "Ignoring pre-load cache with unsupported timestamp format: $($cache.timestamp)"
+        return $null
+    }
+
+    $age = (Get-Date) - $parsedTimestamp.LocalDateTime
     if ($age.TotalHours -gt 24) {
         return $null
     }
@@ -136,7 +198,13 @@ $startTime = Get-Date
 
 $cachedData = Get-PreloadCache -RepoRoot $repoRoot
 if ($cachedData) {
-    Write-Info "Using cached pre-load (age: $((Get-Date) - [DateTime]::Parse($cachedData.timestamp)).TotalMinutes minutes)"
+    $cachedTimestamp = Parse-CacheTimestamp -Timestamp $cachedData.timestamp
+    if ($null -ne $cachedTimestamp) {
+        $cacheAgeMinutes = [math]::Round(((Get-Date) - $cachedTimestamp.LocalDateTime).TotalMinutes, 2)
+        Write-Info "Using cached pre-load (age: $cacheAgeMinutes minutes)"
+    } else {
+        Write-Info "Using cached pre-load"
+    }
 } else {
     Write-Info "Generating fresh pre-load..."
 }
