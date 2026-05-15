@@ -1,8 +1,8 @@
-# Demo 04 — Quality Gates, Review & Audit (v2.6.5)
+# Demo 04 — Quality Gates, Review & Audit (v2.14.0)
 
 **Audience:** Development Team / Tech Lead  
 **Duration:** ~15 min  
-**Stack version:** v2.6.5+
+**Stack version:** v2.14.0+
 
 ---
 

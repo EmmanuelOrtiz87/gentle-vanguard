@@ -49,14 +49,40 @@ if ($LASTEXITCODE -eq 0 -and [string]::IsNullOrWhiteSpace($gitStatus)) {
     $workspaceClean = $true
 }
 
-# Detect OS
-$platform = 'unknown'; $shell = 'unknown'
-$osIsWin = [System.OperatingSystem]::IsWindows()
-$osIsLinux = [System.OperatingSystem]::IsLinux()
-$osIsMacOS = [System.OperatingSystem]::IsMacOS()
-if ($osIsWin)     { $platform = 'windows'; $shell = 'powershell' }
-elseif ($osIsMacOS) { $platform = 'macos';   $shell = 'zsh' }
-elseif ($osIsLinux)  { $platform = 'linux';   $shell = 'bash' }
+# Detect OS + tool via detect-tool.ps1
+$platform = 'unknown'; $shell = 'unknown'; $tool = 'unknown'
+$detectScript = Join-Path $PSScriptRoot 'detect-tool.ps1'
+if (Test-Path $detectScript) {
+    try {
+        $detected = & $detectScript -AsJson 2>$null | ConvertFrom-Json
+        if ($detected) {
+            $tool = if ($detected.name) { $detected.name } else { 'unknown' }
+            if ($detected.os) {
+                $platform = if ($detected.os.platform) { $detected.os.platform } else { 'unknown' }
+                $shell   = if ($detected.os.shell)    { $detected.os.shell }    else { 'unknown' }
+            }
+        }
+    } catch {
+        # Fallback: env-based detection
+        if ($env:OPENCODE_SERVER_USERNAME)     { $tool = 'opencode'; $platform = 'windows'; $shell = 'powershell' }
+        elseif ($env:CLAUDE_VSCODE_VERSION)    { $tool = 'claude-code' }
+        elseif (Test-Path (Join-Path $repoRoot '.clinerules'))  { $tool = 'cline' }
+        elseif (Test-Path (Join-Path $repoRoot '.cursorrules')) { $tool = 'cursor' }
+        elseif (Test-Path (Join-Path $repoRoot '.windsurf'))    { $tool = 'windsurf' }
+    }
+} else {
+    # Manual fallback
+    if ($env:OPENCODE_SERVER_USERNAME)  { $tool = 'opencode' }
+    elseif ($env:CLAUDE_VSCODE_VERSION) { $tool = 'claude-code' }
+    elseif ($env:IS_WSL)                { $platform = 'linux'; $shell = 'bash' }
+}
+if ($platform -eq 'unknown') {
+    if ([Environment]::OSVersion.Platform -eq 'Win32NT') { $platform = 'windows'; $shell = 'powershell' }
+    elseif ([Environment]::OSVersion.Platform -eq 'Unix') {
+        $platform = 'linux'
+        $shell = if ($env:SHELL -match 'zsh') { 'zsh' } else { 'bash' }
+    }
+}
 
 # Check engram status
 $engramOk = $false
@@ -67,7 +93,7 @@ try {
 
 $summary = @{
     timestamp       = (Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz')
-    tool            = 'opencode'
+    tool            = $tool
     platform        = $platform
     shell           = $shell
     pathSeparator   = [System.IO.Path]::DirectorySeparatorChar.ToString()

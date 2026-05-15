@@ -1,17 +1,17 @@
 <h1 align="center">🚀 Foundation</h1>
 
 <p align="center">
-  <strong>AI-powered development stack · 127 specialized skills · 16 autonomous agents</strong><br>
+  <strong>AI-powered development stack · 129 specialized skills · 30 autonomous agents</strong><br>
   <em>🔒 100% local · 🧠 Persistent memory · ⚡ No vendor lock-in · ✅ Production ready</em>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-1.0.1-brightgreen?style=flat-square" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.14.0-brightgreen?style=flat-square" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=flat-square" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-purple?style=flat-square" alt="PowerShell">
   <img src="https://img.shields.io/badge/Agents-16-orange?style=flat-square" alt="Agents">
-  <img src="https://img.shields.io/badge/Skills-127-teal?style=flat-square" alt="Skills">
+  <img src="https://img.shields.io/badge/Skills-129-teal?style=flat-square" alt="Skills">
   <img src="https://img.shields.io/badge/Tests-442-blue?style=flat-square" alt="Tests">
 </p>
 
@@ -237,7 +237,7 @@ flowchart LR
 | Gate | Result |
 |------|--------|
 | ⚙️ Configuration | ✅ 3/3 |
-| 🛠️ Skills | ✅ 127 validated |
+| 🛠️ Skills | ✅ 129 validated |
 | 🧪 Tests | ✅ 422 passing (442 total) |
 | 🔗 Hooks | ✅ 2/2 |
 | 📁 Structure | ✅ 7/7 |
@@ -274,7 +274,7 @@ See [build/README.md](build/README.md) for the full build pipeline.
 ---
 
 <p align="center">
-  <strong>🚀 Foundation v1.0.1</strong><br>
+  <strong>🚀 Foundation v2.14.0</strong><br>
   <em>🔒 Local-First · 🛡️ Total Privacy · ⚡ Production Ready</em><br>
   <sub>
     <a href="https://github.com/EmmanuelOrtiz87/foundation">Private repo</a>

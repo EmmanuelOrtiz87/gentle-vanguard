@@ -343,29 +343,43 @@ function Write-FlowGate {
 $sourceTag = if ($FromAgent) { 'AGENT' } else { 'USER' }
 
 # SDD pre-routing: detect feature/development intent and force BA exploration first
-$featureIntentPatterns = @(
+# English is the canonical routing language — DEV triggers in EN must go through BA/EXPLORE
+# Multilingual patterns (ES, PT-BR) are recognized for user convenience but mapped to the same EN routing
+$devIntentTriggersEN = @('implement', 'develop', 'build', 'create', 'make', 'code')
+$featureIntentPatternsML = @(
+    # Spanish
     'implementar', 'desarrollar', 'construir',
     'implementa', 'desarrolla', 'construye',
     'nueva funcionalidad', 'nuevo modulo', 'nuevo módulo',
     'nuevo componente', 'nueva feature', 'nuevo endpoint',
-    'nueva api', 'nueva API', 'feature request',
+    'nueva api', 'nueva API',
+    # Portuguese
+    'implementar', 'desenvolver', 'construir',
+    'novo componente', 'novo modulo', 'novo módulo',
+    'novo projeto', 'criar projeto', 'criar componente',
+    'nova funcionalidade', 'nova feature', 'novo endpoint',
+    'nova api', 'nova API',
+    # English (multilingual input, not trigger-based)
+    'feature request',
     'new feature', 'new module', 'new component',
     'new endpoint', 'new api', 'new API',
     'add feature', 'add module', 'add component'
 )
 $isFeatureIntent = $false
-if ($matchingSkill -eq 'sdd-lifecycle' -and $confidenceScore -ge 80) {
-    foreach ($pattern in $featureIntentPatterns) {
-        if ($inputLower -match [regex]::Escape($pattern)) {
-            $isFeatureIntent = $true
-            break
-        }
-    }
-    # Also check if DEV-style words triggered the match without explicit SDD mention
-    $devIntentTriggers = @('implement', 'develop', 'build', 'create', 'make', 'code')
-    if (-not $isFeatureIntent -and $matchingTrigger -in $devIntentTriggers -and
+if ($matchingSkill -eq 'sdd-lifecycle') {
+    # PRIMARY: English trigger-based detection (exact keyword match, no confidence gate)
+    if ($matchingTrigger -in $devIntentTriggersEN -and
         $inputLower -notmatch '\bsdd\b') {
         $isFeatureIntent = $true
+    }
+    # SECONDARY: Multilingual pattern detection (substring match in user input)
+    if (-not $isFeatureIntent) {
+        foreach ($pattern in $featureIntentPatternsML) {
+            if ($inputLower -match [regex]::Escape($pattern)) {
+                $isFeatureIntent = $true
+                break
+            }
+        }
     }
 }
 
@@ -386,7 +400,7 @@ if ($isFeatureIntent) {
     Write-Output "AGENT: BA"
     Write-Output "SKILL: sdd-lifecycle"
     Write-Output "PHASE: EXPLORE"
-    Write-Output "ACTION: Feature/development request detected - activating BA (sdd-explore) first. Must complete EXPLORE phase before any implementation."
+    Write-Output "ACTION: SDD flow enforced — all feature/development requests route through BA/EXPLORE first. English is the canonical routing language; multilingual input is recognized and normalized to English routing. No implementation without completed EXPLORE and SPEC phases unless explicitly overridden by admin policy."
     Write-AgentProfile -Profile $baProfile -AgentCode "BA"
     if ($clarifyBaStrategy -and $clarifyBaStrategy.questions) {
         Write-Output "CLARIFICATION_QUESTIONS:"
