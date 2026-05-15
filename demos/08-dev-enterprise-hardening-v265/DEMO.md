@@ -1,8 +1,8 @@
-# Demo 08 — Enterprise Hardening Wave (v2.6.4 + v2.6.5)
+# Demo 08 — Enterprise Hardening Wave (v2.14.0)
 
 **Audience:** Tech Lead / Senior Developer / DevOps  
 **Duration:** ~20 min  
-**Stack version:** v2.6.5+  
+**Stack version:** v2.14.0+  
 **Focus:** New capabilities from the enterprise hardening wave — SDD enforcement, benchmarks, drift
 detection, PSScriptAnalyzer CI, and automated releases.
 
@@ -10,29 +10,29 @@ detection, PSScriptAnalyzer CI, and automated releases.
 
 ## What This Demo Shows
 
-This is the "deep technical" demo for developers who want to see the **new v2.6.4+v2.6.5
+This is the "deep technical" demo for developers who want to see the **v2.14.0
 capabilities** in action:
 
 | Feature                                   | Version | Command                         |
 | ----------------------------------------- | ------- | ------------------------------- |
-| SDD Gate (blocks commits without spec)    | v2.6.4  | `wf sdd-gate`                   |
-| SDD Process Metrics (cycle time, SLO)     | v2.6.4  | `wf sdd-metrics`                |
-| Sync Drift Report (foundation ↔ projects) | v2.6.4  | `wf sync-drift`                 |
-| WF Benchmark (SLO measurement)            | v2.6.4  | `wf benchmark`                  |
-| PSScriptAnalyzer CI (static analysis)     | v2.6.5  | `.github/workflows/ps-lint.yml` |
-| Automated GitHub Releases                 | v2.6.5  | `git tag v*.*.*`                |
-| Stack Version command                     | v2.6.5  | `wf version`                    |
-| Normativas vivas                          | v2.6.5  | `rules/` directory              |
+| SDD Gate (blocks commits without spec)    | v2.14.0 | `wf sdd-gate`                   |
+| SDD Process Metrics (cycle time, SLO)     | v2.14.0 | `wf sdd-metrics`                |
+| Sync Drift Report (foundation ↔ projects) | v2.14.0 | `wf sync-drift`                 |
+| WF Benchmark (SLO measurement)            | v2.14.0 | `wf benchmark`                  |
+| PSScriptAnalyzer CI (static analysis)     | v2.14.0 | `.github/workflows/ps-lint.yml` |
+| Automated GitHub Releases                 | v2.14.0 | `git tag v*.*.*`                |
+| Stack Version command                     | v2.14.0 | `wf version`                    |
+| Normativas vivas                          | v2.14.0 | `rules/` directory              |
 
 ---
 
 ## Setup
 
 ```powershell
-# Ensure you're on main at v2.6.5+
+# Ensure you're on main at v2.14.0+
 git checkout main
 wf version
-# Expected: Gentleman Foundation v2.6.5
+# Expected: Gentleman Foundation v2.14.0
 ```
 
 ---
@@ -128,7 +128,7 @@ users complain.
 
 ---
 
-## Part 5 — PSScriptAnalyzer CI (v2.6.5)
+## Part 5 — PSScriptAnalyzer CI (v2.14.0)
 
 ```powershell
 # Locally simulate CI (what ps-lint.yml runs on every push):
@@ -148,12 +148,12 @@ Get-Content .github/workflows/ps-lint.yml
 
 ---
 
-## Part 6 — Automated GitHub Releases (v2.6.5)
+## Part 6 — Automated GitHub Releases (v2.14.0)
 
 ```powershell
 # What happens when a tag is pushed:
-git tag -a v2.6.5 -m "v2.6.5 release"
-git push origin v2.6.5
+git tag -a v2.14.0 -m "v2.14.0 release"
+git push origin v2.14.0
 
 # → GitHub Actions: release.yml triggers
 # → Reads CHANGELOG.md for tag section
@@ -164,12 +164,12 @@ git push origin v2.6.5
 Get-Content .github/workflows/release.yml
 ```
 
-**Key talking point:** Before v2.6.5, releases were created manually. Now: tag → push → release is
+**Key talking point:** Before v2.14.0, releases were created manually. Now: tag → push → release is
 fully automated. The changelog IS the release notes.
 
 ---
 
-## Part 7 — Normativas Vivas (v2.6.5)
+## Part 7 — Normativas Vivas (v2.14.0)
 
 ```powershell
 # Show the three new normatives
@@ -191,12 +191,12 @@ enforcement.
 
 ---
 
-## Part 8 — Stack Version (v2.6.5)
+## Part 8 — Stack Version (v2.14.0)
 
 ```powershell
 wf version
 # Output:
-# Gentleman Foundation v2.6.5 | orchestrator: v2.6.5
+# Gentleman Foundation v2.14.0 | orchestrator: v2.14.0
 #   Stack: 7.5.0 on windows
 #   Skills: 125
 ```
@@ -206,14 +206,14 @@ the pushed tag matches `VERSION`. Drift between tag and file = blocked release.
 
 ---
 
-## Full Command Reference (v2.6.4+v2.6.5 new commands)
+## Full Command Reference (v2.14.0 new commands)
 
 ```powershell
 wf sdd-gate          # FF-001: Check SDD spec status
 wf sdd-metrics       # FF-002: SDD process metrics + cycle time
 wf sync-drift        # FF-004: Foundation ↔ project drift detection
 wf benchmark         # FF-006: SLO benchmark of wf commands
-wf version           # v2.6.5: Stack version + skills count
+wf version           # v2.14.0: Stack version + skills count
 ```
 
 ---

@@ -28,14 +28,24 @@ Parse output exactly:
 
 **BA/SDD Activation**: When user requests project creation, new components, or features WITHOUT a formal spec, pre-process detects these triggers → routes to BA → SDD EXPLORE phase gathers requirements BEFORE implementation begins.
 
-**SDD FLOW RULE (ENFORCED)**: When pre-process outputs `PLAN_MODE_REQUIRED` + `AGENT: BA` + `SKILL: sdd-lifecycle`, the agent MUST activate BA/sdd-explore first. Do NOT jump to DEV/APPLY even if the trigger matched "implement"/"code"/"develop". If `TRIGGER_MATCH_FOUND` + `SKILL: sdd-lifecycle` with a DEV trigger on a new feature request (not a bug fix), treat it as PLAN_MODE_REQUIRED and activate BA first.
+**SDD FLOW RULE (ENFORCED — NO BYPASS)**: English is the canonical routing language for all SDD lifecycle decisions. Multilingual input (ES, PT-BR) is recognized and normalized to English routing — it does NOT create parallel routing logic. When the SDD lifecycle skill is matched:
+
+1. All feature/development intents ALWAYS activate BA/EXPLORE first — NO confidence gate, NO exceptions
+2. English DEV triggers (`implement`, `develop`, `build`, `create`, `make`, `code`) are PRIMARY — exact trigger match is sufficient
+3. Multilingual equivalents (ES: implementar/desarrollar/construir, PT: implementar/desenvolver/construir) are recognized as secondary patterns
+4. Explicit SDD mention (`sdd` in input) allows normal flow (user knows the process)
+5. The ONLY way to bypass SDD flow is explicit admin policy change or explicit user override with justification
+6. Agents MUST NOT skip EXPLORE/SPEC phases. Violation is a CRITICAL non-compliance
 
 Examples that activate BA/SDD:
-- "crear nuevo proyecto" → BA EXPLORE (understand scope, stack, constraints)
+- "implement login" → BA EXPLORE (EN trigger → unconditional PLAN_MODE_REQUIRED)
+- "crear nuevo proyecto" → BA EXPLORE (ES pattern → normalized to EN routing)
 - "new component" → BA EXPLORE (requirements, acceptance criteria)
 - "bootstrap template" → BA EXPLORE (project setup specifications)
-- "implementar login" → BA EXPLORE (gather requirements before implementing)
+- "implementar login" → BA EXPLORE (ES pattern → EN routing)
 - "nueva funcionalidad de usuarios" → BA EXPLORE (explore needs, then spec)
+- "create api endpoint" → BA EXPLORE (EN trigger → unconditional PLAN_MODE_REQUIRED)
+- "desenvolver novo modulo" → BA EXPLORE (PT pattern → normalized to EN routing)
 
 Violation: responding without running this hook is a **CRITICAL** non-compliance.
 
@@ -105,19 +115,26 @@ Threshold source: `config/auto-delegation.json#confidenceThreshold` (default: 60
 
 ## 5.1 Multilingual Routing (MANDATORY)
 
-Routing must support at least these user languages:
+**English is the canonical routing language.** All SDD lifecycle routing logic, keyword mappings, and decision trees use English as the source of truth. Multilingual input (ES, PT-BR) is recognized for user convenience and normalized to English routing — it does NOT create parallel routing paths.
 
-1. Spanish (`es`)
-2. English (`en`)
-3. Portuguese Brazil (`pt-BR`)
+Supported user input languages:
+
+1. English (`en`) — canonical, source of truth for routing
+2. Spanish (`es`) — recognized, normalized to EN routing
+3. Portuguese Brazil (`pt-BR`) — recognized, normalized to EN routing
 
 Operational requirements:
 
 1. Critical intents (session start/close, SDD start for new project/component, PR actions) must have
   trigger coverage in all three languages in `config/auto-delegation.json#keywordMappings`.
-2. Regressions are blocked by automated matrix validation in
+2. The routing logic itself (`pre-process-input.ps1`) uses English triggers as PRIMARY detection.
+   Multilingual patterns are SECONDARY — they map to the same English-based routing decisions.
+3. Regressions are blocked by automated matrix validation in
   `tests/e2e/routing-language-matrix.json` executed by `scripts/utilities/routing-quality-eval.ps1`.
-3. `scripts/utilities/agent-verify.ps1` must fail if multilingual routing matrix has mismatches.
+4. `scripts/utilities/agent-verify.ps1` must fail if multilingual routing matrix has mismatches.
+5. No confidence threshold gates SDD flow — if the skill matches `sdd-lifecycle` and the input
+   contains a development/feature intent keyword (in any supported language), PLAN_MODE_REQUIRED
+   is triggered unconditionally.
 
 ---
 

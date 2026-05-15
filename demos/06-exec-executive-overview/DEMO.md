@@ -1,8 +1,8 @@
-# Demo 06 — Executive Overview (v2.6.5)
+# Demo 06 — Executive Overview (v2.14.0)
 
 **Audience:** Executive Council / Management / Stakeholders  
 **Duration:** ~20 min  
-**Stack version:** v2.6.5+  
+**Stack version:** v2.14.0+  
 **Format:** Dashboard + narrative walkthrough
 
 ---
@@ -64,7 +64,7 @@ wf verify
 
 ```powershell
 wf version
-# Output: Gentleman Foundation v2.6.5 | orchestrator: v2.6.5
+# Output: Gentleman Foundation v2.14.0 | orchestrator: v2.14.0
 #         Stack: 7.5.0 on windows
 #         Skills: 125
 ```

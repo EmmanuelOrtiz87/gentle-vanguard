@@ -1,4 +1,4 @@
-# Demo Suite — Gentleman Foundation v2.6.5
+# Demo Suite — Gentleman Foundation v2.14.0
 
 Audience-oriented demos. Each includes run steps, expected output, and talking points. Use
 `demos/shared/task-tracker/` as the sample project for live demos.
@@ -16,7 +16,7 @@ Audience-oriented demos. Each includes run steps, expected output, and talking p
 | 05  | `05-dev-documentation-and-closure/`    | Dev / DOC       | Session closure, audit artifacts, docs      | 10 min   |
 | 06  | `06-exec-executive-overview/`          | Executives      | Business impact, dashboard, KPIs            | 20 min   |
 | 07  | `07-mixed-cookbook-real-request/`      | Mixed           | End-to-end real-world feature request       | 25 min   |
-| 08  | `08-dev-enterprise-hardening-v265/`    | Dev / DevOps    | New v2.6.4+v2.6.5 features deep-dive        | 20 min   |
+| 08  | `08-dev-enterprise-hardening-v265/`    | Dev / DevOps    | Enterprise hardening, SLOs, releases   | 20 min   |
 
 ---
 
@@ -46,7 +46,7 @@ Audience-oriented demos. Each includes run steps, expected output, and talking p
 01 → 02 → 04 → 06 → 07
 ```
 
-**For "what's new in v2.6.5":**
+**For "what's new in v2.14.0":**
 
 ```
 08 (all new features in one place)
@@ -54,7 +54,7 @@ Audience-oriented demos. Each includes run steps, expected output, and talking p
 
 ---
 
-## Coverage Matrix (v2.6.5)
+## Coverage Matrix (v2.14.0)
 
 | Capability                    | Demos      |
 | ----------------------------- | ---------- |
