@@ -1,0 +1,59 @@
+strict_tdd: true
+context: |
+  Foundation is a PowerShell/TypeScript ESM, multi-tool AI orchestrator project.
+  Detected markers: package.json, npm package manager, GitHub Actions.
+  Package managers: npm.
+  Primary test command: Invoke-Pester tests/ -Output Detailed.
+  Unit tests: pwsh -NoProfile -File tests/unit/run-tests.ps1.
+  Integration tests: pwsh -NoProfile -File tests/integration/run-tests.ps1.
+  E2E tests: none.
+  Quality gates: foundation verify (28 gates), foundation judgment-day (blind review).
+  Agent profiles: 18 specialized agents (BA, SAD, DEV, QA, OPS, GOV, DOC, PREMORTEM, ...).
+  Memory: Engram persistent memory across sessions.
+  Skill count: 129+ skills in skills/ directory.
+
+rules:
+  proposal:
+    require_problem_statement: true
+    require_acceptance_criteria: false
+  spec:
+    require_acceptance_criteria: true
+    require_non_goals: true
+  design:
+    require_tradeoffs: true
+    require_api_contract: false
+  tasks:
+    protect_review_workload: true
+    max_lines_per_pr: 400
+  apply:
+    test_command: "pwsh -NoProfile -Command \"Invoke-Pester tests/\""
+    require_tests: true
+  verify:
+    test_command: "pwsh -NoProfile -Command \"Invoke-Pester tests/\""
+    require_coverage: false
+
+testing:
+  detected: "2026-05-15"
+  runner:
+    command: "pwsh -NoProfile -Command \"Invoke-Pester tests/\""
+    framework: "Pester (via package script)"
+  layers:
+    unit: "Pester"
+    integration: "Pester"
+    e2e: ""
+  commands:
+    unit:
+      - scope: "."
+        command: "pwsh -NoProfile -File tests/unit/run-tests.ps1"
+        framework: "Pester unit test runner"
+    integration:
+      - scope: "."
+        command: "pwsh -NoProfile -File tests/integration/run-tests.ps1"
+        framework: "Pester integration test runner"
+  quality:
+    lint: "pwsh -NoProfile -Command \"Invoke-Pester tests/ -Output Detailed\""
+    lint_commands: []
+    typecheck: ""
+    typecheck_commands: []
+    format: ""
+    format_commands: []
