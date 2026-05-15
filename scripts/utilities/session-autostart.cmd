@@ -54,7 +54,7 @@ REM === Phase 0.5: Tool Detection (NEW - CRITICAL) ===
 echo [0.5/9] Detecting tool/plugin...
 set TOOL_DETECTION=%UTILS_DIR%\detect-tool.ps1
 if exist "%TOOL_DETECTION%" (
-    for /f "tokens=*" %%i in ('powershell -NoProfile -ExecutionPolicy Bypass -File "%TOOL_DETECTION%" -AsJson ^| findstr "name"') do (
+    for /f "tokens=*" %%i in ('pwsh -NoProfile -ExecutionPolicy Bypass -File "%TOOL_DETECTION%" -AsJson ^| findstr "name"') do (
         echo %%i
     )
     echo [OK] Tool detected and configuration loaded
@@ -73,12 +73,12 @@ if exist "%WF_DIR%" (
 )
 
 echo [1/9] Initializing session manager...
-powershell -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\session-manager.ps1" -Mode AutoStart
+pwsh -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\session-manager.ps1" -Mode AutoStart
 if errorlevel 1 (
     echo [ERROR] session-manager.ps1 failed (code: !errorlevel!)
     echo [FALLBACK] Attempting foundation...
     if exist "%WF_DIR%\foundation.ps1" (
-        powershell -NoProfile -ExecutionPolicy Bypass -File "%WF_DIR%\foundation.ps1" start-session
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "%WF_DIR%\foundation.ps1" start-session
     ) else (
         echo [FATAL] No fallback available. Aborting.
         exit /b 1
@@ -88,14 +88,14 @@ if errorlevel 1 (
 REM === Phase 2: Notifications ===
 echo [2/9] Time-based notifications...
 if exist "%UTILS_DIR%\session-notification.ps1" (
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\session-notification.ps1" -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15 -Region "Argentina"
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\session-notification.ps1" -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15 -Region "Argentina"
     if errorlevel 1 ( echo [WARN] Notification check had warnings ) else ( echo [OK] Notifications checked )
 ) else ( echo [SKIP] session-notification.ps1 not found )
 
 REM === Phase 3: Session ID ===
 echo [3/9] Resolving session ID...
 set SESSION_ID=
-for /f "tokens=*" %%i in ('powershell -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\get-session-id.ps1"') do set SESSION_ID=%%i
+for /f "tokens=*" %%i in ('pwsh -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\get-session-id.ps1"') do set SESSION_ID=%%i
 if defined SESSION_ID (
     echo [OK] Session ID: %SESSION_ID%
 ) else ( echo [WARN] Could not resolve session ID )
@@ -104,11 +104,11 @@ REM === Phase 4: Engram Policy Enforcement ===
 echo [4/9] Engram policy enforcement...
 set ENGRAM_POLICY=%WORKSPACE_ROOT%\scripts\foundation\engram-policy.ps1
 if exist "%ENGRAM_POLICY%" (
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%ENGRAM_POLICY%" -Action enforce
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%ENGRAM_POLICY%" -Action enforce
     if errorlevel 1 (
         echo [WARN] Engram policy issues detected
         if exist "%UTILS_DIR%\engram-orchestrator.ps1" (
-            powershell -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\engram-orchestrator.ps1" -Action orchestrate
+            pwsh -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\engram-orchestrator.ps1" -Action orchestrate
         )
     ) else ( echo [OK] Engram policy enforced )
 ) else ( echo [SKIP] engram-policy.ps1 not found )
@@ -117,7 +117,7 @@ REM === Phase 5: Engram Optimization ===
 echo [5/9] Engram optimization...
 set OPTIMIZE_SCRIPT=%WORKSPACE_ROOT%\scripts\utilities\PERFORMANCE-OPTIMIZATION\optimize-engram-usage.ps1
 if exist "%OPTIMIZE_SCRIPT%" (
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_local"
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_local"
     if errorlevel 1 ( echo [WARN] Optimization had warnings ) else ( echo [OK] Engram optimized )
 ) else ( echo [SKIP] optimize-engram-usage.ps1 not found )
 
@@ -125,7 +125,7 @@ REM === Phase 6: Cross-Workspace Validation ===
 echo [6/9] Cross-workspace validation...
 set CROSS_VALIDATOR=%WORKSPACE_ROOT%\scripts\monitoring\cross-workspace-validator.ps1
 if exist "%CROSS_VALIDATOR%" (
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%CROSS_VALIDATOR%" -Detailed
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%CROSS_VALIDATOR%" -Detailed
     if errorlevel 1 ( echo [WARN] Validation found issues ) else ( echo [OK] Cross-workspace validated )
 ) else ( echo [SKIP] cross-workspace-validator.ps1 not found )
 
@@ -133,7 +133,7 @@ REM === Phase 7: Security Orchestrator ===
 echo [7/9] Security orchestrator...
 set SECURITY_SCRIPT=%WORKSPACE_ROOT%\scripts\security\security-orchestrator.ps1
 if exist "%SECURITY_SCRIPT%" (
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%SECURITY_SCRIPT%" -Action init -AsJson
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%SECURITY_SCRIPT%" -Action init -AsJson
     if errorlevel 1 ( echo [WARN] Security init had warnings ) else ( echo [OK] Security initialized )
 ) else ( echo [SKIP] security-orchestrator.ps1 not found )
 
@@ -141,27 +141,27 @@ REM === Phase 8: Skill Router + Registry Build ===
 echo [8/9] Skill router...
 set SKILL_ROUTER=%UTILS_DIR%\skill-router.ps1
 if exist "%SKILL_ROUTER%" (
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%SKILL_ROUTER%" -Query "session-start"
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%SKILL_ROUTER%" -Query "session-start"
     if errorlevel 1 ( echo [WARN] Skill router validation issue ) else ( echo [OK] Skill router active )
 ) else ( echo [SKIP] skill-router.ps1 not found )
 
 REM Build skill registry in background
 set SKILL_REGISTRY=%UTILS_DIR%\build-skill-registry.ps1
 if exist "%SKILL_REGISTRY%" (
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%SKILL_REGISTRY%" -Quiet
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%SKILL_REGISTRY%" -Quiet
     if errorlevel 1 ( echo [WARN] Skill registry build had issues ) else ( echo [OK] Skill registry built )
 ) else ( echo [SKIP] build-skill-registry.ps1 not found )
 
 REM === Phase 9: Post-Autostart Summary ===
 echo [9/10] Generating startup summary...
-powershell -NoProfile -ExecutionPolicy Bypass -File "%WORKSPACE_ROOT%\scripts\utilities\post-autostart-summary.ps1" -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15 -Region "Argentina"
+pwsh -NoProfile -ExecutionPolicy Bypass -File "%WORKSPACE_ROOT%\scripts\utilities\post-autostart-summary.ps1" -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15 -Region "Argentina"
 if errorlevel 1 ( echo [WARN] Summary generation had warnings ) else ( echo [OK] Startup summary saved )
 
 REM === Phase 10: Watchtower Quick Check ===
 echo [10/10] Watchtower quick health check...
 set WATCHTOWER_SCRIPT=%WF_DIR%\..\watchtower.ps1
 if exist "%WATCHTOWER_SCRIPT%" (
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%WATCHTOWER_SCRIPT%" -Quiet
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%WATCHTOWER_SCRIPT%" -Quiet
     if errorlevel 1 ( echo [WARN] Watchtower detected issues - run 'foundation watchtower' for details ) else ( echo [OK] Watchtower all clear )
 ) else ( echo [SKIP] watchtower.ps1 not found )
 
