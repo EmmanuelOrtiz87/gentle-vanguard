@@ -7,11 +7,20 @@ param(
     [string]$Action = 'status',
     
     [string]$EngramPath = "$HOME\bin\engram.exe",
-    [string]$ToolsPath = ".\foundation\\tools\engram.exe",
-    [string]$GoPath = "$HOME\go\bin\engram.exe"
+    [string]$ToolsPath = "",
+    [string]$GoPath = "$HOME\go\bin\engram.exe",
+    [string]$DataDir = ""
 )
 
 $ErrorActionPreference = "Continue"
+
+$script:RepoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+if ([string]::IsNullOrWhiteSpace($ToolsPath)) {
+    $ToolsPath = Join-Path $script:RepoRoot 'tools\engram.exe'
+}
+if ([string]::IsNullOrWhiteSpace($DataDir)) {
+    $DataDir = Join-Path $script:RepoRoot '.engram-data'
+}
 
 function Write-PolicyStatus {
     param([string]$Message)
@@ -33,15 +42,26 @@ function Write-PolicySuccess {
     Write-Host "[OK] $Message" -ForegroundColor Green
 }
 
+function Initialize-EngramDataDir {
+    if (-not (Test-Path $DataDir)) {
+        New-Item -ItemType Directory -Path $DataDir -Force | Out-Null
+    }
+
+    $env:ENGRAM_DATA_DIR = (Resolve-Path $DataDir).Path
+    Write-PolicyStatus "Data dir: $env:ENGRAM_DATA_DIR"
+}
+
 # Verificar instalacion
 function Test-EngramInstalled {
-    $locations = @($EngramPath, $ToolsPath, $GoPath)
+    $locations = @($ToolsPath, $EngramPath, $GoPath)
     $found = @()
     
     foreach ($loc in $locations) {
         if (Test-Path $loc) {
             $found += $loc
-            $version = & $loc --version 2>&1 | Select-String -Pattern '\d+\.\d+\.\d+' | ForEach-Object { $_.Matches.Value }
+            $versionOutput = & $loc version 2>&1
+            $version = ($versionOutput | Select-String -Pattern 'engram\s+(\d+\.\d+\.\d+)' | Select-Object -First 1).Matches.Groups[1].Value
+            if ([string]::IsNullOrWhiteSpace($version)) { $version = 'unknown' }
             Write-PolicyStatus "Found: $loc (v$version)"
         }
     }
@@ -51,18 +71,23 @@ function Test-EngramInstalled {
 
 # Verificar si engram esta corriendo
 function Test-EngramRunning {
+    param([switch]$Quiet)
+
     $process = Get-Process -Name "engram" -ErrorAction SilentlyContinue
     if ($process) {
         Write-PolicySuccess "Engram running (PID: $($process.Id))"
         return $true
     } else {
-        Write-PolicyWarning "Engram not running"
+        if (-not $Quiet) {
+            Write-PolicyWarning "Engram not running"
+        }
         return $false
     }
 }
 
 # Iniciar engram
 function Start-Engram {
+    Initialize-EngramDataDir
     $installed = Test-EngramInstalled
     if ($installed.Count -eq 0) {
         Write-PolicyError "Engram not installed. Run with -Action install"
@@ -70,8 +95,15 @@ function Start-Engram {
     }
     
     $binary = $installed[0]
-    Start-Process -FilePath $binary -ArgumentList "serve" -WindowStyle Hidden
-    Start-Sleep -Seconds 2
+    $logDir = Join-Path $script:RepoRoot 'logs'
+    if (-not (Test-Path $logDir)) {
+        New-Item -ItemType Directory -Path $logDir -Force | Out-Null
+    }
+
+    $stdoutLog = Join-Path $logDir 'engram-serve.out.log'
+    $stderrLog = Join-Path $logDir 'engram-serve.err.log'
+    Start-Process -FilePath $binary -ArgumentList "serve" -WorkingDirectory $script:RepoRoot -WindowStyle Hidden -RedirectStandardOutput $stdoutLog -RedirectStandardError $stderrLog
+    Start-Sleep -Seconds 5
     
     if (Test-EngramRunning) {
         Write-PolicySuccess "Engram started successfully"
@@ -85,6 +117,7 @@ function Start-Engram {
 # Instalar/actualizar engram
 function Install-Engram {
     Write-PolicyStatus "Installing/updating engram..."
+    Initialize-EngramDataDir
     
     # Detener proceso si esta corriendo
     $process = Get-Process -Name "engram" -ErrorAction SilentlyContinue
@@ -119,6 +152,7 @@ function Install-Engram {
 # Reparar instalacion
 function Repair-Engram {
     Write-PolicyStatus "Repairing engram installation..."
+    Initialize-EngramDataDir
     
     $installed = Test-EngramInstalled
     if ($installed.Count -eq 0) {
@@ -148,6 +182,7 @@ function Repair-Engram {
 switch ($Action) {
     'status' {
         Write-PolicyStatus "=== Engram Policy Status ==="
+        Initialize-EngramDataDir
         $installed = Test-EngramInstalled
         if ($installed.Count -eq 0) {
             Write-PolicyError "Engram NOT installed"
@@ -159,6 +194,7 @@ switch ($Action) {
         break
     }
     'check' {
+        Initialize-EngramDataDir
         $installed = Test-EngramInstalled
         $running = Test-EngramRunning
         if ($installed.Count -gt 0 -and $running) {
@@ -171,29 +207,31 @@ switch ($Action) {
         break
     }
     'enforce' {
+        Initialize-EngramDataDir
         $installed = Test-EngramInstalled
         if ($installed.Count -eq 0) {
-            Install-Engram
+            if (-not (Install-Engram)) { exit 1 }
         }
-        $running = Test-EngramRunning
+        $running = Test-EngramRunning -Quiet
         if (-not $running) {
-            Start-Engram
+            Write-PolicyStatus "Engram service not active; starting..."
+            if (-not (Start-Engram)) { exit 1 }
         }
         Write-PolicySuccess "Engram policy enforced"
         break
     }
     'repair' {
-        Repair-Engram
-        Start-Engram
+        if (-not (Repair-Engram)) { exit 1 }
+        if (-not (Start-Engram)) { exit 1 }
         break
     }
     'install' {
-        Install-Engram
-        Start-Engram
+        if (-not (Install-Engram)) { exit 1 }
+        if (-not (Start-Engram)) { exit 1 }
         break
     }
     'start' {
-        Start-Engram
+        if (-not (Start-Engram)) { exit 1 }
         break
     }
 }
