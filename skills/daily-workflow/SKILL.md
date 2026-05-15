@@ -19,20 +19,20 @@ Automates daily Foundation tasks: status check, context tracking, audit, and syn
 
 ### Morning Routine
 
-1. Run `wf daily-check` - Quick status (git, stack health, context)
-2. Run `wf compact-start "objective"` - Initialize context tracking
+1. Run `foundation daily-check` - Quick status (git, stack health, context)
+2. Run `foundation compact-start "objective"` - Initialize context tracking
 3. Check public repo sync: `cd foundation-public && git pull`
 
 ### Daily Tasks
 
-- **Check stack health**: `wf verify`
+- **Check stack health**: `foundation verify`
 - **Review audits**: Check `docs/audits/` for recent reports
 - **Sync public repo**: Ensure installer and docs are current
 - **Context efficiency**: Monitor prompt chars and adoption rate
 
 ### Evening Routine
 
-1. Run `wf status` - Final status check
+1. Run `foundation status` - Final status check
 2. Commit pending work with proper conventional commits
 3. Push to private repo
 4. Update public repo if needed
@@ -41,11 +41,11 @@ Automates daily Foundation tasks: status check, context tracking, audit, and syn
 
 | Command                  | Purpose                                |
 | ------------------------ | -------------------------------------- |
-| `wf daily-check`         | Morning status (git + stack + context) |
-| `wf compact-start "obj"` | Start context tracking                 |
-| `wf verify`              | 14 quality gates                       |
-| `wf status`              | Context efficiency + git status        |
-| `wf audit`               | Generate audit report                  |
+| `foundation daily-check`         | Morning status (git + stack + context) |
+| `foundation compact-start "obj"` | Start context tracking                 |
+| `foundation verify`              | 14 quality gates                       |
+| `foundation status`              | Context efficiency + git status        |
+| `foundation audit`               | Generate audit report                  |
 
 ## Key Files
 

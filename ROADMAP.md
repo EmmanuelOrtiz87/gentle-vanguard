@@ -28,7 +28,7 @@ seguro, extensible, zero-drama.**
 
 | Area          | Feature                                         | Priority |
 | ------------- | ----------------------------------------------- | -------- |
-| **DX**        | `wf init` — project scaffolding from templates  | High     |
+| **DX**        | `foundation init` — project scaffolding from templates  | High     |
 | **CI/CD**     | Automated release workflow (tag → release)      | High     |
 | **Security**  | SBOM generation (CycloneDX) via Trivy           | Medium   |
 | **Docs**      | Architecture Decision Records process tooling   | Medium   |

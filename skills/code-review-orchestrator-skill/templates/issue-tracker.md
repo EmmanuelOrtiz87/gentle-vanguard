@@ -7,7 +7,7 @@ This template is used by the Code Review Orchestrator to track issues found duri
 Issues are automatically added to this file when running:
 
 ```bash
-wf review --track
+foundation review --track
 ```
 
 ## Format
@@ -62,11 +62,11 @@ wf review --track
 
 ```bash
 # Quick status update
-wf review --update-issue 1 --status FIXED
+foundation review --update-issue 1 --status FIXED
 
 # Export issues
-wf review --export-csv
+foundation review --export-csv
 
 # Generate report
-wf review --report
+foundation review --report
 ```

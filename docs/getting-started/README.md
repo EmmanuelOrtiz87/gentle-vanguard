@@ -75,11 +75,11 @@ This will:
 ```powershell
 foundation verify  # Check all 14 quality gates
 foundation version # Show stack version + skills count
-wf start-session   # Begin tracked session
-wf judgment-day    # Full QA gate before release
-wf dashboard       # Open HTML metrics dashboard
-wf benchmark       # SLO benchmark of key commands
-wf sync-drift      # Detect drift between foundation and projects
+foundation start-session   # Begin tracked session
+foundation judgment-day    # Full QA gate before release
+foundation dashboard       # Open HTML metrics dashboard
+foundation benchmark       # SLO benchmark of key commands
+foundation sync-drift      # Detect drift between foundation and projects
 ```
 
 ---

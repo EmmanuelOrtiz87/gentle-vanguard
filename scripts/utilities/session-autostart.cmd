@@ -64,13 +64,21 @@ if exist "%TOOL_DETECTION%" (
 echo.
 
 REM === Phase 1: Session Manager ===
+REM Add WORKFLOW-ORCHESTRATION to PATH so 'foundation' CLI works
+set WF_DIR=%WORKSPACE_ROOT%\scripts\utilities\WORKFLOW-ORCHESTRATION
+if exist "%WF_DIR%" (
+    set PATH=%WF_DIR%;%PATH%
+) else (
+    echo [WARN] WORKFLOW-ORCHESTRATION dir not found
+)
+
 echo [1/9] Initializing session manager...
 powershell -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\session-manager.ps1" -Mode AutoStart
 if errorlevel 1 (
     echo [ERROR] session-manager.ps1 failed (code: !errorlevel!)
-    echo [FALLBACK] Attempting wf.ps1...
-    if exist "%UTILS_DIR%\wf.ps1" (
-        powershell -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\wf.ps1" start-session
+    echo [FALLBACK] Attempting foundation...
+    if exist "%WF_DIR%\foundation.ps1" (
+        powershell -NoProfile -ExecutionPolicy Bypass -File "%WF_DIR%\foundation.ps1" start-session
     ) else (
         echo [FATAL] No fallback available. Aborting.
         exit /b 1
@@ -138,9 +146,17 @@ if exist "%SKILL_ROUTER%" (
 ) else ( echo [SKIP] skill-router.ps1 not found )
 
 REM === Phase 9: Post-Autostart Summary ===
-echo [9/9] Generating startup summary...
+echo [9/10] Generating startup summary...
 powershell -NoProfile -ExecutionPolicy Bypass -File "%WORKSPACE_ROOT%\scripts\utilities\post-autostart-summary.ps1" -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15 -Region "Argentina"
 if errorlevel 1 ( echo [WARN] Summary generation had warnings ) else ( echo [OK] Startup summary saved )
+
+REM === Phase 10: Watchtower Quick Check ===
+echo [10/10] Watchtower quick health check...
+set WATCHTOWER_SCRIPT=%WF_DIR%\..\watchtower.ps1
+if exist "%WATCHTOWER_SCRIPT%" (
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%WATCHTOWER_SCRIPT%" -Quiet
+    if errorlevel 1 ( echo [WARN] Watchtower detected issues - run 'foundation watchtower' for details ) else ( echo [OK] Watchtower all clear )
+) else ( echo [SKIP] watchtower.ps1 not found )
 
 echo.
 echo === Session Autostart Complete ===

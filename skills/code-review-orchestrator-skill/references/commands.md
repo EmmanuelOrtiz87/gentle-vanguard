@@ -2,23 +2,23 @@
 
 | Command                      | Description                     |
 | ---------------------------- | ------------------------------- |
-| `wf review`                  | Full review (all 7 dimensions)  |
-| `wf review --scope security` | Security only                   |
-| `wf review --scope quality`  | Quality only                    |
-| `wf review --scope testing`  | Testing only                    |
-| `wf review --scope docs`     | Documentation only              |
-| `wf review --scope api`      | API design only                 |
-| `wf review --scope git`      | Git workflow only               |
-| `wf review --scope quick`    | Security + Quality (fast, ~30s) |
-| `wf review --scope full`     | Alias for 'all'                 |
-| `wf review --report`         | Generate detailed report        |
-| `wf review --track`          | Export issues to CSV            |
-| `wf review --verbose`        | Verbose output                  |
+| `foundation review`                  | Full review (all 7 dimensions)  |
+| `foundation review --scope security` | Security only                   |
+| `foundation review --scope quality`  | Quality only                    |
+| `foundation review --scope testing`  | Testing only                    |
+| `foundation review --scope docs`     | Documentation only              |
+| `foundation review --scope api`      | API design only                 |
+| `foundation review --scope git`      | Git workflow only               |
+| `foundation review --scope quick`    | Security + Quality (fast, ~30s) |
+| `foundation review --scope full`     | Alias for 'all'                 |
+| `foundation review --report`         | Generate detailed report        |
+| `foundation review --track`          | Export issues to CSV            |
+| `foundation review --verbose`        | Verbose output                  |
 
 ## Scope Selection Flow
 
 ```
-wf review
+foundation review
     |
     +-- --scope required
     |       |

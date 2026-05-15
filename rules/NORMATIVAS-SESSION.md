@@ -89,6 +89,7 @@ Session ID pattern: `session-YYYY-MM-DD-XX` (e.g., `session-2026-05-10-01`)
 7. **MUST** create `todowrite` for tracking work
 8. **SHOULD** run `scripts/utilities/agent-verify.ps1` to validate state
 9. **MUST** report startup summary to user in compact block (peak hour, session ID, workspace state)
+10. **SHOULD** review Watchtower output (autostart Phase 10) for any issues detected
 
 ### 2.3 Active Session
 
@@ -234,15 +235,18 @@ TODO sesión DEBE verificar:
 1. `pre-process-input.ps1` executed BEFORE first response
 2. Session ID follows `session-YYYY-MM-DD-XX` pattern
 3. `startup-summary.json` read and peak hour reported to user
-4. `mem_session_start` called before work
-5. `todowrite` created at session start
-6. `agent-verify.ps1` run at session start (SHOULD)
-7. Significant decisions saved to Engram
-8. Session state recoverable after compaction
-9. `mem_session_summary` called before close
-10. Post-session learning analysis — run `wf learning` to detect gaps and generate improvement proposals
-11. NEXT_SESSION_GUIDE.md updated
-12. Git workspace in clean/reported state before close
+4. Watchtower output reviewed from autostart Phase 10
+5. `mem_session_start` called before work
+6. `todowrite` created at session start
+7. `agent-verify.ps1` run at session start (SHOULD)
+8. Significant decisions saved to Engram
+9. Session state recoverable after compaction
+10. `mem_session_summary` called before close
+11. Post-session learning analysis — run `foundation learning` to detect gaps and generate improvement proposals
+12. Auto-execute proposals — run `foundation learning apply` to scaffold missing skills, patch configs, etc.
+13. Self-healing check — run `foundation heal` post-watchtower if issues detected, or `foundation watchtower heal` for combined check + auto-heal
+14. NEXT_SESSION_GUIDE.md updated
+15. Git workspace in clean/reported state before close
 
 ---
 

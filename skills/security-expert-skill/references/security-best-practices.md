@@ -6,9 +6,9 @@ This document provides security guidelines for projects created with Foundation.
 
 | Command              | Description                       |
 | -------------------- | --------------------------------- |
-| `wf security scan`   | Quick scan for critical issues    |
-| `wf security audit`  | Full audit with detailed report   |
-| `wf security report` | Generate security review document |
+| `foundation security scan`   | Quick scan for critical issues    |
+| `foundation security audit`  | Full audit with detailed report   |
+| `foundation security report` | Generate security review document |
 | `git commit`         | Runs automatic security scan      |
 
 ## Pre-commit Security

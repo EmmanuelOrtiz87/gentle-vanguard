@@ -30,9 +30,9 @@ $repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DI
     $root
 }
 
-$proposalsDir = Join-Path $repoRoot '.local' 'improvement-proposals'
+$proposalsDir = Join-Path (Join-Path $repoRoot '.local') 'improvement-proposals'
 $logFile = Join-Path $proposalsDir 'learning-log.jsonl'
-$summaryFile = Join-Path $repoRoot 'scripts' '.session' 'startup-summary.json'
+$summaryFile = Join-Path (Join-Path (Join-Path $repoRoot 'scripts') '.session') 'startup-summary.json'
 
 # Ensure directories
 if (-not (Test-Path $proposalsDir)) { New-Item -ItemType Directory -Path $proposalsDir -Force | Out-Null }
@@ -100,7 +100,7 @@ $ts = (Get-Date -Format 'yyyy-MM-dd')
 # Check 1: Missing skills detection
 Write-Step "Check 1: Missing skills detection"
 $knownSkills = @()
-$skillsIndex = Join-Path $repoRoot 'skills' 'SKILL_INDEX.md'
+$skillsIndex = Join-Path (Join-Path $repoRoot 'skills') 'SKILL_INDEX.md'
 if (Test-Path $skillsIndex) {
     $content = Get-Content $skillsIndex -Raw
     $matches = [regex]::Matches($content, '(?<=`)[^`]+(?=`)')
@@ -131,7 +131,7 @@ Write-Ok "Commit patterns: $totalCommits total (feat=$($patterns.featCount), fix
 
 # Check 3: Business skills gap — do we have real skills or just stubs?
 Write-Step "Check 3: Business skills audit"
-$businessSkillsRoot = Join-Path $repoRoot 'skills' 'business'
+$businessSkillsRoot = Join-Path (Join-Path $repoRoot 'skills') 'business'
 $businessListPath = Join-Path $businessSkillsRoot 'SKILL.md'
 $businessDomains = @()
 if (Test-Path $businessListPath) {
@@ -143,16 +143,23 @@ $existingBusinessDirs = @(Get-ChildItem -Directory $businessSkillsRoot -ErrorAct
 $stubDomains = $businessDomains | Where-Object { $_ -notin $existingBusinessDirs }
 if ($stubDomains.Count -gt 0) {
     Write-Hit "Business domains without skill dirs: $($stubDomains -join ', ')"
-    $proposals += @{
-        id = "prop-$ts-001"
-        date = $ts
-        category = "missing-skill"
-        severity = "medium"
-        description = "Business domains are stubs (listed but no skill directories): $($stubDomains -join ', ')"
-        evidence = "skills/business/SKILL.md lists $($businessDomains.Count) domains, only $($existingBusinessDirs.Count) have real dirs"
-        proposedAction = "Create SKILL.md for each stub domain with domain-specific instructions"
-        autoApply = $false
-        applied = $false
+    $severity = "medium"
+    $autoApply = $AutoApplyLow -and ($severity -in @('low', 'medium'))
+    $idx = 0
+    foreach ($stubDomain in $stubDomains) {
+        $idx++
+        $proposals += @{
+            id = "prop-$ts-$( '{0:D3}' -f $idx )"
+            date = $ts
+            category = "missing-skill"
+            severity = $severity
+            description = "Stub business domain needs real skill: $stubDomain"
+            domain = $stubDomain
+            evidence = "skills/business/SKILL.md lists $stubDomain but no directory exists"
+            proposedAction = "Create SKILL.md for $stubDomain domain"
+            autoApply = $autoApply
+            applied = $false
+        }
     }
 } else {
     Write-Ok "All $($businessDomains.Count) business domains have skill directories"
@@ -226,7 +233,8 @@ Write-Ok "Post-session learning complete!"
 
 if ($proposals.Count -gt 0) {
     Write-Host "`n[HINT] Review proposals in: $proposalsDir" -ForegroundColor Yellow
-    Write-Host "[HINT] Use 'wf learning' to show pending proposals" -ForegroundColor Yellow
+    Write-Host "[HINT] Run 'foundation learning apply' to auto-execute pending proposals" -ForegroundColor Yellow
+    Write-Host "[HINT] Run 'foundation learning auto' to analyze + auto-apply low-severity" -ForegroundColor Yellow
     exit 1
 }
 exit 0

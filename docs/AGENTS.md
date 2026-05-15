@@ -173,25 +173,25 @@ Key rules:
 bash ./scripts/utilities/session-autostart.sh
 
 # Check all 14 quality gates
-wf verify
+foundation verify
 
 # Show stack version + skills count
-wf version
+foundation version
 
 # Begin tracked session
-wf start-session
+foundation start-session
 
 # Full QA gate before release
-wf judgment-day
+foundation judgment-day
 
 # Open HTML metrics dashboard
-wf dashboard
+foundation dashboard
 
 # SLO benchmark of key commands
-wf benchmark
+foundation benchmark
 
 # Detect drift between foundation and projects
-wf sync-drift
+foundation sync-drift
 ```
 
 ---

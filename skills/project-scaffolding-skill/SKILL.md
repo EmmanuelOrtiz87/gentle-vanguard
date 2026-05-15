@@ -36,29 +36,29 @@ Ask (or infer) these if not provided:
 
 ### 2. Use the CLI
 
-The primary interface is `wf.ps1` (PowerShell) or `wf.sh` (Bash).
+The primary interface is `foundation.ps1` (PowerShell) or via `foundation` alias (when PATH is configured).
 
 ```powershell
 # Initialize workspace
-.\scripts\foundation\wf.ps1 init
+foundation init
 
 # Create project (interactive wizard)
-.\scripts\foundation\wf.ps1 new --interactive
+foundation new --interactive
 
 # Create project with options
-.\scripts\foundation\wf.ps1 new --name <name> --kind <type> --architecture <pattern>
+foundation new --name <name> --kind <type> --architecture <pattern>
 
 # Validate workspace
-.\scripts\foundation\wf.ps1 validate
+foundation validate
 
 # Validate specific project
-.\scripts\foundation\wf.ps1 validate --project <name>
+foundation validate --project <name>
 
 # Install tools
-.\scripts\foundation\wf.ps1 tools --install
+foundation tools --install
 
 # Clean runtime
-.\scripts\foundation\wf.ps1 clean --data --cache
+foundation clean --data --cache
 ```
 
 ### 3. Template Variables

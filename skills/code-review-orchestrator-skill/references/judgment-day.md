@@ -20,7 +20,7 @@ git commit > pre-commit > Block critical issues
 
                     Significant work ready for merge
 
-                    wf review --scope judgment-day
+                    foundation review --scope judgment-day
 
                 APPROVED                     ESCALATED
                 (merge)                (manual review)
@@ -30,12 +30,12 @@ git commit > pre-commit > Block critical issues
 
 | Command                                             | Description              |
 | --------------------------------------------------- | ------------------------ |
-| `wf review --scope judgment-day`                    | Run dual review protocol |
-| `wf review --scope judgment-day --target <path>`    | Target specific path     |
-| `wf review --scope judgment-day --max-iterations 3` | Custom iteration limit   |
+| `foundation review --scope judgment-day`                    | Run dual review protocol |
+| `foundation review --scope judgment-day --target <path>`    | Target specific path     |
+| `foundation review --scope judgment-day --max-iterations 3` | Custom iteration limit   |
 
 ### Integration
 
-AGENT-QA owns Judgment Day execution: `wf agent QA "judgment day on src/features/auth"`
+AGENT-QA owns Judgment Day execution: `foundation agent QA "judgment day on src/features/auth"`
 
 See: `skills/multi-agent-registry/SKILL.md` - AGENT-QA section

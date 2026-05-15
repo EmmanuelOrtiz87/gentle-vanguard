@@ -33,7 +33,7 @@ Foundation is an **AI orchestrator** that turns your CLI or IDE into a full engi
 
 ```mermaid
 flowchart LR
-    YOU[You] --> WF[wf.ps1]
+    YOU[You] --> WF[foundation.ps1]
     WF --> ORC[Orchestrator]
     ORC --> BA[BA - Analysis]
     ORC --> DEV[DEV - Code]
@@ -97,8 +97,8 @@ git clone https://github.com/EmmanuelOrtiz87/foundation.git
 cd foundation
 
 .\scripts\utilities\session-autostart.cmd   # Start a session
-wf verify                                    # Validate 14 quality gates
-wf version                                   # Version + skill count
+foundation verify                            # Validate 14 quality gates
+foundation version                           # Version + skill count
 ```
 
 | Method | Command | For |
@@ -127,7 +127,7 @@ flowchart TB
     end
 
     subgraph CLI["⚡ Entry"]
-        WF[foundation / wf.ps1]
+        WF[foundation.ps1]
         PP[pre-process-input.ps1]
     end
 
@@ -158,9 +158,9 @@ flowchart TB
 ### Request Flow
 
 ```
- User        wf.ps1       Router       Agent        MCP         Skill        Mem
+ User    foundation.ps1   Router       Agent        MCP         Skill        Mem
   │            │            │            │            │            │            │
-  │───────────▶│            │            │            │            │            │  ① wf [command]
+  │───────────▶│            │            │            │            │            │  ① foundation [command]
   │            │───────────▶│            │            │            │            │  ② pre-process
   │            │◀───────────┤            │            │            │            │  ③ route to agent
   │            │            │            │            │            │            │
@@ -220,7 +220,7 @@ flowchart LR
         INSTALL[Run Foundation.exe]
         WIZARD[NSIS wizard · AES-256]
         LAUNCHER[Foundation-Launcher.exe]
-        WF_CMD[wf.ps1 CLI]
+        WF_CMD[foundation CLI]
     end
 
     SRC --> BUILD

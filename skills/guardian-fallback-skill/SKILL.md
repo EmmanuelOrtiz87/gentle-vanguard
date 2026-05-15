@@ -194,8 +194,8 @@ is **enhancement**, not **requirement**.
 
 # Foundation native (always available)
 invoke-ai-review.ps1 run
-wf review --scope quick
-wf review --scope full
+foundation review --scope quick
+foundation review --scope full
 ```
 
 ## Skill Priority
