@@ -68,9 +68,9 @@ if ($targets.Count -eq 0) {
     exit 1
 }
 
-Write-Host "`n╔════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "║ REAL CODE COVERAGE — Foundation" -ForegroundColor Cyan
-Write-Host "╚════════════════════════════════════════╝" -ForegroundColor Cyan
+Write-Host "`n========================================" -ForegroundColor Cyan
+Write-Host "REAL CODE COVERAGE - Foundation" -ForegroundColor Cyan
+Write-Host "========================================" -ForegroundColor Cyan
 
 Write-Host "`n[PHASE 1] Declared Targets" -ForegroundColor Blue
 
@@ -153,9 +153,9 @@ $reportData = [ordered]@{
 $reportData | ConvertTo-Json -Depth 6 | Set-Content -Path $coverageReportFile -Encoding UTF8
 
 $summary = @"
-═══════════════════════════════════════════════════════════════
-  REAL CODE COVERAGE REPORT — $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
-═══════════════════════════════════════════════════════════════
+===============================================================
+    REAL CODE COVERAGE REPORT - $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
+===============================================================
 
 Scope:
   Method:       pester_codecoverage_declared_targets
@@ -171,7 +171,7 @@ Aggregate:
 Per Target:
 $((@($targetResults | ForEach-Object { "  - $($_.name): $($_.coveragePercent)% (threshold $($_.threshold)%) -> $($_.status)" }) -join "`n"))
 
-═══════════════════════════════════════════════════════════════
+===============================================================
 "@
 
 $summary | Set-Content -Path $coverageSummaryFile -Encoding UTF8

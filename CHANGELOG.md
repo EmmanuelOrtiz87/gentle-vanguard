@@ -9,6 +9,28 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- Real Pester coverage target for `scripts/utilities/post-session-learning.ps1`, backed by a new isolated integration suite in `tests/integration/post-session-learning.integration.tests.ps1`.
+- Searchable Engram persistence coverage for session learning workflows is now part of the declared coverage gate in `tests/coverage-config.json`.
+
+### Changed
+
+- `scripts/utilities/verify-coverage.ps1` now evaluates two declared workflow targets: `session-manager-critical-workflow` and `post-session-learning-persistence`.
+- Documentation for session lifecycle, CLI quick start, and testing configuration was synchronized with the current `session-manager.ps1` mode-based interface and Engram-backed learning flow.
+
+### Fixed
+
+- Removed stale documentation that still described `session-manager.ps1` using the obsolete `-Action` interface instead of `-Mode AutoStart|Manual|Health|End|Cleanup`.
+
+### Backlog
+
+- Future sessions: expand declared real coverage to additional operational scripts beyond the session and post-session-learning workflows.
+
+---
+
 ## [1.2.0] - 2026-05-15 - Security, Compliance & Performance Sprint#
 
 ### ✨ Added#

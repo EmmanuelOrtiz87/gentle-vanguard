@@ -1,19 +1,20 @@
-═══════════════════════════════════════════════════════════════
-  REAL CODE COVERAGE REPORT — 2026-05-15 17:21:38
-═══════════════════════════════════════════════════════════════
+===============================================================
+    REAL CODE COVERAGE REPORT - 2026-05-15 17:39:21
+===============================================================
 
 Scope:
   Method:       pester_codecoverage_declared_targets
-  Targets:      1
+  Targets:      2
 
 Aggregate:
-  Passed:       6
+  Passed:       14
   Failed:       0
-  Coverage:     85.56%
+  Coverage:     88.28%
   Minimum:      85%
   Status:       PASS
 
 Per Target:
   - session-manager-critical-workflow: 85.56% (threshold 85%) -> PASS
+  - post-session-learning-persistence: 91.04% (threshold 85%) -> PASS
 
-═══════════════════════════════════════════════════════════════
+===============================================================
