@@ -22,16 +22,24 @@ pre-push:
       run:
         pwsh -NoProfile -ExecutionPolicy Bypass -File
         "scripts/hooks/npm-audit-pre-push.ps1" -AuditLevel moderate
-    orchestrator-auto-fix:
-      run:
-        powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/orchestrate-auto-fix.ps1"
-        -Fix
-    test-suite:
-      run: powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/run-tests-simple.ps1"
     audit-check:
       run:
-        powershell -NoProfile -ExecutionPolicy Bypass -File
-        "skills/foundation-audit-skill/scripts/audit-sweep.ps1" -Scope quick
+        powershell -NoProfile -ExecutionPolicy Bypass -Command "
+          Write-Host \"[$(Get-Date -Format HH:mm:ss)] audit-check iniciado\" -ForegroundColor Cyan;
+          & \"skills/foundation-audit-skill/scripts/audit-sweep.ps1\" -Scope quick;
+          Write-Host \"[$(Get-Date -Format HH:mm:ss)] audit-check completado\" -ForegroundColor Cyan"
+    orchestrator-auto-fix:
+      run:
+        powershell -NoProfile -ExecutionPolicy Bypass -Command "
+          Write-Host \"[$(Get-Date -Format HH:mm:ss)] orchestrator-auto-fix iniciado\" -ForegroundColor Cyan;
+          & \"scripts/hooks/orchestrate-auto-fix.ps1\" -Fix;
+          Write-Host \"[$(Get-Date -Format HH:mm:ss)] orchestrator-auto-fix completado\" -ForegroundColor Cyan"
+    test-suite:
+      run:
+        powershell -NoProfile -ExecutionPolicy Bypass -Command "
+          Write-Host \"[$(Get-Date -Format HH:mm:ss)] test-suite iniciado (puede tomar ~2-3 min)\" -ForegroundColor Yellow;
+          & \"scripts/run-tests-simple.ps1\";
+          Write-Host \"[$(Get-Date -Format HH:mm:ss)] test-suite completado\" -ForegroundColor Cyan"
 
 commit-msg:
   commands:
