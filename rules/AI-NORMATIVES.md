@@ -341,6 +341,99 @@ workflows.
 
 ---
 
+## 15. Secrets Governance & Management (MANDATORY)
+
+All AI agents and Foundation systems MUST comply with enterprise-grade secrets management policies.
+
+**Scope**: API keys, database credentials, cryptographic keys, OAuth tokens, MFA seeds, encryption keys, signing certificates, service account credentials.
+
+**Policy Document**: `config/secrets-governance.json`
+
+### Core Requirements (NO EXCEPTIONS)
+
+1. **Storage**: NEVER commit secrets to Git. Use authorized vaults:
+   - Local Vault: `$HOME/.foundation/vault/` (AES-256 encrypted)
+   - Environment Variables: Session-only, cleared on process exit
+   - Cloud KMS: Azure Key Vault, AWS Secrets Manager, HashiCorp Vault (HSM-backed)
+   - CI/CD Platform: GitHub Secrets, GitLab CI/CD Variables, Jenkins Credentials
+
+2. **Access Control** (Zero-Trust):
+   - Authentication: MFA required for all secret access
+   - Authorization: RBAC per role (admin, operator, application, auditor)
+   - Just-in-Time: Secrets retrieved on-demand, never pre-distributed
+   - Session timeout: 60 minutes idle → automatic revocation
+
+3. **Encryption**:
+   - At rest: AES-256-GCM minimum
+   - In transit: TLS 1.3 minimum
+   - Keys: Managed by HSM (recommended for CRITICAL secrets)
+
+4. **Rotation** (Automated):
+   - API Keys: Every 90 days
+   - Database credentials: Every 120 days
+   - OAuth tokens: Every 30 days
+   - TLS certificates: Every 89 days before expiration
+   - Signing keys: Every 1 year
+   - Schedule: `cron: 0 2 * * 0` (Sunday 2 AM UTC) — configurable per secret type
+   - Zero-downtime: New secret tested in staging BEFORE production deployment
+   - Rollback: If rotation fails, automatic revert to previous secret + escalation
+
+5. **Audit Logging** (Immutable, 2-Year Retention):
+   - Every access logged: WHO, WHAT secret, WHEN, FROM WHERE, RESULT
+   - Alert on: Unauthorized access attempts, mass access (>10 secrets in 5 min), access outside business hours
+   - Report: Weekly access report, monthly rotation compliance, on-demand violations
+   - Integration: Splunk, ELK, Datadog, or equivalent SIEM
+
+6. **Breach Response** (Immediate):
+   - Revoke compromised secret within 5 minutes
+   - Notify security team + service owners within 1 hour
+   - Investigate root cause within 24 hours
+   - Rotate all related secrets within 24 hours
+   - Command: `foundation secret breach-response --compromised-secret <id>`
+
+### Enforcement Gates (BLOCKING)
+
+- **Pre-commit hook**: Scan for hardcoded secrets (secretlint) → block commit
+- **Pre-deployment**: Scan entire codebase for secrets (truffleHog + secretlint) → block deployment
+- **Compliance validator**: `foundation secret validate-compliance` → exit code 0 (compliant) or 1 (violations)
+
+### Agent Checklist (MANDATORY BEFORE DEPLOYMENT)
+
+- [ ] Never hardcode secrets in code or configs
+- [ ] Retrieve secrets from vault at runtime only
+- [ ] Never log secrets (redact in logs)
+- [ ] Implement secret rotation hooks
+- [ ] Enable audit logging for all accesses
+- [ ] Document data classification (PUBLIC, INTERNAL, CONFIDENTIAL, RESTRICTED)
+- [ ] MFA required for sensitive secrets
+- [ ] Secure key distribution (pull-based, never push)
+- [ ] Implement breach response procedures
+- [ ] Zero-trust access model (verify every request)
+
+### Commands
+
+```powershell
+# Create secret (stored encrypted in vault)
+foundation secret create --name API_TOKEN --type api-keys --value <token>
+
+# Retrieve secret (logged to audit trail)
+foundation secret get --name API_TOKEN
+
+# Rotate secret (automated, zero-downtime)
+foundation secret rotate --name API_TOKEN
+
+# Audit compliance
+foundation secret validate-compliance
+foundation secret audit-report --type [access|rotation|violations]
+
+# Breach response (immediate revocation)
+foundation secret breach-response --compromised-secret API_TOKEN --reason "leaked in logs"
+```
+
+**Linked Policies**: `rules/NORMATIVAS-GDPR.md` (user data), `rules/NORMATIVAS-SOC2.md` (enterprise security compliance)
+
+---
+
 ## References
 
 | Resource | Path |
@@ -357,6 +450,9 @@ workflows.
 | Error handling | `rules/NORMATIVAS-ERROR-HANDLING.md` |
 | Performance & Efficiency | `rules/NORMATIVAS-PERFORMANCE.md` |
 | Session Lifecycle | `rules/NORMATIVAS-SESSION.md` |
+| **GDPR Compliance** | `rules/NORMATIVAS-GDPR.md` |
+| **SOC2 Compliance** | `rules/NORMATIVAS-SOC2.md` |
+| **Secrets Governance** | `config/secrets-governance.json` |
 | **Accessibility (WCAG 2.2)** | `docs/NORMATIVAS-ACCESIBILIDAD.md` |
 | **I18n/L10n Standards** | `docs/NORMATIVAS-I18N-L10N.md` |
 | **ISO/IEC 25010 Quality** | `docs/NORMATIVAS-ISO25010.md` |
