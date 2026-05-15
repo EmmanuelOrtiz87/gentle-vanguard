@@ -63,6 +63,12 @@ $config = Get-Content .\config\testing.config.json | ConvertFrom-Json
 Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
 ```
 
+**Nota**:
+
+- `config/testing.config.json` define la politica general de testing.
+- `tests/coverage-config.json` define los targets declarados de cobertura real usados por `scripts/utilities/verify-coverage.ps1`.
+- Los workflows de sesion actualmente declarados son `session-manager.ps1` y `post-session-learning.ps1`.
+
 ---
 
 ### engram-memory.json

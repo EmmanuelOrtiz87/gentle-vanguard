@@ -18,6 +18,26 @@
         "pinnedVersion": "2026.1.14",
         "updateProcedure": "cd %USERPROFILE%\\mcp-workspace && npm update @modelcontextprotocol/server-filesystem && review package-lock.json changes before next use"
       }
+    },
+    "engram-kb": {
+      "command": "tools\\engram.exe",
+      "args": [
+        "mcp",
+        "--tools=agent"
+      ],
+      "description": "Engram Knowledge Base via native MCP stdio server",
+      "security": {
+        "hardened": true,
+        "mode": "local",
+        "storage": "%USERPROFILE%\\.engram",
+        "transport": "stdio",
+        "accessControl": "workspace-only"
+      },
+      "persistence": {
+        "enabled": true,
+        "syncCommand": "tools\\engram.exe sync --project foundation",
+        "exportFormat": "json"
+      }
     }
   },
   "version": "1.1.0",

@@ -1,5 +1,5 @@
 # get-session-id.ps1
-# Obtiene el Session ID mas reciente y lo devuelve
+# Obtiene el Session ID activo/reciente y lo devuelve
 
 $ErrorActionPreference = 'Continue'
 
@@ -10,15 +10,31 @@ $repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DI
     $root
 }
 
-$sessionDir = Join-Path $repoRoot '.session'
-if (-not (Test-Path $sessionDir)) {
-    exit 0
+$logsActiveFile = Join-Path $repoRoot 'logs\.session-active'
+if (Test-Path $logsActiveFile) {
+    try {
+        $activeData = Get-Content -Path $logsActiveFile -Raw | ConvertFrom-Json
+        if ($activeData.SessionId) {
+            Write-Output $activeData.SessionId
+            exit 0
+        }
+    }
+    catch {
+    }
 }
 
-$sessionFile = Get-ChildItem (Join-Path $sessionDir 'session-*.json') -File -ErrorAction SilentlyContinue |
-               Sort-Object LastWriteTime -Descending |
-               Select-Object -First 1
+$sessionDirs = @(
+    (Join-Path $repoRoot 'session'),
+    (Join-Path $repoRoot '.session')
+) | Where-Object { Test-Path $_ }
 
-if ($sessionFile) {
-    Write-Output $sessionFile.BaseName
+foreach ($sessionDir in $sessionDirs) {
+    $sessionFile = Get-ChildItem (Join-Path $sessionDir 'session-*.json') -File -ErrorAction SilentlyContinue |
+                   Sort-Object LastWriteTime -Descending |
+                   Select-Object -First 1
+
+    if ($sessionFile) {
+        Write-Output $sessionFile.BaseName
+        exit 0
+    }
 }

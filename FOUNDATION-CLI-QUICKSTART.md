@@ -101,7 +101,8 @@ foundation benchmark full baseline-update
 ```powershell
 foundation start-session
 ```
-- Initializes session context, loads engram memory, checks health
+- Initializes session context, loads Engram memory, checks health
+- The underlying session manager persists session start/close records to Engram
 
 #### Health Check
 ```powershell
@@ -113,7 +114,21 @@ foundation health
 ```powershell
 foundation verify
 ```
-- Runs all tests, linting, commit hooks
+- Runs the configured quality gates, including tests and hook validation
+
+#### Run Real Coverage Gate
+```powershell
+pwsh -File .\scripts\utilities\verify-coverage.ps1
+```
+- Executes declared Pester `CodeCoverage` targets from `tests/coverage-config.json`
+- Current declared workflows cover `session-manager.ps1`, `post-session-learning.ps1`, `session-autostart.ps1`, `detect-tool.ps1`, and `pre-close-validator.ps1`
+
+#### Run Post-Session Learning Explicitly
+```powershell
+pwsh -File .\scripts\utilities\post-session-learning.ps1 -SessionId "session-YYYY-MM-DD-01"
+```
+- Persists learning summaries or improvement proposals to Engram
+- Uses `.local/improvement-proposals/` as the local review backlog
 
 ---
 

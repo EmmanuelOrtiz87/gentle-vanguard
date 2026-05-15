@@ -4,9 +4,11 @@
 param(
     [ValidateSet('AutoStart', 'Manual', 'Health', 'End', 'Cleanup')]
     [string]$Mode = 'Manual',
-    [string]$ProjectName = 'foundation',
+    [string]$ProjectName = 'workspace_local',
     [string]$SessionDir = '.\.session',
-    [int]$OrphanMaxAgeHours = 24
+    [int]$OrphanMaxAgeHours = 24,
+    [switch]$SkipPreCloseValidation,
+    [switch]$NoExit
 )
 
 $ErrorActionPreference = 'Continue'
@@ -36,6 +38,123 @@ function Write-Info {
 function Write-ErrorMsg {
     param([string]$Message)
     Write-Host "[ERROR] $Message" -ForegroundColor Red
+}
+
+function Get-ValidSessionEntries {
+    $sessionFiles = Get-ChildItem -Path $fullSessionDir -Filter "session-*.json" -ErrorAction SilentlyContinue |
+                    Sort-Object -Property LastWriteTime -Descending
+
+    $entries = @()
+    foreach ($file in $sessionFiles) {
+        try {
+            $data = Get-Content -Path $file.FullName -Raw | ConvertFrom-Json
+            $entries += [pscustomobject]@{
+                File = $file
+                Data = $data
+            }
+        }
+        catch {
+            Write-Warn "Corrupt session file ignored: $($file.Name)"
+        }
+    }
+
+    return $entries
+}
+
+function Save-SessionBriefArtifacts {
+    param(
+        [string]$SessionId,
+        [string]$StartTime,
+        [string]$Mode,
+        [string]$Project
+    )
+
+    $logsDir = Join-Path $repoRoot 'logs'
+    if (-not (Test-Path $logsDir)) {
+        New-Item -ItemType Directory -Path $logsDir -Force | Out-Null
+    }
+
+    $branch = (& git -C $repoRoot rev-parse --abbrev-ref HEAD 2>$null)
+    if ([string]::IsNullOrWhiteSpace($branch)) {
+        $branch = 'unknown'
+    }
+
+    $sessionBrief = @{ 
+        SessionId = $SessionId
+        StartTime = $StartTime
+        TaskName = ''
+        Repository = $repoRoot
+        Branch = $branch
+        Status = 'ACTIVE'
+        Mode = $Mode
+        Project = $Project
+    }
+
+    $sessionBriefPath = Join-Path $logsDir "$SessionId.json"
+    $sessionBrief | ConvertTo-Json | Set-Content -Path $sessionBriefPath -Encoding UTF8
+
+    $activeSessionPath = Join-Path $logsDir '.session-active'
+    @{ 
+        SessionId = $SessionId
+        StartTime = $StartTime
+        TaskName = ''
+        Mode = $Mode
+        Project = $Project
+    } | ConvertTo-Json | Set-Content -Path $activeSessionPath -Encoding UTF8
+}
+
+function Complete-Script {
+    param([int]$ExitCode = 0)
+
+    if ($NoExit) {
+        return $ExitCode
+    }
+
+    exit $ExitCode
+}
+
+function Get-EngramBinary {
+    $candidatePaths = @(
+        (Join-Path $repoRoot 'tools\engram.exe'),
+        (Join-Path ($env:USERPROFILE ? $env:USERPROFILE : $env:HOME) 'bin\engram.exe'),
+        (Join-Path ($env:GOPATH ? $env:GOPATH : (Join-Path $env:USERPROFILE 'go')) 'bin\engram.exe')
+    )
+
+    foreach ($candidate in $candidatePaths) {
+        if ($candidate -and (Test-Path $candidate)) {
+            return $candidate
+        }
+    }
+
+    $engramCmd = Get-Command engram -ErrorAction SilentlyContinue
+    if ($engramCmd) {
+        return $engramCmd.Source
+    }
+
+    return $null
+}
+
+function Save-ToEngram {
+    param(
+        [string]$Title,
+        [string]$Content,
+        [string]$Type = 'manual'
+    )
+
+    $engramBin = Get-EngramBinary
+    if (-not $engramBin) {
+        Write-Info "Engram not available, skipping memory save (non-critical)"
+        return $false
+    }
+
+    $saveResult = & $engramBin save $Title $Content --project $ProjectName --type $Type 2>&1
+    if ($LASTEXITCODE -eq 0) {
+        Write-Info "Engram memory saved: $Title"
+        return $true
+    }
+
+    Write-Info "Engram save skipped (non-critical): $($saveResult | Out-String)"
+    return $false
 }
 
 $repoRoot = if ($env:FOUNDATION_BASE_DIR) { $env:FOUNDATION_BASE_DIR } else {
@@ -141,9 +260,11 @@ function Initialize-Session {
     }
 
     $sessionData | ConvertTo-Json | Out-File -FilePath $sessionFile -Encoding UTF8
+    Save-SessionBriefArtifacts -SessionId $sessionId -StartTime $sessionData.startTime -Mode $Mode -Project $ProjectName
 
     Write-Status "Session initialized: $sessionId"
     Write-Info "Session file: $sessionFile"
+    $null = Save-ToEngram -Title "Session start: $sessionId" -Content "Session $sessionId started in $Mode mode for project $ProjectName." -Type 'session'
 
     $enforcerScript = Join-Path $repoRoot 'scripts\utilities\karpathy-enforcer.ps1'
     if (-not (Test-Path $enforcerScript)) {
@@ -183,27 +304,23 @@ function Initialize-Session {
 function Get-SessionHealth {
     Write-Status "Checking session health..."
 
-    $sessionFiles = Get-ChildItem -Path $fullSessionDir -Filter "session-*.json" -ErrorAction SilentlyContinue |
-                    Sort-Object -Property LastWriteTime -Descending
+    $sessionEntries = @(Get-ValidSessionEntries)
 
-    if ($sessionFiles.Count -eq 0) {
+    if ($sessionEntries.Count -eq 0) {
         Write-Warn "No active sessions found"
         return $false
     }
 
-    $latestSession = $sessionFiles | Select-Object -First 1
-    $sessionData = Get-Content -Path $latestSession.FullName -Raw | ConvertFrom-Json
+    $latestSession = $sessionEntries | Select-Object -First 1
+    $sessionData = $latestSession.Data
 
     Write-Info "Latest session: $($sessionData.sessionId)"
     Write-Info "Status: $($sessionData.status)"
     Write-Info "Started: $($sessionData.startTime)"
 
-    $activeCount = ($sessionFiles | Where-Object {
-        $d = Get-Content $_.FullName -Raw | ConvertFrom-Json
-        $d.status -eq 'active'
-    }).Count
+    $activeCount = @($sessionEntries | Where-Object { $_.Data.status -eq 'active' }).Count
 
-    Write-Info "Total sessions: $($sessionFiles.Count)"
+    Write-Info "Total sessions: $($sessionEntries.Count)"
     Write-Info "Active sessions: $activeCount"
 
     return $true
@@ -229,12 +346,15 @@ function End-Session {
     }
 
     $validator = Join-Path $repoRoot 'scripts\utilities\pre-close-validator.ps1'
-    if (Test-Path $validator) {
+    if ($SkipPreCloseValidation) {
+        Write-Info "Pre-close validation skipped"
+    } elseif (Test-Path $validator) {
         & $validator -AutoResolve
         if ($LASTEXITCODE -ne 0) {
             Write-ErrorMsg "Pre-close validation failed. Session closure blocked."
             Write-ErrorMsg "Fix issues or use -Force to override."
-            exit 1
+            Complete-Script -ExitCode 1
+            return
         }
         Write-Status "Pre-close validation passed"
     } else {
@@ -248,36 +368,22 @@ function End-Session {
         Write-Status "Session metrics saved"
     }
 
-    $sessionFiles = Get-ChildItem -Path $fullSessionDir -Filter "session-*.json" -ErrorAction SilentlyContinue |
-                    Sort-Object -Property LastWriteTime -Descending
+    $sessionEntries = @(Get-ValidSessionEntries)
 
-    if ($sessionFiles.Count -eq 0) {
+    if ($sessionEntries.Count -eq 0) {
         Write-Warn "No active sessions to end"
         return
     }
 
-    $latestSession = $sessionFiles | Select-Object -First 1
-    $sessionData = Get-Content -Path $latestSession.FullName -Raw | ConvertFrom-Json
+    $latestSession = $sessionEntries | Where-Object { $_.Data.status -eq 'active' } | Select-Object -First 1
+    if (-not $latestSession) {
+        Write-Warn "No active session to end."
+        return
+    }
 
-    $engramBin = Join-Path $repoRoot 'tools\engram.exe'
-    if (-not (Test-Path $engramBin)) {
-        $userProfile = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
-        $engramBin = Join-Path $userProfile 'bin\engram.exe'
-    }
-    if (-not (Test-Path $engramBin)) {
-        $goPath = if ($env:GOPATH) { $env:GOPATH } else { Join-Path $env:USERPROFILE 'go' }
-        $engramBin = Join-Path $goPath 'bin\engram.exe'
-    }
-    if (Test-Path $engramBin) {
-        $saveResult = & $engramBin save "Session closure: $($sessionData.sessionId)" --project workspace_local --type manual --content "Session $($sessionData.sessionId) closed. Pre-close validation passed." 2>&1
-        if ($LASTEXITCODE -eq 0) {
-            Write-Status "Session closure saved to Engram"
-        } else {
-            Write-Info "Engram save skipped (non-critical)"
-        }
-    } else {
-        Write-Info "Engram not available, skipping memory save (non-critical)"
-    }
+    $sessionData = $latestSession.Data
+
+    $null = Save-ToEngram -Title "Session closure: $($sessionData.sessionId)" -Content "Session $($sessionData.sessionId) closed. Pre-close validation passed." -Type 'session'
 
     $updatedData = @{
         sessionId = $sessionData.sessionId
@@ -288,7 +394,7 @@ function End-Session {
         status = "ended"
         endTime = Get-Date -Format "o"
     }
-    $updatedData | ConvertTo-Json | Out-File -FilePath $latestSession.FullName -Encoding UTF8
+    $updatedData | ConvertTo-Json | Out-File -FilePath $latestSession.File.FullName -Encoding UTF8
 
     Write-Status "Session ended: $($sessionData.sessionId)"
 
@@ -331,9 +437,10 @@ switch ($Mode) {
 
     default {
         Write-ErrorMsg "Unknown mode: $Mode"
-        exit 1
+        Complete-Script -ExitCode 1
+        return
     }
 }
 
 Write-Status "Session manager operation completed"
-exit 0
+Complete-Script -ExitCode 0

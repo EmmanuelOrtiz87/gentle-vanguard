@@ -4,7 +4,8 @@
 param(
     [string]$ProjectName = "workspace_local",
     [string]$WorkspaceRoot = ".\foundation",
-    [string]$ConfigFile = ""
+    [string]$ConfigFile = "",
+    [switch]$NoExit
 )
 
 $ErrorActionPreference = "Continue"
@@ -17,6 +18,16 @@ function Write-Step {
 function Write-Success { param([string]$Message) Write-Host "[OK] $Message" -ForegroundColor Green }
 function Write-Warning { param([string]$Message) Write-Host "[WARNING] $Message" -ForegroundColor Yellow }
 function Write-ErrorMsg { param([string]$Message) Write-Host "[ERROR] $Message" -ForegroundColor Red }
+
+function Complete-Script {
+    param([int]$ExitCode = 0)
+
+    if ($NoExit) {
+        return $ExitCode
+    }
+
+    exit $ExitCode
+}
 
 $repoRoot = if ($env:FOUNDATION_BASE_DIR) { $env:FOUNDATION_BASE_DIR } else {
     $root = Split-Path -Parent $PSScriptRoot
@@ -31,7 +42,8 @@ if (-not $ConfigFile) {
 
 if (-not (Test-Path $ConfigFile)) {
     Write-ErrorMsg "Config file not found: $ConfigFile"
-    exit 1
+    Complete-Script -ExitCode 1
+    return
 }
 
 $config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
@@ -107,7 +119,8 @@ if ($requiredFailed.Count -gt 0) {
     Write-Host ""
     Write-ErrorMsg "Required steps failed: $($requiredFailed -join ', ')"
     Write-Host "[ACTION] Fix the issues above and re-run session autostart." -ForegroundColor Yellow
-    exit 1
+    Complete-Script -ExitCode 1
+    return
 }
 
 if ($failed.Count -gt 0) {
@@ -115,4 +128,4 @@ if ($failed.Count -gt 0) {
 }
 
 Write-Host "[READY] Workspace ready for operations" -ForegroundColor Green
-exit 0
+Complete-Script -ExitCode 0
