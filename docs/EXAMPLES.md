@@ -1,6 +1,6 @@
 # 🏗️ Foundation AI Development Stack — Real-World Examples
 
-> **29 agents · 132 skills · CLI `wf` · auto-delegation · Engram memory · 7D pre-commit hooks**
+> **29 agents · 132 skills · CLI `foundation` · auto-delegation · Engram memory · 7D pre-commit hooks**
 
 ---
 
@@ -8,7 +8,7 @@
 
 **User input:**
 ```
-wf start-session && wf task-brief "Build a Go REST API for user management with JWT auth"
+foundation start-session && foundation task-brief "Build a Go REST API for user management with JWT auth"
 ```
 
 **What happens:**
@@ -59,7 +59,7 @@ Add JWT auth with login/signup to the React frontend
 
 **User input:**
 ```
-wf judgment-day --security
+foundation judgment-day --security
 ```
 
 **What happens:**
@@ -84,7 +84,7 @@ wf judgment-day --security
 
 **User input:**
 ```
-wf release v2.7.0
+foundation release v2.7.0
 ```
 
 **What happens:**
@@ -139,7 +139,7 @@ premortem my architecture in docs/sdd/payment-service-v2.md
 
 **User input:**
 ```
-wf dashboard --weekly
+foundation dashboard --weekly
 ```
 
 **What happens:**
@@ -256,7 +256,7 @@ Build a notification microservice — sends email/SMS, tracks delivery status
 
 **User input:**
 ```
-wf daily
+foundation daily
 ```
 
 **What happens:**
@@ -309,4 +309,4 @@ wf daily
 
 ---
 
-> **Prerequisite:** Always start with `wf start-session` (or `.\scripts\utilities\session-autostart.cmd`) to initialize Engram memory and routing context.
+> **Prerequisite:** Always start with `foundation start-session` (or `.\scripts\utilities\session-autostart.cmd`) to initialize Engram memory and routing context.

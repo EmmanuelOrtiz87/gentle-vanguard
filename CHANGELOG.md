@@ -60,6 +60,29 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [2.12.0] - 2026-05-14 - Self-Healing Stack + Watchtower + Proposal Executor#
+
+### ✨ Added#
+
+- **Self-Healing Stack**: New `scripts/utilities/self-heal.ps1` with 5 modular healers — Config (JSON validation, trailing comma fix), Hooks (git hook presence & freshness), Session (corrupt JSON recovery), Skills (SKILL.md integrity, auto-delegation reference validation), Engram (process health, auto-restart). Supports `-AutoFix`, `-Scope`, `-Quiet`.
+- **`foundation heal` command**: New CLI command to run self-healing checks. `foundation heal fix` auto-repairs issues. Scoped mode: `foundation heal config|hooks|session|skills|engram`.
+- **Watchtower Agent**: New `scripts/utilities/watchtower.ps1` with 6 proactive health checks — git state, token budget, context pressure, session age, pending proposals, error patterns. Integrated as `foundation watchtower fix|quiet|all|heal`. Added to session-autostart Phase 10.
+- **Proposal Executor**: New `scripts/utilities/proposal-executor.ps1` that reads `.local/improvement-proposals/*.json` and dispatches to category-specific executors (`missing-skill`, `config-gap`, `pattern-opportunity`). Integrated as `foundation learning apply|auto|auto-pr`.
+- **Watchtower→Heal integration**: `foundation watchtower heal` runs self-heal first (avoids stash race), then watchtower with auto-fix.
+
+### 🔧 Fixed#
+
+- **PS5.1 variable interpolation**: Fixed `$Healer:` → `${Healer}:` in self-heal.ps1 (PowerShell 5.1 compat)
+- **Watchtower stash ordering**: Heal runs before watchtower stash to prevent self-heal.ps1 from being stashed before execution
+
+### 📚 Changed#
+
+- **NORMATIVAS-SESSION.md**: Added checkpoint 13 (self-healing check post-watchtower)
+- **WF.ps1**: Added 'heal' to ValidateSet, added heal dispatch block with scope support
+- **VERSION**: Bumped to 1.1.0 (minor: new features)
+
+---
+
 ## [Unreleased]#
 
 ### 🚀 Planned#
@@ -76,8 +99,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### ✨ Added#
 
 - **Post-Session Learning System**: New `skills/post-session-learning-skill/` with 5-step learning workflow. New `scripts/utilities/post-session-learning.ps1` that analyzes session artifacts (startup-summary, git log, engram) to detect gaps — missing skills, repeated errors, token waste, config gaps. Generates structured improvement proposals saved to `.local/improvement-proposals/`.
-- **`wf learning` command**: New CLI command to run post-session learning analysis. `wf learning auto` auto-applies low-severity proposals.
-- **Session close integration**: Step 10 in NORMATIVAS-SESSION.md close checklist — `wf learning` before session end.
+- **`foundation learning` command**: New CLI command to run post-session learning analysis. `foundation learning auto` auto-applies low-severity proposals.
+- **Session close integration**: Step 10 in NORMATIVAS-SESSION.md close checklist — `foundation learning` before session end.
 - **12 business skills**: Created real SKILL.md files for accounting, compliance, CRM, ERP, insurance, logistics, payroll, procurement, real-estate, recruitment, supply-chain, tax — each with domain-specific instructions, key metrics, triggers in ES/EN, and response patterns.
 - **Business skills index**: Updated `skills/business/SKILL.md` with active skills table and trigger keywords.
 

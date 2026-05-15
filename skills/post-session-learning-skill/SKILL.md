@@ -80,7 +80,10 @@ engram_mem_save -title "Learning: {key finding}" -type "learning"
 ## Integration Points
 
 - **Session close**: Run automatically during session closure (step between summary and end)
-- **Manual trigger**: User can run `wf learning` to analyze current session anytime
+- **Manual trigger**: User can run `foundation learning` to analyze current session anytime
+- **Proposal executor**: Run `foundation learning apply` to auto-execute pending proposals (scaffold skills, patch configs)
+- **Auto mode**: `foundation learning auto` runs analysis + auto-applies low-severity proposals in one step
+- **PR mode**: `foundation learning auto-pr` auto-applies + creates a git branch and commit with changes
 - **Startup check**: At session start, check `.local/improvement-proposals/` for pending items
 
 ## Output Files

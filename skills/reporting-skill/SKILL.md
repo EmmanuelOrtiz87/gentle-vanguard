@@ -193,11 +193,11 @@ Timestamp,User_ID,Session_ID,Task_Scope,Tokens_Estimated,Judgment_Result,Review_
 
 | Command               | Description            |
 | --------------------- | ---------------------- |
-| `wf report today`     | Report for today       |
-| `wf report yesterday` | Report for yesterday   |
-| `wf report 7days`     | Report for last 7 days |
-| `wf metrics`          | Show metrics summary   |
-| `wf costs`            | Show cost analysis     |
+| `foundation report today`     | Report for today       |
+| `foundation report yesterday` | Report for yesterday   |
+| `foundation report 7days`     | Report for last 7 days |
+| `foundation metrics`          | Show metrics summary   |
+| `foundation costs`            | Show cost analysis     |
 
 ## Integration Points
 

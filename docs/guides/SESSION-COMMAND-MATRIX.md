@@ -155,7 +155,7 @@ git status  # No debe dar error
 | `ExecutionPolicy` | Política de ejecución bloqueada | Ejecuta: `Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process` |
 | `Permission denied` | Permisos insuficientes | Ejecuta PowerShell como administrador |
 | `TRIGGER_MATCH_FOUND: False` | Entrada no reconocida | Usa exactamente: `"inicia sesion"` o `"start session"` |
-| `[ERROR] Skills discovery script not found` | Script no existe | No usar `wf skills`, skill se carga automáticamente |
+| `[ERROR] Skills discovery script not found` | Script no existe | No usar `foundation skills`, skill se carga automáticamente |
 | `Cannot validate argument on parameter` | Parámetro inválido | Verifica que uses solo parámetros válidos |
 
 ---

@@ -28,7 +28,7 @@ git clone https://github.com/EmmanuelOrtiz87/foundation.git
 cd foundation
 
 # 2️⃣ Bootstrap (installs hooks, verifies deps, configures your environment)
-.\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1 start-session
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\foundation.ps1 start-session
 
 # 3️⃣ Start working — tell the AI what to build
 ```
@@ -43,25 +43,25 @@ cd foundation
 
 | What | How | Guardrails |
 |------|-----|------------|
-| **Session tracking** | Auto-starts on `wf.ps1 start-session` | Logs every dispatch, token, and event |
+| **Session tracking** | Auto-starts on `foundation.ps1 start-session` | Logs every dispatch, token, and event |
 | **Trigger routing** | `pre-process-input.ps1` parses your input → dispatches the right agent + skill | Falls back to BA if confidence < 60% |
 | **Pre-commit validation** | Lefthook runs 7D checks before every `git commit` | Blocks on secrets, lint errors, SDD violations |
 | **Token budget guard** | 30K tokens/day cap with 70% soft / 90% hard thresholds | Agents cannot exceed budget |
 | **Engram memory** | Saves observations across sessions automatically | Retrievable via `mem_search` |
 | **Telemetry + event bus** | 10 standard events with governance gate + distributed tracing | Audit trail for every action |
-| **Sync-drift detection** | `wf sync-drift` detects workspace inconsistencies | Reports before release |
+| **Sync-drift detection** | `foundation sync-drift` detects workspace inconsistencies | Reports before release |
 | **CI/CD pipeline** | 15 GitHub Actions workflows run on every push | Quality gate, PSScriptAnalyzer, OWASP, SDD gate |
 
 ### 🔧 Manual (you decide when)
 
 | What | Command | When to Use |
 |------|---------|-------------|
-| Start a session | `wf start-session` | Beginning of any work block |
-| Request an agent | `wf dispatch DEV,QA "add tests for auth module"` | Need specialized AI assistance |
-| Full quality gate | `wf judgment-day` | Before any release or major merge |
-| Generate dashboard | `wf dashboard` | Weekly review, exec reporting |
-| Adversarial review | `wf review --all` | Before shipping critical changes |
-| SLO benchmark | `wf benchmark` | Performance regression check |
+| Start a session | `foundation start-session` | Beginning of any work block |
+| Request an agent | `foundation dispatch DEV,QA "add tests for auth module"` | Need specialized AI assistance |
+| Full quality gate | `foundation judgment-day` | Before any release or major merge |
+| Generate dashboard | `foundation dashboard` | Weekly review, exec reporting |
+| Adversarial review | `foundation review --all` | Before shipping critical changes |
+| SLO benchmark | `foundation benchmark` | Performance regression check |
 | Version info | `foundation version` | Check stack health and skills count |
 
 ---
@@ -195,17 +195,17 @@ flowchart TD
 
 | Scenario | What Happens | Time Saved |
 |----------|-------------|------------|
-| **Build a REST API** | `wf dispatch SAD,DEV "Go REST API with auth"` → SAD designs contract + DEV implements with `golang-api-skill` | ~4 hrs |
-| **Add auth to a React app** | `wf dispatch DEV "add JWT auth to React"` → DEV loads `react-19-skill` + `security-skill`, implements login flow | ~3 hrs |
-| **Release a new version** | `wf judgment-day` → OPS + GOV audit all gates → RELEASE bumps version → CI publishes | ~1 hr |
-| **Run a premortem** | `wf dispatch PREMORTEM "stress-test our launch plan"` → generates failure scenarios + mitigations | ~30 min |
-| **Weekly audit** | `wf audit` → full governance sweep with drift detection + context pack | ~5 min |
+| **Build a REST API** | `foundation dispatch SAD,DEV "Go REST API with auth"` → SAD designs contract + DEV implements with `golang-api-skill` | ~4 hrs |
+| **Add auth to a React app** | `foundation dispatch DEV "add JWT auth to React"` → DEV loads `react-19-skill` + `security-skill`, implements login flow | ~3 hrs |
+| **Release a new version** | `foundation judgment-day` → OPS + GOV audit all gates → RELEASE bumps version → CI publishes | ~1 hr |
+| **Run a premortem** | `foundation dispatch PREMORTEM "stress-test our launch plan"` → generates failure scenarios + mitigations | ~30 min |
+| **Weekly audit** | `foundation audit` → full governance sweep with drift detection + context pack | ~5 min |
 
 ---
 
 ## 📊 Dashboard Preview
 
-Run `wf dashboard` to generate `reports/dashboard.html` — a full HTML metrics dashboard:
+Run `foundation dashboard` to generate `reports/dashboard.html` — a full HTML metrics dashboard:
 
 | Section | What You See |
 |---------|-------------|
@@ -341,7 +341,7 @@ workflow-lint.yml            ⚙️ Workflow integrity
 | **Governance** | `foundation-audit-skill`, `foundation-manager-skill`, `judgment-day`, `script-governance-skill` |
 | **Business** | `marketing-content-writer`, `sales-account-executive`, `finance-financial-analyst`, `hr-talent-acquisition`, `legal-compliance-officer`, `business-telemetry-skill` |
 
-> Skills load **zero memory** until triggered by keyword. Run `wf skills` to see the full registry.
+> Skills load **zero memory** until triggered by keyword. Run `foundation skills` to see the full registry.
 
 ---
 
@@ -383,8 +383,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for full guidelines.
 ```bash
 git clone https://github.com/EmmanuelOrtiz87/foundation.git
 cd foundation
-wf start-session    # Your first session
-wf health           # Verify everything works
+foundation start-session    # Your first session
+foundation health           # Verify everything works
 ```
 
 ---

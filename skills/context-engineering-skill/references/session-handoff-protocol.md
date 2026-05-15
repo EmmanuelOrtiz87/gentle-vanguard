@@ -18,13 +18,13 @@ flowchart LR
 
 ```powershell
 # Save session state
-.\wf.ps1 end-session
+foundation end-session
 
 # Generate context pack
-.\wf.ps1 context-pack "objective"
+foundation context-pack "objective"
 
 # Generate compact prompt
-.\wf.ps1 compact-start "objective"
+foundation compact-start "objective"
 ```
 
 ### 2. Start New Session
@@ -32,14 +32,14 @@ flowchart LR
 ```powershell
 # From new thread: paste compact prompt
 # Then run:
-.\wf.ps1 start-session
+foundation start-session
 ```
 
 ### 3. Intra-Session Context Pack
 
 ```powershell
 # Mid-session snapshot
-.\wf.ps1 context-pack "current objective"
+foundation context-pack "current objective"
 ```
 
 ## Marker Protocol

@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'foundation-sync', 'release-homologation', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'webhook', 'predictor', 'sla-dashboard', 'escalation', 'live-server', 'learning', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'foundation-sync', 'release-homologation', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'webhook', 'predictor', 'sla-dashboard', 'escalation', 'live-server', 'learning', 'watchtower', 'heal', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -2855,17 +2855,91 @@ switch ($Command) {
         # Post-session learning analysis — detect gaps, propose improvements
         Write-Step "Post-Session Learning Analysis"
         $learningScript = Join-Path $repoRoot 'scripts' 'utilities' 'post-session-learning.ps1'
+        $executorScript = Join-Path $repoRoot 'scripts' 'utilities' 'proposal-executor.ps1'
         if (-not (Test-Path $learningScript)) {
             Write-Error "post-session-learning.ps1 not found"
             exit 1
         }
         if ($Scope -eq 'auto') {
             & $learningScript -AutoApplyLow
+            if (Test-Path $executorScript) {
+                & $executorScript -AutoApply -CreatePR:$($Scope -eq 'auto-pr')
+            }
+        } elseif ($Scope -eq 'apply') {
+            if (Test-Path $executorScript) {
+                & $executorScript -AutoApply -CreatePR:$false
+            } else {
+                Write-Error "proposal-executor.ps1 not found"
+                exit 1
+            }
+        } elseif ($Scope -eq 'auto-pr') {
+            & $learningScript -AutoApplyLow
+            if (Test-Path $executorScript) {
+                & $executorScript -AutoApply -CreatePR:$true
+            }
         } else {
             & $learningScript
         }
         Write-Host "`n[HINT] Review proposals in: .local/improvement-proposals/" -ForegroundColor Yellow
-        Write-Host "[HINT] Run 'wf learning auto' to auto-apply low-severity proposals" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'foundation learning apply' to execute pending proposals" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'foundation learning auto' to analyze + auto-apply low-severity" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'foundation learning auto-pr' to auto-apply + create PR" -ForegroundColor Yellow
+        exit $LASTEXITCODE
+    }
+
+    'watchtower' {
+        # Proactive session monitoring — git, tokens, context, proposals, errors
+        Write-Step "Watchtower Agent"
+        $watchtowerScript = Join-Path $repoRoot 'scripts' 'utilities' 'watchtower.ps1'
+        if (-not (Test-Path $watchtowerScript)) {
+            Write-Error "watchtower.ps1 not found"
+            exit 1
+        }
+        if ($Scope -eq 'fix') {
+            & $watchtowerScript -AutoFix
+        } elseif ($Scope -eq 'quiet') {
+            & $watchtowerScript -Quiet
+        } elseif ($Scope -eq 'all') {
+            & $watchtowerScript -AutoFix
+        } elseif ($Scope -eq 'heal') {
+            $healScript = Join-Path $repoRoot 'scripts' 'utilities' 'self-heal.ps1'
+            if (Test-Path $healScript) {
+                & $healScript -AutoFix
+            } else {
+                Write-Warning "self-heal.ps1 not found — skipping heal step"
+            }
+            & $watchtowerScript -AutoFix
+        } else {
+            & $watchtowerScript
+        }
+        Write-Host "`n[HINT] Run 'foundation watchtower fix' to auto-remediate low-severity issues" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'foundation watchtower quiet' for silent mode" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'foundation watchtower all' for full check + auto-fix" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'foundation watchtower heal' for full check + auto-fix + self-heal" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'foundation watchtower heal' to run watchtower + auto-heal" -ForegroundColor Yellow
+        exit $LASTEXITCODE
+    }
+
+    'heal' {
+        # Self-Healing Stack — detect and repair common infrastructure issues
+        Write-Step "Self-Healing Stack"
+        $healScript = Join-Path $repoRoot 'scripts' 'utilities' 'self-heal.ps1'
+        if (-not (Test-Path $healScript)) {
+            Write-Error "self-heal.ps1 not found"
+            exit 1
+        }
+        $autoFix = ($Scope -eq 'fix' -or $Force)
+        if ($Scope -and $Scope -ne 'fix' -and $Scope -ne 'all') {
+            & $healScript -Scope $Scope -AutoFix:$autoFix
+        } else {
+            & $healScript -AutoFix:$autoFix
+        }
+        Write-Host "`n[HINT] Run 'foundation heal fix' to auto-repair all issues" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'foundation heal config' to check only config files" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'foundation heal hooks' to check only git hooks" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'foundation heal session' to check only session files" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'foundation heal skills' to check only skill integrity" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'foundation heal engram' to check only engram health" -ForegroundColor Yellow
         exit $LASTEXITCODE
     }
 

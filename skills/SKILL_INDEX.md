@@ -757,7 +757,7 @@ records
 ### foundation-audit-skill
 
 **Trigger**: `audit foundation`, `validate`, `sweep`, `check links`, `find duplicates`,
-`homologate`, `validation sweep`, `wf audit`, `judgment`, `pre-release audit`
+`homologate`, `validation sweep`, `foundation audit`, `judgment`, `pre-release audit`
 
 **Use when**: Running comprehensive validation of Foundation, detecting duplicates, broken links,
 skill inconsistencies, and documentation issues. Zero agent tokens when using batch mode.

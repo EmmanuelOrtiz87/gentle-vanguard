@@ -169,19 +169,19 @@ Archive completed SDD:
 
 ```powershell
 # Initialize SDD for a feature
-wf sdd init "user-authentication"
+foundation sdd init "user-authentication"
 
 # Explore requirements
-wf sdd explore "user-authentication"
+foundation sdd explore "user-authentication"
 
 # Create specification
-wf sdd spec "user-authentication"
+foundation sdd spec "user-authentication"
 
 # Implement tasks
-wf sdd apply "user-authentication" --task "1.1"
+foundation sdd apply "user-authentication" --task "1.1"
 
 # Verify implementation
-wf sdd verify "user-authentication"
+foundation sdd verify "user-authentication"
 ```
 
 ## Files
@@ -262,14 +262,14 @@ Old skills are deprecated but continue to work as aliases.
 ## Commands
 
 ```powershell
-wf sdd init <name>           # Initialize
-wf sdd explore <name>        # Explore
-wf sdd propose <name>        # Propose
-wf sdd spec <name>          # Write spec
-wf sdd design <name>         # Design
-wf sdd tasks <name>          # Create tasks
-wf sdd apply <name>          # Implement
-wf sdd verify <name>         # Verify
-wf sdd archive <name>         # Archive
-wf sdd status <name>         # Show progress
+foundation sdd init <name>           # Initialize
+foundation sdd explore <name>        # Explore
+foundation sdd propose <name>        # Propose
+foundation sdd spec <name>          # Write spec
+foundation sdd design <name>         # Design
+foundation sdd tasks <name>          # Create tasks
+foundation sdd apply <name>          # Implement
+foundation sdd verify <name>         # Verify
+foundation sdd archive <name>         # Archive
+foundation sdd status <name>         # Show progress
 ```

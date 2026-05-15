@@ -36,14 +36,14 @@ artifacts.
 
 ## Execution Steps
 
-1. **Session Start (resuming work)**: `wf compact-start -Objective "..."` (or
+1. **Session Start (resuming work)**: `foundation compact-start -Objective "..."` (or
    `.\scripts\utilities\compact-start.ps1 -Objective "..."`) → paste output into new session. Output
    includes git diff, last N commits, branch+status, objective.
-2. **Mid-Session Context Pack**: `wf context-pack -Objective "..."` (or
+2. **Mid-Session Context Pack**: `foundation context-pack -Objective "..."` (or
    `.\scripts\utilities\context-pack.ps1 -Objective "..." -MaxChangedFiles 12 -MaxCommits 8`)
 3. **Token Metrics**: `.\scripts\utilities\context-metrics-report.ps1` (stored in
    `docs/sessions/metrics/context-usage.csv`)
-4. **Session Handoff**: Run `wf end-session` → `context-pack` → save objective + next steps → new
+4. **Session Handoff**: Run `foundation end-session` → `context-pack` → save objective + next steps → new
    session starts with `compact-start -Objective "..."`
 
 ## Output Contract

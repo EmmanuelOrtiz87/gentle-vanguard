@@ -17,15 +17,15 @@ Every substantial code review MUST cover all 7 dimensions.
 ### Review Commands
 
 ```powershell
-wf review                # Full 7-dimension review
-wf review --scope quick  # Security + Quality only (~30s)
-wf review --scope full   # All 7 dimensions
+foundation review                # Full 7-dimension review
+foundation review --scope quick  # Security + Quality only (~30s)
+foundation review --scope full   # All 7 dimensions
 ```
 
 ### Mandatory Coverage Rules
 
-1. **PRE-COMMIT**: Run `wf review --scope quick` (Security + Quality)
-2. **PRE-MERGE**: Run `wf review --scope full` (all 7 dimensions)
+1. **PRE-COMMIT**: Run `foundation review --scope quick` (Security + Quality)
+2. **PRE-MERGE**: Run `foundation review --scope full` (all 7 dimensions)
 3. **JUDGMENT DAY**: Invoke for adversarial dual-review before major releases
 
 ### Severity Matrix
