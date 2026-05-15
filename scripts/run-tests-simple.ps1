@@ -28,31 +28,55 @@ if ($IncludeE2E) {
     $categories += @{ Name = "E2E Tests"; Path = "e2e\*.e2e.tests.ps1" }
 }
 
+$globalStart = Get-Date
+
+$allFiles = @()
+foreach ($cat in $categories) {
+    $files = Get-ChildItem "$testDir\$($cat.Path)" -ErrorAction SilentlyContinue
+    foreach ($f in $files) { $allFiles += @{ File = $f; Category = $cat.Name } }
+}
+$totalFiles = $allFiles.Count
+$fileIndex = 0
+
+Write-Host "┌────────────────────────────────────────────────┐" -ForegroundColor Cyan
+Write-Host "│  TEST SUITE: $($totalFiles.ToString().PadLeft(2)) archivos a ejecutar                   │" -ForegroundColor Cyan
+Write-Host "└────────────────────────────────────────────────┘" -ForegroundColor Cyan
+
 foreach ($cat in $categories) {
     $files = Get-ChildItem "$testDir\$($cat.Path)" -ErrorAction SilentlyContinue
     if ($files.Count -eq 0) { continue }
 
-    Write-Host "=== $($cat.Name) ($($files.Count) files) ===" -ForegroundColor Cyan
+    Write-Host "`n=== $($cat.Name) ($($files.Count) archivos) ===" -ForegroundColor Cyan
 
     foreach ($file in $files) {
+        $fileIndex++
+        $elapsed = [math]::Round(((Get-Date) - $globalStart).TotalSeconds)
+        $elapsedStr = "{0:mm\:ss}" -f ([datetime]::new(0).AddSeconds($elapsed))
+
+        $pct = [math]::Round(($fileIndex / $totalFiles) * 100)
+        Write-Host "  [$elapsedStr] [$fileIndex/$totalFiles] ($pct%) $($file.Name) ... " -NoNewline
+
+        $t0 = Get-Date
         $output = pwsh -NoProfile -Command "Invoke-Pester -Path '$($file.FullName)' -PassThru" 2>&1
+        $duration = [math]::Round(((Get-Date) - $t0).TotalSeconds, 1)
         $total++
 
         if ($output -match "Passed:\s*(\d+)" -and $output -notmatch "Failed:\s*[1-9]") {
             $passed++
-            Write-Host "  PASSED: $($file.Name)" -ForegroundColor Green
+            Write-Host "PASSED (${duration}s)" -ForegroundColor Green
         } else {
             $failed++
-            Write-Host "  FAILED: $($file.Name)" -ForegroundColor Red
-            # Show relevant error lines
+            Write-Host "FAILED (${duration}s)" -ForegroundColor Red
             $output | Select-String "FAIL|Error|RuntimeException" | Select-Object -First 3 |
-                ForEach-Object { Write-Host "    $_" -ForegroundColor DarkRed }
+                ForEach-Object { Write-Host "      $_" -ForegroundColor DarkRed }
         }
     }
 }
 
-Write-Host "`n=== Result ($total total) ===" -ForegroundColor Cyan
-Write-Host "Passed: $passed | Failed: $failed" -ForegroundColor $(if ($failed -eq 0) { "Green" } else { "Red" })
+$totalElapsed = [math]::Round(((Get-Date) - $globalStart).TotalSeconds, 1)
+Write-Host "`n┌────────────────────────────────────────────────┐" -ForegroundColor Cyan
+Write-Host "│  RESULT: $passed passed, $failed failed | ${totalElapsed}s                │" -ForegroundColor $(if ($failed -eq 0) { "Green" } else { "Red" })
+Write-Host "└────────────────────────────────────────────────┘" -ForegroundColor Cyan
 
 # Code coverage report (optional, requires Pester CodeCoverage support)
 if ($WithCoverage) {
