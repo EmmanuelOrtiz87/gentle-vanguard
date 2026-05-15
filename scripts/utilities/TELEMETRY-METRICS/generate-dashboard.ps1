@@ -221,6 +221,54 @@ $stackBenchmarkPath = Join-Path $repoRoot 'reports\stack-benchmark.json'
 $stackBenchmarkHistoryPath = Join-Path $repoRoot 'reports\stack-benchmark-history.json'
 $stackBenchmarkBaselinePath = Join-Path $repoRoot 'reports\stack-benchmark-baseline.json'
 
+# Session metrics from session-metrics-tracker (real execution data)
+$activeSessionMetrics = Read-JsonFile (Join-Path $repoRoot '.session\metrics\current-session.json')
+$sessionDir = Join-Path $repoRoot 'session'
+$allSessions = @()
+$sessionExecRows = @()
+$totalDurationSec = 0
+$totalSessionTokens = 0
+$totalToolCalls = 0
+$totalFilesRead = 0
+$totalFilesEdited = 0
+if (Test-Path $sessionDir) {
+    $sessionFiles = @(Get-ChildItem -Path $sessionDir -Filter 'session-*.json' | Sort-Object LastWriteTime -Descending)
+    foreach ($sf in $sessionFiles) {
+        $sData = Read-JsonFile $sf.FullName
+        if (-not $sData) { continue }
+        $allSessions += $sData
+        $sdur = 0
+        $stok = 0
+        $stool = 0
+        $sfr = 0
+        $sfe = 0
+        if ($sData.durationSeconds) { $sdur = [int]$sData.durationSeconds; $totalDurationSec += $sdur }
+        if ($sData.metrics) {
+            if ($sData.metrics.totalTokens) { $stok = [int]$sData.metrics.totalTokens; $totalSessionTokens += $stok }
+            if ($sData.metrics.toolCalls) { $stool = [int]$sData.metrics.toolCalls; $totalToolCalls += $stool }
+            if ($sData.metrics.filesRead) { $sfr = [int]$sData.metrics.filesRead; $totalFilesRead += $sfr }
+            if ($sData.metrics.filesEdited) { $sfe = [int]$sData.metrics.filesEdited; $totalFilesEdited += $sfe }
+        }
+        $sessionExecRows += [pscustomobject]@{
+            SessionId = $sData.sessionId
+            StartTime = $sData.startTime
+            Duration_S = $sdur
+            Status = if ($sData.status) { $sData.status } else { 'unknown' }
+            Tokens = $stok
+            ToolCalls = $stool
+            FilesRead = $sfr
+            FilesEdited = $sfe
+        }
+    }
+}
+$sessionTotal = $sessionExecRows.Count
+$activeSessions = @($sessionExecRows | Where-Object { $_.Status -eq 'active' })
+$completedSessions = @($sessionExecRows | Where-Object { $_.Status -eq 'completed' })
+$sessionExecStatus = if ($activeSessionMetrics) { $activeSessionMetrics.status } elseif ($activeSessions.Count -gt 0) { 'active' } else { 'none' }
+$sessionLastExec = if ($sessionExecRows.Count -gt 0) { $sessionExecRows[0].StartTime } else { 'N/A' }
+$sessionAvgDuration = if ($sessionTotal -gt 0) { [math]::Round($totalDurationSec / $sessionTotal, 0) } else { 0 }
+$sessionExecTable = Build-TableHtml -Rows $sessionExecRows -Columns @('SessionId','StartTime','Duration_S','Status','Tokens','ToolCalls','FilesRead','FilesEdited') -MaxRows 20
+
 $telemetryRows = Import-CsvSafe $telemetryMasterPath
 $tokenGuardRows = Import-CsvSafe $tokenGuardPath
 $contextRows = Import-CsvSafe $contextUsagePath
@@ -803,6 +851,13 @@ $cardsOverview += Build-MetricCard -Title 'Context Adoption' -Value "$adoptionPc
 $cardsOverview += Build-MetricCard -Title 'Daily Budget' -Value ([string]::Format('{0:N0}', $dailyBudget)) -Label 'tokens/day'
 $cardsOverview += Build-MetricCard -Title 'Runtime Requests' -Value $runtimeRequests -Label "ok=$runtimeSuccess err=$runtimeErrors"
 $cardsOverview += Build-MetricCard -Title 'Runtime Latency' -Value "$runtimeLatencyAvg ms" -Label 'average'
+# Session execution metrics (from session-metrics-tracker)
+$cardsOverview += Build-MetricCard -Title 'Session Status' -Value $sessionExecStatus -Label 'current session state'
+$cardsOverview += Build-MetricCard -Title 'Last Execution' -Value $sessionLastExec -Label 'last session start'
+$cardsOverview += Build-MetricCard -Title 'Total Sessions' -Value $sessionTotal -Label "active=$($activeSessions.Count) completed=$($completedSessions.Count)"
+$cardsOverview += Build-MetricCard -Title 'Avg Exec Duration' -Value "$sessionAvgDuration s" -Label 'across all sessions'
+$cardsOverview += Build-MetricCard -Title 'Tool Calls' -Value $totalToolCalls -Label 'total across sessions'
+$cardsOverview += Build-MetricCard -Title 'Files Edited' -Value $totalFilesEdited -Label 'total across sessions'
 
 $cardsCosts = @()
 $cardsCosts += Build-MetricCard -Title 'Actual Cost' -Value ('$' + $actualCost) -Label 'using $10 / 1M tokens'
@@ -1113,6 +1168,7 @@ $autoRefreshMeta
     <button data-target="stack">Stack Metrics</button>
     <button data-target="explorer">Metrics Explorer</button>
     <button data-target="events">Events</button>
+    <button data-target="execution">Execution</button>
     <button class="export-btn" onclick="exportDashboardPdf()" title="Print or save as PDF using the browser print dialog">&#128461; PDF</button>
     <button class="export-btn" onclick="exportDashboardPng()" title="Export current section as PNG (requires internet for html2canvas)">&#128247; PNG</button>
   </div>
@@ -1359,6 +1415,26 @@ $autoRefreshMeta
         </tbody>
       </table>
       <p class="muted">Rate-limit state: $rateLimitLabel</p>
+    </div>
+  </section>
+
+  <section id="execution" class="section">
+    <h2>Session Execution Metrics</h2>
+    <p class="muted">Real execution data from session-metrics-tracker. Shows session lifecycle, duration, tool usage, and file operations.</p>
+    <div class="grid">
+      <div class="card"><h3>Active Session</h3><div class="value">$sessionExecStatus</div><div class="label">current state</div></div>
+      <div class="card"><h3>Total Sessions</h3><div class="value">$sessionTotal</div><div class="label">active=$($activeSessions.Count) completed=$($completedSessions.Count)</div></div>
+      <div class="card"><h3>Total Duration</h3><div class="value">$([math]::Round($totalDurationSec / 60, 1)) min</div><div class="label">across all sessions</div></div>
+      <div class="card"><h3>Avg Duration</h3><div class="value">$sessionAvgDuration s</div><div class="label">per session</div></div>
+      <div class="card"><h3>Total Tokens</h3><div class="value">$totalSessionTokens</div><div class="label">from session metrics</div></div>
+      <div class="card"><h3>Tool Calls</h3><div class="value">$totalToolCalls</div><div class="label">total</div></div>
+      <div class="card"><h3>Files Read</h3><div class="value">$totalFilesRead</div><div class="label">total</div></div>
+      <div class="card"><h3>Files Edited</h3><div class="value">$totalFilesEdited</div><div class="label">total</div></div>
+    </div>
+    <div class="panel" style="margin-top:12px;">
+      <h3>Session Execution Log</h3>
+      <p class="muted">Last 20 sessions ordered by start time (descending). Data comes from session files + metrics-tracker.</p>
+      $sessionExecTable
     </div>
   </section>
 

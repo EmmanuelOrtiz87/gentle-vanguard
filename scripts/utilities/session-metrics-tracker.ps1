@@ -125,6 +125,10 @@ switch ($Action) {
         $data | Add-Member -NotePropertyName 'durationSeconds' -NotePropertyValue ([math]::Round(($endTime - $startTime).TotalSeconds, 0)) -Force
         
         $sessionFile = Join-Path $ProjectRoot ".session\$($data.sessionId).json"
+        $sessionFileAlt = Join-Path $ProjectRoot "session\$($data.sessionId).json"
+        if (-not (Test-Path $sessionFile) -and (Test-Path $sessionFileAlt)) {
+            $sessionFile = $sessionFileAlt
+        }
         if (Test-Path $sessionFile) {
             $sessionData = Get-Content $sessionFile -Raw | ConvertFrom-Json
             $sessionData | Add-Member -NotePropertyName "endTime" -NotePropertyValue $data.endTime -Force

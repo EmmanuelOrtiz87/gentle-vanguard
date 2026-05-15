@@ -5,16 +5,26 @@
 param(
     [ValidateSet("daily", "weekly", "monthly", "on-demand")]
     [string]$Period = "daily",
-    [string]$ProjectRoot = ".\foundation",
+    [string]$ProjectRoot = "",
     [switch]$Silent,
     [switch]$GenerateReport
 )
 
 $ErrorActionPreference = 'Continue'
 
+if (-not $ProjectRoot) {
+    $ProjectRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) { $env:FOUNDATION_BASE_DIR } else {
+        $root = Split-Path -Parent $PSScriptRoot
+        while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
+        if (-not $root) { $root = $PSScriptRoot }
+        $root
+    }
+}
+
 $metricsDir = Join-Path $ProjectRoot "docs\sessions\metrics"
 $telemetryDir = Join-Path $ProjectRoot ".telemetry"
-$sessionDir = Join-Path $ProjectRoot ".session"
+$sessionDir = Join-Path $ProjectRoot "session"
+$engineDir = Join-Path $ProjectRoot "scripts\utilities\TELEMETRY-METRICS"
 
 function Write-Log {
     param([string]$Message, [string]$Level = "INFO")
@@ -150,6 +160,13 @@ $metrics = Save-ConsolidatedMetrics -Sessions $sessions -Period $Period -OutputF
 
 $telemetryMaster = Join-Path $ProjectRoot "docs\management\telemetry-master.csv"
 Save-TelemetryMaster -Sessions $sessions -OutputFile $telemetryMaster
+
+# Refresh dashboard with consolidated data
+$dashboardScript = Join-Path $engineDir "generate-dashboard.ps1"
+if (Test-Path $dashboardScript) {
+    Write-Log "Refreshing dashboard..." "INFO"
+    & $dashboardScript
+}
 
 if ($GenerateReport) {
     $reportScript = Join-Path $ProjectRoot "scripts\utilities\generate-executive-summary.ps1"
