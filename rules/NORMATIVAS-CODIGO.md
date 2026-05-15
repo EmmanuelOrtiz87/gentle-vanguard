@@ -83,7 +83,7 @@ config/
 
 | Type | Max Lines | Action if exceeded |
 |------|-----------|-------------------|
-| Script (.ps1) | 400 | Split into modules |
+| Script (.ps1) | 500 | Split into modules |
 | Config (.json) | 200 | Split into domain files |
 | Skill SKILL.md | 150 | Split references |
 | Workflow (.yml) | 100 | Use reusable workflows |
@@ -142,7 +142,7 @@ function Invoke-TaskName {
 
 ### 4.3 Forbidden PowerShell Patterns
 
-- `Write-Host` (use `Write-Output` or `Write-Verbose`)
+- `Write-Host` in reusable functions/libraries (use `Write-Output` or `Write-Verbose`); OK in CLI scripts, hooks, and `wf` commands for direct user output
 - Empty `catch { }` blocks
 - Hardcoded absolute paths
 - `Select-String` (use `grep` tool via agent, or direct `-match`)

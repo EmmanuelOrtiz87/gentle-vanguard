@@ -29,10 +29,10 @@ Last updated: 2026-05-10
 
 ### Forbidden Patterns
 
-- No `Write-Host` in functions (use `Write-Output` or `return`)
+- No `Write-Host` in reusable functions/libraries (use `Write-Output` or `return`); OK in CLI scripts, hooks, and `wf` commands for direct user output
 - No hardcoded paths (use relative or config-driven paths)
 - No empty `catch` blocks
-- No `Should -Be` syntax (use `Should Be` for Pester 3.4.0)
+- No `Should Be` syntax (use `Should -Be` for Pester 5.x)
 - No circular dependencies between modules
 - No hardcoded secrets or API keys
 
@@ -51,17 +51,17 @@ tests/
 └── security/       # Security-focused tests
 ```
 
-### Pester 3.4.0 Syntax (REQUIRED)
+### Pester 5.x Syntax (REQUIRED)
 
 ```powershell
 # CORRECT:
-$result | Should Be $expected
-$value | Should Not BeNullOrEmpty
-$array | Should Contain 'item'
-$string | Should Match 'pattern'
-
-# WRONG (Pester 5.x syntax):
 $result | Should -Be $expected
+$value | Should -Not -BeNullOrEmpty
+$array | Should -Contain 'item'
+$string | Should -Match 'pattern'
+
+# WRONG (Pester 3.4.0 syntax):
+$result | Should Be $expected
 ```
 
 ### Coverage Requirements
@@ -116,7 +116,7 @@ description: 'Trigger: keyword1, keyword2. Short description.'
 ### File Organization
 
 - One logical concept per file (Single Responsibility)
-- Max 400 lines per script/file (split if exceeded)
+- Max 500 lines per script/file (split if exceeded)
 - Max 3 nesting levels (refactor to functions if exceeded)
 - No circular dependencies between modules
 - Max 3 parameters per function (use splatting/hashtable for more)
@@ -263,7 +263,7 @@ context-first development — understand before changing.
 ### Required Tools
 
 - **PowerShell** 7.0+
-- **Pester** 3.4.0 (NOT 5.x)
+- **Pester** 5.x (minimum 5.3 for coverage support)
 - **Git** 2.30+
 - **Lefthook** 2.1.6+
 - **Node.js** 18+ (for Prettier)
