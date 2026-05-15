@@ -6,8 +6,8 @@ param(
 $ErrorActionPreference = "Stop"
 $WorkspaceRoot = Resolve-Path $WorkspaceRoot
 
-$registryPath = Join-Path $WorkspaceRoot ".atl" "skill-registry.md"
-$autoDelegationPath = Join-Path $WorkspaceRoot "config" "auto-delegation.json"
+$registryPath = Join-Path (Join-Path $WorkspaceRoot ".atl") "skill-registry.md"
+$autoDelegationPath = Join-Path (Join-Path $WorkspaceRoot "config") "auto-delegation.json"
 
 # --- Helpers ---
 function Extract-FrontmatterField {
