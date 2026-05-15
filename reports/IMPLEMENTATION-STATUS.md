@@ -98,17 +98,17 @@ telemetry-master.csv + informes .md
 
 ## 📊 Métricas Capturadas
 
-| Métrica            | Estado       | Fuente           |
-| ------------------ | ------------ | ---------------- |
-| session_id         | ✅           | .session/\*.json |
-| start_time         | ✅           | .session/\*.json |
-| status             | ✅           | .session/\*.json |
-| input_tokens       | 🔲 Pendiente | -                |
-| output_tokens      | 🔲 Pendiente | -                |
-| estimated_cost_usd | 🔲 Pendiente | -                |
-| tool_calls         | 🔲 Pendiente | Instrumentar     |
-| files_read         | 🔲 Pendiente | Instrumentar     |
-| files_edited       | 🔲 Pendiente | Instrumentar     |
+| Métrica            | Estado       | Fuente                                |
+| ------------------ | ------------ | ------------------------------------- |
+| session_id         | ✅           | .session/\*.json                      |
+| start_time         | ✅           | .session/\*.json                      |
+| status             | ✅           | .session/\*.json                      |
+| input_tokens       | ✅           | session-metrics-tracker.ps1 param     |
+| output_tokens      | ✅           | session-metrics-tracker.ps1 param     |
+| estimated_cost_usd | ✅           | session-metrics-tracker.ps1 (auto)    |
+| tool_calls         | ✅           | session-metrics-tracker.ps1 param     |
+| files_read         | ✅           | session-metrics-tracker.ps1 param     |
+| files_edited       | ✅           | session-metrics-tracker.ps1 param     |
 
 ---
 
@@ -121,12 +121,10 @@ telemetry-master.csv + informes .md
 - [x] Informes ejecutivos generados
 - [x] Documentación para gerencia
 
-## ⏳ Pendiente (Instrumentación)
+## ⏳ Pendiente
 
-- [ ] Integrar session-metrics-tracker en workflow start/end
-- [ ] Instrumentar tool calls para contar usage
-- [ ] Scheduled task para consolidación diaria
+- [ ] Scheduled task para consolidación diaria (no crítico, puede ejecutarse on-demand)
 
 ---
 
-_Estado: 2026-04-26_
+_Estado: 2026-05-14 — Actualizado: tracker integrado en session-autostart + end-session + session-manager_
