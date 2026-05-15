@@ -153,6 +153,16 @@ if (Test-Path $artifactsScript) {
     }
 }
 
+# Metrics consolidation + dashboard refresh
+$consolidateScript = Join-Path $repoRoot 'scripts\utilities\consolidate-metrics.ps1'
+if (Test-Path $consolidateScript) {
+    Write-Info "Consolidating daily metrics and refreshing dashboard..."
+    & $consolidateScript -Period daily -Silent
+    Write-Ok "Metrics consolidated and dashboard refreshed"
+} else {
+    Write-Warn "consolidate-metrics.ps1 not found"
+}
+
 $reportDir = Join-Path $repoRoot 'docs\sessions'
 New-Item -ItemType Directory -Path $reportDir -Force | Out-Null
 
