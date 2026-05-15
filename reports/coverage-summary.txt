@@ -1,20 +1,21 @@
 ===============================================================
-    REAL CODE COVERAGE REPORT - 2026-05-15 17:39:21
+    REAL CODE COVERAGE REPORT - 2026-05-15 17:49:23
 ===============================================================
 
 Scope:
   Method:       pester_codecoverage_declared_targets
-  Targets:      2
+  Targets:      3
 
 Aggregate:
-  Passed:       14
+  Passed:       20
   Failed:       0
-  Coverage:     88.28%
+  Coverage:     88.18%
   Minimum:      85%
   Status:       PASS
 
 Per Target:
   - session-manager-critical-workflow: 85.56% (threshold 85%) -> PASS
   - post-session-learning-persistence: 91.04% (threshold 85%) -> PASS
+  - session-autostart-critical-workflow: 87.63% (threshold 85%) -> PASS
 
 ===============================================================
