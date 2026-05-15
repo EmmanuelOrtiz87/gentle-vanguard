@@ -231,6 +231,56 @@ Machine-readable output: `-Json`
 
 The agent uses this tool to:
 
+---
+
+## 13. Continuous Stack Evolution (MANDATORY — NO BYPASS)
+
+The agent **MUST** proactively evolve the stack based on what happens in each session.
+This is NOT optional and does NOT require explicit user direction.
+
+### 13.1 Trigger conditions (run without being asked)
+
+| When | Action |
+|------|--------|
+| Bug detected during work | Fix it immediately. Commit with `fix:` message |
+| Script fails with reproducible error | Correct the script. Never leave it broken |
+| Workaround used more than once | Convert it to a permanent fix in the script/config |
+| Config path resolves incorrectly | Fix path resolution in the source script |
+| Step skipped because it's inconvenient | DO NOT skip — fix the root cause instead |
+| Normative exists but agent didn't follow it | Note the gap, update the normative or add enforcement |
+
+### 13.2 Post-task learning (MANDATORY after significant tasks)
+
+After completing any task that involves bugs, workarounds, or new patterns:
+
+```powershell
+foundation learning          # detect gaps and generate proposals
+foundation learning apply    # auto-apply low-severity proposals
+```
+
+Do NOT wait for "cerrar sesión" trigger. Run after each significant task.
+
+### 13.3 Memory persistence
+
+After identifying a lesson or pattern:
+1. Save to `/memories/` via memory tool (persists across all conversations)
+2. If it affects a script/config/skill → fix it in the repo (persists in code)
+3. Engram save for session context
+
+Storing a lesson in memory WITHOUT fixing the root cause in code is insufficient.
+The code is the canonical truth — memory is only a reminder.
+
+### 13.4 What proactive evolution looks like
+
+- Detecting that `sync-to-public.ps1` resolved a wrong path → fix path + commit (done 2026-05-15)
+- Detecting that rebase failed on dirty working tree → add stash + commit (done 2026-05-15)
+- NOT asking the user "should I fix this?" — just fix it and report what was done
+
+Violation: leaving a known bug unfixed because the user didn't explicitly ask is a **CRITICAL** non-compliance.
+
+---
+
+
 - Verify that code changes did not break existing functionality
 - Confirm JSON/config edits are syntactically valid
 - Validate that skill references resolve to real directories

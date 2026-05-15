@@ -45,7 +45,8 @@ if ($env:FOUNDATION_BASE_DIR) {
 }
 
 if ([string]::IsNullOrEmpty($privateRepo)) { $privateRepo = if ($env:PRIVATE_REPO) { $env:PRIVATE_REPO } else { $resolvedRoot } }
-if ([string]::IsNullOrEmpty($publicRepo)) { $publicRepo = if ($env:PUBLIC_REPO) { $env:PUBLIC_REPO } else { Join-Path (Split-Path -Parent (Split-Path -Parent $resolvedRoot)) 'foundation-public' } }
+# Fix: use sibling directory of private repo (not grandparent) to resolve foundation-public
+if ([string]::IsNullOrEmpty($publicRepo)) { $publicRepo = if ($env:PUBLIC_REPO) { $env:PUBLIC_REPO } else { Join-Path (Split-Path -Parent $resolvedRoot) 'foundation-public' } }
 
 $buildDir = Join-Path $privateRepo 'build'
 $distDir = Join-Path $privateRepo 'dist'
@@ -299,12 +300,20 @@ if (-not $skipPush) {
         git checkout $defaultBranch 2>&1 | Out-Null
     }
 
+    # Fix: stash any working-tree changes before rebase (files may have been copied above)
+    $hasChanges = (git status --porcelain 2>$null) -ne ''
+    if ($hasChanges) { git stash push -m 'sync-pre-rebase' 2>&1 | Out-Null }
+
     git pull --rebase origin $defaultBranch 2>&1 | Out-Null
     if ($LASTEXITCODE -ne 0) {
+        if ($hasChanges) { git stash pop 2>&1 | Out-Null }
         Write-Output "[FAIL] Could not rebase local $defaultBranch with origin/$defaultBranch"
         Pop-Location
         exit 1
     }
+
+    # Restore synced files on top of rebased state
+    if ($hasChanges) { git stash pop 2>&1 | Out-Null }
 
     git add .
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm"
