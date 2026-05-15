@@ -91,6 +91,17 @@ if ($null -eq $resolvedSessionContext) {
 
 $sessionId = $resolvedSessionContext.SessionId
 $startTime = $resolvedSessionContext.StartTime
+$branch = git rev-parse --abbrev-ref HEAD 2>$null
+if ([string]::IsNullOrWhiteSpace($branch)) {
+    $branch = 'unknown'
+}
+
+$displayStartTime = $startTime
+try {
+    $displayStartTime = ([datetime]$startTime).ToString('yyyy-MM-dd HH:mm:ss')
+}
+catch {
+}
 
 # Create session brief
 $sessionBrief = @{
@@ -98,7 +109,7 @@ $sessionBrief = @{
     StartTime = $startTime
     TaskName = $TaskName
     Repository = $repoRoot
-    Branch = (git rev-parse --abbrev-ref HEAD 2>$null) -or 'unknown'
+    Branch = $branch
     Status = 'ACTIVE'
 }
 
@@ -116,7 +127,7 @@ $activeSessionPath = Join-Path $logsDir '.session-active'
 
 Write-Host "`n=== Session Started ===" -ForegroundColor Green
 Write-Host "Session ID: $sessionId" -ForegroundColor Cyan
-Write-Host "Start Time: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" -ForegroundColor Cyan
+Write-Host "Start Time: $displayStartTime" -ForegroundColor Cyan
 if ($TaskName) {
     Write-Host "Task: $TaskName" -ForegroundColor Cyan
 }

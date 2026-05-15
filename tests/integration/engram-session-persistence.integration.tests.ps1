@@ -6,6 +6,8 @@ Describe 'Engram Session Persistence Integration Tests' {
         $script:sessionManager = Join-Path $script:root 'scripts\utilities\session-manager.ps1'
         $script:postSessionLearning = Join-Path $script:root 'scripts\utilities\post-session-learning.ps1'
         $script:engram = Join-Path $script:root 'tools\engram.exe'
+        $env:ENGRAM_DATA_DIR = Join-Path $script:root '.engram-data'
+        $env:ENGRAM_SKIP_UPDATE = '1'
         $script:runId = Get-Date -Format 'yyyyMMddHHmmss'
         $script:sessionDirRelative = '.\tmp-session-tests'
         $script:sessionDir = Join-Path $script:root 'tmp-session-tests'

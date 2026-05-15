@@ -31,6 +31,11 @@ $repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DI
     $root
 }
 
+$engramSafeScript = Join-Path $repoRoot 'scripts\utilities\engram-safe.ps1'
+if (Test-Path $engramSafeScript) {
+    . $engramSafeScript
+}
+
 $proposalsDir = Join-Path (Join-Path $repoRoot '.local') 'improvement-proposals'
 $logFile = Join-Path $proposalsDir 'learning-log.jsonl'
 $summaryFile = Join-Path (Join-Path (Join-Path $repoRoot 'scripts') '.session') 'startup-summary.json'
@@ -54,27 +59,6 @@ function Complete-Script {
     exit $ExitCode
 }
 
-function Get-EngramBinary {
-    $candidatePaths = @(
-        (Join-Path $repoRoot 'tools\engram.exe'),
-        (Join-Path ($env:USERPROFILE ? $env:USERPROFILE : $env:HOME) 'bin\engram.exe'),
-        (Join-Path ($env:GOPATH ? $env:GOPATH : (Join-Path $env:USERPROFILE 'go')) 'bin\engram.exe')
-    )
-
-    foreach ($candidate in $candidatePaths) {
-        if ($candidate -and (Test-Path $candidate)) {
-            return $candidate
-        }
-    }
-
-    $engramCmd = Get-Command engram -ErrorAction SilentlyContinue
-    if ($engramCmd) {
-        return $engramCmd.Source
-    }
-
-    return $null
-}
-
 function Save-ToEngram {
     param(
         [string]$Title,
@@ -82,19 +66,18 @@ function Save-ToEngram {
         [string]$Type = 'learning'
     )
 
-    $engramBin = Get-EngramBinary
-    if (-not $engramBin) {
+    if (-not (Get-Command Invoke-FoundationEngram -ErrorAction SilentlyContinue)) {
         Write-Info "Engram not available, skipping knowledge-base save"
         return $false
     }
 
-    $result = & $engramBin save $Title $Content --project foundation --type $Type 2>&1
-    if ($LASTEXITCODE -eq 0) {
+    $result = Invoke-FoundationEngram -RepoRoot $repoRoot -Arguments @('save', $Title, $Content, '--project', $ProjectName, '--type', $Type)
+    if ($result.Success) {
         Write-Ok "Saved to Engram: $Title"
         return $true
     }
 
-    Write-Warn "Engram save skipped: $($result | Out-String)"
+    Write-Warn "Engram save skipped: $($result.Output | Out-String)"
     return $false
 }
 
