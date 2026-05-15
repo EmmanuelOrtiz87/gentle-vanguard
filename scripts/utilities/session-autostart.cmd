@@ -110,6 +110,7 @@ if defined SESSION_ID (
 
 REM === Phase 4: Engram Policy Enforcement ===
 echo [4/9] Engram policy enforcement...
+set ENGRAM_DATA_DIR=%WORKSPACE_ROOT%\.engram-data
 set ENGRAM_POLICY=%WORKSPACE_ROOT%\scripts\foundation\engram-policy.ps1
 if exist "%ENGRAM_POLICY%" (
     pwsh -NoProfile -ExecutionPolicy Bypass -File "%ENGRAM_POLICY%" -Action enforce
