@@ -17,21 +17,15 @@ pre-commit:
 
 pre-push:
   commands:
+    audit-check:
+      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/pre-push-notify.ps1" -HookName "audit-check" -ScriptPath "skills/foundation-audit-skill/scripts/audit-sweep.ps1" -ScriptArgs "-Scope quick"
+    orchestrator-auto-fix:
+      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/pre-push-notify.ps1" -HookName "orchestrator-auto-fix" -ScriptPath "scripts/hooks/orchestrate-auto-fix.ps1" -ScriptArgs "-Fix"
+    test-suite:
+      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/pre-push-notify.ps1" -HookName "test-suite" -ScriptPath "scripts/run-tests-simple.ps1" -IsLong
     npm-audit:
       glob: "package.json"
-      run:
-        pwsh -NoProfile -ExecutionPolicy Bypass -File
-        "scripts/hooks/npm-audit-pre-push.ps1" -AuditLevel moderate
-    orchestrator-auto-fix:
-      run:
-        powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/orchestrate-auto-fix.ps1"
-        -Fix
-    test-suite:
-      run: powershell -NoProfile -ExecutionPolicy Bypass -File "scripts/run-tests-simple.ps1"
-    audit-check:
-      run:
-        powershell -NoProfile -ExecutionPolicy Bypass -File
-        "skills/foundation-audit-skill/scripts/audit-sweep.ps1" -Scope quick
+      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/npm-audit-pre-push.ps1" -AuditLevel moderate
 
 commit-msg:
   commands:
