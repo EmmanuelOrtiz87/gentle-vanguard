@@ -43,6 +43,50 @@ function Write-Warn { param([string]$Message) Write-Host "[WARN] $Message" -Fore
 function Write-Info { param([string]$Message) Write-Host "[INFO] $Message" -ForegroundColor Cyan }
 function Write-Hit  { param([string]$Message) Write-Host "[HIT] $Message" -ForegroundColor Magenta }
 
+function Get-EngramBinary {
+    $candidatePaths = @(
+        (Join-Path $repoRoot 'tools\engram.exe'),
+        (Join-Path ($env:USERPROFILE ? $env:USERPROFILE : $env:HOME) 'bin\engram.exe'),
+        (Join-Path ($env:GOPATH ? $env:GOPATH : (Join-Path $env:USERPROFILE 'go')) 'bin\engram.exe')
+    )
+
+    foreach ($candidate in $candidatePaths) {
+        if ($candidate -and (Test-Path $candidate)) {
+            return $candidate
+        }
+    }
+
+    $engramCmd = Get-Command engram -ErrorAction SilentlyContinue
+    if ($engramCmd) {
+        return $engramCmd.Source
+    }
+
+    return $null
+}
+
+function Save-ToEngram {
+    param(
+        [string]$Title,
+        [string]$Content,
+        [string]$Type = 'learning'
+    )
+
+    $engramBin = Get-EngramBinary
+    if (-not $engramBin) {
+        Write-Info "Engram not available, skipping knowledge-base save"
+        return $false
+    }
+
+    $result = & $engramBin save $Title $Content --project foundation --type $Type 2>&1
+    if ($LASTEXITCODE -eq 0) {
+        Write-Ok "Saved to Engram: $Title"
+        return $true
+    }
+
+    Write-Warn "Engram save skipped: $($result | Out-String)"
+    return $false
+}
+
 # --- Phase 1: Collect session data ---
 Write-Step "Phase 1: Collecting session data"
 
@@ -103,8 +147,8 @@ $knownSkills = @()
 $skillsIndex = Join-Path (Join-Path $repoRoot 'skills') 'SKILL_INDEX.md'
 if (Test-Path $skillsIndex) {
     $content = Get-Content $skillsIndex -Raw
-    $matches = [regex]::Matches($content, '(?<=`)[^`]+(?=`)')
-    $knownSkills = @($matches.Value | Where-Object { $_ -like '*skill*' })
+    $skillMatches = [regex]::Matches($content, '(?<=`)[^`]+(?=`)')
+    $knownSkills = @($skillMatches.Value | Where-Object { $_ -like '*skill*' })
 }
 Write-Ok "Known skills: $($knownSkills.Count)"
 
@@ -229,6 +273,12 @@ $logEntry = @{
 $logEntry | ConvertTo-Json -Depth 3 -Compress | Out-File -FilePath $logFile -Encoding UTF8 -Append -Force
 
 Write-Ok "Learning log appended to $logFile"
+if ($report.proposals.Count -gt 0) {
+    $proposalSummary = ($report.proposals | ForEach-Object { "[$($_.severity)] $($_.description) => $($_.proposedAction)" }) -join " | "
+    $null = Save-ToEngram -Title "Learning proposals: $($report.runId)" -Content $proposalSummary -Type 'proposal'
+} else {
+    $null = Save-ToEngram -Title "Learning summary: $($report.runId)" -Content $report.summary -Type 'learning'
+}
 Write-Ok "Post-session learning complete!"
 
 if ($proposals.Count -gt 0) {
