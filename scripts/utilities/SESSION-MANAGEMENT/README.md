@@ -1,223 +1,104 @@
-# SESSION-MANAGEMENT - Gestin de sesiónes
+# SESSION-MANAGEMENT
 
-Mdulo centralizado para gestin del ciclo de vida de sesiónes de trabajo.
+Documentacion operativa del flujo actual de sesiones en Foundation.
 
-**Versin**: 2.0.0  
-**ltima actualizacin**: 2026-04-22  
-**Estado**: PRODUCCIN
+## Resumen
 
----
+El flujo vigente combina autostart, gestion de sesion y aprendizaje post-sesion:
 
-## Descripcin
+- `session-autostart.cmd` prepara el workspace, hooks, Engram y contexto.
+- `session-manager.ps1` crea, inspecciona, limpia y cierra sesiones.
+- `post-session-learning.ps1` analiza artefactos de la sesion y persiste resumenes o propuestas en Engram.
 
-Este directorio contiene scripts para:
+## session-manager.ps1
 
-- Inicio y cierre de sesiónes
-- Monitoreo de inactividad
-- Validacin de stack de sesin
-- Finalizacin con artefactos
-- Autostart automtico
-- Gestin centralizada de sesiónes
-
----
-
-## Scripts
-
-### `start-session.ps1`
-
-**Propsito**: Inicia una nueva sesin de trabajo
-
-**Caractersticas**:
-
-- Inicializa contexto de sesin
-- Carga configuración
-- Activa herramientas necesarias
-- Genera ID de sesin nico
-
-**Parmetros**:
+Parámetros reales:
 
 ```powershell
--SessionName <string>    # Nombre de la sesin (opcional)
--AutoInit                # Auto-inicializar entorno
--Quiet                   # Modo silencioso
+-Mode <AutoStart|Manual|Health|End|Cleanup>
+-ProjectName <string>
+-SessionDir <string>                # default: .\.session
+-OrphanMaxAgeHours <int>            # default: 24
+-SkipPreCloseValidation
+-NoExit
 ```
 
-**Uso**:
+Modos:
+
+- `AutoStart`: inicializa una nueva sesión de workspace y ejecuta el arranque asociado.
+- `Manual`: crea una nueva sesión sin el flujo completo de autostart.
+- `Health`: informa el estado de la sesión más reciente y del directorio de sesiones.
+- `End`: cierra la sesion activa mas reciente, guarda metricas y persiste el cierre en Engram.
+- `Cleanup`: marca sesiones huerfanas, archiva JSON corruptos y limpia estado antiguo.
+
+Ejemplos:
 
 ```powershell
-# Iniciar sesin estndar
-.\start-session.ps1
+# Inicio manual
+pwsh -File .\scripts\utilities\session-manager.ps1 -Mode Manual
 
-# Iniciar con nombre especfico
-.\start-session.ps1 -SessionName "feature-auth"
+# Estado del directorio de sesiones
+pwsh -File .\scripts\utilities\session-manager.ps1 -Mode Health
 
-# Iniciar con auto-inicializacin
-.\start-session.ps1 -AutoInit
+# Cierre sin pre-close validator (util para tests aislados)
+pwsh -File .\scripts\utilities\session-manager.ps1 -Mode End -SkipPreCloseValidation
+
+# Limpieza agresiva de huerfanas
+pwsh -File .\scripts\utilities\session-manager.ps1 -Mode Cleanup -OrphanMaxAgeHours 1
 ```
 
----
+Notas operativas:
 
-### `end-session.ps1`
+- Los inicios y cierres de sesion se guardan en Engram cuando `tools\engram.exe` esta disponible.
+- `-NoExit` permite ejecución in-process en Pester y es parte del gate de cobertura real.
+- Los JSON corruptos no detienen el script: se ignoran en `Health` y se archivan en `Cleanup`.
 
-**Propsito**: Finaliza sesin con verificaciones
+## post-session-learning.ps1
 
-**Caractersticas**:
-
-- Verifica integridad de cambios
-- Genera artefactos de cierre
-- Limpia recursos temporales
-- Registra mtricas de sesin
-
-**Parmetros**:
+Parámetros relevantes:
 
 ```powershell
--GenerateArtifacts       # Generar artefactos de cierre
--Verify                  # Verificar antes de cerrar
--Quiet                   # Modo silencioso
+-SessionId <string>
+-AutoApplyLow
+-ProjectName <string>
+-NoExit
 ```
 
-**Uso**:
+Comportamiento:
+
+- Lee `scripts/.session/startup-summary.json` cuando existe.
+- Analiza commits recientes, cambios y gaps de skills.
+- Guarda propuestas en `.local/improvement-proposals/`.
+- Persiste en Engram un resumen de aprendizaje o una propuesta searchable por `SessionId`.
+
+Ejemplo:
 
 ```powershell
-# Finalizar sesin estndar
-.\end-session.ps1
-
-# Finalizar con artefactos
-.\end-session.ps1 -GenerateArtifacts
-
-# Finalizar con verificacin
-.\end-session.ps1 -Verify
+pwsh -File .\scripts\utilities\post-session-learning.ps1 -SessionId "session-YYYY-MM-DD-01"
 ```
 
----
+## Validación actual
 
-### `finalize-session.ps1`
+La cobertura real se valida con Pester `CodeCoverage` sobre workflows declarados en `tests/coverage-config.json`.
 
-**Propsito**: Finaliza sesin con generacin completa de artefactos
+Targets actuales:
 
-**Caractersticas**:
+- `session-manager-critical-workflow`
+- `post-session-learning-persistence`
+- `session-autostart-critical-workflow`
+- `detect-tool-critical-workflow`
+- `pre-close-validator-critical-workflow`
 
-- Genera todos los artefactos de cierre
-- Auditora completa
-- Reporte de sesin
-- Compresin de contexto
-
-**Parmetros**:
+Comandos útiles:
 
 ```powershell
--IncludeAudit            # Incluir auditora completa
--CompressContext         # Comprimir contexto
--GenerateReport          # Generar reporte
+pwsh -File .\scripts\utilities\verify-coverage.ps1
+Invoke-Pester .\tests\integration\engram-session-persistence.integration.tests.ps1 -Output Detailed
+Invoke-Pester .\tests\integration\post-session-learning.integration.tests.ps1 -Output Detailed
+Invoke-Pester .\tests\integration\session-autostart.integration.tests.ps1 -Output Detailed
+Invoke-Pester .\tests\integration\detect-tool.integration.tests.ps1 -Output Detailed
+Invoke-Pester .\tests\integration\pre-close-validator.integration.tests.ps1 -Output Detailed
 ```
-
-**Uso**:
-
-```powershell
-# Finalizar con todos los artefactos
-.\finalize-session.ps1 -IncludeAudit -GenerateReport
-```
-
----
-
-### `session-manager.ps1`
-
-**Propsito**: Gestor centralizado de sesiónes
-
-**Acciones**:
-
-- `start` - Inicia sesin
-- `end` - Finaliza sesin
-- `list` - Lista sesiónes activas
-- `status` - Estado de sesin actual
-- `validate` - Valida sesin
-- `cleanup` - Limpia sesiónes antiguas
-
-**Parmetros**:
-
-```powershell
--Action <string>         # Accin a ejecutar
--SessionId <string>      # ID de sesin (opcional)
-```
-
-**Uso**:
-
-```powershell
-# Listar sesiónes activas
-.\session-manager.ps1 -Action list
-
-# Obtener estado actual
-.\session-manager.ps1 -Action status
-
-# Validar sesin
-.\session-manager.ps1 -Action validate
-
-# Limpiar sesiónes antiguas
-.\session-manager.ps1 -Action cleanup
-```
-
----
-
-### `session-idle-monitor.ps1`
-
-**Propsito**: Monitorea inactividad de sesin
-
-**Caractersticas**:
-
-- Detecta inactividad
-- Alerta antes de timeout
-- Auto-pausa de recursos
-- Recuperacin automtica
-
-**Parmetros**:
-
-```powershell
--IdleThreshold <int>     # Minutos antes de considerar inactivo (default: 30)
--CheckInterval <int>     # Intervalo de verificacin en segundos (default: 60)
--AutoPause               # Auto-pausar recursos
-```
-
-**Uso**:
-
-```powershell
-# Monitorear con threshold de 30 minutos
-.\session-idle-monitor.ps1
-
-# Monitorear con threshold personalizado
-.\session-idle-monitor.ps1 -IdleThreshold 60 -AutoPause
-```
-
----
-
-### `validate-session-stack.ps1`
-
-**Propsito**: Valida integridad del stack de sesin
-
-**Verifica**:
-
-- archivos de sesin
-- configuración
-- Recursos activos
-- Integridad de datos
-
-**Parmetros**:
-
-```powershell
--Full                    # Validacin completa
--Repair                  # Reparar problemas encontrados
--Verbose                 # Salida detallada
-```
-
-**Uso**:
-
-```powershell
-# Validacin rpida
-.\validate-session-stack.ps1
-
-# Validacin completa con reparacin
-.\validate-session-stack.ps1
-{
-  "prompt_tokens": 33168,
-  "prompt_unit_price": "0",
   "prompt_price_unit": "0",
   "prompt_price": "0",
   "completion_tokens": 8096,
