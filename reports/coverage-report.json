@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-05-15T17:21:38-03:00",
+  "timestamp": "2026-05-15T17:39:21-03:00",
   "method": "pester_codecoverage_declared_targets",
   "scope": "declared coverage targets",
   "minimumThreshold": 85,
   "aggregate": {
-    "coveragePercent": 85.56,
-    "analyzedCommands": 284,
-    "executedCommands": 243,
-    "testsPassed": 6,
+    "coveragePercent": 88.28,
+    "analyzedCommands": 563,
+    "executedCommands": 497,
+    "testsPassed": 14,
     "testsFailed": 0,
     "status": "PASS"
   },
@@ -26,6 +26,23 @@
       "analyzedCommands": 284,
       "executedCommands": 243,
       "coveragePercent": 85.56,
+      "status": "PASS"
+    },
+    {
+      "name": "post-session-learning-persistence",
+      "threshold": 85,
+      "tests": [
+        "tests/integration/engram-session-persistence.integration.tests.ps1",
+        "tests/integration/post-session-learning.integration.tests.ps1"
+      ],
+      "scripts": [
+        "scripts/utilities/post-session-learning.ps1"
+      ],
+      "passed": 8,
+      "failed": 0,
+      "analyzedCommands": 279,
+      "executedCommands": 254,
+      "coveragePercent": 91.04,
       "status": "PASS"
     }
   ]

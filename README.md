@@ -231,6 +231,9 @@ cd foundation
 # Verify all quality gates
 foundation verify
 
+# Run the declared real coverage gate explicitly
+pwsh -File .\scripts\utilities\verify-coverage.ps1
+
 # SDD preflight (before first SDD task)
 .\scripts\utilities\sdd-preflight.ps1 -Interactive
 
@@ -248,11 +251,16 @@ foundation verify
 | Run all tests | `Invoke-Pester tests/ -Output Detailed` |
 | Run unit tests | `Invoke-Pester tests/unit/ -Output Detailed` |
 | Run integration | `Invoke-Pester tests/integration/ -Output Detailed` |
+| Real coverage gate | `pwsh -File .\scripts\utilities\verify-coverage.ps1` |
+| Session persistence tests | `Invoke-Pester tests/integration/engram-session-persistence.integration.tests.ps1 -Output Detailed` |
+| Learning workflow tests | `Invoke-Pester tests/integration/post-session-learning.integration.tests.ps1 -Output Detailed` |
 | Quality gates | `foundation verify` or `foundation judgment-day` |
 | Security audit | `.\scripts\security\audit.ps1` |
 | Rebuild skill registry | `.\scripts\utilities\build-skill-registry.ps1` |
 
 See [build/README.md](build/README.md) for the full build pipeline.
+
+Session lifecycle is now persisted end-to-end through Engram: `session-manager.ps1` saves session start and closure records, `post-session-learning.ps1` saves searchable learning summaries or proposals, and `config/mcp-servers.json` registers the native `engram-kb` MCP endpoint through `tools\engram.exe mcp --tools=agent`.
 
 ---
 
