@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-05-15T16:54:01-03:00",
+  "scripts": 297,
+  "minimumThreshold": 85,
+  "testFiles": 34,
+  "coveragePercent": 95,
+  "testsFailed": 0,
+  "status": "PASS",
+  "testsPassed": 23,
+  "method": "test_execution_rate_estimation"
+}
