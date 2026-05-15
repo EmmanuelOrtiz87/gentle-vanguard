@@ -16,7 +16,8 @@ Write-Host "[$ts] $HookName iniciado$warn$notice" -ForegroundColor $(if ($IsLong
 
 $t0 = Get-Date
 if ($ScriptArgs) {
-    & $ScriptPath $ScriptArgs
+    $escPath = $ScriptPath -replace "'", "''"
+    Invoke-Expression "& '$escPath' $ScriptArgs"
 } else {
     & $ScriptPath
 }
