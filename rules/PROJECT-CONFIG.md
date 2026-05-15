@@ -7,15 +7,15 @@ Centralized configuration for project standards and enforcement.
 ### PowerShell Standards
 
 - **Version**: PowerShell 7.0+ required
-- **Pester Version**: 3.4.0 (NOT 5.x - syntax compatibility)
+- **Pester Version**: 5.x (minimum 5.3)
 - **Coding Style**: PascalCase for functions, camelCase for locals
 - **Required Attributes**: `[CmdletBinding()]` for all advanced functions
 - **Comment-Based Help**: All public functions must have .SYNOPSIS, .DESCRIPTION, .EXAMPLE
 
 ### Testing Standards
 
-- **Framework**: Pester 3.4.0
-- **Syntax**: `Should Be`, `Should Match`, `Should Contain` (NO `Should -Be`)
+- **Framework**: Pester 5.x
+- **Syntax**: `Should -Be`, `Should -Match`, `Should -Contain` (NO `Should Be`)
 - **Coverage Target**: 80% for critical scripts, 70% for utilities
 - **Test Tags**: `CI` (PR runs), `Slow` (>1s), `Feature` (daily runs)
 - **Structure**: `tests/unit/`, `tests/integration/`, `tests/performance/`
