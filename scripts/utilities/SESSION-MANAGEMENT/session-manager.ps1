@@ -180,51 +180,6 @@ function Invoke-CompatibilityChecks {
     Write-Warn "Continuing because strictCompatibilityChecks=false."
 }
 
-    & $wf orchestrator-status
-    if ($LASTEXITCODE -ne 0) {
-        $failures += "wf orchestrator-status failed with exit $LASTEXITCODE"
-    }
-
-    $engramCmd = Get-Command engram -ErrorAction SilentlyContinue
-    if (-not $engramCmd) {
-        $failures += "engram command not found in PATH"
-    }
-    if (-not (Test-Path $runEngram)) {
-        $failures += "run-engram.ps1 not found"
-    }
-
-    & $agentRouter status
-    if ($LASTEXITCODE -ne 0) {
-        $failures += "agent-router status failed with exit $LASTEXITCODE"
-    }
-
-    if ($failures.Count -eq 0) {
-        Write-Ok "Compatibility checks passed (engram + orchestrator + agents)."
-        return
-    }
-
-    foreach ($f in $failures) {
-        Write-Warn $f
-    }
-
-    if ($Strict) {
-        Write-Host ""
-        Write-Warn "Session start blocked by strict compatibility policy."
-        Write-Host "How to proceed:" -ForegroundColor Cyan
-        Write-Host "  1) Keep strict mode (recommended) and fix missing components." -ForegroundColor White
-        Write-Host "     - .\\tools\\validate-session-stack.ps1 -Quiet" -ForegroundColor Gray
-        Write-Host "     - .\\foundation\\\scripts\\utilities\\wf.ps1 orchestrator-status" -ForegroundColor Gray
-        Write-Host "     - .\\foundation\\\scripts\\utilities\\wf.ps1 orchestrator-status" -ForegroundColor Gray
-        Write-Host "     - .\\foundation\\\scripts\\utilities\\agent-router.ps1 status" -ForegroundColor Gray
-        Write-Host "  2) Temporary continuity mode (degraded startup)." -ForegroundColor White
-        Write-Host "     - Set strictCompatibilityChecks=false in scripts/utilities/session-autostart.config.json" -ForegroundColor Gray
-        Write-Host "     - Re-run: .\\tools\\session-autostart.cmd" -ForegroundColor Gray
-        throw "Compatibility checks failed in strict mode."
-    }
-
-    Write-Warn "Continuing because strictCompatibilityChecks=false."
-}
-
 function Run-StartFlow {
     param([bool]$Manual)
 
@@ -324,6 +279,5 @@ switch ($Mode) {
         Write-Host ("Session: {0} | Status: {1} | Started: {2} | Monitor PID: {3}" -f $state.sessionId, $state.status, $state.startedAt, $state.monitorPid) -ForegroundColor White
     }
 }
-
 
 

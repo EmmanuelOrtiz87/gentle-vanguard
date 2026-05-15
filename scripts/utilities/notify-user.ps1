@@ -49,6 +49,11 @@ $repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DI
     $root
 }
 
+$engramSafeScript = Join-Path $repoRoot 'scripts\utilities\engram-safe.ps1'
+if (Test-Path $engramSafeScript) {
+    . $engramSafeScript
+}
+
 $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 
 # Color scheme
@@ -72,18 +77,8 @@ $icons = @{
 
 function Save-ToEngram {
     param([string]$Action, [string]$Reason, [string]$Details)
-    
-    $engramBin = Join-Path $repoRoot 'tools\engram.exe'
-    if (-not (Test-Path $engramBin)) {
-        $userProfile = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
-        $engramBin = Join-Path $userProfile 'bin\engram.exe'
-    }
-    if (-not (Test-Path $engramBin)) {
-        $goPath = if ($env:GOPATH) { $env:GOPATH } else { Join-Path $env:USERPROFILE 'go' }
-        $engramBin = Join-Path $goPath 'bin\engram.exe'
-    }
-    
-    if (-not (Test-Path $engramBin)) {
+
+    if (-not (Get-Command Invoke-FoundationEngram -ErrorAction SilentlyContinue)) {
         return $false
     }
     
@@ -97,8 +92,8 @@ This action was performed automatically to optimize token usage and maintain sys
 "@
     
     try {
-        & $engramBin save --title "Auto-Action: $Action" --content $content --project $ProjectName --type manual 2>$null | Out-Null
-        return ($LASTEXITCODE -eq 0)
+        $result = Invoke-FoundationEngram -RepoRoot $repoRoot -Arguments @('save', "Auto-Action: $Action", $content, '--project', $ProjectName, '--type', 'manual')
+        return $result.Success
     } catch {
         return $false
     }
