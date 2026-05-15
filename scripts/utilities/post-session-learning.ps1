@@ -275,9 +275,11 @@ $logEntry | ConvertTo-Json -Depth 3 -Compress | Out-File -FilePath $logFile -Enc
 Write-Ok "Learning log appended to $logFile"
 if ($report.proposals.Count -gt 0) {
     $proposalSummary = ($report.proposals | ForEach-Object { "[$($_.severity)] $($_.description) => $($_.proposedAction)" }) -join " | "
-    $null = Save-ToEngram -Title "Learning proposals: $($report.runId)" -Content $proposalSummary -Type 'proposal'
+    $proposalContent = if ($report.sessionId) { "SessionId=$($report.sessionId) | $proposalSummary" } else { $proposalSummary }
+    $null = Save-ToEngram -Title "Learning proposals: $($report.runId)" -Content $proposalContent -Type 'proposal'
 } else {
-    $null = Save-ToEngram -Title "Learning summary: $($report.runId)" -Content $report.summary -Type 'learning'
+    $summaryContent = if ($report.sessionId) { "SessionId=$($report.sessionId) | $($report.summary)" } else { $report.summary }
+    $null = Save-ToEngram -Title "Learning summary: $($report.runId)" -Content $summaryContent -Type 'learning'
 }
 Write-Ok "Post-session learning complete!"
 
