@@ -38,6 +38,50 @@ function Write-ErrorMsg {
     Write-Host "[ERROR] $Message" -ForegroundColor Red
 }
 
+function Get-EngramBinary {
+    $candidatePaths = @(
+        (Join-Path $repoRoot 'tools\engram.exe'),
+        (Join-Path ($env:USERPROFILE ? $env:USERPROFILE : $env:HOME) 'bin\engram.exe'),
+        (Join-Path ($env:GOPATH ? $env:GOPATH : (Join-Path $env:USERPROFILE 'go')) 'bin\engram.exe')
+    )
+
+    foreach ($candidate in $candidatePaths) {
+        if ($candidate -and (Test-Path $candidate)) {
+            return $candidate
+        }
+    }
+
+    $engramCmd = Get-Command engram -ErrorAction SilentlyContinue
+    if ($engramCmd) {
+        return $engramCmd.Source
+    }
+
+    return $null
+}
+
+function Save-ToEngram {
+    param(
+        [string]$Title,
+        [string]$Content,
+        [string]$Type = 'manual'
+    )
+
+    $engramBin = Get-EngramBinary
+    if (-not $engramBin) {
+        Write-Info "Engram not available, skipping memory save (non-critical)"
+        return $false
+    }
+
+    $saveResult = & $engramBin save $Title $Content --project foundation --type $Type 2>&1
+    if ($LASTEXITCODE -eq 0) {
+        Write-Info "Engram memory saved: $Title"
+        return $true
+    }
+
+    Write-Info "Engram save skipped (non-critical): $($saveResult | Out-String)"
+    return $false
+}
+
 $repoRoot = if ($env:FOUNDATION_BASE_DIR) { $env:FOUNDATION_BASE_DIR } else {
     $root = Split-Path -Parent $PSScriptRoot
     while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
@@ -144,6 +188,7 @@ function Initialize-Session {
 
     Write-Status "Session initialized: $sessionId"
     Write-Info "Session file: $sessionFile"
+    $null = Save-ToEngram -Title "Session start: $sessionId" -Content "Session $sessionId started in $Mode mode for project $ProjectName." -Type 'session'
 
     $enforcerScript = Join-Path $repoRoot 'scripts\utilities\karpathy-enforcer.ps1'
     if (-not (Test-Path $enforcerScript)) {
@@ -259,25 +304,7 @@ function End-Session {
     $latestSession = $sessionFiles | Select-Object -First 1
     $sessionData = Get-Content -Path $latestSession.FullName -Raw | ConvertFrom-Json
 
-    $engramBin = Join-Path $repoRoot 'tools\engram.exe'
-    if (-not (Test-Path $engramBin)) {
-        $userProfile = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
-        $engramBin = Join-Path $userProfile 'bin\engram.exe'
-    }
-    if (-not (Test-Path $engramBin)) {
-        $goPath = if ($env:GOPATH) { $env:GOPATH } else { Join-Path $env:USERPROFILE 'go' }
-        $engramBin = Join-Path $goPath 'bin\engram.exe'
-    }
-    if (Test-Path $engramBin) {
-        $saveResult = & $engramBin save "Session closure: $($sessionData.sessionId)" --project workspace_local --type manual --content "Session $($sessionData.sessionId) closed. Pre-close validation passed." 2>&1
-        if ($LASTEXITCODE -eq 0) {
-            Write-Status "Session closure saved to Engram"
-        } else {
-            Write-Info "Engram save skipped (non-critical)"
-        }
-    } else {
-        Write-Info "Engram not available, skipping memory save (non-critical)"
-    }
+    $null = Save-ToEngram -Title "Session closure: $($sessionData.sessionId)" -Content "Session $($sessionData.sessionId) closed. Pre-close validation passed." -Type 'session'
 
     $updatedData = @{
         sessionId = $sessionData.sessionId
