@@ -17,6 +17,17 @@
       "scripts": [
         "scripts/utilities/session-manager.ps1"
       ]
+    },
+    {
+      "name": "post-session-learning-persistence",
+      "threshold": 85,
+      "tests": [
+        "tests/integration/engram-session-persistence.integration.tests.ps1",
+        "tests/integration/post-session-learning.integration.tests.ps1"
+      ],
+      "scripts": [
+        "scripts/utilities/post-session-learning.ps1"
+      ]
     }
   ],
   "include": [
