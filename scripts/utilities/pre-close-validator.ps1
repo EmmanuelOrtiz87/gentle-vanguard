@@ -4,7 +4,8 @@
 param(
     [switch]$AutoResolve,
     [switch]$Force,
-    [string]$ProjectName = "foundation"
+    [string]$ProjectName = "foundation",
+    [switch]$NoExit
 )
 
 $ErrorActionPreference = 'Continue'
@@ -34,6 +35,16 @@ function Write-Info { param([string]$Message)
 
 function Write-Error { param([string]$Message)
     Write-Host "[ERROR] $Message" -ForegroundColor Red
+}
+
+function Complete-Script {
+    param([int]$ExitCode = 0)
+
+    if ($NoExit) {
+        return $ExitCode
+    }
+
+    exit $ExitCode
 }
 
 function Resolve-EngramBinary {
@@ -146,8 +157,11 @@ try {
     $criticalPatterns = @('HACK:', 'XXX:')
     $foundTasks = @()
     
-    $codeFiles = Get-ChildItem -Path $repoRoot -Include "*.ps1", "*.ts", "*.js" -Recurse -ErrorAction SilentlyContinue | 
-                 Where-Object { $_.FullName -notmatch 'node_modules|\.git|docs|templates' } |
+    $codeFiles = Get-ChildItem -Path $repoRoot -Recurse -File -ErrorAction SilentlyContinue |
+                 Where-Object {
+                     $_.Extension -in @('.ps1', '.ts', '.js') -and
+                     $_.FullName -notmatch 'node_modules|\.git|docs|templates'
+                 } |
                  Select-Object -First 50
     
     foreach ($file in $codeFiles) {
@@ -155,7 +169,7 @@ try {
         for ($i = 0; $i -lt $lines.Count; $i++) {
             $line = $lines[$i]
             foreach ($pattern in $criticalPatterns) {
-                if ($line -match [regex]::Escape($pattern)) {
+                if ($line -and $line.Contains($pattern)) {
                     $relativePath = $file.FullName.Replace($repoRoot, '').TrimStart('\')
                     $lineNum = $i + 1
                     $foundTasks += "{0}:{1}: {2}" -f $relativePath, $lineNum, $line.Trim()
@@ -233,11 +247,13 @@ if ($allPassed) {
     Write-Host "  1. Call mem_session_summary with proper structure"
     Write-Host "  2. Call mem_session_end to close the session"
     Write-Host "  3. Run scripts/utilities/session-manual-end.cmd if needed"
-    exit 0
+    Complete-Script -ExitCode 0
+    return
 } else {
     Write-Error "VALIDATION FAILED - Checks failed: $($failedChecks -join ', ')"
     Write-Host "`nRequired actions:"
     Write-Host "  - Fix critical issues or use -Force to override"
     Write-Host "  - Run with -AutoResolve to auto-fix git issues"
-    exit 1
+    Complete-Script -ExitCode 1
+    return
 }

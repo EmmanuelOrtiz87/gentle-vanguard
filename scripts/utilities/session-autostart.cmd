@@ -74,16 +74,22 @@ if exist "%WF_DIR%" (
 
 echo [1/9] Initializing session manager...
 pwsh -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\session-manager.ps1" -Mode AutoStart
-if errorlevel 1 (
-    echo [ERROR] session-manager.ps1 failed (code: !errorlevel!)
-    echo [FALLBACK] Attempting foundation...
-    if exist "%WF_DIR%\foundation.ps1" (
-        pwsh -NoProfile -ExecutionPolicy Bypass -File "%WF_DIR%\foundation.ps1" start-session
-    ) else (
-        echo [FATAL] No fallback available. Aborting.
-        exit /b 1
-    )
-) else ( echo [OK] Session initialized )
+set SESSION_MANAGER_EXIT=%ERRORLEVEL%
+if "%SESSION_MANAGER_EXIT%"=="0" goto session_manager_ok
+echo [ERROR] session-manager.ps1 failed (code: %SESSION_MANAGER_EXIT%)
+echo [FALLBACK] Attempting foundation...
+if exist "%WF_DIR%\foundation.ps1" (
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%WF_DIR%\foundation.ps1" start-session
+) else (
+    echo [FATAL] No fallback available. Aborting.
+    exit /b 1
+)
+goto session_manager_done
+
+:session_manager_ok
+echo [OK] Session initialized
+
+:session_manager_done
 
 REM === Phase 2: Notifications ===
 echo [2/9] Time-based notifications...
@@ -97,6 +103,8 @@ echo [3/9] Resolving session ID...
 set SESSION_ID=
 for /f "tokens=*" %%i in ('pwsh -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\get-session-id.ps1"') do set SESSION_ID=%%i
 if defined SESSION_ID (
+    set FOUNDATION_SESSION_ID=%SESSION_ID%
+    set WFS_SESSION_ID=%SESSION_ID%
     echo [OK] Session ID: %SESSION_ID%
 ) else ( echo [WARN] Could not resolve session ID )
 

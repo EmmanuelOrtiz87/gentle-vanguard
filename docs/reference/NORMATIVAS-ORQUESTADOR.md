@@ -7,12 +7,16 @@ agentes y skills, cumpliendo la directiva de almacenamiento dentro del proyecto 
 
 ---
 
+## Ubicación
+
 ## 1. Ubicación y Estructura
 
 - Este archivo debe residir en `docs/reference/NORMATIVAS-ORQUESTADOR.md` dentro del proyecto
   Foundation.
 - No debe haber archivos normativos sueltos fuera del proyecto.
 - Si existía un archivo global, su contenido debe migrarse aquí y eliminarse el original.
+
+## Contenido
 
 ## 2. Contenido
 
@@ -23,6 +27,8 @@ agentes y skills, cumpliendo la directiva de almacenamiento dentro del proyecto 
 - Ámbito de aplicación
 - Ejemplos de patrones y decisiones
 - Referencias cruzadas y protocolo de handoff
+
+## Decisiones
 
 ---
 

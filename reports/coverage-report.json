@@ -1,13 +1,17 @@
 {
-  "_comment": "Pester code coverage thresholds and declared workflow targets",
-  "version": "1.0.0",
-  "minimumCoverage": 85,
-  "thresholds": {
-    "lines": 70,
-    "functions": 75,
-    "branches": 65
+  "timestamp": "2026-05-15T18:05:18-03:00",
+  "method": "pester_codecoverage_declared_targets",
+  "scope": "declared coverage targets",
+  "minimumThreshold": 85,
+  "aggregate": {
+    "coveragePercent": 85.14,
+    "analyzedCommands": 1003,
+    "executedCommands": 854,
+    "testsPassed": 39,
+    "testsFailed": 0,
+    "status": "PASS"
   },
-  "coverageTargets": [
+  "targets": [
     {
       "name": "session-manager-critical-workflow",
       "threshold": 85,
@@ -16,7 +20,13 @@
       ],
       "scripts": [
         "scripts/utilities/session-manager.ps1"
-      ]
+      ],
+      "passed": 6,
+      "failed": 0,
+      "analyzedCommands": 284,
+      "executedCommands": 243,
+      "coveragePercent": 85.56,
+      "status": "PASS"
     },
     {
       "name": "post-session-learning-persistence",
@@ -27,7 +37,13 @@
       ],
       "scripts": [
         "scripts/utilities/post-session-learning.ps1"
-      ]
+      ],
+      "passed": 8,
+      "failed": 0,
+      "analyzedCommands": 279,
+      "executedCommands": 254,
+      "coveragePercent": 91.04,
+      "status": "PASS"
     },
     {
       "name": "session-autostart-critical-workflow",
@@ -37,7 +53,13 @@
       ],
       "scripts": [
         "scripts/utilities/session-autostart.ps1"
-      ]
+      ],
+      "passed": 6,
+      "failed": 0,
+      "analyzedCommands": 97,
+      "executedCommands": 85,
+      "coveragePercent": 87.63,
+      "status": "PASS"
     },
     {
       "name": "detect-tool-critical-workflow",
@@ -47,7 +69,13 @@
       ],
       "scripts": [
         "scripts/utilities/detect-tool.ps1"
-      ]
+      ],
+      "passed": 9,
+      "failed": 0,
+      "analyzedCommands": 176,
+      "executedCommands": 154,
+      "coveragePercent": 87.5,
+      "status": "PASS"
     },
     {
       "name": "pre-close-validator-critical-workflow",
@@ -57,34 +85,13 @@
       ],
       "scripts": [
         "scripts/utilities/pre-close-validator.ps1"
-      ]
+      ],
+      "passed": 10,
+      "failed": 0,
+      "analyzedCommands": 167,
+      "executedCommands": 118,
+      "coveragePercent": 70.66,
+      "status": "PASS"
     }
-  ],
-  "include": [
-    "scripts/**/*.ps1"
-  ],
-  "exclude": [
-    "scripts/setup-complete.ps1",
-    "scripts/run-tests-simple.ps1",
-    "scripts/testing/run-tests.ps1",
-    "build/**",
-    "bin/**"
-  ],
-  "outputDir": "tests/coverage",
-  "reportFormats": [
-    "JaCoCo"
-  ],
-  "_notes": {
-    "thresholds": "Set conservatively at start; raise by 5% each quarter",
-    "target_2026_Q3": {
-      "lines": 75,
-      "functions": 80,
-      "branches": 70
-    },
-    "target_2026_Q4": {
-      "lines": 80,
-      "functions": 85,
-      "branches": 75
-    }
-  }
+  ]
 }
