@@ -4,7 +4,7 @@
 param(
     [ValidateSet('AutoStart', 'Manual', 'Health', 'End', 'Cleanup')]
     [string]$Mode = 'Manual',
-    [string]$ProjectName = 'foundation',
+    [string]$ProjectName = 'workspace_local',
     [string]$SessionDir = '.\.session',
     [int]$OrphanMaxAgeHours = 24,
     [switch]$SkipPreCloseValidation,
@@ -61,6 +61,48 @@ function Get-ValidSessionEntries {
     return $entries
 }
 
+function Save-SessionBriefArtifacts {
+    param(
+        [string]$SessionId,
+        [string]$StartTime,
+        [string]$Mode,
+        [string]$Project
+    )
+
+    $logsDir = Join-Path $repoRoot 'logs'
+    if (-not (Test-Path $logsDir)) {
+        New-Item -ItemType Directory -Path $logsDir -Force | Out-Null
+    }
+
+    $branch = (& git -C $repoRoot rev-parse --abbrev-ref HEAD 2>$null)
+    if ([string]::IsNullOrWhiteSpace($branch)) {
+        $branch = 'unknown'
+    }
+
+    $sessionBrief = @{ 
+        SessionId = $SessionId
+        StartTime = $StartTime
+        TaskName = ''
+        Repository = $repoRoot
+        Branch = $branch
+        Status = 'ACTIVE'
+        Mode = $Mode
+        Project = $Project
+    }
+
+    $sessionBriefPath = Join-Path $logsDir "$SessionId.json"
+    $sessionBrief | ConvertTo-Json | Set-Content -Path $sessionBriefPath -Encoding UTF8
+
+    $activeSessionPath = Join-Path $logsDir '.session-active'
+    @{ 
+        SessionId = $SessionId
+        StartTime = $StartTime
+        TaskName = ''
+        Mode = $Mode
+        Project = $Project
+    } | ConvertTo-Json | Set-Content -Path $activeSessionPath -Encoding UTF8
+}
+
 function Complete-Script {
     param([int]$ExitCode = 0)
 
@@ -105,7 +147,7 @@ function Save-ToEngram {
         return $false
     }
 
-    $saveResult = & $engramBin save $Title $Content --project foundation --type $Type 2>&1
+    $saveResult = & $engramBin save $Title $Content --project $ProjectName --type $Type 2>&1
     if ($LASTEXITCODE -eq 0) {
         Write-Info "Engram memory saved: $Title"
         return $true
@@ -218,6 +260,7 @@ function Initialize-Session {
     }
 
     $sessionData | ConvertTo-Json | Out-File -FilePath $sessionFile -Encoding UTF8
+    Save-SessionBriefArtifacts -SessionId $sessionId -StartTime $sessionData.startTime -Mode $Mode -Project $ProjectName
 
     Write-Status "Session initialized: $sessionId"
     Write-Info "Session file: $sessionFile"
