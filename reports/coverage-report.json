@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-05-15T17:49:23-03:00",
+  "timestamp": "2026-05-15T18:05:18-03:00",
   "method": "pester_codecoverage_declared_targets",
   "scope": "declared coverage targets",
   "minimumThreshold": 85,
   "aggregate": {
-    "coveragePercent": 88.18,
-    "analyzedCommands": 660,
-    "executedCommands": 582,
-    "testsPassed": 20,
+    "coveragePercent": 85.14,
+    "analyzedCommands": 1003,
+    "executedCommands": 854,
+    "testsPassed": 39,
     "testsFailed": 0,
     "status": "PASS"
   },
@@ -59,6 +59,38 @@
       "analyzedCommands": 97,
       "executedCommands": 85,
       "coveragePercent": 87.63,
+      "status": "PASS"
+    },
+    {
+      "name": "detect-tool-critical-workflow",
+      "threshold": 85,
+      "tests": [
+        "tests/integration/detect-tool.integration.tests.ps1"
+      ],
+      "scripts": [
+        "scripts/utilities/detect-tool.ps1"
+      ],
+      "passed": 9,
+      "failed": 0,
+      "analyzedCommands": 176,
+      "executedCommands": 154,
+      "coveragePercent": 87.5,
+      "status": "PASS"
+    },
+    {
+      "name": "pre-close-validator-critical-workflow",
+      "threshold": 70,
+      "tests": [
+        "tests/integration/pre-close-validator.integration.tests.ps1"
+      ],
+      "scripts": [
+        "scripts/utilities/pre-close-validator.ps1"
+      ],
+      "passed": 10,
+      "failed": 0,
+      "analyzedCommands": 167,
+      "executedCommands": 118,
+      "coveragePercent": 70.66,
       "status": "PASS"
     }
   ]

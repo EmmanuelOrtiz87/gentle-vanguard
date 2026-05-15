@@ -86,6 +86,8 @@ Targets actuales:
 - `session-manager-critical-workflow`
 - `post-session-learning-persistence`
 - `session-autostart-critical-workflow`
+- `detect-tool-critical-workflow`
+- `pre-close-validator-critical-workflow`
 
 Comandos útiles:
 
@@ -94,6 +96,8 @@ pwsh -File .\scripts\utilities\verify-coverage.ps1
 Invoke-Pester .\tests\integration\engram-session-persistence.integration.tests.ps1 -Output Detailed
 Invoke-Pester .\tests\integration\post-session-learning.integration.tests.ps1 -Output Detailed
 Invoke-Pester .\tests\integration\session-autostart.integration.tests.ps1 -Output Detailed
+Invoke-Pester .\tests\integration\detect-tool.integration.tests.ps1 -Output Detailed
+Invoke-Pester .\tests\integration\pre-close-validator.integration.tests.ps1 -Output Detailed
 ```
   "prompt_price_unit": "0",
   "prompt_price": "0",
