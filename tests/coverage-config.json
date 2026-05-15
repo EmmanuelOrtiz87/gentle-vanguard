@@ -38,6 +38,26 @@
       "scripts": [
         "scripts/utilities/session-autostart.ps1"
       ]
+    },
+    {
+      "name": "detect-tool-critical-workflow",
+      "threshold": 85,
+      "tests": [
+        "tests/integration/detect-tool.integration.tests.ps1"
+      ],
+      "scripts": [
+        "scripts/utilities/detect-tool.ps1"
+      ]
+    },
+    {
+      "name": "pre-close-validator-critical-workflow",
+      "threshold": 70,
+      "tests": [
+        "tests/integration/pre-close-validator.integration.tests.ps1"
+      ],
+      "scripts": [
+        "scripts/utilities/pre-close-validator.ps1"
+      ]
     }
   ],
   "include": [
