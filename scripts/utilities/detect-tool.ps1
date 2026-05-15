@@ -33,19 +33,23 @@ function Get-DetectedTool {
         }
     }
 
-    # Detect OS
-    $tool.os.isWindows = [System.OperatingSystem]::IsWindows()
-    $tool.os.isLinux   = [System.OperatingSystem]::IsLinux()
-    $tool.os.isMacOS   = [System.OperatingSystem]::IsMacOS()
-    if ($tool.os.isWindows) {
-        $tool.os.platform = "windows"
-        $tool.os.shell    = "powershell"
-    } elseif ($tool.os.isMacOS) {
-        $tool.os.platform = "macos"
-        $tool.os.shell    = "zsh"
-    } elseif ($tool.os.isLinux) {
-        $tool.os.platform = "linux"
-        $tool.os.shell    = "bash"
+    # Detect OS (compatible with PS 5.1 and PS 7+)
+    $osPlatform = [Environment]::OSVersion.Platform
+    if ($osPlatform -eq 'Win32NT') {
+        $tool.os.isWindows  = $true
+        $tool.os.platform   = "windows"
+        $tool.os.shell      = "powershell"
+    } elseif ($osPlatform -eq 'Unix') {
+        $uname = (uname -s)
+        if ($uname -eq 'Darwin') {
+            $tool.os.isMacOS = $true
+            $tool.os.platform = "macos"
+            $tool.os.shell    = "zsh"
+        } else {
+            $tool.os.isLinux  = $true
+            $tool.os.platform = "linux"
+            $tool.os.shell    = "bash"
+        }
     }
 
     # 1. Check OPENCODE env vars (most reliable for opencode)
