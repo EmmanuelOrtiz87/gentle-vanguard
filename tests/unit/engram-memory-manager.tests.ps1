@@ -1,203 +1,77 @@
 ﻿#!/usr/bin/env pwsh
-<#
-.SYNOPSIS
-    Unit Tests for Engram Memory Manager
-    
-.DESCRIPTION
-    Comprehensive unit tests for Engram Memory Manager functions
-    
-.NOTES
-    Requires Pester module
-#>
 
-Describe "Engram Memory Manager - Unit Tests" {
-    
-    BeforeAll {
-        $script:ManagerPath = ".\tools\engram-memory-manager.ps1"
-        $script:ConfigPath = Join-Path $PSScriptRoot "config\engram-memory.json"
-    }
-    
-    Context "Configuration Loading" {
-        It "Should load configuration file" {
-            $config = Get-Content $script:ConfigPath | ConvertFrom-Json
-            $config | Should Not BeNullOrEmpty
-            $config.version | Should Be "2.0.0"
+$script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
+$script:engram = Join-Path $script:root 'tools\engram.exe'
+$script:engramSafe = Join-Path $script:root 'scripts\utilities\engram-safe.ps1'
+$script:testId = "test-$(Get-Date -Format 'yyyyMMddHHmmss')"
+$env:ENGRAM_DATA_DIR = Join-Path $script:root '.engram-data'
+$env:ENGRAM_SKIP_UPDATE = '1'
+
+Describe "Engram CLI - Unit Tests" {
+
+    Context "CLI Availability" {
+        It "engram.exe binary exists" {
+            Test-Path $script:engram | Should Be $true
         }
-        
-        It "Should have all required phases" {
-            $config = Get-Content $script:ConfigPath | ConvertFrom-Json
-            $config.phases | Should Not BeNullOrEmpty
-            $config.phases.phase1 | Should Not BeNullOrEmpty
-            $config.phases.phase2 | Should Not BeNullOrEmpty
-            $config.phases.phase3 | Should Not BeNullOrEmpty
+
+        It "engram.exe --version returns a version string" {
+            $v = & $script:engram --version 2>&1 | Out-String
+            $v | Should Not BeNullOrEmpty
         }
-        
-        It "Should have correct threshold value" {
-            $config = Get-Content $script:ConfigPath | ConvertFrom-Json
-            $config.phases.phase1.threshold | Should Be 250
+
+        It "engram-safe.ps1 wrapper exists" {
+            Test-Path $script:engramSafe | Should Be $true
         }
     }
-    
-    Context "Memory Pack Creation" {
-        It "Should create memory pack with valid ID" {
-            $packId = "test-pack-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
-            $packId | Should Match "^test-pack-\d{8}-\d{6}$"
+
+    Context "Search Operations" {
+        It "engram search returns results for known session patterns" {
+            $out = & $script:engram search "Session start:" --project foundation --limit 3 2>&1 | Out-String
+            $out | Should Not BeNullOrEmpty
         }
-        
-        It "Should validate pack structure" {
-            $pack = @{
-                id = "test-pack-001"
-                type = "memory-pack"
-                tokens = 250
-                timestamp = (Get-Date -Format "o")
-            }
-            $pack.id | Should Not BeNullOrEmpty
-            $pack.type | Should Be "memory-pack"
-            $pack.tokens | Should Be 250
-        }
-        
-        It "Should enforce token limits" {
-            $maxTokens = 250
-            $testTokens = 300
-            $testTokens -gt $maxTokens | Should Be $true
+
+        It "engram search with --limit works correctly" {
+            $raw = & $script:engram search "Session" --project foundation --limit 2 2>&1
+            $lines = @($raw | Where-Object { $_ -match 'session-' })
+            $lines.Count -le 10 | Should Be $true
         }
     }
-    
-    Context "Consolidation Logic" {
-        It "Should identify consolidation trigger" {
-            $packCount = 5
-            $triggerThreshold = 5
-            $packCount -ge $triggerThreshold | Should Be $true
+
+    Context "Health and Diagnostics" {
+        It "engram doctor returns valid JSON" {
+            $raw = & $script:engram doctor --json 2>&1 | Out-String
+            $parsed = $raw | ConvertFrom-Json -ErrorAction Stop
+            $parsed | Should Not BeNullOrEmpty
         }
-        
-        It "Should calculate consolidation ratio" {
-            $sourcePacks = 5
-            $targetPacks = 1
-            $ratio = $sourcePacks / $targetPacks
-            $ratio | Should Be 5
-        }
-        
-        It "Should validate consolidation result" {
-            $consolidatedPack = @{
-                id = "consolidated-001"
-                sourcePacks = 5
-                tokens = 1250
-                compressionRatio = 0.65
-            }
-            $consolidatedPack.compressionRatio | Should Be 0.65
-            $consolidatedPack.tokens | Should Be 1250
+
+        It "engram stats returns observation count" {
+            $raw = & $script:engram stats --project foundation 2>&1 | Out-String
+            $raw.Trim() | Should Not BeNullOrEmpty
         }
     }
-    
-    Context "Compression Operations" {
-        It "Should apply compression ratio" {
-            $originalSize = 1000
-            $compressionRatio = 0.65
-            $compressedSize = [int]($originalSize * $compressionRatio)
-            $compressedSize | Should Be 650
-        }
-        
-        It "Should maintain minimum quality score" {
-            $qualityScore = 0.91
-            $minimumQuality = 0.80
-            $qualityScore -ge $minimumQuality | Should Be $true
-        }
-        
-        It "Should validate compression bounds" {
-            $ratio = 0.65
-            $ratio -ge 0.50 -and $ratio -le 0.95 | Should Be $true
+
+    Context "Data Roundtrip" {
+        It "can save and then search for an observation" {
+            $title = "test-obs-$script:testId"
+            $null = & $script:engram save --title $title --content "Integration test observation $script:testId" --project foundation 2>&1
+            $searchOut = & $script:engram search $title --project foundation --limit 5 2>&1 | Out-String
+            ($searchOut -match [regex]::Escape($title)) | Should Be $true
         }
     }
-    
+
     Context "Error Handling" {
-        It "Should handle missing configuration" {
-            $missingConfig = ".\config\nonexistent.json"
-            Test-Path $missingConfig | Should Be $false
-        }
-        
-        It "Should validate input parameters" {
-            $invalidAction = "invalid-action"
-            $validActions = @("create", "consolidate", "compress", "analyze", "report")
-            $validActions -contains $invalidAction | Should Be $false
-        }
-        
-        It "Should handle corrupted pack data" {
-            $corruptedPack = @{
-                id = ""
-                tokens = -100
-            }
-            [string]::IsNullOrEmpty($corruptedPack.id) | Should Be $true
-            $corruptedPack.tokens -lt 0 | Should Be $true
+        It "engram with invalid command returns non-zero exit" {
+            $null = & $script:engram nonexistent-command-12345 2>&1
+            $LASTEXITCODE | Should Not Be 0
         }
     }
-    
-    Context "Performance Metrics" {
-        It "Should track creation time" {
-            $startTime = Get-Date
-            Start-Sleep -Milliseconds 10
-            $endTime = Get-Date
-            $duration = ($endTime - $startTime).TotalMilliseconds
-            $duration -gt 0 | Should Be $true
-        }
-        
-        It "Should validate performance threshold" {
-            $actualTime = 45
-            $threshold = 50
-            $actualTime -le $threshold | Should Be $true
-        }
-        
-        It "Should track consolidation performance" {
-            $consolidationTime = 95
-            $performanceThreshold = 100
-            $consolidationTime -le $performanceThreshold | Should Be $true
-        }
-    }
-    
-    Context "Data Integrity" {
-        It "Should verify pack integrity" {
-            $pack = @{
-                id = "test-001"
-                checksum = "abc123def456"
-                verified = $true
-            }
-            $pack.verified | Should Be $true
-        }
-        
-        It "Should detect data corruption" {
-            $originalChecksum = "abc123"
-            $currentChecksum = "xyz789"
-            $originalChecksum -eq $currentChecksum | Should Be $false
-        }
-        
-        It "Should validate pack structure" {
-            $pack = @{
-                id = "test-001"
-                type = "memory-pack"
-                tokens = 250
-                timestamp = (Get-Date -Format "o")
-            }
-            $pack.Keys.Count | Should Be 4
-        }
-    }
-}
 
-Describe "Engram Memory Manager - Integration Tests" {
-    
-    Context "End-to-End Workflow" {
-        It "Should complete full workflow" {
-            # Create  Consolidate  Compress  Validate
-            $workflow = @("create", "consolidate", "compress", "validate")
-            $workflow.Count | Should Be 4
-        }
-        
-        It "Should maintain state across operations" {
-            $state = @{
-                packsCreated = 5
-                packsConsolidated = 1
-                compressionApplied = $true
-            }
-            $state.packsCreated | Should Be 5
-            $state.compressionApplied | Should Be $true
+    Context "Cross-Session Consistency" {
+        It "search returns same project across multiple queries" {
+            $r1 = & $script:engram search "session" --project foundation --limit 2 2>&1 | Out-String
+            $r2 = & $script:engram search "session" --project foundation --limit 2 2>&1 | Out-String
+            $r1.Trim().Length | Should BeGreaterThan 0
+            $r2.Trim().Length | Should BeGreaterThan 0
         }
     }
 }

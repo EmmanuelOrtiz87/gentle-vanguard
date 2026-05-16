@@ -85,6 +85,21 @@ function foundation {
 # Alias for even faster access (optional)
 Set-Alias -Name foundation-cli -Value foundation -Force
 
+# Tab completion for foundation command
+$foundationCompletionPaths = @(
+    ".\scripts\utilities\register-foundation-completion.ps1",
+    "..\scripts\utilities\register-foundation-completion.ps1",
+    "~\foundation\scripts\utilities\register-foundation-completion.ps1"
+)
+$foundationCompletionLoaded = $false
+foreach ($fcp in $foundationCompletionPaths) {
+    $fcpExpanded = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($fcp)
+    if (-not $foundationCompletionLoaded -and (Test-Path $fcpExpanded)) {
+        . $fcpExpanded
+        $foundationCompletionLoaded = $true
+    }
+}
+
 Write-Host "[INFO] 'foundation' command ready. Type 'foundation help' for available commands." -ForegroundColor Green
 '@
 

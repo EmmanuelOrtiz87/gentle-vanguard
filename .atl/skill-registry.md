@@ -1,6 +1,6 @@
 # Skill Registry
 
-**Auto-generated**: 2026-05-15 20:32:11 | **Skills**: 127
+**Auto-generated**: 2026-05-16 08:42:11 | **Skills**: 127
 
 **Delegator use only.** Sub-agents receive compact rules pre-digested in launch prompt.
 Orchestrator reads this registry to resolve skill->agent mappings and inject compact rules.

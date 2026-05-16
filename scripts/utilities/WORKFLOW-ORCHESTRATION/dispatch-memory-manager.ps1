@@ -4,7 +4,7 @@
 
 param(
     [Parameter(Mandatory=$false)]
-    [ValidateSet('save', 'load', 'list', 'clear', 'sync')]
+    [ValidateSet('save', 'load', 'list', 'clear', 'sync', 'reconcile', 'handoff')]
     [string]$Action = 'load',
     
     [Parameter(Mandatory=$false)]
@@ -249,9 +249,62 @@ function Clear-DispatchMemory {
     }
 }
 
+function Detect-ContextConflicts {
+    param([array]$Contexts)
+    $conflicts = @()
+    $allKeys = @{}
+    foreach ($ctx in $Contexts) {
+        if ($ctx.context) {
+            foreach ($kv in $ctx.context.PSObject.Properties) {
+                if (-not $allKeys.ContainsKey($kv.Name)) {
+                    $allKeys[$kv.Name] = @{ values = @(); sources = @() }
+                }
+                $val = if ($kv.Value) { $kv.Value.ToString() } else { '' }
+                $allKeys[$kv.Name].values += $val
+                $allKeys[$kv.Name].sources += $ctx.execution_id
+            }
+        }
+    }
+    foreach ($key in $allKeys.Keys) {
+        $unique = $allKeys[$key].values | Select-Object -Unique
+        if ($unique.Count -gt 1) {
+            $conflicts += @{ key = $key; values = $unique; sources = $allKeys[$key].sources }
+        }
+    }
+    return $conflicts
+}
+
+function Merge-Contexts {
+    param([array]$Contexts)
+    $merged = @{}
+    $sorted = $Contexts | Sort-Object -Property timestamp
+    foreach ($ctx in $sorted) {
+        if ($ctx.context) {
+            foreach ($kv in $ctx.context.PSObject.Properties) {
+                $val = $kv.Value
+                if ($val -is [array]) {
+                    $existing = if ($merged.ContainsKey($kv.Name)) { $merged[$kv.Name] } else { @() }
+                    $merged[$kv.Name] = @($existing + $val) | Select-Object -Unique
+                } elseif ($val -is [System.Management.Automation.PSCustomObject]) {
+                    $existing = if ($merged.ContainsKey($kv.Name)) { $merged[$kv.Name] } else { @{} }
+                    foreach ($nk in $val.PSObject.Properties) {
+                        $existing | Add-Member -NotePropertyName $nk.Name -NotePropertyValue $nk.Value -Force
+                    }
+                    $merged[$kv.Name] = $existing
+                } else {
+                    $merged[$kv.Name] = $val
+                }
+            }
+        }
+    }
+    return $merged
+}
+
 function Sync-DispatchMemory {
     param(
-        [string]$SessionId = ''
+        [string]$SessionId = '',
+        [string]$TargetSessionId = '',
+        [switch]$DryRun
     )
     
     Initialize-MemoryStructure
@@ -259,23 +312,98 @@ function Sync-DispatchMemory {
     try {
         $registry = Get-DispatchRegistry
         $currentSession = if ([string]::IsNullOrWhiteSpace($SessionId)) { $env:WFS_SESSION_ID } else { $SessionId }
-        
         $sessionDispatches = @($registry.dispatches | Where-Object { $_.session_id -eq $currentSession })
         
-        Write-DispatchLog "Sincronizando $($sessionDispatches.Count) dispatches de sesin: $currentSession" -Level 'INFO'
-        
-        $syncReport = @{
-            session_id = $currentSession
-            total_dispatches = $sessionDispatches.Count
-            synced_at = Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz'
-            dispatches = $sessionDispatches
+        Write-DispatchLog "Reconciliando $($sessionDispatches.Count) dispatches de sesin: $currentSession" -Level 'INFO'
+
+        $contexts = @()
+        foreach ($d in $sessionDispatches) {
+            $cf = Join-Path $dispatchContextDir "$($d.execution_id).json"
+            if (Test-Path $cf) { $contexts += (Get-Content $cf -Raw | ConvertFrom-Json) }
         }
-        
-        return $syncReport
+
+        $conflicts = Detect-ContextConflicts -Contexts $contexts
+        $merged = Merge-Contexts -Contexts $contexts
+        $staleness = @()
+        $cutoff = (Get-Date).AddDays(-14)
+        foreach ($d in $sessionDispatches) {
+            try { if ([datetime]::Parse($d.timestamp) -lt $cutoff) { $staleness += $d } } catch {}
+        }
+
+        # Cross-session reconciliation
+        $crossSessionMerged = $null
+        if ($TargetSessionId -and $TargetSessionId -ne $currentSession) {
+            $targetDispatches = @($registry.dispatches | Where-Object { $_.session_id -eq $TargetSessionId })
+            $targetContexts = @()
+            foreach ($d in $targetDispatches) {
+                $cf = Join-Path $dispatchContextDir "$($d.execution_id).json"
+                if (Test-Path $cf) { $targetContexts += (Get-Content $cf -Raw | ConvertFrom-Json) }
+            }
+            $crossSessionMerged = Merge-Contexts -Contexts $targetContexts
+            Write-DispatchLog "Cross-session merge: $TargetSessionId -> $currentSession" -Level 'INFO'
+        }
+
+        # Save reconciliation artifact
+        $reconFile = Join-Path $dispatchMemoryDir "reconciliation-$currentSession.json"
+        $report = @{
+            session_id = $currentSession
+            target_session_id = $TargetSessionId
+            timestamp = Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz'
+            total_dispatches = $sessionDispatches.Count
+            conflict_count = $conflicts.Count
+            conflicts = $conflicts
+            staleness_count = $staleness.Count
+            stale_dispatches = @($staleness | ForEach-Object { $_.execution_id })
+            merged_keys = @($merged.Keys)
+            has_cross_session = ($null -ne $crossSessionMerged)
+            dry_run = $DryRun -eq $true
+        }
+
+        if (-not $DryRun) {
+            $report | ConvertTo-Json -Depth 5 | Out-File -FilePath $reconFile -Encoding UTF8 -Force
+            # Save merged context as session canonical context
+            $sessionContextFile = Join-Path $dispatchMemoryDir "session-context-$currentSession.json"
+            @{ session_id = $currentSession; merged = $merged; cross_session = $crossSessionMerged } | ConvertTo-Json -Depth 5 | Out-File -FilePath $sessionContextFile -Encoding UTF8 -Force
+            Write-DispatchLog "Reconciliation saved to $reconFile" -Level 'SUCCESS'
+        } else {
+            Write-DispatchLog "Dry-run: no changes written" -Level 'INFO'
+        }
+
+        return $report
     } catch {
-        Write-DispatchLog "Error al sincronizar memoria de dispatch: $_" -Level 'ERROR'
+        Write-DispatchLog "Error al reconciliar memoria de dispatch: $_" -Level 'ERROR'
         return @{ error = $_.Exception.Message }
     }
+}
+
+function Invoke-Handoff {
+    param(
+        [string]$FromSessionId,
+        [string]$ToSessionId
+    )
+    Initialize-MemoryStructure
+    $registry = Get-DispatchRegistry
+    $fromDispatches = @($registry.dispatches | Where-Object { $_.session_id -eq $FromSessionId })
+    $toDispatches = @($registry.dispatches | Where-Object { $_.session_id -eq $ToSessionId })
+    
+    $fromContexts = @()
+    foreach ($d in $fromDispatches) {
+        $cf = Join-Path $dispatchContextDir "$($d.execution_id).json"
+        if (Test-Path $cf) { $fromContexts += (Get-Content $cf -Raw | ConvertFrom-Json) }
+    }
+    $mergedFrom = Merge-Contexts -Contexts $fromContexts
+
+    $handoffFile = Join-Path $dispatchMemoryDir "handoff-$FromSessionId-to-$ToSessionId.json"
+    @{
+        from_session = $FromSessionId
+        to_session = $ToSessionId
+        timestamp = Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz'
+        from_dispatch_count = $fromDispatches.Count
+        to_dispatch_count = $toDispatches.Count
+        context = $mergedFrom
+    } | ConvertTo-Json -Depth 5 | Out-File -FilePath $handoffFile -Encoding UTF8 -Force
+    Write-DispatchLog "Handoff: $FromSessionId -> $ToSessionId ($($fromDispatches.Count) dispatches)" -Level 'SUCCESS'
+    return @{ handoff = $handoffFile; from = $FromSessionId; to = $ToSessionId; context_keys = @($mergedFrom.Keys) }
 }
 
 # Ejecutar accin solicitada
@@ -302,6 +430,16 @@ $result = switch ($Action) {
     }
     'sync' {
         Sync-DispatchMemory -SessionId $SessionId
+    }
+    'reconcile' {
+        Sync-DispatchMemory -SessionId $SessionId -DryRun:$Force -TargetSessionId $Scope
+    }
+    'handoff' {
+        if ([string]::IsNullOrWhiteSpace($ExecutionId) -or [string]::IsNullOrWhiteSpace($SessionId)) {
+            @{ error = 'ExecutionId (from session) and SessionId (to session) required for handoff' }
+        } else {
+            Invoke-Handoff -FromSessionId $ExecutionId -ToSessionId $SessionId
+        }
     }
     default {
         @{ error = "Accin no reconocida: $Action" }
