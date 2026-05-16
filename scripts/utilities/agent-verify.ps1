@@ -393,12 +393,34 @@ if (Test-DomainEnabled 'structure') {
         Add-Result "workflow-hardening" "WARN" ".github/workflows directory not found" "structure"
     }
 
-    # Detect uncommitted changes (unstaged or staged)
-    $DirtyFiles = git -C $Root status --porcelain 2>$null | Where-Object { $_ -match "^\s*[MADRCU?]" }
-    if ($DirtyFiles.Count -gt 0) {
-        Add-Result "uncommitted-changes" "WARN" "$($DirtyFiles.Count) uncommitted file(s) - commit or stash before closing task" "structure"
+    # Detect uncommitted changes (unstaged or staged), ignoring known operational files.
+    $dirtyStateScript = Join-Path $Root 'scripts\utilities\get-workspace-dirty-state.ps1'
+    if (Test-Path $dirtyStateScript) {
+        try {
+            $stateInfo = & $dirtyStateScript -RepoRoot $Root -AsJson | ConvertFrom-Json
+            if ($stateInfo.state -eq 'dirty-user') {
+                Add-Result "uncommitted-changes" "WARN" "$($stateInfo.userDirtyCount) uncommitted user file(s) - commit or stash before closing task" "structure"
+            } elseif ($stateInfo.state -eq 'dirty-operational') {
+                Add-Result "uncommitted-changes" "PASS" "Only operational auto-managed files are dirty ($($stateInfo.operationalDirtyCount))" "structure"
+            } else {
+                Add-Result "uncommitted-changes" "PASS" "Working tree clean" "structure"
+            }
+        }
+        catch {
+            $DirtyFiles = git -C $Root status --porcelain 2>$null | Where-Object { $_ -match "^\s*[MADRCU?]" }
+            if ($DirtyFiles.Count -gt 0) {
+                Add-Result "uncommitted-changes" "WARN" "$($DirtyFiles.Count) uncommitted file(s) - commit or stash before closing task" "structure"
+            } else {
+                Add-Result "uncommitted-changes" "PASS" "Working tree clean" "structure"
+            }
+        }
     } else {
-        Add-Result "uncommitted-changes" "PASS" "Working tree clean" "structure"
+        $DirtyFiles = git -C $Root status --porcelain 2>$null | Where-Object { $_ -match "^\s*[MADRCU?]" }
+        if ($DirtyFiles.Count -gt 0) {
+            Add-Result "uncommitted-changes" "WARN" "$($DirtyFiles.Count) uncommitted file(s) - commit or stash before closing task" "structure"
+        } else {
+            Add-Result "uncommitted-changes" "PASS" "Working tree clean" "structure"
+        }
     }
 
     # Governed override abuse detection
