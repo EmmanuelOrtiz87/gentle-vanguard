@@ -106,9 +106,9 @@ Reason: $idleMinutes minutes of inactivity (timeout: $IdleTimeoutMinutes minutes
 Error: $errorMessage
 
 Please run manual closure:
-1) .\tools\session-manual-end.cmd
+1) scripts\utilities\session-manual-end.cmd
 Then start again:
-2) .\tools\session-autostart.cmd
+2) scripts\utilities\session-autostart.cmd
 "@
             Write-Message -Text $msg
         }

@@ -440,11 +440,12 @@ function Install-SkillsToAgent {
         return $false
     }
 
+    $homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
     $skillsDir = switch ($Agent.ToLower()) {
-        "claude" { "$env:USERPROFILE\.claude\skills" }
-        "opencode" { "$env:USERPROFILE\.config\opencode\skills" }
-        "gemini" { "$env:USERPROFILE\.gemini\skills" }
-        "cursor" { "$env:USERPROFILE\.cursor\skills" }
+        "claude" { "$homePath\.claude\skills" }
+        "opencode" { "$homePath\.config\opencode\skills" }
+        "gemini" { "$homePath\.gemini\skills" }
+        "cursor" { "$homePath\.cursor\skills" }
         default {
             Write-Host "[Workspace-Skills] Unknown agent: $Agent" -ForegroundColor Yellow
             return $false
