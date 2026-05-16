@@ -13,12 +13,9 @@ param(
 $ErrorActionPreference = 'Continue'
 
 # ============================================================================
-# SECURITY: Sanitize ALL input before processing (prevents prompt injection
-# and cross-agent data poisoning). When data comes FROM another agent,
-# apply strict mode with full sanitization + critical pattern blocking.
+# SECURITY: Sanitize ALL input before processing
 # ============================================================================
 if (-not $FromAgent) {
-    # User input: sanitize for PII, secrets, and prompt injection patterns
     $securityScript = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) '..\security\security-orchestrator.ps1'
     if (Test-Path $securityScript) {
         try {
@@ -29,7 +26,6 @@ if (-not $FromAgent) {
         } catch { }
     }
 } else {
-    # Inter-agent data: full sanitize + critical pattern blocking
     $securityScript = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) '..\security\security-orchestrator.ps1'
     if (Test-Path $securityScript) {
         try {
@@ -66,14 +62,12 @@ function Add-TriggersFromSkillFiles {
         $content = Get-Content $file.FullName -Raw
         $skillName = $file.Directory.Name
 
-        # Extract frontmatter (between --- markers)
         $startMarker = $content.IndexOf("---")
         if ($startMarker -ge 0) {
             $secondMarker = $content.IndexOf("---", $startMarker + 3)
             if ($secondMarker -ge 0) {
                 $frontMatter = $content.Substring($startMarker + 3, $secondMarker - $startMarker - 3)
 
-                # Find trigger line (allowing leading whitespace)
                 $lines = $frontMatter -split "`n"
                 foreach ($line in $lines) {
                     if ($line -match '\s*[Tt]rigger:\s*') {
@@ -91,7 +85,6 @@ function Add-TriggersFromSkillFiles {
     }
 }
 
-# Source 2: auto-delegation.json - single config load, all mappings driven by config
 $autoDelegationConfig = Join-Path $workspaceRoot "config/auto-delegation.json"
 $delegationConfig = $null
 if (Test-Path $autoDelegationConfig) {
@@ -105,16 +98,13 @@ if ($delegationConfig -and $delegationConfig.keywordMappings) {
         if (-not $RawTrigger) { return $null }
 
         $normalized = $RawTrigger.ToLower().Trim()
-        # Remove paired wrappers commonly present in config entries
         $normalized = $normalized.Trim('"')
-        # Remove trailing punctuation/noise from descriptive list items
         $normalized = $normalized.TrimEnd('.', ',', ';', ':')
 
         if ([string]::IsNullOrWhiteSpace($normalized)) { return $null }
         return $normalized
     }
 
-    # agentCodeToSkill: loaded from config - no hardcoding in script
     $skillMapping = @{}
     if ($delegationConfig.agentCodeToSkill) {
         foreach ($prop in $delegationConfig.agentCodeToSkill.PSObject.Properties) {
@@ -122,14 +112,12 @@ if ($delegationConfig -and $delegationConfig.keywordMappings) {
         }
     }
 
-    # skillToAgentProfile overrides: loaded from config
     $skillToAgent = @{}
     if ($delegationConfig.skillToAgentProfile) {
         foreach ($prop in $delegationConfig.skillToAgentProfile.PSObject.Properties) {
             $skillToAgent[$prop.Name] = $prop.Value
         }
     }
-    # Fallback reverse map for any skills not in override
     foreach ($kv in $skillMapping.GetEnumerator()) {
         if (-not $skillToAgent.ContainsKey($kv.Value)) {
             $skillToAgent[$kv.Value] = $kv.Key
@@ -157,23 +145,17 @@ function Compute-MatchQuality {
         [string]$Trigger,
         [int]$InputWordCount
     )
-    # Exact match: input is exactly the trigger
     if ($InputText -eq $Trigger) { return 100 }
-    # Word boundary match: trigger appears as whole word
     $pattern = '\b' + [regex]::Escape($Trigger) + '\b'
     if ($InputText -match $pattern) { return 95 }
-    # For short triggers (e.g. "pr"), avoid partial matches like "proyecto"
     if ($Trigger.Length -le 2) { return 0 }
-    # Word-start match: trigger matches start of a word (only for length >= 3)
     $wordStartPattern = '\b' + [regex]::Escape($Trigger)
     if ($InputText -match $wordStartPattern) { return 90 }
-    # Substring match: allow only for longer or multi-word triggers to reduce false positives
     if ($InputText.Contains($Trigger)) {
         if ($Trigger.Contains(' ') -or $Trigger.Length -ge 5) {
             return 85
         }
     }
-    # Word-fragment match: trigger words partially present
     $triggerWords = $Trigger -split '\s+'
     $matchedWords = 0
     foreach ($w in $triggerWords) {
@@ -187,28 +169,6 @@ function Compute-MatchQuality {
         return [math]::Max(40, [math]::Min(79, [int]($ratio * 70 + 10)))
     }
     return 0
-}
-
-function Compute-ConfidenceBonus {
-    param(
-        [string]$InputText,
-        [hashtable]$Map,
-        [ref]$MatchesRef
-    )
-    $bonus = 0
-    $foundMatches = @($MatchesRef.Value)
-    foreach ($kv in $Map.GetEnumerator()) {
-        $trigger = $kv.Key
-        if ($trigger -and $InputText.Contains($trigger)) {
-            $alreadyMatched = $foundMatches | Where-Object { $_ -eq $trigger }
-            if (-not $alreadyMatched) {
-                $bonus += 5
-                $foundMatches += $trigger
-            }
-        }
-    }
-    $MatchesRef.Value = $foundMatches
-    return [math]::Min(15, $bonus)
 }
 
 function Find-Match {
@@ -236,7 +196,6 @@ function Find-Match {
 
     if (-not $bestSkill) { return @($null, $null, 0) }
 
-    # Bonus for multiple matches on same skill
     $skillMatches = $allMatches | Where-Object { $_['Skill'] -eq $bestSkill } | ForEach-Object { $_['Trigger'] }
     $uniqueForSkill = $skillMatches | Select-Object -Unique
     if ($uniqueForSkill.Count -gt 1) {
@@ -247,7 +206,6 @@ function Find-Match {
     return @($bestSkill, $bestTrigger, $bestConfidence)
 }
 
-# Check user input against triggers
 $inputLower = $UserInput.ToLower()
 $matchingSkill = $null
 $matchingTrigger = $null
@@ -258,7 +216,6 @@ $matchingSkill = $firstPass[0]
 $matchingTrigger = $firstPass[1]
 $confidenceScore = $firstPass[2]
 
-# Fallback: parse SKILL.md only when config-based routing did not match.
 if (-not $matchingSkill -and -not $DisableSkillFileFallback) {
     Add-TriggersFromSkillFiles -Map $triggerMap -SkillsPathFull $skillsFullPath
     $sortedTriggers = $triggerMap.Keys | Sort-Object Length -Descending
@@ -268,7 +225,6 @@ if (-not $matchingSkill -and -not $DisableSkillFileFallback) {
     $confidenceScore = $secondPass[2]
 }
 
-# Final boost: if user input word count matches trigger ratio well
 $inputWords = $inputLower -split '\s+' | Where-Object { $_ -and $_.Length -gt 2 }
 if ($matchingTrigger -and $inputWords.Count -gt 0) {
     $triggerWords = $matchingTrigger -split '\s+' | Where-Object { $_ -and $_.Length -gt 2 }
@@ -280,7 +236,6 @@ if ($matchingTrigger -and $inputWords.Count -gt 0) {
     }
 }
 
-# Read strategy and profiles from already-loaded config
 $fallbackStrategy  = if ($delegationConfig -and $delegationConfig.fallbackStrategy) { $delegationConfig.fallbackStrategy } else { "manual" }
 $clarifyBaStrategy = if ($delegationConfig) { $delegationConfig.clarifyBaStrategy } else { $null }
 $agentProfiles     = if ($delegationConfig) { $delegationConfig.agentProfiles } else { $null }
@@ -288,15 +243,12 @@ $unmappedFlows     = if ($delegationConfig) { $delegationConfig.unmappedFlows } 
 
 $lowConfidenceThreshold = if ($clarifyBaStrategy -and $clarifyBaStrategy.triggerThreshold) { $clarifyBaStrategy.triggerThreshold } else { 40 }
 
-# Resolve agent profile for matched skill
-# For GITFLOW-* aliases and SCRIPT aliases, resolve to the parent profile
 function Resolve-AgentProfile {
     param($AgentCode, $Profiles)
     if (-not $AgentCode -or -not $Profiles) { return $null }
     if ($Profiles.PSObject.Properties[$AgentCode]) {
         return $Profiles.PSObject.Properties[$AgentCode].Value
     }
-    # Check aliases in profiles
     foreach ($prof in $Profiles.PSObject.Properties) {
         if ($prof.Value -and $prof.Value.aliases -and $AgentCode -in $prof.Value.aliases) {
             return $prof.Value
@@ -342,24 +294,18 @@ function Write-FlowGate {
 
 $sourceTag = if ($FromAgent) { 'AGENT' } else { 'USER' }
 
-# SDD pre-routing: detect feature/development intent and force BA exploration first
-# English is the canonical routing language — DEV triggers in EN must go through BA/EXPLORE
-# Multilingual patterns (ES, PT-BR) are recognized for user convenience but mapped to the same EN routing
 $devIntentTriggersEN = @('implement', 'develop', 'build', 'create', 'make', 'code')
 $featureIntentPatternsML = @(
-    # Spanish
     'implementar', 'desarrollar', 'construir',
     'implementa', 'desarrolla', 'construye',
-    'nueva funcionalidad', 'nuevo modulo', 'nuevo módulo',
+    'nueva funcionalidad', 'nuevo modulo', 'nuevo modulo',
     'nuevo componente', 'nueva feature', 'nuevo endpoint',
     'nueva api', 'nueva API',
-    # Portuguese
     'implementar', 'desenvolver', 'construir',
-    'novo componente', 'novo modulo', 'novo módulo',
+    'novo componente', 'novo modulo', 'novo modulo',
     'novo projeto', 'criar projeto', 'criar componente',
     'nova funcionalidade', 'nova feature', 'novo endpoint',
     'nova api', 'nova API',
-    # English (multilingual input, not trigger-based)
     'feature request',
     'new feature', 'new module', 'new component',
     'new endpoint', 'new api', 'new API',
@@ -367,12 +313,9 @@ $featureIntentPatternsML = @(
 )
 $isFeatureIntent = $false
 if ($matchingSkill -eq 'sdd-lifecycle') {
-    # PRIMARY: English trigger-based detection (exact keyword match, no confidence gate)
-    if ($matchingTrigger -in $devIntentTriggersEN -and
-        $inputLower -notmatch '\bsdd\b') {
+    if ($matchingTrigger -in $devIntentTriggersEN -and $inputLower -notmatch '\bsdd\b') {
         $isFeatureIntent = $true
     }
-    # SECONDARY: Multilingual pattern detection (substring match in user input)
     if (-not $isFeatureIntent) {
         foreach ($pattern in $featureIntentPatternsML) {
             if ($inputLower -match [regex]::Escape($pattern)) {
@@ -384,7 +327,6 @@ if ($matchingSkill -eq 'sdd-lifecycle') {
 }
 
 if ($isFeatureIntent) {
-    # Register feature in SDD state tracker for multi-turn orchestration
     $sddOrch = Join-Path (Split-Path -Parent $PSCommandPath) 'sdd-orchestrator.ps1'
     $wsRoot = if ($PSBoundParameters.ContainsKey("WorkspaceRoot") -and $WorkspaceRoot -ne ".") { $WorkspaceRoot } else { (Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSCommandPath))) }
     if (Test-Path $sddOrch) {
@@ -400,21 +342,15 @@ if ($isFeatureIntent) {
     Write-Output "AGENT: BA"
     Write-Output "SKILL: sdd-lifecycle"
     Write-Output "PHASE: EXPLORE"
-    Write-Output "ACTION: SDD flow enforced — all feature/development requests route through BA/EXPLORE first. English is the canonical routing language; multilingual input is recognized and normalized to English routing. No implementation without completed EXPLORE and SPEC phases unless explicitly overridden by admin policy."
+    Write-Output "ACTION: SDD flow enforced - all feature/development requests route through BA/EXPLORE first"
     Write-AgentProfile -Profile $baProfile -AgentCode "BA"
     if ($clarifyBaStrategy -and $clarifyBaStrategy.questions) {
         Write-Output "CLARIFICATION_QUESTIONS:"
         foreach ($q in $clarifyBaStrategy.questions) { Write-Output "  - $q" }
     }
-    return @{
-        HasMatch       = $true
-        Skill          = 'sdd-lifecycle'
-        Trigger        = $matchingTrigger
-        Confidence     = $confidenceScore
-        PlanMode       = $true
-        AgentCode      = 'BA'
-        AgentProfile   = $baProfile
-    }
+    $matchingSkill = "sdd-lifecycle"
+    $resolvedAgent = "BA"
+    $activeProfile = $baProfile
 } elseif ($matchingSkill) {
     Write-Output "SOURCE: $sourceTag"
     Write-Output "TRIGGER_MATCH_FOUND"
