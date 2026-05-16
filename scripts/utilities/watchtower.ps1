@@ -316,11 +316,11 @@ function Invoke-AutoFix {
                 if ($LASTEXITCODE -eq 0) { $fixed++; Write-Ok "Pushed commits" }
                 else { Write-Warn "Push failed" }
             }
-        } elseif ($issue.check -eq 'context' -and $issue.autoFixAction) {
-            $gentle-vanguard = $issue.autoFixAction
-            & $gentle-vanguard 2>$null
-            if ($LASTEXITCODE -eq 0 -or $LASTEXITCODE -eq $null) { $fixed++; Write-Ok "Compact-start completed" }
-            else { Write-Warn "Compact-start failed" }
+         } elseif ($issue.check -eq 'context' -and $issue.autoFixAction) {
+             $gentleVanguardAction = $issue.autoFixAction
+             & $gentleVanguardAction 2>$null
+             if ($LASTEXITCODE -eq 0 -or $LASTEXITCODE -eq $null) { $fixed++; Write-Ok "Compact-start completed" }
+             else { Write-Warn "Compact-start failed" }
         } elseif ($issue.check -eq 'proposals' -and $issue.autoFixAction) {
             $execPath = $issue.autoFixAction
             & $execPath 2>$null
