@@ -212,12 +212,25 @@ if exist "%ADAPTIVE_CC%" (
 ) else ( echo [SKIP] adaptive-claude-cline-profile.ps1 not found )
 
 REM === Phase 9.5: Workspace State Warning ===
-for /f "tokens=*" %%i in ('pwsh -NoProfile -Command "if (git status --short 2>$null) { 'dirty' } else { 'clean' }"') do set WORKSPACE_STATE=%%i
-if "!WORKSPACE_STATE!"=="dirty" (
+set WORKSPACE_STATE=unknown
+set DIRTY_STATE_SCRIPT=%UTILS_DIR%\get-workspace-dirty-state.ps1
+if exist "%DIRTY_STATE_SCRIPT%" (
+    for /f "tokens=*" %%i in ('pwsh -NoProfile -ExecutionPolicy Bypass -File "%DIRTY_STATE_SCRIPT%" -RepoRoot "%WORKSPACE_ROOT%"') do set WORKSPACE_STATE=%%i
+) else (
+    for /f "tokens=*" %%i in ('pwsh -NoProfile -Command "if (git status --short 2>$null) { 'dirty-user' } else { 'clean' }"') do set WORKSPACE_STATE=%%i
+)
+
+if "!WORKSPACE_STATE!"=="dirty-user" (
     echo [WARN] =====================================================================
     echo [WARN]  Workspace has uncommitted changes from a previous session.
     echo [WARN]  Run 'git status' to review, or 'git stash' to shelve them.
     echo [WARN] =====================================================================
+)
+if "!WORKSPACE_STATE!"=="dirty-operational" (
+    echo [INFO] Workspace has operational auto-managed changes (no user action required).
+)
+if "!WORKSPACE_STATE!"=="clean" (
+    echo [OK] Workspace clean
 )
 
 REM === Phase 10: Watchtower Quick Check ===

@@ -40,9 +40,9 @@ After detection, execute ALL steps **in order**. Steps 0 and 6-9 are often misse
 
 1. Run `$detected.instructions.sessionAutostart` (OS-aware, resolved by detect-tool.ps1: Windows → `.cmd`, Linux/macOS → `.sh`) — activates notifications, security, engram, token guard, karpathy enforcer.
 
-2. `engram_mem_session_start` — register session ID
+2. `pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/engram_mem_session_start.ps1` — register session ID
 
-3. `engram_mem_context` — restore previous context
+3. `pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/engram_mem_context.ps1` — restore previous context
 
 4. `git status` — verify workspace state
 
