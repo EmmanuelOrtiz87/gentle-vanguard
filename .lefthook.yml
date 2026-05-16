@@ -18,7 +18,7 @@ pre-commit:
 pre-push:
   commands:
     audit-check:
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "skills/gentle-vanguard-audit-skill/scripts/audit-sweep.ps1" -Scope quick
+      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "skills/foundation-audit-skill/scripts/audit-sweep.ps1" -Scope quick
     orchestrator-auto-fix:
       run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/orchestrate-auto-fix.ps1" -Fix
     npm-audit:
