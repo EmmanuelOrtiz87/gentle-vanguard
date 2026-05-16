@@ -146,7 +146,8 @@ try {
         Write-Host "" -ForegroundColor Green
     } else {
         Write-Host "[WARN] Some components failed to restart" -ForegroundColor Yellow
-        Write-Host "Run full restart: .\tools\session-autostart.cmd" -ForegroundColor Cyan
+        $autostart = if ([Environment]::OSVersion.Platform -eq 'Win32NT') { '.\tools\session-autostart.cmd' } else { 'bash scripts/utilities/session-autostart.sh' }
+        Write-Host "Run full restart: $autostart" -ForegroundColor Cyan
     }
     
     exit 0

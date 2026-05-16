@@ -77,7 +77,8 @@ switch ($Source) {
         Write-Host "  Ejecutando: go install github.com/foundation/engram/cmd/engram@latest" -ForegroundColor Gray
         try {
             go install github.com/foundation/engram/cmd/engram@latest
-            $newBinary = "$env:USERPROFILE\go\bin\engram.exe"
+            $homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
+            $newBinary = "$homePath\go\bin\engram.exe"
             if (Test-Path $newBinary) {
                 Copy-Item $newBinary $TargetPath -Force
                 Write-Host "  [OK] Binario actualizado via go install" -ForegroundColor Green

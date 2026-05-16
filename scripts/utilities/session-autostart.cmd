@@ -63,6 +63,19 @@ if exist "%TOOL_DETECTION%" (
 )
 echo.
 
+REM === Phase 0.75: Orphan Session Cleanup ===
+echo [0.75/10] Checking for orphaned sessions...
+pwsh -NoProfile -ExecutionPolicy Bypass -Command ^
+  "$stateFile='%WORKSPACE_ROOT%\.session\state.json';" ^
+  "$activeFile='%WORKSPACE_ROOT%\logs\.session-active';" ^
+  "$dayEnd='%WORKSPACE_ROOT%\scripts\utilities\UTILITIES\day-end-closure.ps1';" ^
+  "$orphan=$false;" ^
+  "$sid='';" ^
+  "if (Test-Path $stateFile) { try { $d=Get-Content $stateFile -Raw|ConvertFrom-Json; if ($d.status -eq 'active') { $orphan=$true; $sid=$d.sessionId } } catch {} };" ^
+  "if (-not $orphan -and (Test-Path $activeFile)) { $orphan=$true; try { $d=Get-Content $activeFile -Raw|ConvertFrom-Json; $sid=$d.SessionId } catch {} };" ^
+  "if ($orphan) { Write-Host '[WARN] Orphaned session detected: ' -NoNewline -ForegroundColor Yellow; if ($sid) { Write-Host $sid -ForegroundColor Yellow } else { Write-Host 'unknown' -ForegroundColor Yellow }; Write-Host '[INFO] Auto-closing orphan before new start...' -ForegroundColor Cyan; if (Test-Path $dayEnd) { & $dayEnd -SessionId $sid -Force -SkipValidation -SkipRotation -Quiet; Write-Host '[OK] Orphan session closed' -ForegroundColor Green } } else { Write-Host '[OK] No orphaned sessions found' -ForegroundColor Green }"
+if errorlevel 1 ( echo [WARN] Orphan cleanup had issues ) else ( echo [OK] Orphan check complete )
+
 REM === Phase 1: Session Manager ===
 REM Add WORKFLOW-ORCHESTRATION to PATH so 'foundation' CLI works
 set WF_DIR=%WORKSPACE_ROOT%\scripts\utilities\WORKFLOW-ORCHESTRATION
@@ -107,6 +120,14 @@ if defined SESSION_ID (
     set WFS_SESSION_ID=%SESSION_ID%
     echo [OK] Session ID: %SESSION_ID%
 ) else ( echo [WARN] Could not resolve session ID )
+
+REM === Phase 3.5: Session Metrics Start ===
+echo [3.5/10] Starting session metrics tracking...
+set METRICS_SCRIPT=%UTILS_DIR%\session-metrics-tracker.ps1
+if exist "%METRICS_SCRIPT%" (
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%METRICS_SCRIPT%" -Action start -SessionId "%SESSION_ID%" -Silent
+    if errorlevel 1 ( echo [WARN] Metrics tracking start had warnings ) else ( echo [OK] Session metrics active )
+) else ( echo [SKIP] session-metrics-tracker.ps1 not found )
 
 REM === Phase 4: Engram Policy Enforcement ===
 echo [4/9] Engram policy enforcement...
@@ -165,6 +186,39 @@ REM === Phase 9: Post-Autostart Summary ===
 echo [9/10] Generating startup summary...
 pwsh -NoProfile -ExecutionPolicy Bypass -File "%WORKSPACE_ROOT%\scripts\utilities\post-autostart-summary.ps1" -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15 -Region "Argentina"
 if errorlevel 1 ( echo [WARN] Summary generation had warnings ) else ( echo [OK] Startup summary saved )
+
+REM === Phase 9.25: Adaptive OpenCode Profile ===
+echo [9.25/10] Adaptive OpenCode profile...
+set ADAPTIVE_OPENCODE=%UTILS_DIR%\adaptive-opencode-profile.ps1
+if exist "%ADAPTIVE_OPENCODE%" (
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%ADAPTIVE_OPENCODE%" -Mode Auto -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15
+    if errorlevel 1 ( echo [WARN] Adaptive OpenCode profile had warnings ) else ( echo [OK] Adaptive OpenCode profile checked )
+) else ( echo [SKIP] adaptive-opencode-profile.ps1 not found )
+
+REM === Phase 9.3: Adaptive Codex/Windsurf Profile ===
+echo [9.3/10] Adaptive Codex/Windsurf profile...
+set ADAPTIVE_CW=%UTILS_DIR%\adaptive-codex-windsurf-profile.ps1
+if exist "%ADAPTIVE_CW%" (
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%ADAPTIVE_CW%" -Mode Auto -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15
+    if errorlevel 1 ( echo [WARN] Adaptive Codex/Windsurf profile had warnings ) else ( echo [OK] Adaptive Codex/Windsurf profile checked )
+) else ( echo [SKIP] adaptive-codex-windsurf-profile.ps1 not found )
+
+REM === Phase 9.35: Adaptive Claude/Cline Profile ===
+echo [9.35/10] Adaptive Claude/Cline profile...
+set ADAPTIVE_CC=%UTILS_DIR%\adaptive-claude-cline-profile.ps1
+if exist "%ADAPTIVE_CC%" (
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%ADAPTIVE_CC%" -Mode Auto -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15
+    if errorlevel 1 ( echo [WARN] Adaptive Claude/Cline profile had warnings ) else ( echo [OK] Adaptive Claude/Cline profile checked )
+) else ( echo [SKIP] adaptive-claude-cline-profile.ps1 not found )
+
+REM === Phase 9.5: Workspace State Warning ===
+for /f "tokens=*" %%i in ('pwsh -NoProfile -Command "if (git status --short 2>$null) { 'dirty' } else { 'clean' }"') do set WORKSPACE_STATE=%%i
+if "!WORKSPACE_STATE!"=="dirty" (
+    echo [WARN] =====================================================================
+    echo [WARN]  Workspace has uncommitted changes from a previous session.
+    echo [WARN]  Run 'git status' to review, or 'git stash' to shelve them.
+    echo [WARN] =====================================================================
+)
 
 REM === Phase 10: Watchtower Quick Check ===
 echo [10/10] Watchtower quick health check...

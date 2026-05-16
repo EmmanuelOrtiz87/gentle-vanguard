@@ -3,7 +3,7 @@
 # Terminal-Based Setup Wizard with Logo, Help, and Quit support
 
 param(
-    [string]$InstallPath = "$env:USERPROFILE\foundation",
+    [string]$InstallPath = "$(if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME })\foundation",
     [switch]$Silent,
     [switch]$Force,
     [switch]$Uninstall,
@@ -11,6 +11,7 @@ param(
 )
 
 $ErrorActionPreference = "Continue"
+$script:homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
 $host.UI.RawUI.WindowTitle = "Foundation TUI Installer - Enhanced"
 
 # Directories
@@ -81,7 +82,7 @@ function Show-Help {
     Write-Host "  - Enter accepts the default (>) option" -ForegroundColor Gray
     Write-Host ""
     Write-Host "  INSTALLATION PATHS" -ForegroundColor $colorHighlight
-    Write-Host "  - Default: $env:USERPROFILE\foundation" -ForegroundColor Gray
+    Write-Host "  - Default: $script:homePath\foundation" -ForegroundColor Gray
     Write-Host "  - Change it in Step 2 of installer" -ForegroundColor Gray
     Write-Host ""
     Write-Host "  LOGS" -ForegroundColor $colorHighlight

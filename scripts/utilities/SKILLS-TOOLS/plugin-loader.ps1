@@ -165,7 +165,8 @@ function Initialize-Plugins {
         }
     }
 
-    $localPath = Join-Path $env:USERPROFILE '.foundation\plugins'
+    $homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
+    $localPath = Join-Path $homePath '.foundation\plugins'
     if (Test-Path $localPath) { $searchPaths += $localPath }
 
     $searchPaths = $searchPaths | Select-Object -Unique

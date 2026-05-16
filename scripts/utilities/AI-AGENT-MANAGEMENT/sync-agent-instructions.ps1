@@ -15,11 +15,12 @@ $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 
 $masterFile = Join-Path $repoRoot 'docs\reference\master-instructions.md'
 
+$homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
 $targets = @{
     'OpenCode' = Join-Path $repoRoot 'AGENTS.md'
     'Copilot'  = Join-Path $repoRoot '.github\copilot-instructions.md'
-    'Claude'   = Join-Path $env:USERPROFILE '.claude\CLAUDE.md'
-    'Gemini'   = Join-Path $env:USERPROFILE '.gemini\instructions.md'
+    'Claude'   = Join-Path $homePath '.claude\CLAUDE.md'
+    'Gemini'   = Join-Path $homePath '.gemini\instructions.md'
 }
 
 function Write-Step { param([string]$m) Write-Host "`n=== $m ===" -ForegroundColor Cyan }

@@ -250,7 +250,8 @@ if ($allPassed) {
     Write-Host "`nNext steps:"
     Write-Host "  1. Call mem_session_summary with proper structure"
     Write-Host "  2. Call mem_session_end to close the session"
-    Write-Host "  3. Run scripts/utilities/session-manual-end.cmd if needed"
+    $endScript = if ([Environment]::OSVersion.Platform -eq 'Win32NT') { 'scripts/utilities/session-manual-end.cmd' } else { 'bash scripts/utilities/session-manual-end.sh' }
+    Write-Host "  3. Run $endScript if needed"
     Complete-Script -ExitCode 0
     return
 } else {

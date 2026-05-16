@@ -61,9 +61,10 @@ if (Test-Path $adPath) {
 
 # --- 3. Critical scripts exist -------------------------------------------------
 Write-Host "`n[3/6] Critical scripts" -ForegroundColor Cyan
+$autostartFile = if ([Environment]::OSVersion.Platform -eq 'Win32NT') { 'scripts/utilities/session-autostart.cmd' } else { 'scripts/utilities/session-autostart.sh' }
 $criticalScripts = @(
     'scripts/utilities/pre-process-input.ps1',
-    'scripts/utilities/session-autostart.cmd',
+    $autostartFile,
     'scripts/utilities/install-hooks.ps1',
     'hooks/pre-commit.ps1'
 )
