@@ -46,7 +46,7 @@ if (-not $sessionActive) {
     Write-Host "[WARN] No active session detected (WFS_SESSION_ID not set)." -ForegroundColor Yellow
     $forceOverride = Read-Host "Proceed without active session? This will be logged in audit. (yes/no)"
     if ($forceOverride -notmatch '^(y|yes|si|s)$') {
-        Write-Host "[INFO] Operation cancelled. Please start a session with '.\scripts\utilities\start-session.ps1' first." -ForegroundColor Cyan
+        Write-Host "[INFO] Operation cancelled. Start a session with 'wf.ps1 start-session' first." -ForegroundColor Cyan
         exit 0
     }
 }
@@ -58,7 +58,7 @@ if (-not $sessionActive) {
     Write-Host "[WARN] No active session detected (WFS_SESSION_ID not set)." -ForegroundColor Yellow
     $forceOverride = Read-Host "Proceed without active session? This will be logged in audit. (yes/no)"
     if ($forceOverride -notmatch '^(y|yes|si|s)$') {
-        Write-Host "[INFO] Operation cancelled. Please start a session with '.\scripts\utilities\start-session.ps1' first." -ForegroundColor Cyan
+        Write-Host "[INFO] Operation cancelled. Start a session with 'wf.ps1 start-session' first." -ForegroundColor Cyan
         exit 0
     }
 }
@@ -70,7 +70,7 @@ if (-not $sessionActive) {
     Write-Host "[WARN] No active session detected (WFS_SESSION_ID not set)." -ForegroundColor Yellow
     $forceOverride = Read-Host "Proceed without active session? This will be logged in audit. (yes/no)"
     if ($forceOverride -notmatch '^(y|yes|si|s)$') {
-        Write-Host "[INFO] Operation cancelled. Please start a session with '.\scripts\utilities\start-session.ps1' first." -ForegroundColor Cyan
+        Write-Host "[INFO] Operation cancelled. Start a session with 'wf.ps1 start-session' first." -ForegroundColor Cyan
         exit 0
     }
 }
