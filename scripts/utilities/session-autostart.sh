@@ -231,6 +231,45 @@ else
     echo "[SKIP] post-autostart-summary.ps1 not found"
 fi
 
+# === Phase 9.25: Adaptive OpenCode Profile ===
+echo "[13.25/16] Adaptive OpenCode profile..."
+ADAPTIVE_OPENCODE="$UTILS_DIR/adaptive-opencode-profile.ps1"
+if [ -f "$ADAPTIVE_OPENCODE" ]; then
+    if pwsh -NoProfile -ExecutionPolicy Bypass -File "$ADAPTIVE_OPENCODE" -Mode Auto -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15; then
+        echo "[OK] Adaptive OpenCode profile checked"
+    else
+        echo "[WARN] Adaptive OpenCode profile had warnings"
+    fi
+else
+    echo "[SKIP] adaptive-opencode-profile.ps1 not found"
+fi
+
+# === Phase 9.3: Adaptive Codex/Windsurf Profile ===
+echo "[13.3/16] Adaptive Codex/Windsurf profile..."
+ADAPTIVE_CW="$UTILS_DIR/adaptive-codex-windsurf-profile.ps1"
+if [ -f "$ADAPTIVE_CW" ]; then
+    if pwsh -NoProfile -ExecutionPolicy Bypass -File "$ADAPTIVE_CW" -Mode Auto -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15; then
+        echo "[OK] Adaptive Codex/Windsurf profile checked"
+    else
+        echo "[WARN] Adaptive Codex/Windsurf profile had warnings"
+    fi
+else
+    echo "[SKIP] adaptive-codex-windsurf-profile.ps1 not found"
+fi
+
+# === Phase 9.35: Adaptive Claude/Cline Profile ===
+echo "[13.35/16] Adaptive Claude/Cline profile..."
+ADAPTIVE_CC="$UTILS_DIR/adaptive-claude-cline-profile.ps1"
+if [ -f "$ADAPTIVE_CC" ]; then
+    if pwsh -NoProfile -ExecutionPolicy Bypass -File "$ADAPTIVE_CC" -Mode Auto -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15; then
+        echo "[OK] Adaptive Claude/Cline profile checked"
+    else
+        echo "[WARN] Adaptive Claude/Cline profile had warnings"
+    fi
+else
+    echo "[SKIP] adaptive-claude-cline-profile.ps1 not found"
+fi
+
 # === Phase 9.5: Workspace State Warning ===
 echo "[14/16] Checking workspace state..."
 WORKSPACE_STATE=$(cd "$WORKSPACE_ROOT" && git status --porcelain 2>/dev/null || true)

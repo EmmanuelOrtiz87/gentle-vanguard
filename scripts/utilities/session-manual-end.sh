@@ -36,6 +36,29 @@ fi
 echo "[INFO] Running standard close flow (validation + audit + governance)..."
 pwsh -NoProfile -ExecutionPolicy Bypass -File "$WF_SCRIPT" end-session || echo "[WARN] Close flow reported issues — continuing with post-close steps..."
 
+# Close only current tracked session ID (safe when multiple sessions are active)
+SESSION_MANAGER="$REPO_ROOT/scripts/utilities/session-manager.ps1"
+ACTIVE_SESSION_FILE="$REPO_ROOT/logs/.session-active"
+if [ -f "$SESSION_MANAGER" ]; then
+    if [ -f "$ACTIVE_SESSION_FILE" ]; then
+        TARGET_SESSION_ID=$(pwsh -NoProfile -Command "`$a=Get-Content '$ACTIVE_SESSION_FILE' -Raw | ConvertFrom-Json; `$a.SessionId")
+        if [ -n "$TARGET_SESSION_ID" ]; then
+            echo "[INFO] Closing tracked session only: $TARGET_SESSION_ID"
+            if pwsh -NoProfile -ExecutionPolicy Bypass -File "$SESSION_MANAGER" -Mode End -TargetSessionId "$TARGET_SESSION_ID"; then
+                echo "[OK] Session closed safely: $TARGET_SESSION_ID"
+            else
+                echo "[WARN] Session manager close returned warnings"
+            fi
+        else
+            echo "[WARN] Could not read SessionId from logs/.session-active"
+        fi
+    else
+        echo "[WARN] logs/.session-active not found — skipping targeted session close"
+    fi
+else
+    echo "[SKIP] session-manager.ps1 not found"
+fi
+
 # Post-close: cross-workspace validation
 echo "[INFO] Validating cross-workspace consistency..."
 CROSS_VALIDATOR="$REPO_ROOT/scripts/monitoring/cross-workspace-validator.ps1"

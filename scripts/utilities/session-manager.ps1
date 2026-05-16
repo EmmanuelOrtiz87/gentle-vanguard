@@ -6,6 +6,8 @@ param(
     [string]$Mode = 'Manual',
     [string]$ProjectName = 'workspace_local',
     [string]$SessionDir = '.\.session',
+    [string]$TargetSessionId = '',
+    [switch]$AllowCloseWithOtherActive,
     [int]$OrphanMaxAgeHours = 24,
     [switch]$SkipPreCloseValidation,
     [switch]$NoExit
@@ -352,19 +354,50 @@ function End-Session {
     }
 
     $sessionEntries = @(Get-ValidSessionEntries)
+    $activeSessions = @($sessionEntries | Where-Object { $_.Data.status -eq 'active' })
 
-    if ($sessionEntries.Count -eq 0) {
+    if ($activeSessions.Count -eq 0) {
         Write-Warn "No active sessions to end"
         return
     }
 
-    $latestSession = $sessionEntries | Where-Object { $_.Data.status -eq 'active' } | Select-Object -First 1
-    if (-not $latestSession) {
-        Write-Warn "No active session to end."
-        return
+    $targetSession = $null
+    if (-not [string]::IsNullOrWhiteSpace($TargetSessionId)) {
+        $targetSession = $activeSessions | Where-Object { $_.Data.sessionId -eq $TargetSessionId } | Select-Object -First 1
+        if (-not $targetSession) {
+            Write-ErrorMsg "Target session '$TargetSessionId' was not found among active sessions."
+            Write-Info "Active session IDs: $($activeSessions.Data.sessionId -join ', ')"
+            Complete-Script -ExitCode 2
+            return
+        }
+    } else {
+        $targetSession = $activeSessions | Select-Object -First 1
     }
 
-    $sessionData = $latestSession.Data
+    if ($activeSessions.Count -gt 1) {
+        Write-Warn "Multiple active sessions detected ($($activeSessions.Count))."
+        foreach ($s in $activeSessions) {
+            Write-Host ("  - {0} | start={1}" -f $s.Data.sessionId, $s.Data.startTime) -ForegroundColor Yellow
+        }
+
+        $notifyScript = Join-Path $repoRoot 'scripts\utilities\notify-user.ps1'
+        if (Test-Path $notifyScript) {
+            $closeCmd = if ([string]::IsNullOrWhiteSpace($TargetSessionId)) {
+                'pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/session-manager.ps1 -Mode End -TargetSessionId <session-id>'
+            } else {
+                "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/session-manager.ps1 -Mode End -TargetSessionId $TargetSessionId -AllowCloseWithOtherActive"
+            }
+            & $notifyScript -Action 'session-close' -Reason 'Multiple active sessions detected during close' -Details 'Select explicit TargetSessionId to avoid closing the wrong concurrent session.' -RecoveryCommand $closeCmd 2>$null
+        }
+
+        if ([string]::IsNullOrWhiteSpace($TargetSessionId) -and -not $AllowCloseWithOtherActive) {
+            Write-ErrorMsg "Session closure blocked. Use -TargetSessionId when multiple sessions are active."
+            Complete-Script -ExitCode 2
+            return
+        }
+    }
+
+    $sessionData = $targetSession.Data
 
     $null = Save-ToEngram -Title "Session closure: $($sessionData.sessionId)" -Content "Session $($sessionData.sessionId) closed. Pre-close validation passed." -Type 'session'
 
@@ -377,7 +410,7 @@ function End-Session {
         status = "ended"
         endTime = Get-Date -Format "o"
     }
-    $updatedData | ConvertTo-Json | Out-File -FilePath $latestSession.File.FullName -Encoding UTF8
+    $updatedData | ConvertTo-Json | Out-File -FilePath $targetSession.File.FullName -Encoding UTF8
 
     Write-Status "Session ended: $($sessionData.sessionId)"
 

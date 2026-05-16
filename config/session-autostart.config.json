@@ -109,6 +109,30 @@
         "args": "-Action start",
         "required": false,
         "description": "Initialize session metrics tracking (tokens, tool calls, files)"
+      },
+      {
+        "id": "adaptive-opencode-profile",
+        "enabled": true,
+        "script": "scripts/utilities/adaptive-opencode-profile.ps1",
+        "args": "-Mode Auto -TimeZone \"Argentina Standard Time\" -PeakStart 9 -PeakEnd 15",
+        "required": false,
+        "description": "Intelligent temporary OpenCode optimization with automatic restore when normalized"
+      },
+      {
+        "id": "adaptive-codex-windsurf-profile",
+        "enabled": true,
+        "script": "scripts/utilities/adaptive-codex-windsurf-profile.ps1",
+        "args": "-Mode Auto -TimeZone \"Argentina Standard Time\" -PeakStart 9 -PeakEnd 15",
+        "required": false,
+        "description": "Intelligent temporary Codex/Windsurf optimization with automatic restore when normalized"
+      },
+      {
+        "id": "adaptive-claude-cline-profile",
+        "enabled": true,
+        "script": "scripts/utilities/adaptive-claude-cline-profile.ps1",
+        "args": "-Mode Auto -TimeZone \"Argentina Standard Time\" -PeakStart 9 -PeakEnd 15",
+        "required": false,
+        "description": "Intelligent temporary Claude Code/Cline optimization with automatic restore when normalized"
       }
     ],
 
