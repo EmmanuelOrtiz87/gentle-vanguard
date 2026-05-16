@@ -15,7 +15,7 @@
     .\auto-norm-learner.ps1 -Trigger session-start
     
 .NOTES
-    Author: foundation
+    Author: gentle-vanguard
     Version: 1.0.0
 #>
 

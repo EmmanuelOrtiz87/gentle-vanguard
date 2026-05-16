@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Sync Foundation to public demo repository
+    Sync Gentle-Vanguard to public demo repository
 .DESCRIPTION
     Copy non-sensitive files to public repo.
     Filters exclude: security scripts, workspace config, internal docs
@@ -8,7 +8,7 @@
 #>
 
 param(
-    [string]$PublicRepoPath = "..\foundation-demo",
+    [string]$PublicRepoPath = "..\gentle-vanguard-demo",
     [switch]$DryRun,
     [switch]$AutoCommit,
     [switch]$Verify,
@@ -49,7 +49,7 @@ $EXCLUDE_SCAN_PATHS_FULL = @(
     'skills\',
     'templates\',
     'config\README',
-    'scripts\foundation\sync-public-repo'
+    'scripts\gentle-vanguard\sync-public-repo'
 )
 
 # =============================================================================
@@ -85,7 +85,7 @@ $EXCLUDE_DIRS_DEMO = @(
     'docs\architecture',
     'scripts\security',
     'scripts\diagnostics',
-    'scripts\foundation',
+    'scripts\gentle-vanguard',
     'scripts\git-hooks',
     'scripts\hooks',
     'scripts\monitoring',
@@ -140,7 +140,7 @@ $EXCLUDE_SCAN_PATHS = @(
     'skills\',
     'templates\',
     'config\README',
-    'scripts\foundation\sync-public-repo'
+    'scripts\gentle-vanguard\sync-public-repo'
 )
 
 # =============================================================================
@@ -207,7 +207,7 @@ function Copy-Filtered {
 # =============================================================================
 
 Write-Host "=========================================" -ForegroundColor Cyan
-Write-Host "  FOUNDATION SYNC TO PUBLIC REPO" -ForegroundColor Cyan
+Write-Host "  GENTLE_VANGUARD SYNC TO PUBLIC REPO" -ForegroundColor Cyan
 Write-Host "=========================================" -ForegroundColor Cyan
 Write-Host ""
 

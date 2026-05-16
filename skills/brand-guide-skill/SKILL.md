@@ -5,7 +5,7 @@ description: >
   "brand identity", "branding", "voice", "tone", "visual identity", "logo usage", "brand colors"
 license: Apache-2.0
 metadata:
-  author: foundation
+  author: gentle-vanguard
   versión: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task
 ---
@@ -194,17 +194,17 @@ body {
 
 ---
 
-## Foundation Integration
+## Gentle-Vanguard Integration
 
 ```powershell
 # Check brand consistency
-.\wf.ps1 brand check
+.\gv.ps1 brand check
 
 # Validate colors
-.\wf.ps1 brand validate-colors
+.\gv.ps1 brand validate-colors
 
 # Check copy voice
-.\wf.ps1 brand check-voice
+.\gv.ps1 brand check-voice
 ```
 
 ---
@@ -259,3 +259,4 @@ Our voice is:
 - Marketing: Enthusiastic, benefit-driven
 - Docs: Clear, authoritative
 ```
+

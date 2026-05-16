@@ -1,5 +1,5 @@
 {
-  "workspaceName": "foundation",
+  "workspaceName": "gentle-vanguard",
   "dataRoot": "{workspaceRoot}/.engram-data",
   "toolsRoot": "{workspaceRoot}/tools",
   "projectsRoot": "{workspaceRoot}/projects",
@@ -34,3 +34,4 @@
     }
   ]
 }
+

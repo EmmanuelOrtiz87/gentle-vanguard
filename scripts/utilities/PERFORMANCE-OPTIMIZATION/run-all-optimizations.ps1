@@ -25,7 +25,7 @@
     .\run-all-optimizations.ps1 -ContextPath "C:\context" -DataPath "C:\data" -OutputPath "C:\optimized" -FullReport
 
 .NOTES
-    Author: Gentleman Foundation Team
+    Author: Gentle-Vanguard Team
     Version: 1.0.0
     Last Updated: 2026-04-22
 #>
@@ -312,7 +312,7 @@ class OptimizationOrchestrator {
 
 ---
 
-**Generado por:** Gentleman Foundation Optimization Suite
+**Generado por:** Gentle-Vanguard Optimization Suite
 **Versin:** 1.0.0
 "@
         
@@ -339,4 +339,5 @@ catch {
     Write-Log "Error fatal: $_" "ERROR"
     exit 1
 }
+
 

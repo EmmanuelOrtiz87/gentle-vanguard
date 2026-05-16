@@ -7,7 +7,7 @@
     "status": "OPTIMIZED",
     "targetReduction": "40-50%",
     "expectedTokenSavings": "significant",
-    "notes": "Fully aligned with foundation local-first policy"
+    "notes": "Fully aligned with gentle-vanguard local-first policy"
   },
   "provider": {
     "type": "dify",
@@ -130,7 +130,7 @@
       "runOnPluginLoad": true
     },
     "tracking": {
-      "project": "workspace_local",
+      "project": "workspace_gentle_vanguard",
       "directory": "c:\\Workspace_local",
       "sessionIdPattern": "session-YYYY-MM-DD-XX",
       "autoInitialize": true,
@@ -358,3 +358,4 @@
     "bypassConditions": ["user-explicit-request", "local-knowledge-insufficient"]
   }
 }
+

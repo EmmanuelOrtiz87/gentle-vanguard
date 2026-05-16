@@ -6,7 +6,7 @@ Version: 1.0.0 Framework: OWASP LLM Top 10 2025 + OWASP Agentic Top 10 2026
 
 ## 1. PROPOSITO
 
-Define las normativas de seguridad para agentes LLM en el stack Foundation. Toda implementacion debe
+Define las normativas de seguridad para agentes LLM en el stack Gentle-Vanguard. Toda implementacion debe
 cumplir estos controles o documentar desvio aprobado.
 
 ---
@@ -122,3 +122,4 @@ cumplir estos controles o documentar desvio aprobado.
 - Config: `config/security-hardening.json`
 - Security Policy: `config/security-policy.json`
 - Security Privacy: `config/security-privacy.json`
+

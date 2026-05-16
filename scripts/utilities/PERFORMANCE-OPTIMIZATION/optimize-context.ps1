@@ -25,7 +25,7 @@
     .\optimize-context.ps1 -ContextPath "C:\context" -OutputPath "C:\optimized" -CompressionLevel high
 
 .NOTES
-    Author: Gentleman Foundation Team
+    Author: Gentle-Vanguard Team
     Version: 1.0.0
     Last Updated: 2026-04-22
 #>

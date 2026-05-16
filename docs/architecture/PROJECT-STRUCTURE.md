@@ -1,11 +1,11 @@
-# Project Structure - Foundation (v2.0)
+# Project Structure - Gentle-Vanguard (v2.0)
 
 ## Canonical Structure
 
-After refactoring (April 2026), Foundation uses ONE single source of truth for each category:
+After refactoring (April 2026), Gentle-Vanguard uses ONE single source of truth for each category:
 
 ```
-foundation/
+gentle-vanguard/
  config/                 #  Single config location (was: .workspace/config/)
  docs/                  #  Documentation (no duplicates)
  hooks/                 #  Git hooks (unified)
@@ -41,3 +41,4 @@ foundation/
 | 2026-04-27 | Eliminated `scripts/utilities/skills/` duplicate | DONE   |
 | 2026-04-27 | Merged `.workspace/config/` `config/`            | DONE   |
 | 2026-04-27 | Unified `content-output-skill`                   | DONE   |
+

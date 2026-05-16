@@ -1,10 +1,10 @@
 import { z } from 'zod';
 import { execSync } from 'child_process';
 
-export function registerHealthTool(server: any, foundationRoot: string) {
+export function registerHealthTool(server: any, gentle-vanguardRoot: string) {
   server.tool(
-    'foundation_health',
-    'Check Foundation workspace health (tools, scripts, token budget, session status)',
+    'gentle-vanguard_health',
+    'Check Gentle-Vanguard workspace health (tools, scripts, token budget, session status)',
     {
       detailed: z.boolean().default(false).describe('Include detailed checks'),
       strict: z.boolean().default(false).describe('Enable strict cleanup mode'),
@@ -13,12 +13,12 @@ export function registerHealthTool(server: any, foundationRoot: string) {
       try {
         const detailed = args.detailed || false;
         const strict = args.strict || false;
-        const healthScript = `${foundationRoot}/scripts/utilities/wf.ps1`;
+        const healthScript = `${gentle-vanguardRoot}/scripts/utilities/gv.ps1`;
         const strictFlag = strict ? '-StrictCleanup' : '';
         const cmd = `powershell -NoProfile -ExecutionPolicy Bypass -File "${healthScript}" health ${strictFlag}`;
         
         const output = execSync(cmd, {
-          cwd: foundationRoot,
+          cwd: gentle-vanguardRoot,
           encoding: 'utf-8',
           maxBuffer: 5 * 1024 * 1024
         });
@@ -36,3 +36,4 @@ export function registerHealthTool(server: any, foundationRoot: string) {
     }
   );
 }
+

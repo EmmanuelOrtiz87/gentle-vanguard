@@ -4,7 +4,7 @@ For teams using AI assistants...
 
 Is governance friction or necessity?
 
-In Foundation:
+In Gentle-Vanguard:
 -SPEC required before CODE
 - 7D hooks validate automatically
 - Dual adversarial review

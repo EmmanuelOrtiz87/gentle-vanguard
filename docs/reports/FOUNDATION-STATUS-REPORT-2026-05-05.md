@@ -1,15 +1,15 @@
-# GENTLEMAN FOUNDATION — INFORME DE STATUS COMPLETO
+# GENTLEMAN GENTLE_VANGUARD — INFORME DE STATUS COMPLETO
 **Fecha:** 2026-05-05 (rev. 2 — post sesión de implementación)  
 **Versión del stack:** v2.6.5  
 **Clasificación:** Resumen técnico ejecutivo + Estado operacional  
 **Destinatario:** Gerencia / Equipo técnico  
-**Generado por:** `wf version` + revisión manual post-release + `agent-verify` 14/14 PASS
+**Generado por:** `gv version` + revisión manual post-release + `agent-verify` 14/14 PASS
 
 ---
 
 ## 1. RESUMEN EJECUTIVO
 
-Gentleman Foundation es una **plataforma de orquestación de agentes de IA** local-first, diseñada para sistematizar el ciclo de desarrollo de software con IA como co-piloto inteligente. No es un producto SaaS ni una dependencia de terceros: es infraestructura propia que controla el flujo de trabajo, la gobernanza de calidad, el gasto de tokens y la especialización de agentes.
+Gentle-Vanguard es una **plataforma de orquestación de agentes de IA** local-first, diseñada para sistematizar el ciclo de desarrollo de software con IA como co-piloto inteligente. No es un producto SaaS ni una dependencia de terceros: es infraestructura propia que controla el flujo de trabajo, la gobernanza de calidad, el gasto de tokens y la especialización de agentes.
 
 **Estado actual (v2.6.5 — rev. 2):**
 
@@ -24,7 +24,7 @@ Gentleman Foundation es una **plataforma de orquestación de agentes de IA** loc
 | Skills disponibles | 125 skills bajo demanda |
 | Backlog oficial | 7/7 items completados (FF-001 a FF-013) |
 | Sync drift | CLEAN — 0 drifts detectados |
-| Homologación workspace_local | **EN PROGRESO** — `foundation` sincronizado; `bitbucket-dashboard` bloqueado por manifest legacy + working tree sucio |
+| Homologación workspace_gentle_vanguard | **EN PROGRESO** — `gentle-vanguard` sincronizado; `bitbucket-dashboard` bloqueado por manifest legacy + working tree sucio |
 
 **Propuesta de valor central:**
 - Reducción de re-trabajo mediante routing inteligente de agentes especializados
@@ -38,7 +38,7 @@ Gentleman Foundation es una **plataforma de orquestación de agentes de IA** loc
 ## 2. ARQUITECTURA DEL STACK
 
 ```
-CAPA 4 — INTERFAZ         wf.ps1 (CLI unificado, 44+ comandos)
+CAPA 4 — INTERFAZ         gv.ps1 (CLI unificado, 44+ comandos)
 CAPA 3 — ORQUESTACIÓN     Orchestrator v2.6.5, 7 agentes especializados
 CAPA 2 — SKILLS           125 skills cargados bajo demanda
 CAPA 1 — INFRAESTRUCTURA  Event bus, token guard, telemetría, git hooks, sesiones
@@ -49,7 +49,7 @@ CAPA 0 — CI/CD            10 GitHub Actions workflows con hardening enterprise
 
 | Componente | Archivo / Directorio | Estado |
 |---|---|---|
-| CLI principal | `scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1` | Operacional — 44+ comandos |
+| CLI principal | `scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1` | Operacional — 44+ comandos |
 | Orchestrator config | `config/orchestrator.json` v2.6.5 | Operacional |
 | Auto-delegación | `config/auto-delegation.json` | Operacional |
 | Event bus | `scripts/.../event-bus.ps1` | Operacional — 5 governance gates |
@@ -62,7 +62,7 @@ CAPA 0 — CI/CD            10 GitHub Actions workflows con hardening enterprise
 | SDD Gate | `scripts/hooks/check-sdd-gate.ps1` | Operacional — bloquea sin SDD |
 | SDD Metrics | `scripts/.../TELEMETRY-METRICS/sdd-process-metrics.ps1` | Operacional |
 | Sync Drift Report | `scripts/utilities/sync-drift-report.ps1` | Operacional — JSON + HTML |
-| WF Benchmark | `scripts/utilities/wf-benchmark.ps1` | Operacional — SLO thresholds |
+| GV Benchmark | `scripts/utilities/gv-benchmark.ps1` | Operacional — SLO thresholds |
 | Git Hooks | `hooks/*.ps1` + `.git/hooks/pre-commit` | Operacional |
 | Testing (Pester) | `tests/unit/*.tests.ps1` | Operacional — 0 fallos |
 | Skills index | `skills/SKILL_INDEX.md` + 125 skills | Operacional |
@@ -101,7 +101,7 @@ Input usuario
 - Tier 2 (60–79%): dispatch mostrando agente+skill al usuario
 - Tier 3 (<60%): activar BA antes de ejecutar
 
-### 3.2 CLI Unificado — wf.ps1 (44+ comandos)
+### 3.2 CLI Unificado — gv.ps1 (44+ comandos)
 
 **Sesión y flujo:**
 ```
@@ -122,8 +122,7 @@ skills                     Lista todos los skills disponibles
 **Calidad y gobernanza:**
 ```
 review           Code review con múltiples dimensiones
-audit            Audit completo de foundation
-verify           Autoverificación del workspace (agent-verify.ps1)
+audit            Audit completo de gv verify           Autoverificación del workspace (agent-verify.ps1)
 judgment-day     QA gate completo antes de merge/release
 sdd-gate         Verifica que el SDD esté validado antes de commitear (FF-001)
 ```
@@ -131,8 +130,8 @@ sdd-gate         Verifica que el SDD esté validado antes de commitear (FF-001)
 **Métricas y SLOs:**
 ```
 sdd-metrics      SDD process metrics — cycle time, status distribution (FF-002)
-sync-drift       Drift report entre foundation y workspace projects (FF-004)
-benchmark [cmds] Benchmark de comandos wf contra SLO thresholds (FF-006)
+sync-drift       Drift report entre gentle-vanguard y workspace projects (FF-004)
+benchmark [cmds] Benchmark de comandos gv contra SLO thresholds (FF-006)
 export-metrics   Exporta métricas en CSV/JSON
 ```
 
@@ -177,7 +176,7 @@ Todos los workflows cumplen el estándar CI-HARDENING-STANDARDS.md v1.0:
 
 | Workflow | Trigger | Función | Timeout |
 |---|---|---|---|
-| `foundation-quality-gate` | push/PR main/develop | Quality gate principal — 7D | 30 min |
+| `gentle-vanguard-quality-gate` | push/PR main/develop | Quality gate principal — 7D | 30 min |
 | `workflow-lint` | push/PR any | Valida estructura de workflows | 10 min |
 | `script-governance` | push/PR *.ps1 | Governance de scripts PS1 | 25 min |
 | `ps-lint` | push/PR *.ps1 | PSScriptAnalyzer — Error=bloquea | 15 min |
@@ -253,22 +252,22 @@ Tres normativas vivas en `rules/` que se aplican automáticamente en CI:
 
 - **Hook:** integrado en `pre-commit` y en CI `sdd-gate.yml`
 - **Bypass:** solo con override documentado y reason obligatorio
-- **Métricas:** `wf sdd-metrics` muestra distribución de estados, cycle time por fase y SLO compliance
+- **Métricas:** `gv sdd-metrics` muestra distribución de estados, cycle time por fase y SLO compliance
 
 ### 3.9 Sync Drift Report (FF-004 — nuevo en v2.6.4)
 
-`sync-drift-report.ps1` detecta desincronizaciones entre foundation y proyectos workspace:
+`sync-drift-report.ps1` detecta desincronizaciones entre gentle-vanguard y proyectos workspace:
 - Archivos críticos faltantes en destino
 - Referencias rotas entre docs
 - Score de drift (0–100)
 - Salida: consola + JSON (`-AsJson`) + HTML opcional
 
-### 3.10 WF Benchmark (FF-006 — nuevo en v2.6.4)
+### 3.10 GV Benchmark (FF-006 — nuevo en v2.6.4)
 
-`wf-benchmark.ps1` ejecuta comandos wf y mide tiempo vs SLO thresholds:
+`gv-benchmark.ps1` ejecuta comandos gv y mide tiempo vs SLO thresholds:
 - `status` SLO: 5s | `health` SLO: 15s | `verify` SLO: 30s
 - Salida: tabla con PASS/WARN/FAIL por comando + JSON (`-AsJson`)
-- Integrado como `wf benchmark [cmd1,cmd2,...]`
+- Integrado como `gv benchmark [cmd1,cmd2,...]`
 
 ### 3.11 Seguridad (v2.6.5)
 
@@ -284,7 +283,7 @@ Tres normativas vivas en `rules/` que se aplican automáticamente en CI:
 
 ### 3.12 Dashboard HTML de Métricas (actualizado en rev. 2)
 
-Generado por `wf dashboard` → `reports/dashboard.html` (gitignored — generado localmente).
+Generado por `gv dashboard` → `reports/dashboard.html` (gitignored — generado localmente).
 
 **Secciones del dashboard:**
 1. **Overview** — 10 metric cards: Sessions, Dispatches, Tokens, Events, Avg Duration, Efficiency, Context Adoption, Daily Budget, Runtime Requests, Runtime Latency
@@ -307,7 +306,7 @@ Generado por `wf dashboard` → `reports/dashboard.html` (gitignored — generad
 - `docs/sessions/metrics/*.csv` — token-guard, context-usage, agent-usage, judgment-history, text-simplification
 - `.runtime/telemetry/cloud-agent-telemetry.csv` — telemetría real de providers
 
-**Cómo generarlo:** `wf dashboard` o directamente `.\ scripts\utilities\TELEMETRY-METRICS\generate-dashboard.ps1`
+**Cómo generarlo:** `gv dashboard` o directamente `.\ scripts\utilities\TELEMETRY-METRICS\generate-dashboard.ps1`
 
 ### 3.13 Colector de Telemetría de Providers (nuevo en rev. 2)
 
@@ -379,7 +378,7 @@ auto_apply_on:    context-pack, compact-start, audit, publish, end-session, disp
 ```
 required-files         PASS   VERSION, SECURITY.md, CLAUDE.md, AI-NORMATIVES.md
 required-scripts       PASS   pre-process-input, validate-configs, install-hooks
-quality-gate-workflows PASS   script-governance, workflow-lint, foundation-quality-gate, ps-lint, sdd-gate, owasp-scan
+quality-gate-workflows PASS   script-governance, workflow-lint, gentle-vanguard-quality-gate, ps-lint, sdd-gate, owasp-scan
 workflow-hardening     PASS   todos los workflows tienen permissions + timeout + concurrency
 hooks-installed        PASS   pre-commit hook instalado y activo
 tests-passing          PASS   0 fallos en suite Pester
@@ -397,7 +396,7 @@ sdd-docs               PASS   al menos 1 SDD validado
 
 | Suite | Archivo | Tests | Status |
 |---|---|---|---|
-| Foundation Core | `tests/unit/foundation-core.tests.ps1` | 12 | PASS |
+| Gentle-Vanguard Core | `tests/unit/gentle-vanguard-core.tests.ps1` | 12 | PASS |
 | v2.6.4 Scripts | `tests/unit/v264-scripts.tests.ps1` | 14 | PASS |
 | Integration | `tests/integration/` | disponible | — |
 
@@ -408,8 +407,8 @@ sdd-docs               PASS   al menos 1 SDD validado
 | Versión | Fecha | Highlights |
 |---|---|---|
 | v2.6.5 rev.2 | 2026-05-05 | **Rev. 2:** real provider telemetry, dashboard PDF/PNG export, alert thresholds en config |
-| v2.6.5 | 2026-05-05 | PSScriptAnalyzer CI, release automático, normativas PS+CI+Testing, wf version, dependabot, SECURITY.md |
-| v2.6.4 | 2026-05-05 | SDD Gate (FF-001), SDD Metrics (FF-002), Sync Drift (FF-004), WF Benchmark (FF-006) |
+| v2.6.5 | 2026-05-05 | PSScriptAnalyzer CI, release automático, normativas PS+CI+Testing, gv version, dependabot, SECURITY.md |
+| v2.6.4 | 2026-05-05 | SDD Gate (FF-001), SDD Metrics (FF-002), Sync Drift (FF-004), GV Benchmark (FF-006) |
 | v2.6.3 | anterior | Context Dashboard, Event Bus Phase 3, Override Governance |
 | v2.6.2 | anterior | Dispatch paralelo, Event Bus Phase 2 |
 | v2.6.1 | anterior | Token Budget Guard unificado, telemetría distribuida |
@@ -444,16 +443,16 @@ El backlog oficial está vacío. Las siguientes áreas son sugerencias de madure
 | 2 | **Alertas automáticas** — Slack/Teams webhook cuando SLO de benchmark excede threshold | M | Alto | ⏳ Pendiente |
 | 3 | **Cobertura de tests integración** — expandir `tests/integration/` para flujos críticos de routing | M | Medio | ⏳ Pendiente |
 | 4 | **Portabilidad Linux/macOS** — abstraer rutas Windows con `Join-Path` universal en hooks/scripts | S | Medio | ⏳ Parcial (autonomous-validation corregido) |
-| 5 | **Report mensual automatizado** — `wf export-metrics` + `generate-management-report.ps1` programado | S | Medio | ⏳ Pendiente |
-| 6 | **Homologación workspace_local** — propagar foundation a proyectos bajo `C:\Workspace_local\` | L | Alto | ⏳ **Ver sección 9** |
+| 5 | **Report mensual automatizado** — `gv export-metrics` + `generate-management-report.ps1` programado | S | Medio | ⏳ Pendiente |
+| 6 | **Homologación workspace_gentle_vanguard** — propagar gentle-vanguard a proyectos bajo `C:\Workspace_local\` | L | Alto | ⏳ **Ver sección 9** |
 
 ---
 
-## 9. ANÁLISIS DE HOMOLOGACIÓN — workspace_local
+## 9. ANÁLISIS DE HOMOLOGACIÓN — workspace_gentle_vanguard
 
-### 9.1 ¿Qué es la homologación workspace_local?
+### 9.1 ¿Qué es la homologación workspace_gentle_vanguard?
 
-Propagar los assets, skills, scripts y configuraciones de `foundation` a todos los proyectos bajo `C:\Workspace_local\` para que operen con el mismo estándar de gobernanza, calidad y observabilidad.
+Propagar los assets, skills, scripts y configuraciones de `gentle-vanguard` a todos los proyectos bajo `C:\Workspace_local\` para que operen con el mismo estándar de gobernanza, calidad y observabilidad.
 
 ### 9.2 Estado actual — Prerequisites
 
@@ -465,32 +464,32 @@ Propagar los assets, skills, scripts y configuraciones de `foundation` a todos l
 | CI/CD pipeline verde | ✅ Cumplido | HEAD `6aa883a` — todos los workflows passing |
 | Telemetría real | ✅ Cumplido | collect-provider-telemetry.ps1 operacional (rev. 2) |
 | Dashboard documentado | ✅ Cumplido | PDF/PNG export + thresholds configurables (rev. 2) |
-| foundation-sync.json presente | ✅ Cumplido | `config/foundation-sync.json` actualizado a v2.6.5 y catálogo validado por test de integración |
-| wf.ps1 accesible | ✅ Cumplido | wrapper `scripts/utilities/wf.ps1` reparado y path canónico `scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1` operativo |
+| gentle-vanguard-sync.json presente | ✅ Cumplido | `config/gentle-vanguard-sync.json` actualizado a v2.6.5 y catálogo validado por test de integración |
+| gv.ps1 accesible | ✅ Cumplido | wrapper `scripts/utilities/gv.ps1` reparado y path canónico `scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1` operativo |
 | Tests de integración | ✅ Cumplido | `tests/integration/` con specs activas; `routing-flow.tests.ps1` ampliado a 13 tests PASS |
-| Portabilidad Windows/Linux | ⚠️ Parcial | benchmark/sync/foundation-sync corregidos; persisten rutas Windows en hooks y scripts heredados |
+| Portabilidad Windows/Linux | ⚠️ Parcial | benchmark/sync/gentle-vanguard-sync corregidos; persisten rutas Windows en hooks y scripts heredados |
 
 ### 9.3 Bloqueadores antes de homologar
 
-Los bloqueadores iniciales ya fueron resueltos en esta sesión. Los bloqueadores remanentes para completar toda la cadena de `workspace_local` son:
+Los bloqueadores iniciales ya fueron resueltos en esta sesión. Los bloqueadores remanentes para completar toda la cadena de `workspace_gentle_vanguard` son:
 
 1. **agent-verify no llega a 14/14 por working tree dirty** — el stack ya valida funcionalmente, pero el warning de `uncommitted-changes` no desaparece sin commit o stash.
 
-2. **`bitbucket-dashboard` tiene manifest consumer legacy** — su `config/foundation-sync.json` todavía referencia 5 sources que no existen en `foundation` (`rotate-artifacts.ps1`, `day-end-closure.ps1`, `end-session.ps1`, `judgment-day.ps1`, `token-telemetry-report.ps1`).
+2. **`bitbucket-dashboard` tiene manifest consumer legacy** — su `config/gentle-vanguard-sync.json` todavía referencia 5 sources que no existen en `gentle-vanguard` (`rotate-artifacts.ps1`, `day-end-closure.ps1`, `end-session.ps1`, `judgment-day.ps1`, `token-telemetry-report.ps1`).
 
-3. **`bitbucket-dashboard` tiene working tree sucio** — aplicar `foundation-sync` ahí hoy sería riesgoso porque mezclaría la homologación con cambios locales no relacionados.
+3. **`bitbucket-dashboard` tiene working tree sucio** — aplicar `gentle-vanguard-sync` ahí hoy sería riesgoso porque mezclaría la homologación con cambios locales no relacionados.
 
 ### 9.4 Recomendación de secuencia
 
 ```
-1. [DONE] Corregir benchmark + wrapper/entrypoints (`wf benchmark` PASS)
-2. [DONE] Actualizar `foundation-sync.json` (catálogo validado, v2.6.5)
+1. [DONE] Corregir benchmark + wrapper/entrypoints (`gv benchmark` PASS)
+2. [DONE] Actualizar `gentle-vanguard-sync.json` (catálogo validado, v2.6.5)
 3. [DONE] Agregar test de integración (routing + asset catalog + wrapper)
 4. [PARTIAL] `agent-verify` PASS with warnings; benchmark PASS
-5. [PARTIAL] `sync-drift` CLEAN; `foundation` sincronizado; `bitbucket-dashboard` pendiente por dirty tree + manifest legacy
+5. [PARTIAL] `sync-drift` CLEAN; `gentle-vanguard` sincronizado; `bitbucket-dashboard` pendiente por dirty tree + manifest legacy
 ```
 
-**Estado post-sesión:** `foundation` quedó alineado con `foundation` (`foundation-sync check` = sin cambios requeridos). La homologación completa de `workspace_local` requiere una sesión aparte para sanear el manifest y el working tree de `bitbucket-dashboard`.
+**Estado post-sesión:** `gentle-vanguard` quedó alineado con `gentle-vanguard` (`gentle-vanguard-sync check` = sin cambios requeridos). La homologación completa de `workspace_gentle_vanguard` requiere una sesión aparte para sanear el manifest y el working tree de `bitbucket-dashboard`.
 
 ---
 
@@ -498,26 +497,26 @@ Los bloqueadores iniciales ya fueron resueltos en esta sesión. Los bloqueadores
 
 ```powershell
 # 1. Verificar estado del stack
-wf verify
+gv verify
 
 # 2. Ver versión y skills disponibles
-wf version
+gv version
 
 # 3. Iniciar sesión de trabajo
-wf start-session
+gv start-session
 
 # 4. Ejecutar quality gate antes de release
-wf judgment-day
+gv judgment-day
 
 # 5. Ver dashboard de métricas
-wf dashboard
+gv dashboard
 # → abre reports/dashboard.html en el browser
 
 # 6. Benchmark del stack
-wf benchmark status,health,verify
+gv benchmark status,health,verify
 
-# 7. Sincronizar foundation con proyectos workspace
-wf sync-drift
+# 7. Sincronizar gentle-vanguard con proyectos workspace
+gv sync-drift
 
 # 8. Commit con validación automática
 git add . && git commit -m "feat: ..."
@@ -526,6 +525,7 @@ git add . && git commit -m "feat: ..."
 
 ---
 
-*Gentleman Foundation v2.6.5 rev.2 — Local-First AI Orchestration Platform*  
-*Generado: 2026-05-05 | Rev. 2: 2026-05-05 | Repo: https://github.com/EmmanuelOrtiz87/foundation*  
+*Gentle-Vanguard v2.6.5 rev.2 — Local-First AI Orchestration Platform*  
+*Generado: 2026-05-05 | Rev. 2: 2026-05-05 | Repo: https://github.com/EmmanuelOrtiz87/gentle-vanguard*  
 *agent-verify: 14/14 PASS | sync-drift: CLEAN | backlog: 7/7 done*
+

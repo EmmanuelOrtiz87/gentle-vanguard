@@ -10,9 +10,9 @@
 
 These scripts are essential for project functionality and must be fixed first.
 
-### 1. wf.ps1 (Foundation - CRITICAL)
+### 1. gv.ps1 (Gentle-Vanguard - CRITICAL)
 
-**Location**: `scripts/foundation/wf.ps1`  
+**Location**: `scripts/gentle-vanguard/gv.ps1`  
 **Issues**:
 
 - Unbalanced braces: 501 open, 500 closed (missing 1 closing brace)
@@ -26,15 +26,15 @@ These scripts are essential for project functionality and must be fixed first.
 2. Use Find & Replace to locate unmatched braces
 3. Check function definitions and here-strings
 4. Validate with:
-   `[System.Management.Automation.Language.Parser]::ParseFile('.\scripts\foundation\wf.ps1', [ref]$null, [ref]$errors)`
+   `[System.Management.Automation.Language.Parser]::ParseFile('.\scripts\gentle-vanguard\gv.ps1', [ref]$null, [ref]$errors)`
 
 **Estimated Effort**: 30-45 minutes
 
 ---
 
-### 2. bootstrap-workspace.ps1 (Foundation)
+### 2. bootstrap-workspace.ps1 (Gentle-Vanguard)
 
-**Location**: `scripts/foundation/bootstrap-workspace.ps1`  
+**Location**: `scripts/gentle-vanguard/bootstrap-workspace.ps1`  
 **Issues**:
 
 - Unbalanced braces: 219 open, 217 closed (missing 2 closing braces)
@@ -314,7 +314,7 @@ These scripts have syntax issues but are less frequently used.
 
 ### Phase 1 - Critical (This Week)
 
-1. **wf.ps1** - Core workflow
+1. **gv.ps1** - Core workflow
 2. **bootstrap-workspace.ps1** - Initialization
 3. **validate-script-governance.ps1** - Validation
 4. **session-manager.ps1** - Session management
@@ -411,5 +411,6 @@ $errors | ForEach-Object { Write-Host $_.Message }
 | Lower     | 10     | 2-2.5 hours       |
 | **TOTAL** | **21** | **5.5-7.5 hours** |
 
-**Recommendation**: Focus on Critical and High Priority scripts first. These are the foundation of
+**Recommendation**: Focus on Critical and High Priority scripts first. These are the gentle-vanguard of
 the project and will unblock most workflows.
+

@@ -1,15 +1,15 @@
 param(
     [string[]]$RepoPaths = @(),
     [string]$Owner = 'EmmanuelOrtiz87',
-    [string]$OldName = 'foundation',
-    [string]$NewName = 'foundation',
+    [string]$OldName = 'gentle-vanguard',
+    [string]$NewName = 'gentle-vanguard',
     [switch]$DryRun
 )
 
 $ErrorActionPreference = 'Stop'
 
-if ($env:FOUNDATION_BASE_DIR) {
-    $resolvedRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GENTLE_VANGUARD_BASE_DIR) {
+    $resolvedRoot = $env:GENTLE_VANGUARD_BASE_DIR
 } else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -21,7 +21,7 @@ if ($env:FOUNDATION_BASE_DIR) {
 if ($RepoPaths.Count -eq 0) {
     $RepoPaths = @(
         $resolvedRoot,
-        (Join-Path (Split-Path -Parent (Split-Path -Parent $resolvedRoot)) 'foundation-public')
+        (Join-Path (Split-Path -Parent (Split-Path -Parent $resolvedRoot)) 'gentle-vanguard-public')
     )
 }
 
@@ -48,7 +48,7 @@ function Write-Warn {
 $oldUrl = "https://github.com/$Owner/$OldName.git"
 $newUrl = "https://github.com/$Owner/$NewName.git"
 
-Write-Step "Foundation remote migration"
+Write-Step "Gentle-Vanguard remote migration"
 Write-Host "Old URL: $oldUrl"
 Write-Host "New URL: $newUrl"
 

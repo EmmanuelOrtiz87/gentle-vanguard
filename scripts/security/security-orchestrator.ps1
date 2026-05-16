@@ -1,4 +1,4 @@
-# Security Orchestrator - Foundation
+# Security Orchestrator - Gentle-Vanguard
 # Central security module for workflow automation
 # Provides sanitization, privacy, and data control
 
@@ -53,7 +53,7 @@ function Get-SessionAuth {
 
 function Get-OwnerApiKey {
     # Priority 1: Environment variable (most secure - not in repo)
-    $envKey = $env:FOUNDATION_OWNER_KEY
+    $envKey = $env:GV_OWNER_KEY
     if (-not [string]::IsNullOrWhiteSpace($envKey)) {
         return $envKey
     }
@@ -69,7 +69,7 @@ function Get-OwnerApiKey {
                 [System.Security.Cryptography.DataProtectionScope]::CurrentUser
             )
             $auth = [System.Text.Encoding]::UTF8.GetString($decrypted) | ConvertFrom-Json
-            if ($auth.apiKey -and $auth.apiKey -ne '__USE_ENV_VAR_FOUNDATION_OWNER_KEY__') {
+            if ($auth.apiKey -and $auth.apiKey -ne '__USE_ENV_VAR_GV_OWNER_KEY__') {
                 return $auth.apiKey
             }
         }
@@ -81,7 +81,7 @@ function Get-OwnerApiKey {
     # Priority 3: Plain file (legacy fallback - avoid)
     if (Test-Path $ownerAuthPath) {
         $auth = Get-Content $ownerAuthPath -Raw | ConvertFrom-Json
-        if ($auth.apiKey -and $auth.apiKey -ne '__USE_ENV_VAR_FOUNDATION_OWNER_KEY__') {
+        if ($auth.apiKey -and $auth.apiKey -ne '__USE_ENV_VAR_GV_OWNER_KEY__') {
             return $auth.apiKey
         }
     }
@@ -108,7 +108,7 @@ function Test-OwnerApiKey {
     
     $expectedKey = Get-OwnerApiKey
     if ($null -eq $expectedKey) {
-        Write-Host "[WARN] No owner API key configured. Set FOUNDATION_OWNER_KEY env var." -ForegroundColor Yellow
+        Write-Host "[WARN] No owner API key configured. Set GV_OWNER_KEY env var." -ForegroundColor Yellow
         return $false
     }
     
@@ -163,7 +163,7 @@ function Write-AuthRequired {
     Write-Host "Usage:" -ForegroundColor Cyan
     Write-Host "  .\scripts\security\security-orchestrator.ps1 -Action '$Operation' -ApiKey <your-api-key>" -ForegroundColor Gray
     Write-Host ""
-    Write-Host "Get API key: Set FOUNDATION_OWNER_KEY env var (recommended)" -ForegroundColor Gray
+    Write-Host "Get API key: Set GV_OWNER_KEY env var (recommended)" -ForegroundColor Gray
     Write-Host "Or use: .\scripts\utilities\auth-session.ps1 -UseSecurityQuestions" -ForegroundColor Gray
     Write-Host "Or check: .workspace\config\owner-auth.json (legacy)" -ForegroundColor Gray
     Write-Host ""
@@ -650,3 +650,4 @@ if ($AsJson) {
         }
     }
 }
+

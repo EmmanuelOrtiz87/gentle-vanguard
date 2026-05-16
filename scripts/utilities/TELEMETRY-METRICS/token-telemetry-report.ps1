@@ -6,8 +6,8 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-if ($env:FOUNDATION_BASE_DIR) {
-    $repoRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GV_BASE_DIR) {
+    $repoRoot = $env:GV_BASE_DIR
 } else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -102,3 +102,4 @@ $content = @"
 
 $content | Set-Content -Path $outputPath -Encoding UTF8
 Write-Host "[OK] Telemetry report: $outputPath" -ForegroundColor Green
+

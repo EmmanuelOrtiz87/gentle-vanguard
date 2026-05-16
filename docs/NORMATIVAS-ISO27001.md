@@ -8,13 +8,13 @@ Last updated: 2026-05-11
 
 ## 1. PROPOSITO
 
-Mapea los controles del Anexo A de ISO/IEC 27001:2022 a automatizaciones, workflows y gates en el stack Foundation. Garantiza que las practicas de seguridad del framework esten alineadas con el estandar internacional de gestion de seguridad de la informacion.
+Mapea los controles del Anexo A de ISO/IEC 27001:2022 a automatizaciones, workflows y gates en el stack Gentle-Vanguard. Garantiza que las practicas de seguridad del framework esten alineadas con el estandar internacional de gestion de seguridad de la informacion.
 
 ---
 
 ## 2. CONTROLES ORGANIZACIONALES (A.5)
 
-| Control ID | Control Name | Implementacion Foundation | Verification |
+| Control ID | Control Name | Implementacion Gentle-Vanguard | Verification |
 |---|---|---|---|
 | A.5.1 | Information security policy | `docs/NORMATIVAS-SEGURIDAD.md` + `config/security-policy.json` | Policy documentada y revisada |
 | A.5.2 | Information security roles | `config/access-control.json` + `config/owner-auth.json` | Roles definidos y asignados |
@@ -33,7 +33,7 @@ Mapea los controles del Anexo A de ISO/IEC 27001:2022 a automatizaciones, workfl
 
 ## 3. CONTROLES DE TECNOLOGIA (A.8)
 
-| Control ID | Control Name | Implementacion Foundation | Verification |
+| Control ID | Control Name | Implementacion Gentle-Vanguard | Verification |
 |---|---|---|---|
 | A.8.4 | Privileged access | `config/security-hardening.json#leastPrivilege` | Least privilege por agente |
 | A.8.5 | Secure authentication | `secure-auth.ps1` + `auth-session.ps1` | Session-based auth |
@@ -60,7 +60,7 @@ Mapea los controles del Anexo A de ISO/IEC 27001:2022 a automatizaciones, workfl
 
 ## 4. CONTROLES DE PERSONAS (A.6)
 
-| Control ID | Control Name | Implementacion Foundation | Verification |
+| Control ID | Control Name | Implementacion Gentle-Vanguard | Verification |
 |---|---|---|---|
 | A.6.1 | Screening | `config/owner-auth.json` | Owner verification |
 | A.6.2 | Terms and conditions | `config/security-policy.json` | Policy acceptance |
@@ -155,3 +155,4 @@ TODO implementacion DEBE verificar:
 ---
 
 _Version: 1.0.0 — 2026-05-11 — Status: ACTIVE_
+

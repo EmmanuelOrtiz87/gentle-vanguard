@@ -1,9 +1,9 @@
-# Foundation Client - Lightweight Interface
+# Gentle-Vanguard Client - Lightweight Interface
 
-This is the **client-only** distribution of Foundation. It provides:
+This is the **client-only** distribution of Gentle-Vanguard. It provides:
 
 - TUI interface for setup
-- Connection to Foundation API (server mode)
+- Connection to Gentle-Vanguard API (server mode)
 - Public documentation and theory
 - NO engine implementation (protected IP)
 
@@ -11,8 +11,8 @@ This is the **client-only** distribution of Foundation. It provides:
 
 ```
 client/
-├── wf-client.exe          # Compiled CLI (PS2EXE, obfuscated)
-├── foundation-tui.exe     # TUI installer (interface only)
+├── gv-client.exe          # Compiled CLI (PS2EXE, obfuscated)
+├── gentle-vanguard-tui.exe     # TUI installer (interface only)
 ├── config/
 │   └── server-endpoint.json  # API connection config
 └── docs/                 # Public docs (theory, architecture)
@@ -28,18 +28,18 @@ client/
 
 ## Server Mode
 
-To use full Foundation capabilities:
+To use full Gentle-Vanguard capabilities:
 
-1. **Subscribe** at https://foundation.dev/pricing
+1. **Subscribe** at https://gentle-vanguard.dev/pricing
 2. **Get API key** from dashboard
 3. **Configure client**:
    ```powershell
-   .\wf-client.exe config --api-key "your-key"
+   .\gv-client.exe config --api-key "your-key"
    ```
 4. **Use normally**:
    ```powershell
-   .\wf-client.exe health
-   .\wf-client.exe verify
+   .\gv-client.exe health
+   .\gv-client.exe verify
    ```
 
 ## Local Mode (Limited)
@@ -53,7 +53,7 @@ Without server connection, you can:
 
 ## Intellectual Property Notice
 
-Foundation engine and core algorithms are:
+Gentle-Vanguard engine and core algorithms are:
 
 - **NOT open source** (despite public docs)
 - **Protected by EULA** (see LICENSE)
@@ -62,6 +62,7 @@ Foundation engine and core algorithms are:
 
 ## Support
 
-- Docs: https://foundation.dev/docs
-- Issues: https://github.com/EmmanuelOrtiz87/foundation/issues
-- Email: support@foundation.dev
+- Docs: https://gentle-vanguard.dev/docs
+- Issues: https://github.com/EmmanuelOrtiz87/gentle-vanguard/issues
+- Email: support@gentle-vanguard.dev
+

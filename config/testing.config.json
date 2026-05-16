@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "name": "Testing Configuration",
-  "description": "Automated testing suite configuration for foundation",
+  "description": "Automated testing suite configuration for gentle-vanguard",
   "enabled": true,
   "testFramework": "pester",
   "testFrameworkBash": "bats",
@@ -132,3 +132,4 @@
     "channels": ["console", "log", "email"]
   }
 }
+

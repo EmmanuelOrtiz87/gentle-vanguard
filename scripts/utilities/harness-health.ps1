@@ -15,7 +15,7 @@ function Write-Health {
 }
 
 $results = @()
-$repoRoot = if ($env:FOUNDATION_BASE_DIR) { $env:FOUNDATION_BASE_DIR } else { (Get-Location).Path }
+$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) { $env:GENTLE_VANGUARD_BASE_DIR } else { (Get-Location).Path }
 
 Write-Output "=== HARNESS HEALTH CHECK ==="
 Write-Output ""
@@ -107,8 +107,8 @@ if (Test-Path $cbConfig) {
     $results += Write-Health -Layer 6 -Status 'WARN' -Message "circuit-breaker.json NO presente"
 }
 
-# L7: Tools (Engram, wf.ps1, session-autostart)
-$wf = Join-Path $repoRoot "scripts/utilities/wf.ps1"
+# L7: Tools (Engram, gv.ps1, session-autostart)
+$gv = Join-Path $repoRoot "scripts/utilities/gv.ps1"
 $homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
 $autostart = if ([Environment]::OSVersion.Platform -eq 'Win32NT') {
     Join-Path $repoRoot "scripts/utilities/session-autostart.cmd"
@@ -117,10 +117,10 @@ $autostart = if ([Environment]::OSVersion.Platform -eq 'Win32NT') {
 }
 $engramPresent = (Get-Command "engram" -ErrorAction SilentlyContinue) -or (Test-Path (Join-Path $homePath "bin/engram"))
 $toolsOK = $true
-if (-not (Test-Path $wf)) { $toolsOK = $false; $results += Write-Health -Layer 7 -Status 'FAIL' -Message "wf.ps1 no encontrado" }
+if (-not (Test-Path $gv)) { $toolsOK = $false; $results += Write-Health -Layer 7 -Status 'FAIL' -Message "gv.ps1 no encontrado" }
 if (-not (Test-Path $autostart)) { $toolsOK = $false; $results += Write-Health -Layer 7 -Status 'FAIL' -Message "session-autostart no encontrado" }
 if (-not $engramPresent) { $toolsOK = $false; $results += Write-Health -Layer 7 -Status 'FAIL' -Message "engram no disponible" }
-if ($toolsOK) { $results += Write-Health -Layer 7 -Status 'PASS' -Message "Tools: wf.ps1 + session-autostart + engram OK" }
+if ($toolsOK) { $results += Write-Health -Layer 7 -Status 'PASS' -Message "Tools: gv.ps1 + session-autostart + engram OK" }
 
 # L8: Governance
 $normFiles = @(
@@ -155,3 +155,4 @@ if ($AsJson) {
         summary = @{ pass = $passCount; warn = $warnCount; fail = $failCount; total = $results.Count }
     } | ConvertTo-Json -Depth 3
 }
+

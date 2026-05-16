@@ -20,7 +20,7 @@ if ($SourceScript -and (Test-Path $SourceScript)) {
     $outputPath = Join-Path $OutputDir "$fileName.exe"
     
     Write-Output " Compiling: $SourceScript"
-    ps2exe -inputFile $SourceScript -outputFile $outputPath -noConsole -iconFile "" -title "Foundation Utility" -description "Foundation automated utility"
+    ps2exe -inputFile $SourceScript -outputFile $outputPath -noConsole -iconFile "" -title "Gentle-Vanguard Utility" -description "Gentle-Vanguard automated utility"
     
     if (Test-Path $outputPath) {
         Write-Output "[OK] Created: $outputPath"
@@ -29,3 +29,4 @@ if ($SourceScript -and (Test-Path $SourceScript)) {
     Write-Output "Usage: .\compile-ps2exe.ps1 -SourceScript 'path\to\script.ps1'"
     Write-Output "Or run without parameters to see this help."
 }
+

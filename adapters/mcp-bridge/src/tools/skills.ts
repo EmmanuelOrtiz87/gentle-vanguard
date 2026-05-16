@@ -2,13 +2,13 @@ import { z } from 'zod';
 import { readdirSync, existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 
-export function registerSkillTools(server: any, foundationRoot: string) {
-  const skillsRoot = join(foundationRoot, 'skills');
+export function registerSkillTools(server: any, gentle-vanguardRoot: string) {
+  const skillsRoot = join(gentle-vanguardRoot, 'skills');
 
   // List available skills
   server.tool(
-    'foundation_skill_list',
-    'List all available Foundation skills with descriptions and triggers',
+    'gentle-vanguard_skill_list',
+    'List all available Gentle-Vanguard skills with descriptions and triggers',
     {
       category: z.string().optional().describe('Filter by category: frontend, backend, testing, workflow, etc.'),
     },
@@ -57,7 +57,7 @@ export function registerSkillTools(server: any, foundationRoot: string) {
 
   // Load specific skill
   server.tool(
-    'foundation_skill_load',
+    'gentle-vanguard_skill_load',
     'Get skill content for loading into AI context',
     {
       skillName: z.string().describe('Skill name (e.g., angular-spa-skill, react-19-skill)'),
@@ -89,3 +89,4 @@ export function registerSkillTools(server: any, foundationRoot: string) {
     }
   );
 }
+

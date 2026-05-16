@@ -1,4 +1,4 @@
-﻿# Script Normalization Audit Report
+# Script Normalization Audit Report
 
 **Date**: 2026-04-22 10:32:08 **Total Scripts**: 120 **Scripts with Issues**: 21 **Scripts Fixed**:
 0
@@ -21,13 +21,13 @@ Issues:
 
 - Syntax error: Token 'Script' inesperado en la expresin o la instruccin.
 
-### .\scripts\foundation\bootstrap-workspace.ps1
+### .\scripts\gentle-vanguard\bootstrap-workspace.ps1
 
 Issues:
 
 - Unbalanced braces: 219 open, 217 closed
 
-### .\scripts\foundation\wf.ps1
+### .\scripts\gentle-vanguard\gv.ps1
 
 Issues:
 
@@ -176,7 +176,7 @@ Issues:
 
 - Unbalanced parentheses: 73 open, 74 closed
 
-### .\scripts\utilities\wf.ps1
+### .\scripts\utilities\gv.ps1
 
 Issues:
 
@@ -193,3 +193,4 @@ Issues:
 ## Compliance Status
 
 **Compliance**: 82.5%
+

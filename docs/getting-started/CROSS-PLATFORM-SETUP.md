@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Foundation - Development Stack now supports **all platforms** through orchestrator-coordinated
+The Gentle-Vanguard - Development Stack now supports **all platforms** through orchestrator-coordinated
 shell routing:
 
 - **Windows**: PowerShell 5.1+ or PowerShell Core (pwsh)
@@ -25,23 +25,23 @@ shell routing:
 
 ```powershell
 # First time setup
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\foundation\bootstrap.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\gentle-vanguard\bootstrap.ps1
 
 # Then use workflow commands
-.\scripts\utilities\wf.ps1 status
-.\scripts\utilities\wf.ps1 health
+.\scripts\utilities\gv.ps1 status
+.\scripts\utilities\gv.ps1 health
 ```
 
 ### Linux / macOS / WSL
 
 ```bash
 # First time setup
-bash scripts/foundation/setup.sh
-chmod +x scripts/foundation/setup.sh wf
+bash scripts/gentle-vanguard/setup.sh
+chmod +x scripts/gentle-vanguard/setup.sh gv
 
 # Then use workflow commands
-./wf status
-./wf health
+./gv status
+./gv health
 ```
 
 ## How It Works
@@ -60,13 +60,13 @@ detect_shell  # Returns: bash, zsh, sh, powershell, pwsh
 
 ### Intelligent Routing
 
-When you run `./wf`, the system:
+When you run `./gv`, the system:
 
 1. Detects available shells (prioritizes: PowerShell bash sh)
 2. Routes to appropriate implementation:
-   - Windows + PowerShell available runs `wf.ps1`
-   - Linux/macOS + bash available runs `wf.sh`
-   - Fallback uses `wf` wrapper script
+   - Windows + PowerShell available runs `gv.ps1`
+   - Linux/macOS + bash available runs `gv.sh`
+   - Fallback uses `gv` wrapper script
 
 ### Unified Command Interface
 
@@ -74,11 +74,11 @@ Same commands work on **all platforms**:
 
 ```bash
 # All these work the same way everywhere:
-./wf status      # Show project status
-./wf health      # Run health checks
-./wf verify      # Verify configuration
-./wf diagnose    # Detailed diagnostics
-./wf init        # Initialize environment
+./gv status      # Show project status
+./gv health      # Run health checks
+./gv verify      # Verify configuration
+./gv diagnose    # Detailed diagnostics
+./gv init        # Initialize environment
 ```
 
 ## Scripts Provided
@@ -87,9 +87,9 @@ Same commands work on **all platforms**:
 
 | Script                                  | Platform           | Purpose                                   |
 | --------------------------------------- | ------------------ | ----------------------------------------- |
-| `scripts/foundation/setup.sh`           | Linux/macOS/WSL    | Universal setup with platform detection   |
-| `scripts/foundation/bootstrap.ps1`      | Windows/PowerShell | Canonical PowerShell bootstrap entrypoint |
-| `wf` wrapper + `scripts/utilities/wf.*` | All                | Auto-detects platform on execution        |
+| `scripts/gentle-vanguard/setup.sh`           | Linux/macOS/WSL    | Universal setup with platform detection   |
+| `scripts/gentle-vanguard/bootstrap.ps1`      | Windows/PowerShell | Canonical PowerShell bootstrap entrypoint |
+| `gv` wrapper + `scripts/utilities/gv.*` | All                | Auto-detects platform on execution        |
 
 ### Diagnostic Scripts
 
@@ -109,9 +109,9 @@ Same commands work on **all platforms**:
 
 | Script                     | Platform           | Purpose                         |
 | -------------------------- | ------------------ | ------------------------------- |
-| `scripts/utilities/wf.sh`  | Linux/macOS/WSL    | Main workflow CLI (bash)        |
-| `scripts/utilities/wf.ps1` | Windows/PowerShell | Main workflow CLI (PowerShell)  |
-| `wf` (wrapper)             | All                | Smart router that detects shell |
+| `scripts/utilities/gv.sh`  | Linux/macOS/WSL    | Main workflow CLI (bash)        |
+| `scripts/utilities/gv.ps1` | Windows/PowerShell | Main workflow CLI (PowerShell)  |
+| `gv` (wrapper)             | All                | Smart router that detects shell |
 
 ## Command Reference
 
@@ -120,7 +120,7 @@ Same commands work on **all platforms**:
 Shows project information and installed tools:
 
 ```bash
-./wf status
+./gv status
 ```
 
 Output:
@@ -136,7 +136,7 @@ Output:
 Runs health checks and auto-installs missing tools:
 
 ```bash
-./wf health
+./gv health
 ```
 
 Actions:
@@ -157,7 +157,7 @@ Additional behavior:
 Detailed system diagnostics (verbose):
 
 ```bash
-./wf diagnose
+./gv diagnose
 ```
 
 Checks:
@@ -177,7 +177,7 @@ Checks:
 Quick environment verification:
 
 ```bash
-./wf verify
+./gv verify
 ```
 
 Verifies:
@@ -191,7 +191,7 @@ Verifies:
 Full environment initialization:
 
 ```bash
-./wf init
+./gv init
 ```
 
 Actions:
@@ -220,8 +220,8 @@ The orchestrator is configured in `config/orchestrator.json`:
     "macos": ["bash", "zsh", "sh"]
   },
   "bootstrap": {
-    "primary_entry": "scripts/foundation/setup.sh",
-    "fallback_entry": "scripts/foundation/bootstrap.ps1"
+    "primary_entry": "scripts/gentle-vanguard/setup.sh",
+    "fallback_entry": "scripts/gentle-vanguard/bootstrap.ps1"
   }
 }
 ```
@@ -233,9 +233,9 @@ The orchestrator maps commands to platform-specific implementations:
 ```json
 {
   "commands": {
-    "status": "wf.sh status",
-    "health": "wf.sh health",
-    "verify": "wf.sh verify"
+    "status": "gv.sh status",
+    "health": "gv.sh health",
+    "verify": "gv.sh verify"
   }
 }
 ```
@@ -274,7 +274,7 @@ Before each commit:
 
 ## Compatibility Notes
 
-1. `wf.ps1`, `ensure-tools-active.ps1`, and `update-tools.ps1` are the canonical automation scripts.
+1. `gv.ps1`, `ensure-tools-active.ps1`, and `update-tools.ps1` are the canonical automation scripts.
 2. On Linux or macOS, prefer `pwsh` when invoking the PowerShell scripts directly.
 3. Bash support is recommended when using shell-based helper tooling.
 4. AI tooling is configurable and optional; the workspace does not require a single IDE or AI
@@ -285,7 +285,7 @@ Before each commit:
 **Linux/macOS:**
 
 ```bash
-chmod +x scripts/foundation/setup.sh wf
+chmod +x scripts/gentle-vanguard/setup.sh gv
 chmod +x scripts/utilities/*.sh
 chmod +x scripts/diagnostics/*.sh
 chmod +x scripts/git-hooks/*
@@ -309,7 +309,7 @@ go env GOPATH
 Manually install:
 
 ```bash
-go install github.com/foundation/engram/cmd/engram@latest
+go install github.com/gentle-vanguard/engram/cmd/engram@latest
 ```
 
 ### Problem: "Wrong shell detected"
@@ -318,20 +318,20 @@ Explicitly use desired shell:
 
 ```bash
 # Force bash
-bash scripts/utilities/wf.sh status
+bash scripts/utilities/gv.sh status
 
 # Force PowerShell
-powershell -File scripts\utilities\wf.ps1 status
+powershell -File scripts\utilities\gv.ps1 status
 ```
 
 ## Development
 
 ### Adding New Commands
 
-1. Add function in `wf.sh` and `wf.ps1`:
+1. Add function in `gv.sh` and `gv.ps1`:
 
 ```bash
-# scripts/utilities/wf.sh
+# scripts/utilities/gv.sh
 cmd_mycommand() {
     log_header "My Command"
     log_info "Doing something..."
@@ -354,7 +354,7 @@ esac
 ```json
 {
   "commands": {
-    "mycommand": "wf.sh mycommand"
+    "mycommand": "gv.sh mycommand"
   },
   "communication_response_mode": "simple"
 }
@@ -364,16 +364,16 @@ esac
 
 ```
 project-root/
- scripts/foundation/setup.sh       # Universal setup entry point (bash)
- scripts/foundation/bootstrap.ps1  # PowerShell bootstrap entry point
- wf                                # Universal wrapper (any shell)
+ scripts/gentle-vanguard/setup.sh       # Universal setup entry point (bash)
+ scripts/gentle-vanguard/bootstrap.ps1  # PowerShell bootstrap entry point
+ gv                                # Universal wrapper (any shell)
  config/
     orchestrator.json             # Platform routing config
     workspace.config.json         # Workspace configuration
  scripts/
     utilities/
-       wf.sh                     # Bash/sh workflow CLI
-       wf.ps1                    # PowerShell workflow CLI
+       gv.sh                     # Bash/sh workflow CLI
+       gv.ps1                    # PowerShell workflow CLI
        auto-init-dev-environment.sh
        auto-init-dev-environment.ps1
        ...
@@ -397,12 +397,13 @@ project-root/
 
 ## What's Next
 
-1. Run setup: `bash scripts/foundation/setup.sh` (Linux/macOS) or
-   `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\foundation\bootstrap.ps1`
+1. Run setup: `bash scripts/gentle-vanguard/setup.sh` (Linux/macOS) or
+   `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\gentle-vanguard\bootstrap.ps1`
    (Windows)
-2. Verify installation: `./wf health` or `.\scripts\utilities\wf.ps1 health`
+2. Verify installation: `./gv health` or `.\scripts\utilities\gv.ps1 health`
 3. Start development: See project-specific README
 4. Monitor via orchestrator: `engram status`
 
-- Los hooks automticos de Foundation - Development Stack ejecutan chequeos de seguridad, calidad,
+- Los hooks automticos de Gentle-Vanguard - Development Stack ejecutan chequeos de seguridad, calidad,
   arquitectura, testing, API, documentacin y gitflow en cada commit/push. Ver REVIEW-INDEX.md.
+

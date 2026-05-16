@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "description": "OWASP-aligned security controls for Foundation LLM agents",
+  "description": "OWASP-aligned security controls for Gentle-Vanguard LLM agents",
   "framework": "OWASP LLM Top 10 2025 + OWASP Agentic Top 10 2026",
   "prompt_injection": {
     "treat_external_input_as_untrusted": true,
@@ -79,3 +79,4 @@
     }
   }
 }
+

@@ -23,21 +23,21 @@ function Write-Warn {
     Write-Host "[WARN] $Message" -ForegroundColor Yellow
 }
 
-if ($env:FOUNDATION_BASE_DIR) {
-    $foundationRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GENTLE_VANGUARD_BASE_DIR) {
+    $gentle-vanguardRoot = $env:GENTLE_VANGUARD_BASE_DIR
 } else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
         $searchDir = Split-Path -Parent $searchDir
     }
-    $foundationRoot = $searchDir
+    $gentle-vanguardRoot = $searchDir
 }
-$orchestratorSkill = Join-Path $foundationRoot "skills\project-orchestrator-skill"
+$orchestratorSkill = Join-Path $gentle-vanguardRoot "skills\project-orchestrator-skill"
 
 if ($ProjectPath) {
     $targetProject = (Resolve-Path $ProjectPath).Path
 } else {
-    $targetProject = $foundationRoot
+    $targetProject = $gentle-vanguardRoot
 }
 
 function Ensure-Engram {
@@ -49,7 +49,7 @@ function Ensure-Engram {
         return
     }
 
-    $installScript = Join-Path $foundationRoot "scripts\utilities\install-engram.ps1"
+    $installScript = Join-Path $gentle-vanguardRoot "scripts\utilities\install-engram.ps1"
     if (Test-Path $installScript) {
         & powershell -NoProfile -ExecutionPolicy Bypass -File $installScript
     }
@@ -219,10 +219,10 @@ function Deactivate-OnDemand {
 function Validate-Stack {
     Write-Step "Validating stack state"
 
-    $validator = Join-Path $foundationRoot "scripts\utilities\orchestrator-status.ps1"
+    $validator = Join-Path $gentle-vanguardRoot "scripts\utilities\orchestrator-status.ps1"
     & powershell -NoProfile -ExecutionPolicy Bypass -File $validator
 
-    $sessionValidator = Join-Path $foundationRoot "scripts\utilities\orchestrator-status.ps1"
+    $sessionValidator = Join-Path $gentle-vanguardRoot "scripts\utilities\orchestrator-status.ps1"
     if (Test-Path $sessionValidator) {
         $validatorArgs = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $sessionValidator)
         if ($Detailed) { $validatorArgs += "-Detailed" }
@@ -255,3 +255,4 @@ switch ($Action) {
 
 Write-Step "Completed"
 Write-Host "Action=$Action ProjectPath=$targetProject" -ForegroundColor Cyan
+

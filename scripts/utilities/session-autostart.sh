@@ -92,9 +92,9 @@ if pwsh -NoProfile -ExecutionPolicy Bypass -File "$UTILS_DIR/session-manager.ps1
     echo "[OK] Session initialized"
 else
     echo "[ERROR] session-manager.ps1 failed"
-    if [ -f "$WF_DIR/wf.ps1" ]; then
-        echo "[FALLBACK] Attempting wf.ps1..."
-        pwsh -NoProfile -ExecutionPolicy Bypass -File "$WF_DIR/wf.ps1" start-session
+    if [ -f "$WF_DIR/gv.ps1" ]; then
+        echo "[FALLBACK] Attempting gv.ps1..."
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "$WF_DIR/gv.ps1" start-session
     else
         echo "[FATAL] No fallback available. Aborting."
         exit 1
@@ -117,7 +117,7 @@ fi
 echo "[5/16] Resolving session ID..."
 SESSION_ID=$(pwsh -NoProfile -ExecutionPolicy Bypass -File "$UTILS_DIR/get-session-id.ps1" 2>/dev/null || true)
 if [ -n "$SESSION_ID" ]; then
-    export FOUNDATION_SESSION_ID="$SESSION_ID"
+    export GENTLE_VANGUARD_SESSION_ID="$SESSION_ID"
     export WFS_SESSION_ID="$SESSION_ID"
     echo "[OK] Session ID: $SESSION_ID"
 else
@@ -139,7 +139,7 @@ fi
 
 # === Phase 4: Engram Policy Enforcement ===
 echo "[7/16] Engram policy enforcement..."
-ENGRAM_POLICY="$WORKSPACE_ROOT/scripts/foundation/engram-policy.ps1"
+ENGRAM_POLICY="$WORKSPACE_ROOT/scripts/gentle-vanguard/engram-policy.ps1"
 if [ -f "$ENGRAM_POLICY" ]; then
     if pwsh -NoProfile -ExecutionPolicy Bypass -File "$ENGRAM_POLICY" -Action enforce; then
         echo "[OK] Engram policy enforced"
@@ -157,7 +157,7 @@ fi
 echo "[8/16] Engram optimization..."
 OPTIMIZE_SCRIPT="$WORKSPACE_ROOT/scripts/utilities/PERFORMANCE-OPTIMIZATION/optimize-engram-usage.ps1"
 if [ -f "$OPTIMIZE_SCRIPT" ]; then
-    if pwsh -NoProfile -ExecutionPolicy Bypass -File "$OPTIMIZE_SCRIPT" -ProjectName "workspace_local"; then
+    if pwsh -NoProfile -ExecutionPolicy Bypass -File "$OPTIMIZE_SCRIPT" -ProjectName "workspace_gentle_vanguard"; then
         echo "[OK] Engram optimized"
     else
         echo "[WARN] Optimization had warnings"
@@ -272,12 +272,21 @@ fi
 
 # === Phase 9.5: Workspace State Warning ===
 echo "[14/16] Checking workspace state..."
-WORKSPACE_STATE=$(cd "$WORKSPACE_ROOT" && git status --porcelain 2>/dev/null || true)
-if [ -n "$WORKSPACE_STATE" ]; then
+WORKSPACE_STATE=""
+DIRTY_STATE_SCRIPT="$UTILS_DIR/get-workspace-dirty-state.ps1"
+if [ -f "$DIRTY_STATE_SCRIPT" ]; then
+    WORKSPACE_STATE=$(pwsh -NoProfile -ExecutionPolicy Bypass -File "$DIRTY_STATE_SCRIPT" -RepoRoot "$WORKSPACE_ROOT" 2>/dev/null || true)
+else
+    WORKSPACE_STATE=$(cd "$WORKSPACE_ROOT" && (git status --porcelain 2>/dev/null | grep -q . && echo "dirty-user" || echo "clean"))
+fi
+
+if [ "$WORKSPACE_STATE" = "dirty-user" ]; then
     echo "[WARN] ====================================================================="
     echo "[WARN]  Workspace has uncommitted changes from a previous session."
     echo "[WARN]  Run 'git status' to review, or 'git stash' to shelve them."
     echo "[WARN] ====================================================================="
+elif [ "$WORKSPACE_STATE" = "dirty-operational" ]; then
+    echo "[INFO] Workspace has operational auto-managed changes (no user action required)."
 else
     echo "[OK] Workspace is clean"
 fi
@@ -298,3 +307,4 @@ fi
 echo ""
 echo "[16/16] === Session Autostart Complete ==="
 echo "[READY] Workspace ready for operations"
+

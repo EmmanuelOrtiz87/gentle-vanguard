@@ -1,6 +1,6 @@
 # Requirements
 
-Unified dependency manifest for Foundation. Consolidates data from 7 sources: `install-prerequisites.ps1`, `bootstrap.ps1`, `system-diagnostics.ps1`, `package.json`, `docs/getting-started/PREREQUISITES.md`, `docs/getting-started/README.md`, `auto-init-dev-environment.ps1`.
+Unified dependency manifest for Gentle-Vanguard. Consolidates data from 7 sources: `install-prerequisites.ps1`, `bootstrap.ps1`, `system-diagnostics.ps1`, `package.json`, `docs/getting-started/PREREQUISITES.md`, `docs/getting-started/README.md`, `auto-init-dev-environment.ps1`.
 
 ---
 
@@ -59,7 +59,7 @@ Unified dependency manifest for Foundation. Consolidates data from 7 sources: `i
 - GitHub CLI (winget/brew/apt depending on OS with user confirmation)
 
 ### `bootstrap-machine.ps1` can install automatically:
-- Foundation directory structure and symlinks (NOT developers tools — it installs Foundation itself, not its prerequisites)
+- Gentle-Vanguard directory structure and symlinks (NOT developers tools — it installs Gentle-Vanguard itself, not its prerequisites)
 
 ### Manual-only:
 - Git (https://git-scm.com/)
@@ -79,7 +79,7 @@ Unified dependency manifest for Foundation. Consolidates data from 7 sources: `i
 - `.\scripts\utilities\install-prerequisites.ps1 -CheckOnly` — checks all tools
 - `.\scripts\diagnostics\system-diagnostics.ps1` — comprehensive health report (exit codes: 0=healthy, 1=degraded, 2=critical)
 - `.\scripts\utilities\agent-verify.ps1` — agent self-verification
-- `.\scripts\utilities\wf.ps1 verify` — workflow verification
+- `.\scripts\utilities\gv.ps1 verify` — workflow verification
 
 ---
 
@@ -100,7 +100,7 @@ Unified dependency manifest for Foundation. Consolidates data from 7 sources: `i
 |--------|--------|
 | `install-prerequisites.ps1` | `Required = $true` |
 | `docs/getting-started/PREREQUISITES.md` | Required (top of table) |
-| `system-diagnostics.ps1` | WARN only (optional for foundation project type) |
+| `system-diagnostics.ps1` | WARN only (optional for gentle-vanguard project type) |
 | `docs/getting-started/README.md` | Optional |
 | `bootstrap.ps1` | Not checked at all |
 
@@ -117,8 +117,8 @@ Unified dependency manifest for Foundation. Consolidates data from 7 sources: `i
 ### 4. Engram — Two different install methods
 | Source | Method |
 |--------|--------|
-| `install-prerequisites.ps1` | `go install github.com/foundation/engram/cmd/engram@latest` |
-| `bootstrap.ps1` | `git clone https://github.com/foundation/engram.git` + `go install ./cmd/engram` |
+| `install-prerequisites.ps1` | `go install github.com/gentle-vanguard/engram/cmd/engram@latest` |
+| `bootstrap.ps1` | `git clone https://github.com/gentle-vanguard/engram.git` + `go install ./cmd/engram` |
 
 **Resolution needed**: Align on one method. bootstrap.ps1's approach (clone + local install) is more reliable for development.
 
@@ -133,7 +133,7 @@ Checked by bootstrap.ps1 and auto-init-dev-environment.ps1 but missing from the 
 |--------|-----------------|-------------------|
 | `install-engram.ps1` | `scripts/utilities/SKILLS-TOOLS/` | `scripts/utilities/` (referenced by system-diagnostics.ps1 as `scripts/utilities/install-engram.ps1`) |
 | `auto-init-dev-environment.ps1` | `scripts/utilities/UTILITIES/` | `scripts/utilities/` (redundant nesting) |
-| `wf.ps1` | 3 copies: `scripts/utilities/`, `scripts/utilities/WORKFLOW-ORCHESTRATION/`, `scripts/foundation/` | Should consolidate |
+| `gv.ps1` | 3 copies: `scripts/utilities/`, `scripts/utilities/WORKFLOW-ORCHESTRATION/`, `scripts/gentle-vanguard/` | Should consolidate |
 
 ### 8. Missing dependencies from PREREQUISITES.md not in install-prerequisites
 `safety` and `bandit` (Python security tools) are listed in PREREQUISITES.md but absent from install-prerequisites.ps1.
@@ -145,4 +145,5 @@ Checked by bootstrap.ps1 and auto-init-dev-environment.ps1 but missing from the 
 OpenCode is listed as an optional dependency in install-prerequisites.ps1 but doesn't appear in PREREQUISITES.md or any other documentation.
 
 ### 11. `bootstrap-machine.ps1` naming collision
-`scripts/foundation/bootstrap-machine.ps1` is a **global Foundation installer** (installs Foundation to `~/.foundation/`), not a machine bootstrap for prerequisites. This is distinct from `scripts/foundation/bootstrap.ps1` (workspace bootstrap) and `scripts/utilities/install-prerequisites.ps1` (tool installer). The name `bootstrap-machine.ps1` is misleading given docs/getting-started/README.md says "this will install required PowerShell modules, configure Git hooks, set up env vars, and validate prerequisites" — the actual script does none of those things (it installs Foundation itself to a user directory).
+`scripts/gentle-vanguard/bootstrap-machine.ps1` is a **global Gentle-Vanguard installer** (installs Gentle-Vanguard to `~/.gentle-vanguard/`), not a machine bootstrap for prerequisites. This is distinct from `scripts/gentle-vanguard/bootstrap.ps1` (workspace bootstrap) and `scripts/utilities/install-prerequisites.ps1` (tool installer). The name `bootstrap-machine.ps1` is misleading given docs/getting-started/README.md says "this will install required PowerShell modules, configure Git hooks, set up env vars, and validate prerequisites" — the actual script does none of those things (it installs Gentle-Vanguard itself to a user directory).
+

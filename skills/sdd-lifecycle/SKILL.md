@@ -169,19 +169,19 @@ Archive completed SDD:
 
 ```powershell
 # Initialize SDD for a feature
-foundation sdd init "user-authentication"
+gentle-vanguard sdd init "user-authentication"
 
 # Explore requirements
-foundation sdd explore "user-authentication"
+gentle-vanguard sdd explore "user-authentication"
 
 # Create specification
-foundation sdd spec "user-authentication"
+gentle-vanguard sdd spec "user-authentication"
 
 # Implement tasks
-foundation sdd apply "user-authentication" --task "1.1"
+gentle-vanguard sdd apply "user-authentication" --task "1.1"
 
 # Verify implementation
-foundation sdd verify "user-authentication"
+gentle-vanguard sdd verify "user-authentication"
 ```
 
 ## Files
@@ -262,14 +262,15 @@ Old skills are deprecated but continue to work as aliases.
 ## Commands
 
 ```powershell
-foundation sdd init <name>           # Initialize
-foundation sdd explore <name>        # Explore
-foundation sdd propose <name>        # Propose
-foundation sdd spec <name>          # Write spec
-foundation sdd design <name>         # Design
-foundation sdd tasks <name>          # Create tasks
-foundation sdd apply <name>          # Implement
-foundation sdd verify <name>         # Verify
-foundation sdd archive <name>         # Archive
-foundation sdd status <name>         # Show progress
+gentle-vanguard sdd init <name>           # Initialize
+gentle-vanguard sdd explore <name>        # Explore
+gentle-vanguard sdd propose <name>        # Propose
+gentle-vanguard sdd spec <name>          # Write spec
+gentle-vanguard sdd design <name>         # Design
+gentle-vanguard sdd tasks <name>          # Create tasks
+gentle-vanguard sdd apply <name>          # Implement
+gentle-vanguard sdd verify <name>         # Verify
+gentle-vanguard sdd archive <name>         # Archive
+gentle-vanguard sdd status <name>         # Show progress
 ```
+

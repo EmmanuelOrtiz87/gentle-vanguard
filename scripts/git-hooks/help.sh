@@ -2,7 +2,7 @@
 set -eu
 
 cat <<'EOF'
-Foundation
+Gentle-Vanguard
 
 Quick start:
   scripts/init-workspace.sh
@@ -33,3 +33,4 @@ Tools are external and not vendored.
 The workspace skills are shipped inside the kit and installed separately into Codex.
 Use docs/installation.md for the full step-by-step guide.
 EOF
+

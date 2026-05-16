@@ -1,9 +1,9 @@
-# NORMATIVAS DE ORQUESTADOR Y AUTORIZACIONES GLOBALES (Foundation)
+# NORMATIVAS DE ORQUESTADOR Y AUTORIZACIONES GLOBALES (Gentle-Vanguard)
 
 ## Objetivo
 
 Centralizar y versiónar todas las reglas, patrones, decisiones y aprendizajes clave del orquestador,
-agentes y skills, cumpliendo la directiva de almacenamiento dentro del proyecto Foundation.
+agentes y skills, cumpliendo la directiva de almacenamiento dentro del proyecto Gentle-Vanguard.
 
 ---
 
@@ -12,7 +12,7 @@ agentes y skills, cumpliendo la directiva de almacenamiento dentro del proyecto 
 ## 1. Ubicación y Estructura
 
 - Este archivo debe residir en `docs/reference/NORMATIVAS-ORQUESTADOR.md` dentro del proyecto
-  Foundation.
+  Gentle-Vanguard.
 - No debe haber archivos normativos sueltos fuera del proyecto.
 - Si existía un archivo global, su contenido debe migrarse aquí y eliminarse el original.
 
@@ -63,7 +63,7 @@ agentes y skills, cumpliendo la directiva de almacenamiento dentro del proyecto 
 
 ## 7. Ámbito de Aplicación
 
-- Aplica a todo el workspace local y a todos los proyectos bajo Foundation - Development Stack.
+- Aplica a todo el workspace local y a todos los proyectos bajo Gentle-Vanguard - Development Stack.
 - Debe ser referenciado desde README, CONTRIBUTING y skills de orquestación.
 
 ## 8. Ejemplos de Patrones y Decisiones
@@ -156,12 +156,13 @@ masivas.
 ## 11. Actualización y Mantenimiento
 
 - **Versión:** 2.0 (Actualizado 2026-05-02)
-- **Responsable:** Orquestador Foundation
+- **Responsable:** Orquestador Gentle-Vanguard
 - **Frecuencia de actualización:** Ante cualquier cambio de política, excepción o aprendizaje
   relevante
-- **Validación:** Ejecutar `wf.ps1 verify` y `wf.ps1 audit` periódicamente
+- **Validación:** Ejecutar `gv.ps1 verify` y `gv.ps1 audit` periódicamente
 
 ---
 
 **Última actualización:** 2026-05-02  
-**Responsable:** Orquestador Foundation
+**Responsable:** Orquestador Gentle-Vanguard
+

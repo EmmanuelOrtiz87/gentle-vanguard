@@ -26,7 +26,7 @@ first feature request.
 
 1. `detect-tool.ps1` — identifies which AI tool (opencode, claude-code, etc.) is in use
 2. `session-autostart.cmd` — one-command session bootstrap
-3. `wf.ps1` — primary workflow dispatcher
+3. `gv.ps1` — primary workflow dispatcher
 4. `pre-process-input.ps1` — input routing and delegation
 5. SDD lifecycle (BA → EXPLORE → DEV)
 
@@ -58,7 +58,7 @@ from wrong-platform commands.
 # Expected: All services report ACTIVE status
 
 # Verify health with a single command
-./scripts/utilities/wf.ps1 health
+./scripts/utilities/gv.ps1 health
 # Expected: "OK" with component status summary
 ```
 
@@ -89,16 +89,16 @@ git status
 # Expected: "nothing to commit, working tree clean" or list of modified files
 
 # Check token budget awareness
-./scripts/utilities/wf.ps1 status
+./scripts/utilities/gv.ps1 status
 # Expected: shows session ID, active profile, token usage, budget remaining
 
 # View current response profile
-./scripts/utilities/wf.ps1 response-mode
+./scripts/utilities/gv.ps1 response-mode
 # Shows: current detail level, chat mode, token allocation
 ```
 
 **Token Budget Awareness:** The stack enforces daily token caps. The profile determines response
-detail. If you need more verbose output for complex tasks, use `wf response-mode set lleno` —
+detail. If you need more verbose output for complex tasks, use `gv response-mode set lleno` —
 otherwise the compact default keeps costs predictable.
 
 ### Step 5 — Route a first feature request (SDD flow)
@@ -135,3 +135,4 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/pre-process-inpu
 3. Token budget is visible and understood
 4. Developer sees the SDD-mandated flow: BA first, code second
 5. Pre-process routing correctly identifies the need for analysis before coding
+

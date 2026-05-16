@@ -1,7 +1,7 @@
 # 🏗️ Architecture Documentation
 
 <p align="center">
-  <b>Understanding the 5-layer topology that makes Foundation agnostic</b>
+  <b>Understanding the 5-layer topology that makes Gentle-Vanguard agnostic</b>
 </p>
 
 ---
@@ -49,7 +49,7 @@ docs/architecture/
 ┌─────────────────────────────────────────────────────┐
 │  🤖 Layer 1: AGENTS (BA, DEV, QA, OPS, GOV, DOC, SAD)    │
 ├─────────────────────────────────────────────────────┤
-│  ⚡ Layer 2: COMMANDS (wf.ps1, pre-process-input.ps1)    │
+│  ⚡ Layer 2: COMMANDS (gv.ps1, pre-process-input.ps1)    │
 ├─────────────────────────────────────────────────────┤
 │  🔌 Layer 3: MCP SERVERS (Model Context Protocol)         │
 ├─────────────────────────────────────────────────────┤
@@ -121,3 +121,4 @@ docs/architecture/
   <b>🏗️ Understand the architecture. Master the stack.</b><br>
   <i>5 layers • 127 skills • 100% agnostic</i>
 </p>
+

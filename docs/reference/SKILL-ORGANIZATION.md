@@ -1,8 +1,8 @@
-﻿# Skill Organization Policy
+# Skill Organization Policy
 
 ## Security Skills (Intentional Separation)
 
-Foundation has two security skills by design - they serve different agents:
+Gentle-Vanguard has two security skills by design - they serve different agents:
 
 | Skill                   | Agent     | Purpose                 | Scope            |
 | ----------------------- | --------- | ----------------------- | ---------------- |
@@ -50,3 +50,4 @@ testing-skill            DEV agent  unit tests
 playwright-skill        QA agent  E2E tests
 pytest-skill            QA agent  Python tests
 ```
+

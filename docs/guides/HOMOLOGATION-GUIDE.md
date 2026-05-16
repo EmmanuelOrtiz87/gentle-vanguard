@@ -1,38 +1,38 @@
-# Homologación: Foundation → Foundation-Public
+# Homologación: Gentle-Vanguard → Gentle-Vanguard-Public
 
 ## Propósito
 
-Este documento describe el proceso completo para homologar (sincronizar) el repositorio privado `foundation` con el repositorio público `foundation-public`.
+Este documento describe el proceso completo para homologar (sincronizar) el repositorio privado `gentle-vanguard` con el repositorio público `gentle-vanguard-public`.
 
 ## Arquitectura
 
 | Repositorio | Propósito | Contenido |
 |---|---|---|
-| `foundation` (privado) | Desarrollo activo | Stack completo: scripts, configs, skills, tests, docs en texto plano |
-| `foundation-public` (público) | Hub de distribución | Solo: `.exe` instalador, scripts encriptados, skill stubs, bootstrap scripts, docs públicos |
+| `gentle-vanguard` (privado) | Desarrollo activo | Stack completo: scripts, configs, skills, tests, docs en texto plano |
+| `gentle-vanguard-public` (público) | Hub de distribución | Solo: `.exe` instalador, scripts encriptados, skill stubs, bootstrap scripts, docs públicos |
 
 ## Proceso de Homologación (4 pasos)
 
 ### Paso 1: Encriptar el stack
 
 ```powershell
-cd C:\Workspace_local\foundation
-pwsh -NoProfile -File "build\protect-foundation.ps1" -CompileEXE
+cd C:\Workspace_local\gentle-vanguard
+pwsh -NoProfile -File "build\protect-gentle-vanguard.ps1" -CompileEXE
 ```
 
 Esto genera:
 - `build/protected/` — 400+ archivos encriptados (.enc) con AES-256
 - `build/public/` — 130+ skill stubs (solo SKILL.md)
-- `build/compiled/Foundation-Launcher.exe` — Launcher compilado
-- `build/compiled/wf.exe` — CLI compilado
+- `build/compiled/Gentle-Vanguard-Launcher.exe` — Launcher compilado
+- `build/compiled/gv.exe` — CLI compilado
 
 ### Paso 2: Construir el instalador
 
 ```powershell
-& "C:\Program Files (x86)\NSIS\makensis.exe" "build\foundation-installer.nsi"
+& "C:\Program Files (x86)\NSIS\makensis.exe" "build\gentle-vanguard-installer.nsi"
 ```
 
-Genera: `dist/Foundation.exe` (instalador unificado)
+Genera: `dist/Gentle-Vanguard.exe` (instalador unificado)
 
 ### Paso 3: Sincronizar al repo público
 
@@ -53,7 +53,7 @@ El script `sync-to-public.ps1` hace:
 ### Paso 4: Commit y push
 
 ```powershell
-Push-Location C:\Workspace_local\foundation-public
+Push-Location C:\Workspace_local\gentle-vanguard-public
 git add -A
 git commit -m "refactor: homologación completa - protect + sync"
 git push origin develop
@@ -66,18 +66,18 @@ git checkout develop
 Pop-Location
 ```
 
-## Estructura final de foundation-public
+## Estructura final de gentle-vanguard-public
 
 ```
-foundation-public/
-├── Foundation.exe             # Instalador NSIS unificado
+gentle-vanguard-public/
+├── Gentle-Vanguard.exe             # Instalador NSIS unificado
 ├── protected/                 # Scripts encriptados (.enc)
 │   ├── scripts/               #   200+ scripts .ps1.enc
 │   ├── config/                #   50+ configs .json.enc
 │   └── skills/                #   130+ skills .enc
 ├── public/                    # Skill stubs públicos
 │   └── skills/                #   130+ SKILL.md (solo teoría)
-├── scripts/foundation/        # Bootstrap (código abierto)
+├── scripts/gentle-vanguard/        # Bootstrap (código abierto)
 │   ├── bootstrap.ps1
 │   ├── bootstrap-machine.ps1
 │   └── setup-multi-machine.ps1
@@ -96,7 +96,7 @@ foundation-public/
 
 | Categoría | Ejemplo | Razón |
 |---|---|---|
-| Scripts en texto plano | `scripts/utilities/wf.ps1` | IP — solo encriptados |
+| Scripts en texto plano | `scripts/utilities/gv.ps1` | IP — solo encriptados |
 | Configs reales | `config/auto-delegation.json` | IP — solo encriptados |
 | Skills completos | `skills/*/SKILL.md` | IP — solo encriptados |
 | Docs internos | `docs/sessions/`, `docs/audits/` | Información interna |
@@ -109,9 +109,9 @@ foundation-public/
 ## Verificación post-homologación
 
 ```powershell
-# En foundation-public:
-# 1. No debe haber scripts .ps1 fuera de scripts/foundation/
-Get-ChildItem -Recurse -Include "*.ps1" | Where-Object { $_.FullName -notmatch '\\scripts\\foundation\\' }
+# En gentle-vanguard-public:
+# 1. No debe haber scripts .ps1 fuera de scripts/gentle-vanguard/
+Get-ChildItem -Recurse -Include "*.ps1" | Where-Object { $_.FullName -notmatch '\\scripts\\gentle-vanguard\\' }
 
 # 2. No debe haber configs planos (solo .example)
 Get-ChildItem config/ | Where-Object { $_.Name -notlike "*.example.*" }
@@ -120,13 +120,14 @@ Get-ChildItem config/ | Where-Object { $_.Name -notlike "*.example.*" }
 (Get-ChildItem protected/ -Recurse -Include "*.enc").Count  # > 400
 
 # 4. .exe deben existir
-Test-Path Foundation.exe   # True
+Test-Path Gentle-Vanguard.exe   # True
 ```
 
 ## Notas importantes
 
-- **Master key**: Nunca se incluye en foundation-public. Los usuarios la obtienen del repo privado o la pegan al primer launch.
-- **Versionado**: foundation-public debe mantener el mismo baseline de release que foundation (ejemplo: v1.0.0 en adelante).
-- **CI**: foundation-public tiene su propio workflow (`public-quality-gate.yml`) que valida integridad del repo.
+- **Master key**: Nunca se incluye en gentle-vanguard-public. Los usuarios la obtienen del repo privado o la pegan al primer launch.
+- **Versionado**: gentle-vanguard-public debe mantener el mismo baseline de release que gentle-vanguard (ejemplo: v1.0.0 en adelante).
+- **CI**: gentle-vanguard-public tiene su propio workflow (`public-quality-gate.yml`) que valida integridad del repo.
 - **Frecuencia**: Homologar después de cada release significativo o cuando se agreguen nuevos scripts/skills.
 - **Complementariedad**: esta homologacion no reemplaza el proceso de release; extiende la etapa de distribucion para el repo publico.
+

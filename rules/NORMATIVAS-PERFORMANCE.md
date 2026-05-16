@@ -8,7 +8,7 @@ Framework: SLO-based performance governance + token efficiency 2026 best practic
 
 ## 1. PROPOSITO
 
-Define performance budgets, SLOs, y estándares de eficiencia para todo el stack Foundation. Aplica a scripts, configuraciones, agentes AI, y pipelines CI/CD.
+Define performance budgets, SLOs, y estándares de eficiencia para todo el stack Gentle-Vanguard. Aplica a scripts, configuraciones, agentes AI, y pipelines CI/CD.
 
 ---
 
@@ -190,3 +190,4 @@ TODO implementación DEBE verificar:
 ---
 
 _Version: 1.0.0 — 2026-05-10 — Status: ACTIVE_
+

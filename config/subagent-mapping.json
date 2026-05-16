@@ -1,6 +1,6 @@
 {
   "version": "1.3",
-  "description": "Maps 29-agent foundation model to opencode subagent types — complete coverage of all auto-delegation agent codes",
+  "description": "Maps 29-agent gentle-vanguard model to opencode subagent types — complete coverage of all auto-delegation agent codes",
   "mapping": {
     "BA": {
       "name": "Business Analyst",
@@ -355,3 +355,4 @@
     }
   }
 }
+

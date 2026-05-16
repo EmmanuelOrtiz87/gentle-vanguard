@@ -2,15 +2,15 @@
 name: chained-pr
 description: >
   Split large changes into chained or stacked pull requests that protect reviewer focus and stay
-  within Foundation's 400-line cognitive review budget. Trigger: when a PR would exceed 400 changed
+  within Gentle-Vanguard's 400-line cognitive review budget. Trigger: when a PR would exceed 400 changed
   lines, when planning chained PRs, stacked PRs, or reviewable slices.
 license: Apache-2.0
 metadata:
-  author: foundation (adapted for Foundation)
+  author: gentle-vanguard (adapted for Gentle-Vanguard)
   version: '1.0'
 ---
 
-# Chained PRs (Foundation Adaptation)
+# Chained PRs (Gentle-Vanguard Adaptation)
 
 ## When to Use#
 
@@ -19,12 +19,12 @@ Use this skill when:
 - A planned PR is likely to exceed **400 changed lines** (`additions + deletions`).
 - You need chained PRs, stacked PRs, or a feature branch with multiple reviewable slices.
 - A reviewer asks to split a PR for cognitive load, review fatigue, or burnout prevention.
-- You must protect Foundation's **micro-scoping rule**: Max 10 files/judgment (learned 2026-05-02).
+- You must protect Gentle-Vanguard's **micro-scoping rule**: Max 10 files/judgment (learned 2026-05-02).
 
 Do not use this skill for small fixes or single-purpose changes that fit comfortably under the
 review budget.
 
-## Critical Rules (Foundation)#
+## Critical Rules (Gentle-Vanguard)#
 
 | Rule             | Requirement                                                                                                           |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------- |
@@ -43,7 +43,7 @@ review budget.
 The goal is not bureaucracy. The goal is preventing reviewer burnout so maintainers can review with
 care instead of skimming. Big PRs create fatigue, hide defects, and slow merge velocity.
 
-## Choosing the Split Strategy (Foundation)#
+## Choosing the Split Strategy (Gentle-Vanguard)#
 
 | Scenario                                | Recommended approach  | Why                                            |
 | --------------------------------------- | --------------------- | ---------------------------------------------- |
@@ -83,7 +83,7 @@ Every child PR must show where it sits in the chain. Mark the current PR with `�
 
 ```text
 main
-└── #101 Foundation
+└── #101 Gentle-Vanguard
      └── #102 Fix links
           └── 📍 #103 Move scripts
                └── #104 Rename rules
@@ -94,13 +94,13 @@ Pair the diagram with a status table:
 
 | PR   | Scope            | Status         |
 | ---- | ---------------- | -------------- |
-| #101 | Foundation audit | ✅ Passing     |
+| #101 | Gentle-Vanguard audit | ✅ Passing     |
 | #102 | Fix links        | ✅ Passing     |
 | #103 | Move scripts     | 📍 Review here |
 | #104 | Rename rules     | ⚪ Pending     |
 | #105 | Tracker          | 🟡 Draft       |
 
-## Foundation Integration#
+## Gentle-Vanguard Integration#
 
 When planning produces tasks that may exceed 400 changed lines:
 
@@ -110,16 +110,16 @@ When planning produces tasks that may exceed 400 changed lines:
 4. Keep each slice autonomous: tests/docs included, CI green, clear rollback.
 5. Do not let one `sdd-apply` batch silently grow into a burnout-sized PR.
 
-## Feature Branch Chain (Foundation)#
+## Feature Branch Chain (Gentle-Vanguard)#
 
 Use this when multiple PRs should integrate together before landing in `main`.
 
 ```text
 main
- └── feat/foundation-audit          # integration branch
-      ├── #102 Fix links           # PR targets feat/foundation-audit
-      ├── #103 Move scripts        # PR targets feat/foundation-audit
-      └── #104 Rename rules       # PR targets feat/foundation-audit
+ └── feat/gentle-vanguard-audit          # integration branch
+      ├── #102 Fix links           # PR targets feat/gentle-vanguard-audit
+      ├── #103 Move scripts        # PR targets feat/gentle-vanguard-audit
+      └── #104 Rename rules       # PR targets feat/gentle-vanguard-audit
 ```
 
 ### Steps#
@@ -142,7 +142,7 @@ PRs are reviewed and integrated.
 - If the tracker PR exceeds the budget, request/obtain maintainer-applied `size:exception` and
   document why the aggregate diff is unavoidable.
 
-## Stacked PRs to Main (Foundation)#
+## Stacked PRs to Main (Gentle-Vanguard)#
 
 Use this when each PR can land in `main` in order.
 
@@ -223,14 +223,14 @@ main
 
 ````
 
-## Commands (Foundation)#
+## Commands (Gentle-Vanguard)#
 
 ```bash
 # Check PR size before asking for review
 gh pr view <PR_NUMBER> --json additions,deletions,changedFiles,title
 
 # Create a chained PR targeting a feature branch
-gh pr create --base feat/foundation-audit --title "fix: repair broken links" --body-file pr-body.md
+gh pr create --base feat/gentle-vanguard-audit --title "fix: repair broken links" --body-file pr-body.md
 
 # Create a stacked PR targeting the previous branch
 gh pr create --base fix-links --title "refactor: move scripts to utilities" --body-file pr-body.md
@@ -246,9 +246,10 @@ gh pr create --base fix-links --title "refactor: move scripts to utilities" --bo
 - Protect reviewer energy. If the chain forces reviewers to reconstruct hidden context, ask for
   clearer boundaries.
 
-## Foundation Lessons Applied (2026-05-02)#
+## Gentle-Vanguard Lessons Applied (2026-05-02)#
 
 - **Max 10 files/judgment-day** (cognitive budget)
 - **Max 400 lines/PR** (cognitive load)
 - **Micro-scoping** → 2-5 minute reviews instead of "many minutes"
 - **Chained PRs** → No more massive audits that timeout
+

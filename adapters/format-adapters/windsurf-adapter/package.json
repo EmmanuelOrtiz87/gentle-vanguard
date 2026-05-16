@@ -1,14 +1,14 @@
 {
   "name": "windsurf-adapter",
   "version": "1.0.0",
-  "description": "Converts Foundation skills to Windsurf plugin format",
+  "description": "Converts Gentle-Vanguard skills to Windsurf plugin format",
   "main": "adapter.js",
   "scripts": {
     "convert-skill": "node adapter.js convert-skill",
     "generate-config": "node adapter.js generate-config"
   },
   "keywords": [
-    "foundation",
+    "gentle-vanguard",
     "windsurf",
     "plugin",
     "adapter"
@@ -17,7 +17,7 @@
     "fs": "built-in",
     "path": "built-in"
   },
-  "foundation": {
+  "gentle-vanguard": {
     "adapterType": "format-adapter",
     "targetTool": "windsurf",
     "targetFormat": "plugin",
@@ -26,3 +26,4 @@
     ]
   }
 }
+

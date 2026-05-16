@@ -1,6 +1,6 @@
 ---
 name: incident-response-skill
-description: Incident detection, response, and recovery automation for Foundation
+description: Incident detection, response, and recovery automation for Gentle-Vanguard
 trigger: "incident", "alert", "response", "recovery", "emergency"
 ---
 
@@ -8,7 +8,7 @@ trigger: "incident", "alert", "response", "recovery", "emergency"
 
 ## Purpose
 
-Automated incident detection, alerting, and recovery procedures for Foundation workspace.
+Automated incident detection, alerting, and recovery procedures for Gentle-Vanguard workspace.
 
 ## Capabilities
 
@@ -60,3 +60,4 @@ Automated incident detection, alerting, and recovery procedures for Foundation w
 ## Next Steps
 
 Add more automated runbooks as incidents occur.
+

@@ -61,10 +61,10 @@ $requiredDirs = @(
     ".session",
     ".session/logs",
     ".session/reports",
-    "foundation/config",
-    "foundation/scripts/utilities/WORKFLOW-ORCHESTRATION",
-    "foundation/scripts/utilities/GIT-VERSION-CONTROL",
-    "foundation/docs"
+    "gentle-vanguard/config",
+    "gentle-vanguard/scripts/utilities/WORKFLOW-ORCHESTRATION",
+    "gentle-vanguard/scripts/utilities/GIT-VERSION-CONTROL",
+    "gentle-vanguard/docs"
 )
 
 foreach ($dir in $requiredDirs) {
@@ -83,10 +83,10 @@ foreach ($dir in $requiredDirs) {
 Write-Log "Validating configuration files..." "INFO"
 
 $configFiles = @(
-    "foundation/opencode.json",
-    "foundation/config/hooks-config.json",
-    "foundation/config/workspace.config.json",
-    "foundation/scripts/utilities/WORKFLOW-ORCHESTRATION/hook-registry.json"
+    "gentle-vanguard/opencode.json",
+    "gentle-vanguard/config/hooks-config.json",
+    "gentle-vanguard/config/workspace.config.json",
+    "gentle-vanguard/scripts/utilities/WORKFLOW-ORCHESTRATION/hook-registry.json"
 )
 
 foreach ($configFile in $configFiles) {
@@ -107,12 +107,12 @@ foreach ($configFile in $configFiles) {
 Write-Log "Verifying scripts..." "INFO"
 
 $scripts = @(
-    "foundation/scripts/utilities/WORKFLOW-ORCHESTRATION/pre-process-input.ps1",
-    "foundation/scripts/utilities/WORKFLOW-ORCHESTRATION/validate-system-health.ps1",
-    "foundation/scripts/utilities/WORKFLOW-ORCHESTRATION/intelligent-validator.ps1",
-    "foundation/scripts/utilities/WORKFLOW-ORCHESTRATION/comprehensive-validation.ps1",
-    "foundation/scripts/utilities/GIT-VERSION-CONTROL/pre-commit-validation.ps1",
-    "foundation/scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1"
+    "gentle-vanguard/scripts/utilities/WORKFLOW-ORCHESTRATION/pre-process-input.ps1",
+    "gentle-vanguard/scripts/utilities/WORKFLOW-ORCHESTRATION/validate-system-health.ps1",
+    "gentle-vanguard/scripts/utilities/WORKFLOW-ORCHESTRATION/intelligent-validator.ps1",
+    "gentle-vanguard/scripts/utilities/WORKFLOW-ORCHESTRATION/comprehensive-validation.ps1",
+    "gentle-vanguard/scripts/utilities/GIT-VERSION-CONTROL/pre-commit-validation.ps1",
+    "gentle-vanguard/scripts/utilities/GIT-VERSION-CONTROL/post-merge-sync.ps1"
 )
 
 foreach ($script in $scripts) {
@@ -133,11 +133,11 @@ foreach ($script in $scripts) {
 Write-Log "Verifying documentation..." "INFO"
 
 $docs = @(
-    "foundation/docs/HOOKS-IMPLEMENTATION-GUIDE.md",
-    "foundation/docs/LESSONS-LEARNED-HOOKS-INCIDENT.md",
-    "foundation/docs/CONFIGURATION-VALIDATION-CHECKLIST.md",
-    "foundation/docs/AUTONOMOUS-VALIDATION-SYSTEM.md",
-    "foundation/docs/AUTONOMOUS-SYSTEM-GUIDE.md"
+    "gentle-vanguard/docs/HOOKS-IMPLEMENTATION-GUIDE.md",
+    "gentle-vanguard/docs/LESSONS-LEARNED-HOOKS-INCIDENT.md",
+    "gentle-vanguard/docs/CONFIGURATION-VALIDATION-CHECKLIST.md",
+    "gentle-vanguard/docs/AUTONOMOUS-VALIDATION-SYSTEM.md",
+    "gentle-vanguard/docs/AUTONOMOUS-SYSTEM-GUIDE.md"
 )
 
 foreach ($doc in $docs) {
@@ -157,8 +157,8 @@ if (Test-Path ".git") {
     $preCommitHook = Join-Path $hooksDir "pre-commit"
     $preCommitContent = @"
 #!/bin/sh
-# Pre-commit hook for Foundation validation
-powershell -NoProfile -ExecutionPolicy Bypass -File "foundation\\scripts\utilities\GIT-VERSION-CONTROL\pre-commit-validation.ps1"
+# Pre-commit hook for Gentle-Vanguard validation
+powershell -NoProfile -ExecutionPolicy Bypass -File "gentle-vanguard\\scripts\utilities\GIT-VERSION-CONTROL\pre-commit-validation.ps1"
 exit `$?
 "@
     

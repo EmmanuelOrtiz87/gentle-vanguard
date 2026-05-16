@@ -22,13 +22,13 @@ REM Pre-start: engram optimization
 set OPTIMIZE_SCRIPT=%REPO_ROOT%\scripts\utilities\PERFORMANCE-OPTIMIZATION\optimize-engram-usage.ps1
 if exist "%OPTIMIZE_SCRIPT%" (
   echo [INFO] Running pre-session Engram optimization...
-  powershell -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_local"
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_gentle_vanguard"
 )
 
-REM Main start flow via wf.ps1
-set "WF_SCRIPT=%REPO_ROOT%\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1"
+REM Main start flow via gv.ps1
+set "WF_SCRIPT=%REPO_ROOT%\scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1"
 if not exist "%WF_SCRIPT%" (
-  echo [ERROR] wf.ps1 not found
+  echo [ERROR] gv.ps1 not found
   exit /b 1
 )
 
@@ -41,3 +41,4 @@ if errorlevel 1 (
 
 echo [SUCCESS] Session started successfully
 exit /b 0
+

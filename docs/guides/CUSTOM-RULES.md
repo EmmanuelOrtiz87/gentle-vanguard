@@ -1,4 +1,4 @@
-﻿# Custom Rules for Orchestrator Extension
+# Custom Rules for Orchestrator Extension
 
 This guide explains how to add project-specific rules that complement the base stack skills.
 
@@ -106,7 +106,7 @@ Check loaded rules:
 
 ```powershell
 .\scripts\utilities\custom-rules.ps1 -Mode status
-.\scripts\utilities\wf.ps1 custom-rules-status
+.\scripts\utilities\gv.ps1 custom-rules-status
 ```
 
 Export rule digest:
@@ -122,3 +122,4 @@ Export rule digest:
 3. Review rule changes via normal PR workflow.
 4. Prefer advisory language unless a rule is truly blocking.
 5. Files that do not match the `.md` extension are silently ignored by the loader.
+

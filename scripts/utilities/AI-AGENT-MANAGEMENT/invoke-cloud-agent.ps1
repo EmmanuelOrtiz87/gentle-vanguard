@@ -178,8 +178,8 @@ function Get-DefaultProvider {
 }
 
 function Get-CurrentSessionId {
-    if (-not [string]::IsNullOrWhiteSpace($env:FOUNDATION_SESSION_ID)) {
-        return [string]$env:FOUNDATION_SESSION_ID
+    if (-not [string]::IsNullOrWhiteSpace($env:GV_SESSION_ID)) {
+        return [string]$env:GV_SESSION_ID
     }
 
     $sessionsPath = Join-Path $repoRoot 'docs\sessions'
@@ -206,7 +206,7 @@ function Get-ProviderHeaders {
 
     $headers = @{
         'Content-Type' = 'application/json'
-        'User-Agent' = 'Foundation-CloudAgent/1.0'
+        'User-Agent' = 'Gentle-Vanguard-CloudAgent/1.0'
     }
 
     if ($ProviderConfig.api_key_env) {
@@ -755,3 +755,5 @@ if ($result.Success) {
 } else {
     throw "Cloud agent request failed: $($result.Error)"
 }
+
+

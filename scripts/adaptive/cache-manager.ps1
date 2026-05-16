@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-    Foundation Intelligent Cache Manager — Multi-tier L1/L2/L3/Archive caching
+    Gentle-Vanguard Intelligent Cache Manager — Multi-tier L1/L2/L3/Archive caching
     
 .DESCRIPTION
     Implements a local-first multi-tier caching strategy:
@@ -61,7 +61,7 @@ $WorkspaceRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSS
 if (-not (Test-Path (Join-Path $WorkspaceRoot 'config'))) {
     $WorkspaceRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 }
-$CacheRoot    = Join-Path $env:TEMP 'foundation-cache'
+$CacheRoot    = Join-Path $env:TEMP 'gentle-vanguard-cache'
 $L2Dir        = Join-Path $CacheRoot 'l2'
 $L3Dir        = Join-Path $CacheRoot 'l3'
 $ArchiveDir   = Join-Path $CacheRoot 'archive'
@@ -78,10 +78,10 @@ $TierDefaults = @{
 
 # ── L1: In-memory cache (persists for module/script lifetime) ──────────────────
 # Uses a static hashtable keyed per process via global variable
-if (-not $Global:FoundationL1Cache) {
-    $Global:FoundationL1Cache = @{}
+if (-not $Global:Gentle-VanguardL1Cache) {
+    $Global:Gentle-VanguardL1Cache = @{}
 }
-$L1 = $Global:FoundationL1Cache
+$L1 = $Global:Gentle-VanguardL1Cache
 
 # ── Bootstrap dirs ─────────────────────────────────────────────────────────────
 foreach ($dir in @($CacheRoot, $L2Dir, $L3Dir, $ArchiveDir, $CacheMetaDir)) {
@@ -342,7 +342,7 @@ function Invoke-Stats {
     $hitRate   = if ($totalOps -gt 0) { [math]::Round(($totalHits / $totalOps) * 100, 1) } else { 0 }
     
     Write-Host ""
-    Write-Host "  Foundation Cache Manager v$CACHE_VERSION" -ForegroundColor Cyan
+    Write-Host "  Gentle-Vanguard Cache Manager v$CACHE_VERSION" -ForegroundColor Cyan
     Write-Host "  ─────────────────────────────────────────" -ForegroundColor Gray
     Write-Host ("  {0,-18} {1,-10} {2,-10} {3}" -f "TIER", "ENTRIES", "HITS", "DETAILS") -ForegroundColor White
     Write-Host "  ─────────────────────────────────────────" -ForegroundColor Gray
@@ -378,11 +378,11 @@ function Invoke-GC {
 function Invoke-Warm {
     Write-Host "[INFO] Cache warm-up starting..." -ForegroundColor Cyan
     
-    # Warm common Foundation data into L2/L3
+    # Warm common Gentle-Vanguard data into L2/L3
     $warmSources = @(
-        @{ key = 'foundation:version'; file = (Join-Path $WorkspaceRoot 'VERSION'); tier = 'L3'; ttl = 86400 }
-        @{ key = 'foundation:skills-list'; dir = (Join-Path $WorkspaceRoot 'skills'); tier = 'L2'; ttl = 1800 }
-        @{ key = 'foundation:config-orchestrator'; file = (Join-Path $WorkspaceRoot 'config' 'orchestrator.json'); tier = 'L3'; ttl = 3600 }
+        @{ key = 'gentle-vanguard:version'; file = (Join-Path $WorkspaceRoot 'VERSION'); tier = 'L3'; ttl = 86400 }
+        @{ key = 'gentle-vanguard:skills-list'; dir = (Join-Path $WorkspaceRoot 'skills'); tier = 'L2'; ttl = 1800 }
+        @{ key = 'gentle-vanguard:config-orchestrator'; file = (Join-Path $WorkspaceRoot 'config' 'orchestrator.json'); tier = 'L3'; ttl = 3600 }
     )
     
     $warmed = 0
@@ -424,3 +424,4 @@ switch ($Command) {
     'gc'         { Invoke-GC }
     default      { Invoke-Stats }
 }
+

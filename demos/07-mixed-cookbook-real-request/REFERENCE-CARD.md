@@ -1,6 +1,6 @@
 # Reference Card Demo 07 Mixed Cookbook
 
-**Workspace:** `.\foundation` **Proyecto demo:** `demos/shared/task-tracker/`
+**Workspace:** `.\gentle-vanguard` **Proyecto demo:** `demos/shared/task-tracker/`
 
 ---
 
@@ -15,14 +15,14 @@
 ### Apertura
 
 ```powershell
-./scripts/utilities/wf.ps1 status
+./scripts/utilities/gv.ps1 status
 ```
 
 ### Orquestador
 
 ```powershell
 ./scripts/utilities/orchestrator-next-steps.ps1
-./scripts/utilities/wf.ps1 response-mode list
+./scripts/utilities/gv.ps1 response-mode list
 ```
 
 ### Tokens
@@ -59,7 +59,7 @@ cd ../../..
 ### Cierre
 
 ```powershell
-./scripts/utilities/wf.ps1 end-session demo-task-tracker
+./scripts/utilities/gv.ps1 end-session demo-task-tracker
 ```
 
 ---
@@ -87,7 +87,8 @@ cd ../../..
 
 ## Checklist Pre-Demo
 
-- [ ] `wf.ps1 status` responde sin error
+- [ ] `gv.ps1 status` responde sin error
 - [ ] `go version` disponible en PATH
 - [ ] `tasks.json` eliminado si hubo corrida previa
 - [ ] Repo limpio (`git status` sin cambios)
+

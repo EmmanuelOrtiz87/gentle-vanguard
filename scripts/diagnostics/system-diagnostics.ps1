@@ -95,17 +95,17 @@ function Get-CommandVersion {
 # Detect project type
 $hasAngular = Test-Path (Join-Path $repoRoot 'angular.json')
 $hasGo = Test-Path (Join-Path $repoRoot 'go.mod')
-$hasBootstrap = Test-Path (Join-Path $repoRoot 'scripts\foundation\bootstrap.ps1')
+$hasBootstrap = Test-Path (Join-Path $repoRoot 'scripts\gentle-vanguard\bootstrap.ps1')
 
 if ($hasAngular -and $hasGo) {
     $diagnostics.projectType = 'bitbucket-dashboard'
 } elseif ($hasBootstrap) {
-    $diagnostics.projectType = 'foundation'
+    $diagnostics.projectType = 'gentle-vanguard'
 }
 
 Write-Diag ''
 Write-Diag '=======================================================' -Color Cyan
-Write-Diag '  Foundation - Development Stack - System Diagnostics' -Color Cyan
+Write-Diag '  Gentle-Vanguard - Development Stack - System Diagnostics' -Color Cyan
 Write-Diag '=======================================================' -Color Cyan
 Write-Diag "Project Type: $($diagnostics.projectType)" -Color Yellow
 Write-Diag "Project Root: $repoRoot" -Color Yellow
@@ -173,7 +173,7 @@ if ($engramPath) {
 } else {
     Add-Check -Name 'Engram CLI' -Status 'WARN' -Message 'Engram not found in PATH'
     Add-Warning 'Engram CLI not found in PATH.'
-    Add-Suggestion 'Run scripts/utilities/install-engram.ps1 or wf.ps1 install-engram.'
+    Add-Suggestion 'Run scripts/utilities/install-engram.ps1 or gv.ps1 install-engram.'
     Write-Diag '[WARN] Engram CLI: NOT FOUND' -Color Yellow
 }
 
@@ -188,7 +188,7 @@ if (Test-Path $activationFile) {
 } else {
     Add-Check -Name 'Orchestrator Active' -Status 'WARN' -Message 'Orchestrator not activated'
     Add-Warning 'Orchestrator not activated.'
-    Add-Suggestion 'Run wf.ps1 orchestrator-status to initialize orchestrator metadata.'
+    Add-Suggestion 'Run gv.ps1 orchestrator-status to initialize orchestrator metadata.'
     Write-Diag '[WARN] Orchestrator: NOT ACTIVATED' -Color Yellow
 }
 
@@ -309,3 +309,4 @@ switch ($diagnostics.overallStatus) {
     'CRITICAL' { exit 2 }
     default { exit 2 }
 }
+

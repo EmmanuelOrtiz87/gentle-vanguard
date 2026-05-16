@@ -21,8 +21,8 @@ $ErrorActionPreference = 'Stop'
 
 # --- Paths ---
 if (-not $ConfigPath) {
-    if ($env:FOUNDATION_BASE_DIR) {
-        $repoRoot = $env:FOUNDATION_BASE_DIR
+    if ($env:GENTLE_VANGUARD_BASE_DIR) {
+        $repoRoot = $env:GENTLE_VANGUARD_BASE_DIR
     } else {
         $searchDir = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
         while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -32,8 +32,8 @@ if (-not $ConfigPath) {
     }
     $ConfigPath = Join-Path $repoRoot 'config\model-router.json'
 }
-if ($env:FOUNDATION_BASE_DIR) {
-    $repoRootGlobal = $env:FOUNDATION_BASE_DIR
+if ($env:GENTLE_VANGUARD_BASE_DIR) {
+    $repoRootGlobal = $env:GENTLE_VANGUARD_BASE_DIR
 } else {
     $searchDir = if ($PSScriptRoot) { $PSScriptRoot } else { (Get-Location).Path }
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -704,7 +704,7 @@ function Invoke-RouteCommand {
 
         default {
             Write-Host "`nModel Router v2.0" -ForegroundColor Cyan
-            Write-Host "Usage: wf.ps1 route <action> [options]" -ForegroundColor Yellow
+            Write-Host "Usage: gv.ps1 route <action> [options]" -ForegroundColor Yellow
             Write-Host ""
             Write-Host "Actions:" -ForegroundColor White
             Write-Host "  list                              Show all agent bindings" -ForegroundColor Gray
@@ -742,3 +742,4 @@ if ($Help) {
 if ($Action) {
     Invoke-RouteCommand -Action $Action -Agent $Agent -Model $Model -Provider $Provider -Temperature $Temperature -AdminPassword $AdminPassword -AdminKeyFile $AdminKeyFile -JSON:$JSON
 }
+

@@ -1,5 +1,5 @@
 # install-prerequisites.ps1
-# Instala automticamente las herramientas requeridas para Foundation
+# Instala automticamente las herramientas requeridas para Gentle-Vanguard
 # Ejecucin: .\scripts\utilities\install-prerequisites.ps1
 
 param(
@@ -98,7 +98,7 @@ function Install-Tool {
 }
 
 Write-Host ""
-Write-Host "=== Foundation Prerequisites Installer ===" -ForegroundColor Cyan
+Write-Host "=== Gentle-Vanguard Prerequisites Installer ===" -ForegroundColor Cyan
 Write-Host ""
 
 $prerequisites = @(
@@ -185,10 +185,10 @@ $prerequisites = @(
     @{
         Name = "Engram"
         Type = "manual"
-        InstallCommand = "go install github.com/foundation/engram/cmd/engram@latest"
+        InstallCommand = "go install github.com/gentle-vanguard/engram/cmd/engram@latest"
         Description = "Persistent memory engine (optional)"
         Required = $false
-        ManualHint = "Requires Go: go install github.com/foundation/engram/cmd/engram@latest"
+        ManualHint = "Requires Go: go install github.com/gentle-vanguard/engram/cmd/engram@latest"
         AlternativeCheck = { $null -ne (Get-Command engram -ErrorAction SilentlyContinue) }
     },
     @{
@@ -281,7 +281,7 @@ if ($missing.Count -gt 0 -and -not $CheckOnly) {
         } elseif ($tool.Name -eq "Engram") {
             if (Get-Command go -ErrorAction SilentlyContinue) {
                 try {
-                    & go install github.com/foundation/engram/cmd/engram@latest 2>&1 | Out-Null
+                    & go install github.com/gentle-vanguard/engram/cmd/engram@latest 2>&1 | Out-Null
                     if ($LASTEXITCODE -eq 0) {
                         Write-Ok "Engram installed via go install"
                     } else {

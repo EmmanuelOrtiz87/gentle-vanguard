@@ -19,7 +19,7 @@ function Is-Glob      { param([string]$p) $p -match '[\*\?]' }
 # Exclusions — never a real file path
 $ExactBareSkiplist = @(
     # Commands resolved via PATH at runtime
-    'engram', 'engram.exe', 'wf', 'wf.ps1', 'gh', 'git', 'pwsh', 'powershell',
+    'engram', 'engram.exe', 'gv', 'gv.ps1', 'gh', 'git', 'pwsh', 'powershell',
     # Common runtime-created data files
     'connections.json', 'subscriptions.json', 'history.json',
     'appsettings.json', 'secrets.json', 'appsettings.Development.json',
@@ -71,10 +71,10 @@ $combinedLower = $combinedContent.ToLowerInvariant()
 # --- Phase 1: Find unreferenced files ---
 Write-Step "Phase 1: Unreferenced script files"
 
-$nameMap = [ordered]@{}
+$nameMap = @{}
 foreach ($s in $allScripts) {
     $key = $s.Name.ToLowerInvariant()
-    if (-not $nameMap.ContainsKey($key)) { $nameMap[$key] = @() }
+    if (-not $nameMap.Contains($key)) { $nameMap[$key] = @() }
     $nameMap[$key] += $s
 }
 
@@ -204,3 +204,4 @@ return @{
     BrokenRefs = $brokenRefs
     Status = if ($issues -eq 0) { 'PASS' } else { 'FAIL' }
 }
+

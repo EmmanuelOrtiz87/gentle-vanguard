@@ -1,6 +1,6 @@
 # Twitter/X - Features Quick
 
-5 Foundation features you might not know:
+5 Gentle-Vanguard features you might not know:
 
 1. Auto-delegation - routes to specialist agents
 2. Engram - memory survives restarts  
@@ -10,4 +10,4 @@
 
 Which one interests you?
 
-#FoundationStack #AI
+#Gentle-VanguardStack #AI

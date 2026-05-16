@@ -35,7 +35,7 @@ docs/audits/
 ### Generate New Audit#
 
 ```powershell
-.\scripts\wf.ps1 audit
+.\scripts\gv.ps1 audit
 # Output: docs/audits/YYYY-MM-DD-HHmmss-audit.md
 ```
 
@@ -49,7 +49,7 @@ docs/audits/
 ### Strict Cleanup (CI)#
 
 ```powershell
-.\scripts\wf.ps1 health -StrictCleanup
+.\scripts\gv.ps1 health -StrictCleanup
 # Non-zero exit is blocking
 ```
 
@@ -69,7 +69,7 @@ docs/audits/
 ### Step 1: Generate Context Pack#
 
 ```powershell
-.\scripts\wf.ps1 context-pack
+.\scripts\gv.ps1 context-pack
 # Output: docs/sessions/YYYY-MM-DD-HHmmss-context-pack.md
 ```
 
@@ -78,17 +78,17 @@ Captures: branch, recent commits, changed files, platform health.
 ### Step 2: Activate Compact Context#
 
 ```powershell
-.\scripts\wf.ps1 compact-start
+.\scripts\gv.ps1 compact-start
 # Reads: latest context-pack from docs/sessions/ (by timestamp)
 # Logs: docs/sessions/metrics/context-usage.csv
 ```
 
-Auto-activates on `wf.ps1 start-session` if health is RED.
+Auto-activates on `gv.ps1 start-session` if health is RED.
 
 ### Step 3: Generate Audit Document#
 
 ```powershell
-.\scripts\wf.ps1 audit
+.\scripts\gv.ps1 audit
 # Output: docs/audits/YYYY-MM-DD-HHmmss-audit.md
 ```
 
@@ -105,7 +105,7 @@ Validates canonical path references and no deprecated dependencies.
 ### Step 5: Review Session Metrics#
 
 ```powershell
-.\scripts\wf.ps1 context-metrics
+.\scripts\gv.ps1 context-metrics
 # Reads: docs/sessions/metrics/context-usage.csv
 ```
 
@@ -115,10 +115,10 @@ Displays: total events, context-pack calls, compact-start calls, efficiency indi
 
 ```powershell
 # Preview cleanup actions
-.\scripts\wf.ps1 homologate
+.\scripts\gv.ps1 homologate
 
 # Apply cleanup and reference updates
-.\scripts\wf.ps1 homologate apply
+.\scripts\gv.ps1 homologate apply
 ```
 
 Normalizes workspace before release or when strict cleanup reports drift.
@@ -140,16 +140,17 @@ Normalizes workspace before release or when strict cleanup reports drift.
 
 | Command               | Description              | Output                                            |
 | --------------------- | ------------------------ | ------------------------------------------------- |
-| `wf audit`            | Generate audit report    | `docs/audits/YYYY-MM-DD-HHmmss-audit.md`          |
-| `wf context-pack`     | Generate context pack    | `docs/sessions/YYYY-MM-DD-HHmmss-context-pack.md` |
-| `wf compact-start`    | Activate compact context | `docs/sessions/metrics/context-usage.csv`         |
-| `wf context-metrics`  | Review session metrics   | Console output                                    |
-| `wf homologate`       | Preview cleanup          | Console output                                    |
-| `wf homologate apply` | Apply cleanup            | Updated references                                |
+| `gv audit`            | Generate audit report    | `docs/audits/YYYY-MM-DD-HHmmss-audit.md`          |
+| `gv context-pack`     | Generate context pack    | `docs/sessions/YYYY-MM-DD-HHmmss-context-pack.md` |
+| `gv compact-start`    | Activate compact context | `docs/sessions/metrics/context-usage.csv`         |
+| `gv context-metrics`  | Review session metrics   | Console output                                    |
+| `gv homologate`       | Preview cleanup          | Console output                                    |
+| `gv homologate apply` | Apply cleanup            | Updated references                                |
 
 ---
 
 <p align="center">
   <b>📅 Ready to audit?</b><br>
-  <code>.\scripts\wf.ps1 audit</code>
+  <code>.\scripts\gv.ps1 audit</code>
 </p>
+

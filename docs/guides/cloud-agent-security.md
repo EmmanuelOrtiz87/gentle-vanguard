@@ -2,7 +2,7 @@
 
 ## Overview
 
-Foundation's Cloud Agent Connector supports secure connections to external AI providers (AWS
+Gentle-Vanguard's Cloud Agent Connector supports secure connections to external AI providers (AWS
 Bedrock, Difi, Azure, OpenAI, Anthropic, Gemini, Ollama).
 
 **For complete setup and usage guide, see:** [CLOUD-AGENT-CONNECTOR.md](CLOUD-AGENT-CONNECTOR.md)
@@ -79,3 +79,4 @@ $env:OPENAI_API_KEY = "sk-..."
 | `config/cloud-agents.json`                     | Yes    | Template (no secrets)                |
 | `config/cloud-agents.local.json`               | **NO** | Local provider metadata (no secrets) |
 | `.runtime/telemetry/cloud-agent-telemetry.csv` | **NO** | Runtime audit log                    |
+

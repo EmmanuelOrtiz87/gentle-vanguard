@@ -1,4 +1,4 @@
-# Foundation - Architecture
+# Gentle-Vanguard - Architecture
 
 > System design, component relationships, and technical decisións.
 
@@ -22,7 +22,7 @@
 
                                  CLI LAYER
 
-                            wf.ps1 (Main Entry)
+                            gv.ps1 (Main Entry)
 
              init       new       review    validate  ...
 
@@ -70,7 +70,7 @@
                          COMPONENT DEPENDENCIES
 
 
-    wf.ps1 (CLI)
+    gv.ps1 (CLI)
 
          Read-Workspace-Config
 
@@ -113,7 +113,7 @@
 
 ## Artifact Retention Policy
 
-Foundation stores operational artifacts with a dual-scope retention model:
+Gentle-Vanguard stores operational artifacts with a dual-scope retention model:
 
 1. **Repo scope (example only)**
    - Keep **1** most recent file per category in the repo.
@@ -142,7 +142,7 @@ Rotation is automated on `end-session` and `day-end-closure`.
 
 
 
-     wf new                Read Config            Project
+     gv new                Read Config            Project
      --name                   Structure
      --kind
 
@@ -389,7 +389,7 @@ Rotation is automated on `end-session` and `day-end-closure`.
                          Destination:
                          {project}/
                          .workspace-
-                         foundation/
+                         gentle-vanguard/
                          skills/{name}/
 
 
@@ -679,7 +679,7 @@ Rotation is automated on `end-session` and `day-end-closure`.
 ### 9.1 Directory Structure
 
 ```
-foundation/
+gentle-vanguard/
 
  .github/                          # GitHub specific
     ISSUE_TEMPLATE/
@@ -705,7 +705,7 @@ foundation/
     code-reviews/               # Generated reports
 
  scripts/                          # Main scripts
-    wf.ps1                       # Main CLI
+    gv.ps1                       # Main CLI
     bootstrap-workspace.ps1       # Project creation
     validate-workspace.ps1        # Validation
     deploy.ps1                    # Deployment
@@ -716,7 +716,7 @@ foundation/
           commit-msg
 
  skills/                           # AI Skills
-    foundation/
+    gentle-vanguard/
     code-review-orchestrator/
     security-expert/
     testing-skill/
@@ -803,7 +803,7 @@ foundation/
 
 ## 11. Shared Conventions & Protocols
 
-Foundation now incorporates standardized protocols from `agent-teams-lite-main` to ensure consistent
+Gentle-Vanguard now incorporates standardized protocols from `agent-teams-lite-main` to ensure consistent
 agent behavior and token efficiency:
 
 ### 11.1 Skill Resolver Protocol
@@ -835,4 +835,5 @@ All Spec-Driven Development (SDD) phases follow the `sdd-phase-common.md` standa
 
 ---
 
-_Architecture document for Foundation v2.1_
+_Architecture document for Gentle-Vanguard v2.1_
+

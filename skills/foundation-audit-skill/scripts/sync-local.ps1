@@ -1,20 +1,20 @@
-﻿#Requires -Version 5.1
+#Requires -Version 5.1
 <#
 .SYNOPSIS
-    Sync Foundation Audit to Local - Enables standalone usage without repo
+    Sync Gentle-Vanguard Audit to Local - Enables standalone usage without repo
 .DESCRIPTION
-    Copies audit scripts to ~/.foundation-local/ for use in any directory.
+    Copies audit scripts to ~/.gentle-vanguard-local/ for use in any directory.
     No git repo required - works on any project.
     
-    Location: ~/.foundation-local/
+    Location: ~/.gentle-vanguard-local/
     
     Usage after sync:
-    ~/.foundation-local/audit-workflow.ps1 -Mode full
-    ~/.foundation-local/audit-workflow.ps1 -Mode quick
+    ~/.gentle-vanguard-local/audit-workflow.ps1 -Mode full
+    ~/.gentle-vanguard-local/audit-workflow.ps1 -Mode quick
 .PARAMETER Source
-    Path to Foundation (default: auto-detect from script location)
+    Path to Gentle-Vanguard (default: auto-detect from script location)
 .PARAMETER Target
-    Target directory (default: ~/.foundation-local/)
+    Target directory (default: ~/.gentle-vanguard-local/)
 .PARAMETER Force
     Overwrite existing files
 .PARAMETER ListOnly
@@ -31,7 +31,7 @@
 #>
 param(
     [string]$Source,
-    [string]$Target = "$env:USERPROFILE\.foundation-local",
+    [string]$Target = "$env:USERPROFILE\.gentle-vanguard-local",
     [switch]$Force,
     [switch]$ListOnly
 )
@@ -43,12 +43,12 @@ if (-not $Source) {
     $Source = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
 }
 
-$AuditSource = Join-Path $Source 'skills\foundation-audit-skill\scripts'
+$AuditSource = Join-Path $Source 'skills\gentle-vanguard-audit-skill\scripts'
 $AuditTarget = $Target
 
 # Files to sync
 $FilesToSync = @(
-    @{ Source = 'audit-sweep.ps1'; Desc = 'Batch audit (foundation-audit)' },
+    @{ Source = 'audit-sweep.ps1'; Desc = 'Batch audit (gentle-vanguard-audit)' },
     @{ Source = 'audit-workflow.ps1'; Desc = 'Unified workflow (audit + judgment)' }
 )
 
@@ -56,7 +56,7 @@ function Write-SyncHeader {
     Write-Host @"
 
 
-           FOUNDATION LOCAL SYNC                               
+           GENTLE_VANGUARD LOCAL SYNC                               
   Standalone audit scripts for any directory                   
 
 
@@ -135,7 +135,7 @@ $rulesPath = Join-Path $configTarget 'audit-rules.json'
 if (-not (Test-Path $rulesPath)) {
     $defaultRules = @{
         Version = "1.0"
-        Description = "Foundation Audit Rules - Standalone"
+        Description = "Gentle-Vanguard Audit Rules - Standalone"
         DeprecatedSkills = @(
             'sdd-init', 'sdd-explore', 'sdd-propose', 'sdd-spec',
             'sdd-design', 'sdd-tasks', 'sdd-apply', 'sdd-verify',
@@ -163,7 +163,7 @@ $wrapperPath = Join-Path $AuditTarget 'audit.ps1'
 if (-not (Test-Path $wrapperPath) -or $Force) {
     $wrapperContent = @'
 #Requires -Version 5.1
-# Foundation Audit Wrapper - Place in project root for quick access
+# Gentle-Vanguard Audit Wrapper - Place in project root for quick access
 # This script wraps the unified audit workflow
 
 $ErrorActionPreference = 'Continue'
@@ -175,7 +175,7 @@ if (Test-Path $AuditScript) {
     $out = if ($args.Count -ge 2 -and -not [string]::IsNullOrWhiteSpace($args[1])) { $args[1] } else { 'text' }
     & $AuditScript -Mode $mode -Output $out
 } else {
-    Write-Error "Audit script not found. Run sync-local.ps1 from Foundation first."
+    Write-Error "Audit script not found. Run sync-local.ps1 from Gentle-Vanguard first."
     exit 1
 }
 '@
@@ -193,13 +193,14 @@ Write-Host "" -ForegroundColor Cyan
 if ($ListOnly) {
     Write-Host "[DRY RUN] No files copied. Run without -ListOnly to sync." -ForegroundColor Yellow
 } else {
-    Write-Host "[SUCCESS] Foundation audit synced to: $AuditTarget" -ForegroundColor Green
+    Write-Host "[SUCCESS] Gentle-Vanguard audit synced to: $AuditTarget" -ForegroundColor Green
     Write-Host ""
     Write-Host "Usage:" -ForegroundColor White
     Write-Host "  cd your-project-directory" -ForegroundColor DarkGray
-    Write-Host "  ~\.foundation-local\audit-workflow.ps1 -Mode quick" -ForegroundColor DarkGray
-    Write-Host "  ~\.foundation-local\audit-workflow.ps1 -Mode full" -ForegroundColor DarkGray
-    Write-Host "  ~\.foundation-local\audit.ps1 full" -ForegroundColor DarkGray
+    Write-Host "  ~\.gentle-vanguard-local\audit-workflow.ps1 -Mode quick" -ForegroundColor DarkGray
+    Write-Host "  ~\.gentle-vanguard-local\audit-workflow.ps1 -Mode full" -ForegroundColor DarkGray
+    Write-Host "  ~\.gentle-vanguard-local\audit.ps1 full" -ForegroundColor DarkGray
 }
 
 Write-Host ""
+

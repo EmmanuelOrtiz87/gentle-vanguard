@@ -412,23 +412,23 @@ if ($Agent -eq 'list') {
 }
 
 if ([string]::IsNullOrWhiteSpace($Agent)) {
-    Write-Host "Usage: .\wf.ps1 agent <AGENT> [TASK] [-AsJson]" -ForegroundColor Yellow
+    Write-Host "Usage: .\gv.ps1 agent <AGENT> [TASK] [-AsJson]" -ForegroundColor Yellow
     Write-Host ""
     Write-Host "Agents: BA, SAD, DEV, QA, OPS, GOV, DOC, MKT, SALES, FINANCE, HR, LEGAL, BUS-TELE, SESSION, PREMORTEM" -ForegroundColor White
     Write-Host "Actions: run, plan, validate, status" -ForegroundColor White
     Write-Host "Flags: -AsJson for structured output" -ForegroundColor White
     Write-Host ""
     Write-Host "Examples:" -ForegroundColor Cyan
-    Write-Host "  .\wf.ps1 agent list" -ForegroundColor Gray
-    Write-Host "  .\wf.ps1 agent status" -ForegroundColor Gray
-    Write-Host "  .\wf.ps1 agent DEV `"implement login`"" -ForegroundColor Gray
-    Write-Host "  .\wf.ps1 agent QA `"validate checkout`" -AsJson" -ForegroundColor Gray
+    Write-Host "  .\gv.ps1 agent list" -ForegroundColor Gray
+    Write-Host "  .\gv.ps1 agent status" -ForegroundColor Gray
+    Write-Host "  .\gv.ps1 agent DEV `"implement login`"" -ForegroundColor Gray
+    Write-Host "  .\gv.ps1 agent QA `"validate checkout`" -AsJson" -ForegroundColor Gray
     exit 1
 }
 
 if ([string]::IsNullOrWhiteSpace($Task)) {
     Write-AgentLine "Task parameter is required when specifying an agent." 'Yellow'
-    Write-Host "Use: .\wf.ps1 agent $Agent `"<task description>`"" -ForegroundColor Gray
+    Write-Host "Use: .\gv.ps1 agent $Agent `"<task description>`"" -ForegroundColor Gray
     exit 1
 }
 
@@ -440,3 +440,4 @@ if ($validAgents -notcontains $Agent) {
 }
 
 Invoke-Agent -AgentName $Agent -TaskText $Task -ActionType $Action
+

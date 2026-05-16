@@ -65,8 +65,8 @@ Before substantial work in a new conversation, execute ALL steps in order:
    | **🪟 Windows**         | `scripts/utilities/session-autostart.cmd`       |
    | **🐧 Linux/macOS/WSL** | `bash ./scripts/utilities/session-autostart.sh` |
 
-2. **Register session** with Engram: `engram_mem_session_start`
-3. **Restore context**: `engram_mem_context`
+2. **Register session** with Engram: `pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/engram_mem_session_start.ps1`
+3. **Restore context**: `pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/engram_mem_context.ps1`
 4. **Check workspace**: `git status`
 5. **Read bootstrap**: this file (`docs/AGENTS.md`)
 
@@ -88,7 +88,7 @@ When session tracking capability exists, initialize a session early using:
 
 | Setting                | Value                   |
 | ---------------------- | ----------------------- |
-| **project**            | `workspace_local`       |
+| **project**            | `workspace_gentle_vanguard`       |
 | **directory**          | `c:\Workspace_local`    |
 | **session id pattern** | `session-YYYY-MM-DD-XX` |
 
@@ -116,7 +116,7 @@ If the current response profile prevents completing a multi-step task, you MUST 
 
 ## 🧑‍💻 Default Persona — Professional#
 
-Foundation opera en modo profesional (equivalente a "neutral" de gentle-pi):
+Gentle-Vanguard opera en modo profesional (equivalente a "neutral" de gentle-pi):
 - Misma disciplina técnica, sin variantes regionales de lenguaje
 - ES/PT-BR/EN: responde en el idioma del usuario, tono profesional consistente
 - Sin voseo, modismos ni jerga informal
@@ -153,7 +153,7 @@ Foundation opera en modo profesional (equivalente a "neutral" de gentle-pi):
 | ----------------------- | ---------------------------------------------------------------------------------------------- |
 | **Memory tiering**      | Hot (active) → Warm (1 day, 90%) → Cold (7 days, 70%)                                          |
 | **Handoff compression** | `scripts/utilities/handoff-compress.ps1` (~30% size reduction)                                 |
-| **Pre-compact hook**    | `scripts/utilities/pre-compact-hook.ps1 -ProjectName "workspace_local" -CompressionRatio 0.90` |
+| **Pre-compact hook**    | `scripts/utilities/pre-compact-hook.ps1 -ProjectName "workspace_gentle_vanguard" -CompressionRatio 0.90` |
 
 ---
 
@@ -191,16 +191,16 @@ Key rules:
 bash ./scripts/utilities/session-autostart.sh
 
 # Check all quality gates
-foundation verify
+gv verify
 
 # Show stack version + skills count
-foundation version
+gv version
 
 # Begin tracked session
-foundation start-session
+gv start-session
 
 # Full QA gate before release
-foundation judgment-day
+gv judgment-day
 
 # SDD preflight (before first SDD flow in a session)
 .\scripts\utilities\sdd-preflight.ps1 -Interactive
@@ -212,13 +212,13 @@ foundation judgment-day
 .\scripts\utilities\build-skill-registry.ps1
 
 # Open HTML metrics dashboard
-foundation dashboard
+gv dashboard
 
 # SLO benchmark of key commands
-foundation benchmark
+gv benchmark
 
-# Detect drift between foundation and projects
-foundation sync-drift
+# Detect drift between gentle-vanguard and projects
+gv sync-drift
 ```
 
 ---
@@ -244,3 +244,4 @@ foundation sync-drift
   <b>🤖 Ready to start a session?</b><br>
   <code>.\scripts\utilities\session-autostart.cmd</code>
 </p>
+

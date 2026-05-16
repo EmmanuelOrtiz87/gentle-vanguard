@@ -6,8 +6,7 @@ description: >
   "candidate sourcing", "ats", "reclutamiento", "selección de personal"
 license: Apache-2.0
 metadata:
-  author: foundation
-  version: '1.0'
+  author: gv version: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash
 ---
 
@@ -35,3 +34,4 @@ User asks about recruitment processes, hiring strategies, candidate sourcing, in
 2. Provide specific guidance or templates (screening questions, offer letters)
 3. Include ATS-specific advice (Workday, Lever, Greenhouse, BambooHR)
 4. Address DEI considerations in recruiting
+

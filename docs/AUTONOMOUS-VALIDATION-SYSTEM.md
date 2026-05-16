@@ -15,7 +15,7 @@ The autonomous validation system continuously monitors workspace health and conf
 ### Cross-Workspace Validation
 
 - **Script**: `scripts/monitoring/cross-workspace-validator.ps1`
-- **Purpose**: Ensures local and foundation stay in sync
+- **Purpose**: Ensures local and gentle-vanguard stay in sync
 - **Run**: `.\cross-workspace-validator.ps1 -Fix`
 
 ### Engram Optimization
@@ -35,3 +35,4 @@ Validation runs automatically:
 ## Pass Rate Target
 
 Target: 100% pass rate on all validations.
+

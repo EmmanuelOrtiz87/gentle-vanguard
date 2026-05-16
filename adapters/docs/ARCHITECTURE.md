@@ -1,4 +1,4 @@
-﻿# Adapter Architecture
+# Adapter Architecture
 
 **Date**: 2026-04-28  
 **Version**: 1.0.0  
@@ -8,7 +8,7 @@
 
 ## Overview
 
-The Adapter Layer enables **any AI tool/IDE** to use Foundation capabilities, regardless of whether
+The Adapter Layer enables **any AI tool/IDE** to use Gentle-Vanguard capabilities, regardless of whether
 they support the Agent Skills standard.
 
 ---
@@ -17,7 +17,7 @@ they support the Agent Skills standard.
 
 ```
 
-                     FOUNDATION CORE
+                     GENTLE_VANGUARD CORE
 
      7D Review      SDD Workflow     Engram Mem
 
@@ -66,23 +66,23 @@ they support the Agent Skills standard.
 
 **Location**: `adapters/mcp-bridge/`
 
-Converts Foundation into an **MCP Server** that any MCP-compatible tool can use.
+Converts Gentle-Vanguard into an **MCP Server** that any MCP-compatible tool can use.
 
 **Benefits**:
 
 - Universal (any MCP client)
 - Standard protocol (future-proof)
-- Exposes all Foundation capabilities
+- Exposes all Gentle-Vanguard capabilities
 - Token-efficient (MCP handles context)
 
 **Exposed Tools**:
 
-- `foundation_review` - 7D code review
-- `foundation_audit` - Workspace audit
-- `foundation_delegate` - Subagent delegation
-- `foundation_health` - Health check
-- `foundation_session_start/end` - Session management
-- `foundation_skill_list/load` - Skill management
+- `gentle-vanguard_review` - 7D code review
+- `gentle-vanguard_audit` - Workspace audit
+- `gentle-vanguard_delegate` - Subagent delegation
+- `gentle-vanguard_health` - Health check
+- `gentle-vanguard_session_start/end` - Session management
+- `gentle-vanguard_skill_list/load` - Skill management
 
 **MCP Clients Supported**:
 
@@ -100,15 +100,15 @@ Converts Foundation into an **MCP Server** that any MCP-compatible tool can use.
 
 **Location**: `adapters/format-adapters/{tool}-adapter/`
 
-Translates between Foundation's standard format and tool-specific formats.
+Translates between Gentle-Vanguard's standard format and tool-specific formats.
 
 **When to use**: Tool doesn't support MCP but has its own plugin system.
 
 | Adapter                | Input Format        | Output Format    | Status  |
 | ---------------------- | ------------------- | ---------------- | ------- |
-| `windsurf-adapter/`    | Foundation SKILL.md | Windsurf plugin  | Pending |
-| `codex-adapter/`       | Foundation tools    | OpenAI functions | Pending |
-| `antigravity-adapter/` | Foundation context  | Mission Control  | Pending |
+| `windsurf-adapter/`    | Gentle-Vanguard SKILL.md | Windsurf plugin  | Pending |
+| `codex-adapter/`       | Gentle-Vanguard tools    | OpenAI functions | Pending |
+| `antigravity-adapter/` | Gentle-Vanguard context  | Mission Control  | Pending |
 
 ---
 
@@ -123,9 +123,9 @@ Tool (Windsurf, Codex, etc.)
 
 MCP Bridge Server (adapters/mcp-bridge/)
 
-     Calls Foundation CLI/Scripts
+     Calls Gentle-Vanguard CLI/Scripts
 
-Foundation Core (7D Review, SDD, Engram, etc.)
+Gentle-Vanguard Core (7D Review, SDD, Engram, etc.)
 ```
 
 ### Format Adapter Flow
@@ -137,9 +137,9 @@ Tool (Windsurf, Codex, etc.)
 
 Format Adapter (adapters/format-adapters/)
 
-     Translates to Foundation format
+     Translates to Gentle-Vanguard format
 
-Foundation Core (via CLI/Scripts)
+Gentle-Vanguard Core (via CLI/Scripts)
 ```
 
 ---
@@ -170,7 +170,7 @@ Detects running tool and recommends adapter:
 1. Preserve token efficiency (no unnecessary context expansion)
 2. Log all translations (for debugging)
 3. Handle errors gracefully (fallback to basic mode)
-4. Respect Foundation's memory tiering
+4. Respect Gentle-Vanguard's memory tiering
 5. Support the detection system
 
 ---
@@ -200,5 +200,6 @@ Detects running tool and recommends adapter:
 
 ---
 
-**Author**: Foundation Team  
+**Author**: Gentle-Vanguard Team  
 **Last Updated**: 2026-04-28
+

@@ -16,7 +16,7 @@
     .\tools\post-task-cleanup.ps1 -TaskName "Corregir bug" -AgentType "DEV"
     
 .NOTES
-    Author: foundation
+    Author: gentle-vanguard
     Version: 1.0
     Se invoca automticamente desde auto-delegation-router.ps1
 #>
@@ -29,7 +29,7 @@ param(
     [string]$AgentType = "GENERAL",
     
     [Parameter(Mandatory=$false)]
-    [string]$ProjectName = "foundation"
+    [string]$ProjectName = "gentle-vanguard"
 )
 
 $ErrorActionPreference = 'Continue'
@@ -98,3 +98,4 @@ Write-Host "SUBAGENTE LISTO PARA NUEVA TAREA" -ForegroundColor Green
 Write-Host ("-" * 50) -ForegroundColor Green
 
 exit 0
+

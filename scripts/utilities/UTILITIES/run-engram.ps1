@@ -49,8 +49,8 @@ function Ensure-Directory {
     }
 }
 
-if ($env:FOUNDATION_BASE_DIR) {
-    $workspaceRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GENTLE_VANGUARD_BASE_DIR) {
+    $workspaceRoot = $env:GENTLE_VANGUARD_BASE_DIR
 } else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -70,7 +70,7 @@ if ([string]::IsNullOrWhiteSpace($ConfigPath)) {
 
 # Initialization validation
 if (-not (Test-Path -LiteralPath $ConfigPath)) {
-    throw "Environment not initialized or config missing. Run 'scripts/foundation/bootstrap.ps1' first."
+    throw "Environment not initialized or config missing. Run 'scripts/gentle-vanguard/bootstrap.ps1' first."
 }
 
 # Health check for critical dependencies
@@ -204,8 +204,8 @@ if (-not $engramPath) {
 }
 
 try {
-    if (Get-Command Invoke-FoundationEngram -ErrorAction SilentlyContinue) {
-        $result = Invoke-FoundationEngram -RepoRoot $workspaceRoot -Arguments $EngramArgs
+    if (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue) {
+        $result = Invoke-Gentle-VanguardEngram -RepoRoot $workspaceRoot -Arguments $EngramArgs
         $result.Output | ForEach-Object { Write-Host $_ }
         if (-not $result.Success) {
             Write-ContinuityLog -Message "Engram exited with code $($result.ExitCode). Saving state to fallback." -Level 'WARN'
@@ -226,3 +226,4 @@ try {
 }
 
 exit $LASTEXITCODE
+

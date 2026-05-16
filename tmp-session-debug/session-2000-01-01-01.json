@@ -1,6 +1,6 @@
 {
   "orphanedReason": "Session left active > 1 hours",
-  "project": "foundation",
+  "project": "gentle-vanguard",
   "mode": "Manual",
   "orphanedAt": "2026-05-15T17:11:05.6301907-03:00",
   "status": "orphaned",
@@ -8,3 +8,4 @@
   "version": "2.0",
   "startTime": "2000-01-01T00:00:00Z"
 }
+

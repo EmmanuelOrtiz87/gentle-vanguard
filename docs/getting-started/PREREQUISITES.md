@@ -1,7 +1,7 @@
-# Prerequisites - Foundation
+# Prerequisites - Gentle-Vanguard
 
 **Date**: 2026-05-03  
-**Description**: Complete list of required and optional tools for Foundation.
+**Description**: Complete list of required and optional tools for Gentle-Vanguard.
 
 ---
 
@@ -140,3 +140,4 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/in
 ---
 
 _Document updated: 2026-05-03_
+

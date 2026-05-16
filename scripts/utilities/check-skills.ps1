@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
-$skillsPath = '.\foundation\\skills'
-$indexPath = '.\foundation\\skills\SKILL_INDEX.md'
+$skillsPath = '.\gentle-vanguard\\skills'
+$indexPath = '.\gentle-vanguard\\skills\SKILL_INDEX.md'
 
 # Get directories
 $dirs = Get-ChildItem $skillsPath -Directory | Select-Object -ExpandProperty Name | Sort-Object
@@ -20,3 +20,4 @@ Write-Host "Missing from INDEX: $($missing.Count)"
 foreach($m in $missing) {
     Write-Host "  - $m"
 }
+

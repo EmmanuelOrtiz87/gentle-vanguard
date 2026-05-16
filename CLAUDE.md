@@ -1,4 +1,4 @@
-# foundation — Entry Point for Claude-Compatible Tools
+# gentle-vanguard — Entry Point for Claude-Compatible Tools
 
 **Loaded by**: OpenCode, Claude Code, Windsurf, Claude | Canonical entry: `docs/AGENTS.md`
 
@@ -40,9 +40,9 @@ After detection, execute ALL steps **in order**. Steps 0 and 6-9 are often misse
 
 1. Run `$detected.instructions.sessionAutostart` (OS-aware, resolved by detect-tool.ps1: Windows → `.cmd`, Linux/macOS → `.sh`) — activates notifications, security, engram, token guard, karpathy enforcer.
 
-2. `engram_mem_session_start` — register session ID
+2. `pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/engram_mem_session_start.ps1` — register session ID
 
-3. `engram_mem_context` — restore previous context
+3. `pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/engram_mem_context.ps1` — restore previous context
 
 4. `git status` — verify workspace state
 
@@ -67,7 +67,7 @@ After detection, execute ALL steps **in order**. Steps 0 and 6-9 are often misse
 
 ## 🧑‍💻 Default Persona — Professional
 
-Foundation opera en **modo profesional** (equivalente a "neutral" de gentle-pi):
+Gentle-Vanguard opera en **modo profesional** (equivalente a "neutral" de gentle-pi):
 - Misma disciplina y estándares técnicos, sin variantes regionales de lenguaje
 - ES/PT-BR/EN: responde en el idioma del usuario, manteniendo tono profesional
 - No usa voseo, modismos regionales ni jerga informal
@@ -122,7 +122,7 @@ Profile: **ultra** | Detail: **simple** | Chat: **chat-compact** (max 4 lines te
 
 - Temperature: 0.3 | Max tokens: 4500 | Cache: enabled (setCacheKey: true)
 - Lang: es | Session pattern: session-YYYY-MM-DD-XX
-- Engram project: workspace_local
+- Engram project: workspace_gentle_vanguard
 
 ## 📚 Key References
 
@@ -145,3 +145,4 @@ Profile: **ultra** | Detail: **simple** | Chat: **chat-compact** (max 4 lines te
 
 - **New projects**: created under `config/orchestrator.json#workspace.projectRoot` (default: `projects/`). Run SDD lifecycle (BA explore → SAD design → DEV implement).
 - **Existing modifications**: BEFORE modifying any file, read `rules/DEVELOPMENT-STANDARDS.md#modification-protocol`. Protocol: explore project structure first → identify entry points/configs → scope change → modify → validate.
+

@@ -4,8 +4,8 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-if ($env:FOUNDATION_BASE_DIR) {
-    $repoRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GENTLE_VANGUARD_BASE_DIR) {
+    $repoRoot = $env:GENTLE_VANGUARD_BASE_DIR
 } else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -20,7 +20,7 @@ if ([string]::IsNullOrWhiteSpace($MetricsPath)) {
 
 if (-not (Test-Path $MetricsPath)) {
     Write-Host "[WARN] Metrics file not found: $MetricsPath" -ForegroundColor Yellow
-    Write-Host 'Run wf.ps1 compact-start or wf.ps1 context-pack to start collecting metrics.' -ForegroundColor Yellow
+    Write-Host 'Run gv.ps1 compact-start or gv.ps1 context-pack to start collecting metrics.' -ForegroundColor Yellow
     exit 0
 }
 
@@ -57,3 +57,4 @@ foreach ($day in $byDay) {
     $dPack = @($day.Group | Where-Object event -eq 'context-pack').Count
     Write-Host "  $($day.Name): total=$dTotal, context-pack=$dPack, compact-start=$dCompact"
 }
+

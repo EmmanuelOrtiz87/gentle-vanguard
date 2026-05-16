@@ -8,7 +8,7 @@
     usando Engram y otras herramientas del workspace.
 
 .PARAMETER ProjectName
-    Nombre del proyecto. Por defecto: workspace_local
+    Nombre del proyecto. Por defecto: workspace_gentle_vanguard
 
 .PARAMETER OutputPath
     Ruta del archivo de reporte. Por defecto: logs/weekly-metrics-{date}.md
@@ -21,12 +21,12 @@
     Genera reporte de mtricas semanales
 
 .EXAMPLE
-    .\weekly-metrics.ps1 -ProjectName "workspace_local" -Email
+    .\weekly-metrics.ps1 -ProjectName "workspace_gentle_vanguard" -Email
     Genera reporte y lo enva por email
 #>
 
 param(
-    [string]$ProjectName = "workspace_local",
+    [string]$ProjectName = "workspace_gentle_vanguard",
     [string]$OutputPath = "",
     [switch]$Email
 )
@@ -65,7 +65,7 @@ function Get-EngramStats {
 function Get-SessionStats {
     Write-Host "Analizando sesiones..." -ForegroundColor Yellow
     
-    $sessionDocs = "foundation\\docs\sessions"
+    $sessionDocs = "gentle-vanguard\\docs\sessions"
     if (-not (Test-Path $sessionDocs)) {
         return "No se encontraron documentos de sesion"
     }
@@ -148,7 +148,7 @@ function Get-HealthStatus {
     Write-Host "Verificando salud del workspace..." -ForegroundColor Yellow
     
     try {
-        $health = & ".\scripts\utilities\wf.ps1" health 2>&1
+        $health = & ".\scripts\utilities\gv.ps1" health 2>&1
         return $health -join "`n"
     }
     catch {

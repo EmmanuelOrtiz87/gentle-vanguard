@@ -2,7 +2,7 @@
 #Requires -Version 7.0
 <#
 .SYNOPSIS
-    Install git hooks for the Foundation workspace.
+    Install git hooks for the Gentle-Vanguard workspace.
 
 .DESCRIPTION
     Creates wrapper scripts in .git/hooks/ that delegate to PowerShell
@@ -70,3 +70,4 @@ Write-Host "Hooks installed: $installed  Skipped: $skipped" -ForegroundColor Cya
 if ($installed -gt 0) {
     Write-Host "Run 'git commit --dry-run' to verify." -ForegroundColor DarkGray
 }
+

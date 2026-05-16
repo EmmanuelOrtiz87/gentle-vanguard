@@ -6,7 +6,7 @@ description: >
   "competitive analysis", "firecrawl"
 license: Apache-2.0
 metadata:
-  author: foundation
+  author: gentle-vanguard
   versión: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task, webfetch, websearch
 ---
@@ -113,7 +113,7 @@ result = app.crawl_urls(urls, limit=10)
 
 ---
 
-## Integration with Foundation
+## Integration with Gentle-Vanguard
 
 ### Environment Variables
 
@@ -139,17 +139,17 @@ Add to `config/workspace.config.json`:
 }
 ```
 
-### Foundation wf.ps1 Integration
+### Gentle-Vanguard gv.ps1 Integration
 
 ```powershell
 # Scrape URL
-.\wf.ps1 scrape "https://example.com" --format markdown
+.\gv.ps1 scrape "https://example.com" --format markdown
 
 # Batch scrape
-.\wf.ps1 scrape urls.txt --output content/
+.\gv.ps1 scrape urls.txt --output content/
 
 # Web search
-.\wf.ps1 search "Next.js best practices" --limit 5
+.\gv.ps1 search "Next.js best practices" --limit 5
 ```
 
 ---
@@ -210,3 +210,4 @@ except ExtractionError:
 3. **Caching** - Store results for future use
 4. **Error handling** - Plan for failures
 5. **Token efficient** - Trim unnecessary content
+

@@ -1,6 +1,6 @@
 # Dify.io Integration Example
 
-This guide shows how to connect Foundation to Dify.io using the standard architecture.
+This guide shows how to connect Gentle-Vanguard to Dify.io using the standard architecture.
 
 ---
 
@@ -43,7 +43,7 @@ $env:DIFY_API_KEY = "your_api_key_here"
 ## 3. Test the Connection
 
 ```powershell
-cd foundation
+cd gentle-vanguard
 .\scripts\utilities\AI-AGENT-MANAGEMENT\invoke-cloud-agent.ps1 -Provider dify -TestConnection
 ```
 
@@ -79,3 +79,4 @@ cd foundation
 ---
 
 **Last updated:** 2026-04-20
+

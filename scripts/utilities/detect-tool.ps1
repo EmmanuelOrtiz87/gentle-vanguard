@@ -64,7 +64,7 @@ function Get-DetectedTool {
     }
 
     # 1b. Check for .opencode/ directory (fallback for OpenCode without env var)
-    $repoRoot = if ($env:FOUNDATION_BASE_DIR) { $env:FOUNDATION_BASE_DIR } else { (Get-Location).Path }
+    $repoRoot = if ($env:GV_BASE_DIR) { $env:GV_BASE_DIR } else { (Get-Location).Path }
     if (Test-Path (Join-Path $repoRoot ".opencode")) {
         $tool.name = "opencode"
         $tool.source = "dir:.opencode"
@@ -99,7 +99,7 @@ function Get-DetectedTool {
     }
 
     # 4. Check for .clinerules file (Cline)
-    $repoRoot = if ($env:FOUNDATION_BASE_DIR) { $env:FOUNDATION_BASE_DIR } else { (Get-Location).Path }
+    $repoRoot = if ($env:GV_BASE_DIR) { $env:GV_BASE_DIR } else { (Get-Location).Path }
     if (Test-Path (Join-Path $repoRoot ".clinerules")) {
         $tool.name = "cline"
         $tool.source = "file:.clinerules"
@@ -230,3 +230,4 @@ if ($AsJson) {
     return ($fullConfig | ConvertTo-Json -Depth 4)
 }
 return $fullConfig
+

@@ -2,7 +2,7 @@
 
 ## Descripción
 
-Directorio centralizado para toda la configuración del proyecto foundation.
+Directorio centralizado para toda la configuración del proyecto gentle-vanguard.
 
 **Versión**: 2.0.0 **última actualización**: 2026-04-21 **Estado**: PRODUCCIÓN
 
@@ -369,3 +369,4 @@ Todos los archivos de configuración estn centralizados, documentados y listos p
 ---
 
 **última actualización**: 2026-04-21 **Versión**: 2.0.0
+

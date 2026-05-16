@@ -2,7 +2,7 @@
 
 **Version:** 1.0.0
 **Last updated:** 2026-05-14
-**Applies to:** All foundation processes, rules, skills, and agent behavior
+**Applies to:** All gentle-vanguard processes, rules, skills, and agent behavior
 
 ---
 
@@ -29,14 +29,14 @@ This project uses Kaizen (改善) — continuous improvement through small, incr
 ```
 
 ### 2.2 Weekly Cycle (Audit-Driven)
-Triggered by `foundation-audit-skill` / `audit-sweep.ps1`:
+Triggered by `gentle-vanguard-audit-skill` / `audit-sweep.ps1`:
 1. Run full audit sweep
 2. Categorize findings (critical/high/medium/low)
 3. Assign improvement items to upcoming sessions
 4. Track in `.local/improvement-proposals/`
 
 ### 2.3 Monthly Cycle (Judgment Day)
-Triggered by `foundation judgment-day`:
+Triggered by `gv judgment-day`:
 1. Adversarial review of the entire stack
 2. Identify systemic patterns (not one-off bugs)
 3. Propose structural improvements
@@ -127,10 +127,11 @@ When looking for improvements, check these areas in order:
 | Adaptive Rules | `rules/adaptive/LEARNED-NORMS.md` |
 | Development Standards | `rules/DEVELOPMENT-STANDARDS.md` |
 | Code Review Standards | `rules/CODE-REVIEW-STANDARDS.md` |
-| Audit Skill | `skills/foundation-audit-skill/` |
+| Audit Skill | `skills/gentle-vanguard-audit-skill/` |
 | Improvement Proposals | `.local/improvement-proposals/` |
 | Judgment Day | `scripts/utilities/judgment-day-orchestrator.ps1` |
 
 ---
 
 _Version: 1.0.0 — 2026-05-14 — Status: ACTIVE_
+

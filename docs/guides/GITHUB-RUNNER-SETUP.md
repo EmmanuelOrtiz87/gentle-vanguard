@@ -35,7 +35,7 @@ on a public repository. Keep those jobs on GitHub-hosted infrastructure.
 ### Option 2: Install during bootstrap
 
 ```powershell
-.\scripts\foundation\bootstrap.ps1 -InstallGitHubRunner -GitHubRunnerConfigPath .\config\github-runner.local.json
+.\scripts\gentle-vanguard\bootstrap.ps1 -InstallGitHubRunner -GitHubRunnerConfigPath .\config\github-runner.local.json
 ```
 
 ## Registration Token
@@ -51,12 +51,12 @@ You need one of these:
 2. Keep the example file generic and secret-free.
 3. Use the same script on every machine; only the local config changes.
 
-## foundation-public Alignment
+## gentle-vanguard-public Alignment
 
 The public sync bundle includes:
 
-1. `scripts/foundation/bootstrap.ps1`
-2. `scripts/foundation/bootstrap-machine.ps1`
+1. `scripts/gentle-vanguard/bootstrap.ps1`
+2. `scripts/gentle-vanguard/bootstrap-machine.ps1`
 3. `scripts/utilities/DEPLOYMENT/install-github-runner.ps1`
 4. `config/workspace.example.json`
 5. `config/workspace.portable.example.json`
@@ -68,3 +68,4 @@ That keeps the public repository bootstrappable on a new machine without exposin
 
 With the repository public, GitHub-hosted workflows can keep running without the private-minutes
 problem. The self-hosted runner becomes an optional performance and control upgrade, not a blocker.
+

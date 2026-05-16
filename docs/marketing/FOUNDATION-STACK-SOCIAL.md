@@ -1,4 +1,4 @@
-# 🏛️ Foundation - AI Development Workspace
+# 🏛️ Gentle-Vanguard - AI Development Workspace
 
 <p align="center">
   <b>🌐 El stack de desarrollo AI-first para equipos modernos</b>
@@ -12,14 +12,14 @@
 
 ---
 
-## 🤔 ¿Qué es Foundation?
+## 🤔 ¿Qué es Gentle-Vanguard?
 
-**Foundation** es un workspace agnóstico que potencia tu desarrollo con AI assistants como
+**Gentle-Vanguard** es un workspace agnóstico que potencia tu desarrollo con AI assistants como
 **OpenCode, Claude, Cursor y otros**.
 
 ```
 
-          🏛️ FOUNDATION v2.8.0
+          🏛️ GENTLE_VANGUARD v2.8.0
           AI Development Workspace
 
           🎯 SESSION MANAGER  🚀 AUTO-DELEGATION
@@ -55,7 +55,7 @@
 
    📚 BDD     📐 SDD    💻 Code    🧪 Tests
 
-          🏛️ FOUNDATION SKILLS
+          🏛️ GENTLE_VANGUARD SKILLS
     📈 reporting-skill
     🎮 session-workflow-skill
     🧠 context-engineering-skill
@@ -104,7 +104,7 @@
 "génerame un informe de sesiones de ayer"
 
 # 3️⃣ Obtener reporte
-.\scripts\utilities\wf-report.ps1 -Type executive
+.\scripts\utilities\gv-report.ps1 -Type executive
 ```
 
 ---
@@ -113,14 +113,14 @@
 
 | Plataforma    | Enlace                                       |
 | ------------- | -------------------------------------------- |
-| **🐙 GitHub** | github.com/EmmanuelOrtiz87/foundation-public |
-| **📚 Docs**   | docs.foundation.local                        |
+| **🐙 GitHub** | github.com/EmmanuelOrtiz87/gentle-vanguard-public |
+| **📚 Docs**   | docs.gentle-vanguard.local                        |
 
 ---
 
 ## #️⃣ Hashtags
 
-`#FoundationStack` `#AIDevelopment` `#DevTools` `#OpenCode` `#Productivity`
+`#Gentle-VanguardStack` `#AIDevelopment` `#DevTools` `#OpenCode` `#Productivity`
 
 ---
 
@@ -128,3 +128,4 @@
   <i>* Built for AI-first development teams*</i><br>
   <i>* Open source • Continuous improvement*</i>
 </p>
+

@@ -414,7 +414,7 @@ switch ($Action.ToLower()) {
     }
     'version' {
         Write-Host "AI-Review v1.0.0 (-native)"
-        Write-Host "Foundation-native implementation"
+        Write-Host "Gentle-Vanguard-native implementation"
     }
     'init' {
         $defaultConfig = @{
@@ -572,3 +572,4 @@ switch ($Action.ToLower()) {
 }
 
 exit 0
+

@@ -8,7 +8,7 @@ Last updated: 2026-05-11
 
 ## 1. PROPOSITO
 
-Define los estandares de diseno de API para el stack Foundation. Aplica a todas las APIs REST, GraphQL, y WebSocket desarrolladas o consumidas por el framework.
+Define los estandares de diseno de API para el stack Gentle-Vanguard. Aplica a todas las APIs REST, GraphQL, y WebSocket desarrolladas o consumidas por el framework.
 
 ---
 
@@ -197,3 +197,4 @@ Define los estandares de diseno de API para el stack Foundation. Aplica a todas 
 ---
 
 _Version: 1.0.0 - 2026-05-11 - Status: ACTIVE_
+

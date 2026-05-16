@@ -8,7 +8,7 @@ Last updated: 2026-05-11
 
 ## 1. PROPOSITO
 
-Define los estándares de accesibilidad web para todo frontend generado en el stack Foundation. Aplica a componentes UI, dashboards, landing pages, artifacts, y cualquier interfaz web producida por agentes. Toda implementacion debe cumplir WCAG 2.2 Level AA como minimo.
+Define los estándares de accesibilidad web para todo frontend generado en el stack Gentle-Vanguard. Aplica a componentes UI, dashboards, landing pages, artifacts, y cualquier interfaz web producida por agentes. Toda implementacion debe cumplir WCAG 2.2 Level AA como minimo.
 
 ---
 
@@ -203,3 +203,4 @@ TODO implementacion DEBE verificar:
 ---
 
 _Version: 1.0.0 — 2026-05-11 — Status: ACTIVE_
+

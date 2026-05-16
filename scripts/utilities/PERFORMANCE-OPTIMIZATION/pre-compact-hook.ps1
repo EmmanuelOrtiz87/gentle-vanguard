@@ -3,7 +3,7 @@
 # Hook point for memory tiering and prefix anchoring
 
 param(
-    [string]$ProjectName = 'workspace_local',
+    [string]$ProjectName = 'workspace_gentle_vanguard',
     [string]$SessionId = '',
     [double]$CompressionRatio = 0.90,
     [int]$TriggerThreshold = 15000

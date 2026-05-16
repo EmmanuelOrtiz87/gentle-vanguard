@@ -1,5 +1,5 @@
 # Fix Spanish accents in all markdown files
-$basePath = ".\foundation"
+$basePath = ".\gentle-vanguard"
 $totalFixed = 0
 
 Get-ChildItem -Path $basePath -Filter *.md -Recurse | ForEach-Object {
@@ -31,3 +31,4 @@ Get-ChildItem -Path $basePath -Filter *.md -Recurse | ForEach-Object {
 }
 
 Write-Host "Total files fixed: $totalFixed"
+

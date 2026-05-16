@@ -1,8 +1,8 @@
-﻿# ðŸ“Š Informe Ejecutivo - Resumen de Actividad
+# ðŸ“Š Informe Ejecutivo - Resumen de Actividad
 
 **PerÃ­odo**: Ãšltimos 7 dÃ­as  
 **Fecha de generaciÃ³n**: 2026-04-26 01:17  
-**Proyecto**: workspace_local
+**Proyecto**: workspace_gentle_vanguard
 
 ---
 
@@ -90,3 +90,4 @@
 
 _Informe generado automÃ¡ticamente_  
 _Formato: Markdown (.md)_
+

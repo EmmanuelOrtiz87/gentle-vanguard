@@ -103,7 +103,7 @@
 ### 风格 6 — Claude 官方风格
 ```text
 画一张 style 6（Claude Official）的 system architecture 图。
-使用左侧 layer label：Interface Layer、Core Layer、Foundation Layer。
+使用左侧 layer label：Interface Layer、Core Layer、Gentle-Vanguard Layer。
 包含 Client Surface、Gateway、Task Planner、Model Runtime、Policy Guardrails、Memory Store、Tool Runtime、Observability、Registry。
 使用温暖奶油色背景、克制的品牌感配色、足够留白，并在右下角放 legend。
 ```
@@ -512,3 +512,4 @@ fireworks-tech-graph/
 ## License
 
 MIT © 2025 fireworks-tech-graph contributors
+

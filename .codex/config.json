@@ -1,5 +1,5 @@
 {
-  "name": "Codex - Foundation Workspace",
+  "name": "Codex - Gentle-Vanguard Workspace",
   "version": "1.1.0",
   "description": "Local-first policy for Codex CLI/IDE with reliability and safety controls",
   "aiSettings": {
@@ -55,3 +55,4 @@
   "language": { "default": "es", "technicalTerms": "en" },
   "rules": ["docs/AGENTS.md", "rules/AI-NORMATIVES.md", "rules/DEVELOPMENT-STANDARDS.md", "rules/NORMATIVAS-CODIGO.md", "rules/NORMATIVAS-ERROR-HANDLING.md", "docs/guides/OPENCODE-OPTIMIZATION-GUIDE.md"]
 }
+

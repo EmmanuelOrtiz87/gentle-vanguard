@@ -1,8 +1,8 @@
-# Functional Document: Foundation
+# Functional Document: Gentle-Vanguard
 
-## What is Foundation?
+## What is Gentle-Vanguard?
 
-Foundation is an agnostic development infrastructure platform designed to standardize,
+Gentle-Vanguard is an agnostic development infrastructure platform designed to standardize,
 automate, and enhance the software lifecycle through native Artificial Intelligence integration and
 robust quality protocols.
 
@@ -28,7 +28,7 @@ robust quality protocols.
 
 ## Impact on Development Process
 
-Foundation transforms a manual, error-prone process into an automated "software factory":
+Gentle-Vanguard transforms a manual, error-prone process into an automated "software factory":
 
 1. **Start:** Developer runs `bootstrap` and gets all tools.
 2. **Development:** AI agent has access to native workspace skills to guide the developer.
@@ -36,7 +36,7 @@ Foundation transforms a manual, error-prone process into an automated "software 
 
 ## Disadvantages / Challenges
 
-- **Initial Learning Curve:** Developers must adapt to using the foundation scripts.
+- **Initial Learning Curve:** Developers must adapt to using the gentle-vanguard scripts.
 - **Tools Maintenance:** Requires keeping base repositories (Engram and native policies) up to date.
 
 ## Impact on Production Release
@@ -44,3 +44,4 @@ Foundation transforms a manual, error-prone process into an automated "software 
 By ensuring that code leaving the developer's machine is already compiled, validated by linters, and
 documented, the failure rate in CI/CD pipelines is drastically reduced, accelerating
 _Time-to-Market_.
+

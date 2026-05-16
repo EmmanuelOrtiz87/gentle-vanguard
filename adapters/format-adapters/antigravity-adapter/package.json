@@ -1,7 +1,7 @@
 {
   "name": "antigravity-adapter",
   "version": "1.0.0",
-  "description": "Converts Foundation skills to Antigravity Mission Control format",
+  "description": "Converts Gentle-Vanguard skills to Antigravity Mission Control format",
   "main": "adapter.js",
   "scripts": {
     "test": "node test.js",
@@ -10,7 +10,7 @@
     "generate-mission": "node adapter.js generate-mission"
   },
   "keywords": [
-    "foundation",
+    "gentle-vanguard",
     "antigravity",
     "mission-control",
     "adapter",
@@ -20,7 +20,7 @@
     "fs": "built-in",
     "path": "built-in"
   },
-  "foundation": {
+  "gentle-vanguard": {
     "adapterType": "format-adapter",
     "targetTool": "antigravity",
     "targetFormat": "mission-control",
@@ -30,3 +30,4 @@
     ]
   }
 }
+

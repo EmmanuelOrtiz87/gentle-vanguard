@@ -56,7 +56,7 @@ function Invoke-Engram {
 $endSessionScript = Join-Path $scriptDir '..\SESSION-MANAGEMENT\end-session.ps1'
 $validateScript = Join-Path $repoRoot 'scripts\diagnostics\validate-script-governance.ps1'
 
-# 1. Generate standard delivery closure artifact via wf.ps1
+# 1. Generate standard delivery closure artifact via gv.ps1
 Write-Step "Stage 1: Operational Closure"
 if (Test-Path $endSessionScript) {
     & $endSessionScript -SkipAudit:$SkipValidation -Force:(-not $SkipEngram)
@@ -238,7 +238,7 @@ $report = @"
 
 1. Session will resume with preserved Engram context.
 2. All learnings from today are available for continuation.
-3. Run \`gf health\` to verify tools are active.
+3. Run \`gv health\` to verify tools are active.
 
 ---
 
@@ -262,8 +262,10 @@ if (-not $Quiet) {
     Write-Host "To resume tomorrow:" -ForegroundColor Cyan
     Write-Host "   Tools auto-activate on project entry" -ForegroundColor Gray
     Write-Host "   Engram loads prior session context" -ForegroundColor Gray
-    Write-Host "   Run 'gf status' to see where you left off" -ForegroundColor Gray
+    Write-Host "   Run 'gv status' to see where you left off" -ForegroundColor Gray
     Write-Host ""
 }
 
 exit 0
+
+

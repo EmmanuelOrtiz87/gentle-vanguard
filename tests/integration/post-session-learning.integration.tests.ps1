@@ -5,7 +5,7 @@ Describe 'Post-Session Learning Integration Tests' {
         $script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
         $script:postSessionLearning = Join-Path $script:root 'scripts\utilities\post-session-learning.ps1'
         $script:tempRoot = Join-Path $script:root 'tmp-post-session-learning-tests'
-        $script:originalFoundationBaseDir = $env:FOUNDATION_BASE_DIR
+        $script:originalGentle-VanguardBaseDir = $env:GENTLE_VANGUARD_BASE_DIR
     }
 
     BeforeEach {
@@ -16,10 +16,10 @@ Describe 'Post-Session Learning Integration Tests' {
     }
 
     AfterEach {
-        if ($null -eq $script:originalFoundationBaseDir) {
-            Remove-Item Env:FOUNDATION_BASE_DIR -ErrorAction SilentlyContinue
+        if ($null -eq $script:originalGentle-VanguardBaseDir) {
+            Remove-Item Env:GENTLE_VANGUARD_BASE_DIR -ErrorAction SilentlyContinue
         } else {
-            $env:FOUNDATION_BASE_DIR = $script:originalFoundationBaseDir
+            $env:GENTLE_VANGUARD_BASE_DIR = $script:originalGentle-VanguardBaseDir
         }
 
         if (Test-Path $script:tempRoot) {
@@ -74,7 +74,7 @@ Describe 'Post-Session Learning Integration Tests' {
             New-Item -ItemType Directory -Path (Join-Path $workspace.BusinessDir 'sales') -Force | Out-Null
             '{"id":"pending-001","applied":false}' | Set-Content -Path $pendingProposalPath -Encoding UTF8
 
-            $env:FOUNDATION_BASE_DIR = $script:tempRoot
+            $env:GENTLE_VANGUARD_BASE_DIR = $script:tempRoot
             $null = & $script:postSessionLearning -SessionId 'isolated-learning-proposals' -AutoApplyLow -NoExit 2>&1
 
             $proposalFiles = @(Get-ChildItem -Path $workspace.ProposalDir -Filter 'prop-*.json' -ErrorAction SilentlyContinue)
@@ -112,8 +112,8 @@ Describe 'Post-Session Learning Integration Tests' {
             Push-Location $script:tempRoot
             try {
                 git init | Out-Null
-                git config user.email 'tests@foundation.local'
-                git config user.name 'Foundation Tests'
+                git config user.email 'tests@gentle-vanguard.local'
+                git config user.name 'Gentle-Vanguard Tests'
                 'seed' | Set-Content -Path (Join-Path $script:tempRoot 'seed.txt') -Encoding UTF8
                 git add . | Out-Null
                 $env:GIT_AUTHOR_DATE = '2000-01-01T00:00:00Z'
@@ -126,7 +126,7 @@ Describe 'Post-Session Learning Integration Tests' {
                 Pop-Location
             }
 
-            $env:FOUNDATION_BASE_DIR = $script:tempRoot
+            $env:GENTLE_VANGUARD_BASE_DIR = $script:tempRoot
             $null = & $script:postSessionLearning -SessionId 'isolated-learning-no-commits' -NoExit 2>&1
 
             $logPath = Join-Path $workspace.ProposalDir 'learning-log.jsonl'

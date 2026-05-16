@@ -75,7 +75,7 @@ $engramCmd = Get-Command engram -ErrorAction SilentlyContinue
 if ($engramCmd) {
     Write-Ok "Engram available: $(& $engramCmd version | Select-Object -First 1)"
 } else {
-    Write-Warn "Engram not found. If you plan to show Segment 4, run: ./scripts/utilities/wf.ps1 install-engram"
+    Write-Warn "Engram not found. If you plan to show Segment 4, run: ./scripts/utilities/gv.ps1 install-engram"
     Write-Info "Demo is runnable without Engram - just skip Segment 4"
 }
 
@@ -111,3 +111,4 @@ Write-Info "Ready to run the demo. Next steps:"
 Write-Info "  1. Run ./scripts/utilities/orchestrator-next-steps.ps1"
 Write-Info "  2. Run ./scripts/utilities/orchestrator-status.ps1"
 Write-Info "  3. Follow recipe in ./demos/07-mixed-cookbook-real-request/DEMO.md"
+

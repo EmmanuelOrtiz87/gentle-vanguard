@@ -13,7 +13,7 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 | DEV - Code | 20 |
 | DOC - Documentation | 3 |
 | FINANCE - Finance | 1 |
-| GOV - Governance | 8 |
+| GOV - Governance | 6 |
 | HR - Talent | 1 |
 | LEGAL - Legal | 1 |
 | MKT - Marketing | 4 |
@@ -23,7 +23,7 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 | SAD - Design | 6 |
 | SALES - Sales | 2 |
 | SESSION - Session | 1 |
-| *(unassigned)* | 57 |
+| *(unassigned)* | 59 |
 
 ## Skill-Agent Mapping
 
@@ -55,6 +55,8 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 | (unassigned) | docs-alignment-skill | "docs", "documentation", "update docs", "doc sync" |
 | (unassigned) | firecrawl-web-skill | "web scrape", "extract data", "crawl website", "markdown", "screenshot", "web... |
 | (unassigned) | fireworks-tech-graph | Use when the user wants to create any technical diagram - architecture, data ... |
+| (unassigned) | foundation-audit-skill | 'audit gentle-vanguard', 'validate docs', 'sweep project', 'check links', 'fi... |
+| (unassigned) | foundation-manager-skill | 'update gentle-vanguard', 'check updates', 'sync skills', 'install tools', 'm... |
 | (unassigned) | frontend-engineer | "frontend", "React component", "UI implementation", "responsive", "state mana... |
 | (unassigned) | game-designer | "game design", "game mechanics", "balance", "player experience", "level desig... |
 | (unassigned) | github-pr-skill | When creating PRs, writing PR descriptions, or using gh CLI for pull requests |
@@ -117,8 +119,6 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 | DOC - Documentation | reporting-skill | "informe", "report", "reporte", "mtricas", "metrics", "dashboard", "gerencia"... |
 | FINANCE - Finance | finance-financial-analyst | "financial model", "forecast", "scenario analysis", "variance", "budget", "ca... |
 | GOV - Governance | comment-writer | PR feedback, issue replies, reviews, Slack messages, or GitHub comments |
-| GOV - Governance | foundation-audit-skill | 'audit foundation', 'validate docs', 'sweep project', 'check links', 'find du... |
-| GOV - Governance | foundation-manager-skill | 'update foundation', 'check updates', 'sync skills', 'install tools', 'mainte... |
 | GOV - Governance | gitflow-orchestrator-skill | gitflow, git, branch, workflow, git hooks |
 | GOV - Governance | judgment-day | "judgment day", "judgment-day", "dual review", "juzgar" |
 | GOV - Governance | project-orchestrator-skill | session start, project setup, orchestration, repository governance, iniciar s... |
@@ -211,8 +211,8 @@ Delegators copy matching blocks into sub-agent prompts under Project Standards (
 
 #### daily-workflow
 
-- Check public repo sync: `cd foundation-public && git pull`
-- Check stack health: `foundation verify`
+- Check public repo sync: `cd gentle-vanguard-public && git pull`
+- Check stack health: `gv verify`
 - Review audits: Check `docs/audits/` for recent reports
 - Sync public repo: Ensure installer and docs are current
 - Context efficiency: Monitor prompt chars and adoption rate
@@ -315,15 +315,6 @@ Delegators copy matching blocks into sub-agent prompts under Project Standards (
 
 - No compact rules extracted
 
-#### foundation-audit-skill
-
-- Never modify files during audit — only report issues
-
-#### foundation-manager-skill
-
-- Never auto-update without logging all changes to `.runtime/skill-updates.log`
-- Respect user auto-update preferences in `config/orchestrator.json`
-
 #### gitflow-orchestrator-skill
 
 - No compact rules extracted
@@ -343,7 +334,7 @@ Delegators copy matching blocks into sub-agent prompts under Project Standards (
 - MUST execute pre-process-input.ps1 BEFORE every user response
 - MUST load triggered skill before any other action
 - MUST use Engram for durable memory (not session-only state)
-- MUST run `wf.ps1 ide-status` -> `wf.ps1 health` -> `wf.ps1 start-session` on session start
+- MUST run `gv.ps1 ide-status` -> `gv.ps1 health` -> `gv.ps1 start-session` on session start
 - MUST validate spec before PR merge
 - MUST generate audit document before push
 - MUST NOT modify repository structure without explicit user approval
@@ -723,6 +714,15 @@ Delegators copy matching blocks into sub-agent prompts under Project Standards (
 - Report: the generated file paths
 - (Optional) Visual self-review: — if your runtime can read images, load the exported PNG back and inspect it. Syntactic validity does not guarantee visual correctness: arrows may cross through component interiors, labels may collide with lifelines or other labels, boxes may overlap, alt-frame text may sit on top of a message, or a legend may cover content. If you see any of these, revise the SVG and re-export; repeat until the rendered image is clean. Common fixes:
 
+#### foundation-audit-skill
+
+- Never modify files during audit — only report issues
+
+#### foundation-manager-skill
+
+- Never auto-update without logging all changes to `.runtime/skill-updates.log`
+- Respect user auto-update preferences in `config/orchestrator.json`
+
 #### frontend-engineer
 
 - Use semantic HTML (button not div onclick)
@@ -768,7 +768,7 @@ Delegators copy matching blocks into sub-agent prompts under Project Standards (
 #### karpathy-guidelines
 
 - Check: Is code minimal? Are changes surgical? Are goals defined?
-- Uses Foundation's failure-learning-system to improve over time
+- Uses Gentle-Vanguard's failure-learning-system to improve over time
 
 #### mobile-app-debugging
 
@@ -878,15 +878,15 @@ Delegators copy matching blocks into sub-agent prompts under Project Standards (
 
 | File | Path |
 |------|------|
-| docs/AGENTS.md | C:\Workspace_local\foundation\docs\AGENTS.md |
-| CLAUDE.md | C:\Workspace_local\foundation\CLAUDE.md |
-| .cursorrules | C:\Workspace_local\foundation\.cursorrules |
-| config/orchestrator.json | C:\Workspace_local\foundation\config\orchestrator.json |
-| config/auto-delegation.json | C:\Workspace_local\foundation\config\auto-delegation.json |
-| config/model-routing.json | C:\Workspace_local\foundation\config\model-routing.json |
-| rules/DELEGATION-RULES.md | C:\Workspace_local\foundation\rules\DELEGATION-RULES.md |
-| rules/DEVELOPMENT-STANDARDS.md | C:\Workspace_local\foundation\rules\DEVELOPMENT-STANDARDS.md |
-| openspec/config.yaml | C:\Workspace_local\foundation\openspec\config.yaml |
+| docs/AGENTS.md | C:\Workspace_local\gentle-vanguard\docs\AGENTS.md |
+| CLAUDE.md | C:\Workspace_local\gentle-vanguard\CLAUDE.md |
+| .cursorrules | C:\Workspace_local\gentle-vanguard\.cursorrules |
+| config/orchestrator.json | C:\Workspace_local\gentle-vanguard\config\orchestrator.json |
+| config/auto-delegation.json | C:\Workspace_local\gentle-vanguard\config\auto-delegation.json |
+| config/model-routing.json | C:\Workspace_local\gentle-vanguard\config\model-routing.json |
+| rules/DELEGATION-RULES.md | C:\Workspace_local\gentle-vanguard\rules\DELEGATION-RULES.md |
+| rules/DEVELOPMENT-STANDARDS.md | C:\Workspace_local\gentle-vanguard\rules\DEVELOPMENT-STANDARDS.md |
+| openspec/config.yaml | C:\Workspace_local\gentle-vanguard\openspec\config.yaml |
 
 ---
 *Auto-generated by build-skill-registry.ps1*

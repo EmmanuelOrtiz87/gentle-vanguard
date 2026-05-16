@@ -2,7 +2,7 @@
 
 **Version:** 1.0.0
 **Last updated:** 2026-05-14
-**Applies to:** All foundation infrastructure, CI/CD, AI agents, and production systems
+**Applies to:** All gentle-vanguard infrastructure, CI/CD, AI agents, and production systems
 
 ---
 
@@ -27,7 +27,7 @@ Detect → Triage → Contain → Resolve → Verify → Document → Review
 Sources:
 - Automated alerts (GitHub Actions failures, quality gate failures)
 - Agent self-verification failures (`agent-verify.ps1`)
-- Watchtower health checks (`foundation watchtower`)
+- Watchtower health checks (`gv watchtower`)
 - Token budget exceeded (`token-guard.ps1`)
 - User reports
 - Secret leak detection (Gitleaks, Trufflehog)
@@ -57,7 +57,7 @@ Sources:
 1. Fix verified in staging/CI
 2. All quality gates pass
 3. No regressions detected
-4. `foundation verify` returns clean
+4. `gv verify` returns clean
 
 ### 2.6 Document
 Record in the incident tracking issue:
@@ -183,3 +183,4 @@ ETA: {estimated resolution}
 ---
 
 _Version: 1.0.0 — 2026-05-14 — Status: ACTIVE_
+

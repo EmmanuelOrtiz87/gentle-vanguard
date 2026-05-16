@@ -1,17 +1,17 @@
-# Foundation Scripts
+# Gentle-Vanguard Scripts
 
-Scripts for installing and maintaining the foundation.
+Scripts for installing and maintaining the gentle-vanguard.
 
 ## Scripts
 
 | Script                    | Description                                                  |
 | ------------------------- | ------------------------------------------------------------ |
-| `setup.sh`                | Cross-platform foundation setup entrypoint (Linux/macOS/WSL) |
-| `bootstrap-machine.ps1`   | Install foundation globally on machine                       |
+| `setup.sh`                | Cross-platform gentle-vanguard setup entrypoint (Linux/macOS/WSL) |
+| `bootstrap-machine.ps1`   | Install gentle-vanguard globally on machine                       |
 | `bootstrap-workspace.ps1` | Bootstrap workspace with skills and tools                    |
 | `bootstrap.ps1`           | Main bootstrap script                                        |
 | `sync-skills.ps1`         | Sync skills from source to global                            |
-| `wf.ps1`                  | Main CLI entry point (alias: gf)                             |
+| `gv.ps1`                  | Main CLI entry point (alias: gv)                             |
 | `export-profile.ps1`      | Export user profile (engram, opencode, binarios, master.key) to ZIP for PC migration |
 | `import-profile.ps1`      | Import user profile from ZIP on a new PC                    |
 | `setup-multi-machine.ps1` | Clone and bootstrap repos on a new PC                        |
@@ -33,10 +33,10 @@ See [PC Migration Guide](../../docs/guides/PC-MIGRATION.md) for the complete ste
 **Quick start:**
 ```powershell
 # Export (current PC)
-.\scripts\foundation\export-profile.ps1 -ExternalDisk D
+.\scripts\gentle-vanguard\export-profile.ps1 -ExternalDisk D
 
 # Import (new PC)
-.\scripts\foundation\import-profile.ps1 -ExternalDisk D
+.\scripts\gentle-vanguard\import-profile.ps1 -ExternalDisk D
 
 # Verify tools
 .\scripts\utilities\verify-tools.ps1
@@ -48,7 +48,7 @@ See [PC Migration Guide](../../docs/guides/PC-MIGRATION.md) for the complete ste
 ## Usage
 
 ```powershell
-# Install foundation globally (~/.gentleman/)
+# Install gentle-vanguard globally (~/.gentleman/)
 .\bootstrap-machine.ps1
 
 # Sync skills to global installation
@@ -57,3 +57,5 @@ See [PC Migration Guide](../../docs/guides/PC-MIGRATION.md) for the complete ste
 # Update everything
 .\scripts\validation\update-all.ps1
 ```
+
+

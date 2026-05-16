@@ -458,7 +458,8 @@ switch ($Action) {
     'sync' { 
         Invoke-SkillsMap
         Write-Host ""
-        Write-InfoLine "Use 'wf skills sync' to update agent-router.ps1 with auto-detected mapping"
+        Write-InfoLine "Use 'gv skills sync' to update agent-router.ps1 with auto-detected mapping"
     }
     'sync-delegation' { Invoke-SkillsSyncDelegation }
 }
+

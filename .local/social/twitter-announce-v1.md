@@ -1,6 +1,6 @@
 # Twitter/X - Announcement
 
-FoundatIon v2.0 is here. 
+Gentle-Vanguard v2.0 is here. 
 
 AI Development Stack with:
 - Auto-delegation
@@ -12,4 +12,5 @@ PowerShell-based. Agnostic.
 
 Link in thread
 
-#FoundationStack #DevTools #AI
+#Gentle-VanguardStack #DevTools #AI
+

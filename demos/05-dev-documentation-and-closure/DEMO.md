@@ -39,7 +39,7 @@ through metrics consolidation to dashboard refresh.
 
 ```powershell
 # End the current session and generate closure artifacts
-./scripts/utilities/wf.ps1 end-session demo-task-tracker
+./scripts/utilities/gv.ps1 end-session demo-task-tracker
 # Expected:
 # [SESSION] Closing demo-task-tracker
 # [ENGRAM] Saving session summary to persistent memory
@@ -154,7 +154,7 @@ Get-Content .metrics/dashboard-data.json | ConvertFrom-Json | ConvertTo-Json
 
 ```powershell
 # Generate the dashboard HTML (now includes consolidated metrics)
-./scripts/utilities/wf.ps1 dashboard
+./scripts/utilities/gv.ps1 dashboard
 # → Regenerates reports/dashboard.html
 # → Opens in browser
 
@@ -188,7 +188,7 @@ Get-Content .metrics/dashboard-data.json | ConvertFrom-Json | ConvertTo-Json
 #   - Review/Audit artifact references
 
 # Check documentation consistency
-./scripts/utilities/wf.ps1 verify
+./scripts/utilities/gv.ps1 verify
 # Expected: 14/14 PASS including doc quality checks
 # Look for: documentation-coherence, artifact-completeness
 ```
@@ -203,3 +203,4 @@ Get-Content .metrics/dashboard-data.json | ConvertFrom-Json | ConvertTo-Json
 4. Token budget utilization is visible and actionable
 5. PR-ready output includes all quality and governance evidence
 6. Day-end closure produces a single source of truth for management reporting
+

@@ -7,8 +7,8 @@ param(
     [string]$AgentType,
     [string[]]$AgentTypes,
     [string]$Behavior = "balanced",
-    [string]$SessionId = "manual-save-workspace_local",
-    [string]$Project = "workspace_local",
+    [string]$SessionId = "manual-save-workspace_gentle_vanguard",
+    [string]$Project = "workspace_gentle_vanguard",
     [int]$TimeoutSeconds = 300,
     [switch]$UseTieredRouting,
     [switch]$EnableConcurrency,
@@ -22,8 +22,8 @@ param(
 $ErrorActionPreference = "Stop"
 
 #region RepoRoot Resolution
-if ($env:FOUNDATION_BASE_DIR) {
-    $repoRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GENTLE_VANGUARD_BASE_DIR) {
+    $repoRoot = $env:GENTLE_VANGUARD_BASE_DIR
 } else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -817,3 +817,4 @@ else {
     Write-Host "Usage: .\auto-delegate-orchestrator.ps1 -TaskDescription 'your task' [-AgentType BA|SAD|DEV|QA|OPS|GOV|DOC] [-AgentTypes BA,DEV,QA] [-Behavior balanced|fast|precise|exploratory|creative|strict] [-Verbose] [-DryRun]"
 }
 #endregion
+

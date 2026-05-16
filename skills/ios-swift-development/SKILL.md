@@ -32,7 +32,7 @@ Combine, and async/await patterns.
 Minimal working example:
 
 ```swift
-import Foundation
+import Gentle-Vanguard
 import Combine
 
 struct User: Codable, Identifiable {
@@ -88,3 +88,4 @@ class UserViewModel: ObservableObject {
 - Ignore accessibility
 - Deploy untested code
 - Use hardcoded API URLs
+

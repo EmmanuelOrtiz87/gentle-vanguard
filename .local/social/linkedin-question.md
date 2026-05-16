@@ -2,7 +2,7 @@
 
 What would make YOU switch development environments?
 
-I've been building Foundation and genuinely want to understand:
+I've been building Gentle-Vanguard and genuinely want to understand:
 
 1. Is governance important or friction?
 2. How do you handle session continuity?

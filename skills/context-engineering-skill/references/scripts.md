@@ -7,16 +7,16 @@
 
 | Param        | Type   | Default                  | Description                    |
 | ------------ | ------ | ------------------------ | ------------------------------ |
-| `-Objective` | string | "Foundation maintenance" | One-sentence goal (<100 chars) |
+| `-Objective` | string | "Gentle-Vanguard maintenance" | One-sentence goal (<100 chars) |
 
 **Usage**:
 
 ```powershell
 # With objective
-.\wf.ps1 compact-start "fix ci noise in build pipeline"
+.\gv.ps1 compact-start "fix ci noise in build pipeline"
 
 # Direct script call
-.\scripts\utilities\wf.ps1 compact-start "refactor auth middleware"
+.\scripts\utilities\gv.ps1 compact-start "refactor auth middleware"
 ```
 
 **Output**: Structured prompt <8000 chars with git diff, commits, branch, objective.
@@ -38,7 +38,7 @@
 **Usage**:
 
 ```powershell
-.\wf.ps1 context-pack "implementing search feature"
+.\gv.ps1 context-pack "implementing search feature"
 ```
 
 **Output**: Snapshot file <15000 chars.
@@ -53,7 +53,7 @@
 **Usage**:
 
 ```powershell
-.\wf.ps1 context-metrics
+.\gv.ps1 context-metrics
 ```
 
 **Stored in**: `docs/sessions/metrics/context-usage.csv`
@@ -72,7 +72,8 @@
 ## compact-marker (`.session/.compact-marker`)
 
 **Description**: Runtime flag to prevent duplicate compact-start within 60 min.  
-**Written by**: `wf.ps1 compact-start` handler.  
+**Written by**: `gv.ps1 compact-start` handler.  
 **Checked by**: `start-session.ps1` and `Invoke-ContextEfficiencyLiveAssist`.  
 **TTL**: 60 minutes.  
 **Git**: Ignored via `.gitignore` (`.session/` directory).
+

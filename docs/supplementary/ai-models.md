@@ -13,7 +13,7 @@ workflows.
 
 ## Required or Optional
 
-- The foundation does not require a local base model to be installed.
+- The gentle-vanguard does not require a local base model to be installed.
 - A model is only required when a specific project, agent workflow, or automation flow depends on
   it.
 - When a model is required, prefer the simplest supported path for the target machine.
@@ -100,3 +100,4 @@ fields:
 5. `ai-model-notes`
 
 If the project does not use AI assistance, set `ai-model-mode` to `none` and leave the rest blank.
+

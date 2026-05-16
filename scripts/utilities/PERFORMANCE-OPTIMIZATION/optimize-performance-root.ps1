@@ -25,7 +25,7 @@
     .\optimize-performance.ps1 -MaxThreads 16 -CacheEnabled -EnableIOOptimization
 
 .NOTES
-    Author: Gentleman Foundation Team
+    Author: Gentle-Vanguard Team
     Version: 1.0.0
     Last Updated: 2026-04-22
 #>

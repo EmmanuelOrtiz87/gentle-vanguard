@@ -167,8 +167,8 @@ At session end:
 
 Regular status checks via:
 
-- `wf.ps1 status`: Show current efficiency rating
-- `wf.ps1 diagnose`: Detailed efficiency analysis
+- `gv.ps1 status`: Show current efficiency rating
+- `gv.ps1 diagnose`: Detailed efficiency analysis
 - `engram mem_search "efficiency"`: Find related optimizations
 
 ### 8.2 Alerting
@@ -202,3 +202,4 @@ System alerts when:
 - Reference related Engram entries
 - Keep comments concise but meaningful
 - Remove obsolete or redundant code/comments
+

@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Message Queue adapter for the Gentleman Foundation event bus.
+    Message Queue adapter for the Gentle-Vanguard event bus.
 
 .DESCRIPTION
     Provides a real MQ backend for team environments. Supports three adapters:
@@ -13,7 +13,7 @@
     Configuration (config/mq-config.json):
     {
       "adapter": "redis",           // "file" | "redis" | "webhook"
-      "redis": { "host": "127.0.0.1", "port": 6379, "channel": "gf-events" },
+      "redis": { "host": "127.0.0.1", "port": 6379, "channel": "gv-events" },
       "webhook": { "url": "https://team-relay.example.com/events", "secret_env": "GF_WEBHOOK_SECRET" }
     }
 
@@ -24,13 +24,13 @@
     test     - Test connectivity to the configured backend
 
 .PARAMETER Channel
-    Channel/topic name. Default: 'gf-events'
+    Channel/topic name. Default: 'gv-events'
 
 .PARAMETER Payload
     JSON payload string to publish.
 
 .EXAMPLE
-    .\mq-adapter.ps1 -Action publish -Channel gf-events -Payload '{"event":"workflow.checkpoint"}'
+    .\mq-adapter.ps1 -Action publish -Channel gv-events -Payload '{"event":"workflow.checkpoint"}'
     .\mq-adapter.ps1 -Action status
     .\mq-adapter.ps1 -Action test
 #>
@@ -39,7 +39,7 @@ param(
     [ValidateSet('publish', 'consume', 'status', 'test')]
     [string]$Action = 'status',
 
-    [string]$Channel  = 'gf-events',
+    [string]$Channel  = 'gv-events',
     [string]$Payload  = '',
     [int]$MaxMessages = 20,
     [switch]$Quiet
@@ -61,7 +61,7 @@ function Get-MqConfig {
     # Defaults: file adapter
     return [PSCustomObject]@{
         adapter = 'file'
-        redis   = [PSCustomObject]@{ host = '127.0.0.1'; port = 6379; channel = 'gf-events' }
+        redis   = [PSCustomObject]@{ host = '127.0.0.1'; port = 6379; channel = 'gv-events' }
         webhook = [PSCustomObject]@{ url = ''; secret_env = 'GF_WEBHOOK_SECRET' }
     }
 }
@@ -106,7 +106,7 @@ function Publish-Webhook {
     $secret = if ($cfg.webhook.secret_env) { [System.Environment]::GetEnvironmentVariable($cfg.webhook.secret_env) } else { '' }
     $body   = @{ channel = $Chan; payload = $Msg; timestamp = (Get-Date -Format 'o') } | ConvertTo-Json -Compress
     $headers = @{ 'Content-Type' = 'application/json' }
-    if ($secret) { $headers['X-GF-Signature'] = $secret }
+    if ($secret) { $headers['X-gv-Signature'] = $secret }
     Invoke-RestMethod -Uri $url -Method POST -Body $body -Headers $headers -TimeoutSec 5 -ErrorAction Stop | Out-Null
 }
 
@@ -238,3 +238,5 @@ switch ($Action) {
         Write-Host ""
     }
 }
+
+

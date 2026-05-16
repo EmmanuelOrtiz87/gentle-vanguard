@@ -1,4 +1,4 @@
-﻿# Gentleman Foundation
+# Gentle-Vanguard
 
 ## AI Concepts & Best Practices
 
@@ -62,14 +62,14 @@ An AI agent is a system that:
 3. Uses tools (code execution, file access, etc.)
 4. Iterates based on results
 
-### Foundation AI Stack
+### Gentle-Vanguard AI Stack
 
 | Component                | Purpose                           |
 | ------------------------ | --------------------------------- |
 | **OpenCode**             | AI agent for development tasks    |
 | **Engram**               | Persistent memory across sessions |
 | **Native Review Engine** | Code review with AI               |
-| **Foundation Skills**    | Context and patterns for AI       |
+| **Gentle-Vanguard Skills**    | Context and patterns for AI       |
 
 ### Tool Categories
 
@@ -79,7 +79,7 @@ An AI agent is a system that:
 | -------------------- | ---------------------------------- | ---------------------------------- |
 | **Code Generation**  | OpenCode, GitHub Copilot, Cursor   | Generate and complete code         |
 | **Code Review**      | Native Review Engine, Human review | Validate and improve code          |
-| **Memory & Context** | Engram, Foundation Skills          | Persistent context across sessions |
+| **Memory & Context** | Engram, Gentle-Vanguard Skills          | Persistent context across sessions |
 | **Execution**        | Code interpreter, Terminal access  | Run and test code                  |
 
 ---
@@ -197,7 +197,7 @@ graph LR
 .\.githooks\pre-commit.ps1
 
 # Manual security scan
-.\scripts\utilities\wf.ps1 review security
+.\scripts\utilities\gv.ps1 review security
 ```
 
 ---
@@ -219,7 +219,7 @@ graph LR
 1. Provide more context (relevant files, existing patterns)
 2. Break complex tasks into smaller steps
 3. Iterate and refine your prompts
-4. Use foundation skills for project-specific context
+4. Use gv skills for project-specific context
 
 ### Q: What if AI suggests something wrong?
 
@@ -243,7 +243,7 @@ graph LR
 
 ## 7. Resources
 
-### Foundation Documentation
+### Gentle-Vanguard Documentation
 
 - [ARCHITECTURE.md](../reference/ARCHITECTURE.md) - System design
 - [AI-CONFIGURATION.md](../guides/AI-CONFIGURATION.md) - AI setup
@@ -268,3 +268,4 @@ graph LR
 ---
 
 **Last Updated:** April 2026 **Next Review:** Quarterly
+

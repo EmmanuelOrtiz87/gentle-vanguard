@@ -43,12 +43,13 @@ If the user confirms, append the item. If not confirmed, do not register it.
 | FF-001 | 2026-04-13 | SDD CI Hardening           | Tighten SDD gate to require `validated`/`done` on PRs to protected branches.    | high     | pending | orchestrator | When current SDD baseline is stable for one full sprint.   |
 | FF-002 | 2026-04-13 | Process Metrics            | Add SDD process KPIs (spec coverage, lead time impact, rework ratio).           | high     | pending | orchestrator | When at least 10 PRs have passed through current SDD gate. |
 | FF-003 | 2026-04-13 | Check Noise Reduction      | Reduce non-actionable CI warnings and improve blocking/advisory classification. | medium   | pending | orchestrator | When warning volume affects merge throughput.              |
-| FF-004 | 2026-04-13 | Sync Drift Prevention      | Add periodic drift report for Foundation vs consumers manifests/skills.         | medium   | pending | orchestrator | When multi-repo sync cadence increases.                    |
+| FF-004 | 2026-04-13 | Sync Drift Prevention      | Add periodic drift report for Gentle-Vanguard vs consumers manifests/skills.         | medium   | pending | orchestrator | When multi-repo sync cadence increases.                    |
 | FF-005 | 2026-04-13 | PR Template Quality        | Standardize PR templates to include spec traceability and validation evidence.  | medium   | pending | orchestrator | When next workflow template update is scheduled.           |
-| FF-006 | 2026-04-13 | Local Workflow Performance | Profile and optimize `wf health/verify` runtime for faster local loops.         | medium   | pending | orchestrator | When local validation runtime exceeds agreed SLO.          |
+| FF-006 | 2026-04-13 | Local Workflow Performance | Profile and optimize `gv health/verify` runtime for faster local loops.         | medium   | pending | orchestrator | When local validation runtime exceeds agreed SLO.          |
 
 ## Notes
 
 1. This backlog is reference-first and should stay concise.
 2. Move completed items to `done` and keep rationale in-place for historical traceability.
 3. Do not duplicate items; update existing rows when scope evolves.
+

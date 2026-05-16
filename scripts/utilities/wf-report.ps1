@@ -1,4 +1,4 @@
-# wf-report.ps1
+# gv-report.ps1
 # Unified reporting CLI - on-demand reports for management and analysis
 
 param(
@@ -8,7 +8,7 @@ param(
     [string]$Period = "7days",
     [ValidateSet("markdown", "json", "console")]
     [string]$Format = "markdown",
-    [string]$ProjectRoot = ".\foundation"
+    [string]$ProjectRoot = ".\gentle-vanguard"
 )
 
 $ErrorActionPreference = 'Continue'
@@ -16,7 +16,7 @@ $ErrorActionPreference = 'Continue'
 function Get-ProjectRoot {
     $scriptRoot = $PSScriptRoot
     if ($scriptRoot -match 'scripts[\\]utilities$') {
-        return ".\foundation"
+        return ".\gentle-vanguard"
     }
     return $scriptRoot
 }
@@ -27,13 +27,13 @@ function Show-Clarification {
     Write-Host ""
     Write-Host "=== Report Types Available ===" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "  ./wf report sessions    - Session summary" -ForegroundColor Gray
-    Write-Host "  ./wf report costs       - Cost analysis" -ForegroundColor Gray
-    Write-Host "  ./wf report tokens     - Token metrics" -ForegroundColor Gray
-    Write-Host "  ./wf report performance - Performance metrics" -ForegroundColor Gray
-    Write-Host "  ./wf report executive  - Executive summary" -ForegroundColor Gray
-    Write-Host "  ./wf report telemetry - System telemetry" -ForegroundColor Gray
-    Write-Host "  ./wf report all        - Complete report" -ForegroundColor Gray
+    Write-Host "  ./gv report sessions    - Session summary" -ForegroundColor Gray
+    Write-Host "  ./gv report costs       - Cost analysis" -ForegroundColor Gray
+    Write-Host "  ./gv report tokens     - Token metrics" -ForegroundColor Gray
+    Write-Host "  ./gv report performance - Performance metrics" -ForegroundColor Gray
+    Write-Host "  ./gv report executive  - Executive summary" -ForegroundColor Gray
+    Write-Host "  ./gv report telemetry - System telemetry" -ForegroundColor Gray
+    Write-Host "  ./gv report all        - Complete report" -ForegroundColor Gray
     Write-Host ""
     Write-Host "=== Periods ===" -ForegroundColor White
     Write-Host "  -Period today     - Today only" -ForegroundColor Gray
@@ -43,9 +43,9 @@ function Show-Clarification {
     Write-Host "  -Period all      - All time" -ForegroundColor Gray
     Write-Host ""
     Write-Host "=== Examples ===" -ForegroundColor White
-    Write-Host "  ./wf report sessions -Period yesterday" -ForegroundColor Gray
-    Write-Host "  ./wf report costs -Period 7days -Format json" -ForegroundColor Gray
-    Write-Host "  ./wf report executive" -ForegroundColor Gray
+    Write-Host "  ./gv report sessions -Period yesterday" -ForegroundColor Gray
+    Write-Host "  ./gv report costs -Period 7days -Format json" -ForegroundColor Gray
+    Write-Host "  ./gv report executive" -ForegroundColor Gray
 }
 
 function Get-SessionsReport {

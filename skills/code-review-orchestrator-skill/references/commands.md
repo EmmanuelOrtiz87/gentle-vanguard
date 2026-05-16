@@ -2,23 +2,23 @@
 
 | Command                      | Description                     |
 | ---------------------------- | ------------------------------- |
-| `foundation review`                  | Full review (all 7 dimensions)  |
-| `foundation review --scope security` | Security only                   |
-| `foundation review --scope quality`  | Quality only                    |
-| `foundation review --scope testing`  | Testing only                    |
-| `foundation review --scope docs`     | Documentation only              |
-| `foundation review --scope api`      | API design only                 |
-| `foundation review --scope git`      | Git workflow only               |
-| `foundation review --scope quick`    | Security + Quality (fast, ~30s) |
-| `foundation review --scope full`     | Alias for 'all'                 |
-| `foundation review --report`         | Generate detailed report        |
-| `foundation review --track`          | Export issues to CSV            |
-| `foundation review --verbose`        | Verbose output                  |
+| `gv review`                  | Full review (all 7 dimensions)  |
+| `gv review --scope security` | Security only                   |
+| `gv review --scope quality`  | Quality only                    |
+| `gv review --scope testing`  | Testing only                    |
+| `gv review --scope docs`     | Documentation only              |
+| `gv review --scope api`      | API design only                 |
+| `gv review --scope git`      | Git workflow only               |
+| `gv review --scope quick`    | Security + Quality (fast, ~30s) |
+| `gv review --scope full`     | Alias for 'all'                 |
+| `gv review --report`         | Generate detailed report        |
+| `gv review --track`          | Export issues to CSV            |
+| `gv review --verbose`        | Verbose output                  |
 
 ## Scope Selection Flow
 
 ```
-foundation review
+gv review
     |
     +-- --scope required
     |       |
@@ -41,3 +41,4 @@ foundation review
 | all      | 7          | ~2-5min   |
 
 _Times vary based on project size and disk I/O_
+

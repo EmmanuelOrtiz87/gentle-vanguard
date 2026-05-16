@@ -6,8 +6,7 @@ description: >
   "data protection", "audit compliance", "cumplimiento normativo"
 license: Apache-2.0
 metadata:
-  author: foundation
-  version: '1.0'
+  author: gv version: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash
 ---
 
@@ -30,3 +29,4 @@ User asks about regulatory compliance, data protection, industry standards, audi
 2. Provide actionable compliance checklist items
 3. Distinguish between mandatory requirements vs best practices
 4. Reference specific articles/sections when relevant
+

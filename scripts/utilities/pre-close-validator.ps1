@@ -4,12 +4,12 @@
 param(
     [switch]$AutoResolve,
     [switch]$Force,
-    [string]$ProjectName = "foundation",
+    [string]$ProjectName = "gentle-vanguard",
     [switch]$NoExit
 )
 
 $ErrorActionPreference = 'Continue'
-$repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) { $env:FOUNDATION_BASE_DIR } else {
+$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) { $env:GENTLE_VANGUARD_BASE_DIR } else {
     $root = Split-Path -Parent $PSScriptRoot
     while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
     if (-not $root) { $root = $PSScriptRoot }
@@ -225,8 +225,8 @@ try {
 # 4. Engram Check (non-blocking)
 Write-Step "Checking Engram (non-critical)"
 try {
-    if (Get-Command Invoke-FoundationEngram -ErrorAction SilentlyContinue) {
-        $result = Invoke-FoundationEngram -RepoRoot $repoRoot -Arguments @('doctor', '--project', $ProjectName)
+    if (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue) {
+        $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('doctor', '--project', $ProjectName)
         if ($result.Success) {
             Write-Ok "Engram is responsive"
         } else {
@@ -262,3 +262,4 @@ if ($allPassed) {
     Complete-Script -ExitCode 1
     return
 }
+

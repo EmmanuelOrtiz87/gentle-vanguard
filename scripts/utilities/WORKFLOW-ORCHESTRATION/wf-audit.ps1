@@ -1,12 +1,12 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    WF Audit Integration - Unified audit interface via wf.ps1
+    GV Audit Integration - Unified audit interface via gv.ps1
 .DESCRIPTION
-    Provides unified audit interface combining foundation-audit and judgment-day.
+    Provides unified audit interface combining gentle-vanguard-audit and judgment-day.
     
     Actions:
-    - sweep: Batch validation (foundation-audit) - zero tokens
+    - sweep: Batch validation (gentle-vanguard-audit) - zero tokens
     - judgment: Batch + adversarial review (judgment-day) - tokens
     - check: Specific check type
     - report: Generate markdown report
@@ -57,20 +57,20 @@ $ErrorActionPreference = 'Continue'
 
 # Resolve paths
 $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-$FoundationRoot = Split-Path -Parent (Split-Path -Parent $ScriptRoot)
+$Gentle-VanguardRoot = Split-Path -Parent (Split-Path -Parent $ScriptRoot)
 
 if (-not $BasePath) {
-    $BasePath = $FoundationRoot
+    $BasePath = $Gentle-VanguardRoot
 }
 
-$BatchScript = Join-Path $FoundationRoot 'skills\foundation-audit-skill\scripts\audit-sweep.ps1'
-$WorkflowScript = Join-Path $FoundationRoot 'skills\foundation-audit-skill\scripts\audit-workflow.ps1'
-$SyncScript = Join-Path $FoundationRoot 'skills\foundation-audit-skill\scripts\sync-local.ps1'
+$BatchScript = Join-Path $Gentle-VanguardRoot 'skills\gentle-vanguard-audit-skill\scripts\audit-sweep.ps1'
+$WorkflowScript = Join-Path $Gentle-VanguardRoot 'skills\gentle-vanguard-audit-skill\scripts\audit-workflow.ps1'
+$SyncScript = Join-Path $Gentle-VanguardRoot 'skills\gentle-vanguard-audit-skill\scripts\sync-local.ps1'
 
 # Execute based on action
 switch ($Action) {
     'sweep' {
-        Write-Host "Running Foundation Audit Sweep..." -ForegroundColor Magenta
+        Write-Host "Running Gentle-Vanguard Audit Sweep..." -ForegroundColor Magenta
         & $WorkflowScript -Mode $Mode -Output $Output -FailOnIssues:$FailOnIssues -SkipJudgment:$true -BasePath $BasePath
     }
     
@@ -94,3 +94,4 @@ switch ($Action) {
         & $SyncScript
     }
 }
+

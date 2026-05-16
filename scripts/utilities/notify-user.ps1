@@ -37,12 +37,12 @@ param(
     [string]$RecoveryCommand = "",
     
     [Parameter(Mandatory=$false)]
-    [string]$ProjectName = "foundation"
+    [string]$ProjectName = "gentle-vanguard"
 )
 
 $ErrorActionPreference = 'Continue'
 
-$repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) { $env:FOUNDATION_BASE_DIR } else {
+$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) { $env:GENTLE_VANGUARD_BASE_DIR } else {
     $root = Split-Path -Parent $PSScriptRoot
     while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
     if (-not $root) { $root = $PSScriptRoot }
@@ -78,7 +78,7 @@ $icons = @{
 function Save-ToEngram {
     param([string]$Action, [string]$Reason, [string]$Details)
 
-    if (-not (Get-Command Invoke-FoundationEngram -ErrorAction SilentlyContinue)) {
+    if (-not (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue)) {
         return $false
     }
     
@@ -92,7 +92,7 @@ This action was performed automatically to optimize token usage and maintain sys
 "@
     
     try {
-        $result = Invoke-FoundationEngram -RepoRoot $repoRoot -Arguments @('save', "Auto-Action: $Action", $content, '--project', $ProjectName, '--type', 'manual')
+        $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('save', "Auto-Action: $Action", $content, '--project', $ProjectName, '--type', 'manual')
         return $result.Success
     } catch {
         return $false
@@ -159,3 +159,4 @@ catch {
     Write-Host "[ERROR] Notification failed: $_" -ForegroundColor Red
     exit 1
 }
+

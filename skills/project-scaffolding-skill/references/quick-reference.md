@@ -1,28 +1,28 @@
-# Foundation - Quick Reference
+# Gentle-Vanguard - Quick Reference
 
 ## CLI Commands
 
 ```powershell
 # Initialize workspace
-.\scripts\foundation\wf.ps1 init
+.\scripts\gentle-vanguard\gv.ps1 init
 
 # Create project
-.\scripts\foundation\wf.ps1 new --name <name> --kind <type> [options]
+.\scripts\gentle-vanguard\gv.ps1 new --name <name> --kind <type> [options]
 
 # Validate
-.\scripts\foundation\wf.ps1 validate [--project <name>] [--full]
+.\scripts\gentle-vanguard\gv.ps1 validate [--project <name>] [--full]
 
 # Tools
-.\scripts\foundation\wf.ps1 tools [--install|--list|--update]
+.\scripts\gentle-vanguard\gv.ps1 tools [--install|--list|--update]
 
 # Skills
-.\scripts\foundation\wf.ps1 skills [--install|--list]
+.\scripts\gentle-vanguard\gv.ps1 skills [--install|--list]
 
 # Clean
-.\scripts\foundation\wf.ps1 clean [--data|--cache|--all]
+.\scripts\gentle-vanguard\gv.ps1 clean [--data|--cache|--all]
 
 # Help
-.\scripts\foundation\wf.ps1 help
+.\scripts\gentle-vanguard\gv.ps1 help
 ```
 
 ## Project Creation Options
@@ -168,3 +168,4 @@ PORT=3000
 | frontend      | 3000         | npm test           | npm run build            |
 | fullstack     | 3000/3001    | npm test           | npm run build            |
 | microservices | varies       | npm test           | varies                   |
+

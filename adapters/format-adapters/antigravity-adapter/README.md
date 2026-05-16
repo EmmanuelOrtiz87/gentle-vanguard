@@ -1,6 +1,6 @@
 # Antigravity Mission Control Adapter
 
-Converts Foundation skills and workflows to Antigravity Mission Control format.
+Converts Gentle-Vanguard skills and workflows to Antigravity Mission Control format.
 
 ---
 
@@ -17,10 +17,10 @@ Antigravity uses:
 
 ## Features
 
-✅ Converts Foundation `SKILL.md` → Antigravity Mission Control JSON  
-✅ Generates cross-tool `AGENTS.md` from Foundation skills  
+✅ Converts Gentle-Vanguard `SKILL.md` → Antigravity Mission Control JSON  
+✅ Generates cross-tool `AGENTS.md` from Gentle-Vanguard skills  
 ✅ Creates `mission.yaml` for multi-agent workflows  
-✅ Maps Foundation skills to AgentKit 2.0 agent roles  
+✅ Maps Gentle-Vanguard skills to AgentKit 2.0 agent roles  
 ✅ Supports parallel and sequential execution patterns
 
 ---
@@ -36,7 +36,7 @@ cd adapters/format-adapters/antigravity-adapter
 
 ## Usage
 
-### 1. Convert a Foundation Skill
+### 1. Convert a Gentle-Vanguard Skill
 
 ```bash
 node adapter.js convert-skill skills/react-19-skill/SKILL.md output/react-19.json
@@ -66,7 +66,7 @@ node adapter.js generate-mission '[{"name":"dev","instructions":"Implement featu
 
 ## Agent Role Mapping
 
-| Foundation Skill          | Antigravity Agent Role |
+| Gentle-Vanguard Skill          | Antigravity Agent Role |
 | ------------------------- | ---------------------- |
 | react-19-skill            | frontend               |
 | angular-spa-skill         | frontend               |
@@ -78,9 +78,9 @@ node adapter.js generate-mission '[{"name":"dev","instructions":"Implement featu
 
 ---
 
-## Integration with Foundation
+## Integration with Gentle-Vanguard
 
-The adapter integrates with Foundation's detection system:
+The adapter integrates with Gentle-Vanguard's detection system:
 
 1. **Detection**: `enhanced-detect.ps1` identifies Antigravity via `ANTIGRAVITY_SESSION` env var
 2. **Pre-processing**: `pre-process-input.ps1` loads `tool-antigravity.json`
@@ -100,7 +100,7 @@ mission:
 agents:
   - role: orchestrator
     model: gemini-3-pro
-    instructions: 'Coordinate development using Foundation skills'
+    instructions: 'Coordinate development using Gentle-Vanguard skills'
 
   - role: frontend
     model: gemini-3-pro
@@ -144,3 +144,4 @@ agents:
 **Version**: 1.0.0  
 **Status**: Ready for testing  
 **Compatibility**: Antigravity Mission Control, AgentKit 2.0
+

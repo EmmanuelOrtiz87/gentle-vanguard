@@ -39,8 +39,8 @@
 | scripts\utilities\artifact-naming.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
 | scripts\utilities\artifact-naming.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\AUDIT-REPORTING\audit-script-normalization.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| skills\foundation-audit-skill\scripts\audit-sweep.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| skills\foundation-audit-skill\scripts\audit-workflow.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| skills\gentle-vanguard-audit-skill\scripts\audit-sweep.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| skills\gentle-vanguard-audit-skill\scripts\audit-workflow.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\adaptive\auto-backup-orchestrator.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\adaptive\auto-delegate-orchestrator.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | tests\integration\auto-delegation-router.integration.tests.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
@@ -58,9 +58,9 @@
 | scripts\utilities\BACKUP-RESTORE\backup-master-key.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
 | scripts\utilities\BACKUP-RESTORE\backup-master-key.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\adaptive\backup-resilience-test.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| scripts\foundation\bootstrap-machine.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| scripts\foundation\bootstrap-workspace.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| scripts\foundation\bootstrap.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| scripts\gentle-vanguard\bootstrap-machine.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| scripts\gentle-vanguard\bootstrap-workspace.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| scripts\gentle-vanguard\bootstrap.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\cache-cleanup-manager.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\hooks\check-api.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\hooks\check-architecture.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
@@ -131,7 +131,7 @@
 | tests\integration\engram-orchestrator.integration.tests.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\engram-orchestrator.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | tests\performance\engram-performance.perf.tests.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
-| scripts\foundation\engram-policy.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| scripts\gentle-vanguard\engram-policy.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | adapters\detection\enhanced-detect.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\SESSION-MANAGEMENT\ensure-github-bypass.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\SKILLS-TOOLS\ensure-tools-active.ps1:34 | error_handling | - | WARNING (real) | Suspect (A only) |
@@ -154,16 +154,16 @@
 | scripts\utilities\fix-all-simple.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
 | scripts\utilities\fix-emoji-cleanup.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
 | scripts\utilities\UTILITIES\fix-remaining-scripts.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| tests\unit\foundation-core.tests.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
-| tests\unit\foundation-core.tests.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| scripts\utilities\foundation-installer-tui.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| build\archive\Foundation-Installer-v2.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| build\archive\Foundation-Installer-v3.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| build\Foundation-Installer-v4.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| build\Foundation-Launcher.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| tests\unit\foundation-manager.tests.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
-| build\archive\Foundation-Simple-Installer.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| scripts\utilities\UTILITIES\foundation-sync.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| tests\unit\gentle-vanguard-core.tests.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
+| tests\unit\gentle-vanguard-core.tests.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| scripts\utilities\gentle-vanguard-installer-tui.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| build\archive\Gentle-Vanguard-Installer-v2.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| build\archive\Gentle-Vanguard-Installer-v3.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| build\Gentle-Vanguard-Installer-v4.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| build\Gentle-Vanguard-Launcher.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| tests\unit\gentle-vanguard-manager.tests.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
+| build\archive\Gentle-Vanguard-Simple-Installer.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| scripts\utilities\UTILITIES\gentle-vanguard-sync.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\AUDIT-REPORTING\generate-audit-report.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
 | scripts\utilities\AUDIT-REPORTING\generate-audit-report.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\TELEMETRY-METRICS\generate-dashboard.ps1:391 | security | - | CRITICAL | Suspect (A only) |
@@ -181,7 +181,7 @@
 | scripts\utilities\AUDIT-REPORTING\generate-session-review.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
 | scripts\utilities\AUDIT-REPORTING\generate-session-review.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\get-session-id.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
-| bin\gf.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| bin\gv.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\testing\git-hooks-setup.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
 | tests\unit\githooks-scripts.tests.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
 | tests\unit\githooks-scripts.tests.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
@@ -235,7 +235,7 @@
 | scripts\utilities\message-tracker.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\CONFIG\Microsoft.PowerShell_profile.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
 | scripts\utilities\CONFIG\Microsoft.PowerShell_profile.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| scripts\utilities\DEPLOYMENT\migrate-foundation-remotes.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| scripts\utilities\DEPLOYMENT\migrate-gentle-vanguard-remotes.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\DEPLOYMENT\migrate-structure.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\project\migrate.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\MODEL-ROUTER\model-router.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
@@ -298,9 +298,9 @@
 | hooks\pre-tool-format.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | demos\07-mixed-cookbook-real-request\preflight.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\security\privacy-gateway.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| build\protect-foundation.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| build\protect-gentle-vanguard.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\UTILITIES\read-once-guard.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| scripts\foundation\register-sync-task.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
+| scripts\gentle-vanguard\register-sync-task.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
 | skills\distributed-tracing-skill\report-generator.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
 | skills\distributed-tracing-skill\report-generator.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | demos\07-mixed-cookbook-real-request\reset-demo.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
@@ -351,7 +351,7 @@
 | .github\scripts\setup-branch-protection.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
 | scripts\setup-complete.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\DEPLOYMENT\setup-monitoring.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| scripts\foundation\setup-multi-machine.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| scripts\gentle-vanguard\setup-multi-machine.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\testing\setup-normalization-hooks.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\project\setup-project.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\DEPLOYMENT\setup-remote-agent.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
@@ -372,9 +372,9 @@
 | scripts\utilities\AI-AGENT-MANAGEMENT\sync-agent-instructions.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\project\sync-docs.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\sync-drift-report.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| skills\foundation-audit-skill\scripts\sync-local.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| scripts\foundation\sync-public-repo.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| scripts\foundation\sync-skills.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| skills\gentle-vanguard-audit-skill\scripts\sync-local.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| scripts\gentle-vanguard\sync-public-repo.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| scripts\gentle-vanguard\sync-skills.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\DEPLOYMENT\sync-to-public.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\diagnostics\system-diagnostics.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\telemetry-dashboard.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
@@ -401,7 +401,7 @@
 | tests\unit\v264-scripts.tests.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
 | tests\unit\v264-scripts.tests.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\validate-configs.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| scripts\utilities\validate-foundation-complete.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| scripts\utilities\validate-gentle-vanguard-complete.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\diagnostics\validate-gitflow.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\validation\validate-project.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\utilities\TELEMETRY-METRICS\validate-report-simple.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
@@ -411,12 +411,12 @@
 | scripts\utilities\WORKFLOW-ORCHESTRATION\validate-system-health.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\validation\validate-workspace.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | scripts\monitoring\weekly-metrics.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| scripts\utilities\wf-benchmark.ps1:44 | error_handling | - | WARNING (real) | Suspect (A only) |
-| scripts\utilities\wf-benchmark.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1:1406 | error_handling | - | WARNING (real) | Suspect (A only) |
-| scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
-| scripts\utilities\wf.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
-| scripts\foundation\wf.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
+| scripts\utilities\gv-benchmark.ps1:44 | error_handling | - | WARNING (real) | Suspect (A only) |
+| scripts\utilities\gv-benchmark.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1:1406 | error_handling | - | WARNING (real) | Suspect (A only) |
+| scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
+| scripts\utilities\gv.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
+| scripts\gentle-vanguard\gv.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
 | hooks\workflow-lint.ps1:1 | performance | - | WARNING (real) | Suspect (A only) |
 | templates\testing\tests\accessibility.spec.ts:0 | edge_case | - | WARNING (theoretical) | Suspect (A only) |
 | templates\testing\tests\api.spec.ts:25 | security | - | CRITICAL | Suspect (A only) |
@@ -532,7 +532,7 @@
 | .github\copilot-instructions.md (dir):0 | - | documentation | SUGGESTION | Suspect (B only) |
 | reports\EXECUTIVE-REPORT-TEMPLATE.md (dir):0 | - | documentation | SUGGESTION | Suspect (B only) |
 | skills\judgment-day\references\fix-agent-prompt-template.md:21 | - | governance | SUGGESTION | Suspect (B only) |
-| docs\reports\FOUNDATION-STATUS-REPORT-2026-05-05.md:12 | - | governance | SUGGESTION | Suspect (B only) |
+| docs\reports\GENTLE_VANGUARD-STATUS-REPORT-2026-05-05.md:12 | - | governance | SUGGESTION | Suspect (B only) |
 | docs\reference\archive\FUTURE-FEATURES-BACKLOG-20260418.md:41 | - | governance | SUGGESTION | Suspect (B only) |
 | docs\reference\FUTURE-FEATURES-BACKLOG.md:1 | - | governance | SUGGESTION | Suspect (B only) |
 | reports\IMPLEMENTATION-STATUS.md (dir):0 | - | documentation | SUGGESTION | Suspect (B only) |
@@ -546,7 +546,7 @@
 | docs\reference\PLUGIN-ARCHITECTURE.md:12 | - | governance | SUGGESTION | Suspect (B only) |
 | templates\PULL_REQUEST_TEMPLATE.md (dir):0 | - | documentation | SUGGESTION | Suspect (B only) |
 | .github\PULL_REQUEST_TEMPLATE.md (dir):0 | - | documentation | SUGGESTION | Suspect (B only) |
-| reports\RECOMENDACIONES-FOUNDATION-PRODUCTO.md (dir):0 | - | documentation | SUGGESTION | Suspect (B only) |
+| reports\RECOMENDACIONES-GENTLE_VANGUARD-PRODUCTO.md (dir):0 | - | documentation | SUGGESTION | Suspect (B only) |
 | docs\reference\script-registry.md:15 | - | governance | SUGGESTION | Suspect (B only) |
 | .workspace\SECURITY.md (dir):0 | - | documentation | SUGGESTION | Suspect (B only) |
 | .engram\session-2026-04-23-02-lessons.md (dir):0 | - | documentation | SUGGESTION | Suspect (B only) |
@@ -572,8 +572,8 @@
 | scripts\utilities\TELEMETRY-METRICS\aggregate-metrics.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\artifact-naming.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\AUDIT-REPORTING\audit-script-normalization.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| skills\foundation-audit-skill\scripts\audit-sweep.ps1:269 | - | governance | SUGGESTION | Suspect (B only) |
-| skills\foundation-audit-skill\scripts\audit-workflow.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| skills\gentle-vanguard-audit-skill\scripts\audit-sweep.ps1:269 | - | governance | SUGGESTION | Suspect (B only) |
+| skills\gentle-vanguard-audit-skill\scripts\audit-workflow.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\adaptive\auto-delegate-orchestrator.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\adaptive\auto-delegate-orchestrator.ps1:667 | - | governance | SUGGESTION | Suspect (B only) |
 | scripts\adaptive\auto-delegate-orchestrator.ps1:670 | - | structure | SUGGESTION | Suspect (B only) |
@@ -587,10 +587,10 @@
 | scripts\utilities\SKILLS-TOOLS\auto-update-skills.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | tests\unit\auto-update-workflow.tests.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\BACKUP-RESTORE\backup-master-key.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| scripts\foundation\bootstrap-machine.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| scripts\foundation\bootstrap-workspace.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| scripts\foundation\bootstrap-workspace.ps1:819 | - | structure | SUGGESTION | Suspect (B only) |
-| scripts\foundation\bootstrap.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| scripts\gentle-vanguard\bootstrap-machine.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| scripts\gentle-vanguard\bootstrap-workspace.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| scripts\gentle-vanguard\bootstrap-workspace.ps1:819 | - | structure | SUGGESTION | Suspect (B only) |
+| scripts\gentle-vanguard\bootstrap.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\hooks\check-api.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\hooks\check-architecture.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\hooks\check-documentation.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
@@ -640,7 +640,7 @@
 | scripts\utilities\SESSION-MANAGEMENT\end-session.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | tests\unit\engine-scripts.tests.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\engram-orchestrator.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| scripts\foundation\engram-policy.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| scripts\gentle-vanguard\engram-policy.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | adapters\detection\enhanced-detect.ps1:265 | - | governance | SUGGESTION | Suspect (B only) |
 | scripts\utilities\SKILLS-TOOLS\ensure-tools-active.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\SKILLS-TOOLS\ensure-tools-active.ps1:648 | - | structure | SUGGESTION | Suspect (B only) |
@@ -659,15 +659,15 @@
 | scripts\utilities\fix-all-simple.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\fix-emoji-cleanup.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\UTILITIES\fix-remaining-scripts.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| tests\unit\foundation-core.tests.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| scripts\utilities\foundation-installer-tui.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| build\archive\Foundation-Installer-v2.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| build\archive\Foundation-Installer-v3.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| build\Foundation-Installer-v4.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| build\Foundation-Launcher.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| tests\unit\foundation-manager.tests.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| build\archive\Foundation-Simple-Installer.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| scripts\utilities\UTILITIES\foundation-sync.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| tests\unit\gentle-vanguard-core.tests.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| scripts\utilities\gentle-vanguard-installer-tui.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| build\archive\Gentle-Vanguard-Installer-v2.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| build\archive\Gentle-Vanguard-Installer-v3.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| build\Gentle-Vanguard-Installer-v4.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| build\Gentle-Vanguard-Launcher.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| tests\unit\gentle-vanguard-manager.tests.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| build\archive\Gentle-Vanguard-Simple-Installer.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| scripts\utilities\UTILITIES\gentle-vanguard-sync.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\AUDIT-REPORTING\generate-audit-report.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\AUDIT-REPORTING\generate-audit-report.ps1:280 | - | governance | SUGGESTION | Suspect (B only) |
 | scripts\utilities\TELEMETRY-METRICS\generate-dashboard.ps1:201 | - | governance | SUGGESTION | Suspect (B only) |
@@ -681,8 +681,8 @@
 | scripts\utilities\AUDIT-REPORTING\generate-session-audit.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\AUDIT-REPORTING\generate-session-review.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\get-session-id.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| bin\gf.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| bin\gf.ps1 (dir):0 | - | documentation | SUGGESTION | Suspect (B only) |
+| bin\gv.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| bin\gv.ps1 (dir):0 | - | documentation | SUGGESTION | Suspect (B only) |
 | tests\unit\githooks-scripts.tests.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | plugins\example-hello-world\hello-world.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\UTILITIES\help.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
@@ -724,7 +724,7 @@
 | scripts\utilities\UTILITIES\mcp-monitor.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\message-tracker.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\CONFIG\Microsoft.PowerShell_profile.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| scripts\utilities\DEPLOYMENT\migrate-foundation-remotes.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| scripts\utilities\DEPLOYMENT\migrate-gentle-vanguard-remotes.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\project\migrate.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\MODEL-ROUTER\model-router.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\MODEL-ROUTER\model-router.ps1:565 | - | governance | SUGGESTION | Suspect (B only) |
@@ -767,9 +767,9 @@
 | demos\07-mixed-cookbook-real-request\preflight.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\security\privacy-gateway.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\security\privacy-sanitizer.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| build\protect-foundation.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| build\protect-gentle-vanguard.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\UTILITIES\read-once-guard.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| scripts\foundation\register-sync-task.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| scripts\gentle-vanguard\register-sync-task.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | skills\distributed-tracing-skill\report-generator.ps1:512 | - | structure | SUGGESTION | Suspect (B only) |
 | demos\07-mixed-cookbook-real-request\reset-demo.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | skills\parallel-execution-limits\resource-pooling.ps1:587 | - | structure | SUGGESTION | Suspect (B only) |
@@ -802,7 +802,7 @@
 | tests\unit\session-workflow.tests.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\setup-complete.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\DEPLOYMENT\setup-monitoring.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| scripts\foundation\setup-multi-machine.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| scripts\gentle-vanguard\setup-multi-machine.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\testing\setup-normalization-hooks.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\project\setup-project.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\DEPLOYMENT\setup-remote-agent.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
@@ -823,7 +823,7 @@
 | scripts\utilities\AI-AGENT-MANAGEMENT\sync-agent-instructions.ps1:54 | - | governance | SUGGESTION | Suspect (B only) |
 | scripts\project\sync-docs.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\sync-drift-report.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| scripts\foundation\sync-skills.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| scripts\gentle-vanguard\sync-skills.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\diagnostics\system-diagnostics.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\TELEMETRY-METRICS\token-budget-guard.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\TELEMETRY-METRICS\token-budget-guard.ps1:140 | - | governance | SUGGESTION | Suspect (B only) |
@@ -837,7 +837,7 @@
 | scripts\utilities\SKILLS-TOOLS\update-tools.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | tests\unit\utility-scripts.tests.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | tests\unit\v264-scripts.tests.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| scripts\utilities\validate-foundation-complete.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| scripts\utilities\validate-gentle-vanguard-complete.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\diagnostics\validate-gitflow.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\validation\validate-project.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\TELEMETRY-METRICS\validate-report-simple.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
@@ -846,13 +846,13 @@
 | scripts\diagnostics\validate-sdd-governance.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\utilities\SESSION-MANAGEMENT\validate-session-stack.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | scripts\validation\validate-workspace.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| scripts\utilities\wf-benchmark.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| scripts\utilities\wf-report.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1:6 | - | governance | SUGGESTION | Suspect (B only) |
-| scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1:2834 | - | structure | SUGGESTION | Suspect (B only) |
-| scripts\utilities\wf.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
-| scripts\foundation\wf.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| scripts\utilities\gv-benchmark.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| scripts\utilities\gv-report.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1:6 | - | governance | SUGGESTION | Suspect (B only) |
+| scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1:2834 | - | structure | SUGGESTION | Suspect (B only) |
+| scripts\utilities\gv.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
+| scripts\gentle-vanguard\gv.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | hooks\workflow-lint.ps1:1 | - | governance | WARNING (real) | Suspect (B only) |
 | hooks\workflow-lint.ps1 (dir):0 | - | documentation | SUGGESTION | Suspect (B only) |
 | skills\security-expert-skill\hooks\pre-commit-security.sh:70 | - | governance | SUGGESTION | Suspect (B only) |
@@ -900,8 +900,8 @@
 - [WARNING (real)] scripts\utilities\artifact-naming.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\utilities\artifact-naming.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\utilities\AUDIT-REPORTING\audit-script-normalization.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] skills\foundation-audit-skill\scripts\audit-sweep.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] skills\foundation-audit-skill\scripts\audit-workflow.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] skills\gentle-vanguard-audit-skill\scripts\audit-sweep.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] skills\gentle-vanguard-audit-skill\scripts\audit-workflow.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\adaptive\auto-backup-orchestrator.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\adaptive\auto-delegate-orchestrator.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (real)] tests\integration\auto-delegation-router.integration.tests.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
@@ -919,9 +919,9 @@
 - [WARNING (real)] scripts\utilities\BACKUP-RESTORE\backup-master-key.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\utilities\BACKUP-RESTORE\backup-master-key.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\adaptive\backup-resilience-test.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] scripts\foundation\bootstrap-machine.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] scripts\foundation\bootstrap-workspace.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] scripts\foundation\bootstrap.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] scripts\gentle-vanguard\bootstrap-machine.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] scripts\gentle-vanguard\bootstrap-workspace.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] scripts\gentle-vanguard\bootstrap.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\utilities\cache-cleanup-manager.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\hooks\check-api.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\hooks\check-architecture.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
@@ -992,7 +992,7 @@
 - [WARNING (theoretical)] tests\integration\engram-orchestrator.integration.tests.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\utilities\engram-orchestrator.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (real)] tests\performance\engram-performance.perf.tests.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] scripts\foundation\engram-policy.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] scripts\gentle-vanguard\engram-policy.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] adapters\detection\enhanced-detect.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\utilities\SESSION-MANAGEMENT\ensure-github-bypass.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\SKILLS-TOOLS\ensure-tools-active.ps1:34 — Catch block vacío — traga errores silenciosamente (Juez A solamente, no auto-fixed) 
@@ -1015,16 +1015,16 @@
 - [WARNING (real)] scripts\utilities\fix-all-simple.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\fix-emoji-cleanup.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\utilities\UTILITIES\fix-remaining-scripts.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (real)] tests\unit\foundation-core.tests.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] tests\unit\foundation-core.tests.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] scripts\utilities\foundation-installer-tui.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] build\archive\Foundation-Installer-v2.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] build\archive\Foundation-Installer-v3.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] build\Foundation-Installer-v4.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] build\Foundation-Launcher.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (real)] tests\unit\foundation-manager.tests.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] build\archive\Foundation-Simple-Installer.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] scripts\utilities\UTILITIES\foundation-sync.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (real)] tests\unit\gentle-vanguard-core.tests.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] tests\unit\gentle-vanguard-core.tests.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] scripts\utilities\gentle-vanguard-installer-tui.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] build\archive\Gentle-Vanguard-Installer-v2.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] build\archive\Gentle-Vanguard-Installer-v3.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] build\Gentle-Vanguard-Installer-v4.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] build\Gentle-Vanguard-Launcher.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (real)] tests\unit\gentle-vanguard-manager.tests.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] build\archive\Gentle-Vanguard-Simple-Installer.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] scripts\utilities\UTILITIES\gentle-vanguard-sync.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\AUDIT-REPORTING\generate-audit-report.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\utilities\AUDIT-REPORTING\generate-audit-report.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [CRITICAL] scripts\utilities\TELEMETRY-METRICS\generate-dashboard.ps1:391 — Posible SQL Injection — concatenación en query (Juez A solamente, no auto-fixed) 
@@ -1042,7 +1042,7 @@
 - [WARNING (real)] scripts\utilities\AUDIT-REPORTING\generate-session-review.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\utilities\AUDIT-REPORTING\generate-session-review.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\get-session-id.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] bin\gf.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] bin\gv.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (real)] scripts\testing\git-hooks-setup.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
 - [WARNING (real)] tests\unit\githooks-scripts.tests.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] tests\unit\githooks-scripts.tests.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
@@ -1096,7 +1096,7 @@
 - [WARNING (theoretical)] scripts\utilities\message-tracker.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\CONFIG\Microsoft.PowerShell_profile.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\utilities\CONFIG\Microsoft.PowerShell_profile.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] scripts\utilities\DEPLOYMENT\migrate-foundation-remotes.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] scripts\utilities\DEPLOYMENT\migrate-gentle-vanguard-remotes.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\utilities\DEPLOYMENT\migrate-structure.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\project\migrate.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\utilities\MODEL-ROUTER\model-router.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
@@ -1159,9 +1159,9 @@
 - [WARNING (theoretical)] hooks\pre-tool-format.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] demos\07-mixed-cookbook-real-request\preflight.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\security\privacy-gateway.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] build\protect-foundation.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] build\protect-gentle-vanguard.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\utilities\UTILITIES\read-once-guard.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (real)] scripts\foundation\register-sync-task.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
+- [WARNING (real)] scripts\gentle-vanguard\register-sync-task.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
 - [WARNING (real)] skills\distributed-tracing-skill\report-generator.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] skills\distributed-tracing-skill\report-generator.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] demos\07-mixed-cookbook-real-request\reset-demo.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
@@ -1212,7 +1212,7 @@
 - [WARNING (real)] .github\scripts\setup-branch-protection.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\setup-complete.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\utilities\DEPLOYMENT\setup-monitoring.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] scripts\foundation\setup-multi-machine.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] scripts\gentle-vanguard\setup-multi-machine.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\testing\setup-normalization-hooks.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\project\setup-project.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\utilities\DEPLOYMENT\setup-remote-agent.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
@@ -1233,9 +1233,9 @@
 - [WARNING (theoretical)] scripts\utilities\AI-AGENT-MANAGEMENT\sync-agent-instructions.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\project\sync-docs.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\utilities\sync-drift-report.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] skills\foundation-audit-skill\scripts\sync-local.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] scripts\foundation\sync-public-repo.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] scripts\foundation\sync-skills.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] skills\gentle-vanguard-audit-skill\scripts\sync-local.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] scripts\gentle-vanguard\sync-public-repo.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] scripts\gentle-vanguard\sync-skills.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\utilities\DEPLOYMENT\sync-to-public.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\diagnostics\system-diagnostics.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\telemetry-dashboard.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
@@ -1262,7 +1262,7 @@
 - [WARNING (real)] tests\unit\v264-scripts.tests.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] tests\unit\v264-scripts.tests.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\utilities\validate-configs.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] scripts\utilities\validate-foundation-complete.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] scripts\utilities\validate-gentle-vanguard-complete.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\diagnostics\validate-gitflow.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\validation\validate-project.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\TELEMETRY-METRICS\validate-report-simple.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
@@ -1272,12 +1272,12 @@
 - [WARNING (theoretical)] scripts\utilities\WORKFLOW-ORCHESTRATION\validate-system-health.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\validation\validate-workspace.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] scripts\monitoring\weekly-metrics.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (real)] scripts\utilities\wf-benchmark.ps1:44 — Catch block vacío — traga errores silenciosamente (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] scripts\utilities\wf-benchmark.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (real)] scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1:1406 — Catch block vacío — traga errores silenciosamente (Juez A solamente, no auto-fixed) 
-- [WARNING (theoretical)] scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
-- [WARNING (real)] scripts\utilities\wf.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
-- [WARNING (real)] scripts\foundation\wf.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
+- [WARNING (real)] scripts\utilities\gv-benchmark.ps1:44 — Catch block vacío — traga errores silenciosamente (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] scripts\utilities\gv-benchmark.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (real)] scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1:1406 — Catch block vacío — traga errores silenciosamente (Juez A solamente, no auto-fixed) 
+- [WARNING (theoretical)] scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
+- [WARNING (real)] scripts\utilities\gv.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
+- [WARNING (real)] scripts\gentle-vanguard\gv.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
 - [WARNING (real)] hooks\workflow-lint.ps1:1 — Script sin ErrorActionPreference — puede continuar tras errores (Juez A solamente, no auto-fixed) 
 - [WARNING (theoretical)] templates\testing\tests\accessibility.spec.ts:0 — Referencia a null/None sin null-check visible (Juez A solamente, no auto-fixed) 
 - [CRITICAL] templates\testing\tests\api.spec.ts:25 — Posible secreto hardcodeado detectado (Juez A solamente, no auto-fixed) 
@@ -1393,7 +1393,7 @@
 - [SUGGESTION] .github\copilot-instructions.md (dir):0 — Directorio sin README.md (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] reports\EXECUTIVE-REPORT-TEMPLATE.md (dir):0 — Directorio sin README.md (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] skills\judgment-day\references\fix-agent-prompt-template.md:21 — 1 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
-- [SUGGESTION] docs\reports\FOUNDATION-STATUS-REPORT-2026-05-05.md:12 — 7 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
+- [SUGGESTION] docs\reports\GENTLE_VANGUARD-STATUS-REPORT-2026-05-05.md:12 — 7 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] docs\reference\archive\FUTURE-FEATURES-BACKLOG-20260418.md:41 — 8 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] docs\reference\FUTURE-FEATURES-BACKLOG.md:1 — 21 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] reports\IMPLEMENTATION-STATUS.md (dir):0 — Directorio sin README.md (Juez B solamente, no auto-fixed) 
@@ -1407,7 +1407,7 @@
 - [SUGGESTION] docs\reference\PLUGIN-ARCHITECTURE.md:12 — 1 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] templates\PULL_REQUEST_TEMPLATE.md (dir):0 — Directorio sin README.md (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] .github\PULL_REQUEST_TEMPLATE.md (dir):0 — Directorio sin README.md (Juez B solamente, no auto-fixed) 
-- [SUGGESTION] reports\RECOMENDACIONES-FOUNDATION-PRODUCTO.md (dir):0 — Directorio sin README.md (Juez B solamente, no auto-fixed) 
+- [SUGGESTION] reports\RECOMENDACIONES-GENTLE_VANGUARD-PRODUCTO.md (dir):0 — Directorio sin README.md (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] docs\reference\script-registry.md:15 — 27 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] .workspace\SECURITY.md (dir):0 — Directorio sin README.md (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] .engram\session-2026-04-23-02-lessons.md (dir):0 — Directorio sin README.md (Juez B solamente, no auto-fixed) 
@@ -1433,8 +1433,8 @@
 - [WARNING (real)] scripts\utilities\TELEMETRY-METRICS\aggregate-metrics.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\artifact-naming.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\AUDIT-REPORTING\audit-script-normalization.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [SUGGESTION] skills\foundation-audit-skill\scripts\audit-sweep.ps1:269 — 1 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] skills\foundation-audit-skill\scripts\audit-workflow.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [SUGGESTION] skills\gentle-vanguard-audit-skill\scripts\audit-sweep.ps1:269 — 1 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] skills\gentle-vanguard-audit-skill\scripts\audit-workflow.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\adaptive\auto-delegate-orchestrator.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] scripts\adaptive\auto-delegate-orchestrator.ps1:667 — 1 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] scripts\adaptive\auto-delegate-orchestrator.ps1:670 — Archivo muy largo (670 líneas) (Juez B solamente, no auto-fixed) 
@@ -1448,10 +1448,10 @@
 - [WARNING (real)] scripts\utilities\SKILLS-TOOLS\auto-update-skills.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] tests\unit\auto-update-workflow.tests.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\BACKUP-RESTORE\backup-master-key.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] scripts\foundation\bootstrap-machine.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] scripts\foundation\bootstrap-workspace.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [SUGGESTION] scripts\foundation\bootstrap-workspace.ps1:819 — Archivo muy largo (819 líneas) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] scripts\foundation\bootstrap.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] scripts\gentle-vanguard\bootstrap-machine.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] scripts\gentle-vanguard\bootstrap-workspace.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [SUGGESTION] scripts\gentle-vanguard\bootstrap-workspace.ps1:819 — Archivo muy largo (819 líneas) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] scripts\gentle-vanguard\bootstrap.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\hooks\check-api.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\hooks\check-architecture.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\hooks\check-documentation.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
@@ -1501,7 +1501,7 @@
 - [WARNING (real)] scripts\utilities\SESSION-MANAGEMENT\end-session.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] tests\unit\engine-scripts.tests.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\engram-orchestrator.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] scripts\foundation\engram-policy.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] scripts\gentle-vanguard\engram-policy.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] adapters\detection\enhanced-detect.ps1:265 — 1 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\SKILLS-TOOLS\ensure-tools-active.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] scripts\utilities\SKILLS-TOOLS\ensure-tools-active.ps1:648 — Archivo muy largo (648 líneas) (Juez B solamente, no auto-fixed) 
@@ -1520,15 +1520,15 @@
 - [WARNING (real)] scripts\utilities\fix-all-simple.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\fix-emoji-cleanup.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\UTILITIES\fix-remaining-scripts.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] tests\unit\foundation-core.tests.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] scripts\utilities\foundation-installer-tui.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] build\archive\Foundation-Installer-v2.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] build\archive\Foundation-Installer-v3.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] build\Foundation-Installer-v4.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] build\Foundation-Launcher.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] tests\unit\foundation-manager.tests.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] build\archive\Foundation-Simple-Installer.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] scripts\utilities\UTILITIES\foundation-sync.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] tests\unit\gentle-vanguard-core.tests.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] scripts\utilities\gentle-vanguard-installer-tui.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] build\archive\Gentle-Vanguard-Installer-v2.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] build\archive\Gentle-Vanguard-Installer-v3.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] build\Gentle-Vanguard-Installer-v4.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] build\Gentle-Vanguard-Launcher.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] tests\unit\gentle-vanguard-manager.tests.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] build\archive\Gentle-Vanguard-Simple-Installer.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] scripts\utilities\UTILITIES\gentle-vanguard-sync.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\AUDIT-REPORTING\generate-audit-report.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] scripts\utilities\AUDIT-REPORTING\generate-audit-report.ps1:280 — 1 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] scripts\utilities\TELEMETRY-METRICS\generate-dashboard.ps1:201 — 2 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
@@ -1542,8 +1542,8 @@
 - [WARNING (real)] scripts\utilities\AUDIT-REPORTING\generate-session-audit.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\AUDIT-REPORTING\generate-session-review.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\get-session-id.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] bin\gf.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [SUGGESTION] bin\gf.ps1 (dir):0 — Directorio sin README.md (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] bin\gv.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [SUGGESTION] bin\gv.ps1 (dir):0 — Directorio sin README.md (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] tests\unit\githooks-scripts.tests.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] plugins\example-hello-world\hello-world.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\UTILITIES\help.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
@@ -1585,7 +1585,7 @@
 - [WARNING (real)] scripts\utilities\UTILITIES\mcp-monitor.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\message-tracker.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\CONFIG\Microsoft.PowerShell_profile.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] scripts\utilities\DEPLOYMENT\migrate-foundation-remotes.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] scripts\utilities\DEPLOYMENT\migrate-gentle-vanguard-remotes.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\project\migrate.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\MODEL-ROUTER\model-router.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] scripts\utilities\MODEL-ROUTER\model-router.ps1:565 — 1 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
@@ -1628,9 +1628,9 @@
 - [WARNING (real)] demos\07-mixed-cookbook-real-request\preflight.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\security\privacy-gateway.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\security\privacy-sanitizer.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] build\protect-foundation.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] build\protect-gentle-vanguard.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\UTILITIES\read-once-guard.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] scripts\foundation\register-sync-task.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] scripts\gentle-vanguard\register-sync-task.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] skills\distributed-tracing-skill\report-generator.ps1:512 — Archivo muy largo (512 líneas) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] demos\07-mixed-cookbook-real-request\reset-demo.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] skills\parallel-execution-limits\resource-pooling.ps1:587 — Archivo muy largo (587 líneas) (Juez B solamente, no auto-fixed) 
@@ -1663,7 +1663,7 @@
 - [WARNING (real)] tests\unit\session-workflow.tests.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\setup-complete.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\DEPLOYMENT\setup-monitoring.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] scripts\foundation\setup-multi-machine.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] scripts\gentle-vanguard\setup-multi-machine.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\testing\setup-normalization-hooks.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\project\setup-project.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\DEPLOYMENT\setup-remote-agent.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
@@ -1684,7 +1684,7 @@
 - [SUGGESTION] scripts\utilities\AI-AGENT-MANAGEMENT\sync-agent-instructions.ps1:54 — 1 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\project\sync-docs.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\sync-drift-report.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] scripts\foundation\sync-skills.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] scripts\gentle-vanguard\sync-skills.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\diagnostics\system-diagnostics.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\TELEMETRY-METRICS\token-budget-guard.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] scripts\utilities\TELEMETRY-METRICS\token-budget-guard.ps1:140 — 2 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
@@ -1698,7 +1698,7 @@
 - [WARNING (real)] scripts\utilities\SKILLS-TOOLS\update-tools.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] tests\unit\utility-scripts.tests.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] tests\unit\v264-scripts.tests.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] scripts\utilities\validate-foundation-complete.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] scripts\utilities\validate-gentle-vanguard-complete.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\diagnostics\validate-gitflow.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\validation\validate-project.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\TELEMETRY-METRICS\validate-report-simple.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
@@ -1707,13 +1707,13 @@
 - [WARNING (real)] scripts\diagnostics\validate-sdd-governance.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\utilities\SESSION-MANAGEMENT\validate-session-stack.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] scripts\validation\validate-workspace.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] scripts\utilities\wf-benchmark.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] scripts\utilities\wf-report.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [SUGGESTION] scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1:6 — 2 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
-- [SUGGESTION] scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1:2834 — Archivo muy largo (2834 líneas) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] scripts\utilities\wf.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
-- [WARNING (real)] scripts\foundation\wf.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] scripts\utilities\gv-benchmark.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] scripts\utilities\gv-report.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [SUGGESTION] scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1:6 — 2 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
+- [SUGGESTION] scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1:2834 — Archivo muy largo (2834 líneas) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] scripts\utilities\gv.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
+- [WARNING (real)] scripts\gentle-vanguard\gv.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [WARNING (real)] hooks\workflow-lint.ps1:1 — Script sin bloque de ayuda (SYNOPSIS/DESCRIPTION) (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] hooks\workflow-lint.ps1 (dir):0 — Directorio sin README.md (Juez B solamente, no auto-fixed) 
 - [SUGGESTION] skills\security-expert-skill\hooks\pre-commit-security.sh:70 — 1 línea(s) superan 200 caracteres (Juez B solamente, no auto-fixed) 
@@ -1727,3 +1727,5 @@
 
 
 ### JUDGMENT: APPROVED
+
+

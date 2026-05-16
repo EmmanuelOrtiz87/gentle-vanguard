@@ -952,7 +952,7 @@ func main() {
 	}
 
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		fmt.Println("Model router config not found. Run 'wf.ps1 route defaults --init' first.")
+		fmt.Println("Model router config not found. Run 'gv.ps1 route defaults --init' first.")
 		fmt.Println("Expected path:", path)
 		os.Exit(1)
 	}
@@ -973,3 +973,4 @@ func main() {
 		fmt.Println(finalModel.statusMsg)
 	}
 }
+

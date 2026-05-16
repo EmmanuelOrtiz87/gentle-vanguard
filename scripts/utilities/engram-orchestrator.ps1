@@ -6,8 +6,8 @@ param(
     [Parameter(Mandatory=$true)]
     [string]$Action,
     
-    [string]$WorkspaceRoot = ".\foundation",
-    [string]$EngramPolicyScript = "$WorkspaceRoot\scripts\foundation\engram-policy.ps1"
+    [string]$WorkspaceRoot = ".\gentle-vanguard",
+    [string]$EngramPolicyScript = "$WorkspaceRoot\scripts\gentle-vanguard\engram-policy.ps1"
 )
 
 $ErrorActionPreference = "Continue"
@@ -80,7 +80,7 @@ function Test-EngramHealth {
     # Verificar instalacion
     $engramPaths = @(
         "$HOME\bin\engram.exe",
-        ".\foundation\\tools\engram.exe",
+        ".\gentle-vanguard\\tools\engram.exe",
         "$HOME\go\bin\engram.exe"
     )
     
@@ -208,3 +208,4 @@ switch ($Action) {
 }
 
 Write-OrchStatus "=== Orchestration Complete ==="
+

@@ -1,7 +1,7 @@
-# MCP Bridge - Foundation
+# MCP Bridge - Gentle-Vanguard
 
-Exposes Foundation capabilities as an **MCP (Model Context Protocol)** server, enabling any
-MCP-compatible tool to use Foundation's features.
+Exposes Gentle-Vanguard capabilities as an **MCP (Model Context Protocol)** server, enabling any
+MCP-compatible tool to use Gentle-Vanguard's features.
 
 ---
 
@@ -13,7 +13,7 @@ Model Context Protocol (MCP) is a standard for AI tools to:
 - **Share resources** (readable data)
 - **Use prompts** (predefined templates)
 
-Any tool that supports MCP can connect to this server and access Foundation's capabilities.
+Any tool that supports MCP can connect to this server and access Gentle-Vanguard's capabilities.
 
 ---
 
@@ -44,18 +44,18 @@ npm run dev
 
 ## Exposed Tools
 
-Foundation exposes these tools via MCP:
+Gentle-Vanguard exposes these tools via MCP:
 
 | Tool Name                  | Description              | Input Schema                             |
 | -------------------------- | ------------------------ | ---------------------------------------- |
-| `foundation_review`        | Run 7D code review       | `{ path: string, dimensions: string[] }` |
-| `foundation_audit`         | Run workspace audit      | `{ mode: 'quick' \| 'full' }`            |
-| `foundation_delegate`      | Delegate to subagent     | `{ agent: string, prompt: string }`      |
-| `foundation_health`        | Check workspace health   | `{}`                                     |
-| `foundation_session_start` | Start new session        | `{ project: string }`                    |
-| `foundation_session_end`   | End session with summary | `{ sessionId: string }`                  |
-| `foundation_skill_list`    | List available skills    | `{}`                                     |
-| `foundation_skill_load`    | Load specific skill      | `{ skillName: string }`                  |
+| `gentle-vanguard_review`        | Run 7D code review       | `{ path: string, dimensions: string[] }` |
+| `gentle-vanguard_audit`         | Run workspace audit      | `{ mode: 'quick' \| 'full' }`            |
+| `gentle-vanguard_delegate`      | Delegate to subagent     | `{ agent: string, prompt: string }`      |
+| `gentle-vanguard_health`        | Check workspace health   | `{}`                                     |
+| `gentle-vanguard_session_start` | Start new session        | `{ project: string }`                    |
+| `gentle-vanguard_session_end`   | End session with summary | `{ sessionId: string }`                  |
+| `gentle-vanguard_skill_list`    | List available skills    | `{}`                                     |
+| `gentle-vanguard_skill_load`    | Load specific skill      | `{ skillName: string }`                  |
 
 ---
 
@@ -66,11 +66,11 @@ Foundation exposes these tools via MCP:
 ```json
 {
   "mcpServers": {
-    "foundation": {
+    "gentle-vanguard": {
       "command": "node",
       "args": ["/absolute/path/to/adapters/mcp-bridge/dist/server.js"],
       "env": {
-        "FOUNDATION_ROOT": "/path/to/foundation"
+        "GENTLE_VANGUARD_ROOT": "/path/to/gentle-vanguard"
       }
     }
   }
@@ -82,7 +82,7 @@ Foundation exposes these tools via MCP:
 ```json
 {
   "mcpServers": {
-    "foundation": {
+    "gentle-vanguard": {
       "command": "node",
       "args": ["/absolute/path/to/adapters/mcp-bridge/dist/server.js"]
     }
@@ -95,7 +95,7 @@ Foundation exposes these tools via MCP:
 ```json
 {
   "mcpServers": {
-    "foundation": {
+    "gentle-vanguard": {
       "command": "node",
       "args": ["/absolute/path/to/adapters/mcp-bridge/dist/server.js"]
     }
@@ -108,7 +108,7 @@ Foundation exposes these tools via MCP:
 ```json
 {
   "mcpServers": {
-    "foundation": {
+    "gentle-vanguard": {
       "command": "node",
       "args": ["/absolute/path/to/adapters/mcp-bridge/dist/server.js"]
     }
@@ -125,7 +125,7 @@ Foundation exposes these tools via MCP:
 ```typescript
 // MCP client call
 const result = await mcpClient.callTool({
-  name: 'foundation_review',
+  name: 'gentle-vanguard_review',
   arguments: {
     path: 'src/components/App.tsx',
     dimensions: ['security', 'quality', 'architecture'],
@@ -138,7 +138,7 @@ const result = await mcpClient.callTool({
 
 ```typescript
 const result = await mcpClient.callTool({
-  name: 'foundation_delegate',
+  name: 'gentle-vanguard_delegate',
   arguments: {
     agent: 'sdd-apply',
     prompt: 'Implement the authentication feature from task #123',
@@ -153,13 +153,13 @@ const result = await mcpClient.callTool({
 
 ```
 
-   MCP Client      MCP Bridge       Foundation
+   MCP Client      MCP Bridge       Gentle-Vanguard
  (Windsurf,                (this server)             Core
   Codex, etc.)
 
 
           MCP Protocol               Translates                  Calls
-          (standard)                 to Foundation               Foundation
+          (standard)                 to Gentle-Vanguard               Gentle-Vanguard
                                      CLI/Scripts                scripts
 ```
 
@@ -176,11 +176,11 @@ mcp-bridge/
  src/
     server.ts            # Main MCP server
     scripts/utilities/               # Tool implementations
-       review.ts       # foundation_review
-       audit.ts        # foundation_audit
-       delegate.ts     # foundation_delegate
-       health.ts       # foundation_health
-       session.ts      # foundation_session_*
+       review.ts       # gentle-vanguard_review
+       audit.ts        # gentle-vanguard_audit
+       delegate.ts     # gentle-vanguard_delegate
+       health.ts       # gentle-vanguard_health
+       session.ts      # gentle-vanguard_session_*
     resources/          # MCP resources
     utils/              # Shared utilities
  dist/                   # Compiled JavaScript (gitignored)
@@ -204,10 +204,10 @@ All tools return standardized error responses:
 
 ## Token Efficiency
 
-The MCP Bridge maintains Foundation's token efficiency:
+The MCP Bridge maintains Gentle-Vanguard's token efficiency:
 
 - Only sends necessary context
-- Uses Foundation's compression strategies
+- Uses Gentle-Vanguard's compression strategies
 - Respects memory tiering (hot/warm/cold)
 - Logs token usage for monitoring
 
@@ -216,3 +216,4 @@ The MCP Bridge maintains Foundation's token efficiency:
 **Status**: Implementation Pending  
 **Priority**: HIGH (covers 80% of non-standard tools)  
 **Next**: Implement `server.ts` and `tools.ts`
+

@@ -18,7 +18,7 @@ metadata:
 
 ## Purpose
 
-Unified skill for generating all types of content output from Foundation:
+Unified skill for generating all types of content output from Gentle-Vanguard:
 
 - **Technical Docs**: API docs, README, guides, references
 - **Internal Reports**: Session metrics, costs, performance
@@ -124,14 +124,14 @@ A - Action: CTA claro
 ```
 P - Problem: Describir el dolor del usuario
 A - Agitation: Intensificar sin resolver
-S - Solution: Presentar Foundation como solucin
+S - Solution: Presentar Gentle-Vanguard como solucin
 ```
 
 #### BAB (Before, After, Bridge)
 
 ```
 B - Before: Estado actual del usuario
-A - After: Estado deseada con Foundation
+A - After: Estado deseada con Gentle-Vanguard
 B - Bridge: Cmo llegar del Before al After
 ```
 
@@ -159,17 +159,17 @@ B - Bridge: Cmo llegar del Before al After
 
  [CTA]
 
-#FoundationStack
+#Gentle-VanguardStack
 ```
 
 #### Testimonial Request
 
 ```
-Ya usas Foundation?
+Ya usas Gentle-Vanguard?
 Cuntanos tu experiencia
 
 Tu feedback nos ayuda a mejorar.
-[#FoundationStack]
+[#Gentle-VanguardStack]
 ```
 
 ---
@@ -182,7 +182,7 @@ Tu feedback nos ayuda a mejorar.
 
 ```
 1. ORDINARIO: El developer sin herramientas
-2. LLAMADO: Descubrir Foundation
+2. LLAMADO: Descubrir Gentle-Vanguard
 3. PRUEBAS: Learning curve, configuración
 4. MENTOR: Skills y documentacin
 5. TRANSFORMACIN: Productividad X10
@@ -206,7 +206,7 @@ El problema: context hell, sesiónes perdidas...
 Cada vez que iniciaba, tardaba 30min solo en recapitular.
 
 3/x
-Ento encontr Foundation:
+Ento encontr Gentle-Vanguard:
 - Engram: memoria persistente
 - Auto-delegation: 70% tiempo recuperado
 - Token guard: 40% menos tokens
@@ -264,7 +264,7 @@ Thread below
 ```
 0:00-1:00  Hook + Introduccin
 1:00-4:00  Problema (con datos)
-4:00-9:00  Solucin Foundation
+4:00-9:00  Solucin Gentle-Vanguard
 9:00-13:00 Demo live
 13:00-14:00  Resultados + CTA
 14:00-15:00 Q&A
@@ -287,12 +287,12 @@ Thread below
 4. **Repeticin**: Say it three ways
 5. **CTA**: Sempre terminar con action
 
-## Foundation Stack Description Templates
+## Gentle-Vanguard Stack Description Templates
 
 ### Short (Twitter/X - 280 chars)
 
 ```
-# FoundationStack
+# Gentle-VanguardStack
  AI Development Workspace
 - Session tracking & metrics
 - Auto-delegation con orquestador
@@ -304,9 +304,9 @@ Thread below
 ### Medium (LinkedIn - 2-3 paragraphs)
 
 ```
- Presentando Foundation: Mi AI Development Workspace
+ Presentando Gentle-Vanguard: Mi AI Development Workspace
 
-Foundation es un workspace agnstico para desarrollo AI-first que incluye:
+Gentle-Vanguard es un workspace agnstico para desarrollo AI-first que incluye:
 
  Session Management con tracking de mtricas
  Auto-delegation que routedareas subagentes especializados
@@ -316,12 +316,12 @@ Foundation es un workspace agnstico para desarrollo AI-first que incluye:
 
 Ideal para equipos que usan AI assistants (OpenCode, Claude, Cursor).
 
-#FoundationStack #AIDevelopment #OpenCode #DevTools
+#Gentle-VanguardStack #AIDevelopment #OpenCode #DevTools
 ```
 
 ### Long (Blog Post)
 
-Ver: `docs/marketing/foundation-stack-blog-post.md`
+Ver: `docs/marketing/gentle-vanguard-stack-blog-post.md`
 
 ---
 
@@ -371,7 +371,7 @@ Ver: `docs/marketing/foundation-stack-blog-post.md`
 #### Discord Template
 
 ```
- **Nuevo en Foundation [v2.x]**
+ **Nuevo en Gentle-Vanguard [v2.x]**
 
 [Feature description]
 
@@ -382,7 +382,7 @@ Ver: `docs/marketing/foundation-stack-blog-post.md`
  Get it: [Link]
  Feedback: [Channel link]
 
-#FoundationStack
+#Gentle-VanguardStack
 ```
 
 ---
@@ -400,21 +400,21 @@ Ver: `docs/marketing/foundation-stack-blog-post.md`
 #### WhatsApp Template
 
 ```
- Foundation Update v2.x
+ Gentle-Vanguard Update v2.x
 
 [1-liner sobre lo nuevo]
 
  [Link to full post]
 
 Preguntas? Responde aqu
-#FoundationStack
+#Gentle-VanguardStack
 ```
 
 ---
 
 ## Logo & Branding
 
-### Foundation Logo (Text-based)
+### Gentle-Vanguard Logo (Text-based)
 
 ```
 
@@ -442,7 +442,7 @@ Preguntas? Responde aqu
 
 
 
-       FOUNDATION
+       GENTLE_VANGUARD
 
 ```
 
@@ -450,7 +450,7 @@ Preguntas? Responde aqu
 
 | Category | Hashtags                        |
 | -------- | ------------------------------- |
-| Stack    | #FoundationStack #AIDevelopment |
+| Stack    | #Gentle-VanguardStack #AIDevelopment |
 | Tools    | #OpenCode #Claude #Cursor       |
 | Spanish  | #DevES #desarrolloES            |
 | General  | #DevTools #AI #Productivity     |
@@ -495,3 +495,4 @@ Preguntas? Responde aqu
 
 _Skill versión: 3.0_  
 _Last updated: 2026-04-27_
+

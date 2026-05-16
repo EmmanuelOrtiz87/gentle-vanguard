@@ -2,13 +2,13 @@
 
 **Version**: 1.0.0  
 **Last Updated**: 2026-05-15  
-**Scope**: Foundation stack, all agents, data processing, user privacy
+**Scope**: Gentle-Vanguard stack, all agents, data processing, user privacy
 
 ---
 
 ## 1. Principles (MANDATORY)
 
-All AI agents and Foundation systems MUST comply with GDPR Article 5 principles:
+All AI agents and Gentle-Vanguard systems MUST comply with GDPR Article 5 principles:
 
 1. **Lawfulness, Fairness, Transparency**: Justify processing. Disclose AI decision logic.
 2. **Purpose Limitation**: Process data only for declared purposes. NO secondary use without consent.
@@ -23,33 +23,33 @@ All AI agents and Foundation systems MUST comply with GDPR Article 5 principles:
 ## 2. User Rights (MANDATORY ENFORCEMENT)
 
 ### Right to Access (Article 15)
-- Users MAY request all personal data Foundation processes about them
+- Users MAY request all personal data Gentle-Vanguard processes about them
 - Agent response time: **30 calendar days** (HARD DEADLINE)
-- Implementation: `foundation privacy export-user-data <user_id>` command
+- Implementation: `gentle-vanguard privacy export-user-data <user_id>` command
 - Output: JSON/CSV with all PII, processing history, retention dates
 
 ### Right to Erasure (Article 17 — "Right to be Forgotten")
 - Users MAY request deletion of personal data
 - Exceptions: Legal obligation, contractual necessity, law enforcement
 - Agent response time: **30 calendar days**
-- Implementation: `foundation privacy delete-user-data <user_id>` command
+- Implementation: `gentle-vanguard privacy delete-user-data <user_id>` command
 - Verification: Confirm deletion in audit log within 48 hours
 
 ### Right to Rectification (Article 16)
 - Users MAY correct inaccurate data
 - Agent responds within **14 calendar days**
-- Implementation: `foundation privacy update-user-data <user_id> <json_patch>`
+- Implementation: `gentle-vanguard privacy update-user-data <user_id> <json_patch>`
 - Audit log entry: WHO corrected WHAT, WHEN
 
 ### Right to Data Portability (Article 20)
 - Users MAY export data in machine-readable format (JSON/CSV/Parquet)
 - Response time: **30 calendar days**
-- Implementation: `foundation privacy export-portable <user_id> --format json|csv|parquet`
+- Implementation: `gentle-vanguard privacy export-portable <user_id> --format json|csv|parquet`
 
 ### Right to Object (Article 21)
 - Users MAY opt out of processing for marketing, profiling, automated decisions
 - Agent honor opt-out within **5 business days**
-- Configuration: Store in `~/.foundation/privacy-preferences.json`
+- Configuration: Store in `~/.gentle-vanguard/privacy-preferences.json`
 
 ---
 
@@ -64,7 +64,7 @@ All AI agents and Foundation systems MUST comply with GDPR Article 5 principles:
 - Before collecting PII: Obtain explicit, informed, freely-given, specific consent
 - Store consent record: `{ user_id, data_type, timestamp, consent_version, duration }`
 - Consent duration default: **365 days** (renewable annually)
-- Withdrawal: Users may withdraw anytime via `foundation privacy revoke-consent <data_type>`
+- Withdrawal: Users may withdraw anytime via `gentle-vanguard privacy revoke-consent <data_type>`
 
 ### Automated Decision-Making (Article 22 — CRITICAL)
 - NO fully automated decisions affecting user rights WITHOUT transparency + opt-out
@@ -76,7 +76,7 @@ All AI agents and Foundation systems MUST comply with GDPR Article 5 principles:
     "decision": "session_auto_deleted",
     "reasoning": "inactivity > 180 days",
     "affected_user": "user_id",
-    "right_to_review": "foundation privacy request-human-review <decision_id>",
+    "right_to_review": "gentle-vanguard privacy request-human-review <decision_id>",
     "timestamp": "2026-05-15T16:00:00Z"
   }
   ```
@@ -96,8 +96,8 @@ All AI agents and Foundation systems MUST comply with GDPR Article 5 principles:
 | Learning logs (Engram) | 365 days | Model improvement (consent-based) |
 
 ### Retention Enforcement
-- Automated purge every 30 days: `foundation privacy purge-expired-data`
-- Verify purge: `foundation privacy audit-retention-compliance`
+- Automated purge every 30 days: `gentle-vanguard privacy purge-expired-data`
+- Verify purge: `gentle-vanguard privacy audit-retention-compliance`
 - Output: List of deleted records, timestamps, audit trail
 
 ---
@@ -112,7 +112,7 @@ All AI agents and Foundation systems MUST comply with GDPR Article 5 principles:
 ### Response Protocol (72-Hour Requirement)
 1. **Identify** breach scope (who, what data, when discovered)
 2. **Contain** immediately (revoke tokens, freeze accounts if necessary)
-3. **Notify** Foundation security team + legal (within 2 hours)
+3. **Notify** Gentle-Vanguard security team + legal (within 2 hours)
 4. **Assess** risk to individuals
 5. **Notify** supervisory authority (WITHIN 72 HOURS) if required by Article 33
 6. **Notify** affected users if high risk (WITHIN 72 HOURS) — Article 34
@@ -120,13 +120,13 @@ All AI agents and Foundation systems MUST comply with GDPR Article 5 principles:
 
 ### Breach Notification Template
 ```
-Subject: Data Breach Notification — Foundation [INCIDENT_ID]
+Subject: Data Breach Notification — Gentle-Vanguard [INCIDENT_ID]
 
 Dear [User],
 On [DATE], we discovered a security incident affecting [X] user accounts.
 Affected data: [LIST DATA TYPES]
 We have taken the following measures: [ACTIONS]
-You can request more details: foundation privacy breach-details [INCIDENT_ID]
+You can request more details: gentle-vanguard privacy breach-details [INCIDENT_ID]
 Supervisory authority notification: [AUTHORITY], [DATE]
 ```
 
@@ -151,7 +151,7 @@ Supervisory authority notification: [AUTHORITY], [DATE]
 
 ### Implementation
 ```powershell
-foundation privacy run-dpia --agent <agent_name> --scope <data_types> --output report.json
+gentle-vanguard privacy run-dpia --agent <agent_name> --scope <data_types> --output report.json
 ```
 
 ---
@@ -164,7 +164,7 @@ foundation privacy run-dpia --agent <agent_name> --scope <data_types> --output r
 - Store all DPAs: `config/dpas/<processor_name>.json`
 
 ### Sub-Processor Changes
-- Foundation MUST notify users if sub-processors change
+- Gentle-Vanguard MUST notify users if sub-processors change
 - User opt-out right: If user disagrees, delete account/data on demand
 - Update audit trail: `[GDPR] Sub-processor changed: <old> → <new>, users notified [TIMESTAMP]`
 
@@ -184,7 +184,7 @@ foundation privacy run-dpia --agent <agent_name> --scope <data_types> --output r
 
 ### Audit Command
 ```powershell
-foundation privacy audit-gdpr --year 2026 --output audit-report-2026.md
+gentle-vanguard privacy audit-gdpr --year 2026 --output audit-report-2026.md
 ```
 
 ---
@@ -205,7 +205,7 @@ foundation privacy audit-gdpr --year 2026 --output audit-report-2026.md
 
 ### Deployment Gate: GDPR Compliance Validator
 ```powershell
-foundation privacy validate-agent-compliance <agent_name>
+gentle-vanguard privacy validate-agent-compliance <agent_name>
 ```
 Exit code 0 = Compliant; Exit code 1 = BLOCK deployment
 
@@ -221,7 +221,7 @@ Exit code 0 = Compliant; Exit code 1 = BLOCK deployment
 
 ### Command
 ```powershell
-foundation privacy monitor-daily --alert-email compliance@foundation.local
+gentle-vanguard privacy monitor-daily --alert-email compliance@gentle-vanguard.local
 ```
 
 ---
@@ -239,3 +239,4 @@ foundation privacy monitor-daily --alert-email compliance@foundation.local
 **Status**: MANDATORY — All agents MUST comply by 2026-06-01  
 **Violation**: Non-compliance blocks production deployment  
 **Review Cycle**: Annual + quarterly updates per emerging regulations
+

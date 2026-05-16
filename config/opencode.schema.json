@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "OpenCode Configuration Schema",
-  "description": "Esquema de validación para opencode.json - Configuración centralizada de Foundation",
+  "description": "Esquema de validación para opencode.json - Configuración centralizada de Gentle-Vanguard",
   "type": "object",
   "required": ["provider", "agent", "skills"],
   "properties": {

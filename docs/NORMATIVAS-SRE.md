@@ -8,7 +8,7 @@ Last updated: 2026-05-11
 
 ## 1. PROPOSITO
 
-Define los estandares de Site Reliability Engineering (SRE) para el stack Foundation. Aplica a todos los servicios, scripts, workflows, y agentes. Establece SLIs, SLOs, y error budgets para garantizar confiabilidad medible.
+Define los estandares de Site Reliability Engineering (SRE) para el stack Gentle-Vanguard. Aplica a todos los servicios, scripts, workflows, y agentes. Establece SLIs, SLOs, y error budgets para garantizar confiabilidad medible.
 
 ---
 
@@ -29,7 +29,7 @@ Service SLO (global) -> Component SLOs (por agente, script, workflow) -> SLIs (m
 
 ---
 
-## 3. SLIs DEL STACK FOUNDATION
+## 3. SLIs DEL STACK Gentle-Vanguard
 
 ### 3.1 Agent Performance SLIs
 
@@ -103,7 +103,7 @@ Service SLO (global) -> Component SLOs (por agente, script, workflow) -> SLIs (m
 
 ### 5.1 Definicion de Toil
 
-| Caracteristica | Ejemplo Foundation | Accion |
+| Caracteristica | Ejemplo Gentle-Vanguard | Accion |
 |----------------|-------------------|--------|
 | Manual | Validacion manual de configs | Automatizar con validate-configs.ps1 |
 | Repetitivo | Revision semanal de logs | Dashboard automatico |
@@ -172,3 +172,5 @@ TODO implementacion DEBE verificar:
 ---
 
 _Version: 1.0.0 - 2026-05-11 - Status: ACTIVE_
+
+

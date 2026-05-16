@@ -1,27 +1,27 @@
-# Foundation Sync Guide
+# Gentle-Vanguard Sync Guide
 
-This guide explains exactly how Foundation sync behaves in consumer repositories.
+This guide explains exactly how Gentle-Vanguard sync behaves in consumer repositories.
 
 ## Scope
 
-`foundation-sync` does **not** update the whole repository. It only evaluates and updates files
-listed in `config/foundation-sync.json` under `assets`.
+`gentle-vanguard-sync` does **not** update the whole repository. It only evaluates and updates files
+listed in `config/gentle-vanguard-sync.json` under `assets`.
 
 If a file is not listed in `assets`, sync does not touch it.
 
 ## Source vs Consumer Role
 
-`config/foundation-sync.json` defines a repository role:
+`config/gentle-vanguard-sync.json` defines a repository role:
 
 1. `role: source`
 
-- This repository is the Foundation source.
-- `foundation-sync` exits early with no file sync.
+- This repository is the Gentle-Vanguard source.
+- `gentle-vanguard-sync` exits early with no file sync.
 
 2. `role: consumer`
 
-- This repository consumes Foundation-managed assets.
-- `foundation-sync` compares and optionally updates listed assets.
+- This repository consumes Gentle-Vanguard-managed assets.
+- `gentle-vanguard-sync` compares and optionally updates listed assets.
 
 ## Asset Strategy
 
@@ -64,11 +64,11 @@ Each asset can define a `strategy`:
 1. Run check first:
 
 ```powershell
-.\scripts\utilities\wf.ps1 foundation-sync
+.\scripts\utilities\gv.ps1 gentle-vanguard-sync
 ```
 
 2. Review drifted files and strategy (`replace` vs `preserve-local`).
-3. Adjust `config/foundation-sync.json` before apply if needed.
+3. Adjust `config/gentle-vanguard-sync.json` before apply if needed.
 4. Ensure a clean working tree before apply:
 
 ```powershell
@@ -77,13 +77,13 @@ git add .
 git commit -m "chore: save local changes"
 
 # Option B: Stash temporarily
-git stash push -u -m "pre-foundation-sync"
+git stash push -u -m "pre-gentle-vanguard-sync"
 ```
 
 5. Apply with PR for traceability:
 
 ```powershell
-.\scripts\utilities\wf.ps1 foundation-sync apply -CreatePr
+.\scripts\utilities\gv.ps1 gentle-vanguard-sync apply -CreatePr
 ```
 
 6. Review PR and merge.
@@ -104,13 +104,13 @@ Custom files outside managed assets are not touched.
 {
   "schemaversión": 1,
   "role": "consumer",
-  "foundationPath": "../foundation",
+  "gentle-vanguardPath": "../gentle-vanguard",
   "fromversión": "0.2.0",
   "toversión": "0.2.1",
   "assets": [
     {
-      "source": "scripts/utilities/wf.ps1",
-      "target": "scripts/utilities/wf.ps1",
+      "source": "scripts/utilities/gv.ps1",
+      "target": "scripts/utilities/gv.ps1",
       "strategy": "replace"
     },
     {
@@ -124,6 +124,7 @@ Custom files outside managed assets are not touched.
 
 ## Related Files
 
-1. `scripts/utilities/UTILITIES/foundation-sync.ps1`
-2. `config/foundation-sync.json`
-3. `scripts/utilities/wf.ps1`
+1. `scripts/utilities/UTILITIES/gentle-vanguard-sync.ps1`
+2. `config/gentle-vanguard-sync.json`
+3. `scripts/utilities/gv.ps1`
+

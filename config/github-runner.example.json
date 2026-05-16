@@ -2,14 +2,14 @@
   "enabled": false,
   "repository": {
     "owner": "EmmanuelOrtiz87",
-    "name": "foundation-public",
-    "url": "https://github.com/EmmanuelOrtiz87/foundation-public"
+    "name": "gentle-vanguard-public",
+    "url": "https://github.com/EmmanuelOrtiz87/gentle-vanguard-public"
   },
   "runner": {
-    "root": "{userProfile}/actions-runner/foundation-public",
-    "name": "{machineName}-foundation-public",
+    "root": "{userProfile}/actions-runner/gentle-vanguard-public",
+    "name": "{machineName}-gentle-vanguard-public",
     "group": "Default",
-    "labels": ["self-hosted", "windows", "x64", "foundation"],
+    "labels": ["self-hosted", "windows", "x64", "gentle-vanguard"],
     "workFolder": "_work",
     "installService": true,
     "replaceExisting": true,
@@ -20,3 +20,4 @@
     "security": "Do not route untrusted pull_request_target workflows to self-hosted runners on public repositories."
   }
 }
+

@@ -4,11 +4,11 @@
 Describe 'Auto-Update Workflow Integration Tests' {
     BeforeAll {
         $script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
-        $script:skillPath = Join-Path $script:root "skills/foundation-manager-skill"
+        $script:skillPath = Join-Path $script:root "skills/gentle-vanguard-manager-skill"
     }
 
-    Context 'Foundation Manager Skill' {
-        It 'foundation-manager-skill directory exists' {
+    Context 'Gentle-Vanguard Manager Skill' {
+        It 'gentle-vanguard-manager-skill directory exists' {
             Test-Path $script:skillPath | Should Be $true
         }
 
@@ -29,9 +29,9 @@ Describe 'Auto-Update Workflow Integration Tests' {
         }
     }
 
-    Context 'WF CLI Integration' {
-        It 'wf.ps1 has update command (via canonical wf)' {
-            $f = Join-Path $script:root "scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1"
+    Context 'GV CLI Integration' {
+        It 'gv.ps1 has update command (via canonical gv)' {
+            $f = Join-Path $script:root "scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1"
             if (Test-Path $f) {
                 $content = Get-Content $f -Raw
                 ($content -match 'update|Update') | Should Be $true
@@ -42,7 +42,7 @@ Describe 'Auto-Update Workflow Integration Tests' {
     }
 
     Context 'Auto-Update Script' {
-        It 'Foundation manager SKILL.md documents FF-017' {
+        It 'Gentle-Vanguard manager SKILL.md documents FF-017' {
             $f = Join-Path $script:skillPath "SKILL.md"
             if (Test-Path $f) {
                 $content = Get-Content $f -Raw
@@ -64,3 +64,4 @@ Describe 'Auto-Update Workflow Integration Tests' {
         }
     }
 }
+

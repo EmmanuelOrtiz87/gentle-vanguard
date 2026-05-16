@@ -1,4 +1,4 @@
-# Presentation Script: Foundation
+# Presentation Script: Gentle-Vanguard
 
 This document contains detailed content for the 13 slides in the executive presentation.
 
@@ -6,7 +6,7 @@ This document contains detailed content for the 13 slides in the executive prese
 
 ### Slide 1: Title
 
-**Title:** Foundation: The Future of Engineering Efficiency. **Subtitle:**
+**Title:** Gentle-Vanguard: The Future of Engineering Efficiency. **Subtitle:**
 Standardization, AI, and Quality as pillars of growth. **Notes:** Present the overall vision for
 modernizing the development area.
 
@@ -19,7 +19,7 @@ modernizing the development area.
 - Lack of up-to-date technical documentation.
 - Security risks (Secret leaks).
 
-### Slide 3: The Solution: Foundation
+### Slide 3: The Solution: Gentle-Vanguard
 
 **Message:** An abstraction layer that unifies development. **Phrase:** "We don't just build code,
 we build a platform to scale engineering."
@@ -34,7 +34,7 @@ we build a platform to scale engineering."
 
 ### Slide 5: Simplified Architecture
 
-**Flow:** [Base Layer: Foundation] -> [Tools Layer: Engram/Native Review] -> [Business Value:
+**Flow:** [Base Layer: Gentle-Vanguard] -> [Tools Layer: Engram/Native Review] -> [Business Value:
 Projects] **Concept:** Total independence between the technical base and business logic.
 
 ### Slide 6: The "Bootstrap Effect"
@@ -86,9 +86,10 @@ each release.
 
 ### Slide 13: Conclusion
 
-**Closing:** "Foundation is the foundation of our technological agility." **Call to
+**Closing:** "Gentle-Vanguard is the gentle-vanguard of our technological agility." **Call to
 action:** Standard implementation for all new developments.
 
 ---
 
 _Document generated for executive presentation support._
+

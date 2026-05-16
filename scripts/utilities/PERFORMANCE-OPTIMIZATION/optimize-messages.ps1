@@ -28,7 +28,7 @@
     .\optimize-messages.ps1 -InputMessage "message.json" -OutputPath "optimized.json" -CompressionMethod gzip -EnableBatching
 
 .NOTES
-    Author: Gentleman Foundation Team
+    Author: Gentle-Vanguard Team
     Version: 1.0.0
     Last Updated: 2026-04-22
 #>

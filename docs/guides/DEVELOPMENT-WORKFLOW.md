@@ -1,9 +1,9 @@
-﻿# Development Workflow
+# Development Workflow
 
 ## Overview
 
 This document defines the standardized development workflow for all projects using Gentleman
-Foundation.
+Gentle-Vanguard.
 
 ## Branch Strategy
 
@@ -47,7 +47,7 @@ feature/* / bugfix/* / chore/*
 
 ### Single-User Emergency Bypass
 
-1. For `foundation` and `foundation-public`, the repository owner can keep a ruleset bypass actor
+1. For `gentle-vanguard` and `gentle-vanguard-public`, the repository owner can keep a ruleset bypass actor
    on `develop` for emergency unblock scenarios.
 2. This does not simulate a second reviewer; it enables administrative bypass when GitHub review
    policy blocks a time-critical merge.
@@ -79,11 +79,11 @@ feature/* / bugfix/* / chore/*
 ### 3. Before End
 
 ```markdown
-1. wf.ps1 review # Code review
-2. wf.ps1 audit # Audit document
+1. gv.ps1 review # Code review
+2. gv.ps1 audit # Audit document
 3. Validate specification
 4. Ask: Create PR?
-5. wf.ps1 publish # Full publish flow with gated merge decisión
+5. gv.ps1 publish # Full publish flow with gated merge decisión
 ```
 
 ## Commit Convention
@@ -114,7 +114,7 @@ docs(readme): update installation
 ### Trigger Points
 
 - Before any PR
-- Manual: `wf.ps1 review`
+- Manual: `gv.ps1 review`
 - Automatic: Pre-commit hook
 
 ### 7 Dimensions
@@ -156,7 +156,7 @@ LOW found:
 
 ## Audit Document
 
-Generated automatically with `wf.ps1 audit`.
+Generated automatically with `gv.ps1 audit`.
 
 ### Structure
 
@@ -205,7 +205,7 @@ gh pr merge --admin --merge
 
 ### Controlled Publish decisión
 
-Use `wf.ps1 publish` for end-to-end execution with governance gates:
+Use `gv.ps1 publish` for end-to-end execution with governance gates:
 
 1. If validations pass with no alerts, PR merge is authorized automatically.
 2. If alerts are detected, a summary + suggestións are shown.
@@ -220,12 +220,12 @@ Use `wf.ps1 publish` for end-to-end execution with governance gates:
 
 | Script           | Purpose                                                                               |
 | ---------------- | ------------------------------------------------------------------------------------- |
-| `wf.ps1 review`  | Run code review                                                                       |
-| `wf.ps1 audit`   | Generate audit document                                                               |
-| `wf.ps1 pr`      | Create PR template                                                                    |
-| `wf.ps1 push`    | Prepare for push                                                                      |
-| `wf.ps1 publish` | Validate, summarize alerts, apply suggestións, and merge according to decisión policy |
-| `wf.ps1 status`  | Show current status                                                                   |
+| `gv.ps1 review`  | Run code review                                                                       |
+| `gv.ps1 audit`   | Generate audit document                                                               |
+| `gv.ps1 pr`      | Create PR template                                                                    |
+| `gv.ps1 push`    | Prepare for push                                                                      |
+| `gv.ps1 publish` | Validate, summarize alerts, apply suggestións, and merge according to decisión policy |
+| `gv.ps1 status`  | Show current status                                                                   |
 
 ### Hooks
 
@@ -241,13 +241,13 @@ Use `wf.ps1 publish` for end-to-end execution with governance gates:
 
 ```powershell
 # Workflow CLI
-.\scripts\utilities\wf.ps1 <command>
+.\scripts\utilities\gv.ps1 <command>
 
-# Foundation CLI
-gf validate
-gf list
-gf update
-gf check
+# Gentle-Vanguard CLI
+gv validate
+gv list
+gv update
+gv check
 ```
 
 ### Git Aliases
@@ -270,7 +270,7 @@ Add to `~/.gitconfig`:
 ### Do
 
 - Always create feature branches
-- Run `wf.ps1 review` before PR
+- Run `gv.ps1 review` before PR
 - Generate audit document on push
 - Use conventional commits
 - Keep PRs small and focused
@@ -291,7 +291,7 @@ Add to `~/.gitconfig`:
 git checkout -b feature/my-feature
 
 # During work
-.\scripts\utilities\wf.ps1 review
+.\scripts\utilities\gv.ps1 review
 go test ./...
 npm test
 
@@ -300,7 +300,7 @@ git add .
 git commit -m "feat(scope): description"
 
 # Before push
-.\scripts\utilities\wf.ps1 audit
+.\scripts\utilities\gv.ps1 audit
 git push -u origin feature/my-feature
 
 # Create PR
@@ -309,7 +309,9 @@ gh pr create
 
 ## Support
 
-- Foundation: `~/.gentleman/`
+- Gentle-Vanguard: `~/.gentleman/`
 - Documentation: `docs/`
 - Skills: `.skills/`
 - Scripts: `scripts/`
+
+

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "description": "Foundation Project - Performance Targets Configuration",
+  "description": "Gentle-Vanguard Project - Performance Targets Configuration",
   "targets": {
     "api_response_time": {
       "value": 5000,
