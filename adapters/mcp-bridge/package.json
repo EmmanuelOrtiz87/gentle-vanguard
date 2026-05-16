@@ -1,7 +1,7 @@
 {
-  "name": "foundation-mcp-bridge",
+  "name": "gentle-vanguard-mcp-bridge",
   "version": "1.0.0",
-  "description": "MCP Server exposing Foundation capabilities to any MCP-compatible tool",
+  "description": "MCP Server exposing Gentle-Vanguard capabilities to any MCP-compatible tool",
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",
@@ -11,11 +11,11 @@
   },
   "keywords": [
     "mcp",
-    "foundation",
+    "gentle-vanguard",
     "ai",
     "orchestration"
   ],
-  "author": "Foundation Team",
+  "author": "Gentle-Vanguard Team",
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.4",
@@ -27,3 +27,4 @@
   },
   "type": "commonjs"
 }
+

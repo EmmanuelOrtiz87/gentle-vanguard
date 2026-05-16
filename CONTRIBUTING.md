@@ -1,4 +1,4 @@
-# 🤝 Contributing to Foundation
+# 🤝 Contributing to Gentle-Vanguard
 
 <p align="center">
   <b>Thank you for your interest in contributing!</b>
@@ -20,11 +20,11 @@ By participating, you agree to maintain a **respectful and inclusive environment
 # Fork the repository on GitHub
 
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/foundation-public.git
-cd foundation-public
+git clone https://github.com/YOUR_USERNAME/gentle-vanguard-public.git
+cd gentle-vanguard-public
 
 # Add upstream remote
-git remote add upstream https://github.com/EmmanuelOrtiz87/foundation-public.git
+git remote add upstream https://github.com/EmmanuelOrtiz87/gentle-vanguard-public.git
 ```
 
 ### 2️⃣ Create a Branch
@@ -50,7 +50,7 @@ npm install
 npm test
 
 # Check workflow health
-.\scripts\utilities\WORKFLOW-ORCHESTRATION\foundation.ps1 health
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\gentle-vanguard.ps1 health
 ```
 
 ### 4️⃣ Make Changes
@@ -103,7 +103,7 @@ npm test
 .\scripts\run-tests-simple.ps1
 
 # Full validation
-.\scripts\utilities\WORKFLOW-ORCHESTRATION\foundation.ps1 verify
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\gentle-vanguard.ps1 verify
 ```
 
 ### 6️⃣ Submit PR
@@ -140,7 +140,7 @@ git push origin feat/your-feature-name
 .\scripts\utilities\install-prerequisites.ps1
 
 # Start working
-.\scripts\utilities\WORKFLOW-ORCHESTRATION\foundation.ps1 start-session
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\gentle-vanguard.ps1 start-session
 ```
 
 ---
@@ -210,5 +210,6 @@ Measure-Command { .\scripts\run-tests-simple.ps1 }
 
 <p align="center">
   <b>🤝 Ready to contribute?</b><br>
-  <code>git clone https://github.com/EmmanuelOrtiz87/foundation-public.git</code>
+  <code>git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard-public.git</code>
 </p>
+

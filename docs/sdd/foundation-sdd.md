@@ -1,4 +1,4 @@
-# Software Design Document (SDD) - Foundation
+# Software Design Document (SDD) - Gentle-Vanguard
 
 **versión:** 1.0  
 **Date:** April 11, 2026  
@@ -9,7 +9,7 @@
 
 ### Purpose
 
-Foundation is the base framework for creating standardized, cross-platform development
+Gentle-Vanguard is the base framework for creating standardized, cross-platform development
 projects. It provides:
 
 - Project scaffolding and templates
@@ -46,10 +46,10 @@ projects. It provides:
 ### High-level Design
 
 ```
-Foundation
+Gentle-Vanguard
  Core Components
-    Bootstrap System (scripts/foundation/bootstrap.ps1)
-    Setup Scripts (scripts/foundation/setup.sh, scripts/utilities/wf.ps1)
+    Bootstrap System (scripts/gentle-vanguard/bootstrap.ps1)
+    Setup Scripts (scripts/gentle-vanguard/setup.sh, scripts/utilities/gv.ps1)
     Template Engine (templates/)
     Skill Registry (skills/)
  Governance Layer
@@ -72,8 +72,8 @@ Foundation
 ### Deployment
 
 - **Distribution:** Git repository as template
-- **Installation:** Canonical setup entrypoints are `bash scripts/foundation/setup.sh` or
-  `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\foundation\bootstrap.ps1`
+- **Installation:** Canonical setup entrypoints are `bash scripts/gentle-vanguard/setup.sh` or
+  `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\gentle-vanguard\bootstrap.ps1`
 - **Updates:** Git-based with validation scripts
 
 ## 3. Detailed Design
@@ -90,7 +90,7 @@ Foundation
 
 **Key Files:**
 
-- `scripts/foundation/bootstrap.ps1` - Canonical PowerShell bootstrap script
+- `scripts/gentle-vanguard/bootstrap.ps1` - Canonical PowerShell bootstrap script
 - `scripts/project/new-project.ps1` - Canonical project creation entrypoint
 - `templates/` - Project templates
 - `config/` - Configuration templates
@@ -148,7 +148,7 @@ User Request  Canonical Bootstrap Script  Template Selection  Configuration  Val
 
 ```powershell
 # Main entry point
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\foundation\bootstrap.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\gentle-vanguard\bootstrap.ps1
 
 # Canonical project creation entry point
 .\scripts\project\new-project.ps1 -Name "MyProject" -Kind "service"
@@ -162,15 +162,15 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\foundation\bootstr
 
 ```bash
 # Cross-platform setup
-bash scripts/foundation/setup.sh    # Linux/macOS/WSL
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\foundation\bootstrap.ps1   # Windows
+bash scripts/gentle-vanguard/setup.sh    # Linux/macOS/WSL
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\gentle-vanguard\bootstrap.ps1   # Windows
 ```
 
 ## 4. Implementation Plan
 
 ### Phases
 
-#### Phase 1: Core Foundation (Current)
+#### Phase 1: Core Gentle-Vanguard (Current)
 
 - Bootstrap system
 - Cross-platform setup
@@ -234,7 +234,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\foundation\bootstr
 
 - "Create a cross-platform bootstrap system for project scaffolding"
 - "Design documentation governance with orchestrator coordination"
-- "Implement error handling patterns for foundation scripts"
+- "Implement error handling patterns for gentle-vanguard scripts"
 
 ### Code Generation
 
@@ -250,7 +250,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\foundation\bootstr
 
 ## 7. Error Handling Patterns
 
-### Implementation in Foundation
+### Implementation in Gentle-Vanguard
 
 #### Structured Error Handling
 
@@ -338,5 +338,6 @@ And commands work identically
 
 ---
 
-**This SDD serves as the foundation for all projects created from Foundation. All
+**This SDD serves as the gentle-vanguard for all projects created from Gentle-Vanguard. All
 generated projects should reference and extend this document.**
+

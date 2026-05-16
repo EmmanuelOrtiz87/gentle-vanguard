@@ -1,7 +1,7 @@
 #Requires -Modules Pester
 # v2.6.4 Scripts — Minimal Existence + Parse Tests
 # Covers: FF-001 check-sdd-gate, FF-002 sdd-process-metrics,
-#         FF-004 sync-drift-report, FF-006 wf-benchmark
+#         FF-004 sync-drift-report, FF-006 gv-benchmark
 
 Describe 'v2.6.4 Script Suite' {
     BeforeAll {
@@ -84,9 +84,9 @@ Describe 'v2.6.4 Script Suite' {
         }
     }
 
-    Context 'FF-006: wf-benchmark.ps1' {
+    Context 'FF-006: gv-benchmark.ps1' {
         BeforeAll {
-            $script:bench = Join-Path $script:root 'scripts\utilities\wf-benchmark.ps1'
+            $script:bench = Join-Path $script:root 'scripts\utilities\gv-benchmark.ps1'
         }
 
         It 'exists at expected path' {
@@ -128,4 +128,5 @@ Describe 'v2.6.4 Script Suite' {
         }
     }
 }
+
 

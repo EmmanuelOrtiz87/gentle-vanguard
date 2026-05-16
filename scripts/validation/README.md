@@ -1,6 +1,6 @@
 # Validation Scripts
 
-Scripts for validating and checking the foundation.
+Scripts for validating and checking the gentle-vanguard.
 
 ## Scripts
 
@@ -9,7 +9,7 @@ Scripts for validating and checking the foundation.
 | `validate-project.ps1`   | Validate project setup               |
 | `validate-workspace.ps1` | Validate workspace configuration     |
 | `check-updates.ps1`      | Check for available updates          |
-| `update-all.ps1`         | Update foundation, skills, and tools |
+| `update-all.ps1`         | Update gentle-vanguard, skills, and tools |
 
 ## Usage
 
@@ -26,10 +26,12 @@ Scripts for validating and checking the foundation.
 
 ## CLI Access
 
-These can also be accessed via `gf` CLI:
+These can also be accessed via `gv` CLI:
 
 ```powershell
-gf validate    # Validate installation
-gf check      # Check for updates
-gf update-all # Update everything
+gv validate    # Validate installation
+gv check      # Check for updates
+gv update-all # Update everything
 ```
+
+

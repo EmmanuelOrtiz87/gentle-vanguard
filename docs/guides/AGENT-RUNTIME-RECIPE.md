@@ -16,15 +16,15 @@ Ensure these capabilities work together without conflicts:
 ## Prerequisites
 
 - `go`, `git`, `node` available
-- `foundation` cloned
+- `gentle-vanguard` cloned
 - `engram` installed and reachable in `PATH`
 
 Quick validation:
 
 ```powershell
-.\foundation\scripts\utilities\wf.ps1 orchestrator-status
-.\foundation\scripts\utilities\wf.ps1 runtime-route
-.\foundation\scripts\utilities\agent-router.ps1 status
+.\gentle-vanguard\scripts\utilities\gv.ps1 orchestrator-status
+.\gentle-vanguard\scripts\utilities\gv.ps1 runtime-route
+.\gentle-vanguard\scripts\utilities\agent-router.ps1 status
 ```
 
 3. Run session start + explicit checks in pipeline bootstrap:
@@ -52,8 +52,8 @@ Use this when core reasoning/runtime is external but repo governance remains loc
 Integration baseline:
 
 1. Keep repository-side governance active:
-   - `wf.ps1 start-session`
-   - `wf.ps1 end-session` or `wf.ps1 day-end-closure`
+   - `gv.ps1 start-session`
+   - `gv.ps1 end-session` or `gv.ps1 day-end-closure`
 2. Keep `engram` as shared memory source from repo side.
 3. Use `agent-router.ps1 status` as readiness contract for role lanes.
 4. Capture artifacts in `docs/sessions`, `docs/audits`, `docs/code-reviews`.
@@ -87,9 +87,9 @@ If startup fails in strict mode:
 1. Run diagnostics:
 
 ```powershell
-.\foundation\scripts\utilities\wf.ps1 orchestrator-status
-.\foundation\scripts\utilities\wf.ps1 runtime-route
-.\foundation\scripts\utilities\agent-router.ps1 status
+.\gentle-vanguard\scripts\utilities\gv.ps1 orchestrator-status
+.\gentle-vanguard\scripts\utilities\gv.ps1 runtime-route
+.\gentle-vanguard\scripts\utilities\agent-router.ps1 status
 ```
 
 If startup fails in strict mode:
@@ -105,3 +105,4 @@ If startup fails in strict mode:
 - [ ] Agent lanes are `READY`
 - [ ] Engram memory path available
 - [ ] Session closure artifact generated at end of cycle
+

@@ -1,6 +1,6 @@
 # Discord - Question
 
-Which Foundation feature would you want to see in action?
+Which Gentle-Vanguard feature would you want to see in action?
 
 1. Auto-delegation demo
 2. Persistent memory demo  
@@ -9,4 +9,4 @@ Which Foundation feature would you want to see in action?
 
 Reply with your vote!
 
-#FoundationStack
+#Gentle-VanguardStack

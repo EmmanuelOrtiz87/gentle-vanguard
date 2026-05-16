@@ -99,16 +99,16 @@ function Get-SnapshotHash {
 # HTML snippet for SSE client
 $sseClientScript = @'
 <script>
-if (!window.__foundationLiveSeries) {
-    window.__foundationLiveSeries = {
+if (!window.__gentle-vanguardLiveSeries) {
+    window.__gentle-vanguardLiveSeries = {
         labels: [],
         events5m: [],
         routing: []
     };
 }
 
-function foundationPushSeries(label, eventsVal, routingVal) {
-    const series = window.__foundationLiveSeries;
+function gentle-vanguardPushSeries(label, eventsVal, routingVal) {
+    const series = window.__gentle-vanguardLiveSeries;
     series.labels.push(label);
     series.events5m.push(eventsVal);
     series.routing.push(routingVal);
@@ -121,8 +121,8 @@ function foundationPushSeries(label, eventsVal, routingVal) {
     }
 }
 
-function foundationRefreshLiveCharts() {
-    const series = window.__foundationLiveSeries;
+function gentle-vanguardRefreshLiveCharts() {
+    const series = window.__gentle-vanguardLiveSeries;
     if (!series || series.labels.length === 0) return;
 
     if (typeof drawLineChart === 'function') {
@@ -162,8 +162,8 @@ if (window.EventSource) {
             const eventsVal = Number((data.metrics && data.metrics.events_5m) || 0);
             const routingRaw = (data.metrics && data.metrics.routing_accuracy) || 0;
             const routingVal = Number(String(routingRaw).replace('%', '').trim()) || 0;
-            foundationPushSeries(label, eventsVal, routingVal);
-            foundationRefreshLiveCharts();
+            gentle-vanguardPushSeries(label, eventsVal, routingVal);
+            gentle-vanguardRefreshLiveCharts();
             
         } catch (e) {
             console.error('[DASHBOARD-SSE] Parse error:', e);
@@ -295,3 +295,4 @@ try {
         $listener.Close()
     }
 }
+

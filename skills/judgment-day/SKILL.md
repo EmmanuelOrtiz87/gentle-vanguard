@@ -5,8 +5,7 @@ description:
   protocol using two blind judge sub-agents, synthesis, fix, and re-judge cycle.'
 license: Apache-2.0
 metadata:
-  author: foundation
-  version: '1.4'
+  author: gv version: '1.4'
 ---
 
 # Judgment Day
@@ -122,3 +121,4 @@ Full examples in `references/output-examples.md`.
 - `references/judge-prompt-template.md` — full adversarial judge prompt with review criteria
 - `references/fix-agent-prompt-template.md` — full surgical fix agent prompt with scope rule
 - `references/output-examples.md` — output format examples (APPROVED and ESCALATED)
+

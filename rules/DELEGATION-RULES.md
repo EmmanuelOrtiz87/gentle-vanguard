@@ -33,7 +33,7 @@ Delegate when the work would inflate parent context or requires focused explorat
 - Run tests/builds and summarize results
 - Fresh-context review
 
-Use `foundation` subagents (sdd-apply, sdd-design, sdd-verify, etc.) when available.
+Use `gentle-vanguard` subagents (sdd-apply, sdd-design, sdd-verify, etc.) when available.
 
 **Default balanced pattern for bounded implementation:**
 ```
@@ -105,7 +105,7 @@ These are **stop rules**. Once any trigger fires, the parent MUST either delegat
 4. If the user accepts chained PRs, plan slices where each stays under 400 lines
 5. If the user declines chaining, require explicit `size:exception` rationale
 
-**Why 400 lines?** Cognitive research shows review quality drops sharply above 400 changed lines per session. Foundation enforces this as a hard guard, not a soft suggestion.
+**Why 400 lines?** Cognitive research shows review quality drops sharply above 400 changed lines per session. Gentle-Vanguard enforces this as a hard guard, not a soft suggestion.
 
 ## Cost and Context Balance
 
@@ -163,3 +163,4 @@ Each phase produces an artifact. The parent synthesizes phase results using this
 - `next_recommended`: what the agent suggests next
 - `risks`: blocking or notable issues
 - `skill_resolution`: how project skills were resolved
+

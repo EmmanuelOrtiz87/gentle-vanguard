@@ -6,8 +6,7 @@ description: >
   "tax planning", "transfer pricing", "impuestos", "declaración de impuestos"
 license: Apache-2.0
 metadata:
-  author: foundation
-  version: '1.0'
+  author: gv version: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash
 ---
 
@@ -36,3 +35,4 @@ User asks about tax compliance, tax planning, tax returns, VAT/GST, corporate ta
 2. Clarify whether the question is compliance, planning, or dispute
 3. Provide calculations or filing guidance
 4. Include disclaimer: user must verify with qualified tax professional
+

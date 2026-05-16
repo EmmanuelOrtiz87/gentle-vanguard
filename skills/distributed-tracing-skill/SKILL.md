@@ -8,7 +8,7 @@ trigger: tracing, telemetry, distributed, correlation, span
 
 ## Descripcin
 
-Este skill proporciona capacidades de tracing distribuido para el foundation, permitiendo
+Este skill proporciona capacidades de tracing distribuido para el gentle-vanguard, permitiendo
 rastrear la ejecucin de dispatches, orchestration y automatización con:
 
 - **OpenTelemetry Integration**: Implementacin compatible con estndares de observabilidad
@@ -139,3 +139,4 @@ Ver: `config/distributed-tracing-config.json`
 - `skills/distributed-tracing-skill/metrics-collector.ps1` - Metrics collection
 - `skills/distributed-tracing-skill/report-generator.ps1` - Report generation
 - `scripts/utilities/telemetry-dashboard.ps1` - Dashboard para visualizar traces
+

@@ -55,7 +55,7 @@
       }
     },
     "tracking": {
-      "project": "foundation",
+      "project": "gentle-vanguard",
       "directory": ".",
       "sessionIdPattern": "session-YYYY-MM-DD-XX"
     }
@@ -91,3 +91,4 @@
     "responseStyle": "concise, direct"
   }
 }
+

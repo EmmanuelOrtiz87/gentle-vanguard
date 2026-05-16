@@ -77,7 +77,7 @@ errores de configuración que puedan afectar la funcionalidad del proyecto.
 ### Inconsistencias cross-workspace
 
 - **Fecha:** 2026-05-02
-- **Causa:** Archivos desincronizados entre local y foundation
+- **Causa:** Archivos desincronizados entre local y gentle-vanguard
 - **Impacto:** Comportamiento inconsistente
 - **Solución:** Ejecutar cross-workspace-validator -Fix
 - **Prevención:** Validar sincronización en cada cambio
@@ -146,3 +146,4 @@ Este skill se integra con:
   "confirmationRequired": true|false
 }
 ```
+

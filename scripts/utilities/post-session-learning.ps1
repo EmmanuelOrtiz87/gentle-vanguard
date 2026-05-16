@@ -19,12 +19,12 @@
 param(
     [string]$SessionId = '',
     [switch]$AutoApplyLow,
-    [string]$ProjectName = 'foundation',
+    [string]$ProjectName = 'gentle-vanguard',
     [switch]$NoExit
 )
 
 $ErrorActionPreference = 'Continue'
-$repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) { $env:FOUNDATION_BASE_DIR } else {
+$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) { $env:GENTLE_VANGUARD_BASE_DIR } else {
     $root = Split-Path -Parent $PSScriptRoot
     while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
     if (-not $root) { $root = $PSScriptRoot }
@@ -66,12 +66,12 @@ function Save-ToEngram {
         [string]$Type = 'learning'
     )
 
-    if (-not (Get-Command Invoke-FoundationEngram -ErrorAction SilentlyContinue)) {
+    if (-not (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue)) {
         Write-Info "Engram not available, skipping knowledge-base save"
         return $false
     }
 
-    $result = Invoke-FoundationEngram -RepoRoot $repoRoot -Arguments @('save', $Title, $Content, '--project', $ProjectName, '--type', $Type)
+    $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('save', $Title, $Content, '--project', $ProjectName, '--type', $Type)
     if ($result.Success) {
         Write-Ok "Saved to Engram: $Title"
         return $true
@@ -279,9 +279,10 @@ Write-Ok "Post-session learning complete!"
 
 if ($proposals.Count -gt 0) {
     Write-Host "`n[HINT] Review proposals in: $proposalsDir" -ForegroundColor Yellow
-    Write-Host "[HINT] Run 'foundation learning apply' to auto-execute pending proposals" -ForegroundColor Yellow
-    Write-Host "[HINT] Run 'foundation learning auto' to analyze + auto-apply low-severity" -ForegroundColor Yellow
+    Write-Host "[HINT] Run 'gv learning apply' to auto-execute pending proposals" -ForegroundColor Yellow
+    Write-Host "[HINT] Run 'gv learning auto' to analyze + auto-apply low-severity" -ForegroundColor Yellow
     Complete-Script -ExitCode 1
     return
 }
 Complete-Script -ExitCode 0
+

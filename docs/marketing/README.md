@@ -1,4 +1,4 @@
-# 🏛️ Foundation Marketing Materials
+# 🏛️ Gentle-Vanguard Marketing Materials
 
 <p align="center">
   <img src="https://img.shields.io/badge/Version-2.8.0-brightgreen?style=for-the-badge" alt="Version">
@@ -26,7 +26,7 @@
 
 ## 🎙️ Elevator Pitch
 
-> **"Foundation es un sistema de orquestación de workspace local-first que dota a los agentes de IA
+> **"Gentle-Vanguard es un sistema de orquestación de workspace local-first que dota a los agentes de IA
 > de 125+ skills especializados mientras mantiene todo el procesamiento en tu máquina. Cero
 > dependencias en la nube, seguridad empresarial, y arquitectura de plugins extensible."**
 
@@ -34,7 +34,7 @@
 
 ## 🎯 Target Audiences
 
-| Audiencia          | Necesidad                                           | Solución Foundation             |
+| Audiencia          | Necesidad                                           | Solución Gentle-Vanguard             |
 | ------------------ | --------------------------------------------------- | ------------------------------- |
 | **🛠️ Developers**  | Workflows de desarrollo asistido por IA             | Auto-delegación + 125 skills    |
 | **👥 Teams**       | Skills de agentes estandarizados y seguridad        | GOV + OPS + QA workflows        |
@@ -58,7 +58,7 @@
 | Asset                          | Estado       | Descripción                             |
 | ------------------------------ | ------------ | --------------------------------------- |
 | **🎨 Logo y identidad visual** | 📋 Pendiente | Diseño de marca completo                |
-| **📸 Screenshot gallery**      | 📋 Pendiente | TUI installer, wf.ps1 CLI, dashboards   |
+| **📸 Screenshot gallery**      | 📋 Pendiente | TUI installer, gv.ps1 CLI, dashboards   |
 | **🎥 Demo videos**             | 📋 Pendiente | Instalación, primera sesión, delegación |
 | **📚 Case studies**            | 📋 Pendiente | Casos de uso reales                     |
 | **📊 Comparison charts**       | 📋 Pendiente | vs otras soluciones                     |
@@ -93,20 +93,21 @@
 
 ```powershell
 # 🚀 PASO 1: Clonar
-git clone https://github.com/EmmanuelOrtiz87/foundation-public.git
-cd foundation-public
+git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard-public.git
+cd gentle-vanguard-public
 
 # 💡 PASO 2: Configurar
-.\scripts\utilities\foundation-installer-tui.ps1
+.\scripts\utilities\gentle-vanguard-installer-tui.ps1
 
 # 📖 PASO 3: ¡Listo para usar!
-.\scripts\utilities\wf.ps1 health
+.\scripts\utilities\gv.ps1 health
 ```
 
 ---
 
 <p align="center">
-  <b>🏛️ Foundation v2.8.0 — El Stack Definitivo para IA-First Development</b><br>
+  <b>🏛️ Gentle-Vanguard v2.8.0 — El Stack Definitivo para IA-First Development</b><br>
   <i>100% Local-First • Privacidad Total • Listo para Producción</i><br><br>
-  <code>git clone https://github.com/EmmanuelOrtiz87/foundation-public.git</code>
+  <code>git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard-public.git</code>
 </p>
+

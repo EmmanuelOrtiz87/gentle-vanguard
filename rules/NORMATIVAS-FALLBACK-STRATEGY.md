@@ -1,4 +1,4 @@
-# Fallback Strategy Normatives — Foundation
+# Fallback Strategy Normatives — Gentle-Vanguard
 
 Canonical standards for agent fallback behavior, error recovery, and graceful degradation.
 Last updated: 2026-05-12 | Version: 1.0.0
@@ -7,7 +7,7 @@ Last updated: 2026-05-12 | Version: 1.0.0
 
 ## 1. Fallback Strategy Overview
 
-When agent routing fails or confidence is low, Foundation MUST fallback gracefully.
+When agent routing fails or confidence is low, Gentle-Vanguard MUST fallback gracefully.
 
 ### Default Fallback: Clarify with BA
 
@@ -473,3 +473,4 @@ Need urgent processing? Reply: "PRIORITY"
 - [config/auto-delegation.json](../config/auto-delegation.json) — Fallback config (`fallbackStrategy`)
 - [AI-NORMATIVES.md](AI-NORMATIVES.md) — Agent profiles
 - Project: sdd-lifecycle skill
+

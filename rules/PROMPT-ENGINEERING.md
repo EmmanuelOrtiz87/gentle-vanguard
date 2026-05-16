@@ -33,7 +33,7 @@ Every prompt MUST follow this structure:
 ```
 You are a PowerShell expert reviewing session closure scripts.
 
-Context: Foundation project session lifecycle. Script must run on Windows pwsh 7.4+.
+Context: Gentle-Vanguard project session lifecycle. Script must run on Windows pwsh 7.4+.
 All paths use Join-Path. No Write-Host in reusable functions.
 
 Constraints:
@@ -183,3 +183,4 @@ Related rules, configs, or skills.
 ---
 
 _Version: 1.0.0 — 2026-05-14 — Status: ACTIVE_
+

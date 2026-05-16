@@ -25,17 +25,17 @@ function Write-Info  { param([string]$Msg) Write-Host "[INFO] $Msg" -ForegroundC
 function Write-OK    { param([string]$Msg) Write-Host "[OK] $Msg" -ForegroundColor Green }
 function Write-Warn  { param([string]$Msg) Write-Host "[WARN] $Msg" -ForegroundColor Yellow }
 
-$tempBase = Join-Path $env:TEMP 'foundation-migration-export'
+$tempBase = Join-Path $env:TEMP 'gentle-vanguard-migration-export'
 if (Test-Path $tempBase) { Remove-Item $tempBase -Recurse -Force }
 New-Item -ItemType Directory -Path $tempBase -Force | Out-Null
 
 $timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
-$zipName = "foundation-profile-$timestamp.zip"
+$zipName = "gentle-vanguard-profile-$timestamp.zip"
 $zipPath = Join-Path $OutputDir $zipName
 
 if ([string]::IsNullOrWhiteSpace($RepoRoot)) {
-    if ($env:FOUNDATION_BASE_DIR) {
-        $RepoRoot = $env:FOUNDATION_BASE_DIR
+    if ($env:GENTLE_VANGUARD_BASE_DIR) {
+        $RepoRoot = $env:GENTLE_VANGUARD_BASE_DIR
     } else {
         $searchDir = $PSScriptRoot
         while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {

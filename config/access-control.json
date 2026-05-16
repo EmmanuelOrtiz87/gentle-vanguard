@@ -1,5 +1,5 @@
 {
-  "workspace": "workspace_local",
+  "workspace": "workspace_gentle_vanguard",
   "accessControl": {
     "owner": {
       "name": "Emmanuel",
@@ -12,7 +12,7 @@
         "modify-skills",
         "modify-orchestrator",
         "access-workspace-config",
-        "run-foundation-audit",
+        "run-gentle-vanguard-audit",
         "manage-users"
       ]
     }
@@ -68,3 +68,4 @@
     "requireJustification": true
   }
 }
+

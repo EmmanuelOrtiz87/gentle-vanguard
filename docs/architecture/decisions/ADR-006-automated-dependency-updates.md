@@ -2,14 +2,14 @@
 
 **Status**: Accepted (Partially Implemented)  
 **Date**: May 13, 2026  
-**Author**: Foundation DevOps Team  
+**Author**: Gentle-Vanguard DevOps Team  
 **Context**: Supply-chain security posture after npx hardening sprint  
 
 ---
 
 ## Context
 
-foundation has strong supply-chain security controls (ADR-003: npx offline hardening,
+gentle-vanguard has strong supply-chain security controls (ADR-003: npx offline hardening,
 `.npmrc` global policy, `lockfile-lint` pre-commit hook). However, **keeping
 dependencies up-to-date** requires ongoing manual attention. Without automation:
 
@@ -97,7 +97,7 @@ Evaluate and configure Renovate Bot for:
 - ✅ `npm audit` in pre-push catches CVEs before they reach main
 - ✅ `lockfile-lint` prevents lockfile tampering
 - ✅ Quarterly cadence ensures stale deps don't accumulate
-- ✅ Clear ownership: whoever runs `wf.ps1 publish` is accountable for audit check
+- ✅ Clear ownership: whoever runs `gv.ps1 publish` is accountable for audit check
 - ✅ Zero new tooling required for Layers 1-3
 
 ### Negative
@@ -114,7 +114,7 @@ Evaluate and configure Renovate Bot for:
    grouped updates; auto-merge not available without branch protection bypass; deferred
    in favour of Renovate's richer grouping support.
 
-2. **Renovate now (Q2 2026)** — Preferred long-term but requires tuning time foundation
+2. **Renovate now (Q2 2026)** — Preferred long-term but requires tuning time gentle-vanguard
    doesn't have mid-sprint; deferred to Q3 with a hard deadline.
 
 3. **Manual-only (current)** — Rejected: humans miss advisories; `npm audit` finds
@@ -138,8 +138,9 @@ Evaluate and configure Renovate Bot for:
 
 ## References
 
-- ADR-003 — npx offline hardening (supply-chain foundation)
+- ADR-003 — npx offline hardening (supply-chain gentle-vanguard)
 - `config/lefthook.yml` — hook configuration
 - `scripts/hooks/check-npm-audit.ps1` — audit hook implementation
 - `scripts/utilities/DEPLOYMENT/generate-sbom.ps1` — SBOM generation
 - OWASP A06:2021 — Vulnerable and Outdated Components
+

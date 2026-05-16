@@ -1,4 +1,4 @@
-# Privacy Gateway - Foundation
+# Privacy Gateway - Gentle-Vanguard
 # Intermediario para sanitizacion automatica de prompts
 
 param(

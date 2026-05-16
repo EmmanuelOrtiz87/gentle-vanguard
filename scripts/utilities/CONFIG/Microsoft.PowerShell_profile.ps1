@@ -1,17 +1,17 @@
 # Microsoft.PowerShell_profile.ps1
-# PowerShell profile for Foundation - Development Stack development
+# PowerShell profile for Gentle-Vanguard - Development Stack development
 # This runs automatically when PowerShell starts
 
 # Only run in interactive sessions
 if ($Host.Name -eq 'ConsoleHost') {
 
-    # Check if we're in a Foundation - Development Stack project
+    # Check if we're in a Gentle-Vanguard - Development Stack project
     $currentDir = Get-Location
     $isGFProject = $false
     $checkPaths = @(
         (Join-Path $currentDir '.gentleman'),
         (Join-Path $currentDir 'SKILL.md'),
-        (Join-Path $currentDir 'scripts/utilities/wf.ps1')
+        (Join-Path $currentDir 'scripts/utilities/gv.ps1')
     )
 
     foreach ($path in $checkPaths) {
@@ -22,7 +22,7 @@ if ($Host.Name -eq 'ConsoleHost') {
     }
 
     if ($isGFProject) {
-        Write-Host " Foundation - Development Stack project detected - Activating tools..." -ForegroundColor Cyan
+        Write-Host " Gentle-Vanguard - Development Stack project detected - Activating tools..." -ForegroundColor Cyan
 
         # Run auto-init in background to avoid blocking shell startup
         $initScript = Join-Path $currentDir 'scripts/utilities/auto-init-dev-environment.ps1'
@@ -34,13 +34,14 @@ if ($Host.Name -eq 'ConsoleHost') {
         }
 
         Write-Host " Development environment activation started in background" -ForegroundColor Green
-        Write-Host "Use '.\scripts\utilities\wf.ps1 health' to check status" -ForegroundColor Blue
+        Write-Host "Use '.\scripts\utilities\gv.ps1 health' to check status" -ForegroundColor Blue
         Write-Host ""
     }
 }
 
-# Set common aliases for Foundation - Development Stack
-Set-Alias -Name gf-status -Value '.\scripts\utilities\wf.ps1 status' -ErrorAction SilentlyContinue
-Set-Alias -Name gf-health -Value '.\scripts\utilities\wf.ps1 health' -ErrorAction SilentlyContinue
-Set-Alias -Name gf-review -Value '.\scripts\utilities\wf.ps1 review' -ErrorAction SilentlyContinue
-Set-Alias -Name gf-audit -Value '.\scripts\utilities\wf.ps1 audit' -ErrorAction SilentlyContinue
+# Set common aliases for Gentle-Vanguard - Development Stack
+Set-Alias -Name gv-status -Value '.\scripts\utilities\gv.ps1 status' -ErrorAction SilentlyContinue
+Set-Alias -Name gv-health -Value '.\scripts\utilities\gv.ps1 health' -ErrorAction SilentlyContinue
+Set-Alias -Name gv-review -Value '.\scripts\utilities\gv.ps1 review' -ErrorAction SilentlyContinue
+Set-Alias -Name gv-audit -Value '.\scripts\utilities\gv.ps1 audit' -ErrorAction SilentlyContinue
+

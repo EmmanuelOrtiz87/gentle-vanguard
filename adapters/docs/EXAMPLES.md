@@ -1,23 +1,23 @@
 # Adapter Examples
 
-Quick reference for using Foundation adapters with various tools.
+Quick reference for using Gentle-Vanguard adapters with various tools.
 
 ---
 
 ## MCP Bridge Examples
 
-### 1. Configure Windsurf to use Foundation
+### 1. Configure Windsurf to use Gentle-Vanguard
 
 **File**: `~/.windsurf/mcp.json`
 
 ```json
 {
   "mcpServers": {
-    "foundation": {
+    "gentle-vanguard": {
       "command": "node",
       "args": ["/absolute/path/to/adapters/mcp-bridge/dist/server.js"],
       "env": {
-        "FOUNDATION_ROOT": "/path/to/foundation"
+        "GENTLE_VANGUARD_ROOT": "/path/to/gentle-vanguard"
       }
     }
   }
@@ -28,19 +28,19 @@ Quick reference for using Foundation adapters with various tools.
 
 ```
 User: "Run a 7D review on src/components/App.tsx"
-Windsurf calls: foundation_review({ path: "src/components/App.tsx" })
+Windsurf calls: gentle-vanguard_review({ path: "src/components/App.tsx" })
 ```
 
 ---
 
-### 2. Configure Codex to use Foundation
+### 2. Configure Codex to use Gentle-Vanguard
 
 **File**: `~/.codex/mcp.json` (if Codex supports MCP)
 
 ```json
 {
   "mcpServers": {
-    "foundation": {
+    "gentle-vanguard": {
       "command": "node",
       "args": ["/absolute/path/to/adapters/mcp-bridge/dist/server.js"]
     }
@@ -60,14 +60,14 @@ export OPENAI_API_BASE="http://localhost:8080/v1"
 
 ---
 
-### 3. Call Foundation Tools via MCP
+### 3. Call Gentle-Vanguard Tools via MCP
 
 **Example: Run 7D Code Review**
 
 ```typescript
 // Any MCP client can call:
 const result = await mcpClient.callTool({
-  name: 'foundation_review',
+  name: 'gentle-vanguard_review',
   arguments: {
     path: 'src/components/App.tsx',
     dimensions: ['security', 'quality', 'architecture'],
@@ -82,7 +82,7 @@ console.log(result.content[0].text); // Review output
 
 ```typescript
 const result = await mcpClient.callTool({
-  name: 'foundation_delegate',
+  name: 'gentle-vanguard_delegate',
   arguments: {
     agent: 'sdd-apply',
     prompt: 'Implement the authentication feature from task #123',
@@ -97,7 +97,7 @@ const result = await mcpClient.callTool({
 ### Windsurf Adapter (Planned)
 
 ```bash
-# Convert Foundation skill to Windsurf format
+# Convert Gentle-Vanguard skill to Windsurf format
 node adapters/format-adapters/windsurf-adapter/adapter.js \
   --input skills/react-19-skill/SKILL.md \
   --output ~/.windsurf/skills/react-19.md
@@ -115,7 +115,7 @@ node adapters/format-adapters/codex-adapter/proxy.js --port 8080
 export OPENAI_API_BASE="http://localhost:8080/v1"
 export OPENAI_API_KEY="dummy"  # Not needed for local
 
-# Codex now uses Foundation via OpenAI API
+# Codex now uses Gentle-Vanguard via OpenAI API
 ```
 
 ---
@@ -129,7 +129,7 @@ export OPENAI_API_KEY="dummy"  # Not needed for local
 .\adapters\detection\enhanced-detect.ps1
 
 # Output:
-# === Foundation Enhanced Detection ===
+# === Gentle-Vanguard Enhanced Detection ===
 # Tool: windsurf (Windsurf)
 # Confidence: medium (source: env/process)
 # Detection: WINDSURF_ env or process name
@@ -171,7 +171,7 @@ if (-not $detection.supportsMcp) {
 3. Enhanced Detection: tool=windsurf, supportsMcp=false
 4. Recommendation: Use MCP Bridge
 5. Windsurf (if MCP configured):
-   - Calls foundation_review via MCP
+   - Calls gentle-vanguard_review via MCP
    - Gets review results
    - Displays to user
 ```
@@ -183,8 +183,8 @@ if (-not $detection.supportsMcp) {
 2. Codex detects: can use OpenAI functions
 3. Codex Adapter (proxy):
    - Receives OpenAI function call
-   - Translates to foundation_delegate
-   - Executes via Foundation CLI
+   - Translates to gentle-vanguard_delegate
+   - Executes via Gentle-Vanguard CLI
    - Returns result in OpenAI format
 4. Codex displays result to user
 ```
@@ -198,11 +198,11 @@ if (-not $detection.supportsMcp) {
 ```bash
 # Check if server starts
 node adapters/mcp-bridge/dist/server.js
-# Should output: "Foundation MCP Bridge running on stdio"
+# Should output: "Gentle-Vanguard MCP Bridge running on stdio"
 
-# Check FOUNDATION_ROOT
-echo $env:FOUNDATION_ROOT
-# Should point to foundation directory
+# Check GENTLE_VANGUARD_ROOT
+echo $env:GENTLE_VANGUARD_ROOT
+# Should point to gentle-vanguard directory
 ```
 
 ### Detection showing "unknown"
@@ -219,3 +219,4 @@ Get-ChildItem env: | Where-Object { $_.Name -like "*WINDSURF*" }
 
 **Status**: Work in Progress  
 **Last Updated**: 2026-04-28
+

@@ -9,8 +9,8 @@ user story, BDD, Gherkin, acceptance criteria, feature analysis, especificación
 story mappings, requirements traceability matrix **Commands**:
 
 ```powershell
-.\scripts\utilities\wf.ps1 agent BA "<task>"
-.\scripts\utilities\wf.ps1 bdd "<feature-description>"
+.\scripts\utilities\gv.ps1 agent BA "<task>"
+.\scripts\utilities\gv.ps1 bdd "<feature-description>"
 ```
 
 ## AGENT-SAD: Solution Architect & Designer
@@ -23,8 +23,8 @@ design, database schema, technical decision, arquitectura, diseño **Deliverable
 design documents **Commands**:
 
 ```powershell
-.\scripts\utilities\wf.ps1 agent SAD "<task>"
-.\scripts\utilities\wf.ps1 sdd "<feature-name>"
+.\scripts\utilities\gv.ps1 agent SAD "<task>"
+.\scripts\utilities\gv.ps1 sdd "<feature-name>"
 ```
 
 ## AGENT-DEV: Senior Developer
@@ -36,8 +36,8 @@ backend, component, API endpoint **Deliverables**: Source code implementations, 
 technical debt records, security hardening **Commands**:
 
 ```powershell
-.\scripts\utilities\wf.ps1 agent DEV "<task>"
-.\scripts\utilities\wf.ps1 scaffold "<component-name>"
+.\scripts\utilities\gv.ps1 agent DEV "<task>"
+.\scripts\utilities\gv.ps1 scaffold "<component-name>"
 ```
 
 ## AGENT-QA: Quality Assurance
@@ -52,10 +52,10 @@ revision profunda pre-merge **Deliverables**: Test files and suites, E2E test sc
 reports, validation evidence, Judgment Day verdict reports **Commands**:
 
 ```powershell
-.\scripts\utilities\wf.ps1 agent QA "<task>"
-.\scripts\utilities\wf.ps1 test "<scope>"
-.\scripts\utilities\wf.ps1 review --scope judgment-day
-.\scripts\utilities\wf.ps1 review --scope judgment-day --target <path>
+.\scripts\utilities\gv.ps1 agent QA "<task>"
+.\scripts\utilities\gv.ps1 test "<scope>"
+.\scripts\utilities\gv.ps1 review --scope judgment-day
+.\scripts\utilities\gv.ps1 review --scope judgment-day --target <path>
 ```
 
 ## AGENT-OPS: DevOps & Infrastructure
@@ -67,8 +67,8 @@ DevOps **Deliverables**: Docker configurations, Kubernetes manifests, CI/CD pipe
 deployment runbooks **Commands**:
 
 ```powershell
-.\scripts\utilities\wf.ps1 agent OPS "<task>"
-.\scripts\utilities\wf.ps1 deploy "<environment>"
+.\scripts\utilities\gv.ps1 agent OPS "<task>"
+.\scripts\utilities\gv.ps1 deploy "<environment>"
 ```
 
 ## AGENT-GOV: Governance & Observability
@@ -80,8 +80,8 @@ compliance, metrics, monitoring, observability, incident, security audit, review
 **Commands**:
 
 ```powershell
-.\scripts\utilities\wf.ps1 agent GOV "<task>"
-.\scripts\utilities\wf.ps1 audit
+.\scripts\utilities\gv.ps1 agent GOV "<task>"
+.\scripts\utilities\gv.ps1 audit
 ```
 
 ## AGENT-DOC: Documentation
@@ -92,6 +92,7 @@ specs, specification **Deliverables**: README files, API documentation, runbooks
 specifications **Commands**:
 
 ```powershell
-.\scripts\utilities\wf.ps1 agent DOC "<task>"
-.\scripts\utilities\wf.ps1 docs "<type>"
+.\scripts\utilities\gv.ps1 agent DOC "<task>"
+.\scripts\utilities\gv.ps1 docs "<type>"
 ```
+

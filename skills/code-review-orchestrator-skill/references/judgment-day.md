@@ -20,7 +20,7 @@ git commit > pre-commit > Block critical issues
 
                     Significant work ready for merge
 
-                    foundation review --scope judgment-day
+                    gv review --scope judgment-day
 
                 APPROVED                     ESCALATED
                 (merge)                (manual review)
@@ -30,12 +30,13 @@ git commit > pre-commit > Block critical issues
 
 | Command                                             | Description              |
 | --------------------------------------------------- | ------------------------ |
-| `foundation review --scope judgment-day`                    | Run dual review protocol |
-| `foundation review --scope judgment-day --target <path>`    | Target specific path     |
-| `foundation review --scope judgment-day --max-iterations 3` | Custom iteration limit   |
+| `gv review --scope judgment-day`                    | Run dual review protocol |
+| `gv review --scope judgment-day --target <path>`    | Target specific path     |
+| `gv review --scope judgment-day --max-iterations 3` | Custom iteration limit   |
 
 ### Integration
 
-AGENT-QA owns Judgment Day execution: `foundation agent QA "judgment day on src/features/auth"`
+AGENT-QA owns Judgment Day execution: `gv agent QA "judgment day on src/features/auth"`
 
 See: `skills/multi-agent-registry/SKILL.md` - AGENT-QA section
+

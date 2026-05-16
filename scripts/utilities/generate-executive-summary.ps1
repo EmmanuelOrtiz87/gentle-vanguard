@@ -6,7 +6,7 @@ param(
     [string]$Period = "7days",
     [ValidateSet("markdown", "json")]
     [string]$Format = "markdown",
-    [string]$ProjectRoot = ".\foundation",
+    [string]$ProjectRoot = ".\gentle-vanguard",
     [switch]$Silent
 )
 
@@ -126,7 +126,7 @@ $markdown = @"
 
 **Perodo**: $periodLabel  
 **Fecha de generacin**: $reportDate  
-**Proyecto**: workspace_local  
+**Proyecto**: workspace_gentle_vanguard  
 
 ---
 
@@ -224,5 +224,6 @@ if (-not $Silent) {
 }
 
 exit 0
+
 
 

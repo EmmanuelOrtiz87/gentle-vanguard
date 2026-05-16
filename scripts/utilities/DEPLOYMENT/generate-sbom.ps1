@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-    Generate Software Bill of Materials (SBOM) for the foundation release.
+    Generate Software Bill of Materials (SBOM) for the gv release.
 
 .DESCRIPTION
     Generates a CycloneDX-compatible SBOM in JSON format capturing all npm
@@ -114,10 +114,10 @@ function Build-FallbackBom {
         version     = 1
         metadata    = [ordered]@{
             timestamp = $Ts
-            tools     = @([ordered]@{ vendor = 'foundation'; name = 'generate-sbom.ps1'; version = '1.0.0' })
+            tools     = @([ordered]@{ vendor = 'gentle-vanguard'; name = 'generate-sbom.ps1'; version = '1.0.0' })
             component = [ordered]@{
                 type    = 'application'
-                name    = if ($metadata -and $metadata.name) { $metadata.name } else { 'foundation' }
+                name    = if ($metadata -and $metadata.name) { $metadata.name } else { 'gentle-vanguard' }
                 version = $Ver
             }
         }
@@ -166,3 +166,4 @@ if (-not $Quiet) {
 }
 
 exit 0
+

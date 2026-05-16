@@ -5,7 +5,7 @@ description: >
   markers.
 license: Apache-2.0
 metadata:
-  author: foundation
+  author: gentle-vanguard
   versión: '1.0'
 ---
 
@@ -185,3 +185,4 @@ pytest --tb=short               # Short traceback
 ## Keywords
 
 pytest, python, testing, fixtures, mocking, parametrize, markers
+

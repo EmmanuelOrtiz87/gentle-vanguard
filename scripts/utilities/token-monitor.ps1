@@ -24,7 +24,7 @@
     Continuously monitors tokens, refreshing every 5 seconds
     
 .NOTES
-    Author: foundation
+    Author: gentle-vanguard
     Version: 1.0
 #>
 
@@ -51,7 +51,7 @@ function Get-EngramTokenData {
     }
     
     try {
-        $result = & $engramBin context --project "foundation" 2>$null | ConvertFrom-Json -ErrorAction SilentlyContinue
+        $result = & $engramBin context --project "gentle-vanguard" 2>$null | ConvertFrom-Json -ErrorAction SilentlyContinue
         return $result
     } catch {
         return $null
@@ -292,3 +292,4 @@ catch {
     Write-Host "[TOKEN-MONITOR] Error: $_" -ForegroundColor Red
     exit 1
 }
+

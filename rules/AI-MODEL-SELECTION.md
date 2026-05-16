@@ -106,7 +106,7 @@ Is the task security-critical or architecture-defining?
 When changing a model assignment:
 
 1. Document the change in `config/orchestrator.json` or `opencode.json`
-2. Run `foundation verify` to confirm routing works
+2. Run `gv verify` to confirm routing works
 3. Monitor token consumption for 3 sessions
 4. Compare quality metrics (pass rate, rework rate)
 5. Roll back if quality degrades or cost exceeds 2x budget
@@ -126,3 +126,4 @@ When changing a model assignment:
 ---
 
 _Version: 1.0.0 — 2026-05-14 — Status: ACTIVE_
+

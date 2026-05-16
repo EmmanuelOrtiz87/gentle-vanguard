@@ -24,7 +24,7 @@
     Enforces maximum 5 lines per response
     
 .NOTES
-    Author: foundation
+    Author: gentle-vanguard
     Version: 1.0
 #>
 
@@ -360,3 +360,4 @@ switch ($Mode) {
         exit 0
     }
 }
+

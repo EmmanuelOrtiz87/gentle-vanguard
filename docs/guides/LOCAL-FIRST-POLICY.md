@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines the **local-first** approach for AI tools in foundation.
+This document defines the **local-first** approach for AI tools in gentle-vanguard.
 
 ## Core Principle
 
@@ -67,8 +67,8 @@ Each AI tool has a local-first configuration:
 
 ### Memory
 
-- **Project**: `foundation`
-- **Engram project**: `workspace_local`
+- **Project**: `gentle-vanguard`
+- **Engram project**: `workspace_gentle_vanguard`
 - **Session pattern**: `session-YYYY-MM-DD-XX`
 
 ## Language Preference
@@ -120,3 +120,4 @@ Only bypass when ALL conditions met:
 - Update config files when new tools added
 - Monitor token usage via engram logs
 - Validate cross-workspace consistency monthly
+

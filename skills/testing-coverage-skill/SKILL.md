@@ -13,7 +13,7 @@ Ensure test coverage for all behavior changes in scripts.
 
 ## Test Framework
 
-Foundation uses **Pester** for PowerShell and **ShellSpec** for Bash scripts.
+Gentle-Vanguard uses **Pester** for PowerShell and **ShellSpec** for Bash scripts.
 
 ## Running Tests
 
@@ -24,8 +24,8 @@ Invoke-Pester -Path .\tests\
 # Bash - ShellSpec
 shellspec spec/
 
-# Via wf.ps1
-.\wf.ps1 test
+# Via gv.ps1
+.\gv.ps1 test
 ```
 
 ## Test Structure
@@ -79,3 +79,4 @@ Describe "Get-Config" {
 | New function  | 80%             |
 | Bug fix       | Regression test |
 | Config change | Smoke test      |
+

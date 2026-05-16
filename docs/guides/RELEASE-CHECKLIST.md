@@ -1,4 +1,4 @@
-# Foundation Release Checklist
+# Gentle-Vanguard Release Checklist
 
 Use this checklist every time before publishing a release to ensure consistency, completeness, and
 quality.
@@ -86,13 +86,13 @@ quality.
 Run before tagging:
 
 ```powershell
-.\scripts\utilities\wf.ps1 release-homologation
+.\scripts\utilities\gv.ps1 release-homologation
 # Optional tag-aware check:
-.\scripts\utilities\wf.ps1 release-homologation vX.Y.Z
+.\scripts\utilities\gv.ps1 release-homologation vX.Y.Z
 ```
 
 - [ ] **Version Baseline Alignment**
-  - [ ] `VERSION` is aligned in `foundation` and `foundation-public`
+  - [ ] `VERSION` is aligned in `gentle-vanguard` and `gentle-vanguard-public`
   - [ ] Planned release tag exists only when intentionally created for this release
   - [ ] No tag force-move is required
 
@@ -111,7 +111,7 @@ Run before tagging:
   - [ ] LICENSE file present and unchanged (or updated if needed)
   - [ ] CODEOWNERS file current (if using code ownership rules)
   - [ ] No security warnings from GitHub:
-        https://github.com/EmmanuelOrtiz87/foundation/security
+        https://github.com/EmmanuelOrtiz87/gentle-vanguard/security
 
 - [ ] **No Secrets Exposed**
   - [ ] Run `git log --all --full-history --oneline` and scan for suspicious commits
@@ -129,7 +129,7 @@ Run before tagging:
 
 - [ ] **Architecture Docs**
   - [ ] `docs/reference/ARCHITECTURE.md` or equivalent architecture overview is present and current
-  - [ ] Foundation-Dashboard homologation documented (if applicable)
+  - [ ] Gentle-Vanguard-Dashboard homologation documented (if applicable)
   - [ ] Skill distribution model documented
 
 ---
@@ -139,7 +139,7 @@ Run before tagging:
 ### Step 1: Create Release Branch
 
 ```powershell
-cd .\foundation
+cd .\gentle-vanguard
 git checkout -b release/v1.0.0
 ```
 
@@ -150,13 +150,13 @@ Edit `CHANGELOG.md`:
 - Change `## [Unreleased]` to `## [1.0.0] - 2026-04-13`
 - Ensure all changes are listed
 - Add link at bottom:
-  `[1.0.0]: https://github.com/EmmanuelOrtiz87/foundation/releases/tag/v1.0.0`
+  `[1.0.0]: https://github.com/EmmanuelOrtiz87/gentle-vanguard/releases/tag/v1.0.0`
 
 ### Step 3: Commit Release
 
 ```powershell
 git add CHANGELOG.md
-git commit -m "chore(release): prepare v1.0.0 - Foundation stable release"
+git commit -m "chore(release): prepare v1.0.0 - Gentle-Vanguard stable release"
 git push -u origin release/v1.0.0
 ```
 
@@ -164,17 +164,17 @@ git push -u origin release/v1.0.0
 
 ```powershell
 gh pr create --base main --head release/v1.0.0 \
-  --title "chore(release): v1.0.0 - First stable Foundation release" \
+  --title "chore(release): v1.0.0 - First stable Gentle-Vanguard release" \
   --body "## Release: v1.0.0
 
-First stable release of Gentleman Foundation.
+First stable release of Gentle-Vanguard.
 
 ### What's Included
 - AI orchestration framework
 - Skill distribution model
 - SDD governance enforcement
 - Global-vs-repo boundary protocols
-- Foundation-Dashboard homologation
+- Gentle-Vanguard-Dashboard homologation
 
 See CHANGELOG.md for full details.
 
@@ -195,7 +195,7 @@ gh pr merge <number> --squash --delete-branch
 ```powershell
 git checkout main
 git pull origin main
-git tag -a v1.0.0 -m "Release v1.0.0: First stable release of Gentleman Foundation"
+git tag -a v1.0.0 -m "Release v1.0.0: First stable release of Gentle-Vanguard"
 git push origin v1.0.0
 ```
 
@@ -209,11 +209,11 @@ git tag -l v1.0.0 -n5
 
 ```powershell
 gh release create v1.0.0 --target main \
-  --title "v1.0.0 - Gentleman Foundation Stable Release" \
+  --title "v1.0.0 - Gentle-Vanguard Stable Release" \
   --notes "First stable release. See CHANGELOG.md for full details."
 ```
 
-Or use GitHub UI: https://github.com/EmmanuelOrtiz87/foundation/releases/new
+Or use GitHub UI: https://github.com/EmmanuelOrtiz87/gentle-vanguard/releases/new
 
 ### Step 7: Sync Back to Develop (Optional)
 
@@ -236,7 +236,7 @@ git push origin develop
   - [ ] Email/Slack notification to team
 
 - [ ] **Update Dependent Projects**
-  - [ ] Dashboard: If using Foundation skills, note that v1.0.0 is available
+  - [ ] Dashboard: If using Gentle-Vanguard skills, note that v1.0.0 is available
   - [ ] Workspace root docs: Link to v1.0.0 release
 
 ### Feedback & Monitoring
@@ -279,3 +279,4 @@ git push origin :v1.0.0  # Delete tag from remote
 
 **Ready to release? Run this checklist, confirm all boxes, then proceed to Release Execution
 section.**
+

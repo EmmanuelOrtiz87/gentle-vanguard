@@ -6,8 +6,7 @@ description: >
   "leasing", "mortgage", "bienes raíces", "inmobiliaria"
 license: Apache-2.0
 metadata:
-  author: foundation
-  version: '1.0'
+  author: gv version: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash
 ---
 
@@ -35,3 +34,4 @@ User asks about real estate transactions, property valuation, real estate invest
 2. Clarify the transaction type (sale, lease, investment)
 3. Provide valuation analysis or calculations
 4. Include local market considerations (laws, taxes, regulations)
+

@@ -10,7 +10,7 @@ for parallel task execution with circular dependency detection and optimization.
 1.0.0
 
 .AUTHOR
-Foundation Team
+Gentle-Vanguard Team
 
 .LICENSE
 MIT

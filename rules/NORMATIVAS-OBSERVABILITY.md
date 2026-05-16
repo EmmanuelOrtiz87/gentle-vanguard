@@ -1,6 +1,6 @@
-# Observability Normatives — Foundation
+# Observability Normatives — Gentle-Vanguard
 
-Canonical standards for logging, tracing, metrics, and observability across Foundation stack.
+Canonical standards for logging, tracing, metrics, and observability across Gentle-Vanguard stack.
 Last updated: 2026-05-12 | Version: 1.0.0
 
 ---
@@ -37,7 +37,7 @@ All observability MUST collect from these three pillars:
 {
   "timestamp": "2026-05-12T19:55:32.123Z",
   "level": "INFO",
-  "service": "foundation-agent-router",
+  "service": "gentle-vanguard-agent-router",
   "traceId": "550e8400-e29b-41d4-a716-446655440000",
   "spanId": "span-12345",
   "userId": "user-abc123",
@@ -79,7 +79,7 @@ function Write-StructuredLog {
     $logEntry = @{
         timestamp = (Get-Date -AsUTC -Format 'o')
         level = $Level
-        service = 'foundation-orchestrator'
+        service = 'gentle-vanguard-orchestrator'
         traceId = $env:TRACE_ID ?? (New-Guid).Guid
         message = $Message
         attributes = $Attributes
@@ -228,7 +228,7 @@ function Emit-Metric {
     $metric = "$Name{$labelStr} $Value"
     
     # Send to metrics collector (e.g., Prometheus pushgateway)
-    Invoke-RestMethod -Uri "http://metrics-collector:9091/metrics/job/foundation" `
+    Invoke-RestMethod -Uri "http://metrics-collector:9091/metrics/job/gentle-vanguard" `
         -Method POST -Body $metric
 }
 
@@ -255,7 +255,7 @@ Emit-Metric -Name "agent_dispatch_seconds" -Value 0.234 `
       "format": "json",
       "output": [
         "stdout",
-        "file:///logs/foundation.log",
+        "file:///logs/gentle-vanguard.log",
         "elk:elasticsearch.example.com:9200"
       ],
       "retention_days": 30,
@@ -281,7 +281,7 @@ Emit-Metric -Name "agent_dispatch_seconds" -Value 0.234 `
       ],
       "max_trace_size_bytes": 65536,
       "attributes": {
-        "service.name": "foundation-orchestrator",
+        "service.name": "gentle-vanguard-orchestrator",
         "service.version": "2.1.0",
         "deployment.environment": "production"
       }
@@ -381,7 +381,7 @@ Write-StructuredLog -Level INFO -Message "Skill execution completed" `
 ```yaml
 # Prometheus alerts
 groups:
-  - name: foundation-alerts
+  - name: gentle-vanguard-alerts
     rules:
       - alert: AgentDispatchSlow
         expr: agent_dispatch_seconds > 0.5
@@ -484,3 +484,4 @@ Describe "Observability" {
 - [ELK Stack](https://www.elastic.co/what-is/elk-stack)
 - [Jaeger Tracing](https://www.jaegertracing.io/)
 - Project: [config/observability-config.json](../config/observability-config.json)
+

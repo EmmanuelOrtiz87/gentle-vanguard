@@ -12,7 +12,7 @@
 .PARAMETER ExternalDisk
     Letra de unidad del disco externo donde esta el ZIP (ej. 'E').
 .EXAMPLE
-    .\import-profile.ps1 -ZipPath C:\Users\emman\Downloads\foundation-profile-20260511.zip
+    .\import-profile.ps1 -ZipPath C:\Users\emman\Downloads\gentle-vanguard-profile-20260511.zip
     .\import-profile.ps1 -ExternalDisk E
 #>
 param(
@@ -33,7 +33,7 @@ function Write-Err   { param([string]$Msg) Write-Host "[ERROR] $Msg" -Foreground
 if ($ExternalDisk -and -not $ZipPath) {
     $searchPath = "${ExternalDisk}:\"
     if (-not (Test-Path $searchPath)) { throw "Disco externo ${ExternalDisk}: no encontrado" }
-    $zips = Get-ChildItem $searchPath -Filter 'foundation-profile-*.zip' -ErrorAction SilentlyContinue |
+    $zips = Get-ChildItem $searchPath -Filter 'gentle-vanguard-profile-*.zip' -ErrorAction SilentlyContinue |
         Sort-Object LastWriteTime -Descending | Select-Object -First 1
     if (-not $zips) { throw "No se encontro ZIP en disco externo ${ExternalDisk}:" }
     $ZipPath = $zips.FullName
@@ -45,7 +45,7 @@ if (-not $ZipPath -or -not (Test-Path $ZipPath)) {
 }
 
 # --- Extraer ZIP ---
-$tempBase = Join-Path $env:TEMP 'foundation-migration-import'
+$tempBase = Join-Path $env:TEMP 'gentle-vanguard-migration-import'
 if (Test-Path $tempBase) { Remove-Item $tempBase -Recurse -Force }
 New-Item -ItemType Directory -Path $tempBase -Force | Out-Null
 
@@ -108,14 +108,14 @@ Write-Step 'Restaurando master.key del repo'
 
 $keysSrc = Join-Path $tempBase 'keys\master.key'
 if (Test-Path $keysSrc) {
-    $repoRoot = if ($env:FOUNDATION_BASE_DIR) {
-        $env:FOUNDATION_BASE_DIR
+    $repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) {
+        $env:GENTLE_VANGUARD_BASE_DIR
     } else {
         $searchDir = $PSScriptRoot
         while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
             $searchDir = Split-Path -Parent $searchDir
         }
-        if ($searchDir) { $searchDir } else { Join-Path $HOME 'source\foundation' }
+        if ($searchDir) { $searchDir } else { Join-Path $HOME 'source\gentle-vanguard' }
     }
 
     $keysDest = Join-Path $repoRoot 'keys'
@@ -300,7 +300,7 @@ Prerequisitos:
   4. Bun:  powershell -c "irm bun.sh/install.ps1 | iex"
 
 Luego ejecuta: .\import-profile.ps1 -SkipBootstrap
-y finalmente:   .\scripts\foundation\setup-multi-machine.ps1
+y finalmente:   .\scripts\gentle-vanguard\setup-multi-machine.ps1
 '@ -ForegroundColor Yellow
             throw "Prerequisito faltante: $cmd"
         }
@@ -321,7 +321,7 @@ Prerequisitos:
   4. Bun:  powershell -c "irm bun.sh/install.ps1 | iex"
 
 Luego ejecuta: .\import-profile.ps1 -SkipBootstrap
-y finalmente:   .\scripts\foundation\setup-multi-machine.ps1
+y finalmente:   .\scripts\gentle-vanguard\setup-multi-machine.ps1
 '@ -ForegroundColor Yellow
             throw "Prerequisito faltante: go y engram.exe"
         }
@@ -333,7 +333,7 @@ y finalmente:   .\scripts\foundation\setup-multi-machine.ps1
         Write-OK 'setup-multi-machine completado'
     } else {
         Write-Warn "setup-multi-machine.ps1 no encontrado en $PSScriptRoot"
-        Write-Host 'Ejecuta manualmente: .\scripts\foundation\setup-multi-machine.ps1' -ForegroundColor Yellow
+        Write-Host 'Ejecuta manualmente: .\scripts\gentle-vanguard\setup-multi-machine.ps1' -ForegroundColor Yellow
     }
 }
 
@@ -346,7 +346,7 @@ Siguientes pasos:
   2. Verifica: engram.exe health
   3. Verifica: opencode --version
   4. Si se omitio bootstrap, ejecuta:
-     .\scripts\foundation\setup-multi-machine.ps1
+     .\scripts\gentle-vanguard\setup-multi-machine.ps1
   5. Inicia engram: engram serve
   6. Abre el repo: cd <ruta al repo> && opencode
 

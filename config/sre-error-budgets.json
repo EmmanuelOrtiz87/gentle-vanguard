@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "description": "SRE error budgets for Foundation stack services",
+  "description": "SRE error budgets for Gentle-Vanguard stack services",
   "error_budgets": {
     "agent_dispatch": {
       "slo": 0.99,
@@ -40,3 +40,4 @@
     "notify_on_threshold": ["50_to_75", "75_to_90", "over_90"]
   }
 }
+

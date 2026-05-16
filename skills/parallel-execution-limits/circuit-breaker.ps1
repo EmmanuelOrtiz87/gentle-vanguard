@@ -10,7 +10,7 @@ graceful degradation, and execution flow control based on token consumption.
 1.0.0
 
 .AUTHOR
-Foundation Team
+Gentle-Vanguard Team
 
 .LICENSE
 MIT

@@ -3,7 +3,7 @@
 **Version:** 1.0.0  
 **Last reviewed:** 2026-05-05  
 **Framework:** Pester 5.x (PowerShell unit/integration tests)  
-**Enforced by:** `agent-verify.ps1` (`tests` domain check) + CI `foundation-quality-gate.yml`
+**Enforced by:** `agent-verify.ps1` (`tests` domain check) + CI `gentle-vanguard-quality-gate.yml`
 
 ---
 
@@ -27,7 +27,7 @@ Target distribution: **70% unit · 20% integration · 10% E2E**.
 
 | Layer                                         | Minimum Coverage | Target |
 | --------------------------------------------- | ---------------- | ------ |
-| Critical scripts (hooks, wf.ps1, token-guard) | 80%              | 90%    |
+| Critical scripts (hooks, gv.ps1, token-guard) | 80%              | 90%    |
 | Utility scripts (telemetry, metrics, reports) | 60%              | 75%    |
 | Config validation functions                   | 100%             | 100%   |
 | Integration flows (agent routing, SDD gate)   | 50%              | 70%    |
@@ -41,7 +41,7 @@ Target distribution: **70% unit · 20% integration · 10% E2E**.
 ```
 tests/
 ├── unit/
-│   ├── foundation-core.tests.ps1          # Core infrastructure tests
+│   ├── gentle-vanguard-core.tests.ps1          # Core infrastructure tests
 │   ├── engram-memory-manager.tests.ps1    # Engram integration tests
 │   ├── new-scripts.tests.ps1              # Tests for new scripts (see §6)
 │   └── ...
@@ -165,7 +165,7 @@ Describe 'my-new-script.ps1' {
 pwsh -File scripts/utilities/agent-verify.ps1
 
 # Run specific test file
-Invoke-Pester tests/unit/foundation-core.tests.ps1 -Output Detailed
+Invoke-Pester tests/unit/gentle-vanguard-core.tests.ps1 -Output Detailed
 
 # Run with coverage (requires Pester 5.3+)
 Invoke-Pester -CodeCoverage scripts/**/*.ps1 -CodeCoverageOutputFile coverage.xml
@@ -184,3 +184,4 @@ Invoke-Pester -CodeCoverage scripts/**/*.ps1 -CodeCoverageOutputFile coverage.xm
 | WCAG violations (critical) | 0 | `check-accessibility.ps1` |
 | I18n missing keys | 0 | `check-i18n.ps1` |
 | SRE error budgets | HEALTHY | `enforce-error-budget.ps1` |
+

@@ -3,7 +3,7 @@
 ## Objetivo
 
 Centralizar la referencia de todos los artefactos, mtricas, logs y normativas relevantes para
-observabilidad, continuidad y auditora en Foundation.
+observabilidad, continuidad y auditora en Gentle-Vanguard.
 
 ---
 
@@ -30,7 +30,7 @@ observabilidad, continuidad y auditora en Foundation.
 ## 3. Normativas y Protocolos
 
 - **docs/reference/NORMATIVAS-ORQUESTADOR.md**: Normativas de orquestador y autorizaciones globales
-  (debe estar SIEMPRE dentro del proyecto Foundation)
+  (debe estar SIEMPRE dentro del proyecto Gentle-Vanguard)
 - **docs/reference/OPERATING-DECISIONS-\*.md**: decisiónes y reglas clave
 
 ## 4. Engram
@@ -41,17 +41,18 @@ observabilidad, continuidad y auditora en Foundation.
 ## 5. Cumplimiento de Directivas
 
 - Todas las normativas y protocolos deben estar almacenados dentro de `docs/reference/` en
-  Foundation.
+  Gentle-Vanguard.
 - No deben quedar archivos normativos sueltos a nivel global fuera del proyecto.
-- Si existe un archivo global, migrar su contenido a Foundation y eliminar el archivo suelto.
+- Si existe un archivo global, migrar su contenido a Gentle-Vanguard y eliminar el archivo suelto.
 
 ## 6. Resumen Ejecutivo
 
 - Toda la informacin relevante para observabilidad, auditora y continuidad est centralizada en los
   directorios y archivos anteriores.
 - Skills, scripts y humanos deben consultar estos artefactos para operar y auditar el sistema.
-- Si se detecta informacin fuera de esta estructura, debe migrarse y documentarse en Foundation.
+- Si se detecta informacin fuera de esta estructura, debe migrarse y documentarse en Gentle-Vanguard.
 
 ---
 
-ltima actualizacin: 2026-04-19 Responsable: Orquestador Foundation
+ltima actualizacin: 2026-04-19 Responsable: Orquestador Gentle-Vanguard
+

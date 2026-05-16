@@ -1,6 +1,6 @@
 #!/usr/bin/env pwsh
 # pre-commit.ps1
-# Pre-commit hook for Foundation - Development Stack
+# Pre-commit hook for Gentle-Vanguard - Development Stack
 # Place this in .githooks/ or configure git to use it
 
 param(
@@ -32,14 +32,14 @@ if (-not $GitRoot) {
     exit 0
 }
 
-$GFRoot = $env:FOUNDATION_ROOT
+$GFRoot = $env:GENTLE_VANGUARD_ROOT
 if (-not $GFRoot) {
     $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
     if (-not $scriptDir) { $scriptDir = Split-Path -Parent $PSScriptRoot }
     
     $candidate = Split-Path -Parent $scriptDir
     while ($candidate) {
-        if (Test-Path (Join-Path $candidate ".foundation")) {
+        if (Test-Path (Join-Path $candidate ".gentle-vanguard")) {
             $GFRoot = $candidate
             break
         }
@@ -54,12 +54,12 @@ if (-not $GFRoot) {
 }
 
 if (-not $GFRoot) {
-    $GFRoot = Join-Path $env:USERPROFILE ".foundation"
+    $GFRoot = Join-Path $env:USERPROFILE ".gentle-vanguard"
 }
 
 Write-Host ""
 Write-Host "==========================================" -ForegroundColor Cyan
-Write-Host " Foundation - Development Stack - Pre-commit" -ForegroundColor Cyan
+Write-Host " Gentle-Vanguard - Development Stack - Pre-commit" -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -113,7 +113,7 @@ foreach ($file in $StagedFiles.Split("`n")) {
         'hooks/pre-commit.ps1',
         'hooks/pre-commit-privacy.ps1',
         'scripts/hooks/check-security.ps1',
-        'scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1',
+        'scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1',
         'skills/docker-devops-skill/SKILL.md',
         'skills/security-expert-skill/references/security-patterns.md',
         'config/security-privacy.json',
@@ -146,6 +146,7 @@ Write-Host "[OK] Pre-commit checks passed!" -ForegroundColor Green
 Write-Host ""
 
 exit 0
+
 
 
 

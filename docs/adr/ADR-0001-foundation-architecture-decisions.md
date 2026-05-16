@@ -1,4 +1,4 @@
-# ADR-0001: Foundation Architecture Decisions
+# ADR-0001: Gentle-Vanguard Architecture Decisions
 
 ## Status
 
@@ -10,12 +10,12 @@ Accepted
 
 ## Context
 
-The Foundation project requires a documented architecture decision record to track significant
+The Gentle-Vanguard project requires a documented architecture decision record to track significant
 technical choices, their rationale, and their implications.
 
 ## Decision
 
-Adopt the following architecture decisions as the foundation for the project:
+Adopt the following architecture decisions as the gentle-vanguard for the project:
 
 ### 1. PowerShell-First with Multi-Language Support
 
@@ -40,7 +40,7 @@ decisions are stored in Engram for future reference.
 ### 5. 5-Layer Architecture
 
 - Layer 1: AGENTS — Role-based AI agents (BA, DEV, QA, OPS, GOV, DOC, SAD)
-- Layer 2: COMMANDS — wf.ps1 CLI, pre-process-input.ps1 routing
+- Layer 2: COMMANDS — gv.ps1 CLI, pre-process-input.ps1 routing
 - Layer 3: MCP SERVERS — Model Context Protocol servers
 - Layer 4: SKILLS — 126+ specialized skills with SKILL.md manifests
 - Layer 5: MEMORY — Engram persistent storage
@@ -69,3 +69,4 @@ Multi-layer approach: trufflehog (pre-push, full scans) + pre-commit hooks (stag
 
 - ADRs must be kept updated as architecture evolves
 - Multi-layer architecture adds cognitive overhead for new contributors
+

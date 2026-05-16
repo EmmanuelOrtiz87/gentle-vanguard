@@ -1,17 +1,17 @@
 ---
-name: foundation-audit-skill
+name: gentle-vanguard-audit-skill
 description:
-  "Trigger: 'audit foundation', 'validate docs', 'sweep project', 'check links', 'find duplicates',
-  'fix references', 'homologate', 'validation sweep', 'wf audit'. Foundation audit and validation
+  "Trigger: 'audit gentle-vanguard', 'validate docs', 'sweep project', 'check links', 'find duplicates',
+  'fix references', 'homologate', 'validation sweep', 'gv audit'. Gentle-Vanguard audit and validation
   sweep detecting duplicates, broken links, missing files, skill inconsistencies, and documentation
   issues."
 ---
 
-# Foundation Audit Skill
+# Gentle-Vanguard Audit Skill
 
 ## Activation Contract
 
-Load when user requests any audit/validation/deduplication/sweep operation for Foundation workspace.
+Load when user requests any audit/validation/deduplication/sweep operation for Gentle-Vanguard workspace.
 Use before judgment-day when structural integrity check is needed first.
 
 ## Hard Rules
@@ -34,7 +34,7 @@ Use before judgment-day when structural integrity check is needed first.
 ## Execution Steps
 
 1. Resolve audit scope: quick → standard → full → deep → judgment (ascending)
-2. Run `audit-sweep.ps1 -Scope <resolved>` via `wf.ps1 audit <scope>`
+2. Run `audit-sweep.ps1 -Scope <resolved>` via `gv.ps1 audit <scope>`
 3. Parse exit code and output
 4. If judgment scope: prompt user for adversarial AI review
 5. Report results in requested format
@@ -49,3 +49,4 @@ Use before judgment-day when structural integrity check is needed first.
 
 - Scripts: [scripts/](scripts/) — audit-sweep.ps1, audit-workflow.ps1, sync-local.ps1
 - Details (JD comparison, scopes, commands): [references/details.md](references/details.md)
+

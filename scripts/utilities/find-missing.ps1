@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
-$skillsPath = '.\foundation\\skills'
-$indexPath = '.\foundation\\skills\SKILL_INDEX.md'
+$skillsPath = '.\gentle-vanguard\\skills'
+$indexPath = '.\gentle-vanguard\\skills\SKILL_INDEX.md'
 
 # Get directories
 $dirs = Get-ChildItem $skillsPath -Directory | Select-Object -ExpandProperty Name | Sort-Object
@@ -27,3 +27,4 @@ foreach($d in $dirs) {
         Write-Host "  $d"
     }
 }
+

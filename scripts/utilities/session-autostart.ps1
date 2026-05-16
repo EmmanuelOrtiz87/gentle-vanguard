@@ -2,8 +2,8 @@
 # Session Autostart - Config-driven pipeline with Engram Optimization
 
 param(
-    [string]$ProjectName = "workspace_local",
-    [string]$WorkspaceRoot = ".\foundation",
+    [string]$ProjectName = "workspace_gentle_vanguard",
+    [string]$WorkspaceRoot = ".\gentle-vanguard",
     [string]$ConfigFile = "",
     [switch]$NoExit
 )
@@ -29,7 +29,7 @@ function Complete-Script {
     exit $ExitCode
 }
 
-$repoRoot = if ($env:FOUNDATION_BASE_DIR) { $env:FOUNDATION_BASE_DIR } else {
+$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) { $env:GENTLE_VANGUARD_BASE_DIR } else {
     $root = Split-Path -Parent $PSScriptRoot
     while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
     if (-not $root) { $root = $PSScriptRoot }

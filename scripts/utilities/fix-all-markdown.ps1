@@ -1,7 +1,7 @@
-# fix-all-markdown.ps1 - Comprehensive markdown fix for foundation
+# fix-all-markdown.ps1 - Comprehensive markdown fix for gentle-vanguard
 # Fixes: Spanish accents, broken links, code blocks, emojis, tables, formatting
 
-$basePath = ".\foundation"
+$basePath = ".\gentle-vanguard"
 $totalFiles = 0
 $fixedFiles = 0
 
@@ -100,3 +100,4 @@ Write-Host "`n========================================="
 Write-Host "Total files processed: $totalFiles"
 Write-Host "Files fixed: $fixedFiles"
 Write-Host "========================================="
+

@@ -1,6 +1,6 @@
 # Tool Activation
 
-This guide describes the current tool activation model for Foundation.
+This guide describes the current tool activation model for Gentle-Vanguard.
 
 ## Start Here
 
@@ -14,22 +14,22 @@ This guide describes the current tool activation model for Foundation.
 Windows PowerShell:
 
 ```powershell
-.\scripts\utilities\wf.ps1 health
-.\scripts\utilities\wf.ps1 health -Force
+.\scripts\utilities\gv.ps1 health
+.\scripts\utilities\gv.ps1 health -Force
 .\scripts\utilities\update-tools.ps1 -DryRun
 ```
 
 Linux, macOS, or WSL:
 
 ```bash
-./wf health
-pwsh -NoProfile -File ./scripts/utilities/wf.ps1 health
+./gv health
+pwsh -NoProfile -File ./scripts/utilities/gv.ps1 health
 pwsh -NoProfile -File ./scripts/utilities/update-tools.ps1 -DryRun
 ```
 
 ## Activation Model
 
-1. `wf.ps1 health` is the canonical tool activation entrypoint.
+1. `gv.ps1 health` is the canonical tool activation entrypoint.
 2. `ensure-tools-active.ps1` reads `config/workspace.config.json` and resolves platform-specific
    installation metadata for Windows, Linux, and macOS.
 3. Missing system dependencies are checked before tool installation.
@@ -91,3 +91,4 @@ The activation flow validates:
 3. If a tool installs but is not detected immediately, restart the terminal and re-run the health
    check.
 4. If you need a non-destructive check, use `update-tools.ps1 -DryRun`.
+

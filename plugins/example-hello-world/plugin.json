@@ -1,10 +1,10 @@
 {
   "name": "example-hello-world",
   "version": "1.0.0",
-  "description": "Example plugin that adds a simple 'hello' command to wf.ps1",
-  "author": "Foundation Team",
+  "description": "Example plugin that adds a simple 'hello' command to gv.ps1",
+  "author": "Gentle-Vanguard Team",
   "main": "hello-world.ps1",
-  "minFoundationVersion": "2.6.0",
+  "minGentle-VanguardVersion": "2.6.0",
   "provides": ["example", "greeting"],
   "hooks": [],
   "commands": [
@@ -18,3 +18,4 @@
     "PowerShell": ">=7.0"
   }
 }
+

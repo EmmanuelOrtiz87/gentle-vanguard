@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Adaptive Mode Engine - Dynamic DAG-based orchestration with feedback loops and auto-rollback
 .DESCRIPTION
@@ -9,7 +9,7 @@
     - Parallel execution where possible
     - Real-time monitoring and metrics
 .AUTHOR
-    Gentleman Foundation
+    Gentle-Vanguard
 .VERSION
     1.0
 #>

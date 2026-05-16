@@ -27,7 +27,7 @@ Security Expert is an AI-powered security assistant that provides:
 This skill activates when:
 
 1. User commits code (`git commit`) - via pre-commit hook
-2. User requests security review (`foundation security scan`, `foundation security audit`)
+2. User requests security review (`gentle-vanguard security scan`, `gentle-vanguard security audit`)
 3. User asks about security topics
 4. Code contains patterns matching security keywords
 
@@ -125,11 +125,11 @@ When user asks about security or mentions security keywords:
 
 | Command                    | Description                       |
 | -------------------------- | --------------------------------- |
-| `foundation security scan`         | Quick scan for critical issues    |
-| `foundation security audit`        | Full security audit with report   |
-| `foundation security fix`          | Auto-fix common issues            |
-| `foundation security report`       | Generate security review document |
-| `foundation security check <file>` | Scan specific file                |
+| `gentle-vanguard security scan`         | Quick scan for critical issues    |
+| `gentle-vanguard security audit`        | Full security audit with report   |
+| `gentle-vanguard security fix`          | Auto-fix common issues            |
+| `gentle-vanguard security report`       | Generate security review document |
+| `gentle-vanguard security check <file>` | Scan specific file                |
 
 ## Output Formats
 
@@ -238,3 +238,4 @@ See `references/security-patterns.md` for:
 - Encryption best practices
 - API security checklist
 - Dependency management
+

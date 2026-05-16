@@ -10,7 +10,7 @@ dynamic allocation, and resource constraint enforcement.
 1.0.0
 
 .AUTHOR
-Foundation Team
+Gentle-Vanguard Team
 
 .LICENSE
 MIT

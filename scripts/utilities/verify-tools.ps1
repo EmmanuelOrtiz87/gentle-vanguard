@@ -3,7 +3,7 @@
     Validates installed tools with hash-based caching to avoid repeated checks.
 .DESCRIPTION
     Checks tool availability and versions. On first run, creates a cache file at
-    ~/.foundation/.tool-cache.json with version hashes. On subsequent runs, only
+    ~/.gentle-vanguard/.tool-cache.json with version hashes. On subsequent runs, only
     re-verifies if a tool's version changed or the cache is stale (7+ days).
 .PARAMETER Force
     Force re-verification of all tools regardless of cache.
@@ -21,7 +21,7 @@ param(
 
 $ErrorActionPreference = 'Continue'
 
-$cacheDir = Join-Path $HOME '.foundation'
+$cacheDir = Join-Path $HOME '.gentle-vanguard'
 $cacheFile = Join-Path $cacheDir '.tool-cache.json'
 $cacheTTL_DAYS = 7
 
@@ -57,7 +57,7 @@ $tools = @(
     @{ Name = 'PowerShell';  Command = 'pwsh';      Version = '7.0';    Required = $true;  InstallCmd = 'winget install Microsoft.PowerShell' }
     @{ Name = 'Bun';         Command = 'bun';       Version = '1.0';    Required = $false;  InstallCmd = 'powershell -c "irm bun.sh/install.ps1 | iex"' }
     @{ Name = 'GitHub CLI';  Command = 'gh';        Version = '2.0';    Required = $false;  InstallCmd = 'winget install GitHub.cli' }
-    @{ Name = 'Engram';      Command = 'engram';    Version = '0.0';    Required = $false;  InstallCmd = 'go install github.com/foundation/engram/cmd/engram@latest' }
+    @{ Name = 'Engram';      Command = 'engram';    Version = '0.0';    Required = $false;  InstallCmd = 'go install github.com/gentle-vanguard/engram/cmd/engram@latest' }
     @{ Name = 'OpenCode';    Command = 'opencode';   Version = '0.0';   Required = $false;  InstallCmd = 'Download from https://opencode.ai' }
     @{ Name = 'lefthook';    Command = 'lefthook';  Version = '1.0';    Required = $true;   InstallCmd = 'npm install -g @evilmartians/lefthook' }
     @{ Name = 'Python';      Command = 'python';     Version = '3.10';  Required = $false;  InstallCmd = 'winget install Python.Python.3.12' }

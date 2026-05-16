@@ -1,6 +1,6 @@
 /**
  * Antigravity Mission Control Adapter
- * Converts Foundation skills to Antigravity Mission Control format
+ * Converts Gentle-Vanguard skills to Antigravity Mission Control format
  * 
  * Antigravity uses:
  * - Mission Control: Multi-agent orchestration dashboard
@@ -13,14 +13,14 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * Convert Foundation SKILL.md to Antigravity Mission Control format
+ * Convert Gentle-Vanguard SKILL.md to Antigravity Mission Control format
  * @param {string} skillPath - Path to SKILL.md
  * @param {string} outputPath - Output path for converted file
  */
 function convertSkillToAntigravity(skillPath, outputPath) {
   const skillContent = fs.readFileSync(skillPath, 'utf-8');
   
-  // Parse Foundation SKILL.md format (frontmatter + content)
+  // Parse Gentle-Vanguard SKILL.md format (frontmatter + content)
   const parsed = parseSkillMarkdown(skillContent);
    
   // Convert to Antigravity format (Mission Control compatible)
@@ -49,7 +49,7 @@ function convertSkillToAntigravity(skillPath, outputPath) {
 }
 
 /**
- * Parse Foundation SKILL.md markdown format
+ * Parse Gentle-Vanguard SKILL.md markdown format
  */
 function parseSkillMarkdown(content) {
   const result = {
@@ -89,7 +89,7 @@ function parseSkillMarkdown(content) {
 }
 
 /**
- * Map Foundation skill names to Antigravity agent roles
+ * Map Gentle-Vanguard skill names to Antigravity agent roles
  */
 function mapSkillToAgentRole(skillName) {
   const roleMap = {
@@ -107,7 +107,7 @@ function mapSkillToAgentRole(skillName) {
 }
 
 /**
- * Generate AGENTS.md from Foundation skills
+ * Generate AGENTS.md from Gentle-Vanguard skills
  * AGENTS.md is cross-tool compatible (Antigravity, Cursor, Claude Code)
  */
 function generateAGENTSmd(skillsDir, outputPath) {
@@ -138,7 +138,7 @@ function generateAGENTSmd(skillsDir, outputPath) {
 function generateMissionYaml(skills, outputPath) {
   const mission = {
     mission: {
-      name: 'Foundation Multi-Agent Mission',
+      name: 'Gentle-Vanguard Multi-Agent Mission',
       max_agents: 5,
       timeout: 7200
     },
@@ -198,3 +198,4 @@ module.exports = {
   generateAGENTSmd,
   generateMissionYaml
 };
+

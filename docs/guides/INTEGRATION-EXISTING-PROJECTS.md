@@ -1,10 +1,10 @@
 # Integration Guide: Existing Projects
 
-How to integrate Foundation into existing repositories and projects.
+How to integrate Gentle-Vanguard into existing repositories and projects.
 
 ## Overview
 
-Foundation is **designed to be additive**, meaning it adds capabilities without modifying
+Gentle-Vanguard is **designed to be additive**, meaning it adds capabilities without modifying
 existing code. This guide covers integration into:
 
 - Local repositories
@@ -45,7 +45,7 @@ winget install Microsoft.PowerShell
 ### Scenario 1: Local Repository
 
 ```
-Existing Project          Foundation Integration
+Existing Project          Gentle-Vanguard Integration
 
 C:\my-project\           C:\my-project\
  src/                   src/
@@ -67,8 +67,8 @@ cd C:\my-existing-project
 # 2. Verify it's a Git repository
 git status
 
-# 3. Initialize Foundation
-.\path\to\foundation\\scripts\init-workspace.ps1
+# 3. Initialize Gentle-Vanguard
+.\path\to\gentle-vanguard\\scripts\init-workspace.ps1
 
 # 4. The script will:
 #    - Detect existing project structure
@@ -81,7 +81,7 @@ git status
 ### Scenario 2: Cloud Repository (Clone + Integrate)
 
 ```
-GitHub/Bitbucket          Local + Foundation
+GitHub/Bitbucket          Local + Gentle-Vanguard
 
 my-repo.git       my-repo/
                                src/
@@ -96,12 +96,12 @@ my-repo.git       my-repo/
 git clone https://github.com/your-org/your-project.git
 cd your-project
 
-# 2. Integrate Foundation
-.\path\to\foundation\\scripts\init-workspace.ps1
+# 2. Integrate Gentle-Vanguard
+.\path\to\gentle-vanguard\\scripts\init-workspace.ps1
 
-# 3. Commit the Foundation files
+# 3. Commit the Gentle-Vanguard files
 git add .
-git commit -m "feat: integrate Foundation"
+git commit -m "feat: integrate Gentle-Vanguard"
 git push
 ```
 
@@ -109,9 +109,9 @@ git push
 
 ```
 C:\Projects\
- project-alpha\       Integrate Foundation
- project-beta\        Integrate Foundation
- project-gamma\      Integrate Foundation
+ project-alpha\       Integrate Gentle-Vanguard
+ project-beta\        Integrate Gentle-Vanguard
+ project-gamma\      Integrate Gentle-Vanguard
 ```
 
 **Steps:**
@@ -119,10 +119,10 @@ C:\Projects\
 ```powershell
 # Each project is independent
 cd C:\Projects\project-alpha
-.\path\to\foundation\\scripts\init-workspace.ps1
+.\path\to\gentle-vanguard\\scripts\init-workspace.ps1
 
 cd C:\Projects\project-beta
-.\path\to\foundation\\scripts\init-workspace.ps1
+.\path\to\gentle-vanguard\\scripts\init-workspace.ps1
 
 # Each project has its own:
 # - .audit/ directory
@@ -146,7 +146,7 @@ Your Project
     init-workspace.ps1     Bootstrap
     finalize-session.ps1    Session end
     ...
- docs/                       NEW: Foundation docs
+ docs/                       NEW: Gentle-Vanguard docs
      audit-system.md
 ```
 
@@ -175,18 +175,18 @@ You CAN apply project templates to add missing structure:
 
 ## Handling Conflicts
 
-## Foundation Sync Safety Model
+## Gentle-Vanguard Sync Safety Model
 
-Foundation sync updates only managed assets. It does not overwrite the entire repository.
+Gentle-Vanguard sync updates only managed assets. It does not overwrite the entire repository.
 
 Rules:
 
-1. Only files listed in `config/foundation-sync.json` under `assets` are considered.
+1. Only files listed in `config/gentle-vanguard-sync.json` under `assets` are considered.
 2. Strategy `replace` updates drifted managed files during `apply`.
 3. Strategy `preserve-local` keeps local files unchanged.
 4. For safe rollout, prefer `check` first and `apply -CreatePr` for review.
 
-See: `docs/guides/FOUNDATION-SYNC.md` for full behavior and examples.
+See: `docs/guides/GENTLE_VANGUARD-SYNC.md` for full behavior and examples.
 
 ### What Happens If...
 
@@ -194,14 +194,14 @@ See: `docs/guides/FOUNDATION-SYNC.md` for full behavior and examples.
 | ------------------------- | -------------------------- |
 | `.audit/` exists          | Skip (keep existing)       |
 | `AGENTS.md` exists        | Skip (keep existing)       |
-| `scripts/` has same name  | Rename with prefix (`wf-`) |
+| `scripts/` has same name  | Rename with prefix (`gv-`) |
 | `.gitignore` needs update | Merge prompt               |
 | Template file exists      | Skip (keep existing)       |
 
 ### Force Apply (If Needed)
 
 ```powershell
-# If you want to overwrite existing Foundation files
+# If you want to overwrite existing Gentle-Vanguard files
 .\scripts\init-workspace.ps1 -Force
 
 # This will:
@@ -286,7 +286,7 @@ claude "Hello, verify you're working"
 
 ### Team Consistency
 
-All team members integrate Foundation the same way:
+All team members integrate Gentle-Vanguard the same way:
 
 ```powershell
 # 1. Clone repo
@@ -320,7 +320,7 @@ git clone https://github.com/team/project.git
 ### Detailed Verification
 
 ```powershell
-# 1. Check Foundation files exist
+# 1. Check Gentle-Vanguard files exist
 Get-ChildItem .audit/
 Get-ChildItem AGENTS.md
 Get-ChildItem scripts/
@@ -339,26 +339,26 @@ Get-ChildItem .audit/sessions/
 
 ## Rollback (If Needed)
 
-### Remove Foundation (Keep Code)
+### Remove Gentle-Vanguard (Keep Code)
 
 ```powershell
-# This removes Foundation but keeps your code
+# This removes Gentle-Vanguard but keeps your code
 Remove-Item -Recurse .audit/
 Remove-Item AGENTS.md
 Remove-Item -Recurse scripts/
 
 # Commit the removal
 git add .
-git commit -m "chore: remove Foundation"
+git commit -m "chore: remove Gentle-Vanguard"
 git push
 ```
 
 ### Re-Integrate
 
 ```powershell
-# To bring Foundation back
+# To bring Gentle-Vanguard back
 cd your-project
-.\path\to\foundation\\scripts\init-workspace.ps1
+.\path\to\gentle-vanguard\\scripts\init-workspace.ps1
 ```
 
 ## Troubleshooting
@@ -409,4 +409,5 @@ $env:WFS_SESSION_FILE
 | 4    | Start working normally           |
 | 5    | Run `finalize-session.ps1` daily |
 
-**Result:** Foundation adds capabilities without touching existing code.
+**Result:** Gentle-Vanguard adds capabilities without touching existing code.
+

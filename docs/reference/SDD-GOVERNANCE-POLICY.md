@@ -16,7 +16,7 @@ This document standardizes how Spec-Driven Development (SDD) is applied in this 
 
 ## Policy Scope
 
-This policy applies to repositories and modules using the Foundation orchestration model.
+This policy applies to repositories and modules using the Gentle-Vanguard orchestration model.
 
 ## Enforcement Criteria
 
@@ -75,3 +75,4 @@ For exception paths, a mini-spec must exist before merge with:
 1. `skills/project-orchestrator-skill/SKILL.md`
 2. `skills/sdd-lifecycle/SKILL.md`
 3. `docs/sdd/README.md`
+

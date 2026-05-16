@@ -1,6 +1,6 @@
 # WhatsApp - Short
 
-Foundation v2.0 is available!
+Gentle-Vanguard v2.0 is available!
 
 AI Development Stack:
 - Auto-delegation
@@ -9,4 +9,4 @@ AI Development Stack:
 
 More info: Check GitHub
 
-#FoundationStack
+#Gentle-VanguardStack

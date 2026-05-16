@@ -1,6 +1,6 @@
-# Foundation Development Standards v2.0
+# Gentle-Vanguard Development Standards v2.0
 
-Standards and best practices for Foundation project development.
+Standards and best practices for Gentle-Vanguard project development.
 Last updated: 2026-05-10
 
 ---
@@ -29,7 +29,7 @@ Last updated: 2026-05-10
 
 ### Forbidden Patterns
 
-- No `Write-Host` in reusable functions/libraries (use `Write-Output` or `return`); OK in CLI scripts, hooks, and `wf` commands for direct user output
+- No `Write-Host` in reusable functions/libraries (use `Write-Output` or `return`); OK in CLI scripts, hooks, and `gv` commands for direct user output
 - No hardcoded paths (use relative or config-driven paths)
 - No empty `catch` blocks
 - No `Should Be` syntax (use `Should -Be` for Pester 5.x)
@@ -239,7 +239,7 @@ BEFORE modifying any existing file, follow this protocol to avoid incomplete/wro
 1. **Run affected tests**: not just the full suite, specifically touched modules
 2. **Run linter/typecheck**: ensure no new warnings
 3. **Verify integration points**: APIs, database migrations, UI components
-4. **Run `agent-verify.ps1`** if modifying foundation itself
+4. **Run `agent-verify.ps1`** if modifying gentle-vanguard itself
 5. **Persist to engram** if architecture/pattern changed significantly
 
 **Why**: Existing projects have established conventions. Blind modifications break builds,
@@ -283,9 +283,9 @@ context-first development — understand before changing.
 These standards are enforced by:
 
 1. **Pre-commit hooks** (Lefthook) - `hooks/pre-commit-opencode-validation.ps1`
-2. **CI/CD pipeline** (GitHub Actions) - `foundation-quality-gate.yml`
+2. **CI/CD pipeline** (GitHub Actions) - `gentle-vanguard-quality-gate.yml`
 3. **Code review** (mandatory for `develop` -> `main`)
-4. **Audit sweeps** (weekly) - `foundation-audit-skill`
+4. **Audit sweeps** (weekly) - `gentle-vanguard-audit-skill`
 5. **Agent self-verification** (`agent-verify.ps1`)
 
 Violations result in:
@@ -325,4 +325,5 @@ Violations result in:
 
 ---
 
-_Version: 2.0 - 2026-05-10_ _Author: Foundation Team_ _Status: ACTIVE_
+_Version: 2.0 - 2026-05-10_ _Author: Gentle-Vanguard Team_ _Status: ACTIVE_
+

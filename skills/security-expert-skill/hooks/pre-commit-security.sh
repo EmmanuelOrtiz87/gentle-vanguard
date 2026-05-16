@@ -30,7 +30,7 @@ echo ""
 
 # Check if security skill is installed
 if [ ! -f "$SCAN_SCRIPT" ]; then
-    echo "${YELLOW}[SKIP]${NC} Security skill not found. Run 'wf skills --install' to install."
+    echo "${YELLOW}[SKIP]${NC} Security skill not found. Run 'gv skills --install' to install."
     exit 0
 fi
 
@@ -107,8 +107,8 @@ if command -v pwsh >/dev/null 2>&1 || command -v powershell >/dev/null 2>&1; the
         echo " COMMIT BLOCKED - Security issues found!"
         echo "==========================================${NC}"
         echo ""
-        echo "Run 'wf security audit' for detailed report."
-        echo "Run 'wf security scan --interactive' to review and fix issues."
+        echo "Run 'gv security audit' for detailed report."
+        echo "Run 'gv security scan --interactive' to review and fix issues."
         echo ""
         exit 1
     fi
@@ -122,3 +122,4 @@ echo "${GREEN}[OK]${NC} Security scan passed!"
 echo ""
 
 exit 0
+

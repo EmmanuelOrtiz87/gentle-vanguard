@@ -1,7 +1,7 @@
 # 📚 Documentation Guide
 
 <p align="center">
-  <b>Navigate the Foundation documentation ecosystem</b>
+  <b>Navigate the Gentle-Vanguard documentation ecosystem</b>
 </p>
 
 **Last Updated**: 2026-05-06  
@@ -11,7 +11,7 @@
 
 ## 🚀 Quick Start
 
-New to Foundation? Start here:
+New to Gentle-Vanguard? Start here:
 
 | Guide                                                        | Purpose                               |
 | ------------------------------------------------------------ | ------------------------------------- |
@@ -117,7 +117,7 @@ New to Foundation? Start here:
 | JUDGMENT-GUIDE.md                         | Judgment day guide                 |
 | JUDGMENT-DAY-AUTOMATION.md                | Judgment day automation            |
 | GITFLOW-ENFORCEMENT-ANALYSIS.md           | GitFlow enforcement                |
-| FOUNDATION-SYNC.md                        | Foundation sync                    |
+| Gentle-Vanguard-SYNC.md                        | Gentle-Vanguard sync                    |
 | ARTIFACT-RETENTION.md                     | Artifact retention                 |
 | COMPATIBILITY-MATRIX.md                   | Compatibility matrix               |
 | DEPLOYMENT-OPTIMIZATION-GUIDE.md          | Deployment optimization            |
@@ -154,3 +154,5 @@ When adding documentation:
 <p align="center">
   <b>📚 Master the documentation. Navigate the stack.</b>
 </p>
+
+

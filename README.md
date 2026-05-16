@@ -1,4 +1,4 @@
-<h1 align="center">Foundation</h1>
+<h1 align="center">Gentle-Vanguard</h1>
 
 <p align="center">
   <strong>AI-powered development orchestrator · 18 specialized agents · 130+ skills</strong><br>
@@ -26,9 +26,9 @@
 
 ---
 
-## What is Foundation?
+## What is Gentle-Vanguard?
 
-Foundation is an **AI orchestrator** that turns your CLI or IDE into a disciplined engineering team. Unlike chat wrappers, Foundation:
+Gentle-Vanguard is an **AI orchestrator** that turns your CLI or IDE into a disciplined engineering team. Unlike chat wrappers, Gentle-Vanguard:
 
 - **Routes work** through delegation rules: small changes stay inline, complex work goes to specialized subagents
 - **Enforces SDD** (Spec-Driven Development): concepts before code, artifacts over chat context
@@ -68,7 +68,7 @@ flowchart TB
 
 ### Work Routing Ladder
 
-Foundation routes every request through the **smallest safe harness**:
+Gentle-Vanguard routes every request through the **smallest safe harness**:
 
 ```mermaid
 flowchart LR
@@ -156,7 +156,7 @@ Configured in [config/model-routing.json](config/model-routing.json).
 
 ### SDD / OpenSpec
 
-Foundation implements Spec-Driven Development with a formal phase chain:
+Gentle-Vanguard implements Spec-Driven Development with a formal phase chain:
 
 ```
 init  explore  proposal  spec  design  tasks  apply  verify  archive
@@ -195,7 +195,7 @@ Before multi-file implementation, estimate the review burden:
 
 ### Skill Registry
 
-Foundation auto-maintains a skill registry at `.atl/skill-registry.md`:
+Gentle-Vanguard auto-maintains a skill registry at `.atl/skill-registry.md`:
 
 - Built on every session start
 - Scans 10+ skill directories (project + user/tool)
@@ -222,14 +222,14 @@ Rebuild on demand:
 ## Quick Start
 
 ```powershell
-git clone https://github.com/EmmanuelOrtiz87/foundation.git
-cd foundation
+git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
+cd gentle-vanguard
 
 # Full session start (autostart + session manager + engram + skill registry)
 .\scripts\utilities\session-autostart.cmd
 
 # Verify all quality gates
-foundation verify
+gv verify
 
 # Run the declared real coverage gate explicitly
 pwsh -File .\scripts\utilities\verify-coverage.ps1
@@ -254,7 +254,7 @@ pwsh -File .\scripts\utilities\verify-coverage.ps1
 | Real coverage gate | `pwsh -File .\scripts\utilities\verify-coverage.ps1` |
 | Session persistence tests | `Invoke-Pester tests/integration/engram-session-persistence.integration.tests.ps1 -Output Detailed` |
 | Learning workflow tests | `Invoke-Pester tests/integration/post-session-learning.integration.tests.ps1 -Output Detailed` |
-| Quality gates | `foundation verify` or `foundation judgment-day` |
+| Quality gates | `gv verify` or `gv judgment-day` |
 | Security audit | `.\scripts\security\audit.ps1` |
 | Rebuild skill registry | `.\scripts\utilities\build-skill-registry.ps1` |
 
@@ -294,6 +294,7 @@ Session lifecycle is now persisted end-to-end through Engram: `session-manager.p
 ---
 
 <p align="center">
-  <strong>Foundation v2.15.0</strong><br>
+  <strong>Gentle-Vanguard v2.15.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>
+

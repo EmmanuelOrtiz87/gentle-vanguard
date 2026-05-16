@@ -64,11 +64,12 @@ API_KEY=sk-placeholder-key-not-real
 - [ ] Error messages don't leak info?
 - [ ] Dependencies vetted?
 
-## Blocked Operations (Foundation workspace, developer role)
+## Blocked Operations (Gentle-Vanguard workspace, developer role)
 
 - Modifying skills (`skills/*`)
 - Modifying orchestrator
 - Accessing workspace config (`.workspace/config/*`)
 - Running skill-optimizer
-- Running foundation-audit
+- Running gentle-vanguard-audit
 - Managing users
+

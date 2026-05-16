@@ -54,7 +54,7 @@ Show cross-session continuity using Engram memory, session history, and executio
 
 ```powershell
 # Start a new session
-./scripts/utilities/wf.ps1 start-session demo-memory
+./scripts/utilities/gv.ps1 start-session demo-memory
 # Expected:
 # [SESSION] Registered: session-YYYY-MM-DD-XX
 # [ENGRAM] Context bridge active
@@ -87,8 +87,8 @@ Show cross-session continuity using Engram memory, session history, and executio
 # - Quality gate results
 
 # View current session execution metrics
-# (Available as part of wf status)
-./scripts/utilities/wf.ps1 status
+# (Available as part of gv status)
+./scripts/utilities/gv.ps1 status
 # Expected to show:
 # ┌─────────────────────────────────────────┐
 # │ Session Execution Metrics               │
@@ -100,7 +100,7 @@ Show cross-session continuity using Engram memory, session history, and executio
 # └─────────────────────────────────────────┘
 
 # Generate compact continuation prompt for handoff
-./scripts/utilities/wf.ps1 compact-start "handoff after memory demo"
+./scripts/utilities/gv.ps1 compact-start "handoff after memory demo"
 # Expected:
 # [COMPACT] Continuation prompt generated
 # [COMPACT] Includes: last 3 decisions, current files, open tasks
@@ -111,7 +111,7 @@ Show cross-session continuity using Engram memory, session history, and executio
 
 ```powershell
 # Generate and open the HTML dashboard
-./scripts/utilities/wf.ps1 dashboard
+./scripts/utilities/gv.ps1 dashboard
 # → Generates reports/dashboard.html
 # → Opens in default browser
 
@@ -145,7 +145,7 @@ Show cross-session continuity using Engram memory, session history, and executio
 
 ```powershell
 # On day 2, restore previous context
-./scripts/utilities/wf.ps1 compact-start "continue task-tracker from yesterday"
+./scripts/utilities/gv.ps1 compact-start "continue task-tracker from yesterday"
 # Expected:
 # [ENGRAM] Restored context from session-YYYY-MM-DD-XX
 # [ENGRAM] Found 5 past observations
@@ -162,7 +162,7 @@ Show cross-session continuity using Engram memory, session history, and executio
 
 ```powershell
 # End session and finalize metrics
-./scripts/utilities/wf.ps1 end-session demo-memory
+./scripts/utilities/gv.ps1 end-session demo-memory
 # Expected:
 # [SESSION] Closing demo-memory
 # [TRACKER] Finalizing execution metrics...
@@ -185,3 +185,4 @@ Get-Content .metrics/session-YYYY-MM-DD-XX.json | ConvertFrom-Json | ConvertTo-J
 4. Context is resumed quickly on day 2 — no repeated onboarding
 5. Token efficiency: compact-start uses ~350 tokens vs. 2K+ for full reload
 6. Team sees tangible AI collaboration continuity across sessions
+

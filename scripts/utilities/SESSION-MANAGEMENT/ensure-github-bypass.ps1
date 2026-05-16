@@ -5,7 +5,7 @@
 .DESCRIPTION
     Resolves the current GitHub user via gh, locates branch rulesets targeting develop,
     and ensures the user is added as a bypass actor with bypass_mode=always in both
-    foundation and foundation-public.
+    gentle-vanguard and gentle-vanguard-public.
 .PARAMETER Owner
     Repository owner/user.
 .PARAMETER Repos
@@ -18,7 +18,7 @@
 
 param(
     [string]$Owner = 'EmmanuelOrtiz87',
-    [string[]]$Repos = @('foundation', 'foundation-public'),
+    [string[]]$Repos = @('gentle-vanguard', 'gentle-vanguard-public'),
     [string]$Branch = 'develop',
     [switch]$Strict
 )

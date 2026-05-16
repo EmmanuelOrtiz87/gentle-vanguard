@@ -24,27 +24,27 @@ Configuration source:
 Set hard mode (recommended default for testing):
 
 ```powershell
-pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1 token-guard profile:hard
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1 token-guard profile:hard
 ```
 
 Set balanced mode (less aggressive):
 
 ```powershell
-pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1 token-guard profile:balanced
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1 token-guard profile:balanced
 ```
 
 Run automatic guard + autopilot check now:
 
 ```powershell
-pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1 token-guard auto
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1 token-guard auto
 ```
 
 On-demand chat response control:
 
 ```powershell
-pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1 response-mode ahorro
-pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1 response-mode normal
-pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1 response-mode detallado
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1 response-mode ahorro
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1 response-mode normal
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1 response-mode detallado
 ```
 
 ## Profile Comparison
@@ -92,7 +92,7 @@ Note: exact token savings depend on workload shape and agent/task mix.
 If a mode command fails, run:
 
 ```powershell
-pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1 response-mode status -JSON
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1 response-mode status -JSON
 ```
 
 Then verify:
@@ -101,3 +101,4 @@ Then verify:
 - `detail`
 - `active`
 - `responsePolicy`
+

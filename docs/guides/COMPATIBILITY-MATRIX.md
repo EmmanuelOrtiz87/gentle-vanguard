@@ -1,6 +1,6 @@
 # AI Tools Compatibility Matrix
 
-This document tracks feature parity across all supported AI tools in foundation.
+This document tracks feature parity across all supported AI tools in gentle-vanguard.
 
 ## Core Features Matrix
 
@@ -45,9 +45,9 @@ When using Claude or Copilot, watch for these keywords and manually load the cor
 | test, write test, test coverage, unit test, integration test, e2e test, testing framework, test setup                                | `testing-skill`              |
 | testing strategy, test pyramid, what to test, coverage target, unit test, integration test                                           | `testing-strategy-skill`     |
 | iniciar sesión, session, start session                                                                                               | `session-lifecycle`          |
-| audit foundation, validate docs, sweep project, check links, find duplicates, fix references, homologate, validation sweep, wf audit | `foundation-audit-skill`     |
+| audit gentle-vanguard, validate docs, sweep project, check links, find duplicates, fix references, homologate, validation sweep, gv audit | `gentle-vanguard-audit-skill`     |
 | new project, assess project, setup project, migrate, refactor decisión, organize docs                                                | `project-orchestrator-skill` |
-| create project, new project, bootstrap, scaffold, template, workspace setup, initialize project, wf CLI                              | `project-scaffolding`        |
+| create project, new project, bootstrap, scaffold, template, workspace setup, initialize project, gv CLI                              | `project-scaffolding`        |
 | sdd init, iniciar sdd, openspec init                                                                                                 | `sdd-init`                   |
 
 ## Orchestrator Delegation
@@ -124,3 +124,4 @@ Features that CANNOT be implemented in certain tools due to architectural limita
 - **Matrix versión**: 1.1.0
 - **Tools Supported**: 8
 - **Features Tracked**: 12 core features
+

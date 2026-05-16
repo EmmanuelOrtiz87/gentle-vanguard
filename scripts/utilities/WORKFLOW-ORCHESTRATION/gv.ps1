@@ -1617,12 +1617,11 @@ switch ($Command) {
         $action = if ($scopeParts[0]) { $scopeParts[0] } else { 'list' }
         $eventName = if ($scopeParts.Count -gt 1) { $scopeParts[1] } else { '' }
 
-        $eventArgs = @('-Action', $action)
         if ($eventName) {
-            $eventArgs += @('-Event', $eventName)
+            & $eventScript -Action $action -Event $eventName
+        } else {
+            & $eventScript -Action $action
         }
-
-        & $eventScript @eventArgs
     }
 
     'route' {

@@ -1,6 +1,6 @@
 # Scripts Utilities - Main Directory
 
-Centralized collection of utility scripts organized by functionality for Foundation.
+Centralized collection of utility scripts organized by functionality for Gentle-Vanguard.
 
 **Version**: 3.0.0  
 **Last updated**: 2026-05-04  
@@ -162,7 +162,7 @@ Performance optimization, memory compaction, and Engram.
 
 Active scripts (used by session lifecycle):
 
-- `end-session.ps1` - End session (called from day-end-closure.ps1, wf.ps1)
+- `end-session.ps1` - End session (called from day-end-closure.ps1, gv.ps1)
 - `ensure-github-bypass.ps1` - GitHub bypass enforcement (referenced in config)
 
 ---
@@ -233,7 +233,7 @@ General utilities and general-purpose tools.
 - `detect-ide-session.ps1` - Detect IDE session
 - `enforce-response-mode.ps1` - Enforce response mode
 - `export-backlog-csv.ps1` - Export backlog to CSV
-- `foundation-sync.ps1` - Sync foundation
+- `gentle-vanguard-sync.ps1` - Sync gentle-vanguard
 - `handoff-compress.ps1` - Compress handoff
 - `help.ps1` - Help
 - `manage-backlog.ps1` - Manage backlog
@@ -268,15 +268,15 @@ Workflow orchestration and runtime routing.
 - `orchestrator-next-steps.ps1` - Orchestrator next steps
 - `orchestrator-status.ps1` - Orchestrator status
 - `runtime-router.ps1` - Runtime router
-- `wf-audit.ps1` - Workflow audit
-- `wf.ps1` - Main workflow CLI
-- `wf.sh` - Workflow CLI (Bash)
+- `gv-audit.ps1` - Workflow audit
+- `gv.ps1` - Main workflow CLI
+- `gv.sh` - Workflow CLI (Bash)
 
 **Typical usage:**
 
 ```powershell
-.\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1 diagnose
-.\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1 verify
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1 diagnose
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1 verify
 ```
 
 [View full documentation](./WORKFLOW-ORCHESTRATION/README.md)
@@ -294,7 +294,7 @@ Workflow orchestration and runtime routing.
 ### Run Full Diagnostics
 
 ```powershell
-.\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1 diagnose
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1 diagnose
 ```
 
 ### End Session
@@ -382,3 +382,4 @@ Install-Module -Name Pester -Force -SkipPublisherCheck
 **Last updated**: 2026-05-04  
 **Version**: 3.0.0  
 **Status**: PRODUCTION
+

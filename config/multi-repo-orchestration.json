@@ -26,12 +26,12 @@
         "name": "Polyrepo (v3.x community phase)",
         "description": "Multiple independent repositories",
         "targetVersion": "3.5.0",
-        "orchestrator": "foundation-sync",
+        "orchestrator": "gentle-vanguard-sync",
         "repositories": [
-          "foundation-core",
-          "foundation-web-ui",
-          "foundation-plugins",
-          "foundation-marketplace"
+          "gentle-vanguard-core",
+          "gentle-vanguard-web-ui",
+          "gentle-vanguard-plugins",
+          "gentle-vanguard-marketplace"
         ]
       },
       "hybrid": {
@@ -40,12 +40,12 @@
         "description": "Monorepo for core + polyrepo for community",
         "coreStructure": "monorepo",
         "communityStructure": "polyrepo",
-        "syncTool": "foundation-sync"
+        "syncTool": "gentle-vanguard-sync"
       }
     },
     
     "monorepoConfig": {
-      "root": "foundation/",
+      "root": "gentle-vanguard/",
       "workspaceManager": "pnpm",
       "workspaceFile": "pnpm-workspace.yaml",
       "workspaces": {
@@ -117,19 +117,19 @@
     
     "polyrepoSync": {
       "enabled": false,
-      "tool": "foundation-sync",
+      "tool": "gentle-vanguard-sync",
       "schedule": "0 */6 * * *",
       "sources": [
         {
-          "repo": "foundation-core",
+          "repo": "gentle-vanguard-core",
           "path": "skills/",
           "syncMode": "mirror"
         }
       ],
       "targets": [
         {
-          "repo": "foundation-plugins",
-          "path": "node_modules/@foundation/skills",
+          "repo": "gentle-vanguard-plugins",
+          "path": "node_modules/@gentle-vanguard/skills",
           "syncMode": "merge"
         }
       ]
@@ -158,3 +158,4 @@
     }
   }
 }
+

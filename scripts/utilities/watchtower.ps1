@@ -158,7 +158,7 @@ function Check-Context {
                 severity = "warn"
                 message = "Last compact-start was $ageMin min(s) ago (recommended < 60 min)"
                 detail = "Context may be growing, run compact-start"
-                autoFixAction = Join-Path (Join-Path (Join-Path (Join-Path $repoRoot "scripts") "utilities") "WORKFLOW-ORCHESTRATION") "foundation.ps1"
+                autoFixAction = Join-Path (Join-Path (Join-Path (Join-Path $repoRoot "scripts") "utilities") "WORKFLOW-ORCHESTRATION") "gentle-vanguard.ps1"
                 autoFixDesc = "Run compact-start automatically"
             }
         } else {
@@ -230,8 +230,8 @@ function Check-Proposals {
             check = "proposals"
             severity = if ($pending.Count -gt 5) { "critical" } else { "warn" }
             message = "$($pending.Count) pending improvement proposal(s)"
-            detail = "Run 'foundation learning apply' to execute"
-            autoFixAction = Join-Path (Join-Path (Join-Path (Join-Path $repoRoot "scripts") "utilities") "WORKFLOW-ORCHESTRATION") "foundation.ps1"
+            detail = "Run 'gv learning apply' to execute"
+            autoFixAction = Join-Path (Join-Path (Join-Path (Join-Path $repoRoot "scripts") "utilities") "WORKFLOW-ORCHESTRATION") "gentle-vanguard.ps1"
             autoFixDesc = "Execute pending proposals"
         }
     } else {
@@ -317,8 +317,8 @@ function Invoke-AutoFix {
                 else { Write-Warn "Push failed" }
             }
         } elseif ($issue.check -eq 'context' -and $issue.autoFixAction) {
-            $foundation = $issue.autoFixAction
-            & $foundation 2>$null
+            $gentle-vanguard = $issue.autoFixAction
+            & $gentle-vanguard 2>$null
             if ($LASTEXITCODE -eq 0 -or $LASTEXITCODE -eq $null) { $fixed++; Write-Ok "Compact-start completed" }
             else { Write-Warn "Compact-start failed" }
         } elseif ($issue.check -eq 'proposals' -and $issue.autoFixAction) {
@@ -366,3 +366,4 @@ if ($AutoFix) {
 
 $exitCode = if ($summary.critical -gt 0) { 1 } elseif ($summary.warn -gt 0) { 0 } else { 0 }
 exit $exitCode
+

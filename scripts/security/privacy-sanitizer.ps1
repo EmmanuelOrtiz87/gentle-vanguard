@@ -1,4 +1,4 @@
-# Privacy Sanitizer - Foundation
+# Privacy Sanitizer - Gentle-Vanguard
 # Sanitiza outputs automaticos para evitar data leakage
 
 #Requires -Version 5.1

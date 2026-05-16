@@ -1,4 +1,4 @@
-# API Versioning Normatives — Foundation
+# API Versioning Normatives — Gentle-Vanguard
 
 Canonical standards for API versioning, deprecation, and backward compatibility.
 Last updated: 2026-05-12 | Version: 1.0.0
@@ -51,7 +51,7 @@ GET /api/v3/users/accounts # v3 with new structure
 
 ```
 GET /api/users
-  Accept: application/vnd.foundation+json; version=2
+  Accept: application/vnd.gentle-vanguard+json; version=2
 ```
 
 **DO NOT USE**: Query parameter versioning (`?api=v2`) — difficult to cache, route, and monitor.
@@ -178,7 +178,7 @@ All APIs MUST publish OpenAPI 3.0+ spec:
 # api-contract.yaml
 openapi: 3.0.0
 info:
-  title: Foundation API
+  title: Gentle-Vanguard API
   version: 2.1.0
   description: "Breaking changes from v1: ..."
 
@@ -397,3 +397,4 @@ Describe "API Versioning" {
 - [OpenAPI 3.0 Specification](https://spec.openapis.org/oas/v3.0.3)
 - Project: [config/auto-delegation.json](../config/auto-delegation.json)
 - Related: [NORMATIVAS-CODIGO.md](NORMATIVAS-CODIGO.md)
+

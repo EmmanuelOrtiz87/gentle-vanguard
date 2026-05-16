@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env bash
+#!/usr/bin/env bash
 # auto-init-dev-environment.sh - Universal auto-initialization
 # Works on: Linux, macOS, Windows (WSL, Git Bash)
 
@@ -110,7 +110,7 @@ if bash "$SCRIPT_DIR/system-diagnostics.sh" > /dev/null 2>&1; then
         log_info ""
         log_info "Next steps:"
         log_info "  1. cd $(basename "$PROJECT_ROOT")"
-        log_info "  2. ./wf status"
+        log_info "  2. ./gv status"
         log_info "  3. Start coding!"
         log_info ""
     fi
@@ -121,3 +121,4 @@ else
     fi
     exit 1
 fi
+

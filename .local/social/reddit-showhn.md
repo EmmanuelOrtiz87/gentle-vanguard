@@ -1,6 +1,6 @@
 # Reddit - Show HN
 
-Show: Foundation v2.0 - AI Development Stack
+Show: Gentle-Vanguard v2.0 - AI Development Stack
 
 Built over 6+ months. Governance + automation + AI assistance.
 
@@ -16,4 +16,4 @@ PowerShell. Works on Win/Linux/macOS. Provider-agnostic.
 
 Would love feedback. What would make this useful?
 
-GitHub: github.com/EmmanuelOrtiz87/foundation
+GitHub: github.com/EmmanuelOrtiz87/gentle-vanguard

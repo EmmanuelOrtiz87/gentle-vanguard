@@ -78,7 +78,7 @@ function Write-BkpSecure { param([string]$msg) Write-Host "[BKP-SEC]" -NoNewline
 
 # Derive encryption key from workspace (only this stack can decrypt)
 function Get-EncryptionKey {
-    $workspaceId = "foundation-2026"  # Unique stack identifier
+    $workspaceId = "gentle-vanguard-2026"  # Unique stack identifier
     $machineId = $env:COMPUTERNAME
     $userSalt = "opencode-stack-salt-2026"
     
@@ -374,4 +374,5 @@ switch ($Action) {
 }
 
 return $result
+
 

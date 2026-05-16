@@ -7,7 +7,7 @@ description: >
   installing/removing skills.
 license: MIT
 metadata:
-  author: foundation
+  author: gentle-vanguard
   versión: '1.0'
 ---
 
@@ -18,7 +18,7 @@ rules** (pre-digested, 5-15 line summaries) that any delegator injects directly 
 prompts. Sub-agents do NOT read the registry or individual SKILL.md files they receive compact rules
 pre-resolved in their launch prompt.
 
-This is the foundation of the **Skill Resolver Protocol** (see
+This is the gentle-vanguard of the **Skill Resolver Protocol** (see
 `docs/reference/SKILL-RESOLVER-PROTOCOL.md`). The registry is built ONCE (expensive), then read
 cheaply at every delegation.
 
@@ -228,3 +228,4 @@ sub-agents via their launch prompts. To update after installing/removing skills,
 - If no skills or conventions are found, write an empty registry (so sub-agents don't waste time
   searching)
 - Add `.atl/` to the project's `.gitignore` if it exists and `.atl` is not already listed
+

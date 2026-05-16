@@ -50,7 +50,7 @@ $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..\..')).Path
 
 $generateDashboard = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\generate-dashboard.ps1'
 $liveObs = Join-Path $repoRoot 'scripts\utilities\UTILITIES\stack-live-observability.ps1'
-$stackBenchmark = Join-Path $repoRoot 'scripts\utilities\wf-stack-benchmark.ps1'
+$stackBenchmark = Join-Path $repoRoot 'scripts\utilities\gv-stack-benchmark.ps1'
 $webhookScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\webhook-alerting.ps1'
 $predictorScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\baseline-predictor.ps1'
 $slaScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\sla-dashboard-generator.ps1'
@@ -70,7 +70,7 @@ if (-not (Test-Path $liveObs)) {
     throw "stack-live-observability.ps1 not found: $liveObs"
 }
 if (-not (Test-Path $stackBenchmark)) {
-    throw "wf-stack-benchmark.ps1 not found: $stackBenchmark"
+    throw "gv-stack-benchmark.ps1 not found: $stackBenchmark"
 }
 
 $refreshSafe = [Math]::Max(5, $RefreshSeconds)
@@ -274,3 +274,4 @@ while ($true) {
 Write-Host ''
 Write-Host 'Live refresh finished.' -ForegroundColor Cyan
 exit 0
+

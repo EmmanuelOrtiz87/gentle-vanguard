@@ -1,4 +1,4 @@
-# generate-session-review.ps1 (Foundation Core)
+# generate-session-review.ps1 (Gentle-Vanguard Core)
 # Agnostic session review generator for AI-assisted change control.
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -46,7 +46,7 @@ if (-not $sessionActive) {
     Write-Host "[WARN] No active session detected (WFS_SESSION_ID not set)." -ForegroundColor Yellow
     $forceOverride = Read-Host "Proceed without active session? This will be logged in audit. (yes/no)"
     if ($forceOverride -notmatch '^(y|yes|si|s)$') {
-        Write-Host "[INFO] Operation cancelled. Start a session with 'wf.ps1 start-session' first." -ForegroundColor Cyan
+        Write-Host "[INFO] Operation cancelled. Start a session with 'gv.ps1 start-session' first." -ForegroundColor Cyan
         exit 0
     }
 }
@@ -58,7 +58,7 @@ if (-not $sessionActive) {
     Write-Host "[WARN] No active session detected (WFS_SESSION_ID not set)." -ForegroundColor Yellow
     $forceOverride = Read-Host "Proceed without active session? This will be logged in audit. (yes/no)"
     if ($forceOverride -notmatch '^(y|yes|si|s)$') {
-        Write-Host "[INFO] Operation cancelled. Start a session with 'wf.ps1 start-session' first." -ForegroundColor Cyan
+        Write-Host "[INFO] Operation cancelled. Start a session with 'gv.ps1 start-session' first." -ForegroundColor Cyan
         exit 0
     }
 }
@@ -70,7 +70,7 @@ if (-not $sessionActive) {
     Write-Host "[WARN] No active session detected (WFS_SESSION_ID not set)." -ForegroundColor Yellow
     $forceOverride = Read-Host "Proceed without active session? This will be logged in audit. (yes/no)"
     if ($forceOverride -notmatch '^(y|yes|si|s)$') {
-        Write-Host "[INFO] Operation cancelled. Start a session with 'wf.ps1 start-session' first." -ForegroundColor Cyan
+        Write-Host "[INFO] Operation cancelled. Start a session with 'gv.ps1 start-session' first." -ForegroundColor Cyan
         exit 0
     }
 }

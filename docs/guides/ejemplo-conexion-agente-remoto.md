@@ -1,16 +1,16 @@
 # Ejemplo: Conexin a un Agente IA Remoto va API
 
-Este ejemplo documenta el paso a paso para conectar Foundation (o tu entorno local) a un agente IA
+Este ejemplo documenta el paso a paso para conectar Gentle-Vanguard (o tu entorno local) a un agente IA
 externo expuesto va API, usando solo la URL y la API key.
 
 ---
 
 ## 1. Crear configuración local de proveedores
 
-Desde PowerShell, en la raz de foundation:
+Desde PowerShell, en la raz de gentle-vanguard:
 
 ```powershell
-cd .\foundation
+cd .\gentle-vanguard
 .\scripts\utilities\invoke-cloud-agent.ps1 -Config
 ```
 
@@ -92,3 +92,4 @@ Edita `config/cloud-agents.local.json` y agrega tu proveedor personalizado:
 ---
 
 **ltima actualizacin:** 2026-04-20
+

@@ -1,4 +1,4 @@
-# Multi-Repository Orchestration Normatives — Foundation
+# Multi-Repository Orchestration Normatives — Gentle-Vanguard
 
 Canonical standards for managing multiple repositories, monorepo/polyrepo strategies, and cross-repo workflows.
 Last updated: 2026-05-12 | Version: 1.0.0
@@ -12,7 +12,7 @@ Last updated: 2026-05-12 | Version: 1.0.0
 **Structure**: Single repository with multiple projects under one version control.
 
 ```
-foundation/ (monorepo root)
+gentle-vanguard/ (monorepo root)
 ├── apps/
 │   ├── web-dashboard/          (React App)
 │   ├── cli-tool/               (TypeScript CLI)
@@ -37,7 +37,7 @@ foundation/ (monorepo root)
 - ⚠️ Larger repository size
 - ⚠️ Requires careful access controls
 
-**Use case**: Foundation should adopt monorepo structure for v3.0 to unify skills, agentsm and frontends.
+**Use case**: Gentle-Vanguard should adopt monorepo structure for v3.0 to unify skills, agentsm and frontends.
 
 ---
 
@@ -47,12 +47,12 @@ foundation/ (monorepo root)
 
 ```
 Repositories:
-├── foundation-core/            (Main orchestrator, skills)
-├── foundation-web-ui/          (React dashboard)
-├── foundation-plugins/         (Community plugins)
-└── foundation-docs/            (Documentation)
+├── gentle-vanguard-core/            (Main orchestrator, skills)
+├── gentle-vanguard-web-ui/          (React dashboard)
+├── gentle-vanguard-plugins/         (Community plugins)
+└── gentle-vanguard-docs/            (Documentation)
 
-Orchestrator: foundation-sync (coordinates updates)
+Orchestrator: gentle-vanguard-sync (coordinates updates)
 ```
 
 **Advantages**:
@@ -75,16 +75,16 @@ Orchestrator: foundation-sync (coordinates updates)
 **Structure**: Monorepo for core + polyrepo for community.
 
 ```
-CORE (Monorepo: foundation)
+CORE (Monorepo: gentle-vanguard)
 ├── apps/                       [web, cli, api]
 ├── packages/                   [shared skills, utilities]
 └── infrastructure/             [deployment configs]
 
 COMMUNITY (Polyrepo)
-├── foundation-plugins/         [community skills, integrations]
-└── foundation-marketplace/     [plugin registry, discovery]
+├── gentle-vanguard-plugins/         [community skills, integrations]
+└── gentle-vanguard-marketplace/     [plugin registry, discovery]
 
-Sync: foundation-sync orchestrator (sync core → plugins as needed)
+Sync: gentle-vanguard-sync orchestrator (sync core → plugins as needed)
 ```
 
 ---
@@ -94,7 +94,7 @@ Sync: foundation-sync orchestrator (sync core → plugins as needed)
 ### Directory Structure
 
 ```
-foundation/ (monorepo)
+gentle-vanguard/ (monorepo)
 │
 ├── apps/                       # Deployable applications
 │   ├── web-dashboard/         # React 19 frontend
@@ -185,7 +185,7 @@ catalog:
 
 ```json
 {
-  "name": "foundation-monorepo",
+  "name": "gentle-vanguard-monorepo",
   "version": "3.0.0",
   "type": "module",
   "private": true,
@@ -217,15 +217,15 @@ catalog:
 
 ```json
 {
-  "name": "@foundation/web-dashboard",
+  "name": "@gentle-vanguard/web-dashboard",
   "version": "3.0.0",
   "type": "module",
   "private": true,
   
   "dependencies": {
     "react": "^19.0.0",
-    "@foundation/core-sdk": "workspace:*",
-    "@foundation/ui-components": "workspace:*"
+    "@gentle-vanguard/core-sdk": "workspace:*",
+    "@gentle-vanguard/ui-components": "workspace:*"
   },
   
   "devDependencies": {
@@ -250,8 +250,8 @@ catalog:
 ```json
 {
   "dependencies": {
-    "@foundation/core-sdk": "3.0.0",    // Fixed version
-    "@foundation/ui-components": "^3.0.0"  // Semver range
+    "@gentle-vanguard/core-sdk": "3.0.0",    // Fixed version
+    "@gentle-vanguard/ui-components": "^3.0.0"  // Semver range
   }
 }
 ```
@@ -261,7 +261,7 @@ catalog:
 ```json
 {
   "dependencies": {
-    "@foundation/core-sdk": "workspace:^3.0.0"
+    "@gentle-vanguard/core-sdk": "workspace:^3.0.0"
   }
 }
 ```
@@ -272,10 +272,10 @@ When core package version changes (v3.0 → v4.0):
 
 ```bash
 # 1. Update core package
-pnpm --filter @foundation/core-sdk version major
+pnpm --filter @gentle-vanguard/core-sdk version major
 
 # 2. Update all dependents
-pnpm -r update @foundation/core-sdk@latest
+pnpm -r update @gentle-vanguard/core-sdk@latest
 
 # 3. Run tests to detect breaking changes
 pnpm test
@@ -342,33 +342,33 @@ jobs:
 
 ## 6. Multi-Repo Synchronization (Polyrepo Phase)
 
-### Sync Tool: foundation-sync
+### Sync Tool: gentle-vanguard-sync
 
 ```powershell
-# scripts/utilities/foundation-sync.ps1
+# scripts/utilities/gentle-vanguard-sync.ps1
 
 [CmdletBinding()]
 param(
-    [string]$SourceRepo = "https://github.com/EmmanuelOrtiz87/foundation",
-    [string]$TargetRepo = "https://github.com/EmmanuelOrtiz87/foundation-plugins",
+    [string]$SourceRepo = "https://github.com/EmmanuelOrtiz87/gentle-vanguard",
+    [string]$TargetRepo = "https://github.com/EmmanuelOrtiz87/gentle-vanguard-plugins",
     [string]$SourcePath = "skills/",
-    [string]$TargetPath = "node_modules/@foundation/skills",
+    [string]$TargetPath = "node_modules/@gentle-vanguard/skills",
     [string]$SyncMode = "mirror"  # mirror, merge, patch
 )
 
 function Sync-Repository {
     # Clone source
-    git clone --depth 1 $SourceRepo /tmp/foundation-src
+    git clone --depth 1 $SourceRepo /tmp/gentle-vanguard-src
     
     # Copy target files
-    $source = "/tmp/foundation-src/$SourcePath"
-    $target = "/tmp/foundation-target/$TargetPath"
+    $source = "/tmp/gentle-vanguard-src/$SourcePath"
+    $target = "/tmp/gentle-vanguard-target/$TargetPath"
     Copy-Item -Path $source -Destination $target -Recurse -Force
     
     # Commit and push
-    git -C /tmp/foundation-target add $TargetPath
-    git -C /tmp/foundation-target commit -m "chore(sync): Update from foundation core"
-    git -C /tmp/foundation-target push
+    git -C /tmp/gentle-vanguard-target add $TargetPath
+    git -C /tmp/gentle-vanguard-target commit -m "chore(sync): Update from gentle-vanguard core"
+    git -C /tmp/gentle-vanguard-target push
 }
 
 Sync-Repository
@@ -378,7 +378,7 @@ Sync-Repository
 
 ```yaml
 # .github/workflows/sync-core.yml
-name: Sync Foundation Core
+name: Sync Gentle-Vanguard Core
 
 on:
   schedule:
@@ -390,7 +390,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: pwsh ./scripts/utilities/foundation-sync.ps1
+      - run: pwsh ./scripts/utilities/gentle-vanguard-sync.ps1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -404,7 +404,7 @@ jobs:
 ```
 VERSION_MANIFEST.json
 {
-  "foundation": "3.0.0",
+  "gentle-vanguard": "3.0.0",
   "apps": {
     "web-dashboard": "3.0.0",
     "api-gateway": "3.0.0",
@@ -482,7 +482,7 @@ Describe "Monorepo Integration" {
     }
 
     It "cross-package dependencies resolve" {
-        (pnpm list @foundation/core-sdk).version | Should Match "3\.0\."
+        (pnpm list @gentle-vanguard/core-sdk).version | Should Match "3\.0\."
     }
 
     It "can build all apps" {
@@ -543,8 +543,8 @@ Describe "Monorepo Integration" {
 ### Best Practices
 
 1. Validate in both repos before any release action:
-  - prefer automated gate: `./scripts/utilities/wf.ps1 release-homologation`
-  - optionally include target tag: `./scripts/utilities/wf.ps1 release-homologation vX.Y.Z`
+  - prefer automated gate: `./scripts/utilities/gv.ps1 release-homologation`
+  - optionally include target tag: `./scripts/utilities/gv.ps1 release-homologation vX.Y.Z`
   - if manual checks are needed: `VERSION`, `git tag --sort=-creatordate`, `git branch -vv`
 2. Apply baseline changes in this order:
   - update `VERSION` on `main`
@@ -566,3 +566,4 @@ Describe "Monorepo Integration" {
 - [Lerna.js](https://lerna.js.org/)
 - [Turborepo](https://turbo.build/repo)
 - Project: `config/multi-repo-orchestration.json` (to be created)
+

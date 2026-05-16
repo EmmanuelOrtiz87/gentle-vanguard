@@ -39,7 +39,7 @@ param(
     [int]$MaxCacheAge = 5,
     
     [Parameter(Mandatory=$false)]
-    [string]$ProjectName = "foundation"
+    [string]$ProjectName = "gentle-vanguard"
 )
 
 $ErrorActionPreference = 'Continue'
@@ -230,3 +230,4 @@ switch ($Mode) {
         Start-CacheMonitor -InactivityMin $InactivityMinutes
     }
 }
+

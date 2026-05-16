@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-Comprehensive end-to-end validation of entire Foundation system
+Comprehensive end-to-end validation of entire Gentle-Vanguard system
 
 .DESCRIPTION
 Complete validation that checks:
@@ -408,3 +408,4 @@ else {
     Write-Log "[FAIL] SOME VALIDATIONS FAILED" "ERROR"
     exit 1
 }
+

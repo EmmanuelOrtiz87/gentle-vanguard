@@ -1,5 +1,5 @@
 {
-  "name": "Cline - Foundation Workspace",
+  "name": "Cline - Gentle-Vanguard Workspace",
   "version": "1.0.0",
   "description": "Local-first policy for Cline",
   "aiSettings": {
@@ -24,7 +24,7 @@
   },
   "sessionManagement": {
     "autostart": "scripts/utilities/session-autostart.cmd",
-    "project": "foundation"
+    "project": "gentle-vanguard"
   },
   "language": {
     "default": "es",
@@ -51,3 +51,4 @@
     ]
   }
 }
+

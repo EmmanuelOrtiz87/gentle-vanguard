@@ -1,8 +1,8 @@
-# Stack On-Demand (Foundation)
+# Stack On-Demand (Gentle-Vanguard)
 
 ## 1. Goal
 
-Operate the Foundation stack without keeping orchestrator controls permanently active.
+Operate the Gentle-Vanguard stack without keeping orchestrator controls permanently active.
 
 Default mode:
 
@@ -15,7 +15,7 @@ Default mode:
 
 ## 2. Command
 
-Run from foundation root:
+Run from gentle-vanguard root:
 
 `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\stack-on-demand.ps1`
 
@@ -62,3 +62,4 @@ Optional:
 2. Explicit activation evidence for audits.
 3. Cleaner runtime posture for multi-repo work.
 4. Better cost and cycle-time governance.
+

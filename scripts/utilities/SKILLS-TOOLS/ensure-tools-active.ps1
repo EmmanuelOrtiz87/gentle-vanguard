@@ -1,5 +1,5 @@
 # ensure-tools-active.ps1
-# Health-check and auto-install for all foundation tools.
+# Health-check and auto-install for all gentle-vanguard tools.
 # Reads tool definitions from config/workspace.config.json (single source of truth).
 # All 5 tools follow the same check  install  verify pattern.
 
@@ -222,7 +222,7 @@ function Install-SystemDep {
         if ($nowAvailable) {
             Write-Host "  [OK] $($Dep.name) is now available in this session" -ForegroundColor Green
         } else {
-            Write-Host "  [OK] $($Dep.name) installed - open a NEW terminal, then re-run: wf.ps1 health" -ForegroundColor Yellow
+            Write-Host "  [OK] $($Dep.name) installed - open a NEW terminal, then re-run: gv.ps1 health" -ForegroundColor Yellow
         }
         return $true
     }
@@ -241,7 +241,7 @@ function Install-SystemDep {
         Write-Host "  3. $($info.notes)" -ForegroundColor White
     }
     Write-Host "  4. Restart this terminal" -ForegroundColor White
-    Write-Host "  5. Re-run: wf.ps1 health" -ForegroundColor White
+    Write-Host "  5. Re-run: gv.ps1 health" -ForegroundColor White
     Write-Host "  [BLOCKED] Cannot auto-install '$($Dep.name)' -- see instructions above" -ForegroundColor Red
     return $false
 }
@@ -317,7 +317,7 @@ function Invoke-SystemDeps {
             if ($depInfo -and $depInfo.url) {
                 Write-Host "  Install from : $($depInfo.url)" -ForegroundColor Yellow
             }
-            Write-Host "  Then run     : wf.ps1 health" -ForegroundColor Yellow
+            Write-Host "  Then run     : gv.ps1 health" -ForegroundColor Yellow
             $missingRequired += $dep.name
         }
     }
@@ -327,7 +327,7 @@ function Invoke-SystemDeps {
         Write-Host "  =========================================================" -ForegroundColor Red
         Write-Host "  MISSING REQUIRED DEPENDENCIES: $($missingRequired -join ', ')" -ForegroundColor Red
         Write-Host "  Install the packages listed above, restart this terminal," -ForegroundColor Red
-        Write-Host "  then run: wf.ps1 health" -ForegroundColor Red
+        Write-Host "  then run: gv.ps1 health" -ForegroundColor Red
         Write-Host "  =========================================================" -ForegroundColor Red
         Write-Host ""
     } else {
@@ -374,7 +374,7 @@ function Install-Tool {
                     }
                 }
                 if (-not $hasBash) {
-                    Write-Host "  Install bash (or Git, if it bundles bash), then re-run: wf.ps1 health" -ForegroundColor Yellow
+                    Write-Host "  Install bash (or Git, if it bundles bash), then re-run: gv.ps1 health" -ForegroundColor Yellow
                     return $false
                 }
             }
@@ -395,7 +395,7 @@ function Install-Tool {
                     }
                 }
                 if (-not $reqFound) {
-                    Write-Host "  Once '$req' is installed, re-run: wf.ps1 health" -ForegroundColor Yellow
+                    Write-Host "  Once '$req' is installed, re-run: gv.ps1 health" -ForegroundColor Yellow
                     return $false
                 }
             }
@@ -483,7 +483,7 @@ function Confirm-ToolAfterInstall {
 
 #  Main tool activation loop (data-driven over workspace.config.json) 
 function Invoke-ToolActivation {
-    Write-Step "Checking Foundation Tools"
+    Write-Step "Checking Gentle-Vanguard Tools"
 
     $configPath = Join-Path $repoRoot 'config\workspace.config.json'
     if (-not (Test-Path $configPath)) {
@@ -530,13 +530,13 @@ function Invoke-ToolActivation {
             if ($isOptionalTool) {
                 Write-Warn "$($tool.name) not installed [optional]"
             } else {
-                Write-Warn "$($tool.name) not installed - run 'wf.ps1 health' to auto-install"
+                Write-Warn "$($tool.name) not installed - run 'gv.ps1 health' to auto-install"
                 $allOk = $false
             }
         }
     }
 
-    if ($allOk) { Write-Ok "Required foundation tools are active" }
+    if ($allOk) { Write-Ok "Required gentle-vanguard tools are active" }
 }
 
 #  Orchestrator skills 
@@ -592,7 +592,7 @@ function Test-MCPIntegrations {
 function Test-WorkflowReadiness {
     Write-Step "Checking Workflow CLI"
 
-    $wfScript = Join-Path (Split-Path (Split-Path $scriptDir)) 'utilities\WORKFLOW-ORCHESTRATION\wf.ps1'
+    $wfScript = Join-Path (Split-Path (Split-Path $scriptDir)) 'utilities\WORKFLOW-ORCHESTRATION\gv.ps1'
     if (-not (Test-Path $wfScript)) {
         Write-Err "Workflow CLI not found: $wfScript"
         return
@@ -600,7 +600,7 @@ function Test-WorkflowReadiness {
     $shellCmd = Get-Command pwsh -ErrorAction SilentlyContinue
     if (-not $shellCmd) { $shellCmd = Get-Command powershell -ErrorAction SilentlyContinue }
     if (-not $shellCmd) {
-        Write-Warn "Cannot locate a PowerShell runner to execute wf.ps1 status"
+        Write-Warn "Cannot locate a PowerShell runner to execute gv.ps1 status"
         return
     }
 
@@ -610,9 +610,9 @@ function Test-WorkflowReadiness {
         $null = & $shellCmd.Source -NoProfile -File $wfScript status 2>$null
     }
     if ($LASTEXITCODE -eq 0) {
-        Write-Ok "Workflow CLI (wf.ps1) is operational"
+        Write-Ok "Workflow CLI (gv.ps1) is operational"
     } else {
-        Write-Warn "Workflow CLI returned exit $LASTEXITCODE - check wf.ps1"
+        Write-Warn "Workflow CLI returned exit $LASTEXITCODE - check gv.ps1"
     }
 }
 
@@ -623,16 +623,16 @@ function Show-Summary {
     Write-Host "  Tool Activation Complete" -ForegroundColor Green
     Write-Host "========================================" -ForegroundColor Green
     Write-Host ""
-    Write-Host "  wf.ps1 status        - project status"   -ForegroundColor Cyan
-    Write-Host "  wf.ps1 review        - run code review"  -ForegroundColor Cyan
-    Write-Host "  wf.ps1 audit         - generate report"  -ForegroundColor Cyan
-    Write-Host "  wf.ps1 update-tools  - update all tools" -ForegroundColor Cyan
+    Write-Host "  gv.ps1 status        - project status"   -ForegroundColor Cyan
+    Write-Host "  gv.ps1 review        - run code review"  -ForegroundColor Cyan
+    Write-Host "  gv.ps1 audit         - generate report"  -ForegroundColor Cyan
+    Write-Host "  gv.ps1 update-tools  - update all tools" -ForegroundColor Cyan
     Write-Host ""
 }
 
 # - Entry point 
 if (-not $Quiet) {
-    Write-Host "Foundation - Development Stack - Tool Activation" -ForegroundColor Magenta
+    Write-Host "Gentle-Vanguard - Development Stack - Tool Activation" -ForegroundColor Magenta
     Write-Host "Reads tool list from config/workspace.config.json" -ForegroundColor White
     Write-Host ""
 }
@@ -645,3 +645,4 @@ Test-WorkflowReadiness
 Show-Summary
 
 exit 0
+

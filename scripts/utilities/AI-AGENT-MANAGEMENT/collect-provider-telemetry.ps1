@@ -78,7 +78,7 @@ function Write-TelemetryRow {
     $ts        = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
     $userStr   = if ($env:USERNAME) { $env:USERNAME } else { 'agent' }
     $userId    = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($userStr))
-    $sessionId = if ($env:FOUNDATION_SESSION_ID) { $env:FOUNDATION_SESSION_ID } else { 'telemetry-collect' }
+    $sessionId = if ($env:GV_SESSION_ID) { $env:GV_SESSION_ID } else { 'telemetry-collect' }
     $requestId = [Guid]::NewGuid().ToString()
 
     $row = '"' + (Sanitize-CsvCell $ts)           + '",' +
@@ -184,7 +184,7 @@ foreach ($providerName in $providerMap.Keys) {
     # -- Build request headers ---------------------------------------------------
     $headers = @{
         'Content-Type' = 'application/json'
-        'User-Agent'   = 'Foundation-CloudAgent/1.0'
+        'User-Agent'   = 'Gentle-Vanguard-CloudAgent/1.0'
     }
     if ($cfg.api_key_env) {
         $apiKey = (Get-ChildItem "env:$($cfg.api_key_env)" -ErrorAction SilentlyContinue).Value
@@ -260,3 +260,5 @@ if ($DryRun) {
 } else {
     Write-Host "`n[OK] Telemetry appended to: $telemetryPath" -ForegroundColor Green
 }
+
+

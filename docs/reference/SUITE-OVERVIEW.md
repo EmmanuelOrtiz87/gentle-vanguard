@@ -1,11 +1,11 @@
-# Foundation - Development Stack Suite - Complete Overview
+# Gentle-Vanguard - Development Stack Suite - Complete Overview
 
 > **AI-Powered Development Ecosystem - Production Ready**
 
-Foundation - Development Stack Suite **Foundation - Development Stack Suite is now fully operational
+Gentle-Vanguard - Development Stack Suite **Gentle-Vanguard - Development Stack Suite is now fully operational
 and production-ready.**
 
-# Gentleman Foundation Suite - Complete Overview
+# Gentle-Vanguard Suite - Complete Overview
 
 > **AI-Powered Development Ecosystem - Production Ready**
 
@@ -22,8 +22,8 @@ integration on Windows
 ## Suite Architecture
 
 ```
-Gentleman Foundation Suite
-  foundation/          # Foundation Template & Core Tools
+Gentle-Vanguard Suite
+  gentle-vanguard/          # Gentle-Vanguard Template & Core Tools
      AI Orchestration Layer     # Skills, Orchestrators, Memory
      Development Tools          # CLI, Scripts, Templates
      Quality Assurance          # Pre-commit, Testing, Reviews
@@ -51,14 +51,14 @@ Gentleman Foundation Suite
 | **Project Orchestrator**     | Active | `skills/project-orchestrator-skill/`     | Auto-detects project type, loads skills |
 | **Session Workflow**         | Active | `skills/session-workflow-skill/`         | Manages session lifecycle, memory       |
 | **Code Review Orchestrator** | Active | `skills/code-review-orchestrator-skill/` | Coordinates quality checks              |
-| **Foundation Manager**       | Active | `skills/foundation/`           | Template management                     |
+| **Gentle-Vanguard Manager**       | Active | `skills/gentle-vanguard/`           | Template management                     |
 
 ### Development Tools
 
 | Tool                   | Status   | Command                             | Description                             |
 | ---------------------- | -------- | ----------------------------------- | --------------------------------------- |
-| **Workflow CLI**       | Ready    | `.\scripts\utilities\wf.ps1`        | Project coordination & automation       |
-| **Health Check**       | Ready    | `.\scripts\utilities\wf.ps1 health` | Tool validation & activation            |
+| **Workflow CLI**       | Ready    | `.\scripts\utilities\gv.ps1`        | Project coordination & automation       |
+| **Health Check**       | Ready    | `.\scripts\utilities\gv.ps1 health` | Tool validation & activation            |
 | **Auto-Init**          | Ready    | `auto-init-dev-environment.ps1`     | Environment setup                       |
 | **PowerShell Profile** | Optional | `$PROFILE`                          | Windows convenience for auto-activation |
 
@@ -84,11 +84,11 @@ Gentleman Foundation Suite
 
 ## Projects Status
 
-### foundation (Foundation Template)
+### gentle-vanguard (Gentle-Vanguard Template)
 
 | Aspect            | Status    | Details                                                 |
 | ----------------- | --------- | ------------------------------------------------------- |
-| **Repository**    | Active    | https://github.com/EmmanuelOrtiz87/foundation |
+| **Repository**    | Active    | https://github.com/EmmanuelOrtiz87/gentle-vanguard |
 | **Documentation** | Complete  | README, guides, architecture                            |
 | **CI/CD**         | Ready     | GitHub Actions workflows                                |
 | **Templates**     | Available | Go, Angular, Python, React                              |
@@ -114,15 +114,15 @@ Gentleman Foundation Suite
 ### 1. Environment Setup (One-time)
 
 ```powershell
-# Clone foundation template
-git clone https://github.com/EmmanuelOrtiz87/foundation-public.git
+# Clone gentle-vanguard template
+git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard-public.git
 
 # Optional Windows PowerShell profile setup
 Copy-Item "scripts/utilities/Microsoft.PowerShell_profile.ps1" $PROFILE
 . $PROFILE
 
 # Initialize environment
-.\scripts\utilities\wf.ps1 health
+.\scripts\utilities\gv.ps1 health
 ```
 
 ### 2. Project Development (Per Session)
@@ -135,9 +135,9 @@ cd .\bitbucket-dashboard
 # (Orchestrator detects project type, loads skills)
 
 # Development workflow
-.\scripts\utilities\wf.ps1 status    # Project status
-.\scripts\utilities\wf.ps1 review    # Code review
-.\scripts\utilities\wf.ps1 audit     # Generate reports
+.\scripts\utilities\gv.ps1 status    # Project status
+.\scripts\utilities\gv.ps1 review    # Code review
+.\scripts\utilities\gv.ps1 audit     # Generate reports
 ```
 
 ### 3. Quality Gates (Automatic)
@@ -210,7 +210,7 @@ git commit -m "feat: add new dashboard component"
 
 ```powershell
 # Health check (run daily)
-.\scripts\utilities\wf.ps1 health
+.\scripts\utilities\gv.ps1 health
 
 # Update tools (weekly)
 .\scripts\utilities\update-tools.ps1
@@ -230,7 +230,7 @@ git commit -m "feat: add new dashboard component"
 
 - **Automatic**: Health checks and workflow entrypoints keep tools aligned; the PowerShell profile
   is optional on Windows
-- **Manual**: `.\scripts\utilities\wf.ps1 update` for explicit updates
+- **Manual**: `.\scripts\utilities\gv.ps1 update` for explicit updates
 - **Skills**: AI skills update automatically via orchestrator
 
 ---
@@ -239,7 +239,7 @@ git commit -m "feat: add new dashboard component"
 
 ### Phase 1 (Completed)
 
-- [x] Foundation template creation
+- [x] Gentle-Vanguard template creation
 - [x] AI orchestration system
 - [x] Project homologation
 - [x] Auto-activation system
@@ -274,10 +274,10 @@ git commit -m "feat: add new dashboard component"
 
 ```powershell
 # Get help
-.\scripts\utilities\wf.ps1 --help
+.\scripts\utilities\gv.ps1 --help
 
 # Health check
-.\scripts\utilities\wf.ps1 health
+.\scripts\utilities\gv.ps1 health
 
 # Start session
 # (AI agents will guide you)
@@ -293,7 +293,7 @@ git commit -m "feat: add new dashboard component"
 
 ## Conclusion
 
-**Foundation Suite is now fully operational and production-ready.**
+**Gentle-Vanguard Suite is now fully operational and production-ready.**
 
 The suite provides:
 
@@ -306,4 +306,5 @@ The suite provides:
 
 **Ready to experience the future of AI-powered development?**
 
-Start with `.\scripts\utilities\wf.ps1 health` in any project directory!
+Start with `.\scripts\utilities\gv.ps1 health` in any project directory!
+

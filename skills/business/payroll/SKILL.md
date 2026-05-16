@@ -6,8 +6,7 @@ description: >
   "payroll compliance", "salary calculation", "payroll software"
 license: Apache-2.0
 metadata:
-  author: foundation
-  version: '1.0'
+  author: gv version: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash
 ---
 
@@ -33,3 +32,4 @@ User asks about payroll processing, payroll taxes, deductions, compliance, or pa
 2. Distinguish between employee vs contractor classification
 3. Provide payroll calculation breakdown
 4. Include filing/reporting requirements and deadlines
+

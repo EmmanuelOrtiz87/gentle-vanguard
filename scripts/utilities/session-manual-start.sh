@@ -21,13 +21,13 @@ fi
 OPTIMIZE_SCRIPT="$REPO_ROOT/scripts/utilities/PERFORMANCE-OPTIMIZATION/optimize-engram-usage.ps1"
 if [ -f "$OPTIMIZE_SCRIPT" ]; then
     echo "[INFO] Running pre-session Engram optimization..."
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "$OPTIMIZE_SCRIPT" -ProjectName "workspace_local"
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "$OPTIMIZE_SCRIPT" -ProjectName "workspace_gentle_vanguard"
 fi
 
-# Main start flow via wf.ps1
-WF_SCRIPT="$REPO_ROOT/scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1"
+# Main start flow via gv.ps1
+WF_SCRIPT="$REPO_ROOT/scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1"
 if [ ! -f "$WF_SCRIPT" ]; then
-    echo "[ERROR] wf.ps1 not found"
+    echo "[ERROR] gv.ps1 not found"
     exit 1
 fi
 
@@ -39,3 +39,4 @@ else
     echo "[ERROR] Session start failed"
     exit 1
 fi
+

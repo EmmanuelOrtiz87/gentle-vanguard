@@ -20,7 +20,7 @@ if (-not (Test-Path $GFRoot)) {
     $GFRoot = Split-Path -Parent $scriptDir
 }
 
-$versionFile = Join-Path $GFRoot "foundation.version"
+$versionFile = Join-Path $GFRoot "gentle-vanguard.version"
 
 function Write-Check {
     param([string]$Name, [string]$Status, [string]$Message = "")
@@ -61,7 +61,7 @@ function Get-CommandVersion {
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "  Gentleman Foundation - System Check" -ForegroundColor Cyan
+Write-Host "  Gentle-Vanguard - System Check" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -95,14 +95,14 @@ if ($All -or $Core) {
 }
 
 if ($All -or $Skills) {
-    Write-Host "Foundation Status" -ForegroundColor Yellow
+    Write-Host "Gentle-Vanguard Status" -ForegroundColor Yellow
     Write-Host "-----------------"
     
     if (Test-Path $versionFile) {
         $vf = Get-Content $versionFile | ConvertFrom-Json
-        Write-Check "Foundation" "OK" "v$($vf.version) (installed: $($vf.installed))"
+        Write-Check "Gentle-Vanguard" "OK" "v$($vf.version) (installed: $($vf.installed))"
     } else {
-        Write-Check "Foundation" "MISSING" "Run bootstrap-machine.ps1"
+        Write-Check "Gentle-Vanguard" "MISSING" "Run bootstrap-machine.ps1"
     }
     
     $skillsDir = Join-Path $GFRoot "skills"
@@ -132,11 +132,11 @@ if ($All -or $Tools) {
         Write-Check "engram" "OK" "Persistent memory"
     } else {
         Write-Check "engram" "MISSING" "Persistent memory"
-        Write-Host "       Install: go install github.com/foundation/engram/cmd/engram@latest" -ForegroundColor Gray
+        Write-Host "       Install: go install github.com/gentle-vanguard/engram/cmd/engram@latest" -ForegroundColor Gray
     }
 
     Write-Host ""
-    Write-Host "Optional: These enhance the foundation but are not required." -ForegroundColor Gray
+    Write-Host "Optional: These enhance the gentle-vanguard but are not required." -ForegroundColor Gray
 }
 
 Write-Host ""
@@ -145,9 +145,11 @@ Write-Host "========================================" -ForegroundColor Cyan
 if ($All -or $Core -or $Skills) {
     Write-Host ""
     Write-Host "To fix missing items:" -ForegroundColor Yellow
-    Write-Host "  1. Run .\scripts\foundation\bootstrap-machine.ps1" -ForegroundColor White
+    Write-Host "  1. Run .\scripts\gentle-vanguard\bootstrap-machine.ps1" -ForegroundColor White
     Write-Host "  2. Restart terminal" -ForegroundColor White
-    Write-Host "  3. Run gf validate" -ForegroundColor White
+    Write-Host "  3. Run gv validate" -ForegroundColor White
 }
 
 Write-Host ""
+
+

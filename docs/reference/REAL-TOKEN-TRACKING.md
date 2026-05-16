@@ -2,7 +2,7 @@
 
 ## Overview
 
-Foundation ahora soporta **Real Token Tracking** integrando los tokens reales de las APIs del AI
+Gentle-Vanguard ahora soporta **Real Token Tracking** integrando los tokens reales de las APIs del AI
 (OpenAI, Anthropic, etc.) en el token-budget-guard.
 
 ## What Changed
@@ -17,7 +17,7 @@ Nuevos parámetros:
 
 Estos reemplazan el estimado basado en caracteres cuando están disponibles.
 
-### 2. wf.ps1 (scripts/utilities/WORKFLOW-ORCHESTRATION/)
+### 2. gv.ps1 (scripts/utilities/WORKFLOW-ORCHESTRATION/)
 
 Actualizado `Invoke-TokenBudgetGuard` para aceptar y pasar tokens reales:
 
@@ -65,12 +65,12 @@ if ($response.usage) {
 }
 ```
 
-### Para el Engine (wf.ps1):
+### Para el Engine (gv.ps1):
 
 El engine ahora acepta tokens reales como parámetros adicionales:
 
 ```powershell
-wf context-pack -ActualPromptTokens 1500 -ActualCompletionTokens 800
+gv context-pack -ActualPromptTokens 1500 -ActualCompletionTokens 800
 ```
 
 ## Backward Compatibility
@@ -86,3 +86,4 @@ wf context-pack -ActualPromptTokens 1500 -ActualCompletionTokens 800
 1. Integrar en skills que usan AI APIs (anthropic, openai, etc.)
 2. Actualizar `session-autostart.ps1` para capturar tokens reales de respuestas
 3. Crear dashboard de tokens reales vs estimados
+

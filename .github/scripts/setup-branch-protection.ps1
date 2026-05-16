@@ -13,7 +13,7 @@
 .PARAMETER dryRun
     If set, show payload without applying.
 .EXAMPLE
-    pwsh setup-branch-protection.ps1 -owner EmmanuelOrtiz87 -repo foundation
+    pwsh setup-branch-protection.ps1 -owner EmmanuelOrtiz87 -repo gentle-vanguard
 #>
 
 param(
@@ -107,3 +107,4 @@ New-Ruleset `
     -rules $developRules
 
 Write-Output "Branch protection setup complete."
+
