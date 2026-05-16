@@ -101,7 +101,12 @@ Write-OK "Version: $productVersion"
 #region Step 4: Compile launcher to .exe with ps2exe (if available)
 Write-Step "Step 4: Compiling launcher"
 
-$launcherPs1 = Join-Path $buildDir 'Gentle-Vanguard-Launcher.ps1'
+$launcherSourceCandidates = @(
+    (Join-Path $buildDir 'Gentle-Vanguard-Launcher.ps1'),
+    (Join-Path $buildDir 'Foundation-Launcher.ps1')
+)
+$launcherPs1 = $launcherSourceCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+$launcherInstallPs1Name = 'Gentle-Vanguard-Launcher.ps1'
 $launcherExe = Join-Path $buildDir 'compiled\Gentle-Vanguard-Launcher.exe'
 
 $ps2exe = Get-Command ps2exe -ErrorAction SilentlyContinue
@@ -177,7 +182,7 @@ if ($launcherExe -and (Test-Path $launcherExe)) {
 "@
 } else {
     # Generate a .bat wrapper file for the PowerShell launcher
-    $batContent = "@echo off`r`npwsh -NoProfile -ExecutionPolicy Bypass -File `"%~dp0Gentle-Vanguard-Launcher.ps1`" %*`r`n"
+        $batContent = "@echo off`r`npwsh -NoProfile -ExecutionPolicy Bypass -File `"%~dp0$launcherInstallPs1Name`" %*`r`n"
     $batPath = Join-Path $buildDir 'Gentle-Vanguard.bat'
     if (-not $DryRun) {
         [System.IO.File]::WriteAllText($batPath, $batContent, [System.Text.Encoding]::ASCII)
@@ -187,7 +192,7 @@ if ($launcherExe -and (Test-Path $launcherExe)) {
 
   ; Launcher script (run via PowerShell)
   SetOutPath "`$INSTDIR"
-  File "$launcherPs1"
+    File /oname=$launcherInstallPs1Name "$launcherPs1"
   File "$batPath"
 "@
 }
