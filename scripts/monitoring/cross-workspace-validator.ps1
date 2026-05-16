@@ -25,14 +25,14 @@
 param(
     [switch]$Fix,
     [switch]$Detailed,
-    [string]$Gentle-VanguardRoot = ''
+    [string]$GentleVanguardRepoRoot = ''
 )
 
 $ErrorActionPreference = "Continue"
 $repoRoot = (Resolve-Path ".").Path
 
 function Get-Gentle-VanguardSyncManifest {
-    $manifestPath = Join-Path $repoRoot "config/gentle-vanguard-sync.json"
+    $manifestPath = Join-Path $repoRoot "config/foundation-sync.json"
     if (-not (Test-Path $manifestPath)) {
         return $null
     }
@@ -140,19 +140,19 @@ if ($manifest -and $manifest.PSObject.Properties['role'] -and [string]$manifest.
     exit 0
 }
 
-if ([string]::IsNullOrWhiteSpace($Gentle-VanguardRoot)) {
-    if ($manifest -and $manifest.PSObject.Properties['gentle-vanguardPath'] -and -not [string]::IsNullOrWhiteSpace([string]$manifest.gentle-vanguardPath)) {
-        $Gentle-VanguardRoot = [string]$manifest.gentle-vanguardPath
+if ([string]::IsNullOrWhiteSpace($GentleVanguardRepoRoot)) {
+    if ($manifest -and $manifest.PSObject.Properties['gentle-vanguardPath'] -and -not [string]::IsNullOrWhiteSpace([string]$manifest.'gentle-vanguardPath')) {
+        $GentleVanguardRepoRoot = [string]$manifest.'gentle-vanguardPath'
     } elseif ($env:GENTLE_VANGUARD_REPO_PATH) {
-        $Gentle-VanguardRoot = [string]$env:GENTLE_VANGUARD_REPO_PATH
+        $GentleVanguardRepoRoot = [string]$env:GENTLE_VANGUARD_REPO_PATH
     } else {
-        $Gentle-VanguardRoot = '..\gentle-vanguard'
+            $GentleVanguardRepoRoot = $repoRoot
     }
 }
 
-$Gentle-VanguardRoot = Resolve-WorkspacePath -Path $Gentle-VanguardRoot
-if (-not (Test-Path $Gentle-VanguardRoot)) {
-    Write-Status "Gentle-Vanguard root no existe: $Gentle-VanguardRoot" "ERROR"
+$GentleVanguardRepoRoot = Resolve-WorkspacePath -Path $GentleVanguardRepoRoot
+if (-not (Test-Path $GentleVanguardRepoRoot)) {
+    Write-Status "Gentle-Vanguard root no existe: $GentleVanguardRepoRoot" "ERROR"
     exit 1
 }
 
@@ -162,13 +162,13 @@ $issues = 0
 # 1. Context Efficiency Config
 $result = Compare-ConfigFiles `
     -File1 "scripts/utilities/context-efficiency-config.json" `
-    -File2 (Join-Path $Gentle-VanguardRoot "scripts/utilities/context-efficiency-config.json") `
+    -File2 (Join-Path $GentleVanguardRepoRoot "scripts/utilities/context-efficiency-config.json") `
     -Description "Context Efficiency Config"
 
 $validations += @{
     Name = "Context Efficiency Config"
     Local = "scripts/utilities/context-efficiency-config.json"
-    Gentle-Vanguard = (Join-Path $Gentle-VanguardRoot "scripts/utilities/context-efficiency-config.json")
+    GentleVanguard = (Join-Path $GentleVanguardRepoRoot "scripts/utilities/context-efficiency-config.json")
     Status = $result
 }
 
@@ -177,13 +177,13 @@ if (-not $result) { $issues++ }
 # 2. Session Autostart Config
 $result = Compare-ConfigFiles `
     -File1 "scripts/utilities/session-autostart.config.json" `
-    -File2 (Join-Path $Gentle-VanguardRoot "scripts/utilities/session-autostart.config.json") `
+    -File2 (Join-Path $GentleVanguardRepoRoot "scripts/utilities/session-autostart.config.json") `
     -Description "Session Autostart Config"
 
 $validations += @{
     Name = "Session Autostart Config"
     Local = "scripts/utilities/session-autostart.config.json"
-    Gentle-Vanguard = (Join-Path $Gentle-VanguardRoot "scripts/utilities/session-autostart.config.json")
+    GentleVanguard = (Join-Path $GentleVanguardRepoRoot "scripts/utilities/session-autostart.config.json")
     Status = $result
 }
 
@@ -193,13 +193,13 @@ if (-not $result) { $issues++ }
 if (Test-Path "config/adaptive-config.json") {
     $result = Compare-ConfigFiles `
         -File1 "config/adaptive-config.json" `
-        -File2 (Join-Path $Gentle-VanguardRoot "config/adaptive-config.json") `
+        -File2 (Join-Path $GentleVanguardRepoRoot "config/adaptive-config.json") `
         -Description "Adaptive Config"
     
     $validations += @{
         Name = "Adaptive Config"
         Local = "config/adaptive-config.json"
-        Gentle-Vanguard = (Join-Path $Gentle-VanguardRoot "config/adaptive-config.json")
+        GentleVanguard = (Join-Path $GentleVanguardRepoRoot "config/adaptive-config.json")
         Status = $result
     }
     
@@ -209,29 +209,29 @@ if (Test-Path "config/adaptive-config.json") {
 # 4. AGENTS.md
 $result = Compare-ConfigFiles `
     -File1 "AGENTS.md" `
-    -File2 (Join-Path $Gentle-VanguardRoot "AGENTS.md") `
+    -File2 (Join-Path $GentleVanguardRepoRoot "AGENTS.md") `
     -Description "AGENTS.md"
 
 $validations += @{
     Name = "AGENTS.md"
     Local = "AGENTS.md"
-    Gentle-Vanguard = (Join-Path $Gentle-VanguardRoot "AGENTS.md")
+    GentleVanguard = (Join-Path $GentleVanguardRepoRoot "AGENTS.md")
     Status = $result
 }
 
 if (-not $result) { $issues++ }
 
 # 5. GV.ps1 Script
-if ((Test-Path "scripts/utilities/gv.ps1") -and (Test-Path (Join-Path $Gentle-VanguardRoot "scripts/utilities/gv.ps1"))) {
+if ((Test-Path "scripts/utilities/gv.ps1") -and (Test-Path (Join-Path $GentleVanguardRepoRoot "scripts/utilities/gv.ps1"))) {
     $result = Compare-ConfigFiles `
         -File1 "scripts/utilities/gv.ps1" `
-        -File2 (Join-Path $Gentle-VanguardRoot "scripts/utilities/gv.ps1") `
+        -File2 (Join-Path $GentleVanguardRepoRoot "scripts/utilities/gv.ps1") `
         -Description "Workflow Script (gv.ps1)"
     
     $validations += @{
         Name = "Workflow Script"
         Local = "scripts/utilities/gv.ps1"
-        Gentle-Vanguard = (Join-Path $Gentle-VanguardRoot "scripts/utilities/gv.ps1")
+        GentleVanguard = (Join-Path $GentleVanguardRepoRoot "scripts/utilities/gv.ps1")
         Status = $result
     }
     
@@ -249,7 +249,7 @@ if ($issues -gt 0) {
         if (-not $val.Status) {
             Write-Host "  - $($val.Name)" -ForegroundColor Red
             Write-Host "    Local:      $($val.Local)" -ForegroundColor Gray
-            Write-Host "    Gentle-Vanguard: $($val.Gentle-Vanguard)" -ForegroundColor Gray
+            Write-Host "    Gentle-Vanguard: $($val.GentleVanguard)" -ForegroundColor Gray
         }
     }
 }
