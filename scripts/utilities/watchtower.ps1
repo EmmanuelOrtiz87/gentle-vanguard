@@ -137,6 +137,18 @@ function Check-Context {
     if (Test-Path $markerFile) {
         $marker = Get-Content $markerFile -Raw
         $lastCompact = if ($marker -match '\d+') { [long]$Matches[0] } else { 0 }
+        if ($lastCompact -lt 946684800) {
+            $issues += @{
+                check = "context"
+                severity = "ok"
+                message = "Compact marker invalid/stale (treated as fresh session)"
+                detail = ""
+                autoFixAction = ""
+                autoFixDesc = ""
+            }
+            return $issues
+        }
+
         $epoch2 = [long]$lastCompact
         $dt2 = (Get-Date -Year 1970 -Month 1 -Day 1 -Hour 0 -Minute 0 -Second 0).AddSeconds($epoch2)
         $ageMin = [int]((Get-Date) - $dt2).TotalMinutes
