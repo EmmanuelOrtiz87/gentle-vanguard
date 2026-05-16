@@ -1,0 +1,28 @@
+# Cline Rules - Local-First Policy
+
+## MANDATORY PRE-PROCESSING RULE (ALWAYS ACTIVE)
+
+**BEFORE responding to ANY user input:**
+
+1. **Run trigger detection** - Execute: `powershell -File scripts/utilities/pre-process-input.ps1 -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
+2. **Parse output**:
+   - If `TRIGGER_MATCH_FOUND` → Read `skills/<skill-name>/SKILL.md` directly from disk and follow its instructions
+   - If `PLAN_MODE_REQUIRED` with `AGENT: BA` and `SKILL: sdd-lifecycle` → Activate BA exploration first. Read `skills/sdd-lifecycle/SKILL.md` for phase guidance. Do NOT jump to DEV/APPLY — complete EXPLORE before any implementation.
+   - If `NO_TRIGGER_MATCH` → Continue with normal behavior
+3. **SDD FLOW RULE**: If trigger matched "implement"/"code"/"develop" and skill is `sdd-lifecycle`, check if it's a new feature (not a bug fix). If new feature, treat as PLAN_MODE_REQUIRED — activate BA first.
+4. **Session start** - Always run `scripts/utilities/session-autostart.cmd` on Windows for notifications, optimizations, validations
+5. **Session commands** - If `SESSION` trigger matched, read `skills/session-workflow-skill/SKILL.md` and follow its workflow
+
+**This rule is MANDATORY and MUST be followed automatically. Do NOT wait to be asked.**
+
+## Principle: LOCAL-FIRST
+Prioritize local project knowledge over external searches.
+
+## Canonical Sources (Tool-Agnostic)
+- **Bootstrap & entry point**: `docs/AGENTS.md`
+- **Routing & agent profiles**: `config/auto-delegation.json`
+- **AI normatives**: `rules/AI-NORMATIVES.md` (includes SDD FLOW RULE)
+- **Development standards**: `rules/DEVELOPMENT-STANDARDS.md`
+- **Code standards**: `rules/NORMATIVAS-CODIGO.md`
+- **Error handling**: `rules/NORMATIVAS-ERROR-HANDLING.md`
+- **Orchestrator config**: `config/orchestrator.json`
