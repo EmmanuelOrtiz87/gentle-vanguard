@@ -22,7 +22,7 @@
 | ------ | ----------------------------------------------- | -------------------------------------------- |
 | **1️⃣** | Check [PREREQUISITES.md](PREREQUISITES.md)      | Review system requirements                   |
 | **2️⃣** | Follow [DEVELOPER-SETUP.md](DEVELOPER-SETUP.md) | Complete setup steps                         |
-| **3️⃣** | Run bootstrap                                   | `.\scripts\foundation\bootstrap-machine.ps1` |
+| **3️⃣** | Run bootstrap                                   | `.\scripts\gentle-vanguard\bootstrap-machine.ps1` |
 
 > 💡 **TIP:** Start here for a smooth onboarding experience.
 
@@ -45,14 +45,14 @@
 ### Step 1: Clone the Repository
 
 ```powershell
-git clone https://github.com/EmmanuelOrtiz87/foundation.git
-cd foundation
+git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
+cd gentle-vanguard
 ```
 
 ### Step 2: Bootstrap Your Machine
 
 ```powershell
-.\scripts\foundation\bootstrap-machine.ps1
+.\scripts\gentle-vanguard\bootstrap-machine.ps1
 ```
 
 This will:
@@ -65,7 +65,7 @@ This will:
 ### Step 3: Start Working
 
 ```powershell
-.\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1 start-session
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1 start-session
 ```
 
 ---
@@ -73,13 +73,13 @@ This will:
 ## 📖 Daily Usage Commands
 
 ```powershell
-foundation verify  # Check all 14 quality gates
-foundation version # Show stack version + skills count
-foundation start-session   # Begin tracked session
-foundation judgment-day    # Full QA gate before release
-foundation dashboard       # Open HTML metrics dashboard
-foundation benchmark       # SLO benchmark of key commands
-foundation sync-drift      # Detect drift between foundation and projects
+gv verify  # Check all 14 quality gates
+gv version # Show stack version + skills count
+gv start-session   # Begin tracked session
+gv judgment-day    # Full QA gate before release
+gv dashboard       # Open HTML metrics dashboard
+gv benchmark       # SLO benchmark of key commands
+gv sync-drift      # Detect drift between gentle-vanguard and projects
 ```
 
 ---
@@ -95,5 +95,6 @@ foundation sync-drift      # Detect drift between foundation and projects
 
 <p align="center">
   <b>🚀 Ready to start?</b><br>
-  <code>git clone https://github.com/EmmanuelOrtiz87/foundation.git</code>
+  <code>git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git</code>
 </p>
+

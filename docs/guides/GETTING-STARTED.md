@@ -18,7 +18,7 @@
 
 ```powershell
 git clone <repository-url>
-cd foundation
+cd gentle-vanguard
 ```
 
 ### 2. Initialize Session
@@ -30,7 +30,7 @@ cd foundation
 ### 3. Verify Tools
 
 ```powershell
-.\scripts\foundation\wf.ps1 doctor
+.\scripts\gentle-vanguard\gv.ps1 doctor
 ```
 
 ---
@@ -80,9 +80,9 @@ cd foundation
 
 | Command       | Purpose         |
 | ------------- | --------------- |
-| wf.ps1 doctor | Diagnose issues |
-| wf.ps1 audit  | Run audit       |
-| wf.ps1 tools  | Manage tools    |
+| gv.ps1 doctor | Diagnose issues |
+| gv.ps1 audit  | Run audit       |
+| gv.ps1 tools  | Manage tools    |
 
 ---
 
@@ -90,3 +90,4 @@ cd foundation
 
 - Review [SESSION-GUIDE.md](SESSION-GUIDE.md)
 - Review [GITFLOW-QUICK-REFERENCE.md](GITFLOW-QUICK-REFERENCE.md)
+

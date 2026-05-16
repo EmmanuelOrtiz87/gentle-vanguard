@@ -1,29 +1,29 @@
-﻿# Audit Workflow - Foundation v2.1
+# Audit Workflow - Gentle-Vanguard v2.1
 
-Unified audit system combining **foundation-audit** (batch validation) and **judgment-day**
+Unified audit system combining **gentle-vanguard-audit** (batch validation) and **judgment-day**
 (adversarial review).
 
 ## Quick Start
 
-### Integrated (with Foundation)
+### Integrated (with Gentle-Vanguard)
 
 ```powershell
 # Quick check - 1 second
-.\scripts\utilities\wf.ps1 audit sweep --scope quick
+.\scripts\utilities\gv.ps1 audit sweep --scope quick
 
 # Full batch audit - 5 seconds
-.\scripts\utilities\wf.ps1 audit sweep --scope full
+.\scripts\utilities\gv.ps1 audit sweep --scope full
 
 # Full + Judgment - 15 minutes
-.\scripts\utilities\wf.ps1 audit judgment --mode full
+.\scripts\utilities\gv.ps1 audit judgment --mode full
 ```
 
-### Standalone (without Foundation)
+### Standalone (without Gentle-Vanguard)
 
 ```powershell
 # After sync:
-~\.foundation-local\audit-workflow.ps1 -Mode quick
-~\.foundation-local\audit-workflow.ps1 -Mode full
+~\.gentle-vanguard-local\audit-workflow.ps1 -Mode quick
+~\.gentle-vanguard-local\audit-workflow.ps1 -Mode full
 ```
 
 ## Architecture
@@ -35,7 +35,7 @@ Unified audit system combining **foundation-audit** (batch validation) and **jud
 
 
      PHASE 1                   PHASE 2
-     foundation-audit           judgment-day
+     gentle-vanguard-audit           judgment-day
 
       Batch script              Sub-agents
       0 tokens                  ~$0.03
@@ -79,39 +79,39 @@ Unified audit system combining **foundation-audit** (batch validation) and **jud
 
 ```powershell
 # Add to .git/hooks/pre-commit
-.\scripts\utilities\wf.ps1 audit sweep --scope quick --fail-on-issues
+.\scripts\utilities\gv.ps1 audit sweep --scope quick --fail-on-issues
 ```
 
 ### CI/CD Pipeline
 
 ```yaml
 # GitHub Actions
-- name: Foundation Audit
-  run: .\scripts\utilities\wf.ps1 audit sweep --scope standard --output json
+- name: Gentle-Vanguard Audit
+  run: .\scripts\utilities\gv.ps1 audit sweep --scope standard --output json
 ```
 
 ### Pre-Release Checklist
 
 ```powershell
 # 1. Batch validation
-.\scripts\utilities\wf.ps1 audit sweep --scope full
+.\scripts\utilities\gv.ps1 audit sweep --scope full
 
 # 2. If pass  Adversarial review
-.\scripts\utilities\wf.ps1 audit judgment --mode unified
+.\scripts\utilities\gv.ps1 audit judgment --mode unified
 
 # 3. If both pass  Safe to release
 ```
 
 ## Standalone Setup
 
-For use in projects without Foundation:
+For use in projects without Gentle-Vanguard:
 
 ```powershell
-# 1. From Foundation directory:
-.\skills\foundation-audit-skill\scripts\sync-local.ps1
+# 1. From Gentle-Vanguard directory:
+.\skills\gentle-vanguard-audit-skill\scripts\sync-local.ps1
 
 # 2. Then in any project:
-~\.foundation-local\audit-workflow.ps1 -Mode full
+~\.gentle-vanguard-local\audit-workflow.ps1 -Mode full
 ```
 
 ## Exit Codes
@@ -126,26 +126,27 @@ For use in projects without Foundation:
 
 ```powershell
 # Human-readable (default)
-.\wf.ps1 audit sweep --output text
+.\gv.ps1 audit sweep --output text
 
 # JSON for CI/CD
-.\wf.ps1 audit sweep --output json
+.\gv.ps1 audit sweep --output json
 
 # Markdown for reports
-.\wf.ps1 audit sweep --output markdown
+.\gv.ps1 audit sweep --output markdown
 ```
 
 ## Skills Reference
 
 | Skill                     | Purpose                        |
 | ------------------------- | ------------------------------ |
-| `foundation-audit-skill`  | Batch validation, zero tokens  |
+| `gentle-vanguard-audit-skill`  | Batch validation, zero tokens  |
 | `judgment-day-skill`      | Adversarial review, token cost |
 | `script-governance-skill` | Script validation              |
 | `docs-alignment-skill`    | Documentation synchronization  |
 
 ## Related Documentation
 
-- [foundation-audit-skill/SKILL.md](../../skills/foundation-audit-skill/SKILL.md)
+- [gentle-vanguard-audit-skill/SKILL.md](../../skills/gentle-vanguard-audit-skill/SKILL.md)
 - [judgment-day/SKILL.md](../../skills/judgment-day/SKILL.md)
 - [SKILL-RESOLVER-PROTOCOL](../reference/SKILL-RESOLVER-PROTOCOL.md)
+

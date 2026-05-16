@@ -1,6 +1,6 @@
-﻿# Spec-Driven Development (SDD)
+# Spec-Driven Development (SDD)
 
-This directory contains design documents and implementation specifications for Foundation
+This directory contains design documents and implementation specifications for Gentle-Vanguard
 and its components.
 
 ## Purpose
@@ -13,7 +13,7 @@ for validation.
 
 ```
 sdd/
- foundation-sdd.md          # Main design document
+ gentle-vanguard-sdd.md          # Main design document
  SPEC-TEMPLATE.md           # Template for new specs
  [feature]-[spec].md        # Individual feature specs
 ```
@@ -62,7 +62,7 @@ The SDD gate (`scripts/hooks/check-sdd-gate.ps1`) enforces this on PRs to `main`
 
 Main specification:
 
-- [foundation-sdd.md](foundation-sdd.md) - Core Foundation design
+- [gentle-vanguard-sdd.md](gentle-vanguard-sdd.md) - Core Gentle-Vanguard design
 
 Template:
 
@@ -73,3 +73,4 @@ Template:
 - [SDD Governance Policy](../reference/SDD-GOVERNANCE-POLICY.md)
 - [Development Workflow](../guides/DEVELOPMENT-WORKFLOW.md)
 - [Session Guide](../guides/SESSION-GUIDE.md)
+

@@ -1,4 +1,4 @@
-# Demo Suite — Gentleman Foundation v2.14.0
+# Demo Suite — Gentle-Vanguard v2.14.0
 
 Audience-oriented demos. Each includes run steps, expected output, and talking points. Use
 `demos/shared/task-tracker/` as the sample project for live demos.
@@ -62,7 +62,7 @@ Audience-oriented demos. Each includes run steps, expected output, and talking p
 | Engram persistent memory      | 03, 05, 06 |
 | SDD enforcement gate          | 04, 08     |
 | PSScriptAnalyzer CI           | 04, 08     |
-| WF Benchmark (SLOs)           | 08         |
+| GV Benchmark (SLOs)           | 08         |
 | Sync Drift detection          | 08         |
 | Quality gates (7D)            | 04, 07     |
 | HTML Dashboard + metrics      | 06         |
@@ -71,3 +71,4 @@ Audience-oriented demos. Each includes run steps, expected output, and talking p
 | Normativas vivas              | 08         |
 | Judgment Day review           | 04, 07     |
 | Session lifecycle             | 01, 05     |
+

@@ -1,4 +1,4 @@
-# Technical Document: Foundation Architecture
+# Technical Document: Gentle-Vanguard Architecture
 
 ## Directory Structure
 
@@ -47,3 +47,4 @@ This creates an immaculate Git history ready for Tag-based deployments.
 - PowerShell Core 7+
 - Git 2.30+
 - Go 1.20+ (for backend tools)
+

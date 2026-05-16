@@ -2,7 +2,7 @@
 
 ## Visión General
 
-Este documento describe las medidas de seguridad implementadas en foundation.
+Este documento describe las medidas de seguridad implementadas en gentle-vanguard.
 
 **Versión**: 1.0.0 **Fecha**: 2026-04-21 **Estado**: IMPLEMENTADO
 
@@ -373,7 +373,7 @@ Test-Path node_modules/@modelcontextprotocol/server-filesystem
 **Global NPM Security Policy (.npmrc)**:
 
 ```ini
-# npm Security Configuration — foundation
+# npm Security Configuration — gentle-vanguard
 # Hardened against supply chain attacks
 
 # Disable post-install lifecycle scripts
@@ -453,3 +453,4 @@ Encriptación AES-256 Validación robusta de entrada Gestin segura de secretos L
 completos Tests de seguridad Detección de Anomalías **NPX supply-chain hardening (offline + workspace mode)**
 
 **Estado**: LISTO PARA PRODUCCIN
+

@@ -1,4 +1,4 @@
-﻿# Script Normalization - Completion Report
+# Script Normalization - Completion Report
 
 **Date**: 2026-04-22  
 **Status**: PHASE 1 COMPLETE - PHASE 2 IN PROGRESS  
@@ -90,7 +90,7 @@ These scripts have mismatched opening and closing braces:
 - Action: Manual review required
 - Impact: Here-string or code block incomplete
 
-**wf.ps1**
+**gv.ps1**
 
 - Issue: 501 open, 500 closed
 - Action: Manual review required
@@ -119,7 +119,7 @@ These scripts have mismatched `@"` and `"@` delimiters:
 - `end-session.ps1` - 1 open, 3 closed
 - `generate-audit-report.ps1` - 3 open, 2 closed
 - `invoke-ai-review.ps1` - 3 open, 4 closed
-- `wf.ps1` - 4 open, 6 closed
+- `gv.ps1` - 4 open, 6 closed
 
 **Action**: Review multi-line string definitions
 
@@ -225,7 +225,7 @@ These scripts contain syntax that PowerShell cannot parse:
 | ----------- | ------- | ------ | ------ | ----------- |
 | common      | 1       | 1      | 0      | 100%        |
 | diagnostics | 6       | 5      | 1      | 83.3%       |
-| foundation  | 5       | 3      | 2      | 60%         |
+| gentle-vanguard  | 5       | 3      | 2      | 60%         |
 | hooks       | 7       | 5      | 2      | 71.4%       |
 | monitoring  | 3       | 3      | 0      | 100%        |
 | optional    | 2       | 2      | 0      | 100%        |
@@ -297,3 +297,4 @@ These scripts contain syntax that PowerShell cannot parse:
 - [ ] Pre-commit hooks validate
 
 **Current Progress**: 80.2% Target: 100%
+

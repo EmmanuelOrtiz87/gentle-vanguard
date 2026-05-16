@@ -1,6 +1,6 @@
-﻿# AI Configuration Guide
+# AI Configuration Guide
 
-Complete guide to configure AI tools for Foundation - both cloud and local.
+Complete guide to configure AI tools for Gentle-Vanguard - both cloud and local.
 
 ## Overview
 
@@ -41,19 +41,19 @@ Operational commands:
 
 ```powershell
 # Show active communication settings
-.\scripts\utilities\wf.ps1 response-mode
+.\scripts\utilities\gv.ps1 response-mode
 
 # List all options
-.\scripts\utilities\wf.ps1 response-mode list
+.\scripts\utilities\gv.ps1 response-mode list
 
 # Set compression profile
-.\scripts\utilities\wf.ps1 response-mode profile:ultra
+.\scripts\utilities\gv.ps1 response-mode profile:ultra
 
 # Set language
-.\scripts\utilities\wf.ps1 response-mode language:pt-BR
+.\scripts\utilities\gv.ps1 response-mode language:pt-BR
 
 # Set detail level
-.\scripts\utilities\wf.ps1 response-mode detail:expanded
+.\scripts\utilities\gv.ps1 response-mode detail:expanded
 ```
 
 Recommendation:
@@ -76,10 +76,10 @@ Commands:
 
 ```powershell
 # Apply preset directly
-.\scripts\utilities\wf.ps1 response-mode preset:bugfix
+.\scripts\utilities\gv.ps1 response-mode preset:bugfix
 
 # Ask for recommendation from preset + risk
-.\scripts\utilities\wf.ps1 response-mode recommend:docs:high
+.\scripts\utilities\gv.ps1 response-mode recommend:docs:high
 ```
 
 Orchestrator integration:
@@ -284,7 +284,7 @@ ollama serve
 ollama list  # Shows installed models
 ```
 
-### Configure Foundation for Ollama
+### Configure Gentle-Vanguard for Ollama
 
 ```powershell
 # Set Ollama as provider
@@ -312,7 +312,7 @@ OPENAI_API_KEY=sk-xxxxx
 OLLAMA_BASE_URL=http://localhost:11434
 OLLAMA_MODEL=codellama:13b
 
-# Priority order (Foundation uses first available)
+# Priority order (Gentle-Vanguard uses first available)
 AI_PROVIDER_PRIORITY=anthropic,openai,ollama
 
 # Fallback settings
@@ -321,7 +321,7 @@ USE_LOCAL_WHEN_CLOUD_UNAVAILABLE=true
 
 ### Automatic Failover
 
-Foundation automatically detects availability:
+Gentle-Vanguard automatically detects availability:
 
 ```
 
@@ -464,7 +464,7 @@ USE_LOCAL_FALLBACK=true
 
 ```powershell
 #
-# FOUNDATION - AI CONFIGURATION
+# GENTLE_VANGUARD - AI CONFIGURATION
 #
 
 #
@@ -549,7 +549,7 @@ opencode --model gpt-4o "Say 'OpenAI connected!'"
 # 4. Test Ollama (if installed)
 ollama list
 
-# 5. Run Foundation validation
+# 5. Run Gentle-Vanguard validation
 .\scripts\validate-workspace.ps1
 ```
 
@@ -573,3 +573,4 @@ Expected output:
 | Rate limits    | Wait, or reduce usage       |
 | Slow responses | Use faster model, or local  |
 | Offline        | Use Ollama local models     |
+
