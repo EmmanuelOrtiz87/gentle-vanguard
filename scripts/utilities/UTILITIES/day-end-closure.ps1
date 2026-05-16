@@ -139,6 +139,22 @@ if (-not $SkipEngram) {
     }
 }
 
+# 3.5. Post-session learning analysis (identifies gaps, proposes improvements)
+Write-Step "Stage 3.5: Post-Session Learning"
+$learningScript = Join-Path $repoRoot 'scripts\utilities\post-session-learning.ps1'
+if (Test-Path $learningScript) {
+    $learningArgs = @('-AutoApplyLow')
+    if ($SessionId) { $learningArgs += '-SessionId', $SessionId }
+    & $learningScript @learningArgs
+    if ($LASTEXITCODE -eq 0) {
+        Write-Ok "Post-session learning analysis complete"
+    } else {
+        Write-Warn "Post-session learning found improvement gaps (proposals saved)"
+    }
+} else {
+    Write-Info "post-session-learning.ps1 not found - skipping"
+}
+
 # 4. Generate Session Artifacts (Audit, Budget, Telemetry) and Final Report
 Write-Step "Stage 4: Session Artifacts & Final Report"
 

@@ -40,7 +40,8 @@ if (-not $scriptDir) { $scriptDir = $PSScriptRoot }
 
 $projectRoot = if (Test-Path ".git") { (Get-Location).Path } else { $scriptDir }
 $configPath = Join-Path $projectRoot "config\ai-review.json"
-$configGlobalPath = Join-Path $env:USERPROFILE ".config\ai-review\config.json"
+$homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
+$configGlobalPath = Join-Path $homePath ".config\ai-review\config.json"
 $cacheDir = Join-Path $projectRoot ".ai-review-cache"
 $hooksDir = Join-Path $projectRoot ".git\hooks"
 $Config = Join-Path $projectRoot "."

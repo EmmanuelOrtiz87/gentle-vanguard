@@ -14,7 +14,8 @@ $ErrorActionPreference = 'Continue'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 if (-not $scriptDir) { $scriptDir = Split-Path -Parent $PSScriptRoot }
 
-$GFRoot = Join-Path $env:USERPROFILE ".gentleman"
+$script:homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
+$GFRoot = Join-Path $script:homePath ".gentleman"
 if (-not (Test-Path $GFRoot)) {
     $GFRoot = Split-Path -Parent $scriptDir
 }

@@ -31,10 +31,12 @@ if (-not $Source) {
     }
 }
 
+$script:homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
+
 if (-not $Target) {
     $possibleTargets = @(
-        (Join-Path $env:USERPROFILE ".gentleman\skills"),
-        (Join-Path $env:USERPROFILE ".claude\skills"),
+        (Join-Path $script:homePath ".gentleman\skills"),
+        (Join-Path $script:homePath ".claude\skills"),
         (Join-Path $scriptDir "..\skills")
     )
     

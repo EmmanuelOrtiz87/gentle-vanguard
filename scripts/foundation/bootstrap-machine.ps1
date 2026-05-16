@@ -12,16 +12,17 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+$script:homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
 
 if ([string]::IsNullOrWhiteSpace($InstallRoot)) {
     if ($env:FOUNDATION_HOME) {
         $InstallRoot = $env:FOUNDATION_HOME
     } else {
-        $InstallRoot = Join-Path $env:USERPROFILE ".foundation"
+        $InstallRoot = Join-Path $script:homePath ".foundation"
     }
 }
 
-$legacyRoot = Join-Path $env:USERPROFILE ".gentleman"
+$legacyRoot = Join-Path $script:homePath ".gentleman"
 if ((-not (Test-Path $InstallRoot)) -and (Test-Path $legacyRoot)) {
     $InstallRoot = $legacyRoot
 }
@@ -201,7 +202,7 @@ if (Test-Path $sourceTemplates) {
 }
 
 Write-Step "5. Installing Global Git Hooks"
-$gitHooksDir = Join-Path $env:USERPROFILE ".git-hooks"
+$gitHooksDir = Join-Path $script:homePath ".git-hooks"
 
 Ensure-Directory -Path $gitHooksDir
 
@@ -233,7 +234,7 @@ if ($gitConfigHookPath -ne $gitHooksDir) {
 
 Write-Step "5b. Installing PreTool Auto-Format Hooks"
 $preToolHookSource = Join-Path $FoundationRoot "hooks"
-$preToolHookTarget = Join-Path $env:USERPROFILE ".pretool-hooks"
+$preToolHookTarget = Join-Path $script:homePath ".pretool-hooks"
 
 Ensure-Directory -Path $preToolHookTarget
 

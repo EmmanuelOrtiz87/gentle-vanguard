@@ -6,12 +6,12 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$root = (Resolve-Path (Join-Path $scriptDir '..')).Path
-$wf = Join-Path $root 'foundation\\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1'
-$dayEnd = Join-Path $root 'foundation\\scripts\utilities\UTILITIES\day-end-closure.ps1'
-$runEngram = Join-Path $root 'foundation\\scripts\utilities\UTILITIES\run-engram.ps1'
-$agentRouter = Join-Path $root 'foundation\\scripts\utilities\AI-AGENT-MANAGEMENT\agent-router.ps1'
-$enforce = Join-Path $root 'foundation\\scripts\utilities\UTILITIES\enforce-response-mode.ps1'
+$root = (Resolve-Path (Join-Path $scriptDir '..\..\..')).Path
+$wf = Join-Path $root 'scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1'
+$dayEnd = Join-Path $root 'scripts\utilities\UTILITIES\day-end-closure.ps1'
+$runEngram = Join-Path $root 'scripts\utilities\UTILITIES\run-engram.ps1'
+$agentRouter = Join-Path $root 'scripts\utilities\AI-AGENT-MANAGEMENT\agent-router.ps1'
+$enforce = Join-Path $root 'scripts\utilities\UTILITIES\enforce-response-mode.ps1'
 $monitor = Join-Path $scriptDir 'session-idle-monitor.ps1'
 $stateDir = Join-Path $scriptDir '.session'
 $stateFile = Join-Path $stateDir 'state.json'
@@ -204,7 +204,7 @@ function Run-StartFlow {
 
     Write-Step "Session tracking"
     $sessionId = Get-NewSessionId
-    & $wf start-session
+    & $wf start-session -SessionId $sessionId
     if ($LASTEXITCODE -ne 0) { throw "wf start-session failed with exit $LASTEXITCODE" }
 
     $monitorPid = Start-Monitor -SessionId $sessionId -IdleTimeoutMinutes ([int]$cfg.idleTimeoutMinutes) -Enabled ([bool]$cfg.enableIdleAutoClose)
