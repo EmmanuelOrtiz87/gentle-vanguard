@@ -303,7 +303,7 @@ if (-not $skipPush) {
 
     # Fix: stash any working-tree changes before rebase (files may have been copied above)
     $hasChanges = (git status --porcelain 2>$null) -ne ''
-    if ($hasChanges) { git stash push -m 'sync-pre-rebase' 2>&1 | Out-Null }
+    if ($hasChanges) { git stash push -u -m 'sync-pre-rebase' 2>&1 | Out-Null }
 
     git pull --rebase origin $defaultBranch 2>&1 | Out-Null
     if ($LASTEXITCODE -ne 0) {
