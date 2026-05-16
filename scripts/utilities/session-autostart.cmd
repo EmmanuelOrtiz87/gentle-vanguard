@@ -227,7 +227,7 @@ if "!WORKSPACE_STATE!"=="dirty-user" (
     echo [WARN] =====================================================================
 )
 if "!WORKSPACE_STATE!"=="dirty-operational" (
-    echo [INFO] Workspace has operational auto-managed changes (no user action required).
+    echo [INFO] Workspace has operational auto-managed changes; no user action required.
 )
 if "!WORKSPACE_STATE!"=="clean" (
     echo [OK] Workspace clean
