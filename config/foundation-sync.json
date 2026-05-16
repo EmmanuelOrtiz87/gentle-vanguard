@@ -57,7 +57,7 @@
     {
       "type": "guide",
       "path": "docs/guides/REPO-RENAME-MIGRATION.md",
-      "description": "Repository Rename Migration Guide - Steps for safe rename from gentle-vanguard to gentle-vanguard"
+      "description": "Repository Rename Migration Guide - Steps for safe rename from foundation to gentle-vanguard"
     },
     {
       "type": "script",
