@@ -110,6 +110,22 @@ When closing a session:
 4. **SHOULD** run `git status` to verify clean state
 5. **SHOULD** validate configs with `validate-configs.ps1`
 6. **MUST** call `engram_mem_session_end` to mark session complete
+7. **MUST** detect concurrent active sessions and close by explicit `SessionId` when count > 1
+
+#### Concurrent Session Safety (MANDATORY)
+
+If multiple active sessions exist, closure MUST be explicit and non-destructive:
+
+1. List active sessions (`session-*.json` with `status=active`)
+2. Emit a close notification indicating concurrent sessions are active
+3. Require explicit target session ID for closure
+4. Do NOT auto-close "latest active" without target when more than one session is active
+
+Recommended command:
+
+```powershell
+pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/session-manager.ps1 -Mode End -TargetSessionId <session-id>
+```
 
 ---
 

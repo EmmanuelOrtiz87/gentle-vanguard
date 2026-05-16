@@ -1,23 +1,57 @@
 {
   "name": "Codex - Foundation Workspace",
-  "version": "1.0.0",
-  "description": "Local-first policy for Codex CLI",
+  "version": "1.1.0",
+  "description": "Local-first policy for Codex CLI/IDE with reliability and safety controls",
   "aiSettings": {
-    "model": "claude-sonnet-4-5",
+    "model": "gpt-5.5",
     "temperature": 0.3,
     "maxTokens": 4500,
-    "localFirst": true
+    "localFirst": true,
+    "planFirstForComplex": true,
+    "reasoning": {
+      "simpleTasks": "low",
+      "complexTasks": "medium-high"
+    }
   },
   "toolPermissions": {
     "websearch": "deny",
-    "codesearch": "deny",
-    "webfetch": "deny"
+    "webfetch": "deny",
+    "network": "deny-by-default",
+    "externalCommands": "ask"
+  },
+  "taskTemplate": {
+    "goal": true,
+    "context": true,
+    "constraints": true,
+    "doneWhen": true
+  },
+  "execution": {
+    "runTestsBeforeDone": true,
+    "reviewDiffBeforeDone": true,
+    "preferPlanModeForAmbiguousTasks": true
+  },
+  "sessionControls": {
+    "compactLongThreads": true,
+    "oneThreadPerTask": true,
+    "resumeSupported": true
+  },
+  "security": {
+    "approvalPolicy": "on-request",
+    "sandboxMode": "workspace-write",
+    "networkAccess": false,
+    "protectedPaths": [".git/**", ".codex/**", ".agents/**"]
   },
   "preProcessing": {
     "enabled": true,
     "script": "scripts/utilities/pre-process-input.ps1",
     "scriptArgs": { "UserInput": "USER_INPUT_HERE", "WorkspaceRoot": "." }
   },
+  "adaptiveOptimization": {
+    "enabled": true,
+    "controller": "scripts/utilities/adaptive-codex-windsurf-profile.ps1",
+    "mode": "temporary",
+    "autoRestore": true
+  },
   "language": { "default": "es", "technicalTerms": "en" },
-  "rules": ["docs/AGENTS.md", "rules/AI-NORMATIVES.md", "rules/DEVELOPMENT-STANDARDS.md", "rules/NORMATIVAS-CODIGO.md", "rules/NORMATIVAS-ERROR-HANDLING.md"]
+  "rules": ["docs/AGENTS.md", "rules/AI-NORMATIVES.md", "rules/DEVELOPMENT-STANDARDS.md", "rules/NORMATIVAS-CODIGO.md", "rules/NORMATIVAS-ERROR-HANDLING.md", "docs/guides/OPENCODE-OPTIMIZATION-GUIDE.md"]
 }
