@@ -1,11 +1,10 @@
 param(
-    [Parameter(Mandatory)]
     [string]$HookName,
-    [Parameter(Mandatory)]
     [string]$ScriptPath,
-    [string]$ScriptArgs = "",
     [string]$Message = "",
-    [switch]$IsLong
+    [switch]$IsLong,
+    [Parameter(ValueFromRemainingArguments)]
+    $PassThru
 )
 
 $ts = Get-Date -Format "HH:mm:ss"
@@ -15,12 +14,7 @@ $warn = if ($IsLong) { " (puede tomar ~2-3 min)" } else { "" }
 Write-Host "[$ts] $HookName iniciado$warn$notice" -ForegroundColor $(if ($IsLong) { "Yellow" } else { "Cyan" })
 
 $t0 = Get-Date
-if ($ScriptArgs) {
-    $escPath = $ScriptPath -replace "'", "''"
-    Invoke-Expression "& '$escPath' $ScriptArgs"
-} else {
-    & $ScriptPath
-}
+& $ScriptPath @PassThru
 $exitCode = $LASTEXITCODE
 $duration = [math]::Round(((Get-Date) - $t0).TotalSeconds, 1)
 
