@@ -272,12 +272,21 @@ fi
 
 # === Phase 9.5: Workspace State Warning ===
 echo "[14/16] Checking workspace state..."
-WORKSPACE_STATE=$(cd "$WORKSPACE_ROOT" && git status --porcelain 2>/dev/null || true)
-if [ -n "$WORKSPACE_STATE" ]; then
+WORKSPACE_STATE=""
+DIRTY_STATE_SCRIPT="$UTILS_DIR/get-workspace-dirty-state.ps1"
+if [ -f "$DIRTY_STATE_SCRIPT" ]; then
+    WORKSPACE_STATE=$(pwsh -NoProfile -ExecutionPolicy Bypass -File "$DIRTY_STATE_SCRIPT" -RepoRoot "$WORKSPACE_ROOT" 2>/dev/null || true)
+else
+    WORKSPACE_STATE=$(cd "$WORKSPACE_ROOT" && (git status --porcelain 2>/dev/null | grep -q . && echo "dirty-user" || echo "clean"))
+fi
+
+if [ "$WORKSPACE_STATE" = "dirty-user" ]; then
     echo "[WARN] ====================================================================="
     echo "[WARN]  Workspace has uncommitted changes from a previous session."
     echo "[WARN]  Run 'git status' to review, or 'git stash' to shelve them."
     echo "[WARN] ====================================================================="
+elif [ "$WORKSPACE_STATE" = "dirty-operational" ]; then
+    echo "[INFO] Workspace has operational auto-managed changes (no user action required)."
 else
     echo "[OK] Workspace is clean"
 fi

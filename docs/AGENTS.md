@@ -65,8 +65,8 @@ Before substantial work in a new conversation, execute ALL steps in order:
    | **🪟 Windows**         | `scripts/utilities/session-autostart.cmd`       |
    | **🐧 Linux/macOS/WSL** | `bash ./scripts/utilities/session-autostart.sh` |
 
-2. **Register session** with Engram: `engram_mem_session_start`
-3. **Restore context**: `engram_mem_context`
+2. **Register session** with Engram: `pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/engram_mem_session_start.ps1`
+3. **Restore context**: `pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/engram_mem_context.ps1`
 4. **Check workspace**: `git status`
 5. **Read bootstrap**: this file (`docs/AGENTS.md`)
 
