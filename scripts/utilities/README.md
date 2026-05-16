@@ -160,28 +160,10 @@ Performance optimization, memory compaction, and Engram.
 
 ### 7. **SESSION-MANAGEMENT/**
 
-Session management, start, end, and monitoring.
+Active scripts (used by session lifecycle):
 
-**Main scripts:**
-
-- `start-session.ps1` - Start session
-- `end-session.ps1` - End session
-- `finalize-session.ps1` - Finalize session with artifacts
-- `session-manager.ps1` - Session manager
-- `session-idle-monitor.ps1` - Idle monitor
-- `validate-session-stack.ps1` - Validate session stack
-- `session-autostart.cmd` - Session autostart (Windows)
-- `session-manual-start.cmd` - Manual start (Windows)
-- `session-manual-end.cmd` - Manual end (Windows)
-
-**Typical usage:**
-
-```powershell
-.\scripts\utilities\SESSION-MANAGEMENT\start-session.ps1
-.\scripts\utilities\SESSION-MANAGEMENT\end-session.ps1
-```
-
-[View full documentation](./SESSION-MANAGEMENT/README.md)
+- `end-session.ps1` - End session (called from day-end-closure.ps1, wf.ps1)
+- `ensure-github-bypass.ps1` - GitHub bypass enforcement (referenced in config)
 
 ---
 

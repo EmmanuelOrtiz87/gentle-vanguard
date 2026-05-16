@@ -17,7 +17,8 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 if (-not $scriptDir) { $scriptDir = Split-Path -Parent $PSScriptRoot }
 $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 
-$GFRoot = Join-Path $env:USERPROFILE ".gentleman"
+$script:homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
+$GFRoot = Join-Path $script:homePath ".gentleman"
 
 function Write-Step {
     param([string]$Message)

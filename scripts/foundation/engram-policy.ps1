@@ -6,17 +6,27 @@ param(
     [ValidateSet('check', 'enforce', 'repair', 'install', 'start', 'status')]
     [string]$Action = 'status',
     
-    [string]$EngramPath = "$HOME\bin\engram.exe",
+    [string]$EngramPath = "",
     [string]$ToolsPath = "",
-    [string]$GoPath = "$HOME\go\bin\engram.exe",
+    [string]$GoPath = "",
     [string]$DataDir = ""
 )
 
 $ErrorActionPreference = "Continue"
 
+$script:homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
 $script:RepoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 if ([string]::IsNullOrWhiteSpace($ToolsPath)) {
-    $ToolsPath = Join-Path $script:RepoRoot 'tools\engram.exe'
+    $candidate = Join-Path $script:RepoRoot 'tools\engram'
+    $ToolsPath = if (Test-Path $candidate) { $candidate } else { "$candidate.exe" }
+}
+if ([string]::IsNullOrWhiteSpace($EngramPath)) {
+    $candidate = Join-Path $script:homePath 'bin\engram'
+    $EngramPath = if (Test-Path $candidate) { $candidate } else { "$candidate.exe" }
+}
+if ([string]::IsNullOrWhiteSpace($GoPath)) {
+    $candidate = Join-Path $script:homePath 'go\bin\engram'
+    $GoPath = if (Test-Path $candidate) { $candidate } else { "$candidate.exe" }
 }
 if ([string]::IsNullOrWhiteSpace($DataDir)) {
     $DataDir = Join-Path $script:RepoRoot '.engram-data'

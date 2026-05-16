@@ -22,6 +22,7 @@ param(
 
 $ErrorActionPreference = "Continue"
 $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$script:homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
 
 $healed = 0; $errors = 0; $issues = @()
 
@@ -251,8 +252,8 @@ function Heal-Engram {
     Write-Step "Engram Health"
 
     $engramPaths = @(
-        "$env:USERPROFILE\bin\engram.exe",
-        "$env:USERPROFILE\go\bin\engram.exe"
+        "$script:homePath\bin\engram.exe",
+        "$script:homePath\go\bin\engram.exe"
     )
     $found = $null
     foreach ($p in $engramPaths) {

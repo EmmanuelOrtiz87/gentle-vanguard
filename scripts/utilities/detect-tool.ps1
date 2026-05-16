@@ -86,7 +86,19 @@ function Get-DetectedTool {
         return $tool
     }
 
-    # 3. Check for .clinerules file (Cline)
+    # 3. Platform-default policy: OpenCode baseline for this workspace.
+    # If no explicit runtime marker exists, default to OpenCode and let routing/skills decide behavior.
+    if (Test-Path (Join-Path $repoRoot "opencode.json")) {
+        $tool.name = "opencode"
+        $tool.source = "policy-default:opencode"
+        $tool.isOpenCode = $true
+        $tool.confidence = 75
+        $tool.configFile = "opencode.json"
+        $tool.promptFile = "CLAUDE.md"
+        return $tool
+    }
+
+    # 4. Check for .clinerules file (Cline)
     $repoRoot = if ($env:FOUNDATION_BASE_DIR) { $env:FOUNDATION_BASE_DIR } else { (Get-Location).Path }
     if (Test-Path (Join-Path $repoRoot ".clinerules")) {
         $tool.name = "cline"
@@ -98,7 +110,7 @@ function Get-DetectedTool {
         return $tool
     }
 
-    # 4. Check for .cursorrules file (Cursor)
+    # 5. Check for .cursorrules file (Cursor)
     if (Test-Path (Join-Path $repoRoot ".cursorrules")) {
         $tool.name = "cursor"
         $tool.source = "file:.cursorrules"
@@ -109,7 +121,7 @@ function Get-DetectedTool {
         return $tool
     }
 
-    # 5. Check for .windsurf directory (Windsurf)
+    # 6. Check for .windsurf directory (Windsurf)
     if (Test-Path (Join-Path $repoRoot ".windsurf")) {
         $tool.name = "windsurf"
         $tool.source = "dir:.windsurf"
@@ -120,8 +132,9 @@ function Get-DetectedTool {
         return $tool
     }
 
-    # 6. Check for Continue config
-    $continueConfig = Join-Path $env:USERPROFILE ".continue/config.json"
+    # 7. Check for Continue config
+    $homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
+    $continueConfig = Join-Path $homePath ".continue/config.json"
     if (Test-Path $continueConfig -PathType Leaf) {
         $tool.name = "continue-dev"
         $tool.source = "file:$continueConfig"
@@ -132,7 +145,7 @@ function Get-DetectedTool {
         return $tool
     }
 
-    # 7. Fallback: detect by prompt instruction file presence
+    # 8. Fallback: detect by prompt instruction file presence
     $candidates = @(
         @{file="CLAUDE.md"; name="claude-generic"; promptFile="CLAUDE.md"}
         @{file=".clinerules"; name="cline"; promptFile=".clinerules"}
@@ -150,6 +163,13 @@ function Get-DetectedTool {
         }
     }
 
+    # 9. Final fallback: enforce OpenCode default baseline.
+    $tool.name = "opencode"
+    $tool.source = "fallback-default:opencode"
+    $tool.isOpenCode = $true
+    $tool.confidence = 40
+    $tool.configFile = "opencode.json"
+    $tool.promptFile = "CLAUDE.md"
     return $tool
 }
 

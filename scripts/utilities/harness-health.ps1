@@ -109,12 +109,17 @@ if (Test-Path $cbConfig) {
 
 # L7: Tools (Engram, wf.ps1, session-autostart)
 $wf = Join-Path $repoRoot "scripts/utilities/wf.ps1"
-$autostart = Join-Path $repoRoot "scripts/utilities/session-autostart.cmd"
-$engramPresent = (Get-Command "engram.exe" -ErrorAction SilentlyContinue) -or (Test-Path (Join-Path $env:USERPROFILE "bin/engram.exe"))
+$homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
+$autostart = if ([Environment]::OSVersion.Platform -eq 'Win32NT') {
+    Join-Path $repoRoot "scripts/utilities/session-autostart.cmd"
+} else {
+    Join-Path $repoRoot "scripts/utilities/session-autostart.sh"
+}
+$engramPresent = (Get-Command "engram" -ErrorAction SilentlyContinue) -or (Test-Path (Join-Path $homePath "bin/engram"))
 $toolsOK = $true
 if (-not (Test-Path $wf)) { $toolsOK = $false; $results += Write-Health -Layer 7 -Status 'FAIL' -Message "wf.ps1 no encontrado" }
-if (-not (Test-Path $autostart)) { $toolsOK = $false; $results += Write-Health -Layer 7 -Status 'FAIL' -Message "session-autostart.cmd no encontrado" }
-if (-not $engramPresent) { $toolsOK = $false; $results += Write-Health -Layer 7 -Status 'FAIL' -Message "engram.exe no disponible" }
+if (-not (Test-Path $autostart)) { $toolsOK = $false; $results += Write-Health -Layer 7 -Status 'FAIL' -Message "session-autostart no encontrado" }
+if (-not $engramPresent) { $toolsOK = $false; $results += Write-Health -Layer 7 -Status 'FAIL' -Message "engram no disponible" }
 if ($toolsOK) { $results += Write-Health -Layer 7 -Status 'PASS' -Message "Tools: wf.ps1 + session-autostart + engram OK" }
 
 # L8: Governance
