@@ -325,5 +325,69 @@ Violations result in:
 
 ---
 
+## Reference Management & Deprecation Policy
+
+### Cross-Reference Validation
+
+All scripts must maintain valid references to other scripts, configurations, and documentation. Use `scripts/utilities/validate-cross-references.ps1` to audit:
+
+```powershell
+# Full validation
+pwsh -NoProfile -File scripts/utilities/validate-cross-references.ps1
+
+# Only broken references
+pwsh -NoProfile -File scripts/utilities/validate-cross-references.ps1 -BrokenRefsOnly
+
+# Only unreferenced files
+pwsh -NoProfile -File scripts/utilities/validate-cross-references.ps1 -UnreferencedOnly
+```
+
+### Deprecation Lifecycle
+
+When deprecating a script or feature:
+
+1. **Mark as Deprecated**: Add comment block at file start
+   ```powershell
+   <#
+   .SYNOPSIS
+       [DEPRECATED] Use new-script.ps1 instead
+   
+   .DEPRECATION
+       Status: DEPRECATED
+       Since: 2026-05-16
+       Replacement: scripts/utilities/new-script.ps1
+       Reason: Functionality moved to unified orchestrator
+       RemovalDate: 2026-08-16 (90 days)
+   #>
+   ```
+
+2. **Update All References**: Change all callers to use replacement script
+
+3. **Wait 90 Days**: Allow transition period for dependent code
+
+4. **Remove**: After 90 days with no references, delete file and update `docs/DEPRECATION-LOG.md`
+
+### Before Deleting Files
+
+**Mandatory Checklist**:
+- [ ] File marked as `@deprecated` for ≥90 days
+- [ ] All references updated or removed
+- [ ] Documentation updated
+- [ ] Tests updated or removed
+- [ ] `validate-cross-references.ps1` returns PASS
+- [ ] Reviewed by at least 1 team member
+- [ ] Entry added to `docs/DEPRECATION-LOG.md`
+
+### Reference Validation in CI/CD
+
+All PRs must pass reference validation:
+```bash
+pwsh -NoProfile -File scripts/utilities/validate-cross-references.ps1
+```
+
+Broken references block merge. Fix before committing.
+
+---
+
 _Version: 2.0 - 2026-05-10_ _Author: Gentle-Vanguard Team_ _Status: ACTIVE_
 
