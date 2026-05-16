@@ -8,24 +8,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
-## [Unreleased]
+## [2.16.0] - 2026-05-16 - Phase 3: Orchestration & Intelligence Sprint
 
 ### Added
 
-- Real Pester coverage target for `scripts/utilities/post-session-learning.ps1`, backed by a new isolated integration suite in `tests/integration/post-session-learning.integration.tests.ps1`.
-- Real Pester coverage target for `scripts/utilities/session-autostart.ps1`, backed by a new isolated integration suite in `tests/integration/session-autostart.integration.tests.ps1`.
-- Real Pester coverage target for `scripts/utilities/detect-tool.ps1`, backed by `tests/integration/detect-tool.integration.tests.ps1`.
-- Real executable coverage target for `scripts/utilities/pre-close-validator.ps1`, backed by `tests/integration/pre-close-validator.integration.tests.ps1`.
-- Searchable Engram persistence coverage for session learning workflows is now part of the declared coverage gate in `tests/coverage-config.json`.
+- **Phase 3.1 — Inter-agent Communication** (`scripts/adaptive/agent-message-bus.ps1`): File-based mailbox system with structured message schema (id, type, sender, recipient, conversation/correlation ids), priority queue, TTL expiry, request/response protocol, and JSONL audit log. Integrated into `dispatch-agent.ps1` with auto-send of agent.completed messages. New `wf dispatch message` sub-command.
+- **Phase 3.2 — Cost-aware Model Routing** (`scripts/utilities/MODEL-ROUTER/cost-optimizer.ps1`, `config/provider-costs.json`): Cost database for 4 providers / 12 models with free/standard/premium tiers. Provider routing by cheapest available, cost comparison, token cost projection, session spend tracking (`.session/token-spend.json`). Commands: `route`, `compare`, `estimate`, `session-spend`, `status`.
+- **Phase 3.3 — Memory Reconciliation** (`dispatch-memory-manager.ps1`): `Detect-ContextConflicts` (key-level value conflict detection across dispatches), `Merge-Contexts` (deterministic merge: latest scalar wins, array union, nested deep-merge), `Invoke-Handoff` (cross-session context transfer). Commands: `reconcile`, `handoff`.
+- **Tab Completion** (`scripts/utilities/register-foundation-completion.ps1`): `Register-ArgumentCompleter` for `foundation` command with 70+ commands + subcommands. Auto-loaded via `install-foundation-cli.ps1`.
+- Parallel batch dispatch via `Start-BatchOrchestrator` in `auto-delegate-orchestrator.ps1` with `-AgentTypes` parameter and dependency queue processing.
 
 ### Changed
 
-- `scripts/utilities/verify-coverage.ps1` now evaluates five declared workflow targets, adding `detect-tool-critical-workflow` and `pre-close-validator-critical-workflow`.
-- Documentation for session lifecycle, CLI quick start, and testing configuration was synchronized with the current `session-manager.ps1` mode-based interface and Engram-backed learning flow.
+- **wf.ps1 modularization** (Phase 2.3): Extracted 48 functions (1622 lines) into 3 command modules (`commands/common.ps1`, `commands/git.ps1`, `commands/context.ps1`). wf.ps1 reduced from 3393 to ~1765 lines. Uses `dot-source` approach with `$global:scriptDir`/`$global:repoRoot` exports.
+- `dispatch-agent.ps1`: Migrated from `Start-Job` (process-based) to Runspace pool (thread-based) for ~10x faster parallel dispatch.
+- `provider-failover.ps1`: Provider availability checker with failover chain (OpenRouter → Anthropic → OpenAI → Ollama), 5-min cache in `.session/provider-state.json`.
+- Rewrote tests: `engram-memory-manager.tests.ps1` (10 real engram.exe tests) and `engram-performance.perf.tests.ps1` (4 latency tests).
+- VERSION file corrected from stale 1.2.0 to 2.15.0 to match README and git tags.
 
 ### Fixed
 
-- Removed stale documentation that still described `session-manager.ps1` using the obsolete `-Action` interface instead of `-Mode AutoStart|Manual|Health|End|Cleanup`.
+- `dispatch-agent.ps1`: Fixed `$jobs` → `$psInstances` variable name bug that silently dropped results in parallel batches.
+- `Write-Error` naming consistency across wf.ps1 command modules.
 
 ### Backlog
 
