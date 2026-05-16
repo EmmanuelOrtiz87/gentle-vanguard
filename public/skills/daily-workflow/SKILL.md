@@ -57,5 +57,5 @@ Automates daily Foundation tasks: status check, context tracking, audit, and syn
 ## Notes
 
 - Keep $env:FOUNDATION_VERBOSE empty for quiet operation
-- Public repo: https://github.com/EmmanuelOrtiz87/foundation-public
-- Private repo: https://github.com/EmmanuelOrtiz87/foundation
+- Public repo: https://github.com/EmmanuelOrtiz87/gentle-vanguard-public
+- Private repo: https://github.com/EmmanuelOrtiz87/gentle-vanguard
