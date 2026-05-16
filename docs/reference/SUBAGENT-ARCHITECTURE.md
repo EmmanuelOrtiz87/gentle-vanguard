@@ -1,8 +1,8 @@
-﻿# Subagent Architecture
+# Subagent Architecture
 
 ## 1. Purpose
 
-Define a parallel, token-efficient execution model for the Foundation orchestrator by splitting work
+Define a parallel, token-efficient execution model for the Gentle-Vanguard orchestrator by splitting work
 into specialized subagents with bounded context.
 
 ## 2. Design Principles
@@ -29,7 +29,7 @@ Responsibilities:
 
 ### 3.2 Specialized Sub-Agents (29 Agents)
 
-The foundation defines 29 agent codes mapped to opencode subagents. Below is the **core 7** — the full 29-agent mapping lives in `config/subagent-mapping.json`.
+The gentle-vanguard defines 29 agent codes mapped to opencode subagents. Below is the **core 7** — the full 29-agent mapping lives in `config/subagent-mapping.json`.
 
 | Agent   | Role                  | Skills Loaded                                    | Token Budget |
 | ------- | --------------------- | ------------------------------------------------ | ------------ |
@@ -56,14 +56,14 @@ Extended agents (22 more): BUS-TELE, SCRIPT-GOV, REPORT, PR-REVIEW, RELEASE, SES
 
 ```powershell
 # List agents
-.\wf.ps1 agent list
+.\gv.ps1 agent list
 
 # Check readiness
-.\wf.ps1 agent status
+.\gv.ps1 agent status
 
 # Delegate task
-.\wf.ps1 agent DEV "implement login feature"
-.\wf.ps1 agent QA "validate checkout flow"
+.\gv.ps1 agent DEV "implement login feature"
+.\gv.ps1 agent QA "validate checkout flow"
 ```
 
 ## 4. Execution Graph
@@ -168,13 +168,13 @@ Each lane must return structured JSON matching the opencode subagent result sche
 1. Generate compact baseline:
 
 ```powershell
-./scripts/utilities/wf.ps1 context-pack "<objective>"
+./scripts/utilities/gv.ps1 context-pack "<objective>"
 ```
 
 2. Set response mode for compressed operations:
 
 ```powershell
-./scripts/utilities/wf.ps1 response-mode ultra
+./scripts/utilities/gv.ps1 response-mode ultra
 ```
 
 3. Execute coordinator-led parallel slices.
@@ -316,14 +316,14 @@ Metrics are persisted to Engram with topic_key `metrics/subagent-delegation` for
 1. Manual budget check:
 
 ```powershell
-./scripts/utilities/wf.ps1 token-guard
-./scripts/utilities/wf.ps1 token-guard publish
+./scripts/utilities/gv.ps1 token-guard
+./scripts/utilities/gv.ps1 token-guard publish
 ```
 
 2. Engram readiness and usage:
 
 ```powershell
-./scripts/utilities/wf.ps1 install-engram
+./scripts/utilities/gv.ps1 install-engram
 ./scripts/utilities/run-engram.ps1 --help
 ```
 
@@ -333,3 +333,4 @@ Metrics are persisted to Engram with topic_key `metrics/subagent-delegation` for
 [skills/multi-agent-registry/SKILL.md](../../skills/multi-agent-registry/SKILL.md)
 
 **Skill mapping matrix**: 35+ skills distributed across 29 agents with zero overlap redundancy. See `config/subagent-mapping.json` for the complete agent→skill matrix and `config/auto-delegation.json` for trigger→keyword mappings.
+

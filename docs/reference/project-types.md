@@ -1,6 +1,6 @@
-﻿# Project Types
+# Project Types
 
-Detailed guide for each project type supported by Foundation.
+Detailed guide for each project type supported by Gentle-Vanguard.
 
 ## Overview
 
@@ -241,7 +241,8 @@ Override files by placing them in your project after creation:
 
 ```
 my-project/
- .wf/
+ .gv/
     templates/   # Your custom overrides
  (generated files)
 ```
+

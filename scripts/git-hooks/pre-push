@@ -65,10 +65,11 @@ if [ -f "$HOMOLOGATE_SCRIPT" ]; then
     fi
     if [ $? -ne 0 ]; then
         echo "[pre-push][ERROR] homologation drift detected"
-        echo "[pre-push][INFO] Run: .\\scripts\\utilities\\wf.ps1 homologate apply"
+        echo "[pre-push][INFO] Run: .\\scripts\\utilities\\gv.ps1 homologate apply"
         exit 1
     fi
 fi
 
 echo "[pre-push] All governance checks passed"
 exit 0
+

@@ -1,9 +1,9 @@
-# Foundation-Launcher.exe — Smart Launcher v2.3
+# Gentle-Vanguard-Launcher.exe — Smart Launcher v2.3
 # Dual-mode: embedded encrypted archive (single .exe) + file-based .enc (installed)
 # AES-256 decryption with master.key caching — secure single-file distribution
 # Silent professional mode — no interactive prompts except first-run key input
 
-param([string]$Command = "wf")
+param([string]$Command = "gv")
 
 $ErrorActionPreference = "Stop"
 
@@ -11,11 +11,11 @@ $ErrorActionPreference = "Stop"
 # ZIP of encrypted (.enc) files. If non-empty, embedded mode activates.
 $embeddedArchiveBase64 = "__EMBEDDED_SCRIPTS__"
 
-$appDataDir = "$env:LOCALAPPDATA\Foundation\scripts"
-$dataDir = "$env:LOCALAPPDATA\Foundation\data"
+$appDataDir = "$env:LOCALAPPDATA\Gentle-Vanguard\scripts"
+$dataDir = "$env:LOCALAPPDATA\Gentle-Vanguard\data"
 $cacheKeyPath = Join-Path $dataDir "master.key"
-$cacheScript = Join-Path $appDataDir "scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1"
-$embeddedTempDir = Join-Path $env:TEMP "Foundation\embedded"
+$cacheScript = Join-Path $appDataDir "scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1"
+$embeddedTempDir = Join-Path $env:TEMP "Gentle-Vanguard\embedded"
 
 function Write-Log {
     param($Message, $Color = "White")
@@ -106,7 +106,7 @@ function Resolve-MasterKey {
 }
 
 function Prompt-For-Key {
-    Write-Log "`nFOUNDATION LAUNCHER: First-time setup" "Cyan"
+    Write-Log "`nGENTLE_VANGUARD LAUNCHER: First-time setup" "Cyan"
     Write-Log "No master.key found. This exe contains encrypted scripts." "Yellow"
     Write-Log "Enter the master.key contents (Base64, 32 bytes):" "Yellow"
     $input = Read-Host-Safe "> "
@@ -142,11 +142,11 @@ $isEmbedded = ($embeddedArchiveBase64 -ne "" -and $embeddedArchiveBase64 -ne "__
 
 if ($isEmbedded -and -not (Test-Path $cacheScript)) {
     # MODE 1: Embedded encrypted archive — extract .enc files to temp
-    Write-Log "FOUNDATION LAUNCHER: Extracting encrypted scripts from archive..." "Green"
+    Write-Log "GENTLE_VANGUARD LAUNCHER: Extracting encrypted scripts from archive..." "Green"
     if (Test-Path $embeddedTempDir) { Remove-Item $embeddedTempDir -Recurse -Force }
     New-Item -ItemType Directory -Path $embeddedTempDir -Force | Out-Null
     $count = Extract-EncryptedArchive -Base64 $embeddedArchiveBase64 -OutDir $embeddedTempDir
-    Write-Log "FOUNDATION LAUNCHER: Extracted $count encrypted files" "Green"
+    Write-Log "GENTLE_VANGUARD LAUNCHER: Extracted $count encrypted files" "Green"
     $encryptedBasePath = $embeddedTempDir
     $isEmbeddedEncrypted = $true
 } elseif ($isEmbedded) {
@@ -156,13 +156,13 @@ if ($isEmbedded -and -not (Test-Path $cacheScript)) {
     # MODE 2: File-based encrypted distribution
     $isEmbeddedEncrypted = $false
     foreach ($p in @((Join-Path $baseDir "protected"), (Join-Path $baseDir "..\protected"), $baseDir)) {
-        if (Test-Path (Join-Path $p "scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1.enc")) {
+        if (Test-Path (Join-Path $p "scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1.enc")) {
             $encryptedBasePath = $p; break
         }
     }
     if (-not $encryptedBasePath) {
-        Write-Log "FOUNDATION LAUNCHER: No protected scripts found." "Red"
-        Write-Log "Install Foundation properly or use Foundation.exe (self-contained)." "Yellow"
+        Write-Log "GENTLE_VANGUARD LAUNCHER: No protected scripts found." "Red"
+        Write-Log "Install Gentle-Vanguard properly or use Gentle-Vanguard.exe (self-contained)." "Yellow"
         exit 1
     }
 }
@@ -173,7 +173,7 @@ if ($isEmbeddedEncrypted -or (-not $isEmbedded -and -not (Test-Path $cacheScript
     if (-not $key) {
         $key = Prompt-For-Key
         if (-not $key) {
-            Write-Log "FOUNDATION LAUNCHER: Master key required to decrypt scripts." "Red"
+            Write-Log "GENTLE_VANGUARD LAUNCHER: Master key required to decrypt scripts." "Red"
             exit 1
         }
     }
@@ -193,7 +193,7 @@ if ($isEmbeddedEncrypted -or (-not $isEmbedded -and -not (Test-Path $cacheScript
             $decryptedCount++
         }
     } catch {
-        Write-Log "FOUNDATION LAUNCHER: Failed to decrypt scripts: $_" "Red"
+        Write-Log "GENTLE_VANGUARD LAUNCHER: Failed to decrypt scripts: $_" "Red"
         exit 1
     }
 
@@ -204,14 +204,16 @@ if ($isEmbeddedEncrypted -or (-not $isEmbedded -and -not (Test-Path $cacheScript
 }
 
 # Inject environment variables
-$env:FOUNDATION_BASE_DIR = $baseDir
-$env:FOUNDATION_APPDATA_DIR = $appDataDir
-$env:FOUNDATION_DATA_DIR = $dataDir
+$env:GENTLE_VANGUARD_BASE_DIR = $baseDir
+$env:GENTLE_VANGUARD_APPDATA_DIR = $appDataDir
+$env:GENTLE_VANGUARD_DATA_DIR = $dataDir
 
 # Execute from AppData
 if (-not (Test-Path $cacheScript)) {
-    Write-Log "FOUNDATION LAUNCHER: wf.ps1 not found in AppData cache." "Red"
+    Write-Log "GENTLE_VANGUARD LAUNCHER: gv.ps1 not found in AppData cache." "Red"
     exit 1
 }
 try { & $cacheScript @args }
-catch { Write-Log "FOUNDATION LAUNCHER: Failed to execute script: $_" "Red"; exit 1 }
+catch { Write-Log "GENTLE_VANGUARD LAUNCHER: Failed to execute script: $_" "Red"; exit 1 }
+
+

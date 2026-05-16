@@ -49,7 +49,7 @@ function Get-PluginPaths {
     }
 
     $homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
-    $localPath = Join-Path $homePath '.foundation\plugins'
+    $localPath = Join-Path $homePath '.gentle-vanguard\plugins'
     if (Test-Path $localPath) { $paths += $localPath }
 
     return $paths | Select-Object -Unique
@@ -282,3 +282,4 @@ switch ($Action) {
     'validate' { Invoke-PluginsValidate }
     'paths'    { Invoke-PluginsPaths }
 }
+

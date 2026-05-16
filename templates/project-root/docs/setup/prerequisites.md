@@ -22,7 +22,7 @@
 
 ## AI Model Setup
 
-- The Foundation does not require a base model installed locally.
+- The Gentle-Vanguard does not require a base model installed locally.
 - If a project uses AI-assisted workflows, follow `docs/ai-models.md`.
 - Choose either a local model path or a cloud model path, not both unless the project explicitly
   needs a fallback.
@@ -36,3 +36,4 @@ pwsh --version
 go version
 engram --help
 ```
+

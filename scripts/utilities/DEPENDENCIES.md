@@ -1,4 +1,4 @@
-﻿<# .SYNOPSIS Validates documentation consistency and completeness
+<# .SYNOPSIS Validates documentation consistency and completeness
 
 .DESCRIPTION Checks that all scripts have proper documentation, READMEs exist, and documentation
 follows standards
@@ -11,7 +11,7 @@ follows standards
 
 .EXAMPLE .\validate-documentation.ps1 -Path "scripts\utilities" -Verbose
 
-.NOTES Author: Gentleman Foundation Team versión: 1.0.0 Last Updated: 2026-04-22 #>
+.NOTES Author: Gentle-Vanguard Team versión: 1.0.0 Last Updated: 2026-04-22 #>
 
 param( [string]$Path = ".",
     [switch]$Verbose, [switch]$Fix )
@@ -47,3 +47,4 @@ function Test-ScriptHeader { param([string]$ScriptPath)
 "completion_tokens": 8096, "completion_unit_price": "0", "completion_price_unit": "0",
 "completion_price": "0", "total_tokens": 80895, "total_price": "0", "currency": "USD", "latency":
 52.204, "time_to_first_token": 3.746, "time_to_generate": 48.458 }
+

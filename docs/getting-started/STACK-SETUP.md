@@ -1,41 +1,41 @@
-# Foundation - Development Stack Setup & Auto-Repair Guide
+# Gentle-Vanguard - Development Stack Setup & Auto-Repair Guide
 
 ## Overview
 
-The Foundation - Development Stack architecture includes an **automatic stack detection and repair
+The Gentle-Vanguard - Development Stack architecture includes an **automatic stack detection and repair
 system** that runs with minimal manual intervention. The stack is checked and repaired when:
 
 - You open a terminal in a project directory
 - You run `git checkout` on a branch
 - You run workflow commands
-- You explicitly run `.\scripts\utilities\wf.ps1 verify`
+- You explicitly run `.\scripts\utilities\gv.ps1 verify`
 
 ## Quick Start
 
 ### Option 1: New Project
 
 ```powershell
-# In the foundation root
-.\scripts\utilities\wf.ps1 init-stack
+# In the gentle-vanguard root
+.\scripts\utilities\gv.ps1 init-stack
 
 # Or in the bitbucket-dashboard root
-.\scripts\utilities\wf.ps1 init-stack
+.\scripts\utilities\gv.ps1 init-stack
 ```
 
 ### Option 2: Existing Project (cloned repo, new branch, and similar cases)
 
 ```powershell
 # Quick verification with auto-repair
-.\scripts\utilities\wf.ps1 verify
+.\scripts\utilities\gv.ps1 verify
 
 # Or a full verification with a detailed report
-.\scripts\utilities\wf.ps1 diagnose
+.\scripts\utilities\gv.ps1 diagnose
 ```
 
 ### Option 3: Automatic on Terminal Entry (Recommended)
 
 On Windows, the optional PowerShell profile can run `verify` automatically when it detects a
-Foundation - Development Stack project. On Linux and macOS, use `./wf verify` or invoke `wf.ps1`
+Gentle-Vanguard - Development Stack project. On Linux and macOS, use `./gv verify` or invoke `gv.ps1`
 through `pwsh`.
 
 ## Stack Components
@@ -61,16 +61,16 @@ Additional for bitbucket-dashboard:
 
 ## Command Reference
 
-### `.\scripts\utilities\wf.ps1 diagnose`
+### `.\scripts\utilities\gv.ps1 diagnose`
 
 Generates a full stack status report.
 
 ```powershell
 # Detailed console report
-.\scripts\utilities\wf.ps1 diagnose
+.\scripts\utilities\gv.ps1 diagnose
 
 # JSON report for automation
-.\scripts\utilities\wf.ps1 diagnose -JSON > stack-status.json
+.\scripts\utilities\gv.ps1 diagnose -JSON > stack-status.json
 ```
 
 **Output includes:**
@@ -81,16 +81,16 @@ Generates a full stack status report.
 - Orchestrator status
 - Repair recommendations
 
-### `.\scripts\utilities\wf.ps1 verify`
+### `.\scripts\utilities\gv.ps1 verify`
 
 Quick verification with auto-repair. Quiet by default.
 
 ```powershell
 # Quiet verification with auto-repair
-.\scripts\utilities\wf.ps1 verify
+.\scripts\utilities\gv.ps1 verify
 
 # Show details during repair
-.\scripts\utilities\wf.ps1 verify -Verbose
+.\scripts\utilities\gv.ps1 verify -Verbose
 ```
 
 **What `verify` does:**
@@ -101,20 +101,20 @@ Quick verification with auto-repair. Quiet by default.
 4. Activates development tools
 5. Reports the final status
 
-### `.\scripts\utilities\wf.ps1 health`
+### `.\scripts\utilities\gv.ps1 health`
 
 Health check with tool activation.
 
 ```powershell
-.\scripts\utilities\wf.ps1 health
+.\scripts\utilities\gv.ps1 health
 ```
 
-### `.\scripts\utilities\wf.ps1 install-engram`
+### `.\scripts\utilities\gv.ps1 install-engram`
 
 Install or verify Engram CLI availability.
 
 ```powershell
-.\scripts\utilities\wf.ps1 install-engram
+.\scripts\utilities\gv.ps1 install-engram
 ```
 
 ## Usage Flows
@@ -127,10 +127,10 @@ mkdir my-new-project
 cd my-new-project
 
 # Copy template
-Copy-Item -Path "c:\foundation\\*" -Destination . -Recurse
+Copy-Item -Path "c:\gentle-vanguard\\*" -Destination . -Recurse
 
 # Initialize stack
-.\scripts\utilities\wf.ps1 init-stack
+.\scripts\utilities\gv.ps1 init-stack
 ```
 
 **Result:** Stack fully initialized and operational.
@@ -143,7 +143,7 @@ cd <project-root>
 
 # The post-checkout hook runs verify automatically
 # You can also run it manually:
-.\scripts\utilities\wf.ps1 verify
+.\scripts\utilities\gv.ps1 verify
 ```
 
 **The post-checkout hook:**
@@ -157,13 +157,13 @@ cd <project-root>
 
 ```powershell
 # Full report
-.\scripts\utilities\wf.ps1 diagnose
+.\scripts\utilities\gv.ps1 diagnose
 
 # Report + auto-repair
-.\scripts\utilities\wf.ps1 verify
+.\scripts\utilities\gv.ps1 verify
 
 # JSON report for CI/CD
-.\scripts\utilities\wf.ps1 diagnose -JSON
+.\scripts\utilities\gv.ps1 diagnose -JSON
 ```
 
 ## Automatic Detection
@@ -171,12 +171,12 @@ cd <project-root>
 ### PowerShell Profile Auto-Detection
 
 The optional PowerShell profile (`scripts/utilities/Microsoft.PowerShell_profile.ps1`) can detect
-when you are in a Foundation - Development Stack project and run:
+when you are in a Gentle-Vanguard - Development Stack project and run:
 
 ```powershell
 # When opening a terminal in a project directory:
-if (is_gentleman_foundation_project) {
-  .\scripts\utilities\wf.ps1 verify  # Quiet automatic verification
+if (is_gentleman_gentle-vanguard_project) {
+  .\scripts\utilities\gv.ps1 verify  # Quiet automatic verification
 }
 ```
 
@@ -224,7 +224,7 @@ The system returns these exit codes:
 For CI/CD and automation:
 
 ```powershell
-.\scripts\utilities\wf.ps1 diagnose -JSON | ConvertFrom-Json
+.\scripts\utilities\gv.ps1 diagnose -JSON | ConvertFrom-Json
 ```
 
 ```json
@@ -265,7 +265,7 @@ cd C:\projects\my-project
 # Wait 2-3 seconds if it does
 
 # 3. The stack is ready to use
-.\scripts\utilities\wf.ps1 status  # Confirm project status
+.\scripts\utilities\gv.ps1 status  # Confirm project status
 ```
 
 ### When You Change Branches
@@ -278,20 +278,20 @@ git checkout feature/new-feature
 # - auto-init-dev-environment.ps1
 
 # Wait for completion; the stack is then ready
-.\scripts\utilities\wf.ps1 review  # Continue with normal work
+.\scripts\utilities\gv.ps1 review  # Continue with normal work
 ```
 
 ### When You Suspect Problems
 
 ```powershell
 # Full report
-.\scripts\utilities\wf.ps1 diagnose
+.\scripts\utilities\gv.ps1 diagnose
 
 # Auto-repair
-.\scripts\utilities\wf.ps1 verify
+.\scripts\utilities\gv.ps1 verify
 
 # Re-verify
-.\scripts\utilities\wf.ps1 diagnose
+.\scripts\utilities\gv.ps1 diagnose
 ```
 
 ## Troubleshooting
@@ -306,7 +306,7 @@ git checkout feature/new-feature
 # Restart PowerShell or pwsh
 
 # Verify
-.\scripts\utilities\wf.ps1 verify
+.\scripts\utilities\gv.ps1 verify
 ```
 
 ### "Engram CLI NOT FOUND (can auto-install)"
@@ -315,10 +315,10 @@ git checkout feature/new-feature
 
 ```powershell
 # Auto-install
-.\scripts\utilities\wf.ps1 install-engram
+.\scripts\utilities\gv.ps1 install-engram
 
 # Or verify and repair everything
-.\scripts\utilities\wf.ps1 verify
+.\scripts\utilities\gv.ps1 verify
 ```
 
 ### "Orchestrator NOT ACTIVATED"
@@ -326,10 +326,10 @@ git checkout feature/new-feature
 **Solution:**
 
 ```powershell
-.\scripts\utilities\wf.ps1 orchestrator-status
+.\scripts\utilities\gv.ps1 orchestrator-status
 
 # Or use verify to activate it
-.\scripts\utilities\wf.ps1 verify
+.\scripts\utilities\gv.ps1 verify
 ```
 
 ### Post-checkout hook does not run
@@ -353,7 +353,7 @@ For continuous integration pipelines:
 
 ```powershell
 # In the setup step:
-.\scripts\utilities\wf.ps1 diagnose -JSON | ConvertFrom-Json | Select-Object overallStatus
+.\scripts\utilities\gv.ps1 diagnose -JSON | ConvertFrom-Json | Select-Object overallStatus
 
 # If overallStatus != "HEALTHY", fail the pipeline
 if ($status.overallStatus -ne "HEALTHY") {
@@ -374,11 +374,12 @@ if ($status.overallStatus -ne "HEALTHY") {
 ## See Also
 
 - [scripts/utilities/README.md](../../scripts/utilities/README.md) - Available commands
-- [scripts/foundation/bootstrap.ps1](../../scripts/foundation/bootstrap.ps1) - Full initialization
+- [scripts/gentle-vanguard/bootstrap.ps1](../../scripts/gentle-vanguard/bootstrap.ps1) - Full initialization
 - [scripts/diagnostics/system-diagnostics.ps1](../../scripts/diagnostics/system-diagnostics.ps1) -
   Diagnostics engine
 - [hooks/post-checkout.ps1](../../hooks/post-checkout.ps1) - Automatic verification on checkout
 
-- Los hooks automticos de Foundation - Development Stack ejecutan chequeos de 7 dimensiones
+- Los hooks automticos de Gentle-Vanguard - Development Stack ejecutan chequeos de 7 dimensiones
   (seguridad, calidad, arquitectura, testing, API, documentacin, gitflow) en cada commit/push. Ver
   REVIEW-INDEX.md para detalles.
+

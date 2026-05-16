@@ -55,7 +55,7 @@ decisións are stored in:
    - Format: `decisión-YYYYMMDD-XXX.md`
    - For project-specific decisións
 
-2. **Foundation decisións**: `decisións/` in foundation
+2. **Gentle-Vanguard decisións**: `decisións/` in gentle-vanguard
    - Format: `decisión-YYYYMMDD-XXX.md`
    - For cross-project patterns and standards
 
@@ -70,7 +70,7 @@ decisións are stored in:
 2. **Document tradeoffs** - Every decisión must list alternatives considered
 3. **Review before implementation** - Major decisións should be reviewed (use judgment-day)
 4. **Update SKILL_INDEX** - If a decisión affects skill loading or triggers, update the index
-5. **Cross-workspace sync** - Foundation decisións apply to all consumer repositories
+5. **Cross-workspace sync** - Gentle-Vanguard decisións apply to all consumer repositories
 
 ## Quick Reference
 
@@ -90,3 +90,4 @@ mem_save -title "decisión: chose X over Y" -type decisión -content "**What**: 
 - **Topology**: [layer-topology.md](layer-topology.md)
 - **Workflows**: [role-workflows.md](role-workflows.md)
 - **This file**: Architecture standards and decisión templates
+

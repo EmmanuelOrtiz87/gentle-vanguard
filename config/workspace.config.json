@@ -1,5 +1,5 @@
 {
-  "workspaceName": "foundation",
+  "workspaceName": "gentle-vanguard",
   "workspaceRoot": ".",
   "projectRoot": "projects",
   "dataRoot": ".engram-data",
@@ -16,3 +16,4 @@
     "postInstallCommand": ""
   }
 }
+

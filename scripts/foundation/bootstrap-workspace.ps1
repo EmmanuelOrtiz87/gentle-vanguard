@@ -21,8 +21,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-if ($env:FOUNDATION_BASE_DIR) {
-    $repoRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GENTLE_VANGUARD_BASE_DIR) {
+    $repoRoot = $env:GENTLE_VANGUARD_BASE_DIR
 } else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -254,9 +254,9 @@ function Install-SecuritySkill {
     )
 
     $skillSource = Join-Path $WorkspaceSkillsPath $SkillName
-    $skillDest = Join-Path $ProjectPath '.foundation\\skills\$SkillName'
+    $skillDest = Join-Path $ProjectPath '.gentle-vanguard\\skills\$SkillName'
     
-    $skillDest = Join-Path $ProjectPath ".foundation\\skills\$SkillName"
+    $skillDest = Join-Path $ProjectPath ".gentle-vanguard\\skills\$SkillName"
     
     if (Test-Path $skillSource) {
         Write-Host "Installing $SkillName..."
@@ -318,7 +318,7 @@ function Install-ProjectSkills {
             continue
         }
         
-        $skillDest = Join-Path $ProjectPath ".foundation\\skills\$skillName"
+        $skillDest = Join-Path $ProjectPath ".gentle-vanguard\\skills\$skillName"
         Ensure-Directory -Path (Split-Path -Parent $skillDest)
         
         Copy-Item -Path $skillSource -Destination $skillDest -Recurse -Force
@@ -353,7 +353,7 @@ function Create-OrchestratorActivation {
 
     $config = @{
         active = $true
-        skill_path = ".foundation/skills/project-orchestrator-skill"
+        skill_path = ".gentle-vanguard/skills/project-orchestrator-skill"
         auto_detect = $true
         workflow_mode = "coordinated"
         communication_response_mode = "simple"
@@ -832,3 +832,4 @@ foreach ($tool in $config.tools) {
 }
 
 Write-Host "Workspace bootstrap complete."
+

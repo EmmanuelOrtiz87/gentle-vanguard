@@ -16,7 +16,7 @@ param(
 $ErrorActionPreference = 'Stop'
 
 # Origin Configuration (Git Provider Agnostic)
-$ENGRAM_REPO_URL = "https://github.com/foundation/engram.git"
+$ENGRAM_REPO_URL = "https://github.com/gentle-vanguard/engram.git"
 
 function Write-Step { param([string]$msg) Write-Host "`n>> $msg" -ForegroundColor Cyan }
 function Write-Success { param([string]$msg) Write-Host "   OK: $msg" -ForegroundColor Green }
@@ -197,5 +197,5 @@ foreach ($item in $report.Keys) {
     Write-Host "   [Checking] $item : $($report[$item])" -ForegroundColor $color
 }
 
-Write-Host "`n[SUCCESS] Foundation Initialized and Verified!" -ForegroundColor Green
+Write-Host "`n[SUCCESS] Gentle-Vanguard Initialized and Verified!" -ForegroundColor Green
 Write-Host "You can now run 'scripts/run-engram.ps1' to start your assisted development session." -ForegroundColor Green

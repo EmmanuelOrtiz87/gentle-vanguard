@@ -30,9 +30,9 @@ Reference: `docs/reference/SDG-GOVERNANCE-POLICY.md`
 
 ## Skill Distribution Model
 
-1. Foundation is the source of truth for skills
+1. Gentle-Vanguard is the source of truth for skills
 2. Skills maintained natively in `skills/<skill-name>/SKILL.md`
-3. Publication: update in Foundation, commit/publish, consumers run `wf.ps1 foundation-sync apply`
+3. Publication: update in Gentle-Vanguard, commit/publish, consumers run `gv.ps1 gentle-vanguard-sync apply`
 4. Activation: on-demand — orchestrator loads only skills needed by current task
 5. New skills must be reflected in: `skills/SKILL_INDEX.md`, orchestrator stack mapping, consumer
    sync manifest
@@ -40,7 +40,7 @@ Reference: `docs/reference/SDG-GOVERNANCE-POLICY.md`
 ## Token and Context Budget Protocol
 
 1. SHOULD keep active chat context to last 5-10 messages for long-running work
-2. MUST generate compact handoff before opening new thread: `wf.ps1 compact-start "<objective>"`
+2. MUST generate compact handoff before opening new thread: `gv.ps1 compact-start "<objective>"`
 3. MUST treat generated `docs/sessions/*-context-pack.md` as source of truth in new threads
 4. SHOULD avoid repeating long invariant instructions unless changed
 5. SHOULD use concise prompts with explicit acceptance criteria
@@ -51,9 +51,9 @@ Automation: context budgeting is command-driven, not silent background automatio
 
 For risky in-session edits not yet committed:
 
-1. Create checkpoint: `wf.ps1 checkpoint <scope-objective>` (label: lowercase kebab-case)
+1. Create checkpoint: `gv.ps1 checkpoint <scope-objective>` (label: lowercase kebab-case)
 2. Checkpoint MUST include untracked files (`git stash -u`)
-3. Rollback: `wf.ps1 rollback-checkpoint` (latest) or with label/stash-ref
+3. Rollback: `gv.ps1 rollback-checkpoint` (latest) or with label/stash-ref
 4. Print one-line risk summary before checkpointing
 5. After rollback, run relevant validation gate
 
@@ -61,7 +61,7 @@ Guardrails: no checkpoint for trivial single-line edits; one checkpoint per boun
 
 ## Guardian Fallback Protocol
 
-serves as optional fallback when Foundation cannot proceed autonomously.
+serves as optional fallback when Gentle-Vanguard cannot proceed autonomously.
 
 Architecture: ORCHESTRATOR (primary) → self-healing → (optional) → manual intervention
 
@@ -72,7 +72,7 @@ Architecture: ORCHESTRATOR (primary) → self-healing → (optional) → manual 
 | PR needs review   | ` run --pr-mode`     |
 | Commit validation | commit-msg hook      |
 
-Dependency: is enhancement, not requirement. Foundation operates fully without it.
+Dependency: is enhancement, not requirement. Gentle-Vanguard operates fully without it.
 
 ## Decision Challenge Protocol
 
@@ -166,3 +166,4 @@ Guardrails: search adds at most one round-trip; saving after user confirms compl
 | "PR"                                            | Validate, code review, decision  |
 | "Push"                                          | Generate audit, commit, push     |
 | "Judgment Day" / "Juicio Final" / "Dual Review" | Run adversarial review           |
+

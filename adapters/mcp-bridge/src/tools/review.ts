@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import { execSync } from 'child_process';
 
-export function registerReviewTool(server: any, foundationRoot: string) {
+export function registerReviewTool(server: any, gentle-vanguardRoot: string) {
   server.tool(
-    'foundation_review',
+    'gentle-vanguard_review',
     'Run 7D code review (security, quality, architecture, testing, docs, api, gitflow)',
     {
       path: z.string().describe('File or directory path to review'),
@@ -16,11 +16,11 @@ export function registerReviewTool(server: any, foundationRoot: string) {
         const dims = args.dimensions || ['security', 'quality', 'architecture'];
         const mode = args.mode || 'quick';
         const dimsStr = dims.join(',');
-        const reviewScript = `${foundationRoot}/scripts/utilities/wf.ps1`;
+        const reviewScript = `${gentle-vanguardRoot}/scripts/utilities/gv.ps1`;
         const cmd = `powershell -NoProfile -ExecutionPolicy Bypass -File "${reviewScript}" review ${mode} -Dimensions ${dimsStr} -Path "${path}"`;
         
         const output = execSync(cmd, {
-          cwd: foundationRoot,
+          cwd: gentle-vanguardRoot,
           encoding: 'utf-8',
           maxBuffer: 10 * 1024 * 1024
         });
@@ -38,3 +38,4 @@ export function registerReviewTool(server: any, foundationRoot: string) {
     }
   );
 }
+

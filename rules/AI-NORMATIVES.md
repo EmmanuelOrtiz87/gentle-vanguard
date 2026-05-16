@@ -1,4 +1,4 @@
-# AI Normatives — Gentleman Foundation
+# AI Normatives — Gentle-Vanguard
 
 Canonical normatives for all AI agents operating in this workspace.  
 Last reviewed: 2026-05-04 | Version: 1.0.0
@@ -171,7 +171,7 @@ Do **NOT** invent skill paths or fake tool calls.
 
 1. **Pre**: Run `pre-process-input.ps1` with first user message — MUST be before any response
 2. **Start**: Run `scripts/utilities/session-autostart.cmd` (Windows) or `bash ./scripts/utilities/session-autostart.sh`
-3. **Track**: Session ID pattern `session-YYYY-MM-DD-XX`, project `workspace_local`
+3. **Track**: Session ID pattern `session-YYYY-MM-DD-XX`, project `workspace_gentle_vanguard`
 4. **Analyze**: Read `scripts/.session/startup-summary.json` — report peak hour and warnings to user
 5. **Verify**: Run `agent-verify.ps1` to validate workspace integrity (SHOULD)
 6. **End**: Run `scripts/utilities/pre-close-validator.ps1` before closing; save key decisions to engram
@@ -195,7 +195,7 @@ Valid types: `feat`, `fix`, `chore`, `docs`, `refactor`, `perf`, `test`, `ci`
 - Temperature: 0.3 (focused) — overridden per agent profile
 - Max tokens: 4500 (default agent)
 - Context compression: `scripts/utilities/handoff-compress.ps1` for agent-to-agent handoffs
-- Pre-compact hook: `scripts/utilities/pre-compact-hook.ps1 -ProjectName workspace_local -CompressionRatio 0.90`
+- Pre-compact hook: `scripts/utilities/pre-compact-hook.ps1 -ProjectName workspace_gentle_vanguard -CompressionRatio 0.90`
 
 ---
 
@@ -254,8 +254,8 @@ This is NOT optional and does NOT require explicit user direction.
 After completing any task that involves bugs, workarounds, or new patterns:
 
 ```powershell
-foundation learning          # detect gaps and generate proposals
-foundation learning apply    # auto-apply low-severity proposals
+gv learning          # detect gaps and generate proposals
+gv learning apply    # auto-apply low-severity proposals
 ```
 
 Do NOT wait for "cerrar sesión" trigger. Run after each significant task.
@@ -343,7 +343,7 @@ workflows.
 
 ## 15. Secrets Governance & Management (MANDATORY)
 
-All AI agents and Foundation systems MUST comply with enterprise-grade secrets management policies.
+All AI agents and Gentle-Vanguard systems MUST comply with enterprise-grade secrets management policies.
 
 **Scope**: API keys, database credentials, cryptographic keys, OAuth tokens, MFA seeds, encryption keys, signing certificates, service account credentials.
 
@@ -352,7 +352,7 @@ All AI agents and Foundation systems MUST comply with enterprise-grade secrets m
 ### Core Requirements (NO EXCEPTIONS)
 
 1. **Storage**: NEVER commit secrets to Git. Use authorized vaults:
-   - Local Vault: `$HOME/.foundation/vault/` (AES-256 encrypted)
+   - Local Vault: `$HOME/.gentle-vanguard/vault/` (AES-256 encrypted)
    - Environment Variables: Session-only, cleared on process exit
    - Cloud KMS: Azure Key Vault, AWS Secrets Manager, HashiCorp Vault (HSM-backed)
    - CI/CD Platform: GitHub Secrets, GitLab CI/CD Variables, Jenkins Credentials
@@ -389,13 +389,13 @@ All AI agents and Foundation systems MUST comply with enterprise-grade secrets m
    - Notify security team + service owners within 1 hour
    - Investigate root cause within 24 hours
    - Rotate all related secrets within 24 hours
-   - Command: `foundation secret breach-response --compromised-secret <id>`
+   - Command: `gv secret breach-response --compromised-secret <id>`
 
 ### Enforcement Gates (BLOCKING)
 
 - **Pre-commit hook**: Scan for hardcoded secrets (secretlint) → block commit
 - **Pre-deployment**: Scan entire codebase for secrets (truffleHog + secretlint) → block deployment
-- **Compliance validator**: `foundation secret validate-compliance` → exit code 0 (compliant) or 1 (violations)
+- **Compliance validator**: `gv secret validate-compliance` → exit code 0 (compliant) or 1 (violations)
 
 ### Agent Checklist (MANDATORY BEFORE DEPLOYMENT)
 
@@ -414,20 +414,20 @@ All AI agents and Foundation systems MUST comply with enterprise-grade secrets m
 
 ```powershell
 # Create secret (stored encrypted in vault)
-foundation secret create --name API_TOKEN --type api-keys --value <token>
+gv secret create --name API_TOKEN --type api-keys --value <token>
 
 # Retrieve secret (logged to audit trail)
-foundation secret get --name API_TOKEN
+gv secret get --name API_TOKEN
 
 # Rotate secret (automated, zero-downtime)
-foundation secret rotate --name API_TOKEN
+gv secret rotate --name API_TOKEN
 
 # Audit compliance
-foundation secret validate-compliance
-foundation secret audit-report --type [access|rotation|violations]
+gv secret validate-compliance
+gv secret audit-report --type [access|rotation|violations]
 
 # Breach response (immediate revocation)
-foundation secret breach-response --compromised-secret API_TOKEN --reason "leaked in logs"
+gv secret breach-response --compromised-secret API_TOKEN --reason "leaked in logs"
 ```
 
 **Linked Policies**: `rules/NORMATIVAS-GDPR.md` (user data), `rules/NORMATIVAS-SOC2.md` (enterprise security compliance)
@@ -465,3 +465,4 @@ foundation secret breach-response --compromised-secret API_TOKEN --reason "leake
 | ESLint Config | `.eslintrc.json` |
 | TypeScript Config | `tsconfig.json` |
 | Self-verification | `scripts/utilities/agent-verify.ps1` |
+

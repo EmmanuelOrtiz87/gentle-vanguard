@@ -1,4 +1,4 @@
-# lefthook.yml v2 — Git hooks for Foundation
+# lefthook.yml v2 — Git hooks for Gentle-Vanguard
 # Install: npm install lefthook && npx lefthook install
 
 pre-commit:
@@ -29,3 +29,4 @@ commit-msg:
   commands:
     commitlint:
       run: powershell -NoProfile -ExecutionPolicy Bypass -File "hooks/commitlint.ps1" {1}
+

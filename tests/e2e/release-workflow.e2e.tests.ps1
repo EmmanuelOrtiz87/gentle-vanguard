@@ -64,15 +64,15 @@ function New-TempRepo {
 
 function Invoke-Gate {
     param(
-        [string]$FoundationRepo,
+        [string]$Gentle-VanguardRepo,
         [string]$PublicRepo,
         [string]$ExpectedTag = "",
         [bool]$AsJson = $false
     )
     $gateScriptEscaped = $script:gateScript.Replace("'", "''")
-    $fEscaped = $FoundationRepo.Replace("'", "''")
+    $fEscaped = $Gentle-VanguardRepo.Replace("'", "''")
     $pEscaped = $PublicRepo.Replace("'", "''")
-    $cmd = "& '$gateScriptEscaped' -FoundationRepoPath '$fEscaped' -PublicRepoPath '$pEscaped'"
+    $cmd = "& '$gateScriptEscaped' -Gentle-VanguardRepoPath '$fEscaped' -PublicRepoPath '$pEscaped'"
     if ($ExpectedTag) { $cmd += " -ExpectedTag '$ExpectedTag'" }
     if ($AsJson) { $cmd += " -AsJson" }
     $output = pwsh -NoProfile -Command $cmd 2>&1
@@ -105,12 +105,12 @@ Describe "Homologation Gate - VERSION alignment" {
         $f = New-TempRepo -Name "f-va-1" -Version "1.0.0"
         $p = New-TempRepo -Name "p-va-1" -Version "1.0.0"
 
-        $result = Invoke-Gate -FoundationRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
+        $result = Invoke-Gate -Gentle-VanguardRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
         $check = $result.checks | Where-Object { $_.Name -eq "VERSION alignment" }
         $check.Passed | Should Be $true
     }
 
-    It "FAILS when foundation VERSION is newer than public" {
+    It "FAILS when gentle-vanguard VERSION is newer than public" {
         $f = New-TempRepo -Name "f-va-2" -Version "1.0.0"
         $p = New-TempRepo -Name "p-va-2" -Version "1.0.0"
 
@@ -118,16 +118,16 @@ Describe "Homologation Gate - VERSION alignment" {
         $null = git -C $f add VERSION 2>&1
         $null = git -C $f commit -m "bump" 2>&1
 
-        $result = Invoke-Gate -FoundationRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
+        $result = Invoke-Gate -Gentle-VanguardRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
         $check = $result.checks | Where-Object { $_.Name -eq "VERSION alignment" }
         $check.Passed | Should Be $false
     }
 
-    It "FAILS when public VERSION is ahead of foundation" {
+    It "FAILS when public VERSION is ahead of gentle-vanguard" {
         $f = New-TempRepo -Name "f-va-3" -Version "1.0.0"
         $p = New-TempRepo -Name "p-va-3" -Version "2.0.0"
 
-        $result = Invoke-Gate -FoundationRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
+        $result = Invoke-Gate -Gentle-VanguardRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
         $result.summary.status | Should Be "FAIL"
     }
 
@@ -135,10 +135,10 @@ Describe "Homologation Gate - VERSION alignment" {
         $f = New-TempRepo -Name "f-va-4" -Version "1.2.3"
         $p = New-TempRepo -Name "p-va-4" -Version "1.0.0"
 
-        $result = Invoke-Gate -FoundationRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
+        $result = Invoke-Gate -Gentle-VanguardRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
         $check = $result.checks | Where-Object { $_.Name -eq "VERSION alignment" }
-        $check.Detail | Should Match "foundation="
-        $check.Detail | Should Match "foundation-public="
+        $check.Detail | Should Match "gentle-vanguard="
+        $check.Detail | Should Match "gentle-vanguard-public="
     }
 
     It "Returns exit code 1 on VERSION mismatch" {
@@ -146,7 +146,7 @@ Describe "Homologation Gate - VERSION alignment" {
         $p = New-TempRepo -Name "p-va-5" -Version "1.0.0"
 
         $gateEscaped = $script:gateScript.Replace("'", "''")
-        pwsh -NoProfile -Command "& '$gateEscaped' -FoundationRepoPath '$($f.Replace("'","''"))' -PublicRepoPath '$($p.Replace("'","''"))' | Out-Null; exit `$LASTEXITCODE"
+        pwsh -NoProfile -Command "& '$gateEscaped' -Gentle-VanguardRepoPath '$($f.Replace("'","''"))' -PublicRepoPath '$($p.Replace("'","''"))' | Out-Null; exit `$LASTEXITCODE"
         $LASTEXITCODE | Should Be 1
     }
 }
@@ -157,17 +157,17 @@ Describe "Homologation Gate - Working tree cleanliness" {
         $f = New-TempRepo -Name "f-dirty-1" -Version "1.0.0"
         $p = New-TempRepo -Name "p-dirty-1" -Version "1.0.0"
 
-        $result = Invoke-Gate -FoundationRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
+        $result = Invoke-Gate -Gentle-VanguardRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
         $cleanChecks = $result.checks | Where-Object { $_.Name -like "*working tree clean*" }
         $cleanChecks | ForEach-Object { $_.Passed | Should Be $true }
     }
 
-    It "FAILS when foundation repo has uncommitted changes" {
+    It "FAILS when gentle-vanguard repo has uncommitted changes" {
         $f = New-TempRepo -Name "f-dirty-2" -Version "1.0.0" -WithDirtyTree $true
         $p = New-TempRepo -Name "p-dirty-2" -Version "1.0.0"
 
-        $result = Invoke-Gate -FoundationRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
-        $check = $result.checks | Where-Object { $_.Name -eq "foundation working tree clean" }
+        $result = Invoke-Gate -Gentle-VanguardRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
+        $check = $result.checks | Where-Object { $_.Name -eq "gentle-vanguard working tree clean" }
         $check.Passed | Should Be $false
     }
 
@@ -175,8 +175,8 @@ Describe "Homologation Gate - Working tree cleanliness" {
         $f = New-TempRepo -Name "f-dirty-3" -Version "1.0.0" -WithDirtyTree $true
         $p = New-TempRepo -Name "p-dirty-3" -Version "1.0.0"
 
-        $result = Invoke-Gate -FoundationRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
-        $check = $result.checks | Where-Object { $_.Name -eq "foundation working tree clean" }
+        $result = Invoke-Gate -Gentle-VanguardRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
+        $check = $result.checks | Where-Object { $_.Name -eq "gentle-vanguard working tree clean" }
         $check.Detail | Should Match "Uncommitted"
     }
 }
@@ -187,17 +187,17 @@ Describe "Homologation Gate - JSON output structure" {
         $f = New-TempRepo -Name "f-json-1" -Version "1.0.0"
         $p = New-TempRepo -Name "p-json-1" -Version "1.0.0"
 
-        $output = Invoke-Gate -FoundationRepo $f -PublicRepo $p -AsJson $true
+        $output = Invoke-Gate -Gentle-VanguardRepo $f -PublicRepo $p -AsJson $true
         { $output | ConvertFrom-Json } | Should Not Throw
     }
 
-    It "Has required top-level fields: timestamp, foundation, public, checks, summary" {
+    It "Has required top-level fields: timestamp, gentle-vanguard, public, checks, summary" {
         $f = New-TempRepo -Name "f-json-2" -Version "1.0.0"
         $p = New-TempRepo -Name "p-json-2" -Version "1.0.0"
 
-        $result = Invoke-Gate -FoundationRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
+        $result = Invoke-Gate -Gentle-VanguardRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
         $result.timestamp | Should Not BeNullOrEmpty
-        $result.foundation | Should Not BeNullOrEmpty
+        $result.gentle-vanguard | Should Not BeNullOrEmpty
         $result.public | Should Not BeNullOrEmpty
         $result.checks | Should Not BeNullOrEmpty
         $result.summary | Should Not BeNullOrEmpty
@@ -207,7 +207,7 @@ Describe "Homologation Gate - JSON output structure" {
         $f = New-TempRepo -Name "f-json-3" -Version "1.0.0"
         $p = New-TempRepo -Name "p-json-3" -Version "1.0.0"
 
-        $result = Invoke-Gate -FoundationRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
+        $result = Invoke-Gate -Gentle-VanguardRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
         $result.summary.total | Should BeGreaterThan 0
         ($result.summary.status -eq "PASS" -or $result.summary.status -eq "FAIL") | Should Be $true
     }
@@ -216,7 +216,7 @@ Describe "Homologation Gate - JSON output structure" {
         $f = New-TempRepo -Name "f-json-4" -Version "1.0.0"
         $p = New-TempRepo -Name "p-json-4" -Version "1.0.0"
 
-        $result = Invoke-Gate -FoundationRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
+        $result = Invoke-Gate -Gentle-VanguardRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
         foreach ($check in $result.checks) {
             $check.Name | Should Not BeNullOrEmpty
             ($check.PSObject.Properties.Name -contains "Passed") | Should Be $true
@@ -231,7 +231,7 @@ Describe "Homologation Gate - Tag consistency (-ExpectedTag)" {
         $f = New-TempRepo -Name "f-tag-1" -Version "1.0.0"
         $p = New-TempRepo -Name "p-tag-1" -Version "1.0.0"
 
-        $result = Invoke-Gate -FoundationRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
+        $result = Invoke-Gate -Gentle-VanguardRepo $f -PublicRepo $p -AsJson $true | ConvertFrom-Json
         $tagChecks = $result.checks | Where-Object { $_.Name -match "Tag|tag" }
         $tagChecks.Count | Should Be 0
     }
@@ -240,7 +240,7 @@ Describe "Homologation Gate - Tag consistency (-ExpectedTag)" {
         $f = New-TempRepo -Name "f-tag-2" -Version "1.0.0"
         $p = New-TempRepo -Name "p-tag-2" -Version "1.0.0"
 
-        $result = Invoke-Gate -FoundationRepo $f -PublicRepo $p -ExpectedTag "v1.0.0" -AsJson $true | ConvertFrom-Json
+        $result = Invoke-Gate -Gentle-VanguardRepo $f -PublicRepo $p -ExpectedTag "v1.0.0" -AsJson $true | ConvertFrom-Json
         $tagChecks = $result.checks | Where-Object { $_.Name -match "Tag|tag" }
         $tagChecks.Count | Should BeGreaterThan 0
     }
@@ -248,12 +248,12 @@ Describe "Homologation Gate - Tag consistency (-ExpectedTag)" {
 
 Describe "Homologation Gate - Error handling" {
 
-    It "Exits non-zero when foundation repo path does not exist" {
+    It "Exits non-zero when gentle-vanguard repo path does not exist" {
         $badPath = "C:\nonexistent-e2e-$(Get-Random)"
         $p = New-TempRepo -Name "p-err-1" -Version "1.0.0"
 
         $gateEscaped = $script:gateScript.Replace("'", "''")
-        pwsh -NoProfile -Command "& '$gateEscaped' -FoundationRepoPath '$badPath' -PublicRepoPath '$($p.Replace("'","''"))' | Out-Null; exit `$LASTEXITCODE"
+        pwsh -NoProfile -Command "& '$gateEscaped' -Gentle-VanguardRepoPath '$badPath' -PublicRepoPath '$($p.Replace("'","''"))' | Out-Null; exit `$LASTEXITCODE"
         $LASTEXITCODE | Should Not Be 0
     }
 
@@ -271,20 +271,20 @@ Describe "Homologation Gate - Error handling" {
 
         $p = New-TempRepo -Name "p-err-2" -Version "1.0.0"
         $gateEscaped = $script:gateScript.Replace("'", "''")
-        pwsh -NoProfile -Command "& '$gateEscaped' -FoundationRepoPath '$($noVersionPath.Replace("'","''"))' -PublicRepoPath '$($p.Replace("'","''"))' | Out-Null; exit `$LASTEXITCODE" 2>&1 | Out-Null
+        pwsh -NoProfile -Command "& '$gateEscaped' -Gentle-VanguardRepoPath '$($noVersionPath.Replace("'","''"))' -PublicRepoPath '$($p.Replace("'","''"))' | Out-Null; exit `$LASTEXITCODE" 2>&1 | Out-Null
         $LASTEXITCODE | Should Not Be 0
     }
 }
 
-Describe "Release Workflow Integration - wf.ps1 wiring" {
+Describe "Release Workflow Integration - gv.ps1 wiring" {
 
-    $script:wfContent = Get-Content (Join-Path $script:repoRoot "scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1") -Raw
+    $script:wfContent = Get-Content (Join-Path $script:repoRoot "scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1") -Raw
 
-    It "wf.ps1 references validate-release-homologation.ps1" {
+    It "gv.ps1 references validate-release-homologation.ps1" {
         $script:wfContent | Should Match "validate-release-homologation"
     }
 
-    It "wf.ps1 publish exposes -SkipHomologationGate parameter" {
+    It "gv.ps1 publish exposes -SkipHomologationGate parameter" {
         $script:wfContent | Should Match "SkipHomologationGate"
     }
 
@@ -301,7 +301,7 @@ Describe "Release Workflow Integration - Human output format" {
         $f = New-TempRepo -Name "f-fmt-1" -Version "1.0.0"
         $p = New-TempRepo -Name "p-fmt-1" -Version "1.0.0"
 
-        $output = Invoke-Gate -FoundationRepo $f -PublicRepo $p
+        $output = Invoke-Gate -Gentle-VanguardRepo $f -PublicRepo $p
         $outputStr = $output -join "`n"
         ($outputStr -match "\[PASS\]" -or $outputStr -match "\[FAIL\]") | Should Be $true
     }
@@ -310,8 +310,9 @@ Describe "Release Workflow Integration - Human output format" {
         $f = New-TempRepo -Name "f-fmt-2" -Version "1.0.0"
         $p = New-TempRepo -Name "p-fmt-2" -Version "1.0.0"
 
-        $output = Invoke-Gate -FoundationRepo $f -PublicRepo $p
+        $output = Invoke-Gate -Gentle-VanguardRepo $f -PublicRepo $p
         $outputStr = $output -join "`n"
         $outputStr | Should Match "Result:"
     }
 }
+

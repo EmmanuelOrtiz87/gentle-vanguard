@@ -217,7 +217,7 @@
       "description": "Multi-user artifact persistence — username prefix prevents collisions in parallel sessions.",
       "mode": "username_prefix",
       "modes_available": ["username_prefix", "user_subdirectory", "session_scoped"],
-      "username_sources": ["$env:FOUNDATION_USERNAME", "$env:USERNAME", "git config user.name"],
+      "username_sources": ["$env:GV_USERNAME", "$env:USERNAME", "git config user.name"],
       "sanitize": true,
       "separator": "-",
       "timestamp_format": "YYYY-MM-DD-HHmmss",
@@ -388,3 +388,4 @@
     }
   }
 }
+

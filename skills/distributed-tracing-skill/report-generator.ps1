@@ -11,7 +11,7 @@
     - System health reports
     
 .NOTES
-    Author: foundation
+    Author: gentle-vanguard
     Version: 1.0
 #>
 

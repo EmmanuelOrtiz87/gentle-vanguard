@@ -68,7 +68,7 @@ echo [0.75/10] Checking for orphaned sessions...
 pwsh -NoProfile -ExecutionPolicy Bypass -Command ^
   "$stateFile='%WORKSPACE_ROOT%\.session\state.json';" ^
   "$activeFile='%WORKSPACE_ROOT%\logs\.session-active';" ^
-  "$dayEnd='%WORKSPACE_ROOT%\scripts\utilities\UTILITIES\day-end-closure.ps1';" ^
+  "$dayEnd='%WORKSPACE_ROOT%\scripts\utilities\session-manual-end.ps1';" ^
   "$orphan=$false;" ^
   "$sid='';" ^
   "if (Test-Path $stateFile) { try { $d=Get-Content $stateFile -Raw|ConvertFrom-Json; if ($d.status -eq 'active') { $orphan=$true; $sid=$d.sessionId } } catch {} };" ^
@@ -77,22 +77,14 @@ pwsh -NoProfile -ExecutionPolicy Bypass -Command ^
 if errorlevel 1 ( echo [WARN] Orphan cleanup had issues ) else ( echo [OK] Orphan check complete )
 
 REM === Phase 1: Session Manager ===
-REM Add WORKFLOW-ORCHESTRATION to PATH so 'foundation' CLI works
-set WF_DIR=%WORKSPACE_ROOT%\scripts\utilities\WORKFLOW-ORCHESTRATION
-if exist "%WF_DIR%" (
-    set PATH=%WF_DIR%;%PATH%
-) else (
-    echo [WARN] WORKFLOW-ORCHESTRATION dir not found
-)
-
 echo [1/9] Initializing session manager...
 pwsh -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\session-manager.ps1" -Mode AutoStart
 set SESSION_MANAGER_EXIT=%ERRORLEVEL%
 if "%SESSION_MANAGER_EXIT%"=="0" goto session_manager_ok
 echo [ERROR] session-manager.ps1 failed (code: %SESSION_MANAGER_EXIT%)
-echo [FALLBACK] Attempting foundation...
-if exist "%WF_DIR%\foundation.ps1" (
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "%WF_DIR%\foundation.ps1" start-session
+echo [FALLBACK] Attempting gv.ps1...
+if exist "%UTILS_DIR%\gv.ps1" (
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\gv.ps1" start-session
 ) else (
     echo [FATAL] No fallback available. Aborting.
     exit /b 1
@@ -116,7 +108,7 @@ echo [3/9] Resolving session ID...
 set SESSION_ID=
 for /f "tokens=*" %%i in ('pwsh -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\get-session-id.ps1"') do set SESSION_ID=%%i
 if defined SESSION_ID (
-    set FOUNDATION_SESSION_ID=%SESSION_ID%
+    set GENTLE_VANGUARD_SESSION_ID=%SESSION_ID%
     set WFS_SESSION_ID=%SESSION_ID%
     echo [OK] Session ID: %SESSION_ID%
 ) else ( echo [WARN] Could not resolve session ID )
@@ -132,7 +124,7 @@ if exist "%METRICS_SCRIPT%" (
 REM === Phase 4: Engram Policy Enforcement ===
 echo [4/9] Engram policy enforcement...
 set ENGRAM_DATA_DIR=%WORKSPACE_ROOT%\.engram-data
-set ENGRAM_POLICY=%WORKSPACE_ROOT%\scripts\foundation\engram-policy.ps1
+set ENGRAM_POLICY=%UTILS_DIR%\engram-policy.ps1
 if exist "%ENGRAM_POLICY%" (
     pwsh -NoProfile -ExecutionPolicy Bypass -File "%ENGRAM_POLICY%" -Action enforce
     if errorlevel 1 (
@@ -147,40 +139,25 @@ REM === Phase 5: Engram Optimization ===
 echo [5/9] Engram optimization...
 set OPTIMIZE_SCRIPT=%WORKSPACE_ROOT%\scripts\utilities\PERFORMANCE-OPTIMIZATION\optimize-engram-usage.ps1
 if exist "%OPTIMIZE_SCRIPT%" (
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_local"
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_gentle_vanguard"
     if errorlevel 1 ( echo [WARN] Optimization had warnings ) else ( echo [OK] Engram optimized )
 ) else ( echo [SKIP] optimize-engram-usage.ps1 not found )
 
-REM === Phase 6: Cross-Workspace Validation ===
-echo [6/9] Cross-workspace validation...
-set CROSS_VALIDATOR=%WORKSPACE_ROOT%\scripts\monitoring\cross-workspace-validator.ps1
-if exist "%CROSS_VALIDATOR%" (
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "%CROSS_VALIDATOR%" -Detailed
-    if errorlevel 1 ( echo [WARN] Validation found issues ) else ( echo [OK] Cross-workspace validated )
-) else ( echo [SKIP] cross-workspace-validator.ps1 not found )
-
-REM === Phase 7: Security Orchestrator ===
-echo [7/9] Security orchestrator...
-set SECURITY_SCRIPT=%WORKSPACE_ROOT%\scripts\security\security-orchestrator.ps1
-if exist "%SECURITY_SCRIPT%" (
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "%SECURITY_SCRIPT%" -Action init -AsJson
-    if errorlevel 1 ( echo [WARN] Security init had warnings ) else ( echo [OK] Security initialized )
-) else ( echo [SKIP] security-orchestrator.ps1 not found )
-
-REM === Phase 8: Skill Router + Registry Build ===
-echo [8/9] Skill router...
-set SKILL_ROUTER=%UTILS_DIR%\skill-router.ps1
-if exist "%SKILL_ROUTER%" (
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "%SKILL_ROUTER%" -Query "session-start"
-    if errorlevel 1 ( echo [WARN] Skill router validation issue ) else ( echo [OK] Skill router active )
-) else ( echo [SKIP] skill-router.ps1 not found )
-
-REM Build skill registry in background
+REM === Phase 6: Skill Registry Build ===
+echo [6/9] Skill registry...
 set SKILL_REGISTRY=%UTILS_DIR%\build-skill-registry.ps1
 if exist "%SKILL_REGISTRY%" (
     pwsh -NoProfile -ExecutionPolicy Bypass -File "%SKILL_REGISTRY%" -Quiet
     if errorlevel 1 ( echo [WARN] Skill registry build had issues ) else ( echo [OK] Skill registry built )
 ) else ( echo [SKIP] build-skill-registry.ps1 not found )
+
+REM === Phase 7: Reserved for Future Use ===
+echo [7/9] Reserved...
+echo [SKIP] Reserved for future extensions
+
+REM === Phase 8: Reserved for Future Use ===
+echo [8/9] Reserved...
+echo [SKIP] Reserved for future extensions
 
 REM === Phase 9: Post-Autostart Summary ===
 echo [9/10] Generating startup summary...
@@ -212,23 +189,37 @@ if exist "%ADAPTIVE_CC%" (
 ) else ( echo [SKIP] adaptive-claude-cline-profile.ps1 not found )
 
 REM === Phase 9.5: Workspace State Warning ===
-for /f "tokens=*" %%i in ('pwsh -NoProfile -Command "if (git status --short 2>$null) { 'dirty' } else { 'clean' }"') do set WORKSPACE_STATE=%%i
-if "!WORKSPACE_STATE!"=="dirty" (
+set WORKSPACE_STATE=unknown
+set DIRTY_STATE_SCRIPT=%UTILS_DIR%\get-workspace-dirty-state.ps1
+if exist "%DIRTY_STATE_SCRIPT%" (
+    for /f "tokens=*" %%i in ('pwsh -NoProfile -ExecutionPolicy Bypass -File "%DIRTY_STATE_SCRIPT%" -RepoRoot "%WORKSPACE_ROOT%"') do set WORKSPACE_STATE=%%i
+) else (
+    for /f "tokens=*" %%i in ('pwsh -NoProfile -Command "if (git status --short 2>$null) { 'dirty-user' } else { 'clean' }"') do set WORKSPACE_STATE=%%i
+)
+
+if "!WORKSPACE_STATE!"=="dirty-user" (
     echo [WARN] =====================================================================
     echo [WARN]  Workspace has uncommitted changes from a previous session.
     echo [WARN]  Run 'git status' to review, or 'git stash' to shelve them.
     echo [WARN] =====================================================================
 )
+if "!WORKSPACE_STATE!"=="dirty-operational" (
+    echo [INFO] Workspace has operational auto-managed changes; no user action required.
+)
+if "!WORKSPACE_STATE!"=="clean" (
+    echo [OK] Workspace clean
+)
 
 REM === Phase 10: Watchtower Quick Check ===
 echo [10/10] Watchtower quick health check...
-set WATCHTOWER_SCRIPT=%WF_DIR%\..\watchtower.ps1
+set WATCHTOWER_SCRIPT=%UTILS_DIR%\watchtower.ps1
 if exist "%WATCHTOWER_SCRIPT%" (
     pwsh -NoProfile -ExecutionPolicy Bypass -File "%WATCHTOWER_SCRIPT%" -Quiet
-    if errorlevel 1 ( echo [WARN] Watchtower detected issues - run 'foundation watchtower' for details ) else ( echo [OK] Watchtower all clear )
+    if errorlevel 1 ( echo [WARN] Watchtower detected issues - run 'gv watchtower' for details ) else ( echo [OK] Watchtower all clear )
 ) else ( echo [SKIP] watchtower.ps1 not found )
 
 echo.
 echo === Session Autostart Complete ===
 echo [READY] Workspace ready for operations
 exit /b 0
+

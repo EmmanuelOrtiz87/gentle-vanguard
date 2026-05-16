@@ -25,10 +25,10 @@ if exist "%STATUS_MONITOR%" (
     powershell -NoProfile -ExecutionPolicy Bypass -File "%STATUS_MONITOR%" -Once
 ) else ( echo [SKIP] continuous-status-monitor.ps1 not found )
 
-REM Main close flow via wf.ps1 (includes pre-close-validator, review, audit, governance)
-set "WF_SCRIPT=%REPO_ROOT%\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1"
+REM Main close flow via gv.ps1 (includes pre-close-validator, review, audit, governance)
+set "WF_SCRIPT=%REPO_ROOT%\scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1"
 if not exist "%WF_SCRIPT%" (
-  echo [ERROR] wf.ps1 not found
+  echo [ERROR] gv.ps1 not found
   exit /b 1
 )
 
@@ -70,7 +70,7 @@ REM Post-close: engram optimization
 set OPTIMIZE_SCRIPT=%REPO_ROOT%\scripts\utilities\PERFORMANCE-OPTIMIZATION\optimize-engram-usage.ps1
 if exist "%OPTIMIZE_SCRIPT%" (
   echo [INFO] Running post-session Engram optimization...
-  powershell -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_local" -AutoApply
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_gentle_vanguard" -AutoApply
 ) else ( echo [SKIP] optimize-engram-usage.ps1 not found )
 
 REM Weekly metrics on Sundays
@@ -99,3 +99,4 @@ echo ============================================
 echo.
 
 exit /b 0
+

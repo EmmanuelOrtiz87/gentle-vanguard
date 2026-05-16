@@ -15,8 +15,8 @@ on:
       - 'build/**'
       - 'config/*.example.json'
       - 'config/README.md'
-      - 'scripts/foundation/bootstrap*.ps1'
-      - 'scripts/foundation/setup-multi-machine.ps1'
+      - 'scripts/gentle-vanguard/bootstrap*.ps1'
+      - 'scripts/gentle-vanguard/setup-multi-machine.ps1'
       - 'scripts/utilities/DEPLOYMENT/sync-to-public.ps1'
       - 'skills/SKILL_INDEX.md'
       - 'docs/**'
@@ -30,7 +30,7 @@ on:
       public_repo:
         description:
           'Optional override owner/repo for public sync target (example:
-          EmmanuelOrtiz87/foundation-public)'
+          EmmanuelOrtiz87/gentle-vanguard-public)'
         required: false
         default: ''
       public_repo_default_branch:
@@ -40,7 +40,7 @@ on:
 
 jobs:
   sync:
-    name: Sync to foundation-public
+    name: Sync to gentle-vanguard-public
     runs-on: windows-latest
     timeout-minutes: 15
     steps:
@@ -65,7 +65,7 @@ jobs:
           }
 
           $publicRepoSlug = if ([string]::IsNullOrWhiteSpace($env:PUBLIC_REPO)) {
-            'EmmanuelOrtiz87/foundation-public'
+            'EmmanuelOrtiz87/gentle-vanguard-public'
           } else {
             $env:PUBLIC_REPO
           }
@@ -75,7 +75,7 @@ jobs:
           $authUrl = "https://x-access-token:$env:PAT_SYNC@github.com/$publicRepoSlug.git"
 
           # --- Clone public repo ---
-          Write-Output "::group::Clone foundation-public"
+          Write-Output "::group::Clone gentle-vanguard-public"
           New-Item -ItemType Directory -Path $publicDir -Force | Out-Null
           Set-Location $publicDir
           git init
@@ -94,12 +94,12 @@ jobs:
 
           git fetch origin $defaultBranch --depth=1 2>&1
           if ($LASTEXITCODE -ne 0) {
-            Write-Output "::error::Failed to fetch foundation-public. Check PAT permissions."
+            Write-Output "::error::Failed to fetch gentle-vanguard-public. Check PAT permissions."
             exit 1
           }
           git checkout -B $defaultBranch FETCH_HEAD
-          git config --local user.name "foundation-bot"
-          git config --local user.email "bot@foundation"
+          git config --local user.name "gentle-vanguard-bot"
+          git config --local user.email "bot@gentle-vanguard"
           Write-Output "::endgroup::"
 
           # --- Run sync script ---
@@ -108,7 +108,7 @@ jobs:
           Write-Output "::endgroup::"
 
           # --- Commit and push ---
-          Write-Output "::group::Push to foundation-public"
+          Write-Output "::group::Push to gentle-vanguard-public"
           $hasChanges = git status --porcelain
           if ([string]::IsNullOrEmpty($hasChanges)) {
             Write-Output "ℹ️  Nothing to push — public repo is up to date"
@@ -119,9 +119,10 @@ jobs:
           git commit -m "sync: automated sync from private repo - $timestamp"
           git push origin $defaultBranch 2>&1
           if ($LASTEXITCODE -eq 0) {
-            Write-Output "✅ Pushed to foundation-public $defaultBranch"
+            Write-Output "✅ Pushed to gentle-vanguard-public $defaultBranch"
           } else {
             Write-Output "::error::Push failed (exit code $LASTEXITCODE)"
             exit 1
           }
           Write-Output "::endgroup::"
+

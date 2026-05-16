@@ -2,7 +2,7 @@
 
 **Estimated Time**: 15-20 minutes  
 **Level**: Beginner (follow steps sequentially)  
-**Goal**: Get foundation running locally with all security gates active
+**Goal**: Get gentle-vanguard running locally with all security gates active
 
 ---
 
@@ -35,9 +35,9 @@ npm --version
 ## Step 1: Clone Repository (2 min)
 
 ```powershell
-# Clone foundation (private repo — requires access)
-git clone https://github.com/EmmanuelOrtiz87/foundation.git
-cd foundation
+# Clone gentle-vanguard (private repo — requires access)
+git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
+cd gentle-vanguard
 
 # Verify structure
 dir | Select-Object Name | head -10
@@ -116,11 +116,11 @@ true
 
 ---
 
-## Step 5: Install Foundation Dependencies (3 min)
+## Step 5: Install Gentle-Vanguard Dependencies (3 min)
 
 ```powershell
-# Go back to foundation root
-cd C:\Workspace_local\foundation
+# Go back to gentle-vanguard root
+cd C:\Workspace_local\gentle-vanguard
 
 # Clean install (respects exact versions in lockfile)
 npm ci --ignore-scripts
@@ -178,11 +178,11 @@ Test-Path "tests" -PathType Container
 The built-in diagnostic validates everything is working:
 
 ```powershell
-# From foundation root
-.\scripts\utilities\wf.ps1 doctor
+# From gentle-vanguard root
+.\scripts\utilities\gv.ps1 doctor
 
 # Or if not available:
-.\scripts\foundation\wf.ps1 doctor
+.\scripts\gentle-vanguard\gv.ps1 doctor
 ```
 
 **Expected output**: Green checkmarks ✓ for all checks (PowerShell version, git, npm, etc.)
@@ -307,7 +307,7 @@ npm test 2>&1 | Tee-Object test-output.txt
 
 **Questions?**
 - Check [TROUBLESHOOTING-RUNBOOK.md](TROUBLESHOOTING-RUNBOOK.md) for common problems
-- Ask in #dev-foundation Slack channel
+- Ask in #dev-gentle-vanguard Slack channel
 - Email: security-team@example.com
 
 **Setup taking too long?**
@@ -320,3 +320,4 @@ npm test 2>&1 | Tee-Object test-output.txt
 **Completed By**: ________________ (your name)
 
 ✅ Ready to start coding!
+

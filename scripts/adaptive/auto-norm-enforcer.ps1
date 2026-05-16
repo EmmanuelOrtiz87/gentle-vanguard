@@ -20,7 +20,7 @@
     .\auto-norm-enforcer.ps1 -Trigger session-start -AutoFix
     
 .NOTES
-    Author: foundation
+    Author: gentle-vanguard
     Version: 1.0.0
 #>
 
@@ -37,7 +37,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) { $env:FOUNDATION_BASE_DIR } else {
+$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) { $env:GENTLE_VANGUARD_BASE_DIR } else {
     $root = Split-Path -Parent $PSScriptRoot
     while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
     if (-not $root) { $root = $PSScriptRoot }
@@ -229,6 +229,7 @@ function Invoke-NormEnforcement {
 
 # Execute
 Invoke-NormEnforcement
+
 
 
 

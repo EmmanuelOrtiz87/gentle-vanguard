@@ -58,7 +58,7 @@ function Install-Engram {
 
     Write-Step "Installing Engram CLI via Go..."
     try {
-        & go install github.com/foundation/engram/cmd/engram@latest
+        & go install github.com/gentle-vanguard/engram/cmd/engram@latest
     } catch {
         Write-Error "Engram installation failed: $($_.Exception.Message)"
         exit 1
@@ -92,3 +92,4 @@ if ($choice -match '^(y|yes|si|s)$') {
 } else {
     Write-Warning "Skipping Engram installation. Some features will be limited."
 }
+

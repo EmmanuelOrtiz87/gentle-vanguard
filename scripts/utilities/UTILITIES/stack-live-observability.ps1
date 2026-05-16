@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
 <#!
 .SYNOPSIS
-  Live observability monitor for Foundation stack.
+  Live observability monitor for Gentle-Vanguard stack.
 
 .DESCRIPTION
   Aggregates real-time-ish operational signals from local artifacts:
@@ -10,7 +10,7 @@
   - token guard status
   - context dashboard metrics
   - latest routing quality matrix
-  - latest wf benchmark report
+  - latest gv benchmark report
 
 .PARAMETER Watch
   Refresh repeatedly in console mode.
@@ -40,7 +40,7 @@ $activationFile = Join-Path $repoRoot '.orchestrator-active'
 $orchestratorConfigPath = Join-Path $repoRoot 'config\orchestrator.json'
 $eventHistoryPath = Join-Path $repoRoot '.event-bus\history.json'
 $routingQualityPath = Join-Path $repoRoot '.session\routing-quality-last.json'
-$wfBenchmarkPath = Join-Path $repoRoot 'reports\wf-benchmark.json'
+$wfBenchmarkPath = Join-Path $repoRoot 'reports\gv-benchmark.json'
 $latestSnapshotPath = Join-Path $repoRoot 'reports\stack-live-observability-latest.json'
 $tokenGuardScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\token-budget-guard.ps1'
 $contextDashboardScript = Join-Path $repoRoot 'scripts\utilities\TELEMETRY-METRICS\context-dashboard.ps1'
@@ -222,7 +222,7 @@ function Show-Snapshot {
 
     Clear-Host
     Write-Host ''
-    Write-Host '=== FOUNDATION LIVE OBSERVABILITY ===' -ForegroundColor Cyan
+    Write-Host '=== GENTLE_VANGUARD LIVE OBSERVABILITY ===' -ForegroundColor Cyan
     Write-Host "Timestamp: $($s.timestamp)" -ForegroundColor Gray
     Write-Host ''
 
@@ -245,7 +245,7 @@ function Show-Snapshot {
     Write-Host ''
     Write-Host '[Quality / Benchmark]' -ForegroundColor White
     Write-Host "  Routing matrix: accuracy=$($s.routing.accuracy) total=$($s.routing.total) failed=$($s.routing.failed)"
-    Write-Host "  WF benchmark: pass=$($s.benchmark.pass) warn=$($s.benchmark.warn) fail=$($s.benchmark.fail)"
+    Write-Host "  GV benchmark: pass=$($s.benchmark.pass) warn=$($s.benchmark.warn) fail=$($s.benchmark.fail)"
 
     $tlColor = switch ($s.executive_traffic_light) {
         'RED' { 'Red' }
@@ -283,3 +283,4 @@ while ($true) {
 }
 
 exit 0
+

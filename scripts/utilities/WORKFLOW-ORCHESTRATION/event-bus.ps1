@@ -377,7 +377,7 @@ switch ($Action) {
     'subscribe' {
         if ([string]::IsNullOrWhiteSpace($Event)) {
             Write-Host "[ERROR] Event name required for subscribe" -ForegroundColor Red
-            Write-Host "Usage: .\wf.ps1 events subscribe <EVENT> [HANDLER_SCRIPT]" -ForegroundColor Yellow
+            Write-Host "Usage: .\gv.ps1 events subscribe <EVENT> [HANDLER_SCRIPT]" -ForegroundColor Yellow
             exit 1
         }
         
@@ -538,3 +538,4 @@ switch ($Action) {
     }
     
 }
+

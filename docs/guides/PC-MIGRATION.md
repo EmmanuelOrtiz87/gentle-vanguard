@@ -1,6 +1,6 @@
 # PC Migration Guide
 
-Complete guide for migrating Foundation workspace to a new machine.
+Complete guide for migrating Gentle-Vanguard workspace to a new machine.
 
 ## Prerequisites (New Machine)
 
@@ -23,13 +23,13 @@ Before importing, install these on the new machine:
 
 ```powershell
 # Export to Downloads folder
-.\scripts\foundation\export-profile.ps1
+.\scripts\gentle-vanguard\export-profile.ps1
 
 # Or export directly to external disk (e.g. D:)
-.\scripts\foundation\export-profile.ps1 -ExternalDisk D
+.\scripts\gentle-vanguard\export-profile.ps1 -ExternalDisk D
 
 # Specify custom repo root (default: auto-detected)
-.\scripts\foundation\export-profile.ps1 -ExternalDisk D -RepoRoot C:\Workspace_local\foundation
+.\scripts\gentle-vanguard\export-profile.ps1 -ExternalDisk D -RepoRoot C:\Workspace_local\gentle-vanguard
 ```
 
 ### What Gets Exported
@@ -47,15 +47,15 @@ Before importing, install these on the new machine:
 ## Import (New PC)
 
 ```powershell
-# 1. Clone the Foundation repo first
-git clone https://github.com/EmmanuelOrtiz87/foundation.git C:\Workspace_local\foundation
-cd C:\Workspace_local\foundation
+# 1. Clone the Gentle-Vanguard repo first
+git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git C:\Workspace_local\gentle-vanguard
+cd C:\Workspace_local\gentle-vanguard
 
 # 2. Import profile from external disk
-.\scripts\foundation\import-profile.ps1 -ExternalDisk D
+.\scripts\gentle-vanguard\import-profile.ps1 -ExternalDisk D
 
 # 3. Run setup (repos + bootstrap)
-.\scripts\foundation\setup-multi-machine.ps1
+.\scripts\gentle-vanguard\setup-multi-machine.ps1
 
 # 4. Restart terminal for PATH changes to take effect
 ```
@@ -82,8 +82,8 @@ opencode --version
 # Verify tools
 .\scripts\utilities\install-prerequisites.ps1 -CheckOnly
 
-# Verify Foundation
-.\wf.ps1 health
+# Verify Gentle-Vanguard
+.\gv.ps1 health
 ```
 
 ## Engram Updates
@@ -91,11 +91,11 @@ opencode --version
 Engram can be updated at any time:
 
 ```powershell
-# Via wf CLI
-.\scripts\utilities\wf.ps1 install-engram
+# Via gv CLI
+.\scripts\utilities\gv.ps1 install-engram
 
 # Or directly
-go install github.com/foundation/engram/cmd/engram@latest
+go install github.com/gentle-vanguard/engram/cmd/engram@latest
 ```
 
 ## Cairo/GTK3 (Diagram PNG Export)
@@ -108,7 +108,7 @@ For fireworks-tech-graph PNG export, install Cairo:
 
 This installs GTK3 Runtime which includes `libcairo-2.dll`. SVG generation works without Cairo; PNG export requires it.
 
-## Syncing to Foundation-Public
+## Syncing to Gentle-Vanguard-Public
 
 After changes to the private repo that need to be reflected in the public repo:
 
@@ -125,23 +125,23 @@ This copies:
 - Public documentation
 - Encrypted `protected/` artifacts
 - Public skill stubs
-- Compiled executables (`Foundation-Launcher.exe`, `Foundation-Setup.exe`)
+- Compiled executables (`Gentle-Vanguard-Launcher.exe`, `Gentle-Vanguard-Setup.exe`)
 - Example configs (no secrets)
 
-## Updating Foundation Itself
+## Updating Gentle-Vanguard Itself
 
 ```powershell
 # Pull latest changes
 git pull origin develop
 
 # Re-run bootstrap if needed
-.\scripts\foundation\bootstrap.ps1
+.\scripts\gentle-vanguard\bootstrap.ps1
 
 # Update prerequisites
 .\scripts\utilities\install-prerequisites.ps1
 
 # Verify all tools
-.\scripts\utilities\wf.ps1 health
+.\scripts\utilities\gv.ps1 health
 ```
 
 ## Troubleshooting

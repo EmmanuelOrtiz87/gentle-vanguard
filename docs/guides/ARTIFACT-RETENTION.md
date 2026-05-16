@@ -1,8 +1,8 @@
-﻿# Artifact Retention Policy
+# Artifact Retention Policy
 
 ## Overview
 
-Foundation automatically manages artifact retention to balance **historical context** with
+Gentle-Vanguard automatically manages artifact retention to balance **historical context** with
 **repository cleanliness**. The system keeps recent files in the repo for AI agent context while
 archiving older files locally.
 
@@ -196,3 +196,4 @@ cat .gitignore | Select-String "local-archive"
 - [`ARCHITECTURE.md`](../reference/ARCHITECTURE.md) - Dual-scope retention model
 - [`SESSION-GUIDE.md`](./SESSION-GUIDE.md) - Session lifecycle
 - [`audit-system.md`](./audit-system.md) - Audit generation details
+

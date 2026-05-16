@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Cross-platform compatibility helpers for Gentleman Foundation scripts.
+    Cross-platform compatibility helpers for Gentle-Vanguard scripts.
 
 .DESCRIPTION
     Dot-source this module to get platform-aware path helpers, OS detection,
@@ -110,3 +110,4 @@ function Get-PlatformInfo {
 }
 
 Export-ModuleMember -Function * -ErrorAction SilentlyContinue
+

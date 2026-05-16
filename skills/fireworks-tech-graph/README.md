@@ -117,7 +117,7 @@ Use frosted cards, soft glow, and semantic arrows for delegation, shared memory 
 ### Style 6 — Claude Official
 ```text
 Draw a system architecture diagram in style 6 (Claude Official).
-Use left-side layer labels: Interface Layer, Core Layer, Foundation Layer.
+Use left-side layer labels: Interface Layer, Core Layer, Gentle-Vanguard Layer.
 Include Client Surface, Gateway, Task Planner, Model Runtime, Policy Guardrails, Memory Store, Tool Runtime, Observability, and Registry.
 Use warm cream background, restrained brand-like palette, generous whitespace, and a bottom-right legend.
 ```
@@ -336,7 +336,7 @@ Generate a feature comparison matrix: RAG vs Fine-tuning vs Prompt Engineering
 ### Concept Maps
 
 ```
-Visualize the LLM application tech stack: from foundation model to SDK to app framework to deployment
+Visualize the LLM application tech stack: from gentle-vanguard model to SDK to app framework to deployment
 ```
 → Layered architecture or mind map from model layer to product layer
 
@@ -553,3 +553,4 @@ fireworks-tech-graph/
 ## License
 
 MIT © 2025 fireworks-tech-graph contributors
+

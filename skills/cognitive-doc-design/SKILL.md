@@ -6,11 +6,11 @@ description: >
   READMEs, RFCs, onboarding docs, architecture docs, or review-facing documentation.
 license: Apache-2.0
 metadata:
-  author: foundation (adapted for Foundation)
+  author: gentle-vanguard (adapted for Gentle-Vanguard)
   version: '1.0'
 ---
 
-# Cognitive Doc Design (Foundation Adaptation)
+# Cognitive Doc Design (Gentle-Vanguard Adaptation)
 
 ## When to Use
 
@@ -23,7 +23,7 @@ Use it especially for:
 - Contributor or maintainer guides
 - Architecture, workflow, or onboarding docs
 - Any doc that currently feels long, dense, or hard to scan
-- Foundation READMEs (main, AGENTS.md, docs/guides/)
+- Gentle-Vanguard READMEs (main, AGENTS.md, docs/guides/)
 
 ## Critical Patterns
 
@@ -36,9 +36,9 @@ Use it especially for:
 | Recognition over recall | Prefer tables, checklists, examples, and templates over prose that must be remembered. |
 | Review empathy          | Design docs so reviewers can verify intent without reconstructing the whole story.     |
 
-## Documentation Shape (Foundation Standard)
+## Documentation Shape (Gentle-Vanguard Standard)
 
-Use this structure for all Foundation docs (adapted from native-tools):
+Use this structure for all Gentle-Vanguard docs (adapted from native-tools):
 
 ```markdown
 # <Outcome-oriented title>
@@ -67,9 +67,9 @@ Use this structure for all Foundation docs (adapted from native-tools):
 <Link or action that continues the workflow.>
 ```
 
-## Adaptation for Foundation
+## Adaptation for Gentle-Vanguard
 
-### 1. Lead with Answer (Foundation Rule)
+### 1. Lead with Answer (Gentle-Vanguard Rule)
 
 ```markdown
 ## ✅ RESULT (put first)
@@ -79,13 +79,13 @@ Use this structure for all Foundation docs (adapted from native-tools):
 - Rename: LEARNED-NORMS.md → TECH-ADAPTIVE-001-learned-norms.md
 ```
 
-### 2. Chunking (Foundation Rule)
+### 2. Chunking (Gentle-Vanguard Rule)
 
 - Max 200 lines per doc section
 - Group by: Problem → Solution → Metric
 - Use tables for structured data (not prose)
 
-### 3. Signposting (Foundation Rule)
+### 3. Signposting (Gentle-Vanguard Rule)
 
 ```markdown
 ## 🔍 Discovery (what we found)
@@ -97,7 +97,7 @@ Use this structure for all Foundation docs (adapted from native-tools):
 ## 🎯 Conclusion (what we learned)
 ```
 
-### 4. Recognition over Recall (Foundation Rule)
+### 4. Recognition over Recall (Gentle-Vanguard Rule)
 
 ```markdown
 | Check      | Status   | Metric                  |
@@ -107,14 +107,14 @@ Use this structure for all Foundation docs (adapted from native-tools):
 | Validation | ✅ 33/33 | 100% pass rate          |
 ```
 
-### 5. Review Empathy (Foundation Rule)
+### 5. Review Empathy (Gentle-Vanguard Rule)
 
 - Reviewers should NOT need to reconstruct context
 - Each section is self-contained
 - Use checklists for acceptance criteria
 - Link previous/next steps explicitly
 
-## Commands (Foundation)
+## Commands (Gentle-Vanguard)
 
 ```bash
 # Check markdown files changed in current branch
@@ -123,11 +123,11 @@ git diff --name-only -- '*.md'
 # Inspect PR changed-line count for cognitive load
 gh pr view <PR_NUMBER> --json additions,deletions,changedFiles
 
-# Validate doc structure (Foundation audit)
-.\skills\foundation-audit-skill\scripts\audit-sweep.ps1 -Scope standard
+# Validate doc structure (Gentle-Vanguard audit)
+.\skills\gentle-vanguard-audit-skill\scripts\audit-sweep.ps1 -Scope standard
 ```
 
-## Integration with Foundation
+## Integration with Gentle-Vanguard
 
 ### AGENTS.md
 
@@ -136,7 +136,7 @@ gh pr view <PR_NUMBER> --json additions,deletions,changedFiles
 
 ### README.md (main)
 
-- Lead with: "Foundation is a 100% autonomous stack ✅"
+- Lead with: "Gentle-Vanguard is a 100% autonomous stack ✅"
 - Not: "This is a project that..." (burying the lead)
 
 ### PR Template
@@ -147,5 +147,6 @@ gh pr view <PR_NUMBER> --json additions,deletions,changedFiles
 
 ## Reference
 
-- Foundation adaptation: 2026-05-02
+- Gentle-Vanguard adaptation: 2026-05-02
 - Applied to: NORMATIVAS-ORQUESTADOR.md, AGENTS.md, READMEs
+

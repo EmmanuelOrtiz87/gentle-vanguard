@@ -66,7 +66,7 @@ Describe 'Engram Session Persistence Integration Tests' {
             $sessionData = Get-Content -Path $sessionFile.FullName -Raw | ConvertFrom-Json
             $sessionData.status | Should Be 'active'
 
-            $searchOutput = & $script:engram search "Session start: $($sessionData.sessionId)" --project foundation --limit 5 2>&1 | Out-String
+            $searchOutput = & $script:engram search "Session start: $($sessionData.sessionId)" --project gentle-vanguard --limit 5 2>&1 | Out-String
             ($searchOutput -match [regex]::Escape($sessionData.sessionId)) | Should Be $true
         }
 
@@ -74,7 +74,7 @@ Describe 'Engram Session Persistence Integration Tests' {
             $orphanPath = Join-Path $script:sessionDir 'session-2000-01-01-01.json'
             $orphanData = @{
                 sessionId = 'session-2000-01-01-01'
-                project = 'foundation'
+                project = 'gentle-vanguard'
                 mode = 'Manual'
                 startTime = '2000-01-01T00:00:00Z'
                 status = 'active'
@@ -113,7 +113,7 @@ Describe 'Engram Session Persistence Integration Tests' {
             $endedSessionData = Get-Content -Path $activeSession.FullName -Raw | ConvertFrom-Json
             $endedSessionData.status | Should Be 'ended'
 
-            $searchOutput = & $script:engram search "Session closure: $($activeSessionData.sessionId)" --project foundation --limit 5 2>&1 | Out-String
+            $searchOutput = & $script:engram search "Session closure: $($activeSessionData.sessionId)" --project gentle-vanguard --limit 5 2>&1 | Out-String
             ($searchOutput -match [regex]::Escape($activeSessionData.sessionId)) | Should Be $true
         }
     }
@@ -121,8 +121,9 @@ Describe 'Engram Session Persistence Integration Tests' {
     Context 'Post-session Learning Persistence' {
         It 'persists a searchable learning summary in Engram' {
             $output = & $script:postSessionLearning -SessionId $script:learningSessionId -NoExit 2>&1
-            $searchOutput = & $script:engram search $script:learningSessionId --project foundation --limit 5 2>&1 | Out-String
+            $searchOutput = & $script:engram search $script:learningSessionId --project gentle-vanguard --limit 5 2>&1 | Out-String
             ($searchOutput -match [regex]::Escape($script:learningSessionId)) | Should Be $true
         }
     }
 }
+

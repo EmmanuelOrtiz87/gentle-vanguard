@@ -26,9 +26,9 @@ Eliminar ambigüedad sobre qué comando ejecutar en cada situación.
 |---|---|---|
 | `powershell -File scripts/utilities/...` | Falta `-NoProfile -ExecutionPolicy Bypass` | Usa `pwsh -NoProfile -ExecutionPolicy Bypass -File` |
 | `scripts/utilities/session-autostart.cmd` | Falta shell (`cmd /c`) | Usa `cmd /c scripts\utilities\session-autostart.cmd` |
-| `.\scripts\utilities\wf.ps1 -Command "skill"` | Parámetro "skill" no válido | Usa `wf start-session` |
-| `.\scripts\utilities\wf.ps1 skills` | Script no existe | No usar, skill se carga automáticamente |
-| `.\scripts\utilities\wf.ps1 skill load session-workflow-skill` | Sintaxis incorrecta | No existe este comando |
+| `.\scripts\utilities\gv.ps1 -Command "skill"` | Parámetro "skill" no válido | Usa `gv start-session` |
+| `.\scripts\utilities\gv.ps1 skills` | Script no existe | No usar, skill se carga automáticamente |
+| `.\scripts\utilities\gv.ps1 skill load session-workflow-skill` | Sintaxis incorrecta | No existe este comando |
 
 ---
 
@@ -118,7 +118,7 @@ Antes de ejecutar cualquier comando, verifica:
 
 ```powershell
 # 1. ¿Estamos en el directorio correcto?
-Get-Location  # Debe contener "foundation"
+Get-Location  # Debe contener "gentle-vanguard"
 
 # 2. ¿Existen los scripts?
 Test-Path "scripts/utilities/pre-process-input.ps1"
@@ -155,7 +155,7 @@ git status  # No debe dar error
 | `ExecutionPolicy` | Política de ejecución bloqueada | Ejecuta: `Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process` |
 | `Permission denied` | Permisos insuficientes | Ejecuta PowerShell como administrador |
 | `TRIGGER_MATCH_FOUND: False` | Entrada no reconocida | Usa exactamente: `"inicia sesion"` o `"start session"` |
-| `[ERROR] Skills discovery script not found` | Script no existe | No usar `foundation skills`, skill se carga automáticamente |
+| `[ERROR] Skills discovery script not found` | Script no existe | No usar `gv skills`, skill se carga automáticamente |
 | `Cannot validate argument on parameter` | Parámetro inválido | Verifica que uses solo parámetros válidos |
 
 ---

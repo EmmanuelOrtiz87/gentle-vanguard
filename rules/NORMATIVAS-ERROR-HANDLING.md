@@ -8,7 +8,7 @@ Framework: Centralized Error Handling Pattern + OWASP LLM06 (Excessive Agency)
 
 ## 1. PROPOSITO
 
-Define el manejo de errores centralizado para todo el stack Foundation. Aplica a scripts PowerShell, Python, Bash, workflows CI/CD, y agentes AI. Garantiza que los errores se capturen, clasifiquen, registren y escalen de manera consistente.
+Define el manejo de errores centralizado para todo el stack Gentle-Vanguard. Aplica a scripts PowerShell, Python, Bash, workflows CI/CD, y agentes AI. Garantiza que los errores se capturen, clasifiquen, registren y escalen de manera consistente.
 
 ---
 
@@ -64,7 +64,7 @@ catch {
 
 #### Centralized Error Handler
 ```powershell
-function Write-FoundationError {
+function Write-Gentle-VanguardError {
     param(
         [Parameter(Mandatory = $true)]
         [string]$Message,
@@ -112,7 +112,7 @@ class ErrorSeverity(Enum):
     MEDIUM = 1
     LOW = 0
 
-class FoundationError(Exception):
+class Gentle-VanguardError(Exception):
     def __init__(self, message: str, severity: ErrorSeverity, context: Optional[dict] = None):
         self.severity = severity
         self.context = context or {}
@@ -126,7 +126,7 @@ def handle_error(message: str, severity: ErrorSeverity, context: Optional[dict] 
     }
     logging.error(f"[{severity.name}] {message}")
     if should_raise:
-        raise FoundationError(message, severity, context)
+        raise Gentle-VanguardError(message, severity, context)
 ```
 
 ---
@@ -278,3 +278,4 @@ TODO implementación DEBE verificar:
 ---
 
 _Version: 1.0.0 — 2026-05-10 — Status: ACTIVE_
+

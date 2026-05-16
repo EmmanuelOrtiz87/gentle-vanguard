@@ -1,8 +1,8 @@
 ---
 version: 'alpha'
-name: 'Gentleman Foundation'
+name: 'Gentle-Vanguard'
 description:
-  'Design system for foundation: agnostic, minimal, ASCII-only documentation and tooling'
+  'Design system for gentle-vanguard: agnostic, minimal, ASCII-only documentation and tooling'
 colors:
   primary: '#1A1C1E'
   secondary: '#4A5568'
@@ -67,7 +67,7 @@ components:
 
 ## 1. Overview
 
-Gentleman Foundation uses a minimal, agnostic design system focused on readability and utility. The
+Gentle-Vanguard uses a minimal, agnostic design system focused on readability and utility. The
 visual identity prioritizes:
 
 - Monospace fonts for code and technical content
@@ -116,7 +116,7 @@ margins.
 
 ## 5. Elevation & Depth
 
-Foundation uses minimal elevation. Surfaces use background color with subtle borders. No shadows -
+Gentle-Vanguard uses minimal elevation. Surfaces use background color with subtle borders. No shadows -
 keeps the ASCII-aesthetic consistent.
 
 Code blocks use surface color (#F7FAFC) to create visual separation without depth effects.
@@ -157,3 +157,4 @@ sufficient separation.
 - Mix spacing units (stick to 4px base)
 - Add shadows or gradients
 - Use rounded corners greater than 4px
+

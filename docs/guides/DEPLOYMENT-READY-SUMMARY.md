@@ -10,7 +10,7 @@
 
 ### All Systems Go
 
-The Foundation project is **fully optimized and ready for production deployment**.
+The Gentle-Vanguard project is **fully optimized and ready for production deployment**.
 
 ---
 
@@ -261,7 +261,7 @@ Context Compression: ~120ms per 10KB (40% improvement)
 
 ```bash
 git clone <repo-url>
-cd foundation
+cd gentle-vanguard
 ```
 
 ### 2. Install Hooks
@@ -310,3 +310,4 @@ cd foundation
    "completion_price_unit": "0", "completion_price": "0", "total_tokens": 141575, "total_price":
    "0", "currency": "USD", "latency": 44.162, "time_to_first_token": 3.441, "time_to_generate":
    40.721 }
+

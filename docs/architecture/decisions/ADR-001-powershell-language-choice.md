@@ -2,8 +2,8 @@
 
 **Status**: Accepted (Implemented)  
 **Date**: May 2026  
-**Author**: Foundation Security Team  
-**Context**: foundation runs on Windows as primary platform  
+**Author**: Gentle-Vanguard Security Team  
+**Context**: gentle-vanguard runs on Windows as primary platform  
 
 ---
 
@@ -11,7 +11,7 @@
 
 The project needed a scripting language for:
 - Git hooks (pre-commit, pre-push, commit-msg)
-- CLI orchestration (wf.ps1)
+- CLI orchestration (gv.ps1)
 - Build automation
 - Test execution
 - Deployment workflows
@@ -39,7 +39,7 @@ The project needed a scripting language for:
    - Direct access to Windows APIs if ever needed
 
 2. **npm Integration**
-   - foundation uses npm for MCP servers
+   - gentle-vanguard uses npm for MCP servers
    - PowerShell scripts can call `npm` commands directly
    - Natural fit alongside Node.js tools
 
@@ -133,3 +133,4 @@ git status
 
 **Review Date**: Q3 2026  
 **Reviewers**: Security team, DevOps team
+

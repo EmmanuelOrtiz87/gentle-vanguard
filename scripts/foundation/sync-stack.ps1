@@ -1,13 +1,13 @@
 # sync-stack.ps1
-# Synchronize Foundation stack with latest remote release or local updates
-# Useful for updating installed Foundation without re-running the installer
+# Synchronize Gentle-Vanguard stack with latest remote release or local updates
+# Useful for updating installed Gentle-Vanguard without re-running the installer
 
 param(
     [ValidateSet('remote', 'local', 'check')]
     [string]$Source = 'check',
     [switch]$DryRun,
     [switch]$Force,
-    [string]$RemoteUrl = 'https://github.com/EmmanuelOrtiz87/foundation',
+    [string]$RemoteUrl = 'https://github.com/EmmanuelOrtiz87/gentle-vanguard',
     [string]$Branch = 'main'
 )
 
@@ -22,18 +22,18 @@ function Write-OK { param([string]$msg) Write-Host "[OK] $msg" -ForegroundColor 
 function Write-Warn { param([string]$msg) Write-Host "[WARN] $msg" -ForegroundColor Yellow }
 function Write-Err { param([string]$msg) Write-Host "[ERROR] $msg" -ForegroundColor Red }
 
-# Detect Foundation installation location
-$foundationInstall = $null
+# Detect Gentle-Vanguard installation location
+$gentle-vanguardInstall = $null
 $possibleLocations = @(
-    "C:\Program Files\Foundation",
-    "C:\Program Files (x86)\Foundation",
+    "C:\Program Files\Gentle-Vanguard",
+    "C:\Program Files (x86)\Gentle-Vanguard",
     "$script:homePath\.gentleman",
-    "$env:LOCALAPPDATA\Foundation"
+    "$env:LOCALAPPDATA\Gentle-Vanguard"
 )
 
 foreach ($loc in $possibleLocations) {
-    if (Test-Path (Join-Path $loc "Foundation-Launcher.exe")) {
-        $foundationInstall = $loc
+    if (Test-Path (Join-Path $loc "Gentle-Vanguard-Launcher.exe")) {
+        $gentle-vanguardInstall = $loc
         break
     }
 }
@@ -47,9 +47,9 @@ function Get-LocalVersion {
 }
 
 function Get-InstalledVersion {
-    if (-not $foundationInstall) { return 'not-installed' }
+    if (-not $gentle-vanguardInstall) { return 'not-installed' }
     
-    $manifestFile = Join-Path $foundationInstall 'integrity-manifest.json'
+    $manifestFile = Join-Path $gentle-vanguardInstall 'integrity-manifest.json'
     if (Test-Path $manifestFile) {
         $manifest = Get-Content $manifestFile -Raw | ConvertFrom-Json
         return $manifest.version -or 'unknown'
@@ -58,19 +58,19 @@ function Get-InstalledVersion {
 }
 
 function Check-Status {
-    Write-Step "Foundation Stack Status"
+    Write-Step "Gentle-Vanguard Stack Status"
     
     $localVer = Get-LocalVersion
     $installedVer = Get-InstalledVersion
     
     Write-Host "Local Repo Version:       $localVer"
     Write-Host "Installed Version:        $installedVer"
-    Write-Host "Foundation Install Path:  $(if ($foundationInstall) { $foundationInstall } else { 'NOT FOUND' })"
+    Write-Host "Gentle-Vanguard Install Path:  $(if ($gentle-vanguardInstall) { $gentle-vanguardInstall } else { 'NOT FOUND' })"
     
     if ($installedVer -eq 'not-installed') {
-        Write-Warn "Foundation not detected in standard locations"
-        Write-Host "`nTo install Foundation, run:" -ForegroundColor Cyan
-        Write-Host "  .\dist\Foundation-Setup.exe" -ForegroundColor Yellow
+        Write-Warn "Gentle-Vanguard not detected in standard locations"
+        Write-Host "`nTo install Gentle-Vanguard, run:" -ForegroundColor Cyan
+        Write-Host "  .\dist\Gentle-Vanguard-Setup.exe" -ForegroundColor Yellow
         return $false
     }
     
@@ -88,8 +88,8 @@ function Check-Status {
 }
 
 function Sync-LocalUpdate {
-    if (-not $foundationInstall) {
-        Write-Err "Foundation not installed. Run Foundation-Setup.exe first."
+    if (-not $gentle-vanguardInstall) {
+        Write-Err "Gentle-Vanguard not installed. Run Gentle-Vanguard-Setup.exe first."
         return $false
     }
     
@@ -97,11 +97,11 @@ function Sync-LocalUpdate {
     
     $protectedSrc = Join-Path $repoRoot 'build\protected'
     $publicSrc = Join-Path $repoRoot 'build\public'
-    $protectedDst = Join-Path $foundationInstall 'protected'
-    $publicDst = Join-Path $foundationInstall 'public'
+    $protectedDst = Join-Path $gentle-vanguardInstall 'protected'
+    $publicDst = Join-Path $gentle-vanguardInstall 'public'
     
     if (-not (Test-Path $protectedSrc)) {
-        Write-Err "Protected scripts not found. Run 'build\protect-foundation.ps1' first."
+        Write-Err "Protected scripts not found. Run 'build\protect-gentle-vanguard.ps1' first."
         return $false
     }
     
@@ -115,7 +115,7 @@ function Sync-LocalUpdate {
     try {
         # Backup existing installation
         $timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
-        $backupDir = Join-Path $foundationInstall "backup-$timestamp"
+        $backupDir = Join-Path $gentle-vanguardInstall "backup-$timestamp"
         Write-Host "Creating backup at: $backupDir" -ForegroundColor Gray
         
         New-Item -ItemType Directory -Path $backupDir -Force | Out-Null
@@ -138,7 +138,7 @@ function Sync-LocalUpdate {
         # Copy integrity manifest if exists
         $manifestSrc = Join-Path $repoRoot 'build\integrity-manifest.json'
         if (Test-Path $manifestSrc) {
-            Copy-Item $manifestSrc -Destination (Join-Path $foundationInstall 'integrity-manifest.json') -Force
+            Copy-Item $manifestSrc -Destination (Join-Path $gentle-vanguardInstall 'integrity-manifest.json') -Force
             Write-OK "Integrity manifest updated"
         }
         
@@ -147,7 +147,7 @@ function Sync-LocalUpdate {
         Write-Host ""
         Write-Host "Next steps:" -ForegroundColor Cyan
         Write-Host "  1. Restart your terminal or run: refreshenv"
-        Write-Host "  2. Verify with: gf validate"
+        Write-Host "  2. Verify with: gv validate"
         Write-Host "  3. If issues occur, restore backup from: $backupDir"
         
         return $true
@@ -161,7 +161,7 @@ function Sync-LocalUpdate {
 function Sync-RemoteUpdate {
     Write-Warn "Remote sync not yet implemented"
     Write-Host "To use latest remote version:" -ForegroundColor Cyan
-    Write-Host "  1. Download Foundation-Setup.exe from: $RemoteUrl/releases"
+    Write-Host "  1. Download Gentle-Vanguard-Setup.exe from: $RemoteUrl/releases"
     Write-Host "  2. Run the installer (will upgrade or reinstall)"
     Write-Host "  3. Or manually update from repo and run: sync-stack.ps1 -Source local"
     return $false
@@ -170,7 +170,7 @@ function Sync-RemoteUpdate {
 # Main execution
 Write-Host ""
 Write-Host "============================================" -ForegroundColor Cyan
-Write-Host "  Foundation Stack Synchronization" -ForegroundColor Cyan
+Write-Host "  Gentle-Vanguard Stack Synchronization" -ForegroundColor Cyan
 Write-Host "============================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -192,3 +192,5 @@ $result = switch ($Source) {
 
 Write-Host ""
 exit $(if ($result) { 0 } else { 1 })
+
+

@@ -123,7 +123,7 @@ function Invoke-ContextEfficiencyLiveAssist {
     if (-not $needsNudge) { return }
     Write-Host "`n[Context Efficiency] Status: $($metrics.HealthStatus) | adoption: $($metrics.AdoptionPercent)% | avg: $($metrics.AvgPromptChars) chars"
     Write-Host "  Recommendation: $($metrics.Recommendation)" -ForegroundColor Yellow
-    Write-Host "  Run: wf.ps1 compact-start '<objective>'" -ForegroundColor Cyan
+    Write-Host "  Run: gv.ps1 compact-start '<objective>'" -ForegroundColor Cyan
     if ($livePolicy.AutoRunOnStartSessionWhenRed -and $normalized -eq 'start-session' -and ($metrics.HealthStatus -like 'RED*')) {
         $compactScript = Join-Path $global:scriptDir 'compact-start.ps1'
         $marker = Join-Path $global:repoRoot '.session\.compact-marker'
@@ -132,3 +132,4 @@ function Invoke-ContextEfficiencyLiveAssist {
         if (-not $alreadyRun -and (Test-Path $compactScript)) { $autoObjective = if ($Objective) { $Objective } else { "resume work" }; & $compactScript -Objective $autoObjective | Out-Null; if ($LASTEXITCODE -eq 0) { Write-Success 'Auto compact-start completed.' } else { Write-Warning 'Auto compact-start failed.' } }
     }
 }
+

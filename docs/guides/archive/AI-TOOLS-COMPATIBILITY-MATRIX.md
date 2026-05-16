@@ -8,7 +8,7 @@
 
 ## Overview
 
-This document maps compatibility between Foundation and various AI
+This document maps compatibility between Gentle-Vanguard and various AI
 scripts/utilities/plugins to ensure consistent behavior across all integrations.
 
 ---
@@ -366,7 +366,7 @@ MAXIMUM = 99% token usage (use all available)
 #### Standard System Prompt
 
 ```
-You are an AI assistant integrated with Foundation.
+You are an AI assistant integrated with Gentle-Vanguard.
 
 CAPABILITIES:
 - PowerShell scripting and execution
@@ -713,3 +713,4 @@ CONSTRAINTS:
 - Context Pack: `scripts/utilities/context-pack.ps1`
 - Detect IDE Session: `scripts/utilities/detect-ide-session.ps1`
 - Dispatch Agent: `scripts/utilities/dispatch-agent.ps1`
+

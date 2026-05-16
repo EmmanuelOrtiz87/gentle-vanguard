@@ -50,9 +50,9 @@ body:
     id: type
     attributes:
       label: Project Type
-      description: Which part of Foundation?
+      description: Which part of Gentle-Vanguard?
       options:
-        - CLI / wf command
+        - CLI / gv command
         - Templates
         - Skills
         - Documentation
@@ -75,3 +75,4 @@ body:
           required: true
         - label: I've considered backward compatibility
           required: true
+

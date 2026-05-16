@@ -12,7 +12,7 @@ The canonical and complete architecture document is:
 
 - [../reference/SUBAGENT-ARCHITECTURE.md](../reference/SUBAGENT-ARCHITECTURE.md)
 - [README.md](README.md)
-- [../sdd/foundation-sdd.md](../sdd/foundation-sdd.md)
+- [../sdd/gentle-vanguard-sdd.md](../sdd/gentle-vanguard-sdd.md)
 
 ## Notes
 
@@ -20,3 +20,4 @@ The canonical and complete architecture document is:
    `docs/architecture/`.
 2. Do not duplicate long-form architecture content here.
 3. Update references when architecture docs are moved or renamed.
+

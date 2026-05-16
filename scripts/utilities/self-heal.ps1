@@ -209,8 +209,7 @@ description: >
   Trigger: "$($dir.Name)"
 license: Apache-2.0
 metadata:
-  author: foundation
-  version: '1.0'
+  author: gv version: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash
 ---
 
@@ -263,7 +262,7 @@ function Heal-Engram {
     if (-not $found) {
         Add-Issue "engram" "error" "engram.exe not found in expected paths"
         if ($AutoFix) {
-            Write-Warn "Cannot auto-install engram — run 'foundation install-engram' manually"
+            Write-Warn "Cannot auto-install engram — run 'gentle-vanguard install-engram' manually"
         }
         return
     }
@@ -319,3 +318,4 @@ if ($issues.Count -eq 0) {
 }
 
 exit ($issues.Count -gt 0 -and @($issues | Where-Object { $_.severity -eq 'error' }).Count -gt 0)
+

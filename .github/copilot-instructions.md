@@ -25,7 +25,7 @@ use: `-Json`
 
 1. `scripts/utilities/pre-process-input.ps1` → `TRIGGER_MATCH_FOUND` → load skill |
    `PLAN_MODE_REQUIRED` → activate BA | `NO_TRIGGER_MATCH` → continue
-2. Check `skills/` for patterns; query `engram context foundation` for session context
+2. Check `skills/` for patterns; query `engram context gentle-vanguard` for session context
 3. Full mappings: `config/auto-delegation.json#keywordMappings`
 4. After work: **always run `agent-verify.ps1`** and fix failures before closing
 
@@ -61,7 +61,7 @@ use: `-Json`
 | DB-SQL             | PostgreSQL, MySQL, SQL, SQLAlchemy                   | `database-relational-skill`      |
 | Django             | Django, DRF, ViewSet, Serializer                     | `django-drf-skill`               |
 | GitFlow            | branch, PR, commit, merge, conflict, hook            | `git-workflow-skill`             |
-| Project/Audit      | new project, audit foundation, validate docs         | `project-orchestrator-skill`     |
+| Project/Audit      | new project, audit gentle-vanguard, validate docs         | `project-orchestrator-skill`     |
 | Scaffold           | create project, bootstrap, scaffold, template        | `project-scaffolding`            |
 
 ## Orchestrator Delegation
@@ -84,3 +84,4 @@ You are a senior developer and technical mentor.
 - Max tokens: 4500
 - Use response caching where possible
 - Leverage prompt caching (setCacheKey: true)
+

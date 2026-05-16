@@ -1,6 +1,6 @@
 # Troubleshooting Runbook
 
-**Purpose**: Diagnose and resolve common foundation issues  
+**Purpose**: Diagnose and resolve common gentle-vanguard issues  
 **Audience**: Developers, DevOps, Security team  
 **Last Updated**: May 13, 2026
 
@@ -461,7 +461,7 @@ npx --include-workspace-root --workspace $HOME\mcp-workspace --no --offline @mod
 
 ### Problem: "Homologation gate failed"
 
-**Symptom**: `wf.ps1 publish` blocked — "Multi-Repo Homologation Gate failed"
+**Symptom**: `gv.ps1 publish` blocked — "Multi-Repo Homologation Gate failed"
 
 **Root Cause**: Repos are misaligned (VERSION, branches, or tags don't match)
 
@@ -469,18 +469,18 @@ npx --include-workspace-root --workspace $HOME\mcp-workspace --no --offline @mod
 
 ```powershell
 # 1. Run gate manually to see details
-.\scripts\utilities\wf.ps1 release-homologation
+.\scripts\utilities\gv.ps1 release-homologation
 
 # 2. Common issues:
 
 # VERSION mismatch
 cat VERSION
-# foundation VERSION should = foundation-public VERSION
+# gentle-vanguard VERSION should = gentle-vanguard-public VERSION
 
 # 3. Branch alignment
 git branch -v origin/main
 git branch -v origin/develop
-# Both foundation and foundation-public should have same commits
+# Both gentle-vanguard and gentle-vanguard-public should have same commits
 
 # 4. Working tree cleanliness
 git status
@@ -500,17 +500,17 @@ git pull origin main
 git pull origin develop
 
 # 6. Retry gate
-.\scripts\utilities\wf.ps1 release-homologation
+.\scripts\utilities\gv.ps1 release-homologation
 # Should now pass
 
 # 7. Retry publish
-.\scripts\utilities\wf.ps1 publish
+.\scripts\utilities\gv.ps1 publish
 ```
 
 **Emergency: Skip gate (NOT RECOMMENDED)**:
 ```powershell
 # Only for critical hotfixes:
-.\scripts\utilities\wf.ps1 publish -SkipHomologationGate
+.\scripts\utilities\gv.ps1 publish -SkipHomologationGate
 # You must justify this in the release notes
 ```
 
@@ -518,7 +518,7 @@ git pull origin develop
 
 ### Problem: Publish workflow timeout
 
-**Symptom**: `wf.ps1 publish` runs for 30+ minutes then times out
+**Symptom**: `gv.ps1 publish` runs for 30+ minutes then times out
 
 **Root Cause**: Tests or validation taking too long
 
@@ -531,7 +531,7 @@ git pull origin develop
 # 2. Run stages individually:
 
 # Stage 1: Homologation gate
-.\scripts\utilities\wf.ps1 release-homologation
+.\scripts\utilities\gv.ps1 release-homologation
 # How long? Expected: < 1 min
 
 # Stage 2: Tests
@@ -549,7 +549,7 @@ npm test
 # 4. If still timing out:
 # Contact security-team with:
 $start = Get-Date
-.\scripts\utilities\wf.ps1 publish
+.\scripts\utilities\gv.ps1 publish
 $duration = (Get-Date) - $start
 Write-Host "Duration: $($duration.TotalMinutes) minutes"
 ```
@@ -647,3 +647,4 @@ Get-Process | Select-Object -Property Name, CPU, Memory | Sort-Object CPU -Desce
 **Runbook Last Updated**: May 13, 2026  
 **Maintainer**: Security Team  
 **Review Cycle**: Monthly or as issues arise
+

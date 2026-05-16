@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "name": "foundation-security-privacy",
-  "description": "Security and privacy configuration for Foundation orchestrator",
+  "name": "gentle-vanguard-security-privacy",
+  "description": "Security and privacy configuration for Gentle-Vanguard orchestrator",
 
   "security": {
     "enabled": true,
@@ -126,3 +126,4 @@
     "metrics": ["sanitizedCount", "violationsBlocked", "patternsDetected", "auditEntries"]
   }
 }
+

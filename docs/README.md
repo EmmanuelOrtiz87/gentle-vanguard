@@ -1,4 +1,4 @@
-# 🏛️ Foundation — AI Development Stack
+# 🏛️ Gentle-Vanguard — AI Development Stack
 
 <p align="center">
   <img src="https://img.shields.io/badge/Version-2.9.0-brightgreen?style=for-the-badge" alt="Version 2.9.0">
@@ -16,7 +16,7 @@
 
 ---
 
-> 🚀 **What is Foundation?** Not a library. Not a framework. It's a **complete AI operating system for software delivery** — where every agent follows rules, every commit is validated, and every token is accounted for.
+> 🚀 **What is Gentle-Vanguard?** Not a library. Not a framework. It's a **complete AI operating system for software delivery** — where every agent follows rules, every commit is validated, and every token is accounted for.
 
 ---
 
@@ -24,11 +24,11 @@
 
 ```powershell
 # 1️⃣ Clone
-git clone https://github.com/EmmanuelOrtiz87/foundation.git
-cd foundation
+git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
+cd gentle-vanguard
 
 # 2️⃣ Bootstrap (installs hooks, verifies deps, configures your environment)
-.\scripts\utilities\WORKFLOW-ORCHESTRATION\foundation.ps1 start-session
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\gentle-vanguard.ps1 start-session
 
 # 3️⃣ Start working — tell the AI what to build
 ```
@@ -43,26 +43,26 @@ cd foundation
 
 | What | How | Guardrails |
 |------|-----|------------|
-| **Session tracking** | Auto-starts on `foundation.ps1 start-session` | Logs every dispatch, token, and event |
+| **Session tracking** | Auto-starts on `gentle-vanguard.ps1 start-session` | Logs every dispatch, token, and event |
 | **Trigger routing** | `pre-process-input.ps1` parses your input → dispatches the right agent + skill | Falls back to BA if confidence < 60% |
 | **Pre-commit validation** | Lefthook runs 7D checks before every `git commit` | Blocks on secrets, lint errors, SDD violations |
 | **Token budget guard** | 30K tokens/day cap with 70% soft / 90% hard thresholds | Agents cannot exceed budget |
 | **Engram memory** | Saves observations across sessions automatically | Retrievable via `mem_search` |
 | **Telemetry + event bus** | 10 standard events with governance gate + distributed tracing | Audit trail for every action |
-| **Sync-drift detection** | `foundation sync-drift` detects workspace inconsistencies | Reports before release |
+| **Sync-drift detection** | `gv sync-drift` detects workspace inconsistencies | Reports before release |
 | **CI/CD pipeline** | 15 GitHub Actions workflows run on every push | Quality gate, PSScriptAnalyzer, OWASP, SDD gate |
 
 ### 🔧 Manual (you decide when)
 
 | What | Command | When to Use |
 |------|---------|-------------|
-| Start a session | `foundation start-session` | Beginning of any work block |
-| Request an agent | `foundation dispatch DEV,QA "add tests for auth module"` | Need specialized AI assistance |
-| Full quality gate | `foundation judgment-day` | Before any release or major merge |
-| Generate dashboard | `foundation dashboard` | Weekly review, exec reporting |
-| Adversarial review | `foundation review --all` | Before shipping critical changes |
-| SLO benchmark | `foundation benchmark` | Performance regression check |
-| Version info | `foundation version` | Check stack health and skills count |
+| Start a session | `gv start-session` | Beginning of any work block |
+| Request an agent | `gv dispatch DEV,QA "add tests for auth module"` | Need specialized AI assistance |
+| Full quality gate | `gv judgment-day` | Before any release or major merge |
+| Generate dashboard | `gv dashboard` | Weekly review, exec reporting |
+| Adversarial review | `gv review --all` | Before shipping critical changes |
+| SLO benchmark | `gv benchmark` | Performance regression check |
+| Version info | `gv version` | Check stack health and skills count |
 
 ---
 
@@ -85,7 +85,7 @@ cd foundation
 ┌──────────────────────────────▼──────────────────────────────────┐
 │                    ⚙️ ORCHESTRATION LAYER                        │
 │  ┌──────────────────────────────────────────────────────────┐   │
-│  │  wf.ps1 CLI (40+ commands)                              │   │
+│  │  gv.ps1 CLI (40+ commands)                              │   │
 │  │  pre-process-input.ps1 (trigger detection + routing)     │   │
 │  │  session-autostart.cmd (platform bootstrap)              │   │
 │  │  Artifact naming · File locking · Concurrency limits     │   │
@@ -163,7 +163,7 @@ cd foundation
 | **GitFlow Commit** | `GITFLOW-COMMIT` | 0.1 | Conventional commit validation | Critical |
 | **GitFlow Conflict** | `GITFLOW-CONFLICT` | 0.1 | Merge conflict resolution | Critical |
 
-> 💡 **How it works:** You don't pick agents. The orchestrator detects intent from your input and routes to the right agent + skill automatically. Or use `wf dispatch BA,DEV "..."` for explicit delegation.
+> 💡 **How it works:** You don't pick agents. The orchestrator detects intent from your input and routes to the right agent + skill automatically. Or use `gv dispatch BA,DEV "..."` for explicit delegation.
 
 ---
 
@@ -195,17 +195,17 @@ flowchart TD
 
 | Scenario | What Happens | Time Saved |
 |----------|-------------|------------|
-| **Build a REST API** | `foundation dispatch SAD,DEV "Go REST API with auth"` → SAD designs contract + DEV implements with `golang-api-skill` | ~4 hrs |
-| **Add auth to a React app** | `foundation dispatch DEV "add JWT auth to React"` → DEV loads `react-19-skill` + `security-skill`, implements login flow | ~3 hrs |
-| **Release a new version** | `foundation judgment-day` → OPS + GOV audit all gates → RELEASE bumps version → CI publishes | ~1 hr |
-| **Run a premortem** | `foundation dispatch PREMORTEM "stress-test our launch plan"` → generates failure scenarios + mitigations | ~30 min |
-| **Weekly audit** | `foundation audit` → full governance sweep with drift detection + context pack | ~5 min |
+| **Build a REST API** | `gv dispatch SAD,DEV "Go REST API with auth"` → SAD designs contract + DEV implements with `golang-api-skill` | ~4 hrs |
+| **Add auth to a React app** | `gv dispatch DEV "add JWT auth to React"` → DEV loads `react-19-skill` + `security-skill`, implements login flow | ~3 hrs |
+| **Release a new version** | `gv judgment-day` → OPS + GOV audit all gates → RELEASE bumps version → CI publishes | ~1 hr |
+| **Run a premortem** | `gv dispatch PREMORTEM "stress-test our launch plan"` → generates failure scenarios + mitigations | ~30 min |
+| **Weekly audit** | `gentle-vanguard audit` → full governance sweep with drift detection + context pack | ~5 min |
 
 ---
 
 ## 📊 Dashboard Preview
 
-Run `foundation dashboard` to generate `reports/dashboard.html` — a full HTML metrics dashboard:
+Run `gv dashboard` to generate `reports/dashboard.html` — a full HTML metrics dashboard:
 
 | Section | What You See |
 |---------|-------------|
@@ -234,7 +234,7 @@ Run `foundation dashboard` to generate `reports/dashboard.html` — a full HTML 
 | **Codex** | Solo-agent | ❌ Limited | Narrow scope |
 | **Antigravity** | Solo-agent + Mission Control | ❌ Experimental | Not production-ready |
 
-> All integrations are **local-first**. Foundation never requires an external API key unless you explicitly enable cloud features.
+> All integrations are **local-first**. Gentle-Vanguard never requires an external API key unless you explicitly enable cloud features.
 
 ---
 
@@ -250,7 +250,7 @@ Run `foundation dashboard` to generate `reports/dashboard.html` — a full HTML 
 | `config/testing-policy.json` | Testing standards and coverage requirements |
 | `.lefthook.yml` | Pre-commit, pre-push, commit-msg hooks (3 commands, 4 scripts) |
 | `.github/workflows/` | 15 CI workflows — quality gate, lint, security, SDD, release, sync |
-| `scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1` | Main CLI entry point (40+ commands) |
+| `scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1` | Main CLI entry point (40+ commands) |
 | `scripts/utilities/pre-process-input.ps1` | Trigger detection + agent routing engine |
 
 ### Environment Variables
@@ -262,11 +262,11 @@ export OPENAI_API_KEY="sk-..."            # OpenAI API key
 export GEMINI_API_KEY="..."               # Gemini API key
 
 # Project paths — auto-detected, override if needed
-export FOUNDATION_ROOT="/path/to/foundation"
-export FOUNDATION_USERNAME="your-name"    # Multi-user artifact naming
+export GENTLE_VANGUARD_ROOT="/path/to/gentle-vanguard"
+export GENTLE_VANGUARD_USERNAME="your-name"    # Multi-user artifact naming
 ```
 
-### Project Config (`.foundation`)
+### Project Config (`.gentle-vanguard`)
 
 ```json
 {
@@ -310,7 +310,7 @@ export FOUNDATION_USERNAME="your-name"    # Multi-user artifact naming
 autonomous-validation.yml    📋 SDD + quality gates
 dashboard-auto-refresh.yml   📊 Daily dashboard rebuild
 format-check.yml             ✨ Prettier formatting
-foundation-quality-gate.yml  ✅ Main quality gate
+gentle-vanguard-quality-gate.yml  ✅ Main quality gate
 gitleaks.yml                 🔒 Secret detection
 labeler.yml                  🏷️ PR labeling
 monthly-management-report.yml📈 Executive reporting
@@ -338,10 +338,10 @@ workflow-lint.yml            ⚙️ Workflow integrity
 | **Security** | `security-skill`, `security-pentester`, `gitleaks` |
 | **DevOps** | `docker-devops-skill`, `kubernetes-deployment`, `terraform-infrastructure`, `observability-skill` |
 | **Mobile** | `android-kotlin-skill`, `android-jetpack-compose-skill`, `ios-swiftui-patterns-skill` |
-| **Governance** | `foundation-audit-skill`, `foundation-manager-skill`, `judgment-day`, `script-governance-skill` |
+| **Governance** | `gentle-vanguard-audit-skill`, `gentle-vanguard-manager-skill`, `judgment-day`, `script-governance-skill` |
 | **Business** | `marketing-content-writer`, `sales-account-executive`, `finance-financial-analyst`, `hr-talent-acquisition`, `legal-compliance-officer`, `business-telemetry-skill` |
 
-> Skills load **zero memory** until triggered by keyword. Run `foundation skills` to see the full registry.
+> Skills load **zero memory** until triggered by keyword. Run `gv skills` to see the full registry.
 
 ---
 
@@ -381,10 +381,10 @@ workflow-lint.yml            ⚙️ Workflow integrity
 See [CONTRIBUTING.md](CONTRIBUTING.md) for full guidelines.
 
 ```bash
-git clone https://github.com/EmmanuelOrtiz87/foundation.git
-cd foundation
-foundation start-session    # Your first session
-foundation health           # Verify everything works
+git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
+cd gentle-vanguard
+gv start-session    # Your first session
+gv health           # Verify everything works
 ```
 
 ---
@@ -397,17 +397,18 @@ MIT License — see [LICENSE](../LICENSE) for details.
 
 ## 🆘 Support
 
-- **Issues**: [GitHub Issues](https://github.com/EmmanuelOrtiz87/foundation/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/EmmanuelOrtiz87/foundation/discussions)
+- **Issues**: [GitHub Issues](https://github.com/EmmanuelOrtiz87/gentle-vanguard/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/EmmanuelOrtiz87/gentle-vanguard/discussions)
 - **Docs**: Start at [docs/](.)
 
 ---
 
 <p align="center">
-  <b>🏛️ Foundation v2.9.0 — Where governance, automation, and AI converge</b><br>
+  <b>🏛️ Gentle-Vanguard v2.9.0 — Where governance, automation, and AI converge</b><br>
   <i>29 Agents · 132 Skills · 100% Local-First · Cross-Platform</i>
 </p>
 
 <p align="center">
-  <code>git clone https://github.com/EmmanuelOrtiz87/foundation.git && cd foundation && wf start-session</code>
+  <code>git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git && cd gentle-vanguard && gv start-session</code>
 </p>
+

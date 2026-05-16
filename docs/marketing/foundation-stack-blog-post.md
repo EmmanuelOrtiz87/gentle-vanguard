@@ -1,4 +1,4 @@
-# 🏛️ Foundation: Mi AI Development Workspace
+# 🏛️ Gentle-Vanguard: Mi AI Development Workspace
 
 <p align="center">
   <b>🌐 Cómo optimizar tu desarrollo con AI assistants usando un workspace agnóstico</b>
@@ -18,14 +18,14 @@ Cada día, más equipos usan AI assistants como **OpenCode, Claude, Cursor o Git
 | ❌ Informes scattered          | No hay visión unificada         |
 | ❌ Sin gobernanza              | Riesgos de seguridad y calidad  |
 
-> **Foundation** resuelve esto.
+> **Gentle-Vanguard** resuelve esto.
 
 ---
 
-## 🤔 ¿Qué es Foundation?
+## 🤔 ¿Qué es Gentle-Vanguard?
 
 ```
-            🏛️ FOUNDATION v2.8.0
+            🏛️ GENTLE_VANGUARD v2.8.0
       AI Development Workspace
 
    🎮 Session Manager    🚀 Auto-Delegation    📈 Reporting
@@ -56,7 +56,7 @@ Tracking automático de:
 El orquestador detecta qué necesitas y delega al skill/subagente correcto:
 
 ```
-"génerame un informe"        → 📈 REPORT agent + wf-report.ps1
+"génerame un informe"        → 📈 REPORT agent + gv-report.ps1
 "implementa login"              → 🛠️ DEV agent + implementation skill
 "audita seguridad"             → 🔒 GOV agent + judgment-day
 ```
@@ -67,9 +67,9 @@ El orquestador detecta qué necesitas y delega al skill/subagente correcto:
 
 ```powershell
 # Informes desde CLI:
-.\scripts\utilities\wf-report.ps1 -Type sessions -Period 7days
-.\scripts\utilities\wf-report.ps1 -Type executive
-.\scripts\utilities\wf-report.ps1 -Type costs
+.\scripts\utilities\gv-report.ps1 -Type sessions -Period 7days
+.\scripts\utilities\gv-report.ps1 -Type executive
+.\scripts\utilities\gv-report.ps1 -Type costs
 ```
 
 O simplemente:
@@ -102,7 +102,7 @@ Control de contexto:
 
 ## 🌐 ¿Por qué agnóstico?
 
-Foundation **NO depende de un AI específico**:
+Gentle-Vanguard **NO depende de un AI específico**:
 
 | AI Assistant          | Compatible |
 | --------------------- | ---------- |
@@ -120,7 +120,7 @@ El workspace es **agnóstico** - trabaja con la herramienta que vos elijas.
 
 ```powershell
 # Clone
-git clone https://github.com/EmmanuelOrtiz87/foundation-public.git
+git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard-public.git
 
 # Setup
 .\scripts\utilities\session-autostart.cmd
@@ -139,13 +139,13 @@ git clone https://github.com/EmmanuelOrtiz87/foundation-public.git
 | 3. [ ] Dashboard UI                     | 📋 Pendiente |
 | 4. [ ] Plugin marketplace               | 📋 Pendiente |
 
-Ver: `reports/RECOMENDACIONES-FOUNDATION-PRODUCTO.md`
+Ver: `reports/RECOMENDACIONES-GENTLE_VANGUARD-PRODUCTO.md`
 
 ---
 
 ## 🎓 Conclusión
 
-Foundation transforma tu AI assistant en un **sistema de desarrollo completo** con:
+Gentle-Vanguard transforma tu AI assistant en un **sistema de desarrollo completo** con:
 
 - 📊 Métricas reales
 - 🚀 Auto-delegación
@@ -161,4 +161,5 @@ Foundation transforma tu AI assistant en un **sistema de desarrollo completo** c
   <i>* Open source • Mejorando continuamente*</i>
 </p>
 
-`#FoundationStack` `#AIDevelopment` `#DevTools`
+`#Gentle-VanguardStack` `#AIDevelopment` `#DevTools`
+

@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-    Foundation SIEM Audit Bridge — Routes audit events to SIEM endpoints
+    Gentle-Vanguard SIEM Audit Bridge — Routes audit events to SIEM endpoints
     
 .DESCRIPTION
     Reads JSONL audit logs and forwards to configured SIEM (Splunk, ELK, Datadog,
@@ -90,7 +90,7 @@ function Save-Checkpoint {
 
 # ── Normalize audit entry to SIEM event ───────────────────────────────────────
 function ConvertTo-SiemEvent {
-    param($entry, [string]$source = 'foundation-secret-vault')
+    param($entry, [string]$source = 'gentle-vanguard-secret-vault')
     return [ordered]@{
         timestamp   = $entry.timestamp
         source      = $source
@@ -109,7 +109,7 @@ function ConvertTo-SiemEvent {
             'WARNING' { 'WARN' }
             default   { 'INFO' }
         }
-        tags = @('foundation', 'secrets', 'compliance', 'audit')
+        tags = @('gentle-vanguard', 'secrets', 'compliance', 'audit')
     }
 }
 
@@ -133,7 +133,7 @@ function Send-ToSiem {
                         'Authorization' = "Splunk $($siemConfig.token)"
                         'Content-Type'  = 'application/json'
                     }
-                    $body = @{ event = $siemEvent; sourcetype = 'foundation:audit' } | ConvertTo-Json -Depth 8
+                    $body = @{ event = $siemEvent; sourcetype = 'gentle-vanguard:audit' } | ConvertTo-Json -Depth 8
                     Invoke-RestMethod -Uri "$endpoint/services/collector/event" `
                         -Method POST -Headers $headers -Body $body -TimeoutSec 10 | Out-Null
                 }
@@ -143,8 +143,8 @@ function Send-ToSiem {
                         'Content-Type' = 'application/json'
                     }
                     $body = @{
-                        ddsource  = 'foundation'
-                        ddtags    = 'env:production,service:foundation-vault'
+                        ddsource  = 'gentle-vanguard'
+                        ddtags    = 'env:production,service:gentle-vanguard-vault'
                         hostname  = $siemEvent.event.machine
                         message   = $siemEvent | ConvertTo-Json -Compress -Depth 6
                     } | ConvertTo-Json -Depth 8
@@ -328,7 +328,7 @@ function Invoke-Full {
 
 function Invoke-Status {
     Write-Host ""
-    Write-Host "  Foundation SIEM Audit Bridge v$BRIDGE_VERSION" -ForegroundColor Cyan
+    Write-Host "  Gentle-Vanguard SIEM Audit Bridge v$BRIDGE_VERSION" -ForegroundColor Cyan
     Write-Host "  ──────────────────────────────────────────" -ForegroundColor Gray
     
     $checkpoint = Get-Checkpoint
@@ -373,7 +373,7 @@ function Invoke-Test {
         actor     = $env:USERNAME
         machine   = $env:COMPUTERNAME
         pid       = $PID
-    }) 'foundation-siem-test'
+    }) 'gentle-vanguard-siem-test'
     
     $siemConfig = Get-SiemConfig
     $ok = Send-ToSiem $testEvent $siemConfig
@@ -397,3 +397,4 @@ switch ($Mode) {
     'status' { Invoke-Status }
     'test'   { Invoke-Test }
 }
+

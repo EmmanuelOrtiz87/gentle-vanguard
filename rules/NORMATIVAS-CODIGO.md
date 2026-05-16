@@ -7,7 +7,7 @@ Last updated: 2026-05-10
 
 ## 1. PROPOSITO
 
-Define los estándares de código para todo el stack Foundation. Aplica a scripts (PowerShell, Python, Bash), configuraciones JSON/YAML, y cualquier código generado por agentes.
+Define los estándares de código para todo el stack Gentle-Vanguard. Aplica a scripts (PowerShell, Python, Bash), configuraciones JSON/YAML, y cualquier código generado por agentes.
 
 ---
 
@@ -45,7 +45,7 @@ scripts/
   utilities/    # Herramientas reutilizables
   validation/   # Validación y gates
   monitoring/   # Monitoreo y telemetría
-  foundation/   # Core del framework
+  gentle-vanguard/   # Core del framework
   hooks/        # Git hooks
   testing/      # Testing utilities
   sre/          # Site Reliability Engineering (error budgets, SLOs)
@@ -75,7 +75,7 @@ config/
 | PowerShell modules | PascalCase | `AutoDelegationRouter.psm1` |
 | Python files | snake_case | `validate_config.py` |
 | JSON configs | kebab-case | `auto-delegation.json` |
-| YAML workflows | kebab-case | `foundation-quality-gate.yml` |
+| YAML workflows | kebab-case | `gentle-vanguard-quality-gate.yml` |
 | Markdown docs | UPPERCASE or Title | `NORMATIVAS-CODIGO.md`, `Development-Guide.md` |
 | Test files | `<name>.tests.ps1` | `auth.tests.ps1` |
 
@@ -142,7 +142,7 @@ function Invoke-TaskName {
 
 ### 4.3 Forbidden PowerShell Patterns
 
-- `Write-Host` in reusable functions/libraries (use `Write-Output` or `Write-Verbose`); OK in CLI scripts, hooks, and `wf` commands for direct user output
+- `Write-Host` in reusable functions/libraries (use `Write-Output` or `Write-Verbose`); OK in CLI scripts, hooks, and `gv` commands for direct user output
 - Empty `catch { }` blocks
 - Hardcoded absolute paths
 - `Select-String` (use `grep` tool via agent, or direct `-match`)
@@ -234,7 +234,7 @@ on: ...
 |-------|------|-------------------|
 | Auto-fix | `scripts/hooks/orchestrate-auto-fix.ps1` | Fix + warn |
 | Test suite | `scripts/run-tests-simple.ps1` | Block push |
-| Audit sweep | `skills/foundation-audit-skill/scripts/audit-sweep.ps1` | Block push |
+| Audit sweep | `skills/gentle-vanguard-audit-skill/scripts/audit-sweep.ps1` | Block push |
 
 ### 8.3 CI/CD
 
@@ -268,3 +268,4 @@ on: ...
 ---
 
 _Version: 1.0.0 — 2026-05-10 — Status: ACTIVE_
+

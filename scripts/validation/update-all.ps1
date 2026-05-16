@@ -1,9 +1,9 @@
 # update-all.ps1
-# Update Gentleman Foundation and all related tools
+# Update Gentle-Vanguard and all related tools
 
 param(
     [switch]$All,
-    [switch]$Foundation,
+    [switch]$Gentle-Vanguard,
     [switch]$Skills,
     [switch]$Tools,
     [switch]$DryRun,
@@ -65,7 +65,7 @@ function Update-Skills {
         return $false
     }
     
-    $syncScript = Join-Path $repoRoot "scripts\foundation\sync-skills.ps1"
+    $syncScript = Join-Path $repoRoot "scripts\gentle-vanguard\sync-skills.ps1"
     if (Test-Path $syncScript) {
         if ($DryRun) {
             Write-Host "[DRY-RUN] Would sync skills from: $skillsSource" -ForegroundColor Cyan
@@ -80,14 +80,14 @@ function Update-Skills {
     }
 }
 
-function Update-Foundation {
-    Write-Step "Updating Foundation"
+function Update-Gentle-Vanguard {
+    Write-Step "Updating Gentle-Vanguard"
     
     if (-not $Source) {
         $possibleSources = @(
             $repoRoot,
-            ".\foundation",
-            ".\foundation"
+            ".\gentle-vanguard",
+            ".\gentle-vanguard"
         )
         
         foreach ($src in $possibleSources) {
@@ -99,7 +99,7 @@ function Update-Foundation {
     }
     
     if (-not $Source -or -not (Test-Path $Source)) {
-        Write-Err "Foundation source not found. Specify with -Source parameter."
+        Write-Err "Gentle-Vanguard source not found. Specify with -Source parameter."
         return $false
     }
     
@@ -112,26 +112,26 @@ function Update-Foundation {
         $remote = git rev-parse "origin/$(git rev-parse --abbrev-ref HEAD)"
         
         if ($local -eq $remote) {
-            Write-Skipped "Foundation already up to date"
+            Write-Skipped "Gentle-Vanguard already up to date"
             return $true
         }
         
         if ($DryRun) {
-            Write-Host "[DRY-RUN] Would update foundation" -ForegroundColor Cyan
+            Write-Host "[DRY-RUN] Would update gentle-vanguard" -ForegroundColor Cyan
             return $true
         }
         
         Write-Host "Pulling latest changes..." -ForegroundColor Gray
         git pull origin (git rev-parse --abbrev-ref HEAD)
         
-        $versionFile = Join-Path $GFRoot "foundation.version"
+        $versionFile = Join-Path $GFRoot "gentle-vanguard.version"
         if (Test-Path $versionFile) {
             $vf = Get-Content $versionFile | ConvertFrom-Json
             $vf.version = "updated-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
             $vf | ConvertTo-Json | Set-Content -Path $versionFile
         }
         
-        Write-Success "Foundation updated to latest"
+        Write-Success "Gentle-Vanguard updated to latest"
         return $true
     } catch {
         Write-Err "Failed to update: $($_.Exception.Message)"
@@ -184,18 +184,18 @@ function Update-Tools {
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Green
-Write-Host "  Gentleman Foundation - Update All" -ForegroundColor Green
+Write-Host "  Gentle-Vanguard - Update All" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green
 Write-Host ""
 
-if (-not $All -and -not $Foundation -and -not $Skills -and -not $Tools) {
+if (-not $All -and -not $Gentle-Vanguard -and -not $Skills -and -not $Tools) {
     $All = $true
 }
 
 $success = $true
 
-if ($All -or $Foundation) {
-    $result = Update-Foundation
+if ($All -or $Gentle-Vanguard) {
+    $result = Update-Gentle-Vanguard
     if (-not $result) { $success = $false }
 }
 
@@ -215,9 +215,11 @@ Write-Host ""
 if ($success) {
     Write-Success "All updates completed successfully!"
     Write-Host ""
-    Write-Host "Restart terminal or run 'gf validate' to verify." -ForegroundColor Gray
+    Write-Host "Restart terminal or run 'gv validate' to verify." -ForegroundColor Gray
 } else {
     Write-Err "Some updates failed. Check logs above."
 }
 
 exit $(if ($success) { 0 } else { 1 })
+
+

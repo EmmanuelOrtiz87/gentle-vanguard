@@ -2,14 +2,14 @@
 
 # FF-011: Extensibility contract for third-party plugins
 
-> **Status**: IMPLEMENTED — Foundation v2.9.0  
+> **Status**: IMPLEMENTED — Gentle-Vanguard v2.9.0  
 > **Core scripts**: `scripts/utilities/SKILLS-TOOLS/plugins-discovery.ps1`, `plugin-loader.ps1`  
 > **Manifest schema**: `config/plugin-manifest-schema.json`  
 > **CI validation**: `.github/workflows/autonomous-validation.yml`
 
 ## Overview
 
-Standardized interface for third-party plugins with clear contract. Plugins are auto-discovered from `plugins/`, `~/.foundation/plugins/`, and custom paths configured in `config/plugins.json`. Each plugin provides a `plugin.json` manifest and one or more executable scripts.
+Standardized interface for third-party plugins with clear contract. Plugins are auto-discovered from `plugins/`, `~/.gentle-vanguard/plugins/`, and custom paths configured in `config/plugins.json`. Each plugin provides a `plugin.json` manifest and one or more executable scripts.
 
 ## Plugin Interface
 
@@ -36,7 +36,7 @@ function Get-PluginMetadata {
         version = "1.0.0"
         author = "Author"
         description = "Plugin description"
-        minFoundationVersion = "2.6.0"
+        minGentle-VanguardVersion = "2.6.0"
         provides = @("capability1", "capability2")
     }
 }
@@ -47,7 +47,7 @@ function Get-PluginMetadata {
 Plugins discovered from:
 
 1. `plugins/` directory (built-in)
-2. `C:\Users\$env:USERNAME\.foundation\plugins\` (user)
+2. `C:\Users\$env:USERNAME\.gentle-vanguard\plugins\` (user)
 3. Configured paths in `config/plugins.json`
 
 ## Plugin Loading
@@ -90,7 +90,7 @@ plugins/
 
 - Hooks: Plugins can register git hooks
 - Skills: Plugins can provide custom skills
-- Commands: Plugins can add wf.ps1 subcommands
+- Commands: Plugins can add gv.ps1 subcommands
 - Tools: Plugins can provide new tool integrations
 
 ## Lifecycle
@@ -126,7 +126,7 @@ plugins/
 Initialize-Plugins
 
 # Invoke a plugin command
-Invoke-Plugin -PluginName "example-hello-world" -Command "hello" -Parameters @{ Name = "Foundation" }
+Invoke-Plugin -PluginName "example-hello-world" -Command "hello" -Parameters @{ Name = "Gentle-Vanguard" }
 ```
 
 ### CI Integration
@@ -144,3 +144,4 @@ plugins/
 ```
 
 Built-in example: `plugins/example-hello-world/plugin.json` + `hello-world.ps1`
+

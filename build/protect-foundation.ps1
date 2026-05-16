@@ -1,7 +1,7 @@
-# protect-foundation.ps1
+# protect-gentle-vanguard.ps1
 # Encrypts core scripts with AES-256, generates loader.ps1, and prepares
 # the build/protected directory for NSIS packaging.
-# Usage: pwsh -File build/protect-foundation.ps1 [-KeyPath keys/master.key] [-DryRun]
+# Usage: pwsh -File build/protect-gentle-vanguard.ps1 [-KeyPath keys/master.key] [-DryRun]
 
 param(
     [string]$KeyPath = '',
@@ -12,8 +12,8 @@ param(
 $ErrorActionPreference = 'Stop'
 
 #region RepoRoot Resolution
-if ($env:FOUNDATION_BASE_DIR) {
-    $repoRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GENTLE_VANGUARD_BASE_DIR) {
+    $repoRoot = $env:GENTLE_VANGUARD_BASE_DIR
 } else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -69,7 +69,7 @@ $includeDirs = @(
     'scripts\adaptive'
     'scripts\common'
     'scripts\diagnostics'
-    'scripts\foundation'
+    'scripts\gentle-vanguard'
     'scripts\git-hooks'
     'scripts\hooks'
     'scripts\monitoring'
@@ -195,14 +195,14 @@ Write-OK "Copied $copied skill stubs"
 #region Step 5: Copy launcher
 Write-Step "Step 5: Preparing launcher"
 
-$launcherSource = Join-Path $buildDir 'Foundation-Launcher.ps1'
+$launcherSource = Join-Path $buildDir 'Gentle-Vanguard-Launcher.ps1'
 if (Test-Path $launcherSource) {
     if (-not $DryRun) {
         Copy-Item $launcherSource (Join-Path $buildDir 'loader.ps1') -Force
         Write-OK "Launcher copied to loader.ps1"
     }
 } else {
-    Write-Warn "Foundation-Launcher.ps1 not found in build/"
+    Write-Warn "Gentle-Vanguard-Launcher.ps1 not found in build/"
 }
 #endregion
 

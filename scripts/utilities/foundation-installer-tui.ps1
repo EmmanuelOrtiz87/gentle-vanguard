@@ -1,21 +1,21 @@
-# foundation-installer-tui.ps1
-# FF-018: Interactive TUI Installer for Foundation
+# gentle-vanguard-installer-tui.ps1
+# FF-018: Interactive TUI Installer for Gentle-Vanguard
 # Terminal-Based Setup Wizard with Logo, Help, and Quit support
 
 param(
-    [string]$InstallPath = "$(if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME })\foundation",
+    [string]$InstallPath = "$(if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME })\gentle-vanguard",
     [switch]$Silent,
     [switch]$Force,
     [switch]$Uninstall,
-    [string]$RepoURL = "https://github.com/EmmanuelOrtiz87/foundation.git"
+    [string]$RepoURL = "https://github.com/EmmanuelOrtiz87/gentle-vanguard.git"
 )
 
 $ErrorActionPreference = "Continue"
 $script:homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
-$host.UI.RawUI.WindowTitle = "Foundation TUI Installer - Enhanced"
+$host.UI.RawUI.WindowTitle = "Gentle-Vanguard TUI Installer - Enhanced"
 
 # Directories
-$logDir = Join-Path $env:TEMP "foundation-installer-logs"
+$logDir = Join-Path $env:TEMP "gentle-vanguard-installer-logs"
 if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
 $logFile = Join-Path $logDir "install-$(Get-Date -Format 'yyyyMMdd-HHmmss').log"
 
@@ -34,7 +34,7 @@ function Write-Log {
 
 function Write-Step {
     param([int]$Step, [int]$Total, [string]$Message)
-    if ($env:FOUNDATION_VERBOSE -ne "1") { return }
+    if ($env:GENTLE_VANGUARD_VERBOSE -ne "1") { return }
     Write-Host "[$Step/$Total] $Message" -ForegroundColor $colorMenu
     Write-Log "Step $Step/$Total`: $Message"
 }
@@ -82,7 +82,7 @@ function Show-Help {
     Write-Host "  - Enter accepts the default (>) option" -ForegroundColor Gray
     Write-Host ""
     Write-Host "  INSTALLATION PATHS" -ForegroundColor $colorHighlight
-    Write-Host "  - Default: $script:homePath\foundation" -ForegroundColor Gray
+    Write-Host "  - Default: $script:homePath\gentle-vanguard" -ForegroundColor Gray
     Write-Host "  - Change it in Step 2 of installer" -ForegroundColor Gray
     Write-Host ""
     Write-Host "  LOGS" -ForegroundColor $colorHighlight
@@ -120,7 +120,7 @@ function Read-Choice {
                 $result = $num - 1
             }
         } elseif ($input -match '^[Qq]$') {
-            Write-Host "  [!] Quitting Foundation TUI..." -ForegroundColor Yellow
+            Write-Host "  [!] Quitting Gentle-Vanguard TUI..." -ForegroundColor Yellow
             exit 0
         } elseif ($input -match '^[Hh]$') {
             Show-Help
@@ -246,8 +246,8 @@ function Configure-Settings {
     return $settings
 }
 
-function Install-Foundation {
-    Write-Step 5 6 "Installing Foundation..."
+function Install-Gentle-Vanguard {
+    Write-Step 5 6 "Installing Gentle-Vanguard..."
     Write-Log "Starting installation to: $InstallPath"
 
     # Create directory
@@ -302,14 +302,14 @@ function Install-Foundation {
             if ($installEngram -eq 0) {
                 try {
                     Write-Log "Installing Engram via go install..." -Level "INFO"
-                    & go install github.com/foundation/engram/cmd/engram@latest 2>&1 | ForEach-Object { Write-Log $_ }
+                    & go install github.com/gentle-vanguard/engram/cmd/engram@latest 2>&1 | ForEach-Object { Write-Log $_ }
                     Write-Log "Engram installed. Configure with: engram setup <agent>" -Level "SUCCESS"
                 } catch {
                     Write-Log "Engram installation failed: $($_.Exception.Message)" -Level "WARN"
                 }
             }
         } else {
-            Write-Log "Engram requires Go. Install Go first then run: go install github.com/foundation/engram/cmd/engram@latest" -Level "INFO"
+            Write-Log "Engram requires Go. Install Go first then run: go install github.com/gentle-vanguard/engram/cmd/engram@latest" -Level "INFO"
         }
     } else {
         Write-Log "Engram already installed" -Level "SUCCESS"
@@ -317,13 +317,13 @@ function Install-Foundation {
 
     # Run post-install verification
     Write-Log "Running post-install verification..." -Level "INFO"
-    $wfScript = Join-Path $InstallPath "scripts\utilities\wf.ps1"
+    $wfScript = Join-Path $InstallPath "scripts\utilities\gv.ps1"
     if (Test-Path $wfScript) {
         & $wfScript health 2>&1 | ForEach-Object { Write-Log $_ }
         Write-Log "Post-install verification completed" -Level "SUCCESS"
     }
 
-    Write-Log "Foundation installed successfully at: $InstallPath" -Level "SUCCESS"
+    Write-Log "Gentle-Vanguard installed successfully at: $InstallPath" -Level "SUCCESS"
     return $true
 }
 
@@ -345,17 +345,17 @@ function Show-Summary {
     Write-Host "========================================" -ForegroundColor $colorSuccess
     Write-Host ""
     Write-Host "  Install path: $InstallPath" -ForegroundColor $colorMenu
-    Write-Host "  Run 'wf.ps1 health' to verify." -ForegroundColor $colorHighlight
+    Write-Host "  Run 'gv.ps1 health' to verify." -ForegroundColor $colorHighlight
     Write-Host "  Read docs/guides/GETTING-STARTED.md to begin." -ForegroundColor $colorHighlight
     Write-Host "  Log file: $logFile" -ForegroundColor $colorMenu
     Write-Host ""
 }
 
-function Uninstall-Foundation {
-    Write-Host "Uninstalling Foundation from: $InstallPath" -ForegroundColor $colorWarning
+function Uninstall-Gentle-Vanguard {
+    Write-Host "Uninstalling Gentle-Vanguard from: $InstallPath" -ForegroundColor $colorWarning
     if (Test-Path $InstallPath) {
         Remove-Item -Path $InstallPath -Recurse -Force -ErrorAction Stop
-        Write-Log "Foundation uninstalled from: $InstallPath" -Level "SUCCESS"
+        Write-Log "Gentle-Vanguard uninstalled from: $InstallPath" -Level "SUCCESS"
     } else {
         Write-Log "Install path not found: $InstallPath" -Level "WARN"
     }
@@ -363,13 +363,13 @@ function Uninstall-Foundation {
 
 # Main execution
 if ($Uninstall) {
-    Uninstall-Foundation
+    Uninstall-Gentle-Vanguard
     exit 0
 }
 
 if (-not $Silent) {
     Write-Header
-    $continue = Read-Choice -Prompt "Start Foundation installation?" -Options @("Yes, start installation", "No, exit") -Default 0 -AllowQuit
+    $continue = Read-Choice -Prompt "Start Gentle-Vanguard installation?" -Options @("Yes, start installation", "No, exit") -Default 0 -AllowQuit
     if ($continue -eq 1) {
         Write-Host "Installation cancelled." -ForegroundColor $colorWarning
         exit 0
@@ -385,12 +385,13 @@ if (-not $prereq) {
 Select-InstallPath
 $components = Select-Components
 $settings = Configure-Settings
-$installed = Install-Foundation
+$installed = Install-Gentle-Vanguard
 
 if ($installed) {
     Show-Summary
-    Write-Host "Thank you for installing Foundation!" -ForegroundColor $colorHighlight
+    Write-Host "Thank you for installing Gentle-Vanguard!" -ForegroundColor $colorHighlight
 } else {
     Write-Log "Installation failed" -Level "ERROR"
     exit 1
 }
+

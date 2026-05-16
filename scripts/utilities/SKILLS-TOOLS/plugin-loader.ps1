@@ -1,5 +1,5 @@
 # plugin-loader.ps1
-# Plugin loading and execution engine for Foundation FF-011
+# Plugin loading and execution engine for Gentle-Vanguard FF-011
 # Usage: . .\scripts\utilities\SKILLS-TOOLS\plugin-loader.ps1
 
 $script:PluginRegistry = @{}
@@ -28,7 +28,7 @@ function Get-PluginMetadata {
         version              = $Manifest.version
         author               = $Manifest.author
         description          = $Manifest.description
-        minFoundationVersion = if ($Manifest.minFoundationVersion) { $Manifest.minFoundationVersion } else { '2.6.0' }
+        minGentle-VanguardVersion = if ($Manifest.minGentle-VanguardVersion) { $Manifest.minGentle-VanguardVersion } else { '2.6.0' }
         provides             = if ($Manifest.provides) { @($Manifest.provides) } else { @() }
         requires             = if ($Manifest.requires) { @($Manifest.requires) } else { @() }
         hooks                = if ($Manifest.hooks) { @($Manifest.hooks) } else { @() }
@@ -140,8 +140,8 @@ function Initialize-Plugins {
     $loaded = 0
     $failed = 0
 
-    if ($env:FOUNDATION_BASE_DIR) {
-        $repoRoot = $env:FOUNDATION_BASE_DIR
+    if ($env:GENTLE_VANGUARD_BASE_DIR) {
+        $repoRoot = $env:GENTLE_VANGUARD_BASE_DIR
     } else {
         $searchDir = $PSScriptRoot
         while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -166,7 +166,7 @@ function Initialize-Plugins {
     }
 
     $homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
-    $localPath = Join-Path $homePath '.foundation\plugins'
+    $localPath = Join-Path $homePath '.gentle-vanguard\plugins'
     if (Test-Path $localPath) { $searchPaths += $localPath }
 
     $searchPaths = $searchPaths | Select-Object -Unique
@@ -202,3 +202,4 @@ try { Export-ModuleMember -Function @(
     'Get-RegisteredPlugins',
     'Initialize-Plugins'
 ) } catch { }
+

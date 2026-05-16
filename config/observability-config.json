@@ -10,7 +10,7 @@
       "format": "json",
       "output": [
         "stdout",
-        "file:logs/foundation.jsonl"
+        "file:logs/gentle-vanguard.jsonl"
       ],
       "retention_days": 30,
       "sampling": {
@@ -59,7 +59,7 @@
       ],
       "max_trace_size_bytes": 65536,
       "attributes": {
-        "service.name": "foundation-orchestrator",
+        "service.name": "gentle-vanguard-orchestrator",
         "service.version": "2.9.0",
         "deployment.environment": "production"
       },
@@ -176,3 +176,4 @@
     }
   }
 }
+

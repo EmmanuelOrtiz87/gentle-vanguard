@@ -8,7 +8,7 @@ Last updated: 2026-05-11
 
 ## 1. PROPOSITO
 
-Define los estandares de Chaos Engineering para el stack Foundation. Establece la madurez de resiliencia, experimentos controlados de caos, y verificacion de que los sistemas soportan fallos inesperados sin degradacion catastrófica.
+Define los estandares de Chaos Engineering para el stack Gentle-Vanguard. Establece la madurez de resiliencia, experimentos controlados de caos, y verificacion de que los sistemas soportan fallos inesperados sin degradacion catastrófica.
 
 ---
 
@@ -147,3 +147,4 @@ TODO implementacion DEBE verificar:
 ---
 
 _Version: 1.0.0 - 2026-05-11 - Status: ACTIVE_
+

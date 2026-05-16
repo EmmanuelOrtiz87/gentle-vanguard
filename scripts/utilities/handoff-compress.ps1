@@ -15,12 +15,12 @@
     How much to compress (default: 0.30)
     
 .EXAMPLE
-    .\tools\handoff-compress.ps1 -ProjectName "foundation" -CompressionRatio 0.30
+    .\tools\handoff-compress.ps1 -ProjectName "gentle-vanguard" -CompressionRatio 0.30
 #>
 
 param(
     [Parameter(Mandatory=$false)]
-    [string]$ProjectName = "foundation",
+    [string]$ProjectName = "gentle-vanguard",
     
     [Parameter(Mandatory=$false)]
     [double]$CompressionRatio = 0.30
@@ -138,3 +138,4 @@ catch {
     Write-Host "[HANDOFF] Error: $_" -ForegroundColor Red
     exit 1
 }
+

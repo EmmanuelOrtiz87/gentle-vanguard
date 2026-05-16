@@ -1,4 +1,4 @@
-# Foundation Project Configuration v1.0
+# Gentle-Vanguard Project Configuration v1.0
 
 Centralized configuration for project standards and enforcement.
 
@@ -68,7 +68,7 @@ Centralized configuration for project standards and enforcement.
 ## Project Structure
 
 ```
-foundation/
+gentle-vanguard/
 ├── scripts/           # All workflow/utility scripts
 ├── skills/            # 127 AI agent skills
 ├── config/            # Configuration files
@@ -100,3 +100,4 @@ foundation/
 ---
 
 _Version: 1.0 - 2026-05-05_ _Status: ACTIVE_
+

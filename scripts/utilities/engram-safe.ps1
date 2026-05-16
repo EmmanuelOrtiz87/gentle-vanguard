@@ -4,9 +4,9 @@ function Get-HomePath {
     return [Environment]::GetFolderPath('UserProfile')
 }
 
-function Get-FoundationRepoRoot {
-    if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) {
-        return (Resolve-Path $env:FOUNDATION_BASE_DIR).Path
+function Get-Gentle-VanguardRepoRoot {
+    if ($env:GV_BASE_DIR -and (Test-Path $env:GV_BASE_DIR)) {
+        return (Resolve-Path $env:GV_BASE_DIR).Path
     }
 
     $root = $PSScriptRoot
@@ -21,8 +21,8 @@ function Get-FoundationRepoRoot {
     return $root
 }
 
-function Resolve-FoundationEngramBinary {
-    param([string]$RepoRoot = (Get-FoundationRepoRoot))
+function Resolve-Gentle-VanguardEngramBinary {
+    param([string]$RepoRoot = (Get-Gentle-VanguardRepoRoot))
 
     if ($env:ENGRAM_CMD -and (Test-Path $env:ENGRAM_CMD)) {
         return (Resolve-Path $env:ENGRAM_CMD).Path
@@ -52,8 +52,8 @@ function Resolve-FoundationEngramBinary {
     return $null
 }
 
-function Initialize-FoundationEngramEnvironment {
-    param([string]$RepoRoot = (Get-FoundationRepoRoot))
+function Initialize-Gentle-VanguardEngramEnvironment {
+    param([string]$RepoRoot = (Get-Gentle-VanguardRepoRoot))
 
     $dataDir = Join-Path $RepoRoot '.engram-data'
     if (-not (Test-Path $dataDir)) {
@@ -66,7 +66,7 @@ function Initialize-FoundationEngramEnvironment {
     return $dataDir
 }
 
-function Remove-FoundationEngramNoise {
+function Remove-Gentle-VanguardEngramNoise {
     param([object[]]$Output)
 
     $lines = @($Output | ForEach-Object { [string]$_ })
@@ -76,7 +76,7 @@ function Remove-FoundationEngramNoise {
     })
 }
 
-function Write-FoundationEngramFallback {
+function Write-Gentle-VanguardEngramFallback {
     param(
         [string]$RepoRoot,
         [string[]]$Arguments,
@@ -85,7 +85,7 @@ function Write-FoundationEngramFallback {
     )
 
     try {
-        $dataDir = Initialize-FoundationEngramEnvironment -RepoRoot $RepoRoot
+        $dataDir = Initialize-Gentle-VanguardEngramEnvironment -RepoRoot $RepoRoot
         $fallback = Join-Path $dataDir 'fallback-memory.jsonl'
         $entry = @{
             timestamp = Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz'
@@ -99,27 +99,27 @@ function Write-FoundationEngramFallback {
     }
 }
 
-function Invoke-FoundationEngram {
+function Invoke-Gentle-VanguardEngram {
     param(
         [Parameter(Mandatory = $true)]
         [string[]]$Arguments,
-        [string]$RepoRoot = (Get-FoundationRepoRoot),
+        [string]$RepoRoot = (Get-Gentle-VanguardRepoRoot),
         [int]$MaxAttempts = 3
     )
 
-    $engramBin = Resolve-FoundationEngramBinary -RepoRoot $RepoRoot
+    $engramBin = Resolve-Gentle-VanguardEngramBinary -RepoRoot $RepoRoot
     if (-not $engramBin) {
         return [pscustomobject]@{
             Success = $false
             ExitCode = 127
             Output = @('Engram CLI not found')
             RawOutput = @('Engram CLI not found')
-            DataDir = Initialize-FoundationEngramEnvironment -RepoRoot $RepoRoot
+            DataDir = Initialize-Gentle-VanguardEngramEnvironment -RepoRoot $RepoRoot
         }
     }
 
-    $dataDir = Initialize-FoundationEngramEnvironment -RepoRoot $RepoRoot
-    $mutex = [System.Threading.Mutex]::new($false, 'Global\FoundationEngramCli')
+    $dataDir = Initialize-Gentle-VanguardEngramEnvironment -RepoRoot $RepoRoot
+    $mutex = [System.Threading.Mutex]::new($false, 'Global\Gentle-VanguardEngramCli')
     $attempt = 0
     $rawOutput = @()
     $exitCode = 1
@@ -162,9 +162,9 @@ function Invoke-FoundationEngram {
         $mutex.Dispose()
     }
 
-    $cleanOutput = Remove-FoundationEngramNoise -Output $rawOutput
+    $cleanOutput = Remove-Gentle-VanguardEngramNoise -Output $rawOutput
     if ($exitCode -ne 0) {
-        Write-FoundationEngramFallback -RepoRoot $RepoRoot -Arguments $Arguments -ExitCode $exitCode -Output $cleanOutput
+        Write-Gentle-VanguardEngramFallback -RepoRoot $RepoRoot -Arguments $Arguments -ExitCode $exitCode -Output $cleanOutput
     }
 
     return [pscustomobject]@{
@@ -175,3 +175,5 @@ function Invoke-FoundationEngram {
         DataDir = $dataDir
     }
 }
+
+

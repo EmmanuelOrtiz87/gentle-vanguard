@@ -5,7 +5,7 @@ Describe 'Pre-Close Validator Integration Tests' {
         $script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
         $script:validator = Join-Path $script:root 'scripts\utilities\pre-close-validator.ps1'
         $script:tempRoot = Join-Path $script:root 'tmp-pre-close-validator-integration-tests'
-        $script:originalFoundationBaseDir = $env:FOUNDATION_BASE_DIR
+        $script:originalGentle-VanguardBaseDir = $env:GENTLE_VANGUARD_BASE_DIR
         $script:startingLocation = (Get-Location).Path
     }
 
@@ -21,10 +21,10 @@ Describe 'Pre-Close Validator Integration Tests' {
     AfterEach {
         Set-Location $script:startingLocation
 
-        if ($null -eq $script:originalFoundationBaseDir) {
-            Remove-Item Env:FOUNDATION_BASE_DIR -ErrorAction SilentlyContinue
+        if ($null -eq $script:originalGentle-VanguardBaseDir) {
+            Remove-Item Env:GENTLE_VANGUARD_BASE_DIR -ErrorAction SilentlyContinue
         } else {
-            $env:FOUNDATION_BASE_DIR = $script:originalFoundationBaseDir
+            $env:GENTLE_VANGUARD_BASE_DIR = $script:originalGentle-VanguardBaseDir
         }
 
         if (Test-Path $script:tempRoot) {
@@ -47,8 +47,8 @@ Describe 'Pre-Close Validator Integration Tests' {
         Push-Location $repoPath
         try {
             git init | Out-Null
-            git config user.email 'tests@foundation.local'
-            git config user.name 'Foundation Tests'
+            git config user.email 'tests@gentle-vanguard.local'
+            git config user.name 'Gentle-Vanguard Tests'
             git branch -M main | Out-Null
             git add . | Out-Null
             git commit -m 'test: seed repo' | Out-Null
@@ -74,7 +74,7 @@ Describe 'Pre-Close Validator Integration Tests' {
             [switch]$Force
         )
 
-        $env:FOUNDATION_BASE_DIR = $RepoPath
+        $env:GENTLE_VANGUARD_BASE_DIR = $RepoPath
         Set-Location $script:startingLocation
 
         try {

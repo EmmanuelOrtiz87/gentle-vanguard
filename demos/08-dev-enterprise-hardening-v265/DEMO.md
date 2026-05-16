@@ -15,13 +15,13 @@ capabilities** in action:
 
 | Feature                                   | Version | Command                         |
 | ----------------------------------------- | ------- | ------------------------------- |
-| SDD Gate (blocks commits without spec)    | v2.14.0 | `wf sdd-gate`                   |
-| SDD Process Metrics (cycle time, SLO)     | v2.14.0 | `wf sdd-metrics`                |
-| Sync Drift Report (foundation ↔ projects) | v2.14.0 | `wf sync-drift`                 |
-| WF Benchmark (SLO measurement)            | v2.14.0 | `wf benchmark`                  |
+| SDD Gate (blocks commits without spec)    | v2.14.0 | `gv sdd-gate`                   |
+| SDD Process Metrics (cycle time, SLO)     | v2.14.0 | `gv sdd-metrics`                |
+| Sync Drift Report (gentle-vanguard ↔ projects) | v2.14.0 | `gv sync-drift`                 |
+| GV Benchmark (SLO measurement)            | v2.14.0 | `gv benchmark`                  |
 | PSScriptAnalyzer CI (static analysis)     | v2.14.0 | `.github/workflows/ps-lint.yml` |
 | Automated GitHub Releases                 | v2.14.0 | `git tag v*.*.*`                |
-| Stack Version command                     | v2.14.0 | `wf version`                    |
+| Stack Version command                     | v2.14.0 | `gv version`                    |
 | Normativas vivas                          | v2.14.0 | `rules/` directory              |
 
 ---
@@ -31,8 +31,8 @@ capabilities** in action:
 ```powershell
 # Ensure you're on main at v2.14.0+
 git checkout main
-wf version
-# Expected: Gentleman Foundation v2.14.0
+gv version
+# Expected: Gentle-Vanguard v2.14.0
 ```
 
 ---
@@ -46,7 +46,7 @@ wf version
 
 ```powershell
 # Check current SDD status
-wf sdd-gate
+gv sdd-gate
 # Expected output:
 # [SDD-GATE] Checking for validated SDD documents...
 # [PASS] Found 1 validated SDD(s): docs/sdd/YYYY-MM-DD-spec.md (status: validated)
@@ -56,7 +56,7 @@ wf sdd-gate
 # → CI sdd-gate.yml → PR check fails → merge blocked
 
 # Check SDD metrics (cycle time, phase distribution)
-wf sdd-metrics
+gv sdd-metrics
 # Shows: status breakdown, avg cycle time per phase, SLO compliance %
 ```
 
@@ -68,7 +68,7 @@ review. The gate enforces this end-to-end.
 ## Part 2 — SDD Process Metrics (FF-002)
 
 ```powershell
-wf sdd-metrics
+gv sdd-metrics
 # Output (example):
 # ┌─────────────────────────────────────────┐
 # │ SDD Process Metrics                     │
@@ -86,9 +86,9 @@ wf sdd-metrics
 ## Part 3 — Sync Drift Report (FF-004)
 
 ```powershell
-wf sync-drift
+gv sync-drift
 # Output (example):
-# [DRIFT-REPORT] Scanning foundation ↔ workspace...
+# [DRIFT-REPORT] Scanning gentle-vanguard ↔ workspace...
 # [OK] config/auto-delegation.json: in sync
 # [WARN] docs/guides/SESSION-GUIDE.md: missing in 2 projects
 # [WARN] rules/AI-NORMATIVES.md: version mismatch
@@ -104,14 +104,14 @@ projects don't get the updates. Score 0 = perfectly synced.
 
 ---
 
-## Part 4 — WF Benchmark (FF-006)
+## Part 4 — GV Benchmark (FF-006)
 
 ```powershell
 # Benchmark with default commands (status + health)
-wf benchmark
+gv benchmark
 
 # Benchmark specific commands
-wf benchmark status,health,verify
+gv benchmark status,health,verify
 
 # Expected output:
 # ┌─────────────────────────────────────────────┐
@@ -194,9 +194,9 @@ enforcement.
 ## Part 8 — Stack Version (v2.14.0)
 
 ```powershell
-wf version
+gv version
 # Output:
-# Gentleman Foundation v2.14.0 | orchestrator: v2.14.0
+# Gentle-Vanguard v2.14.0 | orchestrator: v2.14.0
 #   Stack: 7.5.0 on windows
 #   Skills: 125
 ```
@@ -209,11 +209,11 @@ the pushed tag matches `VERSION`. Drift between tag and file = blocked release.
 ## Full Command Reference (v2.14.0 new commands)
 
 ```powershell
-wf sdd-gate          # FF-001: Check SDD spec status
-wf sdd-metrics       # FF-002: SDD process metrics + cycle time
-wf sync-drift        # FF-004: Foundation ↔ project drift detection
-wf benchmark         # FF-006: SLO benchmark of wf commands
-wf version           # v2.14.0: Stack version + skills count
+gv sdd-gate          # FF-001: Check SDD spec status
+gv sdd-metrics       # FF-002: SDD process metrics + cycle time
+gv sync-drift        # FF-004: Gentle-Vanguard ↔ project drift detection
+gv benchmark         # FF-006: SLO benchmark of gv commands
+gv version           # v2.14.0: Stack version + skills count
 ```
 
 ---
@@ -226,3 +226,4 @@ Developers leave understanding:
 - New features are **benchmarked against SLOs** (not just "it works")
 - **Releasing is a single command** (tag + push)
 - **Standards are code** — normativas are enforced in CI, not just documented
+

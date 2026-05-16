@@ -1,6 +1,6 @@
 # Format Adapters
 
-Translate between Foundation's standard format and tool-specific formats for tools that don't
+Translate between Gentle-Vanguard's standard format and tool-specific formats for tools that don't
 support MCP.
 
 ---
@@ -31,7 +31,7 @@ format-adapters/
     README.md         # Adapter documentation
  codex-adapter/
     functions.json     # OpenAI function definitions
-    proxy.js           # HTTP proxy to Foundation
+    proxy.js           # HTTP proxy to Gentle-Vanguard
     README.md
  antigravity-adapter/
     mission-control.json # Mission Control config
@@ -47,7 +47,7 @@ format-adapters/
 ### Windsurf Adapter
 
 ```bash
-# Convert Foundation skills to Windsurf format
+# Convert Gentle-Vanguard skills to Windsurf format
 node adapters/format-adapters/windsurf-adapter/adapter.js \
   --input skills/react-19-skill/SKILL.md \
   --output ~/.windsurf/skills/react-19.md
@@ -59,7 +59,7 @@ node adapters/format-adapters/windsurf-adapter/adapter.js \
 # Start proxy server (OpenAI-compatible endpoint)
 node adapters/format-adapters/codex-adapter/proxy.js \
   --port 8080 \
-  --foundation-root /path/to/foundation
+  --gentle-vanguard-root /path/to/gentle-vanguard
 
 # Codex can now call: POST http://localhost:8080/v1/functions
 ```
@@ -69,7 +69,7 @@ node adapters/format-adapters/codex-adapter/proxy.js \
 ```bash
 # Generate Mission Control config
 node adapters/format-adapters/antigravity-adapter/adapter.js \
-  --foundation-root /path/to/foundation \
+  --gentle-vanguard-root /path/to/gentle-vanguard \
   --output ~/.antigravity/mission-control.json
 ```
 
@@ -79,7 +79,7 @@ node adapters/format-adapters/antigravity-adapter/adapter.js \
 
 ```
 
-  Foundation        Format           Tool-Specific
+  Gentle-Vanguard        Format           Tool-Specific
   SKILL.md              Adapter               Format
   (Standard)            (Translate)           (Windsurf/
             Codex/etc.)
@@ -103,7 +103,7 @@ node adapters/format-adapters/antigravity-adapter/adapter.js \
 1. Create directory: `adapters/format-adapters/{tool}-adapter/`
 2. Research the tool's plugin/extension format
 3. Create adapter script that translates:
-   - **From**: Foundation SKILL.md format
+   - **From**: Gentle-Vanguard SKILL.md format
    - **To**: Tool-specific format
 4. Document in `README.md`
 5. Add to compatibility matrix in `adapters/docs/COMPATIBILITY-MATRIX.md`
@@ -111,3 +111,4 @@ node adapters/format-adapters/antigravity-adapter/adapter.js \
 ---
 
 **Note**: Prefer **MCP Bridge** when possible - it's more maintainable and future-proof.
+

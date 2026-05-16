@@ -1,4 +1,4 @@
-# Cross-Platform Normatives — Foundation
+# Cross-Platform Normatives — Gentle-Vanguard
 
 Canonical standards for Windows, Linux, macOS, and WSL compatibility.
 Last updated: 2026-05-12 | Version: 1.0.0
@@ -38,7 +38,7 @@ PowerShell Core has these advantages over Windows PowerShell 5.1:
 
 ```powershell
 # ❌ WRONG (Windows-only):
-$path = "C:\Workspace_local\foundation\scripts"
+$path = "C:\Workspace_local\gentle-vanguard\scripts"
 
 # ✅ CORRECT (Cross-platform):
 $path = Join-Path $PSScriptRoot ".." "scripts"
@@ -100,7 +100,7 @@ git config core.autocrlf
 ### .gitattributes (Required)
 
 ```
-# foundation/.gitattributes
+# gentle-vanguard/.gitattributes
 * text eol=lf
 *.ps1 text eol=lf
 *.sh text eol=lf
@@ -143,13 +143,13 @@ $logFile = "C:\logs\app.log"  # Windows-only path
 
 ```powershell
 # Use system temp directory (cross-platform)
-$tempDir = Join-Path ([System.IO.Path]::GetTempPath()) "foundation-session"
+$tempDir = Join-Path ([System.IO.Path]::GetTempPath()) "gentle-vanguard-session"
 
 # Use standard locations
 $logDir = if ($IsWindows) {
-    Join-Path $env:ProgramData "foundation" "logs"
+    Join-Path $env:ProgramData "gentle-vanguard" "logs"
 } else {
-    Join-Path "/var" "log" "foundation"
+    Join-Path "/var" "log" "gentle-vanguard"
 }
 
 # Create if doesn't exist
@@ -180,9 +180,9 @@ $tempDir = [System.IO.Path]::GetTempPath()
 
 # Portable configuration
 $configDir = if ($IsWindows) {
-    Join-Path $env:APPDATA "foundation"
+    Join-Path $env:APPDATA "gentle-vanguard"
 } else {
-    Join-Path $env:HOME ".config" "foundation"
+    Join-Path $env:HOME ".config" "gentle-vanguard"
 }
 ```
 
@@ -271,11 +271,11 @@ docker run -rm -v $(pwd):/work mcr.microsoft.com/powershell:7.4 `
 
 ```powershell
 # ❌ WRONG:
-$config = Get-Content "C:\Users\$env:USERNAME\AppData\Local\foundation\config.json"
+$config = Get-Content "C:\Users\$env:USERNAME\AppData\Local\gentle-vanguard\config.json"
 
 # ✅ CORRECT:
 $appDataPath = if ($IsWindows) { $env:APPDATA } else { Join-Path $HOME ".config" }
-$configPath = Join-Path $appDataPath "foundation" "config.json"
+$configPath = Join-Path $appDataPath "gentle-vanguard" "config.json"
 $config = Get-Content $configPath
 ```
 
@@ -324,13 +324,13 @@ try {
 ## 10. pwsh Availability Check & Fallback
 
 ### Problem
-All foundation scripts require PowerShell 7+ (pwsh). On Linux/macOS, pwsh may not be installed.
+All gentle-vanguard scripts require PowerShell 7+ (pwsh). On Linux/macOS, pwsh may not be installed.
 Without a fallback, the agent wastes tokens attempting to run scripts that fail with "command not found".
 
 ### Mandatory Check — Before Any Script Execution
 
 ```powershell
-# Check pwsh availability before running foundation scripts
+# Check pwsh availability before running gentle-vanguard scripts
 if (-not (Get-Command pwsh -ErrorAction SilentlyContinue)) {
     Write-Error "PowerShell 7+ (pwsh) is required. Install from: https://github.com/PowerShell/PowerShell"
     exit 1
@@ -353,7 +353,7 @@ if (-not (Get-Command pwsh -ErrorAction SilentlyContinue)) {
 # In detect-tool.ps1 or session-autostart:
 $hasPwsh = [bool](Get-Command pwsh -ErrorAction SilentlyContinue)
 if (-not $hasPwsh -and -not $IsWindows) {
-    Write-Error "[FOUNDATION] PowerShell 7+ required. Run: brew install powershell (macOS) or see https://aka.ms/powershell"
+    Write-Error "[GENTLE_VANGUARD] PowerShell 7+ required. Run: brew install powershell (macOS) or see https://aka.ms/powershell"
     exit 1
 }
 ```
@@ -464,7 +464,7 @@ RUN pwsh -Command 'Invoke-Pester tests/ -CI'
 ### README Platform-Specific Sections
 
 ```markdown
-# Foundation — Installation
+# Gentle-Vanguard — Installation
 
 ## Prerequisites
 
@@ -484,7 +484,7 @@ RUN pwsh -Command 'Invoke-Pester tests/ -CI'
 
 \`\`\`bash
 git clone https://github.com/...
-cd foundation
+cd gentle-vanguard
 pwsh ./scripts/setup.ps1
 \`\`\`
 ```
@@ -512,3 +512,4 @@ pwsh ./scripts/setup.ps1
 - [POSIX Compliance](https://pubs.opengroup.org/onlinepubs/9699919799/)
 - [GitHub Actions: Strategy Matrix](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs)
 - Project: [.github/workflows/](../.github/workflows/)
+

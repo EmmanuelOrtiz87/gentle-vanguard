@@ -1,2 +1,4 @@
 @echo off
-pwsh -NoProfile -ExecutionPolicy Bypass -File "%~dp0Foundation-Launcher.ps1" %*
+pwsh -NoProfile -ExecutionPolicy Bypass -File "%~dp0Gentle-Vanguard-Launcher.ps1" %*
+
+

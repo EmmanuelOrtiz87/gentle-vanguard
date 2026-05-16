@@ -1,4 +1,4 @@
-# Foundation
+# Gentle-Vanguard
 
 ## Board Supplement
 
@@ -95,7 +95,7 @@ Tools de seguridad:
 
 ```
 XITO DEL PILOTO (30 das)
- 100% de devs del piloto usan WF
+ 100% de devs del piloto usan GV
  Tiempo promedio de setup < 30 min
  Al menos 1 feature shipped con ayuda de IA
  0 incidentes de seguridad
@@ -135,7 +135,7 @@ Target: >80% active para fin de mes 2
 
 
 Semana 1: Fundamentos
- Sesin 1: Qu es Foundation? (1 hr)
+ Sesin 1: Qu es Gentle-Vanguard? (1 hr)
  Sesin 2: Tour de herramientas (1 hr)
  Hands-on: Setup de tu primer proyecto (2 hrs)
 
@@ -170,7 +170,7 @@ Semana 4: Optimization
 ```
 Champion por equipo:
  1 dev por equipo seleccionado
- Conocimiento profundo de WF
+ Conocimiento profundo de GV
  First-line support para teammates
  Liaison con el equipo core
 
@@ -193,15 +193,15 @@ Equipo Core:
 | **GitHub Copilot**       | Integrado, popular                   | Solo MS ecosystem, limited governance | $19/user/mes    |
 | **Amazon Q Developer**   | AWS integrado                        | Solo AWS                              | $19-30/user/mes |
 | **Cursor/Windsurf**      | Buena UX                             | No governance                         | $20/user/mes    |
-| **Foundation** | Custom, governance, multi-vendor, $0 | Requiere impl                         | $0 + dev time   |
+| **Gentle-Vanguard** | Custom, governance, multi-vendor, $0 | Requiere impl                         | $0 + dev time   |
 
-### E.2 Por Qu WF Es Mejor
+### E.2 Por Qu GV Es Mejor
 
 ```
-Foundation vs Alternativas
+Gentle-Vanguard vs Alternativas
 
 
- Feature           WF           Copilot  Amazon Q  Cursor
+ Feature           GV           Copilot  Amazon Q  Cursor
 
  Multi-provider    [OK]                             [OK]
  Audit system      [OK]
@@ -230,11 +230,11 @@ Foundation vs Alternativas
 ### F.2 messaging para Developers
 
 ```
-Subject: Nuevo: Foundation - Tu toolkit de IA para desarrollo
+Subject: Nuevo: Gentle-Vanguard - Tu toolkit de IA para desarrollo
 
 Hola [Nombre]!,
 
-Foundation est aqu para hacerte ms productivo.
+Gentle-Vanguard est aqu para hacerte ms productivo.
 
 Lo que gans:
 [OK] Setup en 5 minutos (vs 4 horas)
@@ -245,7 +245,7 @@ Lo que gans:
 Cmo empezar:
 1. ./scripts/init-workspace.ps1
 2. Sigue la gua en docs/TECHNICAL-ONBOARDING.md
-3. Pregunta en #foundation en Slack
+3. Pregunta en #gentle-vanguard en Slack
 
 Preguntas? Contacta con [Nombre], tu referente tecnico.
 
@@ -259,7 +259,7 @@ Happy coding!
 ### G.1 Polticas de Uso
 
 ```
-FOUNDATION - POLICIES
+GENTLE_VANGUARD - POLICIES
 
 1. REVISION REQUERIDA
    Todo cdigo generado por IA requiere review humano antes de commit.
@@ -415,10 +415,10 @@ SI ROLLOUT FALLA:
 
 ### Recursos
 
-- **Repo (Public):** github.com/EmmanuelOrtiz87/foundation-public
-- **Repo (Private):** github.com/EmmanuelOrtiz87/foundation
+- **Repo (Public):** github.com/EmmanuelOrtiz87/gentle-vanguard-public
+- **Repo (Private):** github.com/EmmanuelOrtiz87/gentle-vanguard
 - **Docs:** docs/technical-onboarding.md
-- **Slack:** #foundation
+- **Slack:** #gentle-vanguard
 - **Issues:** Crear issue en repo
 
 ---
@@ -426,3 +426,4 @@ SI ROLLOUT FALLA:
 **Documento preparado por:** Equipo de desarrollo  
 **ltima actualizacin:** Abril 2026  
 **Versin:** 1.0
+

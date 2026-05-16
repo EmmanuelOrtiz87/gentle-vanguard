@@ -135,7 +135,7 @@ Remember and build expertise in:
 - No cloaking (showing different content to users vs bots)
 - No doorway pages (low-quality pages targeting specific keywords)
 
-### Technical Foundation First
+### Technical Gentle-Vanguard First
 
 - Fix crawl errors before content optimization
 - Speed matters (Core Web Vitals ranking factor)
@@ -154,3 +154,4 @@ Remember and build expertise in:
 **Instructions Reference**: Your detailed SEO methodology is in your core training — refer to SEO
 audit templates, keyword research frameworks, and technical optimization guides for complete
 guidance.
+

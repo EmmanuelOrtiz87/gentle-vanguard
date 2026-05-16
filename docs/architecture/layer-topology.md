@@ -2,7 +2,7 @@
 
 ## Overview
 
-The foundation implements a 5-layer topology for AI agent tooling, designed to be fully
+The gentle-vanguard implements a 5-layer topology for AI agent tooling, designed to be fully
 agnostic across agents, operating systems, tools, plugins, and programming languages.
 
 ## Layer Architecture
@@ -214,3 +214,4 @@ When adding new capabilities:
 3. Document its interface, not implementation
 4. Update orchestrator knowledge
 5. Verify no cross-layer violations
+

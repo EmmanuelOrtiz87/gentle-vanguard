@@ -28,7 +28,7 @@ Template for weekly technical status and metrics.
 
 | Operation          | Avg Time | SLO    | Status   |
 | ------------------ | -------- | ------ | -------- |
-| wf.ps1 health      | [ms]     | <15ms  | 🟢/🟡/🔴 |
+| gv.ps1 health      | [ms]     | <15ms  | 🟢/🟡/🔴 |
 | token-budget-guard | [ms]     | <50ms  | 🟢/🟡/🔴 |
 | session-start      | [ms]     | <100ms | 🟢/🟡/🔴 |
 
@@ -114,4 +114,5 @@ Security:     [PASS]/[TOTAL] ([%] pass rate)
 
 ---
 
-_Generated automatically by Foundation Weekly Reporting (FF-006)_
+_Generated automatically by Gentle-Vanguard Weekly Reporting (FF-006)_
+

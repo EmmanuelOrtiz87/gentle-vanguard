@@ -9,7 +9,7 @@
 
 ## Goal
 
-Communicate the **business impact** of Gentleman Foundation in three dimensions:
+Communicate the **business impact** of Gentle-Vanguard in three dimensions:
 
 1. **Velocity** — how the stack accelerates delivery cycles
 2. **Control** — how governance prevents quality debt and surprise failures
@@ -39,7 +39,7 @@ No technical deep-dive. Evidence-based. Visual-first.
 ### Step 1 — Open HTML Dashboard (visual impact opener)
 
 ```powershell
-wf dashboard
+gv dashboard
 # → Generates and opens reports/dashboard.html
 ```
 
@@ -53,7 +53,7 @@ wf dashboard
 ### Step 2 — Stack Health (30 seconds)
 
 ```powershell
-wf verify
+gv verify
 # Expected: 14/14 PASS
 ```
 
@@ -63,8 +63,8 @@ wf verify
 ### Step 3 — Stack Version + Scale
 
 ```powershell
-wf version
-# Output: Gentleman Foundation v2.14.0 | orchestrator: v2.14.0
+gv version
+# Output: Gentle-Vanguard v2.14.0 | orchestrator: v2.14.0
 #         Stack: 7.5.0 on windows
 #         Skills: 125
 ```
@@ -83,8 +83,8 @@ Open `.github/workflows/` in GitHub — show the 10 active workflows.
 ### Step 5 — SDD Gate (governance story)
 
 ```powershell
-wf sdd-gate
-wf sdd-metrics
+gv sdd-gate
+gv sdd-metrics
 ```
 
 > "We enforce that no code ships without a specification. Not a policy in a document — a technical
@@ -93,7 +93,7 @@ wf sdd-metrics
 ### Step 6 — Benchmark (SLO evidence)
 
 ```powershell
-wf benchmark status,health,verify
+gv benchmark status,health,verify
 # Output: status 0.8s (SLO: 5s) PASS
 #         health 2.1s (SLO: 15s) PASS
 #         verify 4.3s (SLO: 30s) PASS
@@ -133,3 +133,4 @@ Management leaves with:
 - Understanding that quality gates are **automated** (not human-dependent)
 - Confidence that AI spend is **controlled and auditable**
 - A clear picture of scalability: 125 skills, 10 workflows, 7 agents — all managed by one platform
+

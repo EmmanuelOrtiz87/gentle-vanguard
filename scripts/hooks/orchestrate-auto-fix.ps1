@@ -87,7 +87,7 @@ function Initialize-Validators {
     }
     $script:Validators.scripts.exists = $null -ne $script:Validators.scripts.path
 
-    $script:Validators.docs.path = Get-ChildItem -Path $repoRoot -Filter "audit-sweep.ps1" -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.DirectoryName -match "foundation-audit" } | Select-Object -First 1
+    $script:Validators.docs.path = Get-ChildItem -Path $repoRoot -Filter "audit-sweep.ps1" -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.DirectoryName -match "gentle-vanguard-audit" } | Select-Object -First 1
     $script:Validators.docs.exists = $null -ne $script:Validators.docs.path
 
     $script:Validators.skills.path = $script:Validators.docs.path
@@ -338,4 +338,5 @@ Invoke-ValidationPhase
 Invoke-AutoFixPhase
 Invoke-DelegationPhase
 Write-FinalSummary
+
 

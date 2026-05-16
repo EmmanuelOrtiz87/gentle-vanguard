@@ -26,10 +26,10 @@ else
     echo "[SKIP] continuous-status-monitor.ps1 not found"
 fi
 
-# Main close flow via wf.ps1
-WF_SCRIPT="$REPO_ROOT/scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1"
+# Main close flow via gv.ps1
+WF_SCRIPT="$REPO_ROOT/scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1"
 if [ ! -f "$WF_SCRIPT" ]; then
-    echo "[ERROR] wf.ps1 not found"
+    echo "[ERROR] gv.ps1 not found"
     exit 1
 fi
 
@@ -76,7 +76,7 @@ fi
 OPTIMIZE_SCRIPT="$REPO_ROOT/scripts/utilities/PERFORMANCE-OPTIMIZATION/optimize-engram-usage.ps1"
 if [ -f "$OPTIMIZE_SCRIPT" ]; then
     echo "[INFO] Running post-session Engram optimization..."
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "$OPTIMIZE_SCRIPT" -ProjectName "workspace_local" -AutoApply
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "$OPTIMIZE_SCRIPT" -ProjectName "workspace_gentle_vanguard" -AutoApply
 else
     echo "[SKIP] optimize-engram-usage.ps1 not found"
 fi
@@ -111,3 +111,4 @@ echo "============================================"
 echo ""
 
 exit 0
+

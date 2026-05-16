@@ -1,4 +1,4 @@
-﻿# SECURITY SYSTEM - Foundation
+# SECURITY SYSTEM - Gentle-Vanguard
 
 ## Access Control Overview
 
@@ -80,7 +80,7 @@ Location: .workspace/config/owner-auth.json (ENCRYPTED)
 
 ```powershell
 # Attempting restricted operation without auth
-> wf.ps1 skill-optimizer analyze
+> gv.ps1 skill-optimizer analyze
 
 [ERROR] Esta operacin requiere autenticacin del owner
 [INFO] Use: .\scripts\utilities\auth-session.ps1 -ApiKey <key>
@@ -126,7 +126,7 @@ NO DIRECT ACCESS (BLOCKED)
 
 
 .Can submit escalation request
-.\wf.ps1 skill-optimizer request improve --skill "xxx" --reason "..."
+.\gv.ps1 skill-optimizer request improve --skill "xxx" --reason "..."
 
 
 Goes to: .workspace/escalations/pending/
@@ -158,4 +158,5 @@ IMPLEMENT  NOTIFY
 
 ---
 
-Generated: 2026-04-25 Owner: Emmanuel (workspace_local)
+Generated: 2026-04-25 Owner: Emmanuel (workspace_gentle_vanguard)
+

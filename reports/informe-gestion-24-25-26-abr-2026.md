@@ -1,7 +1,7 @@
 # 📊 Informe de Gestión - Sesiones y Métricas
 
 **Período**: 24 al 26 de Abril de 2026  
-**Proyecto**: workspace_local  
+**Proyecto**: workspace_gentle_vanguard  
 **Gerencia**: Presentación Ejecutiva  
 **Fecha**: 2026-04-26 01:15
 
@@ -178,7 +178,7 @@ Total: 13 sesiones en 3 días
 ### Mediano Plazo (Próximo Mes)
 
 - [ ] Implementar reporting on-demand completo
-- [ ] Agregar CLI `wf report`
+- [ ] Agregar CLI `gv report`
 - [ ] Integrar con billing/costos reales
 
 ---
@@ -222,3 +222,4 @@ Total: 13 sesiones en 3 días
 _Informe generado: 2026-04-26 01:15 UTC-3_  
 _Formato: Markdown (.md) para presentaciones_  
 _Skills: reporting-skill, business-telemetry-skill_
+

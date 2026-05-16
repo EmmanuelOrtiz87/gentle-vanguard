@@ -52,7 +52,7 @@ description: >
   ```
 - Loop until verified (don't ask "is this ok?" - verify objectively)
 
-### Integration with Foundation
+### Integration with Gentle-Vanguard
 
 **Orchestrator Integration:**
 
@@ -86,7 +86,7 @@ description: >
 When active, this skill:
 
 - Reads existing code style and matches it strictly
-- Uses Foundation's failure-learning-system to improve over time
+- Uses Gentle-Vanguard's failure-learning-system to improve over time
 - Reports violations to engram with tag "karpathy-violation"
 - Integrates with judgment-day-orchestrator for code quality gates
 
@@ -105,4 +105,5 @@ When active, this skill:
 
 - Original: https://github.com/forrestchang/andrej-karpathy-skills
 - Andrej Karpathy's post: https://x.com/karpathy/status/2015883857489522876
-- Foundation integration: See judgment-day-orchestrator.ps1, failure-learning-system.ps1
+- Gentle-Vanguard integration: See judgment-day-orchestrator.ps1, failure-learning-system.ps1
+
