@@ -1,4 +1,6 @@
-# Codex project-scoped configuration (adaptive optimized)
+# Codex project-scoped configuration (local-first optimized)
+# Based on https://developers.openai.com/codex/learn/best-practices
+
 model = "gpt-5.5"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
@@ -7,6 +9,7 @@ web_search = "disabled"
 project_doc_max_bytes = 32768
 file_opener = "vscode"
 
+# Keep Codex constrained to safe defaults in this repository.
 [sandbox_workspace_write]
 network_access = false
 
