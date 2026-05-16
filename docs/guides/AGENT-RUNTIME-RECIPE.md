@@ -22,42 +22,9 @@ Ensure these capabilities work together without conflicts:
 Quick validation:
 
 ```powershell
-.\tools\validate-session-stack.ps1 -Quiet
-.\foundation\\scripts\utilities\wf.ps1 orchestrator-status
-.\foundation\\scripts\utilities\wf.ps1 runtime-route
-.\foundation\\scripts\utilities\agent-router.ps1 status
-```
-
-## Runtime Modes
-
-### 1) Local (Developer Machine)
-
-Use this for day-to-day coding in a local repo.
-
-1. Configure startup policy in `scripts/utilities/session-autostart.config.json`:
-   - `autoStartPrimaryRuntime: true`
-   - `strictCompatibilityChecks: true` (recommended)
-2. Start session:
-
-```powershell
-.\tools\session-autostart.cmd
-```
-
-3. If strict mode blocks startup:
-   - Fix components and retry (recommended), or
-   - Temporarily set `strictCompatibilityChecks: false` and rerun startup.
-
-### 2) Cloud / Self-Hosted Runner
-
-Use this for controlled infrastructure (VM, container host, internal runners).
-
-Recommended pattern:
-
-1. Provision required binaries (`engram`, AI agent CLI) in image/bootstrap.
-2. Run preflight before work units:
-
-```powershell
-.\tools\validate-session-stack.ps1 -Quiet
+.\foundation\scripts\utilities\wf.ps1 orchestrator-status
+.\foundation\scripts\utilities\wf.ps1 runtime-route
+.\foundation\scripts\utilities\agent-router.ps1 status
 ```
 
 3. Run session start + explicit checks in pipeline bootstrap:
@@ -120,11 +87,12 @@ If startup fails in strict mode:
 1. Run diagnostics:
 
 ```powershell
-.\tools\validate-session-stack.ps1 -Quiet
-.\foundation\\scripts\utilities\wf.ps1 orchestrator-status
-.\foundation\\scripts\utilities\wf.ps1 runtime-route
-.\foundation\\scripts\utilities\agent-router.ps1 status
+.\foundation\scripts\utilities\wf.ps1 orchestrator-status
+.\foundation\scripts\utilities\wf.ps1 runtime-route
+.\foundation\scripts\utilities\agent-router.ps1 status
 ```
+
+If startup fails in strict mode:
 
 2. Resolve missing pieces and retry startup.
 3. Use degraded mode only as temporary workaround.

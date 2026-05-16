@@ -74,13 +74,13 @@
         "temperature": 0.3
       },
       "permission": {
-        "websearch": "allow",
-        "codesearch": "allow",
-        "webfetch": "allow",
+        "websearch": "deny",
+        "webfetch": "deny",
         "task": {
           "*": "allow"
         }
-      }
+      },
+      "steps": 12
     },
     "sdd-explore": {
       "description": "BA exploration agent — requirements gathering and analysis",
@@ -94,7 +94,6 @@
       },
       "permission": {
         "websearch": "deny",
-        "codesearch": "allow",
         "webfetch": "deny"
       },
       "routing": {
@@ -102,7 +101,8 @@
         "mappings": "config/auto-delegation.json#keywordMappings",
         "agentProfiles": "config/auto-delegation.json#agentProfiles",
         "fallbackStrategy": "clarify-ba"
-      }
+      },
+      "steps": 6
     },
     "sdd-design": {
       "description": "SAD architecture design agent — system design and API contracts",
@@ -116,7 +116,6 @@
       },
       "permission": {
         "websearch": "deny",
-        "codesearch": "allow",
         "webfetch": "deny"
       },
       "routing": {
@@ -124,7 +123,8 @@
         "mappings": "config/auto-delegation.json#keywordMappings",
         "agentProfiles": "config/auto-delegation.json#agentProfiles",
         "fallbackStrategy": "clarify-ba"
-      }
+      },
+      "steps": 6
     },
     "sdd-apply": {
       "description": "DEV implementation agent — code generation and feature building",
@@ -138,7 +138,6 @@
       },
       "permission": {
         "websearch": "deny",
-        "codesearch": "deny",
         "webfetch": "deny"
       },
       "routing": {
@@ -146,7 +145,8 @@
         "mappings": "config/auto-delegation.json#keywordMappings",
         "agentProfiles": "config/auto-delegation.json#agentProfiles",
         "fallbackStrategy": "clarify-ba"
-      }
+      },
+      "steps": 6
     },
     "sdd-verify": {
       "description": "QA verification agent — testing and validation",
@@ -160,7 +160,6 @@
       },
       "permission": {
         "websearch": "deny",
-        "codesearch": "deny",
         "webfetch": "deny"
       },
       "routing": {
@@ -168,7 +167,8 @@
         "mappings": "config/auto-delegation.json#keywordMappings",
         "agentProfiles": "config/auto-delegation.json#agentProfiles",
         "fallbackStrategy": "clarify-ba"
-      }
+      },
+      "steps": 6
     },
     "doc-agent": {
       "description": "Documentation agent — technical docs and guides",
@@ -182,7 +182,6 @@
       },
       "permission": {
         "websearch": "deny",
-        "codesearch": "deny",
         "webfetch": "deny"
       },
       "routing": {
@@ -190,7 +189,8 @@
         "mappings": "config/auto-delegation.json#keywordMappings",
         "agentProfiles": "config/auto-delegation.json#agentProfiles",
         "fallbackStrategy": "clarify-ba"
-      }
+      },
+      "steps": 6
     },
     "ops-agent": {
       "description": "Operations agent — deployment, CI/CD, infrastructure",
@@ -204,7 +204,6 @@
       },
       "permission": {
         "websearch": "deny",
-        "codesearch": "allow",
         "webfetch": "deny"
       },
       "routing": {
@@ -212,7 +211,8 @@
         "mappings": "config/auto-delegation.json#keywordMappings",
         "agentProfiles": "config/auto-delegation.json#agentProfiles",
         "fallbackStrategy": "clarify-ba"
-      }
+      },
+      "steps": 6
     },
     "gov-agent": {
       "description": "Governance agent — compliance, security, audit",
@@ -226,7 +226,6 @@
       },
       "permission": {
         "websearch": "deny",
-        "codesearch": "allow",
         "webfetch": "deny"
       },
       "routing": {
@@ -234,7 +233,8 @@
         "mappings": "config/auto-delegation.json#keywordMappings",
         "agentProfiles": "config/auto-delegation.json#agentProfiles",
         "fallbackStrategy": "clarify-ba"
-      }
+      },
+      "steps": 6
     },
     "session-agent": {
       "description": "Session management agent — state tracking and lifecycle",
@@ -248,7 +248,6 @@
       },
       "permission": {
         "websearch": "deny",
-        "codesearch": "deny",
         "webfetch": "deny"
       },
       "routing": {
@@ -256,7 +255,8 @@
         "mappings": "config/auto-delegation.json#keywordMappings",
         "agentProfiles": "config/auto-delegation.json#agentProfiles",
         "fallbackStrategy": "clarify-ba"
-      }
+      },
+      "steps": 6
     },
     "premortem-agent": {
       "description": "Premortem analysis agent — risk identification and stress testing",
@@ -270,7 +270,6 @@
       },
       "permission": {
         "websearch": "deny",
-        "codesearch": "deny",
         "webfetch": "deny"
       },
       "routing": {
@@ -278,7 +277,8 @@
         "mappings": "config/auto-delegation.json#keywordMappings",
         "agentProfiles": "config/auto-delegation.json#agentProfiles",
         "fallbackStrategy": "clarify-ba"
-      }
+      },
+      "steps": 6
     },
     "finance-agent": {
       "description": "Financial analysis agent — modeling and calculations",
@@ -292,7 +292,6 @@
       },
       "permission": {
         "websearch": "deny",
-        "codesearch": "deny",
         "webfetch": "deny"
       },
       "routing": {
@@ -300,7 +299,8 @@
         "mappings": "config/auto-delegation.json#keywordMappings",
         "agentProfiles": "config/auto-delegation.json#agentProfiles",
         "fallbackStrategy": "clarify-ba"
-      }
+      },
+      "steps": 6
     },
     "legal-agent": {
       "description": "Legal compliance agent — regulatory and policy analysis",
@@ -314,7 +314,6 @@
       },
       "permission": {
         "websearch": "deny",
-        "codesearch": "deny",
         "webfetch": "deny"
       },
       "routing": {
@@ -322,7 +321,8 @@
         "mappings": "config/auto-delegation.json#keywordMappings",
         "agentProfiles": "config/auto-delegation.json#agentProfiles",
         "fallbackStrategy": "clarify-ba"
-      }
+      },
+      "steps": 6
     },
     "mkt-agent": {
       "description": "Marketing content agent — copywriting and SEO",
@@ -336,7 +336,6 @@
       },
       "permission": {
         "websearch": "deny",
-        "codesearch": "deny",
         "webfetch": "deny"
       },
       "routing": {
@@ -344,7 +343,8 @@
         "mappings": "config/auto-delegation.json#keywordMappings",
         "agentProfiles": "config/auto-delegation.json#agentProfiles",
         "fallbackStrategy": "clarify-ba"
-      }
+      },
+      "steps": 6
     },
     "sales-agent": {
       "description": "Sales agent — pipeline and account management",
@@ -358,7 +358,6 @@
       },
       "permission": {
         "websearch": "deny",
-        "codesearch": "deny",
         "webfetch": "deny"
       },
       "routing": {
@@ -366,7 +365,8 @@
         "mappings": "config/auto-delegation.json#keywordMappings",
         "agentProfiles": "config/auto-delegation.json#agentProfiles",
         "fallbackStrategy": "clarify-ba"
-      }
+      },
+      "steps": 6
     },
     "hr-agent": {
       "description": "HR agent — talent acquisition and people processes",
@@ -380,7 +380,6 @@
       },
       "permission": {
         "websearch": "deny",
-        "codesearch": "deny",
         "webfetch": "deny"
       },
       "routing": {
@@ -388,7 +387,53 @@
         "mappings": "config/auto-delegation.json#keywordMappings",
         "agentProfiles": "config/auto-delegation.json#agentProfiles",
         "fallbackStrategy": "clarify-ba"
-      }
+      },
+      "steps": 6
+    }
+  },
+  "default_agent": "orchestrator",
+  "share": "manual",
+  "compaction": {
+    "auto": true,
+    "prune": true
+  },
+  "watcher": {
+    "ignore": [
+      "node_modules/**",
+      "dist/**",
+      "build/**",
+      ".git/**",
+      ".engram-data/**",
+      "tmp-session-debug/**",
+      "logs/**",
+      "session/**"
+    ]
+  },
+  "permission": {
+    "read": "allow",
+    "glob": "allow",
+    "grep": "allow",
+    "skill": "allow",
+    "question": "allow",
+    "todowrite": "allow",
+    "lsp": "ask",
+    "webfetch": "deny",
+    "websearch": "deny",
+    "external_directory": "ask",
+    "doom_loop": "deny",
+    "edit": "allow",
+    "bash": {
+      "*": "ask",
+      "git status*": "allow",
+      "git log*": "allow",
+      "git diff*": "allow",
+      "git show*": "allow",
+      "rg *": "allow",
+      "Get-ChildItem *": "allow",
+      "Test-Path *": "allow"
+    },
+    "task": {
+      "*": "allow"
     }
   }
 }

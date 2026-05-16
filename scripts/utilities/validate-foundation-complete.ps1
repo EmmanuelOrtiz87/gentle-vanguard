@@ -3,6 +3,7 @@
 
 $ErrorActionPreference = 'Stop'
 $workspaceRoot = $PSScriptRoot | Split-Path | Split-Path
+$script:homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
 $errors = 0
 $warnings = 0
 
@@ -43,7 +44,7 @@ $reportScript = Join-Path $workspaceRoot "scripts\utilities\TELEMETRY-METRICS\ge
 Test-Item "generate-management-report.ps1 exists" (Test-Path $reportScript)
 
 # Check skill exists
-$skillFile = "$env:USERPROFILE\.config\opencode\skills\management-reporting-skill\SKILL.md"
+$skillFile = "$script:homePath\.config\opencode\skills\management-reporting-skill\SKILL.md"
 Test-Item "management-reporting-skill exists" (Test-Path $skillFile)
 
 # Check opencode.json has post_session hook
@@ -102,8 +103,12 @@ $preProcessScript = Join-Path $workspaceRoot "tools\pre-process-input.ps1"
 Test-Item "pre-process-input.ps1 exists" (Test-Path $preProcessScript)
 
 # Check session autostart
-$autostartCmd = Join-Path $workspaceRoot "tools\session-autostart.cmd"
-Test-Item "session-autostart.cmd exists" (Test-Path $autostartCmd)
+$autostartFile = if ([Environment]::OSVersion.Platform -eq 'Win32NT') {
+    Join-Path $workspaceRoot "tools\session-autostart.cmd"
+} else {
+    Join-Path $workspaceRoot "scripts\utilities\session-autostart.sh"
+}
+Test-Item "session-autostart exists" (Test-Path $autostartFile)
 
 Write-Host ""
 
