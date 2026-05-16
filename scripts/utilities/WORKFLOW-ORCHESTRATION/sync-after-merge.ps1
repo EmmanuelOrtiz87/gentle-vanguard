@@ -41,15 +41,7 @@ foreach ($script in $criticalScripts) {
     }
 }
 
-# Update session if needed
-if (Test-Path "scripts/utilities/session-manager.ps1") {
-    try {
-        .\tools\session-manager.ps1 -Action "update" -Silent
-    }
-    catch {
-        Write-Host "[WARN] Session update failed: $_"
-    }
-}
+# Session manager validated by criticalScripts check above
 
 Write-Host "[OK] Post-merge processing completed"
 exit 0
