@@ -160,3 +160,5 @@ keys/
 
 *.lib
 
+docs/REFERENCE-AUDIT-*.md 
+rules/NORMATIVAS-REFERENCE-*.md 
