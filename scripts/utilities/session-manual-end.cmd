@@ -38,6 +38,26 @@ if errorlevel 1 (
   echo [WARN] Close flow reported issues — continuing with post-close steps...
 )
 
+REM Close only current tracked session ID (safe when multiple sessions are active)
+set SESSION_MANAGER=%REPO_ROOT%\scripts\utilities\session-manager.ps1
+set ACTIVE_SESSION_FILE=%REPO_ROOT%\logs\.session-active
+if exist "%SESSION_MANAGER%" (
+  if exist "%ACTIVE_SESSION_FILE%" (
+    for /f "usebackq tokens=*" %%i in (`powershell -NoProfile -Command "$a=Get-Content '%ACTIVE_SESSION_FILE%' -Raw | ConvertFrom-Json; $a.SessionId"`) do set TARGET_SESSION_ID=%%i
+    if not "!TARGET_SESSION_ID!"=="" (
+      echo [INFO] Closing tracked session only: !TARGET_SESSION_ID!
+      powershell -NoProfile -ExecutionPolicy Bypass -File "%SESSION_MANAGER%" -Mode End -TargetSessionId "!TARGET_SESSION_ID!"
+      if errorlevel 1 ( echo [WARN] Session manager close returned warnings ) else ( echo [OK] Session closed safely: !TARGET_SESSION_ID! )
+    ) else (
+      echo [WARN] Could not read SessionId from logs/.session-active
+    )
+  ) else (
+    echo [WARN] logs/.session-active not found — skipping targeted session close
+  )
+) else (
+  echo [SKIP] session-manager.ps1 not found
+)
+
 REM Post-close: cross-workspace validation
 echo [INFO] Validating cross-workspace consistency...
 set CROSS_VALIDATOR=%REPO_ROOT%\scripts\monitoring\cross-workspace-validator.ps1

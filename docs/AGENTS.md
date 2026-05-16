@@ -8,6 +8,9 @@
 
 ## 🔧 Tool Detection Rule#
 
+**Default platform policy**: OpenCode is the baseline/default platform for this workspace.
+Runtime detection is the final authority that decides what to use and how to optimize behavior per turn/session.
+
 **BEFORE** any other action, detect which AI tool is running:
 
 ```powershell
@@ -34,6 +37,8 @@ $detected.os.isWindows     → true/false
 **Use this immediately**: Before running ANY command, check `$detected.os.platform` to pick the correct script extension (`.cmd`/`.ps1` for Windows, `.sh` for Linux/macOS) and path format.
 
 Based on the detected tool, load the correct config from `config/orchestrator.json#toolProfiles`.
+
+If no explicit runtime marker is present, fallback defaults to OpenCode.
 
 > **CRITICAL**: This file (`AGENTS.md`) is the canonical tool-agnostic entry point.  
 > Do NOT rely on `CLAUDE.md`, `.clinerules`, or `.cursorrules` as primary bootstrap —  

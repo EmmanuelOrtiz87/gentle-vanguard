@@ -1,6 +1,6 @@
 {
-  "tool": "cline",
-  "displayName": "Cline",
+  "tool": "claude-code",
+  "displayName": "Claude Code",
   "version": "latest",
   "preProcess": {
     "loadSkills": true,
@@ -8,8 +8,8 @@
     "autoLoad": true,
     "mcpBridge": true
   },
-  "capabilities": ["mcp", "skills", "code_completion", "terminal"],
-  "configFiles": [".clinerules", ".clinerules.optimized", ".clineignore", ".cline/config.json", ".claude/settings.json"],
+  "capabilities": ["mcp", "skills", "subagents", "terminal", "hooks", "plugins"],
+  "configFiles": ["CLAUDE.md", ".claude/settings.json", "docs/AGENTS.md", "config/plugins.json"],
   "adapter": {
     "type": "mcp-bridge",
     "path": "adapters/mcp-bridge",

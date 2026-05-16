@@ -6,10 +6,10 @@
       "mandatory": true,
       "script": "scripts/utilities/detect-tool.ps1",
       "scriptArgs": "-ConfigPath config/orchestrator.json -AsJson",
-      "fallbackTool": "claude-generic",
+      "fallbackTool": "opencode",
       "fallbackPromptFile": "CLAUDE.md",
       "canonicalEntryPoint": "docs/AGENTS.md",
-      "note": "Detects tool at runtime and loads correct profile. Always use AGENTS.md over tool-specific files."
+      "note": "Detects tool at runtime and loads correct profile. OpenCode is the baseline default when no explicit runtime marker is present. Always use AGENTS.md over tool-specific files."
     },
     "preProcessing": {
       "enabled": true,

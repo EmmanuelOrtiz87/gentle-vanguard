@@ -5,12 +5,12 @@
 **BEFORE responding to ANY user input:**
 
 1. **Run**:
-   `powershell -File tools/pre-process-input.ps1 -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
+   `powershell -File scripts/utilities/pre-process-input.ps1 -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
 2. **Parse output**:
    - `TRIGGER_MATCH_FOUND` → load skill BEFORE any other action
    - `PLAN_MODE_REQUIRED` → activate BA agent (confidence < 40)
    - `NO_TRIGGER_MATCH` → continue normally
-3. **Session start**: run `tools/session-autostart.cmd` on first turn
+3. **Session start**: run `scripts/utilities/session-autostart.cmd` on first turn
 
 **This rule is MANDATORY. Do NOT wait to be asked.**
 
@@ -35,7 +35,18 @@ authorized.
 See also:
 
 - `opencode.json` - OpenCode configuration
+- `.codex/config.toml` - Codex native configuration (sandbox, approvals, profiles)
 - `CLAUDE.md` - Claude-specific rules
 - `.cursorrules` - Cursor IDE rules
 - `.windsurf/config.json` - Windsurf configuration
 - `.clinerules` - Cline rules
+
+## Codex Prompt Pattern (Recommended)
+
+When requesting implementation, include:
+- Goal
+- Context
+- Constraints
+- Done when
+
+For complex tasks, use plan-first mode before apply.
