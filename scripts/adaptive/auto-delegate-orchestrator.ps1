@@ -5,6 +5,7 @@
 param(
     [string]$TaskDescription,
     [string]$AgentType,
+    [string[]]$AgentTypes,
     [string]$Behavior = "balanced",
     [string]$SessionId = "manual-save-workspace_local",
     [string]$Project = "workspace_local",
@@ -674,8 +675,132 @@ function Start-Orchestrator {
 }
 #endregion
 
+#region Batch Dispatch
+function Start-BatchOrchestrator {
+    param([string[]]$AgentTypeList)
+
+    if (-not $AgentTypeList -or $AgentTypeList.Count -eq 0) {
+        return @{ status = "error"; reason = "no agents specified" }
+    }
+
+    Initialize-Semaphores
+    Initialize-CircuitBreakers
+    Initialize-Metrics
+    if ($EnableContinuity -or $true) { Restore-OrchestratorState | Out-Null }
+
+    $pool = [runspacefactory]::CreateRunspacePool(1, [Math]::Min($AgentTypeList.Count, 5))
+    $pool.Open()
+    $psList = @()
+
+    foreach ($at in $AgentTypeList) {
+        $circuitState = Get-CircuitState -AgentType $at
+        if ($circuitState -eq "OPEN") {
+            if ($Verbose) { Write-Host "[BATCH] Circuit OPEN for $at - skipping" }
+            $psList += @{ agent = $at; skipped = $true; reason = "circuit_open" }
+            continue
+        }
+
+        $subagent = Get-SubagentType -AgentType $at
+        if (-not (Test-SkillDependencies -SkillName $subagent)) {
+            if ($Verbose) { Write-Host "[BATCH] Dependencies not met for $at - queuing" }
+            $script:OrchestratorState.DependencyQueue["$at`:$TaskDescription"] = @{
+                agent = $at; subagent = $subagent; timestamp = Get-Date
+            }
+            $psList += @{ agent = $at; skipped = $true; reason = "dependencies" }
+            continue
+        }
+
+        $behaviorPrompt = Get-BehaviorPrompt -BehaviorType $Behavior
+        $delegationId = "del-$(Get-Date -Format 'yyyyMMdd-HHmmss')-$(Get-Random -Maximum 9999)"
+
+        if ($DryRun) {
+            $psList += @{ agent = $at; dry_run = $true; delegation_id = $delegationId }
+            continue
+        }
+
+        $wrapperPath = $AutoDelegationWrapper
+        $desc = $TaskDescription
+        $ps = [powershell]::Create().AddScript({
+            param($wrapper, $agent, $task, $bid)
+            $r = & $wrapper -Agent $agent -Task $task -AsJson | ConvertFrom-Json
+            $status = if ($r -and $r.status) { [string]$r.status } else { "unknown" }
+            $tokenEst = 0
+            if ($r -and $r.token_estimate) { $tokenEst = [int][math]::Ceiling([double]$r.token_estimate / 4) }
+            elseif ($r -and $r.delegation -and $r.delegation.token_estimate) { $tokenEst = [int][math]::Ceiling([double]$r.delegation.token_estimate / 4) }
+            $isSuccess = $status -in @("ready", "partial", "dispatched")
+            return @{ success = $isSuccess; agent_type = $agent; delegation_id = $bid; wrapper_status = $status; token_estimate = $tokenEst }
+        }).AddArgument($wrapperPath).AddArgument($at).AddArgument($desc).AddArgument($delegationId)
+        $ps.RunspacePool = $pool
+        $psList += @{ ps = $ps; agent = $at; delegation_id = $delegationId; handle = $ps.BeginInvoke(); skipped = $false }
+    }
+
+    $results = @()
+    foreach ($pi in $psList) {
+        if ($pi.skipped) {
+            $results += @{ agent_type = $pi.agent; status = "skipped"; reason = $pi.reason }
+            continue
+        }
+        if ($pi.dry_run) {
+            $results += @{ agent_type = $pi.agent; status = "dry_run"; delegation_id = $pi.delegation_id }
+            continue
+        }
+        try {
+            $r = $pi.ps.EndInvoke($pi.handle)
+            $results += $r
+            if ($r.success) { Record-CircuitSuccess -AgentType $pi.agent }
+            else {
+                Record-CircuitFailure -AgentType $pi.agent
+                $escalationTarget = $AutoDelegation.agentProfiles.$($pi.agent).escalateOnFailure
+                if ($escalationTarget -and $escalationTarget -ne 'orchestrator') {
+                    if ($Verbose) { Write-Host "[ESCALATE] $($pi.agent) failed -> escalating to $escalationTarget" }
+                    $results += @{ agent_type = $pi.agent; status = "escalated"; escalated_to = $escalationTarget }
+                }
+            }
+            if ($EnableMetrics -or $true) { Record-Metric -AgentType $pi.agent -Result $(if ($r.success){"success"}else{"failure"}) -DurationSeconds 0 }
+        } catch {
+            $results += @{ agent_type = $pi.agent; status = "error"; error = $_.Exception.Message }
+            Record-CircuitFailure -AgentType $pi.agent
+        } finally {
+            $pi.ps.Dispose()
+        }
+    }
+    $pool.Close(); $pool.Dispose()
+
+    $resolved = Process-DependencyQueue
+    if ($resolved.Count -gt 0 -and $Verbose) {
+        Write-Host "[DEPS] Resolved $($resolved.Count) queued dependencies: $($resolved -join ', ')"
+    }
+
+    if ($EnableContinuity -or $true) { Save-OrchestratorState }
+
+    Write-MetricsSummary
+    return @{ status = "completed"; agents = $results; total = $results.Count; failed = @($results | Where-Object { -not $_.success -and -not $_.skipped }).Count }
+}
+
+function Process-DependencyQueue {
+    $processed = @()
+    $remaining = @{}
+    foreach ($kv in $script:OrchestratorState.DependencyQueue.GetEnumerator()) {
+        $taskKey = $kv.Key
+        $dep = $kv.Value
+        if (Test-SkillDependencies -SkillName $dep.subagent) {
+            $processed += $taskKey
+            if ($Verbose) { Write-Host "[DEPS] Dependencies resolved for $($dep.agent) -> $taskKey" }
+        } else {
+            $remaining[$taskKey] = $dep
+        }
+    }
+    $script:OrchestratorState.DependencyQueue = $remaining
+    return $processed
+}
+#endregion
+
 #region Entry Point
-if ($TaskDescription) {
+if ($AgentTypes -and $AgentTypes.Count -gt 0) {
+    $result = Start-BatchOrchestrator -AgentTypeList $AgentTypes
+    $result | ConvertTo-Json -Depth 10
+}
+elseif ($TaskDescription) {
     $result = Start-Orchestrator
     
     # Write final metrics
@@ -689,6 +814,6 @@ if ($TaskDescription) {
     }
 }
 else {
-    Write-Host "Usage: .\auto-delegate-orchestrator.ps1 -TaskDescription 'your task' [-AgentType BA|SAD|DEV|QA|OPS|GOV|DOC] [-Behavior balanced|fast|precise|exploratory|creative|strict] [-Verbose] [-DryRun]"
+    Write-Host "Usage: .\auto-delegate-orchestrator.ps1 -TaskDescription 'your task' [-AgentType BA|SAD|DEV|QA|OPS|GOV|DOC] [-AgentTypes BA,DEV,QA] [-Behavior balanced|fast|precise|exploratory|creative|strict] [-Verbose] [-DryRun]"
 }
 #endregion

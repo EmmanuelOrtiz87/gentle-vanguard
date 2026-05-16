@@ -26,6 +26,7 @@ $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 $agentRouter = Join-Path $scriptDir 'agent-router.ps1'
 $eventBusScript = Join-Path $scriptDir 'event-bus.ps1'
 $dispatchMemoryManager = Join-Path $scriptDir 'dispatch-memory-manager.ps1'
+$agentMessageBus = Join-Path (Split-Path -Parent $scriptDir) 'adaptive\agent-message-bus.ps1'
 
 function Write-AgentLine {
     param([string]$Message, [string]$Color = 'White')
@@ -182,12 +183,19 @@ function Get-ParallelConfig {
     return $config
 }
 
+function Invoke-InterAgentMessage {
+    param([string]$FromAgent, [string]$ToAgent, [string]$Subject, [string]$Payload, [string]$ConvId, [string]$MsgType = 'response')
+    if (-not (Test-Path $agentMessageBus)) { return }
+    $null = & $agentMessageBus -Action send -Sender $FromAgent -Recipient $ToAgent -Subject $Subject -Payload $Payload -ConversationId $ConvId -MessageType $MsgType -Priority normal -Quiet
+}
+
 function Invoke-ParallelDispatch {
     param(
         [string[]]$AgentNames,
         [string]$TaskText,
         [string]$ExecutionMode,
-        [string]$RiskLevel
+        [string]$RiskLevel,
+        [string]$ConversationId = ''
     )
     
     $config = Get-ParallelConfig -AgentNames $AgentNames -TaskText $TaskText -ExecutionMode $ExecutionMode -RiskLevel $RiskLevel
@@ -241,7 +249,9 @@ function Invoke-ParallelDispatch {
             $batchNum++
             Write-AgentLine "`n[Batch $batchNum] Running $($lane.agents.Count) agents in parallel..." 'Green'
             
-            $jobs = @()
+            $runspacePool = [runspacefactory]::CreateRunspacePool(1, [Math]::Min($lane.agents.Count, 4))
+            $runspacePool.Open()
+            $psInstances = @()
             foreach ($agent in $lane.agents) {
                 Write-Host "  Dispatching: $agent" -ForegroundColor Gray
                 if (Test-Path $eventBusScript) {
@@ -251,28 +261,31 @@ function Invoke-ParallelDispatch {
                         lane_id = "agent-$agent-$batchNum"
                     } | ConvertTo-Json -Compress) -Quiet
                 }
-                $job = Start-Job -ScriptBlock {
-                    param($script, $agentName, $taskDesc)
-                    & $script -Agent $agentName -Task $taskDesc -AsJson | ConvertFrom-Json
-                } -ArgumentList $agentRouter, $agent, $TaskText
-                $jobs += @{ job = $job; agent = $agent; laneId = "agent-$agent-$batchNum" }
+                $ps = [powershell]::Create().AddScript({
+                    param($s, $a, $t) & $s -Agent $a -Task $t -AsJson | ConvertFrom-Json
+                }).AddArgument($agentRouter).AddArgument($agent).AddArgument($TaskText)
+                $ps.RunspacePool = $runspacePool
+                $psInstances += @{ ps = $ps; agent = $agent; laneId = "agent-$agent-$batchNum"; handle = $ps.BeginInvoke() }
             }
             
             Write-Host "  Waiting for batch to complete..." -ForegroundColor DarkGray
-            $jobs | ForEach-Object { 
-                $_.result = Receive-Job -Job $_.job -Wait
-                Remove-Job -Job $_.job
+            foreach ($pi in $psInstances) {
+                $pi.result = $pi.ps.EndInvoke($pi.handle)
+                $pi.ps.Dispose()
             }
+            $runspacePool.Close()
+            $runspacePool.Dispose()
             
-            foreach ($job in $jobs) {
-                $results += $job.result
+            foreach ($pi in $psInstances) {
+                $results += $pi.result
                 if (Test-Path $eventBusScript) {
-                    $tEst = if ($job.result -and $job.result.token_estimate) { [math]::Ceiling($job.result.token_estimate / 4) } else { 0 }
-                    $aStatus = if ($job.result -and $job.result.status) { $job.result.status } else { 'unknown' }
+                    $tEst = if ($pi.result -and $pi.result.token_estimate) { [math]::Ceiling($pi.result.token_estimate / 4) } else { 0 }
+                    $aStatus = if ($pi.result -and $pi.result.status) { $pi.result.status } else { 'unknown' }
                     & $eventBusScript -Action emit -Event 'agent.completed' -Payload (@{
-                        agent = $job.agent; status = $aStatus; lane_id = $job.laneId; token_estimate = $tEst
+                        agent = $pi.agent; status = $aStatus; lane_id = $pi.laneId; token_estimate = $tEst
                     } | ConvertTo-Json -Compress) -Quiet
                 }
+                Invoke-InterAgentMessage -FromAgent $pi.agent -ToAgent ORCHESTRATOR -Subject 'agent.completed' -Payload ($pi.result | ConvertTo-Json -Compress) -ConvId $ConversationId
             }
         } else {
             Write-AgentLine "`n[Lane $($lane.order)] Running $($lane.agent)..." 'Yellow'
@@ -295,6 +308,7 @@ function Invoke-ParallelDispatch {
                     agent = $lane.agent; status = $aStatus; lane_id = "agent-$($lane.agent)-$($lane.order)"; token_estimate = $tEst
                 } | ConvertTo-Json -Compress) -Quiet
             }
+            Invoke-InterAgentMessage -FromAgent $lane.agent -ToAgent ORCHESTRATOR -Subject 'agent.completed' -Payload ($result | ConvertTo-Json -Compress) -ConvId $ConversationId
         }
     }
     
@@ -360,9 +374,10 @@ if ([string]::IsNullOrWhiteSpace($Task)) {
 
 # Cargar contexto anterior
 $previousContext = Load-PreviousDispatchContext
+$conversationId = "conv-dispatch-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
 
 if ($AsJson) {
-    $result = Invoke-ParallelDispatch -AgentNames $agentList -TaskText $Task -ExecutionMode $Mode -RiskLevel $Risk
+    $result = Invoke-ParallelDispatch -AgentNames $agentList -TaskText $Task -ExecutionMode $Mode -RiskLevel $Risk -ConversationId $conversationId
     
     # Guardar contexto para prxima ejecucin
     $dispatchContext = @{
@@ -370,6 +385,7 @@ if ($AsJson) {
         task = $Task
         mode = $Mode
         risk = $Risk
+        conversation_id = $conversationId
         previous_context = $previousContext
         results_summary = $result.summary
     }
@@ -377,7 +393,7 @@ if ($AsJson) {
     
     $result | ConvertTo-Json -Depth 5
 } else {
-    $result = Invoke-ParallelDispatch -AgentNames $agentList -TaskText $Task -ExecutionMode $Mode -RiskLevel $Risk
+    $result = Invoke-ParallelDispatch -AgentNames $agentList -TaskText $Task -ExecutionMode $Mode -RiskLevel $Risk -ConversationId $conversationId
     
     # Guardar contexto para prxima ejecucin
     $dispatchContext = @{
@@ -385,6 +401,7 @@ if ($AsJson) {
         task = $Task
         mode = $Mode
         risk = $Risk
+        conversation_id = $conversationId
         previous_context = $previousContext
         results_summary = $result.summary
     }
@@ -392,6 +409,7 @@ if ($AsJson) {
     
     Write-AgentLine "`n=== DISPATCH SUMMARY ===" 'Cyan'
     Write-Host "Execution ID: $($result.execution_id)" -ForegroundColor White
+    Write-Host "Conversation: $conversationId" -ForegroundColor Gray
     Write-Host "Total dispatched: $($result.summary.total)" -ForegroundColor White
     Write-Host "  Ready: $($result.summary.ready)" -ForegroundColor Green
     Write-Host "  Failed: $($result.summary.failed)" -ForegroundColor Red

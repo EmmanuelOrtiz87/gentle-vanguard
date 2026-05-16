@@ -83,6 +83,15 @@
     "maxAuthAttempts": 3,
     "lockoutDurationMinutes": 15
   },
+  "failover": {
+    "enabled": true,
+    "script": "scripts/utilities/MODEL-ROUTER/provider-failover.ps1",
+    "chain": ["openrouter", "anthropic", "openai", "ollama"],
+    "autoCheck": "on-route",
+    "cacheMinutes": 5,
+    "fallbackModel": "opencode/big-pickle",
+    "stateFile": ".session/provider-state.json"
+  },
   "providerPriority": {
     "description": "Ordered list for model selection UI (first = default)",
     "order": ["opencode", "anthropic", "openai", "bedrock", "gemini", "azure", "ollama", "dify", "custom"]
