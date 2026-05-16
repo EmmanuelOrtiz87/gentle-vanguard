@@ -60,9 +60,10 @@ Write-Output ""
 Write-Output "[BOOTSTRAP] Syncing bootstrap scripts..."
 $bootstrapDir = "$publicRepo\scripts\gentle-vanguard"
 New-Item -ItemType Directory -Path $bootstrapDir -Force | Out-Null
-Copy-Item "$privateRepo\scripts\gentle-vanguard\bootstrap.ps1" "$bootstrapDir\bootstrap.ps1" -Force
-Copy-Item "$privateRepo\scripts\gentle-vanguard\bootstrap-machine.ps1" "$bootstrapDir\bootstrap-machine.ps1" -Force
-Copy-Item "$privateRepo\scripts\gentle-vanguard\setup-multi-machine.ps1" "$bootstrapDir\setup-multi-machine.ps1" -Force
+$privateBootstrapDir = "$privateRepo\scripts\foundation"
+Copy-Item "$privateBootstrapDir\bootstrap.ps1" "$bootstrapDir\bootstrap.ps1" -Force
+Copy-Item "$privateBootstrapDir\bootstrap-machine.ps1" "$bootstrapDir\bootstrap-machine.ps1" -Force
+Copy-Item "$privateBootstrapDir\setup-multi-machine.ps1" "$bootstrapDir\setup-multi-machine.ps1" -Force
 
 # ============================================================================
 # 1. Public documentation (root files)
