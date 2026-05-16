@@ -121,7 +121,8 @@ function Get-DetectedTool {
     }
 
     # 6. Check for Continue config
-    $continueConfig = Join-Path $env:USERPROFILE ".continue/config.json"
+    $homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
+    $continueConfig = Join-Path $homePath ".continue/config.json"
     if (Test-Path $continueConfig -PathType Leaf) {
         $tool.name = "continue-dev"
         $tool.source = "file:$continueConfig"

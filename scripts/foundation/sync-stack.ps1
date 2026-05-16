@@ -15,6 +15,7 @@ $ErrorActionPreference = 'Stop'
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = if ($PSScriptRoot) { (Resolve-Path (Join-Path $scriptDir '..\...')).Path } else { Get-Location }
+$script:homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
 
 function Write-Step { param([string]$msg) Write-Host "`n=== $msg ===" -ForegroundColor Cyan }
 function Write-OK { param([string]$msg) Write-Host "[OK] $msg" -ForegroundColor Green }
@@ -26,7 +27,7 @@ $foundationInstall = $null
 $possibleLocations = @(
     "C:\Program Files\Foundation",
     "C:\Program Files (x86)\Foundation",
-    "$env:USERPROFILE\.gentleman",
+    "$script:homePath\.gentleman",
     "$env:LOCALAPPDATA\Foundation"
 )
 

@@ -3,7 +3,7 @@
 Automated setup for Foundation across all supported platforms and use cases.
 
 param(
-    [string]$InstallPath = "$env:USERPROFILE\foundation",
+    [string]$InstallPath = "$(if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME })\foundation",
     [ValidateSet('developer', 'team', 'enterprise')]
     [string]$Mode = 'developer',
     [switch]$SkipTests,
@@ -11,6 +11,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+$script:homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
 $host.UI.RawUI.WindowTitle = "Foundation Complete Setup"
 
 function Write-Step {

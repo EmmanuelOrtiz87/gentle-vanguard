@@ -1,3 +1,9 @@
+function Get-HomePath {
+    if ($env:USERPROFILE) { return $env:USERPROFILE }
+    if ($env:HOME) { return $env:HOME }
+    return [Environment]::GetFolderPath('UserProfile')
+}
+
 function Get-FoundationRepoRoot {
     if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) {
         return (Resolve-Path $env:FOUNDATION_BASE_DIR).Path
@@ -22,10 +28,14 @@ function Resolve-FoundationEngramBinary {
         return (Resolve-Path $env:ENGRAM_CMD).Path
     }
 
+    $homePath = Get-HomePath
     $candidatePaths = @(
-        (Join-Path $RepoRoot 'tools\engram.exe'),
-        (Join-Path ($env:USERPROFILE ? $env:USERPROFILE : $env:HOME) 'bin\engram.exe'),
-        (Join-Path ($env:GOPATH ? $env:GOPATH : (Join-Path $env:USERPROFILE 'go')) 'bin\engram.exe')
+        (Join-Path $RepoRoot 'tools' 'engram'),
+        (Join-Path $RepoRoot 'tools' 'engram.exe'),
+        (Join-Path $homePath 'bin' 'engram'),
+        (Join-Path $homePath 'bin' 'engram.exe'),
+        (Join-Path ($env:GOPATH ? $env:GOPATH : (Join-Path $homePath 'go')) 'bin' 'engram'),
+        (Join-Path ($env:GOPATH ? $env:GOPATH : (Join-Path $homePath 'go')) 'bin' 'engram.exe')
     )
 
     foreach ($candidate in $candidatePaths) {
