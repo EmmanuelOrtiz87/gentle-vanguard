@@ -6,8 +6,7 @@ description: >
   "insurtech", "seguros", "siniestros", "prima"
 license: Apache-2.0
 metadata:
-  author: foundation
-  version: '1.0'
+  author: gv version: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash
 ---
 
@@ -33,3 +32,4 @@ User asks about insurance products, underwriting, claims processing, policy admi
 2. Clarify the process stage (underwriting, claims, policy admin)
 3. Provide domain-specific terminology and calculations
 4. Include regulatory considerations (Solvency II, RBC)
+

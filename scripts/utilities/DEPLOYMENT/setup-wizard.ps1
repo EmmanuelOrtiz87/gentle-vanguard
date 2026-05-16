@@ -1,5 +1,5 @@
 # setup-wizard.ps1
-# Unified dependency checker and installer for Foundation.
+# Unified dependency checker and installer for Gentle-Vanguard.
 # Usage: .\setup-wizard.ps1
 
 param([switch]$Force)
@@ -36,7 +36,7 @@ function Test-Tool {
     return $false
 }
 
-Write-Step "Foundation Setup Wizard"
+Write-Step "Gentle-Vanguard Setup Wizard"
 
 # 1. Git
 Test-Tool -Name "git" -InstallCmd "winget install --id Git.Git -e --source winget"
@@ -54,4 +54,5 @@ if (-not (Get-Command go -ErrorAction SilentlyContinue)) {
 & "$scriptDir\install-engram.ps1" -Force:$Force
 
 Write-Step "Setup Complete!"
-Write-Host "Run '.\wf.ps1 health' to verify your environment." -ForegroundColor Cyan
+Write-Host "Run '.\gv.ps1 health' to verify your environment." -ForegroundColor Cyan
+

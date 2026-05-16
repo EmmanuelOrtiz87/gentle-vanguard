@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-Post-merge hook for Foundation workspace.
+Post-merge hook for Gentle-Vanguard workspace.
 
 .DESCRIPTION
 Syncs dependencies and tools after merge:
@@ -28,7 +28,7 @@ if ($mergedFiles -match "package\.json") {
 }
 
 # Validate critical scripts
-$criticalScripts = @("scripts/utilities/session-manager.ps1", "scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1")
+$criticalScripts = @("scripts/utilities/session-manager.ps1", "scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1")
 foreach ($script in $criticalScripts) {
     if ($mergedFiles -contains $script -and (Test-Path $script)) {
         try {
@@ -45,3 +45,4 @@ foreach ($script in $criticalScripts) {
 
 Write-Host "[OK] Post-merge processing completed"
 exit 0
+

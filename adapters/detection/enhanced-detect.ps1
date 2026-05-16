@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Enhanced IDE/Tool detection for Foundation adapters.
+    Enhanced IDE/Tool detection for Gentle-Vanguard adapters.
 
 .DESCRIPTION
     Extends detect-ide-session.ps1 with:
@@ -260,7 +260,7 @@ if ($AsJson) {
 }
 
 if (-not $Quiet) {
-    Write-Host "=== Foundation Enhanced Detection ===" -ForegroundColor Cyan
+    Write-Host "=== Gentle-Vanguard Enhanced Detection ===" -ForegroundColor Cyan
     Write-Host "Tool: $($result.toolName) ($($result.displayName))" -ForegroundColor White
     Write-Host "Confidence: $($result.confidence) (source: $($result.source))" -ForegroundColor $(if ($result.confidence -eq 'high') { 'Green' } elseif ($result.confidence -eq 'medium') { 'Yellow' } else { 'Red' })
     Write-Host "Detection: $($result.detectionMethod)" -ForegroundColor Gray
@@ -281,3 +281,4 @@ if (-not $Quiet) {
 }
 
 $result
+

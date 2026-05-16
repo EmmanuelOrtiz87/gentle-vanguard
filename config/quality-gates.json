@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "description": "Foundation Project - 28 Quality Gates Configuration",
+  "description": "Gentle-Vanguard Project - 28 Quality Gates Configuration",
   "gates": [
     {
       "id": "pre-commit-format",
@@ -343,12 +343,12 @@
     "dashboardUrl": "http://localhost:3000/dashboard"
   },
   "requiredWorkflows": [
-    "foundation-quality-gate",
+    "gentle-vanguard-quality-gate",
     "cross-platform-tests",
     "security-scan"
   ],
   "requiredStatusChecks": [
-    "Foundation Quality Gate",
+    "Gentle-Vanguard Quality Gate",
     "Cross-Platform Tests",
     "Security Scan",
     "Code Coverage"
@@ -364,3 +364,4 @@
     "allowDeletions": false
   }
 }
+

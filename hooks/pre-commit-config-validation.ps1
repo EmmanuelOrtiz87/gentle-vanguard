@@ -7,7 +7,7 @@
     that configuration files are correct.
     
 .NOTES
-    Author: foundation
+    Author: gentle-vanguard
     Version: 1.0.0
 #>
 
@@ -58,3 +58,4 @@ if ($hasErrors) {
 
 Write-Host "✅ Configuration validation passed" -ForegroundColor Green
 exit 0
+

@@ -1,5 +1,5 @@
 # setup-project.ps1
-# Setup project to use Gentleman Foundation
+# Setup project to use Gentle-Vanguard
 # Creates .skills/ symlinks and configures hooks
 
 param(
@@ -48,16 +48,16 @@ function Write-Err {
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Green
-Write-Host "  Project Setup - Gentleman Foundation" -ForegroundColor Green
+Write-Host "  Project Setup - Gentle-Vanguard" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green
 Write-Host ""
 Write-Host "Project: $ProjectRoot"
-Write-Host "Foundation: $GFRoot"
+Write-Host "Gentle-Vanguard: $GFRoot"
 Write-Host ""
 
 if (-not (Test-Path $GFRoot)) {
-    Write-Err "Foundation not found at: $GFRoot"
-    Write-Host "Run bootstrap-machine.ps1 first to install the foundation." -ForegroundColor Yellow
+    Write-Err "Gentle-Vanguard not found at: $GFRoot"
+    Write-Host "Run bootstrap-machine.ps1 first to install the gentle-vanguard." -ForegroundColor Yellow
     exit 1
 }
 
@@ -146,7 +146,7 @@ if (-not $HooksOnly) {
     $agentsContent = @"
 # AI Agent Guidelines
 
-This project is configured to work with the Gentleman Foundation.
+This project is configured to work with the Gentle-Vanguard.
 
 ## Skills
 
@@ -226,5 +226,7 @@ Write-Host ""
 Write-Host "Next Steps:" -ForegroundColor Yellow
 Write-Host "  1. Review and customize AGENTS.md"
 Write-Host "  2. Add project-specific skills if needed"
-Write-Host "  3. Run 'gf validate' to verify"
+Write-Host "  3. Run 'gv validate' to verify"
 Write-Host ""
+
+

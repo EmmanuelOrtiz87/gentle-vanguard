@@ -338,11 +338,11 @@ $validAgents = @('BA', 'SAD', 'DEV', 'QA', 'OPS', 'GOV', 'DOC')
 
 if ([string]::IsNullOrWhiteSpace($Agents)) {
     if ($AsJson) {
-        @{ error = 'agents required'; example = '.\wf.ps1 dispatch "DEV,QA" "implement feature"' } | ConvertTo-Json
+        @{ error = 'agents required'; example = '.\gv.ps1 dispatch "DEV,QA" "implement feature"' } | ConvertTo-Json
         exit 1
     }
     
-    Write-Host "Usage: .\wf.ps1 dispatch <AGENTS> <TASK> [OPTIONS]" -ForegroundColor Yellow
+    Write-Host "Usage: .\gv.ps1 dispatch <AGENTS> <TASK> [OPTIONS]" -ForegroundColor Yellow
     Write-Host ""
     Write-Host "AGENTS: Comma-separated list (e.g., DEV,QA,BA)" -ForegroundColor White
     Write-Host "Options:" -ForegroundColor White
@@ -353,9 +353,9 @@ if ([string]::IsNullOrWhiteSpace($Agents)) {
     Write-Host "  -AsJson (structured output)" -ForegroundColor Gray
     Write-Host ""
     Write-Host "Examples:" -ForegroundColor Cyan
-    Write-Host "  .\wf.ps1 dispatch `"DEV,QA`" `"implement auth`"" -ForegroundColor Gray
-    Write-Host "  .\wf.ps1 dispatch `"BA,SAD`" `"plan feature`" -DryRun" -ForegroundColor Gray
-    Write-Host "  .\wf.ps1 dispatch `"DEV,QA,OPS`" `"deploy`" -Mode adaptive" -ForegroundColor Gray
+    Write-Host "  .\gv.ps1 dispatch `"DEV,QA`" `"implement auth`"" -ForegroundColor Gray
+    Write-Host "  .\gv.ps1 dispatch `"BA,SAD`" `"plan feature`" -DryRun" -ForegroundColor Gray
+    Write-Host "  .\gv.ps1 dispatch `"DEV,QA,OPS`" `"deploy`" -Mode adaptive" -ForegroundColor Gray
     exit 1
 }
 
@@ -415,3 +415,4 @@ if ($AsJson) {
     Write-Host "  Failed: $($result.summary.failed)" -ForegroundColor Red
     Write-Host "  Blocked: $($result.summary.blocked)" -ForegroundColor Yellow
 }
+

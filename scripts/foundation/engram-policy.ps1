@@ -138,7 +138,7 @@ function Install-Engram {
     
     # Instalar via go install
     try {
-        go install github.com/foundation/engram/cmd/engram@latest
+        go install github.com/gentle-vanguard/engram/cmd/engram@latest
         Write-PolicySuccess "Engram installed via go install"
     } catch {
         Write-PolicyError "go install failed: $_"
@@ -247,3 +247,4 @@ switch ($Action) {
 }
 
 Write-PolicyStatus "=== Policy check complete ==="
+

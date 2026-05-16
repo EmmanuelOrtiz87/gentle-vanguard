@@ -6,8 +6,7 @@ description: >
   "income statement", "general ledger", "trial balance", "contabilidad", "asiento contable"
 license: Apache-2.0
 metadata:
-  author: foundation
-  version: '1.0'
+  author: gv version: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash
 ---
 
@@ -33,3 +32,4 @@ User asks about accounting/bookkeeping: journal entries, financial statements, r
 - Depreciation: Straight-line, declining balance, units of production
 - Inventory: FIFO, LIFO, weighted average
 - Ratios: Current ratio, quick ratio, debt-to-equity, ROE, ROA
+

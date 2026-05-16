@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "description": "Artifact retention policy for Foundation v2.1+",
+  "description": "Artifact retention policy for Gentle-Vanguard v2.1+",
   "defaultMaxRepo": 1,
   "defaultMaxLocal": 14,
   "categories": {
@@ -26,3 +26,4 @@
     "ciIntegration": true
   }
 }
+

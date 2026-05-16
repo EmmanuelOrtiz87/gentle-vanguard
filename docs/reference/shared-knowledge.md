@@ -1,7 +1,7 @@
-﻿# Shared Team Knowledge
+# Shared Team Knowledge
 
 This file aggregates key learnings and decisións from the team to align all AI agents. It is updated
-via `wf.ps1 end-session` when developers choose to share their findings.
+via `gv.ps1 end-session` when developers choose to share their findings.
 
 ## Core Rules
 
@@ -16,3 +16,4 @@ via `wf.ps1 end-session` when developers choose to share their findings.
 ---
 
 _Last updated: {{LAST_UPDATE_DATE}}_
+

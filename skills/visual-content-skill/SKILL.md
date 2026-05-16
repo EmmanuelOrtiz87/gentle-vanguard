@@ -1,7 +1,7 @@
 ---
 name: visual-content-skill
 description: >
-  Creates visual content for Foundation: ASCII art, diagrams (Mermaid), presentation templates,
+  Creates visual content for Gentle-Vanguard: ASCII art, diagrams (Mermaid), presentation templates,
   social media visuals, and graphic assets. Complements content-output-skill. Trigger: "ascii",
   "diagram", "mermaid", "visual", "presentacion", "slide", "logo", "grafico", "diagrama", "imagen",
   "png", "ppt", "pptx"
@@ -31,7 +31,7 @@ and documentation.
 
 ## ASCII Art
 
-### Foundation Logo (Classic)
+### Gentle-Vanguard Logo (Classic)
 
 ```
 
@@ -42,11 +42,11 @@ and documentation.
 
 
 
-        FOUNDATION
+        Gentle-Vanguard
 
 ```
 
-### Foundation Logo (Modern)
+### Gentle-Vanguard Logo (Modern)
 
 ```
 
@@ -62,7 +62,7 @@ and documentation.
 
 ```
 
-### Foundation Logo (Minimal)
+### Gentle-Vanguard Logo (Minimal)
 
 ```
 
@@ -72,7 +72,7 @@ and documentation.
 
 
 
-       FOUNDATION
+       Gentle-Vanguard
 
 ```
 
@@ -99,18 +99,18 @@ and documentation.
 ### Mini Banner
 
 ```
- Foundation v2.0 - AI Development Stack
+ Gentle-Vanguard v2.0 - AI Development Stack
 =====================================
 ```
 
-        FOUNDATION
+        Gentle-Vanguard
 
 ```
 
 ### Mini Banner
 ```
 
-# Foundation v2.0 - AI Development Stack
+# Gentle-Vanguard v2.0 - AI Development Stack
 
 ````
 
@@ -168,18 +168,18 @@ Use these prompts in Midjourney, DALL-E, Bing Image Creator, or Canva:
 
 ---
 
-#### Foundation Logo (Square - 1080x1080)
+#### Gentle-Vanguard Logo (Square - 1080x1080)
 
 ```
-Foundation logo, dark blue background #0d1117, cyan and purple neon accents,
-modern tech aesthetic, minimalist geometric style, "FOUNDATION" text in bold,
+Gentle-Vanguard logo, dark blue background #0d1117, cyan and purple neon accents,
+modern tech aesthetic, minimalist geometric style, "Gentle-Vanguard" text in bold,
 digital transformation, AI development, holographic effect, sleek, professional
 ```
 
 #### Twitter/X Banner (1600x900)
 
 ```
-Tech banner for Twitter, Foundation AI Development Stack, dark theme #0d1117,
+Tech banner for Twitter, Gentle-Vanguard AI Development Stack, dark theme #0d1117,
 cyan glow accents, code symbols floating, data streams, modern clean design,
 professional tech aesthetic, 16:9 ratio, no text
 ```
@@ -187,7 +187,7 @@ professional tech aesthetic, 16:9 ratio, no text
 #### LinkedIn Banner (1584x396)
 
 ```
-Professional LinkedIn banner, Foundation development stack, corporate blue #0d1117,
+Professional LinkedIn banner, Gentle-Vanguard development stack, corporate blue #0d1117,
 geometric lines, network nodes connected, subtle AI brain pattern, elegant,
 business professional, clean minimalist, no text
 ```
@@ -224,7 +224,7 @@ dark dramatic background, purple highlight, professional, "Judgment Day" text
 #### Announcement Post (1200x1200)
 
 ```
-Square post: Foundation v2.0 release announcement, bold typography, neon glow,
+Square post: Gentle-Vanguard v2.0 release announcement, bold typography, neon glow,
 celebration particles, AI and tech theme, professional, "v2.0" prominent,
 dark blue background
 ```
@@ -246,7 +246,7 @@ dark blue background
 ### Midjourney Quick Commands
 
 ```
-/imagine: Foundation logo --ar 1:1 --v 6
+/imagine: Gentle-Vanguard logo --ar 1:1 --v 6
 /imagine: Twitter banner --ar 16:9 --v 6
 /imagine: Feature card --ar 3:2 --v 6
 ```
@@ -273,3 +273,5 @@ dark blue background
 
 _Skill versión: 1.2_  
 _Last updated: 2026-04-27_
+
+

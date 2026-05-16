@@ -24,17 +24,17 @@ Structured JSON output for agent results enabling merge/consolidation:
 }
 ```
 
-Usage: `.\wf.ps1 agent DEV "implement feature" -AsJson`
+Usage: `.\gv.ps1 agent DEV "implement feature" -AsJson`
 
 ## Skills Auto-Discovery (FF-008)
 
 Auto-detect skills and generate mapping:
 
 ```powershell
-.\wf.ps1 skills discover    # List all available skills
-.\wf.ps1 skills map         # Show auto-generated agent mapping
-.\wf.ps1 skills agents      # Show agent skill assignments
-.\wf.ps1 skills validate    # Validate skill metadata
+.\gv.ps1 skills discover    # List all available skills
+.\gv.ps1 skills map         # Show auto-generated agent mapping
+.\gv.ps1 skills agents      # Show agent skill assignments
+.\gv.ps1 skills validate    # Validate skill metadata
 ```
 
 Scans `skills/` directory, extracts metadata from SKILL.md (name, description, triggers), generates
@@ -45,10 +45,10 @@ keyword-based agent mapping, identifies unmapped skills.
 Execute multiple agents in parallel with risk-based lane management:
 
 ```powershell
-.\wf.ps1 dispatch "DEV,QA" "implement feature" -DryRun         # Preview
-.\wf.ps1 dispatch "DEV,QA,BA" "plan sprint"                    # Parallel (default)
-.\wf.ps1 dispatch "BA,DEV,QA" "new feature" -Mode adaptive     # Discovery first
-.\wf.ps1 dispatch "BA,SAD,DEV" "requirements" -Mode sequential  # Sequential
+.\gv.ps1 dispatch "DEV,QA" "implement feature" -DryRun         # Preview
+.\gv.ps1 dispatch "DEV,QA,BA" "plan sprint"                    # Parallel (default)
+.\gv.ps1 dispatch "BA,DEV,QA" "new feature" -Mode adaptive     # Discovery first
+.\gv.ps1 dispatch "BA,SAD,DEV" "requirements" -Mode sequential  # Sequential
 ```
 
 ### Execution Modes
@@ -72,10 +72,10 @@ Execute multiple agents in parallel with risk-based lane management:
 Pub/sub event system for automation and hooks:
 
 ```powershell
-.\wf.ps1 events list      # List available events
-.\wf.ps1 events subscribe dispatch.started
-.\wf.ps1 events emit agent.completed '{"agent":"DEV","status":"ready"}'
-.\wf.ps1 events history   # View event history
+.\gv.ps1 events list      # List available events
+.\gv.ps1 events subscribe dispatch.started
+.\gv.ps1 events emit agent.completed '{"agent":"DEV","status":"ready"}'
+.\gv.ps1 events history   # View event history
 ```
 
 ### Standard Events
@@ -104,3 +104,4 @@ Pub/sub event system for automation and hooks:
 | Event Bus System      | ✅ Implemented (FF-010) |
 | Orchestrator Update   | ✅ Integrated           |
 | Documentation         | ✅ Updated              |
+

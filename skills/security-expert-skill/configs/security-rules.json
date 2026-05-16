@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "name": "security-expert-rules",
-  "description": "Security rules configuration for Foundation",
+  "description": "Security rules configuration for Gentle-Vanguard",
 
   "severity": {
     "critical": {
@@ -209,3 +209,4 @@
     "requireJustification": true
   }
 }
+

@@ -1,4 +1,4 @@
-﻿# 📋 Task Briefs#
+# 📋 Task Briefs#
 
 <p align="center">
   <b>Lightweight documentation for development tasks</b>
@@ -43,7 +43,7 @@ tasks/
 cp ../supplementary/TASK-BRIEF.template.md task-name.md
 
 # Or generate via workflow CLI
-.\scripts\utilities\wf.ps1 task-brief <task-name>
+.\scripts\utilities\gv.ps1 task-brief <task-name>
 ```
 
 ### Task Brief Components#
@@ -85,7 +85,7 @@ Each task brief should include:
 - ✅ For any significant work that spans multiple sessions
 - ✅ When tackling complex problems requiring detailed planning
 - ✅ For tasks that others might need to understand or take over
-- ✅ As part of the session workflow (`wf.ps1 start-session [task-name]`)
+- ✅ As part of the session workflow (`gv.ps1 start-session [task-name]`)
 
 ---
 
@@ -104,13 +104,14 @@ Each task brief should include:
 
 | Command                   | Description             | Output                                                |
 | ------------------------- | ----------------------- | ----------------------------------------------------- |
-| `wf task-brief <name>`    | Generate task brief     | `tasks/<name>.md`                                     |
-| `wf start-session <task>` | Start session with task | `docs/sessions/YYYY-MM-DD-HHmmss-session-start.md`    |
-| `wf end-session`          | End session             | `docs/sessions/YYYY-MM-DD-HHmmss-delivery-closure.md` |
+| `gv task-brief <name>`    | Generate task brief     | `tasks/<name>.md`                                     |
+| `gv start-session <task>` | Start session with task | `docs/sessions/YYYY-MM-DD-HHmmss-session-start.md`    |
+| `gv end-session`          | End session             | `docs/sessions/YYYY-MM-DD-HHmmss-delivery-closure.md` |
 
 ---
 
 <p align="center">
   <b>📋 Ready to create a task brief?</b><br>
-  <code>.\scripts\utilities\wf.ps1 task-brief &lt;task-name&gt;</code>
+  <code>.\scripts\utilities\gv.ps1 task-brief &lt;task-name&gt;</code>
 </p>
+

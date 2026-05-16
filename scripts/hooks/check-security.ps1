@@ -23,7 +23,7 @@ foreach ($file in $StagedFiles.Split("`n")) {
         'hooks/pre-commit.ps1',
         'hooks/pre-commit-privacy.ps1',
         'scripts/hooks/check-security.ps1',
-        'scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1',
+        'scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1',
         'skills/docker-devops-skill/SKILL.md',
         'skills/security-expert-skill/references/security-patterns.md',
         'config/security-privacy.json',
@@ -51,3 +51,4 @@ if (Test-Path "package.json") {
 }
 
 if ($SecretFound) { exit 1 } else { exit 0 }
+

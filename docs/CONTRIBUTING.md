@@ -1,4 +1,4 @@
-# Contributing to Foundation
+# Contributing to Gentle-Vanguard
 
 Thank you for your interest in contributing!
 
@@ -14,11 +14,11 @@ By participating, you agree to maintain a respectful and inclusive environment f
 # Fork the repository on GitHub
 
 # Clone your fork
-git clone https://github.com/EmmanuelOrtiz87/foundation.git
-cd foundation
+git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
+cd gentle-vanguard
 
 # Add upstream remote
-git remote add upstream https://github.com/EmmanuelOrtiz87/foundation.git
+git remote add upstream https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
 ```
 
 ### 2. Create a Branch
@@ -41,10 +41,10 @@ git checkout -b feat/your-feature-name
 ./scripts/project/init-workspace.ps1
 
 # Validate your changes
-./scripts/foundation/wf.ps1 validate
+./scripts/gentle-vanguard/gv.ps1 validate
 
 # Check workflow health
-./scripts/utilities/wf.ps1 health
+./scripts/utilities/gv.ps1 health
 ```
 
 ### 4. Make Changes
@@ -88,7 +88,7 @@ git commit -m "docs(readme): update installation guide"
 
 ```bash
 # Validate workspace
-./scripts/foundation/wf.ps1 validate
+./scripts/gentle-vanguard/gv.ps1 validate
 
 # Test specific functionality
 ./scripts/project/new-project.ps1 --name test-project --kind service
@@ -130,17 +130,17 @@ Include in your PR:
 ## Project Structure
 
 ```
-foundation/
+gentle-vanguard/
  .github/           # GitHub templates
  config/            # Workspace configuration
  docs/              # Documentation
  scripts/           # Automation scripts
-    foundation/    # Bootstrap and scaffolding CLI
+    gentle-vanguard/    # Bootstrap and scaffolding CLI
     project/       # Project setup and creation scripts
     utilities/     # Workflow CLI and operational utilities
     validation/    # Validation scripts
  skills/            # Agent skills
-    foundation/
+    gentle-vanguard/
     testing-skill/
     security-skill/
     ...
@@ -158,10 +158,10 @@ foundation/
 
 | Script                                                      | Purpose                                   |
 | ----------------------------------------------------------- | ----------------------------------------- |
-| `scripts/foundation/wf.ps1 init`                            | Initialize workspace                      |
+| `scripts/gentle-vanguard/gv.ps1 init`                            | Initialize workspace                      |
 | `scripts/project/new-project.ps1 -Name <name> -Kind <kind>` | Create new project                        |
-| `scripts/foundation/wf.ps1 validate`                        | Validate workspace                        |
-| `scripts/utilities/wf.ps1 health`                           | Check tool activation and workflow health |
+| `scripts/gentle-vanguard/gv.ps1 validate`                        | Validate workspace                        |
+| `scripts/utilities/gv.ps1 health`                           | Check tool activation and workflow health |
 | `scripts/validation/validate-project.ps1`                   | Run repository validation gate            |
 
 ## Questions?
@@ -173,3 +173,4 @@ foundation/
 ## License
 
 By contributing, you agree that your contributions will be licensed under the MIT License.
+

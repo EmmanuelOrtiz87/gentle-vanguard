@@ -18,13 +18,13 @@ flowchart LR
 
 ```powershell
 # Save session state
-foundation end-session
+gv end-session
 
 # Generate context pack
-foundation context-pack "objective"
+gentle-vanguard context-pack "objective"
 
 # Generate compact prompt
-foundation compact-start "objective"
+gv compact-start "objective"
 ```
 
 ### 2. Start New Session
@@ -32,14 +32,14 @@ foundation compact-start "objective"
 ```powershell
 # From new thread: paste compact prompt
 # Then run:
-foundation start-session
+gv start-session
 ```
 
 ### 3. Intra-Session Context Pack
 
 ```powershell
 # Mid-session snapshot
-foundation context-pack "current objective"
+gentle-vanguard context-pack "current objective"
 ```
 
 ## Marker Protocol
@@ -47,9 +47,11 @@ foundation context-pack "current objective"
 The `.session/.compact-marker` file prevents duplicate compact-start runs:
 
 ```
-1. User runs "wf compact-start" → writes marker + timestamp
+1. User runs "gv compact-start" → writes marker + timestamp
 2. Auto-trigger fires (LiveAssist) → checks marker → skips if <60min
-3. User runs "wf start-session" → start-session.ps1 checks marker → skips if <60min
+3. User runs "gv start-session" → start-session.ps1 checks marker → skips if <60min
 ```
 
 **Result**: compact-start runs at most once per 60 min regardless of trigger source.
+
+

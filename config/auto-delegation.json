@@ -161,8 +161,8 @@
     "customer-support-lead": "BA",
     "backlog-management-skill": "BA",
     "context-engineering-skill": "SAD",
-    "foundation-audit-skill": "GOV",
-    "foundation-manager-skill": "GOV",
+    "gentle-vanguard-audit-skill": "GOV",
+    "gentle-vanguard-manager-skill": "GOV",
     "quality-skill": "QA",
     "premortem-skill": "PREMORTEM"
   },
@@ -378,12 +378,12 @@
       "distributed",
       "correlation",
       "span",
-      "\"audit foundation\"",
+      "\"audit gentle-vanguard\"",
       "\"validate docs\"",
       "\"sweep project\"",
       "\"check links\"",
       "\"find duplicates\"",
-      "for: \"update foundation\"",
+      "for: \"update gentle-vanguard\"",
       "\"check updates\"",
       "\"sync skills\"",
       "\"install tools\"",
@@ -727,7 +727,7 @@
       "\"powershell script\"",
       "\"script parse error\"",
       "\"cross-platform script\"",
-      "\"wf script\".",
+      "\"gv script\".",
       "\"bash\"",
       "\"shell\"",
       "\"shellcheck\"",
@@ -1272,7 +1272,7 @@
         "session_scoped"
       ],
       "username_sources": [
-        "$env:FOUNDATION_USERNAME",
+        "$env:GENTLE_VANGUARD_USERNAME",
         "$env:USERNAME",
         "git config user.name"
       ],
@@ -1667,3 +1667,4 @@
     }
   }
 }
+

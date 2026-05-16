@@ -13,10 +13,10 @@
     Output: color-coded console table + optional JSON via -AsJson.
 
 .PARAMETER PromptChars
-    Current prompt size in characters. Pass from wf.ps1 or measure manually.
+    Current prompt size in characters. Pass from gv.ps1 or measure manually.
 
 .PARAMETER AdoptionPct
-    Current context adoption percentage (0-100). Pass from wf.ps1.
+    Current context adoption percentage (0-100). Pass from gv.ps1.
 
 .PARAMETER AsJson
     Output as JSON for programmatic use.
@@ -206,3 +206,4 @@ Write-Host "  [EVENTS]" -ForegroundColor White
 Write-StatusRow "  Blocked (60s)"  "$blockedRecent events blocked"   $eventStatus
 
 Write-Host ""
+

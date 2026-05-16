@@ -84,7 +84,8 @@ echo "========================================"
 echo ""
 
 if [ $exit_code -eq 1 ]; then
-    echo "Run 'wf review' for detailed report." >&2
+    echo "Run 'gv review' for detailed report." >&2
 fi
 
 exit $exit_code
+

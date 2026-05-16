@@ -1,6 +1,6 @@
 /**
  * Windsurf Adapter
- * Converts Foundation skills to Windsurf plugin format
+ * Converts Gentle-Vanguard skills to Windsurf plugin format
  * 
  * Windsurf uses a plugin system with:
  * - Plugin manifest (plugin.json)
@@ -12,7 +12,7 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * Convert Foundation SKILL.md to Windsurf plugin format
+ * Convert Gentle-Vanguard SKILL.md to Windsurf plugin format
  */
 function convertSkillToWindsurf(skillPath, outputDir) {
   const skillContent = fs.readFileSync(skillPath, 'utf-8');
@@ -28,10 +28,10 @@ function convertSkillToWindsurf(skillPath, outputDir) {
   const pluginManifest = {
     name: parsed.name,
     version: '1.0.0',
-    description: parsed.description || `Foundation skill: ${parsed.name}`,
+    description: parsed.description || `Gentle-Vanguard skill: ${parsed.name}`,
     triggers: parsed.triggers || [],
-    author: 'Foundation',
-    foundation: true
+    author: 'Gentle-Vanguard',
+    gentle-vanguard: true
   };
   
   fs.writeFileSync(
@@ -51,7 +51,7 @@ function convertSkillToWindsurf(skillPath, outputDir) {
 }
 
 /**
- * Parse Foundation SKILL.md format
+ * Parse Gentle-Vanguard SKILL.md format
  */
 function parseSkillMarkdown(content) {
   const result = {
@@ -92,7 +92,7 @@ function parseSkillMarkdown(content) {
  */
 function generateWindsurfInstructions(parsed) {
   let instructions = `# ${parsed.name}\n\n`;
-  instructions += `> Foundation Skill (converted for Windsurf)\n\n`;
+  instructions += `> Gentle-Vanguard Skill (converted for Windsurf)\n\n`;
   instructions += `## Description\n${parsed.description}\n\n`;
   instructions += `## Triggers\n`;
   parsed.triggers.forEach(t => {
@@ -122,7 +122,7 @@ function generateWindsurfConfig(skillsDir, outputPath) {
   const config = {
     plugins: plugins,
     settings: {
-      enableFoundationSkills: true,
+      enableGentle-VanguardSkills: true,
       autoLoad: true
     }
   };
@@ -163,3 +163,4 @@ module.exports = {
   convertSkillToWindsurf,
   generateWindsurfConfig
 };
+

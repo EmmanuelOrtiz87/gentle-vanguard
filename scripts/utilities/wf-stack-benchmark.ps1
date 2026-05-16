@@ -5,7 +5,7 @@
 
 .DESCRIPTION
   Runs four quality layers:
-  1) wf benchmark (command latency vs SLO)
+  1) gv benchmark (command latency vs SLO)
   2) multilingual routing matrix (coverage/accuracy)
   3) agent-verify tests domain (structural quality gate)
   4) baseline regression check (historical trend guard)
@@ -32,10 +32,10 @@
   Force baseline update with current run metrics.
 
 .PARAMETER RegressionWarnPct
-  Warn threshold for wf latency regression (% above baseline).
+  Warn threshold for gv latency regression (% above baseline).
 
 .PARAMETER RegressionFailPct
-  Fail threshold for wf latency regression (% above baseline).
+  Fail threshold for gv latency regression (% above baseline).
 #>
 
 param(
@@ -53,7 +53,7 @@ $ErrorActionPreference = 'Continue'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 
-$wfBench = Join-Path $repoRoot 'scripts\utilities\wf-benchmark.ps1'
+$wfBench = Join-Path $repoRoot 'scripts\utilities\gv-benchmark.ps1'
 $routingEval = Join-Path $repoRoot 'scripts\utilities\routing-quality-eval.ps1'
 $agentVerify = Join-Path $repoRoot 'scripts\utilities\agent-verify.ps1'
 
@@ -138,10 +138,10 @@ function Compare-Baseline {
 
     if ($latencyDeltaPct -ge $FailPct) {
         $status = 'FAIL'
-        $notes += "wf latency regression ${latencyDeltaPct}% >= fail threshold ${FailPct}%"
+        $notes += "gv latency regression ${latencyDeltaPct}% >= fail threshold ${FailPct}%"
     } elseif ($latencyDeltaPct -ge $WarnPct) {
         if ($status -ne 'FAIL') { $status = 'WARN' }
-        $notes += "wf latency regression ${latencyDeltaPct}% >= warn threshold ${WarnPct}%"
+        $notes += "gv latency regression ${latencyDeltaPct}% >= warn threshold ${WarnPct}%"
     }
 
     if ($routingDrop -ge $AccDropFail) {
@@ -264,7 +264,7 @@ function Invoke-AutoRemediation {
         $output = & $WfBenchScript -Commands @('status', 'health', 'verify') -AsJson 2>&1
         $actions += [ordered]@{
             layer = 'wf_benchmark'
-            action = 'Re-run wf benchmark for triage'
+            action = 'Re-run gv benchmark for triage'
             result = ([string]($output | Out-String)).Trim()
         }
     }
@@ -333,7 +333,7 @@ $result = [ordered]@{
     }
 }
 
-# Layer 1: wf benchmark
+# Layer 1: gv benchmark
 $layer1 = [ordered]@{ status = 'UNKNOWN'; detail = '' }
 if (Test-Path $wfBench) {
     try {
@@ -346,11 +346,11 @@ if (Test-Path $wfBench) {
         $layer1.data = $l1
     } catch {
         $layer1.status = 'FAIL'
-        $layer1.detail = "wf benchmark error: $($_.Exception.Message)"
+        $layer1.detail = "gv benchmark error: $($_.Exception.Message)"
     }
 } else {
     $layer1.status = 'FAIL'
-    $layer1.detail = 'wf-benchmark.ps1 not found'
+    $layer1.detail = 'gv-benchmark.ps1 not found'
 }
 $result.layers.wf_benchmark = $layer1
 
@@ -477,7 +477,7 @@ if ($AsJson) {
     Write-Host ''
     Write-Host '=== STACK BENCHMARK ===' -ForegroundColor Cyan
     Write-Host "Output: $outPath" -ForegroundColor Gray
-    Write-Host "WF Benchmark:        $($result.layers.wf_benchmark.status) - $($result.layers.wf_benchmark.detail)"
+    Write-Host "GV Benchmark:        $($result.layers.wf_benchmark.status) - $($result.layers.wf_benchmark.detail)"
     Write-Host "Routing Matrix:      $($result.layers.routing_matrix.status) - $($result.layers.routing_matrix.detail)"
     Write-Host "Agent Verify(Test):  $($result.layers.agent_verify_tests.status) - $($result.layers.agent_verify_tests.detail)"
     Write-Host "Baseline Regression: $($result.layers.baseline_regression.status) - $($result.layers.baseline_regression.detail)"
@@ -493,3 +493,4 @@ if ($Strict -and $result.summary.status -ne 'PASS') {
 }
 
 exit 0
+

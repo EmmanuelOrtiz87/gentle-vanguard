@@ -61,7 +61,7 @@ if (-not $ApiKey) {
     
     if ($Command -match $blocked.patterns -or $Command -in $blocked.commands) {
         Write-Host "[DENIED] This command requires owner authentication" -ForegroundColor Red
-        Write-Host "[INFO] Use: wf.ps1 <command> -apiKey <your-api-key>" -ForegroundColor Yellow
+        Write-Host "[INFO] Use: gv.ps1 <command> -apiKey <your-api-key>" -ForegroundColor Yellow
         exit 1
     }
 }

@@ -16,7 +16,7 @@ Esto verifica Go, Git, activa el orquestador (si hace falta) y limpia datos prev
 
 **Despus del preflight:**
 
-1. Terminal abierta en `.\foundation`.
+1. Terminal abierta en `.\gentle-vanguard`.
 2. PowerShell con permisos de ejecucin:
    `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass`.
 3. Repo limpio: `git status` sin cambios pendientes.
@@ -51,7 +51,7 @@ Esto verifica Go, Git, activa el orquestador (si hace falta) y limpia datos prev
 
 ```powershell
 # Confirmar que el stack est en pie
-./scripts/utilities/wf.ps1 status
+./scripts/utilities/gv.ps1 status
 ```
 
 ### Puntos de anclaje (ejecutivo)
@@ -73,8 +73,8 @@ Esto verifica Go, Git, activa el orquestador (si hace falta) y limpia datos prev
 
 ```powershell
 ./scripts/utilities/orchestrator-next-steps.ps1
-./scripts/utilities/wf.ps1 response-mode
-./scripts/utilities/wf.ps1 response-mode list
+./scripts/utilities/gv.ps1 response-mode
+./scripts/utilities/gv.ps1 response-mode list
 ```
 
 ### Guion dev (ampliar)
@@ -183,7 +183,7 @@ tasks_total=1  tasks_done=1  tasks_pending=0
 ### Nota operativa
 
 > "No duplicamos Engram dentro de `demos/`. La instalacin soportada vive en el stack
-> (`wf.ps1 install-engram`) para evitar deriva entre mquinas."
+> (`gv.ps1 install-engram`) para evitar deriva entre mquinas."
 
 > "Si Engram está activo, el ciclo es:"
 
@@ -242,7 +242,7 @@ mem_search  al siguiente da, el agente retoma desde where we left off
 ### Lo que muestras en pantalla
 
 ```powershell
-./scripts/utilities/wf.ps1 end-session demo-task-tracker
+./scripts/utilities/gv.ps1 end-session demo-task-tracker
 ```
 
 ### Output esperado
@@ -279,14 +279,14 @@ Closure report guardado en `docs/sessions/` con:
 
 ### "Funciona con nuestro stack actual?"
 
-> "foundation es agnstico al lenguaje. Lo que vieron en Go funciona igual en Python,
+> "gentle-vanguard es agnstico al lenguaje. Lo que vieron en Go funciona igual en Python,
 > TypeScript, o cualquier otro. La capa de integracin con la IA es via prompt no hay dependencia de
 > IDE o provider especfico."
 
 ### "Cmo se integra con Jira / Azure DevOps / etc.?"
 
 > "Los artefactos son markdown + JSON. Pueden conectar con cualquier sistema va webhook o pipeline
-> CI. La integracin directa con Jira y Azure Boards est en el roadmap como extensin de wf CLI."
+> CI. La integracin directa con Jira y Azure Boards est en el roadmap como extensin de gv CLI."
 
 ### "Qu tan difcil es adoptarlo para un equipo nuevo?"
 
@@ -305,3 +305,4 @@ Closure report guardado en `docs/sessions/` con:
    respuesta es: "El proyecto es simple para que el proceso sea el protagonista, no el cdigo."
 5. Limpiar `demos/shared/task-tracker/tasks.json` antes de cada demo si hiciste una corrida de
    prueba.
+

@@ -1,7 +1,7 @@
 {
   "name": "codex-adapter",
   "version": "1.0.0",
-  "description": "Converts Foundation skills to OpenAI Codex function calling format",
+  "description": "Converts Gentle-Vanguard skills to OpenAI Codex function calling format",
   "main": "adapter.js",
   "scripts": {
     "convert-skill": "node adapter.js convert-skill",
@@ -9,7 +9,7 @@
     "generate-proxy": "node adapter.js generate-proxy"
   },
   "keywords": [
-    "foundation",
+    "gentle-vanguard",
     "codex",
     "openai",
     "function-calling",
@@ -19,7 +19,7 @@
     "fs": "built-in",
     "path": "built-in"
   },
-  "foundation": {
+  "gentle-vanguard": {
     "adapterType": "format-adapter",
     "targetTool": "codex",
     "targetFormat": "openai-function-calling",
@@ -29,3 +29,4 @@
     ]
   }
 }
+

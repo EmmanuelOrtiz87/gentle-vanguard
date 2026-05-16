@@ -517,7 +517,7 @@ Invoke-ConstrainedExecution -Execution $execution
 
 ---
 
-## Integration with Foundation Stack
+## Integration with Gentle-Vanguard Stack
 
 ### Dependencies
 
@@ -614,3 +614,4 @@ $env:TOKEN_BUDGET_THRESHOLD = "0.85"
 - [Workflow Orchestrator](../workflow-orchestrator/SKILL.md)
 - [Project Orchestrator](../project-orchestrator-skill/SKILL.md)
 - [Monitoring Aggregator](../monitoring-aggregator/SKILL.md)
+

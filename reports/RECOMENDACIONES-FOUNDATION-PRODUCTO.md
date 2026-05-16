@@ -1,4 +1,4 @@
-# 📋 Recomendaciones: Foundation como Producto Cerrado
+# 📋 Recomendaciones: Gentle-Vanguard como Producto Cerrado
 
 **Fecha**: 2026-04-26  
 **Estado**: Análisis y Propuestas
@@ -77,9 +77,9 @@ plugins/
 
 **Plugins recomendados**:
 
-- `wf-plugin-auth` - Autenticación
-- `wf-plugin-deploy` - Despliegue
-- `wf-plugin-analytics` - Analytics
+- `gv-plugin-auth` - Autenticación
+- `gv-plugin-deploy` - Despliegue
+- `gv-plugin-analytics` - Analytics
 
 ### 4. Security (CRÍTICO)
 
@@ -115,13 +115,13 @@ plugins/
 ### 6. CLI Enhancement
 
 ```powershell
-# WF CLI mejorado:
-wf --help                    # Help mejorado
-wf status                   # System status
-wf doctor                   # Diagnostic
-wf update                   # Self-update
-wf plugins list             # List plugins
-wf plugins install <name>   # Install plugin
+# GV CLI mejorado:
+gv --help                    # Help mejorado
+gv status                   # System status
+gv doctor                   # Diagnostic
+gv update                   # Self-update
+gv plugins list             # List plugins
+gv plugins install <name>   # Install plugin
 ```
 
 ---
@@ -206,8 +206,8 @@ El archivo `AGENTS.md` debería incluir:
 
 ## Plugins
 
-- wf-plugin-auth
-- wf-plugin-deploy
+- gv-plugin-auth
+- gv-plugin-deploy
 ```
 
 ---
@@ -241,11 +241,12 @@ El archivo `AGENTS.md` debería incluir:
 
 ### CLI
 
-- [ ] wf doctor (diagnostic)
-- [ ] wf update (self-update)
-- [ ] wf plugins (plugin management)
+- [ ] gv doctor (diagnostic)
+- [ ] gv update (self-update)
+- [ ] gv plugins (plugin management)
 
 ---
 
 _Documento de recomendaciones_  
 _Próxima revisión: cuando se implementen items críticos_
+

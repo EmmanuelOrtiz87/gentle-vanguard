@@ -1,9 +1,9 @@
-# sfx-build.ps1 — Builds portable Foundation.exe (DEPRECATED)
+# sfx-build.ps1 — Builds portable Gentle-Vanguard.exe (DEPRECATED)
 # Embeds encrypted (.enc) files as compressed ZIP, compiles with ps2exe.
-# Output: dist/Foundation.exe (portable, no installation).
+# Output: dist/Gentle-Vanguard.exe (portable, no installation).
 #
 # ⚠️ DEPRECATED: Use create-installer.ps1 instead.
-#    Foundation.exe is now the NSIS installer (professional wizard, all-in-one).
+#    Gentle-Vanguard.exe is now the NSIS installer (professional wizard, all-in-one).
 #    This portable approach no longer represents the canonical distribution.
 #    Kept for reference only.
 #
@@ -13,7 +13,7 @@ param([switch]$DryRun)
 
 $ErrorActionPreference = 'Stop'
 
-if ($env:FOUNDATION_BASE_DIR) { $repoRoot = $env:FOUNDATION_BASE_DIR }
+if ($env:GENTLE_VANGUARD_BASE_DIR) { $repoRoot = $env:GENTLE_VANGUARD_BASE_DIR }
 else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -25,8 +25,8 @@ else {
 $buildDir = Join-Path $repoRoot 'build'
 $distDir = Join-Path $repoRoot 'dist'
 $protectedDir = Join-Path $buildDir 'protected'
-$launcherPs1 = Join-Path $buildDir 'Foundation-Launcher.ps1'
-$outExe = Join-Path $distDir 'Foundation.exe'
+$launcherPs1 = Join-Path $buildDir 'Gentle-Vanguard-Launcher.ps1'
+$outExe = Join-Path $distDir 'Gentle-Vanguard.exe'
 
 function Write-Step { param([string]$msg) Write-Host "[SFX] $msg" -ForegroundColor Cyan }
 function Write-OK  { param([string]$msg) Write-Host "  [OK] $msg" -ForegroundColor Green }
@@ -35,7 +35,7 @@ function Write-Warn{ param([string]$msg) Write-Host "  [WARN] $msg" -ForegroundC
 # Step 1: Ensure encrypted files exist
 Write-Step "Step 1: Checking encrypted files"
 if (-not (Test-Path $protectedDir)) {
-    throw "build/protected/ not found — run protect-foundation.ps1 first"
+    throw "build/protected/ not found — run protect-gentle-vanguard.ps1 first"
 }
 $encFiles = Get-ChildItem -Path $protectedDir -Recurse -Filter "*.enc" -File
 if ($encFiles.Count -eq 0) {
@@ -74,7 +74,7 @@ if (-not $launcherContent.Contains($embeddedLine)) {
 } else {
     $launcherContent = $launcherContent.Replace($embeddedLine, $replacementLine)
 }
-$tempPs1 = Join-Path $buildDir 'Foundation-SFX.ps1'
+$tempPs1 = Join-Path $buildDir 'Gentle-Vanguard-SFX.ps1'
 [System.IO.File]::WriteAllText($tempPs1, $launcherContent, [System.Text.Encoding]::UTF8)
 Write-OK "Embedded $($base64.Length) chars of encrypted data"
 
@@ -84,10 +84,10 @@ $ps2exe = Get-Command ps2exe -ErrorAction SilentlyContinue
 if (-not $ps2exe) { throw "ps2exe not found — Install-Module ps2exe -Scope CurrentUser" }
 if (-not $DryRun) {
     New-Item -ItemType Directory -Path $distDir -Force | Out-Null
-    & ps2exe -inputFile $tempPs1 -outputFile $outExe -noConsole -requireAdmin -title "Foundation" -description "Foundation Framework Launcher v2.3 (AES-256)" -product "Foundation" -copyright "Gentleman Foundation"
+    & ps2exe -inputFile $tempPs1 -outputFile $outExe -noConsole -requireAdmin -title "Gentle-Vanguard" -description "Gentle-Vanguard Framework Launcher v2.3 (AES-256)" -product "Gentle-Vanguard" -copyright "Gentle-Vanguard"
     if (Test-Path $outExe) {
         $size = [math]::Round((Get-Item $outExe).Length / 1MB, 2)
-        Write-OK "Foundation.exe compiled: $outExe ($size MB)"
+        Write-OK "Gentle-Vanguard.exe compiled: $outExe ($size MB)"
         Remove-Item $tempPs1 -Force
     } else { throw "ps2exe did not produce output" }
 } else { Write-Warn "Dry run — would compile to $outExe" }
@@ -95,4 +95,5 @@ if (-not $DryRun) {
 Write-Step "Done!"
 Write-Host "  Output: $outExe ($size MB)" -ForegroundColor Green
 Write-Host "  Security: AES-256 encrypted — master.key required on first run" -ForegroundColor Green
-Write-Host "  Usage: Just run Foundation.exe (key cached after first use)" -ForegroundColor Green
+Write-Host "  Usage: Just run Gentle-Vanguard.exe (key cached after first use)" -ForegroundColor Green
+

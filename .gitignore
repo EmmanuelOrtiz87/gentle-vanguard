@@ -1,4 +1,4 @@
-# Foundation .gitignore
+# Gentle-Vanguard .gitignore
 
 # Auto-generated reports and temporary files
 docs/audit/
@@ -55,7 +55,7 @@ config/owner-auth.template.json
 # Generated reports (runtime artifacts — not source)
 reports/dashboard.html
 reports/metrics-export.csv
-reports/wf-benchmark.json
+reports/gv-benchmark.json
 reports/trivy-report.json
 trivy-report.json
 
@@ -159,3 +159,6 @@ keys/
 .logs/
 
 *.lib
+
+docs/REFERENCE-AUDIT-*.md 
+rules/NORMATIVAS-REFERENCE-*.md 

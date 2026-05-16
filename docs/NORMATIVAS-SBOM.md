@@ -8,7 +8,7 @@ Last updated: 2026-05-11
 
 ## 1. PROPOSITO
 
-Define los estandares de generacion, validacion, y mantenimiento de Software Bill of Materials (SBOM) para el stack Foundation.
+Define los estandares de generacion, validacion, y mantenimiento de Software Bill of Materials (SBOM) para el stack Gentle-Vanguard.
 
 ---
 
@@ -100,3 +100,4 @@ Formato canonical: CycloneDX 1.6 (generado por Trivy en CI)
 ---
 
 _Version: 1.0.0 - 2026-05-11 - Status: ACTIVE_
+

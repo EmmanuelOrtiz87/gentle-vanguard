@@ -42,7 +42,7 @@ Session Event (Start/Close)
 ## Quick Test (Verify All Systems)
 
 ```powershell
-cd .\foundation
+cd .\gentle-vanguard
 .\scripts\adaptive\auto-backup-orchestrator.ps1 -Action check -VerboseOutput
 .\scripts\adaptive\auto-norm-enforcer.ps1 -Trigger manual -AutoFix
 .\scripts\adaptive\auto-norm-learner.ps1 -Trigger manual
@@ -56,3 +56,4 @@ cd .\foundation
 - **Commits**: Fast hooks (security, non-blocking for autonomy)
 - **Judgment Day**: Run manually for deep review
 - **Escalation**: Only if retries exhausted (3x) in auto-delegation
+

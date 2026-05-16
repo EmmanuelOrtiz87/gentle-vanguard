@@ -2,7 +2,7 @@
 
 **Status**: Accepted (Implemented)  
 **Date**: May 13, 2026  
-**Author**: Foundation Security Team  
+**Author**: Gentle-Vanguard Security Team  
 **Context**: Mitigating npm supply-chain attacks  
 
 ---
@@ -254,3 +254,4 @@ Testing: [what was verified]
 **Review Date**: Q2 2027 (annual security review)  
 **Reviewers**: Security team, compliance team  
 **Status**: Stable, monitoring for threats
+

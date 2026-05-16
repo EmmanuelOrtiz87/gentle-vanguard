@@ -255,23 +255,23 @@ if (-not $networkAvailable) {
 
 $actions = @()
 if ($runtimeMode -eq 'offline_deterministic') {
-    $actions += '.\\scripts\\utilities\\wf.ps1 status'
-    $actions += '.\\scripts\\utilities\\wf.ps1 context-pack "<objective>"'
-    $actions += '.\\scripts\\utilities\\wf.ps1 end-session "<task>" -SkipReview -SkipTests -Force'
+    $actions += '.\\scripts\\utilities\\gv.ps1 status'
+    $actions += '.\\scripts\\utilities\\gv.ps1 context-pack "<objective>"'
+    $actions += '.\\scripts\\utilities\\gv.ps1 end-session "<task>" -SkipReview -SkipTests -Force'
     if (Test-Path $runEngramScript) {
         $actions += '.\\scripts\\utilities\\run-engram.ps1 --help'
     }
 } elseif ($runtimeMode -eq 'hybrid_guarded') {
-    $actions += '.\\scripts\\utilities\\wf.ps1 response-mode simple'
-    $actions += '.\\scripts\\utilities\\wf.ps1 response-mode ultra'
-    $actions += '.\\scripts\\utilities\\wf.ps1 compact-start "<objective>"'
-    $actions += '.\\scripts\\utilities\\wf.ps1 token-guard'
+    $actions += '.\\scripts\\utilities\\gv.ps1 response-mode simple'
+    $actions += '.\\scripts\\utilities\\gv.ps1 response-mode ultra'
+    $actions += '.\\scripts\\utilities\\gv.ps1 compact-start "<objective>"'
+    $actions += '.\\scripts\\utilities\\gv.ps1 token-guard'
     if (-not $engramAvailable) {
-        $actions += '.\\scripts\\utilities\\wf.ps1 install-engram'
+        $actions += '.\\scripts\\utilities\\gv.ps1 install-engram'
     }
 } else {
     $actions += '.\\scripts\\utilities\\orchestrator-next-steps.ps1'
-    $actions += '.\\scripts\\utilities\\wf.ps1 stack-dashboard'
+    $actions += '.\\scripts\\utilities\\gv.ps1 stack-dashboard'
 }
 
 # --- GATE MODE ----------------------------------------------------------------
@@ -333,3 +333,4 @@ if ($Strict -and $runtimeMode -eq 'offline_deterministic' -and -not $engramAvail
 }
 
 exit 0
+

@@ -1,13 +1,13 @@
 # Guía de Uso Multi-Herramienta
 
-Esta guía explica cómo usar Foundation con diferentes herramientas (OpenCode, Cursor, VS Code,
+Esta guía explica cómo usar Gentle-Vanguard con diferentes herramientas (OpenCode, Cursor, VS Code,
 Antigravity, Codex, Windsurf, Cline).
 
 ---
 
 ## Visión General
 
-Foundation detecta automáticamente qué herramienta estás usando y carga la configuración
+Gentle-Vanguard detecta automáticamente qué herramienta estás usando y carga la configuración
 correspondiente.
 
 **Flujo de detección**:
@@ -32,7 +32,7 @@ correspondiente.
 ```bash
 # OpenCode ya detecta automáticamente
 openCode
-# Foundation carga: tool-opencode.json + skills
+# Gentle-Vanguard carga: tool-opencode.json + skills
 ```
 
 **Variables de entorno**:
@@ -53,7 +53,7 @@ openCode
 ```bash
 # Cursor detecta automáticamente
 cursor .
-# Foundation carga: tool-cursor.json + .cursorrules
+# Gentle-Vanguard carga: tool-cursor.json + .cursorrules
 ```
 
 **Variables de entorno**: `CURSOR_TRACE_ID`
@@ -72,7 +72,7 @@ cursor .
 # VS Code con extensiones
 code .
 # O Cline (VS Code extension)
-# Foundation carga: tool-vscode.json o tool-cline.json
+# Gentle-Vanguard carga: tool-vscode.json o tool-cline.json
 ```
 
 **Variables de entorno**: `VSCODE_GIT_IPC_HANDLE`
@@ -90,7 +90,7 @@ code .
 ```bash
 # Antigravity detecta automáticamente
 antigravity agent --mission-control
-# Foundation carga: tool-antigravity.json
+# Gentle-Vanguard carga: tool-antigravity.json
 # Convierte skills a formato Mission Control
 ```
 
@@ -118,7 +118,7 @@ node adapter.js generate-mission '[{"name":"dev"}]' mission.yaml
 ```bash
 # Codex detecta automáticamente
 codex
-# Foundation carga: tool-codex.json
+# Gentle-Vanguard carga: tool-codex.json
 # Convierte skills a OpenAI function format
 ```
 
@@ -146,7 +146,7 @@ node adapter.js generate-proxy proxy.js  # Inicia proxy en puerto 3000
 ```bash
 # Windsurf detecta automáticamente
 windsurf .
-# Foundation carga: tool-windsurf.json
+# Gentle-Vanguard carga: tool-windsurf.json
 # Convierte skills a formato plugin
 ```
 
@@ -181,7 +181,7 @@ converter | ⚠️ | ✅ | | Windsurf | - | ⚠️ Via converter | ⚠️ | ✅ 
 ## Archivos Clave
 
 ```
-foundation/
+gentle-vanguard/
 ├── adapters/
 │   ├── detection/
 │   │   └── enhanced-detect.ps1      # Detección de herramientas
@@ -218,3 +218,4 @@ foundation/
 **Versión**: 1.0.0  
 **Estado**: Adaptadores completos, integración lista para pruebas  
 **Compatibilidad**: 8 herramientas soportadas
+

@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-    Foundation Secret Vault — Enterprise-grade secrets management
+    Gentle-Vanguard Secret Vault — Enterprise-grade secrets management
     
 .DESCRIPTION
     Implements secrets governance per config/secrets-governance.json:
@@ -59,10 +59,10 @@ $ErrorActionPreference = 'Stop'
 $VAULT_VERSION = '1.0.0'
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
-$VaultDir    = Join-Path $HOME '.foundation' 'vault'
+$VaultDir    = Join-Path $HOME '.gentle-vanguard' 'vault'
 $MetaDir     = Join-Path $VaultDir '.meta'
 $ScriptRoot2 = Split-Path -Parent $PSScriptRoot  # scripts/
-$WorkspaceRoot = Split-Path -Parent $ScriptRoot2  # foundation/
+$WorkspaceRoot = Split-Path -Parent $ScriptRoot2  # gentle-vanguard/
 $LogDir      = Join-Path $WorkspaceRoot 'logs'
 $AuditLog    = Join-Path $LogDir 'secret-audit.jsonl'
 
@@ -261,7 +261,7 @@ function Invoke-List {
     }
     
     Write-Host ""
-    Write-Host "  Foundation Secret Vault" -ForegroundColor Cyan
+    Write-Host "  Gentle-Vanguard Secret Vault" -ForegroundColor Cyan
     Write-Host "  ─────────────────────────────────────────────────────────" -ForegroundColor Gray
     Write-Host ("  {0,-30} {1,-20} {2,-12} {3}" -f "NAME", "TYPE", "VERSION", "ROTATION DUE") -ForegroundColor White
     Write-Host "  ─────────────────────────────────────────────────────────" -ForegroundColor Gray
@@ -297,7 +297,7 @@ function Invoke-List {
 # ── VALIDATE-COMPLIANCE ────────────────────────────────────────────────────────
 function Invoke-ValidateCompliance {
     Write-Host ""
-    Write-Host "  Foundation Secrets Compliance Validator v$VAULT_VERSION" -ForegroundColor Cyan
+    Write-Host "  Gentle-Vanguard Secrets Compliance Validator v$VAULT_VERSION" -ForegroundColor Cyan
     Write-Host "  Policy: config/secrets-governance.json" -ForegroundColor Gray
     Write-Host ""
     
@@ -422,7 +422,7 @@ function Invoke-AuditReport {
     } | Where-Object { $_ -ne $null }
     
     Write-Host ""
-    Write-Host "  Foundation Secret Audit Report — $ReportType" -ForegroundColor Cyan
+    Write-Host "  Gentle-Vanguard Secret Audit Report — $ReportType" -ForegroundColor Cyan
     Write-Host "  Generated: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" -ForegroundColor Gray
     Write-Host "  Log: $AuditLog" -ForegroundColor Gray
     Write-Host ""
@@ -549,7 +549,7 @@ function Invoke-BreachResponse {
             "3. Rotate all related secrets (SLA: 24 hours)",
             "4. Assess GDPR impact — notify DPA if personal data breached (SLA: 72 hours)",
             "5. Update incident report with root cause and remediation",
-            "6. Run: foundation secret validate-compliance"
+            "6. Run: gv secret validate-compliance"
         )
         auditLog = $AuditLog
     } | ConvertTo-Json -Depth 6
@@ -589,3 +589,4 @@ try {
     Write-AuditEntry $Subcommand ($Name ?? $CompromisedSecret ?? '*') 'FAILURE' $_.Exception.Message
     exit 1
 }
+

@@ -1,5 +1,5 @@
 # setup-remote-agent.ps1
-# Automatiza la configuracin segura de un agente remoto IA en Foundation/local
+# Automatiza la configuracin segura de un agente remoto IA en Gentle-Vanguard/local
 
 param(
     [Parameter(Mandatory=$true)]
@@ -15,8 +15,8 @@ param(
 $ErrorActionPreference = 'Stop'
 
 # Paths
-if ($env:FOUNDATION_BASE_DIR) {
-    $repoRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GV_BASE_DIR) {
+    $repoRoot = $env:GV_BASE_DIR
 } else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -64,3 +64,5 @@ $test = & "$repoRoot\scripts\utilities\invoke-cloud-agent.ps1" -Provider $Provid
 Write-Host $test
 
 Write-Host "[FINALIZADO] Configuracin automatizada completa. Si ves errores arriba, revisa el endpoint y la API key." -ForegroundColor Cyan
+
+

@@ -1,5 +1,5 @@
 {
-  "pluginsPaths": ["plugins", "C:\\Users\\emman\\.foundation\\plugins"],
+  "pluginsPaths": ["plugins", "C:\\Users\\emman\\.gentle-vanguard\\plugins"],
   "enabledPlugins": [],
   "security": {
     "requireSignature": false,
@@ -8,3 +8,4 @@
   },
   "autoDiscover": true
 }
+

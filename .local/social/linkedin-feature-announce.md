@@ -1,6 +1,6 @@
 # LinkedIn - Feature Announcement
 
-Introducing Foundation v2.0
+Introducing Gentle-Vanguard v2.0
 
 Key capabilities:
 
@@ -20,4 +20,4 @@ PowerShell-based. Provider-agnostic.
 
 What feature would you like to learn more about?
 
-#AIDevelopment #SoftwareEngineering #DevTools #FoundationStack
+#AIDevelopment #SoftwareEngineering #DevTools #Gentle-VanguardStack

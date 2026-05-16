@@ -6,8 +6,7 @@ description: >
   "last mile", "wms", "tms", "shipment", "logística", "transporte"
 license: Apache-2.0
 metadata:
-  author: foundation
-  version: '1.0'
+  author: gv version: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash
 ---
 
@@ -34,3 +33,4 @@ User asks about logistics operations, supply chain management, transportation, w
 2. Provide operational guidance or optimization strategies
 3. Include relevant metrics and calculations
 4. Address technology recommendations (TMS/WMS selection, integration)
+

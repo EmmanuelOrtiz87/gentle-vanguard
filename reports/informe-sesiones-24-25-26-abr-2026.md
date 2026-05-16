@@ -1,7 +1,7 @@
 # 📊 Informe de Sesiones y Métricas del Workspace
 
 **Período**: 24 al 26 de Abril de 2026  
-**Proyecto**: workspace_local  
+**Proyecto**: workspace_gentle_vanguard  
 **Gerencia**: Presentación Ejecutiva
 
 ---
@@ -189,3 +189,4 @@ Sesiones por día:
 _Informe generado: 2026-04-26 00:50 UTC-3_  
 _Formato: Markdown (.md) para presentaciones_  
 _Próxima actualización: Fin de día 26-Abr_
+

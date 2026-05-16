@@ -2,13 +2,13 @@
 
 **Version**: 1.0.0  
 **Last Updated**: 2026-05-15  
-**Scope**: Foundation stack, all agents, security operations, audit trail
+**Scope**: Gentle-Vanguard stack, all agents, security operations, audit trail
 
 ---
 
 ## 1. SOC2 Trust Service Criteria Overview
 
-Foundation MUST comply with **5 Trust Service Principles**:
+Gentle-Vanguard MUST comply with **5 Trust Service Principles**:
 
 | Principle | Focus | Status |
 |-----------|-------|--------|
@@ -24,11 +24,11 @@ Foundation MUST comply with **5 Trust Service Principles**:
 
 ### CC1: Governance & Risk Management
 - Establish security governance policy: `/config/security-policy.json`
-- Risk assessments: Quarterly (automated via `foundation security assess-risks`)
+- Risk assessments: Quarterly (automated via `gentle-vanguard security assess-risks`)
 - Authority & accountability: Document responsible parties in each policy
 - Implementation:
   ```powershell
-  foundation security validate-governance
+  gentle-vanguard security validate-governance
   # Outputs: Governance matrix, risk register, authority map
   ```
 
@@ -54,7 +54,7 @@ Foundation MUST comply with **5 Trust Service Principles**:
   - Threat model (STRIDE analysis)
   - Security design review (peer-reviewed)
   - Pre-deployment security testing
-- Implementation: `foundation security design-review <feature_name>`
+- Implementation: `gentle-vanguard security design-review <feature_name>`
 
 ### CC5: Access Controls (MANDATORY)
 - Principle of Least Privilege: Every agent gets MINIMUM required permissions
@@ -65,7 +65,7 @@ Foundation MUST comply with **5 Trust Service Principles**:
 
 **Implementation**:
 ```powershell
-foundation security enforce-access-controls
+gentle-vanguard security enforce-access-controls
 # Outputs: Access violation log, unauthorized attempts, remediation actions
 ```
 
@@ -82,15 +82,15 @@ foundation security enforce-access-controls
   - Privilege escalation attempts
   - Data exfiltration patterns
   - Unauthorized file access
-- Command: `foundation security enable-siem-integration --provider splunk|elk|datadog`
+- Command: `gentle-vanguard security enable-siem-integration --provider splunk|elk|datadog`
 
 ### CC8: Encryption & Secrets Management
-- Data at rest: AES-256 minimum (scripts encrypted via `protect-foundation.ps1`)
+- Data at rest: AES-256 minimum (scripts encrypted via `protect-gentle-vanguard.ps1`)
 - Data in transit: TLS 1.3 minimum
 - Secrets: Never commit to git. Use vault:
   ```powershell
-  foundation secret set --key API_TOKEN --value <token> --ttl 90d
-  foundation secret get --key API_TOKEN  # Logged to audit trail
+  gv secret set --key API_TOKEN --value <token> --ttl 90d
+  gv secret get --key API_TOKEN  # Logged to audit trail
   ```
 - Key rotation: Every 90 days (automated)
 
@@ -99,7 +99,7 @@ foundation security enforce-access-controls
 - Backup testing: Monthly full restore drill
 - RTO (Recovery Time Objective): 4 hours max
 - RPO (Recovery Point Objective): 24 hours max (no data loss >24h)
-- Implementation: `foundation backup verify --last-backup-age-hours 24`
+- Implementation: `gentle-vanguard backup verify --last-backup-age-hours 24`
 
 ---
 
@@ -109,7 +109,7 @@ foundation security enforce-access-controls
 - Uptime target: 99.5% SLA (max 3.6 hours downtime/month)
 - Monitor: Response time, throughput, resource utilization
 - Alerting: If response time >1s OR throughput <100 req/s, escalate
-- Command: `foundation monitoring validate-availability-sla --month 2026-05`
+- Command: `gentle-vanguard monitoring validate-availability-sla --month 2026-05`
 
 ### A2: Redundancy & Failover
 - Critical components: Deployed in N+1 (minimum 2 instances)
@@ -120,7 +120,7 @@ foundation security enforce-access-controls
 - Monitor: CPU, memory, disk usage trends
 - Threshold: Alert if >80% utilization
 - Quarterly forecast: Predict capacity needs 90 days ahead
-- Command: `foundation capacity plan --forecast-days 90`
+- Command: `gentle-vanguard capacity plan --forecast-days 90`
 
 ---
 
@@ -130,13 +130,13 @@ foundation security enforce-access-controls
 - Input validation: All user input validated + sanitized
 - Error detection: Catch processing errors before persistence
 - Correction procedures: Fix corrupted/incomplete data automatically
-- Command: `foundation integrity validate-data --scope <domain>`
+- Command: `gentle-vanguard integrity validate-data --scope <domain>`
 
 ### PI2: Authorized Processing
 - Segregation of duties: Approval role separate from execution
 - Audit trail: Every data modification logged (WHO/WHAT/WHEN/WHY)
 - Recovery procedures: Rollback to last known-good state on error
-- Implementation: `foundation integrity audit-segregation-of-duties`
+- Implementation: `gentle-vanguard integrity audit-segregation-of-duties`
 
 ---
 
@@ -191,7 +191,7 @@ See **NORMATIVAS-GDPR.md** for full privacy requirements. SOC2 PR principle cove
 
 ### Deployment Gate: Security Compliance Validator
 ```powershell
-foundation security validate-agent-soc2 <agent_name>
+gentle-vanguard security validate-agent-soc2 <agent_name>
 ```
 Exit code 0 = Compliant; Exit code 1 = BLOCK deployment
 
@@ -201,7 +201,7 @@ Exit code 0 = Compliant; Exit code 1 = BLOCK deployment
 
 ### Daily Compliance Checks (MANDATORY)
 ```powershell
-foundation compliance check-soc2-daily
+gentle-vanguard compliance check-soc2-daily
 ```
 
 Checks performed:
@@ -213,12 +213,12 @@ Checks performed:
 
 ### Weekly Audit Report
 ```powershell
-foundation compliance audit-soc2-weekly --report audit-week-$(Get-Date -UFormat %U-%Y).json
+gentle-vanguard compliance audit-soc2-weekly --report audit-week-$(Get-Date -UFormat %U-%Y).json
 ```
 
 ### Annual SOC2 Audit Preparation
 ```powershell
-foundation compliance prepare-soc2-audit --year 2026
+gentle-vanguard compliance prepare-soc2-audit --year 2026
 # Outputs: Audit evidence bundle (documentation, logs, test results, remediation proof)
 ```
 
@@ -245,7 +245,7 @@ foundation compliance prepare-soc2-audit --year 2026
 
 ### Command
 ```powershell
-foundation incident report --severity P1 --description "Unauthorized access to PII database"
+gentle-vanguard incident report --severity P1 --description "Unauthorized access to PII database"
 # Triggers: Automated escalation, stakeholder notification, audit logging
 ```
 
@@ -255,7 +255,7 @@ foundation incident report --severity P1 --description "Unauthorized access to P
 
 ### Quarterly Compliance Report
 ```powershell
-foundation compliance generate-report --quarter Q2-2026 --format pdf
+gentle-vanguard compliance generate-report --quarter Q2-2026 --format pdf
 ```
 
 Report contents:
@@ -302,3 +302,4 @@ SOC2 Type II audit (annual third-party validation) to produce:
 **Status**: MANDATORY — All agents MUST comply by 2026-06-01  
 **Violation**: Non-compliance blocks production deployment  
 **Audit Cycle**: Continuous automated checks + Annual SOC2 Type II audit
+

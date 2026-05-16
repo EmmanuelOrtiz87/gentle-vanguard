@@ -2,19 +2,19 @@
 
 **Status**: Accepted (Implemented)  
 **Date**: May 13, 2026  
-**Author**: Foundation Security Team  
+**Author**: Gentle-Vanguard Security Team  
 **Context**: Preventing release-time repository misalignment issues  
 
 ---
 
 ## Context
 
-foundation maintains **two synchronized repositories**:
-- `foundation` (private) — full codebase + internal docs
-- `foundation-public` (public) — sanitized for GitHub
+gentle-vanguard maintains **two synchronized repositories**:
+- `gentle-vanguard` (private) — full codebase + internal docs
+- `gentle-vanguard-public` (public) — sanitized for GitHub
 
 Before implementing the homologation gate, release process risked:
-- **Misaligned versions**: foundation v1.0.1 but foundation-public still v1.0.0
+- **Misaligned versions**: gentle-vanguard v1.0.1 but gentle-vanguard-public still v1.0.0
 - **Misaligned branches**: main branches out of sync, preventing merge
 - **Dirty working trees**: unstaged changes blocking publish
 - **Human error**: Releasing from wrong branch without noticing
@@ -32,7 +32,7 @@ Before implementing the homologation gate, release process risked:
 
 **Implement mandatory homologation gate that blocks publish if repos are misaligned.**
 
-Gate runs BEFORE any other validation (first thing in `wf.ps1 publish`).
+Gate runs BEFORE any other validation (first thing in `gv.ps1 publish`).
 
 If gate fails, publish is blocked with clear remediation steps.
 
@@ -65,7 +65,7 @@ If gate fails, publish is blocked with clear remediation steps.
 ### Gate Location
 
 ```
-wf.ps1 publish
+gv.ps1 publish
   ↓
 1. ✓ Mandatory Homologation Gate  ← FIRST CHECK
   ├─ Check: VERSION file matches
@@ -85,13 +85,13 @@ wf.ps1 publish
 
 ```powershell
 # 1. VERSION alignment (REQUIRED)
-Foundation\VERSION = "1.0.0"
-Foundation-Public\VERSION = "1.0.0"
+Gentle-Vanguard\VERSION = "1.0.0"
+Gentle-Vanguard-Public\VERSION = "1.0.0"
 ✓ MATCH
 
 # 2. Branch alignment (REQUIRED)
-Foundation\main = commit abc123
-Foundation-Public\main = commit abc123
+Gentle-Vanguard\main = commit abc123
+Gentle-Vanguard-Public\main = commit abc123
 ✓ ALIGNED
 
 # 3. Working tree (REQUIRED)
@@ -111,14 +111,14 @@ v1.0.0 exists in both repos
 ❌ [BLOCKED] Homologation gate failed
 
   VERSION Mismatch:
-    Foundation:       1.0.1
-    Foundation-Public: 1.0.0
+    Gentle-Vanguard:       1.0.1
+    Gentle-Vanguard-Public: 1.0.0
 
 Resolution:
-  1. Update foundation-public/VERSION to 1.0.1
+  1. Update gentle-vanguard-public/VERSION to 1.0.1
   2. git add VERSION && git commit -m "chore: align VERSION for vX.Y.Z"
   3. Push: git push origin main
-  4. Retry: wf.ps1 publish
+  4. Retry: gv.ps1 publish
 ```
 
 **Scenario 2: Branch Misalignment**
@@ -127,14 +127,14 @@ Resolution:
 ❌ [BLOCKED] Homologation gate failed
 
   Branch Misalignment:
-    Foundation main:       abc123 (behind by 3 commits)
-    Foundation-Public main: def456
+    Gentle-Vanguard main:       abc123 (behind by 3 commits)
+    Gentle-Vanguard-Public main: def456
 
 Resolution:
   1. Fetch latest: git fetch origin
   2. Pull: git pull origin main
   3. Verify alignment: git log --oneline main | head -5
-  4. Retry: wf.ps1 publish
+  4. Retry: gv.ps1 publish
 ```
 
 **Scenario 3: Dirty Working Tree**
@@ -151,14 +151,14 @@ Resolution:
   2. OR revert changes: git checkout -- config/mcp-servers.json
   3. Remove untracked: rm test.tmp
   4. Verify: git status (should be "clean")
-  5. Retry: wf.ps1 publish
+  5. Retry: gv.ps1 publish
 ```
 
 ### Bypass (Emergency Only)
 
 ```powershell
 # Skip gate (NOT RECOMMENDED)
-wf.ps1 publish -SkipHomologationGate
+gv.ps1 publish -SkipHomologationGate
 
 # This requires explicit flag, flags responsibility
 ```
@@ -197,11 +197,11 @@ wf.ps1 publish -SkipHomologationGate
 **Happy Path: Everything Aligned**
 
 ```powershell
-cd foundation
+cd gentle-vanguard
 git status
 # On branch develop, everything committed
 
-wf.ps1 publish
+gv.ps1 publish
 # [✓] Homologation Gate: PASSED
 # [✓] VERSION files aligned: 1.0.1
 # [✓] Branches aligned: main/develop
@@ -212,21 +212,21 @@ wf.ps1 publish
 **Recovery Path: VERSION Mismatch**
 
 ```powershell
-wf.ps1 publish
+gv.ps1 publish
 # ❌ Homologation Gate: FAILED
-#    VERSION mismatch: foundation=1.0.1, foundation-public=1.0.0
+#    VERSION mismatch: gentle-vanguard=1.0.1, gentle-vanguard-public=1.0.0
 
-cd ../foundation-public
+cd ../gentle-vanguard-public
 echo "1.0.1" > VERSION
 git add VERSION
 git commit -m "chore: align VERSION for v1.0.1 release"
 git push origin main
 
-cd ../foundation
+cd ../gentle-vanguard
 git push origin main  # Sync the commit
 git push origin develop
 
-wf.ps1 publish
+gv.ps1 publish
 # [✓] Homologation Gate: PASSED
 # → Continues with publish
 ```
@@ -269,10 +269,10 @@ wf.ps1 publish
 **Manual verification** (safe to run anytime):
 
 ```powershell
-cd foundation
+cd gentle-vanguard
 
 # Run gate manually
-.\scripts\utilities\wf.ps1 release-homologation
+.\scripts\utilities\gv.ps1 release-homologation
 
 # Check result
 $LASTEXITCODE
@@ -293,3 +293,4 @@ $LASTEXITCODE
 **Implemented**: May 13, 2026 (commit 449363e)  
 **Review Date**: Q1 2027  
 **Status**: Stable, working as designed
+

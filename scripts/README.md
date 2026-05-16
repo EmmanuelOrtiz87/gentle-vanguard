@@ -2,7 +2,7 @@
 
 ## Descripción
 
-directorio centralizado para todos los scripts del proyecto foundation.
+directorio centralizado para todos los scripts del proyecto gentle-vanguard.
 
 **Versión**: 2.0.0 **última actualización**: 2026-04-21 **Estado**: PRODUCCIN
 
@@ -271,7 +271,7 @@ Write-Log "Mensaje" "info"
 
 ```powershell
 .\scripts\utilities\simplify-text.ps1 -InputText "Hola! Buenos dias, por favor necesito tu ayuda!"
-.\scripts\utilities\wf.ps1 simplify-text "texto a simplificar"
+.\scripts\utilities\gv.ps1 simplify-text "texto a simplificar"
 .\scripts\utilities\simplify-text.ps1 -InputFile "archivo.md" -OutputFile "resultado.txt"
 ```
 
@@ -340,7 +340,7 @@ Write-Log "Mensaje" "info"
 ### Ejecutar Tests Completos
 
 ```powershell
-cd foundation
+cd gentle-vanguard
 .\scripts\testing\run-tests.ps1 -TestType all -GenerateReport
 ```
 
@@ -445,3 +445,4 @@ Para reportar problemas o sugerencias:
 ---
 
 **última actualización**: 2026-04-21 **Versión**: 2.0.0 **Estado**: PRODUCCIN
+

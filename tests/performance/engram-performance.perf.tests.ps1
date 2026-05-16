@@ -10,16 +10,16 @@ Describe "Engram Performance Tests" {
     Context "Search Latency" {
         It "engram search completes under 1000ms" {
             $sw = [System.Diagnostics.Stopwatch]::StartNew()
-            $null = & $script:engram search "Session start:" --project foundation --limit 5 2>&1
+            $null = & $script:engram search "Session start:" --project gentle-vanguard --limit 5 2>&1
             $sw.Stop()
             $sw.ElapsedMilliseconds | Should BeLessThan 1000
         }
     }
 
     Context "Stats Latency" {
-        It "engram stats completes under 1000ms for foundation project" {
+        It "engram stats completes under 1000ms for gentle-vanguard project" {
             $sw = [System.Diagnostics.Stopwatch]::StartNew()
-            $null = & $script:engram stats --project foundation 2>&1
+            $null = & $script:engram stats --project gentle-vanguard 2>&1
             $sw.Stop()
             $sw.ElapsedMilliseconds | Should BeLessThan 1000
         }
@@ -37,11 +37,12 @@ Describe "Engram Performance Tests" {
     Context "Consecutive Query Performance" {
         It "3 consecutive searches complete within 2000ms total" {
             $sw = [System.Diagnostics.Stopwatch]::StartNew()
-            $null = & $script:engram search "session" --project foundation --limit 3 2>&1
-            $null = & $script:engram search "test" --project foundation --limit 3 2>&1
-            $null = & $script:engram search "config" --project foundation --limit 3 2>&1
+            $null = & $script:engram search "session" --project gentle-vanguard --limit 3 2>&1
+            $null = & $script:engram search "test" --project gentle-vanguard --limit 3 2>&1
+            $null = & $script:engram search "config" --project gentle-vanguard --limit 3 2>&1
             $sw.Stop()
             $sw.ElapsedMilliseconds | Should BeLessThan 2000
         }
     }
 }
+

@@ -6,8 +6,7 @@ description: >
   "contract negotiation", "compras", "aprovisionamiento"
 license: Apache-2.0
 metadata:
-  author: foundation
-  version: '1.0'
+  author: gv version: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash
 ---
 
@@ -33,3 +32,4 @@ User asks about procurement processes, strategic sourcing, vendor management, RF
 2. Provide RFx templates or evaluation criteria
 3. Include contract terms and negotiation guidance
 4. Address procurement technology (ERP procurement module, procurement platforms)
+

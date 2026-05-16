@@ -1,14 +1,14 @@
 # Security Best Practices Guide
 
-This document provides security guidelines for projects created with Foundation.
+This document provides security guidelines for projects created with Gentle-Vanguard.
 
 ## Quick Reference
 
 | Command              | Description                       |
 | -------------------- | --------------------------------- |
-| `foundation security scan`   | Quick scan for critical issues    |
-| `foundation security audit`  | Full audit with detailed report   |
-| `foundation security report` | Generate security review document |
+| `gentle-vanguard security scan`   | Quick scan for critical issues    |
+| `gentle-vanguard security audit`  | Full audit with detailed report   |
+| `gentle-vanguard security report` | Generate security review document |
 | `git commit`         | Runs automatic security scan      |
 
 ## Pre-commit Security
@@ -190,3 +190,4 @@ If you find a security vulnerability:
 2. Email: security@example.com
 3. Include details about the issue
 4. Allow time for a fix before disclosure
+

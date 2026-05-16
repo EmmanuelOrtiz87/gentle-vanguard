@@ -1,6 +1,6 @@
 # LinkedIn - Auto-Delegation Deep Dive
 
-How Foundation selects the right agent:
+How Gentle-Vanguard selects the right agent:
 
 When you describe your task, the orchestrator analyzes:
 - Keywords

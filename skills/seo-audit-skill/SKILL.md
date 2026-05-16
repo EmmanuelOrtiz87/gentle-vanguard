@@ -6,7 +6,7 @@ description: >
   "search engine"
 license: Apache-2.0
 metadata:
-  author: foundation
+  author: gentle-vanguard
   versión: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task
 ---
@@ -259,17 +259,17 @@ Sitemap: https://example.com/sitemap.xml
 
 ---
 
-## Foundation Integration
+## Gentle-Vanguard Integration
 
 ```powershell
 # Run SEO audit
-.\wf.ps1 audit seo
+.\gv.ps1 audit seo
 
 # Fix common issues
-.\wf.ps1 fix seo --dry-run
+.\gv.ps1 fix seo --dry-run
 
 # Add structured data
-.\wf.ps1 schema add organization
+.\gv.ps1 schema add organization
 ```
 
 ---
@@ -280,3 +280,4 @@ Sitemap: https://example.com/sitemap.xml
 - [Schema Markup Validator](https://validator.schema.org)
 - [Google PageSpeed Insights](https://pagespeed.web.dev)
 - [Sitemap Generator](https://www.xml-sitemaps.com)
+

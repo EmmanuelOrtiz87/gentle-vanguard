@@ -6,7 +6,7 @@ description: >
   "rich preview"
 license: Apache-2.0
 metadata:
-  author: foundation
+  author: gentle-vanguard
   versión: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task
 ---
@@ -211,14 +211,14 @@ When generating artifact code:
 4. Test in isolation first
 5. Provide clear description
 
-### Foundation Integration
+### Gentle-Vanguard Integration
 
 ```powershell
 # Generate artifact
-.\wf.ps1 artifact create dashboard --template sales
+.\gv.ps1 artifact create dashboard --template sales
 
 # Preview in browser
-.\wf.ps1 artifact preview output.html
+.\gv.ps1 artifact preview output.html
 ```
 
 ---
@@ -298,3 +298,4 @@ Before output, verify:
 3.  JS funcional
 4.  CDNs accesibles
 5.  Responsive funciona
+

@@ -1,6 +1,6 @@
 {
   "mission": {
-    "name": "Foundation Multi-Agent Mission",
+    "name": "Gentle-Vanguard Multi-Agent Mission",
     "max_agents": 5,
     "timeout": 7200
   },
@@ -8,7 +8,7 @@
     {
       "role": "orchestrator",
       "model": "gemini-3-pro",
-      "instructions": "Coordinate overall execution, decompose tasks, manage quality. Use Foundation skills for task execution.",
+      "instructions": "Coordinate overall execution, decompose tasks, manage quality. Use Gentle-Vanguard skills for task execution.",
       "tools": ["task_manager", "status_monitor", "skill_loader"]
     },
     {
@@ -53,3 +53,4 @@
     }
   ]
 }
+

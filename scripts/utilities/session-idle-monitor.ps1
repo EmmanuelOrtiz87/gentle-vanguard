@@ -38,7 +38,7 @@ param(
     [int]$MonitorIntervalSeconds = 30,
     
     [Parameter(Mandatory=$false)]
-    [string]$ProjectName = "foundation"
+    [string]$ProjectName = "gentle-vanguard"
 )
 
 $ErrorActionPreference = 'Continue'
@@ -301,3 +301,4 @@ catch {
     Write-Host "[IDLE-MONITOR] Error: $_" -ForegroundColor Red
     exit 1
 }
+

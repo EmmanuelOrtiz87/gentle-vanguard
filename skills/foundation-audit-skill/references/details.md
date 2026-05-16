@@ -1,8 +1,8 @@
-# Foundation Audit — Supporting Details
+# Gentle-Vanguard Audit — Supporting Details
 
 ## Relationship with Judgment Day
 
-|                    | foundation-audit-skill             | judgment-day                               |
+|                    | gentle-vanguard-audit-skill             | judgment-day                               |
 | ------------------ | ---------------------------------- | ------------------------------------------ |
 | **What it checks** | Structure, docs, links, duplicates | Logic, security, architecture, correctness |
 | **Token cost**     | Zero (batch scripts)               | ~2k-4k (AI sub-agents)                     |
@@ -25,31 +25,31 @@
 
 ## Execution Commands
 
-### Via wf.ps1
+### Via gv.ps1
 
 ```powershell
-wf.ps1 audit quick
-wf.ps1 audit standard
-wf.ps1 audit full
-wf.ps1 audit deep
-wf.ps1 audit judgment
-wf.ps1 audit unified
+gv.ps1 audit quick
+gv.ps1 audit standard
+gv.ps1 audit full
+gv.ps1 audit deep
+gv.ps1 audit judgment
+gv.ps1 audit unified
 ```
 
 ### Standalone (any directory)
 
 ```powershell
-~/.foundation-local/audit-workflow.ps1 -Mode full
-~/.foundation-local/audit-workflow.ps1 -Mode judgment
-~/.foundation-local/audit-workflow.ps1 -Mode quick -FailOnIssues
+~/.gentle-vanguard-local/audit-workflow.ps1 -Mode full
+~/.gentle-vanguard-local/audit-workflow.ps1 -Mode judgment
+~/.gentle-vanguard-local/audit-workflow.ps1 -Mode quick -FailOnIssues
 ```
 
 ### Direct script
 
 ```powershell
-.\skills\foundation-audit-skill\scripts\audit-sweep.ps1 -Scope quick
-.\skills\foundation-audit-skill\scripts\audit-sweep.ps1 -Scope full -Output markdown
-.\skills\foundation-audit-skill\scripts\sync-local.ps1
+.\skills\gentle-vanguard-audit-skill\scripts\audit-sweep.ps1 -Scope quick
+.\skills\gentle-vanguard-audit-skill\scripts\audit-sweep.ps1 -Scope full -Output markdown
+.\skills\gentle-vanguard-audit-skill\scripts\sync-local.ps1
 ```
 
 ## What Gets Audited
@@ -62,6 +62,7 @@ wf.ps1 audit unified
 ## Standalone Sync
 
 ```powershell
-.\skills\foundation-audit-skill\scripts\sync-local.ps1
-# Scripts installed to: ~/.foundation-local/
+.\skills\gentle-vanguard-audit-skill\scripts\sync-local.ps1
+# Scripts installed to: ~/.gentle-vanguard-local/
 ```
+

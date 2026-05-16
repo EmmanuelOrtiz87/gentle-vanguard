@@ -1,7 +1,7 @@
 # NORMATIVAS-ORQUESTADOR.md
 
 Versión: 2.0.0  
-Autor: foundation  
+Autor: gentle-vanguard  
 Fecha: 2026-05-09
 
 ---
@@ -9,7 +9,7 @@ Fecha: 2026-05-09
 ## 1. PROPÓSITO
 
 Este documento define las normativas, reglas y restricciones que **TODO** agente y subagente debe
-respetar en el workspace `foundation`.
+respetar en el workspace `gentle-vanguard`.
 
 ---
 
@@ -145,7 +145,7 @@ TODO commit DEBE pasar:
 
 - `sync-public.yml` workflow corre automáticamente en push a `main`
 - Sincroniza skills (stubs públicos), configs, installer y docs
-- Usa `PAT_SYNC` secret para autenticarse en foundation-public
+- Usa `PAT_SYNC` secret para autenticarse en gentle-vanguard-public
 - Requiere `skipPush` para dry-runs locales
 
 ### 4.5 Branch Protection Rulesets
@@ -224,7 +224,7 @@ TODO commit DEBE pasar:
 Antes de compaction (~25k tokens), ejecutar:
 
 ```powershell
-.\tools\pre-compact-hook.ps1 -ProjectName "workspace_local" -CompressionRatio 0.90
+.\tools\pre-compact-hook.ps1 -ProjectName "workspace_gentle_vanguard" -CompressionRatio 0.90
 ```
 
 ### 7.3 Handoff Compression
@@ -318,3 +318,4 @@ El orquestador **DEBE** conocer:
 ---
 
 **FIN DEL DOCUMENTO** — TODO agente debe leer y cumplir estas normativas.
+

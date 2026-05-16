@@ -1,9 +1,9 @@
-# wf.ps1 - Workflow CLI
-# Automated development workflow for Gentleman Foundation
+# gv.ps1 - Workflow CLI
+# Automated development workflow for Gentle-Vanguard
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'foundation-sync', 'release-homologation', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'webhook', 'predictor', 'sla-dashboard', 'escalation', 'live-server', 'learning', 'watchtower', 'heal', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'gentle-vanguard-sync', 'release-homologation', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'webhook', 'predictor', 'sla-dashboard', 'escalation', 'live-server', 'learning', 'watchtower', 'heal', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -21,14 +21,14 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
-# Prefer FOUNDATION_BASE_DIR when running cached from AppData (launcher v2.1+)
+# Prefer GENTLE_VANGUARD_BASE_DIR when running cached from AppData (launcher v2.1+)
 # Falls back to $MyInvocation for development mode
-if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) {
-    $scriptDir = "$env:FOUNDATION_APPDATA_DIR\scripts\utilities\WORKFLOW-ORCHESTRATION"
-    $repoRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) {
+    $scriptDir = "$env:GENTLE_VANGUARD_APPDATA_DIR\scripts\utilities\WORKFLOW-ORCHESTRATION"
+    $repoRoot = $env:GENTLE_VANGUARD_BASE_DIR
 } else {
     $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-    # repoRoot: go up 3 levels from wf.ps1 (WORKFLOW-ORCHESTRATION -> utilities -> scripts -> repo)
+    # repoRoot: go up 3 levels from gv.ps1 (WORKFLOW-ORCHESTRATION -> utilities -> scripts -> repo)
     $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..\..')).Path
 }
 
@@ -42,14 +42,14 @@ $global:scriptDir = $scriptDir
 . (Join-Path $scriptDir 'commands\context.ps1')
 
 function Invoke-Update {
-    Write-Step "Updating repository, foundation, skills, and tools"
+    Write-Step "Updating repository, gentle-vanguard, skills, and tools"
 
     $updateScript = Join-Path $scriptDir '..\validation\update-all.ps1'
     if (Test-Path $updateScript) {
         Invoke-LocalPowerShellScript -ScriptPath $updateScript -ScriptArgs @('-All', '-Force')
-        if ($LASTEXITCODE -ne 0) { Write-Warning "Foundation update returned exit $LASTEXITCODE" }
+        if ($LASTEXITCODE -ne 0) { Write-Warning "Gentle-Vanguard update returned exit $LASTEXITCODE" }
     } else {
-        Write-Warning "update-all.ps1 not found - skipping foundation update"
+        Write-Warning "update-all.ps1 not found - skipping gentle-vanguard update"
     }
 }
 
@@ -59,11 +59,11 @@ function Invoke-UpdateAll {
 
 function Show-Help {
     Write-Host @"
-Foundation - Development Stack Workflow CLI
+Gentle-Vanguard - Development Stack Workflow CLI
 ================================
 
 USAGE:
-    .\scripts\utilities\wf.ps1 <command> [options]
+    .\scripts\utilities\gv.ps1 <command> [options]
 
 COMMANDS:
     review [scope]       Run code review (security, quality, all, judgment-day)
@@ -89,7 +89,7 @@ COMMANDS:
     ide-status           Detect IDE session and suggest activation command
     diagnose             Full system diagnostics report
     verify               Quick stack verification & auto-repair
-    update               Update repository, foundation, skills, and tools
+    update               Update repository, gentle-vanguard, skills, and tools
     update-all           Alias for update
     update-tools         Update toolchain (required + optional integrations)
     migrate-structure    Preflight and guided migration of loose scripts
@@ -103,8 +103,8 @@ COMMANDS:
     rollback-checkpoint [selector] Restore latest checkpoint or one matching selector
     clean-branches [apply] Preview or clean merged local feature/release branches
     homologate [apply]  Normalize docs/artifacts and update references (dry-run default)
-    foundation-sync [apply] [optional -CreatePr]  Sync managed assets declared in foundation manifest
-    release-homologation [vX.Y.Z]  Run complementary release gate across foundation and foundation-public
+    gentle-vanguard-sync [apply] [optional -CreatePr]  Sync managed assets declared in gentle-vanguard manifest
+    release-homologation [vX.Y.Z]  Run complementary release gate across gentle-vanguard and gentle-vanguard-public
     agent-alert [strict] Check process-compliance signals for off-process AI activity
     agent <AGENT> [TASK] Route task to specialized sub-agent (BA|SAD|DEV|QA|OPS|GOV|DOC)
     dashboard [open|live|auto|status|stop] Generate professional HTML dashboard (auto = background live service)
@@ -115,7 +115,7 @@ COMMANDS:
     sdd-gate             FF-001: Validate SDD spec status before merging to protected branches
     sdd-metrics          FF-002: SDD process KPIs: spec coverage, lead time, rework ratio
     sync-drift           FF-004: Detect drift between declared config and actual skills/files
-    benchmark [cmds]     FF-006: Profile wf commands vs SLO thresholds (default: status,health)
+    benchmark [cmds]     FF-006: Profile gv commands vs SLO thresholds (default: status,health)
                         Scope: full [remediate] [baseline-update] (adds regression guard + optional auto-remediation)
     version              Show current stack version (from VERSION file + orchestrator.json)
     help                 Show this help
@@ -128,79 +128,79 @@ OPTIONS:
     -JSON             Output diagnostics in JSON format (diagnose command)
 
 EXAMPLES:
-    .\scripts\utilities\wf.ps1 review              Run full code review
-    .\scripts\utilities\wf.ps1 review security     Run security scan only
-    .\scripts\utilities\wf.ps1 review judgment-day Run dual-review adversarial protocol
-    .\scripts\utilities\wf.ps1 judgment-day       Run judgment day directly
-    .\scripts\utilities\wf.ps1 audit              Generate audit document
-    .\scripts\utilities\wf.ps1 pr                 Create PR
-    .\scripts\utilities\wf.ps1 push               Commit and push
-    .\scripts\utilities\wf.ps1 push pr            Push and open PR now
-    .\scripts\utilities\wf.ps1 push later         Push only and create PR later
-    .\scripts\utilities\wf.ps1 publish            Run end-to-end PR flow with auto-merge on clean validation
-    .\scripts\utilities\wf.ps1 start-session      Create the session brief for today
-    .\scripts\utilities\wf.ps1 end-session        Run end-of-session checks and create closure artifact
-    .\scripts\utilities\wf.ps1 task-brief auth    Create a task brief for auth work
-    .\scripts\utilities\wf.ps1 diagnose            Full diagnostics report (JSON available)
-    .\scripts\utilities\wf.ps1 diagnose -JSON      Full diagnostics report in JSON format
-    .\scripts\utilities\wf.ps1 verify              Quick verify & auto-repair if needed
-    .\scripts\utilities\wf.ps1 health              Check system health & activate tools
-    .\scripts\utilities\wf.ps1 install-engram      Install or verify Engram CLI
-    .\scripts\utilities\wf.ps1 stack-dashboard     One-shot operational dashboard (health + token risk + action)
-    .\scripts\utilities\wf.ps1 stack-dashboard live Real-time observability loop (agents/events/tokens/context)
-    .\scripts\utilities\wf.ps1 stack-dashboard strict  Fail with non-zero exit when executive traffic light is RED
-    .\scripts\utilities\wf.ps1 dashboard open       Generate dashboard and open it in browser
-    .\scripts\utilities\wf.ps1 dashboard live       Continuous professional dashboard refresh (foreground)
-    .\scripts\utilities\wf.ps1 dashboard auto       Start automated background live dashboard and open browser
-    .\scripts\utilities\wf.ps1 dashboard status     Show automated live dashboard process status
-    .\scripts\utilities\wf.ps1 dashboard stop       Stop automated live dashboard process
-    .\scripts\utilities\wf.ps1 runtime-route        Resolve runtime mode and recommended fallback actions
-    .\scripts\utilities\wf.ps1 runtime-route -JSON  Emit machine-readable runtime mode data
-    .\scripts\utilities\wf.ps1 custom-rules-status Show loaded custom rule scopes and files
-    .\scripts\utilities\wf.ps1 response-mode                Show active communication settings
-    .\scripts\utilities\wf.ps1 response-mode list           List language/detail/profile options
-    .\scripts\utilities\wf.ps1 response-mode profile:ultra  Set compression profile
-    .\scripts\utilities\wf.ps1 response-mode chat:chat-compact Set chat level bundle
-    .\scripts\utilities\wf.ps1 response-mode language:pt-BR Set communication language
-    .\scripts\utilities\wf.ps1 response-mode detail:expanded Set detail level
-    .\scripts\utilities\wf.ps1 response-mode preset:bugfix Apply preset for task type
-    .\scripts\utilities\wf.ps1 response-mode recommend:docs:high Recommend mode for preset+risk
-    .\scripts\utilities\wf.ps1 response-mode ahorro         On-demand token saving mode (chat-compact)
-    .\scripts\utilities\wf.ps1 response-mode normal         On-demand balanced mode (chat-balanced, override)
-    .\scripts\utilities\wf.ps1 response-mode detallado      On-demand detailed mode (chat-detailed, override)
-    .\scripts\utilities\wf.ps1 benchmark full      Run full stack benchmark with baseline regression guard
-    .\scripts\utilities\wf.ps1 benchmark full remediate Run full benchmark + auto-remediation incident playbook
-    .\scripts\utilities\wf.ps1 benchmark full baseline-update Force baseline update with current run
-    .\scripts\utilities\wf.ps1 ide-status          Detect IDE and show recommended activation
-    .\scripts\utilities\wf.ps1 update              Refresh repository, foundation, skills, and optional tools
-    .\scripts\utilities\wf.ps1 update-tools         Update required tools and optional integrations
-    .\scripts\utilities\wf.ps1 context-pack "fix ci noise"  Generate compact handoff summary for token-efficient continuation
-    .\scripts\utilities\wf.ps1 compact-start "fix ci noise" Generate handoff summary and copy compact prompt
-    .\scripts\utilities\wf.ps1 context-metrics 14  Show 14-day context usage summary
-    .\scripts\utilities\wf.ps1 token-guard         Show token budget status for current session
-    .\scripts\utilities\wf.ps1 token-guard publish Check token budget for publish-level workflow
-    .\scripts\utilities\wf.ps1 token-guard auto    Run token check and execute autopilot if thresholds persist
-    .\scripts\utilities\wf.ps1 token-guard profile:hard      Set autopilot default to hard mode
-    .\scripts\utilities\wf.ps1 token-guard profile:balanced  Set autopilot default to balanced mode
-    .\scripts\utilities\wf.ps1 checkpoint feature-doc-cleanup  Save rollback point including untracked files
-    .\scripts\utilities\wf.ps1 list-checkpoints        Show available rollback points
-    .\scripts\utilities\wf.ps1 rollback-checkpoint     Restore latest checkpoint
-    .\scripts\utilities\wf.ps1 rollback-checkpoint feature-doc-cleanup Restore matching checkpoint
-    .\scripts\utilities\wf.ps1 clean-branches          Preview merged local branches for cleanup
-    .\scripts\utilities\wf.ps1 clean-branches apply    Delete merged local branches (asks confirmation)
-    .\scripts\utilities\wf.ps1 clean-branches apply -Force  Delete merged branches without prompt, fallback to -D when needed
-    .\scripts\utilities\wf.ps1 homologate          Preview normalization actions
-    .\scripts\utilities\wf.ps1 homologate apply    Execute normalization and reference updates
-    .\scripts\utilities\wf.ps1 release-homologation         Validate VERSION + branch alignment across repos
-    .\scripts\utilities\wf.ps1 release-homologation v1.0.0  Validate alignment plus optional tag consistency
-    .\scripts\utilities\wf.ps1 health -StrictCleanup  Run health and fail if cleanup drift exists
-    .\scripts\utilities\wf.ps1 monthly-report all      Export metrics and build monthly management report
-    .\scripts\utilities\wf.ps1 agent-alert           Show process-compliance warnings (non-blocking)
-    .\scripts\utilities\wf.ps1 agent-alert strict    Fail if process-compliance warnings are detected
-    .\scripts\utilities\wf.ps1 agent list            List all available specialized agents
-    .\scripts\utilities\wf.ps1 agent status          Check agent readiness and skill availability
-    .\scripts\utilities\wf.ps1 agent DEV "implement login"  Delegate implementation to DEV agent
-    .\scripts\utilities\wf.ps1 agent QA "validate checkout"  Delegate testing to QA agent
+    .\scripts\utilities\gv.ps1 review              Run full code review
+    .\scripts\utilities\gv.ps1 review security     Run security scan only
+    .\scripts\utilities\gv.ps1 review judgment-day Run dual-review adversarial protocol
+    .\scripts\utilities\gv.ps1 judgment-day       Run judgment day directly
+    .\scripts\utilities\gv.ps1 audit              Generate audit document
+    .\scripts\utilities\gv.ps1 pr                 Create PR
+    .\scripts\utilities\gv.ps1 push               Commit and push
+    .\scripts\utilities\gv.ps1 push pr            Push and open PR now
+    .\scripts\utilities\gv.ps1 push later         Push only and create PR later
+    .\scripts\utilities\gv.ps1 publish            Run end-to-end PR flow with auto-merge on clean validation
+    .\scripts\utilities\gv.ps1 start-session      Create the session brief for today
+    .\scripts\utilities\gv.ps1 end-session        Run end-of-session checks and create closure artifact
+    .\scripts\utilities\gv.ps1 task-brief auth    Create a task brief for auth work
+    .\scripts\utilities\gv.ps1 diagnose            Full diagnostics report (JSON available)
+    .\scripts\utilities\gv.ps1 diagnose -JSON      Full diagnostics report in JSON format
+    .\scripts\utilities\gv.ps1 verify              Quick verify & auto-repair if needed
+    .\scripts\utilities\gv.ps1 health              Check system health & activate tools
+    .\scripts\utilities\gv.ps1 install-engram      Install or verify Engram CLI
+    .\scripts\utilities\gv.ps1 stack-dashboard     One-shot operational dashboard (health + token risk + action)
+    .\scripts\utilities\gv.ps1 stack-dashboard live Real-time observability loop (agents/events/tokens/context)
+    .\scripts\utilities\gv.ps1 stack-dashboard strict  Fail with non-zero exit when executive traffic light is RED
+    .\scripts\utilities\gv.ps1 dashboard open       Generate dashboard and open it in browser
+    .\scripts\utilities\gv.ps1 dashboard live       Continuous professional dashboard refresh (foreground)
+    .\scripts\utilities\gv.ps1 dashboard auto       Start automated background live dashboard and open browser
+    .\scripts\utilities\gv.ps1 dashboard status     Show automated live dashboard process status
+    .\scripts\utilities\gv.ps1 dashboard stop       Stop automated live dashboard process
+    .\scripts\utilities\gv.ps1 runtime-route        Resolve runtime mode and recommended fallback actions
+    .\scripts\utilities\gv.ps1 runtime-route -JSON  Emit machine-readable runtime mode data
+    .\scripts\utilities\gv.ps1 custom-rules-status Show loaded custom rule scopes and files
+    .\scripts\utilities\gv.ps1 response-mode                Show active communication settings
+    .\scripts\utilities\gv.ps1 response-mode list           List language/detail/profile options
+    .\scripts\utilities\gv.ps1 response-mode profile:ultra  Set compression profile
+    .\scripts\utilities\gv.ps1 response-mode chat:chat-compact Set chat level bundle
+    .\scripts\utilities\gv.ps1 response-mode language:pt-BR Set communication language
+    .\scripts\utilities\gv.ps1 response-mode detail:expanded Set detail level
+    .\scripts\utilities\gv.ps1 response-mode preset:bugfix Apply preset for task type
+    .\scripts\utilities\gv.ps1 response-mode recommend:docs:high Recommend mode for preset+risk
+    .\scripts\utilities\gv.ps1 response-mode ahorro         On-demand token saving mode (chat-compact)
+    .\scripts\utilities\gv.ps1 response-mode normal         On-demand balanced mode (chat-balanced, override)
+    .\scripts\utilities\gv.ps1 response-mode detallado      On-demand detailed mode (chat-detailed, override)
+    .\scripts\utilities\gv.ps1 benchmark full      Run full stack benchmark with baseline regression guard
+    .\scripts\utilities\gv.ps1 benchmark full remediate Run full benchmark + auto-remediation incident playbook
+    .\scripts\utilities\gv.ps1 benchmark full baseline-update Force baseline update with current run
+    .\scripts\utilities\gv.ps1 ide-status          Detect IDE and show recommended activation
+    .\scripts\utilities\gv.ps1 update              Refresh repository, gentle-vanguard, skills, and optional tools
+    .\scripts\utilities\gv.ps1 update-tools         Update required tools and optional integrations
+    .\scripts\utilities\gv.ps1 context-pack "fix ci noise"  Generate compact handoff summary for token-efficient continuation
+    .\scripts\utilities\gv.ps1 compact-start "fix ci noise" Generate handoff summary and copy compact prompt
+    .\scripts\utilities\gv.ps1 context-metrics 14  Show 14-day context usage summary
+    .\scripts\utilities\gv.ps1 token-guard         Show token budget status for current session
+    .\scripts\utilities\gv.ps1 token-guard publish Check token budget for publish-level workflow
+    .\scripts\utilities\gv.ps1 token-guard auto    Run token check and execute autopilot if thresholds persist
+    .\scripts\utilities\gv.ps1 token-guard profile:hard      Set autopilot default to hard mode
+    .\scripts\utilities\gv.ps1 token-guard profile:balanced  Set autopilot default to balanced mode
+    .\scripts\utilities\gv.ps1 checkpoint feature-doc-cleanup  Save rollback point including untracked files
+    .\scripts\utilities\gv.ps1 list-checkpoints        Show available rollback points
+    .\scripts\utilities\gv.ps1 rollback-checkpoint     Restore latest checkpoint
+    .\scripts\utilities\gv.ps1 rollback-checkpoint feature-doc-cleanup Restore matching checkpoint
+    .\scripts\utilities\gv.ps1 clean-branches          Preview merged local branches for cleanup
+    .\scripts\utilities\gv.ps1 clean-branches apply    Delete merged local branches (asks confirmation)
+    .\scripts\utilities\gv.ps1 clean-branches apply -Force  Delete merged branches without prompt, fallback to -D when needed
+    .\scripts\utilities\gv.ps1 homologate          Preview normalization actions
+    .\scripts\utilities\gv.ps1 homologate apply    Execute normalization and reference updates
+    .\scripts\utilities\gv.ps1 release-homologation         Validate VERSION + branch alignment across repos
+    .\scripts\utilities\gv.ps1 release-homologation v1.0.0  Validate alignment plus optional tag consistency
+    .\scripts\utilities\gv.ps1 health -StrictCleanup  Run health and fail if cleanup drift exists
+    .\scripts\utilities\gv.ps1 monthly-report all      Export metrics and build monthly management report
+    .\scripts\utilities\gv.ps1 agent-alert           Show process-compliance warnings (non-blocking)
+    .\scripts\utilities\gv.ps1 agent-alert strict    Fail if process-compliance warnings are detected
+    .\scripts\utilities\gv.ps1 agent list            List all available specialized agents
+    .\scripts\utilities\gv.ps1 agent status          Check agent readiness and skill availability
+    .\scripts\utilities\gv.ps1 agent DEV "implement login"  Delegate implementation to DEV agent
+    .\scripts\utilities\gv.ps1 agent QA "validate checkout"  Delegate testing to QA agent
 
 CHECKPOINT LABEL CONVENTION:
     Use '<scope>-<objective>' in lowercase kebab-case.
@@ -255,7 +255,7 @@ switch ($Command) {
     'task-brief' {
         Write-Step "Creating task brief"
         if ([string]::IsNullOrWhiteSpace($Scope)) {
-            Write-Error "Task name required. Example: .\scripts\utilities\wf.ps1 task-brief auth-flow"
+            Write-Error "Task name required. Example: .\scripts\utilities\gv.ps1 task-brief auth-flow"
             exit 1
         }
 
@@ -464,7 +464,7 @@ switch ($Command) {
         Write-Step "Generating Audit"
         Invoke-TokenBudgetGuard -Task 'audit' -Risk 'medium' -EstimatedChars 8800
 
-        $auditWorkflow = Join-Path $repoRoot 'skills\foundation-audit-skill\scripts\audit-workflow.ps1'
+        $auditWorkflow = Join-Path $repoRoot 'skills\gentle-vanguard-audit-skill\scripts\audit-workflow.ps1'
         $auditModes = @('quick', 'standard', 'full', 'deep', 'judgment', 'unified')
         $normalizedScope = if ($Scope) { $Scope.ToLowerInvariant() } else { $null }
 
@@ -499,11 +499,11 @@ switch ($Command) {
 
             Write-Host ""
             Write-Host "Tip: Use scoped audit modes for structural validation:" -ForegroundColor DarkGray
-            Write-Host "  wf.ps1 audit quick     -- fast structure check (0 tokens)" -ForegroundColor DarkGray
-            Write-Host "  wf.ps1 audit standard  -- + links and skill validation" -ForegroundColor DarkGray
-            Write-Host "  wf.ps1 audit full      -- complete batch sweep" -ForegroundColor DarkGray
-            Write-Host "  wf.ps1 audit deep      -- + orphaned docs sweep" -ForegroundColor DarkGray
-            Write-Host "  wf.ps1 audit judgment  -- full sweep + adversarial AI review" -ForegroundColor DarkGray
+            Write-Host "  gv.ps1 audit quick     -- fast structure check (0 tokens)" -ForegroundColor DarkGray
+            Write-Host "  gv.ps1 audit standard  -- + links and skill validation" -ForegroundColor DarkGray
+            Write-Host "  gv.ps1 audit full      -- complete batch sweep" -ForegroundColor DarkGray
+            Write-Host "  gv.ps1 audit deep      -- + orphaned docs sweep" -ForegroundColor DarkGray
+            Write-Host "  gv.ps1 audit judgment  -- full sweep + adversarial AI review" -ForegroundColor DarkGray
         }
     }
     
@@ -569,7 +569,7 @@ switch ($Command) {
             Write-Host "  git push" -ForegroundColor Yellow
             Write-Host "" 
             Write-Host "Later, create PR with:" -ForegroundColor Cyan
-            Write-Host "  .\scripts\utilities\wf.ps1 pr" -ForegroundColor Yellow
+            Write-Host "  .\scripts\utilities\gv.ps1 pr" -ForegroundColor Yellow
         }
     }
 
@@ -602,7 +602,7 @@ switch ($Command) {
             Invoke-LocalPowerShellScript -ScriptPath $homologateScript -ScriptArgs $homologateArgs
 
             if ($StrictCleanup -and $LASTEXITCODE -ne 0) {
-                Write-Error "Strict cleanup mode failed: run '.\scripts\utilities\wf.ps1 homologate apply' to remediate drift."
+                Write-Error "Strict cleanup mode failed: run '.\scripts\utilities\gv.ps1 homologate apply' to remediate drift."
                 exit $LASTEXITCODE
             }
         }
@@ -945,7 +945,7 @@ switch ($Command) {
 
             Write-Success "Dashboard auto service started (PID $($proc.Id))."
             Write-Host "Live URL: $liveUrl" -ForegroundColor Cyan
-            Write-Host "Use 'foundation dashboard status' to check and 'foundation dashboard stop' to stop." -ForegroundColor Gray
+            Write-Host "Use 'gv dashboard status' to check and 'gv dashboard stop' to stop." -ForegroundColor Gray
             if ($IsWindows -or $env:OS -eq 'Windows_NT') {
                 Start-Process $liveUrl | Out-Null
             }
@@ -1165,10 +1165,10 @@ switch ($Command) {
         exit $LASTEXITCODE
     }
 
-    'foundation-sync' {
-        $syncScript = Join-Path $repoRoot 'scripts\utilities\UTILITIES\foundation-sync.ps1'
+    'gentle-vanguard-sync' {
+        $syncScript = Join-Path $repoRoot 'scripts\utilities\UTILITIES\gentle-vanguard-sync.ps1'
         if (-not (Test-Path $syncScript)) {
-            Write-Error "foundation-sync.ps1 not found: $syncScript"
+            Write-Error "gentle-vanguard-sync.ps1 not found: $syncScript"
             exit 1
         }
 
@@ -1203,9 +1203,9 @@ switch ($Command) {
 
     'benchmark' {
         if ($Scope -eq 'full') {
-            $fullBenchScript = Join-Path $repoRoot 'scripts\utilities\wf-stack-benchmark.ps1'
+            $fullBenchScript = Join-Path $repoRoot 'scripts\utilities\gv-stack-benchmark.ps1'
             if (-not (Test-Path $fullBenchScript)) {
-                Write-Error "wf-stack-benchmark.ps1 not found: $fullBenchScript"
+                Write-Error "gv-stack-benchmark.ps1 not found: $fullBenchScript"
                 exit 1
             }
 
@@ -1223,10 +1223,10 @@ switch ($Command) {
             exit $LASTEXITCODE
         }
 
-        # FF-006: Profile key wf commands against SLO thresholds
-        $benchScript = Join-Path $repoRoot 'scripts\utilities\wf-benchmark.ps1'
+        # FF-006: Profile key gv commands against SLO thresholds
+        $benchScript = Join-Path $repoRoot 'scripts\utilities\gv-benchmark.ps1'
         if (-not (Test-Path $benchScript)) {
-            Write-Error "wf-benchmark.ps1 not found: $benchScript"
+            Write-Error "gv-benchmark.ps1 not found: $benchScript"
             exit 1
         }
         $cmds = @()
@@ -1274,9 +1274,9 @@ switch ($Command) {
             & $learningScript
         }
         Write-Host "`n[HINT] Review proposals in: .local/improvement-proposals/" -ForegroundColor Yellow
-        Write-Host "[HINT] Run 'foundation learning apply' to execute pending proposals" -ForegroundColor Yellow
-        Write-Host "[HINT] Run 'foundation learning auto' to analyze + auto-apply low-severity" -ForegroundColor Yellow
-        Write-Host "[HINT] Run 'foundation learning auto-pr' to auto-apply + create PR" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'gv learning apply' to execute pending proposals" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'gv learning auto' to analyze + auto-apply low-severity" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'gv learning auto-pr' to auto-apply + create PR" -ForegroundColor Yellow
         exit $LASTEXITCODE
     }
 
@@ -1305,11 +1305,11 @@ switch ($Command) {
         } else {
             & $watchtowerScript
         }
-        Write-Host "`n[HINT] Run 'foundation watchtower fix' to auto-remediate low-severity issues" -ForegroundColor Yellow
-        Write-Host "[HINT] Run 'foundation watchtower quiet' for silent mode" -ForegroundColor Yellow
-        Write-Host "[HINT] Run 'foundation watchtower all' for full check + auto-fix" -ForegroundColor Yellow
-        Write-Host "[HINT] Run 'foundation watchtower heal' for full check + auto-fix + self-heal" -ForegroundColor Yellow
-        Write-Host "[HINT] Run 'foundation watchtower heal' to run watchtower + auto-heal" -ForegroundColor Yellow
+        Write-Host "`n[HINT] Run 'gv watchtower fix' to auto-remediate low-severity issues" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'gv watchtower quiet' for silent mode" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'gv watchtower all' for full check + auto-fix" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'gv watchtower heal' for full check + auto-fix + self-heal" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'gv watchtower heal' to run watchtower + auto-heal" -ForegroundColor Yellow
         exit $LASTEXITCODE
     }
 
@@ -1327,12 +1327,12 @@ switch ($Command) {
         } else {
             & $healScript -AutoFix:$autoFix
         }
-        Write-Host "`n[HINT] Run 'foundation heal fix' to auto-repair all issues" -ForegroundColor Yellow
-        Write-Host "[HINT] Run 'foundation heal config' to check only config files" -ForegroundColor Yellow
-        Write-Host "[HINT] Run 'foundation heal hooks' to check only git hooks" -ForegroundColor Yellow
-        Write-Host "[HINT] Run 'foundation heal session' to check only session files" -ForegroundColor Yellow
-        Write-Host "[HINT] Run 'foundation heal skills' to check only skill integrity" -ForegroundColor Yellow
-        Write-Host "[HINT] Run 'foundation heal engram' to check only engram health" -ForegroundColor Yellow
+        Write-Host "`n[HINT] Run 'gv heal fix' to auto-repair all issues" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'gv heal config' to check only config files" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'gv heal hooks' to check only git hooks" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'gv heal session' to check only session files" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'gv heal skills' to check only skill integrity" -ForegroundColor Yellow
+        Write-Host "[HINT] Run 'gv heal engram' to check only engram health" -ForegroundColor Yellow
         exit $LASTEXITCODE
     }
 
@@ -1352,7 +1352,7 @@ switch ($Command) {
                 $orchVer = if ($oc.version) { " | orchestrator: $($oc.version)" } else { '' }
             } catch {}
         }
-        Write-Host "Gentleman Foundation v${ver}${orchVer}" -ForegroundColor Cyan
+        Write-Host "Gentle-Vanguard v${ver}${orchVer}" -ForegroundColor Cyan
         Write-Host "  Stack: $($PSVersionTable.PSVersion) on $(if($IsWindows){'windows'}elseif($IsMacOS){'macos'}else{'linux'})" -ForegroundColor Gray
         Write-Host "  Skills: $(if(Test-Path (Join-Path $repoRoot 'skills')){(Get-ChildItem (Join-Path $repoRoot 'skills') -Dir -EA SilentlyContinue).Count}else{'n/a'})" -ForegroundColor Gray
     }
@@ -1405,9 +1405,9 @@ switch ($Command) {
         }
 
         if ([string]::IsNullOrWhiteSpace($Scope)) {
-            Write-Host "Usage: wf.ps1 simplify-text '<text>'" -ForegroundColor Yellow
-            Write-Host "       wf.ps1 simplify-text -Interactive" -ForegroundColor Yellow
-            Write-Host "       wf.ps1 simplify-text -InputFile '<path>'" -ForegroundColor Yellow
+            Write-Host "Usage: gv.ps1 simplify-text '<text>'" -ForegroundColor Yellow
+            Write-Host "       gv.ps1 simplify-text -Interactive" -ForegroundColor Yellow
+            Write-Host "       gv.ps1 simplify-text -InputFile '<path>'" -ForegroundColor Yellow
         } else {
             & $simplifyScript -InputText $Scope -SaveMetrics
         }
@@ -1500,7 +1500,7 @@ switch ($Command) {
         }
 
         if ([string]::IsNullOrWhiteSpace($Scope)) {
-            Write-Host "Usage: .\wf.ps1 agent <AGENT> [TASK]" -ForegroundColor Yellow
+            Write-Host "Usage: .\gv.ps1 agent <AGENT> [TASK]" -ForegroundColor Yellow
             Write-Host "Agents: BA, SAD, DEV, QA, OPS, GOV, DOC, status, list" -ForegroundColor White
             exit 1
         }
@@ -1596,8 +1596,8 @@ switch ($Command) {
     }
 
     'install' {
-        Write-Step "Foundation TUI Installer (FF-018)"
-        $installScript = Join-Path $scriptDir '..\foundation-installer-tui.ps1'
+        Write-Step "Gentle-Vanguard TUI Installer (FF-018)"
+        $installScript = Join-Path $scriptDir '..\gentle-vanguard-installer-tui.ps1'
         if (-not (Test-Path $installScript)) {
             Write-Error "Installer script not found: $installScript"
             exit 1
@@ -1708,7 +1708,7 @@ switch ($Command) {
                 -AlertType 'status-change' -Provider ($env:WEBHOOK_PROVIDER ?? 'slack') `
                 -Details @{message="Test alert"} -DryRun
         } else {
-            Write-Host "Usage: foundation webhook test" -ForegroundColor Yellow
+            Write-Host "Usage: gv webhook test" -ForegroundColor Yellow
             Write-Host "Set env vars: WEBHOOK_URL, WEBHOOK_PROVIDER (slack|teams|discord|generic)" -ForegroundColor Gray
         }
     }
@@ -1766,7 +1766,7 @@ switch ($Command) {
         
         $repo = $Scope
         if ([string]::IsNullOrWhiteSpace($repo)) {
-            Write-Error "Usage: foundation escalation <owner/repo>"
+            Write-Error "Usage: gv escalation <owner/repo>"
             exit 1
         }
         
@@ -1792,4 +1792,5 @@ switch ($Command) {
 }
 
 exit 0
+
 

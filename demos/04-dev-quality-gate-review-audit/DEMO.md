@@ -18,12 +18,12 @@ gate, to Judgment Day adversarial review — all automated and integrated into t
 | #   | Capability                         | Command / Artifact                      |
 | --- | ---------------------------------- | --------------------------------------- |
 | 1   | Static analysis (PSScriptAnalyzer) | `ps-lint.yml` in CI                     |
-| 2   | SDD spec gate                      | `wf sdd-gate`                           |
+| 2   | SDD spec gate                      | `gv sdd-gate`                           |
 | 3   | 7D pre-commit validation           | `git commit` (hook fires automatically) |
-| 4   | Full QA gate                       | `wf judgment-day`                       |
-| 5   | Code review                        | `wf review`                             |
-| 6   | Audit report                       | `wf audit`                              |
-| 7   | Agent-verify (14 checks)           | `wf verify`                             |
+| 4   | Full QA gate                       | `gv judgment-day`                       |
+| 5   | Code review                        | `gv review`                             |
+| 6   | Audit report                       | `gv audit`                              |
+| 7   | Agent-verify (14 checks)           | `gv verify`                             |
 
 ---
 
@@ -32,7 +32,7 @@ gate, to Judgment Day adversarial review — all automated and integrated into t
 ### Step 1 — Check quality gate status
 
 ```powershell
-wf verify
+gv verify
 # Expected: 14/14 PASS
 # Look for: quality-gate-workflows, workflow-hardening, tests-passing
 ```
@@ -40,7 +40,7 @@ wf verify
 ### Step 2 — SDD Gate (blocks without spec)
 
 ```powershell
-wf sdd-gate
+gv sdd-gate
 # Shows: status of SDD docs (validated/active/done required)
 
 # What happens without SDD:
@@ -74,7 +74,7 @@ Invoke-ScriptAnalyzer -Path scripts/ -Recurse -Severity Error
 ### Step 5 — Full QA Gate (Judgment Day)
 
 ```powershell
-wf judgment-day
+gv judgment-day
 # Runs: dual adversarial review
 # Agents: DEV reviews → QA adversarial → synthesis
 # Output: docs/judgment/YYYY-MM-DD-judgment.md
@@ -83,17 +83,17 @@ wf judgment-day
 ### Step 6 — Review + Audit
 
 ```powershell
-wf review
+gv review
 # AI-assisted multi-dimension review
 
-wf audit
+gv audit
 # Full audit report → docs/audits/YYYY-MM-DD-HHmmss-audit.md
 ```
 
 ### Step 7 — SDD Metrics
 
 ```powershell
-wf sdd-metrics
+gv sdd-metrics
 # Shows: SDD status distribution, cycle time per phase, SLO compliance
 # -AsJson flag for programmatic use
 ```
@@ -107,3 +107,4 @@ wf sdd-metrics
 - PSScriptAnalyzer blocks broken PS1 code before it reaches `main`
 - SDD gate proves that "no spec = no merge" is enforced, not optional
 - Management can see traceable audit artifacts for compliance
+

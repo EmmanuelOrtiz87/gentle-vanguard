@@ -2,7 +2,7 @@
 
 **Version:** 1.0.0
 **Last updated:** 2026-05-14
-**Applies to:** All repositories in the foundation ecosystem
+**Applies to:** All repositories in the gentle-vanguard ecosystem
 
 ---
 
@@ -147,3 +147,4 @@ Before merge, these MUST pass:
 ---
 
 _Version: 1.0.0 — 2026-05-14 — Status: ACTIVE_
+

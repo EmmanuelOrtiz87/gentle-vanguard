@@ -1,5 +1,5 @@
-# wf-benchmark.ps1
-# FF-006: Local Workflow Performance - profiles key wf commands and compares
+# gv-benchmark.ps1
+# FF-006: Local Workflow Performance - profiles key gv commands and compares
 # against SLO thresholds. Emits advisory if any command exceeds its SLO.
 #
 # SLO defaults (configurable in config/testing.config.json under "benchmark"):
@@ -8,8 +8,8 @@
 #   verify   <= 30 s
 #
 # Usage:
-#   pwsh -File scripts/utilities/wf-benchmark.ps1
-#   wf benchmark [-AsJson] [-Commands status,health]
+#   pwsh -File scripts/utilities/gv-benchmark.ps1
+#   gv benchmark [-AsJson] [-Commands status,health]
 
 param(
     [string[]]$Commands = @('status', 'health'),
@@ -20,7 +20,7 @@ param(
 $ErrorActionPreference = 'Continue'
 $scriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repoRoot  = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
-$wfScript  = Join-Path $repoRoot 'scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1'
+$wfScript  = Join-Path $repoRoot 'scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1'
 
 # --- SLO defaults ------------------------------------------------------------
 $sloDefaults = @{
@@ -59,7 +59,7 @@ foreach ($cmd in $Commands) {
             elapsed_s  = -1
             slo_s      = $slo
             status     = 'SKIP'
-            note       = 'wf.ps1 not found'
+            note       = 'gv.ps1 not found'
         }
         continue
     }
@@ -96,7 +96,7 @@ foreach ($cmd in $Commands) {
 # --- Persist to reports/ ------------------------------------------------------
 $reportsDir = Join-Path $repoRoot 'reports'
 if (-not (Test-Path $reportsDir)) { New-Item -ItemType Directory -Path $reportsDir -Force | Out-Null }
-$reportPath = Join-Path $reportsDir 'wf-benchmark.json'
+$reportPath = Join-Path $reportsDir 'gv-benchmark.json'
 
 $report = [ordered]@{
     as_of   = (Get-Date -Format 'yyyy-MM-ddTHH:mm:ssK')
@@ -111,7 +111,7 @@ if ($AsJson) {
 
 if (-not $Quiet) {
     Write-Host ''
-    Write-Host '=== WF Benchmark ===' -ForegroundColor Cyan
+    Write-Host '=== GV Benchmark ===' -ForegroundColor Cyan
     Write-Host "  Report: $reportPath"
     Write-Host ''
     $colW = @(12, 10, 6, 6, 8)
@@ -127,3 +127,4 @@ if (-not $Quiet) {
 
 $failures = @($results | Where-Object { $_.status -in @('FAIL','ERROR') })
 exit ($failures.Count -gt 0 ? 1 : 0)
+

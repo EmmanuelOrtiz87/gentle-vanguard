@@ -1,6 +1,6 @@
 # Discord - Announcement
 
-Foundation v2.0 is here.
+Gentle-Vanguard v2.0 is here.
 
 Features:
 - Auto-delegation
@@ -8,8 +8,8 @@ Features:
 - 7D validation
 - Judgment Day
 
-Get it: github.com/EmmanuelOrtiz87/foundation
+Get it: github.com/EmmanuelOrtiz87/gentle-vanguard
 
 Questions? Drop them here!
 
-#FoundationStack
+#Gentle-VanguardStack

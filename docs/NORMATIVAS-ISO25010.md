@@ -8,7 +8,7 @@ Last updated: 2026-05-11
 
 ## 1. PROPOSITO
 
-Mapea las 8 caracteristicas de calidad del modelo ISO/IEC 25010 a controles automatizados, scripts, y gates en el stack Foundation. Garantiza que la calidad del software sea medible, rastreable, y validable en cada fase del ciclo de vida.
+Mapea las 8 caracteristicas de calidad del modelo ISO/IEC 25010 a controles automatizados, scripts, y gates en el stack Gentle-Vanguard. Garantiza que la calidad del software sea medible, rastreable, y validable en cada fase del ciclo de vida.
 
 ---
 
@@ -16,7 +16,7 @@ Mapea las 8 caracteristicas de calidad del modelo ISO/IEC 25010 a controles auto
 
 ### 2.1 Funcional Suitability (Adecuacion Funcional)
 
-| Sub-caracteristica | Control Foundation | Verification |
+| Sub-caracteristica | Control Gentle-Vanguard | Verification |
 |--------------------|-------------------|--------------|
 | Functional completeness | `scripts/testing/run-tests.ps1` | Test coverage >= 80% |
 | Functional correctness | `tests/unit/*.tests.ps1` | Zero test failures |
@@ -24,7 +24,7 @@ Mapea las 8 caracteristicas de calidad del modelo ISO/IEC 25010 a controles auto
 
 ### 2.2 Performance Efficiency (Eficiencia de Rendimiento)
 
-| Sub-caracteristica | Control Foundation | Verification |
+| Sub-caracteristica | Control Gentle-Vanguard | Verification |
 |--------------------|-------------------|--------------|
 | Time behaviour | `config/orchestrator.json#SLOs` | Dispatch < 500ms |
 | Resource utilisation | `scripts/monitoring/cross-workspace-validator.ps1` | Token budget < 30K/session |
@@ -32,25 +32,25 @@ Mapea las 8 caracteristicas de calidad del modelo ISO/IEC 25010 a controles auto
 
 ### 2.3 Compatibility (Compatibilidad)
 
-| Sub-caracteristica | Control Foundation | Verification |
+| Sub-caracteristica | Control Gentle-Vanguard | Verification |
 |--------------------|-------------------|--------------|
 | Co-existence | `config/tool-*.json` (opencode, cursor, windsurf, etc.) | Tool configs validos |
 | Interoperability | `config/mcp-servers.json` + `adapters/` | MCP bridge estable |
 
 ### 2.4 Usability (Usabilidad)
 
-| Sub-caracteristica | Control Foundation | Verification |
+| Sub-caracteristica | Control Gentle-Vanguard | Verification |
 |--------------------|-------------------|--------------|
 | Appropriateness recognisability | `docs/AGENTS.md` + `rules/README.md` | Docs actualizados |
 | Learnability | `skills/` con SKILL.md | Cada skill documentada |
-| Operability | `scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1` | Comandos wf funcionales |
+| Operability | `scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1` | Comandos gv funcionales |
 | User error protection | `config/security-hardening.json` | Input validation en todas las entradas |
 | User interface aesthetics | `docs/NORMATIVAS-ACCESIBILIDAD.md` | WCAG 2.2 AA compliance |
 | Accessibility | axe-core + Playwright | WCAG automated checks |
 
 ### 2.5 Reliability (Fiabilidad)
 
-| Sub-caracteristica | Control Foundation | Verification |
+| Sub-caracteristica | Control Gentle-Vanguard | Verification |
 |--------------------|-------------------|--------------|
 | Maturity | `tests/integration/*.tests.ps1` | Regression suite passing |
 | Availability | `config/quality-gates.json` | CI gates blocking |
@@ -59,7 +59,7 @@ Mapea las 8 caracteristicas de calidad del modelo ISO/IEC 25010 a controles auto
 
 ### 2.6 Security (Seguridad)
 
-| Sub-caracteristica | Control Foundation | Verification |
+| Sub-caracteristica | Control Gentle-Vanguard | Verification |
 |--------------------|-------------------|--------------|
 | Confidentiality | `config/security-privacy.json` + `secrets-manager.ps1` | No secrets in logs |
 | Integrity | `pre-commit-hook.ps1` + `gitleaks.yml` | Hook validation |
@@ -70,7 +70,7 @@ Mapea las 8 caracteristicas de calidad del modelo ISO/IEC 25010 a controles auto
 
 ### 2.7 Maintainability (Mantenibilidad)
 
-| Sub-caracteristica | Control Foundation | Verification |
+| Sub-caracteristica | Control Gentle-Vanguard | Verification |
 |--------------------|-------------------|--------------|
 | Modularity | `rules/NORMATIVAS-CODIGO.md#3-Estructura` | File organization standards |
 | Reusability | `skills/*/` modular skill structure | Skill isolation |
@@ -80,10 +80,10 @@ Mapea las 8 caracteristicas de calidad del modelo ISO/IEC 25010 a controles auto
 
 ### 2.8 Portability (Portabilidad)
 
-| Sub-caracteristica | Control Foundation | Verification |
+| Sub-caracteristica | Control Gentle-Vanguard | Verification |
 |--------------------|-------------------|--------------|
 | Adaptability | `config/orchestrator.json#platform` | Windows/Linux/macOS |
-| Installability | `scripts/foundation/bootstrap-machine.ps1` | Machine bootstrap |
+| Installability | `scripts/gentle-vanguard/bootstrap-machine.ps1` | Machine bootstrap |
 | Replaceability | `config/tool-*.json` multi-tool support | Tool-agnostic design |
 
 ---
@@ -169,3 +169,4 @@ TODO implementacion DEBE verificar:
 ---
 
 _Version: 1.0.0 — 2026-05-11 — Status: ACTIVE_
+

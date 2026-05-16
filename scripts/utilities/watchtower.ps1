@@ -137,6 +137,18 @@ function Check-Context {
     if (Test-Path $markerFile) {
         $marker = Get-Content $markerFile -Raw
         $lastCompact = if ($marker -match '\d+') { [long]$Matches[0] } else { 0 }
+        if ($lastCompact -lt 946684800) {
+            $issues += @{
+                check = "context"
+                severity = "ok"
+                message = "Compact marker invalid/stale (treated as fresh session)"
+                detail = ""
+                autoFixAction = ""
+                autoFixDesc = ""
+            }
+            return $issues
+        }
+
         $epoch2 = [long]$lastCompact
         $dt2 = (Get-Date -Year 1970 -Month 1 -Day 1 -Hour 0 -Minute 0 -Second 0).AddSeconds($epoch2)
         $ageMin = [int]((Get-Date) - $dt2).TotalMinutes
@@ -146,7 +158,7 @@ function Check-Context {
                 severity = "warn"
                 message = "Last compact-start was $ageMin min(s) ago (recommended < 60 min)"
                 detail = "Context may be growing, run compact-start"
-                autoFixAction = Join-Path (Join-Path (Join-Path (Join-Path $repoRoot "scripts") "utilities") "WORKFLOW-ORCHESTRATION") "foundation.ps1"
+                autoFixAction = Join-Path (Join-Path (Join-Path (Join-Path $repoRoot "scripts") "utilities") "WORKFLOW-ORCHESTRATION") "gentle-vanguard.ps1"
                 autoFixDesc = "Run compact-start automatically"
             }
         } else {
@@ -218,8 +230,8 @@ function Check-Proposals {
             check = "proposals"
             severity = if ($pending.Count -gt 5) { "critical" } else { "warn" }
             message = "$($pending.Count) pending improvement proposal(s)"
-            detail = "Run 'foundation learning apply' to execute"
-            autoFixAction = Join-Path (Join-Path (Join-Path (Join-Path $repoRoot "scripts") "utilities") "WORKFLOW-ORCHESTRATION") "foundation.ps1"
+            detail = "Run 'gv learning apply' to execute"
+            autoFixAction = Join-Path (Join-Path (Join-Path (Join-Path $repoRoot "scripts") "utilities") "WORKFLOW-ORCHESTRATION") "gentle-vanguard.ps1"
             autoFixDesc = "Execute pending proposals"
         }
     } else {
@@ -304,11 +316,11 @@ function Invoke-AutoFix {
                 if ($LASTEXITCODE -eq 0) { $fixed++; Write-Ok "Pushed commits" }
                 else { Write-Warn "Push failed" }
             }
-        } elseif ($issue.check -eq 'context' -and $issue.autoFixAction) {
-            $foundation = $issue.autoFixAction
-            & $foundation 2>$null
-            if ($LASTEXITCODE -eq 0 -or $LASTEXITCODE -eq $null) { $fixed++; Write-Ok "Compact-start completed" }
-            else { Write-Warn "Compact-start failed" }
+         } elseif ($issue.check -eq 'context' -and $issue.autoFixAction) {
+             $gentleVanguardAction = $issue.autoFixAction
+             & $gentleVanguardAction 2>$null
+             if ($LASTEXITCODE -eq 0 -or $LASTEXITCODE -eq $null) { $fixed++; Write-Ok "Compact-start completed" }
+             else { Write-Warn "Compact-start failed" }
         } elseif ($issue.check -eq 'proposals' -and $issue.autoFixAction) {
             $execPath = $issue.autoFixAction
             & $execPath 2>$null
@@ -354,3 +366,4 @@ if ($AutoFix) {
 
 $exitCode = if ($summary.critical -gt 0) { 1 } elseif ($summary.warn -gt 0) { 0 } else { 0 }
 exit $exitCode
+

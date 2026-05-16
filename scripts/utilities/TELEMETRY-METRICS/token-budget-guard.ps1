@@ -14,7 +14,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) { $env:FOUNDATION_BASE_DIR } else {
+$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) { $env:GENTLE_VANGUARD_BASE_DIR } else {
     $root = Split-Path -Parent $PSScriptRoot
     while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
     if (-not $root) { $root = $PSScriptRoot }
@@ -53,11 +53,11 @@ function Get-DefaultGuardConfig {
         hard_threshold_pct = 90
         enforce_on_commands = @('context-pack', 'compact-start', 'review', 'audit', 'end-session', 'publish')
         fallback_actions = @(
-            './scripts/utilities/wf.ps1 response-mode simple',
-            './scripts/utilities/wf.ps1 response-mode ultra',
-            './scripts/utilities/wf.ps1 context-pack "<objective>"',
-            './scripts/utilities/wf.ps1 compact-start "<objective>"',
-            './scripts/utilities/wf.ps1 end-session "<task>" -SkipReview -SkipTests -Force',
+            './scripts/utilities/gv.ps1 response-mode simple',
+            './scripts/utilities/gv.ps1 response-mode ultra',
+            './scripts/utilities/gv.ps1 context-pack "<objective>"',
+            './scripts/utilities/gv.ps1 compact-start "<objective>"',
+            './scripts/utilities/gv.ps1 end-session "<task>" -SkipReview -SkipTests -Force',
             './scripts/utilities/run-engram.ps1 --help'
         )
     }
@@ -207,7 +207,7 @@ if ($engramRequiredIssue -and $status -eq 'PASS') {
 
 $alternatives = @($guardConfig.fallback_actions)
 if (-not $engram.available) {
-    $alternatives += './scripts/utilities/wf.ps1 install-engram'
+    $alternatives += './scripts/utilities/gv.ps1 install-engram'
     $alternatives += './scripts/utilities/run-engram.ps1 --help'
 }
 
@@ -265,3 +265,4 @@ if ($Strict -and ($status -eq 'HARD_LIMIT' -or $status -eq 'ENGRAM_MISSING')) {
 }
 
 exit 0
+

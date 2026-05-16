@@ -5,8 +5,7 @@ description: >
   Trigger: "post-session", "learning", "auto-aprendizaje", "improvement proposals", "mejora continua"
 license: Apache-2.0
 metadata:
-  author: foundation
-  version: '1.0'
+  author: gv version: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task, EngramMemSave
 ---
 
@@ -80,10 +79,10 @@ engram_mem_save -title "Learning: {key finding}" -type "learning"
 ## Integration Points
 
 - **Session close**: Run automatically during session closure (step between summary and end)
-- **Manual trigger**: User can run `foundation learning` to analyze current session anytime
-- **Proposal executor**: Run `foundation learning apply` to auto-execute pending proposals (scaffold skills, patch configs)
-- **Auto mode**: `foundation learning auto` runs analysis + auto-applies low-severity proposals in one step
-- **PR mode**: `foundation learning auto-pr` auto-applies + creates a git branch and commit with changes
+- **Manual trigger**: User can run `gv learning` to analyze current session anytime
+- **Proposal executor**: Run `gv learning apply` to auto-execute pending proposals (scaffold skills, patch configs)
+- **Auto mode**: `gv learning auto` runs analysis + auto-applies low-severity proposals in one step
+- **PR mode**: `gv learning auto-pr` auto-applies + creates a git branch and commit with changes
 - **Startup check**: At session start, check `.local/improvement-proposals/` for pending items
 
 ## Output Files
@@ -92,3 +91,4 @@ engram_mem_save -title "Learning: {key finding}" -type "learning"
 |------|---------|
 | `.local/improvement-proposals/*.json` | Structured improvement proposals |
 | `.local/improvement-proposals/learning-log.jsonl` | Append-only log of all learning runs |
+

@@ -6,7 +6,7 @@ $script:fCommands = @(
     'end-session', 'day-end-closure', 'task-brief', 'migrate-structure',
     'context-pack', 'compact-start', 'context-metrics', 'token-guard',
     'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches',
-    'homologate', 'foundation-sync', 'release-homologation', 'agent-alert',
+    'homologate', 'gentle-vanguard-sync', 'release-homologation', 'agent-alert',
     'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day',
     'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics',
     'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift',
@@ -22,7 +22,7 @@ $script:fSubs = @{
     skills         = 'discover', 'map', 'agents', 'validate'
     'clean-branches' = 'apply'
     homologate     = 'apply'
-    'foundation-sync' = 'apply'
+    'gentle-vanguard-sync' = 'apply'
     'agent-alert'  = 'strict'
     'sla-dashboard' = 'open'
     webhook        = 'test'
@@ -79,4 +79,5 @@ $script:completer = {
     }
 }
 
-Register-ArgumentCompleter -CommandName 'foundation' -ScriptBlock $script:completer
+Register-ArgumentCompleter -CommandName 'gentle-vanguard' -ScriptBlock $script:completer
+

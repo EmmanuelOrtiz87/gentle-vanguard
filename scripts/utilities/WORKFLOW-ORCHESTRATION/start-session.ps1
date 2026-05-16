@@ -1,5 +1,5 @@
 # start-session.ps1 - Initialize a new session with Engram integration
-# Part of Foundation Workflow CLI
+# Part of Gentle-Vanguard Workflow CLI
 
 param(
     [string]$TaskName = '',
@@ -66,7 +66,7 @@ if (-not [string]::IsNullOrWhiteSpace($SessionId)) {
         StartTime = Get-Date -Format 'o'
     }
 } elseif (-not $Force) {
-    $envSessionId = @($env:FOUNDATION_SESSION_ID, $env:WFS_SESSION_ID, $env:SESSION_ID) |
+    $envSessionId = @($env:GV_SESSION_ID, $env:WFS_SESSION_ID, $env:SESSION_ID) |
         Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
         Select-Object -First 1
 
@@ -137,3 +137,5 @@ Write-Host "Use 'end-session' to close this session." -ForegroundColor Gray
 Write-Host ""
 
 exit 0
+
+

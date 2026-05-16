@@ -63,7 +63,7 @@ function Test-ASCIICompliance {
 
 # Main logic
 if ($Recursive) {
-    $scripts = Get-ChildItem -Path "foundation\\scripts\utilities" -Filter "*.ps1" -Recurse
+    $scripts = Get-ChildItem -Path "gentle-vanguard\\scripts\utilities" -Filter "*.ps1" -Recurse
     $compliant = 0
     $nonCompliant = 0
     

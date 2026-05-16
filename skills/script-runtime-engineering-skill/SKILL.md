@@ -3,10 +3,10 @@ name: script-runtime-engineering-skill
 description: >
   Runtime-safe patterns for Bash and PowerShell scripts: quoting, escaping, cross-platform
   execution, parser checks, and smoke validation. Trigger: "bash script", "shell script",
-  "powershell script", "hook", "script parse error", "cross-platform script", "foundation script".
+  "powershell script", "hook", "script parse error", "cross-platform script", "gentle-vanguard script".
 license: Apache-2.0
 metadata:
-  author: foundation
+  author: gentle-vanguard
   versión: '1.0'
 ---
 
@@ -124,7 +124,7 @@ After script changes, run this minimum validation:
 3. Workflow smoke tests
 
 - If hooks were touched: run `hooks/pre-commit.ps1` and `hooks/post-checkout.ps1`.
-- If activation scripts were touched: run `scripts/utilities/wf.ps1 health`.
+- If activation scripts were touched: run `scripts/utilities/gv.ps1 health`.
 
 4. Output contract checks
 
@@ -151,9 +151,10 @@ $errors = $null
 if ($errors.Count -eq 0) { 'PARSE_OK' } else { $errors }
 
 # Canonical workflow health check
-.\scripts\utilities\wf.ps1 health
+.\scripts\utilities\gv.ps1 health
 
 # Hook smoke checks
 .\hooks\pre-commit.ps1
 .\hooks\post-checkout.ps1
 ```
+

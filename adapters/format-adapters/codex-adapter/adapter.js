@@ -1,6 +1,6 @@
 /**
  * Codex Adapter
- * Converts Foundation tools/skills to OpenAI function calling format
+ * Converts Gentle-Vanguard tools/skills to OpenAI function calling format
  * 
  * Codex (OpenAI) uses:
  * - Function calling format (JSON Schema)
@@ -12,7 +12,7 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * Convert Foundation SKILL.md to OpenAI function format
+ * Convert Gentle-Vanguard SKILL.md to OpenAI function format
  */
 function convertSkillToCodex(skillPath, outputPath) {
   const skillContent = fs.readFileSync(skillPath, 'utf-8');
@@ -23,7 +23,7 @@ function convertSkillToCodex(skillPath, outputPath) {
     type: 'function',
     function: {
       name: parsed.name.replace(/-/g, '_'),
-      description: parsed.description || `Foundation skill: ${parsed.name}`,
+      description: parsed.description || `Gentle-Vanguard skill: ${parsed.name}`,
       parameters: {
         type: 'object',
         properties: {
@@ -48,7 +48,7 @@ function convertSkillToCodex(skillPath, outputPath) {
 }
 
 /**
- * Parse Foundation SKILL.md format
+ * Parse Gentle-Vanguard SKILL.md format
  */
 function parseSkillMarkdown(content) {
   const result = {
@@ -128,7 +128,7 @@ const path = require('path');
 const app = express();
 app.use(express.json());
 
-// Load all Foundation tools
+// Load all Gentle-Vanguard tools
 const toolsPath = path.join(__dirname, 'tools.json');
 const toolsData = JSON.parse(fs.readFileSync(toolsPath, 'utf-8'));
 
@@ -139,14 +139,14 @@ app.get('/v1/tools', (req, res) => {
 app.post('/v1/chat/completions', async (req, res) => {
   const { messages, tools } = req.body;
   
-  // Forward to Foundation (simplified - actual implementation would call Foundation)
+  // Forward to Gentle-Vanguard (simplified - actual implementation would call Gentle-Vanguard)
   const lastMessage = messages[messages.length - 1].content;
   
   res.json({
     choices: [{
       message: {
         role: 'assistant',
-        content: \`Foundation processing: \${lastMessage}\`
+        content: \`Gentle-Vanguard processing: \${lastMessage}\`
       }
     }]
   });
@@ -200,3 +200,4 @@ module.exports = {
   generateToolsArray,
   generateProxyServer
 };
+

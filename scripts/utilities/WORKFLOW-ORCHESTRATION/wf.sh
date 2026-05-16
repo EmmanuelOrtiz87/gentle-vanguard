@@ -1,7 +1,7 @@
-﻿#!/usr/bin/env bash
-# wf.sh - Foundation - Development Stack Workflow CLI (bash/sh version)
+#!/usr/bin/env bash
+# gv.sh - Gentle-Vanguard - Development Stack Workflow CLI (bash/sh version)
 # Works on: Linux, macOS, Windows (WSL, Git Bash)
-# Mirror of wf.ps1 - all commands wrapped for shell compatibility
+# Mirror of gv.ps1 - all commands wrapped for shell compatibility
 
 set -euo pipefail
 
@@ -44,7 +44,7 @@ log_warn() {
 
 # Command: status
 cmd_status() {
-    log_header "Foundation - Development Stack - Status Report"
+    log_header "Gentle-Vanguard - Development Stack - Status Report"
     
     echo ""
     log_info "Project Root: $PROJECT_ROOT"
@@ -227,11 +227,11 @@ cmd_events() {
 cmd_help() {
     cat << 'EOF'
 
-Foundation - Development Stack Workflow CLI (bash version)
+Gentle-Vanguard - Development Stack Workflow CLI (bash version)
 Works on Linux, macOS, Windows (WSL/Git Bash). Requires pwsh for PS1 features.
 
 USAGE:
-    wf <command> [options]
+    gv <command> [options]
 
 COMMANDS:
     status           Show current project status and dependencies
@@ -247,14 +247,14 @@ COMMANDS:
     help             Show this help message
 
 EXAMPLES:
-    ./wf status                  # Show project status
-    ./wf health                  # Run health checks
-    ./wf verify-full             # Full PS1-based verification (needs pwsh)
-    ./wf dashboard               # Generate dashboard.html and open it
-    ./wf mq status               # Check MQ adapter connectivity
-    ./wf mq test                 # Test all MQ adapters
-    ./wf export-metrics          # Export metrics to reports/metrics-export.csv
-    ./wf events list             # List standard events
+    ./gv status                  # Show project status
+    ./gv health                  # Run health checks
+    ./gv verify-full             # Full PS1-based verification (needs pwsh)
+    ./gv dashboard               # Generate dashboard.html and open it
+    ./gv mq status               # Check MQ adapter connectivity
+    ./gv mq test                 # Test all MQ adapters
+    ./gv export-metrics          # Export metrics to reports/metrics-export.csv
+    ./gv events list             # List standard events
 
 ENVIRONMENT VARIABLES:
     ENGRAM_DATA_DIR      Location of Engram data (default: ./.engram-data)
@@ -292,3 +292,4 @@ main() {
 }
 
 main "$@"
+

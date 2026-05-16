@@ -1,10 +1,10 @@
-name: Foundation Quality Gate
+name: Gentle-Vanguard Quality Gate
 
 permissions:
   contents: read
 
 concurrency:
-  group: foundation-quality-gate-${{ github.ref }}
+  group: gentle-vanguard-quality-gate-${{ github.ref }}
   cancel-in-progress: true
 
 on:
@@ -28,7 +28,7 @@ on:
 
 jobs:
   quality-gate:
-    name: Foundation Quality Gate
+    name: Gentle-Vanguard Quality Gate
     runs-on: windows-latest
     timeout-minutes: 35
     steps:
@@ -76,4 +76,5 @@ jobs:
             }
           }
           if (-not $allValid) { exit 1 }
+
 

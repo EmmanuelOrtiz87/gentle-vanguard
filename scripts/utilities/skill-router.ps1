@@ -12,7 +12,7 @@
     .\skill-router.ps1 -Query "implement login feature"
     
 .NOTES
-    Author: foundation
+    Author: gentle-vanguard
     Version: 1.0
 #>
 
@@ -21,7 +21,7 @@ param(
     [string]$Query,
     
     [Parameter(Mandatory=$false)]
-    [string]$ProjectName = "workspace_local"
+    [string]$ProjectName = "workspace_gentle_vanguard"
 )
 
 $ErrorActionPreference = 'Continue'
@@ -52,7 +52,7 @@ $skillKeywords = @{
     "documentation" = @("documentation-governance")
     "architecture" = @("architecture-governance")
     "sdd" = @("sdd-init", "sdd-propose", "sdd-explore", "sdd-design", "sdd-spec", "sdd-tasks", "sdd-apply", "sdd-verify", "sdd-archive")
-    "foundation" = @("foundation-audit")
+    "gentle-vanguard" = @("gentle-vanguard-audit")
     "session" = @("session-lifecycle")
     "automation" = @("workspace-automation", "project-scaffolding")
 }
@@ -85,3 +85,4 @@ if ($matchedSkills.Count -gt 0) {
     Write-Output '{"Status":"NoMatch","Skills":[],"Query":"' + $Query + '"}'
     exit 0
 }
+

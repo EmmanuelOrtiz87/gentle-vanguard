@@ -1,9 +1,9 @@
-﻿# Judgment Guide
+# Judgment Guide
 
 ## Overview
 
 The Judgment system provides automated auditing, quality validation, and self-healing capabilities
-for the Foundation stack.
+for the Gentle-Vanguard stack.
 
 ## Quick Start
 
@@ -91,7 +91,7 @@ Timestamp,SessionID,Category,Status,Agent,Message,SLO_ms
 
 ```powershell
 # View trends (future implementation)
-.\scripts\utilities\wf.ps1 judgment-trends
+.\scripts\utilities\gv.ps1 judgment-trends
 
 # This will read dashboard.csv and show:
 # - Failure rate over last 7 days
@@ -125,3 +125,4 @@ If remediation fails after 3 iterations, run manual recovery:
 ### Missing session artifact warning
 
 The `*-session-start.md` warning is normal when running judgment outside an active session.
+

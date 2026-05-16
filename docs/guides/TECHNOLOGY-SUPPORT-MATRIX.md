@@ -1,6 +1,6 @@
 # Technology Support Matrix v1.0=
 
-Complete technology stack support for Foundation.
+Complete technology stack support for Gentle-Vanguard.
 
 ## Supported Platforms=
 
@@ -115,9 +115,9 @@ See `plugins/examples/` for templates.
 
 ## Decision Matrix=
 
-### When to use Foundation=
+### When to use Gentle-Vanguard=
 
-| Scenario                | Use Foundation? | Reason                  |
+| Scenario                | Use Gentle-Vanguard? | Reason                  |
 | ----------------------- | --------------- | ----------------------- |
 | Local-first development | ✅ Yes          | No cloud dependencies   |
 | AI-assisted coding      | ✅ Yes          | 127 specialized skills |
@@ -135,7 +135,7 @@ See `plugins/examples/` for templates.
 
 ## Version Compatibility=
 
-| Foundation    | PowerShell | Lefthook | Pester      | Node.js |
+| Gentle-Vanguard    | PowerShell | Lefthook | Pester      | Node.js |
 | ------------- | ---------- | -------- | ----------- | ------- |
 | v2.6.x        | 7.0+       | 2.1.6+   | 3.4.0       | 18+     |
 | v2.7.x (next) | 7.2+       | 2.2+     | 3.4.0 / 5.x | 20+     |
@@ -143,3 +143,4 @@ See `plugins/examples/` for templates.
 ---
 
 _Version: 1.0 - 2026-05-05_ _Status: ACTIVE_
+

@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "name": "security-policy",
-  "description": "Security authorization policy for Foundation - defines which operations require authentication",
+  "description": "Security authorization policy for Gentle-Vanguard - defines which operations require authentication",
 
   "authentication": {
     "requiredFor": [
@@ -72,3 +72,4 @@
     "alertThreshold": 3
   }
 }
+

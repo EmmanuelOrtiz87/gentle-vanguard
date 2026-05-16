@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
 
-Write-Host "Foundation"
+Write-Host "Gentle-Vanguard"
 Write-Host ""
 Write-Host "Quick start:"
 Write-Host "  scripts\init-workspace.ps1"
@@ -30,3 +30,4 @@ Write-Host ""
 Write-Host "Tools are external and not vendored."
 Write-Host "The workspace skills are shipped inside the kit and installed separately into Codex."
 Write-Host "Use docs\installation.md for the full step-by-step guide."
+

@@ -1,6 +1,6 @@
-﻿# Windsurf Adapter
+# Windsurf Adapter
 
-Converts Foundation skills to Windsurf plugin format.
+Converts Gentle-Vanguard skills to Windsurf plugin format.
 
 ---
 
@@ -26,7 +26,7 @@ Windsurf uses a plugin system with:
 
 ## Usage
 
-### 1. Convert a Foundation Skill
+### 1. Convert a Gentle-Vanguard Skill
 
 ```bash
 node adapter.js convert-skill skills/react-19-skill/SKILL.md .windsurf/plugins
@@ -60,8 +60,8 @@ Creates `.windsurf/windsurf.json` with all available plugins.
   "version": "1.0.0",
   "description": "React 19 patterns with React Compiler",
   "triggers": ["React 19", "React Compiler", "useActionState"],
-  "author": "Foundation",
-  "foundation": true
+  "author": "Gentle-Vanguard",
+  "gentle-vanguard": true
 }
 ```
 
@@ -70,7 +70,7 @@ Creates `.windsurf/windsurf.json` with all available plugins.
 ```markdown
 # react-19-skill
 
-> Foundation Skill (converted for Windsurf)
+> Gentle-Vanguard Skill (converted for Windsurf)
 
 ## Description
 
@@ -89,7 +89,7 @@ React 19 patterns with React Compiler
 
 ---
 
-## Integration with Foundation
+## Integration with Gentle-Vanguard
 
 1. **Detection**: `enhanced-detect.ps1` identifies Windsurf via `WINDSURF_CHAT_MODE` env var
 2. **Pre-processing**: `pre-process-input.ps1` loads `tool-windsurf.json`
@@ -121,3 +121,4 @@ React 19 patterns with React Compiler
 **Version**: 1.0.0  
 **Status**: Ready for testing  
 **Compatibility**: Windsurf IDE
+

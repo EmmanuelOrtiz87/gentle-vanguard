@@ -29,7 +29,7 @@ function Get-FileContext {
     # Orchestrators/large utilities that are SUPPOSED to be comprehensive
     $legitimateLarge = @(
         "orchestrator", "manager", "dashboard", "monitor", "generator",
-        "bootstrap", "wf.ps1", "validate-foundation", "judgment-day"
+        "bootstrap", "gv.ps1", "validate-gentle-vanguard", "judgment-day"
     )
     
     # Files that SHOULD be simple
@@ -300,3 +300,4 @@ function Invoke-KarpathyEnforcement {
 # Execute
 $result = Invoke-KarpathyEnforcement
 exit $result
+

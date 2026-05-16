@@ -50,14 +50,14 @@ jobs:
           # -SkipFallbackTests: skip file-mutation tests (unnecessary in CI — validated locally)
           powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1 -SkipFallbackTests
 
-      - name: Foundation drift check (advisory)
+      - name: Gentle-Vanguard drift check (advisory)
         shell: pwsh
         continue-on-error: true
         run: |
-          if (Test-Path '.\scripts\utilities\UTILITIES\foundation-sync.ps1') {
-            powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\UTILITIES\foundation-sync.ps1 -Mode check
+          if (Test-Path '.\scripts\utilities\UTILITIES\gentle-vanguard-sync.ps1') {
+            powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\UTILITIES\gentle-vanguard-sync.ps1 -Mode check
           } else {
-            Write-Host '::notice::foundation-sync.ps1 not found -- skipping drift check.'
+            Write-Host '::notice::gentle-vanguard-sync.ps1 not found -- skipping drift check.'
           }
 
       - name: SDD governance gate (PR)
@@ -71,11 +71,12 @@ jobs:
         shell: pwsh
         continue-on-error: true
         run: |
-          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\wf.ps1 health
+          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\gv.ps1 health
 
       - name: Agent process compliance alert (non-blocking)
         shell: pwsh
         continue-on-error: true
         run: |
           powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\agent-process-alert.ps1 -WindowHours 24 -EmitGitHubAnnotations
+
 

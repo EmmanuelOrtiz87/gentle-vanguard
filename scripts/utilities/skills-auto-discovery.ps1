@@ -11,8 +11,8 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-if ($env:FOUNDATION_BASE_DIR) {
-    $repoRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GENTLE_VANGUARD_BASE_DIR) {
+    $repoRoot = $env:GENTLE_VANGUARD_BASE_DIR
 } else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -135,8 +135,8 @@ function Get-AgentFromSkillName {
         'issue-creation' = 'QA'
         'chained-pr' = 'QA'
         'config-risk-analyzer' = 'GOV'
-        'foundation-audit-skill' = 'GOV'
-        'foundation-manager-skill' = 'GOV'
+        'gentle-vanguard-audit-skill' = 'GOV'
+        'gentle-vanguard-manager-skill' = 'GOV'
         'sync-automation' = 'GOV'
         'cross-workspace-sync' = 'GOV'
         'monitoring-aggregator' = 'GOV'
@@ -347,3 +347,4 @@ if ($Update) {
 
 Write-Host "`n=== Done ===" -ForegroundColor Cyan
 exit 0
+

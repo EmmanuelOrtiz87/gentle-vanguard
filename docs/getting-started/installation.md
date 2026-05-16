@@ -1,6 +1,6 @@
-# Foundation Installation
+# Gentle-Vanguard Installation
 
-Complete guide to set up Foundation on a new machine.
+Complete guide to set up Gentle-Vanguard on a new machine.
 
 ## Prerequisites
 
@@ -20,29 +20,29 @@ Complete guide to set up Foundation on a new machine.
 ### Windows (PowerShell)
 
 ```powershell
-# Clone or download foundation
-git clone https://github.com/EmmanuelOrtiz87/foundation.git
-cd foundation
+# Clone or download gentle-vanguard
+git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
+cd gentle-vanguard
 
 # Initialize workspace
-.\scripts\foundation\wf.ps1 init
+.\scripts\gentle-vanguard\gv.ps1 init
 
 # Create your first project
-.\scripts\foundation\wf.ps1 new --name my-project --kind service
+.\scripts\gentle-vanguard\gv.ps1 new --name my-project --kind service
 ```
 
 ### Linux/macOS
 
 ```bash
-# Clone or download foundation
-git clone https://github.com/EmmanuelOrtiz87/foundation.git
-cd foundation
+# Clone or download gentle-vanguard
+git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
+cd gentle-vanguard
 
 # Initialize workspace
-pwsh ./scripts/foundation/wf.ps1 init
+pwsh ./scripts/gentle-vanguard/gv.ps1 init
 
 # Create your first project
-pwsh ./scripts/foundation/wf.ps1 new --name my-project --kind service
+pwsh ./scripts/gentle-vanguard/gv.ps1 new --name my-project --kind service
 ```
 
 ## Detailed Setup
@@ -60,24 +60,24 @@ git config --global pull.rebase true
 
 ```powershell
 # Using the CLI
-.\scripts\foundation\wf.ps1 tools --install
+.\scripts\gentle-vanguard\gv.ps1 tools --install
 
 # Or manually
-.\scripts\foundation\wf.ps1 init
+.\scripts\gentle-vanguard\gv.ps1 init
 ```
 
 ### 3. Install AI Tools (Optional but Recommended)
 
-The foundation includes integration with:
+The gentle-vanguard includes integration with:
 
 | Tool                     | Purpose                  | Install                                                               |
 | ------------------------ | ------------------------ | --------------------------------------------------------------------- |
 | **OpenCode**             | AI coding agent          | https://opencode.ai                                                   |
 | **Claude Code**          | AI coding agent          | https://claude.ai/code                                                |
-| **Native Review Engine** | Built-in workflow review | `./scripts/utilities/wf.ps1 review`                                   |
-| **engram**               | Persistent memory        | `go install github.com/foundation/engram/cmd/engram@latest` |
+| **Native Review Engine** | Built-in workflow review | `./scripts/utilities/gv.ps1 review`                                   |
+| **engram**               | Persistent memory        | `go install github.com/gentle-vanguard/engram/cmd/engram@latest` |
 
-Windows one-shot update (no brew required): `./scripts/utilities/wf.ps1 update-tools`
+Windows one-shot update (no brew required): `./scripts/utilities/gv.ps1 update-tools`
 
 ### 4. Install Skills
 
@@ -96,7 +96,7 @@ cp -r scripts/utilities/Workspace-Skills/curated/* ~/.config/opencode/skills/
 ### Interactive Mode (Recommended for beginners)
 
 ```powershell
-.\scripts\foundation\wf.ps1 new --interactive
+.\scripts\gentle-vanguard\gv.ps1 new --interactive
 ```
 
 The wizard will ask:
@@ -111,10 +111,10 @@ The wizard will ask:
 
 ```powershell
 # Basic service
-.\scripts\foundation\wf.ps1 new --name my-api --kind service
+.\scripts\gentle-vanguard\gv.ps1 new --name my-api --kind service
 
 # With options
-.\scripts\foundation\wf.ps1 new `
+.\scripts\gentle-vanguard\gv.ps1 new `
     --name my-project `
     --kind frontend `
     --framework react `
@@ -144,17 +144,17 @@ The wizard will ask:
 ### Validate Your Setup
 
 ```powershell
-.\scripts\foundation\wf.ps1 validate
+.\scripts\gentle-vanguard\gv.ps1 validate
 ```
 
 ### Create a Project
 
 ```powershell
 # Interactive
-.\scripts\foundation\wf.ps1 new --interactive
+.\scripts\gentle-vanguard\gv.ps1 new --interactive
 
 # Or specify all options
-.\scripts\foundation\wf.ps1 new --name my-service --kind service
+.\scripts\gentle-vanguard\gv.ps1 new --name my-service --kind service
 ```
 
 ### Run Tests
@@ -191,3 +191,4 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 # Linux/macOS
 pwsh -Command "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser"
 ```
+

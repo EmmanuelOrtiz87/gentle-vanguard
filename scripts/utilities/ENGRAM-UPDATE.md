@@ -1,4 +1,4 @@
-# Engram Update Procedure - Foundation
+# Engram Update Procedure - Gentle-Vanguard
 
 ## Problema Identificado
 
@@ -20,7 +20,7 @@ Antes de actualizar, cerrar completamente OpenCode (o el cliente que use engram)
 **Opcion A (recomendada - go install):**
 
 ```powershell
-go install github.com/foundation/engram/cmd/engram@latest
+go install github.com/gentle-vanguard/engram/cmd/engram@latest
 ```
 
 El binario va a `%USERPROFILE%\go\bin\engram.exe`
@@ -28,12 +28,12 @@ El binario va a `%USERPROFILE%\go\bin\engram.exe`
 **Opcion B (copiar desde herramientas del workspace):**
 
 ```powershell
-Copy-Item ".\foundation\\tools\engram.exe" "$HOME\bin\engram.exe"
+Copy-Item ".\gentle-vanguard\\tools\engram.exe" "$HOME\bin\engram.exe"
 ```
 
 **Opcion C (descargar release):**
 
-- Ir a: https://github.com/foundation/engram/releases
+- Ir a: https://github.com/gentle-vanguard/engram/releases
 - Descargar `engram_<version>_windows_amd64.zip`
 - Extraer `engram.exe` a `$HOME\bin\`
 
@@ -68,7 +68,7 @@ Ver: `scripts/utilities/update-engram.ps1`
 
 1. **No sirve solo con copiar el .exe** - el proceso en memoria debe reiniciarse
 2. **Engram en PATH** (`$HOME\bin\`) vs **Engram en scripts/utilities/**
-   (`foundation/scripts/utilities/`)
+   (`gentle-vanguard/scripts/utilities/`)
    - El de scripts/utilities/ se usa para actualizaciones internas
    - El de PATH es el que usa el sistema y los agentes MCP
 3. **OpenCode en Windows** usa `~/.config/opencode/` (no `%APPDATA%\opencode\`)
@@ -76,6 +76,7 @@ Ver: `scripts/utilities/update-engram.ps1`
 
 ## Referencias
 
-- https://github.com/foundation/engram/blob/main/README.md
-- https://github.com/foundation/engram/blob/main/docs/INSTALLATION.md
-- https://github.com/foundation/engram/blob/main/docs/AGENT-SETUP.md
+- https://github.com/gentle-vanguard/engram/blob/main/README.md
+- https://github.com/gentle-vanguard/engram/blob/main/docs/INSTALLATION.md
+- https://github.com/gentle-vanguard/engram/blob/main/docs/AGENT-SETUP.md
+

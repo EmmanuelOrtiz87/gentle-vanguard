@@ -1,7 +1,7 @@
 # Operating decisións (2026-04-15)
 
 Consolidated lessons learned, rules, mechanisms, and definitions agreed during hardening of the
-Workspace + Foundation operating flow.
+Workspace + Gentle-Vanguard operating flow.
 
 ## Global (Workspace-Level)
 
@@ -38,7 +38,7 @@ Workspace + Foundation operating flow.
 - **Compatibility Check**: operational readiness check for runtime + orchestration + memory + agent
   lanes.
 
-## Foundation (Repository-Level)
+## Gentle-Vanguard (Repository-Level)
 
 ### Lessons Learned
 
@@ -58,8 +58,8 @@ Workspace + Foundation operating flow.
   - `docs/sessions`
   - `docs/code-reviews`
 - Session lifecycle artifacts are governance-critical and cannot be omitted.
-- Release baseline changes must be propagated from `main` to `develop` in both `foundation` and
-  `foundation-public`.
+- Release baseline changes must be propagated from `main` to `develop` in both `gentle-vanguard` and
+  `gentle-vanguard-public`.
 - Existing release tags must never be force-moved; if a baseline tag is missing in a repo, create
   it on the current homologated baseline commit.
 
@@ -67,11 +67,11 @@ Workspace + Foundation operating flow.
 
 - Markdown link sweep and correction across docs.
 - `rotate-artifacts.ps1` hardened with explicit error accounting and non-zero exit on failures.
-- `wf day-end-closure`/`day-end-closure.ps1` invocation stabilized (named switch handling).
+- `gv day-end-closure`/`day-end-closure.ps1` invocation stabilized (named switch handling).
 - Session startup compatibility checks integrated into workspace startup manager.
 - Complementary release homologation gate automated via
   `scripts/utilities/DEPLOYMENT/validate-release-homologation.ps1` and exposed as
-  `wf.ps1 release-homologation`.
+  `gv.ps1 release-homologation`.
 
 ### Definitions
 
@@ -94,3 +94,4 @@ Workspace + Foundation operating flow.
 .\tools\session-manual-end.cmd
 .\tools\validate-session-stack.ps1 -Quiet
 ```
+

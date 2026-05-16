@@ -1,5 +1,5 @@
 # sync-docs.ps1
-# Sync documentation from Foundation to project
+# Sync documentation from Gentle-Vanguard to project
 
 param(
     [switch]$DryRun,
@@ -21,17 +21,17 @@ $repoRoot = if ($scriptDir) {
     }
 } else { Get-Location }
 
-$foundationRoot = $env:GENTLEMAN_ROOT
-if (-not $foundationRoot) {
-    $candidate = ".\foundation"
+$gentle-vanguardRoot = $env:GENTLEMAN_ROOT
+if (-not $gentle-vanguardRoot) {
+    $candidate = ".\gentle-vanguard"
     if (Test-Path $candidate) {
-        $foundationRoot = $candidate
+        $gentle-vanguardRoot = $candidate
     }
 }
 
-if (-not $foundationRoot) {
-    Write-Host "[ERROR] Foundation root not found" -ForegroundColor Red
-    Write-Host "Set `$env:GENTLEMAN_ROOT or ensure .\foundation exists" -ForegroundColor Yellow
+if (-not $gentle-vanguardRoot) {
+    Write-Host "[ERROR] Gentle-Vanguard root not found" -ForegroundColor Red
+    Write-Host "Set `$env:GENTLEMAN_ROOT or ensure .\gentle-vanguard exists" -ForegroundColor Yellow
     exit 1
 }
 
@@ -40,7 +40,7 @@ Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "  Documentation Sync" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "Foundation: $foundationRoot"
+Write-Host "Gentle-Vanguard: $gentle-vanguardRoot"
 Write-Host "Project:    $repoRoot"
 Write-Host ""
 
@@ -56,9 +56,9 @@ $syncItems = @(
         Dest = "docs\guides\DEVELOPMENT-WORKFLOW.md"
     },
     @{
-        Name = "wf.ps1"
-        Source = "scripts\utilities\wf.ps1"
-        Dest = "scripts\utilities\wf.ps1"
+        Name = "gv.ps1"
+        Source = "scripts\utilities\gv.ps1"
+        Dest = "scripts\utilities\gv.ps1"
     },
     @{
         Name = "PR Template"
@@ -71,7 +71,7 @@ $syncCount = 0
 $skipCount = 0
 
 foreach ($item in $syncItems) {
-    $sourcePath = Join-Path $foundationRoot $item.Source
+    $sourcePath = Join-Path $gentle-vanguardRoot $item.Source
     $destPath = Join-Path $repoRoot $item.Dest
     
     if (-not (Test-Path $sourcePath)) {
@@ -113,3 +113,4 @@ Write-Host ""
 if (-not $DryRun -and $syncCount -gt 0) {
     Write-Host "Documentation synchronized!" -ForegroundColor Green
 }
+

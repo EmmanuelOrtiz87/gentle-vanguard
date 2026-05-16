@@ -1,5 +1,5 @@
 param(
-    [string]$ProjectName = 'workspace_local',
+    [string]$ProjectName = 'workspace_gentle_vanguard',
     [switch]$AutoApply = $false,
     [switch]$Verbose = $false
 )
@@ -190,7 +190,7 @@ Write-Info "Starting context optimization..."
 $engramBin = Find-EngramBinary
 if (-not $engramBin) {
     Write-Warn "Engram binary not found. Pre-load skipped."
-    Write-Info "Run: .\scripts\utilities\wf.ps1 install-engram"
+    Write-Info "Run: .\scripts\utilities\gv.ps1 install-engram"
     exit 0
 }
 

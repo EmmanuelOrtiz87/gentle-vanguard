@@ -36,7 +36,7 @@ Converts JSON data to **7 output formats** based on what the document needs:
 ### Convert JSON string to Markdown (default)
 
 ```powershell
-$json = '{"title":"Session Report","user":"emman","project":"foundation"}'
+$json = '{"title":"Session Report","user":"emman","project":"gentle-vanguard"}'
 .\scripts\utilities\json-to-doc-converter.ps1 -InputJson $json
 ```
 
@@ -121,7 +121,7 @@ Use with: `-TemplatePath "templates/report-template.md"`
 {
   "type": "session",
   "sessionId": "session-2026-04-30-01",
-  "project": "foundation",
+  "project": "gentle-vanguard",
   "duration": 45,
   "tokensIn": 15000,
   "tokensOut": 12000
@@ -137,7 +137,7 @@ Use with: `-TemplatePath "templates/report-template.md"`
 
 - **type**: session
 - **sessionId**: session-2026-04-30-01
-- **project**: foundation
+- **project**: gentle-vanguard
 - **duration**: 45
 - **tokensIn**: 15000
 - **tokensOut**: 12000
@@ -200,3 +200,4 @@ Management Report,2026-04-30,22:30:45,2026-04,450000,12.50,15
 3. HTML output includes basic styling (Arial font, table borders)
 4. XML output sanitizes keys (removes non-alphanumeric)
 5. YAML output uses standard YAML syntax with `---` delimiters
+

@@ -2,12 +2,12 @@
 # Compact start - Initialize context tracking for session
 
 param(
-    [string]$Objective = "Foundation maintenance"
+    [string]$Objective = "Gentle-Vanguard maintenance"
 )
 
 $ErrorActionPreference = 'Continue'
 
-$dataRoot = if ($env:FOUNDATION_DATA_DIR) { $env:FOUNDATION_DATA_DIR } else { Join-Path $env:LOCALAPPDATA 'Foundation\data' }
+$dataRoot = if ($env:GENTLE_VANGUARD_DATA_DIR) { $env:GENTLE_VANGUARD_DATA_DIR } else { Join-Path $env:LOCALAPPDATA 'Gentle-Vanguard\data' }
 $engramData = Join-Path $dataRoot '.engram-data'
 if (-not (Test-Path $engramData)) {
     New-Item -ItemType Directory -Path $engramData -Force | Out-Null
@@ -20,7 +20,7 @@ $context = @{
     sessionId = $sessionId
     objective = $Objective
     startTime = $timestamp
-    project = "foundation"
+    project = "gentle-vanguard"
 }
 
 $context | ConvertTo-Json | Out-File -FilePath (Join-Path $engramData "compact-start-$timestamp.json") -Encoding utf8

@@ -5,7 +5,7 @@ Describe 'Session Autostart Integration Tests' {
         $script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
         $script:sessionAutostart = Join-Path $script:root 'scripts\utilities\session-autostart.ps1'
         $script:tempRoot = Join-Path $script:root 'tmp-session-autostart-integration-tests'
-        $script:originalFoundationBaseDir = $env:FOUNDATION_BASE_DIR
+        $script:originalGentle-VanguardBaseDir = $env:GV_BASE_DIR
     }
 
     BeforeEach {
@@ -15,14 +15,14 @@ Describe 'Session Autostart Integration Tests' {
 
         New-Item -ItemType Directory -Path (Join-Path $script:tempRoot 'config') -Force | Out-Null
         New-Item -ItemType Directory -Path (Join-Path $script:tempRoot 'scripts\utilities') -Force | Out-Null
-        $env:FOUNDATION_BASE_DIR = $script:tempRoot
+        $env:GV_BASE_DIR = $script:tempRoot
     }
 
     AfterEach {
-        if ($null -eq $script:originalFoundationBaseDir) {
-            Remove-Item Env:FOUNDATION_BASE_DIR -ErrorAction SilentlyContinue
+        if ($null -eq $script:originalGentle-VanguardBaseDir) {
+            Remove-Item Env:GV_BASE_DIR -ErrorAction SilentlyContinue
         } else {
-            $env:FOUNDATION_BASE_DIR = $script:originalFoundationBaseDir
+            $env:GV_BASE_DIR = $script:originalGentle-VanguardBaseDir
         }
 
         if (Test-Path $script:tempRoot) {
@@ -63,12 +63,12 @@ Describe 'Session Autostart Integration Tests' {
 
         Set-TestScript -Name 'echo-step.ps1' -Content @'
 param([string]$Name)
-Set-Content -Path (Join-Path $env:FOUNDATION_BASE_DIR 'echo-marker.txt') -Value $Name -Encoding UTF8
+Set-Content -Path (Join-Path $env:GV_BASE_DIR 'echo-marker.txt') -Value $Name -Encoding UTF8
 '@ | Out-Null
 
         Set-TestScript -Name 'disabled-step.ps1' -Content @'
 param()
-Set-Content -Path (Join-Path $env:FOUNDATION_BASE_DIR 'disabled-marker.txt') -Value 'disabled' -Encoding UTF8
+Set-Content -Path (Join-Path $env:GV_BASE_DIR 'disabled-marker.txt') -Value 'disabled' -Encoding UTF8
 '@ | Out-Null
 
         $configPath = Set-TestConfig -Steps @(
@@ -101,7 +101,7 @@ Set-Content -Path (Join-Path $env:FOUNDATION_BASE_DIR 'disabled-marker.txt') -Va
 
         Set-TestScript -Name 'ok-step.ps1' -Content @'
 param()
-    Set-Content -Path (Join-Path $env:FOUNDATION_BASE_DIR 'ok-marker.txt') -Value 'ok' -Encoding UTF8
+    Set-Content -Path (Join-Path $env:GV_BASE_DIR 'ok-marker.txt') -Value 'ok' -Encoding UTF8
 '@ | Out-Null
 
         $configPath = Set-TestConfig -Steps @(
@@ -141,7 +141,7 @@ param()
 
         Set-TestScript -Name 'soft-fail-step.ps1' -Content @'
 param()
-    Set-Content -Path (Join-Path $env:FOUNDATION_BASE_DIR 'soft-fail-marker.txt') -Value 'soft-fail' -Encoding UTF8
+    Set-Content -Path (Join-Path $env:GV_BASE_DIR 'soft-fail-marker.txt') -Value 'soft-fail' -Encoding UTF8
 $global:LASTEXITCODE = 9
 '@ | Out-Null
 
@@ -167,7 +167,7 @@ $global:LASTEXITCODE = 9
 
         Set-TestScript -Name 'throw-step.ps1' -Content @'
 param()
-Set-Content -Path (Join-Path $env:FOUNDATION_BASE_DIR 'throw-marker.txt') -Value 'started' -Encoding UTF8
+Set-Content -Path (Join-Path $env:GV_BASE_DIR 'throw-marker.txt') -Value 'started' -Encoding UTF8
 throw 'boom'
 '@ | Out-Null
 
@@ -205,3 +205,4 @@ throw 'boom'
         $output[-1] | Should Be 1
     }
 }
+

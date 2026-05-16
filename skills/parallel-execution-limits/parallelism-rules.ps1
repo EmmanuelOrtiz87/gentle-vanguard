@@ -10,7 +10,7 @@ that control how tasks are executed in parallel based on task type, priority, an
 1.0.0
 
 .AUTHOR
-Foundation Team
+Gentle-Vanguard Team
 
 .LICENSE
 MIT

@@ -1,5 +1,5 @@
 {
-  "name": "Cursor - Foundation Workspace",
+  "name": "Cursor - Gentle-Vanguard Workspace",
   "version": "1.0.0",
   "description": "Local-first policy for Cursor IDE",
   "aiSettings": {
@@ -21,7 +21,7 @@
   },
   "sessionManagement": {
     "autostart": "scripts/utilities/session-autostart.cmd",
-    "project": "foundation"
+    "project": "gentle-vanguard"
   },
   "language": { "default": "es", "technicalTerms": "en" },
   "governanceLayers": {
@@ -33,3 +33,4 @@
     "SESSION": ["session-workflow-skill"]
   }
 }
+

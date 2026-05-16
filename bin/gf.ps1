@@ -1,5 +1,5 @@
-# gf.ps1 - Gentleman Foundation CLI
-# Main entry point for the development foundation
+# gv.ps1 - Gentle-Vanguard CLI
+# Main entry point for the development gentle-vanguard
 
 param(
     [string]$Command = "",
@@ -55,7 +55,7 @@ $ScriptsDir = $null
 $possibleScriptsDirs = @(
     (Join-Path $env:USERPROFILE ".gentleman\scripts"),
     (Join-Path $GFRoot "..\scripts"),
-    ".\foundation\scripts"
+    ".\gentle-vanguard\scripts"
 )
 foreach ($dir in $possibleScriptsDirs) {
     if (Test-Path $dir) {
@@ -67,36 +67,36 @@ foreach ($dir in $possibleScriptsDirs) {
 function Write-CLI-Header {
     Write-Host ""
     Write-Host "========================================" -ForegroundColor Cyan
-    Write-Host "  Gentleman Foundation CLI" -ForegroundColor Cyan
+    Write-Host "  Gentle-Vanguard CLI" -ForegroundColor Cyan
     Write-Host "========================================" -ForegroundColor Cyan
     Write-Host ""
 }
 
 function Write-CLI-Footer {
     Write-Host ""
-    Write-Host "Run 'gf --help' for usage information." -ForegroundColor Gray
+    Write-Host "Run 'gv --help' for usage information." -ForegroundColor Gray
 }
 
 function Show-Help {
     Write-CLI-Header
     Write-Host @"
-Gentleman Foundation CLI - Agnostic Development Platform
+Gentle-Vanguard CLI - Agnostic Development Platform
 
 REQUIREMENTS (any AI agent works):
   - git + PowerShell
   - AI Agent: opencode, claude, copilot, etc.
 
 USAGE:
-  gf <command> [options]
+  gv <command> [options]
 
 COMMANDS:
   check       Check system status (core, skills, tools)
-  validate    Validate foundation installation
-  info        Show foundation information
+  validate    Validate gentle-vanguard installation
+  info        Show gentle-vanguard information
   list        List installed skills
   update      Update skills from source
   sync        Sync skills (alias for update)
-  update-all  Update foundation + skills
+  update-all  Update gentle-vanguard + skills
   tools       Show optional tools status
   new         Create new project
   secret      Manage secrets (vault, rotation, compliance, breach response)
@@ -111,29 +111,29 @@ OPTIONS:
   --help              Show this help
 
 SECRET SUBCOMMANDS:
-  gf secret create --name TOKEN --secrettype api-keys --value xxx
-  gf secret get    --name TOKEN --reason "CI pipeline"
-  gf secret rotate --name TOKEN [--value newval]
-  gf secret list
-  gf secret validate-compliance
-  gf secret audit-report [--reporttype access|rotation|violations]
-  gf secret breach-response --compromisedsecret TOKEN --reason "leaked"
+  gv secret create --name TOKEN --secrettype api-keys --value xxx
+  gv secret get    --name TOKEN --reason "CI pipeline"
+  gv secret rotate --name TOKEN [--value newval]
+  gv secret list
+  gv secret validate-compliance
+  gv secret audit-report [--reporttype access|rotation|violations]
+  gv secret breach-response --compromisedsecret TOKEN --reason "leaked"
 
 Examples:
-  gf new --name my-api --type service --arch clean
-  gf validate
-  gf check
-  gf update
-  gf update-all
-  gf tools
-  gf secret list
-  gf secret validate-compliance
+  gv new --name my-api --type service --arch clean
+  gv validate
+  gv check
+  gv update
+  gv update-all
+  gv tools
+  gv secret list
+  gv secret validate-compliance
 "@ -ForegroundColor White
     Write-CLI-Footer
 }
 
-function Get-Foundation-Info {
-    $versionFile = Join-Path $GFRoot "foundation.version"
+function Get-Gentle-Vanguard-Info {
+    $versionFile = Join-Path $GFRoot "gentle-vanguard.version"
     $info = @{
         root = $GFRoot
         skillsCount = 0
@@ -156,10 +156,10 @@ function Get-Foundation-Info {
 }
 
 function Show-Info {
-    $info = Get-Foundation-Info
+    $info = Get-Gentle-Vanguard-Info
     
     Write-CLI-Header
-    Write-Host "Foundation Information" -ForegroundColor Green
+    Write-Host "Gentle-Vanguard Information" -ForegroundColor Green
     Write-Host ""
     Write-Host "  Root:         $($info.root)" -ForegroundColor White
     Write-Host "  Version:      $($info.version)" -ForegroundColor White
@@ -183,16 +183,16 @@ function Show-Info {
 
 function Show-Validate {
     Write-CLI-Header
-    Write-Host "Validating Foundation Installation..." -ForegroundColor Green
+    Write-Host "Validating Gentle-Vanguard Installation..." -ForegroundColor Green
     Write-Host ""
     
     $errors = 0
     $warnings = 0
     
     if (Test-Path $GFRoot) {
-        Write-Host "[OK] Foundation root exists: $GFRoot" -ForegroundColor Green
+        Write-Host "[OK] Gentle-Vanguard root exists: $GFRoot" -ForegroundColor Green
     } else {
-        Write-Host "[ERROR] Foundation root not found!" -ForegroundColor Red
+        Write-Host "[ERROR] Gentle-Vanguard root not found!" -ForegroundColor Red
         $errors++
     }
     
@@ -216,7 +216,7 @@ function Show-Validate {
     if ($env:PATH -like "*$ggabin*") {
         Write-Host "[OK] PATH configured" -ForegroundColor Green
     } else {
-        Write-Host "[WARN] gf not in PATH - restart terminal" -ForegroundColor Yellow
+        Write-Host "[WARN] gv not in PATH - restart terminal" -ForegroundColor Yellow
         $warnings++
     }
     
@@ -275,10 +275,10 @@ function New-Project {
     Write-Host ""
     Write-Host "Project creation scaffolding..." -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "Project scaffolding available via: wf.ps1 scaffold" -ForegroundColor Gray
+    Write-Host "Project scaffolding available via: gv.ps1 scaffold" -ForegroundColor Gray
     Write-Host ""
     Write-Host "For now, create project manually and run:" -ForegroundColor Cyan
-    Write-Host "  gf setup --project $Name" -ForegroundColor White
+    Write-Host "  gv setup --project $Name" -ForegroundColor White
     
     Write-CLI-Footer
 }
@@ -428,3 +428,4 @@ switch ($Command) {
         }
     }
 }
+

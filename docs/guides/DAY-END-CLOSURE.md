@@ -16,10 +16,10 @@ Two modes available:
 
 ```powershell
 # Close the day with full automation: closure artifact + validation + Engram capture
-.\scripts\utilities\wf.ps1 day-end-closure
+.\scripts\utilities\gv.ps1 day-end-closure
 
 # Or run end-session separately if you prefer more control
-.\scripts\utilities\wf.ps1 end-session
+.\scripts\utilities\gv.ps1 end-session
 ```
 
 ### What Gets Captured
@@ -71,7 +71,7 @@ Day End Closure Flow
 | --------------------------------------- | ------------------------------------------ | ------------------------- |
 | `scripts/utilities/day-end-closure.ps1` | Main orchestrator for daily closure        | Manual or automatic       |
 | `scripts/utilities/end-session.ps1`     | Operational checks and artifact generation | Called by day-end-closure |
-| `scripts/utilities/wf.ps1`              | CLI entry point                            | User command              |
+| `scripts/utilities/gv.ps1`              | CLI entry point                            | User command              |
 | `docs/sessions/`                        | Artifact storage                           | Auto-created on closure   |
 
 ## Manual Execution Examples
@@ -79,25 +79,25 @@ Day End Closure Flow
 ### Close day with full checks
 
 ```powershell
-.\scripts\utilities\wf.ps1 day-end-closure
+.\scripts\utilities\gv.ps1 day-end-closure
 ```
 
 ### Skip validation (fast closure)
 
 ```powershell
-.\scripts\utilities\wf.ps1 day-end-closure -SkipValidation
+.\scripts\utilities\gv.ps1 day-end-closure -SkipValidation
 ```
 
 ### Bypass Engram capture (operational only)
 
 ```powershell
-.\scripts\utilities\wf.ps1 day-end-closure -SkipEngram
+.\scripts\utilities\gv.ps1 day-end-closure -SkipEngram
 ```
 
 ### Force closure even with failures
 
 ```powershell
-.\scripts\utilities\wf.ps1 day-end-closure -Force
+.\scripts\utilities\gv.ps1 day-end-closure -Force
 ```
 
 ## Automatic Closure (Future)
@@ -109,7 +109,7 @@ Currently manual-trigger only. To enable automatic closure:
 ```powershell
 # Create scheduled task to run at shift end (e.g., 5:30 PM)
 $trigger = New-ScheduledTaskTrigger -Daily -At "17:30"
-$action = New-ScheduledTaskAction -Execute "powershell" -Argument "-NoProfile -ExecutionPolicy Bypass -File .\foundation\\scripts\utilities\wf.ps1 day-end-closure -Quiet"
+$action = New-ScheduledTaskAction -Execute "powershell" -Argument "-NoProfile -ExecutionPolicy Bypass -File .\gentle-vanguard\\scripts\utilities\gv.ps1 day-end-closure -Quiet"
 Register-ScheduledTask -TaskName "Gentleman-DayEndClosure" -Trigger $trigger -Action $action
 ```
 
@@ -118,8 +118,8 @@ Register-ScheduledTask -TaskName "Gentleman-DayEndClosure" -Trigger $trigger -Ac
 ```powershell
 # Add to your $PROFILE to run on shell exit
 Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action {
-    Push-Location ".\foundation"
-    & .\scripts\utilities\wf.ps1 day-end-closure -Quiet -AutoTriggered
+    Push-Location ".\gentle-vanguard"
+    & .\scripts\utilities\gv.ps1 day-end-closure -Quiet -AutoTriggered
     Pop-Location
 } | Out-Null
 ```
@@ -132,7 +132,7 @@ Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action {
 # Runs closure at end of major commits
 
 if [[ $(($(date +%H)*100 + $(date +%M))) -ge 1700 ]]; then
-    pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/wf.ps1 day-end-closure -Quiet
+    pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/gv.ps1 day-end-closure -Quiet
 fi
 ```
 
@@ -141,17 +141,17 @@ fi
 When you start the next session:
 
 1. **Tools Auto-Activate**
-   - PowerShell profile detects Gentleman Foundation project
+   - PowerShell profile detects Gentle-Vanguard project
    - `ensure-tools-active.ps1` runs in background
    - Required and optional tools verified from workspace policy (engram, skills, AI runtime)
 
 2. **Context Restores**
-   - `wf.ps1 start-session` (or manual entry) loads prior Engram context
+   - `gv.ps1 start-session` (or manual entry) loads prior Engram context
    - Session memory available for AI agents
    - Findings and learnings from yesterday are loaded
 
 3. **Status Shows Where You Left Off**
-   - `wf.ps1 status` displays pending from prior session
+   - `gv.ps1 status` displays pending from prior session
    - Delivery artifacts remain visible
    - Continue work without context loss
 
@@ -160,7 +160,7 @@ When you start the next session:
 ```
 START SESSION                END OF DAY
 
-wf start-session          wf day-end-closure
+gv start-session          gv day-end-closure
 
 [WORK]                    [Operational Checks]
 
@@ -181,8 +181,8 @@ Developer choice:         Generated
    - `end-session.ps1` now enforces publication policy by default.
    - Closure is blocked when there are uncommitted changes, no upstream, or local commits ahead of
      upstream.
-   - Recommended flow: `wf.ps1 publish` before closure.
-   - Explicit override only when intentional: `wf.ps1 end-session -AllowUnpublishedClose`.
+   - Recommended flow: `gv.ps1 publish` before closure.
+   - Explicit override only when intentional: `gv.ps1 end-session -AllowUnpublishedClose`.
 
 1. **Run day-end-closure before truly leaving for the day**
    - Ensures all learnings are captured
@@ -192,7 +192,7 @@ Developer choice:         Generated
 1. **Use explicit session IDs if tracking multiple projects**
 
    ```powershell
-   .\scripts\utilities\wf.ps1 day-end-closure -SessionId "bitbucket-dashboard-2026-04-14"
+   .\scripts\utilities\gv.ps1 day-end-closure -SessionId "bitbucket-dashboard-2026-04-14"
    ```
 
 1. **Keep closure artifacts for audit trail**
@@ -220,14 +220,14 @@ Developer choice:         Generated
 .\scripts\utilities\run-engram.ps1 --help
 
 # Inspect recent project context
-.\scripts\utilities\run-engram.ps1 context foundation
+.\scripts\utilities\run-engram.ps1 context gentle-vanguard
 ```
 
 **Fallback (manual save)**:
 
 ```powershell
-engram save "session-summary:<session_id>" "<summary_text>" --project foundation
-engram save "session-end:<session_id>" "<end_message>" --project foundation
+engram save "session-summary:<session_id>" "<summary_text>" --project gentle-vanguard
+engram save "session-end:<session_id>" "<end_message>" --project gentle-vanguard
 ```
 
 ### Delivery closure artifact not created
@@ -244,7 +244,7 @@ engram save "session-end:<session_id>" "<end_message>" --project foundation
 **Allow**: Use `-Force` to proceed despite validation issues for now.
 
 ```powershell
-.\scripts\utilities\wf.ps1 day-end-closure -Force
+.\scripts\utilities\gv.ps1 day-end-closure -Force
 ```
 
 ## See Also
@@ -253,3 +253,4 @@ engram save "session-end:<session_id>" "<end_message>" --project foundation
 - [DEVELOPER-COMMUNICATION-POLICY.md](DEVELOPER-COMMUNICATION-POLICY.md) Response modes and
   escalation
 - [TOOL-ACTIVATION.md](TOOL-ACTIVATION.md) Tool setup and verification
+

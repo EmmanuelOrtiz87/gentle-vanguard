@@ -27,4 +27,5 @@
 | `tests/` or `*_test.go` | Testing                          |
 | `docs/`                 | Documentation                    |
 | `AGENTS.md`             | AI configured                    |
-| `skills/`               | Native Foundation skills catalog |
+| `skills/`               | Native Gentle-Vanguard skills catalog |
+
