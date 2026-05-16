@@ -1,6 +1,6 @@
 # Future Projects Guide
 
-Use this Foundation as the standard starting point for new repositories.
+Use this Gentle-Vanguard as the standard starting point for new repositories.
 
 ## Start Here
 
@@ -98,3 +98,4 @@ including AI provider and model decisións.
 - Secrets are encrypted locally or injected at runtime.
 - Runtime cleanup is automatic or one command away.
 - New developers can follow the README without tribal knowledge.
+

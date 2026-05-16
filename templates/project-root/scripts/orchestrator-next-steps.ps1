@@ -42,7 +42,7 @@ Write-Step "Project Orchestrator - Next Steps"
 
 if (-not (Test-Path $ActivationFile)) {
     Write-Host "The orchestrator does not appear to be active in this project." -ForegroundColor Red
-    Write-Host "Run project setup or create a new project from the Foundation template to activate it." -ForegroundColor Yellow
+    Write-Host "Run project setup or create a new project from the Gentle-Vanguard template to activate it." -ForegroundColor Yellow
     exit 1
 }
 
@@ -53,7 +53,7 @@ if (-not (Test-Path $ConfigFile)) {
 $OrchestratorPath = $null
 $skillCandidates = @(
     Join-Path $ProjectRoot '.skills\project-orchestrator-skill',
-    Join-Path $ProjectRoot '.foundation\\skills\project-orchestrator-skill',
+    Join-Path $ProjectRoot '.gentle-vanguard\\skills\project-orchestrator-skill',
     Join-Path $ProjectRoot 'skills\project-orchestrator-skill'
 )
 
@@ -83,7 +83,7 @@ if ($OrchestratorPath) {
     Write-Success "Orchestrator skill found: $OrchestratorPath"
 } else {
     Write-Host "Orchestrator skill not found in expected locations." -ForegroundColor Yellow
-    Write-Host "Check '.skills/' or '.foundation/skills/' and validate the project setup." -ForegroundColor Yellow
+    Write-Host "Check '.skills/' or '.gentle-vanguard/skills/' and validate the project setup." -ForegroundColor Yellow
 }
 
 if (Test-Path $ActivationFile) {
@@ -106,7 +106,7 @@ if (Test-Path $ConfigFile) {
 }
 
 Write-Step "Recommended Next Activities"
-Write-Action "Validate the project and orchestrator configuration with the Foundation tools."
+Write-Action "Validate the project and orchestrator configuration with the Gentle-Vanguard tools."
 Write-Action "Inspect docs/project-context.md and ARCHITECTURE.md to confirm scope and architecture."
 Write-Action "Use the orchestrator to guide analysis, design, architecture, and testing." 
 Write-Action "Ensure the AI workflow is ready and the required skills are available." 
@@ -122,3 +122,4 @@ if ($Detailed) {
 Write-Step "Orchestrator Ready"
 Write-Host "The Project Orchestrator is active and ready to guide the development lifecycle." -ForegroundColor Green
 Write-Host "Run this script again with -Detailed for extra guidance." -ForegroundColor Green
+

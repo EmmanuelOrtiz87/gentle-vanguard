@@ -21,7 +21,7 @@ Every script MUST begin with a documentation block:
 # script-name.ps1
 # PURPOSE: One-sentence description of what this script does.
 # USAGE: pwsh -File scripts/path/script-name.ps1 [-Param value]
-# CALLED BY: wf command, hook name, or CI step name
+# CALLED BY: gv command, hook name, or CI step name
 ```
 
 ---
@@ -72,7 +72,7 @@ Rules:
 ## 5. Output
 
 ```powershell
-# Preferred: use Write-Host for user-facing output (hooks, CLI, wf commands)
+# Preferred: use Write-Host for user-facing output (hooks, CLI, gv commands)
 Write-Host "[OK] Done" -ForegroundColor Green
 
 # For hook output: ALWAYS use Write-SafeHook (redacts secrets)
@@ -98,14 +98,14 @@ Rules:
 
 ```powershell
 # CORRECT: use Join-Path, never string concatenation
-$path = Join-Path $repoRoot 'scripts\utilities\wf.ps1'
+$path = Join-Path $repoRoot 'scripts\utilities\gv.ps1'
 
 # CORRECT: always resolve repo root from script location
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot  = (Resolve-Path (Join-Path $scriptDir '..\..\..\..')).Path
 
 # WRONG:
-$path = "$repoRoot/scripts/utilities/wf.ps1"   # uses / which may fail on Windows
+$path = "$repoRoot/scripts/utilities/gv.ps1"   # uses / which may fail on Windows
 $path = "C:\hardcoded\path"                     # never hardcode absolute paths
 ```
 
@@ -178,3 +178,4 @@ Excluded rules (documented justification required for each exclusion):
 | `PSReviewUnusedParameter`              | Hook and CLI parameters may be optional by design   |
 
 Any new exclusion must be added to **both** the CI workflow and this document with justification.
+

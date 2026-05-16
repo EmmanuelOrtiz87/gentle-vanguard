@@ -22,7 +22,7 @@
     .\optimize-tokens.ps1 -InputPath "data.json" -OutputPath "optimized.json" -EnableAbbreviations
 
 .NOTES
-    Author: Gentleman Foundation Team
+    Author: Gentle-Vanguard Team
     Version: 1.0.0
     Last Updated: 2026-04-22
 #>

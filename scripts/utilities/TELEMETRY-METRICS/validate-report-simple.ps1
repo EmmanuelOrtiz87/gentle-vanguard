@@ -1,7 +1,7 @@
 # validate-report-simple.ps1
 # Simple validation of management report
 
-$reportFile = ".\foundation\\reports\MANAGEMENT-REPORT-2026-04.csv"
+$reportFile = ".\gentle-vanguard\\reports\MANAGEMENT-REPORT-2026-04.csv"
 
 if (-not (Test-Path $reportFile)) {
     Write-Host "ERROR: Report file not found"
@@ -30,3 +30,4 @@ Write-Host "- Max: $(($csv | Measure-Object -Property 'Duration(min)' -Maximum).
 Write-Host ""
 Write-Host "Primeras 3 sesiones:"
 $csv | Select-Object -First 3 | Format-Table
+

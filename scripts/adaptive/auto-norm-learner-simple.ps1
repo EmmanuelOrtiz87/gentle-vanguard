@@ -19,7 +19,7 @@
     .\auto-norm-learner-simple.ps1 -Trigger session-close -VerboseOutput
     
 .NOTES
-    Author: foundation
+    Author: gentle-vanguard
     Version: 1.0.0 (Simplified)
 #>
 
@@ -266,6 +266,7 @@ $result = @{
 }
 
 return $result
+
 
 
 

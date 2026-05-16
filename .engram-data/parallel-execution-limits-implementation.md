@@ -69,7 +69,7 @@ skills/parallel-execution-limits/
 Commit: 6300e5b
 Branch: develop -> origin/develop
 Files: 13 changed, 3804 insertions(+)
-Remote: https://github.com/EmmanuelOrtiz87/foundation.git
+Remote: https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
 ```
 
 ##  Caractersticas Destacadas

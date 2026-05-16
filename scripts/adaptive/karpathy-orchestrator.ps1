@@ -16,7 +16,7 @@ param(
 
 $ErrorActionPreference = "Continue"
 
-$repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) { $env:FOUNDATION_BASE_DIR } else {
+$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) { $env:GENTLE_VANGUARD_BASE_DIR } else {
     $root = Split-Path -Parent $PSScriptRoot
     while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
     if (-not $root) { $root = $PSScriptRoot }
@@ -228,11 +228,11 @@ function Save-ToEngram {
     }
     
     foreach ($v in $Violations) {
-        $null = & $EngramPath save --title "Karpathy Violation" --content $v --project "workspace_local" 2>&1 | Out-Null
+        $null = & $EngramPath save --title "Karpathy Violation" --content $v --project "workspace_gentle_vanguard" 2>&1 | Out-Null
     }
     
     if ($SuccessPattern) {
-        $null = & $EngramPath save --title "Karpathy Success" --content $SuccessPattern --project "workspace_local" 2>&1 | Out-Null
+        $null = & $EngramPath save --title "Karpathy Success" --content $SuccessPattern --project "workspace_gentle_vanguard" 2>&1 | Out-Null
     }
 }
 
@@ -317,3 +317,4 @@ switch ($Action) {
 }
 
 Write-KarpathyOrch "=== Operation Complete ==="
+

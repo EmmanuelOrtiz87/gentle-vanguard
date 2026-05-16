@@ -8,7 +8,7 @@ Framework: ECMA-402 (Intl API) + Unicode CLDR + ICU MessageFormat
 
 ## 1. PROPOSITO
 
-Define los estándares de internacionalizacion (i18n) y localizacion (l10n) para todo el stack Foundation. Aplica a interfaces de usuario, mensajes del sistema, documentacion generada, y contenido producido por agentes. Garantiza que todo output sea locale-aware, traducible, y culturalmente apropiado.
+Define los estándares de internacionalizacion (i18n) y localizacion (l10n) para todo el stack Gentle-Vanguard. Aplica a interfaces de usuario, mensajes del sistema, documentacion generada, y contenido producido por agentes. Garantiza que todo output sea locale-aware, traducible, y culturalmente apropiado.
 
 ---
 
@@ -34,7 +34,7 @@ Define los estándares de internacionalizacion (i18n) y localizacion (l10n) para
 | React Native | react-intl + IntlProvider | ICU MessageFormat |
 | General | i18next | JSON resource bundles |
 
-### 3.1 Stack Foundation (default)
+### 3.1 Stack Gentle-Vanguard (default)
 
 Preferir **FormatJS (ICU MessageFormat)** para consistencia cross-plataforma:
 
@@ -249,3 +249,4 @@ TODO implementacion DEBE verificar:
 ---
 
 _Version: 1.0.0 — 2026-05-11 — Status: ACTIVE_
+

@@ -27,10 +27,10 @@ Describe 'Session Scripts Tests' {
             ($content -match 'AutoStart|auto-start') | Should Be $true
         }
 
-        It 'session-manager.ps1 defaults Engram project to workspace_local' {
+        It 'session-manager.ps1 defaults Engram project to workspace_gentle_vanguard' {
             $f = Join-Path $script:utilitiesPath "session-manager.ps1"
             $content = Get-Content $f -Raw
-            ($content.Contains("[string]`$ProjectName = 'workspace_local'")) | Should Be $true
+            ($content.Contains("[string]`$ProjectName = 'workspace_gentle_vanguard'")) | Should Be $true
         }
     }
 
@@ -91,3 +91,4 @@ Describe 'Session Scripts Tests' {
         }
     }
 }
+

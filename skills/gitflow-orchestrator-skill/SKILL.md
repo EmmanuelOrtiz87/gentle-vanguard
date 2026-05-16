@@ -488,7 +488,7 @@ El Orchestrator proporciona acceso a:
 ### Nivel 2 (Corto Plazo - EN PROGRESO)
 
 - Validar PR base antes de push (en pre-push hook)
-- Agregar comando `wf.ps1 gitflow-setup` interactivo
+- Agregar comando `gv.ps1 gitflow-setup` interactivo
 - Integrar GitHub Actions para validacin de PR
 
 ### Nivel 3 (Mediano Plazo - PENDIENTE)
@@ -520,3 +520,4 @@ El desarrollador ahora tiene un **maestro/tutor** que:
 - Lo previene de cometer errores
 - Lo ayuda a entender por qu algo fue rechazado
 - Lo automatiza tareas repetitivas
+

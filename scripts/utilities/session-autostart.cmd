@@ -77,7 +77,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -Command ^
 if errorlevel 1 ( echo [WARN] Orphan cleanup had issues ) else ( echo [OK] Orphan check complete )
 
 REM === Phase 1: Session Manager ===
-REM Add WORKFLOW-ORCHESTRATION to PATH so 'foundation' CLI works
+REM Add WORKFLOW-ORCHESTRATION to PATH so 'gentle-vanguard' CLI works
 set WF_DIR=%WORKSPACE_ROOT%\scripts\utilities\WORKFLOW-ORCHESTRATION
 if exist "%WF_DIR%" (
     set PATH=%WF_DIR%;%PATH%
@@ -90,9 +90,9 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\session-manager.ps1" 
 set SESSION_MANAGER_EXIT=%ERRORLEVEL%
 if "%SESSION_MANAGER_EXIT%"=="0" goto session_manager_ok
 echo [ERROR] session-manager.ps1 failed (code: %SESSION_MANAGER_EXIT%)
-echo [FALLBACK] Attempting foundation...
-if exist "%WF_DIR%\foundation.ps1" (
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "%WF_DIR%\foundation.ps1" start-session
+echo [FALLBACK] Attempting gentle-vanguard...
+if exist "%WF_DIR%\gentle-vanguard.ps1" (
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%WF_DIR%\gentle-vanguard.ps1" start-session
 ) else (
     echo [FATAL] No fallback available. Aborting.
     exit /b 1
@@ -116,7 +116,7 @@ echo [3/9] Resolving session ID...
 set SESSION_ID=
 for /f "tokens=*" %%i in ('pwsh -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\get-session-id.ps1"') do set SESSION_ID=%%i
 if defined SESSION_ID (
-    set FOUNDATION_SESSION_ID=%SESSION_ID%
+    set GENTLE_VANGUARD_SESSION_ID=%SESSION_ID%
     set WFS_SESSION_ID=%SESSION_ID%
     echo [OK] Session ID: %SESSION_ID%
 ) else ( echo [WARN] Could not resolve session ID )
@@ -132,7 +132,7 @@ if exist "%METRICS_SCRIPT%" (
 REM === Phase 4: Engram Policy Enforcement ===
 echo [4/9] Engram policy enforcement...
 set ENGRAM_DATA_DIR=%WORKSPACE_ROOT%\.engram-data
-set ENGRAM_POLICY=%WORKSPACE_ROOT%\scripts\foundation\engram-policy.ps1
+set ENGRAM_POLICY=%WORKSPACE_ROOT%\scripts\gentle-vanguard\engram-policy.ps1
 if exist "%ENGRAM_POLICY%" (
     pwsh -NoProfile -ExecutionPolicy Bypass -File "%ENGRAM_POLICY%" -Action enforce
     if errorlevel 1 (
@@ -147,7 +147,7 @@ REM === Phase 5: Engram Optimization ===
 echo [5/9] Engram optimization...
 set OPTIMIZE_SCRIPT=%WORKSPACE_ROOT%\scripts\utilities\PERFORMANCE-OPTIMIZATION\optimize-engram-usage.ps1
 if exist "%OPTIMIZE_SCRIPT%" (
-    pwsh -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_local"
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_gentle_vanguard"
     if errorlevel 1 ( echo [WARN] Optimization had warnings ) else ( echo [OK] Engram optimized )
 ) else ( echo [SKIP] optimize-engram-usage.ps1 not found )
 
@@ -238,10 +238,11 @@ echo [10/10] Watchtower quick health check...
 set WATCHTOWER_SCRIPT=%WF_DIR%\..\watchtower.ps1
 if exist "%WATCHTOWER_SCRIPT%" (
     pwsh -NoProfile -ExecutionPolicy Bypass -File "%WATCHTOWER_SCRIPT%" -Quiet
-    if errorlevel 1 ( echo [WARN] Watchtower detected issues - run 'foundation watchtower' for details ) else ( echo [OK] Watchtower all clear )
+    if errorlevel 1 ( echo [WARN] Watchtower detected issues - run 'gv watchtower' for details ) else ( echo [OK] Watchtower all clear )
 ) else ( echo [SKIP] watchtower.ps1 not found )
 
 echo.
 echo === Session Autostart Complete ===
 echo [READY] Workspace ready for operations
 exit /b 0
+

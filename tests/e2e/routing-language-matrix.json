@@ -5,7 +5,7 @@
     {
       "id": "es-session-start-01",
       "language": "es",
-      "input": "inicia sesion en foundation",
+      "input": "inicia sesion en gentle-vanguard",
       "expected": {
         "hasMatch": true,
         "skill": "session-workflow-skill"
@@ -14,7 +14,7 @@
     {
       "id": "en-session-start-01",
       "language": "en",
-      "input": "start session in foundation",
+      "input": "start session in gentle-vanguard",
       "expected": {
         "hasMatch": true,
         "skill": "session-workflow-skill"
@@ -23,7 +23,7 @@
     {
       "id": "pt-session-start-01",
       "language": "pt-BR",
-      "input": "iniciar sessao no foundation",
+      "input": "iniciar sessao no gentle-vanguard",
       "expected": {
         "hasMatch": true,
         "skill": "session-workflow-skill"
@@ -145,3 +145,4 @@
     }
   ]
 }
+

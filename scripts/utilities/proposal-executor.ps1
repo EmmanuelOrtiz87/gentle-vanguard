@@ -37,8 +37,7 @@ description: >
   Trigger: "$domain"
 license: Apache-2.0
 metadata:
-  author: foundation
-  version: '1.0'
+  author: gv version: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash
 ---
 
@@ -160,3 +159,4 @@ Write-Ok "Pending: $((Get-ChildItem $proposalsPath -Filter '*.json' | ForEach-Ob
     $p = Get-Content $_.FullName -Raw | ConvertFrom-Json
     if (-not $p.applied) { $_ }
 }).Count)"
+

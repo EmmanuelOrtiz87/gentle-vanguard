@@ -30,7 +30,7 @@ function Get-ParentProcessNames {
 function Get-ActivationCommand {
     $onDemandScript = Join-Path $repoRoot 'scripts\utilities\stack-on-demand.ps1'
     $legacyActivateScript = Join-Path $repoRoot 'scripts\activate-project-orchestrator.ps1'
-    $wfScript = Join-Path $repoRoot 'scripts\utilities\wf.ps1'
+    $wfScript = Join-Path $repoRoot 'scripts\utilities\gv.ps1'
 
     if (Test-Path $onDemandScript) {
         return '.\\scripts\\utilities\\stack-on-demand.ps1 -Action activate'
@@ -41,10 +41,10 @@ function Get-ActivationCommand {
     }
 
     if (Test-Path $wfScript) {
-        return '.\\scripts\\utilities\\wf.ps1 health'
+        return '.\\scripts\\utilities\\gv.ps1 health'
     }
 
-    return 'powershell -NoProfile -ExecutionPolicy Bypass -File <repo>/scripts/utilities/wf.ps1 health'
+    return 'powershell -NoProfile -ExecutionPolicy Bypass -File <repo>/scripts/utilities/gv.ps1 health'
 }
 
 $parentNames = Get-ParentProcessNames
@@ -74,7 +74,7 @@ if ($env:VSCODE_GIT_IPC_HANDLE -or $termProgram -eq 'vscode' -or ($parentNames -
 
 $isIdeSession = @('vscode', 'jetbrains', 'visual-studio') -contains $ideName
 $activationCommand = Get-ActivationCommand
-$startSessionCommand = '.\\scripts\\utilities\\wf.ps1 start-session'
+$startSessionCommand = '.\\scripts\\utilities\\gv.ps1 start-session'
 
 $result = [pscustomobject]@{
     ideName = $ideName
@@ -100,3 +100,4 @@ if (-not $Quiet) {
 }
 
 $result
+

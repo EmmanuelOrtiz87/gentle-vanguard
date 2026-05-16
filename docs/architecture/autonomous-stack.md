@@ -2,7 +2,7 @@
 
 ## Overview
 
-Foundation implements a **100% autonomous development stack** with self-healing,
+Gentle-Vanguard implements a **100% autonomous development stack** with self-healing,
 self-learning, and self-scaling capabilities. All systems operate without human intervention in
 production.
 
@@ -189,7 +189,7 @@ manual **Function**:
 ## Directory Structure
 
 ```
-foundation/
+gentle-vanguard/
  .backups/              # Encrypted backups (in .gitignore)
     engram-memory.json.enc
     learned-norms.json.enc
@@ -201,7 +201,7 @@ foundation/
     engram-cache/
  scripts/
     adaptive/         # All autonomous systems (8 scripts)
-    utilities/        # Workflow tools (wf.ps1 symlink)
+    utilities/        # Workflow tools (gv.ps1 symlink)
  rules/
     adaptive/         # Learned norms and rules
        LEARNED-NORMS.md
@@ -286,3 +286,4 @@ $engramPath = Join-Path $repoRoot "tools\engram.exe"
   - Self-learning norms
   - Non-blocking testing
   - Judgment Day integration
+

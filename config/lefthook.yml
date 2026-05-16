@@ -1,4 +1,4 @@
-# Lefthook configuration for Foundation workspace
+# Lefthook configuration for Gentle-Vanguard workspace
 # Auto-generated: 2026-05-02
 
 pre-commit:
@@ -43,3 +43,4 @@ pre-push:
   commands:
     quick-verify:
       run: powershell -NoProfile -Command "& { if (Test-Path 'scripts/utilities/WORKFLOW-ORCHESTRATION/comprehensive-validation.ps1') { .\\scripts\\utilities\\WORKFLOW-ORCHESTRATION\\comprehensive-validation.ps1 } else { Write-Host '[WARN] Validation script not found' } }"
+

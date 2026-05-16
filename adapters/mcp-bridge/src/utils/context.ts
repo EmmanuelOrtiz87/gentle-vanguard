@@ -24,9 +24,9 @@ export function addContextEfficiency(env: Record<string, string>, toolName: stri
   const budget = getTokenBudget(toolName);
   return {
     ...env,
-    'FOUNDATION_TOKEN_BUDGET': budget.toString(),
-    'FOUNDATION_EFFICIENCY_MODE': budget > 80000 ? 'balanced' : 'compact',
-    'FOUNDATION_CONTEXT_LEVEL': 'workspace',
+    'GV_TOKEN_BUDGET': budget.toString(),
+    'GV_EFFICIENCY_MODE': budget > 80000 ? 'balanced' : 'compact',
+    'GV_CONTEXT_LEVEL': 'workspace',
   };
 }
 
@@ -50,3 +50,4 @@ export function logToolUsage(toolName: string, toolAction: string, tokensUsed: n
     // Silently fail - logging shouldn't break functionality
   }
 }
+

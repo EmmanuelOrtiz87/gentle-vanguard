@@ -11,7 +11,7 @@
   "containers": [
     { "x": 44, "y": 118, "width": 1032, "height": 110, "label": "", "side_label": "Interface Layer", "side_label_x": 28, "side_label_anchor": "start", "subtitle": "", "stroke": "#ded8cf", "fill": "none" },
     { "x": 44, "y": 262, "width": 1032, "height": 154, "label": "", "side_label": "Core Layer", "side_label_x": 28, "side_label_anchor": "start", "subtitle": "", "stroke": "#ded8cf", "fill": "none" },
-    { "x": 44, "y": 450, "width": 1032, "height": 178, "label": "", "side_label": "Foundation Layer", "side_label_x": 28, "side_label_anchor": "start", "subtitle": "", "stroke": "#ded8cf", "fill": "none" }
+    { "x": 44, "y": 450, "width": 1032, "height": 178, "label": "", "side_label": "Gentle-Vanguard Layer", "side_label_x": 28, "side_label_anchor": "start", "subtitle": "", "stroke": "#ded8cf", "fill": "none" }
   ],
   "nodes": [
     { "id": "entry", "kind": "rect", "x": 82, "y": 146, "width": 170, "height": 54, "label": "Client Surface", "type_label": "ENTRY", "fill": "#e9f1fb", "stroke": "#8c6f5a", "flat": true },
@@ -46,3 +46,4 @@
   "legend_y": 596,
   "footer": ""
 }
+

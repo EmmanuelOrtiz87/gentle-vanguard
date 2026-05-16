@@ -16,7 +16,7 @@ param(
     [string]$GgaProvider = 'opencode'
 )
 
-$bootstrap = Join-Path (Join-Path $PSScriptRoot '..\foundation') 'bootstrap-workspace.ps1'
+$bootstrap = Join-Path (Join-Path $PSScriptRoot '..\gentle-vanguard') 'bootstrap-workspace.ps1'
 
 $bootstrapArgs = @(
     '-ConfigPath', $ConfigPath,
@@ -47,3 +47,4 @@ if ($runner) {
 } else {
     & $bootstrap @bootstrapArgs
 }
+

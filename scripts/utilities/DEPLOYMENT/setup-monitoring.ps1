@@ -5,8 +5,8 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-if ($env:FOUNDATION_BASE_DIR) {
-    $repoRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GV_BASE_DIR) {
+    $repoRoot = $env:GV_BASE_DIR
 } else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -218,7 +218,7 @@ function Show-MonitoringDashboard {
     
     Write-Host ""
     Write-Host "" -ForegroundColor Cyan
-    Write-Host "         FOUNDATION MONITORING DASHBOARD         " -ForegroundColor Cyan
+    Write-Host "         Gentle-Vanguard MONITORING DASHBOARD         " -ForegroundColor Cyan
     Write-Host "" -ForegroundColor Cyan
     
     Write-Host ""

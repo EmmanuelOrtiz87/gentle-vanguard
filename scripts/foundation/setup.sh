@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/foundation/setup.sh - Universal Gentleman Foundation Stack Setup
+# scripts/gentle-vanguard/setup.sh - Universal Gentle-Vanguard Stack Setup
 # Works on: Linux, macOS, Windows (WSL, Git Bash, MSYS2)
 # No dependencies except bash, git, and go
 
@@ -61,7 +61,7 @@ OS=$(detect_os)
 SHELL_NAME=$(detect_shell)
 
 log_info ""
-log_info "    Gentleman Foundation - Universal Stack Setup"
+log_info "    Gentle-Vanguard - Universal Stack Setup"
 log_info ""
 log_info "OS: $OS"
 log_info "Shell: $SHELL_NAME"
@@ -109,8 +109,8 @@ check_dependencies() {
 detect_project_type() {
     if [ -f "$PROJECT_ROOT/go.mod" ] && [ -f "$PROJECT_ROOT/angular.json" ]; then
         echo "bitbucket-dashboard"
-    elif [ -f "$PROJECT_ROOT/scripts/foundation/bootstrap.ps1" ]; then
-        echo "foundation"
+    elif [ -f "$PROJECT_ROOT/scripts/gentle-vanguard/bootstrap.ps1" ]; then
+        echo "gentle-vanguard"
     else
         echo "unknown"
     fi
@@ -215,24 +215,24 @@ configure_git_hooks() {
 create_shell_wrapper() {
     log_info "Creating universal shell wrappers..."
     
-    # Create wf wrapper that works with any shell
-    local wf_wrapper="$PROJECT_ROOT/wf"
+    # Create gv wrapper that works with any shell
+    local wf_wrapper="$PROJECT_ROOT/gv"
     
     cat > "$wf_wrapper" << 'EOF'
 #!/usr/bin/env bash
-# Universal Gentleman Foundation Workflow CLI
+# Universal Gentle-Vanguard Workflow CLI
 # Detects available shell and routes to appropriate implementation
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$SCRIPT_DIR"
 
 # Detect what we're running with
-if command -v powershell &> /dev/null && [ -f "$PROJECT_ROOT/scripts/utilities/wf.ps1" ]; then
+if command -v powershell &> /dev/null && [ -f "$PROJECT_ROOT/scripts/utilities/gv.ps1" ]; then
     # Try PowerShell if available
-    powershell -NoProfile -ExecutionPolicy Bypass -File "$PROJECT_ROOT/scripts/utilities/wf.ps1" "$@"
-elif [ -f "$PROJECT_ROOT/scripts/utilities/wf.sh" ]; then
+    powershell -NoProfile -ExecutionPolicy Bypass -File "$PROJECT_ROOT/scripts/utilities/gv.ps1" "$@"
+elif [ -f "$PROJECT_ROOT/scripts/utilities/gv.sh" ]; then
     # Fall back to bash version
-    bash "$PROJECT_ROOT/scripts/utilities/wf.sh" "$@"
+    bash "$PROJECT_ROOT/scripts/utilities/gv.sh" "$@"
 else
     echo "Error: Neither PowerShell nor bash workflow CLI found"
     exit 1
@@ -298,8 +298,8 @@ main() {
     log_success ""
     log_info ""
     log_info "Next steps:"
-    log_info "  1. Run: ./wf status"
-    log_info "  2. Run: ./wf health"
+    log_info "  1. Run: ./gv status"
+    log_info "  2. Run: ./gv health"
     log_info "  3. Start coding!"
     log_info ""
     log_info "Type: $(detect_project_type)"
@@ -310,3 +310,4 @@ main() {
 
 # Run main
 main "$@"
+

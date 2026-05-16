@@ -9,7 +9,7 @@ Use this checklist to validate workspace configuration before starting work.
 ### Core Configuration
 
 - [ ] `scripts/utilities/context-efficiency-config.json` exists and `targetPercentage` is 100
-- [ ] `scripts/utilities/session-autostart.config.json` exists and synced with foundation
+- [ ] `scripts/utilities/session-autostart.config.json` exists and synced with gentle-vanguard
 - [ ] `config/hooks-config.json` exists and valid JSON
 - [ ] `opencode.json` exists with provider configuration
 
@@ -37,3 +37,4 @@ Use this checklist to validate workspace configuration before starting work.
 ## Notes
 
 Update this checklist when adding new configuration or scripts.
+

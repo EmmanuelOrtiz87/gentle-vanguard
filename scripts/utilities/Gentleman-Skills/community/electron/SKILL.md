@@ -4,7 +4,7 @@ description: >
   Electron patterns for building cross-platform desktop applications. Trigger: When building desktop
   apps, working with Electron main/renderer processes, IPC communication, or native integrations.
 metadata:
-  author: foundation
+  author: gentle-vanguard
   versión: '1.0'
 ---
 
@@ -524,3 +524,4 @@ contextBridge.exposeInMainWorld('electron', {
 - [electron-vite](https://electron-vite.org/)
 - [electron-builder](https://www.electron.build/)
 - [Electron Security Checklist](https://www.electronjs.org/docs/latest/tutorial/security)
+

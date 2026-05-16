@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Generate social media images for Foundation
+    Generate social media images for Gentle-Vanguard
 .DESCRIPTION
     Creates PNG images for Twitter, LinkedIn, Reddit, Discord, WhatsApp
     Uses .NET System.Drawing for image generation
@@ -81,16 +81,16 @@ if (-not (Test-Path $OutputDir)) {
 # Twitter/X (1200x675 - 16:9)
 if ($Platform -eq "all" -or $Platform -eq "twitter") {
     New-SocialImage -Width 1200 -Height 675 `
-        -Title "Foundation v2.0" `
+        -Title "Gentle-Vanguard v2.0" `
         -Subtitle "AI Development Stack" `
-        -Hashtag "#FoundationStack #AI #DevTools" `
+        -Hashtag "#Gentle-VanguardStack #AI #DevTools" `
         -OutputPath "$OutputDir/twitter-announce.png"
 }
 
 # LinkedIn (1200x627 - 1.91:1)
 if ($Platform -eq "all" -or $Platform -eq "linkedin") {
     New-SocialImage -Width 1200 -Height 627 `
-        -Title "Introducing Foundation v2.0" `
+        -Title "Introducing Gentle-Vanguard v2.0" `
         -Subtitle "Auto-delegation + Persistent Memory + 7D Validation" `
         -Hashtag "#AIDevelopment #SoftwareEngineering" `
         -OutputPath "$OutputDir/linkedin-announce.png"
@@ -99,7 +99,7 @@ if ($Platform -eq "all" -or $Platform -eq "linkedin") {
 # Reddit (1200x1200 - square)
 if ($Platform -eq "all" -or $Platform -eq "reddit") {
     New-SocialImage -Width 1200 -Height 1200 `
-        -Title "Foundation" `
+        -Title "Gentle-Vanguard" `
         -Subtitle "AI Development Stack v2.0" `
         -Hashtag "#github #programming" `
         -OutputPath "$OutputDir/reddit-show.png"
@@ -108,18 +108,18 @@ if ($Platform -eq "all" -or $Platform -eq "reddit") {
 # Discord (800x400)
 if ($Platform -eq "all" -or $Platform -eq "discord") {
     New-SocialImage -Width 800 -Height 400 `
-        -Title "Foundation v2.0" `
+        -Title "Gentle-Vanguard v2.0" `
         -Subtitle "Now Available" `
-        -Hashtag "#FoundationStack" `
+        -Hashtag "#Gentle-VanguardStack" `
         -OutputPath "$OutputDir/discord-announce.png"
 }
 
 # WhatsApp (800x800 - square)
 if ($Platform -eq "all" -or $Platform -eq "whatsapp") {
     New-SocialImage -Width 800 -Height 800 `
-        -Title "Foundation v2.0" `
+        -Title "Gentle-Vanguard v2.0" `
         -Subtitle "AI Development Stack" `
-        -Hashtag "#FoundationStack" `
+        -Hashtag "#Gentle-VanguardStack" `
         -OutputPath "$OutputDir/whatsapp-announce.png"
 }
 

@@ -1,4 +1,4 @@
-﻿# Demo 07 - Mixed Cookbook Real Request
+# Demo 07 - Mixed Cookbook Real Request
 
 Audience: Executive Council + Small Developer Team
 
@@ -30,7 +30,7 @@ Implement a simple project in `demos/shared/task-tracker/` with commands:
 **If the demo was interrupted or needs a complete reset:**
 
 ```powershell
-./scripts/utilities/wf.ps1 reset-demo
+./scripts/utilities/gv.ps1 reset-demo
 ```
 
 Or directly:
@@ -67,15 +67,15 @@ This script will:
 After preflight, proceed with the recipe steps:
 
 1. Open terminal at repository root.
-2. Confirm stack status: `./scripts/utilities/wf.ps1 status`
+2. Confirm stack status: `./scripts/utilities/gv.ps1 status`
 3. Start session with a meaningful task name.
 4. If you plan to show Step 4 (Engram segment) live, the preflight already verified availability. No
    additional setup needed.
 
 ```powershell
-./scripts/utilities/wf.ps1 status
-./scripts/utilities/wf.ps1 orchestrator-status
-./scripts/utilities/wf.ps1 start-session "demo task tracker request"
+./scripts/utilities/gv.ps1 status
+./scripts/utilities/gv.ps1 orchestrator-status
+./scripts/utilities/gv.ps1 start-session "demo task tracker request"
 ```
 
 ## Recipe (Step by Step)
@@ -90,8 +90,8 @@ Commands:
 
 ```powershell
 ./scripts/utilities/orchestrator-next-steps.ps1
-./scripts/utilities/wf.ps1 response-mode
-./scripts/utilities/wf.ps1 response-mode list
+./scripts/utilities/gv.ps1 response-mode
+./scripts/utilities/gv.ps1 response-mode list
 ```
 
 Expected outcome:
@@ -108,8 +108,8 @@ Objective:
 Commands:
 
 ```powershell
-./scripts/utilities/wf.ps1 context-pack "Implement demo task-tracker CLI with add/list/done/stats"
-./scripts/utilities/wf.ps1 compact-start "task-tracker implementation"
+./scripts/utilities/gv.ps1 context-pack "Implement demo task-tracker CLI with add/list/done/stats"
+./scripts/utilities/gv.ps1 compact-start "task-tracker implementation"
 ./scripts/utilities/response-mode-efficiency-matrix.ps1
 ```
 
@@ -151,7 +151,7 @@ Commands:
 
 ```powershell
 ./scripts/utilities/run-engram.ps1 --help
-./scripts/utilities/wf.ps1 compact-start "handoff after task-tracker demo"
+./scripts/utilities/gv.ps1 compact-start "handoff after task-tracker demo"
 ```
 
 Expected outcome:
@@ -189,7 +189,7 @@ Objective:
 Commands:
 
 ```powershell
-./scripts/utilities/wf.ps1 end-session demo-task-tracker
+./scripts/utilities/gv.ps1 end-session demo-task-tracker
 ./scripts/utilities/day-end-closure.ps1 -Force
 ```
 
@@ -214,7 +214,7 @@ Expected outcome:
 
 ## Validation Checklist
 
-1. `wf status` and `orchestrator-status` run clean.
+1. `gv status` and `orchestrator-status` run clean.
 2. Task-tracker commands execute without errors.
 3. At least one context pack is generated.
 4. At least one audit/review artifact is generated.
@@ -227,3 +227,4 @@ Expected outcome:
 3. If a shorter demo is needed, execute Step 1, Step 2, Step 5, and Executive Talking Points.
 4. Step 4 is optional for environments where Engram should not be demonstrated live; the rest of the
    demo remains fully runnable.
+

@@ -1,6 +1,6 @@
 # Reddit - Deep Dive: Memory
 
-How Engram persistent memory works in Foundation:
+How Engram persistent memory works in Gentle-Vanguard:
 
 - Saves session state: decisions, changes, outputs
 - Survives restarts  

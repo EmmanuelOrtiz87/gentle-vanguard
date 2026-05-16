@@ -6,8 +6,8 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-if ($env:FOUNDATION_BASE_DIR) {
-    $repoRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GV_BASE_DIR) {
+    $repoRoot = $env:GV_BASE_DIR
 } else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -37,7 +37,7 @@ function Show-GitFlowHelp {
     
     Write-Host ""
     Write-Host "========================================================" -ForegroundColor Cyan
-    Write-Host "GitFlow Validation Guide - Foundation" -ForegroundColor Cyan
+    Write-Host "GitFlow Validation Guide - Gentle-Vanguard" -ForegroundColor Cyan
     Write-Host "========================================================" -ForegroundColor Cyan
     
     Write-Host ""
@@ -147,3 +147,4 @@ if ($allowProtectedPush -and ($branch -eq 'main' -or $branch -eq 'develop')) {
 
 Write-Ok "GitFlow validation passed"
 exit 0
+

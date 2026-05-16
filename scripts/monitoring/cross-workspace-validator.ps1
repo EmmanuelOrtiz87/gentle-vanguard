@@ -1,10 +1,10 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-    Valida consistencia entre workspace local y foundation.
+    Valida consistencia entre workspace local y gentle-vanguard.
 
 .DESCRIPTION
-    Compara archivos de configuracin y scripts entre foundation
+    Compara archivos de configuracin y scripts entre gentle-vanguard
     y el workspace local para detectar inconsistencias.
 
 .PARAMETER Fix
@@ -25,14 +25,14 @@
 param(
     [switch]$Fix,
     [switch]$Detailed,
-    [string]$FoundationRoot = ''
+    [string]$Gentle-VanguardRoot = ''
 )
 
 $ErrorActionPreference = "Continue"
 $repoRoot = (Resolve-Path ".").Path
 
-function Get-FoundationSyncManifest {
-    $manifestPath = Join-Path $repoRoot "config/foundation-sync.json"
+function Get-Gentle-VanguardSyncManifest {
+    $manifestPath = Join-Path $repoRoot "config/gentle-vanguard-sync.json"
     if (-not (Test-Path $manifestPath)) {
         return $null
     }
@@ -97,7 +97,7 @@ function Compare-ConfigFiles {
         Write-Host "`nDiferencias:" -ForegroundColor Gray
         $diff = Compare-Object (Get-Content $File1) (Get-Content $File2) -IncludeEqual
         $diff | Where-Object { $_.SideIndicator -ne "==" } | ForEach-Object {
-            $indicator = if ($_.SideIndicator -eq "<=") { "LOCAL" } else { "FOUNDATION" }
+            $indicator = if ($_.SideIndicator -eq "<=") { "LOCAL" } else { "GENTLE_VANGUARD" }
             Write-Host "  [$indicator] $($_.InputObject)" -ForegroundColor Gray
         }
     }
@@ -131,28 +131,28 @@ function Sync-ConfigFile {
 }
 
 Write-Host "`n=== Validacion Cross-Workspace ===" -ForegroundColor Cyan
-Write-Host "Comparando configuraciones entre local y foundation`n" -ForegroundColor Gray
+Write-Host "Comparando configuraciones entre local y gentle-vanguard`n" -ForegroundColor Gray
 
-$manifest = Get-FoundationSyncManifest
+$manifest = Get-Gentle-VanguardSyncManifest
 if ($manifest -and $manifest.PSObject.Properties['role'] -and [string]$manifest.role -eq 'source') {
-    Write-Status "Repositorio marcado como foundation source; no requiere comparacion contra workspace externo" "OK"
+    Write-Status "Repositorio marcado como gentle-vanguard source; no requiere comparacion contra workspace externo" "OK"
     Write-Host "`nTodos los archivos estan sincronizados" -ForegroundColor Green
     exit 0
 }
 
-if ([string]::IsNullOrWhiteSpace($FoundationRoot)) {
-    if ($manifest -and $manifest.PSObject.Properties['foundationPath'] -and -not [string]::IsNullOrWhiteSpace([string]$manifest.foundationPath)) {
-        $FoundationRoot = [string]$manifest.foundationPath
-    } elseif ($env:FOUNDATION_REPO_PATH) {
-        $FoundationRoot = [string]$env:FOUNDATION_REPO_PATH
+if ([string]::IsNullOrWhiteSpace($Gentle-VanguardRoot)) {
+    if ($manifest -and $manifest.PSObject.Properties['gentle-vanguardPath'] -and -not [string]::IsNullOrWhiteSpace([string]$manifest.gentle-vanguardPath)) {
+        $Gentle-VanguardRoot = [string]$manifest.gentle-vanguardPath
+    } elseif ($env:GENTLE_VANGUARD_REPO_PATH) {
+        $Gentle-VanguardRoot = [string]$env:GENTLE_VANGUARD_REPO_PATH
     } else {
-        $FoundationRoot = '..\foundation'
+        $Gentle-VanguardRoot = '..\gentle-vanguard'
     }
 }
 
-$FoundationRoot = Resolve-WorkspacePath -Path $FoundationRoot
-if (-not (Test-Path $FoundationRoot)) {
-    Write-Status "Foundation root no existe: $FoundationRoot" "ERROR"
+$Gentle-VanguardRoot = Resolve-WorkspacePath -Path $Gentle-VanguardRoot
+if (-not (Test-Path $Gentle-VanguardRoot)) {
+    Write-Status "Gentle-Vanguard root no existe: $Gentle-VanguardRoot" "ERROR"
     exit 1
 }
 
@@ -162,13 +162,13 @@ $issues = 0
 # 1. Context Efficiency Config
 $result = Compare-ConfigFiles `
     -File1 "scripts/utilities/context-efficiency-config.json" `
-    -File2 (Join-Path $FoundationRoot "scripts/utilities/context-efficiency-config.json") `
+    -File2 (Join-Path $Gentle-VanguardRoot "scripts/utilities/context-efficiency-config.json") `
     -Description "Context Efficiency Config"
 
 $validations += @{
     Name = "Context Efficiency Config"
     Local = "scripts/utilities/context-efficiency-config.json"
-    Foundation = (Join-Path $FoundationRoot "scripts/utilities/context-efficiency-config.json")
+    Gentle-Vanguard = (Join-Path $Gentle-VanguardRoot "scripts/utilities/context-efficiency-config.json")
     Status = $result
 }
 
@@ -177,13 +177,13 @@ if (-not $result) { $issues++ }
 # 2. Session Autostart Config
 $result = Compare-ConfigFiles `
     -File1 "scripts/utilities/session-autostart.config.json" `
-    -File2 (Join-Path $FoundationRoot "scripts/utilities/session-autostart.config.json") `
+    -File2 (Join-Path $Gentle-VanguardRoot "scripts/utilities/session-autostart.config.json") `
     -Description "Session Autostart Config"
 
 $validations += @{
     Name = "Session Autostart Config"
     Local = "scripts/utilities/session-autostart.config.json"
-    Foundation = (Join-Path $FoundationRoot "scripts/utilities/session-autostart.config.json")
+    Gentle-Vanguard = (Join-Path $Gentle-VanguardRoot "scripts/utilities/session-autostart.config.json")
     Status = $result
 }
 
@@ -193,13 +193,13 @@ if (-not $result) { $issues++ }
 if (Test-Path "config/adaptive-config.json") {
     $result = Compare-ConfigFiles `
         -File1 "config/adaptive-config.json" `
-        -File2 (Join-Path $FoundationRoot "config/adaptive-config.json") `
+        -File2 (Join-Path $Gentle-VanguardRoot "config/adaptive-config.json") `
         -Description "Adaptive Config"
     
     $validations += @{
         Name = "Adaptive Config"
         Local = "config/adaptive-config.json"
-        Foundation = (Join-Path $FoundationRoot "config/adaptive-config.json")
+        Gentle-Vanguard = (Join-Path $Gentle-VanguardRoot "config/adaptive-config.json")
         Status = $result
     }
     
@@ -209,29 +209,29 @@ if (Test-Path "config/adaptive-config.json") {
 # 4. AGENTS.md
 $result = Compare-ConfigFiles `
     -File1 "AGENTS.md" `
-    -File2 (Join-Path $FoundationRoot "AGENTS.md") `
+    -File2 (Join-Path $Gentle-VanguardRoot "AGENTS.md") `
     -Description "AGENTS.md"
 
 $validations += @{
     Name = "AGENTS.md"
     Local = "AGENTS.md"
-    Foundation = (Join-Path $FoundationRoot "AGENTS.md")
+    Gentle-Vanguard = (Join-Path $Gentle-VanguardRoot "AGENTS.md")
     Status = $result
 }
 
 if (-not $result) { $issues++ }
 
-# 5. WF.ps1 Script
-if ((Test-Path "scripts/utilities/wf.ps1") -and (Test-Path (Join-Path $FoundationRoot "scripts/utilities/wf.ps1"))) {
+# 5. GV.ps1 Script
+if ((Test-Path "scripts/utilities/gv.ps1") -and (Test-Path (Join-Path $Gentle-VanguardRoot "scripts/utilities/gv.ps1"))) {
     $result = Compare-ConfigFiles `
-        -File1 "scripts/utilities/wf.ps1" `
-        -File2 (Join-Path $FoundationRoot "scripts/utilities/wf.ps1") `
-        -Description "Workflow Script (wf.ps1)"
+        -File1 "scripts/utilities/gv.ps1" `
+        -File2 (Join-Path $Gentle-VanguardRoot "scripts/utilities/gv.ps1") `
+        -Description "Workflow Script (gv.ps1)"
     
     $validations += @{
         Name = "Workflow Script"
-        Local = "scripts/utilities/wf.ps1"
-        Foundation = (Join-Path $FoundationRoot "scripts/utilities/wf.ps1")
+        Local = "scripts/utilities/gv.ps1"
+        Gentle-Vanguard = (Join-Path $Gentle-VanguardRoot "scripts/utilities/gv.ps1")
         Status = $result
     }
     
@@ -249,7 +249,7 @@ if ($issues -gt 0) {
         if (-not $val.Status) {
             Write-Host "  - $($val.Name)" -ForegroundColor Red
             Write-Host "    Local:      $($val.Local)" -ForegroundColor Gray
-            Write-Host "    Foundation: $($val.Foundation)" -ForegroundColor Gray
+            Write-Host "    Gentle-Vanguard: $($val.Gentle-Vanguard)" -ForegroundColor Gray
         }
     }
 }
@@ -257,12 +257,12 @@ if ($issues -gt 0) {
 # Fix if requested
 if ($Fix -and $issues -gt 0) {
     Write-Host "`n=== Aplicando Correcciones ===" -ForegroundColor Cyan
-    Write-Host "Estrategia: Sincronizar desde foundation hacia local`n" -ForegroundColor Gray
+    Write-Host "Estrategia: Sincronizar desde gentle-vanguard hacia local`n" -ForegroundColor Gray
     
     $fixed = 0
     foreach ($val in $validations) {
         if (-not $val.Status) {
-            if (Sync-ConfigFile -Source $val.Foundation -Destination $val.Local -Description $val.Name) {
+            if (Sync-ConfigFile -Source $val.Gentle-Vanguard -Destination $val.Local -Description $val.Name) {
                 $fixed++
             }
         }
@@ -280,3 +280,4 @@ if ($issues -eq 0) {
 }
 
 exit $(if ($issues -eq 0) { 0 } else { 1 })
+

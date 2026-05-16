@@ -12,15 +12,15 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- **Phase 3.1 — Inter-agent Communication** (`scripts/adaptive/agent-message-bus.ps1`): File-based mailbox system with structured message schema (id, type, sender, recipient, conversation/correlation ids), priority queue, TTL expiry, request/response protocol, and JSONL audit log. Integrated into `dispatch-agent.ps1` with auto-send of agent.completed messages. New `wf dispatch message` sub-command.
+- **Phase 3.1 — Inter-agent Communication** (`scripts/adaptive/agent-message-bus.ps1`): File-based mailbox system with structured message schema (id, type, sender, recipient, conversation/correlation ids), priority queue, TTL expiry, request/response protocol, and JSONL audit log. Integrated into `dispatch-agent.ps1` with auto-send of agent.completed messages. New `gv dispatch message` sub-command.
 - **Phase 3.2 — Cost-aware Model Routing** (`scripts/utilities/MODEL-ROUTER/cost-optimizer.ps1`, `config/provider-costs.json`): Cost database for 4 providers / 12 models with free/standard/premium tiers. Provider routing by cheapest available, cost comparison, token cost projection, session spend tracking (`.session/token-spend.json`). Commands: `route`, `compare`, `estimate`, `session-spend`, `status`.
 - **Phase 3.3 — Memory Reconciliation** (`dispatch-memory-manager.ps1`): `Detect-ContextConflicts` (key-level value conflict detection across dispatches), `Merge-Contexts` (deterministic merge: latest scalar wins, array union, nested deep-merge), `Invoke-Handoff` (cross-session context transfer). Commands: `reconcile`, `handoff`.
-- **Tab Completion** (`scripts/utilities/register-foundation-completion.ps1`): `Register-ArgumentCompleter` for `foundation` command with 70+ commands + subcommands. Auto-loaded via `install-foundation-cli.ps1`.
+- **Tab Completion** (`scripts/utilities/register-gentle-vanguard-completion.ps1`): `Register-ArgumentCompleter` for `gentle-vanguard` command with 70+ commands + subcommands. Auto-loaded via `install-gentle-vanguard-cli.ps1`.
 - Parallel batch dispatch via `Start-BatchOrchestrator` in `auto-delegate-orchestrator.ps1` with `-AgentTypes` parameter and dependency queue processing.
 
 ### Changed
 
-- **wf.ps1 modularization** (Phase 2.3): Extracted 48 functions (1622 lines) into 3 command modules (`commands/common.ps1`, `commands/git.ps1`, `commands/context.ps1`). wf.ps1 reduced from 3393 to ~1765 lines. Uses `dot-source` approach with `$global:scriptDir`/`$global:repoRoot` exports.
+- **gv.ps1 modularization** (Phase 2.3): Extracted 48 functions (1622 lines) into 3 command modules (`commands/common.ps1`, `commands/git.ps1`, `commands/context.ps1`). gv.ps1 reduced from 3393 to ~1765 lines. Uses `dot-source` approach with `$global:scriptDir`/`$global:repoRoot` exports.
 - `dispatch-agent.ps1`: Migrated from `Start-Job` (process-based) to Runspace pool (thread-based) for ~10x faster parallel dispatch.
 - `provider-failover.ps1`: Provider availability checker with failover chain (OpenRouter → Anthropic → OpenAI → Ollama), 5-min cache in `.session/provider-state.json`.
 - Rewrote tests: `engram-memory-manager.tests.ps1` (10 real engram.exe tests) and `engram-performance.perf.tests.ps1` (4 latency tests).
@@ -29,7 +29,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - `dispatch-agent.ps1`: Fixed `$jobs` → `$psInstances` variable name bug that silently dropped results in parallel batches.
-- `Write-Error` naming consistency across wf.ps1 command modules.
+- `Write-Error` naming consistency across gv.ps1 command modules.
 
 ### Backlog
 
@@ -40,7 +40,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### ✨ Added#
 
-- **`gf secret` CLI** (`scripts/security/secret-vault.ps1`): Full enterprise-grade secrets management with DPAPI-encrypted local vault (`~/.foundation/vault/`), 7 commands (`create`, `get`, `rotate`, `list`, `validate-compliance`, `audit-report`, `breach-response`), immutable JSONL audit trail, rotation-due tracking, and P1 breach response with incident reports.
+- **`gv secret` CLI** (`scripts/security/secret-vault.ps1`): Full enterprise-grade secrets management with DPAPI-encrypted local vault (`~/.gentle-vanguard/vault/`), 7 commands (`create`, `get`, `rotate`, `list`, `validate-compliance`, `audit-report`, `breach-response`), immutable JSONL audit trail, rotation-due tracking, and P1 breach response with incident reports.
 - **SIEM Audit Bridge** (`scripts/security/siem-audit-bridge.ps1`): Routes `logs/secret-audit.jsonl` to structured ECS-compatible output with anomaly detection (mass access, repeated failures, breach events). Supports Splunk HEC, Datadog, ELK, and generic webhook. Checkpoint-based incremental processing for scheduled runs.
 - **Intelligent Cache Manager** (`scripts/adaptive/cache-manager.ps1`): Multi-tier L1 (memory 2min) → L2 (file 30min) → L3 (persistent 4hr) → Archive caching with read-through promotion, auto-tier selection, tag-based invalidation, and GC. Zero external dependencies.
 - **GDPR Compliance Framework** (`rules/NORMATIVAS-GDPR.md`): 413-line normative covering 7 principles, user rights (Art.15-21), data retention schedules, 72-hour breach protocol, DPIA, third-party processors, and agent compliance checklist.
@@ -55,15 +55,15 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### 📚 Changed#
 
-- **`bin/gf.ps1`**: Added `gf secret` and `gf cache` command routing with full help text.
+- **`bin/gv.ps1`**: Added `gv secret` and `gv cache` command routing with full help text.
 - **VERSION**: Bumped to `1.2.0`.
-- **`build/foundation-installer-auto.nsi`**: Updated installer version to `1.2.0`.
+- **`build/gentle-vanguard-installer-auto.nsi`**: Updated installer version to `1.2.0`.
 
 ### 🔐 Compliance#
 
 - **Mandatory deadline**: GDPR + SOC2 + Secrets enforcement active from 2026-06-01.
 - **References**: GDPR Art.32/33, SOC2 CC6.1/CC7.2, `config/secrets-governance.json`.
-- **Validation**: `gf secret validate-compliance` scans workspace for hardcoded secrets and rotation overdue.
+- **Validation**: `gv secret validate-compliance` scans workspace for hardcoded secrets and rotation overdue.
 
 ---
 
@@ -77,8 +77,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### ✨ Added#
 
-- **Dynamic observability dashboard**: Preserved active tab state, stabilized live metric hooks, and documented the `foundation dashboard live` flow for the current release.
-- **Public release alignment**: Prepared synchronized publication for both `foundation` and `foundation-public`, including the refreshed `Foundation.exe` artifact.
+- **Dynamic observability dashboard**: Preserved active tab state, stabilized live metric hooks, and documented the `gv dashboard live` flow for the current release.
+- **Public release alignment**: Prepared synchronized publication for both `gentle-vanguard` and `gentle-vanguard-public`, including the refreshed `Gentle-Vanguard.exe` artifact.
 
 ### 🔧 Fixed#
 
@@ -88,7 +88,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### 📚 Changed#
 
-- **CLI guidance**: Updated core docs to promote `foundation` as the canonical command while keeping compatibility wrappers in place.
+- **CLI guidance**: Updated core docs to promote `gentle-vanguard` as the canonical command while keeping compatibility wrappers in place.
 - **Release artifacts**: Bumped patch version to `1.0.1` across repo metadata and release notes.
 
 ---
@@ -97,10 +97,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### ✨ Added#
 
-- **Foundation Stack Update Strategy**: Documented three update scenarios (lightweight CLI updates, core .exe builds, dev synchronization)
-- **sync-stack.ps1**: New synchronization script for updating installed Foundation without reinstalling
+- **Gentle-Vanguard Stack Update Strategy**: Documented three update scenarios (lightweight CLI updates, core .exe builds, dev synchronization)
+- **sync-stack.ps1**: New synchronization script for updating installed Gentle-Vanguard without reinstalling
 - **Comprehensive validation hardening**: Made LESSONS-LEARNED-HOOKS-INCIDENT.md optional, added safe property checks for opencode.json
-- **Foundation-Setup.exe**: Generated with complete hardening (v1.0.0)
+- **Gentle-Vanguard-Setup.exe**: Generated with complete hardening (v1.0.0)
 
 ### 🔧 Fixed#
 
@@ -129,10 +129,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### ✨ Added#
 
 - **Self-Healing Stack**: New `scripts/utilities/self-heal.ps1` with 5 modular healers — Config (JSON validation, trailing comma fix), Hooks (git hook presence & freshness), Session (corrupt JSON recovery), Skills (SKILL.md integrity, auto-delegation reference validation), Engram (process health, auto-restart). Supports `-AutoFix`, `-Scope`, `-Quiet`.
-- **`foundation heal` command**: New CLI command to run self-healing checks. `foundation heal fix` auto-repairs issues. Scoped mode: `foundation heal config|hooks|session|skills|engram`.
-- **Watchtower Agent**: New `scripts/utilities/watchtower.ps1` with 6 proactive health checks — git state, token budget, context pressure, session age, pending proposals, error patterns. Integrated as `foundation watchtower fix|quiet|all|heal`. Added to session-autostart Phase 10.
-- **Proposal Executor**: New `scripts/utilities/proposal-executor.ps1` that reads `.local/improvement-proposals/*.json` and dispatches to category-specific executors (`missing-skill`, `config-gap`, `pattern-opportunity`). Integrated as `foundation learning apply|auto|auto-pr`.
-- **Watchtower→Heal integration**: `foundation watchtower heal` runs self-heal first (avoids stash race), then watchtower with auto-fix.
+- **`gv heal` command**: New CLI command to run self-healing checks. `gv heal fix` auto-repairs issues. Scoped mode: `gv heal config|hooks|session|skills|engram`.
+- **Watchtower Agent**: New `scripts/utilities/watchtower.ps1` with 6 proactive health checks — git state, token budget, context pressure, session age, pending proposals, error patterns. Integrated as `gv watchtower fix|quiet|all|heal`. Added to session-autostart Phase 10.
+- **Proposal Executor**: New `scripts/utilities/proposal-executor.ps1` that reads `.local/improvement-proposals/*.json` and dispatches to category-specific executors (`missing-skill`, `config-gap`, `pattern-opportunity`). Integrated as `gv learning apply|auto|auto-pr`.
+- **Watchtower→Heal integration**: `gv watchtower heal` runs self-heal first (avoids stash race), then watchtower with auto-fix.
 
 ### 🔧 Fixed#
 
@@ -142,7 +142,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### 📚 Changed#
 
 - **NORMATIVAS-SESSION.md**: Added checkpoint 13 (self-healing check post-watchtower)
-- **WF.ps1**: Added 'heal' to ValidateSet, added heal dispatch block with scope support
+- **GV.ps1**: Added 'heal' to ValidateSet, added heal dispatch block with scope support
 - **VERSION**: Bumped to 1.1.0 (minor: new features)
 
 ---
@@ -163,8 +163,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### ✨ Added#
 
 - **Post-Session Learning System**: New `skills/post-session-learning-skill/` with 5-step learning workflow. New `scripts/utilities/post-session-learning.ps1` that analyzes session artifacts (startup-summary, git log, engram) to detect gaps — missing skills, repeated errors, token waste, config gaps. Generates structured improvement proposals saved to `.local/improvement-proposals/`.
-- **`foundation learning` command**: New CLI command to run post-session learning analysis. `foundation learning auto` auto-applies low-severity proposals.
-- **Session close integration**: Step 10 in NORMATIVAS-SESSION.md close checklist — `foundation learning` before session end.
+- **`gv learning` command**: New CLI command to run post-session learning analysis. `gv learning auto` auto-applies low-severity proposals.
+- **Session close integration**: Step 10 in NORMATIVAS-SESSION.md close checklist — `gv learning` before session end.
 - **12 business skills**: Created real SKILL.md files for accounting, compliance, CRM, ERP, insurance, logistics, payroll, procurement, real-estate, recruitment, supply-chain, tax — each with domain-specific instructions, key metrics, triggers in ES/EN, and response patterns.
 - **Business skills index**: Updated `skills/business/SKILL.md` with active skills table and trigger keywords.
 
@@ -206,13 +206,13 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **release workflow**: Aligned GitHub Release note extraction with the canonical root `CHANGELOG.md`
 - **Session routing**: Removed `iniciar sesion` / `start session` from auto-delegation in favor of the canonical startup protocol defined in `CLAUDE.md`
 - **SESSION skill docs**: Updated session workflow guidance to avoid duplicate start-session handling
-- **Documentation sync**: Rebuilt and published `Foundation-Setup.exe` for `foundation-public`, keeping the public installer current
+- **Documentation sync**: Rebuilt and published `Gentle-Vanguard-Setup.exe` for `gentle-vanguard-public`, keeping the public installer current
 
 ### 📚 Changed#
 
 - **VERSION**: Bumped from `2.9.0` to `2.9.1`
 - **README badge**: Updated visible version badge to `2.9.1`
-- **Public release process**: Foundation and foundation-public are now aligned on the same validated patch release
+- **Public release process**: Gentle-Vanguard and gentle-vanguard-public are now aligned on the same validated patch release
 
 ---
 
@@ -275,7 +275,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### 🔄 Changed#
 
-- **CONTRIBUTING.md**: Complete rewrite — URLs fixed to `foundation-public`, test counts corrected
+- **CONTRIBUTING.md**: Complete rewrite — URLs fixed to `gentle-vanguard-public`, test counts corrected
   (28), prerequisites updated
 - **VERSION**: Synced from `2.6.5` to `2.8.0`
 - **Stale branches**: 4 merged branches deleted (`feature/judgment-day`, `feature/security-system`,
@@ -297,7 +297,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **Labeler**: `.github/labeler.yml` — auto-labels PRs by changed paths
 - **Linting configs**: `.markdownlint.json` (MD033 with allowed elements), `.prettierrc`
 - **Security configs**: `.trivyignore`, `.secretlintrc.json`, `.secretlintignore`
-- **Architecture Decision Records**: `docs/adr/ADR-0001-foundation-architecture-decisions.md` — 7
+- **Architecture Decision Records**: `docs/adr/ADR-0001-gentle-vanguard-architecture-decisions.md` — 7
   decisions documented
 
 #### 🧪 CI/CD Pipeline#
@@ -318,7 +318,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **Go auto-install**: `install-prerequisites.ps1` — checks via `go version`, installs via
   `winget install GoLang.Go`
 - **Engram auto-install**: `install-prerequisites.ps1` — checks via `engram`, installs via
-  `go install github.com/foundation/engram/cmd/engram@latest`
+  `go install github.com/gentle-vanguard/engram/cmd/engram@latest`
 - **TUI installer**: Interactive prompts for Go and Engram installation post-clone
 - **sync-to-public.ps1**: Now copies `CONTRIBUTING.md`, `SECURITY.md`, `CHANGELOG.md` to public repo
 
@@ -336,17 +336,17 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 #### 📚 Documentation#
 
-- **README.md**: URLs updated from `anomalyco/foundation` to
-  `EmmanuelOrtiz87/foundation-public`
+- **README.md**: URLs updated from `anomalyco/gentle-vanguard` to
+  `EmmanuelOrtiz87/gentle-vanguard-public`
 - **BOARD-SUPPLEMENT.md**: Repo URLs updated — both public and private repos listed
-- **CONTRIBUTING.md**: Clone URL updated to `foundation-public`
+- **CONTRIBUTING.md**: Clone URL updated to `gentle-vanguard-public`
 - **TESTING-STRATEGY.md**: Rewritten with actual test states (22 unit + 3 integration + 2 security +
   1 perf)
 - **tests/README.md**: Corrected test counts and categories
 - **SECURITY-HARDENING.md**: Fixed corrupted accented characters (32 patterns restored)
 - **COMPATIBILITY-MATRIX.md**: Updated with code quality standards checklist
 - **Marketing URLs**: All 3 marketing files updated from `anomalyco/opencode` to
-  `EmmanuelOrtiz87/foundation-public`
+  `EmmanuelOrtiz87/gentle-vanguard-public`
 - **Bitbucket references**: SUITE-OVERVIEW.md URL fixed
 
 #### 🧩 Skills Reorganization#
@@ -358,7 +358,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 #### 🧹 Workspace Homologation#
 
 - 52 stale files at `C:\Workspace_local\` root archived to `_archive/`
-- `C:\Workspace_local\` now contains only: `foundation`, `foundation-public`,
+- `C:\Workspace_local\` now contains only: `gentle-vanguard`, `gentle-vanguard-public`,
   `bitbucket-dashboard`, and system dirs
 
 ---
@@ -392,12 +392,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **NORMATIVAS link**: Last broken link resolved
 - **Dead code**: Removed Spanish duplicate section in `pre-commit-config-validation.ps1` (after
   `exit 0`)
-- **Orphaned AI-TOOLS-COMPATIBILITY-MATRIX.md**: Removed from `foundation-public` (superseded by
+- **Orphaned AI-TOOLS-COMPATIBILITY-MATRIX.md**: Removed from `gentle-vanguard-public` (superseded by
   `COMPATIBILITY-MATRIX.md` v1.1.0)
 
 #### 🐛 Installer#
 
-- **NSIS case**: Fixed `Foundation-Installer.nsi` → `foundation-installer.nsi` in sync script
+- **NSIS case**: Fixed `Gentle-Vanguard-Installer.nsi` → `gentle-vanguard-installer.nsi` in sync script
 
 ---
 
@@ -427,8 +427,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 #### 🎨 Marketing Materials#
 
 - **docs/marketing/README.md**: Completely renovated with visual design
-- **docs/marketing/FOUNDATION-STACK-SOCIAL.md**: Updated with emojis and tables
-- **docs/marketing/foundation-stack-blog-post.md**: Enhanced with literary techniques
+- **docs/marketing/GENTLE_VANGUARD-STACK-SOCIAL.md**: Updated with emojis and tables
+- **docs/marketing/gentle-vanguard-stack-blog-post.md**: Enhanced with literary techniques
 
 #### 📚 Core Documentation#
 
@@ -442,7 +442,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **docs/tasks/README.md**: Task briefs documentation
 - **docs/specs/README.md**: Technical specifications
 
-#### 🔧 Foundation Audit & Fixes#
+#### 🔧 Gentle-Vanguard Audit & Fixes#
 
 - **audit-sweep.ps1**: Added null check for empty files
 - **audit-sweep.ps1**: Exclude `.opencode/node_modules/` from link validation
@@ -463,7 +463,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Added **Section 7: Default Documentation Behavior**
 - Defines visual design requirements for ALL official docs
-- Enforcement via `agent-verify.ps1` and `wf validate`
+- Enforcement via `agent-verify.ps1` and `gv validate`
 
 #### 📂 Documentation Structure#
 
@@ -510,9 +510,9 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `rules/TESTING-STANDARDS.md`: Testing pyramid, coverage targets, Pester 5 patterns, new-script
   test rule, quality gates
 
-#### 🔧 wf CLI Improvements#
+#### 🔧 gv CLI Improvements#
 
-- `wf version`: New command — shows stack version from VERSION file, orchestrator version, PS
+- `gv version`: New command — shows stack version from VERSION file, orchestrator version, PS
   version, and skill count#
 
 #### 🧪 Tests#
@@ -523,7 +523,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### 🔄 Changed#
 
 - `.gitignore`: Added entries for `reports/dashboard.html`, `reports/metrics-export.csv`,
-  `reports/wf-benchmark.json`, `trivy-report.json`, `.event-bus/`, `.session/`
+  `reports/gv-benchmark.json`, `trivy-report.json`, `.event-bus/`, `.session/`
 - `config/quality-gates.json`: Added `ps-lint`, `sdd-gate`, `owasp-scan` to `requiredWorkflows`
   (v1.1.0)
 
@@ -541,7 +541,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - Integrates with `hook-advisory-classifier.ps1` (Add-BlockingFinding/Add-AdvisoryFinding)#
 - `.github/workflows/sdd-gate.yml`: CI workflow triggered on PRs to main/develop; runs
   `check-sdd-gate.ps1` on Windows runner#
-- `wf.ps1`: `sdd-gate` command registered in ValidateSet + switch + help#
+- `gv.ps1`: `sdd-gate` command registered in ValidateSet + switch + help#
 
 #### 🔧 FF-002 — SDD Process Metrics (O-39)#
 
@@ -549,7 +549,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   time (days), rework ratio %, and SDD document status breakdown#
   - Reads `docs/backlog/items.json` + `docs/sdd/*.md`#
   - Health signals: GREEN/YELLOW/RED per KPI; `-AsJson` for machine-readable output#
-- `wf.ps1`: `sdd-metrics` command registered in ValidateSet + switch + help#
+- `gv.ps1`: `sdd-metrics` command registered in ValidateSet + switch + help#
 
 #### 🔧 FF-004 — Sync Drift Prevention (O-40)#
 
@@ -558,17 +558,17 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
     presence; done backlog `resolved_by` script refs vs actual files#
   - Outputs drift score + categorized findings; exits 1 when drift > 0#
   - `-AsJson` for machine-readable output#
-- `wf.ps1`: `sync-drift` command registered in ValidateSet + switch + help#
+- `gv.ps1`: `sync-drift` command registered in ValidateSet + switch + help#
 
 #### 🔧 FF-006 — Local Workflow Performance (O-41)#
 
-- `scripts/utilities/wf-benchmark.ps1`: profiles key `wf` commands with `Measure-Command` and
+- `scripts/utilities/gv-benchmark.ps1`: profiles key `gv` commands with `Measure-Command` and
   compares against configurable SLO thresholds#
   - Default commands: `status`, `health`. Custom via `-Commands status,health,verify`#
-  - PASS/WARN/FAIL per command; report persisted to `reports/wf-benchmark.json`#
+  - PASS/WARN/FAIL per command; report persisted to `reports/gv-benchmark.json`#
   - SLO defaults: status ≤5 s, health ≤15 s, verify ≤30 s (override via
     `config/testing.config.json#benchmark.slo`)#
-- `wf.ps1`: `benchmark [cmds]` command registered in ValidateSet + switch + help#
+- `gv.ps1`: `benchmark [cmds]` command registered in ValidateSet + switch + help#
 
 ### 🔄 Changed#
 
@@ -593,3 +593,5 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   <b>📃 Ready to see what changed?</b><br>
   <code>git log --oneline --since="2026-04-01" | Select-Object -First 30</code>
 </p>
+
+

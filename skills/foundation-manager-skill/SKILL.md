@@ -1,11 +1,11 @@
 ---
-name: foundation-manager-skill
+name: gentle-vanguard-manager-skill
 description:
-  "Trigger: 'update foundation', 'check updates', 'sync skills', 'install tools', 'maintenance'.
+  "Trigger: 'update gentle-vanguard', 'check updates', 'sync skills', 'install tools', 'maintenance'.
   Auto-actualización de skills y herramientas nativas reduciendo mantenimiento manual."
 ---
 
-# Foundation Manager Skill
+# Gentle-Vanguard Manager Skill
 
 ## Activation Contract
 
@@ -15,7 +15,7 @@ detected, scheduled maintenance, post-install validation, or explicit update req
 ## Hard Rules
 
 - Never auto-update without logging all changes to `.runtime/skill-updates.log`
-- Validate integrity after every update via `wf.ps1 health` and `wf.ps1 verify`
+- Validate integrity after every update via `gv.ps1 health` and `gv.ps1 verify`
 - Respect user auto-update preferences in `config/orchestrator.json`
 
 ## Decision Gates
@@ -31,7 +31,7 @@ detected, scheduled maintenance, post-install validation, or explicit update req
 
 1. Scan skills/ for SKILL.md files and determine update needs
 2. Apply updates per Decision Gates (log each change)
-3. Run `wf.ps1 health` then `wf.ps1 verify` for integrity
+3. Run `gv.ps1 health` then `gv.ps1 verify` for integrity
 4. Generate update report
 
 ## Output Contract
@@ -43,5 +43,6 @@ detected, scheduled maintenance, post-install validation, or explicit update req
 ## References
 
 - Skill detection: `scripts/utilities/skills-auto-discovery.ps1`
-- Foundation sync: `scripts/utilities/foundation-sync.ps1`
+- Gentle-Vanguard sync: `scripts/utilities/gentle-vanguard-sync.ps1`
 - User config: `config/orchestrator.json`
+

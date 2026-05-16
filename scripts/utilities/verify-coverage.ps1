@@ -69,7 +69,7 @@ if ($targets.Count -eq 0) {
 }
 
 Write-Host "`n========================================" -ForegroundColor Cyan
-Write-Host "REAL CODE COVERAGE - Foundation" -ForegroundColor Cyan
+Write-Host "REAL CODE COVERAGE - Gentle-Vanguard" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 
 Write-Host "`n[PHASE 1] Declared Targets" -ForegroundColor Blue
@@ -192,3 +192,4 @@ if ($overallStatus -eq 'PASS') {
 
 Write-Host "[FAIL] Real coverage validation failed" -ForegroundColor Red
 exit 1
+

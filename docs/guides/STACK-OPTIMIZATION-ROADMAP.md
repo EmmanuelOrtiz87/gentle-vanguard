@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-The foundation project has excellent foundational tooling (git flow, security layers, testing, audit systems). The npx hardening represents a mature shift toward supply-chain security. Below are recommended optimizations across 5 dimensions:
+The gentle-vanguard project has excellent gentle-vanguardal tooling (git flow, security layers, testing, audit systems). The npx hardening represents a mature shift toward supply-chain security. Below are recommended optimizations across 5 dimensions:
 
 | Dimension | Maturity | Priority | Impact |
 |-----------|----------|----------|---------|
@@ -78,7 +78,7 @@ commands:
     run: lockfile-lint --path package-lock.json
 ```
 
-3. Add to foundation lefthook config:
+3. Add to gentle-vanguard lefthook config:
 
 Create `scripts/hooks/lockfile-lint-check.ps1`:
 
@@ -303,10 +303,10 @@ Describe "Release Workflow E2E" {
 
 **Content**:
 - [ ] Clone repo
-- [ ] Run `wf.ps1 doctor`
+- [ ] Run `gv.ps1 doctor`
 - [ ] Create MCP workspace (`$HOME\mcp-workspace`)
 - [ ] Verify lefthook hooks installed
-- [ ] Run tests (`wf.ps1 test`)
+- [ ] Run tests (`gv.ps1 test`)
 - [ ] Create feature branch
 - [ ] Make first commit
 - [ ] Push for review
@@ -443,7 +443,7 @@ Add to pre-push hook validation.
 
 **Implementation**:
 
-Instrument `wf.ps1 publish`:
+Instrument `gv.ps1 publish`:
 
 ```powershell
 # Track timing for each gate
@@ -627,7 +627,7 @@ Total: 11-13 hours
 
 ## Conclusion
 
-The foundation project is **production-ready** with excellent security foundations. The recent npx hardening represents mature supply-chain thinking.
+The gentle-vanguard project is **production-ready** with excellent security gentle-vanguards. The recent npx hardening represents mature supply-chain thinking.
 
 **Next focus**: Dependency management (lockfile validation + npm ci) and testing completeness (coverage + E2E) provide HIGH impact for MEDIUM effort over the next 1-2 sprints.
 
@@ -638,3 +638,4 @@ The foundation project is **production-ready** with excellent security foundatio
 **Prepared**: May 13, 2026  
 **Review Cycle**: Monthly  
 **Owner**: Security/DevOps Team
+

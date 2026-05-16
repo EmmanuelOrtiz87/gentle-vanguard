@@ -193,11 +193,11 @@ Timestamp,User_ID,Session_ID,Task_Scope,Tokens_Estimated,Judgment_Result,Review_
 
 | Command               | Description            |
 | --------------------- | ---------------------- |
-| `foundation report today`     | Report for today       |
-| `foundation report yesterday` | Report for yesterday   |
-| `foundation report 7days`     | Report for last 7 days |
-| `foundation metrics`          | Show metrics summary   |
-| `foundation costs`            | Show cost analysis     |
+| `gentle-vanguard report today`     | Report for today       |
+| `gentle-vanguard report yesterday` | Report for yesterday   |
+| `gentle-vanguard report 7days`     | Report for last 7 days |
+| `gentle-vanguard metrics`          | Show metrics summary   |
+| `gentle-vanguard costs`            | Show cost analysis     |
 
 ## Integration Points
 
@@ -235,3 +235,4 @@ Timestamp,User_ID,Session_ID,Task_Scope,Tokens_Estimated,Judgment_Result,Review_
 
 _Skill versión: 1.0_  
 _Last updated: 2026-04-26_
+

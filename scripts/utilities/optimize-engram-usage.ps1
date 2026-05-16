@@ -3,7 +3,7 @@
 # Now performs REAL cleanup: removes duplicates, old entries, and optimizes storage
 
 param(
-    [string]$ProjectName = 'foundation',
+    [string]$ProjectName = 'gentle-vanguard',
     [switch]$AutoApply = $false,
     [int]$KeepRecentDays = 7
 )
@@ -139,3 +139,4 @@ Invoke-Engram -Arguments @(
 
 Write-Success "Engram usage optimization completed"
 exit 0
+

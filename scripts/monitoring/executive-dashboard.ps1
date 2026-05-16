@@ -6,7 +6,7 @@
     Unified process that combines:
     1. Real-time status monitoring (continuous-status-monitor.ps1)
     2. Token consumption reporting (token-consumption-report.ps1)
-    3. Governance & audit status (wf.ps1 audit, orchestrator-status)
+    3. Governance & audit status (gv.ps1 audit, orchestrator-status)
     4. Executive summary for management
     
     Replaces/supplements:
@@ -51,8 +51,8 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
-if ($env:FOUNDATION_BASE_DIR) {
-    $repoRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GENTLE_VANGUARD_BASE_DIR) {
+    $repoRoot = $env:GENTLE_VANGUARD_BASE_DIR
 } else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -94,7 +94,7 @@ function Get-TokenSummary {
 }
 
 function Get-AuditStatus {
-    $auditScript = Join-Path $scriptsDir 'WORKFLOW-ORCHESTRATION\wf.ps1'
+    $auditScript = Join-Path $scriptsDir 'WORKFLOW-ORCHESTRATION\gv.ps1'
     if (-not (Test-Path $auditScript)) { return $null }
     
     try {
@@ -158,7 +158,7 @@ function Get-RealTimeMetrics {
 function Generate-ExecutiveReport {
     $timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
     
-    Write-ExecutiveHeader "EXECUTIVE DASHBOARD - Foundation Workspace"
+    Write-ExecutiveHeader "EXECUTIVE DASHBOARD - Gentle-Vanguard Workspace"
     Write-Host "Generated: $timestamp" -ForegroundColor Gray
     Write-Host ""
     
@@ -242,7 +242,7 @@ function Generate-ExecutiveReport {
 }
 
 function Generate-TechnicalReport {
-    Write-ExecutiveHeader "TECHNICAL DASHBOARD - Foundation Workspace"
+    Write-ExecutiveHeader "TECHNICAL DASHBOARD - Gentle-Vanguard Workspace"
     
     # Call detailed scripts
     $tokenScript = Join-Path $scriptsDir 'token-consumption-report.ps1'
@@ -251,7 +251,7 @@ function Generate-TechnicalReport {
         & $tokenScript -OutputFormat markdown -Scope all -IncludeContext -IncludeUtility
     }
     
-    $auditScript = Join-Path $scriptsDir 'WORKFLOW-ORCHESTRATION\wf.ps1'
+    $auditScript = Join-Path $scriptsDir 'WORKFLOW-ORCHESTRATION\gv.ps1'
     if (Test-Path $auditScript) {
         Write-Section "AUDIT STATUS (DETAILED)"
         & $auditScript audit -Mode full
@@ -336,3 +336,4 @@ if ($Mode -eq 'report' -and $OutputFormat -eq 'executive') {
     
     Write-Host "`n[OK] Executive report saved to: $outputPath" -ForegroundColor Green
 }
+

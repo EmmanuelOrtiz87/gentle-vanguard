@@ -9,7 +9,7 @@
     - Example configs (no secrets)
     - Pre-built encrypted artifacts (protected/)
     - Public skill stubs (public/)
-    - Single installer executable: Foundation.exe (NSIS, AES-256, all-in-one)
+    - Single installer executable: Gentle-Vanguard.exe (NSIS, AES-256, all-in-one)
     
     Does NOT copy:
     - Plain-text scripts, configs, or skills (should be encrypted in protected/)
@@ -17,7 +17,7 @@
 .PARAMETER privateRepo
     Path to private repo root. Default: $env:PRIVATE_REPO or ..\..\..\..
 .PARAMETER publicRepo
-    Path to public repo root. Default: $env:PUBLIC_REPO or ..\..\..\foundation-public
+    Path to public repo root. Default: $env:PUBLIC_REPO or ..\..\..\gentle-vanguard-public
 .PARAMETER skipPush
     If set, skips git commit and push (useful for CI dry-runs).
 .EXAMPLE
@@ -28,14 +28,14 @@
 param(
     [string]$privateRepo = '',
     [string]$publicRepo = '',
-    [string]$publicRepoSlug = "$(if ($env:PUBLIC_REPO_SLUG) { $env:PUBLIC_REPO_SLUG } else { 'EmmanuelOrtiz87/foundation-public' })",
+    [string]$publicRepoSlug = "$(if ($env:PUBLIC_REPO_SLUG) { $env:PUBLIC_REPO_SLUG } else { 'EmmanuelOrtiz87/gentle-vanguard-public' })",
     [switch]$skipPush
 )
 
 $ErrorActionPreference = "Stop"
 
-if ($env:FOUNDATION_BASE_DIR) {
-    $resolvedRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GENTLE_VANGUARD_BASE_DIR) {
+    $resolvedRoot = $env:GENTLE_VANGUARD_BASE_DIR
 } else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -45,8 +45,8 @@ if ($env:FOUNDATION_BASE_DIR) {
 }
 
 if ([string]::IsNullOrEmpty($privateRepo)) { $privateRepo = if ($env:PRIVATE_REPO) { $env:PRIVATE_REPO } else { $resolvedRoot } }
-# Fix: use sibling directory of private repo (not grandparent) to resolve foundation-public
-if ([string]::IsNullOrEmpty($publicRepo)) { $publicRepo = if ($env:PUBLIC_REPO) { $env:PUBLIC_REPO } else { Join-Path (Split-Path -Parent $resolvedRoot) 'foundation-public' } }
+# Fix: use sibling directory of private repo (not grandparent) to resolve gentle-vanguard-public
+if ([string]::IsNullOrEmpty($publicRepo)) { $publicRepo = if ($env:PUBLIC_REPO) { $env:PUBLIC_REPO } else { Join-Path (Split-Path -Parent $resolvedRoot) 'gentle-vanguard-public' } }
 
 $buildDir = Join-Path $privateRepo 'build'
 $distDir = Join-Path $privateRepo 'dist'
@@ -58,17 +58,17 @@ Write-Output ""
 # 0. Bootstrap scripts (plain text - needed for user onboarding)
 # ============================================================================
 Write-Output "[BOOTSTRAP] Syncing bootstrap scripts..."
-$bootstrapDir = "$publicRepo\scripts\foundation"
+$bootstrapDir = "$publicRepo\scripts\gentle-vanguard"
 New-Item -ItemType Directory -Path $bootstrapDir -Force | Out-Null
-Copy-Item "$privateRepo\scripts\foundation\bootstrap.ps1" "$bootstrapDir\bootstrap.ps1" -Force
-Copy-Item "$privateRepo\scripts\foundation\bootstrap-machine.ps1" "$bootstrapDir\bootstrap-machine.ps1" -Force
-Copy-Item "$privateRepo\scripts\foundation\setup-multi-machine.ps1" "$bootstrapDir\setup-multi-machine.ps1" -Force
+Copy-Item "$privateRepo\scripts\gentle-vanguard\bootstrap.ps1" "$bootstrapDir\bootstrap.ps1" -Force
+Copy-Item "$privateRepo\scripts\gentle-vanguard\bootstrap-machine.ps1" "$bootstrapDir\bootstrap-machine.ps1" -Force
+Copy-Item "$privateRepo\scripts\gentle-vanguard\setup-multi-machine.ps1" "$bootstrapDir\setup-multi-machine.ps1" -Force
 
 # ============================================================================
 # 1. Public documentation (root files)
 # ============================================================================
 Write-Output " Syncing public docs..."
-# README.md is intentionally NOT synced — foundation-public has its own independent README
+# README.md is intentionally NOT synced — gentle-vanguard-public has its own independent README
 # Copy-Item "$privateRepo\README.md" "$publicRepo\README.md" -Force
 Copy-Item "$privateRepo\LICENSE" "$publicRepo\LICENSE" -Force
 Copy-Item "$privateRepo\CONTRIBUTING.md" "$publicRepo\CONTRIBUTING.md" -Force
@@ -169,7 +169,7 @@ if (Test-Path "$privateRepo\config\README.md") {
 }
 
 # ============================================================================
-# 4. Encrypted artifacts (pre-built by protect-foundation.ps1)
+# 4. Encrypted artifacts (pre-built by protect-gentle-vanguard.ps1)
 # ============================================================================
 Write-Output " Syncing encrypted protected/..."
 if (Test-Path "$buildDir\protected") {
@@ -179,11 +179,11 @@ if (Test-Path "$buildDir\protected") {
     Copy-Item "$buildDir\protected" "$publicRepo\" -Recurse -Force
     Write-Output "  [OK] protected/"
 } else {
-    Write-Output "  [WARN]  build/protected/ not found - run protect-foundation.ps1 first"
+    Write-Output "  [WARN]  build/protected/ not found - run protect-gentle-vanguard.ps1 first"
 }
 
 # ============================================================================
-# 5. Public skill stubs (pre-built by protect-foundation.ps1)
+# 5. Public skill stubs (pre-built by protect-gentle-vanguard.ps1)
 # ============================================================================
 Write-Output " Syncing public skill stubs..."
 if (Test-Path "$buildDir\public") {
@@ -193,7 +193,7 @@ if (Test-Path "$buildDir\public") {
     Copy-Item "$buildDir\public" "$publicRepo\" -Recurse -Force
     Write-Output "  [OK] public/"
 } else {
-    Write-Output "  [WARN]  build/public/ not found - run protect-foundation.ps1 first"
+    Write-Output "  [WARN]  build/public/ not found - run protect-gentle-vanguard.ps1 first"
 }
 
 # ============================================================================
@@ -209,26 +209,26 @@ if (Test-Path "$privateRepo\demos") {
 }
 
 # ============================================================================
-# 7. Single executable — Foundation.exe (NSIS installer, all-in-one)
+# 7. Single executable — Gentle-Vanguard.exe (NSIS installer, all-in-one)
 # ============================================================================
 Write-Output " Syncing installer executable..."
 
-$installerExe = "$distDir\Foundation.exe"
+$installerExe = "$distDir\Gentle-Vanguard.exe"
 if (Test-Path $installerExe) {
     # Remove legacy exes if they exist (deprecated)
-    @("$publicRepo\Foundation-Launcher.exe", "$publicRepo\Foundation-Setup.exe") | ForEach-Object {
+    @("$publicRepo\Gentle-Vanguard-Launcher.exe", "$publicRepo\Gentle-Vanguard-Setup.exe") | ForEach-Object {
         if (Test-Path $_) { Remove-Item $_ -Force; Write-Output "  [DEPRECATED] removed $($_ | Split-Path -Leaf)" }
     }
-    Copy-Item $installerExe "$publicRepo\Foundation.exe" -Force
-    Write-Output "  [OK] Foundation.exe (NSIS installer, AES-256, all-in-one)"
+    Copy-Item $installerExe "$publicRepo\Gentle-Vanguard.exe" -Force
+    Write-Output "  [OK] Gentle-Vanguard.exe (NSIS installer, AES-256, all-in-one)"
 } else {
-    Write-Output "  [WARN]  dist/Foundation.exe not found — run build/create-installer.ps1 first"
+    Write-Output "  [WARN]  dist/Gentle-Vanguard.exe not found — run build/create-installer.ps1 first"
 }
 
 # ============================================================================
 # 8. INSTALLATION.md (manually maintained in public repo)
 # ============================================================================
-# INSTALLATION.md should exist already in foundation-public from the installer.
+# INSTALLATION.md should exist already in gentle-vanguard-public from the installer.
 # If missing, create a basic version.
 if (-not (Test-Path "$publicRepo\INSTALLATION.md")) {
     Write-Output "  [WARN]  INSTALLATION.md missing - keeping existing if any"
@@ -337,3 +337,4 @@ if (-not $skipPush) {
 
 Write-Output ""
 Write-Output "=== Sync Complete ==="
+

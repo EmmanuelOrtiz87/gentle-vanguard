@@ -24,7 +24,7 @@ jobs:
       - name: Run monthly report pipeline
         shell: pwsh
         run: |
-          ./scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1 monthly-report all
+          ./scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1 monthly-report all
 
       - name: Build executive dashboard snapshot
         shell: pwsh
@@ -40,4 +40,5 @@ jobs:
             reports/metrics-export.*
             reports/dashboard.html
           if-no-files-found: warn
+
 

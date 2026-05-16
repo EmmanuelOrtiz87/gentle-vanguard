@@ -109,7 +109,7 @@ gitrob scan
 semgrep --config=auto .
 ```
 
-## Workspace Access Control (Foundation)
+## Workspace Access Control (Gentle-Vanguard)
 
 ```powershell
 # Check access level
@@ -121,3 +121,4 @@ semgrep --config=auto .
 # Authenticate via security questions (recovery)
 .\scripts\utilities\auth-session.ps1 -UseSecurityQuestions
 ```
+

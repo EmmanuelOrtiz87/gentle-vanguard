@@ -1,7 +1,7 @@
 # validate-report.ps1
 # Simple validation of management report
 
-$reportFile = ".\foundation\\reports\MANAGEMENT-REPORT-2026-04.csv"
+$reportFile = ".\gentle-vanguard\\reports\MANAGEMENT-REPORT-2026-04.csv"
 
 if (-not (Test-Path $reportFile)) {
     Write-Host "ERROR: Report file not found: $reportFile"
@@ -51,4 +51,5 @@ if (($csv | Where-Object { $_.ActionsPerformed -ne '' }).Count -gt 0) {
 } else {
     Write-Host " ActionsPerformed column is empty (Engram integration needed)"
 }
+
 

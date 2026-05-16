@@ -12,13 +12,13 @@
     Resumen breve de la tarea que se est cerrando
     
 .PARAMETER ProjectName
-    Nombre del proyecto (default: workspace_local)
+    Nombre del proyecto (default: workspace_gentle_vanguard)
     
 .EXAMPLE
     .\tools\clear-context.ps1 -TaskSummary "Corregidas inconsistencias de inicio"
     
 .NOTES
-    Author: foundation
+    Author: gentle-vanguard
     Version: 1.0
 #>
 
@@ -27,7 +27,7 @@ param(
     [string]$TaskSummary = "",
     
     [Parameter(Mandatory=$false)]
-    [string]$ProjectName = "foundation"
+    [string]$ProjectName = "gentle-vanguard"
 )
 
 $ErrorActionPreference = 'Continue'
@@ -140,4 +140,5 @@ if ($TaskSummary -ne "") {
 }
 
 exit 0
+
 

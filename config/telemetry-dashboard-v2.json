@@ -2,8 +2,8 @@
   "telemetryDashboard": {
     "version": "2.0.0",
     "lastUpdated": "2026-05-12T19:55:00Z",
-    "name": "Foundation Telemetry Dashboard v2",
-    "description": "Business metrics and analytics for Foundation platform",
+    "name": "Gentle-Vanguard Telemetry Dashboard v2",
+    "description": "Business metrics and analytics for Gentle-Vanguard platform",
     
     "metrics": {
       "agent_performance": {
@@ -295,3 +295,4 @@
     }
   }
 }
+

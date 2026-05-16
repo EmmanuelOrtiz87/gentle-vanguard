@@ -6,7 +6,7 @@ Version: 1.0.0
 
 ## 1. PROPOSITO
 
-Define la estrategia de testing para el stack Foundation y sus agentes. Aplica a todo codigo nuevo y
+Define la estrategia de testing para el stack Gentle-Vanguard y sus agentes. Aplica a todo codigo nuevo y
 refactors.
 
 ---
@@ -115,3 +115,4 @@ Pre-release  -> Full suite + adversarial
 - Config: config/testing-policy.json
 - Testing LLM Applications: enricopiovano.com/blog/testing-llm-applications-practical-guide
 - AI Agent Testing: agent-patterns.readthedocs.io/en/stable/guides/testing.html
+

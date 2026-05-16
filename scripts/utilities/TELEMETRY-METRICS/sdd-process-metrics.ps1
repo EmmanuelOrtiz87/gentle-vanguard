@@ -10,7 +10,7 @@
 #
 # Usage:
 #   pwsh -File scripts/utilities/TELEMETRY-METRICS/sdd-process-metrics.ps1
-#   wf sdd-metrics [-JSON]
+#   gv sdd-metrics [-JSON]
 
 param(
     [switch]$AsJson,
@@ -140,3 +140,4 @@ if (-not $Quiet) {
     Write-Host ''
 }
 exit 0
+

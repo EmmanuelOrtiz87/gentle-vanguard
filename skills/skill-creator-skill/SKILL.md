@@ -5,14 +5,14 @@ description: >
   "add agent instructions", "document patterns", "skill factory", "generate skill", "skill template"
 license: Apache-2.0
 metadata:
-  author: foundation
+  author: gentle-vanguard
   versión: '2.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task
 ---
 
 # Skill Creator
 
-Create new AI agent skills following Foundation's Agent Skills specification.
+Create new AI agent skills following Gentle-Vanguard's Agent Skills specification.
 
 ## When to Create a Skill
 
@@ -54,7 +54,7 @@ description: >
   {One-line description of what this skill does}. Trigger: {When the AI should load this skill}.
 license: Apache-2.0
 metadata:
-  author: foundation
+  author: gentle-vanguard
   versión: '1.0'
 ---
 
@@ -88,7 +88,7 @@ metadata:
 | Type                | Pattern                      | Examples                              |
 | ------------------- | ---------------------------- | ------------------------------------- |
 | Generic skill       | `{technology}`               | `pytest`, `playwright`, `typescript`  |
-| Foundation-specific | `{name}-skill`               | `foundation-manager`, `skill-creator` |
+| Gentle-Vanguard-specific | `{name}-skill`               | `gentle-vanguard-manager`, `skill-creator` |
 | Workflow skill      | `{action}-{target}`          | `github-pr`, `jira-task`              |
 | Architecture        | `{component}-governance`     | `documentation-governance`            |
 | Testing skill       | `{project}-test-{component}` | `myapp-test-sdk`                      |
@@ -116,7 +116,7 @@ metadata:
 | `name`             | Yes      | Skill identifier (lowercase, hyphens) |
 | `description`      | Yes      | What + Trigger in one block           |
 | `license`          | Yes      | Always `Apache-2.0`                   |
-| `metadata.author`  | Yes      | `foundation`                |
+| `metadata.author`  | Yes      | `gentle-vanguard`                |
 | `metadata.versión` | Yes      | Semantic versión as string            |
 
 ---
@@ -166,6 +166,7 @@ After creating the skill, add it to `SKILL_INDEX.md`:
 
 ## Resources
 
-- **Foundation**: See `~/.gentleman/` for global installation
+- **Gentle-Vanguard**: See `~/.gentleman/` for global installation
 - **Skill Index**: See [SKILL_INDEX.md](../SKILL_INDEX.md) for all skills
 - **Documentation**: See [docs/](../../docs/) for guides
+

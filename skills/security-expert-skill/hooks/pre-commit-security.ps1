@@ -35,7 +35,7 @@ Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host ""
 
 if (-not (Test-Path $ScanScript)) {
-    Write-Host "[SKIP] Security skill not found. Run 'wf skills --install' to install." -ForegroundColor Yellow
+    Write-Host "[SKIP] Security skill not found. Run 'gv skills --install' to install." -ForegroundColor Yellow
     exit 0
 }
 
@@ -96,8 +96,8 @@ if ($ScanResult -eq 1) {
     Write-Host " COMMIT BLOCKED - Security issues found!" -ForegroundColor Red
     Write-Host "==========================================" -ForegroundColor Red
     Write-Host ""
-    Write-Host "Run 'wf security audit' for detailed report." -ForegroundColor White
-    Write-Host "Run 'wf security scan --interactive' to review and fix." -ForegroundColor White
+    Write-Host "Run 'gv security audit' for detailed report." -ForegroundColor White
+    Write-Host "Run 'gv security scan --interactive' to review and fix." -ForegroundColor White
     Write-Host ""
     exit 1
 }
@@ -107,3 +107,4 @@ Write-Host "[OK] Security scan passed!" -ForegroundColor Green
 Write-Host ""
 
 exit 0
+

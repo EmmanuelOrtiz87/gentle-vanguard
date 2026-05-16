@@ -4,7 +4,7 @@
   "last_measured": "2026-05-13",
   "baselines": {
     "audit-check": {
-      "description": "Foundation audit sweep (skills, JSON, deprecated refs)",
+      "description": "Gentle-Vanguard audit sweep (skills, JSON, deprecated refs)",
       "baseline_seconds": 1.1,
       "max_seconds": 3,
       "warn_seconds": 2
@@ -58,3 +58,4 @@
     "description": "Baselines are informational; only warn (not block) on threshold breach"
   }
 }
+

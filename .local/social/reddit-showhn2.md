@@ -1,4 +1,4 @@
-Gentleman Foundation - AI Development Stack - 
+Gentle-Vanguard - AI Development Stack - 
 
 Built over 3+ months. Combines governance + automation + AI assistance.
 
@@ -14,4 +14,4 @@ Tech: Works on Win/Linux/macOS. Agnostic to AI provider.
 
 Would love feedback. What would make this useful for your team?
 
-#FoundationStack #DevTools #AI #AIDevelopment #Engineering #Governance #SoftwareEngineering #Productivity #AutoDelegation
+#Gentle-VanguardStack #DevTools #AI #AIDevelopment #Engineering #Governance #SoftwareEngineering #Productivity #AutoDelegation

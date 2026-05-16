@@ -5,7 +5,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $roots = @(
-    ".\foundation",
+    ".\gentle-vanguard",
     ".\bitbucket-dashboard"
 )
 

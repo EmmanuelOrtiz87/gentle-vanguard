@@ -25,9 +25,9 @@ ORCHESTRATOR (slim context)
 **Quick commands:**
 
 ```powershell
-.\scripts\utilities\wf.ps1 agent list           # List all agents
-.\scripts\utilities\wf.ps1 agent status        # Check agent readiness
-.\scripts\utilities\wf.ps1 agent DEV "implement login"  # Delegate to DEV agent
+.\scripts\utilities\gv.ps1 agent list           # List all agents
+.\scripts\utilities\gv.ps1 agent status        # Check agent readiness
+.\scripts\utilities\gv.ps1 agent DEV "implement login"  # Delegate to DEV agent
 ```
 
 See [multi-agent-registry](multi-agent-registry/SKILL.md) for full agent definitions and skill
@@ -41,13 +41,13 @@ This is the master reference for all available skills.
 
 ## Distribution Model
 
-Skill lifecycle is on-demand and Foundation-first:
+Skill lifecycle is on-demand and Gentle-Vanguard-first:
 
-1. Skills are authored and updated in Foundation under `skills/`.
+1. Skills are authored and updated in Gentle-Vanguard under `skills/`.
 2. New and updated skills must be native (self-contained) and must not depend on external
    `references/` files for core operation.
-3. Foundation changes are published to repository.
-4. Consumer repositories update through `wf.ps1 foundation-sync apply`.
+3. Gentle-Vanguard changes are published to repository.
+4. Consumer repositories update through `gv.ps1 gentle-vanguard-sync apply`.
 5. The orchestrator activates skills on-demand based on task context.
 
 ## MASTER ORCHESTRATORS
@@ -213,7 +213,7 @@ incidents, response coordination, mitigation, and recovery planning
 | **Workflow**          | github-pr, jira-task, jira-epic, release-management, skill-factory                                                                                                                            |
 | **Quality**           | typescript, code-review, security, technical-debt, web-performance-optimization, judgment-day                                                                                                 |
 | **Operations**        | observability, incident-response-plan                                                                                                                                                         |
-| **Governance**        | project-scaffolding, documentation-governance, architecture-governance, git-workflow, foundation-manager                                                                                      |
+| **Governance**        | project-scaffolding, documentation-governance, architecture-governance, git-workflow, gentle-vanguard-manager                                                                                      |
 | **SDD Lifecycle**     | sdd-lifecycle (CONSOLIDATED - 9 phases in 1)                                                                                                                                                  |
 
 ---
@@ -754,26 +754,26 @@ records
 
 ---
 
-### foundation-audit-skill
+### gentle-vanguard-audit-skill
 
-**Trigger**: `audit foundation`, `validate`, `sweep`, `check links`, `find duplicates`,
-`homologate`, `validation sweep`, `foundation audit`, `judgment`, `pre-release audit`
+**Trigger**: `audit gentle-vanguard`, `validate`, `sweep`, `check links`, `find duplicates`,
+`homologate`, `validation sweep`, `gentle-vanguard audit`, `judgment`, `pre-release audit`
 
-**Use when**: Running comprehensive validation of Foundation, detecting duplicates, broken links,
+**Use when**: Running comprehensive validation of Gentle-Vanguard, detecting duplicates, broken links,
 skill inconsistencies, and documentation issues. Zero agent tokens when using batch mode.
 
-**Unified Workflow** (foundation-audit + judgment-day):
+**Unified Workflow** (gentle-vanguard-audit + judgment-day):
 
 ```powershell
 # Batch validation only (0 tokens)
-.\scripts\utilities\wf.ps1 audit sweep --scope quick    # 1s
-.\scripts\utilities\wf.ps1 audit sweep --scope full     # 5s
+.\scripts\utilities\gv.ps1 audit sweep --scope quick    # 1s
+.\scripts\utilities\gv.ps1 audit sweep --scope full     # 5s
 
 # Batch + Adversarial review (tokens)
-.\scripts\utilities\wf.ps1 audit judgment --mode full   # 15min
+.\scripts\utilities\gv.ps1 audit judgment --mode full   # 15min
 
 # Sync to local (standalone)
-.\scripts\utilities\wf.ps1 audit sync
+.\scripts\utilities\gv.ps1 audit sync
 ```
 
 **Documentation**: See [docs/guides/AUDIT-WORKFLOW.md](../docs/guides/AUDIT-WORKFLOW.md) for full
@@ -781,11 +781,11 @@ workflow diagram.
 
 ---
 
-### foundation-manager-skill
+### gentle-vanguard-manager-skill
 
 **Trigger**: `update`, `sync`, `check`, `maintenance`, `tools`, `versión`
 
-**Use when**: Update foundation, sync skills, check versións, manage tools, maintenance
+**Use when**: Update gentle-vanguard, sync skills, check versións, manage tools, maintenance
 
 ---
 
@@ -892,7 +892,7 @@ workflow diagram.
 | Category         | Skills                                                                                                                                                                                        |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Orchestrator** | project-orchestrator (load first!), session-workflow, skill-creator                                                                                                                           |
-| **Audit**        | foundation-audit (validate, sweep, check)                                                                                                                                                     |
+| **Audit**        | gentle-vanguard-audit (validate, sweep, check)                                                                                                                                                     |
 | **Frontend**     | angular-spa, react-19, nextjs-15, tailwind-4                                                                                                                                                  |
 | **Mobile**       | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-kotlin-coroutines, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging |
 | **State**        | zustand-5                                                                                                                                                                                     |
@@ -905,7 +905,7 @@ workflow diagram.
 | **Workflow**     | github-pr, jira-task, jira-epic, release-management                                                                                                                                           |
 | **Quality**      | typescript, code-review, security, technical-debt, web-performance-optimization                                                                                                               |
 | **Operations**   | observability, incident-response-plan                                                                                                                                                         |
-| **Governance**   | foundation-manager, project-scaffolding, architecture-governance, documentation-governance, git-workflow, foundation-audit                                                                    |
+| **Governance**   | gentle-vanguard-manager, project-scaffolding, architecture-governance, documentation-governance, git-workflow, gentle-vanguard-audit                                                                    |
 
 ## Skill Loading
 
@@ -1296,3 +1296,4 @@ useFormStatus
 **Use when**: Quality assurance and testing evidence collection
 
 ---
+

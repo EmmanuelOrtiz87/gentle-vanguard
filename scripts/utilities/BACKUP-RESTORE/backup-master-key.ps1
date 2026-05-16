@@ -2,7 +2,7 @@
 # Backup master.key to secure location
 
 $source = "keys/master.key"
-$backupDir = "C:\Workspace_local\backups\foundation"
+$backupDir = "C:\Workspace_local\backups\gentle-vanguard"
 
 if (-not (Test-Path $source)) {
     Write-Error "master.key not found at $source"
@@ -24,3 +24,4 @@ Write-Output "[OK] Backup created: $backupPath"
 Write-Output "[OK] Current link updated: $currentLink"
 Write-Output ""
 Write-Output "[WARN]  Keep backups secure. These files decrypt 185 protected scripts."
+

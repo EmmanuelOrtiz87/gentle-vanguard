@@ -8,8 +8,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-if ($env:FOUNDATION_BASE_DIR) {
-    $repoRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GENTLE_VANGUARD_BASE_DIR) {
+    $repoRoot = $env:GENTLE_VANGUARD_BASE_DIR
 } else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -199,7 +199,7 @@ Apply only minimal required changes.
 Validate changes and report concise results.
 
 ## Daily Token Control
-1. Run `wf.ps1 context-pack "<objective>"` before starting a new thread.
+1. Run `gv.ps1 context-pack "<objective>"` before starting a new thread.
 2. Start a fresh chat and paste only this file plus the immediate request.
 3. Regenerate a new context pack after major milestones.
 "@
@@ -210,3 +210,4 @@ Write-Metric -Event 'context-pack' -Objective $objectiveLine -ChangedCount $chan
 if ($PassThru) {
     Write-Output $OutputPath
 }
+

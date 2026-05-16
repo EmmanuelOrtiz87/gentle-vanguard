@@ -1,13 +1,13 @@
 strict_tdd: true
 context: |
-  Foundation is a PowerShell/TypeScript ESM, multi-tool AI orchestrator project.
+  Gentle-Vanguard is a PowerShell/TypeScript ESM, multi-tool AI orchestrator project.
   Detected markers: package.json, npm package manager, GitHub Actions.
   Package managers: npm.
   Primary test command: Invoke-Pester tests/ -Output Detailed.
   Unit tests: pwsh -NoProfile -File tests/unit/run-tests.ps1.
   Integration tests: pwsh -NoProfile -File tests/integration/run-tests.ps1.
   E2E tests: none.
-  Quality gates: foundation verify (28 gates), foundation judgment-day (blind review).
+  Quality gates: gv verify (28 gates), gv judgment-day (blind review).
   Agent profiles: 18 specialized agents (BA, SAD, DEV, QA, OPS, GOV, DOC, PREMORTEM, ...).
   Memory: Engram persistent memory across sessions.
   Skill count: 129+ skills in skills/ directory.
@@ -57,3 +57,4 @@ testing:
     typecheck_commands: []
     format: ""
     format_commands: []
+

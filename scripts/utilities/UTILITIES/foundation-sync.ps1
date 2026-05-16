@@ -3,7 +3,7 @@ param(
     [string]$Mode = 'check',
 
     [string]$ManifestPath = '',
-    [string]$FoundationPath = '',
+    [string]$Gentle-VanguardPath = '',
 
     # When set, apply also creates a PR (branch + commit + gh pr create)
     [switch]$CreatePR,
@@ -99,14 +99,14 @@ function Compare-Directory {
 
 try {
     if ([string]::IsNullOrWhiteSpace($ManifestPath)) {
-        $ManifestPath = Join-Path $repoRoot 'config/foundation-sync.json'
+        $ManifestPath = Join-Path $repoRoot 'config/gentle-vanguard-sync.json'
     } else {
         $ManifestPath = Resolve-AbsolutePath -BasePath $repoRoot -Candidate $ManifestPath
     }
 
     if (-not (Test-Path $ManifestPath)) {
-        Write-ErrorMessage "Foundation sync manifest not found: $ManifestPath"
-        Write-Host "Create config/foundation-sync.json and try again."
+        Write-ErrorMessage "Gentle-Vanguard sync manifest not found: $ManifestPath"
+        Write-Host "Create config/gentle-vanguard-sync.json and try again."
         exit 1
     }
 
@@ -115,37 +115,37 @@ try {
 
     $role = if ($manifest.PSObject.Properties['role']) { [string]$manifest.role } else { 'consumer' }
     if ($role -eq 'source') {
-        Write-Success 'This repository is marked as foundation source. Nothing to sync here.'
+        Write-Success 'This repository is marked as gentle-vanguard source. Nothing to sync here.'
         exit 0
     }
 
     $fromVersion = if ($manifest.PSObject.Properties['fromVersion']) { [string]$manifest.fromVersion } else { '' }
     $toVersion   = if ($manifest.PSObject.Properties['toVersion'])   { [string]$manifest.toVersion }   else { '' }
 
-    if ([string]::IsNullOrWhiteSpace($FoundationPath)) {
-        if ($manifest.PSObject.Properties['foundationPath'] -and -not [string]::IsNullOrWhiteSpace([string]$manifest.foundationPath)) {
-            $FoundationPath = [string]$manifest.foundationPath
-        } elseif ($env:FOUNDATION_REPO_PATH) {
-            $FoundationPath = [string]$env:FOUNDATION_REPO_PATH
+    if ([string]::IsNullOrWhiteSpace($Gentle-VanguardPath)) {
+        if ($manifest.PSObject.Properties['gentle-vanguardPath'] -and -not [string]::IsNullOrWhiteSpace([string]$manifest.gentle-vanguardPath)) {
+            $Gentle-VanguardPath = [string]$manifest.gentle-vanguardPath
+        } elseif ($env:GENTLE_VANGUARD_REPO_PATH) {
+            $Gentle-VanguardPath = [string]$env:GENTLE_VANGUARD_REPO_PATH
         } else {
-            $FoundationPath = '..\foundation'
+            $Gentle-VanguardPath = '..\gentle-vanguard'
         }
     }
 
-    $foundationRoot = Resolve-AbsolutePath -BasePath $repoRoot -Candidate $FoundationPath
-    if (-not (Test-Path $foundationRoot)) {
-        Write-ErrorMessage "Foundation path not found: $foundationRoot"
-        Write-Host "Pass -FoundationPath <path> or set FOUNDATION_REPO_PATH."
+    $gentle-vanguardRoot = Resolve-AbsolutePath -BasePath $repoRoot -Candidate $Gentle-VanguardPath
+    if (-not (Test-Path $gentle-vanguardRoot)) {
+        Write-ErrorMessage "Gentle-Vanguard path not found: $gentle-vanguardRoot"
+        Write-Host "Pass -Gentle-VanguardPath <path> or set GENTLE_VANGUARD_REPO_PATH."
         exit 1
     }
 
-    # Resolve current foundation version from its own manifest
-    $foundationManifestPath = Join-Path $foundationRoot 'config/foundation-sync.json'
-    $currentFoundationVersion = ''
-    if (Test-Path $foundationManifestPath) {
-        $fm = (Get-Content $foundationManifestPath -Raw -Encoding UTF8 | ConvertFrom-Json)
-        if ($fm.PSObject.Properties['foundationVersion']) {
-            $currentFoundationVersion = [string]$fm.foundationVersion
+    # Resolve current gv version from its own manifest
+    $gentle-vanguardManifestPath = Join-Path $gentle-vanguardRoot 'config/gentle-vanguard-sync.json'
+    $currentGentle-VanguardVersion = ''
+    if (Test-Path $gentle-vanguardManifestPath) {
+        $fm = (Get-Content $gentle-vanguardManifestPath -Raw -Encoding UTF8 | ConvertFrom-Json)
+        if ($fm.PSObject.Properties['gentle-vanguardVersion']) {
+            $currentGentle-VanguardVersion = [string]$fm.gentle-vanguardVersion
         }
     }
 
@@ -155,17 +155,17 @@ try {
     }
 
     if ($assets.Count -eq 0) {
-        Write-Warning 'No assets defined in foundation sync manifest.'
+        Write-Warning 'No assets defined in gentle-vanguard sync manifest.'
         exit 0
     }
 
-    Write-Step "Foundation sync ($Mode)"
+    Write-Step "Gentle-Vanguard sync ($Mode)"
     Write-Host "Manifest:          $ManifestPath"
-    Write-Host "Foundation:        $foundationRoot"
+    Write-Host "Gentle-Vanguard:        $gentle-vanguardRoot"
     Write-Host "Target:            $repoRoot"
     if (-not [string]::IsNullOrWhiteSpace($fromVersion))             { Write-Host "From version:      $fromVersion" }
     if (-not [string]::IsNullOrWhiteSpace($toVersion))               { Write-Host "To version:        $toVersion" }
-    if (-not [string]::IsNullOrWhiteSpace($currentFoundationVersion)) { Write-Host "Foundation latest: $currentFoundationVersion" }
+    if (-not [string]::IsNullOrWhiteSpace($currentGentle-VanguardVersion)) { Write-Host "Gentle-Vanguard latest: $currentGentle-VanguardVersion" }
 
     $results = @()
 
@@ -184,7 +184,7 @@ try {
         $strategy  = Get-AssetStrategy -Asset $asset
         $assetType = Get-AssetType -Asset $asset
 
-        $sourceAbs = [System.IO.Path]::GetFullPath((Join-Path $foundationRoot $sourceRel))
+        $sourceAbs = [System.IO.Path]::GetFullPath((Join-Path $gentle-vanguardRoot $sourceRel))
         $targetAbs = [System.IO.Path]::GetFullPath((Join-Path $repoRoot $targetRel))
 
         if (-not (Test-Path $sourceAbs)) {
@@ -241,11 +241,11 @@ try {
         if ($missingSource.Count -gt 0) { exit 1 }
 
         if ($drifted.Count -eq 0) {
-            Write-Success 'Foundation sync check: no changes required.'
+            Write-Success 'Gentle-Vanguard sync check: no changes required.'
         } else {
-            Write-Warning "Foundation sync check detected $($drifted.Count) file(s) to update."
-            Write-Host "Run: .\scripts\utilities\wf.ps1 foundation-sync apply"
-            Write-Host "     .\scripts\utilities\wf.ps1 foundation-sync apply -CreatePr   (auto PR)"
+            Write-Warning "Gentle-Vanguard sync check detected $($drifted.Count) file(s) to update."
+            Write-Host "Run: .\scripts\utilities\gv.ps1 gentle-vanguard-sync apply"
+            Write-Host "     .\scripts\utilities\gv.ps1 gentle-vanguard-sync apply -CreatePr   (auto PR)"
         }
         exit 0
     }
@@ -253,12 +253,12 @@ try {
     # --- APPLY ---
 
     if ($missingSource.Count -gt 0) {
-        Write-ErrorMessage 'Cannot apply while source files are missing in foundation.'
+        Write-ErrorMessage 'Cannot apply while source files are missing in gentle-vanguard.'
         exit 1
     }
 
     if ($drifted.Count -eq 0) {
-        Write-Success 'Nothing to apply. Target already aligned with foundation.'
+        Write-Success 'Nothing to apply. Target already aligned with gentle-vanguard.'
         exit 0
     }
 
@@ -271,10 +271,10 @@ try {
     $syncBranch = ''
     if ($CreatePR) {
         $dateStamp  = (Get-Date -Format 'yyyyMMdd')
-        $syncBranch = "chore/foundation-sync-$dateStamp"
+        $syncBranch = "chore/gentle-vanguard-sync-$dateStamp"
         $existing   = git branch --list $syncBranch 2>$null
         if ($existing) {
-            $syncBranch = "chore/foundation-sync-$dateStamp-$(Get-Random -Maximum 999)"
+            $syncBranch = "chore/gentle-vanguard-sync-$dateStamp-$(Get-Random -Maximum 999)"
         }
 
         git checkout -b $syncBranch 2>&1 | Out-Null
@@ -286,7 +286,7 @@ try {
     }
 
     foreach ($row in $drifted) {
-        $sourceAbs = [System.IO.Path]::GetFullPath((Join-Path $foundationRoot $row.Source))
+        $sourceAbs = [System.IO.Path]::GetFullPath((Join-Path $gentle-vanguardRoot $row.Source))
         $targetAbs = [System.IO.Path]::GetFullPath((Join-Path $repoRoot $row.Target))
 
         if ($row.Type -eq 'dir') {
@@ -307,14 +307,14 @@ try {
     }
 
     if ($CreatePR) {
-        $fvLabel = if (-not [string]::IsNullOrWhiteSpace($currentFoundationVersion)) { " v$currentFoundationVersion" } else { '' }
+        $fvLabel = if (-not [string]::IsNullOrWhiteSpace($currentGentle-VanguardVersion)) { " v$currentGentle-VanguardVersion" } else { '' }
         $fileCount = $drifted.Count
-        $commitMsg = 'chore(foundation-sync): sync' + $fvLabel + ' managed assets (' + $fileCount + ' files)'
+        $commitMsg = 'chore(gentle-vanguard-sync): sync' + $fvLabel + ' managed assets (' + $fileCount + ' files)'
 
         git add . 2>&1 | Out-Null
         git commit -m $commitMsg 2>&1 | Out-Null
         if ($LASTEXITCODE -ne 0) {
-            Write-ErrorMessage 'Commit failed during foundation-sync apply -CreatePr.'
+            Write-ErrorMessage 'Commit failed during gentle-vanguard-sync apply -CreatePr.'
             exit 1
         }
 
@@ -325,13 +325,13 @@ try {
         }
 
         $fileLines = ($drifted | ForEach-Object { '- ' + $_.Target }) -join "`n"
-        $prBody = "## Foundation Sync`n`n" +
-            "Automated sync of foundation-managed assets.`n`n" +
-            "- Foundation version: $currentFoundationVersion`n" +
+        $prBody = "## Gentle-Vanguard Sync`n`n" +
+            "Automated sync of gentle-vanguard-managed assets.`n`n" +
+            "- Gentle-Vanguard version: $currentGentle-VanguardVersion`n" +
             "- Files updated: $fileCount`n" +
-            "- Manifest: config/foundation-sync.json`n`n" +
+            "- Manifest: config/gentle-vanguard-sync.json`n`n" +
             "### Files`n$fileLines`n`n" +
-            '> Review and merge to complete the foundation update.'
+            '> Review and merge to complete the gentle-vanguard update.'
         $prBodyFile = [System.IO.Path]::GetTempFileName()
         $prBody | Out-File -FilePath $prBodyFile -Encoding UTF8
 
@@ -344,9 +344,9 @@ try {
             exit 1
         }
 
-        Write-Success ('Foundation sync PR created from branch ' + $syncBranch + ' -> develop.')
+        Write-Success ('Gentle-Vanguard sync PR created from branch ' + $syncBranch + ' -> develop.')
     } else {
-        Write-Success "Foundation sync apply complete. Updated $($drifted.Count) file(s)."
+        Write-Success "Gentle-Vanguard sync apply complete. Updated $($drifted.Count) file(s)."
     }
 
     exit 0
@@ -355,3 +355,4 @@ catch {
     Write-ErrorMessage $_.Exception.Message
     exit 1
 }
+

@@ -1,7 +1,7 @@
 # Roadmap
 
 <p align="center">
-  <b>Foundation — AI-First Development Workspace</b><br>
+  <b>Gentle-Vanguard — AI-First Development Workspace</b><br>
   <i>v2.8.0 · Updated 2026-05-08</i>
 </p>
 
@@ -9,7 +9,7 @@
 
 ## Vision
 
-Convertir Foundation en el workspace estándar para desarrollo asistido por IA: **local-first,
+Convertir Gentle-Vanguard en el workspace estándar para desarrollo asistido por IA: **local-first,
 seguro, extensible, zero-drama.**
 
 ---
@@ -28,7 +28,7 @@ seguro, extensible, zero-drama.**
 
 | Area          | Feature                                         | Priority |
 | ------------- | ----------------------------------------------- | -------- |
-| **DX**        | `foundation init` — project scaffolding from templates  | High     |
+| **DX**        | `gentle-vanguard init` — project scaffolding from templates  | High     |
 | **CI/CD**     | Automated release workflow (tag → release)      | High     |
 | **Security**  | SBOM generation (CycloneDX) via Trivy           | Medium   |
 | **Docs**      | Architecture Decision Records process tooling   | Medium   |
@@ -43,7 +43,7 @@ seguro, extensible, zero-drama.**
 | **MCP Native**               | Model Context Protocol como first-class citizen            |
 | **Web UI**                   | Dashboard web para métricas en tiempo real                 |
 | **VS Code Extension**        | Integración nativa con editor                              |
-| **Multi-repo Orchestration** | Foundation orquestando múltiples proyectos simultáneamente |
+| **Multi-repo Orchestration** | Gentle-Vanguard orquestando múltiples proyectos simultáneamente |
 
 ---
 
@@ -55,3 +55,4 @@ seguro, extensible, zero-drama.**
 | v2.7.0  | 2026-05-06 | Marketing materials, documentation standards, 127 skills                                       |
 | v2.6.5  | 2026-05-05 | CI hardening, rules, PSScriptAnalyzer, release workflow                                         |
 | v2.6.0  | 2026-05-05 | SDD CI gate, metrics, sync drift prevention, benchmarks                                         |
+

@@ -6,7 +6,7 @@ useDefault = true
 
 # Custom allowlist for known test/fake secrets
 [allowlist]
-description = "Global allowlist for foundation"
+description = "Global allowlist for gentle-vanguard"
 paths = [
     # Test fixtures with intentional secrets
     "tests/",
@@ -36,13 +36,13 @@ regexes = [
 ]
 
 commits = [
-    # Historical docs-only false positives for foundation-master-key-reference
+    # Historical docs-only false positives for gentle-vanguard-master-key-reference
     "cea299f7b984b983b1f8765fc867af49bb7879b1",
 ]
 
 # Custom rules for project-specific patterns
 [[rules]]
-id = "foundation-master-key-reference"
+id = "gentle-vanguard-master-key-reference"
 description = "Reference to master.key file path (not the actual key)"
 regex = '''(?i)(master\.key|master-key)'''
 path = '''(?i)\.md$|readme|docs/'''
@@ -59,3 +59,4 @@ regexes = [
     "is NEVER distribut",
     "key stored in `keys/",
 ]
+

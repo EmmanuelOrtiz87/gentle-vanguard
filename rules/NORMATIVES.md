@@ -1,9 +1,9 @@
-# FOUNDATION PROJECT - COMPREHENSIVE NORMATIVES
+# Gentle-Vanguard PROJECT - COMPREHENSIVE NORMATIVES
 
 **Version**: 1.0.0  
 **Date**: May 12, 2026  
 **Status**: Active  
-**Author**: Foundation Governance Team  
+**Author**: Gentle-Vanguard Governance Team  
 
 ---
 
@@ -29,7 +29,7 @@
 
 #### 1.1 Mandatory Layers
 
-Foundation projects MUST implement the following architectural layers:
+Gentle-Vanguard projects MUST implement the following architectural layers:
 
 ```
 ┌─────────────────────────────────────┐
@@ -740,7 +740,7 @@ All code MUST be scanned with:
 
 #### 2.1 Compliance Frameworks
 
-Foundation MUST comply with:
+Gentle-Vanguard MUST comply with:
 - OWASP Top 10
 - CWE Top 25
 - GDPR (if applicable)
@@ -1451,8 +1451,9 @@ Commit → Build → Test → Security → Deploy → Monitor
 **Status**: Active  
 **Last Updated**: May 12, 2026  
 **Next Review**: August 12, 2026  
-**Approval**: Foundation Governance Team  
+**Approval**: Gentle-Vanguard Governance Team  
 
 ---
 
-**These normatives are mandatory for all Foundation projects and team members.**
+**These normatives are mandatory for all Gentle-Vanguard projects and team members.**
+

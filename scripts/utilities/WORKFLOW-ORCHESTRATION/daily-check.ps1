@@ -2,9 +2,9 @@
 # Daily check - Quick status for daily workflow
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$wfPath = Join-Path $scriptDir "wf.ps1"
+$wfPath = Join-Path $scriptDir "gv.ps1"
 
-Write-Output "=== Daily Foundation Check ==="
+Write-Output "=== Daily Gentle-Vanguard Check ==="
 Write-Output ""
 
 # Git status
@@ -23,3 +23,4 @@ Write-Output " Context Efficiency:"
 Write-Output ""
 
 Write-Output "=== Ready for daily work ==="
+

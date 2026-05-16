@@ -17,7 +17,7 @@ The MCP workspace (`$HOME\mcp-workspace`) is a **local machine artifact** (not g
 ✅ Conscious update procedures with security review gates  
 
 **Location**: `C:\Users\<username>\mcp-workspace`  
-**Isolation**: External to the foundation repository (local machine only)  
+**Isolation**: External to the gentle-vanguard repository (local machine only)  
 
 ---
 
@@ -121,7 +121,7 @@ up to date
 
 ---
 
-## Integration with foundation
+## Integration with gentle-vanguard
 
 ### How MCP Workspace is Used
 
@@ -157,8 +157,8 @@ In `config/mcp-servers.json`:
 ### Testing MCP Integration
 
 ```powershell
-# From foundation root:
-cd C:\Workspace_local\foundation
+# From gentle-vanguard root:
+cd C:\Workspace_local\gentle-vanguard
 
 # Verify MCP config is valid JSON
 Get-Content config/mcp-servers.json | ConvertFrom-Json | Out-Null
@@ -268,10 +268,10 @@ Testing: [manual verification completed]
 
 ## Global NPM Security Policy
 
-The `.npmrc` file in the foundation root provides additional hardening:
+The `.npmrc` file in the gentle-vanguard root provides additional hardening:
 
 ```ini
-# ~/.npmrc (global) AND foundation/.npmrc (project)
+# ~/.npmrc (global) AND gentle-vanguard/.npmrc (project)
 
 # Disable post-install scripts (prevents malicious package code)
 ignore-scripts=true
@@ -372,7 +372,7 @@ Before considering MCP workspace setup complete:
 - [ ] `package-lock.json` exists and checked
 - [ ] `npm audit` returns 0 vulnerabilities
 - [ ] `config/mcp-servers.json` points to `%USERPROFILE%\mcp-workspace`
-- [ ] `.npmrc` policy file in foundation root with 3 settings
+- [ ] `.npmrc` policy file in gentle-vanguard root with 3 settings
 - [ ] npx offline test passes (shows version without network)
 - [ ] Documentation reviewed (this file)
 
@@ -406,3 +406,4 @@ Before considering MCP workspace setup complete:
 
 **Last Updated**: May 13, 2026  
 **Status**: PRODUCTION READY
+

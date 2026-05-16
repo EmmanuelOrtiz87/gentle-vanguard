@@ -22,7 +22,7 @@
     .\orchestrator-auto-optimization.ps1 -ConfigPath "automation-config.json" -DashboardEnabled -AutoApply
 
 .NOTES
-    Author: Gentleman Foundation Team
+    Author: Gentle-Vanguard Team
     Version: 1.0.0
     Last Updated: 2026-04-22
 #>
@@ -240,7 +240,7 @@ La Fase 1 de activacion inmediata ha sido completada exitosamente. Todos los mec
 
 ---
 
-**Generado por:** Gentleman Foundation Orchestrator
+**Generado por:** Gentle-Vanguard Orchestrator
 **Version:** 1.0.0
 "@
         
@@ -311,7 +311,7 @@ La Fase 1 de activacion inmediata ha sido completada exitosamente. Todos los mec
 
 ---
 
-**Plan creado por:** Gentleman Foundation Orchestrator
+**Plan creado por:** Gentle-Vanguard Orchestrator
 **Version:** 1.0.0
 "@
         
@@ -404,7 +404,7 @@ La Fase 1 de activacion inmediata ha sido completada exitosamente. Todos los mec
 
 ---
 
-**Estrategia creada por:** Gentleman Foundation Orchestrator
+**Estrategia creada por:** Gentle-Vanguard Orchestrator
 **Version:** 1.0.0
 "@
         

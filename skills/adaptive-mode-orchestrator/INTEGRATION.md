@@ -205,28 +205,28 @@ Actualizar `docs/sessions/YYYY-MM-DD-session-start.md`:
 
 ```powershell
 # Habilitar Adaptive Mode
-.\scripts\utilities\wf.ps1 adaptive-mode enable
+.\scripts\utilities\gv.ps1 adaptive-mode enable
 
 # Deshabilitar Adaptive Mode
-.\scripts\utilities\wf.ps1 adaptive-mode disable
+.\scripts\utilities\gv.ps1 adaptive-mode disable
 
 # Ver estado
-.\scripts\utilities\wf.ps1 adaptive-mode status
+.\scripts\utilities\gv.ps1 adaptive-mode status
 
 # Ver mtricas
-.\scripts\utilities\wf.ps1 adaptive-mode metrics
+.\scripts\utilities\gv.ps1 adaptive-mode metrics
 
 # Ejecutar manualmente
-.\scripts\utilities\wf.ps1 adaptive-mode run --task "descripcin"
+.\scripts\utilities\gv.ps1 adaptive-mode run --task "descripcin"
 
 # Ver logs
-.\scripts\utilities\wf.ps1 adaptive-mode logs
+.\scripts\utilities\gv.ps1 adaptive-mode logs
 
 # Ver checkpoints
-.\scripts\utilities\wf.ps1 adaptive-mode checkpoints
+.\scripts\utilities\gv.ps1 adaptive-mode checkpoints
 
 # Rollback manual
-.\scripts\utilities\wf.ps1 adaptive-mode rollback --checkpoint "nombre"
+.\scripts\utilities\gv.ps1 adaptive-mode rollback --checkpoint "nombre"
 ```
 
 ## configuración Recomendada
@@ -311,3 +311,4 @@ Get-Content "logs/adaptive-mode.log" -Tail 20
 ---
 
 **Versin**: 1.0 **Fecha**: 2026-04-23 **Estado**: READY FOR INTEGRATION
+

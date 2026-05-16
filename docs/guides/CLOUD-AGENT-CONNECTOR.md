@@ -1,6 +1,6 @@
 # Cloud Agent Connector - Complete Security & Setup Guide
 
-> **Summary**: This guide covers secure setup, configuration, and usage of Foundation's Cloud Agent
+> **Summary**: This guide covers secure setup, configuration, and usage of Gentle-Vanguard's Cloud Agent
 > Connector for connecting to external AI providers (AWS Bedrock, Difi, Azure, OpenAI, Anthropic,
 > Gemini, Ollama).
 
@@ -65,8 +65,8 @@
 ### Step 1: Create Local Configuration
 
 ```powershell
-# Navigate to Foundation scripts
-cd .\foundation
+# Navigate to Gentle-Vanguard scripts
+cd .\gentle-vanguard
 
 # Run the interactive config generator
 .\scripts\utilities\invoke-cloud-agent.ps1 -Config
@@ -101,7 +101,7 @@ AWS_SECRET_ACCESS_KEY=...
 `invoke-cloud-agent.ps1` automatically loads `.env.local` from repository root before resolving
 provider credentials, but keeps existing process environment variables as higher priority.
 
-For deterministic correlation, set `FOUNDATION_SESSION_ID` in session workflows before cloud
+For deterministic correlation, set `GENTLE_VANGUARD_SESSION_ID` in session workflows before cloud
 requests.
 
 ### Step 3: Configure Your Provider Metadata
@@ -390,7 +390,7 @@ $config = @{
     {
       "Effect": "Allow",
       "Action": ["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream"],
-      "Resource": "arn:aws:bedrock:us-east-1:*:foundation-model/anthropic.claude-*"
+      "Resource": "arn:aws:bedrock:us-east-1:*:gentle-vanguard-model/anthropic.claude-*"
     }
   ]
 }
@@ -525,3 +525,4 @@ from provider.
 
 **Last Updated:** 2026-04-17  
 **versión:** 1.0
+

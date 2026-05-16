@@ -1,10 +1,10 @@
 import { z } from 'zod';
 import { execSync } from 'child_process';
 
-export function registerDelegateTool(server: any, foundationRoot: string) {
+export function registerDelegateTool(server: any, gentle-vanguardRoot: string) {
   server.tool(
-    'foundation_delegate',
-    'Delegate task to Foundation subagent (sdd-apply, sdd-design, sdd-verify, etc.)',
+    'gentle-vanguard_delegate',
+    'Delegate task to Gentle-Vanguard subagent (sdd-apply, sdd-design, sdd-verify, etc.)',
     {
       agent: z.string().describe('Agent type: sdd-apply, sdd-design, sdd-verify, sdd-spec, sdd-tasks, etc.'),
       prompt: z.string().describe('Task description or prompt for the agent'),
@@ -15,12 +15,12 @@ export function registerDelegateTool(server: any, foundationRoot: string) {
         const agent = args.agent;
         const prompt = args.prompt;
         const taskId = args.taskId || '';
-        const delegateScript = `${foundationRoot}/scripts/utilities/wf.ps1`;
+        const delegateScript = `${gentle-vanguardRoot}/scripts/utilities/gv.ps1`;
         const taskParam = taskId ? `-TaskId "${taskId}"` : '';
         const cmd = `powershell -NoProfile -ExecutionPolicy Bypass -File "${delegateScript}" delegate -Agent "${agent}" -Prompt "${prompt}" ${taskParam}`;
         
         const output = execSync(cmd, {
-          cwd: foundationRoot,
+          cwd: gentle-vanguardRoot,
           encoding: 'utf-8',
           maxBuffer: 10 * 1024 * 1024,
           timeout: 300000
@@ -39,3 +39,4 @@ export function registerDelegateTool(server: any, foundationRoot: string) {
     }
   );
 }
+

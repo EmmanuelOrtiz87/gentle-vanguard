@@ -9,7 +9,7 @@
 
 ## Rule
 
-All Foundation integrations MUST use the **enhanced detection system**
+All Gentle-Vanguard integrations MUST use the **enhanced detection system**
 (`adapters/detection/enhanced-detect.ps1`) to:
 
 1. **Identify the running tool/IDE** (VS Code, Cursor, Windsurf, Codex, etc.)
@@ -60,7 +60,7 @@ The detection system checks these environment variables:
 | `CURSOR_`               | Cursor      | Detection                |
 | `VSCODE_GIT_IPC_HANDLE` | VS Code     | Detection                |
 | `JETBRAINS_IDE`         | JetBrains   | Detection                |
-| `FOUNDATION_ROOT`       | Foundation  | Root path for MCP Bridge |
+| `GV_ROOT`       | Gentle-Vanguard  | Root path for MCP Bridge |
 
 ---
 
@@ -105,3 +105,5 @@ None. All tools MUST be detected before adapter selection.
 
 **Created**: 2026-04-28  
 **Last Modified**: 2026-04-28
+
+

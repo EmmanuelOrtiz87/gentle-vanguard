@@ -10,7 +10,7 @@ custom parallelism rules, resource pooling, and token budget circuit breaker.
 1.0.0
 
 .AUTHOR
-Foundation Team
+Gentle-Vanguard Team
 
 .LICENSE
 MIT

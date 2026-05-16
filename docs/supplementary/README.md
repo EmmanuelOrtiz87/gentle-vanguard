@@ -25,7 +25,7 @@ Additional documentation and resources.
 
 ## Project Code Reviews
 
-Code reviews are stored **per project**, not in the foundation:
+Code reviews are stored **per project**, not in the gentle-vanguard:
 
 ```
 <project>/
@@ -36,3 +36,4 @@ Code reviews are stored **per project**, not in the foundation:
 ```
 
 See project AGENTS.md for review workflow.
+

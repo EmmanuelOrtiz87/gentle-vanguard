@@ -57,7 +57,7 @@ $scripts = @(
     '.\scripts\diagnostics\validate-script-governance.ps1',
     '.\scripts\diagnostics\validate-sdd-governance.ps1',
     '.\scripts\diagnostics\agent-process-alert.ps1',
-    '.\scripts\utilities\foundation-sync.ps1'
+    '.\scripts\utilities\gentle-vanguard-sync.ps1'
 )
 
 foreach ($script in $scripts) {
@@ -170,7 +170,7 @@ $scripts = @(
     '.\scripts\diagnostics\validate-script-governance.ps1',
     '.\scripts\diagnostics\validate-sdd-governance.ps1',
     '.\scripts\diagnostics\agent-process-alert.ps1',
-    '.\scripts\utilities\foundation-sync.ps1'
+    '.\scripts\utilities\gentle-vanguard-sync.ps1'
 )
 
 $hasErrors = $false
@@ -216,7 +216,7 @@ $scripts = @(
     '.\scripts\diagnostics\validate-script-governance.ps1',
     '.\scripts\diagnostics\validate-sdd-governance.ps1',
     '.\scripts\diagnostics\agent-process-alert.ps1',
-    '.\scripts\utilities\foundation-sync.ps1'
+    '.\scripts\utilities\gentle-vanguard-sync.ps1'
 )
 
 Write-Host "=== PowerShell Script Diagnostics
@@ -237,3 +237,4 @@ Write-Host "=== PowerShell Script Diagnostics
   "time_to_generate": 45.656
 }
 ```
+

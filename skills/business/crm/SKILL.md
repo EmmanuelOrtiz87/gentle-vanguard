@@ -6,8 +6,7 @@ description: >
   "pipeline", "opportunity", "customer retention", "sales funnel"
 license: Apache-2.0
 metadata:
-  author: foundation
-  version: '1.0'
+  author: gv version: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash
 ---
 
@@ -27,3 +26,4 @@ User asks about CRM platforms, customer data management, sales pipelines, lead s
 2. Provide platform-specific guidance (e.g., Salesforce Apex code, HubSpot workflow JSON)
 3. Include data model considerations (objects, fields, relationships)
 4. Address integration scenarios (API, webhooks, sync)
+

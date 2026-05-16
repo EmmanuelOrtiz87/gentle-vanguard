@@ -9,7 +9,7 @@ description: >
 
 ## Purpose
 
-Enable Foundation to delegate tasks to high-performance cloud models while maintaining security,
+Enable Gentle-Vanguard to delegate tasks to high-performance cloud models while maintaining security,
 traceability, and strict tool-use protocols.
 
 ## Execution Modes
@@ -98,3 +98,4 @@ invoke-cloud-agent.ps1 -ListProviders    # Show all providers
 invoke-cloud-agent.ps1 -TestConnection    # Test current provider
 invoke-cloud-agent.ps1 -Config           # Interactive config
 ```
+

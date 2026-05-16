@@ -19,7 +19,7 @@
     .\config-validator.agent.ps1 -ConfigFile opencode.json -AutoFix
     
 .NOTES
-    Author: foundation
+    Author: gentle-vanguard
     Version: 1.0.0
 #>
 
@@ -55,7 +55,7 @@ $script:LessonsLearned = @{
         date = "2026-05-02"
     }
     "cross-workspace-inconsistency" = @{
-        pattern = "Archivos desincronizados entre local y foundation"
+        pattern = "Archivos desincronizados entre local y gentle-vanguard"
         cause = "Cambios sin sincronización"
         solution = "Ejecutar cross-workspace-validator -Fix"
         prevention = "Validar sincronización en cada cambio"

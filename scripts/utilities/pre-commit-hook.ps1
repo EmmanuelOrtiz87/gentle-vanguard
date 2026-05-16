@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-Pre-commit hook for Foundation workspace
+Pre-commit hook for Gentle-Vanguard workspace
 
 .DESCRIPTION
 Validates staged files before commit:
@@ -86,3 +86,4 @@ if (-not $allPassed) {
 
 Write-Host "[OK] All pre-commit validations passed"
 exit 0
+

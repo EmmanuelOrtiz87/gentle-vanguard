@@ -2,13 +2,13 @@
 
 **Version:** 1.0.0
 **Last updated:** 2026-05-14
-**Applies to:** All agent-to-agent calls via `auto-delegation-router`, `sdd-orchestrator`, and `wf.ps1 agent`
+**Applies to:** All agent-to-agent calls via `auto-delegation-router`, `sdd-orchestrator`, and `gv.ps1 agent`
 
 ---
 
 ## 1. Purpose
 
-Define a formal protocol for communication between AI agents in the foundation stack. This ensures:
+Define a formal protocol for communication between AI agents in the gentle-vanguard stack. This ensures:
 - Deterministic handoffs (agent A → agent B produces same result for same input)
 - Error isolation (agent B failure does not cascade to agent A)
 - Observability (every call is logged with source, target, duration, result)
@@ -201,3 +201,4 @@ Every inter-agent call MUST be logged:
 ---
 
 _Version: 1.0.0 — 2026-05-14 — Status: ACTIVE_
+

@@ -1,9 +1,9 @@
-# Foundation Complete Setup Script v1.0=
+# Gentle-Vanguard Complete Setup Script v1.0=
 
-Automated setup for Foundation across all supported platforms and use cases.
+Automated setup for Gentle-Vanguard across all supported platforms and use cases.
 
 param(
-    [string]$InstallPath = "$(if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME })\foundation",
+    [string]$InstallPath = "$(if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME })\gentle-vanguard",
     [ValidateSet('developer', 'team', 'enterprise')]
     [string]$Mode = 'developer',
     [switch]$SkipTests,
@@ -12,7 +12,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $script:homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
-$host.UI.RawUI.WindowTitle = "Foundation Complete Setup"
+$host.UI.RawUI.WindowTitle = "Gentle-Vanguard Complete Setup"
 
 function Write-Step {
     param([string]$Message)
@@ -78,8 +78,8 @@ function Test-Prerequisites {
     }
 }
 
-function Install-Foundation {
-    Write-Step "Installing Foundation ($Mode mode)"
+function Install-Gentle-Vanguard {
+    Write-Step "Installing Gentle-Vanguard ($Mode mode)"
     
     # Create directory
     if (-not (Test-Path $InstallPath)) {
@@ -99,7 +99,7 @@ function Install-Foundation {
             }
         }
     } else {
-        Write-Warning "Not in a git repository. Please clone Foundation first."
+        Write-Warning "Not in a git repository. Please clone Gentle-Vanguard first."
         return $false
     }
     
@@ -175,10 +175,10 @@ function Initialize-Environment {
     }
     
     $profileContent = @"
-# Foundation Environment
-`$env:FOUNDATION_ROOT = '$InstallPath'
-Import-Module `$env:FOUNDATION_ROOT\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1 -ErrorAction SilentlyContinue
-Write-Host 'Foundation environment loaded' -ForegroundColor Green
+# Gentle-Vanguard Environment
+`$env:GENTLE_VANGUARD_ROOT = '$InstallPath'
+Import-Module `$env:GENTLE_VANGUARD_ROOT\scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1 -ErrorAction SilentlyContinue
+Write-Host 'Gentle-Vanguard environment loaded' -ForegroundColor Green
 "@
     $profileContent | Out-File $PROFILE.CurrentUserCurrentHost -Encoding UTF8 -Append
     Write-Success "PowerShell profile updated"
@@ -208,30 +208,30 @@ function Run-Tests {
 
 function Show-Completion {
     Write-Host "`n========================================" -ForegroundColor Green
-    Write-Host "  Foundation Setup Complete!" -ForegroundColor Green
+    Write-Host "  Gentle-Vanguard Setup Complete!" -ForegroundColor Green
     Write-Host "========================================" -ForegroundColor Green
     Write-Host ""
     Write-Host "  Install path: $InstallPath" -ForegroundColor White
     Write-Host "  Mode: $Mode" -ForegroundColor White
     Write-Host ""
     Write-Host "  Next steps:" -ForegroundColor Cyan
-    Write-Host "  1. Run: wf.ps1 health" -ForegroundColor Gray
+    Write-Host "  1. Run: gv.ps1 health" -ForegroundColor Gray
     Write-Host "  2. Read: docs\getting-started\README.md" -ForegroundColor Gray
-    Write-Host "  3. Explore: wf.ps1 skills" -ForegroundColor Gray
+    Write-Host "  3. Explore: gv.ps1 skills" -ForegroundColor Gray
     Write-Host ""
     Write-Host "  For $Mode mode:" -ForegroundColor Cyan
     switch ($Mode) {
         'developer' {
             Write-Host "  - Start coding with AI assistance" -ForegroundColor Gray
-            Write-Host "  - Use 'wf.ps1' for workflow automation" -ForegroundColor Gray
+            Write-Host "  - Use 'gv.ps1' for workflow automation" -ForegroundColor Gray
         }
         'team' {
-            Write-Host "  - Set up CI/CD: wf.ps1 setup-ci" -ForegroundColor Gray
+            Write-Host "  - Set up CI/CD: gv.ps1 setup-ci" -ForegroundColor Gray
             Write-Host "  - Share skills with team" -ForegroundColor Gray
         }
         'enterprise' {
             Write-Host "  - Review security policies" -ForegroundColor Gray
-            Write-Host "  - Run compliance audit: wf.ps1 audit full" -ForegroundColor Gray
+            Write-Host "  - Run compliance audit: gv.ps1 audit full" -ForegroundColor Gray
         }
     }
     Write-Host ""
@@ -239,12 +239,12 @@ function Show-Completion {
 
 # Main execution
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "  Foundation Complete Setup v1.0" -ForegroundColor Cyan
+Write-Host "  Gentle-Vanguard Complete Setup v1.0" -ForegroundColor Cyan
 Write-Host "  Mode: $Mode" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 
 Test-Prerequisites
-$installed = Install-Foundation
+$installed = Install-Gentle-Vanguard
 if ($installed) {
     Initialize-Environment
     Run-Tests
@@ -253,3 +253,4 @@ if ($installed) {
     Write-Error "Installation failed. Please check errors above."
     exit 1
 }
+

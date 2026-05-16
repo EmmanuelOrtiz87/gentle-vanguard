@@ -1,7 +1,7 @@
 param(
     [string]$Owner = 'EmmanuelOrtiz87',
-    [string]$FoundationRepo = 'foundation',
-    [string]$PublicRepo = 'foundation-public',
+    [string]$Gentle-VanguardRepo = 'gentle-vanguard',
+    [string]$PublicRepo = 'gentle-vanguard-public',
     [string]$BasePath = '',
     [switch]$InstallRunner,
     [string]$RunnerConfigPath = 'config/github-runner.local.json'
@@ -72,18 +72,18 @@ if (-not (Test-Path $BasePath)) {
     New-Item -ItemType Directory -Path $BasePath -Force | Out-Null
 }
 
-$foundationSlug = "$Owner/$FoundationRepo"
+$gentle-vanguardSlug = "$Owner/$Gentle-VanguardRepo"
 $publicSlug = "$Owner/$PublicRepo"
-$foundationPath = Join-Path $BasePath $FoundationRepo
+$gentle-vanguardPath = Join-Path $BasePath $Gentle-VanguardRepo
 $publicPath = Join-Path $BasePath $PublicRepo
 
 Write-Step 'Prepare repositories'
-Ensure-GitRepo -RepoSlug $foundationSlug -TargetPath $foundationPath
+Ensure-GitRepo -RepoSlug $gentle-vanguardSlug -TargetPath $gentle-vanguardPath
 Ensure-GitRepo -RepoSlug $publicSlug -TargetPath $publicPath
 Write-Success 'Repositories are ready'
 
-Write-Step 'Bootstrap foundation workspace'
-$bootstrapScript = Join-Path $foundationPath 'scripts/foundation/bootstrap.ps1'
+Write-Step 'Bootstrap gentle-vanguard workspace'
+$bootstrapScript = Join-Path $gentle-vanguardPath 'scripts/gentle-vanguard/bootstrap.ps1'
 if (-not (Test-Path $bootstrapScript)) {
     throw "Bootstrap script not found: $bootstrapScript"
 }
@@ -100,6 +100,6 @@ if ($LASTEXITCODE -ne 0) {
 Write-Success 'Bootstrap completed'
 
 Write-Step 'Done'
-Write-Host "Foundation repo: $foundationPath"
+Write-Host "Gentle-Vanguard repo: $gentle-vanguardPath"
 Write-Host "Public repo:     $publicPath"
 Write-Host 'Run this same script on any new PC to replicate setup.'

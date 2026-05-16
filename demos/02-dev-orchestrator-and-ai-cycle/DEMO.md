@@ -97,7 +97,7 @@ Get-Content config/auto-delegation.json | ConvertFrom-Json | ConvertTo-Json -Dep
 
 ```powershell
 # Pack all relevant context for a new task
-./scripts/utilities/wf.ps1 context-pack "Implement demo task-tracker CLI"
+./scripts/utilities/gv.ps1 context-pack "Implement demo task-tracker CLI"
 # Expected:
 # [CONTEXT-PACK] Scanning project structure...
 # [CONTEXT-PACK] Found 3 relevant SDD specs
@@ -106,7 +106,7 @@ Get-Content config/auto-delegation.json | ConvertFrom-Json | ConvertTo-Json -Dep
 # [CONTEXT-PACK] Estimated tokens: 2,450
 
 # Compact start for continuation (lighter weight)
-./scripts/utilities/wf.ps1 compact-start "task-tracker implementation"
+./scripts/utilities/gv.ps1 compact-start "task-tracker implementation"
 # Expected:
 # [COMPACT] Continuation prompt generated (320 tokens)
 # [COMPACT] Includes: current task, files touched, last decision
@@ -148,7 +148,7 @@ Get-Content config/auto-delegation.json | ConvertFrom-Json | ConvertTo-Json -Dep
 
 ```powershell
 # View available response modes
-./scripts/utilities/wf.ps1 response-mode list
+./scripts/utilities/gv.ps1 response-mode list
 # Expected:
 # Available modes:
 #   ultra     → 4 lines max, no preamble (default for power users)
@@ -170,3 +170,4 @@ Get-Content config/auto-delegation.json | ConvertFrom-Json | ConvertTo-Json -Dep
 4. Context packs reduce token waste by loading only relevant artifacts
 5. Custom rules are injected dynamically per skill, keeping AI context focused
 6. Response modes give fine-grained control over verbosity and token consumption
+

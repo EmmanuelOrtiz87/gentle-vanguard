@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "description": "Model routing per agent — assigns specific models and effort levels to foundation agents",
+  "description": "Model routing per agent — assigns specific models and effort levels to gentle-vanguard agents",
   "defaults": {
     "model": "inherit",
     "thinking": "inherit"
@@ -83,3 +83,4 @@
     }
   }
 }
+

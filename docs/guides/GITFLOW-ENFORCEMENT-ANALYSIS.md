@@ -117,7 +117,7 @@ function Show-GitFlowHelp {
 
     Write-Host "`n" -ForegroundColor Cyan
     Write-Host "" -ForegroundColor Cyan
-    Write-Host "            GUA DE GITFLOW - FOUNDATION        " -ForegroundColor Cyan
+    Write-Host "            GUA DE GITFLOW - GENTLE_VANGUARD        " -ForegroundColor Cyan
     Write-Host "" -ForegroundColor Cyan
 
     Write-Host "`n SOLUCIN RPIDA:" -ForegroundColor Green
@@ -271,9 +271,9 @@ hotfix/, o release/
 
 ### NIVEL 3: automatización Avanzada (Mejora Continua)
 
-#### 3.1 Crear Asistente Interactivo en wf.ps1
+#### 3.1 Crear Asistente Interactivo en gv.ps1
 ```powershell
-# Agregar comando: wf.ps1 gitflow-setup
+# Agregar comando: gv.ps1 gitflow-setup
 # Que gue al usuario paso a paso
 ````
 
@@ -313,7 +313,7 @@ hotfix/, o release/
 ### Fase 2 (Corto Plazo - 2 Semanas)
 
 1. Integrar validacin de PR base en pre-push hook
-2. Agregar comando `wf.ps1 gitflow-setup` interactivo
+2. Agregar comando `gv.ps1 gitflow-setup` interactivo
 3. Crear GitHub Actions para validacin de PR
 
 ### Fase 3 (Mediano Plazo - 1 Mes)
@@ -334,3 +334,4 @@ hotfix/, o release/
 - **Documentacin clara** sobre cundo usar cada tipo de rama
 
 **Recomendacin**: Implementar Nivel 1 y 2 para tener un flujo ESTRICTO, AUTOMTICO e INFORMATIVO.
+

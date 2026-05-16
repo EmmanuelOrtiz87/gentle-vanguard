@@ -1,15 +1,15 @@
 # Defensive Patterns for PowerShell Scripts
 
 Living reference of established patterns and anti-patterns discovered and fixed
-during the foundation audit.
+during the gentle-vanguard audit.
 
 ## RepoRoot Resolution
 
 ### Standard Pattern (Preferred)
 
 ```powershell
-if ($env:FOUNDATION_BASE_DIR) {
-    $repoRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GENTLE_VANGUARD_BASE_DIR) {
+    $repoRoot = $env:GENTLE_VANGUARD_BASE_DIR
 } else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -190,7 +190,7 @@ if ($currentHash -ne $baselineHash.Trim()) {
 ## Known Gaps (Future Work)
 
 - **40+ scripts** still use `$PSScriptRoot '..\..'` fragile path pattern -- migrate to
-  `$env:FOUNDATION_BASE_DIR` + recursive search as scripts are touched
+  `$env:GENTLE_VANGUARD_BASE_DIR` + recursive search as scripts are touched
 - **Non-ASCII characters** in ~30 scripts (emojis, Spanish accented chars in comments,
   em-dashes in heredocs) -- sanitize selectively as scripts are touched
 - **BOM cleanup** completed for all 32 BOM-bearing scripts (2026-05-11)

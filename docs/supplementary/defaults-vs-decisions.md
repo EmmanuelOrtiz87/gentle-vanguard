@@ -1,6 +1,6 @@
 # Defaults vs Project decisións
 
-This document explains what Foundation owns and what each project must decide for
+This document explains what Gentle-Vanguard owns and what each project must decide for
 itself.
 
 ## Start Here
@@ -14,7 +14,7 @@ itself.
 
 ## Workspace Defaults
 
-These belong to `foundation` and should remain reusable across projects:
+These belong to `gentle-vanguard` and should remain reusable across projects:
 
 1. Portable directory layout.
 2. External tools consumed by command, not vendored in application repos.
@@ -50,11 +50,12 @@ These belong to the target project and should be recorded in `docs/project-conte
 
 ## Recommended Rule
 
-If a choice affects more than one future project, it belongs in Foundation. If a
+If a choice affects more than one future project, it belongs in Gentle-Vanguard. If a
 choice affects only one repository, it belongs in that project's `docs/project-context.md`.
 
 ## Quick Summary
 
-1. Foundation = reusable defaults and common workflow.
+1. Gentle-Vanguard = reusable defaults and common workflow.
 2. Project context = repository-specific decisións and constraints.
 3. If you are unsure, keep the default and record the question in `docs/project-context.md`.
+

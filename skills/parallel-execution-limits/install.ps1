@@ -1,16 +1,16 @@
-﻿<#
+<#
 .SYNOPSIS
 Automatic installation and integration script for parallel-execution-limits skill
 
 .DESCRIPTION
-Configures the parallel-execution-limits skill in the Foundation stack,
+Configures the parallel-execution-limits skill in the Gentle-Vanguard stack,
 registers it in the skill index, and updates orchestrator configuration.
 
 .VERSION
 1.0.0
 
 .AUTHOR
-Foundation Team
+Gentle-Vanguard Team
 
 .LICENSE
 MIT
@@ -18,7 +18,7 @@ MIT
 
 param(
     [string]$SkillPath = (Split-Path -Parent $MyInvocation.MyCommand.Path),
-    [string]$FoundationRoot = (git rev-parse --show-toplevel 2>$null),
+    [string]$Gentle-VanguardRoot = (git rev-parse --show-toplevel 2>$null),
     [switch]$Force
 )
 
@@ -33,7 +33,7 @@ if (-not (Test-Path $SkillPath)) {
     exit 1
 }
 
-if (-not $FoundationRoot) {
+if (-not $Gentle-VanguardRoot) {
     Write-Host " Not in a git repository" -ForegroundColor Red
     exit 1
 }
@@ -69,7 +69,7 @@ Write-Host " All required files present" -ForegroundColor Green
 
 Write-Host "`n Registering skill in index..." -ForegroundColor Cyan
 
-$skillIndexPath = "$FoundationRoot\skills\SKILL_INDEX.md"
+$skillIndexPath = "$Gentle-VanguardRoot\skills\SKILL_INDEX.md"
 
 if (Test-Path $skillIndexPath) {
     $indexContent = Get-Content $skillIndexPath -Raw
@@ -91,7 +91,7 @@ if (Test-Path $skillIndexPath) {
 
 Write-Host "`n  Updating orchestrator configuration..." -ForegroundColor Cyan
 
-$orchestratorConfigPath = "$FoundationRoot\config\orchestrator.json"
+$orchestratorConfigPath = "$Gentle-VanguardRoot\config\orchestrator.json"
 
 if (Test-Path $orchestratorConfigPath) {
     $config = Get-Content $orchestratorConfigPath | ConvertFrom-Json
@@ -207,7 +207,7 @@ $hookContent = @'
 Activation hook for parallel-execution-limits skill
 
 .DESCRIPTION
-Automatically loads the skill when Foundation stack initializes.
+Automatically loads the skill when Gentle-Vanguard stack initializes.
 #>
 
 # Get skill path
@@ -217,8 +217,8 @@ $skillPath = Split-Path -Parent $MyInvocation.MyCommand.Path
 . "$skillPath\parallel-executor.ps1"
 
 # Register skill as active
-$global:FoundationSkills = $global:FoundationSkills -or @{}
-$global:FoundationSkills["parallel-execution-limits"] = @{
+$global:Gentle-VanguardSkills = $global:Gentle-VanguardSkills -or @{}
+$global:Gentle-VanguardSkills["parallel-execution-limits"] = @{
     Path = $skillPath
     Loaded = Get-Date
     Status = "Active"

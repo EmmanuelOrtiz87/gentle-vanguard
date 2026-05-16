@@ -1,5 +1,5 @@
 # sync-skills.ps1
-# Sync skills to global foundation installation
+# Sync skills to global gentle-vanguard installation
 # Creates symlinks for easy updates
 
 param(
@@ -20,7 +20,7 @@ if (-not $Source) {
     $possibleSources = @(
         (Join-Path (Split-Path -Parent $scriptDir) 'skills'),
         (Join-Path $scriptDir '..\skills'),
-        ".\foundation\\skills"
+        ".\gentle-vanguard\\skills"
     )
     
     foreach ($loc in $possibleSources) {
@@ -185,7 +185,9 @@ Write-Host ""
 
 if (-not $DryRun) {
     Write-Host "Skills synchronized successfully!" -ForegroundColor Green
-    Write-Host "Run 'gf validate' to verify installation."
+    Write-Host "Run 'gv validate' to verify installation."
 }
 
 exit $(if ($failCount -gt 0) { 1 } else { 0 })
+
+

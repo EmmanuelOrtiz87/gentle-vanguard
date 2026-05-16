@@ -75,7 +75,7 @@
       "platform": "windows"
     },
     "tracking": {
-      "project": "foundation",
+      "project": "gentle-vanguard",
       "directory": ".",
       "sessionIdPattern": "session-YYYY-MM-DD-XX"
     }
@@ -87,3 +87,4 @@
     "requireSummary": true
   }
 }
+

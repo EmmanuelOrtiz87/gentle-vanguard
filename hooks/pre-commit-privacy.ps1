@@ -38,7 +38,7 @@ $EXCLUDED_PATHS = @(
     'hooks/pre-commit.ps1',
     'scripts/hooks/check-security.ps1',
     'docs/reference/ARCHITECTURE.md',
-    'scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1',
+    'scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1',
     'skills/docker-devops-skill/SKILL.md',
     'skills/security-expert-skill/references/security-patterns.md'
 )

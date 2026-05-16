@@ -5,7 +5,7 @@ Describe 'Detect Tool Integration Tests' {
         $script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
         $script:detectTool = Join-Path $script:root 'scripts\utilities\detect-tool.ps1'
         $script:tempRoot = Join-Path $script:root 'tmp-detect-tool-integration-tests'
-        $script:originalFoundationBaseDir = $env:FOUNDATION_BASE_DIR
+        $script:originalGentle-VanguardBaseDir = $env:GENTLE_VANGUARD_BASE_DIR
         $script:originalOpenCodeUser = $env:OPENCODE_SERVER_USERNAME
         $script:originalClaudeVersion = $env:CLAUDE_VSCODE_VERSION
         $script:originalUserProfile = $env:USERPROFILE
@@ -17,17 +17,17 @@ Describe 'Detect Tool Integration Tests' {
         }
 
         New-Item -ItemType Directory -Path (Join-Path $script:tempRoot 'config') -Force | Out-Null
-        $env:FOUNDATION_BASE_DIR = $script:tempRoot
+        $env:GENTLE_VANGUARD_BASE_DIR = $script:tempRoot
         Remove-Item Env:OPENCODE_SERVER_USERNAME -ErrorAction SilentlyContinue
         Remove-Item Env:CLAUDE_VSCODE_VERSION -ErrorAction SilentlyContinue
         $env:USERPROFILE = $script:tempRoot
     }
 
     AfterEach {
-        if ($null -eq $script:originalFoundationBaseDir) {
-            Remove-Item Env:FOUNDATION_BASE_DIR -ErrorAction SilentlyContinue
+        if ($null -eq $script:originalGentle-VanguardBaseDir) {
+            Remove-Item Env:GENTLE_VANGUARD_BASE_DIR -ErrorAction SilentlyContinue
         } else {
-            $env:FOUNDATION_BASE_DIR = $script:originalFoundationBaseDir
+            $env:GENTLE_VANGUARD_BASE_DIR = $script:originalGentle-VanguardBaseDir
         }
 
         if ($null -eq $script:originalOpenCodeUser) {
@@ -66,7 +66,7 @@ Describe 'Detect Tool Integration Tests' {
     }
 
     It 'detects opencode from environment variables with highest confidence' {
-        $env:OPENCODE_SERVER_USERNAME = 'foundation-user'
+        $env:OPENCODE_SERVER_USERNAME = 'gentle-vanguard-user'
 
         $result = Invoke-DetectToolJson
 

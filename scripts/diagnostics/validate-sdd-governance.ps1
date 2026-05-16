@@ -114,7 +114,7 @@ if ($changedFiles.Count -eq 0) {
 $specFilesChanged = @(
     $changedFiles |
     Where-Object { $_ -like 'docs/sdd/*.md' } |
-    Where-Object { $_ -ne 'docs/sdd/README.md' -and $_ -ne 'docs/sdd/SPEC-TEMPLATE.md' -and $_ -ne 'docs/sdd/foundation-sdd.md' }
+    Where-Object { $_ -ne 'docs/sdd/README.md' -and $_ -ne 'docs/sdd/SPEC-TEMPLATE.md' -and $_ -ne 'docs/sdd/gentle-vanguard-sdd.md' }
 )
 
 $behaviorChangeCandidates = @(
@@ -203,3 +203,4 @@ if ($statusFailures.Count -gt 0) {
 
 Write-Ok "SDD governance gate passed with $($specFilesChanged.Count) spec file(s)."
 exit 0
+

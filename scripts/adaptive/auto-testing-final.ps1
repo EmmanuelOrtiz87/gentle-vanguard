@@ -27,7 +27,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) { $env:FOUNDATION_BASE_DIR } else {
+$repoRoot = if ($env:GV_BASE_DIR -and (Test-Path $env:GV_BASE_DIR)) { $env:GV_BASE_DIR } else {
     $root = Split-Path -Parent $PSScriptRoot
     while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
     if (-not $root) { $root = $PSScriptRoot }
@@ -230,4 +230,5 @@ Write-Host "  Logged for Judgment Day: YES" -ForegroundColor Gray
 Write-Host ""
 
 return $result
+
 

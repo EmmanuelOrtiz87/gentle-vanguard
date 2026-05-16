@@ -71,9 +71,10 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.version.outputs.tag }}
-          name: '${{ steps.version.outputs.tag }} — Gentleman Foundation'
+          name: '${{ steps.version.outputs.tag }} — Gentle-Vanguard'
           body_path: /tmp/release_notes.md
           draft: false
           prerelease: false
           generate_release_notes: true # Also use GitHub's auto-generated notes as fallback
+
 

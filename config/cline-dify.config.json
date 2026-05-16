@@ -70,7 +70,7 @@
       "configFile": "scripts/utilities/session-autostart.config.json"
     },
     "tracking": {
-      "project": "workspace_local",
+      "project": "workspace_gentle_vanguard",
       "directory": "c:\\Workspace_local",
       "sessionIdPattern": "session-YYYY-MM-DD-XX"
     },
@@ -150,3 +150,4 @@
     "requestTimeout": 30000
   }
 }
+

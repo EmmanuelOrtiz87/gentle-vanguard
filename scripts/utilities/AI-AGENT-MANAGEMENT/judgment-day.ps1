@@ -45,10 +45,11 @@ $newScript = Join-Path $repoRoot 'scripts\utilities\WORKFLOW-ORCHESTRATION\judgm
 
 if (-not (Test-Path $newScript)) {
     Write-Host "[ERROR] New judgment-day.ps1 not found at WORKFLOW-ORCHESTRATION" -ForegroundColor Red
-    Write-Host "[ERROR] Run 'wf verify' to restore the component" -ForegroundColor Red
+    Write-Host "[ERROR] Run 'gv verify' to restore the component" -ForegroundColor Red
     exit 1
 }
 
 Write-Host "[INFO] Delegating to WORKFLOW-ORCHESTRATION judgment-day.ps1 (v2.0)" -ForegroundColor DarkGray
 & $newScript -Target $Target -MaxPasses $MaxPasses -Scope $Scope -NoPrompt:$NoPrompt
 exit $LASTEXITCODE
+

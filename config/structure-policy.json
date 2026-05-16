@@ -1,11 +1,11 @@
-﻿{
+{
   "_comment": "structureMode: enforce-canonical (greenfield/new repos) | adopt-existing (legacy/production repos  advisory only, no auto-refactor)",
   "structureMode": "enforce-canonical",
   "allowedScriptDirs": [
     "scripts/utilities",
     "scripts/diagnostics",
     "scripts/validation",
-    "scripts/foundation",
+    "scripts/gentle-vanguard",
     "scripts/project",
     "scripts/git-hooks",
     "skills",
@@ -18,3 +18,4 @@
   "allowedRootConfigFiles": [".cursorrules", ".clinerules", ".gitignore"],
   "deprecatedPathPatterns": [".\\scripts\\update-all.ps1", "scripts/update-all.ps1"]
 }
+

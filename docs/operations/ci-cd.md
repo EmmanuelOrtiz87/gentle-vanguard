@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the CI/CD configuration for **foundation**, optimized for GitHub
+This document describes the CI/CD configuration for **gentle-vanguard**, optimized for GitHub
 Free plan (2000 min/month on private repos).
 
 **Context**: Self-hosted runners are NOT available for private repositories on GitHub Free plan
@@ -25,7 +25,7 @@ Free plan (2000 min/month on private repos).
 | Format Check            | ubuntu-latest  | ~1 min    | Low (already runs in pre-commit)  |
 | Test Suite              | windows-latest | ~4 min    | Medium (runs locally in pre-push) |
 | PSScriptAnalyzer        | windows-latest | ~3 min    | Low (runs locally in pre-commit)  |
-| Foundation Quality Gate | windows-latest | ~3 min    | Medium                            |
+| Gentle-Vanguard Quality Gate | windows-latest | ~3 min    | Medium                            |
 | Autonomous Validation   | windows-latest | ~15 min   | Low (weekly schedule)             |
 | Script Governance       | windows-latest | ~3 min    | Medium                            |
 | Sync Public             | windows-latest | ~2 min    | High                              |
@@ -55,7 +55,7 @@ Run locally on every `git push`. Catch issues before GHA minutes are consumed:
 | --------------------- | --------- | ---------------------------- |
 | Orchestrator Auto-Fix | ~6s       | Self-heals config drift      |
 | Test Suite (28 tests) | ~73s      | Runs all Pester tests        |
-| Audit Check (quick)   | ~1s       | Foundation consistency sweep |
+| Audit Check (quick)   | ~1s       | Gentle-Vanguard consistency sweep |
 
 **Removed from pre-push** (runs in GHA instead):
 
@@ -71,7 +71,7 @@ Run locally on every `git push`. Catch issues before GHA minutes are consumed:
 - **Capacity**: ~40 full pushes/month or ~57 develop pushes/month (combined)
 - **Strategy**: Heavy hooks locally prevent broken pushes → fewer GHA runs wasted
 
-## Local Machine Setup (foundation)
+## Local Machine Setup (gentle-vanguard)
 
 - **OS**: Windows (PowerShell 7)
 - **Tools**: `node`, `npm`, `trufflehog`, `gitleaks`, `lefthook`
@@ -79,7 +79,7 @@ Run locally on every `git push`. Catch issues before GHA minutes are consumed:
 - **Key files**:
   - `.lefthook.yml` — hook configuration
   - `scripts/run-tests-simple.ps1` — test runner
-  - `skills/foundation-audit-skill/scripts/audit-sweep.ps1` — audit
+  - `skills/gentle-vanguard-audit-skill/scripts/audit-sweep.ps1` — audit
 
 ## How to Operate from Another Machine
 
@@ -95,4 +95,5 @@ Run locally on every `git push`. Catch issues before GHA minutes are consumed:
 - **GHA quota exhausted (2000 min/month)**: Wait for reset (1st of month) or reduce pushes to `main`
 - **Pre-push hooks fail**: Run `npx lefthook run pre-push` to debug
 - **Audit failures**: Run audit sweep directly:
-  `.\skills\foundation-audit-skill\scripts\audit-sweep.ps1 -Scope full`
+  `.\skills\gentle-vanguard-audit-skill\scripts\audit-sweep.ps1 -Scope full`
+

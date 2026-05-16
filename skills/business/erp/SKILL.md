@@ -6,8 +6,7 @@ description: >
   "supply chain", "inventory management", "production planning"
 license: Apache-2.0
 metadata:
-  author: foundation
-  version: '1.0'
+  author: gv version: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash
 ---
 
@@ -33,3 +32,4 @@ User asks about ERP systems, enterprise resource planning, module configuration,
 2. Provide configuration steps or best practices
 3. Include integration considerations (EDI, API, middleware)
 4. Address migration scenarios (data mapping, cutover, testing)
+

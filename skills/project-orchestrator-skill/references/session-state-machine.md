@@ -3,7 +3,7 @@
 ### States
 
 1. **START**
-   - Run `wf.ps1 ide-status`
+   - Run `gv.ps1 ide-status`
    - Refresh session/task artifacts
    - Capture context in Engram
 
@@ -24,21 +24,21 @@
    - Close only when docs, repo state, and memory state are aligned
 
 6. **HANDOFF**
-   - Run `wf.ps1 compact-start [goal]` before moving to a new chat thread
+   - Run `gv.ps1 compact-start [goal]` before moving to a new chat thread
    - Continue in a fresh thread using only compact prompt + immediate request
 
 ### Session Activation Strategy
 
-1. Detect IDE session first (`wf.ps1 ide-status`)
+1. Detect IDE session first (`gv.ps1 ide-status`)
 2. If known IDE session: continue with auto-init and health checks
 3. If unknown/low confidence: explicitly suggest activation command
 4. Never block work if auto-detection fails; degrade gracefully
 
 Preferred command order:
 
-1. `.\scripts\utilities\wf.ps1 ide-status`
-2. `.\scripts\utilities\wf.ps1 health`
-3. `.\scripts\utilities\wf.ps1 start-session [task]`
+1. `.\scripts\utilities\gv.ps1 ide-status`
+2. `.\scripts\utilities\gv.ps1 health`
+3. `.\scripts\utilities\gv.ps1 start-session [task]`
 
 On-demand fallback:
 
@@ -90,3 +90,4 @@ SESSION WORKFLOW
    mem_save summary
    Present completion summary
 ```
+

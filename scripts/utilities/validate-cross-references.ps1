@@ -19,7 +19,7 @@ function Is-Glob      { param([string]$p) $p -match '[\*\?]' }
 # Exclusions — never a real file path
 $ExactBareSkiplist = @(
     # Commands resolved via PATH at runtime
-    'engram', 'engram.exe', 'wf', 'wf.ps1', 'gh', 'git', 'pwsh', 'powershell',
+    'engram', 'engram.exe', 'gv', 'gv.ps1', 'gh', 'git', 'pwsh', 'powershell',
     # Common runtime-created data files
     'connections.json', 'subscriptions.json', 'history.json',
     'appsettings.json', 'secrets.json', 'appsettings.Development.json',
@@ -204,3 +204,4 @@ return @{
     BrokenRefs = $brokenRefs
     Status = if ($issues -eq 0) { 'PASS' } else { 'FAIL' }
 }
+

@@ -37,7 +37,7 @@ function Get-GitFlowBaseForBranch {
 function Get-WorkflowCheckpoints {
     $lines = git stash list 2>$null
     if ($LASTEXITCODE -ne 0 -or -not $lines) { return @() }
-    @($lines | Where-Object { $_ -match 'wf-checkpoint:' })
+    @($lines | Where-Object { $_ -match 'gv-checkpoint:' })
 }
 
 function Get-WorkflowCheckpointRefs {
@@ -65,7 +65,7 @@ function Warn-OldWorkflowCheckpoints {
     if (-not (Assert-GitRepository)) { return }
     $oldRefs = Get-OldWorkflowCheckpoints -ThresholdDays $ThresholdDays
     if ($oldRefs.Count -gt 0) {
-        Write-Warning "Found $($oldRefs.Count) checkpoint(s) older than $ThresholdDays days. Use 'wf list-checkpoints'."
+        Write-Warning "Found $($oldRefs.Count) checkpoint(s) older than $ThresholdDays days. Use 'gv list-checkpoints'."
         Write-Host "Tip: drop stale checkpoints with 'git stash drop <stash@{n}>'" -ForegroundColor Cyan
     }
 }
@@ -79,11 +79,11 @@ function Invoke-LiveCheckpoint {
     $timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
     $safeLabel = (($Label -replace '\s+', '-') -replace '[^a-zA-Z0-9\-]', '').ToLowerInvariant().Trim('-')
     if ([string]::IsNullOrWhiteSpace($safeLabel)) { $safeLabel = "snapshot" }
-    $stashMessage = "wf-checkpoint:$($branch):$($safeLabel):$($timestamp)"
+    $stashMessage = "gv-checkpoint:$($branch):$($safeLabel):$($timestamp)"
     git stash push -u -m $stashMessage | Out-Null
     if ($LASTEXITCODE -ne 0) { Write-Error "Failed to create checkpoint."; exit 1 }
     Write-Success "Checkpoint created: $stashMessage"
-    Write-Host "Restore: wf rollback-checkpoint | List: wf list-checkpoints" -ForegroundColor Cyan
+    Write-Host "Restore: gv rollback-checkpoint | List: gv list-checkpoints" -ForegroundColor Cyan
 }
 
 function Show-LiveCheckpoints {
@@ -130,7 +130,7 @@ function Invoke-CleanBranches {
     if (-not $candidates) { Write-Success 'No merged branches to clean.'; return }
     Write-Step 'Merged local branches eligible for cleanup'
     foreach ($b in $candidates) { Write-Host "  $b" }
-    if (-not $ApplyNow) { Write-Host "Preview only. Use 'wf clean-branches apply' to delete." -ForegroundColor Cyan; return }
+    if (-not $ApplyNow) { Write-Host "Preview only. Use 'gv clean-branches apply' to delete." -ForegroundColor Cyan; return }
     if (-not $global:Force) { $confirm = Read-Host "Delete these branches? (yes/no)"; if ($confirm -notmatch '^(y|yes|si|s)$') { Write-Warning 'Cancelled.'; return } }
     foreach ($b in $candidates) {
         git branch -d $b 2>$null | Out-Null
@@ -291,7 +291,7 @@ function Invoke-ScriptGovernanceValidation {
     Write-Step 'Running script governance validation...'
     Invoke-LocalPowerShellScript -ScriptPath $script
     if ($LASTEXITCODE -eq 0) { return @{ Passed = $true; Detail = 'Script governance passed.'; Suggestion = ''; Fixable = $false } }
-    @{ Passed = $false; Detail = "Script governance failed (exit $LASTEXITCODE)."; Suggestion = "Run 'wf homologate apply' and retry."; Fixable = $true }
+    @{ Passed = $false; Detail = "Script governance failed (exit $LASTEXITCODE)."; Suggestion = "Run 'gv homologate apply' and retry."; Fixable = $true }
 }
 
 function Resolve-PublishMode {
@@ -387,8 +387,8 @@ function Invoke-PublishWorkflow {
             if (-not (Test-AngularTests)) { $findings += [pscustomobject]@{Code='angular-tests';Severity='HIGH';Detail='Angular tests failed.';Suggestion='Fix tests.';Fixable=$false} }
         }
         $gitInfo = Get-GitInfo; $targetBase = Get-GitFlowBaseForBranch -Branch $gitInfo.Branch
-        $gf = Invoke-GitFlowValidation -EnforcePrBase -PrBase $targetBase
-        if (-not $gf.Passed) { $findings += [pscustomobject]@{Code='gitflow';Severity='HIGH';Detail=$gf.Detail;Suggestion=$gf.Suggestion;Fixable=$gf.Fixable} }
+        $gv = Invoke-GitFlowValidation -EnforcePrBase -PrBase $targetBase
+        if (-not $gv.Passed) { $findings += [pscustomobject]@{Code='gitflow';Severity='HIGH';Detail=$gv.Detail;Suggestion=$gv.Suggestion;Fixable=$gv.Fixable} }
         $gov = Invoke-ScriptGovernanceValidation
         if (-not $gov.Passed) { $findings += [pscustomobject]@{Code='governance';Severity='HIGH';Detail=$gov.Detail;Suggestion=$gov.Suggestion;Fixable=$gov.Fixable} }
         if ($findings.Count -eq 0) {
@@ -420,9 +420,9 @@ function Invoke-PublishWorkflow {
 
 function Show-Help {
     Write-Host @"
-Foundation - Development Stack Workflow CLI
+Gentle-Vanguard - Development Stack Workflow CLI
 
-USAGE: wf.ps1 <command> [options]
+USAGE: gv.ps1 <command> [options]
 
 COMMANDS:
   review, audit, pr, push, publish — Code review & publish
@@ -434,8 +434,8 @@ COMMANDS:
   context-pack, compact-start, token-guard — Context efficiency
   help — This help
 
-Run 'wf.ps1 <command>' for command-specific help.
-Full docs: https://github.com/gentleman/foundation
+Run 'gv.ps1 <command>' for command-specific help.
+Full docs: https://github.com/gentleman/gentle-vanguard
 "@
 }
 
@@ -453,3 +453,5 @@ function Show-IdeStatus {
     Write-Host "Activation: $($ideData.recommendedActivationCommand)" -ForegroundColor Cyan
     Write-Host "Session: $($ideData.recommendedSessionCommand)" -ForegroundColor Cyan
 }
+
+

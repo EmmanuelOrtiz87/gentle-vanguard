@@ -1,4 +1,4 @@
-Describe 'Foundation Core Tests' {
+Describe 'Gentle-Vanguard Core Tests' {
     BeforeAll {
         $script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
     }

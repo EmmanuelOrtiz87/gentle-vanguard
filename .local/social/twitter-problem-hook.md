@@ -1,8 +1,8 @@
-﻿# Twitter/X - Problem Hook
+# Twitter/X - Problem Hook
 
 I used to waste 30 minutes every morning just recalling what I was working on.
 
-Then I built Foundation.
+Then I built Gentle-Vanguard.
 
 Now:
 -  Memory survives restarts

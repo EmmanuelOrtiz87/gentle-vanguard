@@ -103,8 +103,8 @@ function Get-RegistrationTokenFromGh {
 }
 
 if ([string]::IsNullOrWhiteSpace($ConfigPath)) {
-    if ($env:FOUNDATION_BASE_DIR) {
-        $repoRoot = $env:FOUNDATION_BASE_DIR
+    if ($env:GENTLE_VANGUARD_BASE_DIR) {
+        $repoRoot = $env:GENTLE_VANGUARD_BASE_DIR
     } else {
         $searchDir = $PSScriptRoot
         while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -150,7 +150,7 @@ if ([string]::IsNullOrWhiteSpace($RunnerRoot)) {
 }
 
 if ([string]::IsNullOrWhiteSpace($RunnerName)) {
-    $machineName = if ($env:COMPUTERNAME) { $env:COMPUTERNAME } else { 'foundation-runner' }
+    $machineName = if ($env:COMPUTERNAME) { $env:COMPUTERNAME } else { 'gentle-vanguard-runner' }
     $RunnerName = "$machineName-$Repo"
 }
 
@@ -164,7 +164,7 @@ if ([string]::IsNullOrWhiteSpace($WorkFolder)) {
 
 if ($Labels.Count -eq 0) {
     $platformLabel = if ($IsWindows) { 'windows' } elseif ($IsLinux) { 'linux' } else { 'macos' }
-    $Labels = @('self-hosted', $platformLabel, 'foundation')
+    $Labels = @('self-hosted', $platformLabel, 'gentle-vanguard')
 }
 
 $package = Get-PlatformPackage

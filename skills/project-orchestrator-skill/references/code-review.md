@@ -17,15 +17,15 @@ Every substantial code review MUST cover all 7 dimensions.
 ### Review Commands
 
 ```powershell
-foundation review                # Full 7-dimension review
-foundation review --scope quick  # Security + Quality only (~30s)
-foundation review --scope full   # All 7 dimensions
+gv review                # Full 7-dimension review
+gv review --scope quick  # Security + Quality only (~30s)
+gv review --scope full   # All 7 dimensions
 ```
 
 ### Mandatory Coverage Rules
 
-1. **PRE-COMMIT**: Run `foundation review --scope quick` (Security + Quality)
-2. **PRE-MERGE**: Run `foundation review --scope full` (all 7 dimensions)
+1. **PRE-COMMIT**: Run `gv review --scope quick` (Security + Quality)
+2. **PRE-MERGE**: Run `gv review --scope full` (all 7 dimensions)
 3. **JUDGMENT DAY**: Invoke for adversarial dual-review before major releases
 
 ### Severity Matrix
@@ -97,3 +97,4 @@ User decision options for MEDIUM:
 - [ ] Code follows conventions
 
 Questions: Did we meet the spec? Did we forget anything? Is the code ready for review?
+

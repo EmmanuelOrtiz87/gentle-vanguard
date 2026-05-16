@@ -4,7 +4,7 @@
 .DESCRIPTION
     Verifies all components of Adaptive Mode are working correctly
 .AUTHOR
-    Gentleman Foundation
+    Gentle-Vanguard
 #>
 
 param(

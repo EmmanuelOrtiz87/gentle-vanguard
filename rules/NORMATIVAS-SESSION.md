@@ -7,7 +7,7 @@ Last updated: 2026-05-12
 
 ## 1. PROPOSITO
 
-Define el lifecycle completo de sesiones en Foundation. Aplica a todos los agentes AI que operan sesiones de desarrollo.
+Define el lifecycle completo de sesiones en Gentle-Vanguard. Aplica a todos los agentes AI que operan sesiones de desarrollo.
 
 ---
 
@@ -258,9 +258,9 @@ TODO sesión DEBE verificar:
 8. Significant decisions saved to Engram
 9. Session state recoverable after compaction
 10. `mem_session_summary` called before close
-11. Post-session learning analysis — run `foundation learning` to detect gaps and generate improvement proposals
-12. Auto-execute proposals — run `foundation learning apply` to scaffold missing skills, patch configs, etc.
-13. Self-healing check — run `foundation heal` post-watchtower if issues detected, or `foundation watchtower heal` for combined check + auto-heal
+11. Post-session learning analysis — run `gv learning` to detect gaps and generate improvement proposals
+12. Auto-execute proposals — run `gv learning apply` to scaffold missing skills, patch configs, etc.
+13. Self-healing check — run `gv heal` post-watchtower if issues detected, or `gv watchtower heal` for combined check + auto-heal
 14. NEXT_SESSION_GUIDE.md updated
 15. Git workspace in clean/reported state before close
 
@@ -289,3 +289,4 @@ TODO sesión DEBE verificar:
 ---
 
 _Version: 1.0.0 — 2026-05-10 — Status: ACTIVE_
+

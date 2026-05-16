@@ -69,8 +69,8 @@ Current local baseline for this workspace:
 Preset workflow:
 
 1. Ask orchestrator recommendation (`orchestrator-next-steps`).
-2. Apply preset (`wf.ps1 response-mode preset:<name>`).
-3. Escalate by risk when needed (`wf.ps1 response-mode recommend:<name>:high`).
+2. Apply preset (`gv.ps1 response-mode preset:<name>`).
+3. Escalate by risk when needed (`gv.ps1 response-mode recommend:<name>:high`).
 
 Session auto-apply workflow:
 
@@ -108,14 +108,14 @@ To make chat behavior predictable, the workspace defines explicit chat levels:
 
 Activation commands:
 
-1. `wf.ps1 response-mode chat:chat-compact`
-2. `wf.ps1 response-mode chat:chat-balanced`
-3. `wf.ps1 response-mode chat:chat-detailed`
+1. `gv.ps1 response-mode chat:chat-compact`
+2. `gv.ps1 response-mode chat:chat-balanced`
+3. `gv.ps1 response-mode chat:chat-detailed`
 
 Inspection commands:
 
-1. `wf.ps1 response-mode`
-2. `wf.ps1 response-mode list`
+1. `gv.ps1 response-mode`
+2. `gv.ps1 response-mode list`
 
 Architecture baseline for session start:
 
@@ -240,7 +240,7 @@ Do not compress core knowledge documents that require full traceability and tech
 2. Implementation and technical guides.
 3. Business and product documentation.
 
-Rule: keep foundational/technical/business documents complete; optimize only operational/transient
+Rule: keep gentle-vanguardal/technical/business documents complete; optimize only operational/transient
 artifacts.
 
 ## Language Scope
@@ -251,7 +251,7 @@ The supported communication languages for this workspace are:
 2. `pt-BR`
 3. `en`
 
-Classical Chinese variants are deprecated and out of scope for Foundation audiences.
+Classical Chinese variants are deprecated and out of scope for Gentle-Vanguard audiences.
 
 ## Governance
 
@@ -260,3 +260,4 @@ This policy is enforced as a required governance artifact by:
 - `scripts/diagnostics/validate-script-governance.ps1`
 
 Any removal or relocation must be approved by the developer and updated in governance rules.
+

@@ -1,15 +1,15 @@
-# Foundation TUI Installer (FF-018)
+# Gentle-Vanguard TUI Installer (FF-018)
 
-Interactive Terminal User Interface for Foundation onboarding.
+Interactive Terminal User Interface for Gentle-Vanguard onboarding.
 
 ## Quick Start
 
 ```powershell
-# Via wf CLI (recommended)
-.\scripts\utilities\WORKFLOW-ORCHESTRATION\wf.ps1 install
+# Via gv CLI (recommended)
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1 install
 
 # Direct execution
-.\scripts\utilities\foundation-installer-tui.ps1
+.\scripts\utilities\gentle-vanguard-installer-tui.ps1
 ```
 
 ## Features
@@ -28,7 +28,7 @@ Interactive Terminal User Interface for Foundation onboarding.
    - Disk space verification
 
 2. **Path Configuration**
-   - Default: `$env:USERPROFILE\foundation`
+   - Default: `$env:USERPROFILE\gentle-vanguard`
    - Option to customize
 
 3. **Component Selection**
@@ -45,18 +45,18 @@ Interactive Terminal User Interface for Foundation onboarding.
 
 5. **Installation**
    - Creates directory structure
-   - Copies Foundation files
+   - Copies Gentle-Vanguard files
    - Installs git hooks
    - Creates initial config
 
-## Integration with wf.ps1
+## Integration with gv.ps1
 
 The installer is integrated into the main CLI:
 
 ```powershell
-wf.ps1 install          # Run installer
-wf.ps1 install -Silent  # Non-interactive mode (future)
-wf.ps1 install -Force   # Overwrite existing installation
+gv.ps1 install          # Run installer
+gv.ps1 install -Silent  # Non-interactive mode (future)
+gv.ps1 install -Force   # Overwrite existing installation
 ```
 
 ## Requirements
@@ -75,6 +75,7 @@ wf.ps1 install -Force   # Overwrite existing installation
 
 ## Files
 
-- `scripts/utilities/foundation-installer-tui.ps1` - Main installer script
-- `scripts/utilities/WORKFLOW-ORCHESTRATION/wf.ps1` - CLI integration (has `install` command)
-- `docs/reference/FOUNDATION-INSTALLER.md` - This documentation
+- `scripts/utilities/gentle-vanguard-installer-tui.ps1` - Main installer script
+- `scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1` - CLI integration (has `install` command)
+- `docs/reference/GENTLE_VANGUARD-INSTALLER.md` - This documentation
+

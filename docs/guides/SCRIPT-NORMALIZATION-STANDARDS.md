@@ -1,4 +1,4 @@
-﻿# Script Normalization Standards
+# Script Normalization Standards
 
 **Date**: 2026-04-22  
 **Status**: AUDIT COMPLETED  
@@ -233,7 +233,7 @@ Scripts containing emojis or special Unicode characters:
 Scripts with unbalanced braces, parentheses, or here-strings:
 
 - `bootstrap-workspace.ps1` - Unbalanced braces
-- `wf.ps1` - Multiple unbalanced elements
+- `gv.ps1` - Multiple unbalanced elements
 - `check-quality.ps1` - Invalid shell operators
 - `check-testing.ps1` - Invalid shell operators
 - `create-gitflow-branch.ps1` - Unbalanced parentheses
@@ -434,3 +434,4 @@ Write-Ok "Validation passed"
 3. Run automated fixes: `audit-script-normalization.ps1 -Fix`
 4. Validate all scripts parse correctly
 5. Commit changes and verify GitHub Actions passes
+

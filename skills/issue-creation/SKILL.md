@@ -5,7 +5,7 @@ description: >
   Trigger: When creating a GitHub issue, reporting a bug, or requesting a feature.
 license: Apache-2.0
 metadata:
-  author: foundation
+  author: gentle-vanguard
   versión: '1.0'
 ---
 
@@ -267,3 +267,4 @@ gh issue edit <number> --add-label "status:approved"
 # Maintainer: add priority
 gh issue edit <number> --add-label "priority:high"
 ```
+

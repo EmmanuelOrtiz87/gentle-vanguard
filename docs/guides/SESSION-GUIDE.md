@@ -1,6 +1,6 @@
 # Session Guide
 
-> **Quick reference for daily development sessions with Gentleman Foundation**
+> **Quick reference for daily development sessions with Gentle-Vanguard**
 
 ## 🚀 Quick Commands
 
@@ -20,7 +20,7 @@ Use these commands to control your development session:
 
 ## 🔧 Automatic Tool Activation
 
-The Gentleman Foundation automatically ensures all development tools are active and ready.
+The Gentle-Vanguard automatically ensures all development tools are active and ready.
 
 ### Auto-Activation Triggers
 
@@ -29,35 +29,35 @@ The Gentleman Foundation automatically ensures all development tools are active 
 | **Pre-commit**         | Tools validated before each commit     | Runs automatically    |
 | **Session start**      | Session brief artifacts are generated  | Daily workflow        |
 | **RED context health** | Orchestrator auto-runs `compact-start` | Recovers lost context |
-| **Manual**             | Use `wf.ps1 health` anytime            | On-demand check       |
+| **Manual**             | Use `gv.ps1 health` anytime            | On-demand check       |
 
 ### Tools Activated
 
 | Tool                            | Purpose                               | Status Check    |
 | ------------------------------- | ------------------------------------- | --------------- |
 | **Engram**                      | Memory system for context persistence | `mem_context`   |
-| **Native Review Engine**        | Foundation code quality validation    | Runs on commit  |
-| **Native Runtime Orchestrator** | Policy-driven execution and guidance  | `wf.ps1 status` |
+| **Native Review Engine**        | Gentle-Vanguard code quality validation    | Runs on commit  |
+| **Native Runtime Orchestrator** | Policy-driven execution and guidance  | `gv.ps1 status` |
 | **Orchestrator Skills**         | Project coordination system           | Auto-loaded     |
 
 ### Manual Activation Commands
 
 ```powershell
 # Check and activate all tools
-.\scripts\utilities\wf.ps1 health
+.\scripts\utilities\gv.ps1 health
 
 # Create the session brief for today
-.\scripts\utilities\wf.ps1 start-session
+.\scripts\utilities\gv.ps1 start-session
 
 # Create session brief with specific task
-.\scripts\utilities\wf.ps1 start-session api-hardening
+.\scripts\utilities\gv.ps1 start-session api-hardening
 
 # Close session with validation + closure artifact
-.\scripts\utilities\wf.ps1 end-session
-.\scripts\utilities\wf.ps1 end-session api-hardening
+.\scripts\utilities\gv.ps1 end-session
+.\scripts\utilities\gv.ps1 end-session api-hardening
 
 # Force auto-start missing tools
-.\scripts\utilities\wf.ps1 health -Force
+.\scripts\utilities\gv.ps1 health -Force
 
 # Auto-init environment (any directory)
 .\scripts\utilities\auto-init-dev-environment.ps1
@@ -75,8 +75,8 @@ Before starting work, ensure your workspace is clean:
 
 ```powershell
 # Run the standard bootstrap
-.\scripts\utilities\wf.ps1 health
-.\scripts\utilities\wf.ps1 start-session [task-name]
+.\scripts\utilities\gv.ps1 health
+.\scripts\utilities\gv.ps1 start-session [task-name]
 ```
 
 **Step 2: Auto-Detection**
@@ -98,7 +98,7 @@ When health is degraded, the system helps you recover:
 | ------------------- | ----------------------------------------------------------- |
 | **WARN/YELLOW**     | CLI shows live guidance                                     |
 | **RED**             | Orchestrator auto-runs `compact-start` before session brief |
-| **Manual fallback** | `.\scripts\utilities\wf.ps1 compact-start "<objective>"`    |
+| **Manual fallback** | `.\scripts\utilities\gv.ps1 compact-start "<objective>"`    |
 
 **Step 3: Memory Check**
 
@@ -135,10 +135,10 @@ Follow these steps for each task:
 **Pre-Push Checklist:**
 
 ```markdown
-1. ✅ Run: wf.ps1 review # Code review
-2. ✅ Generate: Audit document # wf.ps1 audit
+1. ✅ Run: gv.ps1 review # Code review
+2. ✅ Generate: Audit document # gv.ps1 audit
 3. ✅ Check: Specification complete?
-4. ✅ Optional: wf.ps1 push # Guided commit/push
+4. ✅ Optional: gv.ps1 push # Guided commit/push
 5. ❓ Ask: Create PR?
 ```
 
@@ -204,50 +204,50 @@ Use these in conversation with the AI agent:
 
 ```powershell
 # Start a new session
-.\scripts\utilities\wf.ps1 start-session
-.\scripts\utilities\wf.ps1 start-session api-hardening
+.\scripts\utilities\gv.ps1 start-session
+.\scripts\utilities\gv.ps1 start-session api-hardening
 
 # End session with closure artifact
-.\scripts\utilities\wf.ps1 end-session
-.\scripts\utilities\wf.ps1 end-session api-hardening
+.\scripts\utilities\gv.ps1 end-session
+.\scripts\utilities\gv.ps1 end-session api-hardening
 
 # Create or refresh task brief
-.\scripts\utilities\wf.ps1 task-brief <task-name>
+.\scripts\utilities\gv.ps1 task-brief <task-name>
 ```
 
 **Review & Publishing:**
 
 ```powershell
 # Code review
-.\scripts\utilities\wf.ps1 review
+.\scripts\utilities\gv.ps1 review
 
 # Generate audit document
-.\scripts\utilities\wf.ps1 audit
+.\scripts\utilities\gv.ps1 audit
 
 # Create PR template
-.\scripts\utilities\wf.ps1 pr
+.\scripts\utilities\gv.ps1 pr
 
 # Show current status
-.\scripts\utilities\wf.ps1 status
+.\scripts\utilities\gv.ps1 status
 
 # Prepare to push (guided)
-.\scripts\utilities\wf.ps1 push
+.\scripts\utilities\gv.ps1 push
 ```
 
 **Maintenance:**
 
 ```powershell
 # Full update workflow
-.\scripts\utilities\wf.ps1 update-all
+.\scripts\utilities\gv.ps1 update-all
 
 # Preview cleanup/homologation actions
-.\scripts\utilities\wf.ps1 homologate
+.\scripts\utilities\gv.ps1 homologate
 
 # Apply cleanup/homologation actions
-.\scripts\utilities\wf.ps1 homologate apply
+.\scripts\utilities\gv.ps1 homologate apply
 
 # Health check + cleanup drift gate
-.\scripts\utilities\wf.ps1 health -StrictCleanup
+.\scripts\utilities\gv.ps1 health -StrictCleanup
 ```
 
 ### Git Commands
@@ -285,25 +285,25 @@ gh pr status
 
 ## 🤖 Workflow Automation
 
-### Automated wf.ps1 Workflow
+### Automated gv.ps1 Workflow
 
 Standard flow for validation and publishing:
 
 ```powershell
 # Step 1: Check current status
-.\scripts\utilities\wf.ps1 status
+.\scripts\utilities\gv.ps1 status
 
 # Step 2: Run code review (auto-fix if available)
-.\scripts\utilities\wf.ps1 review
+.\scripts\utilities\gv.ps1 review
 
 # Step 3: Generate audit document
-.\scripts\utilities\wf.ps1 audit
+.\scripts\utilities\gv.ps1 audit
 
 # Step 4: Create PR with template
-.\scripts\utilities\wf.ps1 pr
+.\scripts\utilities\gv.ps1 pr
 ```
 
-**Pro Tip:** Use `wf.ps1 publish` to run all steps with governance gates automatically.
+**Pro Tip:** Use `gv.ps1 publish` to run all steps with governance gates automatically.
 
 ### Git Hooks (Automatic)
 
@@ -338,7 +338,7 @@ Run through this checklist:
 
 ```powershell
 # Run pre-commit checks
-wf.ps1 review
+gv.ps1 review
 git add .
 git commit -m "feat(scope): description"
 ```
@@ -351,8 +351,8 @@ Ensure these are complete:
 
 ```powershell
 # Prepare for PR
-wf.ps1 audit
-wf.ps1 pr
+gv.ps1 audit
+gv.ps1 pr
 gh pr create
 ```
 
@@ -364,7 +364,7 @@ Final checks:
 
 ```powershell
 # Safe push with checks
-wf.ps1 push  # Shows guided commands
+gv.ps1 push  # Shows guided commands
 git push -u origin feature/my-feature
 ```
 
@@ -391,3 +391,4 @@ Create a PR or keep working?
 ```
 
 ## Resources
+

@@ -1,5 +1,5 @@
 # Add missing skills to SKILL_INDEX.md
-$indexPath = '.\foundation\\skills\SKILL_INDEX.md'
+$indexPath = '.\gentle-vanguard\\skills\SKILL_INDEX.md'
 $content = Get-Content $indexPath -Raw
 
 # Define missing skills with their sections

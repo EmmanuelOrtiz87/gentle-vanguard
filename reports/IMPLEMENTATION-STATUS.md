@@ -11,7 +11,7 @@
 
 | Script                           | Función                           |
 | -------------------------------- | --------------------------------- |
-| `wf-report.ps1`                  | CLI unificado - reporte a demanda |
+| `gv-report.ps1`                  | CLI unificado - reporte a demanda |
 | `session-metrics-collector.ps1`  | Colector de métricas de sesión    |
 | `session-metrics-tracker.ps1`    | Tracker en tiempo real            |
 | `consolidate-metrics.ps1`        | Consolidación automática          |
@@ -39,19 +39,19 @@
 
 ```powershell
 # Mostrar ayuda
-.\wf-report.ps1 -Type clarify
+.\gv-report.ps1 -Type clarify
 
 # Reporte de sesiones
-.\wf-report.ps1 -Type sessions -Period 7days
+.\gv-report.ps1 -Type sessions -Period 7days
 
 # Costos
-.\wf-report.ps1 -Type costs -Period yesterday
+.\gv-report.ps1 -Type costs -Period yesterday
 
 # Resumen ejecutivo
-.\wf-report.ps1 -Type executive
+.\gv-report.ps1 -Type executive
 
 # Informe completo
-.\wf-report.ps1 -Type all
+.\gv-report.ps1 -Type all
 ```
 
 ### Automático (Workflow)
@@ -69,9 +69,9 @@
 ### On-Demand (cuando usuario solicite)
 
 ```
-"generame un informe de sesiones" → wf-report.ps1 -Type sessions
-"dame las metricas de costos" → wf-report.ps1 -Type costs
-"quiero un resumen ejecutivo" → wf-report.ps1 -Type executive
+"generame un informe de sesiones" → gv-report.ps1 -Type sessions
+"dame las metricas de costos" → gv-report.ps1 -Type costs
+"quiero un resumen ejecutivo" → gv-report.ps1 -Type executive
 ```
 
 ---
@@ -128,3 +128,4 @@ telemetry-master.csv + informes .md
 ---
 
 _Estado: 2026-05-14 — Actualizado: tracker integrado en session-autostart + end-session + session-manager_
+

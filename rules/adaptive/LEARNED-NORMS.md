@@ -16,7 +16,7 @@ This file is **auto-maintained** by the adaptive learning system.
 | ID       | Pattern                                                   | Confidence | Learned From      | Date       |
 | -------- | --------------------------------------------------------- | ---------- | ----------------- | ---------- |
 | CORR-001 | PowerShell TryParse() must be replaced with regex match   | high       | auto-norm-learner | 2026-05-04 |
-| CORR-002 | Path references in wf.ps1 must use triple Split-Path      | high       | auto-norm-learner | 2026-05-04 |
+| CORR-002 | Path references in gv.ps1 must use triple Split-Path      | high       | auto-norm-learner | 2026-05-04 |
 | CORR-003 | repoRoot calculation must use Resolve-Path with Join-Path | high       | auto-norm-learner | 2026-05-04 |
 
 ### SESS-### (Session Patterns)
@@ -46,7 +46,7 @@ This file is **auto-maintained** by the adaptive learning system.
 
 ### Path Reference Rules
 
-1. **repoRoot**: Always use `Split-Path (Split-Path (Split-Path $scriptDir))` for wf.ps1
+1. **repoRoot**: Always use `Split-Path (Split-Path (Split-Path $scriptDir))` for gv.ps1
 2. **scriptDir**: Always use `Split-Path -Parent $MyInvocation.MyCommand.Path`
 3. **Cross-references**: Use relative paths from repoRoot (e.g., `skills/`, `scripts/`)
 4. **Never hardcode**: Never hardcode absolute paths in scripts
@@ -62,7 +62,7 @@ This file is **auto-maintained** by the adaptive learning system.
 
 1. **Orchestrator**: Active when `.orchestrator-active` file exists
 2. **Skill loading**: Automatic based on file type (angular, react, go, etc.)
-3. **Delegation**: Use `wf.ps1 agent <AGENT> <TASK>` for complex tasks
+3. **Delegation**: Use `gv.ps1 agent <AGENT> <TASK>` for complex tasks
 4. **Fallback**: If orchestrator inactive, use manual skill loading
 
 ### Auto-Learning Rules
@@ -117,3 +117,4 @@ This file is **auto-maintained** by the adaptive learning system.
 - Critical confidence: 1
 - Medium confidence: 0
 - Low confidence: 0
+

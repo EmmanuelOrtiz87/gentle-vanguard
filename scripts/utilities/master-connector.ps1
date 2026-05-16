@@ -84,7 +84,7 @@ foreach ($marker in $endMarkers) {
         # Run pre-compact-hook
         $cleanupScript = Join-Path $WorkspaceRoot "scripts/utilities/pre-compact-hook.ps1"
         if (Test-Path $cleanupScript) {
-            & $cleanupScript -ProjectName "workspace_local" -CompressionRatio 0.90
+            & $cleanupScript -ProjectName "workspace_gentle_vanguard" -CompressionRatio 0.90
             Write-Output "Context cleanup: DONE"
         }
         
@@ -117,3 +117,4 @@ return @{
     ConfigEnabled = ($config.enabled -eq $true)
     AllSystemsConnected = $true
 }
+

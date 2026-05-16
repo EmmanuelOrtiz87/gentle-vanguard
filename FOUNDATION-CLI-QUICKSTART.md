@@ -1,6 +1,6 @@
-# Foundation CLI — Quick Start Guide
+# Gentle-Vanguard CLI — Quick Start Guide
 
-**Command:** `foundation` (replaces `wf` to avoid Windows Defender Firewall conflicts)
+**Command:** `gentle-vanguard` (replaces `gv` to avoid Windows Defender Firewall conflicts)
 
 ---
 
@@ -8,17 +8,17 @@
 
 ### Option 1: Automatic (Recommended)
 ```powershell
-cd c:\Workspace_local\foundation
-.\scripts\utilities\install-foundation-cli.ps1
+cd c:\Workspace_local\gentle-vanguard
+.\scripts\utilities\install-gentle-vanguard-cli.ps1
 ```
 
-Then restart PowerShell and use `foundation` anywhere.
+Then restart PowerShell and use `gentle-vanguard` anywhere.
 
 ### Option 2: Manual
 Add this to your PowerShell profile (`$PROFILE`):
 ```powershell
-function foundation {
-    & ".\scripts\utilities\WORKFLOW-ORCHESTRATION\foundation.ps1" @args
+function gentle-vanguard {
+    & ".\scripts\utilities\WORKFLOW-ORCHESTRATION\gentle-vanguard.ps1" @args
 }
 ```
 
@@ -29,7 +29,7 @@ Then:
 
 ### Option 3: Direct Execution
 ```powershell
-.\scripts\utilities\WORKFLOW-ORCHESTRATION\foundation.ps1 <command> [options]
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\gentle-vanguard.ps1 <command> [options]
 ```
 
 ---
@@ -40,7 +40,7 @@ Then:
 
 #### 1. **Static Dashboard** (single snapshot)
 ```powershell
-foundation dashboard
+gv dashboard
 ```
 - Generates `reports/dashboard.html`
 - 8 professional sections (Overview, Costs, ROI, Benchmarks, etc.)
@@ -48,13 +48,13 @@ foundation dashboard
 
 #### 2. **Dashboard with Auto-Open**
 ```powershell
-foundation dashboard open
+gv dashboard open
 ```
 - Generates HTML and opens in default browser
 
 #### 3. **Live Dashboard** (continuous refresh ⭐ NEW)
 ```powershell
-foundation dashboard live
+gv dashboard live
 ```
 - **Refreshes every 15 seconds** (dev + management real-time monitoring)
 - Updates live snapshots, events, routing quality
@@ -68,10 +68,10 @@ foundation dashboard live
 
 #### 1. **Full Stack Benchmark**
 ```powershell
-foundation benchmark full
+gv benchmark full
 ```
 - Runs 4-layer validation:
-  1. wf command latency vs SLO
+  1. gv command latency vs SLO
   2. Routing accuracy (multilenguaje)
   3. Agent-verify tests domain
   4. **Baseline regression detection** (EWMA smoothing)
@@ -79,7 +79,7 @@ foundation benchmark full
 
 #### 2. **Benchmark with Auto-Remediation** ⭐ NEW
 ```powershell
-foundation benchmark full remediate
+gv benchmark full remediate
 ```
 - Runs full benchmark
 - If any layer FAILS: executes local diagnostics playbook
@@ -88,7 +88,7 @@ foundation benchmark full remediate
 
 #### 3. **Benchmark with Baseline Reset**
 ```powershell
-foundation benchmark full baseline-update
+gv benchmark full baseline-update
 ```
 - Forces baseline update from current metrics
 - Use after incident recovery or performance optimization
@@ -99,20 +99,20 @@ foundation benchmark full baseline-update
 
 #### Start Development Session
 ```powershell
-foundation start-session
+gv start-session
 ```
 - Initializes session context, loads Engram memory, checks health
 - The underlying session manager persists session start/close records to Engram
 
 #### Health Check
 ```powershell
-foundation health
+gv health
 ```
 - Verifies all subsystems: tokens, routing, context, hooks, structure
 
 #### Verify Code Quality
 ```powershell
-foundation verify
+gv verify
 ```
 - Runs the configured quality gates, including tests and hook validation
 
@@ -139,21 +139,21 @@ pwsh -File .\scripts\utilities\post-session-learning.ps1 -SessionId "session-YYY
 **During development:**
 ```powershell
 # Start session
-foundation start-session
+gv start-session
 
 # Monitor in real-time
-foundation dashboard live &
+gv dashboard live &
 
 # Before commit
-foundation verify
+gv verify
 
 # Check regression after changes
-foundation benchmark full
+gv benchmark full
 ```
 
 **If something breaks:**
 ```powershell
-foundation benchmark full remediate
+gv benchmark full remediate
 # → Review incident report in reports/incidents/
 ```
 
@@ -163,7 +163,7 @@ foundation benchmark full remediate
 
 **Real-time monitoring:**
 ```powershell
-foundation dashboard live
+gv dashboard live
 # → Open http://localhost:xxxx in browser
 # → Refreshes every 15 seconds
 # → Shows: token usage, routing quality, costs, ROI, agents/skills, events
@@ -171,7 +171,7 @@ foundation dashboard live
 
 **Weekly health check:**
 ```powershell
-foundation health
+gv health
 # → GREEN: all systems operational
 # → YELLOW: warnings (review logs)
 # → RED: failure (contact on-call)
@@ -198,22 +198,22 @@ foundation health
 ### Auto-Refresh Dashboard in Browser
 ```powershell
 # Browser auto-refreshes every 30 seconds
-foundation dashboard live -RefreshSeconds 30
+gv dashboard live -RefreshSeconds 30
 
 # Run 10 cycles then stop
-foundation dashboard live -Iterations 10
+gv dashboard live -Iterations 10
 ```
 
 ### Benchmark with Custom Intervals
 ```powershell
 # Update baseline every 8 benchmark cycles
-foundation dashboard live -BenchmarkEvery 8 -RefreshSeconds 10
+gv dashboard live -BenchmarkEvery 8 -RefreshSeconds 10
 ```
 
 ### Enable Auto-Remediation for Monitoring
 ```powershell
 # Runs incident playbook automatically on benchmark failure
-foundation dashboard live -AutoRemediateOnFail
+gv dashboard live -AutoRemediateOnFail
 
 # Check results in reports/incidents/
 ```
@@ -236,22 +236,22 @@ foundation dashboard live -AutoRemediateOnFail
 
 ## ⚠️ Troubleshooting
 
-### "foundation: command not found"
+### "gentle-vanguard: command not found"
 ```powershell
 # Solution 1: Reload profile
 . $PROFILE
 
 # Solution 2: Run full path
-.\scripts\utilities\WORKFLOW-ORCHESTRATION\foundation.ps1 health
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\gentle-vanguard.ps1 health
 
 # Solution 3: Reinstall
-.\scripts\utilities\install-foundation-cli.ps1
+.\scripts\utilities\install-gentle-vanguard-cli.ps1
 ```
 
 ### "Windows Defender Firewall" still triggers
 ```powershell
-# Use full path instead of 'wf'
-.\scripts\utilities\WORKFLOW-ORCHESTRATION\foundation.ps1 dashboard live
+# Use full path instead of 'gv'
+.\scripts\utilities\WORKFLOW-ORCHESTRATION\gentle-vanguard.ps1 dashboard live
 ```
 
 ### Dashboard doesn't refresh
@@ -267,12 +267,13 @@ cat reports/stack-live-observability-latest.json | ConvertFrom-Json | Select -Ex
 
 ## 📞 Support
 
-- **Quick help:** `foundation help`
-- **Health issues:** `foundation health -Verbose`
-- **Benchmark details:** `foundation benchmark full | ConvertFrom-Json | Select *`
-- **Live monitoring:** `foundation dashboard live -Iterations 1` (single cycle for testing)
+- **Quick help:** `gv help`
+- **Health issues:** `gv health -Verbose`
+- **Benchmark details:** `gv benchmark full | ConvertFrom-Json | Select *`
+- **Live monitoring:** `gv dashboard live -Iterations 1` (single cycle for testing)
 
 ---
 
 **Updated:** 2026-05-13  
 **Status:** Production Ready ✅
+

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide covers the autonomous systems in foundation.
+This guide covers the autonomous systems in gentle-vanguard.
 
 ## Systems
 
@@ -41,3 +41,4 @@ This guide covers the autonomous systems in foundation.
 ## Monitoring
 
 Check `.session/reports/` for validation reports and session artifacts.
+

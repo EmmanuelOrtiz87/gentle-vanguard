@@ -6,7 +6,7 @@ Step-by-step guide for new developers joining the team.
 
 This guide sets up your machine for development with:
 
-- Foundation - Development Stack (skills, hooks, CLI)
+- Gentle-Vanguard - Development Stack (skills, hooks, CLI)
 - AI-assisted development workflow
 - Code review automation
 
@@ -34,16 +34,16 @@ git --versión
 pwsh --versión  # or powershell --versión
 ```
 
-## Step 2: Install Foundation - Development Stack
+## Step 2: Install Gentle-Vanguard - Development Stack
 
 ### Option A: Automated (Recommended)
 
 ```powershell
-# Clone the foundation repository
-git clone <repository-url> C:\foundation
+# Clone the gentle-vanguard repository
+git clone <repository-url> C:\gentle-vanguard
 
 # Run bootstrap
-cd C:\foundation
+cd C:\gentle-vanguard
 .\scripts\bootstrap-machine.ps1
 
 # Restart terminal
@@ -52,8 +52,8 @@ cd C:\foundation
 ### Option B: Manual
 
 ```powershell
-# Create foundation directory
-New-Item -ItemType Directory -Path "$env:USERPROFILE\.foundation" -Force
+# Create gentle-vanguard directory
+New-Item -ItemType Directory -Path "$env:USERPROFILE\.gentle-vanguard" -Force
 
 # 2. Copy skills from repository
 # (Clone repo and copy skills folder)
@@ -61,17 +61,17 @@ New-Item -ItemType Directory -Path "$env:USERPROFILE\.foundation" -Force
 # 3. Add to PATH
 [Environment]::SetEnvironmentVariable(
     "PATH",
-    "$env:USERPROFILE\.foundation\bin;$env:PATH",
+    "$env:USERPROFILE\.gentle-vanguard\bin;$env:PATH",
     "User"
 )
 ```
 
-### Verify Foundation
+### Verify Gentle-Vanguard
 
 ```powershell
-wf.ps1 health
-wf.ps1 status
-wf.ps1 list
+gv.ps1 health
+gv.ps1 status
+gv.ps1 list
 ```
 
 ### Optional: Local Workspace Autostart (Local-only)
@@ -106,7 +106,7 @@ git config --global core.hooksPath "$env:USERPROFILE\.git-hooks"
 ## Step 4: Update Optional Tooling (Recommended)
 
 ```powershell
-.\scripts\utilities\wf.ps1 update-tools
+.\scripts\utilities\gv.ps1 update-tools
 ```
 
 ## Step 5: Configure AI Agent
@@ -119,7 +119,7 @@ git config --global core.hooksPath "$env:USERPROFILE\.git-hooks"
 
 ### Other AI Agents
 
-Foundation works with any AI agent:
+Gentle-Vanguard works with any AI agent:
 
 - Claude Desktop
 - GitHub Copilot
@@ -132,11 +132,11 @@ Foundation works with any AI agent:
 # Navigate to your workspace
 cd C:\Workspace
 
-# Setup existing project with foundation
-C:\foundation\scripts\setup-project.ps1 -ProjectPath "C:\Workspace\my-project"
+# Setup existing project with gentle-vanguard
+C:\gentle-vanguard\scripts\setup-project.ps1 -ProjectPath "C:\Workspace\my-project"
 
 # Or create new project
-wf.ps1 new --name my-project --type service
+gv.ps1 new --name my-project --type service
 ```
 
 ## Daily Workflow
@@ -145,13 +145,13 @@ wf.ps1 new --name my-project --type service
 
 ```powershell
 # Check for updates
-wf.ps1 check
+gv.ps1 check
 
 # Update if needed
-wf.ps1 update-all
+gv.ps1 update-all
 
 # Validate setup
-wf.ps1 health
+gv.ps1 health
 ```
 
 ### Before Commit
@@ -168,7 +168,7 @@ git commit -m "feat(scope): description"
 
 ## Troubleshooting
 
-### "gf command not found"
+### "gv command not found"
 
 ```powershell
 # Check PATH
@@ -202,15 +202,15 @@ git config --global core.hooksPath
 - [ ] git installed and configured
 - [ ] PowerShell 7 installed
 - [ ] OpenCode (or other AI agent) installed
-- [ ] Foundation - Development Stack installed
+- [ ] Gentle-Vanguard - Development Stack installed
 - [ ] Git identity configured
-- [ ] `gf validate` passes
+- [ ] `gv validate` passes
 
 ## Getting Help
 
-- Foundation docs: `docs/`
+- Gentle-Vanguard docs: `docs/`
 - Skills: `skills/SKILL_INDEX.md`
-- CLI help: `gf --help`
+- CLI help: `gv --help`
 
 ## Next Steps
 
@@ -218,8 +218,10 @@ git config --global core.hooksPath
 2. Explore available [skills](../../skills/SKILL_INDEX.md)
 3. Setup your first project
 
-- Los hooks automticos de Foundation - Development Stack ahora cubren 7 dimensiones: Seguridad,
+- Los hooks automticos de Gentle-Vanguard - Development Stack ahora cubren 7 dimensiones: Seguridad,
   Calidad, Arquitectura, Testing, API, Documentacin y Gitflow. Consulta REVIEW-INDEX.md para
   detalles y cmo personalizar reglas.
 - Para personalizar reglas de revisión, edita los archivos SKILL.md en cada subcarpeta de skills/.
 - Los scripts de chequeo estn en scripts/hooks/ y pueden adaptarse a las necesidades del proyecto.
+
+

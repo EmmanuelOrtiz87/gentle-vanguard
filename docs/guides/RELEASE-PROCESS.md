@@ -36,7 +36,7 @@ npm audit  # Should return: 0 vulnerabilities
 
 ## Versioning
 
-Foundation follows [Semantic Versioning](https://semver.org/):
+Gentle-Vanguard follows [Semantic Versioning](https://semver.org/):
 
 - **MAJOR (x.0.0)**: Breaking changes
 - **MINOR (0.x.0)**: New features, no breaking changes
@@ -54,7 +54,7 @@ git status
 npm test
 
 # Run audit
-.\skills\foundation-audit-skill\scripts\audit-sweep.ps1 -Scope full
+.\skills\gentle-vanguard-audit-skill\scripts\audit-sweep.ps1 -Scope full
 ```
 
 ### 2. Update Version
@@ -63,23 +63,23 @@ npm test
 # Update VERSION file
 # Update CHANGELOG.md — move [Unreleased] → [X.Y.Z] - YYYY-MM-DD
 # Update version badges in README.md, docs/README.md, marketing/*
-# Update TUI installer version in foundation-installer-tui.ps1
+# Update TUI installer version in gentle-vanguard-installer-tui.ps1
 ```
 
 ### 2.5 Homologation Gate (Mandatory — auto-runs on publish)
 
-This gate is **automatically executed** by `wf.ps1 publish` before any validation or merge attempt.
+This gate is **automatically executed** by `gv.ps1 publish` before any validation or merge attempt.
 If the gate fails, publish is blocked until issues are resolved.
 
 ```powershell
 # Run manually (same check that publish runs internally)
-.\scripts\utilities\wf.ps1 release-homologation
+.\scripts\utilities\gv.ps1 release-homologation
 
 # Optional: validate with a specific release tag
-.\scripts\utilities\wf.ps1 release-homologation vX.Y.Z
+.\scripts\utilities\gv.ps1 release-homologation vX.Y.Z
 
 # Skip gate on publish (not recommended — use only for emergencies)
-.\scripts\utilities\wf.ps1 publish -SkipHomologationGate
+.\scripts\utilities\gv.ps1 publish -SkipHomologationGate
 ```
 
 Expected outcome:
@@ -142,3 +142,4 @@ gh release create vX.Y.Z --title "vX.Y.Z" --notes "See CHANGELOG.md"
 - `chore/*` — maintenance branches
 
 See [BRANCH-STRATEGY.md](BRANCH-STRATEGY.md) for full details.
+

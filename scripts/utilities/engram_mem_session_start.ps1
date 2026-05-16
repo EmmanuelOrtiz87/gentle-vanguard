@@ -1,12 +1,12 @@
 #!/usr/bin/env pwsh
 param(
-    [string]$ProjectName = 'workspace_local',
+    [string]$ProjectName = 'workspace_gentle_vanguard',
     [string]$SessionId = ''
 )
 
 $ErrorActionPreference = 'SilentlyContinue'
 
-$repoRoot = if ($env:FOUNDATION_BASE_DIR -and (Test-Path $env:FOUNDATION_BASE_DIR)) { $env:FOUNDATION_BASE_DIR } else {
+$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) { $env:GENTLE_VANGUARD_BASE_DIR } else {
     $root = Split-Path -Parent $PSScriptRoot
     while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
     if (-not $root) { $root = $PSScriptRoot }
@@ -29,14 +29,14 @@ if ([string]::IsNullOrWhiteSpace($SessionId)) {
     $SessionId = "session-$(Get-Date -Format 'yyyy-MM-dd-HHmmss')"
 }
 
-if (-not (Get-Command Invoke-FoundationEngram -ErrorAction SilentlyContinue)) {
+if (-not (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue)) {
     Write-Host "[INFO] Engram helper unavailable. Session marker skipped (non-critical)." -ForegroundColor Cyan
     exit 0
 }
 
 $title = "Session start: $SessionId"
 $content = "Session $SessionId registered manually for project $ProjectName."
-$result = Invoke-FoundationEngram -RepoRoot $repoRoot -Arguments @('save', $title, $content, '--project', $ProjectName, '--type', 'session')
+$result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('save', $title, $content, '--project', $ProjectName, '--type', 'session')
 
 if ($result.Success) {
     Write-Host "[OK] Engram session registered: $SessionId" -ForegroundColor Green

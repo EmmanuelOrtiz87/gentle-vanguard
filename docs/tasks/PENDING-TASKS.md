@@ -3,7 +3,7 @@ status: completed
 last_review: 2026-05-08
 ---
 
-# ✅ Tareas Pendientes — Foundation (Archivado)
+# ✅ Tareas Pendientes — Gentle-Vanguard (Archivado)
 
 **Este documento se mantiene como registro histórico.** **Ver `docs/tasks/README.md` para tareas
 activas.**
@@ -23,3 +23,4 @@ activas.**
 | Fecha      | Cambio                                                        |
 | ---------- | ------------------------------------------------------------- |
 | 2026-05-08 | Documento archivado — todos los items resueltos y verificados |
+

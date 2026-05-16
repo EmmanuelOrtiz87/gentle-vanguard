@@ -1,9 +1,9 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    Foundation Audit Sweep - Batch validation without agent tokens
+    Gentle-Vanguard Audit Sweep - Batch validation without agent tokens
 .DESCRIPTION
-    Performs comprehensive audit of Foundation: duplicates, links, skills, docs
+    Performs comprehensive audit of Gentle-Vanguard: duplicates, links, skills, docs
     Zero agent tokens - pure PowerShell batch execution
 .PARAMETER Scope
     quick | standard | full | deep
@@ -32,7 +32,7 @@ param(
     [string]$BasePath
 )
 
-# Auto-detect Foundation root if not specified
+# Auto-detect Gentle-Vanguard root if not specified
 if (-not $BasePath) {
     $BasePath = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
 }
@@ -125,8 +125,8 @@ function Test-DeprecatedSkillReferences {
         }
     }
 
-    # Foundation contains active SDD skills by design; only flag legacy alias there.
-    if ((Split-Path $RootPath -Leaf) -eq 'foundation') {
+    # Gentle-Vanguard contains active SDD skills by design; only flag legacy alias there.
+    if ((Split-Path $RootPath -Leaf) -eq 'gentle-vanguard') {
         $deprecated = $deprecated | Where-Object { $_ -in @('sdd-skill') }
     }
     
@@ -378,7 +378,7 @@ function Test-SkillIndexSync {
 function Invoke-AuditSweep {
     param([string]$RootPath, [string]$Scope)
     
-    Write-Host "`n# Foundation Audit Sweep - $Scope" -ForegroundColor Magenta
+    Write-Host "`n# Gentle-Vanguard Audit Sweep - $Scope" -ForegroundColor Magenta
     Write-Host "Started: $($Script:StartTime.ToString('HH:mm:ss'))"
     Write-Host "Base: $RootPath`n"
     
@@ -457,3 +457,4 @@ function Get-AuditSummary {
 # Run audit
 Invoke-AuditSweep -RootPath $BasePath -Scope $Scope
 Get-AuditSummary
+

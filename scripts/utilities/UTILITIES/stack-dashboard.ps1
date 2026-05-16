@@ -188,19 +188,19 @@ if (-not $orchestratorActive -or -not $engramAvailable -or $tokenStatus -eq 'HAR
 
 $recommendation = @()
 if (-not $engramAvailable) {
-    $recommendation += '.\\scripts\\utilities\\wf.ps1 install-engram'
+    $recommendation += '.\\scripts\\utilities\\gv.ps1 install-engram'
     $recommendation += '.\\scripts\\utilities\\run-engram.ps1 --help'
 } elseif ($tokenStatus -eq 'HARD_LIMIT') {
-    $recommendation += '.\\scripts\\utilities\\wf.ps1 response-mode simple'
-    $recommendation += '.\\scripts\\utilities\\wf.ps1 response-mode ultra'
-    $recommendation += '.\\scripts\\utilities\\wf.ps1 context-pack "<objective>"'
-    $recommendation += '.\\scripts\\utilities\\wf.ps1 end-session "<task>" -SkipReview -SkipTests -Force'
+    $recommendation += '.\\scripts\\utilities\\gv.ps1 response-mode simple'
+    $recommendation += '.\\scripts\\utilities\\gv.ps1 response-mode ultra'
+    $recommendation += '.\\scripts\\utilities\\gv.ps1 context-pack "<objective>"'
+    $recommendation += '.\\scripts\\utilities\\gv.ps1 end-session "<task>" -SkipReview -SkipTests -Force'
 } elseif ($tokenStatus -eq 'SOFT_LIMIT') {
-    $recommendation += '.\\scripts\\utilities\\wf.ps1 compact-start "<objective>"'
-    $recommendation += '.\\scripts\\utilities\\wf.ps1 context-pack "<objective>"'
+    $recommendation += '.\\scripts\\utilities\\gv.ps1 compact-start "<objective>"'
+    $recommendation += '.\\scripts\\utilities\\gv.ps1 context-pack "<objective>"'
 } else {
     $recommendation += '.\\scripts\\utilities\\orchestrator-next-steps.ps1'
-    $recommendation += '.\\scripts\\utilities\\wf.ps1 token-guard'
+    $recommendation += '.\\scripts\\utilities\\gv.ps1 token-guard'
 }
 
 $result = [ordered]@{
@@ -265,3 +265,4 @@ if ($Strict -and $trafficLight -eq 'RED') {
 }
 
 exit 0
+

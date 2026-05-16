@@ -6,8 +6,7 @@ description: >
   "supply chain optimization", "cadena de suministro", "logística integral"
 license: Apache-2.0
 metadata:
-  author: foundation
-  version: '1.0'
+  author: gv version: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash
 ---
 
@@ -35,3 +34,4 @@ User asks about supply chain management, planning, optimization, or the SCOR mod
 2. Provide quantitative analysis or optimization recommendations
 3. Include technology recommendations (APS, WMS, TMS, control tower)
 4. Address risk management and resilience strategies
+

@@ -199,7 +199,7 @@ if (Test-DomainEnabled 'skills') {
 #  - Unit tests (Pester 3.4.0) all pass
 # =============================================================================
 if (Test-DomainEnabled 'tests') {
-    $TestFile = "$Root\tests\unit\foundation-core.tests.ps1"
+    $TestFile = "$Root\tests\unit\gentle-vanguard-core.tests.ps1"
     if (Test-Path $TestFile) {
         $TestOut = & pwsh -NoProfile -ExecutionPolicy Bypass -Command @"
             Import-Module Pester -RequiredVersion 3.4.0 -ErrorAction Stop
@@ -226,7 +226,7 @@ if (Test-DomainEnabled 'tests') {
             }
         }
     } else {
-        Add-Result "unit-tests" "WARN" "Test file not found: tests/unit/foundation-core.tests.ps1" "tests"
+        Add-Result "unit-tests" "WARN" "Test file not found: tests/unit/gentle-vanguard-core.tests.ps1" "tests"
     }
 
     # Multilingual routing regression matrix (es/en/pt-BR)
@@ -357,15 +357,15 @@ if (Test-DomainEnabled 'structure') {
             $missingTimeout = @()
             $badCronComments = @()
 
-            foreach ($wf in $scheduled) {
-                if ($wf.raw -notmatch "(?m)^\s*concurrency:\s*$") { $missingConcurrency += $wf.file }
-                if ($wf.raw -notmatch "(?m)^\s*permissions:\s*$") { $missingPermissions += $wf.file }
-                if ($wf.raw -notmatch "(?m)^\s*timeout-minutes:\s*\d+") { $missingTimeout += $wf.file }
+            foreach ($gv in $scheduled) {
+                if ($gv.raw -notmatch "(?m)^\s*concurrency:\s*$") { $missingConcurrency += $gv.file }
+                if ($gv.raw -notmatch "(?m)^\s*permissions:\s*$") { $missingPermissions += $gv.file }
+                if ($gv.raw -notmatch "(?m)^\s*timeout-minutes:\s*\d+") { $missingTimeout += $gv.file }
 
-                $cronLines = ($wf.raw -split "`r?`n") | Where-Object { $_ -match "cron:\s*'" }
+                $cronLines = ($gv.raw -split "`r?`n") | Where-Object { $_ -match "cron:\s*'" }
                 foreach ($line in $cronLines) {
                     if ($line -notmatch "GMT-3" -or $line -notmatch "UTC") {
-                        $badCronComments += $wf.file
+                        $badCronComments += $gv.file
                         break
                     }
                 }
@@ -500,7 +500,7 @@ if (Test-DomainEnabled 'structure') {
                                     "Review .logs/override-audit.jsonl for the full override history.",
                                     "If overrides are legitimate, increase thresholds in config/orchestrator.json#governed_override_profiles.abuse_detection.",
                                     "If overrides are abusive, remove excess entries from override-audit.jsonl and notify the team.",
-                                    "Run 'wf verify' after remediation to confirm the alert clears."
+                                    "Run 'gv verify' after remediation to confirm the alert clears."
                                 )
                             }
                             $alertPayload | ConvertTo-Json -Depth 5 | Out-File -FilePath $alertPath -Encoding UTF8 -Force
@@ -517,7 +517,7 @@ if (Test-DomainEnabled 'structure') {
                                 Write-Host "    1. Check .logs/override-audit.jsonl for the full override history." -ForegroundColor Cyan
                                 Write-Host "    2. If legitimate, raise thresholds in orchestrator.json." -ForegroundColor Cyan
                                 Write-Host "    3. If abusive, purge excess entries and notify the team." -ForegroundColor Cyan
-                                Write-Host "    4. Run 'wf verify' again after remediation to confirm the alert clears." -ForegroundColor Cyan
+                                Write-Host "    4. Run 'gv verify' again after remediation to confirm the alert clears." -ForegroundColor Cyan
                                 Write-Host "" -ForegroundColor Red
                             }
                         } else {
@@ -595,3 +595,4 @@ if ($Json) {
 }
 
 exit $(if ($Errors -gt 0) { 1 } else { 0 })
+

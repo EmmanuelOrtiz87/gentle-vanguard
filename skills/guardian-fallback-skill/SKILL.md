@@ -1,7 +1,7 @@
 ---
 name: guardian-fallback
 description: >
-  Optional fallback skill for when Foundation cannot close tasks autonomously.
+  Optional fallback skill for when Gentle-Vanguard cannot close tasks autonomously.
    (Gentleman ) acts as guardian when orchestrator needs assistance.
   Trigger: "fallback", "guardian", "assist", "cerrar", "completar tarea", " blocker"
 ---
@@ -10,7 +10,7 @@ description: >
 
 ## Purpose
 
-serves as **optional guardian** when Foundation's orchestrator:
+serves as **optional guardian** when Gentle-Vanguard's orchestrator:
 
 - Cannot determine next step
 - Is blocked by unknown error
@@ -50,7 +50,7 @@ Use fallback when:
 
 ### Automatic (Recommended)
 
-Foundation invokes automatically when blocked:
+Gentle-Vanguard invokes automatically when blocked:
 
 ```powershell
 # Automatic detection and fallback
@@ -79,7 +79,7 @@ function Test-Available {
 
 function Invoke-Fallback {
     if (-not (Test-Available)) {
-        Write-Warn " not available - using Foundation native capabilities"
+        Write-Warn " not available - using Gentle-Vanguard native capabilities"
         return $false
     }
 
@@ -139,16 +139,16 @@ STRICT_MODE="true"
 
 | Tool                    | Required | Purpose                     |
 | ----------------------- | -------- | --------------------------- |
-| Foundation Orchestrator | **YES**  | Primary execution           |
+| Gentle-Vanguard Orchestrator | **YES**  | Primary execution           |
 | invoke-ai-review.ps1    | **YES**  | Native review (replacement) |
 | ()                      | **NO**   | Optional fallback guardian  |
 
 ## Coexistence
 
-Foundation operates **fully** without :
+Gentle-Vanguard operates **fully** without :
 
 - Native AI review via `invoke-ai-review.ps1`
-- Pre-commit hooks via Foundation hooks
+- Pre-commit hooks via Gentle-Vanguard hooks
 - Code review via `code-review-orchestrator-skill`
 
 is **enhancement**, not **requirement**.
@@ -192,10 +192,10 @@ is **enhancement**, not **requirement**.
  config          # Show config
  cache status    # Cache info
 
-# Foundation native (always available)
+# Gentle-Vanguard native (always available)
 invoke-ai-review.ps1 run
-foundation review --scope quick
-foundation review --scope full
+gv review --scope quick
+gv review --scope full
 ```
 
 ## Skill Priority
@@ -209,4 +209,5 @@ foundation review --scope full
 
 ---
 
-**Note:** is a convenience, not a requirement. Foundation works fully without it.
+**Note:** is a convenience, not a requirement. Gentle-Vanguard works fully without it.
+

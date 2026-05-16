@@ -9,7 +9,7 @@ $activationFile = Join-Path $projectRoot '.orchestrator-active'
 $configFile = Join-Path $projectRoot 'config\orchestrator.json'
 $skillCandidates = @(
     Join-Path $projectRoot 'skills\project-orchestrator-skill'
-    Join-Path $projectRoot '.foundation\\skills\project-orchestrator-skill'
+    Join-Path $projectRoot '.gentle-vanguard\\skills\project-orchestrator-skill'
 )
 $skillDir = $skillCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
 if (-not $skillDir) { $skillDir = $skillCandidates[0] }
@@ -107,23 +107,23 @@ function Show-TokenGuardExecutiveSummary {
 
     if ($guard.require_engram -and -not $EngramInstalled) {
         Write-Warning 'Continuity risk: Engram required by policy but not installed in PATH.'
-        Write-Host '  Alternative 1: .\scripts\utilities\wf.ps1 install-engram' -ForegroundColor Yellow
+        Write-Host '  Alternative 1: .\scripts\utilities\gv.ps1 install-engram' -ForegroundColor Yellow
         Write-Host '  Alternative 2: .\scripts\utilities\run-engram.ps1 --help' -ForegroundColor Yellow
         return
     }
 
     if ($pct -ge $hard) {
         Write-Warning 'Hard token threshold reached: use compact flow and finish with closure-safe path.'
-        Write-Host '  Alternative 1: .\scripts\utilities\wf.ps1 response-mode simple' -ForegroundColor Yellow
-        Write-Host '  Alternative 2: .\scripts\utilities\wf.ps1 response-mode ultra' -ForegroundColor Yellow
-        Write-Host '  Alternative 3: .\scripts\utilities\wf.ps1 context-pack "<objective>"' -ForegroundColor Yellow
-        Write-Host '  Alternative 4: .\scripts\utilities\wf.ps1 end-session "<task>" -SkipReview -SkipTests -Force' -ForegroundColor Yellow
+        Write-Host '  Alternative 1: .\scripts\utilities\gv.ps1 response-mode simple' -ForegroundColor Yellow
+        Write-Host '  Alternative 2: .\scripts\utilities\gv.ps1 response-mode ultra' -ForegroundColor Yellow
+        Write-Host '  Alternative 3: .\scripts\utilities\gv.ps1 context-pack "<objective>"' -ForegroundColor Yellow
+        Write-Host '  Alternative 4: .\scripts\utilities\gv.ps1 end-session "<task>" -SkipReview -SkipTests -Force' -ForegroundColor Yellow
         return
     }
 
     if ($pct -ge $soft) {
         Write-Warning 'Soft token threshold reached: reduce context size and split work into smaller slices.'
-        Write-Host '  Recommendation: run .\scripts\utilities\wf.ps1 compact-start "<objective>" before continuing' -ForegroundColor Yellow
+        Write-Host '  Recommendation: run .\scripts\utilities\gv.ps1 compact-start "<objective>" before continuing' -ForegroundColor Yellow
         return
     }
 
@@ -296,3 +296,4 @@ if ($engramInstalled -and (Test-Path $runEngramScript)) {
 }
 
 exit 0
+

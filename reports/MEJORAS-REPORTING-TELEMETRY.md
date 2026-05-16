@@ -1,7 +1,7 @@
 # 📋 Plan de Mejora: Sistema de Reporting y Telemetría
 
 **Fecha**: 2026-04-26  
-**Proyecto**: workspace_local  
+**Proyecto**: workspace_gentle_vanguard  
 **Objetivo**: Habilitar informes gerenciales completos bajo demanda
 
 ---
@@ -131,11 +131,11 @@ Ya configurado en `config/auto-delegation.json`:
 
 ```powershell
 # Ejemplos de uso:
-wf report today
-wf report yesterday
-wf report "24-26 abr"
-wf report --period 2026-04-24:2026-04-26
-wf metrics --sessions --tokens --costs
+gv report today
+gv report yesterday
+gv report "24-26 abr"
+gv report --period 2026-04-24:2026-04-26
+gv metrics --sessions --tokens --costs
 ```
 
 ---
@@ -191,10 +191,11 @@ wf metrics --sessions --tokens --costs
 - [ ] Ejecutar consolidación giornaliera
 - [ ] Poblar telemetry-master.csv
 - [ ] Crear skill de reporting
-- [ ] Agregar CLI `wf report`
+- [ ] Agregar CLI `gv report`
 - [ ] Probar flujo on-demand
 
 ---
 
 _Documento generado: 2026-04-26_  
 _Próxima revisión: cuando se implemente Fase 1_
+

@@ -95,7 +95,7 @@ try {
         Write-Host "Critical secrets detected in staged files." -ForegroundColor White
         Write-Host "Remove or secure credentials before committing." -ForegroundColor Gray
         Write-Host ""
-        Write-Host "Run 'wf review security' for details." -ForegroundColor Gray
+        Write-Host "Run 'gv review security' for details." -ForegroundColor Gray
         Write-Host ""
         
         Remove-Item $markerPath -Force -ErrorAction SilentlyContinue
@@ -131,7 +131,7 @@ try {
     Remove-Item $markerPath -Force -ErrorAction SilentlyContinue
 
     if ($exitCode -eq 1) {
-        Write-Host "Run 'wf review' for detailed report." -ForegroundColor Yellow
+        Write-Host "Run 'gv review' for detailed report." -ForegroundColor Yellow
     }
 
     exit $exitCode
@@ -141,3 +141,4 @@ try {
     Remove-Item $markerPath -Force -ErrorAction SilentlyContinue
     exit 0
 }
+

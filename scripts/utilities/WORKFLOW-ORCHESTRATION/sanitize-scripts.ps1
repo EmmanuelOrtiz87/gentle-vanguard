@@ -74,7 +74,7 @@ function Sanitize-File {
 
 # Main logic
 if ($Recursive) {
-    $scripts = Get-ChildItem -Path "foundation\\scripts\utilities" -Filter "*.ps1" -Recurse
+    $scripts = Get-ChildItem -Path "gentle-vanguard\\scripts\utilities" -Filter "*.ps1" -Recurse
     $sanitized = 0
     
     foreach ($script in $scripts) {

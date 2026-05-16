@@ -1,6 +1,6 @@
-﻿# Codex Adapter
+# Codex Adapter
 
-Converts Foundation skills to OpenAI Codex function calling format.
+Converts Gentle-Vanguard skills to OpenAI Codex function calling format.
 
 ---
 
@@ -17,7 +17,7 @@ Codex uses:
 ## Features
 
 ✅ Converts `SKILL.md` → OpenAI function format  
-✅ Generates tools array (all Foundation skills)  
+✅ Generates tools array (all Gentle-Vanguard skills)  
 ✅ Creates proxy server for Codex integration  
 ✅ Strict JSON Schema (no additional properties)
 
@@ -25,7 +25,7 @@ Codex uses:
 
 ## Usage
 
-### 1. Convert a Foundation Skill
+### 1. Convert a Gentle-Vanguard Skill
 
 ```bash
 node adapter.js convert-skill skills/react-19-skill/SKILL.md react-19.json
@@ -39,7 +39,7 @@ node adapter.js convert-skill skills/react-19-skill/SKILL.md react-19.json
 node adapter.js generate-tools skills/ tools.json
 ```
 
-Creates `tools.json` with all Foundation skills as OpenAI functions.
+Creates `tools.json` with all Gentle-Vanguard skills as OpenAI functions.
 
 ### 3. Generate Proxy Server
 
@@ -49,7 +49,7 @@ npm install express
 node proxy.js
 ```
 
-Creates a proxy that translates between Codex and Foundation.
+Creates a proxy that translates between Codex and Gentle-Vanguard.
 
 ---
 
@@ -78,7 +78,7 @@ Creates a proxy that translates between Codex and Foundation.
 
 ---
 
-## Integration with Foundation
+## Integration with Gentle-Vanguard
 
 1. **Detection**: `enhanced-detect.ps1` identifies Codex via `CODEX_SESSION` env var
 2. **Pre-processing**: `pre-process-input.ps1` loads `tool-codex.json`
@@ -88,7 +88,7 @@ Creates a proxy that translates between Codex and Foundation.
 
 ## Proxy Server
 
-The proxy server allows Codex to use Foundation skills:
+The proxy server allows Codex to use Gentle-Vanguard skills:
 
 ```bash
 # Start proxy
@@ -124,3 +124,4 @@ export CODEX_API_BASE="http://localhost:3000/v1"
 **Version**: 1.0.0  
 **Status**: Ready for testing  
 **Compatibility**: OpenAI Codex, OpenAI API
+

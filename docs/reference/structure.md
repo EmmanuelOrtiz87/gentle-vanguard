@@ -21,9 +21,9 @@ The goal is to clearly separate:
 
 - `{workspaceRoot}/` (workspace root)
 - `{workspaceRoot}/Workspace-Skills`
-- `{workspaceRoot}/foundation`
-- `{workspaceRoot}/foundation/.engram-data`
-- `{workspaceRoot}/foundation/skills`
+- `{workspaceRoot}/gentle-vanguard`
+- `{workspaceRoot}/gentle-vanguard/.engram-data`
+- `{workspaceRoot}/gentle-vanguard/skills`
 
 ## Project Level
 
@@ -58,3 +58,4 @@ No project should depend on an embedded local copy of external tools.
    `{workspaceRoot}/.engram-data`.
 2. `scripts/utilities/run-engram.ps1` creates the Engram session directory on first use.
 3. A missing `.engram-data/` directory on a fresh machine is normal and should not block demos.
+

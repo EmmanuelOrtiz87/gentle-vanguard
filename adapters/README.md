@@ -1,6 +1,6 @@
-﻿# Adapters & Integration Layer
+# Adapters & Integration Layer
 
-**Purpose**: Bridge Foundation capabilities to tools outside the Agent Skills standard (Windsurf,
+**Purpose**: Bridge Gentle-Vanguard capabilities to tools outside the Agent Skills standard (Windsurf,
 Codex, Antigravity, etc.)
 
 ---
@@ -10,9 +10,9 @@ Codex, Antigravity, etc.)
 ```
 adapters/
  README.md                    # This file
- mcp-bridge/                 # MCP Server exposing Foundation as MCP
+ mcp-bridge/                 # MCP Server exposing Gentle-Vanguard as MCP
     server.ts               # Main MCP server implementation
-    tools.ts               # Foundation tools exposed via MCP
+    tools.ts               # Gentle-Vanguard tools exposed via MCP
     resources.ts            # Context/resources exposed
     package.json           # Node.js dependencies
     README.md              # MCP Bridge documentation
@@ -33,7 +33,7 @@ adapters/
 
 ## Quick Start
 
-### 1. Start MCP Bridge (exposes Foundation to any MCP client)
+### 1. Start MCP Bridge (exposes Gentle-Vanguard to any MCP client)
 
 ```bash
 cd adapters/mcp-bridge
@@ -49,7 +49,7 @@ npm start
 ```json
 {
   "mcpServers": {
-    "foundation": {
+    "gentle-vanguard": {
       "command": "node",
       "args": ["/path/to/adapters/mcp-bridge/dist/server.js"]
     }
@@ -87,36 +87,36 @@ The enhanced detection system identifies:
 
 ### 1. MCP Bridge (Recommended)
 
-Converts Foundation into an **MCP Server** that any MCP-compatible tool can use.
+Converts Gentle-Vanguard into an **MCP Server** that any MCP-compatible tool can use.
 
 **Benefits**:
 
 - Universal compatibility (any MCP client)
 - Standard protocol (future-proof)
-- Exposes all Foundation capabilities
+- Exposes all Gentle-Vanguard capabilities
 - Token-efficient (MCP handles context)
 
 **Exposed Tools**:
 
-- `foundation_review` - 7D code review
-- `foundation_audit` - Workspace audit
-- `foundation_delegate` - Subagent delegation
-- `foundation_health` - Health check
-- `foundation_session` - Session management
+- `gentle-vanguard_review` - 7D code review
+- `gentle-vanguard_audit` - Workspace audit
+- `gentle-vanguard_delegate` - Subagent delegation
+- `gentle-vanguard_health` - Health check
+- `gentle-vanguard_session` - Session management
 
 ---
 
 ### 2. Format Adapters
 
-Translates between Foundation's standard format and tool-specific formats.
+Translates between Gentle-Vanguard's standard format and tool-specific formats.
 
 **When to use**: Tool doesn't support MCP but has its own plugin system.
 
 | Adapter             | Input Format        | Output Format           |
 | ------------------- | ------------------- | ----------------------- |
-| windsurf-adapter    | Foundation SKILL.md | Windsurf plugin format  |
-| codex-adapter       | Foundation tools    | OpenAI function calling |
-| antigravity-adapter | Foundation context  | Mission Control format  |
+| windsurf-adapter    | Gentle-Vanguard SKILL.md | Windsurf plugin format  |
+| codex-adapter       | Gentle-Vanguard tools    | OpenAI function calling |
+| antigravity-adapter | Gentle-Vanguard context  | Mission Control format  |
 
 ---
 
@@ -127,7 +127,7 @@ Translates between Foundation's standard format and tool-specific formats.
 1. Preserve token efficiency (no unnecessary context expansion)
 2. Log all translations (for debugging)
 3. Handle errors gracefully (fallback to basic mode)
-4. Respect Foundation's memory tiering
+4. Respect Gentle-Vanguard's memory tiering
 5. Support the detection system
 
 ---
@@ -158,3 +158,4 @@ Translates between Foundation's standard format and tool-specific formats.
 **Generated**: 2026-04-28  
 **Version**: 1.0.0  
 **Status**: In Development
+

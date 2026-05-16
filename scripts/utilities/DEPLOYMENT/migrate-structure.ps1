@@ -25,8 +25,8 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-if ($env:FOUNDATION_BASE_DIR) {
-    $repoRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GENTLE_VANGUARD_BASE_DIR) {
+    $repoRoot = $env:GENTLE_VANGUARD_BASE_DIR
 } else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -80,7 +80,7 @@ function Resolve-CanonicalDir {
     if ($n -match 'install|setup|init|bootstrap|project')    { return 'scripts/project' }
     if ($n -match 'update|sync|refresh|upgrade')              { return 'scripts/validation' }
     if ($n -match 'hook|post-|pre-')                          { return 'scripts/git-hooks' }
-    if ($n -match 'foundation|scaffold')                      { return 'scripts/foundation' }
+    if ($n -match 'gentle-vanguard|scaffold')                      { return 'scripts/gentle-vanguard' }
     return 'scripts/utilities'
 }
 
@@ -155,3 +155,4 @@ Write-Host ""
 Write-Warn "Remember: update all internal path references after migration."
 Write-Ok   "Migration complete. Run governance validator to confirm: .\scripts\diagnostics\validate-script-governance.ps1"
 exit 0
+

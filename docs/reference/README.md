@@ -1,7 +1,7 @@
 # 📚 Reference Documentation
 
 <p align="center">
-  <b>Technical reference documentation for Foundation</b>
+  <b>Technical reference documentation for Gentle-Vanguard</b>
 </p>
 
 ---
@@ -44,7 +44,7 @@
 | **[tools.md](tools.md)**                                                           | Third-party integrations                     |
 | **[structure.md](structure.md)**                                                   | Workspace layout                             |
 | **[script-registry.md](script-registry.md)**                                       | Script governance registry and policy levels |
-| **[FOUNDATION-INSTALLER.md](FOUNDATION-INSTALLER.md)**                             | Foundation installer guide                   |
+| **[Gentle-Vanguard-INSTALLER.md](Gentle-Vanguard-INSTALLER.md)**                             | Gentle-Vanguard installer guide                   |
 | **[REAL-TOKEN-TRACKING.md](REAL-TOKEN-TRACKING.md)**                               | Token tracking guide                         |
 | **[PLUGIN-ARCHITECTURE.md](PLUGIN-ARCHITECTURE.md)**                               | Plugin development guide                     |
 | **[SKILL-ORGANIZATION.md](SKILL-ORGANIZATION.md)**                                 | Skill catalog and organization               |
@@ -96,3 +96,5 @@ docs/reference/
   <b>📚 Technical reference for power users</b><br>
   <i>Architecture • Skills • Governance • Standards</i>
 </p>
+
+

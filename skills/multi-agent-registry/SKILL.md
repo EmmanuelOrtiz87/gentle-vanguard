@@ -6,7 +6,7 @@ description:
   distributed orchestration replacing monolithic orchestrator pattern.'
 license: Apache-2.0
 metadata:
-  author: foundation
+  author: gentle-vanguard
   versión: '1.0'
 ---
 
@@ -48,8 +48,8 @@ development, QA, DevOps, governance, and documentation domains.
 
 1. **Receive** user request → orchestrator decomposes task
 2. **Route** to appropriate agent(s) via `config/subagent-mapping.json` using the lane table above
-3. **Execute** agents via `wf.ps1 dispatch "<agents>" "<task>" -Mode <mode>` or per-agent
-   `wf.ps1 agent <CODE> "<task>"`
+3. **Execute** agents via `gv.ps1 dispatch "<agents>" "<task>" -Mode <mode>` or per-agent
+   `gv.ps1 agent <CODE> "<task>"`
 4. **Coordinate** cross-agent results (orchestrator)
 5. **Validate** final output and handoff to user
 
@@ -69,3 +69,4 @@ Structured JSON per Agent Result Schema (FF-007): `lane_id`, `agent`, `role`, `s
 - Skill index: `../SKILL_INDEX.md`
 - Orchestrator: `../project-orchestrator-skill/SKILL.md`
 - Backlog: `../../docs/reference/FUTURE-FEATURES-BACKLOG.md`
+

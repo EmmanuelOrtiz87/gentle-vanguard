@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env pwsh
+#!/usr/bin/env pwsh
 
 $script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
 $script:engram = Join-Path $script:root 'tools\engram.exe'
@@ -26,12 +26,12 @@ Describe "Engram CLI - Unit Tests" {
 
     Context "Search Operations" {
         It "engram search returns results for known session patterns" {
-            $out = & $script:engram search "Session start:" --project foundation --limit 3 2>&1 | Out-String
+            $out = & $script:engram search "Session start:" --project gentle-vanguard --limit 3 2>&1 | Out-String
             $out | Should Not BeNullOrEmpty
         }
 
         It "engram search with --limit works correctly" {
-            $raw = & $script:engram search "Session" --project foundation --limit 2 2>&1
+            $raw = & $script:engram search "Session" --project gentle-vanguard --limit 2 2>&1
             $lines = @($raw | Where-Object { $_ -match 'session-' })
             $lines.Count -le 10 | Should Be $true
         }
@@ -45,7 +45,7 @@ Describe "Engram CLI - Unit Tests" {
         }
 
         It "engram stats returns observation count" {
-            $raw = & $script:engram stats --project foundation 2>&1 | Out-String
+            $raw = & $script:engram stats --project gentle-vanguard 2>&1 | Out-String
             $raw.Trim() | Should Not BeNullOrEmpty
         }
     }
@@ -53,8 +53,8 @@ Describe "Engram CLI - Unit Tests" {
     Context "Data Roundtrip" {
         It "can save and then search for an observation" {
             $title = "test-obs-$script:testId"
-            $null = & $script:engram save --title $title --content "Integration test observation $script:testId" --project foundation 2>&1
-            $searchOut = & $script:engram search $title --project foundation --limit 5 2>&1 | Out-String
+            $null = & $script:engram save --title $title --content "Integration test observation $script:testId" --project gentle-vanguard 2>&1
+            $searchOut = & $script:engram search $title --project gentle-vanguard --limit 5 2>&1 | Out-String
             ($searchOut -match [regex]::Escape($title)) | Should Be $true
         }
     }
@@ -68,10 +68,11 @@ Describe "Engram CLI - Unit Tests" {
 
     Context "Cross-Session Consistency" {
         It "search returns same project across multiple queries" {
-            $r1 = & $script:engram search "session" --project foundation --limit 2 2>&1 | Out-String
-            $r2 = & $script:engram search "session" --project foundation --limit 2 2>&1 | Out-String
+            $r1 = & $script:engram search "session" --project gentle-vanguard --limit 2 2>&1 | Out-String
+            $r2 = & $script:engram search "session" --project gentle-vanguard --limit 2 2>&1 | Out-String
             $r1.Trim().Length | Should BeGreaterThan 0
             $r2.Trim().Length | Should BeGreaterThan 0
         }
     }
 }
+

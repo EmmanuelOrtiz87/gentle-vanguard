@@ -24,7 +24,7 @@ param(
     [string]$Components = 'all',
     
     [Parameter(Mandatory=$false)]
-    [string]$ProjectName = "foundation"
+    [string]$ProjectName = "gentle-vanguard"
 )
 
 $ErrorActionPreference = 'Continue'
@@ -156,3 +156,4 @@ catch {
     Write-Host "[ERROR] Quick restart failed: $_" -ForegroundColor Red
     exit 1
 }
+

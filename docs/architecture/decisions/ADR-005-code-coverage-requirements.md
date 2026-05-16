@@ -2,14 +2,14 @@
 
 **Status**: Accepted (Implemented)  
 **Date**: May 13, 2026  
-**Author**: Foundation DevOps Team  
+**Author**: Gentle-Vanguard DevOps Team  
 **Context**: Establishing measurable quality gates after test suite maturation  
 
 ---
 
 ## Context
 
-foundation has a strong test suite (33+ tests across unit, integration, security, and
+gentle-vanguard has a strong test suite (33+ tests across unit, integration, security, and
 performance categories) but **no code coverage measurement** was in place. Without
 coverage thresholds, it is impossible to:
 
@@ -105,7 +105,7 @@ and exclusions. The CI workflow uploads coverage reports as artifacts.
 2. **Report-only, no threshold** — Rejected: reports without enforcement degrade over time
 3. **100% target** — Rejected: infrastructure/deployment scripts have error-handling branches
    that are intentionally difficult to trigger in tests
-4. **Istanbul/NYC for JS, separate for PS** — Rejected: foundation is primarily PowerShell;
+4. **Istanbul/NYC for JS, separate for PS** — Rejected: gentle-vanguard is primarily PowerShell;
    adding a second tool doubles complexity
 
 ---
@@ -116,3 +116,4 @@ and exclusions. The CI workflow uploads coverage reports as artifacts.
 - `scripts/run-tests-simple.ps1` — coverage flag implementation
 - `.github/workflows/test-suite.yml` — CI integration
 - ADR-002 (PowerShell language choice) — explains why Pester is the test framework
+

@@ -10,7 +10,7 @@
         "@modelcontextprotocol/server-filesystem",
         "."
       ],
-      "description": "File system access for foundation — offline hardened (npx supply-chain protection)",
+      "description": "File system access for gentle-vanguard — offline hardened (npx supply-chain protection)",
       "security": {
         "hardened": true,
         "mode": "offline",
@@ -35,12 +35,13 @@
       },
       "persistence": {
         "enabled": true,
-        "syncCommand": "tools\\engram.exe sync --project foundation",
+        "syncCommand": "tools\\engram.exe sync --project gentle-vanguard",
         "exportFormat": "json"
       }
     }
   },
   "version": "1.1.0",
-  "description": "MCP Server Configuration for foundation — hardened against supply chain attacks",
+  "description": "MCP Server Configuration for gentle-vanguard — hardened against supply chain attacks",
   "autoStart": true
 }
+

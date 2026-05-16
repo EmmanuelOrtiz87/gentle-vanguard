@@ -1,14 +1,14 @@
-# foundation-manager.tests.ps1
-# Unit tests for foundation-manager-skill (FF-017 Auto-update)
+# gentle-vanguard-manager.tests.ps1
+# Unit tests for gentle-vanguard-manager-skill (FF-017 Auto-update)
 
-Describe 'Foundation Manager Skill Tests' {
+Describe 'Gentle-Vanguard Manager Skill Tests' {
     BeforeAll {
         $script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
-        $script:skillPath = Join-Path $script:root "skills/foundation-manager-skill"
+        $script:skillPath = Join-Path $script:root "skills/gentle-vanguard-manager-skill"
     }
 
-    Context 'Foundation Manager Skill' {
-        It 'foundation-manager-skill directory exists' {
+    Context 'Gentle-Vanguard Manager Skill' {
+        It 'gentle-vanguard-manager-skill directory exists' {
             Test-Path $script:skillPath | Should Be $true
         }
 
@@ -35,7 +35,7 @@ Describe 'Foundation Manager Skill Tests' {
         }
     }
 
-    Context 'Foundation Manager Implementation' {
+    Context 'Gentle-Vanguard Manager Implementation' {
         It 'SKILL.md is the main implementation document' {
             $f = Join-Path $script:skillPath "SKILL.md"
             Test-Path $f | Should Be $true
@@ -48,3 +48,4 @@ Describe 'Foundation Manager Skill Tests' {
         }
     }
 }
+

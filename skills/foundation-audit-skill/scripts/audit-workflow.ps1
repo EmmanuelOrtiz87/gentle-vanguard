@@ -21,7 +21,7 @@ if ($IsStandalone) {
     $WorkingDir = $StandalonePath
 } else {
     $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-    $AuditScript = Join-Path $BasePath 'skills\foundation-audit-skill\scripts\audit-sweep.ps1'
+    $AuditScript = Join-Path $BasePath 'skills\gentle-vanguard-audit-skill\scripts\audit-sweep.ps1'
     $WorkingDir = $BasePath
 }
 
@@ -129,7 +129,7 @@ function Get-AuditReport {
 
 Write-Host ""
 Write-Host "UNIFIED AUDIT WORKFLOW v1.0" -ForegroundColor Magenta
-Write-Host "Foundation Audit + Judgment Day Integration" -ForegroundColor Magenta
+Write-Host "Gentle-Vanguard Audit + Judgment Day Integration" -ForegroundColor Magenta
 Write-Host ""
 
 Write-Host "Started: $($Script:StartTime.ToString('HH:mm:ss'))"

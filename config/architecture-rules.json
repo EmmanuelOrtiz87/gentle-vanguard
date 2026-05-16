@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "description": "Foundation Project - Architecture Rules Configuration",
+  "description": "Gentle-Vanguard Project - Architecture Rules Configuration",
   "layers": [
     {
       "id": "presentation",

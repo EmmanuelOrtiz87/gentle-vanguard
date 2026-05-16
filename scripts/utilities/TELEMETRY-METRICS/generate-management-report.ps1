@@ -66,7 +66,7 @@ $telemetryDir = Join-Path $workspaceRoot ".telemetry"
 # Try to get Engram data once for all sessions
 $engramObservations = @()
 try {
-    $engramExe = ".\foundation\\tools\engram.exe"
+    $engramExe = ".\gentle-vanguard\\tools\engram.exe"
     
     if (Test-Path $engramExe) {
         Write-Host "   [EXPORT] Exporting Engram data..."
@@ -211,3 +211,4 @@ Write-Host "`n[PREVIEW] First 3 rows:"
 if (Test-Path $reportFile) {
     Get-Content $reportFile -TotalCount 4 | ForEach-Object { Write-Host $_ }
 }
+

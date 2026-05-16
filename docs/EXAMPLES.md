@@ -1,6 +1,6 @@
-# 🏗️ Foundation AI Development Stack — Real-World Examples
+# 🏗️ Gentle-Vanguard AI Development Stack — Real-World Examples
 
-> **29 agents · 132 skills · CLI `foundation` · auto-delegation · Engram memory · 7D pre-commit hooks**
+> **29 agents · 132 skills · CLI `gentle-vanguard` · auto-delegation · Engram memory · 7D pre-commit hooks**
 
 ---
 
@@ -8,7 +8,7 @@
 
 **User input:**
 ```
-foundation start-session && foundation task-brief "Build a Go REST API for user management with JWT auth"
+gv start-session && gv task-brief "Build a Go REST API for user management with JWT auth"
 ```
 
 **What happens:**
@@ -59,7 +59,7 @@ Add JWT auth with login/signup to the React frontend
 
 **User input:**
 ```
-foundation judgment-day --security
+gv judgment-day --security
 ```
 
 **What happens:**
@@ -84,7 +84,7 @@ foundation judgment-day --security
 
 **User input:**
 ```
-foundation release v2.7.0
+gv release v2.7.0
 ```
 
 **What happens:**
@@ -139,7 +139,7 @@ premortem my architecture in docs/sdd/payment-service-v2.md
 
 **User input:**
 ```
-foundation dashboard --weekly
+gv dashboard --weekly
 ```
 
 **What happens:**
@@ -203,7 +203,7 @@ Create a skill for FastAPI patterns — trigger word "fastapi"
 | Step | Agent | Skill | Action |
 |------|-------|-------|--------|
 | 1 | ORCHESTRATOR | `project-orchestrator-skill` | Detects `create skill`, routes to GOV |
-| 2 | GOV | `foundation-manager-skill` | Loads `skill-creator-skill` from `skills/skill-creator-skill/` |
+| 2 | GOV | `gentle-vanguard-manager-skill` | Loads `skill-creator-skill` from `skills/skill-creator-skill/` |
 | 3 | GOV | `skill-creator-skill` | Scaffolds `skills/fastapi-patterns/` with SKILL.md, example files |
 | 4 | GOV | `skill-factory-skill` | Registers skill in `config/auto-delegation.json`: adds keyword mapping → `fastapi-patterns` |
 | 5 | GOV | `sync-skills.ps1` | Runs skill registry sync, validates no duplicate triggers |
@@ -256,7 +256,7 @@ Build a notification microservice — sends email/SMS, tracks delivery status
 
 **User input:**
 ```
-foundation daily
+gv daily
 ```
 
 **What happens:**
@@ -266,7 +266,7 @@ foundation daily
 | 1 | ORCHESTRATOR | `project-orchestrator-skill` | Detects `daily` keyword, routes to DAILY agent |
 | 2 | DAILY | `daily-workflow` | Runs `scripts/utilities/WORKFLOW-ORCHESTRATION/daily-check.ps1` |
 | 3 | DAILY | `session-workflow-skill` | Checks: git status, branch hygiene, stale checkpoints (>7d), CI status |
-| 4 | DAILY | `project-orchestrator-skill` | Validates: config integrity, skill registry health, foundation version |
+| 4 | DAILY | `project-orchestrator-skill` | Validates: config integrity, skill registry health, gv version |
 | 5 | GOV | `quality-skill` | Context efficiency: prompt adoption %, avg chars, trend vs last week |
 | 6 | SESSION | `session-workflow-skill` | Starts session `session-YYYY-MM-DD-NN` in Engram |
 | 7 | DAILY | `daily-workflow` | Prints morning report: 5 sections with status indicators |
@@ -309,4 +309,5 @@ foundation daily
 
 ---
 
-> **Prerequisite:** Always start with `foundation start-session` (or `.\scripts\utilities\session-autostart.cmd`) to initialize Engram memory and routing context.
+> **Prerequisite:** Always start with `gv start-session` (or `.\scripts\utilities\session-autostart.cmd`) to initialize Engram memory and routing context.
+

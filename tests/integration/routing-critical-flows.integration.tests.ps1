@@ -47,7 +47,7 @@ Describe "Routing Critical Flows" {
         }
 
         It "Routes Portuguese session start requests to session workflow" {
-            $result = & $script:preProcess -UserInput 'iniciar sessao no foundation' -WorkspaceRoot $script:repoRoot
+            $result = & $script:preProcess -UserInput 'iniciar sessao no gentle-vanguard' -WorkspaceRoot $script:repoRoot
             $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
 
             $summary | Should Not BeNullOrEmpty
@@ -67,3 +67,4 @@ Describe "Routing Critical Flows" {
         }
     }
 }
+

@@ -67,16 +67,16 @@ Describe 'Routing Flow Integration' {
         }
     }
 
-    Context 'foundation-sync.json consistency' {
+    Context 'gentle-vanguard-sync.json consistency' {
         BeforeAll {
-            $syncPath = Join-Path $script:root 'config\foundation-sync.json'
+            $syncPath = Join-Path $script:root 'config\gentle-vanguard-sync.json'
             $script:sync = Get-Content $syncPath -Raw -Encoding UTF8 | ConvertFrom-Json
         }
 
-        It 'foundationVersion matches VERSION file' {
+        It 'gentle-vanguardVersion matches VERSION file' {
             $versionFile = Join-Path $script:root 'VERSION'
             $expected = (Get-Content $versionFile -Raw -Encoding UTF8).Trim()
-            $script:sync.foundationVersion | Should Be $expected
+            $script:sync.gentle-vanguardVersion | Should Be $expected
         }
 
         It 'all script assets exist on disk' {
@@ -104,13 +104,14 @@ Describe 'Routing Flow Integration' {
         }
     }
 
-    Context 'wf wrapper entrypoint' {
+    Context 'gv wrapper entrypoint' {
         It 'forwards commands to the canonical CLI' {
-            $wrapperPath = Join-Path $script:root 'scripts\utilities\wf.ps1'
+            $wrapperPath = Join-Path $script:root 'scripts\utilities\gv.ps1'
             $output = & pwsh -NoProfile -ExecutionPolicy Bypass -File $wrapperPath version 2>&1
 
             $LASTEXITCODE | Should Be 0
-            (($output | Out-String) -match 'Gentleman Foundation v') | Should Be $true
+            (($output | Out-String) -match 'Gentle-Vanguard v') | Should Be $true
         }
     }
 }
+

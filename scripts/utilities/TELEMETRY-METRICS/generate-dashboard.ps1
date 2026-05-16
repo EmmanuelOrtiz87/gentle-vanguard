@@ -916,7 +916,7 @@ $cardsOps += Build-MetricCard -Title 'Live Snapshot Time' -Value $liveSnapshotTi
 $cardsBenchmark = @()
 $cardsBenchmark += Build-MetricCard -Title 'Benchmark Status' -Value $currentBenchStatus -Label 'full benchmark outcome'
 $cardsBenchmark += Build-MetricCard -Title 'Regression Guard' -Value $currentRegressionStatus -Label 'baseline drift check'
-$cardsBenchmark += Build-MetricCard -Title 'Baseline Latency' -Value ([string]$baselineLatency + ' s') -Label 'wf average elapsed baseline'
+$cardsBenchmark += Build-MetricCard -Title 'Baseline Latency' -Value ([string]$baselineLatency + ' s') -Label 'gv average elapsed baseline'
 $cardsBenchmark += Build-MetricCard -Title 'Baseline Routing' -Value ([string]$baselineRouting + '%') -Label 'routing accuracy baseline'
 
 $html = @"
@@ -926,7 +926,7 @@ $html = @"
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 $autoRefreshMeta
-<title>Gentleman Foundation - Metrics Dashboard</title>
+<title>Gentle-Vanguard - Metrics Dashboard</title>
 <style>
   :root {
     --bg: #081016;
@@ -1155,7 +1155,7 @@ $autoRefreshMeta
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
-  <h1>Gentleman Foundation - Full Metrics Dashboard</h1>
+  <h1>Gentle-Vanguard - Full Metrics Dashboard</h1>
   <p class="subtitle">Generated: $generated | Live pulse: <span id="live-timestamp">$generated</span> | Orchestrator: $orchVersion | Daily budget: $dailyBudget tokens</p>
 
   <div class="nav">
@@ -1300,7 +1300,7 @@ $autoRefreshMeta
     </div>
     <div class="two-col" style="margin-top:12px;">
       <div class="panel">
-        <h3>WF Latency Trend (history)</h3>
+        <h3>GV Latency Trend (history)</h3>
         <canvas id="benchLatencyChart"></canvas>
       </div>
       <div class="panel">
@@ -1312,8 +1312,8 @@ $autoRefreshMeta
       <h3>Baseline Governance</h3>
       <ul>
         <li>Baseline is maintained in <strong>reports/stack-benchmark-baseline.json</strong> using EWMA smoothing.</li>
-        <li>Regression guard status is evaluated every run by <strong>foundation benchmark full</strong>.</li>
-        <li>Use <strong>foundation benchmark full remediate</strong> to execute local auto-remediation playbook and incident report.</li>
+        <li>Regression guard status is evaluated every run by <strong>gv benchmark full</strong>.</li>
+        <li>Use <strong>gv benchmark full remediate</strong> to execute local auto-remediation playbook and incident report.</li>
       </ul>
     </div>
   </section>
@@ -1612,7 +1612,7 @@ function initTabs() {
     buttons.forEach((b) => b.classList.toggle('active', b.dataset.target === selected));
     sections.forEach((s) => s.classList.toggle('active', s.id === selected));
     if (selected) {
-      localStorage.setItem('foundation-dashboard-active-tab', selected);
+      localStorage.setItem('gentle-vanguard-dashboard-active-tab', selected);
       history.replaceState(null, '', '#' + selected);
     }
     if (smooth) {
@@ -1627,7 +1627,7 @@ function initTabs() {
   });
 
   const fromHash = window.location.hash ? window.location.hash.slice(1) : '';
-  const fromStorage = localStorage.getItem('foundation-dashboard-active-tab') || '';
+  const fromStorage = localStorage.getItem('gentle-vanguard-dashboard-active-tab') || '';
   activate(fromHash || fromStorage, false);
 }
 
@@ -1689,3 +1689,4 @@ if ($Open) {
         & xdg-open $OutputPath 2>$null
     }
 }
+

@@ -10,7 +10,7 @@
 #
 # Usage:
 #   pwsh -File scripts/utilities/sync-drift-report.ps1
-#   wf sync-drift [-JSON]
+#   gv sync-drift [-JSON]
 
 param(
     [switch]$AsJson,
@@ -37,7 +37,7 @@ if (Test-Path $autoDelegPath) {
     try {
         $autoCfg = Get-Content $autoDelegPath -Raw -Encoding UTF8 | ConvertFrom-Json
         # Collect all routable skill values from config.
-        # The foundation repo can legitimately contain many more optional skills,
+        # The gentle-vanguard repo can legitimately contain many more optional skills,
         # so only missing declared skills count as drift.
         $declaredSkills = @()
         if ($autoCfg.PSObject.Properties['agentCodeToSkill']) {
@@ -199,3 +199,4 @@ if (-not $Quiet) {
 }
 
 exit ($driftScore -gt 0 ? 1 : 0)
+

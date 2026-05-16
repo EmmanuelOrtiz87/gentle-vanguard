@@ -5,8 +5,8 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-if ($env:FOUNDATION_BASE_DIR) {
-    $repoRoot = $env:FOUNDATION_BASE_DIR
+if ($env:GENTLE_VANGUARD_BASE_DIR) {
+    $repoRoot = $env:GENTLE_VANGUARD_BASE_DIR
 } else {
     $searchDir = $PSScriptRoot
     while ($searchDir -and -not (Test-Path (Join-Path $searchDir 'config\orchestrator.json'))) {
@@ -48,10 +48,10 @@ function Emit-Remediation {
     param([switch]$Annotate)
 
     $steps = @(
-        "Run: .\\scripts\\utilities\\wf.ps1 health",
-        "Run: .\\scripts\\utilities\\wf.ps1 start-session",
-        'Run: .\scripts\utilities\wf.ps1 compact-start "current objective"',
-        "Optional fix: .\\scripts\\utilities\\wf.ps1 homologate apply"
+        "Run: .\\scripts\\utilities\\gv.ps1 health",
+        "Run: .\\scripts\\utilities\\gv.ps1 start-session",
+        'Run: .\scripts\utilities\gv.ps1 compact-start "current objective"',
+        "Optional fix: .\\scripts\\utilities\\gv.ps1 homologate apply"
     )
 
     foreach ($step in $steps) {
@@ -146,3 +146,4 @@ if ($alerts -gt 0) {
 }
 
 exit 0
+
