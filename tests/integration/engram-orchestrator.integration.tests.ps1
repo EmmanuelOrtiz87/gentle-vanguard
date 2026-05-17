@@ -33,7 +33,7 @@ Describe "Engram Memory System - Integration Tests" {
             }
             $state.packsCreated | Should Be 5
             $state.compressionApplied | Should Be $true
-            $state.qualityScore | Should BeGreaterOrEqual 0.80
+            ($state.qualityScore -ge 0.80) | Should Be $true
         }
         
         It "Should handle multiple packs in sequence" {
@@ -57,12 +57,12 @@ Describe "Engram Memory System - Integration Tests" {
         
         It "Should load tool-specific configuration" {
             $config = Get-Content $script:OrchestratorPath | ConvertFrom-Json
-            $config.tools | Should Not -BeNullOrEmpty
+            ($config.tools -ne $null) | Should Be $true
         }
         
         It "Should apply tool-specific rules" {
             $config = Get-Content $script:OrchestratorPath | ConvertFrom-Json
-            $config.rules | Should Not -BeNullOrEmpty
+            ($config.rules -ne $null) | Should Be $true
         }
     }
     
@@ -142,7 +142,7 @@ Describe "Engram Memory System - Integration Tests" {
         It "Should maintain quality during optimization" {
             $qualityScore = 0.91
             $minimumQuality = 0.80
-            $qualityScore | Should BeGreaterOrEqual $minimumQuality
+            ($qualityScore -ge $minimumQuality) | Should Be $true
         }
     }
     
@@ -166,7 +166,7 @@ Describe "Engram Memory System - Integration Tests" {
     Context "Performance Under Load" {
         It "Should handle 10 concurrent packs" {
             $concurrentPacks = 10
-            $concurrentPacks | Should BeLessThanOrEqual 10
+            ($concurrentPacks -le 10) | Should Be $true
         }
         
         It "Should maintain performance with consolidation" {
@@ -208,7 +208,7 @@ Describe "Orchestrator - Integration Tests" {
         It "Should switch between tool configurations" {
             $config1 = @{ tool = "cline"; tokens = 200000 }
             $config2 = @{ tool = "continue"; tokens = 100000 }
-            $config1.tokens | Should Not -Be $config2.tokens
+            $config1.tokens | Should Not Be $config2.tokens
         }
         
         It "Should apply tool-specific parameters" {

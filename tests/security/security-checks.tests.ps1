@@ -88,3 +88,4 @@ Describe 'Security Checks Tests' {
         }
     }
 }
+

@@ -55,8 +55,8 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 | (unassigned) | docs-alignment-skill | "docs", "documentation", "update docs", "doc sync" |
 | (unassigned) | firecrawl-web-skill | "web scrape", "extract data", "crawl website", "markdown", "screenshot", "web... |
 | (unassigned) | fireworks-tech-graph | Use when the user wants to create any technical diagram - architecture, data ... |
-| (unassigned) | foundation-audit-skill | 'audit gentle-vanguard', 'validate docs', 'sweep project', 'check links', 'fi... |
-| (unassigned) | foundation-manager-skill | 'update gentle-vanguard', 'check updates', 'sync skills', 'install tools', 'm... |
+| (unassigned) | gentle-vanguard-audit-skill | 'audit gentle-vanguard', 'validate docs', 'sweep project', 'check links', 'fi... |
+| (unassigned) | gentle-vanguard-manager-skill | 'update gentle-vanguard', 'check updates', 'sync skills', 'install tools', 'm... |
 | (unassigned) | frontend-engineer | "frontend", "React component", "UI implementation", "responsive", "state mana... |
 | (unassigned) | game-designer | "game design", "game mechanics", "balance", "player experience", "level desig... |
 | (unassigned) | github-pr-skill | When creating PRs, writing PR descriptions, or using gh CLI for pull requests |
@@ -714,11 +714,11 @@ Delegators copy matching blocks into sub-agent prompts under Project Standards (
 - Report: the generated file paths
 - (Optional) Visual self-review: — if your runtime can read images, load the exported PNG back and inspect it. Syntactic validity does not guarantee visual correctness: arrows may cross through component interiors, labels may collide with lifelines or other labels, boxes may overlap, alt-frame text may sit on top of a message, or a legend may cover content. If you see any of these, revise the SVG and re-export; repeat until the rendered image is clean. Common fixes:
 
-#### foundation-audit-skill
+#### gentle-vanguard-audit-skill
 
 - Never modify files during audit — only report issues
 
-#### foundation-manager-skill
+#### gentle-vanguard-manager-skill
 
 - Never auto-update without logging all changes to `.runtime/skill-updates.log`
 - Respect user auto-update preferences in `config/orchestrator.json`

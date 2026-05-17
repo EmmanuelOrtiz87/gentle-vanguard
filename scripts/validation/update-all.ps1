@@ -65,7 +65,7 @@ function Update-Skills {
         return $false
     }
     
-    $syncScript = Join-Path $repoRoot "scripts\gentle-vanguard\sync-skills.ps1"
+    $syncScript = Join-Path $repoRoot "scripts\core\sync-skills.ps1"
     if (Test-Path $syncScript) {
         if ($DryRun) {
             Write-Host "[DRY-RUN] Would sync skills from: $skillsSource" -ForegroundColor Cyan
@@ -165,7 +165,7 @@ function Install-Tool {
 function Update-Tools {
     Write-Step "Updating Tools"
     # Delegate to the canonical tool updater which installs engram and opencode.
-    $toolsScript = Join-Path $scriptDir "..\utilities\update-tools.ps1"
+    $toolsScript = Join-Path $scriptDir "..\utilities\SKILLS-TOOLS\update-tools.ps1"
     if (-not (Test-Path $toolsScript)) {
         Write-Err "update-tools.ps1 not found at: $toolsScript"
         return $false
