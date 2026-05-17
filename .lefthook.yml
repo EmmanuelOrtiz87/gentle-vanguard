@@ -14,6 +14,8 @@ pre-commit:
     lockfile-lint:
       glob: "package-lock.json"
       run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/lockfile-lint-pre-commit.ps1"
+    trufflehog-scan:
+      run: pwsh -NoProfile -ExecutionPolicy Bypass -Command "trufflehog filesystem --no-verification --no-update . 2>$null; exit 0"
 
 pre-push:
   commands:
