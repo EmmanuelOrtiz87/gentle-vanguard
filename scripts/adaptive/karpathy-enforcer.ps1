@@ -8,10 +8,21 @@ param(
     [switch]$AutoFix,
     [switch]$VerboseOutput,
     [string]$TargetPath = ".",
-    [string]$FailureLearningDb = Join-Path $repoRoot 'scripts\adaptive\.failure-learning.json'
+    [string]$FailureLearningDb = ''
 )
 
 $ErrorActionPreference = "Continue"
+
+$repoRoot = if ($env:GV_BASE_DIR -and (Test-Path $env:GV_BASE_DIR)) { $env:GV_BASE_DIR } else {
+    $root = Split-Path -Parent $PSScriptRoot
+    while ($root -and -not (Test-Path (Join-Path $root 'config\orchestrator.json'))) { $root = Split-Path -Parent $root }
+    if (-not $root) { $root = $PSScriptRoot }
+    $root
+}
+
+if (-not $FailureLearningDb) {
+    $FailureLearningDb = Join-Path $repoRoot 'scripts\adaptive\.failure-learning.json'
+}
 
 # Smart logging
 function Write-KLog {

@@ -32,7 +32,7 @@ $ErrorActionPreference = "Continue"
 $repoRoot = (Resolve-Path ".").Path
 
 function Get-Gentle-VanguardSyncManifest {
-    $manifestPath = Join-Path $repoRoot "config/foundation-sync.json"
+    $manifestPath = Join-Path $repoRoot "config/gentle-vanguard-sync.json"
     if (-not (Test-Path $manifestPath)) {
         return $null
     }
