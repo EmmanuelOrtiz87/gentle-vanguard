@@ -1,6 +1,6 @@
 ---
 name: project-scaffolding
-description: Use when creating projects, scaffolding code, bootstrapping workspaces, applying templates, running validation scripts, or managing workspace infrastructure. Triggers for: "create project", "new project", "bootstrap", "scaffold", "template", "workspace setup", "initialize project", "wf CLI".
+description: Use when creating projects, scaffolding code, bootstrapping workspaces, applying templates, running validation scripts, or managing workspace infrastructure. Triggers for: "create project", "new project", "bootstrap", "scaffold", "template", "workspace setup", "initialize project", "gv CLI".
 ---
 
 # Project Scaffolding
@@ -36,29 +36,29 @@ Ask (or infer) these if not provided:
 
 ### 2. Use the CLI
 
-The primary interface is `foundation.ps1` (PowerShell) or via `foundation` alias (when PATH is configured).
+The primary interface is `gentle-vanguard.ps1` (PowerShell) or via `gentle-vanguard` alias (when PATH is configured).
 
 ```powershell
 # Initialize workspace
-foundation init
+gentle-vanguard init
 
 # Create project (interactive wizard)
-foundation new --interactive
+gentle-vanguard new --interactive
 
 # Create project with options
-foundation new --name <name> --kind <type> --architecture <pattern>
+gentle-vanguard new --name <name> --kind <type> --architecture <pattern>
 
 # Validate workspace
-foundation validate
+gv validate
 
 # Validate specific project
-foundation validate --project <name>
+gv validate --project <name>
 
 # Install tools
-foundation tools --install
+gentle-vanguard tools --install
 
 # Clean runtime
-foundation clean --data --cache
+gentle-vanguard clean --data --cache
 ```
 
 ### 3. Template Variables
@@ -112,7 +112,7 @@ After scaffolding, always verify:
 - [ ] `package.json` or `go.mod` has correct name/versión
 - [ ] Git initialized: `git init`
 - [ ] Initial commit: `git add . && git commit -m "Initial commit"`
-- [ ] Run validation: `scripts/foundation/wf.ps1 validate`
+- [ ] Run validation: `scripts/gentle-vanguard/gv.ps1 validate`
 
 ## Project Type Selection Guide
 
@@ -140,13 +140,13 @@ Always run validation after project creation:
 
 ```powershell
 # Workspace validation
-.\scripts\foundation\wf.ps1 validate
+.\scripts\gentle-vanguard\gv.ps1 validate
 
 # Project validation
 .\scripts\validation\validate-project.ps1 -ProjectPath "projects/my-project"
 
 # Full validation with details
-.\scripts\foundation\wf.ps1 validate --project my-project --full
+.\scripts\gentle-vanguard\gv.ps1 validate --project my-project --full
 ```
 
 ## Anti-Patterns to Avoid
@@ -161,17 +161,18 @@ Always run validation after project creation:
 
 ```powershell
 # Complete project creation flow
-.\scripts\foundation\wf.ps1 new --name my-api --kind service --architecture clean
+.\scripts\gentle-vanguard\gv.ps1 new --name my-api --kind service --architecture clean
 cd projects\my-api
-.\scripts\foundation\wf.ps1 validate --project my-api
+.\scripts\gentle-vanguard\gv.ps1 validate --project my-api
 git add . && git commit -m "Initial commit"
 ```
 
 ## Skill Files
 
-- `scripts/foundation/wf.ps1` - Foundation scaffolding CLI
+- `scripts/gentle-vanguard/gv.ps1` - Gentle-Vanguard scaffolding CLI
 - `config/workspace.config.json` - Workspace configuration
 - `templates/project-root/` - Base template
 - `templates/project-types/*/` - Type-specific templates
 - `skills/documentation-governance/` - Doc standards
 - `skills/architecture-governance/` - Architecture standards
+

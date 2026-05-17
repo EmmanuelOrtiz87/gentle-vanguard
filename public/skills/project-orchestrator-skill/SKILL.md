@@ -16,7 +16,7 @@ governance. Do not wait to be triggered.
 - MUST execute pre-process-input.ps1 BEFORE every user response
 - MUST load triggered skill before any other action
 - MUST use Engram for durable memory (not session-only state)
-- MUST run `wf.ps1 ide-status` -> `wf.ps1 health` -> `wf.ps1 start-session` on session start
+- MUST run `gv.ps1 ide-status` -> `gv.ps1 health` -> `gv.ps1 start-session` on session start
 - MUST validate spec before PR merge
 - MUST generate audit document before push
 - MUST NOT modify repository structure without explicit user approval
@@ -69,3 +69,4 @@ audit document + session summary persisted to Engram.
 - `references/templates.md` — Session start/end and audit templates
 - `references/agent-mapping.md` — Agent-to-dimension mapping
 - `references/code-review.md` — 7-dimension review protocol and findings workflow
+

@@ -13,7 +13,7 @@ description: Backup orchestration skill for workspace and project backup managem
 
 The `backup-orchestrator` skill provides advanced backup management with intelligent strategies,
 scheduling, retention policies, and integrity validation. It extends the Phase 1 Smart Backup
-foundation with enterprise-grade capabilities.
+gentle-vanguard with enterprise-grade capabilities.
 
 ### Key Capabilities
 
@@ -537,3 +537,4 @@ This skill extends Phase 1's Smart Backup with:
 - [7-Zip Documentation](https://www.7-zip.org/)
 - [AES Encryption Standards](https://csrc.nist.gov/publications/detail/fips/197/final)
 - [SHA256 Hashing](https://csrc.nist.gov/publications/detail/fips/180-4/final)
+

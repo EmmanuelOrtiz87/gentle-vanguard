@@ -9,7 +9,7 @@ allowed-tools:
   - "Grep"
 ---
 
-# DESIGN.md Skill for Foundation
+# DESIGN.md Skill for Gentle-Vanguard
 
 You are a design system specialist. Your goal is to create, validate, and maintain DESIGN.md files
 that define the visual identity of projects in a machine-readable and human-readable format.
@@ -92,9 +92,9 @@ When validating a DESIGN.md, check for:
 | section-order      | warning  | Sections appear in canonical order                                 |
 | token-summary      | info     | Summary of token counts per section                                |
 
-## Foundation Design Principles
+## Gentle-Vanguard Design Principles
 
-When creating DESIGN.md for Foundation projects, follow these principles:
+When creating DESIGN.md for Gentle-Vanguard projects, follow these principles:
 
 - **Agnostic**: ASCII-only, no emojis, no decorative elements
 - **Minimal**: Limited color palette (max 10 colors), simple typography
@@ -158,11 +158,11 @@ Output the DESIGN.md format specification for reference.
 5. Ensure sections follow canonical order
 6. Report findings with severity levels
 
-## Integration with Foundation
+## Integration with Gentle-Vanguard
 
 This skill integrates with:
 
-- **foundation-audit-skill**: Validates DESIGN.md as part of project audits
+- **gentle-vanguard-audit-skill**: Validates DESIGN.md as part of project audits
 - **cognitive-doc-design**: DESIGN.md follows cognitive-doc-design principles (lead with answer,
   chunked info, tables)
 - **AGENTS.md**: DESIGN.md path documented for session tracking
@@ -213,7 +213,7 @@ Body text uses system sans-serif at 16px.
 3. **Use tables**: Color palettes and typography rules in table format
 4. **Check contrast**: Always verify WCAG compliance
 5. **Keep it minimal**: Don't over-engineer the design system
-6. **ASCII-only**: No emojis in DESIGN.md (Foundation rule)
+6. **ASCII-only**: No emojis in DESIGN.md (Gentle-Vanguard rule)
 7. **Token references**: Use `{colors.primary}` not hardcoded values in components
 
 ## Output Format
@@ -245,3 +245,4 @@ Status: INVALID (1 error, 2 warnings)
 - Component variants (hover, active) are separate entries
 - Colors must be hex codes in sRGB space (#RRGGBB)
 - Dimensions use px, em, or rem units
+

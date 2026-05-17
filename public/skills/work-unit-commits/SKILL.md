@@ -55,7 +55,7 @@ Before committing, confirm:
 
 ## PR Relationship
 
-Use work-unit commits as the foundation for chained PRs:
+Use work-unit commits as the gentle-vanguard for chained PRs:
 
 1. Build the smallest independent work unit.
 2. Include verification for that unit.
@@ -94,3 +94,4 @@ git log --oneline -5
 
 _Origin: [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai) — Apache-2.0 License.
 Powered by [Gentleman Programming](https://github.com/Gentleman-Programming)._
+

@@ -6,7 +6,7 @@ description: >
   "incident triage", "Grafana", "Prometheus".
 license: Apache-2.0
 metadata:
-  author: foundation
+  author: gentle-vanguard
   versión: '1.0'
 ---
 
@@ -112,3 +112,4 @@ Bad examples:
 3. Correlate traces to failing components
 4. Inspect logs with requestId/traceId
 5. Validate mitigation, then root cause
+
