@@ -157,20 +157,20 @@ Describe "Security Tests - Input Validation" {
         It "Should handle null gracefully" {
             try {
                 $result = $null.ToString()
-                $result | Should BeNullOrEmpty
+                ($result -eq $null) | Should Be $true
             }
             catch {
-                $_ | Should Not -BeNullOrEmpty
+                ($_ -ne $null) | Should Be $true
             }
         }
         
         It "Should handle invalid operations" {
             try {
                 $result = 1 / 0
-                $result | Should BeNullOrEmpty
+                ($result -eq $null) | Should Be $true
             }
             catch {
-                $_.Exception | Should Not -BeNullOrEmpty
+                ($_.Exception -ne $null) | Should Be $true
             }
         }
         
@@ -189,7 +189,7 @@ Describe "Security Tests - Input Validation" {
             $testFile = ".\config\test.json"
             if (Test-Path $testFile) {
                 $acl = Get-Acl $testFile
-                $acl | Should Not -BeNullOrEmpty
+                ($acl -ne $null) | Should Be $true
             }
         }
         

@@ -41,7 +41,7 @@ while ($candidate) {
 $autoInitScript = $null
 $candidate = $GitRoot
 while ($candidate) {
-    $tested = Join-Path $candidate 'scripts\utilities\auto-init-dev-environment.ps1'
+    $tested = Join-Path $candidate 'scripts\utilities\UTILITIES\auto-init-dev-environment.ps1'
     if (Test-Path $tested) {
         $autoInitScript = $tested
         break

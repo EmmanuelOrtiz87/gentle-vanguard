@@ -43,7 +43,7 @@ if (Test-Path $markerFile) {
     Write-Ok "Orchestrator already active"
 } else {
     Write-Info "Activating orchestrator..."
-    $stackScript = Join-Path $workspaceRoot 'scripts\utilities\stack-on-demand.ps1'
+    $stackScript = Join-Path $workspaceRoot 'scripts\utilities\UTILITIES\stack-on-demand.ps1'
     if (Test-Path $stackScript) {
         & $stackScript -Action activate -ProjectPath $workspaceRoot -AllowPassive:$Force | Out-Null
         if ($LASTEXITCODE -eq 0) {
@@ -58,7 +58,7 @@ if (Test-Path $markerFile) {
 
 # 3. Verify and auto-update Engram (optional for demo base, required for Segment 4)
 Write-Step "Checking and updating tools"
-$updateScript = Join-Path $workspaceRoot 'scripts\utilities\update-tools.ps1'
+$updateScript = Join-Path $workspaceRoot 'scripts\utilities\SKILLS-TOOLS\update-tools.ps1'
 if (Test-Path $updateScript) {
     Write-Info "Updating tools to latest versions..."
     & $updateScript -Quiet | Out-Null
