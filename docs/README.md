@@ -1,17 +1,17 @@
 # 🏛️ Gentle-Vanguard — AI Development Stack
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.9.0-brightgreen?style=for-the-badge" alt="Version 2.9.0">
+  <img src="https://img.shields.io/badge/Version-2.16.0-brightgreen?style=for-the-badge" alt="Version 2.9.0">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License">
-  <img src="https://img.shields.io/badge/Agents-29-orange?style=for-the-badge" alt="29 AI Agents">
-  <img src="https://img.shields.io/badge/Skills-132-blueviolet?style=for-the-badge" alt="132 Skills">
+  <img src="https://img.shields.io/badge/Agents-18-orange?style=for-the-badge" alt="29 AI Agents">
+  <img src="https://img.shields.io/badge/Skills-130+-blueviolet?style=for-the-badge" alt="132 Skills">
   <img src="https://img.shields.io/badge/PowerShell-7+-purple?style=for-the-badge" alt="PowerShell 7+">
   <img src="https://img.shields.io/badge/Platform-Win%20%7C%20Linux%20%7C%20macOS-lightgrey?style=for-the-badge" alt="Cross-Platform">
 </p>
 
 <p align="center">
-  <b>A governance-first AI development stack — 29 agents, 132 on-demand skills, zero compromise.</b>
+  <b>A governance-first AI development stack — 18 agents, 130+ on-demand skills, zero compromise.</b>
 </p>
 
 ---
@@ -24,7 +24,7 @@
 
 ```powershell
 # 1️⃣ Clone
-git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard-public.git
+git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
 cd gentle-vanguard
 
 # 2️⃣ Bootstrap (installs hooks, verifies deps, configures your environment)
@@ -381,7 +381,7 @@ workflow-lint.yml            ⚙️ Workflow integrity
 See [CONTRIBUTING.md](CONTRIBUTING.md) for full guidelines.
 
 ```bash
-git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard-public.git
+git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
 cd gentle-vanguard
 gv start-session    # Your first session
 gv health           # Verify everything works
@@ -404,11 +404,11 @@ MIT License — see [LICENSE](../LICENSE) for details.
 ---
 
 <p align="center">
-  <b>🏛️ Gentle-Vanguard v2.9.0 — Where governance, automation, and AI converge</b><br>
-  <i>29 Agents · 132 Skills · 100% Local-First · Cross-Platform</i>
+  <b>🏛️ Gentle-Vanguard v2.16.0 — Where governance, automation, and AI converge</b><br>
+  <i>18 Agents · 130+ Skills · 100% Local-First · Cross-Platform</i>
 </p>
 
 <p align="center">
-  <code>git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard-public.git && cd gentle-vanguard && gv start-session</code>
+  <code>git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git && cd gentle-vanguard && gv start-session</code>
 </p>
 
