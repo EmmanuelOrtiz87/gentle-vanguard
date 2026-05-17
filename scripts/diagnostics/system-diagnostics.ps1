@@ -95,7 +95,7 @@ function Get-CommandVersion {
 # Detect project type
 $hasAngular = Test-Path (Join-Path $repoRoot 'angular.json')
 $hasGo = Test-Path (Join-Path $repoRoot 'go.mod')
-$hasBootstrap = Test-Path (Join-Path $repoRoot 'scripts\gentle-vanguard\bootstrap.ps1')
+$hasBootstrap = Test-Path (Join-Path $repoRoot 'scripts\core\bootstrap.ps1')
 
 if ($hasAngular -and $hasGo) {
     $diagnostics.projectType = 'bitbucket-dashboard'
@@ -281,14 +281,14 @@ if ($AutoRepair -and $diagnostics.overallStatus -ne 'HEALTHY') {
     Write-Diag '=== AUTO-REPAIR IN PROGRESS ===' -Color Yellow
 
     if (-not $engramPath) {
-        $installScript = Join-Path $scriptDir '..\utilities\install-engram.ps1'
+        $installScript = Join-Path $scriptDir '..\utilities\SKILLS-TOOLS\install-engram.ps1'
         if (Test-Path $installScript) {
             Write-Diag 'Installing Engram CLI...' -Color Yellow
             Invoke-LocalPowerShellScript -ScriptPath $installScript -ScriptArgs @('-Force')
         }
     }
 
-    $healthScript = Join-Path $scriptDir '..\utilities\ensure-tools-active.ps1'
+    $healthScript = Join-Path $scriptDir '..\utilities\SKILLS-TOOLS\ensure-tools-active.ps1'
     if (Test-Path $healthScript) {
         Write-Diag 'Running health activation...' -Color Yellow
         Invoke-LocalPowerShellScript -ScriptPath $healthScript -ScriptArgs @('-AutoStart', '-Quiet')

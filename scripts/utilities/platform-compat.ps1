@@ -8,7 +8,7 @@
     Linux (Ubuntu, Debian, Fedora, Alpine), and macOS (Intel + Apple Silicon).
 
     Usage:
-        $compat = Join-Path $PSScriptRoot '..\platform-compat.ps1'
+        $compat = Join-Path $PSScriptRoot 'platform-compat.ps1'
         if (Test-Path $compat) { . $compat }
 
     Exported functions:

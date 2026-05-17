@@ -276,7 +276,7 @@ function Show-Status {
 
 function Invoke-GitFlowValidation {
     param([switch]$EnforcePrBase, [string]$PrBase)
-    $script = Join-Path $global:scriptDir '..\diagnostics\validate-gitflow.ps1'
+    $script = Join-Path $global:scriptDir '..\..\diagnostics\validate-gitflow.ps1'
     if (-not (Test-Path $script)) { return @{ Passed = $true; Detail = 'validate-gitflow.ps1 not found (skipped)'; Suggestion = ''; Fixable = $false } }
     $args = @(); if ($EnforcePrBase) { $args += '-EnforcePrBase'; if ($PrBase) { $args += @('-PrBase', $PrBase) } }
     Write-Step 'Running GitFlow policy validation...'
@@ -286,7 +286,7 @@ function Invoke-GitFlowValidation {
 }
 
 function Invoke-ScriptGovernanceValidation {
-    $script = Join-Path $global:scriptDir '..\diagnostics\validate-script-governance.ps1'
+    $script = Join-Path $global:scriptDir '..\..\diagnostics\validate-script-governance.ps1'
     if (-not (Test-Path $script)) { return @{ Passed = $true; Detail = 'validate-script-governance.ps1 not found (skipped)'; Suggestion = ''; Fixable = $false } }
     Write-Step 'Running script governance validation...'
     Invoke-LocalPowerShellScript -ScriptPath $script

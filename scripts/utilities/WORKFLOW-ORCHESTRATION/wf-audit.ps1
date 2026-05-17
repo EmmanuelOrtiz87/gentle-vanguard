@@ -57,15 +57,15 @@ $ErrorActionPreference = 'Continue'
 
 # Resolve paths
 $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-$Gentle-VanguardRoot = Split-Path -Parent (Split-Path -Parent $ScriptRoot)
+$repoRoot = (Resolve-Path (Join-Path $ScriptRoot '..\..\..')).Path
 
 if (-not $BasePath) {
-    $BasePath = $Gentle-VanguardRoot
+    $BasePath = $repoRoot
 }
 
-$BatchScript = Join-Path $Gentle-VanguardRoot 'skills\gentle-vanguard-audit-skill\scripts\audit-sweep.ps1'
-$WorkflowScript = Join-Path $Gentle-VanguardRoot 'skills\gentle-vanguard-audit-skill\scripts\audit-workflow.ps1'
-$SyncScript = Join-Path $Gentle-VanguardRoot 'skills\gentle-vanguard-audit-skill\scripts\sync-local.ps1'
+$BatchScript = Join-Path $repoRoot 'skills\gentle-vanguard-audit-skill\scripts\audit-sweep.ps1'
+$WorkflowScript = Join-Path $repoRoot 'skills\gentle-vanguard-audit-skill\scripts\audit-workflow.ps1'
+$SyncScript = Join-Path $repoRoot 'skills\gentle-vanguard-audit-skill\scripts\sync-local.ps1'
 
 # Execute based on action
 switch ($Action) {
