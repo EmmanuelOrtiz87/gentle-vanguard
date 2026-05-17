@@ -8,10 +8,12 @@
 
 ## Install via Executable (Recommended)
 
-1. Download `Gentle-Vanguard.exe` from the [Releases](https://github.com/EmmanuelOrtiz87/gentle-vanguard-public/releases) page
+1. Download [`Gentle-Vanguard.exe`](Gentle-Vanguard.exe) directly from the repo root
 2. Run as Administrator
 3. Follow the NSIS installer wizard
 4. Open a new terminal and run: `gv health`
+
+Download also available from [Releases](https://github.com/EmmanuelOrtiz87/gentle-vanguard-public/releases).
 
 ## Install via Git Clone
 

@@ -18,6 +18,7 @@ obj/
 dist/
 build/
 *.exe
+!Gentle-Vanguard.exe
 *.dll
 *.so
 

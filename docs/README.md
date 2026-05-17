@@ -24,7 +24,7 @@
 
 ```powershell
 # 1️⃣ Clone
-git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
+git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard-public.git
 cd gentle-vanguard
 
 # 2️⃣ Bootstrap (installs hooks, verifies deps, configures your environment)
@@ -381,7 +381,7 @@ workflow-lint.yml            ⚙️ Workflow integrity
 See [CONTRIBUTING.md](CONTRIBUTING.md) for full guidelines.
 
 ```bash
-git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
+git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard-public.git
 cd gentle-vanguard
 gv start-session    # Your first session
 gv health           # Verify everything works
@@ -409,6 +409,6 @@ MIT License — see [LICENSE](../LICENSE) for details.
 </p>
 
 <p align="center">
-  <code>git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git && cd gentle-vanguard && gv start-session</code>
+  <code>git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard-public.git && cd gentle-vanguard && gv start-session</code>
 </p>
 
