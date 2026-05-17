@@ -1203,9 +1203,9 @@ switch ($Command) {
 
     'benchmark' {
         if ($Scope -eq 'full') {
-            $fullBenchScript = Join-Path $repoRoot 'scripts\utilities\wf-stack-benchmark.ps1'
+            $fullBenchScript = Join-Path $repoRoot 'scripts\utilities\gv-stack-benchmark.ps1'
             if (-not (Test-Path $fullBenchScript)) {
-                Write-Error "wf-stack-benchmark.ps1 not found: $fullBenchScript"
+                Write-Error "gv-stack-benchmark.ps1 not found: $fullBenchScript"
                 exit 1
             }
 
