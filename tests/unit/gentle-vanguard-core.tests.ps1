@@ -46,7 +46,7 @@ Describe 'Gentle-Vanguard Core Tests' {
 
         It 'auto-delegation.json has agentCodeToSkill' {
             $ad = Get-Content "$script:root\config\auto-delegation.json" -Raw | ConvertFrom-Json
-            $ad.agentCodeToSkill | Should Not BeNullOrEmpty
+            ($ad.agentCodeToSkill -ne $null) | Should Be $true
         }
 
         It 'auto-delegation.json has at least 10 keyword mappings' {
@@ -75,7 +75,7 @@ Describe 'Gentle-Vanguard Core Tests' {
             $result = & $script:preProcess -UserInput 'pedi crear un nuevo proyecto' -WorkspaceRoot $script:root
             $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
 
-            $summary | Should Not BeNullOrEmpty
+            ($summary -ne $null) | Should Be $true
             $summary.HasMatch | Should Be $true
             $summary.Skill | Should Be 'sdd-lifecycle'
             $summary.AgentCode | Should Be 'BA'
@@ -85,7 +85,7 @@ Describe 'Gentle-Vanguard Core Tests' {
             $result = & $script:preProcess -UserInput 'crear componente nuevo' -WorkspaceRoot $script:root
             $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
 
-            $summary | Should Not BeNullOrEmpty
+            ($summary -ne $null) | Should Be $true
             $summary.HasMatch | Should Be $true
             $summary.Skill | Should Be 'sdd-lifecycle'
             $summary.AgentCode | Should Be 'BA'
@@ -95,7 +95,7 @@ Describe 'Gentle-Vanguard Core Tests' {
             $result = & $script:preProcess -UserInput 'quero criar um novo projeto do zero' -WorkspaceRoot $script:root
             $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
 
-            $summary | Should Not BeNullOrEmpty
+            ($summary -ne $null) | Should Be $true
             $summary.HasMatch | Should Be $true
             $summary.Skill | Should Be 'sdd-lifecycle'
             $summary.AgentCode | Should Be 'BA'
@@ -105,7 +105,7 @@ Describe 'Gentle-Vanguard Core Tests' {
             $result = & $script:preProcess -UserInput 'necesito abrir un PR' -WorkspaceRoot $script:root
             $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
 
-            $summary | Should Not BeNullOrEmpty
+            ($summary -ne $null) | Should Be $true
             $summary.HasMatch | Should Be $true
             $summary.Skill | Should Be 'branch-pr'
             $summary.AgentCode | Should Be 'QA'
@@ -121,7 +121,7 @@ Describe 'Gentle-Vanguard Core Tests' {
             $result = & $script:preProcess -UserInput 'implementar login con jwt' -WorkspaceRoot $script:root
             $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
 
-            $summary | Should Not BeNullOrEmpty
+            ($summary -ne $null) | Should Be $true
             $summary.HasMatch | Should Be $true
             $summary.PlanMode | Should Be $true
             $summary.AgentCode | Should Be 'BA'
@@ -132,7 +132,7 @@ Describe 'Gentle-Vanguard Core Tests' {
             $result = & $script:preProcess -UserInput 'necesito una nueva funcionalidad de usuarios' -WorkspaceRoot $script:root
             $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
 
-            $summary | Should Not BeNullOrEmpty
+            ($summary -ne $null) | Should Be $true
             $summary.HasMatch | Should Be $true
             $summary.PlanMode | Should Be $true
             $summary.AgentCode | Should Be 'BA'
@@ -142,7 +142,7 @@ Describe 'Gentle-Vanguard Core Tests' {
             $result = & $script:preProcess -UserInput 'implement login feature for the app' -WorkspaceRoot $script:root
             $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
 
-            $summary | Should Not BeNullOrEmpty
+            ($summary -ne $null) | Should Be $true
             $summary.HasMatch | Should Be $true
             $summary.PlanMode | Should Be $true
             $summary.AgentCode | Should Be 'BA'
@@ -152,7 +152,7 @@ Describe 'Gentle-Vanguard Core Tests' {
             $result = & $script:preProcess -UserInput 'create a new feature for user dashboard' -WorkspaceRoot $script:root
             $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
 
-            $summary | Should Not BeNullOrEmpty
+            ($summary -ne $null) | Should Be $true
             $summary.HasMatch | Should Be $true
             $summary.PlanMode | Should Be $true
             $summary.AgentCode | Should Be 'BA'
@@ -162,7 +162,7 @@ Describe 'Gentle-Vanguard Core Tests' {
             $result = & $script:preProcess -UserInput 'fix login bug error 401' -WorkspaceRoot $script:root
             $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
 
-            $summary | Should Not BeNullOrEmpty
+            ($summary -ne $null) | Should Be $true
             $summary.HasMatch | Should Be $true
             # Bug fix goes to DEV/sdd-lifecycle, not PlanMode
             $summary.Skill | Should Be 'sdd-lifecycle'
@@ -172,7 +172,7 @@ Describe 'Gentle-Vanguard Core Tests' {
             $result = & $script:preProcess -UserInput 'feature request: add dark mode' -WorkspaceRoot $script:root
             $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
 
-            $summary | Should Not BeNullOrEmpty
+            ($summary -ne $null) | Should Be $true
             $summary.HasMatch | Should Be $true
             $summary.PlanMode | Should Be $true
             $summary.AgentCode | Should Be 'BA'
@@ -182,7 +182,7 @@ Describe 'Gentle-Vanguard Core Tests' {
             $result = & $script:preProcess -UserInput 'create a new component for onboarding flow' -WorkspaceRoot $script:root
             $summary = $result | Where-Object { $_ -is [hashtable] } | Select-Object -Last 1
 
-            $summary | Should Not BeNullOrEmpty
+            ($summary -ne $null) | Should Be $true
             $summary.HasMatch | Should Be $true
             $summary.PlanMode | Should Be $true
             $summary.AgentCode | Should Be 'BA'

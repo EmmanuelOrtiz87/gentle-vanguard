@@ -25,7 +25,7 @@ if ($Host.Name -eq 'ConsoleHost') {
         Write-Host " Gentle-Vanguard - Development Stack project detected - Activating tools..." -ForegroundColor Cyan
 
         # Run auto-init in background to avoid blocking shell startup
-        $initScript = Join-Path $currentDir 'scripts/utilities/auto-init-dev-environment.ps1'
+        $initScript = Join-Path $currentDir 'scripts/utilities/UTILITIES/auto-init-dev-environment.ps1'
         if (Test-Path $initScript) {
             Start-Job -ScriptBlock {
                 param($scriptPath)
