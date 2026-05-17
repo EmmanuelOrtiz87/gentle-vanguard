@@ -48,9 +48,9 @@ jobs:
         run: ./scripts/run-tests-simple.ps1 -IncludeE2E
         env:
           GIT_AUTHOR_NAME: CI
-          GIT_AUTHOR_EMAIL: ci@foundation
+          GIT_AUTHOR_EMAIL: ci@gentle-vanguard
           GIT_COMMITTER_NAME: CI
-          GIT_COMMITTER_EMAIL: ci@foundation
+          GIT_COMMITTER_EMAIL: ci@gentle-vanguard
 
       - name: Check Performance Baselines
         shell: pwsh

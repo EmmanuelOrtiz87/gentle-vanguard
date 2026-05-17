@@ -1,4 +1,0 @@
-{
-  mission: { name: Foundation Multi-Agent Mission, max_agents: 5, timeout: 7200 },
-  agents: [{ role: generalist, model: gemini-3-pro, instructions: Implement code, depends_on: [] }],
-}
