@@ -213,7 +213,7 @@ Describe "Security Tests - Input Validation" {
         
         It "Should use secure random generation" {
             $random1 = [System.Security.Cryptography.RNGCryptoServiceProvider]::new()
-            $random1 | Should Not -BeNullOrEmpty
+            ($random1 -ne $null) | Should Be $true
         }
     }
     

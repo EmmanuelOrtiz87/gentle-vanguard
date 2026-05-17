@@ -210,6 +210,7 @@ $inputLower = $UserInput.ToLower()
 $matchingSkill = $null
 $matchingTrigger = $null
 $confidenceScore = 0
+$planMode = $false
 
 $firstPass = Find-Match -InputText $inputLower -Map $triggerMap -Sorted $sortedTriggers
 $matchingSkill = $firstPass[0]
@@ -351,6 +352,7 @@ if ($isFeatureIntent) {
     $matchingSkill = "sdd-lifecycle"
     $resolvedAgent = "BA"
     $activeProfile = $baProfile
+    $planMode = $true
 } elseif ($matchingSkill) {
     Write-Output "SOURCE: $sourceTag"
     Write-Output "TRIGGER_MATCH_FOUND"
@@ -374,6 +376,7 @@ if ($isFeatureIntent) {
         Write-Output "CLARIFICATION_QUESTIONS:"
         foreach ($q in $clarifyBaStrategy.questions) { Write-Output "  - $q" }
     }
+    $planMode = $true
 } else {
     Write-Output "SOURCE: $sourceTag"
     Write-Output "NO_TRIGGER_MATCH"
@@ -386,7 +389,7 @@ return @{
     Skill          = $matchingSkill
     Trigger        = $matchingTrigger
     Confidence     = $confidenceScore
-    PlanMode       = ($fallbackStrategy -eq "clarify-ba" -and $confidenceScore -lt $lowConfidenceThreshold)
+    PlanMode       = ($planMode -eq $true)
     AgentCode      = $resolvedAgent
     AgentProfile   = $activeProfile
 }

@@ -52,17 +52,17 @@ Describe "Engram Memory System - Integration Tests" {
     Context "Orchestrator Integration" {
         It "Should detect AI tool correctly" {
             $config = Get-Content $script:OrchestratorPath | ConvertFrom-Json
-            $config.orchestration.aiToolDetection.enabled | Should Be $true
+            $config.orchestrator.activeToolDetection.enabled | Should Be $true
         }
         
         It "Should load tool-specific configuration" {
             $config = Get-Content $script:OrchestratorPath | ConvertFrom-Json
-            ($config.tools -ne $null) | Should Be $true
+            ($config.orchestrator.toolProfiles -ne $null) | Should Be $true
         }
         
         It "Should apply tool-specific rules" {
             $config = Get-Content $script:OrchestratorPath | ConvertFrom-Json
-            ($config.rules -ne $null) | Should Be $true
+            ($config.orchestrator.toolProfiles.opencode -ne $null) | Should Be $true
         }
     }
     
@@ -130,7 +130,7 @@ Describe "Engram Memory System - Integration Tests" {
                 cacheHitRate = 0.75
             }
             $metrics.cpuUsage | Should BeLessThan 100
-            $metrics.cacheHitRate | Should BeGreaterOrEqual 0.70
+            ($metrics.cacheHitRate -ge 0.70) | Should Be $true
         }
         
         It "Should adjust parameters based on metrics" {
