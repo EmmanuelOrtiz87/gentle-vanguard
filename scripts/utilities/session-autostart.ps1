@@ -53,6 +53,16 @@ $stepNum = 0
 $failed = @()
 $requiredFailed = @()
 
+Write-Host ""
+Write-Host " ██████╗ ███████╗███╗   ██╗████████╗██╗     ███████╗    ██╗   ██╗ █████╗ ███╗   ██╗ ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗ " -ForegroundColor Cyan
+Write-Host "██╔════╝ ██╔════╝████╗  ██║╚══██╔══╝██║     ██╔════╝    ██║   ██║██╔══██╗████╗  ██║██╔════╝ ██║   ██║██╔══██╗██╔══██╗██╔══██╗" -ForegroundColor Cyan
+Write-Host "██║  ███╗█████╗  ██╔██╗ ██║   ██║   ██║     █████╗      ██║   ██║███████║██╔██╗ ██║██║  ███╗██║   ██║███████║██████╔╝██║  ██║" -ForegroundColor Cyan
+Write-Host "██║   ██║██╔══╝  ██║╚██╗██║   ██║   ██║     ██╔══╝      ╚██╗ ██╔╝██╔══██║██║╚██╗██║██║   ██║██║   ██║██╔══██║██╔══██╗██║  ██║" -ForegroundColor Cyan
+Write-Host "╚██████╔╝███████╗██║  ████║   ██║   ██║███████╗███████╗   ╚████╔╝ ██║  ██║██║  ████║╚██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝" -ForegroundColor Cyan
+Write-Host " ╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝╚══════╝╚══════╝    ╚═══╝  ╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ " -ForegroundColor Cyan
+Write-Host ""
+Write-Host "           -- NATIVE AI COGNITIVE DEVELOPMENT ECOSYSTEM --" -ForegroundColor DarkGray
+Write-Host ""
 Write-Host "=== Session Autostart (Config-Driven) ===" -ForegroundColor Cyan
 Write-Host "[INFO] Loaded config: $ConfigFile" -ForegroundColor Gray
 Write-Host "[INFO] Pipeline steps: $totalSteps enabled" -ForegroundColor Gray

@@ -49,12 +49,14 @@ $colorMenu = "White"
 function Write-Header {
     Clear-Host
     Write-Host ""
-    Write-Host "   ######+ ##+   ##+ ######+ ###+   ##+ ######+ " -ForegroundColor Cyan
-    Write-Host "   ##+==##+##|   ##|##+===##+####+  ##|##+===##+" -ForegroundColor Cyan
-    Write-Host "   ######++##|   ##|##|    ##|##+##+ ##|##|    ##|" -ForegroundColor Cyan
-    Write-Host "   ##+==##+##|   ##|##|    ##|##|+##+##|##|    ##|" -ForegroundColor Cyan
-    Write-Host "   ######+++######+++######++##| +####|+######++" -ForegroundColor Cyan
-    Write-Host "   +=====+  +=====+  +=====+ +=+  +===+ +=====+ " -ForegroundColor Cyan
+    Write-Host " ██████╗ ███████╗███╗   ██╗████████╗██╗     ███████╗    ██╗   ██╗ █████╗ ███╗   ██╗ ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗ " -ForegroundColor Cyan
+    Write-Host "██╔════╝ ██╔════╝████╗  ██║╚══██╔══╝██║     ██╔════╝    ██║   ██║██╔══██╗████╗  ██║██╔════╝ ██║   ██║██╔══██╗██╔══██╗██╔══██╗" -ForegroundColor Cyan
+    Write-Host "██║  ███╗█████╗  ██╔██╗ ██║   ██║   ██║     █████╗      ██║   ██║███████║██╔██╗ ██║██║  ███╗██║   ██║███████║██████╔╝██║  ██║" -ForegroundColor Cyan
+    Write-Host "██║   ██║██╔══╝  ██║╚██╗██║   ██║   ██║     ██╔══╝      ╚██╗ ██╔╝██╔══██║██║╚██╗██║██║   ██║██║   ██║██╔══██║██╔══██╗██║  ██║" -ForegroundColor Cyan
+    Write-Host "╚██████╔╝███████╗██║  ████║   ██║   ██║███████╗███████╗   ╚████╔╝ ██║  ██║██║  ████║╚██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝" -ForegroundColor Cyan
+    Write-Host " ╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝╚══════╝╚══════╝    ╚═══╝  ╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ " -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "           -- NATIVE AI COGNITIVE DEVELOPMENT ECOSYSTEM --" -ForegroundColor DarkGray
     Write-Host ""
     Write-Host "            Terminal-Based Setup Wizard" -ForegroundColor White
     Write-Host "                  v2.8.0" -ForegroundColor Green
