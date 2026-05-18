@@ -31,6 +31,8 @@ $notifyPath = Join-Path $repoRoot 'scripts/utilities/notify-user.ps1'
 
 $continueConfigPath = Join-Path $repoRoot '.continue/config.json'
 $continueBaseline = Join-Path $sessionDir 'continue-config.baseline.json'
+$continueChecksDir = Join-Path $repoRoot '.continue\checks'
+$continueChecksBaseline = Join-Path $sessionDir 'continue-checks-baseline'
 
 function Read-Json {
     param([string]$Path)
@@ -104,6 +106,10 @@ if ($shouldOptimize) {
     $state.normalStreak = 0
     if (-not $state.optimizationActive) {
         if (Test-Path $continueConfigPath) { Copy-Item $continueConfigPath $continueBaseline -Force }
+        if (Test-Path $continueChecksDir) {
+            if (Test-Path $continueChecksBaseline) { Remove-Item $continueChecksBaseline -Recurse -Force -ErrorAction SilentlyContinue }
+            Copy-Item $continueChecksDir $continueChecksBaseline -Recurse -Force
+        }
         $continueCfg = Read-Json -Path $continueConfigPath
         if ($continueCfg) {
             Apply-ContinueOverlay -Cfg $continueCfg
@@ -129,6 +135,11 @@ if ($state.optimizationActive -and $state.normalStreak -ge 2) {
     if (Test-Path $continueBaseline) {
         Copy-Item $continueBaseline $continueConfigPath -Force
         Remove-Item $continueBaseline -Force -ErrorAction SilentlyContinue
+    }
+    if (Test-Path $continueChecksBaseline) {
+        if (Test-Path $continueChecksDir) { Remove-Item $continueChecksDir -Recurse -Force -ErrorAction SilentlyContinue }
+        Copy-Item $continueChecksBaseline $continueChecksDir -Recurse -Force
+        Remove-Item $continueChecksBaseline -Recurse -Force -ErrorAction SilentlyContinue
     }
     $state.optimizationActive = $false
     $state.normalStreak = 0
