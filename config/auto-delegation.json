@@ -99,6 +99,7 @@
     "release-management-skill": "OPS",
     "project-orchestrator-skill": "GOV",
     "reporting-skill": "DOC",
+    "skill-registry": "DOC",
     "judgment-day": "GOV",
     "gitflow-orchestrator-skill": "GOV",
     "branch-pr": "QA",
