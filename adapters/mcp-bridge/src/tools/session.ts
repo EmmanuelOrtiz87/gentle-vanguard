@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { execSync } from 'child_process';
 
-export function registerSessionTools(server: any, gentle-vanguardRoot: string) {
+export function registerSessionTools(server: any, gentleVanguardRoot: string) {
   // Start session
   server.tool(
     'gentle-vanguard_session_start',
@@ -14,13 +14,13 @@ export function registerSessionTools(server: any, gentle-vanguardRoot: string) {
       try {
         const project = args.project || '';
         const directory = args.directory || '';
-        const sessionScript = `${gentle-vanguardRoot}/scripts/utilities/gv.ps1`;
+        const sessionScript = `${gentleVanguardRoot}/scripts/utilities/gv.ps1`;
         const projParam = project ? `-Project "${project}"` : '';
         const dirParam = directory ? `-Directory "${directory}"` : '';
         const cmd = `powershell -NoProfile -ExecutionPolicy Bypass -File "${sessionScript}" start-session ${projParam} ${dirParam}`;
         
         const output = execSync(cmd, {
-          cwd: gentle-vanguardRoot,
+          cwd: gentleVanguardRoot,
           encoding: 'utf-8',
           maxBuffer: 5 * 1024 * 1024
         });
@@ -50,12 +50,12 @@ export function registerSessionTools(server: any, gentle-vanguardRoot: string) {
       try {
         const sessionId = args.sessionId;
         const summary = args.summary || '';
-        const engramScript = `${gentle-vanguardRoot}/scripts/utilities/engram.ps1`;
+        const engramScript = `${gentleVanguardRoot}/scripts/utilities/engram.ps1`;
         const summaryParam = summary ? `-Summary "${summary}"` : '';
         const cmd = `powershell -NoProfile -ExecutionPolicy Bypass -File "${engramScript}" session-end -Id "${sessionId}" ${summaryParam}`;
         
         const output = execSync(cmd, {
-          cwd: gentle-vanguardRoot,
+          cwd: gentleVanguardRoot,
           encoding: 'utf-8',
           maxBuffer: 5 * 1024 * 1024
         });
