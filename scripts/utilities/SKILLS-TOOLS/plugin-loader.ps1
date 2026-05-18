@@ -28,7 +28,7 @@ function Get-PluginMetadata {
         version              = $Manifest.version
         author               = $Manifest.author
         description          = $Manifest.description
-        'minGentle-VanguardVersion' = if ($Manifest.minGentle-VanguardVersion) { $Manifest.minGentle-VanguardVersion } else { '2.6.0' }
+        'minGentle-VanguardVersion' = if ($Manifest.'minGentle-VanguardVersion') { $Manifest.'minGentle-VanguardVersion' } else { '2.6.0' }
         provides             = if ($Manifest.provides) { @($Manifest.provides) } else { @() }
         requires             = if ($Manifest.requires) { @($Manifest.requires) } else { @() }
         hooks                = if ($Manifest.hooks) { @($Manifest.hooks) } else { @() }

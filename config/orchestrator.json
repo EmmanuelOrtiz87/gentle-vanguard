@@ -391,8 +391,8 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": false,
-      "adaptiveProfile": "",
-      "note": "Antigravity — local-first config already minimal. Uses format adapter for integration."
+      "adaptiveProfile": "scripts/utilities/adaptive-cursor-profile.ps1",
+      "note": "Antigravity — local-first config already minimal. Uses cursor adaptive profile for skill emulation."
     },
     "claude-generic": {
       "promptFile": "CLAUDE.md",
@@ -402,6 +402,7 @@
       "communicationLang": "es",
       "supportsSkillTool": true,
       "supportsMemTools": true,
+      "adaptiveProfile": "scripts/utilities/adaptive-opencode-profile.ps1",
       "note": "Fallback for Claude variants — always prefer AGENTS.md"
     }
   },

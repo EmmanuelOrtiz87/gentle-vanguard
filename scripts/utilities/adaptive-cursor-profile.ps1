@@ -105,7 +105,20 @@ Reglas completas en .cursor/rules/
 - LOCAL-FIRST | Temperature 0.3 | MaxTokens 4500
 - websearch/webfetch: DENY | external_dir: ask
 - Espanol, conciso, sin preamble/postamble
-- Usar Engram memory
+
+## Skill Emulation (sin skill tool nativo)
+- Para tareas de documentacion -> leer skills/documentation-governance/SKILL.md
+- Para presentaciones -> leer skills/presentaciones-visuales-skill/SKILL.md
+- Para SDD lifecycle -> leer skills/sdd-lifecycle/SKILL.md
+- Para review de codigo -> leer skills/code-review-orchestrator-skill/SKILL.md
+- Para testing -> leer skills/playwright-skill/SKILL.md, skills/pytest-skill/SKILL.md
+- Skill registry completo en .atl/skill-registry.md
+
+## Engram Memory (emulacion)
+- Datos persistentes en .engram-data/
+- Contexto de sesiones previas en scripts/.session/
+- Session logs en logs/ y session/
+- Para restaurar contexto: leer scripts/.session/startup-summary.json
 - Comandos: /pr, /review, /status, /test, /fix-issue, /update-deps en .cursor/commands/
 "@
         $optimizedRules | Out-File -FilePath $cursorRulesPath -Encoding UTF8 -Force

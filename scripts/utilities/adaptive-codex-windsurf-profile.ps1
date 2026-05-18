@@ -77,12 +77,13 @@ sandbox = "unelevated"
 $windsurfOptimized = @'
 {
   "name": "Windsurf - Local-First Configuration",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Optimized Windsurf settings for context efficiency and reliable Cascade behavior",
   "workspace": {
     "projectRoot": ".",
     "configFiles": ["opencode.json", "AGENTS.md", "CLAUDE.md", ".cursorrules", "docs/AGENTS.md"],
-    "skillPaths": ["skills/", "~/.config/opencode/skills/"]
+    "skillPaths": ["skills/", "~/.config/opencode/skills/"],
+    "skillRegistry": ".atl/skill-registry.md"
   },
   "aiSettings": {
     "temperature": 0.3,
@@ -104,7 +105,9 @@ $windsurfOptimized = @'
   },
   "contextManagement": {
     "useEngramMemory": true,
+    "engramPaths": [".engram-data/", "scripts/.session/", "logs/"],
     "useLocalSkills": true,
+    "skillFallbackPaths": ["skills/documentation-governance/SKILL.md", "skills/sdd-lifecycle/SKILL.md", "skills/code-review-orchestrator-skill/SKILL.md"],
     "useProjectDocs": true,
     "fastContext": true,
     "indexIgnoreFile": ".codeiumignore",
@@ -120,6 +123,17 @@ $windsurfOptimized = @'
     "gitignoreAccess": false,
     "adaptiveModelRouter": true,
     "webDocsSearch": "disabled"
+  },
+  "skillEmulation": {
+    "enabled": true,
+    "note": "Tools without native skill tool load skill SKILL.md files manually",
+    "criticalSkills": {
+      "documentation": "skills/documentation-governance/SKILL.md",
+      "presentations": "skills/presentaciones-visuales-skill/SKILL.md",
+      "sddLifecycle": "skills/sdd-lifecycle/SKILL.md",
+      "codeReview": "skills/code-review-orchestrator-skill/SKILL.md",
+      "testing": ["skills/playwright-skill/SKILL.md", "skills/pytest-skill/SKILL.md"]
+    }
   },
   "sessionManagement": {
     "autostart": {
