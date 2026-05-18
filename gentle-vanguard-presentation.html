@@ -132,9 +132,9 @@
       <div class="card">
         <h4>&#128736; Sistema de Skills</h4>
         <ul class="list">
-          <li>134 skills instalados en directorios físicos</li>
+          <li>133 skills instalados en directorios físicos</li>
           <li>Registry automantenido (.atl/skill-registry.md)</li>
-          <li>55+ skills asignados a agentes específicos</li>
+          <li>131 skills asignados a agentes específicos</li>
           <li>Desde infra hasta marketing y legal</li>
         </ul>
       </div>
@@ -172,14 +172,14 @@
       <tr><td><strong>claude-code</strong></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">Perfil dedicado</span></td></tr>
       <tr><td><strong>continue-dev</strong></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">Perfil dedicado</span></td></tr>
       <tr><td><strong>cline</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Adaptivo (compartido)</span></td></tr>
-      <tr><td><strong>cursor</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Adaptivo básico</span></td></tr>
-      <tr><td><strong>windsurf</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Adaptivo básico</span></td></tr>
+      <tr><td><strong>cursor</strong></td><td><span class="badge badge-green">Emulado</span></td><td><span class="badge badge-green">Emulado</span></td><td><span class="badge badge-green">v1.1 + inline skill emulation</span></td></tr>
+      <tr><td><strong>windsurf</strong></td><td><span class="badge badge-green">Emulado</span></td><td><span class="badge badge-green">Emulado</span></td><td><span class="badge badge-green">v1.2 + engram paths</span></td></tr>
       <tr><td><strong>codex</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Comparte perfil</span></td></tr>
       <tr><td><strong>copilot</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Comparte perfil</span></td></tr>
       <tr><td><strong>antigravity</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Perfil mínimo</span></td></tr>
       <tr><td><strong>claude-generic</strong></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-yellow">Fallback sin optimizar</span></td></tr>
     </table>
-    <p style="font-size:0.8rem;color:#64748b;margin-top:0.8rem">Optimización pendiente para herramientas sin skill tool nativo: emular skills via instrucciones inline.</p>
+    <p style="font-size:0.8rem;color:#64748b;margin-top:0.8rem">Herramientas sin skill tool nativo usan emulación inline vía perfiles adaptivos v1.1+.</p>
   </div>
 </div>
 
@@ -353,7 +353,7 @@
         <ul class="list"><li>SDD Gate</li><li>Script governance</li><li>Plugin validation</li></ul>
       </div>
       <div class="card"><h4><span class="badge badge-blue">Test</span></h4>
-        <ul class="list"><li>23 unit tests</li><li>Routing language matrix</li><li>Cross-workspace validation</li></ul>
+        <ul class="list">          <li>393 tests (40 files)</li><li>Routing language matrix</li><li>Cross-workspace validation</li></ul>
       </div>
       <div class="card"><h4><span class="badge badge-purple">Quality</span></h4>
         <ul class="list"><li>Agent verify (16 checks)</li><li>Validate configs (63 JSONs)</li><li>Skill references integrity</li></ul>
@@ -373,11 +373,11 @@
   <div class="slide-inner">
     <span class="tag">SKILLS</span>
     <h2>Sistema Modular de Skills</h2>
-    <p class="subtitle" style="margin-bottom:1.5rem">134 skills instalados, registry auto-generado, asignación por agente</p>
+    <p class="subtitle" style="margin-bottom:1.5rem">133 skills instalados, registry auto-generado, asignación completa por agente</p>
     <div class="stat-row" style="margin-bottom:1.5rem">
-      <div class="stat"><div class="stat-value">134</div><div class="stat-label">Skills instalados</div></div>
-      <div class="stat"><div class="stat-value">74</div><div class="stat-label">Asignados a agentes</div></div>
-      <div class="stat"><div class="stat-value">57</div><div class="stat-label">Sin asignar</div></div>
+      <div class="stat"><div class="stat-value">133</div><div class="stat-label">Skills instalados</div></div>
+      <div class="stat"><div class="stat-value">131</div><div class="stat-label">Asignados a agentes</div></div>
+      <div class="stat"><div class="stat-value">0</div><div class="stat-label">Sin asignar</div></div>
       <div class="stat"><div class="stat-value">15</div><div class="stat-label">Agentes destino</div></div>
     </div>
     <div class="grid-2">
@@ -445,7 +445,7 @@
 <div class="slide">
   <div class="slide-inner">
     <span class="tag">ROADMAP</span>
-    <h2>Estado Actual y Próximos Pasos</h2>
+    <h2>Estado Actual · Homologación Completa</h2>
     <div class="grid-2" style="margin-top:1.5rem">
       <div class="card">
         <h4><span class="badge badge-green">100%</span> Homologado</h4>
@@ -460,14 +460,14 @@
         </ul>
       </div>
       <div class="card">
-        <h4><span class="badge badge-yellow">En Progreso</span> Por Optimizar</h4>
+        <h4><span class="badge badge-green">Resuelto</span> Optimizaciones Completadas</h4>
         <ul class="list">
-          <li>57 skills sin asignar a ningún agente</li>
-          <li>Soporte nativo de skill tool para cline/cursor/windsurf</li>
-          <li>Plugins discovery con errores de sintaxis</li>
-          <li>Documentación del workspace generada con skills antiguos</li>
-          <li>Perfiles adaptivos para herramientas no-opencode mejorables</li>
-          <li>Cobertura de tests: 23 tests, márgenes de mejora</li>
+          <li><span class="badge badge-green">DONE</span> 57 skills sin asignar → 0 unassigned (131/131 asignados)</li>
+          <li><span class="badge badge-green">DONE</span> Plugins discovery con errores de sintaxis corregido</li>
+          <li><span class="badge badge-green">DONE</span> Perfiles adaptivos mejorados (cursor v1.1, windsurf v1.2)</li>
+          <li><span class="badge badge-green">DONE</span> Cobertura de tests: 23 → 393 tests (40 files)</li>
+          <li><span class="badge badge-green">DONE</span> YAML frontmatter manager-skill + skill-registry actualizado</li>
+          <li><span class="badge badge-yellow">N/A</span> Skill tool nativo para cline/cursor/windsurf: limitación de herramienta, emulación inline implementada</li>
         </ul>
       </div>
     </div>
@@ -503,7 +503,7 @@
     <div class="stat-row" style="margin-top:2rem">
       <div class="stat"><div class="stat-value">10</div><div class="stat-label">Herramientas compatibles</div></div>
       <div class="stat"><div class="stat-value">15</div><div class="stat-label">Agentes</div></div>
-      <div class="stat"><div class="stat-value">134</div><div class="stat-label">Skills</div></div>
+      <div class="stat"><div class="stat-value">133</div><div class="stat-label">Skills</div></div>
       <div class="stat"><div class="stat-value">28</div><div class="stat-label">Quality Gates</div></div>
       <div class="stat"><div class="stat-value">16</div><div class="stat-label">Workflows CI/CD</div></div>
     </div>
