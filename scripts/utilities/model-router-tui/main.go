@@ -40,47 +40,50 @@ var (
 
 	bannerSubtitle = "-- NATIVE AI COGNITIVE DEVELOPMENT ECOSYSTEM --"
 
+	// Brand colors — source of truth: config/brand.json
+	// primary: #00BFFF | primaryLight: #4DCFFF | background: #0D1117 | surface: #1A2035
+
 	titleStyle = lipgloss.NewStyle().
 			Bold(true).
-			Foreground(lipgloss.Color("#00FFFF")).
+			Foreground(lipgloss.Color("#00BFFF")).
 			Padding(0, 1)
 
 	headerStyle = lipgloss.NewStyle().
 			Bold(true).
 			Foreground(lipgloss.Color("#FFFFFF")).
-			Background(lipgloss.Color("#333333")).
+			Background(lipgloss.Color("#1A2035")).
 			Padding(0, 1)
 
 	selectedStyle = lipgloss.NewStyle().
 			Bold(true).
-			Foreground(lipgloss.Color("#00FF00")).
+			Foreground(lipgloss.Color("#4DCFFF")).
 			Padding(0, 1)
 
 	defaultStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#AAAAAA")).
+			Foreground(lipgloss.Color("#6B7280")).
 			Padding(0, 1)
 
 	overrideStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#FFFF00")).
+			Foreground(lipgloss.Color("#F59E0B")).
 			Padding(0, 1)
 
 	errorStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#FF4444")).
+			Foreground(lipgloss.Color("#EF4444")).
 			Bold(true)
 
 	successStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#00FF00")).
+			Foreground(lipgloss.Color("#22C55E")).
 			Bold(true)
 
 	helpStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#888888"))
+			Foreground(lipgloss.Color("#6B7280"))
 
 	subtleStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#666666"))
+			Foreground(lipgloss.Color("#4B5563"))
 
 	labelStyle = lipgloss.NewStyle().
 			Bold(true).
-			Foreground(lipgloss.Color("#00FFFF"))
+			Foreground(lipgloss.Color("#00BFFF"))
 
 	valueStyle = lipgloss.NewStyle().
 			Foreground(lipgloss.Color("#FFFFFF"))
