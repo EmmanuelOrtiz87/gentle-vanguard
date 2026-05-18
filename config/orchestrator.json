@@ -303,6 +303,7 @@
       "supportsMemTools": true,
       "detectFirst": true,
       "mandatoryStartup": "scripts/utilities/session-autostart.cmd",
+      "adaptiveProfile": "scripts/utilities/adaptive-opencode-profile.ps1",
       "note": "CLAUDE.md is auto-loaded by OpenCode — contains immediate detect-tool.ps1 directive atop"
     },
     "claude-code": {
@@ -313,6 +314,7 @@
       "communicationLang": "es",
       "supportsSkillTool": true,
       "supportsMemTools": true,
+      "adaptiveProfile": "scripts/utilities/adaptive-claude-cline-profile.ps1",
       "note": "Claude Code native — CLAUDE.md is auto-loaded"
     },
     "cline": {
@@ -323,6 +325,7 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": false,
+      "adaptiveProfile": "scripts/utilities/adaptive-claude-cline-profile.ps1",
       "note": "Cline uses .clinerules — must reference AGENTS.md for canonical bootstrap"
     },
     "cursor": {
@@ -333,6 +336,7 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": false,
+      "adaptiveProfile": "scripts/utilities/adaptive-cursor-profile.ps1",
       "note": "Cursor uses .cursorrules — must reference AGENTS.md for canonical bootstrap"
     },
     "windsurf": {
@@ -343,7 +347,52 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": false,
+      "adaptiveProfile": "scripts/utilities/adaptive-codex-windsurf-profile.ps1",
       "note": "Windsurf uses CLAUDE.md by convention — canonical entry is AGENTS.md"
+    },
+    "codex": {
+      "promptFile": "CLAUDE.md",
+      "configFile": ".codex/config.toml",
+      "primaryEntryPoint": "docs/AGENTS.md",
+      "responseProfile": "ultra",
+      "communicationLang": "es",
+      "supportsSkillTool": false,
+      "supportsMemTools": false,
+      "adaptiveProfile": "scripts/utilities/adaptive-codex-windsurf-profile.ps1",
+      "note": "Codex — shares adaptive profile with Windsurf"
+    },
+    "continue-dev": {
+      "promptFile": "CLAUDE.md",
+      "configFile": ".continue/config.json",
+      "primaryEntryPoint": "docs/AGENTS.md",
+      "responseProfile": "ultra",
+      "communicationLang": "es",
+      "supportsSkillTool": true,
+      "supportsMemTools": true,
+      "adaptiveProfile": "scripts/utilities/adaptive-continue-copilot-profile.ps1",
+      "note": "Continue.dev — adaptive profile manages token/permission optimization"
+    },
+    "copilot": {
+      "promptFile": "CLAUDE.md",
+      "configFile": ".continue/config.json",
+      "primaryEntryPoint": "docs/AGENTS.md",
+      "responseProfile": "ultra",
+      "communicationLang": "es",
+      "supportsSkillTool": false,
+      "supportsMemTools": false,
+      "adaptiveProfile": "scripts/utilities/adaptive-continue-copilot-profile.ps1",
+      "note": "GitHub Copilot — shares adaptive profile with Continue.dev"
+    },
+    "antigravity": {
+      "promptFile": "CLAUDE.md",
+      "configFile": ".antigravity/config.json",
+      "primaryEntryPoint": "docs/AGENTS.md",
+      "responseProfile": "ultra",
+      "communicationLang": "es",
+      "supportsSkillTool": false,
+      "supportsMemTools": false,
+      "adaptiveProfile": "",
+      "note": "Antigravity — local-first config already minimal. Uses format adapter for integration."
     },
     "claude-generic": {
       "promptFile": "CLAUDE.md",
