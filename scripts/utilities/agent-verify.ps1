@@ -199,34 +199,30 @@ if (Test-DomainEnabled 'skills') {
 #  - Unit tests (Pester 3.4.0) all pass
 # =============================================================================
 if (Test-DomainEnabled 'tests') {
-    $TestFile = "$Root\tests\unit\gentle-vanguard-core.tests.ps1"
-    if (Test-Path $TestFile) {
+    $TestFiles = @(Get-ChildItem -Path "$Root\tests" -Recurse -Filter "*.tests.ps1" -Name)
+    $TotalPassed = 0; $TotalFailed = 0; $FailedFiles = @()
+    foreach ($tf in $TestFiles) {
+        $absPath = "$Root\tests\$tf"
+        if (-not (Test-Path $absPath)) { continue }
         $TestOut = & pwsh -NoProfile -ExecutionPolicy Bypass -Command @"
             Import-Module Pester -RequiredVersion 3.4.0 -ErrorAction Stop
-            `$r = Invoke-Pester '$TestFile' -PassThru -Quiet
-            Write-Output "PESTER_RESULT:`$(`$r.PassedCount):`$(`$r.FailedCount)"
+            `$r = Invoke-Pester '$absPath' -PassThru -Quiet
+            if (`$r) { Write-Output "PESTER_RESULT:`$(`$r.PassedCount):`$(`$r.FailedCount)" }
 "@ 2>&1
         $PesterLine = $TestOut | Select-String "PESTER_RESULT:" | Select-Object -Last 1
         if ($PesterLine) {
-            $parts  = "$PesterLine".Split(":")
-            $passed = [int]$parts[1]
-            $failed = [int]$parts[2]
-            if ($failed -eq 0) {
-                Add-Result "unit-tests" "PASS" "$passed tests passed, 0 failed" "tests"
-            } else {
-                Add-Result "unit-tests" "FAIL" "$passed passed, $failed FAILED - run tests manually for details" "tests"
-            }
-        } else {
-            # Fallback: parse last summary line
-            $summary = $TestOut | Select-String "passed" | Select-Object -Last 1
-            if ($summary -match "0 Failed") {
-                Add-Result "unit-tests" "PASS" "$summary" "tests"
-            } else {
-                Add-Result "unit-tests" "WARN" "Could not parse test output - check manually: pwsh -File '$TestFile'" "tests"
+            $parts  = "$PesterLine".ToString().Split(":")
+            if ($parts.Count -ge 3) {
+                $p = [int]$parts[1]; $f = [int]$parts[2]
+                $TotalPassed += $p; $TotalFailed += $f
+                if ($f -gt 0) { $FailedFiles += "$tf ($f failed)" }
             }
         }
+    }
+    if ($TotalFailed -eq 0) {
+        Add-Result "unit-tests" "PASS" "$TotalPassed tests passed across $($TestFiles.Count) files, 0 failed" "tests"
     } else {
-        Add-Result "unit-tests" "WARN" "Test file not found: tests/unit/gentle-vanguard-core.tests.ps1" "tests"
+        Add-Result "unit-tests" "FAIL" "$TotalPassed passed, $TotalFailed FAILED across $($TestFiles.Count) files: $($FailedFiles -join '; ')" "tests"
     }
 
     # Multilingual routing regression matrix (es/en/pt-BR)
