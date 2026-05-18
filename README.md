@@ -1,20 +1,25 @@
-<h1 align="center">Gentle-Vanguard</h1>
+<p align="center">
+  <img src="docs/brand/assets/banner-github.svg" alt="Gentle-Vanguard" width="100%"/>
+</p>
 
 <p align="center">
-  <strong>AI-powered development orchestrator · 17 agents · 133 skills · 10 tool-compatible</strong><br>
+  <img src="https://img.shields.io/badge/Version-2.19.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
+  <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
+  <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
+  <img src="https://img.shields.io/badge/Platform-Win%20|%20Linux%20|%20macOS-6B7280?style=flat-square&labelColor=0D1117" alt="Platform">
+  <img src="https://img.shields.io/badge/Agents-17-00BFFF?style=flat-square&labelColor=0D1117" alt="Agents">
+  <img src="https://img.shields.io/badge/Skills-134-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
+  <img src="https://img.shields.io/badge/Workflows-16-A855F7?style=flat-square&labelColor=0D1117" alt="Workflows">
+</p>
+
+<p align="center">
+  <strong>AI-powered development orchestrator · 17 agents · 134 skills · 10 tool-compatible</strong><br>
   <em>Tool-agnostic · SDD Lifecycle · Judgment Day · Persistent memory</em>
 </p>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Version-2.18.0-brightgreen?style=flat-square" alt="Version">
-  <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=flat-square" alt="Status">
-  <img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" alt="License">
-  <img src="https://img.shields.io/badge/PowerShell-7+-purple?style=flat-square" alt="PowerShell">
-  <img src="https://img.shields.io/badge/Platform-Win%20|%20Linux%20|%20macOS-lightgrey?style=flat-square" alt="Platform">
-  <img src="https://img.shields.io/badge/Agents-17-orange?style=flat-square" alt="Agents">
-  <img src="https://img.shields.io/badge/Skills-133-teal?style=flat-square" alt="Skills">
-  <img src="https://img.shields.io/badge/Workflows-16-blueviolet?style=flat-square" alt="Workflows">
-</p>
+> *"Construyendo el puente definitivo entre la alta ingeniería de software y la estrategia corporativa."*
+> — [Read the Manifesto](MANIFESTO.md)
 
 Born from a simple observation: AI-assisted coding works, but without structure it's chaotic. Gentle-Vanguard gives you an orchestration layer that routes tasks to specialized agents, enforces standards, tracks every token, and remembers what you did last session.
 
