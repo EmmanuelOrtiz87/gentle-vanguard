@@ -9,6 +9,7 @@
     "prepare": "npx lefthook install"
   },
   "devDependencies": {
+    "better-sqlite3": "^12.10.0",
     "lefthook": "^2.1.6",
     "prettier": "^3.0.0"
   }
