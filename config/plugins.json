@@ -1,6 +1,6 @@
 {
   "pluginsPaths": ["plugins", "C:\\Users\\emman\\.gentle-vanguard\\plugins"],
-  "enabledPlugins": [],
+  "enabledPlugins": ["example-hello-world"],
   "security": {
     "requireSignature": false,
     "allowUnsigned": true,
