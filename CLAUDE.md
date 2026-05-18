@@ -87,6 +87,7 @@ Gentle-Vanguard opera en **modo profesional** (equivalente a "neutral" de gentle
 10. Check `skills/` directory for reusable patterns before writing code
 11. Use Engram memory: `mem_search` for past decisions, `mem_save` after significant work
 12. **CodeGraph Integration** — Before modifying code, use `codegraph_context` to understand impact radius. If `pre-process-input.ps1` outputs `CODEGRAPH_CONTEXT_RECOMMENDED: true`, run `codegraph_context` before proceeding. After significant refactors, run `scripts/utilities/codegraph-post-modification-sync.ps1`. Autostart pipeline includes `codegraph-sync` step (index freshness check). CI validation available via `scripts/utilities/codegraph-ci-validate.ps1`.
+13. **AUTONOMOUS LEARNING** — After every significant task (bug fix, architecture decision, pattern discovery, config change, integration), you MUST save a lesson to Engram via `mem_save` WITHOUT waiting for the user to ask. This includes: (a) bugs found and fixed, (b) non-obvious gotchas discovered, (c) architectural decisions and tradeoffs, (d) integration patterns that work, (e) things that broke and why. The session-close protocol (NORMATIVAS-SESSION.md 2.4) already mandates `mem_session_summary` — this rule extends it to DURING the session, not just at the end. If you detect a failure pattern or a correction you made proactively, save it immediately.
 
 ## 🔴 BREAK GLASS — Auto-Override Harmful Config
 
