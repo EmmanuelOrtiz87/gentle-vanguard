@@ -1,42 +1,45 @@
-<h1 align="center">Gentle-Vanguard</h1>
+<p align="center">
+  <img src="docs/brand/assets/banner-github.svg" alt="Gentle-Vanguard" width="100%"/>
+</p>
 
 <p align="center">
-  <strong>AI-powered development orchestrator · 17 agents · 133 skills · 10 tool-compatible</strong><br>
+  <img src="https://img.shields.io/badge/Version-2.19.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
+  <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
+  <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
+  <img src="https://img.shields.io/badge/Platform-Win%20|%20Linux%20|%20macOS-6B7280?style=flat-square&labelColor=0D1117" alt="Platform">
+  <img src="https://img.shields.io/badge/Agents-17-00BFFF?style=flat-square&labelColor=0D1117" alt="Agents">
+  <img src="https://img.shields.io/badge/Skills-134-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
+  <img src="https://img.shields.io/badge/Workflows-16-A855F7?style=flat-square&labelColor=0D1117" alt="Workflows">
+</p>
+
+<p align="center">
+  <strong>AI-powered development orchestrator · 17 agents · 134 skills · 10 tool-compatible</strong><br>
   <em>Tool-agnostic · SDD Lifecycle · Judgment Day · Persistent memory</em>
 </p>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Version-2.18.0-brightgreen?style=flat-square" alt="Version">
-  <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=flat-square" alt="Status">
-  <img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" alt="License">
-  <img src="https://img.shields.io/badge/PowerShell-7+-purple?style=flat-square" alt="PowerShell">
-  <img src="https://img.shields.io/badge/Agents-17-orange?style=flat-square" alt="Agents">
-  <img src="https://img.shields.io/badge/Skills-133-teal?style=flat-square" alt="Skills">
-  <img src="https://img.shields.io/badge/Workflows-16-blueviolet?style=flat-square" alt="Workflows">
-</p>
+> *"Construyendo el puente definitivo entre la alta ingeniería de software y la estrategia corporativa."*
+> — [Read the Manifesto](MANIFESTO.md)
 
-<p align="center">
-  <a href="docs/AGENTS.md">Bootstrap</a>
-  ·
-  <a href="CHANGELOG.md">Changelog</a>
-  ·
-  <a href="rules/DELEGATION-RULES.md">Delegation Rules</a>
-  ·
-  <a href="openspec/config.yaml">SDD Config</a>
-</p>
+Born from a simple observation: AI-assisted coding works, but without structure it's chaotic. Gentle-Vanguard gives you an orchestration layer that routes tasks to specialized agents, enforces standards, tracks every token, and remembers what you did last session.
 
 ---
 
-## What is Gentle-Vanguard?
+## What It Solves
 
-Gentle-Vanguard is an **AI orchestrator** that turns your CLI or IDE into a disciplined engineering team. It does one thing that chat bots don't: **structure**.
+| Problem | How It Works |
+|---------|-------------|
+| AI gives inconsistent code quality | 7D validation gates catch bad code before commit |
+| No memory between sessions | Engram persists decisions, bugs, and patterns across sessions |
+| Random model selection wastes tokens | Cost-aware router picks the cheapest capable model per agent |
+| No governance in AI workflows | SDD enforcement, judgment-day adversarial review, pre-commit hooks |
+| Disconnected AI sessions | Session lifecycle tracks context across dispatches with crash recovery |
+| No visibility into AI costs | Dashboard with token trends, per-agent costs, ROI analysis |
+| One-size-fits-all AI responses | 16 specialized agents with role-specific model routing |
 
-- **Routes work** through delegation rules — small changes stay inline, complex work goes to specialized subagents
-- **Enforces SDD** (Spec-Driven Development) — concepts before code, artifacts over chat context
-- **Guards reviewer workload** — prevents oversized PRs with automated line-budget checks
-- **Assigns models per agent** — fast/cheap for exploration, strong reasoning for architecture, fresh context for review
-- **Maintains a skill registry** — auto-scanned, always-current index of 133 skills
-- **Persists memory** across sessions via Engram
+---
+
+## Architecture
 
 ```mermaid
 flowchart TB
@@ -47,8 +50,7 @@ flowchart TB
     ORC -->|small| INLINE[Inline work]
     ORC -->|complex| DELEGATE{Delegation Rules}
     DELEGATE -->|4+ files| SCOUT[scout / context-builder]
-    DELEGATE -->|2+ files| WORKER[worker]
-    DELEGATE -->|PR / commit| REVIEWER[fresh reviewer]
+    DELEGATE -->|2+ files| WORKER[worker + reviewer]
     DELEGATE -->|architecture/risk| SDD[SDD Lifecycle]
 
     SDD --> BA[BA - Explore]
@@ -56,79 +58,12 @@ flowchart TB
     SDD --> DEV[DEV - Apply]
     SDD --> QA[QA - Verify]
 
-    BA --> SKILLS[133 Skills]
+    BA --> SKILLS[134 Skills]
     DEV --> SKILLS
     QA --> SKILLS
 
     SKILLS --> MEM[Engram Memory]
 ```
-
----
-
-## Architecture
-
-### Work Routing Ladder
-
-Every request is routed through the **smallest safe harness**:
-
-```mermaid
-flowchart LR
-    subgraph ROUTE[Work Routing]
-        A[Incoming Request] --> B{Size & Complexity}
-        B -->|Small, local, known| C[Inline Direct]
-        B -->|Context-heavy, 4+ files| D[scout delegation]
-        B -->|Multi-file change| E[worker + reviewer]
-        B -->|Ambiguous / architectural| F[SDD lifecycle]
-    end
-
-    subgraph SDD_PHASES[SDD Flow]
-        F --> G[init]
-        G --> H[explore]
-        H --> I[proposal]
-        I --> J[spec]
-        J --> K[design]
-        K --> L[tasks]
-        L --> M[apply]
-        M --> N[verify]
-        N --> O[archive]
-    end
-
-    C --> P[Result]
-    D --> P
-    E --> P
-    O --> P
-```
-
-### Delegation Rules (Mandatory)
-
-| # | Rule | Trigger | Action |
-|---|------|---------|--------|
-| 1 | **4-file rule** | Understanding needs 4+ files | Delegate to scout/context-builder |
-| 2 | **Multi-file write** | Touching 2+ non-trivial files | One worker + fresh reviewer |
-| 3 | **PR rule** | Before commit/push/PR | Fresh-context reviewer |
-| 4 | **Incident rule** | Git/tooling accident | Fresh audit before recovery |
-| 5 | **Long-session** | ~20 calls without delegation | Pause and delegate |
-
-See [rules/DELEGATION-RULES.md](rules/DELEGATION-RULES.md) for full details.
-
-### Model Routing per Agent
-
-Each agent type has a recommended model profile based on its role:
-
-```mermaid
-flowchart LR
-    subgraph ROLES[Agent Roles + Model Assignment]
-        BA[BA - Explore] --> M1[fast/cheap - thinking:off]
-        SAD[SAD - Design] --> M2[strong reasoning - thinking:high]
-        DEV[DEV - Code] --> M3[strong coding - thinking:medium]
-        QA[QA - Verify] --> M4[fresh context - thinking:high]
-        GOV[GOV - Audit] --> M5[thorough review - thinking:high]
-        DOC[DOC - Docs] --> M6[fast/cheap - thinking:low]
-        OPS[OPS - Infra] --> M7[fast/cheap - thinking:off]
-    end
-```
-
-Configured in [config/model-routing.json](config/model-routing.json).
 
 ### 5-Layer Architecture
 
@@ -137,155 +72,99 @@ Configured in [config/model-routing.json](config/model-routing.json).
 | **1. Agents** | Task delegation | 1 orchestrator + 15 sub-agents | `config/auto-delegation.json` |
 | **2. Commands** | CLI entry points | `gv.ps1`, `pre-process-input.ps1` | `config/orchestrator.json` |
 | **3. MCP Servers** | Protocol bridge | Model Context Protocol, Engram MCP | `skills/*/SKILL.md` |
-| **4. Skills** | Specialized execution | 133 skills (frontend, backend, DevOps, security, testing) | `config/skill-dependencies.json` |
+| **4. Skills** | Specialized execution | 134 skills (frontend, backend, DevOps, security, testing) | `config/skill-dependencies.json` |
 | **5. Memory** | Persistent context | Engram (hot/warm/cold tiers) | `config/engram-config.json` |
 
 ---
 
 ## Agent Ecosystem
 
-| Agent | Role | Model Profile | Delegates to |
-|-------|------|--------------|-------------|
-| Orchestrator | Main router | inherit | All agents below |
-| BA | Requirements & analysis | fast/cheap | `sdd-lifecycle` (explore) |
-| SAD | System design | strong-reasoning | `sdd-lifecycle` (design) |
-| DEV | Code generation | strong-coding | `sdd-lifecycle` (apply) |
-| QA | Testing & validation | strong-review | `sdd-lifecycle` (verify) |
-| OPS | Deployment & CI/CD | fast/cheap | `docker-devops-skill` |
-| DOC | Technical docs | fast/cheap | `documentation-governance` |
-| GOV | Compliance & audit | strong-review | `judgment-day` |
-| SESSION | Session management | fast/cheap | `session-workflow-skill` |
-| PREMORTEM | Risk assessment | strong-reasoning | `premortem-skill` |
-| FINANCE | Financial modeling | strong-reasoning | `finance-financial-analyst` |
-| LEGAL | Regulatory compliance | strong-review | `legal-compliance-officer` |
-| MKT | Marketing & SEO | fast/cheap | `marketing-content-writer` |
-| SALES | Pipeline management | fast/cheap | `sales-account-executive` |
-| HR | Talent acquisition | fast/cheap | `hr-talent-acquisition` |
-| SELF-DIAG | Self-diagnosis | fast/cheap | `self-diagnosis-skill` |
-| BUS-TELE | Business telemetry | fast/cheap | `business-telemetry-skill` |
+| Agent | Role | Model Profile |
+|-------|------|--------------|
+| Orchestrator | Main router | inherit |
+| BA | Requirements & analysis | fast/cheap |
+| SAD | System design | strong-reasoning |
+| DEV | Code generation | strong-coding |
+| QA | Testing & validation | strong-review |
+| OPS | Deployment & CI/CD | fast/cheap |
+| DOC | Technical docs | fast/cheap |
+| GOV | Compliance & audit | strong-review |
+| SESSION | Session management | fast/cheap |
+| PREMORTEM | Risk assessment | strong-reasoning |
+| FINANCE | Financial modeling | strong-reasoning |
+| LEGAL | Regulatory compliance | strong-review |
+| MKT | Marketing & SEO | fast/cheap |
+| SALES | Pipeline management | fast/cheap |
+| HR | Talent acquisition | fast/cheap |
+| SELF-DIAG | Self-diagnosis | fast/cheap |
+| BUS-TELE | Business telemetry | fast/cheap |
 
-> All sub-agents are `hidden: true` in `opencode.json` — only the Orchestrator is user-selectable. Sub-agents are managed autonomously via `config/auto-delegation.json`.
-
----
-
-## Key Capabilities
-
-### SDD / OpenSpec
-
-Spec-Driven Development with a formal phase chain:
-
-```mermaid
-flowchart LR
-    init --> explore --> proposal --> spec --> design
-    design --> tasks --> apply --> verify --> archive
-```
-
-Config at [openspec/config.yaml](openspec/config.yaml):
-- `strict_tdd`: forces RED/GREEN/TRIANGULATE/REFACTOR evidence
-- `protect_review_workload`: blocks PRs exceeding 400 lines
-- Per-phase rules: proposal requires problem statement, spec requires acceptance criteria
-
-### SDD Preflight (Session-Level)
-
-Before the first SDD flow in a session, configure:
-
-| Setting | Options | Default |
-|---------|---------|---------|
-| Execution mode | interactive / auto | interactive |
-| Artifact store | openspec / engram / both | openspec |
-| PR strategy | auto-forecast / ask-always / single-pr-default / force-chained | ask-always |
-| Review budget | Max lines per PR | 400 |
-| Strict TDD | enabled / disabled | enabled |
-
-### Review Workload Guard
-
-Before multi-file implementation, estimate the review burden:
-
-```powershell
-.\scripts\utilities\review-workload-guard.ps1
-```
-
-- Checks `git diff main...` for additions + deletions
-- If **>400 changed lines**, recommends chained PRs (see `skills/chained-pr/`)
-- Splits oversized work into reviewable slices
-
-### Skill Registry
-
-Auto-maintained at `.atl/skill-registry.md`:
-
-- Built on every session start
-- Scans 10+ skill directories (project + user/tool)
-- Generates **compact rules**: 5-15 line pre-digested summaries per skill
-- Delegators inject compact rules into subagent prompts
-
-Rebuild on demand:
-```powershell
-.\scripts\utilities\build-skill-registry.ps1
-```
-
-### Chain-Delivery Skills
-
-| Skill | Purpose |
-|-------|---------|
-| `branch-pr` | Issue-first PR creation with template enforcement |
-| `chained-pr` | Split >400-line changes into reviewable PR chains |
-| `work-unit-commits` | Commits as self-contained, reviewable units |
-| `judgment-day` | Blind dual review + re-judgment |
-| `comment-writer` | Postable, warm collaboration comments |
-
-### Cross-Tool Compatibility
-
-Gentle-Vanguard detects and adapts to 10 AI coding tools:
-
-| Tool | Detection | Adaptive Profile |
-|------|-----------|-------------------|
-| OpenCode | `$env:OPENCODE_SERVER_USERNAME` | Full (skill + mem tools) |
-| Claude Code | `$env:CLAUDE_VSCODE_VERSION` | Full (native tools) |
-| Cline | `.clinerules` file | Emulated skill/mem |
-| Cursor | `.cursorrules` file | Emulated skill/mem |
-| Windsurf | `.windsurf/` directory | Emulated skill/mem |
-| Codex | `$env:CODEX` | Emulated skill/mem |
-| Copilot | `$env:COPILOT` | Emulated skill/mem |
-| Antigravity | `$env:ANTIGRAVITY` | Emulated skill/mem |
-| Continue.dev | `.continue/` directory | Emulated skill/mem |
-| Claude (generic) | Fallback | Emulated skill/mem |
+> All sub-agents are `hidden: true` — only the Orchestrator is user-selectable. Sub-agents are managed autonomously via auto-delegation.
 
 ---
 
-## Quick Start
+## Key Features
+
+- **17 Specialized Agents** — Orchestrator + BA, SAD, DEV, QA, OPS, GOV, DOC, SESSION, PREMORTEM, FINANCE, LEGAL, MKT, SALES, HR, SELF-DIAG, BUS-TELE
+- **134 On-Demand Skills** — Angular, React, Next.js, Go, Django, Python, TypeScript, Docker, K8s, Playwright, Security, API Design — zero memory until triggered
+- **Persistent Engram Memory** — Cross-session context, conflict detection, auto-reconciliation
+- **Cost-Aware Model Router** — Per-agent model assignment with 3 profiles: fast/cheap, strong-reasoning, strong-coding
+- **Governance-First** — SDD lifecycle, 7D validation, judgment-day review, 16 CI/CD workflows
+- **100% Local-First** — No required external services. Optional cloud AI integration.
+- **Cross-Platform** — Windows, macOS, Linux. PowerShell 7+ and Bash.
+- **10 Tool-Compatible** — OpenCode, Claude Code, Cline, Cursor, Windsurf, Codex, Copilot, Antigravity, Continue.dev, Claude (generic)
+- **CLI** — 50+ subcommands: `dispatch`, `audit`, `review`, `judgment-day`, `dashboard`, `benchmark`
+
+---
+
+## Skill Catalog
+
+| Category | Count | Key Skills |
+|----------|-------|-----------|
+| Frontend/Mobile | 25 | `react-19-skill`, `angular-spa-skill`, `nextjs-15-skill`, `tailwind-4-skill`, `zustand-5-skill`, `flutter-skill` |
+| Backend | 5 | `golang-api-skill`, `django-drf-skill`, `api-design-skill`, `database-relational-skill`, `database-nosql-skill` |
+| DevOps/Infra | 8 | `docker-devops-skill`, `kubernetes-deployment`, `terraform-infrastructure`, `monitoring-aggregator`, `observability-skill` |
+| Security & Governance | 8 | `security-skill`, `judgment-day`, `architecture-governance`, `documentation-governance`, `script-governance-skill` |
+| Testing/QA | 8 | `testing-skill`, `playwright-skill`, `pytest-skill`, `testing-strategy-skill`, `bdd-scenarios-skill` |
+| Content/Marketing | 14 | `marketing-content-writer`, `seo-audit-skill`, `visual-content-skill`, `cognitive-doc-design`, `presentaciones-visuales-skill` |
+| Business | 14 | `finance-financial-analyst`, `sales-account-executive`, `hr-talent-acquisition`, `legal-compliance-officer`, `product-manager` |
+| Git/Workflow | 9 | `branch-pr`, `chained-pr`, `work-unit-commits`, `gitflow-orchestrator-skill`, `release-management-skill` |
+| Core/Orchestration | 15 | `sdd-lifecycle`, `session-workflow-skill`, `auto-delegation-router`, `skill-registry`, `self-diagnosis-skill` |
+| Other | 27 | `project-scaffolding-skill`, `incident-response-skill`, `premortem-skill`, `karpathy-guidelines`, `humanizador-skill` |
+
+---
+
+## Quick Install
+
+### Windows — One-Click
+
+[Download Gentle-Vanguard.exe](Gentle-Vanguard.exe) — NSIS installer, AES-256 encrypted.
 
 ```powershell
-git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git
-cd gentle-vanguard
+# Run as Administrator, then verify:
+gv health
+```
 
-# Full session start (autostart + session manager + engram + skill registry)
-.\scripts\utilities\session-autostart.cmd
+### Any Platform — Git Clone
 
-# Verify all quality gates
-gv verify
-
-# SDD preflight (before first SDD task)
-.\scripts\utilities\sdd-preflight.ps1 -Interactive
-
-# Check review workload before multi-file changes
-.\scripts\utilities\review-workload-guard.ps1
+```powershell
+git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard-public.git
+cd gentle-vanguard-public
+pwsh -File scripts/bootstrap.ps1
 ```
 
 ---
 
-## Development
+## Requirements
 
-| Action | Command |
-|--------|---------|
-| Run all tests | `Invoke-Pester tests/ -Output Detailed` |
-| Run unit tests | `Invoke-Pester tests/unit/ -Output Detailed` |
-| Run integration | `Invoke-Pester tests/integration/ -Output Detailed` |
-| Quality gates | `gv verify` or `gv judgment-day` |
-| Security audit | `.\scripts\security\audit.ps1` |
-| Rebuild skill registry | `.\scripts\utilities\build-skill-registry.ps1` |
-| Build installer | `pwsh -File build/create-installer.ps1` |
-| SDD preflight | `.\scripts\utilities\sdd-preflight.ps1 -Interactive` |
-| Review workload guard | `.\scripts\utilities\review-workload-guard.ps1` |
+| Requirement | Version | Required? | Notes |
+|------------|---------|-----------|-------|
+| PowerShell | 7+ | Yes | Core runtime |
+| Git | 2.30+ | Yes | Version control |
+| Windows | 10/11 | Optional | Full support |
+| macOS | 13+ | Optional | Full support |
+| Linux | Ubuntu 22.04+ | Optional | Full support |
+| RAM | 4 GB min | Recommended | 8 GB recommended |
 
 ---
 
@@ -313,36 +192,43 @@ gv verify
 
 ---
 
-## Project Status
+## Defensive Patterns
 
-| Gate | Result |
-|------|--------|
-| Configuration | 3/3 |
-| Skills | 133 validated |
-| Tests | 40 test files |
-| Hooks | 2/2 |
-| Structure | 7/7 |
-| **Total** | **Production Ready** |
+All PowerShell scripts follow standardized defensive patterns:
+
+- Robust `repoRoot` resolution via `$env:GENTLE_VANGUARD_BASE_DIR` + recursive config search
+- BOM-free UTF-8 encoding
+- ASCII-only output (no Unicode in scripts)
+- `$ErrorActionPreference = 'Stop'` at script entry
+- SHA256 integrity baselines for security-critical config
+- Quoted hashtable keys with hyphens
 
 ---
 
-## Key Documentation
+## Security
 
-| Resource | Description |
-|----------|-------------|
-| [AGENTS.md](docs/AGENTS.md) | Canonical bootstrap (tool-agnostic) |
-| [Architecture](docs/architecture/README.md) | System design & decisions |
-| [Delegation Rules](rules/DELEGATION-RULES.md) | When to delegate vs. work inline |
-| [Model Routing](config/model-routing.json) | Per-agent model/effort assignments |
-| [SDD Config](openspec/config.yaml) | SDD/OpenSpec phase configuration |
-| [Skill Registry](.atl/skill-registry.md) | Auto-maintained skill index |
-| [Build Pipeline](build/README.md) | Encrypt, compile, distribute |
-| [Contributing](CONTRIBUTING.md) | How to contribute |
-| [Changelog](CHANGELOG.md) | Version history |
+AES-256 encryption for secrets, API keys, and sensitive configs. See [SECURITY.md](SECURITY.md).
+
+---
+
+## Documentation
+
+| Resource | Link |
+|----------|------|
+| Getting Started | [docs/getting-started/](docs/getting-started/) |
+| Installation Guide | [INSTALLATION.md](INSTALLATION.md) |
+| Architecture | [docs/architecture/README.md](docs/architecture/README.md) |
+| Full Index | [docs/](docs/) |
+
+---
+
+## License
+
+[MIT](LICENSE)
 
 ---
 
 <p align="center">
-  <strong>Gentle-Vanguard v2.18.0</strong><br>
+  <strong>Gentle-Vanguard v2.19.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>
