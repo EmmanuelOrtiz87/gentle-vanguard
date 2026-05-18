@@ -99,6 +99,14 @@ During active session:
 2. **MUST** call `mem_search` before starting work that may have been done before
 3. **SHOULD** maintain `todowrite` with current progress
 4. **SHOULD** validate work with `agent-verify.ps1` periodically
+5. **MUST** save lessons to Engram proactively — do NOT wait for user instruction. Triggers for automatic `mem_save`:
+   - Bug found and fixed (what was wrong, why, how fixed)
+   - Non-obvious gotcha discovered (edge case, platform quirk, tool limitation)
+   - Architectural decision made (tradeoffs, alternatives considered)
+   - Integration pattern that works (what connected, how)
+   - Something broke and why (root cause, prevention)
+   - Config change with non-obvious implications
+   - Performance insight or optimization discovered
 
 ### 2.4 Close Protocol
 
@@ -111,6 +119,8 @@ When closing a session:
 5. **SHOULD** validate configs with `validate-configs.ps1`
 6. **MUST** call `engram_mem_session_end` to mark session complete
 7. **MUST** detect concurrent active sessions and close by explicit `SessionId` when count > 1
+8. **MUST** run `scripts/utilities/session-learning-capture.ps1 -Trigger close` to capture session lessons
+9. **SHOULD** run `scripts/utilities/self-diagnosis-autonomous.ps1 -Depth quick` to detect issues for next session
 
 #### Concurrent Session Safety (MANDATORY)
 
