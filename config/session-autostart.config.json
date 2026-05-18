@@ -133,6 +133,14 @@
         "args": "-Mode Auto -TimeZone \"Argentina Standard Time\" -PeakStart 9 -PeakEnd 15",
         "required": false,
         "description": "Intelligent temporary Claude Code/Cline optimization with automatic restore when normalized"
+      },
+      {
+        "id": "codegraph-sync",
+        "enabled": true,
+        "script": "scripts/utilities/codegraph-sync-autostart.ps1",
+        "args": "",
+        "required": false,
+        "description": "Verify CodeGraph index freshness and sync if stale (>30min old)"
       }
     ],
 
