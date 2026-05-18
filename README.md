@@ -28,13 +28,13 @@
 
 ## What is Gentle-Vanguard?
 
-Gentle-Vanguard is an **AI orchestrator** that turns your CLI or IDE into a disciplined engineering team. Unlike chat wrappers, Gentle-Vanguard:
+Gentle-Vanguard is an **AI orchestrator** that turns your CLI or IDE into a disciplined engineering team. It does one thing that chat bots don't: structure.
 
-- **Routes work** through delegation rules: small changes stay inline, complex work goes to specialized subagents
-- **Enforces SDD** (Spec-Driven Development): concepts before code, artifacts over chat context
-- **Guards reviewer workload**: prevents oversized PRs with automated line-budget checks
-- **Assigns models per agent**: fast/cheap for exploration, strong reasoning for architecture, fresh context for review
-- **Maintains a skill registry**: auto-scanned, always-current index of 130+ skills
+- **Routes work** through delegation rules — small changes stay inline, complex work goes to specialized subagents
+- **Enforces SDD** (Spec-Driven Development) — concepts before code, artifacts over chat context
+- **Guards reviewer workload** — prevents oversized PRs with automated line-budget checks
+- **Assigns models per agent** — fast/cheap for exploration, strong reasoning for architecture, fresh context for review
+- **Maintains a skill registry** — auto-scanned, always-current index of 130+ skills
 - **Persists memory** across sessions via Engram
 
 ```mermaid
@@ -158,8 +158,10 @@ Configured in [config/model-routing.json](config/model-routing.json).
 
 Gentle-Vanguard implements Spec-Driven Development with a formal phase chain:
 
-```
-init  explore  proposal  spec  design  tasks  apply  verify  archive
+```mermaid
+flowchart LR
+    init --> explore --> proposal --> spec --> design
+    design --> tasks --> apply --> verify --> archive
 ```
 
 Config at [openspec/config.yaml](openspec/config.yaml):
@@ -294,7 +296,7 @@ Session lifecycle is now persisted end-to-end through Engram: `session-manager.p
 ---
 
 <p align="center">
-  <strong>Gentle-Vanguard v2.15.0</strong><br>
+  <strong>Gentle-Vanguard v2.16.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>
 
