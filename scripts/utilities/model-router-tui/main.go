@@ -29,47 +29,61 @@ const (
 )
 
 var (
+	bannerLines = []string{
+		" ██████╗ ███████╗███╗   ██╗████████╗██╗     ███████╗    ██╗   ██╗ █████╗ ███╗   ██╗ ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗ ",
+		"██╔════╝ ██╔════╝████╗  ██║╚══██╔══╝██║     ██╔════╝    ██║   ██║██╔══██╗████╗  ██║██╔════╝ ██║   ██║██╔══██╗██╔══██╗██╔══██╗",
+		"██║  ███╗█████╗  ██╔██╗ ██║   ██║   ██║     █████╗      ██║   ██║███████║██╔██╗ ██║██║  ███╗██║   ██║███████║██████╔╝██║  ██║",
+		"██║   ██║██╔══╝  ██║╚██╗██║   ██║   ██║     ██╔══╝      ╚██╗ ██╔╝██╔══██║██║╚██╗██║██║   ██║██║   ██║██╔══██║██╔══██╗██║  ██║",
+		"╚██████╔╝███████╗██║  ████║   ██║   ██║███████╗███████╗   ╚████╔╝ ██║  ██║██║  ████║╚██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝",
+		" ╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝╚══════╝╚══════╝    ╚═══╝  ╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ",
+	}
+
+	bannerSubtitle = "-- NATIVE AI COGNITIVE DEVELOPMENT ECOSYSTEM --"
+
+	// Brand colors — source of truth: config/brand.json
+	// primary: #00BFFF | primaryLight: #4DCFFF | background: #0D1117 | surface: #1A2035
+
 	titleStyle = lipgloss.NewStyle().
 			Bold(true).
-			Foreground(lipgloss.Color("#00FFFF")).
+			Foreground(lipgloss.Color("#00BFFF")).
 			Padding(0, 1)
 
 	headerStyle = lipgloss.NewStyle().
 			Bold(true).
 			Foreground(lipgloss.Color("#FFFFFF")).
-			Background(lipgloss.Color("#333333")).
+			Background(lipgloss.Color("#1A2035")).
 			Padding(0, 1)
 
 	selectedStyle = lipgloss.NewStyle().
 			Bold(true).
-			Foreground(lipgloss.Color("#00FF00")).
+			Foreground(lipgloss.Color("#4DCFFF")).
 			Padding(0, 1)
 
 	defaultStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#AAAAAA")).
+			Foreground(lipgloss.Color("#6B7280")).
 			Padding(0, 1)
 
 	overrideStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#FFFF00")).
+			Foreground(lipgloss.Color("#F59E0B")).
 			Padding(0, 1)
 
 	errorStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#FF4444")).
+			Foreground(lipgloss.Color("#EF4444")).
 			Bold(true)
 
 	successStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#00FF00")).
+			Foreground(lipgloss.Color("#22C55E")).
 			Bold(true)
 
 	helpStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#888888"))
+			Foreground(lipgloss.Color("#6B7280"))
 
 	subtleStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#666666"))
+			Foreground(lipgloss.Color("#4B5563"))
 
 	labelStyle = lipgloss.NewStyle().
 			Bold(true).
-			Foreground(lipgloss.Color("#00FFFF"))
+			Foreground(lipgloss.Color("#00BFFF"))
 
 	valueStyle = lipgloss.NewStyle().
 			Foreground(lipgloss.Color("#FFFFFF"))
@@ -628,15 +642,33 @@ func (m model) View() string {
 	return "Unknown state"
 }
 
+func (m model) renderBanner() string {
+	var lines []string
+	for _, line := range bannerLines {
+		lines = append(lines, titleStyle.Render(line))
+	}
+	lines = append(lines, "")
+	lines = append(lines, subtleStyle.Render(bannerSubtitle))
+	return lipgloss.JoinVertical(lipgloss.Center, lines...)
+}
+
+func (m model) renderCompactBanner() string {
+	return lipgloss.JoinVertical(lipgloss.Left,
+		titleStyle.Render("GENTLE VANGUARD"),
+		subtleStyle.Render(bannerSubtitle),
+	)
+}
+
 func (m model) viewLoading() string {
 	return lipgloss.JoinVertical(lipgloss.Center,
-		titleStyle.Render("Model Router v2.0"),
+		m.renderBanner(),
 		"",
 		"Loading configuration...",
 	)
 }
 
 func (m model) viewOverview() string {
+	banner := m.renderCompactBanner()
 	title := titleStyle.Render("Model Router — Agent Routing Overview")
 	header := headerStyle.Render(fmt.Sprintf("%-6s %-22s %-14s %-10s %s", "AGENT", "MODEL", "PROVIDER", "TEMP", "SOURCE"))
 	sep := strings.Repeat("─", m.width-2)
@@ -681,6 +713,8 @@ func (m model) viewOverview() string {
 	helpLine := helpStyle.Render("\n↑/↓ navigate • Enter select • a admin • q quit")
 
 	return lipgloss.JoinVertical(lipgloss.Left,
+		banner,
+		"",
 		title,
 		"",
 		header,
@@ -695,11 +729,14 @@ func (m model) viewOverview() string {
 }
 
 func (m model) viewAllSamePrompt() string {
+	banner := m.renderCompactBanner()
 	title := titleStyle.Render("Model Router — Initial Configuration")
 	defaults := fmt.Sprintf("Default model: %s (%s) — Temperature: %.2f",
 		m.defaultModel, m.defaultProv, m.defaultTemp)
 
 	return lipgloss.JoinVertical(lipgloss.Left,
+		banner,
+		"",
 		title,
 		"",
 		defaults,
@@ -716,9 +753,10 @@ func (m model) viewAllSamePrompt() string {
 }
 
 func (m model) viewChangeDefaults() string {
+	banner := m.renderCompactBanner()
 	title := titleStyle.Render("Model Router — Default Configuration")
 
-	lines := []string{title, ""}
+	lines := []string{banner, "", title, ""}
 
 	items := []struct {
 		label string
@@ -753,6 +791,7 @@ func (m model) viewChangeDefaults() string {
 }
 
 func (m model) viewPerAgentList() string {
+	banner := m.renderCompactBanner()
 	title := titleStyle.Render("Model Router — Per-Agent Configuration")
 	header := headerStyle.Render(fmt.Sprintf("%-6s %-22s %-14s %-10s %s", "AGENT", "MODEL", "PROVIDER", "TEMP", "SOURCE"))
 	sep := strings.Repeat("─", m.width-2)
@@ -782,6 +821,8 @@ func (m model) viewPerAgentList() string {
 	helpLine := helpStyle.Render("\n↑/↓ navigate • Enter edit • s save & exit • Esc back")
 
 	return lipgloss.JoinVertical(lipgloss.Left,
+		banner,
+		"",
 		title,
 		"",
 		header,
@@ -792,6 +833,7 @@ func (m model) viewPerAgentList() string {
 }
 
 func (m model) viewEditAgent() string {
+	banner := m.renderCompactBanner()
 	name := AgentNames[m.editAgentCode]
 	if name == "" {
 		name = m.editAgentCode
@@ -808,7 +850,7 @@ func (m model) viewEditAgent() string {
 	}
 
 	var lines []string
-	lines = append(lines, title, "", status, "")
+	lines = append(lines, banner, "", title, "", status, "")
 	for i, item := range items {
 		if m.cursor == i {
 			lines = append(lines, selectedStyle.Render("> "+item))
@@ -823,11 +865,12 @@ func (m model) viewEditAgent() string {
 }
 
 func (m model) viewModelPicker() string {
+	banner := m.renderCompactBanner()
 	providers := m.cloud.ProviderList(m.config.Priority.Order)
 	title := titleStyle.Render("Select Provider for " + m.editAgentCode)
 
 	var lines []string
-	lines = append(lines, title, "")
+	lines = append(lines, banner, "", title, "")
 
 	for i, p := range providers {
 		prefix := "  "
@@ -852,6 +895,7 @@ func (m model) viewModelPicker() string {
 }
 
 func (m model) viewTemperatureEdit() string {
+	banner := m.renderCompactBanner()
 	title := titleStyle.Render(fmt.Sprintf("Temperature — %s", m.editAgentCode))
 
 	barLen := 30
@@ -862,6 +906,8 @@ func (m model) viewTemperatureEdit() string {
 	bar := strings.Repeat("█", filled) + strings.Repeat("░", barLen-filled)
 
 	return lipgloss.JoinVertical(lipgloss.Left,
+		banner,
+		"",
 		title,
 		"",
 		labelStyle.Render(fmt.Sprintf("Temperature: %.2f", m.currentTemp)),
@@ -876,10 +922,13 @@ func (m model) viewTemperatureEdit() string {
 }
 
 func (m model) viewAdminAuth() string {
+	banner := m.renderCompactBanner()
 	title := titleStyle.Render("Admin Authentication")
 	fp := GetPcFingerprint()
 
 	return lipgloss.JoinVertical(lipgloss.Left,
+		banner,
+		"",
 		title,
 		"",
 		subtleStyle.Render("PC Fingerprint: "+fp),
@@ -895,6 +944,7 @@ func (m model) viewAdminAuth() string {
 }
 
 func (m model) viewAdminPassword() string {
+	banner := m.renderCompactBanner()
 	title := titleStyle.Render("Admin Authentication")
 	masked := strings.Repeat("*", len(m.adminPassword))
 	if masked == "" {
@@ -902,6 +952,8 @@ func (m model) viewAdminPassword() string {
 	}
 
 	return lipgloss.JoinVertical(lipgloss.Left,
+		banner,
+		"",
 		title,
 		"",
 		labelStyle.Render("Enter master.key path or admin password:"),
@@ -917,7 +969,7 @@ func (m model) viewAdminPassword() string {
 
 func (m model) viewSaving() string {
 	return lipgloss.JoinVertical(lipgloss.Center,
-		titleStyle.Render("Model Router"),
+		m.renderCompactBanner(),
 		"",
 		"Saving configuration...",
 	)

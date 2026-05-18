@@ -391,6 +391,17 @@
       "steps": 6
     }
   },
+  "mcp": {
+    "codegraph": {
+      "type": "local",
+      "command": [
+        "codegraph",
+        "serve",
+        "--mcp"
+      ],
+      "enabled": true
+    }
+  },
   "default_agent": "orchestrator",
   "share": "manual",
   "compaction": {

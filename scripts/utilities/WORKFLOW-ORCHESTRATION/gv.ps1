@@ -1352,7 +1352,17 @@ switch ($Command) {
                 $orchVer = if ($oc.version) { " | orchestrator: $($oc.version)" } else { '' }
             } catch {}
         }
-        Write-Host "Gentle-Vanguard v${ver}${orchVer}" -ForegroundColor Cyan
+        Write-Host ""
+        Write-Host " ██████╗ ███████╗███╗   ██╗████████╗██╗     ███████╗    ██╗   ██╗ █████╗ ███╗   ██╗ ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗ " -ForegroundColor Cyan
+        Write-Host "██╔════╝ ██╔════╝████╗  ██║╚══██╔══╝██║     ██╔════╝    ██║   ██║██╔══██╗████╗  ██║██╔════╝ ██║   ██║██╔══██╗██╔══██╗██╔══██╗" -ForegroundColor Cyan
+        Write-Host "██║  ███╗█████╗  ██╔██╗ ██║   ██║   ██║     █████╗      ██║   ██║███████║██╔██╗ ██║██║  ███╗██║   ██║███████║██████╔╝██║  ██║" -ForegroundColor Cyan
+        Write-Host "██║   ██║██╔══╝  ██║╚██╗██║   ██║   ██║     ██╔══╝      ╚██╗ ██╔╝██╔══██║██║╚██╗██║██║   ██║██║   ██║██╔══██║██╔══██╗██║  ██║" -ForegroundColor Cyan
+        Write-Host "╚██████╔╝███████╗██║  ████║   ██║   ██║███████╗███████╗   ╚████╔╝ ██║  ██║██║  ████║╚██████╔╝╚██████╔╝██║  ██║██║  ██║██████╔╝" -ForegroundColor Cyan
+        Write-Host " ╚═════╝ ╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝╚══════╝╚══════╝    ╚═══╝  ╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ " -ForegroundColor Cyan
+        Write-Host ""
+        Write-Host "  -- NATIVE AI COGNITIVE DEVELOPMENT ECOSYSTEM --" -ForegroundColor DarkGray
+        Write-Host ""
+        Write-Host "  Gentle-Vanguard v${ver}${orchVer}" -ForegroundColor Cyan
         Write-Host "  Stack: $($PSVersionTable.PSVersion) on $(if($IsWindows){'windows'}elseif($IsMacOS){'macos'}else{'linux'})" -ForegroundColor Gray
         Write-Host "  Skills: $(if(Test-Path (Join-Path $repoRoot 'skills')){(Get-ChildItem (Join-Path $repoRoot 'skills') -Dir -EA SilentlyContinue).Count}else{'n/a'})" -ForegroundColor Gray
     }

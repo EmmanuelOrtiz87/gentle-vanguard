@@ -209,7 +209,7 @@ incidents, response coordination, mitigation, and recovery planning
 | **Database**          | database-relational, database-nosql                                                                                                                                                           |
 | **DevOps**            | docker-devops, terraform-infrastructure, kubernetes-deployment                                                                                                                                |
 | **Testing**           | testing-strategy, testing-skill, playwright, pytest, go-testing                                                                                                                               |
-| **AI**                | ai-sdk-5, mcp-skill, cloud-agent-connector, pretool-format-hook                                                                                                                               |
+| **AI**                | ai-sdk-5, mcp-skill, cloud-agent-connector, pretool-format-hook, codegraph-skill                                                                                                              |
 | **Business**          | business-telemetry, backlog-management                                                                                                                                                        |
 | **Workflow**          | github-pr, jira-task, jira-epic, release-management, skill-factory                                                                                                                            |
 | **Quality**           | typescript, code-review, security, technical-debt, web-performance-optimization, judgment-day, verificador-datos                                                                              |
@@ -603,6 +603,20 @@ Gemini, Ollama)
 
 **Trigger**: `auto-format`, `pretool`, `format hook`, `format before save`
 
+### codegraph-skill
+
+**Trigger**: `codegraph`, `code graph`, `symbol search`, `call graph`, `impact analysis`,
+`find callers`, `find callees`, `code structure`, `codebase index`, `semantic search`,
+`affected tests`
+
+**Use when**: Exploring codebase structure, finding symbols, tracing call chains, impact analysis,
+understanding architecture before modifications, finding affected tests for CI
+
+**Key tools**: `codegraph_context` (task context), `codegraph_explore` (exploration),
+`codegraph_query` (symbol search), `codegraph_affected` (impact analysis)
+
+**See**: [codegraph-skill](codegraph-skill/SKILL.md)
+
 **Use when**: Running linter/formatter before AI agent accesses files to save tokens
 
 **See**: [pretool-format-hook-skill](pretool-format-hook-skill/SKILL.md)
@@ -936,7 +950,7 @@ workflow diagram.
 | **Database**     | database-relational, database-nosql                                                                                                                                                           |
 | **DevOps**       | docker-devops, terraform-infrastructure, kubernetes-deployment                                                                                                                                |
 | **Testing**      | testing-strategy, testing-skill, playwright, pytest, go-testing                                                                                                                               |
-| **AI**           | ai-sdk-5, mcp-skill                                                                                                                                                                           |
+| **AI**           | ai-sdk-5, mcp-skill, codegraph-skill                                                                                                                                                           |
 | **Workflow**     | github-pr, jira-task, jira-epic, release-management                                                                                                                                           |
 | **Quality**      | typescript, code-review, security, technical-debt, web-performance-optimization                                                                                                               |
 | **Operations**   | observability, incident-response-plan                                                                                                                                                         |
