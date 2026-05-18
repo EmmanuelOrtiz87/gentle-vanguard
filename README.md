@@ -1,12 +1,12 @@
 <h1 align="center">Gentle-Vanguard</h1>
 
 <p align="center">
-  <strong>AI-powered development orchestrator · 18 specialized agents · 130+ skills</strong><br>
-  <em>100% local · Persistent memory · No vendor lock-in · Production ready</em>
+  <strong>AI-powered development orchestrator · 15 agents · 131 skills · 10 tool-compatible</strong><br>
+  <em>Tool-agnostic · SDD Lifecycle · Judgment Day · Persistent memory</em>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.16.0-brightgreen?style=flat-square" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.18.0-brightgreen?style=flat-square" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=flat-square" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-purple?style=flat-square" alt="PowerShell">
@@ -102,6 +102,6 @@ AES-256 encryption for secrets, API keys, and sensitive configs. See [SECURITY.m
 ---
 
 <p align="center">
-  <strong>Gentle-Vanguard v2.16.0</strong><br>
+  <strong>Gentle-Vanguard v2.18.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>
