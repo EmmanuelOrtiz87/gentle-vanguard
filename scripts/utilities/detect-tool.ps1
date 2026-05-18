@@ -132,6 +132,17 @@ function Get-DetectedTool {
         return $tool
     }
 
+    # 6b. Check for .antigravity directory (Antigravity)
+    if (Test-Path (Join-Path $repoRoot ".antigravity")) {
+        $tool.name = "antigravity"
+        $tool.source = "dir:.antigravity"
+        $tool.isAntigravity = $true
+        $tool.confidence = 80
+        $tool.configFile = ".antigravity/config.json"
+        $tool.promptFile = "CLAUDE.md"
+        return $tool
+    }
+
     # 7. Check for Continue config
     $homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
     $continueConfig = Join-Path $homePath ".continue/config.json"
