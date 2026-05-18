@@ -29,6 +29,10 @@ $summaryPath = Join-Path $sessionDir 'startup-summary.json'
 $metricsPath = Join-Path $repoRoot '.session/metrics/current-session.json'
 $cursorRulesPath = Join-Path $repoRoot '.cursorrules'
 $cursorRulesBaseline = Join-Path $sessionDir 'cursorrules.baseline'
+$cursorRulesDir = Join-Path $repoRoot '.cursor\rules'
+$cursorCommandsDir = Join-Path $repoRoot '.cursor\commands'
+$cursorConfigPath = Join-Path $repoRoot '.cursor\config.json'
+$cursorConfigBaseline = Join-Path $sessionDir 'cursor-config.baseline.json'
 $notifyPath = Join-Path $repoRoot 'scripts/utilities/notify-user.ps1'
 
 function Read-Json {
@@ -88,20 +92,21 @@ if ($shouldOptimize) {
     $state.normalStreak = 0
     if (-not $state.optimizationActive) {
         if (Test-Path $cursorRulesPath) { Copy-Item $cursorRulesPath $cursorRulesBaseline -Force }
+        if (Test-Path $cursorConfigPath) { Copy-Item $cursorConfigPath $cursorConfigBaseline -Force }
 
         $optimizedRules = @"
-# Cursor Rules - Mode OPTIMIZADO (ahorro de tokens)
-## Pre-processing
-- **Siempre** ejecutar: `powershell -File scripts/utilities/pre-process-input.ps1 -UserInput "INPUT" -WorkspaceRoot "."`
-- Parsear output: TRIGGER_MATCH_FOUND -> leer skill | PLAN_MODE_REQUIRED -> BA primero | NO_TRIGGER_MATCH -> normal
+# Cursor Rules - Gentle-Vanguard (OPTIMIZADO)
+Reglas completas en .cursor/rules/
+
+## Mandatory
+- `powershell -File scripts/utilities/pre-process-input.ps1 -UserInput "INPUT" -WorkspaceRoot "."` SIEMPRE antes de responder
+- Parsear: TRIGGER_MATCH_FOUND -> skill | PLAN_MODE_REQUIRED -> BA | NO_TRIGGER -> normal
 - Session start: `scripts/utilities/session-autostart.cmd`
-## Core
-- LOCAL-FIRST: skills/ > docs/ > scripts/ > web
-- Entry: docs/AGENTS.md | Routing: config/auto-delegation.json
-- Temperature: 0.3 | MaxTokens: 4500
+- LOCAL-FIRST | Temperature 0.3 | MaxTokens 4500
 - websearch/webfetch: DENY | external_dir: ask
-- Respuestas: español, concisas, sin preamble/postamble
-- Usar Engram memory para contexto de sesiones previas
+- Espanol, conciso, sin preamble/postamble
+- Usar Engram memory
+- Comandos: /pr, /review, /status, /test, /fix-issue, /update-deps en .cursor/commands/
 "@
         $optimizedRules | Out-File -FilePath $cursorRulesPath -Encoding UTF8 -Force
 
