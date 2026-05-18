@@ -5,7 +5,8 @@
   "workspace": {
     "projectRoot": ".",
     "configFiles": ["opencode.json", "AGENTS.md", "CLAUDE.md", ".cursorrules", "docs/AGENTS.md"],
-    "skillPaths": ["skills/", "~/.config/opencode/skills/"]
+    "skillPaths": ["skills/", "~/.config/opencode/skills/"],
+    "skillRegistry": ".atl/skill-registry.md"
   },
   "aiSettings": {
     "temperature": 0.3,
@@ -27,6 +28,7 @@
   },
   "contextManagement": {
     "useEngramMemory": true,
+    "engramPaths": [".engram-data/", "scripts/.session/", "logs/"],
     "useLocalSkills": true,
     "useProjectDocs": true,
     "fastContext": true,
@@ -83,7 +85,7 @@
       }
     },
     "tracking": {
-      "project": "foundation",
+      "project": "gentle-vanguard",
       "directory": ".",
       "sessionIdPattern": "session-YYYY-MM-DD-XX"
     }
@@ -113,6 +115,17 @@
     },
     "marketplace": {
       "configurable": true
+    }
+  },
+  "skillEmulation": {
+    "enabled": true,
+    "note": "Windsurf no tiene skill tool nativo — los skills se cargan manualmente",
+    "criticalSkills": {
+      "documentation": "skills/documentation-governance/SKILL.md",
+      "sddLifecycle": "skills/sdd-lifecycle/SKILL.md",
+      "codeReview": "skills/code-review-orchestrator-skill/SKILL.md",
+      "sessionWorkflow": "skills/session-workflow-skill/SKILL.md",
+      "testing": ["skills/playwright-skill/SKILL.md", "skills/pytest-skill/SKILL.md"]
     }
   },
   "adaptiveOptimization": {

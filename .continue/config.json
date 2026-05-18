@@ -5,7 +5,8 @@
   "workspace": {
     "projectRoot": ".",
     "configFiles": ["opencode.json", "AGENTS.md", "CLAUDE.md", ".cursorrules", ".clinerules"],
-    "skillPaths": ["skills/", "~/.config/opencode/skills/"]
+    "skillPaths": ["skills/", "~/.config/opencode/skills/"],
+    "skillRegistry": ".atl/skill-registry.md"
   },
   "aiSettings": {
     "model": "opencode/claude-sonnet-4-5",
@@ -31,6 +32,7 @@
   },
   "contextManagement": {
     "useEngramMemory": true,
+    "engramPaths": [".engram-data/", "scripts/.session/", "logs/"],
     "useLocalSkills": true,
     "useProjectDocs": true,
     "compressionRatio": 0.9,
