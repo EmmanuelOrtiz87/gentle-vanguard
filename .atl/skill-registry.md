@@ -93,7 +93,7 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 | GOV - Governance | config-risk-analyzer | "config-risk-analyze", "validate-config", "check-config-integrity" |
 | GOV - Governance | cross-workspace-sync | User mentions "sync workspaces" or "sincronizar workspaces" |
 | GOV - Governance | gentle-vanguard-audit-skill | 'audit gentle-vanguard', 'validate docs', 'sweep project', 'check links', 'fi... |
-| GOV - Governance | gentle-vanguard-manager-skill |  |
+| GOV - Governance | gentle-vanguard-manager-skill | 'auto-update', 'self-update', 'update skill', 'sync workspace', 'maintenance'... |
 | GOV - Governance | gitflow-orchestrator-skill | gitflow, git, branch, workflow, git hooks |
 | GOV - Governance | guardian-fallback-skill | "fallback", "guardian", "assist", "cerrar", "completar tarea", " blocker" |
 | GOV - Governance | incident-response-plan | Security breach detection |
