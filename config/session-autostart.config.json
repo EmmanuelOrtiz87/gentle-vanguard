@@ -141,6 +141,14 @@
         "args": "",
         "required": false,
         "description": "Verify CodeGraph index freshness and sync if stale (>30min old)"
+      },
+      {
+        "id": "self-diagnosis",
+        "enabled": true,
+        "script": "scripts/utilities/self-diagnosis-autonomous.ps1",
+        "args": "-Depth quick",
+        "required": false,
+        "description": "Proactive failure detection and autonomous learning capture"
       }
     ],
 
