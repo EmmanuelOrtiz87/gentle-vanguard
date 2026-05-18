@@ -1,31 +1,26 @@
-# Cursor Rules - Local-First Policy
+# Cursor Rules - Gentle-Vanguard
 
-## MANDATORY PRE-PROCESSING RULE (ALWAYS ACTIVE)
+Las reglas de este proyecto estan modularizadas en `.cursor/rules/` para mejor mantenibilidad y compatibilidad con Cursor Agent Best Practices.
 
-**BEFORE responding to ANY user input:**
+## Reglas activas
 
-1. **Run trigger detection** - Execute: `powershell -File scripts/utilities/pre-process-input.ps1 -UserInput "USER_INPUT_HERE" -WorkspaceRoot "."`
-2. **Parse output**:
-   - If `TRIGGER_MATCH_FOUND` → Read `skills/<skill-name>/SKILL.md` directly from disk and follow its instructions
-   - If `PLAN_MODE_REQUIRED` with `AGENT: BA` and `SKILL: sdd-lifecycle` → Activate BA exploration first. Read `skills/sdd-lifecycle/SKILL.md` for phase guidance. Do NOT jump to DEV/APPLY — complete EXPLORE before any implementation.
-   - If `NO_TRIGGER_MATCH` → Continue with normal behavior
-3. **SDD FLOW RULE**: If trigger matched "implement"/"code"/"develop" and skill is `sdd-lifecycle`, check if it's a new feature (not a bug fix). If new feature, treat as PLAN_MODE_REQUIRED — activate BA first.
-4. **Session start** - Always run `scripts/utilities/session-autostart.cmd` on Windows for notifications, optimizations, validations
-5. **Session commands** - If `SESSION` trigger matched, read `skills/session-workflow-skill/SKILL.md` and follow its workflow
+- `.cursor/rules/core-workflow.md` - Pre-processing, SDD flow, session management, local-first
+- `.cursor/rules/commands.md` - Build, test, lint, typecheck, quality gates
+- `.cursor/rules/code-style.md` - Code conventions (PowerShell, TypeScript, Markdown, JSON)
 
-**This rule is MANDATORY and MUST be followed automatically. Do NOT wait to be asked.**
+## Implementacion recomendada por Cursor
 
-## Core Principle
-This project follows a **LOCAL-FIRST** approach. AI agents must prioritize:
-1. Local project knowledge (skills, documentation, scripts)
-2. Cached responses and context
-3. External search ONLY when explicitly needed by orchestrator
+Segun https://cursor.com/es/blog/agent-best-practices:
+- `.cursor/rules/*.md` para contexto estatico persistente
+- `.cursor/commands/*.md` para flujos reutilizables (/pr, /review, /status, /test, /fix-issue, /update-deps)
+- `.cursor/plans/` para guardar planes de Plan Mode
+- `skills/*/SKILL.md` para capacidades dinamicas bajo demanda
+- `adapters/mcp-bridge/` para integracion MCP con herramientas externas
 
-## Canonical Sources (Tool-Agnostic)
-- **Bootstrap & entry point**: `docs/AGENTS.md`
-- **Routing & agent profiles**: `config/auto-delegation.json`
-- **AI normatives**: `rules/AI-NORMATIVES.md` (includes SDD FLOW RULE)
-- **Development standards**: `rules/DEVELOPMENT-STANDARDS.md`
-- **Code standards**: `rules/NORMATIVAS-CODIGO.md`
-- **Error handling**: `rules/NORMATIVAS-ERROR-HANDLING.md`
-- **Orchestrator config**: `config/orchestrator.json`
+## Configuracion del modelo
+- **Temperature**: 0.3
+- **Profile**: ultra (compresion agresiva, sin preamble/postamble)
+- **Chat**: compact (max 4 lineas texto, tool use completo)
+- **Idioma**: espanol (terminos tecnicos en ingles)
+- **websearch/webfetch**: DENY
+- **external_directory**: ask
