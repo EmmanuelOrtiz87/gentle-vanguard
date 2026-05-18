@@ -1,4 +1,4 @@
-# 📃 Changelog#
+# Changelog
 
 <p align="center">
   <b>All notable changes to this project will be documented in this file.</b>
@@ -8,6 +8,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+
+## [2.19.0] - 2026-05-18 - Brand Identity & Visual System
+
+### Added
+
+- **MANIFESTO.md**: 5 founding principles of Gentle-Vanguard — AI as Engine, Business-Driven Code, Persistent Memory Architecture, Skill-Based Modularity, Elegance in CLI
+- **config/brand.json**: Source of truth for visual identity — colors, gradients, typography, social dimensions
+- **docs/brand/BRAND-GUIDELINES.md**: Usage rules, logo variants, clear space, color palette, forbidden uses
+- **docs/brand/assets/logo-primary.svg**: Primary SVG logo with gradient arc + vector V
+- **docs/brand/assets/logo-icon.svg**: Icon-only variant for favicons and small contexts
+- **docs/brand/assets/favicon.svg**: 32x32 optimized favicon
+- **docs/brand/assets/banner-docs.svg**: Documentation header banner (1200x280)
+- **docs/brand/assets/banner-github.svg**: GitHub README hero banner (1280x320)
+- **docs/brand/assets/banner-og.svg**: Open Graph social image (1200x630)
+- **docs/brand/assets/banner-linkedin.svg**: LinkedIn company header (1584x396)
+- **docs/brand/assets/banner-twitter.svg**: Twitter/X header banner (1500x500)
+- **README.md**: Header updated with banner-github.svg, brand-colored badges, manifesto quote, skill count corrected to 134
+- **model-router-tui**: TUI colors updated to official brand palette (`#00BFFF` primary, `#4DCFFF` selected, `#1A2035` surface)
+- **Dist**: `Gentle-Vanguard.exe` rebuilt to 3.15 MB including all brand changes
+
+### Changed
+
+- **VERSION**: `2.16.0` → `2.19.0` (corrects inconsistency between VERSION file and CHANGELOG)
+- **README badges**: Color scheme updated to brand palette (`#00BFFF`, `#4DCFFF`, `#A855F7`)
+- **session-autostart.cmd/.ps1**, **gv.ps1**, **gentle-vanguard-installer-tui.ps1**: ASCII banner color set to `#00BFFF`
+
+### Fixed
+
+- **CHANGELOG.md**: Removed corrupted encoding characters (`??`) from all entries, normalized header
+
+---
+
 ## [2.18.0] - 2026-05-18 - Cross-Tool Nivelación + README Governance
 
 ### Added
