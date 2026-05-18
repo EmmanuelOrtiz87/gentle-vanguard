@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { execSync } from 'child_process';
 
-export function registerAuditTool(server: any, gentle-vanguardRoot: string) {
+export function registerAuditTool(server: any, gentleVanguardRoot: string) {
   server.tool(
     'gentle-vanguard_audit',
     'Run comprehensive workspace audit (delivery status, operational risk, test suite, git status)',
@@ -13,12 +13,12 @@ export function registerAuditTool(server: any, gentle-vanguardRoot: string) {
       try {
         const mode = args.mode || 'full';
         const outputFile = args.outputFile || '';
-        const auditScript = `${gentle-vanguardRoot}/scripts/utilities/gv.ps1`;
+        const auditScript = `${gentleVanguardRoot}/scripts/utilities/gv.ps1`;
         const outParam = outputFile ? `-OutputFile "${outputFile}"` : '';
         const cmd = `powershell -NoProfile -ExecutionPolicy Bypass -File "${auditScript}" audit -Mode ${mode} ${outParam}`;
         
         const output = execSync(cmd, {
-          cwd: gentle-vanguardRoot,
+          cwd: gentleVanguardRoot,
           encoding: 'utf-8',
           maxBuffer: 10 * 1024 * 1024
         });
