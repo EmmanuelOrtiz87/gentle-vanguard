@@ -1,7 +1,7 @@
 <h1 align="center">Gentle-Vanguard</h1>
 
 <p align="center">
-  <strong>AI-powered development orchestrator · 15 agents · 131 skills · 10 tool-compatible</strong><br>
+  <strong>AI-powered development orchestrator · 17 agents · 133 skills · 10 tool-compatible</strong><br>
   <em>Tool-agnostic · SDD Lifecycle · Judgment Day · Persistent memory</em>
 </p>
 
@@ -11,6 +11,9 @@
   <img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-purple?style=flat-square" alt="PowerShell">
   <img src="https://img.shields.io/badge/Platform-Win%20|%20Linux%20|%20macOS-lightgrey?style=flat-square" alt="Platform">
+  <img src="https://img.shields.io/badge/Agents-17-orange?style=flat-square" alt="Agents">
+  <img src="https://img.shields.io/badge/Skills-133-teal?style=flat-square" alt="Skills">
+  <img src="https://img.shields.io/badge/Workflows-16-blueviolet?style=flat-square" alt="Workflows">
 </p>
 
 Born from a simple observation: AI-assisted coding works, but without structure it's chaotic. Gentle-Vanguard gives you an orchestration layer that routes tasks to specialized agents, enforces standards, tracks every token, and remembers what you did last session.
@@ -23,39 +26,108 @@ Born from a simple observation: AI-assisted coding works, but without structure 
 |---------|-------------|
 | AI gives inconsistent code quality | 7D validation gates catch bad code before commit |
 | No memory between sessions | Engram persists decisions, bugs, and patterns across sessions |
-| Random model selection wastes tokens | Cost-aware router picks the cheapest capable model, with 30K token/day budget |
+| Random model selection wastes tokens | Cost-aware router picks the cheapest capable model per agent |
 | No governance in AI workflows | SDD enforcement, judgment-day adversarial review, pre-commit hooks |
-| Disconnected AI sessions | Session lifecycle tracks context across dispatches |
+| Disconnected AI sessions | Session lifecycle tracks context across dispatches with crash recovery |
 | No visibility into AI costs | Dashboard with token trends, per-agent costs, ROI analysis |
+| One-size-fits-all AI responses | 16 specialized agents with role-specific model routing |
+
+---
 
 ## Architecture
 
 ```mermaid
 flowchart TB
     YOU[You / CLI / IDE]
-    YOU --> ORC[Orchestrator]
-    ORC -->|small| INLINE[Inline]
-    ORC -->|complex| SDD[SDD Lifecycle]
+    YOU -->|request| PP[pre-process-input.ps1]
+    PP --> ORC[Orchestrator]
+
+    ORC -->|small| INLINE[Inline work]
+    ORC -->|complex| DELEGATE{Delegation Rules}
+    DELEGATE -->|4+ files| SCOUT[scout / context-builder]
+    DELEGATE -->|2+ files| WORKER[worker + reviewer]
+    DELEGATE -->|architecture/risk| SDD[SDD Lifecycle]
+
     SDD --> BA[BA - Explore]
     SDD --> SAD[SAD - Design]
     SDD --> DEV[DEV - Apply]
     SDD --> QA[QA - Verify]
-    BA --> SKILLS[130+ Skills]
+
+    BA --> SKILLS[133 Skills]
     DEV --> SKILLS
     QA --> SKILLS
+
     SKILLS --> MEM[Engram Memory]
 ```
 
+### 5-Layer Architecture
+
+| Layer | Role | Components | Config |
+|-------|------|-----------|--------|
+| **1. Agents** | Task delegation | 1 orchestrator + 15 sub-agents | `config/auto-delegation.json` |
+| **2. Commands** | CLI entry points | `gv.ps1`, `pre-process-input.ps1` | `config/orchestrator.json` |
+| **3. MCP Servers** | Protocol bridge | Model Context Protocol, Engram MCP | `skills/*/SKILL.md` |
+| **4. Skills** | Specialized execution | 133 skills (frontend, backend, DevOps, security, testing) | `config/skill-dependencies.json` |
+| **5. Memory** | Persistent context | Engram (hot/warm/cold tiers) | `config/engram-config.json` |
+
+---
+
+## Agent Ecosystem
+
+| Agent | Role | Model Profile |
+|-------|------|--------------|
+| Orchestrator | Main router | inherit |
+| BA | Requirements & analysis | fast/cheap |
+| SAD | System design | strong-reasoning |
+| DEV | Code generation | strong-coding |
+| QA | Testing & validation | strong-review |
+| OPS | Deployment & CI/CD | fast/cheap |
+| DOC | Technical docs | fast/cheap |
+| GOV | Compliance & audit | strong-review |
+| SESSION | Session management | fast/cheap |
+| PREMORTEM | Risk assessment | strong-reasoning |
+| FINANCE | Financial modeling | strong-reasoning |
+| LEGAL | Regulatory compliance | strong-review |
+| MKT | Marketing & SEO | fast/cheap |
+| SALES | Pipeline management | fast/cheap |
+| HR | Talent acquisition | fast/cheap |
+| SELF-DIAG | Self-diagnosis | fast/cheap |
+| BUS-TELE | Business telemetry | fast/cheap |
+
+> All sub-agents are `hidden: true` — only the Orchestrator is user-selectable. Sub-agents are managed autonomously via auto-delegation.
+
+---
+
 ## Key Features
 
-- **18 Specialized Agents** — BA, SAD, DEV, QA, OPS, GOV, DOC, PREMORTEM, plus business roles (MKT, SALES, FINANCE, HR, LEGAL)
-- **130+ On-Demand Skills** — Angular, React, Next.js, Go, Django, Python, TypeScript, Docker, K8s, Playwright, Security, API Design — zero memory until triggered
+- **17 Specialized Agents** — Orchestrator + BA, SAD, DEV, QA, OPS, GOV, DOC, SESSION, PREMORTEM, FINANCE, LEGAL, MKT, SALES, HR, SELF-DIAG, BUS-TELE
+- **133 On-Demand Skills** — Angular, React, Next.js, Go, Django, Python, TypeScript, Docker, K8s, Playwright, Security, API Design — zero memory until triggered
 - **Persistent Engram Memory** — Cross-session context, conflict detection, auto-reconciliation
-- **Cost-Aware Model Router** — 4 providers, 12 models, automatic cheapest-available routing
-- **Governance-First** — SDD lifecycle, 7D validation, judgment-day review, 15 CI/CD workflows
+- **Cost-Aware Model Router** — Per-agent model assignment with 3 profiles: fast/cheap, strong-reasoning, strong-coding
+- **Governance-First** — SDD lifecycle, 7D validation, judgment-day review, 16 CI/CD workflows
 - **100% Local-First** — No required external services. Optional cloud AI integration.
 - **Cross-Platform** — Windows, macOS, Linux. PowerShell 7+ and Bash.
+- **10 Tool-Compatible** — OpenCode, Claude Code, Cline, Cursor, Windsurf, Codex, Copilot, Antigravity, Continue.dev, Claude (generic)
 - **CLI** — 50+ subcommands: `dispatch`, `audit`, `review`, `judgment-day`, `dashboard`, `benchmark`
+
+---
+
+## Skill Catalog
+
+| Category | Count | Key Skills |
+|----------|-------|-----------|
+| Frontend/Mobile | 25 | `react-19-skill`, `angular-spa-skill`, `nextjs-15-skill`, `tailwind-4-skill`, `zustand-5-skill`, `flutter-skill` |
+| Backend | 5 | `golang-api-skill`, `django-drf-skill`, `api-design-skill`, `database-relational-skill`, `database-nosql-skill` |
+| DevOps/Infra | 8 | `docker-devops-skill`, `kubernetes-deployment`, `terraform-infrastructure`, `monitoring-aggregator`, `observability-skill` |
+| Security & Governance | 8 | `security-skill`, `judgment-day`, `architecture-governance`, `documentation-governance`, `script-governance-skill` |
+| Testing/QA | 8 | `testing-skill`, `playwright-skill`, `pytest-skill`, `testing-strategy-skill`, `bdd-scenarios-skill` |
+| Content/Marketing | 14 | `marketing-content-writer`, `seo-audit-skill`, `visual-content-skill`, `cognitive-doc-design`, `presentaciones-visuales-skill` |
+| Business | 14 | `finance-financial-analyst`, `sales-account-executive`, `hr-talent-acquisition`, `legal-compliance-officer`, `product-manager` |
+| Git/Workflow | 9 | `branch-pr`, `chained-pr`, `work-unit-commits`, `gitflow-orchestrator-skill`, `release-management-skill` |
+| Core/Orchestration | 15 | `sdd-lifecycle`, `session-workflow-skill`, `auto-delegation-router`, `skill-registry`, `self-diagnosis-skill` |
+| Other | 27 | `project-scaffolding-skill`, `incident-response-skill`, `premortem-skill`, `karpathy-guidelines`, `humanizador-skill` |
+
+---
 
 ## Quick Install
 
@@ -76,11 +148,63 @@ cd gentle-vanguard-public
 pwsh -File scripts/bootstrap.ps1
 ```
 
+---
+
 ## Requirements
 
-- Windows 10/11, macOS 13+, or Linux (Ubuntu 22.04+)
-- PowerShell 7+, Git 2.30+
-- 4 GB RAM minimum (8 GB recommended)
+| Requirement | Version | Required? | Notes |
+|------------|---------|-----------|-------|
+| PowerShell | 7+ | Yes | Core runtime |
+| Git | 2.30+ | Yes | Version control |
+| Windows | 10/11 | Optional | Full support |
+| macOS | 13+ | Optional | Full support |
+| Linux | Ubuntu 22.04+ | Optional | Full support |
+| RAM | 4 GB min | Recommended | 8 GB recommended |
+
+---
+
+## CI/CD Pipeline (16 Workflows)
+
+| Workflow | Purpose | Trigger |
+|----------|---------|---------|
+| `gentle-vanguard-quality-gate.yml` | Quality gates on PRs | Every PR |
+| `test-suite.yml` | Full test suite | Every PR/push |
+| `ps-lint.yml` | PSScriptAnalyzer lint | Every PR |
+| `sdd-gate.yml` | Block PRs without SDD | Every PR |
+| `script-governance.yml` | Script compliance | Every PR |
+| `format-check.yml` | Prettier formatting | Every PR |
+| `gitleaks.yml` | Secret scanning | Every PR |
+| `security-scan.yml` | OWASP security scanning | Weekly |
+| `codeql-analysis.yml` | CodeQL analysis | Weekly |
+| `autonomous-validation.yml` | Full validation suite | Weekly |
+| `dashboard-auto-refresh.yml` | Metrics dashboard | Daily |
+| `monthly-management-report.yml` | Executive report | Monthly |
+| `dependency-backup.yml` | Dependency backup | Weekly |
+| `release.yml` | Release management | On tag |
+| `labeler.yml` | Auto-label PRs | Every PR |
+| `workflow-lint.yml` | Workflow syntax validation | On `.github/` change |
+| `sync-public.yml` | Sync to `gentle-vanguard-public` | On push to `main` |
+
+---
+
+## Defensive Patterns
+
+All PowerShell scripts follow standardized defensive patterns:
+
+- Robust `repoRoot` resolution via `$env:GENTLE_VANGUARD_BASE_DIR` + recursive config search
+- BOM-free UTF-8 encoding
+- ASCII-only output (no Unicode in scripts)
+- `$ErrorActionPreference = 'Stop'` at script entry
+- SHA256 integrity baselines for security-critical config
+- Quoted hashtable keys with hyphens
+
+---
+
+## Security
+
+AES-256 encryption for secrets, API keys, and sensitive configs. See [SECURITY.md](SECURITY.md).
+
+---
 
 ## Documentation
 
@@ -91,9 +215,7 @@ pwsh -File scripts/bootstrap.ps1
 | Architecture | [docs/architecture/README.md](docs/architecture/README.md) |
 | Full Index | [docs/](docs/) |
 
-## Security
-
-AES-256 encryption for secrets, API keys, and sensitive configs. See [SECURITY.md](SECURITY.md).
+---
 
 ## License
 
