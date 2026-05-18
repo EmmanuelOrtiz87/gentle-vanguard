@@ -1,3 +1,12 @@
+---
+name: gentle-vanguard-manager-skill
+description:
+  "Trigger: 'auto-update', 'self-update', 'update skill', 'sync workspace',
+  'maintenance', 'manage workspace'. Auto-update and self-maintenance for
+  the gentle-vanguard workspace. Integrates with session-autostart to keep
+  skills current and workspace aligned."
+---
+
 # gentle-vanguard-manager-skill (FF-017)
 
 Auto-update and self-maintenance skill for the gentle-vanguard workspace.
