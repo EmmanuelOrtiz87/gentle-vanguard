@@ -91,7 +91,8 @@
     "HR": "hr-talent-acquisition",
     "LEGAL": "legal-compliance-officer",
     "BUS-TELE": "business-telemetry-skill",
-    "PREMORTEM": "premortem-skill"
+    "PREMORTEM": "premortem-skill",
+    "CODEGRAPH": "codegraph-skill"
   },
   "skillToAgentProfile": {
     "session-workflow-skill": "SESSION",
@@ -170,6 +171,7 @@
     "gentle-vanguard-manager-skill": "GOV",
     "quality-skill": "QA",
     "premortem-skill": "PREMORTEM",
+    "codegraph-skill": "CODEGRAPH",
     "_semantic-skill-matcher": "GOV",
     "adaptive-mode-orchestrator": "GOV",
     "adaptive-orchestrator": "GOV",
@@ -1100,6 +1102,35 @@
       "script error",
       "correct script"
     ],
+    "CODEGRAPH": [
+      "codegraph",
+      "code graph",
+      "symbol search",
+      "call graph",
+      "impact analysis",
+      "find callers",
+      "find callees",
+      "code structure",
+      "codebase index",
+      "semantic search",
+      "affected tests",
+      "codegraph context",
+      "codegraph explore",
+      "codegraph query",
+      "codegraph affected",
+      "codegraph status",
+      "codegraph sync",
+      "codegraph index",
+      "symbol lookup",
+      "dependency graph",
+      "reference search",
+      "buscar simbolo",
+      "buscar referencia",
+      "analisis de impacto",
+      "grafo de dependencias",
+      "estructura del codigo",
+      "indice del codigo"
+    ],
     "PREMORTEM": [
       "premortem esto",
       "premortem mi",
@@ -1752,6 +1783,25 @@
       "aliases": [
         "SCRIPT-GOV"
       ]
+    },
+    "CODEGRAPH": {
+      "temperature": 0.1,
+      "hallucinationGuard": "critical",
+      "requiredEvidence": [
+        "codegraph query returned results",
+        "symbol locations verified against file system"
+      ],
+      "constraint_retention": {
+        "temperature_earned": false,
+        "hallucinationGuard_earned": false,
+        "requiredEvidence_earned": false,
+        "passes_threshold": 3,
+        "reset_on_failure": true
+      },
+      "hedgingBlocked": true,
+      "maxRetries": 2,
+      "escalateOnFailure": "DEV",
+      "rationale": "CodeGraph is deterministic code intelligence — results must be verifiable against the actual codebase, no invention allowed"
     },
     "hallucinationGuardLevels": {
       "low": "Log only - agent self-reports output, no external verification",

@@ -295,6 +295,25 @@ function Write-FlowGate {
 
 $sourceTag = if ($FromAgent) { 'AGENT' } else { 'USER' }
 
+$codegraphContextTriggers = @(
+    'implement', 'develop', 'refactor', 'modify', 'change', 'fix', 'update',
+    'rename', 'move', 'delete', 'restructure', 'migrate', 'port', 'rewrite',
+    'callers of', 'callees of', 'who calls', 'where is', 'find references',
+    'impact of', 'affected by', 'depends on', 'dependency', 'dependencies',
+    'implementar', 'desarrollar', 'refactorizar', 'modificar', 'cambiar',
+    'arreglar', 'actualizar', 'renombrar', 'mover', 'eliminar', 'reestructurar',
+    'migrar', 'reescribir', 'llamadores de', 'impacto de', 'afectado por',
+    'depende de', 'dependencias', 'buscar referencia', 'donde se usa',
+    'codegraph', 'code graph', 'symbol search', 'call graph', 'impact analysis'
+)
+$isCodegraphRecommended = $false
+foreach ($trigger in $codegraphContextTriggers) {
+    if ($inputLower -match [regex]::Escape($trigger)) {
+        $isCodegraphRecommended = $true
+        break
+    }
+}
+
 $devIntentTriggersEN = @('implement', 'develop', 'build', 'create', 'make', 'code')
 $featureIntentPatternsML = @(
     'implementar', 'desarrollar', 'construir',
@@ -362,6 +381,10 @@ if ($isFeatureIntent) {
     Write-Output "ACTION: Load skill '$matchingSkill' using skill tool"
     Write-AgentProfile -Profile $activeProfile -AgentCode $resolvedAgent
     Write-FlowGate -Flows $unmappedFlows -Skill $matchingSkill
+    if ($isCodegraphRecommended -and $matchingSkill -ne 'codegraph-skill') {
+        Write-Output "CODEGRAPH_CONTEXT_RECOMMENDED: true"
+        Write-Output "CODEGRAPH_REASON: Modification/dependency task detected — use codegraph_context before proceeding"
+    }
 } elseif ($fallbackStrategy -eq "clarify-ba" -and $confidenceScore -lt $lowConfidenceThreshold) {
     $baProfile = Resolve-AgentProfile -AgentCode "BA" -Profiles $agentProfiles
     Write-Output "SOURCE: $sourceTag"
