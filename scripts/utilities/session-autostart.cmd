@@ -50,6 +50,13 @@ if %HEALTH_CRITICAL% equ 0 (
 echo [HEALTH] All critical checks passed.
 echo.
 
+REM === Phase 0.25: PATH Enhancement (NSIS, tools) ===
+set NSIS_BIN=%ProgramFiles(x86)%\NSIS\Bin
+if exist "%NSIS_BIN%\makensis.exe" (
+    set PATH=%PATH%;%NSIS_BIN%
+    echo [OK] NSIS added to PATH: %NSIS_BIN%
+)
+
 REM === Phase 0.5: Tool Detection (CRITICAL) ===
 echo [0.5/10] Detecting tool/plugin...
 set TOOL_DETECTION=%UTILS_DIR%\detect-tool.ps1
@@ -225,6 +232,14 @@ if exist "%ADAPTIVE_CURSOR%" (
     pwsh -NoProfile -ExecutionPolicy Bypass -File "%ADAPTIVE_CURSOR%" -Mode Auto -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15
     if errorlevel 1 ( echo [WARN] Adaptive Cursor profile had warnings ) else ( echo [OK] Adaptive Cursor profile checked )
 ) else ( echo [SKIP] adaptive-cursor-profile.ps1 not found )
+
+REM === Phase 9.425: Adaptive Antigravity Profile ===
+echo [9.425/10] Adaptive Antigravity profile...
+set ADAPTIVE_AG=%UTILS_DIR%\adaptive-antigravity-profile.ps1
+if exist "%ADAPTIVE_AG%" (
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%ADAPTIVE_AG%" -Mode Auto -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15
+    if errorlevel 1 ( echo [WARN] Adaptive Antigravity profile had warnings ) else ( echo [OK] Adaptive Antigravity profile checked )
+) else ( echo [SKIP] adaptive-antigravity-profile.ps1 not found )
 
 REM === Phase 9.45: Adaptive Continue/Copilot Profile ===
 echo [9.45/10] Adaptive Continue/Copilot profile...
