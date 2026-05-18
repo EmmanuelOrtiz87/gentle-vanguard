@@ -2,8 +2,8 @@ import { z } from 'zod';
 import { readdirSync, existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 
-export function registerSkillTools(server: any, gentle-vanguardRoot: string) {
-  const skillsRoot = join(gentle-vanguardRoot, 'skills');
+export function registerSkillTools(server: any, gentleVanguardRoot: string) {
+  const skillsRoot = join(gentleVanguardRoot, 'skills');
 
   // List available skills
   server.tool(

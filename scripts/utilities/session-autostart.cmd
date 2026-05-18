@@ -50,14 +50,26 @@ if %HEALTH_CRITICAL% equ 0 (
 echo [HEALTH] All critical checks passed.
 echo.
 
-REM === Phase 0.5: Tool Detection (NEW - CRITICAL) ===
-echo [0.5/9] Detecting tool/plugin...
+REM === Phase 0.5: Tool Detection (CRITICAL) ===
+echo [0.5/10] Detecting tool/plugin...
 set TOOL_DETECTION=%UTILS_DIR%\detect-tool.ps1
 if exist "%TOOL_DETECTION%" (
-    for /f "tokens=*" %%i in ('pwsh -NoProfile -ExecutionPolicy Bypass -File "%TOOL_DETECTION%" -AsJson ^| findstr "name"') do (
-        echo %%i
-    )
-    echo [OK] Tool detected and configuration loaded
+    pwsh -NoProfile -ExecutionPolicy Bypass -Command ^
+      "$json=& '%TOOL_DETECTION%' -AsJson | ConvertFrom-Json;" ^
+      "$tool=$json.name;" ^
+      "$platform=$json.os.platform;" ^
+      "$config=$json.configFile;" ^
+      "$prompt=$json.promptFile;" ^
+      "$confidence=$json.confidence;" ^
+      "[Environment]::SetEnvironmentVariable('GENTLE_VANGUARD_TOOL',$tool,'Process');" ^
+      "[Environment]::SetEnvironmentVariable('GENTLE_VANGUARD_TOOL_CONFIG',$config,'Process');" ^
+      "[Environment]::SetEnvironmentVariable('GENTLE_VANGUARD_TOOL_PROMPT',$prompt,'Process');" ^
+      "[Environment]::SetEnvironmentVariable('GENTLE_VANGUARD_TOOL_CONFIDENCE',$confidence,'Process');" ^
+      "Write-Host '[DETECT] Tool: ' -NoNewline -ForegroundColor Cyan;" ^
+      "Write-Host $tool -NoNewline -ForegroundColor White;" ^
+      "Write-Host (' (conf: ' + $confidence + ', platform: ' + $platform + ')') -ForegroundColor Gray;" ^
+      "if ($tool -eq 'opencode') { Write-Host '[DETECT] Loading opencode profile...' -ForegroundColor Cyan }"
+    if errorlevel 1 ( echo [WARN] Tool detection had issues ) else ( echo [OK] Tool detected and configuration loaded )
 ) else (
     echo [WARN] detect-tool.ps1 not found - using default configuration
 )
@@ -77,7 +89,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -Command ^
 if errorlevel 1 ( echo [WARN] Orphan cleanup had issues ) else ( echo [OK] Orphan check complete )
 
 REM === Phase 1: Session Manager ===
-echo [1/9] Initializing session manager...
+echo [1/10] Initializing session manager...
 pwsh -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\session-manager.ps1" -Mode AutoStart
 set SESSION_MANAGER_EXIT=%ERRORLEVEL%
 if "%SESSION_MANAGER_EXIT%"=="0" goto session_manager_ok
@@ -97,14 +109,14 @@ echo [OK] Session initialized
 :session_manager_done
 
 REM === Phase 2: Notifications ===
-echo [2/9] Time-based notifications...
+echo [2/10] Time-based notifications...
 if exist "%UTILS_DIR%\session-notification.ps1" (
     pwsh -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\session-notification.ps1" -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15 -Region "Argentina"
     if errorlevel 1 ( echo [WARN] Notification check had warnings ) else ( echo [OK] Notifications checked )
 ) else ( echo [SKIP] session-notification.ps1 not found )
 
 REM === Phase 3: Session ID ===
-echo [3/9] Resolving session ID...
+echo [3/10] Resolving session ID...
 set SESSION_ID=
 for /f "tokens=*" %%i in ('pwsh -NoProfile -ExecutionPolicy Bypass -File "%UTILS_DIR%\get-session-id.ps1"') do set SESSION_ID=%%i
 if defined SESSION_ID (
@@ -122,7 +134,7 @@ if exist "%METRICS_SCRIPT%" (
 ) else ( echo [SKIP] session-metrics-tracker.ps1 not found )
 
 REM === Phase 4: Engram Policy Enforcement ===
-echo [4/9] Engram policy enforcement...
+echo [4/10] Engram policy enforcement...
 set ENGRAM_DATA_DIR=%WORKSPACE_ROOT%\.engram-data
 set ENGRAM_POLICY=%UTILS_DIR%\engram-policy.ps1
 if exist "%ENGRAM_POLICY%" (
@@ -136,7 +148,7 @@ if exist "%ENGRAM_POLICY%" (
 ) else ( echo [SKIP] engram-policy.ps1 not found )
 
 REM === Phase 5: Engram Optimization ===
-echo [5/9] Engram optimization...
+echo [5/10] Engram optimization...
 set OPTIMIZE_SCRIPT=%WORKSPACE_ROOT%\scripts\utilities\PERFORMANCE-OPTIMIZATION\optimize-engram-usage.ps1
 if exist "%OPTIMIZE_SCRIPT%" (
     pwsh -NoProfile -ExecutionPolicy Bypass -File "%OPTIMIZE_SCRIPT%" -ProjectName "workspace_gentle_vanguard"
@@ -144,20 +156,38 @@ if exist "%OPTIMIZE_SCRIPT%" (
 ) else ( echo [SKIP] optimize-engram-usage.ps1 not found )
 
 REM === Phase 6: Skill Registry Build ===
-echo [6/9] Skill registry...
+echo [6/10] Skill registry...
 set SKILL_REGISTRY=%UTILS_DIR%\build-skill-registry.ps1
 if exist "%SKILL_REGISTRY%" (
     pwsh -NoProfile -ExecutionPolicy Bypass -File "%SKILL_REGISTRY%" -Quiet
     if errorlevel 1 ( echo [WARN] Skill registry build had issues ) else ( echo [OK] Skill registry built )
 ) else ( echo [SKIP] build-skill-registry.ps1 not found )
 
-REM === Phase 7: Reserved for Future Use ===
-echo [7/9] Reserved...
-echo [SKIP] Reserved for future extensions
+REM === Phase 7: Plugin System Initialization ===
+echo [7/10] Initializing plugin system...
+set PLUGIN_LOADER=%UTILS_DIR%\SKILLS-TOOLS\plugin-loader.ps1
+if exist "%PLUGIN_LOADER%" (
+    pwsh -NoProfile -ExecutionPolicy Bypass -Command ^
+      ". '%PLUGIN_LOADER%';" ^
+      "$r=Initialize-Plugins -Quiet;" ^
+      "Write-Host ('[PLUGIN] Loaded: ' + $r.loaded + ', failed: ' + $r.failed + ', total: ' + $r.total) -ForegroundColor Cyan;" ^
+      "[Environment]::SetEnvironmentVariable('GENTLE_VANGUARD_PLUGINS_LOADED',$r.loaded,'Process');" ^
+      "[Environment]::SetEnvironmentVariable('GENTLE_VANGUARD_PLUGINS_TOTAL',$r.total,'Process')"
+    if errorlevel 1 ( echo [WARN] Plugin initialization had issues ) else ( echo [OK] Plugin system initialized )
+) else ( echo [SKIP] plugin-loader.ps1 not found )
 
-REM === Phase 8: Reserved for Future Use ===
-echo [8/9] Reserved...
-echo [SKIP] Reserved for future extensions
+REM === Phase 8: Enhanced Tool/Adapter Detection ===
+echo [8/10] Running enhanced tool/adapter detection...
+set ENHANCED_DETECT=%WORKSPACE_ROOT%\adapters\detection\enhanced-detect.ps1
+if exist "%ENHANCED_DETECT%" (
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%ENHANCED_DETECT%" -AsJson -Quiet > "%WORKSPACE_ROOT%\.session\enhanced-detect-result.json" 2>&1
+    if errorlevel 1 ( echo [WARN] Enhanced detection had issues ) else (
+        pwsh -NoProfile -ExecutionPolicy Bypass -Command ^
+          "$j=Get-Content '%WORKSPACE_ROOT%\.session\enhanced-detect-result.json' -Raw | ConvertFrom-Json;" ^
+          "Write-Host ('[DETECT] Tool: ' + $j.toolName + ' | MCP: ' + $j.adapterStatus.mcpBridge.available + ' | Adapter: ' + $j.adapterStatus.formatAdapter.available) -ForegroundColor Cyan"
+        echo [OK] Enhanced detection complete
+    )
+) else ( echo [SKIP] enhanced-detect.ps1 not found - adapter detection not available )
 
 REM === Phase 9: Post-Autostart Summary ===
 echo [9/10] Generating startup summary...
