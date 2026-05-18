@@ -85,6 +85,31 @@ Write-Host "[INFO] Ejecutando chequeos automticos de las 7 dimensiones..." -Fore
 Write-Host "[OK] 7 dimension checks completed." -ForegroundColor Green
 Write-Host ""
 
+# README governance validation
+$stagedForCheck = git diff --cached --name-only --diff-filter=ACM 2>$null
+$readmeChanged = $false
+foreach ($f in $stagedForCheck -split "`n") {
+    if ([string]::IsNullOrWhiteSpace($f)) { continue }
+    if ((Split-Path $f -Leaf) -eq 'README.md') { $readmeChanged = $true; break }
+}
+if ($readmeChanged) {
+    Write-Host "[INFO] README.md changes detected - running governance validation..." -ForegroundColor Cyan
+    $validateScript = Join-Path $PSScriptRoot '..\scripts\utilities\validate-readme.ps1'
+    if (-not (Test-Path $validateScript)) {
+        $validateScript = Join-Path $GitRoot 'scripts\utilities\validate-readme.ps1'
+    }
+    if (Test-Path $validateScript) {
+        & pwsh -NoProfile -ExecutionPolicy Bypass -File $validateScript -Repo both
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "[BLOCK] README governance validation failed. See rules/README-GOVERNANCE.md" -ForegroundColor Red
+            exit 1
+        }
+        Write-Host "[OK] README governance validation passed" -ForegroundColor Green
+    } else {
+        Write-Host "[WARN] validate-readme.ps1 not found - skipping governance check" -ForegroundColor Yellow
+    }
+}
+
 $StagedFiles = git diff --cached --name-only --diff-filter=ACM 2>$null
 if (-not $StagedFiles) {
     Write-Host "[OK] No files staged for commit." -ForegroundColor Green
