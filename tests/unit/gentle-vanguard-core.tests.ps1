@@ -64,6 +64,21 @@ Describe 'Gentle-Vanguard Core Tests' {
         It 'sdd-lifecycle skill exists' {
             Test-Path "$script:root\skills\sdd-lifecycle" | Should Be $true
         }
+
+        It 'Skill registry has 0 unassigned skills' {
+            $reg = Get-Content "$script:root\.atl\skill-registry.md" -Raw
+            $reg -match 'unassigned' | Should Be $false
+        }
+
+        It 'All skillToAgentProfile mappings resolve to real directories' {
+            $ad = Get-Content "$script:root\config\auto-delegation.json" -Raw | ConvertFrom-Json
+            $missing = @()
+            foreach ($skill in $ad.skillToAgentProfile.PSObject.Properties) {
+                $dir = Join-Path "$script:root\skills" $skill.Name
+                if (-not (Test-Path $dir)) { $missing += $skill.Name }
+            }
+            $missing.Count | Should Be 0
+        }
     }
 
     Context 'Routing Regression Guards' {
@@ -186,6 +201,46 @@ Describe 'Gentle-Vanguard Core Tests' {
             $summary.HasMatch | Should Be $true
             $summary.PlanMode | Should Be $true
             $summary.AgentCode | Should Be 'BA'
+        }
+    }
+
+    Context 'Adaptive Profiles' {
+        BeforeAll {
+            $script:profileDir = Join-Path $script:root 'scripts\utilities'
+            $script:profiles = @(
+                'adaptive-opencode-profile.ps1',
+                'adaptive-claude-cline-profile.ps1',
+                'adaptive-cursor-profile.ps1',
+                'adaptive-codex-windsurf-profile.ps1',
+                'adaptive-continue-copilot-profile.ps1'
+            )
+        }
+        It 'All adaptive profiles exist' {
+            $missing = @()
+            foreach ($p in $script:profiles) {
+                if (-not (Test-Path (Join-Path $script:profileDir $p))) { $missing += $p }
+            }
+            $missing.Count | Should Be 0
+        }
+        It 'All adaptive profiles parse without syntax errors' {
+            $errors = @()
+            foreach ($p in $script:profiles) {
+                $path = Join-Path $script:profileDir $p
+                $content = Get-Content $path -Raw
+                $parseErrors = $null
+                $null = [System.Management.Automation.Language.Parser]::ParseInput($content, [ref]$null, [ref]$parseErrors)
+                $syntaxErrors = @($parseErrors | Where-Object { $_.ErrorId -eq 'ParserSyntaxError' })
+                if ($syntaxErrors.Count -gt 0) { $errors = $errors + ($p + ': ' + $syntaxErrors.Count + ' error(s)') }
+            }
+            $errors.Count | Should Be 0
+        }
+        It 'plugin-loader.ps1 parses without syntax errors' {
+            $f = "$script:root\scripts\utilities\SKILLS-TOOLS\plugin-loader.ps1"
+            $content = Get-Content $f -Raw
+            $parseErrors = $null
+            $null = [System.Management.Automation.Language.Parser]::ParseInput($content, [ref]$null, [ref]$parseErrors)
+            $syntaxErrors = @($parseErrors | Where-Object { $_.ErrorId -eq 'ParserSyntaxError' })
+            $syntaxErrors.Count | Should Be 0
         }
     }
 }
