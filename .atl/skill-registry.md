@@ -1,6 +1,6 @@
 # Skill Registry
 
-**Auto-generated** | **Skills**: 127
+**Auto-generated** | **Skills**: 131
 
 **Delegator use only.** Sub-agents receive compact rules pre-digested in launch prompt.
 Orchestrator reads this registry to resolve skill->agent mappings and inject compact rules.
@@ -11,19 +11,19 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 |-------|--------|
 | BA - Analysis | 6 |
 | DEV - Code | 20 |
-| DOC - Documentation | 3 |
+| DOC - Documentation | 6 |
 | FINANCE - Finance | 1 |
-| GOV - Governance | 6 |
+| GOV - Governance | 8 |
 | HR - Talent | 1 |
 | LEGAL - Legal | 1 |
 | MKT - Marketing | 4 |
 | OPS - DevOps | 6 |
 | PREMORTEM - Risk | 1 |
-| QA - Testing | 10 |
+| QA - Testing | 11 |
 | SAD - Design | 6 |
 | SALES - Sales | 2 |
 | SESSION - Session | 1 |
-| *(unassigned)* | 59 |
+| *(unassigned)* | 57 |
 
 ## Skill-Agent Mapping
 
@@ -55,8 +55,6 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 | (unassigned) | docs-alignment-skill | "docs", "documentation", "update docs", "doc sync" |
 | (unassigned) | firecrawl-web-skill | "web scrape", "extract data", "crawl website", "markdown", "screenshot", "web... |
 | (unassigned) | fireworks-tech-graph | Use when the user wants to create any technical diagram - architecture, data ... |
-| (unassigned) | gentle-vanguard-audit-skill | 'audit gentle-vanguard', 'validate docs', 'sweep project', 'check links', 'fi... |
-| (unassigned) | gentle-vanguard-manager-skill | 'update gentle-vanguard', 'check updates', 'sync skills', 'install tools', 'm... |
 | (unassigned) | frontend-engineer | "frontend", "React component", "UI implementation", "responsive", "state mana... |
 | (unassigned) | game-designer | "game design", "game mechanics", "balance", "player experience", "level desig... |
 | (unassigned) | github-pr-skill | When creating PRs, writing PR descriptions, or using gh CLI for pull requests |
@@ -116,9 +114,14 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 | DEV - Code | zustand-5-skill | "Zustand", "state management", "store", "useStore", "persistence" |
 | DOC - Documentation | content-output-skill | "post", "twitter", "linkedin", "redes", "social", "marketing", "promocionar",... |
 | DOC - Documentation | documentation-governance | creating or updating README, ARCHITECTURE, setup guides, code reviews, script... |
+| DOC - Documentation | humanizador-skill | "humaniza este texto", "humanize this text", "make it sound natural", "remove... |
+| DOC - Documentation | optimizador-prompts-skill | "mejora este prompt", "conviértelo en un prompt", "ordena esta idea", "hazme ... |
+| DOC - Documentation | presentaciones-visuales-skill | "crea una presentación", "convierte esto en slides", "deck", "diapositivas", ... |
 | DOC - Documentation | reporting-skill | "informe", "report", "reporte", "mtricas", "metrics", "dashboard", "gerencia"... |
 | FINANCE - Finance | finance-financial-analyst | "financial model", "forecast", "scenario analysis", "variance", "budget", "ca... |
 | GOV - Governance | comment-writer | PR feedback, issue replies, reviews, Slack messages, or GitHub comments |
+| GOV - Governance | gentle-vanguard-audit-skill | 'audit gentle-vanguard', 'validate docs', 'sweep project', 'check links', 'fi... |
+| GOV - Governance | gentle-vanguard-manager-skill |  |
 | GOV - Governance | gitflow-orchestrator-skill | gitflow, git, branch, workflow, git hooks |
 | GOV - Governance | judgment-day | "judgment day", "judgment-day", "dual review", "juzgar" |
 | GOV - Governance | project-orchestrator-skill | session start, project setup, orchestration, repository governance, iniciar s... |
@@ -147,6 +150,7 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 | QA - Testing | testing-evidence-qa | "evidence QA", "screenshot test", "visual testing", "QA certification", "prod... |
 | QA - Testing | testing-skill | Use when writing tests, setting up test coverage, choosing test frameworks, o... |
 | QA - Testing | testing-strategy-skill | testing strategy, test pyramid, what to test, coverage target, unit test, int... |
+| QA - Testing | verificador-datos-skill | "verifica este texto", "comprueba si esto es verdad", "revisa si hay errores"... |
 | SAD - Design | api-design-skill | Use when designing REST APIs, GraphQL schemas, or API contracts. Triggers: "d... |
 | SAD - Design | cloud-agent-connector-skill | "cloud agent", "bedrock", "difi", "external model", "api connection", "invoke... |
 | SAD - Design | context-engineering-skill | context pack, compact start, session handoff, token efficiency, context budge... |
@@ -296,6 +300,18 @@ Delegators copy matching blocks into sub-agent prompts under Project Standards (
 
 - Use numbered steps when order matters
 
+#### humanizador-skill
+
+- No compact rules extracted
+
+#### optimizador-prompts-skill
+
+- No compact rules extracted
+
+#### presentaciones-visuales-skill
+
+- No compact rules extracted
+
 #### reporting-skill
 
 - No compact rules extracted
@@ -312,6 +328,14 @@ Delegators copy matching blocks into sub-agent prompts under Project Standards (
 ### GOV - Governance
 
 #### comment-writer
+
+- No compact rules extracted
+
+#### gentle-vanguard-audit-skill
+
+- Never modify files during audit — only report issues
+
+#### gentle-vanguard-manager-skill
 
 - No compact rules extracted
 
@@ -519,6 +543,10 @@ Delegators copy matching blocks into sub-agent prompts under Project Standards (
 - MUST keep tests independent (no order dependency)
 - MUST write tests in same package (Go) or alongside source (Angular)
 
+#### verificador-datos-skill
+
+- No compact rules extracted
+
 ### SAD - Design
 
 #### api-design-skill
@@ -713,15 +741,6 @@ Delegators copy matching blocks into sub-agent prompts under Project Standards (
 - Export PNG: : Use `cairosvg` (recommended). See **SVG → PNG Conversion** section below for full method comparison
 - Report: the generated file paths
 - (Optional) Visual self-review: — if your runtime can read images, load the exported PNG back and inspect it. Syntactic validity does not guarantee visual correctness: arrows may cross through component interiors, labels may collide with lifelines or other labels, boxes may overlap, alt-frame text may sit on top of a message, or a legend may cover content. If you see any of these, revise the SVG and re-export; repeat until the rendered image is clean. Common fixes:
-
-#### gentle-vanguard-audit-skill
-
-- Never modify files during audit — only report issues
-
-#### gentle-vanguard-manager-skill
-
-- Never auto-update without logging all changes to `.runtime/skill-updates.log`
-- Respect user auto-update preferences in `config/orchestrator.json`
 
 #### frontend-engineer
 
