@@ -32,6 +32,20 @@ Reglas fundamentales de operación para todos los agentes en Gentle-Vanguard.
 
 Para bugs: ir directo a DEV/APPLY, saltar BA.
 
+## Skill Loading (sin skill tool nativo)
+
+Cursor no expone skill tool. Para emular:
+1. Consultar `.atl/skill-registry.md` para encontrar el skill correcto
+2. Leer `skills/<skill-name>/SKILL.md` directamente
+3. Skills críticos siempre disponibles: `sdd-lifecycle`, `code-review-orchestrator`, `session-workflow`
+
+## Memoria entre sesiones (emulación)
+
+- **Contexto persistente**: `.engram-data/`
+- **Resumen de sesión**: `scripts/.session/startup-summary.json`
+- **Restaurar contexto**: `pwsh -NoProfile -File scripts/utilities/engram_mem_context.ps1`
+- **Session logs**: `logs/` y `session/`
+
 ## Respuestas
 
 - **Idioma**: español (términos técnicos en inglés)

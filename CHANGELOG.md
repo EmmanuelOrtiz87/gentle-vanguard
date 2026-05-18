@@ -165,14 +165,22 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## [Unreleased]#
+## [2.18.0] - 2026-05-18 - Cross-Tool Nivelación Sprint#
 
-### 🚀 Planned#
+### Added#
 
-- [ ] Auto-update: Launcher checks remote version and prompts for upgrade
-- [ ] Docker validation: Integration tests in containerized environments
-- [ ] Links validation: Verify all documentation cross-references
-- [ ] Release artifacts: S3 distribution for global availability
+- **Antigravity v2.0**: Config completo con emulación de skills, engram memory, session management. Adaptive profile dedicado (`adaptive-antigravity-profile.ps1`).
+- **Detección de Antigravity**: `detect-tool.ps1` ahora detecta `.antigravity/` directory (confidence 80).
+- **Skill Emulación cross-tool**: 7 configs actualizados con `skillEmulation`, `criticalSkills`, `engramPaths`, `skillRegistry` para tools sin skill/mem nativos (cline, cursor, windsurf, codex, copilot, antigravity).
+- **Memoria entre sesiones**: Todas las tools ahora referencian `.engram-data/`, `scripts/.session/startup-summary.json`, y `engram_mem_context.ps1` para persistencia cross-session.
+- **Nivelación de toolProfiles**: Antigravity tiene adaptive profile propio. Todas las tools tienen emulación funcional equivalente.
+
+### Changed#
+
+- **VERSION**: 2.16.0 → 2.18.0 (fix + bump)
+- **.windsurf/config.json**: project name corregido de "foundation" a "gentle-vanguard"
+- **.clinerules**: references extendidas con skillRegistry + engram + sessionContext
+- **.cursor/rules/core-workflow.md**: secciones de skill loading y memoria emulada
 
 ---
 
