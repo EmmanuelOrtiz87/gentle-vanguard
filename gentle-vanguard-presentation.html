@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gentle-Vanguard · Platform Overview</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: #0a0a0f; color: #e2e2e2; overflow: hidden; height: 100vh; }
+  .slides { display: flex; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); height: 100vh; }
+  .slide { min-width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 5vw; position: relative; overflow: hidden; }
+  .slide::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 50%, rgba(99,102,241,0.08) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(139,92,246,0.06) 0%, transparent 50%); pointer-events: none; }
+  .slide-inner { max-width: 1100px; width: 100%; position: relative; z-index: 1; }
+  h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+  h2 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5em; }
+  h3 { font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 600; color: #a5b4fc; margin-bottom: 0.5em; }
+  .subtitle { font-size: clamp(1rem, 2vw, 1.4rem); color: #94a3b8; font-weight: 400; line-height: 1.6; }
+  .tag { display: inline-block; background: rgba(99,102,241,0.15); color: #a5b4fc; padding: 0.35em 1em; border-radius: 100px; font-size: 0.8rem; font-weight: 500; margin-bottom: 1em; border: 1px solid rgba(99,102,241,0.2); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem; }
+  .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 1.5rem; backdrop-filter: blur(8px); transition: border-color 0.2s; }
+  .card:hover { border-color: rgba(99,102,241,0.3); }
+  .card .num { font-size: 2rem; font-weight: 800; color: #6366f1; line-height: 1; margin-bottom: 0.3rem; }
+  .card h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem; }
+  .card p { font-size: 0.85rem; color: #94a3b8; line-height: 1.5; }
+  .badge { display: inline-block; padding: 0.2em 0.6em; border-radius: 6px; font-size: 0.7rem; font-weight: 600; margin-right: 0.3em; }
+  .badge-green { background: rgba(34,197,94,0.15); color: #4ade80; }
+  .badge-yellow { background: rgba(234,179,8,0.15); color: #facc15; }
+  .badge-red { background: rgba(239,68,68,0.15); color: #f87171; }
+  .badge-blue { background: rgba(59,130,246,0.15); color: #60a5fa; }
+  .badge-purple { background: rgba(139,92,246,0.15); color: #a78bfa; }
+  .badge-gray { background: rgba(148,163,184,0.15); color: #94a3b8; }
+  .nav-arrows { position: fixed; bottom: 2rem; right: 2rem; z-index: 100; display: flex; gap: 0.5rem; }
+  .nav-arrows button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #e2e2e2; font-size: 1.2rem; cursor: pointer; backdrop-filter: blur(8px); transition: all 0.2s; }
+  .nav-arrows button:hover { background: rgba(99,102,241,0.2); border-color: rgba(99,102,241,0.4); }
+  .progress { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, #6366f1, #8b5cf6); z-index: 100; transition: width 0.4s ease; }
+  .slide-counter { position: fixed; bottom: 2rem; left: 2rem; z-index: 100; font-size: 0.8rem; color: #64748b; font-weight: 500; }
+  .gradient-text { background: linear-gradient(135deg, #6366f1, #a78bfa, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-icon { font-size: 3rem; margin-bottom: 0.5rem; }
+  .list { list-style: none; }
+  .list li { padding: 0.4rem 0; padding-left: 1.5rem; position: relative; font-size: 0.9rem; color: #cbd5e1; }
+  .list li::before { content: '▸'; position: absolute; left: 0; color: #6366f1; }
+  .flow-row { display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex-wrap: wrap; }
+  .flow-step { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.8rem; font-weight: 500; }
+  .flow-arrow { color: #6366f1; font-size: 1.2rem; }
+  .stat-row { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+  .stat { text-align: center; padding: 1rem 1.5rem; }
+  .stat-value { font-size: 2.5rem; font-weight: 800; color: #a5b4fc; }
+  .stat-label { font-size: 0.8rem; color: #64748b; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { text-align: left; padding: 0.6rem 0.8rem; color: #94a3b8; font-weight: 500; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  td { padding: 0.6rem 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .col-agents { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .agent-tag { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.15); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.65rem; color: #a5b4fc; font-weight: 500; }
+  .quote { font-style: italic; color: #94a3b8; font-size: 1.1rem; border-left: 3px solid #6366f1; padding-left: 1.5rem; margin: 1rem 0; }
+  @media (max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } .slide { padding: 4vw; } }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="slide-counter" id="counter">1 / 14</div>
+<div class="nav-arrows">
+  <button onclick="prevSlide()" id="prevBtn">&#8592;</button>
+  <button onclick="nextSlide()" id="nextBtn">&#8594;</button>
+</div>
+
+<div class="slides" id="slides">
+
+<!-- SLIDE 1: PORTADA -->
+<div class="slide">
+  <div class="slide-inner" style="text-align:center">
+    <div class="hero-icon">&#9889;</div>
+    <h1 class="gradient-text">Gentle-Vanguard</h1>
+    <p class="subtitle" style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-top:0.5em">Plataforma de Ingeniería Aumentada con IA</p>
+    <p class="subtitle" style="font-size:clamp(0.9rem,1.5vw,1.1rem);margin-top:1.5em;max-width:700px;margin-left:auto;margin-right:auto">
+      Agentes inteligentes · Skills modulares · Ciclo SDD · Memoria persistente · Juicio Dual Automatizado
+    </p>
+    <div style="margin-top:2.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+      <span class="tag">Tool-Agnostic</span>
+      <span class="tag">OpenCode First</span>
+      <span class="tag">15 Agentes</span>
+      <span class="tag">131 Skills</span>
+      <span class="tag">28 Quality Gates</span>
+    </div>
+    <p style="margin-top:3rem;font-size:0.8rem;color:#475569">Mayo 2026</p>
+  </div>
+</div>
+
+<!-- SLIDE 2: QUE ES -->
+<div class="slide">
+  <div class="slide-inner">
+    <span class="tag">VISION</span>
+    <h2>¿Qué es Gentle-Vanguard?</h2>
+    <p class="subtitle">Una plataforma agnóstica de ingeniería de software asistida por IA que orquesta agentes especializados, skills reutilizables y ciclos de calidad automatizados para transformar ideas en código validado.</p>
+    <div class="grid-3" style="margin-top:2rem">
+      <div class="card">
+        <div class="num">01</div>
+        <h4>Multi-Herramienta</h4>
+        <p>Compatible con 10 herramientas AI. Se adapta automáticamente según el runtime detectado (opencode, claude-code, cursor, windsurf, cline, etc.)</p>
+      </div>
+      <div class="card">
+        <div class="num">02</div>
+        <h4>Desarrollo Guiado por Specs</h4>
+        <p>SDD Lifecycle: EXPLORE → PROPOSE → SPEC → DESIGN → APPLY → VERIFY. Cada fase ejecutada por el agente óptimo con el modelo adecuado.</p>
+      </div>
+      <div class="card">
+        <div class="num">03</div>
+        <h4>Memoria y Mejora Continua</h4>
+        <p>Engram memory system persiste decisiones, bugs y patrones entre sesiones. Post-session learning y self-healing automáticos.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 3: ARQUITECTURA -->
+<div class="slide">
+  <div class="slide-inner">
+    <span class="tag">ARQUITECTURA</span>
+    <h2>Vista General del Sistema</h2>
+    <div class="grid-2" style="margin-top:1.5rem">
+      <div class="card">
+        <h4>&#9889; Core Engine</h4>
+        <ul class="list">
+          <li>Detecta herramienta en uso (10 perfiles)</li>
+          <li>Router automático de intenciones → agente</li>
+          <li>Orquestador de sesiones con estado</li>
+          <li>Sistema de plugins y hooks</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>&#128736; Sistema de Skills</h4>
+        <ul class="list">
+          <li>134 skills instalados en directorios físicos</li>
+          <li>Registry automantenido (.atl/skill-registry.md)</li>
+          <li>55+ skills asignados a agentes específicos</li>
+          <li>Desde infra hasta marketing y legal</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>&#128202; Memoria y Datos</h4>
+        <ul class="list">
+          <li>Engram: memoria persistente entre sesiones</li>
+          <li>Session manager con crash recovery</li>
+          <li>Watchtower: monitoreo de salud del sistema</li>
+          <li>Telemetría y métricas de sesión</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>&#9881; Calidad y Automatización</h4>
+        <ul class="list">
+          <li>28 quality gates en pipeline CI/CD</li>
+          <li>16 workflows GitHub Actions</li>
+          <li>Judgment Day: revisión dual adversarial</li>
+          <li>SDD Gate: bloquea PR sin spec validado</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: TOOL COMPATIBILITY -->
+<div class="slide">
+  <div class="slide-inner">
+    <span class="tag">COMPATIBILIDAD</span>
+    <h2>Soporte Multi-Herramienta</h2>
+    <p class="subtitle" style="margin-bottom:1.5rem">10 herramientas detectadas por runtime — 3 con soporte completo, 7 con perfil adaptivo</p>
+    <table>
+      <tr><th>Herramienta</th><th>Skill Tool</th><th>Mem Tools</th><th>Optimización</th></tr>
+      <tr><td><strong>opencode</strong> (baseline)</td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">Perfil dedicado</span></td></tr>
+      <tr><td><strong>claude-code</strong></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">Perfil dedicado</span></td></tr>
+      <tr><td><strong>continue-dev</strong></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">Perfil dedicado</span></td></tr>
+      <tr><td><strong>cline</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Adaptivo (compartido)</span></td></tr>
+      <tr><td><strong>cursor</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Adaptivo básico</span></td></tr>
+      <tr><td><strong>windsurf</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Adaptivo básico</span></td></tr>
+      <tr><td><strong>codex</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Comparte perfil</span></td></tr>
+      <tr><td><strong>copilot</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Comparte perfil</span></td></tr>
+      <tr><td><strong>antigravity</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Perfil mínimo</span></td></tr>
+      <tr><td><strong>claude-generic</strong></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-yellow">Fallback sin optimizar</span></td></tr>
+    </table>
+    <p style="font-size:0.8rem;color:#64748b;margin-top:0.8rem">Optimización pendiente para herramientas sin skill tool nativo: emular skills via instrucciones inline.</p>
+  </div>
+</div>
+
+<!-- SLIDE 5: AGENTES -->
+<div class="slide">
+  <div class="slide-inner">
+    <span class="tag">AGENTES</span>
+    <h2>15 Agentes Especializados</h2>
+    <p class="subtitle" style="margin-bottom:1.5rem">Cada uno con modelo asignado, temperatura, presets de seguridad y evidencia requerida</p>
+    <div class="col-agents" style="justify-content:center;margin-bottom:1.5rem">
+      <span class="agent-tag">BA</span><span class="agent-tag">SAD</span><span class="agent-tag">DEV</span><span class="agent-tag">QA</span>
+      <span class="agent-tag">OPS</span><span class="agent-tag">GOV</span><span class="agent-tag">DOC</span><span class="agent-tag">MKT</span>
+      <span class="agent-tag">SALES</span><span class="agent-tag">FINANCE</span><span class="agent-tag">HR</span><span class="agent-tag">LEGAL</span>
+      <span class="agent-tag">SESSION</span><span class="agent-tag">PREMORTEM</span><span class="agent-tag">SELF-DIAG</span>
+    </div>
+    <div class="grid-3">
+      <div class="card"><h4>BA · Business Analysis</h4><p>Exploración de requerimientos, SDD EXPLORE. Modelo rápido y económico.</p></div>
+      <div class="card"><h4>SAD · System Architecture</h4><p>Diseño de sistemas, API contracts. Modelo de razonamiento fuerte.</p></div>
+      <div class="card"><h4>DEV · Development</h4><p>Implementación y código. Modelo de codificación fuerte.</p></div>
+      <div class="card"><h4>QA · Quality Assurance</h4><p>Validación cross-workspace, testing. Modelo de revisión.</p></div>
+      <div class="card"><h4>GOV · Governance</h4><p>Judgment Day, security, compliance. Modelo de revisión fuerte.</p></div>
+      <div class="card"><h4>DOC · Documentation</h4><p>Docs, presentaciones, humanización. Modelo rápido y económico.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: SDD LIFECYCLE -->
+<div class="slide">
+  <div class="slide-inner">
+    <span class="tag">METODOLOGÍA</span>
+    <h2>SDD Lifecycle</h2>
+    <p class="subtitle" style="margin-bottom:1.5rem">Spec-Driven Development: cada feature nace de un spec, pasa por diseño, implementación y verificación</p>
+    <div class="flow-row" style="margin-bottom:2rem">
+      <span class="flow-step">INIT</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">EXPLORE</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">PROPOSE</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">SPEC</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">TASKS</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">DESIGN</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">APPLY</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">VERIFY</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">ARCHIVE</span>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h4>&#128269; Fase EXPLORE (BA)</h4>
+        <p>Agente BA descubre necesidades, restricciones y criterios de éxito. Produce un documento de requerimientos estructurado.</p>
+      </div>
+      <div class="card">
+        <h4>&#127912; Fase DESIGN (SAD)</h4>
+        <p>Arquitecto de sistemas produce diseño técnico: componentes, API, base de datos, flujos.</p>
+      </div>
+      <div class="card">
+        <h4>&#128187; Fase APPLY (DEV)</h4>
+        <p>Implementación con skills específicos por stack (React, Go, Django, Flutter, etc.)</p>
+      </div>
+      <div class="card">
+        <h4>&#9989; Fase VERIFY (QA)</h4>
+        <p>Validación cross-workspace: usa playwright, pytest, testing-strategy y testing-coverage skills.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 7: JUDGMENT DAY -->
+<div class="slide">
+  <div class="slide-inner">
+    <span class="tag">CALIDAD</span>
+    <h2>Judgment Day</h2>
+    <p class="subtitle" style="margin-bottom:1rem">Protocolo de revisión dual adversarial. Dos jueces AI ciegos evalúan en paralelo, sintetizan, ofrecen fix cycle y re-evalúan.</p>
+    <div class="flow-row" style="margin-bottom:1.5rem">
+      <span class="flow-step">Juez A</span>
+      <span class="flow-step" style="border-color:rgba(139,92,246,0.3);background:rgba(139,92,246,0.1)">Juez B</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">Síntesis</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">Fix Cycle</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step">Re-Juicio</span>
+      <span class="flow-arrow">&#8594;</span>
+      <span class="flow-step badge-green">APPROVED</span>
+      <span class="flow-arrow" style="color:#f87171">&#8594;</span>
+      <span class="flow-step badge-red">ESCALATED</span>
+    </div>
+    <div class="grid-3">
+      <div class="card"><h4>&#9888; Ejecución Automática</h4>
+        <ul class="list">
+          <li>Pre-push hook: juzga cambios antes de push</li>
+          <li>Pre-merge-commit: juzga antes de merge PR</li>
+          <li>GitHub Actions: semanal (lunes 10:00 ART)</li>
+          <li>Evento session.ended también lo dispara</li>
+        </ul>
+      </div>
+      <div class="card"><h4>&#128220; Reglas Duras</h4>
+        <ul class="list">
+          <li>Max 2 iteraciones de fix</li>
+          <li>Nunca declarar APPROVED si hay CRITICALs</li>
+          <li>Preservar posiciones minoritarias</li>
+          <li>Detectar sycophancy (cambio sin evidencia)</li>
+        </ul>
+      </div>
+      <div class="card"><h4>&#127919; Gobernanza</h4>
+        <ul class="list">
+          <li>Bloquea merge si judgment falla</li>
+          <li>Labels auto: approved/failed/pending</li>
+          <li>Coordina con CI pipeline</li>
+          <li>Reporta al event bus</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 8: SESSION + MEMORY -->
+<div class="slide">
+  <div class="slide-inner">
+    <span class="tag">PERSISTENCIA</span>
+    <h2>Sesiones y Memoria</h2>
+    <p class="subtitle" style="margin-bottom:1.5rem">Cada interacción ocurre dentro de una sesión con estado. La memoria cruza sesiones.</p>
+    <div class="grid-2">
+      <div class="card">
+        <h4>&#128337; Ciclo de Sesión</h4>
+        <div class="flow-row" style="margin-top:0.8rem;font-size:0.75rem">
+          <span class="flow-step">INACTIVE</span><span class="flow-arrow">&#8594;</span>
+          <span class="flow-step">STARTING</span><span class="flow-arrow">&#8594;</span>
+          <span class="flow-step badge-green">ACTIVE</span><span class="flow-arrow">&#8594;</span>
+          <span class="flow-step">CLOSING</span><span class="flow-arrow">&#8594;</span>
+          <span class="flow-step">CLOSED</span>
+        </div>
+        <ul class="list" style="margin-top:0.8rem">
+          <li>Session ID único: session-YYYY-MM-DD-XX</li>
+          <li>Pre-process input para routing automático</li>
+          <li>Autostart valida git, engram, health checks</li>
+          <li>Session end: summary + memoria + auditoría</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>&#128214; Engram Memory System</h4>
+        <ul class="list">
+          <li>Persiste decisiones, bugs, patrones, configs</li>
+          <li>Búsqueda semántica entre sesiones</li>
+          <li>Tipos: decision, architecture, bugfix, pattern</li>
+          <li>Post-session learning + gap analysis</li>
+          <li>Self-healing post-watchtower</li>
+          <li>NEXT_SESSION_GUIDE.md para continuidad</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 9: QUALITY GATES -->
+<div class="slide">
+  <div class="slide-inner">
+    <span class="tag">CALIDAD</span>
+    <h2>28 Quality Gates</h2>
+    <p class="subtitle" style="margin-bottom:1.5rem">Validaciones automáticas en cada etapa del ciclo de vida</p>
+    <div class="grid-3">
+      <div class="card"><h4><span class="badge badge-blue">Pre-Commit</span></h4>
+        <ul class="list"><li>Hook scripts</li><li>Linting básico</li></ul>
+      </div>
+      <div class="card"><h4><span class="badge badge-blue">Build</span></h4>
+        <ul class="list"><li>SDD Gate</li><li>Script governance</li><li>Plugin validation</li></ul>
+      </div>
+      <div class="card"><h4><span class="badge badge-blue">Test</span></h4>
+        <ul class="list"><li>23 unit tests</li><li>Routing language matrix</li><li>Cross-workspace validation</li></ul>
+      </div>
+      <div class="card"><h4><span class="badge badge-purple">Quality</span></h4>
+        <ul class="list"><li>Agent verify (16 checks)</li><li>Validate configs (63 JSONs)</li><li>Skill references integrity</li></ul>
+      </div>
+      <div class="card"><h4><span class="badge badge-purple">Security</span></h4>
+        <ul class="list"><li>Gitleaks scan</li><li>Security workflow</li><li>Token budget monitoring</li></ul>
+      </div>
+      <div class="card"><h4><span class="badge badge-purple">Governance</span></h4>
+        <ul class="list"><li>Judgment Day</li><li>SDD validation</li><li>Override abuse audit</li></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 10: SKILLS SYSTEM -->
+<div class="slide">
+  <div class="slide-inner">
+    <span class="tag">SKILLS</span>
+    <h2>Sistema Modular de Skills</h2>
+    <p class="subtitle" style="margin-bottom:1.5rem">134 skills instalados, registry auto-generado, asignación por agente</p>
+    <div class="stat-row" style="margin-bottom:1.5rem">
+      <div class="stat"><div class="stat-value">134</div><div class="stat-label">Skills instalados</div></div>
+      <div class="stat"><div class="stat-value">74</div><div class="stat-label">Asignados a agentes</div></div>
+      <div class="stat"><div class="stat-value">57</div><div class="stat-label">Sin asignar</div></div>
+      <div class="stat"><div class="stat-value">15</div><div class="stat-label">Agentes destino</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h4>&#128736; Skills Clave por Área</h4>
+        <ul class="list">
+          <li><strong>DEV:</strong> react-19, nextjs-15, tailwind-4, golang-api, django-drf, flutter, android-kotlin, ios-swiftui, mcp-skill, typescript, zod</li>
+          <li><strong>QA:</strong> playwright, pytest, testing-strategy, testing-coverage, verificador-datos</li>
+          <li><strong>OPS:</strong> docker-devops, kubernetes-deployment, terraform, observability, incident-response</li>
+          <li><strong>GOV:</strong> judgment-day, security, comment-writer, self-diagnosis, gitflow-orchestrator</li>
+          <li><strong>DOC:</strong> documentation-governance, humanizador, presentaciones-visuales, content-output, optimizador-prompts</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>&#128200; Skills de Negocio</h4>
+        <ul class="list">
+          <li><strong>MKT:</strong> marketing-content-writer, growth-hacker, content-strategist, seo-audit</li>
+          <li><strong>SALES:</strong> sales-account-executive, sales-outbound-strategist</li>
+          <li><strong>FINANCE:</strong> finance-financial-analyst</li>
+          <li><strong>HR:</strong> hr-talent-acquisition</li>
+          <li><strong>LEGAL:</strong> legal-compliance-officer</li>
+          <li><strong>BA:</strong> data-analyst, product-manager, project-manager, backlog-management</li>
+          <li><strong>PREMORTEM:</strong> premortem-skill (análisis de riesgos anticipados)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 11: BUSINESS -->
+<div class="slide">
+  <div class="slide-inner">
+    <span class="tag">NEGOCIO</span>
+    <h2>Propuesta de Valor</h2>
+    <div class="grid-2" style="margin-top:1.5rem">
+      <div class="card">
+        <h4>&#9201; Reducción de Ciclos</h4>
+        <p>SDD Lifecycle elimina ida-y-vuelta entre requerimientos y código. Cada fase produce artefactos que la siguiente consume directamente.</p>
+      </div>
+      <div class="card">
+        <h4>&#128274; Calidad Blindada</h4>
+        <p>Judgment Day + 28 quality gates + SDD Gate aseguran que nada pase sin revisión adversarial y validación cross-workspace.</p>
+      </div>
+      <div class="card">
+        <h4>&#127760; Tool-Agnóstico</h4>
+        <p>No dependency lock-in. Funciona con 10 herramientas AI. Migrar de OpenCode a Claude Code o Cursor no requiere cambiar la plataforma.</p>
+      </div>
+      <div class="card">
+        <h4>&#128202; Memoria Institucional</h4>
+        <p>Engram evita perder contexto entre sesiones. Decisiones, bugs y patrones persisten. Post-session learning identifica gaps automáticamente.</p>
+      </div>
+      <div class="card">
+        <h4>&#128260; Multidominio</h4>
+        <p>No solo código: también marketing, ventas, finanzas, RRHH, legal, y premortem. Un solo workspace para toda la operación aumentada.</p>
+      </div>
+      <div class="card">
+        <h4>&#9889; Automatización Integral</h4>
+        <p>16 workflows CI/CD, session lifecycle completo, auto-healing, watchtower monitoring. Operación 24/7 sin supervisión constante.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 12: EVOLUCIÓN -->
+<div class="slide">
+  <div class="slide-inner">
+    <span class="tag">ROADMAP</span>
+    <h2>Estado Actual y Próximos Pasos</h2>
+    <div class="grid-2" style="margin-top:1.5rem">
+      <div class="card">
+        <h4><span class="badge badge-green">100%</span> Homologado</h4>
+        <ul class="list">
+          <li>Detect tool + routing automático</li>
+          <li>SDD Lifecycle completo (8 fases)</li>
+          <li>Judgment Day con hooks + CI</li>
+          <li>Session lifecycle con Engram</li>
+          <li>28 quality gates funcionales</li>
+          <li>16 GitHub Actions workflows</li>
+          <li>Agent verify (16/16 checks pass)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4><span class="badge badge-yellow">En Progreso</span> Por Optimizar</h4>
+        <ul class="list">
+          <li>57 skills sin asignar a ningún agente</li>
+          <li>Soporte nativo de skill tool para cline/cursor/windsurf</li>
+          <li>Plugins discovery con errores de sintaxis</li>
+          <li>Documentación del workspace generada con skills antiguos</li>
+          <li>Perfiles adaptivos para herramientas no-opencode mejorables</li>
+          <li>Cobertura de tests: 23 tests, márgenes de mejora</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 13: CI/CD -->
+<div class="slide">
+  <div class="slide-inner">
+    <span class="tag">AUTOMATIZACIÓN</span>
+    <h2>Pipeline CI/CD</h2>
+    <p class="subtitle" style="margin-bottom:1.5rem">16 workflows de GitHub Actions para validación continua</p>
+    <div class="grid-3">
+      <div class="card"><h4>autonomous-validation.yml</h4><p>Push a develop + PR + semanal (lun 10:00 ART). Validación integral, plugins, cross-workspace.</p></div>
+      <div class="card"><h4>gentle-vanguard-quality-gate.yml</h4><p>Push y PR a develop/main. Quality gates completos.</p></div>
+      <div class="card"><h4>security-scan.yml</h4><p>Escaneo de seguridad automatizado.</p></div>
+      <div class="card"><h4>gitleaks.yml</h4><p>Detección de secrets en el código.</p></div>
+      <div class="card"><h4>script-governance.yml</h4><p>Gobernanza de scripts.</p></div>
+      <div class="card"><h4>sdd-gate.yml</h4><p>Valida specs SDD en PRs a protected branches.</p></div>
+      <div class="card"><h4>monthly-report.yml</h4><p>Reportes mensuales automatizados.</p></div>
+      <div class="card"><h4>agentic-r2-migration.yml</h4><p>Migraciones automáticas.</p></div>
+      <div class="card"><h4>+8 workflows</h4><p>Cross-platform tests, telemetry, issue alerts, y más.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 14: CIERRE -->
+<div class="slide">
+  <div class="slide-inner" style="text-align:center">
+    <div class="hero-icon">&#9889;</div>
+    <h1 class="gradient-text">Gentle-Vanguard</h1>
+    <p class="subtitle" style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-top:0.5em">El sistema operativo para ingeniería con IA</p>
+    <div class="stat-row" style="margin-top:2rem">
+      <div class="stat"><div class="stat-value">10</div><div class="stat-label">Herramientas compatibles</div></div>
+      <div class="stat"><div class="stat-value">15</div><div class="stat-label">Agentes</div></div>
+      <div class="stat"><div class="stat-value">134</div><div class="stat-label">Skills</div></div>
+      <div class="stat"><div class="stat-value">28</div><div class="stat-label">Quality Gates</div></div>
+      <div class="stat"><div class="stat-value">16</div><div class="stat-label">Workflows CI/CD</div></div>
+    </div>
+    <div class="quote" style="max-width:600px;margin:2rem auto">
+      "Tool-agnóstico, modular, auto-mejorable. No importa qué herramienta AI uses — Gentle-Vanguard se adapta."
+    </div>
+    <p style="font-size:0.85rem;color:#64748b;margin-top:1rem">
+      <span class="badge badge-blue">OpenCode</span>
+      <span class="badge badge-blue">Claude Code</span>
+      <span class="badge badge-blue">Cursor</span>
+      <span class="badge badge-blue">Windsurf</span>
+      <span class="badge badge-blue">Cline</span>
+      <span class="badge badge-blue">Continue.dev</span>
+    </p>
+  </div>
+</div>
+
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+const progress = document.getElementById('progress');
+const counter = document.getElementById('counter');
+
+function update() {
+  document.getElementById('slides').style.transform = `translateX(-${current * 100}vw)`;
+  progress.style.width = `${((current + 1) / total) * 100}%`;
+  counter.textContent = `${current + 1} / ${total}`;
+  document.getElementById('prevBtn').style.opacity = current === 0 ? '0.3' : '1';
+  document.getElementById('nextBtn').style.opacity = current === total - 1 ? '0.3' : '1';
+}
+
+function nextSlide() { if (current < total - 1) { current++; update(); } }
+function prevSlide() { if (current > 0) { current--; update(); } }
+document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') nextSlide(); if (e.key === 'ArrowLeft') prevSlide(); });
+update();
+</script>
+</body>
+</html>
