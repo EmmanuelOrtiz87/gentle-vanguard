@@ -1,7 +1,7 @@
 {
-  "name": "Continue.dev - Local-First Configuration",
-  "version": "1.0.0",
-  "description": "Local-first policy for Continue.dev with tool restrictions",
+  "name": "Continue.dev - Gentle-Vanguard Workspace",
+  "version": "2.0.0",
+  "description": "Optimized with checks system per Continue.dev best practices (docs.continue.dev/checks/best-practices)",
   "workspace": {
     "projectRoot": ".",
     "configFiles": ["opencode.json", "AGENTS.md", "CLAUDE.md", ".cursorrules", ".clinerules"],
@@ -18,6 +18,16 @@
     "codesearch": "deny",
     "webfetch": "deny",
     "note": "External tools only available via orchestrator agent"
+  },
+  "checks": {
+    "paths": [
+      ".continue/checks/security-review.md",
+      ".continue/checks/test-coverage.md",
+      ".continue/checks/documentation-freshness.md",
+      ".continue/checks/dependency-audit.md",
+      ".continue/checks/migration-safety.md"
+    ],
+    "autoRunOnPR": true
   },
   "contextManagement": {
     "useEngramMemory": true,
