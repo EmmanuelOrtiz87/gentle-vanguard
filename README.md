@@ -58,7 +58,7 @@ flowchart TB
     SDD --> DEV[DEV - Apply]
     SDD --> QA[QA - Verify]
 
-    BA --> SKILLS[133 Skills]
+    BA --> SKILLS[134 Skills]
     DEV --> SKILLS
     QA --> SKILLS
 
@@ -72,7 +72,7 @@ flowchart TB
 | **1. Agents** | Task delegation | 1 orchestrator + 15 sub-agents | `config/auto-delegation.json` |
 | **2. Commands** | CLI entry points | `gv.ps1`, `pre-process-input.ps1` | `config/orchestrator.json` |
 | **3. MCP Servers** | Protocol bridge | Model Context Protocol, Engram MCP | `skills/*/SKILL.md` |
-| **4. Skills** | Specialized execution | 133 skills (frontend, backend, DevOps, security, testing) | `config/skill-dependencies.json` |
+| **4. Skills** | Specialized execution | 134 skills (frontend, backend, DevOps, security, testing) | `config/skill-dependencies.json` |
 | **5. Memory** | Persistent context | Engram (hot/warm/cold tiers) | `config/engram-config.json` |
 
 ---
@@ -106,7 +106,7 @@ flowchart TB
 ## Key Features
 
 - **17 Specialized Agents** — Orchestrator + BA, SAD, DEV, QA, OPS, GOV, DOC, SESSION, PREMORTEM, FINANCE, LEGAL, MKT, SALES, HR, SELF-DIAG, BUS-TELE
-- **133 On-Demand Skills** — Angular, React, Next.js, Go, Django, Python, TypeScript, Docker, K8s, Playwright, Security, API Design — zero memory until triggered
+- **134 On-Demand Skills** — Angular, React, Next.js, Go, Django, Python, TypeScript, Docker, K8s, Playwright, Security, API Design — zero memory until triggered
 - **Persistent Engram Memory** — Cross-session context, conflict detection, auto-reconciliation
 - **Cost-Aware Model Router** — Per-agent model assignment with 3 profiles: fast/cheap, strong-reasoning, strong-coding
 - **Governance-First** — SDD lifecycle, 7D validation, judgment-day review, 16 CI/CD workflows
@@ -229,6 +229,6 @@ AES-256 encryption for secrets, API keys, and sensitive configs. See [SECURITY.m
 ---
 
 <p align="center">
-  <strong>Gentle-Vanguard v2.18.0</strong><br>
+  <strong>Gentle-Vanguard v2.19.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>
