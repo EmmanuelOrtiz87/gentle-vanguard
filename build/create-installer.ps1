@@ -65,7 +65,9 @@ if (-not (Test-Path (Join-Path $repoRoot 'keys\master.key'))) { $missing += "key
 
 $makeNsis = $null
 $nsisDirs = @(
-    'C:\Program Files (x86)\NSIS\makensis.exe',
+    'C:\Program Files (x86)\NSIS\Bin\makensis.exe'
+    'C:\Program Files (x86)\NSIS\makensis.exe'
+    'C:\Program Files\NSIS\Bin\makensis.exe'
     'C:\Program Files\NSIS\makensis.exe'
 )
 foreach ($dir in $nsisDirs) {
@@ -73,6 +75,20 @@ foreach ($dir in $nsisDirs) {
 }
 if (-not $makeNsis) {
     $makeNsis = (Get-Command makensis.exe -ErrorAction SilentlyContinue)?.Source
+}
+if (-not $makeNsis) {
+    # Fallback: search common NSIS install locations
+    $progDirs = @($env:ProgramFiles, "${env:ProgramFiles(x86)}") | Where-Object { $_ }
+    foreach ($base in $progDirs) {
+        $candidates = @(
+            "$base\NSIS\Bin\makensis.exe",
+            "$base\NSIS\makensis.exe"
+        )
+        foreach ($c in $candidates) {
+            if (Test-Path $c) { $makeNsis = $c; break }
+        }
+        if ($makeNsis) { break }
+    }
 }
 if (-not $makeNsis) { $missing += "makensis.exe (install NSIS 3+)" }
 
