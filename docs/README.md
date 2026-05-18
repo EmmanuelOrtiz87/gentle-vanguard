@@ -1,7 +1,7 @@
 # 🏛️ Gentle-Vanguard — AI Development Stack
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.16.0-brightgreen?style=for-the-badge" alt="Version 2.9.0">
+  <img src="https://img.shields.io/badge/Version-2.17.0-brightgreen?style=for-the-badge" alt="Version 2.17.0">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/Agents-18-orange?style=for-the-badge" alt="29 AI Agents">
@@ -404,7 +404,7 @@ MIT License — see [LICENSE](../LICENSE) for details.
 ---
 
 <p align="center">
-  <b>🏛️ Gentle-Vanguard v2.16.0 — Where governance, automation, and AI converge</b><br>
+  <b>🏛️ Gentle-Vanguard v2.17.0 — Where governance, automation, and AI converge</b><br>
   <i>18 Agents · 130+ Skills · 100% Local-First · Cross-Platform</i>
 </p>
 
