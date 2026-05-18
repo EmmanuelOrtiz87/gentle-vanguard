@@ -121,7 +121,7 @@ switch ($Action) {
         $data | Add-Member -NotePropertyName 'lastUpdate' -NotePropertyValue ($endTime.ToString("yyyy-MM-ddTHH:mm:ss")) -Force
         $data | Add-Member -NotePropertyName 'status' -NotePropertyValue 'completed' -Force
         
-        $startTime = [DateTime]::ParseExact($data.startTime, @('yyyy-MM-ddTHH:mm:ss', 'MM/dd/yyyy HH:mm:ss', 'yyyy-MM-dd HH:mm:ss', 'MM/dd/yyyy hh:mm:ss tt'), [System.Globalization.CultureInfo]::InvariantCulture, [System.Globalization.DateTimeStyles]::None)
+        try { $startTime = [DateTime]::Parse($data.startTime, [System.Globalization.CultureInfo]::InvariantCulture) } catch { $startTime = [DateTime]::ParseExact($data.startTime, @('yyyy-MM-ddTHH:mm:ss', 'MM/dd/yyyy HH:mm:ss', 'yyyy-MM-dd HH:mm:ss', 'MM/dd/yyyy hh:mm:ss tt', 'o'), [System.Globalization.CultureInfo]::InvariantCulture, [System.Globalization.DateTimeStyles]::None) }
         $data | Add-Member -NotePropertyName 'durationSeconds' -NotePropertyValue ([math]::Round(($endTime - $startTime).TotalSeconds, 0)) -Force
         
         $sessionFile = Join-Path $ProjectRoot ".session\$($data.sessionId).json"

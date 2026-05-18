@@ -57,12 +57,12 @@ Describe "Engram Memory System - Integration Tests" {
         
         It "Should load tool-specific configuration" {
             $config = Get-Content $script:OrchestratorPath | ConvertFrom-Json
-            ($config.orchestrator.toolProfiles -ne $null) | Should Be $true
+            ($config.toolProfiles -ne $null) | Should Be $true
         }
         
         It "Should apply tool-specific rules" {
             $config = Get-Content $script:OrchestratorPath | ConvertFrom-Json
-            ($config.orchestrator.toolProfiles.opencode -ne $null) | Should Be $true
+            ($config.toolProfiles.opencode -ne $null) | Should Be $true
         }
     }
     
