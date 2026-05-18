@@ -86,6 +86,7 @@ Gentle-Vanguard opera en **modo profesional** (equivalente a "neutral" de gentle
 9. **Skill Registry** — `.atl/skill-registry.md` is auto-maintained. Run `scripts/utilities/build-skill-registry.ps1` after installing/removing skills.
 10. Check `skills/` directory for reusable patterns before writing code
 11. Use Engram memory: `mem_search` for past decisions, `mem_save` after significant work
+12. **CodeGraph Integration** — Before modifying code, use `codegraph_context` to understand impact radius. If `pre-process-input.ps1` outputs `CODEGRAPH_CONTEXT_RECOMMENDED: true`, run `codegraph_context` before proceeding. After significant refactors, run `scripts/utilities/codegraph-post-modification-sync.ps1`. Autostart pipeline includes `codegraph-sync` step (index freshness check). CI validation available via `scripts/utilities/codegraph-ci-validate.ps1`.
 
 ## 🔴 BREAK GLASS — Auto-Override Harmful Config
 
@@ -139,6 +140,11 @@ Profile: **ultra** | Detail: **simple** | Chat: **chat-compact** (max 4 lines te
 | Model routing per agent | `config/model-routing.json` |
 | SDD configuration | `openspec/config.yaml` |
 | Skill registry (auto-generated) | `.atl/skill-registry.md` |
+| CodeGraph skill | `skills/codegraph-skill/SKILL.md` |
+| CodeGraph autostart sync | `scripts/utilities/codegraph-sync-autostart.ps1` |
+| CodeGraph post-mod sync | `scripts/utilities/codegraph-post-modification-sync.ps1` |
+| CodeGraph metrics tracker | `scripts/utilities/codegraph-metrics-tracker.ps1` |
+| CodeGraph CI validation | `scripts/utilities/codegraph-ci-validate.ps1` |
 | Performance | `rules/NORMATIVAS-PERFORMANCE.md` |
 
 ## 🆕 New Project & Modification Rules
