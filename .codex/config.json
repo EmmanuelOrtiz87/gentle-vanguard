@@ -2,6 +2,12 @@
   "name": "Codex - Gentle-Vanguard Workspace",
   "version": "1.1.0",
   "description": "Local-first policy for Codex CLI/IDE with reliability and safety controls",
+  "workspace": {
+    "projectRoot": ".",
+    "configFiles": ["opencode.json", "AGENTS.md", "CLAUDE.md", ".codex/config.json"],
+    "skillPaths": ["skills/", "~/.config/opencode/skills/"],
+    "skillRegistry": ".atl/skill-registry.md"
+  },
   "aiSettings": {
     "model": "gpt-5.5",
     "temperature": 0.3,
@@ -45,6 +51,28 @@
     "enabled": true,
     "script": "scripts/utilities/pre-process-input.ps1",
     "scriptArgs": { "UserInput": "USER_INPUT_HERE", "WorkspaceRoot": "." }
+  },
+  "skillEmulation": {
+    "enabled": true,
+    "note": "Codex no tiene skill tool nativo — los skills se cargan manualmente",
+    "criticalSkills": {
+      "documentation": "skills/documentation-governance/SKILL.md",
+      "sddLifecycle": "skills/sdd-lifecycle/SKILL.md",
+      "codeReview": "skills/code-review-orchestrator-skill/SKILL.md",
+      "sessionWorkflow": "skills/session-workflow-skill/SKILL.md",
+      "testing": ["skills/playwright-skill/SKILL.md", "skills/pytest-skill/SKILL.md"]
+    }
+  },
+  "contextManagement": {
+    "useEngramMemory": true,
+    "engramPaths": [".engram-data/", "scripts/.session/", "logs/"],
+    "useLocalSkills": true,
+    "useProjectDocs": true,
+    "memoryTiering": {
+      "hot": "active session",
+      "warm": "1 day",
+      "cold": "7 days"
+    }
   },
   "adaptiveOptimization": {
     "enabled": true,

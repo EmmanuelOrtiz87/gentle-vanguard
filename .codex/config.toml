@@ -9,6 +9,14 @@ web_search = "disabled"
 project_doc_max_bytes = 32768
 file_opener = "vscode"
 
+# Project docs for context
+project_docs = [
+  "docs/AGENTS.md",
+  ".atl/skill-registry.md",
+  "rules/AI-NORMATIVES.md",
+  "rules/DEVELOPMENT-STANDARDS.md"
+]
+
 # Keep Codex constrained to safe defaults in this repository.
 [sandbox_workspace_write]
 network_access = false
