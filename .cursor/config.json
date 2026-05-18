@@ -1,7 +1,7 @@
 {
   "name": "Cursor - Gentle-Vanguard Workspace",
-  "version": "1.0.0",
-  "description": "Local-first policy for Cursor IDE",
+  "version": "2.0.0",
+  "description": "Optimized for Cursor Agent Best Practices with modular rules, commands, and plans",
   "aiSettings": {
     "model": "claude-sonnet-4-5",
     "temperature": 0.3,
@@ -18,6 +18,17 @@
     "mandatory": true,
     "script": "scripts/utilities/pre-process-input.ps1",
     "scriptArgs": { "UserInput": "USER_INPUT_HERE", "WorkspaceRoot": "." }
+  },
+  "rules": {
+    "paths": [".cursor/rules/core-workflow.md", ".cursor/rules/commands.md", ".cursor/rules/code-style.md"]
+  },
+  "commands": {
+    "paths": [".cursor/commands/"],
+    "autoLoad": true
+  },
+  "plans": {
+    "directory": ".cursor/plans/",
+    "autoSave": true
   },
   "sessionManagement": {
     "autostart": "scripts/utilities/session-autostart.cmd",
