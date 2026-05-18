@@ -8,6 +8,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [2.18.0] - 2026-05-18 - Cross-Tool Nivelación + README Governance
+
+### Added
+
+- **Cross-tool skill/mem emulation**: Cline, Cursor, Windsurf, Codex, Copilot, Antigravity, Continue.dev now emulate skill and memory tools via adaptive profiles
+- **Antigravity adaptive profile**: Dedicated profile for Antigravity tool with session lifecycle hooks
+- **Tool detection improvements**: Phase 0.5 exports `GENTLE_VANGUARD_TOOL`, `_CONFIG`, `_PROMPT`, `_CONFIDENCE` as env vars
+- **Plugin system**: Phase 7 with `Initialize-Plugins`, `example-hello-world` enabled
+- **Enhanced detection**: Phase 8 with `enhanced-detect.ps1`
+- **Adaptive profiles**: 5 profiles for 10 tools (cursor, continue-dev, copilot, antigravity, codex added)
+- **Orchestrator**: 10 tool profiles in `orchestrator.json`
+- **SDD cleanup**: 300 zombie features removed from SDD state
+- **README governance policy**: `rules/README-GOVERNANCE.md` — mandatory sections, prohibited actions, modification protocol, baseline tracking
+- **README validation script**: `scripts/utilities/validate-readme.ps1` — automated governance checks
+- **README pre-commit hook**: `hooks/validate-readme-hook.ps1` — blocks commits that fail validation
+- **README restoration**: Both private and public READMEs restored to comprehensive format with Mermaid diagrams, architecture, agent ecosystem, skill catalog, CI/CD pipeline
+
+### Fixed
+
+- **MCP Bridge TypeScript**: `gentle-vanguardRoot` → `gentleVanguardRoot` (hyphen syntax error)
+- **README version badges**: Updated to v2.18.0
+- **Public README**: Added `sync-public.yml` to CI/CD pipeline table
+- **Agent count consistency**: READMEs now correctly state 16 agents (Orchestrator + 15 sub-agents)
+
+---
 ## [2.17.0] - 2026-05-18 - Cursor + Continue.dev Integration Sprint
 
 ### Added
