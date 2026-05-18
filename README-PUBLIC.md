@@ -6,9 +6,9 @@
 </p>
 
 <p align="center">
-<img src="https://img.shields.io/badge/Version-2.17.0-brightgreen?style=flat-square" alt="Version">
+<img src="https://img.shields.io/badge/Version-2.18.0-brightgreen?style=flat-square" alt="Version">
 
-  <strong>Gentle-Vanguard v2.17.0</strong><br>
+  <strong>Gentle-Vanguard v2.18.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em><br><br>
   <a href="https://github.com/EmmanuelOrtiz87/gentle-vanguard-public">GitHub</a>
   &nbsp;·&nbsp;

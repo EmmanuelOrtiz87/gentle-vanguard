@@ -391,8 +391,8 @@
       "communicationLang": "es",
       "supportsSkillTool": false,
       "supportsMemTools": false,
-      "adaptiveProfile": "scripts/utilities/adaptive-cursor-profile.ps1",
-      "note": "Antigravity — local-first config already minimal. Uses cursor adaptive profile for skill emulation."
+      "adaptiveProfile": "scripts/utilities/adaptive-antigravity-profile.ps1",
+      "note": "Antigravity — v2.0 config with full skill emulation and engram memory. Dedicated adaptive profile."
     },
     "claude-generic": {
       "promptFile": "CLAUDE.md",
