@@ -8,6 +8,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [2.17.0] - 2026-05-18 - Cursor + Continue.dev Integration Sprint
+
+### Added
+
+- **Cursor Agent Best Practices**: `.cursor/rules/` (3 modulos: core-workflow, commands, code-style), `.cursor/commands/` (7 comandos: pr, review, status, test, fix-issue, update-deps, continue-check), `.cursor/hooks.json` + `hooks/grind.ts` (stop hook), `.cursor/plans/` directory, `.cursor/config.json` v2.0.0
+- **Continue.dev Checks**: `.continue/checks/` (5 checks: security-review, test-coverage, documentation-freshness, dependency-audit, migration-safety), `.continue/config.json` v2.0.0 con `checks.paths` + `autoRunOnPR`
+- **Tool Detection**: Phase 0.5 exporta `GENTLE_VANGUARD_TOOL`, `_CONFIG`, `_PROMPT`, `_CONFIDENCE` como env vars
+- **Plugin System**: Phase 7 con `Initialize-Plugins`, `example-hello-world` habilitado
+- **Enhanced Detection**: Phase 8 con `enhanced-detect.ps1`
+- **Adaptive Profiles**: 5 perfiles para 10 herramientas (cursor, continue-dev, copilot, antigravity, codex agregados)
+- **Orchestrator**: 10 tool profiles en `orchestrator.json` (added: codex, continue-dev, copilot, antigravity)
+- **SDD Cleanup**: 300 features zombie removidas del SDD state
+
+### Fixed
+
+- **MCP Bridge TypeScript**: `gentle-vanguardRoot` → `gentleVanguardRoot` (hyphen syntax error)
+- **README**: Version badges actualizados a v2.17.0
+
 ## [2.16.0] - 2026-05-16 - Phase 3: Orchestration & Intelligence Sprint
 
 ### Added
