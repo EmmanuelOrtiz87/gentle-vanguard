@@ -1,7 +1,7 @@
 # 🏛️ Gentle-Vanguard Marketing Materials
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.16.0-brightgreen?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.17.0-brightgreen?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License">
 </p>
