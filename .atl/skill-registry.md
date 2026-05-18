@@ -24,13 +24,13 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 | SAD - Design | 13 |
 | SALES - Sales | 2 |
 | SESSION - Session | 2 |
-| *(unassigned)* | 7 |
+| CODEGRAPH - Code Intelligence | 1 |
 
 ## Skill-Agent Mapping
 
 | Agent | Skill | Trigger |
 |-------|-------|--------|
-| (unassigned) | codegraph-skill | "codegraph", "code graph", "symbol search", "call graph", "impact analysis", ... |
+| CODEGRAPH - Code Intelligence | codegraph-skill | "codegraph", "code graph", "symbol search", "call graph", "impact analysis", ... |
 | BA - Analysis | backlog-management-skill | "backlog", "triage", "roadmap", "feature intake" |
 | BA - Analysis | business |  |
 | BA - Analysis | customer-success-manager | "customer success", "retention", "churn", "health score", "NPS", "customer he... |
@@ -895,11 +895,17 @@ Delegators copy matching blocks into sub-agent prompts under Project Standards (
 - MUST save session summary via mem_save after significant work
 - MUST coordinate with project-orchestrator for technical guidance
 
-### *(Unassigned Skills)*
+### CODEGRAPH - Code Intelligence
 
 #### codegraph-skill
 
-- No compact rules extracted
+- Use `codegraph_context` before modifying any file to understand impact radius
+- Use `codegraph_affected` to find transitively affected test files
+- Trust CodeGraph results — don't re-verify with grep/read
+- Sync index after major refactors (`codegraph sync`)
+- Re-index on branch switch with significant changes (`codegraph index`)
+
+### *(Unassigned Skills)*
 
 ## Project Conventions
 
