@@ -109,6 +109,9 @@ README-IMPLEMENTATION.md
 scripts/docs/sessions/
 scripts/utilities/docs/sessions/
 
+# CodeGraph index (local-only, regenerated)
+.codegraph/
+
 # Dependencies
 node_modules/
 packages/
