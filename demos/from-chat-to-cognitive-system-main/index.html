@@ -22,7 +22,7 @@
         </div>
         <div class="status">
           <span id="mode-badge" class="mode-badge">NORMAL</span>
-          <span id="counter">01 / 48</span>
+          <span id="counter">01 / 64</span>
           <span class="hint">← → navegar · F focus</span>
         </div>
       </header>
@@ -78,8 +78,12 @@
             <div class="rail-dots" id="dots-8"></div>
           </div>
           <div class="rail-module" data-module="9">
-            <button class="rail-title" data-first="46">10. Cierre</button>
+            <button class="rail-title" data-first="54">10. Capas Ocultas</button>
             <div class="rail-dots" id="dots-9"></div>
+          </div>
+          <div class="rail-module" data-module="10">
+            <button class="rail-title" data-first="62">11. Cierre</button>
+            <div class="rail-dots" id="dots-10"></div>
           </div>
         </nav>
 
@@ -15869,16 +15873,162 @@
             </figure>
           </article>
 
-          <!-- M10: CIERRE (2) -->
+          <!-- M10: CAPAS OCULTAS (8) -->
 
           <article
             class="slide"
-            data-index="46"
-            data-module="9"
+            data-index="54"
+            data-module="10"
+            data-tone="purple"
+          >
+            <div class="slide-content">
+              <p class="slide-kicker">55 · Capas Ocultas</p>
+              <h2>10 herramientas, 1 stack: Tool-Agnostic Orchestration</h2>
+              <p>
+                Gentle-Vanguard funciona con OpenCode, Claude Code, Cline, Cursor, Windsurf, Codex, Continue.dev, Copilot, Antigravity y Claude Generic. Cada herramienta tiene su perfil adaptativo. Las herramientas sin skill/mem nativo reciben emulacion completa via skillRegistry y engramPaths.
+              </p>
+              <p>
+                <code>detect-tool.ps1</code> identifica automaticamente que herramienta esta corriendo y carga la configuracion correcta. Sin vendor lock-in: cambia de herramienta sin perder contexto ni skills.
+              </p>
+            </div>
+          </article>
+
+          <article
+            class="slide"
+            data-index="55"
+            data-module="10"
+            data-tone="purple"
+          >
+            <div class="slide-content">
+              <p class="slide-kicker">56 · Capas Ocultas</p>
+              <h2>Perfiles Adaptativos: Auto-Optimizacion Inteligente</h2>
+              <p>
+                6 perfiles adaptativos (opencode, claude-cline, cursor, codex-windsurf, continue-copilot, antigravity) detectan hora pico (9-15h Argentina) y presion de tokens. Automaticamente cambian a configuracion optimizada y restauran cuando el sistema se normaliza.
+              </p>
+              <p>
+                Modulo compartido <code>adaptive-common.ps1</code> elimina 606 lineas de duplicacion. Backup/restore garantiza que ninguna configuracion se pierde.
+              </p>
+            </div>
+          </article>
+
+          <article
+            class="slide"
+            data-index="56"
+            data-module="10"
+            data-tone="purple"
+          >
+            <div class="slide-content">
+              <p class="slide-kicker">57 · Capas Ocultas</p>
+              <h2>SDD Lifecycle: Spec-Driven Development</h2>
+              <p>
+                4 fases: BA Explore &rarr; SAD Design &rarr; DEV Implement &rarr; QA Verify. Cada fase tiene su agente especializado. <code>pre-process-input.ps1</code> analiza cada mensaje y rutea automaticamente.
+              </p>
+              <p>
+                Flag <code>PLAN_MODE_REQUIRED</code> impide saltar a implementacion sin exploracion. Config en <code>openspec/config.yaml</code> enforce TDD estricto por fase.
+              </p>
+            </div>
+          </article>
+
+          <article
+            class="slide"
+            data-index="57"
+            data-module="10"
+            data-tone="purple"
+          >
+            <div class="slide-content">
+              <p class="slide-kicker">58 · Capas Ocultas</p>
+              <h2>Judgment Day: 7D Validation Gates</h2>
+              <p>
+                7 dimensiones: Seguridad, Performance, Legibilidad, Mantenibilidad, Testabilidad, Documentacion, Arquitectura. Pre-commit hooks enforce quality gates antes de cada commit.
+              </p>
+              <p>
+                <code>agent-verify.ps1</code> ejecuta 16 checks. 393 unit tests en 40 archivos. TruffleHog scanning previene secret leaks. Resultado: ALL CHECKS PASS o el commit se rechaza.
+              </p>
+            </div>
+          </article>
+
+          <article
+            class="slide"
+            data-index="58"
+            data-module="10"
+            data-tone="purple"
+          >
+            <div class="slide-content">
+              <p class="slide-kicker">59 · Capas Ocultas</p>
+              <h2>Auto-Delegacion: 133 Skills, 15 Agentes, Zero Routing Manual</h2>
+              <p>
+                <code>config/auto-delegation.json</code> mapea keywords a skills y agentes. Cada mensaje de usuario se pre-procesa y rutea automaticamente. BA para exploracion, DEV para implementacion, DOC para documentacion.
+              </p>
+              <p>
+                Skills van desde SDD lifecycle hasta code review, desde Playwright hasta pytest. Sin delegacion manual — el sistema sabe que hacer.
+              </p>
+            </div>
+          </article>
+
+          <article
+            class="slide"
+            data-index="59"
+            data-module="10"
+            data-tone="purple"
+          >
+            <div class="slide-content">
+              <p class="slide-kicker">60 · Capas Ocultas</p>
+              <h2>Session Lifecycle: Nunca Pierdes Contexto</h2>
+              <p>
+                10 fases de autostart: health check, tool detection, orphan cleanup, session init, notifications, engram policy, optimization, skill registry, plugins, adaptive profiles.
+              </p>
+              <p>
+                <code>startup-summary.json</code> captura: hora pico, plataforma, session ID, workspace state. Orphan detection y cleanup previene sesiones stale. Token budget tracking con <code>session-metrics-tracker.ps1</code>. Watchtower health check al cierre.
+              </p>
+            </div>
+          </article>
+
+          <article
+            class="slide"
+            data-index="60"
+            data-module="10"
+            data-tone="purple"
+          >
+            <div class="slide-content">
+              <p class="slide-kicker">61 · Capas Ocultas</p>
+              <h2>Seguridad y Gobernanza: AES-256 Encrypted</h2>
+              <p>
+                298 scripts encriptados con AES-256 en <code>build/protected/</code>. Master key requerida para desencriptar y ejecutar. NSIS installer empaqueta todo en un unico <code>Gentle-Vanguard.exe</code>.
+              </p>
+              <p>
+                El repo publico contiene solo: bootstrap scripts, docs, artefactos encriptados, skill stubs. <code>sync-to-public.ps1</code> elimina todos los scripts plain-text antes de sincronizar. TruffleHog pre-commit hook escanea secrets.
+              </p>
+            </div>
+          </article>
+
+          <article
+            class="slide"
+            data-index="61"
+            data-module="10"
+            data-tone="purple"
+          >
+            <div class="slide-content">
+              <p class="slide-kicker">62 · Capas Ocultas</p>
+              <h2>v2.18.0: Cross-Tool Nivelacion</h2>
+              <p>
+                Skill emulation para las 10 herramientas. Antigravity tiene perfil adaptativo dedicado. NSIS detection corregido. DRY refactor elimina 606 lineas de duplicacion.
+              </p>
+              <p>
+                <strong>133 skills</strong> validados &middot; <strong>393 tests</strong> pasando &middot; <strong>16/16</strong> verification gates &middot; <strong>10 tools</strong> compatibles &middot; <strong>6 adaptive profiles</strong> &middot; <strong>v2.18.0</strong>
+              </p>
+            </div>
+          </article>
+
+          <!-- M11: CIERRE (2) -->
+
+          <article
+            class="slide"
+            data-index="62"
+            data-module="11"
             data-tone="blue"
           >
             <div class="slide-content">
-              <p class="slide-kicker">47 · Cierre</p>
+              <p class="slide-kicker">63 · Cierre</p>
               <h2>La diferencia: arquitectura alrededor del modelo</h2>
               <p>
                 El modelo es el motor. Pero un motor sin chasis, sin direccion y
@@ -16570,12 +16720,12 @@
 
           <article
             class="slide"
-            data-index="47"
-            data-module="9"
+            data-index="63"
+            data-module="11"
             data-tone="blue"
           >
             <div class="slide-content">
-              <p class="slide-kicker">48 · Cierre</p>
+              <p class="slide-kicker">64 · Cierre</p>
               <h2>Links, repos y próximos pasos</h2>
               <p>Todo open source. Links y repos en pantalla.</p>
             </div>
