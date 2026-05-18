@@ -35,6 +35,7 @@
     "LEGAL": { "model": "kimi-k2.6", "provider": "openrouter", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "legal-agent", "rationale": "LEGAL cumple normativa — Kimi K2.6 para precisión regulatoria" },
     "BUS-TELE": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.2, "hallucinationGuard": "high", "subagent": "general", "rationale": "Telemetría — Qwen, datos estructurados" },
     "PREMORTEM": { "model": "glm-5", "provider": "openrouter", "temperature": 0.5, "hallucinationGuard": "medium", "subagent": "premortem-agent", "rationale": "PREMORTEM analiza riesgos — GLM5 para razonamiento adversarial" },
+    "SELF-DIAG": { "model": "glm-5", "provider": "openrouter", "temperature": 0.15, "hallucinationGuard": "high", "subagent": "general", "rationale": "SELF-DIAG diagnóstico — GLM5 para precisión" },
     "SCRIPT-GOV": { "model": "glm-5", "provider": "openrouter", "temperature": 0.15, "hallucinationGuard": "high", "subagent": "sdd-verify", "rationale": "Script governance — hereda glm-5 de sdd-verify" },
     "GITFLOW-BRANCH": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "general", "rationale": "GitFlow — Qwen, tareas determinísticas" },
     "GITFLOW-PR": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "general" },

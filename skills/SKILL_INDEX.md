@@ -199,7 +199,8 @@ incidents, response coordination, mitigation, and recovery planning
 | Category              | Skills                                                                                                                                                                                        |
 | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Orchestrators**     | project-orchestrator, multi-agent-registry, session-workflow, skill-creator-skill                                                                                                             |
-| **Context & Process** | context-engineering, sdd, bdd-scenarios                                                                                                                                                       |
+| **Context & Process** | context-engineering, sdd, bdd-scenarios, optimizador-prompts                                                                                                                                  |
+| **Content & Comms**   | content-output-skill, humanizador-skill, presentaciones-visuales-skill                                                                                                                        |
 | **Frontend & Web**    | angular-spa, react-19, nextjs-15, tailwind-4, firecrawl-web, web-artifacts-builder, seo-audit, brand-guide                                                                                    |
 | **Mobile**            | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-kotlin-coroutines, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging |
 | **State**             | zustand-5                                                                                                                                                                                     |
@@ -211,7 +212,7 @@ incidents, response coordination, mitigation, and recovery planning
 | **AI**                | ai-sdk-5, mcp-skill, cloud-agent-connector, pretool-format-hook                                                                                                                               |
 | **Business**          | business-telemetry, backlog-management                                                                                                                                                        |
 | **Workflow**          | github-pr, jira-task, jira-epic, release-management, skill-factory                                                                                                                            |
-| **Quality**           | typescript, code-review, security, technical-debt, web-performance-optimization, judgment-day                                                                                                 |
+| **Quality**           | typescript, code-review, security, technical-debt, web-performance-optimization, judgment-day, verificador-datos                                                                              |
 | **Operations**        | observability, incident-response-plan                                                                                                                                                         |
 | **Governance**        | project-scaffolding, documentation-governance, architecture-governance, git-workflow, gentle-vanguard-manager                                                                                      |
 | **SDD Lifecycle**     | sdd-lifecycle (CONSOLIDATED - 9 phases in 1)                                                                                                                                                  |
@@ -245,6 +246,32 @@ sessions or agents
 **Trigger**: `BDD`, `gherkin`, `scenario`, `acceptance criteria`, `Given When Then`
 
 **Use when**: Writing behavior scenarios and turning requirements into testable acceptance criteria
+
+---
+
+### optimizador-prompts-skill
+
+**Trigger**: `mejora este prompt`, `conviértelo en un prompt`, `ordena esta idea`, `hazme un prompt para`, `optimiza esto para`, `improve this prompt`, `optimize prompt`, `structure this idea`, `create a prompt for`
+
+**Use when**: Transforming messy ideas, voice notes, or incomplete instructions into clear, structured prompts for any AI tool (Claude, ChatGPT, Midjourney, n8n, etc.)
+
+---
+
+## Content & Comms
+
+### humanizador-skill
+
+**Trigger**: `humaniza este texto`, `humanize text`, `de-ai text`, `make it sound natural`, `rewrite this`
+
+**Use when**: Rewriting AI-generated text to sound natural and human by removing generic phrases, inflated tone, and artificial patterns
+
+---
+
+### presentaciones-visuales-skill
+
+**Trigger**: `crea una presentación`, `convierte esto en slides`, `deck`, `diapositivas`, `presentación visual`, `create presentation`, `make slides`, `slide deck`, `HTML presentation`
+
+**Use when**: Creating self-contained HTML presentations from any content with professional design and clear narrative
 
 ---
 
@@ -723,6 +750,14 @@ regressions
 
 **Use when**: Debt assessment, maintainability reviews, remediation planning, and documenting debt
 records
+
+---
+
+### verificador-datos-skill
+
+**Trigger**: `verifica este texto`, `fact check`, `comprueba afirmaciones`, `revisa errores`, `verify claims`, `check for errors`, `validate information`, `verify this text`
+
+**Use when**: Fact-checking texts, detecting errors, exaggerations, and unverifiable claims before publishing or sending
 
 ---
 
