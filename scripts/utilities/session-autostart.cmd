@@ -218,6 +218,22 @@ if exist "%ADAPTIVE_CC%" (
     if errorlevel 1 ( echo [WARN] Adaptive Claude/Cline profile had warnings ) else ( echo [OK] Adaptive Claude/Cline profile checked )
 ) else ( echo [SKIP] adaptive-claude-cline-profile.ps1 not found )
 
+REM === Phase 9.4: Adaptive Cursor Profile ===
+echo [9.4/10] Adaptive Cursor profile...
+set ADAPTIVE_CURSOR=%UTILS_DIR%\adaptive-cursor-profile.ps1
+if exist "%ADAPTIVE_CURSOR%" (
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%ADAPTIVE_CURSOR%" -Mode Auto -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15
+    if errorlevel 1 ( echo [WARN] Adaptive Cursor profile had warnings ) else ( echo [OK] Adaptive Cursor profile checked )
+) else ( echo [SKIP] adaptive-cursor-profile.ps1 not found )
+
+REM === Phase 9.45: Adaptive Continue/Copilot Profile ===
+echo [9.45/10] Adaptive Continue/Copilot profile...
+set ADAPTIVE_CONTINUE=%UTILS_DIR%\adaptive-continue-copilot-profile.ps1
+if exist "%ADAPTIVE_CONTINUE%" (
+    pwsh -NoProfile -ExecutionPolicy Bypass -File "%ADAPTIVE_CONTINUE%" -Mode Auto -TimeZone "Argentina Standard Time" -PeakStart 9 -PeakEnd 15
+    if errorlevel 1 ( echo [WARN] Adaptive Continue/Copilot profile had warnings ) else ( echo [OK] Adaptive Continue/Copilot profile checked )
+) else ( echo [SKIP] adaptive-continue-copilot-profile.ps1 not found )
+
 REM === Phase 9.5: Workspace State Warning ===
 set WORKSPACE_STATE=unknown
 set DIRTY_STATE_SCRIPT=%UTILS_DIR%\get-workspace-dirty-state.ps1
