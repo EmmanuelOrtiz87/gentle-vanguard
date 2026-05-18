@@ -11,7 +11,7 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 |-------|--------|
 | BA - Analysis | 6 |
 | DEV - Code | 20 |
-| DOC - Documentation | 5 |
+| DOC - Documentation | 6 |
 | FINANCE - Finance | 1 |
 | GOV - Governance | 8 |
 | HR - Talent | 1 |
@@ -23,7 +23,7 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 | SAD - Design | 6 |
 | SALES - Sales | 2 |
 | SESSION - Session | 1 |
-| *(unassigned)* | 58 |
+| *(unassigned)* | 57 |
 
 ## Skill-Agent Mapping
 
@@ -69,7 +69,6 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 | (unassigned) | monitoring-aggregator | User mentions "analyze metrics" or "analizar mtricas" |
 | (unassigned) | multi-agent-registry | delegate task, specialized agent, sub-agent routing, dispatch agent |
 | (unassigned) | operations-manager | "operations", "process improvement", "vendor management", "SOP", "resource pl... |
-| (unassigned) | optimizador-prompts-skill | "mejora este prompt", "conviértelo en un prompt", "ordena esta idea", "hazme ... |
 | (unassigned) | parallel-execution-limits | User mentions "parallel execution", "ejecucin paralela", or "execution limits" |
 | (unassigned) | post-session-learning-skill | "post-session", "learning", "auto-aprendizaje", "improvement proposals", "mej... |
 | (unassigned) | pretool-format-hook-skill | "auto-format", "pretool", "format hook", "format before save" |
@@ -115,8 +114,9 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 | DEV - Code | zustand-5-skill | "Zustand", "state management", "store", "useStore", "persistence" |
 | DOC - Documentation | content-output-skill | "post", "twitter", "linkedin", "redes", "social", "marketing", "promocionar",... |
 | DOC - Documentation | documentation-governance | creating or updating README, ARCHITECTURE, setup guides, code reviews, script... |
-| DOC - Documentation | humanizador-skill | "humaniza este texto", "haz que no suene a IA", "hazlo más natural", "hazlo m... |
-| DOC - Documentation | presentaciones-visuales-skill | "crea una presentación", "haz slides de esto", "convierte esto en slides", "d... |
+| DOC - Documentation | humanizador-skill | "humaniza este texto", "humanize this text", "make it sound natural", "remove... |
+| DOC - Documentation | optimizador-prompts-skill | "mejora este prompt", "conviértelo en un prompt", "ordena esta idea", "hazme ... |
+| DOC - Documentation | presentaciones-visuales-skill | "crea una presentación", "convierte esto en slides", "deck", "diapositivas", ... |
 | DOC - Documentation | reporting-skill | "informe", "report", "reporte", "mtricas", "metrics", "dashboard", "gerencia"... |
 | FINANCE - Finance | finance-financial-analyst | "financial model", "forecast", "scenario analysis", "variance", "budget", "ca... |
 | GOV - Governance | comment-writer | PR feedback, issue replies, reviews, Slack messages, or GitHub comments |
@@ -301,6 +301,10 @@ Delegators copy matching blocks into sub-agent prompts under Project Standards (
 - Use numbered steps when order matters
 
 #### humanizador-skill
+
+- No compact rules extracted
+
+#### optimizador-prompts-skill
 
 - No compact rules extracted
 
@@ -808,10 +812,6 @@ Delegators copy matching blocks into sub-agent prompts under Project Standards (
 - MUST route via `config/subagent-mapping.json`
 
 #### operations-manager
-
-- No compact rules extracted
-
-#### optimizador-prompts-skill
 
 - No compact rules extracted
 
