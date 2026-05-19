@@ -27,14 +27,35 @@ jobs:
           # In PRs we gate new changes; scanning full history causes legacy leaks to block unrelated work.
           fetch-depth: 1
 
+      - name: Detect gitleaks config
+        id: detect-config
+        shell: bash
+        run: |
+          if [ -f .gitleaks.toml ]; then
+            echo "config_arg=config-path: .gitleaks.toml" >> "$GITHUB_OUTPUT"
+            echo "has_config=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_config=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::No .gitleaks.toml found — using default gitleaks rules"
+          fi
+
       - uses: gacts/gitleaks@v1
         id: gitleaks
+        if: steps.detect-config.outputs.has_config == 'true'
         with:
           version: latest
           config-path: .gitleaks.toml
 
+      - name: Run gitleaks with defaults
+        if: steps.detect-config.outputs.has_config == 'false'
+        uses: gacts/gitleaks@v1
+        with:
+          version: latest
+
       - name: Upload SARIF artifact
-        if: ${{ always() && steps.gitleaks.outputs.sarif != '' }}
+        if:
+          ${{ always() && (steps.gitleaks.outputs.sarif != '' ||
+          steps.detect-config.outputs.has_config == 'false') }}
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: ${{ steps.gitleaks.outputs.sarif }}
