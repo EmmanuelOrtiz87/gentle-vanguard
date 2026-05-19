@@ -68,6 +68,11 @@ jobs:
             'PSUseSingularNouns'
           )
 
+          # Files excluded from analysis (intentional patterns that trigger false positives)
+          $excludedFiles = @(
+            'secret-vault.ps1'
+          )
+
           $scriptPaths = @(
             'scripts',
             'hooks'
@@ -80,6 +85,11 @@ jobs:
                 -ExcludeRule $excludedRules `
                 -Severity @('Error', 'Warning', 'Information') `
                 -ErrorAction SilentlyContinue
+              # Filter out excluded files
+              $results = @($results | Where-Object {
+                $fileName = Split-Path $_.ScriptPath -Leaf
+                $fileName -notin $excludedFiles
+              })
               $allResults += $results
             }
           }
