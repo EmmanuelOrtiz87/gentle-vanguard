@@ -236,7 +236,60 @@ if (-not (Test-Path "$publicRepo\INSTALLATION.md")) {
 }
 
 # ============================================================================
-# 9. CI-required scripts (minimal set for workflows to pass)
+# 9. Cleanup FIRST: remove plain-text artifacts that shouldn't be in public repo
+#     (MUST run BEFORE CI scripts copy to avoid deleting just-copied files)
+# ============================================================================
+Write-Output "[CLEANUP] Removing plain-text artifacts..."
+
+# Remove stray plain-text scripts (bootstrap dir is the only exception)
+$strayScriptDirs = @(
+    "$publicRepo\scripts\utilities",
+    "$publicRepo\scripts\monitoring",
+    "$publicRepo\scripts\security",
+    "$publicRepo\scripts\git-hooks",
+    "$publicRepo\scripts\validation",
+    "$publicRepo\scripts\project",
+    "$publicRepo\scripts\diagnostics",
+    "$publicRepo\scripts\docs",
+    "$publicRepo\scripts\testing",
+    "$publicRepo\scripts\sre",
+    "$publicRepo\scripts\core"
+)
+foreach ($dir in $strayScriptDirs) {
+    if (Test-Path $dir) {
+        Remove-Item $dir -Recurse -Force -ErrorAction SilentlyContinue
+        Write-Output "    Removed: $dir"
+    }
+}
+
+# Remove stray plain-text script files at scripts/ root level (except bootstrap dir and run-tests-simple.ps1)
+Get-ChildItem "$publicRepo\scripts" -File -ErrorAction SilentlyContinue | Where-Object {
+    $_.Name -ne 'run-tests-simple.ps1'
+} | ForEach-Object {
+    Remove-Item $_.FullName -Force -ErrorAction SilentlyContinue
+    Write-Output "    Removed: scripts/$($_.Name)"
+}
+
+# Remove plain-text skills root (should only exist in protected/ and public/)
+$plainSkills = "$publicRepo\skills"
+if (Test-Path $plainSkills) {
+    Remove-Item $plainSkills -Recurse -Force -ErrorAction SilentlyContinue
+    Write-Output "    Removed: skills/ (plain text - use protected/skills/ or public/skills/)"
+}
+
+# Remove plain-text config files that are NOT examples (actual routing/IP)
+Get-ChildItem "$publicRepo\config" -ErrorAction SilentlyContinue | Where-Object {
+    $_.Name -notlike "*.example.*" -and $_.Name -ne "README.md" -and $_.Name -ne "PSScriptAnalyzerSettings.psd1"
+} | ForEach-Object {
+    Remove-Item $_.FullName -Force -ErrorAction SilentlyContinue
+    Write-Output "    Removed: config/$($_.Name)"
+}
+
+Write-Output ""
+
+# ============================================================================
+# 10. CI-required scripts (minimal set for workflows to pass)
+#     Runs AFTER cleanup so these files are preserved
 # ============================================================================
 Write-Output "[CI] Syncing CI-required scripts..."
 
@@ -253,9 +306,10 @@ $ciScripts = @(
     @{ Src = 'scripts\monitoring\cross-workspace-validator.ps1'; Dst = 'scripts\monitoring\cross-workspace-validator.ps1' },
     @{ Src = 'scripts\utilities\SKILLS-TOOLS\plugins-discovery.ps1'; Dst = 'scripts\utilities\SKILLS-TOOLS\plugins-discovery.ps1' },
     @{ Src = 'scripts\diagnostics\validate-sdd-governance.ps1'; Dst = 'scripts\diagnostics\validate-sdd-governance.ps1' },
-    @{ Src = 'scripts\utilities\wf.ps1'; Dst = 'scripts\utilities\wf.ps1' },
+    @{ Src = 'scripts\utilities\gv.ps1'; Dst = 'scripts\utilities\gv.ps1' },
     @{ Src = 'scripts\diagnostics\agent-process-alert.ps1'; Dst = 'scripts\diagnostics\agent-process-alert.ps1' },
-    @{ Src = 'scripts\utilities\UTILITIES\gentle-vanguard-sync.ps1'; Dst = 'scripts\utilities\UTILITIES\gentle-vanguard-sync.ps1' }
+    @{ Src = 'scripts\utilities\UTILITIES\gentle-vanguard-sync.ps1'; Dst = 'scripts\utilities\UTILITIES\gentle-vanguard-sync.ps1' },
+    @{ Src = 'scripts\utilities\TELEMETRY-METRICS\generate-dashboard.ps1'; Dst = 'scripts\utilities\TELEMETRY-METRICS\generate-dashboard.ps1' }
 )
 
 foreach ($ci in $ciScripts) {
@@ -272,7 +326,7 @@ foreach ($ci in $ciScripts) {
 }
 
 # ============================================================================
-# 9b. CI-required config and root files
+# 10b. CI-required config and root files
 # ============================================================================
 Write-Output "[CI] Syncing CI-required config and root files..."
 
@@ -281,8 +335,7 @@ $ciFiles = @(
     'package.json',
     'package-lock.json',
     '.prettierrc',
-    '.prettierignore',
-    'PSScriptAnalyzerSettings.psd1'
+    '.prettierignore'
 )
 
 foreach ($f in $ciFiles) {
@@ -296,50 +349,92 @@ foreach ($f in $ciFiles) {
     }
 }
 
-# ============================================================================
-# 9c. Cleanup: remove any plain-text artifacts that shouldn't be in public repo
-# ============================================================================
-Write-Output " Cleaning up plain-text artifacts..."
+# PSScriptAnalyzerSettings.psd1 lives in config/ in the private repo
+$pssaSrc = Join-Path $privateRepo 'config\PSScriptAnalyzerSettings.psd1'
+$pssaDst = Join-Path $publicRepo 'config\PSScriptAnalyzerSettings.psd1'
+if (Test-Path $pssaSrc) {
+    if (-not (Test-Path (Split-Path $pssaDst -Parent))) {
+        New-Item -ItemType Directory -Path (Split-Path $pssaDst -Parent) -Force | Out-Null
+    }
+    Copy-Item $pssaSrc $pssaDst -Force
+    Write-Output "  [OK] config/PSScriptAnalyzerSettings.psd1"
+} elseif (Test-Path (Join-Path $privateRepo 'PSScriptAnalyzerSettings.psd1')) {
+    Copy-Item (Join-Path $privateRepo 'PSScriptAnalyzerSettings.psd1') $pssaDst -Force
+    Write-Output "  [OK] PSScriptAnalyzerSettings.psd1 (from root)"
+} else {
+    Write-Output "  [WARN] PSScriptAnalyzerSettings.psd1 not found"
+}
 
-# Remove stray plain-text scripts (bootstrap dir is the only exception)
-$strayScriptDirs = @(
-    "$publicRepo\scripts\utilities",
-    "$publicRepo\scripts\monitoring",
-    "$publicRepo\scripts\security",
-    "$publicRepo\scripts\git-hooks",
-    "$publicRepo\scripts\validation",
-    "$publicRepo\scripts\project",
-    "$publicRepo\scripts\diagnostics",
-    "$publicRepo\scripts\docs",
-    "$publicRepo\scripts\testing"
+# ============================================================================
+# 10c. CI-required test files (minimal set for cross-platform tests)
+# ============================================================================
+Write-Output "[CI] Syncing CI-required test files..."
+
+$ciTestDirs = @(
+    'tests\unit'
 )
-foreach ($dir in $strayScriptDirs) {
-    if (Test-Path $dir) {
-        Remove-Item $dir -Recurse -Force -ErrorAction SilentlyContinue
-        Write-Output "    Removed: $dir"
+foreach ($dir in $ciTestDirs) {
+    $src = Join-Path $privateRepo $dir
+    $dst = Join-Path $publicRepo $dir
+    if (Test-Path $src) {
+        if (Test-Path $dst) { Remove-Item $dst -Recurse -Force -ErrorAction SilentlyContinue }
+        Copy-Item $src "$publicRepo\$dir" -Recurse -Force
+        Write-Output "  [OK] $dir"
+    } else {
+        Write-Output "  [WARN] $dir not found in private repo"
     }
 }
 
-# Remove plain-text skills root (should only exist in protected/ and public/)
-$plainSkills = "$publicRepo\skills"
-if (Test-Path $plainSkills) {
-    Remove-Item $plainSkills -Recurse -Force -ErrorAction SilentlyContinue
-    Write-Output "    Removed: skills/ (plain text - use protected/skills/ or public/skills/)"
-}
+# ============================================================================
+# 10d. CI-required workflows (adapted for public repo: develop → main)
+# ============================================================================
+Write-Output "[CI] Syncing CI-required workflows (branch: develop → main)..."
 
-# Remove plain-text config files that are NOT examples (actual routing/IP)
-$plainConfigs = @('auto-delegation.json', 'orchestrator.json', 'model-router.json', 'workspace.config.json', 'adaptive-patterns.json', 'owner-mapping.json', 'auto-delegation*.json')
-Get-ChildItem "$publicRepo\config" -ErrorAction SilentlyContinue | Where-Object {
-    $_.Name -notlike "*.example.*" -and $_.Name -ne "README.md"
-} | ForEach-Object {
-    Remove-Item $_.FullName -Force -ErrorAction SilentlyContinue
-    Write-Output "    Removed: config/$($_.Name)"
+$ciWorkflows = @(
+    'autonomous-validation.yml',
+    'cross-platform-tests.yml',
+    'dashboard-auto-refresh.yml',
+    'format-check.yml',
+    'gentle-vanguard-quality-gate.yml',
+    'gitleaks.yml',
+    'labeler.yml',
+    'ps-lint.yml',
+    'script-governance.yml',
+    'security-scan.yml',
+    'test-suite.yml',
+    'workflow-lint.yml'
+)
+
+$workflowSrcDir = Join-Path $privateRepo '.github\workflows'
+$workflowDstDir = Join-Path $publicRepo '.github\workflows'
+if (-not (Test-Path $workflowDstDir)) { New-Item -ItemType Directory -Path $workflowDstDir -Force | Out-Null }
+
+foreach ($wf in $ciWorkflows) {
+    $src = Join-Path $workflowSrcDir $wf
+    $dst = Join-Path $workflowDstDir $wf
+    if (Test-Path $src) {
+        $content = Get-Content $src -Raw
+        # Adapt branch triggers for public repo: develop → main
+        $adapted = $content -replace "branches:\s*\[\s*develop\s*\]", "branches: [main]"
+        $adapted = $adapted -replace "branches:\s*\[\s*main,\s*develop\s*\]", "branches: [main]"
+        $adapted = $adapted -replace "branches:\s*\[\s*develop,\s*main\s*\]", "branches: [main]"
+        $adapted = $adapted -replace "branches:\s*\[\s*'main',\s*'develop'\s*\]", "branches: ['main']"
+        $adapted = $adapted -replace "branches:\s*\[\s*'develop',\s*'main'\s*\]", "branches: ['main']"
+        $adapted = $adapted -replace "branches:\s*\[\s*'develop'\s*\]", "branches: ['main']"
+        $adapted = $adapted -replace "branches:\s*\[\s*'main',\s*'develop'\s*\]", "branches: ['main']"
+        # Remove sync-public workflow trigger (not applicable in public repo)
+        $adapted = $adapted -replace "branches:\s*\[\s*'develop'\s*\]", "branches: ['main']"
+        Set-Content $dst $adapted -Force
+        Write-Output "  [OK] .github/workflows/$wf (adapted)"
+    } else {
+        Write-Output "  [WARN] .github/workflows/$wf not found in private repo"
+    }
 }
 
 Write-Output ""
 
 # ============================================================================
-# 10. Commit and push to public repo
+# 11. Commit and push to public repo
 # ============================================================================
 if (-not $skipPush) {
     Push-Location $publicRepo
