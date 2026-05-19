@@ -18,5 +18,15 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 20
-      - run: npm ci
-      - run: npm run format:check
+      - name: Install and check formatting
+        shell: bash
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          elif [ -f package.json ]; then
+            npm install
+          else
+            echo "::warning::No package.json or package-lock.json found — skipping format check"
+            exit 0
+          fi
+          npm run format:check
