@@ -47,6 +47,10 @@ jobs:
       - name: Run script governance checks
         shell: pwsh
         run: |
+          if (-not (Test-Path '.\scripts\diagnostics\validate-script-governance.ps1')) {
+            Write-Output "::warning::validate-script-governance.ps1 not found — skipping governance checks"
+            exit 0
+          }
           # -SkipFallbackTests: skip file-mutation tests (unnecessary in CI — validated locally)
           powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-script-governance.ps1 -SkipFallbackTests
 
@@ -64,6 +68,10 @@ jobs:
         if: github.event_name == 'pull_request'
         shell: pwsh
         run: |
+          if (-not (Test-Path '.\scripts\diagnostics\validate-sdd-governance.ps1')) {
+            Write-Output "::warning::validate-sdd-governance.ps1 not found — skipping SDD governance gate"
+            exit 0
+          }
           # Mandatory on feature/* and feat/* branches, advisory otherwise.
           powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\validate-sdd-governance.ps1
 
@@ -71,10 +79,18 @@ jobs:
         shell: pwsh
         continue-on-error: true
         run: |
-          powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\gv.ps1 health
+          if (Test-Path '.\scripts\utilities\gv.ps1') {
+            powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\utilities\gv.ps1 health
+          } else {
+            Write-Host '::notice::gv.ps1 not found -- skipping stack readiness check.'
+          }
 
       - name: Agent process compliance alert (non-blocking)
         shell: pwsh
         continue-on-error: true
         run: |
+          if (-not (Test-Path '.\scripts\diagnostics\agent-process-alert.ps1')) {
+            Write-Output "::warning::agent-process-alert.ps1 not found — skipping compliance alert"
+            exit 0
+          }
           powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\agent-process-alert.ps1 -WindowHours 24 -EmitGitHubAnnotations

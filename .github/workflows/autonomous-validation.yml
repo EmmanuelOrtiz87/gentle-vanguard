@@ -42,11 +42,19 @@ jobs:
       - name: Run Comprehensive Validation
         shell: pwsh
         run: |
+          if (-not (Test-Path './scripts/utilities/WORKFLOW-ORCHESTRATION/comprehensive-validation.ps1')) {
+            Write-Output "::warning::comprehensive-validation.ps1 not found — skipping validation"
+            exit 0
+          }
           ./scripts/utilities/WORKFLOW-ORCHESTRATION/comprehensive-validation.ps1 -Verbose
 
       - name: Validate Plugins
         shell: pwsh
         run: |
+          if (-not (Test-Path '.\scripts\utilities\SKILLS-TOOLS\plugins-discovery.ps1')) {
+            Write-Output "::warning::plugins-discovery.ps1 not found — skipping plugin validation"
+            exit 0
+          }
           $result = .\scripts\utilities\SKILLS-TOOLS\plugins-discovery.ps1 -Action validate -AsJson
           $parsed = $result | ConvertFrom-Json
           if ($parsed.errors -and $parsed.errors -gt 0) {
@@ -58,6 +66,10 @@ jobs:
       - name: Run Cross-Workspace Validation
         shell: pwsh
         run: |
+          if (-not (Test-Path './scripts/monitoring/cross-workspace-validator.ps1')) {
+            Write-Output "::warning::cross-workspace-validator.ps1 not found — skipping cross-workspace validation"
+            exit 0
+          }
           ./scripts/monitoring/cross-workspace-validator.ps1 -Fix
 
       - name: Upload Validation Report

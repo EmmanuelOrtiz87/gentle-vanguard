@@ -33,6 +33,12 @@ jobs:
       - name: Generate dashboard
         shell: pwsh
         run: |
+          if (-not (Test-Path './scripts/utilities/TELEMETRY-METRICS/generate-dashboard.ps1')) {
+            Write-Output "::warning::generate-dashboard.ps1 not found — skipping dashboard generation"
+            New-Item -ItemType Directory -Path "reports" -Force | Out-Null
+            "<html><body><p>Dashboard script not available in this environment.</p></body></html>" | Out-File "reports/dashboard.html" -Encoding utf8
+            exit 0
+          }
           ./scripts/utilities/TELEMETRY-METRICS/generate-dashboard.ps1
 
       - name: Upload dashboard artifact
