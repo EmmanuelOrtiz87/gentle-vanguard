@@ -3,7 +3,7 @@
 **Version**: 1.0.0  
 **Date**: May 12, 2026  
 **Status**: Active  
-**Author**: Gentle-Vanguard Governance Team  
+**Author**: Gentle-Vanguard Governance Team
 
 ---
 
@@ -61,6 +61,7 @@ Gentle-Vanguard projects MUST implement the following architectural layers:
 #### 1.2 Layer Responsibilities
 
 **Presentation Layer**:
+
 - Handle user input/output
 - Format responses
 - Validate user requests
@@ -68,6 +69,7 @@ Gentle-Vanguard projects MUST implement the following architectural layers:
 - NO business logic allowed
 
 **Application Layer**:
+
 - Orchestrate business processes
 - Coordinate between layers
 - Handle transactions
@@ -75,18 +77,21 @@ Gentle-Vanguard projects MUST implement the following architectural layers:
 - NO direct data access
 
 **Domain Layer**:
+
 - Define core entities
 - Implement business rules
 - Define value objects
 - NO infrastructure dependencies
 
 **Infrastructure Layer**:
+
 - Data persistence
 - External service integration
 - Resource management
 - NO business logic
 
 **Cross-Cutting Concerns**:
+
 - Logging and monitoring
 - Security and authentication
 - Caching strategies
@@ -106,20 +111,16 @@ Gentle-Vanguard projects MUST implement the following architectural layers:
 
 Each component MUST have a single, well-defined responsibility:
 
-**Controllers**: Handle HTTP requests/responses
-**Services**: Implement business logic
-**Repositories**: Manage data access
-**Entities**: Represent domain objects
-**DTOs**: Transfer data between layers
-**Validators**: Validate input/output
-**Mappers**: Transform between types
-**Factories**: Create complex objects
-**Strategies**: Implement algorithms
-**Decorators**: Add behavior to objects
+**Controllers**: Handle HTTP requests/responses **Services**: Implement business logic
+**Repositories**: Manage data access **Entities**: Represent domain objects **DTOs**: Transfer data
+between layers **Validators**: Validate input/output **Mappers**: Transform between types
+**Factories**: Create complex objects **Strategies**: Implement algorithms **Decorators**: Add
+behavior to objects
 
 #### 2.2 Single Responsibility Principle
 
 Each component MUST:
+
 - Have ONE reason to change
 - Implement ONE responsibility
 - Be testable in isolation
@@ -148,6 +149,7 @@ Each component MUST:
 #### 4.1 Interface Contracts
 
 All interfaces MUST:
+
 - Have clear, descriptive names
 - Define complete contracts
 - Include documentation
@@ -157,6 +159,7 @@ All interfaces MUST:
 #### 4.2 API Design
 
 APIs MUST:
+
 - Be RESTful (for HTTP APIs)
 - Use consistent naming
 - Version appropriately
@@ -198,29 +201,35 @@ APIs MUST:
 #### 1.2 Naming by Type
 
 **Classes/Types**:
+
 - PascalCase
 - Noun form
 - Example: `UserRepository`, `PaymentService`
 
 **Functions/Methods**:
+
 - camelCase
 - Verb form
 - Example: `getUserById()`, `validateEmail()`
 
 **Variables**:
+
 - camelCase
 - Noun form
 - Example: `userName`, `totalAmount`
 
 **Constants**:
+
 - UPPER_SNAKE_CASE
 - Example: `MAX_RETRIES`, `DEFAULT_TIMEOUT`
 
 **Private Members**:
+
 - Prefix with underscore
 - Example: `_internalState`, `_cache`
 
 **Booleans**:
+
 - Prefix with `is`, `has`, `can`, `should`
 - Example: `isActive`, `hasPermission`, `canDelete`
 
@@ -229,6 +238,7 @@ APIs MUST:
 #### 2.1 File Structure
 
 Each file MUST:
+
 - Contain ONE primary class/function
 - Have related utilities grouped
 - Be under 500 lines
@@ -238,6 +248,7 @@ Each file MUST:
 #### 2.2 Class Organization
 
 Within classes, order MUST be:
+
 1. Constants
 2. Static properties
 3. Instance properties
@@ -249,6 +260,7 @@ Within classes, order MUST be:
 #### 2.3 Method Organization
 
 Within methods:
+
 - Declarations first
 - Logic second
 - Returns last
@@ -259,6 +271,7 @@ Within methods:
 #### 3.1 Comment Types
 
 **File Headers**:
+
 ```typescript
 /**
  * Module description
@@ -269,10 +282,11 @@ Within methods:
 ```
 
 **Class Documentation**:
+
 ```typescript
 /**
  * Brief description
- * 
+ *
  * Detailed description if needed
  * @example
  * const instance = new MyClass();
@@ -280,6 +294,7 @@ Within methods:
 ```
 
 **Method Documentation**:
+
 ```typescript
 /**
  * What the method does
@@ -302,6 +317,7 @@ Within methods:
 #### 4.1 Error Types
 
 All errors MUST:
+
 - Extend base Error class
 - Have descriptive messages
 - Include error codes
@@ -316,12 +332,12 @@ try {
 } catch (error) {
   // Log error
   logger.error('Operation failed', { error, context });
-  
+
   // Transform if needed
   if (error instanceof ValidationError) {
     throw new BadRequestError(error.message);
   }
-  
+
   // Re-throw or handle
   throw error;
 }
@@ -330,6 +346,7 @@ try {
 #### 4.3 Error Codes
 
 Error codes MUST:
+
 - Be unique
 - Be documented
 - Follow pattern: `[LAYER]_[COMPONENT]_[ERROR_TYPE]`
@@ -348,6 +365,7 @@ Error codes MUST:
 #### 5.2 Logging Format
 
 All logs MUST include:
+
 - Timestamp
 - Log level
 - Logger name
@@ -372,6 +390,7 @@ All logs MUST include:
 #### 1.1 Validation Rules
 
 All configuration MUST:
+
 - Be validated at startup
 - Have schema definitions
 - Include default values
@@ -404,6 +423,7 @@ All configuration MUST:
 #### 3.1 Secret Handling
 
 Secrets MUST:
+
 - Never be committed to repository
 - Be stored in secure vault
 - Be rotated regularly
@@ -424,18 +444,21 @@ Secrets MUST:
 #### 4.1 Environment Types
 
 **Development**:
+
 - Local development
 - Mock services
 - Verbose logging
 - No data restrictions
 
 **Staging**:
+
 - Production-like
 - Real services
 - Production data (anonymized)
 - Performance testing
 
 **Production**:
+
 - High availability
 - Real services
 - Real data
@@ -444,6 +467,7 @@ Secrets MUST:
 #### 4.2 Environment Configuration
 
 Each environment MUST have:
+
 - Separate configuration file
 - Environment-specific secrets
 - Appropriate logging levels
@@ -590,30 +614,35 @@ tests/
 #### 1.1 Documentation Levels
 
 **Level 1: README**
+
 - Project overview
 - Quick start
 - Key features
 - Links to detailed docs
 
 **Level 2: Getting Started**
+
 - Installation
 - Configuration
 - First steps
 - Common tasks
 
 **Level 3: User Guide**
+
 - Feature documentation
 - Use cases
 - Examples
 - Troubleshooting
 
 **Level 4: Developer Guide**
+
 - Architecture
 - API documentation
 - Code examples
 - Contributing guide
 
 **Level 5: Operations Guide**
+
 - Deployment
 - Monitoring
 - Maintenance
@@ -624,6 +653,7 @@ tests/
 #### 2.1 API Documentation Requirements
 
 Every API endpoint MUST document:
+
 - Purpose and description
 - Request parameters
 - Request body schema
@@ -638,18 +668,18 @@ Every API endpoint MUST document:
 ```typescript
 /**
  * Get user by ID
- * 
+ *
  * Retrieves a single user by their unique identifier.
- * 
+ *
  * @route GET /api/users/:id
  * @param {string} id - User ID (required)
  * @returns {User} User object
  * @throws {NotFoundError} User not found
  * @throws {UnauthorizedError} Not authenticated
- * 
+ *
  * @example
  * GET /api/users/123
- * 
+ *
  * Response:
  * {
  *   "id": "123",
@@ -722,6 +752,7 @@ Every API endpoint MUST document:
 #### 1.1 Scanning Tools
 
 All code MUST be scanned with:
+
 - SAST (Static Application Security Testing)
 - Dependency vulnerability scanner
 - Secret scanner
@@ -741,6 +772,7 @@ All code MUST be scanned with:
 #### 2.1 Compliance Frameworks
 
 Gentle-Vanguard MUST comply with:
+
 - OWASP Top 10
 - CWE Top 25
 - GDPR (if applicable)
@@ -760,6 +792,7 @@ Gentle-Vanguard MUST comply with:
 #### 3.1 Audit Log Requirements
 
 All security events MUST be logged:
+
 - Authentication attempts
 - Authorization decisions
 - Data access
@@ -831,30 +864,35 @@ Commit → Build → Test → Security → Deploy → Monitor
 #### 1.2 Stage Requirements
 
 **Commit Stage**:
+
 - Code checkout
 - Dependency resolution
 - Compilation/build
 - Artifact creation
 
 **Test Stage**:
+
 - Unit tests
 - Integration tests
 - Code coverage
 - Quality gates
 
 **Security Stage**:
+
 - SAST scanning
 - Dependency scanning
 - Secret scanning
 - Compliance checks
 
 **Deploy Stage**:
+
 - Environment preparation
 - Deployment
 - Smoke tests
 - Health checks
 
 **Monitor Stage**:
+
 - Metrics collection
 - Log aggregation
 - Alert configuration
@@ -943,30 +981,35 @@ Commit → Build → Test → Security → Deploy → Monitor
 #### 1.1 Branch Types
 
 **main**: Production-ready code
+
 - Protected branch
 - Requires PR review
 - Requires CI/CD passing
 - Tagged with versions
 
 **develop**: Integration branch
+
 - Base for feature branches
 - Requires PR review
 - Requires CI/CD passing
 - Pre-release testing
 
 **feature/**: Feature development
+
 - Naming: `feature/ISSUE-123-description`
 - Created from: `develop`
 - Merged to: `develop`
 - Deleted after merge
 
 **bugfix/**: Bug fixes
+
 - Naming: `bugfix/ISSUE-456-description`
 - Created from: `develop`
 - Merged to: `develop`
 - Deleted after merge
 
 **hotfix/**: Production hotfixes
+
 - Naming: `hotfix/ISSUE-789-description`
 - Created from: `main`
 - Merged to: `main` and `develop`
@@ -1282,18 +1325,21 @@ Commit → Build → Test → Security → Deploy → Monitor
 #### 2.1 Governance Roles
 
 **Architecture Review Board**:
+
 - Reviews architecture decisions
 - Approves major changes
 - Ensures compliance
 - Resolves conflicts
 
 **Security Review Board**:
+
 - Reviews security decisions
 - Approves security changes
 - Conducts security audits
 - Manages vulnerabilities
 
 **Quality Review Board**:
+
 - Reviews quality metrics
 - Approves quality changes
 - Conducts quality audits
@@ -1414,34 +1460,36 @@ Commit → Build → Test → Security → Deploy → Monitor
 ### Violation Severity Levels
 
 **Critical**:
+
 - Security vulnerabilities
 - Data loss
 - Compliance violations
 - System outages
 
 **High**:
+
 - Architecture violations
 - Major code quality issues
 - Test coverage below 80%
 - Performance degradation
 
 **Medium**:
+
 - Naming convention violations
 - Documentation gaps
 - Minor code quality issues
 - Process deviations
 
 **Low**:
+
 - Style issues
 - Minor documentation gaps
 - Non-critical process deviations
 
 ### Violation Response
 
-**Critical**: Immediate action required
-**High**: Action required within 24 hours
-**Medium**: Action required within 1 week
-**Low**: Action required within 1 month
+**Critical**: Immediate action required **High**: Action required within 24 hours **Medium**: Action
+required within 1 week **Low**: Action required within 1 month
 
 ---
 
@@ -1451,9 +1499,8 @@ Commit → Build → Test → Security → Deploy → Monitor
 **Status**: Active  
 **Last Updated**: May 12, 2026  
 **Next Review**: August 12, 2026  
-**Approval**: Gentle-Vanguard Governance Team  
+**Approval**: Gentle-Vanguard Governance Team
 
 ---
 
 **These normatives are mandatory for all Gentle-Vanguard projects and team members.**
-

@@ -77,4 +77,3 @@ instead of looking for a fake executable.
 ## Validation
 
 Use `scripts/validation/validate-workspace.ps1` or the equivalent PowerShell command on Linux/macOS.
-

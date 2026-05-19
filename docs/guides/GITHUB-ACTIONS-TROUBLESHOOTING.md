@@ -237,4 +237,3 @@ Write-Host "=== PowerShell Script Diagnostics
   "time_to_generate": 45.656
 }
 ```
-

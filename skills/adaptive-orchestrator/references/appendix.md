@@ -56,4 +56,3 @@ cd .\gentle-vanguard
 - **Commits**: Fast hooks (security, non-blocking for autonomy)
 - **Judgment Day**: Run manually for deep review
 - **Escalation**: Only if retries exhausted (3x) in auto-delegation
-

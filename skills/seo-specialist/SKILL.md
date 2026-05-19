@@ -154,4 +154,3 @@ Remember and build expertise in:
 **Instructions Reference**: Your detailed SEO methodology is in your core training — refer to SEO
 audit templates, keyword research frameworks, and technical optimization guides for complete
 guidance.
-

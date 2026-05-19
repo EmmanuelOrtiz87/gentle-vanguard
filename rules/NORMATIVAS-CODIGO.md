@@ -1,13 +1,13 @@
 # NORMATIVAS-CODIGO.md — Code Standards
 
-Version: 1.0.0
-Last updated: 2026-05-10
+Version: 1.0.0 Last updated: 2026-05-10
 
 ---
 
 ## 1. PROPOSITO
 
-Define los estándares de código para todo el stack Gentle-Vanguard. Aplica a scripts (PowerShell, Python, Bash), configuraciones JSON/YAML, y cualquier código generado por agentes.
+Define los estándares de código para todo el stack Gentle-Vanguard. Aplica a scripts (PowerShell,
+Python, Bash), configuraciones JSON/YAML, y cualquier código generado por agentes.
 
 ---
 
@@ -16,7 +16,8 @@ Define los estándares de código para todo el stack Gentle-Vanguard. Aplica a s
 ### 2.1 Single Source of Truth
 
 1. **MUST** centralizar configuraciones en archivos JSON (no hardcode en scripts)
-2. **MUST** referenciar configs canónicas (`config/auto-delegation.json`, `config/orchestrator.json`)
+2. **MUST** referenciar configs canónicas (`config/auto-delegation.json`,
+   `config/orchestrator.json`)
 3. **MUST NOT** duplicar mappings en múltiples archivos de instrucciones
 4. **SHOULD** usar `$ref` para referencias cruzadas entre configs
 
@@ -69,24 +70,24 @@ config/
 
 ### 3.2 Naming Conventions
 
-| Tipo | Convention | Ejemplo |
-|------|-----------|---------|
-| PowerShell scripts | PascalCase-kebab | `token-budget-guard.ps1` |
-| PowerShell modules | PascalCase | `AutoDelegationRouter.psm1` |
-| Python files | snake_case | `validate_config.py` |
-| JSON configs | kebab-case | `auto-delegation.json` |
-| YAML workflows | kebab-case | `gentle-vanguard-quality-gate.yml` |
-| Markdown docs | UPPERCASE or Title | `NORMATIVAS-CODIGO.md`, `Development-Guide.md` |
-| Test files | `<name>.tests.ps1` | `auth.tests.ps1` |
+| Tipo               | Convention         | Ejemplo                                        |
+| ------------------ | ------------------ | ---------------------------------------------- |
+| PowerShell scripts | PascalCase-kebab   | `token-budget-guard.ps1`                       |
+| PowerShell modules | PascalCase         | `AutoDelegationRouter.psm1`                    |
+| Python files       | snake_case         | `validate_config.py`                           |
+| JSON configs       | kebab-case         | `auto-delegation.json`                         |
+| YAML workflows     | kebab-case         | `gentle-vanguard-quality-gate.yml`             |
+| Markdown docs      | UPPERCASE or Title | `NORMATIVAS-CODIGO.md`, `Development-Guide.md` |
+| Test files         | `<name>.tests.ps1` | `auth.tests.ps1`                               |
 
 ### 3.3 File Size Limits
 
-| Type | Max Lines | Action if exceeded |
-|------|-----------|-------------------|
-| Script (.ps1) | 500 | Split into modules |
-| Config (.json) | 200 | Split into domain files |
-| Skill SKILL.md | 150 | Split references |
-| Workflow (.yml) | 100 | Use reusable workflows |
+| Type            | Max Lines | Action if exceeded      |
+| --------------- | --------- | ----------------------- |
+| Script (.ps1)   | 500       | Split into modules      |
+| Config (.json)  | 200       | Split into domain files |
+| Skill SKILL.md  | 150       | Split references        |
+| Workflow (.yml) | 100       | Use reusable workflows  |
 
 ---
 
@@ -142,7 +143,8 @@ function Invoke-TaskName {
 
 ### 4.3 Forbidden PowerShell Patterns
 
-- `Write-Host` in reusable functions/libraries (use `Write-Output` or `Write-Verbose`); OK in CLI scripts, hooks, and `gv` commands for direct user output
+- `Write-Host` in reusable functions/libraries (use `Write-Output` or `Write-Verbose`); OK in CLI
+  scripts, hooks, and `gv` commands for direct user output
 - Empty `catch { }` blocks
 - Hardcoded absolute paths
 - `Select-String` (use `grep` tool via agent, or direct `-match`)
@@ -222,50 +224,49 @@ on: ...
 
 ### 8.1 Pre-Commit
 
-| Check | Tool | Action on failure |
-|-------|------|-------------------|
-| JSON syntax | `hooks/json-lint.ps1` | Block commit |
-| Workflow syntax | `hooks/workflow-lint.ps1` | Block commit |
-| OpenCode validation | `hooks/pre-commit-opencode-validation.ps1` | Block commit |
+| Check               | Tool                                       | Action on failure |
+| ------------------- | ------------------------------------------ | ----------------- |
+| JSON syntax         | `hooks/json-lint.ps1`                      | Block commit      |
+| Workflow syntax     | `hooks/workflow-lint.ps1`                  | Block commit      |
+| OpenCode validation | `hooks/pre-commit-opencode-validation.ps1` | Block commit      |
 
 ### 8.2 Pre-Push
 
-| Check | Tool | Action on failure |
-|-------|------|-------------------|
-| Auto-fix | `scripts/hooks/orchestrate-auto-fix.ps1` | Fix + warn |
-| Test suite | `scripts/run-tests-simple.ps1` | Block push |
-| Audit sweep | `skills/gentle-vanguard-audit-skill/scripts/audit-sweep.ps1` | Block push |
+| Check       | Tool                                                         | Action on failure |
+| ----------- | ------------------------------------------------------------ | ----------------- |
+| Auto-fix    | `scripts/hooks/orchestrate-auto-fix.ps1`                     | Fix + warn        |
+| Test suite  | `scripts/run-tests-simple.ps1`                               | Block push        |
+| Audit sweep | `skills/gentle-vanguard-audit-skill/scripts/audit-sweep.ps1` | Block push        |
 
 ### 8.3 CI/CD
 
-| Gate | Frequency | Blocks |
-|------|-----------|--------|
-| script-governance | Every PR | PR to develop/main |
-| workflow-lint | Every PR | PR to develop/main |
-| quality-gate | Every PR | PR to develop/main |
-| ps-lint | Every PR | PR to develop/main |
-| sdd-gate | Every PR | PR to develop/main |
-| security-scan | Every PR | PR to develop/main |
-| format-check | Every PR | PR to develop/main |
+| Gate              | Frequency | Blocks             |
+| ----------------- | --------- | ------------------ |
+| script-governance | Every PR  | PR to develop/main |
+| workflow-lint     | Every PR  | PR to develop/main |
+| quality-gate      | Every PR  | PR to develop/main |
+| ps-lint           | Every PR  | PR to develop/main |
+| sdd-gate          | Every PR  | PR to develop/main |
+| security-scan     | Every PR  | PR to develop/main |
+| format-check      | Every PR  | PR to develop/main |
 
 ---
 
 ## 9. REFERENCES
 
-| Resource | Path |
-|----------|------|
-| Development Standards | `rules/DEVELOPMENT-STANDARDS.md` |
-| AI Normatives | `rules/AI-NORMATIVES.md` |
-| Error Handling | `rules/NORMATIVAS-ERROR-HANDLING.md` |
-| Testing Normatives | `docs/NORMATIVAS-TESTING.md` |
-| Security Normatives | `docs/NORMATIVAS-SEGURIDAD.md` |
-| Performance & Efficiency | `rules/NORMATIVAS-PERFORMANCE.md` |
-| Session Lifecycle | `rules/NORMATIVAS-SESSION.md` |
-| Skill Style Guide | `rules/SKILL-STYLE-GUIDE.md` |
-| Structure Policy | `config/structure-policy.json` |
-| Quality Gates | `config/quality-gates.json` |
+| Resource                 | Path                                 |
+| ------------------------ | ------------------------------------ |
+| Development Standards    | `rules/DEVELOPMENT-STANDARDS.md`     |
+| AI Normatives            | `rules/AI-NORMATIVES.md`             |
+| Error Handling           | `rules/NORMATIVAS-ERROR-HANDLING.md` |
+| Testing Normatives       | `docs/NORMATIVAS-TESTING.md`         |
+| Security Normatives      | `docs/NORMATIVAS-SEGURIDAD.md`       |
+| Performance & Efficiency | `rules/NORMATIVAS-PERFORMANCE.md`    |
+| Session Lifecycle        | `rules/NORMATIVAS-SESSION.md`        |
+| Skill Style Guide        | `rules/SKILL-STYLE-GUIDE.md`         |
+| Structure Policy         | `config/structure-policy.json`       |
+| Quality Gates            | `config/quality-gates.json`          |
 
 ---
 
 _Version: 1.0.0 — 2026-05-10 — Status: ACTIVE_
-

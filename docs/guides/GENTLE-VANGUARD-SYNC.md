@@ -127,4 +127,3 @@ Custom files outside managed assets are not touched.
 1. `scripts/utilities/UTILITIES/gentle-vanguard-sync.ps1`
 2. `config/gentle-vanguard-sync.json`
 3. `scripts/utilities/gv.ps1`
-

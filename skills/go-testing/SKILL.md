@@ -354,4 +354,3 @@ go test -short ./...                    # Skip integration tests
 - **System Tests**: See `installer/internal/system/*_test.go`
 - **Golden Files**: See `installer/internal/tui/testdata/`
 - **Teatest Docs**: https://github.com/charmbracelet/bubbletea/tree/master/teatest
-

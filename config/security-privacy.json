@@ -126,4 +126,3 @@
     "metrics": ["sanitizedCount", "violationsBlocked", "patternsDetected", "auditEntries"]
   }
 }
-

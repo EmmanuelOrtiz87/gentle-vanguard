@@ -26,15 +26,15 @@
 
 ## 🎙️ Elevator Pitch
 
-> **"Gentle-Vanguard es un sistema de orquestación de workspace local-first que dota a los agentes de IA
-> de 125+ skills especializados mientras mantiene todo el procesamiento en tu máquina. Cero
+> **"Gentle-Vanguard es un sistema de orquestación de workspace local-first que dota a los agentes
+> de IA de 125+ skills especializados mientras mantiene todo el procesamiento en tu máquina. Cero
 > dependencias en la nube, seguridad empresarial, y arquitectura de plugins extensible."**
 
 ---
 
 ## 🎯 Target Audiences
 
-| Audiencia          | Necesidad                                           | Solución Gentle-Vanguard             |
+| Audiencia          | Necesidad                                           | Solución Gentle-Vanguard        |
 | ------------------ | --------------------------------------------------- | ------------------------------- |
 | **🛠️ Developers**  | Workflows de desarrollo asistido por IA             | Auto-delegación + 125 skills    |
 | **👥 Teams**       | Skills de agentes estandarizados y seguridad        | GOV + OPS + QA workflows        |
@@ -110,4 +110,3 @@ cd gentle-vanguard-public
   <i>100% Local-First • Privacidad Total • Listo para Producción</i><br><br>
   <code>git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard-public.git</code>
 </p>
-

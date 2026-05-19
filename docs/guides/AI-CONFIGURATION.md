@@ -573,4 +573,3 @@ Expected output:
 | Rate limits    | Wait, or reduce usage       |
 | Slow responses | Use faster model, or local  |
 | Offline        | Use Ollama local models     |
-

@@ -6,8 +6,8 @@ Version: 1.0.0 Framework: OWASP LLM Top 10 2025 + OWASP Agentic Top 10 2026
 
 ## 1. PROPOSITO
 
-Define las normativas de seguridad para agentes LLM en el stack Gentle-Vanguard. Toda implementacion debe
-cumplir estos controles o documentar desvio aprobado.
+Define las normativas de seguridad para agentes LLM en el stack Gentle-Vanguard. Toda implementacion
+debe cumplir estos controles o documentar desvio aprobado.
 
 ---
 
@@ -96,18 +96,18 @@ cumplir estos controles o documentar desvio aprobado.
 
 ## 3. MATRIZ DE RIESGOS
 
-| Riesgo                | Severidad | Control | Frecuencia     |
-| --------------------- | --------- | ------- | -------------- |
-| Prompt Injection      | CRITICAL  | 2.1     | Cada request   |
-| Excessive Agency      | CRITICAL  | 2.2     | Cada tool call |
-| Data Leakage          | HIGH      | 2.3     | Cada output    |
-| System Prompt Leakage | HIGH      | 2.4     | Cada release   |
-| Supply Chain          | HIGH      | 2.5     | Semanal        |
-| Memory Poisoning      | HIGH      | 2.6     | Cada sesion    |
-| Tool Misuse           | CRITICAL  | 2.7     | Cada tool call |
-| Inter-Agent Attack    | HIGH      | 2.8     | Cada sesion    |
-| Cross-Agent Data Poisoning | HIGH | 2.9     | Cada interaccion entre agentes |
-| Observability Gap     | MEDIUM    | 2.10    | Continuo       |
+| Riesgo                     | Severidad | Control | Frecuencia                     |
+| -------------------------- | --------- | ------- | ------------------------------ |
+| Prompt Injection           | CRITICAL  | 2.1     | Cada request                   |
+| Excessive Agency           | CRITICAL  | 2.2     | Cada tool call                 |
+| Data Leakage               | HIGH      | 2.3     | Cada output                    |
+| System Prompt Leakage      | HIGH      | 2.4     | Cada release                   |
+| Supply Chain               | HIGH      | 2.5     | Semanal                        |
+| Memory Poisoning           | HIGH      | 2.6     | Cada sesion                    |
+| Tool Misuse                | CRITICAL  | 2.7     | Cada tool call                 |
+| Inter-Agent Attack         | HIGH      | 2.8     | Cada sesion                    |
+| Cross-Agent Data Poisoning | HIGH      | 2.9     | Cada interaccion entre agentes |
+| Observability Gap          | MEDIUM    | 2.10    | Continuo                       |
 
 ---
 
@@ -115,11 +115,11 @@ cumplir estos controles o documentar desvio aprobado.
 
 - OWASP LLM Top 10 2025: genai.owasp.org/resource/owasp-top-10-for-llm-applications-2025
 - OWASP Agentic Top 10 2026: genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026
-- OWASP AI Agent Security Cheat Sheet: cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html
+- OWASP AI Agent Security Cheat Sheet:
+  cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html
 - ISO/IEC 27001 Controls Mapping: `docs/NORMATIVAS-ISO27001.md`
 - ISO/IEC 25010 Quality Mapping: `docs/NORMATIVAS-ISO25010.md`
 - SBOM Validation: `docs/NORMATIVAS-SBOM.md`
 - Config: `config/security-hardening.json`
 - Security Policy: `config/security-policy.json`
 - Security Privacy: `config/security-privacy.json`
-

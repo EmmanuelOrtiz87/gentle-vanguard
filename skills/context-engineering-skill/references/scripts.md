@@ -5,8 +5,8 @@
 **Path**: `scripts/utilities/WORKFLOW-ORCHESTRATION/compact-start.ps1`  
 **Description**: Initialize context tracking and generate compact handoff prompt.
 
-| Param        | Type   | Default                  | Description                    |
-| ------------ | ------ | ------------------------ | ------------------------------ |
+| Param        | Type   | Default                       | Description                    |
+| ------------ | ------ | ----------------------------- | ------------------------------ |
 | `-Objective` | string | "Gentle-Vanguard maintenance" | One-sentence goal (<100 chars) |
 
 **Usage**:
@@ -76,4 +76,3 @@
 **Checked by**: `start-session.ps1` and `Invoke-ContextEfficiencyLiveAssist`.  
 **TTL**: 60 minutes.  
 **Git**: Ignored via `.gitignore` (`.session/` directory).
-

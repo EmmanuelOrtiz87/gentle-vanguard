@@ -1,7 +1,6 @@
 # Defaults vs Project decisións
 
-This document explains what Gentle-Vanguard owns and what each project must decide for
-itself.
+This document explains what Gentle-Vanguard owns and what each project must decide for itself.
 
 ## Start Here
 
@@ -50,12 +49,11 @@ These belong to the target project and should be recorded in `docs/project-conte
 
 ## Recommended Rule
 
-If a choice affects more than one future project, it belongs in Gentle-Vanguard. If a
-choice affects only one repository, it belongs in that project's `docs/project-context.md`.
+If a choice affects more than one future project, it belongs in Gentle-Vanguard. If a choice affects
+only one repository, it belongs in that project's `docs/project-context.md`.
 
 ## Quick Summary
 
 1. Gentle-Vanguard = reusable defaults and common workflow.
 2. Project context = repository-specific decisións and constraints.
 3. If you are unsure, keep the default and record the question in `docs/project-context.md`.
-

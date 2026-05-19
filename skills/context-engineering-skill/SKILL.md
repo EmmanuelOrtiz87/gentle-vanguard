@@ -88,5 +88,3 @@ Read `references/session-handoff-protocol.md` when you need:
 - Scripts: `scripts/utilities/compact-start.ps1`, `context-pack.ps1`, `context-metrics-report.ps1`
 - Metrics: `scripts/utilities/token-efficiency-estimator.ps1`
 - Config: `config/context-efficiency.json`
-
-

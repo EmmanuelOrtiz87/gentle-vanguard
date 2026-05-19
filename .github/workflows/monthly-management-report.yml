@@ -40,5 +40,3 @@ jobs:
             reports/metrics-export.*
             reports/dashboard.html
           if-no-files-found: warn
-
-

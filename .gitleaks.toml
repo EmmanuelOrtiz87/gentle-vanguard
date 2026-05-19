@@ -33,14 +33,19 @@ regexes = [
     "(?i)PAT_SYNC",
     "(?i)PRIVATE_REPO",
     "(?i)x-access-token",
+    # Allow master.key file path references in documentation (not actual secrets)
+    "(?i)keys/master\\.key",
+    "(?i)backup-master\\.key",
+    "(?i)master\\.key",
 ]
 
 commits = [
     # Historical docs-only false positives for gentle-vanguard-master-key-reference
     "cea299f7b984b983b1f8765fc867af49bb7879b1",
+    # Recent commits with master.key path references in docs (not actual secrets)
+    "9b89c8474b9a74c5809190091edec4c176af5cf6",
 ]
 
-# Custom rules for project-specific patterns
 [[rules]]
 id = "gentle-vanguard-master-key-reference"
 description = "Reference to master.key file path (not the actual key)"

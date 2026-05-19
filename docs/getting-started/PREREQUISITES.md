@@ -140,4 +140,3 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/in
 ---
 
 _Document updated: 2026-05-03_
-

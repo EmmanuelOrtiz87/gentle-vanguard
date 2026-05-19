@@ -107,4 +107,3 @@ gv sdd-metrics
 - PSScriptAnalyzer blocks broken PS1 code before it reaches `main`
 - SDD gate proves that "no spec = no merge" is enforced, not optional
 - Management can see traceable audit artifacts for compliance
-

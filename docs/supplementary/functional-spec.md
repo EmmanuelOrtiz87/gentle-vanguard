@@ -44,4 +44,3 @@ Gentle-Vanguard transforms a manual, error-prone process into an automated "soft
 By ensuring that code leaving the developer's machine is already compiled, validated by linters, and
 documented, the failure rate in CI/CD pipelines is drastically reduced, accelerating
 _Time-to-Market_.
-

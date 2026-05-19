@@ -116,6 +116,7 @@ git push origin your-branch-name
 ```
 
 **⚠️ NEVER force push unless discussed with team**:
+
 ```powershell
 git push --force-with-lease origin your-branch-name  # Safer than --force
 ```
@@ -153,6 +154,7 @@ git commit -m "fix: correct JSON formatting in $file"
 ```
 
 **Quick JSON validator**:
+
 ```powershell
 # Paste JSON directly
 @"
@@ -206,6 +208,7 @@ git push
 ```
 
 **For unit test failures**:
+
 ```powershell
 # Run with verbose output
 Invoke-Pester -Path "tests/unit/filename.tests.ps1" -Verbose
@@ -348,6 +351,7 @@ git commit -m "fix: restore valid package-lock.json"
 ```
 
 **Emergency: Force skip (NOT RECOMMENDED)**:
+
 ```powershell
 # Only if you absolutely know the lockfile is safe:
 git commit --no-verify -m "emergency: skip lockfile validation"
@@ -508,6 +512,7 @@ git pull origin develop
 ```
 
 **Emergency: Skip gate (NOT RECOMMENDED)**:
+
 ```powershell
 # Only for critical hotfixes:
 .\scripts\utilities\gv.ps1 publish -SkipHomologationGate
@@ -647,4 +652,3 @@ Get-Process | Select-Object -Property Name, CPU, Memory | Sort-Object CPU -Desce
 **Runbook Last Updated**: May 13, 2026  
 **Maintainer**: Security Team  
 **Review Cycle**: Monthly or as issues arise
-

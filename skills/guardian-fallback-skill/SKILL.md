@@ -137,11 +137,11 @@ STRICT_MODE="true"
 
 ## Dependencies
 
-| Tool                    | Required | Purpose                     |
-| ----------------------- | -------- | --------------------------- |
+| Tool                         | Required | Purpose                     |
+| ---------------------------- | -------- | --------------------------- |
 | Gentle-Vanguard Orchestrator | **YES**  | Primary execution           |
-| invoke-ai-review.ps1    | **YES**  | Native review (replacement) |
-| ()                      | **NO**   | Optional fallback guardian  |
+| invoke-ai-review.ps1         | **YES**  | Native review (replacement) |
+| ()                           | **NO**   | Optional fallback guardian  |
 
 ## Coexistence
 
@@ -210,4 +210,3 @@ gv review --scope full
 ---
 
 **Note:** is a convenience, not a requirement. Gentle-Vanguard works fully without it.
-

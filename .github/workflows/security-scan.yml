@@ -91,4 +91,3 @@ jobs:
           name: sbom
           path: sbom-cyclonedx.json
           retention-days: 90
-

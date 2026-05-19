@@ -79,4 +79,3 @@ cd gentle-vanguard
 ---
 
 **Last updated:** 2026-04-20
-

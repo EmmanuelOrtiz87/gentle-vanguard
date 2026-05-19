@@ -240,8 +240,8 @@ Do not compress core knowledge documents that require full traceability and tech
 2. Implementation and technical guides.
 3. Business and product documentation.
 
-Rule: keep gentle-vanguardal/technical/business documents complete; optimize only operational/transient
-artifacts.
+Rule: keep gentle-vanguardal/technical/business documents complete; optimize only
+operational/transient artifacts.
 
 ## Language Scope
 
@@ -260,4 +260,3 @@ This policy is enforced as a required governance artifact by:
 - `scripts/diagnostics/validate-script-governance.ps1`
 
 Any removal or relocation must be approved by the developer and updated in governance rules.
-

@@ -1,18 +1,18 @@
 ---
 name: gentle-vanguard-audit-skill
 description:
-  "Trigger: 'audit gentle-vanguard', 'validate docs', 'sweep project', 'check links', 'find duplicates',
-  'fix references', 'homologate', 'validation sweep', 'gv audit'. Gentle-Vanguard audit and validation
-  sweep detecting duplicates, broken links, missing files, skill inconsistencies, and documentation
-  issues."
+  "Trigger: 'audit gentle-vanguard', 'validate docs', 'sweep project', 'check links', 'find
+  duplicates', 'fix references', 'homologate', 'validation sweep', 'gv audit'. Gentle-Vanguard audit
+  and validation sweep detecting duplicates, broken links, missing files, skill inconsistencies, and
+  documentation issues."
 ---
 
 # Gentle-Vanguard Audit Skill
 
 ## Activation Contract
 
-Load when user requests any audit/validation/deduplication/sweep operation for Gentle-Vanguard workspace.
-Use before judgment-day when structural integrity check is needed first.
+Load when user requests any audit/validation/deduplication/sweep operation for Gentle-Vanguard
+workspace. Use before judgment-day when structural integrity check is needed first.
 
 ## Hard Rules
 
@@ -49,4 +49,3 @@ Use before judgment-day when structural integrity check is needed first.
 
 - Scripts: [scripts/](scripts/) — audit-sweep.ps1, audit-workflow.ps1, sync-local.ps1
 - Details (JD comparison, scopes, commands): [references/details.md](references/details.md)
-

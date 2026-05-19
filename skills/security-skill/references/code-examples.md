@@ -121,4 +121,3 @@ semgrep --config=auto .
 # Authenticate via security questions (recovery)
 .\scripts\utilities\auth-session.ps1 -UseSecurityQuestions
 ```
-

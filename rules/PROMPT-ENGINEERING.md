@@ -1,16 +1,18 @@
 # Prompt Engineering Standards
 
-**Version:** 1.0.0
-**Last updated:** 2026-05-14
-**Applies to:** All AI agent interactions, skill definitions, and system prompts
+**Version:** 1.0.0 **Last updated:** 2026-05-14 **Applies to:** All AI agent interactions, skill
+definitions, and system prompts
 
 ---
 
 ## 1. Purpose
 
-Define a structured framework for crafting, versioning, and governing prompts used by AI agents. Consistent prompt engineering ensures predictable output quality, reduces hallucination risk, and optimizes token consumption.
+Define a structured framework for crafting, versioning, and governing prompts used by AI agents.
+Consistent prompt engineering ensures predictable output quality, reduces hallucination risk, and
+optimizes token consumption.
 
-Based on industry research: structured prompts with explicit format constraints reduce hallucination rates by 40-60% and improve first-attempt correctness by 35%.
+Based on industry research: structured prompts with explicit format constraints reduce hallucination
+rates by 40-60% and improve first-attempt correctness by 35%.
 
 ---
 
@@ -54,23 +56,27 @@ Fallback: If uncertain about any recommendation, mark as [NEEDS REVIEW] instead 
 ## 3. Prompt Types
 
 ### 3.1 System Prompts (Agent Identity)
+
 - Define persona, tone, and behavior constraints
 - Stored in tool configs (`CLAUDE.md`, `opencode.json`, `.clinerules`)
 - Max 100 lines
 - MUST include hallucination guard level
 
 ### 3.2 Task Prompts (Per-Request)
+
 - Specific instructions for ONE operation
 - MUST include clear success criteria
 - MUST specify output format
 - SHOULD include 1 example for complex tasks
 
 ### 3.3 Skill Prompts (Reusable Workflows)
+
 - Defined in `skills/*/SKILL.md`
 - Follow `rules/SKILL-STYLE-GUIDE.md` (max 700 tokens body)
 - MUST include decision gates and execution steps
 
 ### 3.4 Context Prompts (Session Context)
+
 - Auto-generated at session start from engram + startup-summary
 - Structure: project context → recent decisions → relevant rules
 - SHOULD be compressed via `handoff-compress.ps1` if >5K chars
@@ -79,45 +85,49 @@ Fallback: If uncertain about any recommendation, mark as [NEEDS REVIEW] instead 
 
 ## 4. Anti-Patterns
 
-| Anti-Pattern | Problem | Solution |
-|---|---|---|
-| Vague task | "Review this code" | "Review this code for OWASP Top 10 injection patterns" |
-| No format | "Give feedback" | "Output JSON: {severity, file, line, issue, recommendation}" |
-| Assumed knowledge | "Fix the bug" | "Bug: NullReferenceException on line 42 when $input is null" |
-| Over-constrained | 30+ rules in prompt | Split into hierarchy: 5 critical + reference doc |
-| No fallback | Agent guesses | "If uncertain, state 'insufficient context' rather than guessing" |
+| Anti-Pattern             | Problem             | Solution                                                            |
+| ------------------------ | ------------------- | ------------------------------------------------------------------- |
+| Vague task               | "Review this code"  | "Review this code for OWASP Top 10 injection patterns"              |
+| No format                | "Give feedback"     | "Output JSON: {severity, file, line, issue, recommendation}"        |
+| Assumed knowledge        | "Fix the bug"       | "Bug: NullReferenceException on line 42 when $input is null"        |
+| Over-constrained         | 30+ rules in prompt | Split into hierarchy: 5 critical + reference doc                    |
+| No fallback              | Agent guesses       | "If uncertain, state 'insufficient context' rather than guessing"   |
 | Conflicting instructions | Multiple priorities | Single priority chain: Security > Correctness > Performance > Style |
 
 ---
 
 ## 5. Token Optimization
 
-| Technique | Savings | How |
-|-----------|---------|-----|
-| Front-load constraints | 5-10% | Critical rules first, details later |
-| Use tables over prose | 15-25% | AI scans tables more efficiently |
-| Remove duplicates | 10-30% | Each fact in exactly one file |
-| Use references | 20-40% | "(see rules/...) instead of inlining |
-| Compress context | 30-50% | `handoff-compress.ps1` before large prompts |
-| Use smaller models for simple tasks | 40-60% | Qwen 3.6B for validation, GLM-5 for complex |
+| Technique                           | Savings | How                                         |
+| ----------------------------------- | ------- | ------------------------------------------- |
+| Front-load constraints              | 5-10%   | Critical rules first, details later         |
+| Use tables over prose               | 15-25%  | AI scans tables more efficiently            |
+| Remove duplicates                   | 10-30%  | Each fact in exactly one file               |
+| Use references                      | 20-40%  | "(see rules/...) instead of inlining        |
+| Compress context                    | 30-50%  | `handoff-compress.ps1` before large prompts |
+| Use smaller models for simple tasks | 40-60%  | Qwen 3.6B for validation, GLM-5 for complex |
 
 ---
 
 ## 6. Hallucination Prevention
 
 ### 6.1 Explicit Constraints
+
 - "NEVER invent cmdlets, functions, or APIs not verified in the codebase"
 - "ALWAYS verify file paths with Test-Path before reading"
 - "If uncertain, state 'insufficient context' — do not guess"
 
 ### 6.2 Verification Gates
+
 - Code generated by AI MUST be syntax-checked before use
 - API calls MUST be verified against documentation
 - File paths MUST be validated with Test-Path
 - Dependencies MUST exist in package.json / requirements.txt
 
 ### 6.3 Confidence Scoring
+
 Every assertion SHOULD include confidence level:
+
 ```
 [CONFIDENCE: HIGH]   — directly from codebase or docs
 [CONFIDENCE: MEDIUM] — inferred from patterns
@@ -137,24 +147,31 @@ description: 'Trigger: keywords. Short description.'
 ---
 
 ## Activation
+
 When to activate this skill and preconditions.
 
 ## Hard Rules
+
 Non-negotiable constraints (3-5 items).
 
 ## Decision Gates
+
 Conditions that route to different execution paths.
 
 ## Execution Steps
+
 Ordered steps (numbered list).
 
 ## Output Contract
+
 Exact format of the skill output (schema or template).
 
 ## Fallback
+
 What to do when the skill cannot complete.
 
 ## References
+
 Related rules, configs, or skills.
 ```
 
@@ -171,16 +188,15 @@ Related rules, configs, or skills.
 
 ## 9. References
 
-| Resource | Path |
-|----------|------|
-| Skill Style Guide | `rules/SKILL-STYLE-GUIDE.md` |
-| Context Engineering | `rules/CONTEXT-ENGINEERING.md` |
-| AI Normatives | `rules/AI-NORMATIVES.md` |
-| Code Review Standards | `rules/CODE-REVIEW-STANDARDS.md` |
-| Hallucination Guard | `rules/AI-NORMATIVES.md#hallucination-guard` |
-| Orchestrator Config | `config/orchestrator.json` |
+| Resource              | Path                                         |
+| --------------------- | -------------------------------------------- |
+| Skill Style Guide     | `rules/SKILL-STYLE-GUIDE.md`                 |
+| Context Engineering   | `rules/CONTEXT-ENGINEERING.md`               |
+| AI Normatives         | `rules/AI-NORMATIVES.md`                     |
+| Code Review Standards | `rules/CODE-REVIEW-STANDARDS.md`             |
+| Hallucination Guard   | `rules/AI-NORMATIVES.md#hallucination-guard` |
+| Orchestrator Config   | `config/orchestrator.json`                   |
 
 ---
 
 _Version: 1.0.0 — 2026-05-14 — Status: ACTIVE_
-

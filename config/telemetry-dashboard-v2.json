@@ -4,7 +4,7 @@
     "lastUpdated": "2026-05-12T19:55:00Z",
     "name": "Gentle-Vanguard Telemetry Dashboard v2",
     "description": "Business metrics and analytics for Gentle-Vanguard platform",
-    
+
     "metrics": {
       "agent_performance": {
         "name": "Agent Performance",
@@ -35,7 +35,7 @@
           }
         ]
       },
-      
+
       "skill_performance": {
         "name": "Skill Performance",
         "widgets": [
@@ -72,7 +72,7 @@
           }
         ]
       },
-      
+
       "token_usage": {
         "name": "Token & Budget Management",
         "widgets": [
@@ -89,7 +89,7 @@
             "title": "Current Budget Usage (%)",
             "metric": "token_usage_ratio",
             "warning_threshold": 0.75,
-            "critical_threshold": 0.90
+            "critical_threshold": 0.9
           },
           {
             "id": "token_by_agent",
@@ -110,7 +110,7 @@
           }
         ]
       },
-      
+
       "user_satisfaction": {
         "name": "User Satisfaction & Feedback",
         "widgets": [
@@ -146,7 +146,7 @@
           }
         ]
       },
-      
+
       "system_health": {
         "name": "System Health & SLOs",
         "widgets": [
@@ -183,7 +183,7 @@
           }
         ]
       },
-      
+
       "trends": {
         "name": "Trends & Analytics",
         "widgets": [
@@ -221,7 +221,7 @@
         ]
       }
     },
-    
+
     "dashboards": {
       "executive": {
         "name": "Executive Summary",
@@ -248,7 +248,7 @@
         "layout": "grid-3col"
       }
     },
-    
+
     "alerts": {
       "enabled": true,
       "rules": [
@@ -278,7 +278,7 @@
         }
       ]
     },
-    
+
     "exports": {
       "formats": ["csv", "json", "pdf"],
       "schedules": {
@@ -287,7 +287,7 @@
         "monthly": "1st of month 06:00 UTC"
       }
     },
-    
+
     "retention": {
       "raw_data": 7,
       "hourly_aggregates": 30,
@@ -295,4 +295,3 @@
     }
   }
 }
-

@@ -13,9 +13,12 @@ allowed-tools: Read, Edit, Write, Glob, Grep, Bash
 # Tax Skill
 
 ## When to Use
-User asks about tax compliance, tax planning, tax returns, VAT/GST, corporate tax, or international tax issues.
+
+User asks about tax compliance, tax planning, tax returns, VAT/GST, corporate tax, or international
+tax issues.
 
 ## Tax Types
+
 - **Corporate Income Tax**: Tax on business profits (varies by jurisdiction, typically 15-35%)
 - **Individual Income Tax**: Progressive taxation on personal income
 - **VAT/GST**: Value-added tax on goods/services (standard rates 5-27% globally)
@@ -24,6 +27,7 @@ User asks about tax compliance, tax planning, tax returns, VAT/GST, corporate ta
 - **Transfer Pricing**: Pricing of cross-border transactions between related entities
 
 ## Key Considerations
+
 - **Jurisdiction**: Tax rules vary by country, state/province, and city
 - **Tax Treaties**: Double taxation avoidance agreements between countries
 - **Tax Incentives**: R&D credits, investment incentives, free trade zones, patent box regimes
@@ -31,8 +35,8 @@ User asks about tax compliance, tax planning, tax returns, VAT/GST, corporate ta
 - **Permanent Establishment**: When a foreign company becomes taxable in a jurisdiction
 
 ## Response Patterns
+
 1. Identify the tax type and jurisdiction
 2. Clarify whether the question is compliance, planning, or dispute
 3. Provide calculations or filing guidance
 4. Include disclaimer: user must verify with qualified tax professional
-

@@ -4,7 +4,13 @@
   "description": "Enhanced local-first policy with skill emulation and engram memory for Antigravity mission control",
   "workspace": {
     "projectRoot": ".",
-    "configFiles": ["opencode.json", "AGENTS.md", "CLAUDE.md", ".cursorrules", ".antigravity/config.json"],
+    "configFiles": [
+      "opencode.json",
+      "AGENTS.md",
+      "CLAUDE.md",
+      ".cursorrules",
+      ".antigravity/config.json"
+    ],
     "skillPaths": ["skills/", "~/.config/opencode/skills/"],
     "skillRegistry": ".atl/skill-registry.md"
   },

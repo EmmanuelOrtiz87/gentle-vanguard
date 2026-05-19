@@ -39,4 +39,3 @@ git commit > pre-commit > Block critical issues
 AGENT-QA owns Judgment Day execution: `gv agent QA "judgment day on src/features/auth"`
 
 See: `skills/multi-agent-registry/SKILL.md` - AGENT-QA section
-

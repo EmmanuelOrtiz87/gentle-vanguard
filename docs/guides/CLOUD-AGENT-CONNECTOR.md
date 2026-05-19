@@ -1,8 +1,8 @@
 # Cloud Agent Connector - Complete Security & Setup Guide
 
-> **Summary**: This guide covers secure setup, configuration, and usage of Gentle-Vanguard's Cloud Agent
-> Connector for connecting to external AI providers (AWS Bedrock, Difi, Azure, OpenAI, Anthropic,
-> Gemini, Ollama).
+> **Summary**: This guide covers secure setup, configuration, and usage of Gentle-Vanguard's Cloud
+> Agent Connector for connecting to external AI providers (AWS Bedrock, Difi, Azure, OpenAI,
+> Anthropic, Gemini, Ollama).
 
 ---
 
@@ -525,4 +525,3 @@ from provider.
 
 **Last Updated:** 2026-04-17  
 **versión:** 1.0
-

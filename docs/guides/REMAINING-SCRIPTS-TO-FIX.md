@@ -411,6 +411,5 @@ $errors | ForEach-Object { Write-Host $_.Message }
 | Lower     | 10     | 2-2.5 hours       |
 | **TOTAL** | **21** | **5.5-7.5 hours** |
 
-**Recommendation**: Focus on Critical and High Priority scripts first. These are the gentle-vanguard of
-the project and will unblock most workflows.
-
+**Recommendation**: Focus on Critical and High Priority scripts first. These are the gentle-vanguard
+of the project and will unblock most workflows.

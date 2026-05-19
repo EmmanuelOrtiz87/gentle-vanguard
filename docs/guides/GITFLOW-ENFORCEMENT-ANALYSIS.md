@@ -334,4 +334,3 @@ hotfix/, o release/
 - **Documentacin clara** sobre cundo usar cada tipo de rama
 
 **Recomendacin**: Implementar Nivel 1 y 2 para tener un flujo ESTRICTO, AUTOMTICO e INFORMATIVO.
-

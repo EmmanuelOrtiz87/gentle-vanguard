@@ -2,8 +2,8 @@
 
 ## Overview
 
-The Gentle-Vanguard - Development Stack now supports **all platforms** through orchestrator-coordinated
-shell routing:
+The Gentle-Vanguard - Development Stack now supports **all platforms** through
+orchestrator-coordinated shell routing:
 
 - **Windows**: PowerShell 5.1+ or PowerShell Core (pwsh)
 - **Linux**: Bash, sh, zsh
@@ -87,8 +87,8 @@ Same commands work on **all platforms**:
 
 | Script                                  | Platform           | Purpose                                   |
 | --------------------------------------- | ------------------ | ----------------------------------------- |
-| `scripts/gentle-vanguard/setup.sh`           | Linux/macOS/WSL    | Universal setup with platform detection   |
-| `scripts/gentle-vanguard/bootstrap.ps1`      | Windows/PowerShell | Canonical PowerShell bootstrap entrypoint |
+| `scripts/gentle-vanguard/setup.sh`      | Linux/macOS/WSL    | Universal setup with platform detection   |
+| `scripts/gentle-vanguard/bootstrap.ps1` | Windows/PowerShell | Canonical PowerShell bootstrap entrypoint |
 | `gv` wrapper + `scripts/utilities/gv.*` | All                | Auto-detects platform on execution        |
 
 ### Diagnostic Scripts
@@ -404,6 +404,6 @@ project-root/
 3. Start development: See project-specific README
 4. Monitor via orchestrator: `engram status`
 
-- Los hooks automticos de Gentle-Vanguard - Development Stack ejecutan chequeos de seguridad, calidad,
-  arquitectura, testing, API, documentacin y gitflow en cada commit/push. Ver REVIEW-INDEX.md.
-
+- Los hooks automticos de Gentle-Vanguard - Development Stack ejecutan chequeos de seguridad,
+  calidad, arquitectura, testing, API, documentacin y gitflow en cada commit/push. Ver
+  REVIEW-INDEX.md.

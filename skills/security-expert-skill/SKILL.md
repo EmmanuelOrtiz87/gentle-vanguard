@@ -123,8 +123,8 @@ When user asks about security or mentions security keywords:
 
 ## Commands
 
-| Command                    | Description                       |
-| -------------------------- | --------------------------------- |
+| Command                                 | Description                       |
+| --------------------------------------- | --------------------------------- |
 | `gentle-vanguard security scan`         | Quick scan for critical issues    |
 | `gentle-vanguard security audit`        | Full security audit with report   |
 | `gentle-vanguard security fix`          | Auto-fix common issues            |
@@ -238,4 +238,3 @@ See `references/security-patterns.md` for:
 - Encryption best practices
 - API security checklist
 - Dependency management
-

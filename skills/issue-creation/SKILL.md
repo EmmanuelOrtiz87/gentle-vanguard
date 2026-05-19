@@ -267,4 +267,3 @@ gh issue edit <number> --add-label "status:approved"
 # Maintainer: add priority
 gh issue edit <number> --add-label "priority:high"
 ```
-

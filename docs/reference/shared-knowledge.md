@@ -16,4 +16,3 @@ via `gv.ps1 end-session` when developers choose to share their findings.
 ---
 
 _Last updated: {{LAST_UPDATE_DATE}}_
-

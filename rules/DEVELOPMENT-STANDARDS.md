@@ -1,7 +1,6 @@
 # Gentle-Vanguard Development Standards v2.0
 
-Standards and best practices for Gentle-Vanguard project development.
-Last updated: 2026-05-10
+Standards and best practices for Gentle-Vanguard project development. Last updated: 2026-05-10
 
 ---
 
@@ -13,23 +12,25 @@ Last updated: 2026-05-10
 2. **Parameter Validation**: Use `[Parameter()]`, `[ValidateNotNullOrEmpty()]`, etc.
 3. **Comment-Based Help**: All public functions must have `.SYNOPSIS`, `.DESCRIPTION`, `.EXAMPLE`
 4. **Output Type**: Specify `[OutputType([type])` when returning objects
-5. **Error Handling**: Use `try/catch` with meaningful error messages (see `rules/NORMATIVAS-ERROR-HANDLING.md`)
+5. **Error Handling**: Use `try/catch` with meaningful error messages (see
+   `rules/NORMATIVAS-ERROR-HANDLING.md`)
 
 ### Naming Conventions
 
-| Element | Convention | Example |
-|---------|-----------|---------|
-| Functions | Verb-Noun (PascalCase) | `Invoke-TokenBudgetGuard` |
-| Variables | PascalCase (script), camelCase (local) | `$ConfigPath`, `$localVar` |
-| Files | PascalCase with hyphens | `token-budget-guard.ps1` |
-| Tests | `*.tests.ps1` suffix | `auth.tests.ps1` |
-| JSON keys | camelCase | `confidenceThreshold` |
-| Branch names | type/description | `feat/auth-flow` |
-| Skill directories | kebab-case | `auto-delegation-router` |
+| Element           | Convention                             | Example                    |
+| ----------------- | -------------------------------------- | -------------------------- |
+| Functions         | Verb-Noun (PascalCase)                 | `Invoke-TokenBudgetGuard`  |
+| Variables         | PascalCase (script), camelCase (local) | `$ConfigPath`, `$localVar` |
+| Files             | PascalCase with hyphens                | `token-budget-guard.ps1`   |
+| Tests             | `*.tests.ps1` suffix                   | `auth.tests.ps1`           |
+| JSON keys         | camelCase                              | `confidenceThreshold`      |
+| Branch names      | type/description                       | `feat/auth-flow`           |
+| Skill directories | kebab-case                             | `auto-delegation-router`   |
 
 ### Forbidden Patterns
 
-- No `Write-Host` in reusable functions/libraries (use `Write-Output` or `return`); OK in CLI scripts, hooks, and `gv` commands for direct user output
+- No `Write-Host` in reusable functions/libraries (use `Write-Output` or `return`); OK in CLI
+  scripts, hooks, and `gv` commands for direct user output
 - No hardcoded paths (use relative or config-driven paths)
 - No empty `catch` blocks
 - No `Should Be` syntax (use `Should -Be` for Pester 5.x)
@@ -78,8 +79,8 @@ $result | Should Be $expected
 
 ### Testing Policy Source
 
-Canonical testing configuration: `config/testing-policy.json`
-Detailed testing norms: `docs/NORMATIVAS-TESTING.md`
+Canonical testing configuration: `config/testing-policy.json` Detailed testing norms:
+`docs/NORMATIVAS-TESTING.md`
 
 ---
 
@@ -124,6 +125,7 @@ description: 'Trigger: keyword1, keyword2. Short description.'
 ### Config JSON Standards
 
 Every config JSON MUST include:
+
 - `version` field
 - `description` field
 - Comments via `_comment` field (JSON5 not supported)
@@ -209,13 +211,17 @@ Before marking ANY task as complete:
 BEFORE modifying any existing file, follow this protocol to avoid incomplete/wrong changes:
 
 ### Phase 1 — Explore Project Structure
+
 1. **List root directory**: understand project type (src/, lib/, cmd/, api/, frontend/)
-2. **Read package/build configs**: `package.json`, `Cargo.toml`, `go.mod`, `CMakeLists.txt`, `pom.xml`, etc.
-3. **Identify entry points**: `main.go`, `main.ts`, `app.tsx`, `index.js`, `Program.cs`, `routes/`, `handlers/`
+2. **Read package/build configs**: `package.json`, `Cargo.toml`, `go.mod`, `CMakeLists.txt`,
+   `pom.xml`, etc.
+3. **Identify entry points**: `main.go`, `main.ts`, `app.tsx`, `index.js`, `Program.cs`, `routes/`,
+   `handlers/`
 4. **Read README or equivalent**: understand project purpose and conventions
 5. **Check existing code style**: naming conventions, folder structure, import patterns
 
 ### Phase 2 — Scope the Change
+
 1. **Understand the ask**: what needs to change functionally?
 2. **Find related files**: grep for existing patterns, imports, types, endpoints
 3. **Map dependencies**: what imports/exports/schemas will be affected?
@@ -223,12 +229,14 @@ BEFORE modifying any existing file, follow this protocol to avoid incomplete/wro
 5. **Document scope**: list exact files to read → modify → validate
 
 ### Phase 3 — Validate Before Modifying
+
 1. **Run existing tests**: ensure baseline passes before your change
 2. **Check linter output**: `npm run lint`, `ruff`, `golangci-lint`, etc.
 3. **Note conventions**: mimic existing patterns (error handling, logging, naming)
 4. **Verify no secrets exposure** before touching sensitive paths
 
 ### Phase 4 — Modify
+
 1. **Read the full file** before editing (not just snippets)
 2. **Make minimal changes**: one logical change per file
 3. **Follow project conventions**: don't impose your style over existing patterns
@@ -236,15 +244,16 @@ BEFORE modifying any existing file, follow this protocol to avoid incomplete/wro
 5. **Update tests** alongside implementation (not after)
 
 ### Phase 5 — Post-Modification Validation
+
 1. **Run affected tests**: not just the full suite, specifically touched modules
 2. **Run linter/typecheck**: ensure no new warnings
 3. **Verify integration points**: APIs, database migrations, UI components
 4. **Run `agent-verify.ps1`** if modifying gentle-vanguard itself
 5. **Persist to engram** if architecture/pattern changed significantly
 
-**Why**: Existing projects have established conventions. Blind modifications break builds,
-introduce inconsistencies, and waste tokens on rework. This protocol enforces
-context-first development — understand before changing.
+**Why**: Existing projects have established conventions. Blind modifications break builds, introduce
+inconsistencies, and waste tokens on rework. This protocol enforces context-first development —
+understand before changing.
 
 ## AI Agent Standards
 
@@ -298,30 +307,30 @@ Violations result in:
 
 ## References
 
-| Resource | Path |
-|----------|------|
-| AI Normatives | `rules/AI-NORMATIVES.md` |
-| Code Normatives | `rules/NORMATIVAS-CODIGO.md` |
-| Error Handling | `rules/NORMATIVAS-ERROR-HANDLING.md` |
-| Testing Normatives | `docs/NORMATIVAS-TESTING.md` |
-| Security Normatives | `docs/NORMATIVAS-SEGURIDAD.md` |
-| **Accessibility (WCAG 2.2)** | `docs/NORMATIVAS-ACCESIBILIDAD.md` |
-| **I18n/L10n Standards** | `docs/NORMATIVAS-I18N-L10N.md` |
-| **ISO/IEC 25010 Quality** | `docs/NORMATIVAS-ISO25010.md` |
-| **ISO/IEC 27001 Controls** | `docs/NORMATIVAS-ISO27001.md` |
-| **SRE Practices** | `docs/NORMATIVAS-SRE.md` |
-| **Chaos Engineering** | `docs/NORMATIVAS-CHAOS-ENGINEERING.md` |
-| **API Design Standards** | `docs/NORMATIVAS-API-DESIGN.md` |
-| **SBOM Validation** | `docs/NORMATIVAS-SBOM.md` |
-| C# Hardening | `rules/CI-HARDENING-STANDARDS.md` |
-| Skill Style Guide | `rules/SKILL-STYLE-GUIDE.md` |
-| Orchestrator Config | `config/orchestrator.json` |
-| Quality Gates | `config/quality-gates.json` |
-| Structure Policy | `config/structure-policy.json` |
-| Testing Policy | `config/testing-policy.json` |
-| PSScriptAnalyzer Config | `config/PSScriptAnalyzerSettings.psd1` |
-| ESLint Config | `.eslintrc.json` |
-| TypeScript Config | `tsconfig.json` |
+| Resource                     | Path                                   |
+| ---------------------------- | -------------------------------------- |
+| AI Normatives                | `rules/AI-NORMATIVES.md`               |
+| Code Normatives              | `rules/NORMATIVAS-CODIGO.md`           |
+| Error Handling               | `rules/NORMATIVAS-ERROR-HANDLING.md`   |
+| Testing Normatives           | `docs/NORMATIVAS-TESTING.md`           |
+| Security Normatives          | `docs/NORMATIVAS-SEGURIDAD.md`         |
+| **Accessibility (WCAG 2.2)** | `docs/NORMATIVAS-ACCESIBILIDAD.md`     |
+| **I18n/L10n Standards**      | `docs/NORMATIVAS-I18N-L10N.md`         |
+| **ISO/IEC 25010 Quality**    | `docs/NORMATIVAS-ISO25010.md`          |
+| **ISO/IEC 27001 Controls**   | `docs/NORMATIVAS-ISO27001.md`          |
+| **SRE Practices**            | `docs/NORMATIVAS-SRE.md`               |
+| **Chaos Engineering**        | `docs/NORMATIVAS-CHAOS-ENGINEERING.md` |
+| **API Design Standards**     | `docs/NORMATIVAS-API-DESIGN.md`        |
+| **SBOM Validation**          | `docs/NORMATIVAS-SBOM.md`              |
+| C# Hardening                 | `rules/CI-HARDENING-STANDARDS.md`      |
+| Skill Style Guide            | `rules/SKILL-STYLE-GUIDE.md`           |
+| Orchestrator Config          | `config/orchestrator.json`             |
+| Quality Gates                | `config/quality-gates.json`            |
+| Structure Policy             | `config/structure-policy.json`         |
+| Testing Policy               | `config/testing-policy.json`           |
+| PSScriptAnalyzer Config      | `config/PSScriptAnalyzerSettings.psd1` |
+| ESLint Config                | `.eslintrc.json`                       |
+| TypeScript Config            | `tsconfig.json`                        |
 
 ---
 
@@ -329,7 +338,8 @@ Violations result in:
 
 ### Cross-Reference Validation
 
-All scripts must maintain valid references to other scripts, configurations, and documentation. Use `scripts/utilities/validate-cross-references.ps1` to audit:
+All scripts must maintain valid references to other scripts, configurations, and documentation. Use
+`scripts/utilities/validate-cross-references.ps1` to audit:
 
 ```powershell
 # Full validation
@@ -347,11 +357,12 @@ pwsh -NoProfile -File scripts/utilities/validate-cross-references.ps1 -Unreferen
 When deprecating a script or feature:
 
 1. **Mark as Deprecated**: Add comment block at file start
+
    ```powershell
    <#
    .SYNOPSIS
        [DEPRECATED] Use new-script.ps1 instead
-   
+
    .DEPRECATION
        Status: DEPRECATED
        Since: 2026-05-16
@@ -370,6 +381,7 @@ When deprecating a script or feature:
 ### Before Deleting Files
 
 **Mandatory Checklist**:
+
 - [ ] File marked as `@deprecated` for ≥90 days
 - [ ] All references updated or removed
 - [ ] Documentation updated
@@ -381,6 +393,7 @@ When deprecating a script or feature:
 ### Reference Validation in CI/CD
 
 All PRs must pass reference validation:
+
 ```bash
 pwsh -NoProfile -File scripts/utilities/validate-cross-references.ps1
 ```
@@ -390,4 +403,3 @@ Broken references block merge. Fix before committing.
 ---
 
 _Version: 2.0 - 2026-05-10_ _Author: Gentle-Vanguard Team_ _Status: ACTIVE_
-

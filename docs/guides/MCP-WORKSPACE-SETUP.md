@@ -9,15 +9,16 @@
 
 ## Overview
 
-The MCP workspace (`$HOME\mcp-workspace`) is a **local machine artifact** (not git-tracked) that provides:
+The MCP workspace (`$HOME\mcp-workspace`) is a **local machine artifact** (not git-tracked) that
+provides:
 
 ✅ Pre-vetted package versions with locked dependencies  
 ✅ Offline-only execution (no live registry fetches)  
 ✅ Supply-chain attack mitigation via `--offline --no --workspace` flags  
-✅ Conscious update procedures with security review gates  
+✅ Conscious update procedures with security review gates
 
 **Location**: `C:\Users\<username>\mcp-workspace`  
-**Isolation**: External to the gentle-vanguard repository (local machine only)  
+**Isolation**: External to the gentle-vanguard repository (local machine only)
 
 ---
 
@@ -85,6 +86,7 @@ npm install @modelcontextprotocol/server-filesystem@2026.1.14 --save-exact
 ```
 
 **What happens**:
+
 - Downloads and installs exact version from npm registry
 - Creates `package-lock.json` with full dependency tree
 - Creates `node_modules/@modelcontextprotocol/server-filesystem/`
@@ -134,7 +136,8 @@ In `config/mcp-servers.json`:
       "command": "npx",
       "args": [
         "--include-workspace-root",
-        "--workspace", "%USERPROFILE%\\mcp-workspace",
+        "--workspace",
+        "%USERPROFILE%\\mcp-workspace",
         "--no",
         "--offline",
         "@modelcontextprotocol/server-filesystem",
@@ -147,12 +150,12 @@ In `config/mcp-servers.json`:
 
 **What each flag does**:
 
-| Flag | Purpose |
-|------|---------|
-| `--workspace %USERPROFILE%\mcp-workspace` | Point to pre-vetted workspace |
-| `--offline` | Block ALL registry network requests |
-| `--no` | Refuse to auto-download packages |
-| `--include-workspace-root` | Enable workspace mode resolution |
+| Flag                                      | Purpose                             |
+| ----------------------------------------- | ----------------------------------- |
+| `--workspace %USERPROFILE%\mcp-workspace` | Point to pre-vetted workspace       |
+| `--offline`                               | Block ALL registry network requests |
+| `--no`                                    | Refuse to auto-download packages    |
+| `--include-workspace-root`                | Enable workspace mode resolution    |
 
 ### Testing MCP Integration
 
@@ -215,6 +218,7 @@ npm view @modelcontextprotocol/server-filesystem versions --json | ConvertFrom-J
 **Step 3: Decide on update version**
 
 Consider:
+
 - **Security patches** (e.g., 2026.1.14 → 2026.1.15) — RECOMMENDED
 - **Minor updates** (e.g., 2026.1.14 → 2026.2.0) — REVIEW CHANGELOG
 - **Major updates** (e.g., 2026.1.14 → 2027.0.0) — THOROUGH TESTING
@@ -381,12 +385,16 @@ Before considering MCP workspace setup complete:
 ## Reference
 
 **Related Documentation**:
-- [SECURITY-HARDENING.md](SECURITY-HARDENING.md#5-npx-supply-chain-hardening) — NPX hardening details
+
+- [SECURITY-HARDENING.md](SECURITY-HARDENING.md#5-npx-supply-chain-hardening) — NPX hardening
+  details
 - [config/mcp-servers.json](../../config/mcp-servers.json) — MCP configuration
 - [.npmrc](../../.npmrc) — npm security policy
 
 **External References**:
-- [npm-security-best-practices](https://github.com/lirantal/npm-security-best-practices) — Supply chain threat model
+
+- [npm-security-best-practices](https://github.com/lirantal/npm-security-best-practices) — Supply
+  chain threat model
 - [npm audit](https://docs.npmjs.com/cli/v8/commands/npm-audit) — Vulnerability scanning
 - [Model Context Protocol](https://modelcontextprotocol.io) — MCP standards
 
@@ -400,10 +408,10 @@ Before considering MCP workspace setup complete:
 
 **Issues?** Check "Troubleshooting" section or reach out to security team.
 
-**Questions?** See [SECURITY-HARDENING.md](SECURITY-HARDENING.md#5-npx-supply-chain-hardening) for threat model details.
+**Questions?** See [SECURITY-HARDENING.md](SECURITY-HARDENING.md#5-npx-supply-chain-hardening) for
+threat model details.
 
 ---
 
 **Last Updated**: May 13, 2026  
 **Status**: PRODUCTION READY
-

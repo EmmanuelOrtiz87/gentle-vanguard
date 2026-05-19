@@ -322,17 +322,7 @@
   "reporting": {
     "frequency": "weekly",
     "format": "html",
-    "metrics": [
-      "response_time",
-      "throughput",
-      "error_rate",
-      "resource_usage",
-      "cache_performance"
-    ],
-    "comparisons": [
-      "baseline",
-      "previous_week",
-      "target"
-    ]
+    "metrics": ["response_time", "throughput", "error_rate", "resource_usage", "cache_performance"],
+    "comparisons": ["baseline", "previous_week", "target"]
   }
 }

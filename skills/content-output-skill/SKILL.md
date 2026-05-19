@@ -448,12 +448,12 @@ Preguntas? Responde aqu
 
 ## Hashtags
 
-| Category | Hashtags                        |
-| -------- | ------------------------------- |
+| Category | Hashtags                             |
+| -------- | ------------------------------------ |
 | Stack    | #Gentle-VanguardStack #AIDevelopment |
-| Tools    | #OpenCode #Claude #Cursor       |
-| Spanish  | #DevES #desarrolloES            |
-| General  | #DevTools #AI #Productivity     |
+| Tools    | #OpenCode #Claude #Cursor            |
+| Spanish  | #DevES #desarrolloES                 |
+| General  | #DevTools #AI #Productivity          |
 
 ## Posting Schedule
 
@@ -495,4 +495,3 @@ Preguntas? Responde aqu
 
 _Skill versión: 3.0_  
 _Last updated: 2026-04-27_
-

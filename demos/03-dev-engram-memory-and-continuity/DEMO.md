@@ -185,4 +185,3 @@ Get-Content .metrics/session-YYYY-MM-DD-XX.json | ConvertFrom-Json | ConvertTo-J
 4. Context is resumed quickly on day 2 — no repeated onboarding
 5. Token efficiency: compact-start uses ~350 tokens vs. 2K+ for full reload
 6. Team sees tangible AI collaboration continuity across sessions
-

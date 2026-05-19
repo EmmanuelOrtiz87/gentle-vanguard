@@ -16,7 +16,7 @@ Audience-oriented demos. Each includes run steps, expected output, and talking p
 | 05  | `05-dev-documentation-and-closure/`    | Dev / DOC       | Session closure, audit artifacts, docs      | 10 min   |
 | 06  | `06-exec-executive-overview/`          | Executives      | Business impact, dashboard, KPIs            | 20 min   |
 | 07  | `07-mixed-cookbook-real-request/`      | Mixed           | End-to-end real-world feature request       | 25 min   |
-| 08  | `08-dev-enterprise-hardening-v265/`    | Dev / DevOps    | Enterprise hardening, SLOs, releases   | 20 min   |
+| 08  | `08-dev-enterprise-hardening-v265/`    | Dev / DevOps    | Enterprise hardening, SLOs, releases        | 20 min   |
 
 ---
 
@@ -71,4 +71,3 @@ Audience-oriented demos. Each includes run steps, expected output, and talking p
 | Normativas vivas              | 08         |
 | Judgment Day review           | 04, 07     |
 | Session lifecycle             | 01, 05     |
-

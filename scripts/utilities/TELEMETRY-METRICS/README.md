@@ -65,4 +65,3 @@ Management reporting skill available at:
 `~/.config/opencode/skills/management-reporting-skill/SKILL.md`
 
 Triggers: "management report", "generar informe", "reporte gerencial"
-

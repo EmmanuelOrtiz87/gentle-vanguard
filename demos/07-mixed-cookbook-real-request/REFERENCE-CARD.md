@@ -91,4 +91,3 @@ cd ../../..
 - [ ] `go version` disponible en PATH
 - [ ] `tasks.json` eliminado si hubo corrida previa
 - [ ] Repo limpio (`git status` sin cambios)
-

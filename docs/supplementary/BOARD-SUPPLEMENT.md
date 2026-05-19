@@ -187,13 +187,13 @@ Equipo Core:
 
 ### E.1 Opciones del Mercado
 
-| Opcin                    | Pros                                 | Contras                               | Costo           |
-| ------------------------ | ------------------------------------ | ------------------------------------- | --------------- |
-| **No hacer nada**        | -                                    | Sin estndares,perdida de tiempo       | $0              |
-| **GitHub Copilot**       | Integrado, popular                   | Solo MS ecosystem, limited governance | $19/user/mes    |
-| **Amazon Q Developer**   | AWS integrado                        | Solo AWS                              | $19-30/user/mes |
-| **Cursor/Windsurf**      | Buena UX                             | No governance                         | $20/user/mes    |
-| **Gentle-Vanguard** | Custom, governance, multi-vendor, $0 | Requiere impl                         | $0 + dev time   |
+| Opcin                  | Pros                                 | Contras                               | Costo           |
+| ---------------------- | ------------------------------------ | ------------------------------------- | --------------- |
+| **No hacer nada**      | -                                    | Sin estndares,perdida de tiempo       | $0              |
+| **GitHub Copilot**     | Integrado, popular                   | Solo MS ecosystem, limited governance | $19/user/mes    |
+| **Amazon Q Developer** | AWS integrado                        | Solo AWS                              | $19-30/user/mes |
+| **Cursor/Windsurf**    | Buena UX                             | No governance                         | $20/user/mes    |
+| **Gentle-Vanguard**    | Custom, governance, multi-vendor, $0 | Requiere impl                         | $0 + dev time   |
 
 ### E.2 Por Qu GV Es Mejor
 
@@ -426,4 +426,3 @@ SI ROLLOUT FALLA:
 **Documento preparado por:** Equipo de desarrollo  
 **ltima actualizacin:** Abril 2026  
 **Versin:** 1.0
-

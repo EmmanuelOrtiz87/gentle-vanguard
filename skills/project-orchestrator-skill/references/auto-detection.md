@@ -21,11 +21,10 @@
 
 ## Project Structure
 
-| File/Directory          | Meaning                          |
-| ----------------------- | -------------------------------- |
-| `.github/workflows/`    | CI/CD                            |
-| `tests/` or `*_test.go` | Testing                          |
-| `docs/`                 | Documentation                    |
-| `AGENTS.md`             | AI configured                    |
+| File/Directory          | Meaning                               |
+| ----------------------- | ------------------------------------- |
+| `.github/workflows/`    | CI/CD                                 |
+| `tests/` or `*_test.go` | Testing                               |
+| `docs/`                 | Documentation                         |
+| `AGENTS.md`             | AI configured                         |
 | `skills/`               | Native Gentle-Vanguard skills catalog |
-

@@ -64,7 +64,10 @@
             "properties": {
               "name": { "type": "string", "description": "Command name" },
               "description": { "type": "string", "description": "Command description" },
-              "script": { "type": "string", "description": "Script to execute relative to plugin dir" }
+              "script": {
+                "type": "string",
+                "description": "Script to execute relative to plugin dir"
+              }
             }
           }
         ]
@@ -72,4 +75,3 @@
     }
   }
 }
-

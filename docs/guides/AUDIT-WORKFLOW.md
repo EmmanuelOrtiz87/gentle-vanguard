@@ -137,16 +137,15 @@ For use in projects without Gentle-Vanguard:
 
 ## Skills Reference
 
-| Skill                     | Purpose                        |
-| ------------------------- | ------------------------------ |
-| `gentle-vanguard-audit-skill`  | Batch validation, zero tokens  |
-| `judgment-day-skill`      | Adversarial review, token cost |
-| `script-governance-skill` | Script validation              |
-| `docs-alignment-skill`    | Documentation synchronization  |
+| Skill                         | Purpose                        |
+| ----------------------------- | ------------------------------ |
+| `gentle-vanguard-audit-skill` | Batch validation, zero tokens  |
+| `judgment-day-skill`          | Adversarial review, token cost |
+| `script-governance-skill`     | Script validation              |
+| `docs-alignment-skill`        | Documentation synchronization  |
 
 ## Related Documentation
 
 - [gentle-vanguard-audit-skill/SKILL.md](../../skills/gentle-vanguard-audit-skill/SKILL.md)
 - [judgment-day/SKILL.md](../../skills/judgment-day/SKILL.md)
 - [SKILL-RESOLVER-PROTOCOL](../reference/SKILL-RESOLVER-PROTOCOL.md)
-

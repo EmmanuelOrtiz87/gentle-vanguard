@@ -310,4 +310,3 @@ cd gentle-vanguard
    "completion_price_unit": "0", "completion_price": "0", "total_tokens": 141575, "total_price":
    "0", "currency": "USD", "latency": 44.162, "time_to_first_token": 3.441, "time_to_generate":
    40.721 }
-

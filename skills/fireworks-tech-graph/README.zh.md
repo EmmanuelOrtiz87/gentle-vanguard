@@ -12,7 +12,10 @@
 
 ## 概述
 
-`fireworks-tech-graph` 将自然语言描述转化为精美的 SVG 技术图，并通过 `cairosvg`（推荐）导出高分辨率 PNG，同时支持 `rsvg-convert` 与 `puppeteer` 作为备选方案。内置 **7 种视觉风格**，深度覆盖 AI/Agent 领域常见图类型（RAG、Agentic Search、Mem0、Multi-Agent、Tool Call 流程等），并完整支持全部 14 种 UML 图类型。
+`fireworks-tech-graph` 将自然语言描述转化为精美的 SVG 技术图，并通过
+`cairosvg`（推荐）导出高分辨率 PNG，同时支持 `rsvg-convert` 与 `puppeteer` 作为备选方案。内置
+**7 种视觉风格**，深度覆盖 AI/Agent 领域常见图类型（RAG、Agentic Search、Mem0、Multi-Agent、Tool
+Call 流程等），并完整支持全部 14 种 UML 图类型。
 
 ```
 用户: "画一张 Mem0 的架构图，暗黑风格"
@@ -26,34 +29,42 @@
 
 ## 效果展示
 
-> 所有示例图均以 1920px 宽度（2× 视网膜分辨率）通过 `cairosvg` 导出为 **PNG 格式**。技术图应选 PNG（无损），JPG 有损压缩会在文字和线条边缘产生噪点。
+> 所有示例图均以 1920px 宽度（2× 视网膜分辨率）通过 `cairosvg` 导出为
+> **PNG 格式**。技术图应选 PNG（无损），JPG 有损压缩会在文字和线条边缘产生噪点。
 
 ### 风格 1 — 扁平图标风（默认）
-*Mem0 记忆架构图 — 白底，语义箭头，分层记忆系统*
+
+_Mem0 记忆架构图 — 白底，语义箭头，分层记忆系统_
 ![风格 1 — 扁平图标风](assets/samples/sample-style1-flat.png)
 
 ### 风格 2 — 暗黑极客风
-*Tool Call 执行流程 — 深色背景，Neon 配色，等宽字体*
+
+_Tool Call 执行流程 — 深色背景，Neon 配色，等宽字体_
 ![风格 2 — 暗黑极客风](assets/samples/sample-style2-dark.png)
 
 ### 风格 3 — 工程蓝图风
-*微服务架构图 — 深蓝底，网格线，青色描边*
+
+_微服务架构图 — 深蓝底，网格线，青色描边_
 ![风格 3 — 工程蓝图风](assets/samples/sample-style3-blueprint.png)
 
 ### 风格 4 — Notion 极简风
-*Agent 记忆类型图 — 白底极简，单一强调色*
+
+_Agent 记忆类型图 — 白底极简，单一强调色_
 ![风格 4 — Notion 极简风](assets/samples/sample-style4-notion.png)
 
 ### 风格 5 — 玻璃态卡片风
-*Multi-Agent 协作图 — 深色渐变底，磨砂玻璃卡片*
+
+_Multi-Agent 协作图 — 深色渐变底，磨砂玻璃卡片_
 ![风格 5 — 玻璃态卡片风](assets/samples/sample-style5-glass.png)
 
 ### 风格 6 — Claude 官方风格
-*系统架构图 — 温暖奶油色背景 (#f8f6f3)，Anthropic 品牌色，简洁专业美学*
+
+_系统架构图 — 温暖奶油色背景 (#f8f6f3)，Anthropic 品牌色，简洁专业美学_
 ![风格 6 — Claude 官方风格](assets/samples/sample-style6-claude.png)
 
 ### 风格 7 — OpenAI 官方风格
-*API 集成流程图 — 纯白背景，OpenAI 品牌配色，现代极简设计*
+
+_API 集成流程图 — 纯白背景，OpenAI 品牌配色，现代极简设计_
 ![风格 7 — OpenAI 官方风格](assets/samples/sample-style7-openai.png)
 
 ---
@@ -63,6 +74,7 @@
 下面这 7 组提示词都更贴近当前仓库里回归测试最稳定的输出方式：
 
 ### 风格 1 — 扁平图标风
+
 ```text
 画一张 style 1（Flat Icon）的 Mem0 记忆架构图。
 分成四个横向区域：Input Layer、Memory Manager、Storage Layer、Output / Retrieval。
@@ -71,6 +83,7 @@
 ```
 
 ### 风格 2 — 暗黑极客风
+
 ```text
 画一张 style 2（Dark Terminal）的 tool call flow 图。
 包含 User query、Retrieve chunks、Generate answer、Knowledge base、Agent、Terminal、Source documents、Grounded answer。
@@ -78,6 +91,7 @@
 ```
 
 ### 风格 3 — 工程蓝图风
+
 ```text
 画一张 style 3（Blueprint）的微服务架构图。
 使用带编号的工程分区标题，例如 01 // EDGE、02 // APPLICATION SERVICES、03 // DATA + EVENT INFRA、04 // OBSERVABILITY。
@@ -86,6 +100,7 @@
 ```
 
 ### 风格 4 — Notion 极简风
+
 ```text
 画一张 style 4（Notion Clean）的 agent memory types 图。
 以中间的 Agent Core 为中心，对比 Sensory Memory、Working Memory、Episodic Memory、Semantic Memory、Procedural Memory。
@@ -93,6 +108,7 @@
 ```
 
 ### 风格 5 — 玻璃态卡片风
+
 ```text
 画一张 style 5（Glassmorphism）的 multi-agent collaboration 图。
 分成 Mission Control、Specialist Agents、Synthesis 三个区域。
@@ -101,6 +117,7 @@
 ```
 
 ### 风格 6 — Claude 官方风格
+
 ```text
 画一张 style 6（Claude Official）的 system architecture 图。
 使用左侧 layer label：Interface Layer、Core Layer、Gentle-Vanguard Layer。
@@ -109,6 +126,7 @@
 ```
 
 ### 风格 7 — OpenAI 官方风格
+
 ```text
 画一张 style 7（OpenAI Official）的 API integration flow 图。
 分成 Entry、Model + Tools、Delivery 三个区域。
@@ -122,14 +140,17 @@
 
 - **7 种视觉风格** — 从白底极简到暗黑 Neon 再到磨砂玻璃，再到官方品牌风格
 - **可执行风格系统** — 风格约束不仅写在文档里，也真正进入生成器逻辑
-- **14 种图类型** — 完整支持全部 UML 图类型（类图、组件图、部署图、包图、复合结构图、对象图、用例图、活动图、状态机图、序列图、通信图、时序图、交互概览图、ER 图）以及 AI/Agent 领域图
-- **AI/Agent 领域内建知识** — RAG、Agentic Search、Mem0、Multi-Agent、Tool Call 等常见 Pattern 开箱即用
+- **14 种图类型**
+  — 完整支持全部 UML 图类型（类图、组件图、部署图、包图、复合结构图、对象图、用例图、活动图、状态机图、序列图、通信图、时序图、交互概览图、ER 图）以及 AI/Agent 领域图
+- **AI/Agent 领域内建知识** — RAG、Agentic Search、Mem0、Multi-Agent、Tool
+  Call 等常见 Pattern 开箱即用
 - **语义形状词汇表** — LLM = 双边框圆角矩形，Agent = 六边形，Vector Store = 带内环圆柱
 - **语义箭头系统** — 颜色 + 虚线样式编码含义（写入/读取/异步/循环）
 - **产品图标库** — 40+ 产品品牌色：OpenAI、Anthropic、Pinecone、Weaviate、Kafka、PostgreSQL……
 - **泳道分组** — 自动为复杂架构添加层级标签
 - **SVG + PNG 双输出** — SVG 可编辑，1920px PNG 可直接嵌入文章
-- **渲染器友好** — 纯内联 SVG，不依赖外部字体；在 cairosvg、rsvg-convert、headless Chrome 下都能稳定渲染
+- **渲染器友好** — 纯内联 SVG，不依赖外部字体；在 cairosvg、rsvg-convert、headless
+  Chrome 下都能稳定渲染
 
 ---
 
@@ -183,11 +204,11 @@ python3 -c "import cairosvg; print(cairosvg.__version__)"
 rsvg-convert --version
 ```
 
-| 渲染器 | 渲染质量 | 安装成本 | 适用场景 |
-|--------|---------|---------|---------|
-| **cairosvg** | ✅ 好 | 一行 `pip install` | 默认推荐，平衡最佳 |
-| rsvg-convert | ⚠️ 一般 | 系统包 | 没有 Python 环境，简单图形够用 |
-| puppeteer | ✅✅ 最佳 | Node + 约 150MB Chromium | 浏览器生成的 SVG（D3、Mermaid）或像素级还原 |
+| 渲染器       | 渲染质量  | 安装成本                 | 适用场景                                    |
+| ------------ | --------- | ------------------------ | ------------------------------------------- |
+| **cairosvg** | ✅ 好     | 一行 `pip install`       | 默认推荐，平衡最佳                          |
+| rsvg-convert | ⚠️ 一般   | 系统包                   | 没有 Python 环境，简单图形够用              |
+| puppeteer    | ✅✅ 最佳 | Node + 约 150MB Chromium | 浏览器生成的 SVG（D3、Mermaid）或像素级还原 |
 
 > 详细的对比、批量脚本与 puppeteer 完整脚本见 [SKILL.md → SVG → PNG Conversion](SKILL.md)。
 
@@ -243,26 +264,31 @@ generate diagram / draw diagram / create chart / visualize
 ```
 画一张 Agentic RAG 和普通 RAG 的对比图，用 Notion 极简风
 ```
+
 → 功能矩阵对比：检索策略、Agent 循环、工具调用、延迟、成本
 
 ```
 生成一张 Mem0 记忆架构图，包含向量库、图数据库、KV 存储和记忆管理器
 ```
+
 → 分泳道记忆架构：Input → Memory Manager → 存储层 → 检索输出
 
 ```
 画一张 Multi-Agent 协作图：Orchestrator 调度 3 个 SubAgent（搜索/计算/代码执行），汇聚到 Aggregator
 ```
+
 → Agent 架构，六边形节点 + 工具层 + 结果聚合
 
 ```
 可视化一下 Tool Call 的执行流程：LLM → Tool Selector → Execution → Parser → 回到 LLM
 ```
+
 → 含决策循环的流程图，展示工具调用的完整生命周期
 
 ```
 画一张 Agent 的 5 种记忆类型图：感知记忆、工作记忆、情景记忆、语义记忆、程序记忆
 ```
+
 → 思维导图或分层架构，从感官输入到程序技能的记忆层级
 
 ### 基础设施与云架构
@@ -270,16 +296,19 @@ generate diagram / draw diagram / create chart / visualize
 ```
 帮我画一张微服务架构图：Client → API Gateway → [用户服务 / 订单服务 / 支付服务] → PostgreSQL + Redis
 ```
+
 → 水平分层架构，每个服务集群一个泳道
 
 ```
 生成一张数据管道图：Kafka 消费数据 → Spark 处理 → 写入 S3 → Athena 查询
 ```
+
 → 数据流图，每条箭头标注数据类型（stream / batch / query）
 
 ```
 画一张 Kubernetes 部署架构：Ingress → Service → [Pod × 3] → ConfigMap + PersistentVolume
 ```
+
 → 架构图，Namespace 用虚线框，流量用实线箭头
 
 ### API 与时序流程
@@ -287,11 +316,13 @@ generate diagram / draw diagram / create chart / visualize
 ```
 画一张 OAuth2 授权码流程的序列图：用户 → 客户端 → 授权服务器 → 资源服务器
 ```
+
 → 序列图，垂直生命线 + 激活框
 
 ```
 帮我画一张 ChatGPT Plugin 的调用时序图
 ```
+
 → 时序：User → ChatGPT → Plugin Manifest → API → 响应链
 
 ### 决策与流程图
@@ -299,11 +330,13 @@ generate diagram / draw diagram / create chart / visualize
 ```
 画一张 AI 应用上线前的质检流程图：代码审查 → 安全扫描 → 性能测试 → 人工审核 → 发布
 ```
+
 → 流程图，含菱形决策节点和并行分支
 
 ```
 生成一张 RAG vs Fine-tuning vs Prompt Engineering 的功能对比图
 ```
+
 → 功能矩阵，对比成本、延迟、准确率、灵活性
 
 ### 概念图与知识图谱
@@ -311,33 +344,39 @@ generate diagram / draw diagram / create chart / visualize
 ```
 帮我可视化一下 LLM 应用的技术栈：从底层模型到 SDK 到应用框架到部署层
 ```
+
 → 分层架构图或思维导图，从模型层到产品层
 
 ```
 画一张 AI Agent 的核心能力地图：感知 / 记忆 / 推理 / 行动 / 学习
 ```
+
 → 以"AI Agent"为中心的放射状思维导图，5 个核心能力分支
 
 ---
 
 ## 7 种风格
 
-| # | 名称 | 背景色 | 字体 | 适用场景 |
-|---|------|--------|------|----------|
-| 1 | **扁平图标风** *(默认)* | `#ffffff` | Helvetica | 博客、幻灯片、技术文档 |
-| 2 | **暗黑极客风** | `#0f0f1a` | SF Mono / Fira Code | GitHub README、开发者文章 |
-| 3 | **工程蓝图风** | `#0a1628` | Courier New | 架构设计文档、工程规范 |
-| 4 | **Notion 极简风** | `#ffffff` | system-ui | Notion、Confluence、内部 Wiki |
-| 5 | **玻璃态卡片风** | `#0d1117` 渐变 | Inter | 产品官网、演讲 Keynote |
-| 6 | **Claude 官方风格** | `#f8f6f3` | system-ui | Anthropic 风格图表，温暖专业美学 |
-| 7 | **OpenAI 官方风格** | `#ffffff` | system-ui | OpenAI 风格图表，简洁现代设计 |
+| #   | 名称                    | 背景色         | 字体                | 适用场景                         |
+| --- | ----------------------- | -------------- | ------------------- | -------------------------------- |
+| 1   | **扁平图标风** _(默认)_ | `#ffffff`      | Helvetica           | 博客、幻灯片、技术文档           |
+| 2   | **暗黑极客风**          | `#0f0f1a`      | SF Mono / Fira Code | GitHub README、开发者文章        |
+| 3   | **工程蓝图风**          | `#0a1628`      | Courier New         | 架构设计文档、工程规范           |
+| 4   | **Notion 极简风**       | `#ffffff`      | system-ui           | Notion、Confluence、内部 Wiki    |
+| 5   | **玻璃态卡片风**        | `#0d1117` 渐变 | Inter               | 产品官网、演讲 Keynote           |
+| 6   | **Claude 官方风格**     | `#f8f6f3`      | system-ui           | Anthropic 风格图表，温暖专业美学 |
+| 7   | **OpenAI 官方风格**     | `#ffffff`      | system-ui           | OpenAI 风格图表，简洁现代设计    |
 
-每种风格在 `references/` 目录下都有专属参考文件，包含精确的颜色 Token、SVG 模板和使用规范。
-生成器现在还会直接消费风格相关结构字段，例如 `containers`、语义化 `nodes[].kind`、`arrows[].flow` 以及显式端口锚点，以便更稳定地逼近样图级布局质量。
+每种风格在 `references/`
+目录下都有专属参考文件，包含精确的颜色 Token、SVG 模板和使用规范。生成器现在还会直接消费风格相关结构字段，例如
+`containers`、语义化 `nodes[].kind`、`arrows[].flow`
+以及显式端口锚点，以便更稳定地逼近样图级布局质量。
 
 几个很有用的增强字段：
+
 - `style_overrides`：在不复制整套 style 的前提下微调标题对齐或配色 token
-- `containers[].header_prefix` / `containers[].header_text`：用于 style 3 这种 `01 // EDGE` 的工程编号分区标题
+- `containers[].header_prefix` / `containers[].header_text`：用于 style 3 这种 `01 // EDGE`
+  的工程编号分区标题
 - `containers[].side_label`：用于 style 6 这类左侧 Layer Label
 - `window_controls`、`meta_left`、`meta_center`、`meta_right`：用于终端 / 文档风格的顶部 chrome
 - `blueprint_title_block`：用于 style 3 的蓝图标题信息框
@@ -345,23 +384,27 @@ generate diagram / draw diagram / create chart / visualize
 ### 风格选择指南
 
 **UML 图类型：**
+
 - **类图/组件图/包图**：风格 1（扁平图标风）或风格 4（Notion 极简风）— 结构清晰，易于阅读
 - **序列图/时序图**：风格 2（暗黑极客风）— 等宽字体有助于对齐
 - **状态机图/活动图**：风格 3（工程蓝图风）— 工程美学适合流程图
 - **用例图/交互图**：风格 1（扁平图标风）— 彩色，易于理解
 
 **AI/Agent 图类型：**
+
 - **RAG/Agentic Search**：风格 2（暗黑极客风）或风格 5（玻璃态卡片风）— 科技感强
 - **记忆架构**：风格 3（工程蓝图风）— 强调分层存储结构
 - **Multi-Agent**：风格 5（玻璃态卡片风）— 磨砂卡片区分 Agent 边界
 
 **文档类型：**
+
 - **内部文档**：风格 4（Notion 极简风）— 极简，适合 Wiki
 - **技术博客**：风格 1（扁平图标风）— 彩色，吸引眼球
 - **GitHub README**：风格 2（暗黑极客风）— 匹配暗色主题
 - **演示文稿**：风格 5（玻璃态卡片风）或风格 6（Claude 官方风格）— 精致专业
 
 **品牌特定：**
+
 - **Anthropic/Claude 项目**：风格 6（Claude 官方风格）— 温暖奶油色背景，品牌感强且克制
 - **OpenAI 项目**：风格 7（OpenAI 官方风格）— 简洁白色，OpenAI 配色
 
@@ -369,35 +412,35 @@ generate diagram / draw diagram / create chart / visualize
 
 ## 支持的图类型
 
-| 类型 | 描述 | 关键布局规则 |
-|------|------|-------------|
-| **架构图** | 服务、组件、云基础设施 | 水平分层，自上而下 |
-| **数据流图** | 数据在系统中的流向 | 每条箭头标注数据类型 |
-| **流程图** | 决策树、流程步骤 | 菱形 = 决策，自上而下 |
-| **Agent 架构图** | LLM + 工具 + 记忆 | 五层模型：输入/Agent/记忆/工具/输出 |
-| **记忆架构图** | Mem0、MemGPT 风格 | 读/写路径分离，记忆层级分明 |
-| **序列图** | API 调用链、时序交互 | 垂直生命线，水平消息箭头 |
-| **对比图** | 功能矩阵、方案比较 | 列 = 系统，行 = 属性 |
-| **思维导图** | 概念地图、发散思维 | 中心节点，贝塞尔曲线分支 |
+| 类型             | 描述                   | 关键布局规则                        |
+| ---------------- | ---------------------- | ----------------------------------- |
+| **架构图**       | 服务、组件、云基础设施 | 水平分层，自上而下                  |
+| **数据流图**     | 数据在系统中的流向     | 每条箭头标注数据类型                |
+| **流程图**       | 决策树、流程步骤       | 菱形 = 决策，自上而下               |
+| **Agent 架构图** | LLM + 工具 + 记忆      | 五层模型：输入/Agent/记忆/工具/输出 |
+| **记忆架构图**   | Mem0、MemGPT 风格      | 读/写路径分离，记忆层级分明         |
+| **序列图**       | API 调用链、时序交互   | 垂直生命线，水平消息箭头            |
+| **对比图**       | 功能矩阵、方案比较     | 列 = 系统，行 = 属性                |
+| **思维导图**     | 概念地图、发散思维     | 中心节点，贝塞尔曲线分支            |
 
 ### UML 图类型支持（14 种）
 
-| UML 类型 | 描述 | 推荐风格 |
-|----------|------|----------|
-| **类图** | 类、属性、方法、关系 | 风格 1, 4 |
-| **组件图** | 软件组件和依赖关系 | 风格 1, 3 |
-| **部署图** | 硬件节点和软件部署 | 风格 3 |
-| **包图** | 包组织和依赖关系 | 风格 1, 4 |
-| **复合结构图** | 类/组件的内部结构 | 风格 1, 3 |
-| **对象图** | 对象实例和关系 | 风格 1, 4 |
-| **用例图** | 参与者、用例、系统边界 | 风格 1 |
-| **活动图** | 工作流、并行流程 | 风格 3 |
-| **状态机图** | 状态转换和事件 | 风格 2, 3 |
-| **序列图** | 时间顺序的消息交换 | 风格 2 |
-| **通信图** | 对象交互和消息 | 风格 1, 2 |
-| **时序图** | 状态随时间的变化 | 风格 2 |
-| **交互概览图** | 高层交互流程 | 风格 1, 2 |
-| **ER 图** | 实体关系数据模型 | 风格 1, 3 |
+| UML 类型       | 描述                   | 推荐风格  |
+| -------------- | ---------------------- | --------- |
+| **类图**       | 类、属性、方法、关系   | 风格 1, 4 |
+| **组件图**     | 软件组件和依赖关系     | 风格 1, 3 |
+| **部署图**     | 硬件节点和软件部署     | 风格 3    |
+| **包图**       | 包组织和依赖关系       | 风格 1, 4 |
+| **复合结构图** | 类/组件的内部结构      | 风格 1, 3 |
+| **对象图**     | 对象实例和关系         | 风格 1, 4 |
+| **用例图**     | 参与者、用例、系统边界 | 风格 1    |
+| **活动图**     | 工作流、并行流程       | 风格 3    |
+| **状态机图**   | 状态转换和事件         | 风格 2, 3 |
+| **序列图**     | 时间顺序的消息交换     | 风格 2    |
+| **通信图**     | 对象交互和消息         | 风格 1, 2 |
+| **时序图**     | 状态随时间的变化       | 风格 2    |
+| **交互概览图** | 高层交互流程           | 风格 1, 2 |
+| **ER 图**      | 实体关系数据模型       | 风格 1, 3 |
 
 ---
 
@@ -421,35 +464,35 @@ Tool Call 流程       → LLM → Tool Selector → Execution → Parser → LL
 
 形状在所有风格中保持一致的语义：
 
-| 概念 | 形状 |
-|------|------|
-| 用户 / 人类 | 圆形 + 身体路径 |
-| LLM / 模型 | 圆角矩形，双边框，⚡ |
-| Agent / 编排器 | 六边形 |
-| 短期记忆 | 虚线边框圆角矩形 |
-| 长期记忆 | 实线圆柱体 |
-| Vector Store | 带内环圆柱 |
-| Graph DB | 三圆簇 |
-| 工具 / 函数 | 带 ⚙ 的矩形 |
-| API / 网关 | 六边形（单边框） |
-| 消息队列 / 流 | 横向管道 |
-| 文档 / 文件 | 折角矩形 |
-| 浏览器 / UI | 带三点标题栏的矩形 |
-| 决策节点 | 菱形 |
-| 外部服务 | 虚线边框矩形 |
+| 概念           | 形状                 |
+| -------------- | -------------------- |
+| 用户 / 人类    | 圆形 + 身体路径      |
+| LLM / 模型     | 圆角矩形，双边框，⚡ |
+| Agent / 编排器 | 六边形               |
+| 短期记忆       | 虚线边框圆角矩形     |
+| 长期记忆       | 实线圆柱体           |
+| Vector Store   | 带内环圆柱           |
+| Graph DB       | 三圆簇               |
+| 工具 / 函数    | 带 ⚙ 的矩形          |
+| API / 网关     | 六边形（单边框）     |
+| 消息队列 / 流  | 横向管道             |
+| 文档 / 文件    | 折角矩形             |
+| 浏览器 / UI    | 带三点标题栏的矩形   |
+| 决策节点       | 菱形                 |
+| 外部服务       | 虚线边框矩形         |
 
 ---
 
 ## 箭头语义
 
-| 流类型 | 线宽 | 虚线 | 含义 |
-|--------|------|------|------|
-| 主数据流 | 2px 实线 | — | 主要请求/响应路径 |
-| 控制 / 触发 | 1.5px 实线 | — | 系统 A 触发 B |
-| 记忆读取 | 1.5px 实线 | — | 从存储检索 |
-| 记忆写入 | 1.5px | `5,3` | 写入/存储操作 |
-| 异步 / 事件 | 1.5px | `4,2` | 非阻塞 |
-| 反馈 / 循环 | 1.5px 曲线 | — | 迭代推理 |
+| 流类型      | 线宽       | 虚线  | 含义              |
+| ----------- | ---------- | ----- | ----------------- |
+| 主数据流    | 2px 实线   | —     | 主要请求/响应路径 |
+| 控制 / 触发 | 1.5px 实线 | —     | 系统 A 触发 B     |
+| 记忆读取    | 1.5px 实线 | —     | 从存储检索        |
+| 记忆写入    | 1.5px      | `5,3` | 写入/存储操作     |
+| 异步 / 事件 | 1.5px      | `4,2` | 非阻塞            |
+| 反馈 / 循环 | 1.5px 曲线 | —     | 迭代推理          |
 
 ---
 
@@ -493,7 +536,8 @@ fireworks-tech-graph/
 
 ## 产品图标覆盖范围
 
-**AI/ML 模型：** OpenAI、Anthropic/Claude、Google Gemini、Meta LLaMA、Mistral、Cohere、Groq、Hugging Face
+**AI/ML 模型：** OpenAI、Anthropic/Claude、Google Gemini、Meta LLaMA、Mistral、Cohere、Groq、Hugging
+Face
 
 **AI 框架：** Mem0、LangChain、LlamaIndex、LangGraph、CrewAI、AutoGen、DSPy、Haystack
 
@@ -512,4 +556,3 @@ fireworks-tech-graph/
 ## License
 
 MIT © 2025 fireworks-tech-graph contributors
-

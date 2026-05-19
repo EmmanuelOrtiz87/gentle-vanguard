@@ -3,15 +3,15 @@
 **Status**: Accepted (Partially Implemented)  
 **Date**: May 13, 2026  
 **Author**: Gentle-Vanguard DevOps Team  
-**Context**: Supply-chain security posture after npx hardening sprint  
+**Context**: Supply-chain security posture after npx hardening sprint
 
 ---
 
 ## Context
 
-gentle-vanguard has strong supply-chain security controls (ADR-003: npx offline hardening,
-`.npmrc` global policy, `lockfile-lint` pre-commit hook). However, **keeping
-dependencies up-to-date** requires ongoing manual attention. Without automation:
+gentle-vanguard has strong supply-chain security controls (ADR-003: npx offline hardening, `.npmrc`
+global policy, `lockfile-lint` pre-commit hook). However, **keeping dependencies up-to-date**
+requires ongoing manual attention. Without automation:
 
 - Security patches are applied days/weeks late
 - Developers must manually track CVE advisories
@@ -20,10 +20,10 @@ dependencies up-to-date** requires ongoing manual attention. Without automation:
 
 ### Current Dependency Profile (May 2026)
 
-| Scope | Package Manager | Dependencies | Lock File |
-|-------|----------------|--------------|-----------|
-| Root | npm | devDependencies only | package-lock.json ✅ |
-| mcp-bridge | npm | runtime + dev | package-lock.json ✅ |
+| Scope      | Package Manager | Dependencies         | Lock File            |
+| ---------- | --------------- | -------------------- | -------------------- |
+| Root       | npm             | devDependencies only | package-lock.json ✅ |
+| mcp-bridge | npm             | runtime + dev        | package-lock.json ✅ |
 
 ### Risk Profile
 
@@ -35,8 +35,8 @@ dependencies up-to-date** requires ongoing manual attention. Without automation:
 
 ## Decision
 
-**Adopt a two-layer dependency update policy: automated audit alerting + quarterly
-manual dependency review. Defer Renovate/Dependabot automation until Q3 2026.**
+**Adopt a two-layer dependency update policy: automated audit alerting + quarterly manual dependency
+review. Defer Renovate/Dependabot automation until Q3 2026.**
 
 ### Layer 1: Automated Audit (Implemented)
 
@@ -53,8 +53,8 @@ if ($LASTEXITCODE -ne 0) { exit 1 }   # blocks push
 
 ### Layer 2: Lockfile Integrity (Implemented)
 
-`lockfile-lint` pre-commit hook validates that `package-lock.json` was not manually
-edited and only contains entries from the approved registry:
+`lockfile-lint` pre-commit hook validates that `package-lock.json` was not manually edited and only
+contains entries from the approved registry:
 
 ```yaml
 # config/lefthook.yml
@@ -79,11 +79,13 @@ Review schedule: first Monday of March, June, September, December.
 ### Layer 4: Renovate Automation (Q3 2026)
 
 Evaluate and configure Renovate Bot for:
+
 - Auto-PRs for patch updates (auto-merge if CI passes)
 - Manual review for minor/major updates
 - Group lockfile updates in single PR
 
 **Deferred to Q3 2026** because:
+
 1. Current dependency surface is small (devDependencies only)
 2. Renovate config requires tested PR merge automation (in progress)
 3. GitHub Actions PR auto-merge policies need review first
@@ -110,18 +112,18 @@ Evaluate and configure Renovate Bot for:
 
 ## Alternatives Considered
 
-1. **Dependabot (GitHub native)** — Simple to enable, but generates noisy PRs without
-   grouped updates; auto-merge not available without branch protection bypass; deferred
-   in favour of Renovate's richer grouping support.
+1. **Dependabot (GitHub native)** — Simple to enable, but generates noisy PRs without grouped
+   updates; auto-merge not available without branch protection bypass; deferred in favour of
+   Renovate's richer grouping support.
 
-2. **Renovate now (Q2 2026)** — Preferred long-term but requires tuning time gentle-vanguard
-   doesn't have mid-sprint; deferred to Q3 with a hard deadline.
+2. **Renovate now (Q2 2026)** — Preferred long-term but requires tuning time gentle-vanguard doesn't
+   have mid-sprint; deferred to Q3 with a hard deadline.
 
-3. **Manual-only (current)** — Rejected: humans miss advisories; `npm audit` finds
-   moderate+ CVEs that developers would not notice otherwise.
+3. **Manual-only (current)** — Rejected: humans miss advisories; `npm audit` finds moderate+ CVEs
+   that developers would not notice otherwise.
 
-4. **Block publish on any outdated package** — Rejected: overly aggressive; outdated
-   ≠ vulnerable; would break workflow for cosmetic version bumps.
+4. **Block publish on any outdated package** — Rejected: overly aggressive; outdated ≠ vulnerable;
+   would break workflow for cosmetic version bumps.
 
 ---
 
@@ -143,4 +145,3 @@ Evaluate and configure Renovate Bot for:
 - `scripts/hooks/check-npm-audit.ps1` — audit hook implementation
 - `scripts/utilities/DEPLOYMENT/generate-sbom.ps1` — SBOM generation
 - OWASP A06:2021 — Vulnerable and Outdated Components
-

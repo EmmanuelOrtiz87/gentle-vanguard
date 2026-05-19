@@ -9,11 +9,13 @@
 SVG 验证脚本，检查 SVG 语法并报告详细错误。
 
 **用法：**
+
 ```bash
 ./validate-svg.sh <svg-file>
 ```
 
 **检查项目：**
+
 - 标签平衡（开标签 vs 闭标签）
 - 属性引号完整性
 - 特殊字符转义
@@ -22,6 +24,7 @@ SVG 验证脚本，检查 SVG 语法并报告详细错误。
 - 渲染验证（cairosvg 优先，rsvg-convert 兜底）
 
 **示例：**
+
 ```bash
 ./validate-svg.sh /path/to/diagram.svg
 ```
@@ -31,11 +34,13 @@ SVG 验证脚本，检查 SVG 语法并报告详细错误。
 SVG 图表生成脚本，提供自动验证和 PNG 导出。
 
 **用法：**
+
 ```bash
 ./generate-diagram.sh [OPTIONS]
 ```
 
 **选项：**
+
 - `-t, --type TYPE` - 图表类型（见脚本帮助）
 - `-s, --style STYLE` - 风格编号（1-7，默认：1）
 - `-o, --output PATH` - 输出路径（默认：当前目录）
@@ -44,6 +49,7 @@ SVG 图表生成脚本，提供自动验证和 PNG 导出。
 - `-h, --help` - 显示帮助
 
 **示例：**
+
 ```bash
 # 生成架构图（Style 1）
 ./generate-diagram.sh -t architecture -s 1 -o ./output/arch.svg
@@ -56,14 +62,15 @@ SVG 图表生成脚本，提供自动验证和 PNG 导出。
 
 ### 3. generate-from-template.py
 
-基于风格配置和 JSON 数据生成 SVG。当前版本不再只是简单塞入 `nodes/arrows`，
-而是会执行 style guide 中的部分可计算规则，例如：
+基于风格配置和 JSON 数据生成 SVG。当前版本不再只是简单塞入 `nodes/arrows`，而是会执行 style
+guide 中的部分可计算规则，例如：
 
 - `style` - 风格编号（1-7）
 - `containers` - 泳道 / 分组容器
 - `containers[].header_prefix` / `containers[].header_text` - 工程编号式分区标题
 - `containers[].side_label` - 左侧 layer label
-- `nodes[].kind` - 语义组件类型，例如 `double_rect`、`cylinder`、`document`、`terminal`、`circle_cluster`
+- `nodes[].kind` - 语义组件类型，例如
+  `double_rect`、`cylinder`、`document`、`terminal`、`circle_cluster`
 - `arrows[].flow` - 语义箭头类型，例如 `control`、`write`、`read`、`data`
 - `source_port` / `target_port` - 指定端口锚点
 - `route_points` / `corridor_x` / `corridor_y` - 控制复杂图的走线质量
@@ -72,11 +79,13 @@ SVG 图表生成脚本，提供自动验证和 PNG 导出。
 - `blueprint_title_block` - 工程蓝图右下角 title block
 
 **用法：**
+
 ```bash
 python3 ./generate-from-template.py architecture ./output/arch.svg '{"style":1,"title":"My Diagram","containers":[],"nodes":[],"arrows":[]}'
 ```
 
 **示例：**
+
 ```bash
 python3 ./generate-from-template.py memory ./output/mem0.svg '{
   "style": 1,
@@ -99,11 +108,13 @@ python3 ./generate-from-template.py memory ./output/mem0.svg '{
 批量测试脚本，测试 7 种风格的回归样例图。
 
 **用法：**
+
 ```bash
 ./test-all-styles.sh
 ```
 
 **功能：**
+
 - 检查所有风格的参考文件
 - 渲染 `fixtures/*.json` 回归样例
 - 验证生成出的 SVG 文件
@@ -111,11 +122,13 @@ python3 ./generate-from-template.py memory ./output/mem0.svg '{
 - 生成测试报告
 
 **输出：**
+
 - 测试摘要（通过/失败统计）
 - PNG 文件（带时间戳）
 - 详细的验证错误信息
 
 **示例：**
+
 ```bash
 ./test-all-styles.sh
 ```
@@ -125,11 +138,13 @@ python3 ./generate-from-template.py memory ./output/mem0.svg '{
 所有脚本需要至少一个 PNG 渲染器（推荐 cairosvg）：
 
 - **cairosvg**（推荐）- SVG 转 PNG，CSS 支持最好
+
   ```bash
   pip install cairosvg
   ```
 
 - **rsvg-convert**（备选）- 系统包；复杂 SVG 可能丢失 CSS / `<foreignObject>`
+
   ```bash
   brew install librsvg                # macOS
   sudo apt install librsvg2-bin       # Ubuntu/Debian
@@ -140,7 +155,9 @@ python3 ./generate-from-template.py memory ./output/mem0.svg '{
   npm install puppeteer
   ```
 
-`generate-diagram.sh` 会优先调用 cairosvg，缺失时自动回退到 rsvg-convert。完整对比与 puppeteer 脚本见 [SKILL.md → SVG → PNG Conversion](../SKILL.md)。
+`generate-diagram.sh`
+会优先调用 cairosvg，缺失时自动回退到 rsvg-convert。完整对比与 puppeteer 脚本见
+[SKILL.md → SVG → PNG Conversion](../SKILL.md)。
 
 - **grep, sed, awk** - 文本处理（macOS 自带）
 
@@ -191,12 +208,14 @@ cd ~/.claude/skills/fireworks-tech-graph/scripts
 ```
 
 测试脚本会自动：
+
 1. 读取 `../fixtures/*.json`
 2. 按 `template_type + style` 调用 `generate-from-template.py`
 3. 运行 `validate-svg.sh`
 4. 导出 PNG 到 `../test-output/`
 
 查看测试输出：
+
 ```bash
 ls -lh ../test-output/
 ```
@@ -206,6 +225,7 @@ ls -lh ../test-output/
 ### 问题：找不到 PNG 渲染器
 
 **解决方案（任选其一，推荐 cairosvg）：**
+
 ```bash
 pip install cairosvg                   # 推荐
 brew install librsvg                   # macOS 系统包
@@ -217,14 +237,17 @@ sudo apt install librsvg2-bin          # Ubuntu/Debian
 **原因：** rsvg-convert 对 `<foreignObject>`、CSS `filter`、复杂 `<style>` 块支持有限。
 
 **解决方案：** 切换到 cairosvg：
+
 ```bash
 pip install cairosvg
 ```
+
 脚本会自动优先使用 cairosvg。如果仍需要像素级还原（例如浏览器生成的 SVG），改用 puppeteer（见 SKILL.md）。
 
 ### 问题：权限被拒绝
 
 **解决方案：**
+
 ```bash
 chmod +x *.sh
 ```
@@ -232,6 +255,7 @@ chmod +x *.sh
 ### 问题：SVG 验证失败
 
 **解决方案：**
+
 1. 查看详细错误信息
 2. 使用 Edit 工具修复语法错误
 3. 重新运行验证

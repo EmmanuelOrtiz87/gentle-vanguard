@@ -69,4 +69,3 @@ Multi-layer approach: trufflehog (pre-push, full scans) + pre-commit hooks (stag
 
 - ADRs must be kept updated as architecture evolves
 - Multi-layer architecture adds cognitive overhead for new contributors
-

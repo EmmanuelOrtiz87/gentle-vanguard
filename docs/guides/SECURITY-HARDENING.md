@@ -304,25 +304,28 @@ Test-Path .\logs\security
 ## 5. NPX Supply-Chain Hardening
 
 **Archivos Afectados**:
+
 - `config/mcp-servers.json` - MCP server configuration
 - `.npmrc` - Global npm security policy
 
 **Threat Model**:
 
 NPX supply-chain attacks leverage two vectors:
-1. **Live registry fetching** - `npx -y @package` downloads latest version from npm registry on every invocation
+
+1. **Live registry fetching** - `npx -y @package` downloads latest version from npm registry on
+   every invocation
 2. **Post-install scripts** - Malicious packages execute arbitrary code during installation
 
 **Mitigations Implemented**:
 
-| Flag | Purpose | Protection Against |
-|------|---------|-------------------|
-| `--offline` | Block all registry network requests at runtime | Live registry poisoning |
-| `--no` | Refuse to execute packages not already installed | Compromised version downloads |
-| `--workspace <dir>` | Use pre-vetted lockfile-based installation | Version drift/tampering |
-| `--include-workspace-root` | Enable workspace resolution mode | Path traversal attacks |
-| `.npmrc: ignore-scripts=true` | Disable post-install lifecycle scripts globally | Post-install code execution |
-| `.npmrc: min-release-age=3` | 3-day cooldown on new packages | Zero-day exploitation window |
+| Flag                          | Purpose                                          | Protection Against            |
+| ----------------------------- | ------------------------------------------------ | ----------------------------- |
+| `--offline`                   | Block all registry network requests at runtime   | Live registry poisoning       |
+| `--no`                        | Refuse to execute packages not already installed | Compromised version downloads |
+| `--workspace <dir>`           | Use pre-vetted lockfile-based installation       | Version drift/tampering       |
+| `--include-workspace-root`    | Enable workspace resolution mode                 | Path traversal attacks        |
+| `.npmrc: ignore-scripts=true` | Disable post-install lifecycle scripts globally  | Post-install code execution   |
+| `.npmrc: min-release-age=3`   | 3-day cooldown on new packages                   | Zero-day exploitation window  |
 
 **Setup Instructions (New Machine)**:
 
@@ -351,7 +354,8 @@ Test-Path node_modules/@modelcontextprotocol/server-filesystem
       "command": "npx",
       "args": [
         "--include-workspace-root",
-        "--workspace", "%USERPROFILE%\\mcp-workspace",
+        "--workspace",
+        "%USERPROFILE%\\mcp-workspace",
         "--no",
         "--offline",
         "@modelcontextprotocol/server-filesystem",
@@ -450,7 +454,7 @@ npm audit --workspace $HOME\mcp-workspace
 El proyecto tiene implementadas todas las medidas de seguridad crticas:
 
 Encriptación AES-256 Validación robusta de entrada Gestin segura de secretos Logging y Auditoría
-completos Tests de seguridad Detección de Anomalías **NPX supply-chain hardening (offline + workspace mode)**
+completos Tests de seguridad Detección de Anomalías **NPX supply-chain hardening (offline +
+workspace mode)**
 
 **Estado**: LISTO PARA PRODUCCIN
-

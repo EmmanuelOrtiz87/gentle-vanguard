@@ -11,11 +11,25 @@
     "skills",
     "tests"
   ],
-  "allowedRootDirs": [".cursor", ".cline", ".vscode", ".codex", ".antigravity", ".windsurf", ".github"],
+  "allowedRootDirs": [
+    ".cursor",
+    ".cline",
+    ".vscode",
+    ".codex",
+    ".antigravity",
+    ".windsurf",
+    ".github"
+  ],
   "allowedRootFiles": ["README.md", "config/mcp-servers.json"],
-  "allowedRootMarkdownFiles": ["CLAUDE.md", "SECURITY.md", "CODE_OF_CONDUCT.md", "CONTRIBUTING.md", "ROADMAP.md", "CHANGELOG.md"],
+  "allowedRootMarkdownFiles": [
+    "CLAUDE.md",
+    "SECURITY.md",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "ROADMAP.md",
+    "CHANGELOG.md"
+  ],
   "allowedRootJsonFiles": ["opencode.json", "skills-lock.json"],
   "allowedRootConfigFiles": [".cursorrules", ".clinerules", ".gitignore"],
   "deprecatedPathPatterns": [".\\scripts\\update-all.ps1", "scripts/update-all.ps1"]
 }
-

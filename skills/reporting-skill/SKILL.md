@@ -191,8 +191,8 @@ Timestamp,User_ID,Session_ID,Task_Scope,Tokens_Estimated,Judgment_Result,Review_
 
 ## CLI Commands
 
-| Command               | Description            |
-| --------------------- | ---------------------- |
+| Command                            | Description            |
+| ---------------------------------- | ---------------------- |
 | `gentle-vanguard report today`     | Report for today       |
 | `gentle-vanguard report yesterday` | Report for yesterday   |
 | `gentle-vanguard report 7days`     | Report for last 7 days |
@@ -235,4 +235,3 @@ Timestamp,User_ID,Session_ID,Task_Scope,Tokens_Estimated,Judgment_Result,Review_
 
 _Skill versión: 1.0_  
 _Last updated: 2026-04-26_
-

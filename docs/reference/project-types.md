@@ -245,4 +245,3 @@ my-project/
     templates/   # Your custom overrides
  (generated files)
 ```
-

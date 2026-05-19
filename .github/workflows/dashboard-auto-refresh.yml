@@ -41,4 +41,3 @@ jobs:
           name: dashboard-${{ github.run_id }}
           path: reports/dashboard.html
           if-no-files-found: error
-

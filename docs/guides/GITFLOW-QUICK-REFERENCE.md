@@ -355,4 +355,3 @@ For more information, see:
 - `docs/guides/GITFLOW-ENFORCEMENT-ANALYSIS.md` - Detailed analysis
 - `docs/guides/DEVELOPER-COMMUNICATION-POLICY.md` - Development policies
 - `scripts/diagnostics/validate-gitflow.ps1` - GitFlow validator
-

@@ -305,4 +305,3 @@ Closure report guardado en `docs/sessions/` con:
    respuesta es: "El proyecto es simple para que el proceso sea el protagonista, no el cdigo."
 5. Limpiar `demos/shared/task-tracker/tasks.json` antes de cada demo si hiciste una corrida de
    prueba.
-

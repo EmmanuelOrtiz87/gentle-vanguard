@@ -2,8 +2,8 @@
 
 ## Overview
 
-The Gentle-Vanguard - Development Stack architecture includes an **automatic stack detection and repair
-system** that runs with minimal manual intervention. The stack is checked and repaired when:
+The Gentle-Vanguard - Development Stack architecture includes an **automatic stack detection and
+repair system** that runs with minimal manual intervention. The stack is checked and repaired when:
 
 - You open a terminal in a project directory
 - You run `git checkout` on a branch
@@ -35,8 +35,8 @@ system** that runs with minimal manual intervention. The stack is checked and re
 ### Option 3: Automatic on Terminal Entry (Recommended)
 
 On Windows, the optional PowerShell profile can run `verify` automatically when it detects a
-Gentle-Vanguard - Development Stack project. On Linux and macOS, use `./gv verify` or invoke `gv.ps1`
-through `pwsh`.
+Gentle-Vanguard - Development Stack project. On Linux and macOS, use `./gv verify` or invoke
+`gv.ps1` through `pwsh`.
 
 ## Stack Components
 
@@ -374,7 +374,8 @@ if ($status.overallStatus -ne "HEALTHY") {
 ## See Also
 
 - [scripts/utilities/README.md](../../scripts/utilities/README.md) - Available commands
-- [scripts/gentle-vanguard/bootstrap.ps1](../../scripts/gentle-vanguard/bootstrap.ps1) - Full initialization
+- [scripts/gentle-vanguard/bootstrap.ps1](../../scripts/gentle-vanguard/bootstrap.ps1) - Full
+  initialization
 - [scripts/diagnostics/system-diagnostics.ps1](../../scripts/diagnostics/system-diagnostics.ps1) -
   Diagnostics engine
 - [hooks/post-checkout.ps1](../../hooks/post-checkout.ps1) - Automatic verification on checkout
@@ -382,4 +383,3 @@ if ($status.overallStatus -ne "HEALTHY") {
 - Los hooks automticos de Gentle-Vanguard - Development Stack ejecutan chequeos de 7 dimensiones
   (seguridad, calidad, arquitectura, testing, API, documentacin, gitflow) en cada commit/push. Ver
   REVIEW-INDEX.md para detalles.
-

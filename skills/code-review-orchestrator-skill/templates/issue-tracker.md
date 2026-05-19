@@ -70,4 +70,3 @@ gv review --export-csv
 # Generate report
 gv review --report
 ```
-

@@ -69,8 +69,8 @@ navegable.
 Este PR supera el presupuesto de 400 líneas cambiadas, así que necesitamos dividirlo o justificar
 `size:exception`.
 
-Mi sugerencia: primero gentle-vanguard + tests, después integración, después docs. Así cada review tiene
-inicio y fin claros.
+Mi sugerencia: primero gentle-vanguard + tests, después integración, después docs. Así cada review
+tiene inicio y fin claros.
 ```
 
 ## Commands
@@ -84,4 +84,3 @@ gh pr view <PR_NUMBER> --json title,body,additions,deletions,changedFiles
 
 _Origin: [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai) — Apache-2.0 License.
 Powered by [Gentleman Programming](https://github.com/Gentleman-Programming)._
-

@@ -2,13 +2,14 @@
 
 ## Propósito
 
-Este documento describe el proceso completo para homologar (sincronizar) el repositorio privado `gentle-vanguard` con el repositorio público `gentle-vanguard-public`.
+Este documento describe el proceso completo para homologar (sincronizar) el repositorio privado
+`gentle-vanguard` con el repositorio público `gentle-vanguard-public`.
 
 ## Arquitectura
 
-| Repositorio | Propósito | Contenido |
-|---|---|---|
-| `gentle-vanguard` (privado) | Desarrollo activo | Stack completo: scripts, configs, skills, tests, docs en texto plano |
+| Repositorio                        | Propósito           | Contenido                                                                                   |
+| ---------------------------------- | ------------------- | ------------------------------------------------------------------------------------------- |
+| `gentle-vanguard` (privado)        | Desarrollo activo   | Stack completo: scripts, configs, skills, tests, docs en texto plano                        |
 | `gentle-vanguard-public` (público) | Hub de distribución | Solo: `.exe` instalador, scripts encriptados, skill stubs, bootstrap scripts, docs públicos |
 
 ## Proceso de Homologación (4 pasos)
@@ -21,6 +22,7 @@ pwsh -NoProfile -File "build\protect-gentle-vanguard.ps1" -CompileEXE
 ```
 
 Esto genera:
+
 - `build/protected/` — 400+ archivos encriptados (.enc) con AES-256
 - `build/public/` — 130+ skill stubs (solo SKILL.md)
 - `build/compiled/Gentle-Vanguard-Launcher.exe` — Launcher compilado
@@ -41,6 +43,7 @@ pwsh -NoProfile -File "scripts\utilities\DEPLOYMENT\sync-to-public.ps1"
 ```
 
 El script `sync-to-public.ps1` hace:
+
 1. Copia bootstrap scripts (texto plano — necesarios para onboarding)
 2. Copia documentación pública (solo subdirectorios seguros)
 3. Copia configs de ejemplo (sin secretos)
@@ -94,17 +97,17 @@ gentle-vanguard-public/
 
 ## Lo que NO se sincroniza
 
-| Categoría | Ejemplo | Razón |
-|---|---|---|
-| Scripts en texto plano | `scripts/utilities/gv.ps1` | IP — solo encriptados |
-| Configs reales | `config/auto-delegation.json` | IP — solo encriptados |
-| Skills completos | `skills/*/SKILL.md` | IP — solo encriptados |
-| Docs internos | `docs/sessions/`, `docs/audits/` | Información interna |
-| Tests | `tests/` | Solo para desarrollo |
-| Templates | `templates/` | Solo para desarrollo |
-| Rules | `rules/` | Solo para desarrollo |
-| Adapters | `adapters/` | Solo para desarrollo |
-| Build artifacts | `build/`, `dist/` | Internos |
+| Categoría              | Ejemplo                          | Razón                 |
+| ---------------------- | -------------------------------- | --------------------- |
+| Scripts en texto plano | `scripts/utilities/gv.ps1`       | IP — solo encriptados |
+| Configs reales         | `config/auto-delegation.json`    | IP — solo encriptados |
+| Skills completos       | `skills/*/SKILL.md`              | IP — solo encriptados |
+| Docs internos          | `docs/sessions/`, `docs/audits/` | Información interna   |
+| Tests                  | `tests/`                         | Solo para desarrollo  |
+| Templates              | `templates/`                     | Solo para desarrollo  |
+| Rules                  | `rules/`                         | Solo para desarrollo  |
+| Adapters               | `adapters/`                      | Solo para desarrollo  |
+| Build artifacts        | `build/`, `dist/`                | Internos              |
 
 ## Verificación post-homologación
 
@@ -125,9 +128,13 @@ Test-Path Gentle-Vanguard.exe   # True
 
 ## Notas importantes
 
-- **Master key**: Nunca se incluye en gentle-vanguard-public. Los usuarios la obtienen del repo privado o la pegan al primer launch.
-- **Versionado**: gentle-vanguard-public debe mantener el mismo baseline de release que gentle-vanguard (ejemplo: v1.0.0 en adelante).
-- **CI**: gentle-vanguard-public tiene su propio workflow (`public-quality-gate.yml`) que valida integridad del repo.
-- **Frecuencia**: Homologar después de cada release significativo o cuando se agreguen nuevos scripts/skills.
-- **Complementariedad**: esta homologacion no reemplaza el proceso de release; extiende la etapa de distribucion para el repo publico.
-
+- **Master key**: Nunca se incluye en gentle-vanguard-public. Los usuarios la obtienen del repo
+  privado o la pegan al primer launch.
+- **Versionado**: gentle-vanguard-public debe mantener el mismo baseline de release que
+  gentle-vanguard (ejemplo: v1.0.0 en adelante).
+- **CI**: gentle-vanguard-public tiene su propio workflow (`public-quality-gate.yml`) que valida
+  integridad del repo.
+- **Frecuencia**: Homologar después de cada release significativo o cuando se agreguen nuevos
+  scripts/skills.
+- **Complementariedad**: esta homologacion no reemplaza el proceso de release; extiende la etapa de
+  distribucion para el repo publico.

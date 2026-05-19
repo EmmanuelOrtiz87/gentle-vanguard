@@ -259,4 +259,3 @@ Our voice is:
 - Marketing: Enthusiastic, benefit-driven
 - Docs: Clear, authoritative
 ```
-

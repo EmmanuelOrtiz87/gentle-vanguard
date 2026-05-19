@@ -68,4 +68,3 @@ That keeps the public repository bootstrappable on a new machine without exposin
 
 With the repository public, GitHub-hosted workflows can keep running without the private-minutes
 problem. The self-hosted runner becomes an optional performance and control upgrade, not a blocker.
-

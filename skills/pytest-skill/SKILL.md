@@ -185,4 +185,3 @@ pytest --tb=short               # Short traceback
 ## Keywords
 
 pytest, python, testing, fixtures, mocking, parametrize, markers
-

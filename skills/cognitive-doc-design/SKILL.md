@@ -149,4 +149,3 @@ gh pr view <PR_NUMBER> --json additions,deletions,changedFiles
 
 - Gentle-Vanguard adaptation: 2026-05-02
 - Applied to: NORMATIVAS-ORQUESTADOR.md, AGENTS.md, READMEs
-

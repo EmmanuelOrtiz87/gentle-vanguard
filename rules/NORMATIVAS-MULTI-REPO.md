@@ -1,7 +1,7 @@
 # Multi-Repository Orchestration Normatives — Gentle-Vanguard
 
-Canonical standards for managing multiple repositories, monorepo/polyrepo strategies, and cross-repo workflows.
-Last updated: 2026-05-12 | Version: 1.0.0
+Canonical standards for managing multiple repositories, monorepo/polyrepo strategies, and cross-repo
+workflows. Last updated: 2026-05-12 | Version: 1.0.0
 
 ---
 
@@ -27,6 +27,7 @@ gentle-vanguard/ (monorepo root)
 ```
 
 **Advantages**:
+
 - ✅ Single version control history
 - ✅ Atomic commits across projects
 - ✅ Shared dependencies, easy to update
@@ -34,10 +35,12 @@ gentle-vanguard/ (monorepo root)
 - ✅ Simplified CI/CD
 
 **Disadvantages**:
+
 - ⚠️ Larger repository size
 - ⚠️ Requires careful access controls
 
-**Use case**: Gentle-Vanguard should adopt monorepo structure for v3.0 to unify skills, agentsm and frontends.
+**Use case**: Gentle-Vanguard should adopt monorepo structure for v3.0 to unify skills, agentsm and
+frontends.
 
 ---
 
@@ -56,12 +59,14 @@ Orchestrator: gentle-vanguard-sync (coordinates updates)
 ```
 
 **Advantages**:
+
 - ✅ Smaller repositories, faster clones
 - ✅ Independent versioning per project
 - ✅ Team ownership per repo
 - ✅ Flexible deployment
 
 **Disadvantages**:
+
 - ⚠️ Complex synchronization
 - ⚠️ Version mismatch risks
 - ⚠️ Harder to refactor across repos
@@ -190,7 +195,7 @@ catalog:
   "type": "module",
   "private": true,
   "packageManager": "pnpm@9.0.0",
-  
+
   "scripts": {
     "setup": "pnpm install",
     "build": "pnpm -r build",
@@ -202,7 +207,7 @@ catalog:
     "clean": "pnpm -r clean && rm -rf node_modules",
     "workspace:list": "pnpm list -r"
   },
-  
+
   "devDependencies": {
     "pnpm": "^9.0.0",
     "turbo": "^1.12.0",
@@ -221,17 +226,17 @@ catalog:
   "version": "3.0.0",
   "type": "module",
   "private": true,
-  
+
   "dependencies": {
     "react": "^19.0.0",
     "@gentle-vanguard/core-sdk": "workspace:*",
     "@gentle-vanguard/ui-components": "workspace:*"
   },
-  
+
   "devDependencies": {
     "typescript": "^5.3.0"
   },
-  
+
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -250,8 +255,8 @@ catalog:
 ```json
 {
   "dependencies": {
-    "@gentle-vanguard/core-sdk": "3.0.0",    // Fixed version
-    "@gentle-vanguard/ui-components": "^3.0.0"  // Semver range
+    "@gentle-vanguard/core-sdk": "3.0.0", // Fixed version
+    "@gentle-vanguard/ui-components": "^3.0.0" // Semver range
   }
 }
 ```
@@ -302,12 +307,12 @@ jobs:
       apps: ${{ steps.changes.outputs.apps }}
       packages: ${{ steps.changes.outputs.packages }}
       skills: ${{ steps.changes.outputs.skills }}
-    
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Detect changed packages
         id: changes
         run: |
@@ -316,14 +321,14 @@ jobs:
           PACKAGES=$(git diff --name-only origin/main...HEAD | grep '^packages/' | cut -d/ -f2 | sort -u | jq -R -s -c 'split("\n")[:-1]')
           echo "apps=$APPS" >> $GITHUB_OUTPUT
           echo "packages=$PACKAGES" >> $GITHUB_OUTPUT
-  
+
   build-affected:
     needs: detect-changes
     runs-on: ubuntu-latest
     strategy:
       matrix:
         workspace: ${{ fromJson(needs.detect-changes.outputs.apps) }}
-    
+
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v2
@@ -331,7 +336,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'pnpm'
-      
+
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter apps/${{ matrix.workspace }} build
       - run: pnpm --filter apps/${{ matrix.workspace }} test
@@ -359,12 +364,12 @@ param(
 function Sync-Repository {
     # Clone source
     git clone --depth 1 $SourceRepo /tmp/gentle-vanguard-src
-    
+
     # Copy target files
     $source = "/tmp/gentle-vanguard-src/$SourcePath"
     $target = "/tmp/gentle-vanguard-target/$TargetPath"
     Copy-Item -Path $source -Destination $target -Recurse -Force
-    
+
     # Commit and push
     git -C /tmp/gentle-vanguard-target add $TargetPath
     git -C /tmp/gentle-vanguard-target commit -m "chore(sync): Update from gentle-vanguard core"
@@ -382,7 +387,7 @@ name: Sync Gentle-Vanguard Core
 
 on:
   schedule:
-    - cron: '0 */6 * * *'  # Every 6 hours
+    - cron: '0 */6 * * *' # Every 6 hours
   workflow_dispatch:
 
 jobs:
@@ -458,14 +463,16 @@ VERSION_MANIFEST.json
 
 **🚫 NEVER use `--delete-branch` when the PR head branch is `main` or `develop`.**
 
-This will **permanently delete the protected branch** from the remote, breaking the repo's branching model.
+This will **permanently delete the protected branch** from the remote, breaking the repo's branching
+model.
 
-| Scenario | Safe? | Action |
-|----------|-------|--------|
-| PR head is a feature branch (`feat/*`, `fix/*`, `chore/*`, `docs/*`) | ✅ Safe | `gh pr merge --merge --delete-branch` |
-| PR head is `main` or `develop` | 🚫 **NEVER** | `gh pr merge --merge` (omit `--delete-branch`) |
+| Scenario                                                             | Safe?        | Action                                         |
+| -------------------------------------------------------------------- | ------------ | ---------------------------------------------- |
+| PR head is a feature branch (`feat/*`, `fix/*`, `chore/*`, `docs/*`) | ✅ Safe      | `gh pr merge --merge --delete-branch`          |
+| PR head is `main` or `develop`                                       | 🚫 **NEVER** | `gh pr merge --merge` (omit `--delete-branch`) |
 
-**GitFlow rule**: Only temporary/feature branches are auto-deleted. Protected branches (`main`, `develop`, `release/*`) must NEVER be passed as `--delete-branch` target.
+**GitFlow rule**: Only temporary/feature branches are auto-deleted. Protected branches (`main`,
+`develop`, `release/*`) must NEVER be passed as `--delete-branch` target.
 
 ---
 
@@ -501,30 +508,35 @@ Describe "Monorepo Integration" {
 ## 10. Monorepo Migration Plan (v3.0)
 
 ### Phase 1: Planning (Week 1)
+
 - [ ] Define package boundaries
 - [ ] Design monorepo structure
 - [ ] Select workspace tool (pnpm recommended)
 - [ ] Document migration strategy
 
 ### Phase 2: Setup (Week 2)
+
 - [ ] Create monorepo root
 - [ ] Initialize pnpm-workspace.yaml
 - [ ] Create root package.json
 - [ ] Set up tsconfig.json paths
 
 ### Phase 3: Migration (Weeks 3-4)
+
 - [ ] Move apps/ packages
 - [ ] Move packages/ libraries
 - [ ] Move skills/
 - [ ] Migrate CI/CD workflows
 
 ### Phase 4: Validation (Week 5)
+
 - [ ] All tests pass
 - [ ] Performance benchmarks OK
 - [ ] Documentation complete
 - [ ] Stakeholder approval
 
 ### Phase 5: Release (Week 6)
+
 - [ ] Merge to main
 - [ ] Release v3.0.0
 - [ ] Deploy monorepo infrastructure
@@ -543,19 +555,25 @@ Describe "Monorepo Integration" {
 ### Best Practices
 
 1. Validate in both repos before any release action:
-  - prefer automated gate: `./scripts/utilities/gv.ps1 release-homologation`
-  - optionally include target tag: `./scripts/utilities/gv.ps1 release-homologation vX.Y.Z`
-  - if manual checks are needed: `VERSION`, `git tag --sort=-creatordate`, `git branch -vv`
+
+- prefer automated gate: `./scripts/utilities/gv.ps1 release-homologation`
+- optionally include target tag: `./scripts/utilities/gv.ps1 release-homologation vX.Y.Z`
+- if manual checks are needed: `VERSION`, `git tag --sort=-creatordate`, `git branch -vv`
+
 2. Apply baseline changes in this order:
-  - update `VERSION` on `main`
-  - commit and push
-  - merge `main` into `develop`
-  - push `develop`
+
+- update `VERSION` on `main`
+- commit and push
+- merge `main` into `develop`
+- push `develop`
+
 3. Keep tags immutable:
-  - if `v1.0.0` already exists, do not move it
-  - if `v1.0.0` is missing in one repo, create and push it once
+
+- if `v1.0.0` already exists, do not move it
+- if `v1.0.0` is missing in one repo, create and push it once
+
 4. Keep mandatory validation gates enabled (pre-push hooks, tests, audit checks) during
-  homogenization.
+   homogenization.
 
 ---
 
@@ -566,4 +584,3 @@ Describe "Monorepo Integration" {
 - [Lerna.js](https://lerna.js.org/)
 - [Turborepo](https://turbo.build/repo)
 - Project: `config/multi-repo-orchestration.json` (to be created)
-

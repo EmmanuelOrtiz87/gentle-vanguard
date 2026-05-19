@@ -74,34 +74,34 @@ This file is **auto-maintained** by the adaptive learning system.
 
 ### Pester Version
 
-| ID       | Norm                                                          | Confidence | Learned From      | Date       |
-| -------- | ------------------------------------------------------------- | ---------- | ----------------- | ---------- |
-| PST-001  | Use Pester 5.x syntax (`Should -Be`), NOT 3.4.0 (`Should Be`) | high       | session-2026-05-14-06 | 2026-05-14 |
-| PST-002  | `Write-Host` OK in CLI scripts/hooks, forbidden in reusable libs | high    | session-2026-05-14-06 | 2026-05-14 |
-| PST-003  | Script max 500 lines (not 400)                                | high       | session-2026-05-14-06 | 2026-05-14 |
+| ID      | Norm                                                             | Confidence | Learned From          | Date       |
+| ------- | ---------------------------------------------------------------- | ---------- | --------------------- | ---------- |
+| PST-001 | Use Pester 5.x syntax (`Should -Be`), NOT 3.4.0 (`Should Be`)    | high       | session-2026-05-14-06 | 2026-05-14 |
+| PST-002 | `Write-Host` OK in CLI scripts/hooks, forbidden in reusable libs | high       | session-2026-05-14-06 | 2026-05-14 |
+| PST-003 | Script max 500 lines (not 400)                                   | high       | session-2026-05-14-06 | 2026-05-14 |
 
 ### Code Review
 
-| ID       | Norm                                                          | Confidence | Learned From      | Date       |
-| -------- | ------------------------------------------------------------- | ---------- | ----------------- | ---------- |
-| CRV-001  | Security scan FIRST in code review (before logic/style)       | high       | session-2026-05-14-06 | 2026-05-14 |
-| CRV-002  | AI-generated code needs enhanced scrutiny (hallucinated APIs, wrong assumptions) | high | session-2026-05-14-06 | 2026-05-14 |
-| CRV-003  | Every review finding classified by severity (CRIT/WARN/SUGGEST) | high     | session-2026-05-14-06 | 2026-05-14 |
+| ID      | Norm                                                                             | Confidence | Learned From          | Date       |
+| ------- | -------------------------------------------------------------------------------- | ---------- | --------------------- | ---------- |
+| CRV-001 | Security scan FIRST in code review (before logic/style)                          | high       | session-2026-05-14-06 | 2026-05-14 |
+| CRV-002 | AI-generated code needs enhanced scrutiny (hallucinated APIs, wrong assumptions) | high       | session-2026-05-14-06 | 2026-05-14 |
+| CRV-003 | Every review finding classified by severity (CRIT/WARN/SUGGEST)                  | high       | session-2026-05-14-06 | 2026-05-14 |
 
 ### Secrets & Security
 
-| ID       | Norm                                                          | Confidence | Learned From      | Date       |
-| -------- | ------------------------------------------------------------- | ---------- | ----------------- | ---------- |
-| SEC-001  | Never paste secrets into AI agent prompts                     | critical   | session-2026-05-14-06 | 2026-05-14 |
-| SEC-002  | Secret leak response: REVOKE → ROTATE → SCRUB → AUDIT → PREVENT | high     | session-2026-05-14-06 | 2026-05-14 |
+| ID      | Norm                                                            | Confidence | Learned From          | Date       |
+| ------- | --------------------------------------------------------------- | ---------- | --------------------- | ---------- |
+| SEC-001 | Never paste secrets into AI agent prompts                       | critical   | session-2026-05-14-06 | 2026-05-14 |
+| SEC-002 | Secret leak response: REVOKE → ROTATE → SCRUB → AUDIT → PREVENT | high       | session-2026-05-14-06 | 2026-05-14 |
 
 ### Incident Response
 
-| ID       | Norm                                                          | Confidence | Learned From      | Date       |
-| -------- | ------------------------------------------------------------- | ---------- | ----------------- | ---------- |
-| INC-001  | SEV1 incidents: 15min response, immediate containment          | high       | session-2026-05-14-06 | 2026-05-14 |
-| INC-002  | Post-mortem within 48h for SEV1, 1 week for SEV2              | high       | session-2026-05-14-06 | 2026-05-14 |
-| INC-003  | Incident format: Detect → Triage → Contain → Resolve → Verify → Document → Review | high | session-2026-05-14-06 | 2026-05-14 |
+| ID      | Norm                                                                              | Confidence | Learned From          | Date       |
+| ------- | --------------------------------------------------------------------------------- | ---------- | --------------------- | ---------- |
+| INC-001 | SEV1 incidents: 15min response, immediate containment                             | high       | session-2026-05-14-06 | 2026-05-14 |
+| INC-002 | Post-mortem within 48h for SEV1, 1 week for SEV2                                  | high       | session-2026-05-14-06 | 2026-05-14 |
+| INC-003 | Incident format: Detect → Triage → Contain → Resolve → Verify → Document → Review | high       | session-2026-05-14-06 | 2026-05-14 |
 
 ## Last Update
 
@@ -117,4 +117,3 @@ This file is **auto-maintained** by the adaptive learning system.
 - Critical confidence: 1
 - Medium confidence: 0
 - Low confidence: 0
-

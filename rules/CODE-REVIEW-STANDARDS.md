@@ -1,27 +1,26 @@
 # Code Review Standards
 
-**Version:** 1.0.0
-**Last updated:** 2026-05-14
-**Applies to:** All PRs targeting `develop` and `main`
-**Enforced by:** GitHub branch protection + `code-review-orchestrator-skill`
+**Version:** 1.0.0 **Last updated:** 2026-05-14 **Applies to:** All PRs targeting `develop` and
+`main` **Enforced by:** GitHub branch protection + `code-review-orchestrator-skill`
 
 ---
 
 ## 1. Purpose
 
-Define a consistent, severity-based framework for reviewing ALL code changes — human-written and AI-generated. Every review MUST produce structured, actionable output.
+Define a consistent, severity-based framework for reviewing ALL code changes — human-written and
+AI-generated. Every review MUST produce structured, actionable output.
 
 ---
 
 ## 2. Review Levels
 
-| Level | Required For | Reviewers | Blocks Merge |
-|-------|-------------|-----------|-------------|
-| **L1 — Self Review** | Every commit | Author | No |
-| **L2 — Light Review** | `fix/*`, `docs/*`, `chore/*` | 1 peer | Yes |
-| **L3 — Full Review** | `feature/*`, `refactor/*` | 2 peers | Yes |
-| **L4 — Security Review** | Auth, crypto, secrets, payment | 1 security + 1 peer | Yes |
-| **L5 — Architecture Review** | Cross-cutting, new modules, breaking changes | 1 senior + 1 peer | Yes |
+| Level                        | Required For                                 | Reviewers           | Blocks Merge |
+| ---------------------------- | -------------------------------------------- | ------------------- | ------------ |
+| **L1 — Self Review**         | Every commit                                 | Author              | No           |
+| **L2 — Light Review**        | `fix/*`, `docs/*`, `chore/*`                 | 1 peer              | Yes          |
+| **L3 — Full Review**         | `feature/*`, `refactor/*`                    | 2 peers             | Yes          |
+| **L4 — Security Review**     | Auth, crypto, secrets, payment               | 1 security + 1 peer | Yes          |
+| **L5 — Architecture Review** | Cross-cutting, new modules, breaking changes | 1 senior + 1 peer   | Yes          |
 
 ---
 
@@ -52,7 +51,8 @@ Define a consistent, severity-based framework for reviewing ALL code changes —
 - [ ] No circular dependencies
 - [ ] Follows established patterns in the codebase (not introducing new styles)
 - [ ] Changes are proportionate to the problem (no scope creep)
-- [ ] Modification Protocol followed for existing code (`rules/DEVELOPMENT-STANDARDS.md#modification-protocol`)
+- [ ] Modification Protocol followed for existing code
+      (`rules/DEVELOPMENT-STANDARDS.md#modification-protocol`)
 
 ### 3.4 Code Quality
 
@@ -85,13 +85,14 @@ Define a consistent, severity-based framework for reviewing ALL code changes —
 
 Every finding MUST be classified:
 
-| Severity | Label | Meaning | Action |
-|----------|-------|---------|--------|
-| 🔴 **Critical** | `[CRIT]` | Bug, security hole, data loss | Block merge — MUST fix |
-| 🟡 **Warning** | `[WARN]` | Style violation, missing docs, minor perf | SHOULD fix before merge |
-| 🔵 **Suggestion** | `[SUGGEST]` | Optional improvement, alternative approach | MAY fix, no block |
+| Severity          | Label       | Meaning                                    | Action                  |
+| ----------------- | ----------- | ------------------------------------------ | ----------------------- |
+| 🔴 **Critical**   | `[CRIT]`    | Bug, security hole, data loss              | Block merge — MUST fix  |
+| 🟡 **Warning**    | `[WARN]`    | Style violation, missing docs, minor perf  | SHOULD fix before merge |
+| 🔵 **Suggestion** | `[SUGGEST]` | Optional improvement, alternative approach | MAY fix, no block       |
 
 ### Critical findings that ALWAYS block merge:
+
 - Security vulnerability (any OWASP Top 10)
 - Broken functionality (logic error, wrong behavior)
 - Data loss risk
@@ -104,13 +105,17 @@ Every finding MUST be classified:
 ## 5. AI-Generated Code Rules
 
 ### 5.1 Annotations
+
 Every AI-generated code block MUST be annotated:
+
 ```powershell
 # AI-generated — reviewed by <reviewer> on <date>
 ```
 
 ### 5.2 Enhanced Scrutiny
+
 AI-generated code requires additional review focus on:
+
 - **Hallucinated APIs** — verify every function/class/method actually exists
 - **Wrong assumptions** — AI often guesses intent; verify logic matches spec
 - **Security defaults** — AI picks insecure defaults (e.g., permissive CORS, weak crypto)
@@ -118,6 +123,7 @@ AI-generated code requires additional review focus on:
 - **Dead code** — AI generates unused variables, imports, helper functions
 
 ### 5.3 Always Check in AI Code
+
 - [ ] Dependencies exist and are correct versions
 - [ ] Error paths are handled (not just happy path)
 - [ ] No mock data or test fixtures leaked to production
@@ -132,22 +138,25 @@ Every code review MUST be structured:
 
 ```markdown
 ## Review Summary
-**Files reviewed**: <count>
-**Severity**: <critical/warning/suggestion count>
-**Verdict**: Approve / Changes Requested / Blocked
+
+**Files reviewed**: <count> **Severity**: <critical/warning/suggestion count> **Verdict**: Approve /
+Changes Requested / Blocked
 
 ### 🔴 Critical
-| File | Line | Issue | Recommendation |
-|------|------|-------|---------------|
-| path/file.ps1 | 42 | ... | ... |
+
+| File          | Line | Issue | Recommendation |
+| ------------- | ---- | ----- | -------------- |
+| path/file.ps1 | 42   | ...   | ...            |
 
 ### 🟡 Warnings
+
 | File | Line | Issue | Recommendation |
-|------|------|-------|---------------|
+| ---- | ---- | ----- | -------------- |
 
 ### 🔵 Suggestions
+
 | File | Line | Issue | Recommendation |
-|------|------|-------|---------------|
+| ---- | ---- | ----- | -------------- |
 ```
 
 ---
@@ -165,14 +174,14 @@ Every code review MUST be structured:
 
 ## 8. References
 
-| Resource | Path |
-|----------|------|
-| Dev Standards | `rules/DEVELOPMENT-STANDARDS.md` |
-| Error Handling | `rules/NORMATIVAS-ERROR-HANDLING.md` |
-| Testing Standards | `rules/TESTING-STANDARDS.md` |
-| Security Normatives | `docs/NORMATIVAS-SEGURIDAD.md` |
-| PR Workflow | `rules/PR-WORKFLOW.md` |
-| Code Review Skill | `skills/code-review-orchestrator-skill/` |
+| Resource            | Path                                     |
+| ------------------- | ---------------------------------------- |
+| Dev Standards       | `rules/DEVELOPMENT-STANDARDS.md`         |
+| Error Handling      | `rules/NORMATIVAS-ERROR-HANDLING.md`     |
+| Testing Standards   | `rules/TESTING-STANDARDS.md`             |
+| Security Normatives | `docs/NORMATIVAS-SEGURIDAD.md`           |
+| PR Workflow         | `rules/PR-WORKFLOW.md`                   |
+| Code Review Skill   | `skills/code-review-orchestrator-skill/` |
 
 ---
 

@@ -61,7 +61,7 @@ use: `-Json`
 | DB-SQL             | PostgreSQL, MySQL, SQL, SQLAlchemy                   | `database-relational-skill`      |
 | Django             | Django, DRF, ViewSet, Serializer                     | `django-drf-skill`               |
 | GitFlow            | branch, PR, commit, merge, conflict, hook            | `git-workflow-skill`             |
-| Project/Audit      | new project, audit gentle-vanguard, validate docs         | `project-orchestrator-skill`     |
+| Project/Audit      | new project, audit gentle-vanguard, validate docs    | `project-orchestrator-skill`     |
 | Scaffold           | create project, bootstrap, scaffold, template        | `project-scaffolding`            |
 
 ## Orchestrator Delegation
@@ -84,4 +84,3 @@ You are a senior developer and technical mentor.
 - Max tokens: 4500
 - Use response caching where possible
 - Leverage prompt caching (setCacheKey: true)
-

@@ -196,4 +196,3 @@ cat .gitignore | Select-String "local-archive"
 - [`ARCHITECTURE.md`](../reference/ARCHITECTURE.md) - Dual-scope retention model
 - [`SESSION-GUIDE.md`](./SESSION-GUIDE.md) - Session lifecycle
 - [`audit-system.md`](./audit-system.md) - Audit generation details
-

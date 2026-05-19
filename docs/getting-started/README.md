@@ -18,10 +18,10 @@
 
 ## 🚀 Quick Start
 
-| Step   | Action                                          | Command                                      |
-| ------ | ----------------------------------------------- | -------------------------------------------- |
-| **1️⃣** | Check [PREREQUISITES.md](PREREQUISITES.md)      | Review system requirements                   |
-| **2️⃣** | Follow [DEVELOPER-SETUP.md](DEVELOPER-SETUP.md) | Complete setup steps                         |
+| Step   | Action                                          | Command                                           |
+| ------ | ----------------------------------------------- | ------------------------------------------------- |
+| **1️⃣** | Check [PREREQUISITES.md](PREREQUISITES.md)      | Review system requirements                        |
+| **2️⃣** | Follow [DEVELOPER-SETUP.md](DEVELOPER-SETUP.md) | Complete setup steps                              |
 | **3️⃣** | Run bootstrap                                   | `.\scripts\gentle-vanguard\bootstrap-machine.ps1` |
 
 > 💡 **TIP:** Start here for a smooth onboarding experience.
@@ -97,4 +97,3 @@ gv sync-drift      # Detect drift between gentle-vanguard and projects
   <b>🚀 Ready to start?</b><br>
   <code>git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard.git</code>
 </p>
-

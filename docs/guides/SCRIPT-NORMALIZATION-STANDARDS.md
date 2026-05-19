@@ -434,4 +434,3 @@ Write-Ok "Validation passed"
 3. Run automated fixes: `audit-script-normalization.ps1 -Fix`
 4. Validate all scripts parse correctly
 5. Commit changes and verify GitHub Actions passes
-

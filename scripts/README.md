@@ -445,4 +445,3 @@ Para reportar problemas o sugerencias:
 ---
 
 **última actualización**: 2026-04-21 **Versión**: 2.0.0 **Estado**: PRODUCCIN
-

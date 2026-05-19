@@ -124,4 +124,3 @@ export CODEX_API_BASE="http://localhost:3000/v1"
 **Version**: 1.0.0  
 **Status**: Ready for testing  
 **Compatibility**: OpenAI Codex, OpenAI API
-

@@ -125,4 +125,3 @@ If remediation fails after 3 iterations, run manual recovery:
 ### Missing session artifact warning
 
 The `*-session-start.md` warning is normal when running judgment outside an active session.
-

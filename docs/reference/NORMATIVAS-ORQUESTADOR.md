@@ -165,4 +165,3 @@ masivas.
 
 **Última actualización:** 2026-05-02  
 **Responsable:** Orquestador Gentle-Vanguard
-

@@ -178,4 +178,3 @@ Excluded rules (documented justification required for each exclusion):
 | `PSReviewUnusedParameter`              | Hook and CLI parameters may be optional by design   |
 
 Any new exclusion must be added to **both** the CI workflow and this document with justification.
-

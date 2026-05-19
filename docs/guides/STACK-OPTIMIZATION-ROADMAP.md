@@ -8,15 +8,17 @@
 
 ## Executive Summary
 
-The gentle-vanguard project has excellent gentle-vanguardal tooling (git flow, security layers, testing, audit systems). The npx hardening represents a mature shift toward supply-chain security. Below are recommended optimizations across 5 dimensions:
+The gentle-vanguard project has excellent gentle-vanguardal tooling (git flow, security layers,
+testing, audit systems). The npx hardening represents a mature shift toward supply-chain security.
+Below are recommended optimizations across 5 dimensions:
 
-| Dimension | Maturity | Priority | Impact |
-|-----------|----------|----------|---------|
-| **Supply Chain** | Advanced ✅ | DONE | High ↑ |
-| **Testing/Observability** | Strong ✅ | Medium | High |
-| **Dependency Management** | Good ⚠️ | HIGH | Medium |
-| **Documentation** | Strong ✅ | Low | Low |
-| **Performance** | Good ⚠️ | Medium | Medium |
+| Dimension                 | Maturity    | Priority | Impact |
+| ------------------------- | ----------- | -------- | ------ |
+| **Supply Chain**          | Advanced ✅ | DONE     | High ↑ |
+| **Testing/Observability** | Strong ✅   | Medium   | High   |
+| **Dependency Management** | Good ⚠️     | HIGH     | Medium |
+| **Documentation**         | Strong ✅   | Low      | Low    |
+| **Performance**           | Good ⚠️     | Medium   | Medium |
 
 ---
 
@@ -25,12 +27,14 @@ The gentle-vanguard project has excellent gentle-vanguardal tooling (git flow, s
 ### Current State
 
 ✅ **Strengths**:
+
 - MCP workspace isolation implemented
 - npm security policy (.npmrc) in place
 - `package-lock.json` lockfile discipline
 - Security tests pass (33/33)
 
 ⚠️ **Gaps**:
+
 - No `npm ci` in CI/CD pipelines (uses `npm install`)
 - No automated dependency scanning (npm audit only manual)
 - No lockfile-lint pre-commit hook
@@ -50,7 +54,8 @@ The gentle-vanguard project has excellent gentle-vanguardal tooling (git flow, s
 npm ci
 ```
 
-**Impact**: 
+**Impact**:
+
 - ✅ Prevents version drift in CI
 - ✅ Faster (uses cache)
 - ✅ Reproducible builds
@@ -64,6 +69,7 @@ npm ci
 **Implementation**:
 
 1. Install globally:
+
 ```powershell
 npm install -g lockfile-lint
 ```
@@ -74,7 +80,7 @@ npm install -g lockfile-lint
 # Validate lockfile integrity
 commands:
   lockfile-lint:
-    glob: "package-lock.json"
+    glob: 'package-lock.json'
     run: lockfile-lint --path package-lock.json
 ```
 
@@ -110,6 +116,7 @@ if (Test-Path $LockfilePath) {
 ```
 
 **Impact**:
+
 - ✅ Catches corrupted lockfiles before commit
 - ✅ Prevents git merge conflicts in lockfiles
 - ✅ Low overhead
@@ -142,6 +149,7 @@ exit 0
 ```
 
 **Impact**:
+
 - ✅ Blocks vulnerable code before review
 - ✅ Encourages prompt patching
 - ⚠️ May false-positive on already-accepted vulns
@@ -153,12 +161,12 @@ exit 0
 
 ### Dependency Management Summary
 
-| Action | Effort | Impact | Timeline |
-|--------|--------|--------|----------|
-| Add npm ci to CI/CD | 15 min | HIGH | This week |
-| lockfile-lint hook | 30 min | HIGH | This week |
-| npm audit pre-push | 20 min | MEDIUM | Next sprint |
-| **Total** | **65 min** | **HIGH** | **2 weeks** |
+| Action              | Effort     | Impact   | Timeline    |
+| ------------------- | ---------- | -------- | ----------- |
+| Add npm ci to CI/CD | 15 min     | HIGH     | This week   |
+| lockfile-lint hook  | 30 min     | HIGH     | This week   |
+| npm audit pre-push  | 20 min     | MEDIUM   | Next sprint |
+| **Total**           | **65 min** | **HIGH** | **2 weeks** |
 
 ---
 
@@ -167,12 +175,14 @@ exit 0
 ### Current State
 
 ✅ **Excellent**:
+
 - 33/33 tests pass (27 unit + 3 integration + 2 security + 1 perf)
 - Security tests cover: input validation, injection prevention, encryption
 - Performance tests included
 - Lefthook pre-push runs full suite
 
 ⚠️ **Opportunities**:
+
 - No code coverage reporting (% lines/branches covered)
 - No E2E tests for critical flows (e.g., publish workflow)
 - No chaos testing (resilience under failure)
@@ -187,6 +197,7 @@ exit 0
 **Implementation**:
 
 1. Install coverage tool:
+
 ```powershell
 npm install --save-dev pester-coverage  # For PowerShell tests
 ```
@@ -201,10 +212,7 @@ npm install --save-dev pester-coverage  # For PowerShell tests
     "branches": 75,
     "statements": 80
   },
-  "exclude": [
-    "build/",
-    "node_modules/"
-  ]
+  "exclude": ["build/", "node_modules/"]
 }
 ```
 
@@ -216,6 +224,7 @@ npm install --save-dev pester-coverage  # For PowerShell tests
 ```
 
 **Impact**:
+
 - ✅ Detects untested code paths
 - ✅ Prevents coverage regression
 - ✅ Guides test improvements
@@ -259,6 +268,7 @@ Describe "Release Workflow E2E" {
 ```
 
 **Impact**:
+
 - ✅ Catches regressions in critical path
 - ✅ Documents expected behavior
 - ✅ Confidence for release day
@@ -270,12 +280,12 @@ Describe "Release Workflow E2E" {
 
 ### Testing & Observability Summary
 
-| Action | Effort | Impact | Timeline |
-|--------|--------|--------|----------|
-| Code coverage baseline | 2-3h | MEDIUM | Next sprint |
-| E2E release workflow tests | 3-4h | HIGH | Next sprint |
-| Performance baselines | 2h | LOW | Month 2 |
-| **Total** | **7-9 hours** | **HIGH** | **Month 1** |
+| Action                     | Effort        | Impact   | Timeline    |
+| -------------------------- | ------------- | -------- | ----------- |
+| Code coverage baseline     | 2-3h          | MEDIUM   | Next sprint |
+| E2E release workflow tests | 3-4h          | HIGH     | Next sprint |
+| Performance baselines      | 2h            | LOW      | Month 2     |
+| **Total**                  | **7-9 hours** | **HIGH** | **Month 1** |
 
 ---
 
@@ -284,12 +294,14 @@ Describe "Release Workflow E2E" {
 ### Current State
 
 ✅ **Excellent**:
+
 - [SECURITY-HARDENING.md](SECURITY-HARDENING.md) — comprehensive (now including npx hardening)
 - [GETTING-STARTED.md](GETTING-STARTED.md) — clear setup path
 - [RELEASE-PROCESS.md](RELEASE-PROCESS.md) — detailed release workflow
 - [MCP-WORKSPACE-SETUP.md](MCP-WORKSPACE-SETUP.md) — NEW (setup isolation guide)
 
 ⚠️ **Gaps**:
+
 - No "First Time Setup" single-page quick start
 - No troubleshooting runbook for common issues
 - No decision tree for git flow branch selection
@@ -302,6 +314,7 @@ Describe "Release Workflow E2E" {
 **File**: `docs/guides/FIRST-TIME-SETUP-CHECKLIST.md`
 
 **Content**:
+
 - [ ] Clone repo
 - [ ] Run `gv.ps1 doctor`
 - [ ] Create MCP workspace (`$HOME\mcp-workspace`)
@@ -321,6 +334,7 @@ Describe "Release Workflow E2E" {
 **File**: `docs/guides/TROUBLESHOOTING-RUNBOOK.md`
 
 **Sections**:
+
 - Common git flow issues (stuck in wrong branch, bad merge, etc.)
 - Failing tests (how to debug, what each error means)
 - Publish workflow failures (gates blocked, secrets missing)
@@ -336,6 +350,7 @@ Describe "Release Workflow E2E" {
 **Location**: `docs/architecture/decisions/`
 
 **Examples**:
+
 1. **ADR-001**: Why we use PowerShell (not Bash/Python)
 2. **ADR-002**: Why MCP workspace is external (not git-tracked)
 3. **ADR-003**: Why npx offline mode with workspace (threat model + mitigation)
@@ -347,22 +362,29 @@ Describe "Release Workflow E2E" {
 # ADR-NNN: [Title]
 
 ## Status
+
 Accepted | Proposed | Deprecated
 
 ## Context
+
 [Problem/decision driver]
 
 ## Decision
+
 [What we chose]
 
 ## Consequences
+
 Positive:
+
 - [+]
 
 Negative:
+
 - [-]
 
 ## Alternatives Considered
+
 1. [Alternative A]
 2. [Alternative B]
 ```
@@ -374,12 +396,12 @@ Negative:
 
 ### Documentation Summary
 
-| Action | Effort | Impact | Timeline |
-|--------|--------|--------|----------|
-| First-time setup checklist | 30 min | MEDIUM | This week |
-| Troubleshooting runbook | 2h | MEDIUM | This week |
-| Architecture Decision Records | 3-4h | HIGH | Next week |
-| **Total** | **5.5-6.5 hours** | **MEDIUM** | **2 weeks** |
+| Action                        | Effort            | Impact     | Timeline    |
+| ----------------------------- | ----------------- | ---------- | ----------- |
+| First-time setup checklist    | 30 min            | MEDIUM     | This week   |
+| Troubleshooting runbook       | 2h                | MEDIUM     | This week   |
+| Architecture Decision Records | 3-4h              | HIGH       | Next week   |
+| **Total**                     | **5.5-6.5 hours** | **MEDIUM** | **2 weeks** |
 
 ---
 
@@ -388,11 +410,13 @@ Negative:
 ### Current State
 
 ✅ **Good**:
+
 - Pre-commit/pre-push hooks optimized (parallel audit, test-suite)
 - PowerShell scripts use efficient patterns (minimal network calls, caching)
 - Tests run in ~55 seconds pre-push
 
 ⚠️ **Opportunities**:
+
 - No performance baseline (test suite speed over time)
 - No profiling of slow operations
 - No caching strategy for expensive computations (e.g., git operations)
@@ -428,6 +452,7 @@ Create `tests/performance/baseline.json`:
 Add to pre-push hook validation.
 
 **Impact**:
+
 - ✅ Detects when changes slow the build
 - ✅ Documents performance expectations
 - ✅ Early warning for optimization need
@@ -455,6 +480,7 @@ Write-Host "[PROFILE] Homologation Gate: $($duration.TotalSeconds)s"
 ```
 
 **Impact**:
+
 - ✅ Identifies bottlenecks
 - ✅ Guides optimization priorities
 - ✅ Helps with release time predictions
@@ -466,12 +492,12 @@ Write-Host "[PROFILE] Homologation Gate: $($duration.TotalSeconds)s"
 
 ### Performance Summary
 
-| Action | Effort | Impact | Timeline |
-|--------|--------|--------|----------|
-| Performance baselines | 1-2h | LOW-MEDIUM | Next sprint |
-| Publish profiling | 2-3h | MEDIUM | Next sprint |
-| Load testing (multi-repo) | 4-6h | MEDIUM | Month 2 |
-| **Total** | **7-11 hours** | **MEDIUM** | **Month 1-2** |
+| Action                    | Effort         | Impact     | Timeline      |
+| ------------------------- | -------------- | ---------- | ------------- |
+| Performance baselines     | 1-2h           | LOW-MEDIUM | Next sprint   |
+| Publish profiling         | 2-3h           | MEDIUM     | Next sprint   |
+| Load testing (multi-repo) | 4-6h           | MEDIUM     | Month 2       |
+| **Total**                 | **7-11 hours** | **MEDIUM** | **Month 1-2** |
 
 ---
 
@@ -480,6 +506,7 @@ Write-Host "[PROFILE] Homologation Gate: $($duration.TotalSeconds)s"
 ### Current State
 
 ✅ **Excellent** (just completed):
+
 - ✅ NPX supply-chain hardening (offline + workspace)
 - ✅ .npmrc global security policy (ignore-scripts, min-release-age, allow-git=none)
 - ✅ Homologation gate (mandatory pre-publish)
@@ -488,6 +515,7 @@ Write-Host "[PROFILE] Homologation Gate: $($duration.TotalSeconds)s"
 - ✅ AES-256 encryption
 
 ⚠️ **Remaining**:
+
 - No SBOM (Software Bill of Materials) generation
 - No container image scanning (if using Docker)
 - No supply-chain attestation (SLSA provenance)
@@ -509,6 +537,7 @@ cyclonedx-npm --output-format json --output-file sbom.json
 ```
 
 **Impact**:
+
 - ✅ Compliance with SBOM requirements
 - ✅ Faster vulnerability response (know exactly what's in release)
 - ✅ Supply-chain transparency
@@ -523,11 +552,13 @@ cyclonedx-npm --output-format json --output-file sbom.json
 **Why**: Third-party validation; catch systemic issues.
 
 **Action**:
+
 1. Schedule external security audit (Q4 2026)
 2. Scope: code review, dependency audit, configuration review
 3. Estimate: 40-80 hours (external firm)
 
 **Impact**:
+
 - ✅ Professional assessment
 - ✅ Board/audit-ready documentation
 - ✅ Vulnerability fixes from external perspective
@@ -539,12 +570,12 @@ cyclonedx-npm --output-format json --output-file sbom.json
 
 ### Security & Compliance Summary
 
-| Action | Effort | Impact | Timeline |
-|--------|--------|--------|----------|
-| SBOM generation | 1h | HIGH | Next sprint |
-| Annual audit (plan) | 4h | HIGH | Q3 planning |
-| Annual audit (execute) | 80h | HIGH | Q4 2026 |
-| **Total** | **85 hours** | **HIGH** | **Year 2026** |
+| Action                 | Effort       | Impact   | Timeline      |
+| ---------------------- | ------------ | -------- | ------------- |
+| SBOM generation        | 1h           | HIGH     | Next sprint   |
+| Annual audit (plan)    | 4h           | HIGH     | Q3 planning   |
+| Annual audit (execute) | 80h          | HIGH     | Q4 2026       |
+| **Total**              | **85 hours** | **HIGH** | **Year 2026** |
 
 ---
 
@@ -608,34 +639,37 @@ Total: 11-13 hours
       EFFORT: Low→High →
 ```
 
-**Recommended Priority**: Dependency Mgmt (HIGH impact, LOW effort) → Tests (HIGH impact, MEDIUM effort) → Documentation (MEDIUM impact, LOW effort)
+**Recommended Priority**: Dependency Mgmt (HIGH impact, LOW effort) → Tests (HIGH impact, MEDIUM
+effort) → Documentation (MEDIUM impact, LOW effort)
 
 ---
 
 ## Stack Summary
 
-| Layer | Current | Recommendation | Timeline |
-|-------|---------|-----------------|----------|
-| **Supply Chain** | ✅ Advanced (npx hardening) | ✅ Complete | Done |
-| **Dependency Mgmt** | Good ⚠️ | Add lockfile-lint + npm ci | Week 1 |
-| **Testing** | Strong ✅ | Add coverage + E2E | Sprint 1 |
-| **Documentation** | Strong ✅ | Add ADRs + Runbooks | Week 1 |
-| **Security** | Excellent ✅ | Add SBOM | Sprint 1 |
-| **Performance** | Good ⚠️ | Add baselines | Sprint 2 |
+| Layer               | Current                     | Recommendation             | Timeline |
+| ------------------- | --------------------------- | -------------------------- | -------- |
+| **Supply Chain**    | ✅ Advanced (npx hardening) | ✅ Complete                | Done     |
+| **Dependency Mgmt** | Good ⚠️                     | Add lockfile-lint + npm ci | Week 1   |
+| **Testing**         | Strong ✅                   | Add coverage + E2E         | Sprint 1 |
+| **Documentation**   | Strong ✅                   | Add ADRs + Runbooks        | Week 1   |
+| **Security**        | Excellent ✅                | Add SBOM                   | Sprint 1 |
+| **Performance**     | Good ⚠️                     | Add baselines              | Sprint 2 |
 
 ---
 
 ## Conclusion
 
-The gentle-vanguard project is **production-ready** with excellent security gentle-vanguards. The recent npx hardening represents mature supply-chain thinking.
+The gentle-vanguard project is **production-ready** with excellent security gentle-vanguards. The
+recent npx hardening represents mature supply-chain thinking.
 
-**Next focus**: Dependency management (lockfile validation + npm ci) and testing completeness (coverage + E2E) provide HIGH impact for MEDIUM effort over the next 1-2 sprints.
+**Next focus**: Dependency management (lockfile validation + npm ci) and testing completeness
+(coverage + E2E) provide HIGH impact for MEDIUM effort over the next 1-2 sprints.
 
-**12-month vision**: Evolve toward SLSA L3 supply-chain provenance, annual security audits, and chaos engineering maturity.
+**12-month vision**: Evolve toward SLSA L3 supply-chain provenance, annual security audits, and
+chaos engineering maturity.
 
 ---
 
 **Prepared**: May 13, 2026  
 **Review Cycle**: Monthly  
 **Owner**: Security/DevOps Team
-

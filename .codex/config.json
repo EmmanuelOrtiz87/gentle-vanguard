@@ -81,6 +81,12 @@
     "autoRestore": true
   },
   "language": { "default": "es", "technicalTerms": "en" },
-  "rules": ["docs/AGENTS.md", "rules/AI-NORMATIVES.md", "rules/DEVELOPMENT-STANDARDS.md", "rules/NORMATIVAS-CODIGO.md", "rules/NORMATIVAS-ERROR-HANDLING.md", "docs/guides/OPENCODE-OPTIMIZATION-GUIDE.md"]
+  "rules": [
+    "docs/AGENTS.md",
+    "rules/AI-NORMATIVES.md",
+    "rules/DEVELOPMENT-STANDARDS.md",
+    "rules/NORMATIVAS-CODIGO.md",
+    "rules/NORMATIVAS-ERROR-HANDLING.md",
+    "docs/guides/OPENCODE-OPTIMIZATION-GUIDE.md"
+  ]
 }
-

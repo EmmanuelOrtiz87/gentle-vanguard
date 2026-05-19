@@ -212,4 +212,3 @@ Measure-Command { .\scripts\run-tests-simple.ps1 }
   <b>🤝 Ready to contribute?</b><br>
   <code>git clone https://github.com/EmmanuelOrtiz87/gentle-vanguard-public.git</code>
 </p>
-

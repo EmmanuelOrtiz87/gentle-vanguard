@@ -1,8 +1,8 @@
 ---
 name: daily-workflow
 description: >
-  Daily Gentle-Vanguard tasks: status check, context tracking, audit, and sync verification. Trigger:
-  "daily check", "daily workflow", "morning routine", "start day", "daily tasks".
+  Daily Gentle-Vanguard tasks: status check, context tracking, audit, and sync verification.
+  Trigger: "daily check", "daily workflow", "morning routine", "start day", "daily tasks".
 ---
 
 # Daily Workflow Skill
@@ -45,7 +45,7 @@ Automates daily Gentle-Vanguard tasks: status check, context tracking, audit, an
 | `gv compact-start "obj"` | Start context tracking                 |
 | `gv verify`              | 14 quality gates                       |
 | `gv status`              | Context efficiency + git status        |
-| `gentle-vanguard audit`               | Generate audit report                  |
+| `gentle-vanguard audit`  | Generate audit report                  |
 
 ## Key Files
 
@@ -59,5 +59,3 @@ Automates daily Gentle-Vanguard tasks: status check, context tracking, audit, an
 - Keep $env:GENTLE_VANGUARD_VERBOSE empty for quiet operation
 - Public repo: https://github.com/EmmanuelOrtiz87/gentle-vanguard-public
 - Private repo: https://github.com/EmmanuelOrtiz87/gentle-vanguard
-
-

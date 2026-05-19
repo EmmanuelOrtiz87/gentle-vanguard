@@ -158,9 +158,9 @@ gentle-vanguard/
 
 | Script                                                      | Purpose                                   |
 | ----------------------------------------------------------- | ----------------------------------------- |
-| `scripts/gentle-vanguard/gv.ps1 init`                            | Initialize workspace                      |
+| `scripts/gentle-vanguard/gv.ps1 init`                       | Initialize workspace                      |
 | `scripts/project/new-project.ps1 -Name <name> -Kind <kind>` | Create new project                        |
-| `scripts/gentle-vanguard/gv.ps1 validate`                        | Validate workspace                        |
+| `scripts/gentle-vanguard/gv.ps1 validate`                   | Validate workspace                        |
 | `scripts/utilities/gv.ps1 health`                           | Check tool activation and workflow health |
 | `scripts/validation/validate-project.ps1`                   | Run repository validation gate            |
 
@@ -173,4 +173,3 @@ gentle-vanguard/
 ## License
 
 By contributing, you agree that your contributions will be licensed under the MIT License.
-

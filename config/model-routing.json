@@ -80,7 +80,16 @@
       "model": "fast-cheap",
       "thinking": "off",
       "rationale": "Self-diagnosis is quick checks"
+    },
+    "BUS-TELE": {
+      "model": "fast-cheap",
+      "thinking": "off",
+      "rationale": "Business telemetry is structured data collection"
+    },
+    "CODEGRAPH": {
+      "model": "fast-cheap",
+      "thinking": "off",
+      "rationale": "CodeGraph queries are deterministic lookups"
     }
   }
 }
-

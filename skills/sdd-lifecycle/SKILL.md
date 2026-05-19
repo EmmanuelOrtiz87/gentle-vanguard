@@ -220,7 +220,10 @@ docs/sdd/
 
 **SDD FLOW RULE (ENFORCED by pre-process-input.ps1):**
 
-When the system detects a feature/development request (keywords: implementar, crear, desarrollar, build, "nueva funcionalidad", etc.), the pre-process-input.ps1 hook automatically forces PLAN_MODE_REQUIRED → BA/sdd-explore. The agent MUST NOT skip to APPLY even if the trigger matched DEV-style keywords. See `rules/AI-NORMATIVES.md` for canonical definition.
+When the system detects a feature/development request (keywords: implementar, crear, desarrollar,
+build, "nueva funcionalidad", etc.), the pre-process-input.ps1 hook automatically forces
+PLAN_MODE_REQUIRED → BA/sdd-explore. The agent MUST NOT skip to APPLY even if the trigger matched
+DEV-style keywords. See `rules/AI-NORMATIVES.md` for canonical definition.
 
 **Flow enforcement:**
 
@@ -231,10 +234,9 @@ When the system detects a feature/development request (keywords: implementar, cr
 5. DEV completes → passes to QA for VERIFY
 6. QA passes → ARCHIVE
 
-**If the agent receives TRIGGER_MATCH_FOUND with "implement"/"code"/"develop" and SKILL: sdd-lifecycle:**
-→ DO NOT jump to APPLY phase
-→ START from INIT or EXPLORE depending on context
-→ Check if spec exists in docs/sdd/ before implementing
+**If the agent receives TRIGGER_MATCH_FOUND with "implement"/"code"/"develop" and SKILL:
+sdd-lifecycle:** → DO NOT jump to APPLY phase → START from INIT or EXPLORE depending on context →
+Check if spec exists in docs/sdd/ before implementing
 
 **Optional (with justification):**
 
@@ -273,4 +275,3 @@ gentle-vanguard sdd verify <name>         # Verify
 gentle-vanguard sdd archive <name>         # Archive
 gentle-vanguard sdd status <name>         # Show progress
 ```
-

@@ -218,4 +218,3 @@ gentle-vanguard/
 **Versión**: 1.0.0  
 **Estado**: Adaptadores completos, integración lista para pruebas  
 **Compatibilidad**: 8 herramientas soportadas
-

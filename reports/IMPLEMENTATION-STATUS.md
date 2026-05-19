@@ -98,17 +98,17 @@ telemetry-master.csv + informes .md
 
 ## 📊 Métricas Capturadas
 
-| Métrica            | Estado       | Fuente                                |
-| ------------------ | ------------ | ------------------------------------- |
-| session_id         | ✅           | .session/\*.json                      |
-| start_time         | ✅           | .session/\*.json                      |
-| status             | ✅           | .session/\*.json                      |
-| input_tokens       | ✅           | session-metrics-tracker.ps1 param     |
-| output_tokens      | ✅           | session-metrics-tracker.ps1 param     |
-| estimated_cost_usd | ✅           | session-metrics-tracker.ps1 (auto)    |
-| tool_calls         | ✅           | session-metrics-tracker.ps1 param     |
-| files_read         | ✅           | session-metrics-tracker.ps1 param     |
-| files_edited       | ✅           | session-metrics-tracker.ps1 param     |
+| Métrica            | Estado | Fuente                             |
+| ------------------ | ------ | ---------------------------------- |
+| session_id         | ✅     | .session/\*.json                   |
+| start_time         | ✅     | .session/\*.json                   |
+| status             | ✅     | .session/\*.json                   |
+| input_tokens       | ✅     | session-metrics-tracker.ps1 param  |
+| output_tokens      | ✅     | session-metrics-tracker.ps1 param  |
+| estimated_cost_usd | ✅     | session-metrics-tracker.ps1 (auto) |
+| tool_calls         | ✅     | session-metrics-tracker.ps1 param  |
+| files_read         | ✅     | session-metrics-tracker.ps1 param  |
+| files_edited       | ✅     | session-metrics-tracker.ps1 param  |
 
 ---
 
@@ -127,5 +127,5 @@ telemetry-master.csv + informes .md
 
 ---
 
-_Estado: 2026-05-14 — Actualizado: tracker integrado en session-autostart + end-session + session-manager_
-
+_Estado: 2026-05-14 — Actualizado: tracker integrado en session-autostart + end-session +
+session-manager_

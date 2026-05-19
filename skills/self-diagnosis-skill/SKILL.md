@@ -1,11 +1,14 @@
 ---
-trigger: "no terminaste, incompleto, dejaste a la mitad, no completaste, te esta bloqueando, bucle, terminated, break glass, overridea tu config, auto-diagnostico, self-diagnosis"
-agent: "SELF-DIAG"
+trigger:
+  'no terminaste, incompleto, dejaste a la mitad, no completaste, te esta bloqueando, bucle,
+  terminated, break glass, overridea tu config, auto-diagnostico, self-diagnosis'
+agent: 'SELF-DIAG'
 ---
 
 # Self-Diagnosis Skill
 
-Diagnoses when response config constraints are harming task execution. Activated when user reports incompleteness or detects a task loop.
+Diagnoses when response config constraints are harming task execution. Activated when user reports
+incompleteness or detects a task loop.
 
 ## Behavior
 
@@ -16,12 +19,12 @@ Diagnoses when response config constraints are harming task execution. Activated
 
 ## Break Glass Conditions
 
-| Condition | Severity | Action |
-|-----------|----------|--------|
-| User says "no terminaste" / "incompleto" / similar | High | Override immediately |
-| Same task in 3+ turns | Medium | Override to lleno |
-| Loop detection | High | Override to chat-detailed |
-| Output truncation self-detected | High | Override to lleno |
+| Condition                                          | Severity | Action                    |
+| -------------------------------------------------- | -------- | ------------------------- |
+| User says "no terminaste" / "incompleto" / similar | High     | Override immediately      |
+| Same task in 3+ turns                              | Medium   | Override to lleno         |
+| Loop detection                                     | High     | Override to chat-detailed |
+| Output truncation self-detected                    | High     | Override to lleno         |
 
 ## Reference
 

@@ -1,13 +1,14 @@
 # Tools Directory
 
-This directory contains build and runtime dependencies that are NOT tracked by git (see .gitignore: *.exe, *.dll, *.lib).
+This directory contains build and runtime dependencies that are NOT tracked by git (see .gitignore:
+_.exe, _.dll, \*.lib).
 
 ## Required Tools
 
-| Tool | Version | Source | File |
-|------|---------|--------|------|
-| Cairo DLL | 1.17.2 | [preshing/cairo-windows](https://github.com/preshing/cairo-windows/releases) | `cairo.dll` |
-| Cairo LIB | 1.17.2 | [preshing/cairo-windows](https://github.com/preshing/cairo-windows/releases) | `cairo.lib` |
+| Tool       | Version | Source                                                                                   | File         |
+| ---------- | ------- | ---------------------------------------------------------------------------------------- | ------------ |
+| Cairo DLL  | 1.17.2  | [preshing/cairo-windows](https://github.com/preshing/cairo-windows/releases)             | `cairo.dll`  |
+| Cairo LIB  | 1.17.2  | [preshing/cairo-windows](https://github.com/preshing/cairo-windows/releases)             | `cairo.lib`  |
 | Engram CLI | 1.15.10 | [Gentleman-Programming/engram](https://github.com/Gentleman-Programming/engram/releases) | `engram.exe` |
 
 ## Setup
@@ -29,11 +30,11 @@ Copy-Item 'engram-temp\engram.exe' 'tools\engram.exe'
 
 ## Also Available in PATH
 
-| Tool | Location | Purpose |
-|------|----------|---------|
-| PS2EXE | PowerShell Module | Compile .ps1 to .exe |
-| PSScriptAnalyzer | PowerShell Module | Linting |
-| Trufflehog | scoop | Secret detection |
-| Lefthook | scoop | Git hooks manager |
-| NSIS 3.12 | Program Files (x86) | Installer compilation |
-| Go 1.26 | Program Files | Engram build, Go tools |
+| Tool             | Location            | Purpose                |
+| ---------------- | ------------------- | ---------------------- |
+| PS2EXE           | PowerShell Module   | Compile .ps1 to .exe   |
+| PSScriptAnalyzer | PowerShell Module   | Linting                |
+| Trufflehog       | scoop               | Secret detection       |
+| Lefthook         | scoop               | Git hooks manager      |
+| NSIS 3.12        | Program Files (x86) | Installer compilation  |
+| Go 1.26          | Program Files       | Engram build, Go tools |

@@ -79,4 +79,3 @@ Describe "Get-Config" {
 | New function  | 80%             |
 | Bug fix       | Regression test |
 | Config change | Smoke test      |
-

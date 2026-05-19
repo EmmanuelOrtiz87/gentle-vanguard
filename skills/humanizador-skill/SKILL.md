@@ -1,10 +1,9 @@
 ---
 name: humanizador-skill
 description: >
-  Rewrites AI-generated text to sound natural, human, and credible by eliminating generic
-  phrases, inflated tone, corporate emptiness, and artificial patterns. Trigger: "humaniza este
-  texto", "humanize this text", "make it sound natural",
-  "remove AI tone", "rewrite this", "de-AI this text"
+  Rewrites AI-generated text to sound natural, human, and credible by eliminating generic phrases,
+  inflated tone, corporate emptiness, and artificial patterns. Trigger: "humaniza este texto",
+  "humanize this text", "make it sound natural", "remove AI tone", "rewrite this", "de-AI this text"
 license: Apache-2.0
 metadata:
   author: workspace-local
@@ -13,11 +12,13 @@ metadata:
 
 # Humanizador
 
-Revisa textos generados por IA y los reescribe para que suenen naturales, humanos y creíbles, sin perder el significado original.
+Revisa textos generados por IA y los reescribe para que suenen naturales, humanos y creíbles, sin
+perder el significado original.
 
 ## Qué detectas y corriges
 
 **1. Frases genéricas de IA**
+
 - "Espero que estés bien" / "Espero que este mensaje te encuentre bien"
 - "En el mundo actual" / "En el panorama actual"
 - "Es importante destacar" / "Cabe mencionar" / "Sin duda"
@@ -26,11 +27,13 @@ Revisa textos generados por IA y los reescribe para que suenen naturales, humano
 - "En conclusión" / "En resumen" como arranque de cierre
 
 **2. Tono inflado**
+
 - Exceso de entusiasmo o promesas exageradas
 - Palabras grandilocuentes donde bastaría una sencilla
 - Marketing vacío sin sustancia real
 
 **3. Lenguaje artificial**
+
 - Frases demasiado perfectas o simétricas
 - Transiciones mecánicas ("Además, cabe destacar que...")
 - Repetición de estructuras idénticas en párrafos consecutivos
@@ -38,12 +41,14 @@ Revisa textos generados por IA y los reescribe para que suenen naturales, humano
 - Expresiones que nadie usaría hablando
 
 **4. Vaguedad**
+
 - Ideas poco concretas
 - Beneficios genéricos sin detalle
 - Frases bonitas pero sin contenido real
 - Palabras de relleno que no aportan nada
 
 **5. Falta de personalidad**
+
 - Texto plano sin voz propia
 - Tono impersonal de plantilla
 - Ausencia de matices o irregularidades humanas
@@ -73,11 +78,10 @@ Revisa textos generados por IA y los reescribe para que suenen naturales, humano
 
 Devuelve siempre en este orden:
 
-**Texto humanizado:**
-[versión final lista para usar, sin negritas ni formato innecesario si es un email o mensaje real]
+**Texto humanizado:** [versión final lista para usar, sin negritas ni formato innecesario si es un
+email o mensaje real]
 
-**Cambios principales:**
-[lista breve de 3 a 5 cambios realizados, en lenguaje directo]
+**Cambios principales:** [lista breve de 3 a 5 cambios realizados, en lenguaje directo]
 
 ## Reglas
 

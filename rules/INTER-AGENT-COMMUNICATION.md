@@ -1,14 +1,15 @@
 # Inter-Agent Communication Protocol
 
-**Version:** 1.0.0
-**Last updated:** 2026-05-14
-**Applies to:** All agent-to-agent calls via `auto-delegation-router`, `sdd-orchestrator`, and `gv.ps1 agent`
+**Version:** 1.0.0 **Last updated:** 2026-05-14 **Applies to:** All agent-to-agent calls via
+`auto-delegation-router`, `sdd-orchestrator`, and `gv.ps1 agent`
 
 ---
 
 ## 1. Purpose
 
-Define a formal protocol for communication between AI agents in the gentle-vanguard stack. This ensures:
+Define a formal protocol for communication between AI agents in the gentle-vanguard stack. This
+ensures:
+
 - Deterministic handoffs (agent A → agent B produces same result for same input)
 - Error isolation (agent B failure does not cascade to agent A)
 - Observability (every call is logged with source, target, duration, result)
@@ -18,16 +19,16 @@ Define a formal protocol for communication between AI agents in the gentle-vangu
 
 ## 2. Agent Roles
 
-| Role | Code | Responsibility |
-|------|------|---------------|
-| Orchestrator | ORCH | Routes tasks, manages lifecycle, enforces policies |
-| Business Analyst | BA | Requirements gathering, exploration, SDD lifecycle |
-| Software Architect | SAD | System design, API contracts, architecture decisions |
-| Developer | DEV | Code generation, implementation, refactoring |
-| QA / Verifier | QA | Testing, validation, quality gates |
-| Operations | OPS | CI/CD, deployment, infrastructure |
-| Governance | GOV | Policy enforcement, audit, compliance |
-| Documentation | DOC | Technical writing, changelogs, guides |
+| Role               | Code | Responsibility                                       |
+| ------------------ | ---- | ---------------------------------------------------- |
+| Orchestrator       | ORCH | Routes tasks, manages lifecycle, enforces policies   |
+| Business Analyst   | BA   | Requirements gathering, exploration, SDD lifecycle   |
+| Software Architect | SAD  | System design, API contracts, architecture decisions |
+| Developer          | DEV  | Code generation, implementation, refactoring         |
+| QA / Verifier      | QA   | Testing, validation, quality gates                   |
+| Operations         | OPS  | CI/CD, deployment, infrastructure                    |
+| Governance         | GOV  | Policy enforcement, audit, compliance                |
+| Documentation      | DOC  | Technical writing, changelogs, guides                |
 
 ---
 
@@ -36,6 +37,7 @@ Define a formal protocol for communication between AI agents in the gentle-vangu
 Every inter-agent call MUST follow this contract:
 
 ### Request Format
+
 ```json
 {
   "source": "BA",
@@ -58,6 +60,7 @@ Every inter-agent call MUST follow this contract:
 ```
 
 ### Response Format
+
 ```json
 {
   "source": "DEV",
@@ -89,13 +92,15 @@ Every inter-agent call MUST follow this contract:
 Each agent-target pair has a circuit breaker that tracks failures.
 
 ### States
-| State | Meaning | Behavior |
-|-------|---------|----------|
-| **CLOSED** | Normal operation | Calls pass through |
-| **OPEN** | Too many failures | Calls blocked immediately |
-| **HALF_OPEN** | Testing recovery | One call allowed; if OK → CLOSED, if fail → OPEN |
+
+| State         | Meaning           | Behavior                                         |
+| ------------- | ----------------- | ------------------------------------------------ |
+| **CLOSED**    | Normal operation  | Calls pass through                               |
+| **OPEN**      | Too many failures | Calls blocked immediately                        |
+| **HALF_OPEN** | Testing recovery  | One call allowed; if OK → CLOSED, if fail → OPEN |
 
 ### Configuration (in orchestrator.json)
+
 ```json
 {
   "circuitBreaker": {
@@ -108,6 +113,7 @@ Each agent-target pair has a circuit breaker that tracks failures.
 ```
 
 ### Behavior
+
 1. Each agent call tracks success/failure
 2. After `failureThreshold` consecutive failures → circuit OPENS
 3. While OPEN → calls return error immediately (no agent invocation)
@@ -118,29 +124,31 @@ Each agent-target pair has a circuit breaker that tracks failures.
 
 ### Circuit Breaker States by Agent Pair (Current)
 
-| Source → Target | State | Failures | Last Failure |
-|----------------|-------|----------|-------------|
-| ORCH → BA | CLOSED | 0 | - |
-| ORCH → DEV | CLOSED | 0 | - |
-| ORCH → QA | CLOSED | 0 | - |
-| BA → SAD | CLOSED | 0 | - |
-| SAD → DEV | CLOSED | 0 | - |
-| DEV → QA | CLOSED | 0 | - |
+| Source → Target | State  | Failures | Last Failure |
+| --------------- | ------ | -------- | ------------ |
+| ORCH → BA       | CLOSED | 0        | -            |
+| ORCH → DEV      | CLOSED | 0        | -            |
+| ORCH → QA       | CLOSED | 0        | -            |
+| BA → SAD        | CLOSED | 0        | -            |
+| SAD → DEV       | CLOSED | 0        | -            |
+| DEV → QA        | CLOSED | 0        | -            |
 
 ---
 
 ## 5. Error Handling & Escalation
 
 ### Error Types
-| Code | Meaning | Action |
-|------|---------|--------|
-| `TIMEOUT` | Agent did not respond in time | Retry (1x), then escalate |
-| `HALLUCINATION` | Agent output contained hallucinations | Retry with stricter constraints |
-| `EVIDENCE_MISSING` | Agent could not verify its output | Escalate to human |
-| `TOOL_FAILURE` | Tool call failed | Retry (3x with backoff) |
-| `BUDGET_EXCEEDED` | Token budget exhausted | Escalate to orchestrator |
+
+| Code               | Meaning                               | Action                          |
+| ------------------ | ------------------------------------- | ------------------------------- |
+| `TIMEOUT`          | Agent did not respond in time         | Retry (1x), then escalate       |
+| `HALLUCINATION`    | Agent output contained hallucinations | Retry with stricter constraints |
+| `EVIDENCE_MISSING` | Agent could not verify its output     | Escalate to human               |
+| `TOOL_FAILURE`     | Tool call failed                      | Retry (3x with backoff)         |
+| `BUDGET_EXCEEDED`  | Token budget exhausted                | Escalate to orchestrator        |
 
 ### Escalation Chain
+
 ```
 Agent failure → self-retry (1-3x) → escalateOnFailure → orchestrator → human
 ```
@@ -150,12 +158,14 @@ Agent failure → self-retry (1-3x) → escalateOnFailure → orchestrator → h
 ## 6. Observability
 
 Every inter-agent call MUST be logged:
+
 - **What**: correlationId, source, target, task type, duration, tokens, result
 - **Where**: `.session/inter-agent-calls.jsonl` (append-only JSONL)
 - **When**: At call completion (success or failure)
 - **Alerting**: If error rate > 5% in any 1-hour window
 
 ### Log Format
+
 ```json
 {
   "timestamp": "2026-05-14T21:30:00Z",
@@ -175,30 +185,29 @@ Every inter-agent call MUST be logged:
 
 ## 7. Agent-to-Agent Validation Rules
 
-| Rule | Enforced By | Action on Violation |
-|------|------------|-------------------|
-| Every call has correlationId | Pre-call validation | Block call |
-| Source and target are valid agent roles | Pre-call validation | Block call |
-| Token budget is specified | Pre-call validation | Default to 750 |
-| Response matches output format | Post-call validation | Log warning, attempt repair |
-| Duration < timeout | Runtime | Kill agent, escalate |
-| Error is classified | Post-call validation | Log as `UNKNOWN_ERROR` |
-| Circuit breaker respected | Pre-call validation | Block if OPEN |
+| Rule                                    | Enforced By          | Action on Violation         |
+| --------------------------------------- | -------------------- | --------------------------- |
+| Every call has correlationId            | Pre-call validation  | Block call                  |
+| Source and target are valid agent roles | Pre-call validation  | Block call                  |
+| Token budget is specified               | Pre-call validation  | Default to 750              |
+| Response matches output format          | Post-call validation | Log warning, attempt repair |
+| Duration < timeout                      | Runtime              | Kill agent, escalate        |
+| Error is classified                     | Post-call validation | Log as `UNKNOWN_ERROR`      |
+| Circuit breaker respected               | Pre-call validation  | Block if OPEN               |
 
 ---
 
 ## 8. References
 
-| Resource | Path |
-|----------|------|
-| Auto-Delegation Router | `scripts/utilities/AI-AGENT-MANAGEMENT/auto-delegation-router.ps1` |
-| Orchestrator Config | `config/orchestrator.json` |
-| Error Handling | `rules/NORMATIVAS-ERROR-HANDLING.md` |
-| Performance | `rules/NORMATIVAS-PERFORMANCE.md` |
-| AI Normatives | `rules/AI-NORMATIVES.md` |
-| Session Metrics Tracker | `scripts/utilities/session-metrics-tracker.ps1` |
+| Resource                | Path                                                               |
+| ----------------------- | ------------------------------------------------------------------ |
+| Auto-Delegation Router  | `scripts/utilities/AI-AGENT-MANAGEMENT/auto-delegation-router.ps1` |
+| Orchestrator Config     | `config/orchestrator.json`                                         |
+| Error Handling          | `rules/NORMATIVAS-ERROR-HANDLING.md`                               |
+| Performance             | `rules/NORMATIVAS-PERFORMANCE.md`                                  |
+| AI Normatives           | `rules/AI-NORMATIVES.md`                                           |
+| Session Metrics Tracker | `scripts/utilities/session-metrics-tracker.ps1`                    |
 
 ---
 
 _Version: 1.0.0 — 2026-05-14 — Status: ACTIVE_
-

@@ -77,4 +77,3 @@ jobs:
           prerelease: false
           generate_release_notes: true # Also use GitHub's auto-generated notes as fallback
 
-

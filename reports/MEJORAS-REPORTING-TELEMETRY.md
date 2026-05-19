@@ -198,4 +198,3 @@ gv metrics --sessions --tokens --costs
 
 _Documento generado: 2026-04-26_  
 _Próxima revisión: cuando se implemente Fase 1_
-

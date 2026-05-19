@@ -1,7 +1,7 @@
 # Ejemplo: Conexin a un Agente IA Remoto va API
 
-Este ejemplo documenta el paso a paso para conectar Gentle-Vanguard (o tu entorno local) a un agente IA
-externo expuesto va API, usando solo la URL y la API key.
+Este ejemplo documenta el paso a paso para conectar Gentle-Vanguard (o tu entorno local) a un agente
+IA externo expuesto va API, usando solo la URL y la API key.
 
 ---
 
@@ -92,4 +92,3 @@ Edita `config/cloud-agents.local.json` y agrega tu proveedor personalizado:
 ---
 
 **ltima actualizacin:** 2026-04-20
-

@@ -340,4 +340,3 @@ npx playwright test tests/login/       # Run specific folder
 ## Keywords
 
 playwright, e2e, testing, page object model, selectors, end-to-end, mcp
-

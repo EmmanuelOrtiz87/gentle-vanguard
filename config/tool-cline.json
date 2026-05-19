@@ -9,7 +9,13 @@
     "mcpBridge": true
   },
   "capabilities": ["mcp", "skills", "code_completion", "terminal"],
-  "configFiles": [".clinerules", ".clinerules.optimized", ".clineignore", ".cline/config.json", ".claude/settings.json"],
+  "configFiles": [
+    ".clinerules",
+    ".clinerules.optimized",
+    ".clineignore",
+    ".cline/config.json",
+    ".claude/settings.json"
+  ],
   "adapter": {
     "type": "mcp-bridge",
     "path": "adapters/mcp-bridge",

@@ -28,6 +28,7 @@ pwsh -NoProfile -File scripts/utilities/post-session-learning.ps1
 ```
 
 This script reads:
+
 - `scripts/.session/startup-summary.json` — platform, tool, peak hour
 - Recent engram session summary — what was accomplished
 - Git log for the session — files changed, patterns
@@ -37,17 +38,18 @@ This script reads:
 
 The script returns structured data. Review these categories:
 
-| Category | What to Look For | Action |
-|----------|-----------------|--------|
-| **Missing skills** | User asked for something not covered by any skill | Create new skill |
-| **Repeated errors** | Same command failed multiple times | Fix script or config |
-| **Config gaps** | Configuration that would have saved tokens | Update config |
-| **Token waste** | Commands that failed and were retried | Add OS check, doc, or guard |
-| **Pattern opportunity** | Repetitive manual steps | Create skill or script |
+| Category                | What to Look For                                  | Action                      |
+| ----------------------- | ------------------------------------------------- | --------------------------- |
+| **Missing skills**      | User asked for something not covered by any skill | Create new skill            |
+| **Repeated errors**     | Same command failed multiple times                | Fix script or config        |
+| **Config gaps**         | Configuration that would have saved tokens        | Update config               |
+| **Token waste**         | Commands that failed and were retried             | Add OS check, doc, or guard |
+| **Pattern opportunity** | Repetitive manual steps                           | Create skill or script      |
 
 ### Step 3 — Generate Proposals
 
-For each identified gap, create a structured proposal saved to `.local/improvement-proposals/YYYY-MM-DD-proposal-N.json`:
+For each identified gap, create a structured proposal saved to
+`.local/improvement-proposals/YYYY-MM-DD-proposal-N.json`:
 
 ```json
 {
@@ -80,15 +82,15 @@ engram_mem_save -title "Learning: {key finding}" -type "learning"
 
 - **Session close**: Run automatically during session closure (step between summary and end)
 - **Manual trigger**: User can run `gv learning` to analyze current session anytime
-- **Proposal executor**: Run `gv learning apply` to auto-execute pending proposals (scaffold skills, patch configs)
+- **Proposal executor**: Run `gv learning apply` to auto-execute pending proposals (scaffold skills,
+  patch configs)
 - **Auto mode**: `gv learning auto` runs analysis + auto-applies low-severity proposals in one step
 - **PR mode**: `gv learning auto-pr` auto-applies + creates a git branch and commit with changes
 - **Startup check**: At session start, check `.local/improvement-proposals/` for pending items
 
 ## Output Files
 
-| File | Purpose |
-|------|---------|
-| `.local/improvement-proposals/*.json` | Structured improvement proposals |
+| File                                              | Purpose                              |
+| ------------------------------------------------- | ------------------------------------ |
+| `.local/improvement-proposals/*.json`             | Structured improvement proposals     |
 | `.local/improvement-proposals/learning-log.jsonl` | Append-only log of all learning runs |
-

@@ -64,12 +64,12 @@ An AI agent is a system that:
 
 ### Gentle-Vanguard AI Stack
 
-| Component                | Purpose                           |
-| ------------------------ | --------------------------------- |
-| **OpenCode**             | AI agent for development tasks    |
-| **Engram**               | Persistent memory across sessions |
-| **Native Review Engine** | Code review with AI               |
-| **Gentle-Vanguard Skills**    | Context and patterns for AI       |
+| Component                  | Purpose                           |
+| -------------------------- | --------------------------------- |
+| **OpenCode**               | AI agent for development tasks    |
+| **Engram**                 | Persistent memory across sessions |
+| **Native Review Engine**   | Code review with AI               |
+| **Gentle-Vanguard Skills** | Context and patterns for AI       |
 
 ### Tool Categories
 
@@ -79,7 +79,7 @@ An AI agent is a system that:
 | -------------------- | ---------------------------------- | ---------------------------------- |
 | **Code Generation**  | OpenCode, GitHub Copilot, Cursor   | Generate and complete code         |
 | **Code Review**      | Native Review Engine, Human review | Validate and improve code          |
-| **Memory & Context** | Engram, Gentle-Vanguard Skills          | Persistent context across sessions |
+| **Memory & Context** | Engram, Gentle-Vanguard Skills     | Persistent context across sessions |
 | **Execution**        | Code interpreter, Terminal access  | Run and test code                  |
 
 ---
@@ -268,4 +268,3 @@ graph LR
 ---
 
 **Last Updated:** April 2026 **Next Review:** Quarterly
-

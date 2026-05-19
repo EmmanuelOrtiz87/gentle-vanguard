@@ -65,4 +65,3 @@ Gentle-Vanguard engine and core algorithms are:
 - Docs: https://gentle-vanguard.dev/docs
 - Issues: https://github.com/EmmanuelOrtiz87/gentle-vanguard/issues
 - Email: support@gentle-vanguard.dev
-

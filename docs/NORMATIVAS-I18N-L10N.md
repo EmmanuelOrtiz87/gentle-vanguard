@@ -1,38 +1,40 @@
 # NORMATIVAS-I18N-L10N.md — Internationalization & Localization Standards
 
-Version: 1.0.0
-Last updated: 2026-05-11
-Framework: ECMA-402 (Intl API) + Unicode CLDR + ICU MessageFormat
+Version: 1.0.0 Last updated: 2026-05-11 Framework: ECMA-402 (Intl API) + Unicode CLDR + ICU
+MessageFormat
 
 ---
 
 ## 1. PROPOSITO
 
-Define los estándares de internacionalizacion (i18n) y localizacion (l10n) para todo el stack Gentle-Vanguard. Aplica a interfaces de usuario, mensajes del sistema, documentacion generada, y contenido producido por agentes. Garantiza que todo output sea locale-aware, traducible, y culturalmente apropiado.
+Define los estándares de internacionalizacion (i18n) y localizacion (l10n) para todo el stack
+Gentle-Vanguard. Aplica a interfaces de usuario, mensajes del sistema, documentacion generada, y
+contenido producido por agentes. Garantiza que todo output sea locale-aware, traducible, y
+culturalmente apropiado.
 
 ---
 
 ## 2. PRINCIPIOS RECTORES
 
-| Principio | Descripcion |
-|-----------|-------------|
-| Separation | Contenido traducible separado del codigo (no hardcode strings) |
-| Locale-first | Todo texto se mueve a archivos de locale desde el primer commit |
-| Pluralization | Soporte nativo de plurales complejos (1, 2-4, 5+ en eslavo, etc.) |
-| RTL support | Layout responsivo a direccion de texto (LTR/RTL) |
-| Cultural awareness | Formatos de fecha, moneda, numeros, direcciones segun locale |
+| Principio          | Descripcion                                                       |
+| ------------------ | ----------------------------------------------------------------- |
+| Separation         | Contenido traducible separado del codigo (no hardcode strings)    |
+| Locale-first       | Todo texto se mueve a archivos de locale desde el primer commit   |
+| Pluralization      | Soporte nativo de plurales complejos (1, 2-4, 5+ en eslavo, etc.) |
+| RTL support        | Layout responsivo a direccion de texto (LTR/RTL)                  |
+| Cultural awareness | Formatos de fecha, moneda, numeros, direcciones segun locale      |
 
 ---
 
 ## 3. TECNOLOGIAS RECOMENDADAS
 
-| Plataforma | Libreria | Formato |
-|------------|----------|---------|
-| JavaScript/TypeScript | react-intl / FormatJS | ICU MessageFormat |
-| Python | Babel + Django i18n | .po / .mo + gettext |
-| PowerShell | Resource strings | .psd1 con hashtable |
-| React Native | react-intl + IntlProvider | ICU MessageFormat |
-| General | i18next | JSON resource bundles |
+| Plataforma            | Libreria                  | Formato               |
+| --------------------- | ------------------------- | --------------------- |
+| JavaScript/TypeScript | react-intl / FormatJS     | ICU MessageFormat     |
+| Python                | Babel + Django i18n       | .po / .mo + gettext   |
+| PowerShell            | Resource strings          | .psd1 con hashtable   |
+| React Native          | react-intl + IntlProvider | ICU MessageFormat     |
+| General               | i18next                   | JSON resource bundles |
 
 ### 3.1 Stack Gentle-Vanguard (default)
 
@@ -76,12 +78,12 @@ const messages = defineMessages({
 
 ### 4.2 Plurals & Gender
 
-| Regla | Implementacion |
-|-------|----------------|
-| Plurales complejos | Usar ICU `{count, plural, one {...} other {...}}` |
-| Ordinales | Usar `{count, selectordinal, one {...} other {...}}` |
-| Genero | Usar `{name, select, male {...} female {...} other {...}}` |
-| Offset | Usar `{count, offset:1 plural, ...}` para rangos inclusivos |
+| Regla              | Implementacion                                              |
+| ------------------ | ----------------------------------------------------------- |
+| Plurales complejos | Usar ICU `{count, plural, one {...} other {...}}`           |
+| Ordinales          | Usar `{count, selectordinal, one {...} other {...}}`        |
+| Genero             | Usar `{name, select, male {...} female {...} other {...}}`  |
+| Offset             | Usar `{count, offset:1 plural, ...}` para rangos inclusivos |
 
 ### 4.3 Dates, Times & Calendars
 
@@ -90,16 +92,15 @@ const messages = defineMessages({
 const date = new Intl.DateTimeFormat('es-AR', {
   year: 'numeric',
   month: 'long',
-  day: 'numeric'
-}).format(new Date())
+  day: 'numeric',
+}).format(new Date());
 // → "11 de mayo de 2026"
 
-const relative = new Intl.RelativeTimeFormat('es-AR', { numeric: 'auto' })
-  .format(-1, 'day')
+const relative = new Intl.RelativeTimeFormat('es-AR', { numeric: 'auto' }).format(-1, 'day')
 // → "ayer"
 
 // INCORRECTO: Formato hardcodeado
-`${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+`${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 ```
 
 1. **MUST** usar `Intl.DateTimeFormat` o `Intl.RelativeTimeFormat` para fechas
@@ -114,12 +115,12 @@ const relative = new Intl.RelativeTimeFormat('es-AR', { numeric: 'auto' })
 const price = new Intl.NumberFormat('es-AR', {
   style: 'currency',
   currency: 'ARS',
-  currencyDisplay: 'narrowSymbol'
+  currencyDisplay: 'narrowSymbol',
 }).format(1234.56)
 // → "$1.234,56"
 
 // INCORRECTO
-`$${value.toFixed(2)}`
+`$${value.toFixed(2)}`;
 ```
 
 1. **MUST** usar `Intl.NumberFormat` para todo formato numerico
@@ -178,18 +179,18 @@ locales/
 
 ## 5. LOCALES SOPORTADOS (Fase 1)
 
-| Locale | Region | RTL | Prioridad |
-|--------|--------|-----|-----------|
-| en-US | United States | No | P0 (base) |
-| es-AR | Argentina | No | P0 (base) |
-| es | Spanish (generic) | No | P1 |
-| pt-BR | Brazil | No | P1 |
-| en-GB | United Kingdom | No | P2 |
-| fr-FR | France | No | P2 |
-| de-DE | Germany | No | P2 |
-| ja-JP | Japan | No | P3 |
-| zh-CN | China (Simplified) | No | P3 |
-| ar-SA | Saudi Arabia | Si | P3 |
+| Locale | Region             | RTL | Prioridad |
+| ------ | ------------------ | --- | --------- |
+| en-US  | United States      | No  | P0 (base) |
+| es-AR  | Argentina          | No  | P0 (base) |
+| es     | Spanish (generic)  | No  | P1        |
+| pt-BR  | Brazil             | No  | P1        |
+| en-GB  | United Kingdom     | No  | P2        |
+| fr-FR  | France             | No  | P2        |
+| de-DE  | Germany            | No  | P2        |
+| ja-JP  | Japan              | No  | P3        |
+| zh-CN  | China (Simplified) | No  | P3        |
+| ar-SA  | Saudi Arabia       | Si  | P3        |
 
 ---
 
@@ -197,12 +198,12 @@ locales/
 
 ### 6.1 Linting
 
-| Herramienta | Uso | Frecuencia |
-|-------------|-----|------------|
-| eslint-plugin-i18n-json | Validar archivos locale JSON | Cada PR |
-| eslint-plugin-formatjs | Detectar strings hardcodeados | Cada commit |
-| i18next-scanner | Extraer keys del codigo | Pre-commit |
-| locale-compare | Comparar completitud entre locales | CI semanal |
+| Herramienta             | Uso                                | Frecuencia  |
+| ----------------------- | ---------------------------------- | ----------- |
+| eslint-plugin-i18n-json | Validar archivos locale JSON       | Cada PR     |
+| eslint-plugin-formatjs  | Detectar strings hardcodeados      | Cada commit |
+| i18next-scanner         | Extraer keys del codigo            | Pre-commit  |
+| locale-compare          | Comparar completitud entre locales | CI semanal  |
 
 ### 6.2 CI Integration
 
@@ -236,17 +237,16 @@ TODO implementacion DEBE verificar:
 
 ## 8. REFERENCIAS
 
-| Resource | Path |
-|----------|------|
-| ICU MessageFormat | unicode-org.github.io/icu |
-| ECMA-402 Intl API | tc39.es/ecma402 |
-| Unicode CLDR | cldr.unicode.org |
-| FormatJS Documentation | formatjs.io |
-| i18next Documentation | i18next.com |
-| Development Standards | `rules/DEVELOPMENT-STANDARDS.md` |
-| Code Standards | `rules/NORMATIVAS-CODIGO.md` |
+| Resource               | Path                             |
+| ---------------------- | -------------------------------- |
+| ICU MessageFormat      | unicode-org.github.io/icu        |
+| ECMA-402 Intl API      | tc39.es/ecma402                  |
+| Unicode CLDR           | cldr.unicode.org                 |
+| FormatJS Documentation | formatjs.io                      |
+| i18next Documentation  | i18next.com                      |
+| Development Standards  | `rules/DEVELOPMENT-STANDARDS.md` |
+| Code Standards         | `rules/NORMATIVAS-CODIGO.md`     |
 
 ---
 
 _Version: 1.0.0 — 2026-05-11 — Status: ACTIVE_
-

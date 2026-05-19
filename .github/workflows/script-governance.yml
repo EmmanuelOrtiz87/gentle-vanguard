@@ -78,5 +78,3 @@ jobs:
         continue-on-error: true
         run: |
           powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\diagnostics\agent-process-alert.ps1 -WindowHours 24 -EmitGitHubAnnotations
-
-

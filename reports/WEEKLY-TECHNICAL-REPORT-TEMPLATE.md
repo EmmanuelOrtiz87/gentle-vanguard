@@ -115,4 +115,3 @@ Security:     [PASS]/[TOTAL] ([%] pass rate)
 ---
 
 _Generated automatically by Gentle-Vanguard Weekly Reporting (FF-006)_
-

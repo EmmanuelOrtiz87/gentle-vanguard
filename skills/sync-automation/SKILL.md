@@ -28,4 +28,3 @@ Automates synchronization between local Gentle-Vanguard and public repository.
 
 - Supports auto-sync via git hooks or scheduled tasks
 - Logs sync activity to `.runtime/sync-log.csv`
-

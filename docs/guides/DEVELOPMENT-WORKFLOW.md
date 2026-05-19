@@ -47,8 +47,8 @@ feature/* / bugfix/* / chore/*
 
 ### Single-User Emergency Bypass
 
-1. For `gentle-vanguard` and `gentle-vanguard-public`, the repository owner can keep a ruleset bypass actor
-   on `develop` for emergency unblock scenarios.
+1. For `gentle-vanguard` and `gentle-vanguard-public`, the repository owner can keep a ruleset
+   bypass actor on `develop` for emergency unblock scenarios.
 2. This does not simulate a second reviewer; it enables administrative bypass when GitHub review
    policy blocks a time-critical merge.
 3. Session autostart enforces this setting automatically through
@@ -313,5 +313,3 @@ gh pr create
 - Documentation: `docs/`
 - Skills: `.skills/`
 - Scripts: `scripts/`
-
-

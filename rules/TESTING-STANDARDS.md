@@ -175,13 +175,12 @@ Invoke-Pester -CodeCoverage scripts/**/*.ps1 -CodeCoverageOutputFile coverage.xm
 
 ## 8. Test Quality Gates
 
-| Gate | Value | Enforcement |
-| ---- | ----- | ---------- |
-| Zero failing tests | 0 failures | `agent-verify.ps1` + CI |
-| Minimum unit tests | ≥ 18 passing | `agent-verify.ps1` |
-| Parse errors in test files | 0 | `ps-lint.yml` |
-| No `$global:` in tests | Enforced | PSScriptAnalyzer |
-| WCAG violations (critical) | 0 | `check-accessibility.ps1` |
-| I18n missing keys | 0 | `check-i18n.ps1` |
-| SRE error budgets | HEALTHY | `enforce-error-budget.ps1` |
-
+| Gate                       | Value        | Enforcement                |
+| -------------------------- | ------------ | -------------------------- |
+| Zero failing tests         | 0 failures   | `agent-verify.ps1` + CI    |
+| Minimum unit tests         | ≥ 18 passing | `agent-verify.ps1`         |
+| Parse errors in test files | 0            | `ps-lint.yml`              |
+| No `$global:` in tests     | Enforced     | PSScriptAnalyzer           |
+| WCAG violations (critical) | 0            | `check-accessibility.ps1`  |
+| I18n missing keys          | 0            | `check-i18n.ps1`           |
+| SRE error budgets          | HEALTHY      | `enforce-error-budget.ps1` |

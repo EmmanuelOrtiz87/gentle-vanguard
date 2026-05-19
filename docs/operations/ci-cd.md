@@ -2,8 +2,8 @@
 
 ## Overview
 
-This document describes the CI/CD configuration for **gentle-vanguard**, optimized for GitHub
-Free plan (2000 min/month on private repos).
+This document describes the CI/CD configuration for **gentle-vanguard**, optimized for GitHub Free
+plan (2000 min/month on private repos).
 
 **Context**: Self-hosted runners are NOT available for private repositories on GitHub Free plan
 (only available for public repos or Team/Enterprise plans).
@@ -19,16 +19,16 @@ Free plan (2000 min/month on private repos).
 
 ### Workflows Running on Every `main` Push
 
-| Workflow                | Runner         | Est. Time | Criticality                       |
-| ----------------------- | -------------- | --------- | --------------------------------- |
-| Workflow Lint           | ubuntu-latest  | ~1 min    | Low (already runs in pre-commit)  |
-| Format Check            | ubuntu-latest  | ~1 min    | Low (already runs in pre-commit)  |
-| Test Suite              | windows-latest | ~4 min    | Medium (runs locally in pre-push) |
-| PSScriptAnalyzer        | windows-latest | ~3 min    | Low (runs locally in pre-commit)  |
+| Workflow                     | Runner         | Est. Time | Criticality                       |
+| ---------------------------- | -------------- | --------- | --------------------------------- |
+| Workflow Lint                | ubuntu-latest  | ~1 min    | Low (already runs in pre-commit)  |
+| Format Check                 | ubuntu-latest  | ~1 min    | Low (already runs in pre-commit)  |
+| Test Suite                   | windows-latest | ~4 min    | Medium (runs locally in pre-push) |
+| PSScriptAnalyzer             | windows-latest | ~3 min    | Low (runs locally in pre-commit)  |
 | Gentle-Vanguard Quality Gate | windows-latest | ~3 min    | Medium                            |
-| Autonomous Validation   | windows-latest | ~15 min   | Low (weekly schedule)             |
-| Script Governance       | windows-latest | ~3 min    | Medium                            |
-| Sync Public             | windows-latest | ~2 min    | High                              |
+| Autonomous Validation        | windows-latest | ~15 min   | Low (weekly schedule)             |
+| Script Governance            | windows-latest | ~3 min    | Medium                            |
+| Sync Public                  | windows-latest | ~2 min    | High                              |
 
 ### Workflows Running on Both `main` and `develop` (Security Critical)
 
@@ -51,10 +51,10 @@ Free plan (2000 min/month on private repos).
 
 Run locally on every `git push`. Catch issues before GHA minutes are consumed:
 
-| Hook                  | Est. Time | Purpose                      |
-| --------------------- | --------- | ---------------------------- |
-| Orchestrator Auto-Fix | ~6s       | Self-heals config drift      |
-| Test Suite (28 tests) | ~73s      | Runs all Pester tests        |
+| Hook                  | Est. Time | Purpose                           |
+| --------------------- | --------- | --------------------------------- |
+| Orchestrator Auto-Fix | ~6s       | Self-heals config drift           |
+| Test Suite (28 tests) | ~73s      | Runs all Pester tests             |
 | Audit Check (quick)   | ~1s       | Gentle-Vanguard consistency sweep |
 
 **Removed from pre-push** (runs in GHA instead):
@@ -96,4 +96,3 @@ Run locally on every `git push`. Catch issues before GHA minutes are consumed:
 - **Pre-push hooks fail**: Run `npx lefthook run pre-push` to debug
 - **Audit failures**: Run audit sweep directly:
   `.\skills\gentle-vanguard-audit-skill\scripts\audit-sweep.ps1 -Scope full`
-

@@ -50,4 +50,3 @@ testing-skill            DEV agent  unit tests
 playwright-skill        QA agent  E2E tests
 pytest-skill            QA agent  Python tests
 ```
-

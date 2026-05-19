@@ -1,23 +1,22 @@
 # NORMATIVAS-SBOM.md — Software Bill of Materials Standards
 
-Version: 1.0.0
-Framework: SPDX 2.3 + CycloneDX 1.6 + NTIA Minimum Elements
-Last updated: 2026-05-11
+Version: 1.0.0 Framework: SPDX 2.3 + CycloneDX 1.6 + NTIA Minimum Elements Last updated: 2026-05-11
 
 ---
 
 ## 1. PROPOSITO
 
-Define los estandares de generacion, validacion, y mantenimiento de Software Bill of Materials (SBOM) para el stack Gentle-Vanguard.
+Define los estandares de generacion, validacion, y mantenimiento de Software Bill of Materials
+(SBOM) para el stack Gentle-Vanguard.
 
 ---
 
 ## 2. FORMATOS SOPORTADOS
 
-| Formato | Version | Uso | Herramienta |
-|---------|---------|-----|-------------|
-| CycloneDX | 1.6 | SBOM principal | Trivy + CycloneDX CLI |
-| SPDX | 2.3 | Compliance legal | SPDX Tools |
+| Formato   | Version | Uso              | Herramienta           |
+| --------- | ------- | ---------------- | --------------------- |
+| CycloneDX | 1.6     | SBOM principal   | Trivy + CycloneDX CLI |
+| SPDX      | 2.3     | Compliance legal | SPDX Tools            |
 
 Formato canonical: CycloneDX 1.6 (generado por Trivy en CI)
 
@@ -37,13 +36,13 @@ Formato canonical: CycloneDX 1.6 (generado por Trivy en CI)
 
 ### 3.2 SBOM Validation
 
-| Check | Tool | Gate |
-|-------|------|------|
-| Formato valido | CycloneDX CLI validator | Release |
-| Vulnerabilidades conocidas | Trivy | CI (pull_request) |
-| Licencias incompatibles | License Finder | PR a develop |
-| Componentes obsoletos | Dependabot alerts | Semanal |
-| Dependencias no declaradas | OWASP Dependency Check | CI |
+| Check                      | Tool                    | Gate              |
+| -------------------------- | ----------------------- | ----------------- |
+| Formato valido             | CycloneDX CLI validator | Release           |
+| Vulnerabilidades conocidas | Trivy                   | CI (pull_request) |
+| Licencias incompatibles    | License Finder          | PR a develop      |
+| Componentes obsoletos      | Dependabot alerts       | Semanal           |
+| Dependencias no declaradas | OWASP Dependency Check  | CI                |
 
 ### 3.3 SBOM Distribution
 
@@ -88,16 +87,15 @@ Formato canonical: CycloneDX 1.6 (generado por Trivy en CI)
 
 ## 6. REFERENCIAS
 
-| Resource | Path |
-|----------|------|
-| CycloneDX Spec 1.6 | cyclonedx.org/specification |
-| SPDX 2.3 Spec | spdx.dev/specifications |
-| NTIA Minimum Elements | ntia.gov/SBOM |
+| Resource               | Path                                |
+| ---------------------- | ----------------------------------- |
+| CycloneDX Spec 1.6     | cyclonedx.org/specification         |
+| SPDX 2.3 Spec          | spdx.dev/specifications             |
+| NTIA Minimum Elements  | ntia.gov/SBOM                       |
 | Security Scan Workflow | .github/workflows/security-scan.yml |
-| Dependabot Config | .github/dependabot.yml |
-| Security Normatives | docs/NORMATIVAS-SEGURIDAD.md |
+| Dependabot Config      | .github/dependabot.yml              |
+| Security Normatives    | docs/NORMATIVAS-SEGURIDAD.md        |
 
 ---
 
 _Version: 1.0.0 - 2026-05-11 - Status: ACTIVE_
-
