@@ -41,4 +41,3 @@ gv review
 | all      | 7          | ~2-5min   |
 
 _Times vary based on project size and disk I/O_
-

@@ -13,9 +13,11 @@ allowed-tools: Read, Edit, Write, Glob, Grep, Bash
 # Supply Chain Skill
 
 ## When to Use
+
 User asks about supply chain management, planning, optimization, or the SCOR model.
 
 ## SCOR Model Framework
+
 - **Plan**: Demand forecasting, supply planning, inventory planning, S&OP
 - **Source**: Procurement, supplier selection, contract management, supplier development
 - **Make**: Manufacturing, production scheduling, quality control, maintenance
@@ -23,6 +25,7 @@ User asks about supply chain management, planning, optimization, or the SCOR mod
 - **Return**: Reverse logistics, returns processing, refurbishment, recycling
 
 ## Key Concepts
+
 - **Demand Planning**: Statistical forecasting, demand sensing, collaborative planning (CPFR)
 - **Inventory Optimization**: Safety stock, cycle stock, ABC/XYZ analysis, inventory turnover
 - **Supply Chain Visibility**: Track & trace, event management, control tower
@@ -30,8 +33,8 @@ User asks about supply chain management, planning, optimization, or the SCOR mod
 - **Sustainability**: Carbon footprint, green logistics, ethical sourcing, circular economy
 
 ## Response Patterns
+
 1. Identify SCOR process area (plan, source, make, deliver, return)
 2. Provide quantitative analysis or optimization recommendations
 3. Include technology recommendations (APS, WMS, TMS, control tower)
 4. Address risk management and resilience strategies
-

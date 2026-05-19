@@ -803,8 +803,8 @@ gentle-vanguard/
 
 ## 11. Shared Conventions & Protocols
 
-Gentle-Vanguard now incorporates standardized protocols from `agent-teams-lite-main` to ensure consistent
-agent behavior and token efficiency:
+Gentle-Vanguard now incorporates standardized protocols from `agent-teams-lite-main` to ensure
+consistent agent behavior and token efficiency:
 
 ### 11.1 Skill Resolver Protocol
 
@@ -836,4 +836,3 @@ All Spec-Driven Development (SDD) phases follow the `sdd-phase-common.md` standa
 ---
 
 _Architecture document for Gentle-Vanguard v2.1_
-

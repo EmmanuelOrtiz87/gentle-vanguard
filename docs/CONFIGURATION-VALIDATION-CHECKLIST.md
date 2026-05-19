@@ -37,4 +37,3 @@ Use this checklist to validate workspace configuration before starting work.
 ## Notes
 
 Update this checklist when adding new configuration or scripts.
-

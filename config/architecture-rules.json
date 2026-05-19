@@ -68,11 +68,7 @@
         "Resource management",
         "Technical implementations"
       ],
-      "restrictions": [
-        "NO business logic",
-        "NO presentation logic",
-        "NO orchestration"
-      ]
+      "restrictions": ["NO business logic", "NO presentation logic", "NO orchestration"]
     },
     {
       "id": "cross-cutting",
@@ -86,10 +82,7 @@
         "Caching strategies",
         "Error handling"
       ],
-      "restrictions": [
-        "NO business logic",
-        "NO layer-specific logic"
-      ]
+      "restrictions": ["NO business logic", "NO layer-specific logic"]
     }
   ],
   "rules": [

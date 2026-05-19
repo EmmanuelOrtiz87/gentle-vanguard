@@ -1,34 +1,33 @@
 ---
 name: premortem-skill
 description: >
-  Premortem analysis for plans, launches, products, hires, strategies, or decisions.
-  Assumes the plan already failed 6 months later and works backward to expose blind spots.
-  Based on Gary Klein's method (Harvard Business Review), endorsed by Daniel Kahneman.
-  Trigger: "premortem esto", "premortem mi", "ejecuta un premortem", "que podria matar esto",
-  "prueba de estres este plan", "que me estoy perdiendo aqui", "encuentra los puntos ciegos",
-  "que podria salir mal", "me estoy perdiendo algo", "hazle agujeros a esto",
-  "donde va a romperse esto", "abogado del diablo", "stress test this plan",
-  "find the blind spots", "run a premortem", "what could kill this".
-  NOT triggered by simple feedback requests, factual questions, or LLM Council requests.
-  DO trigger when someone has a plan where the cost of being wrong is high.
+  Premortem analysis for plans, launches, products, hires, strategies, or decisions. Assumes the
+  plan already failed 6 months later and works backward to expose blind spots. Based on Gary Klein's
+  method (Harvard Business Review), endorsed by Daniel Kahneman. Trigger: "premortem esto",
+  "premortem mi", "ejecuta un premortem", "que podria matar esto", "prueba de estres este plan",
+  "que me estoy perdiendo aqui", "encuentra los puntos ciegos", "que podria salir mal", "me estoy
+  perdiendo algo", "hazle agujeros a esto", "donde va a romperse esto", "abogado del diablo",
+  "stress test this plan", "find the blind spots", "run a premortem", "what could kill this". NOT
+  triggered by simple feedback requests, factual questions, or LLM Council requests. DO trigger when
+  someone has a plan where the cost of being wrong is high.
 ---
 
 # Premortem Skill
 
 ## Activation Contract
 
-Execute when user triggers a premortem request. A premortem is the opposite of a postmortem:
-instead of figuring out what went wrong after something fails, you imagine it already failed
-and work backward to find every reason why — before starting.
+Execute when user triggers a premortem request. A premortem is the opposite of a postmortem: instead
+of figuring out what went wrong after something fails, you imagine it already failed and work
+backward to find every reason why — before starting.
 
 ## Core Method
 
 From psychologist Gary Klein (HBR). Daniel Kahneman called it his most valuable decision-making
 technique. Used by Google, Goldman Sachs, Procter & Gamble.
 
-**Key insight**: When asked "what could go wrong?", people give cautious, vague answers.
-When you say "this already failed, tell me why", the brain shifts to narrative mode and
-generates much more specific, creative, and honest reasons.
+**Key insight**: When asked "what could go wrong?", people give cautious, vague answers. When you
+say "this already failed, tell me why", the brain shifts to narrative mode and generates much more
+specific, creative, and honest reasons.
 
 ## Hard Rules
 
@@ -41,17 +40,18 @@ generates much more specific, creative, and honest reasons.
 
 ## When To Execute
 
-**Good targets**: product launches, pricing changes, hires, strategic pivots, partnerships,
-any commitment where the cost of being wrong is high.
+**Good targets**: product launches, pricing changes, hires, strategic pivots, partnerships, any
+commitment where the cost of being wrong is high.
 
-**Bad targets**: vague ideas with no concrete plan yet, single-answer factual questions,
-creative feedback on drafts, already-irreversible decisions.
+**Bad targets**: vague ideas with no concrete plan yet, single-answer factual questions, creative
+feedback on drafts, already-irreversible decisions.
 
 ## Execution Steps
 
 ### 1. Context Gathering (minimum viable)
 
 Scan current conversation and workspace for existing context. Need three things:
+
 - **What** — clear understanding of what is being premortemed
 - **For Whom** — audience, stakeholders, who it affects
 - **Success** — what winning looks like
@@ -60,16 +60,17 @@ If context is insufficient, ask ONE question at a time until threshold is met.
 
 ### 2. Set The Frame
 
-"Han pasado 6 meses. [El plan] ha fallado. Esta muerto. Miramos hacia atras
-intentando entender que salio mal."
+"Han pasado 6 meses. [El plan] ha fallado. Esta muerto. Miramos hacia atras intentando entender que
+salio mal."
 
-This shifts from "evaluate this plan" (compliant mode) to "explain why this died"
-(honest failure identification mode).
+This shifts from "evaluate this plan" (compliant mode) to "explain why this died" (honest failure
+identification mode).
 
 ### 3. Raw Premortem — Generate Failure Reasons
 
-Single comprehensive analysis. No preset categories, no lenses, no constraints.
-Pure Klein method. Each reason must be:
+Single comprehensive analysis. No preset categories, no lenses, no constraints. Pure Klein method.
+Each reason must be:
+
 - Specific to this plan (not generic advice)
 - Grounded in real details the user provided
 - A genuine threat (not a minor inconvenience)
@@ -78,10 +79,10 @@ Pure Klein method. Each reason must be:
 
 Launch one sub-agent per failure reason, all in parallel. Each agent:
 
-**Prompt template:**
-"You are a researcher in a premortem analysis. The frame: 6 months have passed,
-this plan has failed. Your assigned failure reason: [specific reason].
-Write the story of how it actually unfolded. Include:
+**Prompt template:** "You are a researcher in a premortem analysis. The frame: 6 months have passed,
+this plan has failed. Your assigned failure reason: [specific reason]. Write the story of how it
+actually unfolded. Include:
+
 1. THE FAILURE STORY — 2-3 paragraph narrative with specific moments
 2. THE HIDDEN ASSUMPTION — the one thing the user took for granted that enabled this failure
 3. EARLY WARNING SIGNS — 1-2 concrete, observable signals to watch for"
@@ -91,6 +92,7 @@ Each agent keeps response under 300 words.
 ### 5. Synthesis
 
 Produce structured report with:
+
 1. **Most Likely Failure** — highest probability scenario
 2. **Most Dangerous Failure** — highest damage scenario (even if less likely)
 3. **The Hidden Assumption** — the most important unchallenged belief
@@ -100,12 +102,14 @@ Produce structured report with:
 ### 6. Generate Reports
 
 Two files in workspace root:
+
 - `premortem-report-{timestamp}.html` — visual report with dark theme, severity indicators
 - `premortem-transcript-{timestamp}.md` — full transcript as reference
 
 ## Output Contract
 
-- **Chat**: 3-sentence summary (most likely failure, hidden assumption, single most important revision)
+- **Chat**: 3-sentence summary (most likely failure, hidden assumption, single most important
+  revision)
 - **HTML report**: Visual, scannable, dark-themed, with synthesis cards and failure detail cards
 - **Transcript**: Complete record of all context, reasons, deep-dives, and synthesis
 

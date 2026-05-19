@@ -13,5 +13,3 @@
     "_note": "Set url and adapter=webhook. Secret loaded from env var GF_WEBHOOK_SECRET."
   }
 }
-
-

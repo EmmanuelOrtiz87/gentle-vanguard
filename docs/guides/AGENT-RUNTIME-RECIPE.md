@@ -105,4 +105,3 @@ If startup fails in strict mode:
 - [ ] Agent lanes are `READY`
 - [ ] Engram memory path available
 - [ ] Session closure artifact generated at end of cycle
-

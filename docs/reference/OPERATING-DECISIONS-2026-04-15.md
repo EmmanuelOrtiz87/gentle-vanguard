@@ -60,8 +60,8 @@ Workspace + Gentle-Vanguard operating flow.
 - Session lifecycle artifacts are governance-critical and cannot be omitted.
 - Release baseline changes must be propagated from `main` to `develop` in both `gentle-vanguard` and
   `gentle-vanguard-public`.
-- Existing release tags must never be force-moved; if a baseline tag is missing in a repo, create
-  it on the current homologated baseline commit.
+- Existing release tags must never be force-moved; if a baseline tag is missing in a repo, create it
+  on the current homologated baseline commit.
 
 ### Mechanisms Implemented
 
@@ -94,4 +94,3 @@ Workspace + Gentle-Vanguard operating flow.
 .\tools\session-manual-end.cmd
 .\tools\validate-session-stack.ps1 -Quiet
 ```
-

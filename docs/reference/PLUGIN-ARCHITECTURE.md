@@ -9,7 +9,9 @@
 
 ## Overview
 
-Standardized interface for third-party plugins with clear contract. Plugins are auto-discovered from `plugins/`, `~/.gentle-vanguard/plugins/`, and custom paths configured in `config/plugins.json`. Each plugin provides a `plugin.json` manifest and one or more executable scripts.
+Standardized interface for third-party plugins with clear contract. Plugins are auto-discovered from
+`plugins/`, `~/.gentle-vanguard/plugins/`, and custom paths configured in `config/plugins.json`.
+Each plugin provides a `plugin.json` manifest and one or more executable scripts.
 
 ## Plugin Interface
 
@@ -101,10 +103,10 @@ plugins/
 
 ### Core Scripts
 
-| Script | Path | Purpose |
-|--------|------|---------|
+| Script                  | Path                              | Purpose                                                     |
+| ----------------------- | --------------------------------- | ----------------------------------------------------------- |
 | `plugins-discovery.ps1` | `scripts/utilities/SKILLS-TOOLS/` | Discover, list, validate, and show search paths for plugins |
-| `plugin-loader.ps1` | `scripts/utilities/SKILLS-TOOLS/` | Runtime engine: load, register, invoke plugins |
+| `plugin-loader.ps1`     | `scripts/utilities/SKILLS-TOOLS/` | Runtime engine: load, register, invoke plugins              |
 
 ### Commands
 
@@ -131,7 +133,9 @@ Invoke-Plugin -PluginName "example-hello-world" -Command "hello" -Parameters @{ 
 
 ### CI Integration
 
-Plugin manifests are validated in `.github/workflows/autonomous-validation.yml` via the `Validate Plugins` step, which runs `plugins-discovery.ps1 -Action validate` on every push/PR to develop/main.
+Plugin manifests are validated in `.github/workflows/autonomous-validation.yml` via the
+`Validate Plugins` step, which runs `plugins-discovery.ps1 -Action validate` on every push/PR to
+develop/main.
 
 ## Example Plugin Structure
 
@@ -144,4 +148,3 @@ plugins/
 ```
 
 Built-in example: `plugins/example-hello-world/plugin.json` + `hello-world.ps1`
-

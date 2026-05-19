@@ -101,4 +101,3 @@ Then verify:
 - `detail`
 - `active`
 - `responsePolicy`
-

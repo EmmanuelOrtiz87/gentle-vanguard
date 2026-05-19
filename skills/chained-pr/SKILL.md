@@ -2,8 +2,8 @@
 name: chained-pr
 description: >
   Split large changes into chained or stacked pull requests that protect reviewer focus and stay
-  within Gentle-Vanguard's 400-line cognitive review budget. Trigger: when a PR would exceed 400 changed
-  lines, when planning chained PRs, stacked PRs, or reviewable slices.
+  within Gentle-Vanguard's 400-line cognitive review budget. Trigger: when a PR would exceed 400
+  changed lines, when planning chained PRs, stacked PRs, or reviewable slices.
 license: Apache-2.0
 metadata:
   author: gentle-vanguard (adapted for Gentle-Vanguard)
@@ -19,7 +19,8 @@ Use this skill when:
 - A planned PR is likely to exceed **400 changed lines** (`additions + deletions`).
 - You need chained PRs, stacked PRs, or a feature branch with multiple reviewable slices.
 - A reviewer asks to split a PR for cognitive load, review fatigue, or burnout prevention.
-- You must protect Gentle-Vanguard's **micro-scoping rule**: Max 10 files/judgment (learned 2026-05-02).
+- You must protect Gentle-Vanguard's **micro-scoping rule**: Max 10 files/judgment (learned
+  2026-05-02).
 
 Do not use this skill for small fixes or single-purpose changes that fit comfortably under the
 review budget.
@@ -92,13 +93,13 @@ main
 
 Pair the diagram with a status table:
 
-| PR   | Scope            | Status         |
-| ---- | ---------------- | -------------- |
+| PR   | Scope                 | Status         |
+| ---- | --------------------- | -------------- |
 | #101 | Gentle-Vanguard audit | ✅ Passing     |
-| #102 | Fix links        | ✅ Passing     |
-| #103 | Move scripts     | 📍 Review here |
-| #104 | Rename rules     | ⚪ Pending     |
-| #105 | Tracker          | 🟡 Draft       |
+| #102 | Fix links             | ✅ Passing     |
+| #103 | Move scripts          | 📍 Review here |
+| #104 | Rename rules          | ⚪ Pending     |
+| #105 | Tracker               | 🟡 Draft       |
 
 ## Gentle-Vanguard Integration#
 
@@ -252,4 +253,3 @@ gh pr create --base fix-links --title "refactor: move scripts to utilities" --bo
 - **Max 400 lines/PR** (cognitive load)
 - **Micro-scoping** → 2-5 minute reviews instead of "many minutes"
 - **Chained PRs** → No more massive audits that timeout
-

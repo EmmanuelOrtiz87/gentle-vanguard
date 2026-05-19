@@ -48,7 +48,14 @@
       "primary_subagent": "session-agent",
       "fallback": "general",
       "skills": ["session-workflow-skill", "project-orchestrator-skill"],
-      "triggers": ["iniciar sesion", "start session", "guardar sesion", "cerrar sesion", "continuar", "estado"]
+      "triggers": [
+        "iniciar sesion",
+        "start session",
+        "guardar sesion",
+        "cerrar sesion",
+        "continuar",
+        "estado"
+      ]
     },
     "GOV": {
       "name": "Governance",
@@ -72,7 +79,13 @@
       "primary_subagent": "premortem-agent",
       "fallback": "orchestrator",
       "skills": ["premortem-skill"],
-      "triggers": ["premortem", "stress test plan", "find blind spots", "abogado del diablo", "que podria salir mal"],
+      "triggers": [
+        "premortem",
+        "stress test plan",
+        "find blind spots",
+        "abogado del diablo",
+        "que podria salir mal"
+      ],
       "parallel_subagents": true,
       "parallel_capacity": 8
     },
@@ -114,7 +127,14 @@
       "primary_subagent": "hr-agent",
       "fallback": "general",
       "skills": ["hr-talent-acquisition"],
-      "triggers": ["hiring", "recruiting", "interview", "candidate", "onboarding", "job description"]
+      "triggers": [
+        "hiring",
+        "recruiting",
+        "interview",
+        "candidate",
+        "onboarding",
+        "job description"
+      ]
     },
     "BUS-TELE": {
       "name": "Business Telemetry",
@@ -122,7 +142,14 @@
       "primary_subagent": "general",
       "fallback": "general",
       "skills": ["business-telemetry-skill"],
-      "triggers": ["telemetry", "metrics", "kpi", "management report", "efficiency score", "business metrics"]
+      "triggers": [
+        "telemetry",
+        "metrics",
+        "kpi",
+        "management report",
+        "efficiency score",
+        "business metrics"
+      ]
     },
     "SCRIPT-GOV": {
       "name": "Script Governance",
@@ -130,7 +157,15 @@
       "primary_subagent": "sdd-verify",
       "fallback": "general",
       "skills": ["script-governance-skill"],
-      "triggers": ["validate script", "parser error", "syntax error", "fix script", "script validation", "auto-fix", "hook"]
+      "triggers": [
+        "validate script",
+        "parser error",
+        "syntax error",
+        "fix script",
+        "script validation",
+        "auto-fix",
+        "hook"
+      ]
     },
     "REPORT": {
       "name": "Reporting",
@@ -138,7 +173,15 @@
       "primary_subagent": "doc-agent",
       "fallback": "general",
       "skills": ["reporting-skill"],
-      "triggers": ["report", "informe", "metrics", "dashboard", "resumen ejecutivo", "analytics", "telemetry"]
+      "triggers": [
+        "report",
+        "informe",
+        "metrics",
+        "dashboard",
+        "resumen ejecutivo",
+        "analytics",
+        "telemetry"
+      ]
     },
     "PR-REVIEW": {
       "name": "PR Review",
@@ -154,7 +197,15 @@
       "primary_subagent": "ops-agent",
       "fallback": "general",
       "skills": ["release-management-skill"],
-      "triggers": ["release", "changelog", "version bump", "ship", "cut release", "hotfix", "semver"]
+      "triggers": [
+        "release",
+        "changelog",
+        "version bump",
+        "ship",
+        "cut release",
+        "hotfix",
+        "semver"
+      ]
     },
     "SESSION-CLOSE": {
       "name": "Session Closure",
@@ -162,7 +213,13 @@
       "primary_subagent": "session-agent",
       "fallback": "general",
       "skills": ["session-workflow-skill", "project-orchestrator-skill"],
-      "triggers": ["close session", "session end", "cerrar sesion", "fin de sesion", "guardar sesion"]
+      "triggers": [
+        "close session",
+        "session end",
+        "cerrar sesion",
+        "fin de sesion",
+        "guardar sesion"
+      ]
     },
     "DAILY": {
       "name": "Daily Workflow",
@@ -178,7 +235,14 @@
       "primary_subagent": "general",
       "fallback": "general",
       "skills": ["gitflow-orchestrator-skill"],
-      "triggers": ["create branch", "feature branch", "bugfix branch", "hotfix branch", "git checkout", "switch branch"]
+      "triggers": [
+        "create branch",
+        "feature branch",
+        "bugfix branch",
+        "hotfix branch",
+        "git checkout",
+        "switch branch"
+      ]
     },
     "GITFLOW-PR": {
       "name": "GitFlow PR",
@@ -350,9 +414,13 @@
     },
     "orchestrator": {
       "description": "Orchestrator — coordinates multi-agent workflows, delegates tasks, manages sessions",
-      "best_for": ["workflow orchestration", "agent delegation", "session lifecycle", "cross-agent coordination"],
+      "best_for": [
+        "workflow orchestration",
+        "agent delegation",
+        "session lifecycle",
+        "cross-agent coordination"
+      ],
       "token_efficient": true
     }
   }
 }
-

@@ -79,4 +79,3 @@ Ver: `scripts/utilities/update-engram.ps1`
 - https://github.com/gentle-vanguard/engram/blob/main/README.md
 - https://github.com/gentle-vanguard/engram/blob/main/docs/INSTALLATION.md
 - https://github.com/gentle-vanguard/engram/blob/main/docs/AGENT-SETUP.md
-

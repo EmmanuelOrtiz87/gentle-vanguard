@@ -4,12 +4,12 @@ This document provides security guidelines for projects created with Gentle-Vang
 
 ## Quick Reference
 
-| Command              | Description                       |
-| -------------------- | --------------------------------- |
+| Command                           | Description                       |
+| --------------------------------- | --------------------------------- |
 | `gentle-vanguard security scan`   | Quick scan for critical issues    |
 | `gentle-vanguard security audit`  | Full audit with detailed report   |
 | `gentle-vanguard security report` | Generate security review document |
-| `git commit`         | Runs automatic security scan      |
+| `git commit`                      | Runs automatic security scan      |
 
 ## Pre-commit Security
 
@@ -190,4 +190,3 @@ If you find a security vulnerability:
 2. Email: security@example.com
 3. Include details about the issue
 4. Allow time for a fix before disclosure
-

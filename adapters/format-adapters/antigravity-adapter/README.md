@@ -66,7 +66,7 @@ node adapter.js generate-mission '[{"name":"dev","instructions":"Implement featu
 
 ## Agent Role Mapping
 
-| Gentle-Vanguard Skill          | Antigravity Agent Role |
+| Gentle-Vanguard Skill     | Antigravity Agent Role |
 | ------------------------- | ---------------------- |
 | react-19-skill            | frontend               |
 | angular-spa-skill         | frontend               |
@@ -144,4 +144,3 @@ agents:
 **Version**: 1.0.0  
 **Status**: Ready for testing  
 **Compatibility**: Antigravity Mission Control, AgentKit 2.0
-

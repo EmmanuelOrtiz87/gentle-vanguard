@@ -111,4 +111,3 @@ The previous on-demand documentation system has been:
 Management reporting skill: `~/.config/opencode/skills/management-reporting-skill/SKILL.md`
 
 **Triggers**: "management report", "generar informe", "reporte gerencial", "CSV report"
-

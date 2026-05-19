@@ -280,4 +280,3 @@ Sitemap: https://example.com/sitemap.xml
 - [Schema Markup Validator](https://validator.schema.org)
 - [Google PageSpeed Insights](https://pagespeed.web.dev)
 - [Sitemap Generator](https://www.xml-sitemaps.com)
-

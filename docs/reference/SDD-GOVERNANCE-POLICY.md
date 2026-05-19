@@ -75,4 +75,3 @@ For exception paths, a mini-spec must exist before merge with:
 1. `skills/project-orchestrator-skill/SKILL.md`
 2. `skills/sdd-lifecycle/SKILL.md`
 3. `docs/sdd/README.md`
-

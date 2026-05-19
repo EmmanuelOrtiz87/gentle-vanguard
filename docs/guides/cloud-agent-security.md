@@ -79,4 +79,3 @@ $env:OPENAI_API_KEY = "sk-..."
 | `config/cloud-agents.json`                     | Yes    | Template (no secrets)                |
 | `config/cloud-agents.local.json`               | **NO** | Local provider metadata (no secrets) |
 | `.runtime/telemetry/cloud-agent-telemetry.csv` | **NO** | Runtime audit log                    |
-

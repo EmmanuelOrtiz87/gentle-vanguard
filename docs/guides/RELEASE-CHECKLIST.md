@@ -279,4 +279,3 @@ git push origin :v1.0.0  # Delete tag from remote
 
 **Ready to release? Run this checklist, confirm all boxes, then proceed to Release Execution
 section.**
-

@@ -50,9 +50,9 @@ observabilidad, continuidad y auditora en Gentle-Vanguard.
 - Toda la informacin relevante para observabilidad, auditora y continuidad est centralizada en los
   directorios y archivos anteriores.
 - Skills, scripts y humanos deben consultar estos artefactos para operar y auditar el sistema.
-- Si se detecta informacin fuera de esta estructura, debe migrarse y documentarse en Gentle-Vanguard.
+- Si se detecta informacin fuera de esta estructura, debe migrarse y documentarse en
+  Gentle-Vanguard.
 
 ---
 
 ltima actualizacin: 2026-04-19 Responsable: Orquestador Gentle-Vanguard
-

@@ -219,4 +219,3 @@ gh pr create --title "feat(scope): description" --body "Closes #N"
 # Add type label to PR
 gh pr edit <pr-number> --add-label "type:feature"
 ````
-

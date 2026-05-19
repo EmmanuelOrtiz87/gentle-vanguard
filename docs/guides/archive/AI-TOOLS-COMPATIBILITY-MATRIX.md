@@ -8,8 +8,8 @@
 
 ## Overview
 
-This document maps compatibility between Gentle-Vanguard and various AI
-scripts/utilities/plugins to ensure consistent behavior across all integrations.
+This document maps compatibility between Gentle-Vanguard and various AI scripts/utilities/plugins to
+ensure consistent behavior across all integrations.
 
 ---
 
@@ -713,4 +713,3 @@ CONSTRAINTS:
 - Context Pack: `scripts/utilities/context-pack.ps1`
 - Detect IDE Session: `scripts/utilities/detect-ide-session.ps1`
 - Dispatch Agent: `scripts/utilities/dispatch-agent.ps1`
-

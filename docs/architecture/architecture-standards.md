@@ -90,4 +90,3 @@ mem_save -title "decisión: chose X over Y" -type decisión -content "**What**: 
 - **Topology**: [layer-topology.md](layer-topology.md)
 - **Workflows**: [role-workflows.md](role-workflows.md)
 - **This file**: Architecture standards and decisión templates
-

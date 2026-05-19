@@ -88,4 +88,3 @@ class UserViewModel: ObservableObject {
 - Ignore accessibility
 - Deploy untested code
 - Use hardcoded API URLs
-

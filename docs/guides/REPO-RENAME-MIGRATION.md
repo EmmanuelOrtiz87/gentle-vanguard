@@ -51,4 +51,3 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/agent-verify.ps1
 1. Rename does not migrate branch rules automatically in all cases.
 2. Re-check branch rulesets after the rename.
 3. For public repositories, keep untrusted PR jobs on GitHub-hosted runners.
-

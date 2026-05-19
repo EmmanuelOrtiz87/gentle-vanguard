@@ -91,4 +91,3 @@ The activation flow validates:
 3. If a tool installs but is not detected immediately, restart the terminal and re-run the health
    check.
 4. If you need a non-destructive check, use `update-tools.ps1 -DryRun`.
-

@@ -9,11 +9,11 @@ Last updated: 2026-05-12 | Version: 1.0.0
 
 All observability MUST collect from these three pillars:
 
-| Pillar | Purpose | Tools | Example |
-|--------|---------|-------|---------|
-| **Logs** | What happened (events, errors) | Structured JSON, ELK, Splunk | `{ level: "ERROR", msg: "User auth failed", userId: "123", error: "invalid-token" }` |
-| **Traces** | How it happened (flow, timing) | OpenTelemetry, Jaeger, Datadog | Agent→Skill→Execution: 3 spans, 47ms total |
-| **Metrics** | How much (counters, gauges) | Prometheus, Datadog, CloudWatch | `agent_dispatch_seconds_bucket{agent="DEV"} = 0.234` |
+| Pillar      | Purpose                        | Tools                           | Example                                                                              |
+| ----------- | ------------------------------ | ------------------------------- | ------------------------------------------------------------------------------------ |
+| **Logs**    | What happened (events, errors) | Structured JSON, ELK, Splunk    | `{ level: "ERROR", msg: "User auth failed", userId: "123", error: "invalid-token" }` |
+| **Traces**  | How it happened (flow, timing) | OpenTelemetry, Jaeger, Datadog  | Agent→Skill→Execution: 3 spans, 47ms total                                           |
+| **Metrics** | How much (counters, gauges)    | Prometheus, Datadog, CloudWatch | `agent_dispatch_seconds_bucket{agent="DEV"} = 0.234`                                 |
 
 ---
 
@@ -21,13 +21,13 @@ All observability MUST collect from these three pillars:
 
 ### Log Levels (syslog + custom)
 
-| Level | Usage | Severity | Example |
-|-------|-------|----------|---------|
-| **DEBUG** | Development, low-level details | 📘 | Token allocation, cache hits |
-| **INFO** | Normal operations, milestones | 💙 | Agent dispatch started, task completed |
-| **WARN** | Potential issues, deprecations | 💛 | Deprecated endpoint called, retry attempted |
-| **ERROR** | Failures, exceptions | 🔴 | Skill execution failed, auth expired |
-| **CRITICAL** | System failures, data loss | 🚨 | Database down, security breach detected |
+| Level        | Usage                          | Severity | Example                                     |
+| ------------ | ------------------------------ | -------- | ------------------------------------------- |
+| **DEBUG**    | Development, low-level details | 📘       | Token allocation, cache hits                |
+| **INFO**     | Normal operations, milestones  | 💙       | Agent dispatch started, task completed      |
+| **WARN**     | Potential issues, deprecations | 💛       | Deprecated endpoint called, retry attempted |
+| **ERROR**    | Failures, exceptions           | 🔴       | Skill execution failed, auth expired        |
+| **CRITICAL** | System failures, data loss     | 🚨       | Database down, security breach detected     |
 
 ### Structured Format (JSON)
 
@@ -70,12 +70,12 @@ function Write-StructuredLog {
     param(
         [ValidateSet('DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL')]
         [string]$Level,
-        
+
         [string]$Message,
-        
+
         [hashtable]$Attributes = @{}
     )
-    
+
     $logEntry = @{
         timestamp = (Get-Date -AsUTC -Format 'o')
         level = $Level
@@ -84,7 +84,7 @@ function Write-StructuredLog {
         message = $Message
         attributes = $Attributes
     }
-    
+
     $logEntry | ConvertTo-Json -Depth 10 | Write-Output
 }
 
@@ -223,10 +223,10 @@ function Emit-Metric {
         [double]$Value,
         [hashtable]$Labels = @{}
     )
-    
+
     $labelStr = ($Labels.GetEnumerator() | ForEach-Object { "$($_.Key)=`"$($_.Value)`"" }) -join ','
     $metric = "$Name{$labelStr} $Value"
-    
+
     # Send to metrics collector (e.g., Prometheus pushgateway)
     Invoke-RestMethod -Uri "http://metrics-collector:9091/metrics/job/gentle-vanguard" `
         -Method POST -Body $metric
@@ -249,7 +249,7 @@ Emit-Metric -Name "agent_dispatch_seconds" -Value 0.234 `
     "enabled": true,
     "environment": "production",
     "version": "1.0.0",
-    
+
     "logging": {
       "level": "INFO",
       "format": "json",
@@ -264,7 +264,7 @@ Emit-Metric -Name "agent_dispatch_seconds" -Value 0.234 `
         "rate": 1.0
       }
     },
-    
+
     "tracing": {
       "enabled": true,
       "exporters": [
@@ -286,7 +286,7 @@ Emit-Metric -Name "agent_dispatch_seconds" -Value 0.234 `
         "deployment.environment": "production"
       }
     },
-    
+
     "metrics": {
       "enabled": true,
       "exporters": [
@@ -304,7 +304,7 @@ Emit-Metric -Name "agent_dispatch_seconds" -Value 0.234 `
         "error_rates"
       ]
     },
-    
+
     "alerts": {
       "enabled": true,
       "rules": [
@@ -387,13 +387,13 @@ groups:
         expr: agent_dispatch_seconds > 0.5
         for: 5m
         annotations:
-          summary: "Agent dispatch slow ({{ $value }}s)"
-      
+          summary: 'Agent dispatch slow ({{ $value }}s)'
+
       - alert: SkillFailureRate
         expr: rate(skill_executions_total{status="FAILURE"}[5m]) > 0.05
         for: 10m
         annotations:
-          summary: "Skill failure rate > 5%"
+          summary: 'Skill failure rate > 5%'
 ```
 
 ---
@@ -403,6 +403,7 @@ groups:
 ### PII Masking
 
 Logs MUST NOT contain:
+
 - User passwords, tokens, API keys
 - Credit card numbers, SSNs
 - Personally identifiable information (names, emails, IPs)
@@ -412,12 +413,12 @@ Logs MUST NOT contain:
 ```powershell
 function Mask-PII {
     param([string]$Input)
-    
+
     $masked = $Input `
         -replace '\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', '[EMAIL_MASKED]' `
         -replace '\b\d{3}-\d{2}-\d{4}\b', '[SSN_MASKED]' `
         -replace '(password|token|apiKey)["\s]*[=:]\s*["\']?[^"\s]*', '$1=[REDACTED]'
-    
+
     return $masked
 }
 ```
@@ -473,7 +474,8 @@ Describe "Observability" {
 - [ ] PII masking tested
 - [ ] 30-day retention configured
 - [ ] Observability tests in `tests/observability/`
-- [ ] Documentation synchronized with [config/observability-config.json](../config/observability-config.json)
+- [ ] Documentation synchronized with
+      [config/observability-config.json](../config/observability-config.json)
 
 ---
 
@@ -484,4 +486,3 @@ Describe "Observability" {
 - [ELK Stack](https://www.elastic.co/what-is/elk-stack)
 - [Jaeger Tracing](https://www.jaegertracing.io/)
 - Project: [config/observability-config.json](../config/observability-config.json)
-

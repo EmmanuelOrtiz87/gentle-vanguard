@@ -116,8 +116,8 @@ margins.
 
 ## 5. Elevation & Depth
 
-Gentle-Vanguard uses minimal elevation. Surfaces use background color with subtle borders. No shadows -
-keeps the ASCII-aesthetic consistent.
+Gentle-Vanguard uses minimal elevation. Surfaces use background color with subtle borders. No
+shadows - keeps the ASCII-aesthetic consistent.
 
 Code blocks use surface color (#F7FAFC) to create visual separation without depth effects.
 
@@ -157,4 +157,3 @@ sufficient separation.
 - Mix spacing units (stick to 4px base)
 - Add shadows or gradients
 - Use rounded corners greater than 4px
-

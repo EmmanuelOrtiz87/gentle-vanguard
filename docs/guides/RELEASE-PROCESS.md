@@ -6,7 +6,8 @@ Before releasing, ensure your local machine is properly configured:
 
 ### MCP Workspace Setup
 
-The MCP workspace (`$HOME\mcp-workspace`) must be initialized for release builds. This provides hardened, offline-only execution of MCP servers.
+The MCP workspace (`$HOME\mcp-workspace`) must be initialized for release builds. This provides
+hardened, offline-only execution of MCP servers.
 
 **Check if setup**:
 
@@ -83,6 +84,7 @@ If the gate fails, publish is blocked until issues are resolved.
 ```
 
 Expected outcome:
+
 - Same release baseline in both repos (VERSION aligned)
 - `main` and `develop` aligned with their remotes in both repos
 - No forced tag rewrites required
@@ -142,4 +144,3 @@ gh release create vX.Y.Z --title "vX.Y.Z" --notes "See CHANGELOG.md"
 - `chore/*` — maintenance branches
 
 See [BRANCH-STRATEGY.md](BRANCH-STRATEGY.md) for full details.
-

@@ -20,7 +20,11 @@
     "scriptArgs": { "UserInput": "USER_INPUT_HERE", "WorkspaceRoot": "." }
   },
   "rules": {
-    "paths": [".cursor/rules/core-workflow.md", ".cursor/rules/commands.md", ".cursor/rules/code-style.md"]
+    "paths": [
+      ".cursor/rules/core-workflow.md",
+      ".cursor/rules/commands.md",
+      ".cursor/rules/code-style.md"
+    ]
   },
   "commands": {
     "paths": [".cursor/commands/"],
@@ -44,4 +48,3 @@
     "SESSION": ["session-workflow-skill"]
   }
 }
-

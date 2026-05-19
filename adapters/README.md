@@ -1,7 +1,7 @@
 # Adapters & Integration Layer
 
-**Purpose**: Bridge Gentle-Vanguard capabilities to tools outside the Agent Skills standard (Windsurf,
-Codex, Antigravity, etc.)
+**Purpose**: Bridge Gentle-Vanguard capabilities to tools outside the Agent Skills standard
+(Windsurf, Codex, Antigravity, etc.)
 
 ---
 
@@ -112,8 +112,8 @@ Translates between Gentle-Vanguard's standard format and tool-specific formats.
 
 **When to use**: Tool doesn't support MCP but has its own plugin system.
 
-| Adapter             | Input Format        | Output Format           |
-| ------------------- | ------------------- | ----------------------- |
+| Adapter             | Input Format             | Output Format           |
+| ------------------- | ------------------------ | ----------------------- |
 | windsurf-adapter    | Gentle-Vanguard SKILL.md | Windsurf plugin format  |
 | codex-adapter       | Gentle-Vanguard tools    | OpenAI function calling |
 | antigravity-adapter | Gentle-Vanguard context  | Mission Control format  |
@@ -158,4 +158,3 @@ Translates between Gentle-Vanguard's standard format and tool-specific formats.
 **Generated**: 2026-04-28  
 **Version**: 1.0.0  
 **Status**: In Development
-

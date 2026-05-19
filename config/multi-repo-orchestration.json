@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "strategy": "hybrid",
     "lastUpdated": "2026-05-12T19:55:00Z",
-    
+
     "strategies": {
       "monorepo": {
         "enabled": true,
@@ -43,7 +43,7 @@
         "syncTool": "gentle-vanguard-sync"
       }
     },
-    
+
     "monorepoConfig": {
       "root": "gentle-vanguard/",
       "workspaceManager": "pnpm",
@@ -67,7 +67,7 @@
         "clean": "pnpm -r clean && rm -rf node_modules"
       }
     },
-    
+
     "versionManagement": {
       "centralVersionFile": "VERSION_MANIFEST.json",
       "syncStrategy": "atomic",
@@ -82,7 +82,7 @@
         "perPackage": false
       }
     },
-    
+
     "cicd": {
       "platform": "github-actions",
       "workflow": ".github/workflows/monorepo-ci.yml",
@@ -98,7 +98,7 @@
         }
       ]
     },
-    
+
     "governance": {
       "codeowners": ".github/CODEOWNERS",
       "branchProtection": {
@@ -114,7 +114,7 @@
         }
       }
     },
-    
+
     "polyrepoSync": {
       "enabled": false,
       "tool": "gentle-vanguard-sync",
@@ -134,7 +134,7 @@
         }
       ]
     },
-    
+
     "migration": {
       "currentPhase": "phase-4",
       "targetPhase": "phase-6",
@@ -158,4 +158,3 @@
     }
   }
 }
-

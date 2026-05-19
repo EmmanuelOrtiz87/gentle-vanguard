@@ -3,7 +3,8 @@ name: script-runtime-engineering-skill
 description: >
   Runtime-safe patterns for Bash and PowerShell scripts: quoting, escaping, cross-platform
   execution, parser checks, and smoke validation. Trigger: "bash script", "shell script",
-  "powershell script", "hook", "script parse error", "cross-platform script", "gentle-vanguard script".
+  "powershell script", "hook", "script parse error", "cross-platform script", "gentle-vanguard
+  script".
 license: Apache-2.0
 metadata:
   author: gentle-vanguard
@@ -157,4 +158,3 @@ if ($errors.Count -eq 0) { 'PARSE_OK' } else { $errors }
 .\hooks\pre-commit.ps1
 .\hooks\post-checkout.ps1
 ```
-

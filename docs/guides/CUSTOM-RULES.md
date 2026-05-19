@@ -122,4 +122,3 @@ Export rule digest:
 3. Review rule changes via normal PR workflow.
 4. Prefer advisory language unless a rule is truly blocking.
 5. Files that do not match the `.md` extension are silently ignored by the loader.
-

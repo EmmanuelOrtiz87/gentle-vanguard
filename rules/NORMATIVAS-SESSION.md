@@ -1,36 +1,37 @@
 # NORMATIVAS-SESSION.md — Session Lifecycle Standards
 
-Version: 1.1.0
-Last updated: 2026-05-12
+Version: 1.1.0 Last updated: 2026-05-12
 
 ---
 
 ## 1. PROPOSITO
 
-Define el lifecycle completo de sesiones en Gentle-Vanguard. Aplica a todos los agentes AI que operan sesiones de desarrollo.
+Define el lifecycle completo de sesiones en Gentle-Vanguard. Aplica a todos los agentes AI que
+operan sesiones de desarrollo.
 
 ---
 
 ## 1.1 DOCUMENTOS LOCAL-ONLY — PROHIBICIÓN DE COMMIT
 
-> **REGLA CRÍTICA**: Los artefactos de sesión son información de trabajo interna. **NUNCA** deben ser commiteados al repo ni publicados.
+> **REGLA CRÍTICA**: Los artefactos de sesión son información de trabajo interna. **NUNCA** deben
+> ser commiteados al repo ni publicados.
 
 ### Documentos que NUNCA van al repo
 
-| Tipo | Ejemplos | Ubicación local |
-|------|----------|-----------------|
-| Closure reports | `PROJECT-CLOSURE-REPORT.md`, `closure-report-*.md` | `.local/session-artifacts/` |
-| Delivery checklists | `FINAL-DELIVERY-CHECKLIST.md` | `.local/session-artifacts/` |
-| Implementation logs | `IMPLEMENTATION-LOG.md`, `README-IMPLEMENTATION.md` | `.local/session-artifacts/` |
-| Session start/context packs | `*-session-start.md`, `*-context-pack.md` | `docs/sessions/` (local-only) |
-| Next session guides | `NEXT_SESSION_GUIDE.md` | `.local/session-artifacts/` |
-| Strategic/phase plans de sesión | `STRATEGIC-OPTIMIZATION-PLAN.md`, `PHASE-*-ARCHITECTURE.md` | `.local/session-artifacts/` |
-| Lessons learned temporales | `LESSONS-LEARNED-*.md` | `.local/session-artifacts/` |
-| Session tasks pendientes | `docs/tasks/*session*.md` | `.local/session-artifacts/` |
-| Telemetry runtime | `.telemetry/initialization-session-*.json` | Local — cubierto por `.gitignore` |
-| Session logs | `logs/session-*.json`, `session/*.json` | Local — cubierto por `.gitignore` |
-| Engram session data | `.engram/session-*.md`, `.engram-data/` | Local — cubierto por `.gitignore` |
-| Métricas de sesión CSV | `docs/sessions/metrics/*.csv` | Local — cubierto por `.gitignore` |
+| Tipo                            | Ejemplos                                                    | Ubicación local                   |
+| ------------------------------- | ----------------------------------------------------------- | --------------------------------- |
+| Closure reports                 | `PROJECT-CLOSURE-REPORT.md`, `closure-report-*.md`          | `.local/session-artifacts/`       |
+| Delivery checklists             | `FINAL-DELIVERY-CHECKLIST.md`                               | `.local/session-artifacts/`       |
+| Implementation logs             | `IMPLEMENTATION-LOG.md`, `README-IMPLEMENTATION.md`         | `.local/session-artifacts/`       |
+| Session start/context packs     | `*-session-start.md`, `*-context-pack.md`                   | `docs/sessions/` (local-only)     |
+| Next session guides             | `NEXT_SESSION_GUIDE.md`                                     | `.local/session-artifacts/`       |
+| Strategic/phase plans de sesión | `STRATEGIC-OPTIMIZATION-PLAN.md`, `PHASE-*-ARCHITECTURE.md` | `.local/session-artifacts/`       |
+| Lessons learned temporales      | `LESSONS-LEARNED-*.md`                                      | `.local/session-artifacts/`       |
+| Session tasks pendientes        | `docs/tasks/*session*.md`                                   | `.local/session-artifacts/`       |
+| Telemetry runtime               | `.telemetry/initialization-session-*.json`                  | Local — cubierto por `.gitignore` |
+| Session logs                    | `logs/session-*.json`, `session/*.json`                     | Local — cubierto por `.gitignore` |
+| Engram session data             | `.engram/session-*.md`, `.engram-data/`                     | Local — cubierto por `.gitignore` |
+| Métricas de sesión CSV          | `docs/sessions/metrics/*.csv`                               | Local — cubierto por `.gitignore` |
 
 ### Criterio de decisión: ¿Va al repo o no?
 
@@ -44,8 +45,11 @@ Define el lifecycle completo de sesiones en Gentle-Vanguard. Aplica a todos los 
 
 1. Todo patrón local-only está declarado en `.gitignore` (sección "Session artifact docs")
 2. El directorio `.local/` es local-only: está en `.gitignore`, **nunca** se trackea
-3. Si un agente genera estos archivos durante una sesión, **DEBE** guardarlos en `.local/session-artifacts/` o en las rutas cubiertas por `.gitignore`
-4. No commitear con `git add .` sin revisar — siempre usar `git add <archivo>` explícito o revisar `git status` primero
+3. Si un agente genera estos archivos durante una sesión, **DEBE** guardarlos en
+   `.local/session-artifacts/` o en las rutas cubiertas por `.gitignore`
+4. No commitear con `git add .` sin revisar — siempre usar `git add <archivo>` explícito o revisar
+   `git status` primero
+
 ---
 
 ## 2. SESSION LIFECYCLE
@@ -60,14 +64,14 @@ INACTIVE → STARTING → ACTIVE → CLOSING → CLOSED
                      ACTIVE (restored)
 ```
 
-| State | Description | Transitions |
-|-------|-------------|-------------|
-| INACTIVE | No session active | → STARTING |
-| STARTING | Session init in progress | → ACTIVE |
-| ACTIVE | Session operational | → CLOSING, → COMPACTED |
-| COMPACTED | Context compressed, recoverable | → ACTIVE (restore) |
-| CLOSING | Shutdown in progress | → CLOSED |
-| CLOSED | Session terminated | → INACTIVE |
+| State     | Description                     | Transitions            |
+| --------- | ------------------------------- | ---------------------- |
+| INACTIVE  | No session active               | → STARTING             |
+| STARTING  | Session init in progress        | → ACTIVE               |
+| ACTIVE    | Session operational             | → CLOSING, → COMPACTED |
+| COMPACTED | Context compressed, recoverable | → ACTIVE (restore)     |
+| CLOSING   | Shutdown in progress            | → CLOSED               |
+| CLOSED    | Session terminated              | → INACTIVE             |
 
 ### 2.2 Startup Protocol
 
@@ -75,7 +79,8 @@ When starting a session, execute ALL steps in order:
 
 #### Phase A — Init
 
-1. **MUST** run `scripts/utilities/pre-process-input.ps1 -UserInput "<message>" -WorkspaceRoot "."` BEFORE first response (AI-NORMATIVES.md #1, CRITICAL)
+1. **MUST** run `scripts/utilities/pre-process-input.ps1 -UserInput "<message>" -WorkspaceRoot "."`
+   BEFORE first response (AI-NORMATIVES.md #1, CRITICAL)
 2. **MUST** run `scripts/utilities/session-autostart.cmd` (Windows) or equivalent
 3. **MUST** call `engram_mem_session_start` with unique session ID
 4. **MUST** call `engram_mem_context` to restore previous context
@@ -85,7 +90,8 @@ Session ID pattern: `session-YYYY-MM-DD-XX` (e.g., `session-2026-05-10-01`)
 
 #### Phase B — Analysis & Reporting
 
-6. **MUST** read `scripts/.session/startup-summary.json` — parse `isPeakHour`, `sessionId`, `workspaceClean`, `engramRunning`
+6. **MUST** read `scripts/.session/startup-summary.json` — parse `isPeakHour`, `sessionId`,
+   `workspaceClean`, `engramRunning`
 7. **MUST** create `todowrite` for tracking work
 8. **SHOULD** run `scripts/utilities/agent-verify.ps1` to validate state
 9. **MUST** report startup summary to user in compact block (peak hour, session ID, workspace state)
@@ -99,7 +105,8 @@ During active session:
 2. **MUST** call `mem_search` before starting work that may have been done before
 3. **SHOULD** maintain `todowrite` with current progress
 4. **SHOULD** validate work with `agent-verify.ps1` periodically
-5. **MUST** save lessons to Engram proactively — do NOT wait for user instruction. Triggers for automatic `mem_save`:
+5. **MUST** save lessons to Engram proactively — do NOT wait for user instruction. Triggers for
+   automatic `mem_save`:
    - Bug found and fixed (what was wrong, why, how fixed)
    - Non-obvious gotcha discovered (edge case, platform quirk, tool limitation)
    - Architectural decision made (tradeoffs, alternatives considered)
@@ -119,8 +126,10 @@ When closing a session:
 5. **SHOULD** validate configs with `validate-configs.ps1`
 6. **MUST** call `engram_mem_session_end` to mark session complete
 7. **MUST** detect concurrent active sessions and close by explicit `SessionId` when count > 1
-8. **MUST** run `scripts/utilities/session-learning-capture.ps1 -Trigger close` to capture session lessons
-9. **SHOULD** run `scripts/utilities/self-diagnosis-autonomous.ps1 -Depth quick` to detect issues for next session
+8. **MUST** run `scripts/utilities/session-learning-capture.ps1 -Trigger close` to capture session
+   lessons
+9. **SHOULD** run `scripts/utilities/self-diagnosis-autonomous.ps1 -Depth quick` to detect issues
+   for next session
 
 #### Concurrent Session Safety (MANDATORY)
 
@@ -145,14 +154,14 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/session-manager.
 
 Preserved between sessions:
 
-| Artifact | Location | Purpose |
-|----------|----------|---------|
-| Engram memory | `.engram-data/` | Persistent knowledge |
-| Session files | `.session/session-*.json` | Session state snapshots |
-| Orchestrator state | `.session/orchestrator-state.json` | Agent dispatch state |
-| Token budget | `.session/token-autopilot-state.json` | Token tracking |
-| Constraint retention | `.session/constraint-retention-state.json` | Earned trust state |
-| NEXT_SESSION_GUIDE | `docs/NEXT_SESSION_GUIDE.md` | Session handoff doc |
+| Artifact             | Location                                   | Purpose                 |
+| -------------------- | ------------------------------------------ | ----------------------- |
+| Engram memory        | `.engram-data/`                            | Persistent knowledge    |
+| Session files        | `.session/session-*.json`                  | Session state snapshots |
+| Orchestrator state   | `.session/orchestrator-state.json`         | Agent dispatch state    |
+| Token budget         | `.session/token-autopilot-state.json`      | Token tracking          |
+| Constraint retention | `.session/constraint-retention-state.json` | Earned trust state      |
+| NEXT_SESSION_GUIDE   | `docs/NEXT_SESSION_GUIDE.md`               | Session handoff doc     |
 
 ### 3.2 Recovery from Compaction
 
@@ -180,29 +189,31 @@ If session terminates unexpectedly:
 
 Session commands are routed via `config/auto-delegation.json`:
 
-| Trigger | Agent | Skill |
-|---------|-------|-------|
+| Trigger                           | Agent   | Skill                  |
+| --------------------------------- | ------- | ---------------------- |
 | "guardar sesion", "close session" | SESSION | session-workflow-skill |
-| "continuar", "continue" | SESSION | session-workflow-skill |
-| "estado", "status" | SESSION | session-workflow-skill |
-| "cerrar sesion", "fin de sesion" | SESSION | session-workflow-skill |
+| "continuar", "continue"           | SESSION | session-workflow-skill |
+| "estado", "status"                | SESSION | session-workflow-skill |
+| "cerrar sesion", "fin de sesion"  | SESSION | session-workflow-skill |
 
-> **Note**: "iniciar sesion" / "start session" is handled directly by the canonical startup
-> protocol in `CLAUDE.md` — NOT routed via auto-delegation.
+> **Note**: "iniciar sesion" / "start session" is handled directly by the canonical startup protocol
+> in `CLAUDE.md` — NOT routed via auto-delegation.
 
 ### 4.2 BA/SDD Activation During Session
 
 BA + sdd-lifecycle is **automatically activated** when user triggers project/component creation:
 
-| Trigger | Context | SDD Phase | Action |
-|---------|---------|-----------|--------|
-| "create project", "nuevo proyecto" | User wants new project | EXPLORE | Gather requirements, constraints, tech stack |
-| "new component", "nueva componente" | User wants new feature/component | EXPLORE | Understand needs, acceptance criteria |
-| "bootstrap", "scaffold", "template" | User wants project template | EXPLORE | Specify project structure and conventions |
+| Trigger                             | Context                          | SDD Phase | Action                                       |
+| ----------------------------------- | -------------------------------- | --------- | -------------------------------------------- |
+| "create project", "nuevo proyecto"  | User wants new project           | EXPLORE   | Gather requirements, constraints, tech stack |
+| "new component", "nueva componente" | User wants new feature/component | EXPLORE   | Understand needs, acceptance criteria        |
+| "bootstrap", "scaffold", "template" | User wants project template      | EXPLORE   | Specify project structure and conventions    |
 
-**Important**: These triggers skip directly to BA/SDD EXPLORE. The user is NOT asked "do you want BA first?" — BA activation is automatic and transparent.
+**Important**: These triggers skip directly to BA/SDD EXPLORE. The user is NOT asked "do you want BA
+first?" — BA activation is automatic and transparent.
 
-Pre-process-input.ps1 detects these keywords → routes to BA agent + sdd-lifecycle skill → EXPLORE phase begins.
+Pre-process-input.ps1 detects these keywords → routes to BA agent + sdd-lifecycle skill → EXPLORE
+phase begins.
 
 See: `config/auto-delegation.json#keywordMappings.BA` for complete trigger list.
 
@@ -228,6 +239,7 @@ See: `config/auto-delegation.json#keywordMappings.BA` for complete trigger list.
 ### 5.1 What Gets Logged
 
 Each session tracks:
+
 - Session ID and start/end timestamps
 - Key decisions made
 - Files changed
@@ -239,16 +251,20 @@ Each session tracks:
 
 ```markdown
 ## Goal
+
 [One sentence: what was built/worked on]
 
 ## Accomplished
+
 - ✅ [Completed tasks]
 - 🔲 [Pending tasks]
 
 ## Discoveries
+
 - [Technical learnings, gotchas, edge cases]
 
 ## Relevant Files
+
 - path/to/file — what changed
 ```
 
@@ -268,9 +284,11 @@ TODO sesión DEBE verificar:
 8. Significant decisions saved to Engram
 9. Session state recoverable after compaction
 10. `mem_session_summary` called before close
-11. Post-session learning analysis — run `gv learning` to detect gaps and generate improvement proposals
+11. Post-session learning analysis — run `gv learning` to detect gaps and generate improvement
+    proposals
 12. Auto-execute proposals — run `gv learning apply` to scaffold missing skills, patch configs, etc.
-13. Self-healing check — run `gv heal` post-watchtower if issues detected, or `gv watchtower heal` for combined check + auto-heal
+13. Self-healing check — run `gv heal` post-watchtower if issues detected, or `gv watchtower heal`
+    for combined check + auto-heal
 14. NEXT_SESSION_GUIDE.md updated
 15. Git workspace in clean/reported state before close
 
@@ -278,25 +296,24 @@ TODO sesión DEBE verificar:
 
 ## 7. REFERENCES
 
-| Resource | Path |
-|----------|------|
-| Session Workflow Skill | `skills/session-workflow-skill/SKILL.md` |
-| Session Autostart | `scripts/utilities/session-autostart.cmd` |
-| Pre-Process Input | `scripts/utilities/pre-process-input.ps1` |
-| Post-Autostart Summary | `scripts/utilities/post-autostart-summary.ps1` |
-| Startup Summary Data | `scripts/.session/startup-summary.json` |
-| Routing Config | `config/auto-delegation.json` |
-| Orchestrator Config | `config/orchestrator.json` |
-| AI Normatives | `rules/AI-NORMATIVES.md` |
-| Performance & Efficiency | `rules/NORMATIVAS-PERFORMANCE.md` |
-| Code Standards | `rules/NORMATIVAS-CODIGO.md` |
-| Error Handling | `rules/NORMATIVAS-ERROR-HANDLING.md` |
-| Development Standards | `rules/DEVELOPMENT-STANDARDS.md` |
-| Agent Verify | `scripts/utilities/agent-verify.ps1` |
-| Validate Configs | `scripts/utilities/validate-configs.ps1` |
-| Handoff Guide | `docs/NEXT_SESSION_GUIDE.md` |
+| Resource                 | Path                                           |
+| ------------------------ | ---------------------------------------------- |
+| Session Workflow Skill   | `skills/session-workflow-skill/SKILL.md`       |
+| Session Autostart        | `scripts/utilities/session-autostart.cmd`      |
+| Pre-Process Input        | `scripts/utilities/pre-process-input.ps1`      |
+| Post-Autostart Summary   | `scripts/utilities/post-autostart-summary.ps1` |
+| Startup Summary Data     | `scripts/.session/startup-summary.json`        |
+| Routing Config           | `config/auto-delegation.json`                  |
+| Orchestrator Config      | `config/orchestrator.json`                     |
+| AI Normatives            | `rules/AI-NORMATIVES.md`                       |
+| Performance & Efficiency | `rules/NORMATIVAS-PERFORMANCE.md`              |
+| Code Standards           | `rules/NORMATIVAS-CODIGO.md`                   |
+| Error Handling           | `rules/NORMATIVAS-ERROR-HANDLING.md`           |
+| Development Standards    | `rules/DEVELOPMENT-STANDARDS.md`               |
+| Agent Verify             | `scripts/utilities/agent-verify.ps1`           |
+| Validate Configs         | `scripts/utilities/validate-configs.ps1`       |
+| Handoff Guide            | `docs/NEXT_SESSION_GUIDE.md`                   |
 
 ---
 
 _Version: 1.0.0 — 2026-05-10 — Status: ACTIVE_
-

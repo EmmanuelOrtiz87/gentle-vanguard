@@ -253,4 +253,3 @@ engram save "session-end:<session_id>" "<end_message>" --project gentle-vanguard
 - [DEVELOPER-COMMUNICATION-POLICY.md](DEVELOPER-COMMUNICATION-POLICY.md) Response modes and
   escalation
 - [TOOL-ACTIVATION.md](TOOL-ACTIVATION.md) Tool setup and verification
-

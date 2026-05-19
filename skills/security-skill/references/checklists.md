@@ -72,4 +72,3 @@ API_KEY=sk-placeholder-key-not-real
 - Running skill-optimizer
 - Running gentle-vanguard-audit
 - Managing users
-

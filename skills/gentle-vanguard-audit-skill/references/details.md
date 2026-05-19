@@ -2,7 +2,7 @@
 
 ## Relationship with Judgment Day
 
-|                    | gentle-vanguard-audit-skill             | judgment-day                               |
+|                    | gentle-vanguard-audit-skill        | judgment-day                               |
 | ------------------ | ---------------------------------- | ------------------------------------------ |
 | **What it checks** | Structure, docs, links, duplicates | Logic, security, architecture, correctness |
 | **Token cost**     | Zero (batch scripts)               | ~2k-4k (AI sub-agents)                     |
@@ -65,4 +65,3 @@ gv.ps1 audit unified
 .\skills\gentle-vanguard-audit-skill\scripts\sync-local.ps1
 # Scripts installed to: ~/.gentle-vanguard-local/
 ```
-

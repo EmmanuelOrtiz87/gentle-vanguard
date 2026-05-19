@@ -5,15 +5,19 @@
 Gentle-Vanguard soporta dos escenarios de actualización:
 
 ### ✅ Escenario 1: Gentle-Vanguard NO está instalado
+
 **Método**: Ejecutar el instalador
+
 ```bash
 .\Gentle-Vanguard-Setup.exe  # o doble-clic
 ```
+
 - Instala core con scripts encriptados
 - Descrypta automáticamente en %APPDATA%\Gentle-Vanguard en primer uso
 - Usuario obtiene acceso inmediato a `gv` CLI
 
 ### ✅ Escenario 2: Gentle-Vanguard YA está instalado
+
 **Método**: Usar comandos de CLI o sincronización
 
 ## Estrategia de Actualización para Instalaciones Existentes
@@ -21,6 +25,7 @@ Gentle-Vanguard soporta dos escenarios de actualización:
 ### Opción A: Actualización Parcial (Recomendado para cambios menores)
 
 **Para actualizar solo skills y herramientas:**
+
 ```powershell
 # CLI directo
 gv update                    # Sincroniza skills
@@ -29,17 +34,20 @@ gv check                    # Verifica actualizaciones disponibles
 ```
 
 **Desde repositorio clonado:**
+
 ```powershell
 cd C:\Workspace_local\gentle-vanguard
 scripts\gentle-vanguard\sync-skills.ps1 -Force
 ```
 
 **Qué se actualiza:**
+
 - Skills (en `~/.gentleman/skills/`)
 - Herramientas externas (engram, opencode)
 - Documentación de skills
 
 **Qué NO se actualiza:**
+
 - Core scripts encriptados
 - Launcher ejecutable
 - Integridad de validación
@@ -47,6 +55,7 @@ scripts\gentle-vanguard\sync-skills.ps1 -Force
 ### Opción B: Actualización del Core (Para cambios importantes)
 
 **Cuando**: Se han realizado cambios en:
+
 - comprehensive-validation.ps1 (como nuestro hardening)
 - cross-platform-tests.yml (shellcheck fixes)
 - gitleaks allowlist
@@ -69,6 +78,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File "build\create-installer.ps1" -Skip
 ```
 
 **Distribución:**
+
 - Publicar nuevo .exe en GitHub Releases
 - Usuarios instalan sobre versión existente (NSIS permite upgrade)
 - Launcher automáticamente descrypta scripts nuevos
@@ -89,6 +99,7 @@ scripts\gentle-vanguard\sync-stack.ps1 -Source local -Force    # Aplicar cambios
 ```
 
 **Qué hace sync-stack.ps1:**
+
 - Detecta installation de Gentle-Vanguard
 - Crea backup automático con timestamp
 - Reemplaza `protected/` y `public/` folders
@@ -96,6 +107,7 @@ scripts\gentle-vanguard\sync-stack.ps1 -Source local -Force    # Aplicar cambios
 - Permite rollback si falla
 
 **Ventajas:**
+
 - No requiere desinstalar
 - Respaldo automático para recovery
 - Ideal para CI/CD deployments
@@ -119,12 +131,14 @@ scripts\gentle-vanguard\sync-stack.ps1 -Source local -Force    # Aplicar cambios
 ## Versionado
 
 **Archivo**: `VERSION` (en repo root)
+
 - Formato: `MAJOR.MINOR.PATCH` (ej: 1.0.0)
 - Se empaqueta en cada .exe
 - Se valida en integrity-manifest.json
 - Se almacena en `gentle-vanguard.version` en %APPDATA%
 
 **Historial de versiones:**
+
 ```
 1.0.0     (mayo 2026) - Inicial con hardening completo
           Incluye: comprehensive-validation hardening,
@@ -136,6 +150,7 @@ scripts\gentle-vanguard\sync-stack.ps1 -Source local -Force    # Aplicar cambios
 ## Processo paso a paso: Usuarios Finales
 
 ### Primera Instalación
+
 1. Descargar `Gentle-Vanguard-Setup.exe` desde releases
 2. Ejecutar instalador
 3. Seguir prompts (instala en `Program Files\Gentle-Vanguard` por defecto)
@@ -143,16 +158,20 @@ scripts\gentle-vanguard\sync-stack.ps1 -Source local -Force    # Aplicar cambios
 5. Verificar: `gv --help` o `gv validate`
 
 ### Actualizar Skills (Versiones Menores)
+
 ```powershell
 gv update
 ```
+
 O desde repo:
+
 ```powershell
 git pull origin main
 gv update
 ```
 
 ### Actualizar Gentle-Vanguard Core (Versiones Mayores)
+
 1. Descargar nuevo `Gentle-Vanguard-Setup.exe`
 2. Ejecutar (automáticamente upgrade sobre versión anterior)
 3. Reiniciar terminal
@@ -161,6 +180,7 @@ gv update
 ## Recuperación / Rollback
 
 **Si algo falla después de sync-stack.ps1:**
+
 ```powershell
 # Listar backups disponibles
 ls "C:\Program Files\Gentle-Vanguard\backup-*"
@@ -171,6 +191,7 @@ copy "C:\Program Files\Gentle-Vanguard\backup-YYYYMMDD-HHMMSS\protected\*" `
 ```
 
 **Si Gentle-Vanguard no funciona después de instalador:**
+
 1. Panel de Control → Desinstalar programas
 2. Buscar "Gentle-Vanguard" y desinstalar
 3. Descargar .exe más reciente
@@ -179,6 +200,7 @@ copy "C:\Program Files\Gentle-Vanguard\backup-YYYYMMDD-HHMMSS\protected\*" `
 ## Integración Futura: Auto-Update
 
 **Roadmap:**
+
 - [ ] Gentle-Vanguard-Launcher.exe chequea versión remota al inicio
 - [ ] Notificación si nueva versión disponible
 - [ ] Opción auto-download de nuevo .exe
@@ -186,17 +208,18 @@ copy "C:\Program Files\Gentle-Vanguard\backup-YYYYMMDD-HHMMSS\protected\*" `
 
 ## Referencias
 
-| Script | Propósito | Ubicación |
-|--------|-----------|-----------|
-| sync-stack.ps1 | Sincronizar installation existente | scripts/gentle-vanguard/ |
-| protect-gentle-vanguard.ps1 | Encriptar scripts | build/ |
-| create-installer.ps1 | Compilar .exe | build/ |
-| sync-skills.ps1 | Sincronizar skills | scripts/gentle-vanguard/ |
-| gv.ps1 | CLI principal | bin/ |
+| Script                      | Propósito                          | Ubicación                |
+| --------------------------- | ---------------------------------- | ------------------------ |
+| sync-stack.ps1              | Sincronizar installation existente | scripts/gentle-vanguard/ |
+| protect-gentle-vanguard.ps1 | Encriptar scripts                  | build/                   |
+| create-installer.ps1        | Compilar .exe                      | build/                   |
+| sync-skills.ps1             | Sincronizar skills                 | scripts/gentle-vanguard/ |
+| gv.ps1                      | CLI principal                      | bin/                     |
 
 ## Ejemplos de Uso
 
 ### Dev local: Aplicar cambios y testear
+
 ```powershell
 cd C:\Workspace_local\gentle-vanguard
 
@@ -215,6 +238,7 @@ gv validate
 ```
 
 ### Buildear para distribución
+
 ```powershell
 cd C:\Workspace_local\gentle-vanguard
 
@@ -231,6 +255,7 @@ build\create-installer.ps1 -SkipEncrypt
 ```
 
 ### Usuarios finales: Actualizar instalación existente
+
 ```powershell
 # Opción 1: Solo skills
 gv update
@@ -242,5 +267,3 @@ gv check
 # ... descargar Gentle-Vanguard-Setup.exe
 .\Gentle-Vanguard-Setup.exe
 ```
-
-

@@ -27,22 +27,29 @@
   <em>Tool-agnostic · SDD Lifecycle · Judgment Day · Persistent memory</em>
 </p>
 
-> *"Construyendo el puente definitivo entre la alta ingeniería de software y la estrategia corporativa."*
-> — [Read the Manifesto](MANIFESTO.md)
+> _"Construyendo el puente definitivo entre la alta ingeniería de software y la estrategia
+> corporativa."_ — [Read the Manifesto](MANIFESTO.md)
 
 ---
 
 ## What is Gentle-Vanguard?
 
-Gentle-Vanguard is an AI orchestration layer built on top of any coding tool (OpenCode, Claude Code, Cline, Cursor, Windsurf, Codex, Copilot). It gives structure, memory, and governance to what would otherwise be chaotic AI-assisted development.
+Gentle-Vanguard is an AI orchestration layer built on top of any coding tool (OpenCode, Claude Code,
+Cline, Cursor, Windsurf, Codex, Copilot). It gives structure, memory, and governance to what would
+otherwise be chaotic AI-assisted development.
 
-- **Routes work** through `pre-process-input.ps1` → trigger matching → agent dispatch (inline, delegate, or SDD)
+- **Routes work** through `pre-process-input.ps1` → trigger matching → agent dispatch (inline,
+  delegate, or SDD)
 - **17 specialized agents** each with a narrow role, a model profile, and delegation rules
-- **134 On-Demand Skills** — Angular, React, Next.js, Go, Django, Python, TypeScript, Docker, K8s, Playwright, Security, API Design — zero memory until triggered
-- **Persists memory** via Engram — decisions, bugs, and patterns across sessions with hot/warm/cold tiers
-- **Cost-aware model router** assigns fast/cheap, strong-reasoning, or strong-coding profiles per agent
+- **134 On-Demand Skills** — Angular, React, Next.js, Go, Django, Python, TypeScript, Docker, K8s,
+  Playwright, Security, API Design — zero memory until triggered
+- **Persists memory** via Engram — decisions, bugs, and patterns across sessions with hot/warm/cold
+  tiers
+- **Cost-aware model router** assigns fast/cheap, strong-reasoning, or strong-coding profiles per
+  agent
 - **Enforces SDD lifecycle** (BA → SAD → DEV → QA) on ambiguous or architectural work
-- **Governance-first** — 7D validation, judgment-day adversarial review, pre-commit hooks, 16 CI/CD workflows
+- **Governance-first** — 7D validation, judgment-day adversarial review, pre-commit hooks, 16 CI/CD
+  workflows
 
 ```mermaid
 flowchart TB
@@ -87,14 +94,14 @@ flowchart LR
 
 ### Delegation Rules
 
-| # | Rule | Trigger | Action |
-|---|------|---------|--------|
-| 1 | **4-file rule** | Understanding requires reading 4+ files | Launch `scout` with fresh context |
-| 2 | **Multi-file write rule** | Implementation touches 2+ non-trivial files | Use one `worker` + fresh `reviewer` |
-| 3 | **PR rule** | Before commit/push/PR for code changes | Run fresh-context `reviewer` |
-| 4 | **Incident rule** | Wrong cwd, git mutation, failed merge | Stop and run fresh audit `reviewer` |
-| 5 | **Long-session rule** | ~20 tool calls or 5 exploratory reads | Pause and delegate |
-| 6 | **Fresh review rule** | Adversarial review of diffs or PR readiness | Use `context: "fresh"` reviewer |
+| #   | Rule                      | Trigger                                     | Action                              |
+| --- | ------------------------- | ------------------------------------------- | ----------------------------------- |
+| 1   | **4-file rule**           | Understanding requires reading 4+ files     | Launch `scout` with fresh context   |
+| 2   | **Multi-file write rule** | Implementation touches 2+ non-trivial files | Use one `worker` + fresh `reviewer` |
+| 3   | **PR rule**               | Before commit/push/PR for code changes      | Run fresh-context `reviewer`        |
+| 4   | **Incident rule**         | Wrong cwd, git mutation, failed merge       | Stop and run fresh audit `reviewer` |
+| 5   | **Long-session rule**     | ~20 tool calls or 5 exploratory reads       | Pause and delegate                  |
+| 6   | **Fresh review rule**     | Adversarial review of diffs or PR readiness | Use `context: "fresh"` reviewer     |
 
 ### Model Routing per Agent
 
@@ -108,39 +115,40 @@ flowchart LR
 
 ### 5-Layer Architecture
 
-| Layer | Role | Components | Config |
-|-------|------|-----------|--------|
-| **1. Agents** | Task delegation | 1 orchestrator + 16 sub-agents | `config/auto-delegation.json` |
-| **2. Commands** | CLI entry points | `gv.ps1`, `pre-process-input.ps1` | `config/orchestrator.json` |
-| **3. MCP Servers** | Protocol bridge | Model Context Protocol, Engram MCP, CodeGraph | `opencode.json#mcp` |
-| **4. Skills** | Specialized execution | 134 skills across 10 categories | `config/skill-dependencies.json` |
-| **5. Memory** | Persistent context | Engram (hot/warm/cold tiers) | `config/engram-config.json` |
+| Layer              | Role                  | Components                                    | Config                           |
+| ------------------ | --------------------- | --------------------------------------------- | -------------------------------- |
+| **1. Agents**      | Task delegation       | 1 orchestrator + 16 sub-agents                | `config/auto-delegation.json`    |
+| **2. Commands**    | CLI entry points      | `gv.ps1`, `pre-process-input.ps1`             | `config/orchestrator.json`       |
+| **3. MCP Servers** | Protocol bridge       | Model Context Protocol, Engram MCP, CodeGraph | `opencode.json#mcp`              |
+| **4. Skills**      | Specialized execution | 134 skills across 10 categories               | `config/skill-dependencies.json` |
+| **5. Memory**      | Persistent context    | Engram (hot/warm/cold tiers)                  | `config/engram-config.json`      |
 
 ---
 
 ## Agent Ecosystem
 
-| Agent | Role | Model Profile | Delegates to |
-|-------|------|--------------|--------------|
-| Orchestrator | Main router | inherit | All sub-agents |
-| BA (sdd-explore) | Requirements & analysis | fast/cheap | SAD, skills |
-| SAD (sdd-design) | System design | strong-reasoning | DEV |
-| DEV (sdd-apply) | Code generation | strong-coding | QA, reviewer |
-| QA (sdd-verify) | Testing & validation | strong-review | DEV (feedback) |
-| OPS | Deployment & CI/CD | fast/cheap | — |
-| DOC | Technical docs | fast/cheap | — |
-| GOV | Compliance & audit | strong-review | — |
-| SESSION | Session management | fast/cheap | — |
-| PREMORTEM | Risk assessment | strong-reasoning | SAD |
-| FINANCE | Financial modeling | strong-reasoning | — |
-| LEGAL | Regulatory compliance | strong-review | — |
-| MKT | Marketing & SEO | fast/cheap | — |
-| SALES | Pipeline management | fast/cheap | — |
-| HR | Talent acquisition | fast/cheap | — |
-| SELF-DIAG | Self-diagnosis | fast/cheap | ORC |
-| BUS-TELE | Business telemetry | fast/cheap | — |
+| Agent            | Role                    | Model Profile    | Delegates to   |
+| ---------------- | ----------------------- | ---------------- | -------------- |
+| Orchestrator     | Main router             | inherit          | All sub-agents |
+| BA (sdd-explore) | Requirements & analysis | fast/cheap       | SAD, skills    |
+| SAD (sdd-design) | System design           | strong-reasoning | DEV            |
+| DEV (sdd-apply)  | Code generation         | strong-coding    | QA, reviewer   |
+| QA (sdd-verify)  | Testing & validation    | strong-review    | DEV (feedback) |
+| OPS              | Deployment & CI/CD      | fast/cheap       | —              |
+| DOC              | Technical docs          | fast/cheap       | —              |
+| GOV              | Compliance & audit      | strong-review    | —              |
+| SESSION          | Session management      | fast/cheap       | —              |
+| PREMORTEM        | Risk assessment         | strong-reasoning | SAD            |
+| FINANCE          | Financial modeling      | strong-reasoning | —              |
+| LEGAL            | Regulatory compliance   | strong-review    | —              |
+| MKT              | Marketing & SEO         | fast/cheap       | —              |
+| SALES            | Pipeline management     | fast/cheap       | —              |
+| HR               | Talent acquisition      | fast/cheap       | —              |
+| SELF-DIAG        | Self-diagnosis          | fast/cheap       | ORC            |
+| BUS-TELE         | Business telemetry      | fast/cheap       | —              |
 
-> All sub-agents are `hidden: true` — only the Orchestrator is user-selectable. Sub-agents are managed autonomously via `config/auto-delegation.json`.
+> All sub-agents are `hidden: true` — only the Orchestrator is user-selectable. Sub-agents are
+> managed autonomously via `config/auto-delegation.json`.
 
 ---
 
@@ -148,7 +156,8 @@ flowchart LR
 
 ### SDD / OpenSpec Lifecycle
 
-Spec-Driven Development enforces a 4-phase lifecycle for ambiguous, architectural, or cross-cutting work.
+Spec-Driven Development enforces a 4-phase lifecycle for ambiguous, architectural, or cross-cutting
+work.
 
 ```mermaid
 flowchart LR
@@ -164,12 +173,12 @@ Config: `openspec/config.yaml` — strict TDD, per-phase gates, testing layers, 
 
 Run once per session before the first SDD flow:
 
-| Setting | Options | Default |
-|---------|---------|---------|
-| Mode | `interactive` / `auto` | `interactive` |
-| Artifact store | `openspec` / `engram` / `both` | `both` |
-| PR strategy | `single` / `chained` | `chained` |
-| Review budget | lines per PR | 400 |
+| Setting        | Options                        | Default       |
+| -------------- | ------------------------------ | ------------- |
+| Mode           | `interactive` / `auto`         | `interactive` |
+| Artifact store | `openspec` / `engram` / `both` | `both`        |
+| PR strategy    | `single` / `chained`           | `chained`     |
+| Review budget  | lines per PR                   | 400           |
 
 ```powershell
 .\scripts\utilities\sdd-preflight.ps1 -Interactive
@@ -183,7 +192,8 @@ Before any `sdd-apply` phase or multi-file implementation:
 .\scripts\utilities\review-workload-guard.ps1
 ```
 
-Blocks PRs exceeding 400 changed lines. Recommends chained PRs (see `skills/chained-pr/SKILL.md`). Cognitive research shows review quality drops sharply above this threshold.
+Blocks PRs exceeding 400 changed lines. Recommends chained PRs (see `skills/chained-pr/SKILL.md`).
+Cognitive research shows review quality drops sharply above this threshold.
 
 ### Skill Registry
 
@@ -198,6 +208,7 @@ Authoritative index: `.atl/skill-registry.md`
 ### Chain-Delivery Skills
 
 For large features that exceed the 400-line review budget, use chained PR delivery:
+
 - `skills/chained-pr/SKILL.md` — planning and splitting
 - `skills/branch-pr/SKILL.md` — branch + PR workflow
 - `skills/gitflow-orchestrator-skill/SKILL.md` — full gitflow
@@ -206,18 +217,18 @@ For large features that exceed the 400-line review budget, use chained PR delive
 
 Compatible with 10 tools via `scripts/utilities/detect-tool.ps1`:
 
-| Tool | Config File | Response Profile |
-|------|------------|-----------------|
-| OpenCode | `opencode.json` | ultra |
-| Claude Code | `.claude/settings.json` | ultra |
-| Cline | `.clinerules` | ultra |
-| Cursor | `.cursorrules` | ultra |
-| Windsurf | `.windsurf/` | ultra |
-| Codex | `.codex/` | standard |
-| Copilot | `.github/copilot-instructions.md` | standard |
-| Antigravity | `.antigravity/` | standard |
-| Continue.dev | `.continue/` | standard |
-| Claude (generic) | `CLAUDE.md` | ultra |
+| Tool             | Config File                       | Response Profile |
+| ---------------- | --------------------------------- | ---------------- |
+| OpenCode         | `opencode.json`                   | ultra            |
+| Claude Code      | `.claude/settings.json`           | ultra            |
+| Cline            | `.clinerules`                     | ultra            |
+| Cursor           | `.cursorrules`                    | ultra            |
+| Windsurf         | `.windsurf/`                      | ultra            |
+| Codex            | `.codex/`                         | standard         |
+| Copilot          | `.github/copilot-instructions.md` | standard         |
+| Antigravity      | `.antigravity/`                   | standard         |
+| Continue.dev     | `.continue/`                      | standard         |
+| Claude (generic) | `CLAUDE.md`                       | ultra            |
 
 ---
 
@@ -245,77 +256,77 @@ gv health
 
 ## Development
 
-| Command | Purpose |
-|---------|---------|
-| `gv verify` | Run all quality gates |
-| `gv judgment-day` | Full adversarial review |
-| `gv dashboard` | Open HTML metrics dashboard |
-| `gv benchmark` | SLO benchmark of key commands |
-| `gv version` | Show stack version + skills count |
-| `pwsh -File tests/run-tests.ps1` | Run full test suite |
-| `Invoke-Pester -Path tests/ -Output Detailed` | Run Pester unit tests |
-| `pwsh -File scripts/utilities/build-skill-registry.ps1` | Rebuild skill registry |
-| `pwsh -File scripts/utilities/security-audit.ps1` | Run security audit |
-| `pwsh -File scripts/utilities/validate-readme.ps1` | Validate README structure |
-| `pwsh -File scripts/utilities/review-workload-guard.ps1` | Estimate PR review workload |
-| `pwsh -File scripts/utilities/sdd-preflight.ps1` | Configure SDD session |
-| `npm run format` | Run Prettier formatting |
-| `Invoke-PSScriptAnalyzer -Path scripts/ -Recurse` | PSScriptAnalyzer lint |
+| Command                                                  | Purpose                           |
+| -------------------------------------------------------- | --------------------------------- |
+| `gv verify`                                              | Run all quality gates             |
+| `gv judgment-day`                                        | Full adversarial review           |
+| `gv dashboard`                                           | Open HTML metrics dashboard       |
+| `gv benchmark`                                           | SLO benchmark of key commands     |
+| `gv version`                                             | Show stack version + skills count |
+| `pwsh -File tests/run-tests.ps1`                         | Run full test suite               |
+| `Invoke-Pester -Path tests/ -Output Detailed`            | Run Pester unit tests             |
+| `pwsh -File scripts/utilities/build-skill-registry.ps1`  | Rebuild skill registry            |
+| `pwsh -File scripts/utilities/security-audit.ps1`        | Run security audit                |
+| `pwsh -File scripts/utilities/validate-readme.ps1`       | Validate README structure         |
+| `pwsh -File scripts/utilities/review-workload-guard.ps1` | Estimate PR review workload       |
+| `pwsh -File scripts/utilities/sdd-preflight.ps1`         | Configure SDD session             |
+| `npm run format`                                         | Run Prettier formatting           |
+| `Invoke-PSScriptAnalyzer -Path scripts/ -Recurse`        | PSScriptAnalyzer lint             |
 
 ---
 
 ## CI/CD Pipeline (16 Workflows)
 
-| Workflow | Purpose | Trigger |
-|----------|---------|---------|
-| `gentle-vanguard-quality-gate.yml` | Quality gates on PRs | Every PR |
-| `test-suite.yml` | Full test suite | Every PR/push |
-| `ps-lint.yml` | PSScriptAnalyzer lint | Every PR |
-| `sdd-gate.yml` | Block PRs without SDD | Every PR |
-| `script-governance.yml` | Script compliance | Every PR |
-| `format-check.yml` | Prettier formatting | Every PR |
-| `gitleaks.yml` | Secret scanning | Every PR |
-| `security-scan.yml` | OWASP security scanning | Weekly |
-| `codeql-analysis.yml` | CodeQL analysis | Weekly |
-| `autonomous-validation.yml` | Full validation suite | Weekly |
-| `dashboard-auto-refresh.yml` | Metrics dashboard | Daily |
-| `monthly-management-report.yml` | Executive report | Monthly |
-| `dependency-backup.yml` | Dependency backup | Weekly |
-| `release.yml` | Release management | On tag |
-| `labeler.yml` | Auto-label PRs | Every PR |
-| `workflow-lint.yml` | Workflow syntax validation | On `.github/` change |
-| `sync-public.yml` | Sync to `gentle-vanguard-public` | On push to `main` |
+| Workflow                           | Purpose                          | Trigger              |
+| ---------------------------------- | -------------------------------- | -------------------- |
+| `gentle-vanguard-quality-gate.yml` | Quality gates on PRs             | Every PR             |
+| `test-suite.yml`                   | Full test suite                  | Every PR/push        |
+| `ps-lint.yml`                      | PSScriptAnalyzer lint            | Every PR             |
+| `sdd-gate.yml`                     | Block PRs without SDD            | Every PR             |
+| `script-governance.yml`            | Script compliance                | Every PR             |
+| `format-check.yml`                 | Prettier formatting              | Every PR             |
+| `gitleaks.yml`                     | Secret scanning                  | Every PR             |
+| `security-scan.yml`                | OWASP security scanning          | Weekly               |
+| `codeql-analysis.yml`              | CodeQL analysis                  | Weekly               |
+| `autonomous-validation.yml`        | Full validation suite            | Weekly               |
+| `dashboard-auto-refresh.yml`       | Metrics dashboard                | Daily                |
+| `monthly-management-report.yml`    | Executive report                 | Monthly              |
+| `dependency-backup.yml`            | Dependency backup                | Weekly               |
+| `release.yml`                      | Release management               | On tag               |
+| `labeler.yml`                      | Auto-label PRs                   | Every PR             |
+| `workflow-lint.yml`                | Workflow syntax validation       | On `.github/` change |
+| `sync-public.yml`                  | Sync to `gentle-vanguard-public` | On push to `main`    |
 
 ---
 
 ## Project Status
 
-| Gate | Status | Detail |
-|------|--------|--------|
+| Gate          | Status  | Detail                                                                  |
+| ------------- | ------- | ----------------------------------------------------------------------- |
 | Configuration | ✅ PASS | `orchestrator.json`, `auto-delegation.json`, `model-routing.json` valid |
-| Skills | ✅ PASS | 134 skills indexed, registry current |
-| Tests | ✅ PASS | Full test suite passing |
-| Hooks | ✅ PASS | Pre-commit hooks active (README, secrets, lint) |
-| Structure | ✅ PASS | All mandatory files present |
-| Engram | ✅ PASS | Memory store accessible, sessions tracking |
-| SDD | ✅ PASS | OpenSpec config valid, preflight operational |
+| Skills        | ✅ PASS | 134 skills indexed, registry current                                    |
+| Tests         | ✅ PASS | Full test suite passing                                                 |
+| Hooks         | ✅ PASS | Pre-commit hooks active (README, secrets, lint)                         |
+| Structure     | ✅ PASS | All mandatory files present                                             |
+| Engram        | ✅ PASS | Memory store accessible, sessions tracking                              |
+| SDD           | ✅ PASS | OpenSpec config valid, preflight operational                            |
 
 ---
 
 ## Key Documentation
 
-| Resource | Path |
-|----------|------|
-| **Agent Bootstrap** | [docs/AGENTS.md](docs/AGENTS.md) |
+| Resource                  | Path                                                       |
+| ------------------------- | ---------------------------------------------------------- |
+| **Agent Bootstrap**       | [docs/AGENTS.md](docs/AGENTS.md)                           |
 | **Architecture Overview** | [docs/architecture/README.md](docs/architecture/README.md) |
-| **Delegation Rules** | [rules/DELEGATION-RULES.md](rules/DELEGATION-RULES.md) |
-| **Model Routing** | [config/model-routing.json](config/model-routing.json) |
-| **SDD Config** | [openspec/config.yaml](openspec/config.yaml) |
-| **Skill Registry** | [.atl/skill-registry.md](.atl/skill-registry.md) |
-| **README Governance** | [rules/README-GOVERNANCE.md](rules/README-GOVERNANCE.md) |
-| **Build Pipeline** | [docs/build/README.md](build/README.md) |
-| **Contributing** | [CONTRIBUTING.md](CONTRIBUTING.md) |
-| **Changelog** | [CHANGELOG.md](CHANGELOG.md) |
+| **Delegation Rules**      | [rules/DELEGATION-RULES.md](rules/DELEGATION-RULES.md)     |
+| **Model Routing**         | [config/model-routing.json](config/model-routing.json)     |
+| **SDD Config**            | [openspec/config.yaml](openspec/config.yaml)               |
+| **Skill Registry**        | [.atl/skill-registry.md](.atl/skill-registry.md)           |
+| **README Governance**     | [rules/README-GOVERNANCE.md](rules/README-GOVERNANCE.md)   |
+| **Build Pipeline**        | [docs/build/README.md](build/README.md)                    |
+| **Contributing**          | [CONTRIBUTING.md](CONTRIBUTING.md)                         |
+| **Changelog**             | [CHANGELOG.md](CHANGELOG.md)                               |
 
 ---
 

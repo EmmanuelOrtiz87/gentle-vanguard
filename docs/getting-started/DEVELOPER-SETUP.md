@@ -223,5 +223,3 @@ git config --global core.hooksPath
   detalles y cmo personalizar reglas.
 - Para personalizar reglas de revisión, edita los archivos SKILL.md en cada subcarpeta de skills/.
 - Los scripts de chequeo estn en scripts/hooks/ y pueden adaptarse a las necesidades del proyecto.
-
-

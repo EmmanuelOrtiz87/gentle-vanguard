@@ -200,4 +200,3 @@ Management Report,2026-04-30,22:30:45,2026-04,450000,12.50,15
 3. HTML output includes basic styling (Arial font, table borders)
 4. XML output sanitizes keys (removes non-alphanumeric)
 5. YAML output uses standard YAML syntax with `---` delimiters
-

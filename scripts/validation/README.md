@@ -4,11 +4,11 @@ Scripts for validating and checking the gentle-vanguard.
 
 ## Scripts
 
-| Script                   | Description                          |
-| ------------------------ | ------------------------------------ |
-| `validate-project.ps1`   | Validate project setup               |
-| `validate-workspace.ps1` | Validate workspace configuration     |
-| `check-updates.ps1`      | Check for available updates          |
+| Script                   | Description                               |
+| ------------------------ | ----------------------------------------- |
+| `validate-project.ps1`   | Validate project setup                    |
+| `validate-workspace.ps1` | Validate workspace configuration          |
+| `check-updates.ps1`      | Check for available updates               |
 | `update-all.ps1`         | Update gentle-vanguard, skills, and tools |
 
 ## Usage
@@ -33,5 +33,3 @@ gv validate    # Validate installation
 gv check      # Check for updates
 gv update-all # Update everything
 ```
-
-

@@ -66,8 +66,10 @@ Write-Host "Coverage mínimo: $($config.testCoverage.minimumThreshold)"
 **Nota**:
 
 - `config/testing.config.json` define la politica general de testing.
-- `tests/coverage-config.json` define los targets declarados de cobertura real usados por `scripts/utilities/verify-coverage.ps1`.
-- Los workflows de sesion actualmente declarados son `session-manager.ps1` y `post-session-learning.ps1`.
+- `tests/coverage-config.json` define los targets declarados de cobertura real usados por
+  `scripts/utilities/verify-coverage.ps1`.
+- Los workflows de sesion actualmente declarados son `session-manager.ps1` y
+  `post-session-learning.ps1`.
 
 ---
 
@@ -369,4 +371,3 @@ Todos los archivos de configuración estn centralizados, documentados y listos p
 ---
 
 **última actualización**: 2026-04-21 **Versión**: 2.0.0
-

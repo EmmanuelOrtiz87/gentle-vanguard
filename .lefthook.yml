@@ -12,23 +12,30 @@ pre-commit:
     workflow-lint:
       run: pwsh -NoProfile -ExecutionPolicy Bypass -File "hooks/workflow-lint.ps1"
     lockfile-lint:
-      glob: "package-lock.json"
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/lockfile-lint-pre-commit.ps1"
+      glob: 'package-lock.json'
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/lockfile-lint-pre-commit.ps1"
     trufflehog-scan:
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -Command "trufflehog filesystem --no-verification --no-update . 2>$null; exit 0"
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -Command "trufflehog filesystem --no-verification
+        --no-update . 2>$null; exit 0"
 
 pre-push:
   commands:
     audit-check:
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "skills/gentle-vanguard-audit-skill/scripts/audit-sweep.ps1" -Scope quick
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File
+        "skills/gentle-vanguard-audit-skill/scripts/audit-sweep.ps1" -Scope quick
     orchestrator-auto-fix:
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/orchestrate-auto-fix.ps1" -Fix
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/orchestrate-auto-fix.ps1" -Fix
     npm-audit:
-      glob: "package.json"
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/npm-audit-pre-push.ps1" -AuditLevel moderate
+      glob: 'package.json'
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/hooks/npm-audit-pre-push.ps1"
+        -AuditLevel moderate
 
 commit-msg:
   commands:
     commitlint:
       run: powershell -NoProfile -ExecutionPolicy Bypass -File "hooks/commitlint.ps1" {1}
-

@@ -236,7 +236,68 @@ if (-not (Test-Path "$publicRepo\INSTALLATION.md")) {
 }
 
 # ============================================================================
-# 9. Cleanup: remove any plain-text artifacts that shouldn't be in public repo
+# 9. CI-required scripts (minimal set for workflows to pass)
+# ============================================================================
+Write-Output "[CI] Syncing CI-required scripts..."
+
+$ciScripts = @(
+    @{ Src = 'scripts\utilities\WORKFLOW-ORCHESTRATION\comprehensive-validation.ps1'; Dst = 'scripts\utilities\WORKFLOW-ORCHESTRATION\comprehensive-validation.ps1' },
+    @{ Src = 'scripts\utilities\validate-configs.ps1'; Dst = 'scripts\utilities\validate-configs.ps1' },
+    @{ Src = 'scripts\run-tests-simple.ps1'; Dst = 'scripts\run-tests-simple.ps1' },
+    @{ Src = 'scripts\diagnostics\validate-script-governance.ps1'; Dst = 'scripts\diagnostics\validate-script-governance.ps1' },
+    @{ Src = 'scripts\utilities\agent-verify.ps1'; Dst = 'scripts\utilities\agent-verify.ps1' },
+    @{ Src = 'scripts\sre\enforce-error-budget.ps1'; Dst = 'scripts\sre\enforce-error-budget.ps1' },
+    @{ Src = 'scripts\testing\check-performance-baselines.ps1'; Dst = 'scripts\testing\check-performance-baselines.ps1' },
+    @{ Src = 'scripts\testing\check-accessibility.ps1'; Dst = 'scripts\testing\check-accessibility.ps1' },
+    @{ Src = 'scripts\testing\check-i18n.ps1'; Dst = 'scripts\testing\check-i18n.ps1' },
+    @{ Src = 'scripts\monitoring\cross-workspace-validator.ps1'; Dst = 'scripts\monitoring\cross-workspace-validator.ps1' },
+    @{ Src = 'scripts\utilities\SKILLS-TOOLS\plugins-discovery.ps1'; Dst = 'scripts\utilities\SKILLS-TOOLS\plugins-discovery.ps1' },
+    @{ Src = 'scripts\diagnostics\validate-sdd-governance.ps1'; Dst = 'scripts\diagnostics\validate-sdd-governance.ps1' },
+    @{ Src = 'scripts\utilities\wf.ps1'; Dst = 'scripts\utilities\wf.ps1' },
+    @{ Src = 'scripts\diagnostics\agent-process-alert.ps1'; Dst = 'scripts\diagnostics\agent-process-alert.ps1' },
+    @{ Src = 'scripts\utilities\UTILITIES\gentle-vanguard-sync.ps1'; Dst = 'scripts\utilities\UTILITIES\gentle-vanguard-sync.ps1' }
+)
+
+foreach ($ci in $ciScripts) {
+    $src = Join-Path $privateRepo $ci.Src
+    $dst = Join-Path $publicRepo $ci.Dst
+    if (Test-Path $src) {
+        $dstDir = Split-Path $dst -Parent
+        if (-not (Test-Path $dstDir)) { New-Item -ItemType Directory -Path $dstDir -Force | Out-Null }
+        Copy-Item $src $dst -Force
+        Write-Output "  [OK] $($ci.Src)"
+    } else {
+        Write-Output "  [WARN] $($ci.Src) not found in private repo"
+    }
+}
+
+# ============================================================================
+# 9b. CI-required config and root files
+# ============================================================================
+Write-Output "[CI] Syncing CI-required config and root files..."
+
+$ciFiles = @(
+    '.gitleaks.toml',
+    'package.json',
+    'package-lock.json',
+    '.prettierrc',
+    '.prettierignore',
+    'PSScriptAnalyzerSettings.psd1'
+)
+
+foreach ($f in $ciFiles) {
+    $src = Join-Path $privateRepo $f
+    $dst = Join-Path $publicRepo $f
+    if (Test-Path $src) {
+        Copy-Item $src $dst -Force
+        Write-Output "  [OK] $f"
+    } else {
+        Write-Output "  [WARN] $f not found in private repo"
+    }
+}
+
+# ============================================================================
+# 9c. Cleanup: remove any plain-text artifacts that shouldn't be in public repo
 # ============================================================================
 Write-Output " Cleaning up plain-text artifacts..."
 

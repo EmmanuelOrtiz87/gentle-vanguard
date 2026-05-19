@@ -118,12 +118,12 @@ See `plugins/examples/` for templates.
 ### When to use Gentle-Vanguard=
 
 | Scenario                | Use Gentle-Vanguard? | Reason                  |
-| ----------------------- | --------------- | ----------------------- |
-| Local-first development | ✅ Yes          | No cloud dependencies   |
-| AI-assisted coding      | ✅ Yes          | 127 specialized skills |
-| Enterprise security     | ✅ Yes          | Lefthook + Trufflehog   |
-| Team collaboration      | ✅ Yes          | Shared skills + configs |
-| Open source project     | ✅ Yes          | MIT license, extensible |
+| ----------------------- | -------------------- | ----------------------- |
+| Local-first development | ✅ Yes               | No cloud dependencies   |
+| AI-assisted coding      | ✅ Yes               | 127 specialized skills  |
+| Enterprise security     | ✅ Yes               | Lefthook + Trufflehog   |
+| Team collaboration      | ✅ Yes               | Shared skills + configs |
+| Open source project     | ✅ Yes               | MIT license, extensible |
 
 ### When to consider alternatives=
 
@@ -135,12 +135,11 @@ See `plugins/examples/` for templates.
 
 ## Version Compatibility=
 
-| Gentle-Vanguard    | PowerShell | Lefthook | Pester      | Node.js |
-| ------------- | ---------- | -------- | ----------- | ------- |
-| v2.6.x        | 7.0+       | 2.1.6+   | 3.4.0       | 18+     |
-| v2.7.x (next) | 7.2+       | 2.2+     | 3.4.0 / 5.x | 20+     |
+| Gentle-Vanguard | PowerShell | Lefthook | Pester      | Node.js |
+| --------------- | ---------- | -------- | ----------- | ------- |
+| v2.6.x          | 7.0+       | 2.1.6+   | 3.4.0       | 18+     |
+| v2.7.x (next)   | 7.2+       | 2.2+     | 3.4.0 / 5.x | 20+     |
 
 ---
 
 _Version: 1.0 - 2026-05-05_ _Status: ACTIVE_
-

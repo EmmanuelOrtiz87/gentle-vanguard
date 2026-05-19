@@ -115,6 +115,7 @@ Get-ChildItem docs/audits/ -Filter "*demo-task-tracker*" | Select-Object Name
 ```
 
 **What day-end-closure does:**
+
 1. Iterates all sessions not yet finalized
 2. Ensures each has review + audit artifacts
 3. Saves session summaries to Engram persistent memory
@@ -203,4 +204,3 @@ Get-Content .metrics/dashboard-data.json | ConvertFrom-Json | ConvertTo-Json
 4. Token budget utilization is visible and actionable
 5. PR-ready output includes all quality and governance evidence
 6. Day-end closure produces a single source of truth for management reporting
-

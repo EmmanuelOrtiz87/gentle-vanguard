@@ -40,4 +40,3 @@
     "notify_on_threshold": ["50_to_75", "75_to_90", "over_90"]
   }
 }
-

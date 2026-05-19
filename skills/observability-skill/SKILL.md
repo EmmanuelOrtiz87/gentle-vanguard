@@ -112,4 +112,3 @@ Bad examples:
 3. Correlate traces to failing components
 4. Inspect logs with requestId/traceId
 5. Validate mitigation, then root cause
-

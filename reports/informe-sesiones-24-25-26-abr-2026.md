@@ -189,4 +189,3 @@ Sesiones por día:
 _Informe generado: 2026-04-26 00:50 UTC-3_  
 _Formato: Markdown (.md) para presentaciones_  
 _Próxima actualización: Fin de día 26-Abr_
-

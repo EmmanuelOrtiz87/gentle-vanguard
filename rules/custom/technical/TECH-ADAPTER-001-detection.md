@@ -51,16 +51,16 @@ ELSE:
 
 The detection system checks these environment variables:
 
-| Variable                | Tool        | Purpose                  |
-| ----------------------- | ----------- | ------------------------ |
-| `WINDSURF_`             | Windsurf    | Detection                |
-| `CODEX_`                | Codex       | Detection                |
-| `ANTIGRAVITY_`          | Antigravity | Detection                |
-| `OPENCODE_`             | OpenCode    | Detection                |
-| `CURSOR_`               | Cursor      | Detection                |
-| `VSCODE_GIT_IPC_HANDLE` | VS Code     | Detection                |
-| `JETBRAINS_IDE`         | JetBrains   | Detection                |
-| `GV_ROOT`       | Gentle-Vanguard  | Root path for MCP Bridge |
+| Variable                | Tool            | Purpose                  |
+| ----------------------- | --------------- | ------------------------ |
+| `WINDSURF_`             | Windsurf        | Detection                |
+| `CODEX_`                | Codex           | Detection                |
+| `ANTIGRAVITY_`          | Antigravity     | Detection                |
+| `OPENCODE_`             | OpenCode        | Detection                |
+| `CURSOR_`               | Cursor          | Detection                |
+| `VSCODE_GIT_IPC_HANDLE` | VS Code         | Detection                |
+| `JETBRAINS_IDE`         | JetBrains       | Detection                |
+| `GV_ROOT`               | Gentle-Vanguard | Root path for MCP Bridge |
 
 ---
 
@@ -105,5 +105,3 @@ None. All tools MUST be detected before adapter selection.
 
 **Created**: 2026-04-28  
 **Last Modified**: 2026-04-28
-
-

@@ -162,4 +162,3 @@ Gentle-Vanguard transforma tu AI assistant en un **sistema de desarrollo complet
 </p>
 
 `#Gentle-VanguardStack` `#AIDevelopment` `#DevTools`
-

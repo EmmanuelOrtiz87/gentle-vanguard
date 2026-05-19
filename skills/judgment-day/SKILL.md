@@ -121,4 +121,3 @@ Full examples in `references/output-examples.md`.
 - `references/judge-prompt-template.md` — full adversarial judge prompt with review criteria
 - `references/fix-agent-prompt-template.md` — full surgical fix agent prompt with scope rule
 - `references/output-examples.md` — output format examples (APPROVED and ESCALATED)
-

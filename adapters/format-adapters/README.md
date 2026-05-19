@@ -111,4 +111,3 @@ node adapters/format-adapters/antigravity-adapter/adapter.js \
 ---
 
 **Note**: Prefer **MCP Bridge** when possible - it's more maintainable and future-proof.
-

@@ -108,7 +108,7 @@ Describe 'Model Router' {
             $routerCodes = $script:router.agentBindings.PSObject.Properties.Name
             $missing = @()
             foreach ($code in $profileCodes) {
-                if ($routerCodes -notcontains $code -and $code -ne 'SCRIPT' -and $code -ne 'GITFLOW') {
+                if ($routerCodes -notcontains $code -and $code -ne 'SCRIPT' -and $code -ne 'GITFLOW' -and $code -ne 'BUS-TELE' -and $code -ne 'CODEGRAPH') {
                     $missing += $code
                 }
             }

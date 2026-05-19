@@ -3,17 +3,19 @@
 **Status**: Accepted (Implemented)  
 **Date**: May 13, 2026  
 **Author**: Gentle-Vanguard Security Team  
-**Context**: Preventing release-time repository misalignment issues  
+**Context**: Preventing release-time repository misalignment issues
 
 ---
 
 ## Context
 
 gentle-vanguard maintains **two synchronized repositories**:
+
 - `gentle-vanguard` (private) — full codebase + internal docs
 - `gentle-vanguard-public` (public) — sanitized for GitHub
 
 Before implementing the homologation gate, release process risked:
+
 - **Misaligned versions**: gentle-vanguard v1.0.1 but gentle-vanguard-public still v1.0.0
 - **Misaligned branches**: main branches out of sync, preventing merge
 - **Dirty working trees**: unstaged changes blocking publish
@@ -185,8 +187,12 @@ gv.ps1 publish -SkipHomologationGate
 
 ### Mitigation
 
-- ✅ [RELEASE-PROCESS.md](../../guides/RELEASE-PROCESS.md#25-homologation-gate-mandatory--auto-runs-on-publish) documents the gate
-- ✅ [TROUBLESHOOTING-RUNBOOK.md](../../guides/TROUBLESHOOTING-RUNBOOK.md#problem-homologation-gate-failed) has remediation steps
+- ✅
+  [RELEASE-PROCESS.md](../../guides/RELEASE-PROCESS.md#25-homologation-gate-mandatory--auto-runs-on-publish)
+  documents the gate
+- ✅
+  [TROUBLESHOOTING-RUNBOOK.md](../../guides/TROUBLESHOOTING-RUNBOOK.md#problem-homologation-gate-failed)
+  has remediation steps
 - ✅ Clear error messages guide developers to fixes
 - ✅ `-SkipHomologationGate` escape hatch for emergencies
 
@@ -235,13 +241,13 @@ gv.ps1 publish
 
 ## Related Gates
 
-| Gate | Purpose | Timing |
-|------|---------|--------|
-| **Homologation** | Repo alignment | First (1 sec) |
-| Secrets Scan | No hardcoded secrets | After homologation |
-| Tests | Code quality | Before build |
-| Build | Compilation | Final check |
-| Publish | Deploy | If all pass |
+| Gate             | Purpose              | Timing             |
+| ---------------- | -------------------- | ------------------ |
+| **Homologation** | Repo alignment       | First (1 sec)      |
+| Secrets Scan     | No hardcoded secrets | After homologation |
+| Tests            | Code quality         | Before build       |
+| Build            | Compilation          | Final check        |
+| Publish          | Deploy               | If all pass        |
 
 ---
 
@@ -293,4 +299,3 @@ $LASTEXITCODE
 **Implemented**: May 13, 2026 (commit 449363e)  
 **Review Date**: Q1 2027  
 **Status**: Stable, working as designed
-

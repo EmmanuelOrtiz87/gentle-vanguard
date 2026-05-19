@@ -62,7 +62,10 @@ jobs:
             'PSAvoidUsingWriteHost',
             'PSUseDeclaredVarsMoreThanAssignments',
             'PSAvoidGlobalVars',
-            'PSReviewUnusedParameter'
+            'PSReviewUnusedParameter',
+            'PSUseShouldProcessForStateChangingFunctions',
+            'PSUseApprovedVerbs',
+            'PSUseSingularNouns'
           )
 
           $scriptPaths = @(
@@ -127,4 +130,3 @@ jobs:
             exit 1
           }
           exit 0
-

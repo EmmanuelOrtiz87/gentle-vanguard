@@ -71,9 +71,21 @@
 
   "socialMedia": {
     "ogImage": { "width": 1200, "height": 630, "asset": "docs/brand/assets/banner-og.svg" },
-    "githubHeader": { "width": 1280, "height": 320, "asset": "docs/brand/assets/banner-github.svg" },
-    "linkedinBanner": { "width": 1584, "height": 396, "asset": "docs/brand/assets/banner-linkedin.svg" },
-    "twitterHeader": { "width": 1500, "height": 500, "asset": "docs/brand/assets/banner-twitter.svg" }
+    "githubHeader": {
+      "width": 1280,
+      "height": 320,
+      "asset": "docs/brand/assets/banner-github.svg"
+    },
+    "linkedinBanner": {
+      "width": 1584,
+      "height": 396,
+      "asset": "docs/brand/assets/banner-linkedin.svg"
+    },
+    "twitterHeader": {
+      "width": 1500,
+      "height": 500,
+      "asset": "docs/brand/assets/banner-twitter.svg"
+    }
   },
 
   "cli": {

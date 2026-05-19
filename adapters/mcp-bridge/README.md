@@ -46,8 +46,8 @@ npm run dev
 
 Gentle-Vanguard exposes these tools via MCP:
 
-| Tool Name                  | Description              | Input Schema                             |
-| -------------------------- | ------------------------ | ---------------------------------------- |
+| Tool Name                       | Description              | Input Schema                             |
+| ------------------------------- | ------------------------ | ---------------------------------------- |
 | `gentle-vanguard_review`        | Run 7D code review       | `{ path: string, dimensions: string[] }` |
 | `gentle-vanguard_audit`         | Run workspace audit      | `{ mode: 'quick' \| 'full' }`            |
 | `gentle-vanguard_delegate`      | Delegate to subagent     | `{ agent: string, prompt: string }`      |
@@ -216,4 +216,3 @@ The MCP Bridge maintains Gentle-Vanguard's token efficiency:
 **Status**: Implementation Pending  
 **Priority**: HIGH (covers 80% of non-standard tools)  
 **Next**: Implement `server.ts` and `tools.ts`
-

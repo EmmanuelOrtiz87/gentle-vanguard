@@ -32,7 +32,8 @@ Reference: `docs/reference/SDG-GOVERNANCE-POLICY.md`
 
 1. Gentle-Vanguard is the source of truth for skills
 2. Skills maintained natively in `skills/<skill-name>/SKILL.md`
-3. Publication: update in Gentle-Vanguard, commit/publish, consumers run `gv.ps1 gentle-vanguard-sync apply`
+3. Publication: update in Gentle-Vanguard, commit/publish, consumers run
+   `gv.ps1 gentle-vanguard-sync apply`
 4. Activation: on-demand — orchestrator loads only skills needed by current task
 5. New skills must be reflected in: `skills/SKILL_INDEX.md`, orchestrator stack mapping, consumer
    sync manifest
@@ -166,4 +167,3 @@ Guardrails: search adds at most one round-trip; saving after user confirms compl
 | "PR"                                            | Validate, code review, decision  |
 | "Push"                                          | Generate audit, commit, push     |
 | "Judgment Day" / "Juicio Final" / "Dual Review" | Run adversarial review           |
-

@@ -524,4 +524,3 @@ contextBridge.exposeInMainWorld('electron', {
 - [electron-vite](https://electron-vite.org/)
 - [electron-builder](https://www.electron.build/)
 - [Electron Security Checklist](https://www.electronjs.org/docs/latest/tutorial/security)
-

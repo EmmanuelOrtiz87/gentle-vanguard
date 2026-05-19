@@ -66,4 +66,3 @@ jobs:
         with:
           name: validation-report
           path: .session/reports/
-

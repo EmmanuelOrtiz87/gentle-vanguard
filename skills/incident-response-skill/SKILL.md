@@ -60,4 +60,3 @@ Automated incident detection, alerting, and recovery procedures for Gentle-Vangu
 ## Next Steps
 
 Add more automated runbooks as incidents occur.
-

@@ -41,4 +41,3 @@ gentle-vanguard/
 | 2026-04-27 | Eliminated `scripts/utilities/skills/` duplicate | DONE   |
 | 2026-04-27 | Merged `.workspace/config/` `config/`            | DONE   |
 | 2026-04-27 | Unified `content-output-skill`                   | DONE   |
-

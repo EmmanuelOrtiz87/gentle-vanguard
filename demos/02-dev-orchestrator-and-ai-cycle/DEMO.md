@@ -88,6 +88,7 @@ Get-Content config/auto-delegation.json | ConvertFrom-Json | ConvertTo-Json -Dep
 ```
 
 **Confidence-Based Delegation:**
+
 - High-confidence matches (>0.85): automatic routing, no confirmation needed
 - Medium-confidence (0.70–0.85): routed but flagged for user confirmation
 - Low-confidence (<0.70): presented as suggestions, user chooses
@@ -170,4 +171,3 @@ Get-Content config/auto-delegation.json | ConvertFrom-Json | ConvertTo-Json -Dep
 4. Context packs reduce token waste by loading only relevant artifacts
 5. Custom rules are injected dynamically per skill, keeping AI context focused
 6. Response modes give fine-grained control over verbosity and token consumption
-

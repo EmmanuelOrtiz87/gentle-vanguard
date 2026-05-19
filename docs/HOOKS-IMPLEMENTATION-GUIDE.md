@@ -39,4 +39,3 @@ Hooks are configured in `config/hooks-config.json`.
 1. Create script in appropriate directory
 2. Register in `config/hooks-config.json`
 3. Update `scripts/utilities/WORKFLOW-ORCHESTRATION/hook-registry.json`
-

@@ -25,30 +25,30 @@ workaround available
 
 When using Claude or Copilot, watch for these keywords and manually load the corresponding skill:
 
-| Trigger Keywords                                                                                                                     | Skill to Load                |
-| ------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
-| Angular, Angular component, Angular service, Angular signal, Angular SPA, @defer, standalone component                               | `angular-spa-skill`          |
-| React, React 19, useActionState, useFormStatus, React Compiler                                                                       | `react-19-skill`             |
-| Next.js, Next.js 15, App Router, Server Component, Server Action, next.config                                                        | `nextjs-15-skill`            |
-| Go API, Go backend, REST endpoint Go, Go JSON, Go SPA, Go HTTP handler                                                               | `golang-api-skill`           |
-| TypeScript, interface, type, generic, utility types, typescript strict                                                               | `typescript-skill`           |
-| Zod, schema validation, input validation, type safety                                                                                | `zod-4-skill`                |
-| Zustand, state management, store, useStore, persistence                                                                              | `zustand-5-skill`            |
-| Tailwind, Tailwind CSS, cn(), className, tailwind-4                                                                                  | `tailwind-4-skill`           |
-| AI SDK, AI SDK 5, streamText, generateText, AI provider                                                                              | `ai-sdk-5-skill`             |
-| MCP, Model Context Protocol, MCP server, MCP tool, MCP resource                                                                      | `mcp-skill`                  |
-| Docker, container, kubernetes, k8s, deployment, docker-compose, dockerfile, pod, ingress, helm                                       | `docker-devops-skill`        |
-| MongoDB, Redis, NoSQL, document database, caching, cache                                                                             | `database-nosql-skill`       |
-| PostgreSQL, MySQL, SQL, database, SQLAlchemy, migration, transaction                                                                 | `database-relational-skill`  |
-| Django, Django REST Framework, DRF, ViewSet, Serializer, APIView                                                                     | `django-drf-skill`           |
-| security, authentication, authorization, vulnerability, CVE, OWASP, XSS, SQL injection, secrets, encryption                          | `security-skill`             |
-| test, write test, test coverage, unit test, integration test, e2e test, testing framework, test setup                                | `testing-skill`              |
-| testing strategy, test pyramid, what to test, coverage target, unit test, integration test                                           | `testing-strategy-skill`     |
-| iniciar sesión, session, start session                                                                                               | `session-lifecycle`          |
-| audit gentle-vanguard, validate docs, sweep project, check links, find duplicates, fix references, homologate, validation sweep, gv audit | `gentle-vanguard-audit-skill`     |
-| new project, assess project, setup project, migrate, refactor decisión, organize docs                                                | `project-orchestrator-skill` |
-| create project, new project, bootstrap, scaffold, template, workspace setup, initialize project, gv CLI                              | `project-scaffolding`        |
-| sdd init, iniciar sdd, openspec init                                                                                                 | `sdd-init`                   |
+| Trigger Keywords                                                                                                                          | Skill to Load                 |
+| ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| Angular, Angular component, Angular service, Angular signal, Angular SPA, @defer, standalone component                                    | `angular-spa-skill`           |
+| React, React 19, useActionState, useFormStatus, React Compiler                                                                            | `react-19-skill`              |
+| Next.js, Next.js 15, App Router, Server Component, Server Action, next.config                                                             | `nextjs-15-skill`             |
+| Go API, Go backend, REST endpoint Go, Go JSON, Go SPA, Go HTTP handler                                                                    | `golang-api-skill`            |
+| TypeScript, interface, type, generic, utility types, typescript strict                                                                    | `typescript-skill`            |
+| Zod, schema validation, input validation, type safety                                                                                     | `zod-4-skill`                 |
+| Zustand, state management, store, useStore, persistence                                                                                   | `zustand-5-skill`             |
+| Tailwind, Tailwind CSS, cn(), className, tailwind-4                                                                                       | `tailwind-4-skill`            |
+| AI SDK, AI SDK 5, streamText, generateText, AI provider                                                                                   | `ai-sdk-5-skill`              |
+| MCP, Model Context Protocol, MCP server, MCP tool, MCP resource                                                                           | `mcp-skill`                   |
+| Docker, container, kubernetes, k8s, deployment, docker-compose, dockerfile, pod, ingress, helm                                            | `docker-devops-skill`         |
+| MongoDB, Redis, NoSQL, document database, caching, cache                                                                                  | `database-nosql-skill`        |
+| PostgreSQL, MySQL, SQL, database, SQLAlchemy, migration, transaction                                                                      | `database-relational-skill`   |
+| Django, Django REST Framework, DRF, ViewSet, Serializer, APIView                                                                          | `django-drf-skill`            |
+| security, authentication, authorization, vulnerability, CVE, OWASP, XSS, SQL injection, secrets, encryption                               | `security-skill`              |
+| test, write test, test coverage, unit test, integration test, e2e test, testing framework, test setup                                     | `testing-skill`               |
+| testing strategy, test pyramid, what to test, coverage target, unit test, integration test                                                | `testing-strategy-skill`      |
+| iniciar sesión, session, start session                                                                                                    | `session-lifecycle`           |
+| audit gentle-vanguard, validate docs, sweep project, check links, find duplicates, fix references, homologate, validation sweep, gv audit | `gentle-vanguard-audit-skill` |
+| new project, assess project, setup project, migrate, refactor decisión, organize docs                                                     | `project-orchestrator-skill`  |
+| create project, new project, bootstrap, scaffold, template, workspace setup, initialize project, gv CLI                                   | `project-scaffolding`         |
+| sdd init, iniciar sdd, openspec init                                                                                                      | `sdd-init`                    |
 
 ## Orchestrator Delegation
 
@@ -124,4 +124,3 @@ Features that CANNOT be implemented in certain tools due to architectural limita
 - **Matrix versión**: 1.1.0
 - **Tools Supported**: 8
 - **Features Tracked**: 12 core features
-

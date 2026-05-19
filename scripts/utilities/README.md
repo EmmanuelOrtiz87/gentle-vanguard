@@ -382,4 +382,3 @@ Install-Module -Name Pester -Force -SkipPublisherCheck
 **Last updated**: 2026-05-04  
 **Version**: 3.0.0  
 **Status**: PRODUCTION
-

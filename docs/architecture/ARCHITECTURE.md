@@ -20,4 +20,3 @@ The canonical and complete architecture document is:
    `docs/architecture/`.
 2. Do not duplicate long-form architecture content here.
 3. Update references when architecture docs are moved or renamed.
-

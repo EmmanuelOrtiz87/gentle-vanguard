@@ -78,4 +78,3 @@ gv.ps1 install -Force   # Overwrite existing installation
 - `scripts/utilities/gentle-vanguard-installer-tui.ps1` - Main installer script
 - `scripts/utilities/WORKFLOW-ORCHESTRATION/gv.ps1` - CLI integration (has `install` command)
 - `docs/reference/GENTLE_VANGUARD-INSTALLER.md` - This documentation
-

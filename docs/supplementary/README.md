@@ -36,4 +36,3 @@ Code reviews are stored **per project**, not in the gentle-vanguard:
 ```
 
 See project AGENTS.md for review workflow.
-

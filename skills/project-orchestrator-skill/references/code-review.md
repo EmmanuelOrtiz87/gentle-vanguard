@@ -97,4 +97,3 @@ User decision options for MEDIUM:
 - [ ] Code follows conventions
 
 Questions: Did we meet the spec? Did we forget anything? Is the code ready for review?
-

@@ -214,7 +214,7 @@ incidents, response coordination, mitigation, and recovery planning
 | **Workflow**          | github-pr, jira-task, jira-epic, release-management, skill-factory                                                                                                                            |
 | **Quality**           | typescript, code-review, security, technical-debt, web-performance-optimization, judgment-day, verificador-datos                                                                              |
 | **Operations**        | observability, incident-response-plan                                                                                                                                                         |
-| **Governance**        | project-scaffolding, documentation-governance, architecture-governance, git-workflow, gentle-vanguard-manager                                                                                      |
+| **Governance**        | project-scaffolding, documentation-governance, architecture-governance, git-workflow, gentle-vanguard-manager                                                                                 |
 | **SDD Lifecycle**     | sdd-lifecycle (CONSOLIDATED - 9 phases in 1)                                                                                                                                                  |
 
 ---
@@ -251,9 +251,12 @@ sessions or agents
 
 ### optimizador-prompts-skill
 
-**Trigger**: `mejora este prompt`, `conviértelo en un prompt`, `ordena esta idea`, `hazme un prompt para`, `optimiza esto para`, `improve this prompt`, `optimize prompt`, `structure this idea`, `create a prompt for`
+**Trigger**: `mejora este prompt`, `conviértelo en un prompt`, `ordena esta idea`,
+`hazme un prompt para`, `optimiza esto para`, `improve this prompt`, `optimize prompt`,
+`structure this idea`, `create a prompt for`
 
-**Use when**: Transforming messy ideas, voice notes, or incomplete instructions into clear, structured prompts for any AI tool (Claude, ChatGPT, Midjourney, n8n, etc.)
+**Use when**: Transforming messy ideas, voice notes, or incomplete instructions into clear,
+structured prompts for any AI tool (Claude, ChatGPT, Midjourney, n8n, etc.)
 
 ---
 
@@ -261,17 +264,21 @@ sessions or agents
 
 ### humanizador-skill
 
-**Trigger**: `humaniza este texto`, `humanize text`, `de-ai text`, `make it sound natural`, `rewrite this`
+**Trigger**: `humaniza este texto`, `humanize text`, `de-ai text`, `make it sound natural`,
+`rewrite this`
 
-**Use when**: Rewriting AI-generated text to sound natural and human by removing generic phrases, inflated tone, and artificial patterns
+**Use when**: Rewriting AI-generated text to sound natural and human by removing generic phrases,
+inflated tone, and artificial patterns
 
 ---
 
 ### presentaciones-visuales-skill
 
-**Trigger**: `crea una presentación`, `convierte esto en slides`, `deck`, `diapositivas`, `presentación visual`, `create presentation`, `make slides`, `slide deck`, `HTML presentation`
+**Trigger**: `crea una presentación`, `convierte esto en slides`, `deck`, `diapositivas`,
+`presentación visual`, `create presentation`, `make slides`, `slide deck`, `HTML presentation`
 
-**Use when**: Creating self-contained HTML presentations from any content with professional design and clear narrative
+**Use when**: Creating self-contained HTML presentations from any content with professional design
+and clear narrative
 
 ---
 
@@ -769,9 +776,11 @@ records
 
 ### verificador-datos-skill
 
-**Trigger**: `verifica este texto`, `fact check`, `comprueba afirmaciones`, `revisa errores`, `verify claims`, `check for errors`, `validate information`, `verify this text`
+**Trigger**: `verifica este texto`, `fact check`, `comprueba afirmaciones`, `revisa errores`,
+`verify claims`, `check for errors`, `validate information`, `verify this text`
 
-**Use when**: Fact-checking texts, detecting errors, exaggerations, and unverifiable claims before publishing or sending
+**Use when**: Fact-checking texts, detecting errors, exaggerations, and unverifiable claims before
+publishing or sending
 
 ---
 
@@ -808,8 +817,8 @@ records
 **Trigger**: `audit gentle-vanguard`, `validate`, `sweep`, `check links`, `find duplicates`,
 `homologate`, `validation sweep`, `gentle-vanguard audit`, `judgment`, `pre-release audit`
 
-**Use when**: Running comprehensive validation of Gentle-Vanguard, detecting duplicates, broken links,
-skill inconsistencies, and documentation issues. Zero agent tokens when using batch mode.
+**Use when**: Running comprehensive validation of Gentle-Vanguard, detecting duplicates, broken
+links, skill inconsistencies, and documentation issues. Zero agent tokens when using batch mode.
 
 **Unified Workflow** (gentle-vanguard-audit + judgment-day):
 
@@ -840,9 +849,11 @@ workflow diagram.
 
 ### premortem-skill
 
-**Trigger**: `premortem`, `risk analysis`, `failure mode`, `what could go wrong`, `Klein`, `prospective hindsight`
+**Trigger**: `premortem`, `risk analysis`, `failure mode`, `what could go wrong`, `Klein`,
+`prospective hindsight`
 
-**Use when**: Running premortem analysis using Klein + Kahneman methods to identify risks before starting significant work
+**Use when**: Running premortem analysis using Klein + Kahneman methods to identify risks before
+starting significant work
 
 **See**: [premortem-skill](premortem-skill/SKILL.md)
 
@@ -941,7 +952,7 @@ workflow diagram.
 | Category         | Skills                                                                                                                                                                                        |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Orchestrator** | project-orchestrator (load first!), session-workflow, skill-creator                                                                                                                           |
-| **Audit**        | gentle-vanguard-audit (validate, sweep, check)                                                                                                                                                     |
+| **Audit**        | gentle-vanguard-audit (validate, sweep, check)                                                                                                                                                |
 | **Frontend**     | angular-spa, react-19, nextjs-15, tailwind-4                                                                                                                                                  |
 | **Mobile**       | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-kotlin-coroutines, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging |
 | **State**        | zustand-5                                                                                                                                                                                     |
@@ -950,11 +961,11 @@ workflow diagram.
 | **Database**     | database-relational, database-nosql                                                                                                                                                           |
 | **DevOps**       | docker-devops, terraform-infrastructure, kubernetes-deployment                                                                                                                                |
 | **Testing**      | testing-strategy, testing-skill, playwright, pytest, go-testing                                                                                                                               |
-| **AI**           | ai-sdk-5, mcp-skill, codegraph-skill                                                                                                                                                           |
+| **AI**           | ai-sdk-5, mcp-skill, codegraph-skill                                                                                                                                                          |
 | **Workflow**     | github-pr, jira-task, jira-epic, release-management                                                                                                                                           |
 | **Quality**      | typescript, code-review, security, technical-debt, web-performance-optimization                                                                                                               |
 | **Operations**   | observability, incident-response-plan                                                                                                                                                         |
-| **Governance**   | gentle-vanguard-manager, project-scaffolding, architecture-governance, documentation-governance, git-workflow, gentle-vanguard-audit                                                                    |
+| **Governance**   | gentle-vanguard-manager, project-scaffolding, architecture-governance, documentation-governance, git-workflow, gentle-vanguard-audit                                                          |
 
 ## Skill Loading
 
@@ -1345,4 +1356,3 @@ useFormStatus
 **Use when**: Quality assurance and testing evidence collection
 
 ---
-

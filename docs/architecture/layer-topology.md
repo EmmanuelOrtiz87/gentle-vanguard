@@ -214,4 +214,3 @@ When adding new capabilities:
 3. Document its interface, not implementation
 4. Update orchestrator knowledge
 5. Verify no cross-layer violations
-
