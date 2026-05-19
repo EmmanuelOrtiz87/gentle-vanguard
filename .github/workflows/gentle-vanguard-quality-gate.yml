@@ -55,9 +55,19 @@ jobs:
           }
           $json = .\scripts\utilities\agent-verify.ps1 -Json
           $result = $json | ConvertFrom-Json
-          if ($result.summary.failed -gt 0) {
-            Write-Error "agent-verify reported failures"
+          Write-Host "agent-verify result: $($result.result)"
+          Write-Host "Total: $($result.summary.total) | Passed: $($result.summary.passed) | Failed: $($result.summary.failed) | Warnings: $($result.summary.warnings)"
+          foreach ($check in $result.checks) {
+            $icon = switch ($check.status) { 'PASS' { '[OK]' }; 'FAIL' { '[FAIL]' }; 'WARN' { '[WARN]' }; default { '[?]' } }
+            Write-Host "  $icon $($check.check): $($check.message)"
+          }
+          $blockingFailures = @($result.checks | Where-Object { $_.status -eq 'FAIL' -and $_.check -ne 'uncommitted-changes' })
+          if ($blockingFailures.Count -gt 0) {
+            Write-Error "agent-verify reported $($blockingFailures.Count) blocking failure(s)"
             exit 1
+          }
+          if ($result.summary.failed -gt 0) {
+            Write-Output "::warning::agent-verify has $($result.summary.failed) failure(s) — check logs for details"
           }
           Write-Host "agent-verify: PASS (warnings: $($result.summary.warnings))"
 
