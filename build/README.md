@@ -26,12 +26,14 @@ This is the **only** distribution format. `Gentle-Vanguard.exe` is a professiona
 
 ## Prerequisites
 
-| Tool | Purpose | Download |
-|------|---------|----------|
-| PowerShell 7+ | Script execution | Microsoft |
-| NSIS 3+ | Compile .exe installer | https://nsis.sourceforge.io/ |
-| PS2EXE (optional) | Compile PS1 to standalone .exe | `Install-Module ps2exe` |
-| Cairo DLL (optional) | SVG to PNG conversion | `tools\cairo.dll` |
+| Tool | Purpose | Install Location | Download |
+|------|---------|------------------|----------|
+| PowerShell 7+ | Script execution | System PATH | Microsoft |
+| NSIS 3+ | Compile .exe installer | `C:\Program Files (x86)\NSIS\Bin\makensis.exe` | https://nsis.sourceforge.io/ |
+| PS2EXE | Compile PS1 to standalone .exe | PowerShell module | `Install-Module ps2exe -Scope CurrentUser -Force -AllowClobber` |
+| Cairo DLL (optional) | SVG to PNG conversion | `tools\cairo.dll` | — |
+
+> **NSIS location**: `C:\Program Files (x86)\NSIS\Bin\makensis.exe` (v3.12). The build script auto-detects it. If NSIS is not found, the build will fail with a clear error.
 
 ## Build Pipeline
 
@@ -145,6 +147,41 @@ pwsh -File build/sfx-build.ps1
 4. **`master.key`** is NEVER distributed — users must obtain it from the private repo
 5. **`build/`** is in `.gitignore` except for `Gentle-Vanguard-Launcher.ps1` which is force-tracked
 6. **`gentle-vanguard-installer-auto.nsi`** is auto-generated — do not edit manually
+
+## End-to-End Build & Deploy
+
+Complete flow from code change to public release:
+
+```powershell
+# 1. Make code changes in private repo (develop branch)
+# 2. Commit and push
+git add . && git commit -m "fix: description" && git push origin develop
+
+# 3. Create PR and merge to main
+gh pr create --base main --head develop --title "fix: description"
+gh pr merge <PR_NUMBER> --merge --delete-branch
+
+# 4. Switch to main and pull
+git checkout main && git pull origin main
+
+# 5. Build the .exe (encrypt + compile NSIS installer)
+pwsh -NoProfile -ExecutionPolicy Bypass -File "build\create-installer.ps1"
+# Output: dist\Gentle-Vanguard.exe (~2.75 MB)
+
+# 6. Sync to public repo (copies .exe, docs, CI scripts, cleans up)
+pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts\utilities\DEPLOYMENT\sync-to-public.ps1"
+# This auto-commits and pushes to gentle-vanguard-public
+```
+
+### Quick Reference
+
+| Step | Command | Output |
+|------|---------|--------|
+| Build .exe | `pwsh -File build/create-installer.ps1` | `dist/Gentle-Vanguard.exe` |
+| Build (skip encrypt) | `pwsh -File build/create-installer.ps1 -SkipEncrypt` | `dist/Gentle-Vanguard.exe` |
+| Build (dry run) | `pwsh -File build/create-installer.ps1 -DryRun` | Preview only |
+| Sync to public | `pwsh -File scripts/utilities/DEPLOYMENT/sync-to-public.ps1` | Pushes to gentle-vanguard-public |
+| Sync (no push) | `pwsh -File scripts/utilities/DEPLOYMENT/sync-to-public.ps1 -skipPush` | Local copy only |
 
 ## Encryption Format
 
