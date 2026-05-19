@@ -520,4 +520,3 @@ El desarrollador ahora tiene un **maestro/tutor** que:
 - Lo previene de cometer errores
 - Lo ayuda a entender por qu algo fue rechazado
 - Lo automatiza tareas repetitivas
-

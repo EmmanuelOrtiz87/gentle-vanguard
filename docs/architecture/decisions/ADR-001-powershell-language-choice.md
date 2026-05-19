@@ -3,13 +3,14 @@
 **Status**: Accepted (Implemented)  
 **Date**: May 2026  
 **Author**: Gentle-Vanguard Security Team  
-**Context**: gentle-vanguard runs on Windows as primary platform  
+**Context**: gentle-vanguard runs on Windows as primary platform
 
 ---
 
 ## Context
 
 The project needed a scripting language for:
+
 - Git hooks (pre-commit, pre-push, commit-msg)
 - CLI orchestration (gv.ps1)
 - Build automation
@@ -18,12 +19,12 @@ The project needed a scripting language for:
 
 ### Alternatives Considered
 
-| Language | Pros | Cons | Decision |
-|----------|------|------|----------|
-| **PowerShell** | Native to Windows, GitHub Actions, powerful scripting | Less portable to Linux/Mac | ✅ **CHOSEN** |
-| Bash | Portable, Unix standard | Weak on Windows, awkward WSL workarounds | ❌ Rejected |
-| Python | Cross-platform, many libraries | Requires .py interpreter, extra install step | ❌ Rejected |
-| JavaScript (Node) | Same ecosystem as npm | Overkill for shell scripts, worse error handling | ❌ Rejected |
+| Language          | Pros                                                  | Cons                                             | Decision      |
+| ----------------- | ----------------------------------------------------- | ------------------------------------------------ | ------------- |
+| **PowerShell**    | Native to Windows, GitHub Actions, powerful scripting | Less portable to Linux/Mac                       | ✅ **CHOSEN** |
+| Bash              | Portable, Unix standard                               | Weak on Windows, awkward WSL workarounds         | ❌ Rejected   |
+| Python            | Cross-platform, many libraries                        | Requires .py interpreter, extra install step     | ❌ Rejected   |
+| JavaScript (Node) | Same ecosystem as npm                                 | Overkill for shell scripts, worse error handling | ❌ Rejected   |
 
 ---
 
@@ -110,7 +111,7 @@ git status
 - uses: actions/setup-node@v4
   with:
     node-version: '20'
-- shell: pwsh  # Use PowerShell
+- shell: pwsh # Use PowerShell
   run: npm ci
 ```
 
@@ -133,4 +134,3 @@ git status
 
 **Review Date**: Q3 2026  
 **Reviewers**: Security team, DevOps team
-

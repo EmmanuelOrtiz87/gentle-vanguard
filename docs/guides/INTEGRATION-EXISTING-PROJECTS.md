@@ -410,4 +410,3 @@ $env:WFS_SESSION_FILE
 | 5    | Run `finalize-session.ps1` daily |
 
 **Result:** Gentle-Vanguard adds capabilities without touching existing code.
-

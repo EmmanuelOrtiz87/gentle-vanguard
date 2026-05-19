@@ -21,4 +21,3 @@
 9. From spec to deploy — 29 agents collaborating on your machine. No data leaves.
 
 10. Open source. Cross-platform. Local-first. Gentle-Vanguard changes how you build with AI.
-

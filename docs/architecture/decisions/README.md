@@ -2,13 +2,15 @@
 
 **Purpose**: Document significant architectural decisions and their rationales  
 **Format**: [Lightweight ADR Format](https://github.com/joelparkerhenderson/architecture_decision_record)  
-**Review Cycle**: Annually or when circumstances change  
+**Review
+Cycle**: Annually or when circumstances change
 
 ---
 
 ## Overview
 
 ADRs provide:
+
 - **Rationale**: Why we chose this approach (not just what we did)
 - **Alternatives**: What we considered and rejected
 - **Consequences**: Tradeoffs and mitigation strategies
@@ -20,13 +22,13 @@ Each ADR is immutable once accepted. Updates create new ADRs (ADR-005, etc).
 
 ## Current Decisions
 
-| ID | Title | Status | Date | Summary |
-|---|-------|--------|------|---------|
-| **[ADR-001](ADR-001-powershell-language-choice.md)** | Primary Language: PowerShell | ✅ Accepted | May 2026 | Why PowerShell over Bash/Python for automation |
-| **[ADR-002](ADR-002-mcp-workspace-external.md)** | MCP Workspace: External Local | ✅ Accepted | May 2026 | Why MCP workspace is `$HOME/mcp-workspace`, not git-tracked |
-| **[ADR-003](ADR-003-npx-offline-hardening.md)** | NPX Hardening: Offline + Workspace | ✅ Accepted | May 2026 | Why npx uses offline mode with pre-vetted workspace |
-| **[ADR-004](ADR-004-homologation-gate.md)** | Homologation Gate: Mandatory | ✅ Accepted | May 2026 | Why release workflow has mandatory repo alignment check |
-| **[ADR-005](ADR-005-code-coverage-requirements.md)** | Code Coverage: Tiered Thresholds | ✅ Accepted | May 2026 | Coverage thresholds (70%/75%/65%) with quarterly targets |
+| ID                                                     | Title                                 | Status      | Date     | Summary                                                     |
+| ------------------------------------------------------ | ------------------------------------- | ----------- | -------- | ----------------------------------------------------------- |
+| **[ADR-001](ADR-001-powershell-language-choice.md)**   | Primary Language: PowerShell          | ✅ Accepted | May 2026 | Why PowerShell over Bash/Python for automation              |
+| **[ADR-002](ADR-002-mcp-workspace-external.md)**       | MCP Workspace: External Local         | ✅ Accepted | May 2026 | Why MCP workspace is `$HOME/mcp-workspace`, not git-tracked |
+| **[ADR-003](ADR-003-npx-offline-hardening.md)**        | NPX Hardening: Offline + Workspace    | ✅ Accepted | May 2026 | Why npx uses offline mode with pre-vetted workspace         |
+| **[ADR-004](ADR-004-homologation-gate.md)**            | Homologation Gate: Mandatory          | ✅ Accepted | May 2026 | Why release workflow has mandatory repo alignment check     |
+| **[ADR-005](ADR-005-code-coverage-requirements.md)**   | Code Coverage: Tiered Thresholds      | ✅ Accepted | May 2026 | Coverage thresholds (70%/75%/65%) with quarterly targets    |
 | **[ADR-006](ADR-006-automated-dependency-updates.md)** | Dependency Updates: Audit + Quarterly | ✅ Accepted | May 2026 | npm audit in pre-push + quarterly review + Renovate Q3 2026 |
 
 ---
@@ -34,17 +36,20 @@ Each ADR is immutable once accepted. Updates create new ADRs (ADR-005, etc).
 ## How to Read ADRs
 
 **Quick Overview** (5 min):
+
 1. Read "Status" line
 2. Read "Decision" section
 3. Scan "Consequences" for pros/cons
 
 **Full Understanding** (15 min):
+
 1. Understand "Context" and problem
 2. Review "Alternatives Considered" table
 3. Study "Implementation Details"
 4. Note "Related Decisions"
 
 **Challenging a Decision** (30 min):
+
 1. Read the full ADR including "Rationale"
 2. Review "Consequences" and "Mitigation"
 3. Check "References" for supporting material
@@ -55,12 +60,14 @@ Each ADR is immutable once accepted. Updates create new ADRs (ADR-005, etc).
 ## Creating New ADRs
 
 **When to create an ADR:**
+
 - Major architectural choice (not minor implementation details)
 - Decision affects multiple teams or long-term
 - Choice has tradeoffs worth documenting
 - Team might revisit this decision in future
 
 **When NOT to create an ADR:**
+
 - Bug fixes or patches
 - Refactoring internal implementation
 - Minor configuration changes
@@ -95,10 +102,10 @@ Each ADR is immutable once accepted. Updates create new ADRs (ADR-005, etc).
 ### Alternatives Considered
 
 | Option | Pros | Cons | Chosen? |
-|--------|------|------|---------|
-| A | | | |
-| B | | | |
-| **C** | | | ✅ |
+| ------ | ---- | ---- | ------- |
+| A      |      |      |         |
+| B      |      |      |         |
+| **C**  |      |      | ✅      |
 
 ---
 
@@ -156,11 +163,11 @@ Should we document this decision?
 Is it a major architectural choice?
     ├─ YES → Create ADR-NNN.md
     └─ NO  → Document in code comments
-    
+
 Will this affect multiple teams long-term?
     ├─ YES → Create ADR-NNN.md
     └─ NO  → Document in relevant guide
-    
+
 Is there uncertainty or tradeoffs?
     ├─ YES → Create ADR-NNN.md (even if not major)
     └─ NO  → Just implement and reference in comments
@@ -171,12 +178,14 @@ Is there uncertainty or tradeoffs?
 ## Cross-References
 
 **Related Guides**:
+
 - [SECURITY-HARDENING.md](../guides/SECURITY-HARDENING.md) — References ADR-003
 - [MCP-WORKSPACE-SETUP.md](../guides/MCP-WORKSPACE-SETUP.md) — References ADR-002
 - [RELEASE-PROCESS.md](../guides/RELEASE-PROCESS.md) — References ADR-004
 - [FIRST-TIME-SETUP-CHECKLIST.md](../guides/FIRST-TIME-SETUP-CHECKLIST.md) — References ADR-001
 
 **Related Code**:
+
 - `config/mcp-servers.json` — Implements ADR-003
 - `scripts/utilities/DEPLOYMENT/validate-release-homologation.ps1` — Implements ADR-004
 - `scripts/hooks/*.ps1` — Implements ADR-001
@@ -188,13 +197,15 @@ Is there uncertainty or tradeoffs?
 
 **Q: Can we change an ADR after accepting it?**
 
-A: No. If circumstances change significantly, create a new ADR (ADR-005) that supersedes or enhances the previous decision. Update the old ADR status to "Deprecated" or "Evolved To ADR-005".
+A: No. If circumstances change significantly, create a new ADR (ADR-005) that supersedes or enhances
+the previous decision. Update the old ADR status to "Deprecated" or "Evolved To ADR-005".
 
 ---
 
 **Q: What if I disagree with an ADR?**
 
 A: Respectfully discuss in:
+
 1. Team meeting or Slack
 2. Open a GitHub Discussion with your alternative
 3. If consensus shifts, create a new ADR
@@ -212,6 +223,7 @@ A: Typically 1-3 pages. If it's getting longer, consider breaking into multiple 
 **Q: Who reviews ADRs?**
 
 A: Team consensus. Typically:
+
 - Security team (for security-related ADRs)
 - DevOps team (for infrastructure ADRs)
 - All developers (for architectural ADRs)
@@ -243,7 +255,8 @@ A: Team consensus. Typically:
 
 - [adr.github.io](https://adr.github.io/) — ADR home
 - [Lightweight ADR Format](https://github.com/joelparkerhenderson/architecture_decision_record/blob/main/adr_template_by_michael_nygard.md)
-- [Michael Nygard's ADR](http://thinkrelevant.com/blog/2011/11/15/documenting-architecture-decisions/) — Original concept
+- [Michael Nygard's ADR](http://thinkrelevant.com/blog/2011/11/15/documenting-architecture-decisions/)
+  — Original concept
 
 ---
 

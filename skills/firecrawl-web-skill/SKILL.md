@@ -210,4 +210,3 @@ except ExtractionError:
 3. **Caching** - Store results for future use
 4. **Error handling** - Plan for failures
 5. **Token efficient** - Trim unnecessary content
-

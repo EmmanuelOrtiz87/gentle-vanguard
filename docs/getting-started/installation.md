@@ -70,11 +70,11 @@ git config --global pull.rebase true
 
 The gentle-vanguard includes integration with:
 
-| Tool                     | Purpose                  | Install                                                               |
-| ------------------------ | ------------------------ | --------------------------------------------------------------------- |
-| **OpenCode**             | AI coding agent          | https://opencode.ai                                                   |
-| **Claude Code**          | AI coding agent          | https://claude.ai/code                                                |
-| **Native Review Engine** | Built-in workflow review | `./scripts/utilities/gv.ps1 review`                                   |
+| Tool                     | Purpose                  | Install                                                          |
+| ------------------------ | ------------------------ | ---------------------------------------------------------------- |
+| **OpenCode**             | AI coding agent          | https://opencode.ai                                              |
+| **Claude Code**          | AI coding agent          | https://claude.ai/code                                           |
+| **Native Review Engine** | Built-in workflow review | `./scripts/utilities/gv.ps1 review`                              |
 | **engram**               | Persistent memory        | `go install github.com/gentle-vanguard/engram/cmd/engram@latest` |
 
 Windows one-shot update (no brew required): `./scripts/utilities/gv.ps1 update-tools`
@@ -191,4 +191,3 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 # Linux/macOS
 pwsh -Command "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser"
 ```
-

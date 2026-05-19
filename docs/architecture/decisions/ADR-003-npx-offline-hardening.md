@@ -3,7 +3,7 @@
 **Status**: Accepted (Implemented)  
 **Date**: May 13, 2026  
 **Author**: Gentle-Vanguard Security Team  
-**Context**: Mitigating npm supply-chain attacks  
+**Context**: Mitigating npm supply-chain attacks
 
 ---
 
@@ -76,6 +76,7 @@ Modern npm supply chain attacks target two primary vectors:
 ```
 
 **How it works**:
+
 ```
 Developer runs MCP server
   ↓
@@ -91,6 +92,7 @@ Success: MCP starts
 ```
 
 **Attack prevention**:
+
 ```
 Attacker poisons npm registry with @latest
   ↓
@@ -119,13 +121,15 @@ allow-git=none
 ```
 
 **Defense depth**:
+
 - `ignore-scripts=true` — Prevents post-install code execution
 - `min-release-age=3` — Blocks zero-day package poisoning (package must be 3+ days old)
 - `allow-git=none` — Common attack vector (cloning from malicious git repos)
 
 ### Layer 3: Conscious Update Procedure
 
-**Documented in [MCP-WORKSPACE-SETUP.md](../../guides/MCP-WORKSPACE-SETUP.md) §Conscious Update Procedure**:
+**Documented in [MCP-WORKSPACE-SETUP.md](../../guides/MCP-WORKSPACE-SETUP.md) §Conscious Update
+Procedure**:
 
 ```powershell
 # 1. Review current status
@@ -187,22 +191,20 @@ Testing: [what was verified]
 
 ### Attack Vectors Closed
 
-| Attack | NPX -y | Hardened | Status |
-|--------|--------|----------|--------|
-| **Registry Poisoning** | ❌ Vulnerable | ✅ Blocked | Offline + workspace |
-| **Post-Install Script** | ❌ Vulnerable | ✅ Blocked | ignore-scripts=true |
-| **Zero-Day Exploit** | ❌ Vulnerable (no delay) | ✅ Delayed | 3-day min-release-age |
-| **Compromised Git Repo** | ❌ Vulnerable | ✅ Blocked | allow-git=none |
-| **Version Drift** | ❌ Auto-update | ✅ Conscious | Lockfile-locked |
+| Attack                   | NPX -y                   | Hardened     | Status                |
+| ------------------------ | ------------------------ | ------------ | --------------------- |
+| **Registry Poisoning**   | ❌ Vulnerable            | ✅ Blocked   | Offline + workspace   |
+| **Post-Install Script**  | ❌ Vulnerable            | ✅ Blocked   | ignore-scripts=true   |
+| **Zero-Day Exploit**     | ❌ Vulnerable (no delay) | ✅ Delayed   | 3-day min-release-age |
+| **Compromised Git Repo** | ❌ Vulnerable            | ✅ Blocked   | allow-git=none        |
+| **Version Drift**        | ❌ Auto-update           | ✅ Conscious | Lockfile-locked       |
 
 ### Remaining Risks
 
 - **Compromised Package (Before 3 Days)**: Rare but possible
   - Mitigation: Security team monitors npm security advisories daily
-  
 - **Malicious Maintenance Access**: Package maintainer compromised
   - Mitigation: Regular audits of core MCP server updates
-  
 - **Workspace Tampering**: Local attacker modifies workspace
   - Mitigation: Windows file permissions, anti-malware tools
 
@@ -210,24 +212,26 @@ Testing: [what was verified]
 
 ## Comparison to Alternatives
 
-| Approach | Security | Ease | Recommendation |
-|----------|----------|------|-----------------|
-| **`npx -y` (current)** | ❌ None | ✅✅✅ Simple | ❌ DO NOT USE |
-| **Offline workspace** | ✅✅✅ Strong | ✅ Medium | ✅ **THIS (chosen)** |
-| **Signed packages** | ✅ Strong | ❌ Complex | 🤔 Future option |
-| **Docker container** | ✅✅ Strong | ❌❌ Complex | 🤔 Consider later |
-| **Monorepo vendor** | ✅✅ Strong | ✅ Medium | 🤔 If scaling |
+| Approach               | Security      | Ease          | Recommendation       |
+| ---------------------- | ------------- | ------------- | -------------------- |
+| **`npx -y` (current)** | ❌ None       | ✅✅✅ Simple | ❌ DO NOT USE        |
+| **Offline workspace**  | ✅✅✅ Strong | ✅ Medium     | ✅ **THIS (chosen)** |
+| **Signed packages**    | ✅ Strong     | ❌ Complex    | 🤔 Future option     |
+| **Docker container**   | ✅✅ Strong   | ❌❌ Complex  | 🤔 Consider later    |
+| **Monorepo vendor**    | ✅✅ Strong   | ✅ Medium     | 🤔 If scaling        |
 
 ---
 
 ## Future Evolution
 
 **Year 2026-2027**:
+
 - SLSA L2 attestation (provenance of packages)
 - Signed releases (cryptographic verification)
 - Automated supply-chain scanning (Snyk, Dependabot)
 
 **Year 2027+**:
+
 - SLSA L3+ (stronger build guarantees)
 - Hardware-backed signing (Yubikey for releases)
 - Federated package verification
@@ -254,4 +258,3 @@ Testing: [what was verified]
 **Review Date**: Q2 2027 (annual security review)  
 **Reviewers**: Security team, compliance team  
 **Status**: Stable, monitoring for threats
-

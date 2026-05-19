@@ -5,10 +5,13 @@ Reglas fundamentales de operación para todos los agentes en Gentle-Vanguard.
 ## Pre-processing (SIEMPRE activo)
 
 **Antes de responder a CUALQUIER input del usuario:**
-1. Ejecutar: `powershell -File scripts/utilities/pre-process-input.ps1 -UserInput "INPUT" -WorkspaceRoot "."`
+
+1. Ejecutar:
+   `powershell -File scripts/utilities/pre-process-input.ps1 -UserInput "INPUT" -WorkspaceRoot "."`
 2. Parsear output:
    - `TRIGGER_MATCH_FOUND` → leer `skills/<skill-name>/SKILL.md` y seguir instrucciones
-   - `PLAN_MODE_REQUIRED` con `AGENT: BA` → activar BA/sdd-explore primero. Completar EXPLORE antes de implementar.
+   - `PLAN_MODE_REQUIRED` con `AGENT: BA` → activar BA/sdd-explore primero. Completar EXPLORE antes
+     de implementar.
    - `NO_TRIGGER_MATCH` → comportamiento normal
 
 ## Session Management
@@ -35,9 +38,11 @@ Para bugs: ir directo a DEV/APPLY, saltar BA.
 ## Skill Loading (sin skill tool nativo)
 
 Cursor no expone skill tool. Para emular:
+
 1. Consultar `.atl/skill-registry.md` para encontrar el skill correcto
 2. Leer `skills/<skill-name>/SKILL.md` directamente
-3. Skills críticos siempre disponibles: `sdd-lifecycle`, `code-review-orchestrator`, `session-workflow`
+3. Skills críticos siempre disponibles: `sdd-lifecycle`, `code-review-orchestrator`,
+   `session-workflow`
 
 ## Memoria entre sesiones (emulación)
 

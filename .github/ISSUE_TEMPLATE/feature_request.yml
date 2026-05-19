@@ -75,4 +75,3 @@ body:
           required: true
         - label: I've considered backward compatibility
           required: true
-

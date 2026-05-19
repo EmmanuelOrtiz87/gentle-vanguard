@@ -146,4 +146,3 @@ Este skill se integra con:
   "confirmationRequired": true|false
 }
 ```
-

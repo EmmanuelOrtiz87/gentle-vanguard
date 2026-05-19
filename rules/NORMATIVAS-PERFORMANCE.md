@@ -1,14 +1,14 @@
 # NORMATIVAS-PERFORMANCE.md — Performance & Efficiency Standards
 
-Version: 1.0.0
-Last updated: 2026-05-10
-Framework: SLO-based performance governance + token efficiency 2026 best practices
+Version: 1.0.0 Last updated: 2026-05-10 Framework: SLO-based performance governance + token
+efficiency 2026 best practices
 
 ---
 
 ## 1. PROPOSITO
 
-Define performance budgets, SLOs, y estándares de eficiencia para todo el stack Gentle-Vanguard. Aplica a scripts, configuraciones, agentes AI, y pipelines CI/CD.
+Define performance budgets, SLOs, y estándares de eficiencia para todo el stack Gentle-Vanguard.
+Aplica a scripts, configuraciones, agentes AI, y pipelines CI/CD.
 
 ---
 
@@ -16,32 +16,32 @@ Define performance budgets, SLOs, y estándares de eficiencia para todo el stack
 
 ### 2.1 Agent Performance
 
-| Metric | Target | Warning | Critical | Measurement |
-|--------|--------|---------|----------|-------------|
-| Agent dispatch time | < 500ms | 500-1000ms | > 1000ms | `metrics-config.json` |
-| Skill load time | < 2s | 2-5s | > 5s | `orchestrator.json` |
-| Agent task completion | < 30s | 30-60s | > 60s | Delegation metrics |
-| Circuit breaker uptime | 100% | < 99% | < 95% | Circuit breaker state |
+| Metric                 | Target  | Warning    | Critical | Measurement           |
+| ---------------------- | ------- | ---------- | -------- | --------------------- |
+| Agent dispatch time    | < 500ms | 500-1000ms | > 1000ms | `metrics-config.json` |
+| Skill load time        | < 2s    | 2-5s       | > 5s     | `orchestrator.json`   |
+| Agent task completion  | < 30s   | 30-60s     | > 60s    | Delegation metrics    |
+| Circuit breaker uptime | 100%    | < 99%      | < 95%    | Circuit breaker state |
 
 ### 2.2 Script Performance
 
-| Script Type | Max Execution | Warning | Critical |
-|-------------|--------------|---------|----------|
-| Interactive (CLI) | < 2s | 2-5s | > 5s |
-| CI/CD step | < 30s | 30-60s | > 60s |
-| Pre-commit hook | < 5s | 5-15s | > 15s |
-| Pre-push hook | < 60s | 60-120s | > 120s |
-| Audit sweep (quick) | < 30s | 30-60s | > 60s |
-| Audit sweep (full) | < 5min | 5-10min | > 10min |
+| Script Type         | Max Execution | Warning | Critical |
+| ------------------- | ------------- | ------- | -------- |
+| Interactive (CLI)   | < 2s          | 2-5s    | > 5s     |
+| CI/CD step          | < 30s         | 30-60s  | > 60s    |
+| Pre-commit hook     | < 5s          | 5-15s   | > 15s    |
+| Pre-push hook       | < 60s         | 60-120s | > 120s   |
+| Audit sweep (quick) | < 30s         | 30-60s  | > 60s    |
+| Audit sweep (full)  | < 5min        | 5-10min | > 10min  |
 
 ### 2.3 Token Efficiency
 
-| Metric | Target | Warning | Critical |
-|--------|--------|---------|----------|
-| Tokens per session | < 30K | 30-50K | > 50K |
-| Tokens per agent dispatch | < 750 | 750-1500 | > 1500 |
-| Daily token budget | < 30K | 30-50K | > 50K |
-| Context compression ratio | > 0.85 | 0.70-0.85 | < 0.70 |
+| Metric                    | Target | Warning   | Critical |
+| ------------------------- | ------ | --------- | -------- |
+| Tokens per session        | < 30K  | 30-50K    | > 50K    |
+| Tokens per agent dispatch | < 750  | 750-1500  | > 1500   |
+| Daily token budget        | < 30K  | 30-50K    | > 50K    |
+| Context compression ratio | > 0.85 | 0.70-0.85 | < 0.70   |
 
 Source: `config/orchestrator.json#subagent_orchestration.token_budget_guard`
 
@@ -52,23 +52,27 @@ Source: `config/orchestrator.json#subagent_orchestration.token_budget_guard`
 ### 3.1 Script Optimization Rules
 
 1. **MUST** use `$null` assignment over `| Out-Null` for suppressing output
+
    ```powershell
    # GOOD: $null = $collection.Add($item)
    # BAD:  $collection.Add($item) | Out-Null
    ```
 
 2. **MUST** use `[void]` cast for return value suppression
+
    ```powershell
    # GOOD: [void]$collection.Add($item)
    ```
 
 3. **MUST** avoid pipeline for performance-critical loops
+
    ```powershell
    # GOOD: foreach ($item in $collection) { ... }
    # BAD:  $collection | ForEach-Object { ... }
    ```
 
 4. **MUST** use `-Filter` over `-Include` for `Get-ChildItem`
+
    ```powershell
    # GOOD: Get-ChildItem -Path $path -Filter "*.ps1"
    # BAD:  Get-ChildItem -Path $path -Include "*.ps1"
@@ -101,15 +105,15 @@ Source: `config/orchestrator.json#subagent_orchestration.token_budget_guard`
 
 ### 4.1 PowerShell Performance Anti-Patterns
 
-| Anti-Pattern | Impact | Fix |
-|-------------|--------|-----|
-| `| Out-Null` in loops | 10-50x slower | `$null =` or `[void]` |
-| `Write-Host` for output | Slower + stream issues | `Write-Output` or `return` |
-| `Get-ChildItem -Include` | 2-5x slower | `-Filter` instead |
-| Pipeline `%` in loops | 5-10x slower | `foreach` statement |
-| Repeated file reads | N x slower | Cache in variable |
-| `Select-Object -Last 1` | Full enumeration | Use index `[-1]` |
-| `Where-Object` for small sets | Overhead | Use `if` in `foreach` |
+| Anti-Pattern                  | Impact                 | Fix                        |
+| ----------------------------- | ---------------------- | -------------------------- | --------------------- |
+| `                             | Out-Null` in loops     | 10-50x slower              | `$null =` or `[void]` |
+| `Write-Host` for output       | Slower + stream issues | `Write-Output` or `return` |
+| `Get-ChildItem -Include`      | 2-5x slower            | `-Filter` instead          |
+| Pipeline `%` in loops         | 5-10x slower           | `foreach` statement        |
+| Repeated file reads           | N x slower             | Cache in variable          |
+| `Select-Object -Last 1`       | Full enumeration       | Use index `[-1]`           |
+| `Where-Object` for small sets | Overhead               | Use `if` in `foreach`      |
 
 ### 4.2 PowerShell Performance Patterns
 
@@ -148,14 +152,14 @@ $hardThreshold = 0.90  # 27K tokens → BLOCK
 
 ### 5.2 Per-Agent Budget
 
-| Agent | Budget (tokens) | Notes |
-|-------|----------------|-------|
-| DEV | 750 | Implementation tasks |
-| QA | 750 | Testing tasks |
-| GOV | 500 | Governance review |
-| SESSION | 300 | Session mgmt (lightweight) |
-| DOC | 500 | Documentation |
-| BA/SAD | 1000 | Analysis (needs more context) |
+| Agent   | Budget (tokens) | Notes                         |
+| ------- | --------------- | ----------------------------- |
+| DEV     | 750             | Implementation tasks          |
+| QA      | 750             | Testing tasks                 |
+| GOV     | 500             | Governance review             |
+| SESSION | 300             | Session mgmt (lightweight)    |
+| DOC     | 500             | Documentation                 |
+| BA/SAD  | 1000            | Analysis (needs more context) |
 
 ---
 
@@ -174,20 +178,19 @@ TODO implementación DEBE verificar:
 
 ## 7. REFERENCES
 
-| Resource | Path |
-|----------|------|
-| Orchestrator Config | `config/orchestrator.json` |
-| Development Standards | `rules/DEVELOPMENT-STANDARDS.md` |
-| Code Standards | `rules/NORMATIVAS-CODIGO.md` |
-| Error Handling | `rules/NORMATIVAS-ERROR-HANDLING.md` |
-| Token Guard Script | `scripts/utilities/token-guard.ps1` |
-| Handoff Compression | `scripts/utilities/handoff-compress.ps1` |
-| AI Normatives | `rules/AI-NORMATIVES.md` |
-| Session Lifecycle | `rules/NORMATIVAS-SESSION.md` |
-| Quality Gates | `config/quality-gates.json` |
-| Testing Policy | `config/testing-policy.json` |
+| Resource              | Path                                     |
+| --------------------- | ---------------------------------------- |
+| Orchestrator Config   | `config/orchestrator.json`               |
+| Development Standards | `rules/DEVELOPMENT-STANDARDS.md`         |
+| Code Standards        | `rules/NORMATIVAS-CODIGO.md`             |
+| Error Handling        | `rules/NORMATIVAS-ERROR-HANDLING.md`     |
+| Token Guard Script    | `scripts/utilities/token-guard.ps1`      |
+| Handoff Compression   | `scripts/utilities/handoff-compress.ps1` |
+| AI Normatives         | `rules/AI-NORMATIVES.md`                 |
+| Session Lifecycle     | `rules/NORMATIVAS-SESSION.md`            |
+| Quality Gates         | `config/quality-gates.json`              |
+| Testing Policy        | `config/testing-policy.json`             |
 
 ---
 
 _Version: 1.0.0 — 2026-05-10 — Status: ACTIVE_
-

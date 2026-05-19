@@ -26,6 +26,7 @@ npm --version
 ```
 
 ❌ Missing something? Install from:
+
 - [PowerShell](https://github.com/PowerShell/PowerShell/releases)
 - [Git](https://git-scm.com/download/win)
 - [Node.js](https://nodejs.org/) (includes npm)
@@ -109,6 +110,7 @@ npm config get min-release-age
 ```
 
 **Expected**:
+
 ```
 true
 3
@@ -237,15 +239,15 @@ git commit -m "test: verify hooks are working"
 
 If all steps completed successfully:
 
-| Check | Status |
-|-------|--------|
-| PowerShell 7+ | ✅ |
-| Git hooks installed | ✅ |
-| MCP workspace at `$HOME\mcp-workspace` | ✅ |
-| npm security policy active | ✅ |
-| Tests passing (33/33) | ✅ |
-| Security gates verified | ✅ |
-| On feature branch | ✅ |
+| Check                                  | Status |
+| -------------------------------------- | ------ |
+| PowerShell 7+                          | ✅     |
+| Git hooks installed                    | ✅     |
+| MCP workspace at `$HOME\mcp-workspace` | ✅     |
+| npm security policy active             | ✅     |
+| Tests passing (33/33)                  | ✅     |
+| Security gates verified                | ✅     |
+| On feature branch                      | ✅     |
 
 ---
 
@@ -254,6 +256,7 @@ If all steps completed successfully:
 ### "npm install" fails with permission denied
 
 **Solution**:
+
 ```powershell
 # Run as Administrator
 # OR change npm cache:
@@ -264,6 +267,7 @@ npm ci
 ### "lefthook: command not found"
 
 **Solution**:
+
 ```powershell
 # Reinstall
 npm install lefthook --save-dev
@@ -273,6 +277,7 @@ npx lefthook install
 ### "lockfile-lint validation failed"
 
 **Solution**: This is expected if you modified `package-lock.json`. Run:
+
 ```powershell
 npm ci  # Restore clean lockfile
 ```
@@ -280,12 +285,14 @@ npm ci  # Restore clean lockfile
 ### Tests fail on first run
 
 **Solution**: Check if you're on a feature branch:
+
 ```powershell
 git branch --show-current
 # Should NOT be 'main'
 ```
 
 If tests still fail, reach out to security team with:
+
 ```powershell
 npm test 2>&1 | Tee-Object test-output.txt
 # Share test-output.txt
@@ -299,25 +306,27 @@ npm test 2>&1 | Tee-Object test-output.txt
 2. **Review** [GITFLOW-QUICK-REFERENCE.md](GITFLOW-QUICK-REFERENCE.md) — Branch strategy
 3. **Check** [SECURITY-HARDENING.md](SECURITY-HARDENING.md) — Security policies
 4. **Explore** [MCP-WORKSPACE-SETUP.md](MCP-WORKSPACE-SETUP.md) — MCP server details
-5. **Reference** [STACK-OPTIMIZATION-ROADMAP.md](STACK-OPTIMIZATION-ROADMAP.md) — Future improvements
+5. **Reference** [STACK-OPTIMIZATION-ROADMAP.md](STACK-OPTIMIZATION-ROADMAP.md) — Future
+   improvements
 
 ---
 
 ## Support
 
 **Questions?**
+
 - Check [TROUBLESHOOTING-RUNBOOK.md](TROUBLESHOOTING-RUNBOOK.md) for common problems
 - Ask in #dev-gentle-vanguard Slack channel
 - Email: security-team@example.com
 
 **Setup taking too long?**
+
 - Each step should take < 5 minutes
 - If longer, something is wrong — get help early
 
 ---
 
-**Setup Completed**: ________________ (date/time)  
-**Completed By**: ________________ (your name)
+**Setup Completed**: ******\_\_\_\_****** (date/time)  
+**Completed By**: ******\_\_\_\_****** (your name)
 
 ✅ Ready to start coding!
-

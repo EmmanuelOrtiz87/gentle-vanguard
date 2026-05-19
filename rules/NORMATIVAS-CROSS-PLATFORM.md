@@ -1,20 +1,21 @@
 # Cross-Platform Normatives — Gentle-Vanguard
 
-Canonical standards for Windows, Linux, macOS, and WSL compatibility.
-Last updated: 2026-05-12 | Version: 1.0.0
+Canonical standards for Windows, Linux, macOS, and WSL compatibility. Last updated: 2026-05-12 |
+Version: 1.0.0
 
 ---
 
 ## 1. Platform Support Matrix
 
-| Platform | Min Version | Shell | Status | Notes |
-|----------|-------------|-------|--------|-------|
-| **Windows** | 10 (21H2) | PowerShell 7.4+ | ✅ Primary | All scripts tested |
-| **Linux** | Ubuntu 22.04 LTS | Bash 5.1, PowerShell 7.4+ | ✅ Supported | GitHub Actions CI/CD |
-| **macOS** | 13 (Ventura) | Bash 5+, PowerShell 7.4+ | ✅ Supported | GitHub Actions CI/CD |
-| **WSL 2** | Ubuntu 22.04 | Bash 5.1, PowerShell 7.4+ | ✅ Supported | Same as Linux |
+| Platform    | Min Version      | Shell                     | Status       | Notes                |
+| ----------- | ---------------- | ------------------------- | ------------ | -------------------- |
+| **Windows** | 10 (21H2)        | PowerShell 7.4+           | ✅ Primary   | All scripts tested   |
+| **Linux**   | Ubuntu 22.04 LTS | Bash 5.1, PowerShell 7.4+ | ✅ Supported | GitHub Actions CI/CD |
+| **macOS**   | 13 (Ventura)     | Bash 5+, PowerShell 7.4+  | ✅ Supported | GitHub Actions CI/CD |
+| **WSL 2**   | Ubuntu 22.04     | Bash 5.1, PowerShell 7.4+ | ✅ Supported | Same as Linux        |
 
-**REQUIREMENT**: All scripts MUST run on all platforms or explicitly document platform-specific code.
+**REQUIREMENT**: All scripts MUST run on all platforms or explicitly document platform-specific
+code.
 
 ---
 
@@ -25,6 +26,7 @@ Last updated: 2026-05-12 | Version: 1.0.0
 - **WSL 2**: Same as Linux
 
 PowerShell Core has these advantages over Windows PowerShell 5.1:
+
 - Native Linux/macOS support
 - Unicode handling (UTF-8)
 - Cross-platform modules
@@ -60,7 +62,7 @@ $file = Join-Path $home ".config" "myapp.json"
 ```powershell
 function Get-CrossPlatformPath {
     param([string]$Path)
-    
+
     # Resolve to absolute, normalize separators
     $resolved = Resolve-Path -LiteralPath $Path
     return $resolved.ProviderPath
@@ -162,12 +164,12 @@ New-Item -ItemType Directory -Force -Path $tempDir | Out-Null
 
 ### Standard Cross-Platform Variables
 
-| Variable | Windows | Linux/macOS | PowerShell |
-|----------|---------|-------------|------------|
-| Home directory | `$env:USERPROFILE` | `$env:HOME` | `$HOME` |
-| Temp directory | `$env:TEMP` | `$TMPDIR` | `[System.IO.Path]::GetTempPath()` |
-| System root | `$env:SystemRoot` | `/` | `$env:SystemRoot` (PS Core handles) |
-| User shell | N/A | `$env:SHELL` | Auto-detected |
+| Variable       | Windows            | Linux/macOS  | PowerShell                          |
+| -------------- | ------------------ | ------------ | ----------------------------------- |
+| Home directory | `$env:USERPROFILE` | `$env:HOME`  | `$HOME`                             |
+| Temp directory | `$env:TEMP`        | `$TMPDIR`    | `[System.IO.Path]::GetTempPath()`   |
+| System root    | `$env:SystemRoot`  | `/`          | `$env:SystemRoot` (PS Core handles) |
+| User shell     | N/A                | `$env:SHELL` | Auto-detected                       |
 
 ### Portable Code
 
@@ -241,13 +243,13 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         pwsh-version: [7.3, 7.4]
-    
+
     steps:
       - uses: actions/checkout@v4
       - uses: PowerShell/setup-powershell@v2
         with:
           powershell-version: ${{ matrix.pwsh-version }}
-      
+
       - name: Run Pester tests
         run: pwsh -Command 'Invoke-Pester tests/ -CI'
 ```
@@ -324,8 +326,10 @@ try {
 ## 10. pwsh Availability Check & Fallback
 
 ### Problem
+
 All gentle-vanguard scripts require PowerShell 7+ (pwsh). On Linux/macOS, pwsh may not be installed.
-Without a fallback, the agent wastes tokens attempting to run scripts that fail with "command not found".
+Without a fallback, the agent wastes tokens attempting to run scripts that fail with "command not
+found".
 
 ### Mandatory Check — Before Any Script Execution
 
@@ -339,13 +343,13 @@ if (-not (Get-Command pwsh -ErrorAction SilentlyContinue)) {
 
 ### Fallback Behavior
 
-| Platform | pwsh installed? | Behavior |
-|----------|----------------|----------|
-| **Windows** | Always (shipped with tool) | Run `.cmd`/`.ps1` directly |
-| **Linux** | ✅ Yes | Run `pwsh ./script.ps1` |
-| **Linux** | ❌ No | **BLOCK**: report error with install instructions. No bash-native fallback exists |
-| **macOS** | ✅ Yes | Run `pwsh ./script.ps1` |
-| **macOS** | ❌ No | **BLOCK**: report error with `brew install powershell`. No zsh-native fallback exists |
+| Platform    | pwsh installed?            | Behavior                                                                              |
+| ----------- | -------------------------- | ------------------------------------------------------------------------------------- |
+| **Windows** | Always (shipped with tool) | Run `.cmd`/`.ps1` directly                                                            |
+| **Linux**   | ✅ Yes                     | Run `pwsh ./script.ps1`                                                               |
+| **Linux**   | ❌ No                      | **BLOCK**: report error with install instructions. No bash-native fallback exists     |
+| **macOS**   | ✅ Yes                     | Run `pwsh ./script.ps1`                                                               |
+| **macOS**   | ❌ No                      | **BLOCK**: report error with `brew install powershell`. No zsh-native fallback exists |
 
 ### Detection at Startup
 
@@ -359,9 +363,11 @@ if (-not $hasPwsh -and -not $IsWindows) {
 ```
 
 ### What If pwsh Is Missing?
+
 1. Agent MUST NOT attempt to run any .ps1/.cmd script
 2. Agent MUST report the missing dependency to user
-3. Agent MUST provide install command: `brew install powershell` (macOS) or `https://aka.ms/powershell`
+3. Agent MUST provide install command: `brew install powershell` (macOS) or
+   `https://aka.ms/powershell`
 4. Agent MUST NOT fall back to bash — stack is PowerShell-native
 
 ---
@@ -402,17 +408,17 @@ function Invoke-CrossPlatformCommand {
         [string]$Command,
         [string[]]$Arguments
     )
-    
+
     $pinfo = New-Object System.Diagnostics.ProcessStartInfo
     $pinfo.FileName = $Command
     $pinfo.Arguments = $Arguments -join ' '
     $pinfo.UseShellExecute = $false
     $pinfo.RedirectStandardOutput = $true
-    
+
     $p = [System.Diagnostics.Process]::Start($pinfo)
     $output = $p.StandardOutput.ReadToEnd()
     $p.WaitForExit()
-    
+
     return @{
         ExitCode = $p.ExitCode
         Output = $output
@@ -436,11 +442,11 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-    
+
     steps:
       - uses: actions/checkout@v4
       - uses: PowerShell/setup-powershell@v2
-      
+
       - name: Run tests
         run: pwsh ./scripts/run-tests.ps1
 ```
@@ -472,21 +478,19 @@ RUN pwsh -Command 'Invoke-Pester tests/ -CI'
 - Git 2.40+
 
 ### Windows
+
 - Windows 10 (21H2) or later
 - No additional setup required
 
 ### Linux/macOS
+
 - Linux: Ubuntu 22.04 LTS or later
 - macOS: 13 (Ventura) or later
 - Install PowerShell: `brew install powershell`
 
 ## Setup (All Platforms)
 
-\`\`\`bash
-git clone https://github.com/...
-cd gentle-vanguard
-pwsh ./scripts/setup.ps1
-\`\`\`
+\`\`\`bash git clone https://github.com/... cd gentle-vanguard pwsh ./scripts/setup.ps1 \`\`\`
 ```
 
 ---
@@ -512,4 +516,3 @@ pwsh ./scripts/setup.ps1
 - [POSIX Compliance](https://pubs.opengroup.org/onlinepubs/9699919799/)
 - [GitHub Actions: Strategy Matrix](https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs)
 - Project: [.github/workflows/](../.github/workflows/)
-

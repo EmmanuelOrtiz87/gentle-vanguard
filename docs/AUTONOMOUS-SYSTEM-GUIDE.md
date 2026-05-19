@@ -41,4 +41,3 @@ This guide covers the autonomous systems in gentle-vanguard.
 ## Monitoring
 
 Check `.session/reports/` for validation reports and session artifacts.
-

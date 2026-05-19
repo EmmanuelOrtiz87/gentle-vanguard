@@ -76,7 +76,17 @@
     "default_level": "chat-compact",
     "enforce_on_session_start": false,
     "auto_escalate_on_complex_tasks": true,
-    "auto_escalate_triggers": ["multi-step", "implement", "refactor", "bug fix", "crear", "build", "desarrollar", "arreglar", "implementar"],
+    "auto_escalate_triggers": [
+      "multi-step",
+      "implement",
+      "refactor",
+      "bug fix",
+      "crear",
+      "build",
+      "desarrollar",
+      "arreglar",
+      "implementar"
+    ],
     "allow": ["chat-compact", "chat-balanced", "chat-detailed"],
     "decision": {
       "kind": "architecture",
@@ -438,4 +448,3 @@
     }
   }
 }
-

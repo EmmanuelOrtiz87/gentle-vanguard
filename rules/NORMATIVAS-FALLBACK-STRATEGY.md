@@ -1,7 +1,7 @@
 # Fallback Strategy Normatives — Gentle-Vanguard
 
-Canonical standards for agent fallback behavior, error recovery, and graceful degradation.
-Last updated: 2026-05-12 | Version: 1.0.0
+Canonical standards for agent fallback behavior, error recovery, and graceful degradation. Last
+updated: 2026-05-12 | Version: 1.0.0
 
 ---
 
@@ -23,7 +23,9 @@ When agent routing fails or confidence is low, Gentle-Vanguard MUST fallback gra
 }
 ```
 
-**Meaning**: If trigger doesn't match any skill or confidence is low, activate Business Analyst (BA) agent with `sdd-lifecycle` skill to:
+**Meaning**: If trigger doesn't match any skill or confidence is low, activate Business Analyst (BA)
+agent with `sdd-lifecycle` skill to:
+
 1. Ask clarifying questions
 2. Explore user intent
 3. Route to correct agent
@@ -74,14 +76,14 @@ Confidence: 28%
 
 ## 3. Fallback Triggers
 
-| Scenario | Trigger | Confidence | Fallback | Action |
-|----------|---------|------------|----------|--------|
-| **No match** | User input doesn't match any keyword | <40% | BA clarification | Ask user for clarification |
-| **Ambiguous** | Multiple triggers equally likely | 50% | BA summary & confirm | Show options to user |
-| **Timeout** | Routing takes >5s | N/A | Escalate orchestrator | Page on-call engineer |
-| **Skill unavailable** | Matched skill not loaded | N/A | Fallback skill defined | Use alternative skill |
-| **Agent quota exceeded** | Agent hit token budget | N/A | Queue + notify | Queue task, notify user ETA |
-| **Runtime error** | Skill execution failed | N/A | Log + retry OR escalate | Retry 3x, then escalate |
+| Scenario                 | Trigger                              | Confidence | Fallback                | Action                      |
+| ------------------------ | ------------------------------------ | ---------- | ----------------------- | --------------------------- |
+| **No match**             | User input doesn't match any keyword | <40%       | BA clarification        | Ask user for clarification  |
+| **Ambiguous**            | Multiple triggers equally likely     | 50%        | BA summary & confirm    | Show options to user        |
+| **Timeout**              | Routing takes >5s                    | N/A        | Escalate orchestrator   | Page on-call engineer       |
+| **Skill unavailable**    | Matched skill not loaded             | N/A        | Fallback skill defined  | Use alternative skill       |
+| **Agent quota exceeded** | Agent hit token budget               | N/A        | Queue + notify          | Queue task, notify user ETA |
+| **Runtime error**        | Skill execution failed               | N/A        | Log + retry OR escalate | Retry 3x, then escalate     |
 
 ---
 
@@ -153,7 +155,7 @@ Confidence: 0% (skill doesn't exist)
 FALLBACK:
 1. Log warning: "Skill 'custom-widget' not found"
 2. Try fallback (generic skill): "project-orchestrator-skill"
-3. Route to BA: "I don't have a 'custom-widget' skill. 
+3. Route to BA: "I don't have a 'custom-widget' skill.
    Would you like me to create one or help you with project setup instead?"
 ```
 
@@ -188,7 +190,7 @@ BUT: DATA-SCIENTIST agent token budget: 18,000 / 20,000 used today
 FALLBACK:
 1. Log warning: "Agent quota exceeded"
 2. Queue task: Add to job queue with priority
-3. Notify user: "Your task is queued. 
+3. Notify user: "Your task is queued.
    Estimated processing time: 2 hours 15 minutes.
    You'll receive a notification when complete.
    Queue position: 3 of 8."
@@ -212,8 +214,8 @@ FALLBACK (Automatic Retry):
 5. If all retries fail:
    → Log CRITICAL error
    → Route to OPS agent (infrastructure issue)
-   → Notify user: "Testing infrastructure error. 
-      OPS team has been notified. 
+   → Notify user: "Testing infrastructure error.
+      OPS team has been notified.
       ETA for fix: 30 minutes."
 ```
 
@@ -226,7 +228,7 @@ Routing attempt: TIMEOUT (5s exceeded)
 FALLBACK:
 1. Log: "Routing timeout"
 2. Escalate to orchestrator (GOV agent)
-3. Notify user: "Request is complex. 
+3. Notify user: "Request is complex.
    I'm escalating to our orchestrator for manual routing.
    You'll hear back within 5 minutes."
 4. Orchestrator:
@@ -241,12 +243,12 @@ FALLBACK:
 
 ### Classification: 4-Level Error Ladder
 
-| Level | Severity | Action | Example |
-|-------|----------|--------|---------|
-| **DEBUG** | Informational | Log & continue | Cache miss, retry attempt |
-| **WARN** | Minor issue | Log & notify | Deprecated endpoint, slow operation |
-| **ERROR** | Significant failure | Log & fallback | Skill failed, retry exhausted |
-| **CRITICAL** | System failure | Log & escalate | Database down, auth failure |
+| Level        | Severity            | Action         | Example                             |
+| ------------ | ------------------- | -------------- | ----------------------------------- |
+| **DEBUG**    | Informational       | Log & continue | Cache miss, retry attempt           |
+| **WARN**     | Minor issue         | Log & notify   | Deprecated endpoint, slow operation |
+| **ERROR**    | Significant failure | Log & fallback | Skill failed, retry exhausted       |
+| **CRITICAL** | System failure      | Log & escalate | Database down, auth failure         |
 
 ### Error Handling Template
 
@@ -290,36 +292,32 @@ catch [Exception] {
   "fallbackStrategy": {
     "enabled": true,
     "version": "1.0.0",
-    
+
     "routing": {
       "default": "clarify-ba",
-      "tier1": { "minConfidence": 0.80, "action": "dispatch_immediately" },
-      "tier2": { "minConfidence": 0.60, "maxConfidence": 0.79, "action": "dispatch_with_summary" },
+      "tier1": { "minConfidence": 0.8, "action": "dispatch_immediately" },
+      "tier2": { "minConfidence": 0.6, "maxConfidence": 0.79, "action": "dispatch_with_summary" },
       "tier3": { "maxConfidence": 0.59, "action": "activate_ba_exploration" },
       "timeout": {
         "seconds": 5,
         "action": "escalate-orchestrator"
       }
     },
-    
+
     "retryPolicy": {
       "maxRetries": 3,
       "backoff": "exponential",
       "backoffMs": [100, 500, 2000],
-      "retryableErrors": [
-        "TimeoutException",
-        "TemporaryFailure",
-        "ResourceUnavailable"
-      ]
+      "retryableErrors": ["TimeoutException", "TemporaryFailure", "ResourceUnavailable"]
     },
-    
+
     "fallbackSkills": {
       "default": "sdd-lifecycle",
       "onSkillNotFound": "project-orchestrator-skill",
       "onTimeout": "session-workflow-skill",
       "onQuotaExceeded": "session-workflow-skill"
     },
-    
+
     "escalation": {
       "enabled": true,
       "targets": ["orchestrator", "devops", "security"],
@@ -328,7 +326,7 @@ catch [Exception] {
         "severity": "CRITICAL"
       }
     },
-    
+
     "userCommunication": {
       "askClarification": true,
       "showOptions": true,
@@ -350,27 +348,27 @@ catch [Exception] {
 # tests/fallback-strategy.tests.ps1
 
 Describe "Fallback Strategy" -Tag "CI" {
-    
+
     It "routes low-confidence to BA" {
         $result = Invoke-Routing -Input "???" -ExpectConfidence 0.2
         $result.AgentCode | Should Be "BA"
         $result.Skill | Should Be "sdd-lifecycle"
     }
-    
+
     It "disambiguates multiple matches" {
         $result = Invoke-Routing -Input "setup testing framework" -InteractiveResponse "1"
         $result.AgentCode | Should Be "QA"
     }
-    
+
     It "retries on skill failure" {
         $callCount = 0
         Mock-Skill -Name "failing-skill" -CallCount ([ref]$callCount)
-        
+
         Invoke-SkillWithFallback -Skill "failing-skill"
-        
+
         $callCount | Should Be 3  # Retried 3 times
     }
-    
+
     It "escalates on timeout" {
         $result = Invoke-Routing -Input "complex query" -Timeout 6
         $result.EscalatedTo | Should Be "orchestrator"
@@ -390,7 +388,8 @@ Describe "Fallback Strategy" -Tag "CI" {
 "I'm not 100% sure what you're asking for. Let me clarify:
 
 Would you like help with:
-- 🏗️  **System Design** — Architecture, APIs, data structures
+
+- 🏗️ **System Design** — Architecture, APIs, data structures
 - 💻 **Implementation** — Write code, refactor, debug
 - 🧪 **Testing** — Test strategies, quality assurance
 - 🚀 **DevOps** — Infrastructure, deployment, CI/CD
@@ -427,13 +426,13 @@ Need urgent processing? Reply: "PRIORITY"
 
 ### SLOs for Fallback
 
-| Metric | Target | Alert Threshold |
-|--------|--------|-----------------|
-| Fallback rate | <5% of requests | >8% |
-| BA clarification success | >85% | <75% |
-| Retry success rate | >70% | <60% |
-| Timeout incidents | <1% | >2% |
-| Escalation rate | <2% | >5% |
+| Metric                   | Target          | Alert Threshold |
+| ------------------------ | --------------- | --------------- |
+| Fallback rate            | <5% of requests | >8%             |
+| BA clarification success | >85%            | <75%            |
+| Retry success rate       | >70%            | <60%            |
+| Timeout incidents        | <1%             | >2%             |
+| Escalation rate          | <2%             | >5%             |
 
 ### Monitoring Dashboard
 
@@ -470,7 +469,7 @@ Need urgent processing? Reply: "PRIORITY"
 ## References
 
 - [config/auto-delegation.json](../config/auto-delegation.json) — Routing rules
-- [config/auto-delegation.json](../config/auto-delegation.json) — Fallback config (`fallbackStrategy`)
+- [config/auto-delegation.json](../config/auto-delegation.json) — Fallback config
+  (`fallbackStrategy`)
 - [AI-NORMATIVES.md](AI-NORMATIVES.md) — Agent profiles
 - Project: sdd-lifecycle skill
-

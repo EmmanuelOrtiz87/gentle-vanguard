@@ -10,9 +10,9 @@ description: >
 
 ## Activation Contract
 
-Load when user triggers session commands: "continuar" /
-"continue", "estado" / "status", "push" / "guardar", "review" / "auditar", or "PR" / "create PR".
-Coordinates with project-orchestrator for technical decisions.
+Load when user triggers session commands: "continuar" / "continue", "estado" / "status", "push" /
+"guardar", "review" / "auditar", or "PR" / "create PR". Coordinates with project-orchestrator for
+technical decisions.
 
 ## Hard Rules
 
@@ -29,23 +29,23 @@ Coordinates with project-orchestrator for technical decisions.
 
 ## Decision Gates
 
-| Command  | Trigger Words                     | Action                                                     |
-| -------- | --------------------------------- | ---------------------------------------------------------- |
-| Continue | "continuar", "continue"           | mem_context, git status, show next step, resume            |
-| Status   | "estado", "status"                | Show project, git branch/status, todos, suggest next       |
-| Push     | "push", "guardar"                 | Review todos, generate audit doc, commit, push, mem_save   |
-| Review   | "review", "auditar"               | Quick scan (Security + Quality), classify, present, decide |
-| PR       | "pr"                              | Validate spec, run review, handle findings, create PR      |
+| Command  | Trigger Words           | Action                                                     |
+| -------- | ----------------------- | ---------------------------------------------------------- |
+| Continue | "continuar", "continue" | mem_context, git status, show next step, resume            |
+| Status   | "estado", "status"      | Show project, git branch/status, todos, suggest next       |
+| Push     | "push", "guardar"       | Review todos, generate audit doc, commit, push, mem_save   |
+| Review   | "review", "auditar"     | Quick scan (Security + Quality), classify, present, decide |
+| PR       | "pr"                    | Validate spec, run review, handle findings, create PR      |
 
 ## Execution Steps
 
 1. **Continue session**: `mem_context` → `git status` → show next step → resume work
-3. **Show status**: Show project info → git branch/status → todos → suggest next step
-4. **Push / Guardar**: Review todos completed → generate audit doc → git status/diff → commit → push
+2. **Show status**: Show project info → git branch/status → todos → suggest next step
+3. **Push / Guardar**: Review todos completed → generate audit doc → git status/diff → commit → push
    → mem_save summary
-5. **Review / Auditar**: Run code review (7 dimensions) → classify findings by severity → present
+4. **Review / Auditar**: Run code review (7 dimensions) → classify findings by severity → present
    summary → ask decision options → execute choice
-6. **Create PR**: Validate spec → run code review → handle findings → ask: met spec? → ask: create
+5. **Create PR**: Validate spec → run code review → handle findings → ask: met spec? → ask: create
    PR? → branch → commit → push → create PR with template
 
 ## Output Contract

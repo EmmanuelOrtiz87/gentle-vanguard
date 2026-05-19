@@ -249,4 +249,3 @@ El archivo `AGENTS.md` debería incluir:
 
 _Documento de recomendaciones_  
 _Próxima revisión: cuando se implementen items críticos_
-

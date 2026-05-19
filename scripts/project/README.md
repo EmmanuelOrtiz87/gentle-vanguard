@@ -4,12 +4,12 @@ Scripts for creating and managing projects.
 
 ## Scripts
 
-| Script               | Description                               |
-| -------------------- | ----------------------------------------- |
-| `setup-project.ps1`  | Setup existing project with gentle-vanguard    |
-| `new-project.ps1`    | Create new project (canonical entrypoint) |
-| `init-workspace.ps1` | Initialize workspace                      |
-| `migrate.ps1`        | Migrate existing project to gentle-vanguard    |
+| Script               | Description                                 |
+| -------------------- | ------------------------------------------- |
+| `setup-project.ps1`  | Setup existing project with gentle-vanguard |
+| `new-project.ps1`    | Create new project (canonical entrypoint)   |
+| `init-workspace.ps1` | Initialize workspace                        |
+| `migrate.ps1`        | Migrate existing project to gentle-vanguard |
 
 ## Usage
 
@@ -23,4 +23,3 @@ Scripts for creating and managing projects.
 # Initialize workspace
 .\init-workspace.ps1
 ```
-

@@ -273,5 +273,3 @@ dark blue background
 
 _Skill versión: 1.2_  
 _Last updated: 2026-04-27_
-
-

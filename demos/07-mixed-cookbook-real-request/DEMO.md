@@ -227,4 +227,3 @@ Expected outcome:
 3. If a shorter demo is needed, execute Step 1, Step 2, Step 5, and Executive Talking Points.
 4. Step 4 is optional for environments where Engram should not be demonstrated live; the rest of the
    demo remains fully runnable.
-

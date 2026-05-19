@@ -7,6 +7,7 @@
 ## ⚡ Installation
 
 ### Option 1: Automatic (Recommended)
+
 ```powershell
 cd c:\Workspace_local\gentle-vanguard
 .\scripts\utilities\install-gentle-vanguard-cli.ps1
@@ -15,7 +16,9 @@ cd c:\Workspace_local\gentle-vanguard
 Then restart PowerShell and use `gentle-vanguard` anywhere.
 
 ### Option 2: Manual
+
 Add this to your PowerShell profile (`$PROFILE`):
+
 ```powershell
 function gentle-vanguard {
     & ".\scripts\utilities\WORKFLOW-ORCHESTRATION\gentle-vanguard.ps1" @args
@@ -23,11 +26,13 @@ function gentle-vanguard {
 ```
 
 Then:
+
 ```powershell
 . $PROFILE
 ```
 
 ### Option 3: Direct Execution
+
 ```powershell
 .\scripts\utilities\WORKFLOW-ORCHESTRATION\gentle-vanguard.ps1 <command> [options]
 ```
@@ -39,23 +44,29 @@ Then:
 ### Dashboard & Monitoring
 
 #### 1. **Static Dashboard** (single snapshot)
+
 ```powershell
 gv dashboard
 ```
+
 - Generates `reports/dashboard.html`
 - 8 professional sections (Overview, Costs, ROI, Benchmarks, etc.)
 - Open in browser manually
 
 #### 2. **Dashboard with Auto-Open**
+
 ```powershell
 gv dashboard open
 ```
+
 - Generates HTML and opens in default browser
 
 #### 3. **Live Dashboard** (continuous refresh ⭐ NEW)
+
 ```powershell
 gv dashboard live
 ```
+
 - **Refreshes every 15 seconds** (dev + management real-time monitoring)
 - Updates live snapshots, events, routing quality
 - Every 4 cycles: runs full benchmark to update baseline/history
@@ -67,9 +78,11 @@ gv dashboard live
 ### Benchmarking & Quality Gates
 
 #### 1. **Full Stack Benchmark**
+
 ```powershell
 gv benchmark full
 ```
+
 - Runs 4-layer validation:
   1. gv command latency vs SLO
   2. Routing accuracy (multilenguaje)
@@ -78,18 +91,22 @@ gv benchmark full
 - Output: JSON with status (PASS/WARN/FAIL)
 
 #### 2. **Benchmark with Auto-Remediation** ⭐ NEW
+
 ```powershell
 gv benchmark full remediate
 ```
+
 - Runs full benchmark
 - If any layer FAILS: executes local diagnostics playbook
 - Generates incident report: `reports/incidents/stack-benchmark-remediation-<timestamp>.md`
 - Does NOT auto-escalate (you control when to act)
 
 #### 3. **Benchmark with Baseline Reset**
+
 ```powershell
 gv benchmark full baseline-update
 ```
+
 - Forces baseline update from current metrics
 - Use after incident recovery or performance optimization
 
@@ -98,35 +115,46 @@ gv benchmark full baseline-update
 ### Session & Workflow
 
 #### Start Development Session
+
 ```powershell
 gv start-session
 ```
+
 - Initializes session context, loads Engram memory, checks health
 - The underlying session manager persists session start/close records to Engram
 
 #### Health Check
+
 ```powershell
 gv health
 ```
+
 - Verifies all subsystems: tokens, routing, context, hooks, structure
 
 #### Verify Code Quality
+
 ```powershell
 gv verify
 ```
+
 - Runs the configured quality gates, including tests and hook validation
 
 #### Run Real Coverage Gate
+
 ```powershell
 pwsh -File .\scripts\utilities\verify-coverage.ps1
 ```
+
 - Executes declared Pester `CodeCoverage` targets from `tests/coverage-config.json`
-- Current declared workflows cover `session-manager.ps1`, `post-session-learning.ps1`, `session-autostart.ps1`, `detect-tool.ps1`, and `pre-close-validator.ps1`
+- Current declared workflows cover `session-manager.ps1`, `post-session-learning.ps1`,
+  `session-autostart.ps1`, `detect-tool.ps1`, and `pre-close-validator.ps1`
 
 #### Run Post-Session Learning Explicitly
+
 ```powershell
 pwsh -File .\scripts\utilities\post-session-learning.ps1 -SessionId "session-YYYY-MM-DD-01"
 ```
+
 - Persists learning summaries or improvement proposals to Engram
 - Uses `.local/improvement-proposals/` as the local review backlog
 
@@ -137,6 +165,7 @@ pwsh -File .\scripts\utilities\post-session-learning.ps1 -SessionId "session-YYY
 ### **For Developers**
 
 **During development:**
+
 ```powershell
 # Start session
 gv start-session
@@ -152,6 +181,7 @@ gv benchmark full
 ```
 
 **If something breaks:**
+
 ```powershell
 gv benchmark full remediate
 # → Review incident report in reports/incidents/
@@ -162,6 +192,7 @@ gv benchmark full remediate
 ### **For Managers/Ops**
 
 **Real-time monitoring:**
+
 ```powershell
 gv dashboard live
 # → Open http://localhost:xxxx in browser
@@ -170,6 +201,7 @@ gv dashboard live
 ```
 
 **Weekly health check:**
+
 ```powershell
 gv health
 # → GREEN: all systems operational
@@ -196,6 +228,7 @@ gv health
 ## 🔧 Advanced Usage
 
 ### Auto-Refresh Dashboard in Browser
+
 ```powershell
 # Browser auto-refreshes every 30 seconds
 gv dashboard live -RefreshSeconds 30
@@ -205,12 +238,14 @@ gv dashboard live -Iterations 10
 ```
 
 ### Benchmark with Custom Intervals
+
 ```powershell
 # Update baseline every 8 benchmark cycles
 gv dashboard live -BenchmarkEvery 8 -RefreshSeconds 10
 ```
 
 ### Enable Auto-Remediation for Monitoring
+
 ```powershell
 # Runs incident playbook automatically on benchmark failure
 gv dashboard live -AutoRemediateOnFail
@@ -222,21 +257,22 @@ gv dashboard live -AutoRemediateOnFail
 
 ## 📝 Output Artifacts
 
-| File | Purpose |
-|------|---------|
-| `reports/dashboard.html` | Main dashboard (HTML) |
-| `reports/stack-benchmark.json` | Latest benchmark results |
-| `reports/stack-benchmark-baseline.json` | EWMA-smoothed baseline |
-| `reports/stack-benchmark-history.json` | Last 240 benchmark cycles |
-| `reports/stack-benchmark-history.jsonl` | Append-only audit log |
+| File                                           | Purpose                             |
+| ---------------------------------------------- | ----------------------------------- |
+| `reports/dashboard.html`                       | Main dashboard (HTML)               |
+| `reports/stack-benchmark.json`                 | Latest benchmark results            |
+| `reports/stack-benchmark-baseline.json`        | EWMA-smoothed baseline              |
+| `reports/stack-benchmark-history.json`         | Last 240 benchmark cycles           |
+| `reports/stack-benchmark-history.jsonl`        | Append-only audit log               |
 | `reports/stack-live-observability-latest.json` | Live snapshot (live dashboard feed) |
-| `reports/incidents/*.md` | Auto-remediation incident reports |
+| `reports/incidents/*.md`                       | Auto-remediation incident reports   |
 
 ---
 
 ## ⚠️ Troubleshooting
 
 ### "gentle-vanguard: command not found"
+
 ```powershell
 # Solution 1: Reload profile
 . $PROFILE
@@ -249,12 +285,14 @@ gv dashboard live -AutoRemediateOnFail
 ```
 
 ### "Windows Defender Firewall" still triggers
+
 ```powershell
 # Use full path instead of 'gv'
 .\scripts\utilities\WORKFLOW-ORCHESTRATION\gentle-vanguard.ps1 dashboard live
 ```
 
 ### Dashboard doesn't refresh
+
 ```powershell
 # Check if browser has auto-refresh meta tag
 # If not, manually refresh (F5) or wait for next cycle
@@ -276,4 +314,3 @@ cat reports/stack-live-observability-latest.json | ConvertFrom-Json | Select -Ex
 
 **Updated:** 2026-05-13  
 **Status:** Production Ready ✅
-

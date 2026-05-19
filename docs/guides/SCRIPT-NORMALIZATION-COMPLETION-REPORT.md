@@ -221,20 +221,20 @@ These scripts contain syntax that PowerShell cannot parse:
 
 ### By Category
 
-| Category    | Total   | OK     | Issues | % Compliant |
-| ----------- | ------- | ------ | ------ | ----------- |
-| common      | 1       | 1      | 0      | 100%        |
-| diagnostics | 6       | 5      | 1      | 83.3%       |
-| gentle-vanguard  | 5       | 3      | 2      | 60%         |
-| hooks       | 7       | 5      | 2      | 71.4%       |
-| monitoring  | 3       | 3      | 0      | 100%        |
-| optional    | 2       | 2      | 0      | 100%        |
-| project     | 5       | 4      | 1      | 80%         |
-| security    | 4       | 2      | 2      | 50%         |
-| testing     | 2       | 1      | 1      | 50%         |
-| utilities   | 70      | 63     | 7      | 90%         |
-| validation  | 5       | 4      | 1      | 80%         |
-| **TOTAL**   | **116** | **93** | **23** | **80.2%**   |
+| Category        | Total   | OK     | Issues | % Compliant |
+| --------------- | ------- | ------ | ------ | ----------- |
+| common          | 1       | 1      | 0      | 100%        |
+| diagnostics     | 6       | 5      | 1      | 83.3%       |
+| gentle-vanguard | 5       | 3      | 2      | 60%         |
+| hooks           | 7       | 5      | 2      | 71.4%       |
+| monitoring      | 3       | 3      | 0      | 100%        |
+| optional        | 2       | 2      | 0      | 100%        |
+| project         | 5       | 4      | 1      | 80%         |
+| security        | 4       | 2      | 2      | 50%         |
+| testing         | 2       | 1      | 1      | 50%         |
+| utilities       | 70      | 63     | 7      | 90%         |
+| validation      | 5       | 4      | 1      | 80%         |
+| **TOTAL**       | **116** | **93** | **23** | **80.2%**   |
 
 ---
 
@@ -297,4 +297,3 @@ These scripts contain syntax that PowerShell cannot parse:
 - [ ] Pre-commit hooks validate
 
 **Current Progress**: 80.2% Target: 100%
-

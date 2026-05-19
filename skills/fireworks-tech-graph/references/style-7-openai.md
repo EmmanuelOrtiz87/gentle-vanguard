@@ -45,6 +45,7 @@ Clean, minimal boxes with subtle borders:
 ```
 
 **Key techniques:**
+
 1. White fill with light gray border (no shadows)
 2. Optional colored left-border accent strip (4px wide)
 3. `rx="8"` for subtle rounding
@@ -78,6 +79,7 @@ Thin, precise arrows with subtle colors:
 ```
 
 **Arrow guidelines:**
+
 - Prefer straight lines (orthogonal routing with right angles)
 - `stroke-width: 1.5` — thin and precise
 - Filled polygon arrowheads (not stroke-based)
@@ -95,6 +97,7 @@ Minimal, small labels:
 ```
 
 Labels should be:
+
 - 12px, gray color (`#6e6e80`)
 - No background rect (white background is default)
 - Short, technical language
@@ -141,6 +144,7 @@ Clean, minimal text layout:
 ```
 
 **Content guidelines:**
+
 - 1-2 lines per box
 - Main label: 16px, font-weight: 600, near-black
 - Description: 13px, font-weight: 400, gray
@@ -149,6 +153,7 @@ Clean, minimal text layout:
 ## Layout Principles
 
 **Precise, grid-aligned layout:**
+
 - Snap all coordinates to 8px grid
 - Consistent 100px horizontal spacing
 - Consistent 120px vertical spacing
@@ -156,6 +161,7 @@ Clean, minimal text layout:
 - No decorative elements
 
 **OpenAI minimalism:**
+
 - Only use color when semantically meaningful (brand green for primary flow)
 - White boxes on white background — differentiation through border and label only
 - Avoid: shadows, gradients, patterns, icons, decorative elements
@@ -202,12 +208,14 @@ Clean, minimal text layout:
 ## Design Philosophy
 
 OpenAI Official style emphasizes:
+
 - **Minimalism**: White on white, only essential visual elements
 - **Precision**: Thin strokes, sharp corners (rx=8), grid-aligned
 - **Clarity**: Content-first, no visual noise
 - **Brand consistency**: `#10a37f` green used sparingly for primary flows
 
 Avoid:
+
 - Shadows and gradients
 - Colorful fills (white fill only)
 - Thick borders (>2px)

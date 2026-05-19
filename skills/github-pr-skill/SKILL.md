@@ -235,4 +235,3 @@ Closes #123"
 
 - [Conventional Commits](https://www.conventionalcommits.org/)
 - [GitHub CLI Manual](https://cli.github.com/manual/gh_pr_create)
-

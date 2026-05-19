@@ -47,4 +47,3 @@ This creates an immaculate Git history ready for Tag-based deployments.
 - PowerShell Core 7+
 - Git 2.30+
 - Go 1.20+ (for backend tools)
-

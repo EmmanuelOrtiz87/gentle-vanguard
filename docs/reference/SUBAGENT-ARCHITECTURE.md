@@ -2,8 +2,8 @@
 
 ## 1. Purpose
 
-Define a parallel, token-efficient execution model for the Gentle-Vanguard orchestrator by splitting work
-into specialized subagents with bounded context.
+Define a parallel, token-efficient execution model for the Gentle-Vanguard orchestrator by splitting
+work into specialized subagents with bounded context.
 
 ## 2. Design Principles
 
@@ -29,7 +29,8 @@ Responsibilities:
 
 ### 3.2 Specialized Sub-Agents (29 Agents)
 
-The gentle-vanguard defines 29 agent codes mapped to opencode subagents. Below is the **core 7** — the full 29-agent mapping lives in `config/subagent-mapping.json`.
+The gentle-vanguard defines 29 agent codes mapped to opencode subagents. Below is the **core 7** —
+the full 29-agent mapping lives in `config/subagent-mapping.json`.
 
 | Agent   | Role                  | Skills Loaded                                    | Token Budget |
 | ------- | --------------------- | ------------------------------------------------ | ------------ |
@@ -41,7 +42,10 @@ The gentle-vanguard defines 29 agent codes mapped to opencode subagents. Below i
 | **GOV** | Governance            | observability, incident-response, security       | ~2-3K        |
 | **DOC** | Documentation         | sdd, bdd, github-pr                              | ~2K          |
 
-Extended agents (22 more): BUS-TELE, SCRIPT-GOV, REPORT, PR-REVIEW, RELEASE, SESSION, SESSION-CLOSE, DAILY, PREMORTEM, FINANCE, LEGAL, MKT, SALES, HR, ORCHESTRATOR, GITFLOW-BRANCH, GITFLOW-PR, GITFLOW-HOOKS, GITFLOW-MERGE, GITFLOW-WORKFLOW, GITFLOW-COMMIT, GITFLOW-CONFLICT. See `config/subagent-mapping.json` for full details.
+Extended agents (22 more): BUS-TELE, SCRIPT-GOV, REPORT, PR-REVIEW, RELEASE, SESSION, SESSION-CLOSE,
+DAILY, PREMORTEM, FINANCE, LEGAL, MKT, SALES, HR, ORCHESTRATOR, GITFLOW-BRANCH, GITFLOW-PR,
+GITFLOW-HOOKS, GITFLOW-MERGE, GITFLOW-WORKFLOW, GITFLOW-COMMIT, GITFLOW-CONFLICT. See
+`config/subagent-mapping.json` for full details.
 
 **Token Efficiency**: ~60% savings vs monolithic orchestrator (~20K vs ~50K tokens/session).
 
@@ -332,5 +336,6 @@ Metrics are persisted to Engram with topic_key `metrics/subagent-delegation` for
 **Full specification**: See
 [skills/multi-agent-registry/SKILL.md](../../skills/multi-agent-registry/SKILL.md)
 
-**Skill mapping matrix**: 35+ skills distributed across 29 agents with zero overlap redundancy. See `config/subagent-mapping.json` for the complete agent→skill matrix and `config/auto-delegation.json` for trigger→keyword mappings.
-
+**Skill mapping matrix**: 35+ skills distributed across 29 agents with zero overlap redundancy. See
+`config/subagent-mapping.json` for the complete agent→skill matrix and `config/auto-delegation.json`
+for trigger→keyword mappings.

@@ -8,8 +8,8 @@
 
 ## Overview
 
-The Adapter Layer enables **any AI tool/IDE** to use Gentle-Vanguard capabilities, regardless of whether
-they support the Agent Skills standard.
+The Adapter Layer enables **any AI tool/IDE** to use Gentle-Vanguard capabilities, regardless of
+whether they support the Agent Skills standard.
 
 ---
 
@@ -104,8 +104,8 @@ Translates between Gentle-Vanguard's standard format and tool-specific formats.
 
 **When to use**: Tool doesn't support MCP but has its own plugin system.
 
-| Adapter                | Input Format        | Output Format    | Status  |
-| ---------------------- | ------------------- | ---------------- | ------- |
+| Adapter                | Input Format             | Output Format    | Status  |
+| ---------------------- | ------------------------ | ---------------- | ------- |
 | `windsurf-adapter/`    | Gentle-Vanguard SKILL.md | Windsurf plugin  | Pending |
 | `codex-adapter/`       | Gentle-Vanguard tools    | OpenAI functions | Pending |
 | `antigravity-adapter/` | Gentle-Vanguard context  | Mission Control  | Pending |
@@ -202,4 +202,3 @@ Detects running tool and recommends adapter:
 
 **Author**: Gentle-Vanguard Team  
 **Last Updated**: 2026-04-28
-

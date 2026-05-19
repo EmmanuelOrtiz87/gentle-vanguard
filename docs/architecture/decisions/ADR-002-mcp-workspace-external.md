@@ -3,26 +3,27 @@
 **Status**: Accepted (Implemented)  
 **Date**: May 13, 2026  
 **Author**: Gentle-Vanguard Security Team  
-**Context**: Hardening npx execution against supply-chain attacks  
+**Context**: Hardening npx execution against supply-chain attacks
 
 ---
 
 ## Context
 
 gentle-vanguard uses Model Context Protocol (MCP) servers for file system access. The challenge was:
+
 - npm packages (MCP servers) need pre-vetting before use
 - `npx -y @package` auto-downloads latest version on every invocation → supply chain risk
 - Need offline-only execution mode with lockfile guarantee
 
 ### Alternatives Considered
 
-| Location | Approach | Pros | Cons | Decision |
-|----------|----------|------|------|----------|
-| **External local** (`$HOME\mcp-workspace`) | Pre-vetted workspace at home dir | Isolated, offline mode, security focus | Not in git, manual setup per machine | ✅ **CHOSEN** |
-| Git-tracked in repo | `gentle-vanguard/mcp-workspace/` folder | Version controlled, distributed with repo | Bloats repo (node_modules), harder CI/CD | ❌ Rejected |
-| GitHub Releases | Download pre-built binaries | Deterministic, cacheable | Complex release process, duplicate artifacts | ❌ Rejected |
-| Docker image | Container with preinstalled packages | Reproducible, isolated | Requires Docker, over-engineered | ❌ Rejected |
-| npm ci in CI/CD only | Install only in GitHub Actions | No local concerns | Doesn't solve local dev problem | ❌ Rejected |
+| Location                                   | Approach                                | Pros                                      | Cons                                         | Decision      |
+| ------------------------------------------ | --------------------------------------- | ----------------------------------------- | -------------------------------------------- | ------------- |
+| **External local** (`$HOME\mcp-workspace`) | Pre-vetted workspace at home dir        | Isolated, offline mode, security focus    | Not in git, manual setup per machine         | ✅ **CHOSEN** |
+| Git-tracked in repo                        | `gentle-vanguard/mcp-workspace/` folder | Version controlled, distributed with repo | Bloats repo (node_modules), harder CI/CD     | ❌ Rejected   |
+| GitHub Releases                            | Download pre-built binaries             | Deterministic, cacheable                  | Complex release process, duplicate artifacts | ❌ Rejected   |
+| Docker image                               | Container with preinstalled packages    | Reproducible, isolated                    | Requires Docker, over-engineered             | ❌ Rejected   |
+| npm ci in CI/CD only                       | Install only in GitHub Actions          | No local concerns                         | Doesn't solve local dev problem              | ❌ Rejected   |
 
 ---
 
@@ -82,7 +83,8 @@ Not tracked in git. Manually set up once per machine using documented procedure.
 ### Mitigation
 
 - ✅ Documented setup in [MCP-WORKSPACE-SETUP.md](../../guides/MCP-WORKSPACE-SETUP.md)
-- ✅ First-time checklist in [FIRST-TIME-SETUP-CHECKLIST.md](../../guides/FIRST-TIME-SETUP-CHECKLIST.md)
+- ✅ First-time checklist in
+  [FIRST-TIME-SETUP-CHECKLIST.md](../../guides/FIRST-TIME-SETUP-CHECKLIST.md)
 - ✅ Conscious update procedure with review gates
 - ✅ Pre-push npm audit validates workspace health
 - ✅ .npmrc policy enforces 3-day minimum release age
@@ -109,7 +111,8 @@ npm install @modelcontextprotocol/server-filesystem@2026.1.14 --save-exact
       "command": "npx",
       "args": [
         "--include-workspace-root",
-        "--workspace", "%USERPROFILE%\\mcp-workspace",
+        "--workspace",
+        "%USERPROFILE%\\mcp-workspace",
         "--no",
         "--offline",
         "@modelcontextprotocol/server-filesystem",
@@ -184,4 +187,3 @@ If future team decides to version-control MCP workspace:
 **Review Date**: Q4 2026  
 **Reviewers**: Security team, DevOps team  
 **Status**: Stable (re-evaluate annually)
-

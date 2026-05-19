@@ -139,4 +139,3 @@ Ver: `config/distributed-tracing-config.json`
 - `skills/distributed-tracing-skill/metrics-collector.ps1` - Metrics collection
 - `skills/distributed-tracing-skill/report-generator.ps1` - Report generation
 - `scripts/utilities/telemetry-dashboard.ps1` - Dashboard para visualizar traces
-

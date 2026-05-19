@@ -340,4 +340,3 @@ And commands work identically
 
 **This SDD serves as the gentle-vanguard for all projects created from Gentle-Vanguard. All
 generated projects should reference and extend this document.**
-

@@ -20,36 +20,240 @@
     "resetOnRenewal": true
   },
   "agentBindings": {
-    "BA": { "model": "kimi-k2.6", "provider": "openrouter", "temperature": 0.7, "hallucinationGuard": "low", "subagent": "sdd-explore", "rationale": "BA explora/analiza — Kimi K2.6 para razonamiento profundo y contexto largo" },
-    "SAD": { "model": "kimi-k2.6", "provider": "openrouter", "temperature": 0.3, "hallucinationGuard": "medium", "subagent": "sdd-design", "rationale": "SAD diseña arquitectura — Kimi K2.6 para razonamiento preciso" },
-    "DEV": { "model": "glm-5", "provider": "openrouter", "temperature": 0.15, "hallucinationGuard": "high", "subagent": "sdd-apply", "rationale": "DEV implementa código — GLM5 para generación robusta" },
-    "QA": { "model": "glm-5", "provider": "openrouter", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "sdd-verify", "rationale": "QA valida — GLM5 para precisión binaria" },
-    "OPS": { "model": "glm-5", "provider": "openrouter", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "ops-agent", "rationale": "OPS despliega — GLM5 para precisión en producción" },
-    "GOV": { "model": "kimi-k2.6", "provider": "openrouter", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "gov-agent", "rationale": "GOV audita — Kimi K2.6 para contexto largo en compliance" },
-    "DOC": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.4, "hallucinationGuard": "low", "subagent": "doc-agent", "rationale": "DOC documenta — Qwen balanceado para documentación técnica" },
-    "SESSION": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.1, "hallucinationGuard": "high", "subagent": "session-agent", "rationale": "SESSION trackea estado — Qwen eficiente para tareas determinísticas" },
-    "MKT": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.5, "hallucinationGuard": "low", "subagent": "mkt-agent", "rationale": "MKT crea contenido — Qwen para creatividad de marca" },
-    "SALES": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.3, "hallucinationGuard": "medium", "subagent": "sales-agent", "rationale": "SALES sigue metodología — Qwen eficiente para procesos estructurados" },
-    "FINANCE": { "model": "glm-5", "provider": "openrouter", "temperature": 0.15, "hallucinationGuard": "high", "subagent": "finance-agent", "rationale": "FINANCE calcula — GLM5 para precisión numérica" },
-    "HR": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.4, "hallucinationGuard": "medium", "subagent": "hr-agent", "rationale": "HR procesa — Qwen eficiente para procesos estructurados" },
-    "LEGAL": { "model": "kimi-k2.6", "provider": "openrouter", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "legal-agent", "rationale": "LEGAL cumple normativa — Kimi K2.6 para precisión regulatoria" },
-    "BUS-TELE": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.2, "hallucinationGuard": "high", "subagent": "general", "rationale": "Telemetría — Qwen, datos estructurados" },
-    "PREMORTEM": { "model": "glm-5", "provider": "openrouter", "temperature": 0.5, "hallucinationGuard": "medium", "subagent": "premortem-agent", "rationale": "PREMORTEM analiza riesgos — GLM5 para razonamiento adversarial" },
-    "SELF-DIAG": { "model": "glm-5", "provider": "openrouter", "temperature": 0.15, "hallucinationGuard": "high", "subagent": "general", "rationale": "SELF-DIAG diagnóstico — GLM5 para precisión" },
-    "SCRIPT-GOV": { "model": "glm-5", "provider": "openrouter", "temperature": 0.15, "hallucinationGuard": "high", "subagent": "sdd-verify", "rationale": "Script governance — hereda glm-5 de sdd-verify" },
-    "GITFLOW-BRANCH": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "general", "rationale": "GitFlow — Qwen, tareas determinísticas" },
-    "GITFLOW-PR": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "general" },
-    "GITFLOW-HOOKS": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "general" },
-    "GITFLOW-MERGE": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "general" },
-    "GITFLOW-WORKFLOW": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "general" },
-    "GITFLOW-COMMIT": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "general" },
-    "GITFLOW-CONFLICT": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "general" },
-    "REPORT": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.4, "hallucinationGuard": "low", "subagent": "doc-agent", "rationale": "Reportes — hereda qwen de doc-agent" },
-    "PR-REVIEW": { "model": "glm-5", "provider": "openrouter", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "sdd-verify", "rationale": "Code review — hereda glm-5 de sdd-verify" },
-    "RELEASE": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.1, "hallucinationGuard": "critical", "subagent": "ops-agent", "rationale": "Release — Qwen, procesos determinísticos" },
-    "SESSION-CLOSE": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.1, "hallucinationGuard": "high", "subagent": "session-agent", "rationale": "Session close — Qwen, estado determinístico" },
-    "DAILY": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.3, "hallucinationGuard": "medium", "subagent": "general", "rationale": "Daily — Qwen, rutina ligera" },
-    "ORCHESTRATOR": { "model": "qwen-3.6-plus", "provider": "openrouter", "temperature": 0.3, "hallucinationGuard": "high", "subagent": "orchestrator", "rationale": "Orquestador — Qwen para coordinación eficiente" }
+    "BA": {
+      "model": "kimi-k2.6",
+      "provider": "openrouter",
+      "temperature": 0.7,
+      "hallucinationGuard": "low",
+      "subagent": "sdd-explore",
+      "rationale": "BA explora/analiza — Kimi K2.6 para razonamiento profundo y contexto largo"
+    },
+    "SAD": {
+      "model": "kimi-k2.6",
+      "provider": "openrouter",
+      "temperature": 0.3,
+      "hallucinationGuard": "medium",
+      "subagent": "sdd-design",
+      "rationale": "SAD diseña arquitectura — Kimi K2.6 para razonamiento preciso"
+    },
+    "DEV": {
+      "model": "glm-5",
+      "provider": "openrouter",
+      "temperature": 0.15,
+      "hallucinationGuard": "high",
+      "subagent": "sdd-apply",
+      "rationale": "DEV implementa código — GLM5 para generación robusta"
+    },
+    "QA": {
+      "model": "glm-5",
+      "provider": "openrouter",
+      "temperature": 0.1,
+      "hallucinationGuard": "critical",
+      "subagent": "sdd-verify",
+      "rationale": "QA valida — GLM5 para precisión binaria"
+    },
+    "OPS": {
+      "model": "glm-5",
+      "provider": "openrouter",
+      "temperature": 0.1,
+      "hallucinationGuard": "critical",
+      "subagent": "ops-agent",
+      "rationale": "OPS despliega — GLM5 para precisión en producción"
+    },
+    "GOV": {
+      "model": "kimi-k2.6",
+      "provider": "openrouter",
+      "temperature": 0.1,
+      "hallucinationGuard": "critical",
+      "subagent": "gov-agent",
+      "rationale": "GOV audita — Kimi K2.6 para contexto largo en compliance"
+    },
+    "DOC": {
+      "model": "qwen-3.6-plus",
+      "provider": "openrouter",
+      "temperature": 0.4,
+      "hallucinationGuard": "low",
+      "subagent": "doc-agent",
+      "rationale": "DOC documenta — Qwen balanceado para documentación técnica"
+    },
+    "SESSION": {
+      "model": "qwen-3.6-plus",
+      "provider": "openrouter",
+      "temperature": 0.1,
+      "hallucinationGuard": "high",
+      "subagent": "session-agent",
+      "rationale": "SESSION trackea estado — Qwen eficiente para tareas determinísticas"
+    },
+    "MKT": {
+      "model": "qwen-3.6-plus",
+      "provider": "openrouter",
+      "temperature": 0.5,
+      "hallucinationGuard": "low",
+      "subagent": "mkt-agent",
+      "rationale": "MKT crea contenido — Qwen para creatividad de marca"
+    },
+    "SALES": {
+      "model": "qwen-3.6-plus",
+      "provider": "openrouter",
+      "temperature": 0.3,
+      "hallucinationGuard": "medium",
+      "subagent": "sales-agent",
+      "rationale": "SALES sigue metodología — Qwen eficiente para procesos estructurados"
+    },
+    "FINANCE": {
+      "model": "glm-5",
+      "provider": "openrouter",
+      "temperature": 0.15,
+      "hallucinationGuard": "high",
+      "subagent": "finance-agent",
+      "rationale": "FINANCE calcula — GLM5 para precisión numérica"
+    },
+    "HR": {
+      "model": "qwen-3.6-plus",
+      "provider": "openrouter",
+      "temperature": 0.4,
+      "hallucinationGuard": "medium",
+      "subagent": "hr-agent",
+      "rationale": "HR procesa — Qwen eficiente para procesos estructurados"
+    },
+    "LEGAL": {
+      "model": "kimi-k2.6",
+      "provider": "openrouter",
+      "temperature": 0.1,
+      "hallucinationGuard": "critical",
+      "subagent": "legal-agent",
+      "rationale": "LEGAL cumple normativa — Kimi K2.6 para precisión regulatoria"
+    },
+    "BUS-TELE": {
+      "model": "qwen-3.6-plus",
+      "provider": "openrouter",
+      "temperature": 0.2,
+      "hallucinationGuard": "high",
+      "subagent": "general",
+      "rationale": "Telemetría — Qwen, datos estructurados"
+    },
+    "PREMORTEM": {
+      "model": "glm-5",
+      "provider": "openrouter",
+      "temperature": 0.5,
+      "hallucinationGuard": "medium",
+      "subagent": "premortem-agent",
+      "rationale": "PREMORTEM analiza riesgos — GLM5 para razonamiento adversarial"
+    },
+    "SELF-DIAG": {
+      "model": "glm-5",
+      "provider": "openrouter",
+      "temperature": 0.15,
+      "hallucinationGuard": "high",
+      "subagent": "general",
+      "rationale": "SELF-DIAG diagnóstico — GLM5 para precisión"
+    },
+    "SCRIPT-GOV": {
+      "model": "glm-5",
+      "provider": "openrouter",
+      "temperature": 0.15,
+      "hallucinationGuard": "high",
+      "subagent": "sdd-verify",
+      "rationale": "Script governance — hereda glm-5 de sdd-verify"
+    },
+    "GITFLOW-BRANCH": {
+      "model": "qwen-3.6-plus",
+      "provider": "openrouter",
+      "temperature": 0.1,
+      "hallucinationGuard": "critical",
+      "subagent": "general",
+      "rationale": "GitFlow — Qwen, tareas determinísticas"
+    },
+    "GITFLOW-PR": {
+      "model": "qwen-3.6-plus",
+      "provider": "openrouter",
+      "temperature": 0.1,
+      "hallucinationGuard": "critical",
+      "subagent": "general"
+    },
+    "GITFLOW-HOOKS": {
+      "model": "qwen-3.6-plus",
+      "provider": "openrouter",
+      "temperature": 0.1,
+      "hallucinationGuard": "critical",
+      "subagent": "general"
+    },
+    "GITFLOW-MERGE": {
+      "model": "qwen-3.6-plus",
+      "provider": "openrouter",
+      "temperature": 0.1,
+      "hallucinationGuard": "critical",
+      "subagent": "general"
+    },
+    "GITFLOW-WORKFLOW": {
+      "model": "qwen-3.6-plus",
+      "provider": "openrouter",
+      "temperature": 0.1,
+      "hallucinationGuard": "critical",
+      "subagent": "general"
+    },
+    "GITFLOW-COMMIT": {
+      "model": "qwen-3.6-plus",
+      "provider": "openrouter",
+      "temperature": 0.1,
+      "hallucinationGuard": "critical",
+      "subagent": "general"
+    },
+    "GITFLOW-CONFLICT": {
+      "model": "qwen-3.6-plus",
+      "provider": "openrouter",
+      "temperature": 0.1,
+      "hallucinationGuard": "critical",
+      "subagent": "general"
+    },
+    "REPORT": {
+      "model": "qwen-3.6-plus",
+      "provider": "openrouter",
+      "temperature": 0.4,
+      "hallucinationGuard": "low",
+      "subagent": "doc-agent",
+      "rationale": "Reportes — hereda qwen de doc-agent"
+    },
+    "PR-REVIEW": {
+      "model": "glm-5",
+      "provider": "openrouter",
+      "temperature": 0.1,
+      "hallucinationGuard": "critical",
+      "subagent": "sdd-verify",
+      "rationale": "Code review — hereda glm-5 de sdd-verify"
+    },
+    "RELEASE": {
+      "model": "qwen-3.6-plus",
+      "provider": "openrouter",
+      "temperature": 0.1,
+      "hallucinationGuard": "critical",
+      "subagent": "ops-agent",
+      "rationale": "Release — Qwen, procesos determinísticos"
+    },
+    "SESSION-CLOSE": {
+      "model": "qwen-3.6-plus",
+      "provider": "openrouter",
+      "temperature": 0.1,
+      "hallucinationGuard": "high",
+      "subagent": "session-agent",
+      "rationale": "Session close — Qwen, estado determinístico"
+    },
+    "DAILY": {
+      "model": "qwen-3.6-plus",
+      "provider": "openrouter",
+      "temperature": 0.3,
+      "hallucinationGuard": "medium",
+      "subagent": "general",
+      "rationale": "Daily — Qwen, rutina ligera"
+    },
+    "ORCHESTRATOR": {
+      "model": "qwen-3.6-plus",
+      "provider": "openrouter",
+      "temperature": 0.3,
+      "hallucinationGuard": "high",
+      "subagent": "orchestrator",
+      "rationale": "Orquestador — Qwen para coordinación eficiente"
+    }
   },
   "temperaturePolicy": {
     "description": "Temperature can ONLY be modified from the model assignment flow (route set or TUI). Standalone temperature commands are blocked.",
@@ -95,7 +299,17 @@
   },
   "providerPriority": {
     "description": "Ordered list for model selection UI (first = default)",
-    "order": ["opencode", "anthropic", "openai", "bedrock", "gemini", "azure", "ollama", "dify", "custom"]
+    "order": [
+      "opencode",
+      "anthropic",
+      "openai",
+      "bedrock",
+      "gemini",
+      "azure",
+      "ollama",
+      "dify",
+      "custom"
+    ]
   },
   "audit": {
     "enabled": true,

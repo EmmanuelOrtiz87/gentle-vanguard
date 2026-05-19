@@ -10,19 +10,19 @@ detection, PSScriptAnalyzer CI, and automated releases.
 
 ## What This Demo Shows
 
-This is the "deep technical" demo for developers who want to see the **v2.14.0
-capabilities** in action:
+This is the "deep technical" demo for developers who want to see the **v2.14.0 capabilities** in
+action:
 
-| Feature                                   | Version | Command                         |
-| ----------------------------------------- | ------- | ------------------------------- |
-| SDD Gate (blocks commits without spec)    | v2.14.0 | `gv sdd-gate`                   |
-| SDD Process Metrics (cycle time, SLO)     | v2.14.0 | `gv sdd-metrics`                |
+| Feature                                        | Version | Command                         |
+| ---------------------------------------------- | ------- | ------------------------------- |
+| SDD Gate (blocks commits without spec)         | v2.14.0 | `gv sdd-gate`                   |
+| SDD Process Metrics (cycle time, SLO)          | v2.14.0 | `gv sdd-metrics`                |
 | Sync Drift Report (gentle-vanguard ↔ projects) | v2.14.0 | `gv sync-drift`                 |
-| GV Benchmark (SLO measurement)            | v2.14.0 | `gv benchmark`                  |
-| PSScriptAnalyzer CI (static analysis)     | v2.14.0 | `.github/workflows/ps-lint.yml` |
-| Automated GitHub Releases                 | v2.14.0 | `git tag v*.*.*`                |
-| Stack Version command                     | v2.14.0 | `gv version`                    |
-| Normativas vivas                          | v2.14.0 | `rules/` directory              |
+| GV Benchmark (SLO measurement)                 | v2.14.0 | `gv benchmark`                  |
+| PSScriptAnalyzer CI (static analysis)          | v2.14.0 | `.github/workflows/ps-lint.yml` |
+| Automated GitHub Releases                      | v2.14.0 | `git tag v*.*.*`                |
+| Stack Version command                          | v2.14.0 | `gv version`                    |
+| Normativas vivas                               | v2.14.0 | `rules/` directory              |
 
 ---
 
@@ -226,4 +226,3 @@ Developers leave understanding:
 - New features are **benchmarked against SLOs** (not just "it works")
 - **Releasing is a single command** (tag + push)
 - **Standards are code** — normativas are enforced in CI, not just documented
-

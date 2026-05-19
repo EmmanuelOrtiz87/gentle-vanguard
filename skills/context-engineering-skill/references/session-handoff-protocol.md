@@ -53,5 +53,3 @@ The `.session/.compact-marker` file prevents duplicate compact-start runs:
 ```
 
 **Result**: compact-start runs at most once per 60 min regardless of trigger source.
-
-

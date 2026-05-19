@@ -90,4 +90,3 @@ See: `scripts/utilities/update-engram.ps1`
 > **Updating the `engram` binary on disk does NOT replace an already-running stdio MCP process.**
 
 This is exactly what was causing our repeated issues.
-

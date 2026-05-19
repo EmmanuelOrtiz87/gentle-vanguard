@@ -1,14 +1,14 @@
 # NORMATIVAS-ACCESIBILIDAD.md — Web Accessibility Standards
 
-Version: 1.0.0
-Framework: WCAG 2.2 Level AA + WCAG 2.3 Draft
-Last updated: 2026-05-11
+Version: 1.0.0 Framework: WCAG 2.2 Level AA + WCAG 2.3 Draft Last updated: 2026-05-11
 
 ---
 
 ## 1. PROPOSITO
 
-Define los estándares de accesibilidad web para todo frontend generado en el stack Gentle-Vanguard. Aplica a componentes UI, dashboards, landing pages, artifacts, y cualquier interfaz web producida por agentes. Toda implementacion debe cumplir WCAG 2.2 Level AA como minimo.
+Define los estándares de accesibilidad web para todo frontend generado en el stack Gentle-Vanguard.
+Aplica a componentes UI, dashboards, landing pages, artifacts, y cualquier interfaz web producida
+por agentes. Toda implementacion debe cumplir WCAG 2.2 Level AA como minimo.
 
 ---
 
@@ -16,46 +16,46 @@ Define los estándares de accesibilidad web para todo frontend generado en el st
 
 ### 2.1 Perceivable — Perceptible
 
-| Criterio | WCAG | Implementacion |
-|----------|------|----------------|
+| Criterio          | WCAG  | Implementacion                                                       |
+| ----------------- | ----- | -------------------------------------------------------------------- |
 | Text alternatives | 1.1.1 | `alt` en imagenes, `aria-label` en iconos, `role="img"` con etiqueta |
-| Captions | 1.2.2 | Subtitulos en contenido multimedia |
-| Adaptable | 1.3.x | Estructura semantica correcta (landmarks, headings, listas) |
-| Distinguishable | 1.4.x | Contraste >= 4.5:1 (texto normal), >= 3:1 (texto grande) |
+| Captions          | 1.2.2 | Subtitulos en contenido multimedia                                   |
+| Adaptable         | 1.3.x | Estructura semantica correcta (landmarks, headings, listas)          |
+| Distinguishable   | 1.4.x | Contraste >= 4.5:1 (texto normal), >= 3:1 (texto grande)             |
 
 ### 2.2 Operable — Operable
 
-| Criterio | WCAG | Implementacion |
-|----------|------|----------------|
+| Criterio            | WCAG  | Implementacion                                           |
+| ------------------- | ----- | -------------------------------------------------------- |
 | Keyboard accessible | 2.1.x | Todas las acciones accesibles via teclado, focus visible |
-| Enough time | 2.2.x | Timers ajustables o removibles |
-| Seizures | 2.3.x | No parpadeos > 3 flases/segundo |
-| Navigable | 2.4.x | Skip links, headings jerarquicos, breadcrumbs |
+| Enough time         | 2.2.x | Timers ajustables o removibles                           |
+| Seizures            | 2.3.x | No parpadeos > 3 flases/segundo                          |
+| Navigable           | 2.4.x | Skip links, headings jerarquicos, breadcrumbs            |
 
 ### 2.3 Understandable — Comprensible
 
-| Criterio | WCAG | Implementacion |
-|----------|------|----------------|
-| Readable | 3.1.x | `lang` en HTML definido correctamente |
-| Predictable | 3.2.x | Comportamiento consistente, cambios contextuales con aviso |
-| Input assistance | 3.3.x | Labels asociados, errores descriptivos, sugerencias |
+| Criterio         | WCAG  | Implementacion                                             |
+| ---------------- | ----- | ---------------------------------------------------------- |
+| Readable         | 3.1.x | `lang` en HTML definido correctamente                      |
+| Predictable      | 3.2.x | Comportamiento consistente, cambios contextuales con aviso |
+| Input assistance | 3.3.x | Labels asociados, errores descriptivos, sugerencias        |
 
 ### 2.4 Robust — Robusto
 
-| Criterio | WCAG | Implementacion |
-|----------|------|----------------|
-| Compatible | 4.1.x | ARIA validado, HTML semantico, parsable |
+| Criterio        | WCAG  | Implementacion                                                |
+| --------------- | ----- | ------------------------------------------------------------- |
+| Compatible      | 4.1.x | ARIA validado, HTML semantico, parsable                       |
 | Status messages | 4.1.3 | `role="status"`, `aria-live="polite"` para mensajes dinamicos |
 
 ---
 
 ## 3. NIVELES DE CUMPLIMIENTO
 
-| Nivel | Requisito | Verification | Timeline |
-|-------|-----------|-------------|----------|
-| A (Minimo) | 30 criterios base | axe-core automated | Release |
-| AA (Target) | A + 20 criterios adicionales | axe-core + manual sampling | Release |
-| AAA (Meta) | AA + 28 criterios avanzados | Full manual audit | Q2 2027 |
+| Nivel       | Requisito                    | Verification               | Timeline |
+| ----------- | ---------------------------- | -------------------------- | -------- |
+| A (Minimo)  | 30 criterios base            | axe-core automated         | Release  |
+| AA (Target) | A + 20 criterios adicionales | axe-core + manual sampling | Release  |
+| AAA (Meta)  | AA + 28 criterios avanzados  | Full manual audit          | Q2 2027  |
 
 Todo nuevo componente frontend DEBE cumplir WCAG 2.2 AA desde el primer commit.
 
@@ -92,7 +92,8 @@ Todo nuevo componente frontend DEBE cumplir WCAG 2.2 AA desde el primer commit.
 2. **MUST** mantener contraste >= 3:1 para texto grande (>= 18px bold o >= 24px)
 3. **MUST NOT** usar color como unico indicador de estado (ej: rojo = error, incluir icono + texto)
 4. **SHOULD** soportar High Contrast Mode (Windows) y prefers-contrast: more
-5. **MUST** testear con simuladores de daltonismo (monocromatico, deuteranopia, protanopia, tritanopia)
+5. **MUST** testear con simuladores de daltonismo (monocromatico, deuteranopia, protanopia,
+   tritanopia)
 
 ### 4.3 Keyboard Navigation
 
@@ -140,21 +141,21 @@ Todo nuevo componente frontend DEBE cumplir WCAG 2.2 AA desde el primer commit.
 
 ### 5.1 Automated Testing
 
-| Herramienta | Uso | Frecuencia |
-|-------------|-----|------------|
-| axe-core | Analisis automatizado de reglas WCAG | Cada PR |
-| Lighthouse AI | Auditoria de accesibilidad + sugerencias | Cada PR |
-| Pa11y | CI pipeline de accesibilidad | Cada commit |
-| HTML Validator (Nu) | Validacion de HTML semantico | Cada PR |
+| Herramienta         | Uso                                      | Frecuencia  |
+| ------------------- | ---------------------------------------- | ----------- |
+| axe-core            | Analisis automatizado de reglas WCAG     | Cada PR     |
+| Lighthouse AI       | Auditoria de accesibilidad + sugerencias | Cada PR     |
+| Pa11y               | CI pipeline de accesibilidad             | Cada commit |
+| HTML Validator (Nu) | Validacion de HTML semantico             | Cada PR     |
 
 ### 5.2 Manual Testing
 
-| Tecnica | Frecuencia | Herramienta |
-|---------|------------|-------------|
-| Keyboard only | Cada PR | Navegador nativo |
-| Screen reader | Pre-release | NVDA / VoiceOver / JAWS |
-| Zoom 400% | Pre-release | Navegador nativo |
-| High Contrast | Pre-release | Windows High Contrast |
+| Tecnica         | Frecuencia  | Herramienta                   |
+| --------------- | ----------- | ----------------------------- |
+| Keyboard only   | Cada PR     | Navegador nativo              |
+| Screen reader   | Pre-release | NVDA / VoiceOver / JAWS       |
+| Zoom 400%       | Pre-release | Navegador nativo              |
+| High Contrast   | Pre-release | Windows High Contrast         |
 | Color blindness | Pre-release | Simuladores (Chrome DevTools) |
 
 ### 5.3 CI Integration
@@ -189,18 +190,17 @@ TODO implementacion DEBE verificar:
 
 ## 7. REFERENCIAS
 
-| Resource | Path |
-|----------|------|
-| WCAG 2.2 Specification | w3.org/TR/WCAG22 |
-| WCAG 2.3 Draft | w3.org/TR/WCAG23 |
-| ARIA Authoring Practices | w3.org/WAI/ARIA/apg |
-| axe-core Documentation | dequeuniversity.com/rules/axe |
-| WebAIM Contrast Checker | webaim.org/resources/contrastchecker |
-| Development Standards | `rules/DEVELOPMENT-STANDARDS.md` |
-| Testing Standards | `rules/TESTING-STANDARDS.md` |
-| Code Standards | `rules/NORMATIVAS-CODIGO.md` |
+| Resource                 | Path                                 |
+| ------------------------ | ------------------------------------ |
+| WCAG 2.2 Specification   | w3.org/TR/WCAG22                     |
+| WCAG 2.3 Draft           | w3.org/TR/WCAG23                     |
+| ARIA Authoring Practices | w3.org/WAI/ARIA/apg                  |
+| axe-core Documentation   | dequeuniversity.com/rules/axe        |
+| WebAIM Contrast Checker  | webaim.org/resources/contrastchecker |
+| Development Standards    | `rules/DEVELOPMENT-STANDARDS.md`     |
+| Testing Standards        | `rules/TESTING-STANDARDS.md`         |
+| Code Standards           | `rules/NORMATIVAS-CODIGO.md`         |
 
 ---
 
 _Version: 1.0.0 — 2026-05-11 — Status: ACTIVE_
-

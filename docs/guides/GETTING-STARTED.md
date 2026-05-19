@@ -90,4 +90,3 @@ cd gentle-vanguard
 
 - Review [SESSION-GUIDE.md](SESSION-GUIDE.md)
 - Review [GITFLOW-QUICK-REFERENCE.md](GITFLOW-QUICK-REFERENCE.md)
-

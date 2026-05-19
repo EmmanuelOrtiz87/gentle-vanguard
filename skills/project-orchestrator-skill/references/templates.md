@@ -106,4 +106,3 @@ Before substantive work, create or refresh:
 
 These must capture: current goal, affected files/subsystems, acceptance criteria, risks/blockers,
 validation expectations. If they drift from real work, update during session.
-

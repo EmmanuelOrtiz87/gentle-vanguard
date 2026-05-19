@@ -133,4 +133,3 @@ Management leaves with:
 - Understanding that quality gates are **automated** (not human-dependent)
 - Confidence that AI spend is **controlled and auditable**
 - A clear picture of scalability: 125 skills, 10 workflows, 7 agents — all managed by one platform
-

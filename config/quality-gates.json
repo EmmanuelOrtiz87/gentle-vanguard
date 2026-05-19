@@ -342,11 +342,7 @@
     "reportPath": "reports/quality-gates-report.json",
     "dashboardUrl": "http://localhost:3000/dashboard"
   },
-  "requiredWorkflows": [
-    "gentle-vanguard-quality-gate",
-    "cross-platform-tests",
-    "security-scan"
-  ],
+  "requiredWorkflows": ["gentle-vanguard-quality-gate", "cross-platform-tests", "security-scan"],
   "requiredStatusChecks": [
     "Gentle-Vanguard Quality Gate",
     "Cross-Platform Tests",
@@ -364,4 +360,3 @@
     "allowDeletions": false
   }
 }
-

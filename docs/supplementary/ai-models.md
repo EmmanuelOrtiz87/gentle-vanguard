@@ -100,4 +100,3 @@ fields:
 5. `ai-model-notes`
 
 If the project does not use AI assistance, set `ai-model-mode` to `none` and leave the rest blank.
-

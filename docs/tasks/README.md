@@ -66,10 +66,10 @@ Each task brief should include:
 
 ### Active Development#
 
-| Task                                | Description                  | Link                                                                                 |
-| ----------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------ |
-| **🏗️ Session Governance** | Governance improvements      | [PENDING-TASKS.md](PENDING-TASKS.md)                   |
-| **📊 Chat Baseline Architecture**   | Chat architecture validation | [chat-baseline-architecture-validation.md](chat-baseline-architecture-validation.md) |
+| Task                              | Description                  | Link                                                                                 |
+| --------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------ |
+| **🏗️ Session Governance**         | Governance improvements      | [PENDING-TASKS.md](PENDING-TASKS.md)                                                 |
+| **📊 Chat Baseline Architecture** | Chat architecture validation | [chat-baseline-architecture-validation.md](chat-baseline-architecture-validation.md) |
 
 ### Templates#
 
@@ -114,4 +114,3 @@ Each task brief should include:
   <b>📋 Ready to create a task brief?</b><br>
   <code>.\scripts\utilities\gv.ps1 task-brief &lt;task-name&gt;</code>
 </p>
-

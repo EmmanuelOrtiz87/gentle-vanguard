@@ -81,4 +81,3 @@ Use `scripts/utilities/sync-agent-instructions.ps1` to propagate changes.
 - **Naming Convention:** Use `kebab-case` for skill directories and `PascalCase` for internal
   references.
 - **Validation:** Every new skill must pass `gv validate` before being committed.
-

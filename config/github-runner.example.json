@@ -20,4 +20,3 @@
     "security": "Do not route untrusted pull_request_target workflows to self-hosted runners on public repositories."
   }
 }
-

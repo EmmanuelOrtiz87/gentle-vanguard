@@ -35,4 +35,3 @@ Validation runs automatically:
 ## Pass Rate Target
 
 Target: 100% pass rate on all validations.
-

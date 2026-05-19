@@ -121,4 +121,3 @@ docs/architecture/
   <b>🏗️ Understand the architecture. Master the stack.</b><br>
   <i>5 layers • 127 skills • 100% agnostic</i>
 </p>
-

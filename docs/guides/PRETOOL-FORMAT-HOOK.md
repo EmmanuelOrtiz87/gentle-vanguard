@@ -267,4 +267,3 @@ New-Item -ItemType SymbolicLink -Path ".git\hooks\pre-tool-format.ps1" -Target "
 
 **Last Updated:** 2026-04-17  
 **Related:** [CLOUD-AGENT-CONNECTOR.md](CLOUD-AGENT-CONNECTOR.md)
-

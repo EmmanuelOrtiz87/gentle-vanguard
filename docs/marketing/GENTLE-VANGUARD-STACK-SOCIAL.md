@@ -111,8 +111,8 @@
 
 ## 🔗 Conectar
 
-| Plataforma    | Enlace                                       |
-| ------------- | -------------------------------------------- |
+| Plataforma    | Enlace                                            |
+| ------------- | ------------------------------------------------- |
 | **🐙 GitHub** | github.com/EmmanuelOrtiz87/gentle-vanguard-public |
 | **📚 Docs**   | docs.gentle-vanguard.local                        |
 
@@ -128,4 +128,3 @@
   <i>* Built for AI-first development teams*</i><br>
   <i>* Open source • Continuous improvement*</i>
 </p>
-

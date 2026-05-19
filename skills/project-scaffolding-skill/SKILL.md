@@ -36,7 +36,8 @@ Ask (or infer) these if not provided:
 
 ### 2. Use the CLI
 
-The primary interface is `gentle-vanguard.ps1` (PowerShell) or via `gentle-vanguard` alias (when PATH is configured).
+The primary interface is `gentle-vanguard.ps1` (PowerShell) or via `gentle-vanguard` alias (when
+PATH is configured).
 
 ```powershell
 # Initialize workspace
@@ -175,4 +176,3 @@ git add . && git commit -m "Initial commit"
 - `templates/project-types/*/` - Type-specific templates
 - `skills/documentation-governance/` - Doc standards
 - `skills/architecture-governance/` - Architecture standards
-

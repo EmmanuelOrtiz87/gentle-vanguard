@@ -4,7 +4,8 @@
       "command": "npx",
       "args": [
         "--include-workspace-root",
-        "--workspace", "%USERPROFILE%\\mcp-workspace",
+        "--workspace",
+        "%USERPROFILE%\\mcp-workspace",
         "--no",
         "--offline",
         "@modelcontextprotocol/server-filesystem",
@@ -21,10 +22,7 @@
     },
     "engram-kb": {
       "command": "tools\\engram.exe",
-      "args": [
-        "mcp",
-        "--tools=agent"
-      ],
+      "args": ["mcp", "--tools=agent"],
       "description": "Engram Knowledge Base via native MCP stdio server",
       "security": {
         "hardened": true,
@@ -44,4 +42,3 @@
   "description": "MCP Server Configuration for gentle-vanguard — hardened against supply chain attacks",
   "autoStart": true
 }
-

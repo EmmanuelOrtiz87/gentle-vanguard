@@ -90,4 +90,3 @@
 
 _Informe generado automÃ¡ticamente_  
 _Formato: Markdown (.md)_
-

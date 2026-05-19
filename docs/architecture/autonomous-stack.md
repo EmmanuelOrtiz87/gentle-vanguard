@@ -2,9 +2,8 @@
 
 ## Overview
 
-Gentle-Vanguard implements a **100% autonomous development stack** with self-healing,
-self-learning, and self-scaling capabilities. All systems operate without human intervention in
-production.
+Gentle-Vanguard implements a **100% autonomous development stack** with self-healing, self-learning,
+and self-scaling capabilities. All systems operate without human intervention in production.
 
 ## Stack Layered Architecture
 
@@ -286,4 +285,3 @@ $engramPath = Join-Path $repoRoot "tools\engram.exe"
   - Self-learning norms
   - Non-blocking testing
   - Judgment Day integration
-

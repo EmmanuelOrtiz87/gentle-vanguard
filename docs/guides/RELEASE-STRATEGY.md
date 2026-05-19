@@ -2,8 +2,8 @@
 
 ## Overview
 
-This document defines how Gentle-Vanguard versións, releases, and manages backward
-compatibility across versións.
+This document defines how Gentle-Vanguard versións, releases, and manages backward compatibility
+across versións.
 
 ## Semantic versióning (SemVer 2.0.0)
 
@@ -229,4 +229,3 @@ Gentle-Vanguard does NOT store versión in `scripts/utilities/gv.ps1` or source 
 ---
 
 **Next**: See [RELEASE-CHECKLIST.md](./RELEASE-CHECKLIST.md) for step-by-step release validation.
-

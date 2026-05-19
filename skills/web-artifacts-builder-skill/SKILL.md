@@ -298,4 +298,3 @@ Before output, verify:
 3.  JS funcional
 4.  CDNs accesibles
 5.  Responsive funciona
-

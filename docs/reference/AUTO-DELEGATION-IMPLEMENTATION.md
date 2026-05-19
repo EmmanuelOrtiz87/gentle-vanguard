@@ -62,7 +62,8 @@ $keywords = Extract-TaskKeywords -TaskDescription "Implement login feature"
 # Output: @{ "DEV" = 2; "GOV" = 1 }
 ```
 
-**Mapeos de palabras clave por agente (core 7 — full 29 en `config/auto-delegation.json#keywordMappings`):**
+**Mapeos de palabras clave por agente (core 7 — full 29 en
+`config/auto-delegation.json#keywordMappings`):**
 
 - **BA**: requirement, user story, bdd, gherkin, acceptance, specification
 - **SAD**: architecture, design, sdd, api design, database, schema
@@ -333,16 +334,16 @@ Ejecutar suite de pruebas:
 
 ## Estado de Implementacin
 
-| Componente         | Estado   | Notas                         |
-| ------------------ | -------- | ----------------------------- |
+| Componente         | Estado   | Notas                                                   |
+| ------------------ | -------- | ------------------------------------------------------- |
 | Keyword Extraction | Completo | 29 agentes, 200+ palabras clave en auto-delegation.json |
-| decisión Trees     | Completo | 4 niveles de decisin          |
-| Confidence Scoring | Completo | Ajustes dinmicos              |
-| Opt-In Control     | Completo | Flag enable/disable           |
-| Configuration      | Completo | JSON configurable             |
-| Metrics            | Completo | Logging automtico             |
-| Tests              | Completo | 26 tests de integracin        |
-| Documentation      | Completo | Guas y ejemplos               |
+| decisión Trees     | Completo | 4 niveles de decisin                                    |
+| Confidence Scoring | Completo | Ajustes dinmicos                                        |
+| Opt-In Control     | Completo | Flag enable/disable                                     |
+| Configuration      | Completo | JSON configurable                                       |
+| Metrics            | Completo | Logging automtico                                       |
+| Tests              | Completo | 26 tests de integracin                                  |
+| Documentation      | Completo | Guas y ejemplos                                         |
 
 ## Prximos Pasos
 
@@ -360,4 +361,3 @@ Ejecutar suite de pruebas:
 **Fecha**: 2026-04-23  
 **Autor**: gentle-vanguard  
 **Estado**: READY FOR INTEGRATION
-

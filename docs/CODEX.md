@@ -44,6 +44,7 @@ See also:
 ## Codex Prompt Pattern (Recommended)
 
 When requesting implementation, include:
+
 - Goal
 - Context
 - Constraints

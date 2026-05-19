@@ -33,12 +33,12 @@ The Gentle-Vanguard automatically ensures all development tools are active and r
 
 ### Tools Activated
 
-| Tool                            | Purpose                               | Status Check    |
-| ------------------------------- | ------------------------------------- | --------------- |
-| **Engram**                      | Memory system for context persistence | `mem_context`   |
-| **Native Review Engine**        | Gentle-Vanguard code quality validation    | Runs on commit  |
-| **Native Runtime Orchestrator** | Policy-driven execution and guidance  | `gv.ps1 status` |
-| **Orchestrator Skills**         | Project coordination system           | Auto-loaded     |
+| Tool                            | Purpose                                 | Status Check    |
+| ------------------------------- | --------------------------------------- | --------------- |
+| **Engram**                      | Memory system for context persistence   | `mem_context`   |
+| **Native Review Engine**        | Gentle-Vanguard code quality validation | Runs on commit  |
+| **Native Runtime Orchestrator** | Policy-driven execution and guidance    | `gv.ps1 status` |
+| **Orchestrator Skills**         | Project coordination system             | Auto-loaded     |
 
 ### Manual Activation Commands
 
@@ -391,4 +391,3 @@ Create a PR or keep working?
 ```
 
 ## Resources
-

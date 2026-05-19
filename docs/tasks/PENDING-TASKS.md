@@ -23,4 +23,3 @@ activas.**
 | Fecha      | Cambio                                                        |
 | ---------- | ------------------------------------------------------------- |
 | 2026-05-08 | Documento archivado — todos los items resueltos y verificados |
-

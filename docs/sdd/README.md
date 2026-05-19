@@ -1,7 +1,7 @@
 # Spec-Driven Development (SDD)
 
-This directory contains design documents and implementation specifications for Gentle-Vanguard
-and its components.
+This directory contains design documents and implementation specifications for Gentle-Vanguard and
+its components.
 
 ## Purpose
 
@@ -41,8 +41,8 @@ approval processes.
 
 ### SDD Exemption
 
-In certain cases, a PR may be exempt from SDD requirements. To request an exemption, add these
-lines to the PR body:
+In certain cases, a PR may be exempt from SDD requirements. To request an exemption, add these lines
+to the PR body:
 
 ```
 SDD-EXEMPT: true
@@ -50,13 +50,14 @@ SDD-EXEMPT-REASON: <brief justification, e.g., "documentation-only change" or "e
 ```
 
 Valid exemption reasons include:
+
 - **Documentation-only changes**: No code or behavior changes
 - **Emergency hotfixes**: Production issues requiring immediate fix (mini-spec still recommended)
 - **Internal refactors**: No external behavior changes (still requires a brief spec)
 - **Trivial changes**: One-line fixes, typo corrections, dependency updates
 
-Exemptions are validated by `scripts/diagnostics/validate-sdd-governance.ps1` in CI.
-The SDD gate (`scripts/hooks/check-sdd-gate.ps1`) enforces this on PRs to `main`/`develop`.
+Exemptions are validated by `scripts/diagnostics/validate-sdd-governance.ps1` in CI. The SDD gate
+(`scripts/hooks/check-sdd-gate.ps1`) enforces this on PRs to `main`/`develop`.
 
 ## Current Specs
 
@@ -73,4 +74,3 @@ Template:
 - [SDD Governance Policy](../reference/SDD-GOVERNANCE-POLICY.md)
 - [Development Workflow](../guides/DEVELOPMENT-WORKFLOW.md)
 - [Session Guide](../guides/SESSION-GUIDE.md)
-

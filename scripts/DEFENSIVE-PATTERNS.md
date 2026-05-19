@@ -1,7 +1,7 @@
 # Defensive Patterns for PowerShell Scripts
 
-Living reference of established patterns and anti-patterns discovered and fixed
-during the gentle-vanguard audit.
+Living reference of established patterns and anti-patterns discovered and fixed during the
+gentle-vanguard audit.
 
 ## RepoRoot Resolution
 
@@ -191,6 +191,6 @@ if ($currentHash -ne $baselineHash.Trim()) {
 
 - **40+ scripts** still use `$PSScriptRoot '..\..'` fragile path pattern -- migrate to
   `$env:GENTLE_VANGUARD_BASE_DIR` + recursive search as scripts are touched
-- **Non-ASCII characters** in ~30 scripts (emojis, Spanish accented chars in comments,
-  em-dashes in heredocs) -- sanitize selectively as scripts are touched
+- **Non-ASCII characters** in ~30 scripts (emojis, Spanish accented chars in comments, em-dashes in
+  heredocs) -- sanitize selectively as scripts are touched
 - **BOM cleanup** completed for all 32 BOM-bearing scripts (2026-05-11)

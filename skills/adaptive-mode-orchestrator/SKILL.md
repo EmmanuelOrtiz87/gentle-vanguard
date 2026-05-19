@@ -318,4 +318,3 @@ Con rollback automtico si seguridad falla
 ---
 
 **Estado**: ACTIVE **Versin**: 1.0 **ltima actualizacin**: 2026-04-23
-

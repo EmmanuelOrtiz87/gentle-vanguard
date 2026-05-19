@@ -85,13 +85,13 @@ metadata:
 
 ## Naming Conventions
 
-| Type                | Pattern                      | Examples                              |
-| ------------------- | ---------------------------- | ------------------------------------- |
-| Generic skill       | `{technology}`               | `pytest`, `playwright`, `typescript`  |
+| Type                     | Pattern                      | Examples                                   |
+| ------------------------ | ---------------------------- | ------------------------------------------ |
+| Generic skill            | `{technology}`               | `pytest`, `playwright`, `typescript`       |
 | Gentle-Vanguard-specific | `{name}-skill`               | `gentle-vanguard-manager`, `skill-creator` |
-| Workflow skill      | `{action}-{target}`          | `github-pr`, `jira-task`              |
-| Architecture        | `{component}-governance`     | `documentation-governance`            |
-| Testing skill       | `{project}-test-{component}` | `myapp-test-sdk`                      |
+| Workflow skill           | `{action}-{target}`          | `github-pr`, `jira-task`                   |
+| Architecture             | `{component}-governance`     | `documentation-governance`                 |
+| Testing skill            | `{project}-test-{component}` | `myapp-test-sdk`                           |
 
 ---
 
@@ -116,7 +116,7 @@ metadata:
 | `name`             | Yes      | Skill identifier (lowercase, hyphens) |
 | `description`      | Yes      | What + Trigger in one block           |
 | `license`          | Yes      | Always `Apache-2.0`                   |
-| `metadata.author`  | Yes      | `gentle-vanguard`                |
+| `metadata.author`  | Yes      | `gentle-vanguard`                     |
 | `metadata.versión` | Yes      | Semantic versión as string            |
 
 ---
@@ -169,4 +169,3 @@ After creating the skill, add it to `SKILL_INDEX.md`:
 - **Gentle-Vanguard**: See `~/.gentleman/` for global installation
 - **Skill Index**: See [SKILL_INDEX.md](../SKILL_INDEX.md) for all skills
 - **Documentation**: See [docs/](../../docs/) for guides
-

@@ -47,4 +47,3 @@ function Test-ScriptHeader { param([string]$ScriptPath)
 "completion_tokens": 8096, "completion_unit_price": "0", "completion_price_unit": "0",
 "completion_price": "0", "total_tokens": 80895, "total_price": "0", "currency": "USD", "latency":
 52.204, "time_to_first_token": 3.746, "time_to_generate": 48.458 }
-

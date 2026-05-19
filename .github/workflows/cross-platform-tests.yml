@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main, develop]
   schedule:
-    - cron: '0 2 * * *'  # Daily at 2 AM UTC / 23:00 GMT-3 (Argentina timezone)
+    - cron: '0 2 * * *' # Daily at 2 AM UTC / 23:00 GMT-3 (Argentina timezone)
 
 permissions:
   contents: read
@@ -23,7 +23,7 @@ jobs:
     name: Test on ${{ matrix.os }} / PowerShell ${{ matrix.pwsh-version }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 45
-    
+
     strategy:
       fail-fast: false
       matrix:
@@ -37,7 +37,7 @@ jobs:
             pwsh-pre: 'brew update'
           - os: windows-latest
             pwsh-pre: ''
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -48,11 +48,6 @@ jobs:
         if: matrix.pwsh-pre != ''
         run: ${{ matrix.pwsh-pre }}
         shell: bash
-
-      - name: Setup PowerShell Core ${{ matrix.pwsh-version }}
-        uses: PowerShell/setup-powershell@v2
-        with:
-          powershell-version: ${{ matrix.pwsh-version }}
 
       - name: Verify PowerShell installation
         shell: pwsh
@@ -82,7 +77,7 @@ jobs:
         run: |
           Write-Output "Running Pester tests..."
           $testResults = Invoke-Pester -Path "tests/" -CI -PassThru
-          
+
           if ($testResults.FailedCount -gt 0) {
             exit 1
           }
@@ -114,15 +109,15 @@ jobs:
         shell: pwsh
         run: |
           Write-Output "Testing cross-platform path handling..."
-          
+
           # Test Join-Path usage
           $testPath = Join-Path $HOME "test" "path"
           Write-Output "Home-based path: $testPath"
-          
+
           # Test temp directory
           $tempPath = [System.IO.Path]::GetTempPath()
           Write-Output "Temp directory: $tempPath"
-          
+
           # Verify paths don't contain hardcoded values
           Get-ChildItem -Path "scripts/" -Filter "*.ps1" -Recurse | ForEach-Object {
             $content = Get-Content $_.FullName -Raw
@@ -135,7 +130,7 @@ jobs:
         shell: pwsh
         run: |
           Write-Output "Checking script portability..."
-          
+
           # List of forbidden patterns per platform
           $forbiddenPatterns = @{
             'all' = @(
@@ -149,7 +144,7 @@ jobs:
               'powershell.exe'
             )
           }
-          
+
           Write-Output "✓ Portability check completed"
 
       - name: Run security scan (cross-platform)
@@ -187,7 +182,7 @@ jobs:
     needs: test-matrix
     if: always()
     timeout-minutes: 10
-    
+
     steps:
       - name: Download all test results
         uses: actions/download-artifact@v8
@@ -228,14 +223,10 @@ jobs:
     name: Lint & Format Check
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    
+
     steps:
       - uses: actions/checkout@v4
-      
-      - uses: PowerShell/setup-powershell@v2
-        with:
-          powershell-version: '7.4'
-      
+
       - name: Run linter
         shell: pwsh
         run: |

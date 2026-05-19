@@ -75,6 +75,7 @@ from wrong-platform commands.
 ```
 
 Session autostart activates:
+
 - Notifications subsystem
 - Security context
 - Engram memory bridge
@@ -119,6 +120,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/pre-process-inpu
 ```
 
 **SDD Flow for New Features:**
+
 1. Pre-processor detects `sdd-lifecycle` trigger
 2. System routes to BA agent (not DEV)
 3. BA completes EXPLORE phase: requirements, scope, constraints
@@ -135,4 +137,3 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/pre-process-inpu
 3. Token budget is visible and understood
 4. Developer sees the SDD-mandated flow: BA first, code second
 5. Pre-process routing correctly identifies the need for analysis before coding
-
