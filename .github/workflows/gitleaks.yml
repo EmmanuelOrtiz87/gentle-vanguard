@@ -53,7 +53,9 @@ jobs:
           version: latest
 
       - name: Upload SARIF artifact
-        if: ${{ always() && (steps.gitleaks.outputs.sarif != '' || steps.detect-config.outputs.has_config == 'false') }}
+        if:
+          ${{ always() && (steps.gitleaks.outputs.sarif != '' ||
+          steps.detect-config.outputs.has_config == 'false') }}
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: ${{ steps.gitleaks.outputs.sarif }}
