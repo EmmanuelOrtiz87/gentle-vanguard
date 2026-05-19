@@ -1,4 +1,4 @@
-# gentle-vanguard-installer-tui.ps1
+﻿# gentle-vanguard-installer-tui.ps1
 # FF-018: Interactive TUI Installer for Gentle-Vanguard
 # Terminal-Based Setup Wizard with Logo, Help, and Quit support
 
@@ -48,6 +48,7 @@ $colorMenu = "White"
 
 function Write-Header {
     Clear-Host
+    [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
     Write-Host ""
     Write-Host " ██████╗ ███████╗███╗   ██╗████████╗██╗     ███████╗    ██╗   ██╗ █████╗ ███╗   ██╗ ██████╗ ██╗   ██╗ █████╗ ██████╗ ██████╗ " -ForegroundColor Cyan
     Write-Host "██╔════╝ ██╔════╝████╗  ██║╚══██╔══╝██║     ██╔════╝    ██║   ██║██╔══██╗████╗  ██║██╔════╝ ██║   ██║██╔══██╗██╔══██╗██╔══██╗" -ForegroundColor Cyan
