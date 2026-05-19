@@ -18,6 +18,11 @@ paths = [
     "config/model-router\\.json",
     # Private sync workflow intentionally references PAT_SYNC and x-access-token
     "\\.github/workflows/sync-public\\.yml",
+    # Docs with master.key file path references (not actual secrets)
+    "docs/NORMATIVAS-ISO27001\\.md",
+    "docs/judgment/final-verdict\\.md",
+    "docs/guides/PC-MIGRATION\\.md",
+    "scripts/core/README\\.md",
 ]
 
 regexes = [
@@ -44,6 +49,7 @@ commits = [
     "cea299f7b984b983b1f8765fc867af49bb7879b1",
     # Recent commits with master.key path references in docs (not actual secrets)
     "9b89c8474b9a74c5809190091edec4c176af5cf6",
+    "66fa80628b16457e011f135cb9128a8b17ed91bf",
 ]
 
 [[rules]]

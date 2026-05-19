@@ -326,7 +326,7 @@ npm test 2>&1 | Tee-Object test-output.txt
 
 ---
 
-**Setup Completed**: ******\_\_\_\_****** (date/time)  
-**Completed By**: ******\_\_\_\_****** (your name)
+**Setup Completed**: **\*\***\_\_\_\_**\*\*** (date/time)  
+**Completed By**: **\*\***\_\_\_\_**\*\*** (your name)
 
 ✅ Ready to start coding!
