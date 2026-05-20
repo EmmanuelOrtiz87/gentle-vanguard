@@ -15,10 +15,26 @@ export async function startWhatsAppBot(cfg, onMessage, log) {
   const sessionDir = path.resolve(cfg.sessionDir);
   fs.mkdirSync(sessionDir, { recursive: true });
 
+  const browserArgs = [
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--disable-accelerated-2d-canvas',
+    '--disable-gpu',
+    '--window-size=1920,1080',
+    '--disable-blink-features=AutomationControlled',
+  ];
+
+  const puppeteerOpts = { headless: false, args: browserArgs, defaultViewport: null };
+  try {
+    const systemChrome = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
+    if (fs.existsSync(systemChrome)) puppeteerOpts.executablePath = systemChrome;
+  } catch (_) { /* ignore */ }
+
   const client = new Client({
     authStrategy: new LocalAuth({ dataPath: sessionDir }),
-    puppeteer: { headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] },
-    webVersionCache: { type: 'remote', remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html' },
+    puppeteer: puppeteerOpts,
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36',
   });
 
   let qrDisplayed = false;
