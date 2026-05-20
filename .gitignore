@@ -69,9 +69,8 @@ session/
 .local/
 .workspace/config/session-auth.json
 .workspace/config/dev-credentials.json
-.runtime/security-*.json
-.runtime/*-audit.log
-.runtime/quality/
+.runtime/
+scripts/.runtime/
 
 # Telemetry & engram runtime data
 .telemetry/
@@ -149,7 +148,11 @@ logs/.session-active
 # OpenCode generated
 config/opencode.schema.json
 
-# Audit reports (auto-generated)
+# Audit reports (auto-generated) — NEVER commit runtime data
+.audit/
+docs/audit/
+docs/code-reviews/
+docs/judgment/
 LESSONS-LEARNED-*.md
 docs/reference/LESSONS-LEARNED-*.md
 
