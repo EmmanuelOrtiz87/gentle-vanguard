@@ -1,5 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { generateReply } from '../ai-responder.js';
+import { generateStackReply } from '../stack-responder.js';
 
 export async function startTelegramBot(cfg, onMessage, log) {
   if (!cfg.token) {
@@ -30,13 +31,14 @@ export async function startTelegramBot(cfg, onMessage, log) {
         text: msg.text,
         raw: { chatId, messageId: msg.message_id, date: msg.date },
       });
-      if (cfg.ai?.enabled) {
+      if (cfg.ai?.enabled && cfg.ai?.apiKey) {
         bot.sendMessage(chatId, '🤖 Procesando...').then(async () => {
           const aiReply = await generateReply(cfg, msg.text, log);
           bot.sendMessage(chatId, aiReply || '❌ No pude procesar la respuesta.', { parse_mode: 'Markdown' });
         });
       } else {
-        bot.sendMessage(chatId, `✅ Mensaje recibido — ID: ${msg.message_id}`, { parse_mode: 'Markdown' });
+        const reply = generateStackReply(msg.text);
+        bot.sendMessage(chatId, reply, { parse_mode: 'Markdown' });
       }
     });
 

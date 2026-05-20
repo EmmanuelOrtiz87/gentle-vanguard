@@ -3,6 +3,7 @@ import qrcode from 'qrcode-terminal';
 import path from 'node:path';
 import fs from 'node:fs';
 import { generateReply } from '../ai-responder.js';
+import { generateStackReply } from '../stack-responder.js';
 
 const { Client, LocalAuth } = wweb;
 
@@ -15,6 +16,8 @@ export async function startWhatsAppBot(cfg, onMessage, log) {
   const sessionDir = path.resolve(cfg.sessionDir);
   fs.mkdirSync(sessionDir, { recursive: true });
 
+  const userDataDir = path.join(sessionDir, 'chrome-profile');
+
   const browserArgs = [
     '--no-sandbox',
     '--disable-setuid-sandbox',
@@ -26,15 +29,13 @@ export async function startWhatsAppBot(cfg, onMessage, log) {
   ];
 
   const puppeteerOpts = { headless: false, args: browserArgs, defaultViewport: null };
-  try {
-    const systemChrome = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
-    if (fs.existsSync(systemChrome)) puppeteerOpts.executablePath = systemChrome;
-  } catch (_) { /* ignore */ }
 
   const client = new Client({
     authStrategy: new LocalAuth({ dataPath: sessionDir }),
     puppeteer: puppeteerOpts,
     userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36',
+    takeoverOnConflict: true,
+    takeoverTimeoutMs: 0,
   });
 
   let qrDisplayed = false;
@@ -65,10 +66,17 @@ export async function startWhatsAppBot(cfg, onMessage, log) {
     if (isGroup) return;
 
     const senderRaw = msg.from.replace('@c.us', '').replace('@s.whatsapp.net', '');
-    const isSelfMsg = msg.fromMe || senderRaw === (client.info?.wid?.user || '');
-    const isAllowed = !cfg.allowedNumbers?.length || cfg.allowedNumbers.includes(senderRaw);
+    const widUser = client.info?.wid?.user || '';
+    const isSelfMsg = msg.fromMe || senderRaw === widUser;
+    const allowedStr = (cfg.allowedNumbers || []).map(String);
+    const isAllowed = !allowedStr.length || allowedStr.includes(senderRaw);
 
-    if (!isAllowed && !isSelfMsg) return;
+    if (!isAllowed && !isSelfMsg) {
+      log(`whatsapp: filtered msg from ${senderRaw} (wid=${widUser}, fromMe=${msg.fromMe}, allowed=${allowedStr.join(',')})`);
+      return;
+    }
+
+    log(`whatsapp: msg from ${senderRaw} (self=${isSelfMsg}, allowed=${isAllowed}) -> ${msg.body.slice(0, 60)}`);
 
     onMessage({
       from: msg._data?.notifyName || senderRaw || 'unknown',
@@ -77,7 +85,7 @@ export async function startWhatsAppBot(cfg, onMessage, log) {
     });
 
     let reply;
-    if (isSelfMsg && cfg.ai?.enabled) {
+    if (isSelfMsg && cfg.ai?.enabled && cfg.ai?.apiKey) {
       reply = `🤖 Procesando...\n\n"${msg.body.slice(0, 200)}"`;
       await client.sendMessage(msg.from, reply);
       const aiReply = await generateReply(cfg, msg.body, log);
@@ -86,21 +94,25 @@ export async function startWhatsAppBot(cfg, onMessage, log) {
       } else {
         await client.sendMessage(msg.from, '❌ No pude procesar la respuesta.');
       }
-    } else if (isSelfMsg) {
-      reply = `🤖 *Gentle-Vanguard*\n\nRecibí: "${msg.body.slice(0, 200)}"\n\n📌 Para respuesta IA, configurá gateway.json → ai.enabled: true con tu API key.`;
-      await client.sendMessage(msg.from, reply);
-    } else if (isAllowed) {
-      reply = `✅ Mensaje recibido — ID: ${msg.id.id}\nGracias por escribir.`;
+    } else {
+      reply = generateStackReply(msg.body);
       await client.sendMessage(msg.from, reply);
     }
   });
 
   client.on('disconnected', (reason) => {
-    log(`whatsapp: disconnected (${reason})`);
+    log(`whatsapp: disconnected (reason=${reason}, ready=${readyResolved})`);
     if (reason === 'LOGOUT') {
-      log('whatsapp: logged out, clearing session...');
-      fs.rmSync(path.join(sessionDir, 'LocalAuth'), { recursive: true, force: true });
+      log('whatsapp: LOGOUT — session invalid. Clearing local session data...');
+      try {
+        fs.rmSync(path.join(sessionDir, 'LocalAuth'), { recursive: true, force: true });
+        fs.rmSync(userDataDir, { recursive: true, force: true });
+      } catch (_) { /* ignore */ }
       log('whatsapp: session cleared. Restart gateway to scan QR again.');
+    } else if (reason === 'NAVIGATION') {
+      log('whatsapp: NAVIGATION — the page was navigated/refreshed. This is normal on first load if WA web redirects. Restart gateway to retry.');
+    } else {
+      log(`whatsapp: unexpected disconnect (${reason}). Restart gateway to retry.`);
     }
   });
 
