@@ -149,6 +149,14 @@
         "args": "-Depth quick",
         "required": false,
         "description": "Proactive failure detection and autonomous learning capture"
+      },
+      {
+        "id": "metrics-collection",
+        "enabled": true,
+        "script": "scripts/metrics/collector.ps1",
+        "args": "-Scope full -Quiet",
+        "required": false,
+        "description": "Auto-collect metrics after session start for live dashboard"
       }
     ],
 
