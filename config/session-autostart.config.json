@@ -157,6 +157,14 @@
         "args": "-Scope full -Quiet",
         "required": false,
         "description": "Auto-collect metrics after session start for live dashboard"
+      },
+      {
+        "id": "gateway-inbox-check",
+        "enabled": true,
+        "script": "scripts/gateway/gateway-manager.ps1",
+        "args": "-Command status",
+        "required": false,
+        "description": "Check gateway status and pending messages count on session start"
       }
     ],
 
