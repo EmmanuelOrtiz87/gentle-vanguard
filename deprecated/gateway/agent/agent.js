@@ -3,6 +3,7 @@ import path from 'node:path';
 import { toolDefinitions, executeTool } from './tools.js';
 import { buildSystemPrompt } from './system-prompt.js';
 import { getProjectContext, ConversationHistory } from './context.js';
+import { handleIncomingMessage } from './scheduler-integration.js';
 
 const ROOT = path.resolve(import.meta.dirname, '..', '..', '..');
 const HISTORY_FILE = path.join(ROOT, '.session', 'gateway', 'agent-history.json');
@@ -41,6 +42,16 @@ export class Agent {
 
     try {
       this.history.add('user', `[${platform} @${from}]: ${text}`);
+
+      const handled = await handleIncomingMessage(this, text, platform, from, onResponse);
+      if (handled) {
+        this.history.save(HISTORY_FILE);
+        return;
+      }
+
+      this.ctx = getProjectContext();
+      this.systemPrompt = buildSystemPrompt(this.ctx);
+
       const response = await this.runReAct();
       if (response) {
         this.history.add('assistant', response);
@@ -52,11 +63,15 @@ export class Agent {
     }
   }
 
+  getConfig() {
+    return this.config;
+  }
+
   async runReAct() {
     const ai = this.config.ai;
     if (!ai?.enabled || !ai?.apiKey) return null;
 
-    const maxIterations = 10;
+    const maxIterations = this.config.agent?.maxIterations || 10;
     let messages = [{ role: 'system', content: this.systemPrompt }];
     messages.push(...this.history.get());
 
@@ -87,7 +102,7 @@ export class Agent {
 
   async callLLM(messages, ai) {
     try {
-      if (ai.provider === 'openai') {
+      if (ai.provider === 'openai' || ai.provider === 'openai-compatible') {
         return await this.callOpenAI(messages, ai);
       }
       if (ai.provider === 'anthropic') {
@@ -113,9 +128,16 @@ export class Agent {
       max_tokens: ai.maxTokens || 2000,
     };
 
-    const res = await fetch(AI_ENDPOINTS.openai, {
+    const endpoint = ai.baseURL ? `${ai.baseURL}/chat/completions` : AI_ENDPOINTS.openai;
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${ai.apiKey}`,
+      ...ai.headers
+    };
+
+    const res = await fetch(endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ai.apiKey}` },
+      headers,
       body: JSON.stringify(body),
     });
     const data = await res.json();

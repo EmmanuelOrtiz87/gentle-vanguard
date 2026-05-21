@@ -5,6 +5,7 @@ import { startTelegramBot } from './platforms/telegram.js';
 import { startDiscordBot } from './platforms/discord.js';
 import { startWhatsAppBot } from './platforms/whatsapp.js';
 import { Agent } from './agent/agent.js';
+import { getScheduler } from './agent/scheduler.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..', '..');
@@ -15,6 +16,7 @@ let config = {};
 let running = true;
 let adapters = [];
 let agent = null;
+let scheduler = null;
 
 function log(msg) {
   const line = `[${new Date().toISOString()}] ${msg}\n`;
@@ -99,6 +101,16 @@ async function main() {
 
   log('Gateway starting...');
 
+  try {
+    const { reloadPlugins } = await import('./agent/plugin-loader.js');
+    const plugins = await reloadPlugins();
+    if (plugins.defs.length > 0) {
+      log(`plugins: loaded ${plugins.defs.length} plugin tool(s)`);
+    }
+  } catch (err) {
+    log(`plugins: init error -> ${err.message}`);
+  }
+
   const handlers = {
     telegram: startTelegramBot,
     discord: startDiscordBot,
@@ -126,6 +138,40 @@ async function main() {
     log('agent: enabled');
   }
 
+  scheduler = getScheduler(config, log);
+  scheduler.start();
+  log('scheduler: enabled');
+
+  if (config.sessionIntegration?.autoProcessInbox) {
+    const interval = config.sessionIntegration.autoProcessIntervalMs || 60000;
+    setInterval(() => {
+      const inboxDir = path.join(ROOT, config.inboxDir);
+      if (!fs.existsSync(inboxDir)) return;
+      const files = fs.readdirSync(inboxDir).filter(f => f.endsWith('.json'));
+      for (const f of files) {
+        try {
+          const fp = path.join(inboxDir, f);
+          const msg = JSON.parse(fs.readFileSync(fp, 'utf-8'));
+          if (msg.processed) continue;
+          if (agent && config.agent?.enabled) {
+            const platform = msg.platform || 'unknown';
+            const from = msg.from || 'unknown';
+            agent.processMessage(msg.id, platform, from, msg.text, async (replyText) => {
+              const adapter = adapters.find(a => a.platform === platform);
+              if (adapter) {
+                const to = msg.raw?.chatId?.toString() || msg.raw?.jid || from;
+                await adapter.send(to, replyText);
+              }
+            });
+          }
+        } catch (e) {
+          log(`AUTO-INBOX: error processing ${f} -> ${e.message}`);
+        }
+      }
+    }, interval);
+    log(`auto-inbox: enabled (${interval}ms interval)`);
+  }
+
   log(`Gateway ready. ${adapters.length} adapter(s) active.`);
 
   setInterval(checkOutbound, config.pollIntervalMs || 3000);
@@ -134,11 +180,13 @@ async function main() {
     log('Gateway shutting down...');
     running = false;
     if (agent) agent.stop();
+    if (scheduler) scheduler.stop();
     Promise.all(adapters.map(a => a.stop?.())).then(() => process.exit(0));
   });
   process.on('SIGTERM', () => {
     log('Gateway terminating...');
     running = false;
+    if (scheduler) scheduler.stop();
     Promise.all(adapters.map(a => a.stop?.())).then(() => process.exit(0));
   });
 }

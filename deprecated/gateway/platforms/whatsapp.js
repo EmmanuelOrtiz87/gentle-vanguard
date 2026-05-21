@@ -38,19 +38,19 @@ export async function startWhatsAppBot(cfg, onMessage, log) {
     takeoverTimeoutMs: 0,
   });
 
-  let qrDisplayed = false;
-  let readyResolved = false;
-  let resolveReady;
+   let qrDisplayed = false;
+   let readyResolved = false;
+   let resolveReady;
 
-  const readyPromise = new Promise((resolve) => { resolveReady = resolve; });
+   const readyPromise = new Promise((resolve) => { resolveReady = resolve; });
 
-  client.on('qr', (qr) => {
-    if (!qrDisplayed) {
-      qrDisplayed = true;
-      log('\nwhatsapp: === SCAN QR CODE WITH WHATSAPP ===');
-      qrcode.generate(qr, { small: false });
-    }
-  });
+    client.on('qr', (qr) => {
+      if (!qrDisplayed) {
+        qrDisplayed = true;
+        log('\nwhatsapp: === SCAN QR CODE WITH WHATSAPP ===');
+        qrcode.generate(qr, { small: false });
+      }
+    });
 
   client.on('ready', () => {
     log(`whatsapp: connected as ${client.info?.pushname || client.info?.wid?.user || 'unknown'}`);
@@ -60,28 +60,33 @@ export async function startWhatsAppBot(cfg, onMessage, log) {
     }
   });
 
-  client.on('message', async (msg) => {
-    if (!msg.body) return;
-    const isGroup = msg.from.includes('@g.us');
-    if (isGroup) return;
+   client.on('message', async (msg) => {
+     if (!msg.body) return;
+     const isGroup = msg.from.includes('@g.us');
+     if (isGroup) return;
 
-    const senderRaw = msg.from.replace('@c.us', '').replace('@s.whatsapp.net', '');
-    const widUser = client.info?.wid?.user || '';
-    const isSelfMsg = msg.fromMe || senderRaw === widUser;
-    const allowedStr = (cfg.allowedNumbers || []).map(String);
-    const isAllowed = !allowedStr.length || allowedStr.includes(senderRaw);
+     const normalize = (n) => n.replace(/\D/g, '');
+     const senderRaw = msg.from.replace('@c.us', '').replace('@s.whatsapp.net', '');
+     const senderDigits = normalize(senderRaw);
+     const widUser = client.info?.wid?.user || '';
+     const widDigits = normalize(widUser);
+     const isSelfMsg = msg.fromMe || (widDigits && senderDigits.endsWith(widDigits.slice(-10)));
+     
+     // IMPORTANTE: Si no hay números permitidos configurados, aceptar todos los mensajes
+     const allowedStr = (cfg.allowedNumbers || []).map(String);
+     const isAllowed = allowedStr.length === 0 || allowedStr.some(a => senderDigits.endsWith(normalize(a).slice(-10)));
 
-    if (!isAllowed && !isSelfMsg) {
-      log(`whatsapp: filtered msg from ${senderRaw} (wid=${widUser}, fromMe=${msg.fromMe}, allowed=${allowedStr.join(',')})`);
-      return;
-    }
-
-    log(`whatsapp: msg from ${senderRaw} (self=${isSelfMsg}, allowed=${isAllowed}) -> ${msg.body.slice(0, 60)}`);
+     log(`whatsapp: msg from ${senderRaw} (digits=${senderDigits}, self=${isSelfMsg}, allowed=${isAllowed}, allowedList=[${allowedStr.join(',')}]) -> ${msg.body.slice(0, 60)}`);
+     
+     if (!isAllowed && !isSelfMsg) {
+       log(`whatsapp: FILTERED - sender ${senderDigits} not in allowed list [${allowedStr.map(a => normalize(a)).join(',')}]`);
+       return;
+     }
 
     onMessage({
       from: msg._data?.notifyName || senderRaw || 'unknown',
       text: msg.body,
-      raw: { from: msg.from, isGroup: false, messageId: msg.id._serialized, timestamp: msg.timestamp },
+      raw: { from: msg.from, chatId: msg.from, isGroup: false, messageId: msg.id._serialized, timestamp: msg.timestamp },
     });
 
     let reply;

@@ -1,5 +1,5 @@
 param(
-  [ValidateSet('start','stop','restart','status','install','uninstall','process','send','agent','schedule','setup','logs')]
+  [ValidateSet('start','stop','restart','status','install','uninstall','process','send','agent','schedule','setup','logs','tools','rpc')]
   [string]$Command,
   [string]$ConfigPath = (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'config\gateway.json')
 )
@@ -86,10 +86,10 @@ function Stop-Gateway {
   $gwPid = Get-GwPid
   if (-not $gwPid) { Write-Host 'Gateway not running'; return }
   try {
-    Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue
+    Stop-Process -Id $gwPid -Force -ErrorAction SilentlyContinue
     Start-Sleep -Seconds 1
     Remove-Item $GwPidFile -Force -ErrorAction SilentlyContinue
-    Write-Host "Gateway stopped (PID: $pid)"
+    Write-Host "Gateway stopped (PID: $gwPid)"
   } catch {
     Write-Host "ERROR stopping gateway: $_" -ForegroundColor Red
   }
@@ -135,6 +135,26 @@ function Process-Inbox {
   Write-Host "`n=== End of Messages ===" -ForegroundColor Cyan
 }
 
+function Show-Tools {
+  Write-Host "`n=== Gateway Agent Tools ===" -ForegroundColor Cyan
+  Write-Host "`nExecution & Files:" -ForegroundColor Yellow
+  Write-Host "  execute_command   - Run any PowerShell/shell command"
+  Write-Host "  read_file         - Read file contents (configs, logs, SKILL.md)"
+  Write-Host "  write_file        - Write content to a file (creates dirs)"
+  Write-Host "  search_files      - Regex search across the codebase"
+  Write-Host "  list_directory    - Explore project structure"
+  Write-Host "  git_command       - Git operations (status, diff, commit, etc.)"
+  Write-Host "`nGateway & Agent:" -ForegroundColor Yellow
+  Write-Host "  gateway_status    - Show gateway state (running, platforms, counts)"
+  Write-Host "  process_inbox     - Process pending inbox messages"
+  Write-Host "  list_schedules    - List active cron scheduler tasks"
+  Write-Host "  load_skill        - Load a skill (skills/<name>/SKILL.md)"
+  Write-Host "  session_info      - Show current session context"
+  Write-Host "`nCommunication:" -ForegroundColor Yellow
+  Write-Host "  send_message      - Send final response to user's platform"
+  Write-Host "`nUsage: The ReAct agent calls these tools automatically based on user intent."
+}
+
 switch ($Command) {
   'status' {
     $s = Get-Status
@@ -160,7 +180,7 @@ switch ($Command) {
   }
   'send' {
     if (-not $sendPlatform -or -not $sendTo -or -not $sendText) {
-      Write-Host 'Usage: .\gateway-manager.ps1 -Command send <platform> <to> <message>' -ForegroundColor Yellow
+      Write-Host 'Usage: .\gateway-manager.ps1 -Command send [platform] [to] [message]' -ForegroundColor Yellow
       Write-Host '  platform: telegram | discord | whatsapp'
       Write-Host '  to: chatId (Telegram), channelId (Discord), or phone@c.us (WhatsApp)'
       Write-Host '  Example: send whatsapp 541155512345@c.us Hola desde GV'
@@ -203,7 +223,7 @@ switch ($Command) {
         Write-Host 'AI auto-response disabled.' -ForegroundColor Yellow
       }
       default {
-        Write-Host 'Usage: .\gateway-manager.ps1 -Command agent <subcommand>'
+        Write-Host 'Usage: .\gateway-manager.ps1 -Command agent [subcommand]' -ForegroundColor Yellow
         Write-Host '  status   Show agent/AI status'
         Write-Host '  on       Enable agent processing'
         Write-Host '  off      Disable agent processing'
@@ -221,14 +241,14 @@ switch ($Command) {
           if ($tasks.Count -eq 0) { Write-Host 'No scheduled tasks.'; return }
           Write-Host "`n=== Scheduled Tasks ===" -ForegroundColor Cyan
           foreach ($t in $tasks) {
-            $status = if ($t.enabled) { '✅' } else { '⏸️' }
-            Write-Host "$status [$($t.id)] $($t.description) — cron: $($t.cron) → $($t.platform)"
+            $status = if ($t.enabled) { 'ON' } else { 'OFF' }
+            Write-Host "$status [$($t.id)] $($t.description) -- cron: $($t.cron) -> $($t.platform)"
           }
         } else { Write-Host 'No scheduled tasks.' }
       }
       'add' {
         if ($scheduleArgs.Count -lt 3) {
-          Write-Host 'Usage: schedule add <cron> <platform> <description>'
+          Write-Host 'Usage: schedule add [cron] [platform] [description]' -ForegroundColor Yellow
           Write-Host '  cron: "*/5 * * * *" (every 5 min), "0 9 * * 1-5" (weekdays 9am)'
           Write-Host '  platform: whatsapp | telegram'
           Write-Host 'Example: schedule add "0 9 * * *" whatsapp Daily morning report'
@@ -245,10 +265,10 @@ switch ($Command) {
             console.log(JSON.stringify(t));
           })
         " 2>&1
-        Write-Host "Task added: $desc (cron: $cron → $platformArg)" -ForegroundColor Green
+        Write-Host "Task added: $desc (cron: $cron -> $platformArg)" -ForegroundColor Green
       }
       'remove' {
-        if ($scheduleArgs.Count -lt 1) { Write-Host 'Usage: schedule remove <task-id>'; exit 1 }
+        if ($scheduleArgs.Count -lt 1) { Write-Host 'Usage: schedule remove [task-id]' -ForegroundColor Yellow; exit 1 }
         $id = $scheduleArgs[0]
         if (Test-Path $scheduleFile) {
           $tasks = Get-Content $scheduleFile -Raw | ConvertFrom-Json | Where-Object { $_.id -ne $id }
@@ -257,13 +277,46 @@ switch ($Command) {
         }
       }
       default {
-        Write-Host 'Usage: .\gateway-manager.ps1 -Command schedule <subcommand>'
+        Write-Host 'Usage: .\gateway-manager.ps1 -Command schedule [subcommand]' -ForegroundColor Yellow
         Write-Host '  list              Show all scheduled tasks'
-        Write-Host '  add <cron> <platform> <desc>   Add a scheduled task'
-        Write-Host '  remove <id>       Remove a task by ID'
+        Write-Host '  add [cron] [platform] [desc]   Add a scheduled task'
+        Write-Host '  remove [id]       Remove a task by ID'
       }
     }
   }
+  'rpc' {
+    $rpcSubCmd = $args[0]
+    $rpcPort = if ($args[1]) { $args[1] } else { 8732 }
+    switch ($rpcSubCmd) {
+      'start' {
+        $rpcLog = Join-Path $RootDir '.session\rpc-logs\rpc-server.log'
+        $proc = Start-Process -FilePath $NodeBin -ArgumentList @(Join-Path $GatewayDir '..\rpc\rpc-server.js', "--port", "$rpcPort") -NoNewWindow -PassThru `
+          -RedirectStandardOutput $rpcLog -RedirectStandardError ($rpcLog -replace '\.log$', '-err.log')
+        Start-Sleep -Seconds 1
+        Write-Host "RPC server started (PID: $($proc.Id), port: $rpcPort)" -ForegroundColor Green
+        $proc.Id | Out-File -FilePath (Join-Path $RootDir '.session\gateway\rpc.pid') -Encoding ascii
+      }
+      'stop' {
+        $rpcPidFile = Join-Path $RootDir '.session\gateway\rpc.pid'
+        if (Test-Path $rpcPidFile) {
+          $pid = Get-Content $rpcPidFile -Raw
+          Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue
+          Remove-Item $rpcPidFile -Force -ErrorAction SilentlyContinue
+          Write-Host "RPC server stopped (PID: $pid)" -ForegroundColor Yellow
+        } else { Write-Host 'RPC server not running' -ForegroundColor Yellow }
+      }
+      'status' {
+        try {
+          $res = Invoke-RestMethod -Uri "http://localhost:$rpcPort/health" -TimeoutSec 3
+          Write-Host "RPC: RUNNING (port $rpcPort, $($res.tools.Count) tools, $($res.requestCount) requests)" -ForegroundColor Green
+        } catch { Write-Host 'RPC: STOPPED' -ForegroundColor Red }
+      }
+      default {
+        Write-Host 'Usage: .\gateway-manager.ps1 -Command rpc [start|stop|status] [port]' -ForegroundColor Yellow
+      }
+    }
+  }
+  'tools' { Show-Tools }
   'setup' {
     Write-Host "=== Gateway Setup Guide ===" -ForegroundColor Cyan
     Write-Host "`n1. Edit config: $ConfigPath"
@@ -289,7 +342,7 @@ switch ($Command) {
     Write-Host "   .\scripts\gateway\gateway-manager.ps1 -Command process"
   }
   default {
-    Write-Host "Usage: .\scripts\gateway\gateway-manager.ps1 -Command <command>"
-    Write-Host "Commands: start | stop | restart | status | install | uninstall | process | send | agent | schedule | logs | setup"
+    Write-Host "Usage: .\scripts\gateway\gateway-manager.ps1 -Command [command]" -ForegroundColor Yellow
+    Write-Host "Commands: start | stop | restart | status | install | uninstall | process | send | agent | schedule | logs | setup | tools | rpc"
   }
 }
