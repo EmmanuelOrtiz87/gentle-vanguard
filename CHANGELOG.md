@@ -45,12 +45,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Deprecated
 
 - **Gateway multi-platform**: `scripts/gateway/`, `scripts/rpc/`, `plugins/`,
-  `skills/multi-platform-gateway/` — moved to `deprecated/`. The gateway serves a different use
-  case (external agent for multi-platform messaging) and does not contribute to core agent
-  autonomy.
-- **Plugin system**: Async ESM plugin loader (`plugin-loader.js`), dynamic tool routing, demo
-  plugin (system-info). Implemented, tested, then deprecated — premature before core autonomy is
-  solid.
+  `skills/multi-platform-gateway/` — moved to `deprecated/`. The gateway serves a different use case
+  (external agent for multi-platform messaging) and does not contribute to core agent autonomy.
+- **Plugin system**: Async ESM plugin loader (`plugin-loader.js`), dynamic tool routing, demo plugin
+  (system-info). Implemented, tested, then deprecated — premature before core autonomy is solid.
 - **Feedback loop**: JSONL feedback store, API endpoints, trend analysis. Deprecated with plugin
   system since it was designed for the gateway agent, not the core orchestrator.
 
