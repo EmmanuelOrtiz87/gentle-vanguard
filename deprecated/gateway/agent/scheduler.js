@@ -125,6 +125,9 @@ export class Scheduler {
         case 'report':
           result = `📊 *Reporte Programado*\n\n${new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })}\n\nProyecto: gentle-vanguard\nTarea: ${task.description}`;
           break;
+        case 'nlu':
+          result = `[NLU] ${task.params?.cmd || task.description}`;
+          break;
         default:
           result = `✅ Ejecutado: ${task.description}`;
       }
@@ -169,4 +172,24 @@ export class Scheduler {
     this.save();
     this.log('scheduler: stopped');
   }
+
+  formatForDisplay() {
+    if (this.tasks.length === 0) return 'No hay tareas programadas.';
+    return this.tasks.map((t, i) =>
+      `${i + 1}. [${t.enabled ? 'ACTIVO' : 'INACTIVO'}] ${t.description} | cron: "${t.cron}" | action: ${t.action} | platform: ${t.platform}${t.target ? ' -> ' + t.target : ''}${t.lastRun ? ' | last: ' + t.lastRun.slice(0, 16).replace('T', ' ') : ''}`
+    ).join('\n');
+  }
+}
+
+let _schedulerInstance = null;
+
+export function getScheduler(config, log) {
+  if (!_schedulerInstance) {
+    _schedulerInstance = new Scheduler(
+      config || {},
+      log || ((msg) => process.stdout.write(`[scheduler] ${msg}\n`))
+    );
+    _schedulerInstance.load();
+  }
+  return _schedulerInstance;
 }
