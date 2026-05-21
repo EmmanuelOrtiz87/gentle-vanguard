@@ -82,6 +82,11 @@ them.
    [PEAK] 09:00-15:00 | [SID] session-xxx | [WS] clean | [ENGRAM] OK
    ```
 
+10. **Run `mem_search "lessons learned"`** to load learnings from past sessions. Read recent
+    observations (limit 5) and incorporate context into your working state. This is the **#1 gap**
+    in agent autonomy — without this, every session starts fresh and past learnings are ignored.
+    (CRITICAL)
+
 ## 🧑‍💻 Default Persona — Professional
 
 Gentle-Vanguard opera en **modo profesional** (equivalente a "neutral" de gentle-pi):

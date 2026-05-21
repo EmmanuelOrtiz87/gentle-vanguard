@@ -173,7 +173,7 @@
     "premortem-skill": "PREMORTEM",
     "codegraph-skill": "CODEGRAPH",
     "_semantic-skill-matcher": "GOV",
-    "multi-platform-gateway": "GATEWAY",
+
     "adaptive-mode-orchestrator": "GOV",
     "adaptive-orchestrator": "GOV",
     "android-architecture-skill": "DEV",
@@ -1102,24 +1102,6 @@
       "autofix",
       "script error",
       "correct script"
-    ],
-    "GATEWAY": [
-      "gateway",
-      "telegram",
-      "discord",
-      "whatsapp",
-      "mensaje",
-      "notificar",
-      "notificacion",
-      "notificación",
-      "alerta",
-      "reporte automatico",
-      "reporte automático",
-      "enviar mensaje",
-      "send message",
-      "multi-platform",
-      "multiplataforma",
-      "bot"
     ],
     "CODEGRAPH": [
       "codegraph",
