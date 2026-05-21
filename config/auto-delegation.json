@@ -173,7 +173,6 @@
     "premortem-skill": "PREMORTEM",
     "codegraph-skill": "CODEGRAPH",
     "_semantic-skill-matcher": "GOV",
-
     "adaptive-mode-orchestrator": "GOV",
     "adaptive-orchestrator": "GOV",
     "android-architecture-skill": "DEV",
