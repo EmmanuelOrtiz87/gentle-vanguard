@@ -78,6 +78,7 @@ them.
    (NORMATIVAS-SESSION.md 2.2 #6, SHOULD)
 
 9. **Report key startup info to user** in a compact block:
+
    ```
    [PEAK] 09:00-15:00 | [SID] session-xxx | [WS] clean | [ENGRAM] OK
    ```

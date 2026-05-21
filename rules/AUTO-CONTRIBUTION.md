@@ -2,9 +2,8 @@
 
 ## Purpose
 
-Define how the agent modifies its own configuration, rules, skills, and scripts to
-improve autonomy over time. Every session should leave the agent slightly better than
-it found it.
+Define how the agent modifies its own configuration, rules, skills, and scripts to improve autonomy
+over time. Every session should leave the agent slightly better than it found it.
 
 ## Principles
 
@@ -16,25 +15,25 @@ it found it.
 
 ## Permitted Self-Modifications (No Approval Needed)
 
-| Action | Guard |
-|---|---|
+| Action                               | Guard                                     |
+| ------------------------------------ | ----------------------------------------- |
 | Add new skill under `skills/<name>/` | Must register in `.atl/skill-registry.md` |
-| Append to `AGENTS.md` section | Must not break existing structure |
-| Create new rule under `rules/` | Must not contradict existing rules |
-| Fix bug in `scripts/utilities/` | Must pass `validate-configs.ps1` |
-| Update `docs/` for accuracy | Must not remove user-authored content |
-| Add/modify `TODO:` comments | Must be actionable |
+| Append to `AGENTS.md` section        | Must not break existing structure         |
+| Create new rule under `rules/`       | Must not contradict existing rules        |
+| Fix bug in `scripts/utilities/`      | Must pass `validate-configs.ps1`          |
+| Update `docs/` for accuracy          | Must not remove user-authored content     |
+| Add/modify `TODO:` comments          | Must be actionable                        |
 
 ## Forbidden Self-Modifications (Requires External Approval)
 
-| Action | Reason |
-|---|---|
-| Delete or modify `CLAUDE.md` | Bootstrap integrity |
-| Change `config/orchestrator.json` | System architecture |
-| Modify `rules/DEVELOPMENT-STANDARDS.md` | Development foundation |
-| Change `.gitignore` | Security boundary |
-| Delete user-created files | Data loss risk |
-| Disable or modify guard scripts (verify, validate) | Safety net |
+| Action                                             | Reason                 |
+| -------------------------------------------------- | ---------------------- |
+| Delete or modify `CLAUDE.md`                       | Bootstrap integrity    |
+| Change `config/orchestrator.json`                  | System architecture    |
+| Modify `rules/DEVELOPMENT-STANDARDS.md`            | Development foundation |
+| Change `.gitignore`                                | Security boundary      |
+| Delete user-created files                          | Data loss risk         |
+| Disable or modify guard scripts (verify, validate) | Safety net             |
 
 ## Workflow
 
@@ -74,6 +73,7 @@ pwsh -NoProfile -File scripts/utilities/build-skill-registry.ps1
 
 ```markdown
 ## 2026-05-21 — <brief description>
+
 - **What**: <what changed>
 - **Why**: <motivation>
 - **Files**: <paths>
@@ -100,9 +100,9 @@ content: |
 
 ## Examples
 
-| Trigger | Action | Protocol |
-|---|---|---|
-| "This skill always fails with X error" | Fix the script, add Known Issues section | Read → Validate → Edit → Validate → Engram |
-| "We keep typing the same commands" | Create a new skill or script | Check existing → Create → Register → Engram |
-| "The AGENTS.md startup is missing a step" | Add the step | Read structure → Append → Validate → Engram |
-| "Config X is wrong for this platform" | Fix config value | Read → Check impact → Edit → Validate → Engram |
+| Trigger                                   | Action                                   | Protocol                                       |
+| ----------------------------------------- | ---------------------------------------- | ---------------------------------------------- |
+| "This skill always fails with X error"    | Fix the script, add Known Issues section | Read → Validate → Edit → Validate → Engram     |
+| "We keep typing the same commands"        | Create a new skill or script             | Check existing → Create → Register → Engram    |
+| "The AGENTS.md startup is missing a step" | Add the step                             | Read structure → Append → Validate → Engram    |
+| "Config X is wrong for this platform"     | Fix config value                         | Read → Check impact → Edit → Validate → Engram |
