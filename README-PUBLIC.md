@@ -8,8 +8,8 @@
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
   <img src="https://img.shields.io/badge/Platform-Win%20|%20Linux%20|%20macOS-6B7280?style=flat-square&labelColor=0D1117" alt="Platform">
-  <img src="https://img.shields.io/badge/Agents-17-00BFFF?style=flat-square&labelColor=0D1117" alt="Agents">
-  <img src="https://img.shields.io/badge/Skills-134-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
+  <img src="https://img.shields.io/badge/Agents-18-00BFFF?style=flat-square&labelColor=0D1117" alt="Agents">
+  <img src="https://img.shields.io/badge/Skills-135-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
   <img src="https://img.shields.io/badge/Workflows-16-A855F7?style=flat-square&labelColor=0D1117" alt="Workflows">
 </p>
 
@@ -24,7 +24,7 @@
 </p>
 
 <p align="center">
-  <strong>AI-powered development orchestrator · 17 agents · 134 skills · 10 tool-compatible</strong><br>
+  <strong>AI-powered development orchestrator · 18 agents · 135 skills · 10 tool-compatible</strong><br>
   <em>Tool-agnostic · SDD Lifecycle · Judgment Day · Persistent memory</em>
 </p>
 
@@ -47,7 +47,7 @@ standards, tracks every token, and remembers what you did last session.
 | No governance in AI workflows        | SDD enforcement, judgment-day adversarial review, pre-commit hooks     |
 | Disconnected AI sessions             | Session lifecycle tracks context across dispatches with crash recovery |
 | No visibility into AI costs          | Dashboard with token trends, per-agent costs, ROI analysis             |
-| One-size-fits-all AI responses       | 17 specialized agents with role-specific model routing                 |
+| One-size-fits-all AI responses       | 18 specialized agents with role-specific model routing                 |
 | Tool lock-in                         | Works with 10 coding tools via runtime detection                       |
 
 ---
@@ -71,7 +71,7 @@ flowchart TB
     SDD --> DEV[DEV - Apply]
     SDD --> QA[QA - Verify]
 
-    BA --> SKILLS[134 Skills]
+    BA --> SKILLS[135 Skills]
     DEV --> SKILLS
     QA --> SKILLS
 
@@ -85,7 +85,7 @@ flowchart TB
 | **1. Agents**      | Task delegation       | 1 orchestrator + 16 sub-agents                            |
 | **2. Commands**    | CLI entry points      | `gv.ps1`, `pre-process-input.ps1`                         |
 | **3. MCP Servers** | Protocol bridge       | Model Context Protocol, Engram MCP, CodeGraph             |
-| **4. Skills**      | Specialized execution | 134 skills (frontend, backend, DevOps, security, testing) |
+| **4. Skills**      | Specialized execution | 135 skills (frontend, backend, DevOps, security, testing) |
 | **5. Memory**      | Persistent context    | Engram (hot/warm/cold tiers)                              |
 
 ---
@@ -118,15 +118,15 @@ flowchart TB
 
 ## Key Features
 
-- **17 Specialized Agents** — Orchestrator + BA, SAD, DEV, QA, OPS, GOV, DOC, SESSION, PREMORTEM,
+- **18 Specialized Agents** — Orchestrator + BA, SAD, DEV, QA, OPS, GOV, DOC, SESSION, PREMORTEM,
   FINANCE, LEGAL, MKT, SALES, HR, SELF-DIAG, BUS-TELE
-- **134 On-Demand Skills** — Angular, React, Next.js, Go, Django, Python, TypeScript, Docker, K8s,
+- **135 On-Demand Skills** — Angular, React, Next.js, Go, Django, Python, TypeScript, Docker, K8s,
   Playwright, Security, API Design — zero memory until triggered
 - **Persistent Engram Memory** — Cross-session context, conflict detection, auto-reconciliation
 - **Cost-Aware Model Router** — Per-agent model assignment with 3 profiles: fast/cheap,
   strong-reasoning, strong-coding
 - **SDD Lifecycle** — BA → SAD → DEV → QA with OpenSpec artifact store and per-phase gates
-- **Governance-First** — 7D validation, judgment-day adversarial review, 16 CI/CD workflows,
+- **Governance-First** — 7D validation, judgment-day adversarial review, 16+ CI/CD workflows,
   pre-commit hooks
 - **100% Local-First** — No required external services. Optional cloud AI integration.
 - **Cross-Platform** — Windows, macOS, Linux. PowerShell 7+ and Bash.
@@ -200,13 +200,13 @@ pwsh -File scripts/bootstrap.ps1
 | `format-check.yml`                 | Prettier formatting        | Every PR             |
 | `gitleaks.yml`                     | Secret scanning            | Every PR             |
 | `security-scan.yml`                | OWASP security scanning    | Weekly               |
-| `codeql-analysis.yml`              | CodeQL analysis            | Weekly               |
 | `autonomous-validation.yml`        | Full validation suite      | Weekly               |
+| `cross-platform-tests.yml`         | Cross-platform tests       | Every PR/push        |
 | `dashboard-auto-refresh.yml`       | Metrics dashboard          | Daily                |
 | `monthly-management-report.yml`    | Executive report           | Monthly              |
-| `dependency-backup.yml`            | Dependency backup          | Weekly               |
 | `release.yml`                      | Release management         | On tag               |
 | `labeler.yml`                      | Auto-label PRs             | Every PR             |
+| `sync-public.yml`                  | Sync to public repo        | On push to `main`    |
 | `workflow-lint.yml`                | Workflow syntax validation | On `.github/` change |
 
 ---
@@ -250,6 +250,6 @@ AES-256 encryption for secrets, API keys, and sensitive configs. See [SECURITY.m
 ---
 
 <p align="center">
-  <strong>Gentle-Vanguard v2.19.0</strong><br>
+  <strong>Gentle-Vanguard v2.20.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>
