@@ -131,7 +131,7 @@ window.gvExportPdf = function(){
 window.gvExportPng = function(){
  var sec = document.querySelector('.sec.active');
  if(!sec){alert('No active section');return}
- fetch(baseUrl+'/api/export/png').then(function(r){if(!r.ok)throw Error(r.status);return r.blob()}).then(function(b){
+ fetch(baseUrl+'/api/export/png?section='+sec.id).then(function(r){if(!r.ok)throw Error(r.status);return r.blob()}).then(function(b){
   var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='dashboard-'+new Date().toISOString().slice(0,10)+'.png';
   document.body.appendChild(a);a.click();document.body.removeChild(a);
  }).catch(function(){
@@ -251,7 +251,7 @@ addExportBar();
                 $res.ContentType = 'application/json'
                 $res.Headers.Add('Access-Control-Allow-Origin', '*')
                 $res.OutputStream.Write($buf, 0, $buf.Length)
-            } elseif ($path -eq '/api/export/pdf') {
+            } elseif ($path -eq '/api/export/pdf' -or $path -like '/api/export/pdf?*') {
                 $pdfScript = Join-Path $repoRoot 'scripts' 'utilities' 'export-dashboard-pdf.ps1'
                 $pdfPath = Join-Path $reportsDir 'dashboard-export.pdf'
                 if (Test-Path $pdfScript) {
@@ -279,7 +279,8 @@ addExportBar();
                     $buf = [System.Text.Encoding]::UTF8.GetBytes("PDF export script not found: $pdfScript")
                     $res.OutputStream.Write($buf, 0, $buf.Length)
                 }
-            } elseif ($path -eq '/api/export/png') {
+            } elseif ($path -like '/api/export/png*') {
+                $section = if ($path -match 'section=(\w+)') { $Matches[1] } else { '' }
                 $browserPaths = @("${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe","${env:ProgramFiles}\Microsoft\Edge\Application\msedge.exe","${env:ProgramFiles}\Google\Chrome\Application\chrome.exe","${env:LOCALAPPDATA}\Google\Chrome\Application\chrome.exe")
                 $browserExe = $null; foreach ($bp in $browserPaths) { if (Test-Path $bp) { $browserExe = $bp; break } }
                 if (-not $browserExe) {
@@ -289,8 +290,13 @@ addExportBar();
                 } else {
                     $tmpHtml = [System.IO.Path]::GetTempFileName() + '.html'
                     $html = Get-Content $dashFile -Raw -Encoding UTF8
-                    # Inject CSS to show ALL sections (screen media, not print) + delay for screenshot
-                    $inject = '<style>.sec{display:block!important}.nav,.export-bar,#gv-export-bar{display:none!important}</style>'
+                    if ($section) {
+                        # Show ONLY the requested section
+                        $inject = "<style>.sec{display:none!important}#$section{display:block!important}.nav,.export-bar,#gv-export-bar{display:none!important}</style>"
+                    } else {
+                        # Show ALL sections (full dashboard)
+                        $inject = '<style>.sec{display:block!important}.nav,.export-bar,#gv-export-bar{display:none!important}</style>'
+                    }
                     $html = $html -replace '</head>', "${inject}</head>"
                     $html | Set-Content $tmpHtml -Encoding UTF8
                     $pngPath = Join-Path $reportsDir 'dashboard-export.png'
