@@ -103,7 +103,7 @@ function Toggle-Display {
 function Get-CurrentSessionId {
     if ($SessionId) { return $SessionId }
     
-    # Try to get from session file
+    # Try to get from session file in .session directory
     $sessionFile = Get-ChildItem (Join-Path $configDir "session-*.json") -ErrorAction SilentlyContinue | 
         Sort-Object LastWriteTime -Descending | 
         Select-Object -First 1
@@ -115,7 +115,30 @@ function Get-CurrentSessionId {
         } catch {}
     }
     
-    return "unknown"
+    # Fallback: check logs directory for most recent session
+    $logsDir = Join-Path $repoRoot 'logs'
+    $logSessionFile = Get-ChildItem (Join-Path $logsDir "session-*.json") -ErrorAction SilentlyContinue | 
+        Sort-Object LastWriteTime -Descending | 
+        Select-Object -First 1
+    
+    if ($logSessionFile) {
+        try {
+            $sessionData = Get-Content $logSessionFile.FullName | ConvertFrom-Json
+            # Handle both sessionId (logs) and SessionId (session files) case sensitivity
+            return $sessionData.sessionId ?? $sessionData.SessionId
+        } catch {}
+    }
+    
+    # Final fallback: check token-usage.json for current session
+    if (Test-Path $tokenUsageFile) {
+        try {
+            $data = Get-Content $tokenUsageFile -Raw | ConvertFrom-Json
+            if ($data.sessionId) { return $data.sessionId }
+        } catch {}
+    }
+    
+    # Last resort: return empty string instead of "unknown" for better UX
+    return ""
 }
 
 # Initialize or load token usage data
@@ -329,7 +352,8 @@ function Show-Status {
     Write-Host "Compact Mode:      $($config.compactMode)" -ForegroundColor White
     Write-Host "Last Toggle:       $($config.lastToggle)" -ForegroundColor Gray
     Write-Host ""
-    Write-Host "Current Session:   $($data.sessionId)" -ForegroundColor White
+    $sessionIdDisplay = if ([string]::IsNullOrWhiteSpace($data.sessionId)) { "N/A" } else { $data.sessionId }
+    Write-Host "Current Session:   $sessionIdDisplay" -ForegroundColor White
     Write-Host "Messages Tracked:  $($data.messageCount)" -ForegroundColor White
     Write-Host "Total Tokens:      $($data.totalTokens)" -ForegroundColor Yellow
     Write-Host ""

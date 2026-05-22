@@ -169,14 +169,22 @@ function Invoke-SafeCommand {
     }
 }
 
-# Exportar funciones
-Export-ModuleMember -Function @(
-    'ConvertTo-SafeJsonString',
-    'Limit-JsonStringLength', 
-    'New-SafeMemSaveContent',
-    'New-SafeSessionEndSummary',
-    'Test-SafeFilePath',
-    'Invoke-SafeCommand'
-)
+# Exportar funciones solo si se ejecuta como módulo (.psm1), no como script independiente
+# Detect module mode by checking if we're being dot-sourced or imported
+$isModuleMode = ($MyInvocation.MyCommand.Name -match '\.psm1$') -or 
+                ($ExecutionContext.SessionState.Module -ne $null)
 
-Write-Verbose "Engram safe functions loaded"
+if ($isModuleMode) {
+    Export-ModuleMember -Function @(
+        'ConvertTo-SafeJsonString',
+        'Limit-JsonStringLength', 
+        'New-SafeMemSaveContent',
+        'New-SafeSessionEndSummary',
+        'Test-SafeFilePath',
+        'Invoke-SafeCommand'
+    )
+    Write-Verbose "Engram safe functions loaded (module mode)"
+} else {
+    # Script mode or dot-sourced - do not export
+    Write-Verbose "Engram safe functions loaded (script mode)"
+}

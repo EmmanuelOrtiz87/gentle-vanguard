@@ -17,7 +17,7 @@
         "id": "session-manager",
         "enabled": true,
         "script": "scripts/utilities/session-manager.ps1",
-        "args": "-Mode AutoStart",
+        "args": "-Mode AutoStart -SkipEngramSafe",
         "required": true,
         "description": "Initialize session ID and create session file"
       },
