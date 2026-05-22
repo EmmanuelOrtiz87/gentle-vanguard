@@ -1,7 +1,8 @@
 param(
     [int]$RefreshSeconds = 15,
     [int]$Iterations = 0,
-    [switch]$Open
+    [switch]$Open,
+    [switch]$Daemon
 )
 
 $ErrorActionPreference = 'Continue'
@@ -59,17 +60,21 @@ function Update-Dashboard {
     }
 }
 
+if (-not $Daemon) {
+    Write-Host "[LIVE-FEED] Starting live feed (every ${RefreshSeconds}s)" -ForegroundColor Cyan
+    Write-Host "[LIVE-FEED] Feed: $feedFile" -ForegroundColor Gray
+    Write-Host "[LIVE-FEED] Dashboard: $dashboardFile" -ForegroundColor Gray
+    Write-Host "[LIVE-FEED] Ctrl+C to stop`n" -ForegroundColor Yellow
+}
+
 $cycle = 0
 $opened = $false
 
-Write-Host "[LIVE-FEED] Starting live feed (every ${RefreshSeconds}s)" -ForegroundColor Cyan
-Write-Host "[LIVE-FEED] Feed: $feedFile" -ForegroundColor Gray
-Write-Host "[LIVE-FEED] Dashboard: $dashboardFile" -ForegroundColor Gray
-Write-Host "[LIVE-FEED] Ctrl+C to stop`n" -ForegroundColor Yellow
-
 while ($true) {
     $cycle++
-    Write-Host "`r[LIVE-FEED] Cycle $cycle @ $(Get-Date -Format 'HH:mm:ss')" -NoNewline -ForegroundColor Green
+    if (-not $Daemon) {
+        Write-Host "`r[LIVE-FEED] Cycle $cycle @ $(Get-Date -Format 'HH:mm:ss')" -NoNewline -ForegroundColor Green
+    }
     & $collector -Scope full -Quiet
     Write-Feed
     if ($cycle % 4 -eq 0) {
@@ -82,7 +87,7 @@ while ($true) {
         $opened = $true
     }
     if ($Iterations -gt 0 -and $cycle -ge $Iterations) {
-        Write-Host "`n[LIVE-FEED] Completed $Iterations cycles" -ForegroundColor Cyan
+        if (-not $Daemon) { Write-Host "`n[LIVE-FEED] Completed $Iterations cycles" -ForegroundColor Cyan }
         break
     }
     Start-Sleep -Seconds $RefreshSeconds

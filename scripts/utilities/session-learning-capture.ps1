@@ -90,7 +90,7 @@ if (Test-Path $logsDir) {
                 $lessonsFound++
                 Write-Log "Errors found in $($log.Name): $($errors.Count) error lines" "WARN"
             }
-        } catch {}
+        } catch { Write-Warning "Failed to read log entries from $($log.Name): $_" }
     }
 }
 
@@ -99,7 +99,7 @@ if (Test-Path $metricsFile) {
     try {
         $sessionMetrics = Get-Content $metricsFile -Raw | ConvertFrom-Json
         Write-Log "Session metrics loaded: $($sessionMetrics.metrics.toolCalls) tool calls, $($sessionMetrics.metrics.filesEdited) files edited" "OK"
-    } catch {}
+    } catch { Write-Warning "Failed to parse session metrics: $_" }
 }
 
 $learningFile = Join-Path $sessionDir "learning-capture.json"

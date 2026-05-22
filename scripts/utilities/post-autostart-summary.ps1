@@ -110,5 +110,5 @@ $summaryDir = Join-Path $repoRoot 'scripts\.session'
 if (-not (Test-Path $summaryDir)) { New-Item -ItemType Directory -Path $summaryDir -Force | Out-Null }
 $outPath = Join-Path $summaryDir 'startup-summary.json'
 $summary | ConvertTo-Json -Depth 3 | Out-File -FilePath $outPath -Encoding UTF8 -Force
-Write-Output "[SUMMARY] Startup summary written to $outPath"
+Write-Output "[SUMMARY] Startup summary written to $outPath (session: $sessionId)"
 
