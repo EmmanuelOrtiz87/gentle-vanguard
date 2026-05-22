@@ -38,7 +38,7 @@ function Write-Info { param([string]$Message)
     Write-Host "[INFO] $Message" -ForegroundColor Cyan
 }
 
-function Write-Error { param([string]$Message)
+function Write-MessageError { param([string]$Message)
     Write-Host "[ERROR] $Message" -ForegroundColor Red
 }
 
@@ -90,8 +90,8 @@ try {
         Write-Warn "Uncommitted changes detected"
         git status --short
         
-        if ($AutoResolve) {
-            Write-Host "Auto-committing changes..." -ForegroundColor Yellow
+        if ($AutoResolve -and $Force) {
+            Write-Host "WARNING: Auto-committing ALL changes..." -ForegroundColor Yellow
             git add . 2>$null
             $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
             $commitMsg = "fix: auto-commit before session close - $timestamp"
@@ -99,12 +99,16 @@ try {
             if ($LASTEXITCODE -eq 0) {
                 Write-Ok "Auto-committed pending changes"
             } else {
-                Write-Error "Failed to auto-commit: $commitOutput"
+                Write-MessageError "Failed to auto-commit: $commitOutput"
                 $allPassed = $false
                 $failedChecks += "GitCommit"
                 $gitError = $true
             }
         } else {
+            Write-Warn "Uncommitted changes block session close. Options:"
+            Write-Warn "  - Commit manually: git add <files> && git commit -m \"...\""
+            Write-Warn "  - Force close: re-run with -Force (bypasses validation)"
+            Write-Warn "  - Auto-commit + Force: re-run with -AutoResolve -Force (commits ALL changes)"
             $allPassed = $false
             $failedChecks += "GitUncommitted"
         }
@@ -124,18 +128,22 @@ try {
             if ($ahead -gt 0) {
                 Write-Warn "Unpushed commits: $ahead"
                 
-                if ($AutoResolve) {
-                    Write-Host "Auto-pushing to $upstream..." -ForegroundColor Yellow
-                    $branch = git rev-parse --abbrev-ref HEAD 2>$null
-                    $pushOutput = git push origin $branch 2>&1
+                if ($AutoResolve -and $Force) {
+                    Write-Host "WARNING: Auto-pushing to $upstream..." -ForegroundColor Yellow
+                    $pushBranch = git rev-parse --abbrev-ref HEAD 2>$null
+                    $null = $LASTEXITCODE
+                    $pushOutput = git push origin $pushBranch 2>&1
                     if ($LASTEXITCODE -eq 0) {
                         Write-Ok "Auto-pushed commits to $upstream"
                     } else {
-                        Write-Error "Failed to auto-push: $pushOutput"
+                        Write-MessageError "Failed to auto-push: $pushOutput"
                         $allPassed = $false
                         $failedChecks += "GitPush"
                     }
                 } else {
+                    Write-Warn "Unpushed commits: $ahead. Options:"
+                    Write-Warn "  - Push manually: git push"
+                    Write-Warn "  - Force close: re-run with -Force"
                     $allPassed = $false
                     $failedChecks += "GitUnpushed"
                 }
@@ -151,7 +159,7 @@ try {
         }
     }
 } catch {
-    Write-Error "Git validation error: $_"
+    Write-MessageError "Git validation error: $_"
     $allPassed = $false
     $failedChecks += "GitError"
 }
@@ -255,7 +263,7 @@ if ($allPassed) {
     Complete-Script -ExitCode 0
     return
 } else {
-    Write-Error "VALIDATION FAILED - Checks failed: $($failedChecks -join ', ')"
+    Write-MessageError "VALIDATION FAILED - Checks failed: $($failedChecks -join ', ')"
     Write-Host "`nRequired actions:"
     Write-Host "  - Fix critical issues or use -Force to override"
     Write-Host "  - Run with -AutoResolve to auto-fix git issues"

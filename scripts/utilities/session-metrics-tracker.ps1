@@ -47,7 +47,7 @@ function Write-Log {
 
 function Get-CostEstimate {
     param([int]$Tokens)
-    $costPer1M = 15.0
+    $costPer1M = 10.0
     return [math]::Round(($Tokens / 1000000) * $costPer1M, 4)
 }
 

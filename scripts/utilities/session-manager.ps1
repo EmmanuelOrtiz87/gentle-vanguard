@@ -187,7 +187,7 @@ function Clear-OrphanedSessions {
         if ($data.status -eq 'active') {
             $startTime = $null
             if ($data.startTime) {
-                try { $startTime = [DateTime]::Parse($data.startTime) } catch { }
+                try { $startTime = [DateTime]::Parse($data.startTime) } catch { Write-Warning "Bad startTime in $($file.Name)" }
             }
 
             if ($null -eq $startTime) {
@@ -207,6 +207,21 @@ function Clear-OrphanedSessions {
                 }
                 $updatedData | ConvertTo-Json | Out-File -FilePath $file.FullName -Encoding UTF8
                 Write-Warn "Orphaned session closed: $($data.sessionId) (age: $([Math]::Round(($cutoff - $startTime).TotalHours * -1, 1))h)"
+                $cleaned++
+            } else {
+                $kept++
+            }
+        } elseif ($data.status -in @('orphaned', 'ended')) {
+            $endTime = $null
+            if ($data.endTime -or $data.orphanedAt) {
+                try { $endTime = [DateTime]::Parse(($data.endTime ?? $data.orphanedAt)) } catch { Write-Warning "Bad endTime in $($file.Name)" }
+            }
+            if ($null -eq $endTime) {
+                $endTime = $file.LastWriteTime
+            }
+            if ($endTime -lt $cutoff) {
+                Remove-Item -Path $file.FullName -Force
+                Write-Info "Removed old session file: $($file.Name)"
                 $cleaned++
             } else {
                 $kept++
@@ -275,11 +290,12 @@ function Initialize-Session {
     $authScript = Join-Path $repoRoot 'scripts\utilities\auth-session.ps1'
     if (Test-Path $authScript) {
         Write-Status "Checking auth session integrity..."
-        & $authScript -ManageAuth status -AsJson 2>$null | Out-Null
-        if ($LASTEXITCODE -eq 0) {
+        $authResult = & $authScript -ManageAuth status -AsJson 2>&1
+        $authExitCode = $LASTEXITCODE
+        if ($authExitCode -eq 0) {
             Write-Info "Auth integrity check passed"
         } else {
-            Write-Warn "Auth integrity check returned exit code $LASTEXITCODE"
+            Write-Warn "Auth integrity check returned exit code $authExitCode"
         }
     }
 
@@ -371,6 +387,13 @@ function End-Session {
         Write-Warn "Norm learner not found at: $learnerScript"
     }
 
+    # Generate session summary draft from activity
+    $summaryGen = Join-Path $repoRoot 'scripts\utilities\generate-session-summary.ps1'
+    if (Test-Path $summaryGen) {
+        $null = & $summaryGen -ToFile -WorkspaceRoot $repoRoot 2>&1
+        Write-Info "Session summary draft generated"
+    }
+
     $validator = Join-Path $repoRoot 'scripts\utilities\pre-close-validator.ps1'
     if ($SkipPreCloseValidation) {
         Write-Info "Pre-close validation skipped"
@@ -392,6 +415,25 @@ function End-Session {
     if (Test-Path $tracker) {
         $null = & $tracker -Action end 2>&1
         Write-Status "Session metrics saved"
+    }
+
+    # Refresh dashboard and metrics after session close
+    $collector = Join-Path $repoRoot 'scripts\metrics\collector.ps1'
+    $renderer = Join-Path $repoRoot 'scripts\metrics\dashboard-render.ps1'
+    if (Test-Path $collector) {
+        $null = & $collector -Scope full -Quiet 2>&1
+        Write-Status "Metrics collector refreshed"
+    }
+    if (Test-Path $renderer) {
+        $null = & $renderer 2>&1
+        Write-Status "Dashboard refreshed"
+    }
+
+    # Stop background live-feed process
+    $feedMgr = Join-Path $repoRoot 'scripts\utilities\live-feed-manager.ps1'
+    if (Test-Path $feedMgr) {
+        $null = & $feedMgr -Action stop 2>&1
+        Write-Status "Live-feed process stopped"
     }
 
     $sessionEntries = @(Get-ValidSessionEntries)
@@ -452,6 +494,12 @@ function End-Session {
         endTime = Get-Date -Format "o"
     }
     $updatedData | ConvertTo-Json | Out-File -FilePath $targetSession.File.FullName -Encoding UTF8
+
+    # Persist end to Engram via session-end wrapper
+    $engramEnd = Join-Path $repoRoot 'scripts\utilities\engram_mem_session_end.ps1'
+    if (Test-Path $engramEnd) {
+        $null = & $engramEnd -SessionId $sessionData.sessionId -WorkspaceRoot $repoRoot 2>&1
+    }
 
     Write-Status "Session ended: $($sessionData.sessionId)"
 

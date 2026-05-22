@@ -90,6 +90,66 @@
       "model": "fast-cheap",
       "thinking": "off",
       "rationale": "CodeGraph queries are deterministic lookups"
+    },
+    "DAILY": {
+      "model": "fast-cheap",
+      "thinking": "off",
+      "rationale": "Daily check — structured, deterministic"
+    },
+    "PR-REVIEW": {
+      "model": "strong-review",
+      "thinking": "high",
+      "rationale": "PR review needs thorough analysis"
+    },
+    "RELEASE": {
+      "model": "fast-cheap",
+      "thinking": "medium",
+      "rationale": "Release management — process-driven"
+    },
+    "REPORT": {
+      "model": "fast-cheap",
+      "thinking": "off",
+      "rationale": "Reporting — structured data aggregation"
+    },
+    "SCRIPT-GOV": {
+      "model": "strong-review",
+      "thinking": "high",
+      "rationale": "Script governance audits — needs thorough validation"
+    },
+    "GITFLOW-BRANCH": {
+      "model": "fast-cheap",
+      "thinking": "off",
+      "rationale": "Git branch operations — deterministic"
+    },
+    "GITFLOW-PR": {
+      "model": "fast-cheap",
+      "thinking": "off",
+      "rationale": "Git PR operations — structured"
+    },
+    "GITFLOW-HOOKS": {
+      "model": "fast-cheap",
+      "thinking": "off",
+      "rationale": "Git hooks — deterministic checks"
+    },
+    "GITFLOW-MERGE": {
+      "model": "fast-cheap",
+      "thinking": "off",
+      "rationale": "Git merge — standard operations"
+    },
+    "GITFLOW-WORKFLOW": {
+      "model": "fast-cheap",
+      "thinking": "off",
+      "rationale": "Git workflow — structured process"
+    },
+    "GITFLOW-COMMIT": {
+      "model": "fast-cheap",
+      "thinking": "off",
+      "rationale": "Git commit — deterministic"
+    },
+    "GITFLOW-CONFLICT": {
+      "model": "fast-cheap",
+      "thinking": "low",
+      "rationale": "Conflict resolution — needs minimal reasoning"
     }
   }
 }
