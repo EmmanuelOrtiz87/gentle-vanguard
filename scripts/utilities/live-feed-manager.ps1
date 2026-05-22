@@ -1,3 +1,39 @@
+<#
+.SYNOPSIS
+    Manages background processes for live metrics — starts/stops/monitors live-feed and metrics-server.
+
+.DESCRIPTION
+    Orchestrates the metrics pipeline:
+    - start   → launches live-feed.ps1 (collector) and metrics-server.ps1 (HTTP)
+    - stop    → terminates both processes and cleans state file
+    - status  → reports current process health with elapsed time
+
+    State is persisted in .session/live-feed-state.json.
+    Use background-watchdog.ps1 for continuous health monitoring with auto-restart.
+
+.PARAMETER Action
+    start  → launch background processes (default)
+    stop   → terminate all background processes
+    status → show process health and dashboard URL
+
+.PARAMETER RefreshSeconds
+    Data collection interval. Default: 15
+
+.PARAMETER ServerPort
+    HTTP server port. Default: 8090
+
+.PARAMETER OpenDashboard
+    Open dashboard in browser after start.
+
+.PARAMETER ProjectRoot
+    Project root path. Auto-detected if empty.
+
+.EXAMPLE
+    .\live-feed-manager.ps1 -Action start -OpenDashboard
+    .\live-feed-manager.ps1 -Action status
+    .\live-feed-manager.ps1 -Action stop
+#>
+
 param(
     [ValidateSet('start','stop','status')]
     [string]$Action = 'start',

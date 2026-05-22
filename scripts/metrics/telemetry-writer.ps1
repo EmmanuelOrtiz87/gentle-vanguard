@@ -68,10 +68,7 @@ switch ($Action) {
         if (Test-Path $eventsFile) { Remove-Item $eventsFile -Force }
     }
     'session' {
-        $sid = if (Test-Path (Join-Path $repoRoot '.session' 'live-feed-state.json')) {
-            try { $st = Get-Content (Join-Path $repoRoot '.session' 'live-feed-state.json') -Raw | ConvertFrom-Json; $st.liveFeedPid } catch { '' }
-        } else { '' }
-        $activity.sessionId = "session-$((Get-Date -Format 'yyyy-MM-dd'))-$sid"
+        $activity.sessionId = "session-$(Get-Date -Format 'yyyy-MM-dd_HHmm')"
     }
 }
 

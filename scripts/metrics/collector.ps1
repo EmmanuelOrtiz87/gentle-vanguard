@@ -218,60 +218,68 @@ function Collect-TelemetryMetrics {
 }
 
 function Collect-MonthlyHistory {
-    Log "Collecting monthly history from snapshots..."
+    Log "Collecting monthly history..."
     $snapDir = Join-Path $outDir 'snapshots'
+    $tokenFile = Join-Path $outDir 'token.json'
+    $costFile = Join-Path $outDir 'cost.json'
+    $telFile = Join-Path $outDir 'telemetry.json'
     $history = @{ days = @(); months = @(); perDay = @{}; perMonth = @{} }
-    if (-not (Test-Path $snapDir)) {
-        $history | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $outDir 'monthly.json')
-        Log "Monthly: no snapshots dir"
-        return $history
-    }
-    $snapshots = Get-ChildItem $snapDir -Filter 'snapshot-*.json' | Sort-Object LastWriteTime
     $dayAgg = @{}
     $monthAgg = @{}
-    foreach ($snap in $snapshots) {
-        try {
-            $s = Get-Content $snap.FullName -Raw | ConvertFrom-Json
-            $dayKey = $snap.LastWriteTime.ToString('yyyy-MM-dd')
-            $monthKey = $snap.LastWriteTime.ToString('yyyy-MM')
-            $tokens = if ($s.token) { [int]$s.token.usedToday } else { 0 }
-            $cost = if ($s.cost) { [double]$s.cost.actualCost } else { 0 }
-            $sessions = if ($s.sessions) { [int]$s.sessions.today } else { 0 }
-            $calls = if ($s.telemetry -and $s.telemetry.hasData) { [int]$s.telemetry.toolCalls } else { 0 }
-            $saved = if ($s.cost) { [double]$s.cost.modeledSavings } else { 0 }
-            if (-not $dayAgg[$dayKey]) { $dayAgg[$dayKey] = @{ tokens=0; cost=0; sessions=0; calls=0; saved=0; count=0; lastTs=$snap.LastWriteTime.ToString('o') } }
-            $da = $dayAgg[$dayKey]
-            $da.tokens = [math]::Max($da.tokens, $tokens)
-            $da.cost = [math]::Max($da.cost, $cost)
-            $da.sessions = [math]::Max($da.sessions, $sessions)
-            $da.calls = [math]::Max($da.calls, $calls)
-            $da.saved = [math]::Max($da.saved, $saved)
-            $da.count++
-            if (-not $monthAgg[$monthKey]) { $monthAgg[$monthKey] = @{ tokens=0; cost=0; sessions=0; calls=0; saved=0; days=0 } }
-            $ma = $monthAgg[$monthKey]
-            $ma.tokens = [math]::Max($ma.tokens, $tokens)
-            $ma.cost = [math]::Max($ma.cost, $cost)
-            $ma.sessions = [math]::Max($ma.sessions, $sessions)
-            $ma.calls = [math]::Max($ma.calls, $calls)
-            $ma.saved = [math]::Max($ma.saved, $saved)
-        } catch {}
+    # Include current data first (overwritten by snapshots if newer)
+    $todayKey = (Get-Date -Format 'yyyy-MM-dd')
+    $curMonthKey = (Get-Date -Format 'yyyy-MM')
+    $dayAgg[$todayKey] = @{ tokens=0; cost=0; sessions=1; calls=0; saved=0; count=1; lastTs=(Get-Date -Format 'o') }
+    if (-not $monthAgg[$curMonthKey]) { $monthAgg[$curMonthKey] = @{ tokens=0; cost=0; sessions=0; calls=0; saved=0; days=0 } }
+    # Load current token/cost data
+    if (Test-Path $tokenFile) { try { $t = Get-Content $tokenFile -Raw | ConvertFrom-Json; $dayAgg[$todayKey].tokens = [int]$t.usedToday; $dayAgg[$todayKey].cost = [double]$t.estCost } catch {} }
+    if (Test-Path $costFile) { try { $c = Get-Content $costFile -Raw | ConvertFrom-Json; $dayAgg[$todayKey].saved = [double]$c.modeledSavings } catch {} }
+    if (Test-Path $telFile) { try { $tel = Get-Content $telFile -Raw | ConvertFrom-Json; if ($tel.hasData) { $dayAgg[$todayKey].calls = [int]$tel.toolCalls } } catch {} }
+    # Merge snapshot data (may overwrite current with higher values)
+    if (Test-Path $snapDir) {
+        Get-ChildItem $snapDir -Filter 'snapshot-*.json' | Sort-Object LastWriteTime | ForEach-Object {
+            try {
+                $s = Get-Content $_.FullName -Raw | ConvertFrom-Json
+                $dayKey = $_.LastWriteTime.ToString('yyyy-MM-dd')
+                $monthKey = $_.LastWriteTime.ToString('yyyy-MM')
+                $tokens = if ($s.token) { [int]$s.token.usedToday } else { 0 }
+                $cost = if ($s.cost) { [double]$s.cost.actualCost } else { 0 }
+                $sessions = if ($s.sessions) { [int]$s.sessions.today } else { 0 }
+                $calls = if ($s.telemetry -and $s.telemetry.hasData) { [int]$s.telemetry.toolCalls } else { 0 }
+                $saved = if ($s.cost) { [double]$s.cost.modeledSavings } else { 0 }
+                if (-not $dayAgg[$dayKey]) { $dayAgg[$dayKey] = @{ tokens=0; cost=0; sessions=0; calls=0; saved=0; count=0; lastTs=$_.LastWriteTime.ToString('o') } }
+                $da = $dayAgg[$dayKey]
+                if ($tokens -gt $da.tokens) { $da.tokens = $tokens }
+                if ($cost -gt $da.cost) { $da.cost = $cost }
+                if ($sessions -gt $da.sessions) { $da.sessions = $sessions }
+                if ($calls -gt $da.calls) { $da.calls = $calls }
+                if ($saved -gt $da.saved) { $da.saved = $saved }
+                $da.count++
+                if (-not $monthAgg[$monthKey]) { $monthAgg[$monthKey] = @{ tokens=0; cost=0; sessions=0; calls=0; saved=0; days=0 } }
+                $ma = $monthAgg[$monthKey]
+                if ($tokens -gt $ma.tokens) { $ma.tokens = $tokens }
+                if ($cost -gt $ma.cost) { $ma.cost = $cost }
+                if ($sessions -gt $ma.sessions) { $ma.sessions = $sessions }
+                if ($calls -gt $ma.calls) { $ma.calls = $calls }
+                if ($saved -gt $ma.saved) { $ma.saved = $saved }
+            } catch {}
+        }
     }
     $history.perDay = $dayAgg
     $history.perMonth = $monthAgg
-    $daysList = $dayAgg.Keys | Sort-Object
-    $monthsList = $monthAgg.Keys | Sort-Object
-    $history.days = $daysList | ForEach-Object { @{ date=$_; tokens=$dayAgg[$_].tokens; cost=$dayAgg[$_].cost; sessions=$dayAgg[$_].sessions; calls=$dayAgg[$_].calls; saved=$dayAgg[$_].saved; lastTs=$dayAgg[$_].lastTs } }
-    $history.months = $monthsList | ForEach-Object { @{ month=$_; tokens=$monthAgg[$_].tokens; cost=$monthAgg[$_].cost; sessions=$monthAgg[$_].sessions; calls=$monthAgg[$_].calls; saved=$monthAgg[$_].saved } }
+    $daysList = @($dayAgg.Keys | Sort-Object)
+    $monthsList = @($monthAgg.Keys | Sort-Object)
+    $history.days = @($daysList | ForEach-Object { @{ date=$_; tokens=$dayAgg[$_].tokens; cost=$dayAgg[$_].cost; sessions=$dayAgg[$_].sessions; calls=$dayAgg[$_].calls; saved=$dayAgg[$_].saved; lastTs=$dayAgg[$_].lastTs } })
+    $history.months = @($monthsList | ForEach-Object { @{ month=$_; tokens=$monthAgg[$_].tokens; cost=$monthAgg[$_].cost; sessions=$monthAgg[$_].sessions; calls=$monthAgg[$_].calls; saved=$monthAgg[$_].saved } })
     $history | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $outDir 'monthly.json')
     Log "Monthly: $($daysList.Count) days, $($monthsList.Count) months"
     return $history
 }
 
 function Collect-Aggregates {
-    Log "Collecting aggregate session data from snapshots..."
+    Log "Collecting aggregate per-action data..."
     $aggDir = Join-Path $outDir 'aggregates'
     $perResponseFile = Join-Path $aggDir 'per-response.json'
-    $activityFile = Join-Path $outDir 'live' 'activity.json'
     $eventsFile = Join-Path $outDir 'live' 'events.ndjson'
     $agg = @{ perResponse = @(); responseCount = 0; totalInputTokens = 0; totalOutputTokens = 0; totalCost = 0; totalSaved = 0; avgTokensPerResponse = 0 }
     $responses = @()
@@ -280,23 +288,23 @@ function Collect-Aggregates {
             Get-Content $eventsFile | ForEach-Object {
                 if ($_) {
                     $evt = $_ | ConvertFrom-Json
-                    if ($evt.type -in @('response','tool','llm')) {
-                        $responses += [PSCustomObject]@{
-                            ts = if ($evt.ts) { $evt.ts } else { $evt.timestamp }
-                            type = $evt.type
-                            inputTokens = if ($evt.inputTokens) { [int]$evt.inputTokens } else { [int]($evt.tokens * 0.6) }
-                            outputTokens = if ($evt.outputTokens) { [int]$evt.outputTokens } else { [int]($evt.tokens * 0.4) }
-                            tokens = [int]($evt.tokens -or 0)
-                            detail = if ($evt.detail) { $evt.detail } else { $evt.type }
-                            cost = [math]::Round(([int]($evt.tokens -or 0) / 1e6) * 10, 6)
-                            saved = [math]::Round(([int]($evt.tokens -or 0) * 0.4 / 1e6) * 10, 6)
-                        }
+                    $tokens = [int]($evt.tokens -or 0)
+                    if ($tokens -eq 0) { return }
+                    $responses += [PSCustomObject]@{
+                        ts = if ($evt.ts) { $evt.ts } else { (Get-Date -Format 'o') }
+                        type = if ($evt.type) { $evt.type } else { 'event' }
+                        inputTokens = [int]($tokens * 0.6)
+                        outputTokens = [int]($tokens * 0.4)
+                        tokens = $tokens
+                        detail = if ($evt.detail) { $evt.detail.Substring(0, [Math]::Min(40, $evt.detail.Length)) } else { $evt.type }
+                        cost = [math]::Round(($tokens / 1e6) * 10, 6)
+                        saved = [math]::Round(($tokens * 0.4 / 1e6) * 10, 6)
                     }
                 }
             }
         } catch {}
     }
-    $agg.perResponse = $responses | Sort-Object ts
+    $agg.perResponse = @($responses | Sort-Object ts)
     $agg.responseCount = $responses.Count
     $agg.totalInputTokens = [int](($responses | Measure-Object -Property inputTokens -Sum).Sum)
     $agg.totalOutputTokens = [int](($responses | Measure-Object -Property outputTokens -Sum).Sum)
@@ -304,7 +312,7 @@ function Collect-Aggregates {
     $agg.totalSaved = [math]::Round(($responses | Measure-Object -Property saved -Sum).Sum, 4)
     if ($agg.responseCount -gt 0) { $agg.avgTokensPerResponse = [int](($agg.totalInputTokens + $agg.totalOutputTokens) / $agg.responseCount) }
     $agg | ConvertTo-Json -Depth 5 | Set-Content $perResponseFile
-    Log "Aggregates: $($agg.responseCount) responses, input=$($agg.totalInputTokens) output=$($agg.totalOutputTokens) cost=`$$($agg.totalCost) saved=`$$($agg.totalSaved)"
+    Log "Aggregates: $($agg.responseCount) actions, input=$($agg.totalInputTokens) output=$($agg.totalOutputTokens) cost=`$$($agg.totalCost) saved=`$$($agg.totalSaved)"
     return $agg
 }
 
