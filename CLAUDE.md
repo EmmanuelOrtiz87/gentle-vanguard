@@ -45,14 +45,15 @@ them.
    `pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/pre-process-input.ps1 -UserInput "<first_message>" -WorkspaceRoot "."`
    — parse output for routing (AI-NORMATIVES.md #1, CRITICAL)
 
-1. Run `$detected.instructions.sessionAutostart` — pipeline de 20 pasos que automatiza:
-   session-manager, github-bypass, notifications, engram-policy, token-budget,
-   cross-workspace-validation, security-orchestrator, karpathy-guidelines, metrics,
-   adaptive profiles, codegraph-sync, self-diagnosis, startup-summary.
-
-   La pipeline corre `engram_mem_session_start`, `engram_mem_context`, y `git status`.
+1. **Run session autostart pipeline** — ejecuta el pipeline optimizado de inicializacion:
+   ```powershell
+   pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/session-start-optimized.ps1
+   ```
+   Este script ejecuta: tool detection, autostart pipeline (25 pasos), token tracking, git status.
    
-   Luego leer `docs/AGENTS.md` — bootstrap canónico completo.
+   **Alternativa manual** (si falla): `pwsh -NoProfile -File scripts/utilities/session-autostart.ps1 -NoExit`
+   
+   Luego leer `docs/AGENTS.md` — bootstrap canonico completo.
 
 ### Phase B — Analysis (4 pasos, no omitir)
 

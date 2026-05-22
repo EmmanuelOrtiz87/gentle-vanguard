@@ -16,13 +16,37 @@ param(
 
 $ErrorActionPreference = 'Continue'
 
-# Robust path resolution
+# Robust path resolution - FIXED: Use environment variable or traverse up to find repo root
 $scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($MyInvocation.MyCommand.Path) {
     Split-Path -Parent $MyInvocation.MyCommand.Path
 } else {
     Get-Location
 }
-$repoRoot = Split-Path -Parent (Split-Path -Parent $scriptRoot)
+
+# FIXED: Better repo root detection
+$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) { 
+    $env:GENTLE_VANGUARD_BASE_DIR 
+} else {
+    # Traverse up from script location to find repo root (look for .git or config directory)
+    $root = $scriptRoot
+    $found = $false
+    while ($root -and -not $found) {
+        if ((Test-Path (Join-Path $root '.git')) -or 
+            (Test-Path (Join-Path $root 'config')) -or
+            (Test-Path (Join-Path $root 'CLAUDE.md'))) {
+            $found = $true
+            break
+        }
+        $parent = Split-Path -Parent $root
+        if ($parent -eq $root) { break }
+        $root = $parent
+    }
+    if (-not $found) {
+        # Fallback: use the original logic but go up one more level from scripts/utilities
+        $root = Split-Path -Parent (Split-Path -Parent $scriptRoot)
+    }
+    $root
+}
 
 # Configuration
 $configDir = Join-Path $repoRoot ".session"
