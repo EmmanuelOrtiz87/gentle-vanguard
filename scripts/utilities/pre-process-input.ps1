@@ -23,7 +23,7 @@ if (-not $FromAgent) {
             if ($sanitized -and $sanitized.status -eq 'OK' -and $sanitized.sanitized) {
                 $UserInput = $sanitized.sanitized
             }
-        } catch { }
+        } catch { Write-Warning "Security sanitize (first path) failed: $_" }
     }
 } else {
     $securityScript = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) '..\security\security-orchestrator.ps1'
@@ -38,7 +38,7 @@ if (-not $FromAgent) {
                 Write-Output "ACTION: Blocked by security - critical pattern in inter-agent data"
                 return @{ HasMatch = $true; Skill = 'governance'; Blocked = $true; Message = $sanitized.message }
             }
-        } catch { }
+        } catch { Write-Warning "Security sanitize (second path) failed: $_" }
     }
 }
 

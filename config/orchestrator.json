@@ -1,6 +1,8 @@
 {
   "orchestrator": {
     "version": "2.6.0",
+    "active": true,
+    "activation_mode": "auto",
     "activeToolDetection": {
       "enabled": true,
       "mandatory": true,
@@ -141,6 +143,14 @@
           "Provide sufficient detail to finish tasks in one pass."
         ]
       },
+      "simple": {
+        "description": "Minimum viable detail — no preamble, no postamble, no digressions.",
+        "guidelines": [
+          "No preamble or postamble.",
+          "No echoing user's question.",
+          "One line answer then tools."
+        ]
+      },
       "ultra": {
         "description": "Aggressive compression with abbreviations and causal arrows.",
         "guidelines": [
@@ -197,8 +207,9 @@
       "daily_budget_tokens": 30000,
       "soft_threshold_pct": 70,
       "hard_threshold_pct": 90,
-      "per_agent_budget_tokens": 750,
+      "per_agent_budget_tokens": 3000,
       "coordination_overhead_tokens": 125,
+      "skill_body_overage_warning_pct": 70,
       "alert_levels": {
         "soft": "WARN — log and continue",
         "hard": "BLOCK — refuse dispatch until reset or override"

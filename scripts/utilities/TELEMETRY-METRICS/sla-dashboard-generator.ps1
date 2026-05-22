@@ -3,16 +3,15 @@
     SLA Dashboard Generator: Uptime tracking, incident metrics, compliance reporting.
 
 .DESCRIPTION
-    Creates HTML dashboard with SLA-focused metrics:
-    - Monthly/Weekly/Daily uptime percentage
-    - Incident count, MTTR (Mean Time To Recovery)
-    - SLO compliance status (latency p95, routing accuracy)
-    - Trend charts (uptime, incidents, availability)
-
-    Reads from:
-    - reports/incidents/*.md (auto-remediation reports)
-    - reports/stack-benchmark-history.json
-    - reports/stack-live-observability-latest.json
+    Creates HTML dashboard with SLA-focused metrics.
+    Primary data sources (in priority order):
+    1) .runtime/metrics/consolidated.json (live pipeline)
+    2) .runtime/metrics/live.json (live snapshot)
+    3) .runtime/metrics/live/daemon-health.json (daemon health)
+    4) .event-bus/history.json (event history)
+    5) reports/incidents/*.md (auto-remediation reports)
+    6) reports/stack-benchmark-history.json (benchmark trends)
+    7) reports/stack-live-observability-latest.json (live snapshot)
 
 .PARAMETER OutputPath
     Path for generated HTML. Default: ./reports/sla-dashboard.html
@@ -46,70 +45,16 @@ $OutputPath = if ([System.IO.Path]::IsPathRooted($OutputPath)) {
 } else {
     Join-Path $repoRoot ($OutputPath -replace '^\.\\?', '')
 }
-$incidentsDir = Join-Path $repoRoot 'reports\incidents'
-$benchmarkPath = Join-Path $repoRoot 'reports\stack-benchmark.json'
-$snapshotPath = Join-Path $repoRoot 'reports\stack-live-observability-latest.json'
 
-# Helper functions
-function Get-IncidentMetrics {
-    if (-not (Test-Path $incidentsDir)) {
-        return @{
-            total_incidents = 0
-            mttr_minutes = 0
-            incidents_7d = 0
-            incidents_30d = 0
-        }
-    }
-
-    $incidents = @(Get-ChildItem -Path $incidentsDir -Filter '*.md' -ErrorAction SilentlyContinue)
-    $now = Get-Date
-    
-    $incidents_7d = @($incidents | Where-Object {
-        (($now) - $_.CreationTime).Days -le 7
-    }).Count
-    
-    $incidents_30d = @($incidents | Where-Object {
-        (($now) - $_.CreationTime).Days -le 30
-    }).Count
-
-    $durations = @()
-    foreach ($incident in $incidents) {
-        try {
-            $content = Get-Content $incident.FullName -Raw
-            $match = [regex]::Match($content, '(?im)(mttr|duration|recovery)\D+(\d+(?:\.\d+)?)\s*(min|minute|minutes)')
-            if ($match.Success) {
-                $durations += [double]$match.Groups[2].Value
-            }
-        } catch {
-        }
-    }
-
-    $mttr_minutes = if ($durations.Count -gt 0) {
-        [Math]::Round((($durations | Measure-Object -Average).Average), 1)
-    } elseif ($incidents.Count -gt 0) {
-        15
-    } else {
-        0
-    }
-
-    return @{
-        total_incidents = $incidents.Count
-        mttr_minutes    = $mttr_minutes
-        incidents_7d    = $incidents_7d
-        incidents_30d   = $incidents_30d
-    }
-}
-
-function Calculate-Uptime {
-    param([int]$IncidentCount, [decimal]$IncidentDuration, [int]$PeriodDays)
-    
-    $periodSeconds = $PeriodDays * 24 * 3600
-    
-    $downtimeSeconds = $IncidentCount * $IncidentDuration * 60  # Convert minutes to seconds
-    $uptimePercent = (($periodSeconds - $downtimeSeconds) / $periodSeconds) * 100
-    
-    return [Math]::Max(0, [Math]::Min(100, $uptimePercent))
-}
+# Primary data sources
+$consolidatedPath = Join-Path $repoRoot '.runtime/metrics/consolidated.json'
+$liveMetricsPath  = Join-Path $repoRoot '.runtime/metrics/live.json'
+$daemonHealthPath = Join-Path $repoRoot '.runtime/metrics/live/daemon-health.json'
+$eventBusPath     = Join-Path $repoRoot '.event-bus/history.json'
+$benchmarkHistoryPath = Join-Path $repoRoot 'reports/stack-benchmark-history.json'
+$incidentsDir     = Join-Path $repoRoot 'reports/incidents'
+$benchmarkPath    = Join-Path $repoRoot 'reports/stack-benchmark.json'
+$snapshotPath     = Join-Path $repoRoot 'reports/stack-live-observability-latest.json'
 
 function Read-JsonFile {
     param([string]$Path)
@@ -121,26 +66,118 @@ function Read-JsonFile {
     }
 }
 
-# Load incident metrics
+function Get-IncidentMetrics {
+    if (-not (Test-Path $incidentsDir)) {
+        return @{ total_incidents = 0; mttr_minutes = 0; incidents_7d = 0; incidents_30d = 0 }
+    }
+    $incidents = @(Get-ChildItem -Path $incidentsDir -Filter '*.md' -ErrorAction SilentlyContinue)
+    $now = Get-Date
+    $incidents_7d = @($incidents | Where-Object { (($now) - $_.CreationTime).Days -le 7 }).Count
+    $incidents_30d = @($incidents | Where-Object { (($now) - $_.CreationTime).Days -le 30 }).Count
+    $durations = @()
+    foreach ($incident in $incidents) {
+        try {
+            $content = Get-Content $incident.FullName -Raw
+            $match = [regex]::Match($content, '(?im)(mttr|duration|recovery)\D+(\d+(?:\.\d+)?)\s*(min|minute|minutes)')
+            if ($match.Success) { $durations += [double]$match.Groups[2].Value }
+        } catch {}
+    }
+    $mttr_minutes = if ($durations.Count -gt 0) { [Math]::Round((($durations | Measure-Object -Average).Average), 1) } elseif ($incidents.Count -gt 0) { 15 } else { 0 }
+    return @{ total_incidents = $incidents.Count; mttr_minutes = $mttr_minutes; incidents_7d = $incidents_7d; incidents_30d = $incidents_30d }
+}
+
+function Calculate-Uptime {
+    param([int]$IncidentCount, [decimal]$IncidentDuration, [int]$PeriodDays)
+    $periodSeconds = $PeriodDays * 24 * 3600
+    $downtimeSeconds = $IncidentCount * $IncidentDuration * 60
+    return [Math]::Max(0, [Math]::Min(100, (($periodSeconds - $downtimeSeconds) / $periodSeconds) * 100))
+}
+
+# --- Load primary data sources ---
+$consolidated = Read-JsonFile $consolidatedPath
+$liveMetrics  = Read-JsonFile $liveMetricsPath
+$daemonHealth = Read-JsonFile $daemonHealthPath
+$eventBus     = Read-JsonFile $eventBusPath
+$benchHistory = Read-JsonFile $benchmarkHistoryPath
+$benchmark    = Read-JsonFile $benchmarkPath
+$snapshot     = Read-JsonFile $snapshotPath
+
+# --- Engine metrics from consolidated.json (primary) ---
+$engine_commits      = if ($consolidated -and $consolidated.git)      { $consolidated.git.totalCommits }      else { 0 }
+$engine_sessions     = if ($consolidated -and $consolidated.sessions) { $consolidated.sessions.total }        else { 0 }
+$engine_active_sess  = if ($consolidated -and $consolidated.sessions) { $consolidated.sessions.active }       else { 0 }
+$engine_token_pct    = if ($consolidated -and $consolidated.token)    { $consolidated.token.pct }             else { 0 }
+$engine_token_status = if ($consolidated -and $consolidated.token)    { $consolidated.token.status }          else { 'UNKNOWN' }
+$engine_est_cost     = if ($consolidated -and $consolidated.cost)     { $consolidated.cost.actualCost }       else { 0 }
+$engine_savings_pct  = if ($consolidated -and $consolidated.cost)     { $consolidated.cost.savingsPct }       else { 0 }
+
+# --- Traffic light from consolidated.json > live.json > snapshot ---
+$trafficLight = 'UNKNOWN'
+if ($consolidated -and $consolidated.live -and $consolidated.live.trafficLight) {
+    $trafficLight = [string]$consolidated.live.trafficLight
+} elseif ($liveMetrics -and $liveMetrics.trafficLight) {
+    $trafficLight = [string]$liveMetrics.trafficLight
+} elseif ($snapshot -and $snapshot.executive_traffic_light) {
+    $trafficLight = [string]$snapshot.executive_traffic_light
+}
+
+# --- Daemon health ---
+$daemon_alive   = if ($daemonHealth -and $daemonHealth.liveFeedAlive)  { $true } else { $false }
+$server_alive   = if ($daemonHealth -and $daemonHealth.serverAlive)    { $true } else { $false }
+$live_feed_pid  = if ($daemonHealth -and $daemonHealth.liveFeedPid)    { $daemonHealth.liveFeedPid }    else { 0 }
+$server_pid     = if ($daemonHealth -and $daemonHealth.serverPid)      { $daemonHealth.serverPid }      else { 0 }
+$daemon_port    = if ($daemonHealth -and $daemonHealth.serverPort)     { $daemonHealth.serverPort }     else { 8090 }
+
+# --- Event bus metrics ---
+$event_count      = if ($eventBus -and $eventBus.events) { @($eventBus.events).Count } else { 0 }
+$event_emitted    = if ($eventBus -and $eventBus.events) { @($eventBus.events | Where-Object { $_ -and $_.status -eq 'emitted' }).Count } else { 0 }
+$event_errors     = if ($eventBus -and $eventBus.events) { @($eventBus.events | Where-Object { $_ -and $_.status -eq 'error' }).Count } else { 0 }
+
+# --- Incident metrics ---
 $metrics = Get-IncidentMetrics
 
-$benchmark = Read-JsonFile -Path $benchmarkPath
-$snapshot = Read-JsonFile -Path $snapshotPath
+# --- Routing accuracy from benchmark or live metrics ---
+$routingAccuracy = 0
+if ($benchmark -and $benchmark.layers -and $benchmark.layers.routing_matrix -and $benchmark.layers.routing_matrix.data) {
+    $routingAccuracy = [double]$benchmark.layers.routing_matrix.data.accuracy
+} elseif ($liveMetrics -and $liveMetrics.routingAcc) {
+    $accStr = [string]$liveMetrics.routingAcc
+    if ($accStr -match '([\d.]+)') { $routingAccuracy = [double]$Matches[1] }
+} elseif ($consolidated -and $consolidated.live -and $consolidated.live.routingAcc) {
+    $accStr = [string]$consolidated.live.routingAcc
+    if ($accStr -match '([\d.]+)') { $routingAccuracy = [double]$Matches[1] }
+}
+
+# --- Latency from benchmark ---
+$latencyAverage = 0
+if ($benchmark -and $benchmark.layers -and $benchmark.layers.wf_benchmark -and $benchmark.layers.wf_benchmark.data -and $benchmark.layers.wf_benchmark.data.results) {
+    $latencyAverage = [Math]::Round(((@($benchmark.layers.wf_benchmark.data.results | Measure-Object -Property elapsed_s -Average).Average)), 3)
+} elseif ($benchHistory -and $benchHistory.Count -gt 0) {
+    $lastBench = $benchHistory | Select-Object -Last 1
+    $latencyAverage = if ($lastBench.metrics -and $lastBench.metrics.wf_avg_elapsed_s) { [Math]::Round([double]$lastBench.metrics.wf_avg_elapsed_s, 3) } else { 0 }
+}
+
+# --- Uptime calculation ---
+$monthly_uptime = Calculate-Uptime -IncidentCount $metrics.incidents_30d -IncidentDuration $metrics.mttr_minutes -PeriodDays 30
+$weekly_uptime  = Calculate-Uptime -IncidentCount $metrics.incidents_7d -IncidentDuration $metrics.mttr_minutes -PeriodDays 7
+
+# --- Compliance ---
+$monthly_compliant = $monthly_uptime -ge $MonthlyTarget
+$weekly_compliant  = $weekly_uptime -ge $WeeklyTarget
+$monthlyStatusClass = if ($monthly_compliant) { 'status-compliant' } else { 'status-critical' }
+$weeklyStatusClass  = if ($weekly_compliant)  { 'status-compliant' } else { 'status-warning' }
+$monthlyStatusLabel = if ($monthly_compliant) { 'PASS' } else { 'FAIL' }
+$weeklyStatusLabel  = if ($weekly_compliant)  { 'PASS' } else { 'WARN' }
+
+$updatedAtUtc = (Get-Date).ToUniversalTime().ToString('yyyy-MM-dd HH:mm:ss')
 
 # Calculate uptime
 $monthly_uptime = Calculate-Uptime -IncidentCount $metrics.incidents_30d -IncidentDuration $metrics.mttr_minutes -PeriodDays 30
 $weekly_uptime = Calculate-Uptime -IncidentCount $metrics.incidents_7d -IncidentDuration $metrics.mttr_minutes -PeriodDays 7
 
-# Compliance status
+# Compliance status (routingAccuracy, latencyAverage, trafficLight already computed from primary sources above)
 $monthly_compliant = $monthly_uptime -ge $MonthlyTarget
 $weekly_compliant = $weekly_uptime -ge $WeeklyTarget
-$routingAccuracy = if ($benchmark -and $benchmark.layers -and $benchmark.layers.routing_matrix -and $benchmark.layers.routing_matrix.data) { [double]$benchmark.layers.routing_matrix.data.accuracy } else { 0 }
-$latencyAverage = if ($benchmark -and $benchmark.layers -and $benchmark.layers.wf_benchmark -and $benchmark.layers.wf_benchmark.data -and $benchmark.layers.wf_benchmark.data.results) {
-    [Math]::Round(((@($benchmark.layers.wf_benchmark.data.results | Measure-Object -Property elapsed_s -Average).Average)), 3)
-} else {
-    0
-}
-$trafficLight = if ($snapshot -and $snapshot.executive_traffic_light) { [string]$snapshot.executive_traffic_light } else { 'UNKNOWN' }
 $updatedAtUtc = (Get-Date).ToUniversalTime().ToString('yyyy-MM-dd HH:mm:ss')
 $monthlyStatusClass = if ($monthly_compliant) { 'status-compliant' } else { 'status-critical' }
 $weeklyStatusClass = if ($weekly_compliant) { 'status-compliant' } else { 'status-warning' }
@@ -429,10 +466,28 @@ $html = @"
             </table>
         </div>
         
+        <!-- Primary Data Sources -->
+        <div class="card" style="margin-top: 30px;">
+            <h3 style="color: #00d4ff; margin-bottom: 15px;">Primary Data Sources</h3>
+            <table>
+                <thead>
+                    <tr><th>Source</th><th>Status</th><th>Key Metrics</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>.runtime/metrics/consolidated.json</code></td><td>$(if ($consolidated) { '<span style="color:#00b050">✓ loaded</span>' } else { '<span style="color:#ff6b6b">✗ missing</span>' })</td><td>$engine_commits commits · $engine_sessions sessions · $engine_token_pct% tokens · \$$engine_est_cost cost · ${engine_savings_pct}% savings</td></tr>
+                    <tr><td><code>.runtime/metrics/live.json</code></td><td>$(if ($liveMetrics) { '<span style="color:#00b050">✓ loaded</span>' } else { '<span style="color:#ff6b6b">✗ missing</span>' })</td><td>routing: $routingAccuracy% · traffic: $trafficLight</td></tr>
+                    <tr><td><code>.runtime/metrics/live/daemon-health.json</code></td><td>$(if ($daemonHealth) { '<span style="color:#00b050">✓ loaded</span>' } else { '<span style="color:#ff6b6b">✗ missing</span>' })</td><td>feed PID $live_feed_pid $(if ($daemon_alive) { '<span style="color:#00b050">●</span>' } else { '<span style="color:#ff6b6b">●</span>' }) · server PID $server_pid $(if ($server_alive) { '<span style="color:#00b050">●</span>' } else { '<span style="color:#ff6b6b">●</span>' }) · port $daemon_port</td></tr>
+                    <tr><td><code>.event-bus/history.json</code></td><td>$(if ($eventBus) { '<span style="color:#00b050">✓ loaded</span>' } else { '<span style="color:#ff6b6b">✗ missing</span>' })</td><td>$event_count total · $event_emitted emitted · $event_errors errors</td></tr>
+                    <tr><td><code>reports/incidents/*.md</code></td><td>$(if (Test-Path $incidentsDir) { '<span style="color:#00b050">✓ loaded</span>' } else { '<span style="color:#ffb900">⚠ empty</span>' })</td><td>$($metrics.total_incidents) incidents · $($metrics.incidents_7d) last 7d · $($metrics.incidents_30d) last 30d · MTTR $($metrics.mttr_minutes)m</td></tr>
+                    <tr><td><code>reports/stack-benchmark.json</code></td><td>$(if ($benchmark) { '<span style="color:#00b050">✓ loaded</span>' } else { '<span style="color:#ffb900">⚠ missing</span>' })</td><td>routing $routingAccuracy% · latency ${latencyAverage}s</td></tr>
+                    <tr><td><code>reports/stack-live-observability-latest.json</code></td><td>$(if ($snapshot) { '<span style="color:#00b050">✓ loaded</span>' } else { '<span style="color:#ffb900">⚠ missing</span>' })</td><td>traffic light: $trafficLight</td></tr>
+                </tbody>
+            </table>
+        </div>
+
         <div class="footer">
-            <p>SLA Dashboard — Gentle-Vanguard Stack v1.0</p>
-            <p>Generated by <code>sla-dashboard-generator.ps1</code></p>
-            <p>For incidents, see: <code>reports/incidents/</code></p>
+            <p>SLA Dashboard — Gentle-Vanguard Stack v2.0</p>
+            <p>Generated by <code>sla-dashboard-generator.ps1</code> | Primary sources: consolidated.json, live.json, daemon-health.json, event-bus, incidents, benchmark</p>
         </div>
     </div>
 </body>
