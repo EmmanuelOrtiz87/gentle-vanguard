@@ -129,7 +129,7 @@ window.gvExportPdf = function(){
 };
 
 window.gvExportPng = function(){
- var sec = document.querySelector('.section.active');
+ var sec = document.querySelector('.sec.active');
  if(!sec){alert('No active section');return}
  fetch(baseUrl+'/api/export/png').then(function(r){if(!r.ok)throw Error(r.status);return r.blob()}).then(function(b){
   var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='dashboard-'+new Date().toISOString().slice(0,10)+'.png';
@@ -255,27 +255,24 @@ addExportBar();
                 $pdfScript = Join-Path $repoRoot 'scripts' 'utilities' 'export-dashboard-pdf.ps1'
                 $pdfPath = Join-Path $reportsDir 'dashboard-export.pdf'
                 if (Test-Path $pdfScript) {
-                    # Create temp HTML with all sections visible for PDF generation
-                    $tmpHtml = [System.IO.Path]::GetTempFileName() + '.html'
-                    $html = Get-Content $dashFile -Raw -Encoding UTF8
-                    $printInject = '<style>@media print{.sec{display:block!important;break-inside:avoid}.export-bar,.nav{display:none!important}}</style><script>window.onload=function(){document.querySelectorAll(".sec").forEach(function(s){s.style.display="block"});document.querySelectorAll(".nav,.export-bar,#gv-export-bar").forEach(function(e){e.style.display="none"});setTimeout(function(){window.print()},600)}</script>'
-                    $html = $html -replace '</head>', "${printInject}</head>"
-                    $html | Set-Content $tmpHtml -Encoding UTF8
-                    $output = & $pdfScript -InputHtml $tmpHtml -OutputPdf $pdfPath -Quiet 2>&1
-                    $exitCode = $LASTEXITCODE
-                    Remove-Item $tmpHtml -Force -ErrorAction SilentlyContinue
-                    if ($exitCode -eq 0 -and (Test-Path $pdfPath)) {
-                        $pdfBytes = [System.IO.File]::ReadAllBytes($pdfPath)
-                        $res.ContentType = 'application/pdf'
-                        $res.Headers.Add('Content-Disposition', "attachment; filename=dashboard-export.pdf")
-                        $res.Headers.Add('Access-Control-Allow-Origin', '*')
-                        $res.OutputStream.Write($pdfBytes, 0, $pdfBytes.Length)
+                    if (-not (Test-Path $dashFile)) {
+                        $res.StatusCode = 500; $buf = [System.Text.Encoding]::UTF8.GetBytes('Dashboard HTML not found')
                     } else {
-                        $res.StatusCode = 500
-                        $errMsg = "PDF generation failed (exit code: $exitCode)"
-                        if ($output) { $errMsg += "`n$($output -join '; ')" }
-                        $buf = [System.Text.Encoding]::UTF8.GetBytes($errMsg)
-                        $res.OutputStream.Write($buf, 0, $buf.Length)
+                        $output = & $pdfScript -InputHtml $dashFile -OutputPdf $pdfPath -Quiet 2>&1
+                        $exitCode = $LASTEXITCODE
+                        if ($exitCode -eq 0 -and (Test-Path $pdfPath) -and ((Get-Item $pdfPath).Length -gt 0)) {
+                            $pdfBytes = [System.IO.File]::ReadAllBytes($pdfPath)
+                            $res.ContentType = 'application/pdf'
+                            $res.Headers.Add('Content-Disposition', "attachment; filename=dashboard-export.pdf")
+                            $res.Headers.Add('Access-Control-Allow-Origin', '*')
+                            $res.OutputStream.Write($pdfBytes, 0, $pdfBytes.Length)
+                        } else {
+                            $res.StatusCode = 500
+                            $errMsg = "PDF generation failed (exit code: $exitCode)"
+                            if ($output) { $errMsg += "`n$($output -join '; ')" }
+                            $buf = [System.Text.Encoding]::UTF8.GetBytes($errMsg)
+                            $res.OutputStream.Write($buf, 0, $buf.Length)
+                        }
                     }
                 } else {
                     $res.StatusCode = 404
@@ -287,16 +284,19 @@ addExportBar();
                 $browserExe = $null; foreach ($bp in $browserPaths) { if (Test-Path $bp) { $browserExe = $bp; break } }
                 if (-not $browserExe) {
                     $res.StatusCode = 500; $buf = [System.Text.Encoding]::UTF8.GetBytes('No headless browser found for PNG export')
+                } elseif (-not (Test-Path $dashFile)) {
+                    $res.StatusCode = 500; $buf = [System.Text.Encoding]::UTF8.GetBytes('Dashboard HTML not found')
                 } else {
                     $tmpHtml = [System.IO.Path]::GetTempFileName() + '.html'
                     $html = Get-Content $dashFile -Raw -Encoding UTF8
-                    # Inject JS to show all sections before rendering
-                    $printInject = '<script>window.onload=function(){document.querySelectorAll(".sec").forEach(function(s){s.style.display="block"});setTimeout(function(){window.dispatchEvent(new Event("screenshot-ready"))},500)}</script>'
-                    $html = $html -replace '</head>', "${printInject}</head>"
+                    # Inject CSS to show ALL sections (screen media, not print) + delay for screenshot
+                    $inject = '<style>.sec{display:block!important}.nav,.export-bar,#gv-export-bar{display:none!important}</style>'
+                    $html = $html -replace '</head>', "${inject}</head>"
                     $html | Set-Content $tmpHtml -Encoding UTF8
                     $pngPath = Join-Path $reportsDir 'dashboard-export.png'
-                    $argsList = @('--headless','--disable-gpu','--no-sandbox','--disable-software-rasterizer','--hide-scrollbars',"--screenshot=$pngPath","--window-size=1280,1800","file:///$($tmpHtml.Replace('\','/').Replace(':',''))")
+                    $argsList = @('--headless','--disable-gpu','--no-sandbox','--disable-software-rasterizer','--hide-scrollbars',"--screenshot=$pngPath","--window-size=1280,1800","--virtual-time-budget=3000","file:///$($tmpHtml.Replace('\','/').Replace(':',''))")
                     $proc = Start-Process -FilePath $browserExe -ArgumentList $argsList -NoNewWindow -Wait -PassThru
+                    Remove-Item $tmpHtml -Force -ErrorAction SilentlyContinue
                     if ($proc.ExitCode -eq 0 -and (Test-Path $pngPath) -and ((Get-Item $pngPath).Length -gt 0)) {
                         $imgBytes = [System.IO.File]::ReadAllBytes($pngPath)
                         $res.ContentType = 'image/png'
@@ -308,7 +308,6 @@ addExportBar();
                         $buf = [System.Text.Encoding]::UTF8.GetBytes("PNG generation failed (exit code: $($proc.ExitCode))")
                         $res.OutputStream.Write($buf, 0, $buf.Length)
                     }
-                    Remove-Item $tmpHtml -Force -ErrorAction SilentlyContinue
                 }
             } elseif ($path -eq '/health') {
                 $dashHealth = Join-Path $metricsDir 'live/daemon-health.json'
