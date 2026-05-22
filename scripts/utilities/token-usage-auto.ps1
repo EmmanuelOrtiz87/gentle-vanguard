@@ -11,20 +11,31 @@ param(
 
 $ErrorActionPreference = 'Continue'
 
-# Detectar repo root
-$scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+# Detectar repo root - FIXED: mejor deteccion de path
 $repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) { 
     $env:GENTLE_VANGUARD_BASE_DIR 
 } else {
-    $root = $scriptRoot
-    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { 
-        $root = Split-Path -Parent $root 
+    # Buscar hacia arriba desde la ubicacion actual
+    $root = Get-Location
+    $found = $false
+    $maxDepth = 5
+    $depth = 0
+    while ($root -and -not $found -and $depth -lt $maxDepth) {
+        if ((Test-Path (Join-Path $root 'CLAUDE.md')) -or 
+            (Test-Path (Join-Path $root 'config'))) {
+            $found = $true
+            break
+        }
+        $parent = Split-Path -Parent $root
+        if ($parent -eq $root) { break }
+        $root = $parent
+        $depth++
     }
-    if (-not $root) { $root = (Get-Location).Path }
+    if (-not $found) { $root = Get-Location }
     $root
 }
 
-$notifierScript = Join-Path $repoRoot "scripts\utilities\token-usage-notifier.ps1"
+$notifierScript = Join-Path $repoRoot "scripts/utilities/token-usage-notifier.ps1"
 
 if (-not (Test-Path $notifierScript)) {
     Write-Warning "Token notifier not found: $notifierScript"
@@ -35,7 +46,7 @@ if (-not (Test-Path $notifierScript)) {
 if ($InputTokens -eq 0 -and $OutputTokens -eq 0) {
     # Estimacion aproximada: ~4 caracteres por token
     $estimatedInput = [math]::Max(1, [math]::Floor($ContextChars / 4))
-    $estimatedOutput = [math]::Max(1, [math]::Floor(500 / 4))  # Asumimos ~500 chars de respuesta
+    $estimatedOutput = [math]::Max(1, [math]::Floor(500 / 4))
     $InputTokens = $estimatedInput
     $OutputTokens = $estimatedOutput
 }
