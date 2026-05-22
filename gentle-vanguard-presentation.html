@@ -8,6 +8,7 @@
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Inter', system-ui, sans-serif; background: #07080d; color: #e8edf2; overflow: hidden; height: 100vh; }
+@media print { body { overflow: visible !important; } .slide { height: auto !important; min-height: 100vh; overflow: visible !important; } .slides { display: block !important; transform: none !important; } .nav-arrows, .progress, .slide-counter { display: none !important; } }
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.3); border-radius: 4px; }
@@ -573,15 +574,15 @@
   <div class="slide-inner">
     <span class="tag">SKILLS</span>
     <h2>Distribuci&oacute;n de Skills</h2>
-    <p class="subtitle" style="margin-bottom:1rem">Distribuci&oacute;n por categor&iacute;a funcional</p>
-    <div class="grid-2">
-      <canvas id="skillsChart" class="cnvs" style="height:240px"></canvas>
-      <div>
-        <div class="card"><h4>Frontend & Mobile</h4><p>13 skills: React, Next.js, Tailwind, Angular, Flutter, Android (4), iOS (2), React Native, UI</p></div>
-        <div class="card"><h4>Backend & Data</h4><p>10 skills: Go, Django, TypeScript, Zod, API Design, Databases (2), Data Science/Analysis</p></div>
-        <div class="card"><h4>Infra & Ops</h4><p>8 skills: Docker, K8s, Terraform, DevOps/SRE, Observability, Incident Response, Monitoring</p></div>
-        <div class="card"><h4>QA & Testing</h4><p>5 skills: Playwright, Pytest, Testing Strategy, Coverage, Verificador de Datos</p></div>
-        <div class="card"><h4>Negocio & Gobernanza</h4><p>20+ skills: Marketing (4), Sales (2), Finance, HR, Legal, BA (4), GOV (6), DOC (5), Premortem</p></div>
+    <p class="subtitle" style="margin-bottom:0.6rem">Distribuci&oacute;n por categor&iacute;a funcional &middot; 133 skills instalados</p>
+    <div class="grid-2" style="gap:0.8rem">
+      <canvas id="skillsChart" class="cnvs" style="height:160px"></canvas>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;font-size:0.7rem">
+        <div class="card" style="padding:0.6rem"><h4 style="font-size:0.8rem">Frontend &amp; Mobile</h4><p style="font-size:0.65rem;color:#94a3b8">13 skills: React, Next.js, Tailwind, Angular, Flutter, Android (4), iOS (2), RN, UI</p></div>
+        <div class="card" style="padding:0.6rem"><h4 style="font-size:0.8rem">Backend &amp; Data</h4><p style="font-size:0.65rem;color:#94a3b8">10 skills: Go, Django, TS, Zod, API Design, DBs (2), Data Science/Analysis</p></div>
+        <div class="card" style="padding:0.6rem"><h4 style="font-size:0.8rem">Infra &amp; Ops</h4><p style="font-size:0.65rem;color:#94a3b8">8 skills: Docker, K8s, Terraform, DevOps/SRE, Observability, Incident, Monitoring</p></div>
+        <div class="card" style="padding:0.6rem"><h4 style="font-size:0.8rem">QA &amp; Testing</h4><p style="font-size:0.65rem;color:#94a3b8">5 skills: Playwright, Pytest, Testing Strategy, Coverage, Verificador</p></div>
+        <div class="card" style="padding:0.6rem"><h4 style="font-size:0.8rem">Negocio &amp; Gobernanza</h4><p style="font-size:0.65rem;color:#94a3b8">20+ skills: MKT (4), Sales (2), Finance, HR, Legal, BA (4), GOV (6), DOC (5), Premortem</p></div>
       </div>
     </div>
   </div>
@@ -946,47 +947,30 @@
   <div class="slide-inner">
     <span class="tag">METRICAS</span>
     <h2>Actividad de Desarrollo</h2>
-    <p class="subtitle" style="margin-bottom:1rem">M&eacute;tricas de Git, PRs y productividad del equipo</p>
-    <div class="grid-2">
-      <canvas id="commitsChart" class="cnvs" style="height:200px"></canvas>
-      <div>
-        <div class="card"><h4>Commits por Per&iacute;odo</h4>
-          <table>
-            <tr><th>Per&iacute;odo</th><th>Commits</th></tr>
-            <tr><td>Hoy</td><td>0</td></tr>
-            <tr><td>Esta semana</td><td>78</td></tr>
-            <tr><td>Este mes</td><td>460</td></tr>
-            <tr><td>Total</td><td>788</td></tr>
-          </table>
-        </div>
-        <div class="card" style="margin-top:0.5rem"><h4>PR Activity</h4>
-          <table>
-            <tr><th>M&eacute;trica</th><th>Valor</th></tr>
-            <tr><td>PRs totales</td><td>100</td></tr>
-            <tr><td>PRs merged</td><td>94</td></tr>
-            <tr><td>PRs abiertos</td><td>0</td></tr>
-            <tr><td>Ciclo promedio</td><td>2.5h</td></tr>
-            <tr><td>L&iacute;neas agregadas</td><td>+188,024</td></tr>
-            <tr><td>L&iacute;neas eliminadas</td><td>-28,220</td></tr>
-          </table>
-        </div>
-      </div>
-    </div>
-    <div class="grid-2" style="margin-top:0.8rem">
-      <div class="card"><h4>Top Contributors</h4>
-        <table>
-          <tr><th>Autor</th><th>Commits</th></tr>
-          <tr><td>EmmanuelOrtiz87</td><td>684</td></tr>
-          <tr><td>Emman</td><td>123</td></tr>
-          <tr><td>gentle-vanguard-bot</td><td>8</td></tr>
-          <tr><td>dependabot[bot]</td><td>7</td></tr>
-          <tr><td>foundation-bot</td><td>3</td></tr>
-          <tr><td>EmmanuelO87</td><td>1</td></tr>
+    <p class="subtitle" style="margin-bottom:0.6rem">M&eacute;tricas de Git, PRs y productividad del equipo</p>
+    <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:0.6rem;font-size:0.7rem">
+      <canvas id="commitsChart" class="cnvs" style="height:140px"></canvas>
+      <div class="card" style="padding:0.6rem"><h4 style="font-size:0.75rem">Commits</h4>
+        <table style="font-size:0.65rem"><tr><th>Periodo</th><th>Cant</th></tr>
+          <tr><td>Hoy</td><td>0</td></tr><tr><td>Semana</td><td>78</td></tr><tr><td>Mes</td><td>460</td></tr><tr><td>Total</td><td>788</td></tr>
         </table>
       </div>
-      <div class="card"><h4>&Uacute;ltimos PRs</h4>
-        <table>
-          <tr><th>#</th><th>Estado</th><th>+/-</th></tr>
+      <div class="card" style="padding:0.6rem"><h4 style="font-size:0.75rem">PR Activity</h4>
+        <table style="font-size:0.65rem"><tr><th>Metrica</th><th>Valor</th></tr>
+          <tr><td>Totales</td><td>100</td></tr><tr><td>Merged</td><td>94</td></tr><tr><td>Abiertos</td><td>0</td></tr><tr><td>Ciclo prom.</td><td>2.5h</td></tr><tr><td>+Lineas</td><td>+188,024</td></tr><tr><td>-Lineas</td><td>-28,220</td></tr>
+        </table>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-top:0.5rem;font-size:0.7rem">
+      <div class="card" style="padding:0.6rem"><h4 style="font-size:0.75rem">Top Contributors</h4>
+        <table style="font-size:0.6rem"><tr><th>Autor</th><th>Commits</th></tr>
+          <tr><td>EmmanuelOrtiz87</td><td>684</td></tr><tr><td>Emman</td><td>123</td></tr>
+          <tr><td>gentle-vanguard-bot</td><td>8</td></tr><tr><td>dependabot[bot]</td><td>7</td></tr>
+          <tr><td>foundation-bot</td><td>3</td></tr><tr><td>EmmanuelO87</td><td>1</td></tr>
+        </table>
+      </div>
+      <div class="card" style="padding:0.6rem"><h4 style="font-size:0.75rem">Ultimos PRs</h4>
+        <table style="font-size:0.6rem"><tr><th>#</th><th>Estado</th><th>+/-</th></tr>
           <tr><td>#127 Dashboard charts</td><td><span class="badge badge-green">MERGED</span></td><td>3396/322</td></tr>
           <tr><td>#126 v2.20 Core autonomy</td><td><span class="badge badge-green">MERGED</span></td><td>8315/369</td></tr>
           <tr><td>#125 Gateway + scheduler</td><td><span class="badge badge-green">MERGED</span></td><td>8315/369</td></tr>
@@ -1059,26 +1043,24 @@
   <div class="slide-inner">
     <span class="tag">OPERACIONES</span>
     <h2>Actividad de Sesiones</h2>
-    <p class="subtitle" style="margin-bottom:1rem">Sesiones registradas, duraci&oacute;n y estado actual</p>
-    <div class="grid-2">
-      <canvas id="sessionChart" class="cnvs" style="height:200px"></canvas>
-      <div>
-        <div class="card"><h4>Sesiones Recientes</h4>
-          <table>
-            <tr><th>Sesi&oacute;n</th><th>Inicio</th><th>Estado</th><th>Modo</th></tr>
-            <tr><td>session-2026-05-22-01</td><td>05/22 00:14</td><td><span class="badge badge-green">ACTIVE</span></td><td>AutoStart</td></tr>
-            <tr><td>session-2026-05-21-02</td><td>05/21 23:44</td><td><span class="badge badge-green">ACTIVE</span></td><td>AutoStart</td></tr>
-            <tr><td>session-2026-05-20-03</td><td>05/20 23:42</td><td><span class="badge badge-gray">ENDED</span></td><td>AutoStart</td></tr>
-            <tr><td>session-2026-05-20-02</td><td>05/20 18:32</td><td><span class="badge badge-gray">ENDED</span></td><td>AutoStart</td></tr>
-            <tr><td>session-2026-05-20-01</td><td>05/20 00:13</td><td><span class="badge badge-gray">ENDED</span></td><td>AutoStart</td></tr>
-          </table>
-        </div>
+    <p class="subtitle" style="margin-bottom:0.6rem">Sesiones registradas, duraci&oacute;n y estado actual</p>
+    <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:0.8rem">
+      <canvas id="sessionChart" class="cnvs" style="height:150px"></canvas>
+      <div class="card" style="padding:0.6rem"><h4 style="font-size:0.8rem">Sesiones Recientes</h4>
+        <table style="font-size:0.65rem">
+          <tr><th>Session</th><th>Inicio</th><th>Estado</th></tr>
+          <tr><td>session-2026-05-22-01</td><td>05/22 00:14</td><td><span class="badge badge-green">ACTIVE</span></td></tr>
+          <tr><td>session-2026-05-21-02</td><td>05/21 23:44</td><td><span class="badge badge-green">ACTIVE</span></td></tr>
+          <tr><td>session-2026-05-20-03</td><td>05/20 23:42</td><td><span class="badge badge-gray">ENDED</span></td></tr>
+          <tr><td>session-2026-05-20-02</td><td>05/20 18:32</td><td><span class="badge badge-gray">ENDED</span></td></tr>
+          <tr><td>session-2026-05-20-01</td><td>05/20 00:13</td><td><span class="badge badge-gray">ENDED</span></td></tr>
+        </table>
       </div>
     </div>
-    <div class="grid-3" style="margin-top:0.8rem">
-      <div class="card"><h4>Total Sesiones</h4><div class="stat-num">5</div><p>desde inicio</p></div>
-      <div class="card"><h4>Activas Ahora</h4><div class="stat-num" style="color:#4ade80">2</div><p>sesiones abiertas</p></div>
-      <div class="card"><h4>Duraci&oacute;n Promedio</h4><div class="stat-num">12.3h</div><p>por sesi&oacute;n</p></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;margin-top:0.5rem">
+      <div class="card" style="padding:0.6rem;text-align:center"><h4 style="font-size:0.8rem">Total Sesiones</h4><div class="stat-num" style="font-size:1.5rem">5</div><p style="font-size:0.65rem">desde inicio</p></div>
+      <div class="card" style="padding:0.6rem;text-align:center"><h4 style="font-size:0.8rem">Activas Ahora</h4><div class="stat-num" style="font-size:1.5rem;color:#4ade80">2</div><p style="font-size:0.65rem">sesiones abiertas</p></div>
+      <div class="card" style="padding:0.6rem;text-align:center"><h4 style="font-size:0.8rem">Duracion Promedio</h4><div class="stat-num" style="font-size:1.5rem">12.3h</div><p style="font-size:0.65rem">por sesion</p></div>
     </div>
   </div>
 </div>
@@ -1259,34 +1241,30 @@
 <!-- ============================================================ -->
 <div class="slide">
   <div class="slide-inner" style="text-align:center">
-    <div class="hero-icon">&#9889;</div>
-    <h1 class="gradient-text">Gentle-Vanguard</h1>
-    <p class="subtitle" style="font-size:clamp(1.2rem,2.5vw,1.8rem);margin-top:0.4em;font-weight:500">El sistema operativo para ingenier&iacute;a con IA</p>
-    <div class="stat-row" style="margin-top:2rem">
-      <div class="stat"><div class="stat-value">10</div><div class="stat-label">Herramientas</div></div>
-      <div class="stat"><div class="stat-value">15</div><div class="stat-label">Agentes</div></div>
-      <div class="stat"><div class="stat-value">133</div><div class="stat-label">Skills</div></div>
-      <div class="stat"><div class="stat-value">28</div><div class="stat-label">Quality Gates</div></div>
-      <div class="stat"><div class="stat-value">16</div><div class="stat-label">Workflows</div></div>
-      <div class="stat"><div class="stat-value">788</div><div class="stat-label">Commits</div></div>
+    <div class="hero-icon" style="font-size:2rem;margin-bottom:0.3rem">&#9889;</div>
+    <h1 class="gradient-text" style="font-size:clamp(1.8rem,4vw,2.8rem)">Gentle-Vanguard</h1>
+    <p class="subtitle" style="font-size:clamp(0.9rem,1.5vw,1.2rem);margin-top:0.3em;font-weight:500">El sistema operativo para ingenier&iacute;a con IA</p>
+    <div class="stat-row" style="margin-top:0.8rem;gap:0.8rem">
+      <div class="stat" style="padding:0.3rem 0.8rem"><div class="stat-value" style="font-size:1.4rem">10</div><div class="stat-label" style="font-size:0.6rem">Herramientas</div></div>
+      <div class="stat" style="padding:0.3rem 0.8rem"><div class="stat-value" style="font-size:1.4rem">15</div><div class="stat-label" style="font-size:0.6rem">Agentes</div></div>
+      <div class="stat" style="padding:0.3rem 0.8rem"><div class="stat-value" style="font-size:1.4rem">133</div><div class="stat-label" style="font-size:0.6rem">Skills</div></div>
+      <div class="stat" style="padding:0.3rem 0.8rem"><div class="stat-value" style="font-size:1.4rem">28</div><div class="stat-label" style="font-size:0.6rem">Quality Gates</div></div>
+      <div class="stat" style="padding:0.3rem 0.8rem"><div class="stat-value" style="font-size:1.4rem">16</div><div class="stat-label" style="font-size:0.6rem">Workflows</div></div>
+      <div class="stat" style="padding:0.3rem 0.8rem"><div class="stat-value" style="font-size:1.4rem">788</div><div class="stat-label" style="font-size:0.6rem">Commits</div></div>
     </div>
-    <div class="quote" style="max-width:650px;margin:2rem auto">
+    <div class="quote" style="max-width:500px;margin:0.8rem auto;font-size:0.85rem;padding-left:1rem">
       &ldquo;Tool-agn&oacute;stico, modular, auto-mejorable. No importa qu&eacute; herramienta AI uses &mdash; Gentle-Vanguard se adapta.&rdquo;
     </div>
-    <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem">
-      <span class="pill" style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.15);color:#a5b4fc">OpenCode</span>
-      <span class="pill" style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.15);color:#a5b4fc">Claude Code</span>
-      <span class="pill" style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.15);color:#a5b4fc">Cursor</span>
-      <span class="pill" style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.15);color:#a5b4fc">Windsurf</span>
-      <span class="pill" style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.15);color:#a5b4fc">Cline</span>
-      <span class="pill" style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.15);color:#a5b4fc">Continue.dev</span>
+    <div style="display:flex;gap:0.3rem;justify-content:center;flex-wrap:wrap;margin-bottom:0.8rem">
+      <span class="pill" style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.15);color:#a5b4fc;font-size:0.6rem;padding:0.15rem 0.5rem">OpenCode</span>
+      <span class="pill" style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.15);color:#a5b4fc;font-size:0.6rem;padding:0.15rem 0.5rem">Claude Code</span>
+      <span class="pill" style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.15);color:#a5b4fc;font-size:0.6rem;padding:0.15rem 0.5rem">Cursor</span>
+      <span class="pill" style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.15);color:#a5b4fc;font-size:0.6rem;padding:0.15rem 0.5rem">Windsurf</span>
+      <span class="pill" style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.15);color:#a5b4fc;font-size:0.6rem;padding:0.15rem 0.5rem">Cline</span>
+      <span class="pill" style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.15);color:#a5b4fc;font-size:0.6rem;padding:0.15rem 0.5rem">Continue.dev</span>
     </div>
-    <p style="font-size:0.85rem;color:#475569">
-      Mayo 2026 &middot; v2.20 &middot; <span class="badge badge-green">GREEN</span> Todos los sistemas operativos
-    </p>
-    <p style="font-size:0.75rem;color:#3f3f5e;margin-top:0.5rem">
-      Presentaci&oacute;n autogenerada con datos en vivo &middot; &uacute;ltima actualizaci&oacute;n: <span id="liveTimestamp">2026-05-22</span>
-    </p>
+    <p style="font-size:0.7rem;color:#475569">Mayo 2026 &middot; v2.20 &middot; <span class="badge badge-green">GREEN</span> Todos los sistemas operativos</p>
+    <p style="font-size:0.65rem;color:#3f3f5e;margin-top:0.3rem">Presentaci&oacute;n autogenerada con datos en vivo &middot; <span id="liveTimestamp">2026-05-22</span></p>
   </div>
 </div>
 
