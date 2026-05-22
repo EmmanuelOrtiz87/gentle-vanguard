@@ -251,6 +251,32 @@ addExportBar();
                 $res.ContentType = 'application/json'
                 $res.Headers.Add('Access-Control-Allow-Origin', '*')
                 $res.OutputStream.Write($buf, 0, $buf.Length)
+            } elseif ($path -eq '/api/metrics/monthly') {
+                $mp = Join-Path $metricsDir 'monthly.json'
+                if (Test-Path $mp) {
+                    $json = Get-Content $mp -Raw
+                    $buf = [System.Text.Encoding]::UTF8.GetBytes($json)
+                    $res.ContentType = 'application/json'
+                    $res.Headers.Add('Access-Control-Allow-Origin', '*')
+                    $res.OutputStream.Write($buf, 0, $buf.Length)
+                } else {
+                    $res.StatusCode = 404
+                    $buf = [System.Text.Encoding]::UTF8.GetBytes('{}')
+                    $res.OutputStream.Write($buf, 0, $buf.Length)
+                }
+            } elseif ($path -eq '/api/metrics/per-response') {
+                $prFile = Join-Path $metricsDir 'aggregates' 'per-response.json'
+                if (Test-Path $prFile) {
+                    $json = Get-Content $prFile -Raw
+                    $buf = [System.Text.Encoding]::UTF8.GetBytes($json)
+                    $res.ContentType = 'application/json'
+                    $res.Headers.Add('Access-Control-Allow-Origin', '*')
+                    $res.OutputStream.Write($buf, 0, $buf.Length)
+                } else {
+                    $res.StatusCode = 404
+                    $buf = [System.Text.Encoding]::UTF8.GetBytes('{}')
+                    $res.OutputStream.Write($buf, 0, $buf.Length)
+                }
             } elseif ($path -eq '/api/export/pdf' -or $path -like '/api/export/pdf?*') {
                 $pdfScript = Join-Path $repoRoot 'scripts' 'utilities' 'export-dashboard-pdf.ps1'
                 $pdfPath = Join-Path $reportsDir 'dashboard-export.pdf'

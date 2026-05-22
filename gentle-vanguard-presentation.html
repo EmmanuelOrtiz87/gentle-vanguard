@@ -575,15 +575,13 @@
     <span class="tag">SKILLS</span>
     <h2>Distribuci&oacute;n de Skills</h2>
     <p class="subtitle" style="margin-bottom:0.6rem">Distribuci&oacute;n por categor&iacute;a funcional &middot; 133 skills instalados</p>
-    <div class="grid-2" style="gap:0.8rem">
-      <canvas id="skillsChart" class="cnvs" style="height:160px"></canvas>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;font-size:0.7rem">
-        <div class="card" style="padding:0.6rem"><h4 style="font-size:0.8rem">Frontend &amp; Mobile</h4><p style="font-size:0.65rem;color:#94a3b8">13 skills: React, Next.js, Tailwind, Angular, Flutter, Android (4), iOS (2), RN, UI</p></div>
-        <div class="card" style="padding:0.6rem"><h4 style="font-size:0.8rem">Backend &amp; Data</h4><p style="font-size:0.65rem;color:#94a3b8">10 skills: Go, Django, TS, Zod, API Design, DBs (2), Data Science/Analysis</p></div>
-        <div class="card" style="padding:0.6rem"><h4 style="font-size:0.8rem">Infra &amp; Ops</h4><p style="font-size:0.65rem;color:#94a3b8">8 skills: Docker, K8s, Terraform, DevOps/SRE, Observability, Incident, Monitoring</p></div>
-        <div class="card" style="padding:0.6rem"><h4 style="font-size:0.8rem">QA &amp; Testing</h4><p style="font-size:0.65rem;color:#94a3b8">5 skills: Playwright, Pytest, Testing Strategy, Coverage, Verificador</p></div>
-        <div class="card" style="padding:0.6rem"><h4 style="font-size:0.8rem">Negocio &amp; Gobernanza</h4><p style="font-size:0.65rem;color:#94a3b8">20+ skills: MKT (4), Sales (2), Finance, HR, Legal, BA (4), GOV (6), DOC (5), Premortem</p></div>
-      </div>
+    <canvas id="skillsChart" class="cnvs" style="height:150px;width:100%"></canvas>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.4rem;margin-top:0.5rem;font-size:0.68rem">
+      <div class="card" style="padding:0.45rem"><h4 style="font-size:0.7rem">Frontend &amp; Mobile</h4><p style="font-size:0.6rem;color:#94a3b8">13 skills: React, Next.js, Tailwind, Angular, Flutter, Android (4), iOS (2), RN</p></div>
+      <div class="card" style="padding:0.45rem"><h4 style="font-size:0.7rem">Backend &amp; Data</h4><p style="font-size:0.6rem;color:#94a3b8">10 skills: Go, Django, TS, Zod, API Design, DBs (2), Data Sci/Analysis</p></div>
+      <div class="card" style="padding:0.45rem"><h4 style="font-size:0.7rem">Infra &amp; Ops</h4><p style="font-size:0.6rem;color:#94a3b8">8 skills: Docker, K8s, Terraform, DevOps/SRE, Observability, Incident, Mon.</p></div>
+      <div class="card" style="padding:0.45rem"><h4 style="font-size:0.7rem">QA &amp; Testing</h4><p style="font-size:0.6rem;color:#94a3b8">5 skills: Playwright, Pytest, Testing Strategy, Coverage, Verificador</p></div>
+      <div class="card" style="padding:0.45rem"><h4 style="font-size:0.7rem">Negocio &amp; Gobernanza</h4><p style="font-size:0.6rem;color:#94a3b8">20+ skills: MKT (4), Sales (2), Finance, HR, Legal, BA (4), GOV (6), DOC (5)</p></div>
     </div>
   </div>
 </div>
@@ -947,38 +945,28 @@
   <div class="slide-inner">
     <span class="tag">METRICAS</span>
     <h2>Actividad de Desarrollo</h2>
-    <p class="subtitle" style="margin-bottom:0.6rem">M&eacute;tricas de Git, PRs y productividad del equipo</p>
-    <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:0.6rem;font-size:0.7rem">
-      <canvas id="commitsChart" class="cnvs" style="height:140px"></canvas>
-      <div class="card" style="padding:0.6rem"><h4 style="font-size:0.75rem">Commits</h4>
-        <table style="font-size:0.65rem"><tr><th>Periodo</th><th>Cant</th></tr>
-          <tr><td>Hoy</td><td>0</td></tr><tr><td>Semana</td><td>78</td></tr><tr><td>Mes</td><td>460</td></tr><tr><td>Total</td><td>788</td></tr>
-        </table>
-      </div>
-      <div class="card" style="padding:0.6rem"><h4 style="font-size:0.75rem">PR Activity</h4>
-        <table style="font-size:0.65rem"><tr><th>Metrica</th><th>Valor</th></tr>
-          <tr><td>Totales</td><td>100</td></tr><tr><td>Merged</td><td>94</td></tr><tr><td>Abiertos</td><td>0</td></tr><tr><td>Ciclo prom.</td><td>2.5h</td></tr><tr><td>+Lineas</td><td>+188,024</td></tr><tr><td>-Lineas</td><td>-28,220</td></tr>
-        </table>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-top:0.5rem;font-size:0.7rem">
-      <div class="card" style="padding:0.6rem"><h4 style="font-size:0.75rem">Top Contributors</h4>
-        <table style="font-size:0.6rem"><tr><th>Autor</th><th>Commits</th></tr>
+    <p class="subtitle" style="margin-bottom:0.4rem">M&eacute;tricas de Git, PRs y productividad del equipo</p>
+    <canvas id="commitsChart" class="cnvs" style="height:100px;width:100%"></canvas>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0.4rem;margin-top:0.4rem;font-size:0.65rem">
+      <div class="card" style="padding:0.4rem"><h4 style="font-size:0.65rem">Commits</h4>
+        <table style="font-size:0.55rem"><tr><th>Periodo</th><th>Cant</th></tr>
+          <tr><td>Hoy</td><td>0</td></tr><tr><td>Semana</td><td>78</td></tr><tr><td>Mes</td><td>460</td></tr><tr><td>Total</td><td>788</td></tr></table></div>
+      <div class="card" style="padding:0.4rem"><h4 style="font-size:0.65rem">PR Activity</h4>
+        <table style="font-size:0.55rem"><tr><th>Metrica</th><th>Valor</th></tr>
+          <tr><td>Totales</td><td>100</td></tr><tr><td>Merged</td><td>94</td></tr><tr><td>Abiertos</td><td>0</td></tr><tr><td>Ciclo</td><td>2.5h</td></tr><tr><td>+Lineas</td><td>+188K</td></tr><tr><td>-Lineas</td><td>-28K</td></tr></table></div>
+      <div class="card" style="padding:0.4rem"><h4 style="font-size:0.65rem">Top Contributors</h4>
+        <table style="font-size:0.5rem"><tr><th>Autor</th><th>Commits</th></tr>
           <tr><td>EmmanuelOrtiz87</td><td>684</td></tr><tr><td>Emman</td><td>123</td></tr>
-          <tr><td>gentle-vanguard-bot</td><td>8</td></tr><tr><td>dependabot[bot]</td><td>7</td></tr>
-          <tr><td>foundation-bot</td><td>3</td></tr><tr><td>EmmanuelO87</td><td>1</td></tr>
-        </table>
-      </div>
-      <div class="card" style="padding:0.6rem"><h4 style="font-size:0.75rem">Ultimos PRs</h4>
-        <table style="font-size:0.6rem"><tr><th>#</th><th>Estado</th><th>+/-</th></tr>
-          <tr><td>#127 Dashboard charts</td><td><span class="badge badge-green">MERGED</span></td><td>3396/322</td></tr>
-          <tr><td>#126 v2.20 Core autonomy</td><td><span class="badge badge-green">MERGED</span></td><td>8315/369</td></tr>
-          <tr><td>#125 Gateway + scheduler</td><td><span class="badge badge-green">MERGED</span></td><td>8315/369</td></tr>
-          <tr><td>#124 Unicode/BOM fix</td><td><span class="badge badge-green">MERGED</span></td><td>35/7</td></tr>
-          <tr><td>#122 Autonomous learning</td><td><span class="badge badge-green">MERGED</span></td><td>295/0</td></tr>
-          <tr><td>#121 CodeGraph integration</td><td><span class="badge badge-green">MERGED</span></td><td>970/146</td></tr>
-        </table>
-      </div>
+          <tr><td>g-v-bot</td><td>8</td></tr><tr><td>dependabot</td><td>7</td></tr>
+          <tr><td>foundation-bot</td><td>3</td></tr><tr><td>EmmanuelO87</td><td>1</td></tr></table></div>
+      <div class="card" style="padding:0.4rem"><h4 style="font-size:0.65rem">Ultimos PRs</h4>
+        <table style="font-size:0.5rem"><tr><th>#</th><th>Estado</th><th>+/-</th></tr>
+          <tr><td>#127 Dashboard</td><td><span class="badge badge-green" style="font-size:0.5rem">MERGED</span></td><td>3396/322</td></tr>
+          <tr><td>#126 Core</td><td><span class="badge badge-green" style="font-size:0.5rem">MERGED</span></td><td>8315/369</td></tr>
+          <tr><td>#125 Gateway</td><td><span class="badge badge-green" style="font-size:0.5rem">MERGED</span></td><td>8315/369</td></tr>
+          <tr><td>#124 Unicode</td><td><span class="badge badge-green" style="font-size:0.5rem">MERGED</span></td><td>35/7</td></tr>
+          <tr><td>#122 Auto learn</td><td><span class="badge badge-green" style="font-size:0.5rem">MERGED</span></td><td>295/0</td></tr>
+          <tr><td>#121 CodeGraph</td><td><span class="badge badge-green" style="font-size:0.5rem">MERGED</span></td><td>970/146</td></tr></table></div>
     </div>
   </div>
 </div>
@@ -1043,24 +1031,24 @@
   <div class="slide-inner">
     <span class="tag">OPERACIONES</span>
     <h2>Actividad de Sesiones</h2>
-    <p class="subtitle" style="margin-bottom:0.6rem">Sesiones registradas, duraci&oacute;n y estado actual</p>
-    <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:0.8rem">
-      <canvas id="sessionChart" class="cnvs" style="height:150px"></canvas>
-      <div class="card" style="padding:0.6rem"><h4 style="font-size:0.8rem">Sesiones Recientes</h4>
-        <table style="font-size:0.65rem">
+    <p class="subtitle" style="margin-bottom:0.4rem">Sesiones registradas, duraci&oacute;n y estado actual</p>
+    <canvas id="sessionChart" class="cnvs" style="height:100px;width:100%"></canvas>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;margin-top:0.4rem;font-size:0.65rem">
+      <div class="card" style="padding:0.4rem"><h4 style="font-size:0.7rem">Sesiones Recientes</h4>
+        <table style="font-size:0.55rem">
           <tr><th>Session</th><th>Inicio</th><th>Estado</th></tr>
-          <tr><td>session-2026-05-22-01</td><td>05/22 00:14</td><td><span class="badge badge-green">ACTIVE</span></td></tr>
-          <tr><td>session-2026-05-21-02</td><td>05/21 23:44</td><td><span class="badge badge-green">ACTIVE</span></td></tr>
-          <tr><td>session-2026-05-20-03</td><td>05/20 23:42</td><td><span class="badge badge-gray">ENDED</span></td></tr>
-          <tr><td>session-2026-05-20-02</td><td>05/20 18:32</td><td><span class="badge badge-gray">ENDED</span></td></tr>
-          <tr><td>session-2026-05-20-01</td><td>05/20 00:13</td><td><span class="badge badge-gray">ENDED</span></td></tr>
+          <tr><td>session-2026-05-22-01</td><td>05/22 00:14</td><td><span class="badge badge-green" style="font-size:0.5rem">ACTIVE</span></td></tr>
+          <tr><td>session-2026-05-21-02</td><td>05/21 23:44</td><td><span class="badge badge-green" style="font-size:0.5rem">ACTIVE</span></td></tr>
+          <tr><td>session-2026-05-20-03</td><td>05/20 23:42</td><td><span class="badge badge-gray" style="font-size:0.5rem">ENDED</span></td></tr>
+          <tr><td>session-2026-05-20-02</td><td>05/20 18:32</td><td><span class="badge badge-gray" style="font-size:0.5rem">ENDED</span></td></tr>
+          <tr><td>session-2026-05-20-01</td><td>05/20 00:13</td><td><span class="badge badge-gray" style="font-size:0.5rem">ENDED</span></td></tr>
         </table>
       </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;margin-top:0.5rem">
-      <div class="card" style="padding:0.6rem;text-align:center"><h4 style="font-size:0.8rem">Total Sesiones</h4><div class="stat-num" style="font-size:1.5rem">5</div><p style="font-size:0.65rem">desde inicio</p></div>
-      <div class="card" style="padding:0.6rem;text-align:center"><h4 style="font-size:0.8rem">Activas Ahora</h4><div class="stat-num" style="font-size:1.5rem;color:#4ade80">2</div><p style="font-size:0.65rem">sesiones abiertas</p></div>
-      <div class="card" style="padding:0.6rem;text-align:center"><h4 style="font-size:0.8rem">Duracion Promedio</h4><div class="stat-num" style="font-size:1.5rem">12.3h</div><p style="font-size:0.65rem">por sesion</p></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.4rem">
+        <div class="card" style="padding:0.4rem;text-align:center"><h4 style="font-size:0.65rem">Total</h4><div style="font-size:1.2rem;font-weight:800;color:#a5b4fc">5</div><p style="font-size:0.55rem">sesiones</p></div>
+        <div class="card" style="padding:0.4rem;text-align:center"><h4 style="font-size:0.65rem">Activas</h4><div style="font-size:1.2rem;font-weight:800;color:#4ade80">2</div><p style="font-size:0.55rem">ahora</p></div>
+        <div class="card" style="padding:0.4rem;text-align:center"><h4 style="font-size:0.65rem">Promedio</h4><div style="font-size:1.2rem;font-weight:800;color:#a5b4fc">12.3h</div><p style="font-size:0.55rem">c/u</p></div>
+      </div>
     </div>
   </div>
 </div>
@@ -1171,66 +1159,48 @@
 <!-- ============================================================ -->
 <!-- SLIDE 27: GLOSARIO -->
 <!-- ============================================================ -->
-<div class="slide">
+<div class="slide" style="justify-content:flex-start;padding-top:2vh">
   <div class="slide-inner">
     <span class="tag">REFERENCIA</span>
     <h2>Glosario de T&eacute;rminos</h2>
-    <p class="subtitle" style="margin-bottom:1rem">Vocabulario t&eacute;cnico y de negocio usado en la plataforma</p>
-    <div class="grid-2">
-      <div class="card"><h4><span class="badge badge-blue">A</span></h4>
-        <ul class="list">
-          <li><strong>Agent:</strong> Cliente AI especializado con rol, temperatura y modelo asignado</li>
-          <li><strong>Auto-delegation:</strong> Routing autom&aacute;tico de intenci&oacute;n &rarr; agente &rarr; skill</li>
-          <li><strong>Adaptive profile:</strong> Perfil de comportamiento que se ajusta seg&uacute;n la herramienta detectada</li>
-        </ul>
+    <p class="subtitle" style="margin-bottom:0.6rem">Vocabulario t&eacute;cnico y de negocio usado en la plataforma</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.4rem;font-size:0.65rem">
+      <div class="card" style="padding:0.4rem"><h4 style="font-size:0.65rem"><span class="badge badge-blue">A</span></h4>
+        <div style="font-size:0.6rem;color:#cbd5e1;line-height:1.5"><div><strong>Agent:</strong> Cliente AI con rol, temperatura y modelo</div>
+        <div><strong>Auto-delegation:</strong> Routing intenci&oacute;n &rarr; agente &rarr; skill</div>
+        <div><strong>Adaptive profile:</strong> Perfil seg&uacute;n herramienta detectada</div></div>
       </div>
-      <div class="card"><h4><span class="badge badge-cyan">C</span></h4>
-        <ul class="list">
-          <li><strong>CodeGraph:</strong> &Iacute;ndice de c&oacute;digo para navegaci&oacute;n y an&aacute;lisis de impacto</li>
-          <li><strong>Cross-workspace:</strong> Validaci&oacute;n que abarca m&uacute;ltiples repositorios</li>
-        </ul>
+      <div class="card" style="padding:0.4rem"><h4 style="font-size:0.65rem"><span class="badge badge-cyan">C</span></h4>
+        <div style="font-size:0.6rem;color:#cbd5e1;line-height:1.5"><div><strong>CodeGraph:</strong> Indice de c&oacute;digo para impacto</div>
+        <div><strong>Cross-workspace:</strong> Validaci&oacute;n multi-repositorio</div></div>
       </div>
-      <div class="card"><h4><span class="badge badge-green">E</span></h4>
-        <ul class="list">
-          <li><strong>Engram:</strong> Sistema de memoria persistente con b&uacute;squeda sem&aacute;ntica</li>
-          <li><strong>Executive Dashboard:</strong> Panel con m&eacute;tricas de negocio y estado del sistema</li>
-        </ul>
+      <div class="card" style="padding:0.4rem"><h4 style="font-size:0.65rem"><span class="badge badge-green">E</span></h4>
+        <div style="font-size:0.6rem;color:#cbd5e1;line-height:1.5"><div><strong>Engram:</strong> Memoria persistente con b&uacute;squeda sem&aacute;ntica</div>
+        <div><strong>Executive Dashboard:</strong> Panel de m&eacute;tricas ejecutivas</div></div>
       </div>
-      <div class="card"><h4><span class="badge badge-purple">J</span></h4>
-        <ul class="list">
-          <li><strong>Judgment Day:</strong> Protocolo de revisi&oacute;n dual adversarial con fix cycle</li>
-          <li><strong>Juez:</strong> Instancia de agente GOV que produce un veredicto estructurado</li>
-        </ul>
+      <div class="card" style="padding:0.4rem"><h4 style="font-size:0.65rem"><span class="badge badge-purple">J</span></h4>
+        <div style="font-size:0.6rem;color:#cbd5e1;line-height:1.5"><div><strong>Judgment Day:</strong> Revisi&oacute;n dual adversarial con fix cycle</div>
+        <div><strong>Juez:</strong> Agente GOV que produce veredicto estructurado</div></div>
       </div>
-      <div class="card"><h4><span class="badge badge-orange">K</span></h4>
-        <ul class="list">
-          <li><strong>Karpathy Baseline:</strong> Conjunto de 119 items de referencia para detectar regresiones</li>
-        </ul>
+      <div class="card" style="padding:0.4rem"><h4 style="font-size:0.65rem"><span class="badge badge-orange">K</span></h4>
+        <div style="font-size:0.6rem;color:#cbd5e1;line-height:1.5"><div><strong>Karpathy Baseline:</strong> 119 items de referencia para regresiones</div></div>
       </div>
-      <div class="card"><h4><span class="badge badge-pink">M</span></h4>
-        <ul class="list">
-          <li><strong>MCP:</strong> Model Context Protocol — puente de comunicaci&oacute;n entre herramientas</li>
-          <li><strong>mem_save:</strong> Comando para persistir observaciones a Engram</li>
-        </ul>
+      <div class="card" style="padding:0.4rem"><h4 style="font-size:0.65rem"><span class="badge badge-pink">M</span></h4>
+        <div style="font-size:0.6rem;color:#cbd5e1;line-height:1.5"><div><strong>MCP:</strong> Model Context Protocol — puente entre herramientas</div>
+        <div><strong>mem_save:</strong> Persistir observaciones a Engram</div></div>
       </div>
-      <div class="card"><h4><span class="badge badge-red">Q</span></h4>
-        <ul class="list">
-          <li><strong>Quality Gate:</strong> Punto de validaci&oacute;n obligatorio en el pipeline CI/CD</li>
-        </ul>
+      <div class="card" style="padding:0.4rem"><h4 style="font-size:0.65rem"><span class="badge badge-red">Q</span></h4>
+        <div style="font-size:0.6rem;color:#cbd5e1;line-height:1.5"><div><strong>Quality Gate:</strong> Validaci&oacute;n obligatoria en CI/CD</div></div>
       </div>
-      <div class="card"><h4><span class="badge badge-blue">S</span></h4>
-        <ul class="list">
-          <li><strong>SDD:</strong> Spec-Driven Development — ciclo de vida de desarrollo guiado por especificaciones</li>
-          <li><strong>Skill:</strong> Paquete reutilizable de instrucciones para un dominio espec&iacute;fico</li>
-          <li><strong>Sycophancy:</strong> Cambio de opini&oacute;n sin evidencia nueva (detectado por Judgment Day)</li>
-          <li><strong>Session:</strong> Unidad de interacci&oacute;n con estado, identificador &uacute;nico y ciclo de vida</li>
-        </ul>
+      <div class="card" style="padding:0.4rem"><h4 style="font-size:0.65rem"><span class="badge badge-blue">S</span></h4>
+        <div style="font-size:0.6rem;color:#cbd5e1;line-height:1.5"><div><strong>SDD:</strong> Spec-Driven Development — ciclo guiado por specs</div>
+        <div><strong>Skill:</strong> Instrucciones reutilizables para dominio</div>
+        <div><strong>Sycophancy:</strong> Cambio de opini&oacute;n sin evidencia</div>
+        <div><strong>Session:</strong> Unidad de interacci&oacute;n con estado</div></div>
       </div>
-      <div class="card"><h4><span class="badge badge-green">T</span></h4>
-        <ul class="list">
-          <li><strong>Tier:</strong> Nivel de resiliencia (primary, secondary, tertiary)</li>
-          <li><strong>Token Budget:</strong> L&iacute;mite diario de consumo de tokens (120,000)</li>
-        </ul>
+      <div class="card" style="padding:0.4rem"><h4 style="font-size:0.65rem"><span class="badge badge-green">T</span></h4>
+        <div style="font-size:0.6rem;color:#cbd5e1;line-height:1.5"><div><strong>Tier:</strong> Nivel de resiliencia (primary/secondary/tertiary)</div>
+        <div><strong>Token Budget:</strong> Limite diario de 120,000 tokens</div></div>
       </div>
     </div>
   </div>

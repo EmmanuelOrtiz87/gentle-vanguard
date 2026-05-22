@@ -217,10 +217,103 @@ function Collect-TelemetryMetrics {
     return $tm
 }
 
+function Collect-MonthlyHistory {
+    Log "Collecting monthly history from snapshots..."
+    $snapDir = Join-Path $outDir 'snapshots'
+    $history = @{ days = @(); months = @(); perDay = @{}; perMonth = @{} }
+    if (-not (Test-Path $snapDir)) {
+        $history | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $outDir 'monthly.json')
+        Log "Monthly: no snapshots dir"
+        return $history
+    }
+    $snapshots = Get-ChildItem $snapDir -Filter 'snapshot-*.json' | Sort-Object LastWriteTime
+    $dayAgg = @{}
+    $monthAgg = @{}
+    foreach ($snap in $snapshots) {
+        try {
+            $s = Get-Content $snap.FullName -Raw | ConvertFrom-Json
+            $dayKey = $snap.LastWriteTime.ToString('yyyy-MM-dd')
+            $monthKey = $snap.LastWriteTime.ToString('yyyy-MM')
+            $tokens = if ($s.token) { [int]$s.token.usedToday } else { 0 }
+            $cost = if ($s.cost) { [double]$s.cost.actualCost } else { 0 }
+            $sessions = if ($s.sessions) { [int]$s.sessions.today } else { 0 }
+            $calls = if ($s.telemetry -and $s.telemetry.hasData) { [int]$s.telemetry.toolCalls } else { 0 }
+            $saved = if ($s.cost) { [double]$s.cost.modeledSavings } else { 0 }
+            if (-not $dayAgg[$dayKey]) { $dayAgg[$dayKey] = @{ tokens=0; cost=0; sessions=0; calls=0; saved=0; count=0; lastTs=$snap.LastWriteTime.ToString('o') } }
+            $da = $dayAgg[$dayKey]
+            $da.tokens = [math]::Max($da.tokens, $tokens)
+            $da.cost = [math]::Max($da.cost, $cost)
+            $da.sessions = [math]::Max($da.sessions, $sessions)
+            $da.calls = [math]::Max($da.calls, $calls)
+            $da.saved = [math]::Max($da.saved, $saved)
+            $da.count++
+            if (-not $monthAgg[$monthKey]) { $monthAgg[$monthKey] = @{ tokens=0; cost=0; sessions=0; calls=0; saved=0; days=0 } }
+            $ma = $monthAgg[$monthKey]
+            $ma.tokens = [math]::Max($ma.tokens, $tokens)
+            $ma.cost = [math]::Max($ma.cost, $cost)
+            $ma.sessions = [math]::Max($ma.sessions, $sessions)
+            $ma.calls = [math]::Max($ma.calls, $calls)
+            $ma.saved = [math]::Max($ma.saved, $saved)
+        } catch {}
+    }
+    $history.perDay = $dayAgg
+    $history.perMonth = $monthAgg
+    $daysList = $dayAgg.Keys | Sort-Object
+    $monthsList = $monthAgg.Keys | Sort-Object
+    $history.days = $daysList | ForEach-Object { @{ date=$_; tokens=$dayAgg[$_].tokens; cost=$dayAgg[$_].cost; sessions=$dayAgg[$_].sessions; calls=$dayAgg[$_].calls; saved=$dayAgg[$_].saved; lastTs=$dayAgg[$_].lastTs } }
+    $history.months = $monthsList | ForEach-Object { @{ month=$_; tokens=$monthAgg[$_].tokens; cost=$monthAgg[$_].cost; sessions=$monthAgg[$_].sessions; calls=$monthAgg[$_].calls; saved=$monthAgg[$_].saved } }
+    $history | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $outDir 'monthly.json')
+    Log "Monthly: $($daysList.Count) days, $($monthsList.Count) months"
+    return $history
+}
+
+function Collect-Aggregates {
+    Log "Collecting aggregate session data from snapshots..."
+    $aggDir = Join-Path $outDir 'aggregates'
+    $perResponseFile = Join-Path $aggDir 'per-response.json'
+    $activityFile = Join-Path $outDir 'live' 'activity.json'
+    $eventsFile = Join-Path $outDir 'live' 'events.ndjson'
+    $agg = @{ perResponse = @(); responseCount = 0; totalInputTokens = 0; totalOutputTokens = 0; totalCost = 0; totalSaved = 0; avgTokensPerResponse = 0 }
+    $responses = @()
+    if (Test-Path $eventsFile) {
+        try {
+            Get-Content $eventsFile | ForEach-Object {
+                if ($_) {
+                    $evt = $_ | ConvertFrom-Json
+                    if ($evt.type -in @('response','tool','llm')) {
+                        $responses += [PSCustomObject]@{
+                            ts = if ($evt.ts) { $evt.ts } else { $evt.timestamp }
+                            type = $evt.type
+                            inputTokens = if ($evt.inputTokens) { [int]$evt.inputTokens } else { [int]($evt.tokens * 0.6) }
+                            outputTokens = if ($evt.outputTokens) { [int]$evt.outputTokens } else { [int]($evt.tokens * 0.4) }
+                            tokens = [int]($evt.tokens -or 0)
+                            detail = if ($evt.detail) { $evt.detail } else { $evt.type }
+                            cost = [math]::Round(([int]($evt.tokens -or 0) / 1e6) * 10, 6)
+                            saved = [math]::Round(([int]($evt.tokens -or 0) * 0.4 / 1e6) * 10, 6)
+                        }
+                    }
+                }
+            }
+        } catch {}
+    }
+    $agg.perResponse = $responses | Sort-Object ts
+    $agg.responseCount = $responses.Count
+    $agg.totalInputTokens = [int](($responses | Measure-Object -Property inputTokens -Sum).Sum)
+    $agg.totalOutputTokens = [int](($responses | Measure-Object -Property outputTokens -Sum).Sum)
+    $agg.totalCost = [math]::Round(($responses | Measure-Object -Property cost -Sum).Sum, 4)
+    $agg.totalSaved = [math]::Round(($responses | Measure-Object -Property saved -Sum).Sum, 4)
+    if ($agg.responseCount -gt 0) { $agg.avgTokensPerResponse = [int](($agg.totalInputTokens + $agg.totalOutputTokens) / $agg.responseCount) }
+    $agg | ConvertTo-Json -Depth 5 | Set-Content $perResponseFile
+    Log "Aggregates: $($agg.responseCount) responses, input=$($agg.totalInputTokens) output=$($agg.totalOutputTokens) cost=`$$($agg.totalCost) saved=`$$($agg.totalSaved)"
+    return $agg
+}
+
 function Collect-AllMetrics {
     $s = Collect-SessionMetrics; $t = Collect-TokenMetrics; $l = Collect-LiveMetrics
     $g = Collect-GitMetrics; $p = Collect-PRMetrics; $c = Collect-CostMetrics
     $tel = Collect-TelemetryMetrics
+    Collect-MonthlyHistory | Out-Null
+    Collect-Aggregates | Out-Null
     $all = [PSCustomObject]@{
         collectedAt = (Get-Date -Format 'o')
         sessions = [PSCustomObject]@{ total = $s.Count; active = @($s | Where-Object { $_.status -eq 'active' }).Count; today = @($s | Where-Object { $_.isToday }).Count; avgDurationSec = ($s | Where-Object { $_.durationSec -gt 0 } | Measure-Object -Average durationSec).Average; totalDurationMin = [int](($s | Where-Object { $_.durationSec -gt 0 } | Measure-Object -Sum durationSec).Sum / 60); latest = ($s | Sort-Object startTime -Descending | Select-Object -First 1).sessionId }

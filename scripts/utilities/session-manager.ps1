@@ -243,8 +243,8 @@ function Initialize-Session {
     Clear-OrphanedSessions -MaxAgeHours $OrphanMaxAgeHours | Out-Null
 
     $date = Get-Date -Format "yyyy-MM-dd"
-    $sessionNumber = (Get-ChildItem -Path $fullSessionDir -Filter "session-$date-*.json" -ErrorAction SilentlyContinue | Measure-Object).Count + 1
-    $sessionId = "session-$date-$($sessionNumber.ToString('D2'))"
+    $time = Get-Date -Format "HHmm"
+    $sessionId = "session-${date}_${time}"
 
     $sessionFile = Join-Path $fullSessionDir "$sessionId.json"
 
