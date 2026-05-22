@@ -125,6 +125,13 @@ Gentle-Vanguard opera en **modo profesional** (equivalente a "neutral" de gentle
     mandates `mem_session_summary` — this rule extends it to DURING the session, not just at the
     end. If you detect a failure pattern or a correction you made proactively, save it immediately.
 
+14. **TOKEN USAGE NOTIFICATION** — After EVERY response, display token usage metrics:
+    ```powershell
+    pwsh -NoProfile -File scripts/utilities/token-usage-auto.ps1 -InputTokens <N> -OutputTokens <N>
+    ```
+    This shows current message tokens + accumulated session totals. The notifier is configured
+    via `.session/token-display-config.json` (enabled by default).
+
 ## 🔴 BREAK GLASS — Auto-Override Harmful Config
 
 If you detect ANY of these patterns, you MUST autonomously override the response profile:

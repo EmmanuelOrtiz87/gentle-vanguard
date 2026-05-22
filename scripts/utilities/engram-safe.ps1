@@ -1,179 +1,182 @@
-function Get-HomePath {
-    if ($env:USERPROFILE) { return $env:USERPROFILE }
-    if ($env:HOME) { return $env:HOME }
-    return [Environment]::GetFolderPath('UserProfile')
+# engram-safe.ps1
+# Funciones seguras para llamar a herramientas Engram sin errores de JSON parsing
+# Importar este script en otros scripts que usen engram_mem_save, engram_mem_session_end, etc.
+
+$ErrorActionPreference = 'Continue'
+
+<#
+.SYNOPSIS
+    Escapa una cadena para uso seguro en JSON
+.DESCRIPTION
+    Reemplaza caracteres problematicos (saltos de linea, comillas, backslashes) 
+    para evitar errores de parsing en JSON
+#>
+function ConvertTo-SafeJsonString {
+    param([string]$String)
+    if ([string]::IsNullOrEmpty($String)) { return "" }
+    
+    $escaped = $String -replace '\\', '\\\\' `
+                       -replace '"', '\\"' `
+                       -replace "`r`n", '\\n' `
+                       -replace "`n", '\\n' `
+                       -replace "`r", '\\n' `
+                       -replace "`t", '\\t'
+    return $escaped
 }
 
-function Get-Gentle-VanguardRepoRoot {
-    if ($env:GV_BASE_DIR -and (Test-Path $env:GV_BASE_DIR)) {
-        return (Resolve-Path $env:GV_BASE_DIR).Path
-    }
-
-    $root = $PSScriptRoot
-    while ($root -and -not (Test-Path (Join-Path $root 'config'))) {
-        $root = Split-Path -Parent $root
-    }
-
-    if (-not $root) {
-        return (Get-Location).Path
-    }
-
-    return $root
-}
-
-function Resolve-Gentle-VanguardEngramBinary {
-    param([string]$RepoRoot = (Get-Gentle-VanguardRepoRoot))
-
-    if ($env:ENGRAM_CMD -and (Test-Path $env:ENGRAM_CMD)) {
-        return (Resolve-Path $env:ENGRAM_CMD).Path
-    }
-
-    $homePath = Get-HomePath
-    $candidatePaths = @(
-        (Join-Path $RepoRoot 'tools' 'engram'),
-        (Join-Path $RepoRoot 'tools' 'engram.exe'),
-        (Join-Path $homePath 'bin' 'engram'),
-        (Join-Path $homePath 'bin' 'engram.exe'),
-        (Join-Path ($env:GOPATH ? $env:GOPATH : (Join-Path $homePath 'go')) 'bin' 'engram'),
-        (Join-Path ($env:GOPATH ? $env:GOPATH : (Join-Path $homePath 'go')) 'bin' 'engram.exe')
-    )
-
-    foreach ($candidate in $candidatePaths) {
-        if ($candidate -and (Test-Path $candidate)) {
-            return (Resolve-Path $candidate).Path
-        }
-    }
-
-    $engramCmd = Get-Command engram -ErrorAction SilentlyContinue
-    if ($engramCmd -and $engramCmd.Source) {
-        return $engramCmd.Source
-    }
-
-    return $null
-}
-
-function Initialize-Gentle-VanguardEngramEnvironment {
-    param([string]$RepoRoot = (Get-Gentle-VanguardRepoRoot))
-
-    $dataDir = Join-Path $RepoRoot '.engram-data'
-    if (-not (Test-Path $dataDir)) {
-        New-Item -ItemType Directory -Path $dataDir -Force | Out-Null
-    }
-
-    $env:ENGRAM_DATA_DIR = $dataDir
-    $env:ENGRAM_SKIP_UPDATE = '1'
-
-    return $dataDir
-}
-
-function Remove-Gentle-VanguardEngramNoise {
-    param([object[]]$Output)
-
-    $lines = @($Output | ForEach-Object { [string]$_ })
-    return @($lines | Where-Object {
-        $_ -notmatch '^Could not check for updates:' -and
-        $_ -notmatch '^Get "https://api\.github\.com/repos/Gentleman-Programming/engram/releases/latest"'
-    })
-}
-
-function Write-Gentle-VanguardEngramFallback {
+<#
+.SYNOPSIS
+    Valida que un string no exceda el limite de longitud para JSON
+.DESCRIPTION
+    Trunca strings muy largos y agrega indicador [...truncated]
+#>
+function Limit-JsonStringLength {
     param(
-        [string]$RepoRoot,
-        [string[]]$Arguments,
-        [int]$ExitCode,
-        [object[]]$Output
+        [string]$String,
+        [int]$MaxLength = 4000
     )
+    if ($String.Length -gt $MaxLength) {
+        return $String.Substring(0, $MaxLength - 15) + " [...truncated]"
+    }
+    return $String
+}
 
+<#
+.SYNOPSIS
+    Prepara contenido para mem_save de forma segura
+.DESCRIPTION
+    Valida y escapa el contenido para evitar errores de JSON parsing
+    cuando se llama a engram_mem_save
+#>
+function New-SafeMemSaveContent {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$Title,
+        
+        [Parameter(Mandatory=$true)]
+        [string]$Content,
+        
+        [Parameter(Mandatory=$false)]
+        [ValidateSet("decision", "architecture", "bugfix", "pattern", "config", "discovery", "learning", "manual")]
+        [string]$Type = "manual",
+        
+        [Parameter(Mandatory=$false)]
+        [string]$Project = "gentle-vanguard"
+    )
+    
+    # Escapar contenido
+    $safeTitle = ConvertTo-SafeJsonString -String $Title
+    $safeContent = ConvertTo-SafeJsonString -String $Content
+    
+    # Limitar longitud
+    $safeTitle = Limit-JsonStringLength -String $safeTitle -MaxLength 200
+    $safeContent = Limit-JsonStringLength -String $safeContent -MaxLength 4000
+    
+    return @{
+        title = $safeTitle
+        content = $safeContent
+        type = $Type
+        project = $Project
+    }
+}
+
+<#
+.SYNOPSIS
+    Prepara summary para mem_session_end de forma segura
+.DESCRIPTION
+    Valida y escapa el summary para evitar errores de JSON parsing
+#>
+function New-SafeSessionEndSummary {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$SessionId,
+        
+        [Parameter(Mandatory=$false)]
+        [string]$Summary = ""
+    )
+    
+    if ([string]::IsNullOrWhiteSpace($Summary)) {
+        return "Session $SessionId completed"
+    }
+    
+    # Escapar y limitar
+    $safeSummary = ConvertTo-SafeJsonString -String $Summary
+    $safeSummary = Limit-JsonStringLength -String $safeSummary -MaxLength 500
+    
+    return $safeSummary
+}
+
+<#
+.SYNOPSIS
+    Valida que un path de archivo existe antes de usarlo
+.DESCRIPTION
+    Previene errores de file not found
+#>
+function Test-SafeFilePath {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$Path,
+        
+        [Parameter(Mandatory=$false)]
+        [string]$Description = "File"
+    )
+    
+    if (-not (Test-Path $Path)) {
+        Write-Warning "$Description not found: $Path"
+        return $false
+    }
+    return $true
+}
+
+<#
+.SYNOPSIS
+    Ejecuta un comando con manejo de errores robusto
+.DESCRIPTION
+    Captura errores y retorna resultado estructurado
+#>
+function Invoke-SafeCommand {
+    param(
+        [Parameter(Mandatory=$true)]
+        [scriptblock]$Command,
+        
+        [Parameter(Mandatory=$false)]
+        [string]$ErrorMessage = "Command failed",
+        
+        [Parameter(Mandatory=$false)]
+        [switch]$ContinueOnError
+    )
+    
     try {
-        $dataDir = Initialize-Gentle-VanguardEngramEnvironment -RepoRoot $RepoRoot
-        $fallback = Join-Path $dataDir 'fallback-memory.jsonl'
-        $entry = @{
-            timestamp = Get-Date -Format 'yyyy-MM-ddTHH:mm:sszzz'
-            args = $Arguments
-            exitCode = $ExitCode
-            output = (@($Output) -join "`n")
+        $result = & $Command 2>&1
+        return @{
+            Success = $true
+            Output = $result
+            Error = $null
         }
-        $entry | ConvertTo-Json -Compress -Depth 8 | Out-File -FilePath $fallback -Append -Encoding UTF8
-    }
-    catch {
-    }
-}
-
-function Invoke-Gentle-VanguardEngram {
-    param(
-        [Parameter(Mandatory = $true)]
-        [string[]]$Arguments,
-        [string]$RepoRoot = (Get-Gentle-VanguardRepoRoot),
-        [int]$MaxAttempts = 3
-    )
-
-    $engramBin = Resolve-Gentle-VanguardEngramBinary -RepoRoot $RepoRoot
-    if (-not $engramBin) {
-        return [pscustomobject]@{
+    } catch {
+        $errorMsg = "$ErrorMessage`: $($_.Exception.Message)"
+        Write-Warning $errorMsg
+        
+        if (-not $ContinueOnError) {
+            throw $_
+        }
+        
+        return @{
             Success = $false
-            ExitCode = 127
-            Output = @('Engram CLI not found')
-            RawOutput = @('Engram CLI not found')
-            DataDir = Initialize-Gentle-VanguardEngramEnvironment -RepoRoot $RepoRoot
+            Output = $null
+            Error = $errorMsg
         }
-    }
-
-    $dataDir = Initialize-Gentle-VanguardEngramEnvironment -RepoRoot $RepoRoot
-    $mutex = [System.Threading.Mutex]::new($false, 'Global\Gentle-VanguardEngramCli')
-    $attempt = 0
-    $rawOutput = @()
-    $exitCode = 1
-
-    try {
-        while ($attempt -lt $MaxAttempts) {
-            $attempt++
-            $lockTaken = $false
-
-            try {
-                $lockTaken = $mutex.WaitOne([TimeSpan]::FromSeconds(20))
-                if (-not $lockTaken) {
-                    $rawOutput = @('Timed out waiting for Engram lock')
-                    $exitCode = 124
-                    continue
-                }
-
-                $rawOutput = @(& $engramBin @Arguments 2>&1)
-                $exitCode = $LASTEXITCODE
-            }
-            finally {
-                if ($lockTaken) {
-                    $mutex.ReleaseMutex()
-                }
-            }
-
-            $rawText = $rawOutput -join "`n"
-            if ($exitCode -eq 0) {
-                break
-            }
-
-            if ($rawText -notmatch 'database is locked|SQLITE_BUSY|database table is locked') {
-                break
-            }
-
-            Start-Sleep -Milliseconds (250 * $attempt)
-        }
-    }
-    finally {
-        $mutex.Dispose()
-    }
-
-    $cleanOutput = Remove-Gentle-VanguardEngramNoise -Output $rawOutput
-    if ($exitCode -ne 0) {
-        Write-Gentle-VanguardEngramFallback -RepoRoot $RepoRoot -Arguments $Arguments -ExitCode $exitCode -Output $cleanOutput
-    }
-
-    return [pscustomobject]@{
-        Success = ($exitCode -eq 0)
-        ExitCode = $exitCode
-        Output = $cleanOutput
-        RawOutput = $rawOutput
-        DataDir = $dataDir
     }
 }
 
+# Exportar funciones
+Export-ModuleMember -Function @(
+    'ConvertTo-SafeJsonString',
+    'Limit-JsonStringLength', 
+    'New-SafeMemSaveContent',
+    'New-SafeSessionEndSummary',
+    'Test-SafeFilePath',
+    'Invoke-SafeCommand'
+)
 
+Write-Verbose "Engram safe functions loaded"
