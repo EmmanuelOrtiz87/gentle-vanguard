@@ -61,7 +61,12 @@ $VAULT_VERSION = '1.0.0'
 # ── Paths ──────────────────────────────────────────────────────────────────────
 $VaultDir    = Join-Path $HOME '.gentle-vanguard' 'vault'
 $MetaDir     = Join-Path $VaultDir '.meta'
-$ScriptRoot2 = Split-Path -Parent $PSScriptRoot  # scripts/
+$scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($MyInvocation.MyCommand.Path) {
+    Split-Path -Parent $MyInvocation.MyCommand.Path
+} else {
+    Get-Location
+}
+$ScriptRoot2 = Split-Path -Parent $scriptRoot  # scripts/
 $WorkspaceRoot = Split-Path -Parent $ScriptRoot2  # gentle-vanguard/
 $LogDir      = Join-Path $WorkspaceRoot 'logs'
 $AuditLog    = Join-Path $LogDir 'secret-audit.jsonl'

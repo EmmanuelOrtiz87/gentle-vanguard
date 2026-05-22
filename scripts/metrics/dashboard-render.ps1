@@ -24,7 +24,17 @@
 param([switch]$Quiet, [switch]$Open)
 
 $ErrorActionPreference = 'Continue'
-$repoRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path))
+
+# Resolve repo root robustly
+if ($PSScriptRoot) {
+    $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+} elseif ($MyInvocation.MyCommand.Path) {
+    $repoRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path))
+} else {
+    # Fallback: assume running from repo root or scripts/metrics
+    $repoRoot = if (Test-Path 'config/orchestrator.json') { Get-Location } else { Split-Path -Parent (Split-Path -Parent (Get-Location)) }
+}
+
 $reportsDir = Join-Path $repoRoot 'reports'
 $outFile = Join-Path $reportsDir 'dashboard.html'
 $metricsDir = Join-Path $repoRoot '.runtime' 'metrics'

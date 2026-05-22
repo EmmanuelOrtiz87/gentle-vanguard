@@ -5,6 +5,7 @@ param(
     [string]$ProjectName = "workspace_gentle_vanguard",
     [string]$WorkspaceRoot = ".\gentle-vanguard",
     [string]$ConfigFile = "",
+    [int]$StepTimeoutSeconds = 300,
     [switch]$NoExit
 )
 
@@ -90,13 +91,22 @@ foreach ($step in $steps) {
 
     try {
         $LASTEXITCODE = 0
+        $sw = [System.Diagnostics.Stopwatch]::StartNew()
+        
         if ($scriptArgs -and $scriptArgs.Trim()) {
             $invokeCmd = "& `"$scriptPath`" $scriptArgs"
             $result = Invoke-Expression $invokeCmd 2>&1
         } else {
             $result = & $scriptPath 2>&1
         }
+        
+        $sw.Stop()
         $exitCode = $LASTEXITCODE
+        
+        # Log execution time for monitoring
+        if ($sw.Elapsed.TotalSeconds -gt 30) {
+            Write-Host "      [INFO] Step took $($sw.Elapsed.ToString('mm\:ss'))" -ForegroundColor Gray
+        }
 
         if ($exitCode -ne 0) {
             $msg = "$scriptId exited with code $exitCode"

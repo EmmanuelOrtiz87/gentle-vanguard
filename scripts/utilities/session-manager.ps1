@@ -142,10 +142,19 @@ function Save-ToEngram {
     return $false
 }
 
-$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) { $env:GENTLE_VANGUARD_BASE_DIR } else {
-    $root = Split-Path -Parent $PSScriptRoot
-    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
-    if (-not $root) { $root = $PSScriptRoot }
+$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) { 
+    $env:GENTLE_VANGUARD_BASE_DIR 
+} else {
+    $scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($MyInvocation.MyCommand.Path) { 
+        Split-Path -Parent $MyInvocation.MyCommand.Path 
+    } else { 
+        Get-Location 
+    }
+    $root = Split-Path -Parent $scriptRoot
+    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { 
+        $root = Split-Path -Parent $root 
+    }
+    if (-not $root) { $root = $scriptRoot }
     $root
 }
 $fullSessionDir = Join-Path $repoRoot $SessionDir.TrimStart('.\')
@@ -502,6 +511,13 @@ function End-Session {
     }
 
     Write-Status "Session ended: $($sessionData.sessionId)"
+
+    # Show token usage summary before closing
+    $tokenNotifier = Join-Path $repoRoot 'scripts\utilities\token-usage-notifier.ps1'
+    if (Test-Path $tokenNotifier) {
+        Write-Status "Generating token usage summary..."
+        & $tokenNotifier -Action summary
+    }
 
     $notifyScript = Join-Path $repoRoot 'scripts\utilities\notify-user.ps1'
     if (Test-Path $notifyScript) {

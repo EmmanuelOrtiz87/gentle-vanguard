@@ -6,7 +6,12 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($MyInvocation.MyCommand.Path) {
+    Split-Path -Parent $MyInvocation.MyCommand.Path
+} else {
+    Get-Location
+}
+$repoRoot = Split-Path -Parent (Split-Path -Parent $scriptRoot)
 $proposalsPath = Join-Path $repoRoot $ProposalsDir
 
 function Write-Info  { Write-Host "[INFO] $args" -ForegroundColor Cyan }

@@ -6,14 +6,19 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) {
+$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) {
     $env:GENTLE_VANGUARD_BASE_DIR
 } else {
-    $root = Split-Path -Parent $PSScriptRoot
+    $scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($MyInvocation.MyCommand.Path) {
+        Split-Path -Parent $MyInvocation.MyCommand.Path
+    } else {
+        Get-Location
+    }
+    $root = Split-Path -Parent $scriptRoot
     while ($root -and -not (Test-Path (Join-Path $root ".git"))) {
         $root = Split-Path -Parent $root
     }
-    if (-not $root) { $root = $PSScriptRoot }
+    if (-not $root) { $root = $scriptRoot }
     $root
 }
 

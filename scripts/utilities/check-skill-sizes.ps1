@@ -1,7 +1,15 @@
 param([switch]$WarnOnly, [int]$MaxTokens = 1000, [int]$MaxLines = 150)
 
 $ErrorActionPreference = 'Continue'
-$repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+
+# Robust path resolution
+$scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($MyInvocation.MyCommand.Path) { 
+    Split-Path -Parent $MyInvocation.MyCommand.Path 
+} else { 
+    Get-Location 
+}
+
+$repoRoot = Split-Path -Parent (Split-Path -Parent $scriptRoot)
 $skillsDir = Join-Path $repoRoot "skills"
 
 $over = @()

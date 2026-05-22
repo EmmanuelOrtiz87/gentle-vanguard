@@ -5,7 +5,14 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
-$repoRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path))
+$scriptPath = if ($MyInvocation.MyCommand.Path) { 
+    $MyInvocation.MyCommand.Path 
+} elseif ($PSScriptRoot) { 
+    Join-Path $PSScriptRoot 'collector.ps1' 
+} else { 
+    (Get-Location).Path 
+}
+$repoRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $scriptPath))
 $outDir = Join-Path $repoRoot '.runtime' 'metrics'
 $sessionsDir = Join-Path $repoRoot 'session'
 $tokenState = Join-Path $repoRoot '.session' 'token-autopilot-state.json'

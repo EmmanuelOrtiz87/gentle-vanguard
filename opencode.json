@@ -394,9 +394,20 @@
   "mcp": {
     "codegraph": {
       "type": "local",
-      "command": ["codegraph", "serve", "--mcp"],
+      "command": [
+        "codegraph",
+        "serve",
+        "--mcp"
+      ],
       "enabled": true
     }
+  },
+  "tools": {
+    "bash": true,
+    "readFile": true,
+    "writeFile": true,
+    "editFile": true,
+    "listFiles": true
   },
   "default_agent": "orchestrator",
   "share": "manual",
@@ -416,13 +427,6 @@
       "session/**"
     ]
   },
-      "tools": {
-        "bash": true,
-        "readFile": true,
-        "writeFile": true,
-        "editFile": true,
-        "listFiles": true
-    },
   "permission": {
     "read": "allow",
     "glob": "allow",

@@ -3,7 +3,7 @@
 # Purpose: Minimal rules file with external references to avoid context bloat
 
 ---
-name: foundation-orchestrator
+name: gentle-vanguard-orchestrator
 version: "2.6.0"
 description: SDD-driven AI agent orchestration platform — optimized context loading
 
@@ -108,9 +108,6 @@ agent:
     - "Keep reasoning steps explicit but concise"
     - "Batch independent tool calls in parallel"
     - "Cache query results using engram memory"
-    - "Reference skill registry (.atl/skill-registry.md) to find the right skill before loading"
-    - "Restore session context from startup-summary.json at session start"
-    - "Use engram memory context (scripts/.session/) for cross-session persistence"
 
   # Error handling
   errorHandling:
@@ -185,10 +182,6 @@ references:
   standards: "rules/DEVELOPMENT-STANDARDS.md"
   orchestrator: "config/orchestrator.json"
   skills: "skills/SKILL_INDEX.md"
-  skillRegistry: ".atl/skill-registry.md"
-  engram: ".engram-data/"
-  sessionContext: "scripts/.session/startup-summary.json"
-  memRestore: "scripts/utilities/engram_mem_context.ps1"
 
 # ============================================================================
 # PHASE 7: DEBUGGING & TELEMETRY
@@ -219,3 +212,4 @@ telemetry:
 #   4. Enforce @include/@exclude boundaries
 #   5. Use memory caching for hot paths
 #   Result: Minimal, focused context ✅
+

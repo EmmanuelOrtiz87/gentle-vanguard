@@ -15,7 +15,12 @@ param(
 $ErrorActionPreference = "Continue"
 
 $script:homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
-$script:RepoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($MyInvocation.MyCommand.Path) {
+    Split-Path -Parent $MyInvocation.MyCommand.Path
+} else {
+    Get-Location
+}
+$script:RepoRoot = Split-Path -Parent (Split-Path -Parent $scriptRoot)
 if ([string]::IsNullOrWhiteSpace($ToolsPath)) {
     $candidate = Join-Path $script:RepoRoot 'tools\engram'
     $ToolsPath = if (Test-Path $candidate) { $candidate } else { "$candidate.exe" }

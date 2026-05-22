@@ -13,8 +13,13 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-if (-not $scriptDir) { $scriptDir = Split-Path -Parent $PSScriptRoot }
+$scriptDir = if ($MyInvocation.MyCommand.Path) {
+    Split-Path -Parent $MyInvocation.MyCommand.Path
+} elseif ($PSScriptRoot) {
+    $PSScriptRoot
+} else {
+    Get-Location
+}
 $repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 
 $script:homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
