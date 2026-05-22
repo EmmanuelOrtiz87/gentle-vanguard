@@ -315,3 +315,13 @@ kubectl logs -f deployment/myapp
 kubectl rollout restart deployment/myapp
 kubectl rollout undo deployment/myapp
 ```
+
+
+## References
+
+See [references/](references/) for detailed examples:
+
+- [Example 1](references/code-example-1.md)
+- [Example 2](references/code-example-2.md)
+- [Example 3](references/code-example-3.md)
+

@@ -298,3 +298,12 @@ Before output, verify:
 3.  JS funcional
 4.  CDNs accesibles
 5.  Responsive funciona
+
+
+## References
+
+See [references/](references/) for detailed examples:
+
+- [Example 1](references/code-example-1.md)
+- [Example 2](references/code-example-2.md)
+

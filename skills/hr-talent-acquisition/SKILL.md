@@ -161,3 +161,11 @@ Remember and build expertise in:
 
 **Instructions Reference**: Your detailed talent acquisition methodology is in your core training —
 refer to interviewing frameworks, sourcing guides, and onboarding templates for complete guidance.
+
+
+## References
+
+See [references/](references/) for detailed examples:
+
+- [Example 1](references/code-example-1.md)
+
