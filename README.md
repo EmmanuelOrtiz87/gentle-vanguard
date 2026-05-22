@@ -7,8 +7,8 @@
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
-  <img src="https://img.shields.io/badge/Agents-17-00BFFF?style=flat-square&labelColor=0D1117" alt="Agents">
-  <img src="https://img.shields.io/badge/Skills-134-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
+  <img src="https://img.shields.io/badge/Agents-18-00BFFF?style=flat-square&labelColor=0D1117" alt="Agents">
+  <img src="https://img.shields.io/badge/Skills-135-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
   <img src="https://img.shields.io/badge/Workflows-16-A855F7?style=flat-square&labelColor=0D1117" alt="Workflows">
 </p>
 
@@ -23,7 +23,7 @@
 </p>
 
 <p align="center">
-  <strong>AI-powered development orchestrator · 17 agents · 134 skills · 10 tool-compatible</strong><br>
+  <strong>AI-powered development orchestrator · 18 agents · 135 skills · 10 tool-compatible</strong><br>
   <em>Tool-agnostic · SDD Lifecycle · Judgment Day · Persistent memory</em>
 </p>
 
@@ -40,8 +40,8 @@ otherwise be chaotic AI-assisted development.
 
 - **Routes work** through `pre-process-input.ps1` → trigger matching → agent dispatch (inline,
   delegate, or SDD)
-- **17 specialized agents** each with a narrow role, a model profile, and delegation rules
-- **134 On-Demand Skills** — Angular, React, Next.js, Go, Django, Python, TypeScript, Docker, K8s,
+- **18 specialized agents** each with a narrow role, a model profile, and delegation rules
+- **135 On-Demand Skills** — Angular, React, Next.js, Go, Django, Python, TypeScript, Docker, K8s,
   Playwright, Security, API Design — zero memory until triggered
 - **Persists memory** via Engram — decisions, bugs, and patterns across sessions with hot/warm/cold
   tiers
@@ -68,7 +68,7 @@ flowchart TB
     SDD --> DEV[DEV - Apply]
     SDD --> QA[QA - Verify]
 
-    BA --> SKILLS[134 Skills]
+    BA --> SKILLS[135 Skills]
     DEV --> SKILLS
     QA --> SKILLS
 
@@ -117,10 +117,10 @@ flowchart LR
 
 | Layer              | Role                  | Components                                    | Config                           |
 | ------------------ | --------------------- | --------------------------------------------- | -------------------------------- |
-| **1. Agents**      | Task delegation       | 1 orchestrator + 16 sub-agents                | `config/auto-delegation.json`    |
+| **1. Agents**      | Task delegation       | 1 orchestrator + 17 sub-agents                | `config/auto-delegation.json`    |
 | **2. Commands**    | CLI entry points      | `gv.ps1`, `pre-process-input.ps1`             | `config/orchestrator.json`       |
 | **3. MCP Servers** | Protocol bridge       | Model Context Protocol, Engram MCP, CodeGraph | `opencode.json#mcp`              |
-| **4. Skills**      | Specialized execution | 134 skills across 10 categories               | `config/skill-dependencies.json` |
+| **4. Skills**      | Specialized execution | 135 skills across 10 categories               | `config/skill-dependencies.json` |
 | **5. Memory**      | Persistent context    | Engram (hot/warm/cold tiers)                  | `config/engram-config.json`      |
 
 ---
@@ -146,6 +146,7 @@ flowchart LR
 | HR               | Talent acquisition      | fast/cheap       | —              |
 | SELF-DIAG        | Self-diagnosis          | fast/cheap       | ORC            |
 | BUS-TELE         | Business telemetry      | fast/cheap       | —              |
+| CODEGRAPH        | Code analysis           | fast/cheap       | —              |
 
 > All sub-agents are `hidden: true` — only the Orchestrator is user-selectable. Sub-agents are
 > managed autonomously via `config/auto-delegation.json`.
@@ -197,7 +198,7 @@ Cognitive research shows review quality drops sharply above this threshold.
 
 ### Skill Registry
 
-134 skills auto-indexed at session start. Registry is rebuilt on install/removal:
+135 skills auto-indexed at session start. Registry is rebuilt on install/removal:
 
 ```powershell
 .\scripts\utilities\build-skill-registry.ps1
@@ -287,15 +288,14 @@ gv health
 | `format-check.yml`                 | Prettier formatting              | Every PR             |
 | `gitleaks.yml`                     | Secret scanning                  | Every PR             |
 | `security-scan.yml`                | OWASP security scanning          | Weekly               |
-| `codeql-analysis.yml`              | CodeQL analysis                  | Weekly               |
 | `autonomous-validation.yml`        | Full validation suite            | Weekly               |
+| `cross-platform-tests.yml`         | Cross-platform tests             | Every PR/push        |
 | `dashboard-auto-refresh.yml`       | Metrics dashboard                | Daily                |
 | `monthly-management-report.yml`    | Executive report                 | Monthly              |
-| `dependency-backup.yml`            | Dependency backup                | Weekly               |
 | `release.yml`                      | Release management               | On tag               |
 | `labeler.yml`                      | Auto-label PRs                   | Every PR             |
-| `workflow-lint.yml`                | Workflow syntax validation       | On `.github/` change |
 | `sync-public.yml`                  | Sync to `gentle-vanguard-public` | On push to `main`    |
+| `workflow-lint.yml`                | Workflow syntax validation       | On `.github/` change |
 
 ---
 
@@ -304,7 +304,7 @@ gv health
 | Gate          | Status  | Detail                                                                  |
 | ------------- | ------- | ----------------------------------------------------------------------- |
 | Configuration | ✅ PASS | `orchestrator.json`, `auto-delegation.json`, `model-routing.json` valid |
-| Skills        | ✅ PASS | 134 skills indexed, registry current                                    |
+| Skills        | ✅ PASS | 135 skills indexed, registry current                                    |
 | Tests         | ✅ PASS | Full test suite passing                                                 |
 | Hooks         | ✅ PASS | Pre-commit hooks active (README, secrets, lint)                         |
 | Structure     | ✅ PASS | All mandatory files present                                             |
@@ -343,6 +343,6 @@ AES-256 encryption for secrets, API keys, and sensitive configs. See [SECURITY.m
 ---
 
 <p align="center">
-  <strong>Gentle-Vanguard v2.19.0</strong><br>
+  <strong>Gentle-Vanguard v2.20.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>

@@ -27,7 +27,7 @@ function Write-Warn {
     Write-Host "[WARN] $Message" -ForegroundColor Yellow
 }
 
-function Write-Error {
+function Write-MessageError {
     param([string]$Message)
     Write-Host "[ERROR] $Message" -ForegroundColor Red
 }

@@ -1,6 +1,6 @@
 # Skill Registry
 
-**Auto-generated** | **Skills**: 134
+**Auto-generated** | **Skills**: 133
 
 **Delegator use only.** Sub-agents receive compact rules pre-digested in launch prompt.
 Orchestrator reads this registry to resolve skill->agent mappings and inject compact rules.
@@ -15,7 +15,6 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 | DEV - Code | 35 |
 | DOC - Documentation | 10 |
 | FINANCE - Finance | 1 |
-| GATEWAY | 1 |
 | GOV - Governance | 24 |
 | HR - Talent | 1 |
 | LEGAL - Legal | 1 |
@@ -33,7 +32,6 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 | Agent | Skill | Trigger |
 |-------|-------|--------|
 | (unassigned) | codegraph-skill | "codegraph", "code graph", "symbol search", "call graph", "impact analysis", ... |
-| (unassigned) | multi-platform-gateway |  |
 | (unassigned) | usage-metrics | "usage metrics", "skill usage", "effectiveness", "failure pattern", "auto-nudge" |
 | BA - Analysis | backlog-management-skill | "backlog", "triage", "roadmap", "feature intake" |
 | BA - Analysis | business |  |
@@ -165,7 +163,7 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 | SALES - Sales | sales-account-executive | "enterprise sales", "deal negotiation", "pipeline", "account management", "sa... |
 | SALES - Sales | sales-outbound-strategist | "outbound sales", "cold outreach", "prospecting", "ICP", "sequence", "buyer p... |
 | SESSION - Session | post-session-learning-skill | "post-session", "learning", "auto-aprendizaje", "improvement proposals", "mej... |
-| SESSION - Session | session-workflow-skill | "guardar sesion", "continuar", "estado", "pr", "push", "review", "auditar" |
+| SESSION - Session | session-workflow-skill |  |
 
 ## Compact Rules by Agent
 
@@ -444,12 +442,6 @@ Delegators copy matching blocks into sub-agent prompts under Project Standards (
 - Never hardcode numbers that should be formulas
 - Use consistent time periods (monthly vs quarterly) across all statements
 - Never bury bad scenarios — decision-makers need realism
-
-### GATEWAY
-
-#### multi-platform-gateway
-
-- No compact rules extracted
 
 ### GOV - Governance
 
@@ -910,8 +902,7 @@ Delegators copy matching blocks into sub-agent prompts under Project Standards (
 - MUST create todowrite at session start
 - MUST save session summary via mem_save after significant work
 - MUST coordinate with project-orchestrator for technical guidance
-- MUST run self-improving pipeline during session close (steps 10-11 in NORMATIVAS-SESSION.md 2.4)
-- MUST check gateway inbox before session close if auto-inbox disabled
+- MUST run self-improving pipeline during session close (usage-tracker → skill-nudge → skill-auto-patch)
 
 ### *(Unassigned Skills)*
 

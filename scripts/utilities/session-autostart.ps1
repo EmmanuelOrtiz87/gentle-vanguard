@@ -16,7 +16,7 @@ function Write-Step {
 }
 
 function Write-Success { param([string]$Message) Write-Host "[OK] $Message" -ForegroundColor Green }
-function Write-Warning { param([string]$Message) Write-Host "[WARNING] $Message" -ForegroundColor Yellow }
+function Write-MessageWarn { param([string]$Message) Write-Host "[WARNING] $Message" -ForegroundColor Yellow }
 function Write-ErrorMsg { param([string]$Message) Write-Host "[ERROR] $Message" -ForegroundColor Red }
 
 function Complete-Script {
@@ -89,6 +89,7 @@ foreach ($step in $steps) {
     }
 
     try {
+        $LASTEXITCODE = 0
         if ($scriptArgs -and $scriptArgs.Trim()) {
             $invokeCmd = "& `"$scriptPath`" $scriptArgs"
             $result = Invoke-Expression $invokeCmd 2>&1
@@ -99,7 +100,7 @@ foreach ($step in $steps) {
 
         if ($exitCode -ne 0) {
             $msg = "$scriptId exited with code $exitCode"
-            Write-Warning "$msg"
+            Write-MessageWarn "$msg"
             $failed += $scriptId
             if ($isRequired) {
                 Write-ErrorMsg "REQUIRED step failed: $msg"
@@ -111,7 +112,7 @@ foreach ($step in $steps) {
     }
     catch {
         $msg = "$scriptId threw exception: $($_.Exception.Message)"
-        Write-Warning $msg
+        Write-MessageWarn $msg
         $failed += $scriptId
         if ($isRequired) {
             Write-ErrorMsg "REQUIRED step exception: $msg"

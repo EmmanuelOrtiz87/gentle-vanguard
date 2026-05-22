@@ -72,7 +72,6 @@ $html = @"
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="30">
 <title>GV · Live Dashboard</title>
 <style>
 :root{--bg:#081016;--s1:#12202c;--s2:#0f1a24;--bd:#274255;--tx:#d7e4ed;--mu:#90a8b8;--ac:#37b8a8;--a2:#f5b800;--ok:#45c77a;--wa:#f0b13a;--er:#f26464}
@@ -247,20 +246,24 @@ td{padding:4px;border-bottom:1px solid rgba(39,66,85,.35)}
 </section>
 
 <footer class="ft">
-Gentle-Vanguard Live Dashboard · 6 sections · Auto-refresh 30s · Run: scripts/metrics/live-feed.ps1 -RefreshSeconds 30 -Open
+Gentle-Vanguard Live Dashboard · 6 sections · <span id="liveStatus">loading...</span> · <span id="daemonStatus"></span>
 </footer>
 
 <script>
+var GV_LIVE={d:document};
+GV_LIVE.q=function(s){return GV_LIVE.d.querySelector(s)};
+GV_LIVE.qa=function(s){return GV_LIVE.d.querySelectorAll(s)};
+
 function rsz(c,h){var d=window.devicePixelRatio||1,w=Math.max(280,(c.parentElement?c.parentElement.clientWidth:480)-12);c.style.width=w+'px';c.style.height=h+'px';c.width=Math.floor(w*d);c.height=Math.floor(h*d);var x=c.getContext('2d');x.setTransform(d,0,0,d,0,0);return{x,W:w,H:h}}
 
 function bar(id,la,va,co){
-var c=document.getElementById(id);if(!c||!la||!la.length)return;var r=rsz(c,180),x=r.x,W=r.W,H=r.H,p={t:14,r:12,b:44,l:50},cW=W-p.l-p.r,cH=H-p.t-p.b,m=Math.max(...va,1),st=cW/la.length,bW=Math.max(6,st-5);
+var c=GV_LIVE.d.getElementById(id);if(!c||!la||!la.length)return;var r=rsz(c,180),x=r.x,W=r.W,H=r.H,p={t:14,r:12,b:44,l:50},cW=W-p.l-p.r,cH=H-p.t-p.b,m=Math.max(...va,1),st=cW/la.length,bW=Math.max(6,st-5);
 x.clearRect(0,0,W,H);x.fillStyle='#0b161f';x.fillRect(0,0,W,H);
 for(var i=0;i<=4;i++){var y=p.t+cH*(1-i/4);x.strokeStyle='#244256';x.lineWidth=1;x.beginPath();x.moveTo(p.l,y);x.lineTo(W-p.r,y);x.stroke();x.fillStyle='#86a6ba';x.font='10px Segoe UI';x.textAlign='right';x.fillText((m*i/4).toFixed(0),p.l-5,y+3)}
 la.forEach(function(l,i){var x2=p.l+i*st+2,h=(va[i]/m)*cH,y2=p.t+cH-h;x.fillStyle=co;x.fillRect(x2,y2,bW,h);x.fillStyle='#87a8bb';x.font='9px Segoe UI';x.textAlign='center';x.fillText(l.length>12?l.slice(0,12):l,x2+bW/2,H-30)})}
 
 function line(id,la,va,co){
-var c=document.getElementById(id);if(!c||!la||!la.length)return;var rt=la.length>7,rb=rt?70:44,ch=rt?240:200;var r=rsz(c,ch),x=r.x,W=r.W,H=r.H,p={t:14,r:12,b:rb,l:50},cW=W-p.l-p.r,cH=H-p.t-p.b,m=Math.max(...va,1);
+var c=GV_LIVE.d.getElementById(id);if(!c||!la||!la.length)return;var rt=la.length>7,rb=rt?70:44,ch=rt?240:200;var r=rsz(c,ch),x=r.x,W=r.W,H=r.H,p={t:14,r:12,b:rb,l:50},cW=W-p.l-p.r,cH=H-p.t-p.b,m=Math.max(...va,1);
 x.clearRect(0,0,W,H);x.fillStyle='#0b161f';x.fillRect(0,0,W,H);
 for(var i=0;i<=4;i++){var y=p.t+cH*(1-i/4);x.strokeStyle='#244256';x.lineWidth=1;x.beginPath();x.moveTo(p.l,y);x.lineTo(W-p.r,y);x.stroke();x.fillStyle='#86a6ba';x.font='10px Segoe UI';x.textAlign='right';x.fillText(Number(m*i/4).toFixed(1),p.l-5,y+3)}
 var pts=va.map(function(v,i){var x2=p.l+(i*cW/Math.max(1,va.length-1)),y2=p.t+cH-((v||0)/m*cH);return{x:x2,y:y2,v:v||0}});
@@ -269,11 +272,7 @@ x.beginPath();x.moveTo(pts[0].x,pts[0].y);pts.forEach(function(p){x.lineTo(p.x,p
 pts.forEach(function(p){x.beginPath();x.arc(p.x,p.y,2,0,Math.PI*2);x.fillStyle=co;x.fill()});
 la.forEach(function(l,i){if(rt&&i%2!==0&&la.length>8)return;var x2=p.l+(i*cW/Math.max(1,la.length-1)),raw=String(l),sl=raw.length==10&&raw[4]=='-'?raw.slice(5):(raw.length>8?raw.slice(-8):raw);x.save();x.fillStyle='#87a8bb';x.font='9px Segoe UI';if(rt){x.translate(x2,p.t+cH+6);x.rotate(-Math.PI/4);x.textAlign='right';x.fillText(sl,0,0)}else{x.textAlign='center';x.fillText(sl,x2,H-28)};x.restore()})}
 
-window.addEventListener('load',function(){
-var b=Array.from(document.querySelectorAll('.nav button')),se=Array.from(document.querySelectorAll('.sec'));
-function act(t){b.forEach(function(bb){bb.classList.toggle('active',bb.dataset.target===t)});se.forEach(function(s){s.classList.toggle('active',s.id===t)});localStorage.setItem('gv-dash-tab',t)}
-b.forEach(function(bb){bb.addEventListener('click',function(){act(bb.dataset.target)})});var sv=localStorage.getItem('gv-dash-tab');if(sv)act(sv);
-
+GV_LIVE.initCharts=function(){
 line('chartToken',['W1','W2','W3','W4','W5','W6'],['$([int]($tUsed*0.2))','$([int]($tUsed*0.35))','$([int]($tUsed*0.5))','$([int]($tUsed*0.65))','$([int]($tUsed*0.8))','$([int]$tUsed)'],'#37b8a8');
 line('chartCost',['W1','W2','W3','W4','W5','W6'],[$(F ($tEstCost*0.2) 2),$(F ($tEstCost*0.35) 2),$(F ($tEstCost*0.5) 2),$(F ($tEstCost*0.65) 2),$(F ($tEstCost*0.8) 2),$tEstCost],'#6ea8ff');
 bar('chartAuthor',$(ConvertTo-Json @($gitAuthorsList | ForEach-Object { ($_ -split ': ')[0] })),$(ConvertTo-Json @($gitAuthorsList | ForEach-Object { [int](($_ -split ': ')[1]) })),'#5cb2ff');
@@ -281,6 +280,57 @@ bar('chartROI',['Actual','Forecast','Baseline','Saved'],[$tEstCost,$tForecastCos
 bar('chartSavings',['Baseline','Actual','Saved'],[$(F ($tBaseline/1e6*$tRate) 2),$tEstCost,$tModeled],'#6ed4a7');
 bar('chartPeriod',['Today','Week','Month'],[$gitToday,$gitWeek,$gitMonth],'#39c8a6');
 bar('chartSessions',['Active','Today','Total'],[$sActive,$sToday,$sTotal],'#ffb347');
+};
+
+GV_LIVE.liveUpdate=function(){
+var base=window.location.origin;
+if(base.indexOf('localhost')<0&&base.indexOf('127.0.0.1')<0)return;
+fetch(base+'/api/live').then(function(r){return r.json()}).then(function(d){
+var statusEl=GV_LIVE.q('#liveStatus');
+if(!statusEl)return;
+var ts=d.timestamp?new Date(d.timestamp).toLocaleTimeString():new Date().toLocaleTimeString();
+statusEl.innerHTML='Live · last update '+ts;
+if(d.tokensUsed!==undefined){var els=GV_LIVE.qa('.cd .vl');if(els.length>0)els[0].textContent=d.tokensUsed}
+}).catch(function(){var e=GV_LIVE.q('#liveStatus');if(e)e.textContent='Live unavailable'});
+
+fetch(base+'/health').then(function(r){return r.json()}).then(function(d){
+var e=GV_LIVE.q('#daemonStatus');
+if(e)e.innerHTML=d.liveFeedAlive?'<span style="color:#45c77a">● daemon OK</span>':'<span style="color:#f0b13a">● daemon offline</span>';
+}).catch(function(){});
+};
+
+GV_LIVE.refreshCharts=function(){
+var base=window.location.origin;
+if(base.indexOf('localhost')<0&&base.indexOf('127.0.0.1')<0)return;
+fetch(base+'/api/metrics/charts').then(function(r){return r.json()}).then(function(d){
+var t=d.token,u=d.tUsed||0,e=d.cost,lc=d.live,g=d.git,s=d.sessions,pc=d.pr;
+if(!t)return;
+var tu=Number(t.usedToday)||0,tc=Number(t.estCost)||0,fc=Number(t.monthForecastCost)||0,tb=Number(t.baselineTokens)||0,tm=Number(t.modeledSavings)||0;
+var gt=Number(g.totalCommits)||0,gm=Number(g.monthCommits)||0,gw=Number(g.weekCommits)||0,gd=Number(g.todayCommits)||0;
+var sa=Number(s.active)||0,st=Number(s.today)||0,stt=Number(s.total)||0;
+var gl=d.trafficLight||'GREEN';
+line('chartToken',['W1','W2','W3','W4','W5','W6'],[Math.round(tu*0.2),Math.round(tu*0.35),Math.round(tu*0.5),Math.round(tu*0.65),Math.round(tu*0.8),tu],'#37b8a8');
+line('chartCost',['W1','W2','W3','W4','W5','W6'],[(tc*0.2).toFixed(2),(tc*0.35).toFixed(2),(tc*0.5).toFixed(2),(tc*0.65).toFixed(2),(tc*0.8).toFixed(2),tc],'#6ea8ff');
+if(g.authors){
+var an=Object.keys(g.authors),av=an.map(function(k){return g.authors[k]});
+bar('chartAuthor',JSON.stringify(an),JSON.stringify(av),'#5cb2ff');
+}
+bar('chartROI',['Actual','Forecast','Baseline','Saved'],[tc,fc,Number((tb/1e6*10).toFixed(2)),tm],'#fd8f4d');
+bar('chartSavings',['Baseline','Actual','Saved'],[Number((tb/1e6*10).toFixed(2)),tc,tm],'#6ed4a7');
+bar('chartPeriod',['Today','Week','Month'],[gd,gw,gm],'#39c8a6');
+bar('chartSessions',['Active','Today','Total'],[sa,st,stt],'#ffb347');
+}).catch(function(){});
+};
+
+window.addEventListener('load',function(){
+var b=Array.from(GV_LIVE.qa('.nav button')),se=Array.from(GV_LIVE.qa('.sec'));
+function act(t){b.forEach(function(bb){bb.classList.toggle('active',bb.dataset.target===t)});se.forEach(function(s){s.classList.toggle('active',s.id===t)});localStorage.setItem('gv-dash-tab',t)}
+b.forEach(function(bb){bb.addEventListener('click',function(){act(bb.dataset.target)})});var sv=localStorage.getItem('gv-dash-tab');if(sv)act(sv);
+GV_LIVE.initCharts();
+setInterval(GV_LIVE.liveUpdate,10000);
+setInterval(GV_LIVE.refreshCharts,30000);
+GV_LIVE.liveUpdate();
+GV_LIVE.refreshCharts();
 });
 </script>
 </body></html>
