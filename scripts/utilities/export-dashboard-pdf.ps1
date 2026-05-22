@@ -1,3 +1,33 @@
+<#
+.SYNOPSIS
+    Server-side PDF/PNG export of dashboard HTML using headless browser.
+
+.DESCRIPTION
+    Detects Edge or Chrome for headless --print-to-pdf generation.
+    Falls back to browser print dialog if no headless browser found.
+    When invoked via metrics-server /api/export/pdf, the PDF bytes are
+    streamed directly to the browser for download.
+
+.PARAMETER InputHtml
+    Path to the HTML file to export. Default: reports/dashboard.html
+
+.PARAMETER OutputPdf
+    Output PDF path. Default: reports/dashboard-<date>.pdf
+
+.PARAMETER Sections
+    Reserved for future section-specific export.
+
+.PARAMETER Open
+    Open the generated PDF after creation.
+
+.PARAMETER Quiet
+    Suppress console output.
+
+.EXAMPLE
+    .\export-dashboard-pdf.ps1 -Open
+    .\export-dashboard-pdf.ps1 -InputHtml reports/sla-dashboard.html -OutputPdf reports/sla-report.pdf -Quiet
+#>
+
 param(
     [string]$InputHtml = '',
     [string]$OutputPdf = '',
@@ -79,7 +109,7 @@ if ($Sections.Count -gt 0) {
     $argsList += "--print-to-pdf-page-ranges=1-1"
 }
 
-$argsList += "file:///$($absInput.Replace('\','/').Replace(':',''))"
+$argsList += "file:///$($absInput.Replace('\','/'))"
 
 try {
     if (-not $Quiet) {

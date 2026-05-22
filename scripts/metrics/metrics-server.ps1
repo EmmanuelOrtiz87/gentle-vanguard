@@ -294,7 +294,7 @@ addExportBar();
                     $html = $html -replace '</head>', "${inject}</head>"
                     $html | Set-Content $tmpHtml -Encoding UTF8
                     $pngPath = Join-Path $reportsDir 'dashboard-export.png'
-                    $argsList = @('--headless','--disable-gpu','--no-sandbox','--disable-software-rasterizer','--hide-scrollbars',"--screenshot=$pngPath","--window-size=1280,1800","--virtual-time-budget=3000","file:///$($tmpHtml.Replace('\','/').Replace(':',''))")
+                    $argsList = @('--headless','--disable-gpu','--no-sandbox','--disable-software-rasterizer','--hide-scrollbars',"--screenshot=$pngPath","--window-size=1280,1800","--virtual-time-budget=3000","file:///$($tmpHtml.Replace('\','/'))")
                     $proc = Start-Process -FilePath $browserExe -ArgumentList $argsList -NoNewWindow -Wait -PassThru
                     Remove-Item $tmpHtml -Force -ErrorAction SilentlyContinue
                     if ($proc.ExitCode -eq 0 -and (Test-Path $pngPath) -and ((Get-Item $pngPath).Length -gt 0)) {
