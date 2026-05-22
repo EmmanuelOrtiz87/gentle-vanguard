@@ -159,6 +159,22 @@
         "description": "Auto-collect metrics after session start for live dashboard"
       },
       {
+        "id": "dashboard-render",
+        "enabled": true,
+        "script": "scripts/metrics/dashboard-render.ps1",
+        "args": "",
+        "required": false,
+        "description": "Regenerate live HTML dashboard from latest metrics data"
+      },
+      {
+        "id": "live-feed-start",
+        "enabled": true,
+        "script": "scripts/utilities/live-feed-manager.ps1",
+        "args": "-Action start -RefreshSeconds 15 -ServerPort 8090 -OpenDashboard",
+        "required": false,
+        "description": "Start live-feed + HTTP server + open dashboard in browser"
+      },
+      {
         "id": "post-autostart-summary",
         "enabled": true,
         "script": "scripts/utilities/post-autostart-summary.ps1",
@@ -181,6 +197,22 @@
         "args": "-Report",
         "required": false,
         "description": "Reporta nudges pendientes de skills al inicio (desactivado por defecto, corre al cerrar)"
+      },
+      {
+        "id": "skill-size-check",
+        "enabled": true,
+        "script": "scripts/utilities/check-skill-sizes.ps1",
+        "args": "-WarnOnly",
+        "required": false,
+        "description": "Audita skills que exceden limites de tokens/lineas y recomienda split a references/"
+      },
+      {
+        "id": "post-autostart-consistency-check",
+        "enabled": true,
+        "script": "scripts/utilities/post-autostart-summary.ps1",
+        "args": "",
+        "required": false,
+        "description": "Refresca startup-summary.json como ultimo paso para asegurar datos actuales post-pipeline"
       }
     ],
 
@@ -211,7 +243,7 @@
   "orphanSessionCleanup": {
     "enabled": true,
     "maxAgeHours": 24,
-    "statusesToClean": ["active"],
+    "statusesToClean": ["active", "orphaned", "ended"],
     "description": "Clean up sessions left in 'active' status after maxAgeHours (crash recovery)"
   }
 }

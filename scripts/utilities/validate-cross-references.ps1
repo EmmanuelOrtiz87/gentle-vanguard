@@ -61,10 +61,10 @@ $combinedContent = ''
 $refFilePaths = @{}
 foreach ($rf in $refFiles) {
     $refFilePaths[$rf.FullName] = $true
-    try {
+        try {
         $c = Get-Content -LiteralPath $rf.FullName -Raw -ErrorAction SilentlyContinue
         if ($c) { $combinedContent += "`n--FILE:$($rf.Name)--`n$c" }
-    } catch {}
+    } catch { Write-Warning "Failed to read $($rf.Name): $_" }
 }
 $combinedLower = $combinedContent.ToLowerInvariant()
 

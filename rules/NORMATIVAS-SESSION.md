@@ -73,31 +73,36 @@ INACTIVE → STARTING → ACTIVE → CLOSING → CLOSED
 | CLOSING   | Shutdown in progress            | → CLOSED               |
 | CLOSED    | Session terminated              | → INACTIVE             |
 
-### 2.2 Startup Protocol
+### 2.2 Startup Protocol — Optimized (Contextual)
 
-When starting a session, execute ALL steps in order:
+La Phase A (init) la ejecuta **automáticamente** la autostart pipeline (20 pasos habilitados).
+El agente solo ejecuta Phase B (análisis y reporte).
 
-#### Phase A — Init
+#### Phase A — Init (Automatizado por autostart pipeline)
 
-1. **MUST** run `scripts/utilities/pre-process-input.ps1 -UserInput "<message>" -WorkspaceRoot "."`
-   BEFORE first response (AI-NORMATIVES.md #1, CRITICAL)
-2. **MUST** run `scripts/utilities/session-autostart.cmd` (Windows) or equivalent
-3. **MUST** call `engram_mem_session_start` with unique session ID
-4. **MUST** call `engram_mem_context` to restore previous context
-5. **MUST** check `git status` for dirty workspace
+```
+scripts/utilities/session-autostart.ps1
+```
+
+La pipeline cubre: tool-detection, session-manager, github-bypass, notifications,
+engram-policy, token-budget, engram-optimization, cross-workspace-validation,
+security-orchestrator, skill-router, karpathy-guidelines, metrics, adaptive profiles,
+codegraph-sync, self-diagnosis, post-autostart-summary.
+
+#### Phase B — Análisis y reporte (agente, 4 pasos)
+
+1. **Leer** `scripts/.session/startup-summary.json` — obtener `isPeakHour`, `sessionId`,
+   `workspaceClean`, `engramRunning`, `platform`, `pathSeparator`
+2. **Crear** `todowrite` para trackear el trabajo
+3. **Reportar** al usuario: bloque compacto (peak hour, session ID, workspace state)
+4. **Cargar** `mem_search "lessons learned"` — últimas 5 observaciones al estado de trabajo
+
+#### Post-init opcional (SHOULD)
+
+- `scripts/utilities/agent-verify.ps1` — validar estado del workspace
+- Revisar Watchtower/self-diagnosis por issues detectados en autostart
 
 Session ID pattern: `session-YYYY-MM-DD-XX` (e.g., `session-2026-05-10-01`)
-
-#### Phase B — Analysis & Reporting
-
-6. **MUST** read `scripts/.session/startup-summary.json` — parse `isPeakHour`, `sessionId`,
-   `workspaceClean`, `engramRunning`
-7. **MUST** create `todowrite` for tracking work
-8. **SHOULD** run `scripts/utilities/agent-verify.ps1` to validate state
-9. **MUST** report startup summary to user in compact block (peak hour, session ID, workspace state)
-10. **MUST** run `mem_search "lessons learned"` and incorporate recent observations into working
-    state
-11. **SHOULD** review Watchtower output (autostart Phase 10) for any issues detected
 
 ### 2.3 Active Session
 
@@ -117,47 +122,51 @@ During active session:
    - Config change with non-obvious implications
    - Performance insight or optimization discovered
 
-### 2.4 Close Protocol
+### 2.4 Close Protocol — Optimized (Automated Contextual)
 
-When closing a session:
+The close protocol es contextual: el agente ejecuta UN comando (`gv end-session`) y la pipeline
+automatiza todo. No son pasos manuales — son capacidades que la pipeline resuelve según el contexto.
 
-1. **MUST** run `mem_session_summary` with structured summary
-2. **MUST** save key decisions to Engram via `mem_save`
-3. **MUST** update `NEXT_SESSION_GUIDE.md` with current state
-4. **SHOULD** run `git status` to verify clean state
-5. **SHOULD** validate configs with `validate-configs.ps1`
-6. **MUST** call `engram_mem_session_end` (built-in tool, NOT a standalone script) to mark session
-   complete in Engram. Only available from tool-capable clients (OpenCode, Claude Code, Cline). Do
-   NOT attempt to call from PowerShell.
-7. **MUST** detect concurrent active sessions and close by explicit `SessionId` when count > 1
-8. **MUST** run `scripts/utilities/session-learning-capture.ps1 -Trigger close` to capture session
-   lessons
-9. **SHOULD** run `scripts/utilities/self-diagnosis-autonomous.ps1 -Depth quick` to detect issues
-   for next session
-10. **SHOULD** run the Self-Improving Pipeline (usage-tracker → skill-nudge → skill-auto-patch):
-    ```powershell
-    pwsh -NoProfile -File scripts/skills/usage-tracker.ps1
-    pwsh -NoProfile -File scripts/skills/usage-tracker.ps1 -Nudge
-    pwsh -NoProfile -File scripts/skills/skill-nudge.ps1
-    pwsh -NoProfile -File scripts/skills/skill-auto-patch.ps1 -AutoApply
-    ```
-    Updates skill usage metrics, detects failure patterns, and auto-applies patches for
-    urgent/repeated issues.
+#### Comando Único
 
-#### Concurrent Session Safety (MANDATORY)
-
-If multiple active sessions exist, closure MUST be explicit and non-destructive:
-
-1. List active sessions (`session-*.json` with `status=active`)
-2. Emit a close notification indicating concurrent sessions are active
-3. Require explicit target session ID for closure
-4. Do NOT auto-close "latest active" without target when more than one session is active
-
-Recommended command:
-
-```powershell
-pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/utilities/session-manager.ps1 -Mode End -TargetSessionId <session-id>
 ```
+gv end-session        # Cierre completo automatizado
+gv end-session -Force # Omite validaciones no críticas
+```
+
+Trigger alternativo por auto-delegación: "cerrar sesion", "close session", "guardar sesion".
+
+#### Lo que la pipeline automatiza
+
+| Capacidad                         | Gatillador contextual                     |
+| --------------------------------- | ----------------------------------------- |
+| Session summary draft             | `generate-session-summary.ps1` desde git log + actividad |
+| Pre-close validation              | Corre automático al inicio del cierre     |
+| Git status check                  | Validación automática, advierte si sucio  |
+| Config validation (`validate-configs.ps1`) | Automático en pipeline de cierre |
+| Session metrics persistence       | `session-metrics-tracker.ps1 -Action end` |
+| Self-improving pipeline           | `usage-tracker` → `skill-nudge` → `skill-auto-patch` |
+| Self-diagnosis (`self-diagnosis-autonomous.ps1`) | Automático, detecta issues residuales |
+| Session learning capture          | `session-learning-capture.ps1 -Trigger close` |
+| Artifact rotation                 | Automático si hay más de N artefactos     |
+| Norm enforcement/learning         | `auto-norm-enforcer` + `auto-norm-learner` |
+| Engram session end                | `engram_mem_session_end.ps1` — actualiza session file + Engram |
+
+#### 0 pasos manuales del agente
+
+Todo es automático. El agente solo **confirma con el usuario** el draft de session summary
+que la pipeline ya generó:
+
+1. `gv end-session` → pipeline genera draft, valida, persiste métricas, cierra en Engram
+2. Agente muestra draft al usuario: "¿Este resumen está bien? ¿Agregas algo?"
+3. Si el usuario confirma o modifica → `mem_session_summary` con el contenido finalizado
+4. Si el usuario no dice nada → el draft queda en `.local/session-artifacts/` para la próxima sesión
+
+#### Concurrent Session Safety (automático)
+
+El `session-manager.ps1 -Mode End` ya detecta sesiones concurrentes y requiere
+`-TargetSessionId` explícito si hay más de 1 activa. No necesita acción manual del agente
+a menos que el script lo advierta.
 
 ---
 
@@ -285,25 +294,38 @@ Each session tracks:
 
 ## 6. COMPLIANCE CHECKPOINTS
 
-TODO sesión DEBE verificar:
+### Inicio (automático, no requiere acción del agente)
 
-1. `pre-process-input.ps1` executed BEFORE first response
-2. Session ID follows `session-YYYY-MM-DD-XX` pattern
-3. `startup-summary.json` read and peak hour reported to user
-4. Watchtower output reviewed from autostart Phase 10
-5. `mem_session_start` called before work
-6. `todowrite` created at session start
-7. `agent-verify.ps1` run at session start (SHOULD)
-8. Significant decisions saved to Engram
-9. Session state recoverable after compaction
-10. `mem_session_summary` called before close
-11. Post-session learning analysis — run `gv learning` to detect gaps and generate improvement
-    proposals
-12. Auto-execute proposals — run `gv learning apply` to scaffold missing skills, patch configs, etc.
-13. Self-healing check — run `gv heal` post-watchtower if issues detected, or `gv watchtower heal`
-    for combined check + auto-heal
-14. NEXT_SESSION_GUIDE.md updated
-15. Git workspace in clean/reported state before close
+| Checkpoint | Responsable |
+|---|---|
+| `pre-process-input.ps1` antes del primer response | Agente (manual, CRITICAL) |
+| Autostart pipeline (20 pasos) ejecutado | Pipeline automático |
+| Session ID sigue patrón `session-YYYY-MM-DD-XX` | Pipeline automático |
+| `startup-summary.json` generado | Pipeline automático |
+| Orphan cleanup ejecutado | Pipeline automático |
+| `mem_search` con "lessons learned" | Agente (Phase B step 4) |
+| `todowrite` creado | Agente (Phase B step 2) |
+| Reporte al usuario generado | Agente (Phase B step 3) |
+
+### Durante la sesión
+
+| Checkpoint | Responsable |
+|---|---|
+| Decisiones significativas guardadas en Engram (`mem_save`) | Agente (Core Rule #13) |
+| `mem_search` antes de trabajo que pudo haberse hecho antes | Agente |
+| `todowrite` mantenido con progreso actual | Agente |
+
+### Cierre (3 pasos manuales, el resto automático)
+
+| Checkpoint | Responsable |
+|---|---|
+| Pre-close validation | Pipeline end-session |
+| Self-improving pipeline | Pipeline end-session |
+| Self-diagnosis | Pipeline end-session |
+| Session metrics persistidas | Pipeline end-session |
+| `mem_session_summary` preguntado al usuario | Agente (paso manual 1) |
+| Decisiones de cierre guardadas (`mem_save`) | Agente (paso manual 2) |
+| `engram_mem_session_end` ejecutado | Agente (paso manual 3, built-in tool) |
 
 ---
 

@@ -238,7 +238,9 @@ $configPath = if ($ConfigPath) { $ConfigPath } else { Join-Path (Split-Path -Par
 $fullConfig = Get-ToolConfig -DetectedTool $detected -ConfigPath $configPath
 
 if ($AsJson) {
-    return ($fullConfig | ConvertTo-Json -Depth 4)
+    $fullConfig | ConvertTo-Json -Depth 4
+    exit 0
 }
-return $fullConfig
+$fullConfig
+exit 0
 

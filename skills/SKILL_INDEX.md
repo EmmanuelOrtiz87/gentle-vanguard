@@ -686,21 +686,7 @@ understanding architecture before modifications, finding affected tests for CI
 
 ---
 
-### jira-task-skill
-
-**Trigger**: `jira`, `task`, `ticket`, `story`
-
-**Use when**: Jira tasks, user stories, estimation
-
----
-
-### jira-epic-skill
-
-**Trigger**: `epic`, `large feature`, `initiative`
-
-**Use when**: Epics, feature breakdown, planning
-
----
+<!-- jira-task-skill and jira-epic-skill: planned but not yet implemented -->
 
 ### release-management-skill
 
