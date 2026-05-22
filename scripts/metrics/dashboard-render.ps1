@@ -1,3 +1,26 @@
+<#
+.SYNOPSIS
+    Generates a live HTML dashboard with canvas charts, git stats, token usage, cost, and session metrics.
+
+.DESCRIPTION
+    Reads .runtime/metrics/*.json files and produces reports/dashboard.html.
+    Charts are rendered via Canvas JS with live polling support:
+    - Token usage trend, cost trend, event distribution
+    - Agent/skill volume, benchmark latency/routing trends
+    - Session execution metrics, ROI history
+    - Live-updating via /api/live and /api/metrics/charts when served by metrics-server.ps1
+
+.PARAMETER Quiet
+    Suppress console output.
+
+.PARAMETER Open
+    Open dashboard in default browser after generation.
+
+.EXAMPLE
+    .\dashboard-render.ps1 -Open
+    .\dashboard-render.ps1 -Quiet
+#>
+
 param([switch]$Quiet, [switch]$Open)
 
 $ErrorActionPreference = 'Continue'
@@ -41,6 +64,16 @@ $prAdds = V($p.totalAdditions) 0; $prDels = V($p.totalDeletions) 0; $prAvgHrs = 
 $costActual = V($c.actualCost) 0; $costForecast = V($c.monthForecastCost) 0
 $costBaseline = V($c.baselineTokens) 0; $costSaved = V($c.savedTokens) 0
 $costModeled = V($c.modeledSavings) 0; $costPct = V($c.savingsPct) 0
+
+$telFile = Join-Path $metricsDir 'telemetry.json'
+$tel = if (Test-Path $telFile) { try { Get-Content $telFile -Raw | ConvertFrom-Json } catch {} } else { $null }
+$telCalls = if ($tel -and $tel.hasData) { $tel.toolCalls } else { 0 }
+$telTokens = if ($tel -and $tel.hasData) { $tel.estimatedTokens } else { 0 }
+$telFilesRead = if ($tel -and $tel.hasData) { $tel.filesRead } else { 0 }
+$telFilesWritten = if ($tel -and $tel.hasData) { $tel.filesWritten } else { 0 }
+$telFilesEdited = if ($tel -and $tel.hasData) { $tel.filesEdited } else { 0 }
+$telCommands = if ($tel -and $tel.hasData) { $tel.commandsRun } else { 0 }
+$telCost = [math]::Round($telTokens / 1e6 * 10, 6)
 
 # --- Helpers ---
 function Color($v, $g, $y, $r) { if ($v -eq $g -or $v -ge 90) { return '#45c77a' } elseif ($v -eq $y -or $v -ge 50) { return '#f0b13a' } else { return '#f26464' } }
@@ -118,6 +151,7 @@ td{padding:4px;border-bottom:1px solid rgba(39,66,85,.35)}
 <button data-target="cost">Cost & ROI</button>
 <button data-target="gov">Governance</button>
 <button data-target="health">Health</button>
+<button data-target="live">Live Activity</button>
 </div>
 
 <section id="exec" class="sec active">
@@ -245,8 +279,33 @@ td{padding:4px;border-bottom:1px solid rgba(39,66,85,.35)}
 </div>
 </section>
 
+<section id="live" class="sec">
+<h2>Live Activity · Agent Telemetry</h2>
+<div class="gr">
+<div class="cd"><h3>Tool Calls</h3><div class="vl" id="telCalls">$telCalls</div><div class="lb">this session</div></div>
+<div class="cd"><h3>Est. Tokens</h3><div class="vl" id="telTokens">$telTokens</div><div class="lb">~`$$telCost USD</div></div>
+<div class="cd"><h3>Commands Run</h3><div class="vl" id="telCommands">$telCommands</div><div class="lb">bash/cmd calls</div></div>
+<div class="cd"><h3>Files Read</h3><div class="vl" id="telFilesRead">$telFilesRead</div><div class="lb">explored</div></div>
+<div class="cd"><h3>Files Written</h3><div class="vl" id="telFilesWritten">$telFilesWritten</div><div class="lb">created</div></div>
+<div class="cd"><h3>Files Edited</h3><div class="vl" id="telFilesEdited">$telFilesEdited</div><div class="lb">modified</div></div>
+</div>
+<div class="pn"><h3>Event Stream</h3>
+<table><thead><tr><th>Time</th><th>Type</th><th>Detail</th><th>Tokens</th></tr></thead>
+<tbody id="telEvents"><tr><td colspan="4" style="text-align:center;color:var(--mu)">Polling live events...</td></tr></tbody>
+</table>
+</div>
+<div class="pn"><h3>Telemetry Ingestion</h3>
+<ul style="font-size:.7rem;color:var(--mu);margin:4px 0">
+<li>Agent writes telemetry via <code>telemetry-writer.ps1</code> or <code>POST /api/ingest</code></li>
+<li>Tracks tool calls, estimated tokens, files touched per session</li>
+<li>Refreshed every ~15s via live feed + liveUpdate JS poll</li>
+<li>Data source: <code>.runtime/metrics/live/activity.json</code> + <code>events.ndjson</code></li>
+<li id="telLastUpdate">Last update: —</li>
+</ul></div>
+</section>
+
 <footer class="ft">
-Gentle-Vanguard Live Dashboard · 6 sections · <span id="liveStatus">loading...</span> · <span id="daemonStatus"></span>
+Gentle-Vanguard Live Dashboard · 7 sections · <span id="liveStatus">loading...</span> · <span id="daemonStatus"></span>
 </footer>
 
 <script>
@@ -291,11 +350,39 @@ if(!statusEl)return;
 var ts=d.timestamp?new Date(d.timestamp).toLocaleTimeString():new Date().toLocaleTimeString();
 statusEl.innerHTML='Live · last update '+ts;
 if(d.tokensUsed!==undefined){var els=GV_LIVE.qa('.cd .vl');if(els.length>0)els[0].textContent=d.tokensUsed}
+// Update telemetry live
+if(d.telemetry&&d.telemetry.hasData){
+var t=d.telemetry;
+['telCalls','telTokens','telCommands','telFilesRead','telFilesWritten','telFilesEdited'].forEach(function(id){
+var el=GV_LIVE.d.getElementById(id);
+if(el){var key=id.replace('tel','').toLowerCase();if(key==='calls')el.textContent=t.toolCalls||0;else if(key==='tokens')el.textContent=t.estimatedTokens||0;else if(key==='commands')el.textContent=t.commandsRun||0;else if(key==='filesread')el.textContent=t.filesRead||0;else if(key==='fileswritten')el.textContent=t.filesWritten||0;else if(key==='filesedited')el.textContent=t.filesEdited||0}
+});
+var lu=GV_LIVE.d.getElementById('telLastUpdate');
+if(lu)lu.innerHTML='Last update: '+(t.collectedAt?new Date(t.collectedAt).toLocaleTimeString():new Date().toLocaleTimeString());
+}
 }).catch(function(){var e=GV_LIVE.q('#liveStatus');if(e)e.textContent='Live unavailable'});
 
 fetch(base+'/health').then(function(r){return r.json()}).then(function(d){
 var e=GV_LIVE.q('#daemonStatus');
 if(e)e.innerHTML=d.liveFeedAlive?'<span style="color:#45c77a">● daemon OK</span>':'<span style="color:#f0b13a">● daemon offline</span>';
+}).catch(function(){});
+};
+
+GV_LIVE.pollEvents=function(){
+var base=window.location.origin;
+if(base.indexOf('localhost')<0&&base.indexOf('127.0.0.1')<0)return;
+fetch(base+'/api/live').then(function(r){return r.json()}).then(function(d){
+if(!d.telemetry||!d.telemetry.hasData)return;
+var tb=GV_LIVE.d.getElementById('telEvents');
+if(!tb)return;
+var rows='';
+var types=d.telemetry.events||[];
+types.slice(-10).reverse().forEach(function(e){
+var t=e.ts?new Date(e.ts).toLocaleTimeString():'-';
+rows+='<tr><td>'+t+'</td><td><span class="b ok">'+(e.type||'?')+'</span></td><td>'+(e.detail||'-')+'</td><td>'+(e.tokens||0)+'</td></tr>';
+});
+if(!rows)rows='<tr><td colspan="4" style="text-align:center;color:var(--mu)">Waiting for agent telemetry events...</td></tr>';
+tb.innerHTML=rows;
 }).catch(function(){});
 };
 
@@ -329,8 +416,10 @@ b.forEach(function(bb){bb.addEventListener('click',function(){act(bb.dataset.tar
 GV_LIVE.initCharts();
 setInterval(GV_LIVE.liveUpdate,10000);
 setInterval(GV_LIVE.refreshCharts,30000);
+setInterval(GV_LIVE.pollEvents,15000);
 GV_LIVE.liveUpdate();
 GV_LIVE.refreshCharts();
+GV_LIVE.pollEvents();
 });
 </script>
 </body></html>

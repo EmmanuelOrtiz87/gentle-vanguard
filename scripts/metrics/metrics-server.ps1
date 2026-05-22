@@ -1,3 +1,29 @@
+<#
+.SYNOPSIS
+    Metrics HTTP server — serves dashboard, live API, metric files, SSE events, chart data, and PDF/PNG export.
+
+.DESCRIPTION
+    Starts a local HTTP listener (default port 8090) that serves:
+    - / or /index.html    → dashboard HTML with live overlay
+    - /api/live           → latest feed.json / consolidated.json
+    - /api/metrics/charts → consolidated chart data for JS polling
+    - /api/export/pdf     → server-side PDF via export-dashboard-pdf.ps1
+    - /api/export/png     → server-side PNG (headless browser screenshot)
+    - /health             → daemon health check
+    - /metrics/<file>     → individual metric JSON files
+    - /events             → SSE stream for real-time push
+
+.PARAMETER Port
+    HTTP port. Default: 8090
+
+.PARAMETER Daemon
+    Run silently (no startup banner).
+
+.EXAMPLE
+    .\metrics-server.ps1 -Daemon
+    .\metrics-server.ps1 -Port 9090
+#>
+
 param(
     [int]$Port = 8090,
     [switch]$Daemon
@@ -12,6 +38,8 @@ $running = $true
 $metricsDir = Join-Path $repoRoot '.runtime/metrics'
 $reportsDir = Join-Path $repoRoot 'reports'
 $dashFile = Join-Path $reportsDir 'dashboard.html'
+
+$presentationFile = Join-Path $repoRoot 'gentle-vanguard-presentation.html'
 
 $mime = @{
     '.html' = 'text/html; charset=utf-8'
@@ -128,12 +156,63 @@ addExportBar();
                     $buf = [System.Text.Encoding]::UTF8.GetBytes('Dashboard not found. Run dashboard-render.ps1 first.')
                     $res.OutputStream.Write($buf, 0, $buf.Length)
                 }
+            } elseif ($path -eq '/presentacion') {
+                if (Test-Path $presentationFile) {
+                    $html = Get-Content $presentationFile -Raw -Encoding UTF8
+                    $buf = [System.Text.Encoding]::UTF8.GetBytes($html)
+                    $res.ContentType = 'text/html; charset=utf-8'
+                    $res.Headers.Add('Access-Control-Allow-Origin', '*')
+                    $res.OutputStream.Write($buf, 0, $buf.Length)
+                } else {
+                    $res.StatusCode = 404
+                    $buf = [System.Text.Encoding]::UTF8.GetBytes('Presentation not found at gentile-vanguard-presentation.html')
+                    $res.OutputStream.Write($buf, 0, $buf.Length)
+                }
+            } elseif ($path -eq '/api/ingest' -and $req.HttpMethod -eq 'POST') {
+                $reader = New-Object System.IO.StreamReader($req.InputStream)
+                $body = $reader.ReadToEnd(); $reader.Close()
+                $actFile = Join-Path $metricsDir 'live/activity.json'
+                $evtFile = Join-Path $metricsDir 'live/events.ndjson'
+                try {
+                    $evt = $body | ConvertFrom-Json
+                    $evt | Add-Member -NotePropertyName 'ts' -NotePropertyValue (Get-Date -Format 'o') -Force
+                    $evt | ConvertTo-Json -Compress -Depth 2 | Add-Content -Path $evtFile -Encoding UTF8
+                    $activity = if (Test-Path $actFile) { Get-Content $actFile -Raw | ConvertFrom-Json } else { [PSCustomObject]@{ toolCalls=0; estimatedTokens=0; filesRead=0; filesWritten=0; filesEdited=0; commandsRun=0 } }
+                    if ($evt.tokens) { $activity.estimatedTokens += [int]$evt.tokens }
+                    if ($evt.toolCalls) { $activity.toolCalls += [int]$evt.toolCalls }
+                    if ($evt.filesRead) { $activity.filesRead += [int]$evt.filesRead }
+                    if ($evt.filesWritten) { $activity.filesWritten += [int]$evt.filesWritten }
+                    if ($evt.filesEdited) { $activity.filesEdited += [int]$evt.filesEdited }
+                    if ($evt.type -eq 'bash') { $activity.commandsRun += 1 }
+                    $activity.lastUpdate = (Get-Date -Format 'o')
+                    $activity | ConvertTo-Json -Depth 3 | Set-Content $actFile
+                    $res.StatusCode = 200
+                    $buf = [System.Text.Encoding]::UTF8.GetBytes('{"status":"ok"}')
+                } catch {
+                    $res.StatusCode = 400
+                    $buf = [System.Text.Encoding]::UTF8.GetBytes('{"status":"error","detail":"' + $_.Exception.Message + '"}')
+                }
+                $res.ContentType = 'application/json'
+                $res.Headers.Add('Access-Control-Allow-Origin', '*')
+                $res.OutputStream.Write($buf, 0, $buf.Length)
             } elseif ($path -eq '/api/live') {
                 $feedPath = Join-Path $metricsDir 'feed.json'
                 $consPath = Join-Path $metricsDir 'consolidated.json'
+                $evtPath = Join-Path $metricsDir 'live/events.ndjson'
                 $src = if (Test-Path $feedPath) { $feedPath } elseif (Test-Path $consPath) { $consPath } else { $null }
                 if ($src) {
                     $json = Get-Content $src -Raw
+                    $data = $json | ConvertFrom-Json
+                    if (Test-Path $evtPath) {
+                        $events = @(Get-Content $evtPath | ForEach-Object { if ($_) { $_ | ConvertFrom-Json } })
+                        if ($data.telemetry) {
+                            $data.telemetry | Add-Member -NotePropertyName 'events' -NotePropertyValue @($events) -Force
+                        } else {
+                            $tel = [PSCustomObject]@{ hasData = ($events.Count -gt 0); events = @($events); toolCalls = 0; estimatedTokens = 0 }
+                            $data | Add-Member -NotePropertyName 'telemetry' -NotePropertyValue $tel -Force
+                        }
+                    }
+                    $json = $data | ConvertTo-Json -Depth 5 -Compress
                     $buf = [System.Text.Encoding]::UTF8.GetBytes($json)
                     $res.ContentType = 'application/json'
                     $res.Headers.Add('Access-Control-Allow-Origin', '*')
@@ -157,7 +236,7 @@ addExportBar();
                 }
             } elseif ($path -eq '/api/metrics/charts') {
                 $resp = @{}
-                @('sessions','token','live','git','pr','cost') | ForEach-Object {
+                @('sessions','token','live','git','pr','cost','telemetry') | ForEach-Object {
                     $fp = Join-Path $metricsDir "$_.json"
                     if (Test-Path $fp) {
                         try { $resp[$_] = Get-Content $fp -Raw -Encoding UTF8 | ConvertFrom-Json } catch {}

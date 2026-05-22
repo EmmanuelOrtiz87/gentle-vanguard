@@ -184,13 +184,47 @@ function Collect-CostMetrics {
     return $cost
 }
 
+function Collect-TelemetryMetrics {
+    Log "Collecting telemetry metrics..."
+    $activityFile = Join-Path $outDir 'live' 'activity.json'
+    $eventsFile = Join-Path $outDir 'live' 'events.ndjson'
+    $tm = [PSCustomObject]@{ collectedAt = (Get-Date -Format 'o'); hasData = $false; toolCalls = 0; estimatedTokens = 0; filesRead = 0; filesWritten = 0; filesEdited = 0; commandsRun = 0; eventsCount = 0 }
+    if (Test-Path $activityFile) {
+        try {
+            $a = Get-Content $activityFile -Raw | ConvertFrom-Json
+            $tm.hasData = $true
+            $tm.toolCalls = [int]$a.toolCalls
+            $tm.estimatedTokens = [int]$a.estimatedTokens
+            $tm.filesRead = [int]$a.filesRead
+            $tm.filesWritten = [int]$a.filesWritten
+            $tm.filesEdited = [int]$a.filesEdited
+            $tm.commandsRun = [int]$a.commandsRun
+        } catch {}
+    }
+    # Read events from ndjson
+    $events = @()
+    if (Test-Path $eventsFile) {
+        try {
+            Get-Content $eventsFile | ForEach-Object { if ($_) { $events += $_ | ConvertFrom-Json } }
+            $tm | Add-Member -NotePropertyName 'events' -NotePropertyValue @($events) -Force -ErrorAction SilentlyContinue
+            $tm.eventsCount = $events.Count
+        } catch {}
+    }
+    if (-not $tm.events) { $tm | Add-Member -NotePropertyName 'events' -NotePropertyValue @() -Force -ErrorAction SilentlyContinue }
+    $tm | ConvertTo-Json -Depth 3 | Set-Content (Join-Path $outDir 'telemetry.json')
+    $has = $tm.hasData
+    Log "Telemetry: hasData=$has calls=$($tm.toolCalls) tokens=$($tm.estimatedTokens) events=$($tm.eventsCount)"
+    return $tm
+}
+
 function Collect-AllMetrics {
     $s = Collect-SessionMetrics; $t = Collect-TokenMetrics; $l = Collect-LiveMetrics
     $g = Collect-GitMetrics; $p = Collect-PRMetrics; $c = Collect-CostMetrics
+    $tel = Collect-TelemetryMetrics
     $all = [PSCustomObject]@{
         collectedAt = (Get-Date -Format 'o')
         sessions = [PSCustomObject]@{ total = $s.Count; active = @($s | Where-Object { $_.status -eq 'active' }).Count; today = @($s | Where-Object { $_.isToday }).Count; avgDurationSec = ($s | Where-Object { $_.durationSec -gt 0 } | Measure-Object -Average durationSec).Average; totalDurationMin = [int](($s | Where-Object { $_.durationSec -gt 0 } | Measure-Object -Sum durationSec).Sum / 60); latest = ($s | Sort-Object startTime -Descending | Select-Object -First 1).sessionId }
-        token = $t; live = $l; git = $g; pr = $p; cost = $c
+        token = $t; live = $l; git = $g; pr = $p; cost = $c; telemetry = $tel
     }
     $all | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $outDir 'consolidated.json')
     $stamp = (Get-Date -Format 'yyyyMMdd-HHmmss')
