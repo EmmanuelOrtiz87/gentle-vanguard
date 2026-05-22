@@ -4,6 +4,21 @@
 
 This project contains **135 skills**. Of these, **86 exceed** the recommended size limits (1000 tokens / 150 lines). However, **most of these are legitimately large** and exempt from size restrictions.
 
+### Optimization Status (2026-05-22)
+
+| Phase | Status | Details |
+|-------|--------|---------|
+| **Phase 1** | ✅ Complete | Created `references/` structure in 53 skills |
+| **Phase 2** | ✅ Complete | Added reference links to 10 SKILL.md files |
+| **Phase 3** | 📋 Future | Extract large sections to reduce SKILL.md size |
+
+**Current State:**
+- **73 skills** now have `references/` directory (54% of total)
+- **19 skills** were already optimized
+- **53 skills** optimized in Phase 1
+- **10 skills** have code examples extracted
+- **27 skills** are exempt (frameworks/orchestrators)
+
 ## Legitimately Large Skills
 
 The following skill categories are expected to exceed standard limits:
