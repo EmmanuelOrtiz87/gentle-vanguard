@@ -184,16 +184,6 @@ def transfer_funds(db: Session, from_id: int, to_id: int, amount: Decimal):
         raise e
 ```
 
-
-
-## References
-
-See [references/](references/) for detailed examples:
-
-- [Example 1](references/code-example-1.md)
-- [Example 2](references/code-example-2.md)
-
-
 ## Quick Reference
 
 | Operation   | Code                                      |
@@ -205,4 +195,3 @@ See [references/](references/) for detailed examples:
 | Transaction | `try: ... except: db.rollback()`          |
 | Join        | `db.query(A, B).join(B, A.b_id == B.id)`  |
 | Count       | `db.query(func.count(Model.id)).scalar()` |
-

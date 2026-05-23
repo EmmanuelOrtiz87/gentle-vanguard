@@ -192,7 +192,6 @@ pwsh -NoProfile -File scripts/utilities/session-context-log.ps1 -Action close -P
 Config references: `docs/AGENTS.md#post-response-context-logging-rule`, `CLAUDE.md` rules #14-#15.
 
 ---
-
 ## Key Capabilities
 
 ### SDD / OpenSpec Lifecycle

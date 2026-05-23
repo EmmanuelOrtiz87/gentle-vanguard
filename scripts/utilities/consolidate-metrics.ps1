@@ -13,19 +13,10 @@ param(
 $ErrorActionPreference = 'Continue'
 
 if (-not $ProjectRoot) {
-    $ProjectRoot = if ($env:GV_BASE_DIR -and (Test-Path $env:GV_BASE_DIR)) {
-        $env:GV_BASE_DIR
-    } else {
-        $scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($MyInvocation.MyCommand.Path) {
-            Split-Path -Parent $MyInvocation.MyCommand.Path
-        } else {
-            Get-Location
-        }
-        $root = Split-Path -Parent $scriptRoot
-        while ($root -and -not (Test-Path (Join-Path $root 'config'))) {
-            $root = Split-Path -Parent $root
-        }
-        if (-not $root) { $root = $scriptRoot }
+    $ProjectRoot = if ($env:GV_BASE_DIR -and (Test-Path $env:GV_BASE_DIR)) { $env:GV_BASE_DIR } else {
+        $root = Split-Path -Parent $PSScriptRoot
+        while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
+        if (-not $root) { $root = $PSScriptRoot }
         $root
     }
 }

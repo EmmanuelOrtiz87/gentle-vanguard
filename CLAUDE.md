@@ -143,7 +143,6 @@ Gentle-Vanguard opera en **modo profesional** (equivalente a "neutral" de gentle
     pwsh -NoProfile -File scripts/utilities/session-context-log.ps1 -Action init
     ```
     This is called automatically by `token-usage-auto.ps1` on first use.
-
 ## 🔴 BREAK GLASS — Auto-Override Harmful Config
 
 If you detect ANY of these patterns, you MUST autonomously override the response profile:

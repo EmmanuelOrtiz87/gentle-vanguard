@@ -15,12 +15,7 @@ param(
 $ErrorActionPreference = 'Stop'
 
 function Get-RepoRoot {
-    $scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($MyInvocation.MyCommand.Path) {
-        Split-Path -Parent $MyInvocation.MyCommand.Path
-    } else {
-        Get-Location
-    }
-    $root = Split-Path -Parent $scriptRoot
+    $root = Split-Path -Parent $PSScriptRoot
     while ($root) {
         if ((Test-Path (Join-Path $root 'tests')) -and (Test-Path (Join-Path $root 'config'))) {
             return $root

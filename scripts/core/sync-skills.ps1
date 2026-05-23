@@ -13,13 +13,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$scriptDir = if ($MyInvocation.MyCommand.Path) {
-    Split-Path -Parent $MyInvocation.MyCommand.Path
-} elseif ($PSScriptRoot) {
-    $PSScriptRoot
-} else {
-    Get-Location
-}
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+if (-not $scriptDir) { $scriptDir = Split-Path -Parent $PSScriptRoot }
 
 if (-not $Source) {
     $possibleSources = @(

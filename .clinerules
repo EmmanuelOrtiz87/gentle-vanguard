@@ -3,7 +3,7 @@
 # Purpose: Minimal rules file with external references to avoid context bloat
 
 ---
-name: gentle-vanguard-orchestrator
+name: foundation-orchestrator
 version: "2.6.0"
 description: SDD-driven AI agent orchestration platform — optimized context loading
 

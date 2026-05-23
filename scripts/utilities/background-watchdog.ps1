@@ -1,35 +1,3 @@
-<#
-.SYNOPSIS
-    Watchdog daemon for background processes — monitors live-feed and metrics-server PIDs.
-
-.DESCRIPTION
-    Reads .session/live-feed-state.json and .runtime/metrics/live/daemon-health.json,
-    checks if PIDs are alive, logs status, and optionally auto-restarts dead processes.
-    Can run as a persistent daemon loop or one-shot check.
-
-.PARAMETER Action
-    check   → one-shot health check (default, exit code 0=all alive)
-    start   → run as daemon loop with interval
-    stop    → clean watchdog state
-    status  → detailed report with restart count and log path
-
-.PARAMETER IntervalSeconds
-    Polling interval in daemon mode. Default: 30
-
-.PARAMETER MaxRestarts
-    Max automatic restarts before giving up. Default: 3
-
-.PARAMETER AutoRestart
-    Enable automatic restart of dead processes.
-
-.PARAMETER Quiet
-    Suppress console output (still writes to watchdog.log).
-
-.EXAMPLE
-    .\background-watchdog.ps1 -Action status
-    .\background-watchdog.ps1 -Action start -AutoRestart -IntervalSeconds 15
-#>
-
 param(
     [ValidateSet('start','stop','status','check')]
     [string]$Action = 'check',

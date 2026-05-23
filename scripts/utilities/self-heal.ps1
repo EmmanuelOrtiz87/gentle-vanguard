@@ -21,12 +21,7 @@ param(
 )
 
 $ErrorActionPreference = "Continue"
-$scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($MyInvocation.MyCommand.Path) {
-    Split-Path -Parent $MyInvocation.MyCommand.Path
-} else {
-    Get-Location
-}
-$repoRoot = Split-Path -Parent (Split-Path -Parent $scriptRoot)
+$repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $script:homePath = if ($env:USERPROFILE) { $env:USERPROFILE } else { $env:HOME }
 
 $healed = 0; $errors = 0; $issues = @()

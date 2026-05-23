@@ -236,11 +236,3 @@ git log --oneline --graph --all
 git blame file.js
 git show commit-id
 ```
-
-
-## References
-
-See [references/](references/) for detailed examples:
-
-- [Example 1](references/code-example-1.md)
-
