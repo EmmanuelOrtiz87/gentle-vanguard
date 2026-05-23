@@ -244,6 +244,9 @@ Write-Step "Checking Engram (non-critical)"
 try {
     if (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue) {
         $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('doctor', '--project', $ProjectName)
+    } elseif ($engramPath = (Get-Command engram.exe -ErrorAction SilentlyContinue).Source) {
+        $output = & $engramPath 'doctor' '--project' $ProjectName 2>&1
+        $result = @{ Success = ($LASTEXITCODE -eq 0); Output = $output }
         if ($result.Success) {
             Write-Ok "Engram is responsive"
         } else {

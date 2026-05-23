@@ -87,9 +87,9 @@ $icons = @{
 function Save-ToEngram {
     param([string]$Action, [string]$Reason, [string]$Details)
 
-    if (-not (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue)) {
-        return $false
-    }
+    $engramPath = (Get-Command engram.exe -ErrorAction SilentlyContinue).Source
+    if (-not $engramPath) { $engramPath = Join-Path $env:USERPROFILE 'bin\engram.exe' }
+    if (-not (Test-Path $engramPath)) { return $false }
     
     $content = @"
 ## Automatic Action: $Action
@@ -101,7 +101,12 @@ This action was performed automatically to optimize token usage and maintain sys
 "@
     
     try {
-        $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('save', "Auto-Action: $Action", $content, '--project', $ProjectName, '--type', 'manual')
+        if (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue) {
+            $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('save', "Auto-Action: $Action", $content, '--project', $ProjectName, '--type', 'manual')
+        } else {
+            & $engramPath 'save' "Auto-Action: $Action" $content '--project' $ProjectName '--type' 'manual' 2>&1
+            $result = @{ Success = ($LASTEXITCODE -eq 0) }
+        }
         return $result.Success
     } catch {
         return $false

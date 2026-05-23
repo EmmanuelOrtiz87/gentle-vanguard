@@ -18,15 +18,17 @@ function Write-Warn { param([string]$Message) Write-Host "[WARN] $Message" -Fore
 function Write-Err { param([string]$Message) Write-Host "[ERR] $Message" -ForegroundColor Red }
 function Write-Info { param([string]$Message) Write-Host "[INFO] $Message" -ForegroundColor Gray }
 
-# Detectar repo root
+# Detectar repo root y exportar para scripts subsecuentes
 $repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) { 
     $env:GENTLE_VANGUARD_BASE_DIR 
 } else {
     $root = Split-Path -Parent $PSScriptRoot
-    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { 
+    while ($root -and -not (Test-Path (Join-Path $root 'config\orchestrator.json'))) { 
         $root = Split-Path -Parent $root 
     }
     if (-not $root) { $root = (Get-Location).Path }
+    # Exportar para scripts subsecuentes
+    $env:GENTLE_VANGUARD_BASE_DIR = $root
     $root
 }
 

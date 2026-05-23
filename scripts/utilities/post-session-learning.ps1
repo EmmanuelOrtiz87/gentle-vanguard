@@ -75,12 +75,24 @@ function Save-ToEngram {
         [string]$Type = 'learning'
     )
 
-    if (-not (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue)) {
+    $engramPath = (Get-Command engram.exe -ErrorAction SilentlyContinue).Source
+    if (-not $engramPath) { $engramPath = Join-Path $env:USERPROFILE 'bin\engram.exe' }
+    if (-not (Test-Path $engramPath)) {
         Write-Info "Engram not available, skipping knowledge-base save"
         return $false
     }
 
-    $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('save', $Title, $Content, '--project', $ProjectName, '--type', $Type)
+    if (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue) {
+        $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('save', $Title, $Content, '--project', $ProjectName, '--type', $Type)
+    } else {
+        try {
+            $output = & $engramPath 'save' $Title $Content '--project' $ProjectName '--type' $Type 2>&1
+            $result = @{ Success = ($LASTEXITCODE -eq 0); Output = $output }
+        } catch {
+            $result = @{ Success = $false; Output = $_.Exception.Message }
+        }
+    }
+
     if ($result.Success) {
         Write-Ok "Saved to Engram: $Title"
         return $true

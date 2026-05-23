@@ -141,12 +141,26 @@ function Save-ToEngram {
         [string]$Type = 'manual'
     )
 
-    if (-not (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue)) {
+    $engramPath = (Get-Command engram.exe -ErrorAction SilentlyContinue).Source
+    if (-not $engramPath) {
+        $engramPath = Join-Path $env:USERPROFILE 'bin\engram.exe'
+    }
+    if (-not (Test-Path $engramPath)) {
         Write-Info "Engram not available, skipping memory save (non-critical)"
         return $false
     }
 
-    $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('save', $Title, $Content, '--project', $ProjectName, '--type', $Type)
+    if (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue) {
+        $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('save', $Title, $Content, '--project', $ProjectName, '--type', $Type)
+    } else {
+        try {
+            $output = & $engramPath 'save' $Title $Content '--project' $ProjectName '--type' $Type 2>&1
+            $result = @{ Success = ($LASTEXITCODE -eq 0); Output = $output }
+        } catch {
+            $result = @{ Success = $false; Output = $_.Exception.Message }
+        }
+    }
+
     if ($result.Success) {
         Write-Info "Engram memory saved: $Title"
         return $true
@@ -195,7 +209,7 @@ function Clear-OrphanedSessions {
         if ($data.status -eq 'active') {
             $startTime = $null
             if ($data.startTime) {
-                try { $startTime = [DateTime]::Parse($data.startTime) } catch { Write-Warning "Bad startTime in $($file.Name)" }
+                try { $startTime = [DateTime]::Parse($data.startTime, [cultureinfo]::InvariantCulture) } catch { Write-Warning "Bad startTime in $($file.Name)" }
             }
 
             if ($null -eq $startTime) {
@@ -222,7 +236,7 @@ function Clear-OrphanedSessions {
         } elseif ($data.status -in @('orphaned', 'ended')) {
             $endTime = $null
             if ($data.endTime -or $data.orphanedAt) {
-                try { $endTime = [DateTime]::Parse(($data.endTime ?? $data.orphanedAt)) } catch { Write-Warning "Bad endTime in $($file.Name)" }
+                try { $endTime = [DateTime]::Parse(($data.endTime ?? $data.orphanedAt), [cultureinfo]::InvariantCulture) } catch { Write-Warning "Bad endTime in $($file.Name)" }
             }
             if ($null -eq $endTime) {
                 $endTime = $file.LastWriteTime

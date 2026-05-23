@@ -182,6 +182,44 @@ Gentle-Vanguard opera en modo profesional (equivalente a "neutral" de gentle-pi)
   `rules/DEVELOPMENT-STANDARDS.md#modification-protocol`. Protocol: explore project structure first
   → identify entry points/configs → scope change → modify → validate.
 
+## 📊 Post-Response Context Logging Rule#
+
+After EVERY response (before the next user message), the agent MUST:
+
+1. **Run `token-usage-auto.ps1`** to display token metrics + log context:
+   ```powershell
+   pwsh -NoProfile -File scripts/utilities/token-usage-auto.ps1 `
+     -InputTokens <N> -OutputTokens <N> -ContextChars <N> `
+     -InputSummary "<brief user intent/first 200 chars>" `
+     -OutputSummary "<brief response summary/first 400 chars>" `
+     -TurnLabel "<current task short label>"
+   ```
+2. This creates temp `.md` files in `.session/context-log/<session-id>/`:
+   - `context-summary.md` — full session log with all turns
+   - `turn-NNN.md` — detail per turn (input, output, tokens, cost)
+3. At session close, run:
+   ```powershell
+   pwsh -NoProfile -File scripts/utilities/session-context-log.ps1 -Action close
+   ```
+4. Temp files stay in `.session/` (gitignored, local-only). To **promote to permanent**
+   local storage (`.local/session-artifacts/`), use `-PromoteToPermanent`.
+
+### Viewing context log
+```powershell
+pwsh -NoProfile -File scripts/utilities/session-context-log.ps1 -Action status
+```
+
+### Architecture
+- `session-context-log.ps1` — **permanent script** (committed to repo)
+- `.session/context-log/<session-id>/` — **temp markdown files** (gitignored)
+- `.local/session-artifacts/context-log-<session-id>/` — **permanent local** (gitignored, promoted on close)
+
+**Why**: Without native post-response hooks in AI tools, this agent-driven approach captures
+token consumption, cost estimates, and context structure for every exchange — enabling cost
+analysis, context optimization, and session forensics.
+
+---
+
 ## 📝 Response Compression#
 
 All agents MUST follow `config/orchestrator.json#response_policy`:
@@ -230,6 +268,15 @@ gv judgment-day
 
 # Rebuild skill registry (after installing/removing skills)
 .\scripts\utilities\build-skill-registry.ps1
+
+# Show context log status
+.\scripts\utilities\session-context-log.ps1 -Action status
+
+# Session close with context log finalization
+.\scripts\utilities\session-context-log.ps1 -Action close
+
+# Session close + promote to permanent local storage
+.\scripts\utilities\session-context-log.ps1 -Action close -PromoteToPermanent
 
 # Open HTML metrics dashboard
 gv dashboard

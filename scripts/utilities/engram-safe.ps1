@@ -169,6 +169,37 @@ function Invoke-SafeCommand {
     }
 }
 
+function Invoke-Gentle-VanguardEngram {
+    param(
+        [string]$RepoRoot,
+        [object[]]$Arguments
+    )
+
+    $engramPath = (Get-Command engram.exe -ErrorAction SilentlyContinue).Source
+    if (-not $engramPath) {
+        $engramPath = Join-Path $env:USERPROFILE 'bin\engram.exe'
+        if (-not (Test-Path $engramPath)) {
+            return @{ Success = $false; Output = 'Engram CLI not found'; ExitCode = 1 }
+        }
+    }
+
+    try {
+        $output = & $engramPath @Arguments 2>&1
+        $exitCode = $LASTEXITCODE
+        return @{
+            Success = ($exitCode -eq 0)
+            Output  = $output
+            ExitCode = $exitCode
+        }
+    } catch {
+        return @{
+            Success  = $false
+            Output   = $_.Exception.Message
+            ExitCode = 1
+        }
+    }
+}
+
 # Exportar funciones solo si se ejecuta como módulo (.psm1), no como script independiente
 # Detect module mode by checking if we're being dot-sourced or imported
 $isModuleMode = ($MyInvocation.MyCommand.Name -match '\.psm1$') -or 
@@ -181,7 +212,8 @@ if ($isModuleMode) {
         'New-SafeMemSaveContent',
         'New-SafeSessionEndSummary',
         'Test-SafeFilePath',
-        'Invoke-SafeCommand'
+        'Invoke-SafeCommand',
+        'Invoke-Gentle-VanguardEngram'
     )
     Write-Verbose "Engram safe functions loaded (module mode)"
 } else {

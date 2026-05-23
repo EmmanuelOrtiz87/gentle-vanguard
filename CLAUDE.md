@@ -125,12 +125,24 @@ Gentle-Vanguard opera en **modo profesional** (equivalente a "neutral" de gentle
     mandates `mem_session_summary` — this rule extends it to DURING the session, not just at the
     end. If you detect a failure pattern or a correction you made proactively, save it immediately.
 
-14. **TOKEN USAGE NOTIFICATION** — After EVERY response, display token usage metrics:
+14. **TOKEN USAGE NOTIFICATION** — After EVERY response, display token usage metrics AND log context:
     ```powershell
-    pwsh -NoProfile -File scripts/utilities/token-usage-auto.ps1 -InputTokens <N> -OutputTokens <N>
+    pwsh -NoProfile -File scripts/utilities/token-usage-auto.ps1 `
+      -InputTokens <N> -OutputTokens <N> -ContextChars <N> `
+      -InputSummary "<user intent/first 200 chars>" `
+      -OutputSummary "<response summary/first 400 chars>" `
+      -TurnLabel "<task label>"
     ```
-    This shows current message tokens + accumulated session totals. The notifier is configured
-    via `.session/token-display-config.json` (enabled by default).
+    This shows current message tokens + accumulated session totals, AND logs the exchange
+    to `.session/context-log/<session-id>/` as markdown files for session forensics.
+    The notifier is configured via `.session/token-display-config.json` (enabled by default).
+    At session close, run `session-context-log.ps1 -Action close`.
+
+15. **SESSION CONTEXT LOG INIT** — On first response of a session, auto-init the context log:
+    ```powershell
+    pwsh -NoProfile -File scripts/utilities/session-context-log.ps1 -Action init
+    ```
+    This is called automatically by `token-usage-auto.ps1` on first use.
 
 ## 🔴 BREAK GLASS — Auto-Override Harmful Config
 
@@ -196,6 +208,9 @@ use allowed)
 | CodeGraph metrics tracker                           | `scripts/utilities/codegraph-metrics-tracker.ps1`        |
 | CodeGraph CI validation                             | `scripts/utilities/codegraph-ci-validate.ps1`            |
 | Performance                                         | `rules/NORMATIVAS-PERFORMANCE.md`                        |
+| Session context logging                             | `scripts/utilities/session-context-log.ps1`              |
+| Token usage notifier                                | `scripts/utilities/token-usage-auto.ps1`                 |
+| Session autostart (exports `$env:GENTLE_VANGUARD_BASE_DIR`) | `scripts/utilities/session-start-optimized.ps1`   |
 
 ## 🆕 New Project & Modification Rules
 
