@@ -8,6 +8,14 @@
       "sessions": 243,
       "memories": 1076,
       "prompts": 143
+    },
+    {
+      "id": "8720bc6d",
+      "created_by": "emman",
+      "created_at": "2026-05-23T20:48:55Z",
+      "sessions": 0,
+      "memories": 2,
+      "prompts": 0
     }
   ]
 }
