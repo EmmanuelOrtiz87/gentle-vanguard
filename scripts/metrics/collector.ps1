@@ -5,14 +5,7 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
-$scriptPath = if ($MyInvocation.MyCommand.Path) { 
-    $MyInvocation.MyCommand.Path 
-} elseif ($PSScriptRoot) { 
-    Join-Path $PSScriptRoot 'collector.ps1' 
-} else { 
-    (Get-Location).Path 
-}
-$repoRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $scriptPath))
+$repoRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path))
 $outDir = Join-Path $repoRoot '.runtime' 'metrics'
 $sessionsDir = Join-Path $repoRoot 'session'
 $tokenState = Join-Path $repoRoot '.session' 'token-autopilot-state.json'
@@ -191,148 +184,13 @@ function Collect-CostMetrics {
     return $cost
 }
 
-function Collect-TelemetryMetrics {
-    Log "Collecting telemetry metrics..."
-    $activityFile = Join-Path $outDir 'live' 'activity.json'
-    $eventsFile = Join-Path $outDir 'live' 'events.ndjson'
-    $tm = [PSCustomObject]@{ collectedAt = (Get-Date -Format 'o'); hasData = $false; toolCalls = 0; estimatedTokens = 0; filesRead = 0; filesWritten = 0; filesEdited = 0; commandsRun = 0; eventsCount = 0 }
-    if (Test-Path $activityFile) {
-        try {
-            $a = Get-Content $activityFile -Raw | ConvertFrom-Json
-            $tm.hasData = $true
-            $tm.toolCalls = [int]$a.toolCalls
-            $tm.estimatedTokens = [int]$a.estimatedTokens
-            $tm.filesRead = [int]$a.filesRead
-            $tm.filesWritten = [int]$a.filesWritten
-            $tm.filesEdited = [int]$a.filesEdited
-            $tm.commandsRun = [int]$a.commandsRun
-        } catch {}
-    }
-    # Read events from ndjson
-    $events = @()
-    if (Test-Path $eventsFile) {
-        try {
-            Get-Content $eventsFile | ForEach-Object { if ($_) { $events += $_ | ConvertFrom-Json } }
-            $tm | Add-Member -NotePropertyName 'events' -NotePropertyValue @($events) -Force -ErrorAction SilentlyContinue
-            $tm.eventsCount = $events.Count
-        } catch {}
-    }
-    if (-not $tm.events) { $tm | Add-Member -NotePropertyName 'events' -NotePropertyValue @() -Force -ErrorAction SilentlyContinue }
-    $tm | ConvertTo-Json -Depth 3 | Set-Content (Join-Path $outDir 'telemetry.json')
-    $has = $tm.hasData
-    Log "Telemetry: hasData=$has calls=$($tm.toolCalls) tokens=$($tm.estimatedTokens) events=$($tm.eventsCount)"
-    return $tm
-}
-
-function Collect-MonthlyHistory {
-    Log "Collecting monthly history..."
-    $snapDir = Join-Path $outDir 'snapshots'
-    $tokenFile = Join-Path $outDir 'token.json'
-    $costFile = Join-Path $outDir 'cost.json'
-    $telFile = Join-Path $outDir 'telemetry.json'
-    $history = @{ days = @(); months = @(); perDay = @{}; perMonth = @{} }
-    $dayAgg = @{}
-    $monthAgg = @{}
-    # Include current data first (overwritten by snapshots if newer)
-    $todayKey = (Get-Date -Format 'yyyy-MM-dd')
-    $curMonthKey = (Get-Date -Format 'yyyy-MM')
-    $dayAgg[$todayKey] = @{ tokens=0; cost=0; sessions=1; calls=0; saved=0; count=1; lastTs=(Get-Date -Format 'o') }
-    if (-not $monthAgg[$curMonthKey]) { $monthAgg[$curMonthKey] = @{ tokens=0; cost=0; sessions=0; calls=0; saved=0; days=0 } }
-    # Load current token/cost data
-    if (Test-Path $tokenFile) { try { $t = Get-Content $tokenFile -Raw | ConvertFrom-Json; $dayAgg[$todayKey].tokens = [int]$t.usedToday; $dayAgg[$todayKey].cost = [double]$t.estCost } catch {} }
-    if (Test-Path $costFile) { try { $c = Get-Content $costFile -Raw | ConvertFrom-Json; $dayAgg[$todayKey].saved = [double]$c.modeledSavings } catch {} }
-    if (Test-Path $telFile) { try { $tel = Get-Content $telFile -Raw | ConvertFrom-Json; if ($tel.hasData) { $dayAgg[$todayKey].calls = [int]$tel.toolCalls } } catch {} }
-    # Merge snapshot data (may overwrite current with higher values)
-    if (Test-Path $snapDir) {
-        Get-ChildItem $snapDir -Filter 'snapshot-*.json' | Sort-Object LastWriteTime | ForEach-Object {
-            try {
-                $s = Get-Content $_.FullName -Raw | ConvertFrom-Json
-                $dayKey = $_.LastWriteTime.ToString('yyyy-MM-dd')
-                $monthKey = $_.LastWriteTime.ToString('yyyy-MM')
-                $tokens = if ($s.token) { [int]$s.token.usedToday } else { 0 }
-                $cost = if ($s.cost) { [double]$s.cost.actualCost } else { 0 }
-                $sessions = if ($s.sessions) { [int]$s.sessions.today } else { 0 }
-                $calls = if ($s.telemetry -and $s.telemetry.hasData) { [int]$s.telemetry.toolCalls } else { 0 }
-                $saved = if ($s.cost) { [double]$s.cost.modeledSavings } else { 0 }
-                if (-not $dayAgg[$dayKey]) { $dayAgg[$dayKey] = @{ tokens=0; cost=0; sessions=0; calls=0; saved=0; count=0; lastTs=$_.LastWriteTime.ToString('o') } }
-                $da = $dayAgg[$dayKey]
-                if ($tokens -gt $da.tokens) { $da.tokens = $tokens }
-                if ($cost -gt $da.cost) { $da.cost = $cost }
-                if ($sessions -gt $da.sessions) { $da.sessions = $sessions }
-                if ($calls -gt $da.calls) { $da.calls = $calls }
-                if ($saved -gt $da.saved) { $da.saved = $saved }
-                $da.count++
-                if (-not $monthAgg[$monthKey]) { $monthAgg[$monthKey] = @{ tokens=0; cost=0; sessions=0; calls=0; saved=0; days=0 } }
-                $ma = $monthAgg[$monthKey]
-                if ($tokens -gt $ma.tokens) { $ma.tokens = $tokens }
-                if ($cost -gt $ma.cost) { $ma.cost = $cost }
-                if ($sessions -gt $ma.sessions) { $ma.sessions = $sessions }
-                if ($calls -gt $ma.calls) { $ma.calls = $calls }
-                if ($saved -gt $ma.saved) { $ma.saved = $saved }
-            } catch {}
-        }
-    }
-    $history.perDay = $dayAgg
-    $history.perMonth = $monthAgg
-    $daysList = @($dayAgg.Keys | Sort-Object)
-    $monthsList = @($monthAgg.Keys | Sort-Object)
-    $history.days = @($daysList | ForEach-Object { @{ date=$_; tokens=$dayAgg[$_].tokens; cost=$dayAgg[$_].cost; sessions=$dayAgg[$_].sessions; calls=$dayAgg[$_].calls; saved=$dayAgg[$_].saved; lastTs=$dayAgg[$_].lastTs } })
-    $history.months = @($monthsList | ForEach-Object { @{ month=$_; tokens=$monthAgg[$_].tokens; cost=$monthAgg[$_].cost; sessions=$monthAgg[$_].sessions; calls=$monthAgg[$_].calls; saved=$monthAgg[$_].saved } })
-    $history | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $outDir 'monthly.json')
-    Log "Monthly: $($daysList.Count) days, $($monthsList.Count) months"
-    return $history
-}
-
-function Collect-Aggregates {
-    Log "Collecting aggregate per-action data..."
-    $aggDir = Join-Path $outDir 'aggregates'
-    $perResponseFile = Join-Path $aggDir 'per-response.json'
-    $eventsFile = Join-Path $outDir 'live' 'events.ndjson'
-    $agg = @{ perResponse = @(); responseCount = 0; totalInputTokens = 0; totalOutputTokens = 0; totalCost = 0; totalSaved = 0; avgTokensPerResponse = 0 }
-    $responses = @()
-    if (Test-Path $eventsFile) {
-        try {
-            Get-Content $eventsFile | ForEach-Object {
-                if ($_) {
-                    $evt = $_ | ConvertFrom-Json
-                    $tokens = [int]($evt.tokens -or 0)
-                    if ($tokens -eq 0) { return }
-                    $responses += [PSCustomObject]@{
-                        ts = if ($evt.ts) { $evt.ts } else { (Get-Date -Format 'o') }
-                        type = if ($evt.type) { $evt.type } else { 'event' }
-                        inputTokens = [int]($tokens * 0.6)
-                        outputTokens = [int]($tokens * 0.4)
-                        tokens = $tokens
-                        detail = if ($evt.detail) { $evt.detail.Substring(0, [Math]::Min(40, $evt.detail.Length)) } else { $evt.type }
-                        cost = [math]::Round(($tokens / 1e6) * 10, 6)
-                        saved = [math]::Round(($tokens * 0.4 / 1e6) * 10, 6)
-                    }
-                }
-            }
-        } catch {}
-    }
-    $agg.perResponse = @($responses | Sort-Object ts)
-    $agg.responseCount = $responses.Count
-    $agg.totalInputTokens = [int](($responses | Measure-Object -Property inputTokens -Sum).Sum)
-    $agg.totalOutputTokens = [int](($responses | Measure-Object -Property outputTokens -Sum).Sum)
-    $agg.totalCost = [math]::Round(($responses | Measure-Object -Property cost -Sum).Sum, 4)
-    $agg.totalSaved = [math]::Round(($responses | Measure-Object -Property saved -Sum).Sum, 4)
-    if ($agg.responseCount -gt 0) { $agg.avgTokensPerResponse = [int](($agg.totalInputTokens + $agg.totalOutputTokens) / $agg.responseCount) }
-    $agg | ConvertTo-Json -Depth 5 | Set-Content $perResponseFile
-    Log "Aggregates: $($agg.responseCount) actions, input=$($agg.totalInputTokens) output=$($agg.totalOutputTokens) cost=`$$($agg.totalCost) saved=`$$($agg.totalSaved)"
-    return $agg
-}
-
 function Collect-AllMetrics {
     $s = Collect-SessionMetrics; $t = Collect-TokenMetrics; $l = Collect-LiveMetrics
     $g = Collect-GitMetrics; $p = Collect-PRMetrics; $c = Collect-CostMetrics
-    $tel = Collect-TelemetryMetrics
-    Collect-MonthlyHistory | Out-Null
-    Collect-Aggregates | Out-Null
     $all = [PSCustomObject]@{
         collectedAt = (Get-Date -Format 'o')
         sessions = [PSCustomObject]@{ total = $s.Count; active = @($s | Where-Object { $_.status -eq 'active' }).Count; today = @($s | Where-Object { $_.isToday }).Count; avgDurationSec = ($s | Where-Object { $_.durationSec -gt 0 } | Measure-Object -Average durationSec).Average; totalDurationMin = [int](($s | Where-Object { $_.durationSec -gt 0 } | Measure-Object -Sum durationSec).Sum / 60); latest = ($s | Sort-Object startTime -Descending | Select-Object -First 1).sessionId }
-        token = $t; live = $l; git = $g; pr = $p; cost = $c; telemetry = $tel
+        token = $t; live = $l; git = $g; pr = $p; cost = $c
     }
     $all | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $outDir 'consolidated.json')
     $stamp = (Get-Date -Format 'yyyyMMdd-HHmmss')

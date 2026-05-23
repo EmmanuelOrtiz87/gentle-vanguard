@@ -1,29 +1,3 @@
-<#
-.SYNOPSIS
-    Metrics HTTP server — serves dashboard, live API, metric files, SSE events, chart data, and PDF/PNG export.
-
-.DESCRIPTION
-    Starts a local HTTP listener (default port 8090) that serves:
-    - / or /index.html    → dashboard HTML with live overlay
-    - /api/live           → latest feed.json / consolidated.json
-    - /api/metrics/charts → consolidated chart data for JS polling
-    - /api/export/pdf     → server-side PDF via export-dashboard-pdf.ps1
-    - /api/export/png     → server-side PNG (headless browser screenshot)
-    - /health             → daemon health check
-    - /metrics/<file>     → individual metric JSON files
-    - /events             → SSE stream for real-time push
-
-.PARAMETER Port
-    HTTP port. Default: 8090
-
-.PARAMETER Daemon
-    Run silently (no startup banner).
-
-.EXAMPLE
-    .\metrics-server.ps1 -Daemon
-    .\metrics-server.ps1 -Port 9090
-#>
-
 param(
     [int]$Port = 8090,
     [switch]$Daemon
@@ -38,8 +12,6 @@ $running = $true
 $metricsDir = Join-Path $repoRoot '.runtime/metrics'
 $reportsDir = Join-Path $repoRoot 'reports'
 $dashFile = Join-Path $reportsDir 'dashboard.html'
-
-$presentationFile = Join-Path $repoRoot 'gentle-vanguard-presentation.html'
 
 $mime = @{
     '.html' = 'text/html; charset=utf-8'
@@ -129,9 +101,9 @@ window.gvExportPdf = function(){
 };
 
 window.gvExportPng = function(){
- var sec = document.querySelector('.sec.active');
+ var sec = document.querySelector('.section.active');
  if(!sec){alert('No active section');return}
- fetch(baseUrl+'/api/export/png?section='+sec.id).then(function(r){if(!r.ok)throw Error(r.status);return r.blob()}).then(function(b){
+ fetch(baseUrl+'/api/export/png').then(function(r){if(!r.ok)throw Error(r.status);return r.blob()}).then(function(b){
   var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='dashboard-'+new Date().toISOString().slice(0,10)+'.png';
   document.body.appendChild(a);a.click();document.body.removeChild(a);
  }).catch(function(){
@@ -156,63 +128,12 @@ addExportBar();
                     $buf = [System.Text.Encoding]::UTF8.GetBytes('Dashboard not found. Run dashboard-render.ps1 first.')
                     $res.OutputStream.Write($buf, 0, $buf.Length)
                 }
-            } elseif ($path -eq '/presentacion') {
-                if (Test-Path $presentationFile) {
-                    $html = Get-Content $presentationFile -Raw -Encoding UTF8
-                    $buf = [System.Text.Encoding]::UTF8.GetBytes($html)
-                    $res.ContentType = 'text/html; charset=utf-8'
-                    $res.Headers.Add('Access-Control-Allow-Origin', '*')
-                    $res.OutputStream.Write($buf, 0, $buf.Length)
-                } else {
-                    $res.StatusCode = 404
-                    $buf = [System.Text.Encoding]::UTF8.GetBytes('Presentation not found at gentile-vanguard-presentation.html')
-                    $res.OutputStream.Write($buf, 0, $buf.Length)
-                }
-            } elseif ($path -eq '/api/ingest' -and $req.HttpMethod -eq 'POST') {
-                $reader = New-Object System.IO.StreamReader($req.InputStream)
-                $body = $reader.ReadToEnd(); $reader.Close()
-                $actFile = Join-Path $metricsDir 'live/activity.json'
-                $evtFile = Join-Path $metricsDir 'live/events.ndjson'
-                try {
-                    $evt = $body | ConvertFrom-Json
-                    $evt | Add-Member -NotePropertyName 'ts' -NotePropertyValue (Get-Date -Format 'o') -Force
-                    $evt | ConvertTo-Json -Compress -Depth 2 | Add-Content -Path $evtFile -Encoding UTF8
-                    $activity = if (Test-Path $actFile) { Get-Content $actFile -Raw | ConvertFrom-Json } else { [PSCustomObject]@{ toolCalls=0; estimatedTokens=0; filesRead=0; filesWritten=0; filesEdited=0; commandsRun=0 } }
-                    if ($evt.tokens) { $activity.estimatedTokens += [int]$evt.tokens }
-                    if ($evt.toolCalls) { $activity.toolCalls += [int]$evt.toolCalls }
-                    if ($evt.filesRead) { $activity.filesRead += [int]$evt.filesRead }
-                    if ($evt.filesWritten) { $activity.filesWritten += [int]$evt.filesWritten }
-                    if ($evt.filesEdited) { $activity.filesEdited += [int]$evt.filesEdited }
-                    if ($evt.type -eq 'bash') { $activity.commandsRun += 1 }
-                    $activity.lastUpdate = (Get-Date -Format 'o')
-                    $activity | ConvertTo-Json -Depth 3 | Set-Content $actFile
-                    $res.StatusCode = 200
-                    $buf = [System.Text.Encoding]::UTF8.GetBytes('{"status":"ok"}')
-                } catch {
-                    $res.StatusCode = 400
-                    $buf = [System.Text.Encoding]::UTF8.GetBytes('{"status":"error","detail":"' + $_.Exception.Message + '"}')
-                }
-                $res.ContentType = 'application/json'
-                $res.Headers.Add('Access-Control-Allow-Origin', '*')
-                $res.OutputStream.Write($buf, 0, $buf.Length)
             } elseif ($path -eq '/api/live') {
                 $feedPath = Join-Path $metricsDir 'feed.json'
                 $consPath = Join-Path $metricsDir 'consolidated.json'
-                $evtPath = Join-Path $metricsDir 'live/events.ndjson'
                 $src = if (Test-Path $feedPath) { $feedPath } elseif (Test-Path $consPath) { $consPath } else { $null }
                 if ($src) {
                     $json = Get-Content $src -Raw
-                    $data = $json | ConvertFrom-Json
-                    if (Test-Path $evtPath) {
-                        $events = @(Get-Content $evtPath | ForEach-Object { if ($_) { $_ | ConvertFrom-Json } })
-                        if ($data.telemetry) {
-                            $data.telemetry | Add-Member -NotePropertyName 'events' -NotePropertyValue @($events) -Force
-                        } else {
-                            $tel = [PSCustomObject]@{ hasData = ($events.Count -gt 0); events = @($events); toolCalls = 0; estimatedTokens = 0 }
-                            $data | Add-Member -NotePropertyName 'telemetry' -NotePropertyValue $tel -Force
-                        }
-                    }
-                    $json = $data | ConvertTo-Json -Depth 5 -Compress
                     $buf = [System.Text.Encoding]::UTF8.GetBytes($json)
                     $res.ContentType = 'application/json'
                     $res.Headers.Add('Access-Control-Allow-Origin', '*')
@@ -236,7 +157,7 @@ addExportBar();
                 }
             } elseif ($path -eq '/api/metrics/charts') {
                 $resp = @{}
-                @('sessions','token','live','git','pr','cost','telemetry') | ForEach-Object {
+                @('sessions','token','live','git','pr','cost') | ForEach-Object {
                     $fp = Join-Path $metricsDir "$_.json"
                     if (Test-Path $fp) {
                         try { $resp[$_] = Get-Content $fp -Raw -Encoding UTF8 | ConvertFrom-Json } catch {}
@@ -251,95 +172,53 @@ addExportBar();
                 $res.ContentType = 'application/json'
                 $res.Headers.Add('Access-Control-Allow-Origin', '*')
                 $res.OutputStream.Write($buf, 0, $buf.Length)
-            } elseif ($path -eq '/api/metrics/monthly') {
-                $mp = Join-Path $metricsDir 'monthly.json'
-                if (Test-Path $mp) {
-                    $json = Get-Content $mp -Raw
-                    $buf = [System.Text.Encoding]::UTF8.GetBytes($json)
-                    $res.ContentType = 'application/json'
-                    $res.Headers.Add('Access-Control-Allow-Origin', '*')
-                    $res.OutputStream.Write($buf, 0, $buf.Length)
-                } else {
-                    $res.StatusCode = 404
-                    $buf = [System.Text.Encoding]::UTF8.GetBytes('{}')
-                    $res.OutputStream.Write($buf, 0, $buf.Length)
-                }
-            } elseif ($path -eq '/api/metrics/per-response') {
-                $prFile = Join-Path $metricsDir 'aggregates' 'per-response.json'
-                if (Test-Path $prFile) {
-                    $json = Get-Content $prFile -Raw
-                    $buf = [System.Text.Encoding]::UTF8.GetBytes($json)
-                    $res.ContentType = 'application/json'
-                    $res.Headers.Add('Access-Control-Allow-Origin', '*')
-                    $res.OutputStream.Write($buf, 0, $buf.Length)
-                } else {
-                    $res.StatusCode = 404
-                    $buf = [System.Text.Encoding]::UTF8.GetBytes('{}')
-                    $res.OutputStream.Write($buf, 0, $buf.Length)
-                }
-            } elseif ($path -eq '/api/export/pdf' -or $path -like '/api/export/pdf?*') {
+            } elseif ($path -eq '/api/export/pdf') {
                 $pdfScript = Join-Path $repoRoot 'scripts' 'utilities' 'export-dashboard-pdf.ps1'
                 $pdfPath = Join-Path $reportsDir 'dashboard-export.pdf'
                 if (Test-Path $pdfScript) {
-                    if (-not (Test-Path $dashFile)) {
-                        $res.StatusCode = 500; $buf = [System.Text.Encoding]::UTF8.GetBytes('Dashboard HTML not found')
+                    $output = & $pdfScript -InputHtml $dashFile -OutputPdf $pdfPath -Quiet 2>&1
+                    $exitCode = $LASTEXITCODE
+                    if ($exitCode -eq 0 -and (Test-Path $pdfPath)) {
+                        $pdfBytes = [System.IO.File]::ReadAllBytes($pdfPath)
+                        $res.ContentType = 'application/pdf'
+                        $res.Headers.Add('Content-Disposition', "attachment; filename=dashboard-export.pdf")
+                        $res.Headers.Add('Access-Control-Allow-Origin', '*')
+                        $res.OutputStream.Write($pdfBytes, 0, $pdfBytes.Length)
                     } else {
-                        $output = & $pdfScript -InputHtml $dashFile -OutputPdf $pdfPath -Quiet 2>&1
-                        $exitCode = $LASTEXITCODE
-                        if ($exitCode -eq 0 -and (Test-Path $pdfPath) -and ((Get-Item $pdfPath).Length -gt 0)) {
-                            $pdfBytes = [System.IO.File]::ReadAllBytes($pdfPath)
-                            $res.ContentType = 'application/pdf'
-                            $res.Headers.Add('Content-Disposition', "attachment; filename=dashboard-export.pdf")
-                            $res.Headers.Add('Access-Control-Allow-Origin', '*')
-                            $res.OutputStream.Write($pdfBytes, 0, $pdfBytes.Length)
-                        } else {
-                            $res.StatusCode = 500
-                            $errMsg = "PDF generation failed (exit code: $exitCode)"
-                            if ($output) { $errMsg += "`n$($output -join '; ')" }
-                            $buf = [System.Text.Encoding]::UTF8.GetBytes($errMsg)
-                            $res.OutputStream.Write($buf, 0, $buf.Length)
-                        }
+                        $res.StatusCode = 500
+                        $errMsg = "PDF generation failed (exit code: $exitCode)"
+                        if ($output) { $errMsg += "`n$($output -join '; ')" }
+                        $buf = [System.Text.Encoding]::UTF8.GetBytes($errMsg)
+                        $res.OutputStream.Write($buf, 0, $buf.Length)
                     }
                 } else {
                     $res.StatusCode = 404
                     $buf = [System.Text.Encoding]::UTF8.GetBytes("PDF export script not found: $pdfScript")
                     $res.OutputStream.Write($buf, 0, $buf.Length)
                 }
-            } elseif ($path -like '/api/export/png*') {
-                $section = if ($path -match 'section=(\w+)') { $Matches[1] } else { '' }
-                $browserPaths = @("${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe","${env:ProgramFiles}\Microsoft\Edge\Application\msedge.exe","${env:ProgramFiles}\Google\Chrome\Application\chrome.exe","${env:LOCALAPPDATA}\Google\Chrome\Application\chrome.exe")
-                $browserExe = $null; foreach ($bp in $browserPaths) { if (Test-Path $bp) { $browserExe = $bp; break } }
-                if (-not $browserExe) {
-                    $res.StatusCode = 500; $buf = [System.Text.Encoding]::UTF8.GetBytes('No headless browser found for PNG export')
-                } elseif (-not (Test-Path $dashFile)) {
-                    $res.StatusCode = 500; $buf = [System.Text.Encoding]::UTF8.GetBytes('Dashboard HTML not found')
-                } else {
-                    $tmpHtml = [System.IO.Path]::GetTempFileName() + '.html'
-                    $html = Get-Content $dashFile -Raw -Encoding UTF8
-                    if ($section) {
-                        # Show ONLY the requested section
-                        $inject = "<style>.sec{display:none!important}#$section{display:block!important}.nav,.export-bar,#gv-export-bar{display:none!important}</style>"
-                    } else {
-                        # Show ALL sections (full dashboard)
-                        $inject = '<style>.sec{display:block!important}.nav,.export-bar,#gv-export-bar{display:none!important}</style>'
-                    }
-                    $html = $html -replace '</head>', "${inject}</head>"
-                    $html | Set-Content $tmpHtml -Encoding UTF8
-                    $pngPath = Join-Path $reportsDir 'dashboard-export.png'
-                    $argsList = @('--headless','--disable-gpu','--no-sandbox','--disable-software-rasterizer','--hide-scrollbars',"--screenshot=$pngPath","--window-size=1280,1800","--virtual-time-budget=3000","file:///$($tmpHtml.Replace('\','/'))")
-                    $proc = Start-Process -FilePath $browserExe -ArgumentList $argsList -NoNewWindow -Wait -PassThru
-                    Remove-Item $tmpHtml -Force -ErrorAction SilentlyContinue
-                    if ($proc.ExitCode -eq 0 -and (Test-Path $pngPath) -and ((Get-Item $pngPath).Length -gt 0)) {
-                        $imgBytes = [System.IO.File]::ReadAllBytes($pngPath)
+            } elseif ($path -eq '/api/export/png') {
+                $pdfScript = Join-Path $repoRoot 'scripts' 'utilities' 'export-dashboard-pdf.ps1'
+                $pdfPath = Join-Path $reportsDir 'dashboard-export.png'
+                if (Test-Path $pdfScript) {
+                    $output = & $pdfScript -InputHtml $dashFile -OutputPdf $pdfPath -Quiet 2>&1
+                    $exitCode = $LASTEXITCODE
+                    if ($exitCode -eq 0 -and (Test-Path $pdfPath)) {
+                        $imgBytes = [System.IO.File]::ReadAllBytes($pdfPath)
                         $res.ContentType = 'image/png'
                         $res.Headers.Add('Content-Disposition', "attachment; filename=dashboard-export.png")
                         $res.Headers.Add('Access-Control-Allow-Origin', '*')
                         $res.OutputStream.Write($imgBytes, 0, $imgBytes.Length)
                     } else {
                         $res.StatusCode = 500
-                        $buf = [System.Text.Encoding]::UTF8.GetBytes("PNG generation failed (exit code: $($proc.ExitCode))")
+                        $errMsg = "PNG generation failed (exit code: $exitCode)"
+                        if ($output) { $errMsg += "`n$($output -join '; ')" }
+                        $buf = [System.Text.Encoding]::UTF8.GetBytes($errMsg)
                         $res.OutputStream.Write($buf, 0, $buf.Length)
                     }
+                } else {
+                    $res.StatusCode = 404
+                    $buf = [System.Text.Encoding]::UTF8.GetBytes("Export script not found")
+                    $res.OutputStream.Write($buf, 0, $buf.Length)
                 }
             } elseif ($path -eq '/health') {
                 $dashHealth = Join-Path $metricsDir 'live/daemon-health.json'

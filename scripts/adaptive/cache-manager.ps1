@@ -57,14 +57,9 @@ $ErrorActionPreference = 'Stop'
 $CACHE_VERSION = '1.0.0'
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
-$scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($MyInvocation.MyCommand.Path) {
-    Split-Path -Parent $MyInvocation.MyCommand.Path
-} else {
-    Get-Location
-}
-$WorkspaceRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $scriptRoot))
+$WorkspaceRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
 if (-not (Test-Path (Join-Path $WorkspaceRoot 'config'))) {
-    $WorkspaceRoot = Split-Path -Parent (Split-Path -Parent $scriptRoot)
+    $WorkspaceRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 }
 $CacheRoot    = Join-Path $env:TEMP 'gentle-vanguard-cache'
 $L2Dir        = Join-Path $CacheRoot 'l2'

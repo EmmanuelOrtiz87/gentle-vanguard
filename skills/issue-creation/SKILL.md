@@ -267,11 +267,3 @@ gh issue edit <number> --add-label "status:approved"
 # Maintainer: add priority
 gh issue edit <number> --add-label "priority:high"
 ```
-
-
-## References
-
-See [references/](references/) for detailed examples:
-
-- [Example 1](references/code-example-1.md)
-

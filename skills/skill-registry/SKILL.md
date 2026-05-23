@@ -228,11 +228,3 @@ sub-agents via their launch prompts. To update after installing/removing skills,
 - If no skills or conventions are found, write an empty registry (so sub-agents don't waste time
   searching)
 - Add `.atl/` to the project's `.gitignore` if it exists and `.atl` is not already listed
-
-
-## References
-
-See [references/](references/) for detailed examples:
-
-- [Example 1](references/code-example-1.md)
-

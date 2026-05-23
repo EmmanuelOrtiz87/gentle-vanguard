@@ -19,12 +19,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($MyInvocation.MyCommand.Path) {
-    Split-Path -Parent $MyInvocation.MyCommand.Path
-} else {
-    Get-Location
-}
-$repoRoot = Split-Path -Parent (Split-Path -Parent $scriptRoot)
+$repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 
 function Write-Ok    { if (-not $Quiet) { Write-Host "[OK] $args" -ForegroundColor Green } }
 function Write-Warn  { Write-Host "[WARN] $args" -ForegroundColor Yellow }

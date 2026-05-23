@@ -1,6 +1,6 @@
 {
   "name": "Windsurf - Local-First Configuration",
-  "version": "1.3.0",
+  "version": "1.1.0",
   "description": "Local-first policy for Windsurf IDE with advanced context, indexing, and adaptive controls",
   "workspace": {
     "projectRoot": ".",

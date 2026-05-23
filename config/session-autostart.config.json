@@ -17,7 +17,7 @@
         "id": "session-manager",
         "enabled": true,
         "script": "scripts/utilities/session-manager.ps1",
-        "args": "-Mode AutoStart -SkipEngramSafe",
+        "args": "-Mode AutoStart",
         "required": true,
         "description": "Initialize session ID and create session file"
       },
@@ -213,14 +213,6 @@
         "args": "",
         "required": false,
         "description": "Refresca startup-summary.json como ultimo paso para asegurar datos actuales post-pipeline"
-      },
-      {
-        "id": "token-usage-init",
-        "enabled": true,
-        "script": "scripts/utilities/token-usage-notifier.ps1",
-        "args": "-Action status",
-        "required": false,
-        "description": "Initialize token usage tracking and show current status"
       }
     ],
 

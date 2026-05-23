@@ -219,7 +219,6 @@ token consumption, cost estimates, and context structure for every exchange — 
 analysis, context optimization, and session forensics.
 
 ---
-
 ## 📝 Response Compression#
 
 All agents MUST follow `config/orchestrator.json#response_policy`:
@@ -277,7 +276,6 @@ gv judgment-day
 
 # Session close + promote to permanent local storage
 .\scripts\utilities\session-context-log.ps1 -Action close -PromoteToPermanent
-
 # Open HTML metrics dashboard
 gv dashboard
 
