@@ -29,14 +29,23 @@ if ([string]::IsNullOrWhiteSpace($SessionId)) {
     $SessionId = "session-$(Get-Date -Format 'yyyy-MM-dd-HHmmss')"
 }
 
-if (-not (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue)) {
+$engramPath = (Get-Command engram.exe -ErrorAction SilentlyContinue).Source
+if (-not $engramPath) { $engramPath = Join-Path $env:USERPROFILE 'bin\engram.exe' }
+
+if (-not (Test-Path $engramPath) -and -not (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue)) {
     Write-Host "[INFO] Engram helper unavailable. Session marker skipped (non-critical)." -ForegroundColor Cyan
     exit 0
 }
 
 $title = "Session start: $SessionId"
 $content = "Session $SessionId registered manually for project $ProjectName."
-$result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('save', $title, $content, '--project', $ProjectName, '--type', 'session')
+
+if (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue) {
+    $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('save', $title, $content, '--project', $ProjectName, '--type', 'session')
+} else {
+    $output = & $engramPath 'save' $title $content '--project' $ProjectName '--type' 'session' 2>&1
+    $result = @{ Success = ($LASTEXITCODE -eq 0); Output = $output }
+}
 
 if ($result.Success) {
     Write-Host "[OK] Engram session registered: $SessionId" -ForegroundColor Green

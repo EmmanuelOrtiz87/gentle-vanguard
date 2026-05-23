@@ -17,12 +17,20 @@ if (Test-Path $engramSafe) {
     . $engramSafe
 }
 
-if (-not (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue)) {
+$engramPath = (Get-Command engram.exe -ErrorAction SilentlyContinue).Source
+if (-not $engramPath) { $engramPath = Join-Path $env:USERPROFILE 'bin\engram.exe' }
+
+if (-not (Test-Path $engramPath) -and -not (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue)) {
     Write-Host "[INFO] Engram helper unavailable. Context restore skipped (non-critical)." -ForegroundColor Cyan
     exit 0
 }
 
-$result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('context', $ProjectName)
+if (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue) {
+    $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('context', $ProjectName)
+} else {
+    $output = & $engramPath 'context' $ProjectName 2>&1
+    $result = @{ Success = ($LASTEXITCODE -eq 0); Output = $output }
+}
 
 if ($result.Success) {
     Write-Host "[OK] Engram context restored for project: $ProjectName" -ForegroundColor Green

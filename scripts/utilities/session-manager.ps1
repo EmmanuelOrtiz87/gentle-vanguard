@@ -10,21 +10,35 @@ param(
     [switch]$AllowCloseWithOtherActive,
     [int]$OrphanMaxAgeHours = 24,
     [switch]$SkipPreCloseValidation,
-    [switch]$NoExit
+    [switch]$NoExit,
+    [switch]$SkipEngramSafe
 )
 
 $ErrorActionPreference = 'Continue'
 
-$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) { $env:GENTLE_VANGUARD_BASE_DIR } else {
-    $root = Split-Path -Parent $PSScriptRoot
-    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
-    if (-not $root) { $root = $PSScriptRoot }
+# Calculate repoRoot first (needed for engram-safe import)
+$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) { 
+    $env:GENTLE_VANGUARD_BASE_DIR 
+} else {
+    $scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($MyInvocation.MyCommand.Path) { 
+        Split-Path -Parent $MyInvocation.MyCommand.Path 
+    } else { 
+        Get-Location 
+    }
+    $root = Split-Path -Parent $scriptRoot
+    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { 
+        $root = Split-Path -Parent $root 
+    }
+    if (-not $root) { $root = $scriptRoot }
     $root
 }
 
-$engramSafeScript = Join-Path $repoRoot 'scripts\utilities\engram-safe.ps1'
-if (Test-Path $engramSafeScript) {
-    . $engramSafeScript
+# Skip engram-safe import when running as autostart step to avoid Export-ModuleMember error
+if (-not $SkipEngramSafe) {
+    $engramSafeScript = Join-Path $repoRoot 'scripts\utilities\engram-safe.ps1'
+    if (Test-Path $engramSafeScript) {
+        . $engramSafeScript
+    }
 }
 
 function Write-Status {
@@ -127,12 +141,26 @@ function Save-ToEngram {
         [string]$Type = 'manual'
     )
 
-    if (-not (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue)) {
+    $engramPath = (Get-Command engram.exe -ErrorAction SilentlyContinue).Source
+    if (-not $engramPath) {
+        $engramPath = Join-Path $env:USERPROFILE 'bin\engram.exe'
+    }
+    if (-not (Test-Path $engramPath)) {
         Write-Info "Engram not available, skipping memory save (non-critical)"
         return $false
     }
 
-    $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('save', $Title, $Content, '--project', $ProjectName, '--type', $Type)
+    if (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue) {
+        $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('save', $Title, $Content, '--project', $ProjectName, '--type', $Type)
+    } else {
+        try {
+            $output = & $engramPath 'save' $Title $Content '--project' $ProjectName '--type' $Type 2>&1
+            $result = @{ Success = ($LASTEXITCODE -eq 0); Output = $output }
+        } catch {
+            $result = @{ Success = $false; Output = $_.Exception.Message }
+        }
+    }
+
     if ($result.Success) {
         Write-Info "Engram memory saved: $Title"
         return $true
@@ -142,12 +170,6 @@ function Save-ToEngram {
     return $false
 }
 
-$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) { $env:GENTLE_VANGUARD_BASE_DIR } else {
-    $root = Split-Path -Parent $PSScriptRoot
-    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
-    if (-not $root) { $root = $PSScriptRoot }
-    $root
-}
 $fullSessionDir = Join-Path $repoRoot $SessionDir.TrimStart('.\')
 
 if (-not (Test-Path $fullSessionDir)) {
@@ -187,7 +209,7 @@ function Clear-OrphanedSessions {
         if ($data.status -eq 'active') {
             $startTime = $null
             if ($data.startTime) {
-                try { $startTime = [DateTime]::Parse($data.startTime) } catch { Write-Warning "Bad startTime in $($file.Name)" }
+                try { $startTime = [DateTime]::Parse($data.startTime, [cultureinfo]::InvariantCulture) } catch { Write-Warning "Bad startTime in $($file.Name)" }
             }
 
             if ($null -eq $startTime) {
@@ -214,7 +236,7 @@ function Clear-OrphanedSessions {
         } elseif ($data.status -in @('orphaned', 'ended')) {
             $endTime = $null
             if ($data.endTime -or $data.orphanedAt) {
-                try { $endTime = [DateTime]::Parse(($data.endTime ?? $data.orphanedAt)) } catch { Write-Warning "Bad endTime in $($file.Name)" }
+                try { $endTime = [DateTime]::Parse(($data.endTime ?? $data.orphanedAt), [cultureinfo]::InvariantCulture) } catch { Write-Warning "Bad endTime in $($file.Name)" }
             }
             if ($null -eq $endTime) {
                 $endTime = $file.LastWriteTime
@@ -243,8 +265,8 @@ function Initialize-Session {
     Clear-OrphanedSessions -MaxAgeHours $OrphanMaxAgeHours | Out-Null
 
     $date = Get-Date -Format "yyyy-MM-dd"
-    $sessionNumber = (Get-ChildItem -Path $fullSessionDir -Filter "session-$date-*.json" -ErrorAction SilentlyContinue | Measure-Object).Count + 1
-    $sessionId = "session-$date-$($sessionNumber.ToString('D2'))"
+    $time = Get-Date -Format "HHmm"
+    $sessionId = "session-${date}_${time}"
 
     $sessionFile = Join-Path $fullSessionDir "$sessionId.json"
 
@@ -502,6 +524,13 @@ function End-Session {
     }
 
     Write-Status "Session ended: $($sessionData.sessionId)"
+
+    # Show token usage summary before closing
+    $tokenNotifier = Join-Path $repoRoot 'scripts\utilities\token-usage-notifier.ps1'
+    if (Test-Path $tokenNotifier) {
+        Write-Status "Generating token usage summary..."
+        & $tokenNotifier -Action summary
+    }
 
     $notifyScript = Join-Path $repoRoot 'scripts\utilities\notify-user.ps1'
     if (Test-Path $notifyScript) {

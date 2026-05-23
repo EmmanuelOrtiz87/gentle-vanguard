@@ -153,6 +153,45 @@ flowchart LR
 
 ---
 
+### Session Context Logging
+
+Every agent response is tracked for token consumption, context size, and cost estimation:
+
+```mermaid
+flowchart LR
+    AGT[Agent Response] -->|post-response hook| TUA[token-usage-auto.ps1]
+    TUA --> TUN[token-usage-notifier.ps1\nDisplay tokens]
+    TUA --> SCL[session-context-log.ps1\nLog context]
+    SCL --> TEMP[.session/context-log/&lt;sid&gt;/\nTemp .md files per turn]
+    SCL -->|-PromoteToPermanent| PERM[.local/session-artifacts/\nPermanent local storage]
+```
+
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| `session-context-log.ps1` | `scripts/utilities/` | **Permanent** — Init, log, close, status, reinit |
+| `token-usage-auto.ps1` | `scripts/utilities/` | **Permanent** — Integrates notifier + context logger |
+| `context-summary.md` | `.session/context-log/<sid>/` | **Temp** — Full session log (gitignored) |
+| `turn-NNN.md` | `.session/context-log/<sid>/` | **Temp** — Per-turn detail (gitignored) |
+| `context-log-<sid>/` | `.local/session-artifacts/` | **Permanent local** — Promoted with `-PromoteToPermanent` |
+
+**Usage** (called automatically by the agent after every response):
+```powershell
+pwsh -NoProfile -File scripts/utilities/token-usage-auto.ps1 `
+  -InputTokens <N> -OutputTokens <N> -ContextChars <N> `
+  -InputSummary "<user intent>" -OutputSummary "<response>" `
+  -TurnLabel "<task>"
+```
+
+At session close:
+```powershell
+pwsh -NoProfile -File scripts/utilities/session-context-log.ps1 -Action close
+# Or with permanent promotion:
+pwsh -NoProfile -File scripts/utilities/session-context-log.ps1 -Action close -PromoteToPermanent
+```
+
+Config references: `docs/AGENTS.md#post-response-context-logging-rule`, `CLAUDE.md` rules #14-#15.
+
+---
 ## Key Capabilities
 
 ### SDD / OpenSpec Lifecycle
@@ -307,6 +346,7 @@ gv health
 | Skills        | ✅ PASS | 135 skills indexed, registry current                                    |
 | Tests         | ✅ PASS | Full test suite passing                                                 |
 | Hooks         | ✅ PASS | Pre-commit hooks active (README, secrets, lint)                         |
+| Context Log   | ✅ PASS | Session context logging active — tokens, cost, input/output per turn    |
 | Structure     | ✅ PASS | All mandatory files present                                             |
 | Engram        | ✅ PASS | Memory store accessible, sessions tracking                              |
 | SDD           | ✅ PASS | OpenSpec config valid, preflight operational                            |
@@ -318,6 +358,7 @@ gv health
 | Resource                  | Path                                                       |
 | ------------------------- | ---------------------------------------------------------- |
 | **Agent Bootstrap**       | [docs/AGENTS.md](docs/AGENTS.md)                           |
+| **Context Logging**       | [docs/AGENTS.md#post-response-context-logging-rule](docs/AGENTS.md) |
 | **Architecture Overview** | [docs/architecture/README.md](docs/architecture/README.md) |
 | **Delegation Rules**      | [rules/DELEGATION-RULES.md](rules/DELEGATION-RULES.md)     |
 | **Model Routing**         | [config/model-routing.json](config/model-routing.json)     |
