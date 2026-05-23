@@ -24,10 +24,19 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
-$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) { $env:GENTLE_VANGUARD_BASE_DIR } else {
-    $root = Split-Path -Parent $PSScriptRoot
-    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
-    if (-not $root) { $root = $PSScriptRoot }
+$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) {
+    $env:GENTLE_VANGUARD_BASE_DIR
+} else {
+    $scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($MyInvocation.MyCommand.Path) {
+        Split-Path -Parent $MyInvocation.MyCommand.Path
+    } else {
+        Get-Location
+    }
+    $root = Split-Path -Parent $scriptRoot
+    while ($root -and -not (Test-Path (Join-Path $root 'config'))) {
+        $root = Split-Path -Parent $root
+    }
+    if (-not $root) { $root = $scriptRoot }
     $root
 }
 
@@ -66,12 +75,24 @@ function Save-ToEngram {
         [string]$Type = 'learning'
     )
 
-    if (-not (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue)) {
+    $engramPath = (Get-Command engram.exe -ErrorAction SilentlyContinue).Source
+    if (-not $engramPath) { $engramPath = Join-Path $env:USERPROFILE 'bin\engram.exe' }
+    if (-not (Test-Path $engramPath)) {
         Write-Info "Engram not available, skipping knowledge-base save"
         return $false
     }
 
-    $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('save', $Title, $Content, '--project', $ProjectName, '--type', $Type)
+    if (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue) {
+        $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('save', $Title, $Content, '--project', $ProjectName, '--type', $Type)
+    } else {
+        try {
+            $output = & $engramPath 'save' $Title $Content '--project' $ProjectName '--type' $Type 2>&1
+            $result = @{ Success = ($LASTEXITCODE -eq 0); Output = $output }
+        } catch {
+            $result = @{ Success = $false; Output = $_.Exception.Message }
+        }
+    }
+
     if ($result.Success) {
         Write-Ok "Saved to Engram: $Title"
         return $true

@@ -9,10 +9,19 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
-$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) { $env:GENTLE_VANGUARD_BASE_DIR } else {
-    $root = Split-Path -Parent $PSScriptRoot
-    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
-    if (-not $root) { $root = $PSScriptRoot }
+$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) {
+    $env:GENTLE_VANGUARD_BASE_DIR
+} else {
+    $scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($MyInvocation.MyCommand.Path) {
+        Split-Path -Parent $MyInvocation.MyCommand.Path
+    } else {
+        Get-Location
+    }
+    $root = Split-Path -Parent $scriptRoot
+    while ($root -and -not (Test-Path (Join-Path $root 'config'))) {
+        $root = Split-Path -Parent $root
+    }
+    if (-not $root) { $root = $scriptRoot }
     $root
 }
 Set-Location $repoRoot
@@ -235,6 +244,9 @@ Write-Step "Checking Engram (non-critical)"
 try {
     if (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue) {
         $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('doctor', '--project', $ProjectName)
+    } elseif ($engramPath = (Get-Command engram.exe -ErrorAction SilentlyContinue).Source) {
+        $output = & $engramPath 'doctor' '--project' $ProjectName 2>&1
+        $result = @{ Success = ($LASTEXITCODE -eq 0); Output = $output }
         if ($result.Success) {
             Write-Ok "Engram is responsive"
         } else {

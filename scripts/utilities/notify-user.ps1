@@ -42,10 +42,19 @@ param(
 
 $ErrorActionPreference = 'Continue'
 
-$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) { $env:GENTLE_VANGUARD_BASE_DIR } else {
-    $root = Split-Path -Parent $PSScriptRoot
-    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
-    if (-not $root) { $root = $PSScriptRoot }
+$repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) {
+    $env:GENTLE_VANGUARD_BASE_DIR
+} else {
+    $scriptRoot = if ($PSScriptRoot) { $PSScriptRoot } elseif ($MyInvocation.MyCommand.Path) {
+        Split-Path -Parent $MyInvocation.MyCommand.Path
+    } else {
+        Get-Location
+    }
+    $root = Split-Path -Parent $scriptRoot
+    while ($root -and -not (Test-Path (Join-Path $root 'config'))) {
+        $root = Split-Path -Parent $root
+    }
+    if (-not $root) { $root = $scriptRoot }
     $root
 }
 
@@ -78,9 +87,9 @@ $icons = @{
 function Save-ToEngram {
     param([string]$Action, [string]$Reason, [string]$Details)
 
-    if (-not (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue)) {
-        return $false
-    }
+    $engramPath = (Get-Command engram.exe -ErrorAction SilentlyContinue).Source
+    if (-not $engramPath) { $engramPath = Join-Path $env:USERPROFILE 'bin\engram.exe' }
+    if (-not (Test-Path $engramPath)) { return $false }
     
     $content = @"
 ## Automatic Action: $Action
@@ -92,7 +101,12 @@ This action was performed automatically to optimize token usage and maintain sys
 "@
     
     try {
-        $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('save', "Auto-Action: $Action", $content, '--project', $ProjectName, '--type', 'manual')
+        if (Get-Command Invoke-Gentle-VanguardEngram -ErrorAction SilentlyContinue) {
+            $result = Invoke-Gentle-VanguardEngram -RepoRoot $repoRoot -Arguments @('save', "Auto-Action: $Action", $content, '--project', $ProjectName, '--type', 'manual')
+        } else {
+            & $engramPath 'save' "Auto-Action: $Action" $content '--project' $ProjectName '--type' 'manual' 2>&1
+            $result = @{ Success = ($LASTEXITCODE -eq 0) }
+        }
         return $result.Success
     } catch {
         return $false
