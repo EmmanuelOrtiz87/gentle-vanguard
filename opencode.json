@@ -396,6 +396,12 @@
       "type": "local",
       "command": ["codegraph", "serve", "--mcp"],
       "enabled": true
+    },
+    "engram": {
+      "type": "stdio",
+      "command": "engram",
+      "args": ["mcp", "--tools=agent"],
+      "enabled": true
     }
   },
   "default_agent": "orchestrator",
