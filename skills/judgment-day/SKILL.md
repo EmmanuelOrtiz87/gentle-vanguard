@@ -77,47 +77,7 @@ After 2 fix iterations still issues?
    Theoretical warnings and suggestions may remain.
 5. **Fix cycle** — Present verdict to user. ASK before fixing. On confirmation: delegate Fix Agent
    with confirmed issues list. After fix: re-launch both judges in parallel.
-6. **Iteration limit** — After 2 fix rounds, ASK user whether to continue or escalate.
-7. **Self-check** — Before any terminal action: verify every active JD reached APPROVED or
-   ESCALATED. If any fix was applied, verify re-judgment ran.
-8. **Skill Resolution feedback** — After each delegation returns, check `**Skill Resolution**`
-   field. If not `injected`, re-read registry immediately and inject compact rules in subsequent
-   delegations.
 
-## Output Contract
+---
 
-Return structured verdict per round:
-
-```
-## Judgment Day — {target}
-
-### Round {N} — Verdict
-| Finding | Judge A | Judge B | Severity | CONFIDENCE | Status |
-|---------|---------|---------|----------|------------|--------|
-| {issue} | ✓ HIGH | ✓ HIGH | CRITICAL | HIGH/HIGH | Confirmed |
-
-**Confirmed issues**: {N} CRITICAL, {N} WARNING
-**Suspect issues**: {N} (one judge only)
-**Contradictions**: {N}
-
-### Minority Positions
-- {lone findings preserved for manual review — NOT auto-fixed}
-
-### Fixes Applied (Round {N})
-- `{file}:{line}` — {fix description}
-
-### Re-judgment (Round {N+1})
-- Judge A: PASS / FAIL
-- Judge B: PASS / FAIL
-**Anti-Sycophancy Check**: {verdict changes with/without evidence}
-
-### JUDGMENT: APPROVED / ESCALATED
-```
-
-Full examples in `references/output-examples.md`.
-
-## References
-
-- `references/judge-prompt-template.md` — full adversarial judge prompt with review criteria
-- `references/fix-agent-prompt-template.md` — full surgical fix agent prompt with scope rule
-- `references/output-examples.md` — output format examples (APPROVED and ESCALATED)
+> **Referencia detallada**: [eferences/detail.md](references/detail.md)
