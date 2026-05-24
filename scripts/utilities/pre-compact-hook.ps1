@@ -21,7 +21,7 @@ param(
     [string]$ProjectName = "gentle-vanguard",
     
     [Parameter(Mandatory=$false)]
-    [double]$CompressionRatio = 0.90
+    [double]$CompressionRatio = 0.60
 )
 
 $ErrorActionPreference = 'Continue'
