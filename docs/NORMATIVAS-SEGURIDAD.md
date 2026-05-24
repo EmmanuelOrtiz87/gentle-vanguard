@@ -1,6 +1,13 @@
 # NORMATIVAS-SEGURIDAD.md
 
-Version: 1.0.0 Framework: OWASP LLM Top 10 2025 + OWASP Agentic Top 10 2026
+Version: 1.1.0 — 2026-05-23
+Framework: OWASP LLM Top 10 2025 + OWASP Agentic Top 10 2026
+
+> Cambios v1.0.0 → v1.1.0:
+> - Se actualizaron implementaciones de control 2.3 (PII redaction): `security-logger.ps1` v1.1
+> - Se actualizó control 2.6 (secrets management): `secrets-manager.ps1` v2.0 con DPAPI vault
+> - Se corrigió `input-validator.ps1` (syntax error Validate-Integer)
+> - Se agregaron tests Pester en `tests/security/` para cobertura de controles
 
 ---
 

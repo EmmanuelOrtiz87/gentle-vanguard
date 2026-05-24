@@ -64,13 +64,16 @@ function Validate-Integer {
     
     if ($Value -match '^\d+$') {
         $intValue = [int]$Value
-    if ($intValue -lt 0 -or $intValue -gt 10000) {
-        Write-Log "Integer out of valid range (0-10000)" "error"
-        return $false
+        if ($intValue -lt 0 -or $intValue -gt 10000) {
+            Write-Log "Integer out of valid range (0-10000)" "error"
+            return $false
+        }
+        Write-Log "Integer validation passed" "info"
+        return $true
     }
     
-    Write-Log "Integer validation passed" "info"
-    return $true
+    Write-Log "Input is not a valid integer" "error"
+    return $false
 }
 
 function Validate-Path {
