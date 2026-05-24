@@ -408,7 +408,12 @@
   "share": "manual",
   "compaction": {
     "auto": true,
-    "prune": true
+    "prune": true,
+    "threshold": 8000,
+    "strategy": "sliding-window",
+    "maxTurns": 10,
+    "pruneToolResults": true,
+    "summarize": true
   },
   "watcher": {
     "ignore": [
