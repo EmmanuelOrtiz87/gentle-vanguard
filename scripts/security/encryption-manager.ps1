@@ -27,6 +27,7 @@ param(
     [string]$LogLevel = 'info'
 )
 
+$ErrorActionPreference = 'Stop'
 $EncryptionVersion = "1.0.0"
 $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 $keysDir = ".\keys"
@@ -49,14 +50,18 @@ function Initialize-KeyDirectory {
 function Generate-EncryptionKey {
     Write-Log "Generating AES-256 encryption key..." "info"
     
+    if (Test-Path $KeyPath) {
+        Write-Log "Key already exists at $KeyPath, using existing key" "warn"
+        $keyBase64 = Get-Content -Path $KeyPath -Raw
+        return [Convert]::FromBase64String($keyBase64.Trim())
+    }
+    
     Initialize-KeyDirectory
     
-    $key = New-Object byte[] 32
-    $rng = [System.Security.Cryptography.RNGCryptoServiceProvider]::new()
-    $rng.GetBytes($key)
+    $key = [System.Security.Cryptography.RandomNumberGenerator]::GetBytes(32)
     
     $keyBase64 = [Convert]::ToBase64String($key)
-    Set-Content -Path $KeyPath -Value $keyBase64 -Force
+    Set-Content -Path $KeyPath -Value $keyBase64
     
     Write-Log "Encryption key generated: $KeyPath" "info"
     return $key
@@ -161,19 +166,56 @@ function Validate-Encryption {
     $validation = @{
         keyExists = Test-Path $KeyPath
         keyValid = $false
-{
-  "prompt_tokens": 88670,
-  "prompt_unit_price": "0",
-  "prompt_price_unit": "0",
-  "prompt_price": "0",
-  "completion_tokens": 8096,
-  "completion_unit_price": "0",
-  "completion_price_unit": "0",
-  "completion_price": "0",
-  "total_tokens": 96766,
-  "total_price": "0",
-  "currency": "USD",
-  "latency": 43.834,
-  "time_to_first_token": 3.578,
-  "time_to_generate": 40.256
+    }
+
+    if ($validation.keyExists) {
+        try {
+            $key = Get-EncryptionKey
+            $validation.keyValid = ($key.Length -eq 32)
+        }
+        catch {
+            $validation.keyValid = $false
+        }
+    }
+
+    Write-Log "Key exists: $($validation.keyExists), key valid: $($validation.keyValid)" "info"
+    return $validation
+}
+
+# =============================================================================
+# MAIN EXECUTION
+# =============================================================================
+
+try {
+    switch ($Action) {
+        'generate-key' {
+            $key = Generate-EncryptionKey
+            Write-Output $key
+            exit 0
+        }
+        'encrypt' {
+            if (-not $Data) { throw "Data parameter required for encrypt" }
+            $result = Encrypt-Data -PlainText $Data
+            Write-Output $result
+            exit 0
+        }
+        'decrypt' {
+            if (-not $Data) { throw "Data parameter required for decrypt" }
+            $result = Decrypt-Data -EncryptedJson $Data
+            Write-Output $result
+            exit 0
+        }
+        'validate' {
+            $result = Validate-Encryption
+            exit 0
+        }
+        default {
+            Write-Log "Unknown action: $Action" "error"
+            exit 1
+        }
+    }
+}
+catch {
+    Write-Log "Operation failed: $_" "error"
+    exit 1
 }

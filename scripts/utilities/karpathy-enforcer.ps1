@@ -1,5 +1,10 @@
 # karpathy-enforcer.ps1
 # Canonical entry point — delegates to the real implementation in scripts/adaptive/karpathy-enforcer.ps1
+#
+# Karpathy Coding Guidelines enforced by this script:
+# - Think: Always think step by step before acting. Break down complex problems.
+# - Simplicity: Prefer simple solutions. Avoid premature abstraction.
+# - Goal-Driven: Every action must serve a clear goal. Define success criteria first.
 
 param(
     [ValidateSet('session-start', 'pre-commit', 'code-review', 'task-complete')]

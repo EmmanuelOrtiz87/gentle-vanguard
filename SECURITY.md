@@ -67,6 +67,11 @@ This project implements the following security controls:
 | 2026-05-23 | `input-validator.ps1`  | Fixed Validate-Integer syntax error (missing outer closing brace)    |
 | 2026-05-23 | `keys/master.key`      | Removed from git tracking; added to `.gitignore`                     |
 | 2026-05-23 | `tests/security/`      | Added 5 new test suites (logger, vault, orchestrator, sanitizer, input) |
+| 2026-05-24 | `encryption-manager.ps1` | Added `switch ($Action)` dispatch block for CLI execution            |
+| 2026-05-24 | `encryption-manager.ps1` | Fixed `Generate-EncryptionKey` .NET overload: `GetBytes($key)` → `GetBytes(32)` |
+| 2026-05-24 | `encryption-manager.ps1` | Added idempotency guard: `generate-key` no longer overwrites existing key |
+| 2026-05-24 | `privacy-sanitizer.ps1` | Fixed `$BLOCKED_PATTERNS.envVars` quoting: double→single quotes to prevent PS variable expansion |
+| 2026-05-24 | `secret-vault.ps1` | Fixed `Save-SecretMeta` `[hashtable]` type constraint causing rotate/breach-response to crash on `PSCustomObject` input |
 
 ## Compliance Frameworks
 

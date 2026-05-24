@@ -29,7 +29,8 @@ function Write-Header {
 
 function New-ApiKey {
     $timestamp = Get-Date -Format "yyyyMMddHHmmss"
-    $random = -join ((65..90) + (97..122) + (48..57) | Get-Random -Count 20 | ForEach-Object {[char]$_})
+    $bytes = [System.Security.Cryptography.RandomNumberGenerator]::GetBytes(24)
+    $random = -join ($bytes | ForEach-Object { '{0:x2}' -f $_ })
     return "fnd_$timestamp`_$random"
 }
 
@@ -90,16 +91,7 @@ function Initialize-DeveloperAuth {
 # MAIN
 Write-Header
 
-# Check environment
-$isLocal = $env:COMPUTERNAME -eq "DESKTOP-EMMAN"  # Tu PC
-
-if ($isLocal) {
-    Write-Host "[LOCAL] Development environment detected" -ForegroundColor Green
-    Write-Host "[INFO] Skipping API key requirement" -ForegroundColor Yellow
-} else {
-    Write-Host "[REPO] External environment detected" -ForegroundColor Cyan
-    Write-Host "[INFO] Security will be enforced" -ForegroundColor Yellow
-}
+Write-Host "[REPO] Environment detected" -ForegroundColor Cyan
 
 $result = Initialize-DeveloperAuth -Force:$Force
 

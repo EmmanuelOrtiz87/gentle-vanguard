@@ -1,0 +1,31 @@
+{
+  "enabled": true,
+  "version": "1.0.0",
+  "platforms": {
+    "telegram": {
+      "enabled": false,
+      "token": "",
+      "webhookUrl": ""
+    },
+    "discord": {
+      "enabled": false,
+      "token": "",
+      "clientId": ""
+    },
+    "whatsapp": {
+      "enabled": false,
+      "sessionPath": ".session/gateway/whatsapp"
+    }
+  },
+  "agent": {
+    "enabled": true,
+    "model": "default",
+    "maxConcurrency": 3,
+    "timeoutSeconds": 30
+  },
+  "ai": {
+    "provider": "default",
+    "temperature": 0.3,
+    "maxTokens": 2048
+  }
+}
