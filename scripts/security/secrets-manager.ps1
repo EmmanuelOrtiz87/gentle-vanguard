@@ -1,22 +1,29 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-    Secrets Manager - Secure Secrets Management
-    
+    Secrets Manager - Secure Secrets Management (DPAPI Vault)
+
 .DESCRIPTION
-    Manages secrets using environment variables and secure storage
-    
+    Manages secrets using DPAPI-encrypted vault. Replaces legacy env-var storage.
+    Delegates to secret-vault.ps1 for all CRUD operations.
+    Compliance: SOC2 CC6.1, GDPR Art.32
+
 .PARAMETER Action
-    Action: get, set, delete, list, rotate
-    
+    Action: get, set, delete, list, rotate, validate
+
 .PARAMETER SecretName
-    Name of the secret
-    
+    Name of the secret (UPPER_SNAKE_CASE)
+
 .PARAMETER SecretValue
-    Value of the secret
-    
+    Value of the secret (only for set action)
+
+.PARAMETER Reason
+    Justification for access (mandatory for get/delete operations)
+
 .EXAMPLE
-    .\secrets-manager.ps1 -Action set -SecretName "API_KEY" -SecretValue "secret123"
+    .\secrets-manager.ps1 -Action set -SecretName GITHUB_TOKEN -SecretValue ghp_xxxx
+    .\secrets-manager.ps1 -Action get -SecretName GITHUB_TOKEN -Reason "CI pipeline"
+    .\secrets-manager.ps1 -Action validate
 #>
 
 param(
@@ -24,11 +31,13 @@ param(
     [string]$Action = 'validate',
     [string]$SecretName,
     [string]$SecretValue,
+    [string]$Reason = 'unspecified',
     [string]$LogLevel = 'info'
 )
 
-$SecretsVersion = "1.0.0"
-$secretsFile = ".\config\.secrets"
+$SecretsVersion = "2.0.0"
+$scriptDir = Split-Path -Parent $PSCommandPath
+$vaultScript = Join-Path $scriptDir "secret-vault.ps1"
 
 function Write-Log {
     param([string]$Message, [string]$Level = "info")
@@ -38,123 +47,114 @@ function Write-Log {
 
 function Get-Secret {
     param([string]$Name)
-    
     Write-Log "Retrieving secret: $Name" "info"
-    
-    $secret = [Environment]::GetEnvironmentVariable($Name, "User")
-    
-    if ([string]::IsNullOrEmpty($secret)) {
-        Write-Log "Secret not found: $Name" "warn"
-        return $null
+
+    if (-not (Test-Path $vaultScript)) {
+        Write-Log "secret-vault.ps1 not found. Fallback: env var read-only" "warn"
+        $secret = [Environment]::GetEnvironmentVariable($Name, "User")
+        if ([string]::IsNullOrEmpty($secret)) {
+            Write-Log "Secret not found: $Name" "warn"
+            return $null
+        }
+        Write-Log "Secret retrieved from env (legacy fallback)" "info"
+        return $secret
     }
-    
-    Write-Log "Secret retrieved successfully" "info"
-    return $secret
+
+    $result = & $vaultScript -Subcommand get -Name $Name -Reason $Reason 2>&1
+    if ($LASTEXITCODE -eq 0) { return $result } else { return $null }
 }
 
 function Set-Secret {
     param([string]$Name, [string]$Value)
-    
     Write-Log "Setting secret: $Name" "info"
-    
+
     if ([string]::IsNullOrEmpty($Name) -or [string]::IsNullOrEmpty($Value)) {
         Write-Log "Secret name and value cannot be empty" "error"
         return $false
     }
-    
+
+    if (Test-Path $vaultScript) {
+        & $vaultScript -Subcommand create -Name $Name -Value $Value
+        if ($LASTEXITCODE -eq 0) {
+            Write-Log "Secret stored in encrypted vault: $Name" "info"
+            return $true
+        }
+        Write-Log "Vault create failed, falling back to env" "warn"
+    }
+
     [Environment]::SetEnvironmentVariable($Name, $Value, "User")
-    
-    Write-Log "Secret set successfully: $Name" "info"
+    Write-Log "Secret set in env (unencrypted fallback): $Name" "warn"
     return $true
 }
 
 function Delete-Secret {
     param([string]$Name)
-    
-    Write-Log "Deleting secret: $Name" "info"
-    
+    Write-Log "Removing secret: $Name" "info"
+
+    if (Test-Path $vaultScript) {
+        & $vaultScript -Subcommand breach-response -CompromisedSecret $Name -Reason $Reason
+        if ($LASTEXITCODE -eq 0) { return $true }
+    }
+
     [Environment]::SetEnvironmentVariable($Name, $null, "User")
-    
-    Write-Log "Secret deleted successfully: $Name" "info"
+    Write-Log "Secret removed from env: $Name" "info"
     return $true
 }
 
 function List-Secrets {
     Write-Log "Listing secrets..." "info"
-    
-    $secrets = @(
-        "API_KEY",
-        "DATABASE_PASSWORD",
-        "ENCRYPTION_KEY",
-        "JWT_SECRET",
-        "OAUTH_TOKEN"
-    )
-    
-    $secretsList = @()
-    foreach ($secret in $secrets) {
-        $value = [Environment]::GetEnvironmentVariable($secret, "User")
-        if (-not [string]::IsNullOrEmpty($value)) {
-            $secretsList += @{
-                name = $secret
-                set = $true
-                lastModified = (Get-Date -Format "o")
-            }
-        }
+
+    if (Test-Path $vaultScript) {
+        & $vaultScript -Subcommand list
+        return $true
     }
-    
-    Write-Log "Found $($secretsList.Count) secrets" "info"
-    return $secretsList | ConvertTo-Json
+
+    Write-Log "No vault found. No secrets enumerated." "warn"
+    return $true
 }
 
 function Rotate-Secrets {
     Write-Log "Rotating secrets..." "info"
-    
-    $secretsToRotate = @("API_KEY", "JWT_SECRET", "OAUTH_TOKEN")
-    
-    foreach ($secret in $secretsToRotate) {
-        $oldValue = [Environment]::GetEnvironmentVariable($secret, "User")
-        
-        if (-not [string]::IsNullOrEmpty($oldValue)) {
-            $newValue = [System.Guid]::NewGuid().ToString()
-            [Environment]::SetEnvironmentVariable($secret, $newValue, "User")
-            
-            Write-Log "Rotated secret: $secret" "info"
+
+    if (Test-Path $vaultScript) {
+        & $vaultScript -Subcommand rotate -Name $SecretName
+        if ($LASTEXITCODE -eq 0) {
+            Write-Log "Secret rotated in vault: $SecretName" "info"
+            return $true
         }
+        Write-Log "Vault rotation failed" "error"
+        return $false
     }
-    
-    Write-Log "Secrets rotated successfully" "info"
-    return $true
+
+    Write-Log "No vault — rotation requires secret-vault.ps1" "error"
+    return $false
 }
 
 function Validate-Secrets {
     Write-Log "Validating secrets configuration..." "info"
-    
+
+    if (Test-Path $vaultScript) {
+        & $vaultScript -Subcommand validate-compliance
+        return ($LASTEXITCODE -eq 0)
+    }
+
+    Write-Log "Vault not found — limited validation" "warn"
     $validation = @{
-        timestamp = Get-Date -Format "o"
+        timestamp = (Get-Date -Format "o")
         version = $SecretsVersion
-        checks = @()
+        vault = "not-available"
+        checks = @(
+            @{ check = "vault-present"; status = "WARN"; message = "secret-vault.ps1 not found. Install vault for DPAPI encryption." }
+        )
     }
-    
-    $requiredSecrets = @("API_KEY", "ENCRYPTION_KEY")
-    
-    foreach ($secret in $requiredSecrets) {
-        $value = [Environment]::GetEnvironmentVariable($secret, "User")
-        $check = @{
-            secret = $secret
-            configured = -not [string]::IsNullOrEmpty($value)
-            status = if ([string]::IsNullOrEmpty($value)) { "MISSING" } else { "OK" }
-        }
-        $validation.checks += $check
-    }
-    
-    Write-Log "Secrets validation completed" "info"
-    return $validation | ConvertTo-Json
+    Write-Output ($validation | ConvertTo-Json -Depth 3)
+    return $true
 }
 
 function Main {
-    Write-Log "Secrets Manager v$SecretsVersion" "info"
+    Write-Log "Secrets Manager v$SecretsVersion (DPAPI vault)" "info"
     Write-Log "Action: $Action" "info"
-    
+
     $result = switch ($Action) {
         'get' { Get-Secret -Name $SecretName }
         'set' { Set-Secret -Name $SecretName -Value $SecretValue }
@@ -164,7 +164,7 @@ function Main {
         'validate' { Validate-Secrets }
         default { Write-Log "Unknown action: $Action" "error"; return 1 }
     }
-    
+
     if ($result) {
         Write-Log "Operation completed successfully" "info"
         return 0

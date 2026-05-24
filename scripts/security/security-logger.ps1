@@ -28,9 +28,37 @@ param(
     [string]$LogLevel = 'info'
 )
 
-$LoggerVersion = "1.0.0"
+$LoggerVersion = "1.1.0"
+$scriptDir = Split-Path -Parent $PSCommandPath
+$repoRoot = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 $logsDir = ".\logs\security"
 $auditFile = "$logsDir\audit-trail.log"
+
+# PII patterns for automatic redaction (SOC2 CC6.1, GDPR Art.32)
+$PII_PATTERNS = @(
+    @{ Pattern = [System.Environment]::MachineName; Replacement = '<MACHINE>' }
+    @{ Pattern = $env:COMPUTERNAME; Replacement = '<MACHINE>' }
+    @{ Pattern = [System.Environment]::UserName; Replacement = '<USER>' }
+    @{ Pattern = $env:USERNAME; Replacement = '<USER>' }
+    @{ Pattern = [System.Environment]::GetFolderPath('UserProfile'); Replacement = '<HOME>' }
+    @{ Pattern = $env:USERPROFILE; Replacement = '<HOME>' }
+    @{ Pattern = $env:APPDATA; Replacement = '<HOME>' }
+)
+
+function Invoke-SanitizePII {
+    param([string]$Text)
+    if ([string]::IsNullOrWhiteSpace($Text)) { return $Text }
+    $result = $Text
+    foreach ($p in $PII_PATTERNS) {
+        if (-not [string]::IsNullOrWhiteSpace($p.Pattern)) {
+            $result = $result -replace [regex]::Escape($p.Pattern), $p.Replacement
+        }
+    }
+    $result = $result -replace 'C:\\Users\\[^\\]+', '<HOME>'
+    $result = $result -replace '/home/[^/]+', '<HOME>'
+    $result = $result -replace '\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b', '<IP>'
+    return $result
+}
 
 function Write-Log {
     param([string]$Message, [string]$Level = "info")
@@ -61,10 +89,10 @@ function Log-SecurityEvent {
     $event = @{
         timestamp = Get-Date -Format "o"
         type = $Type
-        message = $Message
+        message = Invoke-SanitizePII -Text $Message
         severity = $Severity
-        user = [Environment]::UserName
-        computer = [Environment]::MachineName
+        user = '<USER>'
+        computer = '<MACHINE>'
         processId = $PID
     }
     
@@ -108,6 +136,12 @@ function Get-AuditTrail {
     }
     
     Write-Log "Retrieved $($events.Count) events" "info"
+    # Sanitize PII before returning events to caller
+    foreach ($e in $events) {
+        if ($e.message) { $e.message = Invoke-SanitizePII -Text $e.message }
+        $e.user = '<USER>'
+        $e.computer = '<MACHINE>'
+    }
     return $events
 }
 
