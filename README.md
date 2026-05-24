@@ -365,6 +365,7 @@ gv health
 | Hooks         | ✅ PASS | Pre-commit hooks active (README, secrets, lint)                         |
 | Context Log   | ✅ PASS | Session context logging active — tokens, cost, input/output per turn    |
 | Context Opt   | ✅ PASS | SHA256 cache, input guard, output guard, 73% avg file compression       |
+| Security      | ✅ PASS | 98 tests pass, injection/jailbreak detection active, AES-256 secrets    |
 | Structure     | ✅ PASS | All mandatory files present                                             |
 | Engram        | ✅ PASS | Memory store accessible, sessions tracking                              |
 | SDD           | ✅ PASS | OpenSpec config valid, preflight operational                            |
@@ -384,6 +385,7 @@ gv health
 | **Skill Registry**        | [.atl/skill-registry.md](.atl/skill-registry.md)           |
 | **README Governance**     | [rules/README-GOVERNANCE.md](rules/README-GOVERNANCE.md)   |
 | **Quick Commands**        | [docs/QUICK-COMMANDS.md](docs/QUICK-COMMANDS.md)           |
+| **Security Normative**     | [docs/NORMATIVAS-SEGURIDAD.md](docs/NORMATIVAS-SEGURIDAD.md)         |
 | **Architecture Normative** | [rules/NORMATIVAS-ARCHITECTURE.md](rules/NORMATIVAS-ARCHITECTURE.md) |
 | **Config Normative**       | [rules/NORMATIVAS-CONFIG.md](rules/NORMATIVAS-CONFIG.md)   |
 | **DevOps Normative**       | [rules/NORMATIVAS-DEVOPS.md](rules/NORMATIVAS-DEVOPS.md)   |
@@ -398,7 +400,18 @@ gv health
 
 ## Security
 
-AES-256 encryption for secrets, API keys, and sensitive configs. See [SECURITY.md](SECURITY.md).
+| Layer | Protection | Implementation |
+|-------|-----------|----------------|
+| **Prompt Injection** | 10 detection patterns (instruction-override, jailbreak, leakage, code-exec, role-takeover, encoding-obfuscation, constraint-bypass) | `privacy-gateway.ps1` — blocks CRITICAL before agent processes input |
+| **Jailbreak Prevention** | DAN, unrestricted-mode, developer-mode, simulation attacks | `security-orchestrator.ps1` — expanded `$CRITICAL_PATTERNS` |
+| **Data Leakage** | PII redaction, IP masking, home path sanitization | `privacy-sanitizer.ps1` + `security-logger.ps1` |
+| **Secrets Management** | AES-256 encryption, DPAPI vault, RBAC, automated rotation | `secrets-manager.ps1` v2.0 + `secret-vault.ps1` |
+| **Supply Chain** | SBOM CycloneDX generation, npm hardening (ignore-scripts, min-release-age), Trivy scanning | `.npmrc` + `sbom-validate.ps1` + CI/CD |
+| **Auth & Access** | Rate-limited auth with lockout, session-based, DPAPI-encrypted | `secure-auth.ps1` + `security-orchestrator.ps1` |
+
+**98 security tests** — injection detection, PII redaction, secrets vault, SBOM validation, encryption.
+
+See [SECURITY.md](SECURITY.md), [docs/NORMATIVAS-SEGURIDAD.md](docs/NORMATIVAS-SEGURIDAD.md) (OWASP LLM Top 10 + OWASP Agentic Top 10).
 
 ---
 

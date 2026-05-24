@@ -23,7 +23,7 @@ Run `docs/AGENTS.md#Mandatory-Startup-Sequence` — no shortcuts.
 ## Core Rules (condensed)
 
 1. **LOCAL-FIRST**: project knowledge before external sources
-2. **pre-process-input.ps1** BEFORE every response
+2. **pre-process-input.ps1** BEFORE every response (`-UserInput` param, not `-Prompt`)
 3. **SDD FLOW RULE**: new features -> BA/EXPLORE first, no exceptions
 4. **Delegation Rules** -> `rules/DELEGATION-RULES.md` mandatory for multi-step
 5. **AUTONOMOUS LEARNING** -> `mem_save` after every significant task

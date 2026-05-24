@@ -1,6 +1,6 @@
 # Skill Registry
 
-**Auto-generated** | **Skills**: 133
+**Auto-generated** | **Skills**: 131
 
 **Delegator use only.** Sub-agents receive compact rules pre-digested in launch prompt.
 Orchestrator reads this registry to resolve skill->agent mappings and inject compact rules.
@@ -11,7 +11,7 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 |-------|--------|
 | BA - Analysis | 7 |
 | BUS-TELE - Telemetry | 1 |
-| CODEGRAPH | 1 |
+| CODEGRAPH | 2 |
 | DEV - Code | 35 |
 | DOC - Documentation | 10 |
 | FINANCE - Finance | 1 |
@@ -25,14 +25,14 @@ Orchestrator reads this registry to resolve skill->agent mappings and inject com
 | SAD - Design | 13 |
 | SALES - Sales | 2 |
 | SESSION - Session | 2 |
-| *(unassigned)* | 7 |
+ | CODEGRAPH | 2 |
 
 ## Skill-Agent Mapping
 
 | Agent | Skill | Trigger |
 |-------|-------|--------|
-| (unassigned) | codegraph-skill | "codegraph", "code graph", "symbol search", "call graph", "impact analysis", ... |
-| (unassigned) | usage-metrics | "usage metrics", "skill usage", "effectiveness", "failure pattern", "auto-nudge" |
+| CODEGRAPH | codegraph-skill | "codegraph", "code graph", "symbol search", "call graph", "impact analysis", ... |
+| GOV - Governance | usage-metrics | "usage metrics", "skill usage", "effectiveness", "failure pattern", "auto-nudge" |
 | BA - Analysis | backlog-management-skill | "backlog", "triage", "roadmap", "feature intake" |
 | BA - Analysis | business |  |
 | BA - Analysis | customer-success-manager | "customer success", "retention", "churn", "health score", "NPS", "customer he... |
@@ -903,12 +903,6 @@ Delegators copy matching blocks into sub-agent prompts under Project Standards (
 - MUST save session summary via mem_save after significant work
 - MUST coordinate with project-orchestrator for technical guidance
 - MUST run self-improving pipeline during session close (usage-tracker → skill-nudge → skill-auto-patch)
-
-### *(Unassigned Skills)*
-
-#### usage-metrics
-
-- No compact rules extracted
 
 ## Project Conventions
 

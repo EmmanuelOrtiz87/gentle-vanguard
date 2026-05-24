@@ -31,7 +31,7 @@ param(
     [string]$Action = 'validate',
     [string]$SecretName,
     [string]$SecretValue,
-    [string]$Reason = 'unspecified',
+    [string]$Reason,
     [string]$LogLevel = 'info'
 )
 
@@ -50,14 +50,7 @@ function Get-Secret {
     Write-Log "Retrieving secret: $Name" "info"
 
     if (-not (Test-Path $vaultScript)) {
-        Write-Log "secret-vault.ps1 not found. Fallback: env var read-only" "warn"
-        $secret = [Environment]::GetEnvironmentVariable($Name, "User")
-        if ([string]::IsNullOrEmpty($secret)) {
-            Write-Log "Secret not found: $Name" "warn"
-            return $null
-        }
-        Write-Log "Secret retrieved from env (legacy fallback)" "info"
-        return $secret
+        throw "secret-vault.ps1 not found. Install vault for DPAPI encryption (run setup-secure.ps1)."
     }
 
     $result = & $vaultScript -Subcommand get -Name $Name -Reason $Reason 2>&1
@@ -73,32 +66,31 @@ function Set-Secret {
         return $false
     }
 
-    if (Test-Path $vaultScript) {
-        & $vaultScript -Subcommand create -Name $Name -Value $Value
-        if ($LASTEXITCODE -eq 0) {
-            Write-Log "Secret stored in encrypted vault: $Name" "info"
-            return $true
-        }
-        Write-Log "Vault create failed, falling back to env" "warn"
+    if (-not (Test-Path $vaultScript)) {
+        throw "secret-vault.ps1 not found. Install vault for DPAPI encryption (run setup-secure.ps1)."
     }
 
-    [Environment]::SetEnvironmentVariable($Name, $Value, "User")
-    Write-Log "Secret set in env (unencrypted fallback): $Name" "warn"
-    return $true
+    & $vaultScript -Subcommand create -Name $Name -Value $Value
+    if ($LASTEXITCODE -eq 0) {
+        Write-Log "Secret stored in encrypted vault: $Name" "info"
+        return $true
+    }
+
+    throw "Failed to store secret in vault: $Name"
 }
 
 function Delete-Secret {
     param([string]$Name)
     Write-Log "Removing secret: $Name" "info"
 
-    if (Test-Path $vaultScript) {
-        & $vaultScript -Subcommand breach-response -CompromisedSecret $Name -Reason $Reason
-        if ($LASTEXITCODE -eq 0) { return $true }
+    if (-not (Test-Path $vaultScript)) {
+        throw "secret-vault.ps1 not found. Install vault for DPAPI encryption (run setup-secure.ps1)."
     }
 
-    [Environment]::SetEnvironmentVariable($Name, $null, "User")
-    Write-Log "Secret removed from env: $Name" "info"
-    return $true
+    & $vaultScript -Subcommand breach-response -CompromisedSecret $Name -Reason $Reason
+    if ($LASTEXITCODE -eq 0) { return $true }
+
+    throw "Failed to delete secret from vault: $Name"
 }
 
 function List-Secrets {
@@ -154,6 +146,11 @@ function Validate-Secrets {
 function Main {
     Write-Log "Secrets Manager v$SecretsVersion (DPAPI vault)" "info"
     Write-Log "Action: $Action" "info"
+
+    if (($Action -in @('get', 'delete')) -and [string]::IsNullOrEmpty($Reason)) {
+        Write-Log "Reason is mandatory for $Action operation. Pass -Reason '<justification>'." "error"
+        return 1
+    }
 
     $result = switch ($Action) {
         'get' { Get-Secret -Name $SecretName }

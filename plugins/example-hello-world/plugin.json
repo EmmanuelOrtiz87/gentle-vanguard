@@ -1,0 +1,9 @@
+{
+  "name": "example-hello-world",
+  "version": "1.0.0",
+  "author": "Gentle-Vanguard",
+  "description": "Example plugin that demonstrates the plugin architecture contract",
+  "main": "hello-world.ps1",
+  "dependencies": {},
+  "license": "MIT"
+}

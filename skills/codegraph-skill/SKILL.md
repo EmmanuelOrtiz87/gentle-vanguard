@@ -117,6 +117,25 @@ Spring, Gin, Axum, ASP.NET, Vapor, React Router, SvelteKit.
 5. **Re-index on branch switch**: If you switch branches with significant changes, run
    `codegraph index` to rebuild
 
+## Auto-Sync via Git Hooks
+
+CodeGraph index se sincroniza automáticamente mediante hooks de Lefthook:
+
+- **`post-commit`**: Ejecuta `codegraph-post-modification-sync.ps1 -Trigger post-commit -Force` después de cada commit
+- **`post-merge`**: Ejecuta `codegraph-post-modification-sync.ps1 -Trigger post-merge -Force` después de cada merge
+
+Esto garantiza que el índice esté siempre fresco (menos de 30min de antigüedad) sin intervención manual. Definido en `.lefthook.yml` y `config/lefthook.yml`.
+
+### Verificación manual
+
+```powershell
+# Verificar edad del índice
+codegraph status
+
+# Forzar sync manual si es necesario
+pwsh -File scripts/utilities/codegraph-sync-autostart.ps1
+```
+
 ## Performance Notes
 
 - **Native backend**: Uses `better-sqlite3` for 5-10x faster operations

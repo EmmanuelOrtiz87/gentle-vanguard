@@ -17,7 +17,7 @@
 #>
 
 param(
-    [string]$Input,
+    [string]$InputText,
     [ValidateSet('string', 'integer', 'path', 'command', 'email')]
     [string]$Type = 'string',
     [string]$LogLevel = 'info'
@@ -49,7 +49,8 @@ function Validate-String {
     $dangerousChars = @(';', '|', '&', '$', '`', '>', '<', '(', ')', '{', '}', '[', ']')
     foreach ($char in $dangerousChars) {
         if ($Value.Contains($char)) {
-            Write-Log "Input contains dangerous character: $char" "warn"
+            Write-Log "Input contains dangerous character: $char" "error"
+            return $false
         }
     }
     
@@ -151,11 +152,11 @@ function Main {
     Write-Log "Validating input as type: $Type" "info"
     
     $result = switch ($Type) {
-        'string' { Validate-String -Value $Input }
-        'integer' { Validate-Integer -Value $Input }
-        'path' { Validate-Path -Value $Input }
-        'command' { Validate-Command -Value $Input }
-        'email' { Validate-Email -Value $Input }
+        'string' { Validate-String -Value $InputText }
+        'integer' { Validate-Integer -Value $InputText }
+        'path' { Validate-Path -Value $InputText }
+        'command' { Validate-Command -Value $InputText }
+        'email' { Validate-Email -Value $InputText }
         default { $false }
     }
     

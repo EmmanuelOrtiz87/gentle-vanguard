@@ -26,11 +26,18 @@ scripts/
     input-validator.ps1            # Validación de entrada
     secrets-manager.ps1            # Gestión de secretos
     security-logger.ps1            # Logging de seguridad
- monitoring/                        # Scripts de monitoreo
-    health-check.ps1               # Verificación de salud
- utilities/                         # Scripts utilitarios
-     setup.ps1                      # Setup inicial
-     cleanup.ps1                    # Limpieza
+  gateway/                             # Gateway multi-plataforma
+     gateway-manager.ps1              # CLI de gestión
+     gateway.js                       # Servidor HTTP
+     platforms/                       # Adaptadores (telegram, discord, whatsapp)
+     agent/                           # Módulo agente (agent, tools, context, scheduler)
+  plugins/                             # Plugins extensibles (vía plugin-loader.ps1)
+     example-hello-world/             # Plugin ejemplo con plugin.json + hello-world.ps1
+  monitoring/                          # Scripts de monitoreo
+     health-check.ps1               # Verificación de salud
+  utilities/                           # Scripts utilitarios
+      setup.ps1                      # Setup inicial
+      cleanup.ps1                    # Limpieza
 ```
 
 ---
@@ -112,7 +119,7 @@ Write-Log "Mensaje" "info"
 
 **Acciones**:
 
-- `generate-key` - Genera clave de 256-bit
+- `generate-key` - Genera clave de 256-bit (idempotente: no sobrescribe si ya existe)
 - `encrypt` - Encripta datos
 - `decrypt` - Desencripta datos
 - `validate` - Valida configuración
@@ -208,6 +215,44 @@ Write-Log "Mensaje" "info"
 
 # Detectar anomalas
 .\scripts\security\security-logger.ps1 -Action anomalies
+```
+
+---
+
+### Gateway (Scripts de Gateway Multi-Plataforma)
+
+#### gateway-manager.ps1
+
+**Propósito**: Gestión de gateway multi-plataforma (Telegram, Discord, WhatsApp)
+
+**Acciones**:
+
+- `status` - Muestra estado del gateway
+- `start` - Inicia conexión con plataforma(s)
+- `stop` - Detiene conexión
+- `agent` - Estado del agente gateway
+- `schedule` - Tareas programadas
+
+**Componentes**:
+
+- `gateway.js` - Servidor HTTP gateway
+- `platforms/telegram.js`, `discord.js`, `whatsapp.js` - Adaptadores de plataforma
+- `agent/agent.js`, `tools.js`, `context.js`, `system-prompt.js`, `scheduler.js` - Módulo agente
+
+**Uso**:
+
+```powershell
+# Ver estado
+.\scripts\gateway\gateway-manager.ps1 -Action status
+
+# Iniciar plataforma
+.\scripts\gateway\gateway-manager.ps1 -Action start -Platform telegram
+
+# Estado del agente
+.\scripts\gateway\gateway-manager.ps1 -Action agent
+
+# Tareas programadas
+.\scripts\gateway\gateway-manager.ps1 -Action schedule
 ```
 
 ---
@@ -444,4 +489,4 @@ Para reportar problemas o sugerencias:
 
 ---
 
-**última actualización**: 2026-04-21 **Versión**: 2.0.0 **Estado**: PRODUCCIN
+**última actualización**: 2026-05-24 **Versión**: 2.21.1 **Estado**: PRODUCCIN

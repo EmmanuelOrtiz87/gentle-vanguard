@@ -59,7 +59,8 @@ $ErrorActionPreference = 'Stop'
 $VAULT_VERSION = '1.0.0'
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
-$VaultDir    = Join-Path $HOME '.gentle-vanguard' 'vault'
+$homeDir = if ($HOME) { $HOME } else { $env:USERPROFILE }
+$VaultDir    = Join-Path $homeDir '.gentle-vanguard' 'vault'
 $MetaDir     = Join-Path $VaultDir '.meta'
 $ScriptRoot2 = Split-Path -Parent $PSScriptRoot  # scripts/
 $WorkspaceRoot = Split-Path -Parent $ScriptRoot2  # gentle-vanguard/
@@ -111,6 +112,7 @@ function Write-AuditEntry {
 
 # ── DPAPI encryption helpers (machine+user bound, no key files) ────────────────
 function ConvertTo-VaultEntry {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Justification = 'Required for DPAPI — plaintext is immediately encrypted via ConvertFrom-SecureString')]
     param([string]$PlainText)
     $ss = ConvertTo-SecureString -String $PlainText -AsPlainText -Force
     return ConvertFrom-SecureString -SecureString $ss  # DPAPI encrypted
@@ -139,7 +141,7 @@ function Get-SecretMeta {
 }
 
 function Save-SecretMeta {
-    param([string]$n, [hashtable]$meta)
+    param([string]$n, $meta)
     $meta | ConvertTo-Json -Depth 4 | Set-Content -Path (Get-MetaPath $n) -Encoding UTF8
 }
 
