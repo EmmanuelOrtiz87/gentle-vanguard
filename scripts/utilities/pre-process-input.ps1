@@ -50,6 +50,45 @@ $workspaceRoot = if ($PSBoundParameters.ContainsKey("WorkspaceRoot") -and $Works
     (Split-Path -Parent (Split-Path -Parent $scriptDir))
 }
 $skillsFullPath = Join-Path $workspaceRoot $SkillsPath
+$sessionDir = Join-Path $workspaceRoot ".session"
+$cacheFile = Join-Path $sessionDir "preprocess-trigger-cache.json"
+
+# ============================================================================
+# CACHE: Skip expensive re-scanning of skills/config when nothing changed
+# ============================================================================
+function Get-CacheHash {
+    param([string]$SkillsPathFull)
+    $hashInput = ""
+    $skillFiles = Get-ChildItem -Path $SkillsPathFull -Filter "SKILL.md" -Recurse -ErrorAction SilentlyContinue
+    foreach ($f in $skillFiles) { $hashInput += "$($f.FullName):$($f.LastWriteTimeUtc.Ticks);" }
+    $configPath = Join-Path (Split-Path -Parent $SkillsPathFull) "config/auto-delegation.json"
+    if (Test-Path $configPath) { $hashInput += "cfg:" + (Get-Item $configPath).LastWriteTimeUtc.Ticks }
+    if ([string]::IsNullOrEmpty($hashInput)) { return "" }
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes($hashInput)
+    $sha256 = [System.Security.Cryptography.SHA256]::Create()
+    return [Convert]::ToBase64String($sha256.ComputeHash($bytes))
+}
+
+function Load-CachedData {
+    param([string]$CachePath, [string]$CurrentHash)
+    if (-not (Test-Path $CachePath)) { return $null }
+    try {
+        $cached = Get-Content $CachePath -Raw -ErrorAction Stop | ConvertFrom-Json -ErrorAction Stop
+        if ($cached.cacheHash -eq $CurrentHash) { return $cached }
+    } catch {}
+    return $null
+}
+
+$currentHash = Get-CacheHash -SkillsPathFull $skillsFullPath
+$cachedData = Load-CachedData -CachePath $cacheFile -CurrentHash $currentHash
+
+if ($cachedData) {
+    $cachedTriggers = @{}
+    foreach ($item in $cachedData.triggers) { $cachedTriggers[$item.key] = $item.skill }
+    $triggerMap = $cachedTriggers
+} else {
+    Write-Debug "Pre-process cache miss — reindexing skills/config"
+}
 
 function Add-TriggersFromSkillFiles {
     param(
@@ -87,51 +126,59 @@ function Add-TriggersFromSkillFiles {
 
 $autoDelegationConfig = Join-Path $workspaceRoot "config/auto-delegation.json"
 $delegationConfig = $null
-if (Test-Path $autoDelegationConfig) {
-    $delegationConfig = Get-Content $autoDelegationConfig -Raw | ConvertFrom-Json
+$skillMapping = @{}
+$skillToAgent = @{}
+
+function Normalize-Trigger {
+    param([string]$RawTrigger)
+    if (-not $RawTrigger) { return $null }
+    $normalized = $RawTrigger.ToLower().Trim()
+    $normalized = $normalized.Trim('"')
+    $normalized = $normalized.TrimEnd('.', ',', ';', ':')
+    if ([string]::IsNullOrWhiteSpace($normalized)) { return $null }
+    return $normalized
 }
 
-if ($delegationConfig -and $delegationConfig.keywordMappings) {
-    function Normalize-Trigger {
-        param([string]$RawTrigger)
-
-        if (-not $RawTrigger) { return $null }
-
-        $normalized = $RawTrigger.ToLower().Trim()
-        $normalized = $normalized.Trim('"')
-        $normalized = $normalized.TrimEnd('.', ',', ';', ':')
-
-        if ([string]::IsNullOrWhiteSpace($normalized)) { return $null }
-        return $normalized
+# If cache was valid and has delegationData, skip the 1.8K-line JSON load
+if ($cachedData -and $cachedData.delegationData) {
+    $dd = $cachedData.delegationData
+    $fallbackStrategy  = $dd.fallbackStrategy
+    $clarifyBaStrategy = $dd.clarifyBaStrategy
+    $agentProfiles     = $dd.agentProfiles
+    $unmappedFlows     = $dd.unmappedFlows
+    $skillMapping      = @{}
+    if ($dd.skillMapping) { foreach ($kv in $dd.skillMapping.PSObject.Properties) { $skillMapping[$kv.Name] = $kv.Value } }
+    $skillToAgent      = @{}
+    if ($dd.skillToAgent) { foreach ($kv in $dd.skillToAgent.PSObject.Properties) { $skillToAgent[$kv.Name] = $kv.Value } }
+} else {
+    if (Test-Path $autoDelegationConfig) {
+        $delegationConfig = Get-Content $autoDelegationConfig -Raw | ConvertFrom-Json
     }
 
-    $skillMapping = @{}
-    if ($delegationConfig.agentCodeToSkill) {
-        foreach ($prop in $delegationConfig.agentCodeToSkill.PSObject.Properties) {
-            $skillMapping[$prop.Name] = $prop.Value
+    if ($delegationConfig -and $delegationConfig.keywordMappings) {
+        if ($delegationConfig.agentCodeToSkill) {
+            foreach ($prop in $delegationConfig.agentCodeToSkill.PSObject.Properties) {
+                $skillMapping[$prop.Name] = $prop.Value
+            }
         }
-    }
-
-    $skillToAgent = @{}
-    if ($delegationConfig.skillToAgentProfile) {
-        foreach ($prop in $delegationConfig.skillToAgentProfile.PSObject.Properties) {
-            $skillToAgent[$prop.Name] = $prop.Value
+        if ($delegationConfig.skillToAgentProfile) {
+            foreach ($prop in $delegationConfig.skillToAgentProfile.PSObject.Properties) {
+                $skillToAgent[$prop.Name] = $prop.Value
+            }
         }
-    }
-    foreach ($kv in $skillMapping.GetEnumerator()) {
-        if (-not $skillToAgent.ContainsKey($kv.Value)) {
-            $skillToAgent[$kv.Value] = $kv.Key
+        foreach ($kv in $skillMapping.GetEnumerator()) {
+            if (-not $skillToAgent.ContainsKey($kv.Value)) {
+                $skillToAgent[$kv.Value] = $kv.Key
+            }
         }
-    }
-
-    foreach ($agent in $delegationConfig.keywordMappings.PSObject.Properties.Name) {
-        $keywords = $delegationConfig.keywordMappings.$agent
-        $skillName = if ($skillMapping.ContainsKey($agent)) { $skillMapping[$agent] } else { $agent.ToLower() }
-
-        foreach ($keyword in $keywords) {
-            $normalizedKeyword = Normalize-Trigger -RawTrigger $keyword
-            if ($normalizedKeyword -and -not $triggerMap.ContainsKey($normalizedKeyword)) {
-                $triggerMap[$normalizedKeyword] = $skillName
+        foreach ($agent in $delegationConfig.keywordMappings.PSObject.Properties.Name) {
+            $keywords = $delegationConfig.keywordMappings.$agent
+            $skillName = if ($skillMapping.ContainsKey($agent)) { $skillMapping[$agent] } else { $agent.ToLower() }
+            foreach ($keyword in $keywords) {
+                $normalizedKeyword = Normalize-Trigger -RawTrigger $keyword
+                if ($normalizedKeyword -and -not $triggerMap.ContainsKey($normalizedKeyword)) {
+                    $triggerMap[$normalizedKeyword] = $skillName
+                }
             }
         }
     }
@@ -237,12 +284,43 @@ if ($matchingTrigger -and $inputWords.Count -gt 0) {
     }
 }
 
-$fallbackStrategy  = if ($delegationConfig -and $delegationConfig.fallbackStrategy) { $delegationConfig.fallbackStrategy } else { "manual" }
-$clarifyBaStrategy = if ($delegationConfig) { $delegationConfig.clarifyBaStrategy } else { $null }
-$agentProfiles     = if ($delegationConfig) { $delegationConfig.agentProfiles } else { $null }
-$unmappedFlows     = if ($delegationConfig) { $delegationConfig.unmappedFlows } else { $null }
+$fallbackStrategy  = if ($null -ne $fallbackStrategy) { $fallbackStrategy } elseif ($delegationConfig -and $delegationConfig.fallbackStrategy) { $delegationConfig.fallbackStrategy } else { "manual" }
+$clarifyBaStrategy = if ($null -ne $clarifyBaStrategy) { $clarifyBaStrategy } elseif ($delegationConfig) { $delegationConfig.clarifyBaStrategy } else { $null }
+$agentProfiles     = if ($null -ne $agentProfiles) { $agentProfiles } elseif ($delegationConfig) { $delegationConfig.agentProfiles } else { $null }
+$unmappedFlows     = if ($null -ne $unmappedFlows) { $unmappedFlows } elseif ($delegationConfig) { $delegationConfig.unmappedFlows } else { $null }
 
 $lowConfidenceThreshold = if ($clarifyBaStrategy -and $clarifyBaStrategy.triggerThreshold) { $clarifyBaStrategy.triggerThreshold } else { 40 }
+
+# ============================================================================
+# CACHE SAVE: Persist parsed data when cache was invalid
+# ============================================================================
+if (-not $cachedData -and $currentHash) {
+    try {
+        $cachedTriggers = @()
+        foreach ($kv in $triggerMap.GetEnumerator()) {
+            $cachedTriggers += @{key = $kv.Name; skill = $kv.Value}
+        }
+        $cachePayload = @{
+            cacheHash    = $currentHash
+            cachedAt     = (Get-Date -Format 'o')
+            triggers     = $cachedTriggers
+            delegationData = @{}
+        }
+        $dd = $cachePayload.delegationData
+        $dd.fallbackStrategy  = $fallbackStrategy
+        $dd.clarifyBaStrategy = if ($clarifyBaStrategy) { $clarifyBaStrategy } else { $null }
+        $dd.agentProfiles     = if ($agentProfiles) { $agentProfiles } else { $null }
+        $dd.unmappedFlows     = if ($unmappedFlows) { $unmappedFlows } else { $null }
+        $skillMappingCache = @{}
+        if ($skillMapping) { foreach ($kv in $skillMapping.GetEnumerator()) { $skillMappingCache[$kv.Name] = $kv.Value } }
+        $skillToAgentCache = @{}
+        if ($skillToAgent) { foreach ($kv in $skillToAgent.GetEnumerator()) { $skillToAgentCache[$kv.Name] = $kv.Value } }
+        $dd.skillMapping = $skillMappingCache
+        $dd.skillToAgent = $skillToAgentCache
+        if (-not (Test-Path $sessionDir)) { $null = New-Item -ItemType Directory -Path $sessionDir -Force }
+        $cachePayload | ConvertTo-Json -Depth 10 | Set-Content -Path $cacheFile -Force
+    } catch { Write-Debug "Cache save failed: $_" }
+}
 
 function Resolve-AgentProfile {
     param($AgentCode, $Profiles)

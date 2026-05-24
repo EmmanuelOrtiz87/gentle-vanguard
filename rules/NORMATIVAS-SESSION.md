@@ -1,6 +1,6 @@
 # NORMATIVAS-SESSION.md — Session Lifecycle Standards
 
-Version: 1.1.0 Last updated: 2026-05-12
+Version: 1.2.0 Last updated: 2026-05-23
 
 ---
 
@@ -182,6 +182,8 @@ Preserved between sessions:
 | Session files        | `.session/session-*.json`                  | Session state snapshots |
 | Orchestrator state   | `.session/orchestrator-state.json`         | Agent dispatch state    |
 | Token budget         | `.session/token-autopilot-state.json`      | Token tracking          |
+| Token display config | `.session/token-display-config.json`      | Token notification freq |
+| Pre-process cache    | `.session/preprocess-trigger-cache.json`  | Trigger cache           |
 | Constraint retention | `.session/constraint-retention-state.json` | Earned trust state      |
 | NEXT_SESSION_GUIDE   | `docs/NEXT_SESSION_GUIDE.md`               | Session handoff doc     |
 
@@ -267,7 +269,7 @@ Each session tracks:
 - Files changed
 - Tests run and results
 - Blockers encountered
-- Token consumption
+- Token consumption (logged every 5 turns per `token-display-config.json`)
 
 ### 5.2 Session Summary Structure
 
@@ -314,6 +316,8 @@ Each session tracks:
 | Decisiones significativas guardadas en Engram (`mem_save`) | Agente (Core Rule #13) |
 | `mem_search` antes de trabajo que pudo haberse hecho antes | Agente |
 | `todowrite` mantenido con progreso actual | Agente |
+| Token notification each 5 turns | Agente (per `token-display-config.json`) |
+| Compaction aplicado si contexto > 80% del window | Sistema (opencode.json) |
 
 ### Cierre (3 pasos manuales, el resto automático)
 
@@ -351,4 +355,10 @@ Each session tracks:
 
 ---
 
-_Version: 1.0.0 — 2026-05-10 — Status: ACTIVE_
+| Token Display Config   | `.session/token-display-config.json`      | Token notification cfg |
+| Context Efficiency     | `config/context-efficiency.json`          | Context budgets        |
+| Compaction Config      | `opencode.json#compaction`                | Conversation mgmt      |
+
+---
+
+_Version: 1.2.0 — 2026-05-23 — Status: ACTIVE_
