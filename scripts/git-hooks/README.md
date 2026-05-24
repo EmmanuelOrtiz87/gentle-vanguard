@@ -1,31 +1,31 @@
-# Git Hooks
+# Git Hooks — DEPRECATED
 
-Git hooks for pre-commit validation and security.
+> **⚠️ DEPRECATED**: This directory is legacy. Hooks are now managed by **Lefthook** (`.lefthook.yml`).
+>
+> See `scripts/core/bootstrap.ps1` for automated Lefthook installation.
 
-## Files
+## Migration
 
-| File          | Description                        |
-| ------------- | ---------------------------------- |
-| `pre-commit/` | Pre-commit hooks directory         |
-| `*.sh`        | Shell alternatives for Linux/macOS |
+| Old (scripts/git-hooks) | New (Lefthook) |
+|-------------------------|----------------|
+| `pre-commit` | `.lefthook.yml → pre-commit` |
+| `commit-msg` | `.lefthook.yml → commit-msg` |
+| `pre-push` | `.lefthook.yml → pre-push` |
+| Manual install required | `bootstrap.ps1` installs lefthook + runs `lefthook install` |
+| `core.hooksPath` override | Default `.git/hooks` (lefthook manages this) |
 
-## Pre-commit Hooks
+## What Lefthook Provides
 
-The `pre-commit/` directory contains:
+- **post-commit**: Auto-syncs CodeGraph index after every commit
+- **post-merge**: Auto-syncs CodeGraph index after every merge
+- **pre-commit**: JSON lint, opencode validation, trufflehog scan
+- **commit-msg**: Conventional commit enforcement
+- **pre-push**: Audit sweep, orchestrator auto-fix, npm audit
 
-- `pre-commit.ps1` - PowerShell pre-commit hook
-- Shell alternatives for cross-platform support
+## Why
 
-## Usage
+Lefthook is cross-platform (Windows/Linux/macOS), faster, and supports parallel hook execution. Manual `core.hooksPath` configuration is no longer needed.
 
-Hooks are automatically installed by:
+## Removal
 
-- `bootstrap-machine.ps1` (global)
-- `setup-project.ps1` (project)
-
-## Manual Installation
-
-```powershell
-# Configure git to use hooks
-git config --global core.hooksPath "$env:USERPROFILE\.git-hooks"
-```
+This directory can be safely removed once all team members have migrated to Lefthook. Keep for now as reference.

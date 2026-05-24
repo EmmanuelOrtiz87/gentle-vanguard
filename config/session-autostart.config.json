@@ -135,6 +135,14 @@
         "description": "Intelligent temporary Claude Code/Cline optimization with automatic restore when normalized"
       },
       {
+        "id": "lefthook-verify",
+        "enabled": true,
+        "script": "scripts/utilities/lefthook-verify.ps1",
+        "args": "",
+        "required": false,
+        "description": "Verify Lefthook CLI + hooks are installed (post-commit/post-merge for CodeGraph auto-sync)"
+      },
+      {
         "id": "codegraph-sync",
         "enabled": true,
         "script": "scripts/utilities/codegraph-sync-autostart.ps1",
