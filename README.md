@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.20.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.21.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
@@ -14,11 +14,10 @@
 
 <p align="center">
   <a href="docs/AGENTS.md">Bootstrap</a> &nbsp;·&nbsp;
-  <a href="docs/architecture/README.md">Architecture</a> &nbsp;·&nbsp;
+  <a href="docs/AGENTS.md#mandatory-startup-sequence">Startup</a> &nbsp;·&nbsp;
+  <a href="docs/QUICK-COMMANDS.md">Quick Commands</a> &nbsp;·&nbsp;
   <a href="rules/DELEGATION-RULES.md">Delegation Rules</a> &nbsp;·&nbsp;
-  <a href="config/model-routing.json">Model Routing</a> &nbsp;·&nbsp;
-  <a href="openspec/config.yaml">SDD Config</a> &nbsp;·&nbsp;
-  <a href=".atl/skill-registry.md">Skill Registry</a> &nbsp;·&nbsp;
+  <a href="rules/NORMATIVES.md">Normatives</a> &nbsp;·&nbsp;
   <a href="CHANGELOG.md">Changelog</a>
 </p>
 
@@ -253,6 +252,24 @@ For large features that exceed the 400-line review budget, use chained PR delive
 - `skills/branch-pr/SKILL.md` — branch + PR workflow
 - `skills/gitflow-orchestrator-skill/SKILL.md` — full gitflow
 
+### Context Optimization (v2.21.0)
+
+Comprehensive input/token efficiency overhaul:
+
+| Area | Before | After |
+|------|--------|-------|
+| CLAUDE.md | 220 lines | 47 lines (−79%) |
+| AGENTS.md | 311 lines | 78 lines (−75%) |
+| NORMATIVES.md | 1,506 lines | 120 lines (−92%) |
+| INTER-AGENT-COMMUNICATION.md | 167 lines | 54 lines (−68%) |
+| 10 oversized SKILL.md files | ~5,200 lines | ~1,420 lines (−73%) |
+| auto-delegation.json | 105 BA keywords | 80 (−24%) |
+| pre-process cache | None | SHA256 (132 skills, zero rescan) |
+| Output guard | None | 200 tokens non-code |
+
+Integrated via `opencode.json` sliding window, `pre-compact-hook.ps1` ratio 0.60,
+`context-efficiency.json` input guard, and `token-display-config.json` interval display.
+
 ### Cross-Tool Compatibility
 
 Compatible with 10 tools via `scripts/utilities/detect-tool.ps1`:
@@ -347,6 +364,7 @@ gv health
 | Tests         | ✅ PASS | Full test suite passing                                                 |
 | Hooks         | ✅ PASS | Pre-commit hooks active (README, secrets, lint)                         |
 | Context Log   | ✅ PASS | Session context logging active — tokens, cost, input/output per turn    |
+| Context Opt   | ✅ PASS | SHA256 cache, input guard, output guard, 73% avg file compression       |
 | Structure     | ✅ PASS | All mandatory files present                                             |
 | Engram        | ✅ PASS | Memory store accessible, sessions tracking                              |
 | SDD           | ✅ PASS | OpenSpec config valid, preflight operational                            |
@@ -365,6 +383,13 @@ gv health
 | **SDD Config**            | [openspec/config.yaml](openspec/config.yaml)               |
 | **Skill Registry**        | [.atl/skill-registry.md](.atl/skill-registry.md)           |
 | **README Governance**     | [rules/README-GOVERNANCE.md](rules/README-GOVERNANCE.md)   |
+| **Quick Commands**        | [docs/QUICK-COMMANDS.md](docs/QUICK-COMMANDS.md)           |
+| **Architecture Normative** | [rules/NORMATIVAS-ARCHITECTURE.md](rules/NORMATIVAS-ARCHITECTURE.md) |
+| **Config Normative**       | [rules/NORMATIVAS-CONFIG.md](rules/NORMATIVAS-CONFIG.md)   |
+| **DevOps Normative**       | [rules/NORMATIVAS-DEVOPS.md](rules/NORMATIVAS-DEVOPS.md)   |
+| **Docs Normative**         | [rules/NORMATIVAS-DOCS.md](rules/NORMATIVAS-DOCS.md)       |
+| **Enforcement Normative**  | [rules/NORMATIVAS-ENFORCEMENT.md](rules/NORMATIVAS-ENFORCEMENT.md) |
+| **Git Normative**          | [rules/NORMATIVAS-GIT.md](rules/NORMATIVAS-GIT.md)         |
 | **Build Pipeline**        | [docs/build/README.md](build/README.md)                    |
 | **Contributing**          | [CONTRIBUTING.md](CONTRIBUTING.md)                         |
 | **Changelog**             | [CHANGELOG.md](CHANGELOG.md)                               |
@@ -384,6 +409,6 @@ AES-256 encryption for secrets, API keys, and sensitive configs. See [SECURITY.m
 ---
 
 <p align="center">
-  <strong>Gentle-Vanguard v2.20.0</strong><br>
+  <strong>Gentle-Vanguard v2.21.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>
