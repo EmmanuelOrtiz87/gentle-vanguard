@@ -81,42 +81,7 @@ Launch one sub-agent per failure reason, all in parallel. Each agent:
 
 **Prompt template:** "You are a researcher in a premortem analysis. The frame: 6 months have passed,
 this plan has failed. Your assigned failure reason: [specific reason]. Write the story of how it
-actually unfolded. Include:
 
-1. THE FAILURE STORY — 2-3 paragraph narrative with specific moments
-2. THE HIDDEN ASSUMPTION — the one thing the user took for granted that enabled this failure
-3. EARLY WARNING SIGNS — 1-2 concrete, observable signals to watch for"
+---
 
-Each agent keeps response under 300 words.
-
-### 5. Synthesis
-
-Produce structured report with:
-
-1. **Most Likely Failure** — highest probability scenario
-2. **Most Dangerous Failure** — highest damage scenario (even if less likely)
-3. **The Hidden Assumption** — the most important unchallenged belief
-4. **The Revised Plan** — concrete changes that would increase resilience
-5. **The Pre-Launch Checklist** — 3-5 specific things to verify before executing
-
-### 6. Generate Reports
-
-Two files in workspace root:
-
-- `premortem-report-{timestamp}.html` — visual report with dark theme, severity indicators
-- `premortem-transcript-{timestamp}.md` — full transcript as reference
-
-## Output Contract
-
-- **Chat**: 3-sentence summary (most likely failure, hidden assumption, single most important
-  revision)
-- **HTML report**: Visual, scannable, dark-themed, with synthesis cards and failure detail cards
-- **Transcript**: Complete record of all context, reasons, deep-dives, and synthesis
-
-## References
-
-- Gary Klein, "Performing a Project Premortem", Harvard Business Review, 2007
-- Daniel Kahneman, "Thinking, Fast and Slow", 2011
-- Wharton/Cornell research on "prospective hindsight"
-- HTML templates in `references/premortem-templates/`
-- Output directory: workspace root
+> **Referencia detallada**: [eferences/detail.md](references/detail.md)
