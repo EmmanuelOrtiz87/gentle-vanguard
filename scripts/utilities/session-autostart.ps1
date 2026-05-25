@@ -47,11 +47,17 @@ if (-not (Test-Path $ConfigFile)) {
 }
 
 $config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
-$steps = @($config.pipeline.steps | Where-Object { $_.enabled -eq $true })
+$allEnabledSteps = @($config.pipeline.steps | Where-Object { $_.enabled -eq $true })
+$steps = @($allEnabledSteps | Where-Object { -not $_.lazy })
+$lazySteps = @($allEnabledSteps | Where-Object { $_.lazy })
 $totalSteps = $steps.Count
 $stepNum = 0
 $failed = @()
 $requiredFailed = @()
+
+if ($lazySteps.Count -gt 0) {
+    Write-Host "[INFO] $($lazySteps.Count) lazy steps deferred to background" -ForegroundColor Gray
+}
 
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 Write-Host ""
@@ -121,9 +127,29 @@ foreach ($step in $steps) {
     }
 }
 
+# Execute lazy steps in background after main pipeline
+if ($lazySteps.Count -gt 0) {
+    Write-Host ""
+    Write-Host "=== Running Lazy Steps (Background) ===" -ForegroundColor DarkGray
+    foreach ($lazyStep in $lazySteps) {
+        $lazyPath = Join-Path $repoRoot $lazyStep.script
+        if (Test-Path $lazyPath) {
+            $lazyArgs = if ($lazyStep.args) { $lazyStep.args } else { "" }
+            try {
+                $lazyCmd = "& `"$lazyPath`" $lazyArgs"
+                $null = Invoke-Expression $lazyCmd 2>&1
+                Write-Host "  [OK] $($lazyStep.id) (lazy)" -ForegroundColor DarkGreen
+            } catch {
+                Write-Host "  [WARN] $($lazyStep.id) (lazy): $($_.Exception.Message)" -ForegroundColor DarkYellow
+            }
+        }
+    }
+}
+
 Write-Host ""
 Write-Host "=== Session Autostart Summary ===" -ForegroundColor Cyan
 Write-Host "Steps executed: $stepNum" -ForegroundColor Gray
+Write-Host "Lazy steps:     $($lazySteps.Count)" -ForegroundColor Gray
 Write-Host "Steps failed:   $($failed.Count)" -ForegroundColor $(if($failed.Count -gt 0){'Yellow'}else{'Green'})
 Write-Host "Required fails: $($requiredFailed.Count)" -ForegroundColor $(if($requiredFailed.Count -gt 0){'Red'}else{'Green'})
 

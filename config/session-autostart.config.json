@@ -129,6 +129,7 @@
       {
         "id": "adaptive-claude-cline-profile",
         "enabled": true,
+        "lazy": true,
         "script": "scripts/utilities/adaptive-claude-cline-profile.ps1",
         "args": "-Mode Auto -TimeZone \"Argentina Standard Time\" -PeakStart 9 -PeakEnd 15",
         "required": false,
@@ -153,6 +154,7 @@
       {
         "id": "self-diagnosis",
         "enabled": true,
+        "lazy": true,
         "script": "scripts/utilities/self-diagnosis-autonomous.ps1",
         "args": "-Depth quick",
         "required": false,
@@ -161,6 +163,7 @@
       {
         "id": "metrics-collection",
         "enabled": true,
+        "lazy": true,
         "script": "scripts/metrics/collector.ps1",
         "args": "-Scope full -Quiet",
         "required": false,
@@ -169,6 +172,7 @@
       {
         "id": "dashboard-render",
         "enabled": true,
+        "lazy": true,
         "script": "scripts/metrics/dashboard-render.ps1",
         "args": "",
         "required": false,
@@ -177,6 +181,7 @@
       {
         "id": "live-feed-start",
         "enabled": true,
+        "lazy": true,
         "script": "scripts/utilities/live-feed-manager.ps1",
         "args": "-Action start -RefreshSeconds 15 -ServerPort 8090 -OpenDashboard",
         "required": false,
@@ -209,6 +214,7 @@
       {
         "id": "skill-size-check",
         "enabled": true,
+        "lazy": true,
         "script": "scripts/utilities/check-skill-sizes.ps1",
         "args": "-WarnOnly",
         "required": false,
