@@ -113,4 +113,4 @@ result = app.crawl_urls(urls, limit=10)
 
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

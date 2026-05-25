@@ -1,13 +1,14 @@
     return await cursor.to_list(length=per_page)
 
 # Count
-async def count_posts():
-    return await mongodb.posts.count_documents({"published": True})
+
+async def count_posts(): return await mongodb.posts.count_documents({"published": True})
 
 # Distinct
-async def get_all_tags():
-    return await mongodb.posts.distinct("tags")
-```
+
+async def get_all_tags(): return await mongodb.posts.distinct("tags")
+
+````
 
 ## Complex Queries
 
@@ -29,7 +30,7 @@ async def get_posts_by_tag(tag: str):
 # Nested field
 async def get_users_by_country(country: str):
     return await mongodb.users.find({"address.country": country}).to_list(length=None)
-```
+````
 
 ## Aggregation
 

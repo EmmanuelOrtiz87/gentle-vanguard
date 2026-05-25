@@ -1,23 +1,26 @@
+## Executive Summary
 
-##  Executive Summary
-| Metric | Value | Trend |
-|--------|-------|-------|
-| Sessions | N |  |
-| Tokens | N |  |
-| Cost | $N |  |
+| Metric   | Value | Trend |
+| -------- | ----- | ----- |
+| Sessions | N     |       |
+| Tokens   | N     |       |
+| Cost     | $N    |       |
 
-##  Detailed Analysis
+## Detailed Analysis
+
 ...
 
-##  Recommendations
+## Recommendations
+
 ...
-```
+
+````
 
 ### JSON (with `-AsJson`)
 
 ```powershell
 .\scripts\utilities\session-metrics-collector.ps1 -Period 7days -AsJson
-```
+````
 
 ## Usage Examples
 

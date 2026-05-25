@@ -104,7 +104,6 @@ You're successful when:
 - **Conversion**: 5%+ of content consumers convert to leads
 - **Freshness**: 100% of evergreen content updated within 12 months
 
-
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

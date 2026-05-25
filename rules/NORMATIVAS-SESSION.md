@@ -75,8 +75,8 @@ INACTIVE → STARTING → ACTIVE → CLOSING → CLOSED
 
 ### 2.2 Startup Protocol — Optimized (Contextual)
 
-La Phase A (init) la ejecuta **automáticamente** la autostart pipeline (20 pasos habilitados).
-El agente solo ejecuta Phase B (análisis y reporte).
+La Phase A (init) la ejecuta **automáticamente** la autostart pipeline (20 pasos habilitados). El
+agente solo ejecuta Phase B (análisis y reporte).
 
 #### Phase A — Init (Automatizado por autostart pipeline)
 
@@ -84,10 +84,10 @@ El agente solo ejecuta Phase B (análisis y reporte).
 scripts/utilities/session-autostart.ps1
 ```
 
-La pipeline cubre: tool-detection, session-manager, github-bypass, notifications,
-engram-policy, token-budget, engram-optimization, cross-workspace-validation,
-security-orchestrator, skill-router, karpathy-guidelines, metrics, adaptive profiles,
-codegraph-sync, self-diagnosis, post-autostart-summary.
+La pipeline cubre: tool-detection, session-manager, github-bypass, notifications, engram-policy,
+token-budget, engram-optimization, cross-workspace-validation, security-orchestrator, skill-router,
+karpathy-guidelines, metrics, adaptive profiles, codegraph-sync, self-diagnosis,
+post-autostart-summary.
 
 #### Phase B — Análisis y reporte (agente, 4 pasos)
 
@@ -138,24 +138,24 @@ Trigger alternativo por auto-delegación: "cerrar sesion", "close session", "gua
 
 #### Lo que la pipeline automatiza
 
-| Capacidad                         | Gatillador contextual                     |
-| --------------------------------- | ----------------------------------------- |
-| Session summary draft             | `generate-session-summary.ps1` desde git log + actividad |
-| Pre-close validation              | Corre automático al inicio del cierre     |
-| Git status check                  | Validación automática, advierte si sucio  |
-| Config validation (`validate-configs.ps1`) | Automático en pipeline de cierre |
-| Session metrics persistence       | `session-metrics-tracker.ps1 -Action end` |
-| Self-improving pipeline           | `usage-tracker` → `skill-nudge` → `skill-auto-patch` |
-| Self-diagnosis (`self-diagnosis-autonomous.ps1`) | Automático, detecta issues residuales |
-| Session learning capture          | `session-learning-capture.ps1 -Trigger close` |
-| Artifact rotation                 | Automático si hay más de N artefactos     |
-| Norm enforcement/learning         | `auto-norm-enforcer` + `auto-norm-learner` |
-| Engram session end                | `engram_mem_session_end.ps1` — actualiza session file + Engram |
+| Capacidad                                        | Gatillador contextual                                          |
+| ------------------------------------------------ | -------------------------------------------------------------- |
+| Session summary draft                            | `generate-session-summary.ps1` desde git log + actividad       |
+| Pre-close validation                             | Corre automático al inicio del cierre                          |
+| Git status check                                 | Validación automática, advierte si sucio                       |
+| Config validation (`validate-configs.ps1`)       | Automático en pipeline de cierre                               |
+| Session metrics persistence                      | `session-metrics-tracker.ps1 -Action end`                      |
+| Self-improving pipeline                          | `usage-tracker` → `skill-nudge` → `skill-auto-patch`           |
+| Self-diagnosis (`self-diagnosis-autonomous.ps1`) | Automático, detecta issues residuales                          |
+| Session learning capture                         | `session-learning-capture.ps1 -Trigger close`                  |
+| Artifact rotation                                | Automático si hay más de N artefactos                          |
+| Norm enforcement/learning                        | `auto-norm-enforcer` + `auto-norm-learner`                     |
+| Engram session end                               | `engram_mem_session_end.ps1` — actualiza session file + Engram |
 
 #### 0 pasos manuales del agente
 
-Todo es automático. El agente solo **confirma con el usuario** el draft de session summary
-que la pipeline ya generó:
+Todo es automático. El agente solo **confirma con el usuario** el draft de session summary que la
+pipeline ya generó:
 
 1. `gv end-session` → pipeline genera draft, valida, persiste métricas, cierra en Engram
 2. Agente muestra draft al usuario: "¿Este resumen está bien? ¿Agregas algo?"
@@ -164,9 +164,9 @@ que la pipeline ya generó:
 
 #### Concurrent Session Safety (automático)
 
-El `session-manager.ps1 -Mode End` ya detecta sesiones concurrentes y requiere
-`-TargetSessionId` explícito si hay más de 1 activa. No necesita acción manual del agente
-a menos que el script lo advierta.
+El `session-manager.ps1 -Mode End` ya detecta sesiones concurrentes y requiere `-TargetSessionId`
+explícito si hay más de 1 activa. No necesita acción manual del agente a menos que el script lo
+advierta.
 
 ---
 
@@ -182,8 +182,8 @@ Preserved between sessions:
 | Session files        | `.session/session-*.json`                  | Session state snapshots |
 | Orchestrator state   | `.session/orchestrator-state.json`         | Agent dispatch state    |
 | Token budget         | `.session/token-autopilot-state.json`      | Token tracking          |
-| Token display config | `.session/token-display-config.json`      | Token notification freq |
-| Pre-process cache    | `.session/preprocess-trigger-cache.json`  | Trigger cache           |
+| Token display config | `.session/token-display-config.json`       | Token notification freq |
+| Pre-process cache    | `.session/preprocess-trigger-cache.json`   | Trigger cache           |
 | Constraint retention | `.session/constraint-retention-state.json` | Earned trust state      |
 | NEXT_SESSION_GUIDE   | `docs/NEXT_SESSION_GUIDE.md`               | Session handoff doc     |
 
@@ -298,38 +298,38 @@ Each session tracks:
 
 ### Inicio (automático, no requiere acción del agente)
 
-| Checkpoint | Responsable |
-|---|---|
+| Checkpoint                                        | Responsable               |
+| ------------------------------------------------- | ------------------------- |
 | `pre-process-input.ps1` antes del primer response | Agente (manual, CRITICAL) |
-| Autostart pipeline (20 pasos) ejecutado | Pipeline automático |
-| Session ID sigue patrón `session-YYYY-MM-DD-XX` | Pipeline automático |
-| `startup-summary.json` generado | Pipeline automático |
-| Orphan cleanup ejecutado | Pipeline automático |
-| `mem_search` con "lessons learned" | Agente (Phase B step 4) |
-| `todowrite` creado | Agente (Phase B step 2) |
-| Reporte al usuario generado | Agente (Phase B step 3) |
+| Autostart pipeline (20 pasos) ejecutado           | Pipeline automático       |
+| Session ID sigue patrón `session-YYYY-MM-DD-XX`   | Pipeline automático       |
+| `startup-summary.json` generado                   | Pipeline automático       |
+| Orphan cleanup ejecutado                          | Pipeline automático       |
+| `mem_search` con "lessons learned"                | Agente (Phase B step 4)   |
+| `todowrite` creado                                | Agente (Phase B step 2)   |
+| Reporte al usuario generado                       | Agente (Phase B step 3)   |
 
 ### Durante la sesión
 
-| Checkpoint | Responsable |
-|---|---|
-| Decisiones significativas guardadas en Engram (`mem_save`) | Agente (Core Rule #13) |
-| `mem_search` antes de trabajo que pudo haberse hecho antes | Agente |
-| `todowrite` mantenido con progreso actual | Agente |
-| Token notification each 5 turns | Agente (per `token-display-config.json`) |
-| Compaction aplicado si contexto > 80% del window | Sistema (opencode.json) |
+| Checkpoint                                                 | Responsable                              |
+| ---------------------------------------------------------- | ---------------------------------------- |
+| Decisiones significativas guardadas en Engram (`mem_save`) | Agente (Core Rule #13)                   |
+| `mem_search` antes de trabajo que pudo haberse hecho antes | Agente                                   |
+| `todowrite` mantenido con progreso actual                  | Agente                                   |
+| Token notification each 5 turns                            | Agente (per `token-display-config.json`) |
+| Compaction aplicado si contexto > 80% del window           | Sistema (opencode.json)                  |
 
 ### Cierre (3 pasos manuales, el resto automático)
 
-| Checkpoint | Responsable |
-|---|---|
-| Pre-close validation | Pipeline end-session |
-| Self-improving pipeline | Pipeline end-session |
-| Self-diagnosis | Pipeline end-session |
-| Session metrics persistidas | Pipeline end-session |
-| `mem_session_summary` preguntado al usuario | Agente (paso manual 1) |
-| Decisiones de cierre guardadas (`mem_save`) | Agente (paso manual 2) |
-| `engram_mem_session_end` ejecutado | Agente (paso manual 3, built-in tool) |
+| Checkpoint                                  | Responsable                           |
+| ------------------------------------------- | ------------------------------------- |
+| Pre-close validation                        | Pipeline end-session                  |
+| Self-improving pipeline                     | Pipeline end-session                  |
+| Self-diagnosis                              | Pipeline end-session                  |
+| Session metrics persistidas                 | Pipeline end-session                  |
+| `mem_session_summary` preguntado al usuario | Agente (paso manual 1)                |
+| Decisiones de cierre guardadas (`mem_save`) | Agente (paso manual 2)                |
+| `engram_mem_session_end` ejecutado          | Agente (paso manual 3, built-in tool) |
 
 ---
 
@@ -355,9 +355,9 @@ Each session tracks:
 
 ---
 
-| Token Display Config   | `.session/token-display-config.json`      | Token notification cfg |
-| Context Efficiency     | `config/context-efficiency.json`          | Context budgets        |
-| Compaction Config      | `opencode.json#compaction`                | Conversation mgmt      |
+| Token Display Config | `.session/token-display-config.json` | Token notification cfg | | Context
+Efficiency | `config/context-efficiency.json` | Context budgets | | Compaction Config |
+`opencode.json#compaction` | Conversation mgmt |
 
 ---
 

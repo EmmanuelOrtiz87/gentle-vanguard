@@ -4,12 +4,16 @@
 post-commit:
   commands:
     codegraph-sync:
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/utilities/codegraph-post-modification-sync.ps1" -Trigger post-commit -Force
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File
+        "scripts/utilities/codegraph-post-modification-sync.ps1" -Trigger post-commit -Force
 
 post-merge:
   commands:
     codegraph-sync:
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/utilities/codegraph-post-modification-sync.ps1" -Trigger post-merge -Force
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File
+        "scripts/utilities/codegraph-post-modification-sync.ps1" -Trigger post-merge -Force
 
 pre-commit:
   commands:

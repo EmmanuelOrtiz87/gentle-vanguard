@@ -107,4 +107,6 @@ func handleMetrics(cfg Config, factory HandlerFactory, auth *AuthManager) http.H
 
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [
+eferences/detail.md](references/detail.md)
+```

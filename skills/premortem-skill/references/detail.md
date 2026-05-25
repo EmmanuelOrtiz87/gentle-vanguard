@@ -8,8 +8,6 @@ Each agent keeps response under 300 words.
 
 ### 5. Synthesis
 
-
 ---
 
-> **Referencia detallada**: [
-eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

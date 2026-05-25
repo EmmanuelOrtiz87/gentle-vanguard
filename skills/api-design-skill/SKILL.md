@@ -105,4 +105,6 @@ GET    /users/123/orders   # User's orders
 
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [
+eferences/detail.md](references/detail.md)
+```

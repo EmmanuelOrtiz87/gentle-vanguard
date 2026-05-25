@@ -1,4 +1,3 @@
-
 - **Signal-to-Contact Rate**: <30 minutes for hot signals
 - **Reply Rate**: 12-25% for signal-based outreach
 - **Positive Reply Rate**: 5-10% of replies convert to conversations

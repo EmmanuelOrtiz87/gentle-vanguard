@@ -1,4 +1,4 @@
-```
+````
 
 ## Parsing vs Safe Parse
 
@@ -13,7 +13,7 @@ if (!result.success) {
 } else {
   console.log(result.data);
 }
-```
+````
 
 ## Error Handling
 

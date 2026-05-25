@@ -6,40 +6,40 @@
 
 ## Executive Summary
 
-| Metric | Value |
-|---|---|
-| Status | ALL GREEN - GREEN |
-| Total Commits | 787 |
-| This Month | 458 |
-| PRs Merged | 94 / 100 |
-| Avg PR Lifecycle | 2.5h |
-| Active Sessions | 1 |
-| Total Sessions | 4 |
-| Contributors | 6 |
-| Lines Added (30d) | +21547 |
-| Lines Removed (30d) | -73906 |
-| Net Change (30d) | -52359 |
+| Metric              | Value             |
+| ------------------- | ----------------- |
+| Status              | ALL GREEN - GREEN |
+| Total Commits       | 787               |
+| This Month          | 458               |
+| PRs Merged          | 94 / 100          |
+| Avg PR Lifecycle    | 2.5h              |
+| Active Sessions     | 1                 |
+| Total Sessions      | 4                 |
+| Contributors        | 6                 |
+| Lines Added (30d)   | +21547            |
+| Lines Removed (30d) | -73906            |
+| Net Change (30d)    | -52359            |
 
 ## Cost & ROI
 
-| Metric | Value |
-|---|---|
-| Actual Cost MTD | $0.0916 |
-| Month Forecast | $0.14 |
-| Rate | $10/1M tokens |
-| Token Budget/Day | 120000 |
-| Used Today | 9158 (8.46%) |
-| Baseline (est.) | 12821 tokens |
-| Tokens Saved | 3663 (28.6%) |
-| Modeled Savings | $0.0366 |
+| Metric           | Value         |
+| ---------------- | ------------- |
+| Actual Cost MTD  | $0.0916       |
+| Month Forecast   | $0.14         |
+| Rate             | $10/1M tokens |
+| Token Budget/Day | 120000        |
+| Used Today       | 9158 (8.46%)  |
+| Baseline (est.)  | 12821 tokens  |
+| Tokens Saved     | 3663 (28.6%)  |
+| Modeled Savings  | $0.0366       |
 
 ## Governance
 
-| Metric | Value |
-|---|---|
-| Token Guard | PASS |
+| Metric           | Value                |
+| ---------------- | -------------------- |
+| Token Guard      | PASS                 |
 | Routing Accuracy | 100% (15 dispatches) |
-| Benchmark | 3/3 passed |
+| Benchmark        | 3/3 passed           |
 
 ## Recent PRs
 
@@ -47,7 +47,8 @@
 - #125 (MERGED): feat: multi-platform gateway with persistent agent and scheduler
 - #124 (MERGED): fix: correct banner Unicode rendering with UTF-8 BOM and OutputEncoding
 - #123 (MERGED): Develop
-- #122 (MERGED): feat(learning): autonomous learning system ΓÇö proactive failure detection and lesson capture
+- #122 (MERGED): feat(learning): autonomous learning system ΓÇö proactive failure detection and
+  lesson capture
 - #121 (MERGED): feat(codegraph): full stack integration ΓÇö proactive, automated, orchestrated
 - #120 (MERGED): chore(deps)(deps): bump actions/download-artifact from 4 to 8
 - #119 (MERGED): chore(deps)(deps): bump actions/setup-node from 4 to 6
@@ -70,6 +71,4 @@
 
 ---
 
-*Data source: .runtime/metrics/consolidated.json*
-*Live dashboard: reports/dashboard.html*
-
+_Data source: .runtime/metrics/consolidated.json_ _Live dashboard: reports/dashboard.html_

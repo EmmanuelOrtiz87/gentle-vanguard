@@ -1,14 +1,10 @@
-  fetchUser: vi.fn(),
-}));
+fetchUser: vi.fn(), }));
 
-// Mock time for consistent tests
-vi.useFakeTimers();
+// Mock time for consistent tests vi.useFakeTimers();
 
-// Reset mocks between tests
-afterEach(() => {
-  vi.clearAllMocks();
-});
-```
+// Reset mocks between tests afterEach(() => { vi.clearAllMocks(); });
+
+````
 
 ## Coverage Targets
 
@@ -27,7 +23,7 @@ afterEach(() => {
   run: npm run test:coverage
 - name: Upload coverage
   uses: codecov/codecov-action@v3
-```
+````
 
 ## Anti-Patterns to Avoid
 

@@ -1,20 +1,11 @@
-@pytest.mark.parametrize("input,expected", [
-    ("hello", "HELLO"),
-    ("world", "WORLD"),
-    ("pytest", "PYTEST"),
-])
-def test_uppercase(input, expected):
-    assert input.upper() == expected
+@pytest.mark.parametrize("input,expected", [ ("hello", "HELLO"), ("world", "WORLD"), ("pytest",
+"PYTEST"), ]) def test_uppercase(input, expected): assert input.upper() == expected
 
-@pytest.mark.parametrize("email,is_valid", [
-    ("user@example.com", True),
-    ("invalid-email", False),
-    ("", False),
-    ("user@.com", False),
-])
-def test_email_validation(email, is_valid):
-    assert validate_email(email) == is_valid
-```
+@pytest.mark.parametrize("email,is_valid", [ ("user@example.com", True), ("invalid-email", False),
+("", False), ("user@.com", False), ]) def test_email_validation(email, is_valid): assert
+validate_email(email) == is_valid
+
+````
 
 ## Markers
 
@@ -46,7 +37,7 @@ def test_unix_specific():
 # Run specific markers
 # pytest -m "not slow"
 # pytest -m "integration"
-```
+````
 
 ## Async Tests
 

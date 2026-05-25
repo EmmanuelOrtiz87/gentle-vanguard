@@ -109,7 +109,6 @@ Use this structure for all Gentle-Vanguard docs (adapted from native-tools):
 
 ### 5. Review Empathy (Gentle-Vanguard Rule)
 
-
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

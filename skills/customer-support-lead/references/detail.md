@@ -1,4 +1,3 @@
-
 Remember and build expertise in:
 
 - **Triage patterns** that catch emergencies fast

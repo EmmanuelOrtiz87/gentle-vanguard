@@ -104,7 +104,6 @@ if p_value < 0.05:
 
 ## 🎯 Success Metrics
 
-
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

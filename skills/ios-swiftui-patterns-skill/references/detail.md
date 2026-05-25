@@ -2,14 +2,12 @@
             .cornerRadius(12)
             .shadow(radius: 4)
     }
+
 }
 
-extension View {
-    func cardStyle() -> some View {
-        modifier(CardModifier())
-    }
-}
-```
+extension View { func cardStyle() -> some View { modifier(CardModifier()) } }
+
+````
 
 ### Task Lifecycle for Async Work
 
@@ -31,7 +29,7 @@ struct UserDetailView: View {
         }
     }
 }
-```
+````
 
 ## Common Patterns
 

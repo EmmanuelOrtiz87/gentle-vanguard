@@ -1,8 +1,7 @@
-function createUser() {
-  return { id: 1, name: 'John' };
-}
-type CreatedUser = ReturnType<typeof createUser>;
-```
+function createUser() { return { id: 1, name: 'John' }; } type CreatedUser =
+ReturnType<typeof createUser>;
+
+````
 
 ## Type Guards
 
@@ -28,7 +27,7 @@ function assertIsString(val: unknown): asserts val is string {
     throw new Error('Not a string');
   }
 }
-```
+````
 
 ## Discriminated Unions
 

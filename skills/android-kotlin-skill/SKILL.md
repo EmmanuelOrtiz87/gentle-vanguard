@@ -45,4 +45,5 @@ app/src/test/  androidTest/
 
 ## References
 
-See `references/patterns.md` for: Gradle config, full ViewModel/Repository/Compose code examples, Testing with MockK+Turbine, GitHub Actions CI, detekt lint config, and detailed anti-patterns.
+See `references/patterns.md` for: Gradle config, full ViewModel/Repository/Compose code examples,
+Testing with MockK+Turbine, GitHub Actions CI, detekt lint config, and detailed anti-patterns.

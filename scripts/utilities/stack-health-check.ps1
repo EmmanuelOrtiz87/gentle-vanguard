@@ -84,6 +84,13 @@ Add-Check "CODEOWNERS" { Test-Path ".github/CODEOWNERS" }
 Add-Check "rules/NORMATIVAS-PERFORMANCE.md" { Test-Path "rules/NORMATIVAS-PERFORMANCE.md" }
 Add-Check "rules/SDD-STRICT-TDD.md" { Test-Path "rules/SDD-STRICT-TDD.md" }
 Add-Check "rules/PER-PHASE-MODEL-ROUTING.md" { Test-Path "rules/PER-PHASE-MODEL-ROUTING.md" }
+Add-Check "pester-minimum-version" {
+    $pv = (Get-Module -ListAvailable Pester | Where-Object { $_.Version -ge [version]'5.0.0' }).Version
+    $pv -ne $null -and $pv -ge [version]'5.0.0'
+}
+Add-Check "config/clinerules" { Test-Path "config/clinerules" }
+Add-Check ".nvmrc" { Test-Path ".nvmrc" }
+Add-Check ".node-version" { Test-Path ".node-version" }
 
 # --- Summary ---
 $duration = (Get-Date) - $start

@@ -1,16 +1,11 @@
     }
-  },
-});
 
-if (result.toolCalls) {
-  for (const call of result.toolCalls) {
-    if (call.toolName === 'getWeather') {
-      const weather = await getWeather(call.args.city);
-      // Continue with weather data
-    }
-  }
-}
-```
+}, });
+
+if (result.toolCalls) { for (const call of result.toolCalls) { if (call.toolName === 'getWeather') {
+const weather = await getWeather(call.args.city); // Continue with weather data } } }
+
+````
 
 ## Vercel AI SDK UI
 
@@ -35,7 +30,7 @@ export function Chat() {
     </div>
   );
 }
-```
+````
 
 ## Provider Configuration
 

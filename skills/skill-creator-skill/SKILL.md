@@ -47,7 +47,7 @@ skills/{skill-name}/
 
 ## SKILL.md Template
 
-````markdown
+```markdown
 ---
 name: { skill-name }
 description: >
@@ -109,7 +109,7 @@ metadata:
 
 ---
 
-
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [ eferences/detail.md](references/detail.md)
+```

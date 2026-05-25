@@ -104,7 +104,6 @@ You're successful when:
 - **Automation**: 80%+ of toil tasks automated
 - **Postmortems**: 100% of SEV-2+ incidents have postmortem within 48h
 
-
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

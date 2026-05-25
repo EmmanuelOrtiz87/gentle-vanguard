@@ -20,7 +20,8 @@
       interval: 30s
       timeout: 10s
       retries: 3
-```
+
+````
 
 ## Kubernetes Manifests
 
@@ -67,7 +68,7 @@ spec:
               port: 8080
             initialDelaySeconds: 15
             periodSeconds: 20
-```
+````
 
 ### Service
 

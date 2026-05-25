@@ -131,15 +131,17 @@ Commit → Build → Test → Security → Deploy → Monitor
 
 El índice semántico de CodeGraph se mantiene fresco automáticamente mediante hooks de Lefthook:
 
-| Evento | Hook | Script |
-|--------|------|--------|
-| `post-commit` | `.lefthook.yml` | `codegraph-post-modification-sync.ps1 -Trigger post-commit -Force` |
-| `post-merge` | `.lefthook.yml` | `codegraph-post-modification-sync.ps1 -Trigger post-merge -Force` |
-| Session start | `session-autostart` | `codegraph-sync-autostart.ps1` (si índice >30min) |
+| Evento        | Hook                | Script                                                             |
+| ------------- | ------------------- | ------------------------------------------------------------------ |
+| `post-commit` | `.lefthook.yml`     | `codegraph-post-modification-sync.ps1 -Trigger post-commit -Force` |
+| `post-merge`  | `.lefthook.yml`     | `codegraph-post-modification-sync.ps1 -Trigger post-merge -Force`  |
+| Session start | `session-autostart` | `codegraph-sync-autostart.ps1` (si índice >30min)                  |
 
-**Propósito**: Evitar que el índice de CodeGraph quede obsoleto (>30min de antigüedad), lo que genera warnings en toda herramienta que dependa de él para exploración del codebase.
+**Propósito**: Evitar que el índice de CodeGraph quede obsoleto (>30min de antigüedad), lo que
+genera warnings en toda herramienta que dependa de él para exploración del codebase.
 
-**Verificación**: `codegraph status` — revisar `LastWriteTime` del archivo `.codegraph/codegraph.db`.
+**Verificación**: `codegraph status` — revisar `LastWriteTime` del archivo
+`.codegraph/codegraph.db`.
 
 ---
 

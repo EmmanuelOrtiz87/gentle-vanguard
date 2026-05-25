@@ -1,4 +1,3 @@
-
 ### Voice
 
 - Professional but approachable
@@ -23,7 +22,8 @@
 | "Your request has been processed" | "Done! Your request is complete"              |
 | "An error occurred"               | "Something went wrong - here's how to fix it" |
 | "You must upgrade"                | "Upgrade for pro features"                    |
-```
+
+````
 
 ---
 
@@ -67,7 +67,7 @@
 body {
   font-family: var(--font-body);
 }
-```
+````
 
 ### Content Audit
 

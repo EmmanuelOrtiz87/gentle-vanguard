@@ -1,4 +1,3 @@
-
 ### 6. Post-Creation Checklist
 
 After scaffolding, always verify:

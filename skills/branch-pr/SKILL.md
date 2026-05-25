@@ -108,7 +108,6 @@ Check exactly ONE in the template and add the matching label:
 
 ### 5. Test Plan
 
-
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

@@ -3,8 +3,10 @@
     if ($StorageConstraintGB -lt $DataSizeGB * 2) { return "Incremental" }
 
     return "Differential"
+
 }
-```
+
+````
 
 ---
 
@@ -28,7 +30,7 @@ function New-BackupSchedule {
         Status = "Active"
     }
 }
-```
+````
 
 #### Resource-Aware Scheduling
 

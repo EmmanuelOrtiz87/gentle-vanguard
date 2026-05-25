@@ -1,12 +1,9 @@
-  border: 1px solid #334155;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-}
+border: 1px solid #334155; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3); }
 
-/* Subtle gradients */
-.bg-gradient-subtle {
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-}
-```
+/_ Subtle gradients _/ .bg-gradient-subtle { background: linear-gradient(135deg, #1e293b 0%, #0f172a
+100%); }
+
+````
 
 ### 6. Focus States
 
@@ -16,7 +13,7 @@ button:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
-```
+````
 
 ---
 

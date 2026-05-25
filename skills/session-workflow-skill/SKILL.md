@@ -10,10 +10,10 @@ description: >
 
 ## Activation Contract
 
-Load when user triggers session commands: "inicia sesion" / "start session" (inicio),
-"continuar" / "continue" (reanudar), "estado" / "status" (consulta), "guardar sesion" (guardar),
-"cerrar sesion" / "close session" / "session end" / "fin de sesion" / "finalizar sesion" (cierre).
-Coordinates with project-orchestrator for technical decisions.
+Load when user triggers session commands: "inicia sesion" / "start session" (inicio), "continuar" /
+"continue" (reanudar), "estado" / "status" (consulta), "guardar sesion" (guardar), "cerrar sesion" /
+"close session" / "session end" / "fin de sesion" / "finalizar sesion" (cierre). Coordinates with
+project-orchestrator for technical decisions.
 
 ## Hard Rules
 
@@ -22,7 +22,8 @@ Coordinates with project-orchestrator for technical decisions.
 - MUST create todowrite at session start
 - MUST save session summary via mem_save after significant work
 - MUST coordinate with project-orchestrator for technical guidance
-- MUST run self-improving pipeline during session close (usage-tracker → skill-nudge → skill-auto-patch)
+- MUST run self-improving pipeline during session close (usage-tracker → skill-nudge →
+  skill-auto-patch)
 
 ## Notes
 

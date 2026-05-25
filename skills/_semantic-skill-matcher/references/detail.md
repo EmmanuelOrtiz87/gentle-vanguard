@@ -1,4 +1,3 @@
-
 Remember and build expertise in:
 
 - **Embedding models** that work offline (sentence-transformers, Ollama embeddings)

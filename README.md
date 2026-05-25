@@ -165,15 +165,16 @@ flowchart LR
     SCL -->|-PromoteToPermanent| PERM[.local/session-artifacts/\nPermanent local storage]
 ```
 
-| Component | Location | Purpose |
-|-----------|----------|---------|
-| `session-context-log.ps1` | `scripts/utilities/` | **Permanent** — Init, log, close, status, reinit |
-| `token-usage-auto.ps1` | `scripts/utilities/` | **Permanent** — Integrates notifier + context logger |
-| `context-summary.md` | `.session/context-log/<sid>/` | **Temp** — Full session log (gitignored) |
-| `turn-NNN.md` | `.session/context-log/<sid>/` | **Temp** — Per-turn detail (gitignored) |
-| `context-log-<sid>/` | `.local/session-artifacts/` | **Permanent local** — Promoted with `-PromoteToPermanent` |
+| Component                 | Location                      | Purpose                                                   |
+| ------------------------- | ----------------------------- | --------------------------------------------------------- |
+| `session-context-log.ps1` | `scripts/utilities/`          | **Permanent** — Init, log, close, status, reinit          |
+| `token-usage-auto.ps1`    | `scripts/utilities/`          | **Permanent** — Integrates notifier + context logger      |
+| `context-summary.md`      | `.session/context-log/<sid>/` | **Temp** — Full session log (gitignored)                  |
+| `turn-NNN.md`             | `.session/context-log/<sid>/` | **Temp** — Per-turn detail (gitignored)                   |
+| `context-log-<sid>/`      | `.local/session-artifacts/`   | **Permanent local** — Promoted with `-PromoteToPermanent` |
 
 **Usage** (called automatically by the agent after every response):
+
 ```powershell
 pwsh -NoProfile -File scripts/utilities/token-usage-auto.ps1 `
   -InputTokens <N> -OutputTokens <N> -ContextChars <N> `
@@ -182,6 +183,7 @@ pwsh -NoProfile -File scripts/utilities/token-usage-auto.ps1 `
 ```
 
 At session close:
+
 ```powershell
 pwsh -NoProfile -File scripts/utilities/session-context-log.ps1 -Action close
 # Or with permanent promotion:
@@ -191,6 +193,7 @@ pwsh -NoProfile -File scripts/utilities/session-context-log.ps1 -Action close -P
 Config references: `docs/AGENTS.md#post-response-context-logging-rule`, `CLAUDE.md` rules #14-#15.
 
 ---
+
 ## Key Capabilities
 
 ### SDD / OpenSpec Lifecycle
@@ -256,16 +259,16 @@ For large features that exceed the 400-line review budget, use chained PR delive
 
 Comprehensive input/token efficiency overhaul:
 
-| Area | Before | After |
-|------|--------|-------|
-| CLAUDE.md | 220 lines | 47 lines (−79%) |
-| AGENTS.md | 311 lines | 78 lines (−75%) |
-| NORMATIVES.md | 1,506 lines | 120 lines (−92%) |
-| INTER-AGENT-COMMUNICATION.md | 167 lines | 54 lines (−68%) |
-| 10 oversized SKILL.md files | ~5,200 lines | ~1,420 lines (−73%) |
-| auto-delegation.json | 105 BA keywords | 80 (−24%) |
-| pre-process cache | None | SHA256 (132 skills, zero rescan) |
-| Output guard | None | 200 tokens non-code |
+| Area                         | Before          | After                            |
+| ---------------------------- | --------------- | -------------------------------- |
+| CLAUDE.md                    | 220 lines       | 47 lines (−79%)                  |
+| AGENTS.md                    | 311 lines       | 78 lines (−75%)                  |
+| NORMATIVES.md                | 1,506 lines     | 120 lines (−92%)                 |
+| INTER-AGENT-COMMUNICATION.md | 167 lines       | 54 lines (−68%)                  |
+| 10 oversized SKILL.md files  | ~5,200 lines    | ~1,420 lines (−73%)              |
+| auto-delegation.json         | 105 BA keywords | 80 (−24%)                        |
+| pre-process cache            | None            | SHA256 (132 skills, zero rescan) |
+| Output guard                 | None            | 200 tokens non-code              |
 
 Integrated via `opencode.json` sliding window, `pre-compact-hook.ps1` ratio 0.60,
 `context-efficiency.json` input guard, and `token-display-config.json` interval display.
@@ -374,44 +377,46 @@ gv health
 
 ## Key Documentation
 
-| Resource                  | Path                                                       |
-| ------------------------- | ---------------------------------------------------------- |
-| **Agent Bootstrap**       | [docs/AGENTS.md](docs/AGENTS.md)                           |
-| **Context Logging**       | [docs/AGENTS.md#post-response-context-logging-rule](docs/AGENTS.md) |
-| **Architecture Overview** | [docs/architecture/README.md](docs/architecture/README.md) |
-| **Delegation Rules**      | [rules/DELEGATION-RULES.md](rules/DELEGATION-RULES.md)     |
-| **Model Routing**         | [config/model-routing.json](config/model-routing.json)     |
-| **SDD Config**            | [openspec/config.yaml](openspec/config.yaml)               |
-| **Skill Registry**        | [.atl/skill-registry.md](.atl/skill-registry.md)           |
-| **README Governance**     | [rules/README-GOVERNANCE.md](rules/README-GOVERNANCE.md)   |
-| **Quick Commands**        | [docs/QUICK-COMMANDS.md](docs/QUICK-COMMANDS.md)           |
+| Resource                   | Path                                                                 |
+| -------------------------- | -------------------------------------------------------------------- |
+| **Agent Bootstrap**        | [docs/AGENTS.md](docs/AGENTS.md)                                     |
+| **Context Logging**        | [docs/AGENTS.md#post-response-context-logging-rule](docs/AGENTS.md)  |
+| **Architecture Overview**  | [docs/architecture/README.md](docs/architecture/README.md)           |
+| **Delegation Rules**       | [rules/DELEGATION-RULES.md](rules/DELEGATION-RULES.md)               |
+| **Model Routing**          | [config/model-routing.json](config/model-routing.json)               |
+| **SDD Config**             | [openspec/config.yaml](openspec/config.yaml)                         |
+| **Skill Registry**         | [.atl/skill-registry.md](.atl/skill-registry.md)                     |
+| **README Governance**      | [rules/README-GOVERNANCE.md](rules/README-GOVERNANCE.md)             |
+| **Quick Commands**         | [docs/QUICK-COMMANDS.md](docs/QUICK-COMMANDS.md)                     |
 | **Security Normative**     | [docs/NORMATIVAS-SEGURIDAD.md](docs/NORMATIVAS-SEGURIDAD.md)         |
 | **Architecture Normative** | [rules/NORMATIVAS-ARCHITECTURE.md](rules/NORMATIVAS-ARCHITECTURE.md) |
-| **Config Normative**       | [rules/NORMATIVAS-CONFIG.md](rules/NORMATIVAS-CONFIG.md)   |
-| **DevOps Normative**       | [rules/NORMATIVAS-DEVOPS.md](rules/NORMATIVAS-DEVOPS.md)   |
-| **Docs Normative**         | [rules/NORMATIVAS-DOCS.md](rules/NORMATIVAS-DOCS.md)       |
-| **Enforcement Normative**  | [rules/NORMATIVAS-ENFORCEMENT.md](rules/NORMATIVAS-ENFORCEMENT.md) |
-| **Git Normative**          | [rules/NORMATIVAS-GIT.md](rules/NORMATIVAS-GIT.md)         |
-| **Build Pipeline**        | [docs/build/README.md](build/README.md)                    |
-| **Contributing**          | [CONTRIBUTING.md](CONTRIBUTING.md)                         |
-| **Changelog**             | [CHANGELOG.md](CHANGELOG.md)                               |
+| **Config Normative**       | [rules/NORMATIVAS-CONFIG.md](rules/NORMATIVAS-CONFIG.md)             |
+| **DevOps Normative**       | [rules/NORMATIVAS-DEVOPS.md](rules/NORMATIVAS-DEVOPS.md)             |
+| **Docs Normative**         | [rules/NORMATIVAS-DOCS.md](rules/NORMATIVAS-DOCS.md)                 |
+| **Enforcement Normative**  | [rules/NORMATIVAS-ENFORCEMENT.md](rules/NORMATIVAS-ENFORCEMENT.md)   |
+| **Git Normative**          | [rules/NORMATIVAS-GIT.md](rules/NORMATIVAS-GIT.md)                   |
+| **Build Pipeline**         | [docs/build/README.md](build/README.md)                              |
+| **Contributing**           | [CONTRIBUTING.md](CONTRIBUTING.md)                                   |
+| **Changelog**              | [CHANGELOG.md](CHANGELOG.md)                                         |
 
 ---
 
 ## Security
 
-| Layer | Protection | Implementation |
-|-------|-----------|----------------|
-| **Prompt Injection** | 10 detection patterns (instruction-override, jailbreak, leakage, code-exec, role-takeover, encoding-obfuscation, constraint-bypass) | `privacy-gateway.ps1` — blocks CRITICAL before agent processes input |
-| **Jailbreak Prevention** | DAN, unrestricted-mode, developer-mode, simulation attacks | `security-orchestrator.ps1` — expanded `$CRITICAL_PATTERNS` |
-| **Data Leakage** | PII redaction, IP masking, home path sanitization | `privacy-sanitizer.ps1` + `security-logger.ps1` |
-| **Secrets Management** | AES-256 encryption, DPAPI vault, RBAC, automated rotation | `secrets-manager.ps1` v2.0 + `secret-vault.ps1` |
-| **Supply Chain** | SBOM CycloneDX generation, npm hardening (ignore-scripts, min-release-age), Trivy scanning | `.npmrc` + `sbom-validate.ps1` + CI/CD |
-| **Auth & Access** | Rate-limited auth with lockout, session-based, DPAPI-encrypted | `secure-auth.ps1` + `security-orchestrator.ps1` |
+| Layer                    | Protection                                                                                                                          | Implementation                                                       |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| **Prompt Injection**     | 10 detection patterns (instruction-override, jailbreak, leakage, code-exec, role-takeover, encoding-obfuscation, constraint-bypass) | `privacy-gateway.ps1` — blocks CRITICAL before agent processes input |
+| **Jailbreak Prevention** | DAN, unrestricted-mode, developer-mode, simulation attacks                                                                          | `security-orchestrator.ps1` — expanded `$CRITICAL_PATTERNS`          |
+| **Data Leakage**         | PII redaction, IP masking, home path sanitization                                                                                   | `privacy-sanitizer.ps1` + `security-logger.ps1`                      |
+| **Secrets Management**   | AES-256 encryption, DPAPI vault, RBAC, automated rotation                                                                           | `secrets-manager.ps1` v2.0 + `secret-vault.ps1`                      |
+| **Supply Chain**         | SBOM CycloneDX generation, npm hardening (ignore-scripts, min-release-age), Trivy scanning                                          | `.npmrc` + `sbom-validate.ps1` + CI/CD                               |
+| **Auth & Access**        | Rate-limited auth with lockout, session-based, DPAPI-encrypted                                                                      | `secure-auth.ps1` + `security-orchestrator.ps1`                      |
 
-**98 security tests** — injection detection, PII redaction, secrets vault, SBOM validation, encryption.
+**98 security tests** — injection detection, PII redaction, secrets vault, SBOM validation,
+encryption.
 
-See [SECURITY.md](SECURITY.md), [docs/NORMATIVAS-SEGURIDAD.md](docs/NORMATIVAS-SEGURIDAD.md) (OWASP LLM Top 10 + OWASP Agentic Top 10).
+See [SECURITY.md](SECURITY.md), [docs/NORMATIVAS-SEGURIDAD.md](docs/NORMATIVAS-SEGURIDAD.md) (OWASP
+LLM Top 10 + OWASP Agentic Top 10).
 
 ---
 

@@ -103,7 +103,6 @@ El **GitFlow Orchestrator Skill** acta como un maestro/tutor que:
 - Proporciona prximos pasos claros
 - Explica qu validaciónes se ejecutarn
 
-
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

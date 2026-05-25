@@ -1,14 +1,8 @@
+// Effect effect(() => console.log('Count:', count()));
 
-// Effect
-effect(() => console.log('Count:', count()));
+// In template { { count(); } }
 
-// In template
-{
-  {
-    count();
-  }
-}
-```
+````
 
 ## @defer (Lazy Loading)
 
@@ -30,7 +24,7 @@ effect(() => console.log('Count:', count()));
     }
   `
 })
-```
+````
 
 ## HTTP Service
 

@@ -1,19 +1,22 @@
 git pull --rebase
 
 # Create feature branch
+
 git checkout -b feature/my-feature
 
 # Work and commit
-git add .
-git commit -m "feat(scope): description"
+
+git add . git commit -m "feat(scope): description"
 
 # Sync with develop
-git fetch origin
-git rebase origin/develop
+
+git fetch origin git rebase origin/develop
 
 # Push and create PR
+
 git push -u origin feature/my-feature
-```
+
+````
 
 ## Handling Merge Conflicts
 
@@ -38,7 +41,7 @@ git merge develop
 git add .
 git commit
 git push
-```
+````
 
 ## Pull Request Checklist
 

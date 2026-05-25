@@ -108,4 +108,6 @@ const doubled = computed(() => count() * 2);
 
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [
+eferences/detail.md](references/detail.md)
+```

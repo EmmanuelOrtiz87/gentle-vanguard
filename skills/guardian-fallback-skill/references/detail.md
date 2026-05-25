@@ -3,8 +3,10 @@
             Write-Warn "Blocked and  unavailable - manual intervention required"
         }
     }
+
 }
-```
+
+````
 
 ### In Session Close
 
@@ -15,7 +17,7 @@ if (-not (Test-AllTasksComplete)) {
          run --ci  # Final review before close
     }
 }
-```
+````
 
 ## Configuration
 

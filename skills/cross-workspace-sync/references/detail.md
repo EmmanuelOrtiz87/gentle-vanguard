@@ -42,6 +42,7 @@ function Resolve-Conflict-Manual {
 ```
 
 ---
+
 ## References
 
 See `references/patterns.md` for detailed patterns and code examples.

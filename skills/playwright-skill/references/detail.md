@@ -1,41 +1,25 @@
     const notification = this.page.locator('[role="status"]');
     await expect(notification).toContainText(message);
-  }
-}
 
-// Page-specific implementation
-export interface LoginData {
-  email: string;
-  password: string;
-}
+} }
 
-export class LoginPage extends BasePage {
-  readonly emailInput: Locator;
-  readonly passwordInput: Locator;
-  readonly submitButton: Locator;
+// Page-specific implementation export interface LoginData { email: string; password: string; }
 
-  constructor(page: Page) {
-    super(page);
-    this.emailInput = page.getByLabel('Email');
-    this.passwordInput = page.getByLabel('Password');
-    this.submitButton = page.getByRole('button', { name: 'Sign in' });
-  }
+export class LoginPage extends BasePage { readonly emailInput: Locator; readonly passwordInput:
+Locator; readonly submitButton: Locator;
 
-  async goto(): Promise<void> {
-    await super.goto('/login');
-  }
+constructor(page: Page) { super(page); this.emailInput = page.getByLabel('Email');
+this.passwordInput = page.getByLabel('Password'); this.submitButton = page.getByRole('button', {
+name: 'Sign in' }); }
 
-  async login(data: LoginData): Promise<void> {
-    await this.emailInput.fill(data.email);
-    await this.passwordInput.fill(data.password);
-    await this.submitButton.click();
-  }
+async goto(): Promise<void> { await super.goto('/login'); }
 
-  async verifyCriticalOutcome(): Promise<void> {
-    await expect(this.page).toHaveURL('/dashboard');
-  }
-}
-```
+async login(data: LoginData): Promise<void> { await this.emailInput.fill(data.email); await
+this.passwordInput.fill(data.password); await this.submitButton.click(); }
+
+async verifyCriticalOutcome(): Promise<void> { await expect(this.page).toHaveURL('/dashboard'); } }
+
+````
 
 ## Page Object Reuse (CRITICAL)
 
@@ -66,7 +50,7 @@ export class SignUpPage extends BasePage {
     /* ... */
   } //  SignInPage already has this
 }
-```
+````
 
 **Guidelines:**
 

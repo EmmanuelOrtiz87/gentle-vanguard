@@ -79,7 +79,6 @@ Each SDD work unit should map cleanly to a commit or PR with:
 - verification in the same unit,
 - rollback that does not remove unrelated work.
 
-
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

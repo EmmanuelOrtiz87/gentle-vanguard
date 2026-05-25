@@ -100,7 +100,6 @@ receive. Invest time making them accurate and concise.
 
 ### Step 2: Scan Project Conventions
 
-
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

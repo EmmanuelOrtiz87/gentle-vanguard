@@ -1,4 +1,4 @@
-# References for _semantic-skill-matcher
+# References for \_semantic-skill-matcher
 
 This directory contains extracted content from SKILL.md to keep the main file under size limits.
 
@@ -8,4 +8,5 @@ This directory contains extracted content from SKILL.md to keep the main file un
 
 ## Usage
 
-Reference these files when you need detailed examples. The main SKILL.md contains the essential rules and patterns only.
+Reference these files when you need detailed examples. The main SKILL.md contains the essential
+rules and patterns only.

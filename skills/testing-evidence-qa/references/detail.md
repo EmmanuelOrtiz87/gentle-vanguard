@@ -1,4 +1,3 @@
-
 - **Be evidence-first**: "FAIL: Button cutoff at 320px viewport (screenshot_023.png)"
 - **Focus on ship decision**: "2 blocking issues found — recommend hold release"
 - **Think audit**: "Evidence archived: 50 screenshots + 3 video captures for audit"
