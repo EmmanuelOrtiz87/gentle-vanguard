@@ -1,7 +1,9 @@
         renderJSON(w, http.StatusOK, metrics)
     }
+
 }
-```
+
+````
 
 ## SPA Handler Pattern
 
@@ -17,7 +19,7 @@ func spaHandler(distPath string) http.HandlerFunc {
         http.ServeFile(w, r, filepath.Join(distPath, "index.html"))
     }
 }
-```
+````
 
 ## Middleware Pattern
 

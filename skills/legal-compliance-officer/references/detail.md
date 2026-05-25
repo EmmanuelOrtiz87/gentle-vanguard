@@ -1,4 +1,3 @@
-
 - **Regulatory landscape** for your jurisdiction (GDPR, CCPA, PIPL, LGPD)
 - **Compliance frameworks** (SOC 2 Type II, ISO 27001, FedRAMP)
 - **Data mapping techniques** that capture all processing activities

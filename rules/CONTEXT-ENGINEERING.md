@@ -74,13 +74,13 @@ Level 5 — Task Context            (current prompt, files, ~80% token budget)
 
 Conversation history grows append-only and MUST be managed to prevent context overflow:
 
-| Parameter | Value | Description |
-|-----------|-------|-------------|
-| `strategy` | sliding-window | Keep recent N turns complete, summarize older |
-| `maxTurns` | 10 | Maximum full turns retained in context |
-| `pruneToolResults` | true | Remove large tool outputs from old turns |
-| `threshold` | 8000 chars | Approximate trigger for compaction activation |
-| `summarize` | false | Turn on for models with summarization capability |
+| Parameter          | Value          | Description                                      |
+| ------------------ | -------------- | ------------------------------------------------ |
+| `strategy`         | sliding-window | Keep recent N turns complete, summarize older    |
+| `maxTurns`         | 10             | Maximum full turns retained in context           |
+| `pruneToolResults` | true           | Remove large tool outputs from old turns         |
+| `threshold`        | 8000 chars     | Approximate trigger for compaction activation    |
+| `summarize`        | false          | Turn on for models with summarization capability |
 
 Config source: `opencode.json#compaction`, `config/context-efficiency.json#compactionPolicy`
 
@@ -95,6 +95,7 @@ Config source: `opencode.json#compaction`, `config/context-efficiency.json#compa
 ### 4.3 Input Token Budget Guard
 
 Enforced via `config/context-efficiency.json#tokenAutopilot.inputGuard`:
+
 - `softThresholdPct (70%)`: Log WARN + suggest compaction
 - `hardThresholdPct (90%)`: BLOCK new tool calls, force compaction before proceeding
 
@@ -104,16 +105,16 @@ Enforced via `config/context-efficiency.json#tokenAutopilot.inputGuard`:
 
 ### 5.1 Trigger Cache
 
-The `pre-process-input.ps1` hook uses a SHA256-based cache to avoid re-scanning all
-SKILL.md files and auto-delegation.json on every invocation:
+The `pre-process-input.ps1` hook uses a SHA256-based cache to avoid re-scanning all SKILL.md files
+and auto-delegation.json on every invocation:
 
-| File | Lines Scanned Per Invocation | Cache Effect |
-|------|------|------|
-| SKILL.md (x132) | ~19,730 lines total | Scanned only on first call or file change |
-| auto-delegation.json | ~1,805 lines | Loaded entirely only on first call or file change |
+| File                 | Lines Scanned Per Invocation | Cache Effect                                      |
+| -------------------- | ---------------------------- | ------------------------------------------------- |
+| SKILL.md (x132)      | ~19,730 lines total          | Scanned only on first call or file change         |
+| auto-delegation.json | ~1,805 lines                 | Loaded entirely only on first call or file change |
 
-Cache location: `.session/preprocess-trigger-cache.json`
-Invalidation: File timestamp changes to any SKILL.md or auto-delegation.json
+Cache location: `.session/preprocess-trigger-cache.json` Invalidation: File timestamp changes to any
+SKILL.md or auto-delegation.json
 
 ### 5.2 When Cache Cannot Be Used
 
@@ -125,16 +126,16 @@ Invalidation: File timestamp changes to any SKILL.md or auto-delegation.json
 
 ## 6. Context Budget (Updated)
 
-| Artifact | Target | Max | Notes |
-|----------|--------|-----|-------|
-| AGENTS.md | 150 lines | 200 | Core bootstrap only |
-| CLAUDE.md | 60 lines | 100 | Tool-specific (compressed from 220) |
-| Per rule file | 120 lines | 200 | One domain per file |
-| SKILL.md body | 200 tokens | 250 | Excluding frontmatter (compressed) |
-| Per config JSON | 80 lines | 150 | Split into sub-configs |
-| Start-up output | 8 lines | 12 | Peak block per startup |
-| Conversation turns | 10 turns | 15 | Sliding window max |
-| Pre-process cache | — | 50KB | JSON cache file size limit |
+| Artifact           | Target     | Max  | Notes                               |
+| ------------------ | ---------- | ---- | ----------------------------------- |
+| AGENTS.md          | 150 lines  | 200  | Core bootstrap only                 |
+| CLAUDE.md          | 60 lines   | 100  | Tool-specific (compressed from 220) |
+| Per rule file      | 120 lines  | 200  | One domain per file                 |
+| SKILL.md body      | 200 tokens | 250  | Excluding frontmatter (compressed)  |
+| Per config JSON    | 80 lines   | 150  | Split into sub-configs              |
+| Start-up output    | 8 lines    | 12   | Peak block per startup              |
+| Conversation turns | 10 turns   | 15   | Sliding window max                  |
+| Pre-process cache  | —          | 50KB | JSON cache file size limit          |
 
 ---
 
@@ -190,10 +191,10 @@ AI agents scan tables more reliably than paragraphs:
 
 ### 7.7 Pre-Compact Hook Compression
 
-| Parameter | Value | Effect |
-|-----------|-------|--------|
-| CompressionRatio | 0.60 | 40% context reduction before compaction |
-| Handoff retention | Anchored content saved to Engram | No loss of critical state |
+| Parameter         | Value                            | Effect                                  |
+| ----------------- | -------------------------------- | --------------------------------------- |
+| CompressionRatio  | 0.60                             | 40% context reduction before compaction |
+| Handoff retention | Anchored content saved to Engram | No loss of critical state               |
 
 Config: `scripts/utilities/pre-compact-hook.ps1`, `scripts/utilities/handoff-compress.ps1`
 
@@ -206,18 +207,19 @@ Config: `scripts/utilities/pre-compact-hook.ps1`, `scripts/utilities/handoff-com
 
 ### 7.9 Inter-Agent Communication Optimization
 
-| Optimization | Before | After | Savings |
-|-------------|--------|-------|---------|
-| INTER-AGENT-COMMUNICATION.md | 167 lines | 57 lines | −66% |
-| JSON schema in docs | Full verbose examples | Reference to orchestrator.json | Eliminated duplication |
-| Circuit breaker doc | Full pattern + state table | Condensed to config reference | Eliminated duplication |
-| Subagent delegation rule | Not defined | Send minimal context in prompt | Prevents context duplication |
+| Optimization                 | Before                     | After                          | Savings                      |
+| ---------------------------- | -------------------------- | ------------------------------ | ---------------------------- |
+| INTER-AGENT-COMMUNICATION.md | 167 lines                  | 57 lines                       | −66%                         |
+| JSON schema in docs          | Full verbose examples      | Reference to orchestrator.json | Eliminated duplication       |
+| Circuit breaker doc          | Full pattern + state table | Condensed to config reference  | Eliminated duplication       |
+| Subagent delegation rule     | Not defined                | Send minimal context in prompt | Prevents context duplication |
 
 Config: `rules/INTER-AGENT-COMMUNICATION.md` v1.1.0, `CLAUDE.md#Core-Rules` rule 9
 
 ### 7.10 Subagent Task Context Budget
 
 When delegating via `task` tool, the prompt sent to subagents MUST follow:
+
 - System context: Only task-relevant information (not full history)
 - Files: Only files needed for the task (max 3 unless required)
 - Previous turns: Summarized if referenced, never full raw text
@@ -237,27 +239,27 @@ When delegating via `task` tool, the prompt sent to subagents MUST follow:
 
 ## 9. References
 
-| Resource | Path |
-|----------|------|
-| NORMATIVES (index) | `rules/NORMATIVES.md` (120 lines) |
-| NORMATIVAS-ARCHITECTURE | `rules/NORMATIVAS-ARCHITECTURE.md` |
-| NORMATIVAS-CONFIG | `rules/NORMATIVAS-CONFIG.md` |
-| NORMATIVAS-DEVOPS | `rules/NORMATIVAS-DEVOPS.md` |
-| NORMATIVAS-DOCS | `rules/NORMATIVAS-DOCS.md` |
-| NORMATIVAS-ENFORCEMENT | `rules/NORMATIVAS-ENFORCEMENT.md` |
-| NORMATIVAS-GIT | `rules/NORMATIVAS-GIT.md` |
-| AI Normatives | `rules/AI-NORMATIVES.md` |
-| Development Standards | `rules/DEVELOPMENT-STANDARDS.md` |
-| AGENTS.md | `docs/AGENTS.md` |
-| Break Glass | `docs/AGENTS.md#break-glass` |
-| Orchestrator Config | `config/orchestrator.json` |
-| Context Efficiency | `config/context-efficiency.json` |
-| Compaction Config | `opencode.json#compaction` |
-| Pre-process Caching | `scripts/utilities/pre-process-input.ps1` |
-| Pre-Compact Hook | `scripts/utilities/pre-compact-hook.ps1` |
-| Behavior Prompts | `config/behavior-prompts.json` (74 lines) |
-| Quick Commands | `docs/QUICK-COMMANDS.md` |
-| Response Profile | `CLAUDE.md#Response-Profile` |
+| Resource                | Path                                      |
+| ----------------------- | ----------------------------------------- |
+| NORMATIVES (index)      | `rules/NORMATIVES.md` (120 lines)         |
+| NORMATIVAS-ARCHITECTURE | `rules/NORMATIVAS-ARCHITECTURE.md`        |
+| NORMATIVAS-CONFIG       | `rules/NORMATIVAS-CONFIG.md`              |
+| NORMATIVAS-DEVOPS       | `rules/NORMATIVAS-DEVOPS.md`              |
+| NORMATIVAS-DOCS         | `rules/NORMATIVAS-DOCS.md`                |
+| NORMATIVAS-ENFORCEMENT  | `rules/NORMATIVAS-ENFORCEMENT.md`         |
+| NORMATIVAS-GIT          | `rules/NORMATIVAS-GIT.md`                 |
+| AI Normatives           | `rules/AI-NORMATIVES.md`                  |
+| Development Standards   | `rules/DEVELOPMENT-STANDARDS.md`          |
+| AGENTS.md               | `docs/AGENTS.md`                          |
+| Break Glass             | `docs/AGENTS.md#break-glass`              |
+| Orchestrator Config     | `config/orchestrator.json`                |
+| Context Efficiency      | `config/context-efficiency.json`          |
+| Compaction Config       | `opencode.json#compaction`                |
+| Pre-process Caching     | `scripts/utilities/pre-process-input.ps1` |
+| Pre-Compact Hook        | `scripts/utilities/pre-compact-hook.ps1`  |
+| Behavior Prompts        | `config/behavior-prompts.json` (74 lines) |
+| Quick Commands          | `docs/QUICK-COMMANDS.md`                  |
+| Response Profile        | `CLAUDE.md#Response-Profile`              |
 
 ---
 

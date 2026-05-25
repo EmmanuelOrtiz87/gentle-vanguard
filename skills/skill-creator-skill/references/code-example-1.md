@@ -113,3 +113,6 @@ metadata:
 After creating the skill, add it to `SKILL_INDEX.md`:
 
 ```
+
+```
+````

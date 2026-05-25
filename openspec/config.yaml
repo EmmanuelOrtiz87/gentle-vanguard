@@ -14,7 +14,7 @@ context: |
   Tools supported: opencode, claude-code, cline, cursor, windsurf, codex, continue-dev, copilot,
     antigravity, claude-generic
   Memory: Engram (persistent), CodeGraph (code graph index)
-  Hooks: Lefthook v2.1.6 (pre-commit, commit-msg, post-commit, pre-push)
+  Hooks: Lefthook v2.1.8 (pre-commit, commit-msg, post-commit, pre-push)
   CI: Dependabot (github-actions + npm), 16 GitHub Actions workflows
 
 strict_tdd: true
@@ -52,36 +52,37 @@ rules:
 
 testing:
   strict_tdd: true
-  detected: "2026-05-24"
+  detected: '2026-05-24'
 
   policies:
-    - "config/testing-policy.json"
-    - "rules/TESTING-STANDARDS.md"
-    - "rules/SDD-STRICT-TDD.md"
+    - 'config/testing-policy.json'
+    - 'rules/TESTING-STANDARDS.md'
+    - 'rules/SDD-STRICT-TDD.md'
 
   frameworks:
     powershell:
-      runner: "Invoke-Pester"
-      framework: "Pester 5.x"
-      pattern: "tests/**/*.tests.ps1"
+      runner: 'Invoke-Pester'
+      framework: 'Pester 5.7+'
+      pattern: 'tests/**/*.tests.ps1'
+      note: 'Pester 5.7.1 installed alongside legacy 3.4.0'
     security:
-      runner: "pwsh -NoProfile tests/security/security-checks.tests.ps1"
-      framework: "Pester 5.x"
+      runner: 'pwsh -NoProfile tests/security/security-checks.tests.ps1'
+      framework: 'Pester 5.7+'
 
   layers:
     unit:
       available: true
-      tool: "Pester"
-      note: "Unit tests in tests/unit/"
+      tool: 'Pester'
+      note: 'Unit tests in tests/unit/ (46 test files)'
     integration:
       available: true
-      tool: "Pester"
-      note: "Integration tests in tests/integration/"
+      tool: 'Pester'
+      note: 'Integration tests in tests/integration/ (7 test files)'
     security:
       available: true
-      tool: "Pester"
-      note: "Security tests in tests/security/"
+      tool: 'Pester'
+      note: 'Security tests in tests/security/'
     e2e:
       available: true
-      tool: "Pester"
-      note: "E2E tests in tests/e2e/ — release workflow homologation gate"
+      tool: 'Pester'
+      note: 'E2E tests in tests/e2e/ — release workflow homologation gate'

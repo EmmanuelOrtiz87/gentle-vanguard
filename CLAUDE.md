@@ -5,6 +5,7 @@
 ## CRITICAL: First Action — Tool Detection
 
 Run BEFORE any action:
+
 ```powershell
 $detected = pwsh -NoProfile -File scripts/utilities/detect-tool.ps1 -AsJson | ConvertFrom-Json
 $detected.name  # opencode|claude-code|cline|cursor|windsurf|unknown
@@ -31,19 +32,23 @@ Run `docs/AGENTS.md#Mandatory-Startup-Sequence` — no shortcuts.
 7. **CodeGraph** -> `codegraph_context` before modifying code
 8. **mem_search "lessons learned"** at session start
 9. **Review Workload Guard** -> `review-workload-guard.ps1` before multi-file impl
-10. **Tool output discipline** -> limit read/grep/bash results; use `-First 30`, `Select-Object`, `head -50` on large output
+10. **Tool output discipline** -> limit read/grep/bash results; use `-First 30`, `Select-Object`,
+    `head -50` on large output
 
 ## Break Glass — Auto-Override Harmful Config
 
 If user reports incompleteness, task spans 3+ turns, loop detected, or output truncated:
+
 ```powershell
 pwsh -NoProfile -File scripts/utilities/self-diagnosis.ps1 -CurrentProfile "<p>" -CurrentChatLevel "<l>" -TurnCount <N>
 ```
+
 Override to `lleno`/`chat-balanced`, notify: `[BREAK GLASS] motivo: {reason}`
 
 ## Response Profile
 
 Profile: **ultra** | Detail: **simple** | Chat: **chat-compact** (max 4 lines text)
+
 1. NO preamble/postamble — just do it
 2. No echoing user's question
 3. Batch independent tool calls in parallel
@@ -56,8 +61,8 @@ Profile: **ultra** | Detail: **simple** | Chat: **chat-compact** (max 4 lines te
 
 ## Settings
 
-Temperature: 0.3 | Max tokens: 4500 | Cache: enabled (setCacheKey: true)
-Lang: es | Engram project: workspace_gentle_vanguard
+Temperature: 0.3 | Max tokens: 4500 | Cache: enabled (setCacheKey: true) Lang: es | Engram project:
+workspace_gentle_vanguard
 
 ## Key Refs
 

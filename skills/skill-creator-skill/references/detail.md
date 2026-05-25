@@ -49,7 +49,8 @@ After creating the skill, add it to `SKILL_INDEX.md`:
 ```markdown
 | **Category** | skill-name |
 ```
-````
+
+```
 
 ---
 
@@ -58,3 +59,4 @@ After creating the skill, add it to `SKILL_INDEX.md`:
 - **Gentle-Vanguard**: See `~/.gentleman/` for global installation
 - **Skill Index**: See [SKILL_INDEX.md](../SKILL_INDEX.md) for all skills
 - **Documentation**: See [docs/](../../docs/) for guides
+```

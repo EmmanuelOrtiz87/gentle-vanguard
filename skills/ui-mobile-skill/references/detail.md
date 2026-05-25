@@ -1,10 +1,9 @@
-  },
-});
+}, });
 
-// NEVER CREATE invisible buttons:
-//  backgroundColor: 'transparent' without border
-//  Text color matching background
-```
+// NEVER CREATE invisible buttons: // backgroundColor: 'transparent' without border // Text color
+matching background
+
+````
 
 ### 4. Accessibility Labels (REQUIRED)
 
@@ -37,7 +36,7 @@
   accessibilityLabel="User profile photo"
   source={...}
 />
-```
+````
 
 ### 5. Focus/Selection States
 
@@ -60,6 +59,10 @@ const styles = StyleSheet.create({
 ```
 
 ---
+
 ---
+
 ## References
-See `references/patterns.md` for: platform differences, component patterns, color tokens, navigation patterns, and accessibility patterns.
+
+See `references/patterns.md` for: platform differences, component patterns, color tokens, navigation
+patterns, and accessibility patterns.

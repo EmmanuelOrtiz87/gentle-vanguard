@@ -111,4 +111,6 @@ def test_with_mock_object():
 
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [
+eferences/detail.md](references/detail.md)
+```

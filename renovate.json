@@ -53,12 +53,7 @@
       "enabled": false
     }
   ],
-  "ignorePaths": [
-    "node_modules/**",
-    ".engram-data/**",
-    ".git/**",
-    "**/node_modules/**"
-  ],
+  "ignorePaths": ["node_modules/**", ".engram-data/**", ".git/**", "**/node_modules/**"],
   "pre-commit": {
     "enabled": true
   }

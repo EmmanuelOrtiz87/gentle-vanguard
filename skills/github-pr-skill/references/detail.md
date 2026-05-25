@@ -1,4 +1,3 @@
-
 ```bash
 gh pr create --title "feat(dashboard): add analytics" --body "$(cat <<'EOF'
 ## Summary

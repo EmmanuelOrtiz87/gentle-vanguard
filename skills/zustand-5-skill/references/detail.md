@@ -1,13 +1,9 @@
-  setUser: (user) => set({ user }),
-  logout: () => set({ user: null }),
-});
+setUser: (user) => set({ user }), logout: () => set({ user: null }), });
 
-// Combine slices
-const useStore = create((...a) => ({
-  ...createCounterSlice(...a),
-  ...createUserSlice(...a),
-}));
-```
+// Combine slices const useStore = create((...a) => ({ ...createCounterSlice(...a),
+...createUserSlice(...a), }));
+
+````
 
 ## Persistence
 
@@ -29,7 +25,7 @@ const useSettingsStore = create(
     },
   ),
 );
-```
+````
 
 ## Async Actions
 

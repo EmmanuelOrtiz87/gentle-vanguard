@@ -1,9 +1,10 @@
       "priceCurrency": "USD",
       "availability": "https://schema.org/InStock"
     }
-  }
-</script>
-```
+
+} </script>
+
+````
 
 #### FAQ
 
@@ -24,7 +25,7 @@
     ]
   }
 </script>
-```
+````
 
 ### 3. Sitemap.xml
 

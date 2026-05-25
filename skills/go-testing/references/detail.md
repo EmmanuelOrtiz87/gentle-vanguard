@@ -1,4 +1,4 @@
-```
+````
 
 ### Pattern 4: Golden File Testing
 
@@ -24,7 +24,7 @@ func TestOSSelectGolden(t *testing.T) {
         t.Errorf("output doesn't match golden file")
     }
 }
-```
+````
 
 ---
 

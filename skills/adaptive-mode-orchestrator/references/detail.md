@@ -6,9 +6,10 @@
       "auto_rollback_on_qa_failure": true,
       "checkpoint_on_phase_complete": true
     }
-  }
-}
-```
+
+} }
+
+````
 
 ## Uso
 
@@ -25,7 +26,7 @@
 
 # Modo dry-run (sin ejecutar)
 .\skills\adaptive-mode-orchestrator\adaptive-mode-engine.ps1 -DryRun
-```
+````
 
 ### Desde el Orquestador Principal
 

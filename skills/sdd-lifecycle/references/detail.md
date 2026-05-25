@@ -3,6 +3,7 @@
 3. Data models
 4. Sequence diagrams
 5. Technical approach
+
 ```
 
 ### Phase 6: TASKS
@@ -12,10 +13,12 @@
 Break down into implementable tasks:
 
 ```
+
 1. Create task list
 2. Estimate effort
 3. Prioritize tasks
 4. Define dependencies
+
 ```
 
 ### Phase 7: APPLY
@@ -25,10 +28,12 @@ Break down into implementable tasks:
 Implement tasks following specs:
 
 ```
+
 1. Read specs and design
 2. Implement with TDD if applicable
 3. Follow project conventions
 4. Update task status
+
 ```
 
 ### Phase 8: VERIFY
@@ -38,10 +43,12 @@ Implement tasks following specs:
 Verify implementation against spec:
 
 ```
+
 1. Run acceptance criteria tests
 2. Review BDD scenario coverage
 3. Validate functionality
 4. Document verification results
+
 ```
 
 ### Phase 9: ARCHIVE
@@ -51,11 +58,13 @@ Verify implementation against spec:
 Archive completed SDD:
 
 ```
+
 1. Verify all criteria met
 2. Document lessons learned
 3. Archive artifacts
 4. Update Engram with learnings
-```
+
+````
 
 ## Usage
 
@@ -74,7 +83,7 @@ gentle-vanguard sdd apply "user-authentication" --task "1.1"
 
 # Verify implementation
 gentle-vanguard sdd verify "user-authentication"
-```
+````
 
 ## Files
 

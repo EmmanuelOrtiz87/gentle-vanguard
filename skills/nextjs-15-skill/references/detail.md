@@ -1,4 +1,3 @@
-
 ```typescript
 // Parallel fetching
 const [users, posts] = await Promise.all([

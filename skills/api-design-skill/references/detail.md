@@ -10,23 +10,22 @@
         "message": "Must be at least 8 characters"
       }
     ]
-  },
-  "meta": {
-    "requestId": "req_abc123"
-  }
-}
+
+}, "meta": { "requestId": "req_abc123" } }
+
 ```
 
 ## versióning
 
 ```
-/v1/users
-/v2/users
-```
+
+/v1/users /v2/users
+
+````
 
 ```http
 Accept: application/vnd.api+json; versión=2
-```
+````
 
 ## Pagination Patterns
 

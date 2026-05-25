@@ -1,9 +1,13 @@
 # RPC Subagent Protocol
 
 ## Overview
-Lightweight HTTP RPC protocol for invoking workspace tools without going through the full agent LLM loop. Reduces context cost in multi-step pipelines by allowing scripts (PowerShell, Node.js, Python) to call tools directly.
+
+Lightweight HTTP RPC protocol for invoking workspace tools without going through the full agent LLM
+loop. Reduces context cost in multi-step pipelines by allowing scripts (PowerShell, Node.js, Python)
+to call tools directly.
 
 ## Architecture
+
 ```
 Script (PS/Node/Python)          RPC Server (Node.js)        Workspace
         |                              |                         |
@@ -15,6 +19,7 @@ Script (PS/Node/Python)          RPC Server (Node.js)        Workspace
 ```
 
 ## Quick Start
+
 ```powershell
 # Start server
 node scripts/rpc/rpc-server.js --port 8732
@@ -30,15 +35,17 @@ node scripts/rpc/rpc-server.js --port 8732
 ```
 
 ## Endpoints
-| Method | Path          | Description                    |
-|--------|---------------|--------------------------------|
-| POST   | /rpc          | Execute a single tool          |
-| POST   | /rpc/batch    | Execute multiple tools         |
-| POST   | /rpc/watch    | Poll a tool until condition    |
-| GET    | /health       | Server health + stats          |
-| GET    | /tools        | List all available tools       |
+
+| Method | Path       | Description                 |
+| ------ | ---------- | --------------------------- |
+| POST   | /rpc       | Execute a single tool       |
+| POST   | /rpc/batch | Execute multiple tools      |
+| POST   | /rpc/watch | Poll a tool until condition |
+| GET    | /health    | Server health + stats       |
+| GET    | /tools     | List all available tools    |
 
 ## Request/Response
+
 ```json
 // POST /rpc
 { "tool": "read_file", "args": { "path": "config.json" }, "id": "req-001" }
@@ -49,7 +56,9 @@ node scripts/rpc/rpc-server.js --port 8732
 ```
 
 ## Available Tools
-All gateway tools (execute_command, read_file, write_file, search_files, list_directory, git_command, send_message) plus RPC-specific:
+
+All gateway tools (execute_command, read_file, write_file, search_files, list_directory,
+git_command, send_message) plus RPC-specific:
 
 - **rpc_health** — Server stats (uptime, request count, tool count)
 - **rpc_batch** — Execute tools in `sequential` or `parallel` mode
@@ -62,18 +71,23 @@ All gateway tools (execute_command, read_file, write_file, search_files, list_di
   - condition format: `"field == value"`, `"output contains done"`
 
 ## Security
+
 - **Localhost only** — no authentication (future: API key via `X-RPC-Key` header)
 - Blocked tools: none currently; `send_message` is a no-op in RPC context
 - Rate limiting: none (future: configurable)
 
 ## Error Codes
-| Code | Meaning                          |
-|------|----------------------------------|
+
+| Code | Meaning                                  |
+| ---- | ---------------------------------------- |
 | 400  | Bad request (missing tool, invalid JSON) |
-| 404  | Unknown endpoint                 |
-| 405  | Method not allowed               |
-| 500  | Tool execution error             |
-| 504  | Tool timeout (30s default)       |
+| 404  | Unknown endpoint                         |
+| 405  | Method not allowed                       |
+| 500  | Tool execution error                     |
+| 504  | Tool timeout (30s default)               |
 
 ## Integration with Gateway
-The gateway agent can delegate long-running tasks to the RPC server via `rpc_batch`/`rpc_watch`, keeping the agent's context window clean. The gateway's `tools.js` can also be configured to use `rpc-client.ps1` for heavy operations.
+
+The gateway agent can delegate long-running tasks to the RPC server via `rpc_batch`/`rpc_watch`,
+keeping the agent's context window clean. The gateway's `tools.js` can also be configured to use
+`rpc-client.ps1` for heavy operations.

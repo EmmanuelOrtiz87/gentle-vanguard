@@ -1,26 +1,17 @@
-  const [optimisticComments, addOptimistic] = useOptimistic(comments, (state, newComment) => [
-    ...state,
-    newComment,
-  ]);
+const [optimisticComments, addOptimistic] = useOptimistic(comments, (state, newComment) => [
+...state, newComment, ]);
 
-  async function handleAdd(text: string) {
-    const tempComment = { id: 'temp', text, pending: true };
-    addOptimistic(tempComment);
+async function handleAdd(text: string) { const tempComment = { id: 'temp', text, pending: true };
+addOptimistic(tempComment);
 
     await addComment(postId, text);
-  }
 
-  return (
-    <ul>
-      {optimisticComments.map((c) => (
-        <li key={c.id} style={{ opacity: c.pending ? 0.5 : 1 }}>
-          {c.text}
-        </li>
-      ))}
-    </ul>
-  );
 }
-```
+
+return ( <ul> {optimisticComments.map((c) => ( <li key={c.id}
+style={{ opacity: c.pending ? 0.5 : 1 }}> {c.text} </li> ))} </ul> ); }
+
+````
 
 ## Component Patterns
 
@@ -59,7 +50,7 @@ function DataFetcher({ render, url }) {
     </ul>
   )}
 />;
-```
+````
 
 ## Custom Hooks
 

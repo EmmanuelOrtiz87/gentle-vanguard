@@ -105,4 +105,4 @@ Copy-Item -Path "templates/project-types/service/.github/workflows/ci.yml" -Dest
 
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

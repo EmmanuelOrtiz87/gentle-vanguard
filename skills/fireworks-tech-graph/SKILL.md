@@ -109,4 +109,4 @@ python3 ./scripts/generate-from-template.py architecture ./output/arch.svg '{"ti
 
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

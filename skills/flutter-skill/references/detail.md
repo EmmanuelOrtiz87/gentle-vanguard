@@ -1,10 +1,7 @@
-  Future<void> addUser(User user) async {
-    final repository = ref.read(userRepositoryProvider);
-    await repository.addUser(user);
-    ref.invalidateSelf();
-  }
-}
-```
+Future<void> addUser(User user) async { final repository = ref.read(userRepositoryProvider); await
+repository.addUser(user); ref.invalidateSelf(); } }
+
+````
 
 ### AsyncValue Handling
 
@@ -37,7 +34,7 @@ Widget build(BuildContext context, WidgetRef ref) {
     AsyncError(:final error) => ErrorDisplay(error: error),
   };
 }
-```
+````
 
 ---
 

@@ -1,19 +1,10 @@
     language: z.string().optional(),
     focus: z.string().optional(),
-  },
-  ({ language, focus }) => ({
-    messages: [
-      {
-        role: 'user',
-        content: {
-          type: 'text',
-          text: `Review the following ${language || 'code'} focusing on: ${focus || 'general quality'}`,
-        },
-      },
-    ],
-  }),
-);
-```
+
+}, ({ language, focus }) => ({ messages: [ { role: 'user', content: { type: 'text', text: `Review
+the following ${language || 'code'} focusing on: ${focus || 'general quality'}`, }, }, ], }), );
+
+````
 
 ## Server Implementation
 
@@ -37,7 +28,7 @@ async function main() {
 }
 
 main().catch(console.error);
-```
+````
 
 ## Client Configuration
 

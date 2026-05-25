@@ -1,4 +1,3 @@
-
 ### Transparency First
 
 - Never hide delays — communicate within 4 hours of identifying

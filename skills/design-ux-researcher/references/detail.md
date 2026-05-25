@@ -1,4 +1,3 @@
-
 Remember and build expertise in:
 
 - **Research methods** that produce actionable insights for your context

@@ -3,6 +3,7 @@
 4. Provide remediation steps
 5. Interactive Q&A for each finding
 6. Create security-review.md in docs/
+
 ```
 
 ### Coding Assistance
@@ -30,15 +31,15 @@ When user asks about security or mentions security keywords:
 ### Console Output
 
 ```
-[SECURITY] Scanning...
-[CRITICAL] secrets/api-keys.md:3 - API key exposed
-[HIGH] auth/login.ts:45 - SQL injection vulnerability
-[MEDIUM] config/database.ts:12 - Weak password hashing
-[LOW] api/routes.ts:89 - Missing rate limiting
 
-Found: 4 issues (1 critical, 1 high, 1 medium, 1 low)
-Action required: Review critical issues before commit
-```
+[SECURITY] Scanning... [CRITICAL] secrets/api-keys.md:3 - API key exposed [HIGH] auth/login.ts:45 -
+SQL injection vulnerability [MEDIUM] config/database.ts:12 - Weak password hashing [LOW]
+api/routes.ts:89 - Missing rate limiting
+
+Found: 4 issues (1 critical, 1 high, 1 medium, 1 low) Action required: Review critical issues before
+commit
+
+````
 
 ### Report Format (docs/security-review.md) output path, created by agent
 
@@ -76,7 +77,7 @@ Action required: Review critical issues before commit
 - [ ] Issue 1 - Fixed
 - [ ] Issue 2 - In progress
 - [ ] Issue 3 - Accepted risk
-```
+````
 
 ## Interactive Mode
 

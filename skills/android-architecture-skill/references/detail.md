@@ -8,8 +8,10 @@
         userApi.updateUser(user.toDto())
         userDao.insertUser(user.toEntity())
     }
+
 }
-```
+
+````
 
 ## Best Practices
 
@@ -59,7 +61,7 @@ class UserViewModel @Inject constructor(
     // ViewModel implementation
 }
 }
-```
+````
 
 ---
 

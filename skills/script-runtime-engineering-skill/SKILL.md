@@ -110,7 +110,6 @@ printf '%s\n' "PowerShell is required to run this workflow."
 exit 1
 ```
 
-
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

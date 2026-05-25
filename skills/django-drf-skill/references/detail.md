@@ -2,7 +2,8 @@
         recent_users = User.objects.order_by('-date_joined')[:10]
         serializer = self.get_serializer(recent_users, many=True)
         return Response(serializer.data)
-```
+
+````
 
 ## Permissions
 
@@ -18,7 +19,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 class IsAdminUser(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user and request.user.is_staff
-```
+````
 
 ## Filters
 

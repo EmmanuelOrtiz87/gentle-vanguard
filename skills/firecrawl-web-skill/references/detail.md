@@ -1,4 +1,3 @@
-
 ---
 
 ## Integration with Gentle-Vanguard

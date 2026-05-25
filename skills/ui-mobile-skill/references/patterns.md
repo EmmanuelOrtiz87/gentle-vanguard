@@ -1,4 +1,3 @@
-
 ## Core Philosophy
 
 **Mobile UI is about touch, speed, and focus.** No hover states, smaller screens, thumb-friendly

@@ -108,7 +108,6 @@ While the `@google/design.md` CLI provides these commands, this skill implements
 
 ### Validate (lint)
 
-
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

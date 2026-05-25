@@ -54,7 +54,6 @@ care instead of skimming. Big PRs create fatigue, hide defects, and slow merge v
 
 ## Chain Boundaries#
 
-
 ---
 
-> **Referencia detallada**: [eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [ eferences/detail.md](references/detail.md)
