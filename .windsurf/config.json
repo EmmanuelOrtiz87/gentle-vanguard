@@ -1,13 +1,67 @@
 {
   "name": "Windsurf - Optimized Profile",
-  "version": "1.2.0",
-  "description": "Optimized Windsurf for peak hour / token pressure",
-  "workspace": { "projectRoot": ".", "configFiles": ["AGENTS.md", "CLAUDE.md"], "skillRegistry": ".atl/skill-registry.md" },
-  "aiSettings": { "temperature": 0.3, "maxTokens": 2500, "localFirst": true },
-  "toolPermissions": { "websearch": "deny", "webfetch": "deny", "externalTools": "ask" },
-  "contextManagement": { "useEngramMemory": true, "useLocalSkills": true, "useProjectDocs": true, "fastContext": true },
-  "cascade": { "restrictToLocal": true, "allowExternalTools": false, "webDocsSearch": "disabled" },
-  "preProcessing": { "enabled": true, "mandatory": true, "script": "scripts/utilities/pre-process-input.ps1", "scriptArgs": { "UserInput": "USER_INPUT_HERE", "WorkspaceRoot": "." } },
-  "sessionManagement": { "tracking": { "project": "gentle-vanguard", "sessionIdPattern": "session-YYYY-MM-DD-XX" } },
-  "language": { "default": "es", "technicalTerms": "en" }
+  "version": "1.3.0",
+  "description": "Optimized Windsurf with response cache, lazy autostart, in-process pipeline",
+  "workspace": {
+    "projectRoot": ".",
+    "configFiles": ["docs/AGENTS.md", "CLAUDE.md"],
+    "skillRegistry": ".atl/skill-registry.md"
+  },
+  "aiSettings": {
+    "temperature": 0.3,
+    "maxTokens": 2500,
+    "localFirst": true
+  },
+  "toolPermissions": {
+    "websearch": "deny",
+    "webfetch": "deny",
+    "externalTools": "ask"
+  },
+  "contextManagement": {
+    "useEngramMemory": true,
+    "useLocalSkills": true,
+    "useProjectDocs": true,
+    "fastContext": true
+  },
+  "cascade": {
+    "restrictToLocal": true,
+    "allowExternalTools": false,
+    "webDocsSearch": "disabled"
+  },
+  "toolDetection": {
+    "enabled": true,
+    "script": "scripts/utilities/detect-tool.ps1",
+    "args": "-AsJson"
+  },
+  "preProcessing": {
+    "enabled": true,
+    "mandatory": true,
+    "script": "scripts/utilities/pre-process-input.ps1",
+    "scriptArgs": {
+      "UserInput": "USER_INPUT_HERE",
+      "WorkspaceRoot": "."
+    },
+    "responseCache": {
+      "enabled": true,
+      "mechanism": "SHA256 key",
+      "ttl": "30min",
+      "benefit": "-33-41% latency"
+    }
+  },
+  "startup": {
+    "script": "scripts/utilities/session-start-optimized.ps1",
+    "pipelineSteps": 18,
+    "lazySteps": 6,
+    "note": "In-process execution (no Start-Job), lazy steps deferred post-pipeline"
+  },
+  "sessionManagement": {
+    "tracking": {
+      "project": "gentle-vanguard",
+      "sessionIdPattern": "session-YYYY-MM-DD-XX"
+    }
+  },
+  "language": {
+    "default": "es",
+    "technicalTerms": "en"
+  }
 }

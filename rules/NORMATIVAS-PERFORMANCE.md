@@ -1,6 +1,6 @@
 # NORMATIVAS-PERFORMANCE.md — Performance & Efficiency Standards
 
-Version: 1.0.0 Last updated: 2026-05-10 Framework: SLO-based performance governance + token
+Version: 1.1.0 Last updated: 2026-05-24 Framework: SLO-based performance governance + token
 efficiency 2026 best practices
 
 ---
@@ -23,7 +23,17 @@ Aplica a scripts, configuraciones, agentes AI, y pipelines CI/CD.
 | Agent task completion  | < 30s   | 30-60s     | > 60s    | Delegation metrics    |
 | Circuit breaker uptime | 100%    | < 99%      | < 95%    | Circuit breaker state |
 
-### 2.2 Script Performance
+### 2.2 Latency Optimization Achievements (2026-05-24)
+
+| Area | Before | After | Savings | Technique |
+|------|--------|-------|---------|-----------|
+| `pre-process-input.ps1` | ~2.6s | ~1.7s (cache hit) | -33-41% | SHA256 response cache, TTL 30min, prune >1hr |
+| Autostart pipeline | ~64s (24 steps, Start-Job) | ~60s (18+6 lazy, in-process) | -6% + ~400ms | Remove Start-Job → `&` directo; lazy loading 6 steps |
+| pwsh process overhead | ~1.3s per cold start | ~400ms subsequent | -69% | Keep scripts in-process, avoid Start-Job for autostart |
+| Skill loading (86 oversized) | 86 warnings | 0 warnings | -100% | Split oversized skills, move detail to `references/detail.md` |
+| CodeGraph sync on hooks | Always sync | Conditional sync | Variable | Freshness check via max(WAL, SHM, DB) timestamps in WAL mode |
+
+### 2.3 Script Performance
 
 | Script Type         | Max Execution | Warning | Critical |
 | ------------------- | ------------- | ------- | -------- |
@@ -100,6 +110,21 @@ Source: `config/orchestrator.json#subagent_orchestration.token_budget_guard`
 5. **SHOULD** parallelize independent test stages
 
 ---
+
+### 3.4 Response Cache Standards
+
+1. **MUST** use SHA256 hash of `$UserInput` as cache key
+2. **MUST** enforce TTL ≤ 30min for cached responses
+3. **MUST** prune entries older than 1hr on every write
+4. **SHOULD** implement cache in `pre-process-input.ps1` — READ at top, WRITE at end
+5. **SHOULD** support `-DisableCache` flag for bypass
+6. **SHOULD** use `[System.Collections.ArrayList]` to capture output for caching (avoid intercepting `Write-Output`)
+
+### 3.5 Process Startup Optimization
+
+1. **MUST NOT** use `Start-Job` for autostart pipeline — use `&` directo in-process (ahorra ~400ms)
+2. **SHOULD** mark non-critical autostart steps as `"lazy": true` in `session-autostart.config.json` — ejecutan post-pipeline sin sumar latencia al startup percibido
+3. **SHOULD** reduce pipeline steps from 24 to 18 (main) + 6 (lazy)
 
 ## 4. SCRIPT PERFORMANCE PATTERNS
 

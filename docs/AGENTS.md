@@ -58,6 +58,9 @@ Professional mode: ES/PT-BR/EN, no regional slang, formal tone, no persona switc
 | Memory tiering | Hot (active) -> Warm (1d, 90%) -> Cold (7d, 70%) |
 | Handoff compression | `scripts/utilities/handoff-compress.ps1` |
 | Pre-compact hook | `scripts/utilities/pre-compact-hook.ps1` |
+| Response cache | `pre-process-input.ps1` — SHA256 cache, TTL 30min, -33-41% latency (flag `-DisableCache` to bypass) |
+| Lazy autostart | `session-autostart.config.json` — 6 non-critical steps deferred post-pipeline |
+| In-process pipeline | `session-start-optimized.ps1` — removed `Start-Job`, runs `&` directo in-process |
 
 ## Context Logging
 
