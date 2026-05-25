@@ -47,6 +47,10 @@ Professional mode: ES/PT-BR/EN, no regional slang, formal tone, no persona switc
 |---------|-----------|
 | Trigger->skill mappings | `config/auto-delegation.json#keywordMappings` |
 | Agent profiles + routing | `config/auto-delegation.json#agentProfiles` + `config/model-routing.json` |
+| SDD config + strict TDD | `openspec/config.yaml` |
+| Strict TDD enforcement | `rules/SDD-STRICT-TDD.md` |
+| Per-phase model routing | `rules/PER-PHASE-MODEL-ROUTING.md` |
+| Dependency automation | `renovate.json` (Renovate) + `.github/dependabot.yml` (Dependabot) |
 | Pre-processing hook | `scripts/utilities/pre-process-input.ps1` |
 | SDD FLOW | New feature -> BA/EXPLORE, no exceptions |
 | Delegation Rules | `rules/DELEGATION-RULES.md` |
