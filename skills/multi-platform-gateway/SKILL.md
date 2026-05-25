@@ -1,3 +1,9 @@
+---
+name: multi-platform-gateway
+description: Manage multi-platform messaging gateway (Telegram, Discord, WhatsApp)
+trigger: gateway, telegram, discord, whatsapp, platform
+---
+
 # Multi-Platform Gateway Skill
 
 ## Purpose
