@@ -1800,16 +1800,6 @@ switch ($Command) {
         
         & $liveServerScript -Port $port
     }
-
-    'gateway' {
-        $gwScript = Join-Path $repoRoot 'scripts\gateway\gateway-manager.ps1'
-        if (-not (Test-Path $gwScript)) {
-            Write-Error "Gateway script not found: $gwScript"
-            exit 1
-        }
-        $action = if ($Scope) { $Scope } else { 'status' }
-        & $gwScript -Command $action $RemainingArgs
-    }
 }
 
 exit 0
