@@ -82,6 +82,6 @@ testing:
       tool: "Pester"
       note: "Security tests in tests/security/"
     e2e:
-      available: false
-      tool: "N/A"
-      note: "E2E testing not yet configured — planned for future iteration"
+      available: true
+      tool: "Pester"
+      note: "E2E tests in tests/e2e/ — release workflow homologation gate"

@@ -9,7 +9,7 @@
     - optional tag consistency without force-moving tags
 
     This script complements existing tests/audits/governance checks. It does not replace them.
-.PARAMETER Gentle-VanguardRepoPath
+.PARAMETER GentleVanguardRepoPath
     Path to gentle-vanguard repository. Defaults to repository root.
 .PARAMETER PublicRepoPath
     Path to gentle-vanguard-public repository. Defaults to sibling folder.
@@ -26,7 +26,7 @@
 [CmdletBinding()]
 param(
     [Parameter()]
-    [string]$Gentle-VanguardRepoPath = '',
+    [string]$GentleVanguardRepoPath = '',
 
     [Parameter()]
     [string]$PublicRepoPath = '',
@@ -197,44 +197,44 @@ function Get-TagState {
     }
 }
 
-$gentle-vanguardRoot = Resolve-RepoRoot
-if ([string]::IsNullOrWhiteSpace($Gentle-VanguardRepoPath)) { $Gentle-VanguardRepoPath = $gentle-vanguardRoot }
+$gentleVanguardRoot = Resolve-RepoRoot
+if ([string]::IsNullOrWhiteSpace($GentleVanguardRepoPath)) { $GentleVanguardRepoPath = $gentleVanguardRoot }
 if ([string]::IsNullOrWhiteSpace($PublicRepoPath)) {
-    $PublicRepoPath = Join-Path (Split-Path -Parent $gentle-vanguardRoot) 'gentle-vanguard-public'
+    $PublicRepoPath = Join-Path (Split-Path -Parent $gentleVanguardRoot) 'gentle-vanguard-public'
 }
 
-$gentle-vanguard = Get-RepoSnapshot -RepoPath $Gentle-VanguardRepoPath
+$gentleVanguard = Get-RepoSnapshot -RepoPath $GentleVanguardRepoPath
 $public = Get-RepoSnapshot -RepoPath $PublicRepoPath
 
 $checks = New-Object System.Collections.Generic.List[object]
 
-$checks.Add([pscustomobject]@{ Name = 'VERSION alignment'; Passed = ($gentle-vanguard.Version -eq $public.Version); Detail = "gentle-vanguard=$($gentle-vanguard.Version) | gentle-vanguard-public=$($public.Version)" })
-$checks.Add([pscustomobject]@{ Name = 'gentle-vanguard working tree clean'; Passed = (-not $gentle-vanguard.IsDirty); Detail = if ($gentle-vanguard.IsDirty) { 'Uncommitted changes detected' } else { 'Clean' } })
+$checks.Add([pscustomobject]@{ Name = 'VERSION alignment'; Passed = ($gentleVanguard.Version -eq $public.Version); Detail = "gentle-vanguard=$($gentleVanguard.Version) | gentle-vanguard-public=$($public.Version)" })
+$checks.Add([pscustomobject]@{ Name = 'gentle-vanguard working tree clean'; Passed = (-not $gentleVanguard.IsDirty); Detail = if ($gentleVanguard.IsDirty) { 'Uncommitted changes detected' } else { 'Clean' } })
 $checks.Add([pscustomobject]@{ Name = 'gentle-vanguard-public working tree clean'; Passed = (-not $public.IsDirty); Detail = if ($public.IsDirty) { 'Uncommitted changes detected' } else { 'Clean' } })
-$checks.Add([pscustomobject]@{ Name = 'gentle-vanguard main aligned'; Passed = $gentle-vanguard.Main.Aligned; Detail = $gentle-vanguard.Main.Message })
-$checks.Add([pscustomobject]@{ Name = 'gentle-vanguard develop aligned'; Passed = $gentle-vanguard.Develop.Aligned; Detail = $gentle-vanguard.Develop.Message })
+$checks.Add([pscustomobject]@{ Name = 'gentle-vanguard main aligned'; Passed = $gentleVanguard.Main.Aligned; Detail = $gentleVanguard.Main.Message })
+$checks.Add([pscustomobject]@{ Name = 'gentle-vanguard develop aligned'; Passed = $gentleVanguard.Develop.Aligned; Detail = $gentleVanguard.Develop.Message })
 $checks.Add([pscustomobject]@{ Name = 'gentle-vanguard-public main aligned'; Passed = $public.Main.Aligned; Detail = $public.Main.Message })
 $checks.Add([pscustomobject]@{ Name = 'gentle-vanguard-public develop aligned'; Passed = $public.Develop.Aligned; Detail = $public.Develop.Message })
 
 $tagResult = $null
 if (-not [string]::IsNullOrWhiteSpace($ExpectedTag)) {
-    $tagGentle-Vanguard = Get-TagState -RepoPath $gentle-vanguard.Path -Tag $ExpectedTag
+    $tagGentleVanguard = Get-TagState -RepoPath $gentleVanguard.Path -Tag $ExpectedTag
     $tagPublic = Get-TagState -RepoPath $public.Path -Tag $ExpectedTag
 
-    $presenceAligned = ($tagGentle-Vanguard.LocalExists -eq $tagPublic.LocalExists)
-    $noForceMoveGentle-Vanguard = -not $tagGentle-Vanguard.RequiresForceMove
+    $presenceAligned = ($tagGentleVanguard.LocalExists -eq $tagPublic.LocalExists)
+    $noForceMoveGentleVanguard = -not $tagGentleVanguard.RequiresForceMove
     $noForceMovePublic = -not $tagPublic.RequiresForceMove
 
     $checks.Add([pscustomobject]@{
         Name = "Tag presence alignment ($ExpectedTag)"
         Passed = $presenceAligned
-        Detail = "gentle-vanguard(local=$($tagGentle-Vanguard.LocalExists)) | gentle-vanguard-public(local=$($tagPublic.LocalExists))"
+        Detail = "gentle-vanguard(local=$($tagGentleVanguard.LocalExists)) | gentle-vanguard-public(local=$($tagPublic.LocalExists))"
     })
-    $checks.Add([pscustomobject]@{ Name = "gentle-vanguard tag no force-move ($ExpectedTag)"; Passed = $noForceMoveGentle-Vanguard; Detail = if ($noForceMoveGentle-Vanguard) { 'No mismatch local/remote tag SHA' } else { 'Local/remote tag SHA mismatch' } })
+    $checks.Add([pscustomobject]@{ Name = "gentle-vanguard tag no force-move ($ExpectedTag)"; Passed = $noForceMoveGentleVanguard; Detail = if ($noForceMoveGentleVanguard) { 'No mismatch local/remote tag SHA' } else { 'Local/remote tag SHA mismatch' } })
     $checks.Add([pscustomobject]@{ Name = "gentle-vanguard-public tag no force-move ($ExpectedTag)"; Passed = $noForceMovePublic; Detail = if ($noForceMovePublic) { 'No mismatch local/remote tag SHA' } else { 'Local/remote tag SHA mismatch' } })
 
     $tagResult = [pscustomobject]@{
-        Gentle-Vanguard = $tagGentle-Vanguard
+        'Gentle-Vanguard' = $tagGentleVanguard
         Public = $tagPublic
     }
 }
@@ -244,7 +244,7 @@ $passed = @($checks | Where-Object { $_.Passed })
 
 $result = [pscustomobject]@{
     timestamp = (Get-Date).ToString('o')
-    gentle-vanguard = $gentle-vanguard
+    'gentle-vanguard' = $gentleVanguard
     public = $public
     expectedTag = if ([string]::IsNullOrWhiteSpace($ExpectedTag)) { $null } else { $ExpectedTag }
     tag = $tagResult
@@ -262,7 +262,7 @@ if ($AsJson) {
 } else {
     Write-Host ''
     Write-Host '=== Release Homologation Gate ===' -ForegroundColor Cyan
-    Write-Host "gentle-vanguard:       $($gentle-vanguard.Path)" -ForegroundColor Gray
+    Write-Host "gentle-vanguard:       $($gentleVanguard.Path)" -ForegroundColor Gray
     Write-Host "gentle-vanguard-public:$($public.Path)" -ForegroundColor Gray
     Write-Host ''
 

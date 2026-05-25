@@ -101,3 +101,12 @@ TypeScript, JavaScript, Python, Go, Rust, Java, C#, PHP, Ruby, C, C++, Swift, Ko
 ---
 
 > **Referencia detallada**: [eferences/detail.md](references/detail.md)
+
+## Known Issues
+
+The following failure pattern has been detected and documented automatically:
+
+- **Issue**: Add timeout configuration and retry logic
+- **Error types observed**: timeout
+
+> Auto-documented by skill-auto-patch.ps1 on 2026-05-25.
