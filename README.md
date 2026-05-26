@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.22.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.23.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
@@ -23,7 +23,7 @@
 
 <p align="center">
   <strong>AI-powered development orchestrator · 18 agents · 135 skills · 10 tool-compatible</strong><br>
-  <em>Tool-agnostic · SDD Lifecycle · Judgment Day · Persistent memory</em>
+  <em>Tool-agnostic · SDD Lifecycle · Hashline · Team Mode · Skill MCPs · Persistent memory</em>
 </p>
 
 > _"Construyendo el puente definitivo entre la alta ingeniería de software y la estrategia
@@ -49,6 +49,12 @@ otherwise be chaotic AI-assisted development.
 - **Enforces SDD lifecycle** (BA → SAD → DEV → QA) on ambiguous or architectural work
 - **Governance-first** — 7D validation, judgment-day adversarial review, pre-commit hooks, 16 CI/CD
   workflows
+- **Hashline** — SHA-256 per-line integrity for 400+ tracked files across 15+ extensions. Snapshot on
+  post-commit via lefthook + pre-compact via hook. Detect unintended edits before they propagate
+- **Team Mode** — Leader-follower orchestration with up to 8 members. Broadcast, assign, report,
+  collect cycle. Built on top of the existing dispatch agent system
+- **Skill MCPs** — On-demand Model Context Protocol servers launched from SKILL.md frontmatter.
+  Register, start, stop, list via dedicated manager. Zero-churn lifecycle
 
 ```mermaid
 flowchart TB
@@ -118,7 +124,7 @@ flowchart LR
 | ------------------ | --------------------- | --------------------------------------------- | -------------------------------- |
 | **1. Agents**      | Task delegation       | 1 orchestrator + 17 sub-agents                | `config/auto-delegation.json`    |
 | **2. Commands**    | CLI entry points      | `gv.ps1`, `pre-process-input.ps1`             | `config/orchestrator.json`       |
-| **3. MCP Servers** | Protocol bridge       | Model Context Protocol, Engram MCP, CodeGraph | `opencode.json#mcp`              |
+| **3. MCP Servers** | Protocol bridge       | Model Context Protocol, Engram MCP, CodeGraph, Skill MCPs (on-demand) | `opencode.json#mcp` + `skill-mcp-manager.ps1` |
 | **4. Skills**      | Specialized execution | 135 skills across 10 categories               | `config/skill-dependencies.json` |
 | **5. Memory**      | Persistent context    | Engram (hot/warm/cold tiers)                  | `config/engram-config.json`      |
 
@@ -411,6 +417,9 @@ gv health
 | Structure     | ✅ PASS | All mandatory files present                                             |
 | Engram        | ✅ PASS | Memory store accessible, sessions tracking                              |
 | SDD           | ✅ PASS | OpenSpec config valid, preflight operational                            |
+| Hashline      | ✅ PASS | 411 files, 83,214 SHA-256 hashes, post-commit snapshot + pre-compact hook |
+| Team Mode     | ✅ PASS | Leader-follower with up to 8 members, full cycle (start→assign→report→collect→stop) tested |
+| Skill MCPs    | ✅ PASS | 6 actions (register, start, stop, list, status, deregister), SKILL.md frontmatter parsing, cycle tested |
 
 ---
 
@@ -466,6 +475,6 @@ LLM Top 10 + OWASP Agentic Top 10).
 ---
 
 <p align="center">
-  <strong>Gentle-Vanguard v2.22.0</strong><br>
+  <strong>Gentle-Vanguard v2.23.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>

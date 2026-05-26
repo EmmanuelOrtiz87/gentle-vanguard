@@ -3,42 +3,34 @@
 # Purpose: Minimal rules file with external references to avoid context bloat
 
 ---
-name: gentle-vanguard-orchestrator
+name: foundation-orchestrator
 version: "2.6.0"
 description: SDD-driven AI agent orchestration platform — optimized context loading
 
 # ============================================================================
-# PHASE 0: TOOL DETECTION (First action before anything)
-# ============================================================================
-detection:
-  command: >
-    pwsh -NoProfile -File scripts/utilities/detect-tool.ps1 -AsJson | ConvertFrom-Json
-  fields:
-    - name: name  # opencode|claude-code|cline|cursor|windsurf|unknown
-    - name: os.platform  # windows|linux|macos
-    - name: os.shell  # powershell|bash|zsh
-  action: Load config from config/orchestrator.json#toolProfiles.<name>
-
-# ============================================================================
 # PHASE 1: CONTEXT BOUNDARIES (Critical for performance)
 # ============================================================================
+# @include: Only load these patterns by default
+# @exclude: Never load these (prevents context bloat)
 
 context:
+  # Default include patterns (loaded on every prompt)
   include:
-    - "rules/**/*.md"
-    - "config/*.json"
-    - "skills/*/SKILL.md"
-    - "scripts/utilities/pre-process-input.ps1"
-    - "docs/AGENTS.md"
-    - ".clinerules"
+    - "rules/**/*.md"           # All rules (small files)
+    - "config/*.json"           # Config files (indexed)
+    - "skills/*/SKILL.md"       # Skill definitions only
+    - "scripts/utilities/pre-process-input.ps1"  # Core router
+    - "docs/AGENTS.md"          # Canonical entry
+    - ".clinerules"             # This file
 
+  # Exclude patterns (CRITICAL: prevents giant context)
   exclude:
     - "node_modules/**"
     - ".git/**"
     - ".engram-data/**"
     - "dist/**"
     - "build/**"
-    - "*.lock.json"
+    - "*.lock.json"             # Don't load lock files
     - ".vscode/**"
     - "tmp-session-debug/**"
     - "logs/**"
@@ -48,93 +40,90 @@ context:
     - "**/dist/**"
     - "**/build/**"
 
+  # Memory hints for cache optimization
   memory:
-    persist:
-      - "config/orchestrator.json"
-      - "config/auto-delegation.json"
-      - "rules/AI-NORMATIVES.md"
-    expire: 300
-    strategy: "reference"
+    persist: 
+      - "config/orchestrator.json"  # Always cache this
+      - "config/auto-delegation.json"  # Always cache this
+      - "rules/AI-NORMATIVES.md"  # Cache normatives
+    expire: 300  # Cache invalidation (seconds)
+    strategy: "reference"  # Use IDs/references instead of full content
 
 # ============================================================================
-# PHASE 2: PRE-PROCESSING (BEFORE every response — response cache enabled)
+# PHASE 2: TRIGGER ROUTING (Route to correct agent/skill)
 # ============================================================================
-# pre-process-input.ps1 now has SHA256 response cache (TTL 30min, -33-41% latency)
-# Use -DisableCache flag to bypass when needed
-
-preprocess:
-  command: >
-    pwsh -NoProfile -File scripts/utilities/pre-process-input.ps1
-    -UserInput "USER_INPUT" -WorkspaceRoot "."
-  cache: enabled  # SHA256 key, TTL 30min, auto-prune >1hr
-  bypass: -DisableCache
-  parse:
-    TRIGGER_MATCH_FOUND: Load triggered skill
-    PLAN_MODE_REQUIRED: Activate BA/sdd-explore first
-    NO_TRIGGER_MATCH: Normal behavior
+# Execute pre-process-input.ps1 BEFORE responding
+# Format: "trigger_keyword" → "agent_code" → "skill_path"
 
 triggers:
+  # Session management (external reference)
   session:
     keywords: ["inicia sesion", "iniciar sesion", "start session", "begin session"]
     reference: "skills/session-workflow-skill/SKILL.md"
     rule: "Load only session-specific context"
 
+  # SDD Lifecycle (external reference)
   sdd:
     keywords: ["implement", "code", "feature", "design", "architecture", "test", "deploy"]
     reference: "skills/sdd-lifecycle/SKILL.md"
-    rule: "Follow EXPLORE -> SPEC -> APPLY -> VERIFY phases"
+    rule: "Follow EXPLORE → SPEC → APPLY → VERIFY phases"
 
+  # Security (external reference)
   security:
     keywords: ["security", "auth", "vulnerability", "penetration", "audit"]
     reference: "skills/security-skill/SKILL.md"
     rule: "Load security context only if triggered"
 
+  # DevOps (external reference)
   devops:
     keywords: ["deploy", "docker", "kubernetes", "ci/cd", "helm"]
     reference: "skills/docker-devops-skill/SKILL.md"
     rule: "Load infra context only if triggered"
 
+  # Git/Workflow (external reference)
   git:
     keywords: ["branch", "pr", "merge", "commit", "conflict", "rebase"]
     reference: "skills/git-workflow-skill/SKILL.md"
     rule: "Load git context only if triggered"
 
 # ============================================================================
-# PHASE 3: STARTUP SEQUENCE (Run on first turn)
+# PHASE 3: AGENT RULES (Behavior & constraints)
 # ============================================================================
-startup:
-  description: >
-    Run docs/AGENTS.md#Mandatory-Startup-Sequence.
-    session-start-optimized.ps1 now runs in-process (no Start-Job overhead)
-    and uses lazy loading (6 non-critical steps deferred post-pipeline).
-  script: scripts/utilities/session-start-optimized.ps1
-  config: config/session-autostart.config.json
-
-# ============================================================================
-# PHASE 4: AGENT RULES
-# ============================================================================
+# Tells Cline HOW to behave (not WHERE to look)
 
 agent:
-  mode: "plan-and-act"
-  approval: "all-actions"
-  contextStrategy: "selective"
+  # Operational mode
+  mode: "plan-and-act"  # User approves before execution
+  approval: "all-actions"  # Require approval for file edits + terminal commands
+
+  # Context management
+  contextStrategy: "selective"  # Load context on-demand, not everything
+  
+  # Prevent context bloat
   rules:
-    - "pre-process-input.ps1 BEFORE every response (-UserInput param, not -Prompt)"
     - "Never grep/search on node_modules or dist/"
     - "Use local-first approach: project knowledge before external search"
     - "Reference external docs, don't embed them"
+    - "Use @include/@exclude directives for @-mentions"
+    - "Keep reasoning steps explicit but concise"
     - "Batch independent tool calls in parallel"
-    - "mem_search 'lessons learned' at session start"
-    - "mem_save after every significant task"
+    - "Cache query results using engram memory"
+    - "Reference skill registry (.atl/skill-registry.md) to find the right skill before loading"
+    - "Restore session context from startup-summary.json at session start"
+    - "Use engram memory context (scripts/.session/) for cross-session persistence"
+
+  # Error handling
   errorHandling:
     reference: "rules/NORMATIVAS-ERROR-HANDLING.md"
     strategy: "escalate-on-pattern-match"
 
 # ============================================================================
-# PHASE 5: SKILL CONTEXT SEGMENTATION
+# PHASE 4: SKILL CONTEXT SEGMENTATION
 # ============================================================================
+# Load skill-specific rules only when triggered (prevents context bloat)
 
 skills:
+  # Example: When triggered by "implement", load ONLY DEV context
   dev-context:
     trigger: ["implement", "code", "feature", "refactor"]
     load:
@@ -142,43 +131,52 @@ skills:
       - "skills/typescript-skill/SKILL.md"
       - "rules/DEVELOPMENT-STANDARDS.md"
     exclude:
-      - "rules/NORMATIVAS-PERFORMANCE.md"
-      - "config/docker-*"
+      - "rules/NORMATIVAS-PERFORMANCE.md"  # Not needed for code
+      - "config/docker-*"  # Not needed for code
 
+  # When triggered by "deploy", load ONLY OPS context
   ops-context:
     trigger: ["deploy", "docker", "kubernetes", "ci/cd"]
     load:
       - "skills/docker-devops-skill/SKILL.md"
       - "config/docker-*"
     exclude:
-      - "rules/DEVELOPMENT-STANDARDS.md"
-      - "src/**"
+      - "rules/DEVELOPMENT-STANDARDS.md"  # Not needed for ops
+      - "src/**"  # Don't need to read all source
 
+  # When triggered by "test", load ONLY QA context
   qa-context:
     trigger: ["test", "testing", "e2e", "unit"]
     load:
       - "skills/testing-skill/SKILL.md"
       - "skills/playwright-skill/SKILL.md"
     exclude:
-      - "build/**"
+      - "build/**"  # Not needed for testing
 
 # ============================================================================
-# PHASE 6: PERFORMANCE TUNING
+# PHASE 5: PERFORMANCE TUNING
 # ============================================================================
+# Cline-specific optimizations
 
 performance:
+  # Don't search entire workspace on every prompt
   maxSearchDepth: 3
   maxSearchResults: 20
-  searchTimeout: 5000
+  searchTimeout: 5000  # milliseconds
+
+  # Memory management
   memoryMode: "selective"
-  contextWindowSize: "adaptive"
-  maxContextTokens: 80000
+  contextWindowSize: "adaptive"  # Auto-adjust based on task
+  maxContextTokens: 80000  # Hard limit (Cline default: ~200k)
+
+  # Parallel execution
   parallelTasks: 2
   batchToolCalls: true
 
 # ============================================================================
-# PHASE 7: CANONICAL REFERENCES
+# PHASE 6: CANONICAL REFERENCES
 # ============================================================================
+# Point to external sources instead of embedding (keeps file small)
 
 references:
   entry: "docs/AGENTS.md"
@@ -187,25 +185,37 @@ references:
   standards: "rules/DEVELOPMENT-STANDARDS.md"
   orchestrator: "config/orchestrator.json"
   skills: "skills/SKILL_INDEX.md"
+  skillRegistry: ".atl/skill-registry.md"
+  engram: ".engram-data/"
+  sessionContext: "scripts/.session/startup-summary.json"
+  memRestore: "scripts/utilities/engram_mem_context.ps1"
 
 # ============================================================================
-# PERFORMANCE OPTIMIZATIONS (2026-05-24)
+# PHASE 7: DEBUGGING & TELEMETRY
 # ============================================================================
-optimizations:
-  response_cache:
-    location: scripts/utilities/pre-process-input.ps1
-    benefit: -33-41% latency on repeated inputs
-    mechanism: SHA256 hash key, TTL 30min, auto-prune >1hr
-    bypass: -DisableCache flag
-  lazy_autostart:
-    location: config/session-autostart.config.json
-    benefit: Pipeline 24->18 steps; 6 lazy steps post-pipeline
-    mechanism: '"lazy": true on non-critical steps (self-diagnosis, metrics, dashboard, live-feed, skill-size, adaptive-profile)'
-  in_process_pipeline:
-    location: scripts/utilities/session-start-optimized.ps1
-    benefit: -~400ms startup time
-    mechanism: Replaced Start-Job with & directo in-process
-  skill_split:
-    benefit: 86 oversized skills -> 0 warnings
-    mechanism: Split verbose content to references/detail.md per skill
 
+debug:
+  enabled: false
+  logContextSize: true
+  logSearchPatterns: true
+
+telemetry:
+  enabled: false
+
+# ============================================================================
+# COMPARISON: Old vs New Context Loading
+# ============================================================================
+# OLD PATTERN (Context Bloat):
+#   1. Load entire .clinerules (inline rules)
+#   2. Search entire workspace for @-mentions
+#   3. Include config + rules + skills
+#   4. No context boundaries
+#   Result: GIANT context on every prompt ❌
+#
+# NEW PATTERN (Selective Loading):
+#   1. Load .clinerules (external references only)
+#   2. Pre-process input via pre-process-input.ps1
+#   3. Load ONLY triggered skill context
+#   4. Enforce @include/@exclude boundaries
+#   5. Use memory caching for hot paths
+#   Result: Minimal, focused context ✅
