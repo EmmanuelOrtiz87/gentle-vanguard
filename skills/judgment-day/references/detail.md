@@ -11,4 +11,3 @@ Return structured verdict per round:
 
 ---
 
-> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

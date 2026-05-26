@@ -158,7 +158,7 @@ flowchart TB
 
 ### Windows — One-Click
 
-[Download Gentle-Vanguard.exe](Gentle-Vanguard.exe) — NSIS installer, AES-256 encrypted.
+[Download Gentle-Vanguard.exe](https://github.com/EmmanuelOrtiz87/gentle-vanguard/releases) — NSIS installer, AES-256 encrypted.
 
 ```powershell
 # Run as Administrator, then verify:
@@ -231,7 +231,7 @@ All PowerShell scripts follow standardized defensive patterns:
 | Resource           | Link                                                       |
 | ------------------ | ---------------------------------------------------------- |
 | Getting Started    | [docs/getting-started/](docs/getting-started/)             |
-| Installation Guide | [INSTALLATION.md](INSTALLATION.md)                         |
+| Installation Guide | [docs/reference/FOUNDATION-INSTALLER.md](docs/reference/FOUNDATION-INSTALLER.md) |
 | Architecture       | [docs/architecture/README.md](docs/architecture/README.md) |
 | Full Index         | [docs/](docs/)                                             |
 

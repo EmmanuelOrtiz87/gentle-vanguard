@@ -138,7 +138,7 @@ Each ADR is immutable once accepted. Updates create new ADRs (ADR-005, etc).
 
 ## Related Decisions
 
-- [ADR-XXX](ADR-XXX-example.md)
+- `ADR-XXX-example.md` (template placeholder — create when needed)
 
 ---
 
@@ -179,10 +179,10 @@ Is there uncertainty or tradeoffs?
 
 **Related Guides**:
 
-- [SECURITY-HARDENING.md](../guides/SECURITY-HARDENING.md) — References ADR-003
-- [MCP-WORKSPACE-SETUP.md](../guides/MCP-WORKSPACE-SETUP.md) — References ADR-002
-- [RELEASE-PROCESS.md](../guides/RELEASE-PROCESS.md) — References ADR-004
-- [FIRST-TIME-SETUP-CHECKLIST.md](../guides/FIRST-TIME-SETUP-CHECKLIST.md) — References ADR-001
+- [SECURITY-HARDENING.md](../../guides/SECURITY-HARDENING.md) — References ADR-003
+- [MCP-WORKSPACE-SETUP.md](../../guides/MCP-WORKSPACE-SETUP.md) — References ADR-002
+- [RELEASE-PROCESS.md](../../guides/RELEASE-PROCESS.md) — References ADR-004
+- [FIRST-TIME-SETUP-CHECKLIST.md](../../guides/FIRST-TIME-SETUP-CHECKLIST.md) — References ADR-001
 
 **Related Code**:
 

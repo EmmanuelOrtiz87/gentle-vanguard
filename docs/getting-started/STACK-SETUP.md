@@ -374,7 +374,7 @@ if ($status.overallStatus -ne "HEALTHY") {
 ## See Also
 
 - [scripts/utilities/README.md](../../scripts/utilities/README.md) - Available commands
-- [scripts/gentle-vanguard/bootstrap.ps1](../../scripts/gentle-vanguard/bootstrap.ps1) - Full
+- [scripts/core/bootstrap.ps1](../../scripts/core/bootstrap.ps1) - Full
   initialization
 - [scripts/diagnostics/system-diagnostics.ps1](../../scripts/diagnostics/system-diagnostics.ps1) -
   Diagnostics engine

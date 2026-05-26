@@ -10,4 +10,3 @@ Each agent keeps response under 300 words.
 
 ---
 
-> **Referencia detallada**: [ eferences/detail.md](references/detail.md)
