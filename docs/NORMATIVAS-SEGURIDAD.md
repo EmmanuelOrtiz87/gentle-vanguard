@@ -1,6 +1,21 @@
 # NORMATIVAS-SEGURIDAD.md
 
-Version: 1.0.0 Framework: OWASP LLM Top 10 2025 + OWASP Agentic Top 10 2026
+Version: 1.2.0 — 2026-05-24 Framework: OWASP LLM Top 10 2025 + OWASP Agentic Top 10 2026
+
+> Cambios v1.1.0 → v1.2.0:
+>
+> - Se agregó control 2.11 (Prompt Injection & Jailbreak Detection): `privacy-gateway.ps1`
+> - Se expandieron patrones críticos en `security-orchestrator.ps1` (jailbreak, leakage, code
+>   execution)
+> - Se actualizó `config/security-privacy.json` con `injectionBlock` patterns
+> - Se corrigieron 13 vulnerabilidades de seguridad (null refs, CSPRNG, env fallback, $lock typo)
+>
+> Cambios v1.0.0 → v1.1.0:
+>
+> - Se actualizaron implementaciones de control 2.3 (PII redaction): `security-logger.ps1` v1.1
+> - Se actualizó control 2.6 (secrets management): `secrets-manager.ps1` v2.0 con DPAPI vault
+> - Se corrigió `input-validator.ps1` (syntax error Validate-Integer)
+> - Se agregaron tests Pester en `tests/security/` para cobertura de controles
 
 ---
 
@@ -91,6 +106,28 @@ debe cumplir estos controles o documentar desvio aprobado.
 3. **MUST** configurar alertas para eventos de seguridad
 4. **MUST** permitir interrumpir y rollback operaciones de agente
 5. **SHOULD** implementar anomaly detection en comportamiento de agente
+
+### 2.11 Prompt Injection & Jailbreak Detection (OWASP LLM01 + ASI01)
+
+1. **MUST** detect and BLOCK instruction override attempts en todo input de usuario antes de pasarlo
+   al agente
+2. **MUST** detectar intentos de jailbreak conocidos (DAN, unrestricted mode, developer mode)
+3. **MUST** detectar intentos de extraccion de system prompt (prompt leakage)
+4. **MUST** detectar intentos de code execution via el agente (exec, eval, shell, spawn)
+5. **MUST** detectar intentos de role takeover y simulation attacks
+6. **MUST** detectar encoding obfuscation (base64, hex, rot, unicode escape) usado para bypass
+7. **MUST** detectar constraint bypass (forget instructions, disregard safeguards, override
+   protocols)
+8. **MUST** bloquear con exit code 1 y loguear el evento de seguridad
+9. **SHOULD** permitir safe content sin falsos positivos
+10. **SHOULD** auditar patrones de intentos de inyeccion por sesion
+
+**Implementacion:**
+
+- `scripts/security/privacy-gateway.ps1` — 10 patrones de deteccion en `$INJECTION_PATTERNS`
+- `scripts/security/security-orchestrator.ps1` — 5 patrones en `$CRITICAL_PATTERNS`
+- `config/security-privacy.json` — 7 patrones en `privacy.injectionBlock[]`
+- Verificado con tests Pester en `tests/security/security-checks.tests.ps1` (7 tests)
 
 ---
 

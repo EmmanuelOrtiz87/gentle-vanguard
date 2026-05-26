@@ -58,7 +58,7 @@ $CACHE_VERSION = '1.0.0'
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
 $WorkspaceRoot = Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
-if (-not (Test-Path (Join-Path $WorkspaceRoot 'config'))) {
+if (-not (Test-Path (Join-Path $WorkspaceRoot 'config\orchestrator.json'))) {
     $WorkspaceRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 }
 $CacheRoot    = Join-Path $env:TEMP 'gentle-vanguard-cache'

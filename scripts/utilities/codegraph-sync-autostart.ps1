@@ -11,7 +11,7 @@ $ErrorActionPreference = 'Continue'
 
 $repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) { $env:GENTLE_VANGUARD_BASE_DIR } else {
     $root = Split-Path -Parent $PSScriptRoot
-    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
+    while ($root -and -not (Test-Path (Join-Path $root 'config\orchestrator.json'))) { $root = Split-Path -Parent $root }
     if (-not $root) { $root = $PSScriptRoot }
     $root
 }
@@ -42,8 +42,21 @@ if (-not (Test-Path $dbPath)) {
     exit 0
 }
 
+# Check all SQLite files (main DB + WAL + SHM) since writes go to WAL in WAL mode
 $dbInfo = Get-Item $dbPath
 $dbLastWrite = $dbInfo.LastWriteTime
+$walPath = Join-Path $codegraphDir "codegraph.db-wal"
+$shmPath = Join-Path $codegraphDir "codegraph.db-shm"
+
+if (Test-Path $walPath) {
+    $walWrite = (Get-Item $walPath).LastWriteTime
+    if ($walWrite -gt $dbLastWrite) { $dbLastWrite = $walWrite }
+}
+if (Test-Path $shmPath) {
+    $shmWrite = (Get-Item $shmPath).LastWriteTime
+    if ($shmWrite -gt $dbLastWrite) { $dbLastWrite = $shmWrite }
+}
+
 $dbAgeMinutes = [math]::Round(((Get-Date) - $dbLastWrite).TotalMinutes, 1)
 $dbSizeMB = [math]::Round($dbInfo.Length / 1MB, 2)
 

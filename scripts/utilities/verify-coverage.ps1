@@ -17,7 +17,7 @@ $ErrorActionPreference = 'Stop'
 function Get-RepoRoot {
     $root = Split-Path -Parent $PSScriptRoot
     while ($root) {
-        if ((Test-Path (Join-Path $root 'tests')) -and (Test-Path (Join-Path $root 'config'))) {
+        if ((Test-Path (Join-Path $root 'tests')) -and (Test-Path (Join-Path $root 'config\orchestrator.json'))) {
             return $root
         }
 

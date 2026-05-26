@@ -54,20 +54,20 @@ Skills register usage data in `.session/skill-usage/{skillName}.json`:
 
 ## Auto-Nudge Triggers
 
-| Condition                                      | Action                                      |
-| ---------------------------------------------- | ------------------------------------------- |
-| 3+ failures in current session                 | Generate nudge with `urgent: false`         |
-| 10+ uses with declining success rate           | Generate nudge with `urgent: false`         |
-| Same failure pattern across 3+ sessions        | Generate nudge with `urgent: true`          |
-| Success rate below 0.5 after 5+ attempts       | Generate nudge with `urgent: true`          |
+| Condition                                | Action                              |
+| ---------------------------------------- | ----------------------------------- |
+| 3+ failures in current session           | Generate nudge with `urgent: false` |
+| 10+ uses with declining success rate     | Generate nudge with `urgent: false` |
+| Same failure pattern across 3+ sessions  | Generate nudge with `urgent: true`  |
+| Success rate below 0.5 after 5+ attempts | Generate nudge with `urgent: true`  |
 
 ## Reference Scripts
 
-| Script                         | Purpose                                       |
-| ------------------------------ | --------------------------------------------- |
-| `scripts/skills/usage-tracker.ps1`     | Increment/record usage per skill              |
-| `scripts/skills/skill-nudge.ps1`       | Generate post-session nudge recommendations   |
-| `scripts/skills/skill-auto-patch.ps1`  | Auto-apply urgent patches to SKILL.md files   |
+| Script                                | Purpose                                     |
+| ------------------------------------- | ------------------------------------------- |
+| `scripts/skills/usage-tracker.ps1`    | Increment/record usage per skill            |
+| `scripts/skills/skill-nudge.ps1`      | Generate post-session nudge recommendations |
+| `scripts/skills/skill-auto-patch.ps1` | Auto-apply urgent patches to SKILL.md files |
 
 ## Integration Points
 

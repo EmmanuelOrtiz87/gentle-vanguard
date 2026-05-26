@@ -79,18 +79,6 @@ Each SDD work unit should map cleanly to a commit or PR with:
 - verification in the same unit,
 - rollback that does not remove unrelated work.
 
-## Commands
-
-```bash
-# Review the story before committing
-git diff --stat
-git diff --cached --stat
-
-# Check recent commit style
-git log --oneline -5
-```
-
 ---
 
-_Origin: [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai) — Apache-2.0 License.
-Powered by [Gentleman Programming](https://github.com/Gentleman-Programming)._
+> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

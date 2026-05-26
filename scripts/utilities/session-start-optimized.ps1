@@ -62,22 +62,9 @@ if (-not $SkipAutostart) {
     $autostartScript = Join-Path $repoRoot "scripts\utilities\session-autostart.ps1"
     if (Test-Path $autostartScript) {
         try {
-            # Ejecutar con timeout extendido
-            $job = Start-Job -ScriptBlock {
-                param($script, $project)
-                & $script -ProjectName $project -NoExit
-            } -ArgumentList $autostartScript, $ProjectName
-            
-            $completed = $job | Wait-Job -Timeout 300
-            if ($completed) {
-                $result = Receive-Job $job
-                $job | Remove-Job
-                Write-OK "Autostart pipeline completed"
-            } else {
-                Stop-Job $job -ErrorAction SilentlyContinue
-                Remove-Job $job -ErrorAction SilentlyContinue
-                Write-Warn "Autostart pipeline timed out after 300s, continuing..."
-            }
+            # Ejecutar in-process (NO Start-Job — ahorra ~400ms de overhead de proceso)
+            & $autostartScript -ProjectName $ProjectName -NoExit 2>&1 | Out-Null
+            Write-OK "Autostart pipeline completed"
         } catch {
             Write-Warn "Autostart error: $($_.Exception.Message)"
         }

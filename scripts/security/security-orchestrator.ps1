@@ -450,7 +450,12 @@ $CRITICAL_PATTERNS = @(
     @{ Name = 'AWS Key'; Pattern = 'AKIA[0-9A-Z]{16}' },
     @{ Name = 'GitHub Token'; Pattern = 'ghp_[A-Za-z0-9]{36}' },
     @{ Name = 'Stripe Key'; Pattern = 'sk_live_[0-9a-zA-Z]{24,}' },
-    @{ Name = 'Private Key'; Pattern = '-----BEGIN .+ PRIVATE KEY-----' }
+    @{ Name = 'Private Key'; Pattern = '-----BEGIN .+ PRIVATE KEY-----' },
+    @{ Name = 'Prompt Injection: Instruction Override'; Pattern = '(?i)(?:\bignore\s+(?:all\s+)?(?:previous\s+)?(?:instructions|commands|directions|rules|prompts?|constraints?|guidelines?))\b' },
+    @{ Name = 'Prompt Injection: Prompt Leakage'; Pattern = '(?i)(?:\b(?:repeat|output|print|show|display|reveal|leak|dump|copy)\s+(?:your\s+)?(?:system\s+)?(?:prompt|instructions|rules))\b' },
+    @{ Name = 'Prompt Injection: Jailbreak'; Pattern = '(?i)(?:DAN|do\s+anything\s+now|jailbreak|unrestricted\s+mode|developer\s+mode|no\s+(?:limits|restrictions|filter))' },
+    @{ Name = 'Prompt Injection: Code Execution'; Pattern = '(?i)(?:\$?(?:exec|eval|system|shell|cmd|powershell|bash|os\.system|subprocess|child_process|execSync|spawn)\s*\()' },
+    @{ Name = 'Prompt Injection: Role Takeover'; Pattern = '(?i)(?:\byou\s+(?:are\s+)?(?:now|must\s+act\s+as|will\s+pretend|shall\s+behave))\b' }
 )
 
 function Test-BlockCritical {

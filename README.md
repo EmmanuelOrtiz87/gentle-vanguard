@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.21.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.22.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
@@ -165,15 +165,16 @@ flowchart LR
     SCL -->|-PromoteToPermanent| PERM[.local/session-artifacts/\nPermanent local storage]
 ```
 
-| Component | Location | Purpose |
-|-----------|----------|---------|
-| `session-context-log.ps1` | `scripts/utilities/` | **Permanent** — Init, log, close, status, reinit |
-| `token-usage-auto.ps1` | `scripts/utilities/` | **Permanent** — Integrates notifier + context logger |
-| `context-summary.md` | `.session/context-log/<sid>/` | **Temp** — Full session log (gitignored) |
-| `turn-NNN.md` | `.session/context-log/<sid>/` | **Temp** — Per-turn detail (gitignored) |
-| `context-log-<sid>/` | `.local/session-artifacts/` | **Permanent local** — Promoted with `-PromoteToPermanent` |
+| Component                 | Location                      | Purpose                                                   |
+| ------------------------- | ----------------------------- | --------------------------------------------------------- |
+| `session-context-log.ps1` | `scripts/utilities/`          | **Permanent** — Init, log, close, status, reinit          |
+| `token-usage-auto.ps1`    | `scripts/utilities/`          | **Permanent** — Integrates notifier + context logger      |
+| `context-summary.md`      | `.session/context-log/<sid>/` | **Temp** — Full session log (gitignored)                  |
+| `turn-NNN.md`             | `.session/context-log/<sid>/` | **Temp** — Per-turn detail (gitignored)                   |
+| `context-log-<sid>/`      | `.local/session-artifacts/`   | **Permanent local** — Promoted with `-PromoteToPermanent` |
 
 **Usage** (called automatically by the agent after every response):
+
 ```powershell
 pwsh -NoProfile -File scripts/utilities/token-usage-auto.ps1 `
   -InputTokens <N> -OutputTokens <N> -ContextChars <N> `
@@ -182,6 +183,7 @@ pwsh -NoProfile -File scripts/utilities/token-usage-auto.ps1 `
 ```
 
 At session close:
+
 ```powershell
 pwsh -NoProfile -File scripts/utilities/session-context-log.ps1 -Action close
 # Or with permanent promotion:
@@ -191,6 +193,44 @@ pwsh -NoProfile -File scripts/utilities/session-context-log.ps1 -Action close -P
 Config references: `docs/AGENTS.md#post-response-context-logging-rule`, `CLAUDE.md` rules #14-#15.
 
 ---
+
+### Token Notification Auto-Hook (Every Turn)
+
+Automatic token consumption display that fires every turn without agent intervention:
+
+```mermaid
+flowchart LR
+    TURN[Every turn start] -->|pre-process-input.ps1| AUTO[token-usage-notifier.ps1\n-Action auto]
+    AUTO --> ACCUM[Show-AccumulatedMetrics\nSession totals]
+    USER[User /notif command] -->|pre-process-input.ps1| TOGGLE[toggle-token-display.ps1]
+    TOGGLE --> CFG[.session/token-display-config.json]
+    CFG --> AUTO
+```
+
+| Command | Effect |
+|---------|--------|
+| `/notif on` / `/notif off` | Master toggle (persists across sessions) |
+| `/notif status` | Show current state of all notification types |
+| `/notif token on/off` | Toggle token display (input/output per turn) |
+| `/notif context on/off` | Toggle context character count display |
+| `/notif cost on/off` | Toggle cost estimation display |
+| `/notif accumulated on/off` | Toggle session accumulated totals display |
+| `/notif compact on/off` | Switch between compact box and verbose format |
+
+**Components:**
+
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| `token-usage-notifier.ps1` | `scripts/utilities/` | Core display: per-turn metrics, accumulated session totals, status, auto-hook, cost estimation with per-model rates from `config/provider-costs.json` |
+| `toggle-token-display.ps1` | `scripts/utilities/` | Toggle handler: on/off/status per type, persistent state via `.session/token-display-config.json` |
+| `pre-process-input.ps1` | `scripts/utilities/` | Auto-hook: calls notifier with `-Action auto` at end of every turn |
+| `token-usage-auto.ps1` | `scripts/utilities/` | Post-response bridge: integrates notifier + context logger |
+| `token-display-config.json` | `.session/` | Persisted state: enabled, individualToggles (token/context/cost/accumulated), compactMode |
+
+Config references: `docs/AGENTS.md#token-notification-auto-hook-–-every-turn`, `CLAUDE.md` rule #6.
+
+---
+
 ## Key Capabilities
 
 ### SDD / OpenSpec Lifecycle
@@ -252,20 +292,21 @@ For large features that exceed the 400-line review budget, use chained PR delive
 - `skills/branch-pr/SKILL.md` — branch + PR workflow
 - `skills/gitflow-orchestrator-skill/SKILL.md` — full gitflow
 
-### Context Optimization (v2.21.0)
+### Context Optimization (v2.22.0)
 
 Comprehensive input/token efficiency overhaul:
 
-| Area | Before | After |
-|------|--------|-------|
-| CLAUDE.md | 220 lines | 47 lines (−79%) |
-| AGENTS.md | 311 lines | 78 lines (−75%) |
-| NORMATIVES.md | 1,506 lines | 120 lines (−92%) |
-| INTER-AGENT-COMMUNICATION.md | 167 lines | 54 lines (−68%) |
-| 10 oversized SKILL.md files | ~5,200 lines | ~1,420 lines (−73%) |
-| auto-delegation.json | 105 BA keywords | 80 (−24%) |
-| pre-process cache | None | SHA256 (132 skills, zero rescan) |
-| Output guard | None | 200 tokens non-code |
+| Area                         | Before          | After                            |
+| ---------------------------- | --------------- | -------------------------------- |
+| CLAUDE.md                    | 220 lines       | 47 lines (−79%)                  |
+| AGENTS.md                    | 311 lines       | 78 lines (−75%)                  |
+| NORMATIVES.md                | 1,506 lines     | 120 lines (−92%)                 |
+| INTER-AGENT-COMMUNICATION.md | 167 lines       | 54 lines (−68%)                  |
+| 10 oversized SKILL.md files  | ~5,200 lines    | ~1,420 lines (−73%)              |
+| auto-delegation.json         | 105 BA keywords | 80 (−24%)                        |
+| pre-process cache            | None            | SHA256 (132 skills, zero rescan) |
+| Output guard                 | None            | 200 tokens non-code              |
+| Token notification auto-hook | Manual `/notif` | Automatic every turn via pre-process-input.ps1, persistent toggles, cost from `provider-costs.json` |
 
 Integrated via `opencode.json` sliding window, `pre-compact-hook.ps1` ratio 0.60,
 `context-efficiency.json` input guard, and `token-display-config.json` interval display.
@@ -365,6 +406,8 @@ gv health
 | Hooks         | ✅ PASS | Pre-commit hooks active (README, secrets, lint)                         |
 | Context Log   | ✅ PASS | Session context logging active — tokens, cost, input/output per turn    |
 | Context Opt   | ✅ PASS | SHA256 cache, input guard, output guard, 73% avg file compression       |
+| Token Notif   | ✅ PASS | Auto-hook every turn, 6 toggle types, persistent config, cost from `provider-costs.json` |
+| Security      | ✅ PASS | 98 tests pass, injection/jailbreak detection active, AES-256 secrets    |
 | Structure     | ✅ PASS | All mandatory files present                                             |
 | Engram        | ✅ PASS | Memory store accessible, sessions tracking                              |
 | SDD           | ✅ PASS | OpenSpec config valid, preflight operational                            |
@@ -373,32 +416,46 @@ gv health
 
 ## Key Documentation
 
-| Resource                  | Path                                                       |
-| ------------------------- | ---------------------------------------------------------- |
-| **Agent Bootstrap**       | [docs/AGENTS.md](docs/AGENTS.md)                           |
-| **Context Logging**       | [docs/AGENTS.md#post-response-context-logging-rule](docs/AGENTS.md) |
-| **Architecture Overview** | [docs/architecture/README.md](docs/architecture/README.md) |
-| **Delegation Rules**      | [rules/DELEGATION-RULES.md](rules/DELEGATION-RULES.md)     |
-| **Model Routing**         | [config/model-routing.json](config/model-routing.json)     |
-| **SDD Config**            | [openspec/config.yaml](openspec/config.yaml)               |
-| **Skill Registry**        | [.atl/skill-registry.md](.atl/skill-registry.md)           |
-| **README Governance**     | [rules/README-GOVERNANCE.md](rules/README-GOVERNANCE.md)   |
-| **Quick Commands**        | [docs/QUICK-COMMANDS.md](docs/QUICK-COMMANDS.md)           |
+| Resource                   | Path                                                                 |
+| -------------------------- | -------------------------------------------------------------------- |
+| **Agent Bootstrap**        | [docs/AGENTS.md](docs/AGENTS.md)                                     |
+| **Context Logging**        | [docs/AGENTS.md#post-response-context-logging-rule](docs/AGENTS.md)  |
+| **Architecture Overview**  | [docs/architecture/README.md](docs/architecture/README.md)           |
+| **Delegation Rules**       | [rules/DELEGATION-RULES.md](rules/DELEGATION-RULES.md)               |
+| **Model Routing**          | [config/model-routing.json](config/model-routing.json)               |
+| **SDD Config**             | [openspec/config.yaml](openspec/config.yaml)                         |
+| **Skill Registry**         | [.atl/skill-registry.md](.atl/skill-registry.md)                     |
+| **README Governance**      | [rules/README-GOVERNANCE.md](rules/README-GOVERNANCE.md)             |
+| **Quick Commands**         | [docs/QUICK-COMMANDS.md](docs/QUICK-COMMANDS.md)                     |
+| **Security Normative**     | [docs/NORMATIVAS-SEGURIDAD.md](docs/NORMATIVAS-SEGURIDAD.md)         |
 | **Architecture Normative** | [rules/NORMATIVAS-ARCHITECTURE.md](rules/NORMATIVAS-ARCHITECTURE.md) |
-| **Config Normative**       | [rules/NORMATIVAS-CONFIG.md](rules/NORMATIVAS-CONFIG.md)   |
-| **DevOps Normative**       | [rules/NORMATIVAS-DEVOPS.md](rules/NORMATIVAS-DEVOPS.md)   |
-| **Docs Normative**         | [rules/NORMATIVAS-DOCS.md](rules/NORMATIVAS-DOCS.md)       |
-| **Enforcement Normative**  | [rules/NORMATIVAS-ENFORCEMENT.md](rules/NORMATIVAS-ENFORCEMENT.md) |
-| **Git Normative**          | [rules/NORMATIVAS-GIT.md](rules/NORMATIVAS-GIT.md)         |
-| **Build Pipeline**        | [docs/build/README.md](build/README.md)                    |
-| **Contributing**          | [CONTRIBUTING.md](CONTRIBUTING.md)                         |
-| **Changelog**             | [CHANGELOG.md](CHANGELOG.md)                               |
+| **Config Normative**       | [rules/NORMATIVAS-CONFIG.md](rules/NORMATIVAS-CONFIG.md)             |
+| **DevOps Normative**       | [rules/NORMATIVAS-DEVOPS.md](rules/NORMATIVAS-DEVOPS.md)             |
+| **Docs Normative**         | [rules/NORMATIVAS-DOCS.md](rules/NORMATIVAS-DOCS.md)                 |
+| **Enforcement Normative**  | [rules/NORMATIVAS-ENFORCEMENT.md](rules/NORMATIVAS-ENFORCEMENT.md)   |
+| **Git Normative**          | [rules/NORMATIVAS-GIT.md](rules/NORMATIVAS-GIT.md)                   |
+| **Build Pipeline**         | [docs/build/README.md](build/README.md)                              |
+| **Contributing**           | [CONTRIBUTING.md](CONTRIBUTING.md)                                   |
+| **Changelog**              | [CHANGELOG.md](CHANGELOG.md)                                         |
 
 ---
 
 ## Security
 
-AES-256 encryption for secrets, API keys, and sensitive configs. See [SECURITY.md](SECURITY.md).
+| Layer                    | Protection                                                                                                                          | Implementation                                                       |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| **Prompt Injection**     | 10 detection patterns (instruction-override, jailbreak, leakage, code-exec, role-takeover, encoding-obfuscation, constraint-bypass) | `privacy-gateway.ps1` — blocks CRITICAL before agent processes input |
+| **Jailbreak Prevention** | DAN, unrestricted-mode, developer-mode, simulation attacks                                                                          | `security-orchestrator.ps1` — expanded `$CRITICAL_PATTERNS`          |
+| **Data Leakage**         | PII redaction, IP masking, home path sanitization                                                                                   | `privacy-sanitizer.ps1` + `security-logger.ps1`                      |
+| **Secrets Management**   | AES-256 encryption, DPAPI vault, RBAC, automated rotation                                                                           | `secrets-manager.ps1` v2.0 + `secret-vault.ps1`                      |
+| **Supply Chain**         | SBOM CycloneDX generation, npm hardening (ignore-scripts, min-release-age), Trivy scanning                                          | `.npmrc` + `sbom-validate.ps1` + CI/CD                               |
+| **Auth & Access**        | Rate-limited auth with lockout, session-based, DPAPI-encrypted                                                                      | `secure-auth.ps1` + `security-orchestrator.ps1`                      |
+
+**98 security tests** — injection detection, PII redaction, secrets vault, SBOM validation,
+encryption.
+
+See [SECURITY.md](SECURITY.md), [docs/NORMATIVAS-SEGURIDAD.md](docs/NORMATIVAS-SEGURIDAD.md) (OWASP
+LLM Top 10 + OWASP Agentic Top 10).
 
 ---
 
@@ -409,6 +466,6 @@ AES-256 encryption for secrets, API keys, and sensitive configs. See [SECURITY.m
 ---
 
 <p align="center">
-  <strong>Gentle-Vanguard v2.21.0</strong><br>
+  <strong>Gentle-Vanguard v2.22.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>

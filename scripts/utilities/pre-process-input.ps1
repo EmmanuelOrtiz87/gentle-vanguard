@@ -7,10 +7,36 @@ param(
     [string]$SkillsPath = "skills",
     [string]$WorkspaceRoot = ".",
     [switch]$DisableSkillFileFallback,
-    [switch]$FromAgent
+    [switch]$FromAgent,
+    [switch]$DisableCache
 )
 
 $ErrorActionPreference = 'Continue'
+
+# ============================================================================
+# RESPONSE CACHE: Return cached output for repeated inputs (saves ~2.5s each)
+if (-not $DisableCache -and -not $FromAgent) {
+    $cacheDir = Join-Path (Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path))) ".session"
+    $responseCacheFile = Join-Path $cacheDir "preprocess-response-cache.json"
+    if (Test-Path $cacheDir) {
+        try {
+            $inputHash = [Convert]::ToBase64String([System.Security.Cryptography.SHA256]::Create().ComputeHash([System.Text.Encoding]::UTF8.GetBytes($UserInput)))
+            $responseCache = @{}
+            if (Test-Path $responseCacheFile) {
+                $responseCache = Get-Content $responseCacheFile -Raw -ErrorAction SilentlyContinue | ConvertFrom-Json -ErrorAction SilentlyContinue
+                if ($responseCache -and $responseCache.cache) { $responseCache = $responseCache.cache } else { $responseCache = @{} }
+            }
+            if ($responseCache.ContainsKey($inputHash)) {
+                $entry = $responseCache[$inputHash]
+                $age = [datetime]::UtcNow - [datetime]::Parse($entry.timestamp)
+                if ($age.TotalMinutes -le 30) {
+                    Write-Output $entry.output
+                    return
+                }
+            }
+        } catch { }
+    }
+}
 
 # ============================================================================
 # SECURITY: Sanitize ALL input before processing
@@ -44,6 +70,68 @@ if (-not $FromAgent) {
 
 $triggerMap = @{}
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+
+# ============================================================================
+# NOTIFICATION COMMANDS: /notif on|off|status|toggle|token|context|cost|accumulated
+# ============================================================================
+if ($UserInput -match '^/notif\s+(.+)$') {
+    $notifCmd = $Matches[1].Trim().ToLower()
+    $notifierScript = Join-Path $scriptDir "toggle-token-display.ps1"
+    if (Test-Path $notifierScript) {
+        switch -Regex ($notifCmd) {
+            '^on$'        { & $notifierScript -Enable }
+            '^off$'       { & $notifierScript -Disable }
+            '^toggle$'    { & $notifierScript }
+            '^status$'    { & $notifierScript -Status }
+            '^token(\s+(on|off))?$' {
+                $sub = $Matches[2]
+                if (-not $sub) { & $notifierScript -Type token }
+                elseif ($sub -eq 'on') { & $notifierScript -Type token -Enable }
+                else { & $notifierScript -Type token -Disable }
+            }
+            '^context(\s+(on|off))?$' {
+                $sub = $Matches[2]
+                if (-not $sub) { & $notifierScript -Type context }
+                elseif ($sub -eq 'on') { & $notifierScript -Type context -Enable }
+                else { & $notifierScript -Type context -Disable }
+            }
+            '^cost(\s+(on|off))?$' {
+                $sub = $Matches[2]
+                if (-not $sub) { & $notifierScript -Type cost }
+                elseif ($sub -eq 'on') { & $notifierScript -Type cost -Enable }
+                else { & $notifierScript -Type cost -Disable }
+            }
+            '^accum(ulated)?(\s+(on|off))?$' {
+                $sub = $Matches[3]
+                if (-not $sub) { & $notifierScript -Type accumulated }
+                elseif ($sub -eq 'on') { & $notifierScript -Type accumulated -Enable }
+                else { & $notifierScript -Type accumulated -Disable }
+            }
+            '^compact(\s+(on|off))?$' {
+                $sub = $Matches[2]
+                if (-not $sub) { & $notifierScript -Type compact }
+                elseif ($sub -eq 'on') { & $notifierScript -Type compact -Enable }
+                else { & $notifierScript -Type compact -Disable }
+            }
+            default {
+                Write-Host ""
+                Write-Host "Usage: /notif <command>" -ForegroundColor Cyan
+                Write-Host "  /notif on|off           - Master toggle" -ForegroundColor Gray
+                Write-Host "  /notif status           - Show state" -ForegroundColor Gray
+                Write-Host "  /notif toggle           - Toggle all" -ForegroundColor Gray
+                Write-Host "  /notif token [on|off]   - Token display" -ForegroundColor Gray
+                Write-Host "  /notif context [on|off] - Context chars" -ForegroundColor Gray
+                Write-Host "  /notif cost [on|off]    - Cost estimation" -ForegroundColor Gray
+                Write-Host "  /notif accum [on|off]   - Session accumulated" -ForegroundColor Gray
+                Write-Host "  /notif compact [on|off] - Compact/verbose mode" -ForegroundColor Gray
+                Write-Host ""
+            }
+        }
+    } else {
+        Write-Host "[WARN] toggle-token-display.ps1 not found at: $notifierScript" -ForegroundColor Yellow
+    }
+    return @{ HasMatch = $false; Skill = $null; Trigger = $null; Confidence = 0; PlanMode = $false; AgentCode = $null; AgentProfile = $null }
+}
 $workspaceRoot = if ($PSBoundParameters.ContainsKey("WorkspaceRoot") -and $WorkspaceRoot -ne ".") {
     try { (Resolve-Path -Path $WorkspaceRoot -ErrorAction Stop).Path } catch { (Split-Path -Parent (Split-Path -Parent $scriptDir)) }
 } else {
@@ -424,6 +512,9 @@ if ($matchingSkill -eq 'sdd-lifecycle') {
     }
 }
 
+# Capture output lines for caching
+$outLines = [System.Collections.ArrayList]@()
+
 if ($isFeatureIntent) {
     $sddOrch = Join-Path (Split-Path -Parent $PSCommandPath) 'sdd-orchestrator.ps1'
     $wsRoot = if ($PSBoundParameters.ContainsKey("WorkspaceRoot") -and $WorkspaceRoot -ne ".") { $WorkspaceRoot } else { (Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $PSCommandPath))) }
@@ -434,55 +525,87 @@ if ($isFeatureIntent) {
     }
 
     $baProfile = Resolve-AgentProfile -AgentCode "BA" -Profiles $agentProfiles
-    Write-Output "SOURCE: $sourceTag"
-    Write-Output "PLAN_MODE_REQUIRED"
-    Write-Output "CONFIDENCE: $confidenceScore"
-    Write-Output "AGENT: BA"
-    Write-Output "SKILL: sdd-lifecycle"
-    Write-Output "PHASE: EXPLORE"
-    Write-Output "ACTION: SDD flow enforced - all feature/development requests route through BA/EXPLORE first"
-    Write-AgentProfile -Profile $baProfile -AgentCode "BA"
+    $outLines.Add("SOURCE: $sourceTag") | Out-Null
+    $outLines.Add("PLAN_MODE_REQUIRED") | Out-Null
+    $outLines.Add("CONFIDENCE: $confidenceScore") | Out-Null
+    $outLines.Add("AGENT: BA") | Out-Null
+    $outLines.Add("SKILL: sdd-lifecycle") | Out-Null
+    $outLines.Add("PHASE: EXPLORE") | Out-Null
+    $outLines.Add("ACTION: SDD flow enforced - all feature/development requests route through BA/EXPLORE first") | Out-Null
+    foreach ($line in (Write-AgentProfile -Profile $baProfile -AgentCode "BA" 2>&1)) { $outLines.Add($line) | Out-Null }
     if ($clarifyBaStrategy -and $clarifyBaStrategy.questions) {
-        Write-Output "CLARIFICATION_QUESTIONS:"
-        foreach ($q in $clarifyBaStrategy.questions) { Write-Output "  - $q" }
+        $outLines.Add("CLARIFICATION_QUESTIONS:") | Out-Null
+        foreach ($q in $clarifyBaStrategy.questions) { $outLines.Add("  - $q") | Out-Null }
     }
     $matchingSkill = "sdd-lifecycle"
     $resolvedAgent = "BA"
     $activeProfile = $baProfile
     $planMode = $true
 } elseif ($matchingSkill) {
-    Write-Output "SOURCE: $sourceTag"
-    Write-Output "TRIGGER_MATCH_FOUND"
-    Write-Output "SKILL: $matchingSkill"
-    Write-Output "TRIGGER_MATCHED: $matchingTrigger"
-    Write-Output "CONFIDENCE: $confidenceScore"
-    Write-Output "ACTION: Load skill '$matchingSkill' using skill tool"
-    Write-AgentProfile -Profile $activeProfile -AgentCode $resolvedAgent
-    Write-FlowGate -Flows $unmappedFlows -Skill $matchingSkill
+    $outLines.Add("SOURCE: $sourceTag") | Out-Null
+    $outLines.Add("TRIGGER_MATCH_FOUND") | Out-Null
+    $outLines.Add("SKILL: $matchingSkill") | Out-Null
+    $outLines.Add("TRIGGER_MATCHED: $matchingTrigger") | Out-Null
+    $outLines.Add("CONFIDENCE: $confidenceScore") | Out-Null
+    $outLines.Add("ACTION: Load skill '$matchingSkill' using skill tool") | Out-Null
+    foreach ($line in (Write-AgentProfile -Profile $activeProfile -AgentCode $resolvedAgent 2>&1)) { $outLines.Add($line) | Out-Null }
+    foreach ($line in (Write-FlowGate -Flows $unmappedFlows -Skill $matchingSkill 2>&1)) { $outLines.Add($line) | Out-Null }
     if ($isCodegraphRecommended -and $matchingSkill -ne 'codegraph-skill') {
-        Write-Output "CODEGRAPH_CONTEXT_RECOMMENDED: true"
-        Write-Output "CODEGRAPH_REASON: Modification/dependency task detected — use codegraph_context before proceeding"
+        $outLines.Add("CODEGRAPH_CONTEXT_RECOMMENDED: true") | Out-Null
+        $outLines.Add("CODEGRAPH_REASON: Modification/dependency task detected — use codegraph_context before proceeding") | Out-Null
     }
 } elseif ($fallbackStrategy -eq "clarify-ba" -and $confidenceScore -lt $lowConfidenceThreshold) {
     $baProfile = Resolve-AgentProfile -AgentCode "BA" -Profiles $agentProfiles
-    Write-Output "SOURCE: $sourceTag"
-    Write-Output "PLAN_MODE_REQUIRED"
-    Write-Output "CONFIDENCE: $confidenceScore"
-    Write-Output "AGENT: BA"
-    Write-Output "SKILL: sdd-lifecycle"
-    Write-Output "PHASE: EXPLORE"
-    Write-Output "ACTION: $($clarifyBaStrategy.instructions)"
-    Write-AgentProfile -Profile $baProfile -AgentCode "BA"
+    $outLines.Add("SOURCE: $sourceTag") | Out-Null
+    $outLines.Add("PLAN_MODE_REQUIRED") | Out-Null
+    $outLines.Add("CONFIDENCE: $confidenceScore") | Out-Null
+    $outLines.Add("AGENT: BA") | Out-Null
+    $outLines.Add("SKILL: sdd-lifecycle") | Out-Null
+    $outLines.Add("PHASE: EXPLORE") | Out-Null
+    $outLines.Add("ACTION: $($clarifyBaStrategy.instructions)") | Out-Null
+    foreach ($line in (Write-AgentProfile -Profile $baProfile -AgentCode "BA" 2>&1)) { $outLines.Add($line) | Out-Null }
     if ($clarifyBaStrategy.questions) {
-        Write-Output "CLARIFICATION_QUESTIONS:"
-        foreach ($q in $clarifyBaStrategy.questions) { Write-Output "  - $q" }
+        $outLines.Add("CLARIFICATION_QUESTIONS:") | Out-Null
+        foreach ($q in $clarifyBaStrategy.questions) { $outLines.Add("  - $q") | Out-Null }
     }
     $planMode = $true
 } else {
-    Write-Output "SOURCE: $sourceTag"
-    Write-Output "NO_TRIGGER_MATCH"
-    Write-Output "CONFIDENCE: $confidenceScore"
-    Write-Output "ACTION: Continue with normal behavior"
+    $outLines.Add("SOURCE: $sourceTag") | Out-Null
+    $outLines.Add("NO_TRIGGER_MATCH") | Out-Null
+    $outLines.Add("CONFIDENCE: $confidenceScore") | Out-Null
+    $outLines.Add("ACTION: Continue with normal behavior") | Out-Null
+}
+
+# Emit output
+foreach ($line in $outLines) { Write-Output $line }
+
+# Cache result for identical future calls (TTL: 30min)
+if (-not $DisableCache -and -not $FromAgent -and $outLines.Count -gt 0) {
+    try {
+        $cacheDir = Join-Path (Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path))) ".session"
+        $responseCacheFile = Join-Path $cacheDir "preprocess-response-cache.json"
+        $responseCache = @{}
+        if (Test-Path $responseCacheFile) {
+            $cached = Get-Content $responseCacheFile -Raw -ErrorAction SilentlyContinue | ConvertFrom-Json -ErrorAction SilentlyContinue
+            if ($cached -and $cached.cache) { $responseCache = $cached.cache }
+        }
+        $inputHash = [Convert]::ToBase64String([System.Security.Cryptography.SHA256]::Create().ComputeHash([System.Text.Encoding]::UTF8.GetBytes($UserInput)))
+        $responseCache[$inputHash] = @{ output = ($outLines -join "`n"); timestamp = ([datetime]::UtcNow.ToString("O")) }
+        # Prune entries >1hr
+        $pruned = @{}; $now = [datetime]::UtcNow
+        foreach ($kv in $responseCache.GetEnumerator()) {
+            try { if (($now - [datetime]::Parse($kv.Value.timestamp)).TotalHours -le 1) { $pruned[$kv.Key] = $kv.Value } } catch { }
+        }
+        @{ cache = $pruned } | ConvertTo-Json -Depth 5 -Compress | Set-Content $responseCacheFile -Force
+    } catch { }
+}
+
+# ============================================================================
+# AUTO-NOTIFICATION HOOK: Muestra el acumulado de tokens al inicio de cada turno
+# ============================================================================
+$notifierScript = Join-Path $workspaceRoot "scripts\utilities\token-usage-notifier.ps1"
+if (Test-Path $notifierScript) {
+    & $notifierScript -Action auto 2>$null
 }
 
 return @{
