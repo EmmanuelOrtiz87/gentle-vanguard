@@ -17,19 +17,37 @@
     "enabled": true,
     "mandatory": true,
     "script": "scripts/utilities/pre-process-input.ps1",
-    "scriptArgs": { "UserInput": "USER_INPUT_HERE", "WorkspaceRoot": "." }
+    "scriptArgs": {
+      "UserInput": "USER_INPUT_HERE",
+      "WorkspaceRoot": "."
+    }
   },
   "sessionManagement": {
     "autostart": "scripts/utilities/session-autostart.cmd",
     "project": "foundation"
   },
-  "language": { "default": "es", "technicalTerms": "en" },
+  "language": {
+    "default": "es",
+    "technicalTerms": "en"
+  },
   "governanceLayers": {
-    "GOV": ["project-orchestrator-skill"],
-    "DEV": ["sdd-lifecycle"],
-    "QA": ["sdd-lifecycle"],
-    "OPS": ["docker-devops-skill"],
-    "DOC": ["documentation-governance"],
-    "SESSION": ["session-workflow-skill"]
+    "GOV": [
+      "project-orchestrator-skill"
+    ],
+    "DEV": [
+      "sdd-lifecycle"
+    ],
+    "QA": [
+      "sdd-lifecycle"
+    ],
+    "OPS": [
+      "docker-devops-skill"
+    ],
+    "DOC": [
+      "documentation-governance"
+    ],
+    "SESSION": [
+      "session-workflow-skill"
+    ]
   }
 }
