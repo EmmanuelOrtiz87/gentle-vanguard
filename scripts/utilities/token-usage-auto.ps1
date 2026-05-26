@@ -63,7 +63,7 @@ if (Test-Path $notifierScript) {
         $InputTokens = $estimatedInput
         $OutputTokens = $estimatedOutput
     }
-    & $notifierScript -Action accumulate -InputTokens $InputTokens -OutputTokens $OutputTokens -ContextChars $ContextChars -SessionId $SessionId
+    & $notifierScript -Action accumulate -InputTokens $InputTokens -OutputTokens $OutputTokens -ContextChars $ContextChars -SessionId $SessionId -Model $Model
 }
 
 # 2. Context logging — auto-init if dir missing, then log

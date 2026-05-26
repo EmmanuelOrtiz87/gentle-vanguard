@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.21.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.22.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
@@ -194,6 +194,43 @@ Config references: `docs/AGENTS.md#post-response-context-logging-rule`, `CLAUDE.
 
 ---
 
+### Token Notification Auto-Hook (Every Turn)
+
+Automatic token consumption display that fires every turn without agent intervention:
+
+```mermaid
+flowchart LR
+    TURN[Every turn start] -->|pre-process-input.ps1| AUTO[token-usage-notifier.ps1\n-Action auto]
+    AUTO --> ACCUM[Show-AccumulatedMetrics\nSession totals]
+    USER[User /notif command] -->|pre-process-input.ps1| TOGGLE[toggle-token-display.ps1]
+    TOGGLE --> CFG[.session/token-display-config.json]
+    CFG --> AUTO
+```
+
+| Command | Effect |
+|---------|--------|
+| `/notif on` / `/notif off` | Master toggle (persists across sessions) |
+| `/notif status` | Show current state of all notification types |
+| `/notif token on/off` | Toggle token display (input/output per turn) |
+| `/notif context on/off` | Toggle context character count display |
+| `/notif cost on/off` | Toggle cost estimation display |
+| `/notif accumulated on/off` | Toggle session accumulated totals display |
+| `/notif compact on/off` | Switch between compact box and verbose format |
+
+**Components:**
+
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| `token-usage-notifier.ps1` | `scripts/utilities/` | Core display: per-turn metrics, accumulated session totals, status, auto-hook, cost estimation with per-model rates from `config/provider-costs.json` |
+| `toggle-token-display.ps1` | `scripts/utilities/` | Toggle handler: on/off/status per type, persistent state via `.session/token-display-config.json` |
+| `pre-process-input.ps1` | `scripts/utilities/` | Auto-hook: calls notifier with `-Action auto` at end of every turn |
+| `token-usage-auto.ps1` | `scripts/utilities/` | Post-response bridge: integrates notifier + context logger |
+| `token-display-config.json` | `.session/` | Persisted state: enabled, individualToggles (token/context/cost/accumulated), compactMode |
+
+Config references: `docs/AGENTS.md#token-notification-auto-hook-–-every-turn`, `CLAUDE.md` rule #6.
+
+---
+
 ## Key Capabilities
 
 ### SDD / OpenSpec Lifecycle
@@ -255,7 +292,7 @@ For large features that exceed the 400-line review budget, use chained PR delive
 - `skills/branch-pr/SKILL.md` — branch + PR workflow
 - `skills/gitflow-orchestrator-skill/SKILL.md` — full gitflow
 
-### Context Optimization (v2.21.0)
+### Context Optimization (v2.22.0)
 
 Comprehensive input/token efficiency overhaul:
 
@@ -269,6 +306,7 @@ Comprehensive input/token efficiency overhaul:
 | auto-delegation.json         | 105 BA keywords | 80 (−24%)                        |
 | pre-process cache            | None            | SHA256 (132 skills, zero rescan) |
 | Output guard                 | None            | 200 tokens non-code              |
+| Token notification auto-hook | Manual `/notif` | Automatic every turn via pre-process-input.ps1, persistent toggles, cost from `provider-costs.json` |
 
 Integrated via `opencode.json` sliding window, `pre-compact-hook.ps1` ratio 0.60,
 `context-efficiency.json` input guard, and `token-display-config.json` interval display.
@@ -368,6 +406,7 @@ gv health
 | Hooks         | ✅ PASS | Pre-commit hooks active (README, secrets, lint)                         |
 | Context Log   | ✅ PASS | Session context logging active — tokens, cost, input/output per turn    |
 | Context Opt   | ✅ PASS | SHA256 cache, input guard, output guard, 73% avg file compression       |
+| Token Notif   | ✅ PASS | Auto-hook every turn, 6 toggle types, persistent config, cost from `provider-costs.json` |
 | Security      | ✅ PASS | 98 tests pass, injection/jailbreak detection active, AES-256 secrets    |
 | Structure     | ✅ PASS | All mandatory files present                                             |
 | Engram        | ✅ PASS | Memory store accessible, sessions tracking                              |
@@ -427,6 +466,6 @@ LLM Top 10 + OWASP Agentic Top 10).
 ---
 
 <p align="center">
-  <strong>Gentle-Vanguard v2.21.0</strong><br>
+  <strong>Gentle-Vanguard v2.22.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>

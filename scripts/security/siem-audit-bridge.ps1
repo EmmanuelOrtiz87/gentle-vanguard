@@ -42,7 +42,7 @@ $SecurityDir   = Split-Path -Parent $ScriptDir   # scripts/security → scripts/
 $ScriptsDir    = Split-Path -Parent $SecurityDir  # If needed
 # Resolve workspace root
 $WorkspaceRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
-if (-not (Test-Path (Join-Path $WorkspaceRoot 'config'))) {
+if (-not (Test-Path (Join-Path $WorkspaceRoot 'config\orchestrator.json'))) {
     # Fallback: try one level up
     $WorkspaceRoot = Split-Path -Parent $WorkspaceRoot
 }

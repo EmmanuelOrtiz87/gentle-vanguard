@@ -8,7 +8,7 @@ function Write-LogWarn { param([string]$m) if (-not $script:Silent) { Write-Host
 function Get-RepoRoot {
     if ($env:GENTLE_VANGUARD_BASE_DIR -and (Test-Path $env:GENTLE_VANGUARD_BASE_DIR)) { return $env:GENTLE_VANGUARD_BASE_DIR }
     $root = Split-Path -Parent $PSScriptRoot
-    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
+    while ($root -and -not (Test-Path (Join-Path $root 'config\orchestrator.json'))) { $root = Split-Path -Parent $root }
     return $root
 }
 

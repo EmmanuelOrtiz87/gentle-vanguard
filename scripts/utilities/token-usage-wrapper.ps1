@@ -24,7 +24,7 @@ $repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) {
     $env:GENTLE_VANGUARD_BASE_DIR 
 } else {
     $root = $scriptRoot
-    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { 
+    while ($root -and -not (Test-Path (Join-Path $root 'config\orchestrator.json'))) { 
         $root = Split-Path -Parent $root 
     }
     if (-not $root) { $root = (Get-Location).Path }

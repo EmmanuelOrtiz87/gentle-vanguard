@@ -1,4 +1,4 @@
-﻿# session-autostart.ps1
+# session-autostart.ps1
 # Session Autostart - Config-driven pipeline with Engram Optimization
 
 param(
@@ -31,7 +31,7 @@ function Complete-Script {
 
 $repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) { $env:GENTLE_VANGUARD_BASE_DIR } else {
     $root = Split-Path -Parent $PSScriptRoot
-    while ($root -and -not (Test-Path (Join-Path $root 'config'))) { $root = Split-Path -Parent $root }
+    while ($root -and -not (Test-Path (Join-Path $root 'config\orchestrator.json'))) { $root = Split-Path -Parent $root }
     if (-not $root) { $root = $PSScriptRoot }
     $root
 }

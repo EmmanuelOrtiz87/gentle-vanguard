@@ -28,7 +28,7 @@ Run `docs/AGENTS.md#Mandatory-Startup-Sequence` — no shortcuts.
 3. **SDD FLOW RULE**: new features -> BA/EXPLORE first, no exceptions
 4. **Delegation Rules** -> `rules/DELEGATION-RULES.md` mandatory for multi-step
 5. **AUTONOMOUS LEARNING** -> `mem_save` after every significant task
-6. **TOKEN NOTIFICATION** -> `token-usage-auto.ps1` every 5 turns (per `token-display-config.json`)
+6. **TOKEN NOTIFICATION** -> Automatico via `pre-process-input.ps1` hook. Se ejecuta CADA turno sin intervención. User puede `/notif off` para silenciar. Toggles individuales: `/notif token on/off`, `/notif context on/off`, `/notif cost on/off`, `/notif accumulated on/off`, `/notif compact on/off`. Estado persiste entre sesiones.
 7. **CodeGraph** -> `codegraph_context` before modifying code
 8. **mem_search "lessons learned"** at session start
 9. **Review Workload Guard** -> `review-workload-guard.ps1` before multi-file impl
