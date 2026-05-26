@@ -11,4 +11,3 @@ Spring, Gin, Axum, ASP.NET, Vapor, React Router, SvelteKit.
 
 ---
 
-> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

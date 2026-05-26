@@ -24,7 +24,7 @@ Run `docs/AGENTS.md#Mandatory-Startup-Sequence` — no shortcuts.
 ## Core Rules (condensed)
 
 1. **LOCAL-FIRST**: project knowledge before external sources
-2. **pre-process-input.ps1** BEFORE every response (`-UserInput` param, not `-Prompt`)
+2. **pre-process-input.ps1** BEFORE every response (`-UserInput`, `-PrevInputTokens`, `-PrevOutputTokens`, `-PrevContextChars`, `-Model`). Track token usage from previous turn: estimate input as `[Math]::Floor(contextChars/4)`, output as actual response length/4. On first turn omit prev params.
 3. **SDD FLOW RULE**: new features -> BA/EXPLORE first, no exceptions
 4. **Delegation Rules** -> `rules/DELEGATION-RULES.md` mandatory for multi-step
 5. **AUTONOMOUS LEARNING** -> `mem_save` after every significant task

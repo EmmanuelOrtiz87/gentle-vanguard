@@ -6,4 +6,3 @@ Every PR in a chain needs explicit boundaries:
 
 ---
 
-> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

@@ -35,37 +35,37 @@ Call 流程等），并完整支持全部 14 种 UML 图类型。
 ### 风格 1 — 扁平图标风（默认）
 
 _Mem0 记忆架构图 — 白底，语义箭头，分层记忆系统_
-![风格 1 — 扁平图标风](assets/samples/sample-style1-flat.png)
+`assets/samples/sample-style1-flat.png` *(首次运行生成)*
 
 ### 风格 2 — 暗黑极客风
 
 _Tool Call 执行流程 — 深色背景，Neon 配色，等宽字体_
-![风格 2 — 暗黑极客风](assets/samples/sample-style2-dark.png)
+`assets/samples/sample-style2-dark.png` *(首次运行生成)*
 
 ### 风格 3 — 工程蓝图风
 
 _微服务架构图 — 深蓝底，网格线，青色描边_
-![风格 3 — 工程蓝图风](assets/samples/sample-style3-blueprint.png)
+`assets/samples/sample-style3-blueprint.png` *(首次运行生成)*
 
 ### 风格 4 — Notion 极简风
 
 _Agent 记忆类型图 — 白底极简，单一强调色_
-![风格 4 — Notion 极简风](assets/samples/sample-style4-notion.png)
+`assets/samples/sample-style4-notion.png` *(首次运行生成)*
 
 ### 风格 5 — 玻璃态卡片风
 
 _Multi-Agent 协作图 — 深色渐变底，磨砂玻璃卡片_
-![风格 5 — 玻璃态卡片风](assets/samples/sample-style5-glass.png)
+`assets/samples/sample-style5-glass.png` *(首次运行生成)*
 
 ### 风格 6 — Claude 官方风格
 
 _系统架构图 — 温暖奶油色背景 (#f8f6f3)，Anthropic 品牌色，简洁专业美学_
-![风格 6 — Claude 官方风格](assets/samples/sample-style6-claude.png)
+`assets/samples/sample-style6-claude.png` *(首次运行生成)*
 
 ### 风格 7 — OpenAI 官方风格
 
 _API 集成流程图 — 纯白背景，OpenAI 品牌配色，现代极简设计_
-![风格 7 — OpenAI 官方风格](assets/samples/sample-style7-openai.png)
+`assets/samples/sample-style7-openai.png` *(首次运行生成)*
 
 ---
 
