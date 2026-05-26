@@ -11,4 +11,3 @@ git log --oneline -5
 
 ---
 
-> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

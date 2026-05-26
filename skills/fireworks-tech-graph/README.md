@@ -49,43 +49,44 @@ design-partner work, and founding engineer conversations.
 
 ## Showcase
 
-> All samples exported at 1920px width (2× retina) via `cairosvg`. PNG is lossless and the right
-> choice for technical diagrams — sharp edges, no JPEG compression artifacts on text/lines.
+> All samples exported at 1920px width (2× retina) via `cairosvg`. Samples are generated at runtime.
+> Run the tool to produce PNG previews in `assets/samples/`.
 
 ### Style 1 — Flat Icon (default)
 
 _Mem0 Memory Architecture — white background, semantic arrows, layered memory system_
-![Style 1 — Flat Icon](assets/samples/sample-style1-flat.png)
+`assets/samples/sample-style1-flat.png` *(generated on first run)*
 
 ### Style 2 — Dark Terminal
 
 _Tool Call Flow — dark background, neon accents, monospace font_
-![Style 2 — Dark Terminal](assets/samples/sample-style2-dark.png)
+`assets/samples/sample-style2-dark.png` *(generated on first run)*
 
 ### Style 3 — Blueprint
 
 _Microservices Architecture — deep blue background, grid lines, cyan strokes_
-![Style 3 — Blueprint](assets/samples/sample-style3-blueprint.png)
+`assets/samples/sample-style3-blueprint.png` *(generated on first run)*
 
 ### Style 4 — Notion Clean
 
 _Agent Memory Types — minimal white, single accent color_
-![Style 4 — Notion Clean](assets/samples/sample-style4-notion.png)
+`assets/samples/sample-style4-notion.png` *(generated on first run)*
 
 ### Style 5 — Glassmorphism
 
 _Multi-Agent Collaboration — dark gradient background, frosted glass cards_
-![Style 5 — Glassmorphism](assets/samples/sample-style5-glass.png)
+`assets/samples/sample-style5-glass.png` *(generated on first run)*
 
 ### Style 6 — Claude Official
 
 _System Architecture — warm cream background (#f8f6f3), Anthropic brand colors, clean professional
-aesthetic_ ![Style 6 — Claude Official](assets/samples/sample-style6-claude.png)
+aesthetic_
+`assets/samples/sample-style6-claude.png` *(generated on first run)*
 
 ### Style 7 — OpenAI Official
 
 _API Integration Flow — pure white background, OpenAI brand palette, modern minimalist design_
-![Style 7 — OpenAI Official](assets/samples/sample-style7-openai.png)
+`assets/samples/sample-style7-openai.png` *(generated on first run)*
 
 ---
 

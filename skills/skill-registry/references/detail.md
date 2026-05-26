@@ -11,4 +11,3 @@
 
 ---
 
-> **Referencia detallada**: [ eferences/detail.md](references/detail.md)

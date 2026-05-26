@@ -8,7 +8,11 @@ param(
     [string]$WorkspaceRoot = ".",
     [switch]$DisableSkillFileFallback,
     [switch]$FromAgent,
-    [switch]$DisableCache
+    [switch]$DisableCache,
+    [int]$PrevInputTokens = 0,
+    [int]$PrevOutputTokens = 0,
+    [int]$PrevContextChars = 0,
+    [string]$Model = ""
 )
 
 $ErrorActionPreference = 'Continue'
@@ -606,6 +610,11 @@ if (-not $DisableCache -and -not $FromAgent -and $outLines.Count -gt 0) {
 $notifierScript = Join-Path $workspaceRoot "scripts\utilities\token-usage-notifier.ps1"
 if (Test-Path $notifierScript) {
     & $notifierScript -Action auto 2>$null
+
+    # Auto-accumulate previous turn data (if agent provided it)
+    if ($PrevInputTokens -gt 0 -or $PrevOutputTokens -gt 0) {
+        & $notifierScript -Action accumulate -InputTokens $PrevInputTokens -OutputTokens $PrevOutputTokens -ContextChars $PrevContextChars -Model $Model 2>$null
+    }
 }
 
 return @{
