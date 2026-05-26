@@ -57,6 +57,6 @@ After creating the skill, add it to `SKILL_INDEX.md`:
 ## Resources
 
 - **Gentle-Vanguard**: See `~/.gentleman/` for global installation
-- **Skill Index**: See [SKILL_INDEX.md](../SKILL_INDEX.md) for all skills
-- **Documentation**: See [docs/](../../docs/) for guides
+- **Skill Index**: See [SKILL_INDEX.md](../../SKILL_INDEX.md) for all skills
+- **Documentation**: See [docs/](../../../docs/) for guides
 ```

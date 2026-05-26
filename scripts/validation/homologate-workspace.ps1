@@ -270,6 +270,9 @@ foreach ($md in $mdFiles) {
     $content = Get-Content -Path $md.FullName -Raw -ErrorAction SilentlyContinue
     if (-not $content) { continue }
 
+    # Strip fenced code blocks (``` ... ```) to avoid false positives from code
+    $content = [regex]::Replace($content, '(?ms)^```[\s\S]*?^```\s*$', '')
+
     # Match markdown links: [text](path) - skip http/https and anchors-only
     $matches2 = [regex]::Matches($content, '\[([^\]]+)\]\(([^)#][^)]*)\)')
     foreach ($m in $matches2) {
