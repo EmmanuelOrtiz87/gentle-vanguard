@@ -3,6 +3,7 @@
 **Version:** 1.0.0 **Last updated:** 2026-05-23
 
 ---
+
 ## Architecture Normatives
 
 ### 1. Layered Architecture Principles

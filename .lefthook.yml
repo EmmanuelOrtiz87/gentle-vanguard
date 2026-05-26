@@ -1,6 +1,20 @@
 # lefthook.yml v2 — Git hooks for Gentle-Vanguard
 # Install: npm install lefthook && npx lefthook install
 
+post-commit:
+  commands:
+    codegraph-sync:
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File
+        "scripts/utilities/codegraph-post-modification-sync.ps1" -Trigger post-commit -Force
+
+post-merge:
+  commands:
+    codegraph-sync:
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File
+        "scripts/utilities/codegraph-post-modification-sync.ps1" -Trigger post-merge -Force
+
 pre-commit:
   commands:
     opencode-validation:

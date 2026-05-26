@@ -4,13 +4,14 @@
 
 param(
     [Parameter(Mandatory=$true)]
-    [ValidateSet("show", "accumulate", "summary", "toggle", "status")]
+    [ValidateSet("show", "accumulate", "summary", "toggle", "status", "auto")]
     [string]$Action,
     
     [int]$InputTokens = 0,
     [int]$OutputTokens = 0,
     [int]$ContextChars = 0,
     [string]$SessionId = "",
+    [string]$Model = "",
     [switch]$Silent
 )
 
@@ -32,7 +33,7 @@ $repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) {
     $found = $false
     while ($root -and -not $found) {
         if ((Test-Path (Join-Path $root '.git')) -or 
-            (Test-Path (Join-Path $root 'config')) -or
+            (Test-Path (Join-Path $root 'config\orchestrator.json')) -or
             (Test-Path (Join-Path $root 'CLAUDE.md'))) {
             $found = $true
             break
@@ -67,9 +68,46 @@ function Initialize-DisplayConfig {
             showAccumulated = $true
             compactMode = $true
             lastToggle = (Get-Date -Format "yyyy-MM-ddTHH:mm:ss")
+            individualToggles = @{
+                tokenUsage = $true
+                contextSize = $true
+                estimatedCost = $true
+                sessionAccumulated = $true
+            }
         }
-        $defaultConfig | ConvertTo-Json | Set-Content $displayConfigFile
+        $defaultConfig | ConvertTo-Json -Depth 10 | Set-Content $displayConfigFile
     }
+}
+
+# Estimate cost in USD from tokens — reads provider-costs.json for model rates
+function Get-EstimatedCost {
+    param($InputTokens, $OutputTokens, [string]$ModelName = "")
+
+    $inputRate = 3.0   # default $/M tokens input
+    $outputRate = 15.0 # default $/M tokens output
+
+    if ($ModelName) {
+        $costsFile = Join-Path $repoRoot "config\provider-costs.json"
+        if (Test-Path $costsFile) {
+            try {
+                $costs = Get-Content $costsFile -Raw | ConvertFrom-Json
+                # Search across all providers for matching model
+                foreach ($prov in $costs.providers.PSObject.Properties) {
+                    $models = $prov.Value.models
+                    if ($models.PSObject.Properties[$ModelName]) {
+                        $m = $models.PSObject.Properties[$ModelName].Value
+                        $inputRate = [float]$m.input * 1000  # convert per-1K to per-M
+                        $outputRate = [float]$m.output * 1000
+                        break
+                    }
+                }
+            } catch {}
+        }
+    }
+
+    $inputCost = ($InputTokens / 1000000) * $inputRate
+    $outputCost = ($OutputTokens / 1000000) * $outputRate
+    return [math]::Round($inputCost + $outputCost, 5)
 }
 
 # Get display config
@@ -83,20 +121,15 @@ function Toggle-Display {
     $config = Get-DisplayConfig
     $config.enabled = -not $config.enabled
     $config.lastToggle = (Get-Date -Format "yyyy-MM-ddTHH:mm:ss")
-    $config | ConvertTo-Json | Set-Content $displayConfigFile
+    $config | ConvertTo-Json -Depth 10 | Set-Content $displayConfigFile
     
     $status = if ($config.enabled) { "ENABLED" } else { "DISABLED" }
+    $padding = " " * (22 - $status.Length)
     Write-Host ""
     Write-Host "╔══════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-    Write-Host "║           TOKEN USAGE DISPLAY $status" -ForegroundColor Cyan -NoNewline
-    if ($config.enabled) {
-        Write-Host "           ║" -ForegroundColor Cyan
-    } else {
-        Write-Host "          ║" -ForegroundColor Cyan
-    }
+    Write-Host "║           TOKEN USAGE DISPLAY $status$padding║" -ForegroundColor Cyan
     Write-Host "╚══════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
     Write-Host ""
-    return $config.enabled
 }
 
 # Get current session ID
@@ -180,46 +213,71 @@ function Save-TokenUsageData($data) {
     $data | ConvertTo-Json -Depth 10 | Set-Content $tokenUsageFile
 }
 
-# Display current message metrics
+# Display current message metrics (respects individualToggles)
 function Show-CurrentMetrics {
-    param($InputTokens, $OutputTokens, $ContextChars)
+    param([int]$InTok, [int]$OutTok, [int]$CtxChars)
     
     $config = Get-DisplayConfig
     if (-not $config.enabled -or $Silent) { return }
     
-    $total = $InputTokens + $OutputTokens
+    $total = $InTok + $OutTok
+    $showToken = [bool]($config.individualToggles -and $config.individualToggles.tokenUsage)
+    $showCtx = [bool]($config.individualToggles -and $config.individualToggles.contextSize)
+    $showCost = [bool]($config.individualToggles -and $config.individualToggles.estimatedCost)
+    
+    $any = $showToken -or $showCtx -or $showCost
+    if (-not $any) { return }
     
     if ($config.compactMode) {
         Write-Host ""
-        Write-Host "┌─ Token Usage ─────────────────┐" -ForegroundColor DarkGray
-        Write-Host "│ Input:  " -ForegroundColor DarkGray -NoNewline
-        Write-Host "$($InputTokens.ToString().PadLeft(6))" -ForegroundColor Green -NoNewline
-        Write-Host " tk │" -ForegroundColor DarkGray
-        Write-Host "│ Output: " -ForegroundColor DarkGray -NoNewline
-        Write-Host "$($OutputTokens.ToString().PadLeft(6))" -ForegroundColor Cyan -NoNewline
-        Write-Host " tk │" -ForegroundColor DarkGray
-        Write-Host "│ Total:  " -ForegroundColor DarkGray -NoNewline
-        Write-Host "$($total.ToString().PadLeft(6))" -ForegroundColor Yellow -NoNewline
-        Write-Host " tk │" -ForegroundColor DarkGray
-        Write-Host "│ Context:" -ForegroundColor DarkGray -NoNewline
-        Write-Host "$($ContextChars.ToString().PadLeft(6))" -ForegroundColor Magenta -NoNewline
-        Write-Host " ch │" -ForegroundColor DarkGray
+        Write-Host "┌─ This Turn ────────────────────┐" -ForegroundColor DarkGray
+        if ($showToken) {
+            Write-Host "│ Input:  " -ForegroundColor DarkGray -NoNewline
+            Write-Host "$($InTok.ToString().PadLeft(6))" -ForegroundColor Green -NoNewline
+            Write-Host " tk │" -ForegroundColor DarkGray
+            Write-Host "│ Output: " -ForegroundColor DarkGray -NoNewline
+            Write-Host "$($OutTok.ToString().PadLeft(6))" -ForegroundColor Cyan -NoNewline
+            Write-Host " tk │" -ForegroundColor DarkGray
+            Write-Host "│ Total:  " -ForegroundColor DarkGray -NoNewline
+            Write-Host "$($total.ToString().PadLeft(6))" -ForegroundColor Yellow -NoNewline
+            Write-Host " tk │" -ForegroundColor DarkGray
+        }
+        if ($showCtx) {
+            Write-Host "│ Context:" -ForegroundColor DarkGray -NoNewline
+            Write-Host "$($CtxChars.ToString().PadLeft(6))" -ForegroundColor Magenta -NoNewline
+            Write-Host " ch │" -ForegroundColor DarkGray
+        }
+        if ($showCost) {
+            $cost = Get-EstimatedCost -InputTokens $InTok -OutputTokens $OutTok -ModelName $Model
+            Write-Host "│ Cost:   " -ForegroundColor DarkGray -NoNewline
+            Write-Host "$('$' + $cost.ToString('F5').PadLeft(8))" -ForegroundColor DarkYellow -NoNewline
+            Write-Host "   │" -ForegroundColor DarkGray
+        }
         Write-Host "└───────────────────────────────┘" -ForegroundColor DarkGray
     } else {
         Write-Host ""
-        Write-Host "=== Token Usage (Current Message) ===" -ForegroundColor Cyan
-        Write-Host "  Input Tokens:  $InputTokens" -ForegroundColor Green
-        Write-Host "  Output Tokens: $OutputTokens" -ForegroundColor Cyan
-        Write-Host "  Total Tokens:  $total" -ForegroundColor Yellow
-        Write-Host "  Context Chars: $ContextChars" -ForegroundColor Magenta
-        Write-Host "=====================================" -ForegroundColor Cyan
+        Write-Host "=== This Turn ===" -ForegroundColor Cyan
+        if ($showToken) {
+            Write-Host "  Input Tokens:  $InTok" -ForegroundColor Green
+            Write-Host "  Output Tokens: $OutTok" -ForegroundColor Cyan
+            Write-Host "  Total Tokens:  $total" -ForegroundColor Yellow
+        }
+        if ($showCtx) {
+            Write-Host "  Context Chars: $CtxChars" -ForegroundColor Magenta
+        }
+        if ($showCost) {
+            $cost = Get-EstimatedCost -InputTokens $InTok -OutputTokens $OutTok -ModelName $Model
+            Write-Host "  Est. Cost:     `$$cost" -ForegroundColor DarkYellow
+        }
+        Write-Host "=================" -ForegroundColor Cyan
     }
 }
 
-# Display accumulated metrics
+# Display accumulated metrics (respects individualToggles.sessionAccumulated)
 function Show-AccumulatedMetrics {
     $config = Get-DisplayConfig
     if (-not $config.enabled -or $Silent) { return }
+    if ($config.individualToggles -and -not $config.individualToggles.sessionAccumulated) { return }
     
     $data = Get-TokenUsageData
     
@@ -227,6 +285,7 @@ function Show-AccumulatedMetrics {
     
     $avgInput = if ($data.messageCount -gt 0) { [math]::Round($data.totalInputTokens / $data.messageCount) } else { 0 }
     $avgOutput = if ($data.messageCount -gt 0) { [math]::Round($data.totalOutputTokens / $data.messageCount) } else { 0 }
+    $totalCost = Get-EstimatedCost -InputTokens $data.totalInputTokens -OutputTokens $data.totalOutputTokens -ModelName $Model
     
     if ($config.compactMode) {
         Write-Host "┌─ Session Accumulated ─────────┐" -ForegroundColor DarkGray
@@ -245,6 +304,9 @@ function Show-AccumulatedMetrics {
         Write-Host "│ Avg In/Out: " -ForegroundColor DarkGray -NoNewline
         Write-Host "$("$avgInput/$avgOutput".PadLeft(6))" -ForegroundColor Magenta -NoNewline
         Write-Host " tk │" -ForegroundColor DarkGray
+        Write-Host "│ Total Cost: " -ForegroundColor DarkGray -NoNewline
+        Write-Host "$('$' + $totalCost.ToString('F4').PadLeft(7))" -ForegroundColor DarkYellow -NoNewline
+        Write-Host "   │" -ForegroundColor DarkGray
         Write-Host "└───────────────────────────────┘" -ForegroundColor DarkGray
     } else {
         Write-Host ""
@@ -254,6 +316,7 @@ function Show-AccumulatedMetrics {
         Write-Host "  Total Output:  $($data.totalOutputTokens) tokens" -ForegroundColor Cyan
         Write-Host "  Grand Total:   $($data.totalTokens) tokens" -ForegroundColor Yellow
         Write-Host "  Avg In/Out:    $avgInput / $avgOutput tokens" -ForegroundColor Magenta
+        Write-Host "  Total Cost:    `$$totalCost" -ForegroundColor DarkYellow
         Write-Host "===========================" -ForegroundColor Cyan
     }
 }
@@ -338,38 +401,77 @@ function Show-SessionSummary {
     } catch {}
 }
 
-# Show current status
+# Show current status (with individual toggles)
 function Show-Status {
     $config = Get-DisplayConfig
     $data = Get-TokenUsageData
     
+    # Ensure individualToggles exist
+    if (-not $config.individualToggles) {
+        $config | Add-Member -MemberType NoteProperty -Name "individualToggles" -Value @{
+            tokenUsage = $true; contextSize = $true; estimatedCost = $true; sessionAccumulated = $true
+        }
+    }
+    
     Write-Host ""
-    Write-Host "Token Usage Notifier Status" -ForegroundColor Cyan
-    Write-Host "===========================" -ForegroundColor Cyan
-    Write-Host "Display Enabled: $($config.enabled)" -ForegroundColor $(if($config.enabled){'Green'}else{'Red'})
-    Write-Host "Show After Each:   $($config.showAfterEachResponse)" -ForegroundColor White
-    Write-Host "Show Accumulated:  $($config.showAccumulated)" -ForegroundColor White
-    Write-Host "Compact Mode:      $($config.compactMode)" -ForegroundColor White
-    Write-Host "Last Toggle:       $($config.lastToggle)" -ForegroundColor Gray
+    Write-Host "╔══════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
+    Write-Host "║              NOTIFICATION STATUS                          ║" -ForegroundColor Cyan
+    Write-Host "╠══════════════════════════════════════════════════════════╣" -ForegroundColor Cyan
+    $ge = if ($config.enabled) { "ENABLED " } else { "DISABLED" }
+    Write-Host "║  Global:           $ge" -ForegroundColor $(if($config.enabled){'Green'}else{'Red'}) -NoNewline
+    Write-Host "                             ║" -ForegroundColor Cyan
+    Write-Host "╠══════════════════════════════════════════════════════════╣" -ForegroundColor Cyan
+    $t = if ($config.individualToggles.tokenUsage) { "ON " } else { "OFF" }
+    Write-Host "║  Token Usage:      $t" -ForegroundColor $(if($config.individualToggles.tokenUsage){'Green'}else{'Red'}) -NoNewline
+    Write-Host "                                   ║" -ForegroundColor Cyan
+    $c = if ($config.individualToggles.contextSize) { "ON " } else { "OFF" }
+    Write-Host "║  Context Size:     $c" -ForegroundColor $(if($config.individualToggles.contextSize){'Green'}else{'Red'}) -NoNewline
+    Write-Host "                                   ║" -ForegroundColor Cyan
+    $e = if ($config.individualToggles.estimatedCost) { "ON " } else { "OFF" }
+    Write-Host "║  Estimated Cost:   $e" -ForegroundColor $(if($config.individualToggles.estimatedCost){'Green'}else{'Red'}) -NoNewline
+    Write-Host "                                   ║" -ForegroundColor Cyan
+    $a = if ($config.individualToggles.sessionAccumulated) { "ON " } else { "OFF" }
+    Write-Host "║  Session Accum:    $a" -ForegroundColor $(if($config.individualToggles.sessionAccumulated){'Green'}else{'Red'}) -NoNewline
+    Write-Host "                                   ║" -ForegroundColor Cyan
+    Write-Host "╠══════════════════════════════════════════════════════════╣" -ForegroundColor Cyan
+    Write-Host "║  Compact Mode:     $(if($config.compactMode){'ON '}else{'OFF'})" -ForegroundColor White -NoNewline
+    Write-Host "                                   ║" -ForegroundColor Cyan
+    Write-Host "║  Show After Each:  $(if($config.showAfterEachResponse){'ON '}else{'OFF'})" -ForegroundColor White -NoNewline
+    Write-Host "                                   ║" -ForegroundColor Cyan
+    Write-Host "╚══════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
     Write-Host ""
     $sessionIdDisplay = if ([string]::IsNullOrWhiteSpace($data.sessionId)) { "N/A" } else { $data.sessionId }
-    Write-Host "Current Session:   $sessionIdDisplay" -ForegroundColor White
-    Write-Host "Messages Tracked:  $($data.messageCount)" -ForegroundColor White
-    Write-Host "Total Tokens:      $($data.totalTokens)" -ForegroundColor Yellow
+    Write-Host "  Current Session:   $sessionIdDisplay" -ForegroundColor White
+    Write-Host "  Messages Tracked:  $($data.messageCount)" -ForegroundColor White
+    Write-Host "  Total Tokens:      $($data.totalTokens)" -ForegroundColor Yellow
+    Write-Host "  Total Cost:       $" -ForegroundColor DarkYellow -NoNewline
+    $totalCost = Get-EstimatedCost -InputTokens $data.totalInputTokens -OutputTokens $data.totalOutputTokens -ModelName $Model
+    Write-Host "$totalCost" -ForegroundColor DarkYellow
     Write-Host ""
 }
 
 # Main execution
 switch ($Action) {
     "show" {
-        Show-CurrentMetrics -InputTokens $InputTokens -OutputTokens $OutputTokens -ContextChars $ContextChars
+        Show-CurrentMetrics -InTok $InputTokens -OutTok $OutputTokens -CtxChars $ContextChars
     }
     "accumulate" {
         Accumulate-Metrics -InputTokens $InputTokens -OutputTokens $OutputTokens -ContextChars $ContextChars
         if ((Get-DisplayConfig).showAfterEachResponse) {
-            Show-CurrentMetrics -InputTokens $InputTokens -OutputTokens $OutputTokens -ContextChars $ContextChars
+            Show-CurrentMetrics -InTok $InputTokens -OutTok $OutputTokens -CtxChars $ContextChars
         }
         if ((Get-DisplayConfig).showAccumulated) {
+            Show-AccumulatedMetrics
+        }
+    }
+    "auto" {
+        # Auto-display hook: muestra el estado actual sin acumular nuevo turno
+        # Se ejecuta al inicio de cada turno desde pre-process-input.ps1
+        $config = Get-DisplayConfig
+        if (-not $config.enabled) { return }
+        
+        $data = Get-TokenUsageData
+        if ($data.messageCount -gt 0) {
             Show-AccumulatedMetrics
         }
     }

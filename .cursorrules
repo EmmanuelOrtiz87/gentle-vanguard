@@ -1,26 +1,31 @@
 # Cursor Rules - Gentle-Vanguard
 
-Las reglas de este proyecto estan modularizadas en `.cursor/rules/` para mejor mantenibilidad y compatibilidad con Cursor Agent Best Practices.
+Las reglas de este proyecto estan modularizadas en `.cursor/rules/` para mejor mantenibilidad.
+
+## Fase 0: Tool Detection (PRIMERA accion)
+
+Ejecutar ANTES de cualquier accion:
+```powershell
+$detected = pwsh -NoProfile -File scripts/utilities/detect-tool.ps1 -AsJson | ConvertFrom-Json
+$detected.name   # opencode|claude-code|cline|cursor|windsurf|unknown
+$detected.os.platform  # windows|linux|macos
+```
+Cargar config desde `config/orchestrator.json#toolProfiles.<name>`.
+
+## Startup Sequence
+
+1. `pre-process-input.ps1 -UserInput "<msg>" -WorkspaceRoot "."` BEFORE primera respuesta
+2. `scripts/utilities/session-start-optimized.ps1` (autostart pipeline con lazy loading)
+3. `docs/AGENTS.md#Mandatory-Startup-Sequence` — sin atajos
 
 ## Reglas activas
 
-- `.cursor/rules/core-workflow.md` - Pre-processing, SDD flow, session management, local-first
-- `.cursor/rules/commands.md` - Build, test, lint, typecheck, quality gates
-- `.cursor/rules/code-style.md` - Code conventions (PowerShell, TypeScript, Markdown, JSON)
-
-## Implementacion recomendada por Cursor
-
-Segun https://cursor.com/es/blog/agent-best-practices:
-- `.cursor/rules/*.md` para contexto estatico persistente
-- `.cursor/commands/*.md` para flujos reutilizables (/pr, /review, /status, /test, /fix-issue, /update-deps)
-- `.cursor/plans/` para guardar planes de Plan Mode
-- `skills/*/SKILL.md` para capacidades dinamicas bajo demanda
-- `adapters/mcp-bridge/` para integracion MCP con herramientas externas
+- `.cursor/rules/core-workflow.md` — Pre-processing, SDD flow, session management
+- `.cursor/rules/commands.md` — Build, test, lint, typecheck
+- `.cursor/rules/code-style.md` — Code conventions
 
 ## Configuracion del modelo
-- **Temperature**: 0.3
-- **Profile**: ultra (compresion agresiva, sin preamble/postamble)
-- **Chat**: compact (max 4 lineas texto, tool use completo)
+- **Temperature**: 0.3 | **Profile**: ultra | **Chat**: compact
 - **Idioma**: espanol (terminos tecnicos en ingles)
 - **websearch/webfetch**: DENY
 - **external_directory**: ask

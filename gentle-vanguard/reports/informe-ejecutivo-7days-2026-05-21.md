@@ -2,48 +2,51 @@
 
 **Perodo**: ltimos 7 das  
 **Fecha de generacin**: 2026-05-21 22:51  
-**Proyecto**: workspace_gentle_vanguard  
+**Proyecto**: workspace_gentle_vanguard
 
 ---
 
 ## [LIST] Resumen Ejecutivo
 
-| Mtrica | Valor | Nota |
-|--------|-------|------|
-| **Sesiones totales** | 0 |  0/da |
-| **Sesiones activas** | 0 | En curso |
-| **Das analizados** | 7 | Perodo seleccionado |
+| Mtrica               | Valor | Nota                |
+| -------------------- | ----- | ------------------- |
+| **Sesiones totales** | 0     | 0/da                |
+| **Sesiones activas** | 0     | En curso            |
+| **Das analizados**   | 7     | Perodo seleccionado |
 
 ### [CHART] Actividad por Da
 
 | Fecha | Sesiones |
-|-------|----------|
+| ----- | -------- |
+
 ---
 
-##  Estado del Sistema
+## Estado del Sistema
 
-| Componente | Estado |
-|------------|--------|
-| Token Guard |  Activo (128K budget) |
-| Context Efficiency |  Perfil recommended |
-| Auto-Delegation |  Configurado |
-| Distributed Tracing |  Activo |
+| Componente          | Estado               |
+| ------------------- | -------------------- |
+| Token Guard         | Activo (128K budget) |
+| Context Efficiency  | Perfil recommended   |
+| Auto-Delegation     | Configurado          |
+| Distributed Tracing | Activo               |
 
 ---
 
 ## [DATA] Detalle de Sesiones
+
 ---
 
-##  Limitaciones y Notas
+## Limitaciones y Notas
 
 > **Nota importantes**: Los ientes mtricas an no estn siendo capturadas automticamente:
+>
 > - Tokens consumidos por sesin
 > - Costo estimado (USD)
 > - Contexto utilizado
 > - Duracin real de sesiones
 > - Tool calls, files read/edited
 
-**Prximas mejoras**: Ver eports/MEJORAS-REPORTING-TELEMETRY.md
+**Prximas mejoras**: Ver eports/MEJORAS-REPORTING-TELEMETRY.md
 
 ---
 
@@ -55,6 +58,5 @@
 
 ---
 
-*Informe generado automticamente*  
-*Formato: Markdown (.md)*
-
+_Informe generado automticamente_  
+_Formato: Markdown (.md)_

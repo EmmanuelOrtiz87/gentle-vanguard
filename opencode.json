@@ -404,16 +404,18 @@
       "enabled": true
     }
   },
+  "tools": {
+    "bash": true,
+    "readFile": true,
+    "writeFile": true,
+    "editFile": true,
+    "listFiles": true
+  },
   "default_agent": "orchestrator",
   "share": "manual",
   "compaction": {
     "auto": true,
-    "prune": true,
-    "threshold": 8000,
-    "strategy": "sliding-window",
-    "maxTurns": 10,
-    "pruneToolResults": true,
-    "summarize": true
+    "prune": true
   },
   "watcher": {
     "ignore": [
@@ -427,13 +429,6 @@
       "session/**"
     ]
   },
-      "tools": {
-        "bash": true,
-        "readFile": true,
-        "writeFile": true,
-        "editFile": true,
-        "listFiles": true
-    },
   "permission": {
     "read": "allow",
     "glob": "allow",

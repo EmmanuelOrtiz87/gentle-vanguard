@@ -29,6 +29,8 @@ post-commit:
   commands:
     update-session:
       run: powershell -NoProfile -Command "& { if (Test-Path scripts/utilities/session-manager.ps1) { .\\tools\\session-manager.ps1 -Action update } }"
+    codegraph-sync:
+      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/utilities/codegraph-post-modification-sync.ps1" -Trigger post-commit -Force
 
 post-merge:
   commands:
@@ -38,6 +40,8 @@ post-merge:
 
     sync-tools:
       run: powershell -NoProfile -Command "& { if (Test-Path 'scripts/utilities/WORKFLOW-ORCHESTRATION/sync-after-merge.ps1') { .\\scripts\\utilities\\WORKFLOW-ORCHESTRATION\\sync-after-merge.ps1 } }"
+    codegraph-sync:
+      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/utilities/codegraph-post-modification-sync.ps1" -Trigger post-merge -Force
 
 pre-push:
   commands:

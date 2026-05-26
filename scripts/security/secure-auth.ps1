@@ -132,7 +132,7 @@ function Set-Lockout {
         timestamp = (Get-Date).ToString("o")
     }
     
-    $lock | ConvertTo-Json | Set-Content $lockFile -Encoding UTF8
+    $lockout | ConvertTo-Json | Set-Content $lockFile -Encoding UTF8
     
     return @{
         locked = $true

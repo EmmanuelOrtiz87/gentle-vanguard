@@ -48,8 +48,20 @@
     "Run mem_session_summary on completion"
   ],
   "integration": {
-    "auto_delegation_router": { "enabled": true, "injection_point": "before_task_execution", "format": "Prepend to task prompt" },
-    "subagent_mapping": { "enabled": true, "config_file": "config/subagent-mapping.json", "field_name": "behavior_prompt" },
-    "engram_learning": { "enabled": true, "topic_key": "behavior-prompts/performance", "save_trigger": "task_completion" }
+    "auto_delegation_router": {
+      "enabled": true,
+      "injection_point": "before_task_execution",
+      "format": "Prepend to task prompt"
+    },
+    "subagent_mapping": {
+      "enabled": true,
+      "config_file": "config/subagent-mapping.json",
+      "field_name": "behavior_prompt"
+    },
+    "engram_learning": {
+      "enabled": true,
+      "topic_key": "behavior-prompts/performance",
+      "save_trigger": "task_completion"
+    }
   }
 }

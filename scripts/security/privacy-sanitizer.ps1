@@ -3,14 +3,13 @@
 
 #Requires -Version 5.1
 
+[CmdletBinding()]
 param(
     [Parameter(Mandatory)]
     [string]$Content,
     
     [ValidateSet('prompt', 'log', 'error', 'all')]
-    [string]$Mode = 'prompt',
-    
-    [switch]$Verbose
+    [string]$Mode = 'prompt'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -67,7 +66,7 @@ $BLOCKED_PATTERNS = @{
 
 function Sanitize-MachineId {
     param([string]$Text)
-    $BLOCKED_PATTERNS.machineId | ForEach-Object {
+    $BLOCKED_PATTERNS.machineId | Where-Object { $_ } | ForEach-Object {
         $Text = $Text -replace [regex]::Escape($_), '<MACHINE>'
     }
     return $Text
@@ -75,7 +74,7 @@ function Sanitize-MachineId {
 
 function Sanitize-UserId {
     param([string]$Text)
-    $BLOCKED_PATTERNS.userId | ForEach-Object {
+    $BLOCKED_PATTERNS.userId | Where-Object { $_ } | ForEach-Object {
         $Text = $Text -replace [regex]::Escape($_), '<USER>'
     }
     return $Text
@@ -84,7 +83,7 @@ function Sanitize-UserId {
 function Sanitize-HomePath {
     param([string]$Text)
     $BLOCKED_PATTERNS.homePath | ForEach-Object {
-        if ($_ -ne '') {
+        if ($_) {
             $Text = $Text -replace [regex]::Escape($_), '<HOME>'
             $Text = $Text -replace [regex]::Escape($_.Replace('\', '\\')), '<HOME>'
         }
@@ -95,7 +94,8 @@ function Sanitize-HomePath {
 function Sanitize-Credentials {
     param([string]$Text)
     foreach ($key in $BLOCKED_PATTERNS.envVars) {
-        $Text = $Text -replace "(?i)(\$env:$key|[A-Z_]+_KEY)\s*=\s*['\"]?[^'\"\s]+['\"]?", "`$<KEY>=[REDACTED]"
+        $envPattern = '(?i)(\$env:' + $key + '|[A-Z_]+_KEY)\s*=\s*["\x27]?[^"\x27\s]+["\x27]?'
+        $Text = $Text -replace $envPattern, '$<KEY>=[REDACTED]'
     }
     $BLOCKED_PATTERNS.apiKeys | ForEach-Object {
         $Text = $Text -replace $_, '<API_KEY>'
@@ -175,7 +175,7 @@ function Invoke-Sanitization {
 try {
     $sanitized = Invoke-Sanitization -Text $Content -Mode $Mode
     
-    if ($Verbose) {
+    if ($PSBoundParameters.ContainsKey('Verbose')) {
         Write-Host "=== PRIVACY SANITIZER ===" -ForegroundColor Cyan
         Write-Host "Mode: $Mode" -ForegroundColor Yellow
         Write-Host "Original length: $($Content.Length)" -ForegroundColor Gray
@@ -184,8 +184,10 @@ try {
     }
     
     Write-Output $sanitized
+    exit 0
 }
 catch {
     Write-Error "Privacy Sanitizer failed: $_"
     Write-Output $Content  # Return original on failure
+    exit 1
 }

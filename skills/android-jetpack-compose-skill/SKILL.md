@@ -17,17 +17,18 @@ allowed-tools:
 
 ## State Management
 
-| API | Use Case |
-|-----|----------|
-| `remember { mutableStateOf() }` | Local composable state |
-| `rememberSaveable { mutableStateOf() }` | Survives config changes |
-| `derivedStateOf {}` | Computed state with deps |
-| `collectAsStateWithLifecycle()` | ViewModel Flow → Compose |
+| API                                     | Use Case                 |
+| --------------------------------------- | ------------------------ |
+| `remember { mutableStateOf() }`         | Local composable state   |
+| `rememberSaveable { mutableStateOf() }` | Survives config changes  |
+| `derivedStateOf {}`                     | Computed state with deps |
+| `collectAsStateWithLifecycle()`         | ViewModel Flow → Compose |
 
 ## Key Patterns
 
 - **State Hoisting**: Stateless composables with `(value, onValueChange)` params
-- **Side Effects**: `LaunchedEffect(key)` for coroutines, `DisposableEffect` for cleanup, `SideEffect` for non-suspend
+- **Side Effects**: `LaunchedEffect(key)` for coroutines, `DisposableEffect` for cleanup,
+  `SideEffect` for non-suspend
 - **Keys**: `key = { it.id }` in `LazyColumn`/`LazyVerticalGrid` items for stable recomposition
 - **Modifier**: First optional param with `Modifier = Modifier` default
 
@@ -40,4 +41,5 @@ allowed-tools:
 
 ## References
 
-See `references/patterns.md` for: Navigation Compose, Material 3 theming, LazyVerticalGrid, sticky headers, and detailed anti-patterns with before/after examples.
+See `references/patterns.md` for: Navigation Compose, Material 3 theming, LazyVerticalGrid, sticky
+headers, and detailed anti-patterns with before/after examples.

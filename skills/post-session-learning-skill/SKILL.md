@@ -41,8 +41,8 @@ pwsh -NoProfile -File scripts/skills/usage-tracker.ps1
 pwsh -NoProfile -File scripts/skills/usage-tracker.ps1 -Nudge
 ```
 
-Scans all registered skills and initializes or updates `.session/skill-usage/*.json` files.
-The `-Nudge` flag checks for auto-nudge conditions (3+ failures, declining success rate).
+Scans all registered skills and initializes or updates `.session/skill-usage/*.json` files. The
+`-Nudge` flag checks for auto-nudge conditions (3+ failures, declining success rate).
 
 ### Step 1c — Generate Skill Nudges
 
@@ -50,8 +50,8 @@ The `-Nudge` flag checks for auto-nudge conditions (3+ failures, declining succe
 pwsh -NoProfile -File scripts/skills/skill-nudge.ps1 -SessionDir ".session"
 ```
 
-Reads usage metrics, identifies skills with failure patterns in the current session,
-and generates structured nudge JSON files in `.session/skill-nudges/`.
+Reads usage metrics, identifies skills with failure patterns in the current session, and generates
+structured nudge JSON files in `.session/skill-nudges/`.
 
 ### Step 2 — Analyze for Gaps
 
@@ -96,9 +96,9 @@ For each identified gap, create a structured proposal saved to
 pwsh -NoProfile -File scripts/skills/skill-auto-patch.ps1 -AutoApply
 ```
 
-Reads `.session/skill-nudges/*.json` for pending nudge recommendations.
-Appends a "## Known Issues" section to the skill's SKILL.md for urgent or repeated failures.
-Use `-Report` flag for a dry run without applying.
+Reads `.session/skill-nudges/*.json` for pending nudge recommendations. Appends a "## Known Issues"
+section to the skill's SKILL.md for urgent or repeated failures. Use `-Report` flag for a dry run
+without applying.
 
 ### Step 5 — Save Learnings
 
@@ -109,24 +109,6 @@ engram_mem_save -title "Learning: {key finding}" -type "learning"
 
 ## Integration Points
 
-- **Session close**: Run automatically during session closure (step between summary and end)
-- **Manual trigger**: User can run `gv learning` to analyze current session anytime
-- **Proposal executor**: Run `gv learning apply` to auto-execute pending proposals (scaffold skills, patch configs)
-- **Auto mode**: `gv learning auto` runs analysis + auto-applies low-severity proposals in one step
-- **PR mode**: `gv learning auto-pr` auto-applies + creates a git branch and commit with changes
-- **Startup check**: At session start, check `.local/improvement-proposals/` for pending items
+---
 
-## Command Flow
-
-```
-session-learning-capture.ps1  →  usage-tracker.ps1  →  skill-nudge.ps1  →  skill-auto-patch.ps1  →  mem_save
-```
-
-## Output Files
-
-| File                                              | Purpose                              |
-| ------------------------------------------------- | ------------------------------------ |
-| `.local/improvement-proposals/*.json`             | Structured improvement proposals     |
-| `.local/improvement-proposals/learning-log.jsonl` | Append-only log of all learning runs |
-| `.session/skill-usage/*.json`                     | Per-skill usage metrics              |
-| `.session/skill-nudges/*.json`                    | Auto-generated nudge recommendations |
+> **Referencia detallada**: [ eferences/detail.md](references/detail.md)
