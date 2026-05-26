@@ -45,8 +45,36 @@ This is a **CRITICAL** rule. Violation = malformed tool call = wasted tokens + f
 Use the JSON validator:
 ```powershell
 pwsh -NoProfile -File scripts/utilities/json-validator.ps1 `
-  -JsonString '<YOUR_JSON>' -Context "manual-check"
+  -JsonString '{"test": "value"}' -Context "manual-check"
 ```
+
+### Common Error: Truncated JSON in Tool Calls
+
+**Problem**: When calling tools like `engram_mem_session_end` with long summaries, the JSON gets truncated, causing "Unterminated string" errors.
+
+**Example of ERROR**:
+```
+{"summary": "Very long text...", "id": "session-202.
+                                    ^
+                                    JSON truncated here
+```
+
+**Root cause**: Long strings in JSON parameters get cut off by the system.
+
+**Solution**: Keep JSON parameters concise:
+```json
+{"summary": "Implemented JSON validator, tests, docs. All pushed.", "id": "session-20250526-001"}
+```
+
+**Best practices**:
+1. Keep summaries under 200 characters
+2. Use abbreviations (e.g., "docs" instead of "documentation")
+3. Remove unnecessary details (dates, full paths)
+4. Focus on WHAT was done, not HOW
+
+**Example transformation**:
+- ❌ BAD (truncated): `{"summary": "Session completed successfully. Implemented JSON validator with strict validation, integrated into pre-process-input.ps1, created mandatory construction normative..."
+- ✅ GOOD (concise): `{"summary": "Implemented JSON validator with tests and docs. All changes pushed to develop."}
 
 ---
 **Version**: 1.0.0 | **Created**: 2026-05-26
