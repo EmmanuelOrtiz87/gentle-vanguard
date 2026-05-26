@@ -75,6 +75,33 @@ pwsh -NoProfile -File scripts/utilities/json-validator.ps1 `
 **Example transformation**:
 - ❌ BAD (truncated): `{"summary": "Session completed successfully. Implemented JSON validator with strict validation, integrated into pre-process-input.ps1, created mandatory construction normative..."
 - ✅ GOOD (concise): `{"summary": "Implemented JSON validator with tests and docs. All changes pushed to develop."}
+- ✅ BETTER (reference): `{"summary": "ref:session-20250526-001", "id": "session-20250526-001"}`
+
+### Session Summary Reference System (RECOMMENDED for long summaries)
+
+For detailed summaries, use the reference pattern instead of inline JSON:
+
+1. **Save full summary** to `.session/summaries/{session-id}.md`
+2. **Call memory tool** with reference: `{"summary": "ref:{session-id}", "id": "{session-id}"}`
+3. **Full details** retrieved from file when needed
+
+**Example**:
+```powershell
+# Save full summary to file
+$summaryContent | Set-Content ".session/summaries/$sessionId.md"
+
+# Call with reference (no truncation risk)
+mem_session_end -id $sessionId -summary "ref:$sessionId"
+```
+
+**Benefits**:
+- ✅ No JSON truncation
+- ✅ Unlimited summary length
+- ✅ Searchable with grep
+- ✅ Human-readable format
+- ✅ Version controlled
+
+See template: `.session/summaries/README.md`
 
 ---
-**Version**: 1.0.0 | **Created**: 2026-05-26
+**Version**: 1.1.0 | **Created**: 2026-05-26 | **Updated**: 2026-05-26
