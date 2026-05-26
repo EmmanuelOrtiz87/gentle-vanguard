@@ -70,6 +70,68 @@ if (-not $FromAgent) {
 
 $triggerMap = @{}
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+
+# ============================================================================
+# NOTIFICATION COMMANDS: /notif on|off|status|toggle|token|context|cost|accumulated
+# ============================================================================
+if ($UserInput -match '^/notif\s+(.+)$') {
+    $notifCmd = $Matches[1].Trim().ToLower()
+    $notifierScript = Join-Path $scriptDir "toggle-token-display.ps1"
+    if (Test-Path $notifierScript) {
+        switch -Regex ($notifCmd) {
+            '^on$'        { & $notifierScript -Enable }
+            '^off$'       { & $notifierScript -Disable }
+            '^toggle$'    { & $notifierScript }
+            '^status$'    { & $notifierScript -Status }
+            '^token(\s+(on|off))?$' {
+                $sub = $Matches[2]
+                if (-not $sub) { & $notifierScript -Type token }
+                elseif ($sub -eq 'on') { & $notifierScript -Type token -Enable }
+                else { & $notifierScript -Type token -Disable }
+            }
+            '^context(\s+(on|off))?$' {
+                $sub = $Matches[2]
+                if (-not $sub) { & $notifierScript -Type context }
+                elseif ($sub -eq 'on') { & $notifierScript -Type context -Enable }
+                else { & $notifierScript -Type context -Disable }
+            }
+            '^cost(\s+(on|off))?$' {
+                $sub = $Matches[2]
+                if (-not $sub) { & $notifierScript -Type cost }
+                elseif ($sub -eq 'on') { & $notifierScript -Type cost -Enable }
+                else { & $notifierScript -Type cost -Disable }
+            }
+            '^accum(ulated)?(\s+(on|off))?$' {
+                $sub = $Matches[3]
+                if (-not $sub) { & $notifierScript -Type accumulated }
+                elseif ($sub -eq 'on') { & $notifierScript -Type accumulated -Enable }
+                else { & $notifierScript -Type accumulated -Disable }
+            }
+            '^compact(\s+(on|off))?$' {
+                $sub = $Matches[2]
+                if (-not $sub) { & $notifierScript -Type compact }
+                elseif ($sub -eq 'on') { & $notifierScript -Type compact -Enable }
+                else { & $notifierScript -Type compact -Disable }
+            }
+            default {
+                Write-Host ""
+                Write-Host "Usage: /notif <command>" -ForegroundColor Cyan
+                Write-Host "  /notif on|off           - Master toggle" -ForegroundColor Gray
+                Write-Host "  /notif status           - Show state" -ForegroundColor Gray
+                Write-Host "  /notif toggle           - Toggle all" -ForegroundColor Gray
+                Write-Host "  /notif token [on|off]   - Token display" -ForegroundColor Gray
+                Write-Host "  /notif context [on|off] - Context chars" -ForegroundColor Gray
+                Write-Host "  /notif cost [on|off]    - Cost estimation" -ForegroundColor Gray
+                Write-Host "  /notif accum [on|off]   - Session accumulated" -ForegroundColor Gray
+                Write-Host "  /notif compact [on|off] - Compact/verbose mode" -ForegroundColor Gray
+                Write-Host ""
+            }
+        }
+    } else {
+        Write-Host "[WARN] toggle-token-display.ps1 not found at: $notifierScript" -ForegroundColor Yellow
+    }
+    return @{ HasMatch = $false; Skill = $null; Trigger = $null; Confidence = 0; PlanMode = $false; AgentCode = $null; AgentProfile = $null }
+}
 $workspaceRoot = if ($PSBoundParameters.ContainsKey("WorkspaceRoot") -and $WorkspaceRoot -ne ".") {
     try { (Resolve-Path -Path $WorkspaceRoot -ErrorAction Stop).Path } catch { (Split-Path -Parent (Split-Path -Parent $scriptDir)) }
 } else {
@@ -536,6 +598,14 @@ if (-not $DisableCache -and -not $FromAgent -and $outLines.Count -gt 0) {
         }
         @{ cache = $pruned } | ConvertTo-Json -Depth 5 -Compress | Set-Content $responseCacheFile -Force
     } catch { }
+}
+
+# ============================================================================
+# AUTO-NOTIFICATION HOOK: Muestra el acumulado de tokens al inicio de cada turno
+# ============================================================================
+$notifierScript = Join-Path $workspaceRoot "scripts\utilities\token-usage-notifier.ps1"
+if (Test-Path $notifierScript) {
+    & $notifierScript -Action auto 2>$null
 }
 
 return @{

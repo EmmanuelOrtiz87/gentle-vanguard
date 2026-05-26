@@ -227,6 +227,14 @@
         "args": "",
         "required": false,
         "description": "Refresca startup-summary.json como ultimo paso para asegurar datos actuales post-pipeline"
+      },
+      {
+        "id": "token-notification-init",
+        "enabled": true,
+        "script": "scripts/utilities/token-usage-notifier.ps1",
+        "args": "-Action status",
+        "required": false,
+        "description": "Inicializa sistema de notificaciones de tokens al inicio de sesion"
       }
     ],
 

@@ -72,12 +72,25 @@ Professional mode: ES/PT-BR/EN, no regional slang, formal tone, no persona switc
 | Lazy autostart      | `session-autostart.config.json` — 6 non-critical steps deferred post-pipeline                       |
 | In-process pipeline | `session-start-optimized.ps1` — removed `Start-Job`, runs `&` directo in-process                    |
 
-## Context Logging
+## Token Notification (Auto-Hook — Every Turn)
 
-Periodically (every 5 turns, per `token-display-config.json`), run:
+Automatico vía `pre-process-input.ps1`. Se ejecuta CADA turno sin intervención del agente.
+Muestra el acumulado de la sesión al inicio de cada turno.
 
+Startup: `session-autostart.config.json` → paso `token-notification-init` → `token-usage-notifier.ps1 -Action status`.
+
+Commands:
+| `/notif on/off`           | Master toggle                      |
+| `/notif status`           | Show current notification state    |
+| `/notif token on/off`     | Toggle token display only          |
+| `/notif context on/off`   | Toggle context chars display       |
+| `/notif cost on/off`      | Toggle cost estimation             |
+| `/notif accumulated on/off` | Toggle session accumulated       |
+| `/notif compact on/off`   | Toggle compact/verbose mode        |
+
+For context logging (post-response), run manually when needed:
 ```powershell
-pwsh -NoProfile -File scripts/utilities/token-usage-auto.ps1 -InputTokens <N> -OutputTokens <N> -ContextChars <N> -InputSummary "<..." -OutputSummary "<...>" -TurnLabel "<...>"
+pwsh -NoProfile -File scripts/utilities/token-usage-auto.ps1 -InputTokens <N> -OutputTokens <N> -ContextChars <N> -InputSummary "<...>" -OutputSummary "<...>" -TurnLabel "<...>" -Model "<model>"
 ```
 
 Creates `.session/context-log/<session-id>/turn-NNN.md` and `context-summary.md`. On close:
