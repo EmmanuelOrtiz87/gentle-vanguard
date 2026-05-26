@@ -61,7 +61,48 @@
         "setCacheKey": true,
         "timeout": 600000
       }
-    }
+    },
+	"littellmott": {
+            "name": "littellmott",
+            "npm": "@ai-sdk/openai-compatible",
+            "options": {
+                "baseURL": "https://ftfnxnldtgioplze2xowa3s4na0gkgpu.lambda-url.us-east-1.on.aws/v1",
+                "headers": {
+                    "x-api-key": "7RnrzuVdkLWFdeY2LOMNfPE6Bok3bfOwvkWHE2YNJ3nPOVYlCt"
+                }
+            },
+            "models": {
+                "claude-haiku": {
+                    "name": "claude-haiku",
+                    "attachment": true,
+                    "reasoning": true,
+                    "temperature": true,
+                    "tool_call": true
+
+                },
+                "kimi-2-5": {
+                    "name": "kimi-2-5",
+                    "attachment": true,
+                    "reasoning": true,
+                    "temperature": true,
+                    "tool_call": true
+                },
+                "minimax-n2-5": {
+                    "name": "minimax-n2-5",
+                    "attachment": true,
+                    "reasoning": true,
+                    "temperature": true,
+                    "tool_call": true
+                },
+				 "qwen3-coder-next": {
+                    "name": "qwen3-coder-next",
+                    "attachment": true,
+                    "reasoning": true,
+                    "temperature": true,
+                    "tool_call": true
+                }
+            }
+        }
   },
   "agent": {
     "orchestrator": {

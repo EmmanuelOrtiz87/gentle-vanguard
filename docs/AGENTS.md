@@ -125,3 +125,5 @@ See `docs/QUICK-COMMANDS.md` for full list.
 | Context engineering     | `rules/CONTEXT-ENGINEERING.md`     |
 | CodeGraph skill         | `skills/codegraph-skill/SKILL.md`  |
 | Quick commands          | `docs/QUICK-COMMANDS.md`           |
+| JSON Validator          | `scripts/utilities/json-validator.ps1` |
+| JSON Construction       | `rules/NORMATIVAS-JSON-CONSTRUCTION.md` |

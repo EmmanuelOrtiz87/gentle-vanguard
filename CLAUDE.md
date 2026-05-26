@@ -34,6 +34,8 @@ Run `docs/AGENTS.md#Mandatory-Startup-Sequence` — no shortcuts.
 9. **Review Workload Guard** -> `review-workload-guard.ps1` before multi-file impl
 10. **Tool output discipline** -> limit read/grep/bash results; use `-First 30`, `Select-Object`,
     `head -50` on large output
+11. **JSON VALIDITY** -> Verify quotes/braces/brackets balanced BEFORE any tool call with JSON params.
+    See `rules/NORMATIVAS-JSON-CONSTRUCTION.md`
 
 ## Break Glass — Auto-Override Harmful Config
 
