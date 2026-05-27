@@ -126,6 +126,26 @@ body {
   color: var(--gv-error);
 }
 
+/* Info icon on cards */
+.gv-card__info {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+.gv-card__info:hover {
+  opacity: 1;
+}
+
+.gv-card {
+  position: relative;
+}
+
 .gv-chart { background: rgba(11,22,31,0.8); border: 1px solid var(--gv-border); border-radius: 8px; padding: 12px; margin-top: 16px; }
 .gv-chart__title { font-size: 13px; color: var(--gv-accent); margin-bottom: 8px; }
 .gv-chart__canvas { width: 100%; height: 200px; background: #0b161f; border-radius: 4px; }
@@ -279,4 +299,121 @@ body {
 .gv-ref-item__unit {
   font-size: 10px;
   color: var(--gv-accent-2);
+}
+
+/* Compact Tooltip-style Modal */
+.gv-modal {
+  display: none;
+  position: absolute;
+  z-index: 10000;
+}
+
+.gv-modal.active {
+  display: block;
+}
+
+.gv-modal__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.gv-modal__content {
+  position: absolute;
+  background: linear-gradient(180deg, var(--gv-surface), var(--gv-surface-2));
+  border: 1px solid var(--gv-accent);
+  border-radius: 8px;
+  padding: 12px 16px;
+  width: 280px;
+  max-width: 280px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  animation: tooltipSlideIn 0.2s ease;
+}
+
+@keyframes tooltipSlideIn {
+  from { 
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.gv-modal__close {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: var(--gv-muted);
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.gv-modal__close:hover {
+  color: var(--gv-error);
+  background: rgba(242, 100, 100, 0.1);
+}
+
+.gv-modal__title {
+  font-size: 13px;
+  color: var(--gv-accent);
+  font-weight: 600;
+  margin-bottom: 8px;
+  padding-right: 24px;
+  border-bottom: 1px solid var(--gv-border);
+  padding-bottom: 6px;
+}
+
+.gv-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gv-modal__section {
+  background: rgba(8, 16, 24, 0.3);
+  border: 1px solid var(--gv-border);
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+
+.gv-modal__label {
+  font-size: 9px;
+  color: var(--gv-accent-2);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.gv-modal__text {
+  font-size: 11px;
+  color: var(--gv-text);
+  line-height: 1.4;
+}
+
+.gv-modal__formula {
+  font-size: 10px;
+  color: var(--gv-accent);
+  font-family: 'Consolas', 'Monaco', monospace;
+  background: rgba(55, 184, 168, 0.1);
+  padding: 4px 8px;
+  border-radius: 3px;
+  border-left: 2px solid var(--gv-accent);
 }
