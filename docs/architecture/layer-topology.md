@@ -123,7 +123,7 @@ signature works.
 1. **Execution**: bash, delegate
 2. **File System**: read, write, edit, glob, grep
 3. **Web**: webfetch, websearch
-4. **Code Intelligence**: codesearch, context7\_\*
+4. **Code Intelligence**: codesearch
 5. **Memory**: engram\_\*
 
 ### Layer 5: Agentes (Agents)

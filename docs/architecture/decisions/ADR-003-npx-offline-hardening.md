@@ -55,7 +55,9 @@ Modern npm supply chain attacks target two primary vectors:
 
 ### Layer 1: Runtime Hardening
 
-**In `config/mcp-servers.json`**:
+**In `config/mcp-servers.json` (DEPRECATED - file removed)**:
+
+The MCP filesystem server was deprecated. See `opencode.json#mcp` for active MCPs.
 
 ```json
 {

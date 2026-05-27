@@ -124,7 +124,7 @@ flowchart LR
 | ------------------ | --------------------- | --------------------------------------------------------------------- | --------------------------------------------- |
 | **1. Agents**      | Task delegation       | 1 orchestrator + 17 sub-agents                                        | `config/auto-delegation.json`                 |
 | **2. Commands**    | CLI entry points      | `gv.ps1`, `pre-process-input.ps1`                                     | `config/orchestrator.json`                    |
-| **3. MCP Servers** | Protocol bridge       | Model Context Protocol, Engram MCP, CodeGraph, Skill MCPs (on-demand) | `opencode.json#mcp` + `skill-mcp-manager.ps1` |
+| **3. MCP Servers** | Protocol bridge       | Engram MCP, CodeGraph | `opencode.json#mcp` |
 | **4. Skills**      | Specialized execution | 135 skills across 10 categories                                       | `config/skill-dependencies.json`              |
 | **5. Memory**      | Persistent context    | Engram (hot/warm/cold tiers)                                          | `config/engram-config.json`                   |
 

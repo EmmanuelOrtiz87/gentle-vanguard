@@ -143,7 +143,7 @@ Route-TaskToAgent -TaskDescription "Fix the thing"
 
 ### Never Auto-Delegate
 
-- AGENTS.md or `config/mcp-servers.json` changes
+- AGENTS.md changes
 - `session-autostart.cmd`, `enforce-response-mode.ps1` changes
 - Token budget/threshold adjustments
 - Credential/security operations

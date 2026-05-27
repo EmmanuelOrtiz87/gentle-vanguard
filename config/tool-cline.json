@@ -5,8 +5,7 @@
   "preProcess": {
     "loadSkills": true,
     "skillTool": "skill",
-    "autoLoad": true,
-    "mcpBridge": true
+    "autoLoad": true
   },
   "capabilities": ["mcp", "skills", "code_completion", "terminal"],
   "configFiles": [
@@ -16,11 +15,6 @@
     ".cline/config.json",
     ".claude/settings.json"
   ],
-  "adapter": {
-    "type": "mcp-bridge",
-    "path": "adapters/mcp-bridge",
-    "status": "available"
-  },
   "hooks": {
     "preToolCall": "scripts/utilities/pre-process-input.ps1",
     "sessionStart": "scripts/utilities/session-autostart.cmd",

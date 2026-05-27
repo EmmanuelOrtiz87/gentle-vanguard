@@ -36,7 +36,7 @@ y validable en cada fase del ciclo de vida.
 | Sub-caracteristica | Control Gentle-Vanguard                                 | Verification         |
 | ------------------ | ------------------------------------------------------- | -------------------- |
 | Co-existence       | `config/tool-*.json` (opencode, cursor, windsurf, etc.) | Tool configs validos |
-| Interoperability   | `config/mcp-servers.json` + `adapters/`                 | MCP bridge estable   |
+| Interoperability   | `config/tool-*.json` (opencode, cursor, etc.)           | Tool configs validos |
 
 ### 2.4 Usability (Usabilidad)
 

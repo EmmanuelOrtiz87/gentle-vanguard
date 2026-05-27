@@ -94,11 +94,7 @@
       "path": "scripts/utilities/UTILITIES/read-once-guard.ps1",
       "description": "Read Once Guard - Prevent redundant file reads"
     },
-    {
-      "type": "script",
-      "path": "scripts/utilities/UTILITIES/mcp-monitor.ps1",
-      "description": "MCP Monitor - Auto-shutdown inactive MCP servers"
-    },
+
     {
       "type": "script",
       "path": "scripts/utilities/DEPLOYMENT/setup-wizard.ps1",

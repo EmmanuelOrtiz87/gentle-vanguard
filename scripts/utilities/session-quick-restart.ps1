@@ -80,14 +80,6 @@ function Recover-Cleanup {
 function Reconnect-Services {
     Write-Status "Reconnecting services..."
     
-    # Check MCP servers
-    $mcpConfig = ".\config\mcp-servers.json"
-    if (Test-Path $mcpConfig) {
-        Write-Status "MCP servers configuration found"
-        # MCP reconnection would happen automatically on next use
-        Write-Success "Services will reconnect on next use"
-    }
-    
     return $true
 }
 

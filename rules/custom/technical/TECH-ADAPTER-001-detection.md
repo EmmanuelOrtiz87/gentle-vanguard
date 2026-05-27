@@ -37,9 +37,7 @@ When multiple tools could be detected, use this priority (highest first):
 ## Adapter Selection Logic
 
 ```
-IF tool supports MCP:
-    USE MCP Bridge (adapters/mcp-bridge/)
-ELSE IF format adapter exists for tool:
+IF format adapter exists for tool:
     USE format adapter (adapters/format-adapters/{tool}/)
 ELSE:
     IMPLEMENT new adapter (see adapters/README.md)
@@ -97,7 +95,6 @@ None. All tools MUST be detected before adapter selection.
 ## References
 
 - Detection script: `adapters/detection/enhanced-detect.ps1`
-- MCP Bridge: `adapters/mcp-bridge/README.md`
 - Format Adapters: `adapters/format-adapters/README.md`
 - Examples: `adapters/docs/EXAMPLES.md`
 

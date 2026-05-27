@@ -5,7 +5,6 @@ Comandos de compilación, prueba y linting para el proyecto.
 ## Build
 
 - `npm run build` (TypeScript)
-- `cd adapters/mcp-bridge && npm run build` (MCP Bridge)
 
 ## Test
 

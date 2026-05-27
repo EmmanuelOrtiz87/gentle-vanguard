@@ -200,7 +200,7 @@ if exist "%ENHANCED_DETECT%" (
     if errorlevel 1 ( echo [WARN] Enhanced detection had issues ) else (
         pwsh -NoProfile -ExecutionPolicy Bypass -Command ^
           "$j=Get-Content '%WORKSPACE_ROOT%\.session\enhanced-detect-result.json' -Raw | ConvertFrom-Json;" ^
-          "Write-Host ('[DETECT] Tool: ' + $j.toolName + ' | MCP: ' + $j.adapterStatus.mcpBridge.available + ' | Adapter: ' + $j.adapterStatus.formatAdapter.available) -ForegroundColor Cyan"
+          "Write-Host ('[DETECT] Tool: ' + $j.toolName + ' | Adapter: ' + $j.adapterStatus.formatAdapter.available) -ForegroundColor Cyan"
         echo [OK] Enhanced detection complete
     )
 ) else ( echo [SKIP] enhanced-detect.ps1 not found - adapter detection not available )

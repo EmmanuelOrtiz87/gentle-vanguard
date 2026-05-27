@@ -10,12 +10,6 @@
 ```
 adapters/
  README.md                    # This file
- mcp-bridge/                 # MCP Server exposing Gentle-Vanguard as MCP
-    server.ts               # Main MCP server implementation
-    tools.ts               # Gentle-Vanguard tools exposed via MCP
-    resources.ts            # Context/resources exposed
-    package.json           # Node.js dependencies
-    README.md              # MCP Bridge documentation
  format-adapters/            # Format translators for non-standard tools
     windsurf-adapter/      # Windsurf format adapter
     codex-adapter/         # OpenAI Codex adapter
@@ -30,32 +24,6 @@ adapters/
 ```
 
 ---
-
-## Quick Start
-
-### 1. Start MCP Bridge (exposes Gentle-Vanguard to any MCP client)
-
-```bash
-cd adapters/mcp-bridge
-npm install
-npm run build
-npm start
-```
-
-### 2. Configure your tool to use the MCP server
-
-**Windsurf** (`~/.windsurf/mcp.json`):
-
-```json
-{
-  "mcpServers": {
-    "gentle-vanguard": {
-      "command": "node",
-      "args": ["/path/to/adapters/mcp-bridge/dist/server.js"]
-    }
-  }
-}
-```
 
 **Codex** (OpenAI-compatible endpoint):
 

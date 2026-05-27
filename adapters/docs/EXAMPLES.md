@@ -6,49 +6,9 @@ Quick reference for using Gentle-Vanguard adapters with various tools.
 
 ## MCP Bridge Examples
 
-### 1. Configure Windsurf to use Gentle-Vanguard
+### 1. Configure Codex to use Gentle-Vanguard
 
-**File**: `~/.windsurf/mcp.json`
-
-```json
-{
-  "mcpServers": {
-    "gentle-vanguard": {
-      "command": "node",
-      "args": ["/absolute/path/to/adapters/mcp-bridge/dist/server.js"],
-      "env": {
-        "GENTLE_VANGUARD_ROOT": "/path/to/gentle-vanguard"
-      }
-    }
-  }
-}
-```
-
-**Use in Windsurf**:
-
-```
-User: "Run a 7D review on src/components/App.tsx"
-Windsurf calls: gentle-vanguard_review({ path: "src/components/App.tsx" })
-```
-
----
-
-### 2. Configure Codex to use Gentle-Vanguard
-
-**File**: `~/.codex/mcp.json` (if Codex supports MCP)
-
-```json
-{
-  "mcpServers": {
-    "gentle-vanguard": {
-      "command": "node",
-      "args": ["/absolute/path/to/adapters/mcp-bridge/dist/server.js"]
-    }
-  }
-}
-```
-
-**Alternative**: Use Codex Adapter (if no MCP support)
+Use Codex Adapter:
 
 ```bash
 # Start proxy
@@ -143,7 +103,7 @@ export OPENAI_API_KEY="dummy"  # Not needed for local
 # Format Adapter: False
 #
 # === Recommendation ===
-# Use MCP Bridge at adapters/mcp-bridge
+# Use format adapters in adapters/format-adapters/
 ```
 
 ### JSON Output (for automation)
@@ -197,7 +157,7 @@ if (-not $detection.supportsMcp) {
 
 ```bash
 # Check if server starts
-node adapters/mcp-bridge/dist/server.js
+node adapters/format-adapters/codex-adapter/proxy.js --port 8080
 # Should output: "Gentle-Vanguard MCP Bridge running on stdio"
 
 # Check GENTLE_VANGUARD_ROOT

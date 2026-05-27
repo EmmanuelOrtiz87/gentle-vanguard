@@ -62,11 +62,11 @@ whether they support the Agent Skills standard.
 
 ## Adapter Types
 
-### 1. MCP Bridge (Primary Solution)
+### 1. Format Adapters (Primary Solution)
 
-**Location**: `adapters/mcp-bridge/`
+**Location**: `adapters/format-adapters/`
 
-Converts Gentle-Vanguard into an **MCP Server** that any MCP-compatible tool can use.
+Converts Gentle-Vanguard output format for tools that don't follow Agent Skills standard.
 
 **Benefits**:
 
@@ -119,9 +119,7 @@ Translates between Gentle-Vanguard's standard format and tool-specific formats.
 ```
 Tool (Windsurf, Codex, etc.)
 
-     MCP Protocol (stdin/stdout)
-
-MCP Bridge Server (adapters/mcp-bridge/)
+     Format Adapter (adapters/format-adapters/)
 
      Calls Gentle-Vanguard CLI/Scripts
 

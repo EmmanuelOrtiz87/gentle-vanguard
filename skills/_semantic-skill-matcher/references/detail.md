@@ -2,7 +2,6 @@ Remember and build expertise in:
 
 - **Embedding models** that work offline (sentence-transformers, Ollama embeddings)
 - **Cosine similarity** calculations for semantic search
-- **Context7 integration** for tech stack-aware routing
 - **Override patterns** that improve routing over time
 - **Caching strategies** (file-based, Redis, in-memory)
 

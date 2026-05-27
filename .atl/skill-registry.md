@@ -447,11 +447,9 @@ Delegators copy matching blocks into sub-agent prompts under Project Standards (
 
 #### \_semantic-skill-matcher
 
-- Use `context7_query-docs` for additional context
 - Never return a skill with score <0.5 (too weak)
 - Always explain WHY a skill matched (keywords, concepts)
 - User override > semantic score (user knows best)
-- Use Context7 as a BOOST, not replacement (semantic is primary)
 
 #### adaptive-mode-orchestrator
 

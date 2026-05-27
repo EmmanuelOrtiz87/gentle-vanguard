@@ -156,69 +156,7 @@ function Test-MCPService {
 
 # Auto-disconnect non-functioning services
 function Disconnect-FailedServices {
-    Write-Status "Checking for non-functioning services..."
-    
-    $mcpConfigPath = ".\config\mcp-servers.json"
-    if (-not (Test-Path $mcpConfigPath)) {
-        return
-    }
-    
-    try {
-        $config = Get-Content $mcpConfigPath | ConvertFrom-Json
-        $servers = $config.mcpServers.PSObject.Properties
-        $disconnected = @()
-        
-        foreach ($server in $servers) {
-            $serverName = $server.Name
-            $serverInfo = $server.Value
-            
-            # Skip disabled servers
-            if ($serverName -like "_disabled_*") { continue }
-            
-            # Test if service is working
-            $isWorking = Test-MCPService -ServerName $serverName -ServerConfig $serverInfo
-            
-            if (-not $isWorking) {
-                Write-Host "  [FAIL] $serverName - not responding" -ForegroundColor Red
-                
-                # Disable the server
-                $config.mcpServers | Add-Member -NotePropertyName "_disabled_$serverName" -NotePropertyValue $serverInfo -Force
-                $config.mcpServers.PSObject.Properties.Remove($serverName)
-                $disconnected += $serverName
-                
-                Write-Host "  Disabled: $serverName" -ForegroundColor Yellow
-            } else {
-                Write-Host "  [OK] $serverName - working" -ForegroundColor Green
-            }
-        }
-        
-        if ($disconnected.Count -gt 0) {
-            $config | ConvertTo-Json -Depth 10 | Set-Content $mcpConfigPath -Encoding UTF8
-            
-            # Save to Engram
-            $engramBin = Join-Path $scriptDir "engram.exe"
-            if (Test-Path $engramBin) {
-                $content = @"
-## Auto-Disconnect: Failed Services
-**Timestamp**: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
-**Disconnected**: $($disconnected -join ', ')
-**Reason**: Services not responding
-
-MCP servers disabled to prevent token waste on failed connection attempts.
-"@
-                & $engramBin save --title "Auto-Disconnect: Failed Services" --content $content --project $ProjectName --type manual 2>$null | Out-Null
-            }
-            
-            # Notify user
-            $notifyScript = Join-Path $scriptDir "notify-user.ps1"
-            if (Test-Path $notifyScript) {
-                & $notifyScript -Action "disconnect" -Reason "Services not responding: $($disconnected -join ', ')" -RecoveryCommand ".\tools\session-quick-restart.ps1 -Components disconnect" 2>$null
-            }
-        }
-    }
-    catch {
-        Write-WarningMsg "Failed to check MCP services: $_"
-    }
+    # No MCP services to disconnect
 }
 
 # Auto-close idle session
