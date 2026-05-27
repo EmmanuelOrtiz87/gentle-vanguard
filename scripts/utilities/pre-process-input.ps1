@@ -18,6 +18,26 @@ param(
 $ErrorActionPreference = 'Continue'
 
 # ============================================================================
+# JSON VALIDATION HELPER - Prevents malformed JSON in tool calls
+# ============================================================================
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$jsonValidator = Join-Path $scriptDir "json-validator.ps1"
+
+function Test-ToolJson {
+    param([string]$JsonString, [string]$Context)
+    if (Test-Path $jsonValidator) {
+        try {
+            $result = & $jsonValidator -JsonString $JsonString -Context $Context -FixCommonErrors 2>$null | ConvertFrom-Json -ErrorAction SilentlyContinue
+            if ($result -and $result.Valid -and $result.Fixes -and $result.Fixes.Count -gt 0) {
+                Write-Warning "[PRE-PROCESS] JSON auto-repaired for: $Context"
+                return $result.Repaired
+            }
+        } catch { }
+    }
+    return $JsonString
+}
+
+# ============================================================================
 # RESPONSE CACHE: Return cached output for repeated inputs (saves ~2.5s each)
 if (-not $DisableCache -and -not $FromAgent) {
     $cacheDir = Join-Path (Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path))) ".session"
@@ -602,6 +622,26 @@ if (-not $DisableCache -and -not $FromAgent -and $outLines.Count -gt 0) {
         }
         @{ cache = $pruned } | ConvertTo-Json -Depth 5 -Compress | Set-Content $responseCacheFile -Force
     } catch { }
+}
+
+# ============================================================================
+# TOOL CALL VALIDATION - Wrap tool calls with JSON validation
+# ============================================================================
+function Invoke-ToolWithValidation {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$ToolName,
+        
+        [Parameter(Mandatory=$true)]
+        [hashtable]$Parameters
+    )
+    
+    # Convert parameters to JSON and validate
+    $jsonPayload = $Parameters | ConvertTo-Json -Depth 10 -Compress
+    $validatedJson = Test-ToolJson -JsonString $jsonPayload -Context "tool:$ToolName"
+    
+    # Return validated parameters
+    return $validatedJson | ConvertFrom-Json -ErrorAction SilentlyContinue
 }
 
 # ============================================================================

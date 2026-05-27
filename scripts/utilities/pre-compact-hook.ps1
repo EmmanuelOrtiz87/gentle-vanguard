@@ -103,6 +103,23 @@ function Invoke-HandoffCompress {
     }
 }
 
+# Snapshot Hashline state before compaction
+function Invoke-HashlineSnapshot {
+    Write-Status "Snapshotting Hashline state..."
+    $hashlineScript = Join-Path $PSScriptRoot "..\editing\hashline.ps1"
+    if (Test-Path $hashlineScript) {
+        $result = & $hashlineScript -Action status -AsJson -Quiet | ConvertFrom-Json
+        if ($result.status -eq 'active') {
+            Write-Success "Hashline: $($result.files_tracked) files, $($result.total_hashes) hashes"
+        } else {
+            Write-Host "[WARN] Hashline not initialized" -ForegroundColor Yellow
+        }
+        return $true
+    }
+    Write-Host "[WARN] hashline.ps1 not found" -ForegroundColor Yellow
+    return $false
+}
+
 # Main execution
 try {
     Write-Host ""
@@ -113,9 +130,10 @@ try {
     
     $saved = Save-CriticalContent
     $compressed = Invoke-HandoffCompress
+    $hashlined = Invoke-HashlineSnapshot
     
     Write-Host ""
-    if ($saved -and $compressed) {
+    if ($saved -and $compressed -and $hashlined) {
         Write-Success "Pre-compaction tasks completed"
     } else {
         Write-Host "[WARN] Some pre-compaction tasks failed" -ForegroundColor Yellow

@@ -235,6 +235,14 @@
         "args": "-Action status",
         "required": false,
         "description": "Inicializa sistema de notificaciones de tokens al inicio de sesion"
+      },
+      {
+        "id": "json-validator-verify",
+        "enabled": true,
+        "script": "scripts/utilities/json-validator.ps1",
+        "args": "-JsonString '{\"test\": \"value\"}' -Context 'startup-verify'",
+        "required": false,
+        "description": "Verifica que el validador JSON esta operativo al inicio de sesion"
       }
     ],
 

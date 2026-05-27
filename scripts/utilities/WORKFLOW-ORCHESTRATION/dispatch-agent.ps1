@@ -6,7 +6,7 @@ param(
     [string]$Task = '',
     
     [Parameter(Mandatory=$false)]
-    [ValidateSet('parallel', 'sequential', 'adaptive')]
+    [ValidateSet('parallel', 'sequential', 'adaptive', 'team')]
     [string]$Mode = 'parallel',
     
     [Parameter(Mandatory=$false)]
@@ -27,6 +27,7 @@ $agentRouter = Join-Path $scriptDir 'agent-router.ps1'
 $eventBusScript = Join-Path $scriptDir 'event-bus.ps1'
 $dispatchMemoryManager = Join-Path $scriptDir 'dispatch-memory-manager.ps1'
 $agentMessageBus = Join-Path (Split-Path -Parent $scriptDir) 'adaptive\agent-message-bus.ps1'
+$teamModeScript = Join-Path $scriptDir 'team-mode.ps1'
 
 function Write-AgentLine {
     param([string]$Message, [string]$Color = 'White')
@@ -178,6 +179,20 @@ function Get-ParallelConfig {
                 }
             }
         }
+    } elseif ($ExecutionMode -eq 'team') {
+        $leader = $AgentNames[0]
+        $followers = $AgentNames | Select-Object -Skip 1
+        $config.team = @{
+            leader = $leader
+            followers = $followers
+            strategy = 'leader-follower'
+        }
+        $config.lanes += @{
+            team_id = "team-$leader-$($config.execution_id)"
+            leader = $leader
+            followers = $followers
+            parallel = $true
+        }
     }
     
     return $config
@@ -217,7 +232,9 @@ function Invoke-ParallelDispatch {
         
         Write-AgentLine "Lanes:" 'Yellow'
         foreach ($lane in $config.lanes) {
-            if ($lane.parallel) {
+            if ($lane.team_id) {
+                Write-Host "  [TEAM $($lane.team_id)] Leader: $($lane.leader), Members: $($lane.followers -join ',')" -ForegroundColor Magenta
+            } elseif ($lane.parallel) {
                 Write-Host "  [BATCH $($lane.batch_id)]" -ForegroundColor Green
                 foreach ($agent in $lane.agents) {
                     Write-Host "    - $agent" -ForegroundColor Gray
@@ -249,7 +266,7 @@ function Invoke-ParallelDispatch {
             $batchNum++
             Write-AgentLine "`n[Batch $batchNum] Running $($lane.agents.Count) agents in parallel..." 'Green'
             
-            $runspacePool = [runspacefactory]::CreateRunspacePool(1, [Math]::Min($lane.agents.Count, 4))
+            $runspacePool = [runspacefactory]::CreateRunspacePool(1, [Math]::Max(1, [Math]::Min($lane.agents.Count, 4)))
             $runspacePool.Open()
             $psInstances = @()
             foreach ($agent in $lane.agents) {
@@ -286,6 +303,40 @@ function Invoke-ParallelDispatch {
                     } | ConvertTo-Json -Compress) -Quiet
                 }
                 Invoke-InterAgentMessage -FromAgent $pi.agent -ToAgent ORCHESTRATOR -Subject 'agent.completed' -Payload ($pi.result | ConvertTo-Json -Compress) -ConvId $ConversationId
+            }
+        } elseif ($lane.team_id) {
+            Write-AgentLine "`n[TEAM MODE] Leader: $($lane.leader), Followers: $($lane.followers -join ',')" 'Magenta'
+            if (Test-Path $teamModeScript) {
+                $teamResult = & $teamModeScript -Action start -Leader $lane.leader -Members ($lane.followers -join ',') -TeamId $lane.team_id -AsJson -Quiet | ConvertFrom-Json
+                $teamId = $teamResult.team_id
+
+                & $teamModeScript -Action broadcast -TeamId $teamId -Subject 'team.mission' -Payload $TaskText -Quiet
+
+                $memberHandles = @()
+                $runspacePool = [runspacefactory]::CreateRunspacePool(1, [Math]::Max(1, [Math]::Min($lane.followers.Count, 4)))
+                $runspacePool.Open()
+                foreach ($f in $lane.followers) {
+                    & $teamModeScript -Action assign -TeamId $teamId -Agent $f -Task $TaskText -Quiet
+                    $ps = [powershell]::Create().AddScript({
+                        param($s, $a, $t) & $s -Agent $a -Task $t -AsJson | ConvertFrom-Json
+                    }).AddArgument($agentRouter).AddArgument($f).AddArgument($TaskText)
+                    $ps.RunspacePool = $runspacePool
+                    $memberHandles += @{ ps = $ps; agent = $f; handle = $ps.BeginInvoke() }
+                }
+                foreach ($mh in $memberHandles) {
+                    $mh.result = $mh.ps.EndInvoke($mh.handle)
+                    $mh.ps.Dispose()
+                    & $teamModeScript -Action report -TeamId $teamId -Agent $mh.agent -Payload ($mh.result | ConvertTo-Json -Compress) -Quiet
+                }
+                $runspacePool.Close()
+                $runspacePool.Dispose()
+
+                $leaderResult = & $agentRouter -Agent $lane.leader -Task $TaskText -AsJson | ConvertFrom-Json
+                & $teamModeScript -Action report -TeamId $teamId -Agent $lane.leader -Payload ($leaderResult | ConvertTo-Json -Compress) -Quiet
+                & $teamModeScript -Action stop -TeamId $teamId -Quiet
+
+                $results += $leaderResult
+                Write-AgentLine "[TEAM] $teamId completed" 'Magenta'
             }
         } else {
             Write-AgentLine "`n[Lane $($lane.order)] Running $($lane.agent)..." 'Yellow'
@@ -346,7 +397,7 @@ if ([string]::IsNullOrWhiteSpace($Agents)) {
     Write-Host ""
     Write-Host "AGENTS: Comma-separated list (e.g., DEV,QA,BA)" -ForegroundColor White
     Write-Host "Options:" -ForegroundColor White
-    Write-Host "  -Mode parallel|sequential|adaptive (default: parallel)" -ForegroundColor Gray
+    Write-Host "  -Mode parallel|sequential|adaptive|team (default: parallel)" -ForegroundColor Gray
     Write-Host "  -Risk low|medium|high (default: medium)" -ForegroundColor Gray
     Write-Host "  -MaxParallel N (default: 4)" -ForegroundColor Gray
     Write-Host "  -DryRun (preview only)" -ForegroundColor Gray

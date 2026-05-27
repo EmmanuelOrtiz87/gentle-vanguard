@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.22.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.23.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
@@ -23,7 +23,7 @@
 
 <p align="center">
   <strong>AI-powered development orchestrator · 18 agents · 135 skills · 10 tool-compatible</strong><br>
-  <em>Tool-agnostic · SDD Lifecycle · Judgment Day · Persistent memory</em>
+  <em>Tool-agnostic · SDD Lifecycle · Hashline · Team Mode · Skill MCPs · Persistent memory</em>
 </p>
 
 > _"Construyendo el puente definitivo entre la alta ingeniería de software y la estrategia
@@ -49,6 +49,12 @@ otherwise be chaotic AI-assisted development.
 - **Enforces SDD lifecycle** (BA → SAD → DEV → QA) on ambiguous or architectural work
 - **Governance-first** — 7D validation, judgment-day adversarial review, pre-commit hooks, 16 CI/CD
   workflows
+- **Hashline** — SHA-256 per-line integrity for 400+ tracked files across 15+ extensions. Snapshot
+  on post-commit via lefthook + pre-compact via hook. Detect unintended edits before they propagate
+- **Team Mode** — Leader-follower orchestration with up to 8 members. Broadcast, assign, report,
+  collect cycle. Built on top of the existing dispatch agent system
+- **Skill MCPs** — On-demand Model Context Protocol servers launched from SKILL.md frontmatter.
+  Register, start, stop, list via dedicated manager. Zero-churn lifecycle
 
 ```mermaid
 flowchart TB
@@ -114,13 +120,13 @@ flowchart LR
 
 ### 5-Layer Architecture
 
-| Layer              | Role                  | Components                                    | Config                           |
-| ------------------ | --------------------- | --------------------------------------------- | -------------------------------- |
-| **1. Agents**      | Task delegation       | 1 orchestrator + 17 sub-agents                | `config/auto-delegation.json`    |
-| **2. Commands**    | CLI entry points      | `gv.ps1`, `pre-process-input.ps1`             | `config/orchestrator.json`       |
-| **3. MCP Servers** | Protocol bridge       | Model Context Protocol, Engram MCP, CodeGraph | `opencode.json#mcp`              |
-| **4. Skills**      | Specialized execution | 135 skills across 10 categories               | `config/skill-dependencies.json` |
-| **5. Memory**      | Persistent context    | Engram (hot/warm/cold tiers)                  | `config/engram-config.json`      |
+| Layer              | Role                  | Components                                                            | Config                                        |
+| ------------------ | --------------------- | --------------------------------------------------------------------- | --------------------------------------------- |
+| **1. Agents**      | Task delegation       | 1 orchestrator + 17 sub-agents                                        | `config/auto-delegation.json`                 |
+| **2. Commands**    | CLI entry points      | `gv.ps1`, `pre-process-input.ps1`                                     | `config/orchestrator.json`                    |
+| **3. MCP Servers** | Protocol bridge       | Model Context Protocol, Engram MCP, CodeGraph, Skill MCPs (on-demand) | `opencode.json#mcp` + `skill-mcp-manager.ps1` |
+| **4. Skills**      | Specialized execution | 135 skills across 10 categories                                       | `config/skill-dependencies.json`              |
+| **5. Memory**      | Persistent context    | Engram (hot/warm/cold tiers)                                          | `config/engram-config.json`                   |
 
 ---
 
@@ -207,25 +213,25 @@ flowchart LR
     CFG --> AUTO
 ```
 
-| Command | Effect |
-|---------|--------|
-| `/notif on` / `/notif off` | Master toggle (persists across sessions) |
-| `/notif status` | Show current state of all notification types |
-| `/notif token on/off` | Toggle token display (input/output per turn) |
-| `/notif context on/off` | Toggle context character count display |
-| `/notif cost on/off` | Toggle cost estimation display |
-| `/notif accumulated on/off` | Toggle session accumulated totals display |
-| `/notif compact on/off` | Switch between compact box and verbose format |
+| Command                     | Effect                                        |
+| --------------------------- | --------------------------------------------- |
+| `/notif on` / `/notif off`  | Master toggle (persists across sessions)      |
+| `/notif status`             | Show current state of all notification types  |
+| `/notif token on/off`       | Toggle token display (input/output per turn)  |
+| `/notif context on/off`     | Toggle context character count display        |
+| `/notif cost on/off`        | Toggle cost estimation display                |
+| `/notif accumulated on/off` | Toggle session accumulated totals display     |
+| `/notif compact on/off`     | Switch between compact box and verbose format |
 
 **Components:**
 
-| Component | Location | Purpose |
-|-----------|----------|---------|
-| `token-usage-notifier.ps1` | `scripts/utilities/` | Core display: per-turn metrics, accumulated session totals, status, auto-hook, cost estimation with per-model rates from `config/provider-costs.json` |
-| `toggle-token-display.ps1` | `scripts/utilities/` | Toggle handler: on/off/status per type, persistent state via `.session/token-display-config.json` |
-| `pre-process-input.ps1` | `scripts/utilities/` | Auto-hook: calls notifier with `-Action auto` at end of every turn |
-| `token-usage-auto.ps1` | `scripts/utilities/` | Post-response bridge: integrates notifier + context logger |
-| `token-display-config.json` | `.session/` | Persisted state: enabled, individualToggles (token/context/cost/accumulated), compactMode |
+| Component                   | Location             | Purpose                                                                                                                                               |
+| --------------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `token-usage-notifier.ps1`  | `scripts/utilities/` | Core display: per-turn metrics, accumulated session totals, status, auto-hook, cost estimation with per-model rates from `config/provider-costs.json` |
+| `toggle-token-display.ps1`  | `scripts/utilities/` | Toggle handler: on/off/status per type, persistent state via `.session/token-display-config.json`                                                     |
+| `pre-process-input.ps1`     | `scripts/utilities/` | Auto-hook: calls notifier with `-Action auto` at end of every turn                                                                                    |
+| `token-usage-auto.ps1`      | `scripts/utilities/` | Post-response bridge: integrates notifier + context logger                                                                                            |
+| `token-display-config.json` | `.session/`          | Persisted state: enabled, individualToggles (token/context/cost/accumulated), compactMode                                                             |
 
 Config references: `docs/AGENTS.md#token-notification-auto-hook-–-every-turn`, `CLAUDE.md` rule #6.
 
@@ -296,16 +302,16 @@ For large features that exceed the 400-line review budget, use chained PR delive
 
 Comprehensive input/token efficiency overhaul:
 
-| Area                         | Before          | After                            |
-| ---------------------------- | --------------- | -------------------------------- |
-| CLAUDE.md                    | 220 lines       | 47 lines (−79%)                  |
-| AGENTS.md                    | 311 lines       | 78 lines (−75%)                  |
-| NORMATIVES.md                | 1,506 lines     | 120 lines (−92%)                 |
-| INTER-AGENT-COMMUNICATION.md | 167 lines       | 54 lines (−68%)                  |
-| 10 oversized SKILL.md files  | ~5,200 lines    | ~1,420 lines (−73%)              |
-| auto-delegation.json         | 105 BA keywords | 80 (−24%)                        |
-| pre-process cache            | None            | SHA256 (132 skills, zero rescan) |
-| Output guard                 | None            | 200 tokens non-code              |
+| Area                         | Before          | After                                                                                               |
+| ---------------------------- | --------------- | --------------------------------------------------------------------------------------------------- |
+| CLAUDE.md                    | 220 lines       | 47 lines (−79%)                                                                                     |
+| AGENTS.md                    | 311 lines       | 78 lines (−75%)                                                                                     |
+| NORMATIVES.md                | 1,506 lines     | 120 lines (−92%)                                                                                    |
+| INTER-AGENT-COMMUNICATION.md | 167 lines       | 54 lines (−68%)                                                                                     |
+| 10 oversized SKILL.md files  | ~5,200 lines    | ~1,420 lines (−73%)                                                                                 |
+| auto-delegation.json         | 105 BA keywords | 80 (−24%)                                                                                           |
+| pre-process cache            | None            | SHA256 (132 skills, zero rescan)                                                                    |
+| Output guard                 | None            | 200 tokens non-code                                                                                 |
 | Token notification auto-hook | Manual `/notif` | Automatic every turn via pre-process-input.ps1, persistent toggles, cost from `provider-costs.json` |
 
 Integrated via `opencode.json` sliding window, `pre-compact-hook.ps1` ratio 0.60,
@@ -398,19 +404,22 @@ gv health
 
 ## Project Status
 
-| Gate          | Status  | Detail                                                                  |
-| ------------- | ------- | ----------------------------------------------------------------------- |
-| Configuration | ✅ PASS | `orchestrator.json`, `auto-delegation.json`, `model-routing.json` valid |
-| Skills        | ✅ PASS | 135 skills indexed, registry current                                    |
-| Tests         | ✅ PASS | Full test suite passing                                                 |
-| Hooks         | ✅ PASS | Pre-commit hooks active (README, secrets, lint)                         |
-| Context Log   | ✅ PASS | Session context logging active — tokens, cost, input/output per turn    |
-| Context Opt   | ✅ PASS | SHA256 cache, input guard, output guard, 73% avg file compression       |
-| Token Notif   | ✅ PASS | Auto-hook every turn, 6 toggle types, persistent config, cost from `provider-costs.json` |
-| Security      | ✅ PASS | 98 tests pass, injection/jailbreak detection active, AES-256 secrets    |
-| Structure     | ✅ PASS | All mandatory files present                                             |
-| Engram        | ✅ PASS | Memory store accessible, sessions tracking                              |
-| SDD           | ✅ PASS | OpenSpec config valid, preflight operational                            |
+| Gate          | Status  | Detail                                                                                                  |
+| ------------- | ------- | ------------------------------------------------------------------------------------------------------- |
+| Configuration | ✅ PASS | `orchestrator.json`, `auto-delegation.json`, `model-routing.json` valid                                 |
+| Skills        | ✅ PASS | 135 skills indexed, registry current                                                                    |
+| Tests         | ✅ PASS | Full test suite passing                                                                                 |
+| Hooks         | ✅ PASS | Pre-commit hooks active (README, secrets, lint)                                                         |
+| Context Log   | ✅ PASS | Session context logging active — tokens, cost, input/output per turn                                    |
+| Context Opt   | ✅ PASS | SHA256 cache, input guard, output guard, 73% avg file compression                                       |
+| Token Notif   | ✅ PASS | Auto-hook every turn, 6 toggle types, persistent config, cost from `provider-costs.json`                |
+| Security      | ✅ PASS | 98 tests pass, injection/jailbreak detection active, AES-256 secrets                                    |
+| Structure     | ✅ PASS | All mandatory files present                                                                             |
+| Engram        | ✅ PASS | Memory store accessible, sessions tracking                                                              |
+| SDD           | ✅ PASS | OpenSpec config valid, preflight operational                                                            |
+| Hashline      | ✅ PASS | 411 files, 83,214 SHA-256 hashes, post-commit snapshot + pre-compact hook                               |
+| Team Mode     | ✅ PASS | Leader-follower with up to 8 members, full cycle (start→assign→report→collect→stop) tested              |
+| Skill MCPs    | ✅ PASS | 6 actions (register, start, stop, list, status, deregister), SKILL.md frontmatter parsing, cycle tested |
 
 ---
 
@@ -466,6 +475,6 @@ LLM Top 10 + OWASP Agentic Top 10).
 ---
 
 <p align="center">
-  <strong>Gentle-Vanguard v2.22.0</strong><br>
+  <strong>Gentle-Vanguard v2.23.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>

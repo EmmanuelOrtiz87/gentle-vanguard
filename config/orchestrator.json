@@ -195,7 +195,34 @@
       }
     }
   },
-  "subagent_orchestration": {
+    "editing": {
+      "hashline": {
+        "enabled": true,
+        "script": "scripts/editing/hashline.ps1",
+        "storage": ".runtime/hashline-db.json",
+        "hash_algorithm": "SHA-256",
+        "integration": {
+          "lefthook": ".lefthook.yml#post-commit.hashing-snapshot",
+          "pre_compact": "scripts/utilities/pre-compact-hook.ps1"
+        }
+      }
+    },
+    "team_mode": {
+      "enabled": true,
+      "script": "scripts/utilities/WORKFLOW-ORCHESTRATION/team-mode.ps1",
+      "dispatch_integration": "scripts/utilities/WORKFLOW-ORCHESTRATION/dispatch-agent.ps1#-Mode team",
+      "message_bus": "scripts/adaptive/agent-message-bus.ps1",
+      "max_members": 8,
+      "runtime_dir": ".runtime/teams"
+    },
+    "skill_mcp": {
+      "enabled": true,
+      "script": "scripts/utilities/UTILITIES/skill-mcp-manager.ps1",
+      "mcp_config": "config/mcp-servers.json",
+      "skill_format_key": "mcp_servers",
+      "active_mcps_file": ".runtime/skill-mcps/active-skill-mcps.json"
+    },
+    "subagent_orchestration": {
     "token_budget_guard": {
       "enabled": true,
       "unit": "tokens",
@@ -282,6 +309,9 @@
   },
   "norms": {
     "orchestrator": "docs/NORMATIVAS-ORQUESTADOR.md",
+    "hashline": "scripts/editing/hashline.ps1",
+    "team_mode": "scripts/utilities/WORKFLOW-ORCHESTRATION/team-mode.ps1",
+    "skill_mcp": "scripts/utilities/UTILITIES/skill-mcp-manager.ps1",
     "code_review": "rules/CODE-REVIEW-STANDARDS.md",
     "pr_workflow": "rules/PR-WORKFLOW.md",
     "secrets_management": "rules/SECRETS-MANAGEMENT.md",
