@@ -8,8 +8,7 @@ post-commit:
         pwsh -NoProfile -ExecutionPolicy Bypass -File
         "scripts/utilities/codegraph-post-modification-sync.ps1" -Trigger post-commit -Force
     hashline-snapshot:
-      run:
-        pwsh -NoProfile -ExecutionPolicy Bypass -Command "git diff --name-only HEAD~1 HEAD 2>`$null | ForEach-Object { & 'scripts/editing/hashline.ps1' -Action update -Path `$_ -Quiet }"
+      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/editing/hashline-snapshot-hook.ps1"
 
 post-merge:
   commands:
