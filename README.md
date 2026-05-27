@@ -239,6 +239,26 @@ Config references: `docs/AGENTS.md#token-notification-auto-hook-–-every-turn`,
 
 ## Key Capabilities
 
+### System Prompt Optimization 🆕
+
+Automatic token reduction and optimization for all AI tools — reduces system prompt from ~65K to ~2K tokens (98% reduction):
+
+| Feature | Description | Status |
+|---------|-------------|--------|
+| **Semantic Compression** | Abbreviates common terms (implementation→impl, function→fn) | ✅ Active |
+| **Prompt Caching** | SHA-256 based cache for assembled prompts | ✅ Active |
+| **Security Scanning** | Detects secrets, XSS, injection attempts | ✅ Active |
+| **Versioning** | Git-like versioning for prompt changes | ✅ Active |
+| **Multi-Tool Support** | Works with all 8 supported AI tools | ✅ Configured |
+
+**Supported Tools:** OpenCode, Claude, Cline, Cursor, Windsurf, Continue.dev, Copilot, Antigravity
+
+**Results:** 98% token reduction (65,697 → ~1,249 tokens)
+
+See: [`docs/SYSTEM-PROMPT-OPTIMIZATION.md`](docs/SYSTEM-PROMPT-OPTIMIZATION.md)
+
+---
+
 ### SDD / OpenSpec Lifecycle
 
 Spec-Driven Development enforces a 4-phase lifecycle for ambiguous, architectural, or cross-cutting

@@ -1,0 +1,23 @@
+{
+  "hooks": {
+    "preToolUse": [
+      {
+        "name": "json-validate",
+        "trigger": "ToolCall",
+        "command": "pwsh",
+        "args": [
+          "-NoProfile",
+          "-File",
+          "C:/Workspace_local/gentle-vanguard/hooks/pre-tool-call-validate.ps1",
+          "-ToolName",
+          "{{tool}}",
+          "-JsonPayload",
+          "{{args}}",
+          "-AutoFix"
+        ],
+        "blocking": true,
+        "onFailure": "warn"
+      }
+    ]
+  }
+}

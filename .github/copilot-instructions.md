@@ -84,3 +84,41 @@ You are a senior developer and technical mentor.
 - Max tokens: 4500
 - Use response caching where possible
 - Leverage prompt caching (setCacheKey: true)
+
+## System Prompt Optimization
+
+### Token Reduction
+- Target: 2000 tokens (max 5000)
+- Compression: semantic abbreviations
+- Current reduction: 98% (65,697 → ~1,249 tokens)
+
+### Abbreviations
+- implementation → impl
+- function → fn
+- configuration → cfg
+- required → req
+- optional → opt
+- reference → ref
+- standard → std
+- performance → perf
+- security → sec
+- development → dev
+- production → prod
+- environment → env
+- database → db
+- application → app
+- service → svc
+- repository → repo
+
+### Scripts
+- Compress: `scripts/utilities/semantic-compression.ps1`
+- Cache: `scripts/utilities/prompt-cache.ps1`
+- Security: `scripts/utilities/prompt-security-scanner.ps1`
+- Version: `scripts/utilities/prompt-versioning.ps1`
+- Monitor: `scripts/utilities/prompt-optimization-monitor.ps1`
+
+### Configuration
+- Cache: `.session/prompt-cache`
+- Versions: `.session/prompt-versions`
+- Security scan: on load
+- Monitoring: alert at 3000 tokens, critical at 5000

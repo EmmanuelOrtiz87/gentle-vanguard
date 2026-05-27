@@ -1,0 +1,225 @@
+name: Dashboard CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'scripts/metrics/**'
+      - 'reports/**'
+      - '.runtime/metrics/**'
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run daily at 6 AM UTC
+    - cron: '0 6 * * *'
+
+env:
+  POWERSHELL_TELEMETRY_OPTOUT: 1
+
+jobs:
+  validate:
+    name: Validate Dashboard
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup PowerShell
+      uses: actions/setup-powershell@v1
+      
+    - name: Run Dashboard Validator
+      id: validator
+      shell: pwsh
+      run: |
+        $result = & "scripts/tests/dashboard-validator.ps1" -CI
+        exit $LASTEXITCODE
+      continue-on-error: true
+      
+    - name: Upload validation results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: validation-results
+        path: |
+          reports/dashboard.html
+          .runtime/metrics/*.json
+        retention-days: 7
+        
+    - name: Comment PR with results
+      if: github.event_name == 'pull_request' && always()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const validator = '${{ steps.validator.outcome }}';
+          const emoji = validator === 'success' ? '✅' : '❌';
+          const message = `${emoji} Dashboard Validation: ${validator.toUpperCase()}`;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: message
+          });
+
+  test-metrics:
+    name: Test Metrics Pipeline
+    runs-on: windows-latest
+    needs: validate
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Test Collector
+      shell: pwsh
+      run: |
+        & "scripts/metrics/collector.ps1" -Scope full -Quiet
+        if (-not (Test-Path ".runtime/metrics/consolidated.json")) {
+          throw "consolidated.json not generated"
+        }
+        
+    - name: Test Log Analyzer
+      shell: pwsh
+      run: |
+        & "scripts/metrics/log-analyzer.ps1" -DaysBack 7 -SaveToMetrics -Quiet
+        if (-not (Test-Path ".runtime/metrics/performance-analytics.json")) {
+          throw "performance-analytics.json not generated"
+        }
+        
+    - name: Test Dashboard Render
+      shell: pwsh
+      run: |
+        & "scripts/metrics/dashboard-render.ps1" -Quiet
+        if (-not (Test-Path "reports/dashboard.html")) {
+          throw "dashboard.html not generated"
+        }
+        $size = (Get-Item "reports/dashboard.html").Length
+        if ($size -lt 1000) {
+          throw "dashboard.html is too small: $size bytes"
+        }
+
+  check-compliance:
+    name: Compliance Checks
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Check no metrics in git
+      shell: pwsh
+      run: |
+        $metricsInGit = git ls-files .runtime/metrics/ 2>$null
+        if ($metricsInGit) {
+          throw "Metrics files should not be tracked in git: $metricsInGit"
+        }
+        
+    - name: Check no dashboard in staged
+      shell: pwsh
+      run: |
+        $staged = git diff --cached --name-only 2>$null
+        if ($staged -match "reports/dashboard\.html") {
+          throw "dashboard.html should not be staged"
+        }
+        
+    - name: Validate JSON syntax
+      shell: pwsh
+      run: |
+        $jsonFiles = Get-ChildItem -Path ".runtime/metrics" -Filter "*.json" -ErrorAction SilentlyContinue
+        $invalid = 0
+        foreach ($file in $jsonFiles) {
+          try {
+            $null = Get-Content $file.FullName -Raw | ConvertFrom-Json
+          } catch {
+            Write-Host "Invalid JSON: $($file.Name)" -ForegroundColor Red
+            $invalid++
+          }
+        }
+        if ($invalid -gt 0) {
+          throw "$invalid invalid JSON files found"
+        }
+
+  security-scan:
+    name: Security Scan
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Check for secrets in dashboard
+      shell: pwsh
+      run: |
+        $html = Get-Content "reports/dashboard.html" -Raw -ErrorAction SilentlyContinue
+        if ($html) {
+          # Check for potential secrets
+          $patterns = @(
+            'api[_-]?key\s*[=:]\s*["\'][^"\']+["\']',
+            'password\s*[=:]\s*["\'][^"\']+["\']',
+            'token\s*[=:]\s*["\'][^"\']{20,}["\']',
+            'ghp_[a-zA-Z0-9]{36}',
+            'sk-[a-zA-Z0-9]{48}'
+          )
+          $found = $false
+          foreach ($pattern in $patterns) {
+            if ($html -match $pattern) {
+              Write-Host "Potential secret found: $pattern" -ForegroundColor Red
+              $found = $true
+            }
+          }
+          if ($found) {
+            throw "Potential secrets found in dashboard.html"
+          }
+        }
+
+  deploy:
+    name: Deploy Dashboard
+    runs-on: windows-latest
+    needs: [validate, test-metrics, check-compliance]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Generate Dashboard
+      shell: pwsh
+      run: |
+        & "scripts/metrics/collector.ps1" -Scope full -Quiet
+        & "scripts/metrics/log-analyzer.ps1" -DaysBack 30 -SaveToMetrics -Quiet
+        & "scripts/metrics/dashboard-render.ps1" -Quiet
+        
+    - name: Upload to GitHub Pages
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: reports/
+        
+    - name: Deploy to GitHub Pages
+      uses: actions/deploy-pages@v4
+      id: deployment
+      
+    - name: Notify deployment
+      shell: pwsh
+      run: |
+        Write-Host "Dashboard deployed to: ${{ steps.deployment.outputs.page_url }}" -ForegroundColor Green
+
+  notify:
+    name: Notify Results
+    runs-on: windows-latest
+    needs: [validate, test-metrics, check-compliance, security-scan]
+    if: always()
+    
+    steps:
+    - name: Notify on failure
+      if: failure()
+      shell: pwsh
+      run: |
+        Write-Host "::error::Dashboard CI/CD failed! Check logs for details."
+        exit 1
+        
+    - name: Summary
+      if: success()
+      shell: pwsh
+      run: |
+        Write-Host "::notice::Dashboard CI/CD completed successfully! ✅"
