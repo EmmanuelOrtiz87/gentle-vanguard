@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gentle-Vanguard Dashboard v2</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="gv-header">
+        <h1 class="gv-header__title" data-i18n="title">Gentle-Vanguard Dashboard</h1>
+        <p class="gv-header__subtitle"><span data-i18n="subtitle">Real-time metrics</span> · <span id="lastUpdate">--</span></p>
+    </header>
+
+    <nav class="gv-nav" id="mainNav">
+        <button class="gv-nav__btn active" data-section="exec" data-i18n="nav.executive">Executive</button>
+        <button class="gv-nav__btn" data-section="ops" data-i18n="nav.operations">Operations</button>
+        <button class="gv-nav__btn" data-section="dev" data-i18n="nav.development">Development</button>
+        <button class="gv-nav__btn" data-section="cost" data-i18n="nav.cost">Cost</button>
+        <button class="gv-nav__btn" data-section="gov" data-i18n="nav.governance">Governance</button>
+        <button class="gv-nav__btn" data-section="health" data-i18n="nav.health">Health</button>
+        <button class="gv-nav__btn" data-section="live" data-i18n="nav.live">Live</button>
+        <button class="gv-nav__btn" data-section="sla" data-i18n="nav.sla">SLA</button>
+        <button class="gv-nav__btn" data-section="perf" data-i18n="nav.performance">Performance</button>
+        <div class="gv-lang-selector">
+            <select id="langSelect" onchange="app.changeLang(this.value)">
+                <option value="en" selected>EN</option>
+                <option value="es">ES</option>
+                <option value="pt">PT</option>
+            </select>
+        </div>
+        <button class="gv-nav__btn gv-nav__btn--tv" onclick="app.toggleTV()" data-i18n="nav.tv">TV</button>
+    </nav>
+
+    <button class="tv-exit" onclick="app.toggleTV()">Exit TV</button>
+
+    <section class="gv-section active" id="exec">
+        <h2 class="gv-section__title" data-i18n="sections.executive">Executive Overview</h2>
+        <div class="gv-grid gv-grid--4" id="exec-grid"></div>
+        <div class="gv-grid gv-grid--2">
+            <div class="gv-chart">
+                <h3 class="gv-chart__title" data-i18n="chartTitles.tokenTrend">Token Usage Trend</h3>
+                <canvas class="gv-chart__canvas" id="chart-token"></canvas>
+            </div>
+            <div class="gv-chart">
+                <h3 class="gv-chart__title" data-i18n="chartTitles.costBreakdown">Cost Breakdown</h3>
+                <canvas class="gv-chart__canvas" id="chart-cost"></canvas>
+            </div>
+        </div>
+        <div class="gv-refs-panel" id="exec-refs"></div>
+    </section>
+
+    <section class="gv-section" id="ops">
+        <h2 class="gv-section__title" data-i18n="sections.operations">Operations</h2>
+        <div class="gv-grid gv-grid--3" id="ops-grid"></div>
+        <div class="gv-chart">
+            <h3 class="gv-chart__title" data-i18n="chartTitles.sessionActivity">Session Activity</h3>
+            <canvas class="gv-chart__canvas" id="chart-sessions"></canvas>
+        </div>
+    </section>
+
+    <section class="gv-section" id="dev">
+        <h2 class="gv-section__title" data-i18n="sections.development">Development</h2>
+        <div class="gv-grid gv-grid--4" id="dev-grid"></div>
+        <div class="gv-chart">
+            <h3 class="gv-chart__title" data-i18n="chartTitles.commitsTimeline">Commits Timeline</h3>
+            <canvas class="gv-chart__canvas" id="chart-commits"></canvas>
+        </div>
+    </section>
+
+    <section class="gv-section" id="cost">
+        <h2 class="gv-section__title" data-i18n="sections.cost">Cost & ROI</h2>
+        <div class="gv-grid gv-grid--4" id="cost-grid"></div>
+        <div class="gv-chart">
+            <h3 class="gv-chart__title" data-i18n="chartTitles.savingsAnalysis">Savings Analysis</h3>
+            <canvas class="gv-chart__canvas" id="chart-savings"></canvas>
+        </div>
+    </section>
+
+    <section class="gv-section" id="gov">
+        <h2 class="gv-section__title" data-i18n="sections.governance">Governance</h2>
+        <div class="gv-grid gv-grid--3" id="gov-grid"></div>
+    </section>
+
+    <section class="gv-section" id="health">
+        <h2 class="gv-section__title" data-i18n="sections.health">Health</h2>
+        <div class="gv-grid gv-grid--3" id="health-grid"></div>
+    </section>
+
+    <section class="gv-section" id="live">
+        <h2 class="gv-section__title" data-i18n="sections.live">Live Feed</h2>
+        <div class="gv-grid gv-grid--3" id="live-grid"></div>
+    </section>
+
+    <section class="gv-section" id="sla">
+        <h2 class="gv-section__title" data-i18n="sections.sla">SLA</h2>
+        <div class="gv-grid gv-grid--4" id="sla-grid"></div>
+    </section>
+
+    <section class="gv-section" id="perf">
+        <h2 class="gv-section__title" data-i18n="sections.performance">Performance</h2>
+        <div class="gv-grid gv-grid--4" id="perf-grid"></div>
+    </section>
+
+    <script src="i18n.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
