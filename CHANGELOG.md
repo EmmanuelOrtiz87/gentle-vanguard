@@ -9,29 +9,92 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [2.23.0] - 2026-05-26 - oh-my-openagent Capabilities Integration
+
+### Added
+
+- **Hashline** (`scripts/editing/hashline.ps1`): SHA-256 per-line integrity system with 5 actions
+  (init, verify, update, status, prune). Tracks 411 files, 83,214 hashes across 15+ extensions.
+  Skips node_modules/.git/dist automatically
+- **Team Mode** (`scripts/utilities/WORKFLOW-ORCHESTRATION/team-mode.ps1`): Leader-follower
+  orchestration with up to 8 members. 7 actions (start, assign, broadcast, report, collect, status,
+  stop). Mailbox-based per-agent communication. Full cycle tested end-to-end
+- **Skill MCP Manager** (`scripts/utilities/UTILITIES/skill-mcp-manager.ps1`): On-demand Model
+  Context Protocol server lifecycle. 6 actions (start, stop, list, status, register, deregister).
+  Parses `mcp_servers` from SKILL.md YAML frontmatter. Cycle tested:
+  register→start→list→stop→deregister
+- **Dispatch -Mode team**: Extended `dispatch-agent.ps1` with `-Mode team` flag for leader-follower
+  dispatch using runspace pools
+- **Lefthook integration**: Post-commit `hashline-snapshot` via `git diff HEAD~1..HEAD` in
+  `.lefthook.yml`
+- **Pre-compact hook**: `Invoke-HashlineSnapshot` in `scripts/utilities/pre-compact-hook.ps1`
+- **Orchestrator config**: 3 new sections in `config/orchestrator.json` — `editing.hashline`,
+  `team_mode`, `skill_mcp` — plus corresponding norms
+
+### Fixed
+
+- **PowerShell `return @()` unwrapping**: `return @()` from a function produces `$null` because the
+  output stream enumerates the empty array into nothing. Fixed by assigning `[object[]]::new(0)`
+  directly instead of returning `@()`
+- **PowerShell `return @(single)` unwrapping**: Returning `@(one_element)` from a function unwraps
+  the array and returns the element directly. Fixed with the unary comma trick: `return , $result`
+- **`"string" -is [PSObject]` = `$true`**: Strings expose `.Length`, `.Chars`, etc. via PSObject.
+  `Convert-PSObjectToHashtable` was converting "QA" to `@{Length=2}`. Fixed by checking
+  `[string]`/`[valueType]` before `[PSObject]`
+- **`try/catch` in hashtable literal**: `@{ key = try { } catch { } }` is invalid PowerShell syntax.
+  Fixed by pre-computing values into separate variables
+- **PSObject mutation restrictions**: `ConvertFrom-Json` returns PSObject which doesn't support
+  `$obj['key'] = value` or `.Remove()`. Fixed with recursive `Convert-PSObjectToHashtable` helper
+- **`CreateRunspacePool(1, 0)` crash**: When `$lane.agents.Count` or `$lane.followers.Count` is 0,
+  the pool max size becomes 0 which throws "maximum pool size cannot be less than 1". Fixed with
+  `[Math]::Max(1, ...)` guard
+- **Path resolution off-by-one**: `$repoRoot` in team-mode.ps1 was `..\..` from
+  `WORKFLOW-ORCHESTRATION/` resolving to `scripts/` instead of repo root. Fixed to `..\..\..`
+
+### Documentation
+
+- `README.md`: Bumped v2.22.0 → v2.23.0, added Hashline/Team Mode/Skill MCPs sections, updated
+  Project Status table, Architecture Layer 3
+
 ## [2.22.0] - 2026-05-25 - Token Notification Auto-Hook & Bugfixes
 
 ### Added
 
-- **Token Notification Auto-Hook**: Automatic token consumption display every turn via `pre-process-input.ps1` hook — no agent intervention required
-- **`/notif` command system**: Master toggle (`on/off`), individual toggles per type (`token`, `context`, `cost`, `accumulated`, `compact`), status display, all persistent across sessions via `.session/token-display-config.json`
+- **Token Notification Auto-Hook**: Automatic token consumption display every turn via
+  `pre-process-input.ps1` hook — no agent intervention required
+- **`/notif` command system**: Master toggle (`on/off`), individual toggles per type (`token`,
+  `context`, `cost`, `accumulated`, `compact`), status display, all persistent across sessions via
+  `.session/token-display-config.json`
 - **Compact mode**: Toggle between compact box display and verbose format with `/notif compact`
-- **Cost estimation per model**: `Get-EstimatedCost` reads real per-1K rates from `config/provider-costs.json`, falls back to $3/$15 per M tokens
-- **README documentation**: Full Token Notification Auto-Hook section with command table, architecture diagram, and component reference
+- **Cost estimation per model**: `Get-EstimatedCost` reads real per-1K rates from
+  `config/provider-costs.json`, falls back to $3/$15 per M tokens
+- **README documentation**: Full Token Notification Auto-Hook section with command table,
+  architecture diagram, and component reference
 
 ### Fixed
 
-- **Compact toggle**: `-Enable/-Disable -Type compact` and `toggle -Type compact` now correctly modify `$config.compactMode` instead of silently falling through `Update-IndividualToggle` (which lacked a "compact" case)
-- **Master toggle missing compactMode**: `/notif on`/`/notif toggle` now also sets `$config.compactMode`, not just individualToggles
-- **Banner literal-text bug**: Replaced backtick-escaped expression with proper `$padding = " " * (41 - $label.Length)` — no more raw `$((35-...))` displayed
-- **Double-toggle bug**: Removed redundant `& $tokenNotifier -Action toggle` from `toggle-token-display.ps1` — the notifier's `Toggle-Display` was re-toggling `$config.enabled` after `Save-Config`, undoing the intended change
-- **Notifier leaked boolean**: Removed `return $config.enabled` from `Toggle-Display` which leaked `True`/`False` to stdout
-- **Notifier banner alignment**: Replaced if/else ENABLED/DISABLED padding with proper `$padding` calculation
-- **Bulk path fix**: 40+ scripts had fragile `Join-Path $root 'config'` path-detection pattern — changed to `config\orchestrator.json` to prevent false detection of `scripts/utilities/CONFIG/` as project root
+- **Compact toggle**: `-Enable/-Disable -Type compact` and `toggle -Type compact` now correctly
+  modify `$config.compactMode` instead of silently falling through `Update-IndividualToggle` (which
+  lacked a "compact" case)
+- **Master toggle missing compactMode**: `/notif on`/`/notif toggle` now also sets
+  `$config.compactMode`, not just individualToggles
+- **Banner literal-text bug**: Replaced backtick-escaped expression with proper
+  `$padding = " " * (41 - $label.Length)` — no more raw `$((35-...))` displayed
+- **Double-toggle bug**: Removed redundant `& $tokenNotifier -Action toggle` from
+  `toggle-token-display.ps1` — the notifier's `Toggle-Display` was re-toggling `$config.enabled`
+  after `Save-Config`, undoing the intended change
+- **Notifier leaked boolean**: Removed `return $config.enabled` from `Toggle-Display` which leaked
+  `True`/`False` to stdout
+- **Notifier banner alignment**: Replaced if/else ENABLED/DISABLED padding with proper `$padding`
+  calculation
+- **Bulk path fix**: 40+ scripts had fragile `Join-Path $root 'config'` path-detection pattern —
+  changed to `config\orchestrator.json` to prevent false detection of `scripts/utilities/CONFIG/` as
+  project root
 
 ### Documentation
 
-- `README.md`: Added Token Notification Auto-Hook section, bumped v2.21.0 → v2.22.0, updated Project Status and Context Optimization tables
+- `README.md`: Added Token Notification Auto-Hook section, bumped v2.21.0 → v2.22.0, updated Project
+  Status and Context Optimization tables
 - `docs/AGENTS.md`: Full command table with `/notif compact on/off`, architecture description
 - `CLAUDE.md`: Rule #6 updated with all individual toggle commands
 

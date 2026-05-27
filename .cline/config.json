@@ -31,11 +31,23 @@
     "technicalTerms": "en"
   },
   "governanceLayers": {
-    "GOV": ["project-orchestrator-skill"],
-    "DEV": ["sdd-lifecycle"],
-    "QA": ["sdd-lifecycle"],
-    "OPS": ["docker-devops-skill"],
-    "DOC": ["documentation-governance"],
-    "SESSION": ["session-workflow-skill"]
+    "GOV": [
+      "project-orchestrator-skill"
+    ],
+    "DEV": [
+      "sdd-lifecycle"
+    ],
+    "QA": [
+      "sdd-lifecycle"
+    ],
+    "OPS": [
+      "docker-devops-skill"
+    ],
+    "DOC": [
+      "documentation-governance"
+    ],
+    "SESSION": [
+      "session-workflow-skill"
+    ]
   }
 }
