@@ -155,6 +155,16 @@ function Invoke-NudgeGeneration {
 
         # Condition 1: failures in current session
         if ($sf.hasFailures -and $m.failureCount -gt 0) {
+            # Guard: skip if SKILL.md already has Known Issues / Failure Patterns section
+            $skillMdPath = Join-Path $repoRoot "skills" "$name" "SKILL.md"
+            $altPath = Join-Path $repoRoot "skills" "$name" "skill.md"
+            $hasSection = $false
+            if (Test-Path $skillMdPath) { $hasSection = (Get-Content $skillMdPath -Raw) -match "## Known Issues|## Failure Patterns" }
+            elseif (Test-Path $altPath) { $hasSection = (Get-Content $altPath -Raw) -match "## Known Issues|## Failure Patterns" }
+            if ($hasSection) {
+                Write-Host "[NUDGE] Skip $name — Known Issues section already exists" -ForegroundColor Gray
+                continue
+            }
             $evidence = "$($m.failureCount) total failures (historical), $($sf.failures) in current session"
             $fixPattern = switch ($m.failurePatterns[0].errorType) {
                 "timeout" { "Add timeout configuration and retry logic" }
