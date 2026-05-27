@@ -154,11 +154,12 @@ const charts = {
   }
 };
 
-// UI Components - Simplified
+// UI Components - With simple title tooltips
 const ui = {
-  // Simple card without complex tooltip system
-  card(label, value, meta, type = '') {
-    return `<div class="gv-card"><div class="gv-card__label">${label}</div><div class="gv-card__value ${type ? 'gv-card__value--' + type : ''}">${value}</div><div class="gv-card__meta">${meta}</div></div>`;
+  // Card with simple HTML title tooltip
+  card(label, value, meta, type = '', tooltip = '') {
+    const titleAttr = tooltip ? `title="${tooltip}"` : '';
+    return `<div class="gv-card" ${titleAttr}><div class="gv-card__label">${label}</div><div class="gv-card__value ${type ? 'gv-card__value--' + type : ''}">${value}</div><div class="gv-card__meta">${meta}</div></div>`;
   },
   
   renderSection(id, cards) {
@@ -375,67 +376,67 @@ const app = {
     
     // Executive
     ui.renderSection('exec', [
-      ui.card(t('cards.trafficLight'), `<span style="color:${statusColor}">${data.health.status}</span>`, t('meta.executiveStatus')),
-      ui.card(t('cards.tokenStatus'), data.tokens.pct < 50 ? 'PASS' : 'WARNING', t('meta.budgetGuard'), data.tokens.pct < 50 ? 'success' : 'warning'),
-      ui.card(t('cards.budgetUsed'), data.tokens.pct + '%', `${data.tokens.used.toLocaleString()} / ${data.tokens.limit.toLocaleString()} ${t('meta.tokens')}`),
-      ui.card(t('cards.estCost'), '$' + data.tokens.cost.toFixed(4), t('meta.per1M')),
-      ui.card(t('cards.forecast'), '$' + data.tokens.forecast.toFixed(2), t('meta.projected')),
-      ui.card(t('cards.savings'), '$' + data.tokens.savings.toFixed(4), t('meta.vsBaseline'), 'success'),
-      ui.card(t('cards.sessions'), data.sessions.total.toString(), `${data.sessions.active} ${t('meta.active')} · ${data.sessions.today} ${t('cards.today')}`),
-      ui.card(t('cards.routing'), data.health.routing, t('meta.dispatches'), 'success')
+      ui.card(t('cards.trafficLight'), `<span style="color:${statusColor}">${data.health.status}</span>`, t('meta.executiveStatus'), '', 'Overall system health status. GREEN=Healthy, YELLOW=Attention, RED=Critical'),
+      ui.card(t('cards.tokenStatus'), data.tokens.pct < 50 ? 'PASS' : 'WARNING', t('meta.budgetGuard'), data.tokens.pct < 50 ? 'success' : 'warning', 'Budget compliance check. PASS=Within limits, WARNING=Approaching limit'),
+      ui.card(t('cards.budgetUsed'), data.tokens.pct + '%', `${data.tokens.used.toLocaleString()} / ${data.tokens.limit.toLocaleString()} ${t('meta.tokens')}`, '', 'Percentage of daily token budget consumed. Unit: % of 120K limit'),
+      ui.card(t('cards.estCost'), '$' + data.tokens.cost.toFixed(4), t('meta.per1M'), '', 'Current cost in USD. Rate: $10 per 1M tokens'),
+      ui.card(t('cards.forecast'), '$' + data.tokens.forecast.toFixed(2), t('meta.projected'), '', 'Projected month-end cost based on current usage trend'),
+      ui.card(t('cards.savings'), '$' + data.tokens.savings.toFixed(4), t('meta.vsBaseline'), 'success', 'Cost savings achieved through optimization vs baseline'),
+      ui.card(t('cards.sessions'), data.sessions.total.toString(), `${data.sessions.active} ${t('meta.active')} · ${data.sessions.today} ${t('cards.today')}`, '', 'Total sessions: active now and started today'),
+      ui.card(t('cards.routing'), data.health.routing, t('meta.dispatches'), 'success', 'Task routing accuracy percentage. Target: >95%')
     ]);
     
     // Operations
     ui.renderSection('ops', [
-      ui.card(t('cards.totalSessions'), data.sessions.total.toString(), t('meta.sinceInception')),
-      ui.card(t('cards.activeNow'), data.sessions.active.toString(), t('meta.currentOpen'), 'success'),
-      ui.card(t('cards.today'), data.sessions.today.toString(), t('meta.started')),
-      ui.card(t('cards.avgDuration'), data.sessions.avgDuration, t('meta.perSession')),
-      ui.card(t('cards.totalTime'), '38597 min', t('meta.allTime')),
-      ui.card(t('cards.latest'), 'session-' + new Date().toISOString().slice(0,10), t('meta.active'))
+      ui.card(t('cards.totalSessions'), data.sessions.total.toString(), t('meta.sinceInception'), '', 'Total sessions since system inception'),
+      ui.card(t('cards.activeNow'), data.sessions.active.toString(), t('meta.currentOpen'), 'success', 'Currently open and active sessions'),
+      ui.card(t('cards.today'), data.sessions.today.toString(), t('meta.started'), '', 'Sessions started today'),
+      ui.card(t('cards.avgDuration'), data.sessions.avgDuration, t('meta.perSession'), '', 'Average session duration in hours'),
+      ui.card(t('cards.totalTime'), '38597 min', t('meta.allTime'), '', 'Cumulative time across all sessions'),
+      ui.card(t('cards.latest'), 'session-' + new Date().toISOString().slice(0,10), t('meta.active'), '', 'Most recent active session')
     ]);
     
     // Development
     ui.renderSection('dev', [
-      ui.card(t('cards.totalCommits'), data.git.commits.toLocaleString(), t('meta.allTime')),
-      ui.card(t('cards.thisMonth'), data.git.month.toLocaleString(), t('meta.sinceInception'), 'success'),
-      ui.card(t('cards.thisWeek'), data.git.week.toString(), 'commits'),
-      ui.card(t('cards.today'), data.git.today.toString(), 'commits'),
-      ui.card(t('cards.prsMerged'), data.git.prsMerged.toString(), `of ${data.git.prsTotal} total`, 'success'),
-      ui.card(t('cards.contributors'), data.git.contributors.toString(), t('meta.uniqueAuthors')),
-      ui.card(t('cards.linesAdded'), '+18805', t('meta.last30Commits'), 'success'),
-      ui.card(t('cards.linesRemoved'), '-21112', t('meta.last30Commits'), 'error')
+      ui.card(t('cards.totalCommits'), data.git.commits.toLocaleString(), t('meta.allTime'), '', 'Total code commits in repository history'),
+      ui.card(t('cards.thisMonth'), data.git.month.toLocaleString(), t('meta.sinceInception'), 'success', 'Commits this month since May 1'),
+      ui.card(t('cards.thisWeek'), data.git.week.toString(), 'commits', '', 'Commits made this week'),
+      ui.card(t('cards.today'), data.git.today.toString(), 'commits', '', 'Commits made today'),
+      ui.card(t('cards.prsMerged'), data.git.prsMerged.toString(), `of ${data.git.prsTotal} total`, 'success', 'Pull requests merged vs total created'),
+      ui.card(t('cards.contributors'), data.git.contributors.toString(), t('meta.uniqueAuthors'), '', 'Unique developers contributing to project'),
+      ui.card(t('cards.linesAdded'), '+18805', t('meta.last30Commits'), 'success', 'Lines of code added in last 30 commits'),
+      ui.card(t('cards.linesRemoved'), '-21112', t('meta.last30Commits'), 'error', 'Lines of code removed in last 30 commits')
     ]);
     
     // Cost
     ui.renderSection('cost', [
-      ui.card(t('cards.actualCost'), '$' + data.tokens.cost.toFixed(4), `${data.tokens.used.toLocaleString()} ${t('meta.tokens')} @ $10/1M`),
-      ui.card(t('cards.forecast'), '$' + data.tokens.forecast.toFixed(2), t('meta.projected')),
-      ui.card(t('cards.dailyBudget'), data.tokens.limit.toLocaleString(), t('meta.dayLimit')),
-      ui.card(t('cards.rate'), '$10', t('meta.per1M')),
-      ui.card(t('cards.baseline'), '12821', t('meta.withoutOpt')),
-      ui.card(t('cards.tokensSaved'), '3663', '28.6% ' + t('meta.reduction'), 'success'),
-      ui.card(t('cards.savings'), '$' + data.tokens.savings.toFixed(4), 'USD ' + t('meta.active'), 'success'),
-      ui.card(t('cards.roiSignal'), data.health.status, t('meta.executiveStatus'), data.health.status === 'GREEN' ? 'success' : 'warning')
+      ui.card(t('cards.actualCost'), '$' + data.tokens.cost.toFixed(4), `${data.tokens.used.toLocaleString()} ${t('meta.tokens')} @ $10/1M`, '', 'Current spending based on token usage'),
+      ui.card(t('cards.forecast'), '$' + data.tokens.forecast.toFixed(2), t('meta.projected'), '', 'Projected month-end cost based on trend'),
+      ui.card(t('cards.dailyBudget'), data.tokens.limit.toLocaleString(), t('meta.dayLimit'), '', 'Maximum tokens allowed per day: 120,000'),
+      ui.card(t('cards.rate'), '$10', t('meta.per1M'), '', 'Pricing: $10 USD per 1 million tokens'),
+      ui.card(t('cards.baseline'), '12821', t('meta.withoutOpt'), '', 'Estimated tokens without optimization'),
+      ui.card(t('cards.tokensSaved'), '3663', '28.6% ' + t('meta.reduction'), 'success', 'Tokens saved through efficiency optimizations'),
+      ui.card(t('cards.savings'), '$' + data.tokens.savings.toFixed(4), 'USD ' + t('meta.active'), 'success', 'Money saved through optimization vs baseline'),
+      ui.card(t('cards.roiSignal'), data.health.status, t('meta.executiveStatus'), data.health.status === 'GREEN' ? 'success' : 'warning', 'Return on investment indicator')
     ]);
     
     // Governance
     ui.renderSection('gov', [
-      ui.card(t('cards.trafficLight'), `<span style="color:${statusColor}">${data.health.status}</span>`, t('meta.executiveStatus')),
-      ui.card(t('cards.tokenGuard'), 'PASS', t('meta.budgetCompliance'), 'success'),
-      ui.card(t('cards.routingAcc'), data.health.routing, t('meta.audited'), 'success'),
-      ui.card(t('cards.benchmark'), data.health.benchmark, t('meta.regressionChecks'), 'success'),
-      ui.card(t('cards.status'), 'PASS', t('meta.overallGuard'), 'success')
+      ui.card(t('cards.trafficLight'), `<span style="color:${statusColor}">${data.health.status}</span>`, t('meta.executiveStatus'), '', 'Governance compliance status'),
+      ui.card(t('cards.tokenGuard'), 'PASS', t('meta.budgetCompliance'), 'success', 'Token budget compliance check'),
+      ui.card(t('cards.routingAcc'), data.health.routing, t('meta.audited'), 'success', 'Task routing accuracy from audit logs'),
+      ui.card(t('cards.benchmark'), data.health.benchmark, t('meta.regressionChecks'), 'success', 'Performance benchmark test results'),
+      ui.card(t('cards.status'), 'PASS', t('meta.overallGuard'), 'success', 'Overall governance guard status')
     ]);
     
     // Health
     ui.renderSection('health', [
-      ui.card(t('cards.status'), `<span style="color:${statusColor}">HEALTHY</span>`, t('meta.allSystems')),
-      ui.card(t('cards.sessions'), data.sessions.active.toString(), t('meta.currentlyRunning')),
-      ui.card(t('cards.benchmark'), data.health.benchmark, t('meta.passTotal'), 'success'),
-      ui.card(t('cards.routing'), data.health.routing, t('meta.dispatchAccuracy'), 'success'),
-      ui.card('Top Author', 'EmmanuelOrtiz87', '1382 commits'),
-      ui.card(t('cards.dataSource'), '.runtime/metrics/', t('meta.localStore'))
+      ui.card(t('cards.status'), `<span style="color:${statusColor}">HEALTHY</span>`, t('meta.allSystems'), '', 'Overall system health status'),
+      ui.card(t('cards.sessions'), data.sessions.active.toString(), t('meta.currentlyRunning'), '', 'Currently running active sessions'),
+      ui.card(t('cards.benchmark'), data.health.benchmark, t('meta.passTotal'), 'success', 'Health benchmark pass rate'),
+      ui.card(t('cards.routing'), data.health.routing, t('meta.dispatchAccuracy'), 'success', 'System routing accuracy percentage'),
+      ui.card('Top Author', 'EmmanuelOrtiz87', '1382 commits', '', 'Developer with most commits'),
+      ui.card(t('cards.dataSource'), '.runtime/metrics/', t('meta.localStore'), '', 'Local metrics storage path')
     ]);
     
     // Live
