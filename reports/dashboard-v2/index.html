@@ -104,7 +104,19 @@
         <div class="gv-grid gv-grid--4" id="perf-grid"></div>
     </section>
 
+    <!-- Modal for metric details -->
+    <div id="gv-modal" class="gv-modal">
+        <div class="gv-modal__overlay"></div>
+        <div class="gv-modal__content">
+            <button class="gv-modal__close" onclick="app.closeModal()">&times;</button>
+            <h3 class="gv-modal__title" id="gv-modal-title"></h3>
+            <div class="gv-modal__body" id="gv-modal-body"></div>
+        </div>
+    </div>
+
+    <script src="node_modules/html2canvas/dist/html2canvas.min.js"></script>
     <script src="i18n.js"></script>
+    <script src="metric-info.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
