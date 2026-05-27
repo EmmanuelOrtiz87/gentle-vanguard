@@ -20,7 +20,7 @@
     ".windsurf",
     ".github"
   ],
-  "allowedRootFiles": ["README.md", "config/mcp-servers.json"],
+  "allowedRootFiles": ["README.md"],
   "allowedRootMarkdownFiles": [
     "CLAUDE.md",
     "SECURITY.md",

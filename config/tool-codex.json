@@ -5,8 +5,7 @@
   "preProcess": {
     "loadSkills": false,
     "skillTool": "none",
-    "autoLoad": false,
-    "mcpBridge": false
+    "autoLoad": false
   },
   "capabilities": ["function_calling", "code_completion"],
   "configFiles": [".codex/config.toml", ".codex/config.json", "AGENTS.md"],

@@ -1,8 +1,8 @@
 ---
 name: semantic-skill-matcher
 description: >
-  Semantic skill matching using embeddings and Context7 for intelligent routing. Trigger: "semantic
-  match", "find skill", "skill routing", "embeddings", "Context7".
+  Semantic skill matching using embeddings for intelligent routing. Trigger: "semantic
+  match", "find skill", "skill routing", "embeddings".
 ---
 
 ## When to Use
@@ -73,13 +73,7 @@ description: >
 - Sort by relevance score (0.0 to 1.0)
 - Return top 3 matches with reasons
 
-### Step3: Context7 Enhancement (Optional)
-
-- If Context7 available, use `context7_resolve-library-id` for tech stack
-- Use `context7_query-docs` for additional context
-- Boost scores for skills matching Context7 results
-
-### Step4: User Override Learning
+### Step3: User Override Learning
 
 - If user overrides selection ("use X instead"), record preference
 - Store in `config/semantic-overrides.json`

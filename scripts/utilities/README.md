@@ -238,7 +238,6 @@ General utilities and general-purpose tools.
 - `help.ps1` - Help
 - `manage-backlog.ps1` - Manage backlog
 - `manual-recovery.ps1` - Manual recovery
-- `mcp-monitor.ps1` - MCP monitor
 - `read-once-guard.ps1` - Read-once guard
 - `response-mode.ps1` - Response mode
 - `rotate-artifacts.ps1` - Rotate artifacts

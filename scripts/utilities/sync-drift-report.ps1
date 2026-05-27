@@ -4,9 +4,7 @@
 #
 # Checks performed:
 #   1. Skills declared in config/auto-delegation.json vs skills/ directories
-#   2. MCP servers declared in config/mcp-servers.json vs actual connectivity
-#      (file presence only - no live TCP checks)
-#   3. Backlog items with resolved_by script ref vs actual file existence
+#   2. Backlog items with resolved_by script ref vs actual file existence
 #
 # Usage:
 #   pwsh -File scripts/utilities/sync-drift-report.ps1
@@ -23,13 +21,11 @@ $repoRoot  = (Resolve-Path (Join-Path $scriptDir '..\..')).Path
 
 # --- Load configs -------------------------------------------------------------
 $autoDelegPath  = Join-Path $repoRoot 'config\auto-delegation.json'
-$mcpConfigPath  = Join-Path $repoRoot 'config\mcp-servers.json'
 $backlogPath    = Join-Path $repoRoot 'docs\backlog\items.json'
 $skillsDir      = Join-Path $repoRoot 'skills'
 
 $missing_skills = @()
 $extra_skills   = @()
-$missing_mcp    = @()
 $broken_refs    = @()
 
 # --- 1. Skill drift -----------------------------------------------------------
@@ -66,46 +62,7 @@ if (Test-Path $autoDelegPath) {
     }
 }
 
-# --- 2. MCP server drift -----------------------------------------------------
-if (Test-Path $mcpConfigPath) {
-    try {
-        $mcpCfg = Get-Content $mcpConfigPath -Raw -Encoding UTF8 | ConvertFrom-Json
-        # Support both top-level array and { mcpServers: {...} } shape
-        $serverNames = @()
-        if ($mcpCfg -is [array]) {
-            $serverNames += @($mcpCfg | ForEach-Object { [string]$_.name } | Where-Object { $_ })
-        } elseif ($mcpCfg.PSObject.Properties['mcpServers']) {
-            $serverNames += @($mcpCfg.mcpServers.PSObject.Properties.Name | Where-Object { $_ })
-        } elseif ($mcpCfg.PSObject.Properties['servers']) {
-            $serverNames += @($mcpCfg.servers | ForEach-Object { [string]$_.name } | Where-Object { $_ })
-        }
-
-        foreach ($srv in $serverNames) {
-            $serverConfig = if ($mcpCfg.PSObject.Properties['mcpServers']) {
-                $mcpCfg.mcpServers.PSObject.Properties[$srv].Value
-            } else {
-                $null
-            }
-            # A server is "present" if there's a matching skill dir, local script,
-            # or an external MCP command/package configured explicitly.
-            $hasSkillDir = Test-Path (Join-Path $skillsDir $srv)
-            $hasScript   = (Get-ChildItem -Path $repoRoot -Recurse -Filter "*$srv*" -File -EA SilentlyContinue | Select-Object -First 1)
-            $hasExternalCommand = $false
-            if ($serverConfig) {
-                $hasCommand = $serverConfig.PSObject.Properties.Name -contains 'command' -and -not [string]::IsNullOrWhiteSpace([string]$serverConfig.command)
-                $hasArgs = $serverConfig.PSObject.Properties.Name -contains 'args' -and $serverConfig.args -and @($serverConfig.args).Count -gt 0
-                $hasExternalCommand = $hasCommand -or $hasArgs
-            }
-            if (-not $hasSkillDir -and -not $hasScript -and -not $hasExternalCommand) {
-                $missing_mcp += $srv
-            }
-        }
-    } catch {
-        Write-Warning "sync-drift: could not parse mcp-servers.json - $_"
-    }
-}
-
-# --- 3. Resolved-by script references ----------------------------------------
+# --- 2. Resolved-by script references ----------------------------------------
 if (Test-Path $backlogPath) {
     try {
         $items = Get-Content $backlogPath -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -140,7 +97,7 @@ if (Test-Path $backlogPath) {
 }
 
 # --- Summary -----------------------------------------------------------------
-$driftScore = $missing_skills.Count + $extra_skills.Count + $missing_mcp.Count + $broken_refs.Count
+$driftScore = $missing_skills.Count + $extra_skills.Count + $broken_refs.Count
 $status = if ($driftScore -eq 0) { 'CLEAN' } elseif ($driftScore -le 5) { 'WARN' } else { 'DRIFT' }
 
 $result = [ordered]@{
@@ -149,7 +106,6 @@ $result = [ordered]@{
     drift_score        = $driftScore
     missing_skills     = $missing_skills
     extra_skills       = $extra_skills
-    missing_mcp        = $missing_mcp
     broken_refs        = @($broken_refs | ForEach-Object { "$($_.item): $($_.ref)" })
 }
 
@@ -178,14 +134,6 @@ if (-not $Quiet) {
         foreach ($s in $extra_skills) { Write-Host "    + $s" -ForegroundColor Cyan }
     } else {
         Write-Host '  Extra skill dirs: none.' -ForegroundColor Green
-    }
-    Write-Host ''
-
-    if ($missing_mcp.Count -gt 0) {
-        Write-Host '  MCP servers without local skill/script:' -ForegroundColor Yellow
-        foreach ($m in $missing_mcp) { Write-Host "    - $m" -ForegroundColor Yellow }
-    } else {
-        Write-Host '  MCP server refs: no unresolved entries.' -ForegroundColor Green
     }
     Write-Host ''
 

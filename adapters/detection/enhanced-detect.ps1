@@ -95,10 +95,6 @@ function Get-AdapterPath {
 function Get-Recommendation {
     param($toolName, $capabilities)
     
-    if ($capabilities -contains 'mcp') {
-        return "Use MCP Bridge at adapters/mcp-bridge"
-    }
-    
     $adapterPath = Get-AdapterPath $toolName
     if ($adapterPath -and (Test-Path $adapterPath)) {
         return "Use format adapter at $adapterPath"
@@ -207,7 +203,6 @@ $adapterPath = Get-AdapterPath $toolName
 $recommendation = Get-Recommendation $toolName $capabilities
 
 # Check adapter availability
-$hasMcpBridge = Test-Path (Join-Path $adaptersDir 'mcp-bridge\package.json')
 $hasFormatAdapter = $adapterPath -and (Test-Path $adapterPath)
 
 # Build result
@@ -225,10 +220,6 @@ $result = [pscustomobject]@{
     supportsSubagents = $capabilities -contains 'subagents'
     recommendation = $recommendation
     adapterStatus = @{
-        mcpBridge = @{
-            available = $hasMcpBridge
-            path = Join-Path $adaptersDir 'mcp-bridge'
-        }
         formatAdapter = @{
             available = $hasFormatAdapter
             path = $adapterPath
@@ -236,9 +227,7 @@ $result = [pscustomobject]@{
     }
     nextSteps = @(
         "1. Check if tool supports MCP (supportsMcp field)",
-        "2. If yes: Configure MCP Bridge (adapters/mcp-bridge/)",
-        "3. If no: Use format adapter (adapters/format-adapters/)",
-        "4. Run: node adapters/mcp-bridge/dist/server.js"
+        "2. Use format adapter (adapters/format-adapters/)"
     )
 }
 
@@ -270,7 +259,6 @@ if (-not $Quiet) {
     Write-Host "Supports Skills: $($result.supportsSkills)" -ForegroundColor $(if ($result.supportsSkills) { 'Green' } else { 'Yellow' })
     Write-Host ""
     Write-Host "=== Adapter Status ===" -ForegroundColor Cyan
-    Write-Host "MCP Bridge: $($result.adapterStatus.mcpBridge.available)" -ForegroundColor $(if ($result.adapterStatus.mcpBridge.available) { 'Green' } else { 'Red' })
     Write-Host "Format Adapter: $($result.adapterStatus.formatAdapter.available)" -ForegroundColor $(if ($result.adapterStatus.formatAdapter.available) { 'Green' } else { 'Red' })
     Write-Host ""
     Write-Host "=== Recommendation ===" -ForegroundColor Yellow

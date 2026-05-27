@@ -5,8 +5,7 @@
   "preProcess": {
     "loadSkills": false,
     "skillTool": "none",
-    "autoLoad": false,
-    "mcpBridge": false
+    "autoLoad": false
   },
   "capabilities": ["mission_control"],
   "configFiles": [".antigravity/config.json"],

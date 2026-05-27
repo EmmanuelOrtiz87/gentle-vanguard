@@ -166,7 +166,6 @@ Ensure critical directories exist:
 ```powershell
 # Core directories
 Test-Path "scripts/utilities/WORKFLOW-ORCHESTRATION" -PathType Container
-Test-Path "config/mcp-servers.json" -PathType Leaf
 Test-Path "docs/guides" -PathType Container
 Test-Path "tests" -PathType Container
 

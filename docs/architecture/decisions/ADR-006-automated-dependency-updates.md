@@ -23,7 +23,7 @@ requires ongoing manual attention. Without automation:
 | Scope      | Package Manager | Dependencies         | Lock File            |
 | ---------- | --------------- | -------------------- | -------------------- |
 | Root       | npm             | devDependencies only | package-lock.json ✅ |
-| mcp-bridge | npm             | runtime + dev        | package-lock.json ✅ |
+| Root       | npm             | devDependencies only | package-lock.json ✅ |
 
 ### Risk Profile
 
@@ -49,7 +49,7 @@ if ($LASTEXITCODE -ne 0) { exit 1 }   # blocks push
 
 - **Trigger**: every `git push` (via lefthook)
 - **Level**: blocks on `moderate` or higher severity
-- **Scope**: root `package.json` + `adapters/mcp-bridge/package.json`
+- **Scope**: root `package.json`
 
 ### Layer 2: Lockfile Integrity (Implemented)
 
@@ -131,7 +131,7 @@ Evaluate and configure Renovate Bot for:
 
 - [x] `npm audit` in pre-push hook (`check-npm-audit.ps1`)
 - [x] `lockfile-lint` in pre-commit (`config/lefthook.yml`)
-- [x] `npm ci` in CI/CD (`test-suite.yml` mcp-bridge step)
+- [x] `npm ci` in CI/CD
 - [ ] Quarterly review calendar event (team calendar — manual action)
 - [ ] Renovate configuration (`renovate.json`) — **Q3 2026**
 - [ ] SBOM generation per release (`generate-sbom.ps1`) — **Implemented May 2026**

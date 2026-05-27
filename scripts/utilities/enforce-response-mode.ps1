@@ -150,126 +150,15 @@ Response mode is MANDATORY. Violations detected by token-guard will trigger auto
     return $true
 }
 
-# Check MCP configuration for unused servers
-function Test-MCPConfiguration {
-    $mcpConfigPath = ".\config\mcp-servers.json"
-    
-    if (-not (Test-Path $mcpConfigPath)) {
-        Write-WarningMsg "MCP config not found"
-        return $false
-    }
-    
-    Write-Status "Checking MCP server configuration..."
-    
-    try {
-        $config = Get-Content $mcpConfigPath | ConvertFrom-Json
-        
-        $servers = $config.mcpServers.PSObject.Properties
-        $unusedServers = @()
-        $activeServers = @()
-        
-        # Essential servers that should never be disabled
-        $essentialServers = @("filesystem")
-        
-        foreach ($server in $servers) {
-            $serverName = $server.Name
-            $serverInfo = $server.Value
-            
-            # Skip disabled servers
-            if ($serverName -like "_disabled_*") {
-                Write-Host "  Server: $serverName (DISABLED)" -ForegroundColor Gray
-                continue
-            }
-            
-            Write-Host "  Server: $serverName" -ForegroundColor White
-            Write-Host "    Command: $($serverInfo.command)" -ForegroundColor Gray
-            
-            # Essential servers are always active
-            if ($essentialServers -contains $serverName) {
-                $activeServers += $serverName
-                Write-Host "    Status: ESSENTIAL (always active)" -ForegroundColor Green
-                continue
-            }
-            
-            # Check if server is referenced in scripts
-            $references = 0
-            try {
-                $refResults = Get-ChildItem -Path . -Recurse -File -Filter "*.ps1" -ErrorAction SilentlyContinue |
-                    Select-String -Pattern $serverName -List -ErrorAction SilentlyContinue
-                if ($refResults) { $references = 1 }
-            } catch { }
-            
-            if ($references -gt 0) {
-                $activeServers += $serverName
-                Write-Host "    Status: ACTIVE (referenced in scripts)" -ForegroundColor Green
-            } else {
-                $unusedServers += $serverName
-                Write-Host "    Status: POTENTIALLY UNUSED" -ForegroundColor Yellow
-            }
-        }
-        
-        Write-Host ""
-        Write-Status "Summary:"
-        Write-Host "  Active servers: $($activeServers.Count)" -ForegroundColor Green
-        Write-Host "  Unused servers: $($unusedServers.Count)" -ForegroundColor Yellow
-        
-        if ($unusedServers.Count -gt 0) {
-            Write-WarningMsg "Consider disabling unused MCP servers to save tokens"
-            return $false
-        }
-        
-        return $true
-    }
-    catch {
-        Write-ErrorMsg "Failed to parse MCP config: $_"
-        return $false
-    }
-}
-
-# Disable unused MCP servers
-function Disable-UnusedMCPServers {
-    param([string[]]$ServersToDisable)
-    
-    $mcpConfigPath = ".\config\mcp-servers.json"
-    
-    if (-not (Test-Path $mcpConfigPath)) {
-        Write-ErrorMsg "MCP config not found"
-        return $false
-    }
-    
-    try {
-        $config = Get-Content $mcpConfigPath | ConvertFrom-Json
-        
-        foreach ($serverName in $ServersToDisable) {
-            if ($config.mcpServers.PSObject.Properties.Name -contains $serverName) {
-                $serverConfig = $config.mcpServers.$serverName
-                $config.mcpServers | Add-Member -NotePropertyName "_disabled_$serverName" -NotePropertyValue $serverConfig -Force
-                $config.mcpServers.PSObject.Properties.Remove($serverName)
-                
-                Write-Success "Disabled MCP server: $serverName"
-            }
-        }
-        
-        $config | ConvertTo-Json -Depth 10 | Set-Content $mcpConfigPath -Encoding UTF8
-        Write-Success "MCP configuration updated"
-        return $true
-    }
-    catch {
-        Write-ErrorMsg "Failed to update MCP config: $_"
-        return $false
-    }
-}
-
 # Validate configuration files for errors/redundancy
 function Test-ConfigurationValidity {
     Write-Status "Validating configuration files..."
     
-    $configFiles = @(
-        ".\tools\session-autostart.config.json",
-        ".\tools\context-efficiency-config.json",
-        ".\tools\token-guard-config.json",
-        ".\config\mcp-servers.json"
-    )
+        $configFiles = @(
+            ".\tools\session-autostart.config.json",
+            ".\tools\context-efficiency-config.json",
+            ".\tools\token-guard-config.json"
+        )
     
     $allValid = $true
     
@@ -325,13 +214,12 @@ switch ($Mode) {
     'check' {
         Write-Status "Running response mode checks..."
         $responseOk = Test-ResponseInstructions
-        $mcpOk = Test-MCPConfiguration
         $configOk = Test-ConfigurationValidity
         
         Write-Host ""
         Write-Host ("=" * 50) -ForegroundColor Cyan
         
-        if ($responseOk -and $mcpOk -and $configOk) {
+        if ($responseOk -and $configOk) {
             Write-Success "All checks passed - Response mode properly configured"
             exit 0
         } else {
@@ -351,10 +239,6 @@ switch ($Mode) {
         Write-Status "Fixing configuration issues..."
         
         Add-ResponseModeRules
-        
-        # Disable unused MCP servers (except essential ones)
-        $unused = @("git", "sqlite")
-        Disable-UnusedMCPServers -ServersToDisable $unused
         
         Write-Success "Configuration fixed"
         exit 0

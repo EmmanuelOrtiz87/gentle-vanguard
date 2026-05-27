@@ -127,29 +127,10 @@
     ]
   },
 
-  "mcpSecurity": {
-    "enabled": true,
-    "scopeToWorkspace": true,
-    "allowedPaths": ["$PWD/**", "$WORKSPACE/**", "<PROJECT>/**"],
-    "deniedPaths": [
-      "**/.env",
-      "**/.ssh/**",
-      "**/node_modules/.package-lock.json",
-      "**/.git/objects/**"
-    ],
-    "noNetworkExternal": false,
-    "auditFileAccess": true
-  },
-
   "targets": {
     "ai-api": {
       "sanitize": true,
       "blockCritical": true,
-      "audit": true
-    },
-    "mcp": {
-      "sanitize": true,
-      "scopeValidation": true,
       "audit": true
     },
     "log": {
@@ -174,7 +155,6 @@
 
   "hooks": {
     "prePrompt": "scripts/security/privacy-gateway.ps1",
-    "preMcp": "scripts/security/mcp-security-validator.ps1",
     "preCommit": "hooks/pre-commit-privacy.ps1"
   },
 

@@ -558,36 +558,6 @@ function Test-OrchestratorSkills {
     if ($allOk) { Write-Ok "Orchestrator skills ready" }
 }
 
-#  Optional MCP integrations 
-function Test-MCPIntegrations {
-    Write-Step "Checking Optional MCP Integrations"
-
-    $configPath = Join-Path $repoRoot 'config\workspace.config.json'
-    if (-not (Test-Path $configPath)) { Write-Warn "Config not found - skipping MCP checks"; return }
-
-    $cfg = Get-Content $configPath -Raw -Encoding UTF8 | ConvertFrom-Json
-    if (-not $cfg.mcpIntegrations) { Write-Ok "No MCP integrations configured (default)"; return }
-
-    foreach ($name in @('context7', 'notion')) {
-        $integration = $cfg.mcpIntegrations.$name
-        if (-not $integration -or -not $integration.enabled) {
-            Write-Ok "MCP $name disabled (default)"
-            continue
-        }
-        $missing = @()
-        foreach ($envName in $integration.requiredEnv) {
-            if ([string]::IsNullOrWhiteSpace([Environment]::GetEnvironmentVariable([string]$envName))) {
-                $missing += [string]$envName
-            }
-        }
-        if ($missing.Count -gt 0) {
-            Write-Warn "MCP $name enabled but missing env vars: $($missing -join ', ')"
-        } else {
-            Write-Ok "MCP $name enabled and configured"
-        }
-    }
-}
-
 #  Workflow CLI readiness 
 function Test-WorkflowReadiness {
     Write-Step "Checking Workflow CLI"
@@ -640,7 +610,6 @@ if (-not $Quiet) {
 Invoke-SystemDeps
 Invoke-ToolActivation
 Test-OrchestratorSkills
-Test-MCPIntegrations
 Test-WorkflowReadiness
 Show-Summary
 

@@ -24,7 +24,6 @@ correspondiente.
 ### 1. OpenCode ✅
 
 **Configuración**: `config/tool-opencode.json`  
-**Adaptador**: MCP Bridge (`adapters/mcp-bridge/`)  
 **Capacidades**: MCP, Subagents, Skills, Token Management
 
 **Uso**:
@@ -189,7 +188,6 @@ gentle-vanguard/
 │   │   ├── antigravity-adapter/      # ✅ Implementado
 │   │   ├── codex-adapter/            # ✅ Implementado
 │   │   └── windsurf-adapter/          # ✅ Implementado
-│   └── mcp-bridge/                   # ⏳ Pendiente
 ├── config/
 │   ├── tool-opencode.json            # ✅ Config OpenCode
 │   ├── tool-cursor.json              # ✅ Config Cursor

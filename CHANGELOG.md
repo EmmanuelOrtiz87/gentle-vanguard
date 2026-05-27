@@ -19,10 +19,6 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **Team Mode** (`scripts/utilities/WORKFLOW-ORCHESTRATION/team-mode.ps1`): Leader-follower
   orchestration with up to 8 members. 7 actions (start, assign, broadcast, report, collect, status,
   stop). Mailbox-based per-agent communication. Full cycle tested end-to-end
-- **Skill MCP Manager** (`scripts/utilities/UTILITIES/skill-mcp-manager.ps1`): On-demand Model
-  Context Protocol server lifecycle. 6 actions (start, stop, list, status, register, deregister).
-  Parses `mcp_servers` from SKILL.md YAML frontmatter. Cycle tested:
-  register→start→list→stop→deregister
 - **Dispatch -Mode team**: Extended `dispatch-agent.ps1` with `-Mode team` flag for leader-follower
   dispatch using runspace pools
 - **Lefthook integration**: Post-commit `hashline-snapshot` via `git diff HEAD~1..HEAD` in

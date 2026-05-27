@@ -5,8 +5,7 @@
   "preProcess": {
     "loadSkills": false,
     "skillTool": "none",
-    "autoLoad": false,
-    "mcpBridge": false
+    "autoLoad": false
   },
   "capabilities": ["ai_chat", "code_generation"],
   "configFiles": [".windsurf/config.json", ".codeiumignore", "AGENTS.md"],

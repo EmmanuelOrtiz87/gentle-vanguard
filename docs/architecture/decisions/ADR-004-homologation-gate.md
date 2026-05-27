@@ -145,12 +145,12 @@ Resolution:
 ❌ [BLOCKED] Homologation gate failed
 
   Working tree not clean:
-    Modified: config/mcp-servers.json
+    Modified: opencode.json
     Untracked: test.tmp
 
 Resolution:
   1. Commit changes: git add . && git commit
-  2. OR revert changes: git checkout -- config/mcp-servers.json
+  2. OR revert changes: git checkout -- opencode.json
   3. Remove untracked: rm test.tmp
   4. Verify: git status (should be "clean")
   5. Retry: gv.ps1 publish

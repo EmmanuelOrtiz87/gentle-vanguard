@@ -103,7 +103,7 @@ function Invoke-ChaosExperiment { param( [string], [string], [hashtable], [scrip
 `yaml
 
 - name: Chaos Experiment - Network Latency shell: pwsh run: |
-  ./scripts/chaos/inject-network-latency.ps1 -Service mcp-bridge -LatencyMs 500 # Run integration
+  # Run integration
   tests under chaos Invoke-Pester tests/integration/ -Tag Chaos `
 
 ---

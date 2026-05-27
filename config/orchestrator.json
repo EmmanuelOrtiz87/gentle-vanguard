@@ -215,13 +215,6 @@
       "max_members": 8,
       "runtime_dir": ".runtime/teams"
     },
-    "skill_mcp": {
-      "enabled": true,
-      "script": "scripts/utilities/UTILITIES/skill-mcp-manager.ps1",
-      "mcp_config": "config/mcp-servers.json",
-      "skill_format_key": "mcp_servers",
-      "active_mcps_file": ".runtime/skill-mcps/active-skill-mcps.json"
-    },
     "subagent_orchestration": {
     "token_budget_guard": {
       "enabled": true,
@@ -311,7 +304,6 @@
     "orchestrator": "docs/NORMATIVAS-ORQUESTADOR.md",
     "hashline": "scripts/editing/hashline.ps1",
     "team_mode": "scripts/utilities/WORKFLOW-ORCHESTRATION/team-mode.ps1",
-    "skill_mcp": "scripts/utilities/UTILITIES/skill-mcp-manager.ps1",
     "code_review": "rules/CODE-REVIEW-STANDARDS.md",
     "pr_workflow": "rules/PR-WORKFLOW.md",
     "secrets_management": "rules/SECRETS-MANAGEMENT.md",

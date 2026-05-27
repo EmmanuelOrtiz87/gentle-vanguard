@@ -186,7 +186,6 @@ Is there uncertainty or tradeoffs?
 
 **Related Code**:
 
-- `config/mcp-servers.json` — Implements ADR-003
 - `scripts/utilities/DEPLOYMENT/validate-release-homologation.ps1` — Implements ADR-004
 - `scripts/hooks/*.ps1` — Implements ADR-001
 - `$HOME\mcp-workspace/` — Implements ADR-002

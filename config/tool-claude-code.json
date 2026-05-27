@@ -5,16 +5,10 @@
   "preProcess": {
     "loadSkills": true,
     "skillTool": "skill",
-    "autoLoad": true,
-    "mcpBridge": true
+    "autoLoad": true
   },
   "capabilities": ["mcp", "skills", "subagents", "terminal", "hooks", "plugins"],
   "configFiles": ["CLAUDE.md", ".claude/settings.json", "docs/AGENTS.md", "config/plugins.json"],
-  "adapter": {
-    "type": "mcp-bridge",
-    "path": "adapters/mcp-bridge",
-    "status": "available"
-  },
   "hooks": {
     "preToolCall": "scripts/utilities/pre-process-input.ps1",
     "sessionStart": "scripts/utilities/session-autostart.cmd",

@@ -308,7 +308,6 @@ Test-Path .\logs\security
 
 **Archivos Afectados**:
 
-- `config/mcp-servers.json` - MCP server configuration
 - `.npmrc` - Global npm security policy
 
 **Threat Model**:
@@ -348,34 +347,7 @@ Test-Path package-lock.json  # Must be True
 Test-Path node_modules/@modelcontextprotocol/server-filesystem
 ```
 
-**Current Configuration (mcp-servers.json)**:
-
-```json
-{
-  "mcpServers": {
-    "filesystem": {
-      "command": "npx",
-      "args": [
-        "--include-workspace-root",
-        "--workspace",
-        "%USERPROFILE%\\mcp-workspace",
-        "--no",
-        "--offline",
-        "@modelcontextprotocol/server-filesystem",
-        "."
-      ],
-      "description": "File system access — offline hardened (npx supply-chain protection)",
-      "security": {
-        "hardened": true,
-        "mode": "offline",
-        "workspace": "%USERPROFILE%\\mcp-workspace",
-        "pinnedVersion": "2026.1.14",
-        "updateProcedure": "cd %USERPROFILE%\\mcp-workspace && npm update @modelcontextprotocol/server-filesystem && review package-lock.json changes before next use"
-      }
-    }
-  }
-}
-```
+**DEPRECATED** — MCP configuration via `config/mcp-servers.json` was removed. Active MCPs are defined in `opencode.json#mcp`.
 
 **Global NPM Security Policy (.npmrc)**:
 
@@ -447,7 +419,7 @@ npm audit --workspace $HOME\mcp-workspace
 - `scripts/security/security-logger.ps1` - Logging
 - `tests/security/input-validation.security.tests.ps1` - Tests
 - `config/security-policy.json` - Políticas
-- `config/mcp-servers.json` - MCP server hardening
+- `opencode.json#mcp` - MCP server configuration
 - `.npmrc` - npm security policy
 
 ---

@@ -42,12 +42,7 @@
       "cold": "7 days"
     }
   },
-  "mcpServers": {
-    "context7": {
-      "enabled": false,
-      "note": "Enable only when local skills insufficient"
-    }
-  },
+  "mcpServers": {},
   "governanceLayers": {
     "GOV": ["project-orchestrator-skill"],
     "SAD": ["sdd-design"],
