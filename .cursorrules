@@ -29,3 +29,38 @@ Cargar config desde `config/orchestrator.json#toolProfiles.<name>`.
 - **Idioma**: espanol (terminos tecnicos en ingles)
 - **websearch/webfetch**: DENY
 - **external_directory**: ask
+
+## System Prompt Optimization
+
+### Token Reduction
+- Target: 2000 tokens max
+- Compression: semantic abbreviations
+- Cache: enabled in .session/prompt-cache
+
+### Abbreviations
+- implementation -> impl
+- function -> fn
+- configuration -> cfg
+- required -> req
+- optional -> opt
+- reference -> ref
+- standard -> std
+- performance -> perf
+- security -> sec
+- development -> dev
+- production -> prod
+- environment -> env
+- database -> db
+- application -> app
+- service -> svc
+- repository -> repo
+
+### Security
+- Scan on load: enabled
+- Block secrets: enabled
+- Block XSS: enabled
+
+### Monitoring
+- Track tokens: yes
+- Alert at: 3000 tokens
+- Critical at: 5000 tokens

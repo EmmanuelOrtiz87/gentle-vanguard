@@ -53,21 +53,21 @@ Run `docs/AGENTS.md#Mandatory-Startup-Sequence` — no shortcuts.
        {"command": "pwsh -NoProfile -File detect-tool.ps1}
        
        # ❌ BAD - Missing closing brace
-       {"id": "session-2025-05-27", "directory": "C:\\path
+       {"id": "session-2025-05-27", "dir": "C:\\path
        
        # ❌ BAD - Trailing comma
        {"key": "value",}
        
        # ✅ GOOD
        {"command": "pwsh -NoProfile -File detect-tool.ps1"}
-       {"id": "session-2025-05-27", "directory": "C:\\path"}
+       {"id": "session-2025-05-27", "dir": "C:\\path"}
        {"key": "value"}
        ```
     
     3. **For Long Text Fields** (summary, content, description):
        - Keep under 500 characters when possible
-       - Use abbreviations (e.g., "impl" for "implementation")
-       - For very long content, save to file first, then reference it
+       - Use abbreviations (e.g., "impl" for "impl")
+       - For very long content, save to file first, then ref it
     
     4. **Auto-Validation Hook** (if configured):
        ```powershell
@@ -115,3 +115,4 @@ workspace_gentle_vanguard
 ## Key Refs
 
 See `docs/AGENTS.md#Key-References` for full resource table.
+

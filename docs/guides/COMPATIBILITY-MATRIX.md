@@ -17,6 +17,7 @@ This document tracks feature parity across all supported AI tools in gentle-vang
 | **Pre-compact hook**           | ✅        | ✅        | ❌        | ❌        | ❌           | ❌          | ❌          | ❌          |
 | **Context7 MCP**               | ✅        | ✅        | ✅        | ✅        | ✅           | ⚠️          | ⚠️          | ✅          |
 | **Delegation to orchestrator** | ✅        | ✅        | ✅        | ✅        | ✅           | ✅          | ✅          | ✅          |
+| **System Prompt Optimization** | ✅ Native | ✅ Config | ✅ Config | ✅ Config | ✅ Config    | ✅ Config   | ✅ Config   | ✅ Config   |
 
 `*` = Limitation of the tool itself (cannot run external scripts) `⚠️` = Partial support or
 workaround available

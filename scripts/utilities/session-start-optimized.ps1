@@ -214,6 +214,38 @@ Write-Host ""
 Write-OK "Session ready for operations"
 Write-Host ""
 
+# ============================================
+# PASO 8: Prompt Optimization Framework
+# ============================================
+Write-Step "Initializing prompt optimization..."
+$promptOptimizer = Join-Path $repoRoot "scripts\utilities\system-prompt-optimizer.ps1"
+if (Test-Path $promptOptimizer) {
+    try {
+        & $promptOptimizer -Action measure 2>$null | Out-Null
+        Write-OK "Prompt optimization: Active"
+    } catch {
+        Write-Warn "Prompt optimizer not available"
+    }
+} else {
+    Write-Warn "Prompt optimizer not found"
+}
+
+# Initialize prompt cache
+$cacheDir = Join-Path $repoRoot ".session\prompt-cache"
+if (-not (Test-Path $cacheDir)) {
+    New-Item -ItemType Directory -Path $cacheDir -Force | Out-Null
+}
+Write-OK "Prompt cache: Ready"
+
+# Initialize normativa cache
+$normativaCache = Join-Path $repoRoot ".session\normativa-cache"
+if (-not (Test-Path $normativaCache)) {
+    New-Item -ItemType Directory -Path $normativaCache -Force | Out-Null
+}
+Write-OK "Normativa cache: Ready"
+
+Write-Host ""
+
 # Return session info for caller
 return @{
     sessionId = $sessionId
