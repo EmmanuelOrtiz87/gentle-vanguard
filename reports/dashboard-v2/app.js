@@ -175,10 +175,17 @@ const app = {
   sections: ['exec','ops','dev','cost','gov','health','live','sla','perf','refs'],
   
   init() {
+    // Ensure English is default
+    if (!localStorage.getItem('gv-lang')) {
+      localStorage.setItem('gv-lang', 'en');
+      i18n.currentLang = 'en';
+    }
+    
     this.bindNav();
+    this.applyTranslations();
+    this.renderData(); // Render initial data before starting updates
     this.startRealTimeUpdates();
     this.updateTime();
-    this.applyTranslations();
     setInterval(() => this.updateTime(), 30000);
     setTimeout(() => charts.renderAll(), 100);
     window.addEventListener('resize', () => charts.renderAll());

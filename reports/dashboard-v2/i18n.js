@@ -2,6 +2,18 @@
 const i18n = {
   currentLang: localStorage.getItem('gv-lang') || 'en',
   
+  // Ensure English is default on init
+  init() {
+    const savedLang = localStorage.getItem('gv-lang');
+    if (!savedLang) {
+      localStorage.setItem('gv-lang', 'en');
+      this.currentLang = 'en';
+    } else {
+      this.currentLang = savedLang;
+    }
+    document.documentElement.lang = this.currentLang;
+  },
+  
   t(key) {
     const keys = key.split('.');
     let value = this.translations[this.currentLang];
