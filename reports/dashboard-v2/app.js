@@ -366,6 +366,31 @@ const app = {
     }
   },
   
+  // Export dashboard as PDF or PNG
+  exportDashboard(format) {
+    const section = document.querySelector('.gv-section.active');
+    if (!section) {
+      this.showNotification('No section active', 'error');
+      return;
+    }
+    
+    const sectionName = section.id;
+    const timestamp = new Date().toISOString().slice(0,19).replace(/:/g, '-');
+    const filename = `dashboard-${sectionName}-${timestamp}.${format}`;
+    
+    if (format === 'pdf') {
+      // Use browser print to PDF
+      const originalTitle = document.title;
+      document.title = filename;
+      window.print();
+      document.title = originalTitle;
+      this.showNotification(`Exported as ${filename}`, 'success');
+    } else if (format === 'png') {
+      // Use html2canvas approach or canvas capture
+      this.showNotification('PNG export: Use browser screenshot tools', 'info');
+    }
+  },
+  
   updateTime() {
     document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
   },
