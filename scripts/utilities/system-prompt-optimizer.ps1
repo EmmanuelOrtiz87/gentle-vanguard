@@ -24,8 +24,9 @@ function Measure-File([string]$Path) {
 
 function Measure-CurrentState {
     $results = @{ TotalTokens = 0; TotalLines = 0; Files = @{} }
-    $files = @("CLAUDE.md", "docs/AGENTS.md", "rules/AI-NORMATIVES.md")
-    $files += (Get-ChildItem -Path (Join-Path $WorkspaceRoot "rules") -Filter "NORMATIVAS-*.md" | Select-Object -ExpandProperty Name | ForEach-Object { "rules/$_" })
+    # Only measure files that are ACTUALLY loaded into the system prompt
+    # Rules are loaded on-demand via normativa-resolver.ps1, NOT at startup
+    $files = @("CLAUDE.md", "docs/AGENTS.md")
     
     foreach ($file in $files) {
         $measure = Measure-File -Path (Join-Path $WorkspaceRoot $file)

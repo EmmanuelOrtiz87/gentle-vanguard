@@ -22,6 +22,14 @@
         "description": "Initialize session ID and create session file"
       },
       {
+        "id": "session-cleanup",
+        "enabled": true,
+        "script": "scripts/utilities/session-cleanup-start.ps1",
+        "args": "-Quiet",
+        "required": false,
+        "description": "Flush caches, close orphans, reset state, generate compressed CLAUDE.min.md"
+      },
+      {
         "id": "github-bypass",
         "enabled": true,
         "script": "scripts/utilities/SESSION-MANAGEMENT/ensure-github-bypass.ps1",
