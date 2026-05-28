@@ -29,7 +29,7 @@ function Write-HashLine {
 
 function Read-Db {
     if (Test-Path $HashDb) {
-        try { return Get-Content $HashDb -Raw -Encoding UTF8 | ConvertFrom-Json } catch { }
+        try { return Get-Content $HashDb -Raw -Encoding UTF8 | ConvertFrom-Json -AsHashtable } catch { }
     }
     return @{ files = @{}; version = '1.0.0'; created = Get-Date -Format 'yyyy-MM-ddTHH:mm:ssK' }
 }

@@ -1,0 +1,1 @@
+    It "Gate script exists at expected path" {

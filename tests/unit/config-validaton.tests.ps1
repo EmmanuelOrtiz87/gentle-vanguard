@@ -19,27 +19,27 @@ Describe 'Config Validation Tests' {
                     break
                 }
             }
-            $allValid | Should Be $true
+            $allValid | Should -Be $true
         }
 
         It 'auto-delegation.json is valid' {
             $f = Join-Path $script:configPath "auto-delegation.json"
-            { Get-Content $f -Raw | ConvertFrom-Json } | Should Not Throw
+            { Get-Content $f -Raw | ConvertFrom-Json } | Should -Not -Throw
         }
 
         It 'orchestrator.json is valid' {
             $f = Join-Path $script:configPath "orchestrator.json"
-            { Get-Content $f -Raw | ConvertFrom-Json } | Should Not Throw
+            { Get-Content $f -Raw | ConvertFrom-Json } | Should -Not -Throw
         }
 
         It 'security-policy.json is valid' {
             $f = Join-Path $script:configPath "security-policy.json"
-            { Get-Content $f -Raw | ConvertFrom-Json } | Should Not Throw
+            { Get-Content $f -Raw | ConvertFrom-Json } | Should -Not -Throw
         }
 
         It 'security-privacy.json is valid' {
             $f = Join-Path $script:configPath "security-privacy.json"
-            { Get-Content $f -Raw | ConvertFrom-Json } | Should Not Throw
+            { Get-Content $f -Raw | ConvertFrom-Json } | Should -Not -Throw
         }
     }
 
@@ -47,21 +47,21 @@ Describe 'Config Validation Tests' {
         It 'auto-delegation.json has required top-level keys' {
             $f = Join-Path $script:configPath "auto-delegation.json"
             $json = Get-Content $f -Raw | ConvertFrom-Json
-            $json.keywordMappings | Should Not BeNullOrEmpty
-            $json.agentCodeToSkill | Should Not BeNullOrEmpty
+            $json.keywordMappings | Should -Not -BeNullOrEmpty
+            $json.agentCodeToSkill | Should -Not -BeNullOrEmpty
         }
 
         It 'orchestrator.json has required structure' {
             $f = Join-Path $script:configPath "orchestrator.json"
             $json = Get-Content $f -Raw | ConvertFrom-Json
-            $json.orchestrator | Should Not BeNullOrEmpty
-            $json.orchestrator.preProcessing | Should Not BeNullOrEmpty
+            $json.orchestrator | Should -Not -BeNullOrEmpty
+            $json.orchestrator.preProcessing | Should -Not -BeNullOrEmpty
         }
 
         It 'security-policy.json has authentication config' {
             $f = Join-Path $script:configPath "security-policy.json"
             $json = Get-Content $f -Raw | ConvertFrom-Json
-            $json.authentication | Should Not BeNullOrEmpty
+            $json.authentication | Should -Not -BeNullOrEmpty
         }
     }
 
@@ -69,10 +69,13 @@ Describe 'Config Validation Tests' {
         It 'sdd-config.json exists if present' {
             $f = Join-Path $script:configPath "sdd-config.json"
             if (Test-Path $f) {
-                { Get-Content $f -Raw | ConvertFrom-Json } | Should Not Throw
+                { Get-Content $f -Raw | ConvertFrom-Json } | Should -Not -Throw
             } else {
-                $true | Should Be $true  # Skip if doesn't exist
+                $true | Should -Be $true  # Skip if doesn't exist
             }
         }
     }
 }
+
+
+

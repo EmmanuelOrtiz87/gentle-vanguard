@@ -1,0 +1,1 @@
+        Test-Path $script:gateScript | Should -Be $true

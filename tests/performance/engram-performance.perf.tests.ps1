@@ -12,7 +12,7 @@ Describe "Engram Performance Tests" {
             $sw = [System.Diagnostics.Stopwatch]::StartNew()
             $null = & $script:engram search "Session start:" --project gentle-vanguard --limit 5 2>&1
             $sw.Stop()
-            $sw.ElapsedMilliseconds | Should BeLessThan 1000
+            $sw.ElapsedMilliseconds | Should -BeLessThan 1000
         }
     }
 
@@ -21,7 +21,7 @@ Describe "Engram Performance Tests" {
             $sw = [System.Diagnostics.Stopwatch]::StartNew()
             $null = & $script:engram stats --project gentle-vanguard 2>&1
             $sw.Stop()
-            $sw.ElapsedMilliseconds | Should BeLessThan 1000
+            $sw.ElapsedMilliseconds | Should -BeLessThan 1000
         }
     }
 
@@ -30,7 +30,7 @@ Describe "Engram Performance Tests" {
             $sw = [System.Diagnostics.Stopwatch]::StartNew()
             $null = & $script:engram doctor --json 2>&1
             $sw.Stop()
-            $sw.ElapsedMilliseconds | Should BeLessThan 1000
+            $sw.ElapsedMilliseconds | Should -BeLessThan 1000
         }
     }
 
@@ -41,8 +41,11 @@ Describe "Engram Performance Tests" {
             $null = & $script:engram search "test" --project gentle-vanguard --limit 3 2>&1
             $null = & $script:engram search "config" --project gentle-vanguard --limit 3 2>&1
             $sw.Stop()
-            $sw.ElapsedMilliseconds | Should BeLessThan 2000
+            $sw.ElapsedMilliseconds | Should -BeLessThan 2000
         }
     }
 }
+
+
+
 

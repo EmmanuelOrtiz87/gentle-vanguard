@@ -19,3 +19,6 @@ Describe "Semantic Compression Tests" {
         Remove-Item $testOutput -ErrorAction SilentlyContinue
     }
 }
+
+
+

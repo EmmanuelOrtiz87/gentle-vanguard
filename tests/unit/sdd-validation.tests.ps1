@@ -11,18 +11,18 @@ Describe 'SDD Validation Tests' {
         It 'sdd-config.json exists if present' {
             $f = Join-Path $script:configPath "sdd-config.json"
             if (Test-Path $f) {
-                Test-Path $f | Should Be $true
+                Test-Path $f | Should -Be $true
             } else {
-                $true | Should Be $true  # Skip if doesn't exist
+                $true | Should -Be $true  # Skip if doesn't exist
             }
         }
 
         It 'sdd-config.json is valid JSON if present' {
             $f = Join-Path $script:configPath "sdd-config.json"
             if (Test-Path $f) {
-                { Get-Content $f -Raw | ConvertFrom-Json } | Should Not Throw
+                { Get-Content $f -Raw | ConvertFrom-Json } | Should -Not -Throw
             } else {
-                $true | Should Be $true
+                $true | Should -Be $true
             }
         }
     }
@@ -31,9 +31,9 @@ Describe 'SDD Validation Tests' {
         It 'sdd-gate.ps1 exists if present' {
             $f = Get-ChildItem -Path $script:root -Filter "sdd-gate.ps1" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
             if ($f) {
-                Test-Path $f.FullName | Should Be $true
+                Test-Path $f.FullName | Should -Be $true
             } else {
-                $true | Should Be $true  # Skip if doesn't exist
+                $true | Should -Be $true  # Skip if doesn't exist
             }
         }
     }
@@ -42,9 +42,9 @@ Describe 'SDD Validation Tests' {
         It 'sdd-process-metrics.ps1 exists if present' {
             $f = Join-Path $script:root "scripts/utilities/TELEMETRY-METRICS/sdd-process-metrics.ps1"
             if (Test-Path $f) {
-                Test-Path $f | Should Be $true
+                Test-Path $f | Should -Be $true
             } else {
-                $true | Should Be $true
+                $true | Should -Be $true
             }
         }
 
@@ -54,9 +54,9 @@ Describe 'SDD Validation Tests' {
                 $errors = $null
                 $content = Get-Content $f -Raw
                 [System.Management.Automation.PSParser]::Tokenize($content, [ref]$errors) | Out-Null
-                $errors.Count | Should Be 0
+                $errors.Count | Should -Be 0
             } else {
-                $true | Should Be $true
+                $true | Should -Be $true
             }
         }
     }
@@ -64,22 +64,25 @@ Describe 'SDD Validation Tests' {
     Context 'SDD Lifecycle Skill' {
         It 'sdd-lifecycle skill directory exists' {
             $f = Join-Path $script:root "skills/sdd-lifecycle"
-            Test-Path $f | Should Be $true
+            Test-Path $f | Should -Be $true
         }
 
         It 'sdd-lifecycle has SKILL.md' {
             $f = Join-Path $script:root "skills/sdd-lifecycle/SKILL.md"
-            Test-Path $f | Should Be $true
+            Test-Path $f | Should -Be $true
         }
 
         It 'SDD skill mentions lifecycle' {
             $f = Join-Path $script:root "skills/sdd-lifecycle/SKILL.md"
             if (Test-Path $f) {
                 $content = Get-Content $f -Raw
-                ($content -match 'lifecycle|Lifecycle|SDD') | Should Be $true
+                ($content -match 'lifecycle|Lifecycle|SDD') | Should -Be $true
             } else {
-                $true | Should Be $true
+                $true | Should -Be $true
             }
         }
     }
 }
+
+
+

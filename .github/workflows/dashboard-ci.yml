@@ -1,5 +1,14 @@
 name: Dashboard CI/CD
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: dashboard-ci-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [ main, develop ]
@@ -10,8 +19,7 @@ on:
   pull_request:
     branches: [ main, develop ]
   schedule:
-    # Run daily at 6 AM UTC
-    - cron: '0 6 * * *'
+    - cron: '0 6 * * *' # 06:00 UTC | 03:00 GMT-3
 
 env:
   POWERSHELL_TELEMETRY_OPTOUT: 1
@@ -20,6 +28,7 @@ jobs:
   validate:
     name: Validate Dashboard
     runs-on: windows-latest
+    timeout-minutes: 15
     
     steps:
     - name: Checkout repository
@@ -65,6 +74,7 @@ jobs:
   test-metrics:
     name: Test Metrics Pipeline
     runs-on: windows-latest
+    timeout-minutes: 15
     needs: validate
     
     steps:
@@ -102,6 +112,7 @@ jobs:
   check-compliance:
     name: Compliance Checks
     runs-on: windows-latest
+    timeout-minutes: 10
     
     steps:
     - name: Checkout repository
