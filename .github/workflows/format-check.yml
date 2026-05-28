@@ -1,13 +1,17 @@
 name: Format Check
 
+permissions:
+  contents: read
+
+concurrency:
+  group: format-check-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [develop]
   pull_request:
     branches: [develop, main]
-
-permissions:
-  contents: read
 
 jobs:
   prettier:

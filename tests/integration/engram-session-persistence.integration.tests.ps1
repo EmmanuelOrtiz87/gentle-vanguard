@@ -47,27 +47,27 @@ Describe 'Engram Session Persistence Integration Tests' {
         It 'handles empty session directories without throwing' {
             $null = & $script:sessionManager -Mode Health -SessionDir $script:emptyDirRelative -NoExit 2>&1
             $null = & $script:sessionManager -Mode Cleanup -SessionDir $script:emptyDirRelative -NoExit 2>&1
-            (Get-ChildItem -Path $script:emptyDir -ErrorAction SilentlyContinue | Measure-Object).Count | Should Be 0
+            (Get-ChildItem -Path $script:emptyDir -ErrorAction SilentlyContinue | Measure-Object).Count | Should -Be 0
         }
 
         It 'supports AutoStart mode in an isolated session directory' {
             $null = & $script:sessionManager -Mode AutoStart -SessionDir $script:autoStartDirRelative -NoExit 2>&1
             $autoStartSession = Get-ChildItem -Path $script:autoStartDir -Filter 'session-*.json' | Select-Object -First 1
-            $autoStartSession | Should Not BeNullOrEmpty
+            $autoStartSession | Should -Not -BeNullOrEmpty
         }
 
         It 'persists session start in Engram and creates an active session file' {
-            Test-Path $script:engram | Should Be $true
+            Test-Path $script:engram | Should -Be $true
 
             $output = & $script:sessionManager -Mode Manual -SessionDir $script:sessionDirRelative -NoExit 2>&1
             $sessionFile = Get-ChildItem -Path $script:sessionDir -Filter 'session-*.json' | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-            $sessionFile | Should Not BeNullOrEmpty
+            $sessionFile | Should -Not -BeNullOrEmpty
 
             $sessionData = Get-Content -Path $sessionFile.FullName -Raw | ConvertFrom-Json
-            $sessionData.status | Should Be 'active'
+            $sessionData.status | Should -Be 'active'
 
             $searchOutput = & $script:engram search "Session start: $($sessionData.sessionId)" --project gentle-vanguard --limit 5 2>&1 | Out-String
-            ($searchOutput -match [regex]::Escape($sessionData.sessionId)) | Should Be $true
+            ($searchOutput -match [regex]::Escape($sessionData.sessionId)) | Should -Be $true
         }
 
         It 'reports health and cleans orphaned plus corrupt sessions in isolated directory' {
@@ -88,10 +88,10 @@ Describe 'Engram Session Persistence Integration Tests' {
             $null = & $script:sessionManager -Mode Health -SessionDir $script:sessionDirRelative -NoExit 2>&1
 
             $null = & $script:sessionManager -Mode Cleanup -SessionDir $script:sessionDirRelative -OrphanMaxAgeHours 1 -NoExit 2>&1
-            Test-Path (Join-Path $script:sessionDir 'archive\session-corrupt.json') | Should Be $true
+            Test-Path (Join-Path $script:sessionDir 'archive\session-corrupt.json') | Should -Be $true
 
             $updatedOrphan = Get-Content -Path $orphanPath -Raw | ConvertFrom-Json
-            $updatedOrphan.status | Should Be 'orphaned'
+            $updatedOrphan.status | Should -Be 'orphaned'
         }
 
         It 'persists session closure in Engram when ending the latest session' {
@@ -106,15 +106,15 @@ Describe 'Engram Session Persistence Integration Tests' {
                 } |
                 Sort-Object LastWriteTime -Descending |
                 Select-Object -First 1
-            $activeSession | Should Not BeNullOrEmpty
+            $activeSession | Should -Not -BeNullOrEmpty
             $activeSessionData = Get-Content -Path $activeSession.FullName -Raw | ConvertFrom-Json
 
             $output = & $script:sessionManager -Mode End -SessionDir $script:sessionDirRelative -SkipPreCloseValidation -NoExit 2>&1
             $endedSessionData = Get-Content -Path $activeSession.FullName -Raw | ConvertFrom-Json
-            $endedSessionData.status | Should Be 'ended'
+            $endedSessionData.status | Should -Be 'ended'
 
             $searchOutput = & $script:engram search "Session closure: $($activeSessionData.sessionId)" --project gentle-vanguard --limit 5 2>&1 | Out-String
-            ($searchOutput -match [regex]::Escape($activeSessionData.sessionId)) | Should Be $true
+            ($searchOutput -match [regex]::Escape($activeSessionData.sessionId)) | Should -Be $true
         }
     }
 
@@ -122,8 +122,11 @@ Describe 'Engram Session Persistence Integration Tests' {
         It 'persists a searchable learning summary in Engram' {
             $output = & $script:postSessionLearning -SessionId $script:learningSessionId -NoExit 2>&1
             $searchOutput = & $script:engram search $script:learningSessionId --project gentle-vanguard --limit 5 2>&1 | Out-String
-            ($searchOutput -match [regex]::Escape($script:learningSessionId)) | Should Be $true
+            ($searchOutput -match [regex]::Escape($script:learningSessionId)) | Should -Be $true
         }
     }
 }
+
+
+
 

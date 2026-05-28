@@ -34,7 +34,7 @@ pre-commit:
     trufflehog-scan:
       run:
         pwsh -NoProfile -ExecutionPolicy Bypass -Command "trufflehog filesystem --no-verification
-        --no-update . 2>$null; exit 0"
+        --no-update . *>$null; exit 0"
 
 pre-push:
   commands:

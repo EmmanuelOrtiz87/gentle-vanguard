@@ -17,7 +17,7 @@ if (`$null -ne `$parsed) {
 }
 "@))
 
-        $result | Should Be '2026-05-15T18:53:04.7388085-03:00'
+        $result | Should -Be '2026-05-15T18:53:04.7388085-03:00'
     }
 
     It 'parses legacy local cache timestamps' {
@@ -29,7 +29,7 @@ if (`$null -ne `$parsed) {
 }
 "@))
 
-        $result | Should Be '2026-05-15 15:05:28'
+        $result | Should -Be '2026-05-15 15:05:28'
     }
 
     It 'returns null for unsupported timestamp values' {
@@ -41,6 +41,8 @@ if (`$null -eq `$parsed) {
 }
 "@))
 
-        $result | Should Be 'null'
+        $result | Should -Be 'null'
     }
 }
+
+

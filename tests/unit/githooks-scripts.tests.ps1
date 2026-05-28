@@ -9,7 +9,7 @@ Describe 'Git Hooks Scripts Tests' {
 
     Context 'Hooks Directory' {
         It 'hooks directory exists' {
-            Test-Path $script:hooksPath | Should Be $true
+            Test-Path $script:hooksPath | Should -Be $true
         }
     }
 
@@ -17,18 +17,18 @@ Describe 'Git Hooks Scripts Tests' {
         It 'pre-commit hook exists if present' {
             $f = Join-Path $script:hooksPath "pre-commit"
             if (Test-Path $f) {
-                $true | Should Be $true
+                $true | Should -Be $true
             } else {
-                $true | Should Be $true  # Skip if doesn't exist
+                $true | Should -Be $true  # Skip if doesn't exist
             }
         }
 
         It 'commit-msg hook exists if present' {
             $f = Join-Path $script:hooksPath "commit-msg"
             if (Test-Path $f) {
-                $true | Should Be $true
+                $true | Should -Be $true
             } else {
-                $true | Should Be $true
+                $true | Should -Be $true
             }
         }
     }
@@ -36,26 +36,26 @@ Describe 'Git Hooks Scripts Tests' {
     Context 'Lefthook Integration' {
         It 'lefthook.yml exists' {
             $f = Join-Path $script:root ".lefthook.yml"
-            Test-Path $f | Should Be $true
+            Test-Path $f | Should -Be $true
         }
 
         It 'lefthook.yml has pre-commit validation commands' {
             $f = Join-Path $script:root ".lefthook.yml"
             $content = Get-Content $f -Raw
-            ($content -match 'opencode-validation|json-lint|workflow-lint') | Should Be $true
+            ($content -match 'opencode-validation|json-lint|workflow-lint') | Should -Be $true
         }
 
         It 'lefthook.yml has pre-commit commands' {
             $f = Join-Path $script:root ".lefthook.yml"
             $content = Get-Content $f -Raw
-            ($content -match 'pre-commit:') | Should Be $true
+            ($content -match 'pre-commit:') | Should -Be $true
         }
     }
 
     Context 'Install Hooks Script' {
         It 'install-hooks.ps1 exists' {
             $f = Join-Path $script:root "scripts/utilities/install-hooks.ps1"
-            Test-Path $f | Should Be $true
+            Test-Path $f | Should -Be $true
         }
 
         It 'install-hooks.ps1 has valid PowerShell syntax' {
@@ -64,10 +64,13 @@ Describe 'Git Hooks Scripts Tests' {
                 $errors = $null
                 $content = Get-Content $f -Raw
                 [System.Management.Automation.PSParser]::Tokenize($content, [ref]$errors) | Out-Null
-                $errors.Count | Should Be 0
+                $errors.Count | Should -Be 0
             } else {
-                $true | Should Be $true
+                $true | Should -Be $true
             }
         }
     }
 }
+
+
+

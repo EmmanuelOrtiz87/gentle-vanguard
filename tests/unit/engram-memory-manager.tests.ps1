@@ -11,29 +11,29 @@ Describe "Engram CLI - Unit Tests" {
 
     Context "CLI Availability" {
         It "engram.exe binary exists" {
-            Test-Path $script:engram | Should Be $true
+            Test-Path $script:engram | Should -Be $true
         }
 
         It "engram.exe --version returns a version string" {
             $v = & $script:engram --version 2>&1 | Out-String
-            $v | Should Not BeNullOrEmpty
+            $v | Should -Not -BeNullOrEmpty
         }
 
         It "engram-safe.ps1 wrapper exists" {
-            Test-Path $script:engramSafe | Should Be $true
+            Test-Path $script:engramSafe | Should -Be $true
         }
     }
 
     Context "Search Operations" {
         It "engram search returns results for known session patterns" {
             $out = & $script:engram search "Session start:" --project gentle-vanguard --limit 3 2>&1 | Out-String
-            $out | Should Not BeNullOrEmpty
+            $out | Should -Not -BeNullOrEmpty
         }
 
         It "engram search with --limit works correctly" {
             $raw = & $script:engram search "Session" --project gentle-vanguard --limit 2 2>&1
             $lines = @($raw | Where-Object { $_ -match 'session-' })
-            $lines.Count -le 10 | Should Be $true
+            $lines.Count -le 10 | Should -Be $true
         }
     }
 
@@ -45,12 +45,12 @@ Describe "Engram CLI - Unit Tests" {
             $start = $combined.IndexOf('{')
             $jsonStr = $combined.Substring($start)
             $parsed = $jsonStr | ConvertFrom-Json -ErrorAction Stop
-            $parsed | Should Not BeNullOrEmpty
+            $parsed | Should -Not -BeNullOrEmpty
         }
 
         It "engram stats returns observation count" {
             $raw = & $script:engram stats --project gentle-vanguard 2>&1 | Out-String
-            $raw.Trim() | Should Not BeNullOrEmpty
+            $raw.Trim() | Should -Not -BeNullOrEmpty
         }
     }
 
@@ -59,14 +59,14 @@ Describe "Engram CLI - Unit Tests" {
             $title = "test-obs-$script:testId"
             $null = & $script:engram save --title $title --content "Integration test observation $script:testId" --project gentle-vanguard 2>&1
             $searchOut = & $script:engram search $title --project gentle-vanguard --limit 5 2>&1 | Out-String
-            ($searchOut -match [regex]::Escape($title)) | Should Be $true
+            ($searchOut -match [regex]::Escape($title)) | Should -Be $true
         }
     }
 
     Context "Error Handling" {
         It "engram with invalid command returns non-zero exit" {
             $null = & $script:engram nonexistent-command-12345 2>&1
-            $LASTEXITCODE | Should Not Be 0
+            $LASTEXITCODE | Should -Not -Be 0
         }
     }
 
@@ -74,9 +74,12 @@ Describe "Engram CLI - Unit Tests" {
         It "search returns same project across multiple queries" {
             $r1 = & $script:engram search "session" --project gentle-vanguard --limit 2 2>&1 | Out-String
             $r2 = & $script:engram search "session" --project gentle-vanguard --limit 2 2>&1 | Out-String
-            $r1.Trim().Length | Should BeGreaterThan 0
-            $r2.Trim().Length | Should BeGreaterThan 0
+            $r1.Trim().Length | Should -BeGreaterThan 0
+            $r2.Trim().Length | Should -BeGreaterThan 0
         }
     }
 }
+
+
+
 

@@ -14,7 +14,7 @@ Describe 'v2.6.4 Script Suite' {
         }
 
         It 'exists at expected path' {
-            Test-Path $script:sddGate | Should Be $true
+            Test-Path $script:sddGate | Should -Be $true
         }
 
         It 'has zero parse errors' {
@@ -22,12 +22,12 @@ Describe 'v2.6.4 Script Suite' {
             $null = [System.Management.Automation.PSParser]::Tokenize(
                 (Get-Content $script:sddGate -Raw), [ref]$e
             )
-            $e.Count | Should Be 0
+            $e.Count | Should -Be 0
         }
 
         It 'references hook-advisory-classifier.ps1' {
             $content = Get-Content $script:sddGate -Raw
-            $content | Should Match 'hook-advisory-classifier'
+            $content | Should -Match 'hook-advisory-classifier'
         }
     }
 
@@ -37,7 +37,7 @@ Describe 'v2.6.4 Script Suite' {
         }
 
         It 'exists at expected path' {
-            Test-Path $script:sddMetrics | Should Be $true
+            Test-Path $script:sddMetrics | Should -Be $true
         }
 
         It 'has zero parse errors' {
@@ -45,17 +45,17 @@ Describe 'v2.6.4 Script Suite' {
             $null = [System.Management.Automation.PSParser]::Tokenize(
                 (Get-Content $script:sddMetrics -Raw), [ref]$e
             )
-            $e.Count | Should Be 0
+            $e.Count | Should -Be 0
         }
 
         It 'accepts -AsJson switch parameter' {
             $content = Get-Content $script:sddMetrics -Raw
-            $content | Should Match '\[switch\]\$AsJson'
+            $content | Should -Match '\[switch\]\$AsJson'
         }
 
         It 'runs and exits 0 in current workspace' {
             $result = pwsh -NoProfile -ExecutionPolicy Bypass -File $script:sddMetrics -Quiet 2>&1
-            $LASTEXITCODE | Should Be 0
+            $LASTEXITCODE | Should -Be 0
         }
     }
 
@@ -65,7 +65,7 @@ Describe 'v2.6.4 Script Suite' {
         }
 
         It 'exists at expected path' {
-            Test-Path $script:syncDrift | Should Be $true
+            Test-Path $script:syncDrift | Should -Be $true
         }
 
         It 'has zero parse errors' {
@@ -73,14 +73,14 @@ Describe 'v2.6.4 Script Suite' {
             $null = [System.Management.Automation.PSParser]::Tokenize(
                 (Get-Content $script:syncDrift -Raw), [ref]$e
             )
-            $e.Count | Should Be 0
+            $e.Count | Should -Be 0
         }
 
         It 'produces valid JSON output with required fields' {
             $output = pwsh -NoProfile -ExecutionPolicy Bypass -File $script:syncDrift -AsJson 2>&1
             $outputStr = ($output | Where-Object { $_ -is [string] }) -join "`n"
-            ($outputStr -match '"status"') | Should Be $true
-            ($outputStr -match '"drift_score"') | Should Be $true
+            ($outputStr -match '"status"') | Should -Be $true
+            ($outputStr -match '"drift_score"') | Should -Be $true
         }
     }
 
@@ -90,7 +90,7 @@ Describe 'v2.6.4 Script Suite' {
         }
 
         It 'exists at expected path' {
-            Test-Path $script:bench | Should Be $true
+            Test-Path $script:bench | Should -Be $true
         }
 
         It 'has zero parse errors' {
@@ -98,13 +98,13 @@ Describe 'v2.6.4 Script Suite' {
             $null = [System.Management.Automation.PSParser]::Tokenize(
                 (Get-Content $script:bench -Raw), [ref]$e
             )
-            $e.Count | Should Be 0
+            $e.Count | Should -Be 0
         }
 
         It 'has SLO defaults for status and health' {
             $content = Get-Content $script:bench -Raw
-            $content | Should Match 'status\s*=\s*5'
-            $content | Should Match 'health\s*=\s*15'
+            $content | Should -Match 'status\s*=\s*5'
+            $content | Should -Match 'health\s*=\s*15'
         }
     }
 
@@ -114,19 +114,22 @@ Describe 'v2.6.4 Script Suite' {
         }
 
         It 'workflow file exists' {
-            Test-Path $script:sddGateWf | Should Be $true
+            Test-Path $script:sddGateWf | Should -Be $true
         }
 
         It 'has permissions block' {
             $content = Get-Content $script:sddGateWf -Raw
-            $content | Should Match 'permissions:'
+            $content | Should -Match 'permissions:'
         }
 
         It 'has timeout-minutes' {
             $content = Get-Content $script:sddGateWf -Raw
-            $content | Should Match 'timeout-minutes:'
+            $content | Should -Match 'timeout-minutes:'
         }
     }
 }
+
+
+
 
 
