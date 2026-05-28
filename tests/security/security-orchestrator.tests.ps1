@@ -4,9 +4,10 @@
     Tests for security-orchestrator.ps1 — sanitization, blocking, auth
 #>
 
-$script:scriptPath = Join-Path $PSScriptRoot "..\..\scripts\security\security-orchestrator.ps1"
-
 Describe "Security Orchestrator (security-orchestrator.ps1)" {
+    BeforeAll {
+        $script:scriptPath = Join-Path $PSScriptRoot "..\..\scripts\security\security-orchestrator.ps1"
+    }
 
     Context "Initialization" {
         It "Should return status without errors" {

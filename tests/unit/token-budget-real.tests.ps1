@@ -68,7 +68,7 @@ Describe 'Real Token Budget Tests' {
         }
 
         It 'session-autostart uses config-driven orchestration' {
-            $f = Join-Path $script:root "scripts/utilities/session-autostart.ps1"
+            $f = Join-Path $script:root "scripts/utilities/SESSION/session-autostart.ps1"
             $content = Get-Content $f -Raw
             ($content -match '\$steps|\$config\.pipeline|config-driven') | Should -Be $true
         }

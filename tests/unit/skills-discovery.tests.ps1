@@ -63,12 +63,12 @@ Describe 'Skills Auto-Discovery Tests' {
 
     Context 'Skills Auto-Discovery Script' {
         It 'skills-auto-discovery.ps1 exists' {
-            $f = Join-Path $script:root "scripts/utilities/skills-auto-discovery.ps1"
+            $f = Join-Path $script:root "scripts/utilities/SKILL/skills-auto-discovery.ps1"
             Test-Path $f | Should -Be $true
         }
 
         It 'skills-auto-discovery.ps1 has valid PowerShell syntax' {
-            $f = Join-Path $script:root "scripts/utilities/skills-auto-discovery.ps1"
+            $f = Join-Path $script:root "scripts/utilities/SKILL/skills-auto-discovery.ps1"
             $errors = $null
             $content = Get-Content $f -Raw
             [System.Management.Automation.PSParser]::Tokenize($content, [ref]$errors) | Out-Null

@@ -6,6 +6,7 @@
     This file is a compatibility shim for any code that references the WORKFLOW-ORCHESTRATION/ path.
 #>
 param(
+    [Parameter(Mandatory=$true)]
     [string]$UserInput,
     [string]$WorkspaceRoot = "."
 )

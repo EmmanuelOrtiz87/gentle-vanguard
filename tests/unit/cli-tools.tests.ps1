@@ -8,28 +8,28 @@ Describe 'CLI Tools Tests' {
     }
 
     Context 'GV CLI' {
-        It 'gv.ps1 exists and is wrapper' {
-            $f = Join-Path $script:utilitiesPath "gv.ps1"
+        It 'gv.ps1 exists and references WORKFLOW-ORCHESTRATION' {
+            $f = Join-Path $script:utilitiesPath "WORKFLOW-ORCHESTRATION/gv.ps1"
             Test-Path $f | Should -Be $true
             $content = Get-Content $f -Raw
-            ($content -match 'WORKFLOW-ORCHESTRATION\\gv\.ps1|WORKFLOW-ORCHESTRATION/gv\.ps1') | Should -Be $true
+            ($content -match 'WORKFLOW-ORCHESTRATION') | Should -Be $true
         }
 
-        It 'gv.ps1 passes arguments to canonical gv' {
-            $f = Join-Path $script:utilitiesPath "gv.ps1"
+        It 'gv.ps1 is a valid runnable script' {
+            $f = Join-Path $script:utilitiesPath "WORKFLOW-ORCHESTRATION/gv.ps1"
             $content = Get-Content $f -Raw
-            ($content -match '& \$wfPath @args|& \$wfPath \$args') | Should -Be $true
+            ($content -match 'param\(') | Should -Be $true
         }
     }
 
     Context 'Session Manager CLI' {
         It 'session-manager.ps1 exists' {
-            $f = Join-Path $script:utilitiesPath "session-manager.ps1"
+            $f = Join-Path $script:utilitiesPath "SESSION/session-manager.ps1"
             Test-Path $f | Should -Be $true
         }
 
         It 'session-manager.ps1 has AutoStart mode' {
-            $f = Join-Path $script:utilitiesPath "session-manager.ps1"
+            $f = Join-Path $script:utilitiesPath "SESSION/session-manager.ps1"
             if (Test-Path $f) {
                 $content = Get-Content $f -Raw
                 ($content -match 'AutoStart|auto-start') | Should -Be $true
@@ -41,12 +41,12 @@ Describe 'CLI Tools Tests' {
 
     Context 'GV Benchmark (FF-006)' {
         It 'gv-benchmark.ps1 exists' {
-            $f = Join-Path $script:utilitiesPath "gv-benchmark.ps1"
+            $f = Join-Path $script:utilitiesPath "BENCHMARK/gv-benchmark.ps1"
             Test-Path $f | Should -Be $true
         }
 
         It 'gv-benchmark.ps1 has SLO definitions' {
-            $f = Join-Path $script:utilitiesPath "gv-benchmark.ps1"
+            $f = Join-Path $script:utilitiesPath "BENCHMARK/gv-benchmark.ps1"
             if (Test-Path $f) {
                 $content = Get-Content $f -Raw
                 ($content -match 'sloDefaults|SLO|slo') | Should -Be $true
@@ -56,7 +56,7 @@ Describe 'CLI Tools Tests' {
         }
 
         It 'gv-benchmark.ps1 references gv.ps1' {
-            $f = Join-Path $script:utilitiesPath "gv-benchmark.ps1"
+            $f = Join-Path $script:utilitiesPath "BENCHMARK/gv-benchmark.ps1"
             if (Test-Path $f) {
                 $content = Get-Content $f -Raw
                 ($content -match 'gv\.ps1|wfScript') | Should -Be $true

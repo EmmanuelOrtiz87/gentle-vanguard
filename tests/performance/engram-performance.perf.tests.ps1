@@ -1,11 +1,12 @@
 #!/usr/bin/env pwsh
 
-$script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
-$script:engram = Join-Path $script:root 'tools\engram.exe'
-$env:ENGRAM_DATA_DIR = Join-Path $script:root '.engram-data'
-$env:ENGRAM_SKIP_UPDATE = '1'
-
 Describe "Engram Performance Tests" {
+    BeforeAll {
+        $script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
+        $script:engram = Join-Path $script:root 'tools\engram.exe'
+        $env:ENGRAM_DATA_DIR = Join-Path $script:root '.engram-data'
+        $env:ENGRAM_SKIP_UPDATE = '1'
+    }
 
     Context "Search Latency" {
         It "engram search completes under 1000ms" {

@@ -3,8 +3,8 @@
 Describe 'Engram Session Persistence Integration Tests' {
     BeforeAll {
         $script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
-        $script:sessionManager = Join-Path $script:root 'scripts\utilities\session-manager.ps1'
-        $script:postSessionLearning = Join-Path $script:root 'scripts\utilities\post-session-learning.ps1'
+        $script:sessionManager = Join-Path $script:root 'scripts\utilities\SESSION\session-manager.ps1'
+        $script:postSessionLearning = Join-Path $script:root 'scripts\utilities\SESSION\post-session-learning.ps1'
         $script:engram = Join-Path $script:root 'tools\engram.exe'
         $env:ENGRAM_DATA_DIR = Join-Path $script:root '.engram-data'
         $env:ENGRAM_SKIP_UPDATE = '1'

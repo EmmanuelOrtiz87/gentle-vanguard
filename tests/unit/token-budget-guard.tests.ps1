@@ -4,7 +4,7 @@
 Describe 'Token Budget Guard Tests' {
     BeforeAll {
         $script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
-        $script:sessionAutostart = Join-Path $script:root "scripts/utilities/session-autostart.ps1"
+        $script:sessionAutostart = Join-Path $script:root "scripts/utilities/SESSION/session-autostart.ps1"
         $script:sessionConfig = Join-Path $script:root "config/session-autostart.config.json"
         $script:tokenGuardPath = Join-Path $script:root "scripts/utilities/TELEMETRY-METRICS/token-budget-guard.ps1"
     }

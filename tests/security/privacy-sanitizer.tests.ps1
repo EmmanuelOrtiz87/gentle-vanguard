@@ -4,9 +4,10 @@
     Tests for privacy-sanitizer.ps1 — PII redaction, data leakage prevention
 #>
 
-$script:scriptPath = Join-Path $PSScriptRoot "..\..\scripts\security\privacy-sanitizer.ps1"
-
 Describe "Privacy Sanitizer (privacy-sanitizer.ps1)" {
+    BeforeAll {
+        $script:scriptPath = Join-Path $PSScriptRoot "..\..\scripts\security\privacy-sanitizer.ps1"
+    }
 
     Context "PII Redaction" {
         It "Should redact IP addresses" {

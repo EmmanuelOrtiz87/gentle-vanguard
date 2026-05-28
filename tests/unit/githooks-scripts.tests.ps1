@@ -54,12 +54,12 @@ Describe 'Git Hooks Scripts Tests' {
 
     Context 'Install Hooks Script' {
         It 'install-hooks.ps1 exists' {
-            $f = Join-Path $script:root "scripts/utilities/install-hooks.ps1"
+            $f = Join-Path $script:root "scripts/utilities/INSTALL/install-hooks.ps1"
             Test-Path $f | Should -Be $true
         }
 
         It 'install-hooks.ps1 has valid PowerShell syntax' {
-            $f = Join-Path $script:root "scripts/utilities/install-hooks.ps1"
+            $f = Join-Path $script:root "scripts/utilities/INSTALL/install-hooks.ps1"
             if (Test-Path $f) {
                 $errors = $null
                 $content = Get-Content $f -Raw
