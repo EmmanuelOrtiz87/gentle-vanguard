@@ -6,7 +6,7 @@ post-commit:
     codegraph-sync:
       run:
         pwsh -NoProfile -ExecutionPolicy Bypass -File
-        "scripts/utilities/codegraph-post-modification-sync.ps1" -Trigger post-commit -Force
+        "scripts/utilities/CODEGRAPH/codegraph-post-modification-sync.ps1" -Trigger post-commit -Force
     hashline-snapshot:
       run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/editing/hashline-snapshot-hook.ps1"
 
@@ -15,7 +15,7 @@ post-merge:
     codegraph-sync:
       run:
         pwsh -NoProfile -ExecutionPolicy Bypass -File
-        "scripts/utilities/codegraph-post-modification-sync.ps1" -Trigger post-merge -Force
+        "scripts/utilities/CODEGRAPH/codegraph-post-modification-sync.ps1" -Trigger post-merge -Force
 
 pre-commit:
   commands:
