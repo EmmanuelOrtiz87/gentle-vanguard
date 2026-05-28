@@ -1,13 +1,14 @@
 # plugin-architecture.tests.ps1
 # Unit tests for Plugin Architecture FF-011
 
-$script:root = Resolve-Path "$PSScriptRoot/../.."
-$script:configPath = Join-Path $script:root "config"
-$script:docsPath = Join-Path $script:root "docs/reference"
-$script:toolsPath = Join-Path $script:root "scripts/utilities/SKILLS-TOOLS"
-$script:pluginsDir = Join-Path $script:root "plugins"
-
 Describe 'Plugin Architecture Tests' {
+    BeforeAll {
+        $script:root = Resolve-Path "$PSScriptRoot/../.."
+        $script:configPath = Join-Path $script:root "config"
+        $script:docsPath = Join-Path $script:root "docs/reference"
+        $script:toolsPath = Join-Path $script:root "scripts/utilities/SKILLS-TOOLS"
+        $script:pluginsDir = Join-Path $script:root "plugins"
+    }
     Context 'Plugin Manifest Schema' {
         It 'plugin-manifest-schema.json exists' {
             $f = Join-Path $script:configPath "plugin-manifest-schema.json"

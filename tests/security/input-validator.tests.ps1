@@ -4,9 +4,10 @@
     Tests for input-validator.ps1 — type validation, sanitization, injection prevention
 #>
 
-$script:scriptPath = Join-Path $PSScriptRoot "..\..\scripts\security\input-validator.ps1"
-
 Describe "Input Validator (input-validator.ps1)" {
+    BeforeAll {
+        $script:scriptPath = Join-Path $PSScriptRoot "..\..\scripts\security\input-validator.ps1"
+    }
 
     Context "Integer Validation" {
         It "Should accept valid integer within range" {

@@ -3,7 +3,7 @@
 Describe "Routing Critical Flows" {
     BeforeAll {
         $script:repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
-        $script:preProcess = Join-Path $script:repoRoot 'scripts\utilities\pre-process-input.ps1'
+        $script:preProcess = Join-Path $script:repoRoot 'scripts\utilities\WORKFLOW-ORCHESTRATION\pre-process-input.ps1'
     }
 
     Context "Trigger-based routing" {

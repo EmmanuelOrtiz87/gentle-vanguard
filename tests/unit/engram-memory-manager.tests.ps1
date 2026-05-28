@@ -1,13 +1,14 @@
 #!/usr/bin/env pwsh
 
-$script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
-$script:engram = Join-Path $script:root 'tools\engram.exe'
-$script:engramSafe = Join-Path $script:root 'scripts\utilities\engram-safe.ps1'
-$script:testId = "test-$(Get-Date -Format 'yyyyMMddHHmmss')"
-$env:ENGRAM_DATA_DIR = Join-Path $script:root '.engram-data'
-$env:ENGRAM_SKIP_UPDATE = '1'
-
 Describe "Engram CLI - Unit Tests" {
+    BeforeAll {
+        $script:root = $PSScriptRoot | Split-Path -Parent | Split-Path -Parent
+        $script:engram = Join-Path $script:root 'tools\engram.exe'
+        $script:engramSafe = Join-Path $script:root 'scripts\utilities\ENGRAM\engram-safe.ps1'
+        $script:testId = "test-$(Get-Date -Format 'yyyyMMddHHmmss')"
+        $env:ENGRAM_DATA_DIR = Join-Path $script:root '.engram-data'
+        $env:ENGRAM_SKIP_UPDATE = '1'
+    }
 
     Context "CLI Availability" {
         It "engram.exe binary exists" {

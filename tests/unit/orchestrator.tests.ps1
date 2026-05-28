@@ -33,7 +33,7 @@ Describe 'Orchestrator Tests' {
 
     Context 'Pre-Processing Hook' {
         It 'pre-process-input.ps1 exists' {
-            $f = Join-Path $script:root "scripts/utilities/pre-process-input.ps1"
+            $f = Join-Path $script:root "scripts/utilities/WORKFLOW-ORCHESTRATION/pre-process-input.ps1"
             Test-Path $f | Should -Be $true
         }
 
@@ -46,12 +46,12 @@ Describe 'Orchestrator Tests' {
 
     Context 'Session Manager' {
         It 'session-manager.ps1 exists' {
-            $f = Join-Path $script:root "scripts/utilities/session-manager.ps1"
+            $f = Join-Path $script:root "scripts/utilities/SESSION/session-manager.ps1"
             Test-Path $f | Should -Be $true
         }
 
         It 'session-manager.ps1 has valid PowerShell syntax' {
-            $f = Join-Path $script:root "scripts/utilities/session-manager.ps1"
+            $f = Join-Path $script:root "scripts/utilities/SESSION/session-manager.ps1"
             $errors = $null
             $content = Get-Content $f -Raw
             [System.Management.Automation.PSParser]::Tokenize($content, [ref]$errors) | Out-Null

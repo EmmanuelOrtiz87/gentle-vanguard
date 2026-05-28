@@ -1,10 +1,11 @@
 # encryption-manager.tests.ps1
 # Tests for AES-256 encryption/decryption, key generation, and validation
 
-$script:scriptPath = Join-Path $PSScriptRoot "..\..\scripts\security\encryption-manager.ps1"
-$script:testKeyPath = Join-Path $ENV:TEMP "gv-test-key-$(Get-Random).key"
-
 Describe "Encryption Manager (encryption-manager.ps1)" {
+    BeforeAll {
+        $script:scriptPath = Join-Path $PSScriptRoot "..\..\scripts\security\encryption-manager.ps1"
+        $script:testKeyPath = Join-Path $ENV:TEMP "gv-test-key-$(Get-Random).key"
+    }
 
     AfterAll {
         if (Test-Path $script:testKeyPath) { Remove-Item $script:testKeyPath -Force }

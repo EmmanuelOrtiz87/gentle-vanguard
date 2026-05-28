@@ -181,7 +181,7 @@ function Initialize-Plugins {
             $manifest = Get-PluginManifest -PluginPath $dir.FullName
             if (-not $manifest) { $failed++; continue }
 
-            Register-Plugin -PluginPath $dir.FullName -Manifest $manifest -Quiet:$Quiet
+            $null = Register-Plugin -PluginPath $dir.FullName -Manifest $manifest -Quiet:$Quiet
             $loaded++
         }
     }

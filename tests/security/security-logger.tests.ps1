@@ -4,9 +4,10 @@
     Tests for security-logger.ps1 (v1.1) — PII sanitization + audit logging
 #>
 
-$script:scriptPath = Join-Path $PSScriptRoot "..\..\scripts\security\security-logger.ps1"
-
 Describe "Security Logger (security-logger.ps1)" {
+    BeforeAll {
+        $script:scriptPath = Join-Path $PSScriptRoot "..\..\scripts\security\security-logger.ps1"
+    }
 
     Context "PII Sanitization" {
         It "Should redact machine name from messages" {

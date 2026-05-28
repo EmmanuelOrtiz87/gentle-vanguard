@@ -12,7 +12,7 @@
       "name": "session-manager-critical-workflow",
       "threshold": 85,
       "tests": ["tests/integration/engram-session-persistence.integration.tests.ps1"],
-      "scripts": ["scripts/utilities/session-manager.ps1"]
+      "scripts": ["scripts/utilities/SESSION/session-manager.ps1"]
     },
     {
       "name": "post-session-learning-persistence",
@@ -21,25 +21,25 @@
         "tests/integration/engram-session-persistence.integration.tests.ps1",
         "tests/integration/post-session-learning.integration.tests.ps1"
       ],
-      "scripts": ["scripts/utilities/post-session-learning.ps1"]
+      "scripts": ["scripts/utilities/ENGRAM/post-session-learning.ps1"]
     },
     {
       "name": "session-autostart-critical-workflow",
       "threshold": 85,
       "tests": ["tests/integration/session-autostart.integration.tests.ps1"],
-      "scripts": ["scripts/utilities/session-autostart.ps1"]
+      "scripts": ["scripts/utilities/SESSION/session-autostart.ps1"]
     },
     {
       "name": "detect-tool-critical-workflow",
       "threshold": 85,
       "tests": ["tests/integration/detect-tool.integration.tests.ps1"],
-      "scripts": ["scripts/utilities/detect-tool.ps1"]
+      "scripts": ["scripts/utilities/DETECT/detect-tool.ps1"]
     },
     {
       "name": "pre-close-validator-critical-workflow",
       "threshold": 70,
       "tests": ["tests/integration/pre-close-validator.integration.tests.ps1"],
-      "scripts": ["scripts/utilities/pre-close-validator.ps1"]
+      "scripts": ["scripts/utilities/GUARD/pre-close-validator.ps1"]
     }
   ],
   "include": ["scripts/**/*.ps1"],

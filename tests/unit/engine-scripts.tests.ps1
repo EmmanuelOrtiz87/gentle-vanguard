@@ -32,7 +32,7 @@ Describe 'Engine Scripts Tests' {
         }
 
         It 'runtime-router.ps1 has gate mode' {
-            $f = Join-Path $script:root "scripts/utilities/runtime-router.ps1"
+            $f = Join-Path $script:root "scripts/utilities/WORKFLOW-ORCHESTRATION/runtime-router.ps1"
             if (Test-Path $f) {
                 $content = Get-Content $f -Raw
                 ($content -match 'Mode.*gate|gate.*Mode') | Should -Be $true
@@ -44,18 +44,12 @@ Describe 'Engine Scripts Tests' {
 
     Context 'Skill Router' {
         It 'skill-router.ps1 exists' {
-            $f = Join-Path $script:root "scripts/utilities/WORKFLOW-ORCHESTRATION/skill-router.ps1"
-            if (-not (Test-Path $f)) {
-                $f = Join-Path $script:root "scripts/utilities/skill-router.ps1"
-            }
+            $f = Join-Path $script:root "scripts/utilities/SKILL/skill-router.ps1"
             Test-Path $f | Should -Be $true
         }
 
         It 'skill-router.ps1 has valid PowerShell syntax' {
-            $f = Join-Path $script:root "scripts/utilities/WORKFLOW-ORCHESTRATION/skill-router.ps1"
-            if (-not (Test-Path $f)) {
-                $f = Join-Path $script:root "scripts/utilities/skill-router.ps1"
-            }
+            $f = Join-Path $script:root "scripts/utilities/SKILL/skill-router.ps1"
             if (Test-Path $f) {
                 $errors = $null
                 $content = Get-Content $f -Raw

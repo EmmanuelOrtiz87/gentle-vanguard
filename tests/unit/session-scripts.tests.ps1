@@ -9,12 +9,12 @@ Describe 'Session Scripts Tests' {
 
     Context 'Session Manager' {
         It 'session-manager.ps1 exists' {
-            $f = Join-Path $script:utilitiesPath "session-manager.ps1"
+            $f = Join-Path $script:utilitiesPath "SESSION/session-manager.ps1"
             Test-Path $f | Should -Be $true
         }
 
         It 'session-manager.ps1 has valid PowerShell syntax' {
-            $f = Join-Path $script:utilitiesPath "session-manager.ps1"
+            $f = Join-Path $script:utilitiesPath "SESSION/session-manager.ps1"
             $errors = $null
             $content = Get-Content $f -Raw
             [System.Management.Automation.PSParser]::Tokenize($content, [ref]$errors) | Out-Null
@@ -22,13 +22,13 @@ Describe 'Session Scripts Tests' {
         }
 
         It 'session-manager.ps1 has AutoStart mode' {
-            $f = Join-Path $script:utilitiesPath "session-manager.ps1"
+            $f = Join-Path $script:utilitiesPath "SESSION/session-manager.ps1"
             $content = Get-Content $f -Raw
             ($content -match 'AutoStart|auto-start') | Should -Be $true
         }
 
         It 'session-manager.ps1 defaults Engram project to workspace_gentle_vanguard' {
-            $f = Join-Path $script:utilitiesPath "session-manager.ps1"
+            $f = Join-Path $script:utilitiesPath "SESSION/session-manager.ps1"
             $content = Get-Content $f -Raw
             ($content.Contains("[string]`$ProjectName = 'workspace_gentle_vanguard'")) | Should -Be $true
         }
@@ -36,12 +36,12 @@ Describe 'Session Scripts Tests' {
 
     Context 'Session Autostart' {
         It 'session-autostart.ps1 exists' {
-            $f = Join-Path $script:utilitiesPath "session-autostart.ps1"
+            $f = Join-Path $script:utilitiesPath "SESSION/session-autostart.ps1"
             Test-Path $f | Should -Be $true
         }
 
         It 'session-autostart.ps1 has valid PowerShell syntax' {
-            $f = Join-Path $script:utilitiesPath "session-autostart.ps1"
+            $f = Join-Path $script:utilitiesPath "SESSION/session-autostart.ps1"
             $errors = $null
             $content = Get-Content $f -Raw
             [System.Management.Automation.PSParser]::Tokenize($content, [ref]$errors) | Out-Null
@@ -49,13 +49,13 @@ Describe 'Session Scripts Tests' {
         }
 
         It 'session-autostart.ps1 uses config-driven pipeline' {
-            $f = Join-Path $script:utilitiesPath "session-autostart.ps1"
+            $f = Join-Path $script:utilitiesPath "SESSION/session-autostart.ps1"
             $content = Get-Content $f -Raw
             ($content -match 'config-driven|ConfigFile|\$config\.pipeline') | Should -Be $true
         }
 
         It 'get-session-id.ps1 checks the active session marker' {
-            $f = Join-Path $script:utilitiesPath "get-session-id.ps1"
+            $f = Join-Path $script:utilitiesPath "SESSION/get-session-id.ps1"
             $content = Get-Content $f -Raw
             ($content -match 'logs\\\.session-active|logs\\.session-active') | Should -Be $true
         }
@@ -63,7 +63,7 @@ Describe 'Session Scripts Tests' {
 
     Context 'Session Notification' {
         It 'session-notification.ps1 exists if present' {
-            $f = Join-Path $script:utilitiesPath "session-notification.ps1"
+            $f = Join-Path $script:utilitiesPath "SESSION/session-notification.ps1"
             if (Test-Path $f) {
                 $true | Should -Be $true
             } else {
@@ -74,13 +74,13 @@ Describe 'Session Scripts Tests' {
 
     Context 'Engram Session Integration' {
         It 'session-autostart.ps1 initializes Engram' {
-            $f = Join-Path $script:utilitiesPath "session-autostart.ps1"
+            $f = Join-Path $script:utilitiesPath "SESSION/session-autostart.ps1"
             $content = Get-Content $f -Raw
             ($content -match 'engram|Engram') | Should -Be $true
         }
 
         It 'engram-orchestrator.ps1 exists for session policy' {
-            $f = Join-Path $script:utilitiesPath "engram-orchestrator.ps1"
+            $f = Join-Path $script:utilitiesPath "ENGRAM/engram-orchestrator.ps1"
             Test-Path $f | Should -Be $true
         }
 

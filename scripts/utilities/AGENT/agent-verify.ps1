@@ -223,38 +223,39 @@ if (Test-DomainEnabled 'tests') {
         Add-Result "unit-tests" "WARN" "Quick mode: $($TestFiles.Count) test files found (not executed)" "tests"
     } else {
         $TestFiles = @(Get-ChildItem -Path $TestDir -Recurse -Filter "*.tests.ps1" -Name)
-        $TotalPassed = 0; $TotalFailed = 0; $FailedFiles = @()
-        foreach ($tf in $TestFiles) {
-            if (Test-DomainExpired) { Add-Result "unit-tests" "WARN" "Pester tests aborted due to timeout after $($TestFiles.IndexOf($tf) + 1)/$($TestFiles.Count) files" "tests"; break }
-            $absPath = "$Root\tests\$tf"
-            if (-not (Test-Path $absPath)) { continue }
+        if ($TestFiles.Count -eq 0) {
+            Add-Result "unit-tests" "WARN" "No test files found" "tests"
+        } elseif (Test-DomainExpired) {
+            Add-Result "unit-tests" "WARN" "Domain timeout before test execution" "tests"
+        } else {
             $TestOut = & pwsh -NoProfile -ExecutionPolicy Bypass -Command @"
-                Import-Module Pester -MinimumVersion 5.0.0 -ErrorAction SilentlyContinue
-                if (-not (Get-Module Pester)) { Import-Module Pester -MinimumVersion 3.4.0 -ErrorAction SilentlyContinue }
+                `$env:PSModulePath = ((`$env:PSModulePath -split ';') | Where-Object { `$_ -notmatch 'WindowsPowerShell' }) -join ';'
+                Get-Module Pester -ListAvailable | Where-Object { `$_.Version -ge '5.0.0' } | Select-Object -First 1 | ForEach-Object { Import-Module `$_.Path -Force }
                 if (-not (Get-Module Pester)) { Write-Output "PESTER_MISSING"; exit }
-                `$ver = (Get-Module Pester).Version
-                if (`$ver -ge [version]'5.0.0') { `$r = Invoke-Pester '$absPath' -PassThru -Show None }
-                else { `$r = Invoke-Pester '$absPath' -PassThru -Quiet }
-                if (`$r -and `$r.PassedCount -ne `$null) { Write-Output "PESTER_RESULT:`$(`$r.PassedCount):`$(`$r.FailedCount)" }
+                `$cfg = New-PesterConfiguration
+                `$cfg.Run.Path = "$Root\tests"
+                `$cfg.Run.PassThru = $true
+                `$cfg.Output.Verbosity = 'None'
+                `$r = Invoke-Pester -Configuration `$cfg
+                if (`$r) { Write-Output "PESTER_RESULT:`$(`$r.PassedCount):`$(`$r.FailedCount)" }
 "@ 2>&1
             if ($TestOut -match "PESTER_MISSING") {
-                Add-Result "unit-tests" "WARN" "Pester not installed, skipping test execution" "tests"; break
-            }
-            $PesterLine = $TestOut | Select-String "PESTER_RESULT:" | Select-Object -Last 1
-            if ($PesterLine) {
-                $parts  = "$PesterLine".ToString().Split(":")
-                if ($parts.Count -ge 3) {
-                    $p = [int]$parts[1]; $f = [int]$parts[2]
-                    $TotalPassed += $p; $TotalFailed += $f
-                    if ($f -gt 0) { $FailedFiles += "$tf ($f failed)" }
-                }
-            }
-        }
-        if (-not ($TestOut -match "PESTER_MISSING")) {
-            if ($TotalFailed -eq 0) {
-                Add-Result "unit-tests" "PASS" "$TotalPassed tests passed across $($TestFiles.Count) files, 0 failed" "tests"
+                Add-Result "unit-tests" "WARN" "Pester not installed, skipping test execution" "tests"
             } else {
-                Add-Result "unit-tests" "FAIL" "$TotalPassed passed, $TotalFailed FAILED across $($TestFiles.Count) files: $($FailedFiles -join '; ')" "tests"
+                $PesterLine = $TestOut | Select-String "PESTER_RESULT:" | Select-Object -Last 1
+                if ($PesterLine) {
+                    $parts  = "$PesterLine".ToString().Split(":")
+                    if ($parts.Count -ge 3) {
+                        $p = [int]$parts[1]; $f = [int]$parts[2]
+                        if ($f -eq 0) {
+                            Add-Result "unit-tests" "PASS" "$p tests passed across $($TestFiles.Count) files, 0 failed" "tests"
+                        } else {
+                            Add-Result "unit-tests" "FAIL" "$p passed, $f FAILED across $($TestFiles.Count) files" "tests"
+                        }
+                    }
+                } else {
+                    Add-Result "unit-tests" "WARN" "No Pester result output" "tests"
+                }
             }
         }
     }
