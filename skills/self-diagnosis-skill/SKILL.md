@@ -12,7 +12,7 @@ incompleteness or detects a task loop.
 
 ## Behavior
 
-1. Run `scripts/utilities/self-diagnosis.ps1` to confirm the diagnosis
+1. Run `scripts/utilities/DIAGNOSIS/self-diagnosis.ps1` to confirm the diagnosis
 2. If `break_glass_needed = true`, override response profile to `lleno`/`chat-balanced`
 3. Notify user with `[BREAK GLASS]` block explaining the change
 4. Log to `.logs/self-diagnosis-audit.jsonl`

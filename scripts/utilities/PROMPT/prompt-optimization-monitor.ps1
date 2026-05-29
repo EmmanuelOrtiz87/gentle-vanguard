@@ -1,4 +1,17 @@
-param([string]$WorkspaceRoot = ".",[int]$SoftThreshold = 3000,[int]$HardThreshold = 5000)
+param(
+    [string]$WorkspaceRoot = ".",
+    [int]$SoftThreshold = 3000,
+    [int]$HardThreshold = 5000
+)
+$cfgPath = Join-Path $WorkspaceRoot "config/system-prompt-optimization.json"
+if (Test-Path $cfgPath) {
+    $cfg = Get-Content $cfgPath -Raw | ConvertFrom-Json
+    if ($cfg.monitoring) {
+        $SoftThreshold = $cfg.monitoring.alertThreshold
+        $HardThreshold = $cfg.monitoring.criticalThreshold
+    }
+}
+
 $claudePath = Join-Path $WorkspaceRoot "CLAUDE.md"
 if (-not (Test-Path $claudePath)) { exit 0 }
 $content = Get-Content $claudePath -Raw

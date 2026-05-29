@@ -32,6 +32,16 @@ jobs:
           }
           ./scripts/run-tests-simple.ps1
 
+      - name: Validate Tool Configs
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          if (-not (Test-Path './scripts/utilities/CONFIG/validate-tool-configs.ps1')) {
+            Write-Output "::warning::validate-tool-configs.ps1 not found — skipping"
+            exit 0
+          }
+          ./scripts/utilities/CONFIG/validate-tool-configs.ps1 -Quiet
+
       - name: Run E2E Tests (Release Workflow)
         shell: pwsh
         run: |

@@ -63,6 +63,15 @@ jobs:
           }
           Write-Host "Plugin validation: PASS ($($parsed.total_plugins) plugins, $($parsed.errors) errors, $($parsed.warnings) warnings)"
 
+      - name: Validate Tool Configs
+        shell: pwsh
+        run: |
+          if (-not (Test-Path './scripts/utilities/CONFIG/validate-tool-configs.ps1')) {
+            Write-Output "::warning::validate-tool-configs.ps1 not found — skipping tool config validation"
+            exit 0
+          }
+          ./scripts/utilities/CONFIG/validate-tool-configs.ps1
+
       - name: Run Cross-Workspace Validation
         shell: pwsh
         run: |

@@ -1,7 +1,7 @@
 {
-  "Status": "active",
-  "Created": "2026-05-28T10:31:15.3895446-03:00",
+  "Created": "2026-05-28T23:23:25.8520522-03:00",
+  "VariantA": "A",
   "Name": "test1",
   "VariantB": "B",
-  "VariantA": "A"
+  "Status": "active"
 }
