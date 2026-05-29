@@ -449,6 +449,15 @@
         "--tools=agent"
       ],
       "enabled": true
+    },
+    "skill-server": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "dist/scripts/mcp/skill-server.js"
+      ],
+      "enabled": true,
+      "description": "Exposes 153+ skills as MCP tools: list_skills, get_skill, search_skills"
     }
   },
   "tools": {
