@@ -214,46 +214,4 @@ telemetry:
 #   Result: Minimal, focused context ✅
 
 
-# ============================================================================
-# SYSTEM PROMPT OPTIMIZATION (Added 2026-05-27)
-# ============================================================================
-# Automatic token reduction via semantic compression
-
-system_prompt:
-  optimization:
-    enabled: true
-    compression: semantic
-    target_tokens: 2000
-    max_tokens: 5000
-    abbreviations:
-      implementation: impl
-      function: fn
-      configuration: cfg
-      required: req
-      optional: opt
-      reference: ref
-      standard: std
-      performance: perf
-      security: sec
-      development: dev
-      production: prod
-      environment: env
-      database: db
-      application: app
-      service: svc
-      repository: repo
-    cache:
-      enabled: true
-      directory: .session/prompt-cache
-      ttl: 3600
-    security:
-      scan_on_load: true
-      block_secrets: true
-      block_xss: true
-    versioning:
-      enabled: true
-      directory: .session/prompt-versions
-    monitoring:
-      track_tokens: true
-      alert_threshold: 3000
-      alert_critical: 5000
+# Nota: system prompt optimization centralizada en config/system-prompt-optimization.json

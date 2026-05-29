@@ -61,6 +61,14 @@ Professional mode: ES/PT-BR/EN, no regional slang, formal tone, no persona switc
 | SDD FLOW                 | New feature -> BA/EXPLORE, no exceptions                                  |
 | Delegation Rules         | `rules/DELEGATION-RULES.md`                                               |
 
+## Hard Rules — Config Safety
+
+| Rule | Description |
+|------|-------------|
+| **NO custom props in tool configs** | Never add non-standard properties to `opencode.json`, `.cursorrules`, `.windsurf/config.json`, etc. Tools reject unknown props at startup. Use `config/*.json` for custom config. |
+| **Validate before deploy** | Run `scripts/utilities/CONFIG/validate-opencode-config.ps1` before any change to `opencode.json` |
+| **Separate config per concern** | Prompt optimization → `config/system-prompt-optimization.json`. Never inline into tool configs. |
+
 ## Context Optimization
 
 | Technique           | Description                                                                                         |

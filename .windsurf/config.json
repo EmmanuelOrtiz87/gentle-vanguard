@@ -1,41 +1,9 @@
 {
   "name": "Windsurf - Optimized Profile",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Optimized Windsurf for peak hour / token pressure",
-  "workspace": { "projectRoot": ".", "configFiles": ["AGENTS.md", "CLAUDE.md"], "skillRegistry": ".atl/skill-registry.md" },
-  "aiSettings": { "temperature": 0.3, "maxTokens": 2500, "localFirst": true },
-  "toolPermissions": { "websearch": "deny", "webfetch": "deny", "externalTools": "ask" },
-  "contextManagement": { "useEngramMemory": true, "useLocalSkills": true, "useProjectDocs": true, "fastContext": true },
-  "cascade": { "restrictToLocal": true, "allowExternalTools": false, "webDocsSearch": "disabled" },
-  "preProcessing": { "enabled": true, "mandatory": true, "script": "scripts/utilities/pre-process-input.ps1", "scriptArgs": { "UserInput": "USER_INPUT_HERE", "WorkspaceRoot": "." } },
-  "sessionManagement": { "tracking": { "project": "gentle-vanguard", "sessionIdPattern": "session-YYYY-MM-DD-XX" } },
-  "language": { "default": "es", "technicalTerms": "en" },
-  "systemPromptOptimization": {
-    "enabled": true,
-    "targetTokens": 2000,
-    "maxTokens": 5000,
-    "compression": "semantic",
-    "abbreviations": {
-      "implementation": "impl",
-      "function": "fn",
-      "configuration": "cfg",
-      "required": "req",
-      "optional": "opt",
-      "reference": "ref",
-      "standard": "std",
-      "performance": "perf",
-      "security": "sec",
-      "development": "dev",
-      "production": "prod",
-      "environment": "env",
-      "database": "db",
-      "application": "app",
-      "service": "svc",
-      "repository": "repo"
-    },
-    "cache": { "enabled": true, "directory": ".session/prompt-cache", "ttl": 3600 },
-    "security": { "scanOnLoad": true, "blockSecrets": true, "blockXss": true },
-    "versioning": { "enabled": true, "directory": ".session/prompt-versions" },
-    "monitoring": { "trackTokens": true, "alertThreshold": 3000, "criticalThreshold": 5000 }
-  }
+  "rules": [
+    "Configuración de proyecto en config/windsurf-project-settings.json",
+    "Optimización de prompts en config/system-prompt-optimization.json"
+  ]
 }

@@ -163,7 +163,7 @@
         "id": "self-diagnosis",
         "enabled": true,
         "lazy": true,
-        "script": "scripts/utilities/self-diagnosis-autonomous.ps1",
+        "script": "scripts/utilities/DIAGNOSIS/self-diagnosis-autonomous.ps1",
         "args": "-Depth quick",
         "required": false,
         "description": "Proactive failure detection and autonomous learning capture"
@@ -251,6 +251,22 @@
         "args": "-JsonString '{\"test\": \"value\"}' -Context 'startup-verify'",
         "required": false,
         "description": "Verifica que el validador JSON esta operativo al inicio de sesion"
+      },
+      {
+        "id": "opencode-config-validate",
+        "enabled": true,
+        "script": "scripts/utilities/CONFIG/validate-opencode-config.ps1",
+        "args": "-ConfigPath opencode.json",
+        "required": false,
+        "description": "Valida que opencode.json no tenga props no reconocidas por OpenCode (previene crash al iniciar)"
+      },
+      {
+        "id": "validate-tool-configs",
+        "enabled": true,
+        "script": "scripts/utilities/CONFIG/validate-tool-configs.ps1",
+        "args": "-Quiet",
+        "required": false,
+        "description": "Valida tool configs (.windsurf, .continue, .clinerules) contra schemas oficiales"
       }
     ],
 
