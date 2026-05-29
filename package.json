@@ -1,17 +1,28 @@
 {
   "version": "1.0.1",
+  "packageManager": "pnpm@11.1.1",
+  "engines": {
+    "pnpm": ">=11.0.0",
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "test": "pwsh ./scripts/run-tests-simple.ps1",
     "lint:json": "pwsh ./hooks/json-lint.ps1",
     "lint:workflows": "pwsh ./hooks/workflow-lint.ps1",
-    "format:check": "npx prettier --check \"**/*.{md,json,yml,yaml}\" ",
-    "format:fix": "npx prettier --write \"**/*.{md,json,yml,yaml}\" ",
-    "prepare": "npx lefthook install"
+    "format:check": "pnpm prettier --check \"**/*.{md,json,yml,yaml}\" ",
+    "format:fix": "pnpm prettier --write \"**/*.{md,json,yml,yaml}\" ",
+    "prepare": "pnpm lefthook install",
+    "build:mcp": "pnpm tsc",
+    "postinstall": "pnpm build:mcp"
   },
   "devDependencies": {
+    "@types/node": "^25.9.1",
     "better-sqlite3": "^12.10.0",
     "lefthook": "^2.1.8",
-    "prettier": "^3.0.0"
+    "prettier": "^3.0.0",
+    "typescript": "^6.0.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0"
+  }
 }

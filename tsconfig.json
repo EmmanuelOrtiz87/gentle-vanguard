@@ -16,12 +16,14 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
     "outDir": "./dist",
-    "baseUrl": "."
+    "rootDir": ".",
+    "types": ["node"],
+    "ignoreDeprecations": "6.0"
   },
-  "include": ["adapters/**/*", "scripts/**/*.ts"],
+  "include": ["scripts/mcp/**/*.ts"],
   "exclude": ["node_modules", "dist", "build", "coverage", "templates"]
 }

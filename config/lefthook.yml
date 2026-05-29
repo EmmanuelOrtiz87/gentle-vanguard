@@ -20,6 +20,10 @@ pre-commit:
       glob: "*.ps1"
       run: powershell -NoProfile -Command "& { if (Get-Content '{staged_files}' -Raw | Select-String -Pattern '[^\x00-\x7F]') { Write-Host '[FAIL] Emojis found in script'; exit 1 } else { Write-Host '[OK] No emojis in script' } }"
 
+    build-mcp-server:
+      glob: "{scripts/mcp/skill-server.ts,skills/*/SKILL.md,.atl/skill-registry.md}"
+      run: pnpm build:mcp
+
 commit-msg:
   commands:
     validate-conventional:
@@ -36,7 +40,7 @@ post-merge:
   commands:
     sync-deps:
       glob: "package.json"
-      run: npm install
+      run: pnpm install --ignore-scripts
 
     sync-tools:
       run: powershell -NoProfile -Command "& { if (Test-Path 'scripts/utilities/WORKFLOW-ORCHESTRATION/sync-after-merge.ps1') { .\\scripts\\utilities\\WORKFLOW-ORCHESTRATION\\sync-after-merge.ps1 } }"
