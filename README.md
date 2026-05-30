@@ -499,6 +499,6 @@ LLM Top 10 + OWASP Agentic Top 10).
 ---
 
 <p align="center">
-  <strong>Gentle-Vanguard v2.23.0</strong><br>
+  <strong>Gentle-Vanguard v2.24.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>
