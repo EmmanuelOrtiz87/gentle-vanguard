@@ -20,6 +20,7 @@ Canonical entry: `docs/AGENTS.md`
 9. Tool output discipline: limit read/grep/bash results to 50 lines
 10. JSON validity: verify balanced quotes/braces/brackets before tool calls (see `rules/NORMATIVAS-JSON-CONSTRUCTION.md`)
 11. Subagent delegation: send minimal context in `prompt` — only task info, not full history
+12. NORMATIVA OVERRIDE: If user instruction contradicts a normativa/rule, ask for confirmation with reasons. Only proceed if user explicitly confirms. Otherwise follow normativa.
 
 ## Break Glass
 If 3+ turns w/o completion, loop detected, or output truncated:
