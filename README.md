@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.23.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.24.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
@@ -55,6 +55,10 @@ otherwise be chaotic AI-assisted development.
   collect cycle. Built on top of the existing dispatch agent system
 - **Skill MCPs** — On-demand Model Context Protocol servers launched from SKILL.md frontmatter.
   Register, start, stop, list via dedicated manager. Zero-churn lifecycle
+- **Optimization Stack** — Token compression (-64% CLAUDE.md), SHA256 response cache
+  (TTL 30min), model cost optimization (4x cheaper with qwen-3.6-plus), pre-task
+  compression (~30% reduction), and automated integrity verification via
+  `verify-optimization-stack.ps1`
 
 ```mermaid
 flowchart TB

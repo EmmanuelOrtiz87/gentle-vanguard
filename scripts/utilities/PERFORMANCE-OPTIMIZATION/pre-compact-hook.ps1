@@ -20,9 +20,16 @@ function Write-Anchor {
 function Check-AutoCompaction {
     param([int]$threshold = $TriggerThreshold)
     
-    # Simular verificacin de tamao de contexto
-    # En implementacin real, esto verificara el tamao real del contexto
-    $contextSize = 16000 # Valor simulado para demostrar la funcionalidad
+    # Leer tamao real del contexto desde token-usage.json
+    $contextSize = 0
+    $repoRoot = if ($env:GENTLE_VANGUARD_BASE_DIR) { $env:GENTLE_VANGUARD_BASE_DIR } else { Get-Location }
+    $tokenFile = Join-Path $repoRoot ".session\token-usage.json"
+    if (Test-Path $tokenFile) {
+        try {
+            $tu = Get-Content $tokenFile -Raw | ConvertFrom-Json
+            $contextSize = [Math]::Floor([int]$tu.totalContextChars / 4) + [int]$tu.totalTokens
+        } catch { $contextSize = $threshold + 1 }
+    }
     
     if ($contextSize -gt $threshold) {
         Write-Anchor "Automatic context compaction triggered (size: $contextSize tokens)"

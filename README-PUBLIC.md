@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.20.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.24.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
@@ -132,6 +132,11 @@ flowchart TB
 - **Cross-Platform** — Windows, macOS, Linux. PowerShell 7+ and Bash.
 - **10 Tool-Compatible** — OpenCode, Claude Code, Cline, Cursor, Windsurf, Codex, Copilot,
   Antigravity, Continue.dev, Claude (generic)
+- **Optimization Stack** — Token compression (-64% CLAUDE.md), SHA256 response cache
+  (TTL 30min), model cost optimization (4x cheaper with qwen-3.6-plus), pre-task
+  compression (~30% reduction), automated integrity verification via 8-rule script
+- **Engram Auto-Backup** — SQLite memory backup on session close, Git-based rollback,
+  NDJSON export, weekly integrity verification
 - **Review Workload Guard** — Auto-blocks PRs exceeding 400 changed lines, recommends chained PRs
 - **CLI** — 50+ subcommands: `dispatch`, `audit`, `review`, `judgment-day`, `dashboard`, `benchmark`
 
