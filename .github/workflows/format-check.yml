@@ -9,9 +9,15 @@ concurrency:
 
 on:
   push:
+<<<<<<< Updated upstream
     branches: [develop]
   pull_request:
     branches: [develop, main]
+=======
+    branches: [main]
+  pull_request:
+    branches: [main]
+>>>>>>> Stashed changes
 
 jobs:
   prettier:
