@@ -9,7 +9,7 @@ concurrency:
 
 on:
   push:
-    branches: [develop]
+    branches: [develop, main]
     paths:
       - '.github/workflows/sync-public.yml'
       - 'build/**'
@@ -25,6 +25,8 @@ on:
       - 'CONTRIBUTING.md'
       - 'SECURITY.md'
       - 'CHANGELOG.md'
+      - 'README-PUBLIC.md'
+      - 'gentle-vanguard-presentation.html'
   workflow_dispatch:
     inputs:
       public_repo:

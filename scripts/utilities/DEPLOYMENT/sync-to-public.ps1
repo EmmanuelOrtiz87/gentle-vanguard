@@ -69,8 +69,15 @@ Copy-Item "$privateBootstrapDir\setup-multi-machine.ps1" "$bootstrapDir\setup-mu
 # 1. Public documentation (root files)
 # ============================================================================
 Write-Output " Syncing public docs..."
-# README.md is intentionally NOT synced — gentle-vanguard-public has its own independent README
-# Copy-Item "$privateRepo\README.md" "$publicRepo\README.md" -Force
+# README-PUBLIC.md is the canonical public-facing README — it is the single source of truth
+# for the public repo's README.md. Changes to README-PUBLIC.md in private repo automatically
+# flow to the public repo. The public repo MUST NOT modify README.md directly.
+if (Test-Path "$privateRepo\README-PUBLIC.md") {
+    Copy-Item "$privateRepo\README-PUBLIC.md" "$publicRepo\README.md" -Force
+    Write-Output "  [OK] README-PUBLIC.md -> README.md (public-facing)"
+} else {
+    Write-Output "  [WARN] README-PUBLIC.md not found — public README.md not updated"
+}
 Copy-Item "$privateRepo\LICENSE" "$publicRepo\LICENSE" -Force
 Copy-Item "$privateRepo\CONTRIBUTING.md" "$publicRepo\CONTRIBUTING.md" -Force
 Copy-Item "$privateRepo\SECURITY.md" "$publicRepo\SECURITY.md" -Force
@@ -207,6 +214,17 @@ if (Test-Path "$privateRepo\demos") {
     }
     Copy-Item "$privateRepo\demos" "$publicRepo\" -Recurse -Force
     Write-Output "  [OK] demos/"
+}
+
+# ============================================================================
+# 6b. Presentation — gentle-vanguard-presentation.html
+# ============================================================================
+Write-Output " Syncing presentation..."
+if (Test-Path "$privateRepo\gentle-vanguard-presentation.html") {
+    Copy-Item "$privateRepo\gentle-vanguard-presentation.html" "$publicRepo\gentle-vanguard-presentation.html" -Force
+    Write-Output "  [OK] gentle-vanguard-presentation.html"
+} else {
+    Write-Output "  [WARN] gentle-vanguard-presentation.html not found"
 }
 
 # ============================================================================

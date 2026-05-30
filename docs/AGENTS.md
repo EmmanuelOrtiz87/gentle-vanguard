@@ -65,6 +65,10 @@ Professional mode: ES/PT-BR/EN, no regional slang, formal tone, no persona switc
 
 | Rule | Description |
 |------|-------------|
+| **NORMATIVA OVERRIDE PROTOCOL** | If user instruction contradicts a normativa/rule, ASK for explicit confirmation explaining WHY it conflicts. Proceed ONLY if user confirms. Otherwise follow normativa without deviation. |
+
+| Rule | Description |
+|------|-------------|
 | **NO custom props in tool configs** | Never add non-standard properties to `opencode.json`, `.cursorrules`, `.windsurf/config.json`, etc. Tools reject unknown props at startup. Use `config/*.json` for custom config. |
 | **Validate before deploy** | Run `scripts/utilities/CONFIG/validate-opencode-config.ps1` before any change to `opencode.json` |
 | **Separate config per concern** | Prompt optimization → `config/system-prompt-optimization.json`. Never inline into tool configs. |
