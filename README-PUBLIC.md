@@ -39,123 +39,99 @@ standards, tracks every token, and remembers what you did last session.
 
 ## What It Solves
 
-| Problem                              | How Gentle-Vanguard Solves It                                          |
-| ------------------------------------ | ---------------------------------------------------------------------- |
-| AI gives inconsistent code quality   | 7D validation gates catch bad code before commit                       |
-| No memory between sessions           | Engram persists decisions, bugs, and patterns across sessions          |
-| Random model selection wastes tokens | Cost-aware router picks the cheapest capable model per agent           |
-| No governance in AI workflows        | SDD enforcement, judgment-day adversarial review, pre-commit hooks     |
-| Disconnected AI sessions             | Session lifecycle tracks context across dispatches with crash recovery |
-| No visibility into AI costs          | Dashboard with token trends, per-agent costs, ROI analysis             |
-| One-size-fits-all AI responses       | 18 specialized agents with role-specific model routing                 |
-| Tool lock-in                         | Works with 10 coding tools via runtime detection                       |
+| Problem                         | How Gentle-Vanguard Solves It                                   |
+| ------------------------------- | --------------------------------------------------------------- |
+| AI code quality varies wildly   | Multi-layer validation gates catch issues before commit         |
+| No session-to-session memory    | Persistent memory system recalls decisions across sessions      |
+| Token waste from wrong models   | Cost-aware router assigns optimal model per task type           |
+| Unstructured AI workflows       | SDD lifecycle enforces spec-driven development                  |
+| Disconnected tool sessions      | Session manager tracks context with crash recovery              |
+| No AI cost visibility           | Dashboard with token trends and per-agent analytics             |
+| One-size AI responses           | 15+ specialized agents with role-specific profiles              |
+| Locked into one AI tool         | Runtime detection adapts to 10+ coding tools seamlessly         |
 
 ---
 
 ## Architecture
 
 ```mermaid
-flowchart TB
-    YOU[You / CLI / IDE]
-    YOU -->|request| PP[pre-process-input.ps1]
+flowchart LR
+    YOU[You] -->|request| PP[Router]
     PP --> ORC[Orchestrator]
-
-    ORC -->|small| INLINE[Inline work]
-    ORC -->|complex| DELEGATE{Delegation Rules}
-    DELEGATE -->|4+ files| SCOUT[scout / context-builder]
-    DELEGATE -->|2+ files| WORKER[worker + reviewer]
-    DELEGATE -->|architecture/risk| SDD[SDD Lifecycle]
-
-    SDD --> BA[BA - Explore]
-    SDD --> SAD[SAD - Design]
-    SDD --> DEV[DEV - Apply]
-    SDD --> QA[QA - Verify]
-
-    BA --> SKILLS[135 Skills]
+    ORC -->|inline| INLINE[Direct]
+    ORC -->|complex| SDD[SDD Lifecycle]
+    SDD --> BA[BA → SAD → DEV → QA]
+    BA --> SKILLS[Skills]
     DEV --> SKILLS
     QA --> SKILLS
-
-    SKILLS --> MEM[Engram Memory]
+    SKILLS --> MEM[Memory]
 ```
 
 ### 5-Layer Architecture
 
-| Layer              | Role                  | Components                                                |
-| ------------------ | --------------------- | --------------------------------------------------------- |
-| **1. Agents**      | Task delegation       | 1 orchestrator + 16 sub-agents                            |
-| **2. Commands**    | CLI entry points      | `gv.ps1`, `pre-process-input.ps1`                         |
-| **3. MCP Servers** | Protocol bridge       | Model Context Protocol, Engram MCP, CodeGraph             |
-| **4. Skills**      | Specialized execution | 135 skills (frontend, backend, DevOps, security, testing) |
-| **5. Memory**      | Persistent context    | Engram (hot/warm/cold tiers)                              |
+| Layer              | Role                  | Components                                          |
+| ------------------ | --------------------- | --------------------------------------------------- |
+| **1. Agents**      | Task delegation       | Orchestrator + specialized sub-agents               |
+| **2. Commands**    | CLI entry points      | `gv` CLI, pre-process router                        |
+| **3. MCP Servers** | Protocol bridge       | MCP protocol for skill communication                |
+| **4. Skills**      | Specialized execution | 135+ skills across all domains                      |
+| **5. Memory**      | Persistent context    | Cross-session memory with hot/warm/cold tiers       |
 
 ---
 
 ## Agent Ecosystem
 
-| Agent        | Role                    | Model Profile    |
-| ------------ | ----------------------- | ---------------- |
-| Orchestrator | Main router             | inherit          |
-| BA           | Requirements & analysis | fast/cheap       |
-| SAD          | System design           | strong-reasoning |
-| DEV          | Code generation         | strong-coding    |
-| QA           | Testing & validation    | strong-review    |
-| OPS          | Deployment & CI/CD      | fast/cheap       |
-| DOC          | Technical docs          | fast/cheap       |
-| GOV          | Compliance & audit      | strong-review    |
-| SESSION      | Session management      | fast/cheap       |
-| PREMORTEM    | Risk assessment         | strong-reasoning |
-| FINANCE      | Financial modeling      | strong-reasoning |
-| LEGAL        | Regulatory compliance   | strong-review    |
-| MKT          | Marketing & SEO         | fast/cheap       |
-| SALES        | Pipeline management     | fast/cheap       |
-| HR           | Talent acquisition      | fast/cheap       |
-| SELF-DIAG    | Self-diagnosis          | fast/cheap       |
-| BUS-TELE     | Business telemetry      | fast/cheap       |
+| Agent     | Role                    |
+| --------- | ----------------------- |
+| BA        | Requirements & analysis |
+| SAD       | System design           |
+| DEV       | Code generation         |
+| QA        | Testing & validation    |
+| OPS       | Deployment & CI/CD      |
+| GOV       | Compliance & audit      |
+| DOC       | Technical docs          |
+| SESSION   | Session management      |
+| PREMORTEM | Risk assessment         |
+| FINANCE   | Financial modeling      |
+| LEGAL     | Regulatory compliance   |
+| MKT       | Marketing & SEO         |
+| SALES     | Pipeline management     |
+| HR        | Talent acquisition      |
 
-> All sub-agents are managed autonomously — only the Orchestrator is user-selectable.
+> 18 specialized agents orchestrated by a central router. Each agent has an optimized model profile (fast/cheap, strong-reasoning, or strong-coding) assigned per role.
 
 ---
 
 ## Key Features
 
-- **18 Specialized Agents** — Orchestrator + BA, SAD, DEV, QA, OPS, GOV, DOC, SESSION, PREMORTEM,
-  FINANCE, LEGAL, MKT, SALES, HR, SELF-DIAG, BUS-TELE
-- **135 On-Demand Skills** — Angular, React, Next.js, Go, Django, Python, TypeScript, Docker, K8s,
-  Playwright, Security, API Design — zero memory until triggered
-- **Persistent Engram Memory** — Cross-session context, conflict detection, auto-reconciliation
-- **Cost-Aware Model Router** — Per-agent model assignment with 3 profiles: fast/cheap,
-  strong-reasoning, strong-coding
-- **SDD Lifecycle** — BA → SAD → DEV → QA with OpenSpec artifact store and per-phase gates
-- **Governance-First** — 7D validation, judgment-day adversarial review, 16+ CI/CD workflows,
-  pre-commit hooks
-- **100% Local-First** — No required external services. Optional cloud AI integration.
-- **Cross-Platform** — Windows, macOS, Linux. PowerShell 7+ and Bash.
-- **10 Tool-Compatible** — OpenCode, Claude Code, Cline, Cursor, Windsurf, Codex, Copilot,
-  Antigravity, Continue.dev, Claude (generic)
-- **Optimization Stack** — Token compression (-64% CLAUDE.md), SHA256 response cache
-  (TTL 30min), model cost optimization (4x cheaper with qwen-3.6-plus), pre-task
-  compression (~30% reduction), automated integrity verification via 8-rule script
-- **Engram Auto-Backup** — SQLite memory backup on session close, Git-based rollback,
-  NDJSON export, weekly integrity verification
-- **Review Workload Guard** — Auto-blocks PRs exceeding 400 changed lines, recommends chained PRs
-- **CLI** — 50+ subcommands: `dispatch`, `audit`, `review`, `judgment-day`, `dashboard`, `benchmark`
+- **18 specialized agents** with role-specific model routing
+- **135+ on-demand skills** across frontend, backend, DevOps, security, testing, business
+- **Persistent cross-session memory** with conflict detection and auto-reconciliation
+- **Cost-aware model router** — assigns optimal model per task type
+- **SDD lifecycle** — Spec-Driven Development with per-phase quality gates
+- **Multi-layer governance** — adversarial review, pre-commit hooks, CI/CD enforcement
+- **100% local-first** — no required external services
+- **Cross-platform** — Windows, macOS, Linux
+- **10 tool-compatible** — OpenCode, Claude Code, Cline, Cursor, Windsurf, and more
+- **Token optimization stack** — compression, caching, model cost reduction
+- **CLI** with 50+ subcommands
 
 ---
 
 ## Skill Catalog
 
-| Category              | Count | Key Skills                                                                                                      |
-| --------------------- | ----- | --------------------------------------------------------------------------------------------------------------- |
-| Frontend/Mobile       | 25    | `react-19-skill`, `angular-spa-skill`, `nextjs-15-skill`, `tailwind-4-skill`, `flutter-skill`                   |
-| Backend               | 5     | `golang-api-skill`, `django-drf-skill`, `api-design-skill`, `database-relational-skill`, `database-nosql-skill` |
-| DevOps/Infra          | 8     | `docker-devops-skill`, `kubernetes-deployment`, `terraform-infrastructure`, `monitoring-aggregator`             |
-| Security & Governance | 8     | `security-skill`, `judgment-day`, `architecture-governance`, `documentation-governance`                         |
-| Testing/QA            | 8     | `testing-skill`, `playwright-skill`, `pytest-skill`, `testing-strategy-skill`, `bdd-scenarios-skill`            |
-| Content/Marketing     | 14    | `marketing-content-writer`, `seo-audit-skill`, `visual-content-skill`, `cognitive-doc-design`                   |
-| Business              | 14    | `finance-financial-analyst`, `sales-account-executive`, `hr-talent-acquisition`, `legal-compliance-officer`     |
-| Git/Workflow          | 9     | `branch-pr`, `chained-pr`, `work-unit-commits`, `gitflow-orchestrator-skill`, `release-management-skill`        |
-| Core/Orchestration    | 15    | `sdd-lifecycle`, `session-workflow-skill`, `auto-delegation-router`, `skill-registry`, `self-diagnosis-skill`   |
-| Other                 | 40    | `project-scaffolding-skill`, `incident-response-skill`, `premortem-skill`, `karpathy-guidelines`                |
+| Category              | Count | Examples                              |
+| --------------------- | ----- | ------------------------------------- |
+| Frontend/Mobile       | 25    | React, Angular, Next.js, Flutter      |
+| Backend               | 5     | Go, Django, API Design, Databases     |
+| DevOps/Infra          | 8     | Docker, Kubernetes, Terraform         |
+| Security & Governance | 8     | Security audit, adversarial review    |
+| Testing/QA            | 8     | Playwright, pytest, BDD               |
+| Content/Marketing     | 14    | SEO, content strategy, visual design  |
+| Business              | 14    | Finance, sales, HR, legal             |
+| Git/Workflow          | 9     | Branch/PR management, release         |
+| Core/Orchestration    | 15    | SDD lifecycle, session mgmt, routing  |
+| Other                 | 40    | Scaffolding, incident response, risk  |
 
 ---
 
@@ -195,39 +171,13 @@ pwsh -File scripts/bootstrap.ps1
 
 ## CI/CD Pipeline (16 Workflows)
 
-| Workflow                           | Purpose                    | Trigger              |
-| ---------------------------------- | -------------------------- | -------------------- |
-| `gentle-vanguard-quality-gate.yml` | Quality gates on PRs       | Every PR             |
-| `test-suite.yml`                   | Full test suite            | Every PR/push        |
-| `ps-lint.yml`                      | PSScriptAnalyzer lint      | Every PR             |
-| `sdd-gate.yml`                     | Block PRs without SDD      | Every PR             |
-| `script-governance.yml`            | Script compliance          | Every PR             |
-| `format-check.yml`                 | Prettier formatting        | Every PR             |
-| `gitleaks.yml`                     | Secret scanning            | Every PR             |
-| `security-scan.yml`                | OWASP security scanning    | Weekly               |
-| `autonomous-validation.yml`        | Full validation suite      | Weekly               |
-| `cross-platform-tests.yml`         | Cross-platform tests       | Every PR/push        |
-| `dashboard-auto-refresh.yml`       | Metrics dashboard          | Daily                |
-| `monthly-management-report.yml`    | Executive report           | Monthly              |
-| `release.yml`                      | Release management         | On tag               |
-| `labeler.yml`                      | Auto-label PRs             | Every PR             |
-| `sync-public.yml`                  | Sync to public repo        | On push to `main`    |
-| `workflow-lint.yml`                | Workflow syntax validation | On `.github/` change |
+Automated validation across quality gates, security scanning, testing, and reporting — triggered on PRs, pushes, scheduled intervals, or tags.
 
 ---
 
 ## Defensive Patterns
 
-All PowerShell scripts follow standardized defensive patterns:
-
-- Robust `repoRoot` resolution via `$env:GENTLE_VANGUARD_BASE_DIR` + recursive config search
-- BOM-free UTF-8 encoding
-- ASCII-only output (no Unicode in scripts)
-- `$ErrorActionPreference = 'Stop'` at script entry
-- SHA256 integrity baselines for security-critical config
-- Quoted hashtable keys with hyphens
-- All parameters validated before use
-- No hardcoded paths — all resolved via environment variables
+All scripts follow standardized patterns for robustness and security: strict error handling, validated parameters, no hardcoded paths, SHA256 integrity baselines, and BOM-free UTF-8 encoding.
 
 ---
 
@@ -255,6 +205,6 @@ AES-256 encryption for secrets, API keys, and sensitive configs. See [SECURITY.m
 ---
 
 <p align="center">
-  <strong>Gentle-Vanguard v2.20.0</strong><br>
+  <strong>Gentle-Vanguard v2.24.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>
