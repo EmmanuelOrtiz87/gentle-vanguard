@@ -17,7 +17,7 @@
 #>
 
 param(
-  [ValidateSet("mcp","team","session","factory","sdd","pnpm","lefthook","all")]
+  [ValidateSet("mcp","team","session","factory","sdd","pnpm","lefthook","optimization","all")]
   [string]$Component = "all",
   [switch]$Quiet
 )
@@ -129,6 +129,14 @@ function Check-Pnpm {
   }
 }
 
+function Check-OptimizationStack {
+  Write-Host "`n=== Optimization Stack ===" -ForegroundColor Cyan
+  $verifyPath = Join-Path $root "scripts/validation/verify-optimization-stack.ps1"
+  if (-not (Test-Path $verifyPath)) { Write-Check "verify-optimization-stack.ps1 exists" $false; return }
+  $null = & $verifyPath -Quiet 2>&1
+  Write-Check "Optimization stack (8 rules)" ($LASTEXITCODE -eq 0)
+}
+
 function Check-Lefthook {
   Write-Host "`n=== Lefthook Hooks ===" -ForegroundColor Cyan
   $hookFiles = @(
@@ -151,6 +159,7 @@ switch ($Component) {
   "sdd" { Check-Sdd }
   "pnpm" { Check-Pnpm }
   "lefthook" { Check-Lefthook }
+  "optimization" { Check-OptimizationStack }
   "all" {
     Check-Mcp
     Check-TeamMode
@@ -159,6 +168,7 @@ switch ($Component) {
     Check-Sdd
     Check-Pnpm
     Check-Lefthook
+    Check-OptimizationStack
   }
 }
 

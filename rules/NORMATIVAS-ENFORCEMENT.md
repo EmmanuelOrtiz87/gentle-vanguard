@@ -1,121 +1,83 @@
 # Enforcement & Governance
 
-**Version:** 1.0.0 **Last updated:** 2026-05-23
+**Version:** 2.0.0 **Last updated:** 2026-05-30 **Status:** ACTIVE
 
 ---
 
-## Enforcement & Governance
+## Implementation Reference
 
-### 1. Normatives Enforcement
+This document references the actual enforcement scripts — not process boilerplate.
 
-#### 1.1 Enforcement Mechanisms
+## Enforcement Layers
 
-- Automated checks (linting, scanning)
-- Code review process
-- CI/CD gates
-- Monitoring and alerting
-- Regular audits
+### 1. Pre-Response Hook (Every Turn) — `scripts/utilities/pre-process-input.ps1`
 
-#### 1.2 Violation Handling
+Runs **before every agent response**. Three sub-layers:
 
-1. Detection
-2. Notification
-3. Investigation
-4. Remediation
-5. Verification
-6. Documentation
-7. Prevention
+| Layer | What It Checks | Rules | Script Reference |
+|-------|---------------|-------|------------------|
+| **Input Validation** | Secrets in plain text, destructive commands, force push patterns, excessive length | SEC-001, OPS-001, GIT-001, PERF-001 | `pre-process-input.ps1` lines 12-44 |
+| **Token Tracking** | Session token accumulation, context size | NORMATIVAS-PERFORMANCE.md | `pre-process-input.ps1` lines 46-56 |
+| **Pre-Compact Hook** | Triggers context compaction when >15K tokens | CONTEXT-ENGINEERING.md | `pre-process-input.ps1` lines 80-91 |
+| **Response Cache** | SHA256-based cache with 30min TTL, skips redundant processing | NORMATIVAS-PERFORMANCE.md | `pre-process-input.ps1` lines 58-78 |
 
-### 2. Governance Structure
+### 2. Adaptive Enforcement — `scripts/adaptive/auto-norm-enforcer.ps1`
 
-#### 2.1 Governance Roles
+Runs at session-start, session-close, or on orchestrator demand.
 
-**Architecture Review Board**:
+| Check | Auto-Fix | Description |
+|-------|----------|-------------|
+| Directory structure | Yes | Creates missing `docs/` subdirectories |
+| Documentation standards | No | Validates English-first content |
+| Learned norms validation | Yes | Applies norms from `rules/adaptive/LEARNED-NORMS.md` |
 
-- Reviews architecture decisions
-- Approves major changes
-- Ensures compliance
-- Resolves conflicts
+### 3. Adaptive Learning — `scripts/adaptive/auto-norm-learner.ps1`
 
-**Security Review Board**:
+Runs at session-close or on demand. Queries Engram memory + session artifacts
+to extract recurring patterns, creates/updates norms in `rules/adaptive/LEARNED-NORMS.md`.
 
-- Reviews security decisions
-- Approves security changes
-- Conducts security audits
-- Manages vulnerabilities
+| Source | What It Extracts |
+|--------|-----------------|
+| Engram memory (`mem_search`) | Session summaries, decisions, learnings |
+| Session artifacts (`.session/`, `.local/session-artifacts/`) | Discoveries, key learnings, accomplishments |
 
-**Quality Review Board**:
+### 4. Karpathy Enforcer — `scripts/adaptive/karpathy-enforcer.ps1`
 
-- Reviews quality metrics
-- Approves quality changes
-- Conducts quality audits
-- Manages improvements
+Context-aware file analysis for code quality. Runs at pre-commit or code-review triggers.
 
-#### 2.2 Decision Process
+### 5. Pre-Commit Hooks — `.lefthook.yml`
 
-1. Proposal submission
-2. Review and discussion
-3. Recommendation
-4. Decision
-5. Communication
-6. Implementation
-7. Verification
+| Hook | What It Validates |
+|------|------------------|
+| `build:mcp-server` | MCP server compiles when skills change |
+| `validate-readme` | README structure compliance |
 
-### 3. Normatives Updates
+### 6. Violation Audit Trail
 
-#### 3.1 Update Process
+All input violations are logged to `.session/input-violations.jsonl` (JSONL format):
 
-1. Identify need for update
-2. Draft proposal
-3. Stakeholder review
-4. Approval
-5. Communication
-6. Implementation
-7. Monitoring
+```json
+{"Timestamp":"...", "Rule":"SEC-001", "Severity":"block", "Message":"...", "InputPreview":"..."}
+```
 
-#### 3.2 Update Frequency
+## Violation Handling
 
-- Quarterly: Normatives review
-- As needed: Urgent updates
-- Annually: Comprehensive review
+| Severity | Action | Example |
+|----------|--------|---------|
+| **block** | Log + notify — human review required | Plain-text secrets detected |
+| **warn** | Log + notify — continues with warning | Destructive command pattern |
+| **info** | Log only | Input exceeds recommended length |
 
-### 4. Training & Awareness
+## Quick Reference
 
-#### 4.1 Training Requirements
-
-- Onboarding training
-- Annual refresher training
-- Role-specific training
-- Tool training
-- Process training
-
-#### 4.2 Training Methods
-
-- Documentation
-- Workshops
-- Online courses
-- Pair programming
-- Code reviews
-
-### 5. Continuous Improvement
-
-#### 5.1 Improvement Process
-
-1. Collect feedback
-2. Identify improvements
-3. Prioritize changes
-4. Implement changes
-5. Measure impact
-6. Iterate
-
-#### 5.2 Metrics & KPIs
-
-- Compliance rate
-- Violation rate
-- Remediation time
-- Team satisfaction
-- Effectiveness
+| What | When | Script |
+|------|------|--------|
+| Input validation | Every turn | `scripts/utilities/pre-process-input.ps1` |
+| Norm enforcement | Session start/close | `scripts/adaptive/auto-norm-enforcer.ps1` |
+| Norm learning | Session close | `scripts/adaptive/auto-norm-learner.ps1` |
+| Karpathy analysis | Pre-commit / code review | `scripts/adaptive/karpathy-enforcer.ps1` |
+| README validation | Pre-commit | `hooks/validate-readme-hook.ps1` |
 
 ---
 
-_Version: 1.0.0 — 2026-05-23 — Status: ACTIVE_
+_Version: 2.0.0 — 2026-05-30 — Status: ACTIVE_

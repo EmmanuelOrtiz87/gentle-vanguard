@@ -9,6 +9,57 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [2.24.0] - 2026-05-30 - Optimization Stack & System Integrity
+
+### Added
+
+- **CodeGraph reindexed**: 50 files (+85%), 588 nodes (+242%), 1197 edges (+377%).
+  Config updated with `**/*.ps1` include for PowerShell support.
+- **NORMATIVA-OPTIMIZATION-STACK.md**: 8 mandatory rules for token compression, response
+  cache, model routing, pre-task compression, token tracking, pre-compact hook,
+  notifications, and cache size limits.
+- **NORMATIVA-ENGRAIN-BACKUP.md**: 5 rules for persistent memory backup: auto-backup
+  post-session, append-only NDJSON format, Git-based rollback, weekly integrity
+  verification, 30-day retention.
+- **NORMATIVA-SISTEMA-INTEGRIDAD.md**: 8 meta-rules ensuring cross-component integration:
+  health check passes before commit, optimization stack verified in CI, CodeGraph fresh
+  (<7d), engram backup per session, zero PSScriptAnalyzer errors, cross-component deps
+  declared, lockfile consistent, zero secrets.
+- **scripts/validation/verify-optimization-stack.ps1**: Automated 8-rule verifier with
+  `-Quiet` and `-AsJson` modes. Used in CI/CD and health check.
+- **scripts/utilities/BACKUP-RESTORE/backup-engram.ps1**: 4-mode backup tool (backup,
+  restore, verify, status). Handles SQLite engram.db (1.5MB) + Git auto-commit.
+- **Health check integration**: `Check-OptimizationStack` added to
+  `scripts/health-check/health-check.ps1`. 8 components verified (MCP, Team, Session,
+  Factory, SDD, pnpm, Lefthook, Optimization Stack).
+- **CI/CD quality gate**: Optimization stack verification step in
+  `.github/workflows/gentle-vanguard-quality-gate.yml`.
+- **Auto-backup on session close**: `session-manager.ps1` End-Session now triggers
+  `backup-engram.ps1 -Mode backup` automatically (NORMATIVA-ENGRAIN-BACKUP R1).
+- **docs/RESEARCH-SYNTHESIS.md**: 345-line research document covering 6 domains
+  (knowledge persistence, CodeGraph, health verification, norm enforcement,
+  optimization integrity, backup strategy).
+
+### Changed
+
+- **CLAUDE.md**: Reduced from 117 to 42 lines (-64%), saving ~450 tokens/turn.
+- **Model routing**: All agents migrated from `openrouter/z-ai/glm-5` to
+  `openrouter/qwen/qwen-3.6-plus` (4x cost reduction). 0 glm-5 references remain.
+- **Response cache**: SHA256 cache with TTL 30min operational in
+  `pre-process-input.ps1`. Cache file: 5.7KB.
+
+### Fixed
+
+- **pre-compact-hook.ps1**: Removed hardcoded 16000 value. Now reads real metrics
+  from `token-usage.json`.
+- **pre-task-compress.ps1**: Rewritten without named functions to avoid PowerShell
+  7.6.1 parser quirk with `[WORD]` strings.
+
+### Security
+
+- 0 secrets in config files. Gitleaks and Trivy pass in CI.
+- PSScriptAnalyzer: 0 errors on all modified and new scripts.
+
 ## [2.23.0] - 2026-05-26 - oh-my-openagent Capabilities Integration
 
 ### Added

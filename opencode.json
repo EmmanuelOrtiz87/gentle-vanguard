@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "openrouter/z-ai/glm-5",
+  "model": "openrouter/qwen/qwen-3.6-plus",
   "small_model": "openrouter/qwen/qwen-3.6-plus",
   "provider": {
     "ollama": {
@@ -170,7 +170,7 @@
       "description": "DEV implementation agent — code generation and feature building",
       "mode": "subagent",
       "hidden": true,
-      "model": "openrouter/z-ai/glm-5",
+      "model": "openrouter/qwen/qwen-3.6-plus",
       "options": {
         "minTokens": 2000,
         "maxTokens": 6000,
@@ -192,7 +192,7 @@
       "description": "QA verification agent — testing and validation",
       "mode": "subagent",
       "hidden": true,
-      "model": "openrouter/z-ai/glm-5",
+      "model": "openrouter/qwen/qwen-3.6-plus",
       "options": {
         "minTokens": 2000,
         "maxTokens": 5000,
@@ -236,7 +236,7 @@
       "description": "Operations agent — deployment, CI/CD, infrastructure",
       "mode": "subagent",
       "hidden": true,
-      "model": "openrouter/z-ai/glm-5",
+      "model": "openrouter/qwen/qwen-3.6-plus",
       "options": {
         "minTokens": 2000,
         "maxTokens": 5000,
@@ -302,7 +302,7 @@
       "description": "Premortem analysis agent — risk identification and stress testing",
       "mode": "subagent",
       "hidden": true,
-      "model": "openrouter/z-ai/glm-5",
+      "model": "openrouter/qwen/qwen-3.6-plus",
       "options": {
         "minTokens": 2000,
         "maxTokens": 6000,
@@ -324,7 +324,7 @@
       "description": "Financial analysis agent — modeling and calculations",
       "mode": "subagent",
       "hidden": true,
-      "model": "openrouter/z-ai/glm-5",
+      "model": "openrouter/qwen/qwen-3.6-plus",
       "options": {
         "minTokens": 2000,
         "maxTokens": 5000,

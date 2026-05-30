@@ -73,6 +73,20 @@ jobs:
           }
           Write-Host "agent-verify: PASS (warnings: $($result.summary.warnings))"
 
+      - name: Optimization Stack Verification
+        shell: pwsh
+        run: |
+          if (-not (Test-Path '.\scripts\validation\verify-optimization-stack.ps1')) {
+            Write-Output "::warning::verify-optimization-stack.ps1 not found — skipping optimization verification"
+            exit 0
+          }
+          .\scripts\validation\verify-optimization-stack.ps1 -Quiet
+          if ($LASTEXITCODE -ne 0) {
+            Write-Error "Optimization stack verification failed with $LASTEXITCODE failures"
+            exit 1
+          }
+          Write-Host "optimization-stack: ALL PASS"
+
       - name: SRE Error Budget Check
         shell: pwsh
         continue-on-error: true
