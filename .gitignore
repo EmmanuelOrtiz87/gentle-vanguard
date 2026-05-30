@@ -67,6 +67,9 @@ scripts/.event-bus/
 .session/
 session/
 .local/
+
+# SDD Pipeline artifacts (NORMATIVA: no commitear artefactos de pipeline)
+.sdd/
 .workspace/config/session-auth.json
 .workspace/config/dev-credentials.json
 .runtime/

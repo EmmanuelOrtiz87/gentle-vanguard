@@ -35,6 +35,9 @@ post-commit:
       run: powershell -NoProfile -Command "& { if (Test-Path scripts/utilities/session-manager.ps1) { .\\tools\\session-manager.ps1 -Action update } }"
     codegraph-sync:
       run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/utilities/codegraph-post-modification-sync.ps1" -Trigger post-commit -Force
+    session-index:
+      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/utilities/SESSION/session-reference-system.ps1" -Mode status
+      skip: true
 
 post-merge:
   commands:
