@@ -22,6 +22,8 @@
         <button class="gv-nav__btn" data-section="live" data-i18n="nav.live">Live</button>
         <button class="gv-nav__btn" data-section="sla" data-i18n="nav.sla">SLA</button>
         <button class="gv-nav__btn" data-section="perf" data-i18n="nav.performance">Performance</button>
+        <button class="gv-nav__btn gv-nav__btn--trace" data-section="trace" data-i18n="nav.trace">Trace</button>
+        <button class="gv-nav__btn" data-section="refs" data-i18n="nav.references">Refs</button>
         <div class="gv-lang-selector">
             <select id="langSelect" onchange="app.changeLang(this.value)">
                 <option value="en" selected>EN</option>
@@ -30,8 +32,8 @@
             </select>
         </div>
         <button class="gv-nav__btn gv-nav__btn--tv" onclick="app.toggleTV()" data-i18n="nav.tv">TV</button>
-        <button class="gv-nav__btn" onclick="app.exportDashboard('pdf')" title="Export as PDF">📄 PDF</button>
-        <button class="gv-nav__btn" onclick="app.exportDashboard('png')" title="Export as PNG">🖼️ PNG</button>
+        <button class="gv-nav__btn" onclick="app.exportDashboard('pdf')" title="Export as PDF"> PDF</button>
+        <button class="gv-nav__btn" onclick="app.exportDashboard('png')" title="Export as PNG"> PNG</button>
     </nav>
 
     <button class="tv-exit" onclick="app.toggleTV()">Exit TV</button>
@@ -40,14 +42,8 @@
         <h2 class="gv-section__title" data-i18n="sections.executive">Executive Overview</h2>
         <div class="gv-grid gv-grid--4" id="exec-grid"></div>
         <div class="gv-grid gv-grid--2">
-            <div class="gv-chart">
-                <h3 class="gv-chart__title" data-i18n="chartTitles.tokenTrend">Token Usage Trend</h3>
-                <canvas class="gv-chart__canvas" id="chart-token"></canvas>
-            </div>
-            <div class="gv-chart">
-                <h3 class="gv-chart__title" data-i18n="chartTitles.costBreakdown">Cost Breakdown</h3>
-                <canvas class="gv-chart__canvas" id="chart-cost"></canvas>
-            </div>
+            <div class="gv-chart"><h3 class="gv-chart__title" data-i18n="chartTitles.tokenTrend">Token Usage Trend</h3><canvas class="gv-chart__canvas" id="chart-token"></canvas></div>
+            <div class="gv-chart"><h3 class="gv-chart__title" data-i18n="chartTitles.costBreakdown">Cost Breakdown</h3><canvas class="gv-chart__canvas" id="chart-cost"></canvas></div>
         </div>
         <div class="gv-refs-panel" id="exec-refs"></div>
     </section>
@@ -55,28 +51,19 @@
     <section class="gv-section" id="ops">
         <h2 class="gv-section__title" data-i18n="sections.operations">Operations</h2>
         <div class="gv-grid gv-grid--3" id="ops-grid"></div>
-        <div class="gv-chart">
-            <h3 class="gv-chart__title" data-i18n="chartTitles.sessionActivity">Session Activity</h3>
-            <canvas class="gv-chart__canvas" id="chart-sessions"></canvas>
-        </div>
+        <div class="gv-chart"><h3 class="gv-chart__title" data-i18n="chartTitles.sessionActivity">Session Activity</h3><canvas class="gv-chart__canvas" id="chart-sessions"></canvas></div>
     </section>
 
     <section class="gv-section" id="dev">
         <h2 class="gv-section__title" data-i18n="sections.development">Development</h2>
         <div class="gv-grid gv-grid--4" id="dev-grid"></div>
-        <div class="gv-chart">
-            <h3 class="gv-chart__title" data-i18n="chartTitles.commitsTimeline">Commits Timeline</h3>
-            <canvas class="gv-chart__canvas" id="chart-commits"></canvas>
-        </div>
+        <div class="gv-chart"><h3 class="gv-chart__title" data-i18n="chartTitles.commitsTimeline">Commits Timeline</h3><canvas class="gv-chart__canvas" id="chart-commits"></canvas></div>
     </section>
 
     <section class="gv-section" id="cost">
         <h2 class="gv-section__title" data-i18n="sections.cost">Cost & ROI</h2>
         <div class="gv-grid gv-grid--4" id="cost-grid"></div>
-        <div class="gv-chart">
-            <h3 class="gv-chart__title" data-i18n="chartTitles.savingsAnalysis">Savings Analysis</h3>
-            <canvas class="gv-chart__canvas" id="chart-savings"></canvas>
-        </div>
+        <div class="gv-chart"><h3 class="gv-chart__title" data-i18n="chartTitles.savingsAnalysis">Savings Analysis</h3><canvas class="gv-chart__canvas" id="chart-savings"></canvas></div>
     </section>
 
     <section class="gv-section" id="gov">
@@ -104,7 +91,66 @@
         <div class="gv-grid gv-grid--4" id="perf-grid"></div>
     </section>
 
-    <!-- Modal for metric details -->
+    <section class="gv-section" id="refs">
+        <h2 class="gv-section__title" data-i18n="sections.references">References</h2>
+        <div class="gv-refs-content" id="refs-content">
+            <div class="gv-refs-intro" data-i18n="references.description">This section explains the purpose and meaning of each metric.</div>
+            <div class="gv-refs-grid" id="refs-grid"></div>
+        </div>
+    </section>
+
+    <!-- TRACEABILITY SECTION -->
+    <section class="gv-section" id="trace">
+        <h2 class="gv-section__title" data-i18n="sections.trace">Live Traceability</h2>
+
+        <!-- Filters -->
+        <div class="trace-filters">
+            <button class="trace-filter-btn active" data-range="all" onclick="app.switchHistoryRange('all')" data-i18n="trace.filter.all">All</button>
+            <button class="trace-filter-btn" data-range="day" onclick="app.switchHistoryRange('day')" data-i18n="trace.filter.today">Today</button>
+            <button class="trace-filter-btn" data-range="week" onclick="app.switchHistoryRange('week')" data-i18n="trace.filter.week">Week</button>
+            <button class="trace-filter-btn" data-range="month" onclick="app.switchHistoryRange('month')" data-i18n="trace.filter.month">Month</button>
+            <span class="trace-poll-badge"><span data-i18n="trace.poll">Poll</span>: <span id="countdown" data-remaining="10">10s</span></span>
+            <div class="trace-search">
+                <input class="trace-search-input" placeholder="Filter sessions..." oninput="app.filterTraceSessions(this.value)" data-i18n="trace.filterSessions">
+            </div>
+        </div>
+
+        <!-- Live Session Panel -->
+        <div class="trace-live-panel" id="trace-live-panel">
+            <div class="trace-live-header">
+                <span class="trace-dot" style="background:#f26464"></span>
+                <span data-i18n="trace.loading">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Turns Table -->
+        <div id="trace-turns" class="trace-turns-container">
+            <div class="trace-empty">Waiting for turn data...</div>
+        </div>
+
+        <!-- Charts (side by side) -->
+        <div class="trace-charts-row">
+            <div class="gv-chart">
+                <h3 class="gv-chart__title" data-i18n="chartTitles.inputTokensPerTurn">Input Tokens per Turn</h3>
+                <canvas class="gv-chart__canvas" id="chart-trace-tokens" style="height:140px"></canvas>
+            </div>
+            <div class="gv-chart">
+                <h3 class="gv-chart__title" data-i18n="chartTitles.costPerTurn">Cost per Turn (mUSD)</h3>
+                <canvas class="gv-chart__canvas" id="chart-trace-costs" style="height:140px"></canvas>
+            </div>
+        </div>
+
+        <!-- Mechanisms -->
+        <div id="trace-mechanisms" class="trace-mech-container">
+            <div class="trace-empty">Loading mechanisms...</div>
+        </div>
+
+        <!-- History -->
+        <div id="trace-history" class="trace-history-container">
+            <div class="trace-empty">Loading history...</div>
+        </div>
+    </section>
+
     <div id="gv-modal" class="gv-modal">
         <div class="gv-modal__overlay"></div>
         <div class="gv-modal__content">
