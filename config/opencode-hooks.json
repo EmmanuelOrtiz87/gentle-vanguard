@@ -18,6 +18,24 @@
         "blocking": true,
         "onFailure": "warn"
       }
+    ],
+    "postToolUse": [
+      {
+        "name": "token-usage-log",
+        "trigger": "ToolCall",
+        "command": "pwsh",
+        "args": [
+          "-NoProfile",
+          "-File",
+          "C:/Workspace_local/gentle-vanguard/hooks/post-tool-use-log.ps1",
+          "-ToolName",
+          "{{tool}}",
+          "-ToolArgs",
+          "{{args}}"
+        ],
+        "blocking": false,
+        "onFailure": "ignore"
+      }
     ]
   }
 }
