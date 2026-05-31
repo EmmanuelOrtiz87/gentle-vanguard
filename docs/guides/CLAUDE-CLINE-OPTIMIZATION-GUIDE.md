@@ -17,9 +17,9 @@ aplicado en OpenCode, Codex y Windsurf.
 ### 1. Perfil adaptativo automatizado (nuevo)
 
 - Script:
-  [scripts/utilities/adaptive-claude-cline-profile.ps1](../../scripts/utilities/adaptive-claude-cline-profile.ps1)
+  [scripts/utilities/PROFILE-ADAPTIVE/adaptive-claude-cline-profile.ps1](../../scripts/utilities/PROFILE-ADAPTIVE/adaptive-claude-cline-profile.ps1)
 - Notificacion:
-  [scripts/utilities/notify-claude-cline-optimization.ps1](../../scripts/utilities/notify-claude-cline-optimization.ps1)
+  [scripts/utilities/NOTIFY/notify-claude-cline-optimization.ps1](../../scripts/utilities/NOTIFY/notify-claude-cline-optimization.ps1)
 
 Comportamiento:
 
@@ -34,7 +34,7 @@ Comportamiento:
 Se agrego el paso adaptativo en:
 
 - [scripts/utilities/session-autostart.cmd](../../scripts/utilities/session-autostart.cmd)
-- [scripts/utilities/session-autostart.sh](../../scripts/utilities/session-autostart.sh)
+- [scripts/utilities/SESSION/session-autostart.ps1](../../scripts/utilities/SESSION/session-autostart.ps1)
 - [config/session-autostart.config.json](../../config/session-autostart.config.json)
 
 ### 3. Claude Code configurado para local-first y control

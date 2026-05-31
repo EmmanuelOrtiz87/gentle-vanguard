@@ -298,7 +298,7 @@ Describe "Release Workflow E2E" {
 - [SECURITY-HARDENING.md](SECURITY-HARDENING.md) — comprehensive (now including npx hardening)
 - [GETTING-STARTED.md](GETTING-STARTED.md) — clear setup path
 - [RELEASE-PROCESS.md](RELEASE-PROCESS.md) — detailed release workflow
-- [MCP-WORKSPACE-SETUP.md](MCP-WORKSPACE-SETUP.md) — NEW (setup isolation guide)
+- [FIRST-TIME-SETUP-CHECKLIST.md](FIRST-TIME-SETUP-CHECKLIST.md) — MCP workspace setup (Step 3)
 
 ⚠️ **Gaps**:
 
