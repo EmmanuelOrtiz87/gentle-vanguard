@@ -304,7 +304,7 @@ npm test 2>&1 | Tee-Object test-output.txt
 1. **Read** [GETTING-STARTED.md](GETTING-STARTED.md) — Daily workflow
 2. **Review** [GITFLOW-QUICK-REFERENCE.md](GITFLOW-QUICK-REFERENCE.md) — Branch strategy
 3. **Check** [SECURITY-HARDENING.md](SECURITY-HARDENING.md) — Security policies
-4. **Explore** [MCP-WORKSPACE-SETUP.md](MCP-WORKSPACE-SETUP.md) — MCP server details
+4. **Review** [Step 3](#step-3-create-mcp-workspace-5-min) above — MCP workspace setup details
 5. **Reference** [STACK-OPTIMIZATION-ROADMAP.md](STACK-OPTIMIZATION-ROADMAP.md) — Future
    improvements
 
