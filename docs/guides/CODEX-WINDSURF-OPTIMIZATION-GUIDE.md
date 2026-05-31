@@ -48,15 +48,15 @@ Prácticas activadas:
 
 Se implementó un controlador adaptativo para Codex y Windsurf:
 
-- [scripts/utilities/adaptive-codex-windsurf-profile.ps1](../../scripts/utilities/adaptive-codex-windsurf-profile.ps1)
+- [scripts/utilities/PROFILE-ADAPTIVE/adaptive-codex-windsurf-profile.ps1](../../scripts/utilities/PROFILE-ADAPTIVE/adaptive-codex-windsurf-profile.ps1)
 - Notificación operativa:
-  [scripts/utilities/notify-codex-windsurf-optimization.ps1](../../scripts/utilities/notify-codex-windsurf-optimization.ps1)
+  [scripts/utilities/NOTIFY/notify-codex-windsurf-optimization.ps1](../../scripts/utilities/NOTIFY/notify-codex-windsurf-optimization.ps1)
 
 Integración en inicio de sesión:
 
 - [config/session-autostart.config.json](../../config/session-autostart.config.json)
 - [scripts/utilities/session-autostart.cmd](../../scripts/utilities/session-autostart.cmd)
-- [scripts/utilities/session-autostart.sh](../../scripts/utilities/session-autostart.sh)
+- [scripts/utilities/SESSION/session-autostart.ps1](../../scripts/utilities/SESSION/session-autostart.ps1)
 
 Comportamiento:
 

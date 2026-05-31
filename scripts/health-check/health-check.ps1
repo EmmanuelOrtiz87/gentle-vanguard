@@ -17,7 +17,7 @@
 #>
 
 param(
-  [ValidateSet("mcp","team","session","factory","sdd","pnpm","lefthook","optimization","all")]
+  [ValidateSet("mcp","team","session","factory","sdd","pnpm","lefthook","optimization","gateguard","costtracking","all")]
   [string]$Component = "all",
   [switch]$Quiet
 )
@@ -151,6 +151,41 @@ function Check-Lefthook {
   if (-not $found) { Write-Check "lefthook config" $false }
 }
 
+function Check-GateGuard {
+  Write-Host "`n=== GateGuard ===" -ForegroundColor Cyan
+  $scriptPath = Join-Path $root "scripts/gateguard/gateguard-mcp.ps1"
+  Write-Check "GateGuard script exists" (Test-Path $scriptPath) "scripts/gateguard/gateguard-mcp.ps1"
+  if (-not (Test-Path $scriptPath)) { return }
+  try {
+    $result = & $scriptPath -Server codegraph 2>&1
+    $resultJson = ($result | Where-Object { $_ -is [string] }) -join "`n"
+    if ([string]::IsNullOrWhiteSpace($resultJson)) { throw "No JSON response from GateGuard" }
+    $parsed = $resultJson | ConvertFrom-Json -ErrorAction Stop
+    $serverStatus = $parsed.Status
+    $detail = "server=$serverStatus latency=$($parsed.LatencyMs)ms"
+    Write-Check "GateGuard responds" $true $detail
+  } catch {
+    Write-Check "GateGuard responds" $false $_.Exception.Message
+  }
+}
+
+function Check-CostTracking {
+  Write-Host "`n=== Cost Tracking ===" -ForegroundColor Cyan
+  $routingConfig = Join-Path $root "config/model-routing.json"
+  if (-not (Test-Path $routingConfig)) { Write-Check "model-routing.json exists" $false; return }
+  Write-Check "model-routing.json exists" $true
+  try {
+    $config = Get-Content $routingConfig -Raw | ConvertFrom-Json
+    $hasCostTracking = $null -ne $config.cost_tracking
+    $hasRoutingThresholds = $null -ne $config.routing_thresholds
+    Write-Check "cost_tracking section present" $hasCostTracking
+    Write-Check "routing_thresholds section present" $hasRoutingThresholds
+  } catch {
+    Write-Check "cost_tracking section present" $false $_.Exception.Message
+    Write-Check "routing_thresholds section present" $false
+  }
+}
+
 switch ($Component) {
   "mcp" { Check-Mcp }
   "team" { Check-TeamMode }
@@ -160,6 +195,8 @@ switch ($Component) {
   "pnpm" { Check-Pnpm }
   "lefthook" { Check-Lefthook }
   "optimization" { Check-OptimizationStack }
+  "gateguard" { Check-GateGuard }
+  "costtracking" { Check-CostTracking }
   "all" {
     Check-Mcp
     Check-TeamMode
@@ -169,6 +206,8 @@ switch ($Component) {
     Check-Pnpm
     Check-Lefthook
     Check-OptimizationStack
+    Check-GateGuard
+    Check-CostTracking
   }
 }
 

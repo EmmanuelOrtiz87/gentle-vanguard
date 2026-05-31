@@ -130,8 +130,8 @@ allow-git=none
 
 ### Layer 3: Conscious Update Procedure
 
-**Documented in [MCP-WORKSPACE-SETUP.md](../../guides/MCP-WORKSPACE-SETUP.md) §Conscious Update
-Procedure**:
+**Documented in [FIRST-TIME-SETUP-CHECKLIST.md](../../guides/FIRST-TIME-SETUP-CHECKLIST.md) §Step 3 — MCP Workspace
+and [STACK-OPTIMIZATION-ROADMAP.md](../../guides/STACK-OPTIMIZATION-ROADMAP.md) §Conscious Update Procedure**:
 
 ```powershell
 # 1. Review current status
@@ -242,7 +242,6 @@ Testing: [what was verified]
 
 ## Related Decisions
 
-- [ADR-002](ADR-002-mcp-workspace-external.md) — Why workspace is external local
 - [ADR-001](ADR-001-powershell-language-choice.md) — Why PowerShell for hooks
 
 ---

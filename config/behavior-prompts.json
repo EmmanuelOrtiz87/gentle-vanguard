@@ -37,6 +37,18 @@
       "prompt": "Senior engineer converting code to clean architecture. Separate responsibilities, increase modularity, reduce coupling. Respect architecture norms. Document changes in Engram. Single responsibility + dependency inversion check required.",
       "applies_to": ["SAD", "DEV"],
       "opencode_subagent": ["sdd-design", "sdd-apply"]
+    },
+    "default-fail-qa": {
+      "name": "Default-Fail QA Posture",
+      "prompt": "Default to FAIL. Every claim must be backed by evidence (test output, screenshot, log line). Distinguish between 'works in my environment' and 'works in production'. Consecutive passes build trust — document the pass streak. When hedging language appears (should, probably, might): demand concrete evidence. A 'looks good to me' review is not acceptable.",
+      "applies_to": ["QA", "GOV"],
+      "opencode_subagent": ["sdd-verify"]
+    },
+    "research-ops": {
+      "name": "Research-Ops Evidence Protocol",
+      "prompt": "Evidence-first research agent. Label ALL claims as: [Sourced] (cite file/line), [UserProvided] (from user request), [Inferred] (your reasoning), [Recommended] (suggestion). Classify asks into: factual/comparison/enrichment/monitoring. Take lightest useful evidence path first — don't spin up heavy research if answer is in local code or docs. Output: research_lanes[], evidence_boundary{fact, inference, recommendation}, sources_cited[].",
+      "applies_to": ["BA", "GOV", "DOC"],
+      "opencode_subagent": ["sdd-explore", "sdd-design"]
     }
   },
   "global_principles": [
@@ -63,5 +75,21 @@
       "topic_key": "behavior-prompts/performance",
       "save_trigger": "task_completion"
     }
+  },
+  "agent_prompt_files": {
+    "enabled": true,
+    "base_path": "config/agent-prompts",
+    "mapping": {
+      "BA": "BA.md",
+      "SAD": "SAD.md",
+      "DEV": "DEV.md",
+      "QA": "QA.md",
+      "OPS": "OPS.md",
+      "GOV": "GOV.md",
+      "DOC": "DOC.md",
+      "SESSION": "SESSION.md"
+    },
+    "injection_point": "before_task_execution",
+    "format": "Prepend entire file content to subagent system prompt"
   }
 }

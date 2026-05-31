@@ -358,7 +358,7 @@ El protocolo de juicio adversarial dual sigue estos pasos:
 
 - [skills/judgment-day/SKILL.md](../../../skills/judgment-day/SKILL.md) - Skill de juicio
   adversarial
-- [../README.md](../README.md) - directorio principal de utilities
+- [docs/README.md](../docs/README.md) - Directorio principal de utilities
 - [../../README.md](../../README.md) - Documentacin principal de scripts
 
 ---

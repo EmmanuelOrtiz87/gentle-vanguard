@@ -1,6 +1,30 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Model routing per agent — assigns specific models and effort levels to gentle-vanguard agents",
+  "routing_thresholds": {
+    "fast_cheap_to_strong_reasoning": {
+      "description": "Escalate to strong reasoning when task complexity exceeds threshold",
+      "text_length_chars": 10000,
+      "item_count": 30,
+      "indicators": ["architectural decision", "security review", "data model design"]
+    },
+    "retry_strategy": {
+      "transient_errors": ["APIConnectionError", "RateLimitError", "InternalServerError"],
+      "fail_fast_errors": ["AuthenticationError", "BadRequestError", "NotFoundError"],
+      "max_retries": 3,
+      "backoff_ms": 1000
+    }
+  },
+  "cost_tracking": {
+    "enabled": true,
+    "immutable": true,
+    "budget_limits": {
+      "daily_tokens": 30000,
+      "per_session_tokens": 15000,
+      "hard_cap_enabled": true
+    },
+    "tracking_level": "per_call"
+  },
   "defaults": {
     "model": "inherit",
     "thinking": "inherit"

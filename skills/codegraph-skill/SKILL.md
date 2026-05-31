@@ -70,6 +70,32 @@ codegraph sync
 codegraph index
 ```
 
+## Semantic Search Capabilities
+
+Beyond standard FTS5 keyword search, GV provides semantic enhancement wrappers:
+
+| Script | Purpose |
+|--------|---------|
+| `codegraph-semantic-search.ps1` | Dual-tier search: FTS5 + fuzzy synonym matching with relevance scoring |
+| `codegraph-enrich.ps1` | Enriches CodeGraph output with layer detection, complexity tags, and metadata |
+
+### Usage Examples
+
+```powershell
+# Semantic search
+.\scripts\codegraph\codegraph-semantic-search.ps1 -Query "where is auth handled" -MaxResults 10
+
+# Enrich query results
+.\scripts\codegraph\codegraph-enrich.ps1 -Query "session" -EnrichLevel full
+```
+
+### Synonym Map
+The semantic search includes an expandable synonym map for common dev terms:
+auth, error, config, db, api, test, ui, cache, net — each maps to 5-10 related terms.
+
+### Integration Note
+When using `codegraph_context` for task context, first run a semantic search via `codegraph-semantic-search.ps1` to identify the most relevant symbols, then pass those to `codegraph_context` for deeper exploration.
+
 ## Integration with Gentle-Vanguard
 
 ### MCP Configuration

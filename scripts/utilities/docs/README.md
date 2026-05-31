@@ -50,7 +50,7 @@ AI agent management and routing.
 .\scripts\utilities\AI-AGENT-MANAGEMENT\agent-router.ps1 -Agent DEV -Task "implement feature"
 ```
 
-[View full documentation](./AI-AGENT-MANAGEMENT/README.md)
+[View full documentation](../AI-AGENT-MANAGEMENT/README.md)
 
 ---
 
@@ -73,7 +73,7 @@ Audit, reporting, and session artifacts.
 .\scripts\utilities\AUDIT-REPORTING\generate-audit-report.ps1
 ```
 
-[View full documentation](./AUDIT-REPORTING/README.md)
+[View full documentation](../AUDIT-REPORTING/README.md)
 
 ---
 
@@ -89,7 +89,7 @@ Configuration, profiles, and config files.
 
 **Usage:** Centralized configuration for the entire workspace.
 
-[View full documentation](./CONFIG/README.md)
+[View full documentation](../CONFIG/README.md)
 
 ---
 
@@ -111,7 +111,7 @@ Deployment, migration, and remote configuration scripts.
 .\scripts\utilities\DEPLOYMENT\deploy.ps1
 ```
 
-[View full documentation](./DEPLOYMENT/README.md)
+[View full documentation](../DEPLOYMENT/README.md)
 
 ---
 
@@ -131,7 +131,7 @@ Git version control, branches, and pull requests.
 .\scripts\utilities\GIT-VERSION-CONTROL\create-gitflow-branch.ps1 -Type feature -Name "new-feature"
 ```
 
-[View full documentation](./GIT-VERSION-CONTROL/README.md)
+[View full documentation](../GIT-VERSION-CONTROL/README.md)
 
 ---
 
@@ -154,7 +154,7 @@ Performance optimization, memory compaction, and Engram.
 .\scripts\utilities\PERFORMANCE-OPTIMIZATION\optimize-performance.ps1
 ```
 
-[View full documentation](./PERFORMANCE-OPTIMIZATION/README.md)
+[View full documentation](../PERFORMANCE-OPTIMIZATION/README.md)
 
 ---
 
@@ -188,7 +188,7 @@ Installation and management of skills and tools.
 .\scripts\utilities\SKILLS-TOOLS\install-workspace-skills.ps1
 ```
 
-[View full documentation](./SKILLS-TOOLS/README.md)
+[View full documentation](../SKILLS-TOOLS/README.md)
 
 ---
 
@@ -217,7 +217,7 @@ Telemetry, metrics, and token budget.
 .\scripts\utilities\TELEMETRY-METRICS\generate-management-report.ps1
 ```
 
-[View full documentation](./TELEMETRY-METRICS/README.md)
+[View full documentation](../TELEMETRY-METRICS/README.md)
 
 ---
 
@@ -252,7 +252,7 @@ General utilities and general-purpose tools.
 .\scripts\utilities\UTILITIES\auto-init-dev-environment.ps1
 ```
 
-[View full documentation](./UTILITIES/README.md)
+[View full documentation](../UTILITIES/README.md)
 
 ---
 
@@ -278,7 +278,7 @@ Workflow orchestration and runtime routing.
 .\scripts\utilities\WORKFLOW-ORCHESTRATION\gv.ps1 verify
 ```
 
-[View full documentation](./WORKFLOW-ORCHESTRATION/README.md)
+[View full documentation](../WORKFLOW-ORCHESTRATION/README.md)
 
 ---
 
@@ -363,9 +363,9 @@ Install-Module -Name Pester -Force -SkipPublisherCheck
 
 ## Related Documentation
 
-- [scripts/README.md](../README.md) - Main scripts documentation
-- [docs/getting-started/STACK-SETUP.md](../../docs/getting-started/STACK-SETUP.md) - Setup guide
-- [skills/SKILL_INDEX.md](../../skills/SKILL_INDEX.md) - Skills index
+- [scripts/README.md](../../README.md) - Main scripts documentation
+- [docs/getting-started/STACK-SETUP.md](../../../docs/getting-started/STACK-SETUP.md) - Setup guide
+- [skills/SKILL_INDEX.md](../../../skills/SKILL_INDEX.md) - Skills index
 
 ---
 
