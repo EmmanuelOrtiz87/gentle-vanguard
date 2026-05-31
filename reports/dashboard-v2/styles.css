@@ -27,7 +27,8 @@ body {
 }
 .gv-nav__btn:hover { background: var(--gv-surface-2); border-color: var(--gv-accent); }
 .gv-nav__btn.active { background: linear-gradient(120deg, #1f7a71, #296d9e); border-color: var(--gv-accent); }
-.gv-nav__btn--tv { background: linear-gradient(120deg, #8b5cf6, #6366f1); }
+.gv-nav__btn--tv { background: linear-gradient(120deg, #8b5cf6, #6366f1); transition: all 0.3s ease; }
+.gv-nav__btn--tv.active { background: linear-gradient(120deg, #a78bfa, #818cf8); box-shadow: 0 0 12px rgba(139,92,246,0.5); border-color: #a78bfa; }
 .gv-nav__btn--trace { background: linear-gradient(120deg, #d97706, #dc2626); border-color: #f59e0b; }
 .gv-section {
   display: none; background: linear-gradient(180deg, var(--gv-surface), var(--gv-surface-2));
@@ -64,6 +65,8 @@ body {
 .tv-mode .gv-nav, .tv-mode .gv-header { display: none; }
 .tv-mode .gv-section { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; margin: 0; border-radius: 0; overflow-y: auto; padding: 24px; z-index: 1000; }
 .tv-mode .gv-section:not(.active) { display: none; }
+.tv-mode .gv-section.active { animation: tvFadeIn 0.5s ease; }
+@keyframes tvFadeIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
 .tv-mode .gv-grid { grid-template-columns: repeat(4, 1fr); }
 .tv-mode .gv-chart__canvas { height: 300px; }
 .tv-exit { position: fixed; top: 16px; right: 16px; background: var(--gv-error); color: white; border: none; border-radius: 8px; padding: 8px 16px; cursor: pointer; font-weight: 600; z-index: 1002; display: none; }
@@ -113,6 +116,10 @@ body {
   width: 6px; height: 6px; border-radius: 50%; background: var(--gv-success);
   animation: pulseRing 2s infinite;
 }
+
+/* Live heart-beat indicator */
+.gv-card__value--live { color: var(--gv-success); animation: livePulse 2s infinite; }
+@keyframes livePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
 /* Hover data-row highlight */
 .trace-hist-session { cursor: pointer; transition: all 0.2s ease; }

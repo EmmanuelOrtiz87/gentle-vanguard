@@ -214,7 +214,7 @@ const app = {
 
   async startRealTimeUpdates() {
     await this.refreshData();
-    setInterval(() => this.refreshData(), 10000);
+    setInterval(() => this.refreshData(), 5000);
   },
 
   connectTraceSSE() {
@@ -235,7 +235,7 @@ const app = {
 
   async startTraceabilityPolling() {
     await this.refreshTraceData();
-    this.tracePollInterval = setInterval(() => this.refreshTraceData(), 5000);
+    this.tracePollInterval = setInterval(() => this.refreshTraceData(), 3000);
   },
 
   startOrConnectTrace() {
@@ -301,7 +301,7 @@ const app = {
     this.updateCardValue('health', 3, data.health.routing);
     this.updateCardValue('health', 4, data.git.contributors > 0 ? 'EmmanuelOrtiz87' : '--');
     this.updateCardValue('health', 5, '.session/context-log/');
-    this.updateCardValue('live', 0, `<span style="color:${(data.trace.live && data.trace.live.status === 'ACTIVE') ? '#37b8a8' : '#f26464'}">${(data.trace.live && data.trace.live.status === 'ACTIVE') ? '● LIVE' : '○ OFFLINE'}</span>`);
+    this.updateCardValue('live', 0, `<span>${(data.trace.live && data.trace.live.status === 'ACTIVE') ? '● LIVE' : '○ OFFLINE'}</span>`);
     this.updateCardValue('live', 1, data.tokens.used.toLocaleString());
     this.updateCardValue('live', 2, `<span style="color:${statusColor}">${data.health.status}</span>`);
     this.updateCardValue('live', 3, data.health.routing);
@@ -410,16 +410,19 @@ const app = {
   toggleTV() {
     this.tvMode = !this.tvMode;
     document.body.classList.toggle('tv-mode', this.tvMode);
+    document.querySelector('.gv-nav__btn--tv')?.classList.toggle('active', this.tvMode);
     if (this.tvMode) {
+      this.showSection(this.sections[0]);
       setTimeout(() => charts.renderAll(), 300);
       this.tvInterval = setInterval(() => {
         const current = document.querySelector('.gv-section.active');
         const idx = this.sections.indexOf(current?.id);
         const next = this.sections[(idx + 1) % this.sections.length];
         this.showSection(next);
-      }, 30000);
+      }, 15000);
     } else {
       clearInterval(this.tvInterval);
+      this.tvInterval = null;
       setTimeout(() => charts.renderAll(), 300);
     }
   },
@@ -453,10 +456,10 @@ const app = {
     const countEl = document.getElementById('countdown');
     if (!countEl) return;
     const sec = parseInt(countEl.dataset.remaining || '0');
-    const next = sec <= 1 ? 10 : sec - 1;
+    const next = sec <= 1 ? 3 : sec - 1;
     countEl.dataset.remaining = next;
     countEl.textContent = next + 's';
-    if (next <= 3) countEl.classList.add('gv-countdown--live');
+    if (next <= 2) countEl.classList.add('gv-countdown--live');
     else countEl.classList.remove('gv-countdown--live');
   },
 
@@ -737,8 +740,9 @@ const app = {
       ui.card(t('cards.topAuthor'), data.git.contributors > 0 ? 'EmmanuelOrtiz87' : '--', data.git.commits.toLocaleString() + ' ' + t('meta.commits'), '', 'Top contributor', 'contributors'),
       ui.card(t('cards.dataSource'), '.session/context-log/', t('meta.localStore'), '', 'Data source', 'dataSource')
     ]);
+    const liveActive = data.trace.live && data.trace.live.status === 'ACTIVE';
     ui.renderSection('live', [
-      ui.card(t('cards.liveStatus'), `<span style="color:${(data.trace.live && data.trace.live.status === 'ACTIVE') ? '#37b8a8' : '#f26464'}">${(data.trace.live && data.trace.live.status === 'ACTIVE') ? '● LIVE' : '○ OFFLINE'}</span>`, t('meta.eventStream'), '', 'Live status', 'liveStatus'),
+      ui.card(t('cards.liveStatus'), `<span>${liveActive ? '● LIVE' : '○ OFFLINE'}</span>`, t('meta.eventStream'), liveActive ? 'live' : 'error', 'Live status', 'liveStatus'),
       ui.card(t('cards.tokens'), data.tokens.used.toLocaleString(), t('meta.currentUsage'), '', 'Current tokens', 'tokens'),
       ui.card(t('cards.trafficLight'), `<span style="color:${statusColor}">${data.health.status}</span>`, t('meta.executiveStatus'), '', 'Traffic light', 'trafficLight'),
       ui.card(t('cards.routing'), data.health.routing, t('meta.dispatchAccuracy'), '', 'Routing', 'routing'),
