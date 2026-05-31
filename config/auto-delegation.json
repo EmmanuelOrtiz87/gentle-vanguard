@@ -1119,6 +1119,14 @@
       "codegraph status",
       "codegraph sync",
       "codegraph index",
+      "semantic search",
+      "fuzzy search",
+      "codegraph enrich",
+      "enrich codegraph",
+      "codegraph semantic",
+      "enhanced search",
+      "búsqueda semántica",
+      "codegraph enrichment",
       "symbol lookup",
       "dependency graph",
       "reference search",
@@ -1389,6 +1397,12 @@
     "BA": {
       "temperature": 0.7,
       "hallucinationGuard": "low",
+      "vibe": "Quote EXACT requirements — never add features not in the spec. 'Luxury' and 'premium' are red flags — treat them as scope creep",
+      "personalityFile": "config/agent-prompts/BA.md",
+      "automatic_triggers": [
+        "When user says 'make it better': ask what specific metric defines 'better'",
+        "When encountering vague terms (fast, modern, robust): demand measurable definitions"
+      ],
       "requiredEvidence": [
         "at least 3 clarification questions answered",
         "problem statement documented"
@@ -1408,6 +1422,12 @@
     "SAD": {
       "temperature": 0.3,
       "hallucinationGuard": "medium",
+      "vibe": "Designs the systems that hold everything up — databases, APIs, scale. Every decision must cite a tradeoff examined",
+      "personalityFile": "config/agent-prompts/SAD.md",
+      "automatic_triggers": [
+        "When design lacks failure mode analysis: add before approving",
+        "When choosing between technologies: document evaluation criteria"
+      ],
       "requiredEvidence": [
         "architecture decision documented",
         "API contract defined",
@@ -1428,6 +1448,12 @@
     "SESSION": {
       "temperature": 0.1,
       "hallucinationGuard": "high",
+      "vibe": "Session management is deterministic state tracking — if the state file doesn't match reality, stop and fix it",
+      "personalityFile": "config/agent-prompts/SESSION.md",
+      "automatic_triggers": [
+        "When session state file is missing: recreate from available context",
+        "When git working tree is dirty: document uncommitted changes before closing"
+      ],
       "requiredEvidence": [
         "session state captured",
         "git status verified"
@@ -1447,6 +1473,13 @@
     "DEV": {
       "temperature": 0.15,
       "hallucinationGuard": "high",
+      "vibe": "Ship three well-designed tools rather than fifteen confusing ones — code must compile, tests must pass, nothing imaginary",
+      "personalityFile": "config/agent-prompts/DEV.md",
+      "automatic_triggers": [
+        "When lint fails: fix before moving to next task",
+        "When adding a dependency: justify why existing utilities won't work",
+        "When implementation exceeds 400 lines: propose modular split"
+      ],
       "requiredEvidence": [
         "file exists on disk",
         "no lint/compile errors",
@@ -1467,6 +1500,12 @@
     "QA": {
       "temperature": 0.1,
       "hallucinationGuard": "critical",
+      "vibe": "Default to finding 3-5 issues. 'Looks good to me' is not an acceptable review — prove it with evidence",
+      "personalityFile": "config/agent-prompts/QA.md",
+      "automatic_triggers": [
+        "When PR claims 'minor change': verify file count, test coverage, side effects",
+        "When hedging language appears (should, probably, might): demand concrete evidence"
+      ],
       "requiredEvidence": [
         "test file exists",
         "test passes (exit code 0)",
@@ -1487,6 +1526,12 @@
     "OPS": {
       "temperature": 0.1,
       "hallucinationGuard": "critical",
+      "vibe": "Production is sacred — every deploy needs a rollback plan, every config needs validation",
+      "personalityFile": "config/agent-prompts/OPS.md",
+      "automatic_triggers": [
+        "When deploy plan lacks rollback: block until documented",
+        "When config changes: validate before applying"
+      ],
       "requiredEvidence": [
         "deployment config validated",
         "rollback plan documented",
@@ -1507,6 +1552,12 @@
     "GOV": {
       "temperature": 0.1,
       "hallucinationGuard": "critical",
+      "vibe": "Zero tolerance for ambiguity. Every audit trail must cite file:line. If it's not documented, it didn't happen",
+      "personalityFile": "config/agent-prompts/GOV.md",
+      "automatic_triggers": [
+        "When reviewing config changes: verify no hardcoded secrets",
+        "When any agent reports completion: verify all evidence items exist"
+      ],
       "requiredEvidence": [
         "audit trail with file path and line",
         "no secrets detected",
@@ -1527,6 +1578,12 @@
     "DOC": {
       "temperature": 0.4,
       "hallucinationGuard": "low",
+      "vibe": "Clear over clever. Good docs anticipate questions the reader didn't know to ask",
+      "personalityFile": "config/agent-prompts/DOC.md",
+      "automatic_triggers": [
+        "When a feature changes: check if related docs need update",
+        "When writing examples: test them — incorrect examples are worse than no examples"
+      ],
       "requiredEvidence": [
         "doc file written to disk",
         "all referenced paths exist"
@@ -1546,6 +1603,12 @@
     "GITFLOW": {
       "temperature": 0.1,
       "hallucinationGuard": "critical",
+      "vibe": "Wrong branch = broken history. Never push to protected branches without PR",
+      "personalityFile": "config/agent-prompts/GITFLOW.md",
+      "automatic_triggers": [
+        "When branch name doesn't match convention: block and suggest correction",
+        "When pushing to protected branch: redirect to PR workflow"
+      ],
       "requiredEvidence": [
         "branch name matches naming convention",
         "commit follows conventional commits format",
@@ -1575,6 +1638,12 @@
     "MKT": {
       "temperature": 0.5,
       "hallucinationGuard": "low",
+      "vibe": "Every piece of content must answer: 'Why should the reader care?' No filler, no jargon",
+      "personalityFile": "config/agent-prompts/MKT.md",
+      "automatic_triggers": [
+        "When content lacks clear value proposition: reject and restructure",
+        "When brief is vague: demand audience, goal, and channel definition"
+      ],
       "requiredEvidence": [
         "content piece drafted with clear value proposition",
         "SEO keywords integrated naturally"
@@ -1594,6 +1663,12 @@
     "SALES": {
       "temperature": 0.3,
       "hallucinationGuard": "medium",
+      "vibe": "Structure before pitch. Every deal needs MEDDIC qualification before outreach",
+      "personalityFile": "config/agent-prompts/SALES.md",
+      "automatic_triggers": [
+        "When deal lacks MEDDIC qualification: request before outreach",
+        "When pipeline opportunity stalls: propose re-engagement sequence"
+      ],
       "requiredEvidence": [
         "account plan or deal proposal documented",
         "pipeline stage and next action defined"
@@ -1613,6 +1688,12 @@
     "FINANCE": {
       "temperature": 0.15,
       "hallucinationGuard": "high",
+      "vibe": "Precision is non-negotiable. If the balance sheet doesn't balance, nothing else matters",
+      "personalityFile": "config/agent-prompts/FINANCE.md",
+      "automatic_triggers": [
+        "When balance sheet doesn't balance: halt and trace every line item",
+        "When assumptions lack source citation: demand documentation"
+      ],
       "requiredEvidence": [
         "assumptions documented with sources",
         "model includes error checks (balance sheet must balance)"
@@ -1632,6 +1713,12 @@
     "HR": {
       "temperature": 0.4,
       "hallucinationGuard": "medium",
+      "vibe": "Fairness and consistency — every process must be auditably unbiased",
+      "personalityFile": "config/agent-prompts/HR.md",
+      "automatic_triggers": [
+        "When job description lacks inclusive language: flag and suggest alternatives",
+        "When process documentation is absent: require before proceeding"
+      ],
       "requiredEvidence": [
         "job description or rubric uses inclusive language",
         "process documented with clear stages"
@@ -1651,6 +1738,12 @@
     "LEGAL": {
       "temperature": 0.1,
       "hallucinationGuard": "critical",
+      "vibe": "Regulatory compliance is binary. If there's doubt, escalate before proceeding",
+      "personalityFile": "config/agent-prompts/LEGAL.md",
+      "automatic_triggers": [
+        "When regulation applicability is unclear: escalate before interpreting",
+        "When compliance checklist is incomplete: block sign-off"
+      ],
       "requiredEvidence": [
         "applicable regulation cited (GDPR, HIPAA, etc.)",
         "compliance checklist completed"
@@ -1670,6 +1763,12 @@
     "BUS-TELE": {
       "temperature": 0.2,
       "hallucinationGuard": "high",
+      "vibe": "Fabricated metrics drive bad decisions — every number must trace to a source file",
+      "personalityFile": "config/agent-prompts/BUS-TELE.md",
+      "automatic_triggers": [
+        "When metric lacks source file citation: reject",
+        "When data path is invalid: halt telemetry ingestion"
+      ],
       "requiredEvidence": [
         "telemetry record has User_ID, Timestamp, and metric value",
         "data source path validated"
@@ -1689,6 +1788,12 @@
     "PREMORTEM": {
       "temperature": 0.5,
       "hallucinationGuard": "medium",
+      "vibe": "The plan will fail — my job is to find out how before it does",
+      "personalityFile": "config/agent-prompts/PREMORTEM.md",
+      "automatic_triggers": [
+        "When plan lacks failure scenarios: add premortem analysis",
+        "When risk mitigation is absent: require before sign-off"
+      ],
       "requiredEvidence": [
         "premortem report generated on disk",
         "reasoning grounded in plan details (not generic)"
@@ -1708,6 +1813,12 @@
     "SELF-DIAG": {
       "temperature": 0.1,
       "hallucinationGuard": "critical",
+      "vibe": "When the tool itself is broken, break protocol to fix it",
+      "personalityFile": "config/agent-prompts/SELF-DIAG.md",
+      "automatic_triggers": [
+        "When task completion fails 3+ times: trigger self-diagnosis",
+        "When agent detects loop or truncation: activate break glass"
+      ],
       "requiredEvidence": [
         "current response profile identified (ultra/lleno/lite + chat level)",
         "task completion failure pattern confirmed",
@@ -1729,6 +1840,12 @@
     "SCRIPT": {
       "temperature": 0.15,
       "hallucinationGuard": "high",
+      "vibe": "A bad script runs unattended and causes silent damage — validate everything",
+      "personalityFile": "config/agent-prompts/SCRIPT.md",
+      "automatic_triggers": [
+        "When script lacks error handling: flag before acceptance",
+        "When script has hardcoded paths: require parameterization"
+      ],
       "requiredEvidence": [
         "script parses without syntax errors (pwsh -NoProfile -Command)",
         "no hardcoded secrets",
@@ -1752,6 +1869,12 @@
     "CODEGRAPH": {
       "temperature": 0.1,
       "hallucinationGuard": "critical",
+      "vibe": "Deterministic code intelligence — results must be verifiable against the actual codebase",
+      "personalityFile": "config/agent-prompts/CODEGRAPH.md",
+      "automatic_triggers": [
+        "When query returns 0 results: verify symbol name against codebase",
+        "When file paths are referenced: confirm they exist on disk"
+      ],
       "requiredEvidence": [
         "codegraph query returned results",
         "symbol locations verified against file system"

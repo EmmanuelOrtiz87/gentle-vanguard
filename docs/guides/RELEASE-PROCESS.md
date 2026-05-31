@@ -18,7 +18,7 @@ Get-Content $HOME\mcp-workspace\package-lock.json | ConvertFrom-Json | Out-Null
 # Must not error (valid JSON)
 ```
 
-**If missing**: Follow [MCP-WORKSPACE-SETUP.md](MCP-WORKSPACE-SETUP.md) steps 1-4 to initialize.
+**If missing**: Follow [FIRST-TIME-SETUP-CHECKLIST.md](FIRST-TIME-SETUP-CHECKLIST.md) Step 3 to initialize.
 
 ### Security Tools
 

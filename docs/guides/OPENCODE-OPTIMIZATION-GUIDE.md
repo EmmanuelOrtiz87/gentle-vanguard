@@ -112,11 +112,11 @@ Este aviso comunica:
 ### Automatización inteligente (temporal)
 
 El sistema ahora incluye automatización adaptativa en
-[scripts/utilities/adaptive-opencode-profile.ps1](../../scripts/utilities/adaptive-opencode-profile.ps1)
+[scripts/utilities/PROFILE-ADAPTIVE/adaptive-opencode-profile.ps1](../../scripts/utilities/PROFILE-ADAPTIVE/adaptive-opencode-profile.ps1)
 y se ejecuta automáticamente en los flujos de inicio de sesión:
 
 - [scripts/utilities/session-autostart.cmd](../../scripts/utilities/session-autostart.cmd)
-- [scripts/utilities/session-autostart.sh](../../scripts/utilities/session-autostart.sh)
+- [scripts/utilities/SESSION/session-autostart.ps1](../../scripts/utilities/SESSION/session-autostart.ps1)
 - [config/session-autostart.config.json](../../config/session-autostart.config.json)
 
 Comportamiento:

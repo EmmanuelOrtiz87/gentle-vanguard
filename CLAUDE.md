@@ -14,13 +14,15 @@ Canonical entry: `docs/AGENTS.md`
 3. SDD FLOW: new features -> BA/EXPLORE first, no exceptions
 4. Delegation Rules -> `rules/DELEGATION-RULES.md` mandatory for multi-step
 5. `mem_save` after every significant task
-6. CodeGraph -> `codegraph_context` before modifying code
+6. CodeGraph -> `codegraph_context` before modifying code (or `semantic-search.ps1` for NL queries)
 7. `mem_search "lessons learned"` at session start
 8. Review Workload Guard (`review-workload-guard.ps1`) before multi-file impl >400 lines
 9. Tool output discipline: limit read/grep/bash results to 50 lines
 10. JSON validity: verify balanced quotes/braces/brackets before tool calls (see `rules/NORMATIVAS-JSON-CONSTRUCTION.md`)
 11. Subagent delegation: send minimal context in `prompt` — only task info, not full history
 12. NORMATIVA OVERRIDE: If user instruction contradicts a normativa/rule, ask for confirmation with reasons. Only proceed if user explicitly confirms. Otherwise follow normativa.
+13. Goal-Driven: For multi-step tasks, state a brief plan: `1. [Step] → verify: [check]` format. Every changed line must trace to the user's request.
+14. Semantic-First Search: Use `codegraph-semantic-search.ps1` for natural-language code queries before fallback to grep/glob
 
 ## Break Glass
 If 3+ turns w/o completion, loop detected, or output truncated:
