@@ -3,6 +3,8 @@ name: business-telemetry-skill
 description: >
   Defines standards for capturing, consolidating and reporting business-relevant telemetry. Trigger:
   "telemetry", "metrics", "management report", "roi analysis"
+metadata:
+  source: GV-native
 ---
 
 ## Purpose

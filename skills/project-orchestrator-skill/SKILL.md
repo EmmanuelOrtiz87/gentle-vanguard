@@ -4,6 +4,8 @@ description:
   'Trigger: session start, project setup, orchestration, repository governance, iniciar sesion.
   Master orchestrator for coordinated sessions: stack detection, skill loading, workflow management,
   and session activation.'
+metadata:
+  source: GV-native
 ---
 
 ## Activation Contract

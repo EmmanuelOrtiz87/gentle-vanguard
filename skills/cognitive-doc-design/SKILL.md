@@ -8,6 +8,8 @@ license: Apache-2.0
 metadata:
   author: gentle-vanguard (adapted for Gentle-Vanguard)
   version: '1.0'
+metadata:
+  source: GV-native
 ---
 
 # Cognitive Doc Design (Gentle-Vanguard Adaptation)

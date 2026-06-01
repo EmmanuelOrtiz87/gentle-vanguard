@@ -3,6 +3,8 @@ name: product-manager
 description: >
   Product Manager: full lifecycle ownership, discovery, roadmap, GTM. Trigger: "product management",
   "roadmap", "PRD", "user story", "backlog", "GTM", "product strategy".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

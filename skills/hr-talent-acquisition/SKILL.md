@@ -3,6 +3,8 @@ name: hr-talent-acquisition
 description: >
   Talent Acquisition: recruiting, interviewing, candidate assessment, onboarding. Trigger: "hiring",
   "recruiting", "interview", "candidate", "onboarding", "job description".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

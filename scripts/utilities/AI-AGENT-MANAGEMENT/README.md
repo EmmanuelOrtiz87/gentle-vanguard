@@ -94,7 +94,6 @@ Este directorio contiene scripts para:
 
 **Habilidades**:
 
-- testing-strategy-skill
 - testing-skill
 - playwright-skill
 - pytest-skill

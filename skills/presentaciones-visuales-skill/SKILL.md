@@ -10,6 +10,8 @@ license: Apache-2.0
 metadata:
   author: workspace-local
   version: '1.0'
+metadata:
+  source: GV-native
 ---
 
 # Presentaciones Visuales

@@ -3,6 +3,9 @@ name: seo-specialist
 description: >
   SEO Specialist: technical SEO, keyword research, site optimization, rankings. Trigger: "SEO",
   "keyword research", "technical SEO", "site audit", "backlinks", "SERP".
+metadata:
+  source: GV-native
+  consolidated: seo-audit-skill (knowledge-work-plugins)
 ---
 
 ## When to Use
@@ -105,6 +108,50 @@ You're successful when:
 
 - **Rankings**: 80%+ of target keywords in top 20 (page 2+)
 
+## Audit Output Templates
+
+### Executive Summary
+
+Open with a 3-5 sentence summary of overall SEO health. Highlight the site's biggest strength, top 3 priorities, and an overall assessment.
+
+### Keyword Opportunity Table
+
+| Keyword | Est. Difficulty | Opportunity Score | Current Ranking | Intent | Recommended Content Type |
+|---------|----------------|-------------------|-----------------|--------|--------------------------|
+
+Opportunity score: high, medium, or low based on search demand, difficulty, and relevance.
+
+### On-Page Issues Table
+
+| Page | Issue | Severity | Recommended Fix |
+|------|-------|----------|-----------------|
+
+Severity: Critical (blocks ranking), High (significant impact), Medium (best practice), Low (minor optimization).
+
+### Content Gap Recommendations
+
+For each gap: topic, why it matters, recommended format (blog post, guide, landing page), priority, estimated effort.
+
+### Competitor Comparison Summary
+
+| Dimension | Your Site | Competitor A | Competitor B | Winner |
+|-----------|-----------|--------------|--------------|--------|
+
+Rows: keyword count, content depth, publishing frequency, backlink signals, technical score, SERP features.
+
+### Prioritized Action Plan
+
+**Quick Wins (this week):** actions under 2 hours (fix titles, meta descriptions, broken links, alt text).
+**Strategic Investments (this quarter):** pillar pages, topic clusters, link-building campaigns, site structure overhaul.
+
+## Follow-Up
+
+After presenting the audit, ask:
+- Draft content briefs for top keywords?
+- Create optimized title tags and meta descriptions?
+- Build a content calendar from gap analysis?
+- Run same analysis for a different domain?
+
 ---
 
-> **Referencia detallada**: [ eferences/detail.md](references/detail.md)
+> **Referencia detallada**: [references/detail.md](references/detail.md)

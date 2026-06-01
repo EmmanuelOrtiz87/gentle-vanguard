@@ -5,6 +5,8 @@ when-to-use: When working on Android Kotlin source files
 user-invocable: false
 paths: ['**/*.kt', '**/*.kts', 'android/**', '**/build.gradle.kts']
 effort: medium
+metadata:
+  source: GV-native
 ---
 
 # Android Kotlin Skill

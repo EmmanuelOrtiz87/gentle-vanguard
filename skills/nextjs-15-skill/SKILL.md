@@ -3,6 +3,8 @@ name: nextjs-15-skill
 description: >
   Next.js 15 App Router patterns: Server Components, Server Actions, data fetching. Trigger:
   "Next.js", "Next.js 15", "App Router", "Server Component", "Server Action", "next.config".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

@@ -3,6 +3,8 @@ name: frontend-engineer
 description: >
   Frontend Engineer: UI implementation, state management, responsive design. Trigger: "frontend",
   "React component", "UI implementation", "responsive", "state management", "CSS".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

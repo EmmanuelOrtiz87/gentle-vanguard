@@ -3,6 +3,8 @@ name: commit-hygiene
 description: >
   Enforce conventional commits and clean commit history. Trigger: "commit", "conventional commit",
   "commit message", "commit hygiene"
+metadata:
+  source: GV-native
 ---
 
 # Commit Hygiene Skill

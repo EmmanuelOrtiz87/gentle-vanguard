@@ -1,0 +1,44 @@
+name: Skill Security Scan
+
+on:
+  pull_request:
+    paths:
+      - 'skills/**/*.md'
+  push:
+    branches: [main, develop]
+    paths:
+      - 'skills/**/*.md'
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install skillspector
+        run: |
+          git clone --depth 1 https://github.com/nvidia/skillspector.git .tmp/skillspector
+          python -m venv .tmp/skillspector/.venv
+          & ".tmp/skillspector/.venv/Scripts/pip" install typer rich httpx pyyaml pydantic openai langgraph langgraph-cli langchain-core langchain-openai langsmith
+          & ".tmp/skillspector/.venv/Scripts/pip" install -e .tmp/skillspector --no-deps
+        shell: pwsh
+
+      - name: Scan all skills
+        run: pwsh -NoProfile -File scripts/security/scan-all-skills.ps1 -ThresholdScore 80
+
+      - name: Check for critical issues
+        run: |
+          $summary = Get-Content reports/skill-security/SUMMARY.md -Raw
+          if ($summary -match 'FAIL') {
+            Write-Error "Skills with risk score >= 80 found. Review reports/skill-security/ for details."
+            exit 1
+          }
+        shell: pwsh

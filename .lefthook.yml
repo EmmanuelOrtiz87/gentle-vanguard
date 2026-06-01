@@ -39,6 +39,9 @@ pre-commit:
       run:
         pwsh -NoProfile -ExecutionPolicy Bypass -Command "trufflehog filesystem --no-verification
         --no-update . *>$null; exit 0"
+    skill-scan:
+      glob: 'skills/*/SKILL.md'
+      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/security/scan-skill.ps1" -Path {staged_files} -ThresholdScore 80 -PassThru | Out-Null
 
 pre-push:
   commands:

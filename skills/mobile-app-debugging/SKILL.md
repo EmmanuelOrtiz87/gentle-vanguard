@@ -3,6 +3,8 @@ name: mobile-app-debugging
 description: >
   Debug issues specific to mobile applications including platform-specific problems, device
   constraints, and connectivity issues.
+metadata:
+  source: GV-native
 ---
 
 # Mobile App Debugging

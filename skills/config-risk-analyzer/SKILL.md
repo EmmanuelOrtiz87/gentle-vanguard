@@ -3,6 +3,8 @@ name: config-risk-analyzer
 description: >
   Analyze risks in configuration files, detect inconsistencies, validate schemas. Trigger:
   "config-risk-analyze", "validate-config", "check-config-integrity".
+metadata:
+  source: GV-native
 ---
 
 # Config Risk Analyzer Skill

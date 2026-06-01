@@ -6,6 +6,8 @@ when-to-use: When working on Flutter/Dart code
 user-invocable: false
 paths: ['**/*.dart', 'pubspec.yaml', 'lib/**', 'test/**']
 effort: medium
+metadata:
+  source: GV-native
 ---
 
 # Flutter Skill

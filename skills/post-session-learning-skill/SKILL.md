@@ -7,6 +7,8 @@ license: Apache-2.0
 metadata:
   author: gv version: '1.0'
   allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task, EngramMemSave
+metadata:
+  source: GV-native
 ---
 
 # Post-Session Learning Skill

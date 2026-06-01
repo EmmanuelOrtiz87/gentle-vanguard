@@ -31,7 +31,7 @@
       "opencode_subagents": ["sdd-verify", "general"],
       "primary_subagent": "sdd-verify",
       "fallback": "general",
-      "skills": ["testing-strategy-skill", "testing-skill", "playwright"],
+      "skills": ["testing-skill", "playwright"],
       "triggers": ["test", "testing", "qa", "validation", "quality", "judgment day"]
     },
     "OPS": {

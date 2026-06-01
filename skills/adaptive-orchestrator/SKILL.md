@@ -4,6 +4,8 @@ description:
   'Trigger: enforce norms, learn norms, validate documentation placement, check adaptive rules, run
   norm enforcer, update learned norms. Autonomous norm enforcement and learning system with 5
   self-healing layers.'
+metadata:
+  source: GV-native
 ---
 
 # Adaptive Orchestrator

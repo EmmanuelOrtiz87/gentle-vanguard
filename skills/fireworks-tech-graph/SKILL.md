@@ -5,6 +5,8 @@ description: >-
   sequence, agent/memory, or concept map - and export as SVG+PNG. Trigger on: "画图" "帮我画"
   "生成图" "做个图" "架构图" "流程图" "可视化一下" "出图" "generate diagram" "draw diagram"
   "visualize" or any system/flow description the user wants illustrated.
+metadata:
+  source: GV-native
 ---
 
 # Fireworks Tech Graph

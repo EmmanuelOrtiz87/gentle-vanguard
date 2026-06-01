@@ -8,6 +8,8 @@ metadata:
   author: gentleman-programming
   version: '1.0'
   origin: https://github.com/Gentleman-Programming/gentle-ai
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

@@ -3,6 +3,8 @@ name: backend-engineer
 description: >
   Backend Engineer: APIs, databases, microservices, system design. Trigger: "backend", "API",
   "database", "microservice", "REST", "GraphQL", "server-side".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

@@ -3,6 +3,8 @@ name: marketing-content-writer
 description: >
   Content Writer: blog posts, copywriting, storytelling, SEO writing. Trigger: "write blog post",
   "copywriting", "blog article", "content writing", "storytelling", "landing page copy".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

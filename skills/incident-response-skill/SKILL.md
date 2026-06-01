@@ -1,62 +1,161 @@
 ---
 name: incident-response-skill
-description: Incident detection, response, and recovery automation for Gentle-Vanguard
-trigger: "incident", "alert", "response", "recovery", "emergency"
+description: >
+  Knowledge work plugin from engineering department.
+metadata:
+  source: knowledge-work-plugins
+  original-name: incident-response
+  department: engineering
 ---
+# /incident-response
 
-# Incident Response Skill
+> If you see unfamiliar placeholders or need to check which tools are connected, see [CONNECTORS.md](../../CONNECTORS.md).
 
-## Purpose
+Manage an incident from detection through postmortem.
 
-Automated incident detection, alerting, and recovery procedures for Gentle-Vanguard workspace.
+## Usage
 
-## Capabilities
+```
+/incident-response $ARGUMENTS
+```
 
-- Real-time monitoring via continuous-status-monitor.ps1
-- Token budget alerts via token-guard
-- Security breach detection via security-orchestrator
-- Session failure recovery via manual-recovery.ps1
-- Automated runbook execution
+## Modes
 
-## Triggers
+```
+/incident-response new [description]     # Start a new incident
+/incident-response update [status]       # Post a status update
+/incident-response postmortem            # Generate postmortem from incident data
+```
 
-| Event                    | Action                             |
-| ------------------------ | ---------------------------------- |
-| Token threshold 80%      | Notify user, continue monitoring   |
-| Token threshold 90%      | Alert, suggest context compression |
-| Token threshold 95%      | Force compression, block new tasks |
-| Auth failure >3 attempts | Lock for 15 minutes                |
-| Security breach detected | Block operation, log, alert        |
-| Session failure          | Trigger recovery procedures        |
+If no mode is specified, ask what phase the incident is in.
 
-## Runbooks
+## How It Works
 
-### Token Exhaustion
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    INCIDENT RESPONSE                               │
+├─────────────────────────────────────────────────────────────────┤
+│  Phase 1: TRIAGE                                                  │
+│  ✓ Assess severity (SEV1-4)                                     │
+│  ✓ Identify affected systems and users                          │
+│  ✓ Assign roles (IC, comms, responders)                         │
+│                                                                    │
+│  Phase 2: COMMUNICATE                                              │
+│  ✓ Draft internal status update                                  │
+│  ✓ Draft customer communication (if needed)                     │
+│  ✓ Set up war room and cadence                                   │
+│                                                                    │
+│  Phase 3: MITIGATE                                                 │
+│  ✓ Document mitigation steps taken                               │
+│  ✓ Track timeline of events                                      │
+│  ✓ Confirm resolution                                            │
+│                                                                    │
+│  Phase 4: POSTMORTEM                                               │
+│  ✓ Blameless postmortem document                                 │
+│  ✓ Timeline reconstruction                                       │
+│  ✓ Root cause analysis (5 whys)                                  │
+│  ✓ Action items with owners                                      │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-1. Run compression: `compact-memory.ps1`
-2. Archive old sessions: `rotate-artifacts.ps1`
-3. Suggest handoff to new session
+## Severity Classification
 
-### Auth Lockout
+| Level | Criteria | Response Time |
+|-------|----------|---------------|
+| SEV1 | Service down, all users affected | Immediate, all-hands |
+| SEV2 | Major feature degraded, many users affected | Within 15 min |
+| SEV3 | Minor feature issue, some users affected | Within 1 hour |
+| SEV4 | Cosmetic or low-impact issue | Next business day |
 
-1. Verify identity via alternative method
-2. Wait 15 minutes or admin override
-3. Reset lockout in secure-auth.ps1
+## Communication Guidance
 
-### Security Breach
+Provide clear, factual updates at regular cadence. Include: what's happening, who's affected, what we're doing, when the next update is.
 
-1. Block operation immediately
-2. Log incident to docs/security/incidents/
-3. Alert via configured channels
-4. Document in PRIVACY-DATA-REGIMEN.md
+## Output — Status Update
 
-## Integration
+```markdown
+## Incident Update: [Title]
+**Severity:** SEV[1-4] | **Status:** Investigating | Identified | Monitoring | Resolved
+**Impact:** [Who/what is affected]
+**Last Updated:** [Timestamp]
 
-- monitoring/continuous-status-monitor.ps1
-- security/security-orchestrator.ps1
-- token-guard configuration
-- event bus for alerts
+### Current Status
+[What we know now]
 
-## Next Steps
+### Actions Taken
+- [Action 1]
+- [Action 2]
 
-Add more automated runbooks as incidents occur.
+### Next Steps
+- [What's happening next and ETA]
+
+### Timeline
+| Time | Event |
+|------|-------|
+| [HH:MM] | [Event] |
+```
+
+## Output — Postmortem
+
+```markdown
+## Postmortem: [Incident Title]
+**Date:** [Date] | **Duration:** [X hours] | **Severity:** SEV[X]
+**Authors:** [Names] | **Status:** Draft
+
+### Summary
+[2-3 sentence plain-language summary]
+
+### Impact
+- [Users affected]
+- [Duration of impact]
+- [Business impact if quantifiable]
+
+### Timeline
+| Time (UTC) | Event |
+|------------|-------|
+| [HH:MM] | [Event] |
+
+### Root Cause
+[Detailed explanation of what caused the incident]
+
+### 5 Whys
+1. Why did [symptom]? → [Because...]
+2. Why did [cause 1]? → [Because...]
+3. Why did [cause 2]? → [Because...]
+4. Why did [cause 3]? → [Because...]
+5. Why did [cause 4]? → [Root cause]
+
+### What Went Well
+- [Things that worked]
+
+### What Went Poorly
+- [Things that didn't work]
+
+### Action Items
+| Action | Owner | Priority | Due Date |
+|--------|-------|----------|----------|
+| [Action] | [Person] | P0/P1/P2 | [Date] |
+
+### Lessons Learned
+[Key takeaways for the team]
+```
+
+## If Connectors Available
+
+If **~~monitoring** is connected:
+- Pull alert details and metrics
+- Show graphs of affected metrics
+
+If **~~incident management** is connected:
+- Create or update incident in PagerDuty/Opsgenie
+- Page on-call responders
+
+If **~~chat** is connected:
+- Post status updates to incident channel
+- Create war room channel
+
+## Tips
+
+1. **Start writing immediately** — Don't wait for complete information. Update as you learn more.
+2. **Keep updates factual** — What we know, what we've done, what's next. No speculation.
+3. **Postmortems are blameless** — Focus on systems and processes, not individuals.

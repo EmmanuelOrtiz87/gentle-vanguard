@@ -3,6 +3,8 @@ name: typescript-skill
 description: >
   TypeScript strict patterns: types, interfaces, generics, utility types. Trigger: "TypeScript",
   "interface", "type", "generic", "utility types", "typescript strict".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

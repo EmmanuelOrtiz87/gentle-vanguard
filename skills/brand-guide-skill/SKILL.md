@@ -8,6 +8,8 @@ metadata:
   author: gentle-vanguard
   versión: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task
+metadata:
+  source: GV-native
 ---
 
 # Brand Guide Skill
@@ -112,5 +114,7 @@ Maintain brand consistency across all touchpoints.
 
 ---
 
-> **Referencia detallada**: [ eferences/detail.md](references/detail.md)
+> **See also**: [brand-guidelines-skill](../brand-guidelines-skill/SKILL.md) for Anthropic-specific brand styling
+
+> **Referencia detallada**: [references/detail.md](references/detail.md)
 ```

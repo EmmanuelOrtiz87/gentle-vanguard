@@ -2,7 +2,9 @@
 name: security-expert
 description: >
   AI-powered security assistant for pre-commit validation, security audits, and secure coding.
-  Trigger: "security", "vulnerability", "secrets", "auth", "jwt"
+  Trigger: "expert security", "vulnerability", "secrets", "auth", "jwt"
+metadata:
+  source: GV-native
 ---
 
 # Security Expert Skill

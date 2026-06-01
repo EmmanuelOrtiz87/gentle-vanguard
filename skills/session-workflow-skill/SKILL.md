@@ -4,6 +4,8 @@ description: >
   Session workflow executor. Triggers: inicia sesion, iniciar sesion, start session, guardar sesion,
   continuar, continue, estado, status, cerrar sesion, close session, session end, fin de sesion,
   finalizar sesion. Coordinates with project-orchestrator for technical guidance.
+metadata:
+  source: GV-native
 ---
 
 # Session Workflow

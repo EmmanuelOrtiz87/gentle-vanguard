@@ -3,6 +3,8 @@ name: golang-api-skill
 description: >
   Go backend API patterns: REST endpoints, JSON responses, middleware, SPA serving. Trigger: "Go
   API", "Go backend", "REST endpoint Go", "Go JSON", "Go SPA", "Go HTTP handler".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

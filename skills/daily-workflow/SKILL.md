@@ -3,6 +3,8 @@ name: daily-workflow
 description: >
   Daily Gentle-Vanguard tasks: status check, context tracking, audit, and sync verification.
   Trigger: "daily check", "daily workflow", "morning routine", "start day", "daily tasks".
+metadata:
+  source: GV-native
 ---
 
 # Daily Workflow Skill

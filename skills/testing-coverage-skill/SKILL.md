@@ -3,6 +3,8 @@ name: testing-coverage
 description: >
   Test coverage requirements for script behavior changes. Trigger: "test", "testing", "coverage",
   "spec", "unit test"
+metadata:
+  source: GV-native
 ---
 
 # Testing Coverage Skill

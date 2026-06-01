@@ -3,6 +3,8 @@ name: zod-4-skill
 description: >
   Zod 4 schema validation: schemas, parsing, transformations, error handling. Trigger: "Zod",
   "schema validation", "input validation", "type safety".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

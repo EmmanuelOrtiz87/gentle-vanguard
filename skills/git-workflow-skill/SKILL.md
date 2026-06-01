@@ -1,6 +1,8 @@
 ---
 name: git-workflow-skill
 description: Use when managing git branches, commits, pull requests, merge conflicts, or git workflows. Triggers: "git branch", "git merge", "conflict", "pull request", "commit", "rebase", "cherry-pick", "stash".
+metadata:
+  source: GV-native
 ---
 
 # Git Workflow Skill

@@ -1,17 +1,17 @@
 # 🏛️ Gentle-Vanguard — AI Development Stack
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.17.0-brightgreen?style=for-the-badge" alt="Version 2.17.0">
+  <img src="https://img.shields.io/badge/Version-2.25.0-brightgreen?style=for-the-badge" alt="Version 2.25.0">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License">
-  <img src="https://img.shields.io/badge/Agents-18-orange?style=for-the-badge" alt="29 AI Agents">
-  <img src="https://img.shields.io/badge/Skills-130+-blueviolet?style=for-the-badge" alt="132 Skills">
+  <img src="https://img.shields.io/badge/Agents-18-orange?style=for-the-badge" alt="18 AI Agents">
+  <img src="https://img.shields.io/badge/Skills-385-blueviolet?style=for-the-badge" alt="385 Skills">
   <img src="https://img.shields.io/badge/PowerShell-7+-purple?style=for-the-badge" alt="PowerShell 7+">
   <img src="https://img.shields.io/badge/Platform-Win%20%7C%20Linux%20%7C%20macOS-lightgrey?style=for-the-badge" alt="Cross-Platform">
 </p>
 
 <p align="center">
-  <b>A governance-first AI development stack — 18 agents, 130+ on-demand skills, zero compromise.</b>
+  <b>A governance-first AI development stack — 18 agents, 385 on-demand skills, zero compromise.</b>
 </p>
 
 ---
@@ -339,7 +339,7 @@ workflow-lint.yml            ⚙️ Workflow integrity
 | **Backend**    | `golang-api-skill`, `django-drf-skill`, `nodejs-backend-patterns`, `api-design-skill`                                                                                     |
 | **AI / SDK**   | `ai-sdk-5-skill`, `mcp-skill`, `cloud-agent-connector-skill`                                                                                                              |
 | **Database**   | `database-relational-skill`, `database-nosql-skill`                                                                                                                       |
-| **Testing**    | `playwright-skill`, `pytest-skill`, `testing-skill`, `testing-strategy-skill`, `testing-coverage-skill`, `testing-evidence-qa`                                            |
+| **Testing**    | `playwright-skill`, `pytest-skill`, `testing-skill`, `testing-coverage-skill`, `testing-evidence-qa`                                            |
 | **Security**   | `security-skill`, `security-pentester`, `gitleaks`                                                                                                                        |
 | **DevOps**     | `docker-devops-skill`, `kubernetes-deployment`, `terraform-infrastructure`, `observability-skill`                                                                         |
 | **Mobile**     | `android-kotlin-skill`, `android-jetpack-compose-skill`, `ios-swiftui-patterns-skill`                                                                                     |
@@ -410,8 +410,8 @@ MIT License — see [LICENSE](../LICENSE) for details.
 ---
 
 <p align="center">
-  <b>🏛️ Gentle-Vanguard v2.17.0 — Where governance, automation, and AI converge</b><br>
-  <i>18 Agents · 130+ Skills · 100% Local-First · Cross-Platform</i>
+  <b>🏛️ Gentle-Vanguard v2.25.0 — Where governance, automation, and AI converge</b><br>
+  <i>18 Agents · 385 Skills · 100% Local-First · Cross-Platform</i>
 </p>
 
 <p align="center">

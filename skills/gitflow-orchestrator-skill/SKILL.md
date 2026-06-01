@@ -2,6 +2,8 @@
 name: gitflow-orchestrator-skill
 description: GitFlow workflow validation and branch creation orchestration
 trigger: gitflow, git, branch, workflow, git hooks
+metadata:
+  source: GV-native
 ---
 
 # GitFlow Orchestrator Skill

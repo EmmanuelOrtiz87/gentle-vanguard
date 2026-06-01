@@ -3,6 +3,8 @@ name: database-relational-skill
 description: >
   Relational database patterns: PostgreSQL, MySQL, SQLAlchemy, migrations, transactions. Trigger:
   "PostgreSQL", "MySQL", "SQL", "database", "SQLAlchemy", "migration", "transaction".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

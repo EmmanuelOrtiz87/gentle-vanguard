@@ -9,6 +9,8 @@ license: Apache-2.0
 metadata:
   author: workspace-local
   versión: '1.0'
+metadata:
+  source: GV-native
 ---
 
 # Visual Content Skill

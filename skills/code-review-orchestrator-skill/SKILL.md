@@ -3,6 +3,8 @@ name: code-review-orchestrator
 description:
   'Trigger: code review, review all, quality check, orchestrator, full review, check code, analyze
   code, audit code. Unified code quality and security review system across 7 dimensions.'
+metadata:
+  source: GV-native
 ---
 
 ## Activation Contract
@@ -52,3 +54,5 @@ path, and exit code (1 if blocked).
 - `references/judgment-day.md` — Dual review protocol
 - `references/config-example.md` — Review configuration JSON
 - `references/integration.md` — Git hooks and CI/CD setup
+
+> **See also**: [code-review-skill](../code-review-skill/SKILL.md) for structured security/performance/correctness reviews

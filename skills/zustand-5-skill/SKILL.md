@@ -3,6 +3,8 @@ name: zustand-5-skill
 description: >
   Zustand 5 state management: create store, actions, slices, persistence. Trigger: "Zustand", "state
   management", "store", "useStore", "persistence".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

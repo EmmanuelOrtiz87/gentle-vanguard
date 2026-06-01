@@ -4,6 +4,8 @@ description:
   'Trigger: release, changelog, version bump, ship, cut release, release notes, hotfix, deployment
   readiness, semver. Release planning, semantic versioning, changelog hygiene, and cutover
   readiness.'
+metadata:
+  source: GV-native
 ---
 
 ## Activation Contract

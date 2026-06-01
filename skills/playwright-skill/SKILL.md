@@ -7,6 +7,8 @@ license: Apache-2.0
 metadata:
   author: gentle-vanguard
   versión: '1.1'
+metadata:
+  source: GV-native
 ---
 
 ## MCP Workflow (MANDATORY If Available)

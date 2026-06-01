@@ -4,6 +4,8 @@ description: >
   Optional fallback skill for when Gentle-Vanguard cannot close tasks autonomously.
    (Gentleman ) acts as guardian when orchestrator needs assistance.
   Trigger: "fallback", "guardian", "assist", "cerrar", "completar tarea", " blocker"
+metadata:
+  source: GV-native
 ---
 
 # Guardian Fallback Skill

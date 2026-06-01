@@ -5,6 +5,8 @@ description:
   specialized subagents based on keywords, decision trees, and confidence scoring with opt-in
   control.'
 license: Apache-2.0
+metadata:
+  source: GV-native
 ---
 
 # Auto-Delegation Router Skill

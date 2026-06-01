@@ -3,6 +3,8 @@ name: sync-automation
 description:
   Auto-sync for Gentle-Vanguard. Automates synchronization between local Gentle-Vanguard and public
   repository.
+metadata:
+  source: GV-native
 ---
 
 # sync-automation

@@ -1,6 +1,8 @@
 ---
 name: cross-workspace-sync
 description: Cross-workspace synchronization skill for maintaining consistency across projects
+metadata:
+  source: GV-native
 ---
 
 # Skill: cross-workspace-sync
