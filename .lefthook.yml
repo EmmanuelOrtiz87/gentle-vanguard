@@ -41,7 +41,7 @@ pre-commit:
         --no-update . *>$null; exit 0"
     skill-scan:
       glob: 'skills/*/SKILL.md'
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/security/scan-skill.ps1" -Path {staged_files} -ThresholdScore 80 -PassThru | Out-Null
+      run: pwsh -NoProfile -ExecutionPolicy Bypass -Command "$f='{staged_files}'; $f.Split(' ',[StringSplitOptions]::RemoveEmptyEntries) | ForEach-Object { & 'scripts/security/scan-skill.ps1' -Path $_ -ThresholdScore 80 -PassThru | Out-Null }"
 
 pre-push:
   commands:
