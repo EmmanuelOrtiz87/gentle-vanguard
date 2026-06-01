@@ -41,7 +41,7 @@ pre-commit:
         --no-update . *>$null; exit 0"
     skill-scan:
       glob: 'skills/*/SKILL.md'
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/security/scan-skill.ps1" -Path {staged_files} -ThresholdScore 80 -PassThru | Out-Null
+      run: pwsh -NoProfile -ExecutionPolicy Bypass -Command "& 'scripts/security/scan-skill-hook.ps1' -StagedFiles '{staged_files}'"
 
 pre-push:
   commands:
