@@ -155,3 +155,5 @@ After presenting the audit, ask:
 ---
 
 > **Referencia detallada**: [references/detail.md](references/detail.md)
+
+# hook-test: verify multi-file hook with -Command

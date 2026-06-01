@@ -77,7 +77,7 @@ flowchart TB
     SDD --> DEV[DEV - Apply]
     SDD --> QA[QA - Verify]
 
-    BA --> SKILLS[135 Skills]
+    BA --> SKILLS[385 Skills]
     DEV --> SKILLS
     QA --> SKILLS
 
@@ -129,7 +129,7 @@ flowchart LR
 | **1. Agents**      | Task delegation       | 1 orchestrator + 17 sub-agents                                        | `config/auto-delegation.json`                 |
 | **2. Commands**    | CLI entry points      | `gv.ps1`, `pre-process-input.ps1`                                     | `config/orchestrator.json`                    |
 | **3. MCP Servers** | Protocol bridge       | Engram MCP, CodeGraph | `opencode.json#mcp` |
-| **4. Skills**      | Specialized execution | 135 skills across 10 categories                                       | `config/skill-dependencies.json`              |
+| **4. Skills**      | Specialized execution | 385 skills across 9 sources                                       | `config/skill-dependencies.json`              |
 | **5. Memory**      | Persistent context    | Engram (hot/warm/cold tiers)                                          | `config/engram-config.json`                   |
 
 ---
@@ -306,7 +306,7 @@ Cognitive research shows review quality drops sharply above this threshold.
 
 ### Skill Registry
 
-135 skills auto-indexed at session start. Registry is rebuilt on install/removal:
+385 skills auto-indexed at session start. Registry is rebuilt on install/removal:
 
 ```powershell
 .\scripts\utilities\build-skill-registry.ps1
@@ -334,7 +334,7 @@ Comprehensive input/token efficiency overhaul:
 | INTER-AGENT-COMMUNICATION.md | 167 lines       | 54 lines (−68%)                                                                                     |
 | 10 oversized SKILL.md files  | ~5,200 lines    | ~1,420 lines (−73%)                                                                                 |
 | auto-delegation.json         | 105 BA keywords | 80 (−24%)                                                                                           |
-| pre-process cache            | None            | SHA256 (132 skills, zero rescan)                                                                    |
+| pre-process cache            | None            | SHA256 (385 skills, zero rescan)                                                                    |
 | Output guard                 | None            | 200 tokens non-code                                                                                 |
 | Token notification auto-hook | Manual `/notif` | Automatic every turn via pre-process-input.ps1, persistent toggles, cost from `provider-costs.json` |
 
@@ -431,7 +431,7 @@ gv health
 | Gate          | Status  | Detail                                                                                                  |
 | ------------- | ------- | ------------------------------------------------------------------------------------------------------- |
 | Configuration | ✅ PASS | `orchestrator.json`, `auto-delegation.json`, `model-routing.json` valid                                 |
-| Skills        | ✅ PASS | 135 skills indexed, registry current                                                                    |
+| Skills        | ✅ PASS | 385 skills indexed, registry current                                                                    |
 | Tests         | ✅ PASS | Full test suite passing                                                                                 |
 | Hooks         | ✅ PASS | Pre-commit hooks active (README, secrets, lint)                                                         |
 | Context Log   | ✅ PASS | Session context logging active — tokens, cost, input/output per turn                                    |
