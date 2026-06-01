@@ -3,6 +3,8 @@ name: project-manager
 description: >
   Project Manager: agile delivery, risk management, stakeholder coordination. Trigger: "project
   management", "agile", "sprint", "risk register", "stakeholder", "Gantt".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

@@ -5,6 +5,8 @@ description: >
   "spec", "spec-driven", "write spec", "feature spec", 
   "sdd init", "sdd explore", "sdd propose", "sdd spec", "sdd design", "sdd tasks", "sdd apply", "sdd
   verify", "sdd archive"
+metadata:
+  source: GV-native
 ---
 
 # SDD Lifecycle Skill

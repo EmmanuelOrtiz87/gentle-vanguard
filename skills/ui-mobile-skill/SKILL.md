@@ -5,6 +5,8 @@ when-to-use: When building mobile UI components
 user-invocable: false
 paths: ['**/*.tsx', '**/*.jsx', 'ios/**', 'android/**', '**/*.dart']
 effort: medium
+metadata:
+  source: GV-native
 ---
 
 # Mobile UI Design Skill (React Native)

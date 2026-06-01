@@ -1,9 +1,11 @@
 ---
-name: markering-growth-hacker
+name: marketing-growth-hacker
 description: >
   Growth hacking specialist: rapid user acquisition, viral loops, experimentation, funnel
   optimization. Trigger: "growth hacking", "user acquisition", "viral loop", "A/B testing", "funnel
   optimization", "CAC", "LTV".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

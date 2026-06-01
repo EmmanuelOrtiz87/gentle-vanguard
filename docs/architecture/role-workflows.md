@@ -111,13 +111,13 @@ existentes. El orquestador delega segn el rol identificado.
 
 **Subagentes**: `sdd-verify`, `general`, `explore`
 
-**Skills**: `sdd-verify`, `testing-strategy-skill`, `pytest`, `go-testing`, `playwright`
+**Skills**: `sdd-verify`, `testing-skill`, `pytest`, `go-testing`, `playwright`
 
 **Flujo**:
 
 1. Recibe cdigo implementado del Desarrollador
 2. Usa `sdd-verify` para validar contra specs/design/tasks
-3. Usa `testing-strategy-skill` para identificar qu probar
+3. Usa `testing-skill` para identificar qu probar
 4. Ejecuta tests: `pytest` (Python), `go-testing` (Go)
 5. Opcional: E2E con `playwright`
 6. Reporta resultados y bugs encontrados

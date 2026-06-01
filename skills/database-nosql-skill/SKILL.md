@@ -3,6 +3,8 @@ name: database-nosql-skill
 description: >
   NoSQL database patterns: MongoDB, Redis, document models, caching. Trigger: "MongoDB", "Redis",
   "NoSQL", "document database", "caching", "cache".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

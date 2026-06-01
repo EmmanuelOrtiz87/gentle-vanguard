@@ -3,6 +3,8 @@ name: ai-sdk-5-skill
 description: >
   Vercel AI SDK 5 patterns: streaming, AI objects, tools, messages. Trigger: "AI SDK", "AI SDK 5",
   "streamText", "generateText", "AI provider".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

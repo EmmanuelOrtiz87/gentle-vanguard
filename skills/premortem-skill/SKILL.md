@@ -10,6 +10,8 @@ description: >
   "stress test this plan", "find the blind spots", "run a premortem", "what could kill this". NOT
   triggered by simple feedback requests, factual questions, or LLM Council requests. DO trigger when
   someone has a plan where the cost of being wrong is high.
+metadata:
+  source: GV-native
 ---
 
 # Premortem Skill

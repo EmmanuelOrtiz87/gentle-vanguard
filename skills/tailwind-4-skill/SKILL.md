@@ -3,6 +3,8 @@ name: tailwind-4-skill
 description: >
   Tailwind CSS 4 patterns: cn() utility, theme variables, no var() in className. Trigger:
   "Tailwind", "Tailwind CSS", "cn()", "className", "tailwind-4", "frontend", "UI", "interface".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

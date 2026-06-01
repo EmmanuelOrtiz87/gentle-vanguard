@@ -3,6 +3,8 @@ name: mcp-skill
 description: >
   Model Context Protocol: MCP servers, tools, resources, prompts. Trigger: "MCP", "Model Context
   Protocol", "MCP server", "MCP tool", "MCP resource".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use
@@ -107,6 +109,7 @@ server.prompt(
 
 ---
 
-> **Referencia detallada**: [
-eferences/detail.md](references/detail.md)
+> **See also**: [mcp-builder-skill](../mcp-builder-skill/SKILL.md) for step-by-step MCP server development guide (Python/TypeScript)
+
+> **Referencia detallada**: [references/detail.md](references/detail.md)
 ```

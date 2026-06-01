@@ -1,6 +1,8 @@
 ---
 name: backup-orchestrator
 description: Backup orchestration skill for workspace and project backup management
+metadata:
+  source: GV-native
 ---
 
 # Skill: backup-orchestrator

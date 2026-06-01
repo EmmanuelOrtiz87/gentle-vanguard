@@ -3,6 +3,8 @@ name: customer-success-manager
 description: >
   Customer Success Manager: retention, health scoring, expansion, advocacy. Trigger: "customer
   success", "retention", "churn", "health score", "NPS", "customer health".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

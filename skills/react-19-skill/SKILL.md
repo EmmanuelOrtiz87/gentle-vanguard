@@ -3,6 +3,8 @@ name: react-19-skill
 description: >
   React 19 patterns with React Compiler: no useMemo/useCallback needed, useActionState,
   useFormStatus. Trigger: "React", "React 19", "useActionState", "useFormStatus", "React Compiler".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

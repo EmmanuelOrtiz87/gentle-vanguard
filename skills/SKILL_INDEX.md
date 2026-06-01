@@ -216,6 +216,7 @@ incidents, response coordination, mitigation, and recovery planning
 | **Operations**        | observability, incident-response-plan                                                                                                                                                         |
 | **Governance**        | project-scaffolding, documentation-governance, architecture-governance, git-workflow, gentle-vanguard-manager                                                                                 |
 | **SDD Lifecycle**     | sdd-lifecycle (CONSOLIDATED - 9 phases in 1)                                                                                                                                                  |
+| **Reasoning & Frameworks** | cynefin, first-principles, socratic, systems-thinking, ooda-loop, bayesian, debiasing, fermi, second-order, inversion, red-team, five-whys, feedback-loops, model-router, leverage-points, systematic-debugging, subagent-driven-dev, writing-plans, executing-plans |
 
 ---
 
@@ -340,12 +341,11 @@ standalone components, defer loading
 
 ---
 
-### seo-audit-skill
+### seo-specialist
 
-**Trigger**: `SEO`, `audit SEO`, `meta tags`, `structured data`, `sitemap`, `robots.txt`,
-`canonical`
+**Trigger**: `SEO`, `keyword research`, `technical SEO`, `site audit`, `backlinks`, `SERP`
 
-**Use when**: Technical SEO auditing, meta tags, structured data
+**Use when**: Technical SEO auditing, keyword research, site optimization, rankings
 
 ---
 
@@ -544,14 +544,6 @@ mobile work
 ---
 
 ## Testing
-
-### testing-strategy-skill
-
-**Trigger**: `testing strategy`, `test pyramid`, `what to test`, `coverage target`
-
-**Use when**: Test strategy, coverage targets, test levels
-
----
 
 ### testing-skill
 
@@ -952,6 +944,8 @@ starting significant work
 | **Quality**      | typescript, code-review, security, technical-debt, web-performance-optimization                                                                                                               |
 | **Operations**   | observability, incident-response-plan                                                                                                                                                         |
 | **Governance**   | gentle-vanguard-manager, project-scaffolding, architecture-governance, documentation-governance, git-workflow, gentle-vanguard-audit                                                          |
+| **Reasoning**    | cynefin, first-principles, socratic, systems-thinking, ooda-loop, bayesian, debiasing, fermi, second-order, inversion, red-team, five-whys, feedback-loops, model-router, leverage-points     |
+| **Methodologies**| systematic-debugging, subagent-driven-dev, writing-plans, executing-plans                                                                                                                      |
 
 ## Skill Loading
 
@@ -1095,7 +1089,7 @@ useFormStatus
 
 ---
 
-### \_semantic-skill-matcher
+### semantic-skill-matcher
 
 **Trigger**: `semantic`, `skill match`, `similarity`
 
@@ -1342,3 +1336,582 @@ useFormStatus
 **Use when**: Quality assurance and testing evidence collection
 
 ---
+
+## Imported Skills (mercury-agent-skills)
+
+### prompt-engineering-skill
+
+**Trigger**: `prompt engineering`, `prompt design`, `system prompt`, `few-shot`, `chain of thought`
+
+**Use when**: Designing effective prompts, system prompts, few-shot examples, and chain-of-thought reasoning
+
+---
+
+### ai-agent-design-skill
+
+**Trigger**: `agent design`, `agent architecture`, `tool use`, `agent orchestration`
+
+**Use when**: Designing AI agent architecture, tool-use patterns, orchestration, and planning systems
+
+---
+
+### memory-management-skill
+
+**Trigger**: `memory management`, `context window`, `vector database`, `RAG`, `summarization`
+
+**Use when**: Managing agent memory, context windows, vector databases, RAG, and memory consolidation
+
+---
+
+### token-budget-tracking-skill
+
+**Trigger**: `token budget`, `cost optimization`, `token tracking`, `LLM costs`
+
+**Use when**: Tracking token usage, optimizing LLM costs, and managing token budgets
+
+---
+
+### agent-audit-logging-skill
+
+**Trigger**: `audit logging`, `compliance`, `observability`, `agent tracing`
+
+**Use when**: Implementing audit logging, compliance tracking, agent tracing, and forensic analysis
+
+---
+
+### security-audit-skill
+
+**Trigger**: `security audit`, `vulnerability assessment`, `OWASP`, `security review`
+
+**Use when**: Conducting security audits, vulnerability assessments, OWASP reviews, and threat modeling
+
+---
+
+### clean-code-skill
+
+**Trigger**: `clean code`, `code quality`, `refactoring`, `readability`, `maintainability`
+
+**Use when**: Writing clean, maintainable code with best practices for naming, functions, and error handling
+
+---
+
+### adr-skill
+
+**Trigger**: `ADR`, `architecture decision`, `decision record`, `architecture governance`
+
+**Use when**: Creating Architecture Decision Records with standard or lightweight templates
+
+---
+
+### e2e-testing-skill
+
+**Trigger**: `e2e test`, `end-to-end`, `Playwright`, `Cypress`, `visual testing`
+
+**Use when**: Writing end-to-end tests with Playwright or Cypress, visual testing, and CI integration
+
+---
+
+### api-testing-skill
+
+**Trigger**: `API test`, `REST testing`, `GraphQL testing`, `contract testing`
+
+**Use when**: Testing REST APIs, GraphQL endpoints, contract testing, and API monitoring
+
+---
+
+### accessibility-testing-skill
+
+**Trigger**: `accessibility test`, `a11y`, `WCAG`, `axe-core`
+
+**Use when**: Testing web accessibility, WCAG compliance, screen reader testing, and inclusive design
+
+---
+
+### monitoring-observability-skill
+
+**Trigger**: `monitoring`, `observability`, `Prometheus`, `Grafana`, `alerting`
+
+**Use when**: Setting up monitoring, observability dashboards, alerting rules, and SLO tracking
+
+---
+
+### shell-scripting-skill
+
+**Trigger**: `shell script`, `bash`, `scripting`, `automation script`
+
+**Use when**: Writing production-grade shell scripts with error handling, argument parsing, and portability
+
+---
+
+### accessibility-design-skill
+
+**Trigger**: `accessibility`, `WCAG`, `inclusive design`, `ARIA`, `a11y`
+
+**Use when**: Designing accessible interfaces following WCAG guidelines, ARIA patterns, and inclusive design
+
+---
+
+### data-storytelling-skill
+
+**Trigger**: `data storytelling`, `data viz`, `charts`, `dashboard`, `analytics presentation`
+
+**Use when**: Creating data stories, visualizations, chart selections, and presentation narratives
+
+---
+
+## Imported Skills (cc-thinking-skills)
+
+### cynefin-skill
+
+**Trigger**: `cynefin`, `complexity classification`, `problem domain`, `complicated vs complex`
+
+**Use when**: Classifying problems using Cynefin framework: simple, complicated, complex, chaotic, and disorder domains
+
+---
+
+### first-principles-skill
+
+**Trigger**: `first principles`, `fundamental reasoning`, `break down problem`, `physics thinking`
+
+**Use when**: Breaking down problems to fundamental truths using first-principles reasoning and building solutions from the ground up
+
+---
+
+### socratic-skill
+
+**Trigger**: `socratic`, `questioning`, `critical inquiry`, `dialectical`
+
+**Use when**: Applying Socratic method of questioning to examine beliefs, expose contradictions, and reach deeper understanding
+
+---
+
+### systems-thinking-skill
+
+**Trigger**: `systems thinking`, `system dynamics`, `emergent behavior`, `interconnections`
+
+**Use when**: Analyzing systems through interconnections, feedback loops, emergent behavior, and dynamic modeling
+
+---
+
+### ooda-loop-skill
+
+**Trigger**: `ooda`, `observe orient decide act`, `rapid iteration`, `decision cycle`
+
+**Use when**: Applying the OODA loop (Observe-Orient-Decide-Act) for rapid decision-making and iterative adaptation
+
+---
+
+### bayesian-skill
+
+**Trigger**: `bayesian`, `probability`, `belief update`, `prior evidence`, `posterior`
+
+**Use when**: Applying Bayesian reasoning for probabilistic thinking, belief updates, and evidence-based decision-making
+
+---
+
+### debiasing-skill
+
+**Trigger**: `debiasing`, `cognitive bias`, `bias awareness`, `decision bias`
+
+**Use when**: Identifying and mitigating cognitive biases in decisions, analysis, and reasoning processes
+
+---
+
+### fermi-skill
+
+**Trigger**: `fermi`, `estimation`, `order of magnitude`, `back of envelope`, `approximation`
+
+**Use when**: Making quick order-of-magnitude estimates using Fermi estimation techniques and dimensional analysis
+
+---
+
+### second-order-skill
+
+**Trigger**: `second order`, `consequences`, `ripple effects`, `unintended consequences`
+
+**Use when**: Analyzing second-order effects, unintended consequences, and ripple effects of decisions and actions
+
+---
+
+### inversion-skill
+
+**Trigger**: `inversion`, `invert problem`, `reverse thinking`, `avoid failure`
+
+**Use when**: Applying inversion thinking to solve problems by considering how to cause or avoid failure
+
+---
+
+### red-team-skill
+
+**Trigger**: `red team`, `adversarial review`, `attack simulation`, `penetration thinking`
+
+**Use when**: Conducting adversarial reviews, red-team analysis, and stress-testing plans against potential failures
+
+---
+
+### five-whys-skill
+
+**Trigger**: `five whys`, `root cause`, `why analysis`, `cause analysis`
+
+**Use when**: Performing root cause analysis by iteratively asking "why" to trace problems to their fundamental cause
+
+---
+
+### feedback-loops-skill
+
+**Trigger**: `feedback loop`, `reinforcing loop`, `balancing loop`, `system dynamics`
+
+**Use when**: Identifying and analyzing reinforcing and balancing feedback loops in complex systems
+
+---
+
+### model-router-skill
+
+**Trigger**: `model router`, `thinking model`, `which model`, `reasoning framework`
+
+**Use when**: Selecting the appropriate reasoning model or thinking framework for a given problem context
+
+---
+
+### leverage-points-skill
+
+**Trigger**: `leverage point`, `high impact`, `intervention point`, `system change`
+
+**Use when**: Identifying high-leverage intervention points in systems where small changes produce large effects
+
+---
+
+## Imported Skills (superpowers)
+
+### systematic-debugging-skill
+
+**Trigger**: `systematic debugging`, `root cause`, `debug process`, `investigate fix verify defend`
+
+**Use when**: Following a systematic debugging methodology: investigate, fix, verify, and defend the root cause
+
+---
+
+### subagent-driven-dev-skill
+
+**Trigger**: `subagent`, `fresh agent per task`, `two-stage review`, `agent isolation`
+
+**Use when**: Using dedicated sub-agents with fresh context per task and two-stage review for complex development work
+
+---
+
+### writing-plans-skill
+
+**Trigger**: `write plan`, `task breakdown`, `implementation plan`, `plan tasks`
+
+**Use when**: Creating detailed implementation plans with task breakdown, dependencies, and execution order
+
+---
+
+### executing-plans-skill
+
+**Trigger**: `execute plan`, `batch tasks`, `checkpoint`, `plan execution`
+
+**Use when**: Executing pre-written implementation plans with batch processing, checkpoints, and progress tracking
+
+---
+
+
+## Imported Skills
+
+---
+
+### Academic Research Skills
+
+- **academic-paper-reviewer-skill** — Imported from academic-research-skills. Profile: BA
+- **academic-paper-skill** — Imported from academic-research-skills. Profile: BA
+- **academic-pipeline-skill** — Imported from academic-research-skills. Profile: BA
+- **deep-research-skill** — Imported from academic-research-skills. Profile: BA
+
+---
+
+### Anthropic Official Skills (anthropics/skills)
+
+- **algorithmic-art-skill** — Imported from anthropic-skills. Profile: DEV
+- **brand-guidelines-skill** — Imported from anthropic-skills. Profile: DEV
+- **canvas-design-skill** — Imported from anthropic-skills. Profile: DEV
+- **claude-api-skill** — Imported from anthropic-skills. Profile: DEV
+- **doc-coauthoring-skill** — Imported from anthropic-skills. Profile: DEV
+- **docx-skill** — Imported from anthropic-skills. Profile: DEV
+- **frontend-design-skill** — Imported from anthropic-skills. Profile: DEV
+- **internal-comms-skill** — Imported from anthropic-skills. Profile: DEV
+- **mcp-builder-skill** — Imported from anthropic-skills. Profile: DEV
+- **pdf-skill** — Imported from anthropic-skills. Profile: DEV
+- **pptx-skill** — Imported from anthropic-skills. Profile: DEV
+- **skill-creator-skill** — Imported from anthropic-skills. Profile: DEV
+- **slack-gif-creator-skill** — Imported from anthropic-skills. Profile: DEV
+- **theme-factory-skill** — Imported from anthropic-skills. Profile: DEV
+- **web-artifacts-builder-skill** — Imported from anthropic-skills. Profile: DEV
+- **webapp-testing-skill** — Imported from anthropic-skills. Profile: DEV
+- **xlsx-skill** — Imported from anthropic-skills. Profile: DEV
+
+---
+
+### Claude BugHunter — Security/Bug Bounty
+
+- **apk-redteam-pipeline-skill** — Imported from claude-bughunter. Profile: GOV
+- **bb-local-toolkit-skill** — Imported from claude-bughunter. Profile: GOV
+- **bb-methodology-skill** — Imported from claude-bughunter. Profile: GOV
+- **bug-bounty-skill** — Imported from claude-bughunter. Profile: GOV
+- **bugcrowd-reporting-skill** — Imported from claude-bughunter. Profile: GOV
+- **cloud-iam-deep-skill** — Imported from claude-bughunter. Profile: GOV
+- **enterprise-vpn-attack-skill** — Imported from claude-bughunter. Profile: GOV
+- **evidence-hygiene-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-api-misconfig-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-aspnet-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-ato-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-auth-bypass-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-business-logic-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-cache-poison-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-cloud-misconfig-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-csrf-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-dispatch-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-file-upload-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-graphql-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-http-smuggling-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-idor-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-llm-ai-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-mfa-bypass-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-misc-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-ntlm-info-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-oauth-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-race-condition-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-rce-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-saml-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-sharepoint-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-sqli-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-ssrf-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-ssti-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-subdomain-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-xss-skill** — Imported from claude-bughunter. Profile: GOV
+- **hunt-xxe-skill** — Imported from claude-bughunter. Profile: GOV
+- **m365-entra-attack-skill** — Imported from claude-bughunter. Profile: GOV
+- **meme-coin-audit-skill** — Imported from claude-bughunter. Profile: GOV
+- **mid-engagement-ir-detection-skill** — Imported from claude-bughunter. Profile: GOV
+- **offensive-osint-skill** — Imported from claude-bughunter. Profile: GOV
+- **okta-attack-skill** — Imported from claude-bughunter. Profile: GOV
+- **osint-methodology-skill** — Imported from claude-bughunter. Profile: GOV
+- **redteam-mindset-skill** — Imported from claude-bughunter. Profile: GOV
+- **redteam-report-template-skill** — Imported from claude-bughunter. Profile: GOV
+- **report-writing-skill** — Imported from claude-bughunter. Profile: GOV
+- **security-arsenal-skill** — Imported from claude-bughunter. Profile: GOV
+- **supply-chain-attack-recon-skill** — Imported from claude-bughunter. Profile: GOV
+- **triage-validation-skill** — Imported from claude-bughunter. Profile: GOV
+- **vmware-vcenter-attack-skill** — Imported from claude-bughunter. Profile: GOV
+- **web2-recon-skill** — Imported from claude-bughunter. Profile: GOV
+- **web3-audit-skill** — Imported from claude-bughunter. Profile: GOV
+
+---
+
+### Knowledge Work Plugins (Anthropic)
+
+
+#### bio-research Department
+
+- **instrument-data-to-allotrope-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **nextflow-development-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **scientific-problem-selection-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **scvi-tools-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **single-cell-rna-qc-skill** — Imported from knowledge-work-plugins. Profile: BA
+
+#### cowork-plugin-management Department
+
+- **cowork-plugin-customizer-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **create-cowork-plugin-skill** — Imported from knowledge-work-plugins. Profile: DEV
+
+#### customer-support Department
+
+- **customer-escalation-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **customer-research-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **draft-response-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **kb-article-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **ticket-triage-skill** — Imported from knowledge-work-plugins. Profile: BA
+
+#### data Department
+
+- **analyze-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **build-dashboard-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **create-viz-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **data-context-extractor-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **data-visualization-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **explore-data-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **sql-queries-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **statistical-analysis-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **validate-data-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **write-query-skill** — Imported from knowledge-work-plugins. Profile: DEV
+
+#### design Department
+
+- **accessibility-review-skill** — Imported from knowledge-work-plugins. Profile: DOC
+- **design-critique-skill** — Imported from knowledge-work-plugins. Profile: DOC
+- **design-handoff-skill** — Imported from knowledge-work-plugins. Profile: DOC
+- **design-system-skill** — Imported from knowledge-work-plugins. Profile: DOC
+- **research-synthesis-skill** — Imported from knowledge-work-plugins. Profile: DOC
+- **user-research-skill** — Imported from knowledge-work-plugins. Profile: DOC
+- **ux-copy-skill** — Imported from knowledge-work-plugins. Profile: DOC
+
+#### engineering Department
+
+- **architecture-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **code-review-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **debug-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **deploy-checklist-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **documentation-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **incident-response-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **standup-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **system-design-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **technical-debt-skill** — GV-native. Profile: DEV (consolidated from tech-debt-skill)
+
+#### enterprise-search Department
+
+- **digest-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **knowledge-synthesis-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **search-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **search-strategy-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **source-management-skill** — Imported from knowledge-work-plugins. Profile: DEV
+
+#### finance Department
+
+- **audit-support-skill** — Imported from knowledge-work-plugins. Profile: FINANCE
+- **close-management-skill** — Imported from knowledge-work-plugins. Profile: FINANCE
+- **financial-statements-skill** — Imported from knowledge-work-plugins. Profile: FINANCE
+- **journal-entry-prep-skill** — Imported from knowledge-work-plugins. Profile: FINANCE
+- **journal-entry-skill** — Imported from knowledge-work-plugins. Profile: FINANCE
+- **reconciliation-skill** — Imported from knowledge-work-plugins. Profile: FINANCE
+- **sox-testing-skill** — Imported from knowledge-work-plugins. Profile: FINANCE
+- **variance-analysis-skill** — Imported from knowledge-work-plugins. Profile: FINANCE
+
+#### human-resources Department
+
+- **comp-analysis-skill** — Imported from knowledge-work-plugins. Profile: HR
+- **draft-offer-skill** — Imported from knowledge-work-plugins. Profile: HR
+- **interview-prep-skill** — Imported from knowledge-work-plugins. Profile: HR
+- **onboarding-skill** — Imported from knowledge-work-plugins. Profile: HR
+- **org-planning-skill** — Imported from knowledge-work-plugins. Profile: HR
+- **people-report-skill** — Imported from knowledge-work-plugins. Profile: HR
+- **performance-review-skill** — Imported from knowledge-work-plugins. Profile: HR
+- **policy-lookup-skill** — Imported from knowledge-work-plugins. Profile: HR
+- **recruiting-pipeline-skill** — Imported from knowledge-work-plugins. Profile: HR
+
+#### legal Department
+
+- **brief-skill** — Imported from knowledge-work-plugins. Profile: LEGAL
+- **compliance-check-skill** — Imported from knowledge-work-plugins. Profile: LEGAL
+- **legal-response-skill** — Imported from knowledge-work-plugins. Profile: LEGAL
+- **legal-risk-assessment-skill** — Imported from knowledge-work-plugins. Profile: LEGAL
+- **meeting-briefing-skill** — Imported from knowledge-work-plugins. Profile: LEGAL
+- **signature-request-skill** — Imported from knowledge-work-plugins. Profile: LEGAL
+- **triage-nda-skill** — Imported from knowledge-work-plugins. Profile: LEGAL
+- **vendor-check-skill** — Imported from knowledge-work-plugins. Profile: LEGAL
+
+#### marketing Department
+
+- **brand-review-skill** — Imported from knowledge-work-plugins. Profile: MKT
+- **campaign-plan-skill** — Imported from knowledge-work-plugins. Profile: MKT
+- **content-creation-skill** — Imported from knowledge-work-plugins. Profile: MKT
+- **draft-content-skill** — Imported from knowledge-work-plugins. Profile: MKT
+- **email-sequence-skill** — Imported from knowledge-work-plugins. Profile: MKT
+- **performance-report-skill** — Imported from knowledge-work-plugins. Profile: MKT
+- **seo-specialist** — GV-native. Profile: MKT (consolidated from seo-audit-skill)
+
+#### operations Department
+
+- **capacity-plan-skill** — Imported from knowledge-work-plugins. Profile: OPS
+- **change-request-skill** — Imported from knowledge-work-plugins. Profile: OPS
+- **compliance-tracking-skill** — Imported from knowledge-work-plugins. Profile: OPS
+- **process-doc-skill** — Imported from knowledge-work-plugins. Profile: OPS
+- **process-optimization-skill** — Imported from knowledge-work-plugins. Profile: OPS
+- **risk-assessment-skill** — Imported from knowledge-work-plugins. Profile: OPS
+- **runbook-skill** — Imported from knowledge-work-plugins. Profile: OPS
+- **status-report-skill** — Imported from knowledge-work-plugins. Profile: OPS
+- **vendor-review-skill** — Imported from knowledge-work-plugins. Profile: OPS
+
+#### pdf-viewer Department
+
+- **view-pdf-skill** — Imported from knowledge-work-plugins. Profile: DEV
+
+#### product-management Department
+
+- **competitive-brief-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **metrics-review-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **product-brainstorming-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **roadmap-update-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **sprint-planning-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **stakeholder-update-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **synthesize-research-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **write-spec-skill** — Imported from knowledge-work-plugins. Profile: BA
+
+#### productivity Department
+
+- **memory-management-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **start-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **task-management-skill** — Imported from knowledge-work-plugins. Profile: DEV
+- **update-skill** — Imported from knowledge-work-plugins. Profile: DEV
+
+#### sales Department
+
+- **account-research-skill** — Imported from knowledge-work-plugins. Profile: SALES
+- **call-prep-skill** — Imported from knowledge-work-plugins. Profile: SALES
+- **call-summary-skill** — Imported from knowledge-work-plugins. Profile: SALES
+- **competitive-intelligence-skill** — Imported from knowledge-work-plugins. Profile: SALES
+- **create-an-asset-skill** — Imported from knowledge-work-plugins. Profile: SALES
+- **daily-briefing-skill** — Imported from knowledge-work-plugins. Profile: SALES
+- **draft-outreach-skill** — Imported from knowledge-work-plugins. Profile: SALES
+- **forecast-skill** — Imported from knowledge-work-plugins. Profile: SALES
+- **pipeline-review-skill** — Imported from knowledge-work-plugins. Profile: SALES
+
+#### small-business Department
+
+- **business-pulse-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **call-list-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **canva-creator-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **cash-flow-snapshot-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **close-month-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **content-strategy-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **contract-review-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **crm-cleanup-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **crm-maintenance-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **customer-pulse-check-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **customer-pulse-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **friday-brief-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **handle-complaint-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **invoice-chase-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **job-post-builder-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **lead-triage-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **margin-analyzer-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **monday-brief-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **month-end-prep-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **month-heads-up-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **plan-payroll-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **price-check-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **quarterly-review-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **review-contract-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **run-campaign-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **sales-brief-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **smb-onboard-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **smb-router-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **tax-prep-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **tax-season-organizer-skill** — Imported from knowledge-work-plugins. Profile: BA
+- **ticket-deflector-skill** — Imported from knowledge-work-plugins. Profile: BA
+
+---
+
+### Taste/Design Quality Skills (taste-skill)
+
+- **brandkit-skill** — Imported from taste-skill. Profile: DOC
+- **brutalist-skill** — Imported from taste-skill. Profile: DOC
+- **gpt-tasteskill-skill** — Imported from taste-skill. Profile: DOC
+- **image-to-code-skill** — Imported from taste-skill. Profile: DOC
+- **imagegen-frontend-mobile-skill** — Imported from taste-skill. Profile: DOC
+- **imagegen-frontend-web-skill** — Imported from taste-skill. Profile: DOC
+- **minimalist-skill** — Imported from taste-skill. Profile: DOC
+- **output-skill** — Imported from taste-skill. Profile: DOC
+- **redesign-skill** — Imported from taste-skill. Profile: DOC
+- **soft-skill** — Imported from taste-skill. Profile: DOC
+- **stitch-skill** — Imported from taste-skill. Profile: DOC
+- **taste-skill** — Imported from taste-skill. Profile: DOC
+- **taste-skill-v1-skill** — Imported from taste-skill. Profile: DOC

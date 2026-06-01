@@ -12,6 +12,8 @@ license: Apache-2.0
 metadata:
   author: workspace-local
   versión: '3.0'
+metadata:
+  source: GV-native
 ---
 
 # Content Output Skill (v3.0)

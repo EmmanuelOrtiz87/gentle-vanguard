@@ -1,8 +1,11 @@
 ---
+name: self-diagnosis-skill
 trigger:
   'no terminaste, incompleto, dejaste a la mitad, no completaste, te esta bloqueando, bucle,
   terminated, break glass, overridea tu config, auto-diagnostico, self-diagnosis'
 agent: 'SELF-DIAG'
+metadata:
+  source: GV-native
 ---
 
 # Self-Diagnosis Skill

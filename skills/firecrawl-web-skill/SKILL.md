@@ -9,6 +9,8 @@ metadata:
   author: gentle-vanguard
   versión: '1.0'
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash, Task, webfetch, websearch
+metadata:
+  source: GV-native
 ---
 
 # Firecrawl Web Skill

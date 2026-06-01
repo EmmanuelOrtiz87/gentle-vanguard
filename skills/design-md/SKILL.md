@@ -7,6 +7,8 @@ allowed-tools:
   - "Bash"
   - "Glob"
   - "Grep"
+metadata:
+  source: GV-native
 ---
 
 # DESIGN.md Skill for Gentle-Vanguard

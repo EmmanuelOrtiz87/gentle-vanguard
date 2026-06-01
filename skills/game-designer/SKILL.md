@@ -3,6 +3,8 @@ name: game-designer
 description: >
   Game Designer: mechanics, balance, player experience, level design. Trigger: "game design", "game
   mechanics", "balance", "player experience", "level design", "gamedev".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

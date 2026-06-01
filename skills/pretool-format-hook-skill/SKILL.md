@@ -4,6 +4,8 @@ description: >
   PreToolUse auto-format hook that runs linter/formatter before AI agent accesses files. Eliminates
   wasted tokens on formatting discussions. Trigger: "auto-format", "pretool", "format hook", "format
   before save"
+metadata:
+  source: GV-native
 ---
 
 ## Purpose

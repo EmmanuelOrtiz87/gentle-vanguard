@@ -3,6 +3,8 @@ name: design-ux-researcher
 description: >
   UX Researcher: user testing, behavior analysis, usability insights, data-driven design. Trigger:
   "UX research", "user testing", "usability", "user behavior", "persona", "journey map".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

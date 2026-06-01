@@ -3,6 +3,8 @@ name: sales-outbound-strategist
 description: >
   Signal-based outbound specialist: multi-channel sequences, ICP targeting, pipeline building.
   Trigger: "outbound sales", "cold outreach", "prospecting", "ICP", "sequence", "buyer persona".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

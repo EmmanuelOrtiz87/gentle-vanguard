@@ -3,6 +3,8 @@ name: finance-financial-analyst
 description: >
   Financial Analyst: modeling, forecasting, scenario analysis, decision support. Trigger: "financial
   model", "forecast", "scenario analysis", "variance", "budget", "cash flow".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

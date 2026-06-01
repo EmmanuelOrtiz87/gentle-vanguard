@@ -3,6 +3,8 @@ name: devops-sre
 description: >
   Site Reliability Engineer: monitoring, incident response, automation, scalability. Trigger: "SRE",
   "incident response", "monitoring", "on-call", "automation", "scalability", "kubernetes".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

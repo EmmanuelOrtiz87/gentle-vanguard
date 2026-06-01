@@ -3,6 +3,8 @@ name: testing-evidence-qa
 description: >
   Evidence-based QA: screenshot testing, visual proof, certification. Trigger: "evidence QA",
   "screenshot test", "visual testing", "QA certification", "production readiness".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

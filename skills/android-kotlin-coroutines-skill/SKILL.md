@@ -7,6 +7,8 @@ when-to-use: When implementing async logic in Android Kotlin code with coroutine
 user-invocable: false
 paths: ['**/*.kt', '**/*.kts', 'android/**', '**/build.gradle.kts']
 effort: medium
+metadata:
+  source: GV-native
 ---
 
 # Android Kotlin Coroutines Skill

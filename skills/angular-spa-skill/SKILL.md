@@ -4,6 +4,8 @@ description: >
   Angular 19+ SPA patterns: signals, zoneless, standalone components, defer loading. Trigger:
   "Angular", "Angular component", "Angular service", "Angular signal", "Angular SPA", "@defer",
   "standalone component".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

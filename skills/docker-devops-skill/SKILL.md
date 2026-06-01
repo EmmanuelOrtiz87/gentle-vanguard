@@ -1,6 +1,8 @@
 ---
 name: docker-devops-skill
 description: Use when working with Docker, Kubernetes, CI/CD pipelines, or deployment configurations. Triggers: "docker", "container", "kubernetes", "k8s", "deployment", "docker-compose", "dockerfile", "pod", "ingress", "helm".
+metadata:
+  source: GV-native
 ---
 
 # Docker & DevOps Skill

@@ -10,6 +10,8 @@ metadata:
   versión: '1.0'
   status: 'ACTIVE'
   priority: 'CRITICAL'
+metadata:
+  source: GV-native
 ---
 
 # ADAPTIVE MODE ORCHESTRATOR SKILL

@@ -11,6 +11,8 @@ allowed-tools:
   - Bash
   - Grep
   - Glob
+metadata:
+  source: GV-native
 ---
 
 # Android - Jetpack Compose

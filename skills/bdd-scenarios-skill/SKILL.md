@@ -6,6 +6,8 @@ description:
 allowed-tools:
   - Bash
   - Read
+metadata:
+  source: GV-native
 ---
 
 # BDD Scenarios

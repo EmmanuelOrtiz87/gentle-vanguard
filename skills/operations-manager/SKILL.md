@@ -4,6 +4,8 @@ description: >
   Operations Manager: process optimization, vendor management, resource planning. Trigger:
   "operations", "process improvement", "vendor management", "SOP", "resource planning",
   "bottleneck".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

@@ -100,16 +100,19 @@ docs/sdd/
 
 ## Integration
 
-| Phase   | Agent     | Skill                     |
-| ------- | --------- | ------------------------- |
-| init    | AGENT-BA  | Detect stack, conventions |
-| explore | AGENT-BA  | bdd-scenarios             |
-| propose | AGENT-SAD | architecture-governance   |
-| spec    | AGENT-SAD | BDD scenarios             |
-| design  | AGENT-SAD | api-design-skill          |
-| apply   | AGENT-DEV | Framework skills          |
-| verify  | AGENT-QA  | testing-skill             |
-| archive | AGENT-DOC | documentation             |
+| Phase   | Agent     | Skill                     | Thinking Framework          |
+| ------- | --------- | ------------------------- | --------------------------- |
+| init    | AGENT-BA  | Detect stack, conventions | —                           |
+| explore | AGENT-BA  | bdd-scenarios             | cynefin, socratic           |
+| propose | AGENT-SAD | architecture-governance   | first-principles, systems-thinking |
+| spec    | AGENT-SAD | BDD scenarios             | inversion                   |
+| design  | AGENT-SAD | api-design-skill          | second-order, leverage-points, feedback-loops |
+| tasks   | AGENT-DEV | task-breakdown            | fermi, writing-plans        |
+| apply   | AGENT-DEV | Framework skills          | ooda-loop, systematic-debugging, executing-plans, subagent-driven-dev |
+| verify  | AGENT-QA  | testing-skill             | red-team, five-whys, debiasing |
+| archive | AGENT-DOC | documentation             | feedback-loops, bayesian    |
+
+> **Full mapping**: See `config/sdd-framework-mapping.json` for triggers, ordering, and per-framework purpose.
 
 ## Enforcement
 

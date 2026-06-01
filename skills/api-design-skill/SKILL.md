@@ -1,6 +1,8 @@
 ---
 name: api-design-skill
 description: Use when designing REST APIs, GraphQL schemas, or API contracts. Triggers: "design API", "REST endpoint", "GraphQL", "OpenAPI", "API versióning", "pagination", "API documentation", "API error handling".
+metadata:
+  source: GV-native
 ---
 
 # API Design Skill

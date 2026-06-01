@@ -6,6 +6,8 @@ description: >
   grep/glob/read. Trigger: "codegraph", "code graph", "symbol search", "call graph", "impact
   analysis", "find callers", "find callees", "code structure", "codebase index", "semantic search",
   "affected tests".
+metadata:
+  source: GV-native
 ---
 
 # CodeGraph Skill

@@ -3,6 +3,8 @@ name: parallel-execution-limits
 description:
   Advanced parallel execution management with dependency graphs, resource pooling, and token budget
   circuit breaker
+metadata:
+  source: GV-native
 ---
 
 # Skill: parallel-execution-limits

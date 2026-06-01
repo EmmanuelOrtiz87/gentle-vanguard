@@ -3,6 +3,8 @@ name: sales-account-executive
 description: >
   Account Executive: enterprise sales, deal negotiation, pipeline management. Trigger: "enterprise
   sales", "deal negotiation", "pipeline", "account management", "sales cycle", "closing".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

@@ -3,6 +3,8 @@ name: data-scientist
 description: >
   Data Scientist: machine learning, statistical analysis, predictive modeling. Trigger: "machine
   learning", "ML model", "data science", "prediction", "classification", "regression", "pandas".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

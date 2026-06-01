@@ -3,6 +3,8 @@ name: django-drf-skill
 description: >
   Django REST Framework patterns: ViewSets, Serializers, Filters, Permissions. Trigger: "Django",
   "Django REST Framework", "DRF", "ViewSet", "Serializer", "APIView".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

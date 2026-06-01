@@ -546,7 +546,7 @@ if (-not $config.skills) {
         'react-19-skill',
         'nextjs-15-skill',
         'typescript-skill',
-        'testing-strategy-skill',
+        'testing-skill',
         'docker-devops-skill',
         'ai-sdk-5-skill',
         'mcp-skill'

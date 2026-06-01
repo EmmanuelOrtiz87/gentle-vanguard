@@ -3,6 +3,8 @@ name: customer-support-lead
 description: >
   Customer Support Lead: ticket triage, escalation management, knowledge base. Trigger: "customer
   support", "ticket triage", "escalation", "knowledge base", "SLA", "help desk".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

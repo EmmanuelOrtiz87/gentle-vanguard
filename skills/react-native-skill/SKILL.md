@@ -5,6 +5,8 @@ when-to-use: When working on React Native mobile app code
 user-invocable: false
 paths: ['**/*.tsx', '**/*.jsx', 'ios/**', 'android/**', 'app.json']
 effort: medium
+metadata:
+  source: GV-native
 ---
 
 # React Native Skill

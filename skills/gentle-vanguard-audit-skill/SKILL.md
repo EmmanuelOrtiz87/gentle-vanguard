@@ -5,6 +5,8 @@ description:
   duplicates', 'fix references', 'homologate', 'validation sweep', 'gv audit'. Gentle-Vanguard audit
   and validation sweep detecting duplicates, broken links, missing files, skill inconsistencies, and
   documentation issues."
+metadata:
+  source: GV-native
 ---
 
 # Gentle-Vanguard Audit Skill

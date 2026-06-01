@@ -8,6 +8,9 @@ license: Apache-2.0
 metadata:
   author: gentle-vanguard
   versión: '1.0'
+metadata:
+  source: GV-native
+  consolidated: tech-debt-skill (knowledge-work-plugins)
 ---
 
 ## When to Use
@@ -19,20 +22,25 @@ metadata:
 
 ## Debt Categories
 
-- Code debt: duplication, long methods, poor boundaries
-- Test debt: missing or brittle tests
-- Documentation debt: missing ADRs/specs/runbooks
-- Operational debt: missing alerts, manual processes, poor observability
-- Architectural debt: leaky abstractions, cyclic dependencies, unsafe shared state
+| Type | Examples | Risk |
+|------|----------|------|
+| **Code debt** | Duplicated logic, poor abstractions, magic numbers | Bugs, slow development |
+| **Architecture debt** | Monolith that should be split, wrong data store | Scaling limits |
+| **Test debt** | Low coverage, flaky tests, missing integration tests | Regressions ship |
+| **Dependency debt** | Outdated libraries, unmaintained dependencies | Security vulns |
+| **Documentation debt** | Missing runbooks, outdated READMEs, tribal knowledge | Onboarding pain |
+| **Infrastructure debt** | Manual deploys, no monitoring, no IaC | Incidents, slow recovery |
+| **Operational debt** | Missing alerts, manual processes, poor observability | Slow incident response |
 
 ## Prioritization Model
 
 Rank debt by:
 
-1. Delivery drag: how much it slows feature work
-2. Incident risk: how likely it causes failures
-3. Change frequency: how often the area changes
-4. Blast radius: how much breaks if it fails
+1. **Impact × Risk × (6 − Effort)** — Score each item on Impact (1-5), Risk (1-5), Effort (1-5, inverted). Formula: Priority = (Impact + Risk) × (6 - Effort)
+2. **Delivery drag**: how much it slows feature work
+3. **Incident risk**: how likely it causes failures
+4. **Change frequency**: how often the area changes
+5. **Blast radius**: how much breaks if it fails
 
 Address debt where all four are high.
 

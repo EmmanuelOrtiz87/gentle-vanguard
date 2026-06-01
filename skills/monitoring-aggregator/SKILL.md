@@ -1,6 +1,8 @@
 ---
 name: monitoring-aggregator
 description: Monitoring aggregation skill for collecting and analyzing workspace metrics
+metadata:
+  source: GV-native
 ---
 
 # Skill: monitoring-aggregator

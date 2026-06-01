@@ -1,6 +1,8 @@
 ---
 name: project-scaffolding
 description: Use when creating projects, scaffolding code, bootstrapping workspaces, applying templates, running validation scripts, or managing workspace infrastructure. Triggers for: "create project", "new project", "bootstrap", "scaffold", "template", "workspace setup", "initialize project", "gv CLI".
+metadata:
+  source: GV-native
 ---
 
 # Project Scaffolding

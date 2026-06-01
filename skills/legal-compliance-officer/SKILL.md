@@ -3,6 +3,8 @@ name: legal-compliance-officer
 description: >
   Compliance Officer: regulatory adherence, policy enforcement, audit support. Trigger:
   "compliance", "GDPR", "HIPAA", "policy", "audit", "regulatory", "privacy".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use

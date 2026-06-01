@@ -3,6 +3,8 @@ name: content-strategist
 description: >
   Content Strategist: editorial planning, SEO, content operations, brand voice. Trigger: "content
   strategy", "editorial calendar", "SEO", "blog post", "content audit", "brand voice".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use
@@ -106,4 +108,6 @@ You're successful when:
 
 ---
 
-> **Referencia detallada**: [ eferences/detail.md](references/detail.md)
+> **See also**: [content-strategy-skill](../content-strategy-skill/SKILL.md) (small-business), [content-creation-skill](../content-creation-skill/SKILL.md) (marketing execution)
+
+> **Referencia detallada**: [references/detail.md](references/detail.md)

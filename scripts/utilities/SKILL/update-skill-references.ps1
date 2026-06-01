@@ -53,7 +53,7 @@ $skillsToUpdate = @(
     'legal-compliance-officer',
     'product-manager',
     'security-pentester',
-    '_semantic-skill-matcher',
+    'semantic-skill-matcher',
     'operations-manager',
     'cognitive-doc-design',
     'finance-financial-analyst',

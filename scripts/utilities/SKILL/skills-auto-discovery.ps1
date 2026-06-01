@@ -85,7 +85,7 @@ function Get-AgentFromSkillName {
         'documentation-governance' = 'DOC'
         'code-review-orchestrator-skill' = 'QA'
         'testing-skill' = 'QA'
-        'testing-strategy-skill' = 'QA'
+        # testing-strategy-skill merged into testing-skill
         'playwright-skill' = 'QA'
         'pytest-skill' = 'QA'
         'go-testing' = 'QA'
@@ -117,7 +117,7 @@ function Get-AgentFromSkillName {
         'mcp-skill' = 'GOV'
         'django-drf-skill' = 'DEV'
         'pretool-format-hook-skill' = 'DEV'
-        '_semantic-skill-matcher' = 'GOV'
+        'semantic-skill-matcher' = 'GOV'
         'ai-sdk-5-skill' = 'DEV'
         'firecrawl-web-skill' = 'DEV'
         'distributed-tracing-skill' = 'GOV'

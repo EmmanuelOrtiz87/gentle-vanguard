@@ -3,6 +3,8 @@ name: data-analyst
 description: >
   Data Analyst: SQL querying, visualization, insight generation, reporting. Trigger: "data
   analysis", "SQL query", "dashboard", "visualization", "insights", "reporting".
+metadata:
+  source: GV-native
 ---
 
 ## When to Use
