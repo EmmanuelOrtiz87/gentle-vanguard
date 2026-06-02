@@ -3,13 +3,13 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.25.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.26.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
   <img src="https://img.shields.io/badge/Agents-18-00BFFF?style=flat-square&labelColor=0D1117" alt="Agents">
   <img src="https://img.shields.io/badge/Skills-385-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
-  <img src="https://img.shields.io/badge/Workflows-16-A855F7?style=flat-square&labelColor=0D1117" alt="Workflows">
+  <img src="https://img.shields.io/badge/Workflows-26-A855F7?style=flat-square&labelColor=0D1117" alt="Workflows">
 </p>
 
 <p align="center">
@@ -23,7 +23,7 @@
 
 <p align="center">
   <strong>AI-powered development orchestrator · 18 agents · 385 skills · 10 tool-compatible</strong><br>
-  <em>Tool-agnostic · SDD Lifecycle · Hashline · Team Mode · Skill MCPs · Persistent memory</em>
+  <em>Tool-agnostic · SDD Lifecycle · Hashline · Team Mode · Skill MCPs · Feedback Loop · Proactive Delivery · Persistent memory</em>
 </p>
 
 > _"Construyendo el puente definitivo entre la alta ingeniería de software y la estrategia
@@ -55,6 +55,12 @@ otherwise be chaotic AI-assisted development.
   collect cycle. Built on top of the existing dispatch agent system
 - **Skill MCPs** — On-demand Model Context Protocol servers launched from SKILL.md frontmatter.
   Register, start, stop, list via dedicated manager. Zero-churn lifecycle
+- **Feedback Loop** — Rate-driven tool improvement (1-5) with NDJSON persistence, trend analysis,
+  red-flag detection (<3 avg), keyword extraction, and auto-apply of improvement proposals.
+  Integrated via `gv feedback rate|status|analyze|auto` and post-session learning (Phase 2.5)
+- **Proactive Delivery** — Daily/status/weekly digests with health status, feedback trends, pending
+  proposals, token spend, and git activity. Auto-displayed at session start via `gv digest`.
+  Configurable `-Mode` (daily|status|weekly) and `-JSON` output
 - **Optimization Stack** — Token compression (-64% CLAUDE.md), SHA256 response cache
   (TTL 30min), model cost optimization (4x cheaper with qwen-3.6-plus), pre-task
   compression (~30% reduction), and automated integrity verification via
@@ -403,14 +409,18 @@ gv health
 
 ---
 
-## CI/CD Pipeline (16 Workflows)
+## CI/CD Pipeline (26 Workflows)
 
 | Workflow                           | Purpose                          | Trigger              |
 | ---------------------------------- | -------------------------------- | -------------------- |
 | `gentle-vanguard-quality-gate.yml` | Quality gates on PRs             | Every PR             |
 | `test-suite.yml`                   | Full test suite                  | Every PR/push        |
+| `coverage.yml`                     | Code coverage reporting          | Every PR/push        |
+| `js-ts-quality.yml`               | JS/TS lint + typecheck           | Every PR/push        |
+| `python-quality.yml`              | Python lint + test               | Every PR/push        |
 | `ps-lint.yml`                      | PSScriptAnalyzer lint            | Every PR             |
 | `sdd-gate.yml`                     | Block PRs without SDD            | Every PR             |
+| `commitlint.yml`                   | Conventional commit validation   | Every PR/push        |
 | `script-governance.yml`            | Script compliance                | Every PR             |
 | `format-check.yml`                 | Prettier formatting              | Every PR             |
 | `gitleaks.yml`                     | Secret scanning                  | Every PR             |
@@ -418,9 +428,15 @@ gv health
 | `autonomous-validation.yml`        | Full validation suite            | Weekly               |
 | `cross-platform-tests.yml`         | Cross-platform tests             | Every PR/push        |
 | `dashboard-auto-refresh.yml`       | Metrics dashboard                | Daily                |
+| `dashboard-ci.yml`                 | Dashboard build verification     | Every PR/push        |
 | `monthly-management-report.yml`    | Executive report                 | Monthly              |
 | `release.yml`                      | Release management               | On tag               |
 | `labeler.yml`                      | Auto-label PRs                   | Every PR             |
+| `markdown-lint.yml`                | Markdown style enforcement       | Every PR/push        |
+| `npm-audit.yml`                    | npm dependency audit             | Weekly               |
+| `openapi-validate.yml`             | OpenAPI spec validation          | Every PR/push        |
+| `skill-scan.yml`                   | Skill structure validation       | Every PR             |
+| `stale.yml`                        | Stale issue/PR management        | Daily                |
 | `sync-public.yml`                  | Sync to `gentle-vanguard-public` | On push to `main`    |
 | `workflow-lint.yml`                | Workflow syntax validation       | On `.github/` change |
 
@@ -444,6 +460,8 @@ gv health
 | Hashline      | ✅ PASS | 411 files, 83,214 SHA-256 hashes, post-commit snapshot + pre-compact hook                               |
 | Team Mode     | ✅ PASS | Leader-follower with up to 8 members, full cycle (start→assign→report→collect→stop) tested              |
 | Skill MCPs    | ✅ PASS | 6 actions (register, start, stop, list, status, deregister), SKILL.md frontmatter parsing, cycle tested |
+| Feedback Loop | ✅ PASS | Rating 1-5 collector + trend analyzer + red-flag detection + auto-apply proposals. `gv feedback`         |
+| Proactive Delivery | ✅ PASS | Daily/status/weekly digests with health, feedback, proposals, tokens. `gv digest` + session autostart |
 
 ---
 
@@ -499,6 +517,6 @@ LLM Top 10 + OWASP Agentic Top 10).
 ---
 
 <p align="center">
-  <strong>Gentle-Vanguard v2.24.0</strong><br>
+  <strong>Gentle-Vanguard v2.26.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>
