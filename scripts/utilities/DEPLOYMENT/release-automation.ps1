@@ -48,11 +48,11 @@ $results = @()
 function Write-Step { param([string]$M) Write-Host "`n=== $M ===" -ForegroundColor Cyan }
 function Write-Ok   { param([string]$M) Write-Host "  [OK] $M" -ForegroundColor Green }
 function Write-Warn { param([string]$M) Write-Host "  [WARN] $M" -ForegroundColor Yellow }
-function Write-Err  { param([string]$M) Write-Host "  [FAIL] $M" -ForegroundColor Red; $global:exitCode = 1 }
+function Write-Err  { param([string]$M) Write-Host "  [FAIL] $M" -ForegroundColor Red; $script:exitCode = 1 }
 
 function Add-Result {
     param([string]$Check, [bool]$Passed, [string]$Detail)
-    $results += [pscustomobject]@{ Check = $Check; Passed = $Passed; Detail = $Detail }
+    $script:results += [pscustomobject]@{ Check = $Check; Passed = $Passed; Detail = $Detail }
     if ($Passed) { Write-Ok "$Check — $Detail" } else { Write-Err "$Check — $Detail" }
 }
 
