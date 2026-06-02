@@ -367,9 +367,10 @@
       "responseProfile": "ultra",
       "communicationLang": "es",
       "supportsSkillTool": false,
-      "supportsMemTools": false,
+      "supportsMemTools": true,
+      "mcpBridge": "scripts/mcp-bridge/mcp-bridge.ps1",
       "adaptiveProfile": "scripts/utilities/adaptive-claude-cline-profile.ps1",
-      "note": "Cline uses .clinerules — must reference AGENTS.md for canonical bootstrap"
+      "note": "Cline sin skill tool nativo — skills vía MCP bridge (gentle-vanguard-skills) en .cline/config.json"
     },
     "cursor": {
       "promptFile": ".cursorrules",
@@ -378,9 +379,10 @@
       "responseProfile": "ultra",
       "communicationLang": "es",
       "supportsSkillTool": false,
-      "supportsMemTools": false,
+      "supportsMemTools": true,
+      "mcpBridge": "scripts/mcp-bridge/mcp-bridge.ps1",
       "adaptiveProfile": "scripts/utilities/adaptive-cursor-profile.ps1",
-      "note": "Cursor uses .cursorrules — must reference AGENTS.md for canonical bootstrap"
+      "note": "Cursor sin skill tool nativo — skills vía MCP bridge en .cursor/config.json#mcpServers"
     },
     "windsurf": {
       "promptFile": "CLAUDE.md",
@@ -389,9 +391,10 @@
       "responseProfile": "ultra",
       "communicationLang": "es",
       "supportsSkillTool": false,
-      "supportsMemTools": false,
+      "supportsMemTools": true,
+      "mcpBridge": "scripts/mcp-bridge/mcp-bridge.ps1",
       "adaptiveProfile": "scripts/utilities/adaptive-codex-windsurf-profile.ps1",
-      "note": "Windsurf uses CLAUDE.md by convention — canonical entry is AGENTS.md"
+      "note": "Windsurf sin skill tool nativo — skills vía MCP bridge en .windsurf/config.json#mcpServers"
     },
     "codex": {
       "promptFile": "CLAUDE.md",
