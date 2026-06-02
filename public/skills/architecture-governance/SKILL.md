@@ -3,6 +3,8 @@ name: architecture-governance
 description:
   'Trigger: "architecture", "project structure", "ADR". Standardize architecture decisions, project
   structure, defaults, and decision records.'
+metadata:
+  source: GV-native
 ---
 
 # Architecture Governance

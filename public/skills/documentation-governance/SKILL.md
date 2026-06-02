@@ -4,6 +4,8 @@ description:
   'Trigger: creating or updating README, ARCHITECTURE, setup guides, code reviews, script docs, or
   any markdown/comment work. Standardizes project documentation with English-first, numbered,
   easy-to-maintain structure.'
+metadata:
+  source: GV-native
 ---
 
 # Documentation Governance
@@ -52,4 +54,4 @@ Select document type from `references/documentation-standards.md`:
 ## References
 
 - Templates & standards:
-  [documentation-standards.md](../../../../skills/documentation-governance/references/documentation-standards.md)
+  [references/documentation-standards.md](references/documentation-standards.md)

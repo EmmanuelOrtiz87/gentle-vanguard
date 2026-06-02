@@ -4,6 +4,8 @@ description:
   'Trigger: script, automation, hook, startup, auto-init, orchestrator script, powershell, bash.
   Governance patterns for development scripts: lifecycle, naming, safety, observability, and
   automation boundaries.'
+metadata:
+  source: GV-native
 ---
 
 ## Activation Contract

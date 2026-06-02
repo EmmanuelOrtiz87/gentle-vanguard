@@ -3,6 +3,8 @@ name: docs-alignment
 description: >
   Keep documentation in sync with code and workflow changes. Trigger: "docs", "documentation",
   "update docs", "doc sync"
+metadata:
+  source: GV-native
 ---
 
 # Documentation Alignment Skill

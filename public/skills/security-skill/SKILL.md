@@ -4,6 +4,8 @@ description:
   'Trigger: "security", "authentication", "authorization", "vulnerability", "OWASP", "XSS", "SQL
   injection", "secrets". Use when reviewing code for security vulnerabilities, implementing auth, or
   setting up security practices.'
+metadata:
+  source: GV-native
 ---
 
 # Security Skill

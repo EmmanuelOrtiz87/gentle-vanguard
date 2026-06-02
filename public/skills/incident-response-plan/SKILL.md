@@ -4,6 +4,8 @@ description: >
   Create and execute incident response procedures for security breaches, data leaks, and cyber
   attacks. Use when handling security incidents, creating response playbooks, or conducting forensic
   analysis.
+metadata:
+  source: GV-native
 ---
 
 # Incident Response Plan
