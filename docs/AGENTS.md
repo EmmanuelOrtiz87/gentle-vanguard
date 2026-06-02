@@ -157,3 +157,5 @@ See `docs/QUICK-COMMANDS.md` for full list.
 | **Feedback Analyzer**   | `scripts/utilities/FEEDBACK/feedback-analyzer.ps1` |
 | **Digest Generator**    | `scripts/utilities/DIGEST/digest-generator.ps1` |
 | **NORMATIVAS-FEEDBACK** | `rules/NORMATIVAS-FEEDBACK.md` |
+| **Release Automation** | `scripts/utilities/DEPLOYMENT/release-automation.ps1` |
+| **NORMATIVAS-RELEASE** | `rules/NORMATIVAS-RELEASE.md` |
