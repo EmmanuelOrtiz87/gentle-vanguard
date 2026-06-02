@@ -47,7 +47,7 @@ export class ResilienceManager {
     dataLossEvents: 0,
   };
   private activeTier: string = 'primary';
-  private stateSync: Map<string, any> = new Map();
+  private stateSync: Map<string, Record<string, unknown>> = new Map();
 
   constructor() {
     this.initializeTiers();
@@ -95,7 +95,7 @@ export class ResilienceManager {
    * Initialize health status for all tiers
    */
   private initializeHealthStatus(): void {
-    this.tiers.forEach((config, tierId) => {
+    this.tiers.forEach((_config, tierId) => {
       this.healthStatuses.set(tierId, {
         tierId,
         isHealthy: true,
@@ -128,7 +128,7 @@ export class ResilienceManager {
       status.lastCheck = new Date();
 
       return status;
-    } catch (error) {
+    } catch {
       status.isHealthy = false;
       status.lastCheck = new Date();
       return status;
@@ -141,7 +141,7 @@ export class ResilienceManager {
    */
   async failoverToSecondary(): Promise<boolean> {
     try {
-      console.log('Initiating failover to secondary tier...');
+      console.warn('Initiating failover to secondary tier...');
       
       // Sync state from primary to secondary
       await this.syncState('primary', 'secondary');
@@ -161,10 +161,10 @@ export class ResilienceManager {
       this.activeTier = 'secondary';
       this.metrics.failoverCount++;
       
-      console.log('Failover to secondary tier completed successfully');
+      console.warn('Failover to secondary tier completed successfully');
       return true;
     } catch (error) {
-      console.error('Failover to secondary tier failed:', error);
+      console.error('Failover to secondary tier failed:', String(error));
       return false;
     }
   }
@@ -175,7 +175,7 @@ export class ResilienceManager {
    */
   async failoverToTertiary(): Promise<boolean> {
     try {
-      console.log('Initiating failover to tertiary tier...');
+      console.warn('Initiating failover to tertiary tier...');
       
       // Sync state from secondary to tertiary
       await this.syncState('secondary', 'tertiary');
@@ -195,10 +195,10 @@ export class ResilienceManager {
       this.activeTier = 'tertiary';
       this.metrics.failoverCount++;
       
-      console.log('Failover to tertiary tier completed successfully');
+      console.warn('Failover to tertiary tier completed successfully');
       return true;
     } catch (error) {
-      console.error('Failover to tertiary tier failed:', error);
+      console.error('Failover to tertiary tier failed:', String(error));
       return false;
     }
   }
@@ -209,9 +209,9 @@ export class ResilienceManager {
    * @param toTier - Destination tier
    */
   private async syncState(fromTier: string, toTier: string): Promise<void> {
-    const state = this.stateSync.get(fromTier) || {};
-    this.stateSync.set(toTier, state);
-    console.log(`State synced from ${fromTier} to ${toTier}`);
+    const state = this.stateSync.get(fromTier);
+    this.stateSync.set(toTier, state ?? {});
+    console.warn(`State synced from ${fromTier} to ${toTier}`);
   }
 
   /**
@@ -242,7 +242,7 @@ export class ResilienceManager {
    * Start resilience monitoring
    */
   startMonitoring(): void {
-    console.log('Starting resilience monitoring...');
+    console.warn('Starting resilience monitoring...');
     
     // Monitor primary tier
     setInterval(async () => {
@@ -262,7 +262,7 @@ export class ResilienceManager {
       }
     }, 10000);
 
-    console.log('Resilience monitoring started');
+    console.warn('Resilience monitoring started');
   }
 }
 

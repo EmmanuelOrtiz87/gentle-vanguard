@@ -50,8 +50,8 @@ function parseFrontmatter(filePath: string): { name?: string; description?: stri
     const name = fm.match(/^name:\s*(.+)$/m)?.[1]?.trim();
     const descMatch = fm.match(/^description:\s*(.+)$/m);
     let description = descMatch?.[1]?.trim().replace(/^>\s*/, "");
-    if (!description) {
-      const multiMatch = fm.match(new RegExp("^description:\\s*\\n(?:^>\\s*(.+)$", "m"));
+    if (description === undefined) {
+      const multiMatch = fm.match(new RegExp("^description:\\s*\\n(?:^>\\s*(.+))$", "m"));
       description = multiMatch?.[1]?.trim();
     }
     return { name, description };
@@ -88,12 +88,14 @@ function buildSkillMap(): Map<string, ParsedSkill> {
     if (existsSync(refDetail)) {
       try {
         detail = readFileSync(refDetail, "utf-8").slice(0, 500);
-      } catch {}
+      } catch {
+        detail = "";
+      }
     }
 
     map.set(parsed.name, {
       name: parsed.name,
-      description: fm.description || parsed.name,
+      description: fm.description ?? parsed.name,
       agent: parsed.agent,
       triggers: parsed.triggers,
       detail,
@@ -105,7 +107,7 @@ function buildSkillMap(): Map<string, ParsedSkill> {
 function buildSummaryTable(skills: Map<string, ParsedSkill>): string {
   const agents = new Map<string, number>();
   for (const s of skills.values()) {
-    agents.set(s.agent, (agents.get(s.agent) || 0) + 1);
+    agents.set(s.agent, (agents.get(s.agent) ?? 0) + 1);
   }
   let table = "| Agent | Skills |\n|-------|--------|\n";
   for (const [agent, count] of agents) {
@@ -174,11 +176,11 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const filterSearch = args?.search as string | undefined;
       let filtered = Array.from(skills.values());
 
-      if (filterAgent) {
+      if (filterAgent !== undefined) {
         const re = new RegExp(filterAgent.replace(/-/g, "[- ]").replace(/\*/g, ".*"), "i");
         filtered = filtered.filter((s) => re.test(s.agent));
       }
-      if (filterSearch) {
+      if (filterSearch !== undefined) {
         const q = filterSearch.toLowerCase();
         filtered = filtered.filter(
           (s) =>
@@ -295,7 +297,7 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => ({
     ...Array.from(skills.keys()).map((name) => ({
       uri: `skill://${name}`,
       name: `Skill: ${name}`,
-      description: skills.get(name)?.description || name,
+      description: skills.get(name)?.description ?? name,
       mimeType: "text/markdown",
     })),
   ],
@@ -346,7 +348,7 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
   };
 });
 
-async function main() {
+async function main(): Promise<void> {
   const transport = new StdioServerTransport();
   await server.connect(transport);
 }

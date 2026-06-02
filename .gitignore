@@ -175,5 +175,9 @@ rules/NORMATIVAS-REFERENCE-*.md
 # WhatsApp Web cache (generated runtime data)
 .wwebjs_cache/
 
+# Python cache
+__pycache__/
+*.pyc
+
 # Deprecated configs with potential secrets
 config/deprecated/ 

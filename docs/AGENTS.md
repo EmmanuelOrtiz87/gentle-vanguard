@@ -118,24 +118,42 @@ See `docs/QUICK-COMMANDS.md` for full list.
 | ----------------------- | ---------------------------------- |
 | Orchestrator config     | `config/orchestrator.json`         |
 | Auto-delegation         | `config/auto-delegation.json`      |
-| NORMATIVES (index)      | `rules/NORMATIVES.md` (120 lines)  |
-| NORMATIVAS-ARCHITECTURE | `rules/NORMATIVAS-ARCHITECTURE.md` |
-| NORMATIVAS-CONFIG       | `rules/NORMATIVAS-CONFIG.md`       |
-| NORMATIVAS-DEVOPS       | `rules/NORMATIVAS-DEVOPS.md`       |
-| NORMATIVAS-DOCS         | `rules/NORMATIVAS-DOCS.md`         |
-| NORMATIVAS-ENFORCEMENT  | `rules/NORMATIVAS-ENFORCEMENT.md`  |
-| NORMATIVAS-GIT          | `rules/NORMATIVAS-GIT.md`          |
-| NORMATIVAS-CODIGO       | `rules/NORMATIVAS-CODIGO.md`       |
-| NORMATIVAS-PERFORMANCE  | `rules/NORMATIVAS-PERFORMANCE.md`  |
-| NORMATIVAS-SESSION      | `rules/NORMATIVAS-SESSION.md`      |
-| NORMATIVAS-SOC2         | `rules/NORMATIVAS-SOC2.md`         |
-| AI normatives           | `rules/AI-NORMATIVES.md`           |
-| Dev standards           | `rules/DEVELOPMENT-STANDARDS.md`   |
+| NORMATIVES (index)          | `rules/NORMATIVES.md`                   |
+| NORMATIVAS-ARCHITECTURE     | `rules/NORMATIVAS-ARCHITECTURE.md`      |
+| NORMATIVAS-CONFIG           | `rules/NORMATIVAS-CONFIG.md`            |
+| NORMATIVAS-DEVOPS           | `rules/NORMATIVAS-DEVOPS.md`            |
+| NORMATIVAS-DOCS             | `rules/NORMATIVAS-DOCS.md`              |
+| NORMATIVAS-ENFORCEMENT      | `rules/NORMATIVAS-ENFORCEMENT.md`       |
+| NORMATIVAS-GIT              | `rules/NORMATIVAS-GIT.md`               |
+| NORMATIVAS-CODIGO           | `rules/NORMATIVAS-CODIGO.md`            |
+| NORMATIVAS-PERFORMANCE      | `rules/NORMATIVAS-PERFORMANCE.md`       |
+| NORMATIVAS-SESSION          | `rules/NORMATIVAS-SESSION.md`           |
+| NORMATIVAS-SOC2             | `rules/NORMATIVAS-SOC2.md`              |
+| **NORMATIVAS-AI-SAFETY**    | `rules/NORMATIVAS-AI-SAFETY.md`         |
+| **NORMATIVAS-COST-OPT**     | `rules/NORMATIVAS-COST-OPTIMIZATION.md` |
+| **NORMATIVAS-DISASTER-REC** | `rules/NORMATIVAS-DISASTER-RECOVERY.md` |
+| **NORMATIVAS-INCIDENT-MGMT**| `rules/NORMATIVAS-INCIDENT-MANAGEMENT.md` |
+| AI normatives               | `rules/AI-NORMATIVES.md`                |
+| Dev standards               | `rules/DEVELOPMENT-STANDARDS.md`        |
 | Delegation rules        | `rules/DELEGATION-RULES.md`        |
 | Model routing           | `config/model-routing.json`        |
 | SDD config              | `openspec/config.yaml`             |
 | Context engineering     | `rules/CONTEXT-ENGINEERING.md`     |
 | CodeGraph skill         | `skills/codegraph-skill/SKILL.md`  |
 | Quick commands          | `docs/QUICK-COMMANDS.md`           |
+| JS/TS Quality CI        | `.github/workflows/js-ts-quality.yml`  |
+| Python Quality CI       | `.github/workflows/python-quality.yml` |
+| Markdown Lint CI        | `.github/workflows/markdown-lint.yml`  |
+| Commit Lint CI          | `.github/workflows/commitlint.yml`     |
+| Coverage CI             | `.github/workflows/coverage.yml`       |
+| npm Audit CI            | `.github/workflows/npm-audit.yml`      |
+| Stale Issues CI         | `.github/workflows/stale.yml`          |
+| PR Labeler CI           | `.github/workflows/labeler.yml`        |
+| OpenAPI Validate CI     | `.github/workflows/openapi-validate.yml`|
+| Devcontainer            | `.devcontainer/devcontainer.json`      |
 | JSON Validator          | `scripts/utilities/json-validator.ps1` |
 | JSON Construction       | `rules/NORMATIVAS-JSON-CONSTRUCTION.md` |
+| **Feedback Collector**  | `scripts/utilities/FEEDBACK/feedback-collector.ps1` |
+| **Feedback Analyzer**   | `scripts/utilities/FEEDBACK/feedback-analyzer.ps1` |
+| **Digest Generator**    | `scripts/utilities/DIGEST/digest-generator.ps1` |
+| **NORMATIVAS-FEEDBACK** | `rules/NORMATIVAS-FEEDBACK.md` |

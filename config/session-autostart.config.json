@@ -267,6 +267,15 @@
         "args": "-Quiet",
         "required": false,
         "description": "Valida tool configs (.windsurf, .continue, .clinerules) contra schemas oficiales"
+      },
+      {
+        "id": "digest-generator",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/DIGEST/digest-generator.ps1",
+        "args": "-Mode status -Show",
+        "required": false,
+        "description": "Genera digest de inicio de sesion con health, feedback trends, proposals pendientes"
       }
     ],
 

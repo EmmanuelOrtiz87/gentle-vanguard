@@ -1,3 +1,5 @@
+//go:build ignore
+
 # Multi-stage Dockerfile for Go service
 # Optimized for production with minimal attack surface
 

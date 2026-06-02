@@ -1,0 +1,35 @@
+name: Markdown Lint
+
+permissions:
+  contents: read
+
+concurrency:
+  group: markdown-lint-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: [develop]
+    paths:
+      - '**/*.md'
+  pull_request:
+    branches: [develop, main]
+    paths:
+      - '**/*.md'
+  workflow_dispatch:
+
+jobs:
+  markdownlint:
+    name: Markdown Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: DavidAnson/markdownlint-cli2-action@v19
+        with:
+          globs: |
+            !templates/
+            !node_modules/
+            !.opencode/
+            !.engram-data/
+            **/*.md

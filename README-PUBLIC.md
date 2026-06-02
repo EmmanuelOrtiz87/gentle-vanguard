@@ -3,14 +3,14 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.24.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.26.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
   <img src="https://img.shields.io/badge/Platform-Win%20|%20Linux%20|%20macOS-6B7280?style=flat-square&labelColor=0D1117" alt="Platform">
   <img src="https://img.shields.io/badge/Agents-18-00BFFF?style=flat-square&labelColor=0D1117" alt="Agents">
   <img src="https://img.shields.io/badge/Skills-135-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
-  <img src="https://img.shields.io/badge/Workflows-16-A855F7?style=flat-square&labelColor=0D1117" alt="Workflows">
+  <img src="https://img.shields.io/badge/Workflows-26-A855F7?style=flat-square&labelColor=0D1117" alt="Workflows">
 </p>
 
 <p align="center">
@@ -114,6 +114,8 @@ flowchart LR
 - **Cross-platform** — Windows, macOS, Linux
 - **10 tool-compatible** — OpenCode, Claude Code, Cline, Cursor, Windsurf, and more
 - **Token optimization stack** — compression, caching, model cost reduction
+- **Feedback Loop** — rate-driven tool improvement with auto-apply of low-rated actions
+- **Proactive Delivery** — daily/status digests with health, feedback trends, and proposals
 - **CLI** with 50+ subcommands
 
 ---
@@ -205,6 +207,6 @@ AES-256 encryption for secrets, API keys, and sensitive configs. See [SECURITY.m
 ---
 
 <p align="center">
-  <strong>Gentle-Vanguard v2.24.0</strong><br>
+  <strong>Gentle-Vanguard v2.26.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>
