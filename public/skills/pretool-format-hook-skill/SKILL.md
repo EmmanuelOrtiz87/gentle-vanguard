@@ -4,6 +4,8 @@ description: >
   PreToolUse auto-format hook that runs linter/formatter before AI agent accesses files. Eliminates
   wasted tokens on formatting discussions. Trigger: "auto-format", "pretool", "format hook", "format
   before save"
+metadata:
+  source: GV-native
 ---
 
 ## Purpose
@@ -46,7 +48,7 @@ Run linter/formatter **before** AI agent reads saved files to avoid:
 
 ## Integration
 
-See [PRETOOL-FORMAT-HOOK.md](../../../../docs/guides/PRETOOL-FORMAT-HOOK.md) for:
+See [docs/guides/PRETOOL-FORMAT-HOOK.md](../../docs/guides/PRETOOL-FORMAT-HOOK.md) for:
 
 - OpenCode integration
 - Claude Code integration

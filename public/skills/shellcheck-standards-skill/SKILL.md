@@ -3,6 +3,8 @@ name: shellcheck-standards
 description: >
   Shell script quality and portability standards. Trigger: "bash", "shell", "shellcheck", "bash
   script"
+metadata:
+  source: GV-native
 ---
 
 # Shell Script Standards

@@ -4,6 +4,8 @@ description:
   "Trigger: 'workflow', 'flujo de trabajo', multi-step automation, scheduled tasks, error recovery.
   Advanced workflow automation with DAG-based graphs, intelligent scheduling, dependency management,
   error handling, and real-time monitoring."
+metadata:
+  source: GV-native
 ---
 
 # Workflow Orchestrator Skill
@@ -53,4 +55,4 @@ recovery required.
 
 ## References
 
-- Full code, examples, tables: [code.md](../../../../skills/workflow-orchestrator/references/code.md)
+- Full code, examples, tables: [references/code.md](references/code.md)

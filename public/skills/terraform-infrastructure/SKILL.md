@@ -3,6 +3,8 @@ name: terraform-infrastructure
 description: >
   Infrastructure as Code using Terraform with modular components, state management, and multi-cloud
   deployments. Use for provisioning and managing cloud resources.
+metadata:
+  source: GV-native
 ---
 
 # Terraform Infrastructure

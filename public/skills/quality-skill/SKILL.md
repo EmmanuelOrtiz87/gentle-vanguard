@@ -3,6 +3,8 @@ name: quality
 description:
   'Trigger: code review, linting, formatting enforcement, PR preparation. Code quality governance
   skill enforcing linters, formatters and best practices across all project files.'
+metadata:
+  source: GV-native
 ---
 
 # Quality Skill

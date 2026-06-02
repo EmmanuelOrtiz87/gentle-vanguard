@@ -3,6 +3,8 @@ name: kubernetes-deployment
 description: >
   Deploy, manage, and scale containerized applications on Kubernetes clusters with best practices
   for production workloads, resource management, and rolling updates.
+metadata:
+  source: GV-native
 ---
 
 # Kubernetes Deployment

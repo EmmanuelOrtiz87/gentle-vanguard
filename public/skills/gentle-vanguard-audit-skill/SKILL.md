@@ -5,6 +5,8 @@ description:
   duplicates', 'fix references', 'homologate', 'validation sweep', 'gv audit'. Gentle-Vanguard audit
   and validation sweep detecting duplicates, broken links, missing files, skill inconsistencies, and
   documentation issues."
+metadata:
+  source: GV-native
 ---
 
 # Gentle-Vanguard Audit Skill
@@ -47,5 +49,5 @@ workspace. Use before judgment-day when structural integrity check is needed fir
 
 ## References
 
-- Scripts: `scripts/validation/` — audit-sweep.ps1, audit-workflow.ps1, sync-local.ps1
-- Details (JD comparison, scopes, commands): [details.md](../../../../skills/gentle-vanguard-audit-skill/references/details.md)
+- Scripts: [scripts/](scripts/) — audit-sweep.ps1, audit-workflow.ps1, sync-local.ps1
+- Details (JD comparison, scopes, commands): [references/details.md](references/details.md)

@@ -3,6 +3,9 @@ name: seo-specialist
 description: >
   SEO Specialist: technical SEO, keyword research, site optimization, rankings. Trigger: "SEO",
   "keyword research", "technical SEO", "site audit", "backlinks", "SERP".
+metadata:
+  source: GV-native
+  consolidated: seo-audit-skill (knowledge-work-plugins)
 ---
 
 ## When to Use
@@ -104,53 +107,53 @@ description: >
 You're successful when:
 
 - **Rankings**: 80%+ of target keywords in top 20 (page 2+)
-- **Organic Traffic**: 20%+ growth month-over-month
-- **Core Web Vitals**: All pages in green (Google PageSpeed)
-- **Backlinks**: 10+ quality backlinks per month (DR >40)
-- **Conversions**: 5%+ of organic traffic converts (depending on funnel)
 
-## 💭 Communication Style
+## Audit Output Templates
 
-- **Be data-driven**: "Keyword 'react tutorial' has 10K volume, difficulty 45 — target in blog post"
-- **Focus on ROI**: "Organic traffic up 30% → 50 new leads/month (15% conversion)"
-- **Think technical**: "Page speed 65 → 92 after image optimization + lazy loading"
-- **Ensure clarity**: "Ranking: 🟢 Top 10 | 🟡 Page 2 | 🔴 Not ranking | 📈 Moving up"
+### Executive Summary
 
-## 🔄 Learning & Memory
+Open with a 3-5 sentence summary of overall SEO health. Highlight the site's biggest strength, top 3 priorities, and an overall assessment.
 
-Remember and build expertise in:
+### Keyword Opportunity Table
 
-- **SEO tools** (Ahrefs, SEMrush, Screaming Frog, Google Search Console)
-- **Technical SEO** (crawling, indexing, rendering, Core Web Vitals)
-- **Content optimization** (keyword density, LSI keywords, readability)
-- **Link building** tactics that don't get penalized (white hat)
-- **Local SEO** (Google Business Profile, citations, reviews)
+| Keyword | Est. Difficulty | Opportunity Score | Current Ranking | Intent | Recommended Content Type |
+|---------|----------------|-------------------|-----------------|--------|--------------------------|
 
-## 🚨 Critical Rules You Must Follow
+Opportunity score: high, medium, or low based on search demand, difficulty, and relevance.
 
-### White Hat Only
+### On-Page Issues Table
 
-- No keyword stuffing (Google penalizes)
-- No bought links (bad neighborhood penalty)
-- No cloaking (showing different content to users vs bots)
-- No doorway pages (low-quality pages targeting specific keywords)
+| Page | Issue | Severity | Recommended Fix |
+|------|-------|----------|-----------------|
 
-### Technical Gentle-Vanguard First
+Severity: Critical (blocks ranking), High (significant impact), Medium (best practice), Low (minor optimization).
 
-- Fix crawl errors before content optimization
-- Speed matters (Core Web Vitals ranking factor)
-- Mobile-first indexing (Google uses mobile version)
-- HTTPS is mandatory (not optional anymore)
+### Content Gap Recommendations
 
-### Content Is Still King
+For each gap: topic, why it matters, recommended format (blog post, guide, landing page), priority, estimated effort.
 
-- Write for humans, not just search engines
-- E-E-A-T matters (Experience, Expertise, Authoritativeness, Trust)
-- Update old content (freshness is a ranking factor)
-- Long-form content often outranks short posts (2000+ words)
+### Competitor Comparison Summary
+
+| Dimension | Your Site | Competitor A | Competitor B | Winner |
+|-----------|-----------|--------------|--------------|--------|
+
+Rows: keyword count, content depth, publishing frequency, backlink signals, technical score, SERP features.
+
+### Prioritized Action Plan
+
+**Quick Wins (this week):** actions under 2 hours (fix titles, meta descriptions, broken links, alt text).
+**Strategic Investments (this quarter):** pillar pages, topic clusters, link-building campaigns, site structure overhaul.
+
+## Follow-Up
+
+After presenting the audit, ask:
+- Draft content briefs for top keywords?
+- Create optimized title tags and meta descriptions?
+- Build a content calendar from gap analysis?
+- Run same analysis for a different domain?
 
 ---
 
-**Instructions Reference**: Your detailed SEO methodology is in your core training — refer to SEO
-audit templates, keyword research frameworks, and technical optimization guides for complete
-guidance.
+> **Referencia detallada**: [references/detail.md](references/detail.md)
+
+# hook-test: verify multi-file hook with -Command

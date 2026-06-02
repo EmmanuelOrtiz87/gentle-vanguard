@@ -3,6 +3,8 @@ name: karpathy-guidelines
 description: >
   Four principles for LLM coding excellence (Andrej Karpathy inspired). Trigger: When writing code,
   refactoring, or implementing features.
+metadata:
+  source: GV-native
 ---
 
 # Skill: karpathy-guidelines

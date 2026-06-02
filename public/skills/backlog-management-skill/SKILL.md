@@ -3,6 +3,8 @@ name: backlog-management-skill
 description: >
   Backlog management patterns: JSON schema, triage automation, migration from markdown. Trigger:
   "backlog", "triage", "roadmap", "feature intake"
+metadata:
+  source: GV-native
 ---
 
 ## Purpose

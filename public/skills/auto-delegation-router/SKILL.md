@@ -5,6 +5,8 @@ description:
   specialized subagents based on keywords, decision trees, and confidence scoring with opt-in
   control.'
 license: Apache-2.0
+metadata:
+  source: GV-native
 ---
 
 # Auto-Delegation Router Skill
@@ -54,9 +56,9 @@ Return object with:
 
 ## References
 
-- Implementation: [auto-delegation-router.ps1](../../../../skills/auto-delegation-router/auto-delegation-router.ps1)
-- Integration guide: [INTEGRATION.md](../../../../skills/auto-delegation-router/INTEGRATION.md)
-- Config: `../../../../config/auto-delegation.json`
-- Subagent mapping: `../../../../config/subagent-mapping.json`
-- Behavior prompts: `../../../../config/behavior-prompts.json`
-- Full code, examples, tables: [code.md](../../../../skills/auto-delegation-router/references/code.md)
+- Implementation: [auto-delegation-router.ps1](auto-delegation-router.ps1)
+- Integration guide: [INTEGRATION.md](INTEGRATION.md)
+- Config: `config/auto-delegation.json`
+- Subagent mapping: `config/subagent-mapping.json`
+- Behavior prompts: `config/behavior-prompts.json`
+- Full code, examples, tables: [references/code.md](references/code.md)

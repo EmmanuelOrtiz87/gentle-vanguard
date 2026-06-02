@@ -5,6 +5,8 @@ description: >
   Anthropic, Gemini, Ollama, and Bedrock via signed proxy). Supports command, script, interactive,
   and agent modes with secure secret management. Trigger: "cloud agent", "bedrock", "difi",
   "external model", "api connection", "invoke cloud"
+metadata:
+  source: GV-native
 ---
 
 ## Purpose

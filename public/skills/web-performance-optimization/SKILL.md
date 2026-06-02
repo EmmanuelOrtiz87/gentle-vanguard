@@ -3,6 +3,8 @@ name: web-performance-optimization
 description: >
   Optimize web application performance using code splitting, lazy loading, caching, compression, and
   monitoring. Use when improving Core Web Vitals and user experience.
+metadata:
+  source: GV-native
 ---
 
 # Web Performance Optimization
