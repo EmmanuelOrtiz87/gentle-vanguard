@@ -59,6 +59,30 @@ See `rules/SECRETS-MANAGEMENT.md`.
 
 ---
 
+## AI Safety Normatives
+
+See `rules/NORMATIVAS-AI-SAFETY.md`.
+
+---
+
+## Cost Optimization Normatives
+
+See `rules/NORMATIVAS-COST-OPTIMIZATION.md`.
+
+---
+
+## Disaster Recovery Normatives
+
+See `rules/NORMATIVAS-DISASTER-RECOVERY.md`.
+
+---
+
+## Incident Management Normatives
+
+See `rules/NORMATIVAS-INCIDENT-MANAGEMENT.md`.
+
+---
+
 ## DevOps Normatives
 
 See `rules/NORMATIVAS-DEVOPS.md`.
@@ -172,10 +196,10 @@ required within 1 week **Low**: Action required within 1 month
 
 ## Document Status
 
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Status**: Active  
-**Last Updated**: May 12, 2026  
-**Next Review**: August 12, 2026  
+**Last Updated**: June 01, 2026  
+**Next Review**: September 01, 2026  
 **Approval**: Gentle-Vanguard Governance Team
 
 ---

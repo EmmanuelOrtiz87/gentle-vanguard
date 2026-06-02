@@ -49,15 +49,12 @@ line-ending = "auto"
 [tool.pytest.ini_options]
 minversion = "8.0"
 testpaths = ["tests"]
-pythonpath = ["src"]
+pythonpath = ["src", "skills/fireworks-tech-graph/scripts"]
 addopts = [
     "-ra",
     "--strict-markers",
     "-v",
     "--tb=short",
-    "--cov=src",
-    "--cov-report=term-missing",
-    "--cov-report=xml",
 ]
 markers = [
     "slow: marks tests as slow",

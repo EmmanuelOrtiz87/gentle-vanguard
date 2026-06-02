@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'gentle-vanguard-sync', 'release-homologation', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'webhook', 'predictor', 'sla-dashboard', 'escalation', 'live-server', 'learning', 'watchtower', 'heal', 'gateway', 'help')]
+    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'gentle-vanguard-sync', 'release-homologation', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'webhook', 'predictor', 'sla-dashboard', 'escalation', 'live-server', 'learning', 'watchtower', 'heal', 'gateway', 'feedback', 'digest', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -119,6 +119,8 @@ COMMANDS:
                         Scope: full [remediate] [baseline-update] (adds regression guard + optional auto-remediation)
     version              Show current stack version (from VERSION file + orchestrator.json)
     gateway [action]     Multi-platform gateway: start|stop|restart|status|install|uninstall|process|send|logs|setup
+    feedback [action]    Feedback loop: rate <n> [action]|status|analyze — rate decisions, view trends
+    digest [mode]        Proactive digest: daily|weekly|status|json — session health & pending items
     help                 Show this help
 
 OPTIONS:
@@ -1799,6 +1801,58 @@ switch ($Command) {
         }
         
         & $liveServerScript -Port $port
+    }
+
+    'feedback' {
+        Write-Step "Feedback System"
+        $collector = Join-Path $repoRoot 'scripts\utilities\FEEDBACK\feedback-collector.ps1'
+        $analyzer = Join-Path $repoRoot 'scripts\utilities\FEEDBACK\feedback-analyzer.ps1'
+        if ($Scope -eq 'analyze') {
+            if (Test-Path $analyzer) { & $analyzer -AutoPropose } else { Write-Error "feedback-analyzer.ps1 not found"; exit 1 }
+        } elseif ($Scope -eq 'status') {
+            if (Test-Path $collector) { & $collector -Status } else { Write-Error "feedback-collector.ps1 not found"; exit 1 }
+        } elseif ($Scope -eq 'auto') {
+            if (Test-Path $analyzer) { & $analyzer -AutoApplyLow } else { Write-Error "feedback-analyzer.ps1 not found"; exit 1 }
+        } elseif ($Scope -match '^rate\s+\d') {
+            $parts = $Scope -split '\s+'
+            $rate = [int]$parts[1]
+            $action = if ($parts[2]) { $parts[2] } else { 'general' }
+            if (Test-Path $collector) { & $collector -Rate $rate -Action $action } else { Write-Error "feedback-collector.ps1 not found"; exit 1 }
+        } else {
+            # Interactive usage: pass remaining args to collector
+            $collectorArgs = @()
+            if ($Scope) { $collectorArgs += "-Action"; $collectorArgs += $Scope }
+            if ($RemainingArgs.Count -gt 0) {
+                for ($i = 0; $i -lt $RemainingArgs.Count; $i += 2) {
+                    $k = $RemainingArgs[$i]
+                    $v = if ($i + 1 -lt $RemainingArgs.Count) { $RemainingArgs[$i + 1] } else { '' }
+                    $collectorArgs += "-$k"; $collectorArgs += $v
+                }
+            }
+            if (Test-Path $collector) { & $collector @collectorArgs } else { Write-Error "feedback-collector.ps1 not found"; exit 1 }
+        }
+        Write-Host "[HINT] gv feedback status — view feedback summary" -ForegroundColor Yellow
+        Write-Host "[HINT] gv feedback analyze — detect patterns" -ForegroundColor Yellow
+        Write-Host "[HINT] gv feedback auto — analyze + auto-apply low severity" -ForegroundColor Yellow
+        Write-Host "[HINT] gv feedback rate 4 -Comment '...'" -ForegroundColor Yellow
+    }
+
+    'digest' {
+        Write-Step "Proactive Digest"
+        $digestScript = Join-Path $repoRoot 'scripts\utilities\DIGEST\digest-generator.ps1'
+        if (-not (Test-Path $digestScript)) { Write-Error "digest-generator.ps1 not found"; exit 1 }
+        if ($Scope -eq 'daily') {
+            & $digestScript -Mode daily
+        } elseif ($Scope -eq 'json') {
+            & $digestScript -Mode status -JSON
+        } elseif ($Scope -eq 'weekly') {
+            & $digestScript -Mode weekly
+        } else {
+            & $digestScript -Mode status
+        }
+        Write-Host "[HINT] gv digest daily — full daily report" -ForegroundColor Yellow
+        Write-Host "[HINT] gv digest json — machine-readable output" -ForegroundColor Yellow
+        Write-Host "[HINT] gv digest weekly — weekly overview" -ForegroundColor Yellow
     }
 }
 

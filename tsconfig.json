@@ -24,6 +24,6 @@
     "types": ["node"],
     "ignoreDeprecations": "6.0"
   },
-  "include": ["scripts/mcp/**/*.ts"],
+  "include": ["scripts/mcp/**/*.ts", "src/**/*.ts"],
   "exclude": ["node_modules", "dist", "build", "coverage", "templates"]
 }
