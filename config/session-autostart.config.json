@@ -269,6 +269,14 @@
         "description": "Valida tool configs (.windsurf, .continue, .clinerules) contra schemas oficiales"
       },
       {
+        "id": "maintenance-watchtower",
+        "enabled": true,
+        "script": "scripts/maintenance/maintenance-watchtower.ps1",
+        "args": "-Action health",
+        "required": false,
+        "description": "Auto-detect stale ML embeddings, RAG index, Dashboard, MCP Bridge — report status"
+      },
+      {
         "id": "digest-generator",
         "enabled": true,
         "lazy": true,

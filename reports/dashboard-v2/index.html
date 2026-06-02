@@ -45,6 +45,10 @@
             <div class="gv-chart"><h3 class="gv-chart__title" data-i18n="chartTitles.tokenTrend">Token Usage Trend</h3><canvas class="gv-chart__canvas" id="chart-token"></canvas></div>
             <div class="gv-chart"><h3 class="gv-chart__title" data-i18n="chartTitles.costBreakdown">Cost Breakdown</h3><canvas class="gv-chart__canvas" id="chart-cost"></canvas></div>
         </div>
+        <div class="gv-grid gv-grid--2">
+            <div class="gv-chart"><h3 class="gv-chart__title" data-i18n="chartTitles.agentUsage">Agent Usage</h3><canvas class="gv-chart__canvas" id="chart-agents"></canvas></div>
+            <div class="gv-chart"><h3 class="gv-chart__title" data-i18n="chartTitles.slaGauge">SLA Gauge</h3><canvas class="gv-chart__canvas" id="chart-sla" style="height:200px"></canvas></div>
+        </div>
         <div class="gv-refs-panel" id="exec-refs"></div>
     </section>
 
@@ -64,6 +68,10 @@
         <h2 class="gv-section__title" data-i18n="sections.cost">Cost & ROI</h2>
         <div class="gv-grid gv-grid--4" id="cost-grid"></div>
         <div class="gv-chart"><h3 class="gv-chart__title" data-i18n="chartTitles.savingsAnalysis">Savings Analysis</h3><canvas class="gv-chart__canvas" id="chart-savings"></canvas></div>
+        <div class="gv-grid gv-grid--2">
+            <div class="gv-chart"><h3 class="gv-chart__title" data-i18n="chartTitles.costComparison">Cost Comparison</h3><canvas class="gv-chart__canvas" id="chart-cost-compare" style="height:200px"></canvas></div>
+            <div class="gv-chart"><h3 class="gv-chart__title" data-i18n="chartTitles.tokenDistribution">Token Distribution</h3><canvas class="gv-chart__canvas" id="chart-token-dist" style="height:200px"></canvas></div>
+        </div>
     </section>
 
     <section class="gv-section" id="gov">
@@ -160,6 +168,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <script src="node_modules/html2canvas/dist/html2canvas.min.js"></script>
     <script src="i18n.js"></script>
     <script src="metric-info.js"></script>

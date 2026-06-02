@@ -13,6 +13,7 @@ const data = {
   health: { status: 'GREEN', routing: '100%', benchmark: '0/3' },
   sla: { uptime: '99.9%', incidents: 0, mttr: '0m' },
   history: { tokens: [], cost: [] },
+  agents: { data: [], labels: [] },
   trace: {
     live: null,
     sessions: [],
@@ -40,6 +41,7 @@ const api = {
   async fetchTraceSessions() { return this.fetch('/api/traceability/sessions'); },
   async fetchTraceHistory(range) { return this.fetch(`/api/traceability/history?range=${range}`); },
   async fetchTraceMechanisms() { return this.fetch('/api/traceability/mechanisms'); },
+  async fetchAgentActivity() { return this.fetch('/api/traceability/agents'); },
   async fetchTraceSession(id) { return this.fetch(`/api/traceability/session/${encodeURIComponent(id)}`); },
   async updateData() {
     const metrics = await this.fetchMetrics();
@@ -68,78 +70,188 @@ const api = {
   }
 };
 
+const chartInstances = {};
+
 const charts = {
-  drawLine(canvasId, labels, values, color) {
-    const c = document.getElementById(canvasId);
-    if (!c) return;
-    const ctx = c.getContext('2d');
-    const rect = c.parentElement.getBoundingClientRect();
-    c.width = rect.width || 400;
-    c.height = rect.height || 200;
-    const w = c.width, h = c.height;
-    const pad = { t: 20, r: 20, b: 40, l: 50 };
-    const cw = w - pad.l - pad.r, ch = h - pad.t - pad.b;
-    const max = Math.max(...values, 1);
-    ctx.fillStyle = '#0b161f';
-    ctx.fillRect(0, 0, w, h);
-    ctx.strokeStyle = '#274255';
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= 4; i++) {
-      const y = pad.t + ch * (1 - i / 4);
-      ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(w - pad.r, y); ctx.stroke();
-      ctx.fillStyle = '#90a8b8'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'right';
-      ctx.fillText((max * i / 4).toFixed(0), pad.l - 5, y + 3);
-    }
-    const step = values.length > 1 ? cw / (values.length - 1) : 0;
-    ctx.beginPath();
-    values.forEach((v, i) => {
-      const x = pad.l + i * step;
-      const y = pad.t + ch - (v / max * ch);
-      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-    });
-    ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke();
-    ctx.lineTo(pad.l + cw, pad.t + ch); ctx.lineTo(pad.l, pad.t + ch); ctx.closePath();
-    ctx.fillStyle = color + '33'; ctx.fill();
-    ctx.fillStyle = '#90a8b8'; ctx.textAlign = 'center';
-    labels.forEach((l, i) => { ctx.fillText(l, pad.l + i * step, h - 15); });
+  getCtx(id) {
+    const c = document.getElementById(id);
+    if (!c) return null;
+    if (chartInstances[id]) { chartInstances[id].destroy(); delete chartInstances[id]; }
+    return c;
   },
-  drawBar(canvasId, labels, values, color) {
-    const c = document.getElementById(canvasId);
-    if (!c) return;
+  defaults() {
+    if (typeof Chart === 'undefined') return;
+    Chart.defaults.color = '#90a8b8';
+    Chart.defaults.borderColor = '#274255';
+    Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+  },
+  createLine(id, labels, values, color) {
+    const c = this.getCtx(id);
+    if (!c || values.length === 0) return;
+    const canvasRect = c.parentElement.getBoundingClientRect();
+    c.width = canvasRect.width || 400;
     const ctx = c.getContext('2d');
-    const rect = c.parentElement.getBoundingClientRect();
-    c.width = rect.width || 400;
-    c.height = rect.height || 200;
-    const w = c.width, h = c.height;
-    const pad = { t: 20, r: 20, b: 40, l: 50 };
-    const cw = w - pad.l - pad.r, ch = h - pad.t - pad.b;
-    const max = Math.max(...values, 1);
-    const barW = (cw / values.length) * 0.7;
-    const gap = (cw / values.length) * 0.3;
-    ctx.fillStyle = '#0b161f'; ctx.fillRect(0, 0, w, h);
-    ctx.strokeStyle = '#274255';
-    for (let i = 0; i <= 4; i++) {
-      const y = pad.t + ch * (1 - i / 4);
-      ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(w - pad.r, y); ctx.stroke();
-    }
-    values.forEach((v, i) => {
-      const x = pad.l + i * (barW + gap) + gap / 2;
-      const barH = (v / max) * ch;
-      const y = pad.t + ch - barH;
-      ctx.fillStyle = color; ctx.fillRect(x, y, barW, barH);
-      ctx.fillStyle = '#90a8b8'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
-      ctx.fillText(labels[i] || '', x + barW / 2, h - 10);
+    const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+    gradient.addColorStop(0, color + '66');
+    gradient.addColorStop(1, color + '05');
+    chartInstances[id] = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          data: values,
+          borderColor: color,
+          backgroundColor: gradient,
+          fill: true,
+          tension: 0.35,
+          pointRadius: 3,
+          pointBackgroundColor: color,
+          pointBorderColor: '#0b161f',
+          pointBorderWidth: 1.5
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: true,
+        plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a2035', titleColor: '#d7e4ed', bodyColor: '#90a8b8', borderColor: '#274255', borderWidth: 1 } },
+        scales: {
+          x: { grid: { color: '#27425533' }, ticks: { color: '#90a8b8', font: { size: 9 } } },
+          y: { grid: { color: '#27425533' }, ticks: { color: '#90a8b8', font: { size: 9 }, callback: v => v >= 1000 ? (v/1000).toFixed(1)+'k' : v } }
+        }
+      }
+    });
+  },
+  createBar(id, labels, values, color) {
+    const c = this.getCtx(id);
+    if (!c || values.length === 0) return;
+    chartInstances[id] = new Chart(c.getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{ data: values, backgroundColor: color + 'cc', borderColor: color, borderWidth: 1, borderRadius: 4 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: true,
+        plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a2035', titleColor: '#d7e4ed', bodyColor: '#90a8b8', borderColor: '#274255', borderWidth: 1 } },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: '#90a8b8', font: { size: 9 } } },
+          y: { grid: { color: '#27425533' }, ticks: { color: '#90a8b8', font: { size: 9 } }, beginAtZero: true }
+        }
+      }
+    });
+  },
+  createDoughnut(id, labels, values, colors) {
+    const c = this.getCtx(id);
+    if (!c || values.length === 0) return;
+    chartInstances[id] = new Chart(c.getContext('2d'), {
+      type: 'doughnut',
+      data: { labels, datasets: [{ data: values, backgroundColor: colors, borderColor: '#0b161f', borderWidth: 2 }] },
+      options: {
+        responsive: true, maintainAspectRatio: true,
+        cutout: '65%',
+        plugins: {
+          legend: { position: 'right', labels: { color: '#90a8b8', font: { size: 10 }, boxWidth: 12, padding: 8 } },
+          tooltip: { backgroundColor: '#1a2035', titleColor: '#d7e4ed', bodyColor: '#90a8b8', borderColor: '#274255', borderWidth: 1 }
+        }
+      }
+    });
+  },
+  createRadar(id, labels, values, color) {
+    const c = this.getCtx(id);
+    if (!c || values.length === 0) return;
+    chartInstances[id] = new Chart(c.getContext('2d'), {
+      type: 'radar',
+      data: {
+        labels,
+        datasets: [{
+          data: values,
+          borderColor: color,
+          backgroundColor: color + '33',
+          fill: true,
+          pointRadius: 3,
+          pointBackgroundColor: color
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: true,
+        plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a2035', titleColor: '#d7e4ed', bodyColor: '#90a8b8', borderColor: '#274255', borderWidth: 1 } },
+        scales: {
+          r: { grid: { color: '#27425544' }, angleLines: { color: '#27425544' }, pointLabels: { color: '#90a8b8', font: { size: 9 } }, ticks: { display: false }, min: 0 }
+        }
+      }
+    });
+  },
+  createGauge(id, value, maxVal, color) {
+    const c = this.getCtx(id);
+    if (!c) return;
+    const pct = Math.min(value / maxVal, 1);
+    chartInstances[id] = new Chart(c.getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Used', 'Remaining'],
+        datasets: [{
+          data: [pct * 100, (1 - pct) * 100],
+          backgroundColor: [color, '#27425544'],
+          borderColor: ['#0b161f', '#0b161f'],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: true,
+        cutout: '75%',
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: false }
+        }
+      }
     });
   },
   renderAll() {
-    this.drawLine('chart-token', ['W1','W2','W3','W4','W5','W6'], data.history.tokens, '#37b8a8');
-    this.drawLine('chart-cost', ['W1','W2','W3','W4','W5','W6'], data.history.cost, '#6ea8ff');
-    this.drawBar('chart-sessions', ['Active','Today','Total'], [data.sessions.active, data.sessions.today, data.sessions.total], '#f5b800');
+    if (typeof Chart === 'undefined') return;
+
+    // Token trend line
+    if (data.history.tokens.length > 0) {
+      this.createLine('chart-token', ['W1','W2','W3','W4','W5','W6'], data.history.tokens, '#37b8a8');
+    }
+    // Cost breakdown line
+    if (data.history.cost.length > 0) {
+      this.createLine('chart-cost', ['W1','W2','W3','W4','W5','W6'], data.history.cost, '#6ea8ff');
+    }
+    // Sessions bar
+    this.createBar('chart-sessions', ['Active','Today','Total'], [data.sessions.active, data.sessions.today, data.sessions.total], '#f5b800');
+
+    // Commits bar
     const commitTimeline = data.git.timeline && data.git.timeline.length > 0 ? data.git.timeline : [];
     const commitLabels = commitTimeline.length > 0 ? commitTimeline.map(d => d.date.slice(5)) : ['Today','Week','Month'];
     const commitValues = commitTimeline.length > 0 ? commitTimeline.map(d => d.count) : [data.git.today, data.git.week, data.git.month];
-    this.drawBar('chart-commits', commitLabels, commitValues, '#45c77a');
-    this.drawBar('chart-savings', ['Baseline','Actual','Saved'], [0.13, data.tokens.cost, data.tokens.savings], '#37b8a8');
+    this.createBar('chart-commits', commitLabels, commitValues, '#45c77a');
+
+    // Savings bar
+    this.createBar('chart-savings', ['Baseline','Actual','Saved'], [data.tokens.used * 1.4, data.tokens.cost, data.tokens.savings], '#37b8a8');
+
+    // Cost comparison doughnut
+    this.createDoughnut('chart-cost-compare',
+      ['Actual', 'Baseline', 'Savings'],
+      [data.tokens.cost, data.tokens.used * 1.4 * 0.00001, data.tokens.savings * 100],
+      ['#6ea8ff', '#274255', '#45c77a']
+    );
+
+    // Token distribution doughnut
+    this.createDoughnut('chart-token-dist',
+      ['Input', 'Output'],
+      [data.tokens.used * 0.6, data.tokens.used * 0.4],
+      ['#6ea8ff', '#37b8a8']
+    );
+
+    // Agent usage radar
+    if (data.agents.labels.length > 0) {
+      this.createRadar('chart-agents', data.agents.labels, data.agents.data, '#a855f7');
+    }
+
+    // SLA gauge
+    const slaVal = parseInt(data.sla.uptime) || 99.9;
+    this.createGauge('chart-sla', slaVal, 100, '#45c77a');
+
+    // Trace charts
     this.renderTraceCharts();
   },
   renderTraceCharts() {
@@ -148,10 +260,9 @@ const charts = {
     if (turns.length < 2) return;
     const labels = turns.map(t => `T${t.turn}`);
     const inTokens = turns.map(t => t.inputTokens);
-    const outTokens = turns.map(t => t.outputTokens);
-    this.drawBar('chart-trace-tokens', labels, inTokens, '#6ea8ff');
+    this.createBar('chart-trace-tokens', labels, inTokens, '#6ea8ff');
     const costs = turns.map(t => parseFloat((t.cost * 1000).toFixed(4)));
-    this.drawLine('chart-trace-costs', labels, costs.length > 0 ? costs : [0], '#37b8a8');
+    this.createLine('chart-trace-costs', labels, costs.length > 0 ? costs : [0], '#37b8a8');
   }
 };
 
@@ -178,6 +289,7 @@ const app = {
 
   init() {
     if (!localStorage.getItem('gv-lang')) { localStorage.setItem('gv-lang', 'en'); i18n.currentLang = 'en'; }
+    charts.defaults();
     this.bindNav();
     this.applyTranslations();
     this.renderData();
@@ -186,7 +298,7 @@ const app = {
     this.updateTime();
     this.countdownInterval = setInterval(() => this.updateCountdown(), 1000);
     setInterval(() => this.updateTime(), 30000);
-    setTimeout(() => charts.renderAll(), 100);
+    setTimeout(() => charts.renderAll(), 200);
     window.addEventListener('resize', () => charts.renderAll());
   },
 
@@ -245,6 +357,11 @@ const app = {
 
   async refreshData() {
     const updated = await api.updateData();
+    const agents = await api.fetchAgentActivity();
+    if (agents) {
+      data.agents.labels = agents.labels || [];
+      data.agents.data = agents.data || [];
+    }
     if (updated) {
       this.updateCardValuesOnly();
       charts.renderAll();

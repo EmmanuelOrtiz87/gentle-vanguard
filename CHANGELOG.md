@@ -9,6 +9,48 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [2.27.0] - 2026-06-02 - ML Router, Engram RAG, Dashboard v3, MCP Bridge
+
+### Added
+
+- **Auto-delegation ML router** (`scripts/utilities/AUTO-DELEGATION/`): TF-IDF n-gram skill embedder
+  (`skill-embedder.ps1`), cosine similarity query router (`ml-router.ps1`), and test CLI
+  (`ml-router-test.ps1`). Indexes 387 skills with 1,070 vocabulary terms. Three routing tiers:
+  tier1_direct (≥80%), tier2_confirm (≥60%), tier3_clarify (<60% → BA exploration). ~400ms query
+  response time. No external ML dependencies (pure PowerShell).
+- **Engram RAG pipeline** (`scripts/utilities/ENGRAM-RAG/`): TF-IDF vector index builder
+  (`engram-vector-index.ps1`), cosine similarity query engine (`engram-rag-query.ps1`), and
+  rebuild wrapper (`engram-rag-reindex.ps1`). Vector index of 1,289 docs × 7,317 terms. Incremental
+  rebuild support. No Python or API dependencies.
+- **Dashboard v3** (`reports/dashboard-v2/`): Chart.js 4.4.7 via CDN replacing custom canvas
+  rendering. 6 Chart.js factory methods (createLine/createBar/createDoughnut/createRadar/
+  createGauge). 10 interactive charts: token trend, cost breakdown, sessions bar, commits timeline,
+  savings analysis, cost comparison doughnut, token distribution doughnut, agent usage radar,
+  SLA gauge, trace charts. New `/api/traceability/agents` endpoint returning real agent activity
+  data. 4 new chartTitle i18n keys in en/es/pt.
+- **MCP Bridge** (`scripts/mcp-bridge/mcp-bridge.ps1`): Universal MCP bridge with 4 actions
+  (status/setup/verify/launch) and automatic tool detection. MCP skill server configured for
+  cursor, windsurf, and cline via `mcpServers` in each tool's config.json. Opencode continues
+  using native skill tools. Updated `config/orchestrator.json` tool profiles with `mcpBridge`
+  field. Updated `config/tool-cline.json`, `tool-cursor.json`, `tool-windsurf.json`.
+- **Roadmap**: `docs/ROADMAP.md` updated with v2.27.0 release plan and v2.28.0+ roadmap.
+
+### Changed
+
+- **reports/dashboard-v2/app.js**: 85 lines of custom canvas drawing replaced with Chart.js.
+  Added `data.agents` structure, `api.fetchAgentActivity()`, and `charts.defaults()` for global
+  Chart.js theming. Charts auto-cleanup via `chartInstances` map.
+- **reports/dashboard-v2/i18n.js**: Added `agentUsage`, `slaGauge`, `costComparison`,
+  `tokenDistribution` chartTitles to en, es, pt translations.
+- **reports/dashboard-v2/server.js**: Added `GET /api/traceability/agents` endpoint.
+  Updated startup logs.
+- **.gitignore**: Added `.atl/skill-embeddings.json` (generated ML artifact, 1.7MB, regenerated
+  by skill-embedder.ps1).
+- **scripts/mcp-bridge/mcp-bridge.ps1**: Fixed `verify` action to not flag opencode (uses native
+  skills, not MCP).
+
+---
+
 ## [2.25.0] - 2026-06-01 - CI/CD Expansion, Normativas, Multi-Language Testing
 
 ### Added

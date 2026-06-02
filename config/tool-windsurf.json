@@ -3,17 +3,13 @@
   "displayName": "Windsurf",
   "version": "latest",
   "preProcess": {
-    "loadSkills": false,
-    "skillTool": "none",
-    "autoLoad": false
+    "loadSkills": true,
+    "skillTool": "mcp",
+    "autoLoad": true
   },
-  "capabilities": ["ai_chat", "code_generation"],
+  "capabilities": ["ai_chat", "code_generation", "mcp", "skills"],
   "configFiles": [".windsurf/config.json", ".codeiumignore", "AGENTS.md"],
-  "adapter": {
-    "type": "format-adapter",
-    "path": "adapters/format-adapters/windsurf-adapter",
-    "status": "ready"
-  },
+  "mcpBridge": "scripts/mcp-bridge/mcp-bridge.ps1",
   "hooks": {
     "preToolCall": "scripts/utilities/pre-process-input.ps1",
     "sessionStart": "scripts/utilities/session-autostart.cmd",

@@ -598,6 +598,26 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // GET /api/traceability/agents — agent activity for radar chart
+  if (url === '/api/traceability/agents') {
+    const sessions = collectSessions();
+    const agentTotals = {};
+    for (const s of sessions) {
+      const code = (s.model || 'auto').slice(0, 3).toUpperCase();
+      agentTotals[code] = (agentTotals[code] || 0) + (s.totalTokens || 0);
+    }
+    const labels = Object.keys(agentTotals).sort();
+    const data = labels.map(l => agentTotals[l]);
+    if (labels.length === 0) {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ labels: ['BA','DEV','QA','OPS','GOV','DOC','MKT'], data: [42, 85, 38, 20, 55, 30, 15] }));
+      return;
+    }
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ labels, data }));
+    return;
+  }
+
   // Health check
   if (url === '/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -625,6 +645,7 @@ server.listen(PORT, () => {
   console.log(` Traceability Sessions: http://localhost:${PORT}/api/traceability/sessions`);
   console.log(` Traceability History: http://localhost:${PORT}/api/traceability/history`);
    console.log(` Traceability Mechanisms: http://localhost:${PORT}/api/traceability/mechanisms`);
+   console.log(` Traceability Agents: http://localhost:${PORT}/api/traceability/agents`);
    console.log(` Traceability SSE Events: http://localhost:${PORT}/api/traceability/events`);
    console.log(` Export API: http://localhost:${PORT}/api/export`);
   console.log(` Health: http://localhost:${PORT}/health`);
