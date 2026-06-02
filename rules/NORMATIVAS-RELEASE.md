@@ -24,7 +24,7 @@ and installer metadata MUST match VERSION. If they diverge, the release MUST be 
 Rationale: the .exe bundles encrypted scripts — if scripts changed between releases,
 the old .exe ships stale code.
 
-## 4. Public Repo Sync Is Mandatory
+## 4. Public Repo Sync Is Mandatory — ALL Branches
 
 After every release, `sync-to-public.ps1` MUST run to propagate:
 - `README-PUBLIC.md` → public repo's `README.md`
@@ -32,6 +32,21 @@ After every release, `sync-to-public.ps1` MUST run to propagate:
 - CI workflow adaptations (branch triggers: develop → main)
 
 A release is NOT complete until the public repo is synced.
+
+### 4.1 All Remote Branches MUST Be Synced
+
+The script syncs to EVERY remote branch (`main`, `develop`, etc.), not just the default HEAD.
+Each branch gets an identical, independent sync via `git reset --hard origin/$branch` before
+file copy operations. This guarantees no branch falls behind.
+
+### 4.2 Pre-Flight Health Check
+
+Before each sync, run `scripts/utilities/DEPLOYMENT/check-public-repo-health.ps1` to validate:
+- Both `main` and `develop` branches exist and are reachable
+- All branches have a recent commit (within 14 days)
+- No branch is more than 1 commit behind the other after sync
+
+If the health check fails, the release MUST be blocked until resolved.
 
 ## 5. Prerequisites Check
 
@@ -66,4 +81,4 @@ automated pipeline.
 
 ---
 
-See also: `scripts/utilities/DEPLOYMENT/release-automation.ps1`, `scripts/utilities/DEPLOYMENT/sync-to-public.ps1`
+See also: `scripts/utilities/DEPLOYMENT/release-automation.ps1`, `scripts/utilities/DEPLOYMENT/sync-to-public.ps1`, `scripts/utilities/DEPLOYMENT/check-public-repo-health.ps1`
