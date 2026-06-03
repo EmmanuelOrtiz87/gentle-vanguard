@@ -3,14 +3,14 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.26.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.30.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
   <img src="https://img.shields.io/badge/Platform-Win%20|%20Linux%20|%20macOS-6B7280?style=flat-square&labelColor=0D1117" alt="Platform">
   <img src="https://img.shields.io/badge/Agents-18-00BFFF?style=flat-square&labelColor=0D1117" alt="Agents">
-  <img src="https://img.shields.io/badge/Skills-135-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
-  <img src="https://img.shields.io/badge/Workflows-26-A855F7?style=flat-square&labelColor=0D1117" alt="Workflows">
+  <img src="https://img.shields.io/badge/Skills-386-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
+  <img src="https://img.shields.io/badge/Workflows-27-A855F7?style=flat-square&labelColor=0D1117" alt="Workflows">
 </p>
 
 <p align="center">
@@ -24,7 +24,7 @@
 </p>
 
 <p align="center">
-  <strong>AI-powered development orchestrator · 18 agents · 135 skills · 10 tool-compatible</strong><br>
+  <strong>AI-powered development orchestrator · 18 agents · 386 skills · 10 tool-compatible</strong><br>
   <em>Tool-agnostic · SDD Lifecycle · Judgment Day · Persistent memory</em>
 </p>
 
@@ -207,6 +207,6 @@ AES-256 encryption for secrets, API keys, and sensitive configs. See [SECURITY.m
 ---
 
 <p align="center">
-  <strong>Gentle-Vanguard v2.26.0</strong><br>
+  <strong>Gentle-Vanguard v2.30.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>

@@ -9,6 +9,78 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [2.30.0] - 2026-06-03 - Stack Status Report, Presentation Update, Release Homologation
+
+### Added
+
+- **Stack Status Report** (`docs/STACK-STATUS-REPORT.md`): Comprehensive 7-section document mapping
+  the entire stack: 5-layer architecture, component inventory with active/inactive status,
+  automatic vs manual classification, flow diagrams, gap analysis, and prioritized next steps.
+  Covers ~300+ scripts, ~386 skills, 27 CI/CD workflows, 13 git hooks, ML router, Engram RAG,
+  Fine-tuning LoRA, Dashboard v3 Chart.js, and security multi-layer.
+- **VERSION consistency fix**: Backfilled missing CHANGELOG entries for v2.29.0-alpha and v2.29.1.
+  Aligned VERSION file (2.28.0 → 2.30.0), README badges, and README-PUBLIC badges.
+- **Presentation update**: `gentle-vanguard-presentation.html` updated to v2.30.0 with all new
+  features (fine-tuning, stack status, ML routing, Engram RAG, Dashboard v3, MCP Bridge).
+
+### Fixed
+
+- **VERSION drift**: VERSION file was 2.28.0 while tags v2.29.0-alpha and v2.29.1 existed.
+  CHANGELOG had gap for both releases. All version references now aligned.
+- **README-PUBLIC badges**: Were showing v2.26.0; updated to v2.30.0.
+
+---
+
+## [2.29.1] - 2026-06-03 - Self-Maintenance Layer for Fine-Tuning System
+
+### Added
+
+- **Self-maintenance CI job** (`.github/workflows/maintenance-scheduled.yml`): Weekly Sunday
+  fine-tuning pipeline automation: collect session data → build dataset → threshold detection →
+  auto-prune stale adapters → commit changes. Integrated with existing maintenance-watchtower.
+- **Threshold detector** (`scripts/utilities/FINE-TUNING/ft-threshold-detect.ps1`): Analyzes
+  benchmark results against quality thresholds (deviation, loss, perplexity). Flags degraded
+  adapters for auto-prune.
+- **Auto-prune** (`scripts/utilities/FINE-TUNING/ft-auto-prune.ps1`): Removes stale or degraded
+  LoRA adapters from registry. Safe dry-run mode with confirmation prompt.
+- **Agent verify FT domain** (`scripts/utilities/AGENT/agent-verify.ps1`): Added fine-tuning
+  domain checks (registry, dataset integrity, lock files, adapters, benchmarks).
+
+### Changed
+
+- **README.md**: Updated to v2.29.0-alpha with FT capability section, dev commands, CI table,
+  project status indicators.
+- **auto-delegation.json**: Added fine-tuning skill mappings for context-aware routing.
+
+---
+
+## [2.29.0-alpha] - 2026-06-02 - Fine-Tuning por Dominio + Dashboard FT
+
+### Added
+
+- **Fine-tuning data pipeline** (`scripts/utilities/FINE-TUNING/`): 8 PowerShell scripts for
+  complete LoRA fine-tuning lifecycle:
+  - `ft-collector.ps1`: Session data collection and preprocessing
+  - `ft-dataset-builder.ps1`: Builds training/validation datasets from session logs
+  - `ft-trainer.ps1`: Orchestrates LoRA training with GPU detection
+  - `ft-inference.ps1`: Runs inference with fine-tuned adapters
+  - `ft-evaluator.ps1`: Evaluates adapter quality (perplexity, loss, deviation)
+  - `ft-registry.ps1`: Manages adapter registry (register, list, activate, deactivate)
+  - `ft-pipeline.ps1`: End-to-end pipeline orchestrator
+  - `ft-session-enrich.ps1`: Enriches session context with FT embeddings
+- **Python LoRA trainer** (`scripts/utilities/FINE-TUNING/python/train_lora.py`): unsloth/
+  transformers-based LoRA training stub with GPU detection.
+- **Fine-tuning infrastructure** (`.ft/`): Registry with 2 adapters (BA, DEV), benchmark
+  evaluation files, training/validation datasets in JSONL format.
+- **Dashboard FT section**: Added fine-tuning metrics to dashboard (adapter status, benchmark
+  results, training progress).
+
+### Changed
+
+- **ROADMAP.md**: Updated v2.28.0 status from PENDING to DONE.
+
+---
+
 ## [2.28.0] - 2026-06-02 - Skill Recommendation Engine, Auto-documentation, Multi-repo Alpha
 
 ### Added
