@@ -49,6 +49,19 @@ Write-Host "[FT-TRAIN] Training records: $trainCount"
 Write-Host "[FT-TRAIN] Validation records: $valCount"
 Write-Host ""
 
+$null = New-Item -ItemType Directory -Path $OutputPath -Force
+$manifest = @{
+    domain = $Domain
+    baseModel = $BaseModel
+    mode = $Mode
+    epochs = $Epochs
+    trainRecords = $trainCount
+    valRecords = $valCount
+    trainedAt = (Get-Date -Format "o")
+    status = "pending"
+    outputPath = $OutputPath
+}
+
 switch ($Mode) {
     "dry-run" {
         Write-Host "[FT-TRAIN] DRY RUN — no training executed" -ForegroundColor Yellow
@@ -74,22 +87,31 @@ switch ($Mode) {
     }
 
     "python-unsloth" {
-        Write-Host "[FT-TRAIN] Python unsloth trainer not yet implemented" -ForegroundColor Yellow
-        Write-Host "[FT-TRAIN] Future: scripts/utilities/FINE-TUNING/python/train_lora.py"
+        $pythonScript = Join-Path $PSScriptRoot "python" "train_lora.py"
+        if (-not (Test-Path $pythonScript)) {
+            Write-Host "[FT-TRAIN] ERROR: Python trainer not found at $pythonScript" -ForegroundColor Red
+            exit 1
+        }
+        $pythonArgs = @(
+            "--domain", $Domain
+            "--dataset", $trainFile
+            "--output", $OutputPath
+            "--base-model", "mistralai/$BaseModel-v0.1"
+            "--epochs", $Epochs
+        )
+        if (-not $Force) { $pythonArgs += "--dry-run" }
+        Write-Host "[FT-TRAIN] Invoking Python trainer..." -ForegroundColor Cyan
+        Write-Host "  python $pythonScript $($pythonArgs -join ' ')" -ForegroundColor Gray
+        & python $pythonScript @pythonArgs
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "[FT-TRAIN] Training completed successfully" -ForegroundColor Green
+            $manifest.status = "trained"
+        } else {
+            Write-Host "[FT-TRAIN] Training failed (exit code: $LASTEXITCODE)" -ForegroundColor Red
+            $manifest.status = "failed"
+        }
     }
 }
 
-$null = New-Item -ItemType Directory -Path $OutputPath -Force
-$manifest = @{
-    domain = $Domain
-    baseModel = $BaseModel
-    mode = $Mode
-    epochs = $Epochs
-    trainRecords = $trainCount
-    valRecords = $valCount
-    trainedAt = (Get-Date -Format "o")
-    status = "pending"
-    outputPath = $OutputPath
-}
 $manifest | ConvertTo-Json | Out-File (Join-Path $OutputPath "training-manifest.json") -Encoding utf8
 Write-Host "[FT-TRAIN] Training manifest saved to $OutputPath" -ForegroundColor Gray
