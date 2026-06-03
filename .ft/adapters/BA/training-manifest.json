@@ -1,11 +1,11 @@
 {
-  "baseModel": "mistral-7b",
-  "status": "pending",
-  "domain": "BA",
-  "trainRecords": 8,
   "valRecords": 4,
-  "mode": "dry-run",
+  "epochs": 3,
   "outputPath": "C:\\Workspace_local\\gentle-vanguard\\.ft\\adapters\\BA",
-  "trainedAt": "2026-06-03T00:41:57.9966234-03:00",
-  "epochs": 3
+  "trainedAt": "2026-06-03T01:11:59.2756218-03:00",
+  "mode": "python-unsloth",
+  "trainRecords": 8,
+  "baseModel": "mistral-7b",
+  "status": "trained",
+  "domain": "BA"
 }

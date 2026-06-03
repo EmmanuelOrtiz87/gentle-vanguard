@@ -159,3 +159,9 @@ See `docs/QUICK-COMMANDS.md` for full list.
 | **NORMATIVAS-FEEDBACK** | `rules/NORMATIVAS-FEEDBACK.md` |
 | **Release Automation** | `scripts/utilities/DEPLOYMENT/release-automation.ps1` |
 | **NORMATIVAS-RELEASE** | `rules/NORMATIVAS-RELEASE.md` |
+| **Fine-Tuning Pipeline** | `scripts/utilities/FINE-TUNING/ft-pipeline.ps1` |
+| **FT Trainer** | `scripts/utilities/FINE-TUNING/ft-trainer.ps1` |
+| **FT Status** | `scripts/utilities/FINE-TUNING/ft-status.ps1` |
+| **FT Threshold Detect** | `scripts/utilities/FINE-TUNING/ft-threshold-detect.ps1` |
+| **FT Auto-Prune** | `scripts/utilities/FINE-TUNING/ft-auto-prune.ps1` |
+| **FT Registry** | `.ft/registry.json` |
