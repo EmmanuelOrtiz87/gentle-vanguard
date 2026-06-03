@@ -43,3 +43,16 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Run coverage
         run: pnpm coverage
+  pester-coverage:
+    name: Pester PS Coverage
+    runs-on: windows-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - name: Install Pester
+        run: Install-Module Pester -Force -SkipPublisherCheck
+      - name: Run Pester coverage
+        run: ./scripts/run-tests-simple.ps1 -WithCoverage
