@@ -9,6 +9,30 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [2.28.0] - 2026-06-02 - Skill Recommendation Engine, Auto-documentation, Multi-repo Alpha
+
+### Added
+
+- **Skill Recommendation Engine** (`scripts/utilities/AUTO-DELEGATION/`): Context-aware skill
+  recommendation system. `context-analyzer.ps1` extracts workspace context (git branch, modified
+  files, recent commits). `skill-recommender.ps1` uses the ML router to rank relevant skills by
+  context. Integration in session autostart pipeline and pre-process-input hook for proactive
+  suggestions.
+- **Auto-architecture documentation** (`scripts/utilities/CODEGRAPH/`): Automatic Mermaid diagram
+  generation from CodeGraph index. `codegraph-diagram.ps1` generates 3 diagram types (module
+  dependency, call graph, data flow). Integrated into PR pipeline via `pr-docs-hook.ps1`.
+- **Multi-repo Orchestration alpha** (`scripts/utilities/MULTI-REPO/`): Cross-repository
+  coordination engine. `multi-repo-engine.ps1` handles coordinated PRs, dependency resolution,
+  and version alignment across repos. Alpha stage with basic PR coordination.
+
+### Changed
+
+- **VERSION**: Bumped from 2.26.0 → 2.28.0.
+- **config/session-autostart.config.json**: Added `skill-recommendation` step for proactive
+  skill suggestions at session start.
+
+---
+
 ## [2.27.0] - 2026-06-02 - ML Router, Engram RAG, Dashboard v3, MCP Bridge
 
 ### Added

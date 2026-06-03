@@ -22,7 +22,8 @@ $schemas = @{
         'username', 'watcher'
     )
     ".windsurf/config.json" = @(
-        'name', 'description', 'version', 'rules', 'customRules', 'handle'
+        'name', 'description', 'version', 'rules', 'customRules', 'handle',
+        'mcpServers', 'gentle-vanguard-skills', 'engram', 'codegraph'
     )
     ".continue/config.json" = @(
         'name', 'description', 'version', 'models', 'modelProviders',

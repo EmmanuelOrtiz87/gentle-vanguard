@@ -6,6 +6,7 @@
     "Configuración de proyecto en config/windsurf-project-settings.json",
     "Optimización de prompts en config/system-prompt-optimization.json"
   ],
+  "mcpServers": {
     "gentle-vanguard-skills": {
       "command": "node",
       "args": ["dist/scripts/mcp/skill-server.js"],
@@ -23,4 +24,5 @@
     }
   }
 }
+
 

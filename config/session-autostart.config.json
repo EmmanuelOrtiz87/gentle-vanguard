@@ -204,6 +204,15 @@
         "description": "Generate startup-summary.json with peak hour, session ID, workspace state"
       },
       {
+        "id": "skill-recommendation",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/AUTO-DELEGATION/skill-recommender.ps1",
+        "args": "-Proactive -TopN 3",
+        "required": false,
+        "description": "Recomienda skills relevantes basado en el contexto actual del workspace (git branch, archivos modificados, commits recientes)"
+      },
+      {
         "id": "skill-usage-scan",
         "enabled": true,
         "script": "scripts/skills/usage-tracker.ps1",
