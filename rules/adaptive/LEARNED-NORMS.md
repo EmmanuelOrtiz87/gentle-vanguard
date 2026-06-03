@@ -1,6 +1,6 @@
 # Learned Norms (Autonomous)
 
-Auto-maintained by auto-norm-learner.ps1 — last run: 2026-06-01 10:11
+Auto-maintained by auto-norm-learner.ps1 — last run: 2026-06-02 13:28
 
 ## Statistics
 
