@@ -38,7 +38,12 @@ const metricInfo = {
   peakActivity: { what: 'Hour with most activity', why: 'Capacity planning', how: 'Hour with maximum session count', unit: 'HH:MM', formula: 'MAX(sessions_by_hour)' },
   velocity: { what: 'Development velocity change', why: 'Team productivity trend', how: 'Percentage change in commits', unit: 'Percentage', formula: '((current - previous) / previous) * 100' },
   liveStatus: { what: 'Real-time event stream status', why: 'Indicates live data connection', how: 'WebSocket or polling connection state', unit: 'LIVE/DISCONNECTED', formula: 'Connection state' },
-  peakActivityFlag: { what: 'High activity period indicator', why: 'Identifies peak usage times', how: 'Checks if current hour is 17:00-20:00', unit: 'YES/NO', formula: 'IF hour IN [17,18,19,20] THEN YES' }
+  peakActivityFlag: { what: 'High activity period indicator', why: 'Identifies peak usage times', how: 'Checks if current hour is 17:00-20:00', unit: 'YES/NO', formula: 'IF hour IN [17,18,19,20] THEN YES' },
+  ftAdapters: { what: 'Registered domain-specific LoRA adapters', why: 'Tracks fine-tuning readiness across domains', how: 'Reads registry.json adapter entries', unit: 'Count per domain', formula: 'COUNT(registry.adapters)' },
+  ftDataset: { what: 'Dataset records available for training', why: 'Measures data pipeline throughput', how: 'Count of JSONL lines in train/val per domain', unit: 'Records (train + val)', formula: 'SUM(dataset/train/*.jsonl lines)' },
+  ftBenchmark: { what: 'Latest fine-tuning evaluation results', why: 'Tracks model improvement over baseline', how: 'Reads latest eval-*.json report', unit: 'Latency (ms) per domain', formula: 'eval.latencyMs' },
+  ftScripts: { what: 'Available pipeline scripts', why: 'Infrastructure completeness check', how: 'Count of .ps1 files in FINE-TUNING/', unit: 'Count', formula: 'COUNT(scripts/utilities/FINE-TUNING/*.ps1)' },
+  ftTests: { what: 'Fine-tuning test files', why: 'Quality assurance coverage', how: 'Count of *.tests.ps1 in tests/unit/fine-tuning/', unit: 'Count', formula: 'COUNT(tests/unit/fine-tuning/*.tests.ps1)' }
 };
 
 if (typeof module !== 'undefined' && module.exports) {

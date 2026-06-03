@@ -1,6 +1,6 @@
 # Gentle-Vanguard Roadmap
 
-> Version: v2.27.0 | Updated: 2026-06-02
+> Version: v2.29.0-alpha | Updated: 2026-06-03
 > Source: Post-audit analysis of implemented vs pending capabilities
 
 ---
@@ -68,13 +68,15 @@ All four roadmap items implemented, integrated, tested, and verified:
 | Auto-documentación de arquitectura | 📋 PENDING | 3 wk | High | Generación automática de diagramas (Mermaid) y documentación desde CodeGraph. Actualización en cada PR |
 | Multi-repo orchestration (alpha) | 📋 PENDING | 4 wk | High | Orquestación cruzada entre repositorios. Resolución de dependencias entre repos, PRs coordinados |
 
+> **Note**: v2.28.0 skipped — fine-tuning (v2.29.0-alpha) was prioritized as higher impact/critical path.
+
 ---
 
-## v2.29.0+
+## v2.29.0-alpha
 
 | Item | Status | Effort | Impact | Description |
 |------|--------|--------|--------|-------------|
-| Agentes con fine-tuning por dominio | 📋 PENDING | 6 wk | Very High | Modelos fine-tuned (LoRA) para BA, SAD, DEV, QA. Dataset from session logs |
+| Agentes con fine-tuning por dominio | ✅ DONE | 6 wk | Very High | Data pipeline PS1, LoRA trainer (Python), registry, inference, evaluator. Dashboard FT section. 2 adapters registrados (BA, DEV). 15/15 tests. Pipeline `ft-pipeline.ps1 -Stage full` operativo. Pendiente: entrenamiento real LoRA (requiere GPU) |
 | Benchmarking automatizado de skills | 📋 PENDING | 3 wk | Medium | Suite de benchmarks: accuracy, latency, token efficiency por skill. Reportes semanales |
 | Observabilidad distribuida cross-session | 📋 PENDING | 4 wk | High | OpenTelemetry tracing entre sesiones y herramientas. Dashboard de trazabilidad E2E |
 | Auto-update launcher | 📋 PENDING | 2 wk | Medium | Mecanismo de auto-update: check remote version, download, apply. CI/CD pipeline de distribución |

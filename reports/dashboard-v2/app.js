@@ -22,6 +22,13 @@ const data = {
     historyData: null,
     selectedSession: null,
     expandedTurn: null
+  },
+  ft: {
+    adapters: [],
+    dataset: { train: 0, val: 0, raw: 0 },
+    benchmark: null,
+    scripts: 0,
+    tests: { pass: 0, total: 0 }
   }
 };
 
@@ -43,6 +50,7 @@ const api = {
   async fetchTraceMechanisms() { return this.fetch('/api/traceability/mechanisms'); },
   async fetchAgentActivity() { return this.fetch('/api/traceability/agents'); },
   async fetchTraceSession(id) { return this.fetch(`/api/traceability/session/${encodeURIComponent(id)}`); },
+  async fetchFt() { return this.fetch('/api/ft'); },
   async updateData() {
     const metrics = await this.fetchMetrics();
     if (!metrics) return false;
@@ -281,7 +289,7 @@ const ui = {
 
 const app = {
   tvMode: false, tvInterval: null,
-  sections: ['exec','ops','dev','cost','gov','health','live','sla','perf','refs','trace'],
+  sections: ['exec','ops','dev','cost','gov','health','live','sla','perf','refs','trace','ft'],
   currentModalMetric: null,
   tracePollInterval: null,
   countdownInterval: null,
@@ -295,6 +303,7 @@ const app = {
     this.renderData();
     this.startRealTimeUpdates();
     this.startOrConnectTrace();
+    this.refreshFtData();
     this.updateTime();
     this.countdownInterval = setInterval(() => this.updateCountdown(), 1000);
     setInterval(() => this.updateTime(), 30000);
@@ -326,7 +335,9 @@ const app = {
 
   async startRealTimeUpdates() {
     await this.refreshData();
+    this.refreshFtData();
     setInterval(() => this.refreshData(), 5000);
+    setInterval(() => this.refreshFtData(), 30000);
   },
 
   connectTraceSSE() {
@@ -353,6 +364,46 @@ const app = {
   startOrConnectTrace() {
     this.refreshTraceData().then(() => { this.updateTraceSection(); charts.renderAll(); });
     this.connectTraceSSE();
+  },
+
+  async refreshFtData() {
+    const ft = await api.fetchFt();
+    if (!ft) return;
+    data.ft.adapters = ft.adapters || [];
+    data.ft.dataset = ft.dataset || { train: 0, val: 0, raw: 0 };
+    data.ft.benchmark = ft.benchmark;
+    data.ft.scripts = ft.scripts || 0;
+    data.ft.tests = { files: ft.tests?.files || 0 };
+    this.updateFtSection();
+  },
+
+  updateFtSection() {
+    // Render adapters list
+    const adaptersEl = document.getElementById('ft-adapters');
+    if (adaptersEl) {
+      if (data.ft.adapters.length === 0) {
+        adaptersEl.innerHTML = '<p style="color:#90a8b8">' + t('ft.noData') + '</p>';
+      } else {
+        adaptersEl.innerHTML = data.ft.adapters.map(a => {
+          const status = a.active ? '<span style="color:#45c77a">● ACTIVE</span>' : '<span style="color:#90a8b8">○ INACTIVE</span>';
+          return `<div class="ft-adapter-row"><span class="ft-adapter-domain">${a.domain}</span> ${a.model} v${a.version} ${status}<div class="ft-adapter-meta">Loss: ${a.loss} | Acc: ${a.accuracy} | ${a.trainedAt ? new Date(a.trainedAt).toLocaleDateString() : 'untrained'}</div></div>`;
+        }).join('');
+      }
+    }
+    // Render dataset summary
+    const dsEl = document.getElementById('ft-dataset');
+    if (dsEl) {
+      const ds = data.ft.dataset;
+      const byDomain = ds.byDomain || { train: {}, val: {} };
+      const allDomains = [...new Set([...Object.keys(byDomain.train || {}), ...Object.keys(byDomain.val || {})])];
+      if (allDomains.length === 0) {
+        dsEl.innerHTML = '<p style="color:#90a8b8">' + t('ft.noData') + '</p>';
+      } else {
+        dsEl.innerHTML = '<table class="ft-dataset-table"><tr><th>Domain</th><th>Train</th><th>Val</th><th>Raw</th></tr>' +
+          allDomains.map(d => `<tr><td><strong>${d}</strong></td><td>${byDomain.train[d] || 0}</td><td>${byDomain.val[d] || 0}</td><td>${ds.raw}</td></tr>`).join('') +
+          `<tr class="ft-ds-total"><td><strong>Total</strong></td><td><strong>${ds.train}</strong></td><td><strong>${ds.val}</strong></td><td><strong>${ds.raw}</strong></td></tr></table>`;
+      }
+    }
   },
 
   async refreshData() {
@@ -888,6 +939,16 @@ const app = {
       ui.card(t('cards.avgSession'), avgSessionMin !== '--' ? avgSessionMin + ' min' : '--', t('meta.duration'), '', 'Avg session duration', 'avgDuration'),
       ui.card(t('cards.activeNow'), data.sessions.active.toString(), t('meta.fromAnalytics'), '', 'Active now', 'activeNow'),
       ui.card(t('cards.velocity'), velocity, data.sessions.total + ' ' + t('meta.sessions'), 'success', 'Velocity', 'velocity')
+    ]);
+    // FT section
+    const ftTotal = data.ft.dataset.train + data.ft.dataset.val;
+    const ftActive = data.ft.adapters.filter(a => a.active).length;
+    const ftDomainCount = data.ft.dataset.byDomain ? Object.keys(data.ft.dataset.byDomain.train || {}).length : 0;
+    ui.renderSection('ft', [
+      ui.card(t('cards.ftAdapters'), ftActive + '/' + data.ft.adapters.length, t('meta.active'), data.ft.adapters.length > 0 ? 'success' : '', 'Registered LoRA adapters', 'ftAdapters'),
+      ui.card(t('cards.ftDataset'), ftTotal.toString(), `${data.ft.dataset.raw} ${t('ft.total')} raw`, ftTotal > 0 ? 'success' : '', 'Dataset records for training', 'ftDataset'),
+      ui.card(t('cards.ftBenchmark'), data.ft.benchmark?.evalDate?.slice(0,10) || t('ft.noData'), ftDomainCount > 0 ? ftDomainCount + ' domains' : '', data.ft.benchmark ? 'success' : '', 'Latest evaluation', 'ftBenchmark'),
+      ui.card(t('cards.ftScripts'), data.ft.scripts.toString(), `${data.ft.tests.files} ${t('cards.ftTests')}`, data.ft.scripts > 0 ? 'success' : '', 'Pipeline scripts', 'ftScripts')
     ]);
     // Refs section — populate from metricInfo
     const refsGrid = document.getElementById('refs-grid');
