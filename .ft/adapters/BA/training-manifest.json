@@ -1,0 +1,11 @@
+{
+  "valRecords": 4,
+  "epochs": 3,
+  "outputPath": "C:\\Workspace_local\\gentle-vanguard\\.ft\\adapters\\BA",
+  "trainedAt": "2026-06-03T01:11:59.2756218-03:00",
+  "mode": "python-unsloth",
+  "trainRecords": 8,
+  "baseModel": "mistral-7b",
+  "status": "trained",
+  "domain": "BA"
+}

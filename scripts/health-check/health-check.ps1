@@ -17,7 +17,7 @@
 #>
 
 param(
-  [ValidateSet("mcp","team","session","factory","sdd","pnpm","lefthook","optimization","all")]
+  [ValidateSet("mcp","team","session","factory","sdd","pnpm","lefthook","optimization","gateguard","costtracking","ml","rag","dashboard","mcpbridge","all")]
   [string]$Component = "all",
   [switch]$Quiet
 )
@@ -151,6 +151,94 @@ function Check-Lefthook {
   if (-not $found) { Write-Check "lefthook config" $false }
 }
 
+function Check-GateGuard {
+  Write-Host "`n=== GateGuard ===" -ForegroundColor Cyan
+  $scriptPath = Join-Path $root "scripts/gateguard/gateguard-mcp.ps1"
+  Write-Check "GateGuard script exists" (Test-Path $scriptPath) "scripts/gateguard/gateguard-mcp.ps1"
+  if (-not (Test-Path $scriptPath)) { return }
+  try {
+    $result = & $scriptPath -Server codegraph 2>&1
+    $resultJson = ($result | Where-Object { $_ -is [string] }) -join "`n"
+    if ([string]::IsNullOrWhiteSpace($resultJson)) { throw "No JSON response from GateGuard" }
+    $parsed = $resultJson | ConvertFrom-Json -ErrorAction Stop
+    $serverStatus = $parsed.Status
+    $detail = "server=$serverStatus latency=$($parsed.LatencyMs)ms"
+    Write-Check "GateGuard responds" $true $detail
+  } catch {
+    Write-Check "GateGuard responds" $false $_.Exception.Message
+  }
+}
+
+function Check-MlEmbeddings {
+  Write-Host "`n=== ML Embeddings (Auto-Delegation) ===" -ForegroundColor Cyan
+  $mlIndex = Join-Path $root ".atl\ml-index.json"
+  $skillEmbedder = Join-Path $root "scripts\ml\skill-embedder.ps1"
+  $mlRouter = Join-Path $root "scripts\ml\ml-router.ps1"
+  Write-Check "ml-index.json exists" (Test-Path $mlIndex) ".atl/ml-index.json"
+  Write-Check "skill-embedder.ps1 exists" (Test-Path $skillEmbedder) "scripts/ml/skill-embedder.ps1"
+  Write-Check "ml-router.ps1 exists" (Test-Path $mlRouter) "scripts/ml/ml-router.ps1"
+  if (Test-Path $mlIndex) {
+    try {
+      $index = Get-Content $mlIndex -Raw | ConvertFrom-Json
+      $cnt = ($index.PSObject.Properties).Count
+      Write-Check "ml-index parseable" $true "$cnt skills indexed"
+    } catch { Write-Check "ml-index parseable" $false }
+    $age = [math]::Round(((Get-Date) - (Get-Item $mlIndex).LastWriteTime).TotalHours, 1)
+    Write-Check "ml-index fresh (<48h)" ($age -le 48) "$age hours old"
+  }
+}
+
+function Check-EngramRag {
+  Write-Host "`n=== Engram RAG Index ===" -ForegroundColor Cyan
+  $ragReindex = Join-Path $root "scripts\utilities\ENGRAM-RAG\engram-rag-reindex.ps1"
+  Write-Check "engram-rag-reindex.ps1 exists" (Test-Path $ragReindex)
+  try {
+    $doctor = & "engram" "doctor" "--json" 2>&1 | Out-String
+    $healthy = $doctor -match '"status"\s*:\s*"ok"' -or $doctor -match '"ok"'
+    Write-Check "engram doctor" $healthy
+  } catch { Write-Check "engram doctor" $false "Not accessible" }
+}
+
+function Check-DashboardV3 {
+  Write-Host "`n=== Dashboard v3 ===" -ForegroundColor Cyan
+  Write-Check "server.js exists" (Test-Path (Join-Path $root "dashboard\server.js"))
+  Write-Check "index.html exists" (Test-Path (Join-Path $root "dashboard\index.html"))
+  try {
+    $conn = New-Object System.Net.Sockets.TcpClient
+    $conn.Connect("127.0.0.1", 3000)
+    $conn.Close()
+    Write-Check "dashboard server (port 3000)" $true
+  } catch { Write-Check "dashboard server (port 3000)" $false }
+}
+
+function Check-McpBridge {
+  Write-Host "`n=== MCP Bridge ===" -ForegroundColor Cyan
+  $bridgePs1 = Join-Path $root "scripts\utilities\MCP-BRIDGE\mcp-bridge.ps1"
+  $tmsBridge = Join-Path $root "scripts\tms-mcp-bridge.ps1"
+  Write-Check "mcp-bridge.ps1 exists" (Test-Path $bridgePs1) "scripts/utilities/MCP-BRIDGE/mcp-bridge.ps1"
+  Write-Check "tms-mcp-bridge.ps1 exists" (Test-Path $tmsBridge) "scripts/tms-mcp-bridge.ps1"
+  $configs = @("config/skill-mcp.json","config/mcp-bridge.json")
+  $found = ($configs | Where-Object { Test-Path (Join-Path $root $_) }).Count
+  Write-Check "MCP configs present" ($found -eq $configs.Count) "$found of $($configs.Count)"
+}
+
+function Check-CostTracking {
+  Write-Host "`n=== Cost Tracking ===" -ForegroundColor Cyan
+  $routingConfig = Join-Path $root "config/model-routing.json"
+  if (-not (Test-Path $routingConfig)) { Write-Check "model-routing.json exists" $false; return }
+  Write-Check "model-routing.json exists" $true
+  try {
+    $config = Get-Content $routingConfig -Raw | ConvertFrom-Json
+    $hasCostTracking = $null -ne $config.cost_tracking
+    $hasRoutingThresholds = $null -ne $config.routing_thresholds
+    Write-Check "cost_tracking section present" $hasCostTracking
+    Write-Check "routing_thresholds section present" $hasRoutingThresholds
+  } catch {
+    Write-Check "cost_tracking section present" $false $_.Exception.Message
+    Write-Check "routing_thresholds section present" $false
+  }
+}
+
 switch ($Component) {
   "mcp" { Check-Mcp }
   "team" { Check-TeamMode }
@@ -160,6 +248,12 @@ switch ($Component) {
   "pnpm" { Check-Pnpm }
   "lefthook" { Check-Lefthook }
   "optimization" { Check-OptimizationStack }
+  "gateguard" { Check-GateGuard }
+  "costtracking" { Check-CostTracking }
+  "ml" { Check-MlEmbeddings }
+  "rag" { Check-EngramRag }
+  "dashboard" { Check-DashboardV3 }
+  "mcpbridge" { Check-McpBridge }
   "all" {
     Check-Mcp
     Check-TeamMode
@@ -169,6 +263,12 @@ switch ($Component) {
     Check-Pnpm
     Check-Lefthook
     Check-OptimizationStack
+    Check-GateGuard
+    Check-CostTracking
+    Check-MlEmbeddings
+    Check-EngramRag
+    Check-DashboardV3
+    Check-McpBridge
   }
 }
 

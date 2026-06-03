@@ -68,6 +68,28 @@ All input violations are logged to `.session/input-violations.jsonl` (JSONL form
 | **warn** | Log + notify — continues with warning | Destructive command pattern |
 | **info** | Log only | Input exceeds recommended length |
 
+## 7. NORMATIVA Override Protocol
+
+When a user instruction contradicts an existing normativa/rule, the agent MUST:
+
+1. **Identify the conflict**: Point out which normativa/rule is being contradicted
+2. **Explain why**: Give clear reasons why following the normativa is recommended
+3. **Ask for confirmation**: Request explicit user confirmation before proceeding with the override
+4. **Proceed ONLY if confirmed**: If user confirms, proceed with the override. Otherwise, follow the normativa.
+
+This applies to ALL rules/normativas including those in CLAUDE.md, AGENTS.md, rules/, and any other
+governance documents. The only exception is when continued execution is impossible without deviation
+(break-glass scenario, see CLAUDE.md Break Glass section).
+
+| Step | Action | Example |
+|------|--------|---------|
+| 1 | Identify conflict | "La instrucción de saltar el SDD contradice Core Rule #3" |
+| 2 | Explain recommendation | "SDD previene errores arquitectónicos. Sugiero seguir el proceso." |
+| 3 | Ask confirmation | "¿Confirma que desea proceder sin SDD? (s/N)" |
+| 4 | Act on response | Si confirma → avanza. Si no → sigue normativa. |
+
+---
+
 ## Quick Reference
 
 | What | When | Script |

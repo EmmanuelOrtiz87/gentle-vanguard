@@ -310,6 +310,10 @@ Violations result in:
 | Resource                     | Path                                   |
 | ---------------------------- | -------------------------------------- |
 | AI Normatives                | `rules/AI-NORMATIVES.md`               |
+| AI Safety                    | `rules/NORMATIVAS-AI-SAFETY.md`        |
+| Cost Optimization            | `rules/NORMATIVAS-COST-OPTIMIZATION.md`|
+| Disaster Recovery            | `rules/NORMATIVAS-DISASTER-RECOVERY.md`|
+| Incident Management          | `rules/NORMATIVAS-INCIDENT-MANAGEMENT.md`|
 | Code Normatives              | `rules/NORMATIVAS-CODIGO.md`           |
 | Error Handling               | `rules/NORMATIVAS-ERROR-HANDLING.md`   |
 | Testing Normatives           | `docs/NORMATIVAS-TESTING.md`           |
@@ -331,6 +335,17 @@ Violations result in:
 | PSScriptAnalyzer Config      | `config/PSScriptAnalyzerSettings.psd1` |
 | ESLint Config                | `.eslintrc.json`                       |
 | TypeScript Config            | `tsconfig.json`                        |
+| JS/TS Quality CI             | `.github/workflows/js-ts-quality.yml`  |
+| Python Quality CI            | `.github/workflows/python-quality.yml` |
+| Coverage CI                  | `.github/workflows/coverage.yml`       |
+| Markdown Lint CI             | `.github/workflows/markdown-lint.yml`  |
+| npm Audit CI                 | `.github/workflows/npm-audit.yml`      |
+| Stale Issues CI              | `.github/workflows/stale.yml`          |
+| PR Labeler CI                | `.github/workflows/labeler.yml`        |
+| OpenAPI Validate CI          | `.github/workflows/openapi-validate.yml`|
+| Commit Lint CI               | `.github/workflows/commitlint.yml`     |
+| Devcontainer                 | `.devcontainer/devcontainer.json`      |
+| Coverage Tool                | `c8` (via `pnpm coverage`)             |
 
 ---
 
