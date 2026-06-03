@@ -9,15 +9,56 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [3.0.0] - 2026-06-03 - Fase 2 y 3: Security Orchestrator, ADR Tooling, Token Metrics, Dashboard v2
+
+### Added
+
+- **Security Orchestrator** (`scripts/utilities/security-orchestrator.ps1`): Real-time security
+  policy enforcement with privacy pattern sanitization, critical credential detection (AWS keys,
+  GitHub tokens, private keys), prompt injection blocking (7 categories), audit logging, and OWASP
+  LLM Top 10 compliance reporting.
+- **Token Metrics Store** (`scripts/utilities/token-metrics-store.ps1`): JSON-based persistence for
+  token usage history with daily/weekly/monthly aggregation, cost tracking, and dashboard
+  integration. No external dependencies.
+- **ADR Tooling Extended** (`scripts/utilities/adr-list.ps1`, `adr-search.ps1`): Complete ADR
+  management with filtering by status/author/date and full-text search across titles, content,
+  decisions, and consequences.
+- **Gentle-Vanguard Init** (`scripts/utilities/init-project.ps1`): Interactive project scaffolding
+  with 8 selectable features (core, gv CLI, ADR, dashboard, CI, lefthook, skills, Engram).
+- **ADR New** (`scripts/utilities/adr-new.ps1`): Automated ADR creation with auto-numbering,
+  template generation, and CI validation workflow (`.github/workflows/adr-validate.yml`).
+- **Token Dashboard v2** (`scripts/metrics/dashboard-render.ps1`): New "Token" section with
+  weekly/monthly historical charts, real data from token-metrics-store, and budget efficiency
+  visualization.
+- **Cross-Platform Test Matrix** (`.github/workflows/cross-platform-tests.yml`): Added PowerShell
+  7.5 support, OS-specific validation, module caching, and comprehensive test coverage for all new
+  features.
+
+### Changed
+
+- **GV.ps1 commands**: Added `security`, `adr-list`, `adr-search`, `metrics`, `init` commands with
+  full integration into the CLI workflow.
+- **Session Autostart**: Integrated security-orchestrator and token-metrics-store initialization
+  into the session startup pipeline.
+- **Help documentation**: Updated with all new commands and examples.
+
+### Fixed
+
+- **Path resolution**: Fixed `$MyInvocation.MyCommand.Path` → `$PSScriptRoot` in all new scripts for
+  consistent execution from any directory.
+- **Token metrics syntax**: Fixed DateTime.ToString() invocation in weekly aggregation.
+
+---
+
 ## [2.30.0] - 2026-06-03 - Stack Status Report, Presentation Update, Release Homologation
 
 ### Added
 
 - **Stack Status Report** (`docs/STACK-STATUS-REPORT.md`): Comprehensive 7-section document mapping
-  the entire stack: 5-layer architecture, component inventory with active/inactive status,
-  automatic vs manual classification, flow diagrams, gap analysis, and prioritized next steps.
-  Covers ~300+ scripts, ~386 skills, 27 CI/CD workflows, 13 git hooks, ML router, Engram RAG,
-  Fine-tuning LoRA, Dashboard v3 Chart.js, and security multi-layer.
+  the entire stack: 5-layer architecture, component inventory with active/inactive status, automatic
+  vs manual classification, flow diagrams, gap analysis, and prioritized next steps. Covers ~300+
+  scripts, ~386 skills, 27 CI/CD workflows, 13 git hooks, ML router, Engram RAG, Fine-tuning LoRA,
+  Dashboard v3 Chart.js, and security multi-layer.
 - **VERSION consistency fix**: Backfilled missing CHANGELOG entries for v2.29.0-alpha and v2.29.1.
   Aligned VERSION file (2.28.0 → 2.30.0), README badges, and README-PUBLIC badges.
 - **Presentation update**: `gentle-vanguard-presentation.html` updated to v2.30.0 with all new
@@ -25,8 +66,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- **VERSION drift**: VERSION file was 2.28.0 while tags v2.29.0-alpha and v2.29.1 existed.
-  CHANGELOG had gap for both releases. All version references now aligned.
+- **VERSION drift**: VERSION file was 2.28.0 while tags v2.29.0-alpha and v2.29.1 existed. CHANGELOG
+  had gap for both releases. All version references now aligned.
 - **README-PUBLIC badges**: Were showing v2.26.0; updated to v2.30.0.
 
 ---
@@ -41,10 +82,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **Threshold detector** (`scripts/utilities/FINE-TUNING/ft-threshold-detect.ps1`): Analyzes
   benchmark results against quality thresholds (deviation, loss, perplexity). Flags degraded
   adapters for auto-prune.
-- **Auto-prune** (`scripts/utilities/FINE-TUNING/ft-auto-prune.ps1`): Removes stale or degraded
-  LoRA adapters from registry. Safe dry-run mode with confirmation prompt.
-- **Agent verify FT domain** (`scripts/utilities/AGENT/agent-verify.ps1`): Added fine-tuning
-  domain checks (registry, dataset integrity, lock files, adapters, benchmarks).
+- **Auto-prune** (`scripts/utilities/FINE-TUNING/ft-auto-prune.ps1`): Removes stale or degraded LoRA
+  adapters from registry. Safe dry-run mode with confirmation prompt.
+- **Agent verify FT domain** (`scripts/utilities/AGENT/agent-verify.ps1`): Added fine-tuning domain
+  checks (registry, dataset integrity, lock files, adapters, benchmarks).
 
 ### Changed
 
@@ -70,8 +111,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - `ft-session-enrich.ps1`: Enriches session context with FT embeddings
 - **Python LoRA trainer** (`scripts/utilities/FINE-TUNING/python/train_lora.py`): unsloth/
   transformers-based LoRA training stub with GPU detection.
-- **Fine-tuning infrastructure** (`.ft/`): Registry with 2 adapters (BA, DEV), benchmark
-  evaluation files, training/validation datasets in JSONL format.
+- **Fine-tuning infrastructure** (`.ft/`): Registry with 2 adapters (BA, DEV), benchmark evaluation
+  files, training/validation datasets in JSONL format.
 - **Dashboard FT section**: Added fine-tuning metrics to dashboard (adapter status, benchmark
   results, training progress).
 
@@ -94,14 +135,14 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   generation from CodeGraph index. `codegraph-diagram.ps1` generates 3 diagram types (module
   dependency, call graph, data flow). Integrated into PR pipeline via `pr-docs-hook.ps1`.
 - **Multi-repo Orchestration alpha** (`scripts/utilities/MULTI-REPO/`): Cross-repository
-  coordination engine. `multi-repo-engine.ps1` handles coordinated PRs, dependency resolution,
-  and version alignment across repos. Alpha stage with basic PR coordination.
+  coordination engine. `multi-repo-engine.ps1` handles coordinated PRs, dependency resolution, and
+  version alignment across repos. Alpha stage with basic PR coordination.
 
 ### Changed
 
 - **VERSION**: Bumped from 2.26.0 → 2.28.0.
-- **config/session-autostart.config.json**: Added `skill-recommendation` step for proactive
-  skill suggestions at session start.
+- **config/session-autostart.config.json**: Added `skill-recommendation` step for proactive skill
+  suggestions at session start.
 
 ---
 
@@ -115,33 +156,33 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   tier1_direct (≥80%), tier2_confirm (≥60%), tier3_clarify (<60% → BA exploration). ~400ms query
   response time. No external ML dependencies (pure PowerShell).
 - **Engram RAG pipeline** (`scripts/utilities/ENGRAM-RAG/`): TF-IDF vector index builder
-  (`engram-vector-index.ps1`), cosine similarity query engine (`engram-rag-query.ps1`), and
-  rebuild wrapper (`engram-rag-reindex.ps1`). Vector index of 1,289 docs × 7,317 terms. Incremental
-  rebuild support. No Python or API dependencies.
+  (`engram-vector-index.ps1`), cosine similarity query engine (`engram-rag-query.ps1`), and rebuild
+  wrapper (`engram-rag-reindex.ps1`). Vector index of 1,289 docs × 7,317 terms. Incremental rebuild
+  support. No Python or API dependencies.
 - **Dashboard v3** (`reports/dashboard-v2/`): Chart.js 4.4.7 via CDN replacing custom canvas
   rendering. 6 Chart.js factory methods (createLine/createBar/createDoughnut/createRadar/
   createGauge). 10 interactive charts: token trend, cost breakdown, sessions bar, commits timeline,
-  savings analysis, cost comparison doughnut, token distribution doughnut, agent usage radar,
-  SLA gauge, trace charts. New `/api/traceability/agents` endpoint returning real agent activity
-  data. 4 new chartTitle i18n keys in en/es/pt.
+  savings analysis, cost comparison doughnut, token distribution doughnut, agent usage radar, SLA
+  gauge, trace charts. New `/api/traceability/agents` endpoint returning real agent activity data. 4
+  new chartTitle i18n keys in en/es/pt.
 - **MCP Bridge** (`scripts/mcp-bridge/mcp-bridge.ps1`): Universal MCP bridge with 4 actions
-  (status/setup/verify/launch) and automatic tool detection. MCP skill server configured for
-  cursor, windsurf, and cline via `mcpServers` in each tool's config.json. Opencode continues
-  using native skill tools. Updated `config/orchestrator.json` tool profiles with `mcpBridge`
-  field. Updated `config/tool-cline.json`, `tool-cursor.json`, `tool-windsurf.json`.
+  (status/setup/verify/launch) and automatic tool detection. MCP skill server configured for cursor,
+  windsurf, and cline via `mcpServers` in each tool's config.json. Opencode continues using native
+  skill tools. Updated `config/orchestrator.json` tool profiles with `mcpBridge` field. Updated
+  `config/tool-cline.json`, `tool-cursor.json`, `tool-windsurf.json`.
 - **Roadmap**: `docs/ROADMAP.md` updated with v2.27.0 release plan and v2.28.0+ roadmap.
 
 ### Changed
 
-- **reports/dashboard-v2/app.js**: 85 lines of custom canvas drawing replaced with Chart.js.
-  Added `data.agents` structure, `api.fetchAgentActivity()`, and `charts.defaults()` for global
-  Chart.js theming. Charts auto-cleanup via `chartInstances` map.
+- **reports/dashboard-v2/app.js**: 85 lines of custom canvas drawing replaced with Chart.js. Added
+  `data.agents` structure, `api.fetchAgentActivity()`, and `charts.defaults()` for global Chart.js
+  theming. Charts auto-cleanup via `chartInstances` map.
 - **reports/dashboard-v2/i18n.js**: Added `agentUsage`, `slaGauge`, `costComparison`,
   `tokenDistribution` chartTitles to en, es, pt translations.
-- **reports/dashboard-v2/server.js**: Added `GET /api/traceability/agents` endpoint.
-  Updated startup logs.
-- **.gitignore**: Added `.atl/skill-embeddings.json` (generated ML artifact, 1.7MB, regenerated
-  by skill-embedder.ps1).
+- **reports/dashboard-v2/server.js**: Added `GET /api/traceability/agents` endpoint. Updated startup
+  logs.
+- **.gitignore**: Added `.atl/skill-embeddings.json` (generated ML artifact, 1.7MB, regenerated by
+  skill-embedder.ps1).
 - **scripts/mcp-bridge/mcp-bridge.ps1**: Fixed `verify` action to not flag opencode (uses native
   skills, not MCP).
 
@@ -178,8 +219,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **tsconfig.json**: Includes `src/**/*.ts` for type checking.
 - **pyproject.toml**: Removed `--cov=src` (no Python code under `src/`), added `pythonpath` for
   `skills/fireworks-tech-graph/scripts`. Non-blocking test execution.
-- **python-quality.yml**: Changed `pytest --cov=... --cov-fail-under=80` → `pytest --ignore=.tmp
-  --ignore=node_modules -v --tb=short` with non-blocking exit.
+- **python-quality.yml**: Changed `pytest --cov=... --cov-fail-under=80` →
+  `pytest --ignore=.tmp --ignore=node_modules -v --tb=short` with non-blocking exit.
 - **config/quality-gates.json**: Updated `requiredWorkflows` to include all new CI workflows (9
   required status checks).
 - **docs/AGENTS.md**: Key References updated with devcontainer, CI workflows, quality gates.
@@ -187,8 +228,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- **ESLint (skill-server.ts)**: Fixed malformed regex, empty catch clause, strict-boolean expression,
-  eqeqeq violations, missing return types — 7 issues resolved.
+- **ESLint (skill-server.ts)**: Fixed malformed regex, empty catch clause, strict-boolean
+  expression, eqeqeq violations, missing return types — 7 issues resolved.
 - **ESLint (ResilienceManager.ts)**: Fixed unused parameters, `console.log` → `warn`, `any` →
   `unknown`, missing return types — 10 issues resolved.
 - **Go module conflict**: Root `go.mod` (`gentle-vanguard`, go 1.26.3) conflicted with sub-module
@@ -207,15 +248,16 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **Feedback Loop System** (`scripts/utilities/FEEDBACK/`): Dual-component system for collecting and
   analyzing user feedback on system decisions.
   - `feedback-collector.ps1`: Captures ratings (1-5), comments, and context per action category
-    (healing, learning, routing, code-review, digest, general). Persists to `.session/feedback/feedback.jsonl`
-    in NDJSON format. Supports `gv feedback rate 4 -Action healing -Comment "..."`, `gv feedback status`,
-    and `gv feedback analyze`.
+    (healing, learning, routing, code-review, digest, general). Persists to
+    `.session/feedback/feedback.jsonl` in NDJSON format. Supports
+    `gv feedback rate 4 -Action healing -Comment "..."`, `gv feedback status`, and
+    `gv feedback analyze`.
   - `feedback-analyzer.ps1`: Computes satisfaction trends by action category, detects red-flagged
     categories (avg rating < 3), extracts top keywords from comments, and generates improvement
     proposals to `.local/improvement-proposals/`. Runs automatically via `gv feedback analyze`.
-- **Proactive Delivery System** (`scripts/utilities/DIGEST/digest-generator.ps1`): Generates
-  session digests with health status, feedback trends, pending proposals, token metrics, and git
-  activity. Supports modes: `gv digest` (status), `gv digest daily`, `gv digest weekly`, `gv digest json`.
+- **Proactive Delivery System** (`scripts/utilities/DIGEST/digest-generator.ps1`): Generates session
+  digests with health status, feedback trends, pending proposals, token metrics, and git activity.
+  Supports modes: `gv digest` (status), `gv digest daily`, `gv digest weekly`, `gv digest json`.
   Persists to `.session/digests/YYYY-MM-DD.md`.
 - **NORMATIVAS-FEEDBACK.md**: 7 rules governing feedback collection, persistence (NDJSON),
   post-session analysis, intervention thresholds (2 sessions low rating → proposal, 3 → normativa),
@@ -225,11 +267,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - **gv.ps1**: Added `feedback` and `digest` commands to ValidateSet, dispatch, and help section.
   Subcommands: `feedback rate|status|analyze|auto`, `digest daily|weekly|status|json`.
-- **feedback-analyzer.ps1**: Added `-AutoApplyLow` switch for auto-apply of low/medium severity proposals.
-  Wired to `gv feedback auto` in gv.ps1 dispatch.
-- **session-autostart.config.json**: Added `digest-generator` as a lazy autostart step with `-Mode status -Show`.
-  Digest now prints to console at session start, not just saved to file.
-- **digest-generator.ps1**: Added `-Show` switch to output digest to console. Wired into autostart pipeline.
+- **feedback-analyzer.ps1**: Added `-AutoApplyLow` switch for auto-apply of low/medium severity
+  proposals. Wired to `gv feedback auto` in gv.ps1 dispatch.
+- **session-autostart.config.json**: Added `digest-generator` as a lazy autostart step with
+  `-Mode status -Show`. Digest now prints to console at session start, not just saved to file.
+- **digest-generator.ps1**: Added `-Show` switch to output digest to console. Wired into autostart
+  pipeline.
 - **post-session-learning.ps1**: New Phase 2.5 consumes `.session/feedback/feedback.jsonl`, computes
   average rating, flags low-rated actions (<=2) as improvement proposals, and includes feedback
   metrics in the learning report.
@@ -244,47 +287,46 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- **CodeGraph reindexed**: 50 files (+85%), 588 nodes (+242%), 1197 edges (+377%).
-  Config updated with `**/*.ps1` include for PowerShell support.
-- **NORMATIVA-OPTIMIZATION-STACK.md**: 8 mandatory rules for token compression, response
-  cache, model routing, pre-task compression, token tracking, pre-compact hook,
-  notifications, and cache size limits.
-- **NORMATIVA-ENGRAIN-BACKUP.md**: 5 rules for persistent memory backup: auto-backup
-  post-session, append-only NDJSON format, Git-based rollback, weekly integrity
-  verification, 30-day retention.
-- **NORMATIVA-SISTEMA-INTEGRIDAD.md**: 8 meta-rules ensuring cross-component integration:
-  health check passes before commit, optimization stack verified in CI, CodeGraph fresh
-  (<7d), engram backup per session, zero PSScriptAnalyzer errors, cross-component deps
-  declared, lockfile consistent, zero secrets.
-- **scripts/validation/verify-optimization-stack.ps1**: Automated 8-rule verifier with
-  `-Quiet` and `-AsJson` modes. Used in CI/CD and health check.
-- **scripts/utilities/BACKUP-RESTORE/backup-engram.ps1**: 4-mode backup tool (backup,
-  restore, verify, status). Handles SQLite engram.db (1.5MB) + Git auto-commit.
+- **CodeGraph reindexed**: 50 files (+85%), 588 nodes (+242%), 1197 edges (+377%). Config updated
+  with `**/*.ps1` include for PowerShell support.
+- **NORMATIVA-OPTIMIZATION-STACK.md**: 8 mandatory rules for token compression, response cache,
+  model routing, pre-task compression, token tracking, pre-compact hook, notifications, and cache
+  size limits.
+- **NORMATIVA-ENGRAIN-BACKUP.md**: 5 rules for persistent memory backup: auto-backup post-session,
+  append-only NDJSON format, Git-based rollback, weekly integrity verification, 30-day retention.
+- **NORMATIVA-SISTEMA-INTEGRIDAD.md**: 8 meta-rules ensuring cross-component integration: health
+  check passes before commit, optimization stack verified in CI, CodeGraph fresh (<7d), engram
+  backup per session, zero PSScriptAnalyzer errors, cross-component deps declared, lockfile
+  consistent, zero secrets.
+- **scripts/validation/verify-optimization-stack.ps1**: Automated 8-rule verifier with `-Quiet` and
+  `-AsJson` modes. Used in CI/CD and health check.
+- **scripts/utilities/BACKUP-RESTORE/backup-engram.ps1**: 4-mode backup tool (backup, restore,
+  verify, status). Handles SQLite engram.db (1.5MB) + Git auto-commit.
 - **Health check integration**: `Check-OptimizationStack` added to
-  `scripts/health-check/health-check.ps1`. 8 components verified (MCP, Team, Session,
-  Factory, SDD, pnpm, Lefthook, Optimization Stack).
+  `scripts/health-check/health-check.ps1`. 8 components verified (MCP, Team, Session, Factory, SDD,
+  pnpm, Lefthook, Optimization Stack).
 - **CI/CD quality gate**: Optimization stack verification step in
   `.github/workflows/gentle-vanguard-quality-gate.yml`.
 - **Auto-backup on session close**: `session-manager.ps1` End-Session now triggers
   `backup-engram.ps1 -Mode backup` automatically (NORMATIVA-ENGRAIN-BACKUP R1).
-- **docs/RESEARCH-SYNTHESIS.md**: 345-line research document covering 6 domains
-  (knowledge persistence, CodeGraph, health verification, norm enforcement,
-  optimization integrity, backup strategy).
+- **docs/RESEARCH-SYNTHESIS.md**: 345-line research document covering 6 domains (knowledge
+  persistence, CodeGraph, health verification, norm enforcement, optimization integrity, backup
+  strategy).
 
 ### Changed
 
 - **CLAUDE.md**: Reduced from 117 to 42 lines (-64%), saving ~450 tokens/turn.
 - **Model routing**: All agents migrated from `openrouter/z-ai/glm-5` to
   `openrouter/qwen/qwen-3.6-plus` (4x cost reduction). 0 glm-5 references remain.
-- **Response cache**: SHA256 cache with TTL 30min operational in
-  `pre-process-input.ps1`. Cache file: 5.7KB.
+- **Response cache**: SHA256 cache with TTL 30min operational in `pre-process-input.ps1`. Cache
+  file: 5.7KB.
 
 ### Fixed
 
-- **pre-compact-hook.ps1**: Removed hardcoded 16000 value. Now reads real metrics
-  from `token-usage.json`.
-- **pre-task-compress.ps1**: Rewritten without named functions to avoid PowerShell
-  7.6.1 parser quirk with `[WORD]` strings.
+- **pre-compact-hook.ps1**: Removed hardcoded 16000 value. Now reads real metrics from
+  `token-usage.json`.
+- **pre-task-compress.ps1**: Rewritten without named functions to avoid PowerShell 7.6.1 parser
+  quirk with `[WORD]` strings.
 
 ### Security
 
