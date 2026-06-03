@@ -3,13 +3,13 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.29.0--alpha-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.30.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
   <img src="https://img.shields.io/badge/Agents-18-00BFFF?style=flat-square&labelColor=0D1117" alt="Agents">
-  <img src="https://img.shields.io/badge/Skills-385-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
-  <img src="https://img.shields.io/badge/Workflows-26-A855F7?style=flat-square&labelColor=0D1117" alt="Workflows">
+  <img src="https://img.shields.io/badge/Skills-386-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
+  <img src="https://img.shields.io/badge/Workflows-27-A855F7?style=flat-square&labelColor=0D1117" alt="Workflows">
 </p>
 
 <p align="center">
@@ -22,7 +22,7 @@
 </p>
 
 <p align="center">
-  <strong>AI-powered development orchestrator · 18 agents · 385 skills · 10 tool-compatible</strong><br>
+  <strong>AI-powered development orchestrator · 18 agents · 386 skills · 10 tool-compatible</strong><br>
   <em>Tool-agnostic · SDD Lifecycle · Hashline · Team Mode · Skill MCPs · Feedback Loop · Proactive Delivery · Persistent memory</em>
 </p>
 
@@ -61,7 +61,7 @@ otherwise be chaotic AI-assisted development.
 - **Proactive Delivery** — Daily/status/weekly digests with health status, feedback trends, pending
   proposals, token spend, and git activity. Auto-displayed at session start via `gv digest`.
   Configurable `-Mode` (daily|status|weekly) and `-JSON` output
-- **Fine-Tuning (v2.29.0-alpha)** — LoRA-based domain adaptation for BA/DEV agents. Full pipeline:
+- **Fine-Tuning (v2.30.0)** — LoRA-based domain adaptation for BA/DEV agents. Full pipeline:
   data collection, dataset building, LoRA training (dry-run or real), inference, evaluation, status.
   Auto-collects session data, builds TF-IDF baselines, registers adapters. Scheduled CI job runs
   weekly. GPU detection prevents crashes on non-CUDA systems. Threshold detector + auto-prune for
@@ -140,7 +140,7 @@ flowchart LR
 | **1. Agents**      | Task delegation       | 1 orchestrator + 17 sub-agents                                        | `config/auto-delegation.json`                 |
 | **2. Commands**    | CLI entry points      | `gv.ps1`, `pre-process-input.ps1`                                     | `config/orchestrator.json`                    |
 | **3. MCP Servers** | Protocol bridge       | Engram MCP, CodeGraph | `opencode.json#mcp` |
-| **4. Skills**      | Specialized execution | 385 skills across 9 sources                                       | `config/skill-dependencies.json`              |
+| **4. Skills**      | Specialized execution | 386 skills across 9 sources                                       | `config/skill-dependencies.json`              |
 | **5. Memory**      | Persistent context    | Engram (hot/warm/cold tiers)                                          | `config/engram-config.json`                   |
 
 ---
@@ -317,7 +317,7 @@ Cognitive research shows review quality drops sharply above this threshold.
 
 ### Skill Registry
 
-385 skills auto-indexed at session start. Registry is rebuilt on install/removal:
+386 skills auto-indexed at session start. Registry is rebuilt on install/removal:
 
 ```powershell
 .\scripts\utilities\build-skill-registry.ps1
@@ -345,7 +345,7 @@ Comprehensive input/token efficiency overhaul:
 | INTER-AGENT-COMMUNICATION.md | 167 lines       | 54 lines (−68%)                                                                                     |
 | 10 oversized SKILL.md files  | ~5,200 lines    | ~1,420 lines (−73%)                                                                                 |
 | auto-delegation.json         | 105 BA keywords | 80 (−24%)                                                                                           |
-| pre-process cache            | None            | SHA256 (385 skills, zero rescan)                                                                    |
+| pre-process cache            | None            | SHA256 (386 skills, zero rescan)                                                                    |
 | Output guard                 | None            | 200 tokens non-code                                                                                 |
 | Token notification auto-hook | Manual `/notif` | Automatic every turn via pre-process-input.ps1, persistent toggles, cost from `provider-costs.json` |
 
@@ -456,7 +456,7 @@ gv health
 | Gate          | Status  | Detail                                                                                                  |
 | ------------- | ------- | ------------------------------------------------------------------------------------------------------- |
 | Configuration | ✅ PASS | `orchestrator.json`, `auto-delegation.json`, `model-routing.json` valid                                 |
-| Skills        | ✅ PASS | 385 skills indexed, registry current                                                                    |
+| Skills        | ✅ PASS | 386 skills indexed, registry current                                                                    |
 | Tests         | ✅ PASS | Full test suite passing                                                                                 |
 | Hooks         | ✅ PASS | Pre-commit hooks active (README, secrets, lint)                                                         |
 | Context Log   | ✅ PASS | Session context logging active — tokens, cost, input/output per turn                                    |
@@ -471,7 +471,7 @@ gv health
 | Skill MCPs    | ✅ PASS | 6 actions (register, start, stop, list, status, deregister), SKILL.md frontmatter parsing, cycle tested |
 | Feedback Loop | ✅ PASS | Rating 1-5 collector + trend analyzer + red-flag detection + auto-apply proposals. `gv feedback`         |
 | Proactive Delivery | ✅ PASS | Daily/status/weekly digests with health, feedback, proposals, tokens. `gv digest` + session autostart |
-| Fine-Tuning        | ✅ PASS | LoRA pipeline v2.29.0-alpha — 2 adapters (BA, DEV), 72 train / 20 val records, TF-IDF baseline active |
+| Fine-Tuning        | ✅ PASS | LoRA pipeline v2.30.0 — 2 adapters (BA, DEV), 72 train / 20 val records, TF-IDF baseline active |
 
 ---
 
@@ -527,6 +527,6 @@ LLM Top 10 + OWASP Agentic Top 10).
 ---
 
 <p align="center">
-  <strong>Gentle-Vanguard v2.29.0-alpha</strong><br>
+  <strong>Gentle-Vanguard v2.30.0</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>
