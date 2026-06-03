@@ -117,11 +117,7 @@ Write-OK "Version: $productVersion"
 #region Step 4: Compile launcher to .exe with ps2exe (if available)
 Write-Step "Step 4: Compiling launcher"
 
-$launcherSourceCandidates = @(
-    (Join-Path $buildDir 'Gentle-Vanguard-Launcher.ps1'),
-    (Join-Path $buildDir 'Foundation-Launcher.ps1')
-)
-$launcherPs1 = $launcherSourceCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+$launcherPs1 = Join-Path $buildDir 'Gentle-Vanguard-Launcher.ps1'
 $launcherInstallPs1Name = 'Gentle-Vanguard-Launcher.ps1'
 $launcherExe = Join-Path $buildDir 'compiled\Gentle-Vanguard-Launcher.exe'
 
