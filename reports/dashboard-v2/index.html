@@ -23,6 +23,7 @@
         <button class="gv-nav__btn" data-section="sla" data-i18n="nav.sla">SLA</button>
         <button class="gv-nav__btn" data-section="perf" data-i18n="nav.performance">Performance</button>
         <button class="gv-nav__btn gv-nav__btn--trace" data-section="trace" data-i18n="nav.trace">Trace</button>
+        <button class="gv-nav__btn" data-section="ft" data-i18n="nav.ft">Fine-Tune</button>
         <button class="gv-nav__btn" data-section="refs" data-i18n="nav.references">Refs</button>
         <div class="gv-lang-selector">
             <select id="langSelect" onchange="app.changeLang(this.value)">
@@ -156,6 +157,15 @@
         <!-- History -->
         <div id="trace-history" class="trace-history-container">
             <div class="trace-empty">Loading history...</div>
+        </div>
+    </section>
+
+    <section class="gv-section" id="ft">
+        <h2 class="gv-section__title" data-i18n="sections.ft">Fine-Tuning</h2>
+        <div class="gv-grid gv-grid--4" id="ft-grid"></div>
+        <div class="gv-grid gv-grid--2">
+            <div class="gv-chart"><h3 class="gv-chart__title" data-i18n="chartTitles.ftAdapters">Adapters Status</h3><div id="ft-adapters" class="ft-adapters-container"><p data-i18n="ft.loading">Loading...</p></div></div>
+            <div class="gv-chart"><h3 class="gv-chart__title" data-i18n="chartTitles.ftDataset">Dataset Summary</h3><div id="ft-dataset" class="ft-dataset-container"><p data-i18n="ft.loading">Loading...</p></div></div>
         </div>
     </section>
 

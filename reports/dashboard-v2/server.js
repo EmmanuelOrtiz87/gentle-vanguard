@@ -618,6 +618,64 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // GET /api/ft — fine-tuning status
+  if (url === '/api/ft') {
+    const ftBase = path.join(ROOT, '.ft');
+    const regPath = path.join(ftBase, 'registry.json');
+    const dsPath = path.join(ftBase, 'dataset');
+    const bmPath = path.join(ftBase, 'benchmarks');
+
+    const reg = readJson(regPath);
+    const adapters = reg && reg.adapters ? reg.adapters.map(a => ({
+      domain: a.domain, model: a.model, version: a.version, active: a.active,
+      trainedAt: a.trainedAt, path: a.path, accuracy: a.metrics?.accuracy || 0,
+      loss: a.metrics?.loss || 1.0
+    })) : [];
+
+    const domains = ['BA','SAD','DEV','QA'];
+    const trainCounts = {}; const valCounts = {};
+    let totalTrain = 0, totalVal = 0;
+    for (const d of domains) {
+      const tf = path.join(dsPath, 'train', d + '.jsonl');
+      const vf = path.join(dsPath, 'val', d + '.jsonl');
+      const tc = fs.existsSync(tf) ? fs.readFileSync(tf,'utf-8').trim().split(/\r?\n/).filter(l => l).length : 0;
+      const vc = fs.existsSync(vf) ? fs.readFileSync(vf,'utf-8').trim().split(/\r?\n/).filter(l => l).length : 0;
+      if (tc > 0 || vc > 0) { trainCounts[d] = tc; valCounts[d] = vc; }
+      totalTrain += tc; totalVal += vc;
+    }
+    const rawDir = path.join(dsPath, 'raw');
+    const totalRaw = fs.existsSync(rawDir) ? fs.readdirSync(rawDir).filter(f => f.startsWith('ft-raw-')).length : 0;
+
+    // Latest benchmark
+    let benchmark = null;
+    if (fs.existsSync(bmPath)) {
+      const bmFiles = fs.readdirSync(bmPath).filter(f => f.startsWith('eval-')).sort().reverse();
+      if (bmFiles.length > 0) {
+        const bm = readJson(path.join(bmPath, bmFiles[0]));
+        if (bm) benchmark = bm;
+      }
+    }
+
+    // Script count
+    const ftScriptDir = path.join(ROOT, 'scripts', 'utilities', 'FINE-TUNING');
+    const scriptCount = fs.existsSync(ftScriptDir) ? fs.readdirSync(ftScriptDir).filter(f => f.endsWith('.ps1')).length : 0;
+
+    // Test count
+    const ftTestDir = path.join(ROOT, 'tests', 'unit', 'fine-tuning');
+    const testFiles = fs.existsSync(ftTestDir) ? fs.readdirSync(ftTestDir).filter(f => f.endsWith('.tests.ps1')).length : 0;
+
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      adapters,
+      dataset: { train: totalTrain, val: totalVal, raw: totalRaw, byDomain: { train: trainCounts, val: valCounts } },
+      benchmark: benchmark ? { evalDate: benchmark.evalDate, domains: benchmark.dataset } : null,
+      scripts: scriptCount,
+      tests: { files: testFiles },
+      registryUpdated: reg?.updated || null
+    }));
+    return;
+  }
+
   // Health check
   if (url === '/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });

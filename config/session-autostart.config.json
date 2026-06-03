@@ -293,6 +293,15 @@
         "args": "-Mode status -Show",
         "required": false,
         "description": "Genera digest de inicio de sesion con health, feedback trends, proposals pendientes"
+      },
+      {
+        "id": "fine-tuning-data-collect",
+        "enabled": true,
+        "lazy": true,
+        "script": "scripts/utilities/FINE-TUNING/ft-data-collector.ps1",
+        "args": "-Source all -Force",
+        "required": false,
+        "description": "Auto-colecta datos de sesiones, engram, skills para fine-tuning dataset"
       }
     ],
 

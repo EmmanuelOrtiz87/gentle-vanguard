@@ -327,3 +327,14 @@ body {
 .gv-ref-card__title { font-size: 14px; color: var(--gv-accent); margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--gv-border); }
 .gv-ref-card__purpose { font-size: 12px; color: var(--gv-text); margin-bottom: 8px; }
 .gv-ref-card__meaning { font-size: 11px; color: var(--gv-muted); line-height: 1.5; }
+
+/* Fine-Tuning */
+.ft-adapters-container { min-height: 80px; }
+.ft-adapter-row { background: rgba(8,16,24,0.4); border: 1px solid var(--gv-border); border-radius: 6px; padding: 8px 12px; margin-bottom: 6px; font-size: 12px; color: var(--gv-text); }
+.ft-adapter-domain { display: inline-block; background: var(--gv-accent); color: #081016; font-weight: 700; border-radius: 4px; padding: 0 6px; margin-right: 6px; font-size: 10px; }
+.ft-adapter-meta { font-size: 10px; color: var(--gv-muted); margin-top: 3px; }
+.ft-dataset-container { min-height: 80px; }
+.ft-dataset-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.ft-dataset-table th { text-align: left; color: var(--gv-muted); padding: 6px 10px; border-bottom: 1px solid var(--gv-border); font-size: 10px; text-transform: uppercase; }
+.ft-dataset-table td { padding: 6px 10px; border-bottom: 1px solid rgba(39,66,85,0.3); color: var(--gv-text); }
+.ft-ds-total td { border-top: 2px solid var(--gv-accent); border-bottom: none; color: var(--gv-accent); }
