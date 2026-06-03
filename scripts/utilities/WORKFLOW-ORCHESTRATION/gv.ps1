@@ -3,7 +3,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet('review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'gentle-vanguard-sync', 'release-homologation', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'webhook', 'predictor', 'sla-dashboard', 'escalation', 'live-server', 'learning', 'watchtower', 'heal', 'gateway', 'feedback', 'digest', 'help')]
+    [ValidateSet('init', 'review', 'audit', 'pr', 'push', 'publish', 'status', 'health', 'update', 'update-all', 'update-tools', 'install', 'install-engram', 'orchestrator-status', 'stack-dashboard', 'runtime-route', 'runtime-gate', 'custom-rules-status', 'response-mode', 'ide-status', 'diagnose', 'verify', 'start-session', 'end-session', 'day-end-closure', 'task-brief', 'migrate-structure', 'context-pack', 'compact-start', 'context-metrics', 'token-guard', 'checkpoint', 'list-checkpoints', 'rollback-checkpoint', 'clean-branches', 'homologate', 'gentle-vanguard-sync', 'release-homologation', 'agent-alert', 'agent', 'skills', 'dispatch', 'events', 'reset-demo', 'judgment-day', 'simplify-text', 'context-dashboard', 'dashboard', 'mq', 'export-metrics', 'monthly-report', 'platform-info', 'sdd-gate', 'sdd-metrics', 'sync-drift', 'benchmark', 'version', 'route', 'webhook', 'predictor', 'sla-dashboard', 'escalation', 'live-server', 'learning', 'watchtower', 'heal', 'gateway', 'feedback', 'digest', 'adr-list', 'adr-search', 'security', 'metrics', 'help')]
     [string]$Command = 'help',
     
     [Parameter(Position=1)]
@@ -78,6 +78,7 @@ COMMANDS:
     task-brief <task>      Create or refresh a task brief only
     judgment-day          Run dual-review adversarial protocol (pre-merge validation)
     health               Check system health & activate tools
+    init [name]          Interactive project scaffolding (FF-019): creates README, VERSION, .gitignore, gv.ps1, ADR tooling, CI, lefthook
     install-engram       Install or verify Engram CLI availability
     orchestrator-status  Validate orchestrator and Engram integration
     stack-dashboard      Show one-shot stack health, token risk, and next action recommendation
@@ -121,6 +122,10 @@ COMMANDS:
     gateway [action]     Multi-platform gateway: start|stop|restart|status|install|uninstall|process|send|logs|setup
     feedback [action]    Feedback loop: rate <n> [action]|status|analyze — rate decisions, view trends
     digest [mode]        Proactive digest: daily|weekly|status|json — session health & pending items
+    adr-list [status]    List Architecture Decision Records (filter by: Proposed|Accepted|Deprecated|All)
+    adr-search <query>   Search ADRs by content (query + optional mode:all|title|content|decision|consequences)
+    security [action]      Security orchestrator: init|status|enforce|report|sanitize|scan
+    metrics [action]       Token metrics store: init|record|query|aggregate|dashboard
     help                 Show this help
 
 OPTIONS:
@@ -148,6 +153,8 @@ EXAMPLES:
     .\scripts\utilities\gv.ps1 diagnose -JSON      Full diagnostics report in JSON format
     .\scripts\utilities\gv.ps1 verify              Quick verify & auto-repair if needed
     .\scripts\utilities\gv.ps1 health              Check system health & activate tools
+    .\scripts\utilities\gv.ps1 init my-project    Scaffold new project with README, VERSION, CI, ADR tooling
+    .\scripts\utilities\gv.ps1 init -Force        Overwrite existing files during scaffolding
     .\scripts\utilities\gv.ps1 install-engram      Install or verify Engram CLI
     .\scripts\utilities\gv.ps1 stack-dashboard     One-shot operational dashboard (health + token risk + action)
     .\scripts\utilities\gv.ps1 stack-dashboard live Real-time observability loop (agents/events/tokens/context)
@@ -217,6 +224,23 @@ CHECKPOINT LABEL CONVENTION:
 Invoke-ContextEfficiencyLiveAssist -CommandName $Command -Objective $Scope
 
 switch ($Command) {
+    'init' {
+        Write-Step "Interactive Project Scaffolding"
+        $initScript = Join-Path $scriptDir '..\init-project.ps1'
+        if (-not (Test-Path $initScript)) {
+            $initScript = Join-Path $repoRoot 'scripts\utilities\init-project.ps1'
+        }
+        if (Test-Path $initScript) {
+            $initArgs = @{}
+            if ($Scope) { $initArgs['ProjectName'] = $Scope }
+            if ($Force) { $initArgs['Force'] = $true }
+            & $initScript @initArgs
+        } else {
+            Write-Error "init-project.ps1 not found"
+            exit 1
+        }
+    }
+
     'help' {
         Show-Help
     }
@@ -1853,6 +1877,58 @@ switch ($Command) {
         Write-Host "[HINT] gv digest daily — full daily report" -ForegroundColor Yellow
         Write-Host "[HINT] gv digest json — machine-readable output" -ForegroundColor Yellow
         Write-Host "[HINT] gv digest weekly — weekly overview" -ForegroundColor Yellow
+    }
+
+    'adr-list' {
+        Write-Step "ADR List"
+        $adrListScript = Join-Path $repoRoot 'scripts\utilities\adr-list.ps1'
+        if (-not (Test-Path $adrListScript)) { Write-Error "adr-list.ps1 not found"; exit 1 }
+        $listArgs = @{}
+        if ($Scope) { $listArgs['Status'] = $Scope }
+        if ($JSON) { $listArgs['Format'] = 'json' }
+        & $adrListScript @listArgs
+    }
+
+    'adr-search' {
+        Write-Step "ADR Search"
+        $adrSearchScript = Join-Path $repoRoot 'scripts\utilities\adr-search.ps1'
+        if (-not (Test-Path $adrSearchScript)) { Write-Error "adr-search.ps1 not found"; exit 1 }
+        if ([string]::IsNullOrWhiteSpace($Scope)) {
+            Write-Error "Usage: gv adr-search <query> [mode:all|title|content|decision|consequences]"
+            exit 1
+        }
+        $parts = $Scope -split ' ', 2
+        $query = $parts[0]
+        $mode = if ($parts[1]) { $parts[1] } else { 'all' }
+        $searchArgs = @{ Query = $query; Mode = $mode }
+        if ($JSON) { $searchArgs['Format'] = 'json' }
+        & $adrSearchScript @searchArgs
+    }
+
+    'security' {
+        Write-Step "Security Orchestrator"
+        $securityScript = Join-Path $repoRoot 'scripts\utilities\security-orchestrator.ps1'
+        if (-not (Test-Path $securityScript)) { Write-Error "security-orchestrator.ps1 not found"; exit 1 }
+        $securityAction = if ($Scope) { $Scope } else { 'status' }
+        $secArgs = @{ Action = $securityAction }
+        if ($JSON) { $secArgs['AsJson'] = $true }
+        if ($Strict) { $secArgs['Strict'] = $true }
+        & $securityScript @secArgs
+    }
+
+    'metrics' {
+        Write-Step "Token Metrics Store"
+        $metricsScript = Join-Path $repoRoot 'scripts\utilities\token-metrics-store.ps1'
+        if (-not (Test-Path $metricsScript)) { Write-Error "token-metrics-store.ps1 not found"; exit 1 }
+        $metricsAction = if ($Scope) { $Scope } else { 'query' }
+        $metArgs = @{ Action = $metricsAction }
+        if ($RemainingArgs -contains 'record' -and $RemainingArgs.Count -ge 3) {
+            $metArgs['SessionId'] = $RemainingArgs[1]
+            $metArgs['Tokens'] = [int]$RemainingArgs[2]
+            if ($RemainingArgs.Count -ge 4) { $metArgs['Cost'] = [double]$RemainingArgs[3] }
+        }
+        if ($JSON) { $metArgs['AsJson'] = $true }
+        & $metricsScript @metArgs
     }
 }
 

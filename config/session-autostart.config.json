@@ -119,6 +119,14 @@
         "description": "Initialize session metrics tracking (tokens, tool calls, files)"
       },
       {
+        "id": "token-metrics-init",
+        "enabled": true,
+        "script": "scripts/utilities/token-metrics-store.ps1",
+        "args": "-Action init",
+        "required": false,
+        "description": "Initialize token metrics database for historical tracking"
+      },
+      {
         "id": "adaptive-opencode-profile",
         "enabled": true,
         "script": "scripts/utilities/adaptive-opencode-profile.ps1",
