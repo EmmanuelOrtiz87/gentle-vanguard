@@ -6,16 +6,19 @@ post-commit:
     codegraph-sync:
       run:
         pwsh -NoProfile -ExecutionPolicy Bypass -File
-        "scripts/utilities/CODEGRAPH/codegraph-post-modification-sync.ps1" -Trigger post-commit -Force
+        "scripts/utilities/CODEGRAPH/codegraph-post-modification-sync.ps1" -Trigger post-commit
+        -Force
     hashline-snapshot:
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/editing/hashline-snapshot-hook.ps1"
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -File "scripts/editing/hashline-snapshot-hook.ps1"
 
 post-merge:
   commands:
     codegraph-sync:
       run:
         pwsh -NoProfile -ExecutionPolicy Bypass -File
-        "scripts/utilities/CODEGRAPH/codegraph-post-modification-sync.ps1" -Trigger post-merge -Force
+        "scripts/utilities/CODEGRAPH/codegraph-post-modification-sync.ps1" -Trigger post-merge
+        -Force
 
 pre-commit:
   commands:
@@ -41,7 +44,15 @@ pre-commit:
         --no-update . *>$null; exit 0"
     skill-scan:
       glob: 'skills/*/SKILL.md'
-      run: pwsh -NoProfile -ExecutionPolicy Bypass -Command "& 'scripts/security/scan-skill-hook.ps1' -StagedFiles '{staged_files}'"
+      run:
+        pwsh -NoProfile -ExecutionPolicy Bypass -Command "& 'scripts/security/scan-skill-hook.ps1'
+        -StagedFiles '{staged_files}'"
+    secretlint:
+      glob: '*.{json,yml,yaml,md,env,toml,xml}'
+      run: npx secretlint --secretlintrc .secretlintrc.json {staged_files} 2>&1
+    format-check:
+      glob: '*.{md,json,yml,yaml,ts,js,html,css}'
+      run: pnpm prettier --check {staged_files}
 
 pre-push:
   commands:
