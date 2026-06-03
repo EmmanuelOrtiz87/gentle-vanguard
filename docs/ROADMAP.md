@@ -60,15 +60,22 @@ All four roadmap items implemented, integrated, tested, and verified:
 
 ---
 
-## v2.28.0
+## v2.28.0 — Current State (All ✅)
+
+All three roadmap items implemented, integrated, tested, and verified in commit a1adc7d6:
 
 | Item | Status | Effort | Impact | Description |
 |------|--------|--------|--------|-------------|
-| Skill recommendation engine | 📋 PENDING | 2 wk | High | Basado en auto-delegation router, sugiere skills relevantes al contexto actual de la tarea |
-| Auto-documentación de arquitectura | 📋 PENDING | 3 wk | High | Generación automática de diagramas (Mermaid) y documentación desde CodeGraph. Actualización en cada PR |
-| Multi-repo orchestration (alpha) | 📋 PENDING | 4 wk | High | Orquestación cruzada entre repositorios. Resolución de dependencias entre repos, PRs coordinados |
+| Skill recommendation engine | ✅ DONE | 2 wk | High | `skill-recommender.ps1` — sugiere skills relevantes al contexto actual basado en auto-delegation router + TF-IDF embeddings |
+| Auto-documentación de arquitectura | ✅ DONE | 3 wk | High | `codegraph-diagram.ps1` + `pr-docs-hook.ps1` — genera diagramas Mermaid desde CodeGraph. Documentación automática en cada PR |
+| Multi-repo orchestration (alpha) | ✅ DONE | 4 wk | High | `multi-repo-engine.ps1` — orquestación cruzada entre repositorios. Resolución de dependencias, PRs coordinados |
 
-> **Note**: v2.28.0 skipped — fine-tuning (v2.29.0-alpha) was prioritized as higher impact/critical path.
+### v2.28.0 Key Results
+
+- **Skill Recommendation**: Context-aware skill suggestions via TF-IDF cosine similarity
+- **Auto-Docs**: Mermaid diagrams (call graph, data flow, module dependency) auto-generated from CodeGraph
+- **Multi-Repo Alpha**: Cross-repo PR coordination, dependency resolution, automated sync
+- **Tests**: Full test suite in `tests/unit/v284-scripts.tests.ps1`
 
 ---
 
