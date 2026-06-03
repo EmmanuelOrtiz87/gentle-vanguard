@@ -1,12 +1,8 @@
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-  ListResourcesRequestSchema,
-  ReadResourceRequestSchema,
-} from "@modelcontextprotocol/sdk/types.js";
-import { readFileSync, readdirSync, existsSync } from "fs";
+import { McpError, ErrorCode } from "@modelcontextprotocol/sdk/types.js";
+import { z } from "zod";
+import { readFileSync, readdirSync, existsSync, statSync, mkdirSync, writeFileSync } from "fs";
 import { join, resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -15,6 +11,7 @@ const __dirname = dirname(__filename);
 const ROOT = resolve(__dirname, "../../..");
 const REGISTRY_PATH = join(ROOT, ".atl", "skill-registry.md");
 const SKILLS_DIR = join(ROOT, "skills");
+const STATS_PATH = join(ROOT, ".atl", "skill-stats.json");
 
 interface ParsedSkill {
   name: string;
@@ -22,6 +19,21 @@ interface ParsedSkill {
   agent: string;
   triggers: string[];
   detail: string;
+  files: string[];
+  lastModified: Date;
+}
+
+interface SkillStats {
+  totalCalls: number;
+  callsByTool: Record<string, number>;
+  callsBySkill: Record<string, number>;
+  lastCall: string | null;
+}
+
+function log(level: "INFO" | "WARN" | "ERROR", message: string, meta?: Record<string, unknown>): void {
+  const timestamp = new Date().toISOString();
+  const metaStr = meta ? " " + JSON.stringify(meta) : "";
+  console.error(`[${timestamp}] [${level}] ${message}${metaStr}`);
 }
 
 function parseRegistryLine(line: string): { name: string; agent: string; triggers: string[] } | null {
@@ -51,7 +63,7 @@ function parseFrontmatter(filePath: string): { name?: string; description?: stri
     const descMatch = fm.match(/^description:\s*(.+)$/m);
     let description = descMatch?.[1]?.trim().replace(/^>\s*/, "");
     if (description === undefined) {
-      const multiMatch = fm.match(new RegExp("^description:\\s*\\n(?:^>\\s*(.+))$", "m"));
+      const multiMatch = fm.match(new RegExp("^description:\s*\n(?:^>\s*(.+))$", "m"));
       description = multiMatch?.[1]?.trim();
     }
     return { name, description };
@@ -60,9 +72,33 @@ function parseFrontmatter(filePath: string): { name?: string; description?: stri
   }
 }
 
+function getSkillFiles(skillDir: string): string[] {
+  if (!existsSync(skillDir)) return [];
+  try {
+    return readdirSync(skillDir, { recursive: true })
+      .filter((f): f is string => typeof f === "string")
+      .filter((f) => f.endsWith(".md"));
+  } catch {
+    return [];
+  }
+}
+
+function getLastModified(skillDir: string): Date {
+  if (!existsSync(skillDir)) return new Date(0);
+  try {
+    const stats = statSync(skillDir);
+    return stats.mtime;
+  } catch {
+    return new Date(0);
+  }
+}
+
 function buildSkillMap(): Map<string, ParsedSkill> {
   const map = new Map<string, ParsedSkill>();
-  if (!existsSync(REGISTRY_PATH)) return map;
+  if (!existsSync(REGISTRY_PATH)) {
+    log("WARN", "Registry not found", { path: REGISTRY_PATH });
+    return map;
+  }
 
   const lines = readFileSync(REGISTRY_PATH, "utf-8").split("\n");
   let inMapping = false;
@@ -99,8 +135,12 @@ function buildSkillMap(): Map<string, ParsedSkill> {
       agent: parsed.agent,
       triggers: parsed.triggers,
       detail,
+      files: getSkillFiles(skillDir),
+      lastModified: getLastModified(skillDir),
     });
   }
+
+  log("INFO", "Skill map built", { count: map.size });
   return map;
 }
 
@@ -116,72 +156,65 @@ function buildSummaryTable(skills: Map<string, ParsedSkill>): string {
   return table;
 }
 
+function loadStats(): SkillStats {
+  if (!existsSync(STATS_PATH)) {
+    return { totalCalls: 0, callsByTool: {}, callsBySkill: {}, lastCall: null };
+  }
+  try {
+    const content = readFileSync(STATS_PATH, "utf-8");
+    return JSON.parse(content);
+  } catch {
+    return { totalCalls: 0, callsByTool: {}, callsBySkill: {}, lastCall: null };
+  }
+}
+
+function saveStats(stats: SkillStats): void {
+  try {
+    const dir = dirname(STATS_PATH);
+    if (!existsSync(dir)) {
+      mkdirSync(dir, { recursive: true });
+    }
+    writeFileSync(STATS_PATH, JSON.stringify(stats, null, 2));
+  } catch (err) {
+    log("WARN", "Failed to save stats", { error: String(err) });
+  }
+}
+
+function trackCall(stats: SkillStats, tool: string, skillName?: string): void {
+  stats.totalCalls++;
+  stats.callsByTool[tool] = (stats.callsByTool[tool] ?? 0) + 1;
+  if (skillName) {
+    stats.callsBySkill[skillName] = (stats.callsBySkill[skillName] ?? 0) + 1;
+  }
+  stats.lastCall = new Date().toISOString();
+  saveStats(stats);
+}
+
 const skills = buildSkillMap();
+const stats = loadStats();
 
-const server = new Server(
-  { name: "gentle-vanguard-skills", version: "1.0.0" },
-  { capabilities: { tools: {}, resources: {} } }
-);
+const server = new McpServer({
+  name: "gentle-vanguard-skills",
+  version: "2.0.0",
+});
 
-server.setRequestHandler(ListToolsRequestSchema, async () => ({
-  tools: [
-    {
-      name: "list_skills",
-      description: "List all skills with agent mappings, count per agent, and summary",
-      inputSchema: {
-        type: "object",
-        properties: {
-          agent: {
-            type: "string",
-            description: "Filter by agent code (e.g., DEV, QA, GOV, DOC, OPS)",
-          },
-          search: {
-            type: "string",
-            description: "Search skills by name or trigger keyword",
-          },
-        },
-      },
-    },
-    {
-      name: "get_skill",
-      description: "Get detailed information about a specific skill by name",
-      inputSchema: {
-        type: "object",
-        properties: {
-          name: { type: "string", description: "Skill name (e.g., react-19-skill, judgment-day)" },
-        },
-        required: ["name"],
-      },
-    },
-    {
-      name: "search_skills",
-      description: "Search skills by keyword across name, description, triggers, and detail content",
-      inputSchema: {
-        type: "object",
-        properties: {
-          query: { type: "string", description: "Search keyword" },
-        },
-        required: ["query"],
-      },
-    },
-  ],
-}));
-
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  const { name, arguments: args } = request.params;
-
-  switch (name) {
-    case "list_skills": {
-      const filterAgent = args?.agent as string | undefined;
-      const filterSearch = args?.search as string | undefined;
+server.tool(
+  "list_skills",
+  {
+    agent: z.string().optional().describe("Filter by agent code"),
+    search: z.string().optional().describe("Search skills by name"),
+  },
+  async ({ agent, search }) => {
+    try {
+      trackCall(stats, "list_skills");
       let filtered = Array.from(skills.values());
 
-      if (filterAgent !== undefined) {
-        const re = new RegExp(filterAgent.replace(/-/g, "[- ]").replace(/\*/g, ".*"), "i");
+      if (agent !== undefined) {
+        const re = new RegExp(agent.replace(/-/g, "[- ]").replace(/\*/g, ".*"), "i");
         filtered = filtered.filter((s) => re.test(s.agent));
       }
-      if (filterSearch !== undefined) {
-        const q = filterSearch.toLowerCase();
+      if (search !== undefined) {
+        const q = search.toLowerCase();
         filtered = filtered.filter(
           (s) =>
             s.name.toLowerCase().includes(q) ||
@@ -195,28 +228,41 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         .map((s) => `- **${s.name}** (_${s.agent}_) — ${s.triggers.slice(0, 3).join(", ")}`)
         .join("\n");
 
+      log("INFO", "list_skills executed", { filtered: filtered.length, total: skills.size });
+
       return {
         content: [
-          { type: "text", text: `**Skills**: ${filtered.length} / ${skills.size}\n\n${summary}\n\n### Skills\n${list}` },
+          {
+            type: "text",
+            text: `**Skills**: ${filtered.length} / ${skills.size}\n\n${summary}\n\n### Skills\n${list}`,
+          },
         ],
       };
+    } catch (err) {
+      log("ERROR", "list_skills failed", { error: String(err) });
+      throw new McpError(ErrorCode.InternalError, `Failed to list skills: ${err}`);
     }
+  }
+);
 
-    case "get_skill": {
-      const skillName = args?.name as string;
+server.tool(
+  "get_skill",
+  {
+    name: z.string().describe("Skill name"),
+  },
+  async ({ name: skillName }) => {
+    try {
+      trackCall(stats, "get_skill", skillName);
       const skill = skills.get(skillName);
       if (!skill) {
-        return {
-          content: [{ type: "text", text: `Skill "${skillName}" not found` }],
-          isError: true,
-        };
+        throw new McpError(ErrorCode.InvalidRequest, `Skill "${skillName}" not found`);
       }
 
       const dir = join(SKILLS_DIR, skillName);
       const files = existsSync(dir)
         ? readdirSync(dir, { recursive: true })
-            .filter((f) => f.toString().endsWith(".md"))
-            .map((f) => f.toString())
+            .filter((f): f is string => typeof f === "string")
+            .filter((f) => f.endsWith(".md"))
         : [];
 
       let fullDetail = skill.detail;
@@ -226,6 +272,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           fullDetail = readFileSync(skillMdPath, "utf-8").slice(0, 2000);
         }
       }
+
+      log("INFO", "get_skill executed", { skill: skillName });
 
       return {
         content: [
@@ -237,7 +285,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               `**Description**: ${skill.description}`,
               `**Triggers**: ${skill.triggers.join(", ") || "(none)"}`,
               `**Files**: ${files.length > 0 ? files.join(", ") : "(skill directory only)"}`,
-              ``,
+              "",
               fullDetail ? `### Detail\n${fullDetail.slice(0, 1500)}` : "",
             ]
               .filter(Boolean)
@@ -245,25 +293,42 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           },
         ],
       };
+    } catch (err) {
+      if (err instanceof McpError) throw err;
+      log("ERROR", "get_skill failed", { error: String(err), skill: skillName });
+      throw new McpError(ErrorCode.InternalError, `Failed to get skill: ${err}`);
     }
+  }
+);
 
-    case "search_skills": {
-      const query = (args?.query as string)?.toLowerCase();
-      if (!query) {
-        return { content: [{ type: "text", text: "Query is required" }], isError: true };
+server.tool(
+  "search_skills",
+  {
+    query: z.string().describe("Search keyword"),
+  },
+  async ({ query }) => {
+    try {
+      trackCall(stats, "search_skills");
+      const q = query.toLowerCase();
+      if (!q) {
+        throw new McpError(ErrorCode.InvalidRequest, "Query is required");
       }
 
       const results = Array.from(skills.values()).filter(
         (s) =>
-          s.name.toLowerCase().includes(query) ||
-          s.description.toLowerCase().includes(query) ||
-          s.triggers.some((t) => t.toLowerCase().includes(query)) ||
-          s.detail.toLowerCase().includes(query)
+          s.name.toLowerCase().includes(q) ||
+          s.description.toLowerCase().includes(q) ||
+          s.triggers.some((t) => t.toLowerCase().includes(q)) ||
+          s.detail.toLowerCase().includes(q)
       );
 
       if (results.length === 0) {
-        return { content: [{ type: "text", text: `No skills found matching "${query}"` }] };
+        return {
+          content: [{ type: "text", text: `No skills found matching "${query}"` }],
+        };
       }
+
+      log("INFO", "search_skills executed", { query, results: results.length });
 
       return {
         content: [
@@ -271,7 +336,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             type: "text",
             text: [
               `**Search results for "${query}"**: ${results.length} skills`,
-              ``,
+              "",
               ...results.map(
                 (s) => `- **${s.name}** (_${s.agent}_) — ${s.triggers.slice(0, 2).join(", ")}`
               ),
@@ -279,74 +344,318 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           },
         ],
       };
+    } catch (err) {
+      if (err instanceof McpError) throw err;
+      log("ERROR", "search_skills failed", { error: String(err) });
+      throw new McpError(ErrorCode.InternalError, `Failed to search skills: ${err}`);
+    }
+  }
+);
+
+server.tool(
+  "execute_skill",
+  {
+    name: z.string().describe("Skill name to execute"),
+    params: z.record(z.string(), z.unknown()).optional().describe("Parameters"),
+  },
+  async ({ name, params }) => {
+    try {
+      trackCall(stats, "execute_skill", name);
+      const skill = skills.get(name);
+      if (!skill) {
+        throw new McpError(ErrorCode.InvalidRequest, `Skill "${name}" not found`);
+      }
+
+      const skillMdPath = join(SKILLS_DIR, name, "SKILL.md");
+      if (!existsSync(skillMdPath)) {
+        throw new McpError(ErrorCode.InvalidRequest, `Skill "${name}" has no SKILL.md`);
+      }
+
+      log("INFO", "execute_skill", { skill: name, params });
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Skill "${name}" (${skill.agent}) execution requested.\n\nParams: ${JSON.stringify(params ?? {})}`,
+          },
+        ],
+      };
+    } catch (err) {
+      if (err instanceof McpError) throw err;
+      log("ERROR", "execute_skill failed", { error: String(err) });
+      throw new McpError(ErrorCode.InternalError, `Failed to execute skill: ${err}`);
+    }
+  }
+);
+
+server.tool(
+  "validate_skill",
+  {
+    name: z.string().describe("Skill name to validate"),
+  },
+  async ({ name }) => {
+    try {
+      trackCall(stats, "validate_skill", name);
+      const skill = skills.get(name);
+      if (!skill) {
+        throw new McpError(ErrorCode.InvalidRequest, `Skill "${name}" not found`);
+      }
+
+      const skillDir = join(SKILLS_DIR, name);
+      const skillMdPath = join(skillDir, "SKILL.md");
+      const errors: string[] = [];
+      const warnings: string[] = [];
+
+      if (!existsSync(skillDir)) {
+        errors.push(`Skill directory not found`);
+      } else {
+        if (!existsSync(skillMdPath)) {
+          errors.push("SKILL.md not found");
+        } else {
+          const content = readFileSync(skillMdPath, "utf-8");
+          if (!content.startsWith("---")) {
+            errors.push("Missing YAML frontmatter");
+          }
+          if (!content.includes("## Usage")) {
+            warnings.push("Missing ## Usage section");
+          }
+        }
+
+        const refDir = join(skillDir, "references");
+        if (!existsSync(refDir)) {
+          warnings.push("No references directory");
+        }
+      }
+
+      const isValid = errors.length === 0;
+      log("INFO", "validate_skill executed", { skill: name, valid: isValid });
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: [
+              `## Validation: ${name}`,
+              `**Status**: ${isValid ? "Valid" : "Invalid"}`,
+              errors.length > 0 ? `### Errors\n${errors.map((e) => `- ${e}`).join("\n")}` : "",
+              warnings.length > 0 ? `### Warnings\n${warnings.map((w) => `- ${w}`).join("\n")}` : "",
+            ].filter(Boolean).join("\n"),
+          },
+        ],
+      };
+    } catch (err) {
+      if (err instanceof McpError) throw err;
+      log("ERROR", "validate_skill failed", { error: String(err) });
+      throw new McpError(ErrorCode.InternalError, `Failed to validate skill: ${err}`);
+    }
+  }
+);
+
+// MCP Prompts
+server.prompt(
+  "skill_usage_guide",
+  {
+    skillName: z.string().describe("Name of the skill to get usage guide for"),
+  },
+  ({ skillName }) => {
+    const skill = skills.get(skillName);
+    if (!skill) {
+      return {
+        messages: [
+          {
+            role: "assistant",
+            content: {
+              type: "text",
+              text: `Skill "${skillName}" not found in the registry.`,
+            },
+          },
+        ],
+      };
     }
 
-    default:
-      return { content: [{ type: "text", text: `Unknown tool: ${name}` }], isError: true };
-  }
-});
+    const guide = [
+      `# Skill Usage Guide: ${skillName}`,
+      "",
+      `**Agent**: ${skill.agent}`,
+      `**Description**: ${skill.description}`,
+      `**Triggers**: ${skill.triggers.join(", ") || "(none)"}`,
+      "",
+      "## How to Use",
+      "",
+      "1. **Identify the correct agent**: This skill is designed for the " +
+        `${skill.agent} agent.`,
+      "",
+      "2. **Trigger phrases**: Use any of these phrases to activate:",
+      ...skill.triggers.map((t) => `   - \"${t}\"`),
+      "",
+      "3. **Execute the skill**: Once triggered, the agent will follow the",
+      "   instructions defined in the skill documentation.",
+      "",
+      "## Validation",
+      "",
+      "Run the `validate_skill` tool to check if this skill is properly configured.",
+      "",
+      "## Best Practices",
+      "",
+      "- Always verify the skill is appropriate for your task",
+      "- Check the skill's examples section for usage patterns",
+      "- Use the `get_skill` tool to view full documentation",
+    ].join("\n");
 
-server.setRequestHandler(ListResourcesRequestSchema, async () => ({
-  resources: [
-    {
-      uri: "skill://registry",
-      name: "Skill Registry",
-      description: "Full skill registry with agent mappings and triggers",
-      mimeType: "text/markdown",
-    },
-    ...Array.from(skills.keys()).map((name) => ({
-      uri: `skill://${name}`,
-      name: `Skill: ${name}`,
-      description: skills.get(name)?.description ?? name,
-      mimeType: "text/markdown",
-    })),
-  ],
-}));
-
-server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
-  const uri = request.params.uri;
-
-  if (uri === "skill://registry") {
-    const lines = [
-      `# Skill Registry (${skills.size} skills)`,
-      ``,
-      buildSummaryTable(skills),
-      ``,
-      `## All Skills`,
-      ...Array.from(skills.values()).map(
-        (s) => `- **${s.name}** — ${s.agent} — ${s.triggers.slice(0, 3).join(", ")}`
-      ),
-    ];
     return {
-      contents: [{ uri, mimeType: "text/markdown", text: lines.join("\n") }],
+      messages: [
+        {
+          role: "assistant",
+          content: {
+            type: "text",
+            text: guide,
+          },
+        },
+      ],
     };
   }
+);
 
-  const skillName = uri.replace("skill://", "");
-  const skill = skills.get(skillName);
-  if (!skill) {
-    throw new Error(`Skill not found: ${skillName}`);
+server.prompt(
+  "skill_development_guide",
+  {
+    skillName: z.string().optional().describe("Optional skill name for specific guidance"),
+  },
+  ({ skillName }) => {
+    const specificSkill = skillName ? skills.get(skillName) : null;
+    
+    const guide = [
+      "# Skill Development Guide",
+      "",
+      "## Creating a New Skill",
+      "",
+      "1. **Create skill directory**: `mkdir skills/my-skill`",
+      "2. **Add SKILL.md**: Create `skills/my-skill/SKILL.md` with:",
+      "   - YAML frontmatter (name, description)",
+      "   - ## Usage section",
+      "   - ## Examples section",
+      "   - ## References (optional)",
+      "3. **Add references/**: Create `skills/my-skill/references/` for additional docs",
+      "4. **Register skill**: Add to `.atl/skill-registry.md`",
+      "",
+      "## Skill Structure",
+      "",
+      "```",
+      "skills/my-skill/",
+      "├── SKILL.md           # Main skill definition",
+      "└── references/",
+      "    └── detail.md      # Additional documentation (optional)",
+      "```",
+      "",
+      "## Validation",
+      "",
+      "Use the `validate_skill` tool to check your skill:",
+      "- Validates YAML frontmatter",
+      "- Checks for required sections",
+      "- Verifies references directory",
+      "",
+      "## Testing",
+      "",
+      "Test your skill with `execute_skill` before deployment.",
+      ...(specificSkill ? [
+        "",
+        `## Reference: ${skillName}`,
+        `Agent: ${specificSkill.agent}`,
+        `Triggers: ${specificSkill.triggers.join(", ")}`,
+      ] : []),
+    ].join("\n");
+
+    return {
+      messages: [
+        {
+          role: "assistant",
+          content: {
+            type: "text",
+            text: guide,
+          },
+        },
+      ],
+    };
   }
+);
 
-  return {
-    contents: [
-      {
-        uri,
-        mimeType: "text/markdown",
-        text: [
-          `# ${skill.name}`,
-          `**Agent**: ${skill.agent}`,
-          `**Description**: ${skill.description}`,
-          `**Triggers**: ${skill.triggers.join(", ") || "(none)"}`,
-          ``,
-          skill.detail ? `## Detail\n${skill.detail}` : "",
-        ]
-          .filter(Boolean)
-          .join("\n"),
-      },
-    ],
-  };
-});
+server.prompt(
+  "agent_selection_guide",
+  {
+    task: z.string().describe("Description of the task you need help with"),
+  },
+  ({ task }) => {
+    const taskLower = task.toLowerCase();
+    let recommendations: string[] = [];
+
+    // Simple keyword matching for recommendations
+    if (taskLower.includes("code") || taskLower.includes("implement") || taskLower.includes("develop")) {
+      recommendations.push("**DEV** - For code implementation and development tasks");
+    }
+    if (taskLower.includes("test") || taskLower.includes("quality") || taskLower.includes("bug")) {
+      recommendations.push("**QA** - For testing, validation, and quality assurance");
+    }
+    if (taskLower.includes("doc") || taskLower.includes("document")) {
+      recommendations.push("**DOC** - For documentation and technical writing");
+    }
+    if (taskLower.includes("deploy") || taskLower.includes("infrastructure") || taskLower.includes("ops")) {
+      recommendations.push("**OPS** - For deployment and infrastructure tasks");
+    }
+    if (taskLower.includes("govern") || taskLower.includes("compliance") || taskLower.includes("security")) {
+      recommendations.push("**GOV** - For governance, compliance, and security");
+    }
+    if (taskLower.includes("analyze") || taskLower.includes("requirement")) {
+      recommendations.push("**BA** - For business analysis and requirements");
+    }
+
+    if (recommendations.length === 0) {
+      recommendations.push("**DEV** - General development tasks");
+    }
+
+    const guide = [
+      "# Agent Selection Guide",
+      "",
+      `**Task**: ${task}`,
+      "",
+      "## Recommended Agents",
+      "",
+      ...recommendations.map((r) => `- ${r}`),
+      "",
+      "## Next Steps",
+      "",
+      "1. Use `list_skills` with the agent filter to see available skills",
+      `   Example: list_skills with agent="${recommendations[0].replace(/\*\*/g, "").split(" ")[0]}"`,
+      "",
+      "2. Review skill triggers to find the best match",
+      "",
+      "3. Execute the appropriate skill for your task",
+      "",
+      "## Available Agents",
+    ];
+
+    // Add agent counts
+    const agentCounts = new Map<string, number>();
+    for (const s of skills.values()) {
+      agentCounts.set(s.agent, (agentCounts.get(s.agent) ?? 0) + 1);
+    }
+    for (const [agent, count] of agentCounts) {
+      guide.push(`- ${agent}: ${count} skill(s)`);
+    }
+
+    return {
+      messages: [
+        {
+          role: "assistant",
+          content: {
+            type: "text",
+            text: guide.join("\n"),
+          },
+        },
+      ],
+    };
+  }
+);
 
 async function main(): Promise<void> {
   const transport = new StdioServerTransport();

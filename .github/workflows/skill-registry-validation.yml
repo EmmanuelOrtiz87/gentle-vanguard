@@ -1,0 +1,144 @@
+name: Skill Registry Validation
+
+on:
+  push:
+    paths:
+      - 'skills/**'
+      - '.atl/skill-registry.md'
+  pull_request:
+    paths:
+      - 'skills/**'
+      - '.atl/skill-registry.md'
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: Validate Skill Registry
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup PowerShell
+        uses: PowerShell/PowerShell@v7.4.0
+        
+      - name: Run skill registry sync validation
+        id: sync
+        shell: pwsh
+        run: |
+          $result = & scripts/utilities/SKILLS-TOOLS/sync-skill-registry.ps1 -ValidateOnly
+          if ($LASTEXITCODE -ne 0) {
+            echo "::error::Skill registry is out of sync!"
+            echo "::group::Missing Skills"
+            & scripts/utilities/SKILLS-TOOLS/sync-skill-registry.ps1 -DryRun
+            echo "::endgroup::"
+            exit 1
+          }
+        
+      - name: Validate skill structure
+        shell: pwsh
+        run: |
+          $errors = @()
+          $skillsDir = "skills"
+          
+          if (Test-Path $skillsDir) {
+            $skillDirs = Get-ChildItem -Path $skillsDir -Directory
+            
+            foreach ($dir in $skillDirs) {
+              $skillMd = Join-Path $dir.FullName "SKILL.md"
+              
+              # Check SKILL.md exists
+              if (-not (Test-Path $skillMd)) {
+                $errors += "Missing SKILL.md: $($dir.Name)"
+                continue
+              }
+              
+              # Check frontmatter
+              $content = Get-Content $skillMd -Raw
+              if (-not ($content -match "^---")) {
+                $errors += "Missing frontmatter: $($dir.Name)"
+              }
+              
+              # Check required sections
+              if (-not ($content -match "## Usage")) {
+                $errors += "Missing ## Usage: $($dir.Name)"
+              }
+              
+              if (-not ($content -match "## Examples")) {
+                $errors += "Missing ## Examples: $($dir.Name)"
+              }
+            }
+          }
+          
+          if ($errors.Count -gt 0) {
+            echo "::error::Found $($errors.Count) skill validation errors"
+            echo "::group::Validation Errors"
+            foreach ($error in $errors) {
+              echo "::error::$error"
+            }
+            echo "::endgroup::"
+            exit 1
+          }
+          
+          echo "::notice::All $($skillDirs.Count) skills validated successfully"
+        
+      - name: Check for orphaned registry entries
+        shell: pwsh
+        run: |
+          $registryContent = Get-Content ".atl/skill-registry.md" -Raw
+          $skillsDir = "skills"
+          $orphaned = @()
+          
+          # Extract skill names from registry
+          $registrySkills = @()
+          $lines = $registryContent -split "`n"
+          foreach ($line in $lines) {
+            if ($line -match "^\|[^|]+\|([^|]+)\|") {
+              $skillName = $Matches[1].Trim()
+              if ($skillName -ne "Skill" -and -not [string]::IsNullOrWhiteSpace($skillName)) {
+                $registrySkills += $skillName
+              }
+            }
+          }
+          
+          # Check if each exists
+          foreach ($skill in $registrySkills) {
+            $skillPath = Join-Path $skillsDir $skill
+            if (-not (Test-Path $skillPath)) {
+              $orphaned += $skill
+            }
+          }
+          
+          if ($orphaned.Count -gt 0) {
+            echo "::warning::Found $($orphaned.Count) orphaned registry entries"
+            echo "::group::Orphaned Entries"
+            foreach ($skill in $orphaned) {
+              echo "::warning::Orphaned: $skill"
+            }
+            echo "::endgroup::"
+          }
+        
+      - name: Generate validation report
+        if: always()
+        shell: pwsh
+        run: |
+          $report = @{
+            timestamp = (Get-Date -Format "o")
+            status = if ($env:GITHUB_JOB_STATUS -eq "success") { "passed" } else { "failed" }
+            totalSkills = (Get-ChildItem -Path "skills" -Directory | Measure-Object).Count
+            registryEntries = (Select-String -Path ".atl/skill-registry.md" -Pattern "^\|[^|]+\|[^|]+\|" | Measure-Object).Count - 1
+          }
+          
+          $report | ConvertTo-Json | Set-Content -Path "validation-report.json"
+          
+      - name: Upload validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: skill-registry-validation-report
+          path: validation-report.json
+          retention-days: 30
