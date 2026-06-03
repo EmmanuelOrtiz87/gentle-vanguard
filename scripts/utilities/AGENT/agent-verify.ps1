@@ -46,7 +46,7 @@ $Results  = [System.Collections.Generic.List[PSCustomObject]]::new()
 $Errors   = 0
 $Warnings = 0
 
-$AllowedDomains = @("all","config","tests","hooks","structure","skills")
+$AllowedDomains = @("all","config","tests","hooks","structure","skills","fine-tuning")
 $NormalizedDomains = @(
     $Domain |
     ForEach-Object { $_ -split ',' } |
@@ -568,6 +568,80 @@ if (Test-DomainEnabled 'structure') {
         } catch {
             Add-Result "override-abuse-audit" "WARN" "Could not evaluate override audit abuse: $_" "structure"
         }
+    }
+}
+
+# =============================================================================
+#  DOMAIN: fine-tuning
+#  - Registry exists and is valid JSON
+#  - Dataset counts tracked
+#  - No stale adapter lock files
+# =============================================================================
+if (Test-DomainEnabled 'fine-tuning') {
+    $FtRoot = "$Root\.ft"
+
+    if (-not (Test-Path $FtRoot)) {
+        Add-Result "ft-directory" "WARN" ".ft/ directory not found (fine-tuning not initialized)" "fine-tuning"
+    } else {
+        Add-Result "ft-directory" "PASS" ".ft/ directory exists" "fine-tuning"
+
+        $RegistryPath = "$FtRoot\registry.json"
+        if (Test-Path $RegistryPath) {
+            try {
+                $reg = Get-Content $RegistryPath -Raw | ConvertFrom-Json
+                $adapterCount = @($reg.PSObject.Properties).Count
+                Add-Result "ft-registry" "PASS" "Registry valid: $adapterCount adapter(s)" "fine-tuning"
+            } catch {
+                Add-Result "ft-registry" "FAIL" "Registry invalid JSON: $_" "fine-tuning"
+            }
+        } else {
+            Add-Result "ft-registry" "FAIL" "registry.json not found" "fine-tuning"
+        }
+
+        $DatasetDir = "$FtRoot\dataset"
+        if (Test-Path $DatasetDir) {
+            $trainFiles = @(Get-ChildItem "$DatasetDir\train\*.json" -ErrorAction SilentlyContinue)
+            $valFiles   = @(Get-ChildItem "$DatasetDir\val\*.json" -ErrorAction SilentlyContinue)
+            $rawFiles   = @(Get-ChildItem "$DatasetDir\raw\*.json" -ErrorAction SilentlyContinue)
+            Add-Result "ft-dataset" "PASS" "Dataset: $($trainFiles.Count) train / $($valFiles.Count) val / $($rawFiles.Count) raw" "fine-tuning"
+        } else {
+            Add-Result "ft-dataset" "WARN" "Dataset directory not found" "fine-tuning"
+        }
+
+        $LockFiles = @(Get-ChildItem "$FtRoot\*.lock" -ErrorAction SilentlyContinue)
+        if ($LockFiles.Count -eq 0) {
+            Add-Result "ft-locks" "PASS" "No stale lock files" "fine-tuning"
+        } else {
+            Add-Result "ft-locks" "WARN" "$($LockFiles.Count) lock file(s) found — may indicate interrupted operation" "fine-tuning"
+        }
+
+        $AdapterDir = "$FtRoot\adapters"
+        if (Test-Path $AdapterDir) {
+            $adapterDirs = @(Get-ChildItem "$AdapterDir\*" -Directory -ErrorAction SilentlyContinue)
+            if ($adapterDirs.Count -gt 0) {
+                Add-Result "ft-adapters" "PASS" "$($adapterDirs.Count) adapter(s) registered" "fine-tuning"
+            } else {
+                Add-Result "ft-adapters" "WARN" "No adapters found (TF-IDF fallback active)" "fine-tuning"
+            }
+        }
+
+        $BenchmarkDir = "$FtRoot\benchmarks"
+        if (Test-Path $BenchmarkDir) {
+            $benchFiles = @(Get-ChildItem "$BenchmarkDir\*.json" -ErrorAction SilentlyContinue)
+            if ($benchFiles.Count -gt 0) {
+                Add-Result "ft-benchmarks" "PASS" "$($benchFiles.Count) benchmark file(s)" "fine-tuning"
+            } else {
+                Add-Result "ft-benchmarks" "PASS" "No benchmarks yet (run evaluate stage)" "fine-tuning"
+            }
+        }
+    }
+
+    # Verify ft-pipeline.ps1 exists
+    $FtPipeline = "$Root\scripts\utilities\FINE-TUNING\ft-pipeline.ps1"
+    if (Test-Path $FtPipeline) {
+        Add-Result "ft-pipeline-script" "PASS" "ft-pipeline.ps1 present" "fine-tuning"
+    } else {
+        Add-Result "ft-pipeline-script" "FAIL" "ft-pipeline.ps1 not found" "fine-tuning"
     }
 }
 

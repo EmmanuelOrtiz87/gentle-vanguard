@@ -50,6 +50,50 @@ jobs:
           path: .runtime/maintenance-report.json
           retention-days: 30
 
+  fine-tuning:
+    name: Fine-Tuning Pipeline
+    runs-on: windows-latest
+    timeout-minutes: 30
+    needs: watchtower
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run FT Pipeline - Collect
+        shell: pwsh
+        run: |
+          .\scripts\utilities\FINE-TUNING\ft-pipeline.ps1 -Stage collect
+          Write-Host "FT collect exit code: $LASTEXITCODE"
+
+      - name: Run FT Pipeline - Build Dataset
+        shell: pwsh
+        run: |
+          .\scripts\utilities\FINE-TUNING\ft-pipeline.ps1 -Stage build
+          Write-Host "FT build exit code: $LASTEXITCODE"
+
+      - name: Run FT Threshold Detection
+        shell: pwsh
+        run: |
+          .\scripts\utilities\FINE-TUNING\ft-threshold-detect.ps1
+          Write-Host "FT threshold exit code: $LASTEXITCODE"
+
+      - name: Run FT Auto-Prune
+        shell: pwsh
+        run: |
+          .\scripts\utilities\FINE-TUNING\ft-auto-prune.ps1 -Days 7
+          Write-Host "FT auto-prune exit code: $LASTEXITCODE"
+
+      - name: Upload FT Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: ft-reports
+          path: |
+            .ft/benchmarks/
+            .ft/dataset/
+          retention-days: 30
+
       - name: Commit Auto-Fixes (if any)
         shell: pwsh
         run: |

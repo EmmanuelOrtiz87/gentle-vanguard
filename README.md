@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.26.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.29.0--alpha-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
@@ -61,6 +61,11 @@ otherwise be chaotic AI-assisted development.
 - **Proactive Delivery** — Daily/status/weekly digests with health status, feedback trends, pending
   proposals, token spend, and git activity. Auto-displayed at session start via `gv digest`.
   Configurable `-Mode` (daily|status|weekly) and `-JSON` output
+- **Fine-Tuning (v2.29.0-alpha)** — LoRA-based domain adaptation for BA/DEV agents. Full pipeline:
+  data collection, dataset building, LoRA training (dry-run or real), inference, evaluation, status.
+  Auto-collects session data, builds TF-IDF baselines, registers adapters. Scheduled CI job runs
+  weekly. GPU detection prevents crashes on non-CUDA systems. Threshold detector + auto-prune for
+  self-maintenance
 - **Optimization Stack** — Token compression (-64% CLAUDE.md), SHA256 response cache
   (TTL 30min), model cost optimization (4x cheaper with qwen-3.6-plus), pre-task
   compression (~30% reduction), and automated integrity verification via
@@ -406,10 +411,13 @@ gv health
 | `pwsh -File scripts/utilities/sdd-preflight.ps1`         | Configure SDD session             |
 | `npm run format`                                         | Run Prettier formatting           |
 | `Invoke-PSScriptAnalyzer -Path scripts/ -Recurse`        | PSScriptAnalyzer lint             |
+| `.\scripts\utilities\FINE-TUNING\ft-pipeline.ps1 -Stage full` | Run full fine-tuning pipeline     |
+| `.\scripts\utilities\FINE-TUNING\ft-status.ps1`         | Show FT registry + dataset status |
+| `.\scripts\utilities\FINE-TUNING\ft-trainer.ps1 -Mode python-unsloth -Force` | Train LoRA adapter (GPU req.) |
 
 ---
 
-## CI/CD Pipeline (26 Workflows)
+## CI/CD Pipeline (27 Workflows)
 
 | Workflow                           | Purpose                          | Trigger              |
 | ---------------------------------- | -------------------------------- | -------------------- |
@@ -439,6 +447,7 @@ gv health
 | `stale.yml`                        | Stale issue/PR management        | Daily                |
 | `sync-public.yml`                  | Sync to `gentle-vanguard-public` | On push to `main`    |
 | `workflow-lint.yml`                | Workflow syntax validation       | On `.github/` change |
+| `maintenance-scheduled.yml`        | Scheduled maintenance + FT pipeline | Weekly (Sun)        |
 
 ---
 
@@ -462,6 +471,7 @@ gv health
 | Skill MCPs    | ✅ PASS | 6 actions (register, start, stop, list, status, deregister), SKILL.md frontmatter parsing, cycle tested |
 | Feedback Loop | ✅ PASS | Rating 1-5 collector + trend analyzer + red-flag detection + auto-apply proposals. `gv feedback`         |
 | Proactive Delivery | ✅ PASS | Daily/status/weekly digests with health, feedback, proposals, tokens. `gv digest` + session autostart |
+| Fine-Tuning        | ✅ PASS | LoRA pipeline v2.29.0-alpha — 2 adapters (BA, DEV), 72 train / 20 val records, TF-IDF baseline active |
 
 ---
 
@@ -517,6 +527,6 @@ LLM Top 10 + OWASP Agentic Top 10).
 ---
 
 <p align="center">
-  <strong>Gentle-Vanguard v2.26.0</strong><br>
+  <strong>Gentle-Vanguard v2.29.0-alpha</strong><br>
   <em>Local-First · Total Privacy · Production Ready</em>
 </p>
