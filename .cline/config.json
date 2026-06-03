@@ -49,5 +49,22 @@
     "SESSION": [
       "session-workflow-skill"
     ]
+  },
+  "mcpServers": {
+    "gentle-vanguard-skills": {
+      "command": "node",
+      "args": ["dist/scripts/mcp/skill-server.js"],
+      "description": "143+ skills vía MCP: list_skills, get_skill, search_skills"
+    },
+    "engram": {
+      "command": "engram",
+      "args": ["mcp", "--tools=agent"],
+      "description": "Memoria persistente Engram vía MCP"
+    },
+    "codegraph": {
+      "command": "codegraph",
+      "args": ["serve", "--mcp"],
+      "description": "CodeGraph: análisis de código indexado"
+    }
   }
 }

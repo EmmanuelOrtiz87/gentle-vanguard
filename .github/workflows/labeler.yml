@@ -6,7 +6,7 @@ permissions:
 
 on:
   pull_request:
-    branches: [main]
+    branches: [develop, main]
     types: [opened, synchronize, reopened]
 
 jobs:
@@ -19,4 +19,3 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler.yml
-

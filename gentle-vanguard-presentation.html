@@ -5,150 +5,145 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gentle-Vanguard · Platform Overview</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+  :root {
+    --gv-primary: #00BFFF;
+    --gv-primary-light: #4DCFFF;
+    --gv-primary-dark: #0055BB;
+    --gv-accent: #A855F7;
+    --gv-accent-teal: #06B6D4;
+    --gv-bg: #0D1117;
+    --gv-surface: #1A2035;
+    --gv-surface-icon: #2A2D3A;
+    --gv-circuit: #1A3050;
+    --gv-text: #FFFFFF;
+    --gv-text-brand: #00BFFF;
+    --gv-text-muted: #6B7280;
+    --gv-border: #1E3A5F;
+    --gv-success: #22C55E;
+    --gv-warning: #F59E0B;
+    --gv-error: #EF4444;
+  }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Inter', system-ui, sans-serif; background: #08080e; color: #e2e2e2; overflow: hidden; height: 100vh; user-select: none; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--gv-bg); color: var(--gv-text); overflow: hidden; height: 100vh; user-select: none; }
   .slides-wrapper { display: flex; transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1); height: 100vh; will-change: transform; }
   .slide { min-width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 4vw 6vw; position: relative; overflow: hidden; }
-  .slide::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 50%, rgba(99,102,241,0.07) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(139,92,246,0.05) 0%, transparent 50%); pointer-events: none; }
-  .slide::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent); }
+  .slide::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 50%, rgba(0,191,255,0.06) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(168,85,247,0.04) 0%, transparent 50%); pointer-events: none; }
+  .slide::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(0,191,255,0.25), transparent); }
   .slide-inner { max-width: 1200px; width: 100%; position: relative; z-index: 1; }
-  h1 { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1.05; }
-  h2 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.4em; }
-  h3 { font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 600; color: #a5b4fc; margin-bottom: 0.4em; }
-  .subtitle { font-size: clamp(0.95rem, 1.8vw, 1.3rem); color: #94a3b8; font-weight: 400; line-height: 1.65; }
-  .tag { display: inline-block; background: rgba(99,102,241,0.12); color: #a5b4fc; padding: 0.3em 1.2em; border-radius: 100px; font-size: 0.75rem; font-weight: 600; margin-bottom: 1em; border: 1px solid rgba(99,102,241,0.15); letter-spacing: 0.04em; }
+  h1 { font-family: 'Orbitron', monospace; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 800; letter-spacing: 0.08em; line-height: 1.05; }
+  h2 { font-family: 'Orbitron', monospace; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; letter-spacing: 0.05em; margin-bottom: 0.4em; text-transform: uppercase; }
+  h3 { font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 600; color: var(--gv-primary); margin-bottom: 0.4em; }
+  .subtitle { font-size: clamp(0.95rem, 1.8vw, 1.3rem); color: var(--gv-text-muted); font-weight: 400; line-height: 1.65; }
+  .tag { display: inline-block; background: rgba(0,191,255,0.1); color: var(--gv-primary); padding: 0.3em 1.2em; border-radius: 100px; font-size: 0.75rem; font-weight: 600; margin-bottom: 1em; border: 1px solid rgba(0,191,255,0.15); letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Orbitron', monospace; }
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem; }
   .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1rem; }
-  .card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 1.5rem; backdrop-filter: blur(12px); transition: all 0.3s; }
-  .card:hover { border-color: rgba(99,102,241,0.3); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99,102,241,0.08); }
-  .card .num { font-size: 2rem; font-weight: 800; color: #6366f1; line-height: 1; margin-bottom: 0.3rem; }
+  .card { background: rgba(255,255,255,0.025); border: 1px solid rgba(0,191,255,0.06); border-radius: 16px; padding: 1.5rem; backdrop-filter: blur(12px); transition: all 0.3s; }
+  .card:hover { border-color: rgba(0,191,255,0.25); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,191,255,0.06); }
+  .card .num { font-size: 2rem; font-weight: 800; color: var(--gv-primary); line-height: 1; margin-bottom: 0.3rem; font-family: 'Orbitron', monospace; }
   .card h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem; }
-  .card p { font-size: 0.83rem; color: #94a3b8; line-height: 1.55; }
+  .card p { font-size: 0.83rem; color: var(--gv-text-muted); line-height: 1.55; }
   .badge { display: inline-block; padding: 0.2em 0.7em; border-radius: 6px; font-size: 0.68rem; font-weight: 600; margin-right: 0.3em; }
-  .badge-green { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.15); }
-  .badge-yellow { background: rgba(234,179,8,0.12); color: #facc15; border: 1px solid rgba(234,179,8,0.15); }
-  .badge-red { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.15); }
-  .badge-blue { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.15); }
-  .badge-purple { background: rgba(139,92,246,0.12); color: #a78bfa; border: 1px solid rgba(139,92,246,0.15); }
-  .badge-cyan { background: rgba(6,182,212,0.12); color: #22d3ee; border: 1px solid rgba(6,182,212,0.15); }
+  .badge-green { background: rgba(34,197,94,0.12); color: var(--gv-success); border: 1px solid rgba(34,197,94,0.15); }
+  .badge-yellow { background: rgba(245,158,11,0.12); color: var(--gv-warning); border: 1px solid rgba(245,158,11,0.15); }
+  .badge-red { background: rgba(239,68,68,0.12); color: var(--gv-error); border: 1px solid rgba(239,68,68,0.15); }
+  .badge-blue { background: rgba(0,191,255,0.12); color: var(--gv-primary); border: 1px solid rgba(0,191,255,0.15); }
+  .badge-purple { background: rgba(168,85,247,0.12); color: var(--gv-accent); border: 1px solid rgba(168,85,247,0.15); }
+  .badge-cyan { background: rgba(6,182,212,0.12); color: var(--gv-accent-teal); border: 1px solid rgba(6,182,212,0.15); }
   .badge-rose { background: rgba(244,63,94,0.12); color: #fb7185; border: 1px solid rgba(244,63,94,0.15); }
-  .badge-gray { background: rgba(148,163,184,0.1); color: #94a3b8; border: 1px solid rgba(148,163,184,0.12); }
+  .badge-gray { background: rgba(107,114,128,0.1); color: var(--gv-text-muted); border: 1px solid rgba(107,114,128,0.12); }
   .nav-arrows { position: fixed; bottom: 2rem; right: 2rem; z-index: 100; display: flex; gap: 0.5rem; }
-  .nav-arrows button { width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); color: #e2e2e2; font-size: 1.2rem; cursor: pointer; backdrop-filter: blur(12px); transition: all 0.25s; display: flex; align-items: center; justify-content: center; }
-  .nav-arrows button:hover { background: rgba(99,102,241,0.2); border-color: rgba(99,102,241,0.4); transform: scale(1.05); }
+  .nav-arrows button { width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(0,191,255,0.08); background: rgba(255,255,255,0.02); color: var(--gv-text); font-size: 1.2rem; cursor: pointer; backdrop-filter: blur(12px); transition: all 0.25s; display: flex; align-items: center; justify-content: center; }
+  .nav-arrows button:hover { background: rgba(0,191,255,0.15); border-color: rgba(0,191,255,0.35); transform: scale(1.05); }
   .nav-arrows button:active { transform: scale(0.95); }
-  .progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, #6366f1, #8b5cf6, #a78bfa); z-index: 100; transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
-  .slide-counter { position: fixed; bottom: 2rem; left: 2rem; z-index: 100; font-size: 0.78rem; color: #475569; font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: 0.05em; }
-  .gradient-text { background: linear-gradient(135deg, #6366f1, #a78bfa, #c084fc, #f0abfc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-size: 300% 300%; animation: gradientShift 6s ease-in-out infinite; }
+  .progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--gv-primary), var(--gv-accent), var(--gv-accent-teal)); z-index: 100; transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+  .slide-counter { position: fixed; bottom: 2rem; left: 2rem; z-index: 100; font-size: 0.78rem; color: var(--gv-text-muted); font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: 0.08em; font-family: 'Orbitron', monospace; }
+  .gradient-text { background: linear-gradient(135deg, var(--gv-primary), var(--gv-primary-light), var(--gv-accent), var(--gv-accent-teal)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-size: 300% 300%; animation: gradientShift 6s ease-in-out infinite; }
   @keyframes gradientShift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
   .hero-icon { font-size: 3.5rem; margin-bottom: 0.5rem; display: inline-block; animation: float 4s ease-in-out infinite; }
   @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
   .list { list-style: none; }
-  .list li { padding: 0.35rem 0; padding-left: 1.5rem; position: relative; font-size: 0.88rem; color: #cbd5e1; line-height: 1.5; }
-  .list li::before { content: '▸'; position: absolute; left: 0; color: #6366f1; }
+  .list li { padding: 0.35rem 0; padding-left: 1.5rem; position: relative; font-size: 0.88rem; color: #d1d5db; line-height: 1.5; }
+  .list li::before { content: '▸'; position: absolute; left: 0; color: var(--gv-primary); }
   .flow-row { display: flex; align-items: center; justify-content: center; gap: 0.4rem; flex-wrap: wrap; }
-  .flow-step { background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.15); padding: 0.45rem 0.9rem; border-radius: 8px; font-size: 0.72rem; font-weight: 600; color: #c7d2fe; letter-spacing: 0.02em; }
-  .flow-arrow { color: #6366f1; font-size: 1rem; }
+  .flow-step { background: rgba(0,191,255,0.06); border: 1px solid rgba(0,191,255,0.12); padding: 0.45rem 0.9rem; border-radius: 8px; font-size: 0.72rem; font-weight: 600; color: var(--gv-primary); letter-spacing: 0.04em; }
+  .flow-arrow { color: var(--gv-primary); font-size: 1rem; }
   .stat-row { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin: 1rem 0; }
   .stat { text-align: center; padding: 0.8rem 1.2rem; }
-  .stat-value { font-size: 2.8rem; font-weight: 800; color: #a5b4fc; font-variant-numeric: tabular-nums; }
-  .stat-label { font-size: 0.78rem; color: #64748b; margin-top: 0.2rem; font-weight: 500; }
+  .stat-value { font-family: 'Orbitron', monospace; font-size: 2.8rem; font-weight: 700; color: var(--gv-primary); font-variant-numeric: tabular-nums; letter-spacing: 0.05em; }
+  .stat-label { font-size: 0.78rem; color: var(--gv-text-muted); margin-top: 0.2rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
   table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-  th { text-align: left; padding: 0.5rem 0.7rem; color: #94a3b8; font-weight: 500; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.72rem; letter-spacing: 0.04em; }
-  td { padding: 0.5rem 0.7rem; border-bottom: 1px solid rgba(255,255,255,0.03); }
+  th { text-align: left; padding: 0.5rem 0.7rem; color: var(--gv-text-muted); font-weight: 500; border-bottom: 1px solid rgba(0,191,255,0.08); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  td { padding: 0.5rem 0.7rem; border-bottom: 1px solid rgba(255,255,255,0.025); }
   tr:hover td { background: rgba(255,255,255,0.015); }
   .col-agents { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-  .agent-tag { background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.12); padding: 0.2rem 0.65rem; border-radius: 4px; font-size: 0.62rem; color: #a5b4fc; font-weight: 600; letter-spacing: 0.03em; }
-  .quote { font-style: italic; color: #94a3b8; font-size: 1.1rem; border-left: 3px solid rgba(99,102,241,0.4); padding-left: 1.5rem; margin: 1rem 0; }
+  .agent-tag { background: rgba(0,191,255,0.06); border: 1px solid rgba(0,191,255,0.1); padding: 0.2rem 0.65rem; border-radius: 4px; font-size: 0.62rem; color: var(--gv-primary); font-weight: 600; letter-spacing: 0.06em; font-family: 'Orbitron', monospace; }
+  .quote { font-style: italic; color: var(--gv-text-muted); font-size: 1.1rem; border-left: 3px solid rgba(0,191,255,0.35); padding-left: 1.5rem; margin: 1rem 0; }
   @media (max-width: 768px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } .slide { padding: 5vw 4vw; } .stat-value { font-size: 2rem; } }
-
-  /* --- GLOW ORB --- */
-  .orb { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; opacity: 0.5; }
-  .orb-1 { width: 400px; height: 400px; background: #6366f1; top: -10%; right: -5%; animation: orbFloat 12s ease-in-out infinite; }
-  .orb-2 { width: 300px; height: 300px; background: #8b5cf6; bottom: -5%; left: -5%; animation: orbFloat 15s ease-in-out infinite reverse; }
-  .orb-3 { width: 200px; height: 200px; background: #a78bfa; top: 50%; left: 50%; animation: orbFloat 10s ease-in-out infinite; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; opacity: 0.4; }
+  .orb-1 { width: 400px; height: 400px; background: var(--gv-primary); top: -10%; right: -5%; animation: orbFloat 12s ease-in-out infinite; }
+  .orb-2 { width: 300px; height: 300px; background: var(--gv-accent); bottom: -5%; left: -5%; animation: orbFloat 15s ease-in-out infinite reverse; }
+  .orb-3 { width: 200px; height: 200px; background: var(--gv-accent-teal); top: 50%; left: 50%; animation: orbFloat 10s ease-in-out infinite; }
   @keyframes orbFloat { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(30px,-30px) scale(1.1); } 66% { transform: translate(-20px,20px) scale(0.9); } }
-
-  /* --- ANIMATED COUNTER --- */
-  .counter-num { font-size: 3.5rem; font-weight: 900; background: linear-gradient(135deg, #6366f1, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-
-  /* --- PROGRESS RING --- */
+  .counter-num { font-family: 'Orbitron', monospace; font-size: 3.5rem; font-weight: 900; background: linear-gradient(135deg, var(--gv-primary), var(--gv-accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 0.05em; }
   .ring-container { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; }
   .ring { position: relative; width: 120px; height: 120px; }
   .ring svg { transform: rotate(-90deg); }
   .ring circle { fill: none; stroke-width: 6; }
-  .ring .bg { stroke: rgba(255,255,255,0.04); }
-  .ring .fg { stroke: #6366f1; stroke-linecap: round; transition: stroke-dashoffset 1.5s cubic-bezier(0.22, 1, 0.36, 1); }
-  .ring .fg.purple { stroke: #a78bfa; }
-  .ring .fg.cyan { stroke: #22d3ee; }
-  .ring .fg.green { stroke: #4ade80; }
+  .ring .bg { stroke: rgba(255,255,255,0.03); }
+  .ring .fg { stroke: var(--gv-primary); stroke-linecap: round; transition: stroke-dashoffset 1.5s cubic-bezier(0.22, 1, 0.36, 1); }
+  .ring .fg.purple { stroke: var(--gv-accent); }
+  .ring .fg.cyan { stroke: var(--gv-accent-teal); }
+  .ring .fg.green { stroke: var(--gv-success); }
   .ring .fg.rose { stroke: #fb7185; }
   .ring-label { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
-  .ring-label span { display: block; font-size: 1.4rem; font-weight: 800; color: #e2e2e8; }
-  .ring-label small { font-size: 0.6rem; color: #64748b; font-weight: 500; }
-
-  /* --- SVG DIVIDER --- */
-  .divider { width: 60px; height: 3px; background: linear-gradient(90deg, #6366f1, transparent); margin: 0.6rem 0 1rem 0; border-radius: 3px; }
-
-  /* --- FEATURE GRID ICONS --- */
+  .ring-label span { font-family: 'Orbitron', monospace; display: block; font-size: 1.4rem; font-weight: 700; color: #e2e2e8; letter-spacing: 0.04em; }
+  .ring-label small { font-size: 0.6rem; color: var(--gv-text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
+  .divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--gv-primary), transparent); margin: 0.6rem 0 1rem 0; border-radius: 3px; }
   .feature-icon { font-size: 1.8rem; margin-bottom: 0.5rem; display: block; }
-
-  /* --- TIMELINE --- */
   .timeline { position: relative; padding: 1rem 0; }
-  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #6366f1, transparent); }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--gv-primary), transparent); }
   .tl-item { padding-left: 2rem; position: relative; margin-bottom: 1rem; }
-  .tl-item::before { content: ''; position: absolute; left: 0; top: 6px; width: 18px; height: 18px; border-radius: 50%; background: #6366f1; border: 3px solid #0a0a0f; }
+  .tl-item::before { content: ''; position: absolute; left: 0; top: 6px; width: 18px; height: 18px; border-radius: 50%; background: var(--gv-primary); border: 3px solid var(--gv-bg); }
   .tl-item .tl-title { font-weight: 600; font-size: 0.9rem; color: #e2e2e8; }
-  .tl-item .tl-desc { font-size: 0.78rem; color: #64748b; }
-
-  /* --- GLASS CARD VARIANT --- */
-  .glass { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 2rem; backdrop-filter: blur(16px); }
-  .glass:hover { border-color: rgba(99,102,241,0.2); }
-
-  /* --- COMPACT CODE FLOW --- */
+  .tl-item .tl-desc { font-size: 0.78rem; color: var(--gv-text-muted); }
+  .glass { background: rgba(255,255,255,0.02); border: 1px solid rgba(0,191,255,0.05); border-radius: 20px; padding: 2rem; backdrop-filter: blur(16px); }
+  .glass:hover { border-color: rgba(0,191,255,0.18); }
   .pipeline { display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: wrap; }
-  .pipe-step { padding: 0.5rem 0.8rem; font-size: 0.7rem; font-weight: 500; background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.1); color: #a5b4fc; }
+  .pipe-step { padding: 0.5rem 0.8rem; font-size: 0.7rem; font-weight: 500; background: rgba(0,191,255,0.05); border: 1px solid rgba(0,191,255,0.08); color: var(--gv-primary); }
   .pipe-step:first-child { border-radius: 8px 0 0 8px; }
   .pipe-step:last-child { border-radius: 0 8px 8px 0; }
   .pipe-step + .pipe-step { border-left: 0; }
-  .pipe-arrow { color: #6366f1; font-size: 0.8rem; margin: 0 0.15rem; }
-
-  /* --- SKILL CATEGORY BADGES --- */
+  .pipe-arrow { color: var(--gv-primary); font-size: 0.8rem; margin: 0 0.15rem; }
   .cat-row { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-  .cat-badge { padding: 0.3rem 0.8rem; border-radius: 6px; font-size: 0.65rem; font-weight: 600; background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.1); color: #c7d2fe; }
-  .cat-badge.dev { background: rgba(34,197,94,0.06); border-color: rgba(34,197,94,0.12); color: #4ade80; }
-  .cat-badge.qa { background: rgba(6,182,212,0.06); border-color: rgba(6,182,212,0.12); color: #22d3ee; }
-  .cat-badge.ops { background: rgba(234,179,8,0.06); border-color: rgba(234,179,8,0.12); color: #facc15; }
-  .cat-badge.gov { background: rgba(239,68,68,0.06); border-color: rgba(239,68,68,0.12); color: #f87171; }
-  .cat-badge.doc { background: rgba(139,92,246,0.06); border-color: rgba(139,92,246,0.12); color: #a78bfa; }
-  .cat-badge.biz { background: rgba(59,130,246,0.06); border-color: rgba(59,130,246,0.12); color: #60a5fa; }
-  .cat-badge.pm { background: rgba(244,63,94,0.06); border-color: rgba(244,63,94,0.12); color: #fb7185; }
-
-  /* --- FEATURE HIGHLIGHT --- */
-  .highlight-box { background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.04)); border: 1px solid rgba(99,102,241,0.12); border-radius: 16px; padding: 1.5rem; }
-
-  /* --- COMPARE BARS --- */
+  .cat-badge { padding: 0.3rem 0.8rem; border-radius: 6px; font-size: 0.65rem; font-weight: 600; background: rgba(0,191,255,0.06); border: 1px solid rgba(0,191,255,0.08); color: var(--gv-primary); }
+  .cat-badge.dev { background: rgba(34,197,94,0.06); border-color: rgba(34,197,94,0.1); color: var(--gv-success); }
+  .cat-badge.qa { background: rgba(6,182,212,0.06); border-color: rgba(6,182,212,0.1); color: var(--gv-accent-teal); }
+  .cat-badge.ops { background: rgba(245,158,11,0.06); border-color: rgba(245,158,11,0.1); color: var(--gv-warning); }
+  .cat-badge.gov { background: rgba(239,68,68,0.06); border-color: rgba(239,68,68,0.1); color: var(--gv-error); }
+  .cat-badge.doc { background: rgba(168,85,247,0.06); border-color: rgba(168,85,247,0.1); color: var(--gv-accent); }
+  .cat-badge.biz { background: rgba(0,191,255,0.06); border-color: rgba(0,191,255,0.1); color: var(--gv-primary); }
+  .cat-badge.pm { background: rgba(244,63,94,0.06); border-color: rgba(244,63,94,0.1); color: #fb7185; }
+  .highlight-box { background: linear-gradient(135deg, rgba(0,191,255,0.06), rgba(168,85,247,0.03)); border: 1px solid rgba(0,191,255,0.1); border-radius: 16px; padding: 1.5rem; }
   .compare-bar { display: flex; align-items: center; gap: 1rem; margin: 0.5rem 0; }
-  .compare-bar .label { width: 80px; font-size: 0.8rem; color: #94a3b8; text-align: right; }
-  .compare-bar .track { flex: 1; height: 20px; background: rgba(255,255,255,0.03); border-radius: 10px; overflow: hidden; }
+  .compare-bar .label { width: 80px; font-size: 0.8rem; color: var(--gv-text-muted); text-align: right; }
+  .compare-bar .track { flex: 1; height: 20px; background: rgba(255,255,255,0.025); border-radius: 10px; overflow: hidden; }
   .compare-bar .fill { height: 100%; border-radius: 10px; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); }
-  .compare-bar .fill.old { background: rgba(148,163,184,0.3); }
-  .compare-bar .fill.new { background: linear-gradient(90deg, #6366f1, #a78bfa); }
-  .compare-bar .pct { width: 50px; font-size: 0.85rem; font-weight: 700; color: #a5b4fc; }
+  .compare-bar .fill.old { background: rgba(107,114,128,0.25); }
+  .compare-bar .fill.new { background: linear-gradient(90deg, var(--gv-primary), var(--gv-accent)); }
+  .compare-bar .pct { width: 50px; font-size: 0.85rem; font-weight: 700; color: var(--gv-primary); font-family: 'Orbitron', monospace; }
 </style>
 </head>
 <body>
 
 <div class="progress-bar" id="progressBar"></div>
-<div class="slide-counter" id="slideCounter">01 / 23</div>
+<div class="slide-counter" id="slideCounter">01 / 18</div>
 <div class="nav-arrows">
   <button onclick="prevSlide()" id="prevBtn" title="Anterior">&#8592;</button>
   <button onclick="nextSlide()" id="nextBtn" title="Siguiente">&#8594;</button>
 </div>
 
-<!-- ORBS -->
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
 <div class="orb orb-3"></div>
@@ -159,8 +154,8 @@
 <div class="slide">
   <div class="slide-inner" style="text-align:center">
     <div class="hero-icon">&#9889;</div>
-    <h1 class="gradient-text">Gentle-Vanguard</h1>
-    <p class="subtitle" style="font-size:clamp(1.3rem,2.8vw,2rem);margin-top:0.4em;font-weight:300">Plataforma de Ingenier&iacute;a Aumentada con IA</p>
+    <h1 class="gradient-text">GENTLE-VANGUARD</h1>
+    <p class="subtitle" style="font-size:clamp(1.3rem,2.8vw,2rem);margin-top:0.4em;font-weight:300;letter-spacing:0.04em">Plataforma de Ingenier&iacute;a Aumentada con IA</p>
     <p class="subtitle" style="font-size:clamp(0.9rem,1.4vw,1.1rem);margin-top:1.5em;max-width:800px;margin-left:auto;margin-right:auto">
       Agentes inteligentes &middot; Skills modulares &middot; Ciclo SDD &middot; Memoria persistente &middot; Juicio Dual &middot; Observabilidad
     </p>
@@ -168,17 +163,17 @@
       <span class="tag">Tool-Agnostic</span>
       <span class="tag">OpenCode First</span>
       <span class="tag">18 Agentes</span>
-      <span class="tag">285 Skills</span>
-      <span class="tag">17 Workflows</span>
-      <span class="tag">28 Quality Gates</span>
+      <span class="tag">386 Skills</span>
+      <span class="tag">27 Workflows</span>
+      <span class="tag">29 Quality Gates</span>
     </div>
     <div class="stat-row" style="margin-top:2.5rem">
-      <div class="stat"><div class="stat-value">v2.24</div><div class="stat-label">Versi&oacute;n actual</div></div>
+      <div class="stat"><div class="stat-value">v2.30.0</div><div class="stat-label">Versi&oacute;n actual</div></div>
       <div class="stat"><div class="stat-value">10</div><div class="stat-label">Herramientas</div></div>
-      <div class="stat"><div class="stat-value">42</div><div class="stat-label">Normativas</div></div>
-      <div class="stat"><div class="stat-value">54</div><div class="stat-label">Tests suites</div></div>
+      <div class="stat"><div class="stat-value">60</div><div class="stat-label">Normativas</div></div>
+      <div class="stat"><div class="stat-value">80+</div><div class="stat-label">Tests suites</div></div>
     </div>
-    <p style="margin-top:3rem;font-size:0.75rem;color:#334155;letter-spacing:0.1em">MAYO 2026 &middot; v2.25.0</p>
+    <p style="margin-top:3rem;font-size:0.75rem;color:var(--gv-text-muted);letter-spacing:0.15em;font-family:'Orbitron',monospace">JUNIO 2026 &middot; v2.30.0</p>
   </div>
 </div>
 
@@ -192,22 +187,18 @@
       <div class="card">
         <div class="feature-icon">&#127760;</div>
         <h4>Multi-Herramienta</h4>
-        <p>Compatible con 10 herramientas AI. Se adapta autom&aacute;ticamente seg&uacute;n el runtime detectado (opencode, claude-code, cursor, windsurf, cline, etc.)</p>
+        <p>Compatible con 10 herramientas AI. Se adapta autom&aacute;ticamente seg&uacute;n el runtime detectado (opencode, claude-code, cursor, windsurf, cline, continue.dev, codex, copilot, antigravity, claude-generic).</p>
       </div>
       <div class="card">
         <div class="feature-icon">&#128221;</div>
         <h4>Desarrollo Guiado por Specs</h4>
-        <p>SDD Lifecycle: EXPLORE &rarr; PROPOSE &rarr; SPEC &rarr; DESIGN &rarr; APPLY &rarr; VERIFY. Cada fase ejecutada por el agente &oacute;ptimo.</p>
+        <p>SDD Lifecycle: INIT &rarr; EXPLORE &rarr; PROPOSE &rarr; SPEC &rarr; TASKS &rarr; DESIGN &rarr; APPLY &rarr; VERIFY &rarr; ARCHIVE. Cada fase ejecutada por el agente &oacute;ptimo con gates de calidad.</p>
       </div>
       <div class="card">
         <div class="feature-icon">&#129504;</div>
         <h4>Memoria y Mejora Continua</h4>
-        <p>Engram memory system persiste decisiones, bugs y patrones entre sesiones. Post-session learning y self-healing autom&aacute;ticos.</p>
+        <p>Engram memory system persiste decisiones, bugs y patrones entre sesiones. Post-session learning, self-healing autom&aacute;tico y reference system para continuidad cross-session.</p>
       </div>
-    </div>
-    <div class="highlight-box" style="margin-top:1rem;display:flex;align-items:center;gap:1rem">
-      <span style="font-size:1.5rem">&#9889;</span>
-      <span style="font-size:0.9rem;color:#a5b4fc"><strong>Nuevo:</strong> Prompt Optimization Framework &mdash; 98% menos tokens en system prompts | Dashboard v2 con i18n | oh-my-openagent: Hashline, Team Mode, Skill MCPs</span>
     </div>
   </div>
 </div>
@@ -225,16 +216,17 @@
           <li>Router autom&aacute;tico de intenciones &rarr; agente</li>
           <li>Orquestador de sesiones con estado</li>
           <li>Sistema de plugins y hooks pre/post</li>
-          <li><span class="badge badge-cyan">NEW</span> Multi-tool validator + pre-commit hooks</li>
+          <li>Multi-tool validator + pre-commit hooks</li>
         </ul>
       </div>
       <div class="card">
         <h4>&#128736; Sistema de Skills</h4>
         <ul class="list">
-          <li>285 skills instalados + sem&aacute;ntica</li>
+           <li>386 skills instalados + sem&aacute;ntica</li>
           <li>Registry automantenido + YAML frontmatter</li>
-          <li>135 directorios de skills categorizados</li>
+          <li>Directorios de skills categorizados</li>
           <li>Desde infra hasta marketing y legal</li>
+          <li>Skill Factory para scaffolding autom&aacute;tico</li>
         </ul>
       </div>
       <div class="card">
@@ -243,14 +235,15 @@
           <li>Engram: memoria persistente entre sesiones</li>
           <li>Session manager con crash recovery</li>
           <li>Track de tokens y costos por sesi&oacute;n</li>
-          <li><span class="badge badge-cyan">NEW</span> Session Summary Reference System</li>
+          <li>Session Summary Reference System</li>
+          <li>Backup autom&aacute;tico con verify de integridad</li>
         </ul>
       </div>
       <div class="card">
         <h4>&#9881; Calidad y Automatizaci&oacute;n</h4>
         <ul class="list">
-          <li>28 quality gates en pipeline CI/CD</li>
-          <li>17 workflows GitHub Actions</li>
+          <li>29 quality gates en pipeline CI/CD</li>
+           <li>27 workflows GitHub Actions</li>
           <li>Judgment Day: revisi&oacute;n dual adversarial</li>
           <li>SDD Gate: bloquea PR sin spec validado</li>
         </ul>
@@ -259,111 +252,7 @@
   </div>
 </div>
 
-<!-- ===== SLIDE 4: STATS RINGS ===== -->
-<div class="slide">
-  <div class="slide-inner" style="text-align:center">
-    <span class="tag">M&Eacute;TRICAS</span>
-    <h2>Plataforma en N&uacute;meros</h2>
-    <p class="subtitle" style="margin-bottom:2rem">Evoluci&oacute;n constante &mdash; cada sesi&oacute;n agrega valor</p>
-    <div class="ring-container">
-      <div class="ring">
-        <svg width="120" height="120" viewBox="0 0 120 120">
-          <circle class="bg" cx="60" cy="60" r="50"/>
-          <circle class="fg" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="62.83" id="ringSkills"/>
-        </svg>
-        <div class="ring-label"><span>285</span><small>Skills</small></div>
-      </div>
-      <div class="ring">
-        <svg width="120" height="120" viewBox="0 0 120 120">
-          <circle class="bg" cx="60" cy="60" r="50"/>
-          <circle class="fg purple" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="94.25" id="ringWorkflows"/>
-        </svg>
-        <div class="ring-label"><span>17</span><small>Workflows</small></div>
-      </div>
-      <div class="ring">
-        <svg width="120" height="120" viewBox="0 0 120 120">
-          <circle class="bg" cx="60" cy="60" r="50"/>
-          <circle class="fg cyan" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="125.66" id="ringTests"/>
-        </svg>
-        <div class="ring-label"><span>54</span><small>Test Suites</small></div>
-      </div>
-      <div class="ring">
-        <svg width="120" height="120" viewBox="0 0 120 120">
-          <circle class="bg" cx="60" cy="60" r="50"/>
-          <circle class="fg green" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="94.25" id="ringGates"/>
-        </svg>
-        <div class="ring-label"><span>28</span><small>Quality Gates</small></div>
-      </div>
-      <div class="ring">
-        <svg width="120" height="120" viewBox="0 0 120 120">
-          <circle class="bg" cx="60" cy="60" r="50"/>
-          <circle class="fg rose" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="125.66" id="ringTools"/>
-        </svg>
-        <div class="ring-label"><span>10</span><small>Herramientas</small></div>
-      </div>
-      <div class="ring">
-        <svg width="120" height="120" viewBox="0 0 120 120">
-          <circle class="bg" cx="60" cy="60" r="50"/>
-          <circle class="fg" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="85.0" id="ringRules"/>
-        </svg>
-        <div class="ring-label"><span>42</span><small>Normativas</small></div>
-      </div>
-    </div>
-    <p style="font-size:0.78rem;color:#475569;margin-top:1.5rem">
-      <span class="badge badge-green">&uarr; +114%</span> Skills vs v2.22 &middot;
-      <span class="badge badge-green">&uarr; +135%</span> Test suites vs v2.22 &middot;
-      <span class="badge badge-cyan">v2.24</span> &Uacute;ltima versi&oacute;n
-    </p>
-  </div>
-</div>
-
-<!-- ===== SLIDE 5: TOOL COMPATIBILITY ===== -->
-<div class="slide">
-  <div class="slide-inner">
-    <span class="tag">COMPATIBILIDAD</span>
-    <h2>Soporte Multi-Herramienta</h2>
-    <p class="subtitle" style="margin-bottom:1.2rem">10 herramientas detectadas por runtime &mdash; 3 con soporte completo, 7 con perfil adaptivo</p>
-    <table>
-      <tr><th>Herramienta</th><th>Skill Tool</th><th>Mem Tools</th><th>Optimizaci&oacute;n</th></tr>
-      <tr><td><strong>opencode</strong> (baseline)</td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">Perfil dedicado</span></td></tr>
-      <tr><td><strong>claude-code</strong></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">Perfil dedicado</span></td></tr>
-      <tr><td><strong>continue-dev</strong></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">Perfil dedicado</span></td></tr>
-      <tr><td><strong>cursor</strong></td><td><span class="badge badge-green">Emulado</span></td><td><span class="badge badge-green">Emulado</span></td><td><span class="badge badge-green">v1.1 + inline skill emulation</span></td></tr>
-      <tr><td><strong>windsurf</strong></td><td><span class="badge badge-green">Emulado</span></td><td><span class="badge badge-green">Emulado</span></td><td><span class="badge badge-green">v1.2 + engram paths</span></td></tr>
-      <tr><td><strong>cline</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Adaptivo (compartido)</span></td></tr>
-      <tr><td><strong>codex</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Comparte perfil</span></td></tr>
-      <tr><td><strong>copilot</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Comparte perfil</span></td></tr>
-      <tr><td><strong>antigravity</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Perfil m&iacute;nimo</span></td></tr>
-      <tr><td><strong>claude-generic</strong></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-yellow">Fallback sin optimizar</span></td></tr>
-    </table>
-    <p style="font-size:0.75rem;color:#475569;margin-top:0.6rem"><span class="badge badge-cyan">NEW</span> Multi-tool config validator unifica perfiles entre herramientas</p>
-  </div>
-</div>
-
-<!-- ===== SLIDE 6: AGENTES ===== -->
-<div class="slide">
-  <div class="slide-inner">
-    <span class="tag">AGENTES</span>
-    <h2>18 Agentes Especializados</h2>
-    <p class="subtitle" style="margin-bottom:1.2rem">Cada uno con modelo asignado, temperatura, presets de seguridad y evidencia requerida</p>
-    <div class="col-agents" style="justify-content:center;margin-bottom:1.2rem">
-      <span class="agent-tag">BA</span><span class="agent-tag">SAD</span><span class="agent-tag">DEV</span><span class="agent-tag">QA</span>
-      <span class="agent-tag">OPS</span><span class="agent-tag">GOV</span><span class="agent-tag">DOC</span><span class="agent-tag">MKT</span>
-      <span class="agent-tag">SALES</span><span class="agent-tag">FINANCE</span><span class="agent-tag">HR</span><span class="agent-tag">LEGAL</span>
-      <span class="agent-tag">SESSION</span><span class="agent-tag">PREMORTEM</span><span class="agent-tag">SELF-DIAG</span><span class="agent-tag">BUS-TELE</span><span class="agent-tag">CODEGRAPH</span>
-    </div>
-    <div class="grid-3">
-      <div class="card"><span class="feature-icon">&#128269;</span><h4>BA &middot; Business Analysis</h4><p>Exploraci&oacute;n de requerimientos, SDD EXPLORE. Modelo r&aacute;pido y econ&oacute;mico.</p></div>
-      <div class="card"><span class="feature-icon">&#127912;</span><h4>SAD &middot; System Architecture</h4><p>Dise&ntilde;o de sistemas, API contracts. Modelo de razonamiento fuerte.</p></div>
-      <div class="card"><span class="feature-icon">&#128187;</span><h4>DEV &middot; Development</h4><p>Implementaci&oacute;n y c&oacute;digo. 30+ skills t&eacute;cnicos por stack.</p></div>
-      <div class="card"><span class="feature-icon">&#9989;</span><h4>QA &middot; Quality Assurance</h4><p>Validaci&oacute;n cross-workspace, testing. Playwright, pytest, cobertura.</p></div>
-      <div class="card"><span class="feature-icon">&#128737;</span><h4>GOV &middot; Governance</h4><p>Judgment Day, security, compliance. Revisi&oacute;n adversarial dual.</p></div>
-      <div class="card"><span class="feature-icon">&#128214;</span><h4>DOC &middot; Documentation</h4><p>Docs, presentaciones, humanizaci&oacute;n. Modelo r&aacute;pido y econ&oacute;mico.</p></div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== SLIDE 7: SDD LIFECYCLE ===== -->
+<!-- ===== SLIDE 4: SDD LIFECYCLE ===== -->
 <div class="slide">
   <div class="slide-inner">
     <span class="tag">METODOLOG&Iacute;A</span>
@@ -388,20 +277,20 @@
     </div>
     <div class="highlight-box" style="margin-top:0.8rem;text-align:center;padding:0.8rem">
       <span style="font-size:1.2rem">&#9889; </span>
-      <span style="font-size:0.8rem;color:#94a3b8"><strong>SDD Gate</strong> bloquea PRs a main sin spec validado &middot; <strong>Quality Gates</strong> en cada etapa</span>
+      <span style="font-size:0.8rem;color:var(--gv-text-muted)"><strong>SDD Gate</strong> bloquea PRs a main sin spec validado &middot; <strong>Quality Gates</strong> en cada etapa &middot; <strong>SDD Pipeline</strong> ejecutable automatizado</span>
     </div>
   </div>
 </div>
 
-<!-- ===== SLIDE 8: PROMPT OPTIMIZATION ===== -->
+<!-- ===== SLIDE 5: PROMPT OPTIMIZATION FRAMEWORK ===== -->
 <div class="slide">
   <div class="slide-inner">
     <span class="tag">OPTIMIZACI&Oacute;N</span>
     <h2>Prompt Optimization Framework</h2>
-    <p class="subtitle" style="margin-bottom:1.2rem">Reducci&oacute;n de tokens en system prompts sin p&eacute;rdida de calidad &mdash; 98% de reducci&oacute;n</p>
+    <p class="subtitle" style="margin-bottom:1.2rem">Reducci&oacute;n de tokens en system prompts sin p&eacute;rdida de calidad &mdash; 98% de reducci&oacute;n, 5-8x menos en costos de API</p>
     <div class="grid-2" style="margin-top:1rem">
       <div class="card" style="display:flex;flex-direction:column;justify-content:center">
-        <h4 style="font-size:1.1rem">Impacto</h4>
+        <h4 style="font-size:1.1rem">Impacto en System Prompts</h4>
         <div class="compare-bar">
           <span class="label">Antes</span>
           <div class="track"><div class="fill old" style="width:100%"></div></div>
@@ -414,10 +303,10 @@
         </div>
         <div class="compare-bar">
           <span class="label">Ahorro</span>
-          <div class="track"><div class="fill" style="width:100%;background:linear-gradient(90deg,#4ade80,#22d3ee)"></div></div>
-          <span class="pct" style="color:#4ade80">98%</span>
+          <div class="track"><div class="fill" style="width:100%;background:linear-gradient(90deg,var(--gv-success),var(--gv-accent-teal))"></div></div>
+          <span class="pct" style="color:var(--gv-success)">98%</span>
         </div>
-        <p style="font-size:0.75rem;color:#64748b;margin-top:0.5rem">System prompts comprimidos, con cach&eacute; y hot-reload</p>
+        <p style="font-size:0.75rem;color:var(--gv-text-muted);margin-top:0.5rem">System prompts comprimidos, con cach&eacute; SHA256 y hot-reload</p>
       </div>
       <div class="card">
         <h4>Mecanismo</h4>
@@ -428,166 +317,32 @@
           <li>Memory tiering: Hot &rarr; Warm &rarr; Cold</li>
           <li>Pre-process-input hook con cache de respuestas</li>
           <li>Handoff compression para subagentes</li>
+          <li>Modelo qwen-3.6-plus (4x m&aacute;s barato)</li>
         </ul>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== SLIDE 9: OH-MY-OPENAGENT ===== -->
-<div class="slide">
-  <div class="slide-inner">
-    <span class="tag">NUEVO</span>
-    <h2>oh-my-openagent</h2>
-    <p class="subtitle" style="margin-bottom:1.2rem">Capacidades avanzadas de agente &mdash; v2.23.0</p>
-    <div class="grid-2" style="margin-top:1rem">
-      <div class="card">
-        <div class="feature-icon">&#9879;</div>
-        <h4>Hashline</h4>
-        <p>Sistema de verificaci&oacute;n de integridad para configuraciones y artefactos. Garantiza que los archivos no hayan sido modificados fuera del pipeline.</p>
-        <p style="margin-top:0.5rem"><span class="badge badge-cyan">Hash</span><span class="badge badge-cyan">Verify</span><span class="badge badge-cyan">Integrity</span></p>
-      </div>
-      <div class="card">
-        <div class="feature-icon">&#128101;</div>
-        <h4>Team Mode</h4>
-        <p>Orquestaci&oacute;n multi-agente en paralelo. M&uacute;ltiples subagentes trabajando simult&aacute;neamente con coordinaci&oacute;n centralizada.</p>
-        <p style="margin-top:0.5rem"><span class="badge badge-purple">Parallel</span><span class="badge badge-purple">Coordinated</span></p>
-      </div>
-      <div class="card">
-        <div class="feature-icon">&#128736;</div>
-        <h4>Skill MCPs</h4>
-        <p>Skills como MCP servers. Cada skill puede exponerse como servidor MCP para comunicaci&oacute;n estandarizada entre herramientas.</p>
-        <p style="margin-top:0.5rem"><span class="badge badge-blue">MCP</span><span class="badge badge-blue">Protocol</span></p>
-      </div>
-      <div class="card">
-        <div class="feature-icon">&#128200;</div>
-        <h4>LSP / AST</h4>
-        <p>Integraci&oacute;n con Language Server Protocol y Abstract Syntax Trees para an&aacute;lisis de c&oacute;digo profundo y refactors inteligentes.</p>
-        <p style="margin-top:0.5rem"><span class="badge badge-green">LSP</span><span class="badge badge-green">AST</span></p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== SLIDE 10: DASHBOARD V2 ===== -->
-<div class="slide">
-  <div class="slide-inner">
-    <span class="tag">OBSERVABILIDAD</span>
-    <h2>Dashboard v2</h2>
-    <p class="subtitle" style="margin-bottom:1rem">M&eacute;tricas en tiempo real con i18n, tooltips, exportaci&oacute;n y auto-refresh</p>
-    <div class="grid-3" style="margin-top:0.5rem">
-      <div class="glass">
-        <div style="font-size:2rem;margin-bottom:0.3rem">&#127760;</div>
-        <h4 style="font-size:0.9rem">i18n Multi-idioma</h4>
-        <p style="font-size:0.78rem;color:#94a3b8">Espa&ntilde;ol, Ingl&eacute;s, Portugu&eacute;s &mdash; switch en vivo sin recargar</p>
-      </div>
-      <div class="glass">
-        <div style="font-size:2rem;margin-bottom:0.3rem">&#128200;</div>
-        <h4 style="font-size:0.9rem">M&eacute;tricas Din&aacute;micas</h4>
-        <p style="font-size:0.78rem;color:#94a3b8">Cards con tooltips, datos en vivo, exportaci&oacute;n a CSV/JSON</p>
-      </div>
-      <div class="glass">
-        <div style="font-size:2rem;margin-bottom:0.3rem">&#128260;</div>
-        <h4 style="font-size:0.9rem">Auto-refresh</h4>
-        <p style="font-size:0.78rem;color:#94a3b8">Actualizaci&oacute;n peri&oacute;dica automatizada de m&eacute;tricas</p>
-      </div>
-    </div>
-    <div style="margin-top:1rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-      <span class="tag">reportes/dashboard.html</span>
-      <span class="tag">reportes/dashboard-v2/</span>
-      <span class="tag">reportes/sla-dashboard.html</span>
     </div>
     <div class="highlight-box" style="margin-top:0.8rem;text-align:center;padding:0.7rem">
-      <span style="font-size:1rem">&#128308; </span>
-      <span style="font-size:0.78rem;color:#94a3b8">Dashboard CI en GitHub Actions &middot; auto-refresh semanal y mensual</span>
+      <span style="font-size:1rem">&#9889; </span>
+      <span style="font-size:0.8rem;color:var(--gv-text-muted)"><strong>8 reglas</strong> en NORMATIVA-OPTIMIZATION-STACK &middot; Health check autom&aacute;tico &middot; Verify script dedicado</span>
     </div>
   </div>
 </div>
 
-<!-- ===== SLIDE 11: SESSION + MEMORY ===== -->
-<div class="slide">
-  <div class="slide-inner">
-    <span class="tag">PERSISTENCIA</span>
-    <h2>Sesiones y Memoria</h2>
-    <p class="subtitle" style="margin-bottom:1.2rem">Cada interacci&oacute;n ocurre dentro de una sesi&oacute;n con estado. La memoria cruza sesiones.</p>
-    <div class="grid-2">
-      <div class="card">
-        <h4>&#128337; Ciclo de Sesi&oacute;n</h4>
-        <div class="flow-row" style="margin-top:0.6rem;font-size:0.7rem">
-          <span class="flow-step">INACTIVE</span><span class="flow-arrow">&rarr;</span>
-          <span class="flow-step">STARTING</span><span class="flow-arrow">&rarr;</span>
-          <span class="flow-step badge-green">ACTIVE</span><span class="flow-arrow">&rarr;</span>
-          <span class="flow-step">CLOSING</span><span class="flow-arrow">&rarr;</span>
-          <span class="flow-step">CLOSED</span>
-        </div>
-        <ul class="list" style="margin-top:0.6rem">
-          <li>Session ID &uacute;nico: session-YYYY-MM-DD-XX</li>
-          <li>Pre-process input con cache SHA256</li>
-          <li>Token tracking y costo por sesi&oacute;n</li>
-          <li><span class="badge badge-cyan">NEW</span> Session Summary Reference System</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h4>&#128214; Engram Memory System</h4>
-        <ul class="list">
-          <li>Persiste decisiones, bugs, patrones, configs</li>
-          <li>B&uacute;squeda sem&aacute;ntica entre sesiones</li>
-          <li>Tipos: decision, architecture, bugfix, pattern</li>
-          <li>Post-session learning + gap analysis</li>
-          <li>Self-healing post-watchtower</li>
-          <li>NEXT_SESSION_GUIDE.md para continuidad</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== SLIDE 12: JSON VALIDATOR ===== -->
-<div class="slide">
-  <div class="slide-inner">
-    <span class="tag">CALIDAD</span>
-    <h2>JSON Validator &amp; Tool Config Safety</h2>
-    <p class="subtitle" style="margin-bottom:1rem">Validaci&oacute;n estricta de JSONs en todo el pipeline &mdash; prevenci&oacute;n de errores en tiempo de edici&oacute;n</p>
-    <div class="grid-2">
-      <div class="card">
-        <h4>&#128270; Validaci&oacute;n Multi-nivel</h4>
-        <ul class="list">
-          <li>71 JSONs de configuraci&oacute;n validados</li>
-          <li>Pre-tool-call hook con auto-fix</li>
-          <li>Normativas de construcci&oacute;n JSON</li>
-          <li>Balance de llaves, comillas, corchetes</li>
-        </ul>
-        <p style="margin-top:0.6rem"><span class="badge badge-green">63 configs OK</span><span class="badge badge-green">Auto-fix</span></p>
-      </div>
-      <div class="card">
-        <h4>&#128737; Tool Config Safety</h4>
-        <ul class="list">
-          <li>Validador multi-herramienta unificado</li>
-          <li>Compatibilidad opencode.json / .cursorrules / .clinerules</li>
-          <li>Pre-commit hooks de validaci&oacute;n</li>
-          <li>CI pipeline con validaci&oacute;n cruzada</li>
-        </ul>
-        <p style="margin-top:0.6rem"><span class="badge badge-cyan">Multi-tool</span><span class="badge badge-purple">Git hooks</span></p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== SLIDE 13: SKILLS SYSTEM ===== -->
+<!-- ===== SLIDE 6: SKILLS SYSTEM ===== -->
 <div class="slide">
   <div class="slide-inner">
     <span class="tag">SKILLS</span>
     <h2>Sistema Modular de Skills</h2>
-    <p class="subtitle" style="margin-bottom:1rem">285 skills instalados, registry auto-generado, asignaci&oacute;n completa por agente</p>
+    <p class="subtitle" style="margin-bottom:1rem">386 skills instalados, registry auto-generado, ML router para asignaci&oacute;n inteligente</p>
     <div class="stat-row" style="margin-bottom:1.2rem">
-      <div class="stat"><div class="stat-value">285</div><div class="stat-label">Skills instalados</div></div>
-      <div class="stat"><div class="stat-value">135</div><div class="stat-label">Directorios</div></div>
-      <div class="stat"><div class="stat-value">15</div><div class="stat-label">Agentes destino</div></div>
+      <div class="stat"><div class="stat-value">386</div><div class="stat-label">Skills instalados</div></div>
+      <div class="stat"><div class="stat-value">65+</div><div class="stat-label">Directorios</div></div>
+      <div class="stat"><div class="stat-value">18</div><div class="stat-label">Agentes destino</div></div>
       <div class="stat"><div class="stat-value">0</div><div class="stat-label">Sin asignar</div></div>
     </div>
     <div class="grid-2">
       <div class="card">
-        <h4>&#128736; Skills Clave por &Aacute;rea</h4>
+        <h4>&#128736; T&eacute;cnicos</h4>
         <div class="cat-row" style="margin-bottom:0.6rem">
           <span class="cat-badge dev">DEV</span> react-19, nextjs-15, tailwind-4, golang-api, django-drf, flutter, android-kotlin, ios-swiftui, typescript, zod, mcp-skill
         </div>
@@ -605,7 +360,7 @@
         </div>
       </div>
       <div class="card">
-        <h4>&#128200; Skills de Negocio</h4>
+        <h4>&#128200; Negocio y Gesti&oacute;n</h4>
         <div class="cat-row" style="margin-bottom:0.6rem">
           <span class="cat-badge biz">MKT</span> marketing-content-writer, growth-hacker, content-strategist, seo-audit
         </div>
@@ -625,14 +380,176 @@
           <span class="cat-badge pm">BA</span> data-analyst, product-manager, project-manager, backlog-management
         </div>
         <div class="cat-row">
-          <span class="cat-badge pm">PRE</span> premortem-skill (an&aacute;lisis de riesgos anticipados)
+          <span class="cat-badge pm">PRE</span> premortem-skill, codegraph-skill
         </div>
+      </div>
+    </div>
+    <div style="margin-top:0.7rem;text-align:center">
+      <span class="badge badge-blue">Skill Factory</span>
+      <span class="badge badge-blue">MCP Skill Server (143+ skills)</span>
+      <span class="badge badge-blue">ML Router (TF-IDF, ~400ms)</span>
+      <span class="badge badge-blue">Registry auto-generado</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 7: CAPACIDADES NATIVAS ===== -->
+<div class="slide">
+  <div class="slide-inner">
+    <span class="tag">CAPACIDADES</span>
+    <h2>Capacidades Nativas del Stack</h2>
+    <p class="subtitle" style="margin-bottom:1.2rem">Funcionalidades integradas en el n&uacute;cleo de la plataforma &mdash; sin dependencias externas</p>
+    <div class="grid-2" style="margin-top:1rem">
+      <div class="card">
+        <div class="feature-icon">&#9879;</div>
+        <h4>Hashline</h4>
+        <p>Sistema de verificaci&oacute;n de integridad para configuraciones y artefactos. Garantiza que los archivos no hayan sido modificados fuera del pipeline. Hash + verify autom&aacute;tico en cada sesi&oacute;n.</p>
+        <p style="margin-top:0.5rem"><span class="badge badge-blue">Integrity</span><span class="badge badge-blue">Verify</span><span class="badge badge-blue">Auto-audit</span></p>
+      </div>
+      <div class="card">
+        <div class="feature-icon">&#128101;</div>
+        <h4>Team Mode</h4>
+        <p>Orquestaci&oacute;n multi-agente en paralelo. Divide tareas por skill, lanza subagentes simult&aacute;neos con PowerShell, sintetiza resultados. Coordinaci&oacute;n centralizada con routing v&iacute;a MCP.</p>
+        <p style="margin-top:0.5rem"><span class="badge badge-purple">Parallel</span><span class="badge badge-purple">Multi-agent</span><span class="badge badge-purple">Coordinated</span></p>
+      </div>
+      <div class="card">
+        <div class="feature-icon">&#128736;</div>
+        <h4>Skill MCP Server</h4>
+        <p>143+ skills expuestos como servidores MCP. Protocolo JSON-RPC estandarizado con 3 tools (list_skills, get_skill, search_skills). Compilaci&oacute;n autom&aacute;tica v&iacute;a lefthook pre-commit.</p>
+        <p style="margin-top:0.5rem"><span class="badge badge-cyan">MCP</span><span class="badge badge-cyan">JSON-RPC</span><span class="badge badge-cyan">TypeScript</span></p>
+      </div>
+      <div class="card">
+        <div class="feature-icon">&#128200;</div>
+        <h4>CodeGraph + LSP/AST</h4>
+        <p>Integraci&oacute;n con CodeGraph para an&aacute;lisis de c&oacute;digo profundo (588 nodos, 1197 edges). Language Server Protocol y Abstract Syntax Trees para refactors inteligentes y navegaci&oacute;n de c&oacute;digo.</p>
+        <p style="margin-top:0.5rem"><span class="badge badge-green">CodeGraph</span><span class="badge badge-green">AST</span><span class="badge badge-green">LSP</span></p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ===== SLIDE 14: JUDGMENT DAY ===== -->
+<!-- ===== SLIDE 8: DASHBOARD ===== -->
+<div class="slide">
+  <div class="slide-inner">
+    <span class="tag">OBSERVABILIDAD</span>
+    <h2>Dashboard &amp; Observabilidad</h2>
+    <p class="subtitle" style="margin-bottom:1rem">M&eacute;tricas en tiempo real con i18n, tooltips, exportaci&oacute;n y auto-refresh &mdash; completamente implementado</p>
+    <div class="grid-3" style="margin-top:0.5rem">
+      <div class="glass">
+        <div style="font-size:2rem;margin-bottom:0.3rem">&#127760;</div>
+        <h4 style="font-size:0.9rem">i18n Multi-idioma</h4>
+        <p style="font-size:0.78rem;color:var(--gv-text-muted)">Espa&ntilde;ol, Ingl&eacute;s, Portugu&eacute;s &mdash; switch en vivo sin recargar</p>
+      </div>
+      <div class="glass">
+        <div style="font-size:2rem;margin-bottom:0.3rem">&#128200;</div>
+        <h4 style="font-size:0.9rem">M&eacute;tricas en Tiempo Real</h4>
+        <p style="font-size:0.78rem;color:var(--gv-text-muted)">Tokens, sesiones, git stats, health status. Cards con tooltips y datos en vivo.</p>
+      </div>
+      <div class="glass">
+        <div style="font-size:2rem;margin-bottom:0.3rem">&#128260;</div>
+        <h4 style="font-size:0.9rem">Auto-refresh + Export</h4>
+        <p style="font-size:0.78rem;color:var(--gv-text-muted)">Actualizaci&oacute;n peri&oacute;dica automatizada. Exportaci&oacute;n a PDF y PNG.</p>
+      </div>
+    </div>
+    <div style="margin-top:1rem;display:flex;gap:0.6rem;justify-content:center;flex-wrap:wrap">
+      <span class="badge badge-blue">reportes/dashboard.html</span>
+      <span class="badge badge-blue">reportes/dashboard-v2/</span>
+      <span class="badge badge-blue">reportes/sla-dashboard.html</span>
+    </div>
+    <div class="highlight-box" style="margin-top:0.8rem;text-align:center;padding:0.7rem">
+      <span style="font-size:1rem">&#9989; </span>
+      <span style="font-size:0.78rem;color:var(--gv-text-muted)">Dashboard CI en GitHub Actions &middot; auto-refresh semanal y mensual &middot; Dashboard v2 funcional con todas las capacidades</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 9: MEMORIA Y SESIONES ===== -->
+<div class="slide">
+  <div class="slide-inner">
+    <span class="tag">PERSISTENCIA</span>
+    <h2>Sesiones y Memoria</h2>
+    <p class="subtitle" style="margin-bottom:1.2rem">Cada interacci&oacute;n ocurre dentro de una sesi&oacute;n con estado. La memoria cruza sesiones.</p>
+    <div class="grid-2">
+      <div class="card">
+        <h4>&#128337; Ciclo de Sesi&oacute;n</h4>
+        <div class="flow-row" style="margin-top:0.6rem;font-size:0.7rem">
+          <span class="flow-step">INACTIVE</span><span class="flow-arrow">&rarr;</span>
+          <span class="flow-step">STARTING</span><span class="flow-arrow">&rarr;</span>
+          <span class="flow-step badge-green">ACTIVE</span><span class="flow-arrow">&rarr;</span>
+          <span class="flow-step">CLOSING</span><span class="flow-arrow">&rarr;</span>
+          <span class="flow-step">CLOSED</span>
+        </div>
+        <ul class="list" style="margin-top:0.6rem">
+          <li>Session ID &uacute;nico: session-YYYY-MM-DD-XX</li>
+          <li>Pre-process input con cache SHA256</li>
+          <li>Token tracking y costo por sesi&oacute;n</li>
+          <li>Session Summary Reference System</li>
+          <li>Auto-generaci&oacute;n de NEXT_SESSION_GUIDE.md</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>&#128214; Engram Memory System</h4>
+        <ul class="list">
+          <li>Persiste decisiones, bugs, patrones, configs</li>
+          <li>B&uacute;squeda sem&aacute;ntica entre sesiones</li>
+          <li>Tipos: decision, architecture, bugfix, pattern, discovery</li>
+          <li>Post-session learning + gap analysis</li>
+          <li>Self-healing post-watchtower</li>
+          <li>Backup autom&aacute;tico con verify semanal</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 10: AGENTES ===== -->
+<div class="slide">
+  <div class="slide-inner">
+    <span class="tag">AGENTES</span>
+    <h2>18 Agentes Especializados</h2>
+    <p class="subtitle" style="margin-bottom:1.2rem">Cada uno con modelo asignado, temperatura, presets de seguridad y evidencia requerida + ML router para asignaci&oacute;n inteligente</p>
+    <div class="col-agents" style="justify-content:center;margin-bottom:1.2rem">
+      <span class="agent-tag">ORCHESTRATOR</span><span class="agent-tag">BA</span><span class="agent-tag">SAD</span><span class="agent-tag">DEV</span><span class="agent-tag">QA</span>
+      <span class="agent-tag">OPS</span><span class="agent-tag">GOV</span><span class="agent-tag">DOC</span><span class="agent-tag">MKT</span>
+      <span class="agent-tag">SALES</span><span class="agent-tag">FINANCE</span><span class="agent-tag">HR</span><span class="agent-tag">LEGAL</span>
+      <span class="agent-tag">SESSION</span><span class="agent-tag">PREMORTEM</span>
+      <span class="agent-tag">EXPLORE</span><span class="agent-tag">GENERAL</span><span class="agent-tag">SDD-*</span>
+    </div>
+    <div class="grid-3">
+      <div class="card"><span class="feature-icon">&#128269;</span><h4>BA &middot; Business Analysis</h4><p>Exploraci&oacute;n de requerimientos, SDD EXPLORE. Modelo r&aacute;pido y econ&oacute;mico.</p></div>
+      <div class="card"><span class="feature-icon">&#127912;</span><h4>SAD &middot; System Architecture</h4><p>Dise&ntilde;o de sistemas, API contracts. Modelo de razonamiento fuerte.</p></div>
+      <div class="card"><span class="feature-icon">&#128187;</span><h4>DEV &middot; Development</h4><p>Implementaci&oacute;n y c&oacute;digo. 30+ skills t&eacute;cnicos por stack.</p></div>
+      <div class="card"><span class="feature-icon">&#9989;</span><h4>QA &middot; Quality Assurance</h4><p>Validaci&oacute;n cross-workspace, testing. Playwright, pytest, cobertura.</p></div>
+      <div class="card"><span class="feature-icon">&#128737;</span><h4>GOV &middot; Governance</h4><p>Judgment Day, security, compliance. Revisi&oacute;n adversarial dual.</p></div>
+      <div class="card"><span class="feature-icon">&#128214;</span><h4>DOC &middot; Documentation</h4><p>Docs, presentaciones, humanizaci&oacute;n. Modelo r&aacute;pido y econ&oacute;mico.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 11: TOOL COMPATIBILITY ===== -->
+<div class="slide">
+  <div class="slide-inner">
+    <span class="tag">COMPATIBILIDAD</span>
+    <h2>Soporte Multi-Herramienta</h2>
+    <p class="subtitle" style="margin-bottom:1.2rem">10 herramientas detectadas por runtime &mdash; 4 con skill tool nativo, 6 con perfil adaptivo</p>
+    <table>
+      <tr><th>Herramienta</th><th>Skill Tool</th><th>Mem Tools</th><th>Optimizaci&oacute;n</th></tr>
+      <tr><td><strong>opencode</strong> (baseline)</td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">Perfil dedicado</span></td></tr>
+      <tr><td><strong>claude-code</strong></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">Perfil dedicado</span></td></tr>
+      <tr><td><strong>continue-dev</strong></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">Perfil dedicado</span></td></tr>
+      <tr><td><strong>cursor</strong></td><td><span class="badge badge-yellow">Emulado</span></td><td><span class="badge badge-yellow">Emulado</span></td><td><span class="badge badge-yellow">v1.1 + inline skill emulation</span></td></tr>
+      <tr><td><strong>windsurf</strong></td><td><span class="badge badge-yellow">Emulado</span></td><td><span class="badge badge-yellow">Emulado</span></td><td><span class="badge badge-yellow">v1.2 + engram paths</span></td></tr>
+      <tr><td><strong>cline</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Adaptivo (compartido)</span></td></tr>
+      <tr><td><strong>codex</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Comparte perfil</span></td></tr>
+      <tr><td><strong>copilot</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Comparte perfil</span></td></tr>
+      <tr><td><strong>antigravity</strong></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-gray">NO</span></td><td><span class="badge badge-yellow">Perfil m&iacute;nimo</span></td></tr>
+      <tr><td><strong>claude-generic</strong></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-green">SI</span></td><td><span class="badge badge-yellow">Fallback sin optimizar</span></td></tr>
+    </table>
+    <p style="font-size:0.75rem;color:var(--gv-text-muted);margin-top:0.6rem"><span class="badge badge-cyan">Multi-tool config validator</span> unifica perfiles entre herramientas &middot; MCP bridge para herramientas sin skill tool nativo</p>
+  </div>
+</div>
+
+<!-- ===== SLIDE 12: JUDGMENT DAY ===== -->
 <div class="slide">
   <div class="slide-inner">
     <span class="tag">CALIDAD</span>
@@ -640,7 +557,7 @@
     <p class="subtitle" style="margin-bottom:0.8rem">Protocolo de revisi&oacute;n dual adversarial. Dos jueces AI ciegos eval&uacute;an en paralelo, sintetizan, ofrecen fix cycle y re-eval&uacute;an.</p>
     <div class="flow-row" style="margin-bottom:1.2rem;font-size:0.75rem">
       <span class="flow-step">Juez A</span>
-      <span class="flow-step" style="border-color:rgba(139,92,246,0.3);background:rgba(139,92,246,0.1)">Juez B</span>
+      <span class="flow-step" style="border-color:rgba(168,85,247,0.25);background:rgba(168,85,247,0.08)">Juez B</span>
       <span class="flow-arrow">&rarr;</span>
       <span class="flow-step">S&iacute;ntesis</span>
       <span class="flow-arrow">&rarr;</span>
@@ -649,7 +566,7 @@
       <span class="flow-step">Re-Juicio</span>
       <span class="flow-arrow">&rarr;</span>
       <span class="flow-step badge-green">APPROVED</span>
-      <span class="flow-arrow" style="color:#f87171">&rarr;</span>
+      <span class="flow-arrow" style="color:var(--gv-error)">&rarr;</span>
       <span class="flow-step badge-red">ESCALATED</span>
     </div>
     <div class="grid-3">
@@ -681,12 +598,12 @@
   </div>
 </div>
 
-<!-- ===== SLIDE 15: QUALITY GATES ===== -->
+<!-- ===== SLIDE 13: QUALITY GATES ===== -->
 <div class="slide">
   <div class="slide-inner">
     <span class="tag">CALIDAD</span>
-    <h2>28 Quality Gates + 17 Workflows</h2>
-    <p class="subtitle" style="margin-bottom:1.2rem">Validaciones autom&aacute;ticas en cada etapa del ciclo de vida</p>
+    <h2>29 Quality Gates + 27 Workflows</h2>
+    <p class="subtitle" style="margin-bottom:1.2rem">Validaciones autom&aacute;ticas en cada etapa del ciclo de vida &mdash; 7 etapas, 29 gates, 27 workflows CI/CD</p>
     <div class="grid-4">
       <div class="card"><h4><span class="badge badge-blue">Pre-Commit</span></h4>
         <ul class="list"><li>Hook scripts</li><li>JSON validator pre-call</li><li>Linting b&aacute;sico</li></ul>
@@ -695,7 +612,7 @@
         <ul class="list"><li>SDD Gate</li><li>Script governance</li><li>Plugin validation</li><li>Multi-tool validator</li></ul>
       </div>
       <div class="card"><h4><span class="badge badge-blue">Test</span></h4>
-        <ul class="list"><li>54 test suites (Pester 5.x)</li><li>Routing language matrix</li><li>Cross-workspace validation</li></ul>
+        <ul class="list"><li>67 test suites (Pester 5.x)</li><li>Routing language matrix</li><li>Cross-workspace validation</li></ul>
       </div>
       <div class="card"><h4><span class="badge badge-purple">Quality</span></h4>
         <ul class="list"><li>Agent verify (16 checks)</li><li>Validate configs (71 JSONs)</li><li>Skill references integrity</li></ul>
@@ -707,7 +624,7 @@
         <ul class="list"><li>Judgment Day</li><li>SDD validation</li><li>Override abuse audit</li></ul>
       </div>
       <div class="card"><h4><span class="badge badge-cyan">CI/CD</span></h4>
-        <ul class="list"><li>17 workflows GitHub Actions</li><li>Cross-platform tests</li><li>Dashboard auto-refresh</li></ul>
+        <ul class="list">        <li>27 workflows GitHub Actions</li><li>Cross-platform tests</li><li>Dashboard auto-refresh</li></ul>
       </div>
       <div class="card"><h4><span class="badge badge-cyan">Post-Merge</span></h4>
         <ul class="list"><li>Release validation</li><li>Homologation checks</li><li>Sync public repos</li></ul>
@@ -716,12 +633,12 @@
   </div>
 </div>
 
-<!-- ===== SLIDE 16: WORKFLOWS ===== -->
+<!-- ===== SLIDE 14: PIPELINE CI/CD ===== -->
 <div class="slide">
   <div class="slide-inner">
     <span class="tag">AUTOMATIZACI&Oacute;N</span>
     <h2>Pipeline CI/CD</h2>
-    <p class="subtitle" style="margin-bottom:1rem">17 workflows de GitHub Actions para validaci&oacute;n continua</p>
+    <p class="subtitle" style="margin-bottom:1rem">27 workflows de GitHub Actions para validaci&oacute;n continua &mdash; todos operativos</p>
     <div class="grid-3">
       <div class="card"><h4>autonomous-validation.yml</h4><p>Push a develop + PR + semanal. Validaci&oacute;n integral, plugins, cross-workspace.</p></div>
       <div class="card"><h4>gentle-vanguard-quality-gate.yml</h4><p>Push y PR a develop/main. Quality gates completos.</p></div>
@@ -729,100 +646,32 @@
       <div class="card"><h4>gitleaks.yml</h4><p>Detecci&oacute;n de secrets en el c&oacute;digo.</p></div>
       <div class="card"><h4>script-governance.yml</h4><p>Gobernanza de scripts PowerShell.</p></div>
       <div class="card"><h4>sdd-gate.yml</h4><p>Valida specs SDD en PRs a protected branches.</p></div>
-      <div class="card"><h4>dashboard-ci.yml</h4><p><span class="badge badge-cyan">NEW</span> CI para dashboard v2.</p></div>
-      <div class="card"><h4>dashboard-auto-refresh.yml</h4><p><span class="badge badge-cyan">NEW</span> Auto-refresh de m&eacute;tricas.</p></div>
-      <div class="card"><h4>+9 workflows</h4><p>Cross-platform tests, format-check, labeler, release, ps-lint, workflow-lint, monthly-report, sync-public, test-suite.</p></div>
+      <div class="card"><h4>dashboard-ci.yml</h4><p>CI para dashboard v2 con validaci&oacute;n de m&eacute;tricas.</p></div>
+      <div class="card"><h4>dashboard-auto-refresh.yml</h4><p>Auto-refresh de m&eacute;tricas semanal y mensual.</p></div>
+      <div class="card"><h4>+19 workflows</h4><p>Cross-platform tests, format-check, labeler, release, ps-lint, workflow-lint, monthly-report, sync-public, test-suite, skill-scan, coverage, commitlint, markdown-lint, python-quality, js-ts-quality, npm-audit, stale, openapi-validate, maintenance-scheduled.</p></div>
     </div>
   </div>
 </div>
 
-<!-- ===== SLIDE 17: SESIONES ===== -->
-<div class="slide">
-  <div class="slide-inner">
-    <span class="tag">OPERACIONES</span>
-    <h2>Session Context Logging</h2>
-    <p class="subtitle" style="margin-bottom:1rem">Sistema completo de tracking de sesiones con m&eacute;tricas de tokens, costos y contexto</p>
-    <div class="grid-2">
-      <div class="card">
-        <h4>&#128202; Datos por Sesi&oacute;n</h4>
-        <ul class="list">
-          <li>Tokens de entrada/salida por turno</li>
-          <li>Costo estimado por sesi&oacute;n</li>
-          <li>Caracteres de contexto utilizados</li>
-          <li>Modelo y temperatura usados</li>
-          <li>Archivos modificados en la sesi&oacute;n</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h4>&#128260; Sistema de Referencia</h4>
-        <ul class="list">
-          <li>Session summaries persistentes en Engram</li>
-          <li>Referencia cruzada entre sesiones</li>
-          <li>Auto-detecci&oacute;n de sesiones hu&eacute;rfanas</li>
-          <li>Gap analysis post-sesi&oacute;n</li>
-          <li>NEXT_SESSION_GUIDE.md generado autom&aacute;ticamente</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== SLIDE 18: EVOLUCIÓN ===== -->
-<div class="slide">
-  <div class="slide-inner">
-    <span class="tag">ROADMAP</span>
-    <h2>Estado Actual v2.24</h2>
-    <p class="subtitle" style="margin-bottom:1rem">Homologaci&oacute;n completada &mdash; nuevas capacidades activas</p>
-    <div class="grid-2">
-      <div class="card">
-        <h4><span class="badge badge-green">100%</span> Homologado</h4>
-        <ul class="list">
-          <li>Detect tool + routing autom&aacute;tico</li>
-          <li>SDD Lifecycle completo (9 fases)</li>
-          <li>Judgment Day con hooks + CI</li>
-          <li>Session lifecycle con Engram</li>
-          <li>28 quality gates funcionales</li>
-          <li>17 GitHub Actions workflows</li>
-          <li>Agent verify (16/16 checks pass)</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h4><span class="badge badge-cyan">NEW</span> Nuevas Capacidades</h4>
-        <ul class="list">
-          <li><span class="badge badge-green">DONE</span> Prompt Optimization Framework (-98% tokens)</li>
-          <li><span class="badge badge-green">DONE</span> Dashboard v2 con i18n + tooltips</li>
-          <li><span class="badge badge-green">DONE</span> oh-my-openagent (Hashline, Team Mode, Skill MCPs, LSP/AST)</li>
-          <li><span class="badge badge-green">DONE</span> Session Summary Reference System</li>
-          <li><span class="badge badge-green">DONE</span> MCP Skill Server + Skill Factory</li>
-          <li><span class="badge badge-green">DONE</span> pnpm security migration (--ignore-scripts)</li>
-          <li><span class="badge badge-green">DONE</span> SDD Pipeline ejecutable (9 fases)</li>
-          <li><span class="badge badge-green">DONE</span> JSON Validator + Tool Config Safety</li>
-          <li><span class="badge badge-green">DONE</span> lefthook pre-commit: build:mcp autom&aacute;tico</li>
-          <li><span class="badge badge-yellow">N/A</span> Skill tool nativo para cline/cursor/windsurf: limitaci&oacute;n de herramienta</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== SLIDE 19: INFRAESTRUCTURA NUEVA ===== -->
+<!-- ===== SLIDE 15: MCP + INTEGRACIONES ===== -->
 <div class="slide">
   <div class="slide-inner">
     <span class="tag">INFRAESTRUCTURA</span>
-    <h2>MCP Server + pnpm Security</h2>
-    <p class="subtitle" style="margin-bottom:1rem">Dos pilares fundamentales habilitados para toda la plataforma</p>
+    <h2>MCP Server &amp; Integraciones</h2>
+    <p class="subtitle" style="margin-bottom:1rem">Servicios MCP estandarizados y pol&iacute;ticas de seguridad en toda la plataforma</p>
     <div class="grid-2">
       <div class="card">
         <h4>&#127760; MCP Skill Server</h4>
-        <p style="margin-bottom:0.8rem">Skills como servicios MCP estandarizados. Exposici&oacute;n de 143+ skills via protocolo JSON-RPC.</p>
+        <p style="margin-bottom:0.8rem">143+ skills como servicios MCP estandarizados. Exposici&oacute;n via protocolo JSON-RPC.</p>
         <ul class="list">
           <li>3 tools: <strong>list_skills</strong>, <strong>get_skill</strong>, <strong>search_skills</strong></li>
           <li>Resources: <strong>skill://registry</strong> + <strong>skill://{name}</strong></li>
-          <li>Compila con <code>pnpm tsc</code> — 0 errores, 0 warnings</li>
+          <li>Compila con <code>pnpm tsc</code> &mdash; 0 errores, 0 warnings</li>
           <li>Registrado en <code>opencode.json#mcp.skill-server</code></li>
           <li><span class="badge badge-green">TESTED</span> JSON-RPC tools/list/tools/call funcional</li>
+          <li>CodeGraph + Engram tambi&eacute;n como servidores MCP</li>
         </ul>
-        <p style="margin-top:0.5rem;font-size:0.7rem;color:#94a3b8"><code>scripts/mcp/skill-server.ts</code> &rarr; TypeScript &rarr; <code>@modelcontextprotocol/sdk v1.29</code></p>
+        <p style="margin-top:0.5rem;font-size:0.7rem;color:var(--gv-text-muted)"><code>scripts/mcp/skill-server.ts</code> &rarr; TypeScript &rarr; <code>@modelcontextprotocol/sdk v1.29</code></p>
       </div>
       <div class="card">
         <h4>&#128274; pnpm + --ignore-scripts</h4>
@@ -831,154 +680,126 @@
           <li><span class="badge badge-green">133</span> paquetes instalados en 5.5s</li>
           <li><span class="badge badge-green">0</span> scripts de postinstall ejecutados</li>
           <li><code>package.json</code>: packageManager + engines.pnpm</li>
-          <li><code>rules/NORMATIVA-PNPM-SECURITY.md</code> — 5 reglas obligatorias</li>
+          <li><code>rules/NORMATIVA-PNPM-SECURITY.md</code> &mdash; 5 reglas obligatorias</li>
           <li><code>lefthook.yml</code>: pre-commit <code>pnpm build:mcp</code> autom&aacute;tico</li>
         </ul>
-        <p style="margin-top:0.5rem;font-size:0.7rem;color:#facc15">&#9888; Supply-chain risk mitigation &mdash; --ignore-scripts es pol&iacute;tica permanente</p>
+        <p style="margin-top:0.5rem;font-size:0.7rem;color:var(--gv-warning)">&#9888; Supply-chain risk mitigation &mdash; --ignore-scripts es pol&iacute;tica permanente</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ===== SLIDE 20: 5 FEATURES IMPLEMENTADAS ===== -->
+<!-- ===== SLIDE 16: ESTADO ACTUAL ===== -->
 <div class="slide">
   <div class="slide-inner">
-    <span class="tag">HECHO</span>
-    <h2>Stack Audit — 5 Priorities Delivered</h2>
-    <p class="subtitle" style="margin-bottom:1rem">De 16 features auditadas, las 5 prioritarias est&aacute;n implementadas, integradas y automatizadas</p>
-    <div class="grid-2" style="margin-top:0.5rem">
+    <span class="tag">ROADMAP</span>
+    <h2>Estado Actual v2.30.0</h2>
+    <p class="subtitle" style="margin-bottom:1rem">Homologaci&oacute;n completada &mdash; todas las capacidades activas y verificadas</p>
+    <div class="grid-2">
       <div class="card">
-        <h4><span class="badge badge-green">#1</span> MCP Server for Skills</h4>
-        <p>143+ skills como MCP tools. TypeScript + @modelcontextprotocol/sdk. Registro en opencode.json. Compilaci&oacute;n autom&aacute;tica via lefthook pre-commit.</p>
-        <p style="margin-top:0.3rem"><span class="badge badge-cyan">scripts/mcp/</span><span class="badge badge-cyan">skill-server.ts</span></p>
+        <h4><span class="badge badge-green">100%</span> Homologado</h4>
+        <ul class="list">
+          <li>Detect tool + routing autom&aacute;tico (10 perfiles)</li>
+          <li>SDD Lifecycle completo (9 fases con pipeline ejecutable)</li>
+          <li>Judgment Day con hooks + CI + GitHub Actions semanal</li>
+          <li>Session lifecycle con Engram + backup autom&aacute;tico</li>
+          <li>29 quality gates funcionales en 7 etapas</li>
+           <li>27 GitHub Actions workflows operativos</li>
+           <li>ML Router TF-IDF + Engram RAG (vector index 1,289 docs)</li>
+           <li>Fine-tuning LoRA (2 adapters: BA, DEV) con pipeline CI semanal</li>
+           <li>Dashboard v3 (Chart.js, 9 secciones, WCAG 2.1 AA)</li>
+           <li>MCP Bridge universal multi-tool</li>
+           <li>Stack Status Report completo (docs/STACK-STATUS-REPORT.md)</li>
+          <li>Agent verify (16/16 checks pass)</li>
+        </ul>
       </div>
       <div class="card">
-        <h4><span class="badge badge-green">#2</span> Team Mode</h4>
-        <p>Orquestador multi-agente paralelo. Divide tareas por skill, lanza sub-agentes PowerShell, sintetiza resultados. Consulta MCP para routing.</p>
-        <p style="margin-top:0.3rem"><span class="badge badge-purple">scripts/team-mode/</span><span class="badge badge-purple">team-orchestrator.ps1</span></p>
-      </div>
-      <div class="card">
-        <h4><span class="badge badge-green">#3</span> Session Reference System</h4>
-        <p>Indexaci&oacute;n de sesiones con 4 modos: index, query, guide, status. Cross-references temporales. Auto-genera NEXT_SESSION_GUIDE.md.</p>
-        <p style="margin-top:0.3rem"><span class="badge badge-rose">scripts/utilities/SESSION/</span><span class="badge badge-rose">session-reference-system.ps1</span></p>
-      </div>
-      <div class="card">
-        <h4><span class="badge badge-green">#4</span> Skill Factory</h4>
-        <p>Scaffolding autom&aacute;tico de skills. Crea SKILL.md con frontmatter YAML + referencias + registro en MCP. Un comando: <code>skill-factory.ps1 -Name X -Register</code>.</p>
-        <p style="margin-top:0.3rem"><span class="badge badge-blue">scripts/utilities/SKILL-FACTORY/</span><span class="badge badge-blue">skill-factory.ps1</span></p>
-      </div>
-      <div class="card">
-        <h4><span class="badge badge-green">#5</span> SDD Pipeline Scripts</h4>
-        <p>Pipeline ejecutable end-to-end: INIT &rarr; EXPLORE &rarr; PROPOSE &rarr; SPEC &rarr; TASKS &rarr; DESIGN &rarr; APPLY &rarr; VERIFY &rarr; ARCHIVE. Gates entre fases. Artefactos en .sdd/&lt;feature&gt;/.</p>
-        <p style="margin-top:0.3rem"><span class="badge badge-yellow">scripts/sdd-pipeline/</span><span class="badge badge-yellow">sdd-pipeline.ps1</span></p>
-      </div>
-      <div class="card" style="display:flex;flex-direction:column;justify-content:center;text-align:center">
-        <div class="counter-num">6</div>
-        <p style="font-size:0.85rem;color:#94a3b8">Componentes nuevos integrados<br><span class="badge badge-green">6/6 TESTED</span> <span class="badge badge-green">0 ERRORS</span> <span class="badge badge-green">0 WARNINGS</span></p>
+        <h4><span class="badge badge-green">IMPLEMENTADO</span> Stack Completo</h4>
+        <ul class="list">
+          <li><span class="badge badge-green">DONE</span> Prompt Optimization Framework (-98% tokens, 5-8x ahorro)</li>
+          <li><span class="badge badge-green">DONE</span> Dashboard v2 con i18n + tooltips + export</li>
+          <li><span class="badge badge-green">DONE</span> Hashline, Team Mode, Skill MCPs, CodeGraph</li>
+          <li><span class="badge badge-green">DONE</span> Session Summary Reference System</li>
+          <li><span class="badge badge-green">DONE</span> MCP Skill Server + Skill Factory</li>
+          <li><span class="badge badge-green">DONE</span> pnpm security migration (--ignore-scripts)</li>
+          <li><span class="badge badge-green">DONE</span> SDD Pipeline ejecutable (9 fases)</li>
+          <li><span class="badge badge-green">DONE</span> JSON Validator + Tool Config Safety</li>
+          <li><span class="badge badge-green">DONE</span> lefthook pre-commit: pnpm build:mcp autom&aacute;tico</li>
+          <li><span class="badge badge-green">DONE</span> Optimization Stack (8 reglas, health check)</li>
+          <li><span class="badge badge-green">DONE</span> ML Router TF-IDF (387 skills, 1,070 t&eacute;rminos, ~400ms)</li>
+          <li><span class="badge badge-green">DONE</span> Engram RAG (vector index 1,289 docs x 7,317 t&eacute;rminos)</li>
+          <li><span class="badge badge-green">DONE</span> Dashboard v3 Chart.js (6 factory methods, 10 gr&aacute;ficos)</li>
+          <li><span class="badge badge-green">DONE</span> MCP Bridge universal multi-tool (cursor, windsurf, cline)</li>
+          <li><span class="badge badge-green">DONE</span> Fine-tuning LoRA (BA/DEV, pipeline CI semanal auto-prune)</li>
+          <li><span class="badge badge-green">DONE</span> Self-maintenance layer (threshold detector + auto-prune)</li>
+          <li><span class="badge badge-green">DONE</span> Skill Recommendation Engine (context-analyzer + skill-recommender)</li>
+          <li><span class="badge badge-green">DONE</span> Multi-repo Orchestration alpha</li>
+          <li><span class="badge badge-green">DONE</span> Auto-architecture docs (Mermaid diagrams desde CodeGraph)</li>
+          <li><span class="badge badge-green">DONE</span> Stack Status Report (docs/STACK-STATUS-REPORT.md)</li>
+          <li><span class="badge badge-gray">N/A</span> Skill tool nativo para cline/cursor/windsurf: limitaci&oacute;n de herramienta (MCP bridge disponible)</li>
+        </ul>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ===== SLIDE 21: ROADMAP ===== -->
+<!-- ===== SLIDE 17: PLAN DE TRABAJO ===== -->
 <div class="slide">
   <div class="slide-inner">
     <span class="tag">FUTURO</span>
-    <h2>Pr&oacute;ximos Hitos</h2>
-    <p class="subtitle" style="margin-bottom:1rem">Lo que viene para Gentle-Vanguard</p>
+    <h2>Plan de Trabajo &mdash; Pr&oacute;ximos Releases</h2>
+    <p class="subtitle" style="margin-bottom:1rem">Traditional: <code>docs/ROADMAP.md</code> &mdash; Prioridades identificadas post-audit v2.26.0</p>
     <div class="grid-2">
       <div class="card">
-        <h4>&#128640; Corto Plazo</h4>
+        <h4>&#128640; Corto Plazo (v2.27.0 - v2.28.0)</h4>
         <ul class="list">
-          <li>MCP nativo para todas las herramientas</li>
-          <li>Auto-delegation router con ML</li>
-          <li>Engram RAG pipeline con vectores</li>
-          <li>Dashboard v3 con gr&aacute;ficos interactivos</li>
-          <li>Skill factory auto-generativa</li>
+          <li><span class="badge badge-green">DONE</span> <strong>Auto-delegation router con ML</strong> &mdash; TF-IDF n-gram router activo (~400ms)</li>
+          <li><span class="badge badge-green">DONE</span> <strong>Engram RAG pipeline con vectores</strong> &mdash; TF-IDF vector index activo</li>
+          <li><span class="badge badge-green">DONE</span> <strong>Dashboard v3</strong> &mdash; Chart.js integrado, 9 secciones</li>
+          <li><span class="badge badge-green">DONE</span> <strong>MCP nativo multi-tool</strong> &mdash; MCP Bridge universal operativo</li>
+          <li><span class="badge badge-green">DONE</span> Skill factory auto-generativa</li>
         </ul>
       </div>
       <div class="card">
-        <h4>&#127919; Mediano Plazo</h4>
+        <h4>&#127919; Mediano/Largo Plazo (v2.31.0+)</h4>
         <ul class="list">
-          <li>Agentes con fine-tuning por dominio</li>
-          <li>Auto-documentaci&oacute;n de arquitectura</li>
-          <li>Multi-repo orchestration</li>
-          <li>Benchmarking automatizado de skills</li>
-          <li>Observabilidad distribuida cross-session</li>
+          <li><span class="badge badge-green">DONE</span> <strong>Agentes con fine-tuning por dominio</strong> &mdash; 2 adapters (BA, DEV) activos</li>
+          <li><span class="badge badge-green">DONE</span> <strong>Auto-documentaci&oacute;n de arquitectura</strong> &mdash; Mermaid diag. desde CodeGraph</li>
+          <li><span class="badge badge-yellow">PENDING</span> <strong>Multi-repo orchestration production-ready</strong> &mdash; Alpha stage actual</li>
+          <li><span class="badge badge-yellow">PENDING</span> <strong>Auto-norm learner autom&aacute;tico</strong> &mdash; Hoy es manual (bajo demanda)</li>
+          <li><span class="badge badge-yellow">PENDING</span> <strong>Benchmarking automatizado de skills</strong> &mdash; Suite de benchmarks para medir calidad y performance de cada skill</li>
+          <li><span class="badge badge-yellow">PENDING</span> <strong>Observabilidad distribuida cross-session</strong> &mdash; Trazabilidad extremo a extremo entre sesiones y herramientas</li>
+          <li><span class="badge badge-yellow">PENDING</span> <strong>Auto-update launcher</strong> &mdash; Mecanismo de actualizaci&oacute;n autom&aacute;tica del stack</li>
+          <li><span class="badge badge-yellow">PENDING</span> <strong>Secretlint pre-commit</strong> &mdash; Planificado para v2.31.0</li>
+          <li><span class="badge badge-yellow">PENDING</span> <strong>Coverage reporting (Pester CodeCoverage)</strong> &mdash; Planificado</li>
         </ul>
       </div>
+    </div>
+    <div class="highlight-box" style="margin-top:0.8rem;text-align:center;padding:0.7rem">
+      <span style="font-size:1rem">&#128196; </span>
+      <span style="font-size:0.78rem;color:var(--gv-text-muted)">Plan detallado en <strong>docs/ROADMAP.md</strong> &middot; Priorizaci&oacute;n basada en impacto vs esfuerzo &middot; Release cada 2-3 semanas</span>
     </div>
   </div>
 </div>
 
-<!-- ===== SLIDE 20: OPTIMIZATION STACK ===== -->
-<div class="slide">
-  <div class="slide-inner">
-    <div class="tag">v2.25.0</div>
-    <h2>Optimization Stack &amp; System Integrity</h2>
-    <p class="subtitle">Token compression, response caching, modelo 4x barato, backup autom&aacute;tico — todo verificado</p>
-    <div class="grid-2" style="margin-top:1.5rem">
-      <div class="card">
-        <div class="num">8</div>
-        <h4>Reglas de optimizaci&oacute;n</h4>
-        <p>CLAUDE.md comprimido 64%, cache SHA256 TTL 30min, qwen-3.6-plus en todos los agentes, pre-task compression activa, token tracking por sesi&oacute;n, pre-compact hook sin hardcoded, notificaciones configurables</p>
-      </div>
-      <div class="card">
-        <div class="num">3</div>
-        <h4>Nuevas normativas</h4>
-        <p>NORMATIVA-OPTIMIZATION-STACK (8 reglas), NORMATIVA-ENGRAIN-BACKUP (5 reglas), NORMATIVA-SISTEMA-INTEGRIDAD (8 reglas meta)</p>
-      </div>
-      <div class="card">
-        <div class="num">5x</div>
-        <h4>Ahorro estimado en costos</h4>
-        <p>Compresi&oacute;n -50% + cache + pre-task-compress -30% + modelo 4x barato = 5-8x reducci&oacute;n de costos de API</p>
-      </div>
-      <div class="card">
-        <div class="num">8/8</div>
-        <h4>Health check ALL PASS</h4>
-        <p>MCP, Team Mode, Session Ref, Skill Factory, SDD, pnpm, Lefthook, Optimization Stack — todos verificados autom&aacute;ticamente</p>
-      </div>
-      <div class="card">
-        <div class="num">1.5MB</div>
-        <h4>Backup de memoria persistente</h4>
-        <p>Engram.db backup autom&aacute;tico al cerrar sesi&oacute;n + Git rollback + verify de integridad semanal</p>
-      </div>
-      <div class="card">
-        <div class="num">50</div>
-        <h4>Archivos indexados en CodeGraph</h4>
-        <p>588 nodos, 1197 edges. Config actualizada con **/*.ps1 para soporte futuro de PowerShell</p>
-      </div>
-    </div>
-    <div class="pipeline" style="margin-top:1rem">
-      <span class="pipe-step">verify-optimization-stack.ps1</span>
-      <span class="pipe-arrow">&rarr;</span>
-      <span class="pipe-step">health-check.ps1</span>
-      <span class="pipe-arrow">&rarr;</span>
-      <span class="pipe-step">CI quality gate</span>
-      <span class="pipe-arrow">&rarr;</span>
-      <span class="pipe-step">session auto-backup</span>
-    </div>
-  </div>
-</div>
-
-<!-- ===== SLIDE 21: CIERRE ===== -->
+<!-- ===== SLIDE 18: CIERRE ===== -->
 <div class="slide">
   <div class="slide-inner" style="text-align:center">
     <div class="hero-icon">&#9889;</div>
-    <h1 class="gradient-text">Gentle-Vanguard</h1>
+    <h1 class="gradient-text">GENTLE-VANGUARD</h1>
     <p class="subtitle" style="font-size:clamp(1.3rem,2.5vw,1.8rem);margin-top:0.4em">El sistema operativo para ingenier&iacute;a con IA</p>
     <div class="stat-row" style="margin-top:2rem">
       <div class="stat"><div class="stat-value">10</div><div class="stat-label">Herramientas</div></div>
       <div class="stat"><div class="stat-value">18</div><div class="stat-label">Agentes</div></div>
-      <div class="stat"><div class="stat-value">143</div><div class="stat-label">MCP Skills</div></div>
-      <div class="stat"><div class="stat-value">28</div><div class="stat-label">Quality Gates</div></div>
-      <div class="stat"><div class="stat-value">17</div><div class="stat-label">Workflows</div></div>
-      <div class="stat"><div class="stat-value">42</div><div class="stat-label">Normativas</div></div>
+      <div class="stat"><div class="stat-value">386</div><div class="stat-label">Skills</div></div>
+      <div class="stat"><div class="stat-value">29</div><div class="stat-label">Quality Gates</div></div>
+      <div class="stat"><div class="stat-value">27</div><div class="stat-label">Workflows</div></div>
+      <div class="stat"><div class="stat-value">60</div><div class="stat-label">Normativas</div></div>
     </div>
     <div class="quote" style="max-width:600px;margin:1.5rem auto">
       &ldquo;Tool-agn&oacute;stico, modular, auto-mejorable. No importa qu&eacute; herramienta AI uses &mdash; Gentle-Vanguard se adapta.&rdquo;
     </div>
-    <p style="font-size:0.8rem;color:#475569;margin-top:1rem">
+    <p style="font-size:0.8rem;color:var(--gv-text-muted);margin-top:1rem">
       <span class="badge badge-blue">OpenCode</span>
       <span class="badge badge-blue">Claude Code</span>
       <span class="badge badge-blue">Cursor</span>
@@ -990,7 +811,7 @@
       <span class="badge badge-blue">Antigravity</span>
       <span class="badge badge-blue">Claude Generic</span>
     </p>
-    <p style="font-size:0.7rem;color:#1e293b;margin-top:2rem;letter-spacing:0.15em">MAYO 2026 &middot; v2.25.0 &middot; gentle-vanguard</p>
+    <p style="font-size:0.7rem;color:var(--gv-text-muted);margin-top:2rem;letter-spacing:0.15em;font-family:'Orbitron',monospace">JUNIO 2026 &middot; v2.30.0 &middot; gentle-vanguard</p>
   </div>
 </div>
 
@@ -1024,7 +845,6 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'End') { current = total - 1; update(); }
 });
 
-// Touch support
 let touchStart = 0;
 document.addEventListener('touchstart', function(e) { touchStart = e.touches[0].clientX; });
 document.addEventListener('touchend', function(e) {
@@ -1032,7 +852,6 @@ document.addEventListener('touchend', function(e) {
   if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); }
 });
 
-// Mouse wheel
 let wheelTimeout = false;
 document.addEventListener('wheel', function(e) {
   if (wheelTimeout) return;
