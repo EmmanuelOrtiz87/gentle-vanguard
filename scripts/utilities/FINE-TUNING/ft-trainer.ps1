@@ -99,7 +99,18 @@ switch ($Mode) {
             "--base-model", "mistralai/$BaseModel-v0.1"
             "--epochs", $Epochs
         )
-        if (-not $Force) { $pythonArgs += "--dry-run" }
+        if (-not $Force) {
+            $pythonArgs += "--dry-run"
+        } else {
+            # Verify GPU before attempting real training
+            $gpuCheck = & python -c "import torch; print(torch.cuda.is_available())" 2>$null
+            if ($LASTEXITCODE -ne 0 -or $gpuCheck -ne "True") {
+                Write-Host "[FT-TRAIN] WARNING: No CUDA GPU detected. Real training requires a GPU." -ForegroundColor Yellow
+                Write-Host "[FT-TRAIN] Running in dry-run mode instead." -ForegroundColor Yellow
+                Write-Host "[FT-TRAIN] Use: -Mode dry-run for simulation, or set up a CUDA environment for actual training." -ForegroundColor Yellow
+                $pythonArgs += "--dry-run"
+            }
+        }
         Write-Host "[FT-TRAIN] Invoking Python trainer..." -ForegroundColor Cyan
         Write-Host "  python $pythonScript $($pythonArgs -join ' ')" -ForegroundColor Gray
         & python $pythonScript @pythonArgs
