@@ -1,0 +1,117 @@
+name: ADR Validation
+
+on:
+  pull_request:
+    paths:
+      - 'docs/architecture/decisions/ADR-*.md'
+      - 'docs/architecture/decisions/README.md'
+  push:
+    branches: [main, develop]
+    paths:
+      - 'docs/architecture/decisions/ADR-*.md'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: adr-validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate ADR Format
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          fetch-depth: 0
+
+      - name: Check ADR numbering
+        shell: pwsh
+        run: |
+          $errors = 0
+          $adrDir = 'docs/architecture/decisions'
+          if (-not (Test-Path $adrDir)) {
+            Write-Output "No ADR directory found — skipping"
+            exit 0
+          }
+
+          $files = Get-ChildItem "$adrDir/ADR-*.md" | Sort-Object Name
+          $expectedNum = 1
+
+          foreach ($f in $files) {
+            if ($f.BaseName -match 'ADR-0*(\d+)') {
+              $num = [int]$Matches[1]
+              if ($num -ne $expectedNum) {
+                Write-Output "::error title=ADR Numbering::ADR gap: expected #$expectedNum but found #$num in $($f.Name)"
+                $errors++
+              }
+              $expectedNum = $num + 1
+            }
+          }
+
+          if ($errors -gt 0) {
+            Write-Output "::warning::$errors ADR numbering issue(s) found"
+            exit 1
+          }
+          Write-Output "ADR numbering: OK ($($files.Count) files)"
+
+      - name: Validate ADR required sections
+        shell: pwsh
+        run: |
+          $errors = 0
+          $requiredSections = @(
+            '## Context',
+            '## Decision',
+            '## Consequences',
+            '## Related Decisions'
+          )
+
+          $files = Get-ChildItem 'docs/architecture/decisions/ADR-*.md' -ErrorAction SilentlyContinue
+          foreach ($f in $files) {
+            $content = Get-Content $f.FullName -Raw
+            foreach ($section in $requiredSections) {
+              if ($content -notmatch [regex]::Escape($section)) {
+                Write-Output "::warning title=ADR Sections::$($f.Name) missing section: $section"
+                $errors++
+              }
+            }
+          }
+
+          if ($errors -gt 0) {
+            Write-Output "::warning::$errors ADR section issue(s) found"
+            exit 1
+          }
+          Write-Output "ADR sections: OK"
+
+      - name: Validate README table references
+        shell: pwsh
+        run: |
+          $errors = 0
+          $readme = 'docs/architecture/decisions/README.md'
+          if (-not (Test-Path $readme)) {
+            Write-Output "No ADR README found — skipping"
+            exit 0
+          }
+
+          $readmeContent = Get-Content $readme -Raw
+          $adrFiles = Get-ChildItem 'docs/architecture/decisions/ADR-*.md' -ErrorAction SilentlyContinue
+
+          foreach ($f in $adrFiles) {
+            $ref = "ADR-$($f.BaseName -replace '^ADR-0*(\d+).*', '')"
+            if ($f.BaseName -match 'ADR-0*(\d+)') {
+              $ref = "ADR-$($Matches[1])"
+            }
+            if ($readmeContent -notmatch [regex]::Escape("ADR-$($Matches[1])")) {
+              Write-Output "::warning title=ADR README::$($f.Name) not referenced in README.md"
+              $errors++
+            }
+          }
+
+          if ($errors -gt 0) {
+            exit 1
+          }
+          Write-Output "ADR README references: OK"
