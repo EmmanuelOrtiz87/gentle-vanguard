@@ -184,3 +184,7 @@ __pycache__/
 
 # Deprecated configs with potential secrets
 config/deprecated/ 
+
+# Technical documentation (local only)
+docs/technical/
+
