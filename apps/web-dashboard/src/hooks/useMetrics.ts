@@ -1,21 +1,41 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { DashboardData, MetricHistory } from '../types/dashboard';
 
-const MOCK_DATA: DashboardData = {
-  tokens: { used: 15000, limit: 30000, cost: 0.45 },
-  sessions: { total: 42, active: 3, today: 5 },
-  git: { commits: 128, prsMerged: 15, contributors: 4 },
-  health: { status: 'healthy', routing: 0.95 },
+const FALLBACK_DATA: DashboardData = {
+  tokens: { used: 0, limit: 0, cost: 0 },
+  sessions: { total: 0, active: 0, today: 0 },
+  git: { commits: 0, prsMerged: 0, contributors: 0 },
+  health: { status: 'unknown', routing: 0 },
 };
 
 export function useMetrics(useWebSocketMode = false) {
-  const [data, setData] = useState<DashboardData>(MOCK_DATA);
+  const [data, setData] = useState<DashboardData>(FALLBACK_DATA);
   const [history, setHistory] = useState<MetricHistory[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [wsConnected, setWsConnected] = useState(false);
 
-  // WebSocket connection
+  const updateFromPayload = useCallback(
+    (payload: { tokens: any; sessions: any; git: any; health: any; timestamp?: string }) => {
+      setData({
+        tokens: payload.tokens,
+        sessions: payload.sessions,
+        git: payload.git,
+        health: payload.health,
+      });
+      setHistory((prev) => {
+        const newEntry: MetricHistory = {
+          timestamp: payload.timestamp || new Date().toISOString(),
+          tokens: payload.tokens.used,
+          sessions: payload.sessions.active,
+          cost: payload.tokens.cost,
+        };
+        return [...prev, newEntry].slice(-20);
+      });
+    },
+    [],
+  );
+
   const connectWebSocket = useCallback(() => {
     if (!useWebSocketMode) return;
 
@@ -30,16 +50,7 @@ export function useMetrics(useWebSocketMode = false) {
       try {
         const message = JSON.parse(event.data);
         if (message.type === 'metrics') {
-          setData(message.data);
-          setHistory((prev) => {
-            const newEntry: MetricHistory = {
-              timestamp: message.data.timestamp || new Date().toISOString(),
-              tokens: message.data.tokens.used,
-              sessions: message.data.sessions.active,
-              cost: message.data.tokens.cost,
-            };
-            return [...prev, newEntry].slice(-20);
-          });
+          updateFromPayload(message.data);
         }
       } catch (err) {
         console.error('[WS] Parse error:', err);
@@ -48,7 +59,6 @@ export function useMetrics(useWebSocketMode = false) {
 
     ws.onclose = () => {
       setWsConnected(false);
-      // Auto-reconnect after 3 seconds
       setTimeout(connectWebSocket, 3000);
     };
 
@@ -57,49 +67,26 @@ export function useMetrics(useWebSocketMode = false) {
     };
 
     return () => ws.close();
-  }, [useWebSocketMode]);
+  }, [useWebSocketMode, updateFromPayload]);
 
-  // HTTP fallback
   const fetchMetrics = useCallback(async () => {
     if (useWebSocketMode && wsConnected) return;
 
     setLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      const newData: DashboardData = {
-        tokens: {
-          used: MOCK_DATA.tokens.used + Math.floor(Math.random() * 100),
-          limit: MOCK_DATA.tokens.limit,
-          cost: MOCK_DATA.tokens.cost + Math.random() * 0.01,
-        },
-        sessions: {
-          total: MOCK_DATA.sessions.total + Math.floor(Math.random() * 2),
-          active: MOCK_DATA.sessions.active,
-          today: MOCK_DATA.sessions.today,
-        },
-        git: MOCK_DATA.git,
-        health: MOCK_DATA.health,
-      };
-
-      setData(newData);
-      setHistory((prev) => {
-        const newEntry: MetricHistory = {
-          timestamp: new Date().toISOString(),
-          tokens: newData.tokens.used,
-          sessions: newData.sessions.active,
-          cost: newData.tokens.cost,
-        };
-        return [...prev, newEntry].slice(-20);
-      });
-
+      const res = await fetch('/api/metrics');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const message = await res.json();
+      if (message.type === 'metrics') {
+        updateFromPayload(message.data);
+      }
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch metrics');
     } finally {
       setLoading(false);
     }
-  }, [useWebSocketMode, wsConnected]);
+  }, [useWebSocketMode, wsConnected, updateFromPayload]);
 
   useEffect(() => {
     if (useWebSocketMode) {
