@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-3.1.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-3.2.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
@@ -69,18 +69,23 @@ Layer 1: MEMORY     — Engram persistent memory (tools/engram.exe)
 
 ---
 
-## Latest Release: v3.1.0
+## Latest Release: v3.2.0
 
 **Download**:
-[gentle-vanguard-3.1.0.exe](https://github.com/EmmanuelOrtiz87/gentle-vanguard/releases/download/v3.1.0/gentle-vanguard-3.1.0.exe)
+[gentle-vanguard-3.2.0.exe](https://github.com/EmmanuelOrtiz87/gentle-vanguard/releases/download/v3.2.0/gentle-vanguard-3.2.0.exe)
 
-### New in v3.1.0
+### New in v3.2.0 — CopilotKit Native Patterns
 
-- **Dashboard v4**: OpenTelemetry tracing visualization with E2E traceability
-- **Skill Marketplace**: Publishing, rating, and review system for skills
-- **Interactive Documentation**: Guided tutorials with progress tracking
-- **Performance Optimizations**: Code splitting with lazy loading
-- **React Router**: Navigation between Dashboard, Tracing, Marketplace, and Docs
+- **Agent Chat** (`/agents`): Conversational interface with 6 agents, @mentions autocomplete,
+  suggested actions
+- **AG-UI Protocol**: 7 interactive UI hints from agent responses (metric, datatable, chart, diff,
+  form, list, alert)
+- **Human-in-the-Loop**: 4-mode modal (confirmation, selection, form, review) with auto-detection
+- **Task Control** (`/tasks`): Real-time agent task monitoring with status icons and quick dispatch
+- **Session Timeline** (`/timeline`): Visual event timeline with expandable JSON payloads
+- **Session Persistence**: Chat history saved across restarts
+- **Shared State Bridge**: Event bus connected to dashboard via WebSocket
+- **No CopilotKit dependency**: All patterns implemented natively over MCP
 
 ---
 

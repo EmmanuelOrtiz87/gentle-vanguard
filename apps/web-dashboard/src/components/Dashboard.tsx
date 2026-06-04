@@ -1,9 +1,11 @@
-import { useState } from 'react';
-import { Coins, Users, GitBranch, Activity, Moon, Sun, RefreshCw, Server, Zap } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Coins, Users, GitBranch, Activity, Moon, Sun, RefreshCw, Server, Zap, Bot } from 'lucide-react';
 import { useMetrics } from '../hooks/useMetrics';
 import { MetricsCard } from './MetricsCard';
 import { LiveChart } from './LiveChart';
 import { SessionTable } from './SessionTable';
+import { AgentMessage } from './AgentMessage';
+import { useAgentStream } from '../hooks/useAgentStream';
 import type { Session } from '../types/dashboard';
 
 const MOCK_SESSIONS: Session[] = [
@@ -17,6 +19,13 @@ export default function Dashboard() {
   const [darkMode, setDarkMode] = useState(false);
   const [useWebSocket, setUseWebSocket] = useState(true);
   const { data, history, loading, wsConnected, refetch } = useMetrics(useWebSocket);
+  const { session: agentSession, bridgeConnected, createSession } = useAgentStream();
+
+  useEffect(() => {
+    if (bridgeConnected && !agentSession) {
+      createSession('DEV');
+    }
+  }, [bridgeConnected]);
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -27,6 +36,7 @@ export default function Dashboard() {
   const totalSkills = mcpData?.skills?.total || 0;
   const totalCalls = mcpData?.calls?.total || 0;
   const avgResponseTime = mcpData?.performance?.avgResponseTime || 0;
+  const recentMessages = agentSession?.messages.slice(-5) || [];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -122,6 +132,37 @@ export default function Dashboard() {
             </div>
           </div>
         )}
+
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Agent Activity</h2>
+            <span className="flex items-center gap-1 text-xs text-gray-500">
+              {bridgeConnected ? <Bot className="w-3.5 h-3.5 text-green-500" /> : <Bot className="w-3.5 h-3.5 text-gray-400" />}
+              {bridgeConnected ? 'Bridge Online' : 'Bridge Offline'}
+            </span>
+          </div>
+          <div className="card">
+            {recentMessages.length === 0 && (
+              <div className="text-center py-6 text-gray-400 dark:text-gray-500">
+                <Bot className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">No agent activity yet</p>
+                <button
+                  onClick={() => createSession('DEV')}
+                  className="mt-2 text-xs text-purple-500 hover:text-purple-600 underline"
+                >
+                  Start a session
+                </button>
+              </div>
+            )}
+            {recentMessages.length > 0 && (
+              <div className="space-y-3">
+                {recentMessages.map((msg: any) => (
+                  <AgentMessage key={msg.id} message={msg} />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
 
         <div className="mb-8">
           <LiveChart data={history} />
