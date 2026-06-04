@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gentle-Vanguard v3.1.0 · Platform Overview</title>
+    <title>Gentle-Vanguard v3.2.0 · Platform Overview</title>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
       :root {
@@ -393,7 +393,7 @@
           class="slide-inner"
           style="display: flex; flex-direction: column; justify-content: center; min-height: 80vh"
         >
-          <div class="version-badge">v3.1.0</div>
+          <div class="version-badge">v3.2.0</div>
           <div class="tag">AI-Powered Development Orchestrator</div>
           <h1>GENTLE-VANGUARD</h1>
           <p class="subtitle">
@@ -406,7 +406,7 @@
           </p>
           <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap">
             <a
-              href="https://github.com/EmmanuelOrtiz87/gentle-vanguard/releases/download/v3.1.0/gentle-vanguard-3.1.0.exe"
+              href="https://github.com/EmmanuelOrtiz87/gentle-vanguard/releases/download/v3.2.0/gentle-vanguard-3.2.0.exe"
               class="btn"
               >Download v3.1.0</a
             >
@@ -800,6 +800,59 @@
               <p>Code splitting with lazy loading and manual chunks for faster load times.</p>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Slide 12: v3.2.0 CopilotKit Native Patterns -->
+      <div class="slide">
+        <div class="slide-inner">
+          <div class="tag">What's New</div>
+          <h2>v3.2.0 CopilotKit Patterns</h2>
+          <p class="subtitle">5 patrones nativos sobre MCP — sin dependencia externa</p>
+          <div class="grid-2">
+            <div class="card">
+              <h4>Agent Chat Interface</h4>
+              <p>
+                Chat conversacional con 6 agentes, @mentions autocomplete, suggested actions,
+                historial persistente.
+              </p>
+            </div>
+            <div class="card">
+              <h4>AG-UI Protocol</h4>
+              <p>
+                7 hints renderizables (metric, datatable, chart, diff, form, list, alert) desde
+                respuestas de agentes via MCP.
+              </p>
+            </div>
+            <div class="card">
+              <h4>Human-in-the-Loop</h4>
+              <p>
+                Modal de 4 modos (confirmación, selección, formulario, revisión) con detección
+                automática por keywords.
+              </p>
+            </div>
+            <div class="card">
+              <h4>Shared State Bridge</h4>
+              <p>
+                Event bus → WebSocket → Dashboard en 3 canales (history, event, tasks) con polling
+                cada 3s.
+              </p>
+            </div>
+            <div class="card">
+              <h4>Task Control & Timeline</h4>
+              <p>
+                Monitoreo de tareas activas con dispatch quick-action y timeline visual de eventos
+                expandible.
+              </p>
+            </div>
+            <div class="card">
+              <h4>Session Persistence</h4>
+              <p>
+                Sesiones guardadas en disco y cargadas al startup. Historial accesible desde
+                sidebar.
+              </p>
+            </div>
+          </div>
           <div style="margin-top: 2rem; text-align: center">
             <a
               href="https://github.com/EmmanuelOrtiz87/gentle-vanguard/blob/main/CHANGELOG.md"
@@ -851,7 +904,7 @@
 
     <script>
       let currentSlide = 0;
-      const totalSlides = 12;
+      const totalSlides = 13;
       const wrapper = document.getElementById('slidesWrapper');
       const navDots = document.getElementById('navDots');
 

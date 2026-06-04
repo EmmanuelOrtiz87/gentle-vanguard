@@ -206,5 +206,21 @@
     "status": "done",
     "type": "feature",
     "resolved_by": "scripts/utilities/gentle-vanguard-installer-tui.ps1 (395 lines, full TUI with logo, menus, component selection, Git/Go/Engram install, logging, uninstall)"
+  },
+  {
+    "id": "FF-019",
+    "defer_reason": "Evaluación completa de CopilotKit (32k ⭐, MIT) completada el 2026-06-04. Decisión: NO integrar como dependencia (desajuste arquitectónico LangGraph/CrewAI vs MCP/PowerShell + churn de 1,369 releases). SÍ adoptar patrones como implementación nativa sobre MCP. Ver análisis completo en docs/plans/COPILOTKIT-ANALYSIS-AND-ADOPTION-PLAN.md",
+    "value_prop": "Dashboard web pasa de ser solo monitoreo a ser interfaz interactiva de agentes: streaming en vivo, UI generativa desde respuestas MCP, human-in-the-loop visual, y estado compartido agente↔dashboard. GV tiene 60% de la infraestructura lista (WebSocket, MCP, React, event-bus).",
+    "created_at": "2026-06-04",
+    "linked_sessions": [],
+    "title": "Adopción Nativa de Patrones CopilotKit sobre MCP",
+    "description": "Implementar 5 patrones validados por CopilotKit como features nativas de GV sobre protocolo MCP: (1) Bridge MCP→Dashboard + streaming de agente, (2) AG-UI Hints (ui_hints schema en respuestas MCP), (3) Shared State event-bus→dashboard, (4) Human-in-the-Loop UI, (5) Agent Chat Interface. Plan dividido en 4 fases graduales. Sin dependencias externas.",
+    "owner": "orchestrator",
+    "priority": "medium",
+    "trigger": "Cuando se decida evolucionar el dashboard de monitoreo pasivo a interfaz activa de agentes. Ideal alineado con milestone v3.x del roadmap.",
+    "linked_prs": [],
+    "status": "backlog",
+    "type": "feature",
+    "resolved_by": "docs/plans/COPILOTKIT-ANALYSIS-AND-ADOPTION-PLAN.md (plan detallado con 4 fases, matriz de decisiones, riesgos y roadmap de implementación)"
   }
 ]

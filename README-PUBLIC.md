@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-3.1.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-3.2.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
@@ -56,7 +56,7 @@ standards, tracks every token, and remembers what you did last session.
 # https://github.com/EmmanuelOrtiz87/gentle-vanguard-public/releases/latest
 
 # Run
-./gentle-vanguard-3.1.0.exe -Dashboard
+./gentle-vanguard-3.2.0.exe -Dashboard
 ```
 
 Or use the portable version:
@@ -82,7 +82,7 @@ Or use the portable version:
 1. Download the latest `.exe` from
    [Releases](https://github.com/EmmanuelOrtiz87/gentle-vanguard-public/releases)
 2. Run the executable — the installer will set up all dependencies
-3. Launch with `./gentle-vanguard-3.1.0.exe -Dashboard`
+3. Launch with `./gentle-vanguard-3.2.0.exe -Dashboard`
 4. Open `http://localhost:3000` in your browser
 
 ---
@@ -110,13 +110,16 @@ Or use the portable version:
 
 ---
 
-## New in v3.1.0
+## New in v3.2.0 — CopilotKit Native Patterns
 
-- **Dashboard v4**: OpenTelemetry tracing visualization with E2E traceability
-- **Skill Marketplace**: Publishing, rating, and review system
-- **Interactive Documentation**: Guided tutorials with progress tracking
-- **Performance Optimizations**: Code splitting with lazy loading
-- **React Router**: Navigation between Dashboard, Tracing, Marketplace, and Docs
+- **Agent Chat**: Conversational interface with 6 agents, @mentions autocomplete, suggested actions
+- **AG-UI Protocol**: 7 interactive UI hints from agents (metric, datatable, chart, diff, form,
+  list, alert)
+- **Human-in-the-Loop**: 4-mode approval modal with auto-detection
+- **Task Control**: Real-time agent task monitoring with quick dispatch
+- **Session Timeline**: Visual event timeline with expandable payloads
+- **Session Persistence**: Chat history saved across restarts
+- **Shared State Bridge**: Event bus connected to dashboard via WebSocket
 
 ---
 
