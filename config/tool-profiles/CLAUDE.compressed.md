@@ -24,58 +24,61 @@ Run `docs/AGENTS.md#Mandatory-Startup-Sequence` — no shortcuts.
 ## Core Rules (condensed)
 
 1. **LOCAL-FIRST**: project knowledge before external sources
-2. **pre-process-input.ps1** BEFORE every response (`-UserInput`, `-PrevInputTokens`, `-PrevOutputTokens`, `-PrevContextChars`, `-Model`). Track token usage from previous turn: estimate input as `[Math]::Floor(contextChars/4)`, output as actual response length/4. On first turn omit prev params.
+2. **pre-process-input.ps1** BEFORE every response (`-UserInput`, `-PrevInputTokens`,
+   `-PrevOutputTokens`, `-PrevContextChars`, `-Model`). Track token usage from previous turn:
+   estimate input as `[Math]::Floor(contextChars/4)`, output as actual response length/4. On first
+   turn omit prev params.
 3. **SDD FLOW RULE**: new features -> BA/EXPLORE first, no exceptions
 4. **Delegation Rules** -> `rules/DELEGATION-RULES.md` mandatory for multi-step
 5. **AUTONOMOUS LEARNING** -> `mem_save` after every significant task
-6. **TOKEN NOTIFICATION** -> Automatico via `pre-process-input.ps1` hook. Se ejecuta CADA turno sin intervención. User puede `/notif off` para silenciar. Toggles individuales: `/notif token on/off`, `/notif context on/off`, `/notif cost on/off`, `/notif accumulated on/off`, `/notif compact on/off`. Estado persiste entre sesiones.
+6. **TOKEN NOTIFICATION** -> Automatico via `pre-process-input.ps1` hook. Se ejecuta CADA turno sin
+   intervención. User puede `/notif off` para silenciar. Toggles individuales:
+   `/notif token on/off`, `/notif context on/off`, `/notif cost on/off`,
+   `/notif accumulated on/off`, `/notif compact on/off`. Estado persiste entre sesiones.
 7. **CodeGraph** -> `codegraph_context` before modifying code
 8. **mem_search "lessons learned"** at session start
 9. **Review Workload Guard** -> `review-workload-guard.ps1` before multi-file impl
 10. **Tool output discipline** -> limit read/grep/bash results; use `-First 30`, `Select-Object`,
     `head -50` on large output
-11. **JSON VALIDITY** -> Verify quotes/braces/brackets balanced BEFORE any tool call with JSON params.
-    See `rules/NORMATIVAS-JSON-CONSTRUCTION.md`
-    
+11. **JSON VALIDITY** -> Verify quotes/braces/brackets balanced BEFORE any tool call with JSON
+    params. See `rules/NORMATIVAS-JSON-CONSTRUCTION.md`
+
     ### JSON Validation Protocol (Mandatory)
-    
+
     Before EVERY tool call with JSON parameters, you MUST:
-    
     1. **Mental Check** (takes 2 seconds):
        - Count opening `"` quotes → must be EVEN
        - Count `{` and `}` → must be EQUAL
        - Count `[` and `]` → must be EQUAL
        - Last character must be `}` or `]`
-    
     2. **Common Error Patterns to Avoid**:
+
        ```powershell
        # ❌ BAD - Unterminated string
        {"command": "pwsh -NoProfile -File detect-tool.ps1}
-       
+
        # ❌ BAD - Missing closing brace
        {"id": "session-2025-05-27", "dir": "C:\\path
-       
+
        # ❌ BAD - Trailing comma
        {"key": "value",}
-       
+
        # ✅ GOOD
        {"command": "pwsh -NoProfile -File detect-tool.ps1"}
        {"id": "session-2025-05-27", "dir": "C:\\path"}
        {"key": "value"}
        ```
-    
+
     3. **For Long Text Fields** (summary, content, description):
        - Keep under 500 characters when possible
        - Use abbreviations (e.g., "impl" for "impl")
        - For very long content, save to file first, then ref it
-    
     4. **Auto-Validation Hook** (if configured):
        ```powershell
        # This runs automatically before tool calls
        pwsh -NoProfile -File hooks/pre-tool-call-validate.ps1 `
          -ToolName "<tool>" -JsonPayload '<json>' -AutoFix
        ```
-    
     5. **Emergency Repair** (if you detect malformed JSON after the fact):
        ```powershell
        # Quick syntax check
@@ -115,4 +118,3 @@ workspace_gentle_vanguard
 ## Key Refs
 
 See `docs/AGENTS.md#Key-References` for full resource table.
-

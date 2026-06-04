@@ -24,12 +24,12 @@ function Write-Success {
     Write-Host "  [[OK]] $Message" -ForegroundColor Green
 }
 
-function Write-Warning {
+function Write-StepWarning {
     param([string]$Message)
     Write-Host "  [!] $Message" -ForegroundColor Yellow
 }
 
-function Write-Error {
+function Write-StepError {
     param([string]$Message)
     Write-Host "  [X] $Message" -ForegroundColor Red
 }
@@ -40,7 +40,7 @@ function Test-Prerequisites {
     # PowerShell 7+
     $psVersion = $PSVersionTable.PSVersion
     if ($psVersion.Major -lt 7) {
-        Write-Error "PowerShell 7+ required. Current: $psVersion"
+        Write-StepError "PowerShell 7+ required. Current: $psVersion"
         Write-Host "  Download: https://github.com/PowerShell/PowerShell" -ForegroundColor Gray
         exit 1
     }
@@ -52,10 +52,10 @@ function Test-Prerequisites {
         if ($LASTEXITCODE -eq 0) {
             Write-Success "Git detected: $($gitVersion.Split(' ')[2])"
         } else {
-            Write-Warning "Git not found. Some features may not work."
+            Write-StepWarning "Git not found. Some features may not work."
         }
     } catch {
-        Write-Warning "Git not found. Install from https://git-scm.com/"
+        Write-StepWarning "Git not found. Install from https://git-scm.com/"
     }
     
     # Node.js (for some tools)
@@ -72,7 +72,7 @@ function Test-Prerequisites {
     $drive = if (Test-Path $InstallPath) { (Get-Item $InstallPath).PSDrive } else { "C:" }
     $freeSpace = (Get-PSDrive $drive -ErrorAction SilentlyContinue).Free
     if ($freeSpace -and $freeSpace -lt 1GB) {
-        Write-Warning "Low disk space. At least 1GB recommended."
+        Write-StepWarning "Low disk space. At least 1GB recommended."
     } else {
         Write-Success "Disk space OK (>1GB available)"
     }
@@ -99,7 +99,7 @@ function Install-Gentle-Vanguard {
             }
         }
     } else {
-        Write-Warning "Not in a git repository. Please clone Gentle-Vanguard first."
+        Write-StepWarning "Not in a git repository. Please clone Gentle-Vanguard first."
         return $false
     }
     
@@ -186,7 +186,7 @@ Write-Host 'Gentle-Vanguard environment loaded' -ForegroundColor Green
 
 function Run-Tests {
     if ($SkipTests) {
-        Write-Warning "Skipping tests (SkipTests specified)"
+        Write-StepWarning "Skipping tests (SkipTests specified)"
         return
     }
     
@@ -197,12 +197,12 @@ function Run-Tests {
     if (Test-Path $testDir) {
         $output = pwsh -NoProfile -Command "Invoke-Pester -Path '$testDir' -PassThru" 2>&1
         if ($output -match "Failed:\s*[1-9]") {
-            Write-Warning "Some tests failed. Check output above."
+            Write-StepWarning "Some tests failed. Check output above."
         } else {
             Write-Success "All tests passed"
         }
     } else {
-        Write-Warning "Test directory not found. Skipping tests."
+        Write-StepWarning "Test directory not found. Skipping tests."
     }
 }
 
@@ -250,7 +250,7 @@ if ($installed) {
     Run-Tests
     Show-Completion
 } else {
-    Write-Error "Installation failed. Please check errors above."
+    Write-StepError "Installation failed. Please check errors above."
     exit 1
 }
 

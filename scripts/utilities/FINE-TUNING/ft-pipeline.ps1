@@ -24,7 +24,7 @@ function Run-Stage {
     }
     $cmd = "& '$scriptPath' $ScriptArgs"
     try {
-        $output = Invoke-Expression $cmd
+        $output = & `$1
         Write-Host "[PIPELINE] $Name completed" -ForegroundColor Green
         return $true
     } catch {
@@ -62,3 +62,4 @@ switch ($Stage) {
 
 $elapsed = (Get-Date) - $startTime
 Write-Host "`n[PIPELINE] Complete in $($elapsed.TotalSeconds.ToString('F1'))s" -ForegroundColor Green
+

@@ -1,7 +1,7 @@
 param(
     [ValidateSet('send', 'poll', 'ack', 'list-conversations', 'list-mailbox', 'purge', 'status')]
     [string]$Action = 'status',
-    [string]$Sender = '',
+    [string]$FromAgent = '',
     [string]$Recipient = '',
     [string]$Subject = '',
     [string]$Payload = '',
@@ -15,7 +15,7 @@ param(
     [int]$TtlSeconds = 300,
     [int]$Limit = 20,
     [switch]$AsJson,
-    [switch]$Quiet
+    [switch]$Silent
 )
 
 $ErrorActionPreference = 'Stop'
@@ -47,7 +47,7 @@ function Read-Mailbox {
     param([string]$Agent)
     $path = Get-MailboxPath -Agent $Agent
     if (Test-Path $path) {
-        try { return Get-Content $path -Raw -Encoding UTF8 | ConvertFrom-Json } catch { }
+        try { return Get-Content $path -Raw -Encoding UTF8 | ConvertFrom-Json } catch { Write-Debug "Failed to read mailbox: $_"; return @{ agent = $Agent; messages = @(); lastPoll = $null } }
     }
     return @{ agent = $Agent; messages = @(); lastPoll = $null }
 }
@@ -95,7 +95,7 @@ function Remove-Expired {
     $active = @()
     foreach ($m in $Mailbox.messages) {
         if ($m.expires_at) {
-            try { if ([datetime]::Parse($m.expires_at) -lt $now) { continue } } catch { }
+            try { if ([datetime]::Parse($m.expires_at) -lt $now) { continue } } catch { Write-Debug "Failed to parse expiry: $_" }
         }
         $active += $m
     }

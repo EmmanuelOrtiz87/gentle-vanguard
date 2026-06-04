@@ -12,7 +12,7 @@
 .PARAMETER ExternalDisk
     Letra de unidad del disco externo donde esta el ZIP (ej. 'E').
 .EXAMPLE
-    .\import-profile.ps1 -ZipPath C:\Users\emman\Downloads\gentle-vanguard-profile-20260511.zip
+    .\import-profile.ps1 -ZipPath .\profile-backup.zip
     .\import-profile.ps1 -ExternalDisk E
 #>
 param(

@@ -98,7 +98,7 @@ if ($Type -in @("all", "vitest", "unit")) {
         if ($Watch) { $cmd = "pnpm vitest" }
         
         Write-Host "Executing: $cmd" -ForegroundColor Gray
-        Invoke-Expression $cmd
+        & $1
         
         # Parse results from output
         $results.vitest.passed = 8  # Mock - would parse from actual output
@@ -154,3 +154,4 @@ if ($totalFailed -gt 0) {
     Write-Host "`n✅ All tests passed" -ForegroundColor Green
     exit 0
 }
+

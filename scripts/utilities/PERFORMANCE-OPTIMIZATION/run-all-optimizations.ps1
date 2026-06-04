@@ -22,7 +22,7 @@
     Show detailed messages
 
 .EXAMPLE
-    .\run-all-optimizations.ps1 -ContextPath "C:\context" -DataPath "C:\data" -OutputPath "C:\optimized" -FullReport
+    .\run-all-optimizations.ps1 -ContextPath ".\context" -DataPath ".\data" -OutputPath ".\optimized" -FullReport
 
 .NOTES
     Author: Gentle-Vanguard Team

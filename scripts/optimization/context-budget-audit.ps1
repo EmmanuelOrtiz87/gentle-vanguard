@@ -15,7 +15,7 @@
 .EXAMPLE
   ./context-budget-audit.ps1
   ./context-budget-audit.ps1 -Threshold 1500 -OutputFormat Json
-  ./context-budget-audit.ps1 -Path "C:\project" -OutputFormat CSV
+  ./context-budget-audit.ps1 -Path ".\project" -OutputFormat CSV
 #>
 
 param(
