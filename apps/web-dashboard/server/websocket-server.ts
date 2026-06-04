@@ -1,5 +1,5 @@
 import { WebSocketServer, WebSocket } from 'ws';
-import { createServer } from 'http';
+import { createServer, IncomingMessage, ServerResponse } from 'http';
 import { readFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { fileURLToPath } from 'url';
@@ -10,8 +10,8 @@ const ROOT = resolve(__dirname, '../../..');
 const STATS_PATH = join(ROOT, '.atl', 'skill-stats.json');
 const REGISTRY_PATH = join(ROOT, '.atl', 'skill-registry.md');
 
-const PORT = process.env.WS_PORT || 8080;
-const server = createServer();
+const PORT = parseInt(process.env.WS_PORT || '8080', 10);
+const server = createServer(handleRequest);
 const wss = new WebSocketServer({ server });
 
 const clients = new Set<WebSocket>();
@@ -98,6 +98,38 @@ function generateMetrics() {
       },
     },
   };
+}
+
+function handleRequest(req: IncomingMessage, res: ServerResponse) {
+  const url = new URL(req.url || '/', `http://${req.headers.host}`);
+  const headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' };
+
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204, { ...headers, 'Access-Control-Allow-Methods': 'GET, OPTIONS' });
+    res.end();
+    return;
+  }
+
+  if (url.pathname === '/api/metrics') {
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ type: 'metrics', data: generateMetrics() }));
+    return;
+  }
+
+  if (url.pathname === '/api/mcp/metrics') {
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ type: 'mcp', data: { skills: countSkills(), calls: loadStats() } }));
+    return;
+  }
+
+  if (url.pathname === '/api/health') {
+    res.writeHead(200, headers);
+    res.end(JSON.stringify({ status: 'ok', uptime: process.uptime(), connections: clients.size }));
+    return;
+  }
+
+  res.writeHead(404, headers);
+  res.end(JSON.stringify({ error: 'Not found' }));
 }
 
 wss.on('connection', (ws: WebSocket) => {
