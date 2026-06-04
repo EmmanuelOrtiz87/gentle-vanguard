@@ -450,7 +450,7 @@ function Get-ContextTierInfo {
             if ($config.memoryTiering) {
                 $tierInfo = $config.memoryTiering
             }
-        } catch { }
+        } catch { Write-Output "[TOKEN] Operation failed, continuing" }
     }
     
     return $tierInfo

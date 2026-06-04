@@ -810,7 +810,7 @@ try { Export-ModuleMember -Function @(
     'Unregister-Plugin',
     'Get-RegisteredPlugins',
     'Initialize-Plugins'
-) } catch { }
+) } catch { Write-Output "[SKILLS-TOOLS] Operation failed, continuing" }
 
 " }
 

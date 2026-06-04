@@ -298,7 +298,7 @@ function Get-SiemConfig {
 function Get-Checkpoint {
     if (Test-Path $CheckpointFile) {
         try { return Get-Content $CheckpointFile -Raw | ConvertFrom-Json }
-        catch {}
+        catch { Write-Output "[security] Operation failed, continuing" }
     }
     return [PSCustomObject]@{ lastLine = 0; lastTimestamp = ''; lastRun = '' }
 }
