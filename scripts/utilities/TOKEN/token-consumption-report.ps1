@@ -450,7 +450,7 @@ function Get-ContextTierInfo {
             if ($config.memoryTiering) {
                 $tierInfo = $config.memoryTiering
             }
-        } catch { Write-Output "[TOKEN] Operation failed, continuing" }
+        } catch { Write-Output "Operation failed, continuing" }
     }
     
     return $tierInfo
@@ -631,16 +631,16 @@ Write-Host "Format: $OutputFormat" -ForegroundColor Gray
 Write-Host ""
 
 # 1. Get token data
-Write-Host "[INFO] Collecting token data..." -ForegroundColor Gray
+Write-Host " Collecting token data..." -ForegroundColor Gray
 $tokenData = Get-TokenData
 $filteredData = Filter-ByScope -data $tokenData -scope $Scope
 
 if ($filteredData.Count -eq 0) {
-    Write-Host "[WARN] No token data found for scope: $Scope" -ForegroundColor Yellow
+    Write-Host " No token data found for scope: $Scope" -ForegroundColor Yellow
     exit 0
 }
 
-Write-Host "[OK] Found $($filteredData.Count) records" -ForegroundColor Green
+Write-Host " Found $($filteredData.Count) records" -ForegroundColor Green
 
 # 2. Get context tier info
 $contextInfo = if ($IncludeContext) { Get-ContextTierInfo } else { @{} }
@@ -649,7 +649,7 @@ $contextInfo = if ($IncludeContext) { Get-ContextTierInfo } else { @{} }
 $utilityInfo = if ($IncludeUtility) { Get-TokenUtility -tokenData $filteredData } else { @{} }
 
 # 4. Generate report
-Write-Host "[INFO] Generating report..." -ForegroundColor Gray
+Write-Host " Generating report..." -ForegroundColor Gray
 
 switch ($OutputFormat) {
     'markdown' {
@@ -662,7 +662,7 @@ switch ($OutputFormat) {
     }
     'csv' {
         $outputFile = Generate-CsvReport -tokenData $filteredData
-        Write-Host "[OK] CSV report: $outputFile" -ForegroundColor Green
+        Write-Host " CSV report: $outputFile" -ForegroundColor Green
     }
 }
 
@@ -850,16 +850,16 @@ Write-Host "Format: $OutputFormat" -ForegroundColor Gray
 Write-Host ""
 
 # 1. Get token data
-Write-Host "[INFO] Collecting token data..." -ForegroundColor Gray
+Write-Host " Collecting token data..." -ForegroundColor Gray
 $tokenData = Get-TokenData
 $filteredData = Filter-ByScope -data $tokenData -scope $Scope
 
 if ($filteredData.Count -eq 0) {
-    Write-Host "[WARN] No token data found for scope: $Scope" -ForegroundColor Yellow
+    Write-Host " No token data found for scope: $Scope" -ForegroundColor Yellow
     exit 0
 }
 
-Write-Host "[OK] Found $($filteredData.Count) records" -ForegroundColor Green
+Write-Host " Found $($filteredData.Count) records" -ForegroundColor Green
 
 # 2. Get context tier info
 $contextInfo = if ($IncludeContext) { Get-ContextTierInfo } else { @{} }
@@ -868,7 +868,7 @@ $contextInfo = if ($IncludeContext) { Get-ContextTierInfo } else { @{} }
 $utilityInfo = if ($IncludeUtility) { Get-TokenUtility -tokenData $filteredData } else { @{} }
 
 # 4. Generate report
-Write-Host "[INFO] Generating report..." -ForegroundColor Gray
+Write-Host " Generating report..." -ForegroundColor Gray
 
 switch ($OutputFormat) {
     'markdown' {
@@ -881,7 +881,7 @@ switch ($OutputFormat) {
     }
     'csv' {
         $outputFile = Generate-CsvReport -tokenData $filteredData
-        Write-Host "[OK] CSV report: $outputFile" -ForegroundColor Green
+        Write-Host " CSV report: $outputFile" -ForegroundColor Green
     }
 }
 
@@ -1070,16 +1070,16 @@ Write-Host "Format: $OutputFormat" -ForegroundColor Gray
 Write-Host ""
 
 # 1. Get token data
-Write-Host "[INFO] Collecting token data..." -ForegroundColor Gray
+Write-Host " Collecting token data..." -ForegroundColor Gray
 $tokenData = Get-TokenData
 $filteredData = Filter-ByScope -data $tokenData -scope $Scope
 
 if ($filteredData.Count -eq 0) {
-    Write-Host "[WARN] No token data found for scope: $Scope" -ForegroundColor Yellow
+    Write-Host " No token data found for scope: $Scope" -ForegroundColor Yellow
     exit 0
 }
 
-Write-Host "[OK] Found $($filteredData.Count) records" -ForegroundColor Green
+Write-Host " Found $($filteredData.Count) records" -ForegroundColor Green
 
 # 2. Get context tier info
 $contextInfo = if ($IncludeContext) { Get-ContextTierInfo } else { @{} }
@@ -1088,7 +1088,7 @@ $contextInfo = if ($IncludeContext) { Get-ContextTierInfo } else { @{} }
 $utilityInfo = if ($IncludeUtility) { Get-TokenUtility -tokenData $filteredData } else { @{} }
 
 # 4. Generate report
-Write-Host "[INFO] Generating report..." -ForegroundColor Gray
+Write-Host " Generating report..." -ForegroundColor Gray
 
 switch ($OutputFormat) {
     'markdown' {
@@ -1101,7 +1101,7 @@ switch ($OutputFormat) {
     }
     'csv' {
         $outputFile = Generate-CsvReport -tokenData $filteredData
-        Write-Host "[OK] CSV report: $outputFile" -ForegroundColor Green
+        Write-Host " CSV report: $outputFile" -ForegroundColor Green
     }
 }
 
@@ -1289,16 +1289,16 @@ Write-Host "Format: $OutputFormat" -ForegroundColor Gray
 Write-Host ""
 
 # 1. Get token data
-Write-Host "[INFO] Collecting token data..." -ForegroundColor Gray
+Write-Host " Collecting token data..." -ForegroundColor Gray
 $tokenData = Get-TokenData
 $filteredData = Filter-ByScope -data $tokenData -scope $Scope
 
 if ($filteredData.Count -eq 0) {
-    Write-Host "[WARN] No token data found for scope: $Scope" -ForegroundColor Yellow
+    Write-Host " No token data found for scope: $Scope" -ForegroundColor Yellow
     exit 0
 }
 
-Write-Host "[OK] Found $($filteredData.Count) records" -ForegroundColor Green
+Write-Host " Found $($filteredData.Count) records" -ForegroundColor Green
 
 # 2. Get context tier info
 $contextInfo = if ($IncludeContext) { Get-ContextTierInfo } else { @{} }
@@ -1307,7 +1307,7 @@ $contextInfo = if ($IncludeContext) { Get-ContextTierInfo } else { @{} }
 $utilityInfo = if ($IncludeUtility) { Get-TokenUtility -tokenData $filteredData } else { @{} }
 
 # 4. Generate report
-Write-Host "[INFO] Generating report..." -ForegroundColor Gray
+Write-Host " Generating report..." -ForegroundColor Gray
 
 switch ($OutputFormat) {
     'markdown' {
@@ -1320,7 +1320,7 @@ switch ($OutputFormat) {
     }
     'csv' {
         $outputFile = Generate-CsvReport -tokenData $filteredData
-        Write-Host "[OK] CSV report: $outputFile" -ForegroundColor Green
+        Write-Host " CSV report: $outputFile" -ForegroundColor Green
     }
 }
 
