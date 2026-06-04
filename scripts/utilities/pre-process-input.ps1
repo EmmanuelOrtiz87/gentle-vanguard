@@ -52,7 +52,7 @@ if (Test-Path $tokenUsageFile) {
         $tc = $tu.totalTokens
         $cc = $tu.totalContextChars
         Write-Output "[TOKENS] sesion: $($tu.sessionId) | total: $tc | chars: $cc | msgs: $($tu.messageCount)"
-    } catch {}
+    } catch { Write-Output "[TOKENS] No token usage data available" }
 }
 
 # ========== RESPONSE CACHE ==========
@@ -87,7 +87,7 @@ if (Test-Path $tokenFile) {
             $hook = Join-Path $repoRoot "scripts\utilities\PERFORMANCE-OPTIMIZATION\pre-compact-hook.ps1"
             if (Test-Path $hook) { & $hook -TriggerThreshold 15000 2>&1 | Out-Null }
         }
-    } catch {}
+    } catch { Write-Output "[HOOK] Pre-compact failed, continuing" }
 }
 
 # ========== KEYWORD ROUTING (logic intact) ==========
@@ -140,7 +140,7 @@ if ($turnCount -ge 20) {
 
 # ========== WRITE TO CACHE ==========
 $cache[$cacheKey] = @{ timestamp = $now.ToString("o"); result = $summary }
-try { $cache | ConvertTo-Json -Depth 5 -Compress | Set-Content $cacheFile } catch {}
+try { $cache | ConvertTo-Json -Depth 5 -Compress | Set-Content $cacheFile } catch { Write-Output "[CACHE] Failed to write cache" }
 Write-Output "[CACHE] SAVED for input hash $cacheKey"
 
 Write-Output $summary

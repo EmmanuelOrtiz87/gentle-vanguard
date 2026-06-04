@@ -143,11 +143,15 @@ function Invoke-TaskName {
 
 ### 4.3 Forbidden PowerShell Patterns
 
-- `Write-Host` in reusable functions/libraries (use `Write-Output` or `Write-Verbose`); OK in CLI
-  scripts, hooks, and `gv` commands for direct user output
+- `Write-Host` is **prohibited** in library modules (`.psm1`, `scripts/common/`, shared function
+  libraries). Use `Write-Output` (pipeline-compatible) or `Write-Verbose` (debug output) instead.
+  **Allowed** in CLI scripts, hooks, diagnostics, adapters, and `gv` commands for colored user
+  output.
 - Empty `catch { }` blocks
 - Hardcoded absolute paths
-- `Select-String` (use `grep` tool via agent, or direct `-match`)
+- `Select-String` is **prohibited** in production automation (`.github/workflows/`, `scripts/core/`,
+  CI pipelines). Prefer `-match` operator or `grep` tool. **Allowed** in diagnostics, analysis, and
+  exploratory scripts.
 - Implicit string comparison without culture spec
 - Using aliases in scripts (`gci`, `foreach`, `%`) — use full cmdlets
 

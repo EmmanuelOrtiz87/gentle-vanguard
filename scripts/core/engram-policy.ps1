@@ -70,7 +70,7 @@ function Test-EngramInstalled {
         if (Test-Path $loc) {
             $found += $loc
             $versionOutput = & $loc version 2>&1
-            $version = ($versionOutput | Select-String -Pattern 'engram\s+(\d+\.\d+\.\d+)' | Select-Object -First 1).Matches.Groups[1].Value
+            $version = if ($versionOutput -match 'engram\s+(\d+\.\d+\.\d+)') { $Matches[1] } else { 'unknown' }
             if ([string]::IsNullOrWhiteSpace($version)) { $version = 'unknown' }
             Write-PolicyStatus "Found: $loc (v$version)"
         }

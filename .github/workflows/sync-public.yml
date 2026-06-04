@@ -84,7 +84,7 @@ jobs:
           git remote add origin $authUrl
 
           $defaultBranch = if ([string]::IsNullOrWhiteSpace($env:PUBLIC_REPO_DEFAULT_BRANCH)) {
-            $headLine = git ls-remote --symref origin HEAD 2>&1 | Select-String 'refs/heads/' | Select-Object -First 1
+            $headLine = git ls-remote --symref origin HEAD 2>&1 | Where-Object { $_ -match 'refs/heads/' } | Select-Object -First 1
             if ($headLine) {
               (($headLine.ToString() -split '\s+')[1] -replace 'refs/heads/', '')
             } else {

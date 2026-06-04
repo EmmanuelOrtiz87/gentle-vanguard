@@ -1,5 +1,12 @@
 name: Skill Registry Validation
 
+permissions:
+  contents: read
+
+concurrency:
+  group: skill-registry-validation-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     paths:
@@ -18,14 +25,15 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     name: Validate Skill Registry
-    
+    timeout-minutes: 15
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+
       - name: Setup PowerShell
         uses: PowerShell/PowerShell@v7.4.0
-        
+
       - name: Run skill registry sync validation
         id: sync
         shell: pwsh
@@ -38,13 +46,13 @@ jobs:
             echo "::endgroup::"
             exit 1
           }
-        
+
       - name: Validate skill structure
         shell: pwsh
         run: |
           $errors = @()
           $skillsDir = "skills"
-          
+
           if (Test-Path $skillsDir) {
             $skillDirs = Get-ChildItem -Path $skillsDir -Directory
             
@@ -73,7 +81,7 @@ jobs:
               }
             }
           }
-          
+
           if ($errors.Count -gt 0) {
             echo "::error::Found $($errors.Count) skill validation errors"
             echo "::group::Validation Errors"
@@ -83,16 +91,16 @@ jobs:
             echo "::endgroup::"
             exit 1
           }
-          
+
           echo "::notice::All $($skillDirs.Count) skills validated successfully"
-        
+
       - name: Check for orphaned registry entries
         shell: pwsh
         run: |
           $registryContent = Get-Content ".atl/skill-registry.md" -Raw
           $skillsDir = "skills"
           $orphaned = @()
-          
+
           # Extract skill names from registry
           $registrySkills = @()
           $lines = $registryContent -split "`n"
@@ -104,7 +112,7 @@ jobs:
               }
             }
           }
-          
+
           # Check if each exists
           foreach ($skill in $registrySkills) {
             $skillPath = Join-Path $skillsDir $skill
@@ -112,7 +120,7 @@ jobs:
               $orphaned += $skill
             }
           }
-          
+
           if ($orphaned.Count -gt 0) {
             echo "::warning::Found $($orphaned.Count) orphaned registry entries"
             echo "::group::Orphaned Entries"
@@ -121,7 +129,7 @@ jobs:
             }
             echo "::endgroup::"
           }
-        
+
       - name: Generate validation report
         if: always()
         shell: pwsh
@@ -130,11 +138,11 @@ jobs:
             timestamp = (Get-Date -Format "o")
             status = if ($env:GITHUB_JOB_STATUS -eq "success") { "passed" } else { "failed" }
             totalSkills = (Get-ChildItem -Path "skills" -Directory | Measure-Object).Count
-            registryEntries = (Select-String -Path ".atl/skill-registry.md" -Pattern "^\|[^|]+\|[^|]+\|" | Measure-Object).Count - 1
+            registryEntries = (Get-Content ".atl/skill-registry.md" | Where-Object { $_ -match '^\|[^|]+\|[^|]+\|' } | Measure-Object).Count - 1
           }
-          
+
           $report | ConvertTo-Json | Set-Content -Path "validation-report.json"
-          
+
       - name: Upload validation report
         if: always()
         uses: actions/upload-artifact@v4

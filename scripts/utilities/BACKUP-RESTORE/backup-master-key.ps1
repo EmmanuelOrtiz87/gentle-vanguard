@@ -1,8 +1,10 @@
 #!/usr/bin/env pwsh
 # Backup master.key to secure location
 
-$source = "keys/master.key"
-$backupDir = "C:\Workspace_local\backups\gentle-vanguard"
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$repoRoot = Resolve-Path (Join-Path $scriptDir '..\..\..')
+$source = Join-Path $repoRoot "keys/master.key"
+$backupDir = if ($env:GV_BACKUP_DIR) { $env:GV_BACKUP_DIR } else { Join-Path (Split-Path $repoRoot -Parent) 'backups\gentle-vanguard' }
 
 if (-not (Test-Path $source)) {
     Write-Error "master.key not found at $source"

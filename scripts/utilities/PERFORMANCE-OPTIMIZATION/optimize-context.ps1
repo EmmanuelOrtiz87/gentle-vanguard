@@ -22,7 +22,7 @@
     Show detailed messages
 
 .EXAMPLE
-    .\optimize-context.ps1 -ContextPath "C:\context" -OutputPath "C:\optimized" -CompressionLevel high
+    .\optimize-context.ps1 -ContextPath ".\context" -OutputPath ".\optimized" -CompressionLevel high
 
 .NOTES
     Author: Gentle-Vanguard Team

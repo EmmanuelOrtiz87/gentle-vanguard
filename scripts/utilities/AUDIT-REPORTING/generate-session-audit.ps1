@@ -25,8 +25,9 @@ function Ensure-AuditDirs {
 
 function Get-MachineId {
     $id = $env:COMPUTERNAME
-    if (Test-Path "C:\Users\.machine-id") {
-        $id = Get-Content "C:\Users\.machine-id" -Raw -ErrorAction SilentlyContinue
+    $machineIdPath = Join-Path $env:USERPROFILE '.machine-id'
+    if (Test-Path $machineIdPath) {
+        $id = Get-Content $machineIdPath -Raw -ErrorAction SilentlyContinue
     }
     return $id.Trim()
 }

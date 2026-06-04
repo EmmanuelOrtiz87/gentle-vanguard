@@ -10,26 +10,24 @@
   <img src="https://img.shields.io/badge/Platform-Win%20|%20Linux%20|%20macOS-6B7280?style=flat-square&labelColor=0D1117" alt="Platform">
   <img src="https://img.shields.io/badge/Agents-18-00BFFF?style=flat-square&labelColor=0D1117" alt="Agents">
   <img src="https://img.shields.io/badge/Skills-386-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
-  <img src="https://img.shields.io/badge/Workflows-27-A855F7?style=flat-square&labelColor=0D1117" alt="Workflows">
 </p>
 
 <p align="center">
   <a href="https://github.com/EmmanuelOrtiz87/gentle-vanguard-public">GitHub</a>
   &nbsp;·&nbsp;
-  <a href="docs/">Documentation</a>
+  <a href="docs/getting-started/README.md">Getting Started</a>
   &nbsp;·&nbsp;
   <a href="../../releases">Releases</a>
   &nbsp;·&nbsp;
-  <a href="SECURITY.md">Security</a>
+  <a href="docs/SECURITY.md">Security</a>
 </p>
 
 <p align="center">
   <strong>AI-powered development orchestrator · 18 agents · 386 skills · 10 tool-compatible</strong><br>
-  <em>Tool-agnostic · SDD Lifecycle · Judgment Day · Persistent memory</em>
+  <em>Tool-agnostic · Spec-Driven Development · Persistent Memory · Built-in Security</em>
 </p>
 
-> _"Construyendo el puente definitivo entre la alta ingeniería de software y la estrategia
-> corporativa."_
+> _"Building the definitive bridge between high-end software engineering and corporate strategy."_
 
 Born from a simple observation: AI-assisted coding works, but without structure it is chaotic.
 Gentle-Vanguard gives you an orchestration layer that routes tasks to specialized agents, enforces
@@ -37,30 +35,17 @@ standards, tracks every token, and remembers what you did last session.
 
 ---
 
-## Latest Release: v3.1.0
-
-🚀 **Download**: [gentle-vanguard-3.1.0.exe](https://github.com/EmmanuelOrtiz87/gentle-vanguard-public/releases/download/v3.1.0/gentle-vanguard-3.1.0.exe)
-
-### New in v3.1.0
-- **Dashboard v4**: OpenTelemetry tracing visualization with E2E traceability
-- **Skill Marketplace**: Publishing, rating, and review system for skills
-- **Interactive Documentation**: Guided tutorials with progress tracking
-- **Performance Optimizations**: Code splitting with lazy loading
-- **React Router**: Navigation between Dashboard, Tracing, Marketplace, and Docs
-
----
-
 ## What It Solves
 
-| Problem                         | How Gentle-Vanguard Solves It                                   |
-| ------------------------------- | --------------------------------------------------------------- |
-| AI code quality varies wildly   | Multi-layer validation gates catch issues before commit         |
-| No session-to-session memory    | Persistent memory system recalls decisions across sessions      |
-| Token waste from wrong models   | Cost-aware router assigns optimal model per task type           |
-| Unstructured AI workflows       | SDD lifecycle enforces spec-driven development                  |
-| Disconnected tool sessions      | Session manager tracks context with crash recovery              |
-| No AI cost visibility           | Dashboard with token trends and per-agent analytics             |
-| One-size AI responses           | 15+ specialized agents with role-specific profiles              |
+| Problem                       | How Gentle-Vanguard Solves It                              |
+| ----------------------------- | ---------------------------------------------------------- |
+| AI code quality varies wildly | Multi-layer validation gates catch issues before commit    |
+| No session-to-session memory  | Persistent memory system recalls decisions across sessions |
+| Token waste from wrong models | Cost-aware router assigns optimal model per task type      |
+| Unstructured AI workflows     | SDD lifecycle enforces spec-driven development             |
+| Disconnected tool sessions    | Session manager tracks context with crash recovery         |
+| No AI cost visibility         | Dashboard with token trends and per-agent analytics        |
+| One-size AI responses         | 18 specialized agents with role-specific profiles          |
 
 ---
 
@@ -74,14 +59,74 @@ standards, tracks every token, and remembers what you did last session.
 ./gentle-vanguard-3.1.0.exe -Dashboard
 ```
 
+Or use the portable version:
+
+```powershell
+# Extract and run
+./gentle-vanguard.exe -Dashboard -Portable
+```
+
+---
+
+## Installation
+
+### System Requirements
+
+- **OS**: Windows 10/11, Linux (Ubuntu 22.04+), macOS 14+
+- **PowerShell**: 7.4+
+- **Memory**: 4 GB RAM minimum
+- **Disk**: 500 MB free
+
+### Step-by-Step
+
+1. Download the latest `.exe` from
+   [Releases](https://github.com/EmmanuelOrtiz87/gentle-vanguard-public/releases)
+2. Run the executable — the installer will set up all dependencies
+3. Launch with `./gentle-vanguard-3.1.0.exe -Dashboard`
+4. Open `http://localhost:3000` in your browser
+
+---
+
+## Architecture Overview
+
+```
+┌──────────────────────────────────────────────────┐
+│                   USER LAYER                      │
+│         (CLI · Dashboard · IDE Integration)       │
+├──────────────────────────────────────────────────┤
+│               ORCHESTRATION LAYER                 │
+│    pre-process-input → trigger → agent dispatch   │
+├──────────────────────────────────────────────────┤
+│                   AGENT LAYER                     │
+│    BA · SAD · DEV · QA · OPS · GOV · DOC · more  │
+├──────────────────────────────────────────────────┤
+│                    SKILL LAYER                    │
+│    386 on-demand skills (web, mobile, security…)  │
+├──────────────────────────────────────────────────┤
+│                  MEMORY LAYER                     │
+│     Engram persistent memory (hot/warm/cold)      │
+└──────────────────────────────────────────────────┘
+```
+
+---
+
+## New in v3.1.0
+
+- **Dashboard v4**: OpenTelemetry tracing visualization with E2E traceability
+- **Skill Marketplace**: Publishing, rating, and review system
+- **Interactive Documentation**: Guided tutorials with progress tracking
+- **Performance Optimizations**: Code splitting with lazy loading
+- **React Router**: Navigation between Dashboard, Tracing, Marketplace, and Docs
+
 ---
 
 ## Documentation
 
 - [Getting Started](docs/getting-started/README.md)
-- [Architecture](docs/reference/ARCHITECTURE.md)
-- [Roadmap](docs/ROADMAP.md)
+- [Installation Guide](docs/getting-started/installation.md)
+- [Stack Setup](docs/getting-started/STACK-SETUP.md)
 - [Changelog](CHANGELOG.md)
+- [Examples](docs/EXAMPLES.md)
 
 ---
 

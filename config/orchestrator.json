@@ -1,6 +1,6 @@
 {
   "orchestrator": {
-    "version": "2.6.0",
+    "version": "3.1.0",
     "active": true,
     "activation_mode": "auto",
     "activeToolDetection": {
@@ -195,27 +195,27 @@
       }
     }
   },
-    "editing": {
-      "hashline": {
-        "enabled": true,
-        "script": "scripts/editing/hashline.ps1",
-        "storage": ".runtime/hashline-db.json",
-        "hash_algorithm": "SHA-256",
-        "integration": {
-          "lefthook": ".lefthook.yml#post-commit.hashing-snapshot",
-          "pre_compact": "scripts/utilities/pre-compact-hook.ps1"
-        }
-      }
-    },
-    "team_mode": {
+  "editing": {
+    "hashline": {
       "enabled": true,
-      "script": "scripts/utilities/WORKFLOW-ORCHESTRATION/team-mode.ps1",
-      "dispatch_integration": "scripts/utilities/WORKFLOW-ORCHESTRATION/dispatch-agent.ps1#-Mode team",
-      "message_bus": "scripts/adaptive/agent-message-bus.ps1",
-      "max_members": 8,
-      "runtime_dir": ".runtime/teams"
-    },
-    "subagent_orchestration": {
+      "script": "scripts/editing/hashline.ps1",
+      "storage": ".runtime/hashline-db.json",
+      "hash_algorithm": "SHA-256",
+      "integration": {
+        "lefthook": ".lefthook.yml#post-commit.hashing-snapshot",
+        "pre_compact": "scripts/utilities/pre-compact-hook.ps1"
+      }
+    }
+  },
+  "team_mode": {
+    "enabled": true,
+    "script": "scripts/utilities/WORKFLOW-ORCHESTRATION/team-mode.ps1",
+    "dispatch_integration": "scripts/utilities/WORKFLOW-ORCHESTRATION/dispatch-agent.ps1#-Mode team",
+    "message_bus": "scripts/adaptive/agent-message-bus.ps1",
+    "max_members": 8,
+    "runtime_dir": ".runtime/teams"
+  },
+  "subagent_orchestration": {
     "token_budget_guard": {
       "enabled": true,
       "unit": "tokens",

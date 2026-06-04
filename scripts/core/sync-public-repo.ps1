@@ -5,6 +5,10 @@
     Copy non-sensitive files to public repo.
     Filters exclude: security scripts, workspace config, internal docs
     Includes: public README, getting-started docs, basic scripts
+
+    NOTE: For production sync (gentle-vanguard-public), use
+    scripts/utilities/DEPLOYMENT/sync-to-public.ps1 instead.
+    This script is for demo/quick-sync only.
 #>
 
 param(

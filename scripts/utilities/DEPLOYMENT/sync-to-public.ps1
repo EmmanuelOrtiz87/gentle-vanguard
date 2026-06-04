@@ -85,14 +85,7 @@ function Sync-FilesToBranch {
     # 2. Public docs dir
     Remove-Item "$targetDir\docs" -Recurse -Force -ErrorAction SilentlyContinue
     New-Item -ItemType Directory -Path "$targetDir\docs" -Force | Out-Null
-    foreach ($f in @('docs/README.md')) {
-        $src = "$privateRepo\$f"
-        $dst = "$targetDir\$f"
-        $dstDir = Split-Path $dst -Parent
-        if (-not (Test-Path $dstDir)) { New-Item -ItemType Directory -Path $dstDir -Force | Out-Null }
-        if (Test-Path $src) { Copy-Item $src $dst -Force }
-    }
-    foreach ($dir in @('docs/getting-started','docs/guides','docs/marketing','docs/sdd','docs/supplementary')) {
+    foreach ($dir in @('docs/getting-started','docs/guides','docs/marketing','docs/supplementary')) {
         $src = "$privateRepo\$dir"
         if (Test-Path $src) {
             $dstParent = "$targetDir\$(Split-Path $dir -Parent)"
@@ -102,7 +95,7 @@ function Sync-FilesToBranch {
     }
     $refDir = "$targetDir\docs\reference"
     New-Item -ItemType Directory -Path $refDir -Force | Out-Null
-    foreach ($f in @('docs/reference/SKILL-ORGANIZATION.md','docs/reference/SKILL-RESOLVER-PROTOCOL.md','docs/reference/SUBAGENT-ARCHITECTURE.md','docs/reference/PLUGIN-ARCHITECTURE.md','docs/reference/REAL-TOKEN-TRACKING.md')) {
+    foreach ($f in @('docs/reference/ARCHITECTURE.md','docs/ROADMAP.md','docs/reference/SKILL-ORGANIZATION.md','docs/reference/SKILL-RESOLVER-PROTOCOL.md','docs/reference/SUBAGENT-ARCHITECTURE.md','docs/reference/PLUGIN-ARCHITECTURE.md','docs/reference/REAL-TOKEN-TRACKING.md')) {
         $src = "$privateRepo\$f"
         if (Test-Path $src) { Copy-Item $src "$refDir\" -Force }
     }

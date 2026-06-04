@@ -22,14 +22,14 @@ function Test-Tool {
     Write-Warn "$Name is missing."
     if ($Force) {
         Write-Host "Installing $Name..." -ForegroundColor Gray
-        Invoke-Expression $InstallCmd
+        & $1
         return $?
     }
     
     $choice = Read-Host "Install $Name now? (y/n)"
     if ($choice -match '^(y|yes|si|s)$') {
         Write-Host "Installing $Name..." -ForegroundColor Gray
-        Invoke-Expression $InstallCmd
+        & $1
         return $?
     }
     
@@ -55,4 +55,5 @@ if (-not (Get-Command go -ErrorAction SilentlyContinue)) {
 
 Write-Step "Setup Complete!"
 Write-Host "Run '.\gv.ps1 health' to verify your environment." -ForegroundColor Cyan
+
 
