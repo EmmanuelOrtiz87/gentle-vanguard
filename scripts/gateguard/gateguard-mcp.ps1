@@ -210,7 +210,7 @@ function Get-GateGuardState {
         }
       }
       return $state
-    } catch { }
+    } catch { Write-Output "[gateguard] Operation failed, continuing" }
   }
   return @{}
 }

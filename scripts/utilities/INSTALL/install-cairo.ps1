@@ -174,7 +174,7 @@ if (-not $Force) {
             Write-OK 'cairosvg PNG export funciona - no se necesita instalacion'
             exit 0
         }
-    } catch { }
+    } catch { Write-Output "[INSTALL] Operation failed, continuing" }
     Write-Warn 'cairosvg no puede exportar PNG - se necesita la libreria Cairo nativa'
 } else {
     Write-Step 'Forzando reinstalacion...'
@@ -202,7 +202,7 @@ try {
             Write-OK 'GTK3 Runtime instalado via winget'
         }
     }
-} catch { }
+} catch { Write-Output "[INSTALL] Operation failed, continuing" }
 
 # Step 2: If not installed, download installer
 if (-not (Test-Path $gtkInstallDir)) {
@@ -412,7 +412,7 @@ if (-not $Force) {
             Write-OK 'cairosvg PNG export funciona - no se necesita instalacion'
             exit 0
         }
-    } catch { }
+    } catch { Write-Output "[INSTALL] Operation failed, continuing" }
     Write-Warn 'cairosvg no puede exportar PNG - se necesita la libreria Cairo nativa'
 } else {
     Write-Step 'Forzando reinstalacion...'
@@ -440,7 +440,7 @@ try {
             Write-OK 'GTK3 Runtime instalado via winget'
         }
     }
-} catch { }
+} catch { Write-Output "[INSTALL] Operation failed, continuing" }
 
 # Step 2: If not installed, download installer
 if (-not (Test-Path $gtkInstallDir)) {
@@ -833,7 +833,7 @@ if (-not $Force) {
             Write-OK 'cairosvg PNG export funciona - no se necesita instalacion'
             exit 0
         }
-    } catch { }
+    } catch { Write-Output "[INSTALL] Operation failed, continuing" }
     Write-Warn 'cairosvg no puede exportar PNG - se necesita la libreria Cairo nativa'
 } else {
     Write-Step 'Forzando reinstalacion...'
@@ -861,7 +861,7 @@ try {
             Write-OK 'GTK3 Runtime instalado via winget'
         }
     }
-} catch { }
+} catch { Write-Output "[INSTALL] Operation failed, continuing" }
 
 # Step 2: If not installed, download installer
 if (-not (Test-Path $gtkInstallDir)) {
@@ -1071,7 +1071,7 @@ if (-not $Force) {
             Write-OK 'cairosvg PNG export funciona - no se necesita instalacion'
             exit 0
         }
-    } catch { }
+    } catch { Write-Output "[INSTALL] Operation failed, continuing" }
     Write-Warn 'cairosvg no puede exportar PNG - se necesita la libreria Cairo nativa'
 } else {
     Write-Step 'Forzando reinstalacion...'
@@ -1099,7 +1099,7 @@ try {
             Write-OK 'GTK3 Runtime instalado via winget'
         }
     }
-} catch { }
+} catch { Write-Output "[INSTALL] Operation failed, continuing" }
 
 # Step 2: If not installed, download installer
 if (-not (Test-Path $gtkInstallDir)) {
@@ -1674,7 +1674,7 @@ if (-not $Force) {
             Write-OK 'cairosvg PNG export funciona - no se necesita instalacion'
             exit 0
         }
-    } catch { }
+    } catch { Write-Output "[INSTALL] Operation failed, continuing" }
     Write-Warn 'cairosvg no puede exportar PNG - se necesita la libreria Cairo nativa'
 } else {
     Write-Step 'Forzando reinstalacion...'
@@ -1702,7 +1702,7 @@ try {
             Write-OK 'GTK3 Runtime instalado via winget'
         }
     }
-} catch { }
+} catch { Write-Output "[INSTALL] Operation failed, continuing" }
 
 # Step 2: If not installed, download installer
 if (-not (Test-Path $gtkInstallDir)) {
@@ -1912,7 +1912,7 @@ if (-not $Force) {
             Write-OK 'cairosvg PNG export funciona - no se necesita instalacion'
             exit 0
         }
-    } catch { }
+    } catch { Write-Output "[INSTALL] Operation failed, continuing" }
     Write-Warn 'cairosvg no puede exportar PNG - se necesita la libreria Cairo nativa'
 } else {
     Write-Step 'Forzando reinstalacion...'
@@ -1940,7 +1940,7 @@ try {
             Write-OK 'GTK3 Runtime instalado via winget'
         }
     }
-} catch { }
+} catch { Write-Output "[INSTALL] Operation failed, continuing" }
 
 # Step 2: If not installed, download installer
 if (-not (Test-Path $gtkInstallDir)) {
@@ -2333,7 +2333,7 @@ if (-not $Force) {
             Write-OK 'cairosvg PNG export funciona - no se necesita instalacion'
             exit 0
         }
-    } catch { }
+    } catch { Write-Output "[INSTALL] Operation failed, continuing" }
     Write-Warn 'cairosvg no puede exportar PNG - se necesita la libreria Cairo nativa'
 } else {
     Write-Step 'Forzando reinstalacion...'
@@ -2361,7 +2361,7 @@ try {
             Write-OK 'GTK3 Runtime instalado via winget'
         }
     }
-} catch { }
+} catch { Write-Output "[INSTALL] Operation failed, continuing" }
 
 # Step 2: If not installed, download installer
 if (-not (Test-Path $gtkInstallDir)) {
@@ -2571,7 +2571,7 @@ if (-not $Force) {
             Write-OK 'cairosvg PNG export funciona - no se necesita instalacion'
             exit 0
         }
-    } catch { }
+    } catch { Write-Output "[INSTALL] Operation failed, continuing" }
     Write-Warn 'cairosvg no puede exportar PNG - se necesita la libreria Cairo nativa'
 } else {
     Write-Step 'Forzando reinstalacion...'
@@ -2599,7 +2599,7 @@ try {
             Write-OK 'GTK3 Runtime instalado via winget'
         }
     }
-} catch { }
+} catch { Write-Output "[INSTALL] Operation failed, continuing" }
 
 # Step 2: If not installed, download installer
 if (-not (Test-Path $gtkInstallDir)) {
