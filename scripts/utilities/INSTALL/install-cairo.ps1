@@ -25,9 +25,9 @@ param(
 $ErrorActionPreference = 'Continue'
 
 function Write-Step { param([string]$Msg) Write-Host "`n=== $Msg ===" -ForegroundColor Cyan }
-function Write-OK   { param([string]$Msg) Write-Host "[OK] $Msg" -ForegroundColor Green }
-function Write-Warn  { param([string]$Msg) Write-Host "[WARN] $Msg" -ForegroundColor Yellow }
-function Write-Err   { param([string]$Msg) Write-Host "[ERROR] $Msg" -ForegroundColor Red }
+function Write-OK   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Green }
+function Write-Warn  { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Yellow }
+function Write-Err   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Red }
 
 Write-Step 'Cairo Installation for Windows'
 
@@ -69,9 +69,9 @@ param(
 $ErrorActionPreference = 'Continue'
 
 function Write-Step { param([string]$Msg) Write-Host "`n=== $Msg ===" -ForegroundColor Cyan }
-function Write-OK   { param([string]$Msg) Write-Host "[OK] $Msg" -ForegroundColor Green }
-function Write-Warn  { param([string]$Msg) Write-Host "[WARN] $Msg" -ForegroundColor Yellow }
-function Write-Err   { param([string]$Msg) Write-Host "[ERROR] $Msg" -ForegroundColor Red }
+function Write-OK   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Green }
+function Write-Warn  { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Yellow }
+function Write-Err   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Red }
 
 Write-Step 'Cairo Installation for Windows'
 
@@ -113,9 +113,9 @@ param(
 $ErrorActionPreference = 'Continue'
 
 function Write-Step { param([string]$Msg) Write-Host "`n=== $Msg ===" -ForegroundColor Cyan }
-function Write-OK   { param([string]$Msg) Write-Host "[OK] $Msg" -ForegroundColor Green }
-function Write-Warn  { param([string]$Msg) Write-Host "[WARN] $Msg" -ForegroundColor Yellow }
-function Write-Err   { param([string]$Msg) Write-Host "[ERROR] $Msg" -ForegroundColor Red }
+function Write-OK   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Green }
+function Write-Warn  { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Yellow }
+function Write-Err   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Red }
 
 Write-Step 'Cairo Installation for Windows'
 
@@ -157,9 +157,9 @@ param(
 $ErrorActionPreference = 'Continue'
 
 function Write-Step { param([string]$Msg) Write-Host "`n=== $Msg ===" -ForegroundColor Cyan }
-function Write-OK   { param([string]$Msg) Write-Host "[OK] $Msg" -ForegroundColor Green }
-function Write-Warn  { param([string]$Msg) Write-Host "[WARN] $Msg" -ForegroundColor Yellow }
-function Write-Err   { param([string]$Msg) Write-Host "[ERROR] $Msg" -ForegroundColor Red }
+function Write-OK   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Green }
+function Write-Warn  { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Yellow }
+function Write-Err   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Red }
 
 Write-Step 'Cairo Installation for Windows'
 
@@ -174,7 +174,7 @@ if (-not $Force) {
             Write-OK 'cairosvg PNG export funciona - no se necesita instalacion'
             exit 0
         }
-    } catch { Write-Output "[INSTALL] Operation failed, continuing" }
+    } catch { Write-Output "Operation failed, continuing" }
     Write-Warn 'cairosvg no puede exportar PNG - se necesita la libreria Cairo nativa'
 } else {
     Write-Step 'Forzando reinstalacion...'
@@ -202,7 +202,7 @@ try {
             Write-OK 'GTK3 Runtime instalado via winget'
         }
     }
-} catch { Write-Output "[INSTALL] Operation failed, continuing" }
+} catch { Write-Output "Operation failed, continuing" }
 
 # Step 2: If not installed, download installer
 if (-not (Test-Path $gtkInstallDir)) {
@@ -395,9 +395,9 @@ param(
 $ErrorActionPreference = 'Continue'
 
 function Write-Step { param([string]$Msg) Write-Host "`n=== $Msg ===" -ForegroundColor Cyan }
-function Write-OK   { param([string]$Msg) Write-Host "[OK] $Msg" -ForegroundColor Green }
-function Write-Warn  { param([string]$Msg) Write-Host "[WARN] $Msg" -ForegroundColor Yellow }
-function Write-Err   { param([string]$Msg) Write-Host "[ERROR] $Msg" -ForegroundColor Red }
+function Write-OK   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Green }
+function Write-Warn  { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Yellow }
+function Write-Err   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Red }
 
 Write-Step 'Cairo Installation for Windows'
 
@@ -412,7 +412,7 @@ if (-not $Force) {
             Write-OK 'cairosvg PNG export funciona - no se necesita instalacion'
             exit 0
         }
-    } catch { Write-Output "[INSTALL] Operation failed, continuing" }
+    } catch { Write-Output "Operation failed, continuing" }
     Write-Warn 'cairosvg no puede exportar PNG - se necesita la libreria Cairo nativa'
 } else {
     Write-Step 'Forzando reinstalacion...'
@@ -440,7 +440,7 @@ try {
             Write-OK 'GTK3 Runtime instalado via winget'
         }
     }
-} catch { Write-Output "[INSTALL] Operation failed, continuing" }
+} catch { Write-Output "Operation failed, continuing" }
 
 # Step 2: If not installed, download installer
 if (-not (Test-Path $gtkInstallDir)) {
@@ -772,9 +772,9 @@ param(
 $ErrorActionPreference = 'Continue'
 
 function Write-Step { param([string]$Msg) Write-Host "`n=== $Msg ===" -ForegroundColor Cyan }
-function Write-OK   { param([string]$Msg) Write-Host "[OK] $Msg" -ForegroundColor Green }
-function Write-Warn  { param([string]$Msg) Write-Host "[WARN] $Msg" -ForegroundColor Yellow }
-function Write-Err   { param([string]$Msg) Write-Host "[ERROR] $Msg" -ForegroundColor Red }
+function Write-OK   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Green }
+function Write-Warn  { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Yellow }
+function Write-Err   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Red }
 
 Write-Step 'Cairo Installation for Windows'
 
@@ -816,9 +816,9 @@ param(
 $ErrorActionPreference = 'Continue'
 
 function Write-Step { param([string]$Msg) Write-Host "`n=== $Msg ===" -ForegroundColor Cyan }
-function Write-OK   { param([string]$Msg) Write-Host "[OK] $Msg" -ForegroundColor Green }
-function Write-Warn  { param([string]$Msg) Write-Host "[WARN] $Msg" -ForegroundColor Yellow }
-function Write-Err   { param([string]$Msg) Write-Host "[ERROR] $Msg" -ForegroundColor Red }
+function Write-OK   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Green }
+function Write-Warn  { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Yellow }
+function Write-Err   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Red }
 
 Write-Step 'Cairo Installation for Windows'
 
@@ -833,7 +833,7 @@ if (-not $Force) {
             Write-OK 'cairosvg PNG export funciona - no se necesita instalacion'
             exit 0
         }
-    } catch { Write-Output "[INSTALL] Operation failed, continuing" }
+    } catch { Write-Output "Operation failed, continuing" }
     Write-Warn 'cairosvg no puede exportar PNG - se necesita la libreria Cairo nativa'
 } else {
     Write-Step 'Forzando reinstalacion...'
@@ -861,7 +861,7 @@ try {
             Write-OK 'GTK3 Runtime instalado via winget'
         }
     }
-} catch { Write-Output "[INSTALL] Operation failed, continuing" }
+} catch { Write-Output "Operation failed, continuing" }
 
 # Step 2: If not installed, download installer
 if (-not (Test-Path $gtkInstallDir)) {
@@ -1054,9 +1054,9 @@ param(
 $ErrorActionPreference = 'Continue'
 
 function Write-Step { param([string]$Msg) Write-Host "`n=== $Msg ===" -ForegroundColor Cyan }
-function Write-OK   { param([string]$Msg) Write-Host "[OK] $Msg" -ForegroundColor Green }
-function Write-Warn  { param([string]$Msg) Write-Host "[WARN] $Msg" -ForegroundColor Yellow }
-function Write-Err   { param([string]$Msg) Write-Host "[ERROR] $Msg" -ForegroundColor Red }
+function Write-OK   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Green }
+function Write-Warn  { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Yellow }
+function Write-Err   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Red }
 
 Write-Step 'Cairo Installation for Windows'
 
@@ -1071,7 +1071,7 @@ if (-not $Force) {
             Write-OK 'cairosvg PNG export funciona - no se necesita instalacion'
             exit 0
         }
-    } catch { Write-Output "[INSTALL] Operation failed, continuing" }
+    } catch { Write-Output "Operation failed, continuing" }
     Write-Warn 'cairosvg no puede exportar PNG - se necesita la libreria Cairo nativa'
 } else {
     Write-Step 'Forzando reinstalacion...'
@@ -1099,7 +1099,7 @@ try {
             Write-OK 'GTK3 Runtime instalado via winget'
         }
     }
-} catch { Write-Output "[INSTALL] Operation failed, continuing" }
+} catch { Write-Output "Operation failed, continuing" }
 
 # Step 2: If not installed, download installer
 if (-not (Test-Path $gtkInstallDir)) {
@@ -1569,9 +1569,9 @@ param(
 $ErrorActionPreference = 'Continue'
 
 function Write-Step { param([string]$Msg) Write-Host "`n=== $Msg ===" -ForegroundColor Cyan }
-function Write-OK   { param([string]$Msg) Write-Host "[OK] $Msg" -ForegroundColor Green }
-function Write-Warn  { param([string]$Msg) Write-Host "[WARN] $Msg" -ForegroundColor Yellow }
-function Write-Err   { param([string]$Msg) Write-Host "[ERROR] $Msg" -ForegroundColor Red }
+function Write-OK   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Green }
+function Write-Warn  { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Yellow }
+function Write-Err   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Red }
 
 Write-Step 'Cairo Installation for Windows'
 
@@ -1613,9 +1613,9 @@ param(
 $ErrorActionPreference = 'Continue'
 
 function Write-Step { param([string]$Msg) Write-Host "`n=== $Msg ===" -ForegroundColor Cyan }
-function Write-OK   { param([string]$Msg) Write-Host "[OK] $Msg" -ForegroundColor Green }
-function Write-Warn  { param([string]$Msg) Write-Host "[WARN] $Msg" -ForegroundColor Yellow }
-function Write-Err   { param([string]$Msg) Write-Host "[ERROR] $Msg" -ForegroundColor Red }
+function Write-OK   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Green }
+function Write-Warn  { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Yellow }
+function Write-Err   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Red }
 
 Write-Step 'Cairo Installation for Windows'
 
@@ -1657,9 +1657,9 @@ param(
 $ErrorActionPreference = 'Continue'
 
 function Write-Step { param([string]$Msg) Write-Host "`n=== $Msg ===" -ForegroundColor Cyan }
-function Write-OK   { param([string]$Msg) Write-Host "[OK] $Msg" -ForegroundColor Green }
-function Write-Warn  { param([string]$Msg) Write-Host "[WARN] $Msg" -ForegroundColor Yellow }
-function Write-Err   { param([string]$Msg) Write-Host "[ERROR] $Msg" -ForegroundColor Red }
+function Write-OK   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Green }
+function Write-Warn  { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Yellow }
+function Write-Err   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Red }
 
 Write-Step 'Cairo Installation for Windows'
 
@@ -1674,7 +1674,7 @@ if (-not $Force) {
             Write-OK 'cairosvg PNG export funciona - no se necesita instalacion'
             exit 0
         }
-    } catch { Write-Output "[INSTALL] Operation failed, continuing" }
+    } catch { Write-Output "Operation failed, continuing" }
     Write-Warn 'cairosvg no puede exportar PNG - se necesita la libreria Cairo nativa'
 } else {
     Write-Step 'Forzando reinstalacion...'
@@ -1702,7 +1702,7 @@ try {
             Write-OK 'GTK3 Runtime instalado via winget'
         }
     }
-} catch { Write-Output "[INSTALL] Operation failed, continuing" }
+} catch { Write-Output "Operation failed, continuing" }
 
 # Step 2: If not installed, download installer
 if (-not (Test-Path $gtkInstallDir)) {
@@ -1895,9 +1895,9 @@ param(
 $ErrorActionPreference = 'Continue'
 
 function Write-Step { param([string]$Msg) Write-Host "`n=== $Msg ===" -ForegroundColor Cyan }
-function Write-OK   { param([string]$Msg) Write-Host "[OK] $Msg" -ForegroundColor Green }
-function Write-Warn  { param([string]$Msg) Write-Host "[WARN] $Msg" -ForegroundColor Yellow }
-function Write-Err   { param([string]$Msg) Write-Host "[ERROR] $Msg" -ForegroundColor Red }
+function Write-OK   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Green }
+function Write-Warn  { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Yellow }
+function Write-Err   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Red }
 
 Write-Step 'Cairo Installation for Windows'
 
@@ -1912,7 +1912,7 @@ if (-not $Force) {
             Write-OK 'cairosvg PNG export funciona - no se necesita instalacion'
             exit 0
         }
-    } catch { Write-Output "[INSTALL] Operation failed, continuing" }
+    } catch { Write-Output "Operation failed, continuing" }
     Write-Warn 'cairosvg no puede exportar PNG - se necesita la libreria Cairo nativa'
 } else {
     Write-Step 'Forzando reinstalacion...'
@@ -1940,7 +1940,7 @@ try {
             Write-OK 'GTK3 Runtime instalado via winget'
         }
     }
-} catch { Write-Output "[INSTALL] Operation failed, continuing" }
+} catch { Write-Output "Operation failed, continuing" }
 
 # Step 2: If not installed, download installer
 if (-not (Test-Path $gtkInstallDir)) {
@@ -2272,9 +2272,9 @@ param(
 $ErrorActionPreference = 'Continue'
 
 function Write-Step { param([string]$Msg) Write-Host "`n=== $Msg ===" -ForegroundColor Cyan }
-function Write-OK   { param([string]$Msg) Write-Host "[OK] $Msg" -ForegroundColor Green }
-function Write-Warn  { param([string]$Msg) Write-Host "[WARN] $Msg" -ForegroundColor Yellow }
-function Write-Err   { param([string]$Msg) Write-Host "[ERROR] $Msg" -ForegroundColor Red }
+function Write-OK   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Green }
+function Write-Warn  { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Yellow }
+function Write-Err   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Red }
 
 Write-Step 'Cairo Installation for Windows'
 
@@ -2316,9 +2316,9 @@ param(
 $ErrorActionPreference = 'Continue'
 
 function Write-Step { param([string]$Msg) Write-Host "`n=== $Msg ===" -ForegroundColor Cyan }
-function Write-OK   { param([string]$Msg) Write-Host "[OK] $Msg" -ForegroundColor Green }
-function Write-Warn  { param([string]$Msg) Write-Host "[WARN] $Msg" -ForegroundColor Yellow }
-function Write-Err   { param([string]$Msg) Write-Host "[ERROR] $Msg" -ForegroundColor Red }
+function Write-OK   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Green }
+function Write-Warn  { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Yellow }
+function Write-Err   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Red }
 
 Write-Step 'Cairo Installation for Windows'
 
@@ -2333,7 +2333,7 @@ if (-not $Force) {
             Write-OK 'cairosvg PNG export funciona - no se necesita instalacion'
             exit 0
         }
-    } catch { Write-Output "[INSTALL] Operation failed, continuing" }
+    } catch { Write-Output "Operation failed, continuing" }
     Write-Warn 'cairosvg no puede exportar PNG - se necesita la libreria Cairo nativa'
 } else {
     Write-Step 'Forzando reinstalacion...'
@@ -2361,7 +2361,7 @@ try {
             Write-OK 'GTK3 Runtime instalado via winget'
         }
     }
-} catch { Write-Output "[INSTALL] Operation failed, continuing" }
+} catch { Write-Output "Operation failed, continuing" }
 
 # Step 2: If not installed, download installer
 if (-not (Test-Path $gtkInstallDir)) {
@@ -2554,9 +2554,9 @@ param(
 $ErrorActionPreference = 'Continue'
 
 function Write-Step { param([string]$Msg) Write-Host "`n=== $Msg ===" -ForegroundColor Cyan }
-function Write-OK   { param([string]$Msg) Write-Host "[OK] $Msg" -ForegroundColor Green }
-function Write-Warn  { param([string]$Msg) Write-Host "[WARN] $Msg" -ForegroundColor Yellow }
-function Write-Err   { param([string]$Msg) Write-Host "[ERROR] $Msg" -ForegroundColor Red }
+function Write-OK   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Green }
+function Write-Warn  { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Yellow }
+function Write-Err   { param([string]$Msg) Write-Host " $Msg" -ForegroundColor Red }
 
 Write-Step 'Cairo Installation for Windows'
 
@@ -2571,7 +2571,7 @@ if (-not $Force) {
             Write-OK 'cairosvg PNG export funciona - no se necesita instalacion'
             exit 0
         }
-    } catch { Write-Output "[INSTALL] Operation failed, continuing" }
+    } catch { Write-Output "Operation failed, continuing" }
     Write-Warn 'cairosvg no puede exportar PNG - se necesita la libreria Cairo nativa'
 } else {
     Write-Step 'Forzando reinstalacion...'
@@ -2599,7 +2599,7 @@ try {
             Write-OK 'GTK3 Runtime instalado via winget'
         }
     }
-} catch { Write-Output "[INSTALL] Operation failed, continuing" }
+} catch { Write-Output "Operation failed, continuing" }
 
 # Step 2: If not installed, download installer
 if (-not (Test-Path $gtkInstallDir)) {

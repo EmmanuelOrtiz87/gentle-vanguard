@@ -298,7 +298,7 @@ function Get-SiemConfig {
 function Get-Checkpoint {
     if (Test-Path $CheckpointFile) {
         try { return Get-Content $CheckpointFile -Raw | ConvertFrom-Json }
-        catch { Write-Output "[security] Operation failed, continuing" }
+        catch { Write-Output "Operation failed, continuing" }
     }
     return [PSCustomObject]@{ lastLine = 0; lastTimestamp = ''; lastRun = '' }
 }
@@ -471,8 +471,8 @@ function Write-Alert {
 
 function Invoke-Tail {
     if (-not (Test-Path $AuditLog)) {
-        Write-Host "[INFO] No audit log found at: $AuditLog" -ForegroundColor Yellow
-        Write-Host "[INFO] No events to process." -ForegroundColor Gray
+        Write-Host " No audit log found at: $AuditLog" -ForegroundColor Yellow
+        Write-Host " No events to process." -ForegroundColor Gray
         return
     }
     
@@ -481,7 +481,7 @@ function Invoke-Tail {
     $newLines    = $allLines | Select-Object -Skip $checkpoint.lastLine
     
     if ($newLines.Count -eq 0) {
-        Write-Host "[INFO] No new audit events since last run (checkpoint: line $($checkpoint.lastLine))." -ForegroundColor Gray
+        Write-Host " No new audit events since last run (checkpoint: line $($checkpoint.lastLine))." -ForegroundColor Gray
         return
     }
     
@@ -511,7 +511,7 @@ function Invoke-Tail {
     
     Save-Checkpoint ($checkpoint.lastLine + $processed) $lastTs
     
-    Write-Host "[OK] SIEM bridge processed $processed event(s), $forwarded forwarded." -ForegroundColor Green
+    Write-Host " SIEM bridge processed $processed event(s), $forwarded forwarded." -ForegroundColor Green
     if ($alerts.Count -gt 0) {
         Write-Host "[!] $($alerts.Count) alert(s) generated — see: $AlertLog" -ForegroundColor Yellow
     }
@@ -519,7 +519,7 @@ function Invoke-Tail {
 
 function Invoke-Full {
     if (-not (Test-Path $AuditLog)) {
-        Write-Host "[INFO] No audit log found." -ForegroundColor Yellow
+        Write-Host " No audit log found." -ForegroundColor Yellow
         return
     }
     
@@ -548,7 +548,7 @@ function Invoke-Full {
     foreach ($alert in $alerts) { Write-Alert $alert }
     
     Save-Checkpoint $processed $lastTs
-    Write-Host "[OK] Full reprocess: $processed event(s), $forwarded forwarded." -ForegroundColor Green
+    Write-Host " Full reprocess: $processed event(s), $forwarded forwarded." -ForegroundColor Green
 }
 
 function Invoke-Status {
@@ -587,7 +587,7 @@ function Invoke-Status {
 }
 
 function Invoke-Test {
-    Write-Host "[INFO] Sending test event to SIEM..." -ForegroundColor Cyan
+    Write-Host " Sending test event to SIEM..." -ForegroundColor Cyan
     
     $testEvent = ConvertTo-SiemEvent ([PSCustomObject]@{
         timestamp = (Get-Date -Format 'o')
@@ -604,9 +604,9 @@ function Invoke-Test {
     $ok = Send-ToSiem $testEvent $siemConfig
     
     if ($ok) {
-        Write-Host "[OK] Test event written to: $SiemOutputLog" -ForegroundColor Green
+        Write-Host " Test event written to: $SiemOutputLog" -ForegroundColor Green
     } else {
-        Write-Host "[WARN] Local write OK but cloud SIEM forward failed." -ForegroundColor Yellow
+        Write-Host " Local write OK but cloud SIEM forward failed." -ForegroundColor Yellow
     }
     Write-Host "      Check config/observability-config.json#siem for cloud config." -ForegroundColor Gray
 }
@@ -796,8 +796,8 @@ function Write-Alert {
 
 function Invoke-Tail {
     if (-not (Test-Path $AuditLog)) {
-        Write-Host "[INFO] No audit log found at: $AuditLog" -ForegroundColor Yellow
-        Write-Host "[INFO] No events to process." -ForegroundColor Gray
+        Write-Host " No audit log found at: $AuditLog" -ForegroundColor Yellow
+        Write-Host " No events to process." -ForegroundColor Gray
         return
     }
     
@@ -806,7 +806,7 @@ function Invoke-Tail {
     $newLines    = $allLines | Select-Object -Skip $checkpoint.lastLine
     
     if ($newLines.Count -eq 0) {
-        Write-Host "[INFO] No new audit events since last run (checkpoint: line $($checkpoint.lastLine))." -ForegroundColor Gray
+        Write-Host " No new audit events since last run (checkpoint: line $($checkpoint.lastLine))." -ForegroundColor Gray
         return
     }
     
@@ -836,7 +836,7 @@ function Invoke-Tail {
     
     Save-Checkpoint ($checkpoint.lastLine + $processed) $lastTs
     
-    Write-Host "[OK] SIEM bridge processed $processed event(s), $forwarded forwarded." -ForegroundColor Green
+    Write-Host " SIEM bridge processed $processed event(s), $forwarded forwarded." -ForegroundColor Green
     if ($alerts.Count -gt 0) {
         Write-Host "[!] $($alerts.Count) alert(s) generated — see: $AlertLog" -ForegroundColor Yellow
     }
@@ -844,7 +844,7 @@ function Invoke-Tail {
 
 function Invoke-Full {
     if (-not (Test-Path $AuditLog)) {
-        Write-Host "[INFO] No audit log found." -ForegroundColor Yellow
+        Write-Host " No audit log found." -ForegroundColor Yellow
         return
     }
     
@@ -873,7 +873,7 @@ function Invoke-Full {
     foreach ($alert in $alerts) { Write-Alert $alert }
     
     Save-Checkpoint $processed $lastTs
-    Write-Host "[OK] Full reprocess: $processed event(s), $forwarded forwarded." -ForegroundColor Green
+    Write-Host " Full reprocess: $processed event(s), $forwarded forwarded." -ForegroundColor Green
 }
 
 function Invoke-Status {
@@ -912,7 +912,7 @@ function Invoke-Status {
 }
 
 function Invoke-Test {
-    Write-Host "[INFO] Sending test event to SIEM..." -ForegroundColor Cyan
+    Write-Host " Sending test event to SIEM..." -ForegroundColor Cyan
     
     $testEvent = ConvertTo-SiemEvent ([PSCustomObject]@{
         timestamp = (Get-Date -Format 'o')
@@ -929,9 +929,9 @@ function Invoke-Test {
     $ok = Send-ToSiem $testEvent $siemConfig
     
     if ($ok) {
-        Write-Host "[OK] Test event written to: $SiemOutputLog" -ForegroundColor Green
+        Write-Host " Test event written to: $SiemOutputLog" -ForegroundColor Green
     } else {
-        Write-Host "[WARN] Local write OK but cloud SIEM forward failed." -ForegroundColor Yellow
+        Write-Host " Local write OK but cloud SIEM forward failed." -ForegroundColor Yellow
     }
     Write-Host "      Check config/observability-config.json#siem for cloud config." -ForegroundColor Gray
 }
@@ -1122,8 +1122,8 @@ function Write-Alert {
 
 function Invoke-Tail {
     if (-not (Test-Path $AuditLog)) {
-        Write-Host "[INFO] No audit log found at: $AuditLog" -ForegroundColor Yellow
-        Write-Host "[INFO] No events to process." -ForegroundColor Gray
+        Write-Host " No audit log found at: $AuditLog" -ForegroundColor Yellow
+        Write-Host " No events to process." -ForegroundColor Gray
         return
     }
     
@@ -1132,7 +1132,7 @@ function Invoke-Tail {
     $newLines    = $allLines | Select-Object -Skip $checkpoint.lastLine
     
     if ($newLines.Count -eq 0) {
-        Write-Host "[INFO] No new audit events since last run (checkpoint: line $($checkpoint.lastLine))." -ForegroundColor Gray
+        Write-Host " No new audit events since last run (checkpoint: line $($checkpoint.lastLine))." -ForegroundColor Gray
         return
     }
     
@@ -1162,7 +1162,7 @@ function Invoke-Tail {
     
     Save-Checkpoint ($checkpoint.lastLine + $processed) $lastTs
     
-    Write-Host "[OK] SIEM bridge processed $processed event(s), $forwarded forwarded." -ForegroundColor Green
+    Write-Host " SIEM bridge processed $processed event(s), $forwarded forwarded." -ForegroundColor Green
     if ($alerts.Count -gt 0) {
         Write-Host "[!] $($alerts.Count) alert(s) generated — see: $AlertLog" -ForegroundColor Yellow
     }
@@ -1170,7 +1170,7 @@ function Invoke-Tail {
 
 function Invoke-Full {
     if (-not (Test-Path $AuditLog)) {
-        Write-Host "[INFO] No audit log found." -ForegroundColor Yellow
+        Write-Host " No audit log found." -ForegroundColor Yellow
         return
     }
     
@@ -1199,7 +1199,7 @@ function Invoke-Full {
     foreach ($alert in $alerts) { Write-Alert $alert }
     
     Save-Checkpoint $processed $lastTs
-    Write-Host "[OK] Full reprocess: $processed event(s), $forwarded forwarded." -ForegroundColor Green
+    Write-Host " Full reprocess: $processed event(s), $forwarded forwarded." -ForegroundColor Green
 }
 
 function Invoke-Status {
@@ -1238,7 +1238,7 @@ function Invoke-Status {
 }
 
 function Invoke-Test {
-    Write-Host "[INFO] Sending test event to SIEM..." -ForegroundColor Cyan
+    Write-Host " Sending test event to SIEM..." -ForegroundColor Cyan
     
     $testEvent = ConvertTo-SiemEvent ([PSCustomObject]@{
         timestamp = (Get-Date -Format 'o')
@@ -1255,9 +1255,9 @@ function Invoke-Test {
     $ok = Send-ToSiem $testEvent $siemConfig
     
     if ($ok) {
-        Write-Host "[OK] Test event written to: $SiemOutputLog" -ForegroundColor Green
+        Write-Host " Test event written to: $SiemOutputLog" -ForegroundColor Green
     } else {
-        Write-Host "[WARN] Local write OK but cloud SIEM forward failed." -ForegroundColor Yellow
+        Write-Host " Local write OK but cloud SIEM forward failed." -ForegroundColor Yellow
     }
     Write-Host "      Check config/observability-config.json#siem for cloud config." -ForegroundColor Gray
 }
@@ -1447,8 +1447,8 @@ function Write-Alert {
 
 function Invoke-Tail {
     if (-not (Test-Path $AuditLog)) {
-        Write-Host "[INFO] No audit log found at: $AuditLog" -ForegroundColor Yellow
-        Write-Host "[INFO] No events to process." -ForegroundColor Gray
+        Write-Host " No audit log found at: $AuditLog" -ForegroundColor Yellow
+        Write-Host " No events to process." -ForegroundColor Gray
         return
     }
     
@@ -1457,7 +1457,7 @@ function Invoke-Tail {
     $newLines    = $allLines | Select-Object -Skip $checkpoint.lastLine
     
     if ($newLines.Count -eq 0) {
-        Write-Host "[INFO] No new audit events since last run (checkpoint: line $($checkpoint.lastLine))." -ForegroundColor Gray
+        Write-Host " No new audit events since last run (checkpoint: line $($checkpoint.lastLine))." -ForegroundColor Gray
         return
     }
     
@@ -1487,7 +1487,7 @@ function Invoke-Tail {
     
     Save-Checkpoint ($checkpoint.lastLine + $processed) $lastTs
     
-    Write-Host "[OK] SIEM bridge processed $processed event(s), $forwarded forwarded." -ForegroundColor Green
+    Write-Host " SIEM bridge processed $processed event(s), $forwarded forwarded." -ForegroundColor Green
     if ($alerts.Count -gt 0) {
         Write-Host "[!] $($alerts.Count) alert(s) generated — see: $AlertLog" -ForegroundColor Yellow
     }
@@ -1495,7 +1495,7 @@ function Invoke-Tail {
 
 function Invoke-Full {
     if (-not (Test-Path $AuditLog)) {
-        Write-Host "[INFO] No audit log found." -ForegroundColor Yellow
+        Write-Host " No audit log found." -ForegroundColor Yellow
         return
     }
     
@@ -1524,7 +1524,7 @@ function Invoke-Full {
     foreach ($alert in $alerts) { Write-Alert $alert }
     
     Save-Checkpoint $processed $lastTs
-    Write-Host "[OK] Full reprocess: $processed event(s), $forwarded forwarded." -ForegroundColor Green
+    Write-Host " Full reprocess: $processed event(s), $forwarded forwarded." -ForegroundColor Green
 }
 
 function Invoke-Status {
@@ -1563,7 +1563,7 @@ function Invoke-Status {
 }
 
 function Invoke-Test {
-    Write-Host "[INFO] Sending test event to SIEM..." -ForegroundColor Cyan
+    Write-Host " Sending test event to SIEM..." -ForegroundColor Cyan
     
     $testEvent = ConvertTo-SiemEvent ([PSCustomObject]@{
         timestamp = (Get-Date -Format 'o')
@@ -1580,9 +1580,9 @@ function Invoke-Test {
     $ok = Send-ToSiem $testEvent $siemConfig
     
     if ($ok) {
-        Write-Host "[OK] Test event written to: $SiemOutputLog" -ForegroundColor Green
+        Write-Host " Test event written to: $SiemOutputLog" -ForegroundColor Green
     } else {
-        Write-Host "[WARN] Local write OK but cloud SIEM forward failed." -ForegroundColor Yellow
+        Write-Host " Local write OK but cloud SIEM forward failed." -ForegroundColor Yellow
     }
     Write-Host "      Check config/observability-config.json#siem for cloud config." -ForegroundColor Gray
 }
