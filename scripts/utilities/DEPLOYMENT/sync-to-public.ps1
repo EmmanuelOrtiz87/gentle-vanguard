@@ -78,7 +78,11 @@ function Sync-FilesToBranch {
     }
     Copy-Item "$privateRepo\LICENSE" "$targetDir\LICENSE" -Force
     Copy-Item "$privateRepo\CONTRIBUTING.md" "$targetDir\CONTRIBUTING.md" -Force
-    Copy-Item "$privateRepo\SECURITY.md" "$targetDir\SECURITY.md" -Force
+    if (Test-Path "$privateRepo\SECURITY.md") {
+        Copy-Item "$privateRepo\SECURITY.md" "$targetDir\SECURITY.md" -Force
+    } elseif (Test-Path "$privateRepo\docs\SECURITY.md") {
+        Copy-Item "$privateRepo\docs\SECURITY.md" "$targetDir\SECURITY.md" -Force
+    }
     Copy-Item "$privateRepo\CHANGELOG.md" "$targetDir\CHANGELOG.md" -Force
     Copy-Item "$privateRepo\BUILD-README.md" "$targetDir\BUILD-README.md" -Force -ErrorAction SilentlyContinue
 
