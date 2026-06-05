@@ -1,6 +1,7 @@
 # Example Plugins
 
-Three complete plugin structures at different complexity levels. Use these as templates when implementing in Phase 4.
+Three complete plugin structures at different complexity levels. Use these as templates when
+implementing in Phase 4.
 
 ## Minimal Plugin: Single Skill
 
@@ -37,9 +38,9 @@ meeting-notes/
 ---
 name: meeting-notes
 description: >
-  Generate structured meeting notes from a transcript. Use when the user asks
-  to "summarize this meeting", "create meeting notes", "extract action items
-  from this transcript", or provides a meeting transcript file.
+  Generate structured meeting notes from a transcript. Use when the user asks to "summarize this
+  meeting", "create meeting notes", "extract action items from this transcript", or provides a
+  meeting transcript file.
 ---
 
 Read the transcript file the user provided and generate structured meeting notes.
@@ -99,9 +100,9 @@ code-quality/
 ---
 name: review-changes
 description: >
-  Review code changes for style and quality issues. Use when the user asks to
-  "review my changes", "check this diff", "review for style violations", or
-  wants a code quality pass on uncommitted work.
+  Review code changes for style and quality issues. Use when the user asks to "review my changes",
+  "check this diff", "review for style violations", or wants a code quality pass on uncommitted
+  work.
 ---
 
 Run `git diff --name-only` to get the list of changed files.
@@ -126,8 +127,8 @@ Present a summary with:
 ---
 name: fix-lint
 description: >
-  Auto-fix linting issues in changed files. Use when the user asks to
-  "fix lint errors", "clean up linting", or "auto-fix my lint issues".
+  Auto-fix linting issues in changed files. Use when the user asks to "fix lint errors", "clean up
+  linting", or "auto-fix my lint issues".
 ---
 
 Run the linter: `npm run lint -- --format json 2>&1`
@@ -147,11 +148,11 @@ After all fixes, run the linter again to confirm clean output.
 ---
 name: coding-standards
 description: >
-  This skill should be used when the user asks about "coding standards",
-  "style guide", "naming conventions", "code formatting rules", or needs
-  guidance on project-specific code quality expectations.
+  This skill should be used when the user asks about "coding standards", "style guide", "naming
+  conventions", "code formatting rules", or needs guidance on project-specific code quality
+  expectations.
 metadata:
-  version: "0.1.0"
+  version: '0.1.0'
 ---
 ```
 
@@ -284,10 +285,8 @@ You are a ticket analysis specialist. Analyze tickets for priority, effort, and 
 4. Map dependencies
 5. Rank by impact-to-effort ratio
 
-**Output Format:**
-| Ticket | Type | Effort | Dependencies | Priority |
-|--------|------|--------|-------------|----------|
-| ... | ... | ... | ... | ... |
+**Output Format:** | Ticket | Type | Effort | Dependencies | Priority |
+|--------|------|--------|-------------|----------| | ... | ... | ... | ... | ... |
 
 Followed by a brief rationale for the top 5 priorities.
 ```
@@ -318,8 +317,8 @@ Followed by a brief rationale for the top 5 priorities.
 
 ## How tool references work
 
-Plugin files use `~~category` as a placeholder for whatever tool the user
-connects in that category. Plugins are tool-agnostic.
+Plugin files use `~~category` as a placeholder for whatever tool the user connects in that category.
+Plugins are tool-agnostic.
 
 ## Connectors for this plugin
 

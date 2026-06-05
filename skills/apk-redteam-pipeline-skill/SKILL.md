@@ -1,21 +1,32 @@
 ---
 name: apk-redteam-pipeline-skill
 description: >
-  End-to-end Android APK red-team pipeline — automated APK acquisition (Play Store + apkpure + apkmirror fallback), jadx decompilation, secret/URL/JWT/Firebase grep, pinned-cert extraction, exported-component enumeration, Frida runtime instrumentation templates, intent-injection probes. Built from an authorized external red-team engagement where 7 APKs were pulled manually, 4 download attempts truncated, and a hardcoded JWT + 30 internal API endpoints were recovered from one of the apps. Use when target has a mobile app catalogue (Play Store developer page), when you find an APK URL hosted on a web server, or when post-recon mentions "mobile app" in scope.
+  End-to-end Android APK red-team pipeline — automated APK acquisition (Play Store + apkpure +
+  apkmirror fallback), jadx decompilation, secret/URL/JWT/Firebase grep, pinned-cert extraction,
+  exported-component enumeration, Frida runtime instrumentation templates, intent-injection probes.
+  Built from an authorized external red-team engagement where 7 APKs were pulled manually, 4
+  download attempts truncated, and a hardcoded JWT + 30 internal API endpoints were recovered from
+  one of the apps. Use when target has a mobile app catalogue (Play Store developer page), when you
+  find an APK URL hosted on a web server, or when post-recon mentions "mobile app" in scope.
 metadata:
   source: claude-bughunter
   original-name: apk-redteam-pipeline
 ---
+
 ## When to use this skill
 
 Trigger when:
+
 - Recon surfaces 1+ mobile apps under the target's developer name (Play Store dev page)
-- A web app hosts `*.apk` files directly (e.g. `Recruitz.apk` found on a subdomain during one engagement)
-- APK package IDs leaked via stealer logs (e.g. `com.<brand>.app`, `com.<brand>.<sub-brand>` patterns in stealer dump format)
+- A web app hosts `*.apk` files directly (e.g. `Recruitz.apk` found on a subdomain during one
+  engagement)
+- APK package IDs leaked via stealer logs (e.g. `com.<brand>.app`, `com.<brand>.<sub-brand>`
+  patterns in stealer dump format)
 - Customer-facing app, dealer/partner portal, or employee mobile companion app is in scope
 - Bug bounty program lists Android in scope
 
 DO NOT use for:
+
 - iOS-only targets (different pipeline — IPA reverse, MobSF, frida-ios-dump)
 - React Native / Flutter web apps already covered by JS bundle analysis
 - Server-side only assessments
@@ -25,6 +36,7 @@ DO NOT use for:
 ## Stage 0 — Inventory all org-owned apps
 
 ### Play Store developer-page scrape
+
 ```bash
 # Find developer page from the target's brand name
 curl -sk -A "Mozilla/5.0" "https://play.google.com/store/apps/developer?id=<Brand+Name>" -o /tmp/dev.html
@@ -34,6 +46,7 @@ grep -oE 'id=[a-zA-Z0-9._]+' /tmp/dev.html | sort -u
 ```
 
 Example output (anonymized — 7 packages typical for a multi-brand conglomerate):
+
 ```
 com.events.<brand>build
 com.<corp>.<sub-brand-1>
@@ -45,12 +58,15 @@ com.<corp>.<sub-brand-3>
 ```
 
 ### Cross-reference with stealer logs
-Stealer-log format includes package names like `*@com.<corp>.<app>` — extract these from `creds_userpass.txt` if you have a leaked dump.
+
+Stealer-log format includes package names like `*@com.<corp>.<app>` — extract these from
+`creds_userpass.txt` if you have a leaked dump.
 
 ### Brand permutation guesses (multi-brand conglomerate patterns)
+
 ```
 com.<brand>.app
-com.<brand>.mobile  
+com.<brand>.mobile
 com.<brand>.android
 com.<brand>connect.app
 in.<brand>.dealer
@@ -62,6 +78,7 @@ in.co.<brand>.app
 ## Stage 1 — APK acquisition
 
 ### Primary: APKPure direct (no auth required)
+
 ```bash
 # Follow 302 redirects to actual download
 curl -sk -L --max-time 60 \
@@ -72,20 +89,24 @@ curl -sk -L --max-time 60 \
 ```
 
 ### Secondary: APKMirror search
+
 ```bash
 curl -sk -A "Mozilla/5.0" "https://www.apkmirror.com/?post_type=app_release&searchtype=apk&s=<brand>" \
   | grep -oE 'href="[^"]+\.apk[^"]*"' | sort -u
 ```
 
 ### Tertiary: APKPure web search
+
 ```bash
 curl -sk "https://apkpure.com/search?q=<brand>" | grep -oE 'data-dt-app="[^"]+"'
 ```
 
 ### XAPK vs APK
+
 - `.xapk` = a zip containing multiple split APKs (base + config.armeabi-v7a + config.en + etc.)
 - Unzip outer first, then unzip the inner `base.apk` or `<package>.apk`
-- Some apkpure downloads return truncated XAPK with missing EOCD signature — symptom of CDN rate-limiting; rotate IP and retry, OR use `7z x` which is more lenient than `unzip`
+- Some apkpure downloads return truncated XAPK with missing EOCD signature — symptom of CDN
+  rate-limiting; rotate IP and retry, OR use `7z x` which is more lenient than `unzip`
 
 ```bash
 # Standard unzip (works for clean APK)
@@ -121,6 +142,7 @@ done
 ```
 
 For a fast "strings only" pass without full decompilation:
+
 ```bash
 find extracted_<package> -name "classes*.dex" -exec strings -8 {} \; > strings_<package>.txt
 ```
@@ -169,6 +191,7 @@ grep -oE '"password"\s*:\s*"[^"]+"|password\s*=\s*"[^"]+"' decompiled_<package>/
 ```
 
 ### Real-world example finding (anonymized — from an authorized engagement)
+
 ```
 # Customer-facing APK shipped a hardcoded URL of this shape:
 https://api.<client>.example/<path-token>/<resource-token>?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.<payload>.<sig>
@@ -197,13 +220,18 @@ done
 ```
 
 ### Real-world example
-A customer-facing APK from an authorized engagement contained `assets/api_<service>_<domain>_com.cer` — revealed the existence of an `api.<service>.<domain>.example` asset that had NOT surfaced in passive recon.
+
+A customer-facing APK from an authorized engagement contained
+`assets/api_<service>_<domain>_com.cer` — revealed the existence of an
+`api.<service>.<domain>.example` asset that had NOT surfaced in passive recon.
 
 ---
 
 ## Stage 5 — Exported component enumeration
 
-AndroidManifest.xml lists components. Exported ones (especially with `android:exported="true"` or implicit-export via intent-filter) can be triggered by other apps — potential intent-injection attack surface.
+AndroidManifest.xml lists components. Exported ones (especially with `android:exported="true"` or
+implicit-export via intent-filter) can be triggered by other apps — potential intent-injection
+attack surface.
 
 ```bash
 # Decode binary AndroidManifest if needed
@@ -217,6 +245,7 @@ grep -E 'android:exported="true"' decompiled_<package>/resources/AndroidManifest
 ```
 
 For each exported component, check:
+
 - Does it accept extras that flow into a WebView (intent → WebView → XSS / file://)
 - Does it accept URI extras (potential SSRF via deep link)
 - Does it pass extras to other Activities (intent redirection)
@@ -248,9 +277,11 @@ curl -s "https://firebasestorage.googleapis.com/v0/b/<bucket>/o"
 
 ## Stage 7 — Runtime instrumentation (Frida)
 
-For when static analysis isn't enough — you want to dump tokens at runtime, bypass cert pinning, or trace API calls.
+For when static analysis isn't enough — you want to dump tokens at runtime, bypass cert pinning, or
+trace API calls.
 
 ### Setup
+
 ```bash
 pip install --break-system-packages frida-tools objection
 adb devices  # ensure device/emulator connected
@@ -258,49 +289,54 @@ adb devices  # ensure device/emulator connected
 ```
 
 ### Cert-pinning bypass (universal)
+
 ```javascript
 // frida-script-pinning-bypass.js
-Java.perform(function() {
-    // OkHttp
-    try {
-        var CertificatePinner = Java.use('okhttp3.CertificatePinner');
-        CertificatePinner.check.overload('java.lang.String', 'java.util.List').implementation = function() {
-            console.log('[+] OkHttp pinning bypassed for: ' + arguments[0]);
-            return;
-        };
-    } catch (e) {}
-    // HttpsURLConnection
-    try {
-        var TrustManagerImpl = Java.use('com.android.org.conscrypt.TrustManagerImpl');
-        TrustManagerImpl.verifyChain.implementation = function(chain) {
-            console.log('[+] TrustManagerImpl verifyChain bypassed');
-            return chain;
-        };
-    } catch (e) {}
+Java.perform(function () {
+  // OkHttp
+  try {
+    var CertificatePinner = Java.use('okhttp3.CertificatePinner');
+    CertificatePinner.check.overload('java.lang.String', 'java.util.List').implementation =
+      function () {
+        console.log('[+] OkHttp pinning bypassed for: ' + arguments[0]);
+        return;
+      };
+  } catch (e) {}
+  // HttpsURLConnection
+  try {
+    var TrustManagerImpl = Java.use('com.android.org.conscrypt.TrustManagerImpl');
+    TrustManagerImpl.verifyChain.implementation = function (chain) {
+      console.log('[+] TrustManagerImpl verifyChain bypassed');
+      return chain;
+    };
+  } catch (e) {}
 });
 ```
+
 ```bash
 frida -U -l frida-script-pinning-bypass.js -f <package_id> --no-pause
 ```
 
 ### Hook HTTP requests
+
 ```javascript
-Java.perform(function() {
-    var OkHttpClient = Java.use('okhttp3.OkHttpClient');
-    var Request = Java.use('okhttp3.Request');
-    var Call = Java.use('okhttp3.Call');
-    
-    OkHttpClient.newCall.implementation = function(req) {
-        var url = req.url().toString();
-        var headers = req.headers().toString();
-        console.log('[REQ] ' + url);
-        console.log('[HDRS] ' + headers);
-        return this.newCall(req);
-    };
+Java.perform(function () {
+  var OkHttpClient = Java.use('okhttp3.OkHttpClient');
+  var Request = Java.use('okhttp3.Request');
+  var Call = Java.use('okhttp3.Call');
+
+  OkHttpClient.newCall.implementation = function (req) {
+    var url = req.url().toString();
+    var headers = req.headers().toString();
+    console.log('[REQ] ' + url);
+    console.log('[HDRS] ' + headers);
+    return this.newCall(req);
+  };
 });
 ```
 
 ### Quick token extraction via objection
+
 ```bash
 objection --gadget com.target.app explore
 # Inside:
@@ -330,28 +366,33 @@ mitmproxy --listen-port 8080
 
 ## Decision tree — what to do with what you find
 
-| Finding | Next move |
-|---|---|
-| Active JWT (not expired) | Test against the API host — does it grant access? Try sid manipulation |
-| Expired JWT | Inspect path tokens / API endpoint structure — useful intel for post-VPN |
-| AWS access key | Use `awscli` to test: `aws sts get-caller-identity` — many leaked keys still have permissions |
-| Firebase project_id + web_api_key | Test public Firestore/RTDB/Storage read |
-| Google API key (AIza*) | Test against `https://www.googleapis.com/customsearch/v1` etc. — see what API the key activates |
-| Hardcoded HTTP URLs (http://) | Possible MITM via downgrade if cert pinning is missing |
-| Pinned cert for internal host | New asset discovery — that host is real |
-| Exported Activity with WebView | Test intent-injection → URL-loading abuse |
-| Stack-trace artifacts (Stack Overflow URLs) | Identify the developer's questions → infer architecture |
-| Hardcoded credentials | Spray immediately (respect any caps from related skills) |
+| Finding                                     | Next move                                                                                       |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Active JWT (not expired)                    | Test against the API host — does it grant access? Try sid manipulation                          |
+| Expired JWT                                 | Inspect path tokens / API endpoint structure — useful intel for post-VPN                        |
+| AWS access key                              | Use `awscli` to test: `aws sts get-caller-identity` — many leaked keys still have permissions   |
+| Firebase project_id + web_api_key           | Test public Firestore/RTDB/Storage read                                                         |
+| Google API key (AIza\*)                     | Test against `https://www.googleapis.com/customsearch/v1` etc. — see what API the key activates |
+| Hardcoded HTTP URLs (http://)               | Possible MITM via downgrade if cert pinning is missing                                          |
+| Pinned cert for internal host               | New asset discovery — that host is real                                                         |
+| Exported Activity with WebView              | Test intent-injection → URL-loading abuse                                                       |
+| Stack-trace artifacts (Stack Overflow URLs) | Identify the developer's questions → infer architecture                                         |
+| Hardcoded credentials                       | Spray immediately (respect any caps from related skills)                                        |
 
 ---
 
 ## Anti-patterns
 
-- **Don't grep only for "password"** — most secrets have specific high-signal patterns (AKIA, AIza, eyJ, etc.). Generic word grep produces too much noise.
-- **Don't skip XAPK split APKs** — config.armeabi splits and config.<lang> splits sometimes contain different code paths.
-- **Don't trust expired JWTs as "dead intel"** — the path structure, endpoint list, and signing algorithm are still useful. The 8-year-expired-JWT example above shows this.
-- **Don't reverse only the latest version** — older APK versions (via APKMirror version history) sometimes have secrets removed in newer versions but still active server-side.
-- **Don't ignore Firebase even if app looks "simple"** — Firebase rules misconfigurations (public read on Firestore) are extremely common.
+- **Don't grep only for "password"** — most secrets have specific high-signal patterns (AKIA, AIza,
+  eyJ, etc.). Generic word grep produces too much noise.
+- **Don't skip XAPK split APKs** — config.armeabi splits and config.<lang> splits sometimes contain
+  different code paths.
+- **Don't trust expired JWTs as "dead intel"** — the path structure, endpoint list, and signing
+  algorithm are still useful. The 8-year-expired-JWT example above shows this.
+- **Don't reverse only the latest version** — older APK versions (via APKMirror version history)
+  sometimes have secrets removed in newer versions but still active server-side.
+- **Don't ignore Firebase even if app looks "simple"** — Firebase rules misconfigurations (public
+  read on Firestore) are extremely common.
 - **Don't run Frida on a production device** — use rooted emulator or test device only.
 
 ---
@@ -365,6 +406,7 @@ pip install --break-system-packages frida-tools objection
 ```
 
 For APK download convenience, can add a `download-apk` shell function:
+
 ```bash
 download-apk() {
   local pkg="$1"
@@ -391,18 +433,39 @@ download-apk() {
 **Finding: Hardcoded JWT + 30+ Internal API Endpoints in a customer-facing APK**
 
 - Subject: Hardcoded artifacts in legacy mobile build reveal internal API surface
-- Observations: Decompilation of `com.<client>.<app>` revealed embedded JWT (expired ~8 years earlier) and 30+ `/v1/*` endpoint paths against `api2.<client>.example` (internal-only externally)
-- Description: APK ships with developer build artifacts. Path tokens are security-by-obscurity; API endpoint inventory is reconnaissance-grade.
-- Impact: Post-VPN-foothold (via cred compromise), attacker has full API surface map without binary reverse. HS256 secret recovery (via SSRF/LFI) would yield arbitrary token forging.
-- Recommendation: rotate HS256 secret, migrate to RS256, remove hardcoded URLs from builds, audit all org APKs.
+- Observations: Decompilation of `com.<client>.<app>` revealed embedded JWT (expired ~8 years
+  earlier) and 30+ `/v1/*` endpoint paths against `api2.<client>.example` (internal-only externally)
+- Description: APK ships with developer build artifacts. Path tokens are security-by-obscurity; API
+  endpoint inventory is reconnaissance-grade.
+- Impact: Post-VPN-foothold (via cred compromise), attacker has full API surface map without binary
+  reverse. HS256 secret recovery (via SSRF/LFI) would yield arbitrary token forging.
+- Recommendation: rotate HS256 secret, migrate to RS256, remove hardcoded URLs from builds, audit
+  all org APKs.
 - Evidence: extracted strings, decoded JWT, endpoint inventory
 
 ---
 
 ## Related Skills & Chains
 
-- **`cloud-iam-deep`** — APK secret extraction frequently yields live AWS/GCP/Azure credentials. Chain primitive: jadx string-grep produces AWS Access Key ID + Secret → `cloud-iam-deep` `aws sts get-caller-identity` → role/policy enumeration → IAM privilege-escalation path (one of 24 documented AWS escalation patterns) → cloud-plane takeover. Same flow applies to GCP service-account JSON and Azure shared-access-signature tokens extracted from APK resources.
-- **`hunt-api-misconfig`** — APK endpoint inventory hands you the API surface for free; mass-assignment, JWT, and CORS bugs are typical. Chain primitive: APK reveals `/v1/users/me` and `/v1/admin/users` → `hunt-api-misconfig` mass-assignment probes (`{is_admin:true}`) against `/v1/users/me` → admin role escalation → access to `/v1/admin/users`.
-- **`hunt-rce`** — Hardcoded JWT signing secrets (HS256) extracted from APK enable arbitrary token forging. Chain primitive: APK strings yield HS256 secret → forge admin token → access admin API → if API has eval/template/sink → `hunt-rce` to server. Also: exported components with intent-injection sinks can reach `Runtime.exec` if app is local-installed.
-- **`offensive-osint`** — APK is one node in the broader org recon graph; pair with breach corpora and cert transparency. Chain primitive: APK reveals internal API hostname `api2.example.com` → `offensive-osint` certificate-transparency lookup → discover sibling subdomains → expanded attack surface.
-- **`redteam-report-template`** — APK findings need clear "what the binary leaks" framing because client engineers often dismiss mobile-static findings as "obfuscation problem." Chain primitive: validated finding (token/URL/secret extracted) → `triage-validation` 7-Question Gate (specifically: "does this credential still authenticate today?") → `redteam-report-template` packaging with explicit binary version + extraction reproduction steps.
+- **`cloud-iam-deep`** — APK secret extraction frequently yields live AWS/GCP/Azure credentials.
+  Chain primitive: jadx string-grep produces AWS Access Key ID + Secret → `cloud-iam-deep`
+  `aws sts get-caller-identity` → role/policy enumeration → IAM privilege-escalation path (one of 24
+  documented AWS escalation patterns) → cloud-plane takeover. Same flow applies to GCP
+  service-account JSON and Azure shared-access-signature tokens extracted from APK resources.
+- **`hunt-api-misconfig`** — APK endpoint inventory hands you the API surface for free;
+  mass-assignment, JWT, and CORS bugs are typical. Chain primitive: APK reveals `/v1/users/me` and
+  `/v1/admin/users` → `hunt-api-misconfig` mass-assignment probes (`{is_admin:true}`) against
+  `/v1/users/me` → admin role escalation → access to `/v1/admin/users`.
+- **`hunt-rce`** — Hardcoded JWT signing secrets (HS256) extracted from APK enable arbitrary token
+  forging. Chain primitive: APK strings yield HS256 secret → forge admin token → access admin API →
+  if API has eval/template/sink → `hunt-rce` to server. Also: exported components with
+  intent-injection sinks can reach `Runtime.exec` if app is local-installed.
+- **`offensive-osint`** — APK is one node in the broader org recon graph; pair with breach corpora
+  and cert transparency. Chain primitive: APK reveals internal API hostname `api2.example.com` →
+  `offensive-osint` certificate-transparency lookup → discover sibling subdomains → expanded attack
+  surface.
+- **`redteam-report-template`** — APK findings need clear "what the binary leaks" framing because
+  client engineers often dismiss mobile-static findings as "obfuscation problem." Chain primitive:
+  validated finding (token/URL/secret extracted) → `triage-validation` 7-Question Gate
+  (specifically: "does this credential still authenticate today?") → `redteam-report-template`
+  packaging with explicit binary version + extraction reproduction steps.

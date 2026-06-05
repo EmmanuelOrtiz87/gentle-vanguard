@@ -2,8 +2,8 @@
 name: sia-skill
 description: >
   Self-Improving Agent (SIA) loop. File-based workflow: META generates target, FEEDBACK reviews,
-  orchestrator evaluates score and decides retry. Triggers: "self-improving", "auto-mejora",
-  "sia loop", "meta-agent", "feedback agent", "self improvement", "improve yourself".
+  orchestrator evaluates score and decides retry. Triggers: "self-improving", "auto-mejora", "sia
+  loop", "meta-agent", "feedback agent", "self improvement", "improve yourself".
 metadata:
   source: GV-native
   version: 1.0
@@ -56,13 +56,13 @@ Each SIA cycle requires agent interaction — the script manages state, the agen
 
 ## Scoring
 
-| Criterion   | Weight | Checked by FEEDBACK agent |
-|-------------|--------|---------------------------|
-| Correctness | 30%    | Solves the problem, no bugs |
-| Efficiency  | 20%    | Optimal approach, no unnecessary complexity |
-| Style       | 15%    | GV conventions, idiomatic |
+| Criterion   | Weight | Checked by FEEDBACK agent                     |
+| ----------- | ------ | --------------------------------------------- |
+| Correctness | 30%    | Solves the problem, no bugs                   |
+| Efficiency  | 20%    | Optimal approach, no unnecessary complexity   |
+| Style       | 15%    | GV conventions, idiomatic                     |
 | Safety      | 20%    | No secrets, no side effects, input validation |
-| Docs        | 15%    | Comments, clear interface |
+| Docs        | 15%    | Comments, clear interface                     |
 
 Score ≥ 80 = pass. Max 5 iterations.
 
@@ -93,11 +93,11 @@ $sid = "my-task"
 
 ## Files
 
-| File | Purpose |
-|------|---------|
-| `scripts/sia/sia-orchestrator.ps1` | Workflow state machine (init/meta/feedback/save/score) |
-| `config/agent-prompts/SIA-META.md` | Meta-agent prompt template |
-| `config/agent-prompts/SIA-FEEDBACK.md` | Feedback-agent prompt template |
-| `.sia/<session>/` | Per-session state: spec, prompts, targets, reviews |
-| `docs/sia/BENCHMARK-TASKS.md` | 4 internal benchmark tasks |
-| `docs/plans/FASE4-SIA-ADAPTATION.md` | Full adaptation plan |
+| File                                   | Purpose                                                |
+| -------------------------------------- | ------------------------------------------------------ |
+| `scripts/sia/sia-orchestrator.ps1`     | Workflow state machine (init/meta/feedback/save/score) |
+| `config/agent-prompts/SIA-META.md`     | Meta-agent prompt template                             |
+| `config/agent-prompts/SIA-FEEDBACK.md` | Feedback-agent prompt template                         |
+| `.sia/<session>/`                      | Per-session state: spec, prompts, targets, reviews     |
+| `docs/sia/BENCHMARK-TASKS.md`          | 4 internal benchmark tasks                             |
+| `docs/plans/FASE4-SIA-ADAPTATION.md`   | Full adaptation plan                                   |

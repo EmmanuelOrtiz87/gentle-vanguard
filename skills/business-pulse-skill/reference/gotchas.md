@@ -6,7 +6,9 @@ Known failure modes for the business-pulse skill. Good / Bad pairs.
 
 ## Gotcha: QuickBooks returns unexpected state
 
-**Why it matters:** QuickBooks can return empty results, a sync-in-progress state, or an auth error without throwing a hard exception. Treating silence as "no data" causes the pulse to skip Cash entirely without telling the owner — they assume their business has no QuickBooks data.
+**Why it matters:** QuickBooks can return empty results, a sync-in-progress state, or an auth error
+without throwing a hard exception. Treating silence as "no data" causes the pulse to skip Cash
+entirely without telling the owner — they assume their business has no QuickBooks data.
 
 ### ✗ Bad
 
@@ -16,7 +18,8 @@ Claude: [QuickBooks returns empty response]
         → pulse presents no cash data; owner assumes QB isn't connected
 ```
 
-The owner spends 10 minutes reconnecting QuickBooks before realizing it was always connected — just in a transient state.
+The owner spends 10 minutes reconnecting QuickBooks before realizing it was always connected — just
+in a transient state.
 
 ### ✓ Good
 
@@ -26,13 +29,15 @@ Claude: [QuickBooks returns empty response or error]
         → "Sources unavailable: QuickBooks — returned empty response" in appendix
 ```
 
-The owner sees the gap explicitly and can decide whether to reconnect or proceed with a partial pulse.
+The owner sees the gap explicitly and can decide whether to reconnect or proceed with a partial
+pulse.
 
 ---
 
 ## Gotcha: Gmail auth failure mid-pulse
 
-**Why it matters:** Gmail auth is intermittently flaky in workshop environments. Surfacing a raw auth error in the middle of the pulse looks broken and breaks the owner's trust in the skill.
+**Why it matters:** Gmail auth is intermittently flaky in workshop environments. Surfacing a raw
+auth error in the middle of the pulse looks broken and breaks the owner's trust in the skill.
 
 ### ✗ Bad
 
@@ -59,7 +64,9 @@ The pulse still delivers value. The owner is informed, not alarmed.
 
 ## Gotcha: Asking permission before pulling data
 
-**Why it matters:** The skill's core value is doing the work without prompting. An owner who invoked the pulse already implicitly approved the data pull. Asking "should I check QuickBooks?" or "can I read your emails?" defeats the purpose and erodes trust in the skill as an autonomous assistant.
+**Why it matters:** The skill's core value is doing the work without prompting. An owner who invoked
+the pulse already implicitly approved the data pull. Asking "should I check QuickBooks?" or "can I
+read your emails?" defeats the purpose and erodes trust in the skill as an autonomous assistant.
 
 ### ✗ Bad
 
@@ -82,7 +89,8 @@ Claude: [immediately dispatches all parallel tool calls]
 
 ## Gotcha: Slack write requires explicit confirmation
 
-**Why it matters:** Slack write is not tested in the standard validation path and posts to channels other people can see. Auto-posting without confirmation could embarrass the owner or spam a team.
+**Why it matters:** Slack write is not tested in the standard validation path and posts to channels
+other people can see. Auto-posting without confirmation could embarrass the owner or spam a team.
 
 ### ✗ Bad
 

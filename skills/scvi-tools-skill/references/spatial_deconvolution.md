@@ -1,21 +1,26 @@
 # Spatial Transcriptomics Analysis
 
-This reference covers spatial transcriptomics analysis using scvi-tools methods: DestVI for deconvolution and resolVI for building spatial models.
+This reference covers spatial transcriptomics analysis using scvi-tools methods: DestVI for
+deconvolution and resolVI for building spatial models.
 
 ## Overview
 
-Spatial transcriptomics technologies like Visium capture gene expression at defined spatial locations, but many platforms have multi-cellular resolution. scvi-tools provides two main approaches:
+Spatial transcriptomics technologies like Visium capture gene expression at defined spatial
+locations, but many platforms have multi-cellular resolution. scvi-tools provides two main
+approaches:
 
-- **DestVI**: Deconvolution - estimates cell type proportions at each spot using a single-cell reference
-- **resolVI**: Builds a spatial model that learns gene expression patterns accounting for spatial context
+- **DestVI**: Deconvolution - estimates cell type proportions at each spot using a single-cell
+  reference
+- **resolVI**: Builds a spatial model that learns gene expression patterns accounting for spatial
+  context
 
 ## Available Methods in scvi-tools
 
-| Method | Description | Use Case |
-|--------|-------------|----------|
-| **DestVI** | Variational inference for deconvolution | Estimate cell type proportions per spot |
-| **resolVI** | Spatial gene expression model | Learn spatially-aware representations |
-| **CondSCVI** | Reference model for DestVI | Required for DestVI workflow |
+| Method       | Description                             | Use Case                                |
+| ------------ | --------------------------------------- | --------------------------------------- |
+| **DestVI**   | Variational inference for deconvolution | Estimate cell type proportions per spot |
+| **resolVI**  | Spatial gene expression model           | Learn spatially-aware representations   |
+| **CondSCVI** | Reference model for DestVI              | Required for DestVI workflow            |
 
 ## Prerequisites
 
@@ -138,7 +143,8 @@ sq.pl.spatial_scatter(
 
 ## Part 2: resolVI Spatial Model
 
-resolVI is a semi-supervised method that learns cell type assignments and spatially-aware representations directly from spatial data, optionally using initial cell type predictions.
+resolVI is a semi-supervised method that learns cell type assignments and spatially-aware
+representations directly from spatial data, optionally using initial cell type predictions.
 
 **Note**: resolVI is in `scvi.external` (not `scvi.model`).
 
@@ -424,13 +430,13 @@ sq.pl.spatial_scatter(
 
 ## Troubleshooting
 
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| Few common genes | Different gene naming | Convert gene names (Ensembl ↔ Symbol) |
-| Poor deconvolution | Reference doesn't match | Use tissue-matched reference |
-| All spots same type | Over-smoothing | Adjust model parameters, check reference diversity |
-| NaN proportions | Missing cell types | Ensure all expected types in reference |
-| Training slow | Large spatial dataset | Reduce max_epochs, increase batch_size |
+| Issue               | Cause                   | Solution                                           |
+| ------------------- | ----------------------- | -------------------------------------------------- |
+| Few common genes    | Different gene naming   | Convert gene names (Ensembl ↔ Symbol)              |
+| Poor deconvolution  | Reference doesn't match | Use tissue-matched reference                       |
+| All spots same type | Over-smoothing          | Adjust model parameters, check reference diversity |
+| NaN proportions     | Missing cell types      | Ensure all expected types in reference             |
+| Training slow       | Large spatial dataset   | Reduce max_epochs, increase batch_size             |
 
 ## Key References
 

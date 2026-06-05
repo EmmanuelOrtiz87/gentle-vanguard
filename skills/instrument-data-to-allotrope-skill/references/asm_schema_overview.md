@@ -1,11 +1,14 @@
 # ASM Schema Overview
 
-The Allotrope Simple Model (ASM) is a JSON-based standard for representing laboratory instrument data with semantic consistency.
+The Allotrope Simple Model (ASM) is a JSON-based standard for representing laboratory instrument
+data with semantic consistency.
 
 ## Core Concepts
 
 ### Structure
+
 ASM uses a hierarchical document structure:
+
 - **Manifest** - Links to ontologies and schemas
 - **Data** - The actual measurement data organized by technique
 
@@ -33,7 +36,9 @@ ASM uses a hierarchical document structure:
 ## Required Metadata Documents
 
 ### data system document
+
 Every ASM output MUST include this document with:
+
 - `ASM file identifier`: Output filename
 - `data system instance identifier`: System ID or "N/A"
 - `file name`: Source input filename
@@ -43,7 +48,9 @@ Every ASM output MUST include this document with:
 - `software name`: Instrument software that generated the source file
 
 ### device system document
+
 Every ASM output MUST include this document with:
+
 - `equipment serial number`: Main instrument serial
 - `product manufacturer`: Vendor name
 - `device document`: Array of sub-components (probes, pods, etc.)
@@ -79,9 +86,11 @@ See: https://gitlab.com/allotrope-public/asm/-/tree/main/json-schemas/adm
 Below are details for frequently-used techniques:
 
 ### Cell Counting
+
 Schema: `cell-counting/REC/2024/09/cell-counting.schema.json`
 
 Key fields:
+
 - `viable-cell-density` (cells/mL)
 - `viability` (percentage)
 - `total-cell-count`
@@ -89,9 +98,11 @@ Key fields:
 - `cell-diameter-distribution-datum`
 
 ### Spectrophotometry (UV-Vis)
+
 Schema: `spectrophotometry/REC/2024/06/spectrophotometry.schema.json`
 
 Key fields:
+
 - `absorbance` (dimensionless)
 - `wavelength` (nm)
 - `transmittance` (percentage)
@@ -99,9 +110,11 @@ Key fields:
 - `concentration` with units
 
 ### Plate Reader
+
 Schema: `plate-reader/REC/2024/06/plate-reader.schema.json`
 
 Key fields:
+
 - `absorbance`
 - `fluorescence`
 - `luminescence`
@@ -109,18 +122,22 @@ Key fields:
 - `plate-identifier`
 
 ### qPCR
+
 Schema: `pcr/REC/2024/06/pcr.schema.json`
 
 Key fields:
+
 - `cycle-threshold-result`
 - `amplification-efficiency`
 - `melt-curve-datum`
 - `target-DNA-description`
 
 ### Chromatography
+
 Schema: `liquid-chromatography/REC/2023/09/liquid-chromatography.schema.json`
 
 Key fields:
+
 - `retention-time` (minutes)
 - `peak-area`
 - `peak-height`
@@ -130,7 +147,9 @@ Key fields:
 ## Data Patterns
 
 ### Value Datum
+
 Simple value with unit:
+
 ```json
 {
   "value": 1.5,
@@ -139,25 +158,29 @@ Simple value with unit:
 ```
 
 ### Aggregate Datum
+
 Collection of related values:
+
 ```json
 {
   "measurement-aggregate-document": {
     "measurement-document": [
-      { "viable-cell-density": {"value": 2.5e6, "unit": "(cell/mL)"} },
-      { "viability": {"value": 95.2, "unit": "%"} }
+      { "viable-cell-density": { "value": 2.5e6, "unit": "(cell/mL)" } },
+      { "viability": { "value": 95.2, "unit": "%" } }
     ]
   }
 }
 ```
 
 ### Data Cube
+
 Multi-dimensional array data:
+
 ```json
 {
   "cube-structure": {
-    "dimensions": [{"@componentDatatype": "double", "concept": "elapsed time"}],
-    "measures": [{"@componentDatatype": "double", "concept": "absorbance"}]
+    "dimensions": [{ "@componentDatatype": "double", "concept": "elapsed time" }],
+    "measures": [{ "@componentDatatype": "double", "concept": "absorbance" }]
   },
   "data": {
     "dimensions": [[0, 1, 2, 3, 4]],
@@ -191,6 +214,7 @@ schema_url = asm.get("$asm.manifest", {}).get("$ref")
 Official schemas: https://gitlab.com/allotrope-public/asm/-/tree/main/json-schemas/adm
 
 Schema structure:
+
 ```
 json-schemas/adm/
 ├── cell-counting/
@@ -208,7 +232,9 @@ json-schemas/adm/
 ## Common Issues
 
 ### Missing Fields
+
 Not all instrument exports contain all ASM fields. Report completeness:
+
 ```python
 def report_completeness(asm, expected_fields):
     found = set(extract_all_fields(asm))
@@ -217,10 +243,13 @@ def report_completeness(asm, expected_fields):
 ```
 
 ### Unit Variations
+
 Instruments may use different unit formats. The allotropy library normalizes these:
+
 - "cells/mL" → "(cell/mL)"
 - "%" → "%"
 - "nm" → "nm"
 
 ### Date Formats
+
 ASM uses ISO 8601: `2024-01-15T10:30:00Z`

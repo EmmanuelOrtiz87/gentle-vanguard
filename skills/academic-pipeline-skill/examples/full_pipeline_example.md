@@ -2,10 +2,9 @@
 
 ## Scenario Description
 
-**User type**: Master's student in Education, first time writing an academic paper
-**Topic**: The impact of declining birthrate on enrollment strategies of private universities in Taiwan
-**Goal**: Complete a submission-ready IMRaD paper
-**Language**: Traditional Chinese (bilingual abstract)
+**User type**: Master's student in Education, first time writing an academic paper **Topic**: The
+impact of declining birthrate on enrollment strategies of private universities in Taiwan **Goal**:
+Complete a submission-ready IMRaD paper **Language**: Traditional Chinese (bilingual abstract)
 
 ---
 
@@ -54,29 +53,40 @@ Loading deep-research SKILL.md...
 Launching socratic_mentor_agent...
 ```
 
-**Socratic Mentor**: You mentioned "the impact of declining birthrate on private university enrollment strategies." Before we begin, I'd like to understand a few things:
+**Socratic Mentor**: You mentioned "the impact of declining birthrate on private university
+enrollment strategies." Before we begin, I'd like to understand a few things:
 
 1. Why are you interested in this topic? Did you observe some phenomenon?
-2. When you say "enrollment strategies," what kind are you thinking of? Online marketing? Scholarships? Program adjustments? Or all of the above?
+2. When you say "enrollment strategies," what kind are you thinking of? Online marketing?
+   Scholarships? Program adjustments? Or all of the above?
 
-**User**: I've noticed that many private universities are starting to do things they wouldn't have done before, like hosting information sessions at high schools, lowering admission thresholds, and opening many new programs. I want to know if these strategies actually work.
+**User**: I've noticed that many private universities are starting to do things they wouldn't have
+done before, like hosting information sessions at high schools, lowering admission thresholds, and
+opening many new programs. I want to know if these strategies actually work.
 
-**Socratic Mentor**: Great observation. You mentioned three types of strategies: outreach activities, admission standard adjustments, and new program establishment.
+**Socratic Mentor**: Great observation. You mentioned three types of strategies: outreach
+activities, admission standard adjustments, and new program establishment.
 
-Let me follow up: What do you mean by "actually work"? Higher freshmen enrollment rate? Maintaining student quality? The school surviving? Different definitions of "working" lead to completely different research questions.
+Let me follow up: What do you mean by "actually work"? Higher freshmen enrollment rate? Maintaining
+student quality? The school surviving? Different definitions of "working" lead to completely
+different research questions.
 
-**User**: I think the most important thing is the freshmen enrollment rate — if you can't recruit students, nothing else matters.
+**User**: I think the most important thing is the freshmen enrollment rate — if you can't recruit
+students, nothing else matters.
 
-**Socratic Mentor**:
-[INSIGHT: Research focus = actual effectiveness of enrollment strategies on freshmen enrollment rate]
+**Socratic Mentor**: [INSIGHT: Research focus = actual effectiveness of enrollment strategies on
+freshmen enrollment rate]
 
-Good. Let's go deeper. If your research conclusion is "certain strategies can indeed improve enrollment rates," who would find this useful? Private university presidents? Ministry of Education policymakers? Or parents of high school students?
+Good. Let's go deeper. If your research conclusion is "certain strategies can indeed improve
+enrollment rates," who would find this useful? Private university presidents? Ministry of Education
+policymakers? Or parents of high school students?
 
 Different target audiences will significantly change how you write your paper.
 
-**User**: Primarily for university administrators, so they know which strategies are worth investing in.
+**User**: Primarily for university administrators, so they know which strategies are worth investing
+in.
 
-*(Socratic dialogue continues for 8 rounds, covering 5 Layers...)*
+_(Socratic dialogue continues for 8 rounds, covering 5 Layers...)_
 
 **Socratic Mentor -- Final Summary**:
 
@@ -111,6 +121,7 @@ Extracted INSIGHTs (8):
 Then bibliography_agent executes literature search, source_verification_agent verifies sources...
 
 **Stage 1 Deliverables:**
+
 - RQ Brief (with FINER scoring)
 - Methodology Blueprint (mixed methods design)
 - Annotated Bibliography (22 references, APA 7.0)
@@ -153,15 +164,19 @@ intake_agent auto-detected deep-research output, skipping redundant Phase 0 ques
 Launching socratic_mentor_agent (plan mode)...
 ```
 
-**Plan Mode Mentor**: I've reviewed your Research Plan Summary. The research question is clear. Let's plan the paper chapter by chapter. Starting with the Introduction.
+**Plan Mode Mentor**: I've reviewed your Research Plan Summary. The research question is clear.
+Let's plan the paper chapter by chapter. Starting with the Introduction.
 
-What sense of urgency do you want the reader to feel? In other words, why should the reader read this paper right now?
+What sense of urgency do you want the reader to feel? In other words, why should the reader read
+this paper right now?
 
-**User**: Because the declining birthrate is already happening — many universities might close within 5 years.
+**User**: Because the declining birthrate is already happening — many universities might close
+within 5 years.
 
-**Plan Mode Mentor**: Good. Your Introduction opening could use a specific number to convey urgency. Do you know how many private universities have closed or suspended enrollment in the past 5 years?
+**Plan Mode Mentor**: Good. Your Introduction opening could use a specific number to convey urgency.
+Do you know how many private universities have closed or suspended enrollment in the past 5 years?
 
-*(Plan mode dialogue continues for 12 rounds, covering 6 chapters...)*
+_(Plan mode dialogue continues for 12 rounds, covering 6 chapters...)_
 
 **Plan Mode Complete --> Switch to full mode**
 
@@ -174,6 +189,7 @@ abstract_bilingual_agent writing bilingual abstract...
 ```
 
 **Stage 2 Deliverables:**
+
 - Paper Draft (5,200 words, IMRaD structure, with bilingual abstract)
 
 ---
@@ -217,6 +233,7 @@ field_analyst_agent analyzing paper domain...
 ```
 
 **Field Analysis Results:**
+
 ```
 Paper domain: Education Policy / Higher Education Management
 Research paradigm: Pragmatism (mixed methods)
@@ -229,7 +246,7 @@ Reviewer Configuration:
   Reviewer 3: Demographer, specializing in declining birthrate and labor market, interdisciplinary perspective
 ```
 
-*(4 reviewers review in parallel... editorial_synthesizer_agent compiles...)*
+_(4 reviewers review in parallel... editorial_synthesizer_agent compiles...)_
 
 **Editorial Decision: Major Revision**
 
@@ -248,6 +265,7 @@ R5: [Introduction] Research gap argumentation not sharp enough, needs more speci
 ```
 
 **Stage 3 Deliverables:**
+
 - 4 independent review reports
 - Editorial Decision Letter: Major Revision
 - Revision Roadmap (5 required items + 3 suggested modifications)
@@ -291,6 +309,7 @@ peer_reviewer_agent monitoring revision quality...
 ```
 
 **Revision Progress Tracking:**
+
 ```
 R1: [v] Added control variables (school size, geographic location, tuition level)
 R2: [v] Supplemented 2024-2026 literature (added 8 new citations)
@@ -300,6 +319,7 @@ R5: [v] Rewrote Introduction paragraphs 2-3, added school closure data
 ```
 
 **Stage 4 Deliverables:**
+
 - Revised Draft (6,800 words, 1,600 words more than original)
 - Response to Reviewers (R-A-C format, point-by-point response)
 
@@ -354,7 +374,8 @@ S1: Recommend refining Discussion final paragraph, focusing on policy recommenda
 S2: Recommend moving sampling limitation statement to Methodology Limitations section
 ```
 
-**Editorial Synthesizer**: Revision quality is good. Remaining issues are all minor. Recommend Accept with Minor Revision.
+**Editorial Synthesizer**: Revision quality is good. Remaining issues are all minor. Recommend
+Accept with Minor Revision.
 
 ---
 
@@ -394,6 +415,7 @@ formatter_agent executing format conversion...
 ```
 
 **Stage 5 Deliverables:**
+
 - `declining_birthrate_private_university.tex` + `.bib` (LaTeX version)
 - `declining_birthrate_private_university.docx` (DOCX version)
 - `declining_birthrate_private_university.pdf` (PDF version)

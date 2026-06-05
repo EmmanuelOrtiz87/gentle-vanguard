@@ -1,30 +1,34 @@
 # Troubleshooting Guide for scvi-tools
 
-This reference provides a consolidated guide for diagnosing and resolving common issues across all scvi-tools models.
+This reference provides a consolidated guide for diagnosing and resolving common issues across all
+scvi-tools models.
 
 ## Quick Diagnosis
 
-| Symptom | Likely Cause | Quick Fix |
-|---------|--------------|-----------|
-| "X should contain integers" | Normalized data in X | Use `layer="counts"` in setup |
-| CUDA out of memory | GPU memory exhausted | Reduce `batch_size`, use smaller model |
-| Training loss is NaN | Bad data or learning rate | Check for all-zero cells/genes |
-| Batches not mixing | Too few shared features | Increase HVGs, check gene overlap |
-| Over-correction | Too aggressive integration | Use scANVI with labels |
-| Import error | Missing dependencies | `pip install scvi-tools[all]` |
+| Symptom                     | Likely Cause               | Quick Fix                              |
+| --------------------------- | -------------------------- | -------------------------------------- |
+| "X should contain integers" | Normalized data in X       | Use `layer="counts"` in setup          |
+| CUDA out of memory          | GPU memory exhausted       | Reduce `batch_size`, use smaller model |
+| Training loss is NaN        | Bad data or learning rate  | Check for all-zero cells/genes         |
+| Batches not mixing          | Too few shared features    | Increase HVGs, check gene overlap      |
+| Over-correction             | Too aggressive integration | Use scANVI with labels                 |
+| Import error                | Missing dependencies       | `pip install scvi-tools[all]`          |
 
 ## Data Format Issues
 
 ### Issue: CITE-seq protein data from Seurat is CLR-normalized
 
-**Cause**: Seurat's `NormalizeData(normalization.method = "CLR")` transforms raw ADT counts. totalVI requires raw integer counts for protein data.
+**Cause**: Seurat's `NormalizeData(normalization.method = "CLR")` transforms raw ADT counts. totalVI
+requires raw integer counts for protein data.
 
 **Symptoms**:
+
 - Protein values are not integers
 - Protein values contain negative numbers
 - Model training produces poor results
 
 **Solution**:
+
 ```python
 # Check if protein data is normalized
 protein = adata.obsm["protein_expression"]
@@ -41,6 +45,7 @@ print(f"Contains integers: {np.allclose(protein, protein.astype(int))}")
 **Cause**: scvi-tools requires raw integer counts, not normalized data.
 
 **Solution**:
+
 ```python
 # Check if X contains integers
 import numpy as np
@@ -61,6 +66,7 @@ scvi.model.SCVI.setup_anndata(adata, layer="counts")
 **Cause**: Incompatible sparse format or dense array expected.
 
 **Solution**:
+
 ```python
 from scipy.sparse import csr_matrix
 
@@ -78,6 +84,7 @@ if adata.n_obs * adata.n_vars < 1e8:
 **Cause**: Missing values or corrupted data.
 
 **Solution**:
+
 ```python
 import numpy as np
 
@@ -98,6 +105,7 @@ adata.X = csr_matrix(X)
 **Cause**: Column name mismatch in adata.obs.
 
 **Solution**:
+
 ```python
 # List available columns
 print(adata.obs.columns.tolist())
@@ -144,6 +152,7 @@ model.train(accelerator="cpu")
 **Cause**: CUDA not installed or version mismatch.
 
 **Diagnosis**:
+
 ```python
 import torch
 print(f"CUDA available: {torch.cuda.is_available()}")
@@ -152,6 +161,7 @@ print(f"CUDA version: {torch.version.cuda}")
 ```
 
 **Solution**:
+
 ```bash
 # Check system CUDA
 nvidia-smi
@@ -168,6 +178,7 @@ pip install torch --index-url https://download.pytorch.org/whl/cu121  # For CUDA
 **Cause**: Dataset too large for system RAM.
 
 **Solutions**:
+
 ```python
 # 1. Process in chunks (for very large data)
 # Subsample for initial exploration
@@ -187,6 +198,7 @@ adata = adata[:, adata.var['highly_variable']].copy()
 **Cause**: Numerical instability, bad data, or learning rate issues.
 
 **Solutions**:
+
 ```python
 # 1. Check for problematic cells/genes
 sc.pp.filter_cells(adata, min_genes=200)
@@ -204,6 +216,7 @@ model.train(max_epochs=200, early_stopping=True)
 **Cause**: Insufficient epochs, poor hyperparameters, or data issues.
 
 **Solutions**:
+
 ```python
 # 1. Train longer
 model.train(max_epochs=400)
@@ -229,6 +242,7 @@ model = scvi.model.SCVI(adata, n_latent=30, n_layers=2)
 **Cause**: Model too complex or trained too long.
 
 **Solutions**:
+
 ```python
 # 1. Enable early stopping
 model.train(early_stopping=True, early_stopping_patience=10)
@@ -247,6 +261,7 @@ model = scvi.model.SCVI(adata, n_layers=1)
 **Cause**: Too few shared features, strong biological differences, or technical issues.
 
 **Solutions**:
+
 ```python
 # 1. Check gene overlap between batches
 for batch in adata.obs['batch'].unique():
@@ -268,6 +283,7 @@ model = scvi.model.SCVI(adata, n_latent=50)
 **Cause**: Model removes too much variation.
 
 **Solutions**:
+
 ```python
 # 1. Use scANVI with cell type labels
 scvi.model.SCANVI.from_scvi_model(scvi_model, labels_key="cell_type")
@@ -288,6 +304,7 @@ scvi.model.SCVI.setup_anndata(
 **Cause**: Unbalanced batch sizes or incomplete integration.
 
 **Solutions**:
+
 ```python
 # 1. Check batch distribution
 print(adata.obs['batch'].value_counts())
@@ -307,6 +324,7 @@ adata_balanced = sc.concat(balanced)
 ### scANVI: Poor label transfer
 
 **Solutions**:
+
 ```python
 # 1. Check label distribution
 print(adata.obs['cell_type'].value_counts())
@@ -323,6 +341,7 @@ scanvi_model.train(max_epochs=100)
 ### totalVI: Noisy protein signal
 
 **Solutions**:
+
 ```python
 # 1. Use denoised protein values
 _, protein_denoised = model.get_normalized_expression(return_mean=True)
@@ -337,6 +356,7 @@ for i, name in enumerate(adata.uns["protein_names"]):
 ### PeakVI: Poor clustering
 
 **Solutions**:
+
 ```python
 # 1. Use more variable peaks
 from sklearn.feature_selection import VarianceThreshold
@@ -350,6 +370,7 @@ adata.X = (adata.X > 0).astype(np.float32)
 ### MultiVI: Different cell counts between modalities
 
 **Solutions**:
+
 ```python
 # Ensure same cells in same order
 common_cells = adata_rna.obs_names.intersection(adata_atac.obs_names)
@@ -360,6 +381,7 @@ adata_atac = adata_atac[common_cells].copy()
 ### DestVI: Poor deconvolution
 
 **Solutions**:
+
 ```python
 # 1. Check gene overlap
 common_genes = adata_ref.var_names.intersection(adata_spatial.var_names)
@@ -377,6 +399,7 @@ print(adata_ref.obs['cell_type'].value_counts())
 ### scvi-tools 1.x vs 0.x API changes
 
 Key differences:
+
 ```python
 # 0.x API
 scvi.data.setup_anndata(adata, ...)
@@ -386,6 +409,7 @@ scvi.model.SCVI.setup_anndata(adata, ...)
 ```
 
 ### Check versions
+
 ```python
 import scvi
 import scanpy as sc
@@ -399,6 +423,7 @@ print(f"torch: {torch.__version__}")
 ```
 
 ### Recommended versions (as of late 2024)
+
 ```
 scvi-tools>=1.0.0
 scanpy>=1.9.0
@@ -414,6 +439,7 @@ torch>=2.0.0
 4. **Tutorials**: https://docs.scvi-tools.org/en/stable/tutorials/index.html
 
 When reporting issues, include:
+
 - scvi-tools version (`scvi.__version__`)
 - Python version
 - Full error traceback

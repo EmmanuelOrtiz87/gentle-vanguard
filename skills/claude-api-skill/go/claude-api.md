@@ -1,6 +1,7 @@
 # Claude API — Go
 
-> **Note:** The Go SDK supports the Claude API and beta tool use with `BetaToolRunner`. Agent SDK is not yet available for Go.
+> **Note:** The Go SDK supports the Claude API and beta tool use with `BetaToolRunner`. Agent SDK is
+> not yet available for Go.
 
 ## Installation
 
@@ -88,14 +89,14 @@ if err := stream.Err(); err != nil { log.Fatal(err) }
 // message.Content now has the complete response
 ```
 
-
 ---
 
 ## Tool Use
 
 ### Tool Runner (Beta — Recommended)
 
-**Beta:** The Go SDK provides `BetaToolRunner` for automatic tool use loops via the `toolrunner` package.
+**Beta:** The Go SDK provides `BetaToolRunner` for automatic tool use loops via the `toolrunner`
+package.
 
 ```go
 import (
@@ -170,7 +171,9 @@ for _, block := range message.Content {
 
 ### Manual Loop
 
-For fine-grained control over the agentic loop, define tools with `ToolParam`, check `StopReason`, execute tools yourself, and feed `tool_result` blocks back. This is the pattern when you need to intercept, validate, or log tool calls.
+For fine-grained control over the agentic loop, define tools with `ToolParam`, check `StopReason`,
+execute tools yourself, and feed `tool_result` blocks back. This is the pattern when you need to
+intercept, validate, or log tool calls.
 
 Derived from `anthropic-sdk-go/examples/tools/main.go`.
 
@@ -260,25 +263,28 @@ func main() {
 
 **Key API surface:**
 
-| Symbol | Purpose |
-|---|---|
-| `resp.ToParam()` | Convert `Message` response → `MessageParam` for history |
-| `block.AsAny().(type)` | Type-switch on `ContentBlockUnion` variants |
-| `variant.JSON.Input.Raw()` | Raw JSON string of tool input (for `json.Unmarshal`) |
-| `anthropic.NewToolResultBlock(id, content, isError)` | Build `tool_result` block |
-| `anthropic.NewUserMessage(blocks...)` | Wrap tool results as a user turn |
-| `anthropic.StopReasonToolUse` | `StopReason` constant to check loop termination |
-| `anthropic.ToolUnionParam{OfTool: &t}` | Wrap `ToolParam` in the union for `Tools:` |
+| Symbol                                               | Purpose                                                 |
+| ---------------------------------------------------- | ------------------------------------------------------- |
+| `resp.ToParam()`                                     | Convert `Message` response → `MessageParam` for history |
+| `block.AsAny().(type)`                               | Type-switch on `ContentBlockUnion` variants             |
+| `variant.JSON.Input.Raw()`                           | Raw JSON string of tool input (for `json.Unmarshal`)    |
+| `anthropic.NewToolResultBlock(id, content, isError)` | Build `tool_result` block                               |
+| `anthropic.NewUserMessage(blocks...)`                | Wrap tool results as a user turn                        |
+| `anthropic.StopReasonToolUse`                        | `StopReason` constant to check loop termination         |
+| `anthropic.ToolUnionParam{OfTool: &t}`               | Wrap `ToolParam` in the union for `Tools:`              |
 
 ---
 
 ## Thinking
 
-Enable Claude's internal reasoning by setting `Thinking` in `MessageNewParams`. The response will contain `ThinkingBlock` content before the final `TextBlock`.
+Enable Claude's internal reasoning by setting `Thinking` in `MessageNewParams`. The response will
+contain `ThinkingBlock` content before the final `TextBlock`.
 
-**Adaptive thinking is the recommended mode for Claude 4.6+ models.** Claude decides dynamically when and how much to think. Combine with the `effort` parameter for cost-quality control.
+**Adaptive thinking is the recommended mode for Claude 4.6+ models.** Claude decides dynamically
+when and how much to think. Combine with the `effort` parameter for cost-quality control.
 
-Derived from `anthropic-sdk-go/message.go` (`ThinkingConfigParamUnion`, `NewThinkingConfigAdaptiveParam`).
+Derived from `anthropic-sdk-go/message.go` (`ThinkingConfigParamUnion`,
+`NewThinkingConfigAdaptiveParam`).
 
 ```go
 // There is no ThinkingConfigParamOfAdaptive helper — construct the union
@@ -309,15 +315,19 @@ for _, block := range resp.Content {
 }
 ```
 
-> **Deprecated:** `ThinkingConfigParamOfEnabled(budgetTokens)` (fixed-budget extended thinking) still works on Claude 4.6 but is deprecated. Use adaptive thinking above.
+> **Deprecated:** `ThinkingConfigParamOfEnabled(budgetTokens)` (fixed-budget extended thinking)
+> still works on Claude 4.6 but is deprecated. Use adaptive thinking above.
 
-To disable: `anthropic.ThinkingConfigParamUnion{OfDisabled: &anthropic.ThinkingConfigDisabledParam{}}`.
+To disable:
+`anthropic.ThinkingConfigParamUnion{OfDisabled: &anthropic.ThinkingConfigDisabledParam{}}`.
 
 ---
 
 ## Prompt Caching
 
-`System` is `[]TextBlockParam`; set `CacheControl` on the last block to cache tools + system together. For placement patterns and the silent-invalidator audit checklist, see `shared/prompt-caching.md`.
+`System` is `[]TextBlockParam`; set `CacheControl` on the last block to cache tools + system
+together. For placement patterns and the silent-invalidator audit checklist, see
+`shared/prompt-caching.md`.
 
 ```go
 System: []anthropic.TextBlockParam{{
@@ -326,7 +336,9 @@ System: []anthropic.TextBlockParam{{
 }},
 ```
 
-For 1-hour TTL: `anthropic.CacheControlEphemeralParam{TTL: anthropic.CacheControlEphemeralTTLTTL1h}`. There's also a top-level `CacheControl` on `MessageNewParams` that auto-places on the last cacheable block.
+For 1-hour TTL:
+`anthropic.CacheControlEphemeralParam{TTL: anthropic.CacheControlEphemeralTTLTTL1h}`. There's also a
+top-level `CacheControl` on `MessageNewParams` that auto-places on the last cacheable block.
 
 Verify hits via `resp.Usage.CacheCreationInputTokens` / `resp.Usage.CacheReadInputTokens`.
 
@@ -334,7 +346,8 @@ Verify hits via `resp.Usage.CacheCreationInputTokens` / `resp.Usage.CacheReadInp
 
 ## Server-Side Tools
 
-Version-suffixed struct names with `Param` suffix. `Name`/`Type` are `constant.*` types — zero value marshals correctly, so `{}` works. Wrap in `ToolUnionParam` with the matching `Of*` field.
+Version-suffixed struct names with `Param` suffix. `Name`/`Type` are `constant.*` types — zero value
+marshals correctly, so `{}` works. Wrap in `ToolUnionParam` with the matching `Of*` field.
 
 ```go
 Tools: []anthropic.ToolUnionParam{
@@ -345,7 +358,8 @@ Tools: []anthropic.ToolUnionParam{
 },
 ```
 
-Also available: `WebFetchTool20260209Param`, `MemoryTool20250818Param`, `ToolSearchToolBm25_20251119Param`, `ToolSearchToolRegex20251119Param`.
+Also available: `WebFetchTool20260209Param`, `MemoryTool20250818Param`,
+`ToolSearchToolBm25_20251119Param`, `ToolSearchToolRegex20251119Param`.
 
 ---
 
@@ -368,7 +382,9 @@ Other sources: `URLPDFSourceParam{URL: "https://..."}`, `PlainTextSourceParam{Da
 
 ## Files API (Beta)
 
-Under `client.Beta.Files`. Method is **`Upload`** (NOT `New`/`Create`), params struct is `BetaFileUploadParams`. The `File` field takes an `io.Reader`; use `anthropic.File()` to attach a filename + content-type for the multipart encoding.
+Under `client.Beta.Files`. Method is **`Upload`** (NOT `New`/`Create`), params struct is
+`BetaFileUploadParams`. The `File` field takes an `io.Reader`; use `anthropic.File()` to attach a
+filename + content-type for the multipart encoding.
 
 ```go
 f, _ := os.Open("./upload_me.txt")
@@ -387,7 +403,8 @@ Other `Beta.Files` methods: `List`, `Delete`, `Download`, `GetMetadata`.
 
 ## Context Editing / Compaction (Beta)
 
-Use `Beta.Messages.New` with `ContextManagement` on `BetaMessageNewParams`. There is no `NewBetaAssistantMessage` — use `.ToParam()` for the round-trip.
+Use `Beta.Messages.New` with `ContextManagement` on `BetaMessageNewParams`. There is no
+`NewBetaAssistantMessage` — use `.ToParam()` for the round-trip.
 
 ```go
 params := anthropic.BetaMessageNewParams{

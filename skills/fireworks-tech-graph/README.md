@@ -55,38 +55,37 @@ design-partner work, and founding engineer conversations.
 ### Style 1 — Flat Icon (default)
 
 _Mem0 Memory Architecture — white background, semantic arrows, layered memory system_
-`assets/samples/sample-style1-flat.png` *(generated on first run)*
+`assets/samples/sample-style1-flat.png` _(generated on first run)_
 
 ### Style 2 — Dark Terminal
 
 _Tool Call Flow — dark background, neon accents, monospace font_
-`assets/samples/sample-style2-dark.png` *(generated on first run)*
+`assets/samples/sample-style2-dark.png` _(generated on first run)_
 
 ### Style 3 — Blueprint
 
 _Microservices Architecture — deep blue background, grid lines, cyan strokes_
-`assets/samples/sample-style3-blueprint.png` *(generated on first run)*
+`assets/samples/sample-style3-blueprint.png` _(generated on first run)_
 
 ### Style 4 — Notion Clean
 
-_Agent Memory Types — minimal white, single accent color_
-`assets/samples/sample-style4-notion.png` *(generated on first run)*
+_Agent Memory Types — minimal white, single accent color_ `assets/samples/sample-style4-notion.png`
+_(generated on first run)_
 
 ### Style 5 — Glassmorphism
 
 _Multi-Agent Collaboration — dark gradient background, frosted glass cards_
-`assets/samples/sample-style5-glass.png` *(generated on first run)*
+`assets/samples/sample-style5-glass.png` _(generated on first run)_
 
 ### Style 6 — Claude Official
 
 _System Architecture — warm cream background (#f8f6f3), Anthropic brand colors, clean professional
-aesthetic_
-`assets/samples/sample-style6-claude.png` *(generated on first run)*
+aesthetic_ `assets/samples/sample-style6-claude.png` _(generated on first run)_
 
 ### Style 7 — OpenAI Official
 
 _API Integration Flow — pure white background, OpenAI brand palette, modern minimalist design_
-`assets/samples/sample-style7-openai.png` *(generated on first run)*
+`assets/samples/sample-style7-openai.png` _(generated on first run)_
 
 ---
 

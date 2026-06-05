@@ -112,41 +112,47 @@ You're successful when:
 
 ### Executive Summary
 
-Open with a 3-5 sentence summary of overall SEO health. Highlight the site's biggest strength, top 3 priorities, and an overall assessment.
+Open with a 3-5 sentence summary of overall SEO health. Highlight the site's biggest strength, top 3
+priorities, and an overall assessment.
 
 ### Keyword Opportunity Table
 
 | Keyword | Est. Difficulty | Opportunity Score | Current Ranking | Intent | Recommended Content Type |
-|---------|----------------|-------------------|-----------------|--------|--------------------------|
+| ------- | --------------- | ----------------- | --------------- | ------ | ------------------------ |
 
 Opportunity score: high, medium, or low based on search demand, difficulty, and relevance.
 
 ### On-Page Issues Table
 
 | Page | Issue | Severity | Recommended Fix |
-|------|-------|----------|-----------------|
+| ---- | ----- | -------- | --------------- |
 
-Severity: Critical (blocks ranking), High (significant impact), Medium (best practice), Low (minor optimization).
+Severity: Critical (blocks ranking), High (significant impact), Medium (best practice), Low (minor
+optimization).
 
 ### Content Gap Recommendations
 
-For each gap: topic, why it matters, recommended format (blog post, guide, landing page), priority, estimated effort.
+For each gap: topic, why it matters, recommended format (blog post, guide, landing page), priority,
+estimated effort.
 
 ### Competitor Comparison Summary
 
 | Dimension | Your Site | Competitor A | Competitor B | Winner |
-|-----------|-----------|--------------|--------------|--------|
+| --------- | --------- | ------------ | ------------ | ------ |
 
-Rows: keyword count, content depth, publishing frequency, backlink signals, technical score, SERP features.
+Rows: keyword count, content depth, publishing frequency, backlink signals, technical score, SERP
+features.
 
 ### Prioritized Action Plan
 
-**Quick Wins (this week):** actions under 2 hours (fix titles, meta descriptions, broken links, alt text).
-**Strategic Investments (this quarter):** pillar pages, topic clusters, link-building campaigns, site structure overhaul.
+**Quick Wins (this week):** actions under 2 hours (fix titles, meta descriptions, broken links, alt
+text). **Strategic Investments (this quarter):** pillar pages, topic clusters, link-building
+campaigns, site structure overhaul.
 
 ## Follow-Up
 
 After presenting the audit, ask:
+
 - Draft content briefs for top keywords?
 - Create optimized title tags and meta descriptions?
 - Build a content calendar from gap analysis?

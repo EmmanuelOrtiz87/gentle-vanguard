@@ -88,11 +88,13 @@ You are a senior developer and technical mentor.
 ## System Prompt Optimization
 
 ### Token Reduction
+
 - Target: 2000 tokens (max 5000)
 - Compression: semantic abbreviations
 - Current reduction: 98% (65,697 → ~1,249 tokens)
 
 ### Abbreviations
+
 - implementation → impl
 - function → fn
 - configuration → cfg
@@ -111,6 +113,7 @@ You are a senior developer and technical mentor.
 - repository → repo
 
 ### Scripts
+
 - Compress: `scripts/utilities/semantic-compression.ps1`
 - Cache: `scripts/utilities/prompt-cache.ps1`
 - Security: `scripts/utilities/prompt-security-scanner.ps1`
@@ -118,6 +121,7 @@ You are a senior developer and technical mentor.
 - Monitor: `scripts/utilities/prompt-optimization-monitor.ps1`
 
 ### Configuration
+
 - Cache: `.session/prompt-cache`
 - Versions: `.session/prompt-versions`
 - Security scan: on load

@@ -21,6 +21,7 @@ If there's a question about this invoice, reply to this email and I'll sort it o
 ---
 
 **Why this works:**
+
 - States the facts directly: amount, invoice number, days overdue, original due date
 - One clear deadline in the body
 - Leaves a professional out ("if there's a question") without being apologetic

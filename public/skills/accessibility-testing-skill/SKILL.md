@@ -1,24 +1,27 @@
 ---
 name: accessibility-testing-skill
 description: >
-  Imported from mercury-agent-skills. Use when working with "accessibility test", "a11y", "WCAG", "axe-core". Triggers: "accessibility test", "a11y", "WCAG", "axe-core".
+  Imported from mercury-agent-skills. Use when working with "accessibility test", "a11y", "WCAG",
+  "axe-core". Triggers: "accessibility test", "a11y", "WCAG", "axe-core".
 metadata:
   source: mercury-agent-skills
   original-name: accessibility-testing
 ---
+
 # Accessibility Testing
 
 Systematically test and improve web accessibility.
 
 ## WCAG Guidelines (Quick Reference)
 
-| Level | Conformance | Target |
-|-------|-------------|--------|
-| A | Minimum | Must pass all A criteria |
-| AA | Standard | Legal standard (ADA, Section 508) |
-| AAA | Advanced | Highest level, not always achievable |
+| Level | Conformance | Target                               |
+| ----- | ----------- | ------------------------------------ |
+| A     | Minimum     | Must pass all A criteria             |
+| AA    | Standard    | Legal standard (ADA, Section 508)    |
+| AAA   | Advanced    | Highest level, not always achievable |
 
 ### Key Success Criteria
+
 - **1.1.1 (A)**: All non-text content has text alternative
 - **1.4.3 (AA)**: Color contrast ≥ 4.5:1
 - **2.1.1 (A)**: All functionality via keyboard
@@ -28,6 +31,7 @@ Systematically test and improve web accessibility.
 ## Testing Approach
 
 ### Automated (Catches ~30%)
+
 ```javascript
 // axe-core in CI
 const { axe } = require('jest-axe');
@@ -39,17 +43,20 @@ it('should have no accessibility violations', async () => {
 ```
 
 ### Manual (Catches ~40%)
+
 - Tab through all interactive elements
 - Test with high contrast mode
 - Zoom to 200% — no content should be cut off
 - Disable CSS — content should be in logical order
 
 ### Assistive Technology (Catches ~30%)
+
 - Test with VoiceOver (macOS/iOS)
 - Test with NVDA (Windows)
 - Test with keyboard only (no mouse/trackpad)
 
 ## Common Fixes
+
 - Add `alt` text to all images (decorative = `alt=""`)
 - Add `aria-label` to icon-only buttons
 - Ensure forms have associated `<label>` elements

@@ -7,13 +7,16 @@ metadata:
   original-name: knowledge-synthesis
   department: enterprise-search
 ---
+
 # Knowledge Synthesis
 
-The last mile of enterprise search. Takes raw results from multiple sources and produces a coherent, trustworthy answer.
+The last mile of enterprise search. Takes raw results from multiple sources and produces a coherent,
+trustworthy answer.
 
 ## The Goal
 
 Transform this:
+
 ```
 ~~chat result: "Sarah said in #eng: 'let's go with REST, GraphQL is overkill for our use case'"
 ~~email result: "Subject: API Decision — Sarah's email confirming REST approach with rationale"
@@ -22,6 +25,7 @@ Transform this:
 ```
 
 Into this:
+
 ```
 The team decided to go with REST over GraphQL for the API redesign. Sarah made the
 call, noting that GraphQL was overkill for the current use case. This was discussed
@@ -42,6 +46,7 @@ Sources:
 The same information often appears in multiple places. Identify and merge duplicates:
 
 **Signals that results are about the same thing:**
+
 - Same or very similar text content
 - Same author/sender
 - Timestamps within a short window (same day or adjacent days)
@@ -49,6 +54,7 @@ The same information often appears in multiple places. Identify and merge duplic
 - One source references another ("as discussed in ~~chat", "per the email", "see the doc")
 
 **How to merge:**
+
 - Combine into a single narrative item
 - Cite all sources where it appeared
 - Use the most complete version as the primary text
@@ -57,6 +63,7 @@ The same information often appears in multiple places. Identify and merge duplic
 ### Deduplication Priority
 
 When the same information exists in multiple sources, prefer:
+
 ```
 1. The most complete version (fullest context)
 2. The most authoritative source (official doc > chat)
@@ -66,6 +73,7 @@ When the same information exists in multiple sources, prefer:
 ### What NOT to Deduplicate
 
 Keep as separate items when:
+
 - The same topic is discussed but with different conclusions
 - Different people express different viewpoints
 - The information evolved meaningfully between sources (v1 vs v2 of a decision)
@@ -78,12 +86,14 @@ Every claim in the synthesized answer must be attributable to a source.
 ### Attribution Format
 
 Inline for direct references:
+
 ```
 Sarah confirmed the REST approach in her email on Wednesday.
 The design doc was updated to reflect this (~~cloud storage: "API Design Doc v3").
 ```
 
 Source list at the end for completeness:
+
 ```
 Sources:
 - ~~chat: #engineering discussion (Jan 14) — initial decision thread
@@ -108,42 +118,45 @@ Not all results are equally trustworthy. Assess confidence based on:
 
 ### Freshness
 
-| Recency | Confidence impact |
-|---------|------------------|
-| Today / yesterday | High confidence for current state |
-| This week | Good confidence |
-| This month | Moderate — things may have changed |
+| Recency            | Confidence impact                               |
+| ------------------ | ----------------------------------------------- |
+| Today / yesterday  | High confidence for current state               |
+| This week          | Good confidence                                 |
+| This month         | Moderate — things may have changed              |
 | Older than a month | Lower confidence — flag as potentially outdated |
 
 For status queries, heavily weight freshness. For policy/factual queries, freshness matters less.
 
 ### Authority
 
-| Source type | Authority level |
-|-------------|----------------|
-| Official wiki / knowledge base | Highest — curated, maintained |
-| Shared documents (final versions) | High — intentionally published |
-| Email announcements | High — formal communication |
-| Meeting notes | Moderate-high — may be incomplete |
-| Chat messages (thread conclusions) | Moderate — informal but real-time |
-| Chat messages (mid-thread) | Lower — may not reflect final position |
-| Draft documents | Low — not finalized |
-| Task comments | Contextual — depends on commenter |
+| Source type                        | Authority level                        |
+| ---------------------------------- | -------------------------------------- |
+| Official wiki / knowledge base     | Highest — curated, maintained          |
+| Shared documents (final versions)  | High — intentionally published         |
+| Email announcements                | High — formal communication            |
+| Meeting notes                      | Moderate-high — may be incomplete      |
+| Chat messages (thread conclusions) | Moderate — informal but real-time      |
+| Chat messages (mid-thread)         | Lower — may not reflect final position |
+| Draft documents                    | Low — not finalized                    |
+| Task comments                      | Contextual — depends on commenter      |
 
 ### Expressing Confidence
 
 When confidence is high (multiple fresh, authoritative sources agree):
+
 ```
 The team decided to use REST for the API redesign. [direct statement]
 ```
 
 When confidence is moderate (single source or somewhat dated):
+
 ```
 Based on the discussion in #engineering last month, the team was leaning
 toward REST for the API redesign. This may have evolved since then.
 ```
 
 When confidence is low (old data, informal source, or conflicting signals):
+
 ```
 I found a reference to an API migration discussion from three months ago
 in ~~chat, but I couldn't find a formal decision document. The information
@@ -153,6 +166,7 @@ may be outdated. You might want to check with the team for current status.
 ### Conflicting Information
 
 When sources disagree:
+
 ```
 I found conflicting information about the API approach:
 - The ~~chat discussion on Jan 10 suggested GraphQL
@@ -170,6 +184,7 @@ Always surface conflicts rather than silently picking one version.
 ### For Small Result Sets (1-5 results)
 
 Present each result with context. No summarization needed — give the user everything:
+
 ```
 [Direct answer synthesized from results]
 
@@ -182,6 +197,7 @@ Sources: [full attribution]
 ### For Medium Result Sets (5-15 results)
 
 Group by theme and summarize each group:
+
 ```
 [Overall answer]
 
@@ -195,6 +211,7 @@ Full results: [count] items found across [sources]
 ### For Large Result Sets (15+ results)
 
 Provide a high-level synthesis with the option to drill down:
+
 ```
 [Overall answer based on most relevant results]
 
@@ -244,6 +261,7 @@ Want me to dig deeper into any specific aspect?
 ## Anti-Patterns
 
 **Do not:**
+
 - List results source by source ("From ~~chat: ... From ~~email: ... From ~~cloud storage: ...")
 - Include irrelevant results just because they matched a keyword
 - Bury the answer under methodology explanation
@@ -253,6 +271,7 @@ Want me to dig deeper into any specific aspect?
 - Summarize so aggressively that useful detail is lost
 
 **Do:**
+
 - Lead with the answer
 - Group by topic, not by source
 - Flag confidence levels when appropriate

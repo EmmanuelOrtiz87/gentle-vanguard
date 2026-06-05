@@ -1,17 +1,20 @@
 # Read-Only Secret Validators
 
-> Reference content for the `offensive-osint` skill. Originally §23 of the monolithic SKILL.md (refactored 2026-05-02 for size/load efficiency).
+> Reference content for the `offensive-osint` skill. Originally §23 of the monolithic SKILL.md
+> (refactored 2026-05-02 for size/load efficiency).
 
 ## 23. Read-Only Secret Validators
 
-Use these to confirm a discovered credential is live. **Read-only, never destructive.** Tag every validation with `detectability` and `checked_at` (UTC).
+Use these to confirm a discovered credential is live. **Read-only, never destructive.** Tag every
+validation with `detectability` and `checked_at` (UTC).
 
-### 23.1 Postman API Key (PMAK-*)
+### 23.1 Postman API Key (PMAK-\*)
 
 ```
 GET https://api.getpostman.com/me
 Header: X-Api-Key: PMAK-<key>
 ```
+
 - `200` → live; response contains `{user: {id, username, email}}`.
 - `401` → dead.
 - Scope: full read access to the user's Postman account (collections, env vars, history).
@@ -22,7 +25,9 @@ Header: X-Api-Key: PMAK-<key>
 ```
 sts:GetCallerIdentity
 ```
+
 Use boto3:
+
 ```python
 import boto3
 sts = boto3.client('sts',
@@ -32,9 +37,11 @@ sts = boto3.client('sts',
 ident = sts.get_caller_identity()
 # ident['Account'], ident['Arn'], ident['UserId']
 ```
+
 - Valid → returns Account ID + ARN + UserId.
 - Invalid → `InvalidClientTokenId` or `SignatureDoesNotMatch`.
-- ARN scope: `:user/` is IAM user (broad), `:assumed-role/` is temp role (narrow), `:root` is account root (do NOT validate root keys you find).
+- ARN scope: `:user/` is IAM user (broad), `:assumed-role/` is temp role (narrow), `:root` is
+  account root (do NOT validate root keys you find).
 - Detectability: **medium** (CloudTrail logs `GetCallerIdentity` in account `<found>`).
 
 ### 23.3 GitHub PAT
@@ -43,8 +50,10 @@ ident = sts.get_caller_identity()
 GET https://api.github.com/user
 Header: Authorization: token <ghp_*>
 ```
+
 - `200` → live; response contains `login`, `id`, `name`, `email` (if public).
-- Response header `X-OAuth-Scopes` lists token scopes. `repo` scope = write to all accessible repos; `admin:org` = org admin.
+- Response header `X-OAuth-Scopes` lists token scopes. `repo` scope = write to all accessible repos;
+  `admin:org` = org admin.
 - `401` → dead.
 - Detectability: low.
 
@@ -54,6 +63,7 @@ Header: Authorization: token <ghp_*>
 POST https://slack.com/api/auth.test
 Header: Authorization: Bearer <xox*-*>
 ```
+
 - `200` with `{"ok": true}` → live; response includes `team`, `team_id`, `user`, `user_id`.
 - `200` with `{"ok": false, "error": "invalid_auth"}` → dead.
 - Detectability: low.
@@ -66,6 +76,7 @@ Headers:
   x-api-key: sk-ant-api03-...
   anthropic-version: 2023-06-01
 ```
+
 - `200` → live; response lists available models.
 - `401` → dead.
 - `403` with org_disabled → key valid but org disabled.
@@ -77,6 +88,7 @@ Headers:
 GET https://api.openai.com/v1/models
 Header: Authorization: Bearer sk-...
 ```
+
 - `200` → live; lists models (may include org-specific fine-tunes).
 - `401` → dead.
 - `429` → live but quota exhausted.
@@ -88,6 +100,7 @@ Header: Authorization: Bearer sk-...
 GET https://registry.npmjs.org/-/whoami
 Header: Authorization: Bearer npm_<token>
 ```
+
 - `200` with `{"username": "<user>"}` → live.
 - `401` → dead.
 - For scope check: `GET /-/npm/v1/tokens` returns the token's permissions (read/publish).
@@ -99,6 +112,7 @@ Header: Authorization: Bearer npm_<token>
 GET https://<workspace>.atlassian.net/rest/api/3/myself
 Auth: Basic <base64(email:ATATT3xFfGF0_...)>
 ```
+
 - `200` → live; returns account profile + email.
 - `401` → dead.
 - Workspace required — extract from leaked repo URL or Atlassian dork results.
@@ -112,6 +126,7 @@ Headers:
   DD-API-KEY: <api-key>
   DD-APPLICATION-KEY: <app-key>
 ```
+
 - `200` → both keys valid.
 - `403` → either key invalid.
 - Per-region URL varies: `api.datadoghq.eu`, `api.us3.datadoghq.com`, etc.
@@ -140,13 +155,15 @@ Headers:
 - Tag every validation with detectability.
 - Record `checked_at` (UTC).
 - If RoE forbids validation → `validation_skipped_by_policy`, stop, document.
-- For root AWS keys, infrastructure-write GitHub PATs, or admin Slack tokens — flag for the operator and let them decide.
+- For root AWS keys, infrastructure-write GitHub PATs, or admin Slack tokens — flag for the operator
+  and let them decide.
 
 ### 23.12 Post-Discovery Enumeration Workflows
 
 After validation confirms a key is live, you often want to enumerate what it can do. Stay read-only.
 
 **AWS access key — IAM enum:**
+
 ```bash
 export AWS_ACCESS_KEY_ID="AKIA..."
 export AWS_SECRET_ACCESS_KEY="..."
@@ -184,6 +201,7 @@ aws iam list-mfa-devices --user-name <username>
 ```
 
 **GitHub PAT — repo enum:**
+
 ```bash
 TOKEN="ghp_..."
 H="Authorization: token $TOKEN"
@@ -209,6 +227,7 @@ curl -sk -m 10 -H "$H" "https://api.github.com/repos/$REPO/actions/secrets"
 ```
 
 **Slack token — workspace enum:**
+
 ```bash
 TOKEN="xoxb-..."
 H="Authorization: Bearer $TOKEN"
@@ -230,6 +249,7 @@ curl -sk -m 10 -H "$H" -X POST "https://slack.com/api/users.list?limit=100" | jq
 ```
 
 **JWT — full triage workflow:**
+
 ```bash
 JWT="eyJhbGciOiJIUzI1NiI..."
 
@@ -262,6 +282,7 @@ NEW_JWT="${NEW_JWT}.$(echo "$JWT" | cut -d. -f2)."
 ```
 
 **Postman PMAK — workspace enum:**
+
 ```bash
 PMAK="PMAK-..."
 H="X-Api-Key: $PMAK"
@@ -288,6 +309,7 @@ curl -sk -m 10 -H "$H" "https://api.getpostman.com/environments/$ENV" | jq '.env
 ```
 
 **Anthropic API key — usage enum:**
+
 ```bash
 KEY="sk-ant-api03-..."
 H="x-api-key: $KEY"
@@ -303,6 +325,7 @@ curl -sk -m 10 -H "$H" -H "$A" https://api.anthropic.com/v1/organizations/usage_
 ```
 
 **OpenAI API key — usage enum:**
+
 ```bash
 KEY="sk-..."
 H="Authorization: Bearer $KEY"
@@ -319,11 +342,12 @@ curl -sk -m 10 -H "$H" https://api.openai.com/v1/fine_tuning/jobs | jq .
 ```
 
 **Generic key — provenance enum:**
-1. Find the consuming domain (where in JS bundle did the key appear? what URL is the bundle served from?).
+
+1. Find the consuming domain (where in JS bundle did the key appear? what URL is the bundle served
+   from?).
 2. Check the API docs of the inferred service.
 3. If the key matches a known regex, lookup vendor-specific scope check.
 4. If unknown service, search GitHub for the key prefix (`gh search code "<prefix>" --type=code`).
 5. Identify scope before validating; some keys are write-broad on first use.
 
 ---
-

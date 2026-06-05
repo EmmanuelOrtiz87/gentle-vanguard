@@ -7,6 +7,7 @@ metadata:
   original-name: process-optimization
   department: operations
 ---
+
 # Process Optimization
 
 Analyze existing processes and recommend improvements.
@@ -14,11 +15,13 @@ Analyze existing processes and recommend improvements.
 ## Analysis Framework
 
 ### 1. Map Current State
+
 - Document every step, decision point, and handoff
 - Identify who does what and how long each step takes
 - Note manual steps, approvals, and waiting times
 
 ### 2. Identify Waste
+
 - **Waiting**: Time spent in queues or waiting for approvals
 - **Rework**: Steps that fail and need to be redone
 - **Handoffs**: Each handoff is a potential point of failure or delay
@@ -26,6 +29,7 @@ Analyze existing processes and recommend improvements.
 - **Manual work**: Tasks that could be automated
 
 ### 3. Design Future State
+
 - Eliminate unnecessary steps
 - Automate where possible
 - Reduce handoffs
@@ -33,6 +37,7 @@ Analyze existing processes and recommend improvements.
 - Add checkpoints (not gates)
 
 ### 4. Measure Impact
+
 - Time saved per cycle
 - Error rate reduction
 - Cost savings
@@ -40,4 +45,5 @@ Analyze existing processes and recommend improvements.
 
 ## Output
 
-Produce a before/after process comparison with specific improvement recommendations, estimated impact, and an implementation plan.
+Produce a before/after process comparison with specific improvement recommendations, estimated
+impact, and an implementation plan.

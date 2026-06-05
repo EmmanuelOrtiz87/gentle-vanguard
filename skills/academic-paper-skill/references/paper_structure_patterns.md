@@ -4,9 +4,8 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
 
 ## Pattern 1: IMRaD (Introduction-Method-Results-Discussion)
 
-**Best for**: Empirical research with original data collection and analysis
-**Typical length**: 5,000-8,000 words
-**Disciplines**: Sciences, Social Sciences, Education, Medicine
+**Best for**: Empirical research with original data collection and analysis **Typical length**:
+5,000-8,000 words **Disciplines**: Sciences, Social Sciences, Education, Medicine
 
 ### Structure
 
@@ -52,22 +51,23 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
 ```
 
 ### Word Allocation (6,000-word example)
-| Section | % | Words |
-|---------|---|-------|
-| Introduction | 15% | 900 |
+
+| Section           | %   | Words |
+| ----------------- | --- | ----- |
+| Introduction      | 15% | 900   |
 | Literature Review | 25% | 1,500 |
-| Methodology | 15% | 900 |
-| Results | 20% | 1,200 |
-| Discussion | 20% | 1,200 |
-| Conclusion | 5% | 300 |
+| Methodology       | 15% | 900   |
+| Results           | 20% | 1,200 |
+| Discussion        | 20% | 1,200 |
+| Conclusion        | 5%  | 300   |
 
 ---
 
 ## Pattern 2: Thematic Literature Review
 
 **Best for**: Synthesizing existing research, identifying gaps, proposing future directions
-**Typical length**: 6,000-10,000 words
-**Disciplines**: All (especially Social Sciences, Education, Humanities)
+**Typical length**: 6,000-10,000 words **Disciplines**: All (especially Social Sciences, Education,
+Humanities)
 
 ### Structure
 
@@ -106,23 +106,23 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
 ```
 
 ### Word Allocation (8,000-word example)
-| Section | % | Words |
-|---------|---|-------|
-| Introduction | 10% | 800 |
-| Theme 1 | 20% | 1,600 |
-| Theme 2 | 20% | 1,600 |
-| Theme 3 | 20% | 1,600 |
-| Synthesis | 15% | 1,200 |
-| Gaps & Future | 10% | 800 |
-| Conclusion | 5% | 400 |
+
+| Section       | %   | Words |
+| ------------- | --- | ----- |
+| Introduction  | 10% | 800   |
+| Theme 1       | 20% | 1,600 |
+| Theme 2       | 20% | 1,600 |
+| Theme 3       | 20% | 1,600 |
+| Synthesis     | 15% | 1,200 |
+| Gaps & Future | 10% | 800   |
+| Conclusion    | 5%  | 400   |
 
 ---
 
 ## Pattern 3: Theoretical Analysis
 
-**Best for**: Developing, critiquing, or extending theoretical frameworks
-**Typical length**: 5,000-8,000 words
-**Disciplines**: Social Sciences, Philosophy, Education
+**Best for**: Developing, critiquing, or extending theoretical frameworks **Typical length**:
+5,000-8,000 words **Disciplines**: Social Sciences, Philosophy, Education
 
 ### Structure
 
@@ -159,22 +159,23 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
 ```
 
 ### Word Allocation (6,000-word example)
-| Section | % | Words |
-|---------|---|-------|
-| Introduction | 12% | 720 |
-| Background | 20% | 1,200 |
+
+| Section           | %   | Words |
+| ----------------- | --- | ----- |
+| Introduction      | 12% | 720   |
+| Background        | 20% | 1,200 |
 | Critical Analysis | 28% | 1,680 |
-| Extension | 20% | 1,200 |
-| Applications | 15% | 900 |
-| Conclusion | 5% | 300 |
+| Extension         | 20% | 1,200 |
+| Applications      | 15% | 900   |
+| Conclusion        | 5%  | 300   |
 
 ---
 
 ## Pattern 4: Case Study
 
-**Best for**: In-depth analysis of specific institutions, programs, events, or phenomena
-**Typical length**: 4,000-7,000 words
-**Disciplines**: Education, Business, Social Sciences, Medicine (clinical)
+**Best for**: In-depth analysis of specific institutions, programs, events, or phenomena **Typical
+length**: 4,000-7,000 words **Disciplines**: Education, Business, Social Sciences, Medicine
+(clinical)
 
 ### Structure
 
@@ -214,23 +215,23 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
 ```
 
 ### Word Allocation (5,000-word example)
-| Section | % | Words |
-|---------|---|-------|
-| Introduction | 12% | 600 |
-| Literature | 15% | 750 |
+
+| Section          | %   | Words |
+| ---------------- | --- | ----- |
+| Introduction     | 12% | 600   |
+| Literature       | 15% | 750   |
 | Case Description | 20% | 1,000 |
-| Analysis | 25% | 1,250 |
-| Discussion | 18% | 900 |
-| Recommendations | 7% | 350 |
-| Conclusion | 3% | 150 |
+| Analysis         | 25% | 1,250 |
+| Discussion       | 18% | 900   |
+| Recommendations  | 7%  | 350   |
+| Conclusion       | 3%  | 150   |
 
 ---
 
 ## Pattern 5: Policy Brief
 
-**Best for**: Evidence-based policy recommendations for decision-makers
-**Typical length**: 2,000-4,000 words
-**Disciplines**: Public Policy, Education, Health, Economics
+**Best for**: Evidence-based policy recommendations for decision-makers **Typical length**:
+2,000-4,000 words **Disciplines**: Public Policy, Education, Health, Economics
 
 ### Structure
 
@@ -265,22 +266,22 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
 ```
 
 ### Word Allocation (3,000-word example)
-| Section | % | Words |
-|---------|---|-------|
-| Executive Summary | 10% | 300 |
-| Background | 15% | 450 |
-| Evidence | 30% | 900 |
-| Options | 25% | 750 |
-| Recommendations | 15% | 450 |
-| Conclusion | 5% | 150 |
+
+| Section           | %   | Words |
+| ----------------- | --- | ----- |
+| Executive Summary | 10% | 300   |
+| Background        | 15% | 450   |
+| Evidence          | 30% | 900   |
+| Options           | 25% | 750   |
+| Recommendations   | 15% | 450   |
+| Conclusion        | 5%  | 150   |
 
 ---
 
 ## Pattern 6: Conference Paper
 
-**Best for**: Presenting research in progress or completed studies at academic conferences
-**Typical length**: 2,000-5,000 words (varies by conference)
-**Disciplines**: All
+**Best for**: Presenting research in progress or completed studies at academic conferences **Typical
+length**: 2,000-5,000 words (varies by conference) **Disciplines**: All
 
 ### Structure (Short Paper)
 
@@ -309,22 +310,23 @@ Used by `structure_architect_agent` and `intake_agent` to select the appropriate
 ```
 
 ### Word Allocation (3,000-word example)
-| Section | % | Words |
-|---------|---|-------|
-| Introduction | 15% | 450 |
-| Related Work | 20% | 600 |
-| Methodology | 20% | 600 |
-| Results | 25% | 750 |
-| Discussion | 12% | 360 |
-| Conclusion | 8% | 240 |
+
+| Section      | %   | Words |
+| ------------ | --- | ----- |
+| Introduction | 15% | 450   |
+| Related Work | 20% | 600   |
+| Methodology  | 20% | 600   |
+| Results      | 25% | 750   |
+| Discussion   | 12% | 360   |
+| Conclusion   | 8%  | 240   |
 
 ## Pattern Selection Guide
 
-| If your paper... | Use Pattern |
-|-----------------|-------------|
-| Has original data collection | IMRaD |
-| Synthesizes existing literature | Literature Review |
-| Develops/critiques a theory | Theoretical |
-| Analyzes specific cases in depth | Case Study |
-| Recommends policy actions | Policy Brief |
-| Presents at a conference | Conference Paper |
+| If your paper...                 | Use Pattern       |
+| -------------------------------- | ----------------- |
+| Has original data collection     | IMRaD             |
+| Synthesizes existing literature  | Literature Review |
+| Develops/critiques a theory      | Theoretical       |
+| Analyzes specific cases in depth | Case Study        |
+| Recommends policy actions        | Policy Brief      |
+| Presents at a conference         | Conference Paper  |

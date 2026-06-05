@@ -1,10 +1,13 @@
 # Dork Corpus & GitHub Code-Search Dorks
 
-> Reference content for the `offensive-osint` skill. Originally §18 + §19 of the monolithic SKILL.md (refactored 2026-05-02 for size/load efficiency).
+> Reference content for the `offensive-osint` skill. Originally §18 + §19 of the monolithic SKILL.md
+> (refactored 2026-05-02 for size/load efficiency).
 
 ## 18. Dork Corpus — 80+ templates, 9 categories
 
-Substitute `{domain}` with the target domain (e.g., `example.com`) and `{company}` with the company name (e.g., `Acme Corporation`). Run via Google, Bing, Brave, DuckDuckGo, Yandex, Baidu — engines surface different results.
+Substitute `{domain}` with the target domain (e.g., `example.com`) and `{company}` with the company
+name (e.g., `Acme Corporation`). Run via Google, Bing, Brave, DuckDuckGo, Yandex, Baidu — engines
+surface different results.
 
 ### 18.1 Files
 
@@ -140,17 +143,22 @@ site:{domain} (filetype:pdf OR filetype:xlsx) ("personnel security" OR clearance
 ### 18.10 Result classification
 
 After running, score each result via URL signature → title hint → snippet regex:
+
 - **CRITICAL URL signatures:** `.pem`, `.p12`, `.pfx`, `.key` extensions; `id_rsa` filename.
-- **HIGH URL signatures:** `/.env`, `/.git/`, database dumps, `wp-config.bak`, `/phpmyadmin`, `/jenkins`, `/phpinfo.php`.
+- **HIGH URL signatures:** `/.env`, `/.git/`, database dumps, `wp-config.bak`, `/phpmyadmin`,
+  `/jenkins`, `/phpinfo.php`.
 - **MEDIUM URL signatures:** `/admin`, `/login`, `/swagger`, `.log`, `/backup`, `.DS_Store`.
-- Snippet content (e.g., a secret regex hit in the snippet) overrides URL signature only if higher severity.
-- Confidence: snippet-only match = TENTATIVE (operator must visit URL to confirm; tag detectability=medium).
+- Snippet content (e.g., a secret regex hit in the snippet) overrides URL signature only if higher
+  severity.
+- Confidence: snippet-only match = TENTATIVE (operator must visit URL to confirm; tag
+  detectability=medium).
 
 ---
 
 ## 19. GitHub Code-Search Dorks for Targets — 13 dorks
 
-Apply each template to `{target}` (root domain stem like `acme`), `{domain}` (full root domain like `acme.com`), and optionally `{company}` (`Acme Corporation`):
+Apply each template to `{target}` (root domain stem like `acme`), `{domain}` (full root domain like
+`acme.com`), and optionally `{company}` (`Acme Corporation`):
 
 ```
 "{target}" filename:.env
@@ -168,13 +176,15 @@ Apply each template to `{target}` (root domain stem like `acme`), `{domain}` (fu
 "@{domain}" password                        # emails + password context
 ```
 
-**Requirements:** GitHub personal access token (any scope; recommend a fine-grained PAT with read-only repo access). Rate limit per token; concurrency cap ≤5.
+**Requirements:** GitHub personal access token (any scope; recommend a fine-grained PAT with
+read-only repo access). Rate limit per token; concurrency cap ≤5.
 
 **For each result:**
+
 1. Fetch the file (or relevant fragment) via the GitHub Contents API.
 2. Run the secret catalog (§17).
-3. If a secret hits → `SECRET_LEAK` finding with catalog severity, evidence = repo URL + file path + matched secret (truncated, last 4 chars only).
+3. If a secret hits → `SECRET_LEAK` finding with catalog severity, evidence = repo URL + file path +
+   matched secret (truncated, last 4 chars only).
 4. Optional: clone the repo to a tempdir, run `trufflehog`/`gitleaks` for full history scan.
 
 ---
-

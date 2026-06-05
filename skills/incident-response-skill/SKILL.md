@@ -7,9 +7,11 @@ metadata:
   original-name: incident-response
   department: engineering
 ---
+
 # /incident-response
 
-> If you see unfamiliar placeholders or need to check which tools are connected, see [CONNECTORS.md](../../CONNECTORS.md).
+> If you see unfamiliar placeholders or need to check which tools are connected, see
+> [CONNECTORS.md](../../CONNECTORS.md).
 
 Manage an incident from detection through postmortem.
 
@@ -60,38 +62,43 @@ If no mode is specified, ask what phase the incident is in.
 
 ## Severity Classification
 
-| Level | Criteria | Response Time |
-|-------|----------|---------------|
-| SEV1 | Service down, all users affected | Immediate, all-hands |
-| SEV2 | Major feature degraded, many users affected | Within 15 min |
-| SEV3 | Minor feature issue, some users affected | Within 1 hour |
-| SEV4 | Cosmetic or low-impact issue | Next business day |
+| Level | Criteria                                    | Response Time        |
+| ----- | ------------------------------------------- | -------------------- |
+| SEV1  | Service down, all users affected            | Immediate, all-hands |
+| SEV2  | Major feature degraded, many users affected | Within 15 min        |
+| SEV3  | Minor feature issue, some users affected    | Within 1 hour        |
+| SEV4  | Cosmetic or low-impact issue                | Next business day    |
 
 ## Communication Guidance
 
-Provide clear, factual updates at regular cadence. Include: what's happening, who's affected, what we're doing, when the next update is.
+Provide clear, factual updates at regular cadence. Include: what's happening, who's affected, what
+we're doing, when the next update is.
 
 ## Output — Status Update
 
 ```markdown
 ## Incident Update: [Title]
-**Severity:** SEV[1-4] | **Status:** Investigating | Identified | Monitoring | Resolved
-**Impact:** [Who/what is affected]
-**Last Updated:** [Timestamp]
+
+**Severity:** SEV[1-4] | **Status:** Investigating | Identified | Monitoring | Resolved **Impact:**
+[Who/what is affected] **Last Updated:** [Timestamp]
 
 ### Current Status
+
 [What we know now]
 
 ### Actions Taken
+
 - [Action 1]
 - [Action 2]
 
 ### Next Steps
+
 - [What's happening next and ETA]
 
 ### Timeline
-| Time | Event |
-|------|-------|
+
+| Time    | Event   |
+| ------- | ------- |
 | [HH:MM] | [Event] |
 ```
 
@@ -99,26 +106,32 @@ Provide clear, factual updates at regular cadence. Include: what's happening, wh
 
 ```markdown
 ## Postmortem: [Incident Title]
-**Date:** [Date] | **Duration:** [X hours] | **Severity:** SEV[X]
-**Authors:** [Names] | **Status:** Draft
+
+**Date:** [Date] | **Duration:** [X hours] | **Severity:** SEV[X] **Authors:** [Names] | **Status:**
+Draft
 
 ### Summary
+
 [2-3 sentence plain-language summary]
 
 ### Impact
+
 - [Users affected]
 - [Duration of impact]
 - [Business impact if quantifiable]
 
 ### Timeline
-| Time (UTC) | Event |
-|------------|-------|
-| [HH:MM] | [Event] |
+
+| Time (UTC) | Event   |
+| ---------- | ------- |
+| [HH:MM]    | [Event] |
 
 ### Root Cause
+
 [Detailed explanation of what caused the incident]
 
 ### 5 Whys
+
 1. Why did [symptom]? → [Because...]
 2. Why did [cause 1]? → [Because...]
 3. Why did [cause 2]? → [Because...]
@@ -126,31 +139,38 @@ Provide clear, factual updates at regular cadence. Include: what's happening, wh
 5. Why did [cause 4]? → [Root cause]
 
 ### What Went Well
+
 - [Things that worked]
 
 ### What Went Poorly
+
 - [Things that didn't work]
 
 ### Action Items
-| Action | Owner | Priority | Due Date |
-|--------|-------|----------|----------|
-| [Action] | [Person] | P0/P1/P2 | [Date] |
+
+| Action   | Owner    | Priority | Due Date |
+| -------- | -------- | -------- | -------- |
+| [Action] | [Person] | P0/P1/P2 | [Date]   |
 
 ### Lessons Learned
+
 [Key takeaways for the team]
 ```
 
 ## If Connectors Available
 
 If **~~monitoring** is connected:
+
 - Pull alert details and metrics
 - Show graphs of affected metrics
 
 If **~~incident management** is connected:
+
 - Create or update incident in PagerDuty/Opsgenie
 - Page on-call responders
 
 If **~~chat** is connected:
+
 - Post status updates to incident channel
 - Create war room channel
 

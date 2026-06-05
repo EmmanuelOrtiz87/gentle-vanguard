@@ -7,9 +7,12 @@ metadata:
   original-name: sales-brief
   department: small-business
 ---
-Run the sales analysis and content brief. Pull what sold (and what didn't), explain why, and produce a ready-to-use content plan that acts on the data.
+
+Run the sales analysis and content brief. Pull what sold (and what didn't), explain why, and produce
+a ready-to-use content plan that acts on the data.
 
 Parse arguments:
+
 - `--lookback` (default: `30d`) — `30d`, `60d`, or `90d` lookback window
 
 ## Step 1 — Sales breakdown
@@ -21,8 +24,8 @@ Using the `content-strategy` skill workflow for sales analysis:
 3. Rank products by: total revenue, unit volume, and margin (if available in QB).
 4. Calculate each product's share of total revenue vs. prior equivalent period.
 
-Top sellers: products that grew share or maintained top-3 rank.
-Bottom sellers: products with declining volume or below 5% of revenue.
+Top sellers: products that grew share or maintained top-3 rank. Bottom sellers: products with
+declining volume or below 5% of revenue.
 
 ## Step 2 — Seasonality check
 
@@ -33,6 +36,7 @@ Bottom sellers: products with declining volume or below 5% of revenue.
 ## Step 3 — Why analysis
 
 For each top and bottom seller, explain the likely driver:
+
 - Price change, promo, new channel, seasonal demand, competitor move
 - Cross-reference with HubSpot campaign activity for the period
 - Note where attribution is inferred vs. confirmed
@@ -64,13 +68,18 @@ Week 2:
 
 ## Connector failures
 
-If both QuickBooks and PayPal are unreachable, stop — sales analysis requires at least one revenue source. If only one is connected, run from that source and note "QuickBooks not connected — revenue data from PayPal only" (or vice versa). If HubSpot is missing, skip campaign cross-reference in the "why analysis" and note it.
+If both QuickBooks and PayPal are unreachable, stop — sales analysis requires at least one revenue
+source. If only one is connected, run from that source and note "QuickBooks not connected — revenue
+data from PayPal only" (or vice versa). If HubSpot is missing, skip campaign cross-reference in the
+"why analysis" and note it.
 
 ## Approval gates
 
 - **Never auto-schedule or publish content.** The brief is for owner review only.
-- **Never create Canva assets automatically** — offer to generate them after owner approves the brief.
+- **Never create Canva assets automatically** — offer to generate them after owner approves the
+  brief.
 
 ## Output
 
-Present the sales analysis, then the content brief. Ask the owner if they'd like to generate Canva assets for any of the planned posts.
+Present the sales analysis, then the content brief. Ask the owner if they'd like to generate Canva
+assets for any of the planned posts.

@@ -1,8 +1,16 @@
 # Managed Agents — PHP
 
-> **Bindings not shown here:** This README covers the most common managed-agents flows for PHP. If you need a class, method, namespace, field, or behavior that isn't shown, WebFetch the PHP SDK repo **or the relevant docs page** from `shared/live-sources.md` rather than guess. Do not extrapolate from cURL shapes or another language's SDK.
+> **Bindings not shown here:** This README covers the most common managed-agents flows for PHP. If
+> you need a class, method, namespace, field, or behavior that isn't shown, WebFetch the PHP SDK
+> repo **or the relevant docs page** from `shared/live-sources.md` rather than guess. Do not
+> extrapolate from cURL shapes or another language's SDK.
 
-> **Agents are persistent — create once, reference by ID.** Store the agent ID returned by `$client->beta->agents->create` and pass it to every subsequent `->sessions->create`; do not call `agents->create` in the request path. The Anthropic CLI is one convenient way to create agents and environments from version-controlled YAML — its URL is in `shared/live-sources.md`. The examples below show in-code creation for completeness; in production the create call belongs in setup, not in the request path.
+> **Agents are persistent — create once, reference by ID.** Store the agent ID returned by
+> `$client->beta->agents->create` and pass it to every subsequent `->sessions->create`; do not call
+> `agents->create` in the request path. The Anthropic CLI is one convenient way to create agents and
+> environments from version-controlled YAML — its URL is in `shared/live-sources.md`. The examples
+> below show in-code creation for completeness; in production the create call belongs in setup, not
+> in the request path.
 
 ## Installation
 
@@ -38,7 +46,10 @@ echo "Environment ID: {$environment->id}\n"; // env_...
 
 ## Create an Agent (required first step)
 
-> ⚠️ **There is no inline agent config.** `model`/`system`/`tools` live on the agent object, not the session. Always start with `$client->beta->agents->create()` — the session takes either `agent: $agent->id` or the typed `BetaManagedAgentsAgentParams::with(type: 'agent', id: $agent->id, version: $agent->version)`.
+> ⚠️ **There is no inline agent config.** `model`/`system`/`tools` live on the agent object, not the
+> session. Always start with `$client->beta->agents->create()` — the session takes either
+> `agent: $agent->id` or the typed
+> `BetaManagedAgentsAgentParams::with(type: 'agent', id: $agent->id, version: $agent->version)`.
 
 ### Minimal
 
@@ -104,13 +115,18 @@ $client->beta->sessions->events->send(
 );
 ```
 
-> 💡 **Stream-first:** Open the stream *before* (or concurrently with) sending the message. The stream only delivers events that occur after it opens — stream-after-send means early events arrive buffered in one batch. See [Steering Patterns](../../shared/managed-agents-events.md#steering-patterns).
+> 💡 **Stream-first:** Open the stream _before_ (or concurrently with) sending the message. The
+> stream only delivers events that occur after it opens — stream-after-send means early events
+> arrive buffered in one batch. See
+> [Steering Patterns](../../shared/managed-agents-events.md#steering-patterns).
 
 ---
 
 ## Stream Events (SSE)
 
-> ℹ️ **Streaming transporter:** PHP's default buffered PSR-18 client never returns for the open-ended session event stream. Use a streaming Guzzle transporter for `streamStream()` calls — other calls keep the default client.
+> ℹ️ **Streaming transporter:** PHP's default buffered PSR-18 client never returns for the
+> open-ended session event stream. Use a streaming Guzzle transporter for `streamStream()` calls —
+> other calls keep the default client.
 
 ```php
 $streamingClient = new GuzzleHttp\Client(['stream' => true]);
@@ -187,7 +203,9 @@ $stream->close();
 
 ## Provide Custom Tool Result
 
-> ℹ️ The PHP managed-agents bindings for `user.custom_tool_result` are not yet documented in this skill or in the apps source examples. Refer to `shared/managed-agents-events.md` for the wire format and the `anthropic-ai/sdk` PHP repository for the corresponding params.
+> ℹ️ The PHP managed-agents bindings for `user.custom_tool_result` are not yet documented in this
+> skill or in the apps source examples. Refer to `shared/managed-agents-events.md` for the wire
+> format and the `anthropic-ai/sdk` PHP repository for the corresponding params.
 
 ---
 
@@ -203,7 +221,10 @@ foreach ($client->beta->sessions->events->list($session->id)->pagingEachItem() a
 
 ## Upload a File
 
-> ℹ️ **PHP file upload:** The PHP SDK's beta managed-agents file upload binding is not shown in the apps source examples; the canonical PHP example uses raw cURL against `POST /v1/files`. If your codebase prefers the SDK, WebFetch the `anthropic-ai/sdk` PHP repository for the latest binding before writing code.
+> ℹ️ **PHP file upload:** The PHP SDK's beta managed-agents file upload binding is not shown in the
+> apps source examples; the canonical PHP example uses raw cURL against `POST /v1/files`. If your
+> codebase prefers the SDK, WebFetch the `anthropic-ai/sdk` PHP repository for the latest binding
+> before writing code.
 
 ```php
 use Anthropic\Beta\Sessions\BetaManagedAgentsFileResourceParams;
@@ -263,7 +284,9 @@ $client->beta->sessions->resources->delete($resource->id, sessionID: $session->i
 
 ## List and Download Session Files
 
-> ℹ️ Listing and downloading files an agent wrote during a session is not yet documented for PHP in this skill or in the apps source examples. See `shared/managed-agents-events.md` and the `anthropic-ai/sdk` PHP repository for the file list/download bindings.
+> ℹ️ Listing and downloading files an agent wrote during a session is not yet documented for PHP in
+> this skill or in the apps source examples. See `shared/managed-agents-events.md` and the
+> `anthropic-ai/sdk` PHP repository for the file list/download bindings.
 
 ---
 

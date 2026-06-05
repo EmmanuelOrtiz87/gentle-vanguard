@@ -2,10 +2,10 @@
 
 ## Scenario Description
 
-**User type**: University professor, experienced in paper writing
-**Scenario**: Already completed an English paper draft, wants a simulated review before submission
-**Goal**: Review --> Revision --> Format conversion (LaTeX)
-**Language**: English (paper is in English; conversation with orchestrator in English)
+**User type**: University professor, experienced in paper writing **Scenario**: Already completed an
+English paper draft, wants a simulated review before submission **Goal**: Review --> Revision -->
+Format conversion (LaTeX) **Language**: English (paper is in English; conversation with orchestrator
+in English)
 
 ---
 
@@ -44,7 +44,8 @@ Before starting, let me confirm a few things:
 If you later want to revise based on review comments, I'll automatically guide you to Stage 4.
 ```
 
-**User**: IMRaD structure, I'd like a quick review first to see if there are any big-picture issues. Targeting Computers & Education (SSCI Q1). Will decide about revision after the review.
+**User**: IMRaD structure, I'd like a quick review first to see if there are any big-picture issues.
+Targeting Computers & Education (SSCI Q1). Will decide about revision after the review.
 
 ### Orchestrator: Confirm Configuration
 
@@ -78,6 +79,7 @@ eic_agent executing quick assessment...
 ```
 
 **Field Analysis (quick version):**
+
 ```
 Paper domain: Educational Data Mining / Higher Education
 Method type: Machine Learning (Supervised Classification)
@@ -119,6 +121,7 @@ Quick Verdict: Major Revision
 ```
 
 **Stage 3 Deliverables:**
+
 - EIC Quick Assessment Report
 - 3 key issues list (priority sorted)
 
@@ -178,6 +181,7 @@ Passing Paper Draft + Quick Assessment Report...
 ```
 
 **Revision Progress Tracking:**
+
 ```
 C1: [v] Added Ethics & Fairness section (Section 5.3)
     - Algorithmic fairness analysis (demographic parity, equalized odds)
@@ -199,6 +203,7 @@ C3: [v] Expanded Literature Review (Section 2)
 ```
 
 **Stage 4 Deliverables:**
+
 - Revised Draft (9,200 words, 2,200 words more than original)
 - Response to Reviewers (R-A-C format, 3 items all addressed)
 
@@ -239,6 +244,7 @@ field_analyst_agent re-analyzing...
 ```
 
 **Reviewer Configuration:**
+
 ```
 EIC:        Computers & Education Associate Editor
             Educational AI, Learning Analytics
@@ -336,6 +342,7 @@ formatter_agent executing LaTeX conversion...
 ```
 
 **Stage 5 Deliverables:**
+
 - `ml_university_attrition_taiwan.tex` (LaTeX main text)
 - `references.bib` (BibTeX file)
 - `figures/` (all figures and tables)

@@ -7,9 +7,12 @@ metadata:
   original-name: close-month
   department: small-business
 ---
-Run the month-end close workflow. Reconcile, flag gaps, narrate the P&L, and export the close packet for the owner's records (and their accountant).
+
+Run the month-end close workflow. Reconcile, flag gaps, narrate the P&L, and export the close packet
+for the owner's records (and their accountant).
 
 Parse arguments:
+
 - `--month` (default: previous calendar month) — `YYYY-MM` format
 - `--save-to` (default `files`) — `files` (Google Drive / OneDrive), `desktop` (local), or `both`
 
@@ -18,23 +21,28 @@ Parse arguments:
 Trigger the `month-end-prep` skill workflow:
 
 1. Pull all QuickBooks transactions for the target month.
-2. Pull settlements from each connected payment processor (PayPal, Stripe, Square) for the same month.
+2. Pull settlements from each connected payment processor (PayPal, Stripe, Square) for the same
+   month.
 3. Match QB entries to processor settlements by amount + date (±2 days).
 4. Surface three gap categories:
-   - **Unmatched processor settlements** — money came in via PayPal/Stripe/Square but never landed in QB
-   - **Unmatched QB deposits** — QB shows income with no processor record (cash? wire? misclassified?)
+   - **Unmatched processor settlements** — money came in via PayPal/Stripe/Square but never landed
+     in QB
+   - **Unmatched QB deposits** — QB shows income with no processor record (cash? wire?
+     misclassified?)
    - **Variance lines** — matched but amount differs (fees, refunds split)
 
 ## Step 2 — Flag suspicious entries
 
 Surface in the same report:
+
 - **Uncategorized transactions** — QB entries with no category
 - **Suspicious duplicates** — same amount, same vendor, within 3 days
 - **Missing receipts** — QB entries above $75 with no attachment
 
 For each, recommend an action: categorize as X, delete duplicate, attach receipt from inbox.
 
-Wait for owner to triage flagged items before generating the narrative. Do not auto-categorize or auto-delete.
+Wait for owner to triage flagged items before generating the narrative. Do not auto-categorize or
+auto-delete.
 
 ## Step 3 — P&L narrative
 
@@ -53,7 +61,8 @@ Three notable items:
 3. ...
 ```
 
-Numbers come from QB; the *why* comes from cross-referencing top transactions, vendor names, and prior-month deltas.
+Numbers come from QB; the _why_ comes from cross-referencing top transactions, vendor names, and
+prior-month deltas.
 
 ## Step 4 — Export the close packet
 
@@ -70,7 +79,10 @@ Save both to the chosen `--save-to` location. Filename format: `close-packet-202
 
 ## Connector failures
 
-If QuickBooks is unreachable, stop — reconciliation requires QB as the source of truth. If a payment processor (PayPal, Stripe, Square) is unreachable, run reconciliation against the available processors and note "PayPal not connected — PayPal settlements skipped from reconciliation" (or whichever is missing). If all processors are missing, run QB-only analysis and flag it.
+If QuickBooks is unreachable, stop — reconciliation requires QB as the source of truth. If a payment
+processor (PayPal, Stripe, Square) is unreachable, run reconciliation against the available
+processors and note "PayPal not connected — PayPal settlements skipped from reconciliation" (or
+whichever is missing). If all processors are missing, run QB-only analysis and flag it.
 
 ## Approval gates
 
@@ -80,4 +92,5 @@ If QuickBooks is unreachable, stop — reconciliation requires QB as the source 
 
 ## Output
 
-End the run with a one-paragraph recap: revenue, margin, gap count remaining (if any), file paths to the saved packet. If gaps were not all resolved, list them so the owner can revisit.
+End the run with a one-paragraph recap: revenue, margin, gap count remaining (if any), file paths to
+the saved packet. If gaps were not all resolved, list them so the owner can revisit.

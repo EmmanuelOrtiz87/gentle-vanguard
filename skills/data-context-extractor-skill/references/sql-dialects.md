@@ -111,11 +111,11 @@ Include the appropriate section in generated skills based on the user's data war
 
 ## Common Patterns Across Dialects
 
-| Operation | BigQuery | Snowflake | PostgreSQL | Databricks |
-|-----------|----------|-----------|------------|------------|
-| Current date | `CURRENT_DATE()` | `CURRENT_DATE()` | `CURRENT_DATE` | `CURRENT_DATE()` |
-| Current timestamp | `CURRENT_TIMESTAMP()` | `CURRENT_TIMESTAMP()` | `NOW()` | `CURRENT_TIMESTAMP()` |
-| String concat | `CONCAT()` or `\|\|` | `CONCAT()` or `\|\|` | `CONCAT()` or `\|\|` | `CONCAT()` or `\|\|` |
-| Coalesce | `COALESCE()` | `COALESCE()` | `COALESCE()` | `COALESCE()` |
-| Case when | `CASE WHEN` | `CASE WHEN` | `CASE WHEN` | `CASE WHEN` |
-| Count distinct | `COUNT(DISTINCT x)` | `COUNT(DISTINCT x)` | `COUNT(DISTINCT x)` | `COUNT(DISTINCT x)` |
+| Operation         | BigQuery              | Snowflake             | PostgreSQL           | Databricks            |
+| ----------------- | --------------------- | --------------------- | -------------------- | --------------------- |
+| Current date      | `CURRENT_DATE()`      | `CURRENT_DATE()`      | `CURRENT_DATE`       | `CURRENT_DATE()`      |
+| Current timestamp | `CURRENT_TIMESTAMP()` | `CURRENT_TIMESTAMP()` | `NOW()`              | `CURRENT_TIMESTAMP()` |
+| String concat     | `CONCAT()` or `\|\|`  | `CONCAT()` or `\|\|`  | `CONCAT()` or `\|\|` | `CONCAT()` or `\|\|`  |
+| Coalesce          | `COALESCE()`          | `COALESCE()`          | `COALESCE()`         | `COALESCE()`          |
+| Case when         | `CASE WHEN`           | `CASE WHEN`           | `CASE WHEN`          | `CASE WHEN`           |
+| Count distinct    | `COUNT(DISTINCT x)`   | `COUNT(DISTINCT x)`   | `COUNT(DISTINCT x)`  | `COUNT(DISTINCT x)`   |

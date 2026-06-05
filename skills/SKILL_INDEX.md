@@ -196,26 +196,26 @@ incidents, response coordination, mitigation, and recovery planning
 
 ## Skill Categories
 
-| Category              | Skills                                                                                                                                                                                        |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Orchestrators**     | project-orchestrator, multi-agent-registry, session-workflow, skill-creator-skill                                                                                                             |
-| **Context & Process** | context-engineering, sdd, bdd-scenarios, optimizador-prompts                                                                                                                                  |
-| **Content & Comms**   | content-output-skill, humanizador-skill, presentaciones-visuales-skill                                                                                                                        |
-| **Frontend & Web**    | angular-spa, react-19, nextjs-15, tailwind-4, firecrawl-web, web-artifacts-builder, seo-audit, brand-guide                                                                                    |
-| **Mobile**            | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-kotlin-coroutines, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging |
-| **State**             | zustand-5                                                                                                                                                                                     |
-| **Validation**        | zod-4                                                                                                                                                                                         |
-| **Backend**           | golang-api, api-design, django-drf                                                                                                                                                            |
-| **Database**          | database-relational, database-nosql                                                                                                                                                           |
-| **DevOps**            | docker-devops, terraform-infrastructure, kubernetes-deployment                                                                                                                                |
-| **Testing**           | testing-strategy, testing-skill, playwright, pytest, go-testing                                                                                                                               |
-| **AI**                | ai-sdk-5, mcp-skill, cloud-agent-connector, pretool-format-hook, codegraph-skill                                                                                                              |
-| **Business**          | business-telemetry, backlog-management                                                                                                                                                        |
-| **Workflow**          | github-pr, jira-task, jira-epic, release-management, skill-factory                                                                                                                            |
-| **Quality**           | typescript, code-review, security, technical-debt, web-performance-optimization, judgment-day, verificador-datos                                                                              |
-| **Operations**        | observability, incident-response-plan                                                                                                                                                         |
-| **Governance**        | project-scaffolding, documentation-governance, architecture-governance, git-workflow, gentle-vanguard-manager                                                                                 |
-| **SDD Lifecycle**     | sdd-lifecycle (CONSOLIDATED - 9 phases in 1)                                                                                                                                                  |
+| Category                   | Skills                                                                                                                                                                                                                                                               |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Orchestrators**          | project-orchestrator, multi-agent-registry, session-workflow, skill-creator-skill                                                                                                                                                                                    |
+| **Context & Process**      | context-engineering, sdd, bdd-scenarios, optimizador-prompts                                                                                                                                                                                                         |
+| **Content & Comms**        | content-output-skill, humanizador-skill, presentaciones-visuales-skill                                                                                                                                                                                               |
+| **Frontend & Web**         | angular-spa, react-19, nextjs-15, tailwind-4, firecrawl-web, web-artifacts-builder, seo-audit, brand-guide                                                                                                                                                           |
+| **Mobile**                 | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-kotlin-coroutines, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging                                                                        |
+| **State**                  | zustand-5                                                                                                                                                                                                                                                            |
+| **Validation**             | zod-4                                                                                                                                                                                                                                                                |
+| **Backend**                | golang-api, api-design, django-drf                                                                                                                                                                                                                                   |
+| **Database**               | database-relational, database-nosql                                                                                                                                                                                                                                  |
+| **DevOps**                 | docker-devops, terraform-infrastructure, kubernetes-deployment                                                                                                                                                                                                       |
+| **Testing**                | testing-strategy, testing-skill, playwright, pytest, go-testing                                                                                                                                                                                                      |
+| **AI**                     | ai-sdk-5, mcp-skill, cloud-agent-connector, pretool-format-hook, codegraph-skill                                                                                                                                                                                     |
+| **Business**               | business-telemetry, backlog-management                                                                                                                                                                                                                               |
+| **Workflow**               | github-pr, jira-task, jira-epic, release-management, skill-factory                                                                                                                                                                                                   |
+| **Quality**                | typescript, code-review, security, technical-debt, web-performance-optimization, judgment-day, verificador-datos                                                                                                                                                     |
+| **Operations**             | observability, incident-response-plan                                                                                                                                                                                                                                |
+| **Governance**             | project-scaffolding, documentation-governance, architecture-governance, git-workflow, gentle-vanguard-manager                                                                                                                                                        |
+| **SDD Lifecycle**          | sdd-lifecycle (CONSOLIDATED - 9 phases in 1)                                                                                                                                                                                                                         |
 | **Reasoning & Frameworks** | cynefin, first-principles, socratic, systems-thinking, ooda-loop, bayesian, debiasing, fermi, second-order, inversion, red-team, five-whys, feedback-loops, model-router, leverage-points, systematic-debugging, subagent-driven-dev, writing-plans, executing-plans |
 
 ---
@@ -927,25 +927,25 @@ starting significant work
 
 ## Quick Reference
 
-| Category         | Skills                                                                                                                                                                                        |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Orchestrator** | project-orchestrator (load first!), session-workflow, skill-creator                                                                                                                           |
-| **Audit**        | gentle-vanguard-audit (validate, sweep, check)                                                                                                                                                |
-| **Frontend**     | angular-spa, react-19, nextjs-15, tailwind-4                                                                                                                                                  |
-| **Mobile**       | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-kotlin-coroutines, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging |
-| **State**        | zustand-5                                                                                                                                                                                     |
-| **Validation**   | zod-4                                                                                                                                                                                         |
-| **Backend**      | golang-api, api-design, django-drf                                                                                                                                                            |
-| **Database**     | database-relational, database-nosql                                                                                                                                                           |
-| **DevOps**       | docker-devops, terraform-infrastructure, kubernetes-deployment                                                                                                                                |
-| **Testing**      | testing-strategy, testing-skill, playwright, pytest, go-testing                                                                                                                               |
-| **AI**           | ai-sdk-5, mcp-skill, codegraph-skill                                                                                                                                                          |
-| **Workflow**     | github-pr, jira-task, jira-epic, release-management                                                                                                                                           |
-| **Quality**      | typescript, code-review, security, technical-debt, web-performance-optimization                                                                                                               |
-| **Operations**   | observability, incident-response-plan                                                                                                                                                         |
-| **Governance**   | gentle-vanguard-manager, project-scaffolding, architecture-governance, documentation-governance, git-workflow, gentle-vanguard-audit                                                          |
-| **Reasoning**    | cynefin, first-principles, socratic, systems-thinking, ooda-loop, bayesian, debiasing, fermi, second-order, inversion, red-team, five-whys, feedback-loops, model-router, leverage-points     |
-| **Methodologies**| systematic-debugging, subagent-driven-dev, writing-plans, executing-plans                                                                                                                      |
+| Category          | Skills                                                                                                                                                                                        |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Orchestrator**  | project-orchestrator (load first!), session-workflow, skill-creator                                                                                                                           |
+| **Audit**         | gentle-vanguard-audit (validate, sweep, check)                                                                                                                                                |
+| **Frontend**      | angular-spa, react-19, nextjs-15, tailwind-4                                                                                                                                                  |
+| **Mobile**        | ios-swift-development, ios-swiftui-patterns, android-kotlin, android-kotlin-coroutines, android-architecture, android-jetpack-compose, flutter, react-native, ui-mobile, mobile-app-debugging |
+| **State**         | zustand-5                                                                                                                                                                                     |
+| **Validation**    | zod-4                                                                                                                                                                                         |
+| **Backend**       | golang-api, api-design, django-drf                                                                                                                                                            |
+| **Database**      | database-relational, database-nosql                                                                                                                                                           |
+| **DevOps**        | docker-devops, terraform-infrastructure, kubernetes-deployment                                                                                                                                |
+| **Testing**       | testing-strategy, testing-skill, playwright, pytest, go-testing                                                                                                                               |
+| **AI**            | ai-sdk-5, mcp-skill, codegraph-skill                                                                                                                                                          |
+| **Workflow**      | github-pr, jira-task, jira-epic, release-management                                                                                                                                           |
+| **Quality**       | typescript, code-review, security, technical-debt, web-performance-optimization                                                                                                               |
+| **Operations**    | observability, incident-response-plan                                                                                                                                                         |
+| **Governance**    | gentle-vanguard-manager, project-scaffolding, architecture-governance, documentation-governance, git-workflow, gentle-vanguard-audit                                                          |
+| **Reasoning**     | cynefin, first-principles, socratic, systems-thinking, ooda-loop, bayesian, debiasing, fermi, second-order, inversion, red-team, five-whys, feedback-loops, model-router, leverage-points     |
+| **Methodologies** | systematic-debugging, subagent-driven-dev, writing-plans, executing-plans                                                                                                                     |
 
 ## Skill Loading
 
@@ -1343,7 +1343,8 @@ useFormStatus
 
 **Trigger**: `prompt engineering`, `prompt design`, `system prompt`, `few-shot`, `chain of thought`
 
-**Use when**: Designing effective prompts, system prompts, few-shot examples, and chain-of-thought reasoning
+**Use when**: Designing effective prompts, system prompts, few-shot examples, and chain-of-thought
+reasoning
 
 ---
 
@@ -1351,7 +1352,8 @@ useFormStatus
 
 **Trigger**: `agent design`, `agent architecture`, `tool use`, `agent orchestration`
 
-**Use when**: Designing AI agent architecture, tool-use patterns, orchestration, and planning systems
+**Use when**: Designing AI agent architecture, tool-use patterns, orchestration, and planning
+systems
 
 ---
 
@@ -1359,7 +1361,8 @@ useFormStatus
 
 **Trigger**: `memory management`, `context window`, `vector database`, `RAG`, `summarization`
 
-**Use when**: Managing agent memory, context windows, vector databases, RAG, and memory consolidation
+**Use when**: Managing agent memory, context windows, vector databases, RAG, and memory
+consolidation
 
 ---
 
@@ -1383,7 +1386,8 @@ useFormStatus
 
 **Trigger**: `security audit`, `vulnerability assessment`, `OWASP`, `security review`
 
-**Use when**: Conducting security audits, vulnerability assessments, OWASP reviews, and threat modeling
+**Use when**: Conducting security audits, vulnerability assessments, OWASP reviews, and threat
+modeling
 
 ---
 
@@ -1391,7 +1395,8 @@ useFormStatus
 
 **Trigger**: `clean code`, `code quality`, `refactoring`, `readability`, `maintainability`
 
-**Use when**: Writing clean, maintainable code with best practices for naming, functions, and error handling
+**Use when**: Writing clean, maintainable code with best practices for naming, functions, and error
+handling
 
 ---
 
@@ -1407,7 +1412,8 @@ useFormStatus
 
 **Trigger**: `e2e test`, `end-to-end`, `Playwright`, `Cypress`, `visual testing`
 
-**Use when**: Writing end-to-end tests with Playwright or Cypress, visual testing, and CI integration
+**Use when**: Writing end-to-end tests with Playwright or Cypress, visual testing, and CI
+integration
 
 ---
 
@@ -1423,7 +1429,8 @@ useFormStatus
 
 **Trigger**: `accessibility test`, `a11y`, `WCAG`, `axe-core`
 
-**Use when**: Testing web accessibility, WCAG compliance, screen reader testing, and inclusive design
+**Use when**: Testing web accessibility, WCAG compliance, screen reader testing, and inclusive
+design
 
 ---
 
@@ -1439,7 +1446,8 @@ useFormStatus
 
 **Trigger**: `shell script`, `bash`, `scripting`, `automation script`
 
-**Use when**: Writing production-grade shell scripts with error handling, argument parsing, and portability
+**Use when**: Writing production-grade shell scripts with error handling, argument parsing, and
+portability
 
 ---
 
@@ -1447,7 +1455,8 @@ useFormStatus
 
 **Trigger**: `accessibility`, `WCAG`, `inclusive design`, `ARIA`, `a11y`
 
-**Use when**: Designing accessible interfaces following WCAG guidelines, ARIA patterns, and inclusive design
+**Use when**: Designing accessible interfaces following WCAG guidelines, ARIA patterns, and
+inclusive design
 
 ---
 
@@ -1465,7 +1474,8 @@ useFormStatus
 
 **Trigger**: `cynefin`, `complexity classification`, `problem domain`, `complicated vs complex`
 
-**Use when**: Classifying problems using Cynefin framework: simple, complicated, complex, chaotic, and disorder domains
+**Use when**: Classifying problems using Cynefin framework: simple, complicated, complex, chaotic,
+and disorder domains
 
 ---
 
@@ -1473,7 +1483,8 @@ useFormStatus
 
 **Trigger**: `first principles`, `fundamental reasoning`, `break down problem`, `physics thinking`
 
-**Use when**: Breaking down problems to fundamental truths using first-principles reasoning and building solutions from the ground up
+**Use when**: Breaking down problems to fundamental truths using first-principles reasoning and
+building solutions from the ground up
 
 ---
 
@@ -1481,7 +1492,8 @@ useFormStatus
 
 **Trigger**: `socratic`, `questioning`, `critical inquiry`, `dialectical`
 
-**Use when**: Applying Socratic method of questioning to examine beliefs, expose contradictions, and reach deeper understanding
+**Use when**: Applying Socratic method of questioning to examine beliefs, expose contradictions, and
+reach deeper understanding
 
 ---
 
@@ -1489,7 +1501,8 @@ useFormStatus
 
 **Trigger**: `systems thinking`, `system dynamics`, `emergent behavior`, `interconnections`
 
-**Use when**: Analyzing systems through interconnections, feedback loops, emergent behavior, and dynamic modeling
+**Use when**: Analyzing systems through interconnections, feedback loops, emergent behavior, and
+dynamic modeling
 
 ---
 
@@ -1497,7 +1510,8 @@ useFormStatus
 
 **Trigger**: `ooda`, `observe orient decide act`, `rapid iteration`, `decision cycle`
 
-**Use when**: Applying the OODA loop (Observe-Orient-Decide-Act) for rapid decision-making and iterative adaptation
+**Use when**: Applying the OODA loop (Observe-Orient-Decide-Act) for rapid decision-making and
+iterative adaptation
 
 ---
 
@@ -1505,7 +1519,8 @@ useFormStatus
 
 **Trigger**: `bayesian`, `probability`, `belief update`, `prior evidence`, `posterior`
 
-**Use when**: Applying Bayesian reasoning for probabilistic thinking, belief updates, and evidence-based decision-making
+**Use when**: Applying Bayesian reasoning for probabilistic thinking, belief updates, and
+evidence-based decision-making
 
 ---
 
@@ -1513,7 +1528,8 @@ useFormStatus
 
 **Trigger**: `debiasing`, `cognitive bias`, `bias awareness`, `decision bias`
 
-**Use when**: Identifying and mitigating cognitive biases in decisions, analysis, and reasoning processes
+**Use when**: Identifying and mitigating cognitive biases in decisions, analysis, and reasoning
+processes
 
 ---
 
@@ -1521,7 +1537,8 @@ useFormStatus
 
 **Trigger**: `fermi`, `estimation`, `order of magnitude`, `back of envelope`, `approximation`
 
-**Use when**: Making quick order-of-magnitude estimates using Fermi estimation techniques and dimensional analysis
+**Use when**: Making quick order-of-magnitude estimates using Fermi estimation techniques and
+dimensional analysis
 
 ---
 
@@ -1529,7 +1546,8 @@ useFormStatus
 
 **Trigger**: `second order`, `consequences`, `ripple effects`, `unintended consequences`
 
-**Use when**: Analyzing second-order effects, unintended consequences, and ripple effects of decisions and actions
+**Use when**: Analyzing second-order effects, unintended consequences, and ripple effects of
+decisions and actions
 
 ---
 
@@ -1537,7 +1555,8 @@ useFormStatus
 
 **Trigger**: `inversion`, `invert problem`, `reverse thinking`, `avoid failure`
 
-**Use when**: Applying inversion thinking to solve problems by considering how to cause or avoid failure
+**Use when**: Applying inversion thinking to solve problems by considering how to cause or avoid
+failure
 
 ---
 
@@ -1545,7 +1564,8 @@ useFormStatus
 
 **Trigger**: `red team`, `adversarial review`, `attack simulation`, `penetration thinking`
 
-**Use when**: Conducting adversarial reviews, red-team analysis, and stress-testing plans against potential failures
+**Use when**: Conducting adversarial reviews, red-team analysis, and stress-testing plans against
+potential failures
 
 ---
 
@@ -1553,7 +1573,8 @@ useFormStatus
 
 **Trigger**: `five whys`, `root cause`, `why analysis`, `cause analysis`
 
-**Use when**: Performing root cause analysis by iteratively asking "why" to trace problems to their fundamental cause
+**Use when**: Performing root cause analysis by iteratively asking "why" to trace problems to their
+fundamental cause
 
 ---
 
@@ -1569,7 +1590,8 @@ useFormStatus
 
 **Trigger**: `model router`, `thinking model`, `which model`, `reasoning framework`
 
-**Use when**: Selecting the appropriate reasoning model or thinking framework for a given problem context
+**Use when**: Selecting the appropriate reasoning model or thinking framework for a given problem
+context
 
 ---
 
@@ -1577,7 +1599,8 @@ useFormStatus
 
 **Trigger**: `leverage point`, `high impact`, `intervention point`, `system change`
 
-**Use when**: Identifying high-leverage intervention points in systems where small changes produce large effects
+**Use when**: Identifying high-leverage intervention points in systems where small changes produce
+large effects
 
 ---
 
@@ -1587,7 +1610,8 @@ useFormStatus
 
 **Trigger**: `systematic debugging`, `root cause`, `debug process`, `investigate fix verify defend`
 
-**Use when**: Following a systematic debugging methodology: investigate, fix, verify, and defend the root cause
+**Use when**: Following a systematic debugging methodology: investigate, fix, verify, and defend the
+root cause
 
 ---
 
@@ -1595,7 +1619,8 @@ useFormStatus
 
 **Trigger**: `subagent`, `fresh agent per task`, `two-stage review`, `agent isolation`
 
-**Use when**: Using dedicated sub-agents with fresh context per task and two-stage review for complex development work
+**Use when**: Using dedicated sub-agents with fresh context per task and two-stage review for
+complex development work
 
 ---
 
@@ -1603,7 +1628,8 @@ useFormStatus
 
 **Trigger**: `write plan`, `task breakdown`, `implementation plan`, `plan tasks`
 
-**Use when**: Creating detailed implementation plans with task breakdown, dependencies, and execution order
+**Use when**: Creating detailed implementation plans with task breakdown, dependencies, and
+execution order
 
 ---
 
@@ -1611,10 +1637,10 @@ useFormStatus
 
 **Trigger**: `execute plan`, `batch tasks`, `checkpoint`, `plan execution`
 
-**Use when**: Executing pre-written implementation plans with batch processing, checkpoints, and progress tracking
+**Use when**: Executing pre-written implementation plans with batch processing, checkpoints, and
+progress tracking
 
 ---
-
 
 ## Imported Skills
 
@@ -1708,7 +1734,6 @@ useFormStatus
 ---
 
 ### Knowledge Work Plugins (Anthropic)
-
 
 #### bio-research Department
 

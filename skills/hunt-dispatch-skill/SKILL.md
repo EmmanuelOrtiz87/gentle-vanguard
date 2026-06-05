@@ -1,11 +1,15 @@
 ---
 name: hunt-dispatch-skill
 description: >
-  Skill-set loader for /hunt orchestrator. Fingerprints the target, picks the right platform attack skills, and loads the Red Team or WAPT skill set. Use when /hunt has just received a mode answer (redteam or wapt + blackbox|greybox) and needs to load the appropriate skills and print the taxonomy. Not for direct user invocation.
+  Skill-set loader for /hunt orchestrator. Fingerprints the target, picks the right platform attack
+  skills, and loads the Red Team or WAPT skill set. Use when /hunt has just received a mode answer
+  (redteam or wapt + blackbox|greybox) and needs to load the appropriate skills and print the
+  taxonomy. Not for direct user invocation.
 metadata:
   source: claude-bughunter
   original-name: hunt-dispatch
 ---
+
 # hunt-dispatch
 
 skill-set loader for `/hunt`. one concept (which skills to load), one place.
@@ -66,7 +70,7 @@ supply-chain-attack-recon
 apk-redteam-pipeline
 ```
 
-high-impact hunt-* set (load third):
+high-impact hunt-\* set (load third):
 
 ```
 hunt-rce
@@ -84,7 +88,8 @@ hunt-sharepoint
 hunt-aspnet
 ```
 
-report format: `redteam-report-template` (subject / observations / description / impact / recommendation / poc).
+report format: `redteam-report-template` (subject / observations / description / impact /
+recommendation / poc).
 
 ### mode=wapt
 
@@ -96,7 +101,7 @@ security-arsenal
 triage-validation
 ```
 
-full hunt-* set (all OWASP-relevant):
+full hunt-\* set (all OWASP-relevant):
 
 ```
 hunt-xss             hunt-sqli            hunt-ssrf            hunt-idor
@@ -110,7 +115,8 @@ hunt-aspnet          hunt-sharepoint      hunt-ntlm-info
 
 report format: `report-writing` (`bugcrowd-reporting` if the target is on bugcrowd).
 
-box=greybox: creds already captured by `/hunt`, available in session memory. apply them to every authenticated test.
+box=greybox: creds already captured by `/hunt`, available in session memory. apply them to every
+authenticated test.
 
 ## step 3 — taxonomy print (once, at session start)
 
@@ -149,11 +155,13 @@ loaded for wapt ({blackbox|greybox}): {N} skills
 
 ## step 4 — return control to /hunt
 
-after taxonomy print, hand control back to `/hunt` for step 3 (sibling delegation) and step 4 (active testing). do not run probes here — this skill only loads context.
+after taxonomy print, hand control back to `/hunt` for step 3 (sibling delegation) and step 4
+(active testing). do not run probes here — this skill only loads context.
 
 ## privacy
 
 never echo back, log, or persist:
+
 - SOW / scope-of-work / engagement-letter content
 - grey box credentials (kept in session memory by `/hunt`, never written to disk)
 - client identifiers in user-level memory
@@ -162,8 +170,21 @@ never echo back, log, or persist:
 
 ## Related Skills & Chains
 
-- **`bb-methodology`** — When PART 0 mode confirmation completes. Workflow primitive: `bb-methodology` confirms engagement type (red team vs WAPT vs bug bounty); the answer feeds directly into this skill's `mode=redteam` / `mode=wapt` invocation.
-- **`redteam-mindset`** + **`mid-engagement-ir-detection`** — When `mode=redteam` is loaded. Workflow primitive: these are the always-on skills loaded first by step 2 of the redteam flow before any platform skill or hunt-* skill.
-- **`okta-attack`** / **`m365-entra-attack`** / **`enterprise-vpn-attack`** / **`vmware-vcenter-attack`** / **`cloud-iam-deep`** / **`supply-chain-attack-recon`** / **`apk-redteam-pipeline`** — When fingerprint signals match. Workflow primitive: step 1's curl fingerprint scan against `recon/<target>/live-hosts.txt` maps banner / domain signals to one or more of these platform skills.
-- **`hunt-rce`** / **`hunt-sqli`** / **`hunt-ssrf`** / **`hunt-ato`** / **all other hunt-* skills`** — When the mode-specific skill set is being printed. Workflow primitive: this skill is the loader; it names the hunt-* skills but does not run probes — actual hunting happens after step 4 returns control to `/hunt`.
-- **`report-writing`** vs **`redteam-report-template`** — When the taxonomy print specifies the report format. Workflow primitive: `mode=wapt` ends with `report-writing` as the deliverable format; `mode=redteam` ends with `redteam-report-template` instead.
+- **`bb-methodology`** — When PART 0 mode confirmation completes. Workflow primitive:
+  `bb-methodology` confirms engagement type (red team vs WAPT vs bug bounty); the answer feeds
+  directly into this skill's `mode=redteam` / `mode=wapt` invocation.
+- **`redteam-mindset`** + **`mid-engagement-ir-detection`** — When `mode=redteam` is loaded.
+  Workflow primitive: these are the always-on skills loaded first by step 2 of the redteam flow
+  before any platform skill or hunt-\* skill.
+- **`okta-attack`** / **`m365-entra-attack`** / **`enterprise-vpn-attack`** /
+  **`vmware-vcenter-attack`** / **`cloud-iam-deep`** / **`supply-chain-attack-recon`** /
+  **`apk-redteam-pipeline`** — When fingerprint signals match. Workflow primitive: step 1's curl
+  fingerprint scan against `recon/<target>/live-hosts.txt` maps banner / domain signals to one or
+  more of these platform skills.
+- **`hunt-rce`** / **`hunt-sqli`** / **`hunt-ssrf`** / **`hunt-ato`** / **all other hunt-\*
+  skills`** — When the mode-specific skill set is being printed. Workflow primitive: this skill is
+  the loader; it names the hunt-\* skills but does not run probes — actual hunting happens after
+  step 4 returns control to `/hunt`.
+- **`report-writing`** vs **`redteam-report-template`** — When the taxonomy print specifies the
+  report format. Workflow primitive: `mode=wapt` ends with `report-writing` as the deliverable
+  format; `mode=redteam` ends with `redteam-report-template` instead.

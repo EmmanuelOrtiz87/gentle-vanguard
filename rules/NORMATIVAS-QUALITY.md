@@ -6,30 +6,34 @@ Version: 1.0.0 | Last updated: 2026-05-26 | Status: ACTIVE
 
 ## 1. PROPOSITO
 
-Definir los estándares de calidad, testing, CI/CD y mejores prácticas para el desarrollo
-y mantenimiento del stack Gentle-Vanguard, asegurando que todo el código sea robusto,
-mantenible y cumpla con estándares enterprise.
+Definir los estándares de calidad, testing, CI/CD y mejores prácticas para el desarrollo y
+mantenimiento del stack Gentle-Vanguard, asegurando que todo el código sea robusto, mantenible y
+cumpla con estándares enterprise.
 
 ---
 
 ## 2. PRINCIPIOS DE CALIDAD
 
 ### 2.1 Testing First
+
 - Todo cambio debe incluir tests
 - Tests automatizados en CI/CD
 - Cobertura mínima: 80%
 
 ### 2.2 Code Review
+
 - Todo PR requiere aprobación
 - Checklist de calidad obligatorio
 - No se permite merge con tests fallidos
 
 ### 2.3 Documentación
+
 - Cada script debe tener header con SYNOPSIS
 - Cambios deben actualizar documentación
 - README actualizado
 
 ### 2.4 Observabilidad
+
 - Logging estructurado
 - Métricas de performance
 - Alertas proactivas
@@ -41,6 +45,7 @@ mantenible y cumpla con estándares enterprise.
 ### 3.1 PowerShell
 
 #### Estructura de Archivos
+
 ```powershell
 #Requires -Version 7.0
 <#
@@ -61,7 +66,7 @@ mantenible y cumpla con estándares enterprise.
 param(
     [Parameter(Mandatory=$true)]
     [string]$Param1,
-    
+
     [switch]$Verbose
 )
 
@@ -78,6 +83,7 @@ Main
 ```
 
 #### Naming Conventions
+
 - **Functions**: `Verb-Noun` (PascalCase)
 - **Variables**: `$camelCase`
 - **Constants**: `$UPPER_SNAKE_CASE`
@@ -85,6 +91,7 @@ Main
 - **Private functions**: `Verb-Noun` con prefijo `_`
 
 #### Error Handling
+
 ```powershell
 try {
     # Operation
@@ -102,34 +109,36 @@ try {
 ### 3.2 JavaScript (Dashboard)
 
 #### Estructura
+
 ```javascript
 // Namespace global
 var GV_APP = GV_APP || {};
 
 // Module pattern
-GV_APP.Module = (function() {
-    // Private
-    var _privateVar = '';
-    
-    function _privateFunction() {
-        // Implementation
-    }
-    
-    // Public
-    return {
-        publicFunction: function() {
-            // Implementation
-        }
-    };
+GV_APP.Module = (function () {
+  // Private
+  var _privateVar = '';
+
+  function _privateFunction() {
+    // Implementation
+  }
+
+  // Public
+  return {
+    publicFunction: function () {
+      // Implementation
+    },
+  };
 })();
 
 // Event listeners
-document.addEventListener('DOMContentLoaded', function() {
-    GV_APP.Module.init();
+document.addEventListener('DOMContentLoaded', function () {
+  GV_APP.Module.init();
 });
 ```
 
 #### Naming Conventions
+
 - **Variables**: `camelCase`
 - **Constants**: `UPPER_SNAKE_CASE`
 - **Functions**: `camelCase`
@@ -137,13 +146,14 @@ document.addEventListener('DOMContentLoaded', function() {
 - **Private**: `_prefixed`
 
 #### Error Handling
+
 ```javascript
 try {
-    // Operation
+  // Operation
 } catch (error) {
-    console.error('[GV] Error:', error);
-    // Log to error tracking
-    GV_APP.ErrorTracker.log(error);
+  console.error('[GV] Error:', error);
+  // Log to error tracking
+  GV_APP.ErrorTracker.log(error);
 }
 ```
 
@@ -153,27 +163,28 @@ try {
 
 ### 4.1 Tipos de Tests
 
-| Tipo | Descripción | Ubicación |
-|------|-------------|-----------|
-| Unit | Tests de funciones individuales | `tests/unit/` |
+| Tipo        | Descripción                            | Ubicación            |
+| ----------- | -------------------------------------- | -------------------- |
+| Unit        | Tests de funciones individuales        | `tests/unit/`        |
 | Integration | Tests de integración entre componentes | `tests/integration/` |
-| E2E | Tests end-to-end del dashboard | `tests/e2e/` |
-| Validation | Validación de estructura y datos | `tests/validation/` |
+| E2E         | Tests end-to-end del dashboard         | `tests/e2e/`         |
+| Validation  | Validación de estructura y datos       | `tests/validation/`  |
 
 ### 4.2 Test Framework
 
 #### PowerShell: Pester
+
 ```powershell
 Describe "Dashboard Tests" {
     BeforeAll {
         # Setup
     }
-    
+
     It "Should generate dashboard" {
         & "scripts/metrics/dashboard-render.ps1"
         "reports/dashboard.html" | Should -Exist
     }
-    
+
     AfterAll {
         # Cleanup
     }
@@ -181,26 +192,27 @@ Describe "Dashboard Tests" {
 ```
 
 #### JavaScript: Jest
+
 ```javascript
 describe('Dashboard', () => {
-    beforeEach(() => {
-        // Setup
-    });
-    
-    test('should render charts', () => {
-        const chart = document.getElementById('chartToken');
-        expect(chart).toBeTruthy();
-    });
+  beforeEach(() => {
+    // Setup
+  });
+
+  test('should render charts', () => {
+    const chart = document.getElementById('chartToken');
+    expect(chart).toBeTruthy();
+  });
 });
 ```
 
 ### 4.3 Coverage Requirements
 
-| Component | Cobertura Mínima |
-|-----------|------------------|
-| Scripts PowerShell | 80% |
-| JavaScript Dashboard | 70% |
-| API Endpoints | 90% |
+| Component            | Cobertura Mínima |
+| -------------------- | ---------------- |
+| Scripts PowerShell   | 80%              |
+| JavaScript Dashboard | 70%              |
+| API Endpoints        | 90%              |
 
 ---
 
@@ -224,7 +236,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Run Tests
         run: .\scripts\tests\dashboard-validator.ps1
-      
+
   deploy:
     needs: validate
     runs-on: windows-latest
@@ -247,12 +259,12 @@ if ($files -match "\.runtime/metrics") {
 
 ### 5.3 Deployment Gates
 
-| Gate | Requisito |
-|------|-----------|
-| Build | Tests pasan |
-| Security | No secrets expuestos |
-| Performance | < 3s load time |
-| Accessibility | WCAG 2.1 AA |
+| Gate          | Requisito            |
+| ------------- | -------------------- |
+| Build         | Tests pasan          |
+| Security      | No secrets expuestos |
+| Performance   | < 3s load time       |
+| Accessibility | WCAG 2.1 AA          |
 
 ---
 
@@ -260,34 +272,36 @@ if ($files -match "\.runtime/metrics") {
 
 ### 6.1 Métricas Clave
 
-| Métrica | Target | Alerta |
-|---------|--------|--------|
-| Dashboard Load Time | < 2s | > 3s |
-| API Response Time | < 500ms | > 1s |
-| Error Rate | < 0.1% | > 1% |
-| Uptime | 99.9% | < 99% |
+| Métrica             | Target  | Alerta |
+| ------------------- | ------- | ------ |
+| Dashboard Load Time | < 2s    | > 3s   |
+| API Response Time   | < 500ms | > 1s   |
+| Error Rate          | < 0.1%  | > 1%   |
+| Uptime              | 99.9%   | < 99%  |
 
 ### 6.2 Logging
 
 #### Niveles
+
 - **ERROR**: Errores críticos
 - **WARN**: Advertencias
 - **INFO**: Información general
 - **DEBUG**: Debug detallado
 
 #### Formato
+
 ```
 [2026-05-26 14:30:00] [ERROR] [Component] Message
 ```
 
 ### 6.3 Alertas
 
-| Condición | Severidad | Canal |
-|-----------|-----------|-------|
-| Dashboard down | CRITICAL | Email + Slack |
-| Error rate > 1% | HIGH | Slack |
-| Load time > 3s | MEDIUM | Dashboard |
-| Stale metrics | LOW | Log |
+| Condición       | Severidad | Canal         |
+| --------------- | --------- | ------------- |
+| Dashboard down  | CRITICAL  | Email + Slack |
+| Error rate > 1% | HIGH      | Slack         |
+| Load time > 3s  | MEDIUM    | Dashboard     |
+| Stale metrics   | LOW       | Log           |
 
 ---
 
@@ -321,12 +335,12 @@ WEBHOOK_URL=https://hooks.slack.com/...
 
 ### 8.1 Targets
 
-| Métrica | Target |
-|---------|--------|
-| First Contentful Paint | < 1.5s |
-| Time to Interactive | < 3s |
+| Métrica                  | Target |
+| ------------------------ | ------ |
+| First Contentful Paint   | < 1.5s |
+| Time to Interactive      | < 3s   |
 | Largest Contentful Paint | < 2.5s |
-| Cumulative Layout Shift | < 0.1 |
+| Cumulative Layout Shift  | < 0.1  |
 
 ### 8.2 Optimizaciones
 
@@ -373,6 +387,7 @@ docs/
 ### 10.2 Comentarios
 
 #### PowerShell
+
 ```powershell
 <#
 .SYNOPSIS
@@ -387,6 +402,7 @@ docs/
 ```
 
 #### JavaScript
+
 ```javascript
 /**
  * Description of function
@@ -395,7 +411,7 @@ docs/
  * @returns {boolean} Description
  */
 function example(param1, param2) {
-    // Implementation
+  // Implementation
 }
 ```
 
@@ -404,12 +420,14 @@ function example(param1, param2) {
 ## 11. CHECKLIST DE CALIDAD
 
 ### Pre-commit
+
 - [ ] Tests pasan
 - [ ] No secrets expuestos
 - [ ] Documentación actualizada
 - [ ] Código formateado
 
 ### Pre-merge
+
 - [ ] Code review aprobado
 - [ ] CI/CD verde
 - [ ] Coverage >= 80%
@@ -417,6 +435,7 @@ function example(param1, param2) {
 - [ ] Accesibilidad verificada
 
 ### Pre-release
+
 - [ ] Changelog actualizado
 - [ ] Versión bump
 - [ ] Tag creado
@@ -426,14 +445,14 @@ function example(param1, param2) {
 
 ## 12. HERRAMIENTAS RECOMENDADAS
 
-| Categoría | Herramienta |
-|-----------|-------------|
-| Testing | Pester, Jest, Playwright |
-| Linting | PSScriptAnalyzer, ESLint |
-| Coverage | CodeCov, Coveralls |
-| Security | GitHub Advanced Security, Snyk |
-| Performance | Lighthouse, WebPageTest |
-| Monitoring | Application Insights, Datadog |
+| Categoría   | Herramienta                    |
+| ----------- | ------------------------------ |
+| Testing     | Pester, Jest, Playwright       |
+| Linting     | PSScriptAnalyzer, ESLint       |
+| Coverage    | CodeCov, Coveralls             |
+| Security    | GitHub Advanced Security, Snyk |
+| Performance | Lighthouse, WebPageTest        |
+| Monitoring  | Application Insights, Datadog  |
 
 ---
 

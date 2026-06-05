@@ -1,6 +1,7 @@
 # Fase 4 — SIA: Self-Improving Agent Loop
 
 ## Objetivo
+
 Implementar un loop de auto-mejora de 3 agentes dentro de la orquestación GV:
 
 ```
@@ -33,13 +34,13 @@ TARGET → ejecuta (el propio código/tarea generado)
 
 ### Componentes
 
-| Componente | Archivo | Propósito |
-|-----------|---------|-----------|
-| Orquestador | `scripts/sia/sia-orchestrator.ps1` | Coordina el loop de 3 agentes |
-| Meta-agent | `config/agent-prompts/SIA-META.md` | Prompt para generar target |
-| Feedback-agent | `config/agent-prompts/SIA-FEEDBACK.md` | Prompt para revisar target |
-| Benchmark | `docs/sia/BENCHMARK-TASKS.md` | Tareas internas de prueba |
-| Skill | `skills/sia-skill/SKILL.md` | Registro como skill GV |
+| Componente     | Archivo                                | Propósito                     |
+| -------------- | -------------------------------------- | ----------------------------- |
+| Orquestador    | `scripts/sia/sia-orchestrator.ps1`     | Coordina el loop de 3 agentes |
+| Meta-agent     | `config/agent-prompts/SIA-META.md`     | Prompt para generar target    |
+| Feedback-agent | `config/agent-prompts/SIA-FEEDBACK.md` | Prompt para revisar target    |
+| Benchmark      | `docs/sia/BENCHMARK-TASKS.md`          | Tareas internas de prueba     |
+| Skill          | `skills/sia-skill/SKILL.md`            | Registro como skill GV        |
 
 ### Flujo
 
@@ -50,22 +51,22 @@ TARGET → ejecuta (el propio código/tarea generado)
 
 ### Criterios de evaluación (FEEDBACK-agent)
 
-| Criterio | Peso | Descripción |
-|----------|------|-------------|
-| Correctness | 30% | ¿El target resuelve el problema? |
-| Efficiency | 20% | ¿Es la solución óptima? |
-| Style | 15% | ¿Sigue convenciones GV? |
-| Safety | 20% | ¿Sin secretos, hardcodeo, side effects? |
-| Docs | 15% | ¿Documentación adecuada? |
+| Criterio    | Peso | Descripción                             |
+| ----------- | ---- | --------------------------------------- |
+| Correctness | 30%  | ¿El target resuelve el problema?        |
+| Efficiency  | 20%  | ¿Es la solución óptima?                 |
+| Style       | 15%  | ¿Sigue convenciones GV?                 |
+| Safety      | 20%  | ¿Sin secretos, hardcodeo, side effects? |
+| Docs        | 15%  | ¿Documentación adecuada?                |
 
 ### Benchmark tasks
 
-| # | Tarea | Categoría | Score inicial esperado |
-|---|-------|-----------|----------------------|
-| 1 | Escribir script PowerShell que liste skills por categoría | scripting | — |
-| 2 | Generar validación JSON con mensajes de error | validation | — |
-| 3 | Crear función de búsqueda semántica simple | algorithm | — |
-| 4 | Refactorizar función monolítica en módulos | refactor | — |
+| #   | Tarea                                                     | Categoría  | Score inicial esperado |
+| --- | --------------------------------------------------------- | ---------- | ---------------------- |
+| 1   | Escribir script PowerShell que liste skills por categoría | scripting  | —                      |
+| 2   | Generar validación JSON con mensajes de error             | validation | —                      |
+| 3   | Crear función de búsqueda semántica simple                | algorithm  | —                      |
+| 4   | Refactorizar función monolítica en módulos                | refactor   | —                      |
 
 ### Registro en auto-delegation.json
 
@@ -89,11 +90,11 @@ TARGET → ejecuta (el propio código/tarea generado)
 
 ### Timeline estimado
 
-| Paso | Duración |
-|------|----------|
-| Crear orquestador SIA | 1h |
-| Prompts META + FEEDBACK | 30min |
-| Benchmark tasks | 30min |
-| Prueba inicial (3 tareas) | 1h |
-| Ajuste thresholds | 30min |
-| **Total** | **~3.5h** |
+| Paso                      | Duración  |
+| ------------------------- | --------- |
+| Crear orquestador SIA     | 1h        |
+| Prompts META + FEEDBACK   | 30min     |
+| Benchmark tasks           | 30min     |
+| Prueba inicial (3 tareas) | 1h        |
+| Ajuste thresholds         | 30min     |
+| **Total**                 | **~3.5h** |

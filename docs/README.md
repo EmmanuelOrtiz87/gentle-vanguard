@@ -339,7 +339,7 @@ workflow-lint.yml            ⚙️ Workflow integrity
 | **Backend**    | `golang-api-skill`, `django-drf-skill`, `nodejs-backend-patterns`, `api-design-skill`                                                                                     |
 | **AI / SDK**   | `ai-sdk-5-skill`, `mcp-skill`, `cloud-agent-connector-skill`                                                                                                              |
 | **Database**   | `database-relational-skill`, `database-nosql-skill`                                                                                                                       |
-| **Testing**    | `playwright-skill`, `pytest-skill`, `testing-skill`, `testing-coverage-skill`, `testing-evidence-qa`                                            |
+| **Testing**    | `playwright-skill`, `pytest-skill`, `testing-skill`, `testing-coverage-skill`, `testing-evidence-qa`                                                                      |
 | **Security**   | `security-skill`, `security-pentester`, `gitleaks`                                                                                                                        |
 | **DevOps**     | `docker-devops-skill`, `kubernetes-deployment`, `terraform-infrastructure`, `observability-skill`                                                                         |
 | **Mobile**     | `android-kotlin-skill`, `android-jetpack-compose-skill`, `ios-swiftui-patterns-skill`                                                                                     |

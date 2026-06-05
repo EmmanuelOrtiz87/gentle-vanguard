@@ -95,14 +95,17 @@ When trigger detected, load corresponding skill:
 ## System Prompt Optimization
 
 ### Token Efficiency
+
 - Target: 2000 tokens (max 5000)
-- Compression: semantic abbreviations (impl, fn, cfg, req, opt, ref, std, perf, sec, dev, prod, env, db, app, svc, repo)
+- Compression: semantic abbreviations (impl, fn, cfg, req, opt, ref, std, perf, sec, dev, prod, env,
+  db, app, svc, repo)
 - Cache: .session/prompt-cache
 - Security scan: on load
 - Versioning: .session/prompt-versions
 - Monitoring: alert at 3000, critical at 5000
 
 ### Scripts
+
 - Compress: `scripts/utilities/semantic-compression.ps1`
 - Cache: `scripts/utilities/prompt-cache.ps1`
 - Security: `scripts/utilities/prompt-security-scanner.ps1`

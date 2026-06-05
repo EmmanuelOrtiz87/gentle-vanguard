@@ -7,9 +7,11 @@ metadata:
   original-name: draft-offer
   department: human-resources
 ---
+
 # /draft-offer
 
-> If you see unfamiliar placeholders or need to check which tools are connected, see [CONNECTORS.md](../../CONNECTORS.md).
+> If you see unfamiliar placeholders or need to check which tools are connected, see
+> [CONNECTORS.md](../../CONNECTORS.md).
 
 Draft a complete offer letter for a new hire.
 
@@ -36,21 +38,24 @@ If you don't have all details, I'll help you think through them.
 ## Offer Letter Draft: [Role] — [Level]
 
 ### Compensation Package
-| Component | Details |
-|-----------|---------|
-| **Base Salary** | $[X]/year |
-| **Equity** | [X shares/units], [vesting schedule] |
-| **Signing Bonus** | $[X] (if applicable) |
-| **Target Bonus** | [X]% of base (if applicable) |
-| **Total First-Year Comp** | $[X] |
+
+| Component                 | Details                              |
+| ------------------------- | ------------------------------------ |
+| **Base Salary**           | $[X]/year                            |
+| **Equity**                | [X shares/units], [vesting schedule] |
+| **Signing Bonus**         | $[X] (if applicable)                 |
+| **Target Bonus**          | [X]% of base (if applicable)         |
+| **Total First-Year Comp** | $[X]                                 |
 
 ### Terms
+
 - **Start Date**: [Date]
 - **Reports To**: [Manager]
 - **Location**: [Office / Remote / Hybrid]
 - **Employment Type**: [Full-time, Exempt]
 
 ### Benefits Summary
+
 [Key benefits highlights relevant to the candidate]
 
 ### Offer Letter Text
@@ -62,6 +67,7 @@ We are pleased to offer you the position of [Title] at [Company]...
 [Complete offer letter text]
 
 ### Notes for Hiring Manager
+
 - [Negotiation guidance if needed]
 - [Comp band context]
 - [Any flags or considerations]
@@ -70,11 +76,13 @@ We are pleased to offer you the position of [Title] at [Company]...
 ## If Connectors Available
 
 If **~~HRIS** is connected:
+
 - Pull comp band data for the level/role
 - Verify headcount approval
 - Auto-populate benefits details
 
 If **~~ATS** is connected:
+
 - Pull candidate details from the application
 - Update offer status in the pipeline
 

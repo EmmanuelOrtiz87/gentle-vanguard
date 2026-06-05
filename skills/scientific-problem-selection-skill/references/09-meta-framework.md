@@ -1,11 +1,16 @@
 # SKILL 9: Meta-Framework - Complete Problem Selection Workflow
 
 ## Overview
-This meta-skill orchestrates the complete problem selection process, guiding users through Skills 1-8 in a systematic, iterative way. This skill should be used when comprehensive support is needed from ideation through execution planning, with integrated literature searches and coherent documentation.
+
+This meta-skill orchestrates the complete problem selection process, guiding users through Skills
+1-8 in a systematic, iterative way. This skill should be used when comprehensive support is needed
+from ideation through execution planning, with integrated literature searches and coherent
+documentation.
 
 ## When to Use This Skill
 
 **Use Skill 9 (Complete Workflow) when:**
+
 - Starting a new project from scratch
 - Major project pivot or reframe needed
 - Grant/fellowship application requiring systematic planning
@@ -14,6 +19,7 @@ This meta-skill orchestrates the complete problem selection process, guiding use
 - Want comprehensive, documented problem selection process
 
 **Use Individual Skills when:**
+
 - You're at a specific stage (e.g., just need risk assessment)
 - Quick consultation on one aspect
 - Updating one component of existing plan
@@ -46,6 +52,7 @@ END: Comprehensive, rigorous project ready to execute
 ```
 
 **Estimated Time:**
+
 - **Intensive:** 1 week of focused work (full-time)
 - **Distributed:** 4-6 weeks with other commitments
 - **With iterations:** Add 50% more time
@@ -57,6 +64,7 @@ END: Comprehensive, rigorous project ready to execute
 ### Phase 1: Preparation (Before Starting)
 
 **Gather Your Context:**
+
 1. **Your background:**
    - Research area/field
    - Current position (grad student, postdoc, PI, etc.)
@@ -77,6 +85,7 @@ END: Comprehensive, rigorous project ready to execute
    - Career development?
 
 **Set Expectations:**
+
 - This process will challenge your assumptions
 - You may discover your initial idea needs major revision
 - That's the point—better to know now than after 2 years
@@ -85,6 +94,7 @@ END: Comprehensive, rigorous project ready to execute
 ### Phase 2: Ideation (Skill 1) - ~1 week
 
 **What We'll Do:**
+
 1. Understand your context and constraints
 2. Work through relevant intuition pumps
 3. Avoid common ideation traps
@@ -94,21 +104,25 @@ END: Comprehensive, rigorous project ready to execute
 7. Create Problem Ideation Document (2 pages)
 
 **Literature Integration Point 1:**
+
 - Search PubMed for precedents and adjacent work
 - Assess generality of problem
 - Identify methodological advances
 - Determine competition level
 
 **Deliverable:**
+
 - Problem Ideation Document with core idea and initial analysis
 - List of 10-15 key papers
 - Preliminary assessment of novelty and feasibility
 
-**Checkpoint:** Do you have a clear, specific idea that excites you? If not, iterate on intuition pumps.
+**Checkpoint:** Do you have a clear, specific idea that excites you? If not, iterate on intuition
+pumps.
 
 ### Phase 3: Risk Analysis (Skill 2) - ~3-5 days
 
 **What We'll Do:**
+
 1. Extract ALL assumptions from your idea
 2. Categorize (biological vs. technical)
 3. Score each assumption (risk 1-5, time to test)
@@ -118,22 +132,26 @@ END: Comprehensive, rigorous project ready to execute
 7. Create Risk Assessment Matrix (2 pages)
 
 **Literature Integration Point 2:**
+
 - Search for technical precedents (has method worked before?)
 - Find biological evidence (what's known about your system?)
 - Identify benchmarks (success rates, effect sizes)
 - Assess timeline realism
 
 **Deliverable:**
+
 - Complete assumption analysis table
 - Top 3 high-risk assumptions with mitigation plans
 - Go/no-go experiment designs
 - Revised timeline with decision points
 
-**Checkpoint:** Is your risk profile acceptable? If risk-5 assumptions are >2 years out, return to Skill 1 to reframe.
+**Checkpoint:** Is your risk profile acceptable? If risk-5 assumptions are >2 years out, return to
+Skill 1 to reframe.
 
 ### Phase 4: Impact Assessment (Skill 3) - ~2-3 days
 
 **What We'll Do:**
+
 1. Categorize your project type
 2. Select appropriate optimization function
 3. Score yourself on both axes
@@ -143,22 +161,26 @@ END: Comprehensive, rigorous project ready to execute
 7. Create Impact Assessment Document (2 pages)
 
 **Literature Integration Point 3:**
+
 - Identify high-impact exemplars in your field
 - Analyze their framing and evaluation
 - Benchmark your potential impact
 - Understand field expectations
 
 **Deliverable:**
+
 - Clear optimization function selection
 - Self-assessment on both axes with justification
 - Comparative analysis vs. alternatives
 - Communication strategy for different audiences
 
-**Checkpoint:** Do you score MEDIUM-HIGH on at least one axis? If not, return to Skill 1 to find higher-impact angle.
+**Checkpoint:** Do you score MEDIUM-HIGH on at least one axis? If not, return to Skill 1 to find
+higher-impact angle.
 
 ### Phase 5: Parameter Strategy (Skill 4) - ~2-3 days
 
 **What We'll Do:**
+
 1. Inventory all project parameters
 2. Identify which are fixed vs. floating
 3. Assess if you're over/under-constrained
@@ -167,21 +189,25 @@ END: Comprehensive, rigorous project ready to execute
 6. Create Parameter Strategy Document (2 pages)
 
 **Literature Integration Point 4:**
+
 - How did successful projects handle parameters?
 - What parameter choices led to breakthroughs?
 - What over-constraints caused failures?
 
 **Deliverable:**
+
 - Complete parameter inventory
 - Strategic rationale for fixed/floating decisions
 - Flexibility matrix for contingencies
 - Project ensemble (family of related projects)
 
-**Checkpoint:** Have you fixed 1-2 meaningful parameters while maintaining flexibility? If too rigid, adjust.
+**Checkpoint:** Have you fixed 1-2 meaningful parameters while maintaining flexibility? If too
+rigid, adjust.
 
 ### Phase 6: Decision Tree Planning (Skill 5) - ~2 days
 
 **What We'll Do:**
+
 1. Map your project's decision tree
 2. Identify major branch points
 3. Set criteria for each decision
@@ -189,9 +215,11 @@ END: Comprehensive, rigorous project ready to execute
 5. Create protocols for getting unstuck
 6. Create Decision Tree Map (1-2 pages)
 
-**No major literature search here** (unless you identify specific decision points needing technical information)
+**No major literature search here** (unless you identify specific decision points needing technical
+information)
 
 **Deliverable:**
+
 - Visual decision tree
 - Decision criteria at each branch
 - Schedule for Level 2 evaluations
@@ -202,6 +230,7 @@ END: Comprehensive, rigorous project ready to execute
 ### Phase 7: Adversity Preparation (Skill 6) - ~2 days
 
 **What We'll Do:**
+
 1. Anticipate likely failure modes
 2. For each, identify upgrade opportunity
 3. Map your project ensemble
@@ -209,28 +238,34 @@ END: Comprehensive, rigorous project ready to execute
 5. Create Adversity Playbook (2-3 pages)
 
 **Literature Integration Point 5:**
+
 - Historical examples of productive pivots
 - How did others capitalize on adversity?
 - What second-generation projects emerged from failures?
 
 **Deliverable:**
+
 - Anticipated crisis catalog
 - Upgrade strategies for each
 - Project ensemble map
 - Resilience rituals and protocols
 
-**Checkpoint:** Are you prepared to see adversity as opportunity? Have you planned how to upgrade, not just fix?
+**Checkpoint:** Are you prepared to see adversity as opportunity? Have you planned how to upgrade,
+not just fix?
 
 ### Phase 8: Problem Inversion Toolkit (Skill 7) - ~1 day
 
 **What We'll Do:**
+
 1. Review three inversion strategies
 2. Pre-plan applications for your likely obstacles
 3. Create Problem Inversion Analysis (1-2 pages)
 
-**This is preparatory** - you may not need it now, but when crisis hits, you'll have framework ready.
+**This is preparatory** - you may not need it now, but when crisis hits, you'll have framework
+ready.
 
 **Deliverable:**
+
 - Strategy 1 application planned
 - Strategy 2 options identified
 - Strategy 3 alternative questions brainstormed
@@ -241,6 +276,7 @@ END: Comprehensive, rigorous project ready to execute
 ### Phase 9: Integration and Synthesis (Skill 8) - ~3-5 days
 
 **What We'll Do:**
+
 1. Review all outputs from Skills 1-7
 2. Create cohesive narrative
 3. Develop communication materials:
@@ -251,18 +287,21 @@ END: Comprehensive, rigorous project ready to execute
 5. Create living documents for ongoing use
 
 **Literature Integration Point 6:**
+
 - Final references for integrated plan
 - Key papers for each section
 - Communication examples from field leaders
 
 **Deliverable:**
+
 - Complete Integrated Project Plan (4-6 pages)
 - 3-slide presentation deck
 - 1-page written summary
 - Elevator pitch script
 - Living documents (decision tree, risk matrix, etc.)
 
-**Checkpoint:** Can you communicate your project compellingly in 1 minute, 5 minutes, and 1 page? Do all pieces fit together coherently?
+**Checkpoint:** Can you communicate your project compellingly in 1 minute, 5 minutes, and 1 page? Do
+all pieces fit together coherently?
 
 ## Iteration and Refinement
 
@@ -271,24 +310,29 @@ END: Comprehensive, rigorous project ready to execute
 **Red Flags That Require Going Back:**
 
 **From Skill 2 (Risk):**
+
 - Risk-5 assumptions >2 years out → Return to Skill 1 (reframe problem)
-- >3 risk-4-5 assumptions → Return to Skill 1 (simplify or change approach)
+- > 3 risk-4-5 assumptions → Return to Skill 1 (simplify or change approach)
 
 **From Skill 3 (Impact):**
+
 - Score LOW on both axes → Return to Skill 1 (find higher-impact angle)
 - Optimization function mismatch → Return to Skill 1 (reframe problem)
 
 **From Skill 4 (Parameters):**
-- >2 fixed parameters → Return to Skill 1 (over-constrained)
+
+- > 2 fixed parameters → Return to Skill 1 (over-constrained)
 - Zero fixed parameters → Return to Skill 1 (under-constrained)
 
 **From Skills 5-6:**
+
 - No clear decision points → Return to Skill 4 (need more flexibility)
 - Every failure mode is existential → Return to Skill 2 (too risky)
 
 ### Iteration Protocol
 
 **Major Revision Needed:**
+
 1. **Pause and acknowledge:** The process is working—it caught a problem
 2. **Return to indicated skill:** Usually Skill 1 or 2
 3. **Bring forward what you learned:** Don't start from scratch
@@ -296,6 +340,7 @@ END: Comprehensive, rigorous project ready to execute
 5. **Multiple iterations OK:** Better than years on wrong project
 
 **Minor Refinement:**
+
 1. **Update specific document:** E.g., adjust parameter strategy
 2. **Check downstream effects:** Does this change anything else?
 3. **Update integration document:** Keep everything coherent
@@ -314,6 +359,7 @@ END: Comprehensive, rigorous project ready to execute
 6. **Skill 8 (Integration):** Communication models, comprehensive references
 
 **Search Strategy:**
+
 - Start broad (field overview)
 - Get specific (your exact approach)
 - Look adjacent (related systems/methods)
@@ -321,6 +367,7 @@ END: Comprehensive, rigorous project ready to execute
 - Identify competition (who else is doing this?)
 
 **Papers to Track:**
+
 - ~10-15 key papers from Skill 1
 - ~5-10 technical papers from Skill 2
 - ~5-10 impact exemplars from Skill 3
@@ -333,6 +380,7 @@ END: Comprehensive, rigorous project ready to execute
 ### What You'll Have at the End
 
 **Core Documents (Organized Folder):**
+
 1. `01_Problem_Ideation.pdf` (2 pages, Skill 1)
 2. `02_Risk_Assessment.pdf` (2 pages, Skill 2)
 3. `03_Impact_Assessment.pdf` (2 pages, Skill 3)
@@ -343,17 +391,20 @@ END: Comprehensive, rigorous project ready to execute
 8. `08_Integrated_Plan.pdf` (4-6 pages, Skill 8)
 
 **Communication Materials:**
+
 - `Presentation_3slides.pptx`
 - `Summary_1page.pdf`
 - `Elevator_Pitch.txt`
 
 **Living Documents (for ongoing use):**
+
 - `Decision_Tree.pdf` (update monthly)
 - `Risk_Matrix.xlsx` (update quarterly)
 - `Adversity_Playbook.pdf` (consult in crisis)
 - `Parameter_Strategy.pdf` (revisit if stuck)
 
 **Reference Library:**
+
 - `Key_Papers.pdf` (annotated bibliography, 30-50 papers)
 - Organized by: Ideation / Technical / Impact / Pivots
 
@@ -364,6 +415,7 @@ END: Comprehensive, rigorous project ready to execute
 ### For Different Purposes
 
 **Grant/Fellowship Applications:**
+
 - Start with Integrated Plan (Skill 8)
 - Include specific aims from Ideation (Skill 1)
 - Show risk mitigation from Risk Assessment (Skill 2)
@@ -371,6 +423,7 @@ END: Comprehensive, rigorous project ready to execute
 - Timeline from Decision Tree (Skill 5)
 
 **Thesis Committee Meetings:**
+
 - Present 3-slide deck (Skill 8)
 - Walk through decision tree (Skill 5)
 - Discuss risk mitigation (Skill 2)
@@ -378,18 +431,21 @@ END: Comprehensive, rigorous project ready to execute
 - Demonstrate thoughtful planning
 
 **Lab Meetings:**
+
 - Use elevator pitch (Skill 8)
 - Show decision tree updates (Skill 5)
 - Discuss latest adversity and response (Skill 6)
 - Get input on parameter strategy (Skill 4)
 
 **Collaborator Conversations:**
+
 - Share 1-page summary (Skill 8)
 - Highlight where their expertise fits (Skill 4)
 - Show risk mitigation plan (Skill 2)
 - Discuss impact potential (Skill 3)
 
 **Personal Reflection:**
+
 - Quarterly: Review Decision Tree (Skill 5), update milestones
 - After setbacks: Consult Adversity Playbook (Skill 6)
 - When stuck: Use Problem Inversion (Skill 7)
@@ -400,18 +456,21 @@ END: Comprehensive, rigorous project ready to execute
 ### Living Documents Protocol
 
 **Monthly:**
+
 - Update Decision Tree (Skill 5)
 - Log adversities and responses (Skill 6)
 - Note new papers or competition
 - Adjust timeline if needed
 
 **Quarterly:**
+
 - Review Risk Matrix (Skill 2) - mark assumptions tested
 - Reassess Impact (Skill 3) - has evaluation changed?
 - Check Parameter Strategy (Skill 4) - still optimal?
 - Update Integrated Plan (Skill 8) - keep current
 
 **Annually:**
+
 - Complete workflow review
 - Consider new projects with fresh Skill 1 ideation
 - Archive old project docs
@@ -422,6 +481,7 @@ END: Comprehensive, rigorous project ready to execute
 ### How Do You Know This Worked?
 
 **Immediate Indicators:**
+
 - Clearer project vision than before
 - Honest assessment of risks
 - Contingency plans for failures
@@ -430,6 +490,7 @@ END: Comprehensive, rigorous project ready to execute
 - Confidence in problem choice
 
 **6-Month Indicators:**
+
 - Major decisions made faster (have framework)
 - Adversity handled productively (used playbook)
 - No existential crises (risks were mitigated)
@@ -437,6 +498,7 @@ END: Comprehensive, rigorous project ready to execute
 - Project staying on-track or pivoting smartly
 
 **2-Year Indicators:**
+
 - Published results or strong progress
 - Avoided dead-end projects
 - Multiple high-quality options at decision points
@@ -462,24 +524,28 @@ END: Comprehensive, rigorous project ready to execute
 ### First Steps
 
 **This Week:**
+
 1. Block time in calendar (1-2 hours to start)
 2. Gather your context (background, goals, constraints)
 3. Begin Skill 1 (Intuition Pumps)
 4. Let me know your starting point
 
 **This Month:**
+
 1. Work through Skills 1-4 (foundation)
 2. Share with mentor for alignment check
 3. Iterate if major changes needed
 4. Complete Skills 5-8 (execution planning)
 
 **This Quarter:**
+
 1. Begin project execution with living documents
 2. Monthly decision tree updates
 3. Quarterly risk assessment reviews
 4. Log adversities and responses
 
 **This Year:**
+
 1. Execute planned project
 2. Use frameworks when stuck
 3. Update living documents
@@ -488,17 +554,20 @@ END: Comprehensive, rigorous project ready to execute
 ## Ready to Begin?
 
 The complete meta-framework is substantial, but each step builds on the last. You'll move through:
+
 - ~2 weeks of intensive planning
 - Comprehensive documentation
 - Clear decision criteria
 - Communication materials
 - Living documents for ongoing guidance
 
-**Most importantly:** You'll KNOW you're working on a well-chosen problem with rigorous planning. That confidence is priceless.
+**Most importantly:** You'll KNOW you're working on a well-chosen problem with rigorous planning.
+That confidence is priceless.
 
 Let's start with Skill 1. Are you ready to begin?
 
 ---
 
-*Remember: The highest-leverage work in science is choosing the right problem. This meta-framework ensures you spend your finite time wisely. The investment in systematic planning pays dividends for years.*
-
+_Remember: The highest-leverage work in science is choosing the right problem. This meta-framework
+ensures you spend your finite time wisely. The investment in systematic planning pays dividends for
+years._

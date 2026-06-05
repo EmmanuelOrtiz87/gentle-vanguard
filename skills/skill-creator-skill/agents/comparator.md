@@ -4,7 +4,9 @@ Compare two outputs WITHOUT knowing which skill produced them.
 
 ## Role
 
-The Blind Comparator judges which output better accomplishes the eval task. You receive two outputs labeled A and B, but you do NOT know which skill produced which. This prevents bias toward a particular skill or approach.
+The Blind Comparator judges which output better accomplishes the eval task. You receive two outputs
+labeled A and B, but you do NOT know which skill produced which. This prevents bias toward a
+particular skill or approach.
 
 Your judgment is based purely on output quality and task completion.
 
@@ -38,21 +40,20 @@ You receive these parameters in your prompt:
 
 Based on the task, generate a rubric with two dimensions:
 
-**Content Rubric** (what the output contains):
-| Criterion | 1 (Poor) | 3 (Acceptable) | 5 (Excellent) |
-|-----------|----------|----------------|---------------|
-| Correctness | Major errors | Minor errors | Fully correct |
-| Completeness | Missing key elements | Mostly complete | All elements present |
-| Accuracy | Significant inaccuracies | Minor inaccuracies | Accurate throughout |
+**Content Rubric** (what the output contains): | Criterion | 1 (Poor) | 3 (Acceptable) | 5
+(Excellent) | |-----------|----------|----------------|---------------| | Correctness | Major errors
+| Minor errors | Fully correct | | Completeness | Missing key elements | Mostly complete | All
+elements present | | Accuracy | Significant inaccuracies | Minor inaccuracies | Accurate throughout
+|
 
-**Structure Rubric** (how the output is organized):
-| Criterion | 1 (Poor) | 3 (Acceptable) | 5 (Excellent) |
-|-----------|----------|----------------|---------------|
-| Organization | Disorganized | Reasonably organized | Clear, logical structure |
-| Formatting | Inconsistent/broken | Mostly consistent | Professional, polished |
-| Usability | Difficult to use | Usable with effort | Easy to use |
+**Structure Rubric** (how the output is organized): | Criterion | 1 (Poor) | 3 (Acceptable) | 5
+(Excellent) | |-----------|----------|----------------|---------------| | Organization |
+Disorganized | Reasonably organized | Clear, logical structure | | Formatting | Inconsistent/broken
+| Mostly consistent | Professional, polished | | Usability | Difficult to use | Usable with effort |
+Easy to use |
 
 Adapt criteria to the specific task. For example:
+
 - PDF form → "Field alignment", "Text readability", "Data placement"
 - Document → "Section structure", "Heading hierarchy", "Paragraph flow"
 - Data output → "Schema correctness", "Data types", "Completeness"
@@ -144,25 +145,25 @@ Write a JSON file with this structure:
     "A": {
       "passed": 4,
       "total": 5,
-      "pass_rate": 0.80,
+      "pass_rate": 0.8,
       "details": [
-        {"text": "Output includes name", "passed": true},
-        {"text": "Output includes date", "passed": true},
-        {"text": "Format is PDF", "passed": true},
-        {"text": "Contains signature", "passed": false},
-        {"text": "Readable text", "passed": true}
+        { "text": "Output includes name", "passed": true },
+        { "text": "Output includes date", "passed": true },
+        { "text": "Format is PDF", "passed": true },
+        { "text": "Contains signature", "passed": false },
+        { "text": "Readable text", "passed": true }
       ]
     },
     "B": {
       "passed": 3,
       "total": 5,
-      "pass_rate": 0.60,
+      "pass_rate": 0.6,
       "details": [
-        {"text": "Output includes name", "passed": true},
-        {"text": "Output includes date", "passed": false},
-        {"text": "Format is PDF", "passed": true},
-        {"text": "Contains signature", "passed": false},
-        {"text": "Readable text", "passed": true}
+        { "text": "Output includes name", "passed": true },
+        { "text": "Output includes date", "passed": false },
+        { "text": "Format is PDF", "passed": true },
+        { "text": "Contains signature", "passed": false },
+        { "text": "Readable text", "passed": true }
       ]
     }
   }
@@ -193,10 +194,13 @@ If no expectations were provided, omit the `expectation_results` field entirely.
 
 ## Guidelines
 
-- **Stay blind**: DO NOT try to infer which skill produced which output. Judge purely on output quality.
+- **Stay blind**: DO NOT try to infer which skill produced which output. Judge purely on output
+  quality.
 - **Be specific**: Cite specific examples when explaining strengths and weaknesses.
 - **Be decisive**: Choose a winner unless outputs are genuinely equivalent.
 - **Output quality first**: Assertion scores are secondary to overall task completion.
-- **Be objective**: Don't favor outputs based on style preferences; focus on correctness and completeness.
+- **Be objective**: Don't favor outputs based on style preferences; focus on correctness and
+  completeness.
 - **Explain your reasoning**: The reasoning field should make it clear why you chose the winner.
-- **Handle edge cases**: If both outputs fail, pick the one that fails less badly. If both are excellent, pick the one that's marginally better.
+- **Handle edge cases**: If both outputs fail, pick the one that fails less badly. If both are
+  excellent, pick the one that's marginally better.

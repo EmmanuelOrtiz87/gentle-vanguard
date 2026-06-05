@@ -7,19 +7,25 @@ metadata:
   original-name: variance-analysis
   department: finance
 ---
+
 # Variance Analysis
 
-**Important**: This skill assists with variance analysis workflows but does not provide financial advice. All analyses should be reviewed by qualified financial professionals before use in reporting.
+**Important**: This skill assists with variance analysis workflows but does not provide financial
+advice. All analyses should be reviewed by qualified financial professionals before use in
+reporting.
 
-Techniques for decomposing variances, materiality thresholds, narrative generation, waterfall chart methodology, and budget vs actual vs forecast comparisons.
+Techniques for decomposing variances, materiality thresholds, narrative generation, waterfall chart
+methodology, and budget vs actual vs forecast comparisons.
 
 ## Variance Decomposition Techniques
 
 ### Price / Volume Decomposition
 
-The most fundamental variance decomposition. Used for revenue, cost of goods, and any metric that can be expressed as Price x Volume.
+The most fundamental variance decomposition. Used for revenue, cost of goods, and any metric that
+can be expressed as Price x Volume.
 
 **Formula:**
+
 ```
 Total Variance = Actual - Budget (or Prior)
 
@@ -32,6 +38,7 @@ Verification:  Volume Effect + Price Effect = Total Variance
 ```
 
 **Three-way decomposition (separating mix):**
+
 ```
 Volume Effect = (Actual Volume - Budget Volume) x Budget Price x Budget Mix
 Price Effect  = (Actual Price - Budget Price) x Budget Volume x Actual Mix
@@ -39,6 +46,7 @@ Mix Effect    = Budget Price x Budget Volume x (Actual Mix - Budget Mix)
 ```
 
 **Example — Revenue variance:**
+
 - Budget: 10,000 units at $50 = $500,000
 - Actual: 11,000 units at $48 = $528,000
 - Total variance: +$28,000 favorable
@@ -51,12 +59,14 @@ Mix Effect    = Budget Price x Budget Volume x (Actual Mix - Budget Mix)
 Used when analyzing blended rates across segments with different unit economics.
 
 **Formula:**
+
 ```
 Rate Effect = Sum of (Actual Volume_i x (Actual Rate_i - Budget Rate_i))
 Mix Effect  = Sum of (Budget Rate_i x (Actual Volume_i - Expected Volume_i at Budget Mix))
 ```
 
 **Example — Gross margin variance:**
+
 - Product A: 60% margin, Product B: 40% margin
 - Budget mix: 50% A, 50% B → Blended margin 50%
 - Actual mix: 40% A, 60% B → Blended margin 48%
@@ -97,23 +107,26 @@ Decompose by:
 
 ### Setting Thresholds
 
-Materiality thresholds determine which variances require investigation and narrative explanation. Set thresholds based on:
+Materiality thresholds determine which variances require investigation and narrative explanation.
+Set thresholds based on:
 
-1. **Financial statement materiality:** Typically 1-5% of a key benchmark (revenue, total assets, net income)
+1. **Financial statement materiality:** Typically 1-5% of a key benchmark (revenue, total assets,
+   net income)
 2. **Line item size:** Larger line items warrant lower percentage thresholds
 3. **Volatility:** More volatile line items may need higher thresholds to avoid noise
 4. **Management attention:** What level of variance would change a decision?
 
 ### Recommended Threshold Framework
 
-| Comparison Type | Dollar Threshold | Percentage Threshold | Trigger |
-|----------------|-----------------|---------------------|---------|
-| Actual vs Budget | Organization-specific | 10% | Either exceeded |
-| Actual vs Prior Period | Organization-specific | 15% | Either exceeded |
-| Actual vs Forecast | Organization-specific | 5% | Either exceeded |
-| Sequential (MoM) | Organization-specific | 20% | Either exceeded |
+| Comparison Type        | Dollar Threshold      | Percentage Threshold | Trigger         |
+| ---------------------- | --------------------- | -------------------- | --------------- |
+| Actual vs Budget       | Organization-specific | 10%                  | Either exceeded |
+| Actual vs Prior Period | Organization-specific | 15%                  | Either exceeded |
+| Actual vs Forecast     | Organization-specific | 5%                   | Either exceeded |
+| Sequential (MoM)       | Organization-specific | 20%                  | Either exceeded |
 
-*Set dollar thresholds based on your organization's size. Common practice: 0.5%-1% of revenue for income statement items.*
+_Set dollar thresholds based on your organization's size. Common practice: 0.5%-1% of revenue for
+income statement items._
 
 ### Investigation Priority
 
@@ -165,7 +178,8 @@ Good variance narratives should be:
 
 ### Concept
 
-A waterfall (or bridge) chart shows how you get from one value to another through a series of positive and negative contributors. Used to visualize variance decomposition.
+A waterfall (or bridge) chart shows how you get from one value to another through a series of
+positive and negative contributors. Used to visualize variance decomposition.
 
 ### Data Structure
 
@@ -202,17 +216,17 @@ Net Variance: +$550K (+5.5% favorable)
 
 Complement the waterfall with a reconciliation table:
 
-| Driver | Amount | % of Variance | Cumulative |
-|--------|--------|---------------|------------|
-| Volume growth | +$800K | 145% | +$800K |
-| Expansion revenue | +$400K | 73% | +$1,200K |
-| Price reductions | -$200K | -36% | +$1,000K |
-| Churn / contraction | -$350K | -64% | +$650K |
-| FX tailwind | +$50K | 9% | +$700K |
-| Timing (deal slippage) | -$150K | -27% | +$550K |
-| **Total variance** | **+$550K** | **100%** | |
+| Driver                 | Amount     | % of Variance | Cumulative |
+| ---------------------- | ---------- | ------------- | ---------- |
+| Volume growth          | +$800K     | 145%          | +$800K     |
+| Expansion revenue      | +$400K     | 73%           | +$1,200K   |
+| Price reductions       | -$200K     | -36%          | +$1,000K   |
+| Churn / contraction    | -$350K     | -64%          | +$650K     |
+| FX tailwind            | +$50K      | 9%            | +$700K     |
+| Timing (deal slippage) | -$150K     | -27%          | +$550K     |
+| **Total variance**     | **+$550K** | **100%**      |            |
 
-*Note: Percentages can exceed 100% for individual drivers when there are offsetting items.*
+_Note: Percentages can exceed 100% for individual drivers when there are offsetting items._
 
 ### Waterfall Best Practices
 
@@ -227,18 +241,22 @@ Complement the waterfall with a reconciliation table:
 
 ### Three-Way Comparison Framework
 
-| Metric | Budget | Forecast | Actual | Bud Var ($) | Bud Var (%) | Fcast Var ($) | Fcast Var (%) |
-|--------|--------|----------|--------|-------------|-------------|---------------|---------------|
-| Revenue | $X | $X | $X | $X | X% | $X | X% |
-| COGS | $X | $X | $X | $X | X% | $X | X% |
-| Gross Profit | $X | $X | $X | $X | X% | $X | X% |
+| Metric       | Budget | Forecast | Actual | Bud Var ($) | Bud Var (%) | Fcast Var ($) | Fcast Var (%) |
+| ------------ | ------ | -------- | ------ | ----------- | ----------- | ------------- | ------------- |
+| Revenue      | $X     | $X       | $X     | $X          | X%          | $X            | X%            |
+| COGS         | $X     | $X       | $X     | $X          | X%          | $X            | X%            |
+| Gross Profit | $X     | $X       | $X     | $X          | X%          | $X            | X%            |
 
 ### When to Use Each Comparison
 
-- **Actual vs Budget:** Annual performance measurement, compensation decisions, board reporting. Budget is set at the beginning of the year and typically not changed.
-- **Actual vs Forecast:** Operational management, identifying emerging issues. Forecast is updated periodically (monthly or quarterly) to reflect current expectations.
-- **Forecast vs Budget:** Understanding how expectations have changed since planning. Useful for identifying planning accuracy issues.
-- **Actual vs Prior Period:** Trend analysis, sequential performance. Useful when budget is not meaningful (new business lines, post-acquisition).
+- **Actual vs Budget:** Annual performance measurement, compensation decisions, board reporting.
+  Budget is set at the beginning of the year and typically not changed.
+- **Actual vs Forecast:** Operational management, identifying emerging issues. Forecast is updated
+  periodically (monthly or quarterly) to reflect current expectations.
+- **Forecast vs Budget:** Understanding how expectations have changed since planning. Useful for
+  identifying planning accuracy issues.
+- **Actual vs Prior Period:** Trend analysis, sequential performance. Useful when budget is not
+  meaningful (new business lines, post-acquisition).
 - **Actual vs Prior Year:** Year-over-year growth analysis, seasonality-adjusted comparison.
 
 ### Forecast Accuracy Analysis
@@ -251,12 +269,12 @@ Forecast Accuracy = 1 - |Actual - Forecast| / |Actual|
 MAPE (Mean Absolute Percentage Error) = Average of |Actual - Forecast| / |Actual| across periods
 ```
 
-| Period | Forecast | Actual | Variance | Accuracy |
-|--------|----------|--------|----------|----------|
-| Jan    | $X       | $X     | $X (X%)  | XX%      |
-| Feb    | $X       | $X     | $X (X%)  | XX%      |
-| ...    | ...      | ...    | ...      | ...      |
-| **Avg**|          |        | **MAPE** | **XX%**  |
+| Period  | Forecast | Actual | Variance | Accuracy |
+| ------- | -------- | ------ | -------- | -------- |
+| Jan     | $X       | $X     | $X (X%)  | XX%      |
+| Feb     | $X       | $X     | $X (X%)  | XX%      |
+| ...     | ...      | ...    | ...      | ...      |
+| **Avg** |          |        | **MAPE** | **XX%**  |
 
 ### Variance Trending
 

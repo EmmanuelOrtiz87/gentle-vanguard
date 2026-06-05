@@ -53,7 +53,9 @@ curl -X POST https://api.anthropic.com/v1/environments \
 
 ## Create an Agent (required first step)
 
-> ⚠️ **There is no inline agent config.** Under `managed-agents-2026-04-01`, `model`/`system`/`tools` are top-level fields on `POST /v1/agents`, not on the session. Always create the agent first — the session only takes `"agent": {"type": "agent", "id": "..."}`.
+> ⚠️ **There is no inline agent config.** Under `managed-agents-2026-04-01`,
+> `model`/`system`/`tools` are top-level fields on `POST /v1/agents`, not on the session. Always
+> create the agent first — the session only takes `"agent": {"type": "agent", "id": "..."}`.
 
 ### Minimal
 

@@ -9,4 +9,3 @@ Each agent keeps response under 300 words.
 ### 5. Synthesis
 
 ---
-

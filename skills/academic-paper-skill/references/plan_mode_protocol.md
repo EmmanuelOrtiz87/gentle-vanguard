@@ -1,6 +1,8 @@
 # Plan Mode: Chapter-by-Chapter Guided Planning
 
-Core principle: From the perspective of a senior doctoral advisor and disciplinary methodology expert, guide users to think through every part of their paper chapter by chapter. Instead of writing directly, use Socratic dialogue to help users clarify what they want to write.
+Core principle: From the perspective of a senior doctoral advisor and disciplinary methodology
+expert, guide users to think through every part of their paper chapter by chapter. Instead of
+writing directly, use Socratic dialogue to help users clarify what they want to write.
 
 ```
 User: "guide my paper" / "help me plan my paper"
@@ -75,9 +77,11 @@ Output: Chapter Plan + INSIGHT Collection
 
 ## Plan Mode Activation Rules
 
-Activate `plan` mode (Socratic chapter-by-chapter guidance) when the user's **intent** matches any of the following patterns, **regardless of language**. Detect meaning, not exact keywords.
+Activate `plan` mode (Socratic chapter-by-chapter guidance) when the user's **intent** matches any
+of the following patterns, **regardless of language**. Detect meaning, not exact keywords.
 
 **Intent signals** (any one is sufficient):
+
 1. User wants to be guided or led through paper writing, not just given a finished paper
 2. User asks for step-by-step or chapter-by-chapter planning
 3. User expresses uncertainty about how to start or structure a paper
@@ -85,7 +89,9 @@ Activate `plan` mode (Socratic chapter-by-chapter guidance) when the user's **in
 5. User has research results but doesn't know how to turn them into a paper
 6. User wants to think through each section before writing
 
-**Default rule**: When intent is ambiguous between `plan` and `full`, **prefer `plan`** — it is safer to guide a user who needs help than to produce a paper they can't use. The user can always switch to `full` later.
+**Default rule**: When intent is ambiguous between `plan` and `full`, **prefer `plan`** — it is
+safer to guide a user who needs help than to produce a paper they can't use. The user can always
+switch to `full` later.
 
-**Example triggers** (illustrative, not exhaustive):
-"guide my paper", "help me plan my paper", "I don't know how to start", 「引導我寫論文」「幫我規劃論文」, or equivalent in any language
+**Example triggers** (illustrative, not exhaustive): "guide my paper", "help me plan my paper", "I
+don't know how to start", 「引導我寫論文」「幫我規劃論文」, or equivalent in any language

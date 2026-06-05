@@ -1,0 +1,143 @@
+name: Skill Contribution
+description: Submit a community skill for the Gentle-Vanguard marketplace
+title: '[SKILL] '
+labels: ['skill-contribution', 'triage']
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Skill Contribution
+
+        Thank you for contributing a skill to the Gentle-Vanguard community!
+        Please fill out the details below so we can review and add your skill to the marketplace.
+
+  - type: input
+    id: skill_name
+    attributes:
+      label: Skill Name
+      description: A unique, kebab-case identifier for your skill (e.g., `my-awesome-skill`)
+      placeholder: my-awesome-skill
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What does this skill do? Be specific about the problem it solves.
+      placeholder: |
+        This skill helps agents generate and validate OpenAPI 3.1 specifications
+        from natural language descriptions. It includes templates for common API
+        patterns and a validation step to ensure spec compliance.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: agent_type
+    attributes:
+      label: Agent Type
+      description: Which agent type is this skill intended for?
+      options:
+        - general
+        - doc-agent
+        - explore
+        - finance-agent
+        - gov-agent
+        - hr-agent
+        - legal-agent
+        - mkt-agent
+        - ops-agent
+        - sales-agent
+        - session-agent
+        - sdd-design
+        - sdd-apply
+        - sdd-explore
+        - sdd-verify
+        - any
+    validations:
+      required: true
+
+  - type: textarea
+    id: triggers
+    attributes:
+      label: Trigger Words / Patterns
+      description: Comma-separated list of words or phrases that should trigger this skill
+      placeholder: 'openapi, api spec, rest api, swagger, api documentation'
+    validations:
+      required: true
+
+  - type: textarea
+    id: skill_content
+    attributes:
+      label: SKILL.md Content
+      description: Paste the full content of your SKILL.md here. It must include frontmatter (---),
+        a ## When to Use section, and examples.
+      placeholder: |
+        ---
+        name: my-awesome-skill
+        description: Generate and validate OpenAPI 3.1 specs
+        metadata:
+          author: your-github-handle
+          version: '1.0'
+        ---
+
+        ## When to Use
+
+        ...
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples
+      description:
+        Provide one or more concrete examples of how this skill works (inputs and outputs)
+      placeholder: |
+        **Input**: "Generate an OpenAPI spec for a pet store API"
+        **Output**: A complete OpenAPI 3.1 YAML file with paths, schemas, and examples.
+    validations:
+      required: true
+
+  - type: input
+    id: tags
+    attributes:
+      label: Tags
+      description: Comma-separated tags (e.g., `api, openapi, documentation, codegen`)
+      placeholder: api, openapi, documentation, codegen
+    validations:
+      required: true
+
+  - type: input
+    id: license
+    attributes:
+      label: License
+      description: License for your skill (e.g., MIT, Apache-2.0)
+      placeholder: MIT
+
+  - type: textarea
+    id: references
+    attributes:
+      label: Additional References
+      description: Links to documentation, repositories, or other resources
+      placeholder: |
+        - https://github.com/...
+        - https://example.com/docs
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Submission Checklist
+      options:
+        - label: My SKILL.md has valid YAML frontmatter with `name` and `description`
+          required: true
+        - label: My SKILL.md includes a `## When to Use` section
+          required: true
+        - label: My SKILL.md includes a `## Examples` section with at least one example
+          required: true
+        - label: The skill name is unique and does not conflict with existing skills in `skills/`
+          required: true
+        - label: I have tested or verified the skill works as described
+          required: true

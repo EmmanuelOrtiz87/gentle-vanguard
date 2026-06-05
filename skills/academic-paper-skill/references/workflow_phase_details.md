@@ -6,8 +6,7 @@ Detailed per-phase agent behavior and output descriptions for the 8-phase orches
 
 ## Phase 0: CONFIG (Interactive)
 
-**Agent**: `intake_agent`
-**Output**: Paper Configuration Record
+**Agent**: `intake_agent` **Output**: Paper Configuration Record
 
 - Paper type (IMRaD / Lit Review / Theoretical / Case Study / Policy Brief / Conference)
 - Discipline and sub-field
@@ -25,8 +24,7 @@ Detailed per-phase agent behavior and output descriptions for the 8-phase orches
 
 ## Phase 1: RESEARCH
 
-**Agent**: `literature_strategist_agent`
-**Output**: Search Strategy + Source Corpus
+**Agent**: `literature_strategist_agent` **Output**: Search Strategy + Source Corpus
 
 - Database selection + search strings
 - Inclusion/exclusion criteria
@@ -40,8 +38,7 @@ Detailed per-phase agent behavior and output descriptions for the 8-phase orches
 
 ## Phase 2: ARCHITECTURE
 
-**Agent**: `structure_architect_agent`
-**Output**: Paper Outline + Evidence Map
+**Agent**: `structure_architect_agent` **Output**: Paper Outline + Evidence Map
 
 - Structure pattern selection (from paper_structure_patterns.md)
 - Section-by-section outline with word count allocation
@@ -54,8 +51,7 @@ Detailed per-phase agent behavior and output descriptions for the 8-phase orches
 
 ## Phase 3: ARGUMENTATION
 
-**Agent**: `argument_builder_agent`
-**Output**: Argument Blueprint
+**Agent**: `argument_builder_agent` **Output**: Argument Blueprint
 
 - Central thesis + sub-arguments
 - Claim-Evidence-Reasoning chains per section
@@ -66,8 +62,7 @@ Detailed per-phase agent behavior and output descriptions for the 8-phase orches
 
 ## Phase 4: DRAFTING
 
-**Agent**: `draft_writer_agent`
-**Output**: Complete Draft
+**Agent**: `draft_writer_agent` **Output**: Complete Draft
 
 - Section-by-section writing following outline
 - Register adjustment for discipline
@@ -81,8 +76,7 @@ Detailed per-phase agent behavior and output descriptions for the 8-phase orches
 
 ### Phase 5a: Citations
 
-**Agent**: `citation_compliance_agent`
-**Output**: Citation Audit Report
+**Agent**: `citation_compliance_agent` **Output**: Citation Audit Report
 
 - In-text <-> reference list cross-check (zero orphans)
 - Format compliance (per selected style)
@@ -92,8 +86,7 @@ Detailed per-phase agent behavior and output descriptions for the 8-phase orches
 
 ### Phase 5b: Abstract
 
-**Agent**: `abstract_bilingual_agent`
-**Output**: Bilingual Abstract + Keywords
+**Agent**: `abstract_bilingual_agent` **Output**: Bilingual Abstract + Keywords
 
 - English abstract (150-300 words, structured)
 - Traditional Chinese abstract (300-500 characters, structured)
@@ -105,22 +98,20 @@ Detailed per-phase agent behavior and output descriptions for the 8-phase orches
 
 ## Phase 6: PEER REVIEW
 
-**Agent**: `peer_reviewer_agent`
-**Output**: Review Report + Revision Instructions
+**Agent**: `peer_reviewer_agent` **Output**: Review Report + Revision Instructions
 
-- 5-dimension scoring:
-  Originality (20%) | Methodological Rigor (25%) | Evidence Sufficiency (25%)
+- 5-dimension scoring: Originality (20%) | Methodological Rigor (25%) | Evidence Sufficiency (25%)
   Argument Coherence (15%) | Writing Quality (15%)
 - Verdict: Accept / Minor Revision / Major Revision / Reject
 - Line-level feedback with suggested fixes
-- Max 2 revision loops -> back to Phase 4 [draft_writer_agent] (limited to 1 round in academic-pipeline)
+- Max 2 revision loops -> back to Phase 4 [draft_writer_agent] (limited to 1 round in
+  academic-pipeline)
 
 ---
 
 ## Phase 7: FORMAT
 
-**Agent**: `formatter_agent`
-**Output**: Final Output Package
+**Agent**: `formatter_agent` **Output**: Final Output Package
 
 - Target format conversion (LaTeX + .bib / DOCX / PDF / Markdown)
 - Journal-specific formatting (if target journal specified)

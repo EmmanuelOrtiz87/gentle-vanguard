@@ -7,13 +7,18 @@ metadata:
   original-name: sox-testing
   department: finance
 ---
+
 # SOX Compliance Testing
 
-> If you see unfamiliar placeholders or need to check which tools are connected, see [CONNECTORS.md](../../CONNECTORS.md).
+> If you see unfamiliar placeholders or need to check which tools are connected, see
+> [CONNECTORS.md](../../CONNECTORS.md).
 
-**Important**: This command assists with SOX compliance workflows but does not provide audit or legal advice. All testing workpapers and assessments should be reviewed by qualified financial professionals before use in audit documentation.
+**Important**: This command assists with SOX compliance workflows but does not provide audit or
+legal advice. All testing workpapers and assessments should be reviewed by qualified financial
+professionals before use in audit documentation.
 
-Generate sample selections, create testing workpapers, document control assessments, and provide testing templates for SOX 404 internal controls over financial reporting.
+Generate sample selections, create testing workpapers, document control assessments, and provide
+testing templates for SOX 404 internal controls over financial reporting.
 
 ## Usage
 
@@ -43,16 +48,18 @@ Generate sample selections, create testing workpapers, document control assessme
 
 Based on the control area, identify the key controls. Present the control matrix:
 
-| Control # | Control Description | Type | Frequency | Key/Non-Key | Risk | Assertion |
-|-----------|-------------------|------|-----------|-------------|------|-----------|
-| [ID]      | [Description]     | Manual/Automated/IT-Dependent | Daily/Weekly/Monthly/Quarterly/Annual | Key | High/Medium/Low | [CEAVOP] |
+| Control # | Control Description | Type                          | Frequency                             | Key/Non-Key | Risk            | Assertion |
+| --------- | ------------------- | ----------------------------- | ------------------------------------- | ----------- | --------------- | --------- |
+| [ID]      | [Description]       | Manual/Automated/IT-Dependent | Daily/Weekly/Monthly/Quarterly/Annual | Key         | High/Medium/Low | [CEAVOP]  |
 
 **Control types:**
+
 - **Automated:** System-enforced controls with no manual intervention
 - **Manual:** Controls performed by personnel with judgment
 - **IT-dependent manual:** Manual controls that rely on system-generated data
 
 **Assertions (CEAVOP):**
+
 - **C**ompleteness — All transactions are recorded
 - **E**xistence/Occurrence — Transactions actually occurred
 - **A**ccuracy — Amounts are correctly recorded
@@ -64,16 +71,17 @@ Based on the control area, identify the key controls. Present the control matrix
 
 Calculate sample sizes based on control frequency and risk:
 
-| Control Frequency | Population Size (approx.) | Recommended Sample |
-|------------------|--------------------------|-------------------|
-| Annual           | 1                        | 1 (test the instance) |
-| Quarterly        | 4                        | 2 |
-| Monthly          | 12                       | 2-4 (based on risk) |
-| Weekly           | 52                       | 5-15 (based on risk) |
-| Daily            | ~250                     | 20-40 (based on risk) |
-| Per-transaction  | Varies                   | 25-60 (based on risk and volume) |
+| Control Frequency | Population Size (approx.) | Recommended Sample               |
+| ----------------- | ------------------------- | -------------------------------- |
+| Annual            | 1                         | 1 (test the instance)            |
+| Quarterly         | 4                         | 2                                |
+| Monthly           | 12                        | 2-4 (based on risk)              |
+| Weekly            | 52                        | 5-15 (based on risk)             |
+| Daily             | ~250                      | 20-40 (based on risk)            |
+| Per-transaction   | Varies                    | 25-60 (based on risk and volume) |
 
 Adjust for:
+
 - **Risk level:** Higher risk controls require larger samples
 - **Prior year results:** Controls with prior deficiencies need larger samples
 - **Reliance:** Controls relied upon by external auditors may need larger samples
@@ -83,14 +91,17 @@ Adjust for:
 Select samples from the population using the appropriate method:
 
 **Random selection** (default for transaction-level controls):
+
 - Generate random numbers to select specific items from the population
 - Ensure coverage across the full period
 
 **Systematic selection** (for periodic controls):
+
 - Select items at fixed intervals with a random start point
 - Ensure representation across all sub-periods
 
 **Targeted selection** (supplement to random, for risk-based testing):
+
 - Select items with specific risk characteristics (high dollar, unusual, period-end)
 - Document rationale for targeted selections
 
@@ -170,6 +181,7 @@ Reviewed by: _______________  Date: ________
 Based on the control area, provide pre-built test step templates:
 
 **Revenue Recognition:**
+
 - Verify sales order approval and authorization
 - Confirm delivery/performance evidence
 - Test revenue recognition timing against contract terms
@@ -177,6 +189,7 @@ Based on the control area, provide pre-built test step templates:
 - Test credit memo approval and validity
 
 **Procure to Pay:**
+
 - Verify purchase order approval and authorization limits
 - Confirm three-way match (PO, receipt, invoice)
 - Test vendor master data change controls
@@ -184,6 +197,7 @@ Based on the control area, provide pre-built test step templates:
 - Test duplicate payment prevention controls
 
 **Financial Close:**
+
 - Verify account reconciliation completeness and timeliness
 - Test journal entry approval and segregation of duties
 - Verify management review of financial statements
@@ -191,6 +205,7 @@ Based on the control area, provide pre-built test step templates:
 - Verify disclosure checklist completion
 
 **ITGC:**
+
 - Test user access provisioning and de-provisioning
 - Verify privileged access reviews
 - Test change management approval and testing
@@ -201,18 +216,23 @@ Based on the control area, provide pre-built test step templates:
 
 Classify any identified deficiencies:
 
-**Deficiency:** A control does not allow management or employees to prevent or detect misstatements on a timely basis. Consider:
+**Deficiency:** A control does not allow management or employees to prevent or detect misstatements
+on a timely basis. Consider:
+
 - Likelihood of misstatement
 - Magnitude of potential misstatement
 - Whether compensating controls exist
 
-**Significant Deficiency:** A deficiency (or combination) that is less severe than a material weakness but important enough to merit attention by those responsible for oversight.
+**Significant Deficiency:** A deficiency (or combination) that is less severe than a material
+weakness but important enough to merit attention by those responsible for oversight.
 
-**Material Weakness:** A deficiency (or combination) such that there is a reasonable possibility that a material misstatement will not be prevented or detected on a timely basis.
+**Material Weakness:** A deficiency (or combination) such that there is a reasonable possibility
+that a material misstatement will not be prevented or detected on a timely basis.
 
 ### 7. Output
 
 Provide:
+
 1. Control matrix for the selected area
 2. Sample selections with methodology documentation
 3. Testing workpaper templates with pre-populated test steps

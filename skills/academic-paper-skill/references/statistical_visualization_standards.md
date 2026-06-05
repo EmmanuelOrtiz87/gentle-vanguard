@@ -1,6 +1,7 @@
 # Statistical Visualization Standards
 
-Reference guide for the `visualization_agent`. Covers APA 7.0 figure guidelines, accessible color palettes, chart type selection, common pitfalls, and code templates.
+Reference guide for the `visualization_agent`. Covers APA 7.0 figure guidelines, accessible color
+palettes, chart type selection, common pitfalls, and code templates.
 
 ---
 
@@ -8,11 +9,13 @@ Reference guide for the `visualization_agent`. Covers APA 7.0 figure guidelines,
 
 ### General Principles
 
-1. **Every figure must add value** — do not visualize data that is better expressed in a sentence or table
+1. **Every figure must add value** — do not visualize data that is better expressed in a sentence or
+   table
 2. **Figures are numbered sequentially** (Figure 1, Figure 2, ...) in order of first mention
 3. **Every figure must be cited in text** ("As shown in Figure 1, ...")
 4. **Captions appear below the figure** (unlike table notes which appear above)
-5. **Figures must be interpretable without reading the text** — include all necessary context in the caption
+5. **Figures must be interpretable without reading the text** — include all necessary context in the
+   caption
 
 ### Caption Format
 
@@ -24,15 +27,15 @@ Note. [Explanation if needed]       ← Plain text, starts with "Note."
 
 ### Typography Specifications
 
-| Element | Size | Style |
-|---------|------|-------|
-| Figure label ("Figure 1") | 10-12 pt | Bold |
-| Figure title | 10-12 pt | Italic |
-| Axis labels | 8-10 pt | Plain, sentence case |
-| Axis tick labels | 8-9 pt | Plain |
-| Legend text | 8-9 pt | Plain |
-| Annotations | 8 pt | Plain or italic |
-| Note text | 8-9 pt | Plain |
+| Element                   | Size     | Style                |
+| ------------------------- | -------- | -------------------- |
+| Figure label ("Figure 1") | 10-12 pt | Bold                 |
+| Figure title              | 10-12 pt | Italic               |
+| Axis labels               | 8-10 pt  | Plain, sentence case |
+| Axis tick labels          | 8-9 pt   | Plain                |
+| Legend text               | 8-9 pt   | Plain                |
+| Annotations               | 8 pt     | Plain or italic      |
+| Note text                 | 8-9 pt   | Plain                |
 
 ### Required Elements
 
@@ -52,55 +55,55 @@ Note. [Explanation if needed]       ← Plain text, starts with "Note."
 
 Best for: continuous/sequential data.
 
-| Index | Hex Code | Usage |
-|-------|----------|-------|
-| 0 | `#440154` | Darkest value |
-| 1 | `#46327E` | |
-| 2 | `#365C8D` | |
-| 3 | `#277F8E` | |
-| 4 | `#1FA187` | |
-| 5 | `#4AC16D` | |
-| 6 | `#9FDA3A` | |
-| 7 | `#FDE725` | Lightest value |
+| Index | Hex Code  | Usage          |
+| ----- | --------- | -------------- |
+| 0     | `#440154` | Darkest value  |
+| 1     | `#46327E` |                |
+| 2     | `#365C8D` |                |
+| 3     | `#277F8E` |                |
+| 4     | `#1FA187` |                |
+| 5     | `#4AC16D` |                |
+| 6     | `#9FDA3A` |                |
+| 7     | `#FDE725` | Lightest value |
 
 ### Alternative: Cividis (Deuteranopia/Protanopia Optimized)
 
 Best for: publications where colorblind accessibility is critical.
 
-| Index | Hex Code |
-|-------|----------|
-| 0 | `#00204D` |
-| 1 | `#00336F` |
-| 2 | `#39486B` |
-| 3 | `#5F5D6A` |
-| 4 | `#7B7463` |
-| 5 | `#9A8C4F` |
-| 6 | `#BBA634` |
-| 7 | `#DEC000` |
-| 8 | `#FFE945` |
+| Index | Hex Code  |
+| ----- | --------- |
+| 0     | `#00204D` |
+| 1     | `#00336F` |
+| 2     | `#39486B` |
+| 3     | `#5F5D6A` |
+| 4     | `#7B7463` |
+| 5     | `#9A8C4F` |
+| 6     | `#BBA634` |
+| 7     | `#DEC000` |
+| 8     | `#FFE945` |
 
 ### Categorical: Tol's Qualitative Palette (Max 8 Categories)
 
 Best for: categorical comparisons, group labels.
 
-| Label | Hex Code | Sample Use |
-|-------|----------|------------|
-| Blue | `#0077BB` | Group 1 / Baseline |
-| Cyan | `#33BBEE` | Group 2 |
-| Teal | `#009988` | Group 3 |
-| Orange | `#EE7733` | Group 4 / Highlight |
-| Red | `#CC3311` | Group 5 / Alert |
-| Magenta | `#EE3377` | Group 6 |
-| Grey | `#BBBBBB` | Reference / NA |
-| Black | `#000000` | Outline / Text |
+| Label   | Hex Code  | Sample Use          |
+| ------- | --------- | ------------------- |
+| Blue    | `#0077BB` | Group 1 / Baseline  |
+| Cyan    | `#33BBEE` | Group 2             |
+| Teal    | `#009988` | Group 3             |
+| Orange  | `#EE7733` | Group 4 / Highlight |
+| Red     | `#CC3311` | Group 5 / Alert     |
+| Magenta | `#EE3377` | Group 6             |
+| Grey    | `#BBBBBB` | Reference / NA      |
+| Black   | `#000000` | Outline / Text      |
 
 ### Diverging: Blue-Red (For Correlation/Difference Maps)
 
-| Negative | Zero | Positive |
-|----------|------|----------|
+| Negative  | Zero      | Positive  |
+| --------- | --------- | --------- |
 | `#2166AC` | `#F7F7F7` | `#B2182B` |
-| `#4393C3` | | `#D6604D` |
-| `#92C5DE` | | `#F4A582` |
+| `#4393C3` |           | `#D6604D` |
+| `#92C5DE` |           | `#F4A582` |
 
 ### Accessibility Rules
 
@@ -115,21 +118,21 @@ Best for: categorical comparisons, group labels.
 
 ### Which Chart for Which Data?
 
-| Your Data | Your Question | Recommended Chart | Avoid |
-|-----------|--------------|-------------------|-------|
-| Categories + values | Compare magnitudes | **Bar chart** (vertical or horizontal) | Pie chart |
-| Categories + values + groups | Compare across groups | **Grouped bar chart** or **stacked bar** | 3D bar chart |
-| Continuous variable, 1 group | Show distribution | **Histogram** + density curve | |
-| Continuous variable, 2-5 groups | Compare distributions | **Boxplot** or **violin plot** | Bar chart of means only |
-| Two continuous variables | Show relationship | **Scatter plot** + regression line | |
-| Time series (1-5 series) | Show trends | **Line chart** | Bar chart for time series |
-| Time series (> 5 series) | Show trends | **Small multiples** (faceted line charts) | Spaghetti plot |
-| Correlation matrix | Show multi-variable relationships | **Heatmap** | Scatter plot matrix (too dense) |
-| Effect sizes + CIs (meta) | Summarize meta-analysis | **Forest plot** | Bar chart |
-| Effect sizes + SE (meta) | Check publication bias | **Funnel plot** | |
-| Concepts + relationships | Map theoretical framework | **Network graph** / **concept map** | |
-| Proportions summing to 100% | Show composition | **Stacked bar chart** | Pie chart |
-| Geographic data | Show spatial patterns | **Choropleth map** | |
+| Your Data                       | Your Question                     | Recommended Chart                         | Avoid                           |
+| ------------------------------- | --------------------------------- | ----------------------------------------- | ------------------------------- |
+| Categories + values             | Compare magnitudes                | **Bar chart** (vertical or horizontal)    | Pie chart                       |
+| Categories + values + groups    | Compare across groups             | **Grouped bar chart** or **stacked bar**  | 3D bar chart                    |
+| Continuous variable, 1 group    | Show distribution                 | **Histogram** + density curve             |                                 |
+| Continuous variable, 2-5 groups | Compare distributions             | **Boxplot** or **violin plot**            | Bar chart of means only         |
+| Two continuous variables        | Show relationship                 | **Scatter plot** + regression line        |                                 |
+| Time series (1-5 series)        | Show trends                       | **Line chart**                            | Bar chart for time series       |
+| Time series (> 5 series)        | Show trends                       | **Small multiples** (faceted line charts) | Spaghetti plot                  |
+| Correlation matrix              | Show multi-variable relationships | **Heatmap**                               | Scatter plot matrix (too dense) |
+| Effect sizes + CIs (meta)       | Summarize meta-analysis           | **Forest plot**                           | Bar chart                       |
+| Effect sizes + SE (meta)        | Check publication bias            | **Funnel plot**                           |                                 |
+| Concepts + relationships        | Map theoretical framework         | **Network graph** / **concept map**       |                                 |
+| Proportions summing to 100%     | Show composition                  | **Stacked bar chart**                     | Pie chart                       |
+| Geographic data                 | Show spatial patterns             | **Choropleth map**                        |                                 |
 
 ### When NOT to Visualize
 
@@ -144,25 +147,25 @@ Best for: categorical comparisons, group labels.
 
 ### Critical Errors (Never Do)
 
-| Pitfall | Problem | Fix |
-|---------|---------|-----|
-| **Pie charts** | Human perception is poor at comparing angles/areas | Use bar chart |
-| **3D charts** | Distorts values through perspective projection | Use 2D |
-| **Dual y-axes** | Implies false correlation; scale choice is arbitrary | Two separate panels |
-| **Rainbow colormap** | Not perceptually uniform; not colorblind-safe | Use viridis/cividis |
-| **Truncated y-axis** (without marking) | Exaggerates small differences | Start at 0 or mark break clearly |
-| **Missing error bars** | Hides uncertainty; readers cannot assess significance | Add SE, SD, or 95% CI bars |
-| **Chartjunk** (decorative elements) | Reduces data-ink ratio; distracts from data | Remove unnecessary elements |
+| Pitfall                                | Problem                                               | Fix                              |
+| -------------------------------------- | ----------------------------------------------------- | -------------------------------- |
+| **Pie charts**                         | Human perception is poor at comparing angles/areas    | Use bar chart                    |
+| **3D charts**                          | Distorts values through perspective projection        | Use 2D                           |
+| **Dual y-axes**                        | Implies false correlation; scale choice is arbitrary  | Two separate panels              |
+| **Rainbow colormap**                   | Not perceptually uniform; not colorblind-safe         | Use viridis/cividis              |
+| **Truncated y-axis** (without marking) | Exaggerates small differences                         | Start at 0 or mark break clearly |
+| **Missing error bars**                 | Hides uncertainty; readers cannot assess significance | Add SE, SD, or 95% CI bars       |
+| **Chartjunk** (decorative elements)    | Reduces data-ink ratio; distracts from data           | Remove unnecessary elements      |
 
 ### Subtle Errors (Easy to Miss)
 
-| Pitfall | Problem | Fix |
-|---------|---------|-----|
-| Unequal bin widths in histogram | Distorts frequency perception | Use equal bins |
-| Overlapping labels | Unreadable at print size | Rotate, abbreviate, or reduce categories |
-| Too many colors (> 8) | Indistinguishable at print size | Group categories or use facets |
-| Legend far from data | Reader must scan back and forth | Place legend inside plot area or use direct labels |
-| Aspect ratio distortion | Exaggerates or minimizes trends | Use 4:3 default; 16:9 for time series |
+| Pitfall                         | Problem                         | Fix                                                |
+| ------------------------------- | ------------------------------- | -------------------------------------------------- |
+| Unequal bin widths in histogram | Distorts frequency perception   | Use equal bins                                     |
+| Overlapping labels              | Unreadable at print size        | Rotate, abbreviate, or reduce categories           |
+| Too many colors (> 8)           | Indistinguishable at print size | Group categories or use facets                     |
+| Legend far from data            | Reader must scan back and forth | Place legend inside plot area or use direct labels |
+| Aspect ratio distortion         | Exaggerates or minimizes trends | Use 4:3 default; 16:9 for time series              |
 
 ---
 

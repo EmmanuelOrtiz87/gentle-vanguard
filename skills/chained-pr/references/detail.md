@@ -5,4 +5,3 @@ Every PR in a chain needs explicit boundaries:
 | Start    | The branch, PR, or state this PR builds on |
 
 ---
-

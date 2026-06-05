@@ -4,7 +4,9 @@ This reference covers joint RNA and ATAC-seq analysis from multiome experiments 
 
 ## Overview
 
-MultiVI is a deep generative model for analyzing multiome data (simultaneous RNA-seq and ATAC-seq from the same cells). It:
+MultiVI is a deep generative model for analyzing multiome data (simultaneous RNA-seq and ATAC-seq
+from the same cells). It:
+
 - Learns a joint latent representation across modalities
 - Handles missing modalities (RNA-only or ATAC-only cells)
 - Enables batch correction across experiments
@@ -371,13 +373,13 @@ def link_peaks_to_genes(model, mdata, distance_threshold=100000):
 
 ## Troubleshooting
 
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| Different cell counts | Cells missing in one modality | Use common cells only |
-| Training instability | Imbalanced modalities | Normalize feature counts |
-| Poor clustering | Too few features | Increase n_top_genes/peaks |
-| Memory error | Large ATAC matrix | Reduce peak count, use sparse |
-| Batch dominates | Strong technical effects | Ensure batch_key is set |
+| Issue                 | Cause                         | Solution                      |
+| --------------------- | ----------------------------- | ----------------------------- |
+| Different cell counts | Cells missing in one modality | Use common cells only         |
+| Training instability  | Imbalanced modalities         | Normalize feature counts      |
+| Poor clustering       | Too few features              | Increase n_top_genes/peaks    |
+| Memory error          | Large ATAC matrix             | Reduce peak count, use sparse |
+| Batch dominates       | Strong technical effects      | Ensure batch_key is set       |
 
 ## Key References
 

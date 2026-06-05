@@ -1,6 +1,7 @@
 # Public SaaS Collaboration Surfaces
 
-> Reference content for the `offensive-osint` skill. Originally §24 + §25 + §26 of the monolithic SKILL.md (refactored 2026-05-02 for size/load efficiency).
+> Reference content for the `offensive-osint` skill. Originally §24 + §25 + §26 of the monolithic
+> SKILL.md (refactored 2026-05-02 for size/load efficiency).
 
 ## 24. Postman Public Workspace Universal Search
 
@@ -29,9 +30,12 @@ curl -sk -m 15 \
   }' | jq '.data[]'
 ```
 
-This proxies through Postman's web app to their internal search service. Pagination via `from` (0, 100, 200, ...).
+This proxies through Postman's web app to their internal search service. Pagination via `from` (0,
+100, 200, ...).
 
-**If the proxy shape changes** (it has historically): inspect a real search request from the Postman web UI:
+**If the proxy shape changes** (it has historically): inspect a real search request from the Postman
+web UI:
+
 1. Open `https://www.postman.com/explore` in a browser.
 2. Open DevTools → Network tab.
 3. Search for any term.
@@ -56,19 +60,24 @@ curl -sk -m 10 "https://www.postman.com/_api/collection/$COL_ID" | jq '.collecti
 ```
 
 **Ownership scoring signals:**
+
 - Creator/team name mentions target domain or brand → strong.
 - Workspace name/description mentions target → strong.
-- Request URLs contain `*.target.com` → strongest signal (workspace is actively used against target's APIs).
+- Request URLs contain `*.target.com` → strongest signal (workspace is actively used against
+  target's APIs).
 
-**Run secret catalog (§17) over every text blob extracted** from the requests, env vars, pre-request scripts, and test scripts.
+**Run secret catalog (§17) over every text blob extracted** from the requests, env vars, pre-request
+scripts, and test scripts.
 
 ---
 
 ## 25. Stack Exchange OSINT Sweep
 
-Stack Exchange and its sister sites collect code paste-ins from developers — many include secrets, internal hostnames, and proprietary code excerpts.
+Stack Exchange and its sister sites collect code paste-ins from developers — many include secrets,
+internal hostnames, and proprietary code excerpts.
 
 **Sites to query (8 with highest signal):**
+
 ```
 stackoverflow.com
 serverfault.com
@@ -81,6 +90,7 @@ salesforce.stackexchange.com
 ```
 
 **API:**
+
 ```
 GET https://api.stackexchange.com/2.3/search/advanced
    ?site=<site>
@@ -90,19 +100,24 @@ GET https://api.stackexchange.com/2.3/search/advanced
 ```
 
 **Code block extraction regex:**
+
 ```regex
 <pre><code>([\s\S]*?)</code></pre>
 ```
+
 (Stack Exchange wraps code in `<pre><code>` HTML.)
 
 **Pipeline:**
+
 1. Search each site for the target name, brand, root domain.
 2. Extract code blocks from `body` HTML.
 3. Run secret catalog (§17) over each block.
-4. Cross-reference post author email (where exposed in profile) against email_osint discoveries — confirms employee posting target's internal code.
+4. Cross-reference post author email (where exposed in profile) against email_osint discoveries —
+   confirms employee posting target's internal code.
 5. Extract hostnames from code blocks → upsert as `subdomain` assets.
 
-**Quota:** Stack Exchange API permits 30 requests/day without a key; with a free key, 10,000/day. Throttle with 2-second min interval per call.
+**Quota:** Stack Exchange API permits 30 requests/day without a key; with a free key, 10,000/day.
+Throttle with 2-second min interval per call.
 
 ---
 
@@ -111,6 +126,7 @@ GET https://api.stackexchange.com/2.3/search/advanced
 Many SaaS collaboration tools allow public sharing. Dork them like search engines.
 
 **Platforms with high incident rate:**
+
 ```
 trello.com
 notion.so / notion.site
@@ -122,17 +138,19 @@ airtable.com
 ```
 
 **Dork template:**
+
 ```
 site:{platform} "{target-keyword}"
 ```
 
-**Run via search-engine adapter** (DDG default; Bing / Brave / Yandex / SerpAPI optional). The same classification logic from §18.7 applies.
+**Run via search-engine adapter** (DDG default; Bing / Brave / Yandex / SerpAPI optional). The same
+classification logic from §18.7 applies.
 
 **Common findings:**
+
 - Public Trello board with credentials in card titles or attached config files.
 - Public Notion page with internal SOPs, API keys in code blocks, customer data.
 - Public Confluence space with onboarding docs containing seed creds.
 - Public Miro board with architecture diagrams revealing internal hostnames.
 
 ---
-

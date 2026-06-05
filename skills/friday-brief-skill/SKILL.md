@@ -7,9 +7,12 @@ metadata:
   original-name: friday-brief
   department: small-business
 ---
-Run the Friday wins-and-watches briefing. Pull the numbers, surface what matters, and give the owner a clean end-of-week picture.
+
+Run the Friday wins-and-watches briefing. Pull the numbers, surface what matters, and give the owner
+a clean end-of-week picture.
 
 Parse arguments:
+
 - `--lookback` (default: `7d`) — `7d` for one week or `14d` for a two-week rolling comparison
 
 ## Step 1 — Revenue pulse
@@ -48,7 +51,10 @@ Revenue this week: ${amount} ({+/-}X% vs last week)
 
 ## Connector failures
 
-Run with whatever is connected — this command degrades gracefully. If PayPal is missing, skip transaction data and note "PayPal not connected — revenue data from HubSpot deals only." If HubSpot is missing, skip deal closes and note it. If neither is connected, stop and tell the owner: "No revenue sources connected. Connect PayPal or HubSpot to run the Friday brief."
+Run with whatever is connected — this command degrades gracefully. If PayPal is missing, skip
+transaction data and note "PayPal not connected — revenue data from HubSpot deals only." If HubSpot
+is missing, skip deal closes and note it. If neither is connected, stop and tell the owner: "No
+revenue sources connected. Connect PayPal or HubSpot to run the Friday brief."
 
 ## Approval gates
 
@@ -57,4 +63,5 @@ Run with whatever is connected — this command degrades gracefully. If PayPal i
 
 ## Output
 
-End with the formatted brief and ask the owner: "Want me to post this to Slack, email it to yourself, or save it?"
+End with the formatted brief and ask the owner: "Want me to post this to Slack, email it to
+yourself, or save it?"
