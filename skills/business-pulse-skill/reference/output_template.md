@@ -1,15 +1,18 @@
 # Output Template
 
-This is the exact structure every pulse must follow. Do not reorder sections. Omit a section only if its connector returned no data — never leave an empty header.
+This is the exact structure every pulse must follow. Do not reorder sections. Omit a section only if
+its connector returned no data — never leave an empty header.
 
-Variables in `{{double braces}}` are placeholders — replace with computed values. Arrow convention: ▲ up, ▼ down, ▬ flat (<1% change). Always show the delta value after the arrow.
+Variables in `{{double braces}}` are placeholders — replace with computed values. Arrow convention:
+▲ up, ▼ down, ▬ flat (<1% change). Always show the delta value after the arrow.
 
 ---
 
 ```markdown
 # Business Pulse — {{Day, Month Date, Year}}
 
-**Overall: {{🟢|🟡|🔴}} {{one-line status, e.g. "Cash healthy, one overdue invoice needs attention."}}}**
+**Overall: {{🟢|🟡|🔴}}
+{{one-line status, e.g. "Cash healthy, one overdue invoice needs attention."}}}**
 
 ## TL;DR
 
@@ -26,11 +29,13 @@ Variables in `{{double braces}}` are placeholders — replace with computed valu
 - **Outstanding AR**: ${{AR_TOTAL}} across {{N}} open invoices
 
 **AR aging**
+
 - 0–30 days: ${{AR_0_30}}
 - 31–60 days: ${{AR_31_60}} {{🟡 if nonzero}}
 - 61+ days: ${{AR_61}} {{🔴 if nonzero}}
 
 **Overdue > 30 days**
+
 - {{customer}} — ${{amount}} ({{days}} days overdue)
 - {{customer}} — ${{amount}} ({{days}} days)
 
@@ -42,6 +47,7 @@ Variables in `{{double braces}}` are placeholders — replace with computed valu
 - **PayPal**: ${{PAYPAL_TOTAL}} | **Square**: ${{SQUARE_TOTAL}} {{omit if not connected}}
 
 **Unusual transactions**
+
 - {{amount}} — {{counterparty}} — {{status: failed/pending/large}}
 - {{or "No unusual transactions this week."}}
 
@@ -55,6 +61,7 @@ Variables in `{{double braces}}` are placeholders — replace with computed valu
 - **New deals created**: {{N}} (${{TOTAL}})
 
 **Deals needing attention**
+
 - {{deal name}} — {{stage}} — {{why: gone cold / slipped / stalled}}
 - {{or "No deals flagged this week."}}
 
@@ -64,8 +71,7 @@ Variables in `{{double braces}}` are placeholders — replace with computed valu
 
 - {{Meeting/deadline — external party, why it matters}}
 - {{Meeting/deadline}}
-- {{Meeting/deadline}}
-{{3–5 items max. Omit internal-only calendar noise.}}
+- {{Meeting/deadline}} {{3–5 items max. Omit internal-only calendar noise.}}
 
 ---
 
@@ -73,7 +79,7 @@ Variables in `{{double braces}}` are placeholders — replace with computed valu
 
 - {{sender / source}} — {{one-line summary of what needs attention}}
 - {{sender / source}} — {{summary}}
-{{Or: "No urgent threads detected." — include this explicitly so the owner knows the check ran.}}
+  {{Or: "No urgent threads detected." — include this explicitly so the owner knows the check ran.}}
 
 ---
 
@@ -91,7 +97,8 @@ overdue. Call Sarah Chen at 415-555-0192 today."}}
 
 **Sources pulled**: {{list of connectors that returned data}}
 
-**Sources unavailable**: {{list with reason, e.g. "Gmail — auth error" or "Zendesk — not connected"}}
+**Sources unavailable**:
+{{list with reason, e.g. "Gmail — auth error" or "Zendesk — not connected"}}
 
 **Thresholds used**: {{note any TODO thresholds that are still defaults}}
 ```

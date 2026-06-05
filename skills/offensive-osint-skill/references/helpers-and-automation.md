@@ -1,30 +1,36 @@
 # AI-Assisted OSINT, Archiving, Automation, Sidecar, Helpers
 
-> Reference content for the `offensive-osint` skill. Originally §33 + §34 + §35 + §36 + §48 of the monolithic SKILL.md (refactored 2026-05-02 for size/load efficiency).
+> Reference content for the `offensive-osint` skill. Originally §33 + §34 + §35 + §36 + §48 of the
+> monolithic SKILL.md (refactored 2026-05-02 for size/load efficiency).
 
 ## 33. AI-Assisted OSINT
 
-> **Warning:** Never paste PII, sensitive IOCs, or unique pivots into cloud LLMs. They log inputs and may use them for training. Use local models for sensitive analysis.
+> **Warning:** Never paste PII, sensitive IOCs, or unique pivots into cloud LLMs. They log inputs
+> and may use them for training. Use local models for sensitive analysis.
 
-| Tool | Strength |
-|------|---------|
-| [ChatGPT](https://chat.openai.com/) (paid) | Log parsing, dataset analysis, Code Interpreter for CSV/JSON, Vision OCR. |
-| [Claude](https://claude.ai/) (paid) | 200K-token context for large doc dumps + report synthesis. |
-| [Gemini](https://gemini.google.com/) | Long-context; Deep Research mode with citations. |
-| [Perplexity Pro](https://www.perplexity.ai/) (paid) | Real-time web search + reasoning. |
+| Tool                                                | Strength                                                                  |
+| --------------------------------------------------- | ------------------------------------------------------------------------- |
+| [ChatGPT](https://chat.openai.com/) (paid)          | Log parsing, dataset analysis, Code Interpreter for CSV/JSON, Vision OCR. |
+| [Claude](https://claude.ai/) (paid)                 | 200K-token context for large doc dumps + report synthesis.                |
+| [Gemini](https://gemini.google.com/)                | Long-context; Deep Research mode with citations.                          |
+| [Perplexity Pro](https://www.perplexity.ai/) (paid) | Real-time web search + reasoning.                                         |
 
-**Local / privacy-preserving:** [Ollama](https://ollama.com/), [LM Studio](https://lmstudio.ai/), [GPT4All](https://gpt4all.io/).
+**Local / privacy-preserving:** [Ollama](https://ollama.com/), [LM Studio](https://lmstudio.ai/),
+[GPT4All](https://gpt4all.io/).
 
 ### 33.1 Commercial AI OSINT Platforms
 
 - [Cylect](https://www.cylect.io/) — entity extraction + link analysis.
-- [Fivecast Matrix](https://www.fivecast.com/products/matrix/) — generative-AI triage for social-media datasets.
+- [Fivecast Matrix](https://www.fivecast.com/products/matrix/) — generative-AI triage for
+  social-media datasets.
 - [Recorded Future](https://www.recordedfuture.com/) — AI-driven threat intel.
 - [DarkOwl Vision](https://www.darkowl.com/) — darknet data analysis.
 
 ### 33.2 Deepfake & Synthetic Media Detection
 
-- [Sensity AI](https://sensity.ai/), [Reality Defender](https://realitydefender.com/), [Adobe Content Credentials Verify](https://contentcredentials.org/verify), [CarNet](https://carnet.ai/).
+- [Sensity AI](https://sensity.ai/), [Reality Defender](https://realitydefender.com/),
+  [Adobe Content Credentials Verify](https://contentcredentials.org/verify),
+  [CarNet](https://carnet.ai/).
 
 ---
 
@@ -38,7 +44,9 @@
 - [SingleFileZ](https://github.com/gildas-lormeau/SingleFileZ) — browser ext for offline HTML.
 - [Kasm Workspaces](https://kasmweb.com/) — containerized OSINT browser isolation.
 
-**Evidence handling:** URL + UTC timestamp + PNG + WARC/SingleFileZ archive, SHA-256 hash all downloads, separate work profiles per case, store evidence read-only, JSONL run logs with `run_id` + tool versions.
+**Evidence handling:** URL + UTC timestamp + PNG + WARC/SingleFileZ archive, SHA-256 hash all
+downloads, separate work profiles per case, store evidence read-only, JSONL run logs with `run_id` +
+tool versions.
 
 ---
 
@@ -47,42 +55,49 @@
 - [n8n](https://n8n.io/) — self-hosted workflow automation (RSS → scrape → alert pipelines).
 - [Huginn](https://github.com/huginn/huginn) — agent-based monitoring/scraping/alerting.
 - [Playwright](https://playwright.dev/) — headless browser automation with stealth plugins.
-- [Browsertrix Crawler](https://github.com/webrecorder/browsertrix-crawler) — archival crawling with WARC export.
-- [Prefect](https://www.prefect.io/) / [Apache Airflow](https://airflow.apache.org/) — workflow orchestration.
+- [Browsertrix Crawler](https://github.com/webrecorder/browsertrix-crawler) — archival crawling with
+  WARC export.
+- [Prefect](https://www.prefect.io/) / [Apache Airflow](https://airflow.apache.org/) — workflow
+  orchestration.
 
 ---
 
 ## 36. Cross-Module Sidecar Coordination
 
-When you run a multi-module recon, late-arriving outputs need to feed into already-running modules. The pattern:
+When you run a multi-module recon, late-arriving outputs need to feed into already-running modules.
+The pattern:
 
 1. Each module writes a sidecar JSON to a known location when it finishes:
    - `<scan>/mobile_endpoints.json` — endpoints + hostnames extracted from APK static analysis.
-   - `<scan>/secrets_sidecar.json` — hostnames + endpoints + Firebase project IDs from secrets-beyond-github sweep.
+   - `<scan>/secrets_sidecar.json` — hostnames + endpoints + Firebase project IDs from
+     secrets-beyond-github sweep.
    - `<scan>/sso_tenants.json` — discovered IdP tenants for breach correlation.
 2. Downstream modules check for sidecars on start; if present, ingest.
-3. Cross-feed: API discovery consumes both `mobile_endpoints.json` and `secrets_sidecar.json`; SSO×breach correlation consumes `sso_tenants.json` and the breach DB.
+3. Cross-feed: API discovery consumes both `mobile_endpoints.json` and `secrets_sidecar.json`;
+   SSO×breach correlation consumes `sso_tenants.json` and the breach DB.
 
 **Sidecar shape (mobile_endpoints.json example):**
+
 ```json
 {
   "endpoints": [
-    {"method": "GET", "url": "https://api.acme.com/v1/users", "source": "apk:com.acme.android"},
-    {"method": "POST", "url": "https://api.acme.com/v1/login", "source": "apk:com.acme.android"}
+    { "method": "GET", "url": "https://api.acme.com/v1/users", "source": "apk:com.acme.android" },
+    { "method": "POST", "url": "https://api.acme.com/v1/login", "source": "apk:com.acme.android" }
   ],
   "hostnames": ["api.acme.com", "cdn.acme.com"],
   "firebase_project_ids": ["acme-prod-12345"]
 }
 ```
 
-When you implement an ad-hoc multi-tool recon (no platform), use a `tmpdir + JSON sidecars + a one-line manifest` pattern. Composable, debuggable, replay-able.
+When you implement an ad-hoc multi-tool recon (no platform), use a
+`tmpdir + JSON sidecars + a one-line manifest` pattern. Composable, debuggable, replay-able.
 
 ---
 
-
 ## 48. Runnable Helper — `secret_scan.py`
 
-Drop-in Python helper that mirrors the 29-pattern catalog from §17. Pure stdlib, no dependencies. For operator use against captured text.
+Drop-in Python helper that mirrors the 29-pattern catalog from §17. Pure stdlib, no dependencies.
+For operator use against captured text.
 
 ```python
 #!/usr/bin/env python3
@@ -179,13 +194,14 @@ if __name__ == "__main__":
 ```
 
 Save as `secret_scan.py`, then:
+
 ```bash
 python3 secret_scan.py path/to/repo/        # scan a directory tree
 python3 secret_scan.py file1 file2 file3    # scan specific files
 cat my.log | python3 secret_scan.py         # pipe stdin
 ```
 
-Output is JSONL — one finding per line — drops cleanly into `jq` for filtering or directly into a finding store.
+Output is JSONL — one finding per line — drops cleanly into `jq` for filtering or directly into a
+finding store.
 
 ---
-

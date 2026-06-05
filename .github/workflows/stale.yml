@@ -19,10 +19,16 @@ jobs:
       - uses: actions/stale@5bef64f19d7facfb25b37b414482c7164dbbb639
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          stale-issue-message: 'This issue has been inactive for 30 days. Marked as stale. Remove stale label or comment to keep it open.'
-          stale-pr-message: 'This PR has been inactive for 14 days. Marked as stale. Remove stale label or comment to keep it open.'
-          close-issue-message: 'Closed due to 7 more days of inactivity. Feel free to reopen if needed.'
-          close-pr-message: 'Closed due to 7 more days of inactivity. Feel free to reopen if needed.'
+          stale-issue-message:
+            'This issue has been inactive for 30 days. Marked as stale. Remove stale label or
+            comment to keep it open.'
+          stale-pr-message:
+            'This PR has been inactive for 14 days. Marked as stale. Remove stale label or comment
+            to keep it open.'
+          close-issue-message:
+            'Closed due to 7 more days of inactivity. Feel free to reopen if needed.'
+          close-pr-message:
+            'Closed due to 7 more days of inactivity. Feel free to reopen if needed.'
           days-before-issue-stale: 30
           days-before-pr-stale: 14
           days-before-issue-close: 7

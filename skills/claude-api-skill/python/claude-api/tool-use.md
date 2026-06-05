@@ -1,12 +1,14 @@
 # Tool Use — Python
 
-For conceptual overview (tool definitions, tool choice, tips), see [shared/tool-use-concepts.md](../../shared/tool-use-concepts.md).
+For conceptual overview (tool definitions, tool choice, tips), see
+[shared/tool-use-concepts.md](../../shared/tool-use-concepts.md).
 
 ## Tool Runner (Recommended)
 
 **Beta:** The tool runner is in beta in the Python SDK.
 
-Use the `@beta_tool` decorator to define tools as typed functions, then pass them to `client.beta.messages.tool_runner()`:
+Use the `@beta_tool` decorator to define tools as typed functions, then pass them to
+`client.beta.messages.tool_runner()`:
 
 ```python
 import anthropic
@@ -51,9 +53,13 @@ For async usage, use `@beta_async_tool` with `async def` functions.
 
 ## MCP Tool Conversion Helpers
 
-**Beta.** Convert [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) tools, prompts, and resources to Anthropic API types for use with the tool runner. Requires `pip install anthropic[mcp]` (Python 3.10+).
+**Beta.** Convert [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) tools, prompts,
+and resources to Anthropic API types for use with the tool runner. Requires
+`pip install anthropic[mcp]` (Python 3.10+).
 
-> **Note:** The Claude API also supports an `mcp_servers` parameter that lets Claude connect directly to remote MCP servers. Use these helpers instead when you need local MCP servers, prompts, resources, or more control over the MCP connection.
+> **Note:** The Claude API also supports an `mcp_servers` parameter that lets Claude connect
+> directly to remote MCP servers. Use these helpers instead when you need local MCP servers,
+> prompts, resources, or more control over the MCP connection.
 
 ### MCP Tools with Tool Runner
 
@@ -124,13 +130,15 @@ resource = await mcp_client.read_resource(uri="file:///path/to/data.json")
 uploaded = await client.beta.files.upload(file=mcp_resource_to_file(resource))
 ```
 
-Conversion functions raise `UnsupportedMCPValueError` if an MCP value cannot be converted (e.g., unsupported content types like audio, unsupported MIME types).
+Conversion functions raise `UnsupportedMCPValueError` if an MCP value cannot be converted (e.g.,
+unsupported content types like audio, unsupported MIME types).
 
 ---
 
 ## Manual Agentic Loop
 
-Use this when you need fine-grained control over the loop (e.g., custom logging, conditional tool execution, human-in-the-loop approval):
+Use this when you need fine-grained control over the loop (e.g., custom logging, conditional tool
+execution, human-in-the-loop approval):
 
 ```python
 import anthropic

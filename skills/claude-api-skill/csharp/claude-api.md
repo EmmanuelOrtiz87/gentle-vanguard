@@ -1,6 +1,9 @@
 # Claude API — C#
 
-> **Note:** The C# SDK is the official Anthropic SDK for C#. Tool use is supported via the Messages API. A class-annotation-based tool runner is not available; use raw tool definitions with JSON schema. The SDK also supports Microsoft.Extensions.AI IChatClient integration with function invocation.
+> **Note:** The C# SDK is the official Anthropic SDK for C#. Tool use is supported via the Messages
+> API. A class-annotation-based tool runner is not available; use raw tool definitions with JSON
+> schema. The SDK also supports Microsoft.Extensions.AI IChatClient integration with function
+> invocation.
 
 ## Installation
 
@@ -70,13 +73,17 @@ await foreach (RawMessageStreamEvent streamEvent in client.Messages.CreateStream
 }
 ```
 
-**`RawMessageStreamEvent` TryPick methods** (naming drops the `Message`/`Raw` prefix): `TryPickStart`, `TryPickDelta`, `TryPickStop`, `TryPickContentBlockStart`, `TryPickContentBlockDelta`, `TryPickContentBlockStop`. There is no `TryPickMessageStop` — use `TryPickStop`.
+**`RawMessageStreamEvent` TryPick methods** (naming drops the `Message`/`Raw` prefix):
+`TryPickStart`, `TryPickDelta`, `TryPickStop`, `TryPickContentBlockStart`,
+`TryPickContentBlockDelta`, `TryPickContentBlockStop`. There is no `TryPickMessageStop` — use
+`TryPickStop`.
 
 ---
 
 ## Thinking
 
-**Adaptive thinking is the recommended mode for Claude 4.6+ models.** Claude decides dynamically when and how much to think.
+**Adaptive thinking is the recommended mode for Claude 4.6+ models.** Claude decides dynamically
+when and how much to think.
 
 ```csharp
 using Anthropic.Models.Messages;
@@ -108,9 +115,11 @@ foreach (var block in response.Content)
 }
 ```
 
-> **Deprecated:** `new ThinkingConfigEnabled { BudgetTokens = N }` (fixed-budget extended thinking) still works on Claude 4.6 but is deprecated. Use adaptive thinking above.
+> **Deprecated:** `new ThinkingConfigEnabled { BudgetTokens = N }` (fixed-budget extended thinking)
+> still works on Claude 4.6 but is deprecated. Use adaptive thinking above.
 
-Alternative to `TryPick*`: `.Select(b => b.Value).OfType<ThinkingBlock>()` (same LINQ pattern as the Basic Message example).
+Alternative to `TryPick*`: `.Select(b => b.Value).OfType<ThinkingBlock>()` (same LINQ pattern as the
+Basic Message example).
 
 ---
 
@@ -118,7 +127,9 @@ Alternative to `TryPick*`: `.Select(b => b.Value).OfType<ThinkingBlock>()` (same
 
 ### Defining a tool
 
-`Tool` (NOT `ToolParam`) with an `InputSchema` record. `InputSchema.Type` is auto-set to `"object"` by the constructor — don't set it. `ToolUnion` has an implicit conversion from `Tool`, triggered by the collection expression `[...]`.
+`Tool` (NOT `ToolParam`) with an `InputSchema` record. `InputSchema.Type` is auto-set to `"object"`
+by the constructor — don't set it. `ToolUnion` has an implicit conversion from `Tool`, triggered by
+the collection expression `[...]`.
 
 ```csharp
 using System.Text.Json;
@@ -145,12 +156,17 @@ var parameters = new MessageCreateParams
 };
 ```
 
-Derived from `anthropic-sdk-csharp/src/Anthropic/Models/Messages/Tool.cs` and `ToolUnion.cs:799` (implicit conversion).
+Derived from `anthropic-sdk-csharp/src/Anthropic/Models/Messages/Tool.cs` and `ToolUnion.cs:799`
+(implicit conversion).
 
 See [shared tool use concepts](../shared/tool-use-concepts.md) for the loop pattern.
+
 ### Converting response content to the follow-up assistant message
 
-When echoing Claude's response back in the assistant turn, **there is no `.ToParam()` helper** — manually reconstruct each `ContentBlock` variant as its `*Param` counterpart. Do NOT use `new ContentBlockParam(block.Json)`: it compiles and serializes, but `.Value` stays `null` so `TryPick*`/`Validate()` fail (degraded JSON pass-through, not the typed path).
+When echoing Claude's response back in the assistant turn, **there is no `.ToParam()` helper** —
+manually reconstruct each `ContentBlock` variant as its `*Param` counterpart. Do NOT use
+`new ContentBlockParam(block.Json)`: it compiles and serializes, but `.Value` stays `null` so
+`TryPick*`/`Validate()` fail (degraded JSON pass-through, not the typed path).
 
 ```csharp
 using Anthropic.Models.Messages;
@@ -209,13 +225,19 @@ List<MessageParam> followUpMessages =
 ];
 ```
 
-`ToolResultBlockParam` has no tuple constructor — use the object initializer. `Content` is a string-or-list union; a plain `string` implicitly converts.
+`ToolResultBlockParam` has no tuple constructor — use the object initializer. `Content` is a
+string-or-list union; a plain `string` implicitly converts.
 
 ---
 
 ## Context Editing / Compaction (Beta)
 
-**Beta-namespace prefix is inconsistent** (source-verified against `src/Anthropic/Models/Beta/Messages/*.cs` @ 12.9.0). No prefix: `MessageCreateParams`, `MessageCountTokensParams`, `Role`. **Everything else has the `Beta` prefix**: `BetaMessageParam`, `BetaMessage`, `BetaContentBlock`, `BetaToolUseBlock`, all block param types. The unprefixed `Role` WILL collide with `Anthropic.Models.Messages.Role` if you import both namespaces (CS0104). Safest: import only Beta; if mixing, alias the beta `Role`:
+**Beta-namespace prefix is inconsistent** (source-verified against
+`src/Anthropic/Models/Beta/Messages/*.cs` @ 12.9.0). No prefix: `MessageCreateParams`,
+`MessageCountTokensParams`, `Role`. **Everything else has the `Beta` prefix**: `BetaMessageParam`,
+`BetaMessage`, `BetaContentBlock`, `BetaToolUseBlock`, all block param types. The unprefixed `Role`
+WILL collide with `Anthropic.Models.Messages.Role` if you import both namespaces (CS0104). Safest:
+import only Beta; if mixing, alias the beta `Role`:
 
 ```csharp
 using Anthropic.Models.Beta.Messages;
@@ -223,8 +245,9 @@ using NonBeta = Anthropic.Models.Messages;  // only if you also need non-beta ty
 // Now: MessageCreateParams, BetaMessageParam, Role (beta's), NonBeta.Role (if needed)
 ```
 
-
-`BetaMessage.Content` is `IReadOnlyList<BetaContentBlock>` — a 15-variant discriminated union. Narrow with `TryPick*`. **Response `BetaContentBlock` is NOT assignable to param `BetaContentBlockParam`** — there's no `.ToParam()` in C#. Round-trip by converting each block:
+`BetaMessage.Content` is `IReadOnlyList<BetaContentBlock>` — a 15-variant discriminated union.
+Narrow with `TryPick*`. **Response `BetaContentBlock` is NOT assignable to param
+`BetaContentBlockParam`** — there's no `.ToParam()` in C#. Round-trip by converting each block:
 
 ```csharp
 using Anthropic.Models.Beta.Messages;
@@ -271,9 +294,13 @@ foreach (var b in resp.Content)
 messages.Add(new BetaMessageParam { Role = Role.Assistant, Content = paramBlocks });
 ```
 
-All 15 `BetaContentBlock.TryPick*` variants: `Text`, `Thinking`, `RedactedThinking`, `ToolUse`, `ServerToolUse`, `WebSearchToolResult`, `WebFetchToolResult`, `CodeExecutionToolResult`, `BashCodeExecutionToolResult`, `TextEditorCodeExecutionToolResult`, `ToolSearchToolResult`, `McpToolUse`, `McpToolResult`, `ContainerUpload`, `Compaction`.
+All 15 `BetaContentBlock.TryPick*` variants: `Text`, `Thinking`, `RedactedThinking`, `ToolUse`,
+`ServerToolUse`, `WebSearchToolResult`, `WebFetchToolResult`, `CodeExecutionToolResult`,
+`BashCodeExecutionToolResult`, `TextEditorCodeExecutionToolResult`, `ToolSearchToolResult`,
+`McpToolUse`, `McpToolResult`, `ContainerUpload`, `Compaction`.
 
-**`BetaToolUseBlock.Input` is `IReadOnlyDictionary<string, JsonElement>`** — index by key then call the `JsonElement` extractor:
+**`BetaToolUseBlock.Input` is `IReadOnlyDictionary<string, JsonElement>`** — index by key then call
+the `JsonElement` extractor:
 
 ```csharp
 if (block.TryPickToolUse(out BetaToolUseBlock? tu))
@@ -287,19 +314,24 @@ if (block.TryPickToolUse(out BetaToolUseBlock? tu))
 
 ## Effort Parameter
 
-Effort is nested under `OutputConfig`, NOT a top-level property. `ApiEnum<string, Effort>` has an implicit conversion from the enum, so assign `Effort.High` directly.
+Effort is nested under `OutputConfig`, NOT a top-level property. `ApiEnum<string, Effort>` has an
+implicit conversion from the enum, so assign `Effort.High` directly.
 
 ```csharp
 OutputConfig = new OutputConfig { Effort = Effort.High },
 ```
 
-Values: `Effort.Low`, `Effort.Medium`, `Effort.High`, `Effort.Max`. Combine with `Thinking = new ThinkingConfigAdaptive()` for cost-quality control.
+Values: `Effort.Low`, `Effort.Medium`, `Effort.High`, `Effort.Max`. Combine with
+`Thinking = new ThinkingConfigAdaptive()` for cost-quality control.
 
 ---
 
 ## Prompt Caching
 
-`System` takes `MessageCreateParamsSystem?` — a union of `string` or `List<TextBlockParam>`. There is no `SystemTextBlockParam`; use plain `TextBlockParam`. The implicit conversion needs the concrete `List<TextBlockParam>` type (array literals won't convert). For placement patterns and the silent-invalidator audit checklist, see `shared/prompt-caching.md`.
+`System` takes `MessageCreateParamsSystem?` — a union of `string` or `List<TextBlockParam>`. There
+is no `SystemTextBlockParam`; use plain `TextBlockParam`. The implicit conversion needs the concrete
+`List<TextBlockParam>` type (array literals won't convert). For placement patterns and the
+silent-invalidator audit checklist, see `shared/prompt-caching.md`.
 
 ```csharp
 System = new List<TextBlockParam> {
@@ -310,7 +342,8 @@ System = new List<TextBlockParam> {
 },
 ```
 
-Optional `Ttl` on `CacheControlEphemeral`: `new() { Ttl = Ttl.Ttl1h }` or `Ttl.Ttl5m`. `CacheControl` also exists on `Tool.CacheControl` and top-level `MessageCreateParams.CacheControl`.
+Optional `Ttl` on `CacheControlEphemeral`: `new() { Ttl = Ttl.Ttl1h }` or `Ttl.Ttl5m`.
+`CacheControl` also exists on `Tool.CacheControl` and top-level `MessageCreateParams.CacheControl`.
 
 Verify hits via `response.Usage.CacheCreationInputTokens` / `response.Usage.CacheReadInputTokens`.
 
@@ -326,7 +359,9 @@ MessageTokensCount result = await client.Messages.CountTokens(new MessageCountTo
 long tokens = result.InputTokens;
 ```
 
-`MessageCountTokensParams.Tools` uses a different union type (`MessageCountTokensTool`) than `MessageCreateParams.Tools` (`ToolUnion`) — if you're passing tools, the compiler will tell you when it matters.
+`MessageCountTokensParams.Tools` uses a different union type (`MessageCountTokensTool`) than
+`MessageCreateParams.Tools` (`ToolUnion`) — if you're passing tools, the compiler will tell you when
+it matters.
 
 ---
 
@@ -351,7 +386,9 @@ OutputConfig = new OutputConfig {
 
 ## PDF / Document Input
 
-`DocumentBlockParam` takes a `DocumentBlockParamSource` union: `Base64PdfSource` / `UrlPdfSource` / `PlainTextSource` / `ContentBlockSource`. `Base64PdfSource` auto-sets `MediaType = "application/pdf"` and `Type = "base64"`.
+`DocumentBlockParam` takes a `DocumentBlockParamSource` union: `Base64PdfSource` / `UrlPdfSource` /
+`PlainTextSource` / `ContentBlockSource`. `Base64PdfSource` auto-sets
+`MediaType = "application/pdf"` and `Type = "base64"`.
 
 ```csharp
 new MessageParam {
@@ -367,7 +404,8 @@ new MessageParam {
 
 ## Server-Side Tools
 
-Web search, bash, text editor, and code execution are built-in server tools. Type names are version-suffixed; constructors auto-set `name`/`type`. All implicit-convert to `ToolUnion`.
+Web search, bash, text editor, and code execution are built-in server tools. Type names are
+version-suffixed; constructors auto-set `name`/`type`. All implicit-convert to `ToolUnion`.
 
 ```csharp
 Tools = [
@@ -378,13 +416,15 @@ Tools = [
 ],
 ```
 
-Also available: `WebFetchTool20260209`, `MemoryTool20250818`. `WebSearchTool20260209` optionals: `AllowedDomains`, `BlockedDomains`, `MaxUses`, `UserLocation`.
+Also available: `WebFetchTool20260209`, `MemoryTool20250818`. `WebSearchTool20260209` optionals:
+`AllowedDomains`, `BlockedDomains`, `MaxUses`, `UserLocation`.
 
 ---
 
 ## Files API (Beta)
 
-Files live under `client.Beta.Files` (namespace `Anthropic.Models.Beta.Files`). `BinaryContent` implicit-converts from `Stream` and `byte[]`.
+Files live under `client.Beta.Files` (namespace `Anthropic.Models.Beta.Files`). `BinaryContent`
+implicit-converts from `Stream` and `byte[]`.
 
 ```csharp
 using Anthropic.Models.Beta.Files;
@@ -399,4 +439,5 @@ new BetaRequestDocumentBlock {
 }
 ```
 
-The non-beta `DocumentBlockParamSource` union has no file-ID variant — file references need `client.Beta.Messages.Create()`.
+The non-beta `DocumentBlockParamSource` union has no file-ID variant — file references need
+`client.Beta.Messages.Create()`.

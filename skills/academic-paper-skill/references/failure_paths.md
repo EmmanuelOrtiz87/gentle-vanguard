@@ -1,25 +1,27 @@
 # Failure Paths — Academic Paper Writing Failure Path Map
 
-This document records the failure scenarios that the academic-paper skill may encounter at each stage, their trigger conditions, and handling strategies. All agents should refer to this guide when they detect a failure scenario.
+This document records the failure scenarios that the academic-paper skill may encounter at each
+stage, their trigger conditions, and handling strategies. All agents should refer to this guide when
+they detect a failure scenario.
 
 ---
 
 ## Failure Path Overview
 
-| # | Failure Scenario | Trigger Condition | Severity | Handling Strategy |
-|---|---------|---------|--------|---------|
-| F1 | Insufficient research foundation | Plan mode Step 0 finds no RQ / no data | High | Recommend running `deep-research` first |
-| F2 | Wrong paper structure selected | structure_architect finds RQ-structure mismatch | Medium | Return to Phase 2, suggest alternative structures |
-| F3 | Severely over word count | Draft exceeds target word count by 30% or more | Medium | Identify sections to cut, suggest condensing |
-| F4 | Severely under word count | Draft is 30% or more below target word count | Medium | Identify sections to expand, suggest additions |
-| F5 | Citation format entirely wrong | citation_compliance finds > 50% format errors | High | Completely re-run citation phase |
-| F6 | Poor bilingual abstract quality | Chinese and English abstracts have inconsistent logic | Medium | Re-run abstract_bilingual |
-| F7 | Peer review rejection | peer_reviewer issues a Reject verdict | High | Analyze rejection reasons, recommend major revision or restructuring |
-| F8 | Plan mode does not converge | > 15 rounds of dialogue without completing all chapters | Medium | Suggest switching to outline-only mode |
-| F9 | Incomplete handoff materials | From deep-research but missing key materials | Low | List missing items, suggest supplementing or re-running |
-| F10 | User abandons midway | Explicitly states unwillingness to continue | Low | Save completed Chapter Plan |
-| F11 | Desk-reject | Journal editor rejects without sending to reviewers | High | Classify rejection cause, select recovery strategy |
-| F12 | Conference-to-journal conversion failure | Conference paper expansion to journal article rejected | Medium | Ensure 30-50% new content + proper citation |
+| #   | Failure Scenario                         | Trigger Condition                                       | Severity | Handling Strategy                                                    |
+| --- | ---------------------------------------- | ------------------------------------------------------- | -------- | -------------------------------------------------------------------- |
+| F1  | Insufficient research foundation         | Plan mode Step 0 finds no RQ / no data                  | High     | Recommend running `deep-research` first                              |
+| F2  | Wrong paper structure selected           | structure_architect finds RQ-structure mismatch         | Medium   | Return to Phase 2, suggest alternative structures                    |
+| F3  | Severely over word count                 | Draft exceeds target word count by 30% or more          | Medium   | Identify sections to cut, suggest condensing                         |
+| F4  | Severely under word count                | Draft is 30% or more below target word count            | Medium   | Identify sections to expand, suggest additions                       |
+| F5  | Citation format entirely wrong           | citation_compliance finds > 50% format errors           | High     | Completely re-run citation phase                                     |
+| F6  | Poor bilingual abstract quality          | Chinese and English abstracts have inconsistent logic   | Medium   | Re-run abstract_bilingual                                            |
+| F7  | Peer review rejection                    | peer_reviewer issues a Reject verdict                   | High     | Analyze rejection reasons, recommend major revision or restructuring |
+| F8  | Plan mode does not converge              | > 15 rounds of dialogue without completing all chapters | Medium   | Suggest switching to outline-only mode                               |
+| F9  | Incomplete handoff materials             | From deep-research but missing key materials            | Low      | List missing items, suggest supplementing or re-running              |
+| F10 | User abandons midway                     | Explicitly states unwillingness to continue             | Low      | Save completed Chapter Plan                                          |
+| F11 | Desk-reject                              | Journal editor rejects without sending to reviewers     | High     | Classify rejection cause, select recovery strategy                   |
+| F12 | Conference-to-journal conversion failure | Conference paper expansion to journal article rejected  | Medium   | Ensure 30-50% new content + proper citation                          |
 
 ---
 
@@ -30,12 +32,14 @@ This document records the failure scenarios that the academic-paper skill may en
 **Trigger Timing**: Plan mode Step 0 (Research Readiness Check) or Full mode Phase 0
 
 **Detection Indicators**:
+
 - User cannot describe their research question in one sentence
 - No literature foundation
 - No concept of research methods
 - Topic is too broad and cannot be focused
 
 **Handling Process**:
+
 ```
 1. Affirm the user's research interest
 2. Specifically explain what is currently missing
@@ -45,6 +49,7 @@ This document records the failure scenarios that the academic-paper skill may en
 ```
 
 **Response Template**:
+
 ```
 Your research topic is very interesting, but I notice that a clear research question
 and literature foundation are still missing.
@@ -65,12 +70,14 @@ more efficiently.
 **Trigger Timing**: Phase 2 (structure_architect_agent)
 
 **Detection Indicators**:
+
 - RQ is a causal question but a Literature Review structure was selected
 - No data but IMRaD was selected
 - Topic suits a Case Study but Policy Brief was selected
 - Word count target and structure are mismatched (e.g., 3000-word IMRaD)
 
 **Handling Process**:
+
 ```
 1. Point out the mismatch between RQ and structure
 2. Explain why they are mismatched
@@ -86,9 +93,11 @@ more efficiently.
 **Trigger Timing**: Phase 4 (after draft_writer_agent completes)
 
 **Detection Indicators**:
+
 - Actual word count > target word count x 1.3
 
 **Handling Process**:
+
 ```
 1. List actual word count vs. target word count for each chapter
 2. Identify the most over-count chapters
@@ -107,9 +116,11 @@ more efficiently.
 **Trigger Timing**: Phase 4 (after draft_writer_agent completes)
 
 **Detection Indicators**:
+
 - Actual word count < target word count x 0.7
 
 **Handling Process**:
+
 ```
 1. List actual word count vs. target word count for each chapter
 2. Identify the most deficient chapters
@@ -128,10 +139,12 @@ more efficiently.
 **Trigger Timing**: Phase 5a (citation_compliance_agent)
 
 **Detection Indicators**:
+
 - Citation format error rate > 50%
 - Systematic errors (e.g., all missing DOIs, all using wrong format)
 
 **Handling Process**:
+
 ```
 1. Analyze error patterns (systematic vs. scattered)
 2. If systematic errors:
@@ -150,12 +163,14 @@ more efficiently.
 **Trigger Timing**: Phase 5b (abstract_bilingual_agent)
 
 **Detection Indicators**:
+
 - Chinese and English abstracts cover different key points
 - One language version omits important findings
 - Keywords do not correspond between Chinese and English
 - Word count seriously deviates from standards
 
 **Handling Process**:
+
 ```
 1. Compare the structure and coverage of Chinese and English abstracts
 2. List inconsistencies
@@ -170,10 +185,12 @@ more efficiently.
 **Trigger Timing**: Phase 6 (peer_reviewer_agent issues Reject)
 
 **Detection Indicators**:
+
 - Two or more of the five dimensions scored below 60
 - Fatal flaws exist (logical breakdowns, missing core evidence, serious methodology flaws)
 
 **Handling Process**:
+
 ```
 1. List all issues flagged as Critical
 2. Classify the nature of the problems:
@@ -185,6 +202,7 @@ more efficiently.
 ```
 
 **Note**: If still Reject after 2 rounds of revision, recommend the user to:
+
 - Consult domain experts
 - Rethink the research design
 - Consider switching target journals (lower the bar)
@@ -196,11 +214,13 @@ more efficiently.
 **Trigger Timing**: Plan mode dialogue exceeds 15 rounds
 
 **Detection Indicators**:
+
 - User repeatedly modifies the direction of the same chapter
 - Unable to make definitive decisions
 - Discussion drifts off the paper topic
 
 **Handling Process**:
+
 ```
 1. Pause and summarize what has been determined so far
 2. List completed and uncompleted chapters
@@ -217,11 +237,13 @@ more efficiently.
 **Trigger Timing**: intake_agent detects deep-research materials but they are incomplete
 
 **Detection Indicators**:
+
 - Has RQ but missing Annotated Bibliography
 - Has Bibliography but missing Synthesis Report
 - Has INSIGHT Collection but some INSIGHTs are incomplete
 
 **Handling Process**:
+
 ```
 1. List received and missing materials
 2. Assess the impact of missing materials:
@@ -240,10 +262,12 @@ more efficiently.
 **Trigger Timing**: User explicitly states unwillingness to continue
 
 **Detection Indicators**:
+
 - "Forget it" / "Not writing anymore" / "Too complicated" / "Let me think about it"
 - Abandons after prolonged unresponsiveness
 
 **Handling Process**:
+
 ```
 1. Respect the user's decision
 2. Save all completed outputs:
@@ -256,12 +280,12 @@ more efficiently.
 ```
 
 **Save Format**:
+
 ```markdown
 ## Academic Paper — Saved Record
 
-**Topic**: {topic}
-**Progress**: Phase {N} / Step {M}
-**Completed**:
+**Topic**: {topic} **Progress**: Phase {N} / Step {M} **Completed**:
+
 - [x] Paper Configuration Record
 - [x/partial] Chapter Plan (completed {N}/{total} chapters)
 - [ ] Draft
@@ -289,14 +313,15 @@ F8 (Non-convergence) → May evolve into F10 (abandonment)
 
 **Cause Classification & Recovery**:
 
-| Cause | Diagnostic Signs | Recovery Strategy |
-|-------|-----------------|-------------------|
-| **Scope Mismatch** | Editor states "outside journal scope" or "not aligned with journal aims" | Re-analyze journal scope using `top_journals_by_field.md`; identify 3 alternative journals; may need to reframe the paper's contribution |
-| **Insufficient Novelty** | "Incremental contribution" or "well-established findings" | Strengthen the novelty claim in introduction; consider additional analysis or a new dataset; reposition the paper's unique contribution |
-| **Formatting Non-Compliance** | Immediate rejection for template/length/style violations | Review target journal's author guidelines; use `formatter_agent` to reformat; resubmit (often same journal accepts after formatting fix) |
-| **Poor Opening** | No specific reason given; likely the abstract/introduction failed to hook | Rewrite abstract with the CARS model (Create A Research Space); lead with the gap, not the background; have `peer_reviewer_agent` evaluate the new opening |
+| Cause                         | Diagnostic Signs                                                          | Recovery Strategy                                                                                                                                          |
+| ----------------------------- | ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Scope Mismatch**            | Editor states "outside journal scope" or "not aligned with journal aims"  | Re-analyze journal scope using `top_journals_by_field.md`; identify 3 alternative journals; may need to reframe the paper's contribution                   |
+| **Insufficient Novelty**      | "Incremental contribution" or "well-established findings"                 | Strengthen the novelty claim in introduction; consider additional analysis or a new dataset; reposition the paper's unique contribution                    |
+| **Formatting Non-Compliance** | Immediate rejection for template/length/style violations                  | Review target journal's author guidelines; use `formatter_agent` to reformat; resubmit (often same journal accepts after formatting fix)                   |
+| **Poor Opening**              | No specific reason given; likely the abstract/introduction failed to hook | Rewrite abstract with the CARS model (Create A Research Space); lead with the gap, not the background; have `peer_reviewer_agent` evaluate the new opening |
 
 **General Protocol**:
+
 1. Do NOT take desk-reject personally — 30-50% of submissions to top journals are desk-rejected
 2. Read the editor's email carefully for any specific feedback
 3. Determine the cause category above
@@ -312,14 +337,15 @@ F8 (Non-convergence) → May evolve into F10 (abandonment)
 
 **Common Rejection Reasons & Solutions**:
 
-| Reason | Solution |
-|--------|----------|
-| **Insufficient Extension** (< 30% new content) | Journal expects 30-50% new material beyond the conference version. Add: extended related work, additional experiments/data, deeper analysis, new discussion sections |
-| **Self-Plagiarism Flag** | Explicitly cite the conference version in the introduction: "This paper extends our previous work [conf-citation] with..." Use iThenticate to verify < 30% text overlap |
-| **Stale Results** | If the conference paper is > 2 years old, results may be outdated. Update experiments with current data/baselines; acknowledge temporal limitations |
-| **Missing Journal Standards** | Conference papers often lack: detailed methodology, reproducibility information, limitations section, broader impact discussion. Add all of these |
+| Reason                                         | Solution                                                                                                                                                                |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Insufficient Extension** (< 30% new content) | Journal expects 30-50% new material beyond the conference version. Add: extended related work, additional experiments/data, deeper analysis, new discussion sections    |
+| **Self-Plagiarism Flag**                       | Explicitly cite the conference version in the introduction: "This paper extends our previous work [conf-citation] with..." Use iThenticate to verify < 30% text overlap |
+| **Stale Results**                              | If the conference paper is > 2 years old, results may be outdated. Update experiments with current data/baselines; acknowledge temporal limitations                     |
+| **Missing Journal Standards**                  | Conference papers often lack: detailed methodology, reproducibility information, limitations section, broader impact discussion. Add all of these                       |
 
 **Conversion Checklist**:
+
 - [ ] Conference version explicitly cited in introduction
 - [ ] 30-50% genuinely new content added (not just padding)
 - [ ] Text overlap with conference version < 30% (verified by similarity tool)
@@ -331,16 +357,16 @@ F8 (Non-convergence) → May evolve into F10 (abandonment)
 
 ## Preventive Measures
 
-| Failure Path | Preventive Measure |
-|---------|---------|
-| F1 | Phase 0 / Step 0 strictly checks research readiness |
-| F2 | structure_architect cross-validates the match between RQ and structure |
-| F3/F4 | draft_writer checks word count progress after completing each section |
-| F5 | draft_writer uses the correct format during writing |
-| F6 | abstract_bilingual writes independently based on the paper content as the standard |
-| F7 | argument_builder stress-tests arguments in Phase 3 |
-| F8 | socratic_mentor sets a dialogue cap per chapter |
-| F9 | intake_agent performs a complete materials check when detecting a handoff |
-| F10 | Maintain dialogue rhythm to avoid user fatigue |
-| F11 | Phase 7 researches target journal scope when producing the cover letter; format_agent strictly follows formatting rules |
-| F12 | intake_agent detects whether this is a conference paper expansion; calculate new content ratio early |
+| Failure Path | Preventive Measure                                                                                                      |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| F1           | Phase 0 / Step 0 strictly checks research readiness                                                                     |
+| F2           | structure_architect cross-validates the match between RQ and structure                                                  |
+| F3/F4        | draft_writer checks word count progress after completing each section                                                   |
+| F5           | draft_writer uses the correct format during writing                                                                     |
+| F6           | abstract_bilingual writes independently based on the paper content as the standard                                      |
+| F7           | argument_builder stress-tests arguments in Phase 3                                                                      |
+| F8           | socratic_mentor sets a dialogue cap per chapter                                                                         |
+| F9           | intake_agent performs a complete materials check when detecting a handoff                                               |
+| F10          | Maintain dialogue rhythm to avoid user fatigue                                                                          |
+| F11          | Phase 7 researches target journal scope when producing the cover letter; format_agent strictly follows formatting rules |
+| F12          | intake_agent detects whether this is a conference paper expansion; calculate new content ratio early                    |

@@ -18,19 +18,10 @@
       "description": "Loaded on demand by task type",
       "maxTokens": 1500,
       "triggeredBy": {
-        "code-modification": [
-          "rules/NORMATIVAS-CODIGO.md",
-          "rules/DEVELOPMENT-STANDARDS.md"
-        ],
-        "git-operations": [
-          "rules/NORMATIVAS-GIT.md"
-        ],
-        "security-privacy": [
-          "rules/NORMATIVAS-GDPR.md"
-        ],
-        "performance": [
-          "rules/NORMATIVAS-PERFORMANCE.md"
-        ]
+        "code-modification": ["rules/NORMATIVAS-CODIGO.md", "rules/DEVELOPMENT-STANDARDS.md"],
+        "git-operations": ["rules/NORMATIVAS-GIT.md"],
+        "security-privacy": ["rules/NORMATIVAS-GDPR.md"],
+        "performance": ["rules/NORMATIVAS-PERFORMANCE.md"]
       },
       "cache": "session",
       "ttl": "1h"
@@ -38,10 +29,7 @@
     "cold": {
       "description": "Reference only",
       "maxTokens": 75000,
-      "files": [
-        "rules/NORMATIVAS-MULTI-REPO.md",
-        "rules/NORMATIVAS-FALLBACK-STRATEGY.md"
-      ],
+      "files": ["rules/NORMATIVAS-MULTI-REPO.md", "rules/NORMATIVAS-FALLBACK-STRATEGY.md"],
       "inlined": false,
       "referenceFormat": "[REF:file#section]",
       "cache": "disk",

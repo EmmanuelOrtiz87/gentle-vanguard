@@ -8,26 +8,26 @@ Framework completo para optimización de system prompts con reducción de 97% de
 
 ### Fase 1: Core Infrastructure
 
-| Component | File | Purpose |
-|-----------|------|---------|
+| Component            | File                                         | Purpose                         |
+| -------------------- | -------------------------------------------- | ------------------------------- |
 | Semantic Compression | `scripts/utilities/semantic-compression.ps1` | Reduce tokens via abbreviations |
-| Prompt Caching | `scripts/utilities/prompt-cache.ps1` | Cache assembled prompts |
-| Tier Config | `config/system-prompt-tiers.json` | Define hot/warm/cold tiers |
-| Normativa Resolver | `scripts/utilities/normativa-resolver.ps1` | Lazy load normativas |
+| Prompt Caching       | `scripts/utilities/prompt-cache.ps1`         | Cache assembled prompts         |
+| Tier Config          | `config/system-prompt-tiers.json`            | Define hot/warm/cold tiers      |
+| Normativa Resolver   | `scripts/utilities/normativa-resolver.ps1`   | Lazy load normativas            |
 
 ### Fase 2: Quality & Safety
 
-| Component | File | Purpose |
-|-----------|------|---------|
-| Security Scanner | `scripts/utilities/prompt-security-scanner.ps1` | Detect security issues |
-| Versioning | `scripts/utilities/prompt-versioning.ps1` | Version control for prompts |
-| Performance Metrics | `scripts/utilities/prompt-performance-metrics.ps1` | Track tokens/latency |
+| Component           | File                                               | Purpose                     |
+| ------------------- | -------------------------------------------------- | --------------------------- |
+| Security Scanner    | `scripts/utilities/prompt-security-scanner.ps1`    | Detect security issues      |
+| Versioning          | `scripts/utilities/prompt-versioning.ps1`          | Version control for prompts |
+| Performance Metrics | `scripts/utilities/prompt-performance-metrics.ps1` | Track tokens/latency        |
 
 ### Fase 3: Optimization
 
-| Component | File | Purpose |
-|-----------|------|---------|
-| A/B Testing | `scripts/utilities/prompt-ab-testing.ps1` | Test prompt variants |
+| Component     | File                                         | Purpose                   |
+| ------------- | -------------------------------------------- | ------------------------- |
+| A/B Testing   | `scripts/utilities/prompt-ab-testing.ps1`    | Test prompt variants      |
 | Model Adapter | `scripts/utilities/prompt-model-adapter.ps1` | Adapt to different models |
 
 ## Usage

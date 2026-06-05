@@ -1,40 +1,52 @@
 ---
 name: shell-scripting-skill
 description: >
-  Imported from mercury-agent-skills. Use when working with "shell script", "bash", "scripting", "automation script". Triggers: "shell script", "bash", "scripting", "automation script".
+  Imported from mercury-agent-skills. Use when working with "shell script", "bash", "scripting",
+  "automation script". Triggers: "shell script", "bash", "scripting", "automation script".
 metadata:
   source: mercury-agent-skills
   original-name: Shell Scripting
 ---
+
 # Shell Scripting
 
 ## Core Principles
 
 ### 1. Fail Explicitly
-A script that encounters an error should stop, not continue with corrupted state. Use defensive coding: validate assumptions, check exit codes, and never assume success.
+
+A script that encounters an error should stop, not continue with corrupted state. Use defensive
+coding: validate assumptions, check exit codes, and never assume success.
 
 ### 2. Clarity Over Cleverness
-Shell scripting is already cryptic enough. Write scripts that are easy to read, not impressive one-liners. Your future self will thank you.
+
+Shell scripting is already cryptic enough. Write scripts that are easy to read, not impressive
+one-liners. Your future self will thank you.
 
 ### 3. Portability By Default
-Unless you have a specific reason to require Bash 4+, write for POSIX sh. Your script may need to run in a container, an embedded system, or a legacy environment.
+
+Unless you have a specific reason to require Bash 4+, write for POSIX sh. Your script may need to
+run in a container, an embedded system, or a legacy environment.
 
 ### 4. Defensive Safety
-Every variable could be empty. Every command could fail. Every file could be missing. Write scripts that survive these realities.
+
+Every variable could be empty. Every command could fail. Every file could be missing. Write scripts
+that survive these realities.
 
 ### 5. Principle of Least Surprise
-Scripts should behave predictably. Use consistent exit codes, clear error messages, and help text. No silent failures, no hidden side effects.
+
+Scripts should behave predictably. Use consistent exit codes, clear error messages, and help text.
+No silent failures, no hidden side effects.
 
 ## Scripting Maturity Model
 
-| Level | Name | Description |
-|-------|------|-------------|
-| 0 | Ad-hoc | One-off commands saved to a file. No error handling. Only the author understands it. |
-| 1 | Functional | Has shebang and basic structure. Handles common success paths. Brittle. |
-| 2 | Defensive | Uses `set -euo pipefail`, checks exit codes, validates arguments. Has basic error messages. |
-| 3 | Robust | Uses functions, has help text, proper argument parsing with defaults. Handles cleanup with traps. Portable across environments. |
-| 4 | Production | Comprehensive error handling, logging, structured output, CI-tested with shellcheck. Configuration via environment or config files. |
-| 5 | Battle-tested | Unit-tested, documented, versioned, handles edge cases (race conditions, signals, resource limits). Used in critical production pipelines. |
+| Level | Name          | Description                                                                                                                                |
+| ----- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| 0     | Ad-hoc        | One-off commands saved to a file. No error handling. Only the author understands it.                                                       |
+| 1     | Functional    | Has shebang and basic structure. Handles common success paths. Brittle.                                                                    |
+| 2     | Defensive     | Uses `set -euo pipefail`, checks exit codes, validates arguments. Has basic error messages.                                                |
+| 3     | Robust        | Uses functions, has help text, proper argument parsing with defaults. Handles cleanup with traps. Portable across environments.            |
+| 4     | Production    | Comprehensive error handling, logging, structured output, CI-tested with shellcheck. Configuration via environment or config files.        |
+| 5     | Battle-tested | Unit-tested, documented, versioned, handles edge cases (race conditions, signals, resource limits). Used in critical production pipelines. |
 
 **Target at least Level 3** for any script that runs unattended.
 
@@ -63,7 +75,8 @@ set -euo pipefail
 # -x:  (debug) Print commands and their arguments as they execute
 ```
 
-**Note**: `set -e` has edge cases — it won't catch failures in conditionals or in the left side of `&&`/`||`. Don't rely on it exclusively; also check exit codes explicitly where it matters.
+**Note**: `set -e` has edge cases — it won't catch failures in conditionals or in the left side of
+`&&`/`||`. Don't rely on it exclusively; also check exit codes explicitly where it matters.
 
 ### Functions
 
@@ -98,9 +111,10 @@ deploy_application() {
 ```
 
 **Function Rules**:
+
 - Use `local` for all variables inside functions to avoid global scope pollution
 - Return meaningful exit codes (0 = success, 1 = general error, 2 = usage error)
-- Name functions with verbs (validate_, build_, deploy_, cleanup_)
+- Name functions with verbs (validate*, build*, deploy*, cleanup*)
 - Keep functions focused — one function, one responsibility
 
 ### main() Guard
@@ -133,27 +147,29 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 fi
 ```
 
-The `main` guard allows the script to be sourced (for testing individual functions) without executing the main flow.
+The `main` guard allows the script to be sourced (for testing individual functions) without
+executing the main flow.
 
 ### Exit Codes
 
 Standard Unix exit codes:
 
-| Code | Meaning | When to Use |
-|------|---------|-------------|
-| 0 | Success | Everything worked perfectly |
-| 1 | General error | Catch-all for failures |
-| 2 | Misuse of shell builtins | Invalid options, wrong arguments |
-| 64 | Command line usage error | Missing required argument |
-| 65 | Data format error | Input data is malformed |
-| 69 | Service unavailable | Required service/dependency missing |
-| 70 | Internal software error | Bug, unexpected state |
-| 77 | Permission denied | Insufficient permissions |
-| 126 | Command invoked cannot execute | Permission issue on called program |
-| 127 | Command not found | Missing dependency |
-| 130 | Script terminated by Ctrl+C | SIGINT received |
+| Code | Meaning                        | When to Use                         |
+| ---- | ------------------------------ | ----------------------------------- |
+| 0    | Success                        | Everything worked perfectly         |
+| 1    | General error                  | Catch-all for failures              |
+| 2    | Misuse of shell builtins       | Invalid options, wrong arguments    |
+| 64   | Command line usage error       | Missing required argument           |
+| 65   | Data format error              | Input data is malformed             |
+| 69   | Service unavailable            | Required service/dependency missing |
+| 70   | Internal software error        | Bug, unexpected state               |
+| 77   | Permission denied              | Insufficient permissions            |
+| 126  | Command invoked cannot execute | Permission issue on called program  |
+| 127  | Command not found              | Missing dependency                  |
+| 130  | Script terminated by Ctrl+C    | SIGINT received                     |
 
-**Best practice**: Use exit codes consistently. `exit 1` for generic errors, more specific codes where useful.
+**Best practice**: Use exit codes consistently. `exit 1` for generic errors, more specific codes
+where useful.
 
 ---
 
@@ -170,7 +186,8 @@ set -euo pipefail
 # -o pipefail: Prevents: "grep fails but '| wc -l' returns 0, hiding the error"
 ```
 
-**Caveat**: `set -e` is disabled inside conditionals (`if`, `while`, `until`) and on the left side of `||` or `&&`. This is intentional — it allows you to test command success. But be aware of it:
+**Caveat**: `set -e` is disabled inside conditionals (`if`, `while`, `until`) and on the left side
+of `||` or `&&`. This is intentional — it allows you to test command success. But be aware of it:
 
 ```bash
 # This does NOT exit on error (because `command` is in a conditional)
@@ -264,17 +281,18 @@ assert '[[ -n "${AWS_REGION:-}" ]]' "AWS_REGION is not set"
 
 ### Bash vs POSIX sh
 
-| Feature | Bash | POSIX sh | Portable Alternative |
-|---------|------|----------|---------------------|
-| Arrays | `arr=(a b c)` | Not supported | Use space-separated strings + `for i in $list` |
-| Associative arrays | `declare -A map` | Not supported | Avoid or use external files |
-| [[ ]] test | `[[ "$a" == "$b" ]]` | `["$a" = "$b"]` | Use `[ ]` for POSIX |
-| Here strings | `grep <<< "$var"` | Not supported | `echo "$var" | grep` |
-| ${var^} (case mod) | `echo "${var^}"` | Not supported | `tr '[:lower:]' '[:upper:]'` |
-| Process substitution | `diff <(cmd1) <(cmd2)` | Not supported | Use temp files |
-| let / (( )) | `(( x++ ))` | Not supported | `x=$(( x + 1 ))` |
+| Feature              | Bash                   | POSIX sh        | Portable Alternative                           |
+| -------------------- | ---------------------- | --------------- | ---------------------------------------------- | ----- |
+| Arrays               | `arr=(a b c)`          | Not supported   | Use space-separated strings + `for i in $list` |
+| Associative arrays   | `declare -A map`       | Not supported   | Avoid or use external files                    |
+| [[]] test            | `[[ "$a" == "$b" ]]`   | `["$a" = "$b"]` | Use `[ ]` for POSIX                            |
+| Here strings         | `grep <<< "$var"`      | Not supported   | `echo "$var"                                   | grep` |
+| ${var^} (case mod)   | `echo "${var^}"`       | Not supported   | `tr '[:lower:]' '[:upper:]'`                   |
+| Process substitution | `diff <(cmd1) <(cmd2)` | Not supported   | Use temp files                                 |
+| let / (( ))          | `(( x++ ))`            | Not supported   | `x=$(( x + 1 ))`                               |
 
-**Rule of thumb**: Start with `#!/bin/sh` unless you genuinely need Bash-specific features. If you need arrays or associative maps, use Bash but document the requirement.
+**Rule of thumb**: Start with `#!/bin/sh` unless you genuinely need Bash-specific features. If you
+need arrays or associative maps, use Bash but document the requirement.
 
 ### OS Differences
 
@@ -368,9 +386,10 @@ if [ "$status" = "ok" ]; then
 if [[ "$name" == "$pattern" ]]; then
 ```
 
-**Golden Rule**: If a variable contains user input, a filename, or any path, quote it. When in doubt, quote it. Unquoted variables are a leading cause of shell script bugs.
+**Golden Rule**: If a variable contains user input, a filename, or any path, quote it. When in
+doubt, quote it. Unquoted variables are a leading cause of shell script bugs.
 
-### Using [[ ]] Over [ ]
+### Using [[]] Over [ ]
 
 ```bash
 # ❌ BAD: [ ] — older, more error-prone
@@ -600,14 +619,14 @@ shellcheck script.sh
 
 **Common ShellCheck warnings and fixes**:
 
-| SC# | Warning | Fix |
-|-----|---------|-----|
-| SC2086 | Double quote to prevent globbing | `"$var"` instead of `$var` |
-| SC2002 | Useless cat | `< file cmd` instead of `cat file | cmd` |
+| SC#    | Warning                              | Fix                                    |
+| ------ | ------------------------------------ | -------------------------------------- | ---- | ------- | --- | ------- |
+| SC2086 | Double quote to prevent globbing     | `"$var"` instead of `$var`             |
+| SC2002 | Useless cat                          | `< file cmd` instead of `cat file      | cmd` |
 | SC2046 | Quote this to prevent word splitting | `"$(command)"` instead of `$(command)` |
-| SC2164 | Use cd ... || exit | `cd dir || exit 1` |
-| SC2068 | Double quote array expansions | `"${arr[@]}"` instead of `${arr[@]}` |
-| SC2155 | Declare and assign separately | Declare var, then assign on next line |
+| SC2164 | Use cd ...                           |                                        | exit | `cd dir |     | exit 1` |
+| SC2068 | Double quote array expansions        | `"${arr[@]}"` instead of `${arr[@]}`   |
+| SC2155 | Declare and assign separately        | Declare var, then assign on next line  |
 
 ### bash -n Syntax Checking
 
@@ -722,6 +741,7 @@ find . -name "*.txt" -exec sh -c 'mv "$1" "${1%.txt}.md"' _ {} \;
 ## Common Mistakes
 
 ### 1. Forgetting to Quote Variables
+
 ```bash
 # ❌ BAD
 if [ $status = ok ]; then   # Breaks if $status empty or has spaces
@@ -731,6 +751,7 @@ if [[ "$status" == "ok" ]]; then
 ```
 
 ### 2. Missing Error Handling on cd
+
 ```bash
 # ❌ BAD — if cd fails, script continues in wrong directory
 cd /some/directory
@@ -741,6 +762,7 @@ cd /some/directory || fatal "Failed to change to /some/directory"
 ```
 
 ### 3. Unsafe Temporary Files
+
 ```bash
 # ❌ BAD — predictable name, race condition, no cleanup
 echo "$data" > /tmp/output.txt
@@ -752,6 +774,7 @@ echo "$data" > "$tmpfile"
 ```
 
 ### 4. Parsing ls Output
+
 ```bash
 # ❌ BAD — breaks on spaces, newlines, special characters
 for file in $(ls *.txt); do
@@ -764,6 +787,7 @@ done
 ```
 
 ### 5. Not Using set -euo pipefail
+
 ```bash
 # ❌ BAD — script continues after errors
 #!/bin/bash
@@ -777,6 +801,7 @@ set -euo pipefail
 ```
 
 ### 6. Useless Use of cat
+
 ```bash
 # ❌ BAD — unnecessary fork
 cat file.txt | grep "pattern"
@@ -789,6 +814,7 @@ grep "pattern" file.txt
 ```
 
 ### 7. Forgetting to Handle Errors in Pipelines
+
 ```bash
 # ❌ BAD — only exit code of last command matters
 cmd_that_fails | cmd_that_succeeds
@@ -804,6 +830,7 @@ fi
 ```
 
 ### 8. Incorrect String Comparisons
+
 ```bash
 # ❌ BAD — uses numeric comparison instead of string
 if [ "$var" -eq 10 ]; then   # -eq is for integers only
@@ -817,6 +844,7 @@ if [ "$var" = "value" ]; then  # POSIX compatible
 ```
 
 ### 9. Zeroing In on the Wrong Problem
+
 ```bash
 # ❌ BAD — using eval unnecessarily (security risk)
 eval "echo \$$var"  # Arbitrary code execution
@@ -826,6 +854,7 @@ echo "${!var}"  # Indirect reference — safe
 ```
 
 ### 10. No Help or Usage Text
+
 ```bash
 # ❌ BAD — user has no idea how to use the script
 # No comments, no help, nothing
@@ -835,6 +864,7 @@ echo "${!var}"  # Indirect reference — safe
 ```
 
 ### 11. Modifying IFS Without Saving/Restoring
+
 ```bash
 # ❌ BAD — changes persist and break everything after
 IFS=',' read -ra fields <<< "$csv_line"
@@ -848,6 +878,7 @@ IFS="$old_ifs"
 ```
 
 ### 12. Not Using printf for Reliable Output
+
 ```bash
 # ❌ BAD — echo has inconsistent behavior across shells
 echo "Hello\nWorld"  # On some systems: prints literal \n

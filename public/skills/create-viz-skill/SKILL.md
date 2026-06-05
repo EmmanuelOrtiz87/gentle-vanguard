@@ -7,11 +7,14 @@ metadata:
   original-name: create-viz
   department: data
 ---
+
 # /create-viz - Create Visualizations
 
-> If you see unfamiliar placeholders or need to check which tools are connected, see [CONNECTORS.md](../../CONNECTORS.md).
+> If you see unfamiliar placeholders or need to check which tools are connected, see
+> [CONNECTORS.md](../../CONNECTORS.md).
 
-Create publication-quality data visualizations using Python. Generates charts from data with best practices for clarity, accuracy, and design.
+Create publication-quality data visualizations using Python. Generates charts from data with best
+practices for clarity, accuracy, and design.
 
 ## Usage
 
@@ -33,32 +36,35 @@ Determine:
 ### 2. Get the Data
 
 **If data warehouse is connected and data needs querying:**
+
 1. Write and execute the query
 2. Load results into a pandas DataFrame
 
 **If data is pasted or uploaded:**
+
 1. Parse the data into a pandas DataFrame
 2. Clean and prepare as needed (type conversions, null handling)
 
 **If data is from a previous analysis in the conversation:**
+
 1. Reference the existing data
 
 ### 3. Select Chart Type
 
 If the user didn't specify a chart type, recommend one based on the data and question:
 
-| Data Relationship | Recommended Chart |
-|---|---|
-| Trend over time | Line chart |
-| Comparison across categories | Bar chart (horizontal if many categories) |
-| Part-to-whole composition | Stacked bar or area chart (avoid pie charts unless <6 categories) |
-| Distribution of values | Histogram or box plot |
-| Correlation between two variables | Scatter plot |
-| Two-variable comparison over time | Dual-axis line or grouped bar |
-| Geographic data | Choropleth map |
-| Ranking | Horizontal bar chart |
-| Flow or process | Sankey diagram |
-| Matrix of relationships | Heatmap |
+| Data Relationship                 | Recommended Chart                                                 |
+| --------------------------------- | ----------------------------------------------------------------- |
+| Trend over time                   | Line chart                                                        |
+| Comparison across categories      | Bar chart (horizontal if many categories)                         |
+| Part-to-whole composition         | Stacked bar or area chart (avoid pie charts unless <6 categories) |
+| Distribution of values            | Histogram or box plot                                             |
+| Correlation between two variables | Scatter plot                                                      |
+| Two-variable comparison over time | Dual-axis line or grouped bar                                     |
+| Geographic data                   | Choropleth map                                                    |
+| Ranking                           | Horizontal bar chart                                              |
+| Flow or process                   | Sankey diagram                                                    |
+| Matrix of relationships           | Heatmap                                                           |
 
 Explain the recommendation briefly if the user didn't specify.
 
@@ -107,22 +113,27 @@ plt.show()
 ### 5. Apply Design Best Practices
 
 **Color:**
+
 - Use a consistent, colorblind-friendly palette
 - Use color meaningfully (not decoratively)
 - Highlight the key data point or trend with a contrasting color
 - Grey out less important reference data
 
 **Typography:**
-- Descriptive title that states the insight, not just the metric (e.g., "Revenue grew 23% YoY" not "Revenue by Month")
+
+- Descriptive title that states the insight, not just the metric (e.g., "Revenue grew 23% YoY" not
+  "Revenue by Month")
 - Readable axis labels (not rotated 90 degrees if avoidable)
 - Data labels on key points when they add clarity
 
 **Layout:**
+
 - Appropriate whitespace and margins
 - Legend placement that doesn't obscure data
 - Sorted categories by value (not alphabetically) unless there's a natural order
 
 **Accuracy:**
+
 - Y-axis starts at zero for bar charts
 - No misleading axis breaks without clear notation
 - Consistent scales when comparing panels
@@ -151,7 +162,8 @@ plt.show()
 
 ## Tips
 
-- If you want interactive charts (hover, zoom, filter), mention "interactive" and Claude will use plotly
+- If you want interactive charts (hover, zoom, filter), mention "interactive" and Claude will use
+  plotly
 - Specify "presentation" if you need larger fonts and higher contrast
 - You can request multiple charts at once (e.g., "create a 2x2 grid of charts showing...")
 - Charts are saved to your current directory as PNG files

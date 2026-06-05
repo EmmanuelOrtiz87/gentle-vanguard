@@ -7,37 +7,43 @@ metadata:
   original-name: data-visualization
   department: data
 ---
+
 # Data Visualization Skill
 
-Chart selection guidance, Python visualization code patterns, design principles, and accessibility considerations for creating effective data visualizations.
+Chart selection guidance, Python visualization code patterns, design principles, and accessibility
+considerations for creating effective data visualizations.
 
 ## Chart Selection Guide
 
 ### Choose by Data Relationship
 
-| What You're Showing | Best Chart | Alternatives |
-|---|---|---|
-| **Trend over time** | Line chart | Area chart (if showing cumulative or composition) |
-| **Comparison across categories** | Vertical bar chart | Horizontal bar (many categories), lollipop chart |
-| **Ranking** | Horizontal bar chart | Dot plot, slope chart (comparing two periods) |
-| **Part-to-whole composition** | Stacked bar chart | Treemap (hierarchical), waffle chart |
-| **Composition over time** | Stacked area chart | 100% stacked bar (for proportion focus) |
-| **Distribution** | Histogram | Box plot (comparing groups), violin plot, strip plot |
-| **Correlation (2 variables)** | Scatter plot | Bubble chart (add 3rd variable as size) |
-| **Correlation (many variables)** | Heatmap (correlation matrix) | Pair plot |
-| **Geographic patterns** | Choropleth map | Bubble map, hex map |
-| **Flow / process** | Sankey diagram | Funnel chart (sequential stages) |
-| **Relationship network** | Network graph | Chord diagram |
-| **Performance vs. target** | Bullet chart | Gauge (single KPI only) |
-| **Multiple KPIs at once** | Small multiples | Dashboard with separate charts |
+| What You're Showing              | Best Chart                   | Alternatives                                         |
+| -------------------------------- | ---------------------------- | ---------------------------------------------------- |
+| **Trend over time**              | Line chart                   | Area chart (if showing cumulative or composition)    |
+| **Comparison across categories** | Vertical bar chart           | Horizontal bar (many categories), lollipop chart     |
+| **Ranking**                      | Horizontal bar chart         | Dot plot, slope chart (comparing two periods)        |
+| **Part-to-whole composition**    | Stacked bar chart            | Treemap (hierarchical), waffle chart                 |
+| **Composition over time**        | Stacked area chart           | 100% stacked bar (for proportion focus)              |
+| **Distribution**                 | Histogram                    | Box plot (comparing groups), violin plot, strip plot |
+| **Correlation (2 variables)**    | Scatter plot                 | Bubble chart (add 3rd variable as size)              |
+| **Correlation (many variables)** | Heatmap (correlation matrix) | Pair plot                                            |
+| **Geographic patterns**          | Choropleth map               | Bubble map, hex map                                  |
+| **Flow / process**               | Sankey diagram               | Funnel chart (sequential stages)                     |
+| **Relationship network**         | Network graph                | Chord diagram                                        |
+| **Performance vs. target**       | Bullet chart                 | Gauge (single KPI only)                              |
+| **Multiple KPIs at once**        | Small multiples              | Dashboard with separate charts                       |
 
 ### When NOT to Use Certain Charts
 
-- **Pie charts**: Avoid unless <6 categories and exact proportions matter less than rough comparison. Humans are bad at comparing angles. Use bar charts instead.
+- **Pie charts**: Avoid unless <6 categories and exact proportions matter less than rough
+  comparison. Humans are bad at comparing angles. Use bar charts instead.
 - **3D charts**: Never. They distort perception and add no information.
-- **Dual-axis charts**: Use cautiously. They can mislead by implying correlation. Clearly label both axes if used.
-- **Stacked bar (many categories)**: Hard to compare middle segments. Use small multiples or grouped bars instead.
-- **Donut charts**: Slightly better than pie charts but same fundamental issues. Use for single KPI display at most.
+- **Dual-axis charts**: Use cautiously. They can mislead by implying correlation. Clearly label both
+  axes if used.
+- **Stacked bar (many categories)**: Hard to compare middle segments. Use small multiples or grouped
+  bars instead.
+- **Donut charts**: Slightly better than pie charts but same fundamental issues. Use for single KPI
+  display at most.
 
 ## Python Visualization Code Patterns
 
@@ -263,7 +269,8 @@ fig.show()
 ### Layout
 
 - **Reduce chart junk**: Remove gridlines, borders, backgrounds that don't carry information
-- **Sort meaningfully**: Categories sorted by value (not alphabetically) unless there's a natural order (months, stages)
+- **Sort meaningfully**: Categories sorted by value (not alphabetically) unless there's a natural
+  order (months, stages)
 - **Appropriate aspect ratio**: Time series wider than tall (3:1 to 2:1); comparisons can be squarer
 - **White space is good**: Don't cram charts together. Give each visualization room to breathe
 
@@ -300,6 +307,7 @@ fig.show()
 ### Accessibility Checklist
 
 Before sharing a visualization:
+
 - [ ] Chart works without color (patterns, labels, or line styles differentiate series)
 - [ ] Text is readable at standard zoom level
 - [ ] Title describes the insight, not just the data

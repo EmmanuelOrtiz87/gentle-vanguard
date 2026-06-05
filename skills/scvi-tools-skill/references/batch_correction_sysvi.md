@@ -1,24 +1,26 @@
 # Advanced Batch Correction with sysVI
 
-This reference covers system-level batch correction using sysVI, designed for integrating data across major technological or study differences.
+This reference covers system-level batch correction using sysVI, designed for integrating data
+across major technological or study differences.
 
 ## Overview
 
 sysVI (System Variational Inference) extends scVI for scenarios where:
+
 - Batch effects are very strong (different technologies)
 - Standard scVI over-corrects biological signal
 - You need to separate "system" effects from biological variation
 
 ## When to Use sysVI vs scVI
 
-| Scenario | Recommended Model |
-|----------|-------------------|
-| Same technology, different samples | scVI |
-| 10x v2 vs 10x v3 | scVI (usually) |
-| 10x vs Smart-seq2 | sysVI |
-| Different sequencing depths | scVI with covariates |
-| Cross-study integration | sysVI |
-| Atlas-scale integration | sysVI |
+| Scenario                           | Recommended Model    |
+| ---------------------------------- | -------------------- |
+| Same technology, different samples | scVI                 |
+| 10x v2 vs 10x v3                   | scVI (usually)       |
+| 10x vs Smart-seq2                  | sysVI                |
+| Different sequencing depths        | scVI with covariates |
+| Cross-study integration            | sysVI                |
+| Atlas-scale integration            | sysVI                |
 
 ## Prerequisites
 
@@ -33,6 +35,7 @@ print(f"scvi-tools version: {scvi.__version__}")
 ## Understanding sysVI Architecture
 
 sysVI separates variation into:
+
 1. **Biological variation**: Cell type, state, trajectory
 2. **System variation**: Technology, study, lab effects
 
@@ -253,7 +256,7 @@ batch_lisi = lisi.ilisi_graph(
 # Cell type LISI (lower = better preservation)
 ct_lisi = lisi.clisi_graph(
     adata,
-    label_key="cell_type", 
+    label_key="cell_type",
     use_rep="X_integrated"
 )
 
@@ -315,7 +318,7 @@ def integrate_cross_system(
 ):
     """
     Integrate datasets from different technological systems.
-    
+
     Parameters
     ----------
     adatas : dict
@@ -330,33 +333,33 @@ def integrate_cross_system(
         Number of HVGs
     n_latent : int
         Latent dimensions
-        
+
     Returns
     -------
     Integrated AnnData with model
     """
     import scvi
     import scanpy as sc
-    
+
     # Add system labels and concatenate
     for system_name, adata in adatas.items():
         adata.obs[system_key] = system_name
-    
+
     adata = sc.concat(list(adatas.values()))
-    
+
     # Find common genes
     for name, ad in adatas.items():
         if name == list(adatas.keys())[0]:
             common_genes = set(ad.var_names)
         else:
             common_genes = common_genes.intersection(ad.var_names)
-    
+
     adata = adata[:, list(common_genes)].copy()
     print(f"Common genes: {len(common_genes)}")
-    
+
     # Store counts
     adata.layers["counts"] = adata.X.copy()
-    
+
     # HVG selection
     sc.pp.highly_variable_genes(
         adata,
@@ -366,7 +369,7 @@ def integrate_cross_system(
         layer="counts"
     )
     adata = adata[:, adata.var["highly_variable"]].copy()
-    
+
     # Setup with system as covariate
     scvi.model.SCVI.setup_anndata(
         adata,
@@ -374,19 +377,19 @@ def integrate_cross_system(
         batch_key=batch_key if batch_key in adata.obs else None,
         categorical_covariate_keys=[system_key]
     )
-    
+
     # Train
     model = scvi.model.SCVI(adata, n_latent=n_latent, n_layers=2)
     model.train(max_epochs=300, early_stopping=True)
-    
+
     # Get representation
     adata.obsm["X_integrated"] = model.get_latent_representation()
-    
+
     # Clustering
     sc.pp.neighbors(adata, use_rep="X_integrated")
     sc.tl.umap(adata)
     sc.tl.leiden(adata)
-    
+
     return adata, model
 
 # Usage
@@ -404,12 +407,12 @@ sc.pl.umap(adata_integrated, color=["system", "leiden"])
 
 ## Troubleshooting
 
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| Systems don't mix | Effects too strong | Use more genes, increase n_latent |
-| Over-correction | Model too aggressive | Reduce n_layers, use scANVI |
-| Few common genes | Different platforms | Use gene name mapping |
-| One system dominates | Unbalanced sizes | Subsample larger dataset |
+| Issue                | Cause                | Solution                          |
+| -------------------- | -------------------- | --------------------------------- |
+| Systems don't mix    | Effects too strong   | Use more genes, increase n_latent |
+| Over-correction      | Model too aggressive | Reduce n_layers, use scANVI       |
+| Few common genes     | Different platforms  | Use gene name mapping             |
+| One system dominates | Unbalanced sizes     | Subsample larger dataset          |
 
 ## Key References
 

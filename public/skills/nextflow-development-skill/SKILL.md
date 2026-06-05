@@ -7,11 +7,14 @@ metadata:
   original-name: nextflow-development
   department: bio-research
 ---
+
 # nf-core Pipeline Deployment
 
 Run nf-core bioinformatics pipelines on local or public sequencing data.
 
-**Target users:** Bench scientists and researchers without specialized bioinformatics training who need to run large-scale omics analyses—differential expression, variant calling, or chromatin accessibility analysis.
+**Target users:** Bench scientists and researchers without specialized bioinformatics training who
+need to run large-scale omics analyses—differential expression, variant calling, or chromatin
+accessibility analysis.
 
 ## Workflow Checklist
 
@@ -31,7 +34,8 @@ Run nf-core bioinformatics pipelines on local or public sequencing data.
 
 **Skip this step if user has local FASTQ files.**
 
-For public datasets, fetch from GEO/SRA first. See [references/geo-sra-acquisition.md](references/geo-sra-acquisition.md) for the full workflow.
+For public datasets, fetch from GEO/SRA first. See
+[references/geo-sra-acquisition.md](references/geo-sra-acquisition.md) for the full workflow.
 
 **Quick start:**
 
@@ -47,6 +51,7 @@ python scripts/sra_geo_fetch.py samplesheet GSE110004 --fastq-dir ./fastq -o sam
 ```
 
 **DECISION POINT:** After fetching study info, confirm with user:
+
 - Which sample subset to download (if multiple data types)
 - Suggested genome and pipeline
 
@@ -66,26 +71,27 @@ All critical checks must pass. If any fail, provide fix instructions:
 
 ### Docker issues
 
-| Problem | Fix |
-|---------|-----|
-| Not installed | Install from https://docs.docker.com/get-docker/ |
-| Permission denied | `sudo usermod -aG docker $USER` then re-login |
-| Daemon not running | `sudo systemctl start docker` |
+| Problem            | Fix                                              |
+| ------------------ | ------------------------------------------------ |
+| Not installed      | Install from https://docs.docker.com/get-docker/ |
+| Permission denied  | `sudo usermod -aG docker $USER` then re-login    |
+| Daemon not running | `sudo systemctl start docker`                    |
 
 ### Nextflow issues
 
-| Problem | Fix |
-|---------|-----|
-| Not installed | `curl -s https://get.nextflow.io \| bash && mv nextflow ~/bin/` |
-| Version < 23.04 | `nextflow self-update` |
+| Problem         | Fix                                                             |
+| --------------- | --------------------------------------------------------------- |
+| Not installed   | `curl -s https://get.nextflow.io \| bash && mv nextflow ~/bin/` |
+| Version < 23.04 | `nextflow self-update`                                          |
 
 ### Java issues
 
-| Problem | Fix |
-|---------|-----|
+| Problem              | Fix                               |
+| -------------------- | --------------------------------- |
 | Not installed / < 11 | `sudo apt install openjdk-11-jdk` |
 
-**Do not proceed until all checks pass.** For HPC/Singularity, see [references/troubleshooting.md](references/troubleshooting.md).
+**Do not proceed until all checks pass.** For HPC/Singularity, see
+[references/troubleshooting.md](references/troubleshooting.md).
 
 ---
 
@@ -93,18 +99,20 @@ All critical checks must pass. If any fail, provide fix instructions:
 
 **DECISION POINT: Confirm with user before proceeding.**
 
-| Data Type | Pipeline | Version | Goal |
-|-----------|----------|---------|------|
-| RNA-seq | `rnaseq` | 3.22.2 | Gene expression |
-| WGS/WES | `sarek` | 3.7.1 | Variant calling |
-| ATAC-seq | `atacseq` | 2.1.2 | Chromatin accessibility |
+| Data Type | Pipeline  | Version | Goal                    |
+| --------- | --------- | ------- | ----------------------- |
+| RNA-seq   | `rnaseq`  | 3.22.2  | Gene expression         |
+| WGS/WES   | `sarek`   | 3.7.1   | Variant calling         |
+| ATAC-seq  | `atacseq` | 2.1.2   | Chromatin accessibility |
 
 Auto-detect from data:
+
 ```bash
 python scripts/detect_data_type.py /path/to/data
 ```
 
 For pipeline-specific details:
+
 - [references/pipelines/rnaseq.md](references/pipelines/rnaseq.md)
 - [references/pipelines/sarek.md](references/pipelines/sarek.md)
 - [references/pipelines/atacseq.md](references/pipelines/atacseq.md)
@@ -119,13 +127,14 @@ For pipeline-specific details:
 nextflow run nf-core/<pipeline> -r <version> -profile test,docker --outdir test_output
 ```
 
-| Pipeline | Command |
-|----------|---------|
-| rnaseq | `nextflow run nf-core/rnaseq -r 3.22.2 -profile test,docker --outdir test_rnaseq` |
-| sarek | `nextflow run nf-core/sarek -r 3.7.1 -profile test,docker --outdir test_sarek` |
-| atacseq | `nextflow run nf-core/atacseq -r 2.1.2 -profile test,docker --outdir test_atacseq` |
+| Pipeline | Command                                                                            |
+| -------- | ---------------------------------------------------------------------------------- |
+| rnaseq   | `nextflow run nf-core/rnaseq -r 3.22.2 -profile test,docker --outdir test_rnaseq`  |
+| sarek    | `nextflow run nf-core/sarek -r 3.7.1 -profile test,docker --outdir test_sarek`     |
+| atacseq  | `nextflow run nf-core/atacseq -r 2.1.2 -profile test,docker --outdir test_atacseq` |
 
 Verify:
+
 ```bash
 ls test_output/multiqc/multiqc_report.html
 grep "Pipeline completed successfully" .nextflow.log
@@ -144,6 +153,7 @@ python scripts/generate_samplesheet.py /path/to/data <pipeline> -o samplesheet.c
 ```
 
 The script:
+
 - Discovers FASTQ/BAM/CRAM files
 - Pairs R1/R2 reads
 - Infers sample metadata
@@ -160,12 +170,14 @@ python scripts/generate_samplesheet.py --validate samplesheet.csv <pipeline>
 ### Samplesheet formats
 
 **rnaseq:**
+
 ```csv
 sample,fastq_1,fastq_2,strandedness
 SAMPLE1,/abs/path/R1.fq.gz,/abs/path/R2.fq.gz,auto
 ```
 
 **sarek:**
+
 ```csv
 patient,sample,lane,fastq_1,fastq_2,status
 patient1,tumor,L001,/abs/path/tumor_R1.fq.gz,/abs/path/tumor_R2.fq.gz,1
@@ -173,6 +185,7 @@ patient1,normal,L001,/abs/path/normal_R1.fq.gz,/abs/path/normal_R2.fq.gz,0
 ```
 
 **atacseq:**
+
 ```csv
 sample,fastq_1,fastq_2,replicate
 CONTROL,/abs/path/ctrl_R1.fq.gz,/abs/path/ctrl_R2.fq.gz,1
@@ -215,12 +228,14 @@ nextflow run nf-core/<pipeline> \
 ```
 
 **Key flags:**
+
 - `-r`: Pin version
 - `-profile docker`: Use Docker (or `singularity` for HPC)
 - `--genome`: iGenomes key
 - `-resume`: Continue from checkpoint
 
 **Resource limits (if needed):**
+
 ```bash
 --max_cpus 8 --max_memory '32.GB' --max_time '24.h'
 ```
@@ -239,14 +254,17 @@ grep "Pipeline completed successfully" .nextflow.log
 ### Key outputs by pipeline
 
 **rnaseq:**
+
 - `results/star_salmon/salmon.merged.gene_counts.tsv` - Gene counts
 - `results/star_salmon/salmon.merged.gene_tpm.tsv` - TPM values
 
 **sarek:**
+
 - `results/variant_calling/*/` - VCF files
 - `results/preprocessing/recalibrated/` - BAM files
 
 **atacseq:**
+
 - `results/macs2/narrowPeak/` - Peak calls
 - `results/bwa/mergedLibrary/bigwig/` - Coverage tracks
 
@@ -266,7 +284,8 @@ nextflow run nf-core/<pipeline> -resume
 
 ## References
 
-- [references/geo-sra-acquisition.md](references/geo-sra-acquisition.md) - Downloading public GEO/SRA data
+- [references/geo-sra-acquisition.md](references/geo-sra-acquisition.md) - Downloading public
+  GEO/SRA data
 - [references/troubleshooting.md](references/troubleshooting.md) - Common issues and fixes
 - [references/installation.md](references/installation.md) - Environment setup
 - [references/pipelines/rnaseq.md](references/pipelines/rnaseq.md) - RNA-seq pipeline details
@@ -277,15 +296,23 @@ nextflow run nf-core/<pipeline> -resume
 
 ## Disclaimer
 
-This skill is provided as a prototype example demonstrating how to integrate nf-core bioinformatics pipelines into Claude Code for automated analysis workflows. The current implementation supports three pipelines (rnaseq, sarek, and atacseq), serving as a foundation that enables the community to expand support to the full set of nf-core pipelines.
+This skill is provided as a prototype example demonstrating how to integrate nf-core bioinformatics
+pipelines into Claude Code for automated analysis workflows. The current implementation supports
+three pipelines (rnaseq, sarek, and atacseq), serving as a foundation that enables the community to
+expand support to the full set of nf-core pipelines.
 
-It is intended for educational and research purposes and should not be considered production-ready without appropriate validation for your specific use case. Users are responsible for ensuring their computing environment meets pipeline requirements and for verifying analysis results.
+It is intended for educational and research purposes and should not be considered production-ready
+without appropriate validation for your specific use case. Users are responsible for ensuring their
+computing environment meets pipeline requirements and for verifying analysis results.
 
-Anthropic does not guarantee the accuracy of bioinformatics outputs, and users should follow standard practices for validating computational analyses. This integration is not officially endorsed by or affiliated with the nf-core community.
+Anthropic does not guarantee the accuracy of bioinformatics outputs, and users should follow
+standard practices for validating computational analyses. This integration is not officially
+endorsed by or affiliated with the nf-core community.
 
 ## Attribution
 
-When publishing results, cite the appropriate pipeline. Citations are available in each nf-core repository's CITATIONS.md file (e.g., https://github.com/nf-core/rnaseq/blob/3.22.2/CITATIONS.md).
+When publishing results, cite the appropriate pipeline. Citations are available in each nf-core
+repository's CITATIONS.md file (e.g., https://github.com/nf-core/rnaseq/blob/3.22.2/CITATIONS.md).
 
 ## Licenses
 

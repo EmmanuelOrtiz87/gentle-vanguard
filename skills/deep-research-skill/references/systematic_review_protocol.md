@@ -1,9 +1,12 @@
 # Systematic Review Mode — Full Protocol
 
-Full PRISMA-compliant systematic literature review with optional meta-analysis. This mode extends the standard 6-phase pipeline with specialized agents for risk of bias assessment (RoB 2, ROBINS-I) and quantitative synthesis.
+Full PRISMA-compliant systematic literature review with optional meta-analysis. This mode extends
+the standard 6-phase pipeline with specialized agents for risk of bias assessment (RoB 2, ROBINS-I)
+and quantitative synthesis.
 
-See `agents/risk_of_bias_agent.md` and `agents/meta_analysis_agent.md` for detailed agent definitions.
-See `references/systematic_review_toolkit.md` for the Cochrane/PRISMA/GRADE reference guide.
+See `agents/risk_of_bias_agent.md` and `agents/meta_analysis_agent.md` for detailed agent
+definitions. See `references/systematic_review_toolkit.md` for the Cochrane/PRISMA/GRADE reference
+guide.
 
 ## 5-Phase Pipeline
 

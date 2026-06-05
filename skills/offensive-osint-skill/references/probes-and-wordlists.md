@@ -1,6 +1,7 @@
 # Probes & Wordlists
 
-> Reference content for the `offensive-osint` skill. Originally §16 of the monolithic SKILL.md (refactored 2026-05-02 for size/load efficiency).
+> Reference content for the `offensive-osint` skill. Originally §16 of the monolithic SKILL.md
+> (refactored 2026-05-02 for size/load efficiency).
 
 ## 16. Pre-built Wordlists & Probe Paths
 
@@ -41,8 +42,11 @@ api/documentation
 ```
 
 **Severity:**
-- Reachable Swagger/OpenAPI spec without auth → **HIGH** `LEAKY_API_SPEC` (full endpoint enumeration leaks; often reveals undocumented internal APIs).
-- Behind auth but accessible to any authenticated user → MEDIUM (still discloses internal API surface).
+
+- Reachable Swagger/OpenAPI spec without auth → **HIGH** `LEAKY_API_SPEC` (full endpoint enumeration
+  leaks; often reveals undocumented internal APIs).
+- Behind auth but accessible to any authenticated user → MEDIUM (still discloses internal API
+  surface).
 
 ### 16.2 GraphQL discovery — 13 paths
 
@@ -63,6 +67,7 @@ api/v1/graphql
 ```
 
 **Standard introspection POST body:**
+
 ```json
 {
   "operationName": "IntrospectionQuery",
@@ -71,102 +76,110 @@ api/v1/graphql
 ```
 
 **Severity:**
+
 - Introspection returns schema without auth → **HIGH** `OPEN_GRAPHQL_API`.
-- Field-suggestion enumeration possible (server returns "did you mean" for typo'd field names) → **MEDIUM** (re-derive partial schema even when introspection is disabled).
-- `/graphql` accepts batched queries (`[...]` request body) → MEDIUM (rate-limit bypass surface; auth bypass via mixed batches).
+- Field-suggestion enumeration possible (server returns "did you mean" for typo'd field names) →
+  **MEDIUM** (re-derive partial schema even when introspection is disabled).
+- `/graphql` accepts batched queries (`[...]` request body) → MEDIUM (rate-limit bypass surface;
+  auth bypass via mixed batches).
 
 UI markers (lower severity but still discoverable):
-- HTML response contains `graphiql`, `playground`, `apollo studio`, `altair` → GraphiQL UI exposed (often shipped accidentally on prod).
+
+- HTML response contains `graphiql`, `playground`, `apollo studio`, `altair` → GraphiQL UI exposed
+  (often shipped accidentally on prod).
 
 ### 16.3 High-risk ports — 35 services
 
-For each open port, emit a finding with the severity and "why an attacker cares" below. Source for the open-port observation: Shodan InternetDB (free, 1 req/sec) is the recommended starting point.
+For each open port, emit a finding with the severity and "why an attacker cares" below. Source for
+the open-port observation: Shodan InternetDB (free, 1 req/sec) is the recommended starting point.
 
-| Port | Service | Severity | Why it matters |
-|---|---|---|---|
-| 21 | FTP | HIGH | Anonymous read often enabled; cleartext creds. |
-| 22 | SSH | LOW | Banner discloses version; brute-force surface. |
-| 23 | Telnet | HIGH | Cleartext protocol; should never be exposed. |
-| 25 | SMTP | LOW | Open relay risk; version banner. |
-| 53 | DNS | LOW | Recursion = DDoS amplifier; AXFR opportunism. |
-| 80 | HTTP | INFO | Standard. |
-| 110 | POP3 | LOW | Cleartext if no STARTTLS. |
-| 111 | rpcbind | MEDIUM | NFS exports enumeration. |
-| 135 | MS RPC | HIGH | Enum via Impacket. |
-| 139 | NetBIOS-SSN | HIGH | File/printer enum. |
-| 143 | IMAP | LOW | Cleartext if no STARTTLS. |
-| 161 | SNMP | HIGH | Community strings often `public`/`private`; full device enum. |
-| 389 | LDAP | HIGH | Anonymous bind = full directory dump. |
-| 443 | HTTPS | INFO | Standard. |
-| 445 | SMB | **CRITICAL** | EternalBlue, SMB relay, anonymous shares. |
-| 465 | SMTPS | LOW | Banner. |
-| 514 | rsyslog | MEDIUM | Log injection / DoS. |
-| 587 | SMTP-MSA | LOW | Banner. |
-| 631 | IPP/CUPS | MEDIUM | Print server enum / RCE in old CUPS. |
-| 873 | rsync | HIGH | Modules often listable; backup data exposure. |
-| 1433 | MSSQL | HIGH | Brute-force; xp_cmdshell. |
-| 1521 | Oracle TNS | HIGH | Brute-force; SID enum. |
-| 2049 | NFS | HIGH | World-readable exports. |
-| 2375 | Docker API (unencrypted) | **CRITICAL** | Unauthenticated container/host takeover. |
-| 2376 | Docker API (TLS) | HIGH | Cert validation bypass risk. |
-| 3000 | Common dev / Grafana | MEDIUM | Often Grafana / Express dev with default creds. |
-| 3306 | MySQL | HIGH | Brute-force; default `root:""`. |
-| 3389 | RDP | **CRITICAL** | BlueKeep / DejaBlue / NLA bypass. |
-| 5432 | PostgreSQL | HIGH | Brute-force; default `postgres:postgres`. |
-| 5601 | Kibana | HIGH | Often unauthenticated; Elasticsearch pivot. |
-| 5900 | VNC | HIGH | Often unauthenticated or weak password. |
-| 5984 | CouchDB | HIGH | Default no auth; admin party. |
-| 6379 | Redis | **CRITICAL** | No auth default; write `authorized_keys` for SSH. |
-| 7001 | WebLogic | HIGH | Frequent CVEs (CVE-2020-14882, etc.). |
-| 8000 | Common dev | MEDIUM | Django, common dev servers. |
-| 8080 | HTTP-alt | MEDIUM | Tomcat, Jenkins, common proxy. |
-| 8443 | HTTPS-alt | MEDIUM | Same as 8080. |
-| 8888 | Common dev / Jupyter | HIGH | Jupyter often exposes interactive shell. |
-| 9090 | Cockpit / Prometheus | HIGH | Server admin UI / metrics scraping. |
-| 9200 | Elasticsearch | **CRITICAL** | Typically no auth. |
-| 9300 | Elasticsearch transport | HIGH | Cluster join + RCE. |
-| 11211 | memcached | MEDIUM | UDP DDoS amp; data dump. |
-| 27017 | MongoDB | **CRITICAL** | No auth by default. |
-| 50070 | Hadoop NameNode | HIGH | HDFS browse. |
+| Port  | Service                  | Severity     | Why it matters                                                |
+| ----- | ------------------------ | ------------ | ------------------------------------------------------------- |
+| 21    | FTP                      | HIGH         | Anonymous read often enabled; cleartext creds.                |
+| 22    | SSH                      | LOW          | Banner discloses version; brute-force surface.                |
+| 23    | Telnet                   | HIGH         | Cleartext protocol; should never be exposed.                  |
+| 25    | SMTP                     | LOW          | Open relay risk; version banner.                              |
+| 53    | DNS                      | LOW          | Recursion = DDoS amplifier; AXFR opportunism.                 |
+| 80    | HTTP                     | INFO         | Standard.                                                     |
+| 110   | POP3                     | LOW          | Cleartext if no STARTTLS.                                     |
+| 111   | rpcbind                  | MEDIUM       | NFS exports enumeration.                                      |
+| 135   | MS RPC                   | HIGH         | Enum via Impacket.                                            |
+| 139   | NetBIOS-SSN              | HIGH         | File/printer enum.                                            |
+| 143   | IMAP                     | LOW          | Cleartext if no STARTTLS.                                     |
+| 161   | SNMP                     | HIGH         | Community strings often `public`/`private`; full device enum. |
+| 389   | LDAP                     | HIGH         | Anonymous bind = full directory dump.                         |
+| 443   | HTTPS                    | INFO         | Standard.                                                     |
+| 445   | SMB                      | **CRITICAL** | EternalBlue, SMB relay, anonymous shares.                     |
+| 465   | SMTPS                    | LOW          | Banner.                                                       |
+| 514   | rsyslog                  | MEDIUM       | Log injection / DoS.                                          |
+| 587   | SMTP-MSA                 | LOW          | Banner.                                                       |
+| 631   | IPP/CUPS                 | MEDIUM       | Print server enum / RCE in old CUPS.                          |
+| 873   | rsync                    | HIGH         | Modules often listable; backup data exposure.                 |
+| 1433  | MSSQL                    | HIGH         | Brute-force; xp_cmdshell.                                     |
+| 1521  | Oracle TNS               | HIGH         | Brute-force; SID enum.                                        |
+| 2049  | NFS                      | HIGH         | World-readable exports.                                       |
+| 2375  | Docker API (unencrypted) | **CRITICAL** | Unauthenticated container/host takeover.                      |
+| 2376  | Docker API (TLS)         | HIGH         | Cert validation bypass risk.                                  |
+| 3000  | Common dev / Grafana     | MEDIUM       | Often Grafana / Express dev with default creds.               |
+| 3306  | MySQL                    | HIGH         | Brute-force; default `root:""`.                               |
+| 3389  | RDP                      | **CRITICAL** | BlueKeep / DejaBlue / NLA bypass.                             |
+| 5432  | PostgreSQL               | HIGH         | Brute-force; default `postgres:postgres`.                     |
+| 5601  | Kibana                   | HIGH         | Often unauthenticated; Elasticsearch pivot.                   |
+| 5900  | VNC                      | HIGH         | Often unauthenticated or weak password.                       |
+| 5984  | CouchDB                  | HIGH         | Default no auth; admin party.                                 |
+| 6379  | Redis                    | **CRITICAL** | No auth default; write `authorized_keys` for SSH.             |
+| 7001  | WebLogic                 | HIGH         | Frequent CVEs (CVE-2020-14882, etc.).                         |
+| 8000  | Common dev               | MEDIUM       | Django, common dev servers.                                   |
+| 8080  | HTTP-alt                 | MEDIUM       | Tomcat, Jenkins, common proxy.                                |
+| 8443  | HTTPS-alt                | MEDIUM       | Same as 8080.                                                 |
+| 8888  | Common dev / Jupyter     | HIGH         | Jupyter often exposes interactive shell.                      |
+| 9090  | Cockpit / Prometheus     | HIGH         | Server admin UI / metrics scraping.                           |
+| 9200  | Elasticsearch            | **CRITICAL** | Typically no auth.                                            |
+| 9300  | Elasticsearch transport  | HIGH         | Cluster join + RCE.                                           |
+| 11211 | memcached                | MEDIUM       | UDP DDoS amp; data dump.                                      |
+| 27017 | MongoDB                  | **CRITICAL** | No auth by default.                                           |
+| 50070 | Hadoop NameNode          | HIGH         | HDFS browse.                                                  |
 
-When Shodan InternetDB returns `vulns[]` for a port, escalate the finding severity by one tier and include the CVE list in evidence.
+When Shodan InternetDB returns `vulns[]` for a port, escalate the finding severity by one tier and
+include the CVE list in evidence.
 
 ### 16.4 Missing security headers — 6 findings
 
 For every alive webapp, audit response headers. Each missing header below = one finding.
 
-| Header | Severity (default) | Severity (sensitive path) | Notes |
-|---|---|---|---|
-| `Strict-Transport-Security` | MEDIUM | **HIGH** | Sensitive paths: `/login`, `/signin`, `/sso`, `/admin`, `/auth`. |
-| `Content-Security-Policy` | MEDIUM | MEDIUM | XSS impact mitigation gone. |
-| `X-Frame-Options` | LOW | LOW | Clickjacking. (CSP `frame-ancestors` is the modern replacement.) |
-| `X-Content-Type-Options` | LOW | LOW | MIME-sniff XSS. |
-| `Referrer-Policy` | INFO | INFO | Outbound link leakage. |
-| `Permissions-Policy` | INFO | INFO | Feature-policy hardening. |
+| Header                      | Severity (default) | Severity (sensitive path) | Notes                                                            |
+| --------------------------- | ------------------ | ------------------------- | ---------------------------------------------------------------- |
+| `Strict-Transport-Security` | MEDIUM             | **HIGH**                  | Sensitive paths: `/login`, `/signin`, `/sso`, `/admin`, `/auth`. |
+| `Content-Security-Policy`   | MEDIUM             | MEDIUM                    | XSS impact mitigation gone.                                      |
+| `X-Frame-Options`           | LOW                | LOW                       | Clickjacking. (CSP `frame-ancestors` is the modern replacement.) |
+| `X-Content-Type-Options`    | LOW                | LOW                       | MIME-sniff XSS.                                                  |
+| `Referrer-Policy`           | INFO               | INFO                      | Outbound link leakage.                                           |
+| `Permissions-Policy`        | INFO               | INFO                      | Feature-policy hardening.                                        |
 
 ### 16.5 Always-on HTTP checks — 15 paths
 
 Run these against every alive webapp regardless of Nuclei availability. Cheap; high signal.
 
-| Path | Finding | Severity | Match logic |
-|---|---|---|---|
-| `/.git/config` | Exposed `.git` repo | **CRITICAL** | Body contains `[core]`, `[remote`, `repositoryformatversion` |
-| `/.git/HEAD` | Exposed `.git/HEAD` | HIGH | Body matches `^ref:\s` |
-| `/.env` | Exposed `.env` | **CRITICAL** | Multiline regex `^\s*[A-Z_][A-Z0-9_]*\s*=` |
-| `/server-status` | Apache server-status | MEDIUM | Body contains `Apache Server Status` or matching title |
-| `/server-info` | Apache mod_info | MEDIUM | Body contains `Apache Server Information` |
-| `/.DS_Store` | Exposed `.DS_Store` | LOW | Byte signature `\x00\x00\x00\x01Bud1` |
-| `/phpinfo.php` | phpinfo() leak | HIGH | Body contains `phpinfo()`, `PHP Version`, or matching title |
-| `/info.php` | phpinfo() (alt path) | HIGH | Same as above |
-| `/actuator/env` | Spring Boot `/actuator/env` | **CRITICAL** | Body contains `"propertySources"`, `systemProperties`, `systemEnvironment` |
-| `/actuator/heapdump` | Spring Boot heapdump | **CRITICAL** | HPROF magic bytes / large binary download |
-| `/_cat/indices` | Elasticsearch open | HIGH | Returns index list |
-| `/console` | Jenkins script console | HIGH | Body contains `Jenkins`/`Script Console` |
-| `/manager/html` | Tomcat Manager | HIGH | Body contains `Tomcat Web Application Manager` |
-| `/wp-admin/install.php` | Orphaned WP install | LOW | Body contains `WordPress Installation` |
-| `/.well-known/security.txt` | Disclosure policy info | INFO | Parse contact + policy fields |
+| Path                        | Finding                     | Severity     | Match logic                                                                |
+| --------------------------- | --------------------------- | ------------ | -------------------------------------------------------------------------- |
+| `/.git/config`              | Exposed `.git` repo         | **CRITICAL** | Body contains `[core]`, `[remote`, `repositoryformatversion`               |
+| `/.git/HEAD`                | Exposed `.git/HEAD`         | HIGH         | Body matches `^ref:\s`                                                     |
+| `/.env`                     | Exposed `.env`              | **CRITICAL** | Multiline regex `^\s*[A-Z_][A-Z0-9_]*\s*=`                                 |
+| `/server-status`            | Apache server-status        | MEDIUM       | Body contains `Apache Server Status` or matching title                     |
+| `/server-info`              | Apache mod_info             | MEDIUM       | Body contains `Apache Server Information`                                  |
+| `/.DS_Store`                | Exposed `.DS_Store`         | LOW          | Byte signature `\x00\x00\x00\x01Bud1`                                      |
+| `/phpinfo.php`              | phpinfo() leak              | HIGH         | Body contains `phpinfo()`, `PHP Version`, or matching title                |
+| `/info.php`                 | phpinfo() (alt path)        | HIGH         | Same as above                                                              |
+| `/actuator/env`             | Spring Boot `/actuator/env` | **CRITICAL** | Body contains `"propertySources"`, `systemProperties`, `systemEnvironment` |
+| `/actuator/heapdump`        | Spring Boot heapdump        | **CRITICAL** | HPROF magic bytes / large binary download                                  |
+| `/_cat/indices`             | Elasticsearch open          | HIGH         | Returns index list                                                         |
+| `/console`                  | Jenkins script console      | HIGH         | Body contains `Jenkins`/`Script Console`                                   |
+| `/manager/html`             | Tomcat Manager              | HIGH         | Body contains `Tomcat Web Application Manager`                             |
+| `/wp-admin/install.php`     | Orphaned WP install         | LOW          | Body contains `WordPress Installation`                                     |
+| `/.well-known/security.txt` | Disclosure policy info      | INFO         | Parse contact + policy fields                                              |
 
-Plus parse `/robots.txt` for `Disallow:` paths — those become the next-tier wordlist for that target.
+Plus parse `/robots.txt` for `Disallow:` paths — those become the next-tier wordlist for that
+target.
 
 ### 16.6 SAML metadata — 5 paths
 
@@ -178,11 +191,14 @@ Plus parse `/robots.txt` for `Disallow:` paths — those become the next-tier wo
 /auth/saml2/metadata
 ```
 
-Reachable SAML metadata XML reveals: `EntityID`, signing certs (often pinned → cert-reuse pivot), `SingleSignOnService` URL, `NameIDFormat`. Mark as `MISCONFIG` (LOW severity unless metadata leaks internal hostnames or non-public certs, then MEDIUM).
+Reachable SAML metadata XML reveals: `EntityID`, signing certs (often pinned → cert-reuse pivot),
+`SingleSignOnService` URL, `NameIDFormat`. Mark as `MISCONFIG` (LOW severity unless metadata leaks
+internal hostnames or non-public certs, then MEDIUM).
 
 ### 16.7 SSO subdomain prefixes — 8 prefixes
 
 Probe each against root domain + every sibling brand domain:
+
 ```
 auth.{domain}
 login.{domain}
@@ -199,6 +215,7 @@ Plus probe `/.well-known/openid-configuration` on every alive subdomain (regardl
 ### 16.8 Cloud bucket permutation arsenal
 
 **6 prefixes:**
+
 ```
 ""           # bare candidate
 backup-
@@ -209,6 +226,7 @@ prod-
 ```
 
 **15 suffixes:**
+
 ```
 ""           # bare candidate
 -backup
@@ -228,6 +246,7 @@ prod-
 ```
 
 **47 generic stems** (filter unless combined with target-identifying token):
+
 ```
 www, mail, email, app, apps, web, webmail, ftp, cdn, static, assets, media, img, images,
 videos, download, downloads, upload, uploads, data, files, docs, support, help, kb,
@@ -238,6 +257,7 @@ mx, smtp, imap, pop, dns, ns, ns1, ns2, mx1, mx2
 **Provider URL templates:**
 
 S3:
+
 ```
 https://{candidate}.s3.amazonaws.com/
 https://{candidate}.s3-{region}.amazonaws.com/      # try us-east-1, us-west-2, eu-west-1, ap-southeast-1 first
@@ -245,17 +265,21 @@ https://s3.{region}.amazonaws.com/{candidate}/
 ```
 
 GCS:
+
 ```
 https://{candidate}.storage.googleapis.com/
 https://storage.googleapis.com/{candidate}/
 ```
 
 Azure Blob:
+
 ```
 https://{candidate}.blob.core.windows.net/
 ```
 
-**Probe technique:** HEAD first → 200/301 = exists, 403 = exists private, 404 = skip. On exists, GET root → if XML/JSON object listing returns, **CRITICAL** `PUBLIC_CLOUD_BUCKET`. Direct-URL object reads but not listable → **HIGH** `PUBLIC_CLOUD_BUCKET_OBJECT_READ`.
+**Probe technique:** HEAD first → 200/301 = exists, 403 = exists private, 404 = skip. On exists, GET
+root → if XML/JSON object listing returns, **CRITICAL** `PUBLIC_CLOUD_BUCKET`. Direct-URL object
+reads but not listable → **HIGH** `PUBLIC_CLOUD_BUCKET_OBJECT_READ`.
 
 ### 16.9 JS guess-paths for endpoint discovery
 
@@ -283,17 +307,21 @@ For every found JS, also try `<jsfile>.map` for sourcemap leaks (HIGH `INFO_DISC
 Three tiers, run in order on every JS body + every sourcesContent[] blob:
 
 **Tier 1 — generic quoted paths:**
+
 ```regex
 ['"`](/[A-Za-z0-9_\-./{}\[\]?=&%:]+)['"`]
 ```
+
 Match group: the path. High recall, lots of false positives — apply allowlist downstream.
 
 **Tier 2 — API-ish paths (biased filter on tier 1):**
+
 ```regex
 ['"`](/(?:api|graphql|gql|v\d+|swagger|openapi|rest|services|internal|admin|auth|oauth|user|users|account|accounts|search|export|upload|file|files|download|webhook|hooks|callback|admin)/[A-Za-z0-9_\-./{}\[\]?=&%:]+)['"`]
 ```
 
 **Tier 3 — fully-qualified URLs:**
+
 ```regex
 \bhttps?://[A-Za-z0-9.\-]+\.[A-Za-z]{2,}(?::\d+)?[/A-Za-z0-9_\-./{}\[\]?=&%:#]*
 ```
@@ -305,63 +333,70 @@ Dedup on `(method, normalized-path-template)` where the template replaces `/123/
 Run on every JS body + sourcesContent + APK strings + manifest:
 
 **RFC1918:**
+
 ```regex
 \b(?:10\.(?:\d{1,3}\.){2}\d{1,3}|172\.(?:1[6-9]|2\d|3[01])\.(?:\d{1,3})\.(?:\d{1,3})|192\.168\.(?:\d{1,3})\.(?:\d{1,3})|127\.(?:\d{1,3}\.){2}\d{1,3})\b
 ```
 
 **Internal DNS suffixes:**
+
 ```regex
 \b[A-Za-z0-9][A-Za-z0-9\-]{0,62}\.(?:internal|corp|lan|intranet|local|prod|staging|dev|qa|test)\b
 ```
 
 **Kubernetes service DNS:**
+
 ```regex
 \b[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+\.svc(?:\.cluster\.local)?\b
 ```
 
-Each match → MEDIUM `INFO_DISCLOSURE`. Aggregate per host: if many matches share the same internal subdomain, that's a recon seed for any future internal phase.
+Each match → MEDIUM `INFO_DISCLOSURE`. Aggregate per host: if many matches share the same internal
+subdomain, that's a recon seed for any future internal phase.
 
 ### 16.12 Subdomain-takeover provider fingerprints (summary, 27 providers)
 
 Watch for these CNAME targets + the corresponding "available for claim" response signature:
 
-| Provider | CNAME pattern | Takeover signature |
-|---|---|---|
-| GitHub Pages | `*.github.io` | `There isn't a GitHub Pages site here.` |
-| Heroku | `*.herokuapp.com` | `No such app` |
-| AWS S3 | `*.s3*.amazonaws.com` | `NoSuchBucket` |
-| AWS CloudFront | `*.cloudfront.net` | `Bad request` w/ specific X-Amz error |
-| Azure (multiple) | `*.azurewebsites.net`, `*.blob.core.windows.net`, `*.cloudapp.net`, `*.trafficmanager.net` | Various per-product 404 patterns |
-| Shopify | `shops.myshopify.com` | `Sorry, this shop is currently unavailable.` |
-| Squarespace | `*.squarespace.com` | `No Such Account` |
-| Tumblr | `*.tumblr.com` | `Whatever you were looking for doesn't currently exist.` |
-| WordPress | `*.wordpress.com` | `Do you want to register *.wordpress.com?` |
-| Fastly | various | Fastly-specific 404 |
-| Pantheon | `*.pantheonsite.io` | `The gods are wise, but do not know of the site...` |
-| Surge.sh | `*.surge.sh` | `project not found` |
-| Bitbucket Pages | `*.bitbucket.io` | Repository not found |
-| Tilda | `*.tilda.ws` | `Please renew your subscription` |
-| Strikingly | `*.s.strikinglydns.com` | `PAGE NOT FOUND` |
-| Smartling | `*.smartling.com` | Domain is not configured |
-| Ngrok | `*.ngrok.io` | Tunnel not found |
-| Webflow | `*.webflow.io` | Site not found |
-| Zendesk | `*.zendesk.com` | `Help Center Closed` |
-| Cargo | `*.cargocollective.com` | `404 Not Found` (with cargo branding) |
-| Statuspage | `*.statuspage.io` | Not found |
-| Intercom | `*.intercom.help` | Not found |
-| Helpjuice | `*.helpjuice.com` | Not found |
-| Helpscout | `*.helpscoutdocs.com` | Not found |
-| Tictail | `*.tictail.com` | Not found |
-| Brightcove | `*.brightcovegallery.com` | Not found |
-| Smugmug | various | Not found |
+| Provider         | CNAME pattern                                                                              | Takeover signature                                       |
+| ---------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------- |
+| GitHub Pages     | `*.github.io`                                                                              | `There isn't a GitHub Pages site here.`                  |
+| Heroku           | `*.herokuapp.com`                                                                          | `No such app`                                            |
+| AWS S3           | `*.s3*.amazonaws.com`                                                                      | `NoSuchBucket`                                           |
+| AWS CloudFront   | `*.cloudfront.net`                                                                         | `Bad request` w/ specific X-Amz error                    |
+| Azure (multiple) | `*.azurewebsites.net`, `*.blob.core.windows.net`, `*.cloudapp.net`, `*.trafficmanager.net` | Various per-product 404 patterns                         |
+| Shopify          | `shops.myshopify.com`                                                                      | `Sorry, this shop is currently unavailable.`             |
+| Squarespace      | `*.squarespace.com`                                                                        | `No Such Account`                                        |
+| Tumblr           | `*.tumblr.com`                                                                             | `Whatever you were looking for doesn't currently exist.` |
+| WordPress        | `*.wordpress.com`                                                                          | `Do you want to register *.wordpress.com?`               |
+| Fastly           | various                                                                                    | Fastly-specific 404                                      |
+| Pantheon         | `*.pantheonsite.io`                                                                        | `The gods are wise, but do not know of the site...`      |
+| Surge.sh         | `*.surge.sh`                                                                               | `project not found`                                      |
+| Bitbucket Pages  | `*.bitbucket.io`                                                                           | Repository not found                                     |
+| Tilda            | `*.tilda.ws`                                                                               | `Please renew your subscription`                         |
+| Strikingly       | `*.s.strikinglydns.com`                                                                    | `PAGE NOT FOUND`                                         |
+| Smartling        | `*.smartling.com`                                                                          | Domain is not configured                                 |
+| Ngrok            | `*.ngrok.io`                                                                               | Tunnel not found                                         |
+| Webflow          | `*.webflow.io`                                                                             | Site not found                                           |
+| Zendesk          | `*.zendesk.com`                                                                            | `Help Center Closed`                                     |
+| Cargo            | `*.cargocollective.com`                                                                    | `404 Not Found` (with cargo branding)                    |
+| Statuspage       | `*.statuspage.io`                                                                          | Not found                                                |
+| Intercom         | `*.intercom.help`                                                                          | Not found                                                |
+| Helpjuice        | `*.helpjuice.com`                                                                          | Not found                                                |
+| Helpscout        | `*.helpscoutdocs.com`                                                                      | Not found                                                |
+| Tictail          | `*.tictail.com`                                                                            | Not found                                                |
+| Brightcove       | `*.brightcovegallery.com`                                                                  | Not found                                                |
+| Smugmug          | various                                                                                    | Not found                                                |
 
-For full per-provider detection signatures + edge cases, use SubdomainX or Subzy/Subjack against a freshly-fetched fingerprint database.
+For full per-provider detection signatures + edge cases, use SubdomainX or Subzy/Subjack against a
+freshly-fetched fingerprint database.
 
 ---
 
 ### 16.13 Copy-Paste Probes (curl one-liners)
 
-Every probe path in §16.1–16.12 with a runnable curl. Defaults: `-sk` (silent + ignore TLS errors), `-m 10` (10s max), `-o /tmp/r` (response body to disk), `-w '%{http_code}\n'` (print status code), `-A "Mozilla/5.0"` (UA — change per persona).
+Every probe path in §16.1–16.12 with a runnable curl. Defaults: `-sk` (silent + ignore TLS errors),
+`-m 10` (10s max), `-o /tmp/r` (response body to disk), `-w '%{http_code}\n'` (print status code),
+`-A "Mozilla/5.0"` (UA — change per persona).
 
 **Always-on HTTP checks (§16.5):**
 
@@ -547,6 +582,7 @@ dig +short TXT "$D" | grep -i 'v=spf1'
 ```
 
 **Common SPF parsing checklist:**
+
 - Ends in `-all` (hardfail) → strict; major providers reject spoofs.
 - Ends in `~all` (softfail) → spam folder for spoofs.
 - Ends in `?all` or no `all` → permissive; spoofs likely deliver.
@@ -564,7 +600,8 @@ dig +short TXT "$D" | grep -i 'v=spf1'
   - `include:spf.mandrillapp.com` → Mandrill.
   - `include:_spf.workday.com` → Workday.
 
-If SPF includes ≥10 mechanisms (max-lookups limit) → SPF eval likely fails → spoofs may pass. Tools: `spfquery`, `spftools` (online), `dig +trace`.
+If SPF includes ≥10 mechanisms (max-lookups limit) → SPF eval likely fails → spoofs may pass. Tools:
+`spfquery`, `spftools` (online), `dig +trace`.
 
 **DMARC policy + alignment:**
 
@@ -573,13 +610,16 @@ dig +short TXT "_dmarc.${D}"
 ```
 
 Parse for:
+
 - `p=` → primary policy (`none`, `quarantine`, `reject`).
 - `sp=` → subdomain policy (defaults to `p=`).
 - `aspf=` / `adkim=` → alignment mode (`r`=relaxed, `s`=strict).
 - `pct=` → percentage of mail to which policy applies.
-- `rua=` / `ruf=` → reporting addresses (often reveals SaaS DMARC vendors: dmarcian, valimail, Agari, easydmarc).
+- `rua=` / `ruf=` → reporting addresses (often reveals SaaS DMARC vendors: dmarcian, valimail,
+  Agari, easydmarc).
 
 **Severity:**
+
 - `p=none` → spoof-feasible, downgrade trust → MEDIUM finding.
 - `p=quarantine pct<100` → partial enforcement → LOW.
 - `p=reject` + `aspf=s` + `adkim=s` → well-postured → no finding.
@@ -587,6 +627,7 @@ Parse for:
 **DKIM key discovery:**
 
 DKIM selectors aren't well-known; common patterns:
+
 ```bash
 for selector in default google selector1 selector2 mail email k1 dkim s1 s2 mta1 mta2 \
                 amazonses 20240101 20230101 mailchimp sendgrid mxvault; do
@@ -595,7 +636,8 @@ for selector in default google selector1 selector2 mail email k1 dkim s1 s2 mta1
 done
 ```
 
-If a key returns: extract `p=<base64>` and check key length. RSA-1024 → MEDIUM (deprecated; should be 2048+). Missing or rotated infrequently → LOW finding.
+If a key returns: extract `p=<base64>` and check key length. RSA-1024 → MEDIUM (deprecated; should
+be 2048+). Missing or rotated infrequently → LOW finding.
 
 **BIMI (Brand Indicators for Message Identification):**
 
@@ -603,7 +645,8 @@ If a key returns: extract `p=<base64>` and check key length. RSA-1024 → MEDIUM
 dig +short TXT "default._bimi.${D}"
 ```
 
-If present + `p=reject` DMARC → brand-impersonation defense in inbox UI. Absence is LOW only (operational, not exploitable).
+If present + `p=reject` DMARC → brand-impersonation defense in inbox UI. Absence is LOW only
+(operational, not exploitable).
 
 **MTA-STS (Mail Transfer Agent Strict Transport Security):**
 
@@ -612,9 +655,11 @@ dig +short TXT "_mta-sts.${D}"
 curl -sk -m 10 "https://mta-sts.${D}/.well-known/mta-sts.txt"
 ```
 
-If neither responds → MX-server TLS not enforced; MITM-able. LOW finding. If `mode=enforce` present and policy file matches → well-postured.
+If neither responds → MX-server TLS not enforced; MITM-able. LOW finding. If `mode=enforce` present
+and policy file matches → well-postured.
 
 **TLS-RPT (TLS Reporting):**
+
 ```bash
 dig +short TXT "_smtp._tls.${D}"
 ```
@@ -626,7 +671,8 @@ dig +dnssec "${D}" SOA | grep -E 'flags|RRSIG'
 delv "${D}" 2>&1 | grep -i 'fully validated\|insecur'
 ```
 
-If `delv` returns "insecure" → DNSSEC not enabled (LOW finding; doesn't enable spoof but is hardening gap).
+If `delv` returns "insecure" → DNSSEC not enabled (LOW finding; doesn't enable spoof but is
+hardening gap).
 
 **MX → IdP / mail-host inference:**
 
@@ -634,37 +680,39 @@ If `delv` returns "insecure" → DNSSEC not enabled (LOW finding; doesn't enable
 dig +short MX "${D}"
 ```
 
-| MX pattern | IdP / hosting |
-|---|---|
-| `aspmx.l.google.com`, `*.googlemail.com` | Google Workspace |
-| `*.mail.protection.outlook.com` | Microsoft 365 |
-| `*.mail.eo.outlook.com` | Microsoft 365 (older) |
-| `*.zoho.com` | Zoho Mail |
-| `*.yandex.net` | Yandex 360 |
-| `*.fastmail.com` | Fastmail |
-| `*.proofpoint.com`, `*.pphosted.com` | Proofpoint (M365 user with Proofpoint inbound) |
-| `*.mimecast.com`, `*.mimecast-eu.com` | Mimecast |
-| `*.barracudanetworks.com` | Barracuda |
-| Self-hosted IPs in target ASN | On-prem mail server (often Exchange) |
+| MX pattern                               | IdP / hosting                                  |
+| ---------------------------------------- | ---------------------------------------------- |
+| `aspmx.l.google.com`, `*.googlemail.com` | Google Workspace                               |
+| `*.mail.protection.outlook.com`          | Microsoft 365                                  |
+| `*.mail.eo.outlook.com`                  | Microsoft 365 (older)                          |
+| `*.zoho.com`                             | Zoho Mail                                      |
+| `*.yandex.net`                           | Yandex 360                                     |
+| `*.fastmail.com`                         | Fastmail                                       |
+| `*.proofpoint.com`, `*.pphosted.com`     | Proofpoint (M365 user with Proofpoint inbound) |
+| `*.mimecast.com`, `*.mimecast-eu.com`    | Mimecast                                       |
+| `*.barracudanetworks.com`                | Barracuda                                      |
+| Self-hosted IPs in target ASN            | On-prem mail server (often Exchange)           |
 
 **DMARC reporting-vendor inference (parse `rua=` / `ruf=`):**
 
-| RUA/RUF host | Vendor | Implication |
-|---|---|---|
-| `*.dmarcian.com` | dmarcian | DMARC reporting customer |
-| `*.valimail.com`, `*.dmarc-rua.com` | Valimail | DMARC reporting customer |
-| `*.kdmarc.com` | Kratikal kDMARC | Indian DMARC vendor; common in IN orgs |
-| `*.agari.com` | Agari (Fortra) | Email security vendor |
-| `*.easydmarc.com` | EasyDMARC | DMARC reporting customer |
-| `*.dmarcanalyzer.com` | DMARC Analyzer | Reporting customer |
-| `*.postmarkapp.com` | Postmark | DMARC reporting addon |
-| `<addr>@<target-domain>` | Self-hosted reporting | Internal mailbox; sometimes leaks team-name (`itg@`, `secops@`, `dmarc@`) |
+| RUA/RUF host                        | Vendor                | Implication                                                               |
+| ----------------------------------- | --------------------- | ------------------------------------------------------------------------- |
+| `*.dmarcian.com`                    | dmarcian              | DMARC reporting customer                                                  |
+| `*.valimail.com`, `*.dmarc-rua.com` | Valimail              | DMARC reporting customer                                                  |
+| `*.kdmarc.com`                      | Kratikal kDMARC       | Indian DMARC vendor; common in IN orgs                                    |
+| `*.agari.com`                       | Agari (Fortra)        | Email security vendor                                                     |
+| `*.easydmarc.com`                   | EasyDMARC             | DMARC reporting customer                                                  |
+| `*.dmarcanalyzer.com`               | DMARC Analyzer        | Reporting customer                                                        |
+| `*.postmarkapp.com`                 | Postmark              | DMARC reporting addon                                                     |
+| `<addr>@<target-domain>`            | Self-hosted reporting | Internal mailbox; sometimes leaks team-name (`itg@`, `secops@`, `dmarc@`) |
 
-Capture the vendor + the internal RUA mailbox. Both are leak surfaces (vendor compromise = DMARC bypass; internal mailbox = phishing target).
+Capture the vendor + the internal RUA mailbox. Both are leak surfaces (vendor compromise = DMARC
+bypass; internal mailbox = phishing target).
 
 **Windows / PowerShell parallel for the entire §16.14 audit:**
 
-PS 5.1 `Resolve-DnsName` does **not** accept `-Type CAA` (use PowerShell 7+ or `nslookup -type=CAA <domain>`). Otherwise:
+PS 5.1 `Resolve-DnsName` does **not** accept `-Type CAA` (use PowerShell 7+ or
+`nslookup -type=CAA <domain>`). Otherwise:
 
 ```powershell
 $D = "target.example"
@@ -684,15 +732,17 @@ foreach ($s in @("default","google","selector1","selector2","mail","email","k1",
 
 ### 16.15 Origin Discovery / CDN Bypass
 
-If the target is behind Cloudflare/Akamai/Fastly/CloudFront, their CDN IPs are well-defined. Find IPs **not** in those ranges that serve the same site = origin.
+If the target is behind Cloudflare/Akamai/Fastly/CloudFront, their CDN IPs are well-defined. Find
+IPs **not** in those ranges that serve the same site = origin.
 
 **Cloudflare IPv4 ranges:**
+
 ```
 https://www.cloudflare.com/ips-v4
 ```
-**Akamai ASNs:** AS16625, AS20940, AS21342, AS21357.
-**Fastly:** AS54113.
-**AWS CloudFront:** published in `https://ip-ranges.amazonaws.com/ip-ranges.json` filter `service:CLOUDFRONT`.
+
+**Akamai ASNs:** AS16625, AS20940, AS21342, AS21357. **Fastly:** AS54113. **AWS CloudFront:**
+published in `https://ip-ranges.amazonaws.com/ip-ranges.json` filter `service:CLOUDFRONT`.
 
 **Origin discovery via DNS history:**
 
@@ -703,6 +753,7 @@ curl -sk -H "APIKEY: ..." \
 ```
 
 Free alternatives:
+
 ```bash
 # Validin
 curl -sk "https://app.validin.com/api/axon/${D}/dns" | jq .
@@ -721,6 +772,7 @@ censys search "services.tls.certificates.leaf_data.subject.common_name:${D} AND 
 ```
 
 Or via crt.sh + manual IP check:
+
 ```bash
 curl -sk "https://crt.sh/?q=%25.${D}&output=json" | jq -r '.[].name_value' | sort -u
 ```
@@ -779,11 +831,13 @@ Cross-reference any returned IP against CDN ranges.
 
 **Origin via email-header bounce:**
 
-Send mail to `<random>@${D}` from a sock-puppet account. The bounce often includes `Received:` headers showing the inbound mail server's actual IP — sometimes co-located with web origin.
+Send mail to `<random>@${D}` from a sock-puppet account. The bounce often includes `Received:`
+headers showing the inbound mail server's actual IP — sometimes co-located with web origin.
 
 **Origin via misconfigured CDN error pages:**
 
 Some CDN 5xx error pages historically leaked upstream details. Trigger errors and inspect:
+
 ```bash
 # Trigger CDN-side 5xx (oversized request, malformed Host)
 curl -sk -m 10 -H "Host: " "https://target.example/" -o /tmp/err.html
@@ -793,34 +847,35 @@ grep -iE 'origin|upstream|server|backend|cf-ray' /tmp/err.html
 
 ### 16.16 Vendor Product Fingerprints
 
-Common edge appliances / products on the target's perimeter, with fingerprint paths and notes on common CVEs.
+Common edge appliances / products on the target's perimeter, with fingerprint paths and notes on
+common CVEs.
 
-| Product | Fingerprint paths | Notes |
-|---|---|---|
-| **Citrix Netscaler / Gateway** | `/vpn/index.html`, `/logon/LogonPoint/tmindex.html`, `/citrix/` | Version in HTML; CVE-2023-3519 (RCE), CVE-2019-19781 (path traversal RCE) — both KEV-listed. |
-| **F5 BIG-IP TMUI** | `/tmui/login.jsp`, `/mgmt/tm/sys/` | Banner reveals version; CVE-2022-1388 (auth bypass), CVE-2023-46747 — KEV-listed. |
-| **Cisco ASA / AnyConnect** | `/+CSCOE+/`, `/CSCOE/index.html`, `/webvpn.html`, `/+CSCOE+/portal.html` | CVE-2020-3452 (file read), CVE-2018-0101 (RCE). |
-| **Pulse Secure / Ivanti Connect** | `/dana-na/`, `/dana-na/auth/url_default/welcome.cgi`, `/api/v1/` | CVE-2024-21887 (KEV), CVE-2023-46805 (KEV) — chained command injection. |
-| **FortiGate / FortiOS** | `/remote/login`, `/remote/info`, `/api/v2/` | CVE-2022-42475 (RCE, KEV), CVE-2024-21762 (RCE, KEV). |
-| **PaloAlto GlobalProtect** | `/global-protect/`, `/global-protect/portal/css/login.css`, `/api/?type=keygen` | CVE-2024-3400 (RCE, KEV), CVE-2019-1579. |
-| **VMware Horizon** | `/portal/info.jsp`, `/broker/xml`, `/login.jsp` | log4shell exposure (CVE-2021-44228, KEV). |
-| **VMware vCenter** | `/sdk`, `/ui/`, `/vsphere-client/`, `/websso/SAML2/` | CVE-2021-21972 (RCE, KEV), CVE-2021-22005. |
-| **VMware ESXi** | `/sdk`, `/ui/`, `/folder` | CVE-2021-21974 (heap overflow → ESXiArgs ransomware, KEV). |
-| **Microsoft Exchange OWA** | `/owa/`, `/ews/exchange.asmx`, `/ecp/` | ProxyShell (CVE-2021-34473), ProxyLogon (CVE-2021-26855), ProxyNotShell (CVE-2022-41040) — all KEV. |
-| **WatchGuard Firebox** | `/auth/`, `/wgcgi.cgi` | CVE-2022-26318 (CGI). |
-| **SonicWall SMA** | `/cgi-bin/welcome`, `/__api__/v1/`, `/diagnostics/` | CVE-2021-20016, CVE-2024-40766 (KEV). |
-| **Sophos UTM/XG/XGS** | `/userportal/`, `/webconsole/`, `/cgi-bin/` | CVE-2022-1040 (RCE, KEV). |
-| **Check Point R80/R81** | `/sslvpn/portal/`, `/clients/` | CVE-2024-24919 (KEV). |
-| **Zoho ManageEngine** | `/RestAPI/Login`, `/api/json/v2/` | Multiple RCE CVEs; check version. |
-| **Atlassian Confluence** | `/confluence/`, `/login.action`, `/rest/api/space` | CVE-2022-26134 (OGNL RCE, KEV), CVE-2023-22515 (KEV). |
-| **Atlassian Jira** | `/secure/Dashboard.jspa`, `/rest/api/2/serverInfo` | Multiple CVEs; check version. |
-| **GitLab self-hosted** | `/users/sign_in`, `/-/oauth/applications`, `/help` | Version in HTML footer; CVE-2021-22205 (RCE, KEV). |
-| **Telerik UI** | `/Telerik.Web.UI.WebResource.axd?type=rau` | CVE-2017-9248, CVE-2019-18935 — old but still found. |
-| **ConnectWise ScreenConnect** | `/SetupWizard.aspx`, `/Bin/SetupWizard.aspx` | CVE-2024-1709 (auth bypass, KEV). |
-| **SolarWinds Orion** | `/Orion/Login.aspx` | SUNBURST supply-chain (CVE-2020-10148). |
-| **Kaseya VSA** | `/dl.asp`, `/userFilterTableRpt.asp` | CVE-2021-30116 (REvil supply-chain). |
-| **Microsoft IIS / OWA misc** | `Server: Microsoft-IIS/<version>` | Old versions = old CVEs; check. |
-| **Cisco Smart Install** | port 4786 open | CVE-2018-0171 (smart install client mode RCE). |
+| Product                           | Fingerprint paths                                                               | Notes                                                                                               |
+| --------------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| **Citrix Netscaler / Gateway**    | `/vpn/index.html`, `/logon/LogonPoint/tmindex.html`, `/citrix/`                 | Version in HTML; CVE-2023-3519 (RCE), CVE-2019-19781 (path traversal RCE) — both KEV-listed.        |
+| **F5 BIG-IP TMUI**                | `/tmui/login.jsp`, `/mgmt/tm/sys/`                                              | Banner reveals version; CVE-2022-1388 (auth bypass), CVE-2023-46747 — KEV-listed.                   |
+| **Cisco ASA / AnyConnect**        | `/+CSCOE+/`, `/CSCOE/index.html`, `/webvpn.html`, `/+CSCOE+/portal.html`        | CVE-2020-3452 (file read), CVE-2018-0101 (RCE).                                                     |
+| **Pulse Secure / Ivanti Connect** | `/dana-na/`, `/dana-na/auth/url_default/welcome.cgi`, `/api/v1/`                | CVE-2024-21887 (KEV), CVE-2023-46805 (KEV) — chained command injection.                             |
+| **FortiGate / FortiOS**           | `/remote/login`, `/remote/info`, `/api/v2/`                                     | CVE-2022-42475 (RCE, KEV), CVE-2024-21762 (RCE, KEV).                                               |
+| **PaloAlto GlobalProtect**        | `/global-protect/`, `/global-protect/portal/css/login.css`, `/api/?type=keygen` | CVE-2024-3400 (RCE, KEV), CVE-2019-1579.                                                            |
+| **VMware Horizon**                | `/portal/info.jsp`, `/broker/xml`, `/login.jsp`                                 | log4shell exposure (CVE-2021-44228, KEV).                                                           |
+| **VMware vCenter**                | `/sdk`, `/ui/`, `/vsphere-client/`, `/websso/SAML2/`                            | CVE-2021-21972 (RCE, KEV), CVE-2021-22005.                                                          |
+| **VMware ESXi**                   | `/sdk`, `/ui/`, `/folder`                                                       | CVE-2021-21974 (heap overflow → ESXiArgs ransomware, KEV).                                          |
+| **Microsoft Exchange OWA**        | `/owa/`, `/ews/exchange.asmx`, `/ecp/`                                          | ProxyShell (CVE-2021-34473), ProxyLogon (CVE-2021-26855), ProxyNotShell (CVE-2022-41040) — all KEV. |
+| **WatchGuard Firebox**            | `/auth/`, `/wgcgi.cgi`                                                          | CVE-2022-26318 (CGI).                                                                               |
+| **SonicWall SMA**                 | `/cgi-bin/welcome`, `/__api__/v1/`, `/diagnostics/`                             | CVE-2021-20016, CVE-2024-40766 (KEV).                                                               |
+| **Sophos UTM/XG/XGS**             | `/userportal/`, `/webconsole/`, `/cgi-bin/`                                     | CVE-2022-1040 (RCE, KEV).                                                                           |
+| **Check Point R80/R81**           | `/sslvpn/portal/`, `/clients/`                                                  | CVE-2024-24919 (KEV).                                                                               |
+| **Zoho ManageEngine**             | `/RestAPI/Login`, `/api/json/v2/`                                               | Multiple RCE CVEs; check version.                                                                   |
+| **Atlassian Confluence**          | `/confluence/`, `/login.action`, `/rest/api/space`                              | CVE-2022-26134 (OGNL RCE, KEV), CVE-2023-22515 (KEV).                                               |
+| **Atlassian Jira**                | `/secure/Dashboard.jspa`, `/rest/api/2/serverInfo`                              | Multiple CVEs; check version.                                                                       |
+| **GitLab self-hosted**            | `/users/sign_in`, `/-/oauth/applications`, `/help`                              | Version in HTML footer; CVE-2021-22205 (RCE, KEV).                                                  |
+| **Telerik UI**                    | `/Telerik.Web.UI.WebResource.axd?type=rau`                                      | CVE-2017-9248, CVE-2019-18935 — old but still found.                                                |
+| **ConnectWise ScreenConnect**     | `/SetupWizard.aspx`, `/Bin/SetupWizard.aspx`                                    | CVE-2024-1709 (auth bypass, KEV).                                                                   |
+| **SolarWinds Orion**              | `/Orion/Login.aspx`                                                             | SUNBURST supply-chain (CVE-2020-10148).                                                             |
+| **Kaseya VSA**                    | `/dl.asp`, `/userFilterTableRpt.asp`                                            | CVE-2021-30116 (REvil supply-chain).                                                                |
+| **Microsoft IIS / OWA misc**      | `Server: Microsoft-IIS/<version>`                                               | Old versions = old CVEs; check.                                                                     |
+| **Cisco Smart Install**           | port 4786 open                                                                  | CVE-2018-0171 (smart install client mode RCE).                                                      |
 
 **Per-vendor probe pattern:**
 
@@ -846,87 +901,92 @@ nuclei -u $T -t http/cves/ -severity high,critical -etags fuzz
 
 Modern apps deploy on serverless / managed services. Fingerprint the platform from the URL pattern.
 
-| Provider | URL pattern | Notes |
-|---|---|---|
-| **AWS Lambda Function URL** | `*.lambda-url.<region>.on.aws` | Direct invocation; check IAM auth posture. |
-| **AWS App Runner** | `*.<region>.awsapprunner.com` | Managed container; usually behind auth. |
-| **AWS API Gateway** | `*.execute-api.<region>.amazonaws.com` | REST/HTTP/WebSocket; check authorizer config. |
-| **AWS CloudFront** | `d{14}\.cloudfront\.net` | Distribution; origin behind it (see §16.15). |
-| **AWS ALB / ELB** | `*.elb.<region>.amazonaws.com` | Behind = EC2 / ECS. |
-| **AWS Amplify** | `*.amplifyapp.com` | Static + Lambda backend. |
-| **Google Cloud Run** | `*.run.app` (and `*.<region>.run.app`) | Container; check public-vs-IAM auth. |
-| **Google Cloud Functions** | `*.cloudfunctions.net`, `*.<region>-<project>.cloudfunctions.net` | Serverless. |
-| **Google App Engine** | `*.appspot.com` | Older serverless. |
-| **Azure Functions** | `*.azurewebsites.net` (also App Service) | Function App behind same domain pattern. |
-| **Azure Container Apps** | `*.azurecontainerapps.io` | Containers. |
-| **Azure Static Web Apps** | `*.azurestaticapps.net` | Static + Functions. |
-| **Vercel** | `*.vercel.app`, `*.now.sh` (legacy) | Frontend + serverless. |
-| **Netlify** | `*.netlify.app`, `*.netlify.com` | Frontend + functions. |
-| **Cloudflare Workers** | `*.workers.dev` | Edge functions. |
-| **Cloudflare Pages** | `*.pages.dev` | Static + functions. |
-| **Heroku** | `*.herokuapp.com` | Dynos. |
-| **Render** | `*.onrender.com` | Container/static. |
-| **Fly.io** | `*.fly.dev` | Edge containers. |
-| **Railway** | `*.railway.app` | App platform. |
-| **DigitalOcean App Platform** | `*.ondigitalocean.app` | Static + container. |
+| Provider                      | URL pattern                                                       | Notes                                         |
+| ----------------------------- | ----------------------------------------------------------------- | --------------------------------------------- |
+| **AWS Lambda Function URL**   | `*.lambda-url.<region>.on.aws`                                    | Direct invocation; check IAM auth posture.    |
+| **AWS App Runner**            | `*.<region>.awsapprunner.com`                                     | Managed container; usually behind auth.       |
+| **AWS API Gateway**           | `*.execute-api.<region>.amazonaws.com`                            | REST/HTTP/WebSocket; check authorizer config. |
+| **AWS CloudFront**            | `d{14}\.cloudfront\.net`                                          | Distribution; origin behind it (see §16.15).  |
+| **AWS ALB / ELB**             | `*.elb.<region>.amazonaws.com`                                    | Behind = EC2 / ECS.                           |
+| **AWS Amplify**               | `*.amplifyapp.com`                                                | Static + Lambda backend.                      |
+| **Google Cloud Run**          | `*.run.app` (and `*.<region>.run.app`)                            | Container; check public-vs-IAM auth.          |
+| **Google Cloud Functions**    | `*.cloudfunctions.net`, `*.<region>-<project>.cloudfunctions.net` | Serverless.                                   |
+| **Google App Engine**         | `*.appspot.com`                                                   | Older serverless.                             |
+| **Azure Functions**           | `*.azurewebsites.net` (also App Service)                          | Function App behind same domain pattern.      |
+| **Azure Container Apps**      | `*.azurecontainerapps.io`                                         | Containers.                                   |
+| **Azure Static Web Apps**     | `*.azurestaticapps.net`                                           | Static + Functions.                           |
+| **Vercel**                    | `*.vercel.app`, `*.now.sh` (legacy)                               | Frontend + serverless.                        |
+| **Netlify**                   | `*.netlify.app`, `*.netlify.com`                                  | Frontend + functions.                         |
+| **Cloudflare Workers**        | `*.workers.dev`                                                   | Edge functions.                               |
+| **Cloudflare Pages**          | `*.pages.dev`                                                     | Static + functions.                           |
+| **Heroku**                    | `*.herokuapp.com`                                                 | Dynos.                                        |
+| **Render**                    | `*.onrender.com`                                                  | Container/static.                             |
+| **Fly.io**                    | `*.fly.dev`                                                       | Edge containers.                              |
+| **Railway**                   | `*.railway.app`                                                   | App platform.                                 |
+| **DigitalOcean App Platform** | `*.ondigitalocean.app`                                            | Static + container.                           |
 
 **For each pattern:**
+
 - Confirm public vs auth-required (HEAD / GET).
 - Check CORS posture.
-- For Lambda Function URLs / Cloud Run / Cloud Functions: check whether IAM auth is enforced (anonymous invocation = HIGH finding).
-- For static + functions hybrids (Vercel/Netlify/Cloudflare Pages): the function paths are usually `/api/*`; enumerate via JS extraction.
+- For Lambda Function URLs / Cloud Run / Cloud Functions: check whether IAM auth is enforced
+  (anonymous invocation = HIGH finding).
+- For static + functions hybrids (Vercel/Netlify/Cloudflare Pages): the function paths are usually
+  `/api/*`; enumerate via JS extraction.
 
 ### 16.18 Container & Kubernetes Exposure
 
 Increasingly common; often forgotten when behind a NAT.
 
-| Target | Port | Probe | Severity if exposed |
-|---|---|---|---|
-| **Docker API (unencrypted)** | 2375 | `curl -sk -m 5 http://${IP}:2375/v1.40/info` | CRITICAL (container/host takeover) |
-| **Docker API (TLS)** | 2376 | `curl -sk -m 5 https://${IP}:2376/v1.40/info` | HIGH (cert validation bypass possible) |
-| **Kubernetes API server** | 6443 / 8443 | `curl -sk -m 5 https://${IP}:6443/api` | HIGH if `system:anonymous` returns non-403 |
-| **Kubernetes Dashboard** | 8001 / 9090 / 30000+ | `curl -sk -m 5 http://${IP}:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard` | HIGH if reachable |
-| **kubelet** | 10250 (HTTPS), 10255 (HTTP, deprecated) | `curl -sk -m 5 https://${IP}:10250/pods` | CRITICAL (no auth = pod exec) |
-| **etcd** | 2379 (client), 2380 (peer) | `curl -sk -m 5 https://${IP}:2379/v2/keys/` (v2) or `etcdctl --endpoints=${IP}:2379 get /` (v3) | CRITICAL (cluster state + secrets) |
-| **kube-proxy** | 10256 | `curl http://${IP}:10256/healthz` | INFO |
-| **kube-controller-manager** | 10257 | `curl https://${IP}:10257/metrics` | MEDIUM |
-| **kube-scheduler** | 10259 | `curl https://${IP}:10259/metrics` | MEDIUM |
-| **cAdvisor** | 4194 (deprecated) | `curl http://${IP}:4194/metrics` | LOW (resource metrics) |
-| **Helm Tiller** (Helm 2 — deprecated but found) | 44134 | `helm --host ${IP}:44134 list` | HIGH (Tiller had cluster-admin) |
+| Target                                          | Port                                    | Probe                                                                                           | Severity if exposed                        |
+| ----------------------------------------------- | --------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| **Docker API (unencrypted)**                    | 2375                                    | `curl -sk -m 5 http://${IP}:2375/v1.40/info`                                                    | CRITICAL (container/host takeover)         |
+| **Docker API (TLS)**                            | 2376                                    | `curl -sk -m 5 https://${IP}:2376/v1.40/info`                                                   | HIGH (cert validation bypass possible)     |
+| **Kubernetes API server**                       | 6443 / 8443                             | `curl -sk -m 5 https://${IP}:6443/api`                                                          | HIGH if `system:anonymous` returns non-403 |
+| **Kubernetes Dashboard**                        | 8001 / 9090 / 30000+                    | `curl -sk -m 5 http://${IP}:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard`   | HIGH if reachable                          |
+| **kubelet**                                     | 10250 (HTTPS), 10255 (HTTP, deprecated) | `curl -sk -m 5 https://${IP}:10250/pods`                                                        | CRITICAL (no auth = pod exec)              |
+| **etcd**                                        | 2379 (client), 2380 (peer)              | `curl -sk -m 5 https://${IP}:2379/v2/keys/` (v2) or `etcdctl --endpoints=${IP}:2379 get /` (v3) | CRITICAL (cluster state + secrets)         |
+| **kube-proxy**                                  | 10256                                   | `curl http://${IP}:10256/healthz`                                                               | INFO                                       |
+| **kube-controller-manager**                     | 10257                                   | `curl https://${IP}:10257/metrics`                                                              | MEDIUM                                     |
+| **kube-scheduler**                              | 10259                                   | `curl https://${IP}:10259/metrics`                                                              | MEDIUM                                     |
+| **cAdvisor**                                    | 4194 (deprecated)                       | `curl http://${IP}:4194/metrics`                                                                | LOW (resource metrics)                     |
+| **Helm Tiller** (Helm 2 — deprecated but found) | 44134                                   | `helm --host ${IP}:44134 list`                                                                  | HIGH (Tiller had cluster-admin)            |
 
 **Public container registries to check for leaks:**
 
-| Registry | Search pattern |
-|---|---|
-| Docker Hub | `https://hub.docker.com/search?q=<target-keyword>&type=image` |
-| Quay (Red Hat) | `https://quay.io/search?q=<target-keyword>` |
-| GitHub Container Registry (GHCR) | enumerable via GitHub API: `https://api.github.com/orgs/<org>/packages?package_type=container` |
-| Amazon ECR Public | `https://gallery.ecr.aws/?searchTerm=<keyword>` |
-| Azure Container Registry (public) | varies; check for `*.azurecr.io` |
-| Google Container Registry (public) | `https://console.cloud.google.com/gcr/images/<project>?project=<project>` |
+| Registry                           | Search pattern                                                                                 |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Docker Hub                         | `https://hub.docker.com/search?q=<target-keyword>&type=image`                                  |
+| Quay (Red Hat)                     | `https://quay.io/search?q=<target-keyword>`                                                    |
+| GitHub Container Registry (GHCR)   | enumerable via GitHub API: `https://api.github.com/orgs/<org>/packages?package_type=container` |
+| Amazon ECR Public                  | `https://gallery.ecr.aws/?searchTerm=<keyword>`                                                |
+| Azure Container Registry (public)  | varies; check for `*.azurecr.io`                                                               |
+| Google Container Registry (public) | `https://console.cloud.google.com/gcr/images/<project>?project=<project>`                      |
 
 **Per-image scan workflow:**
+
 1. `docker pull <registry>/<image>:<tag>` (or `skopeo inspect`).
 2. `docker save <image> -o /tmp/img.tar`.
 3. Extract layers; scan with secret catalog (§17).
-4. Inspect `Dockerfile` history (`docker history <image>`) — sometimes reveals build args or COPY of secrets.
+4. Inspect `Dockerfile` history (`docker history <image>`) — sometimes reveals build args or COPY of
+   secrets.
 
 ### 16.19 CI/CD Platform Exposure
 
-| Platform | Common exposure | Probe |
-|---|---|---|
-| **Jenkins** | `/script` (Groovy console = RCE if no auth), `/asynchPeople/`, `/jnlpJars/jenkins-cli.jar`, `/computer/`, `/job/<name>/api/json` | `curl -sk -m 10 "${T}/script"` and `curl -sk -m 10 "${T}/asynchPeople/api/json"` |
-| **GitLab self-hosted** | `/users/sign_in` (version in HTML), `/-/oauth/applications` (auth-required), `/api/v4/version`, `/-/snippets/<id>/raw` | `curl -sk -m 10 "${T}/api/v4/version"` |
-| **GitHub Actions workflow files** | `.github/workflows/*.yml` in any public repo | Search via GitHub code search: `path:.github/workflows extension:yml secrets` |
-| **CircleCI config** | `.circleci/config.yml` in any repo | Search: `path:.circleci/config.yml` |
-| **TeamCity** | `/login.html`, `/agent.html?agentId=*`, `/admin/admin.html` | `curl -sk -m 10 "${T}/login.html" \| grep -i 'TeamCity'` — version disclosure. CVE-2024-27198 (KEV). |
-| **Bamboo (Atlassian)** | `/userlogin.action`, `/rest/api/latest/info` | `curl -sk -m 10 "${T}/rest/api/latest/info"` |
-| **Drone CI** | `/api/info`, `/login` | `curl -sk -m 10 "${T}/api/info"` |
-| **Travis CI (legacy)** | `.travis.yml` in repos; `https://api.travis-ci.com/repos/<owner>/<repo>` | API often exposes build env. |
-| **Argo CD** | `/api/version`, `/applications` | `curl -sk -m 10 "${T}/api/version"`. Check anonymous-auth posture. |
-| **Tekton** | `/apis/tekton.dev/v1beta1/pipelineruns` (K8s native) | Enumerate via K8s API. |
-| **Spinnaker** | `/gate/info`, `/applications` | `curl -sk -m 10 "${T}/gate/info"` |
-| **Buildkite** | per-org dashboards; usually behind auth. | Check public agents page. |
+| Platform                          | Common exposure                                                                                                                  | Probe                                                                                                |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| **Jenkins**                       | `/script` (Groovy console = RCE if no auth), `/asynchPeople/`, `/jnlpJars/jenkins-cli.jar`, `/computer/`, `/job/<name>/api/json` | `curl -sk -m 10 "${T}/script"` and `curl -sk -m 10 "${T}/asynchPeople/api/json"`                     |
+| **GitLab self-hosted**            | `/users/sign_in` (version in HTML), `/-/oauth/applications` (auth-required), `/api/v4/version`, `/-/snippets/<id>/raw`           | `curl -sk -m 10 "${T}/api/v4/version"`                                                               |
+| **GitHub Actions workflow files** | `.github/workflows/*.yml` in any public repo                                                                                     | Search via GitHub code search: `path:.github/workflows extension:yml secrets`                        |
+| **CircleCI config**               | `.circleci/config.yml` in any repo                                                                                               | Search: `path:.circleci/config.yml`                                                                  |
+| **TeamCity**                      | `/login.html`, `/agent.html?agentId=*`, `/admin/admin.html`                                                                      | `curl -sk -m 10 "${T}/login.html" \| grep -i 'TeamCity'` — version disclosure. CVE-2024-27198 (KEV). |
+| **Bamboo (Atlassian)**            | `/userlogin.action`, `/rest/api/latest/info`                                                                                     | `curl -sk -m 10 "${T}/rest/api/latest/info"`                                                         |
+| **Drone CI**                      | `/api/info`, `/login`                                                                                                            | `curl -sk -m 10 "${T}/api/info"`                                                                     |
+| **Travis CI (legacy)**            | `.travis.yml` in repos; `https://api.travis-ci.com/repos/<owner>/<repo>`                                                         | API often exposes build env.                                                                         |
+| **Argo CD**                       | `/api/version`, `/applications`                                                                                                  | `curl -sk -m 10 "${T}/api/version"`. Check anonymous-auth posture.                                   |
+| **Tekton**                        | `/apis/tekton.dev/v1beta1/pipelineruns` (K8s native)                                                                             | Enumerate via K8s API.                                                                               |
+| **Spinnaker**                     | `/gate/info`, `/applications`                                                                                                    | `curl -sk -m 10 "${T}/gate/info"`                                                                    |
+| **Buildkite**                     | per-org dashboards; usually behind auth.                                                                                         | Check public agents page.                                                                            |
 
 **GitHub Actions secret-leak patterns to look for in workflows:**
 
@@ -953,28 +1013,29 @@ jobs:
 
 Public-share features on collaboration platforms regularly leak.
 
-| Platform | URL pattern | What's exposed |
-|---|---|---|
-| **Notion (publish page)** | `*.notion.site/<slug>` or `notion.so/<workspace>/<page-id>` | Public page; sometimes whole workspaces published by accident. |
-| **Confluence Cloud (anonymous)** | `<target>.atlassian.net/wiki/spaces/` | Public spaces; check `/wiki/display/<SPACE>/`. |
-| **Atlassian Service Desk** | `<target>.atlassian.net/servicedesk/customer/portal/<N>` | Sometimes lists all internal request types. |
-| **Trello board** | `https://trello.com/b/<id>/<slug>` | Public board with cards; check via Google `site:trello.com "${target}"`. |
-| **Asana public project** | `https://app.asana.com/0/<id>/<id>` | Public project view. |
-| **ReadTheDocs** | `<project>.readthedocs.io` | Hosted docs; "private builds" sometimes default to public. |
-| **GitBook** | `<workspace>.gitbook.io/<book>/` | Published docs; sometimes contain internal SOPs. |
-| **MkDocs / Docusaurus on subdomain** | `docs.<target>` | Often contains internal architecture diagrams + setup notes. |
-| **Slab** | `<workspace>.slab.com/posts/<id>` | Published posts. |
-| **Coda** | `coda.io/d/<doc-id>` | Public docs. |
-| **Miro** | `https://miro.com/app/board/<id>/` | Public boards (often architecture diagrams). |
-| **Lucidchart** | `https://lucid.app/lucidchart/<id>/view` | Public diagrams. |
-| **Figma** | `https://www.figma.com/file/<key>/` | Public design files; sometimes leak product spec. |
-| **GitHub Wiki** | `github.com/<org>/<repo>/wiki` | Public wikis; check stale ones. |
-| **Linear** | `linear.app/<workspace>/issue/<id>` | Public issues (rare but happens). |
-| **Confluence anonymous server** | `<target>/confluence/`, `<target>/wiki/` (self-hosted) | Anonymous read sometimes left on. |
-| **Monday.com** | `view.monday.com/<id>` | Shared boards. |
-| **Wrike** | `app.wrike.com/external/<id>` | External-shared spaces. |
+| Platform                             | URL pattern                                                 | What's exposed                                                           |
+| ------------------------------------ | ----------------------------------------------------------- | ------------------------------------------------------------------------ |
+| **Notion (publish page)**            | `*.notion.site/<slug>` or `notion.so/<workspace>/<page-id>` | Public page; sometimes whole workspaces published by accident.           |
+| **Confluence Cloud (anonymous)**     | `<target>.atlassian.net/wiki/spaces/`                       | Public spaces; check `/wiki/display/<SPACE>/`.                           |
+| **Atlassian Service Desk**           | `<target>.atlassian.net/servicedesk/customer/portal/<N>`    | Sometimes lists all internal request types.                              |
+| **Trello board**                     | `https://trello.com/b/<id>/<slug>`                          | Public board with cards; check via Google `site:trello.com "${target}"`. |
+| **Asana public project**             | `https://app.asana.com/0/<id>/<id>`                         | Public project view.                                                     |
+| **ReadTheDocs**                      | `<project>.readthedocs.io`                                  | Hosted docs; "private builds" sometimes default to public.               |
+| **GitBook**                          | `<workspace>.gitbook.io/<book>/`                            | Published docs; sometimes contain internal SOPs.                         |
+| **MkDocs / Docusaurus on subdomain** | `docs.<target>`                                             | Often contains internal architecture diagrams + setup notes.             |
+| **Slab**                             | `<workspace>.slab.com/posts/<id>`                           | Published posts.                                                         |
+| **Coda**                             | `coda.io/d/<doc-id>`                                        | Public docs.                                                             |
+| **Miro**                             | `https://miro.com/app/board/<id>/`                          | Public boards (often architecture diagrams).                             |
+| **Lucidchart**                       | `https://lucid.app/lucidchart/<id>/view`                    | Public diagrams.                                                         |
+| **Figma**                            | `https://www.figma.com/file/<key>/`                         | Public design files; sometimes leak product spec.                        |
+| **GitHub Wiki**                      | `github.com/<org>/<repo>/wiki`                              | Public wikis; check stale ones.                                          |
+| **Linear**                           | `linear.app/<workspace>/issue/<id>`                         | Public issues (rare but happens).                                        |
+| **Confluence anonymous server**      | `<target>/confluence/`, `<target>/wiki/` (self-hosted)      | Anonymous read sometimes left on.                                        |
+| **Monday.com**                       | `view.monday.com/<id>`                                      | Shared boards.                                                           |
+| **Wrike**                            | `app.wrike.com/external/<id>`                               | External-shared spaces.                                                  |
 
 **Dork-driven discovery:**
+
 ```
 site:notion.site "{target}"
 site:notion.so "{target}"
@@ -990,7 +1051,8 @@ site:readthedocs.io "{target}"
 
 ### 16.21 WHOIS / RDAP / Historical
 
-WHOIS gives current registrant; RDAP is the structured replacement; historical WHOIS is the pivot gold.
+WHOIS gives current registrant; RDAP is the structured replacement; historical WHOIS is the pivot
+gold.
 
 **Current WHOIS:**
 
@@ -1008,7 +1070,9 @@ curl -sk "https://www.iana.org/rdap" | jq .   # bootstrap registry
 ```
 
 What to extract from WHOIS / RDAP:
-- Registrant: name, org, email, phone, address (often redacted post-GDPR but not always for non-EU registrants).
+
+- Registrant: name, org, email, phone, address (often redacted post-GDPR but not always for non-EU
+  registrants).
 - Registrar: enables registrar-account pivot for related domains.
 - Created / updated / expiry dates: pattern of bulk registrations = same registrant.
 - Nameservers: NS reuse pivot.
@@ -1019,24 +1083,26 @@ What to extract from WHOIS / RDAP:
 
 Pre-GDPR records often have unredacted contact info. Sources:
 
-| Source | Notes |
-|---|---|
-| **DomainTools** | Paid; gold-standard; full WHOIS history. |
-| **WhoisXML API** | Paid; bulk + history. |
-| **SecurityTrails** | Paid; WHOIS + DNS history. |
-| **viewdns.info** | Free WHOIS history (limited). |
+| Source             | Notes                                    |
+| ------------------ | ---------------------------------------- |
+| **DomainTools**    | Paid; gold-standard; full WHOIS history. |
+| **WhoisXML API**   | Paid; bulk + history.                    |
+| **SecurityTrails** | Paid; WHOIS + DNS history.               |
+| **viewdns.info**   | Free WHOIS history (limited).            |
 | **whoisology.com** | Paid; reverse WHOIS by registrant email. |
 
 **Reverse-WHOIS pivots:**
 
 If you have a registrant email, search "every domain registered by this email":
+
 ```bash
 # DomainTools (paid)
 curl -sk -H "X-API-Username: ..." -H "X-API-Key: ..." \
   "https://api.domaintools.com/v1/reverse-whois/?terms=admin@target.example"
 ```
 
-This finds adjacent corporate assets (subsidiary domains, brand variations, employee personal projects on corp email).
+This finds adjacent corporate assets (subsidiary domains, brand variations, employee personal
+projects on corp email).
 
 ### 16.22 DNS Record Catalog (TXT verification tokens, MX→IdP)
 
@@ -1052,77 +1118,87 @@ done
 
 **TXT record verification token catalog** (each token reveals a SaaS tenancy):
 
-| TXT pattern | SaaS / service | Implication |
-|---|---|---|
-| `google-site-verification=<token>` | Google Workspace / Search Console / Analytics | Google tenancy. |
-| `MS=ms<digits>` | Microsoft 365 (older) | M365 tenancy. |
-| `apple-domain-verification=<token>` | Apple Business Manager / iCloud Calendar | Apple ecosystem. |
-| `atlassian-domain-verification=<token>` | Atlassian Cloud (Jira/Confluence/etc.) | Atlassian customer. |
-| `facebook-domain-verification=<token>` | Facebook Business / Pixel | FB Business. |
-| `adobe-idp-site-verification=<token>` | Adobe Sign / Creative Cloud | Adobe customer. |
-| `docusign=<token>` | DocuSign | DocuSign customer. |
-| `dropbox-domain-verification=<token>` | Dropbox Business | Dropbox customer. |
-| `box-verification=<token>` | Box | Box customer. |
-| `webexdomainverification.<id>` | Webex | Cisco Webex. |
-| `zoom_verify_<id>` | Zoom | Zoom customer (admin domain). |
-| `notion=<token>` (rare) | Notion workspace | Notion enterprise. |
-| `slack-domain-verification=<token>` | Slack Enterprise Grid | Slack EG. |
-| `asana-domain-verification=<token>` | Asana Enterprise | Asana customer. |
-| `mongodb-site-verification=<token>` | MongoDB Atlas | DB tenant. |
-| `_dnsauth.<token>` | Many ACME / Let's Encrypt CAs | DNS-01 challenge in progress. |
-| `pinterest-site-verification=<token>` | Pinterest Business | Marketing surface. |
-| `cisco-ci-domain-verification=<token>` | Cisco Spark / Webex | Cisco. |
-| `_globalsign-domain-verification=<token>` | GlobalSign cert authority | Cert provider. |
-| `mailru-verification:<token>` | Mail.ru | RU presence. |
-| `yandex-verification:<token>` | Yandex services | RU presence. |
-| `zscaler-verification-<id>-<date>-<random>` | Zscaler (ZIA / ZPA / ZDX) | **Web SSE / SASE customer**; the date suffix is the verification-issued date. |
-| `cloudflare-verify=<token>` | Cloudflare (Zero Trust / Access / WARP) | Cloudflare org-tier customer. |
-| `autosect-site-verification=<token>` | AutoSect (security tooling) | Security vendor on tenant. |
-| `cisco-site-verification=<token>` | Cisco (various products) | Cisco vendor. |
-| `mscid=<token>` | Microsoft (newer M365 verification) | M365 tenancy (newer format). |
-| `_amazonses=<token>` | AWS SES sender verification | SES sender. |
-| `salesforce-domain-verification=<token>` | Salesforce | SF customer. |
-| `workday-domain-verification=<token>` | Workday | Workday customer (HR + Finance). |
-| `shopify-domain-verification=<token>` | Shopify | E-commerce customer. |
-| `klaviyo-domain-verification=<token>` | Klaviyo | Marketing automation. |
-| `mailchimp-domain-verification=<token>` | Mailchimp | Marketing email. |
-| `hubspot-domain-verification=<token>` | HubSpot | CRM / marketing. |
-| `zendesk-verification=<token>` | Zendesk | Support tenancy (also see §43). |
-| `freshworks-verification=<token>` | Freshworks | Support / CRM customer. |
-| `intercom-verification=<token>` | Intercom | Messaging tenancy. |
-| `loom-site-verification=<token>` | Loom | Video. |
-| `miro-site-verification=<token>` | Miro | Whiteboard tenancy. |
-| `gitlab-domain-verification=<token>` | GitLab | Self-hosted or cloud verification. |
+| TXT pattern                                 | SaaS / service                                | Implication                                                                   |
+| ------------------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------- |
+| `google-site-verification=<token>`          | Google Workspace / Search Console / Analytics | Google tenancy.                                                               |
+| `MS=ms<digits>`                             | Microsoft 365 (older)                         | M365 tenancy.                                                                 |
+| `apple-domain-verification=<token>`         | Apple Business Manager / iCloud Calendar      | Apple ecosystem.                                                              |
+| `atlassian-domain-verification=<token>`     | Atlassian Cloud (Jira/Confluence/etc.)        | Atlassian customer.                                                           |
+| `facebook-domain-verification=<token>`      | Facebook Business / Pixel                     | FB Business.                                                                  |
+| `adobe-idp-site-verification=<token>`       | Adobe Sign / Creative Cloud                   | Adobe customer.                                                               |
+| `docusign=<token>`                          | DocuSign                                      | DocuSign customer.                                                            |
+| `dropbox-domain-verification=<token>`       | Dropbox Business                              | Dropbox customer.                                                             |
+| `box-verification=<token>`                  | Box                                           | Box customer.                                                                 |
+| `webexdomainverification.<id>`              | Webex                                         | Cisco Webex.                                                                  |
+| `zoom_verify_<id>`                          | Zoom                                          | Zoom customer (admin domain).                                                 |
+| `notion=<token>` (rare)                     | Notion workspace                              | Notion enterprise.                                                            |
+| `slack-domain-verification=<token>`         | Slack Enterprise Grid                         | Slack EG.                                                                     |
+| `asana-domain-verification=<token>`         | Asana Enterprise                              | Asana customer.                                                               |
+| `mongodb-site-verification=<token>`         | MongoDB Atlas                                 | DB tenant.                                                                    |
+| `_dnsauth.<token>`                          | Many ACME / Let's Encrypt CAs                 | DNS-01 challenge in progress.                                                 |
+| `pinterest-site-verification=<token>`       | Pinterest Business                            | Marketing surface.                                                            |
+| `cisco-ci-domain-verification=<token>`      | Cisco Spark / Webex                           | Cisco.                                                                        |
+| `_globalsign-domain-verification=<token>`   | GlobalSign cert authority                     | Cert provider.                                                                |
+| `mailru-verification:<token>`               | Mail.ru                                       | RU presence.                                                                  |
+| `yandex-verification:<token>`               | Yandex services                               | RU presence.                                                                  |
+| `zscaler-verification-<id>-<date>-<random>` | Zscaler (ZIA / ZPA / ZDX)                     | **Web SSE / SASE customer**; the date suffix is the verification-issued date. |
+| `cloudflare-verify=<token>`                 | Cloudflare (Zero Trust / Access / WARP)       | Cloudflare org-tier customer.                                                 |
+| `autosect-site-verification=<token>`        | AutoSect (security tooling)                   | Security vendor on tenant.                                                    |
+| `cisco-site-verification=<token>`           | Cisco (various products)                      | Cisco vendor.                                                                 |
+| `mscid=<token>`                             | Microsoft (newer M365 verification)           | M365 tenancy (newer format).                                                  |
+| `_amazonses=<token>`                        | AWS SES sender verification                   | SES sender.                                                                   |
+| `salesforce-domain-verification=<token>`    | Salesforce                                    | SF customer.                                                                  |
+| `workday-domain-verification=<token>`       | Workday                                       | Workday customer (HR + Finance).                                              |
+| `shopify-domain-verification=<token>`       | Shopify                                       | E-commerce customer.                                                          |
+| `klaviyo-domain-verification=<token>`       | Klaviyo                                       | Marketing automation.                                                         |
+| `mailchimp-domain-verification=<token>`     | Mailchimp                                     | Marketing email.                                                              |
+| `hubspot-domain-verification=<token>`       | HubSpot                                       | CRM / marketing.                                                              |
+| `zendesk-verification=<token>`              | Zendesk                                       | Support tenancy (also see §43).                                               |
+| `freshworks-verification=<token>`           | Freshworks                                    | Support / CRM customer.                                                       |
+| `intercom-verification=<token>`             | Intercom                                      | Messaging tenancy.                                                            |
+| `loom-site-verification=<token>`            | Loom                                          | Video.                                                                        |
+| `miro-site-verification=<token>`            | Miro                                          | Whiteboard tenancy.                                                           |
+| `gitlab-domain-verification=<token>`        | GitLab                                        | Self-hosted or cloud verification.                                            |
 
 Each discovered tenancy is a separate attack surface (own credentials, own MFA posture, own data).
 
 **Autodiscover-as-confirmation pattern:**
 
-`autodiscover.<domain>` resolving to Microsoft IP space (`40.96.0.0/13`, `52.96.0.0/14`, `13.107.0.0/16`) is **definitive proof** of M365 Exchange Online tenancy — even when MX records are obscured by Mimecast/Proofpoint/Barracuda inbound filtering. Probe:
+`autodiscover.<domain>` resolving to Microsoft IP space (`40.96.0.0/13`, `52.96.0.0/14`,
+`13.107.0.0/16`) is **definitive proof** of M365 Exchange Online tenancy — even when MX records are
+obscured by Mimecast/Proofpoint/Barracuda inbound filtering. Probe:
 
 ```powershell
 Resolve-DnsName "autodiscover.$D" -Type A | Select Name,IPAddress
 ```
 
-If IPs are in Microsoft ranges → `M365_CONFIRMED`. Cross-reference with `getuserrealm.srf` (§22.1) for tenant GUID extraction.
+If IPs are in Microsoft ranges → `M365_CONFIRMED`. Cross-reference with `getuserrealm.srf` (§22.1)
+for tenant GUID extraction.
 
 **CAA records:**
+
 ```bash
 dig +short CAA "${D}"
 ```
-Lists which CAs are allowed to issue certs. Absence = LOW finding (any CA can mis-issue). Presence + restrictive list = good posture.
+
+Lists which CAs are allowed to issue certs. Absence = LOW finding (any CA can mis-issue). Presence +
+restrictive list = good posture.
 
 **SOA serial pattern analysis:**
+
 ```bash
 dig +short SOA "${D}"
 ```
-Serial format `YYYYMMDDNN` reveals last-edit date. Pattern across multiple zones can correlate ownership.
+
+Serial format `YYYYMMDDNN` reveals last-edit date. Pattern across multiple zones can correlate
+ownership.
 
 ### 16.23 Wayback CDX Deep Usage
 
 The Wayback Machine has a structured query API.
 
 **Basic CDX query:**
+
 ```bash
 D="target.example"
 curl -sk "https://web.archive.org/cdx/search/cdx?url=${D}/*&output=json&fl=timestamp,original&limit=10000"
@@ -1131,6 +1207,7 @@ curl -sk "https://web.archive.org/cdx/search/cdx?url=${D}/*&output=json&fl=times
 Returns JSON array of `[timestamp, original_url]` tuples.
 
 **Useful filters:**
+
 - `&from=20200101&to=20231231` — date range.
 - `&filter=mimetype:application/json` — only JSON responses (often APIs).
 - `&filter=mimetype:application/javascript` — JS bundles.
@@ -1140,6 +1217,7 @@ Returns JSON array of `[timestamp, original_url]` tuples.
 - `&collapse=digest` — dedup by content (catches identical pages re-archived).
 
 **Get specific snapshot:**
+
 ```bash
 TS="20231215120000"
 URL="https://target.example/admin/dashboard"
@@ -1147,6 +1225,7 @@ curl -sk "https://web.archive.org/web/${TS}/${URL}"
 ```
 
 **Diff snapshot vs live:**
+
 ```bash
 LIVE=$(curl -sk -m 10 "${URL}")
 ARCHIVED=$(curl -sk -m 10 "https://web.archive.org/web/${TS}/${URL}")
@@ -1154,6 +1233,7 @@ diff <(echo "$LIVE") <(echo "$ARCHIVED") | head -100
 ```
 
 **Save current page:**
+
 ```bash
 curl -sk -X POST "https://pragma.archivelab.org/" \
   -H 'Content-Type: application/json' \
@@ -1161,16 +1241,19 @@ curl -sk -X POST "https://pragma.archivelab.org/" \
 ```
 
 **Find every archived JS:**
+
 ```bash
 curl -sk "https://web.archive.org/cdx/search/cdx?url=${D}/*.js&output=json&fl=timestamp,original&filter=statuscode:200" | \
   jq -r '.[1:][] | "\(.[0]) \(.[1])"'
 ```
 
-For each, fetch the archived JS and run the secret catalog (§17). Old JS often had hard-coded keys later removed.
+For each, fetch the archived JS and run the secret catalog (§17). Old JS often had hard-coded keys
+later removed.
 
 **Legacy-app pivot (when `*.js` returns empty):**
 
-Static brochure-ware sites (older corporate sites, especially pre-2015) often have **zero archived JS** because the frontend was server-rendered. Pivot to legacy file extensions:
+Static brochure-ware sites (older corporate sites, especially pre-2015) often have **zero archived
+JS** because the frontend was server-rendered. Pivot to legacy file extensions:
 
 ```bash
 # ASP / ASP.NET classic
@@ -1195,13 +1278,19 @@ done
 curl -sk "https://web.archive.org/cdx/search/cdx?url=${D}/*&output=json&fl=timestamp,original&filter=statuscode:200&collapse=urlkey&limit=10000"
 ```
 
-Legacy `.asp` / `.cfm` / `.jsp` URLs often reveal: forgotten admin panels, old user-enum endpoints, legacy auth flows, SQL-injection-prone parameters. Cross-reference with current DNS — many legacy hosts now NXDOMAIN but the URL paths sometimes survive on a renamed host.
+Legacy `.asp` / `.cfm` / `.jsp` URLs often reveal: forgotten admin panels, old user-enum endpoints,
+legacy auth flows, SQL-injection-prone parameters. Cross-reference with current DNS — many legacy
+hosts now NXDOMAIN but the URL paths sometimes survive on a renamed host.
 
 ### 16.24 Common-Prefix Subdomain Sweep (active, low-detectability)
 
-Empirically: **passive cert-transparency enumeration (crt.sh / VirusTotal / Subfinder) misses 20–40% of high-value subdomains** because (a) many internal hosts use wildcard certs that don't expose the FQDN, (b) some hosts have never been issued public certs (HTTP-only or self-signed), (c) very-recently-provisioned hosts haven't propagated to CT log mirrors yet.
+Empirically: **passive cert-transparency enumeration (crt.sh / VirusTotal / Subfinder) misses 20–40%
+of high-value subdomains** because (a) many internal hosts use wildcard certs that don't expose the
+FQDN, (b) some hosts have never been issued public certs (HTTP-only or self-signed), (c)
+very-recently-provisioned hosts haven't propagated to CT log mirrors yet.
 
-**Always pair passive enum with an active prefix-probe.** Detectability: low (single A-record query per host; no port scan, no HTTP).
+**Always pair passive enum with an active prefix-probe.** Detectability: low (single A-record query
+per host; no port scan, no HTTP).
 
 **The high-yield prefix list (ordered by hit-rate from real engagements):**
 
@@ -1226,6 +1315,7 @@ eproc, tender, tenders, suppliers, vendor, vendors, procurement, purchase
 ```
 
 **One-liner (PowerShell):**
+
 ```powershell
 $D = "target.example"
 $prefixes = @("www","mail","webmail","owa","autodiscover","ftp","vpn","sslvpn","gateway","api","app","portal","login","sso","idp","iam","identity","accounts","oauth","auth","adfs","admin","intranet","hr","sap","erp","crm","support","help","status","grafana","kibana","docs","wiki","jira","jenkins","gitlab","dev","test","staging","stg","qa","uat","sandbox","preprod","preview","careers","jobs","eapps","old","legacy","beta","tender","suppliers","procurement")
@@ -1239,6 +1329,7 @@ foreach ($p in $prefixes) {
 ```
 
 **One-liner (bash + dig):**
+
 ```bash
 D="target.example"
 for p in www mail webmail owa autodiscover ftp vpn sslvpn gateway api app portal login sso idp iam identity accounts oauth auth adfs admin intranet hr sap erp crm support help status grafana kibana docs wiki jira jenkins gitlab dev test staging stg qa uat sandbox preprod preview careers jobs eapps old legacy beta tender suppliers procurement; do
@@ -1248,19 +1339,25 @@ done
 ```
 
 **Mass DNS approach (faster for large prefix lists):**
+
 ```bash
 # Generate candidate FQDNs from a wordlist; resolve in parallel via puredns
 puredns resolve <(awk -v d="$D" '{print $1"."d}' assetnote-best-dns-wordlist.txt) -r resolvers.txt
 ```
 
 **What to extract from each hit:**
-- IP / IP block → ASN lookup (§28.1) → confirms target-owned vs hosted-elsewhere.
-- For `vpn.*` / `gateway.*` / `gp.*` / `globalprotect.*` / `citrix.*` → flag for active vendor fingerprint (§16.16) under separate engagement scope.
-- For `api.*` / `app.*` → seed for §16.1–16.10 webapp probes.
-- For `staging.*` / `dev.*` / `uat.*` → seed for §16.5 always-on HTTP checks (often weaker auth + debug endpoints).
-- For `intranet.*` / `eapps.*` / `eproc.*` / similar internal-app shortnames → public-intranet finding (often MEDIUM; per §40).
 
-**Real-engagement validation:** in an internal smoke test, prefix-sweep found `vpn.`, `api.`, `intranet.`, `staging.`, `support.`, `eapps.`, `eproc.`, `autodiscover.` — all of which crt.sh missed (or returned 502 for). Treat passive + active as **complementary, not alternatives**.
+- IP / IP block → ASN lookup (§28.1) → confirms target-owned vs hosted-elsewhere.
+- For `vpn.*` / `gateway.*` / `gp.*` / `globalprotect.*` / `citrix.*` → flag for active vendor
+  fingerprint (§16.16) under separate engagement scope.
+- For `api.*` / `app.*` → seed for §16.1–16.10 webapp probes.
+- For `staging.*` / `dev.*` / `uat.*` → seed for §16.5 always-on HTTP checks (often weaker auth +
+  debug endpoints).
+- For `intranet.*` / `eapps.*` / `eproc.*` / similar internal-app shortnames → public-intranet
+  finding (often MEDIUM; per §40).
+
+**Real-engagement validation:** in an internal smoke test, prefix-sweep found `vpn.`, `api.`,
+`intranet.`, `staging.`, `support.`, `eapps.`, `eproc.`, `autodiscover.` — all of which crt.sh
+missed (or returned 502 for). Treat passive + active as **complementary, not alternatives**.
 
 ---
-

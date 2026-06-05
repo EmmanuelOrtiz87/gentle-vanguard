@@ -1,10 +1,12 @@
 # Reference Mapping with scArches
 
-This reference covers using scArches for mapping query data to pre-trained reference models without retraining from scratch.
+This reference covers using scArches for mapping query data to pre-trained reference models without
+retraining from scratch.
 
 ## Overview
 
 scArches (single-cell architecture surgery) enables:
+
 - Mapping new data to existing reference atlases
 - Extending models with new batches/studies
 - Transfer learning without full retraining
@@ -12,12 +14,12 @@ scArches (single-cell architecture surgery) enables:
 
 ## When to Use scArches
 
-| Scenario | Approach |
-|----------|----------|
-| Map query to existing atlas | scArches query mapping |
-| Extend atlas with new data | scArches model surgery |
-| No pre-trained model available | Train scANVI from scratch |
-| Query very different from reference | Consider retraining |
+| Scenario                            | Approach                  |
+| ----------------------------------- | ------------------------- |
+| Map query to existing atlas         | scArches query mapping    |
+| Extend atlas with new data          | scArches model surgery    |
+| No pre-trained model available      | Train scANVI from scratch |
+| Query very different from reference | Consider retraining       |
 
 ## Prerequisites
 
@@ -387,15 +389,16 @@ sc.pl.umap(adata_mapped, color=['predicted_cell_type', 'prediction_confidence'])
 
 ## Troubleshooting
 
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| Gene mismatch | Different gene naming | Convert gene IDs (Ensembl ↔ Symbol) |
-| Many low-confidence | Query has novel types | Manually annotate low-confidence cells |
-| Poor mapping | Query too different | Consider retraining with combined data |
-| Memory error | Large query | Process in batches |
-| Version mismatch | Different scvi-tools version | Use same version as reference training |
+| Issue               | Cause                        | Solution                               |
+| ------------------- | ---------------------------- | -------------------------------------- |
+| Gene mismatch       | Different gene naming        | Convert gene IDs (Ensembl ↔ Symbol)    |
+| Many low-confidence | Query has novel types        | Manually annotate low-confidence cells |
+| Poor mapping        | Query too different          | Consider retraining with combined data |
+| Memory error        | Large query                  | Process in batches                     |
+| Version mismatch    | Different scvi-tools version | Use same version as reference training |
 
 ## Key References
 
 - Lotfollahi et al. (2022) "Mapping single-cell data to reference atlases by transfer learning"
-- Xu et al. (2021) "Probabilistic harmonization and annotation of single-cell transcriptomics data with deep generative models"
+- Xu et al. (2021) "Probabilistic harmonization and annotation of single-cell transcriptomics data
+  with deep generative models"

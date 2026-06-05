@@ -6,7 +6,8 @@ Edge cases in contract analysis. Good / Bad pairs.
 
 ## Gotcha: Flagging standard boilerplate as a red flag
 
-**Why it matters:** Over-flagging trains the user to ignore the summary. If everything is a red flag, nothing is.
+**Why it matters:** Over-flagging trains the user to ignore the summary. If everything is a red
+flag, nothing is.
 
 ### ✗ Bad
 
@@ -30,7 +31,9 @@ Reserve red flags for genuinely non-standard terms. If a clause is boilerplate a
 
 ## Gotcha: Missing clauses aren't missing from the analysis
 
-**Why it matters:** For SMBs, the absence of standard protections (liability cap, change order process, consequential damages waiver) is often more dangerous than an unfavorable clause — the default legal position fills the gap, usually in the counterparty's favor.
+**Why it matters:** For SMBs, the absence of standard protections (liability cap, change order
+process, consequential damages waiver) is often more dangerous than an unfavorable clause — the
+default legal position fills the gap, usually in the counterparty's favor.
 
 ### ✗ Bad
 
@@ -57,7 +60,9 @@ Treat absent-but-standard clauses as red flags. Explicitly label them "Missing."
 
 ## Gotcha: Large PDFs truncated mid-analysis
 
-**Why it matters:** Contracts over 20–30 pages often have the most dangerous terms in exhibits, schedules, or "Order Forms" at the back. If the PDF is read only up to page 15, key terms are silently missed.
+**Why it matters:** Contracts over 20–30 pages often have the most dangerous terms in exhibits,
+schedules, or "Order Forms" at the back. If the PDF is read only up to page 15, key terms are
+silently missed.
 
 ### ✗ Bad
 
@@ -80,7 +85,9 @@ Always read the full document. Use the `pages` parameter to chunk large PDFs.
 
 ## Gotcha: Counterparty template vs. negotiated draft
 
-**Why it matters:** Recommendations should match the negotiating context. Pushing back hard on a startup's first-draft agreement is different from pushing back on a Fortune 500 procurement template — the latter is often non-negotiable on 80% of its terms.
+**Why it matters:** Recommendations should match the negotiating context. Pushing back hard on a
+startup's first-draft agreement is different from pushing back on a Fortune 500 procurement template
+— the latter is often non-negotiable on 80% of its terms.
 
 ### ✗ Bad
 

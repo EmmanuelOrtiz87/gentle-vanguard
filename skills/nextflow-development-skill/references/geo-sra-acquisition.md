@@ -2,7 +2,8 @@
 
 Download raw sequencing data from NCBI GEO/SRA and prepare it for nf-core pipelines.
 
-**Use this when:** Reanalyzing published datasets, validating findings, or comparing results against public cohorts.
+**Use this when:** Reanalyzing published datasets, validating findings, or comparing results against
+public cohorts.
 
 ## Table of Contents
 
@@ -99,11 +100,13 @@ Example: "Find differentially expressed genes in GSE309891 (drug-treated vs cont
 When assisting users with GEO/SRA data acquisition:
 
 1. **Always fetch study info first** to show the user what data is available
-2. **Ask for confirmation before downloading** - Present the sample groups and sizes, then ask which subset to download using AskUserQuestion
+2. **Ask for confirmation before downloading** - Present the sample groups and sizes, then ask which
+   subset to download using AskUserQuestion
 3. **Suggest appropriate genome and pipeline** based on the organism and data type
 4. **Return to main SKILL.md workflow** after data preparation is complete
 
 Example confirmation question:
+
 ```
 Question: "Which sample group would you like to download?"
 Options:
@@ -123,11 +126,13 @@ python scripts/sra_geo_fetch.py info <GEO_ID>
 ```
 
 **Example:**
+
 ```bash
 python scripts/sra_geo_fetch.py info GSE110004
 ```
 
 **Output includes:**
+
 - Study title and summary
 - Organism (with auto-suggested genome)
 - Number of samples and runs
@@ -136,6 +141,7 @@ python scripts/sra_geo_fetch.py info GSE110004
 - Suggested nf-core pipeline
 
 **Save info to JSON:**
+
 ```bash
 python scripts/sra_geo_fetch.py info GSE110004 -o study_info.json
 ```
@@ -144,13 +150,15 @@ python scripts/sra_geo_fetch.py info GSE110004 -o study_info.json
 
 ## Step 2: Review Sample Groups
 
-View sample groups organized by data type and layout. This is useful for studies with mixed data types.
+View sample groups organized by data type and layout. This is useful for studies with mixed data
+types.
 
 ```bash
 python scripts/sra_geo_fetch.py groups <GEO_ID>
 ```
 
 **Example output:**
+
 ```
 Sample Group          Count Layout     GSM Range                    Est. Size
 --------------------------------------------------------------------------------
@@ -165,6 +173,7 @@ Available groups for --subset option:
 ```
 
 **List individual runs:**
+
 ```bash
 python scripts/sra_geo_fetch.py list <GEO_ID>
 
@@ -172,7 +181,8 @@ python scripts/sra_geo_fetch.py list <GEO_ID>
 python scripts/sra_geo_fetch.py list GSE110004 --filter "RNA-Seq:PAIRED"
 ```
 
-**DECISION POINT:** Review the sample groups. Decide which subset to download if the study has multiple data types.
+**DECISION POINT:** Review the sample groups. Decide which subset to download if the study has
+multiple data types.
 
 ---
 
@@ -185,6 +195,7 @@ python scripts/sra_geo_fetch.py download <GEO_ID> -o <OUTPUT_DIR>
 ```
 
 **Options:**
+
 - `-o, --output`: Output directory (required)
 - `-i, --interactive`: Interactively select sample group to download
 - `-s, --subset`: Filter by data type (e.g., "RNA-Seq:PAIRED")
@@ -200,6 +211,7 @@ python scripts/sra_geo_fetch.py download GSE110004 -o ./fastq -i
 ```
 
 **Interactive output:**
+
 ```
 ============================================================
   SELECT SAMPLE GROUP TO DOWNLOAD
@@ -231,7 +243,8 @@ python scripts/sra_geo_fetch.py download GSE110004 -o ./fastq \
     --subset "RNA-Seq:PAIRED" --parallel 6
 ```
 
-**Note:** Downloads automatically skip existing files. Resume interrupted downloads by re-running the command.
+**Note:** Downloads automatically skip existing files. Resume interrupted downloads by re-running
+the command.
 
 ---
 
@@ -246,11 +259,13 @@ python scripts/sra_geo_fetch.py samplesheet <GEO_ID> \
 ```
 
 **Options:**
+
 - `-f, --fastq-dir`: Directory containing downloaded FASTQ files (required)
 - `-o, --output`: Output samplesheet path (default: samplesheet.csv)
 - `-p, --pipeline`: Target pipeline (auto-detected if not specified)
 
 **Example:**
+
 ```bash
 python scripts/sra_geo_fetch.py samplesheet GSE110004 \
     --fastq-dir ./fastq \
@@ -258,6 +273,7 @@ python scripts/sra_geo_fetch.py samplesheet GSE110004 \
 ```
 
 **Output:** The script will:
+
 1. Create samplesheet in the format required by the target pipeline
 2. Display suggested genome reference
 3. Show suggested nf-core command
@@ -269,6 +285,7 @@ python scripts/sra_geo_fetch.py samplesheet GSE110004 \
 After generating the samplesheet, the script provides a suggested command.
 
 **Example output:**
+
 ```
 Suggested command:
    nextflow run nf-core/rnaseq \
@@ -279,20 +296,24 @@ Suggested command:
 ```
 
 **DECISION POINT:** Review and confirm:
+
 1. Is the suggested pipeline correct?
 2. Is the genome reference correct for your organism?
 3. Do you need additional pipeline options?
 
-Then return to the main SKILL.md workflow (Step 1: Environment Check) to proceed with pipeline execution.
+Then return to the main SKILL.md workflow (Step 1: Environment Check) to proceed with pipeline
+execution.
 
 ---
 
 ## Supported Pipelines
 
-The skill auto-detects appropriate pipelines based on library strategy. Pipelines marked with ★ are fully supported with configs, samplesheet generation, and documentation. Others are suggested but require manual setup following nf-core documentation.
+The skill auto-detects appropriate pipelines based on library strategy. Pipelines marked with ★ are
+fully supported with configs, samplesheet generation, and documentation. Others are suggested but
+require manual setup following nf-core documentation.
 
 | Library Strategy | Suggested Pipeline | Support |
-|------------------|--------------------|---------|
+| ---------------- | ------------------ | ------- |
 | RNA-Seq          | nf-core/rnaseq     | ★ Full  |
 | ATAC-seq         | nf-core/atacseq    | ★ Full  |
 | WGS/WXS          | nf-core/sarek      | ★ Full  |
@@ -307,16 +328,16 @@ The skill auto-detects appropriate pipelines based on library strategy. Pipeline
 
 Common organisms with auto-suggested genomes:
 
-| Organism | Genome | Notes |
-|----------|--------|-------|
-| Homo sapiens | GRCh38 | Human reference |
-| Mus musculus | GRCm39 | Mouse reference |
-| Saccharomyces cerevisiae | R64-1-1 | Yeast S288C |
-| Drosophila melanogaster | BDGP6 | Fruit fly |
-| Caenorhabditis elegans | WBcel235 | C. elegans |
-| Danio rerio | GRCz11 | Zebrafish |
-| Arabidopsis thaliana | TAIR10 | Arabidopsis |
-| Rattus norvegicus | Rnor_6.0 | Rat |
+| Organism                 | Genome   | Notes           |
+| ------------------------ | -------- | --------------- |
+| Homo sapiens             | GRCh38   | Human reference |
+| Mus musculus             | GRCm39   | Mouse reference |
+| Saccharomyces cerevisiae | R64-1-1  | Yeast S288C     |
+| Drosophila melanogaster  | BDGP6    | Fruit fly       |
+| Caenorhabditis elegans   | WBcel235 | C. elegans      |
+| Danio rerio              | GRCz11   | Zebrafish       |
+| Arabidopsis thaliana     | TAIR10   | Arabidopsis     |
+| Rattus norvegicus        | Rnor_6.0 | Rat             |
 
 See `scripts/config/genomes.yaml` for the full list.
 
@@ -365,6 +386,7 @@ python scripts/sra_geo_fetch.py download GSE110004 \
 ## Troubleshooting
 
 ### ENA Download Fails
+
 If ENA downloads fail, the data may need to be fetched directly from SRA:
 
 ```bash
@@ -377,14 +399,19 @@ conda run -n sra_tools fasterq-dump SRR6357070 -O ./fastq
 ```
 
 ### No SRA Runs Found
+
 Some GEO datasets only have processed data, not raw sequencing reads. Check:
+
 ```bash
 python scripts/sra_geo_fetch.py info <GEO_ID>
 ```
+
 If "Runs: 0", the dataset may not have raw data in SRA.
 
 ### SuperSeries Support
+
 GEO SuperSeries (which contain multiple SubSeries) are automatically handled. The tool will:
+
 1. Detect that a GEO ID is a SuperSeries
 2. Find the linked BioProject accession
 3. Fetch all SRA runs from the BioProject
@@ -392,7 +419,9 @@ GEO SuperSeries (which contain multiple SubSeries) are automatically handled. Th
 Example: GSE110004 is a SuperSeries that links to BioProject PRJNA432544.
 
 ### Genome Not Recognized
+
 If the organism is not in the genome mapping, manually specify the genome:
+
 ```bash
 # Check available iGenomes
 python scripts/manage_genomes.py list
@@ -411,6 +440,7 @@ nextflow run nf-core/rnaseq --fasta /path/to/genome.fa --gtf /path/to/genes.gtf
 - Network access to NCBI and ENA
 
 Install optional dependencies:
+
 ```bash
 pip install requests pyyaml
 ```

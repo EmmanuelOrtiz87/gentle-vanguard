@@ -1,6 +1,8 @@
 # HTTP Error Codes Reference
 
-This file documents HTTP error codes returned by the Claude API, their common causes, and how to handle them. For language-specific error handling examples, see the `python/` or `typescript/` folders.
+This file documents HTTP error codes returned by the Claude API, their common causes, and how to
+handle them. For language-specific error handling examples, see the `python/` or `typescript/`
+folders.
 
 ## Error Code Summary
 
@@ -68,7 +70,8 @@ This file documents HTTP error codes returned by the Claude API, their common ca
 - Organization-level restrictions
 - Attempting to access beta features without beta access
 
-**Fix:** Check your API key permissions in the Console. You may need a different API key or to request access to specific features.
+**Fix:** Check your API key permissions in the Console. You may need a different API key or to
+request access to specific features.
 
 ---
 
@@ -80,7 +83,8 @@ This file documents HTTP error codes returned by the Claude API, their common ca
 - Using deprecated model ID
 - Invalid API endpoint
 
-**Fix:** Use exact model IDs from the models documentation. You can use aliases (e.g., `claude-opus-4-8`).
+**Fix:** Use exact model IDs from the models documentation. You can use aliases (e.g.,
+`claude-opus-4-8`).
 
 ---
 
@@ -92,7 +96,8 @@ This file documents HTTP error codes returned by the Claude API, their common ca
 - Too many tokens in input
 - Image data too large
 
-**Fix:** Reduce input size — truncate conversation history, compress/resize images, or split large documents into chunks.
+**Fix:** Reduce input size — truncate conversation history, compress/resize images, or split large
+documents into chunks.
 
 ---
 
@@ -107,8 +112,10 @@ Some 400 errors are specifically related to parameter validation:
 
 **Model-specific 400s on Opus 4.8 / 4.7:**
 
-- `temperature`, `top_p`, `top_k` are removed — sending any of them returns 400. Delete the parameter; see `shared/model-migration.md` → Per-SDK Syntax Reference.
-- `thinking: {type: "enabled", budget_tokens: N}` is removed — sending it returns 400. Use `thinking: {type: "adaptive"}` instead.
+- `temperature`, `top_p`, `top_k` are removed — sending any of them returns 400. Delete the
+  parameter; see `shared/model-migration.md` → Per-SDK Syntax Reference.
+- `thinking: {type: "enabled", budget_tokens: N}` is removed — sending it returns 400. Use
+  `thinking: {type: "adaptive"}` instead.
 
 **Common mistake with extended thinking on older models (Opus 4.6 and earlier):**
 
@@ -136,7 +143,9 @@ thinking: budget_tokens=10000, max_tokens=16000
 - `x-ratelimit-limit-*`: Your limits
 - `x-ratelimit-remaining-*`: Remaining quota
 
-**Fix:** The Anthropic SDKs automatically retry 429 and 5xx errors with exponential backoff (default: `max_retries=2`). For custom retry behavior, see the language-specific error handling examples.
+**Fix:** The Anthropic SDKs automatically retry 429 and 5xx errors with exponential backoff
+(default: `max_retries=2`). For custom retry behavior, see the language-specific error handling
+examples.
 
 ---
 
@@ -147,7 +156,8 @@ thinking: budget_tokens=10000, max_tokens=16000
 - Temporary Anthropic service issue
 - Bug in API processing
 
-**Fix:** Retry with exponential backoff. If persistent, check [status.anthropic.com](https://status.anthropic.com).
+**Fix:** Retry with exponential backoff. If persistent, check
+[status.anthropic.com](https://status.anthropic.com).
 
 ---
 
@@ -158,26 +168,28 @@ thinking: budget_tokens=10000, max_tokens=16000
 - High API demand
 - Service capacity reached
 
-**Fix:** Retry with exponential backoff. Consider using a different model (Haiku is often less loaded), spreading requests over time, or implementing request queuing.
+**Fix:** Retry with exponential backoff. Consider using a different model (Haiku is often less
+loaded), spreading requests over time, or implementing request queuing.
 
 ---
 
 ## Common Mistakes and Fixes
 
-| Mistake                         | Error            | Fix                                                     |
-| ------------------------------- | ---------------- | ------------------------------------------------------- |
-| `temperature`/`top_p`/`top_k` on Opus 4.8 / 4.7 | 400 | Remove the parameter (see `shared/model-migration.md`)  |
-| `budget_tokens` on Opus 4.8 / 4.7 | 400            | Use `thinking: {type: "adaptive"}`                      |
-| `budget_tokens` >= `max_tokens` (older models) | 400 | Ensure `budget_tokens` < `max_tokens`                  |
-| Typo in model ID                | 404              | Use valid model ID like `claude-opus-4-8`               |
-| First message is `assistant`    | 400              | First message must be `user`                            |
-| Consecutive same-role messages  | 400              | Alternate `user` and `assistant`                        |
-| API key in code                 | 401 (leaked key) | Use environment variable                                |
-| Custom retry needs              | 429/5xx          | SDK retries automatically; customize with `max_retries` |
+| Mistake                                         | Error            | Fix                                                     |
+| ----------------------------------------------- | ---------------- | ------------------------------------------------------- |
+| `temperature`/`top_p`/`top_k` on Opus 4.8 / 4.7 | 400              | Remove the parameter (see `shared/model-migration.md`)  |
+| `budget_tokens` on Opus 4.8 / 4.7               | 400              | Use `thinking: {type: "adaptive"}`                      |
+| `budget_tokens` >= `max_tokens` (older models)  | 400              | Ensure `budget_tokens` < `max_tokens`                   |
+| Typo in model ID                                | 404              | Use valid model ID like `claude-opus-4-8`               |
+| First message is `assistant`                    | 400              | First message must be `user`                            |
+| Consecutive same-role messages                  | 400              | Alternate `user` and `assistant`                        |
+| API key in code                                 | 401 (leaked key) | Use environment variable                                |
+| Custom retry needs                              | 429/5xx          | SDK retries automatically; customize with `max_retries` |
 
 ## Typed Exceptions in SDKs
 
-**Always use the SDK's typed exception classes** instead of checking error messages with string matching. Each HTTP error code maps to a specific exception class:
+**Always use the SDK's typed exception classes** instead of checking error messages with string
+matching. Each HTTP error code maps to a specific exception class:
 
 | HTTP Code | TypeScript Class                  | Python Class                      |
 | --------- | --------------------------------- | --------------------------------- |
@@ -210,4 +222,5 @@ try {
 }
 ```
 
-All exception classes extend `Anthropic.APIError`, which has a `status` property. Use `instanceof` checks from most specific to least specific (e.g., check `RateLimitError` before `APIError`).
+All exception classes extend `Anthropic.APIError`, which has a `status` property. Use `instanceof`
+checks from most specific to least specific (e.g., check `RateLimitError` before `APIError`).

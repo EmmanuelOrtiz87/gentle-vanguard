@@ -7,9 +7,11 @@ metadata:
   original-name: data-context-extractor
   department: data
 ---
+
 # Data Context Extractor
 
-A meta-skill that extracts company-specific data knowledge from analysts and generates tailored data analysis skills.
+A meta-skill that extracts company-specific data knowledge from analysts and generates tailored data
+analysis skills.
 
 ## How It Works
 
@@ -31,21 +33,25 @@ Use when: User wants to create a new data context skill for their warehouse.
 Ask: "What data warehouse are you using?"
 
 Common options:
+
 - **BigQuery**
 - **Snowflake**
 - **PostgreSQL/Redshift**
 - **Databricks**
 
-Use `~~data warehouse` tools (query and schema) to connect. If unclear, check available MCP tools in the current session.
+Use `~~data warehouse` tools (query and schema) to connect. If unclear, check available MCP tools in
+the current session.
 
 **Step 2: Explore the schema**
 
 Use `~~data warehouse` schema tools to:
+
 1. List available datasets/schemas
 2. Identify the most important tables (ask user: "Which 3-5 tables do analysts query most often?")
 3. Pull schema details for those key tables
 
 Sample exploration queries by dialect:
+
 ```sql
 -- BigQuery: List datasets
 SELECT schema_name FROM INFORMATION_SCHEMA.SCHEMATA
@@ -65,41 +71,52 @@ SHOW TABLES IN SCHEMA my_schema
 After schema discovery, ask these questions conversationally (not all at once):
 
 **Entity Disambiguation (Critical)**
+
 > "When people here say 'user' or 'customer', what exactly do they mean? Are there different types?"
 
 Listen for:
+
 - Multiple entity types (user vs account vs organization)
 - Relationships between them (1:1, 1:many, many:many)
 - Which ID fields link them together
 
 **Primary Identifiers**
-> "What's the main identifier for a [customer/user/account]? Are there multiple IDs for the same entity?"
+
+> "What's the main identifier for a [customer/user/account]? Are there multiple IDs for the same
+> entity?"
 
 Listen for:
+
 - Primary keys vs business keys
 - UUID vs integer IDs
 - Legacy ID systems
 
 **Key Metrics**
+
 > "What are the 2-3 metrics people ask about most? How is each one calculated?"
 
 Listen for:
+
 - Exact formulas (ARR = monthly_revenue × 12)
 - Which tables/columns feed each metric
 - Time period conventions (trailing 7 days, calendar month, etc.)
 
 **Data Hygiene**
+
 > "What should ALWAYS be filtered out of queries? (test data, fraud, internal users, etc.)"
 
 Listen for:
+
 - Standard WHERE clauses to always include
 - Flag columns that indicate exclusions (is_test, is_internal, is_fraud)
 - Specific values to exclude (status = 'deleted')
 
 **Common Gotchas**
+
 > "What mistakes do new analysts typically make with this data?"
 
 Listen for:
+
 - Confusing column names
 - Timezone issues
 - NULL handling quirks
@@ -150,6 +167,7 @@ Read the current SKILL.md and reference files to understand what's already docum
 Ask: "What domain or topic needs more context? What queries are failing or producing wrong results?"
 
 Common gaps:
+
 - A new data domain (marketing, finance, product, etc.)
 - Missing metric definitions
 - Undocumented table relationships
@@ -181,6 +199,7 @@ For the identified domain:
 Each reference file should include:
 
 ### For Table Documentation
+
 - **Location**: Full table path
 - **Description**: What this table contains, when to use it
 - **Primary Key**: How to uniquely identify rows
@@ -190,6 +209,7 @@ Each reference file should include:
 - **Sample Queries**: 2-3 common query patterns
 
 ### For Metrics Documentation
+
 - **Metric Name**: Human-readable name
 - **Definition**: Plain English explanation
 - **Formula**: Exact calculation with column references
@@ -197,6 +217,7 @@ Each reference file should include:
 - **Caveats**: Edge cases, exclusions, gotchas
 
 ### For Entity Documentation
+
 - **Entity Name**: What it's called
 - **Definition**: What it represents in the business
 - **Primary Table**: Where to find this entity

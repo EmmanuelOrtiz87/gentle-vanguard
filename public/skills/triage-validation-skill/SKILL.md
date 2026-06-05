@@ -1,16 +1,23 @@
 ---
 name: triage-validation-skill
 description: >
-  Finding validation before writing any report — 7-Question Gate (all 7 questions), 4 pre-submission gates, always-rejected list, conditionally valid with chain table, CVSS 3.1 quick reference, severity decision guide, report title formula, 60-second pre-submit checklist. Use BEFORE writing any report. One wrong answer = kill the finding and move on. Saves N/A ratio.
+  Finding validation before writing any report — 7-Question Gate (all 7 questions), 4 pre-submission
+  gates, always-rejected list, conditionally valid with chain table, CVSS 3.1 quick reference,
+  severity decision guide, report title formula, 60-second pre-submit checklist. Use BEFORE writing
+  any report. One wrong answer = kill the finding and move on. Saves N/A ratio.
 metadata:
   source: claude-bughunter
   original-name: triage-validation
 ---
+
 # TRIAGE & VALIDATION
 
 One wrong answer = STOP **this finding**. Kill **the finding**. Move on **to the next test class**.
 
-> **Scope of "STOP" in this skill:** This skill's gates kill INDIVIDUAL FINDINGS that fail validation. They do NOT authorize stopping the engagement. Killing a finding via the 7-Question Gate just means *that finding* doesn't get submitted — every other test class in the engagement is still pending. See `redteam-mindset` "DO NOT STOP primary directive" for the coverage-axis rule.
+> **Scope of "STOP" in this skill:** This skill's gates kill INDIVIDUAL FINDINGS that fail
+> validation. They do NOT authorize stopping the engagement. Killing a finding via the 7-Question
+> Gate just means _that finding_ doesn't get submitted — every other test class in the engagement is
+> still pending. See `redteam-mindset` "DO NOT STOP primary directive" for the coverage-axis rule.
 
 > "N/A hurts your validity ratio. Informative is neutral. Only submit what passes all 7 questions."
 
@@ -25,6 +32,7 @@ Ask IN ORDER. One wrong answer = STOP immediately.
 ### Q1: Can an attacker use this RIGHT NOW, step by step?
 
 Complete this template:
+
 ```
 1. Setup:   I need [own account / another user's ID / no account]
 2. Request: [exact HTTP method, URL, headers, body — copy-paste ready]
@@ -42,6 +50,7 @@ Complete this template:
 Go to the program page. Find "Vulnerability Types" or "Out of Scope."
 
 Common tiers:
+
 - **Critical**: Any-user ATO without interaction, RCE, SQLi with data exfil, admin auth bypass
 - **High**: Mass PII exfil, privilege escalation, internal SSRF with data, stored XSS all users
 - **Medium**: IDOR on specific user non-critical data, XSS on sensitive page requiring click
@@ -54,6 +63,7 @@ Common tiers:
 ### Q3: Is the root cause in an in-scope asset?
 
 Confirm:
+
 - Vulnerable domain is on the in-scope list (not `*.internal.target.com`)
 - It's a production asset (not staging/dev unless explicitly in scope)
 - It's not a third-party service the company just uses (not Stripe, Salesforce, Google Auth)
@@ -74,6 +84,7 @@ Confirm:
 ### Q5: Is this already known or accepted behavior?
 
 Search:
+
 1. Program's HackerOne/Bugcrowd disclosed reports: Ctrl+F endpoint name + bug class
 2. GitHub issues on target repo: `is:issue label:security ENDPOINT_NAME`
 3. Changelog/CHANGELOG.md — does it mention this behavior?
@@ -105,6 +116,7 @@ Check the NEVER SUBMIT list below. If it's on this list without a chain → **KI
 Run in sequence. ALL 4 must PASS.
 
 ### Gate 0: Reality Check (30 seconds)
+
 ```
 [ ] Bug is REAL — confirmed with actual HTTP requests, not code reading alone
 [ ] Bug is IN SCOPE — checked program scope page explicitly
@@ -113,6 +125,7 @@ Run in sequence. ALL 4 must PASS.
 ```
 
 ### Gate 1: Impact Validation (2 minutes)
+
 ```
 [ ] Can answer: "What can attacker DO that they couldn't before?"
 [ ] Answer is more than "see non-sensitive data" (unless program pays for info disclosure)
@@ -121,6 +134,7 @@ Run in sequence. ALL 4 must PASS.
 ```
 
 ### Gate 2: Deduplication Check (5 minutes)
+
 ```
 [ ] Searched HackerOne Hacktivity for this program + similar bug title/endpoint
 [ ] Searched GitHub issues for target repo
@@ -130,6 +144,7 @@ Run in sequence. ALL 4 must PASS.
 ```
 
 ### Gate 3: Report Quality (10 minutes)
+
 ```
 [ ] Title: [Bug Class] in [Endpoint] allows [actor] to [impact]
 [ ] Steps to Reproduce: copy-pasteable HTTP request
@@ -178,20 +193,20 @@ Pre-account takeover (usually — very specific conditions required)
 
 Build the chain first, prove it works end to end, THEN report.
 
-| Standalone Finding | Chain Required | Valid Result |
-|---|---|---|
-| Open redirect | + OAuth redirect_uri → auth code theft | ATO (Critical) |
-| Clickjacking | + sensitive action + working PoC | Medium |
-| CORS wildcard | + credentialed request exfils user PII | High |
-| CSRF | + sensitive action (transfer funds, change email, delete account) | High |
-| Rate limit bypass | + OTP/reset token brute force succeeds | Medium/High |
-| SSRF DNS-only | + internal service access + data returned | Medium |
-| Host header injection | + password reset email uses injected host | High |
-| Prompt injection | + reads other user's data (IDOR) | High |
-| S3 bucket listing | + JS bundles contain API keys or OAuth secrets | Medium/High |
-| Self-XSS | + CSRF to trigger it on victim without their knowledge | Medium |
-| Subdomain takeover | + OAuth redirect_uri registered at that subdomain | Critical |
-| GraphQL introspection | + auth bypass mutation or IDOR on node() | High |
+| Standalone Finding    | Chain Required                                                    | Valid Result   |
+| --------------------- | ----------------------------------------------------------------- | -------------- |
+| Open redirect         | + OAuth redirect_uri → auth code theft                            | ATO (Critical) |
+| Clickjacking          | + sensitive action + working PoC                                  | Medium         |
+| CORS wildcard         | + credentialed request exfils user PII                            | High           |
+| CSRF                  | + sensitive action (transfer funds, change email, delete account) | High           |
+| Rate limit bypass     | + OTP/reset token brute force succeeds                            | Medium/High    |
+| SSRF DNS-only         | + internal service access + data returned                         | Medium         |
+| Host header injection | + password reset email uses injected host                         | High           |
+| Prompt injection      | + reads other user's data (IDOR)                                  | High           |
+| S3 bucket listing     | + JS bundles contain API keys or OAuth secrets                    | Medium/High    |
+| Self-XSS              | + CSRF to trigger it on victim without their knowledge            | Medium         |
+| Subdomain takeover    | + OAuth redirect_uri registered at that subdomain                 | Critical       |
+| GraphQL introspection | + auth bypass mutation or IDOR on node()                          | High           |
 
 ---
 
@@ -199,35 +214,35 @@ Build the chain first, prove it works end to end, THEN report.
 
 ### Common Score Examples
 
-| Finding | Score | Severity | Vector |
-|---|---|---|---|
-| IDOR read PII, any user, auth required | 6.5 | Medium | AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N |
-| IDOR write/delete, any user | 7.5 | High | AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N |
-| Auth bypass → admin panel | 9.8 | Critical | AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H |
-| Stored XSS → cookie theft, stored | 8.8 | High | AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:L/A:N |
-| SQLi → full DB dump | 8.6 | High | AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N |
-| SSRF → cloud metadata | 9.1 | Critical | AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N |
-| Race → double spend | 7.5 | High | AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:N |
-| GraphQL auth bypass | 8.7 | High | AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N |
-| JWT none algorithm | 9.1 | Critical | AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H |
+| Finding                                | Score | Severity | Vector                              |
+| -------------------------------------- | ----- | -------- | ----------------------------------- |
+| IDOR read PII, any user, auth required | 6.5   | Medium   | AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N |
+| IDOR write/delete, any user            | 7.5   | High     | AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N |
+| Auth bypass → admin panel              | 9.8   | Critical | AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H |
+| Stored XSS → cookie theft, stored      | 8.8   | High     | AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:L/A:N |
+| SQLi → full DB dump                    | 8.6   | High     | AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N |
+| SSRF → cloud metadata                  | 9.1   | Critical | AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N |
+| Race → double spend                    | 7.5   | High     | AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:N |
+| GraphQL auth bypass                    | 8.7   | High     | AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N |
+| JWT none algorithm                     | 9.1   | Critical | AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H |
 
 ### Metric Quick Guide
 
-| What you have | Metric | Value |
-|---|---|---|
-| Exploitable over internet | AV | Network (N) |
-| No special timing or race | AC | Low (L) |
-| Free account needed | PR | Low (L) |
-| No login needed | PR | None (N) |
-| Admin needed | PR | High (H) |
-| No victim action | UI | None (N) |
-| Victim must click | UI | Required (R) |
-| Reads all data | C | High (H) |
-| Reads some data | C | Low (L) |
-| Modifies all data | I | High (H) |
-| Crashes service | A | High (H) |
-| Affects only app | S | Unchanged (U) |
-| Affects browser/OS/cloud | S | Changed (C) |
+| What you have             | Metric | Value         |
+| ------------------------- | ------ | ------------- |
+| Exploitable over internet | AV     | Network (N)   |
+| No special timing or race | AC     | Low (L)       |
+| Free account needed       | PR     | Low (L)       |
+| No login needed           | PR     | None (N)      |
+| Admin needed              | PR     | High (H)      |
+| No victim action          | UI     | None (N)      |
+| Victim must click         | UI     | Required (R)  |
+| Reads all data            | C      | High (H)      |
+| Reads some data           | C      | Low (L)       |
+| Modifies all data         | I      | High (H)      |
+| Crashes service           | A      | High (H)      |
+| Affects only app          | S      | Unchanged (U) |
+| Affects browser/OS/cloud  | S      | Changed (C)   |
 
 ---
 
@@ -246,20 +261,28 @@ The goal is to QUICKLY disqualify bad leads so you hunt real bugs:
 
 ## PRE-SEVERITY GATE
 
-Before labelling any finding **Critical** or **High** anywhere in your notes or report — write out the answer to each of these as a one-liner. If you can't answer concretely, **the severity is wrong**.
+Before labelling any finding **Critical** or **High** anywhere in your notes or report — write out
+the answer to each of these as a one-liner. If you can't answer concretely, **the severity is
+wrong**.
 
-1. **Have I validated the FULL chain to attacker-attainable impact, or only one primitive in the middle?**
-   — "Primitive confirmed at layer N" ≠ exploitable. Multi-stage chains require ALL stages validated before the severity matches the chain's top end.
-2. **What does the attacker walk away with, in one concrete sentence?**
-   — "RCE on the SP front-end web server" is concrete. "Could lead to RCE" is not — that's High at best, often Medium.
-3. **Have I personally reproduced the full chain end-to-end at least twice?**
-   — Twice = once during discovery, once for the report screenshot/PoC. Not "I'm sure it would work."
-4. **Is there an inheritance gate, signature check, audience check, or other validation step still gating the chain?**
-   — If yes, the chain is not Critical. Document it as "primitive present" at lower severity until the gate is bypassed.
-5. **Has the program rejected this severity class before?**
-   — Many programs cap "info disclosure with no concrete impact" at Low/Info regardless of the data type. Read the program scope.
+1. **Have I validated the FULL chain to attacker-attainable impact, or only one primitive in the
+   middle?** — "Primitive confirmed at layer N" ≠ exploitable. Multi-stage chains require ALL stages
+   validated before the severity matches the chain's top end.
+2. **What does the attacker walk away with, in one concrete sentence?** — "RCE on the SP front-end
+   web server" is concrete. "Could lead to RCE" is not — that's High at best, often Medium.
+3. **Have I personally reproduced the full chain end-to-end at least twice?** — Twice = once during
+   discovery, once for the report screenshot/PoC. Not "I'm sure it would work."
+4. **Is there an inheritance gate, signature check, audience check, or other validation step still
+   gating the chain?** — If yes, the chain is not Critical. Document it as "primitive present" at
+   lower severity until the gate is bypassed.
+5. **Has the program rejected this severity class before?** — Many programs cap "info disclosure
+   with no concrete impact" at Low/Info regardless of the data type. Read the program scope.
 
-**Lesson from an authorized engagement:** JWT `alg:none` was initially labelled **Critical** based on the signature-bypass primitive being confirmed at the audience-validation layer. Subsequent testing showed the issuer-trust check still rejected unsigned tokens — the full ATO chain did not complete. Finding had to be retracted. If the Pre-Severity Gate had been run on the original draft, Q1 would have killed the Critical label before submission.
+**Lesson from an authorized engagement:** JWT `alg:none` was initially labelled **Critical** based
+on the signature-bypass primitive being confirmed at the audience-validation layer. Subsequent
+testing showed the issuer-trust check still rejected unsigned tokens — the full ATO chain did not
+complete. Finding had to be retracted. If the Pre-Severity Gate had been run on the original draft,
+Q1 would have killed the Critical label before submission.
 
 ---
 
@@ -279,7 +302,9 @@ Under-describing impact — triager doesn't understand why it matters
 
 ## RETRACTION DISCIPLINE
 
-When a previously-claimed finding fails reproduction — **never silently drop it.** Document the retraction in the report's appendix. This proves to the triager that you validate your own work, and it saves them from chasing a phantom you've already disproved.
+When a previously-claimed finding fails reproduction — **never silently drop it.** Document the
+retraction in the report's appendix. This proves to the triager that you validate your own work, and
+it saves them from chasing a phantom you've already disproved.
 
 **Retraction entry template:**
 
@@ -288,82 +313,124 @@ When a previously-claimed finding fails reproduction — **never silently drop i
 
 - **Original signal:** <one-line description of what looked like a bug>
 - **Disproving evidence:** <concrete reproduction-step + observation that disproves it>
-- **Why it looked like a bug:** <root cause of the false positive — e.g., natural marker collision, network jitter, status-code-only confidence>
+- **Why it looked like a bug:** <root cause of the false positive — e.g., natural marker collision,
+  network jitter, status-code-only confidence>
 - **Retraction date:** <YYYY-MM-DD>
 ```
 
 **Concrete retractions from an authorized engagement — pattern reference:**
 
-- **X-Forwarded-Proto reflection** — looked like header reflection across 4 pages; was the literal word `javascript` in SP help-link hrefs. Cause: non-unique marker.
-- **Host header `:80@evil` bypass** — 200 OK on a path that normally 403s; body byte-identical to baseline (8341 bytes). Cause: status-code-only confidence; ELB Host normalisation dropped the `@evil` portion.
-- **`download.aspx` file-existence oracle** — looked like a file-existence differentiator across path types; was SP's file-extension blocklist (`.ashx`/`.asmx`/`.svc`/`.config` always blocked regardless of existence). Cause: confusing server-side policy with file state.
-- **`Administrator` timing leak** — single-shot 1527 ms vs ~700 ms control on Authentication.asmx Login; n=80 interleaved reproduction collapsed every group to 685-716 ms. Cause: single-sample statistical claim.
+- **X-Forwarded-Proto reflection** — looked like header reflection across 4 pages; was the literal
+  word `javascript` in SP help-link hrefs. Cause: non-unique marker.
+- **Host header `:80@evil` bypass** — 200 OK on a path that normally 403s; body byte-identical to
+  baseline (8341 bytes). Cause: status-code-only confidence; ELB Host normalisation dropped the
+  `@evil` portion.
+- **`download.aspx` file-existence oracle** — looked like a file-existence differentiator across
+  path types; was SP's file-extension blocklist (`.ashx`/`.asmx`/`.svc`/`.config` always blocked
+  regardless of existence). Cause: confusing server-side policy with file state.
+- **`Administrator` timing leak** — single-shot 1527 ms vs ~700 ms control on Authentication.asmx
+  Login; n=80 interleaved reproduction collapsed every group to 685-716 ms. Cause: single-sample
+  statistical claim.
 
-**Why this matters:** retracted findings put in an appendix demonstrate methodological honesty. Silently dropping them looks like you cherry-picked. A clean 11-finding report with a retraction appendix is more trustworthy than a 13-finding report where 2 fall apart at triage.
+**Why this matters:** retracted findings put in an appendix demonstrate methodological honesty.
+Silently dropping them looks like you cherry-picked. A clean 11-finding report with a retraction
+appendix is more trustworthy than a 13-finding report where 2 fall apart at triage.
 
 ---
 
 ## Related Skills & Chains
 
-- **`report-writing`** — When all 7 questions pass and the Pre-Severity Gate is clean. Workflow primitive: this skill is the gate that runs BEFORE `report-writing`; only findings that clear all 7Q + 4 pre-submission gates get the report-template handoff.
-- **`bugcrowd-reporting`** — When a Bugcrowd VRT mapping is needed for an accepted finding. Workflow primitive: after this skill validates the finding, `bugcrowd-reporting` decides the VRT category and severity-request paragraph.
-- **`evidence-hygiene`** — When the validated finding needs PoC evidence captured. Workflow primitive: this skill says "Q6 requires proof of impact"; `evidence-hygiene` provides the capture-and-redact protocol for that proof.
-- **`security-arsenal`** — When checking the always-rejected / conditionally-valid tables. Workflow primitive: this skill's "Never Submit List" and `security-arsenal`'s "Always Rejected" table are aligned; either entry-point lookup decides whether a primitive is reportable alone or only with a chain.
-- **`bb-methodology`** — When Phase 5 (Validate & Report) starts. Workflow primitive: Phase 5's pre-report gate explicitly invokes `/validate` (this skill's 7Q gate) before any report is drafted.
+- **`report-writing`** — When all 7 questions pass and the Pre-Severity Gate is clean. Workflow
+  primitive: this skill is the gate that runs BEFORE `report-writing`; only findings that clear all
+  7Q + 4 pre-submission gates get the report-template handoff.
+- **`bugcrowd-reporting`** — When a Bugcrowd VRT mapping is needed for an accepted finding. Workflow
+  primitive: after this skill validates the finding, `bugcrowd-reporting` decides the VRT category
+  and severity-request paragraph.
+- **`evidence-hygiene`** — When the validated finding needs PoC evidence captured. Workflow
+  primitive: this skill says "Q6 requires proof of impact"; `evidence-hygiene` provides the
+  capture-and-redact protocol for that proof.
+- **`security-arsenal`** — When checking the always-rejected / conditionally-valid tables. Workflow
+  primitive: this skill's "Never Submit List" and `security-arsenal`'s "Always Rejected" table are
+  aligned; either entry-point lookup decides whether a primitive is reportable alone or only with a
+  chain.
+- **`bb-methodology`** — When Phase 5 (Validate & Report) starts. Workflow primitive: Phase 5's
+  pre-report gate explicitly invokes `/validate` (this skill's 7Q gate) before any report is
+  drafted.
 
 ---
 
 ## Operator Notes (Claude-BugHunter)
 
-> Engagement-derived additions to the vendored foundation. Wisdom from real
-> authorized engagements + Phase 2 verification across this repo's 31+
-> skill-area live tests. The upstream methodology covers the WHAT; this
-> layer covers the WHEN-IT-ACTUALLY-WORKS and the FAILURE-MODES.
+> Engagement-derived additions to the vendored foundation. Wisdom from real authorized engagements +
+> Phase 2 verification across this repo's 31+ skill-area live tests. The upstream methodology covers
+> the WHAT; this layer covers the WHEN-IT-ACTUALLY-WORKS and the FAILURE-MODES.
 
 ### 7-Question Gate at scale
 
-The 7Q gate is the single highest-ROI artifact in this skill. Phase 2D's hardened-lab campaign verified it kills four distinct false-positive shapes:
+The 7Q gate is the single highest-ROI artifact in this skill. Phase 2D's hardened-lab campaign
+verified it kills four distinct false-positive shapes:
 
-1. **URL echo dressed as reflection** — payload appears in the response body because the response IS the URL. Q1 (is this a real HTTP request that does something on the server) kills it.
-2. **Word collision dressed as marker hit** — the canary string `XSS-test` matched a CSS class name, not your injection. Marker Discipline + Q1 kill it.
-3. **Server policy mistaken for state oracle** — `download.aspx?file=foo.config` always returns "blocked" regardless of whether the file exists. Q6 (impact beyond technically possible) kills it: there's no oracle, just a deny-list.
-4. **200 OK without leak** — status code differs from baseline 403; body is byte-identical. Body-Diff Rule + Q6 kill it.
+1. **URL echo dressed as reflection** — payload appears in the response body because the response IS
+   the URL. Q1 (is this a real HTTP request that does something on the server) kills it.
+2. **Word collision dressed as marker hit** — the canary string `XSS-test` matched a CSS class name,
+   not your injection. Marker Discipline + Q1 kill it.
+3. **Server policy mistaken for state oracle** — `download.aspx?file=foo.config` always returns
+   "blocked" regardless of whether the file exists. Q6 (impact beyond technically possible) kills
+   it: there's no oracle, just a deny-list.
+4. **200 OK without leak** — status code differs from baseline 403; body is byte-identical.
+   Body-Diff Rule + Q6 kill it.
 
-Without the 7Q gate, expect 10-20% submission validity loss across an engagement. With it, retraction rates trend to single digits.
+Without the 7Q gate, expect 10-20% submission validity loss across an engagement. With it,
+retraction rates trend to single digits.
 
 ### Pre-Severity Gate before reporting Critical
 
-A authorized SharePoint engagement nearly submitted a Critical when the chain didn't actually complete end-to-end — a primitive that read auth state was conflated with a primitive that mutated it. The Pre-Severity Gate (run all 7 questions specifically against the **Critical claim**, not the generic "is this a bug" claim) would have caught it.
+A authorized SharePoint engagement nearly submitted a Critical when the chain didn't actually
+complete end-to-end — a primitive that read auth state was conflated with a primitive that mutated
+it. The Pre-Severity Gate (run all 7 questions specifically against the **Critical claim**, not the
+generic "is this a bug" claim) would have caught it.
 
-Process: write your draft Critical title. Take each of the 7 questions and answer them with the Critical claim substituted for "the bug." If Q6 (impact beyond technically possible) returns "I have a primitive that should let me do X, but I haven't demonstrated X end-to-end on a test account," downgrade. Critical means impact-demonstrated, not impact-inferable.
+Process: write your draft Critical title. Take each of the 7 questions and answer them with the
+Critical claim substituted for "the bug." If Q6 (impact beyond technically possible) returns "I have
+a primitive that should let me do X, but I haven't demonstrated X end-to-end on a test account,"
+downgrade. Critical means impact-demonstrated, not impact-inferable.
 
 ### Retraction discipline
 
 If a finding stops reproducing 24h after submission — retract preemptively. Two reasons:
 
-1. **Triagers retract for you with downgraded scoring.** A self-retraction reads "the researcher validates their own work." A triager-retraction reads "the researcher submitted noise."
-2. **Validation rate is platform-tracked.** Self-retractions don't hit the same metric as triager-closed-as-N/A. Your reputation signal stays cleaner.
+1. **Triagers retract for you with downgraded scoring.** A self-retraction reads "the researcher
+   validates their own work." A triager-retraction reads "the researcher submitted noise."
+2. **Validation rate is platform-tracked.** Self-retractions don't hit the same metric as
+   triager-closed-as-N/A. Your reputation signal stays cleaner.
 
-The retraction template in the RETRACTION DISCIPLINE section above is the canonical format. Don't silently delete — append a retraction appendix to the engagement report instead.
+The retraction template in the RETRACTION DISCIPLINE section above is the canonical format. Don't
+silently delete — append a retraction appendix to the engagement report instead.
 
 ### When the 7Q feels obstructive
 
-The friction is the gate working. The half of findings that get killed by the 7Q are the half that would have come back as Informative or N/A. Take the friction. Your average payout per submission goes up when low-confidence findings stop diluting the funnel.
+The friction is the gate working. The half of findings that get killed by the 7Q are the half that
+would have come back as Informative or N/A. Take the friction. Your average payout per submission
+goes up when low-confidence findings stop diluting the funnel.
 
-The exception: if the 7Q kills a finding but you still believe it, the answer is **gather more evidence**, not **bypass the gate**. The gate is a "do you have proof" check. Get proof, then re-run the gate.
+The exception: if the 7Q kills a finding but you still believe it, the answer is **gather more
+evidence**, not **bypass the gate**. The gate is a "do you have proof" check. Get proof, then re-run
+the gate.
 
 ### Validation discipline rules cross-link
 
 The 7 questions are the umbrella; the discipline rules from `bb-methodology` are the implementation:
 
-| 7Q Question | Discipline Rule (bb-methodology) |
-|---|---|
-| Q1 (real HTTP request that does something) | Reproducibility Gate |
-| Q2 (impact beyond informational) | Pre-Severity Gate |
-| Q3 (server-side state change or data leak) | Server-Policy-vs-State |
+| 7Q Question                                 | Discipline Rule (bb-methodology)                                     |
+| ------------------------------------------- | -------------------------------------------------------------------- |
+| Q1 (real HTTP request that does something)  | Reproducibility Gate                                                 |
+| Q2 (impact beyond informational)            | Pre-Severity Gate                                                    |
+| Q3 (server-side state change or data leak)  | Server-Policy-vs-State                                               |
 | Q4 (cross-tenant / cross-user demonstrated) | OOB Gate (for blind class), Marker Discipline (for reflective class) |
-| Q5 (not already known / dup) | disclosed-reports/ index + HackerOne hacktivity check |
-| Q6 (impact beyond technically possible) | OOB Gate + Body-Diff Rule + Statistical-Sample Rule |
-| Q7 (in scope per program rules) | scope.md lookup (engagement scaffold) |
+| Q5 (not already known / dup)                | disclosed-reports/ index + HackerOne hacktivity check                |
+| Q6 (impact beyond technically possible)     | OOB Gate + Body-Diff Rule + Statistical-Sample Rule                  |
+| Q7 (in scope per program rules)             | scope.md lookup (engagement scaffold)                                |
 
-When a question is hard to answer "yes" to, the cross-linked rule tells you which artifact to produce to make the answer yes. Q6 is the one most engagements stumble on; that's why three discipline rules back it.
+When a question is hard to answer "yes" to, the cross-linked rule tells you which artifact to
+produce to make the answer yes. Q6 is the one most engagements stumble on; that's why three
+discipline rules back it.

@@ -1,10 +1,12 @@
 # scATAC-seq Analysis with PeakVI
 
-This reference covers single-cell ATAC-seq analysis using PeakVI for dimensionality reduction, batch correction, and differential accessibility.
+This reference covers single-cell ATAC-seq analysis using PeakVI for dimensionality reduction, batch
+correction, and differential accessibility.
 
 ## Overview
 
 PeakVI is a deep generative model for scATAC-seq data that:
+
 - Models binary accessibility (peak open/closed)
 - Handles batch effects
 - Provides latent representation for clustering
@@ -255,36 +257,36 @@ peak_bed_sig.to_csv("significant_peaks.bed", sep='\t', index=False, header=False
 def compute_gene_activity(adata, peak_gene_map):
     """
     Compute gene activity scores from peak accessibility.
-    
+
     Parameters
     ----------
     adata : AnnData
         ATAC data with peaks
     peak_gene_map : dict
         Mapping of peaks to genes
-        
+
     Returns
     -------
     AnnData with gene activity scores
     """
     from scipy.sparse import csr_matrix
-    
+
     genes = list(set(peak_gene_map.values()))
     gene_matrix = np.zeros((adata.n_obs, len(genes)))
-    
+
     for i, gene in enumerate(genes):
         gene_peaks = [p for p, g in peak_gene_map.items() if g == gene]
         if gene_peaks:
             peak_idx = [list(adata.var_names).index(p) for p in gene_peaks if p in adata.var_names]
             if peak_idx:
                 gene_matrix[:, i] = np.array(adata.X[:, peak_idx].sum(axis=1)).flatten()
-    
+
     adata_gene = ad.AnnData(
         X=csr_matrix(gene_matrix),
         obs=adata.obs.copy(),
         var=pd.DataFrame(index=genes)
     )
-    
+
     return adata_gene
 ```
 
@@ -300,7 +302,7 @@ def analyze_scatac(
 ):
     """
     Complete scATAC-seq analysis with PeakVI.
-    
+
     Parameters
     ----------
     adata : AnnData
@@ -313,7 +315,7 @@ def analyze_scatac(
         Latent dimensions
     resolution : float
         Leiden clustering resolution
-        
+
     Returns
     -------
     Tuple of (processed AnnData, trained model)
@@ -321,38 +323,38 @@ def analyze_scatac(
     import scvi
     import scanpy as sc
     import numpy as np
-    
+
     adata = adata.copy()
-    
+
     # QC
     sc.pp.calculate_qc_metrics(adata, inplace=True)
     adata = adata[adata.obs['n_genes_by_counts'] > 500].copy()
     sc.pp.filter_genes(adata, min_cells=10)
-    
+
     # Binarize
     adata.X = (adata.X > 0).astype(np.float32)
-    
+
     # Select top peaks
     if adata.n_vars > n_top_peaks:
         peak_accessibility = np.array(adata.X.sum(axis=0)).flatten()
         top_peaks = np.argsort(peak_accessibility)[-n_top_peaks:]
         adata = adata[:, top_peaks].copy()
-    
+
     # Setup PeakVI
     scvi.model.PEAKVI.setup_anndata(adata, batch_key=batch_key)
-    
+
     # Train
     model = scvi.model.PEAKVI(adata, n_latent=n_latent)
     model.train(max_epochs=200, early_stopping=True)
-    
+
     # Latent representation
     adata.obsm["X_PeakVI"] = model.get_latent_representation()
-    
+
     # Clustering
     sc.pp.neighbors(adata, use_rep="X_PeakVI")
     sc.tl.umap(adata)
     sc.tl.leiden(adata, resolution=resolution)
-    
+
     return adata, model
 
 # Usage
@@ -386,13 +388,14 @@ For multiome data or separate RNA/ATAC from same cells:
 
 ## Troubleshooting
 
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| Training slow | Too many peaks | Subset to top 50k peaks |
-| Poor clustering | Too few informative peaks | Use variable peaks |
-| Batch dominates | Strong technical effects | Ensure batch_key is set |
-| Memory error | Large peak matrix | Use sparse format, reduce peaks |
+| Issue           | Cause                     | Solution                        |
+| --------------- | ------------------------- | ------------------------------- |
+| Training slow   | Too many peaks            | Subset to top 50k peaks         |
+| Poor clustering | Too few informative peaks | Use variable peaks              |
+| Batch dominates | Strong technical effects  | Ensure batch_key is set         |
+| Memory error    | Large peak matrix         | Use sparse format, reduce peaks |
 
 ## Key References
 
-- Ashuach et al. (2022) "PeakVI: A deep generative model for single-cell chromatin accessibility analysis"
+- Ashuach et al. (2022) "PeakVI: A deep generative model for single-cell chromatin accessibility
+  analysis"

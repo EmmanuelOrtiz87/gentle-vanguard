@@ -1,7 +1,7 @@
 # Worked Example: Year-End 1099 Prep
 
-**Scenario:** Marcus owns a digital marketing agency. He asks: "I need to send out
-my 1099s — can you pull together a list of who needs one?"
+**Scenario:** Marcus owns a digital marketing agency. He asks: "I need to send out my 1099s — can
+you pull together a list of who needs one?"
 
 ---
 
@@ -9,21 +9,21 @@ my 1099s — can you pull together a list of who needs one?"
 
 **QuickBooks** (Jan 1 – Dec 31, 2024):
 
-| Vendor | Total paid | 1099 eligible? | EIN/SSN on file? |
-|--------|-----------|----------------|-----------------|
-| Jenna Torres (copywriter) | $8,400 | Yes | Yes |
-| Apex Web Solutions | $15,200 | Yes | Yes |
-| Bob Nguyen | $550 | No | No |
-| FedEx | $320 | No | No |
-| Spark Digital Inc. | $6,000 | Yes | Yes |
+| Vendor                    | Total paid | 1099 eligible? | EIN/SSN on file? |
+| ------------------------- | ---------- | -------------- | ---------------- |
+| Jenna Torres (copywriter) | $8,400     | Yes            | Yes              |
+| Apex Web Solutions        | $15,200    | Yes            | Yes              |
+| Bob Nguyen                | $550       | No             | No               |
+| FedEx                     | $320       | No             | No               |
+| Spark Digital Inc.        | $6,000     | Yes            | Yes              |
 
 **PayPal** (goods & services payments sent, 2024):
 
-| Recipient | Total sent | Notes |
-|-----------|-----------|-------|
-| jenna.torres@email.com | $1,200 | Likely same as QuickBooks vendor |
-| designbymike@gmail.com | $2,100 | Not in QuickBooks |
-| Bob Nguyen | $480 | |
+| Recipient              | Total sent | Notes                            |
+| ---------------------- | ---------- | -------------------------------- |
+| jenna.torres@email.com | $1,200     | Likely same as QuickBooks vendor |
+| designbymike@gmail.com | $2,100     | Not in QuickBooks                |
+| Bob Nguyen             | $480       |                                  |
 
 **Stripe** (not connected — skipped)
 
@@ -33,22 +33,24 @@ my 1099s — can you pull together a list of who needs one?"
 
 Cross-referencing QuickBooks and PayPal:
 
-| Payee | QuickBooks | PayPal | Total | Notes |
-|-------|-----------|--------|-------|-------|
-| Jenna Torres | $8,400 | $1,200 | **$9,600** | Same person — email match |
-| Apex Web Solutions | $15,200 | — | **$15,200** | |
-| Spark Digital Inc. | $6,000 | — | **$6,000** | |
-| Design by Mike (Mike unknown) | — | $2,100 | **$2,100** | Not in QuickBooks; payee name unknown |
-| Bob Nguyen | $550 | $480 | **$1,030** | Combined > $600; flagged |
-| FedEx | $320 | — | $320 | Below threshold; goods/shipping — exempt |
+| Payee                         | QuickBooks | PayPal | Total       | Notes                                    |
+| ----------------------------- | ---------- | ------ | ----------- | ---------------------------------------- |
+| Jenna Torres                  | $8,400     | $1,200 | **$9,600**  | Same person — email match                |
+| Apex Web Solutions            | $15,200    | —      | **$15,200** |                                          |
+| Spark Digital Inc.            | $6,000     | —      | **$6,000**  |                                          |
+| Design by Mike (Mike unknown) | —          | $2,100 | **$2,100**  | Not in QuickBooks; payee name unknown    |
+| Bob Nguyen                    | $550       | $480   | **$1,030**  | Combined > $600; flagged                 |
+| FedEx                         | $320       | —      | $320        | Below threshold; goods/shipping — exempt |
 
 ---
 
 ## Step 3: Apply $600 threshold and W-9 check
 
 - Jenna Torres: $9,600 ✅ → **1099-NEC required** · W-9 on file (EIN recorded in QB)
-- Apex Web Solutions: $15,200 ✅ → **1099-NEC candidate** · W-9 on file · Note: may be a corp (confirm)
-- Spark Digital Inc.: $6,000 ✅ → **1099-NEC candidate** · W-9 on file · "Inc." — likely corp exempt (confirm)
+- Apex Web Solutions: $15,200 ✅ → **1099-NEC candidate** · W-9 on file · Note: may be a corp
+  (confirm)
+- Spark Digital Inc.: $6,000 ✅ → **1099-NEC candidate** · W-9 on file · "Inc." — likely corp exempt
+  (confirm)
 - Design by Mike: $2,100 ✅ → **1099-NEC required** · W-9 not on file — must collect
 - Bob Nguyen: $1,030 ✅ → **1099-NEC required** · W-9 not on file — must collect
 - FedEx: $320 → below threshold; goods/shipping — not required

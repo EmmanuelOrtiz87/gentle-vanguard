@@ -10,4 +10,3 @@ Spring, Gin, Axum, ASP.NET, Vapor, React Router, SvelteKit.
 1. **Trust CodeGraph results**: When `codegraph_context` returns symbols and relationships, trust
 
 ---
-

@@ -11,6 +11,7 @@ Todas las mejoras a corto plazo identificadas en la auditoría han sido implemen
 ### Implementado
 
 #### Estructura de Tests
+
 ```
 tests/
 ├── unit/
@@ -46,6 +47,7 @@ tests/
    - Framework: Pester
 
 #### Runner Centralizado
+
 - Script: `scripts/utilities/TESTS/run-test-suite.ps1`
 - Soporta: Pester, Vitest, unit, integration, all
 - Opciones: -Coverage, -Watch
@@ -58,6 +60,7 @@ tests/
 ### Implementado
 
 #### Script de Sincronización
+
 - **Archivo**: `scripts/utilities/SKILLS-TOOLS/sync-skill-registry.ps1`
 - **Funcionalidad**:
   - Escanea directorio `skills/` (385 directorios)
@@ -68,14 +71,16 @@ tests/
   - Modos: Normal, DryRun, ValidateOnly
 
 #### Resultado de Sincronización
-| Métrica | Antes | Después |
-|---------|-------|---------|
-| Skills en registry | 135 | 385 |
-| Faltantes | 256 | 0 |
-| Extra en registry | 6 | 0 |
-| Total líneas | ~170 | 387 |
+
+| Métrica            | Antes | Después |
+| ------------------ | ----- | ------- |
+| Skills en registry | 135   | 385     |
+| Faltantes          | 256   | 0       |
+| Extra en registry  | 6     | 0       |
+| Total líneas       | ~170  | 387     |
 
 #### GitHub Action
+
 - **Archivo**: `.github/workflows/skill-registry-validation.yml`
 - **Triggers**:
   - Push/PR que modifica `skills/` o `.atl/skill-registry.md`
@@ -95,6 +100,7 @@ tests/
 ### Implementado
 
 #### WebSocket Server Actualizado
+
 - **Archivo**: `apps/web-dashboard/server/websocket-server.ts`
 - **Mejoras**:
   - Lee stats reales de `.atl/skill-stats.json`
@@ -103,12 +109,14 @@ tests/
   - Emite datos enriquecidos cada 5 segundos
 
 #### API de Métricas MCP
+
 - **Archivo**: `apps/web-dashboard/server/mcp-metrics-api.ts`
 - **Endpoints**:
   - `GET /api/metrics` - Métricas completas MCP
   - Datos: skills, calls, performance, timestamp
 
 #### Dashboard Actualizado
+
 - **Archivo**: `apps/web-dashboard/src/components/Dashboard.tsx`
 - **Nuevas Features**:
   - Sección "MCP Server Metrics" con 3 cards:
@@ -120,6 +128,7 @@ tests/
   - Integración con hook useMetrics actualizado
 
 #### Hook useMetrics Mejorado
+
 - **Archivo**: `apps/web-dashboard/src/hooks/useMetrics.ts`
 - **Soporte dual**:
   - WebSocket mode: Conexión real-time
@@ -128,6 +137,7 @@ tests/
   - Estado wsConnected expuesto
 
 ### Build Verificado
+
 ```bash
 $ pnpm build
 ✓ 2162 modules transformed
@@ -140,6 +150,7 @@ dist/assets/index-BN-DLXf6.js   541.21 kB │ gzip: 155.68 kB
 ## Archivos Creados/Modificados
 
 ### Nuevos Archivos
+
 1. `tests/unit/mcp/skill-server.test.ts`
 2. `tests/unit/scripts/pre-process-input.tests.ps1`
 3. `tests/unit/scripts/token-guard.tests.ps1`
@@ -150,6 +161,7 @@ dist/assets/index-BN-DLXf6.js   541.21 kB │ gzip: 155.68 kB
 8. `docs/SHORT-TERM-IMPROVEMENTS-COMPLETE.md`
 
 ### Archivos Modificados
+
 1. `apps/web-dashboard/server/websocket-server.ts` - Datos reales MCP
 2. `apps/web-dashboard/src/components/Dashboard.tsx` - Métricas MCP
 3. `apps/web-dashboard/src/hooks/useMetrics.ts` - Soporte WebSocket
@@ -159,12 +171,12 @@ dist/assets/index-BN-DLXf6.js   541.21 kB │ gzip: 155.68 kB
 
 ## Métricas de Éxito
 
-| Objetivo | Estado | Evidencia |
-|----------|--------|-----------|
-| Test suite mínima | ✅ | 3 archivos de tests, 20+ casos |
-| Skills sincronizados | ✅ | 385 skills en registry |
-| Dashboard real-time | ✅ | WebSocket con datos MCP reales |
-| CI/CD validación | ✅ | GitHub Action operativo |
+| Objetivo             | Estado | Evidencia                      |
+| -------------------- | ------ | ------------------------------ |
+| Test suite mínima    | ✅     | 3 archivos de tests, 20+ casos |
+| Skills sincronizados | ✅     | 385 skills en registry         |
+| Dashboard real-time  | ✅     | WebSocket con datos MCP reales |
+| CI/CD validación     | ✅     | GitHub Action operativo        |
 
 ---
 
@@ -211,4 +223,4 @@ node apps/web-dashboard/server/websocket-server.ts
 
 ---
 
-*Completado: 2026-06-03*
+_Completado: 2026-06-03_

@@ -1,6 +1,9 @@
 # Claude API — PHP
 
-> **Note:** The PHP SDK is the official Anthropic SDK for PHP. A beta tool runner is available via `$client->beta->messages->toolRunner()`. Structured output helpers are supported via `StructuredOutputModel` classes. Agent SDK is not available. Bedrock, Vertex AI, and Foundry clients are supported.
+> **Note:** The PHP SDK is the official Anthropic SDK for PHP. A beta tool runner is available via
+> `$client->beta->messages->toolRunner()`. Structured output helpers are supported via
+> `StructuredOutputModel` classes. Agent SDK is not available. Bedrock, Vertex AI, and Foundry
+> clients are supported.
 
 ## Installation
 
@@ -89,7 +92,9 @@ foreach ($message->content as $block) {
 
 ## Streaming
 
-> **Requires SDK v0.5.0+.** v0.4.0 and earlier used a single `$params` array; calling with named parameters throws `Unknown named parameter $model`. Upgrade: `composer require "anthropic-ai/sdk:^0.7"`
+> **Requires SDK v0.5.0+.** v0.4.0 and earlier used a single `$params` array; calling with named
+> parameters throws `Unknown named parameter $model`. Upgrade:
+> `composer require "anthropic-ai/sdk:^0.7"`
 
 ```php
 use Anthropic\Messages\RawContentBlockDeltaEvent;
@@ -116,7 +121,8 @@ foreach ($stream as $event) {
 
 ### Tool Runner (Beta)
 
-**Beta:** The PHP SDK provides a tool runner via `$client->beta->messages->toolRunner()`. Define tools with `BetaRunnableTool` — a definition array plus a `run` closure:
+**Beta:** The PHP SDK provides a tool runner via `$client->beta->messages->toolRunner()`. Define
+tools with `BetaRunnableTool` — a definition array plus a `run` closure:
 
 ```php
 use Anthropic\Lib\Tools\BetaRunnableTool;
@@ -156,7 +162,9 @@ foreach ($runner as $message) {
 
 ### Manual Loop
 
-Tools are passed as arrays. **The SDK uses camelCase keys** (`inputSchema`, `toolUseID`, `stopReason`) and auto-maps to the API's snake_case on the wire — since v0.5.0. See [shared tool use concepts](../shared/tool-use-concepts.md) for the loop pattern.
+Tools are passed as arrays. **The SDK uses camelCase keys** (`inputSchema`, `toolUseID`,
+`stopReason`) and auto-maps to the API's snake_case on the wire — since v0.5.0. See
+[shared tool use concepts](../shared/tool-use-concepts.md) for the loop pattern.
 
 ```php
 use Anthropic\Messages\ToolUseBlock;
@@ -222,12 +230,12 @@ foreach ($response->content as $block) {
 
 `$block->type === 'tool_use'` also works; `instanceof ToolUseBlock` narrows for PHPStan.
 
-
 ---
 
 ## Extended Thinking
 
-**Adaptive thinking is the recommended mode for Claude 4.6+ models.** Claude decides dynamically when and how much to think.
+**Adaptive thinking is the recommended mode for Claude 4.6+ models.** Claude decides dynamically
+when and how much to think.
 
 ```php
 use Anthropic\Messages\ThinkingBlock;
@@ -253,7 +261,8 @@ foreach ($message->content as $block) {
 }
 ```
 
-> **Deprecated:** `['type' => 'enabled', 'budgetTokens' => N]` (fixed-budget extended thinking) still works on Claude 4.6 but is deprecated. Use adaptive thinking above.
+> **Deprecated:** `['type' => 'enabled', 'budgetTokens' => N]` (fixed-budget extended thinking)
+> still works on Claude 4.6 but is deprecated. Use adaptive thinking above.
 
 `$block->type === 'thinking'` also works for the check; `instanceof` narrows for PHPStan.
 
@@ -261,7 +270,9 @@ foreach ($message->content as $block) {
 
 ## Prompt Caching
 
-`system:` takes an array of text blocks; set `cacheControl` on the last block. Array-shape syntax (camelCase keys) is idiomatic. For placement patterns and the silent-invalidator audit checklist, see `shared/prompt-caching.md`.
+`system:` takes an array of text blocks; set `cacheControl` on the last block. Array-shape syntax
+(camelCase keys) is idiomatic. For placement patterns and the silent-invalidator audit checklist,
+see `shared/prompt-caching.md`.
 
 ```php
 $message = $client->messages->create(
@@ -274,9 +285,11 @@ $message = $client->messages->create(
 );
 ```
 
-For 1-hour TTL: `'cacheControl' => ['type' => 'ephemeral', 'ttl' => '1h']`. There's also a top-level `cacheControl:` on `messages->create(...)` that auto-places on the last cacheable block.
+For 1-hour TTL: `'cacheControl' => ['type' => 'ephemeral', 'ttl' => '1h']`. There's also a top-level
+`cacheControl:` on `messages->create(...)` that auto-places on the last cacheable block.
 
-Verify hits via `$message->usage->cacheCreationInputTokens` / `$message->usage->cacheReadInputTokens`.
+Verify hits via `$message->usage->cacheCreationInputTokens` /
+`$message->usage->cacheReadInputTokens`.
 
 ---
 
@@ -314,7 +327,8 @@ $person = $message->parsedOutput();  // Person instance
 echo $person->name;
 ```
 
-Types are inferred from PHP type hints. Use `#[Constrained(description: '...')]` to add descriptions. Nullable properties (`?string`) become optional fields.
+Types are inferred from PHP type hints. Use `#[Constrained(description: '...')]` to add
+descriptions. Nullable properties (`?string`) become optional fields.
 
 ### Raw Schema
 
@@ -353,7 +367,8 @@ foreach ($message->content as $block) {
 
 ## Beta Features & Server-Side Tools
 
-**`betas:` is NOT a param on `$client->messages->create()`** — it only exists on the beta namespace. Use it for features that need an explicit opt-in header:
+**`betas:` is NOT a param on `$client->messages->create()`** — it only exists on the beta namespace.
+Use it for features that need an explicit opt-in header:
 
 ```php
 use Anthropic\Beta\Messages\BetaRequestMCPServerURLDefinition;
@@ -372,4 +387,8 @@ $response = $client->beta->messages->create(
 );
 ```
 
-**Server-side tools** (bash, web_search, text_editor, code_execution) are GA and work on both paths — `Anthropic\Messages\ToolBash20250124` / `WebSearchTool20260209` / `ToolTextEditor20250728` / `CodeExecutionTool20260120` for non-beta, `Anthropic\Beta\Messages\BetaToolBash20250124` / `BetaWebSearchTool20260209` / `BetaToolTextEditor20250728` / `BetaCodeExecutionTool20260120` for beta. No `betas:` header needed for these.
+**Server-side tools** (bash, web_search, text_editor, code_execution) are GA and work on both paths
+— `Anthropic\Messages\ToolBash20250124` / `WebSearchTool20260209` / `ToolTextEditor20250728` /
+`CodeExecutionTool20260120` for non-beta, `Anthropic\Beta\Messages\BetaToolBash20250124` /
+`BetaWebSearchTool20260209` / `BetaToolTextEditor20250728` / `BetaCodeExecutionTool20260120` for
+beta. No `betas:` header needed for these.

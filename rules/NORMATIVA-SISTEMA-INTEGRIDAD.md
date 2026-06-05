@@ -4,22 +4,21 @@
 
 ## Propósito
 
-Garantizar que todos los componentes del stack estén integrados, funcionales y
-verificables. Ningún cambio puede romper la cadena de integración sin ser detectado
-y revertido.
+Garantizar que todos los componentes del stack estén integrados, funcionales y verificables. Ningún
+cambio puede romper la cadena de integración sin ser detectado y revertido.
 
 ## Reglas Obligatorias
 
-| # | Regla | Sanción |
-|---|-------|---------|
-| 1 | **Health check pasa siempre** — `scripts/health-check/health-check.ps1` debe retornar 0 exit code antes de cualquier commit. | Pre-commit hook lo rechaza |
-| 2 | **Optimization stack verificado** — `scripts/validation/verify-optimization-stack.ps1` debe pasar antes de merge a main. | CI/CD gate |
-| 3 | **CodeGraph index fresco** — El índice no puede tener más de 7 días de antigüedad. `codegraph-sync-autostart.ps1` verifica en cada sesión. | Health check alerta |
-| 4 | **Backup de engram post-sesión** — Toda sesión debe ejecutar `backup-engram.ps1 -Mode backup` al cerrar. | Session-end audit |
-| 5 | **Sin errores de parser en scripts** — 0 errores en PSScriptAnalyzer para scripts en `scripts/` y `tests/`. | CI/CD reject |
-| 6 | **Integración cross-componente** — Ningún componente puede depender de otro sin declaración explícita en `config/orchestrator.json`. | Review obligatorio |
-| 7 | **Dependency graph verificable** — `pnpm-lock.yaml` debe estar actualizado y consistente con `package.json`. | CI/CD reject |
-| 8 | **Zero secrets en repo** — Gitleaks y Trivy deben pasar en cada PR. | CI/CD reject automático |
+| #   | Regla                                                                                                                                      | Sanción                    |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| 1   | **Health check pasa siempre** — `scripts/health-check/health-check.ps1` debe retornar 0 exit code antes de cualquier commit.               | Pre-commit hook lo rechaza |
+| 2   | **Optimization stack verificado** — `scripts/validation/verify-optimization-stack.ps1` debe pasar antes de merge a main.                   | CI/CD gate                 |
+| 3   | **CodeGraph index fresco** — El índice no puede tener más de 7 días de antigüedad. `codegraph-sync-autostart.ps1` verifica en cada sesión. | Health check alerta        |
+| 4   | **Backup de engram post-sesión** — Toda sesión debe ejecutar `backup-engram.ps1 -Mode backup` al cerrar.                                   | Session-end audit          |
+| 5   | **Sin errores de parser en scripts** — 0 errores en PSScriptAnalyzer para scripts en `scripts/` y `tests/`.                                | CI/CD reject               |
+| 6   | **Integración cross-componente** — Ningún componente puede depender de otro sin declaración explícita en `config/orchestrator.json`.       | Review obligatorio         |
+| 7   | **Dependency graph verificable** — `pnpm-lock.yaml` debe estar actualizado y consistente con `package.json`.                               | CI/CD reject               |
+| 8   | **Zero secrets en repo** — Gitleaks y Trivy deben pasar en cada PR.                                                                        | CI/CD reject automático    |
 
 ## Pipeline de Verificación Pre-Commit
 

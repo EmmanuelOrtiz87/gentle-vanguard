@@ -1,17 +1,20 @@
 # Anti-Leakage Protocol (Knowledge Isolation)
 
-**Status**: v3.3
-**Used by**: `draft_writer_agent`, `report_compiler_agent`
-**Source**: Adapted from PaperOrchestra (Song et al., 2026, Appendix D.4)
+**Status**: v3.3 **Used by**: `draft_writer_agent`, `report_compiler_agent` **Source**: Adapted from
+PaperOrchestra (Song et al., 2026, Appendix D.4)
 
 ---
 
 ## Purpose
 
-When the user provides comprehensive research materials (RQ Brief, Synthesis Report, Annotated Bibliography, experimental data), the writing agent should construct the paper **primarily from those materials**, not from LLM parametric memory. This prevents:
+When the user provides comprehensive research materials (RQ Brief, Synthesis Report, Annotated
+Bibliography, experimental data), the writing agent should construct the paper **primarily from
+those materials**, not from LLM parametric memory. This prevents:
 
-1. **Methodology fabrication (Failure Mode 6)**: The LLM writes a plausible Methods section from training data rather than the user's actual procedure
-2. **Implicit knowledge leakage**: The LLM fills gaps with memorized content that may be inaccurate, outdated, or from a different context
+1. **Methodology fabrication (Failure Mode 6)**: The LLM writes a plausible Methods section from
+   training data rather than the user's actual procedure
+2. **Implicit knowledge leakage**: The LLM fills gaps with memorized content that may be inaccurate,
+   outdated, or from a different context
 3. **Unintentional plagiarism**: The LLM reproduces near-verbatim passages from training data
 
 ---
@@ -21,13 +24,16 @@ When the user provides comprehensive research materials (RQ Brief, Synthesis Rep
 ### When to activate
 
 Activate when ALL of the following are true:
-- The user has provided research materials via the pipeline handoff (RQ Brief + Synthesis Report + Annotated Bibliography)
+
+- The user has provided research materials via the pipeline handoff (RQ Brief + Synthesis Report +
+  Annotated Bibliography)
 - The paper is in `full` or `revision` mode (not `plan` or `outline-only`)
 - The materials are substantive (not placeholder stubs)
 
 ### When NOT to activate
 
 Do NOT activate when:
+
 - The user is in `plan` or `socratic` mode (exploratory — LLM knowledge is expected)
 - The materials are minimal (e.g., only a RQ Brief with no bibliography)
 - The user explicitly requests the LLM to supplement with its own knowledge
@@ -58,26 +64,33 @@ data, and methodology descriptions must come from session materials.
 
 ### [MATERIAL GAP] handling
 
-> **Tag vocabulary.** The `[MATERIAL GAP]`, `[WEAK EVIDENCE]`, `[GAP]` tags used throughout this protocol are canonically defined in [`shared/compliance_checkpoint_protocol.md#canonical-gap-tag-vocabulary`](../../shared/compliance_checkpoint_protocol.md#canonical-gap-tag-vocabulary). This section describes how the anti-leakage writing-time flag interacts with that vocabulary during manuscript production.
+> **Tag vocabulary.** The `[MATERIAL GAP]`, `[WEAK EVIDENCE]`, `[GAP]` tags used throughout this
+> protocol are canonically defined in
+> [`shared/compliance_checkpoint_protocol.md#canonical-gap-tag-vocabulary`](../../shared/compliance_checkpoint_protocol.md#canonical-gap-tag-vocabulary).
+> This section describes how the anti-leakage writing-time flag interacts with that vocabulary
+> during manuscript production.
 
 When a `[MATERIAL GAP]` is flagged:
+
 1. The gap is surfaced at the next checkpoint
 2. The user can provide additional materials, or authorize LLM supplementation for that specific gap
-3. If supplemented: the gap section is tagged `[LLM-SUPPLEMENTED]` in the draft metadata for integrity review
+3. If supplemented: the gap section is tagged `[LLM-SUPPLEMENTED]` in the draft metadata for
+   integrity review
 
 ---
 
 ## Relationship to existing checks
 
-| Check | What it catches | Anti-leakage adds |
-|-------|----------------|-------------------|
-| Integrity gate (Stage 2.5) | Fabricated citations post-hoc | Prevents fabrication at writing time |
-| Failure Mode 6 (Methodology fabrication) | Methods don't match actual procedures | Prevents LLM from inventing procedures |
-| Writing Quality Check | AI-typical phrasing patterns | Anti-leakage prevents AI-typical *content* (as opposed to style) |
+| Check                                    | What it catches                       | Anti-leakage adds                                                |
+| ---------------------------------------- | ------------------------------------- | ---------------------------------------------------------------- |
+| Integrity gate (Stage 2.5)               | Fabricated citations post-hoc         | Prevents fabrication at writing time                             |
+| Failure Mode 6 (Methodology fabrication) | Methods don't match actual procedures | Prevents LLM from inventing procedures                           |
+| Writing Quality Check                    | AI-typical phrasing patterns          | Anti-leakage prevents AI-typical _content_ (as opposed to style) |
 
 ---
 
 ## References
 
-- Song, Y. et al. (2026). PaperOrchestra. *arXiv:2604.05018*. Appendix D.4 (Anti-Leakage Prompt).
-- Lu, C. et al. (2026). Towards end-to-end automation of AI research. *Nature* 651, 914-919. — Mode 6 (Methodology fabrication).
+- Song, Y. et al. (2026). PaperOrchestra. _arXiv:2604.05018_. Appendix D.4 (Anti-Leakage Prompt).
+- Lu, C. et al. (2026). Towards end-to-end automation of AI research. _Nature_ 651, 914-919. — Mode
+  6 (Methodology fabrication).

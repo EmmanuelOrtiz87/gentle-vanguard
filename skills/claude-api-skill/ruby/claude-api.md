@@ -1,6 +1,7 @@
 # Claude API — Ruby
 
-> **Note:** The Ruby SDK supports the Claude API. A tool runner is available in beta via `client.beta.messages.tool_runner()`. Agent SDK is not yet available for Ruby.
+> **Note:** The Ruby SDK supports the Claude API. A tool runner is available in beta via
+> `client.beta.messages.tool_runner()`. Agent SDK is not yet available for Ruby.
 
 ## Installation
 
@@ -58,7 +59,8 @@ stream.text.each { |text| print(text) }
 
 ## Tool Use
 
-The Ruby SDK supports tool use via raw JSON schema definitions and also provides a beta tool runner for automatic tool execution.
+The Ruby SDK supports tool use via raw JSON schema definitions and also provides a beta tool runner
+for automatic tool execution.
 
 ### Tool Runner (Beta)
 
@@ -89,13 +91,16 @@ end
 
 ### Manual Loop
 
-See the [shared tool use concepts](../shared/tool-use-concepts.md) for the tool definition format and agentic loop pattern.
+See the [shared tool use concepts](../shared/tool-use-concepts.md) for the tool definition format
+and agentic loop pattern.
 
 ---
 
 ## Prompt Caching
 
-`system_:` (trailing underscore — avoids shadowing `Kernel#system`) takes an array of text blocks; set `cache_control` on the last block. Plain hashes work via the `OrHash` type alias. For placement patterns and the silent-invalidator audit checklist, see `shared/prompt-caching.md`.
+`system_:` (trailing underscore — avoids shadowing `Kernel#system`) takes an array of text blocks;
+set `cache_control` on the last block. Plain hashes work via the `OrHash` type alias. For placement
+patterns and the silent-invalidator audit checklist, see `shared/prompt-caching.md`.
 
 ```ruby
 message = client.messages.create(
@@ -108,6 +113,8 @@ message = client.messages.create(
 )
 ```
 
-For 1-hour TTL: `cache_control: { type: "ephemeral", ttl: "1h" }`. There's also a top-level `cache_control:` on `messages.create` that auto-places on the last cacheable block.
+For 1-hour TTL: `cache_control: { type: "ephemeral", ttl: "1h" }`. There's also a top-level
+`cache_control:` on `messages.create` that auto-places on the last cacheable block.
 
-Verify hits via `message.usage.cache_creation_input_tokens` / `message.usage.cache_read_input_tokens`.
+Verify hits via `message.usage.cache_creation_input_tokens` /
+`message.usage.cache_read_input_tokens`.

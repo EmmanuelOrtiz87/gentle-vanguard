@@ -20,10 +20,10 @@ requires ongoing manual attention. Without automation:
 
 ### Current Dependency Profile (May 2026)
 
-| Scope      | Package Manager | Dependencies         | Lock File            |
-| ---------- | --------------- | -------------------- | -------------------- |
-| Root       | npm             | devDependencies only | package-lock.json ✅ |
-| Root       | npm             | devDependencies only | package-lock.json ✅ |
+| Scope | Package Manager | Dependencies         | Lock File            |
+| ----- | --------------- | -------------------- | -------------------- |
+| Root  | npm             | devDependencies only | package-lock.json ✅ |
+| Root  | npm             | devDependencies only | package-lock.json ✅ |
 
 ### Risk Profile
 

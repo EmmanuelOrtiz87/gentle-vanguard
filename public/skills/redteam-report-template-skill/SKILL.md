@@ -1,20 +1,29 @@
 ---
 name: redteam-report-template-skill
 description: >
-  Client-facing red-team deliverable format — codifies the Subject / Observations / Description / Impact / Recommendation / PoC structure used for external red-team engagements (not bug-bounty platform reports). Different audience, different tone, different cadence. Built from an authorized engagement deliverable where 14 findings were packaged into a 52KB MD + 2.2MB DOCX with 16 embedded screenshots. Use when the engagement is "external red team for an enterprise client" (not H1/Bugcrowd/Intigriti), when generating the final report, when the client has specified a custom report format, or when packaging findings into DOCX/PDF.
+  Client-facing red-team deliverable format — codifies the Subject / Observations / Description /
+  Impact / Recommendation / PoC structure used for external red-team engagements (not bug-bounty
+  platform reports). Different audience, different tone, different cadence. Built from an authorized
+  engagement deliverable where 14 findings were packaged into a 52KB MD + 2.2MB DOCX with 16
+  embedded screenshots. Use when the engagement is "external red team for an enterprise client" (not
+  H1/Bugcrowd/Intigriti), when generating the final report, when the client has specified a custom
+  report format, or when packaging findings into DOCX/PDF.
 metadata:
   source: claude-bughunter
   original-name: redteam-report-template
 ---
+
 ## When to use
 
 Use this skill for **client-deliverable** reports:
+
 - External red-team engagements with a signed SOW
 - Pentest reports going to a CISO / IT-Sec team (not a triager)
 - Findings that will be reviewed by both technical and non-technical stakeholders
 - Reports that need DOCX/PDF output (not just markdown / platform UI)
 
 Do NOT use for:
+
 - Bug-bounty platform submissions (use `report-writing` / `bugcrowd-reporting` instead)
 - Quick proof-of-concept memos
 - Internal team writeups
@@ -25,47 +34,59 @@ Do NOT use for:
 
 This is the canonical structure each finding follows:
 
-```markdown
+````markdown
 ## Finding F##: <descriptive title>
 
-**Severity:** Critical / High / Medium / Low / Informational
-**Status:** Confirmed / Patched mid-engagement / Suspected (1 signal)
-**CVSS 3.1:** <score> (<vector>)
-**Affected Asset:** <URL / IP / app name>
+**Severity:** Critical / High / Medium / Low / Informational **Status:** Confirmed / Patched
+mid-engagement / Suspected (1 signal) **CVSS 3.1:** <score> (<vector>) **Affected Asset:** <URL / IP
+/ app name>
 
 ### 1. Subject
+
 <One-line statement of the issue. Plain English, no jargon.>
 
 ### 2. Observations
+
 <Bulleted list of what was observed during testing. Concrete facts only — no interpretation yet.>
+
 - <Observation 1>
 - <Observation 2>
 - ...
 
 ### 3. Description
-<Technical explanation of the vulnerability. 2-4 paragraphs. Reader should understand WHY the observations indicate a vulnerability, what the underlying flaw is.>
+
+<Technical explanation of the vulnerability. 2-4 paragraphs. Reader should understand WHY the
+observations indicate a vulnerability, what the underlying flaw is.>
 
 ### 4. Impact
-<What an attacker could achieve. Concrete attacker outcomes, NOT generic CIA triad statements. Tie to the client's business — money, data, reputation, regulatory exposure.>
+
+<What an attacker could achieve. Concrete attacker outcomes, NOT generic CIA triad statements. Tie
+to the client's business — money, data, reputation, regulatory exposure.>
 
 ### 5. Recommendation
-<Specific, actionable remediation. Vendor patch, configuration change, code-level fix. Avoid "implement security best practices" — say what specifically.>
+
+<Specific, actionable remediation. Vendor patch, configuration change, code-level fix. Avoid
+"implement security best practices" — say what specifically.>
 
 ### 6. Proof of Concept (PoC)
+
 <Steps to reproduce, numbered. Include the exact HTTP requests, payloads, tools used.>
 
 **Step 1:** <action>
+
 ```http
 <full HTTP request or curl one-liner>
 ```
+````
 
 **Step 2:** <action>
+
 ```
 <response excerpt>
 ```
 
-**Screenshot:**
-![F##_descriptive_name](screenshots/F##_descriptive_name.png)
+**Screenshot:** ![F##_descriptive_name](screenshots/F##_descriptive_name.png)
+
 ```
 
 ---
@@ -118,6 +139,7 @@ Each finding MUST have reproducible steps. The PoC section is what proves the fi
 ## Document-level structure
 
 ```
+
 1. Executive Summary (1 page, non-technical)
    - Engagement overview (dates, scope)
    - Risk posture summary (heat-map: <X critical, Y high, Z medium...>)
@@ -131,11 +153,8 @@ Each finding MUST have reproducible steps. The PoC section is what proves the fi
    - Timeline (start / end / key milestones)
    - Team
 
-3. Risk Summary Table
-   | F# | Title | Severity | Status |
-   |----|-------|----------|--------|
-   | F01 | ... | Critical | Confirmed |
-   ...
+3. Risk Summary Table | F# | Title | Severity | Status | |----|-------|----------|--------| | F01 |
+   ... | Critical | Confirmed | ...
 
 4. Findings (one per ## section, in severity order — Critical first)
 
@@ -158,7 +177,8 @@ Each finding MUST have reproducible steps. The PoC section is what proves the fi
    - Outstanding cleanup items requiring client action
 
 8. Appendices (raw output, screenshots index, full target list)
-```
+
+````
 
 ---
 
@@ -186,7 +206,7 @@ print(f'Embedded images: {len(imgs)}')
 print(f'Paragraphs: {len(d.paragraphs)}')
 print(f'Headings: {sum(1 for p in d.paragraphs if p.style.name.startswith(\"Heading\"))}')
 "
-```
+````
 
 ### Image filename convention
 
@@ -207,22 +227,24 @@ Variants get letter suffixes (F02a, F02b). Always zero-pad finding number.
 
 ## Writing tone — for client deliverables
 
-| Section | Tone |
-|---|---|
-| Subject | Plain English, jargon-free, 1 line |
-| Observations | Bulleted facts, past tense ("observed that...") |
-| Description | Technical but accessible; assume CISO reader |
-| Impact | Business-translated; tie to revenue/regulation |
-| Recommendation | Imperative, specific, actionable |
-| PoC | Operator-level technical; copy-pasteable |
+| Section        | Tone                                            |
+| -------------- | ----------------------------------------------- |
+| Subject        | Plain English, jargon-free, 1 line              |
+| Observations   | Bulleted facts, past tense ("observed that...") |
+| Description    | Technical but accessible; assume CISO reader    |
+| Impact         | Business-translated; tie to revenue/regulation  |
+| Recommendation | Imperative, specific, actionable                |
+| PoC            | Operator-level technical; copy-pasteable        |
 
 **Always:**
+
 - Use past tense for observations ("The endpoint returned a 200 status code")
 - Use present tense for descriptions of the flaw ("The application does not validate...")
 - Use imperative for recommendations ("Apply patch ... by ...")
 - Number reproduction steps; never "first... then... also..."
 
 **Never:**
+
 - "Could potentially" — prove it or drop it
 - "It might be possible" — same
 - "We recommend implementing security best practices" — say which one specifically
@@ -234,11 +256,12 @@ Variants get letter suffixes (F02a, F02b). Always zero-pad finding number.
 
 Example: hardcoded JWT in APK
 
-| Section | Technical framing | CISO framing | Board framing |
-|---|---|---|---|
-| Impact | "JWT signing key extracted from APK enables forging admin tokens" | "Anyone with the customer-facing mobile app can read any customer's invoice" | "A leaked secret in our mobile app lets attackers impersonate users" |
+| Section | Technical framing                                                 | CISO framing                                                                 | Board framing                                                        |
+| ------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Impact  | "JWT signing key extracted from APK enables forging admin tokens" | "Anyone with the customer-facing mobile app can read any customer's invoice" | "A leaked secret in our mobile app lets attackers impersonate users" |
 
-The same finding's Impact paragraph should cover both ends — start with the business outcome, then drop into technical detail.
+The same finding's Impact paragraph should cover both ends — start with the business outcome, then
+drop into technical detail.
 
 ---
 
@@ -246,13 +269,18 @@ The same finding's Impact paragraph should cover both ends — start with the bu
 
 Red-team deliverables should include — not just bug-bounty payable bugs:
 
-- **Information disclosure that helps attack mapping** (CodeIgniter debug toolbar leaking routes, version banners on appliances) — Medium
+- **Information disclosure that helps attack mapping** (CodeIgniter debug toolbar leaking routes,
+  version banners on appliances) — Medium
 - **User enumeration** (Microsoft OneDrive 302 vs 404 differential) — Medium
-- **Pre-existing security state observations** (247 accounts already locked by external attacker; weak password policies) — Informational with stakeholder relevance
-- **Defensive observations** (SOC patched our SQLi within 30 min — evidence of working detection) — Informational/positive
-- **Sister-app pattern issues** (same code template across 7 apps) — Medium (multiplied blast radius)
+- **Pre-existing security state observations** (247 accounts already locked by external attacker;
+  weak password policies) — Informational with stakeholder relevance
+- **Defensive observations** (SOC patched our SQLi within 30 min — evidence of working detection) —
+  Informational/positive
+- **Sister-app pattern issues** (same code template across 7 apps) — Medium (multiplied blast
+  radius)
 
-Bug bounty would reject most of these. Red-team deliverables embrace them — the client paid for the assessment to know.
+Bug bounty would reject most of these. Red-team deliverables embrace them — the client paid for the
+assessment to know.
 
 ---
 
@@ -265,13 +293,15 @@ Beyond findings themselves, the deliverable should include:
 - Findings the client patched during the engagement (with PoC pre-patch as evidence)
 - Tooling failures (e.g., MCP timeout, CAPTCHA not solvable) — these affect what was/wasn't testable
 
-Each gives the client context about their real-world detection capability, which often matters more than the findings themselves.
+Each gives the client context about their real-world detection capability, which often matters more
+than the findings themselves.
 
 ---
 
 ## Template library (where to put canned text)
 
 Maintain reusable boilerplate in:
+
 ```
 ~/.claude/skills/redteam-report-template/templates/
     executive_summary.md      # Reusable exec summary skeleton
@@ -310,7 +340,8 @@ Pre-delivery checklist:
 - `redteam-mindset` — informs what counts as a finding worth shipping
 - `mid-engagement-ir-detection` — informs the "patched mid-engagement" status pattern
 - `evidence-hygiene` — informs screenshot redaction discipline
-- `m365-entra-attack`, `enterprise-vpn-attack`, etc. — each provides finding-templates specific to its attack surface
+- `m365-entra-attack`, `enterprise-vpn-attack`, etc. — each provides finding-templates specific to
+  its attack surface
 
 ---
 
@@ -321,13 +352,15 @@ Pre-delivery checklist:
 - **DO NOT** copy-paste OWASP top-10 boilerplate into Description sections
 - **DO NOT** include findings without PoCs — they read as speculative
 - **DO NOT** skip the Recommendation section's specificity — "patch and review" doesn't help
-- **DO NOT** mix bug-bounty CVSS scoring with red-team severity unthinkingly — context differs (e.g., a Medium on a CVSS basis can be Critical for the client if it touches a regulated dataset)
+- **DO NOT** mix bug-bounty CVSS scoring with red-team severity unthinkingly — context differs
+  (e.g., a Medium on a CVSS basis can be Critical for the client if it touches a regulated dataset)
 
 ---
 
 ## Real engagement metric (authorized-engagement)
 
 For calibration:
+
 - 14 findings shipped (2 Critical, 4 High, 5 Medium, 3 Low/Info)
 - 18 screenshots embedded
 - 52,737 bytes markdown / 2,262,484 bytes DOCX
@@ -335,14 +368,33 @@ For calibration:
 - 16 inline images (2 were inline in MD-only edge cases)
 - Time-to-deliverable: ~6 hours after engagement close for first draft
 
-These numbers are typical for a 1-week external red-team engagement on a mid-size enterprise. Scale down for short tests, up for full purple-team exercises.
+These numbers are typical for a 1-week external red-team engagement on a mid-size enterprise. Scale
+down for short tests, up for full purple-team exercises.
 
 ---
 
 ## Related Skills & Chains
 
-- **`triage-validation`** — This template ingests findings that have ALREADY passed the 7-Question Gate. Engagement flow: every finding through `triage-validation` first → only validated findings → `redteam-report-template` packaging. Skipping triage produces a deliverable padded with informational noise that erodes client trust.
-- **`evidence-hygiene`** — The DOCX with 16 embedded screenshots only works if evidence was captured systematically throughout the engagement. Engagement flow: `evidence-hygiene` discipline at session start → timestamped, organized screenshot folder → `redteam-report-template` consumes that folder to populate Evidence blocks.
-- **`redteam-mindset`** — The Subject / Observations / Description / Impact / Recommendation / PoC structure assumes the operator already thinks like a red-teamer (impact-first, blast-radius framing). Engagement flow: `redteam-mindset` loaded at engagement start → findings collected with red-team framing baked in → `redteam-report-template` produces deliverable without rewriting every Impact section.
-- **`mid-engagement-ir-detection`** — Defensive-action findings (SOC patches mid-test, new IPS rules deployed, account lockouts triggered by external attacker) are first-class findings in red-team deliverables. Engagement flow: `mid-engagement-ir-detection` captures behavior-change events → each becomes its own Subject in the deliverable, framed as "client capability observation" not as "bug we missed."
-- **`report-writing`** + **`bugcrowd-reporting`** — Bug-bounty platform reports use DIFFERENT structure (one finding per submission, platform-specific severity scoring, OOS-clause counters). Engagement flow: if engagement mode is `bug-bounty` per project memory → use `report-writing` / `bugcrowd-reporting` instead. This template is ONLY for external red-team / enterprise client deliverables.
+- **`triage-validation`** — This template ingests findings that have ALREADY passed the 7-Question
+  Gate. Engagement flow: every finding through `triage-validation` first → only validated findings →
+  `redteam-report-template` packaging. Skipping triage produces a deliverable padded with
+  informational noise that erodes client trust.
+- **`evidence-hygiene`** — The DOCX with 16 embedded screenshots only works if evidence was captured
+  systematically throughout the engagement. Engagement flow: `evidence-hygiene` discipline at
+  session start → timestamped, organized screenshot folder → `redteam-report-template` consumes that
+  folder to populate Evidence blocks.
+- **`redteam-mindset`** — The Subject / Observations / Description / Impact / Recommendation / PoC
+  structure assumes the operator already thinks like a red-teamer (impact-first, blast-radius
+  framing). Engagement flow: `redteam-mindset` loaded at engagement start → findings collected with
+  red-team framing baked in → `redteam-report-template` produces deliverable without rewriting every
+  Impact section.
+- **`mid-engagement-ir-detection`** — Defensive-action findings (SOC patches mid-test, new IPS rules
+  deployed, account lockouts triggered by external attacker) are first-class findings in red-team
+  deliverables. Engagement flow: `mid-engagement-ir-detection` captures behavior-change events →
+  each becomes its own Subject in the deliverable, framed as "client capability observation" not as
+  "bug we missed."
+- **`report-writing`** + **`bugcrowd-reporting`** — Bug-bounty platform reports use DIFFERENT
+  structure (one finding per submission, platform-specific severity scoring, OOS-clause counters).
+  Engagement flow: if engagement mode is `bug-bounty` per project memory → use `report-writing` /
+  `bugcrowd-reporting` instead. This template is ONLY for external red-team / enterprise client
+  deliverables.

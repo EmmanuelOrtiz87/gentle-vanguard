@@ -10,4 +10,3 @@
 Return structured verdict per round:
 
 ---
-

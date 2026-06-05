@@ -1,10 +1,12 @@
 # Tooling Quick-Install
 
-> Reference content for the `offensive-osint` skill. Originally §46 of the monolithic SKILL.md (refactored 2026-05-02 for size/load efficiency).
+> Reference content for the `offensive-osint` skill. Originally §46 of the monolithic SKILL.md
+> (refactored 2026-05-02 for size/load efficiency).
 
 ## 46. Tooling Quick-Install
 
-One-liner installs for the most-used external recon tools. All assume Linux/Mac with go/python/git installed.
+One-liner installs for the most-used external recon tools. All assume Linux/Mac with go/python/git
+installed.
 
 ### 46.1 Subdomain enumeration
 
@@ -185,4 +187,3 @@ git clone https://github.com/pry0cc/axiom && cd axiom && ./interact/axiom-config
 ```
 
 ---
-

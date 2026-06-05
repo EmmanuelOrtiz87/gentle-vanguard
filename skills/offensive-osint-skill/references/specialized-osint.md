@@ -1,6 +1,7 @@
 # Threat Intel, Crypto, Media, Geo, Regional, Telegram OSINT
 
-> Reference content for the `offensive-osint` skill. Originally §29 + §30 + §31 + §32 + §37 + §38 of the monolithic SKILL.md (refactored 2026-05-02 for size/load efficiency).
+> Reference content for the `offensive-osint` skill. Originally §29 + §30 + §31 + §32 + §37 + §38 of
+> the monolithic SKILL.md (refactored 2026-05-02 for size/load efficiency).
 
 ## 29. Threat Intel & IOCs
 
@@ -8,41 +9,46 @@
 - [MISP Project](https://www.misp-project.org/) and public MISP feeds.
 - [OpenCTI](https://www.opencti.io/) — CTI knowledge graph.
 - [Malpedia](https://malpedia.caad.fkie.fraunhofer.de/) — malware families, YARA, references.
-- [ThreatFox](https://threatfox.abuse.ch/), [URLHaus](https://urlhaus.abuse.ch/), [SSLBL](https://sslbl.abuse.ch/).
+- [ThreatFox](https://threatfox.abuse.ch/), [URLHaus](https://urlhaus.abuse.ch/),
+  [SSLBL](https://sslbl.abuse.ch/).
 - [MalwareBazaar](https://bazaar.abuse.ch/) — hash-based sample sharing.
 - [PhishTank](https://www.phishtank.com/), [OpenPhish](https://openphish.com/).
 
 ### 29.1 Malware Analysis & Sandboxes
 
-- Static: [pefile](https://github.com/erocarrera/pefile), [FLOSS](https://github.com/mandiant/flare-floss), [capa](https://github.com/mandiant/capa).
+- Static: [pefile](https://github.com/erocarrera/pefile),
+  [FLOSS](https://github.com/mandiant/flare-floss), [capa](https://github.com/mandiant/capa).
 - Similarity: SSDEEP, TLSH.
-- Sandboxes: [ANY.RUN](https://any.run/), [Hybrid Analysis](https://www.hybrid-analysis.com/), [CAPE](https://capesandbox.com/), [Tria.ge](https://tria.ge/).
-- Intelligence: [Intezer](https://analyze.intezer.com/) (code reuse), [VirusTotal](https://www.virustotal.com/) — **caution: uploads become public**.
+- Sandboxes: [ANY.RUN](https://any.run/), [Hybrid Analysis](https://www.hybrid-analysis.com/),
+  [CAPE](https://capesandbox.com/), [Tria.ge](https://tria.ge/).
+- Intelligence: [Intezer](https://analyze.intezer.com/) (code reuse),
+  [VirusTotal](https://www.virustotal.com/) — **caution: uploads become public**.
 - TLS: [JA3](https://github.com/salesforce/ja3), [JA4](https://github.com/FingerprinTLS/ja4).
 
 ### 29.2 Vulnerability Prioritization Data Sources
 
 Methodology in companion skill §28. Concrete data sources here.
 
-| Source | URL | What it tells you |
-|---|---|---|
-| **NVD** | `https://nvd.nist.gov/vuln/search` (or API `services.nvd.nist.gov/rest/json/cves/2.0`) | Base CVE catalog with CVSS v2/v3 scores. |
-| **EPSS** | `https://www.first.org/epss/` (CSV at `https://epss.cyentia.com/epss_scores-current.csv.gz`) | 0.0-1.0 probability of exploit in next 30 days. Updated daily. |
-| **CISA KEV** | `https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json` | CVEs proven exploited in the wild + federal-agency due-by dates. |
-| **ExploitDB** | `https://www.exploit-db.com/`; offline DB via `searchsploit` | POC code presence (Metasploit, Python, shell). |
-| **Metasploit module catalog** | `https://www.rapid7.com/db/modules/` (or `msfconsole > search cve:CVE-2024-XXXX`) | Automation availability. |
-| **InTheWild.io** | `https://inthewild.io/` | Community-curated "actively exploited" tracker. |
-| **OpenCVE** | `https://www.opencve.io/` | Timeline + watchlist + alerts. |
-| **Trickest CVE → POC mapping** | `https://github.com/trickest/cve` | Auto-generated CVE → public POC repo links. |
-| **GitHub Security Advisories** | `https://github.com/advisories` | Per-language / per-ecosystem advisories. |
-| **MITRE CVE List** | `https://cve.mitre.org/cve/` | Official CVE registry. |
-| **VulnDB** | `https://vulndb.cyberriskanalytics.com/` | Paid; commercial enrichment. |
-| **OSV.dev** | `https://osv.dev/` | Open-source vulnerability DB; JSON API. |
-| **Vulncheck KEV** | `https://vulncheck.com/kev` | Expanded KEV feed (more than CISA). |
-| **Tenable Research** | `https://www.tenable.com/research` | Tenable's CVE detail enrichment. |
-| **Qualys ThreatPROTECT** | `https://threatprotect.qualys.com/` | Qualys' threat-context enrichment. |
+| Source                         | URL                                                                                          | What it tells you                                                |
+| ------------------------------ | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| **NVD**                        | `https://nvd.nist.gov/vuln/search` (or API `services.nvd.nist.gov/rest/json/cves/2.0`)       | Base CVE catalog with CVSS v2/v3 scores.                         |
+| **EPSS**                       | `https://www.first.org/epss/` (CSV at `https://epss.cyentia.com/epss_scores-current.csv.gz`) | 0.0-1.0 probability of exploit in next 30 days. Updated daily.   |
+| **CISA KEV**                   | `https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json`        | CVEs proven exploited in the wild + federal-agency due-by dates. |
+| **ExploitDB**                  | `https://www.exploit-db.com/`; offline DB via `searchsploit`                                 | POC code presence (Metasploit, Python, shell).                   |
+| **Metasploit module catalog**  | `https://www.rapid7.com/db/modules/` (or `msfconsole > search cve:CVE-2024-XXXX`)            | Automation availability.                                         |
+| **InTheWild.io**               | `https://inthewild.io/`                                                                      | Community-curated "actively exploited" tracker.                  |
+| **OpenCVE**                    | `https://www.opencve.io/`                                                                    | Timeline + watchlist + alerts.                                   |
+| **Trickest CVE → POC mapping** | `https://github.com/trickest/cve`                                                            | Auto-generated CVE → public POC repo links.                      |
+| **GitHub Security Advisories** | `https://github.com/advisories`                                                              | Per-language / per-ecosystem advisories.                         |
+| **MITRE CVE List**             | `https://cve.mitre.org/cve/`                                                                 | Official CVE registry.                                           |
+| **VulnDB**                     | `https://vulndb.cyberriskanalytics.com/`                                                     | Paid; commercial enrichment.                                     |
+| **OSV.dev**                    | `https://osv.dev/`                                                                           | Open-source vulnerability DB; JSON API.                          |
+| **Vulncheck KEV**              | `https://vulncheck.com/kev`                                                                  | Expanded KEV feed (more than CISA).                              |
+| **Tenable Research**           | `https://www.tenable.com/research`                                                           | Tenable's CVE detail enrichment.                                 |
+| **Qualys ThreatPROTECT**       | `https://threatprotect.qualys.com/`                                                          | Qualys' threat-context enrichment.                               |
 
 **Workflow:**
+
 ```bash
 # 1. Get EPSS score for a CVE
 curl -sk "https://api.first.org/data/v1/epss?cve=CVE-2024-3400" | jq '.data[0]'
@@ -59,6 +65,7 @@ msfconsole -q -x "search cve:2024-3400; exit"
 ```
 
 **Bulk prioritization** (given a Nuclei scan output with N CVEs):
+
 ```bash
 # Extract CVEs from nuclei JSON output
 jq -r '.info.classification.["cve-id"][]?' nuclei-results.json | sort -u > cves.txt
@@ -197,3 +204,4 @@ done < cves.txt | sort -t: -k2 -nr
 
 ---
 
+```

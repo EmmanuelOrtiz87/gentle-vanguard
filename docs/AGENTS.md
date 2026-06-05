@@ -63,15 +63,15 @@ Professional mode: ES/PT-BR/EN, no regional slang, formal tone, no persona switc
 
 ## Hard Rules — Config Safety
 
-| Rule | Description |
-|------|-------------|
+| Rule                            | Description                                                                                                                                                                               |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **NORMATIVA OVERRIDE PROTOCOL** | If user instruction contradicts a normativa/rule, ASK for explicit confirmation explaining WHY it conflicts. Proceed ONLY if user confirms. Otherwise follow normativa without deviation. |
 
-| Rule | Description |
-|------|-------------|
+| Rule                                | Description                                                                                                                                                                       |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **NO custom props in tool configs** | Never add non-standard properties to `opencode.json`, `.cursorrules`, `.windsurf/config.json`, etc. Tools reject unknown props at startup. Use `config/*.json` for custom config. |
-| **Validate before deploy** | Run `scripts/utilities/CONFIG/validate-opencode-config.ps1` before any change to `opencode.json` |
-| **Separate config per concern** | Prompt optimization → `config/system-prompt-optimization.json`. Never inline into tool configs. |
+| **Validate before deploy**          | Run `scripts/utilities/CONFIG/validate-opencode-config.ps1` before any change to `opencode.json`                                                                                  |
+| **Separate config per concern**     | Prompt optimization → `config/system-prompt-optimization.json`. Never inline into tool configs.                                                                                   |
 
 ## Context Optimization
 
@@ -86,21 +86,19 @@ Professional mode: ES/PT-BR/EN, no regional slang, formal tone, no persona switc
 
 ## Token Notification (Auto-Hook — Every Turn)
 
-Automatico vía `pre-process-input.ps1`. Se ejecuta CADA turno sin intervención del agente.
-Muestra el acumulado de la sesión al inicio de cada turno.
+Automatico vía `pre-process-input.ps1`. Se ejecuta CADA turno sin intervención del agente. Muestra
+el acumulado de la sesión al inicio de cada turno.
 
-Startup: `session-autostart.config.json` → paso `token-notification-init` → `token-usage-notifier.ps1 -Action status`.
+Startup: `session-autostart.config.json` → paso `token-notification-init` →
+`token-usage-notifier.ps1 -Action status`.
 
-Commands:
-| `/notif on/off`           | Master toggle                      |
-| `/notif status`           | Show current notification state    |
-| `/notif token on/off`     | Toggle token display only          |
-| `/notif context on/off`   | Toggle context chars display       |
-| `/notif cost on/off`      | Toggle cost estimation             |
-| `/notif accumulated on/off` | Toggle session accumulated       |
-| `/notif compact on/off`   | Toggle compact/verbose mode        |
+Commands: | `/notif on/off` | Master toggle | | `/notif status` | Show current notification state |
+| `/notif token on/off` | Toggle token display only | | `/notif context on/off` | Toggle context
+chars display | | `/notif cost on/off` | Toggle cost estimation | | `/notif accumulated on/off` |
+Toggle session accumulated | | `/notif compact on/off` | Toggle compact/verbose mode |
 
 For context logging (post-response), run manually when needed:
+
 ```powershell
 pwsh -NoProfile -File scripts/utilities/token-usage-auto.ps1 -InputTokens <N> -OutputTokens <N> -ContextChars <N> -InputSummary "<...>" -OutputSummary "<...>" -TurnLabel "<...>" -Model "<model>"
 ```
@@ -114,54 +112,54 @@ See `docs/QUICK-COMMANDS.md` for full list.
 
 ## Key References
 
-| Resource                | Path                               |
-| ----------------------- | ---------------------------------- |
-| Orchestrator config     | `config/orchestrator.json`         |
-| Auto-delegation         | `config/auto-delegation.json`      |
-| NORMATIVES (index)          | `rules/NORMATIVES.md`                   |
-| NORMATIVAS-ARCHITECTURE     | `rules/NORMATIVAS-ARCHITECTURE.md`      |
-| NORMATIVAS-CONFIG           | `rules/NORMATIVAS-CONFIG.md`            |
-| NORMATIVAS-DEVOPS           | `rules/NORMATIVAS-DEVOPS.md`            |
-| NORMATIVAS-DOCS             | `rules/NORMATIVAS-DOCS.md`              |
-| NORMATIVAS-ENFORCEMENT      | `rules/NORMATIVAS-ENFORCEMENT.md`       |
-| NORMATIVAS-GIT              | `rules/NORMATIVAS-GIT.md`               |
-| NORMATIVAS-CODIGO           | `rules/NORMATIVAS-CODIGO.md`            |
-| NORMATIVAS-PERFORMANCE      | `rules/NORMATIVAS-PERFORMANCE.md`       |
-| NORMATIVAS-SESSION          | `rules/NORMATIVAS-SESSION.md`           |
-| NORMATIVAS-SOC2             | `rules/NORMATIVAS-SOC2.md`              |
-| **NORMATIVAS-AI-SAFETY**    | `rules/NORMATIVAS-AI-SAFETY.md`         |
-| **NORMATIVAS-COST-OPT**     | `rules/NORMATIVAS-COST-OPTIMIZATION.md` |
-| **NORMATIVAS-DISASTER-REC** | `rules/NORMATIVAS-DISASTER-RECOVERY.md` |
-| **NORMATIVAS-INCIDENT-MGMT**| `rules/NORMATIVAS-INCIDENT-MANAGEMENT.md` |
-| AI normatives               | `rules/AI-NORMATIVES.md`                |
-| Dev standards               | `rules/DEVELOPMENT-STANDARDS.md`        |
-| Delegation rules        | `rules/DELEGATION-RULES.md`        |
-| Model routing           | `config/model-routing.json`        |
-| SDD config              | `openspec/config.yaml`             |
-| Context engineering     | `rules/CONTEXT-ENGINEERING.md`     |
-| CodeGraph skill         | `skills/codegraph-skill/SKILL.md`  |
-| Quick commands          | `docs/QUICK-COMMANDS.md`           |
-| JS/TS Quality CI        | `.github/workflows/js-ts-quality.yml`  |
-| Python Quality CI       | `.github/workflows/python-quality.yml` |
-| Markdown Lint CI        | `.github/workflows/markdown-lint.yml`  |
-| Commit Lint CI          | `.github/workflows/commitlint.yml`     |
-| Coverage CI             | `.github/workflows/coverage.yml`       |
-| npm Audit CI            | `.github/workflows/npm-audit.yml`      |
-| Stale Issues CI         | `.github/workflows/stale.yml`          |
-| PR Labeler CI           | `.github/workflows/labeler.yml`        |
-| OpenAPI Validate CI     | `.github/workflows/openapi-validate.yml`|
-| Devcontainer            | `.devcontainer/devcontainer.json`      |
-| JSON Validator          | `scripts/utilities/json-validator.ps1` |
-| JSON Construction       | `rules/NORMATIVAS-JSON-CONSTRUCTION.md` |
-| **Feedback Collector**  | `scripts/utilities/FEEDBACK/feedback-collector.ps1` |
-| **Feedback Analyzer**   | `scripts/utilities/FEEDBACK/feedback-analyzer.ps1` |
-| **Digest Generator**    | `scripts/utilities/DIGEST/digest-generator.ps1` |
-| **NORMATIVAS-FEEDBACK** | `rules/NORMATIVAS-FEEDBACK.md` |
-| **Release Automation** | `scripts/utilities/DEPLOYMENT/release-automation.ps1` |
-| **NORMATIVAS-RELEASE** | `rules/NORMATIVAS-RELEASE.md` |
-| **Fine-Tuning Pipeline** | `scripts/utilities/FINE-TUNING/ft-pipeline.ps1` |
-| **FT Trainer** | `scripts/utilities/FINE-TUNING/ft-trainer.ps1` |
-| **FT Status** | `scripts/utilities/FINE-TUNING/ft-status.ps1` |
-| **FT Threshold Detect** | `scripts/utilities/FINE-TUNING/ft-threshold-detect.ps1` |
-| **FT Auto-Prune** | `scripts/utilities/FINE-TUNING/ft-auto-prune.ps1` |
-| **FT Registry** | `.ft/registry.json` |
+| Resource                     | Path                                                    |
+| ---------------------------- | ------------------------------------------------------- |
+| Orchestrator config          | `config/orchestrator.json`                              |
+| Auto-delegation              | `config/auto-delegation.json`                           |
+| NORMATIVES (index)           | `rules/NORMATIVES.md`                                   |
+| NORMATIVAS-ARCHITECTURE      | `rules/NORMATIVAS-ARCHITECTURE.md`                      |
+| NORMATIVAS-CONFIG            | `rules/NORMATIVAS-CONFIG.md`                            |
+| NORMATIVAS-DEVOPS            | `rules/NORMATIVAS-DEVOPS.md`                            |
+| NORMATIVAS-DOCS              | `rules/NORMATIVAS-DOCS.md`                              |
+| NORMATIVAS-ENFORCEMENT       | `rules/NORMATIVAS-ENFORCEMENT.md`                       |
+| NORMATIVAS-GIT               | `rules/NORMATIVAS-GIT.md`                               |
+| NORMATIVAS-CODIGO            | `rules/NORMATIVAS-CODIGO.md`                            |
+| NORMATIVAS-PERFORMANCE       | `rules/NORMATIVAS-PERFORMANCE.md`                       |
+| NORMATIVAS-SESSION           | `rules/NORMATIVAS-SESSION.md`                           |
+| NORMATIVAS-SOC2              | `rules/NORMATIVAS-SOC2.md`                              |
+| **NORMATIVAS-AI-SAFETY**     | `rules/NORMATIVAS-AI-SAFETY.md`                         |
+| **NORMATIVAS-COST-OPT**      | `rules/NORMATIVAS-COST-OPTIMIZATION.md`                 |
+| **NORMATIVAS-DISASTER-REC**  | `rules/NORMATIVAS-DISASTER-RECOVERY.md`                 |
+| **NORMATIVAS-INCIDENT-MGMT** | `rules/NORMATIVAS-INCIDENT-MANAGEMENT.md`               |
+| AI normatives                | `rules/AI-NORMATIVES.md`                                |
+| Dev standards                | `rules/DEVELOPMENT-STANDARDS.md`                        |
+| Delegation rules             | `rules/DELEGATION-RULES.md`                             |
+| Model routing                | `config/model-routing.json`                             |
+| SDD config                   | `openspec/config.yaml`                                  |
+| Context engineering          | `rules/CONTEXT-ENGINEERING.md`                          |
+| CodeGraph skill              | `skills/codegraph-skill/SKILL.md`                       |
+| Quick commands               | `docs/QUICK-COMMANDS.md`                                |
+| JS/TS Quality CI             | `.github/workflows/js-ts-quality.yml`                   |
+| Python Quality CI            | `.github/workflows/python-quality.yml`                  |
+| Markdown Lint CI             | `.github/workflows/markdown-lint.yml`                   |
+| Commit Lint CI               | `.github/workflows/commitlint.yml`                      |
+| Coverage CI                  | `.github/workflows/coverage.yml`                        |
+| npm Audit CI                 | `.github/workflows/npm-audit.yml`                       |
+| Stale Issues CI              | `.github/workflows/stale.yml`                           |
+| PR Labeler CI                | `.github/workflows/labeler.yml`                         |
+| OpenAPI Validate CI          | `.github/workflows/openapi-validate.yml`                |
+| Devcontainer                 | `.devcontainer/devcontainer.json`                       |
+| JSON Validator               | `scripts/utilities/json-validator.ps1`                  |
+| JSON Construction            | `rules/NORMATIVAS-JSON-CONSTRUCTION.md`                 |
+| **Feedback Collector**       | `scripts/utilities/FEEDBACK/feedback-collector.ps1`     |
+| **Feedback Analyzer**        | `scripts/utilities/FEEDBACK/feedback-analyzer.ps1`      |
+| **Digest Generator**         | `scripts/utilities/DIGEST/digest-generator.ps1`         |
+| **NORMATIVAS-FEEDBACK**      | `rules/NORMATIVAS-FEEDBACK.md`                          |
+| **Release Automation**       | `scripts/utilities/DEPLOYMENT/release-automation.ps1`   |
+| **NORMATIVAS-RELEASE**       | `rules/NORMATIVAS-RELEASE.md`                           |
+| **Fine-Tuning Pipeline**     | `scripts/utilities/FINE-TUNING/ft-pipeline.ps1`         |
+| **FT Trainer**               | `scripts/utilities/FINE-TUNING/ft-trainer.ps1`          |
+| **FT Status**                | `scripts/utilities/FINE-TUNING/ft-status.ps1`           |
+| **FT Threshold Detect**      | `scripts/utilities/FINE-TUNING/ft-threshold-detect.ps1` |
+| **FT Auto-Prune**            | `scripts/utilities/FINE-TUNING/ft-auto-prune.ps1`       |
+| **FT Registry**              | `.ft/registry.json`                                     |
