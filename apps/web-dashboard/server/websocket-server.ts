@@ -15,6 +15,7 @@ import {
   validateSkillStructure,
   getSkillContent,
 } from './marketplace-api.js';
+import { getRealMetrics, getTraces } from './real-data.js';
 import type {
   AgentSession,
   AgentMessage,
@@ -105,53 +106,8 @@ function loadSessions(): void {
 }
 
 function generateMetrics() {
-  const stats = loadStats();
-  const skills = countSkills();
-  const topSkills = Object.entries(stats.callsBySkill || {})
-    .sort(([, a], [, b]) => b - a)
-    .slice(0, 5)
-    .map(([name]) => name);
-
-  return {
-    timestamp: new Date().toISOString(),
-    tokens: {
-      used: 15000 + Math.floor(Math.random() * 500),
-      limit: 30000,
-      cost: 0.45 + Math.random() * 0.02,
-    },
-    sessions: {
-      total: 42 + Math.floor(Math.random() * 5),
-      active: 3 + Math.floor(Math.random() * 2),
-      today: 5,
-    },
-    git: {
-      commits: 128 + Math.floor(Math.random() * 10),
-      prsMerged: 15,
-      contributors: 4,
-    },
-    health: {
-      status: Math.random() > 0.1 ? 'healthy' : 'degraded',
-      routing: 0.95 + Math.random() * 0.04,
-    },
-    mcp: {
-      skills: {
-        total: skills.total,
-        byAgent: skills.byAgent,
-        recentlyUsed: topSkills,
-      },
-      calls: {
-        total: stats.totalCalls || 0,
-        byTool: stats.callsByTool || {},
-        bySkill: stats.callsBySkill || {},
-        lastCall: stats.lastCall,
-      },
-      performance: {
-        avgResponseTime: 150 + Math.floor(Math.random() * 50),
-      errorRate: Math.random() * 0.02,
-    },
-  },
-  globalHealth: getGlobalHealth(),
-};
+  const real = getRealMetrics();
+  return { ...real, globalHealth: getGlobalHealth() };
 }
 
 // --- Agent Session Management ---
@@ -412,6 +368,12 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
   if (url.pathname === '/api/health') {
     res.writeHead(200, headers);
     res.end(JSON.stringify({ status: 'ok', uptime: process.uptime(), connections: clients.size }));
+    return;
+  }
+
+  if (url.pathname === '/api/traces') {
+    res.writeHead(200, headers);
+    res.end(JSON.stringify(getTraces()));
     return;
   }
 

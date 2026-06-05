@@ -17,6 +17,11 @@ export function useMetrics(useWebSocketMode = false) {
 
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const modeRef = useRef(useWebSocketMode);
+
+  useEffect(() => {
+    modeRef.current = useWebSocketMode;
+  }, [useWebSocketMode]);
 
   const updateFromPayload = useCallback(
     (payload: { tokens: any; sessions: any; git: any; health: any; globalHealth?: any; mcp?: any; timestamp?: string }) => {
@@ -59,7 +64,7 @@ export function useMetrics(useWebSocketMode = false) {
   }, []);
 
   const connectWebSocket = useCallback(() => {
-    if (!useWebSocketMode) return;
+    if (!modeRef.current) return;
 
     cleanupWebSocket();
 
@@ -84,7 +89,7 @@ export function useMetrics(useWebSocketMode = false) {
 
     ws.onclose = () => {
       setWsConnected(false);
-      if (wsRef.current === ws) {
+      if (wsRef.current === ws && modeRef.current) {
         wsRef.current = null;
         reconnectRef.current = setTimeout(connectWebSocket, 3000);
       }
@@ -93,10 +98,10 @@ export function useMetrics(useWebSocketMode = false) {
     ws.onerror = () => {
       setError('WebSocket connection failed');
     };
-  }, [useWebSocketMode, updateFromPayload, cleanupWebSocket]);
+  }, [updateFromPayload, cleanupWebSocket]);
 
   const fetchMetrics = useCallback(async () => {
-    if (useWebSocketMode && wsConnected) return;
+    if (modeRef.current && wsConnected) return;
 
     setLoading(true);
     try {
@@ -112,16 +117,21 @@ export function useMetrics(useWebSocketMode = false) {
     } finally {
       setLoading(false);
     }
-  }, [useWebSocketMode, wsConnected, updateFromPayload]);
+  }, [wsConnected, updateFromPayload]);
 
   useEffect(() => {
     if (useWebSocketMode) {
+      cleanupWebSocket();
       connectWebSocket();
       return cleanupWebSocket;
     } else {
+      cleanupWebSocket();
       fetchMetrics();
       const interval = setInterval(fetchMetrics, 5000);
-      return () => clearInterval(interval);
+      return () => {
+        clearInterval(interval);
+        cleanupWebSocket();
+      };
     }
   }, [useWebSocketMode, connectWebSocket, fetchMetrics, cleanupWebSocket]);
 
