@@ -1,6 +1,9 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync } from "fs";
 import { join, basename } from "path";
+import { fileURLToPath } from "url";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = join(__filename, "..");
 const SKILLS_DIR = join(__dirname, "..", "..", "..", "skills");
 const DATA_PATH = join(__dirname, "..", "data", "marketplace.json");
 

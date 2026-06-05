@@ -3,13 +3,13 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-3.2.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
+  <img src="https://img.shields.io/badge/Version-3.3.0-00BFFF?style=flat-square&labelColor=0D1117" alt="Version">
   <img src="https://img.shields.io/badge/Status-Production%20Ready-22C55E?style=flat-square&labelColor=0D1117" alt="Status">
   <img src="https://img.shields.io/badge/License-MIT-4DCFFF?style=flat-square&labelColor=0D1117" alt="License">
   <img src="https://img.shields.io/badge/PowerShell-7+-A855F7?style=flat-square&labelColor=0D1117" alt="PowerShell">
   <img src="https://img.shields.io/badge/Agents-18-00BFFF?style=flat-square&labelColor=0D1117" alt="Agents">
-  <img src="https://img.shields.io/badge/Skills-386-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
-  <img src="https://img.shields.io/badge/Workflows-27-A855F7?style=flat-square&labelColor=0D1117" alt="Workflows">
+  <img src="https://img.shields.io/badge/Skills-385-4DCFFF?style=flat-square&labelColor=0D1117" alt="Skills">
+  <img src="https://img.shields.io/badge/Workflows-34-A855F7?style=flat-square&labelColor=0D1117" alt="Workflows">
 </p>
 
 <p align="center">
@@ -23,7 +23,7 @@
 </p>
 
 <p align="center">
-  <strong>AI-powered development orchestrator · 18 agents · 386 skills · 10 tool-compatible</strong><br>
+  <strong>AI-powered development orchestrator · 18 agents · 385 skills · 10 tool-compatible</strong><br>
   <em>Tool-agnostic · SDD Lifecycle · Hashline · Team Mode · Skill MCPs · Feedback Loop · Proactive Delivery · Persistent memory</em>
 </p>
 
@@ -44,7 +44,7 @@ Continue.dev, Antigravity).
 Layer 5: AGENTS     — 18 agents (BA, SAD, DEV, QA, OPS, GOV, DOC, etc.)
 Layer 4: COMMANDS   — gv.ps1, pre-process-input.ps1, detect-tool.ps1
 Layer 3: MCP        — skill-server.ts (MCP protocol), mcp-bridge.ps1
-Layer 2: SKILLS     — 386 skills (SDD, security, web, mobile, AI/ML, etc.)
+Layer 2: SKILLS     — 385 skills (SDD, security, web, mobile, AI/ML, etc.)
 Layer 1: MEMORY     — Engram persistent memory (tools/engram.exe)
 ```
 
@@ -53,13 +53,13 @@ Layer 1: MEMORY     — Engram persistent memory (tools/engram.exe)
 - **Intelligent Routing**: `pre-process-input.ps1` → trigger matching → agent dispatch (inline,
   delegate, or SDD)
 - **18 Specialized Agents**: Each with narrow role, model profile, and delegation rules
-- **386 On-Demand Skills**: Angular, React, Next.js, Go, Django, Python, TypeScript, Docker, K8s,
+- **385 On-Demand Skills**: Angular, React, Next.js, Go, Django, Python, TypeScript, Docker, K8s,
   Playwright, Security, API Design
 - **Persistent Memory**: Engram — decisions, bugs, and patterns across sessions with hot/warm/cold
   tiers
 - **Cost-Aware Router**: Fast/cheap, strong-reasoning, or strong-coding profiles per agent
 - **SDD Lifecycle**: BA explore → SAD design → DEV implement → QA verify
-- **Governance**: 7D validation, judgment-day adversarial review, pre-commit hooks, 27 CI/CD
+- **Governance**: 7D validation, judgment-day adversarial review, pre-commit hooks, 34 CI/CD
   workflows
 - **Session Management**: 10-phase autostart, orphan cleanup, token budget tracking
 - **Proactive Security**: AES-256 encryption, TruffleHog scanning, Gitleaks integration
@@ -69,23 +69,18 @@ Layer 1: MEMORY     — Engram persistent memory (tools/engram.exe)
 
 ---
 
-## Latest Release: v3.2.0
+## Latest Release: v3.3.0
 
 **Download**:
-[gentle-vanguard-3.2.0.exe](https://github.com/EmmanuelOrtiz87/gentle-vanguard/releases/download/v3.2.0/gentle-vanguard-3.2.0.exe)
+[gentle-vanguard-3.3.0.exe](https://github.com/EmmanuelOrtiz87/gentle-vanguard/releases/download/v3.3.0/gentle-vanguard-3.3.0.exe)
 
-### New in v3.2.0 — CopilotKit Native Patterns
+### New in v3.3.0 — Community Skills, Global Health Dashboard, CI/CD Expansion, Auto-Update
 
-- **Agent Chat** (`/agents`): Conversational interface with 6 agents, @mentions autocomplete,
-  suggested actions
-- **AG-UI Protocol**: 7 interactive UI hints from agent responses (metric, datatable, chart, diff,
-  form, list, alert)
-- **Human-in-the-Loop**: 4-mode modal (confirmation, selection, form, review) with auto-detection
-- **Task Control** (`/tasks`): Real-time agent task monitoring with status icons and quick dispatch
-- **Session Timeline** (`/timeline`): Visual event timeline with expandable JSON payloads
-- **Session Persistence**: Chat history saved across restarts
-- **Shared State Bridge**: Event bus connected to dashboard via WebSocket
-- **No CopilotKit dependency**: All patterns implemented natively over MCP
+- **Community Skills Platform**: Contribution template, review workflow, submission script
+- **Global Health Dashboard**: Health API server, UI component, marketplace routes
+- **CI/CD Expansion**: Integration tests, Docker validation, Dockerfiles, Nginx config
+- **Auto-Update System**: Auto-update workflow, update script, version checker, release metadata
+- **11 new workflows + 4 new CI checks added to the ecosystem**
 
 ---
 
@@ -190,4 +185,4 @@ MIT © 2026 Emmanuel Ortiz
 
 ---
 
-_Gentle-Vanguard v3.2.0 — Don't let your mellow hustle be faded_
+_Gentle-Vanguard v3.3.0 — Don't let your mellow hustle be faded_

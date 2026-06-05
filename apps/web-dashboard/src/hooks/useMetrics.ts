@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import type { DashboardData, MetricHistory } from '../types/dashboard';
 
 const FALLBACK_DATA: DashboardData = {
@@ -14,6 +14,9 @@ export function useMetrics(useWebSocketMode = false) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [wsConnected, setWsConnected] = useState(false);
+
+  const wsRef = useRef<WebSocket | null>(null);
+  const reconnectRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const updateFromPayload = useCallback(
     (payload: { tokens: any; sessions: any; git: any; health: any; globalHealth?: any; mcp?: any; timestamp?: string }) => {
@@ -38,10 +41,30 @@ export function useMetrics(useWebSocketMode = false) {
     [],
   );
 
+  const cleanupWebSocket = useCallback(() => {
+    if (reconnectRef.current) {
+      clearTimeout(reconnectRef.current);
+      reconnectRef.current = null;
+    }
+    if (wsRef.current) {
+      wsRef.current.onopen = null;
+      wsRef.current.onclose = null;
+      wsRef.current.onerror = null;
+      wsRef.current.onmessage = null;
+      if (wsRef.current.readyState === WebSocket.OPEN || wsRef.current.readyState === WebSocket.CONNECTING) {
+        wsRef.current.close();
+      }
+      wsRef.current = null;
+    }
+  }, []);
+
   const connectWebSocket = useCallback(() => {
     if (!useWebSocketMode) return;
 
+    cleanupWebSocket();
+
     const ws = new WebSocket('ws://localhost:8080');
+    wsRef.current = ws;
 
     ws.onopen = () => {
       setWsConnected(true);
@@ -61,15 +84,16 @@ export function useMetrics(useWebSocketMode = false) {
 
     ws.onclose = () => {
       setWsConnected(false);
-      setTimeout(connectWebSocket, 3000);
+      if (wsRef.current === ws) {
+        wsRef.current = null;
+        reconnectRef.current = setTimeout(connectWebSocket, 3000);
+      }
     };
 
     ws.onerror = () => {
       setError('WebSocket connection failed');
     };
-
-    return () => ws.close();
-  }, [useWebSocketMode, updateFromPayload]);
+  }, [useWebSocketMode, updateFromPayload, cleanupWebSocket]);
 
   const fetchMetrics = useCallback(async () => {
     if (useWebSocketMode && wsConnected) return;
@@ -92,14 +116,14 @@ export function useMetrics(useWebSocketMode = false) {
 
   useEffect(() => {
     if (useWebSocketMode) {
-      const cleanup = connectWebSocket();
-      return cleanup;
+      connectWebSocket();
+      return cleanupWebSocket;
     } else {
       fetchMetrics();
       const interval = setInterval(fetchMetrics, 5000);
       return () => clearInterval(interval);
     }
-  }, [useWebSocketMode, connectWebSocket, fetchMetrics]);
+  }, [useWebSocketMode, connectWebSocket, fetchMetrics, cleanupWebSocket]);
 
   return { data, history, loading, error, wsConnected, refetch: fetchMetrics };
 }

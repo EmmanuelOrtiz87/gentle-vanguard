@@ -23,7 +23,7 @@ import type {
 } from '../src/types/agent.js';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = resolve(__dirname);
+const __dirname = dirname(__filename);
 const ROOT = resolve(__dirname, '../../..');
 const STATS_PATH = join(ROOT, '.atl', 'skill-stats.json');
 const REGISTRY_PATH = join(ROOT, '.atl', 'skill-registry.md');
@@ -36,6 +36,8 @@ const wss = new WebSocketServer({ server });
 const clients = new Set<WebSocket>();
 const agentSubscriptions = new Map<string, Set<WebSocket>>();
 const sessions = new Map<string, AgentSession>();
+const connPerIp = new Map<string, number>();
+const MAX_CONN_PER_IP = 5;
 let bridgeReady = false;
 
 function loadStats() {
@@ -150,6 +152,7 @@ function generateMetrics() {
   },
   globalHealth: getGlobalHealth(),
 };
+}
 
 // --- Agent Session Management ---
 
@@ -631,8 +634,16 @@ function handleRequest(req: IncomingMessage, res: ServerResponse) {
 
 // --- WebSocket ---
 
-wss.on('connection', (ws: WebSocket) => {
-  console.log('[WS] Client connected');
+wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
+  const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || req.socket.remoteAddress || 'unknown';
+  const current = connPerIp.get(ip) || 0;
+  if (current >= MAX_CONN_PER_IP) {
+    console.log(`[WS] Blocked excessive connection from ${ip} (${current})`);
+    ws.close(1013, 'Too many connections');
+    return;
+  }
+  connPerIp.set(ip, current + 1);
+  console.log(`[WS] Client connected (${ip}, conns: ${current + 1})`);
   clients.add(ws);
   ws.send(JSON.stringify({ type: 'metrics', data: generateMetrics() }));
   ws.send(JSON.stringify({ type: 'bridge_status', connected: bridgeReady }));
@@ -657,6 +668,9 @@ wss.on('connection', (ws: WebSocket) => {
 
   ws.on('close', () => {
     clients.delete(ws);
+    const prev = connPerIp.get(ip) || 1;
+    if (prev <= 1) connPerIp.delete(ip);
+    else connPerIp.set(ip, prev - 1);
     for (const [, subs] of agentSubscriptions) {
       subs.delete(ws);
     }
